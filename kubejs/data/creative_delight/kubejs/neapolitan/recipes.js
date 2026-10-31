@@ -11,6 +11,10 @@ ServerEvents.recipes(e => {
 
 	global.CD.recipes(() => {
 
+		//######################### Smoothie #########################
+		// The Strawberry Banana Smoothie is removed (global.removedItems; TODO dishes/sweets #5)
+		R.remove({ output: i.strawberry_banana_smoothie }, e)
+
 		//######################### Egg solution #########################
 		// The pack's egg solution fluid: 250 mB stands in for one egg and its milk (create/recipes.js)
 		if (Platform.isLoaded('create')) {

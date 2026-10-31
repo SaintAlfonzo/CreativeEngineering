@@ -2,7 +2,7 @@
 # Offline checks for the structure groups (feature_writeup/structure_tuning.md section 6):
 #   1. node: tools/structure_tuning_sim.js on the real configs (errors -> exit 1)
 #   2. Rhino: the same script in the pack's own Rhino fork; its output must be byte-identical to node's
-#      ... also at debug density x4 and x0.3 and with structure groups off (CEConfig [worldgen])
+#      ... also at debug density x4 and x0.3, with structure groups off and with test overrides on (CEConfig [worldgen])
 #   3. Rhino with no StructureFrequencies class (an old patcherMod jar): must apply nothing
 #      ... and node without MetaStructure: meta structures left out of every set, nothing else changes
 #   4. Java: tools/structure_groups_test/FreqTest against development/patcherMod/build/classes (run ./gradlew build first)
@@ -40,7 +40,7 @@ python3 -c "import json,sys; a=json.load(open(sys.argv[1])); b=json.load(open(sy
 python3 -c "import json,sys; a=json.load(open(sys.argv[1])); b=json.load(open(sys.argv[2])); sys.exit(0 if a == b and a['ranks'] else 1)" \
   "$T/node/priority.json" "$T/rhino/priority.raw.json" && echo "priority tables identical"
 diff <(sed 1,3d "$T/node_report.md") <(sed 1,3d "$T/rhino/report.md") >/dev/null && echo "reports identical (timestamp aside)"
-for v in "density=4 --density=4" "density=0.3 --density=0.3" "groupsoff --groups-off"; do
+for v in "density=4 --density=4" "density=0.3 --density=0.3" "groupsoff --groups-off" "testoverrides --test-overrides"; do
   set -- $v
   node tools/structure_tuning_sim.js "$T/node_$1.md" "$T/node_$1" "$2" > /dev/null
   java -cp "$T/rhino_cls:$RHINO:$GSON" RhinoRun "$ROOT" "$T/rhino_$1" "$1" > /dev/null

@@ -1,6 +1,6 @@
 # Farmer's Respite 2.1.2 against the installed 2.0
 
-**BUILT 2026-10-25 (Creative Delight 1.0.0 + patcherMod 1.1.03, installed in `mods/`), scratch test queued (SQ-RSP, CQ-RSP), not run.** Installed: `FarmersRespite-1.19-2.0.jar` (`mods/`, `server_mods/`, `development/patcherMod/libs/`), 1.19.2.
+**BUILT 2026-10-25 (Creative Delight 1.0.0 + patcherMod 1.1.03, installed in `mods/`); Shipped in 1.1.03 (deployed to server and players 2026-10-26); boot check SQ-RSP-01 PASSED 2026-10-25, SQ-RSP-02 to 14 and CQ-RSP-01 queued; RSP- rows not run in game.** Installed: `FarmersRespite-1.19-2.0.jar` (`mods/`, `server_mods/`, `development/patcherMod/libs/`), 1.19.2.
 Evaluated 2026-10-25 against `devmods/checkNewerVersionForContent/farmersrespite-1.20.1-2.1.2.jar` (1.20.1 / Forge, mods.toml
 says `1.20.1-2.1`), method in [devmods_evaluation.md](devmods_evaluation.md) section 1. Both jars unpacked in `DecompiledMods/`.
 Plan row: `largecontent/mod-additions #21` in [todo/TODO.md](todo/TODO.md).
@@ -118,7 +118,7 @@ All of section 2 is built. Where each piece lives:
 | Which bottles pour (K3, K4, K7) | `compat/farmersrespite/KettleDrinks`: read from Create filling / emptying recipes (glass bottle <-> 250 mB, one item, untagged fluid); water bottle hard-wired. A drink with no such pair can't go in the tank |
 | Recipes (K8, K9) | `kubejs/data/creative_delight/kubejs/farmersrespite/kettle.js` (48 Kettle recipes); gambler's tea is in `farmersrespite/item_merges.js` (the coffee merge, item_merges.md 1.1) |
 | Fluids (K9) | 10 new pack fluids in `development/creativeDelight/src/main/resources/kubejs_startup/creativeengineering/fluids.js` (`f.milk_coffee` ... `f.berry_matcha_latte`), tags in `fluidtags.js`; Central Kitchen's tea, cider, cocoa, melon and coffee fluids reused |
-| Spout / drain (K10, K12) | NCH `createBottle` (filling + emptying), called in `kettle.js` and `miners_delight/recipes.js` (water cup) |
+| Spout / drain (K10, K12) | NCH `createBottle` (filling + emptying), called in `kettle.js` and `miners_delight/recipes.js` (water cup). BROKEN: every `creative_delight:createfilling/*` fails to load (`Error parsing recipe`, fluid `minecraft:empty`; 12 in the owner's `logs/kubejs/server.log` 2026-10-29, also the 2026-10-28 scratch boots), so the Spout half is missing; emptying not checked |
 | GUI, tooltip, WTHIT, JEI (K11) | `KettleScreenTankMixin` + `compat/farmersrespite/client/KettleTankRender`; `KettleItemTooltipMixin`; `compat/wthit/WthitKettleTank`; `KettleJeiBaseMixin` (base fluid slot in the bar) |
 | Pot, slices, death text (2.2-2.4) | patcherMod `compat/RespitePottedTeaBush`; `startup_scripts/cooking/food_values.js`; `kubejs/assets/farmersrespite/lang/en_us.json` |
 

@@ -1,0 +1,172 @@
+# Run 2026-10-31, boot A2: the A1 superflat world rebooted with (plan step A2)
+#   toml [monster_box] vaultMode = false, [dandelion_maturing] richSoilTicks = 0
+#   server.properties spawn-monsters=true, difficulty=normal
+# Rows: config switches that need a restart, mob cap levels, whistle arrows, crop season growth fields.
+pace 2
+
+## SQ-A2-BOOT | reboot clean
+bootexpect Done \(
+bootreject (Mixin apply failed|InvalidInjectionException).*(creativeengineering|creative_delight)
+> pbot spawn qa 0 -60 0
+> time set noon
+> gamerule doDaylightCycle false
+> pbot status
+expect ceperfbot ok
+
+## SQ-MB-07 | vaultMode off: box breaks after spawning (Quark behaviour)
+> setblock 20 -60 -24 quark:monster_box
+> tp qa 18 -60 -24
+sleep 5
+> execute if block 20 -60 -24 quark:monster_box
+expect Test failed
+> execute positioned 20 -60 -24 run kill @e[type=!minecraft:player,distance=..24]
+
+## SQ-DM-02 | richSoilTicks 0: a Rich Soil dandelion stays plain
+> setblock -10 -61 14 farmersdelight:rich_soil
+> setblock -10 -60 14 minecraft:dandelion
+> tp qa -10 -60 11
+> gamerule randomTickSpeed 300
+sleep 60
+> gamerule randomTickSpeed 3
+> execute if block -10 -60 14 minecraft:dandelion
+expect Test passed
+
+## SQ-MCL-02 | one player at night: level 0, about 289 chunks
+> tp qa 0 -60 0
+> time set 18000
+sleep 90
+> ceperf mobcap
+look overworld about 289 spawnable chunks, level 0; monster count climbing toward vanilla 70
+
+## SQ-MCL-03 | two players 600 apart: level 1, back to 0 together
+> pbot spawn qb 600 -60 0
+sleep 20
+> ceperf mobcap
+> tp qb 20 -60 0
+sleep 30
+> ceperf mobcap
+look apart about 578 chunks and level 1; together back to level 0 once below 400
+> pbot remove qb
+
+## SQ-MCL-04 | forced level 2: hostiles settle near 25, none far out
+# needs [perf] mobCapForceLevel = 2 set in the toml BEFORE the boot (a running server does not reload the toml);
+# run on its own restart (A2: after a2_variants; B1: on the B1b boot), then set it back to -1
+sleep 10
+# a fresh boot spawns nothing near a just-joined bot for about 2.5 min (seen 10-31, level 0 too): wait it out
+sleep 160
+> tp qa 0 -60 0
+> time set 18000
+> kill @e[type=!minecraft:player]
+sleep 120
+> ceperf mobcap
+> execute if entity @e[type=minecraft:zombie]
+> execute if entity @e[type=minecraft:skeleton]
+> execute if entity @e[type=minecraft:spider]
+> execute if entity @e[type=minecraft:creeper]
+> execute as @e[type=#zq:monsters,limit=1,sort=furthest] run data get entity @s Pos
+look the four counts sum to about 25 (not 70); the farthest monster within about 90 blocks of 0 0 (perf.md 17); the toml switch is read live (if the level line still says auto, it is not)
+
+## SQ-PF16-02 | whistling arrow still pulls animals
+> kill @e[type=!minecraft:player]
+> time set noon
+> summon minecraft:cow 6 -60 6
+> summon minecraft:cow 7 -60 5
+> summon minecraft:sheep 5 -60 7
+> summon nock_enough_arrows:whistling_arrow 14 -60 14 {inGround:1b,pickup:0b}
+sleep 15
+> execute positioned 14 -60 14 if entity @e[type=#minecraft:animals_spawnable_on,distance=..4]
+> execute positioned 14 -60 14 if entity @e[type=minecraft:cow,distance=..4]
+> kill @e[type=nock_enough_arrows:whistling_arrow]
+look cows and sheep walk to the arrow (second check passes); after the kill they stop following; a summoned arrow that never "joins" the tracker = the whistle needs a shot arrow (client CQ-PF16-02)
+reject (?i)unknown entity
+
+## SQ-CS-03 | winter: open field behind the glass-roofed field; spring: ahead
+# measure = mean wheat age per field (`zq ages`), first line open field (x 100), second glass field (x 120);
+# 2 min at randomTickSpeed 30 ripens almost nothing, so ripe counts were noise (10-31 first run)
+> kill @e[type=!minecraft:player]
+> forceload add 96 -4 132 12
+> fill 96 -61 -4 132 -61 12 minecraft:grass_block
+> fill 100 -61 0 108 -61 8 minecraft:farmland[moisture=7]
+> setblock 104 -61 4 minecraft:water
+> fill 120 -61 0 128 -61 8 minecraft:farmland[moisture=7]
+> setblock 124 -61 4 minecraft:water
+> fill 119 -57 -1 129 -57 9 minecraft:glass
+> tp qa 114 -60 -6
+> fill 100 -60 0 108 -60 8 minecraft:wheat[age=0]
+> fill 120 -60 0 128 -60 8 minecraft:wheat[age=0]
+> setblock 104 -60 4 minecraft:air
+> setblock 124 -60 4 minecraft:air
+> season set MID_WINTER
+> gamerule randomTickSpeed 30
+sleep 120
+> gamerule randomTickSpeed 3
+> zq ages 100 -60 0 108 -60 8 minecraft:wheat
+> zq ages 120 -60 0 128 -60 8 minecraft:wheat
+> fill 100 -60 0 108 -60 8 minecraft:wheat[age=0]
+> fill 120 -60 0 128 -60 8 minecraft:wheat[age=0]
+> setblock 104 -60 4 minecraft:air
+> setblock 124 -60 4 minecraft:air
+> season set MID_SPRING
+> gamerule randomTickSpeed 30
+sleep 120
+> gamerule randomTickSpeed 3
+> zq ages 100 -60 0 108 -60 8 minecraft:wheat
+> zq ages 120 -60 0 128 -60 8 minecraft:wheat
+look winter: open mean below glass mean (about 3/4 of the growth); spring: open mean above glass mean (about 5/4)
+
+## SQ-CS-04 | spring field ahead of a summer field (same timing)
+> fill 100 -60 0 108 -60 8 minecraft:wheat[age=0]
+> fill 120 -60 0 128 -60 8 minecraft:wheat[age=0]
+> setblock 104 -60 4 minecraft:air
+> setblock 124 -60 4 minecraft:air
+> season set MID_SPRING
+> gamerule randomTickSpeed 30
+sleep 120
+> gamerule randomTickSpeed 3
+> zq ages 100 -60 0 108 -60 8 minecraft:wheat
+> zq ages 120 -60 0 128 -60 8 minecraft:wheat
+> fill 100 -60 0 108 -60 8 minecraft:wheat[age=0]
+> fill 120 -60 0 128 -60 8 minecraft:wheat[age=0]
+> setblock 104 -60 4 minecraft:air
+> setblock 124 -60 4 minecraft:air
+> season set MID_SUMMER
+> gamerule randomTickSpeed 30
+sleep 120
+> gamerule randomTickSpeed 3
+> zq ages 100 -60 0 108 -60 8 minecraft:wheat
+> zq ages 120 -60 0 128 -60 8 minecraft:wheat
+look open field (first line of each pair): spring growth about 5/4 of the summer growth (wheat temperate: spring fertile, summer neutral)
+> season set MID_SPRING
+
+## SQ-CS-05 | off-season crops still grow (mid_winter, randomTickSpeed 100, 1 min)
+> season set MID_WINTER
+> fill 100 -61 12 112 -61 12 minecraft:farmland[moisture=7]
+> setblock 100 -60 12 immersiveengineering:hemp
+> setblock 102 -60 12 the_dirty_stuff:tobacco_seeds
+> setblock 104 -61 12 minecraft:grass_block
+> setblock 104 -60 12 vinery:red_grape_bush
+> setblock 106 -61 12 nethersdelight:rich_soul_soil
+> setblock 106 -60 12 nethersdelight:crimson_fungus_colony
+> setblock 108 -61 12 minecraft:end_stone
+> setblock 108 -60 12 endercrop:ender_crop
+# fungus colony and Ender crop need low light (colony: raw light <= 12): a dark stone box over x 105..109
+> fill 105 -61 11 109 -57 13 minecraft:stone hollow
+> setblock 106 -61 12 nethersdelight:rich_soul_soil
+> setblock 106 -60 12 nethersdelight:crimson_fungus_colony
+> setblock 108 -61 12 minecraft:end_stone
+> setblock 108 -60 12 endercrop:ender_crop
+> gamerule randomTickSpeed 100
+sleep 120
+> gamerule randomTickSpeed 3
+> execute if block 100 -60 12 immersiveengineering:hemp[growth=bottom0]
+> execute if block 102 -60 12 the_dirty_stuff:tobacco_seeds[blockstate=0]
+> execute if block 104 -60 12 vinery:red_grape_bush[age=0]
+> execute if block 106 -60 12 nethersdelight:crimson_fungus_colony[age=0]
+> execute if block 108 -60 12 endercrop:ender_crop[age=0]
+reject (?i)exception
+count Test failed >= 4
+look every "Test failed" = grew past age 0; an "Unknown block" or property error = a guessed id (Ender crop id from endersdelight, CD endersAdditions); fix the id and rerun the row
+> season set MID_SPRING
+> fill 105 -61 11 109 -57 13 minecraft:air
+> fill 100 -61 12 112 -61 12 minecraft:grass_block
+> forceload remove all

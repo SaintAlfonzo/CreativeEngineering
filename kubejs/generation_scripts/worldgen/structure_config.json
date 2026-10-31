@@ -934,7 +934,7 @@
       }
     },
     "endersdelight:end_house": {
-      "source": "creative_delight-1.0.0.jar!endersAdditions-1.1.4-ce-19.2-01.jar",
+      "source": "creative_delight-1.0.0.jar!endersAdditions-1.1.4-ce-19.2-02.jar",
       "structures": [
         {
           "structure": "endersdelight:end_house",
@@ -5884,7 +5884,7 @@
       "anchor": [
         "#creativeengineering:meta/fortified_towns"
       ],
-      "share": 0.2,
+      "share": 0.25,
       "required_parts": [
         [
           "#creativeengineering:meta/small_ruins"
@@ -5896,7 +5896,7 @@
       "anchor": [
         "#creativeengineering:meta/fortified_towns"
       ],
-      "share": 0.2,
+      "share": 0.25,
       "required_parts": [
         [
           "#creativeengineering:meta/friendly_camps"
@@ -5961,6 +5961,229 @@
       ],
       "share": 0.4,
       "required_parts": []
+    },
+    "creativeengineering:meta/cloud_cluster": {
+      "biomes": "#minecraft:is_overworld",
+      "anchor": [
+        "#creativeengineering:meta/sky_clouds"
+      ],
+      "share": 0.3,
+      "required_parts": [
+        [
+          "#creativeengineering:meta/sky_clouds"
+        ]
+      ]
+    },
+    "creativeengineering:meta/balloon_fleet": {
+      "biomes": "#minecraft:is_overworld",
+      "anchor": [
+        "#creativeengineering:meta/sky_balloons"
+      ],
+      "share": 0.3,
+      "required_parts": [
+        [
+          "#creativeengineering:meta/sky_balloons"
+        ]
+      ]
+    },
+    "creativeengineering:meta/cloud_balloons": {
+      "biomes": "#minecraft:is_overworld",
+      "anchor": [
+        "#creativeengineering:meta/sky_clouds"
+      ],
+      "share": 0.2,
+      "required_parts": [
+        [
+          "#creativeengineering:meta/sky_balloons"
+        ]
+      ]
+    },
+    "creativeengineering:meta/sky_village_islands": {
+      "biomes": "#minecraft:is_overworld",
+      "anchor": [
+        "#creativeengineering:meta/sky_villages"
+      ],
+      "share": 0.5,
+      "required_parts": [
+        [
+          "creativeengineering:sky_island"
+        ]
+      ]
+    },
+    "creativeengineering:meta/witch_cart_caravan": {
+      "biomes": "#minecraft:is_overworld",
+      "anchor": [
+        "#creativeengineering:meta/caravan_wagons"
+      ],
+      "share": 0.3,
+      "required_parts": [
+        [
+          "#creativeengineering:meta/caravan_wagons"
+        ]
+      ]
+    },
+    "creativeengineering:meta/pillager_caravan": {
+      "biomes": "#minecraft:is_overworld",
+      "anchor": [
+        "#creativeengineering:meta/caravan_carriages"
+      ],
+      "share": 0.35,
+      "required_parts": [
+        [
+          "#creativeengineering:meta/caravan_carriages"
+        ]
+      ]
+    },
+    "creativeengineering:meta/trader_caravan": {
+      "biomes": "#minecraft:is_overworld",
+      "anchor": [
+        "#creativeengineering:meta/trader_camps"
+      ],
+      "share": 0.25,
+      "required_parts": [
+        [
+          "#creativeengineering:meta/trader_camps"
+        ],
+        [
+          "#creativeengineering:meta/way_signs"
+        ]
+      ]
+    },
+    "creativeengineering:meta/meteorite_village": {
+      "biomes": "#minecraft:is_overworld",
+      "anchor": [
+        "#creativeengineering:meta/villages"
+      ],
+      "share": 0.05,
+      "required_parts": [
+        [
+          "#creativeengineering:meta/meteorites"
+        ]
+      ]
+    },
+    "creativeengineering:meta/desert_temple_ruins": {
+      "biomes": "#minecraft:is_overworld",
+      "anchor": [
+        "#creativeengineering:meta/better_desert_temples"
+      ],
+      "share": 0.35,
+      "required_parts": [
+        [
+          "#creativeengineering:meta/small_ruins"
+        ]
+      ]
+    },
+    "creativeengineering:meta/jungle_temple_ruins": {
+      "biomes": "#minecraft:is_overworld",
+      "anchor": [
+        "#creativeengineering:meta/better_jungle_temples"
+      ],
+      "share": 0.35,
+      "required_parts": [
+        [
+          "#creativeengineering:meta/small_ruins"
+        ]
+      ]
+    },
+    "creativeengineering:meta/meteorite_desert_pyramid": {
+      "biomes": "#minecraft:is_overworld",
+      "anchor": [],
+      "share": 0,
+      "required_parts": [
+        [
+          "minecraft:desert_pyramid"
+        ],
+        [
+          "#creativeengineering:meta/meteorites"
+        ]
+      ]
+    },
+    "creativeengineering:meta/underwater_meteorite": {
+      "biomes": "#minecraft:is_overworld",
+      "anchor": [
+        "#creativeengineering:meta/underwater_large_ruins"
+      ],
+      "share": 0.1,
+      "required_parts": [
+        [
+          "#creativeengineering:meta/meteorites"
+        ]
+      ]
+    },
+    "creativeengineering:meta/pillager_camp_meteorite": {
+      "biomes": "#minecraft:is_overworld",
+      "anchor": [
+        "#creativeengineering:meta/pillager_camps"
+      ],
+      "share": 0.1,
+      "required_parts": [
+        [
+          "#creativeengineering:meta/meteorites"
+        ]
+      ]
+    },
+    "creativeengineering:meta/meteor_shower": {
+      "biomes": "#creativeengineering:land/desert",
+      "anchor": [
+        "#creativeengineering:meta/meteorites"
+      ],
+      "share": 0.5,
+      "required_parts": [
+        [
+          "#creativeengineering:meta/meteorites"
+        ]
+      ]
+    },
+    "creativeengineering:meta/witch_coven": {
+      "biomes": "#minecraft:is_overworld",
+      "anchor": [
+        "#creativeengineering:meta/witch_circles"
+      ],
+      "share": 0.4,
+      "required_parts": [
+        [
+          "#creativeengineering:meta/coven_huts"
+        ],
+        [
+          "#creativeengineering:meta/caravan_wagons"
+        ]
+      ]
+    },
+    "creativeengineering:meta/village_siege_ring": {
+      "biomes": "#minecraft:is_overworld",
+      "anchor": [
+        "#creativeengineering:meta/villages"
+      ],
+      "share": 0.04,
+      "required_parts": [
+        [
+          "#creativeengineering:meta/siege_weapons"
+        ]
+      ]
+    },
+    "creativeengineering:meta/village_siege_camp": {
+      "biomes": "#minecraft:is_overworld",
+      "anchor": [
+        "#creativeengineering:meta/villages"
+      ],
+      "share": 0.04,
+      "required_parts": [
+        [
+          "#creativeengineering:meta/siege_weapons"
+        ]
+      ]
+    },
+    "creativeengineering:meta/struck_monument": {
+      "biomes": "#minecraft:is_overworld",
+      "anchor": [
+        "#creativeengineering:meta/monuments"
+      ],
+      "share": 0.25,
+      "required_parts": [
+        [
+          "#creativeengineering:meta/meteorites"
+        ]
+      ]
     },
     "creativeengineering:meta/deadwood_acacia": {
       "biomes": "#geophilic_reforged:wood_type/mc/acacia",

@@ -211,3 +211,69 @@ Exempt from every rule (`plan/move_to_nether`, to be moved to the Nether later):
 | `terralith:village/fortified/houses/cartographer` | `terralith:fortified_village` | `potted_crimson_fungus` | `minecraft:potted_dead_bush` | 1 |
 | `terralith:village/fortified/houses/church` | `terralith:fortified_village` | `potted_crimson_fungus` | `minecraft:potted_dead_bush` | 1 |
 
+## 23. Soul lanterns to lanterns, hanging kept (K25); ancient cities and sculk structures keep theirs (311 blocks)
+
+Skipped, holding `@sculk`: `minecraft:ancient_city`, `philipsruins:bone_dungeon`, `philipsruins:sculk_dungeon`.
+
+| Template | Structures | From | To | Blocks |
+|---|---|---|---|---:|
+| `betterdungeons:zombie_dungeon/floor1/room/floor1_specialroom_0` | `betterdungeons:zombie_dungeon` | `soul_lantern` | `minecraft:lantern` | 1 |
+| `betterstrongholds:rooms/cmd_acarii` | `betterstrongholds:stronghold` | `soul_lantern` | `minecraft:lantern` | 1 |
+| `eugene:witch_wagon` | `eugene:witch_wagon` | `soul_lantern` | `minecraft:lantern` | 4 |
+| `ipo:pillager_outpost/tower/top/overgrown` | `minecraft:pillager_outpost` | `soul_lantern` | `minecraft:lantern` | 3 |
+| `ipo:pillager_outpost/tower/top/overgrown_active` | `minecraft:pillager_outpost` | `soul_lantern` | `minecraft:lantern` | 3 |
+| `ipo:pillager_outpost/tower/top/overgrown_damaged` | `minecraft:pillager_outpost` | `soul_lantern` | `minecraft:lantern` | 3 |
+| `ipo:pillager_outpost/tower/top/overgrown_damaged_active` | `minecraft:pillager_outpost` | `soul_lantern` | `minecraft:lantern` | 3 |
+| `kaisyn:outpost/towers/snowy_slopes/base_plate` | `towns_and_towers:pillager_outpost_snowy_slopes` | `soul_lantern` | `minecraft:lantern` | 2 |
+| `kaisyn:village/mushroom_fields_fantasy/town_centers/mushroom_meeting_point_1` | `towns_and_towers:village_mushroom_fields` | `soul_lantern` | `minecraft:lantern` | 2 |
+| `kaisyn:village/swamp_boat/town_centers/swamp_b_meeting_point_1` | `towns_and_towers:village_swamp` | `soul_lantern` | `minecraft:lantern` | 1 |
+| `philipsruins:deep_ruin2` | `philipsruins:underground_structures` | `soul_lantern` | `minecraft:lantern` | 3 |
+| `philipsruins:deep_ruin3` | `philipsruins:underground_structures` | `soul_lantern` | `minecraft:lantern` | 1 |
+| `philipsruins:deep_ruin5` | `philipsruins:underground_structures` | `soul_lantern` | `minecraft:lantern` | 1 |
+| `philipsruins:deep_ruin6` | `philipsruins:underground_structures` | `soul_lantern` | `minecraft:lantern` | 5 |
+| `philipsruins:deep_ruin8` | `philipsruins:underground_structures` | `soul_lantern` | `minecraft:lantern` | 5 |
+| `philipsruins:deep_ruinbig1` | `philipsruins:underground_structures` | `soul_lantern` | `minecraft:lantern` | 2 |
+| `philipsruins:pumpkin_ruin_four` | `philipsruins:pumpkin_ruins` | `soul_lantern` | `minecraft:lantern` | 2 |
+| `philipsruins:pumpkin_ruin_six` | `philipsruins:pumpkin_ruins` | `soul_lantern` | `minecraft:lantern` | 1 |
+| `simply_houses:forest_fort/forest_fort` | `simply_houses:forest_fort` | `soul_lantern` | `minecraft:lantern` | 2 |
+| `simply_houses:forest_stonemason/forest_stonemason` | `simply_houses:forest_stonemason` | `soul_lantern` | `minecraft:lantern` | 1 |
+| `simply_houses:plains_house/plains_house` | `simply_houses:plains_house` | `soul_lantern` | `minecraft:lantern` | 1 |
+| `simply_houses:plains_mansion/plains_mansion` | `simply_houses:plains_mansion` | `soul_lantern` | `minecraft:lantern` | 1 |
+| `simply_houses:taiga_forge/taiga_forge` | `simply_houses:taiga_forge` | `soul_lantern` | `minecraft:lantern` | 4 |
+| `simply_houses:taiga_house/taiga_house` | `simply_houses:taiga_house` | `soul_lantern` | `minecraft:lantern` | 7 |
+| `simply_houses:taiga_inn/taiga_inn` | `simply_houses:taiga_inn` | `soul_lantern` | `minecraft:lantern` | 9 |
+| `simply_houses:taiga_woodcutter/taiga_woodcutter` | `simply_houses:taiga_woodcutter` | `soul_lantern` | `minecraft:lantern` | 1 |
+| `terralith:spire/base_l` | `terralith:spire` | `soul_lantern` | `minecraft:lantern` | 14 |
+| `terralith:spire/base_r` | `terralith:spire` | `soul_lantern` | `minecraft:lantern` | 10 |
+| `terralith:spire/layer1` | `terralith:spire` | `soul_lantern` | `minecraft:lantern` | 73 |
+| `terralith:spire/layer2` | `terralith:spire` | `soul_lantern` | `minecraft:lantern` | 39 |
+| `terralith:spire/layer3` | `terralith:spire` | `soul_lantern` | `minecraft:lantern` | 47 |
+| `terralith:spire/layer4` | `terralith:spire` | `soul_lantern` | `minecraft:lantern` | 38 |
+| `terralith:underground/dungeon1` | `terralith:underground/frosted_dungeon` | `soul_lantern` | `minecraft:lantern` | 20 |
+| `terralith:village/fortified/houses/graveyard` | `terralith:fortified_village` | `soul_lantern` | `minecraft:lantern` | 1 |
+
+## 24. Soul wall torches to wall torches, facing kept (K32); ancient cities and sculk structures keep theirs (12 blocks)
+
+Skipped, holding `@sculk`: `minecraft:ancient_city`, `philipsruins:bone_dungeon`, `philipsruins:sculk_dungeon`.
+
+| Template | Structures | From | To | Blocks |
+|---|---|---|---|---:|
+| `betterjungletemples:challenge_room/challenge_room_water_parkour` | `betterjungletemples:jungle_temple` | `soul_wall_torch` | `minecraft:wall_torch` | 2 |
+| `betterjungletemples:floor_2/room/floor_2_parkour_room_0` | `betterjungletemples:jungle_temple` | `soul_wall_torch` | `minecraft:wall_torch` | 1 |
+| `betterjungletemples:floor_2/room/floor_2_parkour_room_1` | `betterjungletemples:jungle_temple` | `soul_wall_torch` | `minecraft:wall_torch` | 1 |
+| `betterjungletemples:floor_2/room/floor_2_parkour_room_2` | `betterjungletemples:jungle_temple` | `soul_wall_torch` | `minecraft:wall_torch` | 1 |
+| `betterjungletemples:floor_2/room/floor_2_parkour_room_3` | `betterjungletemples:jungle_temple` | `soul_wall_torch` | `minecraft:wall_torch` | 1 |
+| `betterjungletemples:floor_2/room/floor_2_parkour_room_4` | `betterjungletemples:jungle_temple` | `soul_wall_torch` | `minecraft:wall_torch` | 1 |
+| `terralith:spire/base_l` | `terralith:spire` | `soul_wall_torch` | `minecraft:wall_torch` | 1 |
+| `veggiesdelight:village/houses/snowy_depot_house` | `minecraft:village_snowy` | `soul_wall_torch` | `minecraft:wall_torch` | 4 |
+
+## 25. Standing soul torches to torches (K32); ancient cities and sculk structures keep theirs (0 blocks)
+
+Skipped, holding `@sculk`: `minecraft:ancient_city`, `philipsruins:bone_dungeon`, `philipsruins:sculk_dungeon`.
+
+Nothing matched.
+
+## Left alone (templates a Nether or End structure also places)
+
+`soul_lantern` 7
+

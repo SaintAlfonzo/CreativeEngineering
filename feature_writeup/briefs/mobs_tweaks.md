@@ -18,7 +18,7 @@ Jars checked (decompiled with vineflower, under `scratchpad/decomp/`): `alexsmob
 | #9 | Nock Enough Arrows golem (the Sputter) | Planned | look done here; then config line or docs |
 | #8 | Merge monkeys | Planned | small once decided: config / data, + JEI hide |
 | #6 | Named mobs | Planned | medium: KubeJS (startup + server), optional patcherMod |
-| #5 | Quark monster boxes | Planned | the question is answered here; vault rework is medium-large patcherMod |
+| #5 | Quark monster boxes | Built | vault rework built 2026-10-30 ([mob_block_tweaks.md](../mob_block_tweaks.md) 2.9); MT-34 to MT-37, MT-47 to MT-50 |
 | #2 | MCA villagers glitch while sleeping | Bug | reported on adults (user, 2026-10-22), so the baby wobble isn't it; no client or AI cause found in code, MT-38 decides |
 | #12 | MCA villager eye colour | Built | Comb eye controls (`McaCombEyeColourMixin`), 2026-10-22; MT-40 |
 
@@ -41,7 +41,7 @@ area as #5), `gear/archery` ([archery.md](../archery.md); #9's Sputter shoots NE
 ---
 
 ## tweaks #7: Seagulls can't take lunchboxes
-Status Testing (config done 2026-10-22, MT-26; the dropped-box mixin not built) / Work KubeJS / patcherMod (really config) / TODO `mobs/tweaks #7`
+Status Testing (config done 2026-10-22; both mixins built 2026-10-29; SQ-LB-01, MT-26 open) / Work KubeJS / patcherMod (really config) / TODO `mobs/tweaks #7`
 
 ### Goal
 Alex's Mobs seagulls stop stealing Spice of Life lunchboxes from the hotbar. Today they also eat them, contents and
@@ -199,7 +199,9 @@ to confirm.
 ---
 
 ## tweaks #9: Nock Enough Arrows golem (the Sputter)
-Status Planned / Work none / TODO `mobs/tweaks #9`
+Status Testing (Sputter removed 2026-10-30, MT-29 open) / Work config / TODO `mobs/tweaks #9`
+
+**Decision (2026-10-30): remove.** `enableSputter = false` in [nock_enough_arrows-common.toml](../../config/nock_enough_arrows-common.toml), backed up in `configs_edited/root_config/`. Existing Sputters stay (`/kill @e[type=nock_enough_arrows:sputter]`). Needs a restart. Test MT-29 now means: pumpkin on barrel does nothing.
 
 ### Goal
 Find out what NEA's golem is and whether it's used, then keep, integrate or remove it.
@@ -253,7 +255,7 @@ Depends on the decision:
 ---
 
 ## tweaks #8: Merge monkeys
-Status Planned / Work data / KubeJS / TODO `merges/mobs #1`
+Status Testing (built 2026-10-30, item_merges.md 2.1) / Work data / KubeJS / TODO `merges/mobs #1`
 
 ### Goal
 One jungle monkey across Alex's Mobs and Neapolitan instead of two overlapping ones.
@@ -317,7 +319,12 @@ the overlap. The overlap is capuchin vs chimpanzee: same jungles, same bananas.
 ---
 
 ## tweaks #6: Named mobs
-Status Planned / Work patcherMod / KubeJS / TODO `mobs/tweaks #6`
+Status Testing / Work patcherMod / TODO `mobs/tweaks #6`
+
+**Built 2026-10-30 differently from the plan below:** patcherMod Java (`mobs.NamedMobs`, `[named_mobs]` toml), not
+KubeJS, so the mob list is a real config. Owner: farm animals only for now, a large karma loss later. Name picked on
+join (server thread), not at spawn: MCA's pool random is shared and not thread safe. As built:
+[mob_block_tweaks.md](../mob_block_tweaks.md) 2.6; tests MT-31 to MT-33 there replace the ones below.
 
 ### Goal
 A small chance that a mob spawns with a random name. Deaths of named mobs, and kills by them, are announced in chat.
@@ -413,11 +420,15 @@ Killing one costs a little karma later (`largecontent/karma #1`).
 ---
 
 ## tweaks #5: Quark monster boxes
-Status Planned / Work config / patcherMod / data / TODO `mobs/tweaks #5`
+Status Testing (built 2026-10-30, SQ-MB queued) (writeup: [mob_block_tweaks.md](../mob_block_tweaks.md) 2.9) / Work config / patcherMod / data / TODO `mobs/tweaks #5`
 
 ### Goal
 Answer "do they break when they spawn, and is that configurable?" Then rework them into a vault-like box: when its
 mobs are dead it spits out items from its own loot table, then waits a cooldown and re-arms.
+
+User spec (2026-10-30): the box stays in place after it triggers, with a cooldown before it can trigger again; it is
+as hard to mine as obsidian; breaking it uses Lootr's rule (break only while sneaking, otherwise a warning and no
+break); when every mob of the wave is dead it spits out a single item rolled from a loot table.
 
 ### Now (verified against `Quark-3.4-418.jar`)
 - **Answer: yes, always; no, not configurable.** `vazkii.quark.content.world.block.be.MonsterBoxBlockEntity#tick`
@@ -449,12 +460,12 @@ mobs are dead it spits out items from its own loot table, then waits a cooldown 
 `"Monster Box" = false` (module off), or keep as is. Nothing else in config changes the breaking.
 
 ### Build: vault rework (patcherMod)
-1. **Config** `CEConfig.MonsterBox` (new section `[monster_box]`, next to `Raids` at CEConfig 679, built in the
-   constructor around line 94):
+1. **Config** `CEConfig.MonsterBox` (new section `[monster_box]`, next to `Raids` at CEConfig 949, built in the
+   constructor at line 111):
    - `vaultMode` (true);
    - `cooldownTicks` (72000 = 1 hour real time, about 3 in-game days);
    - `rewardTable` (`creativeengineering:misc/monster_box_reward`);
-   - `rewardRolls` (3);
+   - `rewardSingleCount` (false: eject the rolled stack as is; true: cap it to 1);
    - `leashRange` (24: a wave mob farther than this from the box counts as gone);
    - `checkIntervalTicks` (20).
 2. **Mixin** `MonsterBoxBlockEntityMixin` on `vazkii.quark.content.world.block.be.MonsterBoxBlockEntity`
@@ -471,9 +482,8 @@ mobs are dead it spits out items from its own loot table, then waits a cooldown 
        `quark:monster_box_spawned` and no `ce:box` yet. Store their UUIDs and stamp each with `ce:box` = the box's
        `BlockPos.asLong()`. This avoids injecting into the private lambda in `spawnMobs`.
      - **ACTIVE:** every `checkIntervalTicks`, a wave mob counts as gone when `ServerLevel#getEntity(uuid)` is null,
-       or it's dead, or it's farther than `leashRange`. When all are gone, eject `rewardRolls` rolls of `rewardTable`
-       (chest context with origin; pop items up with a small spread like a dispenser; `ItemEntity` + pickup delay 10),
-       play a sound, and go to COOLDOWN with `until = gameTime + cooldownTicks`.
+       or it's dead, or it's farther than `leashRange`. When all are gone, eject the reward (step 3b), play a sound,
+       and go to COOLDOWN with `until = gameTime + cooldownTicks`.
      - **COOLDOWN:** do nothing (no growl, no countdown) until `until`, then ARMED.
    - **State storage:** use Forge's `BlockEntity#getPersistentData()` (saved with the block entity as `ForgeData`),
      so no NBT override of `ARLBlockEntity` is needed. Keys `ce:phase`, `ce:wave` (list of UUID int arrays),
@@ -483,6 +493,40 @@ mobs are dead it spits out items from its own loot table, then waits a cooldown 
    set `Enable Extra Loot Table = false` in both `quark-common.toml` copies, or players get both the per-mob drops and
    the box reward. If the pack-side loot layer should own it, add the table there instead (see
    [loot.md](../loot.md); `loot/07_rules.js` holds per-table rules).
+3b. **Single-item reward (user spec).** One roll, one item out: `LootTable#getRandomItems` with
+   `LootContextParamSets.CHEST` (origin = box centre, `LUCK` from the nearest player), then keep one random non-empty
+   stack from the result and drop the rest. This keeps the code safe if the table is later given several pools. The
+   table itself is 1 pool, 1 roll, so it yields one entry. Eject that stack from the box top as an `ItemEntity` with
+   a small upward push and pickup delay 10. The `rewardRolls` config key goes; `rewardSingleCount` (default per
+   Decisions) caps the stack to 1 when true.
+3c. **Obsidian hardness, no Java (verified KubeJS 1902.6.2 has `kjs$setDestroySpeed`, `kjs$setExplosionResistance`,
+   `kjs$setRequiresTool` on `BlockKJS`).** Quark builds the box with `Properties.of(STONE).strength(25)` and no
+   tool requirement. Obsidian is 50 / 1200, needs a diamond pickaxe. Add to the existing
+   [block_properties.js](../../kubejs/startup_scripts/changes/block_properties.js) `BlockEvents.modification`:
+   `e.modify(global.item.monster_box, b => { b.setDestroySpeed(50); b.setExplosionResistance(1200); b.setRequiresTool(true) })`.
+   Tags through `global.tags`: `minecraft:mineable/pickaxe` and `minecraft:needs_diamond_tool`. Without them the
+   requires-tool flag makes it unmineable at hand speed (1/100). Blast resistance 1200 also makes creepers and TNT
+   harmless to it. Startup script, so it needs a restart.
+3d. **Lootr break rule (verified `noobanidus.mods.lootr.event.HandleBreak#onBlockBreak`, Lootr 0.4.29.76).** Lootr
+   listens to `BlockEvent.BreakEvent` server side. If the block is one of its chests and the player is not
+   sneaking (`Player#isShiftKeyDown`), it cancels the event and sends a chat line (`Player#displayClientMessage(msg,
+   false)`, aqua `Style`, key `lootr.message.should_sneak`). Creative players follow the same rule. Pack version: a
+   Forge listener `world/MonsterBoxBreakGuard.java` in patcherMod, gated by `vaultMode` like the rest, so MT-37
+   restores plain Quark. Logic: `state.is(MonsterBoxModule.monster_box)` (or the block's registry id), player not
+   sneaking → `setCanceled(true)` + translatable `creativeengineering.message.monster_box_sneak`, aqua. Lang:
+   "Breaking the monster box destroys it for good. Sneak while mining to break it." (pack lang file
+   `kubejs/assets/creativeengineering/lang/en_us.json`). A sneaking break drops nothing (Quark's empty block table is
+   kept, or the box becomes a carryable spawner). As in Lootr, the check fires at the end of the mining time (about
+   9.4 s with a diamond pickaxe), and the client then gets the block back. Fake players aren't sneaking, so they're
+   blocked too.
+3e. **Breakers that skip `BreakEvent` (verified Create 0.5.1).** `BlockHelper.destroyBlockAs` posts `BreakEvent`
+   only when the player isn't null (bytecode 61-62 `ifnull`), and Create's drill and contraption drills pass null.
+   So a Create drill would grind a box away with no check. Fix: a small mixin returning false from
+   `com.simibubi.create.content.kinetics.base.BlockBreakingKineticBlockEntity#isBreakable(BlockState, float)`
+   (static, used by the drill block entity; check the contraption drill behaviour also calls it) for the box. Also tag the box
+   `create:non_movable` so a contraption can't carry it off as a spawner. Pickarang (max hardness 20) and pistons
+   (block entity) can't move or break it. The pack's own Excavation Drill posts `BreakEvent`, so 3d covers it. Other
+   machine breakers (IE excavator etc.) weren't checked.
 4. **No farming.** The `quark:monster_box` item in the old table plus vault mode = a placeable, re-arming zombie
    spawner. Dropping that entry (step 3) closes the main route. Decide whether player-placed boxes (creative,
    tomes) should be vaults at all. A cheap rule is "only boxes that generated": stamp `ce:natural` from the generator
@@ -498,9 +542,9 @@ mobs are dead it spits out items from its own loot table, then waits a cooldown 
   `public static void tick(Level, BlockPos, BlockState, MonsterBoxBlockEntity)`, `private void spawnMobs()`),
   `...world.gen.MonsterBoxGenerator#generateChunk`.
 - Tables (verified): `quark:misc/monster_box`, `quark:misc/monster_box_spawns`, `quark:blocks/monster_box` (empty).
-- Item: `i.monster_box` = `quark:monster_box` ([item_dict.js](../../kubejs/startup_scripts/_lib/item_dict.js) 3223).
-- `Quark-3.4-418.jar` and `AutoRegLib-1.8.2-55.jar` into `development/patcherMod/libs/` (Quark is likely already
-  there for `FeedingTroughModuleMixin`).
+- Item: `i.monster_box` = `quark:monster_box` ([item_dict.js](../../kubejs/startup_scripts/_lib/item_dict.js) 3293).
+- `Quark-3.4-418.jar` is already in `development/patcherMod/libs/`. `AutoRegLib-1.8.2-55.jar` isn't. It's needed
+  only if the mixin extends `ARLBlockEntity` for the client sync (Gotchas). The Create jar is needed for 3e.
 
 ### Decisions
 - **Rework or config only?** Recommend the rework: it turns a one-shot ambush into a repeatable small dungeon, which
@@ -510,6 +554,10 @@ mobs are dead it spits out items from its own loot table, then waits a cooldown 
 - **Per-player rewards like the vanilla vault?** Recommend no: one reward per wave for whoever is there. A per-player
   "already looted" list is a later step.
 - **Keep the per-mob extra drops?** Recommend off in vault mode (the box reward replaces it).
+- **"Single item": one stack or one item?** A roll can give a stack (raw iron 1-3 in Quark's table). Recommend one
+  stack as the table rolls it (`rewardSingleCount = false`) and set counts in the reward table itself; true forces
+  count 1.
+- **Box drops when broken while sneaking?** Recommend nothing (as now): a dropped box is a portable spawner.
 
 ### Gotchas
 - Client side: Quark's tick also runs on the client for particles (flame while idle, smoke while counting). The
@@ -525,6 +573,12 @@ mobs are dead it spits out items from its own loot table, then waits a cooldown 
 - **MT-35 Reward:** kill the wave → items pop out of the box once; walking up again within the cooldown does nothing.
 - **MT-36 Re-arm:** `cooldownTicks = 200` (game stopped), repeat → after 10 s it growls again.
 - **MT-37 Off switch:** `vaultMode = false` → Quark behaviour (the box breaks).
+- **MT-47 Single item:** kill the wave → exactly one stack pops out, from the reward table.
+- **MT-48 Obsidian hardness:** survival, diamond pickaxe → about 9.4 s to mine, like obsidian next to it; iron
+  pickaxe → barely progresses; TNT next to it → box survives.
+- **MT-49 Sneak to break:** mine it standing → aqua warning in chat, box stays (and reappears client side); mine it
+  sneaking → breaks, drops nothing. Same in creative.
+- **MT-50 Create drill:** a powered Create drill against a box → it doesn't break.
 
 ---
 

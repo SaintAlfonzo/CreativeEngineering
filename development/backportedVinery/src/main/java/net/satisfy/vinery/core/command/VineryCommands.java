@@ -244,7 +244,9 @@ public final class VineryCommands {
         }
         int resolved = amplifier >= 0 ? amplifier : effect.amplifier();
         for (ServerPlayer player : players) {
-            player.addEffect(new MobEffectInstance(effect.effect(), effect.duration(), resolved), ctx.getSource().getEntity());
+            for (net.minecraft.world.effect.MobEffect e : effect.effects()) {
+                player.addEffect(new MobEffectInstance(e, effect.duration(), resolved), ctx.getSource().getEntity());
+            }
         }
         int count = players.size();
         ctx.getSource().sendSuccess(Component.translatable("command.vinery.effect.given", wine.getDefaultInstance().getHoverName(), count), true);
@@ -287,7 +289,7 @@ public final class VineryCommands {
         header(source, "command.vinery.dump.effects", "%s wines with an effect", wines.size());
         for (ResourceLocation id : wines) {
             WineEffects.WineEffect effect = WineEffects.get(Registry.ITEM.get(id));
-            String line = id + " → " + String.valueOf(net.minecraftforge.registries.ForgeRegistries.MOB_EFFECTS.getKey(effect.effect())) + " " + (effect.amplifier() + 1) + ", " + effect.duration() + " ticks";
+            String line = id + " → " + effect.effects().stream().map(e -> String.valueOf(net.minecraftforge.registries.ForgeRegistries.MOB_EFFECTS.getKey(e))).collect(java.util.stream.Collectors.joining("+")) + " " + (effect.amplifier() + 1) + ", " + effect.duration() + " ticks";
             source.sendSuccess(Component.literal(line), false);
         }
         return wines.size();

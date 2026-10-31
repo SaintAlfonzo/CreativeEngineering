@@ -165,12 +165,12 @@ line 66). Potion buckets and tipped arrows on these machines: [potion_buckets.md
 
 ### Findings (2026-10-18)
 
-- **F1. Batch sizes differ between machines. Your call.** Create 1000 mB; IE Mixer 1500 mB, but 1000 mB for the step
+- **F1. Batch sizes differ between machines.** DECIDED 2026-10-29 (owner): keep the IE Mixer's 1500 mB batch (TODO `potions/potions #2`; the brief's matching build drops Lingerification to 1000). Create 1000 mB; IE Mixer 1500 mB, but 1000 mB for the step
   into lingering "so Create and IE stay in step"; Lingerification 1500 mB + 250 mB dragon's breath. So 250 mB of
   dragon's breath makes 1000 mB of lingering in the Create mixer and 1500 mB in the Refinery, and one dragon's breath
   bottle makes 1000 mB in the IE Mixer. Either is fine; the comment in the IE Mixer class implies they were meant to
   line up.
-- **F2. Lingering from regular, only on the Refinery. Your call.** Lingerification takes regular or splash; the Create
+- **F2. Lingering from regular, only on the Refinery.** DECIDED 2026-10-29 (owner): keep the Refinery shortcut (TODO `potions/potions #3`, no change). Lingerification takes regular or splash; the Create
   mixer and the IE Mixer only convert splash (vanilla's rule). Keep the Refinery as the shortcut, or drop its
   regular → lingering recipes.
 - **F3. Placeholder reagents:** Magic Resistance (amethyst shard, `potions.js` line 72) and Luck (four-leaf clover,
@@ -179,7 +179,7 @@ line 66). Potion buckets and tipped arrows on these machines: [potion_buckets.md
   emptied. In [TODO](todo/TODO.md) `tooling/patchermod-cleanup #1`; delete it.
 - **F5.** FIXED 2026-10-19 (javadoc names `potions.js` part 3). **Stale doc:** `DragonBreathBrewing`'s javadoc says the item dragon's breath mixes are stripped by
   `kubejs/startup_scripts/changes/dragon_breath.js`; there is no such file, it's `potions.js` part 3.
-- **F6. Raw `e.custom` in `potion_bottling.js`.** Bottling, filling and emptying are hand-written JSON, against the
+- **F6.** FIXED 2026-10-27 ([pack_hygiene.md](pack_hygiene.md) 3.3 finding 13, TODO `tooling/conventions #1`, PH-07). **Raw `e.custom` in `potion_bottling.js`.** Bottling, filling and emptying are hand-written JSON, against the
   NCH-helper rule in CLAUDE.md. `NCH.ieBottling` already exists (use it with an NBT fluid), `NCH.createFilling`
   covers the Spout and `NCH.createEmptying` the Item Drain (`neoCraftHelper.js` line 1449, added in 1.0.8). One gap:
   `ieBottling` writes its results through `_itemJson`, which drops item NBT, so it needs `_nbtItemJson` before the
@@ -293,7 +293,11 @@ Creative for setup, survival-like for the machines. Use JEI (R / U) and F3+H.
 
 ## 9. Owner effect change list (scratchpad 2026-10-27)
 
-TODO rows: `potions/effects` (last rows). Nothing here is built.
+TODO rows: `potions/effects` (last rows). BUILT 2026-10-31 except Oiled (`#12`): swaps and removals, compounds,
+copper poisoning are in [effects.md](effects.md) 2.6 to 2.8. Decided 2026-10-31: Caffeinated uses Phantom Bane and
+Phantom Bane ending resets Time Since Rest; the golden apple wine gives the enchanted golden apple set and its own
+effect is removed; Crab Shell (no crab claw exists) brews Knockback Resistance; Restfulness went with Insomnia (the
+Flare's only source).
 
 - Knockback resistance: bear hair or crab claw can be brewed for it and drops Resilience.
 - Agility / climbing: swap every Agility to Climbing, durations unchanged.
@@ -312,3 +316,4 @@ TODO rows: `potions/effects` (last rows). Nothing here is built.
   hotbar or offhand, roll for the effect; more fully oxidized pieces raise the chance; the poison is short and its
   duration grows with the piece count. Analyse the performance cost of scanning for oxidized gear first.
 - Oiled: remove it from fish oil; decide where the effect comes from (a chemical thrower without igniter?).
+- 2026-10-31: scratchpad notes translated into TODO rows (`potions/enchanting #8`). No code changed.

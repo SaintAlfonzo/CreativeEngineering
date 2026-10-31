@@ -20,6 +20,8 @@ import sereneseasons.init.ModFertility;
  * - frozen and permanent winter biomes use the "too cold" rule (winter crops only) even where the biome
  *   itself is above 0.15;
  * - a permanent season (spring/summer/autumn) counts as that season all year.
+ * Only matters with fertility.toml seasonal_crops = true: the pack has it off, crop growth seasons are
+ * {@code seasons/CropSeasons} (crops.md 2.12.1).
  */
 @Mixin(value = ModFertility.class, remap = false)
 public class SeasonFertilityMixin {

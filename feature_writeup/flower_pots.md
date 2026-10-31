@@ -8,10 +8,11 @@ can be potted, a tooltip label on every flower pot, every pot distinct, pots hol
 
 | Part | Status | Open |
 |---|---|---|
-| Audit: every holder's accept rule, read from bytecode (section 2) | DONE 2026-10-27 (static) | live confirmation SQ-POT-01 to -05 |
-| `/dumppots` (`kubejs/server_scripts/_lib/dump_flower_pots.js`, in `/dumpall`) | BUILT 2026-10-27, not run | SQ-POT-01 |
-| Probe `/pottest` (`tools/flower_pot_test/pot_probe.js`, scratch-only) | BUILT 2026-10-27, not run | SQ-POT-02 to -04 |
-| Matrix generator `tools/flower_pot_audit.py` -> [flower_pots_matrix.md](flower_pots_matrix.md) | BUILT 2026-10-27; matrix is a static prediction until the two dumps exist | rerun after SQ-POT-02 |
+| Audit: every holder's accept rule, read from bytecode (section 2) | DONE 2026-10-27 (static); live run 2026-10-27 evening | SQ-POT-05 analysis, CQ-POT-01 |
+| `/dumppots` (`kubejs/server_scripts/_lib/dump_flower_pots.js`, in `/dumpall`) | BUILT 2026-10-27; SQ-POT-01 PASS 2026-10-27 evening (after two fixes: 121 potted, 101 pot-like, 543 plants) | none |
+| Probe `/pottest` (`tools/flower_pot_test/pot_probe.js`, scratch-only) | BUILT 2026-10-27; SQ-POT-02 to -04 ran 2026-10-27 evening (427 probe mismatches, 6 probe exceptions: `minecraft:hanging_roots` in 6 holders; the F1 `ClassCastException` did not show) | read the mismatches (SQ-POT-05) |
+| Matrix generator `tools/flower_pot_audit.py` -> [flower_pots_matrix.md](flower_pots_matrix.md) | BUILT 2026-10-27; regenerated from both dumps 2026-10-27 evening | none |
+| Botanist workbench as a flower pot (section 3.1, TODO `#5`) | BUILT 2026-10-29, installed 2026-10-29 (patcherMod 1.1.04); r1031 (2026-10-31): mixins and own block entity PASSED (SQ-POT-06b), a placed bench holds no plant; the flower in the house benches not read, SQ-POT-06 open (client check pending) | POT-08, SQ-POT-06, CQ-POT-02 |
 | Bugs found (section 3) | open, none fixed | decisions D1 to D6 |
 | Tooltip labels, "every pot distinct", "pots hold every flower" | not started | decisions D1, D2, D6 |
 
@@ -55,14 +56,14 @@ Static prediction (2026-10-27, 369 plant items; full table in the matrix):
 | Flower box (Supp.) | `supplementaries:flower_box` | main hand; hit position picks the slot; empty hand takes back | `BlockItem` in `#supplementaries:flower_box_plantable` (273 live) or a `FlowerPotHandler` special model (cactus, azalea, flax seeds and 22 Quark plants: crops, seeds, vines, sea pickle, chorus) | 3; double plants draw both halves at 0.625 scale | box + contents |
 | Planter box (AF) | `another_furniture:<9 woods>_planter_box` | either hand; hit picks left or right | `#another_furniture:planter_box_placeables` (262 live) minus `planter_box_banned` (empty) | 2; no tall flower is in the tag | box + contents; no take-back by hand |
 | Hanging pot (Beautify) | `beautify:hanging_pot` | main hand; bone meal (not over a sturdy block) grows it, shears harvest | hardcoded 25 vanilla items (`HangingPot.validFlowers`): 13 small flowers, 4 tall flowers, vine, glow lichen, weeping and twisting vines, glow berries, sweet berries, grass, fern | 1 (state `potflower`) | pot + plant (+1 if grown) |
+| Botanist workbench (Beautify, pack) | `beautify:botanist_workbench` | either hand; a click that changes nothing passes (blocks still place against it) | same map as the vanilla pot, read on every click | 1; the plant sits in the bench's own pot at 2/3 size | bench + plant |
 | Large pot (Floral) | `floralench:large_pot`, 30 `large_*_pot` | either hand; always consumes the click | hardcoded `item ==` chain: 13 small vanilla flowers, sunflower, lilac, rose bush, peony; same small flower twice = `large_double_*` | tall-flower pots are a 2-block-high model in a 1-block block (enchanting #7) | the filled pot item |
 | Vinery pot | `vinery:flower_pot` | main hand, not sneaking | `#minecraft:tall_flowers` only (22 live, incl. 16 Botania double flowers, wild rice, flowering rush) | 1; renderer forces `HALF=UPPER` | pot + plant |
 | Vinery box | `vinery:flower_box` | front or top face, x < 0.5 picks the slot | `#vinery:small_flower` = `#minecraft:small_flowers` (loaded from `vinery_upstream/`) | 2 | box + contents |
 | Silt pot (Twigs) | `twigs:<17>silt_pot` | fill with rooted dirt first (otherwise a 9-slot container) | any `FlowerBlock` (not `TallFlowerBlock`) placed on top; `FlowerBlockMixin.mayPlaceOn` | 1 real block above | pot; flower pops |
 | Planter (Supp.) | `supplementaries:planter`, `planter_rich` | none: plant on top | soil: `canSustainPlant = true` for every `IPlantable`, in `#minecraft:bamboo_plantable_on`, not `#minecraft:dirt`; rich one random-ticks Farmer's Delight rich soil on the plant above | a growing tree turns it into rooted dirt | planter |
 
-Not plant holders: Handcrafted's 16 `*_pot` (decorative, no `use`), Beautify `botanist_workbench` (decorative),
-Botania apothecaries, Create depot. `supplementaries:rooty_*` blockstates are Dynamic Trees assets (not installed).
+Not plant holders: Handcrafted's 16 `*_pot` (decorative, no `use`), Botania apothecaries, Create depot. `supplementaries:rooty_*` blockstates are Dynamic Trees assets (not installed).
 
 Vanilla map contents (static count): 33 vanilla + Quark 35 (`MorePottedPlantsModule` plus Chorus Vegetation, Glimmering
 Weald, Ancient Wood, Blossom Trees) + Fruits Delight 13 saplings + Bushier Flowers 13 + Upgrade Aquatic 5 + Buzzier
@@ -86,6 +87,28 @@ gossypium. `/dumppots` replaces this count with the live map.
 | F10 | Supplementaries' hanging pot can only be made from an empty vanilla pot: a framed pot hangs by itself, no other pot hangs | note | none |
 | F11 | Glow lichen, mangrove roots, beachgrass, kelp variants, mushroom colonies, rubberwood sapling, magic peanut (Vintage) have no pot | gap | D1 |
 
+### 3.1 Botanist workbench as a flower pot (pack)
+
+Beautify's `BotanistWorkbench` is a plain `HorizontalDirectionalBlock`. `mixin/BotanistWorkbenchPotMixin` (`@Pseudo`)
+adds `EntityBlock`, `use` and `onRemove`; the block entity `creativeengineering:botanist_pot`
+(`compat/BotanistPotBlockEntity`) stores the plant's block id (NBT `Plant`).
+
+- **Plant list:** `compat/BotanistPot.use` follows vanilla `FlowerPotBlock.use` against the vanilla pot's
+  `getFullPotsView()` map, read on every click, so any plant a mod adds with `addPlant` works here too. Empty hand (or
+  any item that is not pottable) on a full bench takes the plant back; breaking the bench drops it.
+- **Look:** `compat/BotanistPotClient` wraps every workbench state model at bake time. For the stored plant it takes
+  the quads of the map's `potted_*` block model, drops those whose sprite is used by the empty `minecraft:flower_pot`
+  model (pot and dirt), scales them to 2/3 about the plant base (pot centre, y4) and moves that point onto the bench's
+  pot (x11.5 y15 z10.5 in the north model), then turns it with the bench's facing. Models come from the current bake
+  and the quad cache dies with the wrapper, so resource-pack potted models show after F3+T. Tinted plants (fern,
+  grass) keep their colour: plant tint indices are moved up by 1000 and handed to the potted block's colour handler.
+- **Structures:** `mixin/StructureTemplateBotanistPotMixin` (on Forge's 6-argument `processBlockInfos`, like the loot
+  swap) gives each template workbench without NBT a random flower: map keys in the `minecraft` namespace, in
+  `#minecraft:flowers`, with a pot entry, not the wither rose. Benches in chunks generated before this change stay
+  empty.
+- **Not covered:** the `flower_pot_audit.py` matrix and `/pottest` have no workbench column (it takes exactly the
+  vanilla pot's column).
+
 ## 4. Decisions (open, owner)
 
 - **D1 "pots hold every flower":** which plants get a vanilla `potted_*` block (map entry + model)? Options: (a) all
@@ -99,14 +122,19 @@ gossypium. `/dumppots` replaces this count with the live map.
 - **D5 soul planter:** register it ourselves (patcherMod mixin on Supplementaries' compat check) or drop it.
 - **D6 F1 fix:** add the four Fungi Delight items to `#another_furniture:planter_box_banned` (smallest), or take them
   out of `#forge:mushrooms` (affects recipes).
-- **Botanist workbench (`#5`):** it has no block entity; making it a pot needs a new block entity and renderer.
+- **Botanist workbench (`#5`):** decided 2026-10-29 and built (section 3.1): the plant model only (Beautify's pot
+  and dirt stay), 2/3 size, structure-placed benches start with a random vanilla flower.
 
 ## 5. File map
 
 - [../kubejs/server_scripts/_lib/dump_flower_pots.js](../kubejs/server_scripts/_lib/dump_flower_pots.js): `/dumppots`
 - [../tools/flower_pot_test/pot_probe.js](../tools/flower_pot_test/pot_probe.js): `/pottest` scratch probe
+- [../tools/flower_pot_test/flower_world.js](../tools/flower_pot_test/flower_world.js): `/flowerworld` scratch builder of
+  the `saves/flower test` superflat world (every potted plant x one block per holder type, axis of plants on grass)
 - [../tools/flower_pot_audit.py](../tools/flower_pot_audit.py): matrix generator, holder rules as data
 - [flower_pots_matrix.md](flower_pots_matrix.md): generated matrix
+- Botanist workbench pot: patcherMod `compat/BotanistPot.java`, `BotanistPotBlockEntity.java`, `BotanistPotClient.java`,
+  `mixin/BotanistWorkbenchPotMixin.java`, `mixin/StructureTemplateBotanistPotMixin.java`
 - Pack code touching pots: patcherMod `compat/RespitePottedTeaBush.java`, CD rustic `logic/RDEvents.java`, backportedMiners
   `logic/MDSetup.java`, backportedVinery `core/registry/ObjectRegistry.java` (F2), `legacy/block/LegacyFlowerPotBlock.java`
 
@@ -129,10 +157,18 @@ Scratch server entries: SQ-POT-01 to SQ-POT-05 in [testing/scratch_queue.md](tes
 - [ ] **POT-05 Beautify and Floral:** a rose bush in each; a modded flower in each is refused.
 - [ ] **POT-06 Vinery pot and box:** a Botania double flower and wild rice in the pot (client draws both, no crash);
   2 small flowers in the box.
+- [ ] **POT-08 botanist workbench:** a poppy, an oak sapling, a fern and a Quark-potted lilac each go in (one at a
+  time, empty hand takes each back); the plant sits in the bench's small pot at 2/3 size, turns with all four
+  facings, the fern is green; a Botania mystical flower is refused and still places as a block against the bench;
+  break a filled bench → bench and plant drop; F3+T keeps the plant; a botanist house in new chunks has a flower in
+  its bench.
 - [ ] **POT-07 silt pot and planters:** rooted dirt into a silt pot, a Botania mystical flower on top; wheat, cactus,
   sugar cane and nether wart on a planter survive.
 
 ## 8. History
+
+- 2026-10-29: botanist workbench made a flower pot (section 3.1), patcherMod 1.1.04 built and installed. POT-08,
+  SQ-POT-06, CQ-POT-02 added.
 
 - 2026-10-27: audit. Holder rules read from bytecode (Supplementaries, FramedBlocks, Beautify, Another Furniture, Floral
   Enchantment, Handcrafted, Twigs, Botania, Quark, backportedVinery source). `/dumppots`, `/pottest` and
@@ -141,3 +177,10 @@ Scratch server entries: SQ-POT-01 to SQ-POT-05 in [testing/scratch_queue.md](tes
 - 2026-10-27 (later): first scratch run (session creativeengineering2-50, pe3) failed in setup: `/dumppots` loaded
   `java.lang.Class`, which KubeJS's class filter blocks, so `/pottest` had no plant list (12x PP-00). Fixed (interfaces
   through `Java.loadClass` + `instanceof`); SQ-POT-01 to -05 back in the queue.
+- 2026-10-27 (evening scratch run, queue Run log): SQ-POT-01 PASS after two `/dumppots` fixes; SQ-POT-02 to -04 ran
+  and regenerated the matrix (427 probe mismatches, 6 exceptions); SQ-POT-05 analysis and CQ-POT-01 open.
+- 2026-10-29: `saves/flower test` built with `/flowerworld` (284 plants x 17 holders, 6 sections of 48 rows along +x)
+  for hand-picking which plants other pots should take. Live fill counts equal pot_probe.json; Supplementaries'
+  hanging pot takes the vanilla map (115) once its block entity holds an empty pot (the probe's 0 was its setup)
+  and the botanist workbench takes the same 115.
+- 2026-10-31: scratchpad notes translated into TODO rows (`blocks/framed-and-decor #11`). No code changed.

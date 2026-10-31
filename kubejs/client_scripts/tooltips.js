@@ -396,6 +396,12 @@ var i = global.item;
 		[i.abacus,['Measures block distances', col.uncm]],
 		[i.slingshot, ['Place blocks from a distance', col.uncm], ['Stasis enchantment removes gravity and highlights target', col.norm]]
 	);
+
+	//Stepstools (patcherMod stepstool/; feature_writeup/stepstool.md)
+	;['white', 'orange', 'magenta', 'light_blue', 'yellow', 'lime', 'pink', 'gray',
+		'light_gray', 'cyan', 'purple', 'blue', 'brown', 'green', 'red', 'black'].forEach(c =>
+		addTooltips(e, [i[c + '_stepstool'], ['Worn in the Feet slot', col.uncm],
+			['Stand still and hold Sprint + Jump to step up', col.norm], ['Move, crouch or jump to step off', col.norm]]))
 				
 // ############################## Crafting Materials ##############################	
 
@@ -551,7 +557,7 @@ var i = global.item;
   	
   	//Compass
   	addTooltips(e,
-		[i.explorers_compass, ['Points to any structure!', col.leg]],
+		[i.explorers_compass, ['Points to any structure!', col.leg], ['Not craftable', col.warn]],
 		[i.natures_compass, ['Points to any biome!', col.epic]]
 	);
   	

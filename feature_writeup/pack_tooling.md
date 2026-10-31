@@ -13,15 +13,17 @@ the feature-specific uses. Deploy tooling is in [deploy.md](deploy.md), the perf
 | Tag helper `global.tags` (add/remove, wildcard `addMatching`, families, mineable, storage blocks, overlaps, mirror) | in use |
 | `CEConfig` (patcherMod): one Forge common config, 23 sections, live-editable in Create's config screen; `NCH.cfg` reads recipe values from it | in use ([gear_tuning.md](gear_tuning.md) for `NCH.cfg`) |
 | 24 `/dump*` commands writing `kubejs/exported/`, and `/dumpall` | in use |
-| `/cegen`: runs `tools/generators.json` (45 Python generators and reports) in game, optionally at startup | in use; startup run off |
+| `/cegen`: runs `tools/generators.json` (50 Python generators and reports, 2026-10-31) in game, optionally at startup | in use; startup run off |
 | `tools/pack_paths.py`: shared instance paths, item_dict parser, lenient JSON loader, vanilla / Forge jar locator for the Python tools | in use since 2026-10-27 |
 | Headless tests: 9 `tools/test_*.sh` suites (Java on patcherMod classes, the pack's Rhino fork, node sims, Python), plus GameTest projects | in use; machine-specific paths (F7) |
 | Root Gradle build: one build for the 5 in-tree mods, `ce.forge-mod` convention plugin, `installToMods` | in use |
 | Item-loss repro harness (`tools/item_repro/`) | ran 2026-09-30; found the Sophisticated Backpacks wipe ([plan_1.0.3.md](plan_1.0.3.md) 4.7) |
 | Slice & Dice `_manual_only` recipe ids | in use (2 recipes) |
 
-- **Pending:** nothing built and unshipped. TL-01 to TL-16 are new. Findings F1 to F10 (section 4); F3 and F4 need
-  your call.
+- **Pending (2026-10-31):** F5, F8 and F9 built 2026-10-27 and shipped in 1.1.04 (client 2026-10-29), their checks not
+  run (TL-09; PH tests in [pack_hygiene.md](pack_hygiene.md)); F1 checked on a scratch server (SQ-INV-02), TL-01's
+  empty-tag half open; TL-02 to TL-16 not run. Open findings: F2, F4 (decided, not built), F7, F10; F3 deleted, F6 fixed
+  (section 4).
 - **Files to open:** [item_dict.js](../kubejs/startup_scripts/_lib/item_dict.js),
   [neoCraftHelper.js](../kubejs/startup_scripts/func/neoCraftHelper.js),
   [tag_helper.js](../kubejs/startup_scripts/func/tag_helper.js),
@@ -145,7 +147,7 @@ Rhino's `try/catch` can't (a `NoClassDefFoundError` used to kill `/dumprecipes` 
 
 ### 2.6 Generators and `/cegen`
 
-[tools/generators.json](../tools/generators.json) lists 45 Python generators and reports in run order, each with `groups`
+[tools/generators.json](../tools/generators.json) lists 50 Python generators and reports (45 on 2026-10-27; silk touch blocks, UA coral growths, item physics audit and crop season audit added since) in run order, each with `groups`
 (`core`, `worldgen`, `loot`, `client`, `pack`, `reports`, `names`, `food`, `blockrunner`, `jei`, `stacks`, `slow`), the `dumps` it
 reads, its `outputs` and an `apply` hint. patcherMod's `devtools/GeneratorRunner` runs them as child processes from the
 instance root, hashes the outputs before and after, and reports changes.
@@ -283,7 +285,7 @@ Everything here is the pack's own; nothing replaces a mod. The conventions and t
 
 ### Findings (2026-10-18)
 
-- **F1. `item_dict` probably reports every tag key as missing.** Its tag check runs at `StartupEvents.postInit`, before
+- **F1.** CHECKED 2026-10-26 (SQ-INV-02): not the case, the startup check listed 19 item ids and 0 tag keys; whether an empty tag key is still reported is open ([TODO](todo/TODO.md) `tooling/dictionaries #1`). **`item_dict` probably reports every tag key as missing.** Its tag check runs at `StartupEvents.postInit`, before
   any datapack (and so any tag) has loaded, so `Ingredient.of('#...').itemIds` is empty for all 238 tag keys. Check
   `logs/latest.log` for `[item_dict] Missing/invalid item IDs` (TL-01). If so, move the tag half to a server-side
   check (`ServerEvents.tags` or the first recipe event).
@@ -292,7 +294,7 @@ Everything here is the pack's own; nothing replaces a mod. The conventions and t
 - **F3.** DELETED 2026-10-22. **`global.config` was dead.** `func/config.js` (a self-healing JSON config under
   `config/creativeengineering/`) has no caller; dragon autorepair, its first user, moved to CEConfig, and the folder
   didn't exist.
-- **F4. Test recipes ship in the pack. Your call.** In `server_scripts/_lib/`:
+- **F4.** DECIDED 2026-10-29: a config option, on for now ([TODO](todo/TODO.md) `tooling/conventions #6`, not built). **Test recipes ship in the pack. Your call.** In `server_scripts/_lib/`:
   - `metal_test_recipes.js`: a mechanical crafting recipe per metal (15 metals + netherite) that takes one of every form
     of the metal (ore to component, up to 20 items) for 1 ingot;
   - `wood_test_recipes.js`: the same idea for wood;
@@ -304,16 +306,16 @@ Everything here is the pack's own; nothing replaces a mod. The conventions and t
 - **F6.** FIXED 2026-10-19 (all three). **Stale references:** `test_crop_growth.sh` names `feature_writeup/crop_growth.md` (it's [crops.md](crops.md)
   2.9); `neoCraftHelper.js` line 1 says `kubejs/server_scripts/helpers/recipes.js`; the `NCH.cfg` example uses toml
   keys instead of field names ([gear_tuning.md](gear_tuning.md) F12).
-- **F7. Headless tests need this machine's caches.** `java_test_cp.sh` reads `~/.local/share/atlauncher/libraries` and
+- **F7.** Open ([TODO](todo/TODO.md) `tooling/generators-and-tests #2`). **Headless tests need this machine's caches.** `java_test_cp.sh` reads `~/.local/share/atlauncher/libraries` and
   the ForgeGradle cache's mapped Forge jar; the remainder-buffer GameTests download FD and Respite. A fresh clone (or a
   cloud session) can't run the Java parts until those exist.
-- **F8. Duplicate dict keys:** 55 keys are assigned twice (same id each time). Harmless; the "Unsorted (Possible
+- **F8.** FIXED 2026-10-27 (pack_hygiene 20, [TODO](todo/TODO.md) `tooling/conventions #2`). **Duplicate dict keys:** 55 keys are assigned twice (same id each time). Harmless; the "Unsorted (Possible
   duplicates)" section is where to start.
-- **F9. Convention drift found by the writeups:** raw `e.custom` in `potion_bottling.js` and `tipped_arrows.js`
+- **F9.** BUILT 2026-10-27 (pack_hygiene 13 to 17, [TODO](todo/TODO.md) `tooling/conventions #1`; leftovers listed there). **Convention drift found by the writeups:** raw `e.custom` in `potion_bottling.js` and `tipped_arrows.js`
   (`NCH.ieBottling` exists; a `createEmptying` helper doesn't), raw tag `e.add` in `equipmenttags.js` (44 lines) and
   literal entity ids in `entitytags.js` (no entity dict). See [potions.md](potions.md) F6, [archery.md](archery.md)
   F4, [mob_block_tweaks.md](mob_block_tweaks.md) F1.
-- **F10. Removed items don't remove their recipes.** `recipe_scan.js` only lists them; each removal is by hand. Fine
+- **F10.** Open by design ([TODO](todo/TODO.md) `tooling/generators-and-tests #3`). **Removed items don't remove their recipes.** `recipe_scan.js` only lists them; each removal is by hand. Fine
   as a design, but a removed item's recipe survives until someone acts on the list.
 
 ### Known limits
@@ -364,7 +366,7 @@ Everything here is the pack's own; nothing replaces a mod. The conventions and t
 - [ ] **TL-07 `/dumpall`:** run it → chat ends with `[dumpall] all 22 dumps done`; `kubejs/exported/` timestamps
   updated; `server_mods/` refreshed.
 - [ ] **TL-08 A dump failing:** (if one fails) `/dumpall` reports it and carries on with the rest.
-- [ ] **TL-09 `/cegen` list:** `/cegen` → the 45 generators, the groups (`stacks` among them) and the last run.
+- [ ] **TL-09 `/cegen` list:** `/cegen` → the 50 generators, the groups (`stacks` among them) and the last run.
 - [ ] **TL-10 `/cegen run core`:** runs the core group in the background, one chat line per script, changed outputs
   named; `logs/cegen/structure_config.log` exists.
 - [ ] **TL-11 `/cegen run loot dumps`:** runs `/dumploot` and `/dumptags item` first, then the loot generators.

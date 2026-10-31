@@ -8,9 +8,15 @@
 // hunger and flags stay.
 //   Rustic Delight's coffees: Speed + Haste -> Caffeinated (Farmer's Respite's), the pack's only coffee family since
 //   Respite's coffee merged into it (item_merges.js). Coffee 1:30, milk 1:00, honey / chocolate 0:45, dark II 0:45.
+//   Neapolitan's Agility -> Vinery's Climbing, same durations (potions/effects #9). The banana cake blocks and anything
+//   else that gives Agility are swapped when applied by patcherMod (CEConfig [effects] remap); this fixes the tooltips.
+var ef = global.effect
 global.foodEffectSwaps = [
 	{ items: ['coffee', 'milk_coffee', 'honey_coffee', 'chocolate_coffee', 'dark_coffee'],
-		from: ['minecraft:speed', 'minecraft:haste'], to: 'farmersrespite:caffeinated' },
+		from: [ef.speed, ef.haste], to: ef.caffeinated },
+	{ items: ['neapolitan_banana', 'banana_bread', 'dried_banana', 'banana_ice_cream', 'banana_milkshake',
+		'strawberry_banana_smoothie', 'adzuki_curry'],
+		from: [ef.agility], to: ef.climbing },
 ]
 
 ItemEvents.modification(e => {

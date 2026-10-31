@@ -30,6 +30,7 @@ import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 import static net.satisfy.foundation.util.LibUtil.popResourceFromFace;
+import net.minecraftforge.common.ForgeHooks;
 
 /**
  * Leaves that grow fruit over time (apples, cherries ...). Only some leaves can carry fruit,
@@ -126,7 +127,8 @@ public abstract class FruitLeavesBlock extends LeavesBlock implements Bonemealab
         if (!level.getBlockState(pos).is(this)) {
             return;
         }
-        if (random.nextDouble() < growthChance()) {
+        // Port: fire Forge's crop-grow event so the pack's crop seasons apply (crops.md 2.12.1)
+        if (random.nextDouble() < growthChance() && ForgeHooks.onCropsGrowPre(level, pos, level.getBlockState(pos), true)) {
             grow(level, pos, level.getBlockState(pos));
         }
     }

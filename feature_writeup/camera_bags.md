@@ -10,9 +10,9 @@
 | Old `creativeengineering:*_camera_bag` items remapped to the new ids | DEPLOYED with 1.0.4; R4-04 never run |
 | Recipes: leather bag crafted; iron and netherite by smithing | DEPLOYED; the netherite step probably needs Armor Trims' template (F1) |
 
-- **Pending:** F4 (flashes in the bag tag, `equipmenttags.js`, `/reload`) built 2026-10-22, unshipped, scratch server PASSED 2026-10-22
+- **Pending:** F4 (flashes in the bag tag, `equipmenttags.js`, `/reload`) built 2026-10-22, DEPLOYED with 1.1.01, scratch server PASSED 2026-10-22
   (SQ-GM-03). CB-01 to CB-11 are new; R4-04 to R4-06 and R4-11 stay in
-  [plan_1.0.4.md](plan_1.0.4.md). Findings F1 to F4 (section 4); F1 and F2 need your call; F4 done 2026-10-22.
+  [plan_1.0.4.md](plan_1.0.4.md). Findings F1 to F4 (section 4); F1 and F2 decided 2026-10-29 (keep the template; lunchbox textures for the tiers); F4 done 2026-10-22.
 - **Files to open:** [camerabag/](../development/exposureBackport/src/extras/java/com/SaintAlfonzo/exposure_extras/camerabag/),
   [camera_bag.js](../kubejs/server_scripts/equipment/camera_bag.js) (recipes),
   [camera_equipment.json](../development/exposureBackport/src/extras/resources/data/exposure_extras/tags/items/camera_equipment.json)
@@ -75,11 +75,11 @@ in containers (shulker boxes). The pack adds `#exposure:flashes` (redstone lamp,
 
 ### Findings (2026-10-18)
 
-- **F1. The netherite upgrade probably needs a Netherite Upgrade Smithing Template. Your call.** Armor Trims blocks any
+- **F1. The netherite upgrade probably needs a Netherite Upgrade Smithing Template.** DECIDED 2026-10-29 (owner): keep; the template is used for every netherite upgrade (TODO `gear/camera-bags #2`). Armor Trims blocks any
   smithing recipe whose material is in `#forge:ingots/netherite` unless the template is in its slot
   ([shields.md](shields.md) F8). So iron bag + netherite ingot gives nothing without a template, and the template is
   used up. Keep that (consistent with gear), or change the material (e.g. netherite scrap) to skip it. Check with CB-04.
-- **F2. Iron and netherite have no look of their own. Your call.** All three share the leather model until tier
+- **F2. Iron and netherite have no look of their own.** DECIDED 2026-10-29 (owner): use the new lunchbox textures (TODO `gear/camera-bags #3`, not built). All three share the leather model until tier
   outlines are drawn ([plan_1.0.4.md](plan_1.0.4.md) 2, "still open" 4).
 - **F3. Never run in game.** GUI, slot locking, upgrades keeping contents, tooltip, overflow spill and the old-id remap
   have only been checked by the build (plan_1.0.4 "still open" 1 to 3).

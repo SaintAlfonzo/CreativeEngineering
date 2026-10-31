@@ -116,12 +116,10 @@
             check('effect stew ' + n, nbt.indexOf('EffectId:' + numId + ',') >= 0 && nbt.indexOf('EffectDuration:160') >= 0,
                 STEW[n] + ' (' + numId + ') -> ' + nbt)
         })
-        let pie = [C + 'baking/truffle_pie'].filter(id => has(server, id))
+        let pie = [CDN + 'baking/truffle_pie', C + 'baking/truffle_pie'].filter(id => has(server, id))
         note('ids with truffle_pie', Object.keys(recipes(server)).filter(id => id.indexOf('truffle_pie') >= 0).join(', ') || 'none')
-        // known gap, TODO fungiport #3 (owner: leave for later): CCK's truffle_pie has no item without Environmental,
-        // so the oven recipe never loads. Record only until that is decided.
-        if (pie.length >= 1) check('oven truffle pie', takes(server, pie[0], FG + 'truffle'), pie.join(', '))
-        else note('oven truffle pie (known gap fungiport #3)', 'none')
+        // TODO fungiport #3: the pack registers CCK's truffle_pie item (2026-10-31), so the oven recipe must load
+        check('oven truffle pie', pie.length >= 1 && takes(server, pie[0], FG + 'truffle'), pie.join(', ') || 'none')
         if (pie.length) {
             let ins = ingredientsOf(recipes(server)[pie[0]]).map(g => { let s = g.getStacks(); return s.size() ? itemId(s.get(0)) + 'x' + s.get(0).getCount() : '-' })
             note('truffle pie inputs', ins.join(', '))

@@ -10,7 +10,7 @@ Three ways to place food in this pack:
   * Crops and bushes that are edible (carrot, sweet berries...) plant rather than place. They are listed
     in the catalog but get no tag.
   * Brewin' and Chewin' coasters (backport) take up to 4 items, and with [coaster] taggedItemsOnly only the ones
-    with a coaster model: the port's own (COASTER_DIR) and the Display Delight foods tools/gen_coaster_models.py
+    with a coaster model: the port's own (COASTER_DIR) and the block-modelled foods tools/gen_coaster_models.py
     writes (PACK_COASTER_DIR, run it first). Those get "Placeable on a coaster" (alcohol.md 8.3, 12).
 
 Outputs:
@@ -59,7 +59,8 @@ TAGS = OrderedDict([
 
 # The Brewin' port's coaster models (one file per item that has its own look on a coaster).
 COASTER_DIR = INSTANCE / 'development/backportedBrewin/src/main/resources/assets/brewinandchewin/brewinandchewin/coaster'
-# The pack's coaster models: Display Delight's placed models, from tools/gen_coaster_models.py.
+# The pack's coaster models (Display Delight's placed models, other mods' wine bottles and jars, borrowed models),
+# from tools/gen_coaster_models.py.
 PACK_COASTER_DIR = INSTANCE / 'kubejs/assets/creativeengineering/brewinandchewin/coaster'
 # Only items with a coaster model go on a coaster (owner 2026-10-25: the produce of every raw, cooked, egg and dairy
 # food type had joined the tag and lay flat without a model; those were cut, food_families.md 4.4).
@@ -97,6 +98,8 @@ EXCLUDE = {
     'oldguns:*': 'black powder cake: gunpowder, not food',
     'immersive_weathering:icicle': 'ordinary block that happens to be edible',
     'immersive_weathering:moss_clump': 'ordinary block that happens to be edible',
+    'vintagedelight:sweet_berry_jam_jar': 'removed (dishes/jams, 2026-10-29): Fruits Delight has the sweet berry jam',
+    'vintagedelight:glow_berry_jam_jar': 'removed (dishes/jams, 2026-10-29): Fruits Delight has the glow berry jam',
 }
 
 VANILLA_STEWS = {'minecraft:mushroom_stew', 'minecraft:rabbit_stew', 'minecraft:beetroot_soup'}
@@ -264,7 +267,7 @@ def add_coaster(entries, rows, installed):
                      'kinds': set(), 'how': [], 'dd': {}}
             entries[item_id] = entry
         entry['kinds'].add('placeable_on_coaster')
-        entry['how'].append('coaster: right click a coaster' + ('' if item_id in modelled else ' (Display Delight model)'))
+        entry['how'].append('coaster: right click a coaster' + ('' if item_id in modelled else ' (pack coaster model)'))
 
 
 def review_candidates(block_items, rows):

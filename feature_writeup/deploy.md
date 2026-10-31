@@ -3,15 +3,16 @@
 BUILT 2026-09-30. Offline checks passed (section 6). Used for real deploys: 1.0.3 (2026-10-02) and 1.0.4 (2026-10-04) went out as
 update payloads; 1.0.5 was staged (2026-10-11) but never copied out; 1.0.6 (2026-10-14, update from 1.0.4, folds in 1.0.5),
 1.0.7 (2026-10-18), 1.0.8 (2026-10-19 10:20), 1.0.9 (2026-10-19 15:54), 1.1.01 (2026-10-22 22:39) and 1.1.02
-(2026-10-23, recorded 2026-10-24) went out as update payloads too. Both sides run 1.1.02
-([deploy/DEPLOYED.json](../deploy/DEPLOYED.json)); 1.1.02 does not load, see the hotfix note in
-[TODO.md](todo/TODO.md).
+(2026-10-23, recorded 2026-10-24) and 1.1.03 (2026-10-26 19:04, server and players) went out as update payloads too;
+1.1.05 (update from 1.1.04, 108 files, 18.8 MB) was applied to the CreativeEngineeringClient instance 2026-10-31 12:51 with `--force`
+(verify showed EXTRA on four same-named 1.1.04 jars that the payload replaces: backportedVeggies -03, creative_delight, creativeengineering-1.1.04, repackedStorage; old copies in the session scratchpad). The server is recorded at 1.1.04 (user's word, 2026-10-31) and
+1.1.05 is not applied there yet ([deploy/DEPLOYED.json](../deploy/DEPLOYED.json)).
 
 ## 0. At a glance
 
 | Part | Status | Open |
 |---|---|---|
-| Deployment snapshot (`--snapshot`, `deploy/DEPLOYED.json`) | BUILT; 1.1.02 recorded as deployed on both sides (2026-10-23, time not known), 1.1.01 before it (2026-10-22 22:39) | [tools/build_deploy.py](../tools/build_deploy.py), [deploy/DEPLOYED.json](../deploy/DEPLOYED.json) |
+| Deployment snapshot (`--snapshot`, `deploy/DEPLOYED.json`) | BUILT; server 1.1.03 (2026-10-26 19:04), client 1.1.04 (2026-10-29 17:16); 1.1.02 on both sides before (2026-10-23) | [tools/build_deploy.py](../tools/build_deploy.py), [deploy/DEPLOYED.json](../deploy/DEPLOYED.json) |
 | `update` / `install` payload modes | BUILT; scratch-tested (DP-01..DP-04 offline) | `select_payload`, `render_readme` |
 | `verify.sh` / `verify.ps1` | BUILT; sh tested, ps1 not run (no PowerShell here). 2026-10-22: `--installed` / `-Installed` checks against the new version (`verify/<target>.installed.*`, both modes); ps1 usage line no longer has a tab for `\t` | `VERIFY_SH`, `VERIFY_PS1` |
 | `apply.sh` / `apply.ps1`: verify (update; stops on DRIFT unless `--force`), removals, copy each folder to its place per target (`CATEGORIES`), `world_serverconfig/` into the server's `level-name` world or the client's `--world` saves, keeps `MEMORY`/`JAVAPATH` (`.bat`: `maxmemory`/`javapath`), verify `--installed`. Install mode moves old jars to `mods_before_<version>/` | BUILT 2026-10-22; sh scratch-tested (synthetic payload: update server + client, rerun refused as DRIFT, install mode, unsafe removal path skipped), ps1 not run | `APPLY_SH`, `APPLY_PS1`, `write_scripts` |
@@ -328,3 +329,18 @@ just stops working (at most a log warning) or breaks later in play. The pack's m
   create_dragon_lib), only a clash with a top-level jar or a Creative Delight member. `pack/manifest.json` regenerated.
   Remaining warnings: Display Delight export older than the jar, uncommitted tree, changelog bullets over 300 characters.
   Not booted: SQ-VP-00 and the scratch queue have not run on these jars. Next: copy, then `--snapshot 1.1.03`.
+- 2026-10-29: 1.1.04 built as an install payload (3438 files, 543 MB) and applied to the CreativeEngineeringClient instance
+  (it failed verify against 1.1.03 with 9 drift jars, so a full install; old jars in `mods_before_1.1.04/`). Snapshot recorded
+  for the client only (2026-10-29T17:16). The server is still on 1.1.03: its update payload must be rebuilt with
+  `build_deploy.py --version 1.1.04 --mode update --from 1.1.03` before copying. patcherMod is now 1.1.04 (installed in
+  `mods/`, old jar archived); two KUBEJS_CLASSES rules added (`wthit/silk_touch_blocks.json` runtime, `physics/item_physics_families.json` dev).
+  The changelog gained a WorldEdit start-time bullet before the build; `unreleased.md` was restarted.
+- 2026-10-30 00:49: 1.1.04 re-staged as an update from 1.1.03 for the server (DEPLOY_LOG: 410 files, 16.2 MB; notes
+  "re-staged from the client instance state actually deployed"; `history/1.1.04.json` rewritten), not copied, no
+  server snapshot. Built with warnings (patcherMod and Vintage sources newer than the jars in `mods/`). Found by the
+  2026-10-31 TODO scan: the payload's `creativeengineering-1.1.04.jar` (2026-10-29 22:02, 3,283,729 bytes) and
+  `creative_delight-1.0.0.jar` (2026-10-29 18:18) are not the jars in the client instance (both 2026-10-29 17:16), so
+  this payload would give the server a different 1.1.04 than the client: check before copying ([TODO](todo/TODO.md)
+  `pack/release #7`). Since then patcherMod 1.1.04 (2026-10-31 00:44), Creative Delight (00:29), Vinery `-06` (00:41),
+  Brewin' `-04` (00:30) and three new third-party jars (Botany Pots, Cozy's Improved Cats, Room for Two) went into
+  `mods/`; they belong to the next version.

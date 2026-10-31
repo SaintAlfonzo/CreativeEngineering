@@ -46,6 +46,11 @@
 		anchorZ = 0.0
 
 [dragon_gear]
+	#Most armor points an entity can have (mixin.ArmorCapMixin). Vanilla is 30; a full dragon set is 36.
+	#Damage reduction still tops out at 20 effective armor (80 %); armor past 20 holds that
+	#cap against bigger hits.
+	#Range: 30.0 ~ 1024.0
+	armorCap = 50.0
 
 	[dragon_gear.autorepair]
 		#Passive slow self-repair for dragon-tier gear while worn/held.
@@ -245,14 +250,21 @@
 		hammerBlows = 8
 
 #Tuning for creativeengineering:magic_resistance's damage reduction against
-#magic damage sources (DamageSource#isMagic() - potion/instant damage, evoker
-#fangs, conduit, dragon's breath, etc).
+#the creativeengineering:magic damage tag (the same tag the shields' MAGIC column
+#reads: potions, poison, evoker fangs, thorns, sonic booms, curses, life drain) and
+#against the periodic damage of the effects listed in negatedEffectTicks.
 [magic_resistance]
 	#Damage reduction per effect amplifier level (amplifier 0 = level I), same
 	#shape as vanilla Resistance. Total reduction is capped at 1.0 (full immunity)
 	#regardless of amplifier.
 	#Range: 0.0 ~ 1.0
 	reductionPerLevel = 0.2
+	#Effects whose periodic damage Magic Resistance stops outright, comma-separated
+	#effect ids. A tick of one of these deals no damage while its level is at most the
+	#Magic Resistance level (Poison I against Magic Resistance I); a higher level takes
+	#the per-level cut instead. These are ticks no shield can block
+	#([shields].unblockableEffectTicks).
+	negatedEffectTicks = "minecraft:poison, minecraft:wither"
 
 #Botania tweaks.
 [botania]
@@ -1327,6 +1339,14 @@
 		#priority predictions, meta retries and the real start of a chunk (patcherMod EarthFill). Same results either way,
 		#only faster. Off: each start reads its own columns.
 		sharedTerrainCache = true
+		#spawn_boxes.json (patcherMod StructureSpawnBoxes): pillager and witch structures respawn their own mob mix
+		#inside a spawn box, members of a meta structure keep their own boxes (or take the meta's), and box evokers drop no
+		#totem. Off: only the mods' own spawn_overrides (inside metas each part keeps its own either way). Applies at once, old chunks too.
+		spawnBoxes = true
+		#Mob spawners of these entities are removed from structure templates when the template loads (patcherMod
+		#TemplateSpawnerFilter); the spawn boxes take their place. A template that loses one also loses its spawners with
+		#no mob. Empty list: every spawner stays. Rejoin; new chunks only.
+		removeSpawners = ["minecraft:pillager"]
 
 	#For testing only; leave at the defaults for play.
 	[worldgen.debug]
@@ -1337,6 +1357,12 @@
 		#the result. Rejoin to apply; only new chunks change.
 		#Range: 0.01 ~ 100.0
 		structureDensity = 1.0
+		#Scratch servers only. On: kubejs/generation_scripts/worldgen/structure_test_overrides.json loosens soft
+		#structure rules so rare structures can be found and tested (per structure frequency, weight, meta share;
+		#group spacing and separation). Biomes, fits, surface checks, peaceful radius, priority and earth/water
+		#fill never change. The log and structure_tag_report.md say TEST OVERRIDES ACTIVE. Rejoin to apply;
+		#only new chunks change.
+		testOverrides = false
 
 	[worldgen.pools]
 		#Fractional piece weights are made whole by scaling the pool's list by up to this factor. Jigsaw
@@ -1463,13 +1489,14 @@
 		#e.g. "philipsruins:ancient_ruins=0,16" (never over water, at most 16 over air after the beard,
 		#mound from its size) or "#creativeengineering:type/village=-1,-1,-1" (no limits). They replace the
 		#size's limits. The first matching entry wins; -1 = no limit.
-		overrides = []
+		overrides = ["eugene:undead_castle=24,320,400"]
 		#The predicted terrain is read once per N x N block cell instead of per column (cheaper, a little
 		#coarser at cliffs). 1 = every column. [worldgen.water_fill] uses it too.
 		#Range: 1 ~ 8
 		sampleGrid = 4
-		#CANCELLED: log each structure that is cancelled (id, chunk, counts, limits). ALL: log every checked
-		#structure that has any earth in its base. For tuning the limits.
+		#CANCELLED: log each structure that is cancelled, and each pruned village or meta part dropped (id, chunk,
+		#counts, limits). ALL: log every checked structure that has earth in its base or (footprintAllPieces) a
+		#surface piece. For tuning the limits.
 		#Allowed Values: OFF, CANCELLED, ALL
 		log = "CANCELLED"
 		#How deep under a piece the beard (beard_thin, beard_box, the soft beard) still fills the ground, in
@@ -1487,10 +1514,19 @@
 		#pad over a cliff). Each column counts once per structure, toward the size's mound limit.
 		#Range: 0 ~ 64
 		maxMoundHeight = 8
+		#Mound columns also under the built bottom of a bearded piece, not only under its earth: a stone or
+		#plank floor over a cliff edge stands on a beard pillar the earth count never sees. Every column with a
+		#solid block in a rigid piece's baseLayers (trimmed columns left out) whose ground lies more than
+		#maxMoundHeight below it counts toward the mound limit; a start with no earth at all is judged as small.
+		#Whole-start check only (pruning still judges earth). tools/earth_fill_sim.sh <seed> <n> footprint
+		#measured 2026-10-30: 23% of vanilla outposts and 2 to 18% of villages would newly cross their mound
+		#limit. Off until calibrated on a log = ALL scratch run.
+		beardFootprint = false
 		#For structures in the structure tag creativeengineering:earth_fill/prune (villages): before the whole start
 		#is judged, each jigsaw piece but the first is judged alone, and one past pruneMaxHanging or pruneMaxMound
-		#is dropped with every piece attached below it (a house over deep water with its villagers). The street
-		#that led to it stays as a dead end. Then the rest is judged as usual. Off: the whole start is judged.
+		#is dropped with every piece attached below it (a house over deep water with its villagers). So is a piece
+		#whose own footprint is too wet (maxWaterSurplus) with at least pruneMinWetColumns water columns. The street
+		#that led to it stays as a dead end. Then the rest is judged as usual. Off: the whole start is judged (and pruneWetJigsaws is off too).
 		prune = true
 		#Earth blocks of one piece over water or air the beard won't fill before that piece is dropped. -1 = never.
 		#Range: -1 ~ 100000
@@ -1499,15 +1535,40 @@
 		#Range: -1 ~ 100000
 		pruneMaxMound = 4
 		#The footprint's water share, checked after the limits: the bounding box of every piece with earth, in the
-		#layer the structure was set onto the surface with. Water there (filled by its earth or the beard, or left
+		#layer the structure was set onto the surface with, and (footprintAllPieces) every other piece's box where
+		#the surface lies within its height. Water there (filled by its earth or the beard, or left
 		#standing) against dry ground there (replaced or left alone): the structure is cancelled when the water
 		#outnumbers the ground by more than this share. 0.5 = water more than 50% over ground (60:40 passes, 61:39
 		#doesn't), 0 = more water than ground, -1 = off. Catches camps on islands and ruins reaching out over a lake,
 		#whose beard fills the shallow water so maxOverWater never sees it. A spot under more than baseLayers
 		#blocks of terrain (underground structures, aquifers) counts as neither. Not for structures in
-		#creativeengineering:water_fill/structures; an override with every limit -1 skips it too.
+		#creativeengineering:water_fill/structures; an override with every limit -1 skips it too. Default 0
+		#(2026-10-30, was 0.5): the strictest setting, any start standing more on water than on ground goes.
 		#Range: -1.0 ~ 1000.0
-		maxWaterSurplus = 0.5
+		maxWaterSurplus = 0.0
+		#The footprint water share also judges pieces with no earth in their base: plank, wool, sandstone or brick
+		#floors, and pieces that are not jigsaw or template pieces (vanilla desert and jungle pyramids, igloos).
+		#A column of such a piece counts when the predicted surface (its topmost block) lies within the piece's
+		#height (from baseLayers below its bottom to its top): water when that surface is water, ground when it
+		#is solid. Pieces buried under the surface or floating above it count as neither. Village streets that
+		#follow the terrain never count. Off: only pieces with earth make the footprint (before 2026-10-30).
+		footprintAllPieces = true
+		#Water columns a piece's own footprint needs before its water share can drop it (so a well or a hut over
+		#a small pond stays). -1 = never drop a piece for its water share.
+		#Range: -1 ~ 100000
+		pruneMinWetColumns = 16
+		#With prune on, every other jigsaw structure on the surface (camps, outposts, ruins, towers; meta
+		#structure parts and anchors too) drops a piece whose own footprint is too wet the same way, with every
+		#piece attached below it; the piece limits above stay for villages. The first piece is never dropped,
+		#and the rest is then judged as usual. Not for creativeengineering:water_fill/structures,
+		#creativeengineering:earth_fill/wet_ok or the structure tag creativeengineering:earth_fill/no_prune
+		#(structures whose pieces only make sense together). Off: only villages are pruned (before 2026-10-30).
+		pruneWetJigsaws = true
+		#Water columns a whole start's footprint needs before its water share (maxWaterSurplus) can cancel it,
+		#so a cliff-edge start whose layer is mostly air doesn't drop on one wet column. 0 = any (before
+		#2026-10-30).
+		#Range: 0 ~ 100000
+		footprintMinWater = 9
 
 		#A structure's size is its earth base block count (each start counted as it generates, a meta
 		#structure part by part). Each size has [maxOverAir, maxMound]: earth blocks over air after the beard,
@@ -1567,7 +1628,7 @@
 	#Meta structures: one structure start made of other structures (an anchor such as a village, plus
 	#satellites such as towers around it) and placed features (driftwood on the sea). Every part keeps
 	#within 7 chunks of the start so the whole thing generates; a part that can't fit (biome, room)
-	#is retried elsewhere, and a meta structure short of a part's minimum count doesn't spawn at all.
+	#is retried elsewhere; a part short of its minimum count keeps what fitted (keepShortParts).
 	#A meta with an anchor only takes a share of the slots its anchor already won, so no structure's rate
 	#changes. /locate finds a meta by its id and a structure inside one by the structure's own id.
 	[worldgen.meta_structures]
@@ -1579,7 +1640,12 @@
 		#(centre or a corner): a satellite tries another spot, an anchor there leaves the slot to the plain anchor,
 		#which still spawns as it would alone. Metas in the structure tag creativeengineering:meta/coast_ok (fleets,
 		#flotillas, wrecks, sunken ruins) are not affected. New chunks only.
-		avoidCoasts = false
+		avoidCoasts = true
+		#A part that fits fewer times than its minimum count (a satellite near a coast, on a cliff) is kept with
+		#what fitted instead of failing the whole meta; earth fill likewise drops an offending satellite and
+		#prunes village parts instead of cancelling the meta. The meta only fails when no structure besides the
+		#anchor is left (the slot is then the plain anchor). Off: a short part fails the meta (before 2026-10-30).
+		keepShortParts = true
 
 	#Geodes whose column is an ocean (the biome at the sea floor is #minecraft:is_ocean) are moved down before
 	#they generate, so they stay under the deepest sea floor the world can have. A moved geode's top (its
@@ -1603,6 +1669,13 @@
 		#Geodes whose inner layer is one of these blocks are left at their own height (Geode Plus'
 		#prismarine geode belongs on the sea floor).
 		untouched = ["geode:budding_prismarine"]
+		#A geode under an ocean that still reaches the sea floor (the stayShare ones; not the untouched
+		#ones). SWAP: it keeps its shape, and its outer and middle layer blocks from the floor up become the floor
+		#block that column had before (sand, gravel, clay), so it reads as a mound of sea floor with the opening
+		#into its crystals. CUT: it is cut flush with the floor (its blocks above the floor become water) and the
+		#rim left on the surface becomes the floor block. OFF: it sticks out as generated.
+		#Allowed Values: OFF, CUT, SWAP
+		floorPatch = "SWAP"
 
 	[worldgen.placement_priority]
 		#Log every structure start dropped because a higher-ranked structure overlaps it, and every
@@ -1647,8 +1720,9 @@
 		#Any structure search (/locate, maps, Async Locator) still running after this long ends as not found and
 		#logs a [locate] line with its counters; its thread is free again. /celocate stop ends running searches
 		#too, and so does the server stopping. 0 = no deadline. Applies to new searches immediately.
+		#Tuned 2026-10-30 (user): 300 [120], so the fortified villages' meta camps and ruins can answer.
 		#Range: 0 ~ 3600
-		searchTimeoutSeconds = 120
+		searchTimeoutSeconds = 300
 
 	#Distant Horizons' distant generation only (chunks it generates for LODs and throws away). Below clipBelowY
 	#no terrain noise is computed: land columns are filled with stone, and an ocean column whose block at
@@ -1819,6 +1893,52 @@
 	#this + 40 ticks, so they stay on. A newly equipped armor starts working within one interval.
 	#Range: 1 ~ 1200
 	mountEffectIntervalTicks = 100
+	#Mob cap levels (perf.md section 17). Vanilla's cap grows with the spawnable chunks (the chunks
+	#within 8 chunks of any player, 289 for one player alone), so spread-out players each add a
+	#whole monster cap. On: above the chunk counts below, the per-chunk caps drop to level 1 or 2.
+	#Lowering a cap removes no mobs; it only stops new spawns until the count falls below it.
+	#Off: vanilla caps.
+	mobCapLevels = true
+	#Force a mob cap level in every dimension (0, 1 or 2) for testing. -1 = pick it from the
+	#spawnable chunk count.
+	#Range: -1 ~ 2
+	mobCapForceLevel = -1
+	#Level 1 starts above this many spawnable chunks in a dimension (430 = about 1.5 player areas).
+	#Range: 0 ~ 100000
+	mobCapLevel1Chunks = 430
+	#Level 2 starts above this many spawnable chunks (870 = about 3 player areas).
+	#Range: 0 ~ 100000
+	mobCapLevel2Chunks = 870
+	#A level is only left when the chunk count falls this far below its threshold, so it does not
+	#flip back and forth while a player walks along the edge.
+	#Range: 0 ~ 10000
+	mobCapHysteresisChunks = 30
+	#Monster cap at level 1 (vanilla 70). The other scaled categories get the same fraction.
+	#Range: 1 ~ 70
+	mobCapLevel1Monster = 50
+	#Monster cap at level 2 (vanilla 70).
+	#Range: 1 ~ 70
+	mobCapLevel2Monster = 25
+	#Spawn categories whose cap is scaled at levels 1 and 2. creature is left out on purpose:
+	#animals are persistent and their herds are placed at chunk generation.
+	mobCapScaledCategories = ["monster", "ambient", "water_creature", "water_ambient", "underground_water_creature", "axolotls"]
+	#At level 1, the scaled categories above only spawn in chunks within this many chunks of a
+	#player (vanilla 8), so mobs spawn closer in and fewer chunks are rolled. 0 = vanilla.
+	#Range: 0 ~ 8
+	spawnChunksLevel1 = 6
+	#The same spawn radius at level 2. 0 = vanilla.
+	#Range: 0 ~ 8
+	spawnChunksLevel2 = 5
+	#At level 1, natural spawns of the categories below must be within this many blocks above or
+	#below the nearest player, so caves far below a surface player do not fill the cap.
+	#0 = no limit.
+	#Range: 0 ~ 512
+	spawnBandLevel1 = 64
+	#The same vertical band at level 2. 0 = no limit.
+	#Range: 0 ~ 512
+	spawnBandLevel2 = 32
+	#Spawn categories the vertical band applies to.
+	spawnBandCategories = ["monster"]
 
 #JEI recipe screen tweaks (client side).
 [jei]
@@ -2153,6 +2273,30 @@
 	#FD cooking pot, Farmer's Respite kettle and oven: 'Holding: 3 Glass Bottle, 1 Bucket' for the two
 	#leftover slots, and 'Waiting: leftover slots full' while a craft waits for room ([cooking] stallWhenFull).
 	remainderBuffer = true
+	#Grass-like blocks cut with shears (fertile=false: grass, mycelium, lush grass, grass slabs):
+	#'Sheared, prevents spreading and converting to dirt'. Sheared vines ([vine_shearing]) and Vinery's
+	#sterilized jungle grape vine: 'Sheared, stops growing'. Weeping, twisting and cave vine and kelp
+	#tips and Immersive Weathering ivy at their last age: 'Stopped growing'.
+	sheared = true
+	#Blocks that only drop themselves with Silk Touch (block tag creativeengineering:wthit/needs_silk_touch,
+	#from tools/gen_silk_touch_blocks.py): a Silk Touch book and 'Needs Silk Touch'. Hidden while the
+	#main-hand tool has Silk Touch.
+	silkTouch = true
+	#Every crop with a crop season type: its seasons as on the planting item ('Fertile: Spring',
+	#'Offseason: Winter, Dry', 'Season: Nether', 'Fertile: Cold biomes'). [crop_seasons].
+	cropSeasons = true
+	#Under it, green 'Fertile here: grows faster' or red 'Offseason here: grows slower' for where the
+	#crop stands (greenhouse glass counted). Nothing when it is neutral there.
+	cropOutOfSeason = true
+	#WTHIT's blacklist hides barriers, structure voids and light blocks from everyone. With this on, players
+	#with operatorBlockLevel see the blocks in operatorBlockList; everyone else still sees through them.
+	operatorBlocks = true
+	#Blocks shown to operators only (block ids).
+	operatorBlockList = ["minecraft:barrier", "minecraft:structure_void", "minecraft:light"]
+	#Permission level that sees them: 2 = operators who can use /give and command blocks (also single
+	#player with cheats on), 4 = server owners only, 0 = every player.
+	#Range: 0 ~ 4
+	operatorBlockLevel = 2
 
 	#One switch per state line (a label added by an overriding state_lines.json is always on).
 	[wthit.state_lines]
@@ -2184,6 +2328,23 @@
 	#two blue), and AppleSkin, Quark's saturation word and isBeneficial() go by it. The defaults are the
 	#effects whose own category showed the wrong colour (feature_writeup/effects.md 2.4). Read live.
 	categoryOverrides = ["create_confectionery:rest=BENEFICIAL", "alexsmobs:debilitating_sting=HARMFUL", "alexsmobs:fear=HARMFUL", "alexsmobs:power_down=HARMFUL", "neapolitan:slipping=HARMFUL", "vinery:trippy=HARMFUL"]
+	#Effects that always get their HUD icon (top right), even when the mod that gave them hid it
+	#(showIcon false, mostly to drop particles). The inventory list shows them either way. Armor, held
+	#tool and aura effects are left hidden on purpose (feature_writeup/effects.md 2.6). Client, read live.
+	forceHudIcon = ["brewinandchewin:intoxication", "via_romana:travellers_fatigue", "monobank:thief"]
+	#Items whose effects always get their HUD icon: every effect added while an entity finishes using
+	#one (eating, drinking, the item's own code). "namespace" for a whole mod or "namespace:item". Effect
+	#ids in forceHudIcon show from any source; this list only for these items, so the same effect from
+	#armor stays hidden. Server side, read live.
+	forceHudIconItems = ["create:builders_tea", "canned_goods:canned_pufferfishs", "farmersrespite", "immersive_weathering"]
+	#Effects swapped for another wherever they are applied, "from=to". Same duration, level and
+	#visibility. Covers foods, potions, blocks, commands and mob code (LivingEntity#addEffect), and
+	#Fruits Delight's jam / jelly effect lines. Food tooltips are swapped by KubeJS
+	#(global.foodEffectSwaps). Server side, read live.
+	remap = ["neapolitan:agility=vinery:climbing_effect", "fruitsdelight:chorus=vinery:teleport", "quark:resilience=alexsmobs:knockback_resistance"]
+	#Effects that are never applied (LivingEntity#addEffect refuses them). Their brews are removed
+	#by KubeJS (startup_scripts/cooking/potions.js). Server side, read live.
+	removed = ["upgrade_aquatic:restfulness", "upgrade_aquatic:insomnia", "alexsmobs:power_down"]
 
 #Mod display names (client side: JEI's mod line and @ search, WTHIT, the Mods screen).
 [mod_names]
@@ -2238,6 +2399,67 @@
 		#Range: 0.0 ~ 1.0
 		yellowBonusChance = 0.15
 
+	#Extra produce on better soil. A ripe crop whose block below is the soil gets 'tries' extra
+	#chances at one more of its produce (seeds are not included), each at 'chance'. Average extra per
+	#harvest = tries x chance. The crop's own drops are unchanged. 0 tries = nothing for that soil.
+	#Each crop is switched on in [crop_drops.soil_yield.crops]; all are off by default.
+	#feature_writeup/crop_yields.md lists every crop's drops.
+	[crop_drops.soil_yield]
+		#Vanilla farmland: extra tries.
+		#Range: 0 ~ 8
+		farmlandTries = 0
+		#Vanilla farmland: chance [0-1] per try.
+		#Range: 0.0 ~ 1.0
+		farmlandChance = 0.0
+		#Rich Soil Farmland: extra tries.
+		#Range: 0 ~ 8
+		richFarmlandTries = 2
+		#Rich Soil Farmland: chance [0-1] per try.
+		#Range: 0.0 ~ 1.0
+		richFarmlandChance = 0.35
+		#Fertile Soil (Immersive Weathering mulch): extra tries.
+		#Range: 0 ~ 8
+		fertileSoilTries = 2
+		#Fertile Soil: chance [0-1] per try.
+		#Range: 0.0 ~ 1.0
+		fertileSoilChance = 0.25
+		#Untilled Rich Soil (only rice and adzuki grow on it): extra tries.
+		#Range: 0 ~ 8
+		richSoilTries = 2
+		#Untilled Rich Soil: chance [0-1] per try.
+		#Range: 0.0 ~ 1.0
+		richSoilChance = 0.35
+
+		#true: the crop gets the soil pools above. false: its drops are the same on every soil.
+		[crop_drops.soil_yield.crops]
+			wheat = false
+			carrots = false
+			potatoes = false
+			beetroots = false
+			cabbages = false
+			onions = false
+			tomatoes = false
+			rice = false
+			bell_peppers = false
+			coffee = false
+			cotton = false
+			ender_crop = false
+			tobacco = false
+			flax = false
+			hemp = false
+			corn = false
+			cave_carrots = false
+			broccoli = false
+			cauliflower = false
+			garlic = false
+			sweet_potato = false
+			turnip = false
+			zucchini = false
+			cucumber = false
+			oats = false
+			peanuts = false
+			adzuki = false
+
 #A stem that has grown its fruit (melon, pumpkin, hamimelon) can grow more on its other free
 #sides, one at a time. Each extra fruit uses vanilla's stem growth roll (light, soil and
 #hydration count the same) and also waits a minimum time since the stem's last fruit. The
@@ -2286,4 +2508,138 @@
 	#a change when they re-render (F3+A).
 	#Range: 0.0 ~ 1.0
 	tintStrength = 1.0
+
+#Stepstools: a stool in the Curios feet slot. Standing still and holding the step-up keys stands the
+#player on it, a block higher; moving, crouching or jumping steps off.
+[stepstool]
+	enabled = true
+	#Client: holding Sprint + Jump steps up. The "Step Up (Stepstool)" key in Controls works too
+	#(unbound by default); set this false to use only that key. While false, Sprint + Jump jumps as usual.
+	sprintJump = true
+	#Client: ticks the step-up keys must be held before stepping up (20 = 1 second).
+	#Range: 0 ~ 100
+	holdTicks = 5
+	#Blocks the player may drift sideways from the stool's centre (knockback, pistons) before stepping off.
+	#Range: 0.05 ~ 0.5
+	maxDrift = 0.3
+	#Taking damage knocks the player off the stool.
+	stepOffWhenHurt = true
+
+#Fully oxidized Everything Copper gear (armor worn, or any piece in the hotbar or
+#offhand) poisons its holder now and then, and the Copper Poisoning effect (copper
+#nuggets) gives Poison instead of dealing damage itself.
+[copper_poisoning]
+	#Roll for poison from oxidized gear.
+	enabled = true
+	#Average seconds between rolls, per player.
+	#Range: 10 ~ 86400
+	intervalSeconds = 300
+	#Random spread either side of intervalSeconds.
+	#Range: 0 ~ 86400
+	jitterSeconds = 120
+	#Chance per fully oxidized piece that a roll poisons; pieces roll independently, so
+	#n pieces give 1 - (1 - chancePerPiece)^n.
+	#Range: 0.0 ~ 1.0
+	chancePerPiece = 0.15
+	#Poison I duration with one oxidized piece.
+	#Range: 1 ~ 600
+	baseSeconds = 4
+	#Extra Poison seconds per oxidized piece after the first.
+	#Range: 0 ~ 600
+	secondsPerExtraPiece = 2
+	#Cap on the Poison duration from one roll.
+	#Range: 1 ~ 600
+	maxSeconds = 20
+	#Poison I seconds the Copper Poisoning effect gives per effect level (a copper nugget
+	#gives level II, so twice this).
+	#Range: 1 ~ 600
+	effectPoisonSeconds = 4
+
+#Plain Dandelions mature into Mature Dandelions when planted on Rich Soil / Rich Soil Farmland
+#or Fertile Soil. Values are the average number of soil random ticks per conversion
+#(about one random tick a minute per block at the default randomTickSpeed). 0 = off for that soil.
+#Takes effect immediately.
+[dandelion_maturing]
+	#Rich Soil and Rich Soil Farmland (Farmer's Delight).
+	#Range: 0 ~ 100000
+	richSoilTicks = 10
+	#Fertile Soil (Immersive Weathering's mulch block).
+	#Range: 0 ~ 100000
+	fertileSoilTicks = 20
+
+#Shears on a modded vine (Floral Enchantment's flower vines, Botania's solid vine) stop it growing,
+#as Quark's Shear Vines does for the vanilla vine. Shears on the tip of a weeping, twisting or cave
+#vine or kelp stop it growing longer (1.20's behaviour).
+[vine_shearing]
+	#Shears stop vines growing. Off: shears do nothing to vines (vines already sheared stay so).
+	enabled = true
+	#Shearing a modded vine also removes the same vine hanging below it, as Quark does.
+	cutBelow = true
+	#Client: a sheared modded vine is drawn with its bottom trimmed, like Quark's cut vine. Read when
+	#models load: press F3+T or restart after changing it.
+	trimmedLook = true
+
+#Quark monster boxes (server side).
+[monster_box]
+	#true: a box stays after it spawns its wave, ejects one reward when the wave is gone, then waits
+	#cooldownTicks before it can trigger again; it only breaks while sneaking, and Create drills skip it.
+	#false: Quark's own box (breaks itself after spawning).
+	vaultMode = true
+	#Game ticks between the reward and the box re-arming (72000 = 1 hour).
+	#Range: > 20
+	cooldownTicks = 72000
+	#Loot table rolled once for the reward; one stack of the result is ejected.
+	rewardTable = "creativeengineering:misc/monster_box_reward"
+	#true: the ejected stack is cut to 1 item; false: the stack as the table rolled it.
+	rewardSingleCount = false
+	#A wave mob farther than this many blocks from its box counts as gone.
+	#Range: 4 ~ 256
+	leashRange = 24
+	#Ticks between checks of an active box's wave.
+	#Range: 1 ~ 200
+	checkIntervalTicks = 20
+
+#Every crop has a type (block tags creativeengineering:crop_seasons/<type>, filled from
+#kubejs/generation_scripts/worldgen/crop_seasons.json). Each season is fertile (grows faster),
+#neutral or off (grows slower) for that type, read from the biome's own calendar: spring to winter
+#in temperate and cold biomes, wet and dry in tropical, dry and arid ones. Replaces Serene Seasons'
+#in/out of season rule (its fertility.toml seasonal_crops is off). A crop in no type grows as usual.
+[crop_seasons]
+	#false: no crop seasons at all (crops grow at their own speed everywhere).
+	enabled = true
+	#Fertile: this share of growth checks gets a second growth check right after (0.25 = 25 % faster).
+	#Range: 0.0 ~ 1.0
+	fertileBonus = 0.25
+	#Off: this share of growth checks is refused (0.25 = 25 % slower).
+	#Range: 0.0 ~ 1.0
+	offPenalty = 0.25
+	#Greenhouse glass: any block in #sereneseasons:greenhouse_glass (filled from crop_seasons.json
+	#greenhouse_glass: glass blocks, panes, doors and trapdoors) in the 16 blocks straight above a seasonal
+	#crop makes every season neutral (no fertile bonus, no off penalty). Only that column counts.
+	greenhouse = true
+	#Cave crops (cave carrots, glow berries) are fertile below this height.
+	#Range: -64 ~ 320
+	caveFertileBelowY = 0
+	#Cave crops are off above this height; neutral in between.
+	#Range: -64 ~ 320
+	caveOffAboveY = 128
+
+#A listed mob that spawns for one of the listed reasons has a small chance to get a random name
+#(Minecraft Comes Alive's citizen names, else fallbackNames). Its death is announced in chat.
+#Mobs already named are left alone; bred, egg, spawner and command mobs never roll.
+[named_mobs]
+	#Off: no new names. Mobs named earlier keep their name and announcement.
+	enabled = true
+	#Chance per eligible spawn. 0.01 = 1 in 100.
+	#Range: 0.0 ~ 1.0
+	chance = 0.01
+	#Entity ids, or #entity type tags, that can be named.
+	mobs = ["minecraft:cow", "minecraft:mooshroom", "minecraft:pig", "minecraft:sheep", "minecraft:chicken", "minecraft:goat"]
+	#Spawn reasons that roll: NATURAL, CHUNK_GENERATION, STRUCTURE (see MobSpawnType for the rest).
+	spawnReasons = ["NATURAL", "CHUNK_GENERATION", "STRUCTURE"]
+	#Every player sees a named mob's death message ("Bessie the Cow was slain by Steve").
+	#Follows the showDeathMessages gamerule.
+	announceDeaths = true
+	#Names used when Minecraft Comes Alive is missing or its name lists are not loaded.
+	fallbackNames = ["Bessie", "Clover", "Daisy", "Biscuit", "Maple", "Pepper", "Hazel", "Barnaby", "Rosie", "Winston", "Mabel", "Otis", "Juniper", "Gus", "Poppy", "Waffles"]
 

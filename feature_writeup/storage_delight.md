@@ -1,9 +1,9 @@
 # Storage Delight 26.10.05 against the installed 25.12.09
 
-**BUILT 2026-10-25 (decisions in section 5), jar not yet installed.** Installed until then: `storagedelight-25.12.09-1.19-forge.jar` (`mods/`, `server_mods/`), 1.19.2. Evaluated
+**BUILT 2026-10-25 (decisions in section 5); Shipped in 1.1.03 (deployed to server and players 2026-10-26); SQ-STD-01 PASSED 2026-10-26, SQ-STD-02 queued. The `build/libs` jar differs from the `mods/` copy (2026-10-30 check: a newer build waits to install).** Replaced: `storagedelight-25.12.09-1.19-forge.jar` (`mods/`, `server_mods/`), 1.19.2. Evaluated
 2026-10-25 against `devmods/checkNewerVersionForContent/storagedelight-26.10.05-26.3-neoforge.jar` (NeoForge, vanilla
 26.3), method in [devmods_evaluation.md](devmods_evaluation.md) section 1. Both jars unpacked in `DecompiledMods/`. Plan
-row: `largecontent/mod-additions #26` in [todo/TODO.md](todo/TODO.md). No config file. The pack's scripts do not touch
+row: `largecontent/mod-additions #33` in [todo/TODO.md](todo/TODO.md). No config file. The pack's scripts do not touch
 the mod (no recipe, tag or name change); it is listed only in [creative_delight.md](creative_delight.md) as a
 non-member.
 

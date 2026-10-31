@@ -23,6 +23,7 @@ import net.minecraft.world.level.block.Rotation;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.chunk.ChunkAccess;
 import net.minecraft.world.level.chunk.ChunkGenerator;
+import net.minecraft.world.level.levelgen.GenerationStep;
 import net.minecraft.world.level.levelgen.RandomState;
 import net.minecraft.world.level.material.Fluids;
 import net.minecraft.world.level.levelgen.structure.BoundingBox;
@@ -36,6 +37,8 @@ import net.minecraft.world.level.levelgen.structure.pieces.PiecesContainer;
 import net.minecraft.world.level.levelgen.structure.pools.JigsawJunction;
 import net.minecraft.world.level.levelgen.structure.pools.ListPoolElement;
 import net.minecraft.world.level.levelgen.structure.pools.SinglePoolElement;
+import net.minecraft.world.level.levelgen.structure.pools.EmptyPoolElement;
+import net.minecraft.world.level.levelgen.structure.pools.FeaturePoolElement;
 import net.minecraft.world.level.levelgen.structure.pools.StructurePoolElement;
 import net.minecraft.world.level.levelgen.structure.pools.StructureTemplatePool;
 import net.minecraft.world.level.levelgen.structure.templatesystem.StructurePlaceSettings;
@@ -54,6 +57,7 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 import java.util.NoSuchElementException;
+import java.util.Set;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.function.Function;
 import java.util.function.Predicate;
@@ -83,7 +87,7 @@ import java.util.function.Supplier;
  * start was set onto the surface with (the piece's bottom, or higher by the sink of {@link TerrainAdaptation#sink}),
  * are read from the same predicted terrain. When the water there (filled by the template's earth or the beard, or
  * left standing where the template has no block) outnumbers the dry ground (replaced or left alone) by more than
- * {@code maxWaterSurplus} (0.5: water 50% over ground), the start is dropped too: a camp on an island, a ruin
+ * {@code maxWaterSurplus} (default 0: any water majority; 0.5 = water 50% over ground), the start is dropped too: a camp on an island, a ruin
  * reaching far out over a lake. A spot under more than {@code baseLayers} blocks of predicted terrain counts as neither
  * (underground structures in aquifers or under the sea). Water structures ({@code creativeengineering:water_fill/structures})
  * are not checked.
@@ -115,10 +119,14 @@ public final class EarthFill {
 
 	static final TagKey<Structure> EXEMPT = TagKey.create(Registry.STRUCTURE_REGISTRY, new ResourceLocation(CreativeEngineering.MODID, "earth_fill/exempt"));
 	static final TagKey<Structure> PRUNE = TagKey.create(Registry.STRUCTURE_REGISTRY, new ResourceLocation(CreativeEngineering.MODID, "earth_fill/prune"));
+	/** Jigsaw structures whose pieces only make sense together: never pruned, judged whole (pruneWetJigsaws skips them). */
+	static final TagKey<Structure> NO_PRUNE = TagKey.create(Registry.STRUCTURE_REGISTRY, new ResourceLocation(CreativeEngineering.MODID, "earth_fill/no_prune"));
 	/** Structures built on a stone or brick base (the drum tower's andesite plate): their base blocks count as earth too. */
 	static final TagKey<Structure> STONE_BASE = TagKey.create(Registry.STRUCTURE_REGISTRY, new ResourceLocation(CreativeEngineering.MODID, "earth_fill/stone_base"));
 	static final TagKey<Block> STONE_BLOCKS = BlockTags.create(new ResourceLocation(CreativeEngineering.MODID, "earth_fill/stone_base"));
 	static final TagKey<Structure> WATER_STRUCTURES = TagKey.create(Registry.STRUCTURE_REGISTRY, new ResourceLocation(CreativeEngineering.MODID, "water_fill/structures"));
+	/** Structures that stand in water on purpose (stilted huts): no footprint water share, the other limits as usual. */
+	static final TagKey<Structure> WET_OK = TagKey.create(Registry.STRUCTURE_REGISTRY, new ResourceLocation(CreativeEngineering.MODID, "earth_fill/wet_ok"));
 
 	private EarthFill() {}
 
@@ -203,6 +211,34 @@ public final class EarthFill {
 
 	record EarthResult(int blocks, int water, int air, int mound, boolean cancelled, boolean complete) {}
 
+	/** One bearded rigid piece's solid bottom blocks (BlockPos.asLong) and its beard's ground level, for beardFootprint. */
+	record BasePiece(long[] blocks, int bottom) {}
+
+	/**
+	 * beardFootprint: the mound columns under the built bottom of bearded pieces that {@link #countEarth} doesn't see
+	 * (columns holding no earth of any piece). A column counts once, when its ground lies more than reach.mound() below
+	 * the piece's bottom.
+	 */
+	static int baseMound(List<BasePiece> bases, List<EarthPiece> earth, Terrain terrain, Reach reach) {
+		LongOpenHashSet columns = new LongOpenHashSet();
+		for (EarthPiece piece : earth) for (long p : piece.blocks()) columns.add(ChunkPos.asLong(BlockPos.getX(p), BlockPos.getZ(p)));
+		int mound = 0;
+		for (BasePiece piece : bases) {
+			for (long p : piece.blocks()) {
+				int x = BlockPos.getX(p), z = BlockPos.getZ(p);
+				if (columns.add(ChunkPos.asLong(x, z)) && terrain.openBelow(x, piece.bottom() - 1, z, reach.mound() + 1) > reach.mound()) mound++;
+			}
+		}
+		return mound;
+	}
+
+	/** The earth result with beardFootprint's extra mound columns added and the limits judged again. */
+	static EarthResult withBaseMound(EarthResult r, int extra, EarthLimits limits) {
+		if (extra == 0) return r;
+		int mound = r.mound() + extra;
+		return new EarthResult(r.blocks(), r.water(), r.air(), mound, over(r.water(), r.air(), mound, limits), r.complete());
+	}
+
 	/** Unique earth positions over all pieces: the start's size. */
 	static int earthBlocks(List<EarthPiece> pieces) {
 		LongOpenHashSet seen = new LongOpenHashSet();
@@ -247,25 +283,46 @@ public final class EarthFill {
 	/** One piece's footprint: its box's columns at layer y (the layer the start was set onto the surface with). */
 	record Layer(int minX, int minZ, int maxX, int maxZ, int y) {}
 
+	/** A piece with no earth: its box's columns, counted where the surface lies between minY and maxY. */
+	record Span(int minX, int minZ, int maxX, int maxZ, int minY, int maxY) {}
+
 	/** The footprint's water blocks (filled by earth or the beard, or left standing) and dry ground blocks. */
 	record Footprint(int water, int ground) {
 		/** More water than ground by more than {@code surplus} (0.5 = water 50% over ground); never with surplus < 0. */
 		boolean tooWet(double surplus) { return surplus >= 0 && water > ground * (1.0 + surplus); }
+
+		/** {@link #tooWet(double)} with at least minWater water columns (a cliff-edge start with 1 water / 0 ground stays). */
+		boolean tooWet(double surplus, int minWater) { return water >= minWater && tooWet(surplus); }
 	}
 
 	/**
-	 * The level-free footprint count: every column of every layer, a position in two layers once. Seabed and air count
-	 * as neither, and so does a position with more than {@code depth} blocks of terrain above it (a structure underground,
-	 * in an aquifer or under the sea, is no camp on an island).
+	 * The level-free footprint count: every column of every layer once, at its lowest layer that is not buried (stacked
+	 * pieces count a column once). Seabed and air count as neither, and so does a position with more than {@code depth}
+	 * blocks of terrain above it (a structure underground, in an aquifer or under the sea, is no camp on an island).
 	 */
 	static Footprint footprint(List<Layer> layers, Terrain terrain, int depth) {
-		LongOpenHashSet seen = new LongOpenHashSet();
+		return footprint(layers, List.of(), terrain, depth);
+	}
+
+	/**
+	 * With spans (pieces with no earth: plank or sandstone floors, legacy pieces): each column not already in a layer
+	 * counts once, by the predicted surface (the column's top) when it lies from {@code depth} below the span's bottom to
+	 * its top: water when that surface is water, ground when solid. A span buried under the surface or floating above it
+	 * counts as neither.
+	 */
+	static Footprint footprint(List<Layer> layers, List<Span> spans, Terrain terrain, int depth) {
+		LongOpenHashSet counted = new LongOpenHashSet(), columns = new LongOpenHashSet();
 		int water = 0, ground = 0;
-		for (Layer l : layers) {
+		List<Layer> lowestFirst = layers.size() < 2 ? layers : new ArrayList<>(layers);
+		if (lowestFirst != layers) lowestFirst.sort(java.util.Comparator.comparingInt(Layer::y));
+		for (Layer l : lowestFirst) {
 			for (int x = l.minX(); x <= l.maxX(); x++) for (int z = l.minZ(); z <= l.maxZ(); z++) {
-				if (!seen.add(BlockPos.asLong(x, l.y(), z))) continue;
+				long column = ChunkPos.asLong(x, z);
+				columns.add(column);
+				if (counted.contains(column)) continue;
 				int top = terrain.top(x, z);
-				if (top != Terrain.NO_TOP && top - l.y() > depth) continue;
+				if (top != Terrain.NO_TOP && top - l.y() > depth) continue;   // buried here: a higher layer may still count it
+				counted.add(column);
 				switch (terrain.at(x, l.y(), z)) {
 					case WATER -> water++;
 					case SOLID -> ground++;
@@ -273,7 +330,33 @@ public final class EarthFill {
 				}
 			}
 		}
+		for (Span sp : spans) {
+			for (int x = sp.minX(); x <= sp.maxX(); x++) for (int z = sp.minZ(); z <= sp.maxZ(); z++) {
+				if (!columns.add(ChunkPos.asLong(x, z))) continue;
+				int top = terrain.top(x, z);
+				if (top == Terrain.NO_TOP || top < sp.minY() - depth || top > sp.maxY()) continue;
+				switch (terrain.at(x, top, z)) {
+					case WATER -> water++;
+					case SOLID -> ground++;
+					default -> { }
+				}
+			}
+		}
 		return new Footprint(water, ground);
+	}
+
+	/**
+	 * A piece that stands on the ground as built: not a street that follows the terrain, not an empty or feature pool
+	 * element, not a meta index or meta feature spot. Its box can join the footprint when it has no earth.
+	 */
+	static boolean rigid(StructurePiece piece) {
+		if (piece instanceof MetaStructure.Index || piece instanceof MetaFeaturePiece) return false;
+		if (piece instanceof PoolElementStructurePiece pool) {
+			StructurePoolElement e = pool.getElement();
+			return e.getProjection() != StructureTemplatePool.Projection.TERRAIN_MATCHING
+					&& !(e instanceof EmptyPoolElement) && !(e instanceof FeaturePoolElement);
+		}
+		return true;
 	}
 
 	private static boolean over(int water, int air, int mound, EarthLimits l) {
@@ -319,7 +402,16 @@ public final class EarthFill {
 	public static void onServerStopped(ServerStoppedEvent event) { LOCAL.clear(); LOCAL_WATER.clear(); SHARED.clear(); }
 
 	@SubscribeEvent
-	public static void onTagsUpdated(TagsUpdatedEvent event) { LOCAL.clear(); }
+	public static void onTagsUpdated(TagsUpdatedEvent event) {
+		LOCAL.clear();
+		LOCAL_WATER.clear();
+		for (TagKey<Block> tag : earthTags()) {
+			boolean empty = Registry.BLOCK.getTag(tag).map(t -> t.size() == 0).orElse(true);
+			if (empty && EMPTY_WARNED.add(tag)) LOG.warn("[earth-fill] blocks: tag #{} holds no block (a block id instead of a tag?); it counts nothing", tag.location());
+		}
+	}
+
+	private static final Set<TagKey<Block>> EMPTY_WARNED = ConcurrentHashMap.newKeySet();
 
 	/** A template's first palette (local positions), or an empty list. */
 	static List<StructureTemplate.StructureBlockInfo> firstPalette(StructureTemplate template) {
@@ -351,6 +443,21 @@ public final class EarthFill {
 			TemplateTrim.Columns columns = trimmed ? TemplateTrim.columns(t) : null;
 			return localBlocks(t, info -> info.pos.getY() >= 0 && info.pos.getY() < layers && isEarth(info.state, earth)
 					&& (columns == null || columns.placed(info.pos.getX(), info.pos.getZ())));
+		});
+	}
+
+	/**
+	 * The solid blocks of a template's bottom layers (not air, not a structure block / jigsaw / void), for beardFootprint;
+	 * with trimmed, only those in columns {@link TemplateTrim} keeps.
+	 */
+	static long[] localBase(StructureTemplate template, int layers, boolean trimmed) {
+		return LOCAL.computeIfAbsent("base|" + layers + "|" + trimmed, k -> new ConcurrentHashMap<>()).computeIfAbsent(template, t -> {
+			TemplateTrim.Columns columns = trimmed ? TemplateTrim.columns(t) : null;
+			return localBlocks(t, info -> {
+				if (info.pos.getY() < 0 || info.pos.getY() >= layers) return false;
+				TemplateTrim.Kind k = TemplateTrim.kind(info.state);
+				return k != TemplateTrim.Kind.AIR && k != TemplateTrim.Kind.MARKER && (columns == null || columns.placed(info.pos.getX(), info.pos.getZ()));
+			});
 		});
 	}
 
@@ -560,7 +667,12 @@ public final class EarthFill {
 			String[] nums = eq < 0 ? new String[0] : line.substring(eq + 1).split(",");
 			try {
 				if (eq <= 0 || nums.length < 2 || nums.length > (third ? 3 : 2)) throw new NumberFormatException();
-				out.add(new Override(line.substring(0, eq).trim(), Integer.parseInt(nums[0].trim()), Integer.parseInt(nums[1].trim()),
+				String key = line.substring(0, eq).trim();
+				boolean tag = key.startsWith("#");
+				// an id without a namespace is minecraft's, as everywhere else ("village_plains" = "minecraft:village_plains")
+				ResourceLocation rl = ResourceLocation.tryParse(tag ? key.substring(1) : key);
+				if (rl == null) throw new NumberFormatException();
+				out.add(new Override((tag ? "#" : "") + rl, Integer.parseInt(nums[0].trim()), Integer.parseInt(nums[1].trim()),
 						nums.length == 3 ? Integer.parseInt(nums[2].trim()) : Override.UNSET));
 			} catch (NumberFormatException e) {
 				LOG.warn("[{}] overrides: \"{}\" is not \"<structure id or #tag>=<number>,<number>{}\", skipped", system, line, third ? "[,<number>]" : "");
@@ -607,9 +719,22 @@ public final class EarthFill {
 
 	/** The size of a start with this many earth base blocks (an index into SIZES), by [worldgen.earth_fill.sizes] bounds. */
 	static int sizeOf(int earthBlocks, List<? extends Integer> bounds) {
+		if (!sorted(bounds)) {
+			if (UNSORTED_WARNED.compareAndSet(false, true)) LOG.warn("[earth-fill] sizes.bounds {} is not in rising order; sorted", bounds);
+			List<Integer> copy = new ArrayList<>(bounds);
+			java.util.Collections.sort(copy);
+			bounds = copy;
+		}
 		int size = 0;
 		for (int i = 0; i < bounds.size() && i < SIZES.length - 1; i++) if (earthBlocks >= bounds.get(i)) size = i + 1;
 		return size;
+	}
+
+	private static final java.util.concurrent.atomic.AtomicBoolean UNSORTED_WARNED = new java.util.concurrent.atomic.AtomicBoolean();
+
+	private static boolean sorted(List<? extends Integer> bounds) {
+		for (int i = 1; i < bounds.size(); i++) if (bounds.get(i) < bounds.get(i - 1)) return false;
+		return true;
 	}
 
 	/** Earth limits for one start: the size's air and mound limits and the global water limit; a matching override replaces them. */
@@ -623,8 +748,46 @@ public final class EarthFill {
 
 	/** An override that lifts every earth limit: the structure needs no terrain reads unless log = ALL. */
 	static boolean earthUnlimited(Holder<Structure> structure) {
-		Override o = EARTH_OVERRIDES.match(structure);
-		return o != null && o.a() < 0 && o.b() < 0 && o.c() < 0;
+		return unlimited(EARTH_OVERRIDES.match(structure));
+	}
+
+	/** Every limit -1; a left-out mound (UNSET) keeps the size's mound limit, so "id=-1,-1" is not unlimited. */
+	static boolean unlimited(Override o) {
+		return o != null && o.a() < 0 && o.b() < 0 && o.c() != Override.UNSET && o.c() < 0;
+	}
+
+	/**
+	 * A start's verdict: over its limits or its footprint too wet; never for an override that lifts every limit,
+	 * which log = ALL only measures (the other log levels skip it before any terrain read).
+	 */
+	static boolean earthCancelled(boolean unlimited, EarthResult r, Footprint f, double surplus) {
+		return earthCancelled(unlimited, r, f, surplus, 0);
+	}
+
+	/** With the footprint's minimum water sample (footprintMinWater, TODO structures/earthfill #15 E7). */
+	static boolean earthCancelled(boolean unlimited, EarthResult r, Footprint f, double surplus, int minWater) {
+		return !unlimited && (r.cancelled() || f != null && f.tooWet(surplus, minWater));
+	}
+
+	// ── pruning: which starts ────────────────────────────────────────────────
+
+	/**
+	 * How a start is pruned. FULL (earth_fill/prune: villages): a piece over pruneMaxHanging / pruneMaxMound or with a
+	 * too-wet footprint goes. WET (pruneWetJigsaws: every other jigsaw start on the surface): only a too-wet piece goes,
+	 * so a camp, outpost or ruin reaching out over a lake loses that piece instead of the whole start. NONE: judged whole.
+	 */
+	enum Prune { NONE, WET, FULL }
+
+	/**
+	 * The level-free part of the pick: prune on, not unlimited, not in earth_fill/no_prune; FULL when tagged prune, WET
+	 * for a surface start of two or more pieces whose first is a jigsaw piece.
+	 */
+	static Prune pruneMode(boolean prune, boolean wetJigsaws, boolean tagged, boolean excluded, boolean unlimited, boolean surface,
+			List<StructurePiece> pieces) {
+		if (!prune || excluded || unlimited) return Prune.NONE;
+		if (tagged) return Prune.FULL;
+		boolean jigsaw = pieces.size() > 1 && pieces.get(0) instanceof PoolElementStructurePiece;
+		return wetJigsaws && surface && jigsaw ? Prune.WET : Prune.NONE;
 	}
 
 	// ── pruning: the jigsaw tree of a start ─────────────────────────────────
@@ -711,39 +874,92 @@ public final class EarthFill {
 		Holder<Structure> structure = entry.structure();
 		List<MetaStructure.PartPieces> parts = MetaStructure.parts(start);
 		if (parts != null) return filterParts(start, parts, entry, generator, randomState, templates, seed, chunk, chunkPos);
-		EarthCheck earth = earthCheck(structure, templates);
+		EarthCheck earth = earthCheck(structure, templates, generator.getSeaLevel());
 		Check water = waterCheck(structure, templates);
 		if (earth == null && water == null) return start;
 		// a frequency roll that is going to veto this start anyway: don't spend the terrain reads on it
 		if (StructureFrequencies.rejects(entry, seed, chunkPos, chunk)) return start;
 
 		Terrain terrain = predicted(generator, randomState, chunk, WorldgenConfig.earthSampleGrid());
-		if (earth != null && WorldgenConfig.earthPrune() && structure.is(PRUNE)) start = earth.prune(start, structure, terrain, chunkPos);
+		if (earth != null) start = earth.prune(start, structure, terrain, chunkPos);
 		if (earth != null && earth.cancels(start.getPieces(), structure, terrain, chunkPos)) return StructureStart.INVALID_START;
 		if (water != null && cancels(water, start.getPieces(), structure, terrain, chunkPos)) return StructureStart.INVALID_START;
 		return start;
 	}
 
 	/**
+	 * How these pieces of this structure are pruned (see {@link Prune}). An override that lifts every limit is never
+	 * pruned: it is only measured, under log = ALL too, so the log level never changes the world.
+	 */
+	private static Prune prunes(Holder<Structure> structure, List<StructurePiece> pieces) {
+		return pruneMode(WorldgenConfig.earthPrune(), WorldgenConfig.earthPruneWetJigsaws(), structure.is(PRUNE), structure.is(NO_PRUNE),
+				earthUnlimited(structure), structure.value().step() == GenerationStep.Decoration.SURFACE_STRUCTURES, pieces);
+	}
+
+	/** " (predicted)" on a line logged while PlacementPriority replays a neighbour on a scratch chunk (E10). */
+	private static String predictedTag() {
+		return PlacementPriority.predicting() ? " (predicted)" : "";
+	}
+
+	/**
 	 * A meta structure: each structure part is checked as it would be alone (its own exempt and water-fill tags and
-	 * limits, its own pieces), so a sunken ruin in a cluster passes exactly when it would pass on its own. One part
-	 * over its limits cancels the whole meta (the slot is then tried as the plain anchor).
+	 * limits, its own pieces), so a sunken ruin in a cluster passes exactly when it would pass on its own: a village or
+	 * other jigsaw part is pruned first, anchor included, as it would be alone. With [worldgen.meta_structures]
+	 * keepShortParts a satellite still over its limits is dropped from the meta; the anchor over its limits, or no
+	 * satellite left, cancels the meta (the slot is then tried as the plain anchor). Without it one part over its
+	 * limits cancels the whole meta.
 	 */
 	private static StructureStart filterParts(StructureStart start, List<MetaStructure.PartPieces> parts, StructureSet.StructureSelectionEntry entry,
 			ChunkGenerator generator, RandomState randomState, StructureTemplateManager templates, long seed, ChunkAccess chunk, ChunkPos chunkPos) {
+		boolean keepShort = WorldgenConfig.metaKeepShortParts();
+		boolean anchored = start.getStructure() instanceof MetaStructure m && m.anchored();
 		Terrain terrain = null;
+		List<List<StructurePiece>> kept = new ArrayList<>(parts.size());
+		List<String> dropped = new ArrayList<>();
+		boolean changed = false;
 		for (MetaStructure.PartPieces part : parts) {
-			EarthCheck earth = earthCheck(part.structure(), templates);
+			List<StructurePiece> pieces = part.pieces();
+			EarthCheck earth = earthCheck(part.structure(), templates, generator.getSeaLevel());
 			Check water = waterCheck(part.structure(), templates);
-			if (earth == null && water == null) continue;
-			if (terrain == null) {
-				if (StructureFrequencies.rejects(entry, seed, chunkPos, chunk)) return start;
-				terrain = predicted(generator, randomState, chunk, WorldgenConfig.earthSampleGrid());
+			if (earth != null || water != null) {
+				if (terrain == null) {
+					if (StructureFrequencies.rejects(entry, seed, chunkPos, chunk)) return start;
+					terrain = predicted(generator, randomState, chunk, WorldgenConfig.earthSampleGrid());
+				}
+				if (earth != null) {
+					List<StructurePiece> p = earth.prunePieces(pieces, part.structure(), terrain, chunkPos);
+					if (p != pieces) { pieces = p; changed = true; }
+				}
+				boolean bad = earth != null && earth.cancels(pieces, part.structure(), terrain, chunkPos)
+						|| water != null && cancels(water, pieces, part.structure(), terrain, chunkPos);
+				if (bad) {
+					boolean anchor = anchored && part.entry() == 0;
+					if (!keepShort || anchor) return StructureStart.INVALID_START;
+					dropped.add(idOf(part.structure()));
+					pieces = null;
+					changed = true;
+				}
 			}
-			if (earth != null && earth.cancels(part.pieces(), part.structure(), terrain, chunkPos)) return StructureStart.INVALID_START;
-			if (water != null && cancels(water, part.pieces(), part.structure(), terrain, chunkPos)) return StructureStart.INVALID_START;
+			kept.add(pieces);
 		}
-		return start;
+		if (!changed) return start;
+		int satellites = 0, left = 0;
+		for (int i = 0; i < parts.size(); i++) {
+			if (anchored && parts.get(i).entry() == 0) continue;
+			satellites++;
+			if (kept.get(i) != null) left++;
+		}
+		// nothing but the anchor left: the plain anchor is the same thing without the meta's name
+		if (satellites > 0 && left == 0) return StructureStart.INVALID_START;
+		if (!dropped.isEmpty() && WorldgenConfig.earthLog() != EarthFillLog.OFF) {
+			LOG.info("[earth-fill] {} at chunk [{}, {}]{}: dropped {} of {} parts: {}", idOf(entry.structure()), chunkPos.x, chunkPos.z,
+					predictedTag(), dropped.size(), parts.size(), String.join(", ", dropped));
+		}
+		return MetaStructure.withParts(start, parts, kept);
+	}
+
+	private static String idOf(Holder<Structure> structure) {
+		return structure.unwrapKey().map(ResourceKey::location).map(ResourceLocation::toString).orElse("?");
 	}
 
 	/**
@@ -751,38 +967,67 @@ public final class EarthFill {
 	 * the footprint water surplus (-1 = not checked) and how many layers the start height sinks the pieces (the
 	 * footprint layer is that far above a piece's bottom).
 	 */
-	private record EarthCheck(EarthFillLog log, Beard beard, Function<StructurePiece, long[]> blocks, double surplus, int sink) {
+	private record EarthCheck(EarthFillLog log, Beard beard, Function<StructurePiece, long[]> blocks, double surplus, int sink, int spanFloor,
+			Function<StructurePiece, long[]> base) {
+
+		/** Pieces with no earth join the footprint as spans (footprintAllPieces); spanFloor = Integer.MAX_VALUE: never. */
+		boolean spans() { return spanFloor != Integer.MAX_VALUE && surplus >= 0; }
 
 		boolean cancels(List<StructurePiece> startPieces, Holder<Structure> structure, Terrain terrain, ChunkPos chunkPos) {
 			List<EarthPiece> pieces = new ArrayList<>(startPieces.size());
 			List<Layer> layers = new ArrayList<>(startPieces.size());
+			List<Span> spans = new ArrayList<>();
+			List<BasePiece> bases = base == null ? List.of() : new ArrayList<>();   // beardFootprint
 			for (StructurePiece piece : startPieces) {
-				long[] earth = blocks.apply(piece);
-				if (earth.length == 0) continue;
-				BoundingBox box = piece.getBoundingBox();
-				pieces.add(new EarthPiece(earth, box.minY(), beard));
-				layers.add(new Layer(box.minX(), box.minZ(), box.maxX(), box.maxZ(), box.minY() + sink));
+				collect(piece, pieces, layers, spans);
+				if (base != null && rigid(piece)) {
+					long[] b = base.apply(piece);
+					if (b.length > 0) bases.add(new BasePiece(b, piece.getBoundingBox().minY() + sink));
+				}
 			}
-			if (pieces.isEmpty()) return false;
+			if (pieces.isEmpty() && spans.isEmpty() && bases.isEmpty()) return false;
 			int size = sizeOf(earthBlocks(pieces), WorldgenConfig.earthSizeBounds());
 			EarthLimits limits = earthLimitsFor(structure, size);
 			if (limits.none() && surplus < 0 && log != EarthFillLog.ALL) return false;
 			EarthResult r = countEarth(pieces, terrain, limits, reach(), log != EarthFillLog.ALL);
+			int baseMound = bases.isEmpty() || !r.complete() ? 0 : baseMound(bases, pieces, terrain, reach());
+			r = withBaseMound(r, baseMound, limits);
 			// the water share: only when the limits kept it (or everything is logged)
-			Footprint f = surplus >= 0 && (!r.cancelled() || log == EarthFillLog.ALL) ? footprint(layers, terrain, WorldgenConfig.earthBaseLayers()) : null;
-			boolean wet = f != null && f.tooWet(surplus);
-			boolean cancelled = r.cancelled() || wet;
+			Footprint f = surplus >= 0 && (!r.cancelled() || log == EarthFillLog.ALL) ? footprint(layers, spans, terrain, WorldgenConfig.earthBaseLayers()) : null;
+			// an all-off override is only measured under log = ALL, never cancelled (as at log = CANCELLED, where it is skipped)
+			boolean unlimited = earthUnlimited(structure);
+			int minWater = WorldgenConfig.earthFootprintMinWater();
+			boolean wet = !unlimited && f != null && f.tooWet(surplus, minWater);
+			boolean cancelled = earthCancelled(unlimited, r, f, surplus, minWater);
 
 			if (cancelled ? log != EarthFillLog.OFF : log == EarthFillLog.ALL) {
 				String plus = r.complete() ? "" : "+";   // counting stopped at the first limit crossed
 				String id = structure.unwrapKey().map(ResourceKey::location).map(ResourceLocation::toString).orElse("?");
-				String share = f == null ? "" : ", footprint " + f.water() + " water / " + f.ground() + " ground (surplus limit " + surplus + (wet ? ", too wet)" : ")");
-				LOG.info("[earth-fill] {} at chunk [{}, {}] ({}, {}): {}{} earth, {}{} over water (limit {}), {}{} over air after beard (limit {}), "
-								+ "{}{} mound columns (limit {}){} -> {}",
-						id, chunkPos.x, chunkPos.z, SIZES[size], beard.name().toLowerCase(java.util.Locale.ROOT), r.blocks(), plus, r.water(), plus,
-						limits.water(), r.air(), plus, limits.air(), r.mound(), plus, limits.mound(), share, cancelled ? "CANCELLED" : "kept");
+				String share = f == null ? "" : ", footprint " + f.water() + " water / " + f.ground() + " ground (surplus limit " + surplus
+						+ (wet ? ", too wet)" : f.water() < minWater && f.tooWet(surplus) ? ", under " + minWater + " water)" : ")");
+				LOG.info("[earth-fill] {} at chunk [{}, {}]{} ({}, {}): {}{} earth, {}{} over water (limit {}), {}{} over air after beard (limit {}), "
+								+ "{}{} mound columns{} (limit {}){} -> {}",
+						id, chunkPos.x, chunkPos.z, predictedTag(), SIZES[size], beard.name().toLowerCase(java.util.Locale.ROOT), r.blocks(), plus, r.water(), plus,
+						limits.water(), r.air(), plus, limits.air(), r.mound(), plus, baseMound > 0 ? " (" + baseMound + " under built floors)" : "", limits.mound(), share,
+						cancelled ? "CANCELLED" : "kept");
 			}
 			return cancelled;
+		}
+
+		/**
+		 * One piece into the lists: with earth, its earth at the sunk ground level and its layer; without, its box as a
+		 * span (only for rigid pieces reaching above spanFloor: pieces wholly under the sea level are underground).
+		 */
+		void collect(StructurePiece piece, List<EarthPiece> pieces, List<Layer> layers, List<Span> spans) {
+			long[] earth = blocks.apply(piece);
+			BoundingBox box = piece.getBoundingBox();
+			if (earth.length > 0) {
+				// the beard's ground level is raised by the sink (TerrainAdaptation.rigid), so its reach starts there
+				pieces.add(new EarthPiece(earth, box.minY() + sink, beard));
+				layers.add(new Layer(box.minX(), box.minZ(), box.maxX(), box.maxZ(), box.minY() + sink));
+			} else if (spans() && box.maxY() >= spanFloor && rigid(piece)) {
+				spans.add(new Span(box.minX(), box.minZ(), box.maxX(), box.maxZ(), box.minY() + sink, box.maxY()));
+			}
 		}
 
 		/**
@@ -790,41 +1035,75 @@ public final class EarthFill {
 		 * offends. The first piece (the town centre) is never dropped: the whole-start check judges it.
 		 */
 		StructureStart prune(StructureStart start, Holder<Structure> structure, Terrain terrain, ChunkPos chunkPos) {
-			List<String> why = new ArrayList<>();
 			List<StructurePiece> pieces = start.getPieces();
-			List<StructurePiece> kept = pruned(pieces, blocks, beard, terrain, why);
+			List<StructurePiece> kept = prunePieces(pieces, structure, terrain, chunkPos);
 			if (kept == pieces) return start;
-			if (log != EarthFillLog.OFF) {
-				String id = structure.unwrapKey().map(ResourceKey::location).map(ResourceLocation::toString).orElse("?");
-				LOG.info("[earth-fill] {} at chunk [{}, {}]: pruned {} of {} pieces; over the piece limits: {}", id, chunkPos.x, chunkPos.z,
-						pieces.size() - kept.size(), pieces.size(), String.join(", ", why));
-			}
 			return new StructureStart(start.getStructure(), start.getChunkPos(), start.getReferences(), new PiecesContainer(kept));
 		}
+
+		/**
+		 * {@link #prune} on a piece list (a village or jigsaw part of a meta structure too), as {@link #prunes} picks:
+		 * the same list when it isn't pruned or nothing offends.
+		 */
+		List<StructurePiece> prunePieces(List<StructurePiece> pieces, Holder<Structure> structure, Terrain terrain, ChunkPos chunkPos) {
+			Prune mode = prunes(structure, pieces);
+			if (mode == Prune.NONE) return pieces;
+			List<String> why = new ArrayList<>();
+			int minWet = WorldgenConfig.earthPruneMinWetColumns();
+			Function<StructurePiece, Footprint> wet = surplus < 0 || minWet < 0 ? null : piece -> {
+				List<EarthPiece> e = new ArrayList<>(1);
+				List<Layer> l = new ArrayList<>(1);
+				List<Span> sp = new ArrayList<>(1);
+				collect(piece, e, l, sp);
+				return footprint(l, sp, terrain, WorldgenConfig.earthBaseLayers());
+			};
+			if (mode == Prune.WET && wet == null) return pieces;
+			List<StructurePiece> kept = pruned(pieces, blocks, beard, sink, terrain, mode == Prune.FULL, wet, surplus, minWet, why);
+			if (kept != pieces && log != EarthFillLog.OFF) {
+				LOG.info("[earth-fill] {} at chunk [{}, {}]{}: pruned {} of {} pieces ({}); over the piece limits: {}", idOf(structure), chunkPos.x, chunkPos.z,
+						predictedTag(), pieces.size() - kept.size(), pieces.size(), mode == Prune.FULL ? "village" : "wet only", String.join(", ", why));
+			}
+			return kept;
+		}
+	}
+
+	/** {@link #pruned(List, Function, Beard, int, Terrain, boolean, Function, double, int, List)} with the piece limits (FULL). */
+	static List<StructurePiece> pruned(List<StructurePiece> pieces, Function<StructurePiece, long[]> blocks, Beard beard, int sink, Terrain terrain,
+			Function<StructurePiece, Footprint> wet, double surplus, int minWet, List<String> why) {
+		return pruned(pieces, blocks, beard, sink, terrain, true, wet, surplus, minWet, why);
 	}
 
 	/**
 	 * The pieces without the offending ones and everything attached below them (the same list when none offends);
 	 * the kept parent of a dropped piece loses its junction to it. The first piece is never dropped. {@code why}
-	 * gets a line per offending piece.
+	 * gets a line per offending piece. Without {@code limits} only the footprint water share drops a piece (WET).
 	 */
-	static List<StructurePiece> pruned(List<StructurePiece> pieces, Function<StructurePiece, long[]> blocks, Beard beard, Terrain terrain, List<String> why) {
+	static List<StructurePiece> pruned(List<StructurePiece> pieces, Function<StructurePiece, long[]> blocks, Beard beard, int sink, Terrain terrain,
+			boolean limits, Function<StructurePiece, Footprint> wet, double surplus, int minWet, List<String> why) {
 		int n = pieces.size();
 		if (n < 2) return pieces;
-		int maxHanging = WorldgenConfig.earthPruneMaxHanging(), maxMound = WorldgenConfig.earthPruneMaxMound();
-		if (maxHanging < 0 && maxMound < 0) return pieces;
+		int maxHanging = limits ? WorldgenConfig.earthPruneMaxHanging() : -1, maxMound = limits ? WorldgenConfig.earthPruneMaxMound() : -1;
+		if (maxHanging < 0 && maxMound < 0 && wet == null) return pieces;
 		Reach reach = reach();
 		EarthLimits open = new EarthLimits(-1, -1, -1);
 		boolean[] offending = new boolean[n];
 		boolean any = false;
 		for (int i = 1; i < n; i++) {
 			StructurePiece piece = pieces.get(i);
-			long[] earth = blocks.apply(piece);
-			if (earth.length == 0) continue;
-			EarthResult r = countEarth(List.of(new EarthPiece(earth, piece.getBoundingBox().minY(), beard)), terrain, open, reach, false);
-			if (over(r.water() + r.air(), maxHanging) || over(r.mound(), maxMound)) {
+			long[] earth = maxHanging < 0 && maxMound < 0 ? new long[0] : blocks.apply(piece);
+			if (earth.length > 0) {
+				// at the sunk ground level, as the whole-start check (TODO structures/earthfill #13 E3)
+				EarthResult r = countEarth(List.of(new EarthPiece(earth, piece.getBoundingBox().minY() + sink, beard)), terrain, open, reach, false);
+				if (over(r.water() + r.air(), maxHanging) || over(r.mound(), maxMound)) {
+					offending[i] = any = true;
+					why.add(pieceName(piece) + " (" + r.water() + " water, " + r.air() + " air, " + r.mound() + " mound)");
+					continue;
+				}
+			}
+			Footprint f = wet == null ? null : wet.apply(piece);
+			if (f != null && f.water() >= minWet && f.tooWet(surplus)) {
 				offending[i] = any = true;
-				why.add(pieceName(piece) + " (" + r.water() + " water, " + r.air() + " air, " + r.mound() + " mound)");
+				why.add(pieceName(piece) + " (footprint " + f.water() + " water / " + f.ground() + " ground)");
 			}
 		}
 		if (!any) return pieces;
@@ -841,15 +1120,59 @@ public final class EarthFill {
 		boolean[] drop = withChildren(offending, tree[0]);
 		List<StructurePiece> kept = new ArrayList<>(n);
 		for (int i = 0; i < n; i++) if (!drop[i]) kept.add(pieces.get(i));
-		// the kept parent of a dropped piece forgets its junction to it (highest index first, so indices stay valid)
-		for (int i = n - 1; i > 0; i--) {
+		List<List<JigsawJunction>> live = new ArrayList<>(n);
+		for (StructurePiece piece : pieces) live.add(junctions(piece));
+		forgetJunctions(boxes, joints, tree, drop, live);
+		return kept;
+	}
+
+	/**
+	 * Every kept piece forgets its junctions to dropped pieces, so the beard adds no ground at a dead street end: a
+	 * linked child's junction by identity (any junction order, custom placers too), and for a dropped piece the tree
+	 * could not link (parent -1), any kept piece's junction whose point lies in that piece's box and in no kept box.
+	 * {@code live} holds each piece's own junction list (removed from in place), indexed as {@code joints}.
+	 */
+	static <J> void forgetJunctions(List<BoundingBox> boxes, List<List<Joint>> joints, int[][] tree, boolean[] drop, List<List<J>> live) {
+		int n = boxes.size();
+		List<java.util.Set<J>> gone = new ArrayList<>(n);
+		for (int i = 0; i < n; i++) gone.add(null);
+		for (int i = 1; i < n; i++) {
+			if (!drop[i]) continue;
 			int p = tree[0][i];
-			if (drop[i] && p >= 0 && !drop[p]) {
-				List<JigsawJunction> pj = junctions(pieces.get(p));
-				if (tree[1][i] < pj.size()) pj.remove(tree[1][i]);
+			if (p >= 0) {
+				if (!drop[p] && tree[1][i] < live.get(p).size()) mark(gone, p, live.get(p).get(tree[1][i]));
+				continue;
+			}
+			// unlinked: drop any kept junction that points into this piece and nowhere kept
+			BoundingBox b = boxes.get(i);
+			for (int k = 0; k < n; k++) {
+				if (drop[k]) continue;
+				List<Joint> kj = joints.get(k);
+				for (int j = 0; j < kj.size() && j < live.get(k).size(); j++) {
+					Joint at = kj.get(j);
+					if (!inColumns(b, at.x(), at.z()) || inKept(boxes, drop, at.x(), at.z())) continue;
+					mark(gone, k, live.get(k).get(j));
+				}
 			}
 		}
-		return kept;
+		for (int k = 0; k < n; k++) {
+			java.util.Set<J> g = gone.get(k);
+			if (g != null) live.get(k).removeIf(g::contains);
+		}
+	}
+
+	private static <J> void mark(List<java.util.Set<J>> gone, int k, J junction) {
+		if (gone.get(k) == null) gone.set(k, java.util.Collections.newSetFromMap(new java.util.IdentityHashMap<>()));
+		gone.get(k).add(junction);
+	}
+
+	private static boolean inColumns(BoundingBox b, int x, int z) {
+		return x >= b.minX() && x <= b.maxX() && z >= b.minZ() && z <= b.maxZ();
+	}
+
+	private static boolean inKept(List<BoundingBox> boxes, boolean[] drop, int x, int z) {
+		for (int k = 0; k < boxes.size(); k++) if (!drop[k] && inColumns(boxes.get(k), x, z)) return true;
+		return false;
 	}
 
 	/** A piece for the log: its template (pool pieces) or its class. */
@@ -864,7 +1187,7 @@ public final class EarthFill {
 		return piece.getClass().getSimpleName();
 	}
 
-	private static EarthCheck earthCheck(Holder<Structure> structure, StructureTemplateManager templates) {
+	private static EarthCheck earthCheck(Holder<Structure> structure, StructureTemplateManager templates, int seaLevel) {
 		if (!WorldgenConfig.earthFillEnabled() || structure.is(EXEMPT)) return null;
 		EarthFillLog log = WorldgenConfig.earthLog();
 		if (log != EarthFillLog.ALL && earthUnlimited(structure)) return null;
@@ -874,10 +1197,17 @@ public final class EarthFill {
 		if (earth.isEmpty()) return null;
 		int layers = WorldgenConfig.earthBaseLayers();
 		boolean trimmed = WorldgenConfig.templateTrimEnabled() && TerrainAdaptation.trims(structure.value());
-		// water structures stand in water on purpose: no footprint share for them
-		double surplus = structure.is(WATER_STRUCTURES) ? -1 : WorldgenConfig.earthMaxWaterSurplus();
+		// water structures and stilted huts stand in water on purpose: no footprint share for them
+		double surplus = structure.is(WATER_STRUCTURES) || structure.is(WET_OK) ? -1 : WorldgenConfig.earthMaxWaterSurplus();
+		// pieces without earth join the footprint for surface structures only (mineshafts, strongholds and fortresses
+		// are underground: no terrain reads for them), and only where they reach above the sea level less the base layers
+		boolean spans = WorldgenConfig.earthFootprintAllPieces() && structure.value().step() == GenerationStep.Decoration.SURFACE_STRUCTURES;
+		int spanFloor = spans ? seaLevel - layers : Integer.MAX_VALUE;
+		// beardFootprint: the solid bottom of bearded pieces counts toward the mound limit too (TODO structures/terrain #2)
+		Function<StructurePiece, long[]> base = WorldgenConfig.earthBeardFootprint() && beardOf(structure.value()) == Beard.BEARD
+				? piece -> pieceBlocks(piece, templates, t -> localBase(t, layers, trimmed)) : null;
 		return new EarthCheck(log, beardOf(structure.value()), piece -> pieceEarth(piece, templates, earth, layers, trimmed), surplus,
-				TerrainAdaptation.sink(structure.value()));
+				TerrainAdaptation.sink(structure.value()), spanFloor, base);
 	}
 
 	private static Check waterCheck(Holder<Structure> structure, StructureTemplateManager templates) {
@@ -904,8 +1234,8 @@ public final class EarthFill {
 			String plus = r.complete() ? "" : "+";   // counting stopped at the first limit crossed
 			String id = structure.unwrapKey().map(ResourceKey::location).map(ResourceLocation::toString).orElse("?");
 			Limits l = check.limits();
-			LOG.info("[water-fill] {} at chunk [{}, {}]: {}{} water blocks, {}{} into dry ground (limit {}), {}{} into air (limit {}) -> {}",
-					id, chunkPos.x, chunkPos.z, r.blocks(), plus, r.ground(), plus, l.ground(), r.air(), plus, l.air(), r.cancelled() ? "CANCELLED" : "kept");
+			LOG.info("[water-fill] {} at chunk [{}, {}]{}: {}{} water blocks, {}{} into dry ground (limit {}), {}{} into air (limit {}) -> {}",
+					id, chunkPos.x, chunkPos.z, predictedTag(), r.blocks(), plus, r.ground(), plus, l.ground(), r.air(), plus, l.air(), r.cancelled() ? "CANCELLED" : "kept");
 		}
 		return r.cancelled();
 	}

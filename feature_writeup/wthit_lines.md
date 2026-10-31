@@ -19,10 +19,13 @@ campfire, sheetmetal tank, kitchen station and keg lines, and the coverage audit
 | Campfire: "Burns forever", "Rain: Puts it out / Going out in 6s / Safe (fuel block below)" | BUILT 2026-10-20; burn, douses and safe lines seen in a world | here, 2.6 |
 | Pot, kettle, oven leftover slots: "Holding: 3 Glass Bottle, 1 Bucket", red "Waiting: leftover slots full" | BUILT 2026-10-21 (patcherMod 1.1.01, not deployed); not seen in game | here, 2.9 |
 | Jade-only ports: IE sheetmetal tank contents on every part, Applied Cooking kitchen station | BUILT 2026-10-20 | here, 2.7 |
+| Silk Touch book + "Needs Silk Touch" on the 707 blocks that only drop themselves with it | BUILT 2026-10-28, shipped in 1.1.04 (client 2026-10-29) | here, 2.11 |
+| "Fertile Seasons: Spring, Summer" and red "Out of season here" on Serene Seasons crops | BUILT 2026-10-28, shipped in 1.1.04 (client 2026-10-29) | here, 2.12 |
+| Barriers, structure voids, light blocks shown to operators only | BUILT 2026-10-28, shipped in 1.1.04 (client 2026-10-29) | here, 2.13 |
 | Brewin' keg: temperature, "Fermenting: Beer 45%", "Must Be Cold" (in the Brewin' port) | BUILT 2026-10-20 | here, 2.8 |
 | Vinery lines (grapevine pot, barrel, press, storage, lattice vines) | BUILT in the Vinery port's own plugin (`vinery:info`) | [alcohol.md](alcohol.md) B4.6 |
 
-- **Pending:** WL-01 to WL-33 in game. The scratch server run (section 6) proved every plugin loads on both sides
+- **Pending:** WL-01 to WL-42 in game. The scratch server run (section 6) proved every plugin loads on both sides
   and showed seven lines in a world before the last round of changes; everything else is unseen.
 - **Findings:** F1 to F3 resolved; the coverage audit's F4 to F10 are all built (F9 on 2026-10-21).
 - **Files to open:** [waila_plugins.json](../development/patcherMod/src/main/resources/waila_plugins.json),
@@ -60,6 +63,10 @@ nothing under WTHIT; 2.6 to 2.8 port the ones that matter.
 | `creativeengineering:sheetmetal_tank` | `compat/WthitSheetmetalTank` | both (server data only) | `immersiveengineering` | tank fluid bar, 2.7 |
 | `creativeengineering:kitchen_station` | `compat/WthitKitchenStation` | both | `appliedcooking`, `ae2` | online / offline, 2.7 |
 | `creativeengineering:remainder_buffer` | `compat/WthitRemainderBuffer` | both | nothing (pot / kettle parts only with `farmersdelight` / `farmersrespite`) | leftover slots, 2.9 |
+| `creativeengineering:sheared` | `compat/WthitSheared` | client | nothing | "Sheared, prevents spreading and converting to dirt", 2.10 |
+| `creativeengineering:silk_touch` | `compat/WthitSilkTouch` | client | nothing (the generated block tag) | Silk Touch book + "Needs Silk Touch", 2.11 |
+| `creativeengineering:crop_seasons` | `compat/WthitCropSeasons` | client | `sereneseasons` | "Fertile: ...", "Offseason: ...", "Fertile here" / "Offseason here", 2.12 |
+| `creativeengineering:operator_blocks` | `compat/WthitOperatorBlocks` | client | nothing | barriers for operators (a redirect, no line), 2.13 |
 | `brewinandchewin:keg` (Brewin' port) | `integration/wthit/KegWthit` | both | nothing | keg lines, 2.8 |
 
 "Both" plugins have a server half that sends data the client doesn't otherwise get; WTHIT and the two mods are on
@@ -193,9 +200,84 @@ The server sends what they hold, so the line doesn't depend on the client's copy
 The oven's leftover slots may also show in WTHIT's own Forge item line (its item handler includes them on every
 face); unchecked in game. `[wthit] remainderBuffer`.
 
+### 2.10 Sheared grass
+
+`compat/WthitSheared` (built 2026-10-28, [TODO](todo/TODO.md) `misc #6`). Shears on a grass-like block clear its
+`fertile` state; the line "Sheared, prevents spreading and converting to dirt" shows on any block whose state has `fertile=false`.
+
+- **Immersive Weathering** (its own feature, `soil_shearing`): grass block, mycelium, podzol, rooted grass. Its
+  `isRandomlyTicking` is `fertile && super`, so a sheared block gets no random ticks: it doesn't spread to dirt, IW
+  grows no grass, flowers or weeds on it, and it doesn't die back to dirt when covered. Checked from IW 1.2.10's
+  bytecode (`ModGrassBlock`, `SoilBlock`, `ModMyceliumBlock`). IW's dirt never pulls grass in from a neighbour
+  (no block growth has dirt as owner and grass as result), so spreading only ever starts from the grass block itself.
+- **Pack additions**, same behaviour: Vintage Delight's lush grass block (port `0.1.6-ce-19.2-08`, `LushGrassBlock`)
+  and Vinery's grass slab (port `1.5.5-ce-19.2-05`, `SpreadableGrassSlabBlock`) gained a `fertile` property (default
+  true), the shears interaction (crop sound, grass particles, 1 durability, shear game event) and the same
+  `isRandomlyTicking` gate. These were the only other random-spreading grass blocks in `mods/` (a jar scan for
+  `SpreadingSnowyDirtBlock` / `GrassBlock` / `MyceliumBlock` subclasses).
+- There is no way to undo it in place: break it with Silk Touch and place it again (placed blocks are fertile).
+- Vines (2026-10-31, [vine_shearing.md](vine_shearing.md) 3.4): "Sheared, stops growing" on sheared modded vines and Vinery's
+  sterilized jungle grape vine; "Stopped growing" on growing-plant tips and IW ivy at their last age.
+- `[wthit] sheared`.
+
+### 2.11 Silk Touch needed
+
+`compat/WthitSilkTouch` (built 2026-10-28, [TODO](todo/TODO.md) `ui/wthit #11`). A line with a Silk Touch book icon
+and "Needs Silk Touch" on every block that only drops itself with Silk Touch. Hidden while the main-hand tool has
+Silk Touch.
+
+- **Source:** loot tables are server data and never reach the client, so the list is a block tag,
+  `creativeengineering:wthit/needs_silk_touch`, synced like every tag. `tools/gen_silk_touch_blocks.py` (`/cegen run
+  silk_touch_blocks dumps`, after `/dumploot`) reads `kubejs/exported/loot_tables/` and writes
+  `kubejs/generation_scripts/wthit/silk_touch_blocks.json`; `kubejs/server_scripts/tags/wthittags.js` adds the
+  registered ones to the tag (`/reload`).
+- **Rule:** the table `blocks/<id>` gives the item `<id>`, and every entry that gives it has a `match_tool`
+  condition naming Silk Touch on the pool, the entry or a parent entry (an `alternative` counts only when all its
+  terms are Silk Touch). Leaves with a shears OR Silk Touch path, blocks that never drop themselves (budding
+  amethyst, spawners) and blocks that always drop themselves are left out.
+- **Count (dump of 2026-10-26):** 707 blocks: Upgrade Aquatic 157, Create Framed 131, vanilla 111 (glass, panes,
+  ice, grass block, mycelium, stone, deepslate, every ore, bookshelf), Geode 77, Immersive Weathering 45, Create 30,
+  Lightman's coin blocks and piles 24, Fruits Delight's fruit leaves 17 (no shears path).
+- **Not seen:** global loot modifiers and drops made in code. A mod update needs the generator rerun.
+- `[wthit] silkTouch`.
+
+Open rework (owner, scratchpad 2026-10-29, TODO `ui/wthit #12`): drop the book icon; fold the line between harvest
+level and run speed; text "Silk Touch Required: xxx" with False (hidden by default, configurable, red), True (green)
+and Drops Differently (yellow). Not built.
+
+### 2.12 Crop seasons
+
+`compat/WthitCropSeasons` (built 2026-10-28, [TODO](todo/TODO.md) `ui/wthit #10`; rewritten 2026-10-30 for the crop
+season types, `farming/crops #5`, [crops.md](crops.md) §2.12.1), after the Growth line.
+
+- The crop's type lines, the same as its planting item's tooltip (`seasons/CropSeasonTooltip`): "Fertile: Spring" and
+  "Offseason: Winter, Dry" (neutral seasons not shown; warm crops too), grapes "Fertile: Cold biomes" / "Offseason:
+  Warm biomes", or "Season: Nether", "Season: End",
+  cave "Fertile: y<0" / "Offseason: y>128". Untyped plants and type `none` (kelp, sea grapes) get no line.
+- Under it, green "Fertile here: grows faster" or red "Offseason here: grows slower" from `CropSeasons.fertility` at
+  that spot (the pack's season types apply: river and beach use the land around them; wet/dry in tropical, dry and arid
+  biomes; neutral below y 32 with no sky and outside the overworld; greenhouse glass within 16 blocks above turns off
+  into neutral). Nothing when neutral. Under greenhouse glass (every season neutral, crops.md §2.12.1): green
+  "Greenhouse: preventing offseason debuff" or red "Greenhouse: preventing fertile season buff".
+- Nothing shows when CEConfig `[crop_seasons] enabled` is off. Client side only: the tags, the season and the configs
+  are all there. Serene Seasons' own "Fertile Seasons" words are no longer used (its crop rule is off).
+- `[wthit] cropSeasons`, `[wthit] cropOutOfSeason`.
+
+### 2.13 Barriers for operators
+
+`compat/WthitOperatorBlocks` (built 2026-10-28, [TODO](todo/TODO.md) `ui/wthit #9`). WTHIT's own blacklist
+(`config/waila/blacklist.json5`: barrier, structure void, light) hides these from everyone: its core plugin
+redirects the look-at to the block behind (a redirect at priority 500). The pack's redirect runs first (400) and
+keeps the target for a player whose permission level is at least `[wthit] operatorBlockLevel` (default 2: ops,
+and single player with cheats on); everyone else falls through to the blacklist and looks straight through.
+
+- The client knows its own permission level (the server sends it on login and on `/op`, `/deop`).
+- A light block can only be looked at while holding a light item (its shape is empty otherwise), as in vanilla.
+- `[wthit] operatorBlocks`, `operatorBlockList` (ids; default the three), `operatorBlockLevel` (0 to 4).
+
 ## 3. What the pack changes
 
-- **Declaration:** `waila_plugins.json` at the root of patcherMod (eleven entries) and of the Brewin' port (one). A
+- **Declaration:** `waila_plugins.json` at the root of patcherMod (fifteen entries) and of the Brewin' port (one). A
   missing required mod skips that plugin only.
 - **Toggles:** WTHIT writes each plugin into `config/waila/plugin_toggle.json5` (player config, not shipped).
 - **Switches:** every change to WTHIT's overlay can be turned off on its own (all default on). In
@@ -219,6 +301,10 @@ face); unchecked in game. `[wthit] remainderBuffer`.
   | Sheetmetal tank bar on every part (server side) | `[wthit] sheetmetalTank` |
   | Kitchen station lines | `[wthit] kitchenStation` |
   | Pot / kettle / oven leftover lines | `[wthit] remainderBuffer` |
+  | Sheared grass line | `[wthit] sheared` |
+  | Silk Touch line | `[wthit] silkTouch` |
+  | Fertile Seasons line / out-of-season line | `[wthit] cropSeasons` / `[wthit] cropOutOfSeason` |
+  | Barriers shown to operators | `[wthit] operatorBlocks` (`operatorBlockList`, `operatorBlockLevel`) |
   | Keg lines | `wthitKeg` in `brewinandchewin-client.toml` (the port) |
   | Coaster lines | `[coaster] wthit` ([alcohol.md](alcohol.md) 12) |
   | Growth line | `[crop_growth] enabled` |
@@ -277,15 +363,6 @@ TreeChop ship WTHIT plugins.
   code and the Vinery port already carries its own WTHIT plugin.
 - **A literal Unlit Campfire port:** in this pack every campfire burns forever, so the useful line is the rain rule.
 
-### Planned from the scratchpad (2026-10-24)
-
-Brief: [briefs/ui_wthit.md](briefs/ui_wthit.md). Nothing here is built.
-
-- [TODO](todo/TODO.md) `ui/wthit #11`: a Silk Touch required icon on blocks that only drop themselves with Silk Touch. Loot tables are server
-  data, so either the server plugin scans the block's loot table and sends a flag, or a `/cegen` generator writes a block tag from
-  the loot dump that the client plugin reads. Open: runtime scan or generated tag (recommended: the tag); hide the icon when the
-  held tool already has Silk Touch.
-
 ## 5. File map
 
 - [waila_plugins.json](../development/patcherMod/src/main/resources/waila_plugins.json) (patcherMod),
@@ -293,7 +370,11 @@ Brief: [briefs/ui_wthit.md](briefs/ui_wthit.md). Nothing here is built.
 - [compat/](../development/patcherMod/src/main/java/com/SaintAlfonzo/creativeengineering/compat/):
   `WthitBlockModelIcon` + `BlockModelIcons` (icon), `WthitHolderContents`, `WthitHive`, `WthitStateLines` +
   `StateLines`, `WthitCampfire`, `WthitSheetmetalTank`, `WthitKitchenStation`, `WthitCoaster`,
-  `WthitRemainderBuffer`.
+  `WthitRemainderBuffer`, `WthitSheared`, `WthitSilkTouch`, `WthitCropSeasons`, `WthitOperatorBlocks`.
+- Silk Touch list: [tools/gen_silk_touch_blocks.py](../tools/gen_silk_touch_blocks.py) →
+  `kubejs/generation_scripts/wthit/silk_touch_blocks.json` → [wthittags.js](../kubejs/server_scripts/tags/wthittags.js).
+- Sheared grass blocks in the ports: [LushGrassBlock.java](../development/backportedVintage/src/main/java/net/ribs/vintagedelight/block/custom/LushGrassBlock.java),
+  [SpreadableGrassSlabBlock.java](../development/backportedVinery/src/main/java/net/satisfy/vinery/core/block/SpreadableGrassSlabBlock.java).
 - [state_lines.json](../development/patcherMod/src/main/resources/assets/creativeengineering/state_lines.json).
 - [KegWthit.java](../development/backportedBrewin/src/main/java/umpaz/brewinandchewin/integration/wthit/KegWthit.java).
 - [devtools/WthitIconDump.java](../development/patcherMod/src/main/java/com/SaintAlfonzo/creativeengineering/devtools/WthitIconDump.java) → `kubejs/exported/wthit_icons.json` → [tools/wthit_icon_audit.py](../tools/wthit_icon_audit.py).
@@ -326,7 +407,8 @@ Line-specific tests elsewhere: BR-44 to BR-47 ([blockrunner.md](blockrunner.md))
   `creativeengineering:` plugins and `brewinandchewin:keg`.
 - [ ] **WL-02 Plugin names:** they read Run Speed, Block Model Icons, Crop Growth, Coaster Drinks, Jar Contents, Hive
   Bees and Honey, Servings Slices Eggs and Levels, Campfire Burn and Rain, Sheetmetal Tank Contents, ME Kitchen
-  Station, Keg Fermentation; no raw `config.waila.plugin_...` keys.
+  Station, Keg Fermentation, Sheared Grass, Silk Touch Needed, Crop Seasons, Barriers for Operators; no raw
+  `config.waila.plugin_...` keys.
 - [ ] **WL-03 Toggles:** turning a plugin off in WTHIT's list removes its lines (spot-check `holder_contents`, `hive`,
   `state_lines`, `campfire`, `brewinandchewin:keg`); turn them back on.
 
@@ -403,6 +485,33 @@ Line-specific tests elsewhere: BR-44 to BR-47 ([blockrunner.md](blockrunner.md))
   a honey bottle recipe, or use `/data`), then load a recipe that leaves a third kind → red "Waiting: leftover slots
   full"; take one slot out → the red line goes and the pot cooks. Repeat once on the dedicated server.
 
+**Sheared grass** (patcherMod 1.1.03, Vintage port `-08`, Vinery port `-05`)
+
+- [ ] **WL-34 Sheared line:** shears on a grass block → grass particles and a crop sound, the line "Sheared, prevents
+  spreading" appears; an unsheared grass block shows no line. Repeat on mycelium.
+- [ ] **WL-35 No spreading:** *Server half: scratch server PASSED r1031 (2026-10-31, SQ-SG-01, -02).* a 3 x 3 dirt patch with one sheared grass block in the middle, in daylight; next to it
+  the same patch around an unsheared block. Wait (or `/gamerule randomTickSpeed 300` for a minute, then back to 3):
+  only the unsheared patch turns to grass, and the sheared block stays sheared.
+- [ ] **WL-36 Port blocks:** *No-spread half (lush grass, grass slab): scratch server PASSED r1031 (SQ-SG-03).* shears on Vintage Delight's lush grass block and on a Vinery grass slab → the same
+  particles and line; WL-35 with lush grass on rich soil and a grass slab next to dirt slabs. A hoe still tills
+  sheared lush grass, a shovel still makes a path slab from a sheared grass slab.
+
+**Silk Touch, crop seasons, operator blocks** (patcherMod 1.1.03 of 2026-10-28)
+
+- [ ] **WL-37 Silk Touch tag:** *Tag half: scratch server PASSED r1031 (2026-10-31, SQ-WT-01).* after `/reload`, no `[wthit-silk-touch]` error in `logs/latest.log`. Look at glass, ice, a grass block, iron ore and stone → a Silk Touch book and
+  "Needs Silk Touch"; dirt, oak log, oak leaves and an iron block → no line.
+- [ ] **WL-38 Silk Touch held:** hold a Silk Touch pickaxe → the line goes on all five; a plain pickaxe → it is back.
+- [ ] **WL-39 Seasons line:** wheat → "Fertile: Spring" and "Offseason: Winter, Dry" under Growth; tobacco → "Fertile:
+  Summer, Dry" and "Offseason: Winter"; an oak sapling and kelp → no line.
+- [ ] **WL-40 Here line:** in a temperate plains biome, `/season set early_spring`; the wheat → green "Fertile here: grows
+  faster". `/season set mid_winter` → red "Offseason here: grows slower"; glass (any `sereneseasons:greenhouse_glass`
+  block) a few blocks above → green "Greenhouse: preventing offseason debuff". `/season set mid_summer` → no here line. Wheat in a jungle in
+  `mid_summer` (dry) → red.
+- [ ] **WL-41 Barriers, operator:** as an op (or single player with cheats), `/setblock ~ ~ ~2 minecraft:barrier`,
+  look at it → WTHIT shows "Barrier". Same for `structure_void`.
+- [ ] **WL-42 Barriers, player:** on the server, `/deop` yourself → the barrier shows the block behind it (or nothing),
+  as before; `/op` again → "Barrier" is back without a relog.
+
 **Switches**
 
 - [ ] **WL-31 Every switch:** set each switch in the section 3 table to false in turn (or all at once, then back) and
@@ -411,7 +520,7 @@ Line-specific tests elsewhere: BR-44 to BR-47 ([blockrunner.md](blockrunner.md))
   `holderPotionEffects` → no effect lines; `holderSingleName` → goblet "Water (1 / 1)"; `hiveBeesOnTop` → WTHIT's
   "2 Bee" line back and Bees at the end; `[wthit.state_lines] slices` → no Slices on a cake while feasts keep Servings;
   `campfireBurn` / `campfireRain` → that line only; `sheetmetalTank` → the bar only on the two ports; `kitchenStation`
-  → no station lines; `remainderBuffer` → no Holding / Waiting lines; `wthitKeg` (brewinandchewin-client.toml) → no keg lines. Set them all back to true.
+  → no station lines; `remainderBuffer` → no Holding / Waiting lines; `sheared` → no Sheared line; `wthitKeg` (brewinandchewin-client.toml) → no keg lines. Set them all back to true.
 
 ## 8. History
 
@@ -435,3 +544,8 @@ Line-specific tests elsewhere: BR-44 to BR-47 ([blockrunner.md](blockrunner.md))
   remainderBuffer`, TODO `cooking/kitchen #3`). patcherMod 1.1.01 rebuilt and installed in `mods/` and `server_mods/`.
   WL-32, WL-33.
 - 2026-10-24: planned from the scratchpad: Silk Touch required icon (`ui/wthit #11`). No code changed.
+- 2026-10-28: sheared grass line (2.10, TODO `misc #6`): IW's shears already stop spreading; the pack adds the line
+  and the same shearing to Vintage lush grass and the Vinery grass slab. Jars installed in `mods/`. WL-34 to WL-36.
+- 2026-10-28: `ui/wthit #9` to `#11` built: Silk Touch line from a generated block tag (2.11, 707 blocks), Fertile
+  Seasons and out-of-season lines (2.12), barriers and the other blacklisted technical blocks shown to operators (2.13).
+  Six new `[wthit]` switches. patcherMod 1.1.03 built; installed since and shipped in 1.1.04 (client 2026-10-29). WL-37 to WL-42.

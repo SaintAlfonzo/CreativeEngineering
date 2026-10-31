@@ -10,6 +10,8 @@
 //   --density=X                                         CEConfig [worldgen.debug] structureDensity
 //   --groups-off                                        CEConfig [worldgen.systems] structureGroups = false
 //   --no-meta                                           pretend the jar lacks MetaStructure (meta structures left out)
+//   --test-overrides[=FILE]                             CEConfig [worldgen.debug] testOverrides = true (FILE instead of
+//                                                       structure_test_overrides.json, e.g. a bad one for the refusal test)
 // Also runs the script's ServerEvents.tags handlers and prints the structure tags (meta/*, biome fits) and the biome
 // tags (biome fits) it adds.
 // Node, not Rhino: catches config, tag and math mistakes, not Rhino-only quirks (see the Rhino harness).
@@ -24,6 +26,9 @@ const densityArg = argv.find(a => a.startsWith('--density='))
 const density = densityArg ? Number(densityArg.split('=')[1]) : 1
 const groupsOff = argv.includes('--groups-off')
 const noMeta = argv.includes('--no-meta')
+const testArg = argv.find(a => a === '--test-overrides' || a.startsWith('--test-overrides='))
+const testFile = testArg && testArg.includes('=') ? path.resolve(testArg.split('=')[1]) : null
+const TEST_PATH = 'kubejs/generation_scripts/worldgen/structure_test_overrides.json'
 const [reportOut, filesOut] = argv.filter(a => !a.startsWith('--'))
 
 let report = null
@@ -43,7 +48,7 @@ const classes = {
   'com.SaintAlfonzo.creativeengineering.worldgen.StructureFrequencies': { stage: json => { staged = JSON.parse(json) }, stageBiomeFactors: json => { biomeFactors = JSON.parse(json) } },
   'com.SaintAlfonzo.creativeengineering.worldgen.StructureBiomeRules': { stage: json => { rules = JSON.parse(json) } },
   'com.SaintAlfonzo.creativeengineering.worldgen.StructureBiomeFits': { stage: json => { fits = JSON.parse(json) } },
-  'com.SaintAlfonzo.creativeengineering.worldgen.WorldgenConfig': { structureDensity: () => density, structureGroupsEnabled: () => !groupsOff, metaStructuresEnabled: () => true, structureReplacementsEnabled: () => true },
+  'com.SaintAlfonzo.creativeengineering.worldgen.WorldgenConfig': { structureDensity: () => density, structureGroupsEnabled: () => !groupsOff, metaStructuresEnabled: () => true, structureReplacementsEnabled: () => true, testOverrides: () => !!testArg },
   'com.SaintAlfonzo.creativeengineering.worldgen.MetaStructure': {},
   'com.SaintAlfonzo.creativeengineering.worldgen.PlacementPriority': { stage: json => { priority = JSON.parse(json) } },
   'com.SaintAlfonzo.creativeengineering.worldgen.MetaSlots': { stageReplacements: json => { replacements = JSON.parse(json) } },
@@ -52,7 +57,7 @@ const addedTags = {}
 const addedBiomeTags = {}
 const sandbox = {
   console: { info: log(''), log: log(''), warn: log('WARN '), error: log('ERROR ') },
-  JsonIO: { readString: p => fs.readFileSync(ROOT + p, 'utf8') },
+  JsonIO: { readString: p => fs.readFileSync(p === TEST_PATH && testFile ? testFile : ROOT + p, 'utf8') },
   Java: {
     loadClass: name => {
       if (noPatcher && /StructureFrequencies|StructureBiomeRules|StructureBiomeFits|MetaStructure|MetaSlots|PlacementPriority/.test(name)) throw new Error("Class '" + name + "' is not found")

@@ -1,7 +1,8 @@
 # Ocean's Delight and Oceanic Delight
 
 **Nothing integrated except the fishing net, the caviar names and the Oceanic item dictionary block** (section 5; `item_dict.js`
-section "oceanic_delight (47)", TODO `dishes/ocean #1` and `#5`).
+section "oceanic_delight (47)", TODO `dishes/ocean #1` and `#5`). Since 2026-10-29 all tentacles are removed and dishes take
+calamari (BUILT, not deployed; TODO `creativedelight/members #24`; SQ-CM-32 FAILED in scratch r1031 2026-10-31 and fixed the same day, section 5.5; rerun SQ-CM-32, SQ-CM-35), so the one-tentacle-tag decision (`mod-additions #5`) is moot.
 Ocean's Delight (`oceansdelight-1.0.2-1.19.2.jar`, 22 items) and Oceanic Delight (`oceanic_delight-1.0.1-forge-1.19.2.jar`,
 47 items) were dropped into `mods/` on 2026-10-23. Both are native 1.19.2 builds (no port). Decision rows:
 `largecontent/mod-additions #5` and the `dishes/ocean` rows in [todo/TODO.md](todo/TODO.md); plans:
@@ -26,6 +27,8 @@ cannot be copied; its item ids and facts are only referenced (the item dictionar
 Oceanic Delight lists AppleSkin, JEED, JEI and "delight" as dependency entries; check whether they are mandatory before relying on them.
 
 ## 1. Ocean's Delight and Oceanic Delight vs each other and the pack
+
+Batch sibling (not installed): [carnivore.md](archive/carnivore.md) section 2 covers Carnivore's guardian meat, salmon roe, squid and whale meat against these mods.
 
 The pack's own seafood content before these jars is thin: Farmer's Delight (`squid_ink_pasta`, `kelp_roll`, fish
 rolls, cooked fish dishes), Miner's Delight 1.1.2 (squid, glow squid, tentacles, stuffed squid; see §4), Alex's Mobs
@@ -133,10 +136,11 @@ Changelog: no bullet yet (plans only). The bullets come with the build.
 
 | Item | Status |
 |---|---|
-| Newer-jar review (section 3.1) | Written 2026-10-25; four changes decided, none built; no TODO rows yet |
+| Newer-jar review (section 3.1) | Written 2026-10-25; four changes decided, none built; TODO rows proposed 2026-10-30: `dishes/ocean #7` (Kelp Encrusted Cod), `#8` (JEED Nourishment list), `farming/wild-crops #6` (sea grape placement), `farming/crops #27` (sea grape plant hoe-mineable) |
 | Overlap survey (section 1) | Written 2026-10-23 |
 | Integration | Partly started (fishing net, item dictionary); rest is `largecontent/mod-additions #5` and `dishes/ocean` |
-| Fishing net, caviar names (section 5) | DEPLOYED 2026-10-25 (patcherMod 1.1.02 in `mods/`, md5 2d2d74ab; not in `server_mods/`), scratch test queued (SQ-FN) |
+| Fishing net, caviar names, squid chain (section 5) | DEPLOYED 1.1.03 (server and players, 2026-10-26); SQ-FN-01, SQ-FN-04 and the squid half SQ-CDB-03, -04 PASSED 2026-10-25; SQ-FN-02, -03 (ocean and river biomes, group B) not run |
+| Tentacles removed, seagrass salad (section 5.5) | Built 2026-10-29, unreleased; SQ-CM-31 PASSED, SQ-CM-32 FAILED r1031, fixed 2026-10-31 (5.5), CD jar in `mods/`; SQ-CM-32, SQ-CM-35 to rerun |
 | Test list | Section 6 (DA-01 to DA-03, DA-08 to DA-11); `DA-04` to `DA-07` stay proposed in the dishes_ocean brief; boot check `SQ-AD-00` |
 
 ## 5. Built
@@ -204,7 +208,7 @@ their name. Caviar in the sea pickle roll was deferred by the user to the caviar
 
 - **Drops** (CD `miners_delight/loot.js`, LootJS, which runs after the mods' loot modifiers): a squid drops one
   Miner's Delight squid item every kill, a glow squid one glow squid item; their ink sacs, Rustic's calamari and the
-  tentacles of Miner's, Ocean's and Oceanic are taken off the mob (the tentacle items themselves wait for `dishes/ocean #4`).
+  tentacles of Miner's, Ocean's and Oceanic are taken off the mob (the tentacle items are removed since 2026-10-29, `dishes/ocean #4`, below).
 - **Cuts** (CD `miners_delight/recipes.js`, Miner's tentacle cuts removed): squid -> calamari 1 + 50 % 1, ink sac 1 +
   50 % 2 (Rustic's 1-2 calamari drop, Miner's own ink); glow squid -> the same in glow calamari and glow ink sacs; baked
   squid -> cooked calamari 1 + 50 % 1.
@@ -237,3 +241,19 @@ one-pickle recipe stays). Only with Oceanic Delight on (the slices are its item)
 | DA-10 | A stack of nets, an ocean | Search about 200 times | A few nautilus shells; a heart of the sea is rare; junk about 1 in 20; never a lily pad, water bottle, rod or ink sacs |
 | DA-11 | `latest.log` after start and `/reload` | grep `fishing_net`, `biome_tag`, `OceanicDelightFishingNetMixin` | No loot table parse error, no mixin apply error |
 
+
+### 5.5 Tentacles removed, seagrass salad (2026-10-29, TODO `dishes/ocean #4`, `creativedelight/members #24`)
+
+- The ten tentacle items of Miner's (`tentacles`, `baked_tentacles`, `tentacles_on_a_stick`), Ocean's (`tentacles`, `cut_tentacles`,
+  `tentacle_on_a_stick`, `baked_tentacle_on_a_stick`) and Oceanic (`squid_tentacles`, `glow_squid_tentacles`, `grilled_squid_tentacles`)
+  are in `removed_items.js` (hidden, tags stripped). Their recipes are removed by output and input (CD `oceansdelight/recipes.js`,
+  `miners_delight/recipes.js`). Hostile Delight's ghast tentacle and Alex's Mobs' lost tentacle are not touched.
+- Dishes: Squid Rings takes raw calamari in place of cut tentacles; Glow Squid Stew raw calamari (the tag holds glowing and every slice); Sea Pickle Roll, Shrimp Rice,
+  Squid Salad and Takoyaki raw calamari (were `#forge:squid_tentacles`); Seafood Skewer and Squid and Pickles cooked calamari (the grilled tentacle slot).
+- Fix 2026-10-31 (SQ-CM-32 FAILED in scratch r1031): the removal by input ran before the swaps and took Squid Rings,
+  Glow Squid Stew, Seafood Skewer and Squid and Pickles; it now runs after them. The tentacle tags are empty once the items
+  are stripped, so a `replaceInput` on them cannot match (NCH error at boot); instead raw calamari is added to
+  `#forge:squid_tentacles` (Oceanic's four dishes) and `#forge:foods/tentacles` (Miner's Takoyaki, two slots) in CD
+  `oceansdelight/tags.js`. Rebuilt and installed 2026-10-31 12:32; recheck SQ-CM-32 and SQ-CM-35.
+- Seagrass Salad: 2 seagrass + bowl.
+- Not done: generated files still list the removed items (`food_types.json`, the can and compost outputs); the generators drop them on the next `/dumpall` and `/cegen` run.

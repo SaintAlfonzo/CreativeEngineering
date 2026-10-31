@@ -1,0 +1,4 @@
+{
+  "replace": false,
+  "values": ["minecraft:zombie", "minecraft:husk", "minecraft:drowned", "minecraft:zombie_villager", "minecraft:skeleton", "minecraft:stray", "minecraft:spider", "minecraft:cave_spider", "minecraft:creeper", "minecraft:witch", "minecraft:enderman", "minecraft:slime", {"id": "mca:male_zombie_villager", "required": false}, {"id": "mca:female_zombie_villager", "required": false}]
+}

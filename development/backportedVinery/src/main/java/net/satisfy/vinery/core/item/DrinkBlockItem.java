@@ -102,15 +102,15 @@ public class DrinkBlockItem extends BlockItem {
 
         WineEffects.WineEffect wineEffect = WineEffects.get(this);
         if (wineEffect != null && level != null) {
-            MobEffect effect = wineEffect.effect();
-
-            String effectName = effect.getDisplayName().getString();
             int amplifier = amplifier(stack, level, wineEffect);
             String amplifierRoman = amplifier > 0 ? " " + toRoman(amplifier + 1) : "";
-            String tooltipText = effect.isInstantenous()
-                    ? effectName + amplifierRoman
-                    : effectName + amplifierRoman + " (" + formatDuration(duration(stack, level, wineEffect)) + ")";
-            tooltip.add(Component.literal(tooltipText).withStyle(effect.getCategory().getTooltipFormatting()));
+            for (MobEffect effect : wineEffect.effects()) {
+                String effectName = effect.getDisplayName().getString();
+                String tooltipText = effect.isInstantenous()
+                        ? effectName + amplifierRoman
+                        : effectName + amplifierRoman + " (" + formatDuration(duration(stack, level, wineEffect)) + ")";
+                tooltip.add(Component.literal(tooltipText).withStyle(effect.getCategory().getTooltipFormatting()));
+            }
         } else if (!hasFoodEffects()) {
             tooltip.add(Component.translatable("effect.none").withStyle(ChatFormatting.GRAY));
         }
@@ -157,7 +157,11 @@ public class DrinkBlockItem extends BlockItem {
             if (!WineYears.hasWineYear(itemStack)) {
                 WineYears.setWineYear(itemStack, level);
             }
-            livingEntity.addEffect(new MobEffectInstance(wineEffect.effect(), duration(itemStack, level, wineEffect), amplifier(itemStack, level, wineEffect)));
+            int duration = duration(itemStack, level, wineEffect);
+            int amplifier = amplifier(itemStack, level, wineEffect);
+            for (MobEffect effect : wineEffect.effects()) {
+                livingEntity.addEffect(new MobEffectInstance(effect, duration, amplifier));
+            }
         }
         if (itemStack.isEdible()) {
             livingEntity.eat(level, itemStack);

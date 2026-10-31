@@ -25,7 +25,21 @@ Loot tables: item entries naming an item 1.19.2 / the pack doesn't have are drop
 
 A source may also be an unpacked mod directory (DecompiledMods/<mod>); a directory is never moved.
 
+Addon datapacks that ship templates for another structure's pools and no pools of their own (Sky Villages
+addons) use --templates-only: every template is converted and written, an existing copy is overwritten (so a
+tweaked --remap table can be rerun), and the source is never moved. Wire the templates into the pools by hand.
+
+--remap FILE adds a JSON swap table (tools/skyvillage_addon_remap.json is the format) on top of BLOCK_REMAP:
+  "blocks": {from: {"to": id or null (air), "keep": "all" | "none" | [names], "set": {name: value},
+             "rename": {old: new}, "strip_be": bool, "attach": "horizontal", "why": text}}
+  attach horizontal: facing is set per block so the block faces away from a horizontally adjacent full block (a
+  wall-mounted block like the Vinery lattice); two neighbours of the same rule with no wall lean on each other;
+  the rest face the nearest full block within 8 and are reported as unsupported ("unsupported": "air" removes them)
+  "items":  {from: to}   item stacks inside block entities (wine racks, shelves), renamed before the unknown check
+  "verified_blocks": [ids] registered blocks with no item and no blockstate in mods/ (the unknown check skips them)
+
   python3 tools/port_structure_jars.py [--dry-run] [--keep-jar] mods/<jar>|<dir> ...
+  python3 tools/port_structure_jars.py --templates-only --remap tools/skyvillage_addon_remap.json <zip> ...
 """
 import argparse, collections, glob, gzip, io, json, os, re, shutil, struct, sys, zipfile
 
@@ -69,6 +83,9 @@ for _w in ('log', 'wood', 'planks', 'slab', 'stairs', 'fence', 'fence_gate', 'tr
            'button', 'pressure_plate', 'sign', 'wall_sign', 'leaves', 'sapling'):
     BLOCK_REMAP[f'minecraft:cherry_{_w}'] = (f'vinery:cherry_{_w}', True, False)
     BLOCK_REMAP[f'minecraft:stripped_cherry_{_w}'] = (f'vinery:stripped_cherry_{_w}', True, False)
+
+# Item stacks renamed inside templates (from --remap tables).
+ITEM_REMAP = {}
 
 # Pool entries whose template 1.19.2 can't read, pointed at a readable variant in the same jar.
 POOL_REPOINT = {
@@ -154,20 +171,51 @@ def known_ids():
         m = re.match(r'assets/minecraft/(blockstates|models/item)/([^/]+)\.json$', n)
         if m: items.add('minecraft:' + m.group(2))
     mods = set(['minecraft'])
+    for z in mod_jars():
+        for n in z.namelist():
+            m = re.match(r'(?:assets|data)/([^/]+)/', n)
+            if m: mods.add(m.group(1))
+    return items, mods
+
+
+def mod_jars():
+    """Every jar in mods/ and the jars nested in them (Creative Delight's members)."""
     for j in glob.glob(os.path.join(ROOT, 'mods/*.jar')):
         try:
-            for n in zipfile.ZipFile(j).namelist():
-                m = re.match(r'(?:assets|data)/([^/]+)/', n)
-                if m: mods.add(m.group(1))
+            z = zipfile.ZipFile(j)
         except zipfile.BadZipFile:
-            pass
-    return items, mods
+            continue
+        yield z
+        for n in z.namelist():
+            if n.startswith('META-INF/jarjar/') and n.endswith('.jar'):
+                yield zipfile.ZipFile(io.BytesIO(z.read(n)))
+
+
+_DUMPED = {}
+def dumped_items(ns):
+    """The /dumpall item list of one namespace, or None when there is no dump."""
+    if ns not in _DUMPED:
+        f = os.path.join(ROOT, 'kubejs/exported/items_by_mod', ns + '.json')
+        _DUMPED[ns] = set(json.load(open(f))['items']) if os.path.exists(f) else None
+    return _DUMPED[ns]
 
 
 def item_ok(iid, vitems, mods):
     ns = iid.split(':')[0] if ':' in iid else 'minecraft'
     if ns == 'minecraft': return iid in vitems
-    return ns in mods
+    dump = dumped_items(ns)
+    return iid in dump if dump is not None else ns in mods
+
+
+def remap_items(tag, renamed):
+    if tag.t == 10:
+        d = tag.v
+        if 'id' in d and d['id'].t == 8 and 'Count' in d and d['id'].v in ITEM_REMAP:
+            renamed[f'{d["id"].v} -> {ITEM_REMAP[d["id"].v]}'] += 1
+            d['id'] = S(ITEM_REMAP[d['id'].v])
+        for x in d.values(): remap_items(x, renamed)
+    elif tag.t == 9:
+        for e in tag.v: remap_items(e, renamed)
 
 
 def strip_unknown_items(tag, vitems, mods, dropped):
@@ -209,14 +257,16 @@ def convert_template(buf, vitems, mods, stats, loc=None):
         raise ValueError(f'DataVersion {dv} (1.20.5+ item format): add a POOL_REPOINT or port it by hand')
     palettes = d['palettes'].v if 'palettes' in d else [d['palette']]
     strip_states = set()
+    attach_states, attach_extra = set(), {}
     for pal in palettes:
         for i, st in enumerate(pal.v):
             bname = st.v['Name'].v
             if bname not in BLOCK_REMAP:
                 continue
-            new, keep_props, strip_be = BLOCK_REMAP[bname]
+            new, keep_props, strip_be, *extra = BLOCK_REMAP[bname]
+            extra = extra[0] if extra else {}
             stats['blocks'][f'{bname} -> {new or "air"}'] += 1
-            if strip_be: strip_states.add(i)
+            if strip_be or new is None: strip_states.add(i)
             if new is None:
                 st.v = {'Name': S('minecraft:air')}
                 continue
@@ -225,11 +275,23 @@ def convert_template(buf, vitems, mods, stats, loc=None):
                 st.v['Properties'] = Tag(10, {k: S(v) for k, v in keep_props.items()})
             elif isinstance(keep_props, tuple):
                 if 'Properties' in st.v:
-                    st.v['Properties'].v = {k: v for k, v in st.v['Properties'].v.items() if k in keep_props}
+                    st.v['Properties'].v = {k: v for k, v in st.v['Properties'].v.items()
+                                            if k in keep_props or k in extra.get('rename', {})}
             elif not keep_props:
                 st.v.pop('Properties', None)
+            if extra.get('attach'): attach_states.add(i); attach_extra[i] = extra
+            if extra:
+                props = st.v['Properties'].v if 'Properties' in st.v else {}
+                for old, nw in extra.get('rename', {}).items():
+                    if old in props: props[nw] = props.pop(old)
+                props.update({k: S(v) for k, v in extra.get('set', {}).items()})
+                if props: st.v['Properties'] = Tag(10, props)
     for b in d['blocks'].v:
         if b.v['state'].v in strip_states: b.v.pop('nbt', None)
+    if attach_states:
+        if len(palettes) != 1: raise ValueError(f'{loc}: attach needs a single-palette template')
+        attach_facing(d, palettes[0].v, attach_states, stats, loc, lambda i: attach_extra[i])
+    remap_items(d['blocks'], stats['renamed'])
     strip_unknown_items(d['blocks'], vitems, mods, stats['items'])
     if 'entities' in d:
         keep = []
@@ -243,6 +305,119 @@ def convert_template(buf, vitems, mods, stats, loc=None):
         strip_unknown_items(d['entities'], vitems, mods, stats['items'])
     out = nbt_write(name, root)
     return gzip.compress(out, mtime=0)
+
+
+HORIZONTAL = {'north': (0, 0, -1), 'east': (1, 0, 0), 'south': (0, 0, 1), 'west': (-1, 0, 0)}
+OPPOSITE = {'north': 'south', 'south': 'north', 'east': 'west', 'west': 'east'}
+
+
+def attach_facing(d, pal, attach_states, stats, loc, extra_of):
+    """Per block facing for attach rules (see the docstring): rewrites state indices to per-facing palette entries."""
+    at = {tuple(x.v for x in b.v['pos'].v): b for b in d['blocks'].v}
+    name_of = lambda b: pal[b.v['state'].v].v['Name'].v
+    todo = sorted(p for p, b in at.items() if b.v['state'].v in attach_states)
+    side = {}   # pos -> direction name of its support
+    def full(q):
+        return q in at and at[q].v['state'].v not in attach_states and full_cube(name_of(at[q]))
+    for p in todo:
+        for dn, (dx, dy, dz) in HORIZONTAL.items():
+            if full((p[0] + dx, p[1], p[2] + dz)):
+                side[p] = dn; break
+    # back to back pairs (each one's panel is the other's support). 1: maximum matching among the blocks with no wall
+    # (the grid is bipartite). 2: a block still alone may take a block with a wall as its partner, along an
+    # alternating path, so no block that was held loses its partner
+    free = [p for p in todo if p not in side]
+    free_set, all_set = set(free), set(todo)
+    def nbrs(p, pool):
+        for dn, (dx, dy, dz) in HORIZONTAL.items():
+            q = (p[0] + dx, p[1], p[2] + dz)
+            if q in pool: yield dn, q
+    mate = {}
+    def augment(p, seen, pool):
+        for _, q in nbrs(p, pool):
+            if q in seen: continue
+            seen.add(q)
+            if q not in mate or augment(mate[q], seen, pool):
+                mate[q], mate[p] = p, q
+                return True
+        return False
+    for p in free:
+        if (p[0] + p[2]) % 2 == 0: augment(p, set(), free_set)
+    for p in free:
+        if p not in mate: augment(p, {p}, all_set)
+    for p, q in mate.items():
+        side[p] = next(dn for dn, r in nbrs(p, all_set) if r == q)
+    drop = set()
+    for p in todo:
+        if p in side: continue
+        if extra_of(at[p].v['state'].v).get('unsupported') == 'air':
+            drop.add(p); stats['unsupported'][f'{loc} {p} -> air'] += 1; continue
+        best = None
+        for dn, (dx, dy, dz) in HORIZONTAL.items():
+            for k in range(2, 9):
+                if full((p[0] + dx * k, p[1], p[2] + dz * k)):
+                    if best is None or k < best[0]: best = (k, dn)
+                    break
+        side[p] = best[1] if best else 'south'
+        stats['unsupported'][f'{loc} {p}'] += 1
+    if drop:
+        air = len(pal); pal.append(Tag(10, {'Name': S('minecraft:air')}))
+        for p in drop: at[p].v['state'] = Tag(3, air)
+    cache = {}
+    for p in todo:
+        if p in drop: continue
+        b = at[p]; si = b.v['state'].v
+        facing = OPPOSITE[side[p]]
+        key = (si, facing)
+        if key not in cache:
+            src = pal[si].v
+            props = dict(src['Properties'].v) if 'Properties' in src else {}
+            props['facing'] = S(facing)
+            pal.append(Tag(10, {'Name': src['Name'], 'Properties': Tag(10, props)}))
+            cache[key] = len(pal) - 1
+        b.v['state'] = Tag(3, cache[key])
+
+
+def donor_jars():
+    """Resource donors read at runtime (vinery_upstream/: the Vinery port's art), with their nested jars."""
+    for j in glob.glob(os.path.join(ROOT, 'vinery_upstream/*.jar')):
+        z = zipfile.ZipFile(j)
+        yield z
+        for n in z.namelist():
+            if n.startswith('META-INF/jars/') and n.endswith('.jar'):
+                yield zipfile.ZipFile(io.BytesIO(z.read(n)))
+
+
+_MODELS = {}
+def full_cube(name):
+    """True when the block's first model is a full cube (a cube parent, or a 0..16 element); unknown = False."""
+    if not _MODELS:
+        for z in [zipfile.ZipFile(VANILLA_JAR)] + list(mod_jars()) + list(donor_jars()):
+            for n in z.namelist():
+                m = re.match(r'assets/([^/]+)/(blockstates|models)/(.+)\.json$', n)
+                if m:
+                    try: _MODELS[(m.group(2), m.group(1) + ':' + m.group(3))] = json.loads(z.read(n))
+                    except ValueError: pass
+        _MODELS['_cache'] = {}
+    cache = _MODELS['_cache']
+    if name in cache: return cache[name]
+    bs = _MODELS.get(('blockstates', name)) or {}
+    v = next(iter(bs.get('variants', {}).values()), None)
+    if v is None and bs.get('multipart'): v = bs['multipart'][0].get('apply')
+    if isinstance(v, list): v = v[0]
+    model = v.get('model') if isinstance(v, dict) else None
+    ok = False
+    for _ in range(10):
+        if not model: break
+        if ':' not in model: model = 'minecraft:' + model
+        if model.split(':')[1] in ('block/cube', 'block/cube_all', 'block/cube_column', 'block/leaves'):
+            ok = True; break
+        mj = _MODELS.get(('models', model)) or {}
+        if 'elements' in mj:
+            ok = any(e.get('from') == [0, 0, 0] and e.get('to') == [16, 16, 16] for e in mj['elements']); break
+        model = mj.get('parent')
+    cache[name] = ok
+    return ok
 
 
 class DirSource:
@@ -343,8 +518,7 @@ def port(jar, vitems, mods, dry, keep_jar):
             parts = p.split('/')
             j = {'name': parts[1] + ':' + '/'.join(parts[4:])[:-5], **j}
         pool_json[p] = j
-    stats = {'blocks': collections.Counter(), 'items': collections.Counter(), 'entities': collections.Counter(),
-             'loot': collections.Counter()}
+    stats = new_stats()
     written, unreferenced, copied = [], [], set()
     namespaces = set()
     for n in data:
@@ -398,15 +572,90 @@ def port(jar, vitems, mods, dry, keep_jar):
     return True
 
 
+def new_stats():
+    return {'blocks': collections.Counter(), 'items': collections.Counter(), 'entities': collections.Counter(),
+            'loot': collections.Counter(), 'renamed': collections.Counter(), 'unsupported': collections.Counter()}
+
+
+def known_blocks(vitems):
+    """Block ids with a blockstate file in vanilla, mods/ (nested too) or kubejs/assets, plus every dumped item
+    (a port that reads its art from elsewhere, like Vinery, ships no blockstates)."""
+    out = set(vitems)
+    for z in mod_jars():
+        for n in z.namelist():
+            m = re.match(r'assets/([^/]+)/blockstates/([^/]+)\.json$', n)
+            if m: out.add(m.group(1) + ':' + m.group(2))
+    for f in glob.glob(os.path.join(KJS_ASSETS, '*/blockstates/*.json')):
+        out.add(f.split(os.sep)[-3] + ':' + os.path.basename(f)[:-5])
+    for f in glob.glob(os.path.join(ROOT, 'kubejs/exported/items_by_mod/*.json')):
+        out |= set(json.load(open(f))['items'])
+    return out
+
+
+def port_templates(src, vitems, mods, blocks, dry):
+    """--templates-only: convert every template of an addon datapack (no pools) into kubejs/data."""
+    z = DirSource(src) if os.path.isdir(src) else zipfile.ZipFile(src)
+    stats = new_stats()
+    unknown = collections.defaultdict(collections.Counter)
+    n_out = 0
+    for n in z.namelist():
+        parts = n.split('/')
+        if len(parts) < 4 or parts[0] != 'data' or parts[2] != 'structures' or not n.endswith('.nbt'):
+            continue
+        loc = parts[1] + ':' + '/'.join(parts[3:])[:-4]
+        content = convert_template(z.read(n), vitems, mods, stats, loc)
+        _, root = nbt_read(gzip.decompress(content))
+        pal = root.v['palettes'].v[0].v if 'palettes' in root.v else root.v['palette'].v
+        used = collections.Counter(b.v['state'].v for b in root.v['blocks'].v)
+        for i, st in enumerate(pal):
+            name = st.v['Name'].v
+            if name not in blocks and not (name.startswith('minecraft:') and name in vitems):
+                unknown[name][loc] += used[i]
+        n_out += 1
+        if not dry:
+            dest = os.path.join(KJS_DATA, *parts[1:])
+            os.makedirs(os.path.dirname(dest), exist_ok=True)
+            with open(dest, 'wb') as fh: fh.write(content)
+    print(f'{os.path.basename(src)} -> kubejs/data ({n_out} templates, templates only)')
+    for k, v in sorted(stats['blocks'].items()): print(f'    remap {k}  x{v} palette entries')
+    for k, v in sorted(stats['renamed'].items()): print(f'    item {k}  x{v}')
+    if stats['items']: print(f'    dropped unknown items: {dict(stats["items"])}')
+    for k, v in sorted(stats['entities'].items()): print(f'    stripped entity {k}  x{v}')
+    for k in sorted(stats['unsupported']): print(f'    UNSUPPORTED attach {k} (no adjacent full block or partner)')
+    for name, locs in sorted(unknown.items()):
+        print(f'    UNKNOWN block {name} (loads as air): {dict(locs)}')
+    return not unknown
+
+
+def load_remap(path):
+    """A JSON swap table (format in the module docstring) into BLOCK_REMAP / ITEM_REMAP."""
+    t = json.load(open(path))
+    for src, r in t.get('blocks', {}).items():
+        keep = r.get('keep', 'all')
+        keep = True if keep == 'all' else False if keep == 'none' else tuple(keep)
+        extra = {k: r[k] for k in ('set', 'rename', 'attach', 'unsupported') if r.get(k)}
+        BLOCK_REMAP[src] = (r.get('to'), keep, r.get('strip_be', False), extra)
+    ITEM_REMAP.update(t.get('items', {}))
+    return set(t.get('verified_blocks', []))
+
+
 def main():
     ap = argparse.ArgumentParser(description=__doc__, formatter_class=argparse.RawDescriptionHelpFormatter)
     ap.add_argument('jars', nargs='+')
     ap.add_argument('--dry-run', action='store_true')
     ap.add_argument('--keep-jar', action='store_true', help='leave the jar in mods/')
+    ap.add_argument('--templates-only', action='store_true', help='addon datapack: templates only, overwrite, never move')
+    ap.add_argument('--remap', help='JSON swap table added to BLOCK_REMAP / ITEM_REMAP')
     a = ap.parse_args()
+    verified = load_remap(a.remap) if a.remap else set()
     vitems, mods = known_ids()
     for dep in set(v[0].split(':')[0] for v in BLOCK_REMAP.values() if v[0]):
         if dep not in mods: sys.exit(f'BLOCK_REMAP target mod {dep} is not in mods/')
+    if a.templates_only:
+        blocks = known_blocks(vitems) | verified   # verified: registered without an item or blockstate file
+        ok = sum(port_templates(j, vitems, mods, blocks, a.dry_run) for j in a.jars)
+        print(f'{ok}/{len(a.jars)} with no unknown blocks{" (dry run)" if a.dry_run else ""}')
+        return
     ok = sum(port(j, vitems, mods, a.dry_run, a.keep_jar) for j in a.jars)
     print(f'{ok}/{len(a.jars)} ported{" (dry run)" if a.dry_run else ""}')
 

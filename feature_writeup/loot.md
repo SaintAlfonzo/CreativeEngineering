@@ -26,13 +26,13 @@ about 20 mod configs with their own loot knobs.
 
 | Part | Layer | Status |
 |---|---|---|
-| Catalog + index (`loot_config.json`, `loot_index.json`) | `tools/gen_loot_config.py` | BUILT, regenerated 2026-10-02 after the 1.0.4 mods: 383 tables (290 roots, 201 placed by templates), 659 items (67 post-roll only). Behind since: 21 container tables of Subterrestrial (13), Eugene's (5) and Underground Bunkers (3) are in the 2026-10-14 catalog but not the index (found 2026-10-21); regenerate |
+| Catalog + index (`loot_config.json`, `loot_index.json`) | `tools/gen_loot_config.py` | BUILT, regenerated 2026-10-26: `loot_index.json` 553 tables, 649 items, now including the 21 container tables of Subterrestrial (13), Eugene's (5) and Underground Bunkers (3) that the 2026-10-02 run missed |
 | Pre-roll framework | KubeJS `ServerEvents.genericLootTables` in `05_tuning.js`, rules in `07_rules.js` | The 2026-09-27 12:00 version ran in game (LT-01, LT-06 PASSED). The full framework is DEPLOYED 2026-09-27 evening. 2026-10-02: the offline sim and a scratch server both log `4 rules -> rewrote 184 tables` (fewer than 204 because The Missing Villages is gone); after the book removal 2026-10-03 the sim says `rewrote 128 tables`; in game LT-14 to LT-27 |
 | Post-roll pass + `/loottuning` | LootJS `LootType.CHEST` modifier in `05_tuning.js` | DEPLOYED; nothing logged or tested yet |
 | PneumaticCraft / Lightman chest loot off at the source | `pneumaticcraft-common.toml`, `lightmanscurrency-common.lcconfig` | DEPLOYED 2026-09-27, guarded by bans |
 | LootJS-only scripts + `global.LOOT` | `00_lib.js`, `10`-`40`, `99_debug.js` | DEPLOYED as scaffolding (commented examples of LootJS-only edits) |
 | `/dumploot` | `_lib/loot_dump.js` | Works; last run 2026-10-02 21:54 via `/dumpall` (12,326 live tables). Three tables can't be serialised and are skipped with a warning: `brewinandchewin:blocks/keg`, `farmersrespite:blocks/kettle` (custom copy functions), `myrtrees:blocks/wooden_bucket` |
-| Census (this writeup's numbers) | `tools/loot_census.py` -> `loot_census.md` | BUILT; re-run 2026-10-02: 0 tables outside scope. Stale since the 1.0.4 to 1.0.7 mod changes (no Subterrestrial, Underground Bunkers or `eugene` tables; `loot_index.json` / `loot_config.json` from 2026-10-03 miss them too): TODO `loot/lootjs-layer #3`. It lists 1 "unindexed" table, `botania:inject/village_chest`: the pool the pack's own `restoreInjection` puts back, which the generator ignores on purpose |
+| Census (this writeup's numbers) | `tools/loot_census.py` -> `loot_census.md` | BUILT; re-run 2026-10-26 (TODO `loot/lootjs-layer #3`, done): 12,342 distinct tables, 472 chest tables; the section 2 numbers below are still the 2026-10-02 run. It lists 1 "unindexed" table, `botania:inject/village_chest`: the pool the pack's own `restoreInjection` puts back, which the generator ignores on purpose |
 | Lootr container swaps | patcherMod | See [structure_tuning.md](structure_tuning.md) 3.6 / ST-14 |
 | Loot catalog (every container table entry by entry, structures, hand-placed containers) | `tools/loot_breakdown.py` -> [loot_catalog/](loot_catalog/README.md) | BUILT 2026-10-03: 383 tables in 47 namespaces, 963 hand-placed containers; read-only reference for writing replacement tables |
 
@@ -410,7 +410,7 @@ LootJS gotcha: `LootEntry.withChance(int)` is a misnamed alias of `withWeight`; 
 | Alex's Mobs | `alexsmobs.toml` | `addLootToChests = true` |
 | Domestication Innovation | `domestication-innovation.toml` `[loot]` | per-enchantment book chances (0.15 to 0.65), `pet_curse_enchantments_loot_only` |
 | Allurement | `allurement-common.toml` | enchanted horse armor "Generates in loot tables", unenchanted table list |
-| Quark | `quark-common.toml` | Ancient Tomes `Loot Tables` (table,weight list), Endermosh disc `Add To End City Loot` / weight 5, Ancient Wood `Ancient City Loot Weight` 8, Monster Box `Enable Extra Loot Table`, `Replace Worldgen Chests` |
+| Quark | `quark-common.toml` | Ancient Tomes `Loot Tables` (table,weight list), Endermosh disc `Add To End City Loot` / weight 5, Ancient Wood `Ancient City Loot Weight` 8, Monster Box `Enable Extra Loot Table` (false since 2026-10-30: the vault box's one reward replaces the per-mob roll, [mob_block_tweaks.md](mob_block_tweaks.md) 2.9), `Replace Worldgen Chests` |
 | Netherite Horse Armor | `netherite_horse_armor-common.toml` | `weight = 8` in bastion treasure (0 disables) |
 | Immersive Armors | `immersive_armors.json` | `lootChance = 0.025` |
 | Dustrial Decor | `dustrial_decor-common.toml` | `loot_table_modification = false` |

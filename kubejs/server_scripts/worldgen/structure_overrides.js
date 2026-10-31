@@ -42,7 +42,8 @@
 //
 // REPLACEMENTS: a group member with "replaces": "<member id>" and "share": 0..1 never wins a slot by its own weight; it
 // takes that share of the slots the named member wins and keeps (the vanilla swamp hut in YUNG's witch hut slots), so the
-// two together spawn exactly as often as the named member alone did. Staged to patcherMod (worldgen/MetaSlots). With
+// two together spawn exactly as often as the named member alone did. A meta structure without an anchor may be a
+// replacement too: its parts then build in the named member's slot (meta/meteorite_desert_pyramid in YUNG's temple slots). Staged to patcherMod (worldgen/MetaSlots). With
 // [worldgen.systems] structureReplacements off, replacements are left out of their group set and the named member keeps
 // every slot.
 //
@@ -68,6 +69,8 @@
 // CEConfig [worldgen] (config/creativeengineering-common.toml, read through patcherMod's WorldgenConfig):
 //   systems.structureGroups = false  -> groups and standalone edits are ignored: every set as its mod ships it.
 //   debug.structureDensity = x       -> every set's rate times x (see scalePlacement), grouped or not.
+//   debug.testOverrides = true       -> structure_test_overrides.json loosens soft rules for scratch tests (see
+//                                       applyTestOverrides): frequency / weight / share per structure, group spacing.
 //
 // Wrapped in an IIFE: all server scripts share one top-level scope.
 
@@ -79,6 +82,7 @@
 	var GROUPS_PATH = DIR + 'structure_groups.json'
 	var META_PATH = DIR + 'meta_structures.json'
 	var FITS_PATH = DIR + 'biome_fits.json'
+	var TEST_PATH = DIR + 'structure_test_overrides.json'
 	var REPORT_PATH = DIR + 'structure_tag_report.md'
 	var GROUP_SET_PREFIX = 'creativeengineering:group/'
 	var TAG = '[structure-tuning] '
@@ -92,12 +96,17 @@
 
 	var GROUP_PLACEMENT_KEYS = ['spacing', 'separation', 'salt', 'spread_type', 'frequency',
 		'frequency_reduction_method', 'locate_offset', 'exclusion_zone']
-	var MEMBER_KEYS = ['weight', 'frequency', 'enabled', 'note', 'fit_base', 'fit_keep', 'replaces', 'share']   // fit_base, fit_keep: gen_structure_groups.py --fit-rates bookkeeping, not read here
+	var MEMBER_KEYS = ['weight', 'frequency', 'enabled', 'note', 'tuned', 'fit_base', 'fit_keep', 'replaces', 'share']   // fit_base, fit_keep, tuned: gen_structure_groups.py bookkeeping (--fit-rates, --strip-weights), not read here
+	// structure_test_overrides.json: soft rules only (structure_tuning.md 7.4.8)
+	var TEST_MEMBER_KEYS = ['frequency', 'weight', 'share']
+	var TEST_GROUP_KEYS = ['spacing', 'separation']
+	var TEST_RULE = 'test overrides loosen soft rules only (frequency, weight, share, spacing, separation; structure_tuning.md 7.4.8); '
+		+ 'biomes, biome rules, fits, surface checks, peaceful radius, priority and earth/water fill are correctness rules and stay'
 	var REDUCTION_METHODS = ['default', 'legacy_type_1', 'legacy_type_2', 'legacy_type_3']
 	var META_TYPE = 'creativeengineering:meta'
-	var META_KEYS = ['note', 'type', 'biomes', 'step', 'terrain_adaptation', 'spawn_overrides', 'anchor', 'share', 'parts', 'companions']
+	var META_KEYS = ['note', 'tuned', 'type', 'biomes', 'step', 'terrain_adaptation', 'spawn_overrides', 'anchor', 'share', 'parts', 'companions']
 	var COMPANION_KEYS = ['structures', 'count', 'distance']
-	var META_PART_KEYS = ['structures', 'features', 'count', 'chance', 'distance', 'spacing', 'margin', 'tries', 'water_depth', 'radius']
+	var META_PART_KEYS = ['structures', 'features', 'count', 'chance', 'distance', 'spacing', 'margin', 'tries', 'water_depth', 'radius', 'overlap', 'cluster']
 	var META_MAX_DISTANCE = 112   // MetaStructure.REACH chunks
 	var META_TAG_PREFIX = 'meta/'
 	var TYPE_TAG_PREFIX = 'type/'
@@ -116,8 +125,9 @@
 
 	// CEConfig [worldgen] switches
 	function worldgenSettings() {
-		var s = { groups: WorldgenConfig.structureGroupsEnabled() == true, density: Number(WorldgenConfig.structureDensity()) }
+		var s = { groups: WorldgenConfig.structureGroupsEnabled() == true, density: Number(WorldgenConfig.structureDensity()), test: false }
 		if (!(s.density > 0) || !isFinite(s.density)) s.density = 1
+		try { s.test = WorldgenConfig.testOverrides() == true } catch (err) { s.test = false }   // older patcherMod jar: no switch
 		return s
 	}
 
@@ -656,6 +666,9 @@
 			if ('count' in part && !isRange(part.count, 4096)) errs.push(where + '.count must be n or [min, max]')
 			if ('distance' in part && !(Array.isArray(part.distance) && isRange(part.distance, META_MAX_DISTANCE))) errs.push(where + '.distance must be [min, max] with max <= ' + META_MAX_DISTANCE)
 			if ('chance' in part && !(typeof part.chance === 'number' && part.chance >= 0 && part.chance <= 1)) errs.push(where + '.chance must be 0..1')
+			if ('overlap' in part && typeof part.overlap !== 'boolean') errs.push(where + '.overlap must be true or false')
+			if ('cluster' in part && !(isInt(part.cluster) && part.cluster >= 0 && part.cluster <= META_MAX_DISTANCE)) errs.push(where + '.cluster must be a whole number 0..' + META_MAX_DISTANCE)
+			if ('cluster' in part && 'features' in part) errs.push(where + ': cluster is for structure parts')
 			;[['spacing', 0, 256], ['margin', 0, 64], ['tries', 1, 64], ['water_depth', 0, 64], ['radius', 0, 16]].forEach(function (f) {
 				if (f[0] in part && !(isInt(part[f[0]]) && part[f[0]] >= f[1] && part[f[0]] <= f[2])) errs.push(where + '.' + f[0] + ' must be a whole number ' + f[1] + '..' + f[2])
 			})
@@ -666,7 +679,7 @@
 	// the structure json the game reads: the definition without our note
 	function metaJson(def) {
 		var out = {}
-		Object.keys(def).forEach(function (k) { if (k !== 'note' && k !== 'companions') out[k] = def[k] })
+		Object.keys(def).forEach(function (k) { if (k !== 'note' && k !== 'tuned' && k !== 'companions') out[k] = def[k] })
 		return toJson(out)
 	}
 
@@ -683,6 +696,118 @@
 			if (!seen[id]) { seen[id] = true; ids.push(id) }
 		})
 		return ids
+	}
+
+	// CEConfig [worldgen.debug] testOverrides: structure_test_overrides.json changes the raw configs in memory before
+	// they are planned, so every check below still runs. Soft rules only (TEST_RULE): any other key refuses the whole
+	// file (nothing from it applied, the world loads as without it). Keys: "_readme"; "groups": {group: {spacing,
+	// separation}}; "<structure id>" or "#<structure tag>": {frequency 0..1, weight >= 1, share 0..1 (metas with an
+	// anchor, replacements)}. Tags first, then ids, so an id overrides its tag. -> { applied: [text], refused }
+	function applyTestOverrides(doc, metaDefs, tagMembers, setOf, warnings) {
+		var raw = readJson(TEST_PATH)
+		var out = { applied: [], refused: false }
+		if (!raw) { warnings.push('TEST OVERRIDES switched on but ' + TEST_PATH + ' is missing or empty: nothing loosened'); return out }
+		var errs = []
+		var groups = doc.groups || {}
+		var standalone = doc.standalone || {}
+		var groupOf = {}
+		Object.keys(tagMembers).forEach(function (t) {
+			if (t.indexOf('group/') === 0) Object.keys(tagMembers[t]).forEach(function (id) { groupOf[id] = t.substring(6) })
+		})
+		var todo = []   // [order, id, values, key]
+		Object.keys(raw).forEach(function (k) {
+			if (k === '_readme' || k === 'groups') return
+			var v = raw[k]
+			if (!v || typeof v !== 'object' || Array.isArray(v)) return errs.push(k + ': must be an object like {"frequency": 1}')
+			Object.keys(v).forEach(function (f) { if (TEST_MEMBER_KEYS.indexOf(f) < 0) errs.push(k + ': "' + f + '" refused (' + TEST_RULE + ')') })
+			if ('frequency' in v && !(typeof v.frequency === 'number' && v.frequency >= 0 && v.frequency <= 1)) errs.push(k + ': frequency must be 0..1')
+			if ('weight' in v && !(isInt(v.weight) && v.weight >= 1)) errs.push(k + ': weight must be a whole number >= 1')
+			if ('share' in v && !(typeof v.share === 'number' && v.share >= 0 && v.share <= 1)) errs.push(k + ': share must be 0..1')
+			var ids
+			if (k.charAt(0) === '#') {
+				if (!tagMembers[k.substring(1)]) return errs.push(k + ': no tag ' + k.substring(1) + ' in structure_tags.json')
+				ids = Object.keys(tagMembers[k.substring(1)]).sort()
+			} else if (/^[a-z0-9_.-]+:[a-z0-9_.\/-]+$/.test(k)) ids = [k]
+			else return errs.push('"' + k + '": not a structure id, "#tag", "groups" or "_readme" (' + TEST_RULE + ')')
+			ids.forEach(function (id) { todo.push([k.charAt(0) === '#' ? 0 : 1, id, v, k]) })
+		})
+		var rg = raw.groups || {}
+		if (typeof rg !== 'object' || Array.isArray(rg)) errs.push('groups: must be an object {group: {spacing, separation}}')
+		else Object.keys(rg).forEach(function (g) {
+			var v = rg[g]
+			if (!groups[g] || !groups[g].placement) return errs.push('groups.' + g + ': no such group in structure_groups.json')
+			if (!v || typeof v !== 'object' || Array.isArray(v)) return errs.push('groups.' + g + ': must be an object like {"spacing": 20}')
+			Object.keys(v).forEach(function (f) { if (TEST_GROUP_KEYS.indexOf(f) < 0) errs.push('groups.' + g + ': "' + f + '" refused (' + TEST_RULE + ')') })
+			var sp = 'spacing' in v ? v.spacing : groups[g].placement.spacing
+			var se = 'separation' in v ? v.separation : groups[g].placement.separation
+			if (!(isInt(sp) && sp >= 1 && sp <= MAX_SPACING && isInt(se) && se >= 0 && se < sp)) errs.push('groups.' + g + ': needs whole numbers with 0 <= separation < spacing <= ' + MAX_SPACING + ' (got ' + sp + ' / ' + se + ')')
+		})
+		// where each id lives: a member entry of its group, or of its standalone set; a meta's share in meta_structures.json
+		function entryOf(id) {
+			var g = groupOf[id]
+			if (g && groups[g]) {
+				var st = groups[g].structures = groups[g].structures || {}
+				return { where: 'group/' + g, e: st[id] = st[id] || {} }
+			}
+			if (!g && setOf[id] && standalone[setOf[id]] !== undefined) {
+				var st2 = standalone[setOf[id]].structures = standalone[setOf[id]].structures || {}
+				return { where: setOf[id], e: st2[id] = st2[id] || {} }
+			}
+			if (!g && setOf[id]) {
+				standalone[setOf[id]] = { structures: {} }
+				doc.standalone = standalone
+				return { where: setOf[id], e: standalone[setOf[id]].structures[id] = {} }
+			}
+			return null
+		}
+		todo.forEach(function (t) {
+			var id = t[1], v = t[2]
+			if ('share' in v) {
+				var isMeta = metaDefs[id] && 'anchor' in metaDefs[id]
+				var g = groupOf[id]
+				var isRepl = g && groups[g] && groups[g].structures && groups[g].structures[id] && 'replaces' in groups[g].structures[id]
+				if (!isMeta && !isRepl && t[0] === 1) errs.push(t[3] + ': share only works on a meta structure with an anchor or a replacement')
+			}
+			if (('frequency' in v || 'weight' in v) && !groupOf[id] && !setOf[id] && t[0] === 1) errs.push(t[3] + ': ' + id + ' is in no group and no structure set')
+		})
+		if (errs.length) {
+			out.refused = true
+			errs.forEach(function (e) { warnings.push('TEST OVERRIDES REFUSED, nothing from ' + TEST_PATH + ' applied: ' + e) })
+			return out
+		}
+		Object.keys(rg).sort().forEach(function (g) {
+			var p = groups[g].placement
+			TEST_GROUP_KEYS.forEach(function (f) {
+				if (f in rg[g] && p[f] !== rg[g][f]) { out.applied.push('group/' + g + ' ' + f + ' ' + p[f] + ' -> ' + rg[g][f]); p[f] = rg[g][f] }
+			})
+		})
+		todo.sort(function (a, b) { return a[0] - b[0] || (a[1] < b[1] ? -1 : a[1] > b[1] ? 1 : 0) })
+		todo.forEach(function (t) {
+			var id = t[1], v = t[2], from = t[0] ? '' : ' (' + t[3] + ')'
+			if ('share' in v) {
+				if (metaDefs[id] && 'anchor' in metaDefs[id]) {
+					if (metaDefs[id].share !== v.share) out.applied.push(id + ' share ' + metaDefs[id].share + ' -> ' + v.share + from)
+					metaDefs[id].share = v.share
+				} else {
+					var g = groupOf[id]
+					var r = g && groups[g] && groups[g].structures && groups[g].structures[id]
+					if (r && 'replaces' in r) {
+						if (r.share !== v.share) out.applied.push(id + ' share ' + r.share + ' -> ' + v.share + from)
+						r.share = v.share
+					}
+				}
+			}
+			if (!('frequency' in v) && !('weight' in v)) return
+			var at = entryOf(id)
+			if (!at) return
+			;['frequency', 'weight'].forEach(function (f) {
+				if (!(f in v)) return
+				var old = f in at.e ? at.e[f] : '(default)'
+				if (old !== v[f]) out.applied.push(id + ' ' + f + ' ' + old + ' -> ' + v[f] + ' in ' + at.where + from)
+				at.e[f] = v[f]
+			})
+		})
+		return out
 	}
 
 	function plan() {
@@ -727,6 +852,7 @@
 		}
 		var tagMembers = resolved.members
 		var errors = []
+		var test = settings.test ? applyTestOverrides(doc, metaDefs, tagMembers, setOf, warnings) : null
 
 		// which meta structures can be built: staged as structure files, the rest kept out of every set
 		var support = metaSupport()
@@ -795,7 +921,7 @@
 				var where = 'groups.' + g + '.structures.' + id
 				if (r.replaces === id) errors.push(where + ': replaces itself')
 				else if (owner[r.replaces] !== g) errors.push(where + ': replaces ' + r.replaces + ', which is not in group/' + g + ' (a replacement takes slots in its own group)')
-				else if (metaDefs[id] || metaDefs[r.replaces]) errors.push(where + ': a meta structure can\'t replace or be replaced (use "anchor" + "share" in meta_structures.json)')
+				else if ((metaDefs[id] && 'anchor' in metaDefs[id]) || metaDefs[r.replaces]) errors.push(where + ': a meta structure with an anchor can\'t replace, and no meta can be replaced (use "anchor" + "share" in meta_structures.json)')
 				else if (listed[r.replaces] && typeof listed[r.replaces] === 'object' && 'replaces' in listed[r.replaces]) errors.push(where + ': replaces ' + r.replaces + ', which is a replacement itself')
 				else if (typeof r.share === 'number' && r.enabled !== false) {
 					if (!replSupport.ok) { replOff[id] = replSupport.why; return }
@@ -932,6 +1058,8 @@
 		setPlans.forEach(function (sp) { if (!sp.emptied) checkExclusion('standalone.' + sp.id, sp.placement) })
 
 		if (errors.length) return { errors: errors, title: 'structure_groups.json / structure_tags.json have errors' }
+		if (test && test.applied.length) warnings.push('TEST OVERRIDES ACTIVE (CEConfig [worldgen.debug] testOverrides, ' + TEST_PATH + '): '
+			+ test.applied.join('; ') + '. Turn the switch off for play.')
 		if (density !== 1) warnings.push('DEBUG structure density x' + density + ' (CEConfig [worldgen.debug] structureDensity): every set\'s rate is scaled; '
 			+ (capped.length ? capped.length + ' set(s) hit their densest grid and stay below x' + density + ': ' + capped.join(', ') : 'all exact')
 			+ '. Set it back to 1 for play.')
@@ -952,9 +1080,9 @@
 			priority: priority,
 			biomeRules: biomeRules,
 			biomeFits: biomeFits,
-			report: buildReport(groupPlans, setPlans, biomeRules, biomeFits, tagDefs, tagMembers, allIds, warnings, freqCount, metaPlans, owner, priority),
+			report: buildReport(groupPlans, setPlans, biomeRules, biomeFits, tagDefs, tagMembers, allIds, warnings, freqCount, metaPlans, owner, priority, test),
 			warnings: warnings,
-			summary: (settings.groups ? '' : 'GROUPS OFF, ') + (density !== 1 ? 'DEBUG density x' + density + ', ' : '')
+			summary: (settings.groups ? '' : 'GROUPS OFF, ') + (test && test.applied.length ? 'TEST OVERRIDES (' + test.applied.length + '), ' : '') + (density !== 1 ? 'DEBUG density x' + density + ', ' : '')
 				+ groupPlans.length + ' groups, ' + Object.keys(files).length + ' structure_sets written ('
 				+ setPlans.filter(function (sp) { return sp.emptied && sp.moved.length }).length + ' emptied into groups), '
 				+ Object.keys(sets).length + ' original sets; ' + freqCount + ' structure frequencies below 1; '
@@ -998,7 +1126,7 @@
 		return parts.join(', ')
 	}
 
-	function buildReport(groupPlans, setPlans, biomeRules, biomeFits, tagDefs, tagMembers, allIds, warnings, freqCount, metaPlans, owner, priority) {
+	function buildReport(groupPlans, setPlans, biomeRules, biomeFits, tagDefs, tagMembers, allIds, warnings, freqCount, metaPlans, owner, priority, test) {
 		var lines = []
 		var out = function (s) { lines.push(s) }
 		reportHeader(lines)
@@ -1009,6 +1137,17 @@
 			out('## Warnings')
 			out('')
 			warnings.forEach(function (w) { out('- ' + w) })
+			out('')
+		}
+
+		if (test) {
+			out('## Test overrides')
+			out('')
+			out('CEConfig `[worldgen.debug] testOverrides` is on: `' + TEST_PATH + '` loosened these soft rules for testing. '
+				+ 'Rates in this report include them. Turn the switch off for play.')
+			out('')
+			if (!test.applied.length) out('None applied' + (test.refused ? ': the file was refused (see Warnings).' : '.'))
+			test.applied.forEach(function (a) { out('- ' + a) })
 			out('')
 		}
 
@@ -1149,7 +1288,7 @@
 			;((mp.def && mp.def.parts) || []).forEach(function (part, n) {
 				var what = 'structures' in part ? members(part.structures) : 'features ' + members(part.features)
 				var bits = ['count ' + toJson('count' in part ? part.count : 1), 'distance ' + toJson(part.distance || [0, 64])]
-				;['chance', 'spacing', 'margin', 'tries', 'water_depth', 'radius'].forEach(function (k) { if (k in part) bits.push(k + ' ' + part[k]) })
+				;['chance', 'spacing', 'margin', 'tries', 'water_depth', 'radius', 'overlap', 'cluster'].forEach(function (k) { if (k in part) bits.push(k + ' ' + part[k]) })
 				out('- part ' + (n + 1) + ': ' + what + '; ' + bits.join(', '))
 			})
 			out('')

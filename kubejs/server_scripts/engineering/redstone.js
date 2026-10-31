@@ -52,9 +52,7 @@ R.remove({id: i.dropper}, e)
 R.shaped(Item.of(i.dropper, 1), ['SSS','SHS', 'SRS'], {S: i.anystone, H: i.q_chute, R: i.redstone}, e)
 R.ieBlueprint(Item.of(i.dropper, 1), [i.q_chute, i.redstone, i.anystone, i.anystone, i.anystone, i.anystone], 'redstonecomponents', e, 'dropper_by_redstonecomponents')
 
-//Dispenser
-//Remove vanilla craft, must be crafted from dropper
-R.remove({id: i.dispenser}, e)
+//Dispenser: vanilla craft kept
 
 //Observer
 //Replace cobble w/ stone, workbench recipe
@@ -88,6 +86,10 @@ R.pcPressureChamber(Item.of(i.rose_quartz, 3), [Item.of(i.quartz, 3), Item.of(i.
 //Charging
 R.createCharging({item: i.polished_rose_quartz, count: 1}, {item: i.rose_quartz}, e, 'polished_rose_quartz_charging', 6000, 300)
 R.createCharging({item: i.polished_rose_quartz_block, count: 1}, {item: i.rose_quartz_crystal_block}, e, 'polished_rose_quartz_block_charging', 50000, 1000)
+//Sand blasting: one item out per item in, 80 % stays rough, 20 % polished; loop the belt for the rest
+R.remove({id: 'create_dd:sanding/rose_quartz'}, e)
+R.ddSanding([Item.of(i.rose_quartz).withChance(0.8), Item.of(i.polished_rose_quartz).withChance(0.2)],
+	i.rose_quartz, e, 'rose_quartz', { exclusive: true })
 
 //Rose quartz plate
 //Replace sheet recipe w/ cutting

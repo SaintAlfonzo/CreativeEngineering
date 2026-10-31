@@ -15,7 +15,7 @@ Fruits Delight 0.5.11, Farmer's Delight 1.2.4, Abnormals Delight 4.1.2, More Del
 | Row | Size | Build with |
 |---|---|---|
 | `baking/sweets #6` Orange jam from 4 slices | tiny, 2 recipes | alone, first |
-| `baking/sweets #5` Smoothie | tiny (if removed) | alone |
+| `baking/sweets #5` Smoothie | REMOVED 2026-10-29: `global.removedItems` (removed_items.js) + its recipes removed in CD `neapolitan/recipes.js`; test RC-164 | alone |
 | `baking/sweets #4` Ice cream rework | large, in steps a-g | a, b, e first (no new items); c, d, f need the shared fluid file of `food/drinks #1/#4` |
 | `baking/sweets #2` Rock candy variants | small-medium (new items) | builds the shared "pack sweets" table (below) |
 | `baking/sweets #1` Gummies | medium (12-ish new items) | same table as #2 |
@@ -56,7 +56,7 @@ Built, needs play: none (no sweets row is at Testing or Complete).
 ---
 
 ## sweets #1: Gummies
-Status **Planned** · Work: KubeJS (+ textures) · id `baking/sweets #1`
+Status **In Progress** · Work: KubeJS (+ textures) · id `baking/sweets #1`
 
 ### Goal
 A gummy for most fruits. Gelling agent: kelp or slime ball. Three routes: a cheap manual craft, a more efficient
@@ -124,7 +124,7 @@ Cooking Pot recipe, and a bulk Create recipe.
 ---
 
 ## sweets #2: Rock candy variants
-Status **Planned** · Work: KubeJS (+ textures) · id `baking/sweets #2`
+Status **In Progress** · Work: KubeJS (+ textures) · id `baking/sweets #2`
 
 ### Goal
 4 or 5 more rock candies made from Quark corundum. The rose quartz one stays.
@@ -169,7 +169,7 @@ Verified: everything under Now. New: `creativeengineering:<colour>_rock_candy`.
 ---
 
 ## sweets #3: Cold sweets variants
-Status **Planned** · Work: KubeJS (+ textures) · id `baking/sweets #3` · after `dishes/ingredients #5` (ice cubes)
+Status **In Progress** · Work: KubeJS (+ textures) · id `baking/sweets #3` · after `dishes/ingredients #5` (ice cubes)
 
 ### Goal
 More custard, shaved ice and popsicle flavours.
@@ -220,7 +220,7 @@ Verified: the table above (`i.glow_berry_custard` 11526, `i.blueberry_custard` 1
 ---
 
 ## sweets #4: Ice cream rework
-Status **Planned** · Work: KubeJS / data (+ textures) · id `baking/sweets #4`
+Status **In Progress** · Work: KubeJS / data (+ textures) · id `baking/sweets #4`
 
 ### Goal
 One recipe shape for every ice cream, a fluid per flavour with mixing recipes, bowl spouting, an ice cream block per
@@ -334,7 +334,10 @@ g. **Bowl spouting:** done by CCK for the Neapolitan six; steps c and f add it f
 ---
 
 ## sweets #5: Smoothie
-Status **Planned** · Work: KubeJS · id `baking/sweets #5`
+Status **Testing** (removed 2026-10-29) · Work: KubeJS · id `baking/sweets #5`
+
+**Done 2026-10-29 (owner: remove):** `i.strawberry_banana_smoothie` is in `global.removedItems` (`kubejs/startup_scripts/_lib/removed_items.js`;
+hidden in JEI, tags stripped) and every recipe that makes it is removed in CD `neapolitan/recipes.js`. Test RC-164.
 
 ### Goal
 There is one smoothie against many milkshakes. Remove it; smoothies come back only as a type in a later sweets parity
@@ -374,7 +377,7 @@ Verified as above.
 ---
 
 ## sweets #6: Orange jam from 4 orange slices
-Status **Planned** · Work: KubeJS · id `baking/sweets #6`
+Status **Testing** · Work: KubeJS · id `baking/sweets #6`
 
 ### Goal
 Orange jam is made from 4 orange slices instead of 2 whole oranges.

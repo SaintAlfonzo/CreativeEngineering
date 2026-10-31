@@ -39,3 +39,10 @@ StartupEvents.registry('item', e => {
 // into it. The salt bucket is gone (no water bucket -> salt bucket smelt). The pairs: item_merges.js here; server
 // half: data/creative_delight/kubejs/vintagedelight/recipes.js.
 global.removedItems.push(global.item.salt_bucket)
+
+// Jams are mason jars only (TODO dishes/jams #1, #3, owner 2026-10-29): the jam and relish bottles are out, and Vintage's
+// sweet berry and glow berry jams go too (Fruits Delight has both). Hidden in JEI, tags stripped; their recipes are
+// removed in data/creative_delight/kubejs/vintagedelight/jams.js. The pepper jam jar and the relish jar stay; the relish
+// jar is an ingredient, not a jam. The grape and cherry jam jars are pack additions to the Vintage port.
+global.removedItems.push(global.item.sweet_berry_jam_bottle, global.item.glow_berry_jam_bottle, global.item.pepper_jam_bottle,
+	global.item.relish_bottle, global.item.sweet_berry_jam_jar, global.item.glow_berry_jam_jar)

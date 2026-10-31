@@ -585,3 +585,4 @@ The covered/uncovered split comes from bytecode, not a running JEI. A few looks 
   Using Cans pages (patcherMod `PotionPagesJEI`, `CanPagesJEI`, `RowPagesCategory`, `CanCraftingCategory`,
   `RecipeRows`; config `[jei] tippedArrowCategory`, `potionBucketCategory`, `canCategories`).
 - 2026-10-24: planned from the scratchpad: soup cups, Vintage Delight screens, arrow update (`jei/jei-coverage #14`, `#15`, `#24`). No code changed.
+- 2026-10-31: scratchpad notes translated into TODO rows (`jei/jei-coverage #29`, `#30`). No code changed.

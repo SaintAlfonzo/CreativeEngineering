@@ -34,8 +34,8 @@ ServerEvents.recipes(e => {
 		// Heatless meal rule: farmersdelight/recipes.js "Meals". Bone broth route (TODO dishes/ingredients #4).
 		R.shapeless(i.fig_chicken_stew, [i.bone_broth, i.cooked_chicken, i.t_fruits_fig, i.t_fruits_fig, i.t_fruits_fig], e, 'fig_chicken_stew_cooked_manual_only')
 
-		//Muffins: both routes (oven, and the Cooking Pot on any dough in place of Fruits Delight's wheat dough) are the
-		// muffin family call in creativeengineering/baking.js (TODO cooking/oven #3, "muffins not cookable?").
+		//Muffins: oven only, the muffin family call in creativeengineering/baking.js; it removes Fruits Delight's Cooking
+		// Pot muffins (TODO cooking/oven #3, baking/baked-goods 2026-10-29).
 
 		//Orange jam (TODO baking/sweets #6)
 		// Fruits Delight's 2-orange pot and heated mixing recipes stay; one orange's 4 slices also work

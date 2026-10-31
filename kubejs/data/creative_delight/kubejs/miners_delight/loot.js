@@ -3,7 +3,7 @@
 // Squid drops for the squid chain (TODO dishes/ocean #3): a squid drops one Miner's Delight squid item and a glow squid
 // one glow squid item, every kill, knife or not; the ink and the calamari come from cutting it (miners_delight/recipes.js).
 // LootJS runs after every mod's loot modifiers, so this also takes out what they add: Rustic's calamari, Miner's knife
-// squid item, and the tentacles of Miner's, Ocean's and Oceanic Delight (those items stay until dishes/ocean #4).
+// squid item, and the tentacles of Miner's, Ocean's and Oceanic Delight (those items are removed, dishes/ocean #4; the filter keeps the drops out of any left in a world).
 
 LootJS.modifiers(event => {
 	if (!global.CD || !global.CD.on('rusticdelight')) return

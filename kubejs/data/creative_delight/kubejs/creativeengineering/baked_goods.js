@@ -20,9 +20,10 @@ ServerEvents.recipes(e => {
 
 		//######################### Doughs and batter #########################
 		// Sweet potato dough (tag form) and Rustic's batter: pot, and Slice & Dice's mixer copy of it. The pack's own
-		// egg solution batter is written with flour in rusticdelight/recipes.js.
+		// egg solution batter is written the same way in rusticdelight/recipes.js. Batter takes wheat flour, cornmeal or
+		// rice in each grain slot (TODO dishes/ingredients #24, 2026-10-29; was wheat flour, before that wheat).
 		R.replaceInput({ id: /^veggiesdelight:sweet_potato_dough_from_/ }, i.t_grain_wheat, i.flour, e)
 		R.replaceInput([{ id: 'rusticdelight:cooking/batter' }, { id: 'sliceanddice:cooking/rusticdelight/cooking/batter' }], i.wheat,
-			i.flour, e)
+			[i.t_flour_or_cornmeal, i.rice], e)
 	})
 })

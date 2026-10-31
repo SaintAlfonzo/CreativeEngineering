@@ -1,13 +1,13 @@
 # Player changelog (title-screen "What's New")
 
-Test prefix `CL-`. Status: BUILT 2026-10-21 (patcherMod 1.1.01 installed in `mods/`), offline checks pass, no
-in-game test yet. Open decisions in 4.1.
+Test prefix `CL-`. Status: shipped in 1.1.01 (deployed 2026-10-22); 1.1.01 to 1.1.04 notes shipped through it. Offline
+checks pass; the owner has used the button in game (CL-13 found 2026-10-27, fixed); CL-01 to CL-13 not ticked. Open decisions in 4.1.
 
 ## 0. At a glance
 
 | Part | Status | Where it will live |
 |---|---|---|
-| Changelog source files (one Markdown file per version, plus the working list) | BUILT | `kubejs/assets/creativeengineering/changelog/` (only `unreleased.md` so far) |
+| Changelog source files (one Markdown file per version, plus the working list) | BUILT | `kubejs/assets/creativeengineering/changelog/` (`1.1.01.md` to `1.1.04.md` frozen, `unreleased.md` working list) |
 | Book button on the title screen and the pause menu, with an update popup | BUILT | patcherMod `changelog/ChangelogButtons.java` (`ScreenEvent.Init.Post`, `ScreenEvent.Render.Post`) |
 | Changelog screen (version list left, scrolling text right, Forge Mods-screen layout) | BUILT | patcherMod `changelog/ChangelogScreen.java`, `ChangelogPanel.java` |
 | Markdown -> vanilla text (commonmark-java 0.21.0, relocated into the jar) | BUILT | patcherMod `changelog/ChangelogMarkdown.java` |
@@ -138,112 +138,25 @@ Anything else (tables, images, HTML other than the icon comment, deeper nesting)
 rejects it so the in-game view never shows raw syntax. The icon comment is invisible in any other Markdown viewer
 too (GitHub, the IDE preview). A missing icon item draws no icon and logs one warning.
 
-**Families are per changelog.** Each version file has its own `##` headings. A heading is created when the first
-feature in that family goes into the working list, placed where it reads best (the biggest or most-played change
-first). There is no fixed list. These names are suggestions, to keep versions looking alike where they can:
-
-| TODO family | Suggested heading |
-|---|---|
-| worldgen | World & Exploration |
-| farming | Farming & Nature |
-| food | Food & Cooking |
-| alcohol | Brewing & Drinks |
-| mobs | Mobs & Animals |
-| gear | Gear & Combat |
-| loot | Loot & Trading |
-| recipes | Crafting & Recipes |
-| engineering | Engineering & Automation |
-| blocks | Blocks & Building |
-| gameplay | Gameplay |
-| ui | Interface & Tooltips |
-| mod jars added or removed | Mods Added & Removed |
-| crash, lag and desync fixes | Performance & Stability |
-| largecontent | whichever family the player would look in (a port of a mod they know usually gets nothing, see 3.6) |
-| tooling, pack/docs | never |
-
-A version with one big theme can use its own headings instead (for example `## The Brewin' Port` and
-`## Everything Else`).
-
-### 3.3 Book button and update popup
-
-- `ScreenEvent.Init.Post` adds a 20x20 button showing the written book item, tooltip "What's New".
-- **Title screen:** right of the Singleplayer button (`width / 2 + 104`, `height / 4 + 48`). Vanilla leaves that
-  spot empty and Quark's Q button never uses it (it goes beside Mods / Realms / Options). If any widget already
-  overlaps the spot (another mod), try right of Multiplayer, then left of Singleplayer; log which one was used.
-- **Pause menu** (`pauseButton`, on by default): right of "Back to Game". Done on the changelog screen returns to
-  the pause menu; the game stays paused in single player as for any pause-menu screen.
-- **Update popup** (`updatePopup`, on by default): while the newest version is newer than the read marker, a
-  Quark-style bubble beside the button says "New in 1.1.01!" (lang key
-  `creativeengineering.changelog.popup`) and bobs one pixel up and down every half second (Quark's motion).
-  It shows on both the title screen and the pause menu, so a player who joins a server straight from a launcher
-  still sees it. The bubble sits on the side that has room and is drawn after the screen (`ScreenEvent.Render.Post`),
-  so it never covers the button itself.
-- **Acknowledged on first read:** the screen opens on the newest version, and opening it writes that version to
-  the read marker. The popup is gone from then on, until the next update ships a newer file. Skipped updates (a
-  player jumps from 1.0.7 to 1.1.01) are all acknowledged at once; their versions carry a `*` in the list for that
-  visit.
-- Fresh installs have no marker, so the popup shows once. That is the intended introduction to the button.
-
-### 3.4 Changelog screen
-
-```
-+--------------------------------------------------------------+
-|                         What's New                           |
-|  +-----------+  +-----------------------------------------+  |
-|  | 1.1.01 *  |  | 1.1.01 - The Brewing Update             |  |
-|  | 1.0.9     |  | Released 2026-10-25                     |  |
-|  | 1.0.8     |  |                                         |  |
-|  | 1.0.7     |  | [icon] Brewing & Drinks                 |  |
-|  |  ...      |  |  - Changed: Every alcoholic drink ...   |  |
-|  |           |  |  - New: Wine ages faster in a cellar    |  |
-|  |           |  |      - Warm rooms slow it down ...     |#|
-|  +-----------+  +-----------------------------------------+  |
-|                          [ Done ]                            |
-+--------------------------------------------------------------+
-```
-
-- Left: `ObjectSelectionList` of versions, newest first, a `*` on the ones that were unread when the screen opened.
-- Right: a `ScrollPanel` subclass. On open (and on window resize) each block becomes wrapped
-  `FormattedCharSequence` lines through `Font.split` at the panel width; headings with an icon reserve 18 px for
-  it. Clicks find the `Style` under the cursor (`font.getSplitter().componentStyleAtWidth`, as in
-  `ModListScreen.InfoPanel`) and pass it to `handleComponentClicked`.
-- Dev instance only: when `unreleased.md` has any bullets, the list shows "In development" at the top with that
-  file's text. It never counts for the popup. Shipped payloads never contain `unreleased.md`, so players never
-  see it.
-- Text is loaded from the resource manager on screen open (`listResources("changelog", ...)`), so F3+T picks up
-  edits.
-
-### 3.5 Deploy integration, permanence and lint
-
-- `KUBEJS_CLASSES`: `assets/creativeengineering/changelog/unreleased.md` -> dev; `assets/creativeengineering/
-  changelog/*.md` -> client (assets are client-side; both classes ship).
-- `--version X` staging: if `unreleased.md` has bullets, the payload gets `kubejs/assets/creativeengineering/
-  changelog/X.md` = the working list with `# X` and `Released <today>` stamped on top (the tree is not touched,
-  so restaging just copies the newer text). No bullets = warning ("this version has no player changelog").
-  An existing `X.md` in the tree for a version being staged is an error (one source per version).
-- `--snapshot X` (the payload really went out): the tree's `unreleased.md` becomes `X.md` with the same stamp,
-  and a fresh `unreleased.md` (title line only) is written. Shipped text and tree text are then identical.
-- **Deployed files are frozen.** Preflight compares every changelog file of a deployed version with the sha1 that
-  version's `deploy/history/<ver>.json` recorded when it shipped. Any difference is an error, and a deployed
-  version's file going missing is an error too. Historic files (1.0.0 to 1.0.9) were never in a payload, so they
-  can be written and edited freely until they ship with 1.1.01; after that they are frozen the same way.
-- `CONFIG_CLASSES`: `creativeengineering/changelog_seen.txt` -> player, so updates never reset what a player read.
-  It is also git-ignored, so the dev instance's own marker never ships (not even with `--config full`).
-- `--snapshot` when the working list changed after staging: the shipped text still goes into the tree (from
-  `deploy/latest/`, or rebuilt from the working list and the history date), the working list is left alone and
-  the script says to remove the shipped bullets by hand.
-- `tools/changelog_lint.py` (run by build_deploy preflight, also on its own): title and date lines in place; every
-  `##` has at least one bullet and is unique in its file; every top-level bullet has a label; one nesting level;
-  icon comments name a well-formed id; no emoji; no unsupported Markdown; no dev words (regex list: `patcherMod`,
-  `KubeJS`, `mixin`, `CEConfig`, `\.js\b`, `\.java\b`, `\.json\b`, `TODO`, test ids `\b[A-Z]{2}-\d{2,3}\b`, TODO
-  ids `\w+/\w+ #\d+`, `namespace:id` outside icon comments); bullets over 300 characters warn. Errors stop the
-  build; warnings print.
+**Families grow with the changes.** A family is a feature or thing (`## Lunchboxes`, `## Powdered Sugar`,
+`## Stepstools`), not a fixed category. Each version file has its own `##` headings and there is no fixed list.
+- The first change to a thing goes under a broad catch-all heading (`## Food & Cooking`, `## Blocks & Building`,
+  `## Gameplay`, `## Engineering & Automation`, `## Mobs & Animals`, `## Gear & Combat`, `## Performance &
+  Stability`, `## Interface & Tooltips`, `## Mods Added & Removed`), created when first needed.
+- When a second change touches the same thing, move both into a family named after it and add to that family from
+  then on. Do this in the same session; do not wait for a cleanup pass.
+- Bullets about one thing stay together even when they come from different systems (a lunchbox bullet under mobs
+  belongs in `## Lunchboxes`). Group by what the player sees, not by what the code touched.
+- Catch-all headings stay at the end of the file, feature families first (biggest or most-played first).
+- A family may be one bullet only while it is the thing's whole story; otherwise merge it back into a catch-all.
+- Optional icon on feature families: `<!-- icon: namespace:id -->`.
 
 ### 3.6 Writing rules (the part that matters most)
 
 **When to write.** The same session that gets a change to the point where it can affect play in the dev instance
 (its TODO row reaches Testing). Not when it is planned, and not "later". If the change belongs to a family the
-working list has no heading for yet, add the heading then.
+working list has no heading for yet, add the heading then; if it touches a thing that already has a bullet
+elsewhere, move them together into a family for it (3.2).
 
 **Keep the working list true.** Every later change during the same development cycle updates whatever it touches
 in `unreleased.md`: rewrite a bullet when the feature changes again, merge bullets that became one change, delete

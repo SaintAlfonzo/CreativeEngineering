@@ -37,8 +37,10 @@ public final class CEConfig {
     public static final ForgivingVoid FORGIVING_VOID;
     public static final DragonGear DRAGON_GEAR;
     public static final AirBrake AIR_BRAKE;
+    public static final Stepstool STEPSTOOL;
     public static final Crafting CRAFTING;
     public static final Magic MAGIC;
+    public static final CopperPoisoning COPPER_POISONING;
     public static final Botania BOTANIA;
     public static final ArmorEnchant ARMOR_ENCHANT;
     public static final Shrapnel SHRAPNEL;
@@ -51,13 +53,16 @@ public final class CEConfig {
     public static final DamageTagConfig DAMAGE_TAGS;
     public static final BonemealCharm BONEMEAL_CHARM;
     public static final CropGrowth CROP_GROWTH;
+    public static final DandelionMaturing DANDELION_MATURING;
     public static final CropDrops CROP_DROPS;
     public static final StemFruit STEM_FRUIT;
     public static final LeafDecay LEAF_DECAY;
     public static final LeafPiles LEAF_PILES;
     public static final Moss MOSS;
+    public static final VineShearing VINE_SHEARING;
     public static final Campfire CAMPFIRE;
     public static final Raids RAIDS;
+    public static final MonsterBox MONSTER_BOX;
     public static final BottledAir BOTTLED_AIR;
     public static final Canning CANNING;
     public static final Cooking COOKING;
@@ -67,6 +72,7 @@ public final class CEConfig {
     public static final Alcohol ALCOHOL;
     public static final Perf PERF;
     public static final Seasons SEASONS;
+    public static final CropSeasons CROP_SEASONS;
     public static final Time TIME;
     public static final Surface SURFACE;
     public static final Worldgen WORLDGEN;
@@ -74,6 +80,7 @@ public final class CEConfig {
     public static final TrashSlot TRASH_SLOT;
     public static final BackpackSkins BACKPACK_SKINS;
     public static final WanderingTrader WANDERING_TRADER;
+    public static final NamedMobs NAMED_MOBS;
     public static final Advancements ADVANCEMENTS;
     public static final Effects EFFECTS;
     public static final ModNames MOD_NAMES;
@@ -84,8 +91,10 @@ public final class CEConfig {
         FORGIVING_VOID = new ForgivingVoid(builder);
         DRAGON_GEAR = new DragonGear(builder);
         AIR_BRAKE = new AirBrake(builder);
+        STEPSTOOL = new Stepstool(builder);
         CRAFTING = new Crafting(builder);
         MAGIC = new Magic(builder);
+        COPPER_POISONING = new CopperPoisoning(builder);
         BOTANIA = new Botania(builder);
         ARMOR_ENCHANT = new ArmorEnchant(builder);
         SHRAPNEL = new Shrapnel(builder);
@@ -98,13 +107,16 @@ public final class CEConfig {
         DAMAGE_TAGS = new DamageTagConfig(builder);
         BONEMEAL_CHARM = new BonemealCharm(builder);
         CROP_GROWTH = new CropGrowth(builder);
+        DANDELION_MATURING = new DandelionMaturing(builder);
         CROP_DROPS = new CropDrops(builder);
         STEM_FRUIT = new StemFruit(builder);
         LEAF_DECAY = new LeafDecay(builder);
         LEAF_PILES = new LeafPiles(builder);
         MOSS = new Moss(builder);
+        VINE_SHEARING = new VineShearing(builder);
         CAMPFIRE = new Campfire(builder);
         RAIDS = new Raids(builder);
+        MONSTER_BOX = new MonsterBox(builder);
         BOTTLED_AIR = new BottledAir(builder);
         CANNING = new Canning(builder);
         COOKING = new Cooking(builder);
@@ -114,6 +126,7 @@ public final class CEConfig {
         ALCOHOL = new Alcohol(builder);
         PERF = new Perf(builder);
         SEASONS = new Seasons(builder);
+        CROP_SEASONS = new CropSeasons(builder);
         TIME = new Time(builder);
         SURFACE = new Surface(builder);
         WORLDGEN = new Worldgen(builder);
@@ -121,6 +134,7 @@ public final class CEConfig {
         TRASH_SLOT = new TrashSlot(builder);
         BACKPACK_SKINS = new BackpackSkins(builder);
         WANDERING_TRADER = new WanderingTrader(builder);
+        NAMED_MOBS = new NamedMobs(builder);
         ADVANCEMENTS = new Advancements(builder);
         EFFECTS = new Effects(builder);
         MOD_NAMES = new ModNames(builder);
@@ -215,9 +229,17 @@ public final class CEConfig {
         public final ForgeConfigSpec.BooleanValue autorepairEnabled;
         public final ForgeConfigSpec.IntValue autorepairIntervalTicks;
         public final ForgeConfigSpec.IntValue autorepairAmountPerInterval;
+        public final ForgeConfigSpec.DoubleValue armorCap;
 
         private DragonGear(ForgeConfigSpec.Builder b) {
-            b.push("dragon_gear").push("autorepair");
+            b.push("dragon_gear");
+
+            armorCap = b.comment("Most armor points an entity can have (mixin.ArmorCapMixin). Vanilla is 30; a full dragon set is 36.",
+                            "Damage reduction still tops out at 20 effective armor (80 %); armor past 20 holds that",
+                            "cap against bigger hits.")
+                    .defineInRange("armorCap", 50.0, 30.0, 1024.0);
+
+            b.push("autorepair");
 
             autorepairEnabled = b.comment("Passive slow self-repair for dragon-tier gear while worn/held.")
                     .define("enabled", true);
@@ -227,6 +249,35 @@ public final class CEConfig {
                     .defineInRange("amountPerInterval", 50, 0, Integer.MAX_VALUE);
 
             b.pop().pop();
+        }
+    }
+
+    /** Dials for the stepstools worn in the Curios feet slot ({@code stepstool.Stepstool}; feature_writeup/stepstool.md). */
+    public static final class Stepstool {
+        public final ForgeConfigSpec.BooleanValue enabled;
+        public final ForgeConfigSpec.BooleanValue sprintJump;
+        public final ForgeConfigSpec.IntValue holdTicks;
+        public final ForgeConfigSpec.DoubleValue maxDrift;
+        public final ForgeConfigSpec.BooleanValue stepOffWhenHurt;
+
+        private Stepstool(ForgeConfigSpec.Builder b) {
+            b.comment(
+                    "Stepstools: a stool in the Curios feet slot. Standing still and holding the step-up keys stands the",
+                    "player on it, a block higher; moving, crouching or jumping steps off."
+            ).push("stepstool");
+
+            enabled = b.define("enabled", true);
+            sprintJump = b.comment("Client: holding Sprint + Jump steps up. The \"Step Up (Stepstool)\" key in Controls works too",
+                    "(unbound by default); set this false to use only that key. While false, Sprint + Jump jumps as usual.")
+                    .define("sprintJump", true);
+            holdTicks = b.comment("Client: ticks the step-up keys must be held before stepping up (20 = 1 second).")
+                    .defineInRange("holdTicks", 5, 0, 100);
+            maxDrift = b.comment("Blocks the player may drift sideways from the stool's centre (knockback, pistons) before stepping off.")
+                    .defineInRange("maxDrift", 0.3, 0.05, 0.5);
+            stepOffWhenHurt = b.comment("Taking damage knocks the player off the stool.")
+                    .define("stepOffWhenHurt", true);
+
+            b.pop(); // stepstool
         }
     }
 
@@ -393,12 +444,14 @@ public final class CEConfig {
     /** Dials for {@code potion/MagicResistanceEffect}'s damage-reduction curve. */
     public static final class Magic {
         public final ForgeConfigSpec.DoubleValue reductionPerLevel;
+        public final ForgeConfigSpec.ConfigValue<String> negatedEffectTicks;
 
         private Magic(ForgeConfigSpec.Builder b) {
             b.comment(
                     "Tuning for creativeengineering:magic_resistance's damage reduction against",
-                    "magic damage sources (DamageSource#isMagic() - potion/instant damage, evoker",
-                    "fangs, conduit, dragon's breath, etc)."
+                    "the creativeengineering:magic damage tag (the same tag the shields' MAGIC column",
+                    "reads: potions, poison, evoker fangs, thorns, sonic booms, curses, life drain) and",
+                    "against the periodic damage of the effects listed in negatedEffectTicks."
             ).push("magic_resistance");
 
             reductionPerLevel = b.comment(
@@ -407,7 +460,57 @@ public final class CEConfig {
                     "regardless of amplifier."
             ).defineInRange("reductionPerLevel", 0.2, 0.0, 1.0);
 
+            negatedEffectTicks = b.comment(
+                    "Effects whose periodic damage Magic Resistance stops outright, comma-separated",
+                    "effect ids. A tick of one of these deals no damage while its level is at most the",
+                    "Magic Resistance level (Poison I against Magic Resistance I); a higher level takes",
+                    "the per-level cut instead. These are ticks no shield can block",
+                    "([shields].unblockableEffectTicks)."
+            ).define("negatedEffectTicks", "minecraft:poison, minecraft:wither");
+
             b.pop(); // magic_resistance
+        }
+    }
+
+    /** Copper poisoning from oxidized Everything Copper gear ({@code potion/CopperPoisoningHandler}). */
+    public static final class CopperPoisoning {
+        public final ForgeConfigSpec.BooleanValue enabled;
+        public final ForgeConfigSpec.IntValue intervalSeconds;
+        public final ForgeConfigSpec.IntValue jitterSeconds;
+        public final ForgeConfigSpec.DoubleValue chancePerPiece;
+        public final ForgeConfigSpec.IntValue baseSeconds;
+        public final ForgeConfigSpec.IntValue secondsPerExtraPiece;
+        public final ForgeConfigSpec.IntValue maxSeconds;
+        public final ForgeConfigSpec.IntValue effectPoisonSeconds;
+
+        private CopperPoisoning(ForgeConfigSpec.Builder b) {
+            b.comment(
+                    "Fully oxidized Everything Copper gear (armor worn, or any piece in the hotbar or",
+                    "offhand) poisons its holder now and then, and the Copper Poisoning effect (copper",
+                    "nuggets) gives Poison instead of dealing damage itself."
+            ).push("copper_poisoning");
+
+            enabled = b.comment("Roll for poison from oxidized gear.").define("enabled", true);
+            intervalSeconds = b.comment("Average seconds between rolls, per player.")
+                    .defineInRange("intervalSeconds", 300, 10, 86400);
+            jitterSeconds = b.comment("Random spread either side of intervalSeconds.")
+                    .defineInRange("jitterSeconds", 120, 0, 86400);
+            chancePerPiece = b.comment(
+                    "Chance per fully oxidized piece that a roll poisons; pieces roll independently, so",
+                    "n pieces give 1 - (1 - chancePerPiece)^n."
+            ).defineInRange("chancePerPiece", 0.15, 0.0, 1.0);
+            baseSeconds = b.comment("Poison I duration with one oxidized piece.")
+                    .defineInRange("baseSeconds", 4, 1, 600);
+            secondsPerExtraPiece = b.comment("Extra Poison seconds per oxidized piece after the first.")
+                    .defineInRange("secondsPerExtraPiece", 2, 0, 600);
+            maxSeconds = b.comment("Cap on the Poison duration from one roll.")
+                    .defineInRange("maxSeconds", 20, 1, 600);
+            effectPoisonSeconds = b.comment(
+                    "Poison I seconds the Copper Poisoning effect gives per effect level (a copper nugget",
+                    "gives level II, so twice this)."
+            ).defineInRange("effectPoisonSeconds", 4, 1, 600);
+
+            b.pop(); // copper_poisoning
         }
     }
 
@@ -814,6 +917,33 @@ public final class CEConfig {
         }
     }
 
+    /**
+     * A plain Dandelion planted on Rich Soil, Rich Soil Farmland or Fertile Soil turns into a Mature Dandelion
+     * (Veggies Delight) on the soil's random ticks ({@code crops.DandelionMaturing}). Each value is "on average one
+     * conversion per N random ticks of the soil block"; a block gets roughly one random tick a minute at the default
+     * randomTickSpeed, so 10 is about ten minutes. 0 turns that soil off.
+     */
+    public static final class DandelionMaturing {
+        public final ForgeConfigSpec.IntValue richSoilTicks;
+        public final ForgeConfigSpec.IntValue fertileSoilTicks;
+
+        private DandelionMaturing(ForgeConfigSpec.Builder b) {
+            b.comment(
+                    "Plain Dandelions mature into Mature Dandelions when planted on Rich Soil / Rich Soil Farmland",
+                    "or Fertile Soil. Values are the average number of soil random ticks per conversion",
+                    "(about one random tick a minute per block at the default randomTickSpeed). 0 = off for that soil.",
+                    "Takes effect immediately."
+            ).push("dandelion_maturing");
+
+            richSoilTicks = b.comment("Rich Soil and Rich Soil Farmland (Farmer's Delight).")
+                    .defineInRange("richSoilTicks", 10, 0, 100000);
+            fertileSoilTicks = b.comment("Fertile Soil (Immersive Weathering's mulch block).")
+                    .defineInRange("fertileSoilTicks", 20, 0, 100000);
+
+            b.pop(); // dandelion_maturing
+        }
+    }
+
     /** Biome-tinted moss block and moss carpet ({@code block.MossTint}). Client side only. */
     public static final class Moss {
         public final ForgeConfigSpec.BooleanValue biomeTint;
@@ -834,6 +964,35 @@ public final class CEConfig {
             ).defineInRange("tintStrength", 1.0, 0.0, 1.0);
 
             b.pop(); // moss
+        }
+    }
+
+    /**
+     * Shears stop vines growing ({@code block.VineShearing}, {@code mixin/VineBlockShearMixin},
+     * {@code block.VineShearingClient}). The sheared state itself is always registered.
+     */
+    public static final class VineShearing {
+        public final ForgeConfigSpec.BooleanValue enabled;
+        public final ForgeConfigSpec.BooleanValue cutBelow;
+        public final ForgeConfigSpec.BooleanValue trimmedLook;
+
+        private VineShearing(ForgeConfigSpec.Builder b) {
+            b.comment(
+                    "Shears on a modded vine (Floral Enchantment's flower vines, Botania's solid vine) stop it growing,",
+                    "as Quark's Shear Vines does for the vanilla vine. Shears on the tip of a weeping, twisting or cave",
+                    "vine or kelp stop it growing longer (1.20's behaviour)."
+            ).push("vine_shearing");
+
+            enabled = b.comment("Shears stop vines growing. Off: shears do nothing to vines (vines already sheared stay so).")
+                    .define("enabled", true);
+            cutBelow = b.comment("Shearing a modded vine also removes the same vine hanging below it, as Quark does.")
+                    .define("cutBelow", true);
+            trimmedLook = b.comment(
+                    "Client: a sheared modded vine is drawn with its bottom trimmed, like Quark's cut vine. Read when",
+                    "models load: press F3+T or restart after changing it."
+            ).define("trimmedLook", true);
+
+            b.pop(); // vine_shearing
         }
     }
 
@@ -902,6 +1061,38 @@ public final class CEConfig {
         }
     }
 
+    /** Quark monster boxes as vaults ({@code mobs.MonsterBoxVault}, feature_writeup/mob_block_tweaks.md section 2.9). */
+    public static final class MonsterBox {
+        public final ForgeConfigSpec.BooleanValue vaultMode;
+        public final ForgeConfigSpec.IntValue cooldownTicks;
+        public final ForgeConfigSpec.ConfigValue<String> rewardTable;
+        public final ForgeConfigSpec.BooleanValue rewardSingleCount;
+        public final ForgeConfigSpec.IntValue leashRange;
+        public final ForgeConfigSpec.IntValue checkIntervalTicks;
+
+        private MonsterBox(ForgeConfigSpec.Builder b) {
+            b.comment("Quark monster boxes (server side).").push("monster_box");
+
+            vaultMode = b.comment(
+                    "true: a box stays after it spawns its wave, ejects one reward when the wave is gone, then waits",
+                    "cooldownTicks before it can trigger again; it only breaks while sneaking, and Create drills skip it.",
+                    "false: Quark's own box (breaks itself after spawning)."
+            ).define("vaultMode", true);
+            cooldownTicks = b.comment("Game ticks between the reward and the box re-arming (72000 = 1 hour).")
+                    .defineInRange("cooldownTicks", 72000, 20, Integer.MAX_VALUE);
+            rewardTable = b.comment("Loot table rolled once for the reward; one stack of the result is ejected.")
+                    .define("rewardTable", "creativeengineering:misc/monster_box_reward");
+            rewardSingleCount = b.comment("true: the ejected stack is cut to 1 item; false: the stack as the table rolled it.")
+                    .define("rewardSingleCount", false);
+            leashRange = b.comment("A wave mob farther than this many blocks from its box counts as gone.")
+                    .defineInRange("leashRange", 24, 4, 256);
+            checkIntervalTicks = b.comment("Ticks between checks of an active box's wave.")
+                    .defineInRange("checkIntervalTicks", 20, 1, 200);
+
+            b.pop(); // monster_box
+        }
+    }
+
     /** Bottled Air port ({@code item.BottledAir}). */
     public static final class BottledAir {
         public final ForgeConfigSpec.BooleanValue enabled;
@@ -940,6 +1131,19 @@ public final class CEConfig {
         public final ForgeConfigSpec.BooleanValue gravityLimitDimensions;
         public final ForgeConfigSpec.ConfigValue<java.util.List<? extends String>> gravityDimensions;
         public final ForgeConfigSpec.IntValue mountEffectIntervalTicks;
+        public final ForgeConfigSpec.BooleanValue mobCapLevels;
+        public final ForgeConfigSpec.IntValue mobCapForceLevel;
+        public final ForgeConfigSpec.IntValue mobCapLevel1Chunks;
+        public final ForgeConfigSpec.IntValue mobCapLevel2Chunks;
+        public final ForgeConfigSpec.IntValue mobCapHysteresisChunks;
+        public final ForgeConfigSpec.IntValue mobCapLevel1Monster;
+        public final ForgeConfigSpec.IntValue mobCapLevel2Monster;
+        public final ForgeConfigSpec.ConfigValue<java.util.List<? extends String>> mobCapScaledCategories;
+        public final ForgeConfigSpec.IntValue spawnChunksLevel1;
+        public final ForgeConfigSpec.IntValue spawnChunksLevel2;
+        public final ForgeConfigSpec.IntValue spawnBandLevel1;
+        public final ForgeConfigSpec.IntValue spawnBandLevel2;
+        public final ForgeConfigSpec.ConfigValue<java.util.List<? extends String>> spawnBandCategories;
 
         private Perf(ForgeConfigSpec.Builder b) {
             b.comment("Performance throttles for other mods' per-tick work. See feature_writeup/perf.md section 7.")
@@ -976,6 +1180,57 @@ public final class CEConfig {
                     "The pass walks every entity in the level, which cost too much every tick. Effects last",
                     "this + 40 ticks, so they stay on. A newly equipped armor starts working within one interval."
             ).defineInRange("mountEffectIntervalTicks", 100, 1, 1200);
+
+            mobCapLevels = b.comment(
+                    "Mob cap levels (perf.md section 17). Vanilla's cap grows with the spawnable chunks (the chunks",
+                    "within 8 chunks of any player, 289 for one player alone), so spread-out players each add a",
+                    "whole monster cap. On: above the chunk counts below, the per-chunk caps drop to level 1 or 2.",
+                    "Lowering a cap removes no mobs; it only stops new spawns until the count falls below it.",
+                    "Off: vanilla caps."
+            ).define("mobCapLevels", true);
+            mobCapForceLevel = b.comment(
+                    "Force a mob cap level in every dimension (0, 1 or 2) for testing. -1 = pick it from the",
+                    "spawnable chunk count."
+            ).defineInRange("mobCapForceLevel", -1, -1, 2);
+            mobCapLevel1Chunks = b.comment(
+                    "Level 1 starts above this many spawnable chunks in a dimension (430 = about 1.5 player areas)."
+            ).defineInRange("mobCapLevel1Chunks", 430, 0, 100000);
+            mobCapLevel2Chunks = b.comment(
+                    "Level 2 starts above this many spawnable chunks (870 = about 3 player areas)."
+            ).defineInRange("mobCapLevel2Chunks", 870, 0, 100000);
+            mobCapHysteresisChunks = b.comment(
+                    "A level is only left when the chunk count falls this far below its threshold, so it does not",
+                    "flip back and forth while a player walks along the edge."
+            ).defineInRange("mobCapHysteresisChunks", 30, 0, 10000);
+            mobCapLevel1Monster = b.comment(
+                    "Monster cap at level 1 (vanilla 70). The other scaled categories get the same fraction."
+            ).defineInRange("mobCapLevel1Monster", 50, 1, 70);
+            mobCapLevel2Monster = b.comment(
+                    "Monster cap at level 2 (vanilla 70)."
+            ).defineInRange("mobCapLevel2Monster", 25, 1, 70);
+            mobCapScaledCategories = b.comment(
+                    "Spawn categories whose cap is scaled at levels 1 and 2. creature is left out on purpose:",
+                    "animals are persistent and their herds are placed at chunk generation."
+            ).defineList("mobCapScaledCategories", java.util.List.of("monster", "ambient", "water_creature",
+                    "water_ambient", "underground_water_creature", "axolotls"), o -> o instanceof String);
+            spawnChunksLevel1 = b.comment(
+                    "At level 1, the scaled categories above only spawn in chunks within this many chunks of a",
+                    "player (vanilla 8), so mobs spawn closer in and fewer chunks are rolled. 0 = vanilla."
+            ).defineInRange("spawnChunksLevel1", 6, 0, 8);
+            spawnChunksLevel2 = b.comment(
+                    "The same spawn radius at level 2. 0 = vanilla."
+            ).defineInRange("spawnChunksLevel2", 5, 0, 8);
+            spawnBandLevel1 = b.comment(
+                    "At level 1, natural spawns of the categories below must be within this many blocks above or",
+                    "below the nearest player, so caves far below a surface player do not fill the cap.",
+                    "0 = no limit."
+            ).defineInRange("spawnBandLevel1", 64, 0, 512);
+            spawnBandLevel2 = b.comment(
+                    "The same vertical band at level 2. 0 = no limit."
+            ).defineInRange("spawnBandLevel2", 32, 0, 512);
+            spawnBandCategories = b.comment(
+                    "Spawn categories the vertical band applies to."
+            ).defineList("spawnBandCategories", java.util.List.of("monster"), o -> o instanceof String);
 
             b.pop(); // perf
         }
@@ -1089,7 +1344,8 @@ public final class CEConfig {
      * The pack's WTHIT lines that have no feature section of their own (client side, display only):
      * {@code compat.WthitBlockModelIcon}, {@code compat.WthitHolderContents}, {@code compat.WthitHive},
      * {@code compat.WthitStateLines}, {@code compat.WthitCampfire}, {@code compat.WthitSheetmetalTank},
-     * {@code compat.WthitKitchenStation}. Every change to WTHIT's overlay has a switch here.
+     * {@code compat.WthitKitchenStation}, {@code compat.WthitSheared}, {@code compat.WthitSilkTouch},
+     * {@code compat.WthitCropSeasons}, {@code compat.WthitOperatorBlocks}. Every change to WTHIT's overlay has a switch here.
      * feature_writeup/wthit_lines.md. Each is also a WTHIT plugin toggle (config/waila/plugin_toggle.json5).
      */
     public static final class Wthit {
@@ -1111,6 +1367,13 @@ public final class CEConfig {
         public final ForgeConfigSpec.BooleanValue sheetmetalTank;
         public final ForgeConfigSpec.BooleanValue kitchenStation;
         public final ForgeConfigSpec.BooleanValue remainderBuffer;
+        public final ForgeConfigSpec.BooleanValue sheared;
+        public final ForgeConfigSpec.BooleanValue silkTouch;
+        public final ForgeConfigSpec.BooleanValue cropSeasons;
+        public final ForgeConfigSpec.BooleanValue cropOutOfSeason;
+        public final ForgeConfigSpec.BooleanValue operatorBlocks;
+        public final ForgeConfigSpec.ConfigValue<List<? extends String>> operatorBlockList;
+        public final ForgeConfigSpec.IntValue operatorBlockLevel;
 
         private Wthit(ForgeConfigSpec.Builder b) {
             b.comment("WTHIT look-at overlay lines (client side). See feature_writeup/wthit_lines.md.").push("wthit");
@@ -1209,6 +1472,44 @@ public final class CEConfig {
                     "leftover slots, and 'Waiting: leftover slots full' while a craft waits for room ([cooking] stallWhenFull)."
             ).define("remainderBuffer", true);
 
+            sheared = b.comment(
+                    "Grass-like blocks cut with shears (fertile=false: grass, mycelium, lush grass, grass slabs):",
+                    "'Sheared, prevents spreading and converting to dirt'. Sheared vines ([vine_shearing]) and Vinery's",
+                    "sterilized jungle grape vine: 'Sheared, stops growing'. Weeping, twisting and cave vine and kelp",
+                    "tips and Immersive Weathering ivy at their last age: 'Stopped growing'."
+            ).define("sheared", true);
+
+            silkTouch = b.comment(
+                    "Blocks that only drop themselves with Silk Touch (block tag creativeengineering:wthit/needs_silk_touch,",
+                    "from tools/gen_silk_touch_blocks.py): a Silk Touch book and 'Needs Silk Touch'. Hidden while the",
+                    "main-hand tool has Silk Touch."
+            ).define("silkTouch", true);
+
+            cropSeasons = b.comment(
+                    "Every crop with a crop season type: its seasons as on the planting item ('Fertile: Spring',",
+                    "'Offseason: Winter, Dry', 'Season: Nether', 'Fertile: Cold biomes'). [crop_seasons]."
+            ).define("cropSeasons", true);
+
+            cropOutOfSeason = b.comment(
+                    "Under it, green 'Fertile here: grows faster' or red 'Offseason here: grows slower' for where the",
+                    "crop stands (greenhouse glass counted). Nothing when it is neutral there."
+            ).define("cropOutOfSeason", true);
+
+            operatorBlocks = b.comment(
+                    "WTHIT's blacklist hides barriers, structure voids and light blocks from everyone. With this on, players",
+                    "with operatorBlockLevel see the blocks in operatorBlockList; everyone else still sees through them."
+            ).define("operatorBlocks", true);
+
+            operatorBlockList = b.comment("Blocks shown to operators only (block ids).")
+                    .defineListAllowEmpty(List.of("operatorBlockList"),
+                            () -> List.of("minecraft:barrier", "minecraft:structure_void", "minecraft:light"),
+                            o -> o instanceof String s && !s.isBlank());
+
+            operatorBlockLevel = b.comment(
+                    "Permission level that sees them: 2 = operators who can use /give and command blocks (also single",
+                    "player with cheats on), 4 = server owners only, 0 = every player."
+            ).defineInRange("operatorBlockLevel", 2, 0, 4);
+
             b.pop(); // wthit
         }
     }
@@ -1305,6 +1606,48 @@ public final class CEConfig {
             ).defineInRange("snowLineY", 320, -64, 4096);
 
             b.pop(); // seasons
+        }
+    }
+
+    /**
+     * Crop growing seasons by crop type ({@code seasons/CropSeasons}): fertile, neutral or off for the season of the
+     * biome the crop stands in. feature_writeup/crops.md 2.12.1. Read live on both sides (the client for tooltips).
+     */
+    public static final class CropSeasons {
+        public final ForgeConfigSpec.BooleanValue enabled;
+        public final ForgeConfigSpec.DoubleValue fertileBonus;
+        public final ForgeConfigSpec.DoubleValue offPenalty;
+        public final ForgeConfigSpec.BooleanValue greenhouse;
+        public final ForgeConfigSpec.IntValue caveFertileBelowY;
+        public final ForgeConfigSpec.IntValue caveOffAboveY;
+
+        private CropSeasons(ForgeConfigSpec.Builder b) {
+            b.comment(
+                    "Every crop has a type (block tags creativeengineering:crop_seasons/<type>, filled from",
+                    "kubejs/generation_scripts/worldgen/crop_seasons.json). Each season is fertile (grows faster),",
+                    "neutral or off (grows slower) for that type, read from the biome's own calendar: spring to winter",
+                    "in temperate and cold biomes, wet and dry in tropical, dry and arid ones. Replaces Serene Seasons'",
+                    "in/out of season rule (its fertility.toml seasonal_crops is off). A crop in no type grows as usual."
+            ).push("crop_seasons");
+
+            enabled = b.comment("false: no crop seasons at all (crops grow at their own speed everywhere).")
+                    .define("enabled", true);
+            fertileBonus = b.comment(
+                    "Fertile: this share of growth checks gets a second growth check right after (0.25 = 25 % faster)."
+            ).defineInRange("fertileBonus", 0.25, 0.0, 1.0);
+            offPenalty = b.comment("Off: this share of growth checks is refused (0.25 = 25 % slower).")
+                    .defineInRange("offPenalty", 0.25, 0.0, 1.0);
+            greenhouse = b.comment(
+                    "Greenhouse glass: any block in #sereneseasons:greenhouse_glass (filled from crop_seasons.json",
+                    "greenhouse_glass: glass blocks, panes, doors and trapdoors) in the 16 blocks straight above a seasonal",
+                    "crop makes every season neutral (no fertile bonus, no off penalty). Only that column counts."
+            ).define("greenhouse", true);
+            caveFertileBelowY = b.comment("Cave crops (cave carrots, glow berries) are fertile below this height.")
+                    .defineInRange("caveFertileBelowY", 0, -64, 320);
+            caveOffAboveY = b.comment("Cave crops are off above this height; neutral in between.")
+                    .defineInRange("caveOffAboveY", 128, -64, 320);
+
+            b.pop(); // crop_seasons
         }
     }
 
@@ -1975,6 +2318,9 @@ public final class CEConfig {
     /** Which structure starts the earth-fill check logs ({@code worldgen/EarthFill}). */
     public enum EarthFillLog { OFF, CANCELLED, ALL }
 
+    /** [worldgen.ocean_geodes] floorPatch: what happens to an ocean geode that reaches the sea floor. */
+    public enum GeodeFloor { OFF, CUT, SWAP }
+
     /**
      * Every worldgen system's switch and every tuning constant that isn't per-structure data. Per-structure
      * and per-piece values stay in kubejs/generation_scripts/worldgen/*.json (hundreds of entries); this is
@@ -2049,6 +2395,8 @@ public final class CEConfig {
         public final ForgeConfigSpec.BooleanValue oceanGeodes;
         public final ForgeConfigSpec.BooleanValue placementPriority;
         public final ForgeConfigSpec.BooleanValue templateBlockSwaps;
+        public final ForgeConfigSpec.BooleanValue spawnBoxes;
+        public final ForgeConfigSpec.ConfigValue<java.util.List<? extends String>> removeSpawners;
         public final ForgeConfigSpec.BooleanValue permafrostMerge;
         public final ForgeConfigSpec.BooleanValue mulberrySapling;
         public final ForgeConfigSpec.BooleanValue firstTickWater;
@@ -2128,6 +2476,14 @@ public final class CEConfig {
                     "when the template loads (lone red glazed terracotta \"meat\" -> Architect's Palette salmon log). Off: templates as",
                     "the mods ship them. Rejoin; new chunks only.")
                     .define("templateBlockSwaps", true);
+            spawnBoxes = b.comment("spawn_boxes.json (patcherMod StructureSpawnBoxes): pillager and witch structures respawn their own mob mix",
+                    "inside a spawn box, members of a meta structure keep their own boxes (or take the meta's), and box evokers drop no",
+                    "totem. Off: only the mods' own spawn_overrides (inside metas each part keeps its own either way). Applies at once, old chunks too.")
+                    .define("spawnBoxes", true);
+            removeSpawners = b.comment("Mob spawners of these entities are removed from structure templates when the template loads (patcherMod",
+                    "TemplateSpawnerFilter); the spawn boxes take their place. A template that loses one also loses its spawners with",
+                    "no mob. Empty list: every spawner stays. Rejoin; new chunks only.")
+                    .defineList("removeSpawners", java.util.List.of("minecraft:pillager"), o -> o instanceof String);
             permafrostMerge = b.comment("Quark's frozen peaks cave style lays Immersive Weathering's permafrost on floors, ceilings and pillars",
                     "instead of Quark's own block (renamed Froststone; patcherMod QuarkPermafrostStyleMixin). Walls stay packed ice.",
                     "Off: Quark's block. New chunks only.")
@@ -2161,6 +2517,7 @@ public final class CEConfig {
     /** Testing knobs that are wrong for a real world. */
     public static final class WorldgenDebug {
         public final ForgeConfigSpec.DoubleValue structureDensity;
+        public final ForgeConfigSpec.BooleanValue testOverrides;
 
         private WorldgenDebug(ForgeConfigSpec.Builder b) {
             b.comment("For testing only; leave at the defaults for play.").push("debug");
@@ -2171,6 +2528,13 @@ public final class CEConfig {
                     "minimum (spacing = separation + 1); separations shrink with the grid. structure_tag_report.md shows",
                     "the result. Rejoin to apply; only new chunks change."
             ).defineInRange("structureDensity", 1.0, 0.01, 100.0);
+            testOverrides = b.comment(
+                    "Scratch servers only. On: kubejs/generation_scripts/worldgen/structure_test_overrides.json loosens soft",
+                    "structure rules so rare structures can be found and tested (per structure frequency, weight, meta share;",
+                    "group spacing and separation). Biomes, fits, surface checks, peaceful radius, priority and earth/water",
+                    "fill never change. The log and structure_tag_report.md say TEST OVERRIDES ACTIVE. Rejoin to apply;",
+                    "only new chunks change."
+            ).define("testOverrides", false);
             b.pop(); // debug
         }
     }
@@ -2298,12 +2662,17 @@ public final class CEConfig {
     public static final class EarthFill {
         public final ForgeConfigSpec.IntValue maxOverWater;
         public final ForgeConfigSpec.DoubleValue maxWaterSurplus;
+        public final ForgeConfigSpec.BooleanValue footprintAllPieces;
         public final ForgeConfigSpec.IntValue beardReach;
         public final ForgeConfigSpec.IntValue buryReach;
         public final ForgeConfigSpec.IntValue maxMoundHeight;
+        public final ForgeConfigSpec.BooleanValue beardFootprint;
         public final ForgeConfigSpec.BooleanValue prune;
         public final ForgeConfigSpec.IntValue pruneMaxHanging;
         public final ForgeConfigSpec.IntValue pruneMaxMound;
+        public final ForgeConfigSpec.IntValue pruneMinWetColumns;
+        public final ForgeConfigSpec.BooleanValue pruneWetJigsaws;
+        public final ForgeConfigSpec.IntValue footprintMinWater;
         public final ForgeConfigSpec.IntValue baseLayers;
         public final ForgeConfigSpec.ConfigValue<List<? extends String>> blocks;
         public final ForgeConfigSpec.ConfigValue<List<? extends String>> overrides;
@@ -2334,14 +2703,24 @@ public final class CEConfig {
             ).defineInRange("maxOverWater", 24, -1, 100000);
             maxWaterSurplus = b.comment(
                     "The footprint's water share, checked after the limits: the bounding box of every piece with earth, in the",
-                    "layer the structure was set onto the surface with. Water there (filled by its earth or the beard, or left",
+                    "layer the structure was set onto the surface with, and (footprintAllPieces) every other piece's box where",
+                    "the surface lies within its height. Water there (filled by its earth or the beard, or left",
                     "standing) against dry ground there (replaced or left alone): the structure is cancelled when the water",
                     "outnumbers the ground by more than this share. 0.5 = water more than 50% over ground (60:40 passes, 61:39",
                     "doesn't), 0 = more water than ground, -1 = off. Catches camps on islands and ruins reaching out over a lake,",
                     "whose beard fills the shallow water so maxOverWater never sees it. A spot under more than baseLayers",
                     "blocks of terrain (underground structures, aquifers) counts as neither. Not for structures in",
-                    "creativeengineering:water_fill/structures; an override with every limit -1 skips it too."
-            ).defineInRange("maxWaterSurplus", 0.5, -1.0, 1000.0);
+                    "creativeengineering:water_fill/structures; an override with every limit -1 skips it too. Default 0",
+                    "(2026-10-30, was 0.5): the strictest setting, any start standing more on water than on ground goes."
+            ).defineInRange("maxWaterSurplus", 0.0, -1.0, 1000.0);
+            footprintAllPieces = b.comment(
+                    "The footprint water share also judges pieces with no earth in their base: plank, wool, sandstone or brick",
+                    "floors, and pieces that are not jigsaw or template pieces (vanilla desert and jungle pyramids, igloos).",
+                    "A column of such a piece counts when the predicted surface (its topmost block) lies within the piece's",
+                    "height (from baseLayers below its bottom to its top): water when that surface is water, ground when it",
+                    "is solid. Pieces buried under the surface or floating above it count as neither. Village streets that",
+                    "follow the terrain never count. Off: only pieces with earth make the footprint (before 2026-10-30)."
+            ).define("footprintAllPieces", true);
             beardReach = b.comment(
                     "How deep under a piece the beard (beard_thin, beard_box, the soft beard) still fills the ground, in",
                     "blocks between the piece's bottom and the ground (air and water both: the beard fills either). Earth",
@@ -2357,11 +2736,21 @@ public final class CEConfig {
                     "the beard would build a tall pillar there, or can't reach the piece at all (an edge of a ravine, a",
                     "pad over a cliff). Each column counts once per structure, toward the size's mound limit."
             ).defineInRange("maxMoundHeight", 8, 0, 64);
+            beardFootprint = b.comment(
+                    "Mound columns also under the built bottom of a bearded piece, not only under its earth: a stone or",
+                    "plank floor over a cliff edge stands on a beard pillar the earth count never sees. Every column with a",
+                    "solid block in a rigid piece's baseLayers (trimmed columns left out) whose ground lies more than",
+                    "maxMoundHeight below it counts toward the mound limit; a start with no earth at all is judged as small.",
+                    "Whole-start check only (pruning still judges earth). tools/earth_fill_sim.sh <seed> <n> footprint",
+                    "measured 2026-10-30: 23% of vanilla outposts and 2 to 18% of villages would newly cross their mound",
+                    "limit. Off until calibrated on a log = ALL scratch run."
+            ).define("beardFootprint", false);
             prune = b.comment(
                     "For structures in the structure tag creativeengineering:earth_fill/prune (villages): before the whole start",
                     "is judged, each jigsaw piece but the first is judged alone, and one past pruneMaxHanging or pruneMaxMound",
-                    "is dropped with every piece attached below it (a house over deep water with its villagers). The street",
-                    "that led to it stays as a dead end. Then the rest is judged as usual. Off: the whole start is judged."
+                    "is dropped with every piece attached below it (a house over deep water with its villagers). So is a piece",
+                    "whose own footprint is too wet (maxWaterSurplus) with at least pruneMinWetColumns water columns. The street",
+                    "that led to it stays as a dead end. Then the rest is judged as usual. Off: the whole start is judged (and pruneWetJigsaws is off too)."
             ).define("prune", true);
             pruneMaxHanging = b.comment(
                     "Earth blocks of one piece over water or air the beard won't fill before that piece is dropped. -1 = never."
@@ -2369,6 +2758,23 @@ public final class CEConfig {
             pruneMaxMound = b.comment(
                     "Mound columns of one piece before that piece is dropped. -1 = never."
             ).defineInRange("pruneMaxMound", 4, -1, 100000);
+            pruneMinWetColumns = b.comment(
+                    "Water columns a piece's own footprint needs before its water share can drop it (so a well or a hut over",
+                    "a small pond stays). -1 = never drop a piece for its water share."
+            ).defineInRange("pruneMinWetColumns", 16, -1, 100000);
+            pruneWetJigsaws = b.comment(
+                    "With prune on, every other jigsaw structure on the surface (camps, outposts, ruins, towers; meta",
+                    "structure parts and anchors too) drops a piece whose own footprint is too wet the same way, with every",
+                    "piece attached below it; the piece limits above stay for villages. The first piece is never dropped,",
+                    "and the rest is then judged as usual. Not for creativeengineering:water_fill/structures,",
+                    "creativeengineering:earth_fill/wet_ok or the structure tag creativeengineering:earth_fill/no_prune",
+                    "(structures whose pieces only make sense together). Off: only villages are pruned (before 2026-10-30)."
+            ).define("pruneWetJigsaws", true);
+            footprintMinWater = b.comment(
+                    "Water columns a whole start's footprint needs before its water share (maxWaterSurplus) can cancel it,",
+                    "so a cliff-edge start whose layer is mostly air doesn't drop on one wet column. 0 = any (before",
+                    "2026-10-30)."
+            ).defineInRange("footprintMinWater", 9, 0, 100000);
             baseLayers = b.comment(
                     "How many template layers from the bottom count as the foundation. Earth higher up (roof gardens,",
                     "planters) is not counted: above the ground everything is air."
@@ -2389,8 +2795,9 @@ public final class CEConfig {
                     "coarser at cliffs). 1 = every column. [worldgen.water_fill] uses it too."
             ).defineInRange("sampleGrid", 4, 1, 8);
             log = b.comment(
-                    "CANCELLED: log each structure that is cancelled (id, chunk, counts, limits). ALL: log every checked",
-                    "structure that has any earth in its base. For tuning the limits."
+                    "CANCELLED: log each structure that is cancelled, and each pruned village or meta part dropped (id, chunk,",
+                    "counts, limits). ALL: log every checked structure that has earth in its base or (footprintAllPieces) a",
+                    "surface piece. For tuning the limits."
             ).defineEnum("log", EarthFillLog.CANCELLED);
             sizes = new EarthFillSizes(b);
             b.pop(); // earth_fill
@@ -2513,6 +2920,7 @@ public final class CEConfig {
         public final ForgeConfigSpec.IntValue spread;
         public final ForgeConfigSpec.DoubleValue stayShare;
         public final ForgeConfigSpec.ConfigValue<java.util.List<? extends String>> untouched;
+        public final ForgeConfigSpec.EnumValue<GeodeFloor> floorPatch;
 
         private OceanGeodes(ForgeConfigSpec.Builder b) {
             b.comment(
@@ -2534,6 +2942,12 @@ public final class CEConfig {
             untouched = b.comment("Geodes whose inner layer is one of these blocks are left at their own height (Geode Plus'",
                     "prismarine geode belongs on the sea floor).")
                     .defineList("untouched", java.util.List.of("geode:budding_prismarine"), o -> o instanceof String);
+            floorPatch = b.comment("A geode under an ocean that still reaches the sea floor (the stayShare ones; not the untouched",
+                    "ones). SWAP: it keeps its shape, and its outer and middle layer blocks from the floor up become the floor",
+                    "block that column had before (sand, gravel, clay), so it reads as a mound of sea floor with the opening",
+                    "into its crystals. CUT: it is cut flush with the floor (its blocks above the floor become water) and the",
+                    "rim left on the surface becomes the floor block. OFF: it sticks out as generated.")
+                    .defineEnum("floorPatch", GeodeFloor.SWAP);
             b.pop();
         }
     }
@@ -2611,8 +3025,9 @@ public final class CEConfig {
             searchTimeoutSeconds = b.comment(
                     "Any structure search (/locate, maps, Async Locator) still running after this long ends as not found and",
                     "logs a [locate] line with its counters; its thread is free again. /celocate stop ends running searches",
-                    "too, and so does the server stopping. 0 = no deadline. Applies to new searches immediately.")
-                    .defineInRange("searchTimeoutSeconds", 120, 0, 3600);
+                    "too, and so does the server stopping. 0 = no deadline. Applies to new searches immediately.",
+                    "Tuned 2026-10-30 (user): 300 [120], so the fortified villages' meta camps and ruins can answer.")
+                    .defineInRange("searchTimeoutSeconds", 300, 0, 3600);
             b.pop();
         }
     }
@@ -2674,13 +3089,14 @@ public final class CEConfig {
     public static final class MetaStructures {
         public final ForgeConfigSpec.BooleanValue log;
         public final ForgeConfigSpec.BooleanValue avoidCoasts;
+        public final ForgeConfigSpec.BooleanValue keepShortParts;
 
         private MetaStructures(ForgeConfigSpec.Builder b) {
             b.comment(
                     "Meta structures: one structure start made of other structures (an anchor such as a village, plus",
                     "satellites such as towers around it) and placed features (driftwood on the sea). Every part keeps",
                     "within 7 chunks of the start so the whole thing generates; a part that can't fit (biome, room)",
-                    "is retried elsewhere, and a meta structure short of a part's minimum count doesn't spawn at all.",
+                    "is retried elsewhere; a part short of its minimum count keeps what fitted (keepShortParts).",
                     "A meta with an anchor only takes a share of the slots its anchor already won, so no structure's rate",
                     "changes. /locate finds a meta by its id and a structure inside one by the structure's own id."
             ).push("meta_structures");
@@ -2694,7 +3110,13 @@ public final class CEConfig {
                     "(centre or a corner): a satellite tries another spot, an anchor there leaves the slot to the plain anchor,",
                     "which still spawns as it would alone. Metas in the structure tag creativeengineering:meta/coast_ok (fleets,",
                     "flotillas, wrecks, sunken ruins) are not affected. New chunks only."
-            ).define("avoidCoasts", false);
+            ).define("avoidCoasts", true);
+            keepShortParts = b.comment(
+                    "A part that fits fewer times than its minimum count (a satellite near a coast, on a cliff) is kept with",
+                    "what fitted instead of failing the whole meta; earth fill likewise drops an offending satellite and",
+                    "prunes village parts instead of cancelling the meta. The meta only fails when no structure besides the",
+                    "anchor is left (the slot is then the plain anchor). Off: a short part fails the meta (before 2026-10-30)."
+            ).define("keepShortParts", true);
             b.pop(); // meta_structures
         }
     }
@@ -2883,6 +3305,43 @@ public final class CEConfig {
         }
     }
 
+    /** Named mobs ({@code mobs.NamedMobs}, feature_writeup/mob_block_tweaks.md section 2.6). Read live. */
+    public static final class NamedMobs {
+        public final ForgeConfigSpec.BooleanValue enabled;
+        public final ForgeConfigSpec.DoubleValue chance;
+        public final ForgeConfigSpec.ConfigValue<java.util.List<? extends String>> mobs;
+        public final ForgeConfigSpec.ConfigValue<java.util.List<? extends String>> spawnReasons;
+        public final ForgeConfigSpec.BooleanValue announceDeaths;
+        public final ForgeConfigSpec.ConfigValue<java.util.List<? extends String>> fallbackNames;
+
+        private NamedMobs(ForgeConfigSpec.Builder b) {
+            b.comment(
+                    "A listed mob that spawns for one of the listed reasons has a small chance to get a random name",
+                    "(Minecraft Comes Alive's citizen names, else fallbackNames). Its death is announced in chat.",
+                    "Mobs already named are left alone; bred, egg, spawner and command mobs never roll."
+            ).push("named_mobs");
+
+            enabled = b.comment("Off: no new names. Mobs named earlier keep their name and announcement.")
+                    .define("enabled", true);
+            chance = b.comment("Chance per eligible spawn. 0.01 = 1 in 100.")
+                    .defineInRange("chance", 0.01, 0.0, 1.0);
+            mobs = b.comment("Entity ids, or #entity type tags, that can be named.")
+                    .defineList("mobs", java.util.List.of("minecraft:cow", "minecraft:mooshroom", "minecraft:pig",
+                            "minecraft:sheep", "minecraft:chicken", "minecraft:goat"), o -> o instanceof String s && !s.isBlank());
+            spawnReasons = b.comment("Spawn reasons that roll: NATURAL, CHUNK_GENERATION, STRUCTURE (see MobSpawnType for the rest).")
+                    .defineList("spawnReasons", java.util.List.of("NATURAL", "CHUNK_GENERATION", "STRUCTURE"), o -> o instanceof String);
+            announceDeaths = b.comment("Every player sees a named mob's death message (\"Bessie the Cow was slain by Steve\").",
+                    "Follows the showDeathMessages gamerule.")
+                    .define("announceDeaths", true);
+            fallbackNames = b.comment("Names used when Minecraft Comes Alive is missing or its name lists are not loaded.")
+                    .defineList("fallbackNames", java.util.List.of("Bessie", "Clover", "Daisy", "Biscuit", "Maple", "Pepper",
+                            "Hazel", "Barnaby", "Rosie", "Winston", "Mabel", "Otis", "Juniper", "Gus", "Poppy", "Waffles"),
+                            o -> o instanceof String s && !s.isBlank());
+
+            b.pop(); // named_mobs
+        }
+    }
+
     /** {@code mixin/ServerAdvancementManagerMixin}: the pack has no advancements at all (user, 2026-10-18). */
     public static final class Advancements {
         public final ForgeConfigSpec.BooleanValue enabled;
@@ -3037,6 +3496,10 @@ public final class CEConfig {
     /** Mob effect category overrides ({@code potion.EffectCategories}, {@code mixin/MobEffectCategoryMixin}). */
     public static final class Effects {
         public final ForgeConfigSpec.ConfigValue<List<? extends String>> categoryOverrides;
+        public final ForgeConfigSpec.ConfigValue<List<? extends String>> forceHudIcon;
+        public final ForgeConfigSpec.ConfigValue<List<? extends String>> forceHudIconItems;
+        public final ForgeConfigSpec.ConfigValue<List<? extends String>> remap;
+        public final ForgeConfigSpec.ConfigValue<List<? extends String>> removed;
 
         private Effects(ForgeConfigSpec.Builder b) {
             b.comment("Mob effects (client and server).").push("effects");
@@ -3053,6 +3516,44 @@ public final class CEConfig {
                     "neapolitan:slipping=HARMFUL",
                     "vinery:trippy=HARMFUL"
             ), o -> o instanceof String s && s.matches("[a-z0-9_.-]+:[a-z0-9_/.-]+=(BENEFICIAL|HARMFUL|NEUTRAL)"));
+            forceHudIcon = b.comment(
+                    "Effects that always get their HUD icon (top right), even when the mod that gave them hid it",
+                    "(showIcon false, mostly to drop particles). The inventory list shows them either way. Armor, held",
+                    "tool and aura effects are left hidden on purpose (feature_writeup/effects.md 2.6). Client, read live."
+            ).defineList("forceHudIcon", List.of(
+                    "brewinandchewin:intoxication",
+                    "via_romana:travellers_fatigue",
+                    "monobank:thief"
+            ), o -> o instanceof String s && s.matches("[a-z0-9_.-]+:[a-z0-9_/.-]+"));
+            forceHudIconItems = b.comment(
+                    "Items whose effects always get their HUD icon: every effect added while an entity finishes using",
+                    "one (eating, drinking, the item's own code). \"namespace\" for a whole mod or \"namespace:item\". Effect",
+                    "ids in forceHudIcon show from any source; this list only for these items, so the same effect from",
+                    "armor stays hidden. Server side, read live."
+            ).defineList("forceHudIconItems", List.of(
+                    "create:builders_tea",
+                    "canned_goods:canned_pufferfishs",
+                    "farmersrespite",
+                    "immersive_weathering"
+            ), o -> o instanceof String s && s.matches("[a-z0-9_.-]+(:[a-z0-9_/.-]+)?"));
+            remap = b.comment(
+                    "Effects swapped for another wherever they are applied, \"from=to\". Same duration, level and",
+                    "visibility. Covers foods, potions, blocks, commands and mob code (LivingEntity#addEffect), and",
+                    "Fruits Delight's jam / jelly effect lines. Food tooltips are swapped by KubeJS",
+                    "(global.foodEffectSwaps). Server side, read live."
+            ).defineList("remap", List.of(
+                    "neapolitan:agility=vinery:climbing_effect",
+                    "fruitsdelight:chorus=vinery:teleport",
+                    "quark:resilience=alexsmobs:knockback_resistance"
+            ), o -> o instanceof String s && s.matches("[a-z0-9_.-]+:[a-z0-9_/.-]+=[a-z0-9_.-]+:[a-z0-9_/.-]+"));
+            removed = b.comment(
+                    "Effects that are never applied (LivingEntity#addEffect refuses them). Their brews are removed",
+                    "by KubeJS (startup_scripts/cooking/potions.js). Server side, read live."
+            ).defineList("removed", List.of(
+                    "upgrade_aquatic:restfulness",
+                    "upgrade_aquatic:insomnia",
+                    "alexsmobs:power_down"
+            ), o -> o instanceof String s && s.matches("[a-z0-9_.-]+:[a-z0-9_/.-]+"));
             b.pop();
         }
     }

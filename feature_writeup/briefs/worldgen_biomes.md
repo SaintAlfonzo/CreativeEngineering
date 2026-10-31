@@ -12,7 +12,7 @@ Written 2026-10-21 from [todo/TODO.md](../todo/TODO.md) `# worldgen`, Sub `biome
 | Row | Status | What is left | Order |
 |---|---|---|---|
 | biomes #4 | Planned | find out why the live End never has crystal peaks (and void barrens only once) | **first**. It is a bug lead, not just a rough number (see "the finding" in #4), and it decides #2's End half |
-| biomes #2 | Planned | settle the unreachable targets: Nether + Overworld accept or set reachable values; End by #4's result | after #4; a 10-minute config edit once decided |
+| biomes #2 | Planned | settle the unreachable targets: Nether + Overworld accept or set reachable values; End by #4's result (End half settled 2026-10-30 by #8: crystal peaks and void barrens now reach their aims) | after #4; a 10-minute config edit once decided |
 | biomes #3 | Planned | skylands multiplier 0.15: keep or raise | any time; one number, user decision |
 | biomes #5 | Testing | permafrost merge built 2026-10-22, scratch server PASSED 2026-10-22 (SQ-MG, [item_merges.md](../item_merges.md) 2.7, MG-21, MG-22); left: MG names in game, PF-01 | done; in-game checks only |
 | biomes #6 | Planned | leafless dead trees, grouped, some in shallow pools | independent; data + one `wild_crops.json` entry. Ties in with `structures/contents #2` (driftwood) |
@@ -535,6 +535,7 @@ cane, grass, flowers and fluid.
 | Row | Status | Note |
 |---|---|---|
 | biomes #1 Rarity floor, `target_pct`, 20,000-column and cave samples | Testing | WG-09 to WG-13 open; WG-01 to WG-08 never run. biome_tuning.md had stale End / Nether stats (fixed below) |
+| biomes #8 Nullscape crystal peaks and void barrens raised (2026-10-30, user: "clearly findable") | Testing | `biome_config.json` End: `crystal_peaks` multiplier 0.25 -> 3, `void_barrens` 0.75 -> 2. Model result on the 2026-10-26 samples (seed -8188900049893920259, 20,000 surface points): crystal peaks 0.61 % -> 3.95 %, void barrens 1.825 % -> 5.41 %, end_highlands 77.3 % -> 70.4 %, shadowlands unchanged 10.735 % (`biomes #9`). Both targets met, so the two "aimed for" notes are gone (the #2 table above lists the older End numbers). Solved offline: the real `BiomeLayoutTuner` run headless on a scratchpad copy (`WorldgenFiles.rootOverride`), the End stats written back match byte for byte. Sweep: (2, 2) 2.65 / 5.37 %; (4, 3) 5.26 / 8.13 %; (6, 4) misses both aims. Live End shares are likely lower than the model (F4: every mismatch is a live end_highlands), hence a generous raise. `tools/gen_biome_config.py` not re-run: multipliers are its kept inputs, nothing else changed. New worlds only. Test SQ-WG30-E03 |
 
 ## Writeup corrections made
 

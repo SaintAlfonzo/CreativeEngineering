@@ -1,0 +1,139 @@
+# Run 2026-10-31, worldgen block W1: earth fill (SQ-EF), on the recipe of structures/12_earth_fill_camps.md 2:
+# group B, seed 8675309, srv toml [worldgen.debug] structureDensity = 4.0, [worldgen.earth_fill] log = "ALL",
+# [worldgen.meta_structures] log = true. Three fresh worlds, rows chosen with --rows (plan steps W1a, W1b, W1c):
+#   W1a  overrides = ["minecraft:village_plains=-1,-1", "village_savanna=-1,-1,-1"]  rows SQ-EF-01
+#   W1b  no overrides (instance value)                                              rows SQ-EF-02 .. SQ-EF-11
+#   W1c  W1b + beardFootprint = true                                                row SQ-TER-05
+# Fill lines: [earth-fill]. A Chunky r 400 square takes about 4 min (2,500 chunks). The bot "qa" is only needed
+# for rows that look at a place (spectator tp); console commands do the rest.
+pace 2
+
+## SQ-EF-01 | -1,-1 keeps the size's mound limit; -1,-1,-1 never prunes (W1a)
+> chunky world minecraft:overworld
+> chunky center 2144 -2592
+> chunky radius 400
+> chunky start
+waitlog Task finished 1800
+> execute positioned 0 70 0 run locate biome minecraft:savanna
+waitlog nearest minecraft:savanna is at 300
+capture SV is at \[(-?\d+), (~|-?\d+), (-?\d+)\]
+> chunky center {SV1} {SV3}
+> chunky radius 200
+> chunky start
+waitlog Task finished 1800
+expect \[earth-fill\].*village_plains.*mound columns \(limit \d+\)
+reject \[earth-fill\].*village_plains.*mound columns \(limit -1\)
+reject \[earth-fill\].*village_savanna.*pruned
+reject \[earth-fill\].*village_savanna.*CANCELLED
+look savanna village lines show limit -1 and "-> kept" (ST-242); none in the savanna square = Chunky one more savanna square
+
+## SQ-EF-02 | villages at a lake lose the wet houses only (W1b)
+> chunky world minecraft:overworld
+> chunky center 2144 -2592
+> chunky radius 400
+> chunky start
+waitlog Task finished 1800
+expect \[earth-fill\].*pruned \d+ of \d+ pieces.*footprint \d+ water / \d+ ground
+look tp a spectator (pbot spawn qa X 150 Z minecraft:overworld creative, or the client block) to one pruned village: the dry part stands, no house over the lake (ST-239); W >= 16 in the reason; none: Chunky a coast square r 200 at -80 -16 and grep again
+
+## SQ-EF-11 | small water never counts, predicted lines, census rejects (same world)
+> celocate census 96 2144 -2592
+waitlog (?i)census.*(done|finished|written) 2400
+bootexpect \[earth-fill\].*too wet
+bootexpect \[earth-fill\].*under 9 water.*-> kept
+bootexpect \[earth-fill\].*\(predicted\)
+bootreject \[earth-fill\].*under 9 water.*CANCELLED
+look every "too wet" line has water >= 9 (python over RES/rows/SQ-EF-02.log + this one); census shows EARTH_FILL and PRIORITY rejects (ST-299)
+
+## SQ-EF-03 | desert pyramids and temples judged by footprint, none in water (same world)
+> execute positioned 2144 70 -2592 run locate biome minecraft:desert
+waitlog nearest minecraft:desert is at 300
+capture DS is at \[(-?\d+), (~|-?\d+), (-?\d+)\]
+> chunky center {DS1} {DS3}
+> chunky radius 300
+> chunky start
+waitlog Task finished 1800
+expect \[earth-fill\].*(desert_pyramid|desert_temple).*footprint
+expect \[earth-fill\].* 0 earth.*footprint
+look no kept pyramid with water > ground; tp to 3 kept pyramids (client block or spectator bot): none in standing water (ST-235, ST-237)
+
+## SQ-EF-04 | swamp huts, witch huts, mangrove towers still stand in water (same world)
+> execute positioned 2144 70 -2592 run locate biome minecraft:mangrove_swamp
+waitlog nearest minecraft:mangrove_swamp is at 300
+capture MW is at \[(-?\d+), (~|-?\d+), (-?\d+)\]
+> chunky center {MW1} {MW3}
+> chunky radius 300
+> chunky start
+waitlog Task finished 1800
+> execute positioned {MW1} 70 {MW3} run locate structure minecraft:swamp_hut
+> execute positioned {MW1} 70 {MW3} run locate structure betterwitchhuts:witch_hut
+waitlog nearest betterwitchhuts:witch_hut is at 300
+reject \[earth-fill\] (minecraft:swamp_hut|betterwitchhuts:witch_hut|[a-z_]+:[a-z_/]*mangrove_pillager_tower) .*too wet
+reject \[earth-fill\] (minecraft:swamp_hut|betterwitchhuts:witch_hut|[a-z_]+:[a-z_/]*mangrove_pillager_tower) .*footprint
+expect nearest minecraft:swamp_hut is at
+
+## SQ-EF-05 | sunk crypt entrance, seabed ruins (same world)
+bootexpect \[terrain-adaptation\].*7 sunk
+bootreject \[terrain-adaptation\].*ignored
+> execute positioned 2144 70 -2592 run locate biome terralith:alpine_highlands
+waitlog nearest terralith:alpine_highlands is at 300
+capture AH is at \[(-?\d+), (~|-?\d+), (-?\d+)\]
+> pbot spawn qa {AH1} 200 {AH3} minecraft:overworld creative
+sleep 20
+> execute at qa run place structure philipsruins:ancient_crypt ~ ~ ~
+> execute positioned 2144 64 -2592 run place structure philipsruins:ancient_crypt
+> execute positioned 0 70 0 run locate biome minecraft:deep_ocean
+waitlog nearest minecraft:deep_ocean is at 300
+capture DO is at \[(-?\d+), (~|-?\d+), (-?\d+)\]
+> execute positioned {DO1} 40 {DO3} run place structure philipsruins:ocean_ruins
+> execute positioned {DO1+80} 40 {DO3} run place structure philipsruins:ocean_fortress
+reject (?i)failed to place
+look crypt: ground ring at the entrance roof, no pit, rooms open (screenshots in the client block at the logged positions); record how the seabed ruins sit for brief #3 (ST-238)
+
+## SQ-EF-06 | undead castles kept on slopes (same world plus a highlands square)
+> chunky center {AH1} {AH3}
+> chunky radius 400
+> chunky start
+waitlog Task finished 2400
+expect \[earth-fill\].*eugene:undead_castle.*limit 400
+look at least half the eugene:undead_castle lines end "-> kept" across both squares; tp to one kept on a slope: no earth over more than 6 blocks of air (ST-240); write the per-fit table into briefs/structures_earthfill.md #4
+
+## SQ-EF-08 | metas inland build with short parts; at the beach not placed; survive a restart
+# seed 8675309: x -80..-40 z -16..100 is ocean / beach (r1031); inland = plains near 1762 -3249, beach near 1792 -2208
+> execute positioned 1840 100 -3249 run place structure creativeengineering:meta/farmers_camp
+> execute positioned 1762 100 -3150 run place structure creativeengineering:meta/house_camp
+> execute positioned 1680 100 -3249 run place structure creativeengineering:meta/ruin_scatter
+> execute positioned 1792 100 -2208 run place structure creativeengineering:meta/farmers_camp
+bootexpect (?i)\[meta.*short:
+expect not placed, no anchor fits
+look after this batch: save-all, stop, boot, then "locate structure creativeengineering:meta/farmers_camp" finds a naturally built one (a /place structure start is never locatable, vanilla) and the boot log has no MetaStructure error (ST-241); any "dropped K of N parts" line names satellite ids
+
+## SQ-EF-09 | non-village jigsaws at water lose wet parts only
+> execute positioned 2144 70 -2592 run locate biome minecraft:river
+waitlog nearest minecraft:river is at 300
+capture RV is at \[(-?\d+), (~|-?\d+), (-?\d+)\]
+> chunky center {RV1} {RV3}
+> chunky radius 300
+> chunky start
+waitlog Task finished 1800
+expect \[earth-fill\].*pruned \d+ of \d+ pieces \(wet only\).*footprint
+reject \[earth-fill\].*(village).*wet only
+look tp to one: its dry part stands, no piece over the water (ST-297); a broken-looking building goes into earth_fill/no_prune
+
+## SQ-EF-10 | a meta anchored on a jigsaw at a lake shore prunes instead of cancelling
+> execute positioned {RV1} 80 {RV3} run place structure creativeengineering:meta/farmers_camp
+> execute positioned {RV1+40} 80 {RV3} run place structure creativeengineering:meta/farmers_camp
+expect \[earth-fill\].*pruned
+reject \[earth-fill\].*farmers_camp.*CANCELLED
+look the meta builds; a "dropped K of N parts" line only for a part still over its limits (ST-298)
+
+## SQ-TER-05 | beard footprint calibration (W1c, beardFootprint = true)
+> execute positioned 2144 70 -2592 run locate biome minecraft:windswept_hills
+waitlog nearest minecraft:windswept_hills is at 300
+capture WH is at \[(-?\d+), (~|-?\d+), (-?\d+)\]
+> chunky center {WH1} {WH3}
+> chunky radius 300
+> chunky start
+waitlog Task finished 1800
+expect under built floors
+look tabulate cancels per family (python over RES/rows/SQ-TER-05.log) against tools/earth_fill_sim.sh 4242 60 footprint (outposts 23%, villages 2 to 18% newly over); look at 3 cancelled and 3 kept starts (ST-304). Calibration only: switch back off after

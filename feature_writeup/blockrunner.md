@@ -87,7 +87,7 @@ blocks that carry no tags (see 6). Tiers are listed fastest first; `[surface.spe
 
 | Tier (`blockrunner:surface/…`) | × | # | What belongs | Examples |
 |---|---|---|---|---|
-| `asphalt` | 1.50 | 19 | Asphalt | IP asphalt + slab/stair, D&D coloured asphalt blocks (friction reset, see 3.5) |
+| `asphalt` | 1.50 | 19 | Asphalt | IP asphalt + slab/stair, D&D Painted Asphalt (16 colours, renamed 2026-10-30; friction reset, see 3.5) |
 | `concrete` | 1.40 | 74 | Concrete | 16 vanilla concretes, IE concrete (leaded, tile, brick, sheet…) and hempcrete, Engineer's Decor rebar concrete, Dustrial Decor cinder blocks |
 | `grating` | 1.30 | 52 | See-through walkway floors | Create Deco / Design n' Decor catwalks, Engineer's Decor steel catwalks and floor grating, Quark grate, Everything is Copper grates, Create and IE metal scaffolding (grate-top + standard), Dustrial Decor chain and iron-bar trapdoors |
 | `metal` | 1.25 | 1247 | Solid metal | storage blocks, every copper stage incl. waxed, sheet metal and plating (IE, Create Deco, Design n' Decor, Dustrial Decor, Architect's Palette), Railways locometal, davebuildingmod steel and boilers, Create copper shingles/tiles, metal fences, gates and trapdoors, CE plate and coil blocks, Canned Goods' sealed canned dirt |

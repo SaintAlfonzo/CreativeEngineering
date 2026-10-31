@@ -57,7 +57,7 @@ tooltip show.
 ---
 
 ## ocean #2: Fish egg roll accepts eggs
-Status: Planned / Work: KubeJS / TODO `dishes/ocean #2` ([ocean_delight.md](../ocean_delight.md))
+Status: In Progress / Work: KubeJS / TODO `dishes/ocean #2` ([ocean_delight.md](../ocean_delight.md))
 
 ### Goal
 Allow fish eggs in the fish egg roll recipe.
@@ -82,7 +82,7 @@ DA-04 Roll crafts from ancient fish eggs.
 ---
 
 ## ocean #3: Squid and glow squid items, calamari chain
-Status: Planned / Work: KubeJS / data / TODO `dishes/ocean #3` ([ocean_delight.md](../ocean_delight.md))
+Status: Testing / Work: KubeJS / data / TODO `dishes/ocean #3` ([ocean_delight.md](../ocean_delight.md))
 
 ### Goal
 Keep the squid and glow squid items. They drop from squids and glow squids; the raw ink sac chance drops and a cut squid
@@ -117,7 +117,7 @@ DA-05 Squid drops its item; knife gives calamari and ink. DA-06 Glow squid chain
 ---
 
 ## ocean #4: Remove tentacles; all tentacles to calamari
-Status: Planned / Work: KubeJS / TODO `dishes/ocean #4` ([ocean_delight.md](../ocean_delight.md)); part of the ocean merge (`mod-additions #5`)
+Status: Testing / Work: KubeJS / TODO `dishes/ocean #4` ([ocean_delight.md](../ocean_delight.md)); part of the ocean merge (`mod-additions #5`)
 
 ### Goal
 Remove the tentacle items; any tentacle cuts to calamari.

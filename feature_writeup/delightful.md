@@ -1,8 +1,8 @@
 # Delightful 3.8.1 against the installed 3.4.1
 
-**Built (2026-10-25), not yet installed or tested in game: the value changes, the knife loot, the jam switch-off and
-the new items, as the Creative Delight member `repackedDelightful` (3).** Installed today: `Delightful-1.19.2-3.4.1.jar`
-(`mods/`, `server_mods/`); it leaves `mods/` when the Creative Delight jar that nests the repack is installed. Evaluated 2026-10-25 against
+**Built 2026-10-25: the value changes, the knife loot, the jam switch-off and the new items, as the Creative Delight
+member `repackedDelightful` (3). Shipped in 1.1.03 (deployed to server and players 2026-10-26) with the Creative Delight jar (installed 2026-10-26); DF-01 to DF-11, SQ-DF not
+run.** The 3.4.1 jar left `mods/` with that install. Evaluated 2026-10-25 against
 `devmods/checkNewerVersionForContent/Delightful-1.20.1-3.8.1.jar` (1.20.1 / Forge), method in
 [devmods_evaluation.md](devmods_evaluation.md) section 1. Both jars unpacked in `DecompiledMods/`. Plan row:
 `largecontent/mod-additions #23` in [todo/TODO.md](todo/TODO.md). Config: `config/delightful-common.toml`.
@@ -190,6 +190,7 @@ Ids that collide with 3.4.1: none (checked against 3.4.1's registry classes and 
 | Nut Dough | nut butter, egg -> 3 | the nut flour recipe is not added (no nut flour in the pack) |
 | Aluminum / Certus Quartz Knife | material over a stick | same |
 | Fluix Knife | smithing: Certus Quartz Knife + Fluix Block | 1.19.2 smithing (no template) |
+| Field Salad (3.4.1 item) | 2 salad ingredients or 2 flowers, a green, a root, a berry, a nut, bowl (2026-10-29, slot tags in `tags.js`; [brief](briefs/dishes_meals.md) meals #39, RC-160) | not a 3.8.1 change: the pack's revamp |
 
 - Tags: `delightful/tags.js` adds what 3.4.1 lacks, with 3.8.1's contents limited to the pack: `forge:tools/knives` (the 3
   knives), `forge:seeds`, `forge:matcha`, `forge:cooked_nuts` (Roasted Acorn, Vintage Delight's Roasted Peanut),

@@ -216,3 +216,4 @@ Use a new world (or new chunks). `/locate biome` then fly over.
   tries and spread and took its warped roots and nether sprouts out. `gen_wild_flowers.py` was rerun so
   `flower_features.json` (which `wild_flowers.js` rebuilds the feature from) has it; flowers_by_biome.md also
   refreshed for the new biome shares ([biome_tuning.md](biome_tuning.md)).
+- 2026-10-31: scratchpad notes translated into TODO rows (`flowers #5`). No code changed.

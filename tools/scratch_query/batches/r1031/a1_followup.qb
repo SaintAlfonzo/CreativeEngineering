@@ -1,0 +1,61 @@
+# Run 2026-10-31, after A2 on the same superflat world: probes for A1 rows the offline judging left OPEN
+# (perf/runs/r1031/judged_a1.md) and reruns of fixed rows. Each row names the A1 row it decides.
+pace 2
+
+## SQ-RW-23b | smoked planks: all smoking recipes with inputs (decides SQ-RW-23; zq recipes stopped at 80 lines)
+> zq rdetail creativeengineering:smoking/
+look 13 recipes, one per smoked shape; inputs oak / spruce, no botania and no driftwood
+
+## SQ-BJ-01b | removed jam / relish bottles are made by nothing (decides SQ-BJ-01)
+> zq makes jam_bottle
+> zq makes relish_bottle
+look no recipe makes one of the 6 removed jam / relish bottle items (vintagedelight); the jar recipes are the A1 half
+
+## SQ-BJ-02b | canned bread keeps its own input; More Delight sandwiches use #forge:bread (decides SQ-BJ-02)
+> zq rdetail canned_goods:canned_bread
+> zq rdetail moredelight:
+look canned_bread input unchanged; every moredelight sandwich lists bread through #forge:bread (first 3 breads)
+
+## SQ-PS-05b | powdered sugar: vacuum inputs, milling / crushing second results (decides SQ-PS-05)
+> zq uses minecraft:sugar
+> zq makes powdered_sugar
+look vacuum: bucket + 4 sugar; milling and crushing list a second result at 0.5 (zq makes prints the first result only: OPEN stays for the client JEI check if the second result is not shown)
+
+## SQ-RW-27b | bark recipes (decides SQ-RW-27)
+> zq rdetail bark
+look 4 bark + salt, 2400 ticks where shown
+
+## SQ-EFX-08b | oxidized copper armor: Poison duration, read each second (decides SQ-EFX-08)
+# bots do not survive a restart; effects still apply to an invulnerable bot
+> pbot spawn qe -50 -60 -50
+sleep 3
+> effect clear qe
+> item replace entity qe armor.head with everythingcopper:copper_helmet{state:"oxidized"}
+> item replace entity qe armor.chest with everythingcopper:copper_chestplate{state:"oxidized"}
+> item replace entity qe armor.legs with everythingcopper:copper_leggings{state:"oxidized"}
+> item replace entity qe armor.feet with everythingcopper:copper_boots{state:"oxidized"}
+pace 0
+repeat 25
+sleep 1
+> data get entity qe ActiveEffects
+end
+pace 2
+expect Id: 19
+look largest Poison Duration about 200 ticks (4 + 3 x 2 s); intervalSeconds 10 in the scratch toml
+> clear qe
+> effect clear qe
+
+## SQ-DM-03b | mature dandelion drop rate: count drops on the ground and in the inventory (decides SQ-DM-03)
+> clear qa
+> kill @e[type=minecraft:item]
+> tp qa -24 -60 10
+> pbot hold qa minecraft:shears
+repeat 20
+> setblock -20 -60 10 veggiesdelight:mature_dandelion
+> pbot use qa -20 -60 10 west
+end
+sleep 3
+> execute positioned -20 -60 10 as @e[type=minecraft:item,distance=..6] run data get entity @s Item
+> data get entity qa Inventory
+look dandelion items (ground Count sum + inventory) about 10 of 20, leaves 40 to 60; another item id in place of minecraft:dandelion = an item swap
+> kill @e[type=minecraft:item]

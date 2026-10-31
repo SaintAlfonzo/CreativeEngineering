@@ -10,10 +10,10 @@ is the build.
 |---|---|
 | Framework: one generic category, rows from resource files, KubeJS and Java providers (patcherMod `compat/jei/world/`) | BUILT 2026-10-22, seen in game. Text pass, arrow, effect and Nothing slots, jar colours: BUILT 2026-10-22 (patcherMod 1.1.01 rebuilt in place), not in `mods/` |
 | 19 tabs (section 2) | BUILT 2026-10-22, rows generated or hand-written; not seen in game |
-| `/dumpworldjei` (patcherMod `devtools/WorldJeiDump`, in `/dumpall`) | BUILT, never run. Until it runs, stripping / waxing / dyeing / soaping come from a hand-made fixture (`kubejs/exported/world_jei/tool_pairs.json`, `"_fixture": true`) and mob bucketing has only its manual rows |
-| Moobloom Conversion category (More Mooblooms 1.1.0, rebuilt in place) | BUILT 2026-10-22, not in `mods/` |
-| Tab tweaks ([plan_jei_tab_tweaks.md](plan_jei_tab_tweaks.md)): blocks and mobs drawn in slots, notes as one paragraph, one Jar Storage / Jar Fluids row per potion, jar + faucet icon, regenerated tool tabs, "Cut" wording, Lava Interactions, concrete 30 s | BUILT 2026-10-26 (patcherMod built, not in `mods/`: the game was running; data regenerated), not seen in game. Tests JW-19 to JW-27 |
-| Grape Planting category (Backported Vinery 1.5.5-ce-19.2-04, rebuilt in place) | BUILT 2026-10-22, seen in game; slow/fast text rebuilt 2026-10-22, not in `mods/`. TODO `alcohol/vineryport #23` |
+| `/dumpworldjei` (patcherMod `devtools/WorldJeiDump`, in `/dumpall`) | BUILT; run 2026-10-26 (`tool_pairs.json` and `mob_buckets.json` are real dumps, no `_fixture`), tool tabs regenerated from it the same day |
+| Moobloom Conversion category (More Mooblooms 1.1.0, rebuilt in place) | BUILT 2026-10-22, in `mods/` (`moreMooblooms-1.1.0`, 2026-10-27 22:50), not seen in game |
+| Tab tweaks ([plan_jei_tab_tweaks.md](plan_jei_tab_tweaks.md)): blocks and mobs drawn in slots, notes as one paragraph, one Jar Storage / Jar Fluids row per potion, jar + faucet icon, regenerated tool tabs, "Cut" wording, Lava Interactions, concrete 30 s | BUILT 2026-10-26, shipped in 1.1.04 (client 2026-10-29; server still 1.1.03), not seen in game. Tests JW-19 to JW-27 |
+| Grape Planting category (Backported Vinery 1.5.5-ce-19.2-04, rebuilt in place) | BUILT 2026-10-22, seen in game; slow/fast text rebuilt 2026-10-22, in `mods/` since (Vinery `-06` installed 2026-10-31 00:41). TODO `alcohol/vineryport #23` |
 
 **Before a release:** run `/dumpworldjei` then `/cegen run jei_world` (or `python3 tools/gen_jei_world.py`), so
 the fixture rows are replaced. The generator exits 1 and prints a WARNING while the fixture or a dump is missing.
@@ -94,7 +94,9 @@ pipe-spill collisions; Farmer's Delight bark (cutting board only); candle-skull 
 - **Mod behaviour found while building** (shown as it really behaves, not fixed): Salt's melting places water only in
   ultra-warm dimensions, elsewhere the block becomes air (its config comment says water); two IW growths use
   `sky_access`, not a valid tick source; Backported Vinery: shearing a ripe stem drops seed and grapes but only steps
-  the stem back one stage, so repeated shearing may duplicate seeds (1.3.10 emptied it). TODO rows open.
+  the stem back one stage, so repeated shearing may duplicate seeds (1.3.10 emptied it). TODO rows open: `jei/jei-coverage #6`
+  (salt, IW), `alcohol/vineryport #24` (stem shearing). The salt rework in 1.1.04 (salt no longer melts ice or snow when
+  used or dispensed) may change the salt half: recheck before fixing.
 - Unverified details (check in game): concrete now sets after 30 s (32 s before the mixin, by the javap reading); DnD milkshake-lava pairing order and chances;
   powder snow per faucet pull; bed and framed-sign soap behaviour; whether Create seats and valve handles use the dye;
   MCA zombie-kill conversion path.
@@ -104,7 +106,7 @@ pipe-spill collisions; Farmer's Delight bark (cutting board only); candle-skull 
 ### Tab tweaks (built 2026-10-26, [plan_jei_tab_tweaks.md](plan_jei_tab_tweaks.md))
 
 Briefs: [briefs/jei_jei-coverage.md](briefs/jei_jei-coverage.md). TODO rows `jei/jei-coverage #7`, `#10`, `#11`,
-`#16` to `#28`, `mobs/mooblooms #6`, `ui/effects #9`.
+`#16` to `#27`, `mobs/mooblooms #6`, `ui/effects #9`.
 
 - Tool tabs regenerated from the real `/dumpworldjei` dump (`#16`, `#17`, `#18`): Stripping one row per log pair; Soap
   Washing keeps one row per target with the sources cycling (soap already takes off copper oxidation, the `unoxidise`

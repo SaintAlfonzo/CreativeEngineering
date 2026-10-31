@@ -14,7 +14,7 @@ server". Plan and reference: [structure_tuning.md](../../structure_tuning.md) 7.
 |---|---|---|
 | Camps and ruins on shallow lakes pass earth fill ("0 over water": the beard fills water up to 6 deep, so the lake becomes an island under them) | Footprint water share: each earth piece's box, at the layer the start was set onto the surface with, read for water (filled by earth or the beard, or left standing) and dry ground (replaced or left alone). Cancel when water > ground x (1 + `maxWaterSurplus`), default 0.5. Seabed, air and spots under more than `baseLayers` blocks of terrain count as neither. Not for `water_fill/structures` | patcherMod `worldgen/EarthFill`, `CEConfig`, `WorldgenConfig` |
 | Campsite Structures' camps on a 4-block dirt plinth | The beard levels the ground to a piece's bottom layer; the camps' start height sinks a 4-layer dirt dome into the ground, so the beard dug the surface down around it. New structure tag `terrain_adaptation/sunk_start`: the beard is raised by the start's sink. The 6 camps tagged; start height -5 -> -4 (grass layer flush, the old features' -5 left a 1-block dip) | patcherMod `worldgen/TerrainAdaptation`, `kubejs/server_scripts/worldgen/terrain_adaptation.js`, `kubejs/data/campsite_structures/worldgen/structure/*.json` |
-| Metas on coasts and rivers | `[worldgen.meta_structures] avoidCoasts` (off by default): no part starts in or reaches into `creativeengineering:coast_river`; the 6 water metas in `meta/coast_ok` exempt | patcherMod `worldgen/MetaStructure`, `CEConfig`, `WorldgenConfig`; `biome_fits.json` (biome_tags `coast_river`), `structure_tags.json` (`meta/coast_ok`) |
+| Metas on coasts and rivers | `[worldgen.meta_structures] avoidCoasts` (on by default since 2026-10-30): no part starts in or reaches into `creativeengineering:coast_river`; the 6 water metas in `meta/coast_ok` exempt | patcherMod `worldgen/MetaStructure`, `CEConfig`, `WorldgenConfig`; `biome_fits.json` (biome_tags `coast_river`), `structure_tags.json` (`meta/coast_ok`) |
 
 Offline: `./gradlew build` clean; `tools/test_worldgen_tools.sh` all 10 sections pass (earth fill 64 checks: 7 new
 footprint checks, 2 burial checks); `tools/test_structure_groups.sh` node and Rhino identical.
@@ -84,7 +84,17 @@ DEPLOYED with pack 1.0.9 (2026-10-19 15:54, [plan_1.0.9.md](../../plan_1.0.9.md)
 - End teleports into unexplored terrain stalled on Quark's hook. BUILT 2026-10-26 (patcherMod 1.1.03, in `mods/`):
   in the End the hook is skipped when the 3 x 3 chunks around the target aren't loaded; other dimensions still skip
   it always. Not run (ST-232, scratch queue SQ-SV-01).
-- `maxWaterSurplus` 0.5 is a first value: look at share-only cancels in game. A village on a lake goes as a whole.
-- Sunk-start candidates not tagged: Philip's crypts, ocean fortress, ocean ruins, -1 ruins, T&T nilotic village.
+- `maxWaterSurplus` 0.5 was a first value. 2026-10-30 (user: aggressive): set to 0 in the toml and the CEConfig
+  default (patcherMod built, not installed), so any start with more water than dry ground under its footprint is
+  cancelled; on the diag3 sample that adds the 470 / 425 shore village. A village on a lake still goes as a whole.
+  Reasoning: [briefs/structures_earthfill.md](../../briefs/structures_earthfill.md) #2. Test SQ-WG30-E01 PASSED 2026-10-30 (every line `surplus limit 0.0`; inland square 6 too-wet cancels, all
+  share-only with water over 1.76x ground or more; coast square none; no kept start with more water than ground; the
+  470 / 425 village is not picked in the stripped-weight world).
+- Sunk-start candidates: 2026-10-30 `ancient_crypt` tagged; the terrain-matching `antiquus_crypta` and T&T nilotic village are refused by patcherMod; ocean fortress, ocean ruins and the -1 ruins wait for the look in SQ-EF-05 ([structure_tuning.md](../../structure_tuning.md) 3.28).
 - `avoidCoasts` on in a coastal area also stops land metas whose satellites can't avoid a nearby beach or river
   (at -104 -150, 32 blocks from a gravel beach, three land metas failed with it on; not compared with it off there).
+  Accepted 2026-10-29: the switch is ON since 2026-10-30 (toml and CEConfig default). Near coasts and rivers such metas
+  fall back to their plain anchor, so clusters there show as single structures; water metas in `meta/coast_ok` are
+  unaffected. Test SQ-WG30-E02 PASSED 2026-10-30 (spawn beach: all three `no anchor fits`; 2144 -2592: all three
+  built; driftwood flotilla 144 blocks from spawn assembles; 35 land metas in the Chunky square, all built; no diag3
+  count to compare).

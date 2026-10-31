@@ -26,6 +26,16 @@ ServerEvents.recipes(e => {
 		// Served from a whole Cantaloupe (the pot's container slot), placed as a feast of 4
 		R.fdCooking([i.rice, i.cooked_mutton, i.onion, i.t_berries, i.t_seeds], i.stuffed_cantaloupe_block, e, 'stuffed_cantaloupe', 0.35, 400, i.cantaloupe)
 
+		//######################### Field salad #########################
+		// (TODO dishes/meals #39) Upstream: 2 salad ingredients, cactus steak, carrot, salmonberries, acorn, bowl. Each
+		// slot takes a set (delightful/tags.js): any berry; carrot, onion, beetroot, corn or turnip; acorn or peanut;
+		// cactus steak, broccoli, cauliflower, zucchini, cucumber or green bell pepper. A second recipe takes 2 flowers
+		// in place of the 2 salad ingredients (cabbage, lettuce, dandelion leaves).
+		R.remove({ id: 'delightful:food/field_salad' }, e)
+		var FIELD_SALAD = [i.t_field_salad_green, i.t_field_salad_root, i.t_berries, i.t_field_salad_nut, i.bowl]
+		R.shapeless(i.field_salad, [i.salad_ingredients, i.salad_ingredients].concat(FIELD_SALAD), e, 'field_salad_manual_only')
+		R.shapeless(i.field_salad, [i.t_flowers, i.t_flowers].concat(FIELD_SALAD), e, 'field_salad_flowers_manual_only')
+
 		//######################### Gummies #########################
 		// Pot: 1 each; heated mixer with a honey block: 9
 		var GUMMIES = [[i.cantaloupe_gummy, i.t_fruits_cantaloupe], [i.matcha_gummy, i.t_matcha]]

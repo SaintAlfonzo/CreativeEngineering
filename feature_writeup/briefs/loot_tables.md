@@ -213,7 +213,7 @@ No Stockpile, Recovery or Cycle book from any container, and know which path sti
 ---
 
 ## tables #7: Coins and PneumaticCraft loot
-Status Planned (built; see Decisions) / Work KubeJS / `loot/tables #7`
+Status Testing (built 2026-09-27; see Decisions) / Work KubeJS / `loot/tables #7`
 
 ### Goal
 No Lightman's coin and no PneumaticCraft item in any chest.

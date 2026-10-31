@@ -50,7 +50,7 @@ script. The recipe swap tool runs twice per recipe event (once per group); no pa
 
 | # | Purged | Survivor | Per-merge work |
 |---|---|---|---|
-| 2.1 | `alexsmobs:banana` | `neapolitan:banana` | Leaf drops stay off (`config/alexsmobs.toml` `bananasDropFromLeaves = false`, unchanged). Neapolitan's banana joins `#forge:crops/banana`, so `#alexsmobs:bananas` (Alex's Mobs' banana-eating mobs) holds only it. Trader elephant chest: banana -> Neapolitan's (loot swap). Eating Neapolitan's banana gives an Alex's Mobs banana peel, as Alex's did (sopa de macaco keeps its source). Compost row removed |
+| 2.1 | `alexsmobs:banana` | `neapolitan:banana` | Leaf drops stay off (`config/alexsmobs.toml` `bananasDropFromLeaves = false`, unchanged). Neapolitan's banana joins `#forge:crops/banana`, so `#alexsmobs:bananas` (Alex's Mobs' banana-eating mobs) holds only it. Trader elephant chest: banana -> Neapolitan's (loot swap). Eating Neapolitan's banana gives an Alex's Mobs banana peel, as Alex's did (sopa de macaco keeps its source). Compost row removed. Monkeys (2026-10-30, TODO `merges/mobs #1`): gorilla and sugar glider leaf foraging build Alex's banana in code; Creative Delight mixins `mixin/alexsmobs/GorillaForageBananaMixin` and `SugarGliderForageBananaMixin` hand them Neapolitan's (`compat/BananaMergeHooks`, Alex's banana if Neapolitan is absent). Capuchin, gorilla and elephant feeding already go through `#alexsmobs:bananas`. Neapolitan's chimpanzee is off: `neapolitan-common.toml` group chance 0.0 (was 0.25), its only spawn is with a generated banana plant; spawn egg and head hidden (`removed_items.js`). The Hullabaloo disc stays (bunker loot); the chimpanzee banner pattern stays (crafted) |
 | 2.2 | `neapolitan:milk_bottle` | `farmersdelight:milk_bottle` | Abnormals Delight turns off Farmer's Delight's bucket and bottle recipes while Neapolitan is loaded, so Neapolitan's ran (3 per bucket); since 2026-10-25 Creative Delight replaces them with 4 per bucket ([abnormals_delight.md](abnormals_delight.md) 3.4): bucket + 4 glass bottles -> 4 FD bottles and bucket + 4 `#forge:bottles/milk` -> milk bucket (FD's bottle joins that tag). Removed: Create spout / drain compat for Neapolitan's bottle and Delightful's `matcha_latte_neapolitan` (FD copies exist). Milk cauldron: taking milk out with a bottle gives Neapolitan's bottle in code; the inventory swap turns it into FD's |
 | 2.3 | `neapolitan:chocolate_cake` | `createaddition:chocolate_cake` | Keeps CC&A's texture. Abnormals Delight's 7 slices -> cake makes CC&A's cake. Since the baking overhaul (2026-10-22, [oven.md](oven.md) 2.6) every other recipe is gone (CC&A's own spout, Neapolitan's crafting); baking.js makes CC&A's by hand, in the oven and by a Spout (baked cake base + 500 mB chocolate; ids `chocolate_cake_manual_only`, `chocolate_cake`, `createfilling/chocolate_cake_spout`, [oven.md](oven.md) OV-33). A bite from the placed cake counts for Spice of Life as the Abnormals Delight slice ([food.md](food.md) 4.2 finding 5). Knife on the cutting board: CC&A's cake -> 7 Abnormals Delight chocolate slices (NCH `fdCutting`, id `chocolate_cake`). Knife on the placed cake: CC&A's block joins `abnormals_delight:drops_chocolate_cake_slice`. Compost row moved to CC&A's cake |
 | 2.4 | `moredelight:diced_potatoes` | `rusticdelight:potato_slices` | Rustic Delight's potato -> 2 slices stays; More Delight's potato -> 1 diced removed. Rustic slices join `#forge:sliced_potato`, which More Delight's dishes (diced potatoes with beef / chicken / egg and tomato / porkchop, mashed potatoes, potato salad) read |
@@ -141,7 +141,15 @@ drinks go, Rustic's drinks give Caffeinated instead of Speed and Haste, every ot
   schema, so gambler's tea is removed and rebuilt with `R.frBrewing` on Rustic's beans. `mortar.js` skips catalogue
   entries naming a purged item (`[mortar] 6 of 7`).
 
-### 2.9 Salt (built 2026-10-26, not tested; TODO `food/seasoning #6`)
+### 2.9 Salt (built 2026-10-26, scratch server PASSED r1031 2026-10-31 after the 2026-10-28 fix; TODO `food/seasoning #6`)
+
+Scratch run 2026-10-28 ([run log](testing/scratch_queue_run_2026-10-28.md)): SQ-SALT-01 FAILED on two leftovers, fixed
+2026-10-28 in CD `vintagedelight/recipes.js` (rebuilt, CD jar installed, retest SQ-SALT-01): the 3 froglight jar recipes
+(`vintagedelight:fermenting/*_froglight_from_fermenting`) are rebuilt with The Salt's Salt Block, and Tactical Fishing's
+`fishing_vintagedelight_salt_bucket` is removed, with `fishing_creativeengineering_powdered_sugar_bucket` (a defensive
+removal; whether that recipe exists was not in the dumps). Tags, the give swap and the rock-salt patch (SQ-SALT-02 to -04)
+PASS. Retest r1031 (2026-10-31, SQ-CM-10): the froglight recipes take the Salt Block, sourdough cuts to 3 Bread: PASS.
+
 
 All salt is Vintage Delight's pink salt (owner, scratchpad 2026-10-26). Pairs in Creative Delight's
 `vintagedelight/vintage_items.js` (jar startup): The Salt's salt -> Vintage's salt dust; Vintage's Salt Block -> The
@@ -176,7 +184,7 @@ bricks and the 17 lamps stay.
     Salt's blocks did already; Vintage's whole salt family now does too: Salt Layer, Evaporator, smooth salt, salt
     bricks and mixed salt bricks (with stairs, slabs, walls), salt pillar, the 17 salt lamps. Their random ticks are
     switched on at common setup (`BlockBehaviour.isRandomlyTicking`, set by reflection).
-  - Dissolve in water (35 %, not from below; a water source beside leaves water) and rain (15 %): The Salt's Salt
+  - Dissolve in water (35 %, not from below; a water source beside leaves water), never in rain (`SaltDissolvingInRain = false` in `salt-common.toml`, 2026-10-28): The Salt's Salt
     Block, ores and Large Salt Lamp (The Salt's own), and the Salt Layer (patcherMod; the snow-layer melt by light is
     replaced). Not the bricks, smooth salt, pillar, Vintage lamps or the Evaporator.
   - The raw rock salt block never dissolves (the beach patch is built on it). It still melts and grows clusters.
@@ -187,19 +195,18 @@ bricks and the 17 lamps stay.
 - Performance (analysis 2026-10-26, no profile yet):
   - Random ticks are spent per chunk section: 3 picks per tick (`randomTickSpeed`) in each section holding any
     randomly ticking block. A salt block is hit about once every 23 min of game time on average (4096 / 3 ticks),
-    and a hit costs 6 neighbour reads and tag checks, plus a rain check for the layer: well under a microsecond.
+    and a hit costs 6 neighbour reads and tag checks: well under a microsecond.
     10 000 salt bricks give about 150 hits a second, much less than 0.1 ms per second of server time.
   - The only new cost per section: a section with no random tickers before (an underground salt-brick build; surface
     sections already have grass and leaves) now gets its 3 picks a tick. Same as any section with one grass block.
   - Mixin overhead: one identity-set lookup at the head of `BlockBehaviour.randomTick` (blocks that do not override
-    it) and of `SnowLayerBlock.randomTick` (all snow layers), and one block read in The Salt's rain-dissolve check.
+    it) and of `SnowLayerBlock.randomTick` (all snow layers).
     Each one costs a few nanoseconds and runs only on blocks that already random tick.
   - Block updates happen only when something melts or dissolves (setBlock plus The Salt's sound and particles).
     A big salt build in a snowy biome clears its touching snow once, then has nothing left to melt.
-  - Gameplay rather than performance: Salt Layers outside dissolve in rain (15 % per hit), so an outdoor Evaporator
-    loses layers in rain. Its growth (50 %) is faster.
+  - Rain does not dissolve salt (config off), so an outdoor Evaporator keeps its layers in rain.
 
-### 2.10 Cantaloupe (built 2026-10-28, not tested; TODO `merges/fruit #1`)
+### 2.10 Cantaloupe (built 2026-10-28, scratch server PASSED 2026-10-28: SQ-CM-01 to -03, -09; shipped to the client in 1.1.04, server still 1.1.03; MG-39 to MG-44 in game; TODO `merges/fruit #1`)
 
 Owner plan 5.4 plus answers of 2026-10-28. Fruits Delight's hamimelon line is the **Cantaloupe** (melon block on a stem,
 seeds, jam, jello, juice, shaved ice, wild patch); Delightful's cantaloupe (the repack's sand crop, a small
@@ -230,6 +237,24 @@ Pairs: Creative Delight `kubejs_startup/fruitsdelight/item_merges.js`; server ha
   Was warm dry grassy with Delightful's `patch_cantaloupe`.
 - Open: the Mini Cantaloupe Plant still needs sand next to water to be planted (Delightful's rule); the wild patch
   places the fruit block, not the plant. `crops_by_biome.md` needs `python3 tools/gen_crop_worldgen_table.py`.
+
+### 2.11 Apple tree (built 2026-10-30, not run; MG-47; TODO `farming/crops #5`)
+
+Owner 2026-10-30: Fruits Delight's apple tree is removed, Vinery's apple tree stays (crop seasons type `autumn_fruit`,
+[crops.md](crops.md) §2.12.1).
+
+| Purged | Survivor | Why |
+|---|---|---|
+| `fruitsdelight:apple_sapling` | `vinery:apple_tree_sapling` | one apple tree |
+| `fruitsdelight:apple_leaves` | `vinery:apple_leaves` | leaves item (Silk Touch, creative) |
+
+Pairs: Creative Delight `kubejs_startup/fruitsdelight/item_merges.js` (now also `// requires: vinery`). Worldgen: the
+mod's `forge/biome_modifier/apple.json` is overridden with `forge:none` in `kubejs/data/fruitsdelight/`, so new chunks
+get no Fruits Delight apple trees (forests, flower forests and the Terralith Blooming / Lavender / Moonlight biomes lose
+their apple trees; Vinery's grow in plains, sunflower plains, meadow and 9 Terralith biomes). Trees already generated
+stay and keep fruiting; their leaves are typed `autumn_fruit` like Vinery's. The apple itself (`minecraft:apple`) is
+unchanged and its tooltip shows the Vinery apple tree's seasons. Apple jelly, jello and crates stay (made from apples).
+The Botany Pots apple recipe goes through the recipe swap onto the Vinery sapling.
 
 ## 3. Known limits
 
@@ -304,7 +329,7 @@ from `item_merges.js` or `cooking.js`, no `ieMixer` warning, no mixin apply erro
 | MG-34 | New world, beach: find a salt patch (`/place feature vintagedelight:patch_salt`) | Salt layers on raw rock salt blocks; the rock salt next to the sea stays |
 | MG-35 | Place an Evaporator with water beside it; wait for layers; place a Salt Block with water beside it | Salt Layers grow on the Evaporator, textured like the pink Salt Block; the Salt Block grows nothing and dissolves |
 | MG-36 | `/gamerule randomTickSpeed 300`; put snow / ice against salt bricks, a salt brick stair, a Vintage salt lamp, a Salt Layer and a raw rock salt block | Every touching snow and ice block melts |
-| MG-37 | Same tick speed: Salt Layer beside water, Salt Layer in rain, Salt Layer next to a torch; raw rock salt block beside water and in rain | Layers by water and in rain dissolve; the torch-lit layer stays; raw rock salt stays |
+| MG-37 | Same tick speed: Salt Layer beside water, Salt Layer and Salt Block in rain, Salt Layer next to a torch; raw rock salt block beside water and in rain | Layers and Salt Blocks by water dissolve; nothing dissolves in rain; the torch-lit layer stays; raw rock salt stays |
 | MG-38 | JEI: uses of Evaporator, of Salt Layer, of `#salt:meltables` | Evaporator page (layers on top, up to 8); Salt Layer in the dissolve rows; no "use salt on ice" or dispenser rows; Evaporator info reads "Salt Blocks do not grow salt" |
 | MG-39 | JEI: search hamimelon, cantaloupe | Cantaloupe (block), Cantaloupe Seeds, Cantaloupe Slice (Delightful's art), Cantaloupe Popsicle (Delightful's art), Jam, Jello, Juice, Shaved Ice; Mini Cantaloupe, Mini Cantaloupe Seeds; no Hamimelon Slice, no second popsicle, no Canned Hamimelon |
 | MG-40 | `/give @s fruitsdelight:hamimelon_slice 3`, `fruitsdelight:hamimelon_popsicle`, `creativeengineering:canned_hamimelon` | 3 Cantaloupe Slices, a Cantaloupe Popsicle, a Canned Cantaloupe |
@@ -313,6 +338,10 @@ from `item_merges.js` or `cooking.js`, no `ieMixer` warning, no mixin apply erro
 | MG-43 | JEI uses of the Cantaloupe Slice: jam, juice, jello, popsicle, exotic fruits bowl, fruit salad, Cantaloupe Bread | All accept it |
 | MG-44 | New world, desert and badlands: find wild Cantaloupes and Mini Cantaloupes (`/place feature creative_delight:wild/mini_cantaloupe` to see one); WTHIT on the stem | Both on sand, red sand or terracotta; stem named Cantaloupe Stem |
 | MG-45 | Wares package and cardboard box (block and item): look; place an Old and a Weathered Cardboard Box; wash a Dustrial Decor box, then the result, in a Create fan; JEI for other recipes of Old/Weathered | Wares boxes brown; Weathered grey-brown; only the washing recipes exist; boxes walk and sink like Dustrial's (server half: scratch queue SQ-MG-16) |
+| MG-46 | Jungle: gorillas and sugar gliders foraging leaves; new world near banana plants | Neapolitan bananas only; no chimpanzees; JEI shows no chimpanzee spawn egg or head (server half: scratch queue SQ-MG-17 to -20) |
+- [ ] **MG-47 Apple tree [game]:** JEI has no Fruits Delight apple sapling or leaves; a Fruits Delight apple sapling
+  given by `/give` turns into the Vinery apple tree sapling in the inventory; a new world's forest has no Fruits Delight
+  apple trees; an apple's tooltip reads "Fertile: Autumn" / "Offseason: Winter, Dry".
 
 Server half of MG-35 to MG-37 without a player: `tools/salt_probe/salt_probe.js` (`/salttest`, scratch queue SQ-SALT-05
 to -07) calls each block's random tick itself and times a salt-brick tick against a stone one (added 2026-10-27).
@@ -361,7 +390,8 @@ the chef's hat (Wardrobe / Simple Hats hat removed) confirmed working in game 20
 - Stuffed peppers: remove VD's stuffed peppers (item and feast); Rustic's stay. Also removed from the veggie tweaks.
 - Potato salad: one item. Inputs: sliced potatoes (or sweet potatoes, doubled for the manual cooked recipe), any egg,
   onion or garlic, pickle or pickled sea pickle. Texture: More Delight's.
-- Cheesy pasta: rename Brewin's to Cheesy Fish Pasta. Add bone broth to the cheesy pasta heatless craft.
+- Cheesy pasta: rename Brewin's to Cheesy Fish Pasta (BUILT 2026-10-30: `namechanges.js`, with its can and placed
+  block; unreleased). Add bone broth to the cheesy pasta heatless craft.
 - Caesar salad: use the correct spelling; Veggies Delight's texture; lettuce, tomato, cheese, bread.
 - Nut butter: remove nut dough. Only the nut mash jar remains: 5 nuts (acorn or peanut) + sugar -> 3 nut mash, needs
   a mason jar. Nut butter sandwich: Vintage's texture, Delightful's name; any bread + any jam + a nut mash jar.
@@ -371,14 +401,16 @@ the chef's hat (Wardrobe / Simple Hats hat removed) confirmed working in game 20
 - Skewers: fold into the skewer family with consistent rules (`dishes/meals #13`). Patties: every patty type is always
   interchangeable (`dishes/meals #14`).
 - Burgers: mark all burgers for an ingredient-variant audit and balancing. Drop More Delight's loaded burger in favour
-  of "The Burger", renamed Loaded Burger, accepting any cheese.
+  of "The Burger", renamed Loaded Burger, accepting any cheese. (Rename BUILT 2026-10-30, `namechanges.js`, unreleased;
+  the drop and the any-cheese recipe are open.)
 - Kimchi: Vintage Delight's texture.
 - Fish tempura: drop Fish Tempura and Raw Fish Tempura, keep fried fish. The fish and chips that used tempura go too.
 
 ### 5.2 Baking (`merges/baking`)
 
 - Pancakes: recolour the individual pancake items to the Supplementaries pancake shape (one colour per pancake
-  type, put on the Supplementaries pancake item). Rename Supplementaries' pancake to Stackable Pancake. Cooking pot:
+  type, put on the Supplementaries pancake item). Rename Supplementaries' pancake to Stackable Pancake (BUILT
+  2026-10-30, `namechanges.js`, unreleased). Cooking pot:
   3 batter + 2 sugar + 1 egg -> 4 stackable pancakes (check food values against the craft cost). Syrup can go on
   stackable pancakes. Related: Rustic pancake rework (`creativedelight/members #15`), pancake food type
   (`dishes/meals #12`).
@@ -401,7 +433,7 @@ the chef's hat (Wardrobe / Simple Hats hat removed) confirmed working in game 20
 - Crates and bags: chorus: keep End's Delight's crate and bag. Blueberry: drop the sack (not enabled anyway). Coffee: drop
   Farmer's Respite's sack. Apples: drop the bag when Fruits Delight is installed. Sweet berries: drop the Berry Good
   berry basket. (Also `alcohol/decisions #7`, Vinery crates and bags.)
-- Cardboard: PARTLY BUILT 2026-10-28 (scratch test queued SQ-MG-16). Design and Decor's cardboard box is renamed Old
+- Cardboard: PARTLY BUILT 2026-10-28 (scratch test queued SQ-MG-16; shipped to the client in 1.1.04). Design and Decor's cardboard box is renamed Old
   Cardboard Box; the new `creativeengineering:weathered_cardboard_box` is the last step. Both are made only by washing
   (Create splashing in `misc_mods.js`): Dustrial Decor box -> Old -> Weathered; their other recipes are removed.
   The Wares boxes and packages are recoloured brown (`textureswapper/cardboard/`). Still open: remove Design and
@@ -419,5 +451,6 @@ the chef's hat (Wardrobe / Simple Hats hat removed) confirmed working in game 20
 
 ### 5.6 Mobs (`merges/mobs`)
 
-- Monkeys: disable Neapolitan's monkey. Integrate Neapolitan's banana with Alex's Mobs' monkeys and apes (the banana
-  merge itself is 2.1).
+- Monkeys: built 2026-10-30, see 2.1 (chimpanzee off, gorilla and sugar glider foraging give Neapolitan's banana).
+  Scratch r1031 (2026-10-31): mixins PASSED (SQ-MG-17); no chimpanzee in a jungle; the foraging drops are unproven
+  (SQ-MG-18, -19: the checks logged nothing), client check pending with CQ-MG-20 / MG-46.

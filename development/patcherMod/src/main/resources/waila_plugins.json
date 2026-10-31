@@ -78,5 +78,32 @@
       "client": "com.SaintAlfonzo.creativeengineering.compat.WthitRemainderBuffer"
     },
     "side": "*"
+  },
+  "creativeengineering:sheared": {
+    "entrypoints": {
+      "client": "com.SaintAlfonzo.creativeengineering.compat.WthitSheared"
+    },
+    "side": "client"
+  },
+  "creativeengineering:silk_touch": {
+    "entrypoints": {
+      "client": "com.SaintAlfonzo.creativeengineering.compat.WthitSilkTouch"
+    },
+    "side": "client"
+  },
+  "creativeengineering:crop_seasons": {
+    "entrypoints": {
+      "client": "com.SaintAlfonzo.creativeengineering.compat.WthitCropSeasons"
+    },
+    "side": "client",
+    "required": [
+      "sereneseasons"
+    ]
+  },
+  "creativeengineering:operator_blocks": {
+    "entrypoints": {
+      "client": "com.SaintAlfonzo.creativeengineering.compat.WthitOperatorBlocks"
+    },
+    "side": "client"
   }
 }

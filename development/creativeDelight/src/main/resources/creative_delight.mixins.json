@@ -16,7 +16,9 @@
     "farmersrespite.KettleBlockMixin",
     "farmersrespite.KettleRecipeSerializerMixin",
     "farmersrespite.KettleDispenseMixin",
-    "farmersrespite.KettleMenuTankMixin"
+    "farmersrespite.KettleMenuTankMixin",
+    "alexsmobs.GorillaForageBananaMixin",
+    "alexsmobs.SugarGliderForageBananaMixin"
   ],
   "client": [
     "farmersdelight.CookingPotScreenRemainderMixin",

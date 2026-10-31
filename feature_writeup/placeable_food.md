@@ -1,6 +1,6 @@
 # Placeable food
 
-Test prefix **PL-** · Last updated **2026-10-25** · Overall status **DEPLOYED with 1.0.6 (2026-10-14), coaster line with 1.0.8 (2026-10-19), not run in game; 2026-10-25 produce on the coaster and 9 Display Delight egg dishes BUILT, not installed** (catalog rerun on the 2026-10-24 live `/dumpplaceable`)
+Test prefix **PL-** · Last updated **2026-10-30** · Overall status **DEPLOYED with 1.0.6 (2026-10-14), coaster line with 1.0.8 (2026-10-19), not run in game; 2026-10-25 produce on the coaster and 9 Display Delight egg dishes shipped with 1.1.03 (2026-10-26); coaster contents limited to modelled items 2026-10-29 ([kitchen.md](kitchen.md) 2.3, TODO `cooking/kitchen #21`)** (catalog rerun on the 2026-10-24 live `/dumpplaceable`; a newer `placeable.json` export came with the 2026-10-30 00:42 `/dumpall`, catalog not rerun)
 live `/dumpplaceable` export of 2026-10-18, rerun 2026-10-20; the tags and client script loaded
 without errors in single player 2026-10-11)
 

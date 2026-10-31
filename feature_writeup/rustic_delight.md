@@ -1,6 +1,7 @@
 # Rustic Delight 1.7.0 against the installed 1.3.0
 
-**Status (2026-10-25): built, scratch test queued.** Owner chose option B (section 3) and the list in section 5: a
+**Status (2026-10-25): built; shipped in 1.1.03 (2026-10-26); SQ-RD-01 and SQ-RD-25 PASSED 2026-10-25; coffee tooltip fix
+(TODO `ui/tooltips #10`) shipped in 1.1.04.** Owner chose option B (section 3) and the list in section 5: a
 donor-jar backport, folded into Creative Delight as member `backportedRustic` (section 5). Not installed: it ships
 with the Creative Delight jar. Before that, installed: `rusticdelight-forge-1.19.2-1.3.0.jar` (`mods/`, `server_mods/`), the last 1.19.2 build
 (2024-11-15). Evaluated 2026-10-25 against `devmods/checkNewerVersionForContent/rusticdelight-forge-1.20.1-1.7.0.jar`
@@ -205,7 +206,7 @@ content group, the worldgen and village rows, the client side and the cutover. R
 
 `./gradlew :patcherMod:installToMods :creativeDelight:installToMods --offline` moves `rusticdelight-forge-1.19.2-1.3.0.jar`
 out (`replaces_jars`); copy `rustic_upstream/` beside `mods/` on every client and server. Then drop the 1.3.0-only lines:
-`i.fruit_beignet` (item_dict, `removed_items.js`, `cooking.js` 817) and the 1.3.0 note in `potions.js`; run `/dumpall`
+`i.fruit_beignet` (item_dict, `removed_items.js`, `cooking.js` 817; done 2026-10-29, including the CD `recipes.js` removal) and the 1.3.0 note in `potions.js`; run `/dumpall`
 and the generators (food types, cans, compost, placeable) for the about 100 new items.
 
 ### 5.8 Owner notes after the build (2026-10-25)

@@ -191,7 +191,7 @@ kernels, cornmeal, tortillas and cornbread, so the fixes can be built without fi
 ---
 
 ## ingredients #11: Botania bowl of water use
-Status **Planned** · Work: KubeJS · id `dishes/ingredients #11`
+Status **Testing** · Work: KubeJS · id `dishes/ingredients #11`
 
 ### Goal
 Give `botania:water_bowl` a use.
@@ -220,7 +220,7 @@ item drain and spout and any fluid-handler tank already treat it as water. Dict:
 ---
 
 ## ingredients #8: Produce fixes
-Status **Planned** · Work: KubeJS · id `dishes/ingredients #8`
+Status **In Progress** · Work: KubeJS · id `dishes/ingredients #8`
 
 ### Goal
 Six small produce changes from the cooking plan and the 2026-10-21 scratchpad.
@@ -261,7 +261,7 @@ Six small produce changes from the cooking plan and the 2026-10-21 scratchpad.
 ---
 
 ## ingredients #3: Sugar and glycerol
-Status **Planned** · Work: KubeJS · id `dishes/ingredients #3`
+Status **Testing** · Work: KubeJS · id `dishes/ingredients #3`
 
 ### Goal
 Glycerol in most sugar recipes, but not in sugar-only items (sugar bag, sugar block) or drinks; more uses for sugar cubes.
@@ -438,7 +438,7 @@ sequenced assembly), IE (Bottler, mixer) and buckets in the grid.
 ---
 
 ## ingredients #7: Batter uses
-Status **Planned** · Work: KubeJS · id `dishes/ingredients #7`
+Status **In Progress** · Work: KubeJS · id `dishes/ingredients #7`
 
 ### Goal
 More uses for batter; batter replaces dough, flour or pie crust in some baking.
@@ -467,7 +467,7 @@ next to Supplementaries' (cooking.js 224).
 ---
 
 ## ingredients #10: Fats and oils
-Status **Planned** · Work: KubeJS / data · id `dishes/ingredients #10`
+Status **In Progress** · Work: KubeJS / data · id `dishes/ingredients #10`
 
 ### Goal
 Animal fat only from cows, pigs and "nether cows"; knives give more meat and fat (tooltip on knives); whales drop
@@ -521,7 +521,7 @@ fish oil counts as cooking oil, more fish into fish oil.
 ---
 
 ## ingredients #6: Vinegar
-Status **Planned** · Work: KubeJS · id `dishes/ingredients #6`
+Status **Testing** · Work: KubeJS · id `dishes/ingredients #6`
 
 ### Goal
 A vinegar canning additive for fruit, veg, meat and fish (and salads).
@@ -589,7 +589,7 @@ A small generator in tools/ (reading food_types.json and the dict) would keep it
 ---
 
 ## ingredients #9: Cheese
-Status **Planned** · Work: new jar (Brewin' port) / KubeJS · id `dishes/ingredients #9`
+Status **In Progress** · Work: new jar (Brewin' port) / KubeJS · id `dishes/ingredients #9`
 
 ### Goal
 More cheese types (red mushroom, warped fungus, Fungi Delight), new colours, longer ageing, more per slice; Vintage
@@ -640,7 +640,7 @@ full port, like the Brewin' and Vinery ports).
 ---
 
 ## ingredients #20: Sweet potato slices
-Status: Planned / Work: KubeJS (+ new item) / TODO `dishes/ingredients #20` ([veggies_delight.md](../veggies_delight.md))
+Status: In Progress / Work: KubeJS (+ new item) / TODO `dishes/ingredients #20` ([veggies_delight.md](../veggies_delight.md))
 
 ### Goal
 A cut sweet potato gives 3 sweet potato slices.
@@ -670,7 +670,7 @@ RC-110 Knife a sweet potato: 3 slices. RC-111 Slices count in the fries recipe.
 ---
 
 ## ingredients #21: Potato and sweet potato compatibility
-Status: Planned / Work: KubeJS / TODO `dishes/ingredients #21` ([veggies_delight.md](../veggies_delight.md))
+Status: In Progress / Work: KubeJS / TODO `dishes/ingredients #21` ([veggies_delight.md](../veggies_delight.md))
 
 ### Goal
 Recipes that take a potato also take a sweet potato, and the same for the cooked and sliced forms.
@@ -703,7 +703,7 @@ RC-112 A sweet potato works in each audited recipe; RC-113 compost and trades un
 ---
 
 ## ingredients #22: Honeycomb as sugar, honey and spread
-Status: Planned / Work: KubeJS / TODO `dishes/ingredients #22` ([food.md](../food.md))
+Status: In Progress / Work: KubeJS / TODO `dishes/ingredients #22` ([food.md](../food.md))
 
 ### Goal
 Honeycomb counts as sugar in heated mixing (2 sugar per honeycomb), as honey in some recipes, and spreads on toast.

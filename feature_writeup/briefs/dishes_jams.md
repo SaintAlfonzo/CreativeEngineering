@@ -16,10 +16,24 @@ Layout per [README.md](README.md). Writeups: [recipes_cooking.md](../recipes_coo
 - Delightful: `jelly_bottle` ("Jam Jar"), `glow_jelly_bottle`, `nut_butter_bottle`; tag `#forge:jam` (exports predate Vintage).
 - Upgrade Aquatic: `mulberry_jam_bottle`, `mulberry_jam_block`, `mulberry_bread`. Brewin's jams are already gone.
 
+**Update 2026-10-29 (owner): jams are mason jars only.** Built, not run: Vintage's jam bottles (sweet berry, glow
+berry, pepper) and the relish bottle are removed items, and so are Vintage's sweet berry and glow berry jam jars
+(Fruits Delight has both jams); their crafts and pots are gone (CD `vintagedelight/jams.js`, startup
+`vintage_items.js`). Pepper Jam Jar stays; the Relish Jar stays as an ingredient (`food_type/ingredient`) and leaves
+`#forge:jam_jars` / `#vintagedelight:savory_jam`. New mason jar jams: Green Grape, Red Grape and Cherry Jam Jar (Vintage
+port `-09`, placeholder wool sprites), pot 4 fruit + sugar + lemon slice -> 2 jars. PB and J takes `#forge:jams`.
+Tests RC-172 to RC-175 ([recipes_cooking.md](../recipes_cooking.md)).
+**Still open:** Fruits Delight's 22 jams (`*_jelly`) and Upgrade Aquatic's mulberry jam bottle are still glass bottle
+items (eating returns a glass bottle; the bottle is set in their jars' Java). Making them mason jars needs a jar item
+per jam (or a container swap in a repack) and the jam colour per fruit (row 1 Build 3): owner to decide.
+- **TODO (texture):** real sprites for the three new jam jars (item and interior texture) to replace the wool
+  placeholders (`development/backportedVintage/.../textures/item/{green_grape,red_grape,cherry}_jam_jar.png`,
+  `textures/block/*_jam_interior_texture.png`).
+
 ---
 
 ## jams #1: Merge all jams into one jam jar
-Status **Planned** / Work: KubeJS / patcherMod / resource pack / id `dishes/jams #1`
+Status **In Progress** / Work: KubeJS / patcherMod / resource pack / id `dishes/jams #1`
 
 ### Goal
 Every jam is Fruits Delight's jam item and Vintage Delight's jam block; every jam jar is a mason jar (mason jars take
@@ -52,7 +66,7 @@ Three overlapping jam stacks (above). The only pack jam code is orange jam in `c
 ---
 
 ## jams #2: Jam crafting: 4 fruit, sugar, lemon slice for 2 jam
-Status **Planned** / Work: KubeJS / id `dishes/jams #2`
+Status **In Progress** / Work: KubeJS / id `dishes/jams #2`
 
 ### Goal
 Cooking pot jam: 4 fruit, 1 sugar, 1 lemon slice (a lemon gives 5 lemon slices) for 2 jam (output doubled).
@@ -78,7 +92,7 @@ Mirror in Create heated mixing (`f.orange_jam` pattern) so the machine route sta
 ---
 
 ## jams #3: Recipes use jam, never bottled jam or jelly
-Status **Planned** / Work: KubeJS / id `dishes/jams #3`
+Status **In Progress** / Work: KubeJS / id `dishes/jams #3`
 
 ### Goal
 Ditch bottled jams (mason-jarred jams are the same in crafting); jam always over jelly; merge mulberry bread into bread with
@@ -101,7 +115,7 @@ Jam Sandwich"), Vintage's vinegar (`jam_jars` + mushroom). Exact recipe list is 
 ---
 
 ## jams #4: Grape and cherry jam
-Status **Planned** / Work: KubeJS / data / id `dishes/jams #4`
+Status **Testing** / Work: KubeJS / data / id `dishes/jams #4`
 
 ### Goal
 Add grape and cherry jam (grape jelly / jam, cherry jelly / jam). Cherry pie is `baking/baked-goods #13`.
@@ -125,7 +139,7 @@ recipe), bread fillings, cans. The pack adds items in `kubejs/startup_scripts/it
 ---
 
 ## jams #5: Merge nut butter and nut mash
-Status **Planned** / Work: KubeJS / id `merges/dishes #7`
+Status **In Progress** / Work: KubeJS / id `merges/dishes #7`
 
 ### Goal
 Merge nut butter and nut mash into one item across the mods.

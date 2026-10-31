@@ -30,7 +30,6 @@ public class MobEffectRegistry {
     public static final ResourceLocation CREEPER_EFFECT = Vinery.identifier("creeper_effect");
     public static final ResourceLocation CLIMBING_EFFECT = Vinery.identifier("climbing_effect");
     public static final ResourceLocation FROSTY_ARMOR_EFFECT = Vinery.identifier("frosty_armor");
-    public static final ResourceLocation JELLIE = Vinery.identifier("jellie");
     public static final ResourceLocation LAVA_WALKER = Vinery.identifier("lava_walker");
     public static final ResourceLocation MAGNET = Vinery.identifier("magnet");
     public static final ResourceLocation WATER_WALKER = Vinery.identifier("water_walker");
@@ -46,7 +45,6 @@ public class MobEffectRegistry {
         register(CREEPER_EFFECT, CreeperEffect::new);
         register(CLIMBING_EFFECT, ClimbingEffect::new);
         register(FROSTY_ARMOR_EFFECT, FrostyArmorEffect::new);
-        register(JELLIE, JellyEffect::new);
         register(LAVA_WALKER, LavaWalkerEffect::new);
         register(MAGNET, MagnetEffect::new);
         register(WATER_WALKER, WaterWalkerEffect::new);

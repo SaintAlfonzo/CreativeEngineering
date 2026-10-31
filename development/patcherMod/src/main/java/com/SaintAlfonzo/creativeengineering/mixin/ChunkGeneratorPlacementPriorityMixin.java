@@ -1,6 +1,5 @@
 package com.SaintAlfonzo.creativeengineering.mixin;
 
-import com.SaintAlfonzo.creativeengineering.worldgen.LocateStats;
 import com.SaintAlfonzo.creativeengineering.worldgen.PlacementPriority;
 import net.minecraft.core.RegistryAccess;
 import net.minecraft.core.SectionPos;
@@ -10,21 +9,20 @@ import net.minecraft.world.level.chunk.ChunkAccess;
 import net.minecraft.world.level.chunk.ChunkGenerator;
 import net.minecraft.world.level.levelgen.RandomState;
 import net.minecraft.world.level.levelgen.structure.StructureSet;
-import net.minecraft.world.level.levelgen.structure.StructureStart;
 import net.minecraft.world.level.levelgen.structure.templatesystem.StructureTemplateManager;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
-import org.spongepowered.asm.mixin.injection.ModifyVariable;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
 /**
  * Placement priority (worldgen/PlacementPriority).
  *
  *  - tryGenerateStructure (m_223104_) made callable, so a prediction replays a set's pick on a scratch chunk.
- *  - The generated StructureStart (local slot 15, as in ChunkGeneratorEarthFillMixin) becomes INVALID_START when a
- *    higher-ranked structure is predicted to overlap it; the pick then fails like a wrong-biome start.
+ *  - The generated StructureStart (local slot 15) becomes INVALID_START when a higher-ranked structure is predicted to
+ *    overlap it; the pick then fails like a wrong-biome start. That check runs in ChunkGeneratorEarthFillMixin, right
+ *    after earth fill (one injector, so the order is fixed in code).
  *  - tryGenerateStructure HEAD: remember the call, so the jigsaw shaping (JigsawPlacementPriorityMixin) knows whose
  *    pieces it is fitting.
  *  - createStructures (m_223164_) RETURN: companion starts (villages around a fortified town) for this chunk.
@@ -54,16 +52,6 @@ public abstract class ChunkGeneratorPlacementPriorityMixin implements PlacementP
 			RegistryAccess registryAccess, RandomState randomState, StructureTemplateManager templateManager, long seed,
 			ChunkAccess chunk, ChunkPos chunkPos, SectionPos sectionPos, org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable<Boolean> cir) {
 		PlacementPriority.current(entry, (ChunkGenerator) (Object) this, structureManager, registryAccess, randomState, templateManager, seed, chunk, chunkPos);
-	}
-
-	@ModifyVariable(method = TRY_GENERATE, at = @At("STORE"), index = 15, require = 1, remap = false)
-	private StructureStart creativeengineering$placementPriority(StructureStart start, StructureSet.StructureSelectionEntry entry,
-			StructureManager structureManager, RegistryAccess registryAccess, RandomState randomState,
-			StructureTemplateManager templateManager, long seed, ChunkAccess chunk, ChunkPos chunkPos) {
-		StructureStart out = PlacementPriority.filter(start, entry, (ChunkGenerator) (Object) this, structureManager, registryAccess, randomState,
-				templateManager, seed, chunk, chunkPos);
-		if (out != start && start.isValid() && !out.isValid()) LocateStats.reject(entry.structure().value(), chunkPos, LocateStats.Reason.PRIORITY);
-		return out;
 	}
 
 	@Inject(method = "m_223164_(Lnet/minecraft/core/RegistryAccess;Lnet/minecraft/world/level/levelgen/RandomState;"

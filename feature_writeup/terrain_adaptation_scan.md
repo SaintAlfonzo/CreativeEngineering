@@ -1,6 +1,6 @@
 # Terrain adaptation scan: structures that could use the soft beard or template trim
 
-Generated 2026-10-26 by `python3 tools/terrain_adaptation_scan.py` (re-run after adding or updating structure mods). What the tags do: [structure_tuning.md 3.15](structure_tuning.md). Data: `kubejs/generation_scripts/worldgen/terrain_adaptation_scan.json`.
+Generated 2026-10-30 by `python3 tools/terrain_adaptation_scan.py` (re-run after adding or updating structure mods). What the tags do: [structure_tuning.md 3.15](structure_tuning.md). Data: `kubejs/generation_scripts/worldgen/terrain_adaptation_scan.json`.
 
 **How it reads a structure.** It follows the start pool and every jigsaw link (up to the structure's `size`) to the templates the structure can place, and measures each rigid template (terrain-matching street pieces are left out, they follow the ground anyway) the way `TemplateTrim` does:
 - **Box cols**: template width x depth, summed over the templates; **Built**: columns with a built block.
@@ -18,13 +18,13 @@ Generated 2026-10-26 by `python3 tools/terrain_adaptation_scan.py` (re-run after
 
 | Verdict | Structures |
 |---|---|
-| Strong candidates | 4 |
-| Mild candidates | 8 |
+| Strong candidates | 1 |
+| Mild candidates | 6 |
 | Settlements (review) | 31 |
-| Compact surface structures (nothing to gain) | 17 |
-| Already tagged | 103 |
-| Ships, rafts and sky structures (earth_fill/exempt) | 24 |
-| Not surface (buried, seabed, sky, underground, Nether, End, mostly water) | 207 |
+| Compact surface structures (nothing to gain) | 16 |
+| Already tagged | 122 |
+| Ships, rafts and sky structures (earth_fill/exempt) | 25 |
+| Not surface (buried, seabed, sky, underground, Nether, End, mostly water) | 193 |
 | Terrain-matching only (already follow the ground) | 6 |
 | Built in code (no templates) | 5 |
 | Templates not found | 3 |
@@ -35,10 +35,7 @@ Surface structures whose templates are mostly pad or saved air. These look like 
 
 | Structure | Adaptation | Templates | Box cols | Built | Pad cols | Air-only cols | Air outside built | Unbuilt | Suggested tags |
 |---|---|---|---|---|---|---|---|---|---|
-| `terralith:spire` | none | 6 | 23381 | 13019 | 841 | 5555 | 180,302 | 44% | template_trim (+ soft if the pad hangs on slopes) |
 | `eugene:undead_castle` | beard_box | 4 | 1938 | 1091 | 844 | 3 | 22,138 | 44% | soft + template_trim |
-| `farmers_structures:aquacultures_common` | beard_thin | 1 | 400 | 157 | 109 | 50 | 693 | 61% | soft + template_trim |
-| `farmers_structures:aquacultures_carp` | none | 1 | 400 | 267 | 87 | 1 | 177 | 33% | template_trim (+ soft if the pad hangs on slopes) |
 
 ## 2. Mild candidates
 
@@ -47,10 +44,8 @@ Some pad or air around the building; trim and soft would help a little.
 | Structure | Adaptation | Templates | Box cols | Built | Pad cols | Air-only cols | Air outside built | Unbuilt | Suggested tags |
 |---|---|---|---|---|---|---|---|---|---|
 | `eugene:castle` | beard_thin | 8 | 6035 | 4701 | 953 | 381 | 48,394 | 22% | soft + template_trim |
-| `philipsruins:level_three_ruins` | beard_thin | 11 | 3801 | 3000 | 801 | 0 | 9,688 | 21% | soft + template_trim |
 | `philipsruins:start_nether_ruin` | beard_thin | 5 | 1803 | 1291 | 512 | 0 | 5,736 | 28% | soft + template_trim |
 | `eugene:red_roof_castle` | beard_thin | 3 | 1892 | 1433 | 105 | 354 | 25,028 | 24% | soft + template_trim |
-| `old_swamp_fisherman_house:fisherman_house` | beard_thin | 1 | 476 | 353 | 123 | 0 | 1,676 | 26% | soft + template_trim |
 | `philipsruins:desert_structures` | bury | 1 | 100 | 72 | 28 | 0 | 0 | 28% | template_trim (keep bury) |
 | `eugene:pillager_loot_carriage` | beard_thin | 3 | 92 | 74 | 16 | 2 | 128 | 20% | soft + template_trim |
 | `simply_houses:taiga_forge` | beard_thin | 1 | 598 | 481 | 0 | 6 | 12 | 20% | soft + template_trim |
@@ -102,8 +97,8 @@ They float on the sea or in the sky (`earth_fill/exempt`). At sea, trim would st
 | `towns_and_towers:village_ocean` | none | 11 | 7870 | 964 | 0 | 6906 | 13,128 | 88% | template_trim |
 | `unwrecked_ships:nether_ship` | none | 62 | 8825 | 2685 | 0 | 3545 | 28,858 | 70% | template_trim (off) |
 | `unwrecked_ships:ship` | none | 67 | 8957 | 3312 | 0 | 2762 | 20,176 | 63% | template_trim |
+| `skyvillages:skyvillage` | none | 37 | 5416 | 4051 | 12 | 1352 | 38,632 | 25% | template_trim (+ soft if the pad hangs on slopes) |
 | `philipsruins:ocean_fortress` | beard_box | 4 | 3300 | 2445 | 853 | 2 | 2 | 26% | soft + template_trim |
-| `skyvillages:skyvillage` | none | 20 | 3595 | 2739 | 8 | 847 | 25,226 | 24% | template_trim (+ soft if the pad hangs on slopes) |
 | `illagerwarship:warship` | none | 1 | 1200 | 506 | 0 | 694 | 32,618 | 58% | template_trim |
 | `antiquetradingship:antique_trading_ship` | none | 1 | 1152 | 482 | 0 | 670 | 19,430 | 58% | template_trim |
 | `philipsruins:ocean_ruins` | beard_thin | 12 | 1843 | 1163 | 632 | 0 | 262 | 37% | soft + template_trim |
@@ -119,6 +114,7 @@ They float on the sea or in the sky (`earth_fill/exempt`). At sea, trim would st
 | `hopo:underwater_warm_small_ruins` | none | 40 | 3787 | 3677 | 1 | 6 | 6 | 3% | template_trim (+ soft if the pad hangs on slopes) |
 | `villager_rafts:raft_1` | none | 1 | 35 | 29 | 0 | 6 | 54 | 17% | template_trim |
 | `villager_rafts:raft_2` | none | 1 | 35 | 29 | 0 | 6 | 54 | 17% | template_trim |
+| `betterwitchhuts:witch_hut` | none | 5 | 381 | 308 | 0 | 4 | 6 | 19% | template_trim (mode tags have no effect on YUNG structures) |
 | `hopo:underwater_fossils` | none | 20 | 2766 | 2003 | 0 | 0 | 0 | 28% | template_trim |
 | `hopo:underwater_ruins` | beard_thin | 25 | 6366 | 6315 | 0 | 0 | 0 | 1% | soft + template_trim |
 | `hopo:underwater_small_ruins` | none | 40 | 2408 | 2408 | 0 | 0 | 0 | 0% | template_trim |
@@ -131,9 +127,11 @@ In `worldgen/terrain_adaptation.js` now, with their numbers for reference.
 | Structure | Adaptation | Templates | Box cols | Built | Pad cols | Air-only cols | Air outside built | Unbuilt | Why |
 |---|---|---|---|---|---|---|---|---|---|
 | `takesapillage:bastille` | beard_box | 19 | 20331 | 10152 | 9423 | 756 | 283,241 | 50% | already in terrain_adaptation/soft |
+| `terralith:spire` | none | 6 | 23381 | 13019 | 841 | 5555 | 180,302 | 44% | already in template_trim/air |
 | `minecraft:pillager_outpost` | beard_thin | 24 | 5906 | 3518 | 1 | 2026 | 36,133 | 40% | already in template_trim, terrain_adaptation/soft |
 | `takesapillage:pillager_camp` | beard_box | 24 | 2636 | 1120 | 1237 | 279 | 35,089 | 57% | already in terrain_adaptation/soft |
 | `farmers_structures:cooks` | beard_thin | 33 | 4741 | 2267 | 844 | 399 | 2,515 | 52% | already in template_trim, terrain_adaptation/soft |
+| `philipsruins:level_three_ruins` | beard_thin | 11 | 3801 | 3000 | 801 | 0 | 9,688 | 21% | already in template_trim, terrain_adaptation/soft |
 | `towns_and_towers:exclusives/pillager_outpost_rustic` | beard_thin | 4 | 1227 | 600 | 168 | 459 | 12,913 | 51% | already in template_trim, terrain_adaptation/soft |
 | `towns_and_towers:pillager_outpost_desert` | beard_thin | 4 | 1053 | 514 | 311 | 228 | 9,305 | 51% | already in template_trim, terrain_adaptation/soft |
 | `towns_and_towers:pillager_outpost_old_growth_taiga` | beard_thin | 4 | 1228 | 708 | 317 | 203 | 8,467 | 42% | already in template_trim, terrain_adaptation/soft |
@@ -152,6 +150,7 @@ In `worldgen/terrain_adaptation.js` now, with their numbers for reference.
 | `towns_and_towers:pillager_outpost_snowy_plains` | beard_thin | 5 | 533 | 329 | 49 | 155 | 7,547 | 38% | already in template_trim, terrain_adaptation/soft |
 | `villager_butcher_house:butcher_house` | beard_thin | 1 | 528 | 332 | 196 | 0 | 3,235 | 37% | already in template_trim, terrain_adaptation/soft |
 | `towns_and_towers:pillager_outpost_swamp` | beard_thin | 4 | 364 | 174 | 62 | 128 | 6,258 | 52% | already in template_trim, terrain_adaptation/soft |
+| `subterrestrial:jungle_cabin` | beard_thin | 12 | 1486 | 1300 | 0 | 186 | 930 | 12% | already in seabed_clearance |
 | `towns_and_towers:exclusives/pillager_outpost_mediterranean` | beard_thin | 5 | 541 | 362 | 121 | 58 | 1,121 | 33% | already in template_trim, terrain_adaptation/soft |
 | `towns_and_towers:pillager_outpost_wooded_badlands` | beard_thin | 7 | 435 | 260 | 0 | 175 | 1,100 | 40% | already in template_trim, terrain_adaptation/soft |
 | `towns_and_towers:pillager_outpost_forest` | beard_thin | 4 | 453 | 288 | 55 | 110 | 6,083 | 36% | already in template_trim, terrain_adaptation/soft |
@@ -159,6 +158,7 @@ In `worldgen/terrain_adaptation.js` now, with their numbers for reference.
 | `sawmillhouse:sawmill` | beard_thin | 1 | 361 | 199 | 162 | 0 | 2,350 | 45% | already in template_trim, terrain_adaptation/soft |
 | `villager_farmer_house:villager_farmer_house` | beard_thin | 1 | 567 | 405 | 162 | 0 | 2,677 | 29% | already in template_trim, terrain_adaptation/soft |
 | `villager_country_house:country_house` | beard_thin | 1 | 702 | 541 | 161 | 0 | 3,057 | 23% | already in template_trim, terrain_adaptation/soft |
+| `farmers_structures:aquacultures_common` | beard_thin | 1 | 400 | 157 | 109 | 50 | 693 | 61% | already in template_trim, terrain_adaptation/soft |
 | `gothic_church:church` | beard_thin | 1 | 527 | 373 | 154 | 0 | 4,992 | 29% | already in template_trim, terrain_adaptation/soft |
 | `towns_and_towers:pillager_outpost_sparse_jungle` | beard_thin | 7 | 389 | 236 | 0 | 153 | 990 | 39% | already in template_trim, terrain_adaptation/soft |
 | `illager_siege_weapons:trebuchet` | beard_thin | 1 | 231 | 91 | 0 | 140 | 2,100 | 61% | already in template_trim, terrain_adaptation/none |
@@ -166,9 +166,11 @@ In `worldgen/terrain_adaptation.js` now, with their numbers for reference.
 | `villager_gold_washing_facility:villager_gold_washing_facility` | beard_thin | 1 | 378 | 253 | 125 | 0 | 1,494 | 33% | already in template_trim, terrain_adaptation/soft |
 | `campsite_structures:armorer_campsite` | beard_thin | 1 | 169 | 41 | 80 | 44 | 699 | 76% | already in terrain_adaptation/sunk_start |
 | `towns_and_towers:pillager_outpost_beach` | beard_thin | 4 | 395 | 271 | 20 | 104 | 1,426 | 31% | already in template_trim, terrain_adaptation/soft |
+| `old_swamp_fisherman_house:fisherman_house` | beard_thin | 1 | 476 | 353 | 123 | 0 | 1,676 | 26% | already in template_trim, terrain_adaptation/soft |
 | `campsite_structures:butcher_campsite` | beard_thin | 1 | 169 | 44 | 77 | 44 | 679 | 74% | already in terrain_adaptation/sunk_start |
 | `towns_and_towers:pillager_outpost_snowy_beach` | beard_thin | 4 | 395 | 275 | 22 | 98 | 1,371 | 30% | already in template_trim, terrain_adaptation/soft |
 | `campsite_structures:cleric_campsite` | beard_thin | 1 | 169 | 52 | 69 | 48 | 914 | 69% | already in terrain_adaptation/sunk_start |
+| `terralith:underground/frosted_dungeon` | beard_box | 1 | 625 | 508 | 0 | 116 | 1,332 | 19% | already in seabed_clearance |
 | `towns_and_towers:pillager_outpost_mushroom_fields` | beard_thin | 4 | 383 | 270 | 0 | 113 | 5,830 | 30% | already in template_trim, terrain_adaptation/soft |
 | `campsite_structures:fisher_campsite` | beard_thin | 1 | 169 | 58 | 63 | 48 | 861 | 66% | already in terrain_adaptation/sunk_start |
 | `villager_forge:villager_forge` | beard_thin | 1 | 408 | 299 | 109 | 0 | 1,717 | 27% | already in template_trim, terrain_adaptation/soft |
@@ -177,9 +179,17 @@ In `worldgen/terrain_adaptation.js` now, with their numbers for reference.
 | `saloon:saloon` | beard_thin | 1 | 399 | 304 | 95 | 0 | 2,280 | 24% | already in template_trim, terrain_adaptation/soft |
 | `towns_and_towers:pillager_outpost_taiga` | beard_thin | 4 | 364 | 271 | 0 | 93 | 3,056 | 26% | already in template_trim, terrain_adaptation/soft |
 | `campsite_structures:cartographer_campsite` | beard_thin | 1 | 132 | 36 | 75 | 17 | 489 | 73% | already in terrain_adaptation/sunk_start |
+| `farmers_structures:aquacultures_carp` | none | 1 | 400 | 267 | 87 | 1 | 177 | 33% | already in template_trim, terrain_adaptation/soft, terrain_adaptation/sunk_start |
 | `plains_villager_tents:big_villager_tent` | beard_thin | 1 | 322 | 235 | 87 | 0 | 840 | 27% | already in template_trim, terrain_adaptation/soft |
 | `villager_tannery:tannery` | beard_thin | 1 | 240 | 154 | 86 | 0 | 1,093 | 36% | already in template_trim, terrain_adaptation/soft |
+| `subterrestrial:default_cabin` | beard_thin | 15 | 1303 | 1219 | 0 | 84 | 420 | 6% | already in seabed_clearance |
+| `subterrestrial:desert_cabin` | beard_thin | 12 | 1086 | 1002 | 0 | 84 | 420 | 8% | already in seabed_clearance |
+| `subterrestrial:ice_cabin` | beard_thin | 12 | 1114 | 1030 | 0 | 84 | 420 | 8% | already in seabed_clearance |
+| `subterrestrial:mesa_cabin` | beard_thin | 12 | 1086 | 1002 | 0 | 84 | 420 | 8% | already in seabed_clearance |
+| `subterrestrial:taiga_cabin` | beard_thin | 12 | 1114 | 1030 | 0 | 84 | 420 | 8% | already in seabed_clearance |
+| `philipsruins:ancient_crypt` | beard_box | 8 | 1858 | 1776 | 82 | 0 | 309 | 4% | already in terrain_adaptation/sunk_start |
 | `villager_flower_house:flower_house` | beard_thin | 1 | 361 | 282 | 79 | 0 | 1,291 | 22% | already in template_trim, terrain_adaptation/soft |
+| `terralith:underground/sunken_tower` | beard_box | 1 | 210 | 132 | 53 | 25 | 929 | 37% | already in seabed_clearance |
 | `illager_siege_weapons:catapult` | beard_thin | 1 | 144 | 69 | 0 | 75 | 900 | 52% | already in template_trim, terrain_adaptation/none |
 | `snowy_tents:snowy_tent` | beard_thin | 1 | 143 | 68 | 75 | 0 | 534 | 52% | already in template_trim, terrain_adaptation/soft |
 | `forest_ruins:ruin_3` | beard_thin | 1 | 238 | 170 | 68 | 0 | 519 | 29% | already in template_trim, terrain_adaptation/soft |
@@ -219,6 +229,7 @@ In `worldgen/terrain_adaptation.js` now, with their numbers for reference.
 | `towns_and_towers:pillager_outpost_snowy_taiga` | beard_thin | 4 | 172 | 144 | 0 | 28 | 875 | 16% | already in template_trim, terrain_adaptation/soft |
 | `villager_fishermans_hut:villager_fishermans_hut` | beard_thin | 1 | 210 | 183 | 27 | 0 | 405 | 13% | already in template_trim, terrain_adaptation/soft |
 | `llama_stable:llama_stable` | beard_thin | 1 | 195 | 170 | 25 | 0 | 322 | 13% | already in template_trim, terrain_adaptation/soft |
+| `terralith:underground/old_refinery` | beard_box | 1 | 253 | 226 | 0 | 25 | 355 | 11% | already in seabed_clearance |
 | `animal_barn:barn` | beard_thin | 1 | 575 | 551 | 24 | 0 | 543 | 4% | already in template_trim, terrain_adaptation/soft |
 | `small_cat_statues:cat_3` | beard_thin | 1 | 77 | 53 | 24 | 0 | 288 | 31% | already in template_trim, terrain_adaptation/soft |
 | `forest_ruins:ruin_2` | beard_thin | 1 | 56 | 36 | 20 | 0 | 192 | 36% | already in template_trim, terrain_adaptation/soft |
@@ -230,9 +241,13 @@ In `worldgen/terrain_adaptation.js` now, with their numbers for reference.
 | `illager_siege_weapons:reinforced_battering_ram` | beard_thin | 1 | 119 | 105 | 0 | 14 | 70 | 12% | already in template_trim, terrain_adaptation/none |
 | `small_cat_statues:cat_1` | beard_thin | 1 | 40 | 26 | 14 | 0 | 126 | 35% | already in template_trim, terrain_adaptation/soft |
 | `forest_ruins:ruin_6` | beard_thin | 1 | 63 | 50 | 13 | 0 | 106 | 21% | already in template_trim, terrain_adaptation/soft |
+| `terralith:underground/oak_cabin` | beard_box | 2 | 150 | 119 | 0 | 10 | 36 | 21% | already in seabed_clearance |
+| `terralith:underground/witch_hut` | beard_box | 1 | 154 | 144 | 0 | 10 | 123 | 6% | already in seabed_clearance |
 | `forest_watchtower:forest_watchtower` | beard_thin | 1 | 81 | 78 | 3 | 0 | 69 | 4% | already in template_trim, terrain_adaptation/soft |
 | `small_viking_villager_house:small_viking_house` | beard_thin | 1 | 221 | 219 | 2 | 0 | 28 | 1% | already in template_trim, terrain_adaptation/soft |
 | `old_illager_statue:old_illager_statue` | beard_thin | 1 | 20 | 20 | 0 | 0 | 0 | 0% | already in template_trim, terrain_adaptation/soft |
+| `terralith:underground/giant_bee_hive` | bury | 2 | 393 | 308 | 0 | 0 | 0 | 22% | already in seabed_clearance |
+| `terralith:underground/mining_outpost` | beard_box | 2 | 157 | 141 | 0 | 0 | 0 | 10% | already in seabed_clearance |
 
 ## 5. Compact surface structures
 
@@ -243,7 +258,6 @@ Built edge to edge; neither tag would change much.
 | `towns_and_towers:pillager_outpost_snowy_slopes` | beard_thin | 4 | 496 | 445 | 0 | 51 | 1,920 | 10% | 10% unbuilt |
 | `towns_and_towers:pillager_outpost_birch_forest` | beard_thin | 4 | 444 | 409 | 9 | 26 | 981 | 8% | 8% unbuilt |
 | `eugene:witch_wagon` | beard_thin | 1 | 91 | 79 | 12 | 0 | 120 | 13% | 13% unbuilt |
-| `betterwitchhuts:witch_hut` | none | 5 | 381 | 308 | 0 | 4 | 6 | 19% | 19% unbuilt |
 | `philipsruins:badlands_start_dungeon` | beard_thin | 2 | 436 | 432 | 0 | 4 | 27 | 1% | 1% unbuilt |
 | `towns_and_towers:exclusives/pillager_outpost_classic` | beard_thin | 4 | 532 | 529 | 0 | 3 | 0 | 1% | 1% unbuilt |
 | `towns_and_towers:exclusives/pillager_outpost_tudor` | beard_thin | 4 | 228 | 225 | 0 | 3 | 0 | 1% | 1% unbuilt |
@@ -276,14 +290,12 @@ Their air carves rooms, their water belongs, or they float on purpose: trim woul
 | `betterstrongholds:stronghold` | none | 83 | 6840 | 6571 | 0 | 259 | 897 | 4% | underground: its air and ground are part of the design |
 | `philipsruins:ancient_towers` | beard_thin | 9 | 898 | 671 | 227 | 0 | 0 | 25% | seabed: its air and ground are part of the design |
 | `mes:astral_meteorite` | beard_thin | 1 | 312 | 123 | 13 | 176 | 1,701 | 61% | end: its air and ground are part of the design |
-| `subterrestrial:jungle_cabin` | beard_thin | 12 | 1486 | 1300 | 0 | 186 | 930 | 12% | underground: its air and ground are part of the design |
 | `mes:mythic_garden` | beard_thin | 1 | 361 | 178 | 79 | 104 | 2,087 | 51% | end: its air and ground are part of the design |
 | `nullscape:phantom_nest` | none | 12 | 1330 | 917 | 0 | 145 | 3,418 | 31% | end: its air and ground are part of the design |
 | `mes:enderwatch_tower` | beard_thin | 1 | 289 | 149 | 0 | 140 | 6,020 | 48% | end: its air and ground are part of the design |
 | `hearths:warped_tower` | none | 6 | 438 | 313 | 0 | 125 | 280 | 28% | nether: its air and ground are part of the design |
 | `farmers_structures:undergardens_sea` | none | 5 | 2716 | 2067 | 0 | 122 | 393 | 24% | underground: its air and ground are part of the design |
 | `mes:monolith` | beard_thin | 3 | 363 | 243 | 0 | 120 | 3,000 | 33% | end: its air and ground are part of the design |
-| `terralith:underground/frosted_dungeon` | beard_box | 1 | 625 | 508 | 0 | 116 | 1,332 | 19% | underground: its air and ground are part of the design |
 | `mes:enderskog` | beard_thin | 1 | 182 | 68 | 0 | 114 | 1,026 | 63% | end: its air and ground are part of the design |
 | `betterdungeons:small_nether_dungeon` | none | 83 | 1431 | 1073 | 0 | 112 | 158 | 25% | nether: its air and ground are part of the design |
 | `mes:manuscript_shrine` | beard_thin | 1 | 210 | 108 | 0 | 102 | 919 | 49% | end: its air and ground are part of the design |
@@ -291,13 +303,6 @@ Their air carves rooms, their water belongs, or they float on purpose: trim woul
 | `hearths:crimson_tower` | none | 4 | 340 | 246 | 0 | 94 | 187 | 28% | nether: its air and ground are part of the design |
 | `subterrestrial:ocean_cabin` | beard_thin | 6 | 568 | 481 | 3 | 84 | 428 | 15% | underground: its air and ground are part of the design |
 | `subterrestrial:deepslate_cabin` | beard_thin | 15 | 1303 | 1219 | 0 | 84 | 420 | 6% | underground: its air and ground are part of the design |
-| `subterrestrial:default_cabin` | beard_thin | 15 | 1303 | 1219 | 0 | 84 | 420 | 6% | underground: its air and ground are part of the design |
-| `subterrestrial:desert_cabin` | beard_thin | 12 | 1086 | 1002 | 0 | 84 | 420 | 8% | underground: its air and ground are part of the design |
-| `subterrestrial:ice_cabin` | beard_thin | 12 | 1114 | 1030 | 0 | 84 | 420 | 8% | underground: its air and ground are part of the design |
-| `subterrestrial:mesa_cabin` | beard_thin | 12 | 1086 | 1002 | 0 | 84 | 420 | 8% | underground: its air and ground are part of the design |
-| `subterrestrial:taiga_cabin` | beard_thin | 12 | 1114 | 1030 | 0 | 84 | 420 | 8% | underground: its air and ground are part of the design |
-| `philipsruins:ancient_crypt` | beard_box | 8 | 1858 | 1776 | 82 | 0 | 309 | 4% | seabed: its air and ground are part of the design |
-| `terralith:underground/sunken_tower` | beard_box | 1 | 210 | 132 | 53 | 25 | 929 | 37% | underground: its air and ground are part of the design |
 | `farmers_structures:cooks_nether_2` | none | 1 | 480 | 394 | 0 | 77 | 440 | 18% | nether: its air and ground are part of the design |
 | `eugene:camp` | beard_thin | 2 | 144 | 86 | 58 | 0 | 342 | 40% | seabed: its air and ground are part of the design |
 | `farmers_structures:aethers` | none | 3 | 1070 | 601 | 0 | 56 | 145 | 44% | fixed height: its air and ground are part of the design |
@@ -308,15 +313,12 @@ Their air carves rooms, their water belongs, or they float on purpose: trim woul
 | `mes:ender_spire` | beard_thin | 1 | 49 | 17 | 0 | 32 | 544 | 65% | end: its air and ground are part of the design |
 | `betterdungeons:zombie_dungeon` | none | 69 | 1999 | 1841 | 0 | 30 | 34 | 8% | fixed height: its air and ground are part of the design |
 | `eugene:fake_trader_camp` | beard_thin | 1 | 72 | 43 | 29 | 0 | 171 | 40% | seabed: its air and ground are part of the design |
-| `terralith:underground/old_refinery` | beard_box | 1 | 253 | 226 | 0 | 25 | 355 | 11% | underground: its air and ground are part of the design |
 | `mes:enderbloom_grove` | beard_thin | 1 | 90 | 66 | 0 | 24 | 336 | 27% | end: its air and ground are part of the design |
 | `mes:ruined_pillar` | beard_thin | 3 | 57 | 41 | 0 | 16 | 37 | 28% | end: its air and ground are part of the design |
 | `betterdungeons:small_dungeon` | none | 16 | 527 | 508 | 0 | 13 | 17 | 4% | underground: its air and ground are part of the design |
 | `mes:astral_hideaway` | beard_thin | 1 | 70 | 58 | 0 | 12 | 108 | 17% | end: its air and ground are part of the design |
 | `eugene:pillager_camp` | beard_thin | 1 | 63 | 52 | 11 | 0 | 54 | 18% | seabed: its air and ground are part of the design |
 | `philipsruins:underground_structures` | beard_thin | 10 | 2312 | 2302 | 10 | 0 | 48 | 0% | underground: its air and ground are part of the design |
-| `terralith:underground/oak_cabin` | beard_box | 2 | 150 | 119 | 0 | 10 | 36 | 21% | underground: its air and ground are part of the design |
-| `terralith:underground/witch_hut` | beard_box | 1 | 154 | 144 | 0 | 10 | 123 | 6% | underground: its air and ground are part of the design |
 | `terralith:underground_cabin` | beard_box | 2 | 150 | 119 | 0 | 10 | 36 | 21% | underground: its air and ground are part of the design |
 | `philipsruins:sealedruinedghaststatue1` | beard_thin | 3 | 109 | 81 | 0 | 9 | 39 | 26% | nether: its air and ground are part of the design |
 | `farmers_structures:aquacultures_beach` | none | 1 | 504 | 393 | 0 | 5 | 12 | 22% | fixed height: its air and ground are part of the design |
@@ -335,8 +337,6 @@ Their air carves rooms, their water belongs, or they float on purpose: trim woul
 | `philipsruins:lost_soul_dungeon` | beard_thin | 5 | 2627 | 2627 | 0 | 0 | 0 | 0% | underground: its air and ground are part of the design |
 | `philipsruins:nether_lava_ruins` | beard_thin | 3 | 522 | 522 | 0 | 0 | 0 | 0% | nether: its air and ground are part of the design |
 | `supplementaries:way_sign` | beard_thin | 1 | 49 | 0 | 0 | 0 | 0 | 100% | underground: its air and ground are part of the design |
-| `terralith:underground/giant_bee_hive` | bury | 2 | 393 | 308 | 0 | 0 | 0 | 22% | underground: its air and ground are part of the design |
-| `terralith:underground/mining_outpost` | beard_box | 2 | 157 | 141 | 0 | 0 | 0 | 10% | underground: its air and ground are part of the design |
 | `terralith:zpointer/minecraft_badlands` | none | 1 | 1 | 0 | 0 | 0 | 0 | 100% | underground: its air and ground are part of the design |
 | `terralith:zpointer/minecraft_bamboo_jungle` | none | 1 | 1 | 0 | 0 | 0 | 0 | 100% | underground: its air and ground are part of the design |
 | `terralith:zpointer/minecraft_beach` | none | 1 | 1 | 0 | 0 | 0 | 0 | 100% | underground: its air and ground are part of the design |

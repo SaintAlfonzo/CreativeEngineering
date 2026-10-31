@@ -32,7 +32,7 @@ Related rows: `pack/release #2` (the server preset gotcha, time.md 3.9), `alcoho
 ---
 
 ## time #5: Season day and day counter misaligned on the GUI
-Status Bug / Work patcherMod / TODO `gameplay/time #5`
+Status Testing (built 2026-10-23, shipped in 1.1.03; TI-30) / Work patcherMod / TODO `gameplay/time #5`
 
 ### Goal
 The two date lines the player sees together agree: SeasonHUD's "Mid Spring (Day 3/24) 7:30 pm" and the "day counter"

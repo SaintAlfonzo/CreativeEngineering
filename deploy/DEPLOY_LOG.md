@@ -4,6 +4,489 @@ Every version staged by `tools/build_deploy.py`, newest first. Each entry lists 
 version before it and which files the other machines must delete. The full file list of a version is in
 `history/<version>.json`.
 
+<!-- deploy:1.1.05 -->
+## 1.1.05 - 2026-10-31 12:42
+
+- Minecraft 1.19.2, Forge 43.3.9
+- Commit: 463d234 + 137 uncommitted file(s)
+- Since: 1.1.04
+- Deployed: client 2026-10-31 12:51; server, client 2026-10-31 12:52
+- Contents: 372 server+client mods, 43 client-only mods, 29 resource pack files, 16 shader pack files
+- Payload: update from 1.1.04, config functional: 108 files, 18.8 MB (mods 10, kubejs 78, config 12, world_serverconfig 8)
+- Notes: Pack as it exists 2026-10-31: in-tree jars current, structure data regenerated, 3 new mods (Botany Pots, Cozy's Improved Cats, Room for Two)
+- Built with warnings:
+  - 137 uncommitted change(s) in shipped folders (commit 463d234 + working tree)
+  - changelog lint, kubejs/assets/creativeengineering/changelog/1.1.01.md: line 8: bullet is 484 characters (over 300: split it or use a sub-bullet)
+  - changelog lint, kubejs/assets/creativeengineering/changelog/1.1.01.md: line 14: bullet is 306 characters (over 300: split it or use a sub-bullet)
+  - changelog lint, kubejs/assets/creativeengineering/changelog/1.1.01.md: line 39: bullet is 404 characters (over 300: split it or use a sub-bullet)
+  - changelog lint, kubejs/assets/creativeengineering/changelog/1.1.01.md: line 59: bullet is 425 characters (over 300: split it or use a sub-bullet)
+  - changelog lint, kubejs/assets/creativeengineering/changelog/1.1.01.md: line 84: bullet is 437 characters (over 300: split it or use a sub-bullet)
+  - changelog lint, kubejs/assets/creativeengineering/changelog/1.1.01.md: line 105: bullet is 358 characters (over 300: split it or use a sub-bullet)
+  - changelog lint, kubejs/assets/creativeengineering/changelog/1.1.01.md: line 118: bullet is 497 characters (over 300: split it or use a sub-bullet)
+  - changelog lint, kubejs/assets/creativeengineering/changelog/1.1.01.md: line 132: bullet is 593 characters (over 300: split it or use a sub-bullet)
+  - changelog lint, kubejs/assets/creativeengineering/changelog/1.1.01.md: line 142: bullet is 453 characters (over 300: split it or use a sub-bullet)
+  - changelog lint, kubejs/assets/creativeengineering/changelog/1.1.01.md: line 147: bullet is 491 characters (over 300: split it or use a sub-bullet)
+  - changelog lint, kubejs/assets/creativeengineering/changelog/1.1.01.md: line 155: bullet is 386 characters (over 300: split it or use a sub-bullet)
+  - changelog lint, kubejs/assets/creativeengineering/changelog/1.1.01.md: line 173: bullet is 427 characters (over 300: split it or use a sub-bullet)
+  - changelog lint, kubejs/assets/creativeengineering/changelog/1.1.01.md: line 207: bullet is 325 characters (over 300: split it or use a sub-bullet)
+  - changelog lint, kubejs/assets/creativeengineering/changelog/1.1.01.md: line 221: bullet is 360 characters (over 300: split it or use a sub-bullet)
+  - changelog lint, kubejs/assets/creativeengineering/changelog/1.1.01.md: line 240: bullet is 458 characters (over 300: split it or use a sub-bullet)
+  - changelog lint, kubejs/assets/creativeengineering/changelog/1.1.01.md: line 246: bullet is 331 characters (over 300: split it or use a sub-bullet)
+  - changelog lint, kubejs/assets/creativeengineering/changelog/1.1.01.md: line 249: bullet is 484 characters (over 300: split it or use a sub-bullet)
+  - changelog lint, kubejs/assets/creativeengineering/changelog/1.1.01.md: line 254: bullet is 412 characters (over 300: split it or use a sub-bullet)
+  - changelog lint, kubejs/assets/creativeengineering/changelog/1.1.01.md: line 266: bullet is 316 characters (over 300: split it or use a sub-bullet)
+  - changelog lint, kubejs/assets/creativeengineering/changelog/1.1.01.md: line 272: bullet is 320 characters (over 300: split it or use a sub-bullet)
+  - changelog lint, kubejs/assets/creativeengineering/changelog/1.1.01.md: line 367: bullet is 362 characters (over 300: split it or use a sub-bullet)
+  - changelog lint, kubejs/assets/creativeengineering/changelog/1.1.01.md: line 394: bullet is 447 characters (over 300: split it or use a sub-bullet)
+  - changelog lint, kubejs/assets/creativeengineering/changelog/1.1.01.md: line 408: bullet is 726 characters (over 300: split it or use a sub-bullet)
+  - changelog lint, kubejs/assets/creativeengineering/changelog/1.1.01.md: line 425: bullet is 483 characters (over 300: split it or use a sub-bullet)
+  - changelog lint, kubejs/assets/creativeengineering/changelog/1.1.03.md: line 23: bullet is 437 characters (over 300: split it or use a sub-bullet)
+  - changelog lint, kubejs/assets/creativeengineering/changelog/1.1.03.md: line 159: bullet is 614 characters (over 300: split it or use a sub-bullet)
+  - changelog lint, kubejs/assets/creativeengineering/changelog/1.1.03.md: line 219: bullet is 317 characters (over 300: split it or use a sub-bullet)
+  - changelog lint, kubejs/assets/creativeengineering/changelog/1.1.03.md: line 287: bullet is 542 characters (over 300: split it or use a sub-bullet)
+  - changelog lint, kubejs/assets/creativeengineering/changelog/1.1.04.md: line 40: bullet is 394 characters (over 300: split it or use a sub-bullet)
+
+### Changes
+
+Mods added (3):
+
+- Botany Pots 9.0.44 `BotanyPots-Forge-1.19.2-9.0.44.jar` (both)
+- Cozy's Improved Cats 2.1.0-Forge-1.19.2 `cozys-improved-cats-2.1.0-forge-1.19.2.jar` (both)
+- Room For Two 0.2.0 `roomfortwo-forge-1.19.2-0.2.0.jar` (both)
+
+Mods updated (7):
+
+- brewinandchewin: `backportedBrewin-4.5.0-ce-19.2-03.jar` -> `backportedBrewin-4.5.0-ce-19.2-04.jar`
+- creative_delight: `creative_delight-1.0.0.jar` -> `creative_delight-1.0.0.jar`
+- creativeengineering: `creativeengineering-1.1.04.jar` -> `creativeengineering-1.1.04.jar`
+- storagedelight: `repackedStorage-25.12.09-1.19-forge-ce-19.2-01.jar` -> `repackedStorage-25.12.09-1.19-forge-ce-19.2-01.jar`
+- veggiesdelight: `backportedVeggies-1.9.2-ce-19.2-03.jar` -> `backportedVeggies-1.9.2-ce-19.2-03.jar`
+- vinery: `backportedVinery-1.5.5-ce-19.2-05.jar` -> `backportedVinery-1.5.5-ce-19.2-06.jar`
+- vintagedelight: `backportedVintage-0.1.6-ce-19.2-08.jar` -> `backportedVintage-0.1.6-ce-19.2-09.jar`
+
+Mods removed (1):
+
+- Just Another Rotten Flesh to Leather Mod 1.4.3 `JRFTL [1.19.1]-1.4.3.jar` (was both)
+
+<details><summary>kubejs/: 43 added, 35 changed, 0 removed</summary>
+
+*added (43)*
+
+- `assets/brewinandchewin/textures/item/kimchi.png`
+- `assets/creativeengineering/changelog/1.1.05.md`
+- `assets/felsic_gear/textures/blocks/felsic_block.png`
+- `assets/jrftl/textures/item/prepared_flesh.png`
+- `assets/myrtrees/blockstates/filled_rubberwood_log.json`
+- `assets/myrtrees/blockstates/rubberwood_log.json`
+- `assets/rusticdelight/textures/item/cherry_blossom_pancake.png`
+- `assets/rusticdelight/textures/item/chocolate_pancake.png`
+- `assets/rusticdelight/textures/item/coffee_pancake.png`
+- `assets/rusticdelight/textures/item/honey_pancake.png`
+- `assets/rusticdelight/textures/item/pumpkin_pancake.png`
+- `assets/rusticdelight/textures/item/vegetable_pancake.png`
+- `data/creativeengineering/loot_tables/misc/monster_box_reward.json`
+- `data/creativeengineering/recipes/sawmill/recycle_wooden_door.json`
+- `data/creativeengineering/recipes/sawmill/recycle_wooden_slab.json`
+- `data/creativeengineering/recipes/sawmill/recycle_wooden_stairs.json`
+- `data/creativeengineering/worldgen/structure/sky_island.json`
+- `data/creativeengineering/worldgen/template_pool/sky_island.json`
+- `data/fireflybushport/forge/biome_modifier/firefly_bush_biome_modifier.json`
+- `data/fruitsdelight/forge/biome_modifier/apple.json`
+- `data/skyvillages/structures/farmersdelight/sky_village_farmersdelight_farm_0.nbt`
+- `data/skyvillages/structures/farmersdelight/sky_village_farmersdelight_farm_1.nbt`
+- `data/skyvillages/structures/farmersdelight/sky_village_farmersdelight_farm_2.nbt`
+- `data/skyvillages/structures/letsdo_brewery/` (11 files)
+- `data/skyvillages/structures/letsdo_vinery/sky_village_letsdo_vinery_0.nbt`
+- `data/skyvillages/structures/letsdo_vinery/sky_village_letsdo_vinery_1.nbt`
+- `data/skyvillages/structures/letsdo_vinery/sky_village_letsdo_vinery_2.nbt`
+- `generation_scripts/worldgen/crop_seasons.json`
+- `generation_scripts/worldgen/spawn_boxes.json`
+- `generation_scripts/worldgen/structure_test_overrides.json`
+- `server_scripts/equipment/watering_can.js`
+- `server_scripts/other/removed_mobs.js`
+- `server_scripts/tags/cropseasontags.js`
+
+*changed (35)*
+
+- `assets/creativeengineering/lang/en_us.json`
+- `client_scripts/namechanges.js`
+- `client_scripts/tooltips.js`
+- `data/creativeengineering/paintings/rebirth_paintings/fall.json`
+- `data/skyvillages/worldgen/template_pool/skyvillage_deco.json`
+- `data/skyvillages/worldgen/template_pool/skyvillage_houses.json`
+- `generation_scripts/worldgen/biome_config.json`
+- `generation_scripts/worldgen/biome_layout_cache.json.gz`
+- `generation_scripts/worldgen/meta_structures.json`
+- `generation_scripts/worldgen/nether_block_swaps.json`
+- `generation_scripts/worldgen/pool_config.json`
+- `generation_scripts/worldgen/structure_config.json`
+- `generation_scripts/worldgen/structure_groups.json`
+- `generation_scripts/worldgen/structure_tags.json`
+- `server_scripts/_lib/dump_crop_growth.js`
+- `server_scripts/engineering/mob_resources.js`
+- `server_scripts/engineering/redstone.js`
+- `server_scripts/magic/armor_effects.js`
+- `server_scripts/other/jeed_providers.js`
+- `server_scripts/tags/blocktags.js`
+- `server_scripts/wood/removed_woods.js`
+- `server_scripts/worldgen/earth_fill.js`
+- `server_scripts/worldgen/structure_overrides.js`
+- `server_scripts/worldgen/terrain_adaptation.js`
+- `startup_scripts/_lib/block_dict.js`
+- `startup_scripts/_lib/effect_dict.js`
+- `startup_scripts/_lib/item_dict.js`
+- `startup_scripts/_lib/removed_items.js`
+- `startup_scripts/_lib/removed_woods.js`
+- `startup_scripts/changes/block_properties.js`
+- `startup_scripts/cooking/food_values.js`
+- `startup_scripts/cooking/potions.js`
+- `startup_scripts/func/armor_effects.js`
+- `startup_scripts/func/tune_tools.js`
+- `startup_scripts/items/misc_items.js`
+
+</details>
+
+config/: 1 added, 11 changed, 0 removed, 1 no longer shipped:
+
+*added (1)*
+
+- `cozys_improved_cats-common.toml`
+
+*changed (11)*
+
+- `betterdungeons-forge-1_19.toml`
+- `creativeengineering-common.toml`
+- `neapolitan-common.toml`
+- `nock_enough_arrows-common.toml`
+- `quark-common.toml`
+- `rare-ice.properties`
+- `vinery-common.toml`
+- `jei/ingredient-list-mod-sort-order.ini`
+- `jei/recipe-category-sort-order.ini`
+- `sereneseasons/fertility.toml`
+- `worldedit/worldedit.properties`
+
+*no longer shipped (player settings, left in place) (1)*
+
+- `DistantHorizons.toml`
+
+### Removals (from 1.1.04)
+
+Delete on the server (4, also in removals_server.txt):
+
+- `mods/JRFTL [1.19.1]-1.4.3.jar`
+- `mods/backportedBrewin-4.5.0-ce-19.2-03.jar`
+- `mods/backportedVinery-1.5.5-ce-19.2-05.jar`
+- `mods/backportedVintage-0.1.6-ce-19.2-08.jar`
+
+Delete on the client (4, also in removals_client.txt):
+
+- `mods/JRFTL [1.19.1]-1.4.3.jar`
+- `mods/backportedBrewin-4.5.0-ce-19.2-03.jar`
+- `mods/backportedVinery-1.5.5-ce-19.2-05.jar`
+- `mods/backportedVintage-0.1.6-ce-19.2-08.jar`
+
+<!-- deploy:1.1.04 -->
+## 1.1.04 - 2026-10-30 00:49
+
+- Minecraft 1.19.2, Forge 43.3.9
+- Commit: 463d234 + 72 uncommitted file(s)
+- Since: 1.1.03
+- Deployed: client 2026-10-29 17:16; server 2026-10-31 12:42
+- Contents: 370 server+client mods, 43 client-only mods, 29 resource pack files, 16 shader pack files
+- Payload: update from 1.1.03, config functional: 410 files, 16.2 MB (mods 12, kubejs 379, config 10, defaultconfigs 1, world_serverconfig 8)
+- Notes: 1.1.04 as an update from 1.1.03 (server); re-staged from the client instance state actually deployed
+- Built with warnings:
+  - mods/creativeengineering-1.1.04.jar differs from development/patcherMod/build/libs/creativeengineering-1.1.04.jar (built but not installed? ./gradlew :patcherMod:installToMods)
+  - development/patcherMod/src has changes newer than mods/creativeengineering-1.1.04.jar (rebuild + install the jar?)
+  - development/backportedVintage/src has changes newer than mods/backportedVintage-0.1.6-ce-19.2-08.jar (rebuild + install the jar?)
+  - mods/creative_delight-1.0.0.jar differs from development/creativeDelight/build/libs/creative_delight-1.0.0.jar (built but not installed? ./gradlew :creativeDelight:installToMods)
+  - development/creativeDelight/src has changes newer than mods/creative_delight-1.0.0.jar (rebuild + install the jar?)
+  - pack/manifest.json is out of date with mods/: run tools/gen_pack_manifest.py and commit pack/
+  - 72 uncommitted change(s) in shipped folders (commit 463d234 + working tree)
+  - changelog lint, kubejs/assets/creativeengineering/changelog/1.1.01.md: line 8: bullet is 484 characters (over 300: split it or use a sub-bullet)
+  - changelog lint, kubejs/assets/creativeengineering/changelog/1.1.01.md: line 14: bullet is 306 characters (over 300: split it or use a sub-bullet)
+  - changelog lint, kubejs/assets/creativeengineering/changelog/1.1.01.md: line 39: bullet is 404 characters (over 300: split it or use a sub-bullet)
+  - changelog lint, kubejs/assets/creativeengineering/changelog/1.1.01.md: line 59: bullet is 425 characters (over 300: split it or use a sub-bullet)
+  - changelog lint, kubejs/assets/creativeengineering/changelog/1.1.01.md: line 84: bullet is 437 characters (over 300: split it or use a sub-bullet)
+  - changelog lint, kubejs/assets/creativeengineering/changelog/1.1.01.md: line 105: bullet is 358 characters (over 300: split it or use a sub-bullet)
+  - changelog lint, kubejs/assets/creativeengineering/changelog/1.1.01.md: line 118: bullet is 497 characters (over 300: split it or use a sub-bullet)
+  - changelog lint, kubejs/assets/creativeengineering/changelog/1.1.01.md: line 132: bullet is 593 characters (over 300: split it or use a sub-bullet)
+  - changelog lint, kubejs/assets/creativeengineering/changelog/1.1.01.md: line 142: bullet is 453 characters (over 300: split it or use a sub-bullet)
+  - changelog lint, kubejs/assets/creativeengineering/changelog/1.1.01.md: line 147: bullet is 491 characters (over 300: split it or use a sub-bullet)
+  - changelog lint, kubejs/assets/creativeengineering/changelog/1.1.01.md: line 155: bullet is 386 characters (over 300: split it or use a sub-bullet)
+  - changelog lint, kubejs/assets/creativeengineering/changelog/1.1.01.md: line 173: bullet is 427 characters (over 300: split it or use a sub-bullet)
+  - changelog lint, kubejs/assets/creativeengineering/changelog/1.1.01.md: line 207: bullet is 325 characters (over 300: split it or use a sub-bullet)
+  - changelog lint, kubejs/assets/creativeengineering/changelog/1.1.01.md: line 221: bullet is 360 characters (over 300: split it or use a sub-bullet)
+  - changelog lint, kubejs/assets/creativeengineering/changelog/1.1.01.md: line 240: bullet is 458 characters (over 300: split it or use a sub-bullet)
+  - changelog lint, kubejs/assets/creativeengineering/changelog/1.1.01.md: line 246: bullet is 331 characters (over 300: split it or use a sub-bullet)
+  - changelog lint, kubejs/assets/creativeengineering/changelog/1.1.01.md: line 249: bullet is 484 characters (over 300: split it or use a sub-bullet)
+  - changelog lint, kubejs/assets/creativeengineering/changelog/1.1.01.md: line 254: bullet is 412 characters (over 300: split it or use a sub-bullet)
+  - changelog lint, kubejs/assets/creativeengineering/changelog/1.1.01.md: line 266: bullet is 316 characters (over 300: split it or use a sub-bullet)
+  - changelog lint, kubejs/assets/creativeengineering/changelog/1.1.01.md: line 272: bullet is 320 characters (over 300: split it or use a sub-bullet)
+  - changelog lint, kubejs/assets/creativeengineering/changelog/1.1.01.md: line 367: bullet is 362 characters (over 300: split it or use a sub-bullet)
+  - changelog lint, kubejs/assets/creativeengineering/changelog/1.1.01.md: line 394: bullet is 447 characters (over 300: split it or use a sub-bullet)
+  - changelog lint, kubejs/assets/creativeengineering/changelog/1.1.01.md: line 408: bullet is 726 characters (over 300: split it or use a sub-bullet)
+  - changelog lint, kubejs/assets/creativeengineering/changelog/1.1.01.md: line 425: bullet is 483 characters (over 300: split it or use a sub-bullet)
+  - changelog lint, kubejs/assets/creativeengineering/changelog/1.1.03.md: line 23: bullet is 437 characters (over 300: split it or use a sub-bullet)
+  - changelog lint, kubejs/assets/creativeengineering/changelog/1.1.03.md: line 159: bullet is 614 characters (over 300: split it or use a sub-bullet)
+  - changelog lint, kubejs/assets/creativeengineering/changelog/1.1.03.md: line 219: bullet is 317 characters (over 300: split it or use a sub-bullet)
+  - changelog lint, kubejs/assets/creativeengineering/changelog/1.1.03.md: line 287: bullet is 542 characters (over 300: split it or use a sub-bullet)
+  - changelog lint, kubejs/assets/creativeengineering/changelog/1.1.04.md: line 40: bullet is 394 characters (over 300: split it or use a sub-bullet)
+  - FORCED past: kubejs/assets/creativeengineering/changelog/1.1.04.md already exists: 1.1.04 is staged from unreleased.md, not from a version file
+  - FORCED past: 1.1.04 is already deployed (DEPLOYED.json): rebuilding it would change the snapshot the machines are checked against. Build a new version (omit --version to bump the patch).
+
+### Changes
+
+Mods added (1):
+
+- ModernFix 5.18.1+mc1.19.2 `modernfix-forge-5.18.1+mc1.19.2.jar` (both)
+
+Mods updated (10):
+
+- brewinandchewin: `backportedBrewin-4.5.0-ce-19.2-03.jar` -> `backportedBrewin-4.5.0-ce-19.2-03.jar`
+- creative_delight: `creative_delight-1.0.0.jar` -> `creative_delight-1.0.0.jar`
+- creative_labels: `creativeLabels-1.0.0.jar` -> `creativeLabels-1.0.0.jar`
+- creativeengineering: `creativeengineering-1.1.03.jar` -> `creativeengineering-1.1.04.jar`
+- displaydelight: `backportedDisplay-1.7.0-ce-19.2-01.jar` -> `backportedDisplay-1.7.0-ce-19.2-01.jar`
+- incubation_additions: `incubationAdditions-1.1.0.jar` -> `incubationAdditions-1.1.0.jar`
+- miners_delight: `backportedMiners-1.4.5-ce-19.2-01.jar` -> `backportedMiners-1.4.5-ce-19.2-01.jar`
+- more_mooblooms: `moreMooblooms-1.1.0.jar` -> `moreMooblooms-1.1.0.jar`
+- vinery: `backportedVinery-1.5.5-ce-19.2-04.jar` -> `backportedVinery-1.5.5-ce-19.2-05.jar`
+- vintagedelight: `backportedVintage-0.1.6-ce-19.2-07.jar` -> `backportedVintage-0.1.6-ce-19.2-08.jar`
+
+Mods removed (1):
+
+- ConnectedTexturesMod CTM - 1.19.2-1.1.6+8 `CTM-1.19.2-1.1.6+8.jar` (was client)
+
+Mods whose side changed (1):
+
+- Pretty Rain `Pretty Rain-1.19.2-Forge-1.1.1.jar`: client -> both
+
+<details><summary>kubejs/: 292 added, 87 changed, 17 removed</summary>
+
+*added (292)*
+
+- `assets/cherry_pie.png`
+- `assets/outline.png`
+- `assets/creativeengineering/blockstates/weathered_cardboard_box.json`
+- `assets/creativeengineering/brewinandchewin/coaster/` (206 files)
+- `assets/creativeengineering/changelog/1.1.04.md`
+- `assets/creativeengineering/models/block/weathered_cardboard_box.json`
+- `assets/creativeengineering/models/item/weathered_cardboard_box.json`
+- `assets/creativeengineering/textures/block/weathered_cardboard_box.png`
+- `assets/salt/textures/block/` (16 files)
+- `assets/salt/textures/item/raw_rock_salt.png`
+- `assets/salt/textures/item/salt.png`
+- `assets/salt/textures/item/salted_overlay.png`
+- `assets/solapplepie/models/item/golden_lunchbox.json`
+- `assets/solapplepie/models/item/lunchbag.json`
+- `assets/solapplepie/models/item/lunchbox.json`
+- `assets/solapplepie/models/item/netherite_lunchbox.json`
+- `assets/solapplepie/models/item/lunchbox_look/copper.json`
+- `assets/solapplepie/models/item/lunchbox_look/copper_dyed.json`
+- `assets/solapplepie/models/item/lunchbox_look/iron.json`
+- `assets/solapplepie/models/item/lunchbox_look/iron_dyed.json`
+- `assets/solapplepie/models/item/lunchbox_look/lunchbag.json`
+- `assets/solapplepie/models/item/lunchbox_look/lunchbag_dyed.json`
+- `assets/solapplepie/models/item/lunchbox_look/netherite.json`
+- `assets/solapplepie/models/item/lunchbox_look/netherite_dyed.json`
+- `assets/solapplepie/textures/items/copper_lunchbox.png`
+- `assets/solapplepie/textures/items/iron_lunchbox.png`
+- `assets/solapplepie/textures/items/iron_lunchbox_outline.png`
+- `assets/solapplepie/textures/items/netherite_lunchbox.png`
+- `assets/solapplepie/textures/items/netherite_lunchbox_outline.png`
+- `assets/solapplepie/textures/items/lunchbox_dye/copper_base.png`
+- `assets/solapplepie/textures/items/lunchbox_dye/copper_overlay.png`
+- `assets/solapplepie/textures/items/lunchbox_dye/iron_base.png`
+- `assets/solapplepie/textures/items/lunchbox_dye/iron_overlay.png`
+- `assets/solapplepie/textures/items/lunchbox_dye/lunchbag_base.png`
+- `assets/solapplepie/textures/items/lunchbox_dye/lunchbag_overlay.png`
+- `assets/solapplepie/textures/items/lunchbox_dye/netherite_base.png`
+- `assets/solapplepie/textures/items/lunchbox_dye/netherite_overlay.png`
+- `assets/vintagedelight/textures/block/salt.png`
+- `assets/vintagedelight/textures/item/cucumber_noodles.png`
+- `assets/wares/textures/block/cardboard_box.png`
+- `assets/wares/textures/block/package_side.png`
+- `assets/wares/textures/block/package_top_bottom.png`
+- `assets/wares/textures/item/cardboard_box.png`
+- `assets/wares/textures/item/package.png`
+- `data/creativeengineering/curios/slots/feet.json`
+- `data/immersive_weathering/block_growths/` (11 files)
+- `data/salt/loot_tables/cauldron_evaporation/salt_level_1.json`
+- `data/salt/loot_tables/cauldron_evaporation/salt_level_2.json`
+- `data/tectonic/worldgen/density_function/overworld/legacy/cliffs.json`
+- `data/vintagedelight/moonlight/soft_fluids/pepper_jam.json`
+- `data/vintagedelight/moonlight/soft_fluids/relish.json`
+- `generation_scripts/food/comfort_nourishment.json`
+- `generation_scripts/worldgen/biome_layout_cache.json.gz`
+- `generation_scripts/wthit/silk_touch_blocks.json`
+- `server_scripts/_lib/dump_flower_pots.js`
+- `server_scripts/_lib/dump_physics.js`
+- `server_scripts/engineering/dreams_desires.js`
+- `server_scripts/equipment/stepstool.js`
+- `server_scripts/tags/wthittags.js`
+- `server_scripts/wood/compost.js`
+- `server_scripts/wood/smoked_wood.js`
+- `startup_scripts/items/stepstools.js`
+
+*changed (87)*
+
+- `assets/cookingforblockheads/models/block/fridge_large_upper.json`
+- `assets/creativeengineering/jei_world/budding/generated.json`
+- `assets/creativeengineering/jei_world/concrete_hardening/manual.json`
+- `assets/creativeengineering/jei_world/grass_drops/generated.json`
+- `assets/creativeengineering/jei_world/jar_interaction/generated.json`
+- `assets/creativeengineering/jei_world/jar_storage/generated.json`
+- `assets/creativeengineering/jei_world/knife_drops/generated.json`
+- `assets/creativeengineering/jei_world/salt/manual.json`
+- `assets/creativeengineering/lang/en_us.json`
+- `assets/kubejs/lang/en_us.json`
+- `client_scripts/namechanges.js`
+- `client_scripts/tooltips.js`
+- `data/creativeengineering/curios/entities/player_hands_face.json`
+- `data/creativeengineering/paintings/rebirth_paintings/fall.json`
+- `data/salt/loot_tables/cauldron_evaporation/salt_full.json`
+- `data/vintagedelight/worldgen/configured_feature/patch_salt.json`
+- `generation_scripts/food/can_types.json`
+- `generation_scripts/food/food_families.json`
+- `generation_scripts/food/food_types.json`
+- `generation_scripts/food/placeable.json`
+- `generation_scripts/stacks/stack_sizes.json`
+- `generation_scripts/worldgen/climate/minecraft__overworld.json.gz`
+- `server_scripts/_lib/dump_all.js`
+- `server_scripts/_lib/dump_bee_nests.js`
+- `server_scripts/_lib/dump_placeable.js`
+- `server_scripts/_lib/dump_spawns.js`
+- `server_scripts/_lib/dump_structuregen.js`
+- `server_scripts/_lib/metal_test_recipes.js`
+- `server_scripts/_lib/recipe_scan.js`
+- `server_scripts/cooking/cooking.js`
+- `server_scripts/economy/coin.js`
+- `server_scripts/engineering/` (10 files)
+- `server_scripts/equipment/archery.js`
+- `server_scripts/equipment/dragon_autorepair.js`
+- `server_scripts/equipment/shield.js`
+- `server_scripts/equipment/tipped_arrows.js`
+- `server_scripts/magic/armor_effects.js`
+- `server_scripts/magic/storage.js`
+- `server_scripts/other/harvest.js`
+- `server_scripts/other/item_merges.js`
+- `server_scripts/other/jeed_providers.js`
+- `server_scripts/other/misc_mods.js`
+- `server_scripts/other/starter_kit.js`
+- `server_scripts/tags/` (9 files)
+- `server_scripts/wood/ash.js`
+- `server_scripts/wood/bark.js`
+- `server_scripts/wood/sawdust.js`
+- `server_scripts/worldgen/bee_nests.js`
+- `server_scripts/worldgen/biome_overrides.js`
+- `server_scripts/worldgen/mob_spawns.js`
+- `server_scripts/worldgen/mushroom_spawns.js`
+- `server_scripts/worldgen/structure_overrides.js`
+- `server_scripts/worldgen/wild_flowers.js`
+- `startup_scripts/_lib/block_dict.js`
+- `startup_scripts/_lib/fluid_dict.js`
+- `startup_scripts/_lib/food_dict.js`
+- `startup_scripts/_lib/item_dict.js`
+- `startup_scripts/_lib/item_merges.js`
+- `startup_scripts/_lib/removed_items.js`
+- `startup_scripts/_lib/removed_woods.js`
+- `startup_scripts/changes/transition_items.js`
+- `startup_scripts/cooking/potions.js`
+- `startup_scripts/func/jei_order.js`
+- `startup_scripts/func/sample_syringe.js`
+- `startup_scripts/func/tune_tools.js`
+- `startup_scripts/items/decor_blocks.js`
+- `startup_scripts/items/misc_items.js`
+- `startup_scripts/items/sample_syringe.js`
+- `startup_scripts/jei/order.js`
+- `startup_scripts/magic/magic_resistance.js`
+
+*removed (17)*
+
+- `assets/creativeengineering/textures/block/fridge_top_fill.png`
+- `client_scripts/seasoning_lang.js`
+- `data/creativeengineering/recipes/blueprint/` (12 files)
+- `server_scripts/loot/09_crop_drops.js`
+- `server_scripts/tags/placeabletags.js`
+- `startup_scripts/items/cultures.js`
+
+</details>
+
+config/: 3 added, 7 changed, 0 removed:
+
+*added (3)*
+
+- `DistantHorizons.toml`
+- `modernfix-common.toml`
+- `modernfix-mixins.properties`
+
+*changed (7)*
+
+- `armor_trims.toml`
+- `creativeengineering-common.toml`
+- `everycomp-wood_types.toml`
+- `rare-ice.properties`
+- `salt-common.toml`
+- `vinery-common.toml`
+- `worldedit/worldedit.properties`
+
+defaultconfigs/: 0 added, 1 changed, 0 removed:
+
+*changed (1)*
+
+- `solapplepie-server.toml`
+
+### Removals (from 1.1.03)
+
+Delete on the server (20, also in removals_server.txt):
+
+- `kubejs/assets/creativeengineering/textures/block/fridge_top_fill.png`
+- `kubejs/client_scripts/seasoning_lang.js`
+- `kubejs/data/creativeengineering/recipes/blueprint/precision_sawblade_button.json`
+- `kubejs/data/creativeengineering/recipes/blueprint/precision_sawblade_door.json`
+- `kubejs/data/creativeengineering/recipes/blueprint/precision_sawblade_fence.json`
+- `kubejs/data/creativeengineering/recipes/blueprint/precision_sawblade_fence_gate.json`
+- `kubejs/data/creativeengineering/recipes/blueprint/precision_sawblade_ladder.json`
+- `kubejs/data/creativeengineering/recipes/blueprint/precision_sawblade_pressure_plate.json`
+- `kubejs/data/creativeengineering/recipes/blueprint/precision_sawblade_railing.json`
+- `kubejs/data/creativeengineering/recipes/blueprint/precision_sawblade_sign.json`
+- `kubejs/data/creativeengineering/recipes/blueprint/precision_sawblade_stairs.json`
+- `kubejs/data/creativeengineering/recipes/blueprint/precision_sawblade_trapdoor.json`
+- `kubejs/data/creativeengineering/recipes/blueprint/precision_sawblade_vertical_planks.json`
+- `kubejs/data/creativeengineering/recipes/blueprint/precision_sawblade_vertical_slab.json`
+- `kubejs/server_scripts/loot/09_crop_drops.js`
+- `kubejs/server_scripts/tags/placeabletags.js`
+- `kubejs/startup_scripts/items/cultures.js`
+- `mods/backportedVinery-1.5.5-ce-19.2-04.jar`
+- `mods/backportedVintage-0.1.6-ce-19.2-07.jar`
+- `mods/creativeengineering-1.1.03.jar`
+
+Delete on the client (21, also in removals_client.txt):
+
+- `kubejs/assets/creativeengineering/textures/block/fridge_top_fill.png`
+- `kubejs/client_scripts/seasoning_lang.js`
+- `kubejs/data/creativeengineering/recipes/blueprint/precision_sawblade_button.json`
+- `kubejs/data/creativeengineering/recipes/blueprint/precision_sawblade_door.json`
+- `kubejs/data/creativeengineering/recipes/blueprint/precision_sawblade_fence.json`
+- `kubejs/data/creativeengineering/recipes/blueprint/precision_sawblade_fence_gate.json`
+- `kubejs/data/creativeengineering/recipes/blueprint/precision_sawblade_ladder.json`
+- `kubejs/data/creativeengineering/recipes/blueprint/precision_sawblade_pressure_plate.json`
+- `kubejs/data/creativeengineering/recipes/blueprint/precision_sawblade_railing.json`
+- `kubejs/data/creativeengineering/recipes/blueprint/precision_sawblade_sign.json`
+- `kubejs/data/creativeengineering/recipes/blueprint/precision_sawblade_stairs.json`
+- `kubejs/data/creativeengineering/recipes/blueprint/precision_sawblade_trapdoor.json`
+- `kubejs/data/creativeengineering/recipes/blueprint/precision_sawblade_vertical_planks.json`
+- `kubejs/data/creativeengineering/recipes/blueprint/precision_sawblade_vertical_slab.json`
+- `kubejs/server_scripts/loot/09_crop_drops.js`
+- `kubejs/server_scripts/tags/placeabletags.js`
+- `kubejs/startup_scripts/items/cultures.js`
+- `mods/CTM-1.19.2-1.1.6+8.jar`
+- `mods/backportedVinery-1.5.5-ce-19.2-04.jar`
+- `mods/backportedVintage-0.1.6-ce-19.2-07.jar`
+- `mods/creativeengineering-1.1.03.jar`
+
 <!-- deploy:1.1.03 -->
 ## 1.1.03 - 2026-10-26 18:11
 

@@ -15,6 +15,18 @@ Forge 1.19.2 modpack (KubeJS + in-tree Java mods). Repo root is the ATLauncher i
 - `mod_sides.md` = client/server side of every jar (add a row for each new mod).
   `configs_edited/` = backup of every hand-edited config. `feature_writeup/` = feature docs.
 
+## Glossary and processes
+
+Shorthand the user and docs use (spell out in player-facing text and changelog bullets):
+CE Creative Engineering (pack, patcherMod) | CD Creative Delight | FD Farmer's Delight | IE Immersive Engineering |
+IW Immersive Weathering | CR Create | PC PneumaticCraft | AM Alex's Mobs | D&D Create: Dreams & Desires |
+S&D Create Slice & Dice | DH Distant Horizons | LC Lightman's Currency | RD Rustic Delight | SoL Spice of Life (Apple Pie) |
+AE2 Applied Energistics 2 | JEI Just Enough Items | JEED Just Enough Effect Descriptions | WTHIT What The Hell Is That |
+FTB Feed The Beast mods (Quests, Teams, Library) | NCH neoCraftHelper (`global.NCH`)
+
+Processes are project skills in `.claude/skills/`: `integration-report` (new or updated mod: overlap, new content,
+fold-in), `add-mod`, `release`, `port` (ports and backports). When the user asks for one, follow its skill.
+
 ## Preferences
 
 - **Recipes and tags go through helpers, not hand-written events.** Recipes: `global.NCH`
@@ -64,8 +76,7 @@ Forge 1.19.2 modpack (KubeJS + in-tree Java mods). Repo root is the ATLauncher i
 - The shared helpers (`neoCraftHelper.js`, `tag_helper.js`, `compost.js`) live in patcherMod's jar
   (`src/main/resources/kubejs_startup/`, loaded before `startup_scripts/`): an edit needs a patcherMod rebuild, install
   and restart. Creative Delight (`development/creativeDelight`) nests its members; build/install via `:creativeDelight:`.
-- Add a mod: mod_sides.md row, then `/dumpall` and the generators (order in memory
-  `dumpall-refresh-workflow`). Release: `python3 tools/build_deploy.py --notes "..."`.
+- Add a mod, release, port: skills `add-mod`, `release`, `port`.
 
 ## Debugging
 
@@ -77,7 +88,7 @@ handling event`, the mod/feature name) before reasoning from code. It is the rea
 - The feature's writeup in `feature_writeup/` and its test list are updated in the same session.
 - **Player changelog for every significant change.** Any change a player can notice (gameplay, recipes,
   values, items, UI, fixes to player-visible bugs) gets a bullet in the same session in the working list
-  `kubejs/assets/creativeengineering/changelog/unreleased.md`, under its family heading (add the heading if new).
+  `kubejs/assets/creativeengineering/changelog/unreleased.md`, under a family named after the feature (`## Lunchboxes`); lone changes go under a broad catch-all heading and move into a feature family once a second change touches the same thing.
   Follow [changelog.md](feature_writeup/changelog.md) section 3.6: terse, facts only, no flavor or benefit
   clauses, old value in brackets, fixes in past tense, no ids/file names/config keys/emoji. Rewrite or merge
   existing bullets when later work changes them. Never edit a deployed version's file. Same-behaviour ports and

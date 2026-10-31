@@ -46,8 +46,8 @@ Share = the biome's % of its layer in the sample set (surface or underground); r
 | Overworld | `terralith:yosemite_cliffs`, `yosemite_lowlands` | 1.5 | 0.14 / 0.11 → 0.2 / 0.16 % | |
 | Overworld | rarity floor + targets: 41 rare biomes lifted (37 surface, 4 cave), 9 never-spawning biomes targeted (volcanic crater included), 14 donors (tables below) | see below | | 2026-10-19 |
 | End | `nullscape:shadowlands` | 0.5 | 18.933 → 9.633 % | |
-| End | `nullscape:void_barrens` | 0.75 | 3.967 → 2.767 % | aimed 2.967 % |
-| End | `nullscape:crystal_peaks` | 0.25 | 3.067 → 1.667 % | aimed 0.767 % |
+| End | `nullscape:void_barrens` | 2 (0.75 before 2026-10-30) | 2.71 → 5.41 % (2026-10-26 samples) | |
+| End | `nullscape:crystal_peaks` | 3 (0.25 before 2026-10-30) | 1.315 → 3.95 % (2026-10-26 samples) | |
 | Nether | `minecraft:nether_wastes` | 2.0 | 34.9 → 46.8 % | aimed 69.8 % |
 | Nether | `minecraft:basalt_deltas` | 0.666 | 18.6 → 12.4 % | |
 | Nether | `minecraft:crimson_forest` | 0.75 | 21.4 → 16.067 % | |
@@ -236,7 +236,9 @@ before), only when an input changed: the result is cached on the input hashes in
   instead of 21.8, crystal peaks 1.667 instead of 0.767, void barrens 2.767 instead of 2.967 (2026-10-18 samples; the
   current file also has 10 Overworld notes, mostly near misses of the rarity floor). The notes say "out of the
   penalty range (offset 0.6 either way) or its climate space is all-or-nothing (overlapping boxes)". Accept the
-  results, or adjust the multipliers to what's reachable so the file says what happens.
+  results, or adjust the multipliers to what's reachable so the file says what happens. End half settled 2026-10-30
+  (TODO `worldgen/biomes #8`): crystal peaks x3, void barrens x2, both reached (3.95 % / 5.41 % on the 2026-10-26
+  samples), no End notes left.
 - **F2. Never-sampled biomes. Resolved 2026-10-19.** The 20,000-column dump sampled `skylands_winter`; the 9
   surface biomes still never hit got `target_pct` and all generate in a new world; `/dumpclimatecaves` sampled
   every cave biome but tuff caves, which can't win anywhere (2.1).
@@ -247,6 +249,17 @@ before), only when an input changed: the result is cached on the input hashes in
   matches the game only 80 % of the time in the End (96.6 % Overworld, 86.4 % Nether), so End results are rough.
   2026-10-21 lead: every mismatch is a live `end_highlands` where the model expects shadowlands, crystal peaks or void
   barrens, and no End dump has ever held crystal peaks live ([briefs/worldgen_biomes.md](briefs/worldgen_biomes.md) #4).
+  Scratch 2026-10-26 (SQ-INV-06, one seed): `locate biome` found crystal peaks 1064 blocks and void barrens 1086 blocks
+  from 0 0, so the dump gaps were sampling (TODO `worldgen/biomes #8`, close after a second seed). Owner 2026-10-29:
+  shadowlands seem not to generate in the End; raise the modded End biomes (TODO `worldgen/biomes #9`). The config
+  halves shadowlands on purpose (`multiplier` 0.5, aimed 10.7 % of the End surface, table above), and every model
+  mismatch is a live `end_highlands` where the model expects shadowlands, so the live share is likely lower still.
+  2026-10-30 (user: make them clearly findable): crystal peaks multiplier 0.25 -> 3 (model 0.61 % -> 3.95 %), void
+  barrens 0.75 -> 2 (1.825 % -> 5.41 %); shadowlands untouched (row #9). Raised generously because the live share
+  likely sits under the model. Second-seed `locate biome` check: scratch queue SQ-WG30-E03, PARTIAL 2026-10-30 on seed
+  8675309: both found from 0 0 and 3000 0 (crystal peaks 1361 / 1647 blocks, void barrens 906 / 1345), only one nearer
+  than the old-seed 1,064 / 1,086; a live 20,000-point `getNoiseBiome` sample of the End (r 20,000, y 64) gives
+  crystal peaks 5.28 %, void barrens 7.11 %, above the model's 3.95 / 5.41 %.
 - **F5. One seed.** All samples come from one seed; shares are noise-distribution properties, so this should hold for
   other seeds, but it isn't checked.
 

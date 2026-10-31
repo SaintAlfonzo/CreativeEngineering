@@ -89,6 +89,10 @@ public class CreativeEngineering
         // Tier shields (copper..dragon, iron = the vanilla shield): the items here, the block-check
         // widening in mixin/LivingEntityShieldMixin, everything tunable in CEConfig.SHIELDS.
         com.SaintAlfonzo.creativeengineering.shield.ShieldItems.register(modEventBus);
+        // Wooden bucket: water-only early bucket (bucket/WoodenBucketItems).
+        com.SaintAlfonzo.creativeengineering.bucket.WoodenBucketItems.register(modEventBus);
+        // Hearth and Harvest's Watering Can under its own id, ahead of the full port (wateringcan/).
+        com.SaintAlfonzo.creativeengineering.wateringcan.WateringCanItems.register(modEventBus);
         // Meta structures: the creativeengineering:meta structure type and its two piece types
         // (worldgen/MetaStructure; the structures themselves are kubejs meta_structures.json).
         com.SaintAlfonzo.creativeengineering.worldgen.MetaStructure.register(modEventBus);
@@ -99,10 +103,25 @@ public class CreativeEngineering
         com.SaintAlfonzo.creativeengineering.food.PowderedSugarRegistry.register(modEventBus);
         // Display Delight placed blocks for foods it has none for (compat/DisplayDelightDishes; food_families.md egg/dish).
         com.SaintAlfonzo.creativeengineering.compat.DisplayDelightDishes.register(modEventBus);
+        // Beautify botanist workbench as a flower pot (compat/BotanistPot, mixin/BotanistWorkbenchPotMixin; flower_pots.md).
+        com.SaintAlfonzo.creativeengineering.compat.BotanistPot.register(modEventBus);
         // Backpack skins: smithing + clearing recipes, Curios equip block (backpackskin/; the looks are mixin/BackpackSkin*).
         com.SaintAlfonzo.creativeengineering.backpackskin.BackpackSkinSerializers.register(modEventBus);
         if (net.minecraftforge.fml.ModList.get().isLoaded("curios")) {
             MinecraftForge.EVENT_BUS.register(com.SaintAlfonzo.creativeengineering.backpackskin.BackpackSkinCurios.class);
+        }
+        // Spice of Life lunchboxes: Netherite Lunchbox tier, upgrade/skin/dye/soap recipes that keep the contents,
+        // "Slots" tooltip (lunchbox/; looks are lunchbox/client, seagulls are mixin/AlexsMobsSeagull*; lunchboxes.md).
+        if (net.minecraftforge.fml.ModList.get().isLoaded("solapplepie")) {
+            com.SaintAlfonzo.creativeengineering.lunchbox.LunchboxItems.register(modEventBus);
+            com.SaintAlfonzo.creativeengineering.lunchbox.LunchboxRecipes.register(modEventBus);
+            MinecraftForge.EVENT_BUS.register(com.SaintAlfonzo.creativeengineering.lunchbox.LunchboxTooltip.class);
+        }
+        // Stepstools: stand a block higher on the stool in the Curios feet slot (stepstool/; the client half is
+        // stepstool/client, the collision mixin.EntityStepstoolCollisionMixin; feature_writeup/stepstool.md).
+        com.SaintAlfonzo.creativeengineering.stepstool.Stepstool.register();
+        if (net.minecraftforge.fml.ModList.get().isLoaded("curios")) {
+            MinecraftForge.EVENT_BUS.register(com.SaintAlfonzo.creativeengineering.stepstool.Stepstool.class);
         }
         // Corn Delight 1.2.11 on 1.0.3: Cob Pipe right click to equip (compat/CornDelightCompat; corn_delight.md 2.3)
         if (net.minecraftforge.fml.ModList.get().isLoaded("corn_delight")) {
@@ -138,6 +157,13 @@ public class CreativeEngineering
         // itself is registered in KubeJS - startup_scripts/magic/magic_resistance.js)
         MinecraftForge.EVENT_BUS.register(com.SaintAlfonzo.creativeengineering.potion.MagicResistanceEffect.class);
 
+        // Oxidized Everything Copper gear rolls for Poison (CEConfig.CopperPoisoning; the
+        // effect-tick half is mixin/CopperPoisoningEffectMixin).
+        MinecraftForge.EVENT_BUS.register(com.SaintAlfonzo.creativeengineering.potion.CopperPoisoningHandler.class);
+
+        // Caffeinated carries Phantom Bane; Phantom Bane ending resets Time Since Rest (potions/effects #10).
+        MinecraftForge.EVENT_BUS.register(com.SaintAlfonzo.creativeengineering.potion.PhantomBaneRules.class);
+
         // Elytra air brake velocity effect (the item itself is registered in KubeJS -
         // startup_scripts/items/air_brake.js) - see CEConfig.AirBrake for the tuning knobs.
         MinecraftForge.EVENT_BUS.register(com.SaintAlfonzo.creativeengineering.gear.AirBrakeHandler.class);
@@ -149,6 +175,11 @@ public class CreativeEngineering
         // Leaf decay (CEConfig [leaf_decay]): Fast Leaf Decay's air-neighbour trigger, ported in; the range and
         // timing rules are mixin.LeavesDecayRangeMixin + block.LeafDecayRange.
         MinecraftForge.EVENT_BUS.register(com.SaintAlfonzo.creativeengineering.block.FastLeafDecayPort.class);
+        // Vine shearing (CEConfig [vine_shearing]): shears stop modded vines and growing-plant tips growing.
+        MinecraftForge.EVENT_BUS.register(com.SaintAlfonzo.creativeengineering.block.VineShearing.class);
+
+        // Live whistling arrows, so mixin.NeaWhistleGoalSkipMixin skips NEA's per-mob arrow query when there are none.
+        MinecraftForge.EVENT_BUS.register(com.SaintAlfonzo.creativeengineering.perf.WhistleArrowTracker.class);
 
         // Bottled Air port (item.BottledAir, CEConfig [bottled_air]): glass bottle right-clicked in water refills air.
         MinecraftForge.EVENT_BUS.register(com.SaintAlfonzo.creativeengineering.item.BottledAir.class);
@@ -220,6 +251,8 @@ public class CreativeEngineering
         MinecraftForge.EVENT_BUS.register(com.SaintAlfonzo.creativeengineering.worldgen.MetaSlots.class);
         MinecraftForge.EVENT_BUS.register(com.SaintAlfonzo.creativeengineering.worldgen.PlacementPriority.class);
         MinecraftForge.EVENT_BUS.register(com.SaintAlfonzo.creativeengineering.worldgen.TemplateBlockSwaps.class);
+        // Spawn boxes on pillager and witch structures and their meta parts (spawn_boxes.json); box evokers drop no totem.
+        MinecraftForge.EVENT_BUS.register(com.SaintAlfonzo.creativeengineering.worldgen.StructureSpawnBoxes.class);
 
         // Mob spawn tuning: biome modifier type creativeengineering:tune_spawns (mob_spawns.json, written by
         // kubejs/server_scripts/worldgen/mob_spawns.js); its change record feeds /dumpspawns and is cleared on stop.
@@ -227,6 +260,10 @@ public class CreativeEngineering
         MinecraftForge.EVENT_BUS.register(com.SaintAlfonzo.creativeengineering.worldgen.SpawnTuning.class);
         // Brown mooshrooms on natural spawns (mob_spawns.json brown_chance); the family's breeding is in mixins.
         MinecraftForge.EVENT_BUS.register(com.SaintAlfonzo.creativeengineering.mooshroom.MooshroomFamily.class);
+        // Named mobs (CEConfig [named_mobs]): a rare random name on natural spawns, deaths announced in chat.
+        MinecraftForge.EVENT_BUS.register(com.SaintAlfonzo.creativeengineering.mobs.NamedMobs.class);
+        // Quark monster boxes as vaults (CEConfig [monster_box]): sneak-only breaking; the tick is mixin.MonsterBoxBlockEntityMixin.
+        MinecraftForge.EVENT_BUS.register(com.SaintAlfonzo.creativeengineering.mobs.MonsterBoxVault.class);
 
         // Bee nest tuning: biome modifier type creativeengineering:bee_nests (bee_nests.json, written by
         // kubejs/server_scripts/worldgen/bee_nests.js) + the tree/nest/chunk counters behind /dumpbeenests.
@@ -256,6 +293,12 @@ public class CreativeEngineering
         // Structures no biome of a dimension can hold are not tried there (ChunkGeneratorStructureFrequencyMixin);
         // registered to clear its cache. On/off: [worldgen.systems] dimensionFilter.
         MinecraftForge.EVENT_BUS.register(com.SaintAlfonzo.creativeengineering.worldgen.DimensionFilter.class);
+
+        // Underground structures tagged creativeengineering:seabed_clearance never start with their box near a
+        // water-covered floor (mixin/ChunkGeneratorSeabedClearanceMixin). Sky Structures' islands are placed by
+        // worldgen/SkyIslands (mixin/ConfiguredFeatureSkyIslandsMixin). Both registered for their load / stop log lines.
+        MinecraftForge.EVENT_BUS.register(com.SaintAlfonzo.creativeengineering.worldgen.SeabedClearance.class);
+        MinecraftForge.EVENT_BUS.register(com.SaintAlfonzo.creativeengineering.worldgen.SkyIslands.class);
 
         // Terrain adaptation by structure tag (none / bury / beard_thin / beard_box / the soft beard) and template trim
         // (air and bare pad around the built columns not placed): mixin/StructureTerrainAdaptationMixin,
@@ -494,12 +537,32 @@ public class CreativeEngineering
                 com.SaintAlfonzo.creativeengineering.compat.CraftingMenuPolymorphClient.register();
             }
             com.SaintAlfonzo.creativeengineering.shield.client.TierShieldClient.setup(event);
+            if (net.minecraftforge.fml.ModList.get().isLoaded("solapplepie")) {
+                com.SaintAlfonzo.creativeengineering.lunchbox.client.LunchboxClient.setup(event);
+            }
+            if (net.minecraftforge.fml.ModList.get().isLoaded("curios")) {
+                MinecraftForge.EVENT_BUS.register(com.SaintAlfonzo.creativeengineering.stepstool.client.StepstoolClient.class);
+            }
             if (net.minecraftforge.fml.ModList.get().isLoaded("corn_delight") && net.minecraftforge.fml.ModList.get().isLoaded("curios")) {
                 com.SaintAlfonzo.creativeengineering.compat.CobPipeRenderer.register();
             }
             event.enqueueWork(() -> net.minecraft.client.gui.screens.MenuScreens.register(
                     com.SaintAlfonzo.creativeengineering.oven.OvenRegistry.OVEN_MENU.get(),
                     com.SaintAlfonzo.creativeengineering.oven.client.OvenScreen::new));
+        }
+
+        @SubscribeEvent
+        public static void onRegisterKeys(net.minecraftforge.client.event.RegisterKeyMappingsEvent event)
+        {
+            com.SaintAlfonzo.creativeengineering.stepstool.client.StepstoolClient.onRegisterKeys(event);
+        }
+
+        @SubscribeEvent
+        public static void onItemColors(net.minecraftforge.client.event.RegisterColorHandlersEvent.Item event)
+        {
+            if (net.minecraftforge.fml.ModList.get().isLoaded("solapplepie")) {
+                com.SaintAlfonzo.creativeengineering.lunchbox.client.LunchboxClient.onItemColors(event);
+            }
         }
 
         @SubscribeEvent

@@ -4,12 +4,16 @@ import net.minecraft.core.BlockPos;
 import net.minecraft.core.Holder;
 import net.minecraft.core.QuartPos;
 import net.minecraft.resources.ResourceLocation;
+import net.minecraft.server.level.ServerLevel;
 import net.minecraft.tags.BiomeTags;
 import net.minecraft.tags.FluidTags;
 import net.minecraft.util.Mth;
 import net.minecraft.util.RandomSource;
 import net.minecraft.world.level.ChunkPos;
+import net.minecraft.world.level.Level;
+import net.minecraft.world.level.LevelAccessor;
 import net.minecraft.world.level.LevelHeightAccessor;
+import net.minecraft.world.level.WorldGenLevel;
 import net.minecraft.world.level.StructureManager;
 import net.minecraft.world.level.biome.Biome;
 import net.minecraft.world.level.block.Blocks;
@@ -65,10 +69,21 @@ public final class DistantClip {
 		return level != null && IS_DH_REGION.get(level.getClass());
 	}
 
+	/**
+	 * The Overworld only: the Nether and the End also build from y 0, so the clip would turn their lava sea and the
+	 * void under the End islands into a stone band in DH's LODs (locate #4). A region with no ServerLevel isn't clipped.
+	 */
+	static boolean clipsDimension(Object level) {
+		if (!(level instanceof WorldGenLevel region)) return false;
+		ServerLevel server = region.getLevel();
+		return server != null && server.dimension() == Level.OVERWORLD;
+	}
+
 	/** createNoiseChunk / fillFromNoise HEAD: mark a DH chunk. */
 	public static void mark(ChunkAccess chunk, StructureManager manager) {
 		if (!WorldgenConfig.distantClip() || manager == null) return;
-		if (!isDistantLevel(LocateReflect.level(manager))) return;
+		LevelAccessor level = LocateReflect.level(manager);
+		if (!isDistantLevel(level) || !clipsDimension(level)) return;
 		int clip = Math.floorDiv(WorldgenConfig.distantClipBelowY(), 16) * 16;
 		if (clip <= chunk.getMinBuildHeight() || clip >= chunk.getMaxBuildHeight()) return;
 		CLIPPED.putIfAbsent(chunk, clip);
@@ -85,7 +100,7 @@ public final class DistantClip {
 
 	/** ConfiguredFeature#place HEAD: skip a feature placed below the clip in DH's generation. */
 	public static boolean skipFeature(Object level, BlockPos origin) {
-		if (!WorldgenConfig.distantClip() || !WorldgenConfig.distantSkipFeatures() || !isDistantLevel(level)) return false;
+		if (!WorldgenConfig.distantClip() || !WorldgenConfig.distantSkipFeatures() || !isDistantLevel(level) || !clipsDimension(level)) return false;
 		return origin.getY() < Math.floorDiv(WorldgenConfig.distantClipBelowY(), 16) * 16;
 	}
 

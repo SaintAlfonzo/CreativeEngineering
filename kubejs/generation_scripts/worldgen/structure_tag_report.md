@@ -1,6 +1,6 @@
 # Structure tuning report
 
-Written 2026-10-28 02:27:02 UTC at world load by `kubejs/server_scripts/worldgen/structure_overrides.js`. Do not edit, it is rewritten every load. Edit `structure_groups.json` (rates) or the `group/*` tags in `structure_tags.json` (membership), then rejoin the world. Expected rates per biome: `structure_group_estimates.md` (`python3 tools/gen_structure_groups.py --check`).
+Written 2026-10-31 17:01:37 UTC at world load by `kubejs/server_scripts/worldgen/structure_overrides.js`. Do not edit, it is rewritten every load. Edit `structure_groups.json` (rates) or the `group/*` tags in `structure_tags.json` (membership), then rejoin the world. Expected rates per biome: `structure_group_estimates.md` (`python3 tools/gen_structure_groups.py --check`).
 
 ## Biome rules
 
@@ -10,7 +10,7 @@ Only the allowed structures may start in a rule's biomes; every other structure 
 
 Oceans and rivers hold water structures only. Mods give some structures every overworld biome (Mysticrift pillager towers: #minecraft:is_overworld), which put them in the open sea.
 
-Biomes: `#minecraft:is_ocean`, `#minecraft:is_river`, `#c:river`. Allowed (`#water_ok`, 69): `ae2:meteorite`, `antiquetradingship:antique_trading_ship`, `betterdungeons:skeleton_dungeon`, `betterdungeons:small_dungeon`, `betterstrongholds:stronghold`, `blocky_siege:pillager_ship`, `cloudstorage:big_balloon`, `cloudstorage:sky_temple`, `creativeengineering:meta/driftwood_flotilla`, `creativeengineering:meta/pillager_fleet`, `creativeengineering:meta/raft_convoy`, `creativeengineering:meta/shipwreck_debris`, `creativeengineering:meta/shipwreck_graveyard`, `creativeengineering:meta/sunken_ruin_cluster`, `farmers_structures:ratatouilles`, `farmers_structures:squids`, `farmers_structures:sushis`, `hopo:underwater_fossils`, `hopo:underwater_ruins`, `hopo:underwater_small_ruins`, `hopo:underwater_warm_small_ruins`, `illager_viking_longship:illager_longship`, `illagerwarship:warship`, `mes:starlight_voyager`, `minecraft:ancient_city`, `minecraft:buried_treasure`, `minecraft:mineshaft`, `minecraft:mineshaft_mesa`, `minecraft:monument`, `minecraft:ocean_ruin_cold`, `minecraft:ocean_ruin_warm`, `minecraft:ruined_portal_ocean`, `minecraft:stronghold`, `philipsruins:ancient_crypt`, `philipsruins:ancient_dungeon`, `philipsruins:antiquus_crypta`, `philipsruins:bone_dungeon`, `philipsruins:lost_soul_city`, `philipsruins:lost_soul_dungeon`, `philipsruins:ocean_fortress`, `philipsruins:ocean_ruins`, `philipsruins:sculk_dungeon`, `philipsruins:underground_structures`, `revamped_shipwrecks:shipwreck`, `revamped_shipwrecks:shipwreck_beached`, `skyvillages:skyvillage`, `subterrestrial:deepslate_cabin`, `subterrestrial:default_cabin`, `subterrestrial:desert_cabin`, `subterrestrial:ice_cabin`, `subterrestrial:jungle_cabin`, `subterrestrial:mesa_cabin`, `subterrestrial:ocean_cabin`, `subterrestrial:taiga_cabin`, `terralith:underground/frosted_dungeon`, `terralith:underground/giant_bee_hive`, `terralith:underground/mining_outpost`, `terralith:underground/oak_cabin`, `terralith:underground/old_refinery`, `terralith:underground/sunken_tower`, `terralith:underground/witch_hut`, `towns_and_towers:pillager_outpost_ocean`, `towns_and_towers:village_ocean`, `towns_and_towers:wreckage_ocean`, `unwrecked_ships:nether_ship`, `unwrecked_ships:ship`, `villager_rafts:raft_1`, `villager_rafts:raft_2`, `villager_rafts:raft_3`
+Biomes: `#minecraft:is_ocean`, `#minecraft:is_river`, `#c:river`. Allowed (`#water_ok`, 76): `ae2:meteorite`, `antiquetradingship:antique_trading_ship`, `betterdungeons:skeleton_dungeon`, `betterdungeons:small_dungeon`, `betterstrongholds:stronghold`, `blocky_siege:pillager_ship`, `cloudstorage:big_balloon`, `cloudstorage:sky_temple`, `creativeengineering:meta/balloon_fleet`, `creativeengineering:meta/cloud_balloons`, `creativeengineering:meta/cloud_cluster`, `creativeengineering:meta/driftwood_flotilla`, `creativeengineering:meta/meteor_shower`, `creativeengineering:meta/pillager_fleet`, `creativeengineering:meta/raft_convoy`, `creativeengineering:meta/shipwreck_debris`, `creativeengineering:meta/shipwreck_graveyard`, `creativeengineering:meta/sky_village_islands`, `creativeengineering:meta/struck_monument`, `creativeengineering:meta/sunken_ruin_cluster`, `creativeengineering:meta/underwater_meteorite`, `farmers_structures:ratatouilles`, `farmers_structures:squids`, `farmers_structures:sushis`, `hopo:underwater_fossils`, `hopo:underwater_ruins`, `hopo:underwater_small_ruins`, `hopo:underwater_warm_small_ruins`, `illager_viking_longship:illager_longship`, `illagerwarship:warship`, `mes:starlight_voyager`, `minecraft:ancient_city`, `minecraft:buried_treasure`, `minecraft:mineshaft`, `minecraft:mineshaft_mesa`, `minecraft:monument`, `minecraft:ocean_ruin_cold`, `minecraft:ocean_ruin_warm`, `minecraft:ruined_portal_ocean`, `minecraft:stronghold`, `philipsruins:ancient_crypt`, `philipsruins:ancient_dungeon`, `philipsruins:antiquus_crypta`, `philipsruins:bone_dungeon`, `philipsruins:lost_soul_city`, `philipsruins:lost_soul_dungeon`, `philipsruins:ocean_fortress`, `philipsruins:ocean_ruins`, `philipsruins:sculk_dungeon`, `philipsruins:underground_structures`, `revamped_shipwrecks:shipwreck`, `revamped_shipwrecks:shipwreck_beached`, `skyvillages:skyvillage`, `subterrestrial:deepslate_cabin`, `subterrestrial:default_cabin`, `subterrestrial:desert_cabin`, `subterrestrial:ice_cabin`, `subterrestrial:jungle_cabin`, `subterrestrial:mesa_cabin`, `subterrestrial:ocean_cabin`, `subterrestrial:taiga_cabin`, `terralith:underground/frosted_dungeon`, `terralith:underground/giant_bee_hive`, `terralith:underground/mining_outpost`, `terralith:underground/oak_cabin`, `terralith:underground/old_refinery`, `terralith:underground/sunken_tower`, `terralith:underground/witch_hut`, `towns_and_towers:pillager_outpost_ocean`, `towns_and_towers:village_ocean`, `towns_and_towers:wreckage_ocean`, `unwrecked_ships:nether_ship`, `unwrecked_ships:ship`, `villager_rafts:raft_1`, `villager_rafts:raft_2`, `villager_rafts:raft_3`
 Surface check (`#surface_check`): `betterdungeons:spider_dungeon`, `betterdungeons:zombie_dungeon` may not start where the surface above them is in these biomes or under water.
 
 ## Biome fits
@@ -75,7 +75,7 @@ A structure whose pieces would overlap a higher-ranked structure's never starts 
 | `flotsam` | 25 |
 
 - `#priority/big_settlements`: rank 100
-- shaped (jigsaw members grow around higher-ranked structures instead of being dropped): `settlements` (35 structures)
+- shaped (jigsaw members grow around higher-ranked structures instead of being dropped): `settlements` (38 structures)
 - companions of `creativeengineering:meta/town_villages`: 1 to 3 of 28 structures, 4 to 6 chunks out, rank 94
 
 ### Peaceful radius
@@ -88,7 +88,7 @@ No hostile structure starts with a piece within this many chunks (square, XZ) of
 | `settlements` | 5 |
 | `remote` | 3 |
 
-- hostile: `pillager_settlements`, `surface_dungeons`, `desert_temples`, `witch_huts`, `entrance_dungeons`, `vehicles` (70 structures)
+- hostile: `pillager_settlements`, `surface_dungeons`, `desert_temples`, `witch_huts`, `entrance_dungeons`, `vehicles` (77 structures)
 
 ## Groups
 
@@ -98,63 +98,67 @@ Members of a group share one grid: at most one structure per grid slot, and no t
 
 Friendly settlements: vanilla and Towns & Towers villages, Terralith fortified villages. Meta structures join later.
 
-Grid: spacing 48, separation 12, salt 871105700. Members never start closer than 13 chunks (208 blocks). 35 of 35 members live.
+Grid: spacing 48, separation 12, salt 871105700. Members never start closer than 13 chunks (208 blocks). 38 of 38 members live.
 
 | Structure | Weight | Frequency | Alone: 1 per | Was in | Note |
 |---|---|---|---|---|---|
-| `creativeengineering:meta/fortified_camps` | 1 | 1 | 48 | `(meta structure)` | meta structure: takes 20% of the slots its anchors win here; this weight is never used |
-| `creativeengineering:meta/fortified_ruins` | 1 | 1 | 48 | `(meta structure)` | meta structure: takes 20% of the slots its anchors win here; this weight is never used |
+| `creativeengineering:meta/fortified_camps` | 1 | 1 | 48 | `(meta structure)` | meta structure: takes 25% of the slots its anchors win here; this weight is never used |
+| `creativeengineering:meta/fortified_ruins` | 1 | 1 | 48 | `(meta structure)` | meta structure: takes 25% of the slots its anchors win here; this weight is never used |
+| `creativeengineering:meta/meteorite_village` | 1 | 1 | 48 | `(meta structure)` | meta structure: takes 5% of the slots its anchors win here; this weight is never used |
 | `creativeengineering:meta/town_villages` | 1 | 1 | 48 | `(meta structure)` | meta structure: takes 40% of the slots its anchors win here; this weight is never used |
+| `creativeengineering:meta/village_siege_camp` | 1 | 1 | 48 | `(meta structure)` | meta structure: takes 4% of the slots its anchors win here; this weight is never used |
+| `creativeengineering:meta/village_siege_ring` | 1 | 1 | 48 | `(meta structure)` | meta structure: takes 4% of the slots its anchors win here; this weight is never used |
 | `creativeengineering:meta/village_towers` | 1 | 1 | 48 | `(meta structure)` | meta structure: takes 33% of the slots its anchors win here; this weight is never used |
-| `eugene:red_roof_castle` | 106 | 1 | 48 | `eugene:castle` |  |
-| `minecraft:village_desert` | 424 | 0.734547 | 56 | `minecraft:villages` |  |
-| `minecraft:village_plains` | 162 | 1 | 48 | `minecraft:villages` |  |
-| `minecraft:village_savanna` | 103 | 0.99558 | 48 | `minecraft:villages` |  |
-| `minecraft:village_snowy` | 132 | 1 | 48 | `minecraft:villages` |  |
-| `minecraft:village_taiga` | 153 | 1 | 48 | `minecraft:villages` |  |
-| `terralith:fortified_desert_village` | 108 | 1 | 48 | `terralith:rare_village` |  |
-| `terralith:fortified_village` | 53 | 1 | 48 | `terralith:rare_village` |  |
-| `towns_and_towers:exclusives/village_classic` | 101 | 0.1623 | 119 | `towns_and_towers:towns` |  |
+| `eugene:red_roof_castle` | 100 | 1 | 48 | `eugene:castle` |  |
+| `minecraft:village_desert` | 100 | 0.734547 | 56 | `minecraft:villages` |  |
+| `minecraft:village_plains` | 100 | 1 | 48 | `minecraft:villages` |  |
+| `minecraft:village_savanna` | 100 | 0.99558 | 48 | `minecraft:villages` |  |
+| `minecraft:village_snowy` | 100 | 1 | 48 | `minecraft:villages` |  |
+| `minecraft:village_taiga` | 100 | 1 | 48 | `minecraft:villages` |  |
+| `terralith:fortified_desert_village` | 100 | 1 | 48 | `terralith:rare_village` |  |
+| `terralith:fortified_village` | 100 | 1 | 48 | `terralith:rare_village` |  |
+| `towns_and_towers:exclusives/village_classic` | 100 | 0.1623 | 119 | `towns_and_towers:towns` |  |
 | `towns_and_towers:exclusives/village_iberian` | 100 | 1 | 48 | `towns_and_towers:towns` |  |
-| `towns_and_towers:exclusives/village_mediterranean` | 41 | 1 | 48 | `towns_and_towers:towns` |  |
+| `towns_and_towers:exclusives/village_mediterranean` | 100 | 1 | 48 | `towns_and_towers:towns` |  |
 | `towns_and_towers:exclusives/village_nilotic` | 100 | 1 | 48 | `towns_and_towers:towns` |  |
 | `towns_and_towers:exclusives/village_rustic` | 100 | 1 | 48 | `towns_and_towers:towns` |  |
-| `towns_and_towers:exclusives/village_swedish` | 22 | 1 | 48 | `towns_and_towers:towns` |  |
-| `towns_and_towers:exclusives/village_tudor` | 99 | 1 | 48 | `towns_and_towers:towns` |  |
-| `towns_and_towers:village_badlands` | 173 | 0.430191 | 73 | `towns_and_towers:towns` |  |
-| `towns_and_towers:village_beach` | 101 | 0.171066 | 116 | `towns_and_towers:towns` |  |
-| `towns_and_towers:village_birch_forest` | 162 | 0.361997 | 80 | `towns_and_towers:towns` |  |
-| `towns_and_towers:village_flower_forest` | 360 | 0.41542 | 74 | `towns_and_towers:towns` |  |
-| `towns_and_towers:village_forest` | 144 | 0.457061 | 71 | `towns_and_towers:towns` |  |
-| `towns_and_towers:village_grove` | 213 | 0.499402 | 68 | `towns_and_towers:towns` |  |
-| `towns_and_towers:village_jungle` | 46 | 0.897 | 51 | `towns_and_towers:towns` |  |
-| `towns_and_towers:village_meadow` | 62 | 1 | 48 | `towns_and_towers:towns` |  |
-| `towns_and_towers:village_mushroom_fields` | 1 | 0.1623 | 119 | `towns_and_towers:towns` |  |
-| `towns_and_towers:village_old_growth_taiga` | 110 | 0.717581 | 57 | `towns_and_towers:towns` |  |
-| `towns_and_towers:village_snowy_slopes` | 141 | 1 | 48 | `towns_and_towers:towns` |  |
-| `towns_and_towers:village_snowy_taiga` | 108 | 0.590369 | 62 | `towns_and_towers:towns` |  |
-| `towns_and_towers:village_sparse_jungle` | 46 | 0.9 | 51 | `towns_and_towers:towns` |  |
-| `towns_and_towers:village_sunflower_plains` | 228 | 0.544825 | 65 | `towns_and_towers:towns` |  |
-| `towns_and_towers:village_swamp` | 142 | 0.582744 | 63 | `towns_and_towers:towns` |  |
-| `towns_and_towers:village_wooded_badlands` | 205 | 0.340365 | 82 | `towns_and_towers:towns` |  |
+| `towns_and_towers:exclusives/village_swedish` | 100 | 1 | 48 | `towns_and_towers:towns` |  |
+| `towns_and_towers:exclusives/village_tudor` | 100 | 1 | 48 | `towns_and_towers:towns` |  |
+| `towns_and_towers:village_badlands` | 100 | 0.430191 | 73 | `towns_and_towers:towns` |  |
+| `towns_and_towers:village_beach` | 100 | 0.171066 | 116 | `towns_and_towers:towns` |  |
+| `towns_and_towers:village_birch_forest` | 100 | 0.361997 | 80 | `towns_and_towers:towns` |  |
+| `towns_and_towers:village_flower_forest` | 100 | 0.41542 | 74 | `towns_and_towers:towns` |  |
+| `towns_and_towers:village_forest` | 100 | 0.457061 | 71 | `towns_and_towers:towns` |  |
+| `towns_and_towers:village_grove` | 100 | 0.499402 | 68 | `towns_and_towers:towns` |  |
+| `towns_and_towers:village_jungle` | 100 | 0.897 | 51 | `towns_and_towers:towns` |  |
+| `towns_and_towers:village_meadow` | 100 | 1 | 48 | `towns_and_towers:towns` |  |
+| `towns_and_towers:village_mushroom_fields` | 100 | 0.1623 | 119 | `towns_and_towers:towns` |  |
+| `towns_and_towers:village_old_growth_taiga` | 100 | 0.717581 | 57 | `towns_and_towers:towns` |  |
+| `towns_and_towers:village_snowy_slopes` | 100 | 1 | 48 | `towns_and_towers:towns` |  |
+| `towns_and_towers:village_snowy_taiga` | 100 | 0.590369 | 62 | `towns_and_towers:towns` |  |
+| `towns_and_towers:village_sparse_jungle` | 100 | 0.9 | 51 | `towns_and_towers:towns` |  |
+| `towns_and_towers:village_sunflower_plains` | 100 | 0.544825 | 65 | `towns_and_towers:towns` |  |
+| `towns_and_towers:village_swamp` | 100 | 0.582744 | 63 | `towns_and_towers:towns` |  |
+| `towns_and_towers:village_wooded_badlands` | 100 | 0.340365 | 82 | `towns_and_towers:towns` |  |
 
 ### `pillager_settlements` -> `creativeengineering:group/pillager_settlements`
 
 Pillager outposts: vanilla, and every Towns & Towers tower, fort and camp outpost except the ship (boats).
 
-Grid: spacing 32, separation 8, salt 1867953461, exclusion_zone creativeengineering:group/settlements r4. Members never start closer than 9 chunks (144 blocks). 47 of 47 members live.
+Grid: spacing 32, separation 8, salt 1867953461, exclusion_zone creativeengineering:group/settlements r4. Members never start closer than 9 chunks (144 blocks). 48 of 48 members live.
 
 | Structure | Weight | Frequency | Alone: 1 per | Was in | Note |
 |---|---|---|---|---|---|
+| `creativeengineering:meta/pillager_camp_meteorite` | 1 | 1 | 32 | `(meta structure)` | meta structure: takes 10% of the slots its anchors win here; this weight is never used |
 | `creativeengineering:meta/pillager_camp_ruin` | 1 | 1 | 32 | `(meta structure)` | meta structure: takes 15% of the slots its anchors win here; this weight is never used |
 | `creativeengineering:meta/pillager_camp_ruins` | 1 | 1 | 32 | `(meta structure)` | meta structure: takes 15% of the slots its anchors win here; this weight is never used |
 | `creativeengineering:meta/pillager_camp_siege` | 1 | 1 | 32 | `(meta structure)` | meta structure: takes 20% of the slots its anchors win here; this weight is never used |
 | `creativeengineering:meta/pillager_great_tower_siege` | 1 | 1 | 32 | `(meta structure)` | meta structure: takes 50% of the slots its anchors win here; this weight is never used |
 | `creativeengineering:meta/pillager_stronghold_siege` | 1 | 1 | 32 | `(meta structure)` | meta structure: takes 40% of the slots its anchors win here; this weight is never used |
 | `creativeengineering:meta/pillager_tower_siege` | 1 | 1 | 32 | `(meta structure)` | meta structure: takes 35% of the slots its anchors win here; this weight is never used |
-| `eugene:fake_trader_camp` | 6 | 1 | 32 | `eugene:camp` |  |
-| `eugene:pillager_camp` | 26 | 1 | 32 | `eugene:camp` |  |
-| `minecraft:pillager_outpost` | 74 | 1 | 32 | `minecraft:pillager_outposts` |  |
+| `eugene:fake_trader_camp` | 100 | 1 | 32 | `eugene:camp` |  |
+| `eugene:pillager_camp` | 100 | 1 | 32 | `eugene:camp` |  |
+| `minecraft:pillager_outpost` | 100 | 1 | 32 | `minecraft:pillager_outposts` |  |
 | `mysticrift_pillagers_towers_aris:acacia_pillager_tower` | 10 | 0.930863 | 33 | `mysticrift_pillagers_towers_aris:acacia_pillager_tower` |  |
 | `mysticrift_pillagers_towers_aris:birch_pillager_tower` | 8 | 0.905604 | 34 | `mysticrift_pillagers_towers_aris:birch_pillager_tower` |  |
 | `mysticrift_pillagers_towers_aris:cherry_pillager_tower` | 17 | 0.856877 | 35 | `mysticrift_pillagers_towers_aris:cherry_pillager_tower` |  |
@@ -165,34 +169,34 @@ Grid: spacing 32, separation 8, salt 1867953461, exclusion_zone creativeengineer
 | `mysticrift_pillagers_towers_aris:oak_wood_pillager_tower` | 5 | 0.467934 | 47 | `mysticrift_pillagers_towers_aris:oak_wood_pillager_tower` |  |
 | `takesapillage:bastille` | 34 | 1 | 32 | `takesapillage:pillager_structure` |  |
 | `takesapillage:pillager_camp` | 87 | 1 | 32 | `takesapillage:pillager_structure` |  |
-| `towns_and_towers:exclusives/pillager_outpost_classic` | 80 | 0.2338 | 66 | `towns_and_towers:towers` |  |
+| `towns_and_towers:exclusives/pillager_outpost_classic` | 100 | 0.2338 | 66 | `towns_and_towers:towers` |  |
 | `towns_and_towers:exclusives/pillager_outpost_iberian` | 100 | 1 | 32 | `towns_and_towers:towers` |  |
-| `towns_and_towers:exclusives/pillager_outpost_mediterranean` | 78 | 1 | 32 | `towns_and_towers:towers` |  |
-| `towns_and_towers:exclusives/pillager_outpost_oriental` | 65 | 1 | 32 | `towns_and_towers:towers` |  |
+| `towns_and_towers:exclusives/pillager_outpost_mediterranean` | 100 | 1 | 32 | `towns_and_towers:towers` |  |
+| `towns_and_towers:exclusives/pillager_outpost_oriental` | 100 | 1 | 32 | `towns_and_towers:towers` |  |
 | `towns_and_towers:exclusives/pillager_outpost_rustic` | 100 | 1 | 32 | `towns_and_towers:towers` |  |
-| `towns_and_towers:exclusives/pillager_outpost_swedish` | 31 | 1 | 32 | `towns_and_towers:towers` |  |
+| `towns_and_towers:exclusives/pillager_outpost_swedish` | 100 | 1 | 32 | `towns_and_towers:towers` |  |
 | `towns_and_towers:exclusives/pillager_outpost_tudor` | 100 | 1 | 32 | `towns_and_towers:towers` |  |
-| `towns_and_towers:pillager_outpost_badlands` | 83 | 1 | 32 | `towns_and_towers:towers` |  |
-| `towns_and_towers:pillager_outpost_beach` | 4 | 0.878499 | 34 | `towns_and_towers:towers` |  |
-| `towns_and_towers:pillager_outpost_birch_forest` | 132 | 0.720211 | 38 | `towns_and_towers:towers` |  |
-| `towns_and_towers:pillager_outpost_desert` | 33 | 0.995091 | 32 | `towns_and_towers:towers` |  |
-| `towns_and_towers:pillager_outpost_flower_forest` | 210 | 0.891321 | 34 | `towns_and_towers:towers` |  |
-| `towns_and_towers:pillager_outpost_forest` | 136 | 0.610697 | 41 | `towns_and_towers:towers` |  |
-| `towns_and_towers:pillager_outpost_grove` | 172 | 1 | 32 | `towns_and_towers:towers` |  |
-| `towns_and_towers:pillager_outpost_jungle` | 109 | 0.560666 | 43 | `towns_and_towers:towers` |  |
-| `towns_and_towers:pillager_outpost_meadow` | 152 | 1 | 32 | `towns_and_towers:towers` |  |
-| `towns_and_towers:pillager_outpost_mushroom_fields` | 1 | 0.237868 | 66 | `towns_and_towers:towers` |  |
-| `towns_and_towers:pillager_outpost_old_growth_taiga` | 108 | 1 | 32 | `towns_and_towers:towers` |  |
-| `towns_and_towers:pillager_outpost_savanna` | 42 | 1 | 32 | `towns_and_towers:towers` |  |
-| `towns_and_towers:pillager_outpost_snowy_beach` | 151 | 0.4394 | 48 | `towns_and_towers:towers` |  |
-| `towns_and_towers:pillager_outpost_snowy_plains` | 156 | 0.584075 | 42 | `towns_and_towers:towers` |  |
-| `towns_and_towers:pillager_outpost_snowy_slopes` | 67 | 1 | 32 | `towns_and_towers:towers` |  |
+| `towns_and_towers:pillager_outpost_badlands` | 100 | 1 | 32 | `towns_and_towers:towers` |  |
+| `towns_and_towers:pillager_outpost_beach` | 100 | 0.878499 | 34 | `towns_and_towers:towers` |  |
+| `towns_and_towers:pillager_outpost_birch_forest` | 100 | 0.720211 | 38 | `towns_and_towers:towers` |  |
+| `towns_and_towers:pillager_outpost_desert` | 100 | 0.995091 | 32 | `towns_and_towers:towers` |  |
+| `towns_and_towers:pillager_outpost_flower_forest` | 100 | 0.891321 | 34 | `towns_and_towers:towers` |  |
+| `towns_and_towers:pillager_outpost_forest` | 100 | 0.610697 | 41 | `towns_and_towers:towers` |  |
+| `towns_and_towers:pillager_outpost_grove` | 100 | 1 | 32 | `towns_and_towers:towers` |  |
+| `towns_and_towers:pillager_outpost_jungle` | 100 | 0.560666 | 43 | `towns_and_towers:towers` |  |
+| `towns_and_towers:pillager_outpost_meadow` | 100 | 1 | 32 | `towns_and_towers:towers` |  |
+| `towns_and_towers:pillager_outpost_mushroom_fields` | 100 | 0.237868 | 66 | `towns_and_towers:towers` |  |
+| `towns_and_towers:pillager_outpost_old_growth_taiga` | 100 | 1 | 32 | `towns_and_towers:towers` |  |
+| `towns_and_towers:pillager_outpost_savanna` | 100 | 1 | 32 | `towns_and_towers:towers` |  |
+| `towns_and_towers:pillager_outpost_snowy_beach` | 100 | 0.4394 | 48 | `towns_and_towers:towers` |  |
+| `towns_and_towers:pillager_outpost_snowy_plains` | 100 | 0.584075 | 42 | `towns_and_towers:towers` |  |
+| `towns_and_towers:pillager_outpost_snowy_slopes` | 100 | 1 | 32 | `towns_and_towers:towers` |  |
 | `towns_and_towers:pillager_outpost_snowy_taiga` | 100 | 1 | 32 | `towns_and_towers:towers` |  |
-| `towns_and_towers:pillager_outpost_sparse_jungle` | 110 | 1 | 32 | `towns_and_towers:towers` |  |
+| `towns_and_towers:pillager_outpost_sparse_jungle` | 100 | 1 | 32 | `towns_and_towers:towers` |  |
 | `towns_and_towers:pillager_outpost_sunflower_plains` | 100 | 1 | 32 | `towns_and_towers:towers` |  |
-| `towns_and_towers:pillager_outpost_swamp` | 2 | 0.915151 | 33 | `towns_and_towers:towers` |  |
-| `towns_and_towers:pillager_outpost_taiga` | 45 | 1 | 32 | `towns_and_towers:towers` |  |
-| `towns_and_towers:pillager_outpost_wooded_badlands` | 81 | 1 | 32 | `towns_and_towers:towers` |  |
+| `towns_and_towers:pillager_outpost_swamp` | 100 | 0.915151 | 33 | `towns_and_towers:towers` |  |
+| `towns_and_towers:pillager_outpost_taiga` | 100 | 1 | 32 | `towns_and_towers:towers` |  |
+| `towns_and_towers:pillager_outpost_wooded_badlands` | 100 | 1 | 32 | `towns_and_towers:towers` |  |
 
 ### `ruins` -> `creativeengineering:group/ruins`
 
@@ -204,73 +208,77 @@ Grid: spacing 16, separation 8, salt 1418638049. Members never start closer than
 |---|---|---|---|---|---|
 | `creativeengineering:meta/ruin_cluster` | 1 | 1 | 16 | `(meta structure)` | meta structure: takes 50% of the slots its anchors win here; this weight is never used |
 | `creativeengineering:meta/ruin_scatter` | 1 | 1 | 16 | `(meta structure)` | meta structure: takes 30% of the slots its anchors win here; this weight is never used |
-| `eugene:ruined_drum_tower` | 19 | 1 | 16 | `eugene:castle` |  |
-| `forest_ruins:ruin_1` | 38 | 0.904155 | 17 | `forest_ruins:ruin_1` |  |
-| `forest_ruins:ruin_2` | 38 | 0.904155 | 17 | `forest_ruins:ruin_2` |  |
-| `forest_ruins:ruin_3` | 38 | 0.904155 | 17 | `forest_ruins:ruin_3` |  |
-| `forest_ruins:ruin_4` | 38 | 0.904155 | 17 | `forest_ruins:ruin_4` |  |
-| `forest_ruins:ruin_5` | 38 | 0.904155 | 17 | `forest_ruins:ruin_5` |  |
-| `forest_ruins:ruin_6` | 38 | 0.904155 | 17 | `forest_ruins:ruin_6` |  |
-| `forest_ruins:ruin_7` | 38 | 0.904155 | 17 | `forest_ruins:ruin_7` |  |
-| `forgotten_church:forgotten_church` | 16 | 1 | 16 | `forgotten_church:forgotten_church` |  |
+| `eugene:ruined_drum_tower` | 100 | 1 | 16 | `eugene:castle` |  |
+| `forest_ruins:ruin_1` | 100 | 0.904155 | 17 | `forest_ruins:ruin_1` |  |
+| `forest_ruins:ruin_2` | 100 | 0.904155 | 17 | `forest_ruins:ruin_2` |  |
+| `forest_ruins:ruin_3` | 100 | 0.904155 | 17 | `forest_ruins:ruin_3` |  |
+| `forest_ruins:ruin_4` | 100 | 0.904155 | 17 | `forest_ruins:ruin_4` |  |
+| `forest_ruins:ruin_5` | 100 | 0.904155 | 17 | `forest_ruins:ruin_5` |  |
+| `forest_ruins:ruin_6` | 100 | 0.904155 | 17 | `forest_ruins:ruin_6` |  |
+| `forest_ruins:ruin_7` | 100 | 0.904155 | 17 | `forest_ruins:ruin_7` |  |
+| `forgotten_church:forgotten_church` | 100 | 1 | 16 | `forgotten_church:forgotten_church` |  |
 | `old_illager_statue:old_illager_statue` | 26 | 1 | 16 | `old_illager_statue:old_illager_statue` |  |
 | `oldvillagerstatue:old_villager_statue` | 26 | 1 | 16 | `oldvillagerstatue:old_villager_statue` |  |
-| `philipsruins:ancient_ruins` | 119 | 0.860538 | 17 | `philipsruins:ancient_ruins` |  |
-| `philipsruins:ancient_towers` | 197 | 0.862964 | 17 | `philipsruins:ancient_towers` |  |
-| `philipsruins:badlands_structures` | 250 | 0.266459 | 31 | `philipsruins:desert_structures` |  |
-| `philipsruins:desert_structures` | 250 | 0.250975 | 32 | `philipsruins:desert_structures` |  |
-| `philipsruins:field_stone_ruins` | 45 | 1 | 16 | `philipsruins:field_stone_ruins` |  |
-| `philipsruins:field_stone_ruins_rocks` | 196 | 0.513101 | 22 | `philipsruins:field_stone_ruins_rocks` |  |
-| `philipsruins:level_one_ruins` | 45 | 1 | 16 | `philipsruins:level_one_ruins` |  |
-| `philipsruins:level_three_ruins` | 35 | 1 | 16 | `philipsruins:level_three_ruins` |  |
-| `philipsruins:level_two_ruins` | 20 | 1 | 16 | `philipsruins:level_two_ruins` |  |
-| `philipsruins:level_two_ruins_pool` | 20 | 1 | 16 | `philipsruins:level_two_ruins` |  |
-| `philipsruins:pumpkin_ruins` | 84 | 1 | 16 | `philipsruins:pumpkin_ruins` |  |
-| `philipsruins:rare_ruin` | 254 | 0.007794 | 181 | `philipsruins:rare_ruin` |  |
-| `philipsruins:start_nether_ruin` | 3 | 0.8688 | 17 | `philipsruins:nether_ruins` |  |
+| `philipsruins:ancient_ruins` | 100 | 0.860538 | 17 | `philipsruins:ancient_ruins` |  |
+| `philipsruins:ancient_towers` | 100 | 0.862964 | 17 | `philipsruins:ancient_towers` |  |
+| `philipsruins:badlands_structures` | 100 | 0.266459 | 31 | `philipsruins:desert_structures` |  |
+| `philipsruins:desert_structures` | 100 | 0.250975 | 32 | `philipsruins:desert_structures` |  |
+| `philipsruins:field_stone_ruins` | 100 | 1 | 16 | `philipsruins:field_stone_ruins` |  |
+| `philipsruins:field_stone_ruins_rocks` | 100 | 0.513101 | 22 | `philipsruins:field_stone_ruins_rocks` |  |
+| `philipsruins:level_one_ruins` | 100 | 1 | 16 | `philipsruins:level_one_ruins` |  |
+| `philipsruins:level_three_ruins` | 100 | 1 | 16 | `philipsruins:level_three_ruins` |  |
+| `philipsruins:level_two_ruins` | 100 | 1 | 16 | `philipsruins:level_two_ruins` |  |
+| `philipsruins:level_two_ruins_pool` | 100 | 1 | 16 | `philipsruins:level_two_ruins` |  |
+| `philipsruins:pumpkin_ruins` | 100 | 1 | 16 | `philipsruins:pumpkin_ruins` |  |
+| `philipsruins:rare_ruin` | 100 | 0.007794 | 181 | `philipsruins:rare_ruin` |  |
+| `philipsruins:start_nether_ruin` | 100 | 0.8688 | 17 | `philipsruins:nether_ruins` |  |
 | `small_cat_statues:cat_1` | 19 | 1 | 16 | `small_cat_statues:cat_1` |  |
 | `small_cat_statues:cat_2` | 19 | 1 | 16 | `small_cat_statues:cat_2` |  |
 | `small_cat_statues:cat_3` | 19 | 1 | 16 | `small_cat_statues:cat_3` |  |
-| `terralith:glacial_hut` | 261 | 0.686437 | 19 | `terralith:ruin` |  |
+| `terralith:glacial_hut` | 100 | 0.686437 | 19 | `terralith:ruin` |  |
 | `watchtower_building:abandoned_watchtower` | 21 | 0.194882 | 36 | `watchtower_building:abandoned_watchtower` |  |
 
 ### `surface_dungeons` -> `creativeengineering:group/surface_dungeons`
 
 Surface dungeons: YUNG's desert and jungle temples, the vanilla desert pyramid and jungle temple (each in 10% of its YUNG's version's slots, "replaces" in structure_groups.json), the woodland mansion, Terralith's spire, the T&T desert mimic, Philip's badlands dungeon. The witch huts have their own group (group/witch_huts).
 
-Grid: spacing 16, separation 10, salt 1261620025. Members never start closer than 11 chunks (176 blocks). 7 of 7 members live.
+Grid: spacing 16, separation 10, salt 1261620025. Members never start closer than 11 chunks (176 blocks). 8 of 8 members live.
 
 | Structure | Weight | Frequency | Alone: 1 per | Was in | Note |
 |---|---|---|---|---|---|
-| `betterjungletemples:jungle_temple` | 1 | 0.7481 | 18 | `betterjungletemples:jungle_temples` |  |
-| `eugene:undead_castle` | 1 | 0.026314 | 99 | `eugene:castle` |  |
+| `betterjungletemples:jungle_temple` | 100 | 0.7481 | 18 | `betterjungletemples:jungle_temples` |  |
+| `creativeengineering:meta/jungle_temple_ruins` | 1 | 1 | 16 | `(meta structure)` | meta structure: takes 35% of the slots its anchors win here; this weight is never used |
+| `eugene:undead_castle` | 100 | 0.026314 | 99 | `eugene:castle` |  |
 | `minecraft:jungle_pyramid` | 1 | 1 | 16 | `minecraft:jungle_temples` | replaces `betterjungletemples:jungle_temple`: takes 10% of the slots it wins and keeps; this weight is never used |
-| `minecraft:mansion` | 1 | 0.1191 | 46 | `minecraft:woodland_mansions` |  |
-| `philipsruins:badlands_start_dungeon` | 106 | 0.441692 | 24 | `philipsruins:desert_structures` |  |
-| `terralith:spire` | 1 | 0.445566 | 24 | `terralith:rare_dungeon` |  |
-| `towns_and_towers:mimic_desert` | 79 | 0.521 | 22 | `towns_and_towers:other` |  |
+| `minecraft:mansion` | 100 | 0.1191 | 46 | `minecraft:woodland_mansions` |  |
+| `philipsruins:badlands_start_dungeon` | 100 | 0.441692 | 24 | `philipsruins:desert_structures` |  |
+| `terralith:spire` | 100 | 0.445566 | 24 | `terralith:rare_dungeon` |  |
+| `towns_and_towers:mimic_desert` | 100 | 0.521 | 22 | `towns_and_towers:other` |  |
 
 ### `desert_temples` -> `creativeengineering:group/desert_temples`
 
 Desert temples: YUNG's desert temple and the vanilla desert pyramid, which takes a share of YUNG's temple slots ("replaces" in structure_groups.json). Own grid with twice the surface dungeons' minimum distance (structures/rates-and-groups #10).
 
-Grid: spacing 32, separation 20, salt 1965760655. Members never start closer than 21 chunks (336 blocks). 2 of 2 members live.
+Grid: spacing 32, separation 20, salt 1965760655. Members never start closer than 21 chunks (336 blocks). 4 of 4 members live.
 
 | Structure | Weight | Frequency | Alone: 1 per | Was in | Note |
 |---|---|---|---|---|---|
-| `betterdeserttemples:desert_temple` | 40 | 0.285 | 60 | `betterdeserttemples:desert_temples` |  |
-| `minecraft:desert_pyramid` | 1 | 1 | 32 | `minecraft:desert_pyramids` | replaces `betterdeserttemples:desert_temple`: takes 10% of the slots it wins and keeps; this weight is never used |
+| `betterdeserttemples:desert_temple` | 100 | 0.285 | 60 | `betterdeserttemples:desert_temples` |  |
+| `creativeengineering:meta/desert_temple_ruins` | 1 | 1 | 32 | `(meta structure)` | meta structure: takes 35% of the slots its anchors win here; this weight is never used |
+| `creativeengineering:meta/meteorite_desert_pyramid` | 1 | 1 | 32 | `(meta structure)` | replaces `betterdeserttemples:desert_temple`: takes 8% of the slots it wins and keeps; this weight is never used |
+| `minecraft:desert_pyramid` | 1 | 1 | 32 | `minecraft:desert_pyramids` | replaces `betterdeserttemples:desert_temple`: takes 5% of the slots it wins and keeps; this weight is never used |
 
 ### `witch_huts` -> `creativeengineering:group/witch_huts`
 
 Witch huts, swamps only (land/swamp): YUNG's witch hut and witch circle, the Villages & Pillages witch village, and the vanilla swamp hut as a replacement of YUNG's hut. Own grid (at least 144 blocks between huts), so they no longer compete with the surface dungeons.
 
-Grid: spacing 16, separation 8, salt 1023661448. Members never start closer than 9 chunks (144 blocks). 4 of 4 members live.
+Grid: spacing 16, separation 8, salt 1023661448. Members never start closer than 9 chunks (144 blocks). 5 of 5 members live.
 
 | Structure | Weight | Frequency | Alone: 1 per | Was in | Note |
 |---|---|---|---|---|---|
-| `betterwitchhuts:witch_circle` | 61 | 0.9433 | 16 | `betterwitchhuts:witch_circle` |  |
-| `betterwitchhuts:witch_hut` | 150 | 0.935 | 17 | `betterwitchhuts:witch_hut` |  |
+| `betterwitchhuts:witch_circle` | 100 | 0.9433 | 16 | `betterwitchhuts:witch_circle` |  |
+| `betterwitchhuts:witch_hut` | 100 | 0.935 | 17 | `betterwitchhuts:witch_hut` |  |
+| `creativeengineering:meta/witch_coven` | 1 | 1 | 16 | `(meta structure)` | meta structure: takes 40% of the slots its anchors win here; this weight is never used |
 | `minecraft:swamp_hut` | 1 | 1 | 16 | `minecraft:swamp_huts` | replaces `betterwitchhuts:witch_hut`: takes 10% of the slots it wins and keeps; this weight is never used |
 | `villagesandpillages:village_witch` | 100 | 0.9374 | 17 | `villagesandpillages:village_witch` |  |
 
@@ -282,8 +290,8 @@ Grid: spacing 32, separation 16, salt 688304942. Members never start closer than
 
 | Structure | Weight | Frequency | Alone: 1 per | Was in | Note |
 |---|---|---|---|---|---|
-| `betterdungeons:spider_dungeon` | 109 | 0.9754 | 32 | `betterdungeons:spider_dungeons` |  |
-| `betterdungeons:zombie_dungeon` | 92 | 0.971 | 32 | `betterdungeons:zombie_dungeons` |  |
+| `betterdungeons:spider_dungeon` | 100 | 0.9754 | 32 | `betterdungeons:spider_dungeons` |  |
+| `betterdungeons:zombie_dungeon` | 100 | 0.971 | 32 | `betterdungeons:zombie_dungeons` |  |
 
 ### `nether_ruins` -> `creativeengineering:group/nether_ruins`
 
@@ -296,7 +304,7 @@ Grid: spacing 14, separation 7, salt 1485554039. Members never start closer than
 | `philipsruins:nether_lava_ruins` | 100 | 0.5993 | 18 | `philipsruins:nether_structures` |  |
 | `philipsruins:sealedruinedghaststatue1` | 100 | 0.5993 | 18 | `philipsruins:nether_structures` |  |
 | `philipsruins:start_nether_dungeon` | 100 | 0.5993 | 18 | `philipsruins:nether_structures` |  |
-| `twigs:bloodstone_obelisk` | 194 | 1 | 14 | `twigs:bloodstone_obelisk` |  |
+| `twigs:bloodstone_obelisk` | 100 | 1 | 14 | `twigs:bloodstone_obelisk` |  |
 
 ### `way_signs` -> `creativeengineering:group/way_signs`
 
@@ -306,18 +314,20 @@ Grid: spacing 19, separation 10, salt 247022060, exclusion_zone creativeengineer
 
 | Structure | Weight | Frequency | Alone: 1 per | Was in | Note |
 |---|---|---|---|---|---|
-| `supplementaries:way_sign` | 1 | 1 | 19 | `supplementaries:way_signs` |  |
+| `supplementaries:way_sign` | 100 | 1 | 19 | `supplementaries:way_signs` |  |
 
 ### `vehicles` -> `creativeengineering:group/vehicles`
 
 Vehicles (hostile, 2026-10-14, plan 7.4.5): the 6 Illager Siege Weapons camps (moved out of pillager_settlements), the pillager loot carriage (with the villager chase and the golem prison van) and the witch wagon. Rarer than camps, more common than outposts, twice as common in harsh biomes (biome_frequency). Grid from the harsh rate (spacing 52: about 1 vehicle per 54 chunks in harsh biomes, 1 per 75 elsewhere, 2026-10-14); equal weights. Rates are hand-set (fit_base = the same values).
 
-Grid: spacing 52, separation 16, salt 1361593970, exclusion_zone creativeengineering:group/settlements r4. Members never start closer than 17 chunks (272 blocks). 8 of 8 members live.
+Grid: spacing 52, separation 16, salt 1361593970, exclusion_zone creativeengineering:group/settlements r4. Members never start closer than 17 chunks (272 blocks). 10 of 10 members live.
 
 Biome frequency: every member's frequency x `#creativeengineering:harsh` 1, anywhere else 0.5 (the biome at its generation point; the first that matches).
 
 | Structure | Weight | Frequency | Alone: 1 per | Was in | Note |
 |---|---|---|---|---|---|
+| `creativeengineering:meta/pillager_caravan` | 1 | 1 | 52 | `(meta structure)` | meta structure: takes 35% of the slots its anchors win here; this weight is never used |
+| `creativeengineering:meta/witch_cart_caravan` | 1 | 1 | 52 | `(meta structure)` | meta structure: takes 30% of the slots its anchors win here; this weight is never used |
 | `eugene:pillager_loot_carriage` | 100 | 1 | 52 | `eugene:pillager_loot_carriage` |  |
 | `eugene:witch_wagon` | 200 | 0.76 | 60 | `eugene:witch_wagon` |  |
 | `illager_siege_weapons:ballista` | 100 | 1 | 52 | `illager_siege_weapons:ballista` |  |
@@ -331,47 +341,54 @@ Biome frequency: every member's frequency x `#creativeengineering:harsh` 1, anyw
 
 Ocean ruins and wrecks: vanilla, Hopo's and Philip's ocean ruins, Philip's ocean fortress, vanilla shipwrecks, the T&T wreckage.
 
-Grid: spacing 8, separation 3, salt 541836770. Members never start closer than 4 chunks (64 blocks). 14 of 14 members live.
+Grid: spacing 8, separation 3, salt 541836770. Members never start closer than 4 chunks (64 blocks). 15 of 15 members live.
 
 | Structure | Weight | Frequency | Alone: 1 per | Was in | Note |
 |---|---|---|---|---|---|
 | `creativeengineering:meta/shipwreck_debris` | 1 | 1 | 8 | `(meta structure)` | meta structure: takes 30% of the slots its anchors win here; this weight is never used |
 | `creativeengineering:meta/shipwreck_graveyard` | 1 | 1 | 8 | `(meta structure)` | meta structure: takes 12% of the slots its anchors win here; this weight is never used |
 | `creativeengineering:meta/sunken_ruin_cluster` | 1 | 1 | 8 | `(meta structure)` | meta structure: takes 50% of the slots its anchors win here; this weight is never used |
-| `hopo:underwater_fossils` | 215 | 1 | 8 | `hopo:underwater_fossils` |  |
-| `hopo:underwater_ruins` | 113 | 1 | 8 | `hopo:underwater_ruins` |  |
-| `hopo:underwater_small_ruins` | 513 | 0.6268 | 10 | `hopo:underwater_small_ruins` |  |
-| `hopo:underwater_warm_small_ruins` | 560 | 0.9701 | 8 | `hopo:underwater_warm_small_ruins` |  |
-| `minecraft:ocean_ruin_cold` | 143 | 0.627 | 10 | `minecraft:ocean_ruins` |  |
-| `minecraft:ocean_ruin_warm` | 92 | 0.9743 | 8 | `minecraft:ocean_ruins` |  |
-| `philipsruins:ocean_fortress` | 29 | 0.5047 | 11 | `philipsruins:ocean_fortress_main` |  |
-| `philipsruins:ocean_ruins` | 58 | 0.4946 | 11 | `philipsruins:ocean_ruins` |  |
-| `revamped_shipwrecks:shipwreck` | 258 | 1 | 8 | `revamped_shipwrecks:shipwreck` |  |
-| `revamped_shipwrecks:shipwreck_beached` | 129 | 0.4444 | 12 | `revamped_shipwrecks:shipwreck` |  |
-| `towns_and_towers:wreckage_ocean` | 108 | 0.3243 | 14 | `towns_and_towers:other` |  |
+| `creativeengineering:meta/underwater_meteorite` | 1 | 1 | 8 | `(meta structure)` | meta structure: takes 10% of the slots its anchors win here; this weight is never used |
+| `hopo:underwater_fossils` | 100 | 1 | 8 | `hopo:underwater_fossils` |  |
+| `hopo:underwater_ruins` | 100 | 1 | 8 | `hopo:underwater_ruins` |  |
+| `hopo:underwater_small_ruins` | 100 | 0.6268 | 10 | `hopo:underwater_small_ruins` |  |
+| `hopo:underwater_warm_small_ruins` | 100 | 0.9701 | 8 | `hopo:underwater_warm_small_ruins` |  |
+| `minecraft:ocean_ruin_cold` | 100 | 0.627 | 10 | `minecraft:ocean_ruins` |  |
+| `minecraft:ocean_ruin_warm` | 100 | 0.9743 | 8 | `minecraft:ocean_ruins` |  |
+| `philipsruins:ocean_fortress` | 100 | 0.5047 | 11 | `philipsruins:ocean_fortress_main` |  |
+| `philipsruins:ocean_ruins` | 100 | 0.4946 | 11 | `philipsruins:ocean_ruins` |  |
+| `revamped_shipwrecks:shipwreck` | 100 | 1 | 8 | `revamped_shipwrecks:shipwreck` |  |
+| `revamped_shipwrecks:shipwreck_beached` | 100 | 0.4444 | 12 | `revamped_shipwrecks:shipwreck` |  |
+| `towns_and_towers:wreckage_ocean` | 100 | 0.3243 | 14 | `towns_and_towers:other` |  |
 
 ### `ocean_dungeons` -> `creativeengineering:group/ocean_dungeons`
 
 Ocean monuments, on the monuments' own grid (same spacing, spread and salt, so positions match vanilla). Monument meta structures join later.
 
-Grid: spacing 32, separation 6, spread_type triangular, salt 10387313. Members never start closer than 7 chunks (112 blocks). 1 of 1 members live.
+Grid: spacing 32, separation 6, spread_type triangular, salt 10387313. Members never start closer than 7 chunks (112 blocks). 2 of 2 members live.
 
 | Structure | Weight | Frequency | Alone: 1 per | Was in | Note |
 |---|---|---|---|---|---|
+| `creativeengineering:meta/struck_monument` | 1 | 1 | 32 | `(meta structure)` | meta structure: takes 25% of the slots its anchors win here; this weight is never used |
 | `minecraft:monument` | 100 | 0.1 | 101 | `minecraft:ocean_monuments` |  |
 
 ### `sky` -> `creativeengineering:group/sky`
 
 Sky structures: Cloud Storage's hot air balloons and sky temples, AE2 meteorites (same rate as the clouds). Meta structures join later.
 
-Grid: spacing 64, separation 16, salt 444386725. Members never start closer than 17 chunks (272 blocks). 4 of 4 members live.
+Grid: spacing 64, separation 16, salt 444386725. Members never start closer than 17 chunks (272 blocks). 9 of 9 members live.
 
 | Structure | Weight | Frequency | Alone: 1 per | Was in | Note |
 |---|---|---|---|---|---|
 | `ae2:meteorite` | 100 | 0.985 | 64 | `ae2:meteorite` |  |
 | `cloudstorage:big_balloon` | 100 | 0.985 | 64 | `cloudstorage:big_balloon` |  |
 | `cloudstorage:sky_temple` | 100 | 0.985 | 64 | `cloudstorage:sky_temple` |  |
-| `skyvillages:skyvillage` | 299 | 1 | 64 | `skyvillages:skyvillage` |  |
+| `creativeengineering:meta/balloon_fleet` | 1 | 1 | 64 | `(meta structure)` | meta structure: takes 30% of the slots its anchors win here; this weight is never used |
+| `creativeengineering:meta/cloud_balloons` | 1 | 1 | 64 | `(meta structure)` | meta structure: takes 20% of the slots its anchors win here; this weight is never used |
+| `creativeengineering:meta/cloud_cluster` | 1 | 1 | 64 | `(meta structure)` | meta structure: takes 30% of the slots its anchors win here; this weight is never used |
+| `creativeengineering:meta/meteor_shower` | 1 | 1 | 64 | `(meta structure)` | meta structure: takes 50% of the slots its anchors win here; this weight is never used |
+| `creativeengineering:meta/sky_village_islands` | 1 | 1 | 64 | `(meta structure)` | meta structure: takes 50% of the slots its anchors win here; this weight is never used |
+| `skyvillages:skyvillage` | 100 | 1 | 64 | `skyvillages:skyvillage` |  |
 
 ### `boats` -> `creativeengineering:group/boats`
 
@@ -381,18 +398,18 @@ Grid: spacing 48, separation 28, salt 905198075. Members never start closer than
 
 | Structure | Weight | Frequency | Alone: 1 per | Was in | Note |
 |---|---|---|---|---|---|
-| `antiquetradingship:antique_trading_ship` | 97 | 1 | 48 | `antiquetradingship:antique_trading_ship` |  |
-| `blocky_siege:pillager_ship` | 57 | 1 | 48 | `blocky_siege:pillager_ship` |  |
+| `antiquetradingship:antique_trading_ship` | 100 | 1 | 48 | `antiquetradingship:antique_trading_ship` |  |
+| `blocky_siege:pillager_ship` | 100 | 1 | 48 | `blocky_siege:pillager_ship` |  |
 | `creativeengineering:meta/pillager_fleet` | 1 | 1 | 48 | `(meta structure)` | meta structure: takes 35% of the slots its anchors win here; this weight is never used |
 | `creativeengineering:meta/raft_convoy` | 1 | 1 | 48 | `(meta structure)` | meta structure: takes 30% of the slots its anchors win here; this weight is never used |
-| `illager_viking_longship:illager_longship` | 148 | 1 | 48 | `illager_viking_longship:illager_longship` |  |
-| `illagerwarship:warship` | 97 | 1 | 48 | `illagerwarship:warship` |  |
-| `towns_and_towers:pillager_outpost_ocean` | 72 | 0.9618 | 49 | `towns_and_towers:towers` |  |
-| `towns_and_towers:village_ocean` | 138 | 0.9588 | 49 | `towns_and_towers:towns` |  |
-| `unwrecked_ships:ship` | 73 | 1 | 48 | `unwrecked_ships:ship` |  |
-| `villager_rafts:raft_1` | 83 | 1 | 48 | `villager_rafts:raft_1` |  |
-| `villager_rafts:raft_2` | 83 | 1 | 48 | `villager_rafts:raft_2` |  |
-| `villager_rafts:raft_3` | 83 | 1 | 48 | `villager_rafts:raft_3` |  |
+| `illager_viking_longship:illager_longship` | 100 | 1 | 48 | `illager_viking_longship:illager_longship` |  |
+| `illagerwarship:warship` | 100 | 1 | 48 | `illagerwarship:warship` |  |
+| `towns_and_towers:pillager_outpost_ocean` | 100 | 0.9618 | 49 | `towns_and_towers:towers` |  |
+| `towns_and_towers:village_ocean` | 100 | 0.9588 | 49 | `towns_and_towers:towns` |  |
+| `unwrecked_ships:ship` | 100 | 1 | 48 | `unwrecked_ships:ship` |  |
+| `villager_rafts:raft_1` | 100 | 1 | 48 | `villager_rafts:raft_1` |  |
+| `villager_rafts:raft_2` | 100 | 1 | 48 | `villager_rafts:raft_2` |  |
+| `villager_rafts:raft_3` | 100 | 1 | 48 | `villager_rafts:raft_3` |  |
 
 ### `flotsam` -> `creativeengineering:group/flotsam`
 
@@ -423,18 +440,18 @@ Grid: spacing 16, separation 5, salt 1349061187. Members never start closer than
 
 Lone camps and cabins: the T&T wandering trader camp and every single-building house mod in the Overworld. The two Farmer's Structures houses whose biomes come from mods this pack does not have (Aether, Undergarden) stay out.
 
-Grid: spacing 24, separation 12, salt 419617315. Members never start closer than 13 chunks (208 blocks). 74 of 74 members live.
+Grid: spacing 24, separation 12, salt 419617315. Members never start closer than 13 chunks (208 blocks). 75 of 75 members live.
 
 | Structure | Weight | Frequency | Alone: 1 per | Was in | Note |
 |---|---|---|---|---|---|
-| `ancient_enchantment_temple:temple` | 1 | 0.1264 | 68 | `ancient_enchantment_temple:temple` |  |
-| `animal_barn:barn` | 116 | 1 | 24 | `animal_barn:barn` |  |
+| `ancient_enchantment_temple:temple` | 100 | 0.1264 | 68 | `ancient_enchantment_temple:temple` |  |
+| `animal_barn:barn` | 100 | 1 | 24 | `animal_barn:barn` |  |
 | `beautify:botanist_house_desert` | 100 | 1 | 24 | `beautify:botanist_house_desert` |  |
 | `beautify:botanist_house_plains` | 100 | 1 | 24 | `beautify:botanist_house_plains` |  |
 | `beautify:botanist_house_savanna` | 100 | 1 | 24 | `beautify:botanist_house_savanna` |  |
 | `beautify:botanist_house_snowy` | 100 | 1 | 24 | `beautify:botanist_house_snowy` |  |
 | `beautify:botanist_house_taiga` | 100 | 1 | 24 | `beautify:botanist_house_taiga` |  |
-| `bighorsestable:big_horse_stable` | 98 | 1 | 24 | `bighorsestable:big_horse_stable` |  |
+| `bighorsestable:big_horse_stable` | 100 | 1 | 24 | `bighorsestable:big_horse_stable` |  |
 | `campsite_structures:armorer_campsite` | 60 | 1 | 24 | `campsite_structures:armorer_campsite` |  |
 | `campsite_structures:butcher_campsite` | 60 | 1 | 24 | `campsite_structures:butcher_campsite` |  |
 | `campsite_structures:cartographer_campsite` | 60 | 1 | 24 | `campsite_structures:cartographer_campsite` |  |
@@ -443,63 +460,64 @@ Grid: spacing 24, separation 12, salt 419617315. Members never start closer than
 | `campsite_structures:fisher_campsite` | 15 | 1 | 24 | `campsite_structures:fisher_campsite` |  |
 | `creativeengineering:meta/farmers_camp` | 1 | 1 | 24 | `(meta structure)` | meta structure: takes 30% of the slots its anchors win here; this weight is never used |
 | `creativeengineering:meta/house_camp` | 1 | 1 | 24 | `(meta structure)` | meta structure: takes 15% of the slots its anchors win here; this weight is never used |
+| `creativeengineering:meta/trader_caravan` | 1 | 1 | 24 | `(meta structure)` | meta structure: takes 25% of the slots its anchors win here; this weight is never used |
 | `creativeengineering:meta/waysign_camps` | 1 | 1 | 24 | `(meta structure)` | meta structure: takes 25% of the slots its anchors win here; this weight is never used |
 | `creativeengineering:meta/waysign_house_camp` | 1 | 1 | 24 | `(meta structure)` | meta structure: takes 10% of the slots its anchors win here; this weight is never used |
-| `desert_village_temple:village_temple` | 110 | 0.293336 | 44 | `desert_village_temple:village_temple` |  |
+| `desert_village_temple:village_temple` | 100 | 0.293336 | 44 | `desert_village_temple:village_temple` |  |
 | `desert_watchtower:watchtower` | 110 | 0.342886 | 41 | `desert_watchtower:watchtower` |  |
-| `eugene:camp` | 148 | 1 | 24 | `eugene:camp` |  |
-| `farmers_structures:aquacultures_beach` | 64 | 0.0307 | 137 | `farmers_structures:aquacultures_beach_with_all` |  |
+| `eugene:camp` | 100 | 1 | 24 | `eugene:camp` |  |
+| `farmers_structures:aquacultures_beach` | 100 | 0.0307 | 137 | `farmers_structures:aquacultures_beach_with_all` |  |
 | `farmers_structures:aquacultures_cod` | 100 | 1 | 24 | `farmers_structures:aquacultures_cod_with_all` |  |
-| `farmers_structures:aquacultures_common` | 42 | 1 | 24 | `farmers_structures:aquacultures_common_with_all` |  |
-| `farmers_structures:cacaos` | 1 | 0.1561 | 61 | `farmers_structures:cacaos_with_all` |  |
-| `farmers_structures:cooks` | 183 | 0.417675 | 37 | `farmers_structures:cooks_with_all` |  |
+| `farmers_structures:aquacultures_common` | 100 | 1 | 24 | `farmers_structures:aquacultures_common_with_all` |  |
+| `farmers_structures:cacaos` | 100 | 0.1561 | 61 | `farmers_structures:cacaos_with_all` |  |
+| `farmers_structures:cooks` | 100 | 0.417675 | 37 | `farmers_structures:cooks_with_all` |  |
 | `farmers_structures:cooks_moss` | 100 | 1 | 24 | `farmers_structures:cooks_moss_with_all` |  |
-| `farmers_structures:fishs_stew` | 387 | 1 | 24 | `farmers_structures:fishs_stew_with_all` |  |
-| `farmers_structures:ratatouilles` | 129 | 1 | 24 | `farmers_structures:ratatouilles_with_all` |  |
-| `farmers_structures:shepherd_farms` | 33 | 1 | 24 | `farmers_structures:shepherd_farms_with_all` |  |
-| `farmers_structures:squids` | 389 | 1 | 24 | `farmers_structures:squids_with_all` |  |
-| `farmers_structures:sushis` | 220 | 0.1058 | 74 | `farmers_structures:sushus_with_all` |  |
+| `farmers_structures:fishs_stew` | 100 | 1 | 24 | `farmers_structures:fishs_stew_with_all` |  |
+| `farmers_structures:ratatouilles` | 100 | 1 | 24 | `farmers_structures:ratatouilles_with_all` |  |
+| `farmers_structures:shepherd_farms` | 100 | 1 | 24 | `farmers_structures:shepherd_farms_with_all` |  |
+| `farmers_structures:squids` | 100 | 1 | 24 | `farmers_structures:squids_with_all` |  |
+| `farmers_structures:sushis` | 100 | 0.1058 | 74 | `farmers_structures:sushus_with_all` |  |
 | `forest_watchtower:forest_watchtower` | 135 | 0.954795 | 25 | `forest_watchtower:forest_watchtower` |  |
-| `gothic_church:church` | 81 | 1 | 24 | `gothic_church:church` |  |
-| `greek_villager_house:greek_house` | 73 | 1 | 24 | `greek_villager_house:greek_house` |  |
-| `hobbit_house_:hobbit_house` | 69 | 1 | 24 | `hobbit_house_:hobbit_house` |  |
-| `llama_stable:llama_stable` | 62 | 1 | 24 | `llama_stable:llama_stable` |  |
-| `minecraft:igloo` | 389 | 0.502816 | 34 | `minecraft:igloos` |  |
+| `gothic_church:church` | 100 | 1 | 24 | `gothic_church:church` |  |
+| `greek_villager_house:greek_house` | 100 | 1 | 24 | `greek_villager_house:greek_house` |  |
+| `hobbit_house_:hobbit_house` | 100 | 1 | 24 | `hobbit_house_:hobbit_house` |  |
+| `llama_stable:llama_stable` | 100 | 1 | 24 | `llama_stable:llama_stable` |  |
+| `minecraft:igloo` | 100 | 0.502816 | 34 | `minecraft:igloos` |  |
 | `mini_clock_tower:mini_clock_tower` | 108 | 0.740947 | 28 | `mini_clock_tower:mini_clock_tower` |  |
-| `old_swamp_fisherman_house:fisherman_house` | 247 | 0.147601 | 62 | `old_swamp_fisherman_house:fisherman_house` |  |
-| `plains_villager_tents:big_villager_tent` | 116 | 1 | 24 | `plains_villager_tents:big_villager_tent` |  |
-| `saloon:saloon` | 326 | 0.43779 | 36 | `saloon:saloon` |  |
-| `sawmillhouse:sawmill` | 159 | 1 | 24 | `sawmillhouse:sawmill` |  |
-| `simply_houses:forest_chapel` | 67 | 0.120438 | 69 | `simply_houses:forest_structures` |  |
-| `simply_houses:forest_fort` | 67 | 0.120438 | 69 | `simply_houses:forest_structures` |  |
-| `simply_houses:forest_house` | 135 | 0.1196 | 69 | `simply_houses:forest_structures` |  |
-| `simply_houses:forest_stonemason` | 135 | 0.1196 | 69 | `simply_houses:forest_structures` |  |
-| `simply_houses:plains_house` | 23 | 1 | 24 | `simply_houses:plains_structures` |  |
-| `simply_houses:plains_mansion` | 23 | 1 | 24 | `simply_houses:plains_structures` |  |
+| `old_swamp_fisherman_house:fisherman_house` | 100 | 0.147601 | 62 | `old_swamp_fisherman_house:fisherman_house` |  |
+| `plains_villager_tents:big_villager_tent` | 100 | 1 | 24 | `plains_villager_tents:big_villager_tent` |  |
+| `saloon:saloon` | 100 | 0.43779 | 36 | `saloon:saloon` |  |
+| `sawmillhouse:sawmill` | 100 | 1 | 24 | `sawmillhouse:sawmill` |  |
+| `simply_houses:forest_chapel` | 100 | 0.120438 | 69 | `simply_houses:forest_structures` |  |
+| `simply_houses:forest_fort` | 100 | 0.120438 | 69 | `simply_houses:forest_structures` |  |
+| `simply_houses:forest_house` | 100 | 0.1196 | 69 | `simply_houses:forest_structures` |  |
+| `simply_houses:forest_stonemason` | 100 | 0.1196 | 69 | `simply_houses:forest_structures` |  |
+| `simply_houses:plains_house` | 100 | 1 | 24 | `simply_houses:plains_structures` |  |
+| `simply_houses:plains_mansion` | 100 | 1 | 24 | `simply_houses:plains_structures` |  |
 | `simply_houses:taiga_forge` | 100 | 0.266606 | 46 | `simply_houses:taiga_structures` |  |
 | `simply_houses:taiga_house` | 100 | 0.266606 | 46 | `simply_houses:taiga_structures` |  |
-| `simply_houses:taiga_inn` | 200 | 0.266606 | 46 | `simply_houses:taiga_structures` |  |
-| `simply_houses:taiga_woodcutter` | 200 | 0.266606 | 46 | `simply_houses:taiga_structures` |  |
-| `small_viking_villager_house:small_viking_house` | 64 | 1 | 24 | `small_viking_villager_house:small_viking_house` |  |
-| `small_villager_greenhouse:small_villager_greenhouse` | 72 | 1 | 24 | `small_villager_greenhouse:small_villager_greenhouse` |  |
-| `smallhorsestable:horse_stable` | 111 | 1 | 24 | `smallhorsestable:horse_stable` |  |
-| `snowy_tents:snowy_tent` | 284 | 1 | 24 | `snowy_tents:snowy_tent` |  |
-| `towns_and_towers:exclusives/village_wandering_trader_camp` | 423 | 0.36673 | 40 | `towns_and_towers:towns` |  |
-| `villager_archer_camp:villager_archer_camp` | 85 | 1 | 24 | `villager_archer_camp:villager_archer_camp` |  |
-| `villager_butcher_house:butcher_house` | 87 | 1 | 24 | `villager_butcher_house:butcher_house` |  |
-| `villager_cartographer_house:villager_cartographer_house` | 91 | 1 | 24 | `villager_cartographer_house:villager_cartographer_house` |  |
-| `villager_circus_tent:villager_circus_tent` | 84 | 1 | 24 | `villager_circus_tent:villager_circus_tent` |  |
-| `villager_cleric_house:villager_cleric_house` | 104 | 1 | 24 | `villager_cleric_house:villager_cleric_house` |  |
-| `villager_country_house:country_house` | 447 | 0.166203 | 59 | `villager_country_house:country_house` |  |
-| `villager_farmer_house:villager_farmer_house` | 74 | 1 | 24 | `villager_farmer_house:villager_farmer_house` |  |
-| `villager_fish_shop:fish_shop` | 17 | 1 | 24 | `villager_fish_shop:fish_shop` |  |
-| `villager_fishermans_hut:villager_fishermans_hut` | 125 | 1 | 24 | `villager_fishermans_hut:villager_fishermans_hut` |  |
-| `villager_fletcher_house:villager_fletcher_house` | 109 | 1 | 24 | `villager_fletcher_house:villager_fletcher_house` |  |
-| `villager_flower_house:flower_house` | 781 | 0.273887 | 46 | `villager_flower_house:flower_house` |  |
-| `villager_forge:villager_forge` | 116 | 1 | 24 | `villager_forge:villager_forge` |  |
-| `villager_gold_washing_facility:villager_gold_washing_facility` | 37 | 1 | 24 | `villager_gold_washing_facility:villager_gold_washing_facility` |  |
-| `villager_tannery:tannery` | 73 | 1 | 24 | `villager_tannery:tannery` |  |
-| `villager_windmill:windmill` | 103 | 1 | 24 | `villager_windmill:windmill` |  |
+| `simply_houses:taiga_inn` | 100 | 0.266606 | 46 | `simply_houses:taiga_structures` |  |
+| `simply_houses:taiga_woodcutter` | 100 | 0.266606 | 46 | `simply_houses:taiga_structures` |  |
+| `small_viking_villager_house:small_viking_house` | 100 | 1 | 24 | `small_viking_villager_house:small_viking_house` |  |
+| `small_villager_greenhouse:small_villager_greenhouse` | 100 | 1 | 24 | `small_villager_greenhouse:small_villager_greenhouse` |  |
+| `smallhorsestable:horse_stable` | 100 | 1 | 24 | `smallhorsestable:horse_stable` |  |
+| `snowy_tents:snowy_tent` | 100 | 1 | 24 | `snowy_tents:snowy_tent` |  |
+| `towns_and_towers:exclusives/village_wandering_trader_camp` | 100 | 0.36673 | 40 | `towns_and_towers:towns` |  |
+| `villager_archer_camp:villager_archer_camp` | 100 | 1 | 24 | `villager_archer_camp:villager_archer_camp` |  |
+| `villager_butcher_house:butcher_house` | 100 | 1 | 24 | `villager_butcher_house:butcher_house` |  |
+| `villager_cartographer_house:villager_cartographer_house` | 100 | 1 | 24 | `villager_cartographer_house:villager_cartographer_house` |  |
+| `villager_circus_tent:villager_circus_tent` | 100 | 1 | 24 | `villager_circus_tent:villager_circus_tent` |  |
+| `villager_cleric_house:villager_cleric_house` | 100 | 1 | 24 | `villager_cleric_house:villager_cleric_house` |  |
+| `villager_country_house:country_house` | 100 | 0.166203 | 59 | `villager_country_house:country_house` |  |
+| `villager_farmer_house:villager_farmer_house` | 100 | 1 | 24 | `villager_farmer_house:villager_farmer_house` |  |
+| `villager_fish_shop:fish_shop` | 100 | 1 | 24 | `villager_fish_shop:fish_shop` |  |
+| `villager_fishermans_hut:villager_fishermans_hut` | 100 | 1 | 24 | `villager_fishermans_hut:villager_fishermans_hut` |  |
+| `villager_fletcher_house:villager_fletcher_house` | 100 | 1 | 24 | `villager_fletcher_house:villager_fletcher_house` |  |
+| `villager_flower_house:flower_house` | 100 | 0.273887 | 46 | `villager_flower_house:flower_house` |  |
+| `villager_forge:villager_forge` | 100 | 1 | 24 | `villager_forge:villager_forge` |  |
+| `villager_gold_washing_facility:villager_gold_washing_facility` | 100 | 1 | 24 | `villager_gold_washing_facility:villager_gold_washing_facility` |  |
+| `villager_tannery:tannery` | 100 | 1 | 24 | `villager_tannery:tannery` |  |
+| `villager_windmill:windmill` | 100 | 1 | 24 | `villager_windmill:windmill` |  |
 | `watchtower_building:fresh_watchtower` | 160 | 1 | 24 | `watchtower_building:fresh_watchtower` |  |
 
 ## Meta structures
@@ -648,20 +666,20 @@ Status: built. Group: `boats`.
 
 ### `creativeengineering:meta/fortified_ruins`
 
-A fortified town or fort (a meta/fortified_towns anchor: Terralith's fortified villages, the red roof castle) with 2 to 6 small ruins outside its walls (settlements; 20% of fortified town slots, D1 2026-10-14).
+A fortified town or fort (a meta/fortified_towns anchor: Terralith's fortified villages, the red roof castle) with 2 to 6 small ruins outside its walls (settlements; 25% of fortified town slots: D1 2026-10-14 had 20%, raised 2026-10-30 so /locate finds it within the 300 s search timeout; 10% of fortified towns stay plain).
 
 Status: built. Group: `settlements`.
 
-- anchor: `#creativeengineering:meta/fortified_towns` (`eugene:red_roof_castle`, `terralith:fortified_desert_village`, `terralith:fortified_village`); takes 20% of the slots these win in its group (share 0.2)
+- anchor: `#creativeengineering:meta/fortified_towns` (`eugene:red_roof_castle`, `terralith:fortified_desert_village`, `terralith:fortified_village`); takes 25% of the slots these win in its group (share 0.25)
 - part 1: `#creativeengineering:meta/small_ruins` (`forest_ruins:ruin_1`, `forest_ruins:ruin_2`, `forest_ruins:ruin_3`, `forest_ruins:ruin_4`, `forest_ruins:ruin_5`, `forest_ruins:ruin_6`, `forest_ruins:ruin_7`, `philipsruins:ancient_ruins`, `philipsruins:badlands_structures`, `philipsruins:desert_structures`, `philipsruins:field_stone_ruins`, `philipsruins:level_one_ruins`, `philipsruins:level_two_ruins`, `philipsruins:level_two_ruins_pool`, `philipsruins:pumpkin_ruins`, `terralith:glacial_hut`); count [2,6], distance [44,108], spacing 18, margin 6
 
 ### `creativeengineering:meta/fortified_camps`
 
-A fortified town or fort (a meta/fortified_towns anchor: Terralith's fortified villages, the red roof castle) with 2 to 4 friendly camps (villager tents, archer camp, circus tent, trader camps, Campsite camps) outside its walls (settlements; 20% of fortified town slots, D1 2026-10-14).
+A fortified town or fort (a meta/fortified_towns anchor: Terralith's fortified villages, the red roof castle) with 2 to 4 friendly camps (villager tents, archer camp, circus tent, trader camps, Campsite camps) outside its walls (settlements; 25% of fortified town slots: D1 2026-10-14 had 20%, raised 2026-10-30 so /locate finds it within the 300 s search timeout; 10% of fortified towns stay plain).
 
 Status: built. Group: `settlements`.
 
-- anchor: `#creativeengineering:meta/fortified_towns` (`eugene:red_roof_castle`, `terralith:fortified_desert_village`, `terralith:fortified_village`); takes 20% of the slots these win in its group (share 0.2)
+- anchor: `#creativeengineering:meta/fortified_towns` (`eugene:red_roof_castle`, `terralith:fortified_desert_village`, `terralith:fortified_village`); takes 25% of the slots these win in its group (share 0.25)
 - part 1: `#creativeengineering:meta/friendly_camps` (`campsite_structures:armorer_campsite`, `campsite_structures:butcher_campsite`, `campsite_structures:cartographer_campsite`, `campsite_structures:cleric_campsite`, `campsite_structures:farmer_campsite`, `campsite_structures:fisher_campsite`, `eugene:camp`, `plains_villager_tents:big_villager_tent`, `snowy_tents:snowy_tent`, `towns_and_towers:exclusives/village_wandering_trader_camp`, `villager_archer_camp:villager_archer_camp`, `villager_circus_tent:villager_circus_tent`); count [2,4], distance [44,108], spacing 24, margin 6
 
 ### `creativeengineering:meta/farmers_camp`
@@ -710,6 +728,174 @@ A fortified town or fort (a meta/fortified_towns anchor, the red roof castle inc
 Status: built. Group: `settlements`.
 
 - anchor: `#creativeengineering:meta/fortified_towns` (`eugene:red_roof_castle`, `terralith:fortified_desert_village`, `terralith:fortified_village`); takes 40% of the slots these win in its group (share 0.4)
+
+### `creativeengineering:meta/cloud_cluster`
+
+2 to 4 of Cloud Storage's storage clouds (sky temples) together: one cloud's slot, plus 1 to 3 more around it.
+
+Status: built. Group: `sky`.
+
+- anchor: `#creativeengineering:meta/sky_clouds` (`cloudstorage:sky_temple`); takes 30% of the slots these win in its group (share 0.3)
+- part 1: `#creativeengineering:meta/sky_clouds` (`cloudstorage:sky_temple`); count [1,3], distance [36,104], spacing 40, margin 8, tries 24
+
+### `creativeengineering:meta/balloon_fleet`
+
+2 to 6 of Cloud Storage's hot air balloons flying together: one balloon's slot, plus 1 to 5 more around it.
+
+Status: built. Group: `sky`.
+
+- anchor: `#creativeengineering:meta/sky_balloons` (`cloudstorage:big_balloon`); takes 30% of the slots these win in its group (share 0.3)
+- part 1: `#creativeengineering:meta/sky_balloons` (`cloudstorage:big_balloon`); count [1,5], distance [20,96], spacing 24, margin 4, tries 24
+
+### `creativeengineering:meta/cloud_balloons`
+
+1 or 2 storage clouds with 1 or 2 hot air balloons moored around them: a cloud's slot, maybe one more cloud, and the balloons.
+
+Status: built. Group: `sky`.
+
+- anchor: `#creativeengineering:meta/sky_clouds` (`cloudstorage:sky_temple`); takes 20% of the slots these win in its group (share 0.2)
+- part 1: `#creativeengineering:meta/sky_clouds` (`cloudstorage:sky_temple`); count [0,1], distance [36,96], spacing 40, margin 8, tries 24
+- part 2: `#creativeengineering:meta/sky_balloons` (`cloudstorage:big_balloon`); count [1,2], distance [24,80], spacing 24, margin 4, tries 24
+
+### `creativeengineering:meta/sky_village_islands`
+
+A sky village with 2 to 5 of Sky Structures' floating islands around it, at about the village's height (creativeengineering:sky_island: one island template, 135 to 165 blocks above the ground).
+
+Status: built. Group: `sky`.
+
+- anchor: `#creativeengineering:meta/sky_villages` (`skyvillages:skyvillage`); takes 50% of the slots these win in its group (share 0.5)
+- part 1: `creativeengineering:sky_island`; count [2,5], distance [24,112], spacing 20, margin 6, tries 32
+
+### `creativeengineering:meta/witch_cart_caravan`
+
+A witch cart caravan: 2 or 3 witch wagons together, with a witch hut nearby where one fits (swamps; in a dark forest the wagons travel alone). Each hut and wagon keeps its own respawns on its own pieces.
+
+Status: built. Group: `vehicles`.
+
+- anchor: `#creativeengineering:meta/caravan_wagons` (`eugene:witch_wagon`); takes 30% of the slots these win in its group (share 0.3)
+- part 1: `#creativeengineering:meta/caravan_wagons` (`eugene:witch_wagon`); count [1,2], distance [16,44], spacing 16, margin 3
+- part 2: `#creativeengineering:meta/caravan_witch_huts` (`betterwitchhuts:witch_circle`, `betterwitchhuts:witch_hut`, `minecraft:swamp_hut`); count [0,1], distance [36,80], margin 6
+
+### `creativeengineering:meta/pillager_caravan`
+
+A pillager caravan: 2 to 4 loot carriages (or prison vans) together, half the time with a siege weapon or a pillager camp beside them.
+
+Status: built. Group: `vehicles`.
+
+- anchor: `#creativeengineering:meta/caravan_carriages` (`eugene:pillager_loot_carriage`); takes 35% of the slots these win in its group (share 0.35)
+- part 1: `#creativeengineering:meta/caravan_carriages` (`eugene:pillager_loot_carriage`); count [1,3], distance [14,48], spacing 14, margin 3
+- part 2: `#creativeengineering:meta/pillager_outworks` (`eugene:pillager_camp`, `illager_siege_weapons:ballista`, `illager_siege_weapons:battering_ram`, `illager_siege_weapons:catapult`, `illager_siege_weapons:reinforced_battering_ram`, `illager_siege_weapons:siege_tower`, `illager_siege_weapons:trebuchet`, `takesapillage:pillager_camp`, `towns_and_towers:pillager_outpost_beach`, `towns_and_towers:pillager_outpost_snowy_beach`, `towns_and_towers:pillager_outpost_sparse_jungle`, `towns_and_towers:pillager_outpost_wooded_badlands`); count 1, distance [30,72], chance 0.5, margin 6
+
+### `creativeengineering:meta/trader_caravan`
+
+A trader caravan: 2 or 3 trader camps along the way, with a way sign.
+
+Status: built. Group: `remote`.
+
+- anchor: `#creativeengineering:meta/trader_camps` (`eugene:camp`, `towns_and_towers:exclusives/village_wandering_trader_camp`); takes 25% of the slots these win in its group (share 0.25)
+- part 1: `#creativeengineering:meta/trader_camps` (`eugene:camp`, `towns_and_towers:exclusives/village_wandering_trader_camp`); count [1,2], distance [16,48], spacing 16, margin 4
+- part 2: `#creativeengineering:meta/way_signs` (`supplementaries:way_sign`); count 1, distance [10,40]
+
+### `creativeengineering:meta/meteorite_village`
+
+A village (any type) struck by an AE2 sky stone meteorite near its middle: the crater cuts through the houses and roads.
+
+Status: built. Group: `settlements`.
+
+- anchor: `#creativeengineering:meta/villages` (`minecraft:village_desert`, `minecraft:village_plains`, `minecraft:village_savanna`, `minecraft:village_snowy`, `minecraft:village_taiga`, `towns_and_towers:exclusives/village_classic`, `towns_and_towers:exclusives/village_iberian`, `towns_and_towers:exclusives/village_mediterranean`, `towns_and_towers:exclusives/village_nilotic`, `towns_and_towers:exclusives/village_rustic`, `towns_and_towers:exclusives/village_swedish`, `towns_and_towers:exclusives/village_tudor`, `towns_and_towers:village_badlands`, `towns_and_towers:village_beach`, `towns_and_towers:village_birch_forest`, `towns_and_towers:village_flower_forest`, `towns_and_towers:village_forest`, `towns_and_towers:village_grove`, `towns_and_towers:village_jungle`, `towns_and_towers:village_meadow`, `towns_and_towers:village_mushroom_fields`, `towns_and_towers:village_old_growth_taiga`, `towns_and_towers:village_snowy_slopes`, `towns_and_towers:village_snowy_taiga`, `towns_and_towers:village_sparse_jungle`, `towns_and_towers:village_sunflower_plains`, `towns_and_towers:village_swamp`, `towns_and_towers:village_wooded_badlands`); takes 5% of the slots these win in its group (share 0.05)
+- part 1: `#creativeengineering:meta/meteorites` (`ae2:meteorite`); count 1, distance [0,16], tries 24, overlap true
+
+### `creativeengineering:meta/desert_temple_ruins`
+
+YUNG's desert temple with 2 to 4 small desert ruins scattered around it.
+
+Status: built. Group: `desert_temples`.
+
+- anchor: `#creativeengineering:meta/better_desert_temples` (`betterdeserttemples:desert_temple`); takes 35% of the slots these win in its group (share 0.35)
+- part 1: `#creativeengineering:meta/small_ruins` (`forest_ruins:ruin_1`, `forest_ruins:ruin_2`, `forest_ruins:ruin_3`, `forest_ruins:ruin_4`, `forest_ruins:ruin_5`, `forest_ruins:ruin_6`, `forest_ruins:ruin_7`, `philipsruins:ancient_ruins`, `philipsruins:badlands_structures`, `philipsruins:desert_structures`, `philipsruins:field_stone_ruins`, `philipsruins:level_one_ruins`, `philipsruins:level_two_ruins`, `philipsruins:level_two_ruins_pool`, `philipsruins:pumpkin_ruins`, `terralith:glacial_hut`); count [2,4], distance [40,100], spacing 20, margin 6, tries 24
+
+### `creativeengineering:meta/jungle_temple_ruins`
+
+YUNG's jungle temple with 2 to 4 small ruins scattered around it in the jungle.
+
+Status: built. Group: `surface_dungeons`.
+
+- anchor: `#creativeengineering:meta/better_jungle_temples` (`betterjungletemples:jungle_temple`); takes 35% of the slots these win in its group (share 0.35)
+- part 1: `#creativeengineering:meta/small_ruins` (`forest_ruins:ruin_1`, `forest_ruins:ruin_2`, `forest_ruins:ruin_3`, `forest_ruins:ruin_4`, `forest_ruins:ruin_5`, `forest_ruins:ruin_6`, `forest_ruins:ruin_7`, `philipsruins:ancient_ruins`, `philipsruins:badlands_structures`, `philipsruins:desert_structures`, `philipsruins:field_stone_ruins`, `philipsruins:level_one_ruins`, `philipsruins:level_two_ruins`, `philipsruins:level_two_ruins_pool`, `philipsruins:pumpkin_ruins`, `terralith:glacial_hut`); count [2,4], distance [36,96], spacing 20, margin 6, tries 24
+
+### `creativeengineering:meta/meteorite_desert_pyramid`
+
+A vanilla desert pyramid struck by an AE2 sky stone meteorite. No anchor: a replacement taking 8% of YUNG's desert temple slots (structure_groups.json), built on the slot's chunk.
+
+Status: built. Group: `desert_temples`.
+
+- part 1: `minecraft:desert_pyramid`; count 1, distance [0,0], margin 0, tries 1
+- part 2: `#creativeengineering:meta/meteorites` (`ae2:meteorite`); count 1, distance [0,12], tries 24, overlap true
+
+### `creativeengineering:meta/underwater_meteorite`
+
+A large underwater ruin struck by a sky stone meteorite on the seabed (AE2's ocean meteorite, no crater), half the time with 1 or 2 small ruins around it.
+
+Status: built. Group: `ocean_ruins`.
+
+- anchor: `#creativeengineering:meta/underwater_large_ruins` (`hopo:underwater_ruins`, `philipsruins:ocean_fortress`, `philipsruins:ocean_ruins`); takes 10% of the slots these win in its group (share 0.1)
+- part 1: `#creativeengineering:meta/underwater_small_ruins` (`hopo:underwater_small_ruins`, `hopo:underwater_warm_small_ruins`); count [1,2], distance [18,48], chance 0.5, spacing 16, margin 3
+- part 2: `#creativeengineering:meta/meteorites` (`ae2:meteorite`); count 1, distance [0,20], tries 24, overlap true
+
+### `creativeengineering:meta/pillager_camp_meteorite`
+
+A pillager camp with a sky stone meteorite strike: anywhere from the middle of the camp to 44 blocks out, so it may hit the camp or land beside it.
+
+Status: built. Group: `pillager_settlements`.
+
+- anchor: `#creativeengineering:meta/pillager_camps` (`eugene:pillager_camp`, `takesapillage:pillager_camp`, `towns_and_towers:pillager_outpost_beach`, `towns_and_towers:pillager_outpost_snowy_beach`, `towns_and_towers:pillager_outpost_sparse_jungle`, `towns_and_towers:pillager_outpost_wooded_badlands`); takes 10% of the slots these win in its group (share 0.1)
+- part 1: `#creativeengineering:meta/meteorites` (`ae2:meteorite`); count 1, distance [0,44], tries 24, overlap true
+
+### `creativeengineering:meta/meteor_shower`
+
+A meteor shower in a sand desert: 2 to 4 AE2 sky stone meteorites close together, one meteorite's slot plus 1 to 3 more.
+
+Status: built. Group: `sky`.
+
+- anchor: `#creativeengineering:meta/meteorites` (`ae2:meteorite`); takes 50% of the slots these win in its group (share 0.5)
+- part 1: `#creativeengineering:meta/meteorites` (`ae2:meteorite`); count [1,3], distance [20,44], spacing 20, tries 32, overlap true
+
+### `creativeengineering:meta/witch_coven`
+
+A witch coven in a swamp: YUNG's witch circle with a witch hut and 1 or 2 witch wagons around it.
+
+Status: built. Group: `witch_huts`.
+
+- anchor: `#creativeengineering:meta/witch_circles` (`betterwitchhuts:witch_circle`); takes 40% of the slots these win in its group (share 0.4)
+- part 1: `#creativeengineering:meta/coven_huts` (`betterwitchhuts:witch_hut`, `minecraft:swamp_hut`); count 1, distance [24,64], margin 6, tries 24
+- part 2: `#creativeengineering:meta/caravan_wagons` (`eugene:witch_wagon`); count [1,2], distance [20,64], spacing 16, margin 3, tries 24
+
+### `creativeengineering:meta/village_siege_ring`
+
+A village under siege: 2 to 6 illager siege weapons around it (open land only: the siege camps' own biomes).
+
+Status: built. Group: `settlements`.
+
+- anchor: `#creativeengineering:meta/villages` (`minecraft:village_desert`, `minecraft:village_plains`, `minecraft:village_savanna`, `minecraft:village_snowy`, `minecraft:village_taiga`, `towns_and_towers:exclusives/village_classic`, `towns_and_towers:exclusives/village_iberian`, `towns_and_towers:exclusives/village_mediterranean`, `towns_and_towers:exclusives/village_nilotic`, `towns_and_towers:exclusives/village_rustic`, `towns_and_towers:exclusives/village_swedish`, `towns_and_towers:exclusives/village_tudor`, `towns_and_towers:village_badlands`, `towns_and_towers:village_beach`, `towns_and_towers:village_birch_forest`, `towns_and_towers:village_flower_forest`, `towns_and_towers:village_forest`, `towns_and_towers:village_grove`, `towns_and_towers:village_jungle`, `towns_and_towers:village_meadow`, `towns_and_towers:village_mushroom_fields`, `towns_and_towers:village_old_growth_taiga`, `towns_and_towers:village_snowy_slopes`, `towns_and_towers:village_snowy_taiga`, `towns_and_towers:village_sparse_jungle`, `towns_and_towers:village_sunflower_plains`, `towns_and_towers:village_swamp`, `towns_and_towers:village_wooded_badlands`); takes 4% of the slots these win in its group (share 0.04)
+- part 1: `#creativeengineering:meta/siege_weapons` (`illager_siege_weapons:ballista`, `illager_siege_weapons:battering_ram`, `illager_siege_weapons:catapult`, `illager_siege_weapons:reinforced_battering_ram`, `illager_siege_weapons:siege_tower`, `illager_siege_weapons:trebuchet`); count [2,6], distance [48,104], spacing 32, margin 6, tries 24
+
+### `creativeengineering:meta/village_siege_camp`
+
+A village under siege from one side: 2 to 6 illager siege weapons grouped within 40 blocks of each other outside it.
+
+Status: built. Group: `settlements`.
+
+- anchor: `#creativeengineering:meta/villages` (`minecraft:village_desert`, `minecraft:village_plains`, `minecraft:village_savanna`, `minecraft:village_snowy`, `minecraft:village_taiga`, `towns_and_towers:exclusives/village_classic`, `towns_and_towers:exclusives/village_iberian`, `towns_and_towers:exclusives/village_mediterranean`, `towns_and_towers:exclusives/village_nilotic`, `towns_and_towers:exclusives/village_rustic`, `towns_and_towers:exclusives/village_swedish`, `towns_and_towers:exclusives/village_tudor`, `towns_and_towers:village_badlands`, `towns_and_towers:village_beach`, `towns_and_towers:village_birch_forest`, `towns_and_towers:village_flower_forest`, `towns_and_towers:village_forest`, `towns_and_towers:village_grove`, `towns_and_towers:village_jungle`, `towns_and_towers:village_meadow`, `towns_and_towers:village_mushroom_fields`, `towns_and_towers:village_old_growth_taiga`, `towns_and_towers:village_snowy_slopes`, `towns_and_towers:village_snowy_taiga`, `towns_and_towers:village_sparse_jungle`, `towns_and_towers:village_sunflower_plains`, `towns_and_towers:village_swamp`, `towns_and_towers:village_wooded_badlands`); takes 4% of the slots these win in its group (share 0.04)
+- part 1: `#creativeengineering:meta/siege_weapons` (`illager_siege_weapons:ballista`, `illager_siege_weapons:battering_ram`, `illager_siege_weapons:catapult`, `illager_siege_weapons:reinforced_battering_ram`, `illager_siege_weapons:siege_tower`, `illager_siege_weapons:trebuchet`); count [2,6], distance [56,104], spacing 18, margin 4, tries 24, cluster 40
+
+### `creativeengineering:meta/struck_monument`
+
+An ocean monument struck by a sky stone meteorite (AE2's ocean meteorite: no crater, the sphere replaces the monument's blocks it overlaps). Guardians respawn in the monument as in a lone one (the part's own spawn overrides), not in the meteorite.
+
+Status: built. Group: `ocean_dungeons`.
+
+- anchor: `#creativeengineering:meta/monuments` (`minecraft:monument`); takes 25% of the slots these win in its group (share 0.25)
+- part 1: `#creativeengineering:meta/meteorites` (`ae2:meteorite`); count 1, distance [0,20], tries 24, overlap true
 
 ### `creativeengineering:meta/deadwood_acacia`
 
@@ -880,21 +1066,21 @@ Source: PhilipsRuins1.19.2-10.8.jar. Placement: spacing 37, separation 30, frequ
 
 Source: PhilipsRuins1.19.2-10.8.jar. Placement: spacing 23, separation 13, frequency 1, salt 641781942 (edited).
 
-- `philipsruins:lost_soul_dungeon`: weight 86, frequency 0.991, alone: 1 per 23
-- `philipsruins:bone_dungeon`: weight 116, frequency 0.29382, alone: 1 per 42
-- `philipsruins:underground_structures`: weight 582, frequency 0.9885, alone: 1 per 23
-- `philipsruins:sculk_dungeon`: weight 86, frequency 0.991, alone: 1 per 23
+- `philipsruins:lost_soul_dungeon`: weight 1, frequency 0.991, alone: 1 per 23
+- `philipsruins:bone_dungeon`: weight 1, frequency 0.29382, alone: 1 per 42
+- `philipsruins:underground_structures`: weight 1, frequency 0.9885, alone: 1 per 23
+- `philipsruins:sculk_dungeon`: weight 1, frequency 0.991, alone: 1 per 23
 
 ### `terralith:underground`
 
 Source: Terralith_1.19.3_v2.3.12.jar. Placement: spacing 3, separation 1, frequency 1, salt 69696969 (edited).
 
-- `terralith:underground/oak_cabin`: weight 50, frequency 1, alone: 1 per 3
-- `terralith:underground/giant_bee_hive`: weight 78, frequency 0.4261, alone: 1 per 5
-- `terralith:underground/mining_outpost`: weight 713, frequency 0.1097, alone: 1 per 9
-- `terralith:underground/old_refinery`: weight 258, frequency 0.1166, alone: 1 per 9
-- `terralith:underground/sunken_tower`: weight 129, frequency 0.4277, alone: 1 per 5
-- `terralith:underground/witch_hut`: weight 44, frequency 1, alone: 1 per 3
+- `terralith:underground/oak_cabin`: weight 11, frequency 1, alone: 1 per 3
+- `terralith:underground/giant_bee_hive`: weight 2, frequency 0.4261, alone: 1 per 5
+- `terralith:underground/mining_outpost`: weight 13, frequency 0.1097, alone: 1 per 9
+- `terralith:underground/old_refinery`: weight 5, frequency 0.1166, alone: 1 per 9
+- `terralith:underground/sunken_tower`: weight 5, frequency 0.4277, alone: 1 per 5
+- `terralith:underground/witch_hut`: weight 4, frequency 1, alone: 1 per 3
 
 ### `unwrecked_ships:nether_ship`
 
@@ -1057,7 +1243,7 @@ Written with no structures and frequency 0: they can neither generate nor show u
 
 ## Coverage
 
-- Structures with no `type/*` or `dungeon/*` tag: `takesapillage:bastille`, `takesapillage:pillager_camp`, `underground_bunkers:underground_bunker`
+- Structures with no `type/*` or `dungeon/*` tag: `takesapillage:bastille`, `takesapillage:pillager_camp`, `underground_bunkers:underground_bunker`, `creativeengineering:meta/witch_cart_caravan`, `creativeengineering:meta/pillager_caravan`, `creativeengineering:meta/trader_caravan`, `creativeengineering:meta/meteorite_village`, `creativeengineering:meta/desert_temple_ruins`, `creativeengineering:meta/jungle_temple_ruins`, `creativeengineering:meta/meteorite_desert_pyramid`, `creativeengineering:meta/pillager_camp_meteorite`, `creativeengineering:meta/meteor_shower`, `creativeengineering:meta/witch_coven`, `creativeengineering:meta/village_siege_ring`, `creativeengineering:meta/village_siege_camp`, `creativeengineering:meta/struck_monument`
 - Structures with no `mod/*` tag: `takesapillage:bastille`, `takesapillage:pillager_camp`, `underground_bunkers:underground_bunker`
 - Structures another mod stops in code (tuning them has no effect, see "blocked" in structure_config.json): `betterdungeons:small_nether_dungeon`, `minecraft:fortress`, `minecraft:stronghold`
 - Structures in no group (74, standalone): `betterdungeons:skeleton_dungeon`, `betterdungeons:small_dungeon`, `betterdungeons:small_nether_dungeon`, `betterfortresses:fortress`, `betterstrongholds:stronghold`, `endersdelight:end_house`, `eugene:piglin_camp`, `farmers_structures:aethers`, `farmers_structures:cooks_nether_1`, `farmers_structures:cooks_nether_2`, `farmers_structures:undergardens_sea`, `hearths:netherrack_spiral`, `hearths:crimson_tower`, `hearths:warped_tower`, `mes:astral_hideaway`, `mes:astral_meteorite`, `mes:ender_spire`, `mes:enderbloom_grove`, `mes:enderkeep_courtyard`, `mes:enderpin_spikes`, `mes:enderskog`, `mes:enderwatch_tower`, `mes:endscraps`, `mes:manuscript_shrine`, `mes:monolith`, `mes:mythic_garden`, `mes:phantom_citadel`, `mes:placid_prairie`, `mes:ruined_pillar`, `mes:starlight_voyager`, `minecraft:ancient_city`, `minecraft:buried_treasure`, `minecraft:end_city`, `minecraft:mineshaft`, `minecraft:mineshaft_mesa`, `minecraft:fortress`, `minecraft:bastion_remnant`, `minecraft:nether_fossil`, `minecraft:ruined_portal`, `minecraft:ruined_portal_desert`, `minecraft:ruined_portal_jungle`, `minecraft:ruined_portal_swamp`, `minecraft:ruined_portal_mountain`, `minecraft:ruined_portal_ocean`, `minecraft:ruined_portal_nether`, `minecraft:stronghold`, `nullscape:dragon_skeleton`, `philipsruins:ancient_crypt`, `philipsruins:ancient_dungeon`, `philipsruins:antiquus_crypta`, `philipsruins:end_ruins`, `philipsruins:end_gate_fortress`, `philipsruins:lost_soul_city`, `philipsruins:lost_soul_dungeon`, `philipsruins:bone_dungeon`, `philipsruins:underground_structures`, `philipsruins:sculk_dungeon`, `subterrestrial:deepslate_cabin`, `subterrestrial:default_cabin`, `subterrestrial:desert_cabin`, `subterrestrial:ice_cabin`, `subterrestrial:jungle_cabin`, `subterrestrial:mesa_cabin`, `subterrestrial:ocean_cabin`, `subterrestrial:taiga_cabin`, `terralith:underground/oak_cabin`, `terralith:underground/giant_bee_hive`, `terralith:underground/mining_outpost`, `terralith:underground/old_refinery`, `terralith:underground/sunken_tower`, `terralith:underground/witch_hut`, `terralith:underground/frosted_dungeon`, `underground_bunkers:underground_bunker`, `unwrecked_ships:nether_ship`
@@ -1083,7 +1269,7 @@ Written with no structures and frequency 0: they can neither generate nor show u
 - **`mod/betterjungletemples`** 1: `betterjungletemples:jungle_temple`
 - **`mod/betterstrongholds`** 1: `betterstrongholds:stronghold`
 - **`mod/yungs`** 11: `betterdeserttemples:desert_temple`, `betterdungeons:skeleton_dungeon`, `betterdungeons:small_dungeon`, `betterdungeons:small_nether_dungeon`, `betterdungeons:spider_dungeon`, `betterdungeons:zombie_dungeon`, `betterfortresses:fortress`, `betterjungletemples:jungle_temple`, `betterstrongholds:stronghold`, `betterwitchhuts:witch_circle`, `betterwitchhuts:witch_hut`
-- **`mod/creativeengineering`** 28: `creativeengineering:meta/deadwood_acacia`, `creativeengineering:meta/deadwood_birch`, `creativeengineering:meta/deadwood_cherry`, `creativeengineering:meta/deadwood_jungle`, `creativeengineering:meta/deadwood_oak`, `creativeengineering:meta/deadwood_spruce`, `creativeengineering:meta/driftwood_flotilla`, `creativeengineering:meta/farmers_camp`, `creativeengineering:meta/fortified_camps`, `creativeengineering:meta/fortified_ruins`, `creativeengineering:meta/house_camp`, `creativeengineering:meta/pillager_camp_ruin`, `creativeengineering:meta/pillager_camp_ruins`, `creativeengineering:meta/pillager_camp_siege`, `creativeengineering:meta/pillager_fleet`, `creativeengineering:meta/pillager_great_tower_siege`, `creativeengineering:meta/pillager_stronghold_siege`, `creativeengineering:meta/pillager_tower_siege`, `creativeengineering:meta/raft_convoy`, `creativeengineering:meta/ruin_cluster`, `creativeengineering:meta/ruin_scatter`, `creativeengineering:meta/shipwreck_debris`, `creativeengineering:meta/shipwreck_graveyard`, `creativeengineering:meta/sunken_ruin_cluster`, `creativeengineering:meta/town_villages`, `creativeengineering:meta/village_towers`, `creativeengineering:meta/waysign_camps`, `creativeengineering:meta/waysign_house_camp`
+- **`mod/creativeengineering`** 46: `creativeengineering:meta/balloon_fleet`, `creativeengineering:meta/cloud_balloons`, `creativeengineering:meta/cloud_cluster`, `creativeengineering:meta/deadwood_acacia`, `creativeengineering:meta/deadwood_birch`, `creativeengineering:meta/deadwood_cherry`, `creativeengineering:meta/deadwood_jungle`, `creativeengineering:meta/deadwood_oak`, `creativeengineering:meta/deadwood_spruce`, `creativeengineering:meta/desert_temple_ruins`, `creativeengineering:meta/driftwood_flotilla`, `creativeengineering:meta/farmers_camp`, `creativeengineering:meta/fortified_camps`, `creativeengineering:meta/fortified_ruins`, `creativeengineering:meta/house_camp`, `creativeengineering:meta/jungle_temple_ruins`, `creativeengineering:meta/meteor_shower`, `creativeengineering:meta/meteorite_desert_pyramid`, `creativeengineering:meta/meteorite_village`, `creativeengineering:meta/pillager_camp_meteorite`, `creativeengineering:meta/pillager_camp_ruin`, `creativeengineering:meta/pillager_camp_ruins`, `creativeengineering:meta/pillager_camp_siege`, `creativeengineering:meta/pillager_caravan`, `creativeengineering:meta/pillager_fleet`, `creativeengineering:meta/pillager_great_tower_siege`, `creativeengineering:meta/pillager_stronghold_siege`, `creativeengineering:meta/pillager_tower_siege`, `creativeengineering:meta/raft_convoy`, `creativeengineering:meta/ruin_cluster`, `creativeengineering:meta/ruin_scatter`, `creativeengineering:meta/shipwreck_debris`, `creativeengineering:meta/shipwreck_graveyard`, `creativeengineering:meta/sky_village_islands`, `creativeengineering:meta/struck_monument`, `creativeengineering:meta/sunken_ruin_cluster`, `creativeengineering:meta/town_villages`, `creativeengineering:meta/trader_caravan`, `creativeengineering:meta/underwater_meteorite`, `creativeengineering:meta/village_siege_camp`, `creativeengineering:meta/village_siege_ring`, `creativeengineering:meta/village_towers`, `creativeengineering:meta/waysign_camps`, `creativeengineering:meta/waysign_house_camp`, `creativeengineering:meta/witch_cart_caravan`, `creativeengineering:meta/witch_coven`
 - **`mod/ae2`** 1: `ae2:meteorite`
 - **`mod/simply_houses`** 10: `simply_houses:forest_chapel`, `simply_houses:forest_fort`, `simply_houses:forest_house`, `simply_houses:forest_stonemason`, `simply_houses:plains_house`, `simply_houses:plains_mansion`, `simply_houses:taiga_forge`, `simply_houses:taiga_house`, `simply_houses:taiga_inn`, `simply_houses:taiga_woodcutter`
 - **`mod/greek_villager_house`** 1: `greek_villager_house:greek_house`
@@ -1156,13 +1342,13 @@ Written with no structures and frequency 0: they can neither generate nor show u
 - **`type/enemy_building`** 63: `betterwitchhuts:witch_hut`, `blocky_siege:pillager_ship`, `creativeengineering:meta/pillager_camp_ruin`, `creativeengineering:meta/pillager_camp_ruins`, `creativeengineering:meta/pillager_camp_siege`, `creativeengineering:meta/pillager_fleet`, `creativeengineering:meta/pillager_great_tower_siege`, `creativeengineering:meta/pillager_stronghold_siege`, `creativeengineering:meta/pillager_tower_siege`, `eugene:fake_trader_camp`, `eugene:pillager_camp`, `eugene:pillager_loot_carriage`, `eugene:witch_wagon`, `illager_siege_weapons:ballista`, `illager_siege_weapons:battering_ram`, `illager_siege_weapons:catapult`, `illager_siege_weapons:reinforced_battering_ram`, `illager_siege_weapons:siege_tower`, `illager_siege_weapons:trebuchet`, `illager_viking_longship:illager_longship`, `illagerwarship:warship`, `minecraft:mansion`, `minecraft:pillager_outpost`, `minecraft:swamp_hut`, `mysticrift_pillagers_towers_aris:acacia_pillager_tower`, `mysticrift_pillagers_towers_aris:birch_pillager_tower`, `mysticrift_pillagers_towers_aris:cherry_pillager_tower`, `mysticrift_pillagers_towers_aris:desert_pillager_tower`, `mysticrift_pillagers_towers_aris:end_pillager_tower`, `mysticrift_pillagers_towers_aris:jungle_pillager_tower`, `mysticrift_pillagers_towers_aris:mangrove_pillager_tower`, `mysticrift_pillagers_towers_aris:oak_wood_pillager_tower`, `terralith:underground/witch_hut`, `towns_and_towers:exclusives/pillager_outpost_classic`, `towns_and_towers:exclusives/pillager_outpost_iberian`, `towns_and_towers:exclusives/pillager_outpost_mediterranean`, `towns_and_towers:exclusives/pillager_outpost_oriental`, `towns_and_towers:exclusives/pillager_outpost_rustic`, `towns_and_towers:exclusives/pillager_outpost_swedish`, `towns_and_towers:exclusives/pillager_outpost_tudor`, `towns_and_towers:pillager_outpost_badlands`, `towns_and_towers:pillager_outpost_beach`, `towns_and_towers:pillager_outpost_birch_forest`, `towns_and_towers:pillager_outpost_desert`, `towns_and_towers:pillager_outpost_flower_forest`, `towns_and_towers:pillager_outpost_forest`, `towns_and_towers:pillager_outpost_grove`, `towns_and_towers:pillager_outpost_jungle`, `towns_and_towers:pillager_outpost_meadow`, `towns_and_towers:pillager_outpost_mushroom_fields`, `towns_and_towers:pillager_outpost_ocean`, `towns_and_towers:pillager_outpost_old_growth_taiga`, `towns_and_towers:pillager_outpost_savanna`, `towns_and_towers:pillager_outpost_snowy_beach`, `towns_and_towers:pillager_outpost_snowy_plains`, `towns_and_towers:pillager_outpost_snowy_slopes`, `towns_and_towers:pillager_outpost_snowy_taiga`, `towns_and_towers:pillager_outpost_sparse_jungle`, `towns_and_towers:pillager_outpost_sunflower_plains`, `towns_and_towers:pillager_outpost_swamp`, `towns_and_towers:pillager_outpost_taiga`, `towns_and_towers:pillager_outpost_wooded_badlands`, `villagesandpillages:village_witch`
 - **`type/ruin`** 29: `creativeengineering:meta/ruin_cluster`, `creativeengineering:meta/ruin_scatter`, `eugene:ruined_drum_tower`, `forest_ruins:ruin_1`, `forest_ruins:ruin_2`, `forest_ruins:ruin_3`, `forest_ruins:ruin_4`, `forest_ruins:ruin_5`, `forest_ruins:ruin_6`, `forest_ruins:ruin_7`, `forgotten_church:forgotten_church`, `philipsruins:ancient_ruins`, `philipsruins:ancient_towers`, `philipsruins:badlands_structures`, `philipsruins:desert_structures`, `philipsruins:field_stone_ruins`, `philipsruins:field_stone_ruins_rocks`, `philipsruins:level_one_ruins`, `philipsruins:level_three_ruins`, `philipsruins:level_two_ruins`, `philipsruins:level_two_ruins_pool`, `philipsruins:lost_soul_city`, `philipsruins:pumpkin_ruins`, `philipsruins:rare_ruin`, `philipsruins:start_nether_ruin`, `philipsruins:underground_structures`, `terralith:glacial_hut`, `terralith:underground/oak_cabin`, `watchtower_building:abandoned_watchtower`
 - **`type/ruined_portal`** 7: `minecraft:ruined_portal`, `minecraft:ruined_portal_desert`, `minecraft:ruined_portal_jungle`, `minecraft:ruined_portal_mountain`, `minecraft:ruined_portal_nether`, `minecraft:ruined_portal_ocean`, `minecraft:ruined_portal_swamp`
-- **`type/underwater_ruin`** 8: `creativeengineering:meta/sunken_ruin_cluster`, `hopo:underwater_ruins`, `hopo:underwater_small_ruins`, `hopo:underwater_warm_small_ruins`, `minecraft:ocean_ruin_cold`, `minecraft:ocean_ruin_warm`, `philipsruins:ocean_fortress`, `philipsruins:ocean_ruins`
+- **`type/underwater_ruin`** 9: `creativeengineering:meta/sunken_ruin_cluster`, `creativeengineering:meta/underwater_meteorite`, `hopo:underwater_ruins`, `hopo:underwater_small_ruins`, `hopo:underwater_warm_small_ruins`, `minecraft:ocean_ruin_cold`, `minecraft:ocean_ruin_warm`, `philipsruins:ocean_fortress`, `philipsruins:ocean_ruins`
 - **`type/shipwreck`** 5: `creativeengineering:meta/shipwreck_debris`, `creativeengineering:meta/shipwreck_graveyard`, `revamped_shipwrecks:shipwreck`, `revamped_shipwrecks:shipwreck_beached`, `towns_and_towers:wreckage_ocean`
 - **`type/mineshaft`** 3: `minecraft:mineshaft`, `minecraft:mineshaft_mesa`, `terralith:underground/mining_outpost`
 - **`type/underground`** 19: `farmers_structures:ratatouilles`, `farmers_structures:squids`, `minecraft:buried_treasure`, `philipsruins:lost_soul_city`, `philipsruins:underground_structures`, `subterrestrial:deepslate_cabin`, `subterrestrial:default_cabin`, `subterrestrial:desert_cabin`, `subterrestrial:ice_cabin`, `subterrestrial:jungle_cabin`, `subterrestrial:mesa_cabin`, `subterrestrial:ocean_cabin`, `subterrestrial:taiga_cabin`, `terralith:underground/giant_bee_hive`, `terralith:underground/mining_outpost`, `terralith:underground/oak_cabin`, `terralith:underground/old_refinery`, `terralith:underground/sunken_tower`, `terralith:underground/witch_hut`
 - **`type/environmental`** 10: `ae2:meteorite`, `creativeengineering:meta/deadwood_acacia`, `creativeengineering:meta/deadwood_birch`, `creativeengineering:meta/deadwood_cherry`, `creativeengineering:meta/deadwood_jungle`, `creativeengineering:meta/deadwood_oak`, `creativeengineering:meta/deadwood_spruce`, `creativeengineering:meta/driftwood_flotilla`, `hopo:underwater_fossils`, `terralith:underground/giant_bee_hive`
 - **`type/decoration`** 14: `hearths:netherrack_spiral`, `mes:ender_spire`, `mes:enderpin_spikes`, `mes:endscraps`, `mes:ruined_pillar`, `minecraft:nether_fossil`, `old_illager_statue:old_illager_statue`, `oldvillagerstatue:old_villager_statue`, `philipsruins:field_stone_ruins_rocks`, `small_cat_statues:cat_1`, `small_cat_statues:cat_2`, `small_cat_statues:cat_3`, `supplementaries:way_sign`, `twigs:bloodstone_obelisk`
-- **`type/sky`** 3: `cloudstorage:big_balloon`, `cloudstorage:sky_temple`, `skyvillages:skyvillage`
+- **`type/sky`** 7: `cloudstorage:big_balloon`, `cloudstorage:sky_temple`, `creativeengineering:meta/balloon_fleet`, `creativeengineering:meta/cloud_balloons`, `creativeengineering:meta/cloud_cluster`, `creativeengineering:meta/sky_village_islands`, `skyvillages:skyvillage`
 - **`type/nether_environmental`** 2: `hearths:netherrack_spiral`, `minecraft:nether_fossil`
 - **`type/nether_constructed`** 14: `betterdungeons:small_nether_dungeon`, `betterfortresses:fortress`, `eugene:piglin_camp`, `farmers_structures:cooks_nether_1`, `farmers_structures:cooks_nether_2`, `hearths:crimson_tower`, `hearths:warped_tower`, `minecraft:bastion_remnant`, `minecraft:fortress`, `minecraft:ruined_portal_nether`, `philipsruins:nether_lava_ruins`, `philipsruins:sealedruinedghaststatue1`, `philipsruins:start_nether_dungeon`, `twigs:bloodstone_obelisk`
 - **`type/end_environmental`** 5: `mes:astral_meteorite`, `mes:enderbloom_grove`, `mes:enderskog`, `mes:placid_prairie`, `nullscape:dragon_skeleton`
@@ -1183,25 +1369,25 @@ Written with no structures and frequency 0: they can neither generate nor show u
 - **`pillager`** 57: `blocky_siege:pillager_ship`, `creativeengineering:meta/pillager_camp_ruin`, `creativeengineering:meta/pillager_camp_ruins`, `creativeengineering:meta/pillager_camp_siege`, `creativeengineering:meta/pillager_fleet`, `creativeengineering:meta/pillager_great_tower_siege`, `creativeengineering:meta/pillager_stronghold_siege`, `creativeengineering:meta/pillager_tower_siege`, `eugene:pillager_camp`, `eugene:pillager_loot_carriage`, `illager_siege_weapons:ballista`, `illager_siege_weapons:battering_ram`, `illager_siege_weapons:catapult`, `illager_siege_weapons:reinforced_battering_ram`, `illager_siege_weapons:siege_tower`, `illager_siege_weapons:trebuchet`, `illager_viking_longship:illager_longship`, `illagerwarship:warship`, `minecraft:mansion`, `minecraft:pillager_outpost`, `mysticrift_pillagers_towers_aris:acacia_pillager_tower`, `mysticrift_pillagers_towers_aris:birch_pillager_tower`, `mysticrift_pillagers_towers_aris:cherry_pillager_tower`, `mysticrift_pillagers_towers_aris:desert_pillager_tower`, `mysticrift_pillagers_towers_aris:end_pillager_tower`, `mysticrift_pillagers_towers_aris:jungle_pillager_tower`, `mysticrift_pillagers_towers_aris:mangrove_pillager_tower`, `mysticrift_pillagers_towers_aris:oak_wood_pillager_tower`, `towns_and_towers:exclusives/pillager_outpost_classic`, `towns_and_towers:exclusives/pillager_outpost_iberian`, `towns_and_towers:exclusives/pillager_outpost_mediterranean`, `towns_and_towers:exclusives/pillager_outpost_oriental`, `towns_and_towers:exclusives/pillager_outpost_rustic`, `towns_and_towers:exclusives/pillager_outpost_swedish`, `towns_and_towers:exclusives/pillager_outpost_tudor`, `towns_and_towers:pillager_outpost_badlands`, `towns_and_towers:pillager_outpost_beach`, `towns_and_towers:pillager_outpost_birch_forest`, `towns_and_towers:pillager_outpost_desert`, `towns_and_towers:pillager_outpost_flower_forest`, `towns_and_towers:pillager_outpost_forest`, `towns_and_towers:pillager_outpost_grove`, `towns_and_towers:pillager_outpost_jungle`, `towns_and_towers:pillager_outpost_meadow`, `towns_and_towers:pillager_outpost_mushroom_fields`, `towns_and_towers:pillager_outpost_ocean`, `towns_and_towers:pillager_outpost_old_growth_taiga`, `towns_and_towers:pillager_outpost_savanna`, `towns_and_towers:pillager_outpost_snowy_beach`, `towns_and_towers:pillager_outpost_snowy_plains`, `towns_and_towers:pillager_outpost_snowy_slopes`, `towns_and_towers:pillager_outpost_snowy_taiga`, `towns_and_towers:pillager_outpost_sparse_jungle`, `towns_and_towers:pillager_outpost_sunflower_plains`, `towns_and_towers:pillager_outpost_swamp`, `towns_and_towers:pillager_outpost_taiga`, `towns_and_towers:pillager_outpost_wooded_badlands`
 - **`nether`** 16: `betterdungeons:small_nether_dungeon`, `betterfortresses:fortress`, `eugene:piglin_camp`, `farmers_structures:cooks_nether_1`, `farmers_structures:cooks_nether_2`, `hearths:crimson_tower`, `hearths:netherrack_spiral`, `hearths:warped_tower`, `minecraft:bastion_remnant`, `minecraft:fortress`, `minecraft:nether_fossil`, `minecraft:ruined_portal_nether`, `philipsruins:nether_lava_ruins`, `philipsruins:sealedruinedghaststatue1`, `philipsruins:start_nether_dungeon`, `twigs:bloodstone_obelisk`
 - **`end`** 22: `endersdelight:end_house`, `mes:astral_hideaway`, `mes:astral_meteorite`, `mes:ender_spire`, `mes:enderbloom_grove`, `mes:enderkeep_courtyard`, `mes:enderpin_spikes`, `mes:enderskog`, `mes:enderwatch_tower`, `mes:endscraps`, `mes:manuscript_shrine`, `mes:monolith`, `mes:mythic_garden`, `mes:phantom_citadel`, `mes:placid_prairie`, `mes:ruined_pillar`, `mes:starlight_voyager`, `minecraft:end_city`, `mysticrift_pillagers_towers_aris:end_pillager_tower`, `nullscape:dragon_skeleton`, `philipsruins:end_gate_fortress`, `philipsruins:end_ruins`
-- **`ruins`** 49: `creativeengineering:meta/ruin_cluster`, `creativeengineering:meta/ruin_scatter`, `creativeengineering:meta/sunken_ruin_cluster`, `eugene:ruined_drum_tower`, `forest_ruins:ruin_1`, `forest_ruins:ruin_2`, `forest_ruins:ruin_3`, `forest_ruins:ruin_4`, `forest_ruins:ruin_5`, `forest_ruins:ruin_6`, `forest_ruins:ruin_7`, `forgotten_church:forgotten_church`, `hopo:underwater_ruins`, `hopo:underwater_small_ruins`, `hopo:underwater_warm_small_ruins`, `mes:endscraps`, `mes:ruined_pillar`, `minecraft:ocean_ruin_cold`, `minecraft:ocean_ruin_warm`, `minecraft:ruined_portal`, `minecraft:ruined_portal_desert`, `minecraft:ruined_portal_jungle`, `minecraft:ruined_portal_mountain`, `minecraft:ruined_portal_nether`, `minecraft:ruined_portal_ocean`, `minecraft:ruined_portal_swamp`, `philipsruins:ancient_ruins`, `philipsruins:ancient_towers`, `philipsruins:badlands_structures`, `philipsruins:desert_structures`, `philipsruins:end_ruins`, `philipsruins:field_stone_ruins`, `philipsruins:field_stone_ruins_rocks`, `philipsruins:level_one_ruins`, `philipsruins:level_three_ruins`, `philipsruins:level_two_ruins`, `philipsruins:level_two_ruins_pool`, `philipsruins:lost_soul_city`, `philipsruins:nether_lava_ruins`, `philipsruins:ocean_fortress`, `philipsruins:ocean_ruins`, `philipsruins:pumpkin_ruins`, `philipsruins:rare_ruin`, `philipsruins:sealedruinedghaststatue1`, `philipsruins:start_nether_ruin`, `philipsruins:underground_structures`, `terralith:glacial_hut`, `terralith:underground/oak_cabin`, `watchtower_building:abandoned_watchtower`
-- **`group/settlements`** 35: `creativeengineering:meta/fortified_camps`, `creativeengineering:meta/fortified_ruins`, `creativeengineering:meta/town_villages`, `creativeengineering:meta/village_towers`, `eugene:red_roof_castle`, `minecraft:village_desert`, `minecraft:village_plains`, `minecraft:village_savanna`, `minecraft:village_snowy`, `minecraft:village_taiga`, `terralith:fortified_desert_village`, `terralith:fortified_village`, `towns_and_towers:exclusives/village_classic`, `towns_and_towers:exclusives/village_iberian`, `towns_and_towers:exclusives/village_mediterranean`, `towns_and_towers:exclusives/village_nilotic`, `towns_and_towers:exclusives/village_rustic`, `towns_and_towers:exclusives/village_swedish`, `towns_and_towers:exclusives/village_tudor`, `towns_and_towers:village_badlands`, `towns_and_towers:village_beach`, `towns_and_towers:village_birch_forest`, `towns_and_towers:village_flower_forest`, `towns_and_towers:village_forest`, `towns_and_towers:village_grove`, `towns_and_towers:village_jungle`, `towns_and_towers:village_meadow`, `towns_and_towers:village_mushroom_fields`, `towns_and_towers:village_old_growth_taiga`, `towns_and_towers:village_snowy_slopes`, `towns_and_towers:village_snowy_taiga`, `towns_and_towers:village_sparse_jungle`, `towns_and_towers:village_sunflower_plains`, `towns_and_towers:village_swamp`, `towns_and_towers:village_wooded_badlands`
-- **`group/pillager_settlements`** 47: `creativeengineering:meta/pillager_camp_ruin`, `creativeengineering:meta/pillager_camp_ruins`, `creativeengineering:meta/pillager_camp_siege`, `creativeengineering:meta/pillager_great_tower_siege`, `creativeengineering:meta/pillager_stronghold_siege`, `creativeengineering:meta/pillager_tower_siege`, `eugene:fake_trader_camp`, `eugene:pillager_camp`, `minecraft:pillager_outpost`, `mysticrift_pillagers_towers_aris:acacia_pillager_tower`, `mysticrift_pillagers_towers_aris:birch_pillager_tower`, `mysticrift_pillagers_towers_aris:cherry_pillager_tower`, `mysticrift_pillagers_towers_aris:desert_pillager_tower`, `mysticrift_pillagers_towers_aris:end_pillager_tower`, `mysticrift_pillagers_towers_aris:jungle_pillager_tower`, `mysticrift_pillagers_towers_aris:mangrove_pillager_tower`, `mysticrift_pillagers_towers_aris:oak_wood_pillager_tower`, `takesapillage:bastille`, `takesapillage:pillager_camp`, `towns_and_towers:exclusives/pillager_outpost_classic`, `towns_and_towers:exclusives/pillager_outpost_iberian`, `towns_and_towers:exclusives/pillager_outpost_mediterranean`, `towns_and_towers:exclusives/pillager_outpost_oriental`, `towns_and_towers:exclusives/pillager_outpost_rustic`, `towns_and_towers:exclusives/pillager_outpost_swedish`, `towns_and_towers:exclusives/pillager_outpost_tudor`, `towns_and_towers:pillager_outpost_badlands`, `towns_and_towers:pillager_outpost_beach`, `towns_and_towers:pillager_outpost_birch_forest`, `towns_and_towers:pillager_outpost_desert`, `towns_and_towers:pillager_outpost_flower_forest`, `towns_and_towers:pillager_outpost_forest`, `towns_and_towers:pillager_outpost_grove`, `towns_and_towers:pillager_outpost_jungle`, `towns_and_towers:pillager_outpost_meadow`, `towns_and_towers:pillager_outpost_mushroom_fields`, `towns_and_towers:pillager_outpost_old_growth_taiga`, `towns_and_towers:pillager_outpost_savanna`, `towns_and_towers:pillager_outpost_snowy_beach`, `towns_and_towers:pillager_outpost_snowy_plains`, `towns_and_towers:pillager_outpost_snowy_slopes`, `towns_and_towers:pillager_outpost_snowy_taiga`, `towns_and_towers:pillager_outpost_sparse_jungle`, `towns_and_towers:pillager_outpost_sunflower_plains`, `towns_and_towers:pillager_outpost_swamp`, `towns_and_towers:pillager_outpost_taiga`, `towns_and_towers:pillager_outpost_wooded_badlands`
+- **`ruins`** 50: `creativeengineering:meta/ruin_cluster`, `creativeengineering:meta/ruin_scatter`, `creativeengineering:meta/sunken_ruin_cluster`, `creativeengineering:meta/underwater_meteorite`, `eugene:ruined_drum_tower`, `forest_ruins:ruin_1`, `forest_ruins:ruin_2`, `forest_ruins:ruin_3`, `forest_ruins:ruin_4`, `forest_ruins:ruin_5`, `forest_ruins:ruin_6`, `forest_ruins:ruin_7`, `forgotten_church:forgotten_church`, `hopo:underwater_ruins`, `hopo:underwater_small_ruins`, `hopo:underwater_warm_small_ruins`, `mes:endscraps`, `mes:ruined_pillar`, `minecraft:ocean_ruin_cold`, `minecraft:ocean_ruin_warm`, `minecraft:ruined_portal`, `minecraft:ruined_portal_desert`, `minecraft:ruined_portal_jungle`, `minecraft:ruined_portal_mountain`, `minecraft:ruined_portal_nether`, `minecraft:ruined_portal_ocean`, `minecraft:ruined_portal_swamp`, `philipsruins:ancient_ruins`, `philipsruins:ancient_towers`, `philipsruins:badlands_structures`, `philipsruins:desert_structures`, `philipsruins:end_ruins`, `philipsruins:field_stone_ruins`, `philipsruins:field_stone_ruins_rocks`, `philipsruins:level_one_ruins`, `philipsruins:level_three_ruins`, `philipsruins:level_two_ruins`, `philipsruins:level_two_ruins_pool`, `philipsruins:lost_soul_city`, `philipsruins:nether_lava_ruins`, `philipsruins:ocean_fortress`, `philipsruins:ocean_ruins`, `philipsruins:pumpkin_ruins`, `philipsruins:rare_ruin`, `philipsruins:sealedruinedghaststatue1`, `philipsruins:start_nether_ruin`, `philipsruins:underground_structures`, `terralith:glacial_hut`, `terralith:underground/oak_cabin`, `watchtower_building:abandoned_watchtower`
+- **`group/settlements`** 38: `creativeengineering:meta/fortified_camps`, `creativeengineering:meta/fortified_ruins`, `creativeengineering:meta/meteorite_village`, `creativeengineering:meta/town_villages`, `creativeengineering:meta/village_siege_camp`, `creativeengineering:meta/village_siege_ring`, `creativeengineering:meta/village_towers`, `eugene:red_roof_castle`, `minecraft:village_desert`, `minecraft:village_plains`, `minecraft:village_savanna`, `minecraft:village_snowy`, `minecraft:village_taiga`, `terralith:fortified_desert_village`, `terralith:fortified_village`, `towns_and_towers:exclusives/village_classic`, `towns_and_towers:exclusives/village_iberian`, `towns_and_towers:exclusives/village_mediterranean`, `towns_and_towers:exclusives/village_nilotic`, `towns_and_towers:exclusives/village_rustic`, `towns_and_towers:exclusives/village_swedish`, `towns_and_towers:exclusives/village_tudor`, `towns_and_towers:village_badlands`, `towns_and_towers:village_beach`, `towns_and_towers:village_birch_forest`, `towns_and_towers:village_flower_forest`, `towns_and_towers:village_forest`, `towns_and_towers:village_grove`, `towns_and_towers:village_jungle`, `towns_and_towers:village_meadow`, `towns_and_towers:village_mushroom_fields`, `towns_and_towers:village_old_growth_taiga`, `towns_and_towers:village_snowy_slopes`, `towns_and_towers:village_snowy_taiga`, `towns_and_towers:village_sparse_jungle`, `towns_and_towers:village_sunflower_plains`, `towns_and_towers:village_swamp`, `towns_and_towers:village_wooded_badlands`
+- **`group/pillager_settlements`** 48: `creativeengineering:meta/pillager_camp_meteorite`, `creativeengineering:meta/pillager_camp_ruin`, `creativeengineering:meta/pillager_camp_ruins`, `creativeengineering:meta/pillager_camp_siege`, `creativeengineering:meta/pillager_great_tower_siege`, `creativeengineering:meta/pillager_stronghold_siege`, `creativeengineering:meta/pillager_tower_siege`, `eugene:fake_trader_camp`, `eugene:pillager_camp`, `minecraft:pillager_outpost`, `mysticrift_pillagers_towers_aris:acacia_pillager_tower`, `mysticrift_pillagers_towers_aris:birch_pillager_tower`, `mysticrift_pillagers_towers_aris:cherry_pillager_tower`, `mysticrift_pillagers_towers_aris:desert_pillager_tower`, `mysticrift_pillagers_towers_aris:end_pillager_tower`, `mysticrift_pillagers_towers_aris:jungle_pillager_tower`, `mysticrift_pillagers_towers_aris:mangrove_pillager_tower`, `mysticrift_pillagers_towers_aris:oak_wood_pillager_tower`, `takesapillage:bastille`, `takesapillage:pillager_camp`, `towns_and_towers:exclusives/pillager_outpost_classic`, `towns_and_towers:exclusives/pillager_outpost_iberian`, `towns_and_towers:exclusives/pillager_outpost_mediterranean`, `towns_and_towers:exclusives/pillager_outpost_oriental`, `towns_and_towers:exclusives/pillager_outpost_rustic`, `towns_and_towers:exclusives/pillager_outpost_swedish`, `towns_and_towers:exclusives/pillager_outpost_tudor`, `towns_and_towers:pillager_outpost_badlands`, `towns_and_towers:pillager_outpost_beach`, `towns_and_towers:pillager_outpost_birch_forest`, `towns_and_towers:pillager_outpost_desert`, `towns_and_towers:pillager_outpost_flower_forest`, `towns_and_towers:pillager_outpost_forest`, `towns_and_towers:pillager_outpost_grove`, `towns_and_towers:pillager_outpost_jungle`, `towns_and_towers:pillager_outpost_meadow`, `towns_and_towers:pillager_outpost_mushroom_fields`, `towns_and_towers:pillager_outpost_old_growth_taiga`, `towns_and_towers:pillager_outpost_savanna`, `towns_and_towers:pillager_outpost_snowy_beach`, `towns_and_towers:pillager_outpost_snowy_plains`, `towns_and_towers:pillager_outpost_snowy_slopes`, `towns_and_towers:pillager_outpost_snowy_taiga`, `towns_and_towers:pillager_outpost_sparse_jungle`, `towns_and_towers:pillager_outpost_sunflower_plains`, `towns_and_towers:pillager_outpost_swamp`, `towns_and_towers:pillager_outpost_taiga`, `towns_and_towers:pillager_outpost_wooded_badlands`
 - **`group/ruins`** 31: `creativeengineering:meta/ruin_cluster`, `creativeengineering:meta/ruin_scatter`, `eugene:ruined_drum_tower`, `forest_ruins:ruin_1`, `forest_ruins:ruin_2`, `forest_ruins:ruin_3`, `forest_ruins:ruin_4`, `forest_ruins:ruin_5`, `forest_ruins:ruin_6`, `forest_ruins:ruin_7`, `forgotten_church:forgotten_church`, `old_illager_statue:old_illager_statue`, `oldvillagerstatue:old_villager_statue`, `philipsruins:ancient_ruins`, `philipsruins:ancient_towers`, `philipsruins:badlands_structures`, `philipsruins:desert_structures`, `philipsruins:field_stone_ruins`, `philipsruins:field_stone_ruins_rocks`, `philipsruins:level_one_ruins`, `philipsruins:level_three_ruins`, `philipsruins:level_two_ruins`, `philipsruins:level_two_ruins_pool`, `philipsruins:pumpkin_ruins`, `philipsruins:rare_ruin`, `philipsruins:start_nether_ruin`, `small_cat_statues:cat_1`, `small_cat_statues:cat_2`, `small_cat_statues:cat_3`, `terralith:glacial_hut`, `watchtower_building:abandoned_watchtower`
-- **`group/surface_dungeons`** 7: `betterjungletemples:jungle_temple`, `eugene:undead_castle`, `minecraft:jungle_pyramid`, `minecraft:mansion`, `philipsruins:badlands_start_dungeon`, `terralith:spire`, `towns_and_towers:mimic_desert`
-- **`group/desert_temples`** 2: `betterdeserttemples:desert_temple`, `minecraft:desert_pyramid`
-- **`group/witch_huts`** 4: `betterwitchhuts:witch_circle`, `betterwitchhuts:witch_hut`, `minecraft:swamp_hut`, `villagesandpillages:village_witch`
+- **`group/surface_dungeons`** 8: `betterjungletemples:jungle_temple`, `creativeengineering:meta/jungle_temple_ruins`, `eugene:undead_castle`, `minecraft:jungle_pyramid`, `minecraft:mansion`, `philipsruins:badlands_start_dungeon`, `terralith:spire`, `towns_and_towers:mimic_desert`
+- **`group/desert_temples`** 4: `betterdeserttemples:desert_temple`, `creativeengineering:meta/desert_temple_ruins`, `creativeengineering:meta/meteorite_desert_pyramid`, `minecraft:desert_pyramid`
+- **`group/witch_huts`** 5: `betterwitchhuts:witch_circle`, `betterwitchhuts:witch_hut`, `creativeengineering:meta/witch_coven`, `minecraft:swamp_hut`, `villagesandpillages:village_witch`
 - **`group/entrance_dungeons`** 2: `betterdungeons:spider_dungeon`, `betterdungeons:zombie_dungeon`
 - **`group/nether_ruins`** 4: `philipsruins:nether_lava_ruins`, `philipsruins:sealedruinedghaststatue1`, `philipsruins:start_nether_dungeon`, `twigs:bloodstone_obelisk`
 - **`group/way_signs`** 1: `supplementaries:way_sign`
-- **`group/vehicles`** 8: `eugene:pillager_loot_carriage`, `eugene:witch_wagon`, `illager_siege_weapons:ballista`, `illager_siege_weapons:battering_ram`, `illager_siege_weapons:catapult`, `illager_siege_weapons:reinforced_battering_ram`, `illager_siege_weapons:siege_tower`, `illager_siege_weapons:trebuchet`
-- **`group/ocean_ruins`** 14: `creativeengineering:meta/shipwreck_debris`, `creativeengineering:meta/shipwreck_graveyard`, `creativeengineering:meta/sunken_ruin_cluster`, `hopo:underwater_fossils`, `hopo:underwater_ruins`, `hopo:underwater_small_ruins`, `hopo:underwater_warm_small_ruins`, `minecraft:ocean_ruin_cold`, `minecraft:ocean_ruin_warm`, `philipsruins:ocean_fortress`, `philipsruins:ocean_ruins`, `revamped_shipwrecks:shipwreck`, `revamped_shipwrecks:shipwreck_beached`, `towns_and_towers:wreckage_ocean`
-- **`group/ocean_dungeons`** 1: `minecraft:monument`
-- **`group/sky`** 4: `ae2:meteorite`, `cloudstorage:big_balloon`, `cloudstorage:sky_temple`, `skyvillages:skyvillage`
+- **`group/vehicles`** 10: `creativeengineering:meta/pillager_caravan`, `creativeengineering:meta/witch_cart_caravan`, `eugene:pillager_loot_carriage`, `eugene:witch_wagon`, `illager_siege_weapons:ballista`, `illager_siege_weapons:battering_ram`, `illager_siege_weapons:catapult`, `illager_siege_weapons:reinforced_battering_ram`, `illager_siege_weapons:siege_tower`, `illager_siege_weapons:trebuchet`
+- **`group/ocean_ruins`** 15: `creativeengineering:meta/shipwreck_debris`, `creativeengineering:meta/shipwreck_graveyard`, `creativeengineering:meta/sunken_ruin_cluster`, `creativeengineering:meta/underwater_meteorite`, `hopo:underwater_fossils`, `hopo:underwater_ruins`, `hopo:underwater_small_ruins`, `hopo:underwater_warm_small_ruins`, `minecraft:ocean_ruin_cold`, `minecraft:ocean_ruin_warm`, `philipsruins:ocean_fortress`, `philipsruins:ocean_ruins`, `revamped_shipwrecks:shipwreck`, `revamped_shipwrecks:shipwreck_beached`, `towns_and_towers:wreckage_ocean`
+- **`group/ocean_dungeons`** 2: `creativeengineering:meta/struck_monument`, `minecraft:monument`
+- **`group/sky`** 9: `ae2:meteorite`, `cloudstorage:big_balloon`, `cloudstorage:sky_temple`, `creativeengineering:meta/balloon_fleet`, `creativeengineering:meta/cloud_balloons`, `creativeengineering:meta/cloud_cluster`, `creativeengineering:meta/meteor_shower`, `creativeengineering:meta/sky_village_islands`, `skyvillages:skyvillage`
 - **`group/boats`** 12: `antiquetradingship:antique_trading_ship`, `blocky_siege:pillager_ship`, `creativeengineering:meta/pillager_fleet`, `creativeengineering:meta/raft_convoy`, `illager_viking_longship:illager_longship`, `illagerwarship:warship`, `towns_and_towers:pillager_outpost_ocean`, `towns_and_towers:village_ocean`, `unwrecked_ships:ship`, `villager_rafts:raft_1`, `villager_rafts:raft_2`, `villager_rafts:raft_3`
 - **`group/flotsam`** 1: `creativeengineering:meta/driftwood_flotilla`
 - **`group/deadwood`** 6: `creativeengineering:meta/deadwood_acacia`, `creativeengineering:meta/deadwood_birch`, `creativeengineering:meta/deadwood_cherry`, `creativeengineering:meta/deadwood_jungle`, `creativeengineering:meta/deadwood_oak`, `creativeengineering:meta/deadwood_spruce`
-- **`group/remote`** 74: `ancient_enchantment_temple:temple`, `animal_barn:barn`, `beautify:botanist_house_desert`, `beautify:botanist_house_plains`, `beautify:botanist_house_savanna`, `beautify:botanist_house_snowy`, `beautify:botanist_house_taiga`, `bighorsestable:big_horse_stable`, `campsite_structures:armorer_campsite`, `campsite_structures:butcher_campsite`, `campsite_structures:cartographer_campsite`, `campsite_structures:cleric_campsite`, `campsite_structures:farmer_campsite`, `campsite_structures:fisher_campsite`, `creativeengineering:meta/farmers_camp`, `creativeengineering:meta/house_camp`, `creativeengineering:meta/waysign_camps`, `creativeengineering:meta/waysign_house_camp`, `desert_village_temple:village_temple`, `desert_watchtower:watchtower`, `eugene:camp`, `farmers_structures:aquacultures_beach`, `farmers_structures:aquacultures_cod`, `farmers_structures:aquacultures_common`, `farmers_structures:cacaos`, `farmers_structures:cooks`, `farmers_structures:cooks_moss`, `farmers_structures:fishs_stew`, `farmers_structures:ratatouilles`, `farmers_structures:shepherd_farms`, `farmers_structures:squids`, `farmers_structures:sushis`, `forest_watchtower:forest_watchtower`, `gothic_church:church`, `greek_villager_house:greek_house`, `hobbit_house_:hobbit_house`, `llama_stable:llama_stable`, `minecraft:igloo`, `mini_clock_tower:mini_clock_tower`, `old_swamp_fisherman_house:fisherman_house`, `plains_villager_tents:big_villager_tent`, `saloon:saloon`, `sawmillhouse:sawmill`, `simply_houses:forest_chapel`, `simply_houses:forest_fort`, `simply_houses:forest_house`, `simply_houses:forest_stonemason`, `simply_houses:plains_house`, `simply_houses:plains_mansion`, `simply_houses:taiga_forge`, `simply_houses:taiga_house`, `simply_houses:taiga_inn`, `simply_houses:taiga_woodcutter`, `small_viking_villager_house:small_viking_house`, `small_villager_greenhouse:small_villager_greenhouse`, `smallhorsestable:horse_stable`, `snowy_tents:snowy_tent`, `towns_and_towers:exclusives/village_wandering_trader_camp`, `villager_archer_camp:villager_archer_camp`, `villager_butcher_house:butcher_house`, `villager_cartographer_house:villager_cartographer_house`, `villager_circus_tent:villager_circus_tent`, `villager_cleric_house:villager_cleric_house`, `villager_country_house:country_house`, `villager_farmer_house:villager_farmer_house`, `villager_fish_shop:fish_shop`, `villager_fishermans_hut:villager_fishermans_hut`, `villager_fletcher_house:villager_fletcher_house`, `villager_flower_house:flower_house`, `villager_forge:villager_forge`, `villager_gold_washing_facility:villager_gold_washing_facility`, `villager_tannery:tannery`, `villager_windmill:windmill`, `watchtower_building:fresh_watchtower`
-- **`water_ok`** 69: `ae2:meteorite`, `antiquetradingship:antique_trading_ship`, `betterdungeons:skeleton_dungeon`, `betterdungeons:small_dungeon`, `betterstrongholds:stronghold`, `blocky_siege:pillager_ship`, `cloudstorage:big_balloon`, `cloudstorage:sky_temple`, `creativeengineering:meta/driftwood_flotilla`, `creativeengineering:meta/pillager_fleet`, `creativeengineering:meta/raft_convoy`, `creativeengineering:meta/shipwreck_debris`, `creativeengineering:meta/shipwreck_graveyard`, `creativeengineering:meta/sunken_ruin_cluster`, `farmers_structures:ratatouilles`, `farmers_structures:squids`, `farmers_structures:sushis`, `hopo:underwater_fossils`, `hopo:underwater_ruins`, `hopo:underwater_small_ruins`, `hopo:underwater_warm_small_ruins`, `illager_viking_longship:illager_longship`, `illagerwarship:warship`, `mes:starlight_voyager`, `minecraft:ancient_city`, `minecraft:buried_treasure`, `minecraft:mineshaft`, `minecraft:mineshaft_mesa`, `minecraft:monument`, `minecraft:ocean_ruin_cold`, `minecraft:ocean_ruin_warm`, `minecraft:ruined_portal_ocean`, `minecraft:stronghold`, `philipsruins:ancient_crypt`, `philipsruins:ancient_dungeon`, `philipsruins:antiquus_crypta`, `philipsruins:bone_dungeon`, `philipsruins:lost_soul_city`, `philipsruins:lost_soul_dungeon`, `philipsruins:ocean_fortress`, `philipsruins:ocean_ruins`, `philipsruins:sculk_dungeon`, `philipsruins:underground_structures`, `revamped_shipwrecks:shipwreck`, `revamped_shipwrecks:shipwreck_beached`, `skyvillages:skyvillage`, `subterrestrial:deepslate_cabin`, `subterrestrial:default_cabin`, `subterrestrial:desert_cabin`, `subterrestrial:ice_cabin`, `subterrestrial:jungle_cabin`, `subterrestrial:mesa_cabin`, `subterrestrial:ocean_cabin`, `subterrestrial:taiga_cabin`, `terralith:underground/frosted_dungeon`, `terralith:underground/giant_bee_hive`, `terralith:underground/mining_outpost`, `terralith:underground/oak_cabin`, `terralith:underground/old_refinery`, `terralith:underground/sunken_tower`, `terralith:underground/witch_hut`, `towns_and_towers:pillager_outpost_ocean`, `towns_and_towers:village_ocean`, `towns_and_towers:wreckage_ocean`, `unwrecked_ships:nether_ship`, `unwrecked_ships:ship`, `villager_rafts:raft_1`, `villager_rafts:raft_2`, `villager_rafts:raft_3`
+- **`group/remote`** 75: `ancient_enchantment_temple:temple`, `animal_barn:barn`, `beautify:botanist_house_desert`, `beautify:botanist_house_plains`, `beautify:botanist_house_savanna`, `beautify:botanist_house_snowy`, `beautify:botanist_house_taiga`, `bighorsestable:big_horse_stable`, `campsite_structures:armorer_campsite`, `campsite_structures:butcher_campsite`, `campsite_structures:cartographer_campsite`, `campsite_structures:cleric_campsite`, `campsite_structures:farmer_campsite`, `campsite_structures:fisher_campsite`, `creativeengineering:meta/farmers_camp`, `creativeengineering:meta/house_camp`, `creativeengineering:meta/trader_caravan`, `creativeengineering:meta/waysign_camps`, `creativeengineering:meta/waysign_house_camp`, `desert_village_temple:village_temple`, `desert_watchtower:watchtower`, `eugene:camp`, `farmers_structures:aquacultures_beach`, `farmers_structures:aquacultures_cod`, `farmers_structures:aquacultures_common`, `farmers_structures:cacaos`, `farmers_structures:cooks`, `farmers_structures:cooks_moss`, `farmers_structures:fishs_stew`, `farmers_structures:ratatouilles`, `farmers_structures:shepherd_farms`, `farmers_structures:squids`, `farmers_structures:sushis`, `forest_watchtower:forest_watchtower`, `gothic_church:church`, `greek_villager_house:greek_house`, `hobbit_house_:hobbit_house`, `llama_stable:llama_stable`, `minecraft:igloo`, `mini_clock_tower:mini_clock_tower`, `old_swamp_fisherman_house:fisherman_house`, `plains_villager_tents:big_villager_tent`, `saloon:saloon`, `sawmillhouse:sawmill`, `simply_houses:forest_chapel`, `simply_houses:forest_fort`, `simply_houses:forest_house`, `simply_houses:forest_stonemason`, `simply_houses:plains_house`, `simply_houses:plains_mansion`, `simply_houses:taiga_forge`, `simply_houses:taiga_house`, `simply_houses:taiga_inn`, `simply_houses:taiga_woodcutter`, `small_viking_villager_house:small_viking_house`, `small_villager_greenhouse:small_villager_greenhouse`, `smallhorsestable:horse_stable`, `snowy_tents:snowy_tent`, `towns_and_towers:exclusives/village_wandering_trader_camp`, `villager_archer_camp:villager_archer_camp`, `villager_butcher_house:butcher_house`, `villager_cartographer_house:villager_cartographer_house`, `villager_circus_tent:villager_circus_tent`, `villager_cleric_house:villager_cleric_house`, `villager_country_house:country_house`, `villager_farmer_house:villager_farmer_house`, `villager_fish_shop:fish_shop`, `villager_fishermans_hut:villager_fishermans_hut`, `villager_fletcher_house:villager_fletcher_house`, `villager_flower_house:flower_house`, `villager_forge:villager_forge`, `villager_gold_washing_facility:villager_gold_washing_facility`, `villager_tannery:tannery`, `villager_windmill:windmill`, `watchtower_building:fresh_watchtower`
+- **`water_ok`** 76: `ae2:meteorite`, `antiquetradingship:antique_trading_ship`, `betterdungeons:skeleton_dungeon`, `betterdungeons:small_dungeon`, `betterstrongholds:stronghold`, `blocky_siege:pillager_ship`, `cloudstorage:big_balloon`, `cloudstorage:sky_temple`, `creativeengineering:meta/balloon_fleet`, `creativeengineering:meta/cloud_balloons`, `creativeengineering:meta/cloud_cluster`, `creativeengineering:meta/driftwood_flotilla`, `creativeengineering:meta/meteor_shower`, `creativeengineering:meta/pillager_fleet`, `creativeengineering:meta/raft_convoy`, `creativeengineering:meta/shipwreck_debris`, `creativeengineering:meta/shipwreck_graveyard`, `creativeengineering:meta/sky_village_islands`, `creativeengineering:meta/struck_monument`, `creativeengineering:meta/sunken_ruin_cluster`, `creativeengineering:meta/underwater_meteorite`, `farmers_structures:ratatouilles`, `farmers_structures:squids`, `farmers_structures:sushis`, `hopo:underwater_fossils`, `hopo:underwater_ruins`, `hopo:underwater_small_ruins`, `hopo:underwater_warm_small_ruins`, `illager_viking_longship:illager_longship`, `illagerwarship:warship`, `mes:starlight_voyager`, `minecraft:ancient_city`, `minecraft:buried_treasure`, `minecraft:mineshaft`, `minecraft:mineshaft_mesa`, `minecraft:monument`, `minecraft:ocean_ruin_cold`, `minecraft:ocean_ruin_warm`, `minecraft:ruined_portal_ocean`, `minecraft:stronghold`, `philipsruins:ancient_crypt`, `philipsruins:ancient_dungeon`, `philipsruins:antiquus_crypta`, `philipsruins:bone_dungeon`, `philipsruins:lost_soul_city`, `philipsruins:lost_soul_dungeon`, `philipsruins:ocean_fortress`, `philipsruins:ocean_ruins`, `philipsruins:sculk_dungeon`, `philipsruins:underground_structures`, `revamped_shipwrecks:shipwreck`, `revamped_shipwrecks:shipwreck_beached`, `skyvillages:skyvillage`, `subterrestrial:deepslate_cabin`, `subterrestrial:default_cabin`, `subterrestrial:desert_cabin`, `subterrestrial:ice_cabin`, `subterrestrial:jungle_cabin`, `subterrestrial:mesa_cabin`, `subterrestrial:ocean_cabin`, `subterrestrial:taiga_cabin`, `terralith:underground/frosted_dungeon`, `terralith:underground/giant_bee_hive`, `terralith:underground/mining_outpost`, `terralith:underground/oak_cabin`, `terralith:underground/old_refinery`, `terralith:underground/sunken_tower`, `terralith:underground/witch_hut`, `towns_and_towers:pillager_outpost_ocean`, `towns_and_towers:village_ocean`, `towns_and_towers:wreckage_ocean`, `unwrecked_ships:nether_ship`, `unwrecked_ships:ship`, `villager_rafts:raft_1`, `villager_rafts:raft_2`, `villager_rafts:raft_3`
 - **`surface_check`** 2: `betterdungeons:spider_dungeon`, `betterdungeons:zombie_dungeon`
 - **`meta/villages`** 28: `minecraft:village_desert`, `minecraft:village_plains`, `minecraft:village_savanna`, `minecraft:village_snowy`, `minecraft:village_taiga`, `towns_and_towers:exclusives/village_classic`, `towns_and_towers:exclusives/village_iberian`, `towns_and_towers:exclusives/village_mediterranean`, `towns_and_towers:exclusives/village_nilotic`, `towns_and_towers:exclusives/village_rustic`, `towns_and_towers:exclusives/village_swedish`, `towns_and_towers:exclusives/village_tudor`, `towns_and_towers:village_badlands`, `towns_and_towers:village_beach`, `towns_and_towers:village_birch_forest`, `towns_and_towers:village_flower_forest`, `towns_and_towers:village_forest`, `towns_and_towers:village_grove`, `towns_and_towers:village_jungle`, `towns_and_towers:village_meadow`, `towns_and_towers:village_mushroom_fields`, `towns_and_towers:village_old_growth_taiga`, `towns_and_towers:village_snowy_slopes`, `towns_and_towers:village_snowy_taiga`, `towns_and_towers:village_sparse_jungle`, `towns_and_towers:village_sunflower_plains`, `towns_and_towers:village_swamp`, `towns_and_towers:village_wooded_badlands`
 - **`meta/peaceful_towers`** 4: `desert_watchtower:watchtower`, `forest_watchtower:forest_watchtower`, `mini_clock_tower:mini_clock_tower`, `watchtower_building:fresh_watchtower`
@@ -1247,7 +1433,7 @@ Written with no structures and frequency 0: they can neither generate nor show u
 - **`meta/pillager_towers`** 15: `minecraft:pillager_outpost`, `towns_and_towers:exclusives/pillager_outpost_oriental`, `towns_and_towers:exclusives/pillager_outpost_swedish`, `towns_and_towers:exclusives/pillager_outpost_tudor`, `towns_and_towers:pillager_outpost_birch_forest`, `towns_and_towers:pillager_outpost_flower_forest`, `towns_and_towers:pillager_outpost_forest`, `towns_and_towers:pillager_outpost_meadow`, `towns_and_towers:pillager_outpost_savanna`, `towns_and_towers:pillager_outpost_snowy_plains`, `towns_and_towers:pillager_outpost_snowy_slopes`, `towns_and_towers:pillager_outpost_snowy_taiga`, `towns_and_towers:pillager_outpost_sunflower_plains`, `towns_and_towers:pillager_outpost_swamp`, `towns_and_towers:pillager_outpost_taiga`
 - **`meta/fortified_towns`** 3: `eugene:red_roof_castle`, `terralith:fortified_desert_village`, `terralith:fortified_village`
 - **`meta/friendly_camps`** 12: `campsite_structures:armorer_campsite`, `campsite_structures:butcher_campsite`, `campsite_structures:cartographer_campsite`, `campsite_structures:cleric_campsite`, `campsite_structures:farmer_campsite`, `campsite_structures:fisher_campsite`, `eugene:camp`, `plains_villager_tents:big_villager_tent`, `snowy_tents:snowy_tent`, `towns_and_towers:exclusives/village_wandering_trader_camp`, `villager_archer_camp:villager_archer_camp`, `villager_circus_tent:villager_circus_tent`
-- **`meta/coast_ok`** 6: `creativeengineering:meta/driftwood_flotilla`, `creativeengineering:meta/pillager_fleet`, `creativeengineering:meta/raft_convoy`, `creativeengineering:meta/shipwreck_debris`, `creativeengineering:meta/shipwreck_graveyard`, `creativeengineering:meta/sunken_ruin_cluster`
+- **`meta/coast_ok`** 16: `creativeengineering:meta/balloon_fleet`, `creativeengineering:meta/cloud_balloons`, `creativeengineering:meta/cloud_cluster`, `creativeengineering:meta/driftwood_flotilla`, `creativeengineering:meta/meteor_shower`, `creativeengineering:meta/meteorite_desert_pyramid`, `creativeengineering:meta/meteorite_village`, `creativeengineering:meta/pillager_camp_meteorite`, `creativeengineering:meta/pillager_fleet`, `creativeengineering:meta/raft_convoy`, `creativeengineering:meta/shipwreck_debris`, `creativeengineering:meta/shipwreck_graveyard`, `creativeengineering:meta/sky_village_islands`, `creativeengineering:meta/struck_monument`, `creativeengineering:meta/sunken_ruin_cluster`, `creativeengineering:meta/underwater_meteorite`
 - **`meta/lone_houses`** 40: `animal_barn:barn`, `beautify:botanist_house_desert`, `beautify:botanist_house_plains`, `beautify:botanist_house_savanna`, `beautify:botanist_house_snowy`, `beautify:botanist_house_taiga`, `bighorsestable:big_horse_stable`, `greek_villager_house:greek_house`, `hobbit_house_:hobbit_house`, `llama_stable:llama_stable`, `minecraft:igloo`, `old_swamp_fisherman_house:fisherman_house`, `saloon:saloon`, `sawmillhouse:sawmill`, `simply_houses:forest_chapel`, `simply_houses:forest_fort`, `simply_houses:forest_house`, `simply_houses:forest_stonemason`, `simply_houses:plains_house`, `simply_houses:plains_mansion`, `simply_houses:taiga_forge`, `simply_houses:taiga_house`, `simply_houses:taiga_inn`, `simply_houses:taiga_woodcutter`, `small_viking_villager_house:small_viking_house`, `small_villager_greenhouse:small_villager_greenhouse`, `smallhorsestable:horse_stable`, `villager_butcher_house:butcher_house`, `villager_cartographer_house:villager_cartographer_house`, `villager_cleric_house:villager_cleric_house`, `villager_country_house:country_house`, `villager_farmer_house:villager_farmer_house`, `villager_fish_shop:fish_shop`, `villager_fishermans_hut:villager_fishermans_hut`, `villager_fletcher_house:villager_fletcher_house`, `villager_flower_house:flower_house`, `villager_forge:villager_forge`, `villager_gold_washing_facility:villager_gold_washing_facility`, `villager_tannery:tannery`, `villager_windmill:windmill`
 - **`meta/farmers_structures`** 9: `farmers_structures:aquacultures_beach`, `farmers_structures:aquacultures_cod`, `farmers_structures:aquacultures_common`, `farmers_structures:cacaos`, `farmers_structures:cooks`, `farmers_structures:cooks_moss`, `farmers_structures:fishs_stew`, `farmers_structures:shepherd_farms`, `farmers_structures:sushis`
 - **`meta/way_signs`** 1: `supplementaries:way_sign`
@@ -1260,4 +1446,17 @@ Written with no structures and frequency 0: they can neither generate nor show u
 - **`land/mushroom`** 2: `towns_and_towers:pillager_outpost_mushroom_fields`, `towns_and_towers:village_mushroom_fields`
 - **`ocean/deep`** 1: `philipsruins:ocean_fortress`
 - **`plan/move_to_nether`** 4: `philipsruins:lost_soul_city`, `philipsruins:lost_soul_dungeon`, `philipsruins:rare_ruin`, `philipsruins:start_nether_ruin`
+- **`meta/sky_clouds`** 1: `cloudstorage:sky_temple`
+- **`meta/sky_balloons`** 1: `cloudstorage:big_balloon`
+- **`meta/sky_villages`** 1: `skyvillages:skyvillage`
+- **`meta/meteorites`** 1: `ae2:meteorite`
+- **`meta/caravan_wagons`** 1: `eugene:witch_wagon`
+- **`meta/caravan_carriages`** 1: `eugene:pillager_loot_carriage`
+- **`meta/trader_camps`** 2: `eugene:camp`, `towns_and_towers:exclusives/village_wandering_trader_camp`
+- **`meta/caravan_witch_huts`** 3: `betterwitchhuts:witch_circle`, `betterwitchhuts:witch_hut`, `minecraft:swamp_hut`
+- **`meta/better_desert_temples`** 1: `betterdeserttemples:desert_temple`
+- **`meta/better_jungle_temples`** 1: `betterjungletemples:jungle_temple`
+- **`meta/witch_circles`** 1: `betterwitchhuts:witch_circle`
+- **`meta/coven_huts`** 2: `betterwitchhuts:witch_hut`, `minecraft:swamp_hut`
+- **`meta/monuments`** 1: `minecraft:monument`
 

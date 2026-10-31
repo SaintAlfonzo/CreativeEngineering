@@ -156,7 +156,7 @@ If the user keeps the stronghold's (portal rooms look right with it), add `"exce
 
 ## structures/netherblockswap #3: Soul lanterns and soul wall torches (K25, K32)
 
-Status Planned · Work data · TODO `worldgen / structures/netherblockswap #3`
+Status Testing (built 2026-10-30; SQ-WG30-B01 to B04 PASSED 2026-10-30) · Work data · TODO `worldgen / structures/netherblockswap #3`
 
 ### Goal
 

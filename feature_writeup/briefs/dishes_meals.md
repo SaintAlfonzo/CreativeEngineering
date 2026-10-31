@@ -27,7 +27,7 @@ or KubeJS does to them at runtime is only knowable in game (`/dumprecipes`, `/du
 | 7 | Fish recipes for any fish (tempura, fish and chips, fries, PNC deep frying out) | Testing (built 2026-10-21) | D |
 | 6 | Glistering melon edible + gilding | Planned | E |
 | 9 | Gold food cheap in machines | Testing (built 2026-10-21; numbers revisited with tuning) | E (after `food/types-and-tuning #1`, #3) |
-| 10 | Shrimp fried rice | Planned | F (tooltip + JEI note; Alex's Mobs already does the rest) |
+| 10 | Shrimp fried rice | In Progress (pot recipe and values built 2026-10-29) | F (tooltip + JEI note; Alex's Mobs already does the rest) |
 
 **Built 2026-10-21 (rows 1-3), as recommended here, with these differences** (writeup:
 [recipes_cooking.md](../recipes_cooking.md) 2.3; tests renumbered RC-55 to RC-64 there, since RC-30 to RC-52 are
@@ -743,6 +743,17 @@ The shrimp converts the whole held stack at once; fine as a bulk route.
 - RC-49 Tame a mantis shrimp, give it a stack of rice (sneak-use), stand it next to a furnace: the stack turns into
   shrimp fried rice; tooltip shows both lines.
 
+### Built 2026-10-29 (crafting route and values; tooltip and JEI note not done)
+- Cooking pot: Fried Rice + 2 `#forge:shrimps` (Oceanic Delight's shrimp or shrimp slices) -> 1 Shrimp Fried Rice,
+  1.0 xp, 200 ticks, no container (the Fried Rice's bowl comes back as its remainder). Creative Delight
+  `kubejs/data/creative_delight/kubejs/alexsmobs/recipes.js`, id `creative_delight:farmersdelightcooking/shrimp_fried_rice`,
+  only with the Oceanic member on.
+- Food values set from the inputs (Fried Rice 14 / 21 + 2 shrimp 4 / 0.8 = 22 / 22.6): hunger 20 (the full bar),
+  modifier 0.6 = 24 saturation, Comfort 240 s as the pack's Fried Rice (upstream 12 / 1.0, no effect). CD startup
+  `alexsmobs/alexsmobs_foods.js`.
+- Open: the mantis shrimp route turns 1 raw rice into the same 20 / 24 meal; the tooltip of step 2.
+- Tests: RC-163.
+
 ---
 
 ## meals #11: Merge potato salad
@@ -765,7 +776,7 @@ Survivor: recommend Rustic's (it has the pack's cooking-fluid egg route and a ca
 ---
 
 ## meals #20: Feasts in ovens
-Status: Planned / Work: KubeJS / TODO `dishes/meals #20` (scratchpad 2026-10-22; no earlier section here)
+Status: In Progress / Work: KubeJS / TODO `dishes/meals #20` (scratchpad 2026-10-22; no earlier section here)
 
 ### Goal
 Feasts cooked in the oven, starting with the hoglin feast. Folded scope (scratchpad 2026-10-24): all feasts in the
@@ -789,7 +800,7 @@ pot as well. Recommend all feasts in both, as the row asks.
 ---
 
 ## meals #21: Meal-specific ingredients audit
-Status: Planned / Work: KubeJS / TODO `dishes/meals #21` ([recipes_cooking.md](../recipes_cooking.md))
+Status: In Progress / Work: KubeJS / TODO `dishes/meals #21` ([recipes_cooking.md](../recipes_cooking.md))
 
 ### Goal
 Audit every meal that takes only vanilla or one specific meat, veggie or fruit. Keep it where the dish is the
@@ -817,7 +828,7 @@ RC-120 For each opened meal: a second meat or veggie works; for each kept meal: 
 ---
 
 ## meals #22: Overnight oats
-Status: Planned / Work: KubeJS / TODO `dishes/meals #22` ([recipes_cooking.md](../recipes_cooking.md))
+Status: Testing / Work: KubeJS / TODO `dishes/meals #22` ([recipes_cooking.md](../recipes_cooking.md))
 
 ### Goal
 Overnight oats from 3 oats, 1 fruit slice, 1 berry fruit and 1 milk.
@@ -842,7 +853,7 @@ RC-121 Overnight oats craft from the row's inputs; the old fermenting recipe is 
 ---
 
 ## meals #23: Fried egg and omelette batches
-Status: Planned / Work: KubeJS / TODO `dishes/meals #23` ([recipes_cooking.md](../recipes_cooking.md))
+Status: In Progress / Work: KubeJS / TODO `dishes/meals #23` ([recipes_cooking.md](../recipes_cooking.md))
 
 ### Goal
 Cooking oil + 3 eggs gives 3 fried eggs; a cooking pot recipe turns 4 fried eggs into 4 omelettes.
@@ -868,7 +879,7 @@ RC-122 Oil + 3 eggs -> 3 fried eggs. RC-123 4 fried eggs -> 4 omelettes in the p
 ---
 
 ## meals #24: Extra veggie omelette recipe
-Status: Planned / Work: KubeJS / TODO `dishes/meals #24` ([recipes_cooking.md](../recipes_cooking.md))
+Status: In Progress / Work: KubeJS / TODO `dishes/meals #24` ([recipes_cooking.md](../recipes_cooking.md))
 
 ### Goal
 A veggie omelette recipe where one ingredient is swapped for tomato, beetroot, any bell pepper or ghost pepper.
@@ -913,7 +924,7 @@ RC-125 The soup shows the new texture in inventory and in the placed bowl.
 ---
 
 ## meals #26: Merge Brewin' pizza
-Status: Planned / Work: KubeJS / TODO `merges/dishes #8` ([recipes_cooking.md](../recipes_cooking.md)); related `baking/baked-goods #20`
+Status: In Progress / Work: KubeJS / TODO `merges/dishes #8` ([recipes_cooking.md](../recipes_cooking.md)); related `baking/baked-goods #20`
 
 ### Goal
 One pizza, renamed Deluxe Pizza: tomato, peppers, mushrooms, cheese and cooked meat or fish, best nutrients.
@@ -940,7 +951,7 @@ RC-126 Deluxe Pizza recipe, name and 8 (or 4) slices; the meat pizza item is gon
 ---
 
 ## meals #27: Pineapple pizza
-Status: Planned / Work: KubeJS / lang / TODO `dishes/meals #27` ([recipes_cooking.md](../recipes_cooking.md))
+Status: In Progress / Work: KubeJS / lang / TODO `dishes/meals #27` ([recipes_cooking.md](../recipes_cooking.md))
 
 ### Goal
 Pineapple pizza with bacon, named Tropical Pizza, with a funny tooltip.
@@ -966,7 +977,7 @@ RC-127 Tropical Pizza crafts, places, slices; tooltip shows.
 ---
 
 ## meals #28: Merge cheesy pastas
-Status: Planned / Work: KubeJS / TODO `merges/dishes #5` ([recipes_cooking.md](../recipes_cooking.md))
+Status: In Progress / Work: KubeJS / TODO `merges/dishes #5` ([recipes_cooking.md](../recipes_cooking.md))
 
 ### Goal
 Merge the cheesy pasta dishes of the mods into one.
@@ -990,7 +1001,7 @@ RC-128 Only one cheese pasta in JEI; Brewin's recipe still gives it.
 ---
 
 ## meals #29: Fermented veg in uncooked crafts
-Status: Planned / Work: KubeJS / TODO `dishes/meals #29` ([vintage_delight.md](../vintage_delight.md)); related `dishes/pickles-and-ferments #2`
+Status: In Progress / Work: KubeJS / TODO `dishes/meals #29` ([vintage_delight.md](../vintage_delight.md)); related `dishes/pickles-and-ferments #2`
 
 ### Goal
 Allow fermented garlic, onion and the like in place of the raw version in some uncooked crafts: burgers and the
@@ -1037,7 +1048,7 @@ RC-130 One Caesar Salad in JEI, name spelled Caesar, both recipes give it.
 ---
 
 ## meals #31: Nut butter sandwich
-Status: Planned / Work: KubeJS / TODO `dishes/meals #31` ([recipes_cooking.md](../recipes_cooking.md))
+Status: In Progress / Work: KubeJS / TODO `dishes/meals #31` ([recipes_cooking.md](../recipes_cooking.md))
 
 ### Goal
 Nut butter sandwich: more jam options, and only square bread.
@@ -1061,7 +1072,7 @@ RC-131 Sandwich accepts each jam and square bread only.
 ---
 
 ## meals #32: Remove mhadjeb
-Status: Planned / Work: KubeJS / TODO `dishes/meals #32` ([recipes_cooking.md](../recipes_cooking.md)); also `baking/baked-goods #17`
+Status: Testing / Work: KubeJS / TODO `dishes/meals #32` ([recipes_cooking.md](../recipes_cooking.md)); also `baking/baked-goods #17`
 
 ### Goal
 Remove the mhadjeb.
@@ -1086,7 +1097,7 @@ RC-132 No mhadjeb in JEI or the creative tab; no `canned_mhadjeb`.
 ---
 
 ## meals #33: Potato noodles become creamy gnocchi
-Status: Planned / Work: KubeJS / lang / TODO `dishes/meals #33` ([veggies_delight.md](../veggies_delight.md))
+Status: In Progress / Work: KubeJS / lang / TODO `dishes/meals #33` ([veggies_delight.md](../veggies_delight.md))
 
 ### Goal
 Rename potato noodles to Creamy Gnocchi (milk, gnocchi, onion or garlic, either can be pickled). Cutting potato dough
@@ -1111,7 +1122,7 @@ RC-133 Creamy Gnocchi name and recipe; knifing sweet potato dough gives gnocchi.
 ---
 
 ## meals #34: Fries from any potato slice
-Status: Planned / Work: KubeJS / TODO `dishes/meals #34` ([veggies_delight.md](../veggies_delight.md))
+Status: In Progress / Work: KubeJS / TODO `dishes/meals #34` ([veggies_delight.md](../veggies_delight.md))
 
 ### Goal
 Fries are made from any potato slice (sweet potato slices too).
@@ -1131,7 +1142,7 @@ RC-134 Fries from sweet potato slices; fish and chips accepts them.
 ---
 
 ## meals #35: Steak and broccoli sides
-Status: Planned / Work: KubeJS / TODO `dishes/meals #35` ([veggies_delight.md](../veggies_delight.md))
+Status: In Progress / Work: KubeJS / TODO `dishes/meals #35` ([veggies_delight.md](../veggies_delight.md))
 
 ### Goal
 Steak and broccoli accepts rice, mashed potatoes, any baked potato plus a bowl, and other baked veggies plus a bowl.
@@ -1155,7 +1166,7 @@ RC-135 Each side crafts the meal; baked sides need the bowl.
 ---
 
 ## meals #36: Cacciatore takes chicken cuts
-Status: Planned / Work: KubeJS / TODO `dishes/meals #36` ([recipes_cooking.md](../recipes_cooking.md))
+Status: Testing / Work: KubeJS / TODO `dishes/meals #36` ([recipes_cooking.md](../recipes_cooking.md))
 
 ### Goal
 Allow chicken cuts in the cacciatore; mark another whole versus cut audit.
@@ -1180,7 +1191,7 @@ RC-136 Heatless cacciatore with cooked cuts.
 ---
 
 ## meals #37: Pancake coverings review
-Status: Planned / Work: KubeJS / patcherMod / TODO `dishes/meals #37` ([recipes_cooking.md](../recipes_cooking.md)); related `dishes/jams #1`
+Status: In Progress / Work: KubeJS / patcherMod / TODO `dishes/meals #37` ([recipes_cooking.md](../recipes_cooking.md)); related `dishes/jams #1`
 
 ### Goal
 Review the Supplementaries pancake covering options, the JEI screen and the tooltip. Recolour jams to their jam
@@ -1205,9 +1216,69 @@ RC-137 Each jam covering shows its colour; JEI and tooltip match the real option
 
 ---
 
+## meals #39: Field salad revamp
+Status: Built 2026-10-29, not run / Work: KubeJS / TODO `dishes/meals #39` ([delightful.md](../delightful.md))
+
+### Built
+Delightful's `delightful:food/field_salad` (2 `#forge:salad_ingredients`, cactus steak, carrot, salmonberries, acorn,
+bowl) is replaced by two shapeless recipes in Creative Delight `delightful/recipes.js`:
+- `creative_delight:shapeless/field_salad_manual_only`: 2 salad ingredients + the four slot tags + bowl.
+- `creative_delight:shapeless/field_salad_flowers_manual_only`: 2 `#minecraft:flowers` in place of the salad ingredients.
+Slot tags (`delightful/tags.js`, keys in item_dict): berry slot `#forge:berries` (9 berries);
+`#creativeengineering:field_salad/root` = carrot, onion, beetroot, corn, turnip (crop tags where they exist);
+`#creativeengineering:field_salad/nut` = `#forge:nuts/acorn`, peanut;
+`#creativeengineering:field_salad/green` = cactus steak, broccoli, cauliflower, cauliflower floret, zucchini, zucchini
+slice, cucumber, green bell pepper. Sliced forms in the pack: only the zucchini slice and cauliflower floret (no onion,
+carrot, beetroot, corn, turnip, berry or nut slices exist); the cabbage leaf is already a salad ingredient. Food
+values unchanged (10 / 0.6). `#minecraft:flowers` includes Botania's functional and mystical flowers.
+
+### Tests
+RC-160 Both field salad recipes in JEI; craft one with each slot alternative (a sweet berry, a turnip, a peanut,
+a zucchini slice; then 2 dandelions in place of the leaves); the upstream recipe is gone.
+
+---
+
+## meals #42: Raise coleslaw nutrition
+Status: Built 2026-10-29, not run / Work: KubeJS / TODO `dishes/meals #42` ([veggies_delight.md](../veggies_delight.md))
+
+### Built
+Rule (owner 2026-10-28): hunger and saturation both above the sum of the inputs. The pack recipe is zucchini 3 / 2.4,
+potato 1 / 0.6, carrot 3 / 3.6, cabbage 2 / 1.6 (+ bowl) = 9 / 8.2. Coleslaw is now 12 hunger, modifier 0.6 = 14.4
+saturation (upstream 8 / 9.6; 11 / 13.2 since 2026-10-27). CD startup `veggiesdelight/veggies_foods.js`. Comfort
+seconds follow the comfort/nourishment rule: rerun `/cegen run comfort_nourishment` after the next `/dumpfood` (12
+hunger is in the 240 s band; the JSON still says 120 s from the 8-hunger dump), and `gen_can_types.py` for the can.
+
+### Tests
+RC-161 Coleslaw tooltip / AppleSkin: 12 hunger, 14.4 saturation.
+
+---
+
+## meals #43: Veggie Noodles
+Status: Built 2026-10-29, not run / Work: KubeJS / resource pack / lang / TODO `dishes/meals #43` ([vintage_delight.md](../vintage_delight.md))
+
+### Built
+- The row's "cucumber pasta" is `vintagedelight:cucumber_noodles` (Cucumber Noodles; cut from `cucumber_dough`, in
+  `#forge:pasta`). Renamed Veggie Noodles (`kubejs/client_scripts/namechanges.js`).
+- Its dough recipe `vintagedelight:cucumber_dough` (cucumber + `#forge:dough` -> 2) is replaced by
+  `creative_delight:shapeless/cucumber_dough`: one of `#creativeengineering:veggie_noodle_veg` (cucumber, broccoli,
+  zucchini, zucchini slice, raw cactus steak = cactus flesh, dandelion leaf) + `#forge:dough` -> 2 (CD
+  `vintagedelight/recipes.js`, `tags.js`). The knife and Slice and Dice cuts are unchanged.
+- Sprite: `kubejs/assets/vintagedelight/textures/item/cucumber_noodles.png`, the 4 shades remapped by brightness onto
+  the zucchini item's 4 lightest shades (shape and shading kept).
+- Open: the dough is still named Cucumber Dough, with its own mint sprite, and the Cucumber Dough Block likewise.
+
+### Tests
+RC-162 Veggie Noodles name and olive-green sprite; the dough from each of the six vegetables; the noodles still cut
+from it and still work as `#forge:pasta`.
+
+---
+
 ## Built, needs play
 
 None: no `meals` row is at Testing or Complete.
+
+Recipe level of RC-160 to RC-164 (field salad, coleslaw and shrimp fried rice values, cucumber dough, shrimp fried rice,
+no smoothie): scratch server PASSED r1031 (2026-10-31, SQ-CM-20 to -24); JEI, tooltips and crafting stay in game.
 
 Test ids: [recipes_cooking.md](../recipes_cooking.md) ends at RC-18; this brief proposes RC-30 to RC-49 to stay clear of
 other briefs that may claim RC-19 onward (renumber when folding into the writeup).

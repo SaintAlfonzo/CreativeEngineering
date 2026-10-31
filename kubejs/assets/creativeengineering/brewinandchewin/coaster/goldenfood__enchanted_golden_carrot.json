@@ -1,0 +1,16 @@
+{
+  "item": "goldenfood:enchanted_golden_carrot",
+  "models": [
+    {
+      "model": "brewinandchewin:block/coaster_golden_carrot"
+    },
+    {
+      "model": "brewinandchewin:block/coaster_golden_carrot",
+      "texture_modifiers": [
+        {
+          "type": "brewinandchewin:glint"
+        }
+      ]
+    }
+  ]
+}

@@ -1,0 +1,13 @@
+{
+ "_doc": "Hand-kept scene additions for rp_bench.py (feature_writeup/perf_rpack.md 4.2). Key = a substring of the pack's file name. blocks / entities are added to what rp_scan.py finds; entity entries are 'ns:id' or 'ns:id {nbt}' (custom NBT replaces the frozen default). noScene = why the pack gets no scene (reload is still measured).",
+ "SquirmingSilverfish": {"entities": ["minecraft:silverfish"]},
+ "CE2 Iron Armor Fix": {"entities": ["minecraft:armor_stand {NoGravity:1b,Invulnerable:1b,ShowArms:1b,ArmorItems:[{id:\"minecraft:iron_boots\",Count:1b},{id:\"minecraft:iron_leggings\",Count:1b},{id:\"minecraft:iron_chestplate\",Count:1b},{id:\"minecraft:iron_helmet\",Count:1b}]}"]},
+ "LootrChestRetexture": {"blocks": ["lootr:lootr_chest", "lootr:lootr_trapped_chest", "lootr:lootr_barrel", "lootr:lootr_shulker"]},
+ "Golden crit": {"noScene": "crit particle texture only; shows in melee hits"},
+ "Lower Shield": {"noScene": "first-person shield model; spectator has no hand"},
+ "Engineers_GUIs": {"noScene": "GUI textures only"},
+ "EclecticTrove": {"noScene": "tooltip border texture only"},
+ "IE Breaker Switch Sound": {"noScene": "sound only"},
+ "Fancy_Beds": {"blocks": ["minecraft:white_bed", "minecraft:red_bed", "minecraft:blue_bed", "minecraft:green_bed", "minecraft:black_bed", "minecraft:yellow_bed"]},
+ "LowOnFire": {"note": "also lowers the burning overlay (first person, not measured)"}
+}

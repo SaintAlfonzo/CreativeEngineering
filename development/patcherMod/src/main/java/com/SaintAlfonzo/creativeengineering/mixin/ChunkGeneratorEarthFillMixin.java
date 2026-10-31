@@ -2,6 +2,7 @@ package com.SaintAlfonzo.creativeengineering.mixin;
 
 import com.SaintAlfonzo.creativeengineering.worldgen.EarthFill;
 import com.SaintAlfonzo.creativeengineering.worldgen.LocateStats;
+import com.SaintAlfonzo.creativeengineering.worldgen.PlacementPriority;
 import net.minecraft.core.RegistryAccess;
 import net.minecraft.world.level.ChunkPos;
 import net.minecraft.world.level.StructureManager;
@@ -16,7 +17,8 @@ import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.ModifyVariable;
 
 /**
- * Earth-fill and water-fill checks (see worldgen/EarthFill).
+ * Earth-fill and water-fill checks (see worldgen/EarthFill), then placement priority (worldgen/PlacementPriority) on
+ * what they kept.
  *
  * ChunkGenerator#tryGenerateStructure (m_223104_, private) stores the generated StructureStart in a local
  * (slot 15: after the 9 parameters, one of them a long, and the structure, reference count, biome set and
@@ -37,6 +39,11 @@ public class ChunkGeneratorEarthFillMixin {
 			StructureTemplateManager templateManager, long seed, ChunkAccess chunk, ChunkPos chunkPos) {
 		StructureStart out = EarthFill.filter(start, entry, (ChunkGenerator) (Object) this, randomState, templateManager, seed, chunk, chunkPos);
 		if (out != start && start.isValid() && !out.isValid()) LocateStats.reject(entry.structure().value(), chunkPos, LocateStats.Reason.EARTH_FILL);
-		return out;
+		// placement priority after earth fill, in this one injector: its predictions of neighbours are only worth running
+		// for a start earth fill kept, and the order no longer rests on two injectors' order in mixins.json (E11)
+		StructureStart ranked = PlacementPriority.filter(out, entry, (ChunkGenerator) (Object) this, structureManager, registryAccess, randomState,
+				templateManager, seed, chunk, chunkPos);
+		if (ranked != out && out.isValid() && !ranked.isValid()) LocateStats.reject(entry.structure().value(), chunkPos, LocateStats.Reason.PRIORITY);
+		return ranked;
 	}
 }

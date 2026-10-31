@@ -15,6 +15,7 @@ import net.minecraft.world.InteractionResult;
 import net.satisfy.foundation.util.ItemInteractionResult;
 import net.minecraft.world.entity.EquipmentSlot;
 import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.item.ShearsItem;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.LevelAccessor;
@@ -26,6 +27,7 @@ import net.minecraft.world.level.block.state.properties.BlockStateProperties;
 import net.minecraft.world.level.block.state.properties.BooleanProperty;
 import net.minecraft.world.level.block.state.properties.Half;
 import net.minecraft.world.level.block.state.properties.SlabType;
+import net.minecraft.world.level.gameevent.GameEvent;
 import net.minecraft.world.level.lighting.LayerLightEngine;
 import net.minecraft.world.level.material.Fluids;
 import net.minecraft.world.phys.BlockHitResult;
@@ -34,6 +36,8 @@ import org.jetbrains.annotations.NotNull;
 
 public class SpreadableGrassSlabBlock extends SlabBlock implements BonemealableBlock {
     public static final BooleanProperty SNOWY = BlockStateProperties.SNOWY;
+    // Pack addition: shears clear it, as on Immersive Weathering's grass block; a sheared slab stops ticking (no spreading)
+    public static final BooleanProperty FERTILE = BooleanProperty.create("fertile");
     public static final Block GRASS_BLOCK = Blocks.GRASS_BLOCK;
 
     public static Block getDirtSlabBlock(){
@@ -46,7 +50,7 @@ public class SpreadableGrassSlabBlock extends SlabBlock implements BonemealableB
 
     public SpreadableGrassSlabBlock(Properties settings) {
         super(settings);
-        this.registerDefaultState(this.defaultBlockState().setValue(TYPE, SlabType.BOTTOM).setValue(WATERLOGGED, false).setValue(SNOWY, false));
+        this.registerDefaultState(this.defaultBlockState().setValue(TYPE, SlabType.BOTTOM).setValue(WATERLOGGED, false).setValue(SNOWY, false).setValue(FERTILE, true));
     }
 
     public static boolean canSurviveNew(BlockState state, LevelReader level, BlockPos pos) {
@@ -103,6 +107,11 @@ public class SpreadableGrassSlabBlock extends SlabBlock implements BonemealableB
     }
 
     @Override
+    public boolean isRandomlyTicking(BlockState state) {
+        return state.getValue(FERTILE) && super.isRandomlyTicking(state);
+    }
+
+    @Override
     public void randomTick(BlockState state, ServerLevel level, BlockPos pos, RandomSource random) {
         if (!canSurviveNew(state, level, pos)) {
             level.setBlock(pos, getDirtSlabBlock().withPropertiesOf(state), Block.UPDATE_CLIENTS);
@@ -137,6 +146,17 @@ public class SpreadableGrassSlabBlock extends SlabBlock implements BonemealableB
     }
 
         public @NotNull ItemInteractionResult useItemOn(ItemStack heldItem, BlockState state, Level level, BlockPos pos, Player player, InteractionHand hand, BlockHitResult hit) {
+        if (heldItem.getItem() instanceof ShearsItem && state.getValue(FERTILE)) {
+            if (level.isClientSide) {
+                level.addDestroyBlockEffect(pos, Blocks.GRASS.defaultBlockState());
+            } else {
+                level.playSound(null, pos, SoundEvents.GROWING_PLANT_CROP, SoundSource.BLOCKS, 1.0F, 1.0F);
+                level.setBlock(pos, state.setValue(FERTILE, false), Block.UPDATE_ALL_IMMEDIATE);
+                PortUtil.hurt(heldItem, 1, player, hand);
+                level.gameEvent(player, GameEvent.SHEAR, pos);
+            }
+            return ItemInteractionResult.SUCCESS;
+        }
         if (PortUtil.isShovel(heldItem)) {
             if (!level.isClientSide) {
                 BlockState pathState = ObjectRegistry.DIRT_PATH_SLAB.get().defaultBlockState()
@@ -159,7 +179,7 @@ public class SpreadableGrassSlabBlock extends SlabBlock implements BonemealableB
     @Override
     protected void createBlockStateDefinition(StateDefinition.Builder<Block, BlockState> builder) {
         super.createBlockStateDefinition(builder);
-        builder.add(SNOWY);
+        builder.add(SNOWY, FERTILE);
     }
 
     public @NotNull BlockState updateShape(BlockState state, Direction direction, BlockState neighborState, LevelAccessor level, BlockPos pos, BlockPos neighborPos) {

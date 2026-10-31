@@ -53,7 +53,6 @@ ServerEvents.recipes(e => {
 	add('alexsmobs:tigers_blessing', i.spawn_egg_tiger)
 	add('alexsmobs:fleet_footed', i.spawn_egg_jerboa)
 	add('alexsmobs:orcas_might', i.spawn_egg_orca)
-	add('alexsmobs:power_down', i.spawn_egg_grizzly_bear)                  // April Fools only
 	add('alexsmobs:sunbird_blessing', i.spawn_egg_sunbird)
 	add('alexsmobs:sunbird_curse', i.spawn_egg_sunbird)
 	add('neapolitan:slipping', i.plantain_spider_spawn_egg)

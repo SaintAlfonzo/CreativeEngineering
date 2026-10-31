@@ -108,7 +108,7 @@ Java field names are what `R.cfg` reads (`mb`, `reachMb`), toml keys are labels 
 ---
 
 ## tuning #2: Dragon set over the 30 armor cap
-Status Planned / Work KubeJS / `gear/tuning #2`
+Status Built 2026-10-30 (owner chose the cap lift to 50 with a config key on 2026-10-29, not the trim below; see gear_tuning.md F13) / Work KubeJS / `gear/tuning #2`
 
 ### Goal
 The dragon set's armor numbers do something, or the overflow is a known, accepted choice.

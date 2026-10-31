@@ -1369,6 +1369,34 @@ global.NCH = {
 		}).id(`${global.NCH.ns()}:dragonbreathing/${idSuffix}`)
 	},
 
+	// Dreams n' Desires sanding fan (create_dd:sanding, catalyst #create_dd:fan_processing_catalysts/sanding). One input,
+	// up to 12 outputs, chances allowed. opts: { exclusive } (false): one weighted pick per item instead of an
+	// independent roll per output (patcherMod fan/ExclusiveResults; chances are slices of 1, any remainder gives nothing).
+	//   R.ddSanding([Item.of(i.rose_quartz).withChance(0.8), Item.of(i.polished_rose_quartz).withChance(0.2)],
+	//       i.rose_quartz, e, 'rose_quartz', { exclusive: true })
+	ddSanding(output, input, e, idOverride, opts) {
+		if (!e) throw new Error('ddSanding called without event object!')
+		opts = opts || {}
+		var idSuffix = idOverride ?? global.NCH.toId(output, input, 'ddsanding')
+		var ctx = 'ddSanding ' + idSuffix
+
+		global.NCH._validateAny(input, ctx + ' input')
+		var outputs = Array.isArray(output) ? output : [output]
+		if (outputs.length > 12) global.NCH._warn(ctx, 'sanding takes up to 12 outputs')
+		var results = outputs.map((o, n) => {
+			global.NCH._validateAny(o, ctx + ' output ' + n)
+			return global.NCH._itemJson(o, { countMode: 'flat', includeChance: true, context: ctx + ' output ' + n })
+		})
+
+		var json = {
+			type: 'create_dd:sanding',
+			ingredients: [global.NCH._itemJson(input, { countMode: 'none', context: ctx + ' input' })],
+			results: results
+		}
+		if (opts.exclusive) json.exclusive_results = true
+		e.custom(json).id(`${global.NCH.ns()}:ddsanding/${idSuffix}`)
+	},
+
 	// Seasoning craft (patcherMod food/SeasoningRecipe): food + one of each seasoning's item, shapeless, gives the same
 	// food with those seasonings added as NBT. seasonings: a global.seasoning key or an array of them
 	// (development/creativeDelight/src/main/resources/kubejs_startup/creativeengineering/seasonings.js, which holds each one's item, bonus and what it combines with). Ids
@@ -1410,6 +1438,55 @@ global.NCH = {
 		if (!e) throw new Error('backpackSkinClear called without event object!')
 		var idSuffix = idOverride ?? 'backpack_skin_clear'
 		e.custom({ type: `${global.NCH.modId}:backpack_skin_clear` }).id(`${global.NCH.ns()}:backpackskin/${idSuffix}`)
+	},
+
+	// Lunchboxes (patcherMod lunchbox/): Spice of Life keeps a box's food in a capability, which vanilla
+	// shaped and smithing results drop. These types copy the box's contents, name, dye and skin to the result.
+	//   R.lunchboxShaped(i.golden_lunchbox, [' A ', 'ABA', 'AAA'], { A: i.ingot_iron, B: i.lunchbox }, e)
+	lunchboxShaped(output, pattern, keys, e, idOverride) {
+		if (!e) throw new Error('lunchboxShaped called without event object!')
+		var idSuffix = idOverride ?? global.NCH.toId(output, Object.values(keys)[0], "shaped")
+		var ctx = 'lunchboxShaped ' + idSuffix
+		var key = {}
+		Object.keys(keys).forEach((k) => {
+			key[k] = global.NCH._itemJson(keys[k], { countMode: 'none', context: ctx + ' key[' + k + ']' })
+		})
+		e.custom({
+			type: `${global.NCH.modId}:lunchbox_shaped`,
+			pattern: pattern,
+			key: key,
+			result: global.NCH._itemJson(output, { allowTag: false, context: ctx + ' output' })
+		}).id(`${global.NCH.ns()}:shaped/${idSuffix}`)
+	},
+
+	// Smithing tier upgrade keeping the contents. A netherite-ingot addition needs Armor Trims' upgrade template.
+	lunchboxSmithing(output, base, addition, e, idOverride) {
+		if (!e) throw new Error('lunchboxSmithing called without event object!')
+		var idSuffix = idOverride ?? global.NCH.toId(output, base, "smithing")
+		var ctx = 'lunchboxSmithing ' + idSuffix
+		e.custom({
+			type: `${global.NCH.modId}:lunchbox_upgrade`,
+			base: global.NCH._itemJson(base, { countMode: 'none', context: ctx + ' base' }),
+			addition: global.NCH._itemJson(addition, { countMode: 'none', context: ctx + ' addition' }),
+			result: global.NCH._itemJson(output, { allowTag: false, context: ctx + ' output' })
+		}).id(`${global.NCH.ns()}:smithing/${idSuffix}`)
+	},
+
+	// Skin (smithing, lower-tier empty box or berry basket used up), dye (grid, leather-style mixing) and soap
+	// (grid: dye off first, then the skin). The allowed skins are fixed in Java (Lunchboxes.SKINS).
+	lunchboxSkin(e, idOverride) {
+		if (!e) throw new Error('lunchboxSkin called without event object!')
+		e.custom({ type: `${global.NCH.modId}:lunchbox_skin` }).id(`${global.NCH.ns()}:smithing/${idOverride ?? 'lunchbox_skin'}`)
+	},
+
+	lunchboxDye(e, idOverride) {
+		if (!e) throw new Error('lunchboxDye called without event object!')
+		e.custom({ type: `${global.NCH.modId}:lunchbox_dye` }).id(`${global.NCH.ns()}:lunchbox/${idOverride ?? 'lunchbox_dye'}`)
+	},
+
+	lunchboxSoap(e, idOverride) {
+		if (!e) throw new Error('lunchboxSoap called without event object!')
+		e.custom({ type: `${global.NCH.modId}:lunchbox_soap` }).id(`${global.NCH.ns()}:lunchbox/${idOverride ?? 'lunchbox_soap'}`)
 	},
 
 	elytraDuplication(catalyst, result, e, idOverride) {
@@ -1895,7 +1972,7 @@ global.NCH = {
 
 	// Vintage Improvements Vacuum Chamber, evacuating ('vintageimprovements:vacuumizing'). Each ingredient slot holds one
 	// item, so a counted input (Item.of(x, 3)) becomes that many slots. 600 ticks by default (the mod's powder snow).
-	//   R.viVacuumizing(i.powdered_sugar_bucket, [i.bucket, Item.of(i.sugar, 3)], e, 'powdered_sugar_bucket')
+	//   R.viVacuumizing(i.powdered_sugar_bucket, [i.bucket, Item.of(i.sugar, 4)], e, 'powdered_sugar_bucket')
 	viVacuumizing(outputs, inputs, e, idOverride, processingTime) {
 		if (!e) throw new Error('viVacuumizing called without event object!')
 		if (!outputs || !inputs) throw new Error('viVacuumizing called without inputs or outputs!')

@@ -42,8 +42,9 @@ ServerEvents.recipes(e => {
 		//######################### Egg solution #########################
 		// The pack's egg solution fluid: 250 mB stands in for one egg and its milk (create/recipes.js)
 		if (Platform.isLoaded('create')) {
-			R.createMixing(Item.of(i.batter, 2), [Item.of(i.flour, 2), Item.of(i.bowl, 2), Fluid.of(f.egg_solution, 250)], e,
-				'batter_egg_solution', 'heated')
+			// Batter: wheat flour, cornmeal or rice in each grain slot (TODO dishes/ingredients #24; was 2 wheat flour)
+			R.createMixing(Item.of(i.batter, 2), [[i.t_flour_or_cornmeal, i.rice], [i.t_flour_or_cornmeal, i.rice], Item.of(i.bowl, 2),
+				Fluid.of(f.egg_solution, 250)], e, 'batter_egg_solution', 'heated')
 			R.createMixing(i.potato_salad, [i.potato, i.onion, i.bowl, Fluid.of(f.egg_solution, 250)], e, 'potato_salad_egg_solution', 'n/a')
 		}
 
@@ -73,10 +74,6 @@ ServerEvents.recipes(e => {
 		;['green', 'red', 'yellow', 'orange', 'white', 'pink', 'blue', 'purple', 'black'].forEach(c =>
 			R.fdCooking([i['roasted_bell_pepper_' + c], i.rice, i.t_stuffed_bell_pepper_ingredients], i['stuffed_bell_pepper_' + c], e,
 				'stuffed_bell_pepper_' + c + '_from_roasted', 1.0, 200))
-
-		//######################### Sweets #########################
-		//Fruit beignet: removed item (dishes/meals #19); its pot recipe and Slice & Dice's mixing copy go
-		R.remove({ output: i.fruit_beignet }, e)
 
 		//######################### Cooking oil #########################
 		// Slice & Dice turns Cooking Pot recipes into heated mixing after KubeJS runs, so R.remove can't reach its copy;

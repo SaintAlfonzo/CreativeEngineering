@@ -9,6 +9,9 @@
 // public field via getDamageValue()/setDamageValue() - no read-only-event problem like
 // magic_resistance's damage reduction had, so this needs no patcherMod/Java at all.
 //
+// dragon_horse_armor is not repaired: as in vanilla, HorseArmorItem has no durability
+// (max damage 0). Its Regeneration comes from armor_effects.js mount().
+//
 // Knobs live in config/creativeengineering-common.toml under [dragon_gear.autorepair],
 // via patcherMod's CEConfig (Forge's native config format - editable live through
 // Create's in-game Configs screen, no restart needed).
@@ -29,13 +32,6 @@
 	}
 
 	const $DragonEqSlot = Java.loadClass('net.minecraft.world.entity.EquipmentSlot')
-	const $DragonAbstractHorse = Java.loadClass('net.minecraft.world.entity.animal.horse.AbstractHorse')
-
-	// AbstractHorse.EQUIPMENT_SLOT_OFFSET (400) + INV_SLOT_ARMOR (1) - same public
-	// getSlot(int) route armor_effects.js's mount() support already uses for
-	// dragon_horse_armor (see [[armor-effects-mount-support]]); there's no
-	// getArmor()-style getter, the backing inventory field is protected.
-	const DRAGON_HORSE_ARMOR_SLOT = 401
 
 	// ItemStack.is(Item) / ItemStack.is(TagKey) are same-arity overloads of unrelated
 	// types - this Rhino build can't disambiguate a raw tag argument between them
@@ -65,27 +61,5 @@
 		DRAGON_ARMOR_SLOTS.forEach(slot => repairIfDragonGear(player.getItemBySlot(slot), amount))
 		repairIfDragonGear(player.getMainHandItem(), amount)
 		repairIfDragonGear(player.getOffhandItem(), amount)
-	})
-
-	// dragon_horse_armor is worn in the horse's own inventory slot, not a player
-	// slot/hand, so the PlayerEvents.tick pass above can never see it - same
-	// AbstractHorse walk as armor_effects.js's mount() support. One ServerEvents.tick
-	// that skips dimensions with no player, not a LevelEvents.tick per dimension
-	// (perf.md 10.2 #6).
-	ServerEvents.tick(event => {
-		if (!CFG.DRAGON_GEAR.autorepairEnabled.get()) return
-		var server = event.getServer()
-
-		var intervalTicks = CFG.DRAGON_GEAR.autorepairIntervalTicks.get()
-		if (server.getTickCount() % intervalTicks !== 0) return
-
-		var amount = CFG.DRAGON_GEAR.autorepairAmountPerInterval.get()
-		server.getAllLevels().forEach(level => {
-			if (level.getPlayers().isEmpty()) return
-			level.getAllEntities().forEach(entity => {
-				if (!(entity instanceof $DragonAbstractHorse)) return
-				repairIfDragonGear(entity.getSlot(DRAGON_HORSE_ARMOR_SLOT).get(), amount)
-			})
-		})
 	})
 })()

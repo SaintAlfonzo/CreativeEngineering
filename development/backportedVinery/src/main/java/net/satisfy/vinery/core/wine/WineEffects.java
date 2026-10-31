@@ -28,7 +28,7 @@ public class WineEffects {
             "vinery:aegis_wine|vinery:armor_effect|0|1800",
             "vinery:villagers_fright|minecraft:bad_omen|0|1800",
             "vinery:clark_wine|vinery:double_jump|0|1800",
-            "vinery:jellie_wine|vinery:jellie|0|1800",
+            "vinery:jellie_wine|minecraft:regeneration+minecraft:absorption+minecraft:resistance+minecraft:fire_resistance|0|1800",
             "vinery:noir_wine|minecraft:jump_boost|0|1800",
             "vinery:red_wine|minecraft:slow_falling|0|1800",
             "vinery:strad_wine|minecraft:night_vision|0|1800",
@@ -46,7 +46,12 @@ public class WineEffects {
             "vinery:mellohi_wine|minecraft:instant_health|0|1"
     );
 
-    public record WineEffect(MobEffect effect, int amplifier, int duration) {
+    /** One or more effects ({@code a+b+c} in the entry), all at the same level and duration. */
+    public record WineEffect(List<MobEffect> effects, int amplifier, int duration) {
+        /** The first effect, for callers that show one. */
+        public MobEffect effect() {
+            return effects.get(0);
+        }
     }
 
     private static List<? extends String> cachedSource;
@@ -70,9 +75,11 @@ public class WineEffects {
     public static Map<String, List<String>> winesByEffect() {
         Map<String, List<String>> out = new LinkedHashMap<>();
         all().forEach((wine, effect) -> {
-            ResourceLocation id = ForgeRegistries.MOB_EFFECTS.getKey(effect.effect());
-            if (id != null) {
-                out.computeIfAbsent(id.toString(), k -> new ArrayList<>()).add(wine.toString());
+            for (MobEffect e : effect.effects()) {
+                ResourceLocation id = ForgeRegistries.MOB_EFFECTS.getKey(e);
+                if (id != null) {
+                    out.computeIfAbsent(id.toString(), k -> new ArrayList<>()).add(wine.toString());
+                }
             }
         });
         return out;
@@ -83,14 +90,24 @@ public class WineEffects {
         for (String entry : entries) {
             String[] parts = entry.split("\\|");
             ResourceLocation wine = parts.length == 4 ? ResourceLocation.tryParse(parts[0].trim()) : null;
-            ResourceLocation effectId = parts.length == 4 ? ResourceLocation.tryParse(parts[1].trim()) : null;
-            MobEffect effect = effectId == null ? null : ForgeRegistries.MOB_EFFECTS.getValue(effectId);
-            if (wine == null || effect == null) {
-                LOGGER.warn("Ignoring invalid wine effect entry '{}', expected wine|effect|amplifier|durationTicks", entry);
+            List<MobEffect> effects = new ArrayList<>();
+            if (parts.length == 4) {
+                for (String part : parts[1].split("\\+")) {
+                    ResourceLocation effectId = ResourceLocation.tryParse(part.trim());
+                    MobEffect effect = effectId == null ? null : ForgeRegistries.MOB_EFFECTS.getValue(effectId);
+                    if (effect == null) {
+                        effects.clear();
+                        break;
+                    }
+                    effects.add(effect);
+                }
+            }
+            if (wine == null || effects.isEmpty()) {
+                LOGGER.warn("Ignoring invalid wine effect entry '{}', expected wine|effect[+effect...]|amplifier|durationTicks", entry);
                 continue;
             }
             try {
-                result.put(wine, new WineEffect(effect, Math.max(0, Integer.parseInt(parts[2].trim())), Math.max(1, Integer.parseInt(parts[3].trim()))));
+                result.put(wine, new WineEffect(List.copyOf(effects), Math.max(0, Integer.parseInt(parts[2].trim())), Math.max(1, Integer.parseInt(parts[3].trim()))));
             } catch (NumberFormatException e) {
                 LOGGER.warn("Ignoring wine effect entry '{}': amplifier and duration must be numbers", entry);
             }

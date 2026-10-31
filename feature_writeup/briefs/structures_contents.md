@@ -9,75 +9,148 @@ overhaul"). Java paths are relative to `development/patcherMod/src/main/java/com
 
 | Row | Status | What is left | Build order |
 |---|---|---|---|
-| #3 pillager spawners | Planned | a spawner filter in patcherMod + optional pillager spawn boxes (data) | **first**: self-contained, small, and `mobs/pillagers #1` (the pillager overhaul) builds on it |
+| #3 pillager spawners | Built 2026-10-30 | as built: [structure_tuning.md](../structure_tuning.md) 3.32 (data-driven boxes in `spawn_boxes.json` instead of JSON copies; meta parts per (a)); scratch SQ-SB | done |
 | #2 river tree and driftwood cleanup | Planned | worldgen override (data) + item removal (KubeJS) | **second**, independent; needs one decision on what "remove driftwood" means |
 | #1 soul dungeons to the Nether | Planned | biome fit, tags, two structure json overrides, group moves | **last**: do it inside the Nether grouping pass (`structures/rates-and-groups #1`), as the row says |
 
 No row depends on another. #1 touches `structure_tags.json`, `biome_fits.json` and `structure_groups.json`, which
 the grouping pass edits too: one session, one `gen_structure_groups.py` run. Proposed test ids below are ST-290 to
-ST-295; renumber at build time if another brief took them first.
+ST-296; renumber at build time if another brief took them first.
 
 ---
 
 ## structures/contents #3: Pillager spawners in structures
 
-Status Planned · Work data / config · TODO `worldgen / structures/contents #3`
+Status Testing (built 2026-10-30) (as built: [structure_tuning.md](../structure_tuning.md) 3.32; the Build and Decisions below are
+the plan, superseded where 3.32 differs: one data file instead of structure JSON copies, mixes by class, no End tower
+box, box evokers drop no totem) · Work patcherMod / data · TODO `worldgen / structures/contents #3` · revised 2026-10-30 (verified
+vanilla mechanics, full audit, owner decision)
 
 ### Goal
 
-No pillager mob spawners in structures (switchable), optionally replaced by a vanilla-style "pillager spawn box": the
-structure's bounding box spawns pillagers naturally, like a pillager outpost.
+No pillager mob spawners in structures (switchable). **Every pillager structure gets a vanilla-style spawn box**
+(owner, 2026-10-30), with a mob pool per structure type that `mobs/pillagers #1` tunes. This row builds the filter and
+the boxes with pillagers only; #1 then fills in the pools.
 
-### Now
+### How vanilla pillagers spawn at outposts (verified 2026-10-30)
 
-- **Where pillager spawners are** (scanned for this brief: every `kubejs/data` template plus the Towns & Towers, IPO,
-  Villages&Pillages, It Takes a Pillage, Philip's Ruins and Blocky Siege jars; script kept in the session scratchpad):
-  22 spawners with `SpawnData.entity.id = minecraft:pillager` in 17 templates, all `minecraft:spawner`:
+Read from Forge 1.19.2-43.3.9 (the Mojmap jar in `~/.gradle/caches/forge_gradle/minecraft_user_repo`, decompiled with
+the ForgeFlower jar in the same cache): `Structures`, `ChunkGenerator.getMobsAt`, `NaturalSpawner`,
+`StructureSpawnOverride`, `SpawnPlacements`, `PatrollingMonster`, `BaseSpawner`.
 
-  | Structure | Template(s) | Spawners |
-  |---|---|---:|
-  | `illager_siege_weapons:*` (6, group `vehicles`) | `illager_siege_weapons:ballista`, `betteringram`, `catapult`, `reforcedbatteringram`, `trebuchet` 1 each, `siegetower` 2 | 7 |
-  | `mysticrift_pillagers_towers_aris:*` (8 towers, `pillager_settlements`) | `*_pillager_tower_new` (acacia, birch, cherry, desert, mangrove, oak_wood) 1 each, `jungle_pillager_tower` 1, `end_new_pillager_tower` 3 (End) | 10 |
-  | `illager_viking_longship:illager_longship` (boats) | `illager_viking_longship:longship_modded` | 2 |
-  | `illagerwarship:warship` (boats) | `illagerwarship:illager-warship` | 1 |
-  | `blocky_siege:pillager_ship` (boats) | `blocky_siege:pillager_pirate_ship` (in `blocky_siege-6.1.91-1.19.2.jar`) | 2 |
+- **The outpost has no spawner and no saved pillagers.** `Structures.PILLAGER_OUTPOST` is defined in code (1.19.2 has
+  no vanilla structure JSON) with one spawn override: category `monster`, box type `STRUCTURE` (JSON name `full`),
+  one entry `pillager` weight 1, count 1 to 1. Its templates (vanilla `client.jar`) hold only the caged iron golem and
+  the 2 allays. Every outpost pillager comes from that override.
+- **How a box works.** Each natural spawn attempt (`NaturalSpawner.spawnCategoryForPosition`) picks a random column in a
+  loaded chunk and a random height from the world bottom up to the surface top (`getRandomPosWithin`,
+  `WORLD_SURFACE` + 1), then tries a group of up to 4 mobs within 5 blocks of it. The mob type is picked once per
+  group, at the group's first valid position, by `ChunkGenerator.getMobsAt`: it walks the structures referenced at that
+  position, and the first one that has an override for the category and contains the position (`full`: the start's
+  whole bounding box; `piece`: inside one of its pieces) supplies its list **instead of** the biome's. Every later mob
+  of the group is checked again (`canSpawnMobAt`), so a group stops at the box edge.
+- **What follows:**
+  - A box replaces the biome's monsters: no zombies or creepers inside it. An override with an empty list
+    (`"spawns": []`) makes a no-monster zone (Philip's Ruins and Sky Villages use this).
+  - A box changes what spawns, not how often: the monster cap, the 24-block minimum distance from players and from
+    world spawn, and despawning at 128 blocks all apply as usual. Box mobs count toward the monster cap.
+  - `full` covers the whole bounding box, including the ground and caves under the structure and the air around it;
+    `piece` keeps to the pieces. Attempts land at random heights, so a small, tall box catches few of them.
+  - Each mob still needs its own spawn rule. Pillager (`PatrollingMonster.checkPatrollingMonsterSpawnRules`): block
+    light 8 or less, any sky light, so they spawn by day. Vindicator, evoker, illusioner, witch, ravager
+    (`Monster.checkMonsterSpawnRules`): dark only. **A mixed pool spawns only its pillagers in daylight.**
+  - 6% of pillagers (and other illagers) from a box or from a spawner roll captain, with an ominous banner
+    (`PatrollingMonster.finalizeSpawn` skips the roll only for patrol, event and structure spawns). Killing one gives
+    Bad Omen. Mobs saved in templates never roll.
+  - Box mobs are not patrolling, so they despawn like any monster (`removeWhenFarAway`).
+- Besides overrides, only the Nether fortress has a hard-coded spawn path (`isInNetherFortressBounds`, on nether
+  bricks). Forge's `LevelEvent.PotentialSpawns` fires on the final list; patcherMod does not use it today. Patrols
+  (`PatrolSpawner`) and raids are separate, not tied to structures. The pack's spawn rules and conditions
+  (`mob_spawns.json`, `SpawnConditions`) have no illager entries and do not touch overrides.
 
-  Everything except Blocky Siege is a port in `kubejs/data/<ns>/structures/` (tools/port_structure_jars.py). No
-  vindicator, evoker or illusioner spawners exist. Towns & Towers, IPO, Eugene's camps and vehicles use template
-  **entities** instead (one-off mobs saved in the template, e.g. `kaisyn:outpost/pillagers/pillager`,
-  `eugene:pillager_camp` 1 pillager + 1 vindicator, `illagerwarship:illager-warship` 15 pillagers, 3 vindicators, 2
-  illusioners): those are not spawners and are out of scope.
-- **How vanilla pillagers spawn** (1.19.2; from knowledge of the vanilla code, verify by reading the decompiled
-  classes if it matters): (1) **outpost spawn override**: `minecraft:pillager_outpost` has a structure spawn override,
-  monster category, bounding box `full` (STRUCTURE), only pillagers, 1 to 1, so natural monster spawning inside the
-  outpost's box picks pillagers instead of the biome's monsters; pillager placement (`PatrollingMonster`
-  spawn rules) allows block light up to 8 at any sky light, so they spawn by day; (2) **patrols**
-  (`PatrolSpawner`, every 10-11 minutes after day 5, not in villages' vicinity); (3) **raids** (Bad Omen). Template
-  entities are the mods' own way. The pack's spawn tuning (mob_spawns.md 4, "Only biome spawners") does not touch
-  structure spawn overrides.
-- **The pack's own structures have the field but empty**: every ported structure json has `"spawn_overrides": {}`
-  (e.g. `kubejs/data/illager_siege_weapons/worldgen/structure/catapult.json`,
-  `kubejs/data/mysticrift_pillagers_towers_aris/worldgen/structure/jungle_pillager_tower.json`); the meta structures
-  in `meta_structures.json` (pillager camp siege, tower siege, fleet ...) have `"spawn_overrides": {}` too.
-- **The hook to use**: `worldgen/TemplateBlockSwaps.apply` (:130-159) runs once per loaded template from
-  `mixin/StructureTemplateManagerSwapMixin.java`. It returns early when the template has no listed swaps (:132), and it
-  replaces a block with `new StructureBlockInfo(pos, state, null)` (:142), which drops the block entity (the
-  spawner's NBT) as needed.
+### Spawner blocks in this pack
+
+Vanilla `BaseSpawner`: activates within 16 blocks of a player, stops at 6 mobs of its type nearby, and the mob's own
+spawn rule applies (pillager: block light 8 or less). **Survivality** changes every spawner in the pack
+(`config/survivality-common.toml`): `spawner_required_player_range = 32`, and `unrestricted_spawners = true` ("Spawners
+will spawn regardless of how many mobs are nearby"). So a pillager spawner keeps adding pillagers, without a cap,
+while a player is within 32 blocks. A box is held by the monster cap. Survivality's `variant_spawners` (its
+`MonsterRoomFeatureMixin`) also gives vanilla dungeon spawners biome variants of their mobs.
+
+### Pillager structures today (scan 2026-10-30)
+
+Scan of every structure JSON, template pool and template in `mods/` (with jar-in-jar) and `kubejs/data` (which wins
+on the same path). Structures are mapped to templates by walking their jigsaw pools. Script:
+`python3 tools/audit_structure_spawners.py [out.json]` (about 80 s; 401 structures, 1,284 pools, 4,832 templates).
+Mob counts are per template; T&T and IPO fill jigsaw slots from mob pools (per-slot counts in
+[mobs_pillagers.md](mobs_pillagers.md), "The pillager structures today").
+
+| Structure | Spawn box | Pillager spawners | Mobs saved in templates or placed by code | In a pillager meta as |
+|---|---|---:|---|---|
+| Vanilla `minecraft:pillager_outpost` (+ IPO tower variant, 1 in 8) | **yes**: `full`, pillager 1-1 (code) | 0 | none (IPO: `ipo:pillager_outpost/entities`, a vindicator per slot) | anchor, `pillager_tower_siege` (35%) |
+| T&T outposts, 27 (`towns_and_towers:pillager_outpost_*`, `exclusives/pillager_outpost_*`) | **yes**: `full`, pillager 1-2 | 0 | grunt pool (pillager 1 : vindicator 1), captain pool | anchors: `pillager_tower_siege` 35% (14 towers), `pillager_stronghold_siege` 40% (forts), camp metas 20 + 15 + 15% (beach, snowy beach, sparse jungle, wooded badlands), `pillager_fleet` 35% (ocean ship) |
+| T&T `pillager_outpost_mushroom_fields` | **no** (the only T&T outpost without one) | 0 | grunt and captain pools | anchor, `pillager_stronghold_siege` |
+| Mysticrift towers, 7 Overworld (`mysticrift_pillagers_towers_aris:*`) | no | 1 each | 5-8 pillagers | anchor, `pillager_great_tower_siege` (50%) |
+| Mysticrift End tower (`end_pillager_tower`) | no | 3 (+ 2 spawners with no mob, which spawn nothing) | none | none (metas are Overworld only) |
+| Illager Siege Weapons x6 (`illager_siege_weapons:*`) | no | 1 each, siege tower 2 (7) | vindicators 2-7; siege tower also 6 pillagers | parts (`meta/pillager_outworks`) |
+| `illagerwarship:warship` | no | 1 | 15 pillagers, 3 vindicators, 2 illusioners | anchor or part, `pillager_fleet` |
+| `illager_viking_longship:illager_longship` | no | 2 | 3 pillagers, 5 vindicators, 1 evoker | anchor or part, `pillager_fleet` |
+| `blocky_siege:pillager_ship` (jar template) | no | 2 | none | anchor or part, `pillager_fleet` |
+| `eugene:pillager_camp` | no | 0 | 1 pillager, 1 vindicator | anchor or part, camp metas |
+| `eugene:pillager_loot_carriage` (3 variants) | no | 0 | 11 pillagers, 2 ravagers across the variants | none |
+| `takesapillage:pillager_camp`, `takesapillage:bastille` | no | 0 | placed features `takesapillage:mob_feature_*` (code) | camp metas; bastille anchors `pillager_stronghold_siege` |
+| `unwrecked_ships:ship`, `nether_ship` | no | 0 | pillager crew pools (`unwrecked_ships:sailors/pillager`, `pillager_captain`) | none |
+
+22 pillager spawners in 17 templates, unchanged since 2026-10-21. All are `minecraft:spawner`. Every template except
+Blocky Siege's is a port in `kubejs/data/<ns>/structures/`. No vindicator, evoker or illusioner spawners exist, and no
+processor list or mod code places a pillager spawner.
+
+**Metas drop the anchor's box.** A meta is one structure: its anchor and parts are all pieces of the meta's start
+([MetaStructure.java:62-64](../../development/patcherMod/src/main/java/com/SaintAlfonzo/creativeengineering/worldgen/MetaStructure.java#L62-L64)),
+and `getMobsAt` looks up overrides by structure. Every meta in `meta_structures.json` has `"spawn_overrides": {}`. So
+a vanilla or T&T outpost that became a meta anchor (35-50% of their slots, see the table) has **no pillager respawn
+today**, and a box added to a member's own JSON would not reach it inside a meta either. The same applies to Philip's
+Ruins inside the ruin metas: their zombie/skeleton boxes and no-monster boxes are lost there.
+
+### Other spawner blocks (audit 2026-10-30)
+
+Templates (by mod; counts are spawner blocks per mob, summed over templates):
+
+| Mod | Structures | Mobs |
+|---|---|---|
+| YUNG's Better Dungeons | skeleton, small, small nether, zombie dungeons | the templates hold `pig` placeholders; its processors (`betterdungeons:*` processor lists, `MobSpawnerProcessor` and friends) set the real mob: skeleton, zombie, spider, blaze, wither skeleton, zombified piglin. 1 real zombie spawner in a zombie dungeon cubby |
+| YUNG's Better Strongholds | stronghold rooms | zombie 8, spider 6, silverfish 2 (portal room, junction), skeleton 1; the grand library and large prison also set spawners by processor |
+| YUNG's Better Nether Fortresses | `betterfortresses:blaze/blaze_0` | blaze 1 |
+| Philip's Ruins | about 45 templates in ruins, crypts, pyramids, ocean and Nether ruins | zombie, husk, skeleton, stray, wither skeleton, cave spider, witch, creeper, drowned, guardian, magma cube, zoglin, ghast, endermite, silverfish |
+| Quark big dungeon | 20 templates | zombie, skeleton |
+| Quark Nether obsidian spikes | placed feature (code), `Big Spike Spawners = true` | blaze (Quark default; not read from code) |
+| Terralith | `spire` bases, `cave/dungeon1`, `underground/dungeon1` (frosted dungeon), desert village cartographer | zombie, stray, silverfish, drowned, cave spider, skeleton |
+| C.C.C. (eugene) | `plains_undead_castle` (castle, undead castle) | skeleton 3 |
+| Hearths | crimson and warped tower interiors | blaze 1 each |
+| Towns & Towers | desert temple mimic passage | husk 1 |
+| MES | `mes:phantom_citadel` | enderman 2, phantom 2 |
+| Nullscape | `phantom_nest` hives | phantom |
+| Underground Bunkers | bunker spawner rooms | zombie 3 |
+| Cloud Storage | sky temple (code piece) | bloviator, badloon |
+| Vanilla (code) | mineshaft corridors, stronghold portal room, fortress blaze throne, dungeon feature (`monster_room`) | cave spider, silverfish, blaze, zombie/skeleton/spider |
+
+Whether the vanilla stronghold and fortress still generate next to YUNG's was not checked here (YUNG replaces them in
+code). Quark's Spawner Replacer module is off. Botania, PneumaticCraft, Create and WTHIT only read or move spawners.
 
 ### Build
 
-1. **Config** (`CEConfig.java`, `WorldgenSystems`, next to `templateBlockSwaps` :1714 / :1784): two keys under
-   `[worldgen.systems]` (or a new `[worldgen.spawners]` section if more knobs follow):
+1. **Config** (`CEConfig.java`, `WorldgenSystems`, next to `templateBlockSwaps`): under `[worldgen.systems]` (or a new
+   `[worldgen.spawners]` section):
    - `removeSpawners` list of entity ids, default `["minecraft:pillager"]` (an empty list keeps every spawner);
    - `spawnerReplacement` block id, default `"minecraft:air"`.
-   Accessors in `worldgen/WorldgenConfig.java` next to `templateBlockSwapsEnabled` (:51). Comment: "rejoin; new
-   chunks only".
-2. **Filter** in `TemplateBlockSwaps.apply`, before the `list == null` return (so it works on templates with no
-   swaps, including jar templates like Blocky Siege's): for each palette, for each `StructureBlockInfo` whose state is
-   `Blocks.SPAWNER` and whose `nbt` has `SpawnData.entity.id` (or any `SpawnPotentials[].data.entity.id`) in the list,
-   replace it with the replacement state and null NBT. Count and log once per template at debug, and a one-line total
-   at info on the first world load (`[template-swaps] N pillager spawner(s) removed in M template(s)`). Keep the
-   `DONE` guard so it runs once per template. Sketch:
+   Accessors in `worldgen/WorldgenConfig.java` next to `templateBlockSwapsEnabled`. Comment: "rejoin; new chunks only".
+2. **Filter** in `worldgen/TemplateBlockSwaps.apply` (runs once per loaded template from
+   `mixin/StructureTemplateManagerSwapMixin.java`), before its "no swaps listed" early return, so it also covers jar
+   templates (Blocky Siege): for each palette, each `StructureBlockInfo` whose state is `Blocks.SPAWNER` and whose
+   `nbt` has `SpawnData.entity.id` (or any `SpawnPotentials[].data.entity.id`) in the list is replaced with the
+   replacement state and null NBT. Also drop the End tower's 2 empty spawners (no `SpawnData.entity.id`) when the
+   template loses a listed one. One info line on first world load (`[template-swaps] N pillager spawner(s) removed in
+   M template(s)`, 22 expected). Sketch:
    ```java
    static boolean filtered(StructureTemplate.StructureBlockInfo info, Set<String> ids) {
        if (!info.state.is(Blocks.SPAWNER) || info.nbt == null) return false;
@@ -89,67 +162,82 @@ structure's bounding box spawns pillagers naturally, like a pillager outpost.
        return false;
    }
    ```
-   A spawner in a floor leaves a hole with `air`; most of these sit on a floor or a deck (siege weapons, tower tops),
-   so air is fine; look at each kind in ST-290.
-3. **Spawn boxes (optional, the "maybe" in the row):** for the structures that lose their spawner, set
-   `spawn_overrides` in their structure json, outpost-style:
+   Most spawners sit on a floor or a deck, so `air` is fine; look at each kind in ST-290.
+3. **Boxes on every pillager structure** (owner decision). A pool per structure type, pillagers only for now:
    ```json
-   "spawn_overrides": {"monster": {"bounding_box": "full",
-     "spawns": [{"type": "minecraft:pillager", "weight": 1, "minCount": 1, "maxCount": 1}]}}
+   "spawn_overrides": {"monster": {"bounding_box": "piece",
+     "spawns": [{"type": "minecraft:pillager", "weight": 1, "minCount": 1, "maxCount": 2}]}}
    ```
-   Files: `kubejs/data/illager_siege_weapons/worldgen/structure/{ballista,battering_ram,catapult,reinforced_battering_ram,siege_tower,trebuchet}.json`,
-   `kubejs/data/mysticrift_pillagers_towers_aris/worldgen/structure/*_pillager_tower.json` (7 Overworld; the End one
-   too if wanted), `kubejs/data/illager_viking_longship/worldgen/structure/illager_longship.json`,
-   `kubejs/data/illagerwarship/worldgen/structure/warship.json`; Blocky Siege needs a copy of its jar json under
-   `kubejs/data/blocky_siege/worldgen/structure/pillager_ship.json`. Run `python3 tools/check_worldgen_json.py` after.
-   Note `tools/port_structure_jars.py` rewrites the ported folders when re-run: re-apply (or teach the port tool a
-   `SPAWN_OVERRIDES` table) if a port is redone.
-4. Document in structure_tuning.md (a 3.x subsection "Spawners") and in mob_spawns.md 9 (strike "remove pillager
-   spawners" once built). patcherMod rebuild; ships with the next pack version (jar on server and clients; the config
-   key is common).
+   - JSON-defined structures, override files in `kubejs/data/<ns>/worldgen/structure/`: Mysticrift x8 (the End tower
+     too, for `mobs/pillagers #2`), siege weapons x6, warship, longship (all already ported there), plus copies of
+     the jar JSONs for `blocky_siege:pillager_ship`, `towns_and_towers:pillager_outpost_mushroom_fields`,
+     `eugene:pillager_camp` and `pillager_loot_carriage` (ported, already in `kubejs/data/eugene`),
+     `takesapillage:pillager_camp` / `bastille`, `unwrecked_ships:ship` (only if its pillager crew is wanted to
+     respawn; it is a mixed ship). T&T's 27 boxes can stay as they are or get the tuned pool via jar JSON copies.
+   - Vanilla `minecraft:pillager_outpost` is code-defined: its pool changes through a JSON override at
+     `kubejs/data/minecraft/worldgen/structure/pillager_outpost.json` (a full copy of the vanilla structure, codec
+     form), or through a Java hook (below).
+   - `tools/port_structure_jars.py` rewrites the ported folders when re-run: give it a `SPAWN_OVERRIDES` table so a
+     re-port keeps the boxes. Run `python3 tools/check_worldgen_json.py` after.
+4. **Metas pass their members' boxes on.** Without this, 35-50% of outposts (and every siege weapon or camp that is
+   a meta part) get no box. Two ways:
+   - (a) A mixin on `ChunkGenerator.getMobsAt` (or a `LevelEvent.PotentialSpawns` handler): when the structure at the
+     position is a `MetaStructure`, find the member whose pieces contain the position (the meta's `Index` piece records
+     each member's piece range) and use that member's override with `piece` semantics. Members keep their own boxes,
+     ruins included. Recommended.
+   - (b) Give each pillager meta its own `piece` override in `meta_structures.json`. Simpler, but one pool for the whole
+     meta (tower, camps and siege weapons alike), and the ruin metas stay wrong.
+5. **Pools** come from `mobs/pillagers #1` (camps 0-2 vindicators, towers + 0-1 evoker / illusioner, ...). Never put
+   evokers in a repeating box (a Totem of Undying every time, see [mobs_pillagers.md](mobs_pillagers.md) Gotchas).
+6. Document in structure_tuning.md (a 3.x subsection "Spawners and spawn boxes") and in mob_spawns.md 9 (strike "remove
+   pillager spawners" once built). patcherMod rebuild; ships with the next pack version (jar on server and clients;
+   the config key is common). Player changelog bullet then (spawners gone, pillagers respawn in all pillager
+   structures).
 
 ### Ids and data
 
-- Spawner block `minecraft:spawner`; NBT path `SpawnData.entity.id` (1.19 format), plus `SpawnPotentials`. Verified on
-  the templates listed above.
-- Pillager `minecraft:pillager` (vanilla). Spawn override JSON keys `bounding_box` (`piece` | `full`) and `spawns`
-  with `type`, `weight`, `minCount`, `maxCount`: the same shape as Philip's lost soul dungeon json (verified in
-  `PhilipsRuins1.19.2-10.8.jar`).
+- Spawner block `minecraft:spawner`; NBT path `SpawnData.entity.id` (1.19 format), plus `SpawnPotentials`.
+- Override JSON: `spawn_overrides.<category>.bounding_box` (`piece` | `full`) and `spawns` entries with `type`,
+  `weight`, `minCount`, `maxCount` (as in T&T's outpost JSONs and Philip's Ruins).
 
 ### Decisions
 
-- **Remove or replace?** Recommendation: remove (the Java filter, default on for pillagers), and add spawn boxes only
-  to the siege weapons and the Mysticrift towers, where a lone spawner was the only source of pillagers. The ships and
-  the warship already carry many template pillagers; a box over open sea would keep spawning pillagers on the deck,
-  which is what a spawner did, so leave them without a box unless the user wants a permanent garrison.
-- **Spawn box size**: `full` (the whole structure box, like the outpost) vs `piece`. Recommendation: `full` for
-  towers, `piece` for the siege weapons (their box with the meta parts can be large).
-- **Interaction with `mobs/pillagers #1`** (the overhaul's "structure pool / spawn swap" per structure type): the box
-  is where its per-type mix (camps 0-2 vindicators, towers + evoker...) would go later, as weighted `spawns` entries.
-  Build #3 first with pillagers only.
+- **Remove and box everything** (owner, 2026-10-30): spawners out by default, every pillager structure gets a box.
+  This replaces the 2026-10-21 recommendation (boxes only on the siege weapons and Mysticrift towers).
+- **Open: meta handling**, (a) per-member mixin (recommended) or (b) one box per meta.
+- **Open: box type.** Recommendation `piece` everywhere except vanilla and T&T outposts (keep `full`, as they are):
+  `piece` keeps ships' boxes to the hull, not the sea around, and keeps camps' boxes to the tents.
+- **Open: ships and the warship.** A box on a ship keeps spawning pillagers on the deck forever (what the spawners
+  did, now held by the monster cap). Fine for the "garrison" feel; say so if ships should stay one-off.
+- **Open: daylight.** Pillagers spawn by day, the rest of a mixed pool only in the dark. If tuned pools should give
+  vindicators by day, that needs a spawn-rule change for illagers inside boxes (a `SpawnConditions` kind), not just
+  weights.
 
 ### Gotchas
 
-- Spawn overrides replace the whole monster list inside the box: no zombies or creepers in a pillager tower, as in
-  vanilla outposts.
-- Pillagers from a box count toward the monster mob cap; with several boxed structures loaded, fewer other monsters
-  spawn nearby.
-- Structures already generated keep their spawners (templates are swapped at load, new chunks only).
-- Do not filter in the port tool alone: it misses jar templates (Blocky Siege) and a mod update.
+- A box replaces the whole monster list inside it (no zombies or creepers in a pillager structure, as in vanilla).
+- Box mobs count toward the monster cap: with several boxed structures loaded, fewer other monsters spawn nearby.
+- 6% of box pillagers are captains: more boxes mean more Bad Omen sources (spawners had the same roll).
+- Structures already generated keep their spawners (templates are swapped at load, new chunks only). Their missing
+  boxes, though, apply at once in old chunks too: overrides are read from the structure JSON when mobs spawn, not when
+  the chunk was made (the meta mixin too).
+- Do not filter in the port tool alone: it misses jar templates (Blocky Siege) and mod updates.
 
 ### Tests
 
 - **ST-290 Pillager spawners gone:** new world; `/ceplace` (or `/locate`) a catapult, a Mysticrift oak tower and the
   Blocky Siege ship -> no spawner where the template had one; log line with the removed count (22 if every template
   loads). `removeSpawners = []` brings them back in new chunks.
-- **ST-291 Pillager spawn box:** stand near a boxed tower at night and by day for a few minutes on Normal -> pillagers
-  spawn inside the box, no zombies inside it.
+- **ST-291 Pillager spawn box:** stand near a boxed Mysticrift tower at night and by day for a few minutes on Normal
+  -> pillagers spawn inside the box, no zombies inside it.
+- **ST-296 Box inside a meta:** `/locate` a `meta/pillager_tower_siege`; stand by the anchor tower and by one of its
+  siege weapons -> pillagers keep spawning at both (fails today: no pillager respawn at a meta anchor).
 
 ---
 
 ## structures/contents #2: River tree and driftwood cleanup
 
-Status Planned · Work data / KubeJS · TODO `worldgen / structures/contents #2`
+Status In Progress (river half done under `recipes/wood #3`) · Work data / KubeJS · TODO `worldgen / structures/contents #2`
 
 ### Goal
 

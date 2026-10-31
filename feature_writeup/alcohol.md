@@ -5,13 +5,15 @@
 Two backports live in this file:
 
 - **Part A (sections 0 to 10, tests `AL-`): Brewin' and Chewin'.** A full port of 4.5.0+1.21.1 as "Backported Brewin";
-  `-02` DEPLOYED with pack 1.0.8 (2026-10-19) in place of the 2.0 jar, still the live jar in 1.0.9. `-03` (10.13) is
-  in the local `mods/` since 2026-10-20, not deployed.
+  `-02` DEPLOYED with pack 1.0.8 (2026-10-19) in place of the 2.0 jar; `-03` (10.13, 10.16, 12) shipped in 1.1.01
+  (deployed 2026-10-22). `-04` (effect icons on the HUD for the food effects, TODO `potions/effects #8`) installed in
+  `mods/` 2026-10-31 00:30, not yet booted.
 - **Part B (sections B0 to B8, tests `VB-`): Let's Do Vinery.** The pack ships Forge 1.3.10; ported from Fabric
   1.5.5 (Minecraft 1.21.1) as "Backported Vinery"; `-02` DEPLOYED with pack 1.0.8 (2026-10-19) in place of 1.3.10,
-  still the live jar in 1.0.9. `-03` (B7.14, 10.9 to 10.14) then `-04` (village houses, section 13) are in the local `mods/`
-  since 2026-10-19/20, not deployed. `-04` was rebuilt in place on 2026-10-22 with the Grape Planting JEI page; the jar
-  in `mods/` and `server_mods/` is the earlier `-04` build, so bump to `-05` before the next deploy. It starts after Part A's History.
+  `-03` (B7.14, 10.9 to 10.14) and `-04` (village houses, section 13; Grape Planting JEI page) shipped in 1.1.01
+  (deployed 2026-10-22); `-05` (sheared grass slab) in 1.1.04 (client 2026-10-29, server still 1.1.03). `-06` (crop
+  seasons for grapes and fruit leaves, Jellie Wine's four effects, Double Jump fix) installed in `mods/` 2026-10-31 00:41,
+  not yet booted. It starts after Part A's History.
 
 # Part A: Brewin' and Chewin' (Backported Brewin)
 
@@ -28,12 +30,12 @@ says otherwise. This part holds the gap analysis (sections 2.1 to 2.6), the port
 | Base fluid choice: honey / milk (4.1) | DECIDED 2026-10-14: the pack's `create:honey` and `minecraft:milk` |
 | Kombucha base (4.5) | DECIDED 2026-10-14: `create_central_kitchen:green_tea` |
 | Heat / cold block audit (2.7) | written 2026-10-14; applied 2026-10-19 with your list (10.13: furnaces, bonfires, braziers, running machines, fueled burners; snow, powder snow, IW thin ice / permafrost / cryosol) |
-| Port (`development/backportedBrewin`) | `-01` shipped in pack 1.0.7. `backportedBrewin-4.5.0-ce-19.2-02.jar` BUILT 2026-10-18 with the section 8 port changes; offline data check passes (6). In `mods/` since 2026-10-18 evening and DEPLOYED with pack 1.0.8 (2026-10-19 10:20), where it replaces both `-01` and the 2.0 jar (1.0.7 shipped the two together; FML loaded `-01` on the server, [plan_1.0.7.md](plan_1.0.7.md) 2.2). Loaded in single player 2026-10-19, no errors. Still the live jar in 1.0.9. `-03` BUILT 2026-10-19 with 10.13 (keg heat / cold); rebuilt with 10.16, 12 and the 10.18 climate line and installed in the local `mods/` 2026-10-20, so Vinery's cold / warm storage is on locally. Gaps and port decisions: 3.5 |
+| Port (`development/backportedBrewin`) | `-01` shipped in pack 1.0.7. `backportedBrewin-4.5.0-ce-19.2-02.jar` BUILT 2026-10-18 with the section 8 port changes; offline data check passes (6). In `mods/` since 2026-10-18 evening and DEPLOYED with pack 1.0.8 (2026-10-19 10:20), where it replaces both `-01` and the 2.0 jar (1.0.7 shipped the two together; FML loaded `-01` on the server, [plan_1.0.7.md](plan_1.0.7.md) 2.2). Loaded in single player 2026-10-19, no errors. Still the live jar in 1.0.9. `-03` BUILT 2026-10-19 with 10.13 (keg heat / cold); rebuilt with 10.16, 12 and the 10.18 climate line and installed in the local `mods/` 2026-10-20, so Vinery's cold / warm storage is on locally. `-04` (HUD effect icons, `potions/effects #8`) installed 2026-10-31 00:30, not yet booted. Gaps and port decisions: 3.5 |
 | Pack-side changes (3.4) | DONE 2026-10-18 except the rows marked open in 3.4. Compost and BlockRunner DONE 2026-10-19 (10.16); food types / stack sizes and the Kimchi can still wait on `/dumpall` in a game with the port |
 | Changes to make (8) | DONE 2026-10-18 (port + pack), not tested in game. Q1 to Q5 built with my defaults (8.9) |
-| Third list (10) | Brewin' side: 10.3, 10.4 BUILT 2026-10-18 (in `-02`, live); 10.13 and 10.16 BUILT 2026-10-19 (in `-03`, not installed). Not tested in game |
+| Third list (10) | Brewin' side: 10.3, 10.4 BUILT 2026-10-18 (in `-02`, live); 10.13 and 10.16 BUILT 2026-10-19 (in `-03`, shipped in 1.1.01). Not tested in game |
 | Alcoholic drinks (11) | BUILT 2026-10-20 (pack + Vinery `-03` rebuild), not tested in game |
-| Coasters (12) | BUILT 2026-10-20 (Brewin' `-03` + patcherMod 1.0.10 rebuilds in `build/libs/`, not installed; pack files live), not tested in game |
+| Coasters (12) | BUILT 2026-10-20 (Brewin' `-03` + patcherMod 1.0.10), shipped in 1.1.01; extended 2026-10-29 to 302 foods and drinks. Scratch server PASSED 2026-10-22 (SQ-OM-02), not tested in game |
 | In-game tests | AL-01 to AL-96 drafted (7), none run |
 
 - **Scope:** everything in 4.5.0 except EMI support, which this pack doesn't have.
@@ -1035,6 +1037,8 @@ This also ticks the "quiche: sequenced assembly" item in cooking.md (the cooking
   NBT, coasters, compost and BlockRunner rows, the 44 drink food values); the logic and server halves of AL-81 to
   AL-87, AL-90, AL-91 recorded, their in-game halves stay open.
 - 2026-10-24: planned from the scratchpad: Vintage Delight's six jar brews get their own category and a redesign (`alcohol/pack #3`, section 11).
+- 2026-10-31: port `-04`: the food effects of Mead, Pale Jane, Saccharine Rum and the six Brewin' dishes show their
+  HUD icon (6-arg `MobEffectInstance`, TODO `potions/effects #8`). Installed in `mods/` 2026-10-31 00:30, not yet booted.
 
 ## 10. Third list (2026-10-18 late, BUILT, not tested in game)
 
@@ -1629,6 +1633,8 @@ Display Delight models to the coaster; add WTHIT info.
 - **Tooltip line:** `tools/placeable_catalog.py` now tags only modelled items, the port's plus the generated ones:
   152 (was 158). Out: the Vinery wines and juices and Farmer's Respite teas (60), which have no coaster model.
   In: the 56 Display Delight foods. This replaces the 8.3 allow-list (8.9 Q3).
+  **Superseded 2026-10-29:** the generator now reads DD 1.7.0 multipart blockstates, Vinery wine bottles and
+  Vintage mason jars, and borrows models for same-sprite drinks; the tag is 304. Current state: [kitchen.md](kitchen.md) 2.3.
 - **WTHIT (patcherMod `compat/WthitCoaster`, `waila_plugins.json`, needs `brewinandchewin`):** the header already shows
   the top item (the coaster's clone stack). The body adds "Coaster: 3 / 4", with "(put away)" once a sneak-use took
   the coaster itself back, and one line per item in the order they went on, repeats folded ("2x Beer"). It reads the
@@ -1695,7 +1701,7 @@ jars as resource donors, B4.8)**
 | Upstream jars as resource donors (B4.8) | CHOSEN 2026-10-18 (D13 B). Feasibility checked 2026-10-18: works; the port reads assets/data from the unmodified 1.5.5 and 1.3.10 jars at runtime. Delivery of the jars (D14) open |
 | Decisions (B5) | DECIDED 2026-10-18: D3 keep `trippy` (section 10.1). DECIDED 2026-10-14: D1 keep `cherry_*`, D2 keep every 1.3.10 block and add the new ones, D6 WTHIT, D11 winemaker set damage by config. Aging revamped to a playtime clock (B4.5). 2026-10-18: D13 option B (B4.8). D14 decided 2026-10-18: payload now, download on publish. Worldgen (user, 2026-10-18): 1.20+ worldgen types become the nearest 1.19.2 vanilla type, nothing backported. Still open, built with the recommendation: D4, D5 (non-aging numbers), D7 to D10, D12 |
 | Wine aging (B4.5) | DESIGNED 2026-10-14: vintage clock on real playtime, lengths unchanged for now (16 days per year, 2 years per level). 2026-10-18: your B7 list changes this to months on the sun clock (sleep ages wine), x2.5 in the dark: [time.md](time.md) 3.7 |
-| Port (`development/backportedVinery`) | BUILT 2026-10-18. `-01` DEPLOYED with 1.0.7 (the first staging crashed the server on the grass slab, fixed under the same name, [fixes_compat.md](fixes_compat.md) 2.23); `-02` DEPLOYED with 1.0.8 (2026-10-19 10:20), loaded in single player 2026-10-19: Foundation subset, 1.5.5, 1.3.10 keepers, vintage clock, upstream-pack layer, WTHIT lines; status and gaps in B4.9. `-03` (B7.14 and 10.9 to 10.14) in the local `mods/` since 2026-10-19 22:27, not deployed |
+| Port (`development/backportedVinery`) | BUILT 2026-10-18. `-01` DEPLOYED with 1.0.7 (the first staging crashed the server on the grass slab, fixed under the same name, [fixes_compat.md](fixes_compat.md) 2.23); `-02` DEPLOYED with 1.0.8 (2026-10-19 10:20), loaded in single player 2026-10-19: Foundation subset, 1.5.5, 1.3.10 keepers, vintage clock, upstream-pack layer, WTHIT lines; status and gaps in B4.9. `-03` (B7.14 and 10.9 to 10.14) in the local `mods/` since 2026-10-19 22:27; `-03` / `-04` shipped in 1.1.01, `-05` in 1.1.04 (client), `-06` installed 2026-10-31 00:41, not yet booted |
 | Pack-side changes (B4.4) | DONE 2026-10-18 (jar swap shipped in 1.0.7) except the I25 tool reruns; per-item outcome under B4.4 |
 | Deploy (D14) | `tools/build_deploy.py`: `vinery_upstream/` category (both sides) + sha1 check against the port's pins; `backportedVinery` in IN_TREE_MODS; mod_sides row swapped, doapi row removed |
 | Changes to make (B7) | BUILT 2026-10-18, not tested in game: everything but B7.4 (pinned), plus the port side of [time.md](time.md) 3.7; B7.11 settled by 10.8; B7.14 built 2026-10-19 into `-03`. Per-item outcome in B7 "Build status" |
@@ -3203,3 +3209,10 @@ Audited 2026-10-19 with bottle sizes and racks: [storage_audit.md](storage_audit
 - 2026-10-22 (second bulk run): SQ-OM-05 (wine storage kinds and rates), SQ-OM-07 (cask and press hoppers), SQ-OM-08
   (2 of 8 placed villages with a winery), SQ-OM-14 and SQ-OM-15 (weight 20; off: no `[vinery-houses]` line, template
   unknown) PASS on the scratch server; logic and server halves of VB-76, VB-93, VB-94, VB-97, VB-98 recorded.
+- 2026-10-28: port `-05`: shears on a grass slab clear its new `fertile` state and stop it spreading (pack
+  addition, [wthit_lines.md](wthit_lines.md) 2.10, WL-34 to WL-36). Installed in `mods/`.
+- 2026-10-30 / 31: port `-06`: grape bushes, vines, pale stems, lattice stems and fruit leaves fire Forge's crop-grow
+  event, so the pack's crop seasons apply ([crops.md](crops.md) 2.12.1, TODO `farming/crops #5`); wine effect entries
+  take several effects (`wine|a+b+c|level|ticks`), Jellie Wine gives Regeneration, Absorption, Resistance and Fire
+  Resistance and `vinery:jellie` is unregistered ([effects.md](effects.md) 2.7, EF-29); Double Jump keeps the higher of
+  its power and Jump Boost's (TODO `potions/effects #14`). Installed in `mods/` 2026-10-31 00:41, not yet booted.

@@ -18,9 +18,9 @@ The ask, from cooking.md:
 | Bakeware items: baking sheet, cake pan, pie tin, muffin tin (KubeJS, own textures 2026-10-19 with the muffin tin on the baking sheet's, no durability) | BUILT 2026-10-18, DEPLOYED with 1.0.8; loaded in single player 2026-10-19 (no script errors), not tested |
 | (Superseded 2026-10-22) Baking recipes: 38, from every live muffin, cookie, tart, pie and cake recipe (pot and crafting) with cooking.md's baked changes (flour, pie crust, cake base), each needing its bakeware; muffins plate on paper. Originals kept (2.6) | BUILT 2026-10-18, DEPLOYED with 1.0.8; loaded in single player 2026-10-19 (no script errors), not tested |
 | Baking overhaul: all cake, pie, cookie, crust and cake base recipes removed and rebuilt on shared bases (cake base, pie crust, frosting, cookie dough) + 2 flavour; pies and cookies oven only; pot pie fillings; crust + filling bakes (2.6) | built, scratch server PASSED 2026-10-22 (probe `tools/baking_probe/baking_probe.js`, 19 of 19: items, no other mod's recipe left, every expected id, no Create / IE base recipe, oven matching, spout recipe). Needs a restart (new items). In game: OV-25 to OV-32 |
-| Opened cans refused as oven ingredients (`BakingRecipe`) | built, scratch server PASSED 2026-10-22 (opened can refused, full can and plain fillings bake); patcherMod 1.1.01 in `mods/`, not deployed; OV-29 in game |
+| Opened cans refused as oven ingredients (`BakingRecipe`) | built, scratch server PASSED 2026-10-22 (opened can refused, full can and plain fillings bake); patcherMod 1.1.01, deployed 2026-10-22; OV-29 in game |
 | Ingredient `count` in `creativeengineering:baking` (one slot gives up n items), behind `[cooking] ovenIngredientCounts`, off by default. Off: repeats take one slot each and 9 recipes over 6 slots drop items (2.6.1) | BUILT 2026-10-18, in patcherMod 1.0.8: DEPLOYED with 1.0.8 |
-| Muffin pot recipes on `#forge:dough` | BUILT 2026-10-18, DEPLOYED with 1.0.8; loaded in single player 2026-10-19 (no script errors), not tested. Whether this was the "not cookable" cause is unconfirmed (3.8) |
+| Muffin pot recipes on `#forge:dough` | SUPERSEDED 2026-10-29: muffins have no Cooking Pot recipe (3.8, OV-13 dropped, OV-36); the change is in the Creative Delight jar installed 2026-10-31 00:29, not yet booted. TODO `cooking/oven #3` closed by it |
 | Crafting recipes: oven (placeholder pattern, 2.1); bakeware by hammering, iron plate -> baking sheet -> muffin tin -> pie tin -> cake pan, on the cutting board or in the grid (2.5) | BUILT 2026-10-18, DEPLOYED with 1.0.8; loaded in single player 2026-10-19 (no script errors), not tested |
 | IE hammer doesn't rotate the cutting board (`#creativeengineering:hammer_no_rotate`, patcherMod `IECompat`) | BUILT 2026-10-18, DEPLOYED with 1.0.8; loaded in single player 2026-10-19 (no errors), not tested |
 | Dummy baking recipes (one per bakeware piece) | REMOVED 2026-10-18 (2.7) |
@@ -289,8 +289,9 @@ That keeps the old craft's full-can rule.
 | `cherry_cookie` (abnormals_delight, new 2026-10-22) | cherry (`vinery:cherry`) |
 | `oatmeal_cookie` (vintagedelight, 2026-10-23; was 2 raw oats + honey -> 8 in the grid) | raw oats |
 
-**Muffins** (muffin tin, plated on paper, 4 per bake; the pot gives 2): `blueberry_muffin`, `cranberry_muffin`: 2x
-berry, wheat flour, milk bottle, egg, sugar.
+**Muffins** (muffin tin, plated on paper, 4 per bake; no Cooking Pot route since 2026-10-29, 3.8): `blueberry_muffin`,
+`cranberry_muffin`: 2x berry, wheat flour, milk bottle, egg, sugar; Sweet Potato Muffin (`veggiesdelight:sweet_potato_cupcake`,
+renamed from Sweet Potato Cupcake 2026-10-29): 2 baked sweet potato, the same rest.
 
 **Tarts** (baking sheet, 2 per bake): `lemon_tart`, `fig_tart`: fruit, pie crust, egg, sugar, milk bottle.
 
@@ -369,6 +370,10 @@ leftovers that don't go to the buffer eject from the front instead of the left. 
 
 ### 3.8 Muffin pot recipes
 
+**Superseded 2026-10-29 (owner): muffins are not made in the Cooking Pot.** `F.muffinBake` (CD `cd_food.js`) removes
+Fruits Delight's pot muffins (Slice & Dice's mixer copies go with them) and adds none; the oven is the only route
+(Veggies Delight's sweet potato muffin keeps its hand craft). OV-13 is dropped, OV-36. The history below is kept.
+
 `farmersdelight:cooking/blueberry_muffin` and `cranberry_muffin` (Fruits Delight) are replaced by
 `creativeengineering:farmersdelightcooking/blueberry_muffin` / `cranberry_muffin`, the same except `#forge:dough`
 instead of `#forge:dough/wheat` (and `#forge:sugar`).
@@ -414,7 +419,8 @@ overrides the muffin recipe ids. If muffins still can't be cooked in game, the c
   honey bottle + honeycomb. Wheat swap for the rest:
   [baked_goods.js](../kubejs/data/creative_delight/kubejs/creativeengineering/baked_goods.js) turns the wheat of bread
   (and Quark's bent bread), Glow Bread, Adzuki Bun, Banana Bread, Strawberry Scones, Strange Eclair, Sweet Potato Dough
-  and Rustic batter (pot, Slice & Dice copy, and the egg solution mix) into flour. Left on wheat, not baked: Brewin'
+  into flour; Rustic batter (pot, Slice & Dice copy, and the egg solution mix) takes wheat flour, cornmeal or rice in
+  each grain slot (2026-10-29, `dishes/ingredients #24`; was wheat flour). Left on wheat, not baked: Brewin'
   vodka, sweet gelatine bucket, fried shrimp, turnip cake, nutritional bar.
   Still without an oven recipe (hand craft or furnace; no family rule asks for one yet): Banana, Glow, Garlic, Honey and
   Mulberry Bread, Nether Wart Sourdough, Cornbread and tortilla (furnace trio), Adzuki Bun, Strawberry Scones, Strange
@@ -492,8 +498,7 @@ Needs a patcherMod build in `mods/`.
   counted ingredients show their stack size (apple pie with counts on: crust, 2 apples, sugar, sugar); clicking the GUI arrow opens
   it; "+" moves the counted amounts in.
 - [ ] **OV-12 Break / burn:** breaking drops oven and contents; standing on a lit oven hurts unless sneaking.
-- [ ] **OV-13 Muffins:** blueberry and cranberry muffins cook in the pot with Create dough. If not, record which
-  ingredient slot JEI shows empty.
+- ~~**OV-13 Muffins:** blueberry and cranberry muffins cook in the pot with Create dough.~~ Dropped 2026-10-29: no pot muffins (OV-36).
 - [ ] **OV-15 Bakeware required:** no recipe bakes without its bakeware in the tool slot; the tool stays afterwards.
   No `dummy_*` recipe in JEI.
 - [ ] **OV-16 Counts off (default):** JEI's apple pie shows 5 single slots (crust, 2 apple, 2 sugar-or-honey); it bakes
@@ -506,8 +511,8 @@ Needs a patcherMod build in `mods/`.
 - [ ] **OV-17 Hammering:** iron plate on a cutting board + Engineer's Hammer -> baking sheet, the board doesn't turn,
   the hammer loses 1 durability; repeat down the chain (muffin tin, pie tin) to the cake pan. Hammer + piece in the crafting grid does the
   same and returns the damaged hammer. The hammer still rotates other blocks and still forms IE multiblocks.
-- [ ] **OV-20 Muffin yield** (recipe level: scratch server PASSED 2026-10-22, SQ-OF-05, baking 4, pot 2; the oven bake and plating: in game): one oven bake of blueberry (and cranberry) muffins gives 4, plated on 4 paper; the
-  FD pot still gives 2.
+- [ ] **OV-20 Muffin yield** (recipe level: scratch server PASSED 2026-10-22, SQ-OF-05, baking 4, pot 2; the oven bake and plating: in game): one oven bake of blueberry (and cranberry) muffins gives 4, plated on 4 paper
+  (the pot half is gone, OV-36).
 - [ ] **OV-23 Other-oven tooltips:** CfB oven shows "Cooks food like a furnace and a smoker"; each of the 7 Fantasy
   Furniture ovens shows "Works like a smoker" (client log: `fantasyfurniture:*/oven -> 7 matches`).
 - [x] **OV-24 CfB oven smokes** (scratch server PASSED 2026-10-22, SQ-OF-06, `/kotest` OV-24a to OV-24d): raw ham goes into the CfB oven and comes out as smoked ham (smoker-only recipe);
@@ -546,6 +551,10 @@ Needs a patcherMod build in `mods/`.
 - [ ] **OV-35 Dough blocks:** JEI shows Gingerdough, Cookie Dough, Sweet Potato Dough, Oat Dough, Cucumber Dough and
   Sourdough Blocks, each in its dough's colour (inventory, placed, held, breaking particles). 9 of a dough in the grid
   gives its block; the block alone gives 9 back. A shovel breaks them fast, they drop themselves, they sound like slime.
+- [ ] **OV-36 No pot muffins:** JEI blueberry, cranberry and sweet potato muffin -> R: no Cooking Pot and no Create
+  mixing recipe; the oven (muffin tin, paper) recipe is there for each. Sweet potato muffin also shows its grid craft.
+- [ ] **OV-37 Sweet Potato Muffin name:** the item formerly Sweet Potato Cupcake reads Sweet Potato Muffin in the
+  inventory, JEI and the WTHIT line; no item is named Cupcake. (Texture still the cupcake sprite, retexture open.)
 - [ ] **OV-14 Server:** the same on a dedicated server with a client (menu opens, slots sync, JEI page present).
 
 ## 8. History
@@ -609,6 +618,7 @@ Needs a patcherMod build in `mods/`.
 - 2026-10-25: own textures for frosting, cookie dough, Create dough, ginger dough and the dough block (palette
   swaps, table in 2.6; textures/food #3). OV-34.
 - 2026-10-25: dough blocks for ginger, cookie, sweet potato, oat, cucumber and sourdough doughs (baked-goods #27). OV-35.
+- 2026-10-29: muffins out of the Cooking Pot (oven only); Sweet Potato Cupcake renamed Sweet Potato Muffin. OV-36, OV-37.
 
 ## Owner ideas (scratchpad 2026-10-26)
 

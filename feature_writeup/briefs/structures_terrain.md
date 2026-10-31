@@ -13,6 +13,11 @@ structure briefs may claim the same numbers).
 
 No recipes, items or `_lib/*_dict.js` ids are involved: these rows are structure tags (data), a test tool and Java.
 
+**Status 2026-10-30:** #1 and #2 BUILT (structure_tuning.md 3.30; the spire got a new air-only trim instead of the
+full trim, step 2 of #2 is behind `beardFootprint`, default off); #6 (geode floor, not in this brief) BUILT, same
+section, `floorPatch` SWAP / CUT; #4 investigated, pinned until the user names the place it shows (TODO row). Test ids here (ST-215 to ST-219) were renumbered to
+ST-300 to ST-305.
+
 ## Scope and order
 
 | Order | Row | Kind | Note |
@@ -28,7 +33,7 @@ over-estimated until it is fixed.
 ---
 
 ## structures/terrain #1: Terrain adaptation batch 4
-Status Planned · Work data · TODO `structures/terrain #1`
+Status Testing (built 2026-10-30, structure_tuning.md 3.30) · Work data · TODO `structures/terrain #1`
 
 ### Goal
 Tag the last structures the scan flagged (soft beard and/or template trim) after looking at each in game: Terralith's
@@ -130,7 +135,7 @@ All ids above are structure ids as in `/dumpstructuregen`; JSON fields verified 
 ---
 
 ## structures/terrain #2: Beardifier fill estimate
-Status Planned · Work tool · TODO `structures/terrain #2`
+Status Testing (step 2 built 2026-10-30 behind `beardFootprint`, structure_tuning.md 3.30) · Work tool · TODO `structures/terrain #2`
 
 ### Goal
 Earth fill only sees a structure's own earth blocks (dirt, sand, gravel, clay, path, plus the opt-in stone base). For a
@@ -189,7 +194,7 @@ Config: new `beardFootprint` (boolean) in `CEConfig.EarthFill` (class at `CEConf
 ---
 
 ## structures/terrain #3: Skip the bottom 64-96 blocks
-Status Planned (should be Testing) · Work patcherMod · TODO `structures/terrain #3`
+Status Testing · Work patcherMod · TODO `structures/terrain #3`
 
 ### Goal
 Cut the cost of generating the bottom of the world.

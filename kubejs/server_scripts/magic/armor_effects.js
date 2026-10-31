@@ -36,12 +36,17 @@ const $ArmorFxCEConfig = (function () {
 })()
 const MOUNT_INTERVAL_DEFAULT = 100
 
+// A refresh that extends an effect re-runs its attribute modifiers (LivingEntity.onEffectUpdated),
+// and Health Boost's removal clamps health to the un-boosted max before the boost goes back on.
+// Health is put back afterwards so a refresh never costs the extra hearts.
 function applyEffects(target, effects, durationTicks) {
+	var health = target.getHealth()
 	effects.forEach(spec => {
 		var me = global.armorEffects._resolveEffect(spec.effect)
 		if (!me) return
 		target.addEffect(new $MobEffectInstance(me, durationTicks || REFRESH_TICKS, spec.amplifier || 0, false, spec.visible === true))
 	})
+	if (target.getHealth() < health) target.setHealth(Math.min(health, target.getMaxHealth()))
 }
 
 PlayerEvents.tick(event => {

@@ -9,7 +9,8 @@ per thing that can be changed, with a **Decision** column (blank = still open).
 | Part | Status |
 |---|---|
 | Scan (surface rules, features, code-added layers and carvers, structures after swaps) | BUILT 2026-10-19: `tools/nether_worldgen_scan.py` -> [nether_worldgen_scan.md](nether_worldgen_scan.md) |
-| Decisions (section 2) | round 1 answered 2026-10-19 (B1, B8, B9 changed; blackstone, basalt, magma kept; bunker and red roof fixed); round 2 the same day (moonlight flower patch generates, sprouts out; D&D deep layer granite; soul fire to fire and glowstone to yellow corundum in every structure). Still open: B12, K19, K25, K28 to K33, K35, K36 |
+| Decisions (section 2) | round 1 answered 2026-10-19 (B1, B8, B9 changed; blackstone, basalt, magma kept; bunker and red roof fixed); round 2 the same day (moonlight flower patch generates, sprouts out; D&D deep layer granite; soul fire to fire and glowstone to yellow corundum in every structure). 2026-10-29: K19 kept, K25 and K32 lantern / torch except ancient cities and sculk structures. Still open: B12, K28 to K31, K33, K35, K36 |
+| Soul lanterns and torches (K25, K32) | BUILT 2026-10-30, not deployed: rules 23 to 25 in `nether_swap_rules.json` (new `except_holding: ["@sculk"]`), generator keeps lantern `hanging` and wall torch `facing` (family carry-over), 323 swaps added (1407 in 101 templates); YUNG's `Enable Nether Blocks in Dungeons` off. Not run in game (NW-13 to NW-17, SQ-WG30-B1 to B4) |
 | Biome changes (B1, B8, B9, F7) | BUILT 2026-10-19, DEPLOYED with 1.0.9 (2026-10-19 15:54): `nether_worldgen_rules.json` -> `tools/gen_nether_worldgen.py` -> 7 `kubejs/data` files, then `gen_wild_flowers.py` (flower snapshot). Round 2 scratch world: moonlight grove has blue orchids and cornflowers with no sprouts or roots; no breccia or glowstone deep down. Scratch server: loads clean; a new world's Scarlet Mountains has jasper + 9.9 % crimsite and no netherrack, nylium or roots; Mirage Isles trunks are stripped acacia. Not run in the user's game (NW-01 to NW-05) |
 | Structure changes (S4, S7, K27, K34) | BUILT 2026-10-19, DEPLOYED with 1.0.9: rules 3, 20 and 21 in `nether_swap_rules.json`, swap file regenerated (1084 swaps). Not run in game (NW-06, NW-07, NW-10, NW-11) |
 | Rarest biomes more common, never-spawning biomes spawning | DEPLOYED with 1.0.9 (built 2026-10-19) in [biome_tuning.md](biome_tuning.md) (rarity floor, `target_pct`, 20,000-column samples, `/dumpclimatecaves`) |
@@ -154,20 +155,20 @@ stone or polished blackstone kept.
 | K16 | `polished_blackstone_brick_stairs` | 2 | 2 | 43 | pillager_outpost_swedish 41, taiga_forge 2 | D twin / S twin | keep (2026-10-19: blackstone, basalt and magma are fine in the Overworld) |
 | K17 | `blackstone_wall` | 2 | 1 | 32 | desert_temple 32 (statues) | cobbled deepslate wall / scorchia wall | keep (2026-10-19: blackstone, basalt and magma are fine in the Overworld) |
 | K18 | `cracked_polished_blackstone_bricks` | 2 | 1 | 30 | pillager_outpost_swedish 30 | cracked deepslate bricks / scorchia bricks | keep (2026-10-19: blackstone, basalt and magma are fine in the Overworld) |
-| K19 | `crying_obsidian` | 2 | 3 | 27 | stronghold 10 (portal treasure rooms), jungle_pillager_tower 9, old_villager_statue 8 | obsidian / keep | |
+| K19 | `crying_obsidian` | 2 | 3 | 27 | stronghold 10 (portal treasure rooms), jungle_pillager_tower 9, old_villager_statue 8 | obsidian / keep | keep (2026-10-29) |
 | K20 | `blackstone_slab` | 2 | 3 | 15 | desert_temple 8, village_temple 4, taiga_forge 3 | cobbled deepslate slab / scorchia slab | keep (2026-10-19: blackstone, basalt and magma are fine in the Overworld) |
 | K21 | `polished_blackstone_pressure_plate` | 2 | 1 | 6 | barn 6 | stone pressure plate / keep | keep (2026-10-19: blackstone, basalt and magma are fine in the Overworld) |
 | K22 | `gilded_blackstone` | 2 | 2 | 6 | desert_temple 4, taiga_forge 2 | deepslate gold ore / raw gold block | keep (2026-10-19: blackstone, basalt and magma are fine in the Overworld) |
 | K23 | `blackstone_stairs` | 2 | 1 | 6 | gold_washing_facility 6 | cobbled deepslate stairs / scorchia stairs | keep (2026-10-19: blackstone, basalt and magma are fine in the Overworld) |
 | K24 | `chiseled_polished_blackstone` | 2 | 1 | 1 | stronghold 1 | chiseled deepslate | keep (2026-10-19: blackstone, basalt and magma are fine in the Overworld) |
-| K25 | `soul_lantern` | 3 | 22 | 441 | spire 221, ancient_city 128, frosted_dungeon 20 ... | lantern / keep | |
+| K25 | `soul_lantern` | 3 | 22 | 441 | spire 221, ancient_city 128, frosted_dungeon 20 ... | lantern / keep | DONE 2026-10-30 (decided 2026-10-29): lantern (state kept) in every Overworld structure except ancient cities and sculk structures (rule 23): 311 swapped. Kept: ancient city 128, Philip's bone dungeon 2 (sculk in its start room), Nether-shared ship layout 7, `plan/move_to_nether` 29 |
 | K26 | `magma_block` | 3 | 19 | 274 | jungle_temple 177 (34 swapped in), desert_temple 48, underground_bunker 10 ... | keep (the 2026-10-12 netherrack target) / scorchia | keep (2026-10-19: blackstone, basalt and magma are fine in the Overworld) |
 | K27 | `soul_fire` | 3 | 2 | 177 | ancient_city 173, sculk_dungeon 4 | keep (on kept soul sand) / fire / drop | DONE 2026-10-19 (round 2): fire (rule 20); the frosted dungeon's stays put out (rule 6). Fire on the ancient city's kept soul sand turns back into soul fire on any block update next to it (vanilla `BaseFireBlock.getState`) |
 | K28 | `crimson_trapdoor` | 3 | 3 | 39 | fortified_desert_village 36, witch_hut 2, taiga_forge 1 | mangrove trapdoor | |
 | K29 | `crimson_button` | 3 | 3 | 28 | stronghold 24, desert_temple 2, pillager_outpost_jungle 2 | mangrove button | |
 | K30 | `warped_pressure_plate` | 3 | 1 | 24 | desert_temple 24 (puzzle) | azalea / dark oak pressure plate | |
 | K31 | `warped_trapdoor` | 3 | 1 | 8 | spire 8 | azalea / dark oak trapdoor | |
-| K32 | `soul_wall_torch` | 3 | 2 | 8 | jungle_temple 7, spire 1 | wall torch | |
+| K32 | `soul_wall_torch` | 3 | 2 | 8 | jungle_temple 7, spire 1 | wall torch | DONE 2026-10-30 (decided 2026-10-29): wall torch, facing kept, same exceptions as K25 (rule 24): 12 swapped, incl. 4 in Creative Delight's snowy depot house (Veggies Delight village piece, added after the scan); standing soul torch -> torch (rule 25, none in templates) |
 | K33 | `crimson_slab` | 3 | 1 | 6 | desert_temple 6 | mangrove slab | |
 | K34 | `glowstone` | 3 | 2 | 5 | church 4, big_villager_tent 1 | yellow corundum (the sky village choice) / keep | DONE 2026-10-19 (round 2): yellow corundum (rule 21); the Mysticrift mangrove tower's stays gold ore (rule 14) |
 | K35 | `warped_stairs` | 3 | 1 | 1 | zombie_dungeon 1 | azalea / dark oak stairs | |
@@ -261,6 +262,20 @@ Built 2026-10-19 (first round of decisions):
 | K27 | Soul fire -> fire in every structure (ancient city 173, Philip's sculk dungeon 4); the frosted dungeon's stays put out | rule 20 |
 | K34 | Glowstone -> Quark yellow corundum in every structure (gothic church 4, villager tent 1); the Mysticrift mangrove tower's stays gold ore | rule 21 |
 | (biomes) | Rarest Overworld biomes lifted to 0.15 %, paid by the 12 largest land biomes; the 9 never-spawning surface biomes given target shares; deep cave samples | [biome_tuning.md](biome_tuning.md) 2.1 |
+
+Built 2026-10-30 (K25, K32, decided 2026-10-29; TODO `structures/netherblockswap #3`):
+
+| Rows | Change | Where |
+|---|---|---|
+| K25 | Soul lantern -> lantern (`hanging`, `waterlogged` kept) in every Overworld structure but ancient cities and sculk structures: 311 in 34 templates (spire 221, frosted dungeon 20, IPO outpost tops 12, Simply Houses, witch wagon, T&T, YUNG's zombie dungeon and stronghold 1 each ...) | rule 23 |
+| K32 | Soul wall torch -> wall torch (`facing` kept): 12 (YUNG's jungle temple 7, Veggies Delight snowy depot house 4, spire 1); standing soul torch -> torch (none today) | rules 24, 25 |
+| (generator) | `gen_nether_swaps.py`: `except_holding` (skip every structure any of whose templates holds a matching block) and the `@sculk` selector (block id path contains `sculk`); target state carry-over falls back by id suffix (`FAMILY_KEEP`: trapdoor, button, pressure plate, slab, stairs, wall, wall torch, lantern, log/wood/hyphae/stem) after the exact-id `KEEP`. The old 1084 swaps came out byte-identical before the rules were added | `tools/gen_nether_swaps.py` |
+| (YUNG's dungeons) | `"Enable Nether Blocks in Dungeons" = false`: the dungeon processor no longer places soul lanterns, soul campfires or soul sand (the template scan can't see processor blocks); backup in `configs_edited/root_config/` | `config/betterdungeons-forge-1_19.toml` |
+
+Sculk structures (`@sculk`, from the template palettes, 2026-10-30): `minecraft:ancient_city` (sculk sensors; also
+listed by id), `philipsruins:sculk_dungeon` (sculk, sculk bone bricks, catalysts, shriekers; no soul lights) and
+`philipsruins:bone_dungeon` (5 sculk in `bone_dungeon_start`; keeps its 2 soul lanterns). No structure tag marks sculk
+structures; the list is recomputed on every generator run, so a new sculk structure is excluded without a rule edit.
 
 How the mix works: per 16-block Y band, a `vertical_gradient` condition whose gradient spans 1900 blocks centred
 so its chance is 10 % in the middle of the band (about 9.6 % to 10.4 % across it), then jasper. Each choice of a
@@ -376,6 +391,19 @@ All in a world created after these changes (new chunks only).
   fire on soul sand; break a block next to one and note whether it turns blue (expected, see section 4).
 - [ ] **NW-11 Gothic church:** `/locate structure gothic_church:church` → yellow corundum lights where the glowstone
   was.
+- [ ] **NW-13 Spire lanterns:** `/locate structure terralith:spire` → plain lanterns, no soul lanterns; the hanging
+  ones still hang from their chains, the standing ones stand; the wall torch at the base is a plain torch on the wall.
+- [ ] **NW-14 Jungle temple torches:** `/locate structure betterjungletemples:jungle_temple`, the water parkour and
+  floor 2 parkour rooms → plain wall torches, attached to the wall (not floating, not facing into it).
+- [x] **NW-15 Ancient city and sculk structures keep theirs:** `/locate structure minecraft:ancient_city` and
+  `philipsruins:bone_dungeon` → soul lanterns still there. (Scratch PASSED 2026-10-30, SQ-WG30-B03.)
+- [x] **NW-16 YUNG dungeons:** a few zombie and small dungeons (`/locate structure betterdungeons:zombie_dungeon`,
+  `betterdungeons:small_dungeon`) → no soul lantern, soul campfire or soul sand. (Scratch PASSED 2026-10-30, SQ-WG30-B04.)
+- [ ] **NW-17 Snowy depot house:** a snowy village with Veggies Delight's depot house → plain wall torches.
+- Scratch 2026-10-30 (SQ-WG30-B01, B02 PASSED): load line `1412 block swap(s) in 105 template(s)`; `/place template`
+  of the spire layer1 / base_l, the water parkour room and the snowy depot house gave 0 soul blocks, lantern `hanging`
+  and wall torch `facing` counts equal to the template's soul ones (4 standing spire lanterns on the template's bottom
+  layer dropped only because it was placed in mid-air). NW-13, NW-14, NW-17 still want an in-game look at real starts.
 
 ## 8. History
 
@@ -397,3 +425,6 @@ All in a world created after these changes (new chunks only).
   `gen_nether_worldgen.py` + `nether_worldgen_rules.json`; bunker rule 3; swaps regenerated (902). Verified on a
   scratch server (section 6). Found D&D's glowstone layer (F7) in that world; the scan gained `CODE_ADDED`.
 - 2026-10-19: both rounds DEPLOYED with pack 1.0.9 (15:54, server + clients); new chunks only. NW-01 to NW-11 pending.
+- 2026-10-30: K25, K32 built (decided 2026-10-29, K19 kept): rules 23 to 25, generator `except_holding` / `@sculk` /
+  `FAMILY_KEEP`, 1407 swaps (323 new), YUNG's dungeon nether blocks off. Offline: old swaps byte-identical, every
+  unswapped soul light accounted for (ancient city, bone dungeon, move-to-Nether, Nether-shared ship). NW-13 to NW-17.

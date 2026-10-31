@@ -39,9 +39,9 @@ public final class DelightfulBackportFoods {
 	public static final FoodProperties CACTUS_SOUP_CUP = new FoodProperties.Builder().nutrition(6).saturationMod(0.3F)
 			.effect(() -> new MobEffectInstance(ModEffects.NOURISHMENT.get(), 1800, 0), 1.0F).build();
 
-	/** Haste without particles. */
+	/** Haste without particles; the HUD icon stays (the five-argument constructor would hide it too). */
 	public static final FoodProperties BAKLAVA_SLICE = new FoodProperties.Builder().nutrition(5).saturationMod(0.6F).fast()
-			.effect(() -> new MobEffectInstance(MobEffects.DIG_SPEED, 600, 0, false, false), 1.0F).build();
+			.effect(() -> new MobEffectInstance(MobEffects.DIG_SPEED, 600, 0, false, false, true), 1.0F).build();
 
 	public static final FoodProperties MATCHA_MILKSHAKE = new FoodProperties.Builder().nutrition(2).saturationMod(1.5F).alwaysEat()
 			.effect(() -> new MobEffectInstance(greenTea(), 200, 1), 1.0F)

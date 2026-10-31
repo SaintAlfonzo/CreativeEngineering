@@ -1,11 +1,17 @@
 package com.SaintAlfonzo.creativeengineering.potion;
 
+import java.util.HashSet;
+import java.util.Set;
+
 import com.SaintAlfonzo.creativeengineering.CEConfig;
+import com.SaintAlfonzo.creativeengineering.damage.DamageTags;
+import com.SaintAlfonzo.creativeengineering.shield.EffectTickContext;
 
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.effect.MobEffect;
 import net.minecraft.world.effect.MobEffectInstance;
 import net.minecraft.world.entity.LivingEntity;
+import net.minecraftforge.event.entity.living.LivingAttackEvent;
 import net.minecraftforge.event.entity.living.LivingHurtEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.registries.ForgeRegistries;
@@ -20,12 +26,19 @@ import net.minecraftforge.registries.ForgeRegistries;
  * {@code LivingHurtEvent} as a read-only {@code EntityEvents.hurt} (confirmed by
  * decompiling kubejs-forge-1902.6.2-build.73.jar — {@code LivingEntityHurtEventJS} exposes
  * only a getter for the damage amount, no {@code setAmount}/cancel), so reducing damage
- * requires a real Forge listener. Percentage scales with amplifier the same way vanilla
- * Resistance does (20% per level, capped at 100% / full immunity at amplifier 4+), applied
- * only to damage sources vanilla itself already flags as magic
- * ({@link net.minecraft.world.damagesource.DamageSource#isMagic()} — potion/instant-damage,
- * evoker fangs, conduit, dragon's breath, etc., same flag vanilla uses elsewhere). The
- * per-level reduction rate is a config knob - see {@link CEConfig.Magic}.
+ * requires a real Forge listener. Two rules:
+ * <ul>
+ *   <li>Periodic damage from an effect in {@code [magic_resistance].negatedEffectTicks} (Poison,
+ *       Wither) is cancelled in {@code LivingAttackEvent}, before the hurt sound and flash, when the
+ *       ticking effect's level is at most the Magic Resistance level. Shields never block these
+ *       ticks ({@code [shields].unblockableEffectTicks}), so this is the cover for them. Recognised
+ *       through {@link EffectTickContext}, since poison ticks share Instant Damage's source.</li>
+ *   <li>Everything else in the {@code creativeengineering:magic} damage tag ({@link DamageTags}, the
+ *       same tag the shields' MAGIC column reads: vanilla-flagged magic plus thorns, sonic boom,
+ *       psychic and life drain) and those ticks above the Magic Resistance level lose 20% per level
+ *       (vanilla Resistance's shape, capped at full immunity) in {@code LivingHurtEvent}. The rate
+ *       is {@code [magic_resistance].reductionPerLevel} ({@link CEConfig.Magic}).</li>
+ * </ul>
  *
  * <p>The MobEffect is looked up lazily (cached after the first hit) rather than at class
  * load / mod construction, since both of those run before KubeJS's own RegisterEvent
@@ -36,8 +49,14 @@ public final class MagicResistanceEffect {
 
     private static final ResourceLocation ID = new ResourceLocation("creativeengineering", "magic_resistance");
 
+    private static final ResourceLocation MAGIC_TAG = DamageTags.id("magic");
+
     private static MobEffect effect;
     private static boolean lookedUp;
+
+    // Parsed negatedEffectTicks keyed by the raw config string, so a live edit just re-parses.
+    private static volatile String negatedRaw;
+    private static volatile Set<ResourceLocation> negatedIds = Set.of();
 
     private MagicResistanceEffect() {}
 
@@ -50,16 +69,54 @@ public final class MagicResistanceEffect {
     }
 
     @SubscribeEvent
+    public static void onAttack(LivingAttackEvent event) {
+        MobEffect me = effect();
+        if (me == null) return;
+        LivingEntity entity = event.getEntity();
+        MobEffect ticking = EffectTickContext.tickingOn(entity);
+        if (ticking == null || !negated(ticking)) return;
+        MobEffectInstance resistance = entity.getEffect(me);
+        MobEffectInstance tick = entity.getEffect(ticking);
+        if (resistance == null || tick == null) return;
+        if (tick.getAmplifier() <= resistance.getAmplifier()) event.setCanceled(true);
+    }
+
+    @SubscribeEvent
     public static void onHurt(LivingHurtEvent event) {
         MobEffect me = effect();
-        if (me == null || !event.getSource().isMagic()) return;
+        if (me == null) return;
 
         LivingEntity entity = event.getEntity();
         MobEffectInstance instance = entity.getEffect(me);
         if (instance == null) return;
 
+        MobEffect ticking = EffectTickContext.tickingOn(entity);
+        boolean tickCovered = ticking != null && negated(ticking);
+        if (!tickCovered && !DamageTags.is(event.getSource(), MAGIC_TAG)) return;
+
         float perLevel = CEConfig.MAGIC.reductionPerLevel.get().floatValue();
         float reduction = Math.min(1.0f, perLevel * (instance.getAmplifier() + 1));
         event.setAmount(event.getAmount() * (1.0f - reduction));
+    }
+
+    /** True when {@code effect} is listed in {@code [magic_resistance].negatedEffectTicks}. */
+    private static boolean negated(MobEffect effect) {
+        String raw;
+        try {
+            raw = CEConfig.MAGIC.negatedEffectTicks.get();
+        } catch (RuntimeException notLoaded) {
+            return false;
+        }
+        if (!raw.equals(negatedRaw)) {
+            Set<ResourceLocation> ids = new HashSet<>();
+            for (String part : raw.split(",")) {
+                ResourceLocation id = ResourceLocation.tryParse(part.trim());
+                if (id != null && !part.isBlank()) ids.add(id);
+            }
+            negatedIds = Set.copyOf(ids);
+            negatedRaw = raw;
+        }
+        ResourceLocation id = ForgeRegistries.MOB_EFFECTS.getKey(effect);
+        return id != null && negatedIds.contains(id);
     }
 }

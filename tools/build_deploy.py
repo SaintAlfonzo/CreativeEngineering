@@ -230,20 +230,25 @@ KUBEJS_CLASSES = [
     ('generation_scripts/worldgen/loot_container_swaps.json', 'runtime'),  # LootContainerSwaps
     ('generation_scripts/worldgen/pool_config.json', 'runtime'),        # PoolTuner
     ('generation_scripts/worldgen/pool_tags.json', 'runtime'),          # PoolTuner
+    ('generation_scripts/worldgen/crop_seasons.json', 'runtime'),       # server_scripts/tags/cropseasontags.js
     ('generation_scripts/worldgen/structure_config.json', 'runtime'),   # worldgen/structure_overrides.js
     ('generation_scripts/worldgen/structure_groups.json', 'runtime'),   # worldgen/structure_overrides.js
     ('generation_scripts/worldgen/structure_tags.json', 'runtime'),     # structure_overrides.js, MassPlacer
     ('generation_scripts/worldgen/biome_traits.json', 'runtime'),       # CD wild crops, mushroom_spawns, wild_flowers, bee_nests, mob_spawns
     ('generation_scripts/worldgen/mob_spawns.json', 'runtime'),         # worldgen/mob_spawns.js
+    ('generation_scripts/worldgen/spawn_boxes.json', 'runtime'),        # StructureSpawnBoxes
     ('generation_scripts/worldgen/mushroom_spawns.json', 'runtime'),    # worldgen mushroom spawns (Fungi Delight)
     ('generation_scripts/worldgen/bee_nests.json', 'runtime'),          # worldgen/bee_nests.js (BeeNests)
     ('generation_scripts/worldgen/biome_fits.json', 'runtime'),         # structure_overrides.js (StructureBiomeFits)
     ('generation_scripts/worldgen/meta_structures.json', 'runtime'),    # structure_overrides.js (MetaStructure)
+    ('generation_scripts/worldgen/structure_test_overrides.json', 'runtime'),  # structure_overrides.js, only with [worldgen.debug] testOverrides
     ('generation_scripts/worldgen/season_types.json', 'runtime'),       # tags/seasontags.js (SeasonTypes)
     ('generation_scripts/worldgen/wild_flowers.json', 'runtime'),       # worldgen/wild_flowers.js
     ('generation_scripts/worldgen/flower_features.json', 'runtime'),    # worldgen/wild_flowers.js (snapshot)
     ('generation_scripts/worldgen/meat_block_swaps.json', 'runtime'),   # TemplateBlockSwaps (tools/meat_block_scan.py)
     ('generation_scripts/worldgen/nether_block_swaps.json', 'runtime'),  # TemplateBlockSwaps (tools/gen_nether_swaps.py)
+    ('generation_scripts/wthit/silk_touch_blocks.json', 'runtime'),     # server_scripts/tags/wthittags.js (Needs Silk Touch tag)
+    ('generation_scripts/physics/item_physics_families.json', 'dev'),   # tools/item_physics_audit.py output
     ('generation_scripts/worldgen/nether_swap_rules.json', 'dev'),      # tools/gen_nether_swaps.py input
     ('generation_scripts/worldgen/bee_nests_baseline.json', 'dev'),     # tools/gen_bee_nests.py calibration
     ('generation_scripts/worldgen/soil_compat_manifest.json', 'dev'),   # tools/gen_soil_compat.py
@@ -515,7 +520,17 @@ def upstream_jars(folder):
 
 def check_structures(pre):
     """Regenerate structure_config.json and sync structure_groups.json in a scratch copy of the
-    worldgen folder; either one changing means the committed data is stale for the installed mods."""
+    worldgen folder; either one changing means the committed data is stale for the installed mods.
+    Also warns when a shipped CEConfig still has the [worldgen.debug] test switches on."""
+    for cfg in ('config/creativeengineering-common.toml', 'configs_edited/root_config/creativeengineering-common.toml'):
+        path = os.path.join(ROOT, cfg)
+        if os.path.exists(path):
+            text = open(path, encoding='utf8').read()
+            if re.search(r'^\s*testOverrides\s*=\s*true', text, re.M):
+                pre.warn(f'{cfg}: [worldgen.debug] testOverrides = true (scratch-test structure rates); set it false before release')
+            m = re.search(r'^\s*structureDensity\s*=\s*([0-9.eE+-]+)', text, re.M)
+            if m and float(m.group(1)) != 1.0:
+                pre.warn(f'{cfg}: [worldgen.debug] structureDensity = {m.group(1)}; set it to 1.0 before release')
     with tempfile.TemporaryDirectory() as tmp:
         wg = os.path.join(tmp, 'worldgen')
         shutil.copytree(WORLDGEN, wg)

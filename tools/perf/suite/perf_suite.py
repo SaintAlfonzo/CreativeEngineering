@@ -70,6 +70,10 @@ class Run:
             fh.write(json.dumps(row) + "\n")
             fh.flush()
             os.fsync(fh.fileno())
+        try:
+            write_summary(self.dir, self.name)
+        except Exception as e:  # a report bug must not stop the run
+            self.log(f"summary.md not written: {e!r}")
 
     def lock(self):
         p = os.path.join(self.dir, "runner.pid")
@@ -429,13 +433,20 @@ def read_results(run_dir):
 
 def cmd_report(a):
     run = Run(a.run)
-    rows = read_results(run.dir)
+    path, out = write_summary(run.dir, a.run, a.baseline)
+    print(path)
+    print("\n".join(out[:60]))
+
+
+def write_summary(run_dir, name, baseline=None):
+    """summary.md from every row of results.jsonl; the runner rewrites it after each result."""
+    rows = read_results(run_dir)
     base = {}
-    if a.baseline:
-        for r in read_results(os.path.join(RUNS, a.baseline)):
+    if baseline:
+        for r in read_results(os.path.join(RUNS, baseline)):
             if r.get("status") == "ok" and r.get("window"):
                 base[r["id"]] = r["window"]
-    out = [f"# Perf suite run {a.run}", "", "| ID | Scenario | Status | MSPT mean | p95 | p99 | max | >50 ms | TPS | "
+    out = [f"# Perf suite run {name}", "", "| ID | Scenario | Status | MSPT mean | p95 | p99 | max | >50 ms | TPS | "
            "entities | heap floor MB | extra | vs baseline (mean / p95) |", "|---|---|---|---|---|---|---|---|---|---|---|---|---|"]
     for r in rows:
         w = r.get("window") or {}
@@ -468,11 +479,11 @@ def cmd_report(a):
             for s in r["slices"]:
                 out.append(f"| {s['from_s']} | {s['mspt_mean']} | {s['mspt_p95']} | {s['mspt_max']} | "
                            f"{s.get('heap_floor_mb', '')} | {s.get('entities_mean', '')} |")
-    path = os.path.join(run.dir, "summary.md")
-    with open(path, "w") as fh:
+    path = os.path.join(run_dir, "summary.md")
+    with open(path + ".tmp", "w") as fh:
         fh.write("\n".join(out) + "\n")
-    print(path)
-    print("\n".join(out[:60]))
+    os.replace(path + ".tmp", path)
+    return path, out
 
 
 def main():

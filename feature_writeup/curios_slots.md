@@ -12,7 +12,9 @@ Nothing registered **hands**, and no mod offers a mouth or face slot. The pack n
 |---|---|
 | Hands slot (1, vanilla Curios hands icon) | `kubejs/data/creativeengineering/curios/slots/hands.json` |
 | Face slot (1, own icon, lang "Face") | `.../curios/slots/face.json`, texture `kubejs/assets/creativeengineering/textures/slot/empty_face_slot.png`, `curios.identifier.face` in `lang/en_us.json` |
-| Player gets both slots | `.../curios/entities/player_hands_face.json` |
+| Feet slot (1, vanilla empty boots icon, lang "Feet"), 2026-10-29 | `.../curios/slots/feet.json`, `curios.identifier.feet` in `lang/en_us.json` |
+| Feet items: the 16 stepstools ([stepstool.md](stepstool.md)) | tag `curios:feet` = `#creativeengineering:stepstools`, [curiostags.js](../kubejs/server_scripts/tags/curiostags.js) |
+| Player gets all three slots | `.../curios/entities/player_hands_face.json` (Feet added 2026-10-29) |
 | Hands items: Falconry Glove (the only glove in the pack) | tag `curios:hands`, [curiostags.js](../kubejs/server_scripts/tags/curiostags.js) |
 | Face items: Simple Hats chalk stick and six masks (tribal, cucumber eye, ghost, hockey, horse, sleep eye), Botania cosmetic masks (ancient, eerie, tiny potato), Cob Pipe | tag `curios:face`, same script |
 
@@ -34,6 +36,9 @@ slot(s) it fits, e.g. "Fits: Face, Head". Source of truth is the `curios:<slot>`
 tags rather than hand-written per item (client script reading the tag keys, or a patcherMod tooltip hook). Applies to the pack's
 own slots and every mod's. Plan row `ui/tooltips #8` in [todo/TODO.md](todo/TODO.md); line wording goes in [tooltips.md](tooltips.md).
 
+Owner idea (scratchpad 2026-10-29, TODO `largecontent/mod-additions #32`): Terraria-like accessories for these slots
+(defense, abilities, effects). Which accessories and their design are open; nothing built.
+
 ## 2. Tests
 
 - CS-01 The Curios screen shows a Hands and a Face slot (Face has the mask icon) on a player in an existing world.
@@ -42,3 +47,4 @@ own slots and every mod's. Plan row `ui/tooltips #8` in [todo/TODO.md](todo/TODO
 - CS-04 `/curios list` shows `hands` and `face` from `creativeengineering`.
 - CS-05 Slot names read "Hands" and "Face" (no raw `curios.identifier` key).
 - CS-06 Once the Cob Pipe exists: it goes in Face.
+- CS-07 The Curios screen shows a Feet slot (boots icon, "Feet"); only stepstools go in it; `/curios list` shows `feet` from `creativeengineering`.

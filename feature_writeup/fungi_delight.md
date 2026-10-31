@@ -2,7 +2,7 @@
 
 > **Merge note (2026-10-25):** this port is to be merged with the other Farmer's Delight add-on backports into a single jar, **Creative Delight**. The inventory summary, cross-port interactions and the merge process are in [creative_delight.md](creative_delight.md). This file stays the detailed record for Fungi Delight; its registry namespace and test prefix do not change.
 
-Investigation written 2026-10-23; **built 2026-10-23, scratch test queued** (§4.0; jars not in `mods/` yet). The owner's plan (2026-10-23) is §5.1 and overrides the §5
+Investigation written 2026-10-23; **built 2026-10-23, deployed with 1.1.02 (2026-10-23); scratch: SQ-FGD-00 PASS, `/fgdtest all` 135 / 136 (2026-10-25, 2026-10-26; the FAIL is the truffle pie)** (§4.0; TODO `ports/fungiport #1` to `#3`). The owner's plan (2026-10-23) is §5.1 and overrides the §5
 defaults where they differ (§5 lists the original questions with a recommendation and a default each). Fungi Delight (Eggmain, the Veggies Delight author: same `net.mehdinoui` code base, same Modrinth owner)
 has no 1.19.2 build: Modrinth lists 1.0 to 1.3 for Forge 1.20.1 and 1.3 for NeoForge 1.21.1, with the same content.
 Getting it into the pack means our own port, like the Veggies Delight port ([veggies_delight.md](veggies_delight.md))
@@ -31,9 +31,9 @@ This file has three parts:
 |---|---|---|
 | Mod inventory (2 mushrooms, 2 colonies, truffle and truffle dirt, 2 huge mushrooms, inky goo veil, 32 items, 17 blocks, 2 cow entities, 2 effects, 3 potions, 34 recipe files, pig / wolf / hoglin / sniffer hooks) | §2 | reference, from `FungiDelight-1.20.1-1.3.jar` |
 | Overlap list | §3 | analysis; small (no other truffle, morel or inky cap in the pack) |
-| Integration list in build order | §4, build record §4.0 | built 2026-10-23, scratch test queued; port jar and patcherMod not in `mods/` |
+| Integration list in build order | §4, build record §4.0 | built 2026-10-23, deployed with 1.1.02; dump-driven steps open (TODO `ports/fungiport #2`) |
 | Decisions for the owner | §5, answered in §5.1 | D1 to D12, each with a recommendation; owner plan 2026-10-23 |
-| Tests | §8 | FGD-01 to FGD-40, none run; live checks in [testing/scratch_queue.md](testing/scratch_queue.md) SQ-FGD (top of the queue) |
+| Tests | §8 | FGD-01 to FGD-40 not ticked; server side by `/fgdtest all` 135 / 136 (2026-10-26); open: SQ-FGD-12 to -15 (group B), CQ-FGD client rows in [testing/scratch_queue.md](testing/scratch_queue.md) |
 
 - **Source to port from:** `~/.local/share/atlauncher/downloads/FungiDelight-1.20.1-1.3.jar` (Forge 1.20.1, closest
   API; downloaded 2026-10-23 from Modrinth, sha1 checked). 53 classes; decompile with
@@ -285,7 +285,7 @@ Steps that match the Veggies or Vintage ports are only named; see [veggies_delig
 
 ## 4.0 Build record (2026-10-23)
 
-Built in one session from §5.1. Nothing has run in game. **Install before the next game start:** the pack's placed
+Built in one session from §5.1. Installed and deployed with 1.1.02 (2026-10-23). **Hard dependency:** the pack's placed
 features in `kubejs/data` reference `fungidelight:*` configured features and blocks, so a world without the port jar
 fails to load. Game closed: `./gradlew :backportedFungi:installToMods :patcherMod:installToMods --offline`.
 
@@ -469,6 +469,10 @@ using the existing info-page route (step 18).
 - **Truffle Pie:** Fungi's truffle goes into Create Central Kitchen's `truffle_pie` (and slice): a baking recipe in
   the pack's pie system (`baking.js`, through `global.NCH`) with truffle as the filling, so the dead item
   becomes obtainable ([baked-goods #14](todo/TODO.md) loses a row). This overrides D11's "leave dead".
+  Built 2026-10-31 (`ports/fungiport #3`): CCK has the block but no item without Environmental, so the pack registers
+  `create_central_kitchen:truffle_pie` as a block item (CD `kubejs_startup/create_central_kitchen/truffle_pie_item.js`),
+  placeholder sprite Farmer's Delight's chocolate pie (own art: `largecontent/mod-additions #3`), name in CD
+  `create_central_kitchen/names.js`. `/fgdtest` now FAILs on a missing oven truffle pie (was a NOTE). Test SQ-CM-36.
 - **Truffle Ice Cream:** registered and kept; its grid recipe stays as a placeholder (marked) until the ice cream
   family is decided (`sweets #4`), then it becomes one of that family's flavours.
 - **Inky Cap Scrambled Eggs:** fine as shipped; both it and Incubation's version ship (D12).

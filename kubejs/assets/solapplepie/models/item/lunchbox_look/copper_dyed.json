@@ -1,0 +1,7 @@
+{
+  "parent": "minecraft:item/generated",
+  "textures": {
+    "layer0": "solapplepie:items/lunchbox_dye/copper_base",
+    "layer1": "solapplepie:items/lunchbox_dye/copper_overlay"
+  }
+}

@@ -14,4 +14,12 @@ BlockEvents.modification(e => {
 			block.setSpeedFactor(1.0)
 		})
 	})
+
+	// Quark monster box (vault box, feature_writeup/mob_block_tweaks.md 2.9): Quark's strength 25 with no tool
+	// becomes obsidian's 50 / 1200, diamond pickaxe (tags in server_scripts/tags/blocktags.js).
+	e.modify(global.blocks.monster_box, block => {
+		block.setDestroySpeed(50)
+		block.setExplosionResistance(1200)
+		block.setRequiresTool(true)
+	})
 })

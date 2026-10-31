@@ -8,6 +8,8 @@
 //   stems, nether wart, cocoa and sweet berry bush by exact block (a modded stem or berry bush class gets
 //   nothing, because the check is `block == Blocks.X`, not instanceof).
 //
+// `item` (the block's item, the seed for most crops) feeds tools/crop_season_audit.py.
+//
 // The WTHIT plugin (Creative Delight compat/wthit/WthitCropGrowth, QoL-6) is driven from this audit: whatever lands in the
 // "missing" list needs a row in its table.
 
@@ -108,8 +110,11 @@ function dumpCropGrowth() {
 			if (props.length === 0) return
 			var isCrop = ch.classes.indexOf('net.minecraft.world.level.block.CropBlock') >= 0
 			var native = isCrop || !!NATIVE_IDS[id]
+			// the item that places it (the seed for a crop); Serene Seasons' tooltip reads this item's tags
+			var itemKey = $Reg.ITEMS.getKey(block.asItem())
+			var item = itemKey && String(itemKey) !== 'minecraft:air' ? String(itemKey) : null
 			var row = {
-				id: id, mod: id.substring(0, id.indexOf(':')), wthitNative: native,
+				id: id, mod: id.substring(0, id.indexOf(':')), item: item, wthitNative: native,
 				props: props, classes: ch.classes, interfaces: ch.interfaces,
 				cropLike: cropLike, ageLike: ageLike,
 			}

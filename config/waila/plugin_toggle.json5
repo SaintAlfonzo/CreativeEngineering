@@ -26,5 +26,9 @@
   "creativeengineering:kitchen_station": true,
   "creativeengineering:remainder_buffer": true,
   "creative_delight:crop_growth": true,
-  "creative_delight:kettle_tank": true
+  "creative_delight:kettle_tank": true,
+  "creativeengineering:sheared": true,
+  "creativeengineering:silk_touch": true,
+  "creativeengineering:crop_seasons": true,
+  "creativeengineering:operator_blocks": true
 }

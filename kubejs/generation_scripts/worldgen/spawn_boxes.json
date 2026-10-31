@@ -1,0 +1,102 @@
+{
+  "_readme": [
+    "Spawn boxes: inside a boxed structure, natural monster spawns come from its pool instead of the biome's list (vanilla",
+    "structure spawn_overrides, as on the pillager outpost). Read by patcherMod StructureSpawnBoxes at every world load",
+    "(CEConfig [worldgen.systems] spawnBoxes); rejoin after editing. Boxes reach old chunks too. Reference + tests:",
+    "feature_writeup/structure_tuning.md, \"Spawners and spawn boxes\". Pillager spawners are removed from templates",
+    "separately (CEConfig removeSpawners).",
+    "",
+    "pools: name -> spawn entries {type, weight, minCount, maxCount} (counts default 1-1). One mob type is picked per",
+    "spawn group, so with 1-1 counts the weights are the share of each mob. Only pillagers spawn by day; the other",
+    "illagers, ravagers and witches need darkness (their vanilla spawn rules), so by day a mixed box spawns fewer mobs.",
+    "",
+    "boxes: in order; a structure takes the first box that names it. structures / exclude: ids, #tags or namespace:*.",
+    "bounding_box: full (the box around the structure, ground and air included) or piece (only inside its pieces;",
+    "default). requires_piece: template ids; the box applies only to starts that placed one of them. category: default",
+    "monster.",
+    "Meta structures: a box on a meta gives its pool to every part that has a box of its own (each part keeps its own",
+    "bounding_box and requires_piece). Parts without a box here keep their own spawn_overrides, metas without a box",
+    "let every part use its own box.",
+    "",
+    "no_drops: entity -> items its box-spawned mobs never drop (a box respawns forever: no endless totems).",
+    "",
+    "The Mysticrift End tower has no box on purpose: its pillagers come later, with gear (owner, 2026-10-30).",
+    "The T&T mushroom fields outpost has no box on purpose: no mobs spawn in mushroom fields (owner, 2026-10-30)."
+  ],
+  "pools": {
+    "large": [
+      {"type": "minecraft:pillager", "weight": 7},
+      {"type": "minecraft:ravager", "weight": 1},
+      {"type": "minecraft:vindicator", "weight": 3},
+      {"type": "minecraft:evoker", "weight": 3},
+      {"type": "minecraft:illusioner", "weight": 3},
+      {"type": "minecraft:witch", "weight": 3}
+    ],
+    "large_tower": [
+      {"type": "minecraft:pillager", "weight": 7},
+      {"type": "minecraft:vindicator", "weight": 3},
+      {"type": "minecraft:evoker", "weight": 3},
+      {"type": "minecraft:illusioner", "weight": 3},
+      {"type": "minecraft:witch", "weight": 3}
+    ],
+    "camp_meta": [
+      {"type": "minecraft:pillager", "weight": 9},
+      {"type": "minecraft:vindicator", "weight": 2},
+      {"type": "minecraft:witch", "weight": 2},
+      {"type": "minecraft:evoker", "weight": 2}
+    ],
+    "lone_camp": [
+      {"type": "minecraft:pillager", "weight": 15},
+      {"type": "minecraft:vindicator", "weight": 4},
+      {"type": "minecraft:witch", "weight": 1}
+    ],
+    "boat": [
+      {"type": "minecraft:pillager", "weight": 3},
+      {"type": "minecraft:vindicator", "weight": 1},
+      {"type": "minecraft:evoker", "weight": 1},
+      {"type": "minecraft:witch", "weight": 1}
+    ],
+    "caravan": [
+      {"type": "minecraft:pillager", "weight": 1},
+      {"type": "minecraft:illusioner", "weight": 1},
+      {"type": "minecraft:vindicator", "weight": 1}
+    ],
+    "vehicle": [
+      {"type": "minecraft:pillager", "weight": 1},
+      {"type": "minecraft:vindicator", "weight": 1}
+    ],
+    "witch": [
+      {"type": "minecraft:witch", "weight": 1}
+    ]
+  },
+  "boxes": [
+    {"id": "meta_large", "pool": "large", "structures": [
+      "creativeengineering:meta/pillager_great_tower_siege", "creativeengineering:meta/pillager_stronghold_siege"]},
+    {"id": "meta_tower_siege", "pool": "large_tower", "structures": ["creativeengineering:meta/pillager_tower_siege"]},
+    {"id": "meta_camps", "pool": "camp_meta", "structures": [
+      "creativeengineering:meta/pillager_camp_siege", "creativeengineering:meta/pillager_camp_ruin",
+      "creativeengineering:meta/pillager_camp_ruins", "creativeengineering:meta/pillager_camp_meteorite"]},
+    {"id": "meta_fleet", "pool": "boat", "structures": ["creativeengineering:meta/pillager_fleet"]},
+    {"id": "meta_caravan", "pool": "caravan", "structures": ["creativeengineering:meta/pillager_caravan"]},
+
+    {"id": "strongholds", "pool": "large", "bounding_box": "full", "structures": ["#creativeengineering:meta/pillager_strongholds"],
+      "exclude": ["towns_and_towers:pillager_outpost_mushroom_fields"]},
+    {"id": "mansion", "pool": "large", "structures": ["minecraft:mansion"]},
+    {"id": "large_towers", "pool": "large_tower", "bounding_box": "full", "structures": ["#creativeengineering:meta/pillager_large_towers"],
+      "exclude": ["mysticrift_pillagers_towers_aris:end_pillager_tower"]},
+    {"id": "towers", "pool": "lone_camp", "bounding_box": "full", "structures": ["#creativeengineering:meta/pillager_towers"]},
+    {"id": "camps", "pool": "lone_camp", "bounding_box": "full", "structures": ["#creativeengineering:meta/pillager_camps"]},
+    {"id": "boats", "pool": "boat", "structures": ["#creativeengineering:meta/pillager_boats"]},
+    {"id": "unwrecked_pillager_ships", "pool": "boat", "structures": ["unwrecked_ships:ship", "unwrecked_ships:nether_ship"],
+      "requires_piece": ["unwrecked_ships:ship/sailor_layout/pillager_pirate_ship", "unwrecked_ships:sailors/pillager",
+        "unwrecked_ships:sailors/pillager_captain"]},
+    {"id": "vehicles", "pool": "vehicle", "bounding_box": "full", "structures": [
+      "#creativeengineering:meta/siege_weapons", "#creativeengineering:meta/caravan_carriages"]},
+    {"id": "witch_huts_full", "pool": "witch", "bounding_box": "full", "structures": ["minecraft:swamp_hut", "eugene:witch_wagon"]},
+    {"id": "witch_huts", "pool": "witch", "structures": [
+      "betterwitchhuts:witch_hut", "betterwitchhuts:witch_circle", "villagesandpillages:village_witch", "terralith:underground/witch_hut"]}
+  ],
+  "no_drops": {
+    "minecraft:evoker": ["minecraft:totem_of_undying"]
+  }
+}

@@ -35,22 +35,22 @@ R.remove({ id: 'brewinandchewin:pizza' }, e)
 R.shaped(i.pizza, ['bfo', 'mtc', ' d '], { b: i.any_bell_pepper, f: i.t_cheese_wedge, o: i.onion, m: i.mushrooms, t: i.tomato_sauce,
 	c: i.cooked_meat, d: i.dough }, e, 'pizza')
 
-// Ham and Cheese Sandwich: a side is a bread slice or a whole bread. Smoked ham cuts into two porkchops, so it gives double.
+// Ham and Cheese Sandwich: a side is any bread (#forge:bread, baking/baked-goods #28). Smoked ham cuts into two porkchops, so it gives double.
 R.remove({ id: 'brewinandchewin:ham_and_cheese_sandwich' }, e)
-var sandwichSide = [i.bread_slice, i.bread]
+var sandwichSide = i.t_bread
 R.shapeless(Item.of(i.ham_and_cheese_sandwich, 1), [sandwichSide, i.cooked_pork, i.flaxen_cheese_wedge, sandwichSide], e, 'ham_and_cheese_sandwich')
 R.shapeless(Item.of(i.ham_and_cheese_sandwich, 2), [sandwichSide, i.smoked_ham, i.flaxen_cheese_wedge, sandwichSide], e, 'ham_and_cheese_sandwich_smoked_ham')
 var incSandwich = R.incomplete('ham_and_cheese_sandwich')
-R.createSequencedAssembly(Item.of(i.ham_and_cheese_sandwich, 2), i.bread_slice, [
+R.createSequencedAssembly(Item.of(i.ham_and_cheese_sandwich, 2), i.t_bread, [
 	e.recipes.create.deploying(incSandwich, [incSandwich, i.cooked_pork]),
 	e.recipes.create.deploying(incSandwich, [incSandwich, i.flaxen_cheese_wedge]),
-	e.recipes.create.deploying(incSandwich, [incSandwich, i.bread_slice])
+	e.recipes.create.deploying(incSandwich, [incSandwich, i.t_bread])
 ], ['ham_and_cheese_sandwich'], e, 'ham_and_cheese_sandwich_sequenced_assembly', 1)
-R.createSequencedAssembly(Item.of(i.ham_and_cheese_sandwich, 4), i.bread_slice, [
+R.createSequencedAssembly(Item.of(i.ham_and_cheese_sandwich, 4), i.t_bread, [
 	e.recipes.create.deploying(incSandwich, [incSandwich, i.smoked_ham]),
 	e.recipes.create.deploying(incSandwich, [incSandwich, i.flaxen_cheese_wedge]),
 	e.recipes.create.deploying(incSandwich, [incSandwich, i.flaxen_cheese_wedge]),
-	e.recipes.create.deploying(incSandwich, [incSandwich, i.bread_slice])
+	e.recipes.create.deploying(incSandwich, [incSandwich, i.t_bread])
 ], ['ham_and_cheese_sandwich'], e, 'ham_and_cheese_sandwich_smoked_ham_sequenced_assembly', 1)
 
 // Quiche: one recipe for bacon and mushroom (JEI cycles them), a cabbage leaf or a whole cabbage. TODO dishes/meals #2

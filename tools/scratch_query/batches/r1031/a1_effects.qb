@@ -1,0 +1,168 @@
+# Run 2026-10-31, boot A1 (superflat): SQ-EFX effect changes (queue section "SQ-EFX effect changes, 2026-10-31",
+# added by the effects session at 00:44) and the D&D wood removal (SQ-RW-28). Runs after a1_data, before a1_world.
+# Toml set before the A1 boot: [copper_poisoning] intervalSeconds = 10, jitterSeconds = 0, chancePerPiece = 1.0.
+# Jars: patcherMod 1.1.04 of 10-31 00:44, creative_delight 00:29, backportedVinery -06 of 00:41, backportedBrewin -04.
+# Needs spawn-animals=true (vanilla discards animals every tick otherwise): SQ-EFX-04 runs at A2.
+# Bot "qe" (survival) takes the effects; ActiveEffects lists modded effects by "forge:id", vanilla ones by Id
+# (Poison 19, Wither 20, Regeneration 10, Resistance 11, Fire Resistance 12, Absorption 22, Health Boost 21).
+pace 2
+
+## SQ-EFX-01 | effect mixins apply
+bootreject (Mixin apply failed|InvalidInjectionException).*(CopperPoisoningEffectMixin|LivingEntityEffectRemapMixin|FruitsDelightEffectFuncMixin|CaffeinatedEffectMixin|LivingEntityUseItemIconMixin|CreateTeaPipeIconMixin|MobEffectTickContextMixin)
+bootreject (?i)removeByPotion.*(error|fail)
+bootreject Ignoring invalid wine effect entry
+bootexpect \[(CE )?potions\]
+
+## SQ-EFX-02 | Magic Resistance I stops Poison I
+# perfBot bots are invulnerable (Bots.java setInvulnerable): damage reads use a NoAI pillager "qp" on Normal
+# (zombies are undead: no Poison). Pillager max health 24.
+> difficulty normal
+> kill @e[type=minecraft:pillager]
+> summon minecraft:pillager -46 -60 -46 {NoAI:1b,PersistenceRequired:1b,Tags:["qp"]}
+sleep 1
+> effect give @e[tag=qp,limit=1] creativeengineering:magic_resistance 60 0
+> effect give @e[tag=qp,limit=1] minecraft:poison 10 0
+> data get entity @e[tag=qp,limit=1] Health
+sleep 6
+> data get entity @e[tag=qp,limit=1] Health
+look the two Health reads are equal (24.0f)
+> effect clear @e[tag=qp,limit=1]
+
+## SQ-EFX-03 | Poison II at 80 %, Wither I none
+# control first: Poison II without Magic Resistance, then with; same 6 s window
+> effect give @e[tag=qp,limit=1] minecraft:instant_damage 1 0
+> effect give @e[tag=qp,limit=1] minecraft:instant_health 1 5
+> effect give @e[tag=qp,limit=1] minecraft:poison 10 1
+> data get entity @e[tag=qp,limit=1] Health
+sleep 6
+> data get entity @e[tag=qp,limit=1] Health
+> effect clear @e[tag=qp,limit=1]
+> effect give @e[tag=qp,limit=1] minecraft:instant_health 1 5
+> effect give @e[tag=qp,limit=1] creativeengineering:magic_resistance 60 0
+> effect give @e[tag=qp,limit=1] minecraft:poison 10 1
+> data get entity @e[tag=qp,limit=1] Health
+sleep 6
+> data get entity @e[tag=qp,limit=1] Health
+> effect clear @e[tag=qp,limit=1] minecraft:poison
+> effect give @e[tag=qp,limit=1] minecraft:instant_health 1 5
+sleep 1
+> effect give @e[tag=qp,limit=1] minecraft:wither 10 0
+> data get entity @e[tag=qp,limit=1] Health
+sleep 6
+> data get entity @e[tag=qp,limit=1] Health
+look reads in pairs: control drop D (no Magic Resistance); with it, about 0.8 x D; Wither I pair equal
+> effect clear @e[tag=qp,limit=1]
+
+## SQ-EFX-04 | Dragon Horse Armor: Regeneration II, Health Boost II, Resistance II
+> summon minecraft:horse -46 -60 -50 {Tame:1b}
+> item replace entity @e[type=minecraft:horse,limit=1,sort=nearest] horse.armor with dragonloot:dragon_horse_armor
+sleep 10
+> data get entity @e[type=minecraft:horse,limit=1] ActiveEffects
+> data get entity @e[type=minecraft:horse,limit=1] Health
+sleep 6
+> data get entity @e[type=minecraft:horse,limit=1] Health
+expect Id: 10, Amplifier: 1b
+expect Id: 21, Amplifier: 1b
+expect Id: 11, Amplifier: 1b
+look Ids 10, 21 and 11 at Amplifier 1b; the second Health read not lower than the first (no drop at the 5 s refresh)
+> kill @e[type=minecraft:horse]
+
+## SQ-EFX-05 | Agility -> Climbing, Resilience -> Knockback Resistance, Chorus -> Teleport
+> data get entity qe Pos
+> effect give qe neapolitan:agility 30 0
+> effect give qe quark:resilience 30 0
+> effect give qe fruitsdelight:chorus 1 0
+sleep 2
+> data get entity qe ActiveEffects
+> data get entity qe Pos
+reject has the following entity data.*(neapolitan:agility|quark:resilience)
+expect has the following entity data.*vinery:climbing_effect
+expect has the following entity data.*alexsmobs:knockback_resistance
+look the second Pos differs from the first (Teleport); an "Unknown effect" for agility or resilience means it is removed from the registry instead of remapped: read effects.md 2.7
+> effect clear qe
+
+## SQ-EFX-06 | Restfulness and Power Outage do nothing; no Flare
+> effect give qe upgrade_aquatic:restfulness 1 0
+> effect give qe alexsmobs:power_down 10 0
+> data get entity qe ActiveEffects
+> summon upgrade_aquatic:flare -50 -55 -50
+sleep 2
+> execute if entity @e[type=upgrade_aquatic:flare]
+reject has the following entity data.*(restfulness|power_down)
+expect Test failed
+
+## SQ-EFX-07 | Caffeinated holds Phantom Bane; time since rest untouched, reset when it ends
+> scoreboard objectives add rest minecraft.custom:minecraft.time_since_rest
+sleep 3
+> scoreboard players get qe rest
+> effect give qe farmersrespite:caffeinated 30 0
+sleep 2
+> data get entity qe ActiveEffects
+> scoreboard players get qe rest
+sleep 31
+> scoreboard players get qe rest
+expect has the following entity data.*phantom_bane
+look rest score: rises between the first two reads (not -24000), reads 0 (or a few ticks) right after the effect ends
+> scoreboard objectives remove rest
+
+## SQ-EFX-08 | oxidized copper armor poisons (interval 10 s, chance 1.0 in the scratch toml)
+> effect clear qe
+> item replace entity qe armor.head with everythingcopper:copper_helmet{state:"oxidized"}
+> item replace entity qe armor.chest with everythingcopper:copper_chestplate{state:"oxidized"}
+> item replace entity qe armor.legs with everythingcopper:copper_leggings{state:"oxidized"}
+> item replace entity qe armor.feet with everythingcopper:copper_boots{state:"oxidized"}
+sleep 25
+> data get entity qe ActiveEffects
+> effect clear qe
+> item replace entity qe armor.head with everythingcopper:copper_helmet
+> item replace entity qe armor.chest with everythingcopper:copper_chestplate
+> item replace entity qe armor.legs with everythingcopper:copper_leggings
+> item replace entity qe armor.feet with everythingcopper:copper_boots
+sleep 25
+> data get entity qe ActiveEffects
+expect has the following entity data.*Id: 19
+look the first read has Poison (Id 19), Duration about 200 ticks (4 + 3 x 2 s); the second (unoxidized) read has no Poison ("Found no elements" or no Id 19)
+> clear qe
+
+## SQ-EFX-09 | Copper Poisoning gives Poison I 8 s, no direct damage
+> effect give @e[tag=qp,limit=1] minecraft:instant_health 1 5
+sleep 1
+> data get entity @e[tag=qp,limit=1] Health
+> effect give @e[tag=qp,limit=1] everythingcopper:copper_poisoning 1 1
+sleep 1
+> data get entity @e[tag=qp,limit=1] ActiveEffects
+> data get entity @e[tag=qp,limit=1] Health
+expect has the following entity data.*Id: 19
+look Poison Duration about 160 ticks, Amplifier 0b; Health right after the give not lower by 4 (no direct damage)
+> effect clear @e[tag=qp,limit=1]
+
+## SQ-EFX-10 | Jellie Wine: four effects at the wine's level
+> vinery effect vinery:jellie_wine qe
+sleep 1
+> data get entity qe ActiveEffects
+expect Id: 10, Amplifier
+expect Id: 22, Amplifier
+expect Id: 11, Amplifier
+expect Id: 12, Amplifier
+reject Ignoring invalid wine effect entry
+look a "vinery effect" syntax error = drink a Jellie Wine in the client block instead (CQ-EFX)
+> effect clear qe
+
+## SQ-EFX-11 | Awkward + Crab Shell brews Knockback Resistance; cocoa beans nothing
+> zq potion minecraft:awkward quark:crab_shell,minecraft:cocoa_beans
+expect quark:crab_shell -> minecraft:potion .*(?i)knockback
+expect minecraft:cocoa_beans -> nothing
+
+## SQ-RW-28 | Dreams & Desires rose, rubber, spirit wood removed (new row, recipes_wood.md 2.6)
+> zq makes create_dd:rose_planks
+> zq makes create_dd:rubber_planks
+> zq makes create_dd:spirit_planks
+> zq tagsof create_dd:rose_log
+> zq makes create_dd:smoked_planks
+expect makes create_dd:rose_planks: 0
+expect makes create_dd:rubber_planks: 0
+expect makes create_dd:spirit_planks: 0
+reject item tags of create_dd:rose_log: \S
+reject makes create_dd:smoked_planks: 0
+kjsreject (removed_woods\.js).*(Error|error)
+look smoked planks keep their own recipe (RW-23); the JEI half is RW-28 in the client block

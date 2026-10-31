@@ -1,4 +1,4 @@
-# Mob and block tweaks: bubble column immunity, Bushier Flowers off, feeding-trough retry, block properties, leaf decay
+# Mob and block tweaks: bubble column immunity, Bushier Flowers off, feeding-trough retry, block properties, leaf decay, named mobs, villager gates, doors and ladders, monster box vaults
 
 Small, unrelated changes to other mods' mobs and blocks, collected in one file. Armor enchantability overrides, first
 listed here in the backlog, are in [gear_tuning.md](gear_tuning.md).
@@ -11,9 +11,13 @@ listed here in the backlog, are in [gear_tuning.md](gear_tuning.md).
 | Bushier Flowers: no bone-meal growth, no worldgen; its bushes crafted from 4 flowers | DEPLOYED with 1.0.6 (built 2026-10-10); in-game test pending |
 | Quark feeding trough: a hungry animal that finds no trough waits 30 s before searching again | DEPLOYED with 1.0.4 (perf fix); scratch server checked the mixin applies, not measured under load |
 | Create: Dreams & Desires asphalt: friction and speed factor reset to vanilla (BlockRunner tiers it instead) | DEPLOYED; BR-28 pending |
-| Alex's Mobs seagulls don't steal a Lunchbox, Lunch Bag or Golden Lunchbox from the hotbar (`seagullStealingBlacklist`; a dropped box is not covered) | Config 2026-10-22 (`alexsmobs.toml`, backed up in `configs_edited/`), not deployed; list load scratch server PASSED 2026-10-22 (SQ-GM-07: 3 ids, each exists); MT-26 in game |
-| MCA Comb sets eye colour (11 colours) and eye shape (2) on its hairstyle page, for the player's own look and for a combed villager | BUILT 2026-10-22 (patcherMod 1.1.01 in `mods/`, not deployed); MT-40 pending in game |
-| Leaf decay: natural leaves live up to 12 leaf steps from a log (vanilla 6), decay only after a block next to them changes (never from random ticks), and fall fast once their tree is cut (Fast Leaf Decay ported in, its jar removed) | BUILT 2026-10-19 (a patcherMod rebuild after the 1.0.9 deploy, now patcherMod 1.1.01 in `mods/`; not deployed); scratch server PASSED (MT-13 to MT-16, MT-19 to MT-23, MT-24 decay piles); MT-13 to MT-24 pending in game |
+| Alex's Mobs seagulls never take a lunchbox: not from the inventory, not dropped (patcherMod `AlexsMobsSeagull*Mixin`, every Spice of Life food container; the `seagullStealingBlacklist` config entries from 2026-10-22 stay; [lunchboxes.md](lunchboxes.md)) | Mixins BUILT 2026-10-29 (patcherMod 1.1.04 in `mods/`), not deployed; config list load scratch server PASSED 2026-10-22 (SQ-GM-07); MT-26 in game |
+| MCA Comb sets eye colour (11 colours) and eye shape (2) on its hairstyle page, for the player's own look and for a combed villager | BUILT 2026-10-22, DEPLOYED with 1.1.01 (2026-10-22); MT-40 pending in game |
+| Leaf decay: natural leaves live up to 12 leaf steps from a log (vanilla 6), decay only after a block next to them changes (never from random ticks), and fall fast once their tree is cut (Fast Leaf Decay ported in, its jar removed) | BUILT 2026-10-19, DEPLOYED with 1.1.01 (2026-10-22, changelog Farming & Nature); scratch server PASSED (MT-13 to MT-16, MT-19 to MT-23, MT-24 decay piles); MT-13 to MT-24 pending in game |
+| Named mobs: a naturally spawned farm animal (cow, mooshroom, pig, sheep, chicken, goat) has a 1 in 100 chance of a random name (MCA citizen names); every player sees its death message ("Bessie the Cow was slain by Steve") (patcherMod `mobs.NamedMobs`, `[named_mobs]`, TODO `mobs/tweaks #6`) | BUILT 2026-10-30 (patcherMod 1.1.04 in `mods/`), not deployed; scratch server PASSED r1031 (2026-10-31, SQ-NM-01 to -03); MT-31 to MT-33 pending in game |
+| Villagers treat fence gates as walls (open or closed) and path through Dramatic Doors' tall and short wooden doors, opening them (patcherMod `McaVillagerPathGatesMixin`, `WalkNodeEvaluatorVillagerGateMixin`, TODO `mobs/tweaks #15`) | BUILT 2026-10-30 (patcherMod 1.1.04 in `mods/`), not deployed; scratch server PASSED r1031 (2026-10-31, SQ-VG-00 to -03); MT-41 to MT-43 pending in game |
+| Villagers path up and down ladders (every block named "ladder" that is climbable; patcherMod `McaVillagerPathLaddersMixin`, `GroundPathNavigationClimbMixin`, `MoveControlVillagerLadderMixin`, tag `#creativeengineering:villager_ladders`) | BUILT 2026-10-30 (patcherMod 1.1.04 in `mods/`), not deployed; scratch server PASSED r1031 (2026-10-31, SQ-VL-00 to -02, up and down a ladder); MT-44 to MT-46 pending in game |
+| Quark monster boxes are vaults: the box stays after its wave, ejects one stack from its own loot table once the wave is dead or gone, then re-arms after a 1 hour cooldown; obsidian hardness (diamond pickaxe); breaks only while sneaking, else a chat warning (Lootr's rule); Create drills and saws skip it (patcherMod `mobs.MonsterBoxVault`, `MonsterBoxBlockEntityMixin`, `CreateBreakerMonsterBoxMixin`, TODO `mobs/tweaks #5`) | BUILT 2026-10-30 (patcherMod 1.1.04 in `mods/`, 22:59); scratch server PASSED r1031 (2026-10-31, SQ-MB-01 to -04, -06, -07: stays, one-stack reward, re-arm, Create drill, off switch); SQ-MB-05 hardness client check pending (tags pass; queue says 50, changelog 25); MT-34 to MT-37, MT-47 to MT-50 in game pending |
 
 - **Pending:** the leaf decay changes are built and unshipped (next deploy; the release also drops FastLeafDecay-30.jar,
   now in `disabledmods/`). MT-01 to MT-25 untested in game (BR-28 stays in its writeup). Findings F1 to F7 (section 4);
@@ -32,6 +36,12 @@ listed here in the backlog, are in [gear_tuning.md](gear_tuning.md).
     `onlyWhenDisturbed` (true), `maxDistance` (12; 6 = vanilla; range 6 to 32), `maxSearchBlocks` (4096),
     `decayMinTicks` / `decayMaxTicks` (4 / 11, Fast Leaf Decay's defaults), same toml. Read on every decay check; edit with the server stopped (an in-place edit of a running scratch server's toml
     was not picked up).
+  - `[named_mobs]` (section 2.6): `enabled`, `chance` (0.01), `mobs` (ids or `#tags`), `spawnReasons`
+    (NATURAL, CHUNK_GENERATION, STRUCTURE), `announceDeaths`, `fallbackNames`. Read live.
+  - `[monster_box]` (section 2.9): `vaultMode` (true; false = Quark's self-breaking box), `cooldownTicks` (72000),
+    `rewardTable` (`creativeengineering:misc/monster_box_reward`), `rewardSingleCount` (false), `leashRange` (24),
+    `checkIntervalTicks` (20). Read live. Quark's `Enable Extra Loot Table` is false (`quark-common.toml`), so wave
+    mobs drop only their own loot.
 - **How to measure:** `python3 tools/leaf_path_scan.py` (structure templates, offline) and
   [tools/leaf_path_probe.js](../tools/leaf_path_probe.js) on a scratch server (every tree feature); timing and decay
   checks with [tools/leaf_decay_probe.js](../tools/leaf_decay_probe.js). Section 6.
@@ -146,6 +156,121 @@ decays fully with its piles on the ground (none left in the air), `leafPiles = f
 (as upstream 1.5.5); its tree features place them non-persistent, so natural ones decay. (2) is in-game only (MT-24),
 because forceloaded chunks get no random ticks.
 
+### 2.6 Named mobs
+
+TODO `mobs/tweaks #6`, design in [briefs/mobs_tweaks.md](briefs/mobs_tweaks.md) tweaks #6 (owner 2026-10-30: a configurable
+mob list, farm animals only for now; a large karma loss once karma exists).
+
+- **Roll** (`LivingSpawnEvent.SpecialSpawn`): a mob in `[named_mobs] mobs` with no name, spawned for a reason in
+  `spawnReasons`, is marked pending in its persistent data (`creativeengineering:named_mob` = 1) on `chance`. Bred,
+  spawn egg, spawner and command mobs never roll. Farm animals mostly spawn with the chunk (CHUNK_GENERATION), so most
+  named animals are found in new chunks.
+- **Name** (`EntityJoinLevelEvent`, server thread): a pending mob gets `Names.pickCitizenName(Gender)` from MCA (random
+  region, random male or female pool), else a random `fallbackNames` entry, and the mark becomes 2. The split exists
+  because chunk generation and structure spawns run on worldgen threads and MCA's name pool uses one shared random
+  (`API.getRng()`), which is not thread safe. MCA answers "Unnamed" while its lists are empty; that counts as no answer.
+- **Death** (`LivingDeathEvent`, lowest priority, cancelled deaths skipped): a mob marked 2 that still has a name
+  sends vanilla's death message to every player, its victim argument swapped for `"%s the %s"`
+  (`chat.creativeengineering.named_mob.title`), so "Bessie the Cow was slain by Steve". Any cause counts, not only
+  player kills. Follows `showDeathMessages`. A tamed mob's owner already gets vanilla's copy and is skipped.
+  A name tag rename keeps the mark (the announcement uses the new name).
+- **Karma:** the player-kill branch in `NamedMobs.onDeath` holds the hook for `largecontent/karma #1`; nothing happens
+  there yet. The karma list in the TODO has the entry (large loss).
+- Naming does not make a mob persistent; farm animals (creature category) never despawn anyway. A monster added to
+  the list despawns as usual (brief: wanted).
+
+### 2.7 Villager gates and doors
+
+TODO `mobs/tweaks #15` (owner 2026-10-30: gates solid to villagers, Dramatic Doors usable).
+
+- **Cause.** MCA overwrites vanilla villagers (`overwriteOriginalVillagers`) and its villager always paths with its own
+  `VillagerNavigation` / `VillagerLandPathNodeMaker`, not `WalkNodeEvaluator`. Its `findNearbyNodeTypes` marks every
+  `#minecraft:fence_gates` block WALKABLE_DOOR, open or closed. With the pack's `useSmarterDoorAI: false` the door task is
+  vanilla `InteractWithDoor`, which never opens gates, so villagers routed into closed gates and pressed against them,
+  and walked through open ones. The node maker's `getCommonNodeType` knows only vanilla `DoorBlock`, so a closed Dramatic
+  Doors door was BLOCKED and never on a path. Dramatic Doors' own mixins (door types in `WalkNodeEvaluator`, opening in
+  `InteractWithDoor`) did the rest of the job but MCA skipped the first half.
+- **Change.** `McaVillagerPathGatesMixin`: `getCommonNodeType` returns FENCE for any gate (tag or `FenceGateBlock`
+  subclass, so the Gates mod's metal gates too), and for a block in `#dramaticdoors:tall_doors` / `short_doors`:
+  DOOR_OPEN when open, DOOR_WOOD_CLOSED when closed and in the `*_wooden_doors` tag (walkable for a mob that opens doors,
+  as for vanilla doors), DOOR_IRON_CLOSED otherwise (metal doors stay shut). The gate-to-WALKABLE_DOOR check in
+  `findNearbyNodeTypes` is redirected to false. Opening is Dramatic Doors' `InteractWithDoor` mixin, unchanged; it closes
+  the door behind them as vanilla does.
+- **Vanilla villagers** (unconverted ones): `WalkNodeEvaluatorVillagerGateMixin` returns FENCE for a gate in the per-block
+  lookup when the pathing mob is a `Villager`. Closed gates were already FENCE there; this adds open ones. Other mobs and
+  wandering traders keep vanilla.
+- **Limits.** Short doors are one block high: only baby villagers fit. With `useSmarterDoorAI` turned on, MCA's own door
+  task runs instead of `InteractWithDoor`; it opens vanilla doors and gates only, so Dramatic Doors would be on paths
+  but not opened. Gates are FENCE for villagers even when a player leaves them open, by design.
+
+### 2.8 Villager ladders
+
+Owner 2026-10-30, after 2.7: villagers path up and down ladders.
+
+- **Before.** MCA's node maker (2.7) has no vertical moves. A ladder block above the ground was OPEN, so the walker
+  dropped through it, and no path went up one. Vanilla's WalkNodeEvaluator has none either.
+- **Which blocks.** `#minecraft:climbable` and `#creativeengineering:villager_ladders` both. The pack tag is every block
+  with "ladder" in its id (KubeJS [blocktags.js](../kubejs/server_scripts/tags/blocktags.js), `t.addMatching`, `/reload`;
+  45 climbable ladders on 2026-10-30: vanilla, Quark, Create, Create Deco, IE, Everything Copper, Framed, Copycats,
+  Upgrade Aquatic, Every Compat, Engineer's Decor). Vines, ropes, chains, scaffolding and grab rails stay out.
+- **Paths** (`McaVillagerPathLaddersMixin`): a ladder block is WALKABLE (`getLandNodeType`), so a villager can stand on
+  any rung and a step off a floor into a ladder shaft lands on the top rung; the ladder block straight above or below a
+  node is added as a successor when the villager's box fits there; a villager on a ladder starts its path there
+  (MCA's start search walked down to the foot of the ladder). Leaving at the top is the normal one-block step up from
+  the top rung, so the ladder must reach the level of the floor it leads to (as for a player who doesn't jump).
+- **Moving.** Up is vanilla: a mob in a ladder jumps every tick (the ladder's collision shape is at its feet) and a
+  jumping mob on a climbable block climbs. Down needed two changes. `MoveControlVillagerLadderMixin`: a villager on a
+  climbable block whose target is over half a block below and within half a block sideways stops jumping and walking,
+  so it slides down at 0.15 blocks a tick (walking into the wall behind the ladder would climb). `GroundPathNavigationClimbMixin`:
+  a villager on a climbable block counts as able to update its path; vanilla only follows paths on the ground, and in
+  the air advances any node it is above in the same column, which on the way down skipped every rung and sent it
+  walking off toward the exit while still high up.
+- **Limits.** MCA villagers only for the paths; an unconverted vanilla villager keeps vanilla pathing (the two
+  movement mixins apply to it, harmlessly). Ladder rungs cost the same as ground. A ladder in mid-air with ground 3 or
+  fewer blocks below may be left by stepping off sideways (MCA's normal drop rule).
+
+### 2.9 Quark monster boxes as vaults
+
+Owner 2026-10-30 (TODO `mobs/tweaks #5`, design in [briefs/mobs_tweaks.md](briefs/mobs_tweaks.md) tweaks #5): the box
+stays after use with a cooldown, is as hard as obsidian, breaks Lootr's way, and gives a single item when the wave is
+dead.
+
+- **Before.** Quark 3.4's box (`MonsterBoxBlockEntity#tick`) growls for 2 s once a player is within 2.5 blocks,
+  spawns 5 to 8 mobs from `quark:misc/monster_box_spawns` (zombie, cave spider, witch; spawn type SPAWNER), and
+  removes itself. No config kept it. Each wave mob dropped a roll of `quark:misc/monster_box` (which could hold another
+  box). Strength 25, no tool needed, no drop.
+- **Phases** (`mobs.MonsterBoxVault`, state on the block entity via `MonsterBoxBlockEntityMixin`):
+  - ARMED: Quark's own tick. Its `Level#removeBlock` after `spawnMobs` is redirected: the box stays, every mob within
+    4 blocks with Quark's `quark:monster_box_spawned` mark and no claim is stamped `creativeengineering:monster_box`
+    (the box position) and listed as the wave; then ACTIVE.
+  - ACTIVE: once a second (spread per box) the wave is checked. A mob counts as gone when unloaded, dead, or over 24
+    blocks from the box. All gone: one roll of the reward table, one random stack of the result pops out of the top
+    (ender chest sound, a puff), then COOLDOWN.
+  - COOLDOWN: nothing until 72000 game ticks have passed, then ARMED again.
+  - Peaceful freezes ACTIVE and COOLDOWN, as Quark's tick does nothing there.
+- **Saved and synced.** Phase, cooldown end and wave are written in AutoRegLib's shared NBT, so they save with the box
+  and reach clients in the update tag. The mixin adds an update packet (Quark's box had none), sent on each phase
+  change. Clients run Quark's tick only while ARMED, so a spent box shows no flames and never plays the local break
+  effect.
+- **Reward table** [monster_box_reward.json](../kubejs/data/creativeengineering/loot_tables/misc/monster_box_reward.json):
+  Quark's `misc/monster_box` with the box itself, TNT and the three infested blocks taken out; 1 pool, 1 roll. Stacks
+  keep Quark's counts (raw iron 4 to 10 and so on); `rewardSingleCount = true` cuts the stack to 1.
+- **Hardness.** [block_properties.js](../kubejs/startup_scripts/changes/block_properties.js): destroy speed 50,
+  blast resistance 1200, requires the right tool; [blocktags.js](../kubejs/server_scripts/tags/blocktags.js):
+  `mineable/pickaxe` + `needs_diamond_tool` (exclusive), and `create:non_movable`. Same numbers as obsidian, and
+  explosions can't break it.
+- **Breaking (Lootr's rule).** A Forge `BreakEvent` listener, as Lootr 0.4.29's `HandleBreak`: a box mined without
+  sneaking is not broken and the player gets an aqua chat line ("Breaking the monster box destroys it for good. Sneak
+  while mining to break it."); sneaking breaks it, with no drop. The check comes at the end of the mining time, as in
+  Lootr. Creative players follow the same rule; fake players are refused without a message.
+- **Create.** Drills, saws and their contraption forms break through `BlockHelper.destroyBlockAs` with no player, so no
+  `BreakEvent`. `CreateBreakerMonsterBoxMixin` makes `BlockBreakingKineticBlockEntity.isBreakable` false for a box.
+- **Every box.** Generated and placed boxes behave alike: with the box gone from the reward table, creative is the
+  only other source.
+- **Limits.** One reward per wave for whoever is there (no per-player list). Other machine breakers that post no
+  `BreakEvent` (not checked beyond Create) could still break a box. `vaultMode = false` returns Quark's behaviour,
+  except that the hardness and tags stay (KubeJS).
+
 ## 3. What the pack changes
 
 - **Bubble columns:** `BubbleColumnImmunityMixin` cancels `BubbleColumnBlock#entityInside` (SRG `m_7892_`) at the head
@@ -247,6 +372,10 @@ because forceloaded chunks get no random ticks.
 - patcherMod mixins: [BubbleColumnImmunityMixin](../development/patcherMod/src/main/java/com/SaintAlfonzo/creativeengineering/mixin/BubbleColumnImmunityMixin.java), [BushierFlowersDisableMixin](../development/patcherMod/src/main/java/com/SaintAlfonzo/creativeengineering/mixin/BushierFlowersDisableMixin.java), [FeedingTroughModuleMixin](../development/patcherMod/src/main/java/com/SaintAlfonzo/creativeengineering/mixin/FeedingTroughModuleMixin.java), [TemptGoalTroughRetryMixin](../development/patcherMod/src/main/java/com/SaintAlfonzo/creativeengineering/mixin/TemptGoalTroughRetryMixin.java); [compat/TroughRetryAccess.java](../development/patcherMod/src/main/java/com/SaintAlfonzo/creativeengineering/compat/TroughRetryAccess.java); `CEConfig.Perf.troughMissCooldownTicks`.
 - Leaf decay: [LeavesDecayRangeMixin](../development/patcherMod/src/main/java/com/SaintAlfonzo/creativeengineering/mixin/LeavesDecayRangeMixin.java), [block/LeafDecayRange.java](../development/patcherMod/src/main/java/com/SaintAlfonzo/creativeengineering/block/LeafDecayRange.java), [block/FastLeafDecayPort.java](../development/patcherMod/src/main/java/com/SaintAlfonzo/creativeengineering/block/FastLeafDecayPort.java) (registered in `CreativeEngineering`), `CEConfig.LeafDecay`; tools [leaf_path_scan.py](../tools/leaf_path_scan.py), [leaf_path_probe.js](../tools/leaf_path_probe.js), [leaf_decay_probe.js](../tools/leaf_decay_probe.js). `disabledmods/FastLeafDecay-30.jar` (removed, row gone from [mod_sides.md](../mod_sides.md)).
 - MCA eyes: [McaCombEyeColourMixin](../development/patcherMod/src/main/java/com/SaintAlfonzo/creativeengineering/mixin/McaCombEyeColourMixin.java) (client), lang `creativeengineering.mca_eyes.*`; how MCA picks eyes: [briefs/mobs_tweaks.md](briefs/mobs_tweaks.md) tweaks #12.
+- Named mobs: [mobs/NamedMobs.java](../development/patcherMod/src/main/java/com/SaintAlfonzo/creativeengineering/mobs/NamedMobs.java) (registered in `CreativeEngineering`), `CEConfig.NamedMobs`, patcherMod lang `chat.creativeengineering.named_mob.title`.
+- Villager gates and doors: [McaVillagerPathGatesMixin](../development/patcherMod/src/main/java/com/SaintAlfonzo/creativeengineering/mixin/McaVillagerPathGatesMixin.java), [WalkNodeEvaluatorVillagerGateMixin](../development/patcherMod/src/main/java/com/SaintAlfonzo/creativeengineering/mixin/WalkNodeEvaluatorVillagerGateMixin.java).
+- Villager ladders: [McaVillagerPathLaddersMixin](../development/patcherMod/src/main/java/com/SaintAlfonzo/creativeengineering/mixin/McaVillagerPathLaddersMixin.java), [GroundPathNavigationClimbMixin](../development/patcherMod/src/main/java/com/SaintAlfonzo/creativeengineering/mixin/GroundPathNavigationClimbMixin.java), [MoveControlVillagerLadderMixin](../development/patcherMod/src/main/java/com/SaintAlfonzo/creativeengineering/mixin/MoveControlVillagerLadderMixin.java); tag in [blocktags.js](../kubejs/server_scripts/tags/blocktags.js), key `t_villager_ladders` in `block_dict.js`.
+- Monster box vaults: [mobs/MonsterBoxVault.java](../development/patcherMod/src/main/java/com/SaintAlfonzo/creativeengineering/mobs/MonsterBoxVault.java) (registered in `CreativeEngineering`), [MonsterBoxBlockEntityMixin](../development/patcherMod/src/main/java/com/SaintAlfonzo/creativeengineering/mixin/MonsterBoxBlockEntityMixin.java), [CreateBreakerMonsterBoxMixin](../development/patcherMod/src/main/java/com/SaintAlfonzo/creativeengineering/mixin/CreateBreakerMonsterBoxMixin.java), `CEConfig.MonsterBox`, lang `chat.creativeengineering.monster_box.sneak`, [monster_box_reward.json](../kubejs/data/creativeengineering/loot_tables/misc/monster_box_reward.json), `quark-common.toml` (`Enable Extra Loot Table`, both copies).
 - KubeJS: [entitytags.js](../kubejs/server_scripts/tags/entitytags.js), [flowers.js](../kubejs/server_scripts/other/flowers.js), [block_properties.js](../kubejs/startup_scripts/changes/block_properties.js), `kubejs/data/bushierflowers/forge/biome_modifier/` (5 files).
 
 ## 6. Offline checks
@@ -310,16 +439,57 @@ because forceloaded chunks get no random ticks.
 - [ ] **MT-25 Pile slow height:** *Logic half: scratch server PASSED 2026-10-22 (SQ-OM-09: 3 layers no slow, 4 and 5 slow; SQ-OM-14 with 6: 5 no slow, 6 and 7 slow); walking and WTHIT: in game.* default `slowFromLayers = 4`: walk through 3-layer and 4-layer piles → only the
   4-layer one slows you, and WTHIT shows a Run Speed line on the 4-layer one only. Set 6 (game closed), repeat → 4 and
   5 no longer slow or show; 6 and up do. Depth Strider boots still walk through.
-- [ ] **MT-26 Seagulls skip lunchboxes** (needs a real player: gulls only target players in the world; the list loading:
-  scratch server PASSED 2026-10-22, SQ-GM-07): a Lunchbox, Lunch Bag and Golden Lunchbox in the hotbar on a beach
-  with seagulls (no other food): no gull takes one in a few minutes. With a carrot added, a gull still steals the
-  carrot. Config `alexsmobs.toml seagullStealingBlacklist` (2026-10-22). Dropped boxes are not covered.
+- [ ] **MT-26 Seagulls skip lunchboxes** (needs a real player: gulls only target players in the world): all four
+  lunchboxes (Lunchbag, Copper, Iron, Netherite), with food inside, anywhere in the inventory on a beach with seagulls
+  (no other food): no gull takes one in a few minutes. With a carrot added, a gull still steals the carrot. Drop a
+  lunchbox near gulls: none picks it up. Mixins `AlexsMobsSeagullStealMixin` / `AlexsMobsSeagullItemMixin`
+  (2026-10-29; the 2026-10-22 config list alone had not stopped them, owner report). Same check as LB-12.
+- [ ] **MT-31 Name rolls:** set `[named_mobs] chance = 1.0` (read live), fly into new chunks → every cow, mooshroom,
+  pig, sheep, chicken and goat shows a name when looked at; other animals (horses, rabbits) none. Breed two named cows
+  and use a cow spawn egg → no names. Leave and come back (chunks unload) → the same names. Set `chance` back to 0.01.
+- [ ] **MT-32 Announce:** kill a named cow → one chat line for every player, "<name> the Cow was slain by <you>". A
+  named animal killed by lava or a fall → its vanilla message, same form. `/gamerule showDeathMessages false` → no line.
+- [ ] **MT-33 Rename and plain names:** rename a named pig with a name tag, kill it → announced with the new name. A
+  name-tagged pig that never rolled → no announcement. With MCA's names seen (MT-31), names look like real first names,
+  not "Unnamed".
+- [ ] **MT-41 Gates are walls:** a pen of fences with a closed oak gate, a villager inside with its job site or bed
+  outside the pen (or the reverse) → it never walks into the gate and stays put (or finds another opening). Open the
+  gate → it still does not walk through. Same with a Gates mod metal gate. A cow or horse still walks out of the open gate.
+- [ ] **MT-42 Tall doors:** a closed house whose only door is a Dramatic Doors tall oak door, the villager's bed inside,
+  the villager outside at dusk → it walks to the door, the door opens, it goes in, and the door closes behind it. Same
+  out of the house in the morning. A tall iron door instead → it does not path through and does not open it.
+- [ ] **MT-43 Short doors and vanilla doors:** a baby villager uses a short oak door (opens it); an adult does not get
+  stuck at it. Vanilla oak doors are used as before.
+- [ ] **MT-44 Up a ladder:** a 6-block wall with a ladder from the ground to its top, a platform on top with the
+  villager's bed (or job site), the villager on the ground → it walks to the ladder, climbs, steps onto the platform.
+  Same with a Quark spruce ladder and a Create andesite ladder.
+- [ ] **MT-45 Down a ladder:** the reverse (villager on the platform, target on the ground) → it steps into the ladder,
+  slides down rung by rung without climbing back up, walks off at the bottom; no fall damage. Also a 1 x 1 shaft
+  through a floor with a ladder up to the floor level, both ways.
+- [ ] **MT-46 Not ladders:** a vine-covered wall or a scaffolding tower as the only way up → the villager does not path
+  up it. A ladder that stops one block short of the platform → not used (expected).
 - [ ] **MT-40 Comb eye colour** (client only): hold an MCA Comb, right-click the air. The hairstyle page has `<` `Brown Eyes` `>`
   top right and `Eye Shape 1` top left. Step the colour through all 11 and toggle the shape → the hair previews show
   the new eyes each time. Press Done → your villager-model look keeps the eyes (switch to the villager model in the
   full editor if needed), the comb lost 1 use. Repeat by using the comb on an MCA villager: its eyes change in the
   world, also after a relog. Change the eyes, press Escape → nothing saved, no use lost. Pick a hairstyle after
   changing the eyes → both saved, 2 uses lost. A heterochromia villager shows its fixed two-colour art.
+
+- [ ] **MT-34 Box stays:** find or `/setblock` a `quark:monster_box`, walk up → it growls, mobs spawn, the box stays
+  and its flames stop.
+- [ ] **MT-35 Reward:** kill the wave → one stack pops out of the box top once (ender chest sound); walking up again
+  within the cooldown does nothing.
+- [ ] **MT-36 Re-arm:** `[monster_box] cooldownTicks = 200` (game stopped), repeat → 10 s after the reward the
+  flames are back and it growls again.
+- [ ] **MT-37 Off switch:** `vaultMode = false` → Quark behaviour (the box breaks itself after spawning).
+- [ ] **MT-47 Single item:** over several waves, each reward is exactly one stack from the reward table; never a
+  monster box, TNT or infested block. Wave mobs drop only their normal loot.
+- [ ] **MT-48 Obsidian hardness:** survival, diamond pickaxe → about 9.4 s, same as obsidian next to it; iron pickaxe
+  → barely progresses; TNT beside it → the box survives.
+- [ ] **MT-49 Sneak to break:** mine it standing → aqua warning in chat, the box stays (it reappears if it vanished
+  client side); mine it sneaking → it breaks, nothing drops. Same in creative.
+- [ ] **MT-50 Create:** a powered drill against a box, and a drill on a moving contraption → the box doesn't break;
+  a contraption doesn't pick the box up.
 
 ## 8. History
 
@@ -347,9 +517,25 @@ because forceloaded chunks get no random ticks.
   Spice of Life lunchboxes (config only; the dropped-box mixin not built). MT-26 untested.
 - 2026-10-22 (second bulk run): SQ-GM-07 (seagull list) and SQ-OM-09 / SQ-OM-14 (pile slow height, default and 6)
   PASS on the scratch server; MT-25 and MT-26 keep their in-game halves.
+- 2026-10-30: named mobs (`mobs/tweaks #6`): `mobs.NamedMobs`, `[named_mobs]` (farm animals, 1 in 100, MCA names),
+  death announcements; patcherMod 1.1.04 rebuilt into `mods/`. MT-31 to MT-33 untested, SQ-NM queued.
+- 2026-10-30: villager gates and doors (`mobs/tweaks #15`): gates are FENCE and Dramatic Doors doors get door types in
+  MCA's node maker (`McaVillagerPathGatesMixin`), open gates FENCE for vanilla villagers
+  (`WalkNodeEvaluatorVillagerGateMixin`); patcherMod 1.1.04 rebuilt into `mods/`. MT-41 to MT-43 untested, SQ-VG queued.
+- 2026-10-30 (later): villager ladders (section 2.8): `McaVillagerPathLaddersMixin`, `GroundPathNavigationClimbMixin`,
+  `MoveControlVillagerLadderMixin`, `#creativeengineering:villager_ladders`; patcherMod 1.1.04 rebuilt into `mods/`.
+  MT-44 to MT-46 untested, SQ-VL queued.
+- 2026-10-30 (later): Quark monster box vaults (section 2.9, `mobs/tweaks #5`): `mobs.MonsterBoxVault`,
+  `MonsterBoxBlockEntityMixin`, `CreateBreakerMonsterBoxMixin`, `[monster_box]`, reward table, obsidian hardness and
+  tags, Quark `Enable Extra Loot Table` off. patcherMod 1.1.04 rebuilt into `mods/`. MT-34 to MT-37, MT-47 to
+  MT-50 untested, SQ-MB queued.
 
 ## Owner ideas (scratchpad 2026-10-26)
 
-- Villagers can't use the tall doors of Dramatic Doors; check the short doors too: `mobs/tweaks #15`.
+- Villagers can't use the tall doors of Dramatic Doors; check the short doors too: `mobs/tweaks #15` (built
+  2026-10-30, section 2.7).
 
 - 2026-10-28: planned from the scratchpad: profile and trim Alex's Mobs behavior and tick cost (TODO `mobs/tweaks #17`). No code changed.
+- 2026-10-29: seagulls (`mobs/tweaks #7`): owner reported gulls still stealing lunchboxes from inventories with the
+  config list in place. Two patcherMod mixins now skip every Spice of Life food container, in the inventory and dropped
+  (covers the new Netherite Lunchbox). MT-26 rewritten. [lunchboxes.md](lunchboxes.md).

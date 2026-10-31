@@ -1,0 +1,21 @@
+{
+  "type": "forge:add_features",
+  "biomes": [
+    "minecraft:river",
+    "minecraft:swamp",
+    "minecraft:mangrove_swamp",
+    "terralith:orchid_swamp",
+    "minecraft:savanna",
+    "minecraft:savanna_plateau",
+    "minecraft:windswept_savanna",
+    "terralith:fractured_savanna",
+    "terralith:savanna_slopes",
+    "terralith:shrubland",
+    "terralith:cold_shrubland",
+    "terralith:hot_shrubland",
+    "terralith:rocky_shrubland",
+    "terralith:brushland"
+  ],
+  "features": "fireflybushport:firefly_bush",
+  "step": "vegetal_decoration"
+}

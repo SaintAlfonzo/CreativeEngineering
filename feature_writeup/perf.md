@@ -320,7 +320,7 @@ one applied, and there are no errors from them in the log. None of it is tested 
 
 | Issue | Fix | Where | Dial |
 |---|---|---|---|
-| Horse armor effect used too many resources, was disabled | Back on, but the all-entities walk runs once per interval (not every tick) and effects last interval + 40 ticks. **Also fixed:** the registration used `minecraft:strong_regeneration`, a potion id, so the horse never got any effect even before it was disabled; now `minecraft:regeneration` (level I; the old name hinted at II, undecided) | `server_scripts/magic/armor_effects.js`, `startup_scripts/func/armor_effects.js` | `mountEffectIntervalTicks` = 100 |
+| Horse armor effect used too many resources, was disabled | Back on, but the all-entities walk runs once per interval (not every tick) and effects last interval + 40 ticks. **Also fixed:** the registration used `minecraft:strong_regeneration`, a potion id, so the horse never got any effect even before it was disabled; now `minecraft:regeneration`; since 2026-10-31 Regeneration II, Health Boost II and Resistance II (armor_effects.md F9) | `server_scripts/magic/armor_effects.js`, `startup_scripts/func/armor_effects.js` | `mountEffectIntervalTicks` = 100 |
 | Quark feeding trough re-searched constantly | After a miss (no trough, no real player tempting) the goal skips the search for 30 s. Hits are never stamped, so cached troughs are unchanged | `FeedingTroughModuleMixin`, `TemptGoalTroughRetryMixin`, `compat/TroughRetryAccess` | `troughMissCooldownTicks` = 600 |
 | Create: Gravity ran for every entity in every dimension | `ForgeEvents#handleLogic` is cancelled outside the listed dimensions (the End). An entity still carrying the low-gravity modifier runs it once more so the modifier is removed | `CreateGravityDimensionMixin` | `gravityLimitDimensions` = true, `gravityDimensions` = the End |
 | Serene Seasons melt check every tick | `RandomUpdateHandler#onWorldTick` runs every 4th tick and the melt chance roll gets 4x the chance (`nextInt(bound / 4)`); same average rate for the mod's bounds 16/12/8/4 | `SereneSeasonsMeltThrottleMixin` | `seasonsMeltIntervalTicks` = 4 |
@@ -521,7 +521,7 @@ list or call `contains`.
 Tests: SQ-ATC-01 to -04 (scratch server, probe `tools/armor_trims_cache_test/atc_probe.js`), CQ-ATC-01 to -03
 (client, JEI start time and trim rendering) in [scratch_queue.md](testing/scratch_queue.md).
 
-### 10.4 Fix for finding 6: horse walks (built 2026-10-27; scratch 2026-10-27 found `level.players()` broken, fixed, player check open)
+### 10.4 Fix for finding 6: horse walks (built 2026-10-27; scratch 2026-10-27 found `level.players()` broken, fixed; player check PASSED on a bot 2026-10-28, SQ-HT-02 / -03)
 
 The horse passes of `server_scripts/magic/armor_effects.js` (mount effects) and
 `server_scripts/equipment/dragon_autorepair.js` (horse armor repair) moved from `LevelEvents.tick` to one
@@ -533,7 +533,7 @@ Side effect: a horse in a loaded dimension with no player in it (spawn chunks, c
 effect or the repair until a player enters. The player-slot passes (`PlayerEvents.tick`) are unchanged.
 Tests: SQ-HT-01 to -03 in [scratch_queue.md](testing/scratch_queue.md), AE-11 / AE-12 in game.
 
-### 10.5 CTM model bake (finding 8, investigated 2026-10-27, no change yet)
+### 10.5 CTM model bake (finding 8, investigated 2026-10-27; CTM removed 2026-10-27, out of 1.1.04)
 
 `eval-client.jfr`: 1,547 samples in `team.chisel.ctm.client.util.TextureMetadataHandler#onModelBake`, all on the
 render thread, from 00:54:36 to 00:54:56 (about 20 s of startup; the handler also runs on every resource reload).
@@ -973,6 +973,8 @@ Reading it:
   Domestication Innovation, Chef's Delight, ...): NBT templates of old data versions run through DataFixerUpper on
   every load. A one-time upgrade of those templates (a pack data overlay) would remove it; not measured.
 - Idle MSPT on a populated world: mob counts, not the pack (12.1). A fair before/after needs the same world age.
+- Resource packs were not measured here (the eval client ran them all, unsplit). Per-pack cost: [perf_rpack.md](perf_rpack.md)
+  (built 2026-10-29, client run CQ-RP queued).
 
 ## 13. Follow-ups to the overall run (built 2026-10-27 late, patcherMod 1.1.03, installed 20:44)
 
@@ -1042,16 +1044,253 @@ queue runs driven through `scratch_server.sh` only. Servers the suite owns (`srv
 | `eval_server.sh wait` prints `DEAD` (exit 3) when no java has its cwd in `srv/` | BUILT |
 | `tools/perf/session/perf_session.sh start [NAME]`, `mark TEXT`, `status`, `stop`, `process`, `report [--baseline DIR] [--prune]` | BUILT; start / mark / status / stop tested with no server |
 | `collect.sh` (background, every 5 s): per boot `boots/NN_level/meta.env` (start, level, type, seed, jar-list hash, JVM args), `proc.tsv` (CPU seconds, RSS, threads), `latest.log` every 30 s; at exit it moves `perf/exit/hotspot-pid-PID-*.jfr` in (or copies the left-over `jfr-repo` folder), with the console tail and crash reports | BUILT; first live use is the next bulk run |
-| `session_report.py`: per boot `perf_report.py` HTML and `ticks.tsv` (ServerTick, ChunkWait, slow KubeJS); `summary.md` / `summary.json` with boots (launch to Done, `Done (`, KubeJS recipe event, RSS, how it ended), segments by mark (tick median / p95 / max / over 50 ms, busy %, CPU cores, chunk waits, slow KubeJS calls, change against a baseline session) and the 25 worst ticks with the commands sent in the 60 s before | BUILT; tested on a synthetic session and on `eval3-idle.jfr` (4559 ticks, HTML, `--prune`) |
+| `session_report.py`: per boot `perf_report.py` HTML and `ticks.tsv` (ServerTick, ChunkWait, slow KubeJS); `summary.md` / `summary.json` with boots (launch to Done, `Done (`, KubeJS recipe event, RSS, how it ended), segments by mark (tick median / p95 / max / over 50 ms, busy %, CPU cores, chunk waits, slow KubeJS calls, change against a baseline session) and every tick over 50 ms with the commands sent in the 60 s before (`summary.json`, `worst_ticks.tsv`; `summary.md` shows the 50 longest; the cap of 25 was lifted 2026-10-28, owner: summaries never capped); malformed `proc.tsv` rows skipped | BUILT; first live run 2026-10-28 (session `q1028`, 8 boots: collector, exit-recording move, killed-boot `repo/` copy and segment stats all worked; run `report` between boots to keep the summary current) |
 
 How to use it in a bulk run: [testing/scratch_queue.md](testing/scratch_queue.md), "Perf session". Output in
 `perf/sessions/<name>/` (untracked). The collector never parses while a server is up (that would load the CPU it
 measures); run `report` after the last server stops. Segments assume one scratch server at a time (the
 one-JVM rule); a mark applies to whichever server is up.
 
+Known limit: when a boot is followed at once by a reboot of the same `srv/`, the collector skips the final `latest.log`
+copy (the new boot owns the file), so the earlier boot's Ended column reads "no clean stop in the log". Cosmetic: the
+real end is in the rotated `srv/logs/*.log.gz`.
+
 Tests (live, next bulk run):
-- [ ] **PS-01** `perf_session.sh start`, run the queue, `stop`, `report --prune` -> one `boots/` folder per boot, each
+- [x] **PS-01** *(PASSED 2026-10-28, session q1028)* `perf_session.sh start`, run the queue, `stop`, `report --prune` -> one `boots/` folder per boot, each
   with a recording before `report` and a `report.html` after; `summary.md` lists every entry that was marked.
-- [ ] **PS-02** a boot stopped with `scratch_server.sh stop` -> "clean stop"; the `hotspot-pid-*.jfr` was moved out
+- [x] **PS-02** *(PASSED 2026-10-28)* a boot stopped with `scratch_server.sh stop` -> "clean stop"; the `hotspot-pid-*.jfr` was moved out
   of `srv/perf/exit/`.
-- [ ] **PS-03** two boots of one `srv/` back to back -> two boot folders, each with its own `latest.log`.
+- [x] **PS-03** *(PASSED 2026-10-28; the earlier boot's Ended column reads "no clean stop" because its final latest.log copy is skipped, cosmetic)* two boots of one `srv/` back to back -> two boot folders, each with its own `latest.log`.
+
+## 15. Immersive Weathering cost in perf suite g1 (studied 2026-10-28)
+
+Source: the suite run `g1` recordings (`perf/suite/g1/jfr/`, parsed to `perf/parsed/g1_<scenario>/`), Immersive
+Weathering 1.2.10. Shares are of Server thread CPU samples (JFR only samples running code, so a share of a scenario's
+mean MSPT is a fair ms estimate). Classes read with vineflower from the jar.
+
+### 15.1 Numbers
+
+| Scenario | MSPT | tickChunk | IW total | IW `tickBlock` (random tick) | sky tick | `MossyBlock` isRandomlyTicking | Growth work done | Mossable neighbour cascade |
+|---|---|---|---|---|---|---|---|---|
+| G03a one bot, day | 18.5 | 16.8% | 3.31% | 2.57% | 0.10% | 0.22% | 0.08% | 0 |
+| G03b one bot, night | 16.3 | 19.5% | 3.00% | 2.26% | 0.16% | 0.31% | 0.07% | 0 |
+| G04 four bots | 50.1 | 15.9% | 2.70% | 1.93% | 0.11% | 0.20% | 0.06% | 0 |
+| G05a travel 30 b/s | 29.0 | 4.3% | 2.44% | 0.58% | 0.08% | 0.13% | 0.03% | 1.35% |
+| G06 save-all | 49.9 | 15.1% | 2.34% | 1.77% | 0.06% | 0.32% | 0.04% | 0 |
+| G12 soak 45 min | 32.0 | 16.6% | 2.85% | 2.23% | 0.15% | 0.23% | 0.09% | 0.01% |
+
+IW is about 17% of the random-tick phase in every scenario with players, about 0.6 ms of an 18 ms tick (G03a) to
+1.35 ms of a 50 ms tick (G04). It is also 5.5 to 6.4% of all Server thread allocation (G12: 18.7 GB sampled over
+45 min, 17.4 GB of it two objects, see below). Worldgen threads: icicle feature only, negligible. Entity AI
+(`FollowLeafCrownGoal`) 0.02%.
+
+### 15.2 Where it goes
+
+1. **`BlockGrowthHandler.tickBlock` dispatch, 75 to 80% of IW's time, almost none of it growth.** IW's
+   `ServerLevelMixin.callTick` injects into vanilla's random-tick loop at `getFluidState`, so it runs for every
+   random-tick position in a ticking section whatever the block (stone, air, dirt), re-reads the block state from
+   the palette, and calls `tickBlock`. Every call: `CommonConfigs.BLOCK_GROWTHS.get()` (Forge 43 does not cache
+   config values: `ConfigValue#getRaw` walks the night-config path, 21% of IW leaf time), allocates a
+   `Suppliers.memoize` and its lambda for a lazy biome lookup (the two objects above), an `EnumMap` lookup, a
+   `HashMap` iterator for the source's universal set, an `Optional` and an `IdentityHashMap` lookup (15% of leaf
+   time) for the block's own growths. The block has no growth on nearly every call: frames inside a growth class
+   are 0.03 to 0.09% of the Server thread, 3% of IW's time. For `block_tick` there are no universal growths
+   (only `block_sandcover`, `block_snowcover`, `icicle_from_snow`, `lightning_vitrified_sand`, on rain, snow and
+   lightning), so every block without an owner-listed growth can return before any of this.
+2. **`MossyBlock#isRandomlyTicking` (0.2 to 0.3%).** Vanilla asks it on every random-tick position that lands on a
+   mossy block; IW answers with `hasProperty` + `getValue` (FerriteCore `FastMap#getKeyFor`) instead of a cached flag.
+3. **Mossable neighbour cascade (1.35% in G05a only).** Scheduled ticks left in pregenerated chunks fire when a
+   player first loads them: `MossableBlock#tick` calls `updateNeighborsAt`, each mossable neighbour runs
+   `updateWeatheredStateOnNeighborChanged` -> `PatchSpreader#getWantedWeatheringState` (scans faces), and a state
+   change schedules the next tick. A one-off per chunk; gone in G05b and the soak.
+4. **Sky-access tick (0.1%), grass spreading (`ModGrassBlock` randomTick, mostly the vanilla `super` call),
+   fluid generators (0.2% in G05a):** not worth touching.
+
+### 15.3 Candidates
+
+| # | Change | Expected | Behaviour change |
+|---|---|---|---|
+| A | patcherMod mixin on `BlockGrowthHandler.tickBlock`: cache `block_growths` (refresh on config load), look up the block's growth set and the source's universal set first, return when both are empty, only then build the biome supplier | most of item 1: about 1.5 to 2% of the Server thread (0.5 to 1 ms per tick with players), most of IW's allocation | none |
+| B | A plus a precomputed per-block flag (an `IdentityHashMap` set at rebuild, or a field on the block) so the early return skips the hash lookup too | a further share of the 15% lookup | none |
+| C | Replace IW's `callTick` injection (mixin plugin cancel in the coremod) with one that only calls when the block has growths for `block_tick`, skipping the palette re-read | the remaining PalettedContainer re-read (2 to 4% of IW) | none if the re-read is kept for blocks that have growths |
+| D | `MossyBlock` / `MossableBlock` `isRandomlyTicking`: read a precomputed per-state boolean | item 2, 0.2 to 0.3% | none |
+| E | Mossable cascade: leave | one-off per chunk | |
+
+A is the clear first step: small, no behaviour change, and it applies to every scenario with players. Measure with
+the suite (G03a, G04, G12) against `g1`. TODO `server #29`.
+
+### 15.4 Built: A, B and C (2026-10-28, patcherMod 1.1.03, installed in `mods/` 2026-10-28)
+
+- `perf/IwGrowthFast`: `tickBlock` reads the block's growth sets from a field on the block (B), returns when neither
+  the block nor the tick source has growths, reads `block_growths` once per game tick, and only then builds the
+  memoized biome supplier (A). Universal sets first, then the block's, the same `Set` objects IW iterates, so the
+  same growths run in the same order.
+- `mixin/IwBlockGrowthHandlerMixin`: `@Overwrite` of `BlockGrowthHandler.tickBlock` (no CallbackInfo per call),
+  keeping IW 1.2.10's body for the off switch; a RETURN inject on `rebuild` refills the tables from IW's maps
+  (`GROWTH_FOR_BLOCK`, `UNIVERSAL_GROWTHS`) after every tag update. `mixin/IwBlockGrowthHolderMixin` adds the field
+  to `Block` (`perf/IwGrowthHolder`).
+- C: `perf/CEMixinPlugin` is now the mixin config plugin of `creativeengineering.mixins.json`. On the post-apply of
+  the empty marker `mixin/IwServerLevelTickMixin` (ServerLevel, priority 1500) it finds IW's merged handler (name
+  ends `$callTick`, `@MixinMerged` from IW's `ServerLevelMixin` or the exact 1.2.10 descriptor) and replaces its
+  body with a call to `IwGrowthFast.blockTick`, which uses the state vanilla already read unless the block
+  random-ticked (only its random tick runs between vanilla's read and the hook). An unknown descriptor or a missing
+  handler logs a warning and leaves IW's code as it is.
+- Off switch for A/B measurements: JVM property `-Dcreativeengineering.iwFastTick=false` (all three parts).
+- Checked headless (scratchpad harness): the rewrite on IW's real `callTick` bytecode gives a 9-instruction body that
+  passes ASM's type-aware verifier as a ServerLevel method; another mixin's handler and other post-applies are left
+  alone. Mixin application, growth behaviour and the gain need a server: SQ-IWF-01 to -05 (scratch_queue.md).
+  Scratch r1031 (2026-10-31): SQ-IWF-01, -02, -02b, -03, -04b PASSED (fast path on and off grow the same: 15 / 14 leaf
+  piles; growths off grows nothing; caveat: -04b used persistent leaves). SQ-IWF-05 (the gain) not run.
+
+## 16. Four spread-out players: whistle goal and underground bees (built 2026-10-28, patcherMod 1.1.03 installed)
+
+Suite `g1` G04 (four bots 600 apart, 50.1 ms mean) had the server at its tick budget (scratch run 2026-10-28,
+finding 10). Inclusive shares of the 18,725 Server thread samples in `perf/suite/g1/jfr/G04-1.jfr`:
+
+| What | Share | Per 50 ms tick | Note |
+|---|---|---|---|
+| Hostile mobs (`world.entity.monster`) | 22.0% | about 11 ms | about 310 hostiles = four monster caps of 70; G03b (one bot, 75 hostiles) runs at 16.3 ms |
+| Natural spawning | 5.3% | about 2.7 ms | |
+| Bees (49 in the census) | 5.9% | about 3 ms | `Mob.serverAiStep` 710 of 1107 samples (wander goal flight pathing), travel 212 |
+| Nock Enough Arrows `TemptByWhistleGoal#canUse` | 1.9% | about 1 ms | an entity query for `WhistlingArrow` in 12 blocks, on every mob, with no arrow anywhere |
+
+The mob cap is not changed here; section 17 adds cap levels.
+
+### 16.1 Whistle goal skip (no behaviour change)
+
+`perf.WhistleArrowTracker` keeps the server's live whistling arrows (weak set, join and leave events, matched by class
+name). `NeaWhistleGoalSkipMixin` (Pseudo, `m_8036_` HEAD) returns false while the set is empty, before the query.
+`canContinueToUse` ends with `canUse`, so a tempted mob still stops when the last arrow goes. Expected: the whole
+1.9%.
+
+### 16.2 Bees below y 32 idle without a player
+
+`MobBeeIdleMixin` (`Mob.serverAiStep`, `m_6140_` HEAD): a `Bee` below y 32 with no living player within 32 blocks
+skips its AI step (goals, sensing, navigation, move and look controls). Travel, gravity and damage still tick; the
+bee resumes when a player comes within 32 blocks. Behaviour change: an underground bee farm below y 32 does not
+pollinate or return to its hive while nobody is near. Bees inside hives are block entity data and unaffected.
+Expected: up to about 65% of the bee cost for bees below y 32 (the census has no bee heights, so the share of
+underground bees is not known).
+
+Tests: scratch queue "Whistle goal skip and underground bees" (SQ-PF16-01 to 04). TODO `server #30`. Scratch r1031
+(2026-10-31): SQ-PF16-01 (mixins), -03 (underground bee frozen with no player near, moves again) PASSED; -02 (whistling
+arrow still pulls) client check pending; -04 not run.
+
+## 17. Mob cap levels by spawnable chunks, spawn edge and vertical limits (BUILT 2026-10-28, patcherMod 1.1.03 installed; BROKEN: SQ-MCL-04 FAIL r1031)
+
+Follows section 16 and finding 10: in G04 four spread-out players ran four full monster caps (about 310 hostiles, 22.0%
+of the Server thread, plus 5.3% natural spawning). Nothing in the pack changes caps or despawn today; they are vanilla.
+Built 2026-10-28 as cap levels (17.2), a spawn radius per level (17.3) and a vertical band per level (17.4), all
+driven by the same level. Code: `perf.MobCapLevels`, `MobCapLevelTickMixin` (ServerChunkCache `m_8490_`, ModifyArg on
+`NaturalSpawner.createState`'s chunk count, unchanged), `MobCapMixin` (Redirect of `getMaxInstancesPerChunk` in
+`SpawnState.canSpawnForCategory` `m_186548_` and `LocalMobCapCalculator$MobCounts.canSpawn` `m_186522_`),
+`MobCapSpawnAreaMixin` (NaturalSpawner `m_47045_` spawnCategoryForChunk HEAD for the radius, `m_220421_`
+isValidSpawnPostitionForType HEAD for the band). Config `[perf]` in the common config, read live. `/ceperf mobcap`
+prints each dimension's spawnable chunks and level. Botania's `NaturalSpawnerMixin` touches the same class (not the
+same methods).
+
+### 17.1 Vanilla facts this rests on (1.19.2)
+
+| Fact | Detail |
+|---|---|
+| Cap | `category cap x spawnable chunks / 289` (`NaturalSpawner$SpawnState`). Spawnable chunks = the union of the chunks within 8 chunks of any player. Overlapping players share cap; spread-out players each add a whole one |
+| Caps | monster 70, creature 10 (persistent), ambient 15, water_creature 5, water_ambient 20, underground_water_creature 5, axolotls 5 |
+| Despawn | per mob, by the nearest player: instant beyond 128 blocks, a 1/800 chance per tick between 32 and 128 after 30 s of life. Persistent mobs (`creature`, named, leashed) skip it |
+| Spawn reach | spawn positions come from chunks within 8 chunks of a player, so a diagonal chunk is up to about 181 blocks away, past the 128-block instant-despawn line |
+| Shipped distances | view 10, simulation 8 (128 blocks). Mobs past simulation distance do not tick |
+
+### 17.2 Cap levels, driven by total spawnable chunks
+
+The player count is not the input; the spawnable chunk total is (what vanilla already counts, so two players standing
+together are not penalised). A mixin on the cap read (`MobCategory#getMaxInstancesPerChunk` at return, or
+`SpawnState#canSpawnForCategory`) picks a level from the current total and returns the reduced per-chunk cap.
+
+| Level | Monster cap | Other capped categories | Total monsters at 1 / 2 / 4 areas (289 chunks each) |
+|---|---|---|---|
+| 0 (vanilla) | 70 | vanilla | 70 / 140 / 280 |
+| 1 | 50 | scaled by 50/70 | 50 / 100 / 200 |
+| 2 | 25 | scaled by 25/70 | 25 / 50 / 100 |
+
+Rules:
+- `creature` is never scaled (persistent, cap 10, herds are placed at chunk generation).
+- Lowering a cap removes no mobs; it only blocks new spawns until the count falls below it.
+- The chunk thresholds for level 1 and level 2 are not decided. Starting guess: level 0 up to about 1.5 areas
+  (about 430 chunks), level 1 up to about 3 areas (about 870), level 2 above. To be set from G03/G04 and a run with
+  two and three bots; add a hysteresis margin so the level does not flip each tick when a player walks.
+- A single player alone (289 chunks) stays at vanilla. Whether an open-world player in one area should ever drop
+  below 70 is not planned.
+- Config in `CEConfig` `[perf]`: `mobCapLevels` (off switch), `mobCapForceLevel` (-1 auto, 0 to 2 forced, for the
+  suite runs), `mobCapLevel1Chunks` 430, `mobCapLevel2Chunks` 870, `mobCapHysteresisChunks` 30 (a level is left only
+  30 chunks below its threshold), `mobCapLevel1Monster` 50, `mobCapLevel2Monster` 25, `mobCapScaledCategories`
+  (all capped categories except `creature`). Other categories get `round(vanilla x cap / 70)`, at least 1.
+- Built: both the dimension cap and the per-player cap (`LocalMobCapCalculator`) read the level's value. The level
+  is per dimension, from that dimension's count. Thresholds are the starting guesses above, still to tune (17.5).
+
+### 17.3 Spawn edge and spawn radius per level
+
+Result of the investigation (bytecode, 1.19.2): vanilla already rejects a natural spawn position farther than the
+category's despawn distance (128) from the nearest player, in `isValidSpawnPostitionForType`, unless the type has
+`canSpawnFarFromPlayer`. So the instant pop in and out below does not happen and needs no code. Random despawn only
+starts after 30 s without action, so spawns at 100 to 128 blocks are not wasted at once either.
+
+Built instead (owner, 2026-10-28): a spawn radius per level. At level 1 the scaled categories only spawn in chunks
+within 6 chunks of some non-spectator player (Chebyshev distance on chunk coordinates), at level 2 within 5 (vanilla
+8). The check is at the head of `spawnCategoryForChunk`, so a chunk outside it skips the position roll and every
+check after it. Config `spawnChunksLevel1` 6, `spawnChunksLevel2` 5 (0 = vanilla). The cap is still computed from
+vanilla's spawnable chunk count, so the level's cap is filled from fewer chunks (13 x 13 = 169 or 11 x 11 = 121
+instead of 289 per player): mobs spawn closer, not fewer than the cap. The chunk count that picks the level is not
+changed either.
+
+Original investigation notes:
+
+Problem: a spawn rolled in a chunk farther than 128 blocks from every player is removed by the instant-despawn check
+within a tick or so, wasting the spawn attempt, the placement checks and the despawn check. Mobs spawned between about
+100 and 128 blocks also despawn at random as soon as a player moves a little, and they are outside simulation
+distance when beyond 128.
+
+To investigate:
+- How many spawns in G04 land beyond 128 blocks (log in the existing `CheckSpawn` path, `SpawnPlacementsConditionsMixin`
+  is the nearest hook) and how many despawn within, say, 100 ticks of spawning. This decides whether it matters.
+- Reject a spawn position when the nearest player is farther than a limit (128, or a margin such as 120) in the same
+  `CheckSpawn` event or the mixin; the attempt then costs one distance check.
+- A smaller radius also shrinks the effective spawnable chunk count the cap uses, which interacts with 17.2: if only
+  chunks within the radius spawn, the cap should be computed from those, or the same cap would be spread over the
+  same chunks anyway. Decide whether to leave the vanilla chunk count alone.
+- Whether the lower bound (24 blocks, vanilla no-spawn zone) should rise per level, so close-in surface spawns are
+  also thinner at higher levels.
+
+### 17.4 Vertical spawn limits per level (built: monster only, 64 / 32)
+
+Built as proposed: `spawnBandLevel1` 64, `spawnBandLevel2` 32 (0 = no limit), `spawnBandCategories` `monster`. The
+band is measured from the nearest player (3D, spectators included as vanilla's own lookup does) at the head of
+`isValidSpawnPostitionForType`, so a rejected position costs one player lookup. Spawners and structure spawns are
+not natural spawns and are not affected.
+
+
+Vanilla lets a monster attempt pick any height from the world bottom up to the surface of the chosen column, so a
+player on the surface has caves 200 blocks below counted in the cap and ticked. Proposal: a vertical band around the
+player per level, enforced in the same check as 17.3 (reject the position when `abs(spawn y - player y)` exceeds the
+band, nearest player).
+
+| Level | Vertical band (to decide) |
+|---|---|
+| 0 | vanilla (no limit) |
+| 1 | wide, for example 64 blocks up and down |
+| 2 | narrow, for example 32 blocks up and down |
+
+Open questions: whether the band applies to monsters only (underground water categories and bats have their own
+heights), how it treats players in deep caves with the surface far above (band is relative to the player, so fine),
+and whether it affects spawner-like structure spawns (those are not natural spawns and skip it). Values above are
+placeholders to tune.
+
+### 17.5 Measurement plan
+
+Re-run suite `g1` G04 (four bots) with level 1 and level 2 forced on, compare mean and p95 tick, the monster entity
+share and the natural spawning share to section 16's numbers, and add a two-bot and three-bot plan for the thresholds.
+A level also needs a play check on the real server: how empty an area feels at 25. Queue: scratch queue "Mob cap
+levels" (SQ-MCL-01 to 06). TODO `server #31`.
+
+Scratch r1031 (2026-10-31): SQ-MCL-01 (mixins), -02 (one player: level 0), -03 (two players apart: level 1, back to 0),
+-05 (forced level 2, normal world: monsters only inside the 32 band) PASSED. SQ-MCL-04 FAILED: forced level 2 on the
+superflat spawned 0 monsters in 8 min for one bot (level 0: 13 zombies); suspects `MobCapSpawnAreaMixin.outsideRadius`
+and the local-cap path in `MobCapMixin`. Note: `#forge:monsters` does not hold zombies in this pack. SQ-MCL-06 not run.

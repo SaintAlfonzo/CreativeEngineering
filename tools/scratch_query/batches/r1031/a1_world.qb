@@ -1,0 +1,524 @@
+# Run 2026-10-31, boot A1 (superflat, grass at y -61, air from y -60): block, tag and fake-player rows.
+# Needs the perfBot jar in srv/mods (prep_srv.sh adds it). Bot "qa" stands near 0 0 so every test area within
+# 50 blocks gets random ticks (simulation distance 4). Toml set before this boot (plan step A1):
+#   [monster_box] cooldownTicks = 200
+# Areas: VS x 10..36 z 9..16, DM x -24..-10 z 10, WC x -26..-20 z -11..-9, MB 20 -60 -20, SG x -40..-14 z 30..34,
+# CS x 30..40 z 30, misc x 40..70.
+pace 2
+
+## SQ-R31-BOT | fake player joins and reports
+> gamerule sendCommandFeedback true
+> time set noon
+> pbot spawn qa 0 -60 0
+> pbot status
+expect ceperfbot ok
+reject (?i)exception
+
+## SQ-LB-01 | netherite lunchbox resolves as an item entity
+> summon item 2 -55 2 {Item:{id:"solapplepie:netherite_lunchbox",Count:1b},NoGravity:1b}
+> execute if entity @e[type=item,nbt={Item:{id:"solapplepie:netherite_lunchbox"}}]
+expect Test passed
+> kill @e[type=item]
+
+## SQ-WT-01 | WTHIT silk touch tag
+> setblock 0 -50 0 minecraft:glass
+> execute if block 0 -50 0 #creativeengineering:wthit/needs_silk_touch
+> setblock 0 -50 0 minecraft:iron_ore
+> execute if block 0 -50 0 #creativeengineering:wthit/needs_silk_touch
+> setblock 0 -50 0 minecraft:dirt
+> execute if block 0 -50 0 #creativeengineering:wthit/needs_silk_touch
+> setblock 0 -50 0 minecraft:oak_leaves
+> execute if block 0 -50 0 #creativeengineering:wthit/needs_silk_touch
+> setblock 0 -50 0 minecraft:air
+count Test passed == 2
+count Test failed == 2
+reject \[wthit-silk-touch\].*(?i)error
+
+## SQ-VL-00 | ladder in the villager ladder tag
+> setblock 2 -50 0 minecraft:ladder
+> execute if block 2 -50 0 #creativeengineering:villager_ladders
+> setblock 2 -50 0 minecraft:air
+expect Test passed
+
+## SQ-CS-02 | crop season type tags (each block passes its own type only)
+> setblock 30 -61 30 minecraft:farmland
+> setblock 30 -60 30 minecraft:wheat
+> setblock 32 -61 30 minecraft:farmland
+> setblock 32 -60 30 the_dirty_stuff:tobacco_seeds
+> setblock 34 -60 30 minecraft:attached_melon_stem
+> setblock 36 -50 30 minecraft:stone
+> setblock 36 -51 30 minecraft:cave_vines
+> execute if block 30 -60 30 #creativeengineering:crop_seasons/temperate
+> execute if block 30 -60 30 #creativeengineering:crop_seasons/warm_dry
+> execute if block 30 -60 30 #creativeengineering:crop_seasons/warm_wet
+> execute if block 30 -60 30 #creativeengineering:crop_seasons/cave
+> execute if block 32 -60 30 #creativeengineering:crop_seasons/temperate
+> execute if block 32 -60 30 #creativeengineering:crop_seasons/warm_dry
+> execute if block 32 -60 30 #creativeengineering:crop_seasons/warm_wet
+> execute if block 32 -60 30 #creativeengineering:crop_seasons/cave
+> execute if block 34 -60 30 #creativeengineering:crop_seasons/temperate
+> execute if block 34 -60 30 #creativeengineering:crop_seasons/warm_dry
+> execute if block 34 -60 30 #creativeengineering:crop_seasons/warm_wet
+> execute if block 34 -60 30 #creativeengineering:crop_seasons/cave
+> execute if block 36 -51 30 #creativeengineering:crop_seasons/temperate
+> execute if block 36 -51 30 #creativeengineering:crop_seasons/warm_dry
+> execute if block 36 -51 30 #creativeengineering:crop_seasons/warm_wet
+> execute if block 36 -51 30 #creativeengineering:crop_seasons/cave
+count Test passed == 4
+look order of the 16 answers in RES/rows/SQ-CS-02.log: pass on 1 (wheat temperate), 6 (tobacco warm_dry), 11 (melon stem warm_wet), 16 (cave vines cave); "Unknown block" for tobacco = id changed
+
+## SQ-CS-08 | greenhouse glass tag
+> setblock 30 -55 34 minecraft:glass_pane
+> execute if block 30 -55 34 #sereneseasons:greenhouse_glass
+> setblock 30 -55 34 immersiveengineering:insulating_glass
+> execute if block 30 -55 34 #sereneseasons:greenhouse_glass
+> setblock 30 -55 34 securitycraft:reinforced_red_stained_glass_pane
+> execute if block 30 -55 34 #sereneseasons:greenhouse_glass
+> setblock 30 -55 34 create:framed_glass_door
+> execute if block 30 -55 34 #sereneseasons:greenhouse_glass
+> setblock 30 -55 34 storagedelight:oak_cabinet_with_glass_doors
+> execute if block 30 -55 34 #sereneseasons:greenhouse_glass
+> setblock 30 -55 34 minecraft:air
+count Test passed == 4
+count Test failed == 1
+
+## SQ-VS-04 | flower vine default state is fertile
+> fill 10 -60 10 18 -53 10 minecraft:stone
+> setblock 18 -58 9 floralench:poppy_vine
+> execute if block 18 -58 9 floralench:poppy_vine[fertile=true]
+expect Test passed
+
+## SQ-VS-05 | fake player shears a flower vine (VS-01 server half)
+> setblock 12 -53 9 floralench:poppy_vine[south=true]
+> setblock 12 -54 9 floralench:poppy_vine[south=true]
+> setblock 12 -55 9 floralench:poppy_vine[south=true]
+> tp qa 12 -60 7
+> pbot hold qa minecraft:shears
+> pbot use qa 12 -54 9 north
+> execute if block 12 -54 9 floralench:poppy_vine[fertile=false]
+> execute if block 12 -55 9 minecraft:air
+> data get entity qa SelectedItem
+expect use (SUCCESS|CONSUME)
+count Test passed == 2
+expect Damage: 1
+
+## SQ-VS-08 | second shear does nothing (VS-03 server half)
+> pbot use qa 12 -54 9 north
+> data get entity qa SelectedItem
+expect use PASS
+expect Damage: 1
+
+## SQ-VS-06 | fake player caps weeping, twisting and kelp tips (VS-05, VS-06 server half)
+> fill 20 -50 10 30 -50 10 minecraft:stone
+> setblock 22 -51 10 minecraft:weeping_vines[age=0]
+> setblock 28 -60 12 minecraft:twisting_vines[age=0]
+> fill 33 -60 14 37 -56 18 minecraft:glass hollow
+> fill 34 -59 15 36 -57 17 minecraft:water
+> setblock 35 -59 16 minecraft:kelp[age=0]
+> tp qa 24 -60 12
+> pbot use qa 22 -51 10 down
+> pbot use qa 28 -60 12 up
+> tp qa 35 -55 13
+> pbot use qa 35 -59 16 up
+> execute if block 22 -51 10 minecraft:weeping_vines[age=25]
+> execute if block 28 -60 12 minecraft:twisting_vines[age=25]
+> execute if block 35 -59 16 minecraft:kelp[age=25]
+count Test passed == 3
+
+## SQ-VS-07 | cave vine with berries is picked, then capped (VS-07 server half)
+> setblock 24 -51 10 minecraft:cave_vines[age=0,berries=true]
+> tp qa 24 -60 12
+> pbot use qa 24 -51 10 down
+> execute if block 24 -51 10 minecraft:cave_vines[berries=false]
+> execute if block 24 -51 10 minecraft:cave_vines[age=25]
+> pbot use qa 24 -51 10 down
+> execute if block 24 -51 10 minecraft:cave_vines[age=25]
+count Test passed == 2
+look order: pass, fail, pass (picked first, capped on the second use)
+
+## SQ-VS-02 | sheared flower vine stays put, unsheared spreads (60 s at randomTickSpeed 300; also runs SQ-VS-03)
+> setblock 10 -53 9 floralench:poppy_vine[south=true,fertile=false]
+> setblock 16 -53 9 floralench:poppy_vine[south=true]
+> setblock 20 -51 10 minecraft:weeping_vines[age=25]
+> setblock 26 -51 10 minecraft:weeping_vines[age=0]
+> tp qa 15 -60 5
+> gamerule randomTickSpeed 300
+sleep 60
+> gamerule randomTickSpeed 3
+> execute if block 10 -53 9 floralench:poppy_vine[fertile=false]
+> execute if block 10 -54 9 minecraft:air
+> execute if block 9 -53 9 minecraft:air
+> execute if block 11 -53 9 minecraft:air
+> execute if block 16 -54 9 floralench:poppy_vine
+count Test passed >= 4
+look the last answer (unsheared grew down) may fail if it spread sideways instead: zq count 13 -60 9 19 -53 9 floralench:poppy_vine in the next row decides
+
+## SQ-VS-03 | weeping vine age 25 does not grow, age 0 does
+> zq count 13 -60 9 19 -53 9 floralench:poppy_vine
+> execute if block 20 -52 10 minecraft:air
+> execute if block 26 -52 10 minecraft:weeping_vines_plant
+count Test passed == 2
+look zq count of the unsheared vine area above 1 (VS-02 unsheared spread)
+
+## SQ-DM-01 | dandelions mature on Rich Soil and Fertile Soil, not on grass
+> setblock -10 -61 10 farmersdelight:rich_soil
+> setblock -10 -60 10 minecraft:dandelion
+> setblock -13 -61 10 immersive_weathering:mulch_block
+> setblock -13 -60 10 minecraft:dandelion
+> setblock -16 -60 10 minecraft:dandelion
+> tp qa -13 -60 7
+> gamerule randomTickSpeed 300
+sleep 60
+> gamerule randomTickSpeed 3
+> execute if block -10 -60 10 veggiesdelight:mature_dandelion
+> execute if block -13 -60 10 veggiesdelight:mature_dandelion
+> execute if block -16 -60 10 veggiesdelight:mature_dandelion
+count Test passed == 2
+count Test failed == 1
+
+## SQ-DM-03 | shears and knife on a Mature Dandelion (fake player, 20 uses each)
+> clear qa
+> tp qa -21 -60 10
+> pbot hold qa minecraft:shears
+repeat 20
+> setblock -20 -60 10 veggiesdelight:mature_dandelion
+> pbot use qa -20 -60 10 west
+end
+sleep 3
+> execute if block -20 -60 10 minecraft:dandelion
+> clear qa veggiesdelight:dandelion_leaf 0
+> clear qa minecraft:dandelion 0
+> data get entity qa SelectedItem
+> pbot hold qa farmersdelight:iron_knife
+repeat 5
+> setblock -20 -60 10 veggiesdelight:mature_dandelion
+> pbot use qa -20 -60 10 west
+end
+> execute if block -20 -60 10 minecraft:dandelion
+> pbot hold qa minecraft:air
+> setblock -20 -60 10 veggiesdelight:mature_dandelion
+> pbot use qa -20 -60 10 west
+> execute if block -20 -60 10 veggiesdelight:mature_dandelion
+count Test passed == 3
+expect Damage: 20
+look leaves found 40 to 60 (2-3 each), dandelions about 10 (half the time); items the bot did not pick up lie at -20 -60 10
+
+## SQ-WC-03 | watering can loads bone meal from the off hand
+> setblock -20 -61 -10 minecraft:farmland
+> setblock -20 -60 -10 minecraft:wheat[age=0]
+> tp qa -20 -60 -12
+> item replace entity qa weapon.mainhand with hearthandharvest:watering_can{WaterLevel:16}
+> item replace entity qa weapon.offhand with minecraft:bone_meal 64
+# loading is the can's air use (Item.use); `pbot use` is a block use only, so the bot loads through /zq useitem
+repeat 3
+> zq useitem qa
+end
+> data get entity qa SelectedItem
+> data get entity qa Inventory[{Slot:-106b}].Count
+expect BonemealLevel: 3
+expect FertilizerItem: "minecraft:bone_meal"
+expect entity data: 61b
+look queue expects BonemealLevel:3, FertilizerItem minecraft:bone_meal, 61 bone meal left; record what a charged use spent
+
+## SQ-WC-05 | watering can soaks a 3x3 of farmland and mulch
+# no random ticks: dry farmland loses moisture 7 -> 6 within seconds (vanilla), which broke the 9-count
+> gamerule randomTickSpeed 0
+> fill -26 -61 -11 -24 -61 -9 minecraft:farmland[moisture=0]
+# young wheat: a right-click on mature wheat is a right-click harvest (CONSUME) before the can's useOn
+> fill -26 -60 -11 -24 -60 -9 minecraft:wheat[age=0]
+> item replace entity qa weapon.mainhand with hearthandharvest:watering_can{WaterLevel:16}
+> item replace entity qa weapon.offhand with minecraft:air
+> tp qa -25 -60 -13
+> pbot use qa -25 -60 -10 up
+> data get entity qa SelectedItem
+> fill -26 -61 -11 -24 -61 -9 minecraft:stone replace minecraft:farmland[moisture=7]
+> pbot use qa -25 -60 -10 up
+> fill -32 -61 -11 -30 -61 -9 immersive_weathering:mulch_block[moisture=0]
+> fill -32 -60 -11 -30 -60 -9 minecraft:wheat[age=0]
+> item replace entity qa weapon.mainhand with hearthandharvest:watering_can{WaterLevel:16}
+> tp qa -31 -60 -13
+> pbot use qa -31 -60 -10 up
+> fill -32 -61 -11 -30 -61 -9 minecraft:stone replace immersive_weathering:mulch_block[moisture=7]
+> gamerule randomTickSpeed 3
+expect WaterLevel: 15
+count Successfully filled 9 block == 6
+look the second use (wheat over stone, nothing to soak) leaves the can at 15; an "Unknown property moisture" error = mulch property name differs
+
+## SQ-AC-02 | full dragon set = 36 armor
+> item replace entity qa armor.head with dragonloot:dragon_helmet
+> item replace entity qa armor.chest with dragonloot:dragon_chestplate
+> item replace entity qa armor.legs with dragonloot:dragon_leggings
+> item replace entity qa armor.feet with dragonloot:dragon_boots
+sleep 2
+> attribute qa minecraft:generic.armor get
+expect for entity qa is 36
+
+## SQ-AC-03 | armor capped at 50
+> attribute qa minecraft:generic.armor base set 100
+sleep 1
+> attribute qa minecraft:generic.armor get
+> attribute qa minecraft:generic.armor base set 0
+> clear qa
+expect for entity qa is 50
+
+## SQ-GF31-03 | Sputter cannot be built (new row)
+> setblock 45 -60 0 minecraft:barrel
+> tp qa 45 -60 2
+# a bot use on a barrel opens it (no sneak): setblock runs the same CarvedPumpkinBlock.onPlace pattern check
+> setblock 45 -59 0 minecraft:carved_pumpkin
+sleep 3
+> execute if entity @e[type=nock_enough_arrows:sputter]
+> execute if block 45 -59 0 minecraft:carved_pumpkin
+expect Test failed
+expect Test passed
+reject (?i)unknown entity|invalid
+look "Test failed" must come from the sputter check and "Test passed" from the pumpkin check
+
+## SQ-KT-21 | coaster accepts modelled drinks and food, refuses others (fake player)
+> setblock 5 -60 -5 brewinandchewin:coaster
+> setblock 7 -60 -5 brewinandchewin:coaster
+> setblock 9 -60 -5 brewinandchewin:coaster
+> setblock 11 -60 -5 brewinandchewin:coaster
+> setblock 13 -60 -5 brewinandchewin:coaster
+> tp qa 9 -60 -3
+> pbot hold qa vinery:red_wine
+> pbot use qa 5 -60 -5 up
+> pbot hold qa farmersdelight:hamburger
+> pbot use qa 7 -60 -5 up
+> pbot hold qa farmersrespite:long_black_tea
+> pbot use qa 9 -60 -5 up
+> pbot hold qa fruitsdelight:apple_jelly
+> pbot use qa 11 -60 -5 up
+> pbot hold qa goldenfood:golden_cookie
+> pbot use qa 13 -60 -5 up
+> data get block 5 -60 -5
+> data get block 7 -60 -5
+> data get block 9 -60 -5
+> data get block 11 -60 -5
+> data get block 13 -60 -5
+look the first three coasters hold their item in the block entity data, the last two hold nothing (pbot use lines: SUCCESS / CONSUME vs PASS / FAIL)
+
+## SQ-POT-06 | botanist house workbench holds a flower
+> forceload add 60 -100 140 -60
+sleep 5
+> place structure beautify:botanist_house_plains 70 -60 -80
+> place structure beautify:botanist_house_desert 110 -60 -80
+> zq count 60 -60 -100 140 -50 -60 beautify:botanist_workbench
+> setblock 130 -60 -60 beautify:botanist_workbench
+> data get block 130 -60 -60
+reject Plant
+look find the benches (zq count prints how many); /data get block on each: Plant "minecraft:<flower>", never a wither rose; run 2-3 more placements for different flowers
+
+## SQ-SVA-02 | the 17 Sky Village addon templates place
+> forceload add 100 100 400 220
+sleep 8
+> place template skyvillages:farmersdelight/sky_village_farmersdelight_farm_0 100 -40 100
+> place template skyvillages:farmersdelight/sky_village_farmersdelight_farm_1 140 -40 100
+> place template skyvillages:farmersdelight/sky_village_farmersdelight_farm_2 180 -40 100
+> place template skyvillages:letsdo_brewery/sky_village_letsdo_brewery_0 220 -40 100
+> place template skyvillages:letsdo_brewery/sky_village_letsdo_brewery_1 260 -40 100
+> place template skyvillages:letsdo_vinery/sky_village_letsdo_vinery_0 300 -40 100
+> place template skyvillages:letsdo_vinery/sky_village_letsdo_vinery_1 340 -40 100
+> place template skyvillages:letsdo_vinery/sky_village_letsdo_vinery_2 380 -40 100
+> place template skyvillages:letsdo_brewery/sky_village_letsdo_brewery_deco_0 100 -40 180
+> place template skyvillages:letsdo_brewery/sky_village_letsdo_brewery_deco_1 130 -40 180
+> place template skyvillages:letsdo_brewery/sky_village_letsdo_brewery_deco_2 160 -40 180
+> place template skyvillages:letsdo_brewery/sky_village_letsdo_brewery_deco_3 190 -40 180
+> place template skyvillages:letsdo_brewery/sky_village_letsdo_brewery_deco_4 220 -40 180
+> place template skyvillages:letsdo_brewery/sky_village_letsdo_brewery_deco_5 250 -40 180
+> place template skyvillages:letsdo_brewery/sky_village_letsdo_brewery_deco_6 280 -40 180
+> place template skyvillages:letsdo_brewery/sky_village_letsdo_brewery_deco_7 310 -40 180
+> place template skyvillages:letsdo_brewery/sky_village_letsdo_brewery_deco_8 340 -40 180
+> zq count 100 -40 100 420 0 140 brewinandchewin:keg
+> zq count 100 -40 100 420 0 140 vinery:wine_press
+count Loaded template "skyvillages == 17
+reject There is no template|Failed to load
+look keg and wine press counts above 0; /data get block on one keg, press, shelf and cabinet returns block entity data (positions from a client fly-by or zq); SVA-04 loot: the farm_0 chest and brewery_1 chests carry LootTable sky_village_weaponsmith / butcher / shepherd
+> forceload remove all
+
+## SQ-MB-02 | monster box stays and records its wave (Normal difficulty, bot next to it)
+> difficulty normal
+> setblock 20 -60 -20 quark:monster_box
+> tp qa 18 -60 -20
+sleep 4
+> execute if block 20 -60 -20 quark:monster_box
+> data get block 20 -60 -20
+expect Test passed
+expect creativeengineering:phase": 1b
+expect creativeengineering:wave
+look the wave list holds 5 to 8 UUIDs
+
+## SQ-MB-03 | wave dead -> one reward stack, rest phase
+# scratch-only: no mob drops, so the item count is the reward alone; bot leaves at once so the 200-tick cooldown
+# does not re-arm the box with the bot beside it (SQ-MB-04 needs phase 0 first) and the bot cannot pick up the reward
+> kill @e[type=minecraft:item]
+> gamerule doMobLoot false
+> tp qa 0 -60 0
+> execute positioned 20 -60 -20 run kill @e[type=!minecraft:player,type=!minecraft:item,distance=..24]
+sleep 3
+> data get block 20 -60 -20
+> execute positioned 20 -60 -20 if entity @e[type=item,distance=..3]
+expect creativeengineering:phase": 2b
+expect creativeengineering:until
+expect Test passed, count: 1
+> gamerule doMobLoot true
+look until = game time + 72000 normally; this boot has cooldownTicks 200, so until = game time + 200
+
+## SQ-MB-04 | cooldown ends, a new wave starts (cooldownTicks 200)
+> tp qa 0 -60 0
+> kill @e[type=item]
+sleep 12
+> data get block 20 -60 -20
+> tp qa 18 -60 -20
+sleep 4
+> data get block 20 -60 -20
+expect creativeengineering:phase": 0b
+expect creativeengineering:phase": 1b
+> execute positioned 20 -60 -20 run kill @e[type=!minecraft:player,distance=..24]
+
+## SQ-MB-05 | monster box mining tags
+> execute if block 20 -60 -20 #minecraft:mineable/pickaxe
+> execute if block 20 -60 -20 #minecraft:needs_diamond_tool
+count Test passed == 2
+look hardness 25 per the changelog (queue row says 50): check with WTHIT in the client block (CQ-MB-08)
+
+## SQ-MB-06 | Create drill cannot break it
+> setblock 22 -60 -20 create:creative_motor[facing=west]
+> setblock 21 -60 -20 create:mechanical_drill[facing=west]
+sleep 30
+> execute if block 20 -60 -20 quark:monster_box
+expect Test passed
+look if the drill did not turn (motor facing wrong), set facing=east on the motor and rerun the row
+> fill 21 -60 -20 22 -60 -20 minecraft:air
+
+## SQ-SG-02 | sheared grass does not spread (also sets up SQ-SG-03; 60 s at randomTickSpeed 300)
+> fill -42 -57 20 -12 -57 36 minecraft:stone
+> fill -40 -56 30 -36 -56 34 minecraft:dirt
+> setblock -38 -56 32 minecraft:grass_block[fertile=false]
+> fill -32 -56 30 -28 -56 34 minecraft:dirt
+> setblock -30 -56 32 minecraft:grass_block
+> fill -24 -56 30 -20 -56 34 farmersdelight:rich_soil
+> setblock -22 -56 32 vintagedelight:lush_grass_block[fertile=false]
+> fill -18 -56 30 -14 -56 34 farmersdelight:rich_soil
+> setblock -16 -56 32 vintagedelight:lush_grass_block
+> fill -40 -56 22 -36 -56 26 vinery:dirt_slab
+> setblock -38 -56 24 vinery:grass_slab[fertile=false]
+> fill -32 -56 22 -28 -56 26 vinery:dirt_slab
+> setblock -30 -56 24 vinery:grass_slab
+> tp qa -27 -56 28
+> gamerule randomTickSpeed 300
+sleep 60
+> gamerule randomTickSpeed 3
+> execute if block -38 -56 32 minecraft:grass_block[fertile=false]
+> fill -40 -56 30 -36 -56 34 minecraft:coarse_dirt replace minecraft:dirt
+> fill -32 -56 30 -28 -56 34 minecraft:coarse_dirt replace minecraft:dirt
+expect Test passed
+expect Successfully filled 24 block
+look the second fill (unsheared patch) reports fewer than 24
+
+## SQ-SG-03 | sheared lush grass and grass slab do not spread
+> fill -24 -56 30 -20 -56 34 minecraft:coarse_dirt replace farmersdelight:rich_soil
+> fill -18 -56 30 -14 -56 34 minecraft:coarse_dirt replace farmersdelight:rich_soil
+> fill -40 -56 22 -36 -56 26 minecraft:coarse_dirt replace vinery:dirt_slab
+> fill -32 -56 22 -28 -56 26 minecraft:coarse_dirt replace vinery:dirt_slab
+count Successfully filled 24 block == 2
+look order: sheared rich soil 24, unsheared fewer, sheared slab 24, unsheared fewer
+
+## SQ-VG-01 | villager never leaves a fenced ring through a gate (closed, then open)
+# Peaceful (villager AI unchanged): the monster box waves of SQ-MB left zombies that killed the villager
+> difficulty peaceful
+> kill @e[type=!minecraft:player,type=!minecraft:item,distance=..300]
+# a one-high `hollow` fill is solid: fill, then clear the inside
+> fill 50 -60 -50 54 -60 -46 minecraft:oak_fence
+> fill 51 -60 -49 53 -60 -47 minecraft:air
+> setblock 52 -60 -50 minecraft:oak_fence_gate[facing=north,open=false]
+> setblock 52 -60 -40 minecraft:red_bed[facing=south,part=foot]
+> setblock 52 -60 -39 minecraft:red_bed[facing=south,part=head]
+> summon minecraft:villager 52 -60 -48
+> tp qa 46 -60 -45
+> time set 13000
+sleep 60
+> execute positioned 52 -60 -48 if entity @e[type=#zq:villagers,distance=..2.6]
+> setblock 52 -60 -50 minecraft:oak_fence_gate[facing=north,open=true]
+sleep 60
+> execute positioned 52 -60 -48 if entity @e[type=#zq:villagers,distance=..2.6]
+count Test passed == 2
+
+## SQ-VG-02 | villager walks through a closed Dramatic Doors tall oak door to its bed
+> fill 60 -60 -52 64 -57 -48 minecraft:stone hollow
+> fill 61 -60 -51 63 -58 -49 minecraft:air
+> setblock 62 -60 -52 minecraft:air
+> setblock 62 -59 -52 minecraft:air
+> setblock 62 -58 -52 minecraft:air
+# Dramatic Doors tall doors use third=lower|middle|upper (no half)
+> setblock 62 -60 -52 dramaticdoors:tall_oak_door[facing=south,third=lower,open=false]
+> setblock 62 -59 -52 dramaticdoors:tall_oak_door[facing=south,third=middle,open=false]
+> setblock 62 -58 -52 dramaticdoors:tall_oak_door[facing=south,third=upper,open=false]
+> setblock 61 -60 -50 minecraft:red_bed[facing=south,part=foot]
+> setblock 61 -60 -49 minecraft:red_bed[facing=south,part=head]
+> summon minecraft:villager 62 -60 -58
+> time set 13000
+pace 0
+repeat 60
+sleep 1
+> execute if block 62 -60 -52 dramaticdoors:tall_oak_door[open=true] run say door_open
+end
+pace 2
+> execute if block 62 -60 -52 dramaticdoors:tall_oak_door run say door_present
+> execute positioned 62 -60 -50 if entity @e[type=#zq:villagers,distance=..2]
+look door_open lines (1 s samples) may miss a villager passing in under a second; the villager ending inside is the pass
+expect \[Server\] door_present
+expect Test passed
+look the villager ends inside and the door state went open then closed; a tall door placed by setblock may need its upper parts (place it by hand in the client block if the first sample shows a broken door)
+
+## SQ-VG-03 | tall iron door keeps it out
+> setblock 62 -60 -52 dramaticdoors:tall_iron_door[facing=south,third=lower,open=false]
+> setblock 62 -59 -52 dramaticdoors:tall_iron_door[facing=south,third=middle,open=false]
+> setblock 62 -58 -52 dramaticdoors:tall_iron_door[facing=south,third=upper,open=false]
+> kill @e[type=!minecraft:player,type=!minecraft:item,distance=..200]
+> summon minecraft:villager 62 -60 -58
+> time set 13000
+sleep 60
+> execute positioned 62 -60 -50 if entity @e[type=#zq:villagers,distance=..2]
+expect Test failed
+
+## SQ-VL-01 | villager climbs a ladder to a bed on a platform
+# clear the SQ-VG beds and villagers first (they pulled the villager away on 10-31); tag the test villager
+> difficulty peaceful
+> kill @e[type=#zq:villagers]
+> fill 66 -60 -64 76 -53 -56 minecraft:air
+> fill 61 -60 -50 61 -60 -49 minecraft:air
+> fill 52 -60 -40 52 -60 -39 minecraft:air
+> fill 70 -60 -60 70 -55 -60 minecraft:stone
+# ladder up to the platform layer (-54): ending at -55 left a one-block step the villager cannot take
+> fill 71 -60 -60 71 -54 -60 minecraft:ladder[facing=east]
+> fill 66 -54 -64 70 -54 -56 minecraft:stone
+> setblock 68 -53 -60 minecraft:red_bed[facing=south,part=foot]
+> setblock 68 -53 -59 minecraft:red_bed[facing=south,part=head]
+> summon minecraft:villager 76 -60 -60 {Tags:["qvl"]}
+> time set 13000
+repeat 20
+sleep 2
+> execute as @e[tag=qvl,limit=1] run data get entity @s Pos
+end
+look Y rises along x 71 to -53 and the villager reaches the bed (last Pos y about -53)
+
+## SQ-VL-02 | villager climbs down in the morning, no fall damage
+> time set 1000
+repeat 20
+sleep 2
+> execute as @e[tag=qvl,limit=1] run data get entity @s Pos
+end
+reject (?i)fell from a high place|hit the ground too hard
+look Y falls step by step in the ladder column, then it walks off at the bottom
+
+## SQ-CS-06 | crop_seasons.json edit + /reload moves wheat (run last: /reload truncates the KubeJS log)
+shell python3 -c "import json;p='kubejs/generation_scripts/worldgen/crop_seasons.json';d=json.load(open(p));b=d['blocks'];b['temperate'].remove('minecraft:wheat');b['cold'].append('minecraft:wheat');json.dump(d,open(p,'w'),indent=2)"
+> reload
+sleep 20
+> execute if block 30 -60 30 #creativeengineering:crop_seasons/cold
+> execute if block 30 -60 30 #creativeengineering:crop_seasons/temperate
+shell cp "$INST/kubejs/generation_scripts/worldgen/crop_seasons.json" kubejs/generation_scripts/worldgen/crop_seasons.json
+expect Test passed
+expect Test failed
+look the shell step restored the instance file in srv; /reload again before any later season row

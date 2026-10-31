@@ -29,7 +29,7 @@ import java.util.Map;
 /**
  * /ceperf status: the running JFR recording, which of the pack's perf events it records, and which hooks
  * have run. /ceperf dump [tag]: saves the recording to perf/recordings/ like server/perf/dump.sh, without
- * shell access to the server (feature_writeup/perf.md 3.6).
+ * shell access to the server (feature_writeup/perf.md 3.6). /ceperf mobcap: each dimension's mob cap level (perf.md 17).
  */
 @Mod.EventBusSubscriber(modid = "creativeengineering", bus = Mod.EventBusSubscriber.Bus.FORGE)
 public final class PerfCommand {
@@ -45,6 +45,7 @@ public final class PerfCommand {
 				.requires(src -> src.hasPermission(3))
 				.executes(ctx -> status(ctx.getSource()))
 				.then(Commands.literal("status").executes(ctx -> status(ctx.getSource())))
+				.then(Commands.literal("mobcap").executes(ctx -> mobcap(ctx.getSource())))
 				.then(Commands.literal("dump")
 						.executes(ctx -> dump(ctx.getSource(), null))
 						.then(Commands.argument("tag", StringArgumentType.word())
@@ -57,6 +58,14 @@ public final class PerfCommand {
 
 	private static void say(CommandSourceStack source, String text, ChatFormatting color) {
 		source.sendSuccess(prefix().append(Component.literal(text).withStyle(color)), false);
+	}
+
+	/** Per dimension: spawnable chunks and mob cap level (perf.md 17). */
+	private static int mobcap(CommandSourceStack source) {
+		if (MobCapLevels.states().isEmpty()) say(source, "no dimension has run natural spawning yet", ChatFormatting.YELLOW);
+		MobCapLevels.states().forEach((level, s) -> say(source, level.dimension().location() + ": " + s.chunks
+				+ " spawnable chunks, level " + s.level, ChatFormatting.WHITE));
+		return 1;
 	}
 
 	/** The pack's recording (name "ce", from the launch scripts), else any running one. */

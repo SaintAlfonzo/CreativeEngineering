@@ -8,13 +8,14 @@ Soils and harvesting mechanics: [crops.md](crops.md). Bell pepper colour weights
 | Part | Status | Where |
 |---|---|---|
 | Current drop yields, every overworld farmland crop | reference (loot dump 2026-10-26) | section 2.1 |
-| Soil yield, overworld crops (27) | BUILT 2026-10-28, off for every crop by default; live check queued (SQ-SY) | section 3, `creativeengineering/soil_yield.js` |
+| Soil yield, overworld crops (27) | BUILT 2026-10-28, off for every crop by default; scratch server PASSED 2026-10-28 (SQ-SY-01 to -07) | section 3, `creativeengineering/soil_yield.js` |
 | Soil yield, nether crops | Planned, outline only (TODO `farming/crops #24`) | section 4 |
 
 Config: `config/creativeengineering-common.toml` `[crop_drops.soil_yield]` (tries and chance per soil) and
-`[crop_drops.soil_yield.crops]` (one `true`/`false` per crop, all `false`). A change needs `/reload`.
+`[crop_drops.soil_yield.crops]` (one `true`/`false` per crop, all `false`). A change needs a restart: on the 2026-10-28 scratch run an edited toml
+was not reread by the running server, and `/reload` kept the old switches.
 
-Install: patcherMod (the new config section) and the Creative Delight scripts. The script only runs with Creative Delight
+Install: patcherMod (the new config section; in the `mods/` jar since 2026-10-29) and the Creative Delight scripts. Every crop is still `false` in `config/` (2026-10-30), so nothing changes in play until the owner switches crops on (TODO `farming/crops #23`). The script only runs with Creative Delight
 loaded (`global.CD`).
 
 ## 1. Overview
@@ -124,7 +125,7 @@ Key lists: crop blocks in `global.blocks` (block_dict.js "Crop blocks with a soi
 (`SoilYield.CROPS`, same keys as the script's table); the script reads them through `NCH.cfg` and `SoilYield.cropOn`.
 A crop the script lists but the config lacks is logged and stays off.
 
-Log line on every reload: `[soil-yield] no crop switched on: ...` or `[soil-yield] N crops (...), soils: rich farmland
+Log line on every script load (boot and `/reload`; the switch values only change on a restart): `[soil-yield] no crop switched on: ...` or `[soil-yield] N crops (...), soils: rich farmland
 2 x 0.35, ...`.
 
 ## 4. Planned: nether crops (outline, not built)
@@ -179,9 +180,15 @@ Plan:
 
 ## 7. In-game tests (SY-)
 
-Queued in [testing/scratch_queue.md](testing/scratch_queue.md) as SQ-SY-01 to SQ-SY-07 (SY-n = SQ-SY-n).
+Run as SQ-SY-01 to SQ-SY-07 in [testing/scratch_queue.md](testing/scratch_queue.md) (SY-n = SQ-SY-n). All PASS on
+2026-10-28 ([run log](testing/scratch_queue_run_2026-10-28.md)), measured with `tools/soil_yield_probe/sy_probe.js`
+(`/syt roll`, 400 to 1500 loot rolls per case on placed blocks): wheat 1.00 / 1.71 / 1.49 per plant on farmland /
+Rich Farmland / Fertile Soil, carrots 3.71 / 4.42 / 4.20, rice and knife rice extra on Rich Soil only, corn extra on
+the lower half only, hemp from the top, flax from the lower half, bell peppers still 1:1:1, `richFarmlandTries = 0`
+removes the Rich Farmland pool.
 
 ## 8. History
 
+- 2026-10-28 night: scratch server PASS (SQ-SY-01 to -07); config changes need a restart (doc corrected).
 - 2026-10-28: built (owner, scratchpad "better soils increases extra yield chance"): overworld crops, off by default per
   crop; nether crops outlined only.

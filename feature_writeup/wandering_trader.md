@@ -266,4 +266,4 @@ weight, then the per-category gap check. Regenerate after any stock change: `/du
 
 ## Owner ideas (scratchpad 2026-10-26)
 
-- Rare Rustic pepper seed offer: `loot/trader #4`.
+- Rare Rustic pepper seed offer: `loot/trader #4`. Built with the Rustic port and live since 1.1.03: Pale or Dark seeds, 5 emeralds, 3 uses ([rustic_delight.md](rustic_delight.md) 5.4).

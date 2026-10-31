@@ -246,10 +246,9 @@ palette with `/exposure palette export <id> json <file>`.
   restart), not just `/reload`.
 - **Projector URL loading** is limited to the allowed domains in `exposure-client.toml` on servers. Files load
   from anywhere unless `multiplayer_file_loading_only_from_game_dir = true`.
-- **Stale loot census:** [kubejs/server_scripts/loot/loot_census.md](../kubejs/server_scripts/loot/loot_census.md)
-  was regenerated 2026-10-02 and already lists the port's tables (`exposure` 6, `exposure_expanded` 21, from
-  `exposureBackport-...-02`), not 1.6.0's. It is stale for the mods added since (Subterrestrial, Underground Bunkers,
-  the `eugene` port...). Regenerate it as loot.md describes (TODO `loot/lootjs-layer #3`).
+- **Loot census:** [kubejs/server_scripts/loot/loot_census.md](../kubejs/server_scripts/loot/loot_census.md)
+  lists the port's tables (`exposure` 6, `exposure_expanded` 21), not 1.6.0's. Regenerated 2026-10-26 with the mods
+  added since (Subterrestrial, Underground Bunkers, the `eugene` port; TODO `loot/lootjs-layer #3`, done).
 - **Leftovers (cleared 2026-10-25, `exposureport #3`):** `config/exposure-common-1.toml.bak` (a 1.6.0-era Forge backup)
   and `resourcepacks/Exposure-CreateCompatibility.zip` (off, it overrides 1.6.0 camera models and would break 1.9.19's;
   it still shipped with every release) moved to `development/exposureBackport/jar_archive/displaced/exposure_leftovers/`.

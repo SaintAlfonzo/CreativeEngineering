@@ -1,6 +1,8 @@
 # Hostile Delight: inventory, overlaps and integration plan
 
-Investigation written 2026-10-23; **nothing built**. Hostile Delight 0.2.2 (`hostiledelight`, MCreator, author
+Investigation written 2026-10-23; **nothing built** from this plan. Pack-wide rules already touch Hostile items: soups and
+stews in jars (1.1.03), the seven cookies in the Oven (1.1.04), JEED `TODO` placeholders for Dioxide and Collapsing
+([effects.md](effects.md) F2); the D-list below is not untouched ground. Hostile Delight 0.2.2 (`hostiledelight`, MCreator, author
 "SAMSUNG") is a native 1.19.2 build and is already in `mods/` (added 2026-10-23, `mod_sides.md` row, TODO
 `mod-additions #6`), so no port is needed: the work is integration only. "Hostile" in this file is Hostile Delight.
 Test prefix `HTD-` (`HD` is too short to grep).
@@ -260,6 +262,8 @@ override is checked in game (HTD-05).
 
 ## 3. Part 2: overlap with what the pack already has
 
+Batch sibling (not installed): [carnivore.md](archive/carnivore.md) section 2 lists where Carnivore's mob meats overlap this mod's drops.
+
 The pack's item names (2026-10-20 dump) were searched for every Hostile theme; the four other 2026-10-23 jars were read
 from their item models (they are newer than the dump). Hostile's item ids have no underscores, so no id clashes
 literally; every overlap is a concept.
@@ -317,6 +321,8 @@ literally; every overlap is a concept.
 | Mob food | 15 meat-flagged items (wolves eat them), Raw Endermite and Rotten Ham among them | Mob audit (step 15) |
 
 ### 3.4 Unusual Delight
+
+Superseded 2026-10-30 by the full survey in [unusual_delight.md](unusual_delight.md) (35 items overlap Hostile).
 
 Only one build is on disk: `DecompiledMods/unusual_delight-5.0.jar` (mod id `unusual_delight`, Forge 1.20.1,
 MCreator-generated, Academic Free License v3.0). There is **no older or 1.19.2 Unusual Delight** in `mods/`,
@@ -519,3 +525,4 @@ before step 6 (recipes name the survivors).
 
 - 2026-10-23: investigation and plan written (inventory from the jar and decompiled code, overlap search against the
   2026-10-20 name dump and the four other 2026-10-23 jars, 12 upstream bugs, D1 to D16; later the same day: counts corrected, B12 added). Nothing built.
+- 2026-10-31: scratchpad notes translated into TODO rows (ghast foods removal added to `largecontent/mod-additions #6`). No code changed.

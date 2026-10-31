@@ -31,6 +31,7 @@ import net.minecraft.world.level.levelgen.structure.TerrainAdjustment;
 import net.minecraft.world.level.levelgen.structure.pools.ListPoolElement;
 import net.minecraft.world.level.levelgen.structure.pools.SinglePoolElement;
 import net.minecraft.world.level.levelgen.structure.pools.StructurePoolElement;
+import net.minecraft.world.level.levelgen.structure.pools.StructureTemplatePool;
 import net.minecraft.world.level.levelgen.structure.structures.JigsawStructure;
 import net.minecraft.world.level.levelgen.structure.templatesystem.StructurePlaceSettings;
 import net.minecraft.world.level.levelgen.structure.templatesystem.StructureTemplate;
@@ -121,6 +122,7 @@ public final class TerrainAdaptation {
 	}
 
 	static final TagKey<Structure> TRIM = TagKey.create(Registry.STRUCTURE_REGISTRY, new ResourceLocation(CreativeEngineering.MODID, "template_trim"));
+	static final TagKey<Structure> TRIM_AIR = TagKey.create(Registry.STRUCTURE_REGISTRY, new ResourceLocation(CreativeEngineering.MODID, "template_trim/air"));
 	static final TagKey<Structure> SUNK = TagKey.create(Registry.STRUCTURE_REGISTRY, new ResourceLocation(CreativeEngineering.MODID, "terrain_adaptation/sunk_start"));
 
 	/** The soft beard's skirt with skirtBump 0, in blocks from the footprint. */
@@ -134,8 +136,11 @@ public final class TerrainAdaptation {
 
 	// ── tag table ────────────────────────────────────────────────────────────
 
-	/** A tagged structure: its mode (null = its own), whether it is trimmed, and how many layers its start sinks (0 = none). */
-	record Shape(Mode mode, boolean trim, int sink) {}
+	/**
+	 * A tagged structure: its mode (null = its own), whether it is trimmed, whether only its air is trimmed
+	 * (template_trim/air), and how many layers its start sinks (0 = none).
+	 */
+	record Shape(Mode mode, boolean trim, boolean airTrim, int sink) {}
 
 	private static volatile Map<Structure, Shape> shapes = Map.of();
 
@@ -150,17 +155,22 @@ public final class TerrainAdaptation {
 		if (registry.isEmpty()) return;
 		Map<Structure, Shape> map = new IdentityHashMap<>();
 		Map<Mode, Integer> counts = new EnumMap<>(Mode.class);
-		int trimmed = 0, sunk = 0;
+		int trimmed = 0, airTrimmed = 0, sunk = 0;
 		for (Holder<Structure> h : registry.get().holders().toList()) {
 			Mode mode = resolve(h::is);
 			boolean trim = h.is(TRIM);
+			boolean airTrim = !trim && h.is(TRIM_AIR);   // the full trim drops air too
 			int sink = 0;
 			if (h.is(SUNK)) {
 				sink = sinkOf(h.value());
-				if (sink > 0) sunk++;
+				if (sink > 0 && followsTerrain(h.value())) {
+					// a terrain-matching start has no beard, and its rigid children sit at the surface: sinking them buries them
+					LOG.warn("[terrain-adaptation] {} is in terrain_adaptation/sunk_start but its start pool has a terrain_matching piece; ignored", id(h));
+					sink = 0;
+				} else if (sink > 0) sunk++;
 				else LOG.warn("[terrain-adaptation] {} is in terrain_adaptation/sunk_start but has no constant start height below 0 projected to a heightmap; ignored", id(h));
 			}
-			if (mode == null && !trim && sink == 0) continue;
+			if (mode == null && !trim && !airTrim && sink == 0) continue;
 			if (mode != null) {
 				counts.merge(mode, 1, Integer::sum);
 				List<String> all = new ArrayList<>();
@@ -168,10 +178,11 @@ public final class TerrainAdaptation {
 				if (all.size() > 1) LOG.warn("[terrain-adaptation] {} is in {}; {} wins", id(h), all, mode.tag.location().getPath());
 			}
 			if (trim) trimmed++;
-			map.put(h.value(), new Shape(mode, trim, sink));
+			if (airTrim) airTrimmed++;
+			map.put(h.value(), new Shape(mode, trim, airTrim, sink));
 		}
 		shapes = Collections.unmodifiableMap(map);
-		LOG.info("[terrain-adaptation] {}: {} structures tagged, modes {}, {} trimmed, {} sunk starts{}", when, map.size(), counts, trimmed, sunk,
+		LOG.info("[terrain-adaptation] {}: {} structures tagged, modes {}, {} trimmed, {} air-trimmed, {} sunk starts{}", when, map.size(), counts, trimmed, airTrimmed, sunk,
 				WorldgenConfig.terrainAdaptationEnabled() ? "" : " (modes off: [worldgen.systems] terrainAdaptation = false)");
 
 		if (!WorldgenConfig.terrainAdaptationEnabled()) return;
@@ -213,6 +224,15 @@ public final class TerrainAdaptation {
 		return s != null && s.trim();
 	}
 
+	/**
+	 * In creativeengineering:template_trim/air (and not template_trim): only air in columns with nothing solid is
+	 * dropped. The footprint and earth count stay the untrimmed ones (nothing solid is dropped).
+	 */
+	public static boolean airTrims(Structure structure) {
+		Shape s = shapes.get(structure);
+		return s != null && s.airTrim();
+	}
+
 	static boolean soft(Structure structure) {
 		Shape s = shapes.get(structure);
 		return s != null && s.mode() == Mode.SOFT && WorldgenConfig.terrainAdaptationEnabled();
@@ -232,6 +252,23 @@ public final class TerrainAdaptation {
 
 	/** A jigsaw structure's sink: minus its start height, when that is a constant absolute height below 0 and the start is projected to a heightmap. */
 	@SuppressWarnings("unchecked")
+	private static final Field START_POOL = EarthFill.field(JigsawStructure.class, "f_227605_", "startPool");
+
+	/** A jigsaw structure whose start pool holds a terrain-matching element (a village base plate that follows the ground). */
+	@SuppressWarnings("unchecked")
+	static boolean followsTerrain(Structure structure) {
+		if (!(structure instanceof JigsawStructure jigsaw)) return false;
+		try {
+			Holder<StructureTemplatePool> pool = (Holder<StructureTemplatePool>) START_POOL.get(jigsaw);
+			for (StructurePoolElement e : pool.value().getShuffledTemplates(net.minecraft.util.RandomSource.create(0L))) {
+				if (e.getProjection() == StructureTemplatePool.Projection.TERRAIN_MATCHING) return true;
+			}
+			return false;
+		} catch (IllegalAccessException e) {
+			throw new IllegalStateException(e);
+		}
+	}
+
 	static int sinkOf(Structure structure) {
 		if (!(structure instanceof JigsawStructure jigsaw)) return 0;
 		try {

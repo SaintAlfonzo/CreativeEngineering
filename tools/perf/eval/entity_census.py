@@ -66,14 +66,26 @@ def chunks(path):
 
 
 def main():
-    world = sys.argv[1]
-    sub = sys.argv[2] if len(sys.argv) > 2 else ""
+    args = sys.argv[1:]
+    box, top = None, 12
+    if "--all" in args:
+        args.remove("--all")
+        top = None
+    if "--box" in args:
+        i = args.index("--box")
+        x1, z1, x2, z2 = map(float, args[i + 1:i + 5])
+        box = (min(x1, x2), min(z1, z2), max(x1, x2), max(z1, z2))
+        del args[i:i + 5]
+    world = args[0]
+    sub = args[1] if len(args) > 1 else ""
     types, items, falling, ys = collections.Counter(), collections.Counter(), collections.Counter(), []
     nchunks = 0
     for f in glob.glob(os.path.join(world, sub, "entities", "*.mca")):
         for c in chunks(f):
             nchunks += 1
             for e in c.get("Entities") or []:
+                if box and not (box[0] <= e["Pos"][0] <= box[2] and box[1] <= e["Pos"][2] <= box[3]):
+                    continue
                 types[e.get("id")] += 1
                 if e.get("id") == "minecraft:item":
                     items[(e.get("Item") or {}).get("id")] += 1
@@ -83,7 +95,7 @@ def main():
     print(f"{nchunks} entity chunks")
     for title, c in (("types", types), ("items", items), ("falling blocks", falling)):
         print(f"{title}: {sum(c.values())}")
-        for k, v in c.most_common(12):
+        for k, v in c.most_common(top):
             print(f"  {v:6} {k}")
     if ys:
         ys.sort()

@@ -22,7 +22,7 @@ public class BnCFoods {
    public static final FoodProperties MEAD = new Builder()
       .effect(() -> new MobEffectInstance(BnCEffects.TIPSY, 2400, 0), 1.0F)
       .effect(() -> new MobEffectInstance(BnCEffects.INTOXICATION, 1800, 0, false, false), 1.0F)
-      .effect(() -> new MobEffectInstance(BnCEffects.SWEET_HEART, 2400, 0, false, false), 1.0F)
+      .effect(() -> new MobEffectInstance(BnCEffects.SWEET_HEART, 2400, 0, false, false, true), 1.0F)
       .alwaysEat()
       .build();
    public static final FoodProperties RICE_WINE = new Builder()
@@ -34,7 +34,7 @@ public class BnCFoods {
    public static final FoodProperties PALE_JANE = new Builder()
       .effect(() -> new MobEffectInstance(BnCEffects.TIPSY, 3600, 0), 1.0F)
       .effect(() -> new MobEffectInstance(BnCEffects.INTOXICATION, 3000, 0, false, false), 1.0F)
-      .effect(() -> new MobEffectInstance(ModEffects.NOURISHMENT.get(), 2400, 0, false, false), 1.0F)
+      .effect(() -> new MobEffectInstance(ModEffects.NOURISHMENT.get(), 2400, 0, false, false, true), 1.0F)
       .alwaysEat()
       .build();
    public static final FoodProperties EGG_GROG = new Builder()
@@ -53,7 +53,7 @@ public class BnCFoods {
    public static final FoodProperties SACCHARINE_RUM = new Builder()
       .effect(() -> new MobEffectInstance(BnCEffects.TIPSY, 3600, 1), 1.0F)
       .effect(() -> new MobEffectInstance(BnCEffects.INTOXICATION, 2400, 0, false, false), 1.0F)
-      .effect(() -> new MobEffectInstance(BnCEffects.SWEET_HEART, 3600, 0, false, false), 1.0F)
+      .effect(() -> new MobEffectInstance(BnCEffects.SWEET_HEART, 3600, 0, false, false, true), 1.0F)
       .alwaysEat()
       .build();
    public static final FoodProperties SALTY_FOLLY = new Builder()
@@ -113,32 +113,32 @@ public class BnCFoods {
    public static final FoodProperties VEGETABLE_OMELET = new Builder()
       .nutrition(12)
       .saturationMod(0.8F)
-      .effect(() -> new MobEffectInstance(ModEffects.NOURISHMENT.get(), 3600, 0, false, false), 1.0F)
+      .effect(() -> new MobEffectInstance(ModEffects.NOURISHMENT.get(), 3600, 0, false, false, true), 1.0F)
       .build();
    public static final FoodProperties CREAMY_ONION_SOUP = new Builder()
       .nutrition(12)
       .saturationMod(0.8F)
-      .effect(() -> new MobEffectInstance(ModEffects.NOURISHMENT.get(), 3600, 0, false, false), 1.0F)
+      .effect(() -> new MobEffectInstance(ModEffects.NOURISHMENT.get(), 3600, 0, false, false, true), 1.0F)
       .build();
    public static final FoodProperties CHEESY_PASTA = new Builder()
       .nutrition(14)
       .saturationMod(0.75F)
-      .effect(() -> new MobEffectInstance(ModEffects.NOURISHMENT.get(), 6000, 0, false, false), 1.0F)
+      .effect(() -> new MobEffectInstance(ModEffects.NOURISHMENT.get(), 6000, 0, false, false, true), 1.0F)
       .build();
    public static final FoodProperties HORROR_LASAGNA = new Builder()
       .nutrition(16)
       .saturationMod(0.55F)
-      .effect(() -> new MobEffectInstance(ModEffects.NOURISHMENT.get(), 6000, 0, false, false), 1.0F)
+      .effect(() -> new MobEffectInstance(ModEffects.NOURISHMENT.get(), 6000, 0, false, false, true), 1.0F)
       .build();
    public static final FoodProperties SCARLET_PIEROGI = new Builder()
       .nutrition(12)
       .saturationMod(1.0F)
-      .effect(() -> new MobEffectInstance(ModEffects.NOURISHMENT.get(), 8400, 0, false, false), 1.0F)
+      .effect(() -> new MobEffectInstance(ModEffects.NOURISHMENT.get(), 8400, 0, false, false, true), 1.0F)
       .build();
    public static final FoodProperties FIERY_FONDUE = new Builder()
       .nutrition(14)
       .saturationMod(0.75F)
-      .effect(() -> new MobEffectInstance(ModEffects.NOURISHMENT.get(), 8400, 0, false, false), 1.0F)
+      .effect(() -> new MobEffectInstance(ModEffects.NOURISHMENT.get(), 8400, 0, false, false, true), 1.0F)
       .build();
    public static final FoodProperties PIZZA_SLICE = new Builder().nutrition(5).saturationMod(1.0F).build();
    public static final FoodProperties QUICHE_SLICE = new Builder().nutrition(4).saturationMod(0.8F).fast().build();
@@ -150,6 +150,6 @@ public class BnCFoods {
    public static final FoodProperties COCOA_FUDGE = new Builder()
       .nutrition(4)
       .saturationMod(0.8F)
-      .effect(() -> new MobEffectInstance(MobEffects.MOVEMENT_SPEED, 800, 0, false, false), 1.0F)
+      .effect(() -> new MobEffectInstance(MobEffects.MOVEMENT_SPEED, 800, 0, false, false, true), 1.0F)
       .build();
 }

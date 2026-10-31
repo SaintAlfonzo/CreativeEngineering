@@ -22,7 +22,7 @@ the Oceans' / Oceanic Delight jars and `alcohol.js`):**
 ---
 
 ## pickles-and-ferments #1: Remove pickled pickles; pickled sea pickle
-Status **Planned** / Work: KubeJS / resource pack / id `dishes/pickles-and-ferments #1`
+Status **Testing** / Work: KubeJS / resource pack / id `dishes/pickles-and-ferments #1`
 
 ### Goal
 Remove Brewin's Pickled Pickles; add a recoloured pickle texture as the new Pickled Sea Pickle, made without honey.
@@ -46,7 +46,7 @@ Remove Brewin's Pickled Pickles; add a recoloured pickle texture as the new Pick
 ---
 
 ## pickles-and-ferments #2: Pickle recipes take real pickles only
-Status **Planned** / Work: KubeJS / id `dishes/pickles-and-ferments #2`
+Status **In Progress** / Work: KubeJS / id `dishes/pickles-and-ferments #2`
 
 ### Goal
 Recipes that want a pickle accept only `vintagedelight:pickle`: not pickled pickles, not raw sea pickles. Swap the sea
@@ -73,7 +73,7 @@ Add `#forge:pickles` = `[i.pickle]` in `cookingtags.js` (`t.add(e, 'forge:pickle
 ---
 
 ## pickles-and-ferments #3: Pickle soup
-Status **Planned** / Work: KubeJS / id `dishes/pickles-and-ferments #3`
+Status **Testing** / Work: KubeJS / id `dishes/pickles-and-ferments #3`
 
 ### Goal
 Pickle soup takes pickles, other pickled veggies, and a veggie variant.
@@ -98,7 +98,7 @@ recipe (exact content: Decisions). Mirror `cooking.js`'s `_manual_only` shapeles
 ---
 
 ## pickles-and-ferments #4: Braised sea pickle accepts slices
-Status **Planned** / Work: KubeJS / id `dishes/pickles-and-ferments #4`
+Status **Testing** / Work: KubeJS / id `dishes/pickles-and-ferments #4`
 
 ### Goal
 Braised sea pickle also takes a sliced sea pickle.
@@ -120,7 +120,7 @@ items) in place of the single item: remove the mod recipe, add one with the tag;
 ---
 
 ## pickles-and-ferments #5: Enzymes from crushed or milled mushrooms
-Status **Planned** / Work: KubeJS / id `dishes/pickles-and-ferments #5`
+Status **In Progress** / Work: KubeJS / id `dishes/pickles-and-ferments #5`
 
 ### Goal
 Crush or mill mushrooms into enzymes (the vinegar craft uses crushed fungus as its enzyme, `#6`).
@@ -145,7 +145,7 @@ milling and the mortar craft.
 ---
 
 ## pickles-and-ferments #6: Vinegar craft
-Status **Planned** / Work: KubeJS / id `dishes/pickles-and-ferments #6`
+Status **In Progress** / Work: KubeJS / id `dishes/pickles-and-ferments #6`
 
 ### Goal
 The vinegar craft becomes 3 apple mash plus an enzyme.
@@ -173,7 +173,7 @@ variant. Depends on `#5`.
 ---
 
 ## pickles-and-ferments #7: Foul Taste on foods with vinegar added
-Status **Planned** / Work: KubeJS / patcherMod / id `dishes/pickles-and-ferments #7`
+Status **In Progress** / Work: KubeJS / patcherMod / id `dishes/pickles-and-ferments #7`
 
 ### Goal
 Foods that get vinegar added carry a Foul Taste effect, on more foods than today.
@@ -200,7 +200,7 @@ today" cannot be measured; the note may mean the canned additive foods.
 ---
 
 ## pickles-and-ferments #8: Merge kimchis
-Status **Planned** / Work: KubeJS / data / id `merges/dishes #9`
+Status **In Progress** / Work: KubeJS / data / id `merges/dishes #9`
 
 ### Goal
 Use Vintage Delight's kimchi, remove the Brewin' brewing of it, and allow any pickleable veggie as the base
@@ -227,7 +227,7 @@ chili) outputs `vintagedelight:kimchi`. Both items exist, both canned (`canned_k
 ---
 
 ## pickles-and-ferments #9: Pickled egg for the century egg
-Status **Planned** / Work: KubeJS / id `dishes/pickles-and-ferments #9`
+Status **In Progress** / Work: KubeJS / id `dishes/pickles-and-ferments #9`
 
 ### Goal
 The century egg uses a pickled egg.
@@ -247,7 +247,7 @@ is unclear (the pickled egg already has it); recommend coal only.
 ---
 
 ## pickles-and-ferments #10: Fermented garlic honey effects
-Status **Planned** / Work: KubeJS / data / id `dishes/pickles-and-ferments #10`
+Status **Testing** / Work: KubeJS / data / id `dishes/pickles-and-ferments #10`
 
 ### Goal
 Fermented garlic honey gives Regeneration II for 5 seconds and Health Boost (3 hearts) for 30 seconds.

@@ -1,0 +1,99 @@
+# Run 2026-10-31, boot A1 (superflat, group A): boot-log rows. Run right after "Done (".
+# qrun.py run OUT tools/scratch_query/batches/r1031/a1_boot.qb RES
+# Plan: feature_writeup/testing/scratch_run_2026-10-31.md. Row texts: feature_writeup/testing/scratch_queue.md.
+pace 1
+
+## SQ-R31-BOOT | boot clean of CE / CD mixin and registry errors
+bootexpect Done \(
+bootreject (Mixin apply failed|InvalidInjectionException|Critical injection failure).*(creativeengineering|creative_delight|creativedelight)
+bootreject Registry Object not present
+bootreject Unknown (item|block) '(creativeengineering|creative_delight|hearthandharvest|solapplepie):
+look kubejs log: kubejs/server.log errors are listed by the next row; judge new ones against the 10-28 run
+
+## SQ-R31-KJS | KubeJS server scripts load without new errors
+kjsreject Error occurred while handling event
+kjsreject \[NCH\].*(error|Error|failed)
+look kubejs log copy is in RES/rows only when lines appear here; compare with perf/sessions/q1028 boot logs for old noise
+
+## SQ-LB-01b | lunchbox: Seagull mixins apply, item registered
+bootreject (InvalidInjectionException|Mixin apply failed).*Seagull
+bootreject Unknown item 'solapplepie:netherite_lunchbox'
+
+## SQ-LB-02 | lunchbox recipes parse
+bootreject Parsing error loading recipe creative_delight:.*lunchbox
+kjsreject (lunchboxes\.js|lunchbox).*(Error|error)
+
+## SQ-STL-01 | stepstool mixins and scripts
+bootreject (Mixin apply failed|InvalidInjectionException).*(EntityStepstoolCollisionMixin|ServerGamePacketListenerStepstoolMixin)
+kjsreject (stepstools\.js|stepstool\.js|curiostags\.js).*(Error|error)
+
+## SQ-SVA-01 | Sky Village addon templates and pools load
+bootreject (?i)skyvillages.*(error|unknown|failed)
+bootreject (?i)(error|failed).*skyvillages
+
+## SQ-TER-01 | terrain adaptation batch 4 load line
+bootexpect \[terrain-adaptation\] world load
+bootreject \[terrain-adaptation\].*ignored
+look the world-load line: trimmed up by 4, "1 air-trimmed", sunk starts up by 1 against the 10-30 run (ST-303)
+
+## SQ-MG-17 | monkey merge mixins
+bootreject (Mixin apply failed|InvalidInjectionException).*(GorillaForageBananaMixin|SugarGliderForageBananaMixin)
+
+## SQ-AC-01 | armor cap mixin
+bootreject (Mixin apply failed|InvalidInjectionException).*ArmorCapMixin
+
+## SQ-CS-01 | crop season hook
+bootreject (Mixin apply failed|InvalidInjectionException).*CropSeasonGrowHookMixin
+bootreject \[crop-seasons\].*(ERROR|error|Error)
+
+## SQ-WC-01 | watering can registers under hearthandharvest
+bootreject (?i)watering_can.*(error|exception)
+look at most the Forge "Potentially Dangerous alternative prefix" warning for hearthandharvest:watering_can
+
+## SQ-MB-01 | monster box mixins and reward table
+bootreject (Mixin apply failed|InvalidInjectionException).*(MonsterBoxBlockEntityMixin|CreateBreakerMonsterBoxMixin)
+bootreject (?i)monster.?box.*(missing|not found)
+
+## SQ-VS-01 | vine shearing mixin, flower vine models
+bootreject (Mixin apply failed|InvalidInjectionException).*VineBlockShearMixin
+bootreject (?i)(missing|exception).*(floralench:[a-z_]*vine|botania:solid_vine)
+
+## SQ-SG-01 | sheared grass blocks
+bootreject (?i)(LushGrassBlock|SpreadableGrassSlabBlock|WthitSheared).*(error|exception)
+bootreject (?i)(missing|exception).*(vintagedelight:lush_grass_block|vinery:grass_slab)
+
+## SQ-PF16-01 | whistle goal skip and underground bees mixins
+bootreject (?i)(NeaWhistleGoalSkip|MobBeeIdle).*(error|fail)
+
+## SQ-MCL-01 | mob cap level mixins
+bootreject (?i)(MobCapLevelTickMixin|MobCapMixin|MobCapSpawnAreaMixin).*(error|fail)
+
+## SQ-VG-00 | villager gate mixins
+bootreject (Mixin apply failed|InvalidInjectionException|Redirect).*(McaVillagerPathGatesMixin|WalkNodeEvaluatorVillagerGateMixin)
+
+## SQ-VL-00b | villager ladder mixins
+bootreject (Mixin apply failed|InvalidInjectionException).*(McaVillagerPathLadders|GroundPathNavigationClimb|MoveControlVillagerLadder)
+
+## SQ-SB-01b | spawn boxes and spawner filter load
+bootexpect \[spawn-boxes\].*15 box\(es\)
+bootreject \[spawn-boxes\].*(no pool|no entity type|is in box)
+
+## SQ-POT-06b | botanist workbench mixins
+bootreject (?i)(BotanistWorkbenchPotMixin|StructureTemplateBotanistPotMixin).*(warn|error|fail)
+
+## SQ-KT-21b | coaster placeable count
+bootexpect \[placeable\].*placeable_on_coaster=
+bootreject \[placeable\].*not item ids
+look the placeable_on_coaster count is the new one (302 foods and drinks, kitchen.md 2.3)
+
+## SQ-IWF-01 | Immersive Weathering fast tick handler
+bootexpect \[perf\] Immersive Weathering.*callTick
+bootreject (?i)(IwBlockGrowth|IwServerLevel).*(error|fail|not found|unknown signature)
+
+## SQ-UC-01 | Upgrade Aquatic coral growths parse
+bootexpect Loaded \d+ block growths
+bootreject (?i)(failed|error).*(ua_[a-z_]*coral|upgrade_aquatic:)
+look the "Loaded N block growths" count is 11 higher than a pre-10-28 boot (perf/sessions/q1028 boots)
+
+## SQ-EN-21b | rose quartz sanding: no exclusive-results warning
+bootreject (?i)exclusive-results

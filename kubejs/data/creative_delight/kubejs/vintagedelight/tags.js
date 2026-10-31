@@ -10,6 +10,8 @@ ServerEvents.tags('item', e => {
 	// Vintage Delight port (vintage_delight.md 3.1): oat dough is a #forge:dough (owner, 2026-10-23); cucumber dough
 	// stays a named ingredient. Cucumber noodles stay in #forge:pasta until the VTD-40 overlap review.
 	t.add(e, i.any_dough, i.oat_dough)
+	// Veggie Noodles (the cucumber noodles, renamed; TODO dishes/meals #43): the dough takes any of these (recipes.js)
+	t.add(e, i.t_veggie_noodle_veg, [i.cucumber, i.broccoli, i.zucchini, i.zucchini_slice, i.cactus_flesh, i.dandelion_leaf])
 	// One salt (food/seasoning #6): salt dust takes The Salt's salt's tags. #forge:salts is the Salting craft's input.
 	t.add(e, ['forge:salts', 'forge:dusts', 'supplementaries:hourglass_dusts'], i.salt_dust)
 	// Pickled veggies: pickle soup's pickle slot (dishes/pickles-and-ferments #3). Brewin's kimchi is added only beside Brewin'.

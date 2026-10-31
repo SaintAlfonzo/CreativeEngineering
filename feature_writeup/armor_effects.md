@@ -6,11 +6,11 @@
 |---|---|
 | Armor effects framework `global.armorEffects`: `piece()` (one item worn), `set()` (full set worn), `mount()` (horse armor) | DEPLOYED (in the 2026-09-27 initial commit; shipped since 1.0.3, live in 1.0.6); no test ids before this writeup |
 | Set bonuses on wooden (Immersive Armors), copper, iron, gold, diamond, netherite, felsic, dragon (both chestplates) | DEPLOYED, in-game test pending |
-| Dragon horse armor (`mount()`): Regeneration I, horse walk once per `mountEffectIntervalTicks` | DEPLOYED with 1.0.4 (perf fix + wrong effect id fixed 2026-10-03), in-game test pending |
+| Dragon horse armor (`mount()`): Regeneration II, Health Boost II, Resistance II, horse walk once per `mountEffectIntervalTicks` | Regeneration I DEPLOYED with 1.0.4; the three level II effects BUILT 2026-10-31 (`potions/effects #4`, startup: restart), scratch server PASSED r1031 (2026-10-31, SQ-EFX-04) |
 | Tool effects framework `global.toolEffects`: `onHit()` (to the target) and `held()` (to the wielder) | DEPLOYED, in-game test pending |
 | Echo tools on-hit Weakness II + Darkness II; dragon sword / axe / shovel / trident / bow / crossbow on-hit and held effects | DEPLOYED, in-game test pending; dragon bow and crossbow swapped 2026-10-22 (F4); on-hit never applied until F10 (fixed 2026-10-22); built, scratch server PASSED 2026-10-22 for the on-hit half (SQ-GM-02); held effects in game (AE-19, AE-20) |
 | Echo armor set bonus swapped from Resistance II + Strength II to Night Vision + Phantom Bane (`EchoArmorEffectProcedureMixin`), tooltip to match (`EchoArmorTooltipMixin`) | DEPLOYED (patcherMod), in-game test pending |
-| `creativeengineering:magic_resistance` effect (KubeJS) and its damage cut (`MagicResistanceEffect`, 20% per level on `isMagic()` damage) | DEPLOYED, in-game test pending |
+| `creativeengineering:magic_resistance` effect (KubeJS) and its damage cut (`MagicResistanceEffect`, 20% per level on the `creativeengineering:magic` tag; Poison / Wither ticks at or below its level cancelled) | Effect DEPLOYED; tag switch and tick cover BUILT 2026-10-31 (`potions/effects #3`, patcherMod 1.1.04), scratch server PASSED r1031 (2026-10-31, SQ-EFX-02, -03) |
 | Magic Resistance potions (base, long, strong) and their brewing | DEPLOYED; brewing and reagent belong to the potions writeup (backlog row 4); reagent is a placeholder |
 | Tooltip lines for all of the above (`armor_effects_tooltip.js`, `tool_effects_tooltip.js`) | DEPLOYED |
 
@@ -68,7 +68,7 @@ No `piece()` entries are registered today.
 
 | Item | Effect | How |
 |---|---|---|
-| `dragonloot:dragon_horse_armor` | Regeneration I | every `mountEffectIntervalTicks` (100) the server walks every entity in the level; each `AbstractHorse` wearing it gets the effect for interval + 40 ticks |
+| `dragonloot:dragon_horse_armor` | Regeneration II, Health Boost II, Resistance II | every `mountEffectIntervalTicks` (100) the server walks every entity in the level; each `AbstractHorse` wearing it gets the effect for interval + 40 ticks |
 
 Tooltip "When worn:" on the item.
 
@@ -106,14 +106,20 @@ The check that all four pieces are worn is CDD's; the mixin only swaps the two `
 
 - **Effect:** `creativeengineering:magic_resistance`, beneficial, colour `#8a2be2`, registered in KubeJS.
 - **Cut:** a Forge `LivingHurtEvent` listener multiplies damage by `1 - min(1, reductionPerLevel x level)` when the
-  source is vanilla-magic (`DamageSource#isMagic()`) and the entity has the effect. 20% at I, 40% at II, 100% from V.
-- **What counts:** vanilla's magic flag: poison and Instant Damage, evoker fangs, thorns, the warden's sonic boom,
-  dragon's breath clouds, and modded sources that set the flag. Not the pack's own `magic` damage tag (F6).
+  source is in the pack's `creativeengineering:magic` damage tag (the shields' MAGIC column, [shields.md](shields.md)
+  2.9) and the entity has the effect. 20% at I, 40% at II, 100% from V.
+- **What counts:** the tag: vanilla's magic flag (poison and Instant Damage, evoker fangs, thorns, the warden's sonic
+  boom, dragon's breath clouds, modded sources that set the flag) plus `farseer`, `#psychic` (Botania relics) and
+  `#life_drain` (Health Siphon, Supplementaries XP extraction). A datapack edit of `magic.json` and `/reload` changes it.
+- **Effect ticks no shield can block** (2026-10-31, owner): a tick from an effect in `[magic_resistance]
+  negatedEffectTicks` (default Poison, Wither) deals no damage when its level is at most the Magic Resistance level; it is
+  cancelled in `LivingAttackEvent`, before the hurt sound and flash, recognised through `EffectTickContext` (poison ticks
+  share Instant Damage's source). A higher level takes the per-level cut (Wither too, though it is not in the tag).
 - **Where it comes from:** felsic and dragon set bonuses (level I), the potions (base 3:00, long 8:00, strong
   1:30 at II, from `CEPotions`), `/effect`. Felsic gear assembly fills with it (see
   [gear_tuning.md](gear_tuning.md)).
-- **Effect description:** still `TODO` in [lang/en_us.json](../kubejs/assets/creativeengineering/lang/en_us.json) line 11
-  (one of the JEED rows in [TODO](todo/TODO.md) `ui/effects #1`).
+- **Effect description:** written 2026-10-31 in [lang/en_us.json](../kubejs/assets/creativeengineering/lang/en_us.json)
+  line 13.
 
 ### 2.6 Effect spec format
 
@@ -186,7 +192,7 @@ several `onHit()` calls on one item add up; armor `piece()` / `mount()` calls re
   - Arrows apply the bow's or crossbow's on-hit only while it is still in the main hand when the arrow lands (bow in
     the off hand: never).
   - Any damage credited to the wielder counts, e.g. thorns from the wielder's armor.
-- **F6. Magic Resistance reads vanilla `isMagic()`, shields read the pack's `magic` damage tag. Your call.** The tag
+- **F6. Magic Resistance reads vanilla `isMagic()`, shields read the pack's `magic` damage tag.** FIXED 2026-10-31: Magic Resistance reads the `magic` tag, the widest one, which the shields already read (decided 2026-10-29, TODO `potions/effects #3`). The tag
   ([shields.md](shields.md) 2.9) is vanilla magic plus `psychic` and `life_drain`, so a source can count as magic for
   a shield and not for Magic Resistance. Switching `MagicResistanceEffect` to `DamageTags` would line them up (the
   user asked shields to read only tags). (The stale magic_resistance.js header about "no potion yet" was fixed
@@ -202,9 +208,8 @@ several `onHit()` calls on one item add up; armor `piece()` / `mount()` calls re
   `onEffectUpdated`, which syncs the effect to the client. A dragon set plus a held dragon tool is 8 updates a
   player a tick. [perf.md](perf.md) only measured the horse walk. A cheaper version re-adds only when under, say, 20
   ticks remain. Not proposed until a profile shows it.
-- **F9. Horse Regeneration level undecided.** The old registration named `minecraft:strong_regeneration` (a potion
-  id, so it never worked); it is now `minecraft:regeneration` level I. Whether II was meant is open
-  ([perf.md](perf.md) 7).
+- **F9. Horse Regeneration level.** BUILT 2026-10-31: Regeneration II, Health Boost II and Resistance II (decided 2026-10-29, TODO `potions/effects #4`). A refresh that extends Health Boost re-runs its modifiers and clamps health to the un-boosted max, so `applyEffects` puts the health back after each pass (bytecode-checked `LivingEntity#onEffectUpdated`, `HealthBoostMobEffect`). Before: level I works, scratch SQ-HT-02 2026-10-28). The old registration named `minecraft:strong_regeneration` (a potion
+  id, so it never worked); it was then `minecraft:regeneration` level I ([perf.md](perf.md) 7).
 - **F10. No tool on-hit effect ever applied.** FIXED 2026-10-22 (scratch run, SQ-GM-02): `tool_effects.js` called
   `event.getSource().getEntity()`, which throws in this KubeJS (the name is `getActual()`), so every on-hit entry (echo
   tools, dragon tools) did nothing. The sample syringe had the same bug ([engineering.md](engineering.md) 2.5).
@@ -274,8 +279,8 @@ Survival, Normal difficulty. Check hidden effects with `/data get entity @s Acti
   about Resistance or Strength, and no second "With full set on" block.
 - [ ] **AE-10 Phantom Bane level (F7):** with the echo set, `/data get entity @s ActiveEffects` → note Phantom Bane's
   Amplifier (expected 0 since 2026-10-28, F7).
-- [ ] **AE-11 Horse armor:** put dragon horse armor on a tamed horse, wait 5 s, damage it → it regenerates; its
-  ActiveEffects shows Regeneration (Amplifier 0). Take the armor off → gone within 7 s.
+- [ ] **AE-11 Horse armor:** put dragon horse armor on a tamed horse, wait 5 s; its
+  ActiveEffects shows Regeneration, Health Boost and Resistance (Amplifier 1 each); its health does not drop every 5 s. (No repair half: the armor has no durability, 2026-10-28.) Take the armor off → gone within 7 s.
 - [ ] **AE-12 Horse interval:** set `[perf] mountEffectIntervalTicks = 20` → newly equipped armor works within 1 s.
   Put it back to 100.
 - [ ] **AE-13 Echo tool on hit:** hit a zombie with the echo pickaxe → it gets Weakness II and Darkness II (5 s).
@@ -296,6 +301,9 @@ Survival, Normal difficulty. Check hidden effects with `/data get entity @s Acti
 - [ ] **AE-22 Magic Resistance cut:** `/effect give @s creativeengineering:magic_resistance 60 0`, then
   `/effect give @s minecraft:instant_damage 1 0` → 4.8 damage instead of 6 (20%). Amplifier 1 → 3.6.
 - [ ] **AE-23 Only magic:** with Magic Resistance, let a zombie hit you → full damage; stand in fire → full damage.
+- [ ] **AE-29 Poison and Wither cover:** with Magic Resistance I, `/effect give @s minecraft:poison 10 0` and
+  `minecraft:wither 10 0` → no damage, no hurt flash; Poison II → damage at 80%. A raised shield still never blocks them.
+- [ ] **AE-30 Tag-driven cut:** with Magic Resistance I, another player's Botania relic damage (2) → 1.6.
 - [ ] **AE-24 Live knob:** `[magic_resistance] reductionPerLevel = 0.5` in the config screen → Instant Damage I now
   does 3. Put it back to 0.2.
 
@@ -314,3 +322,10 @@ Survival, Normal difficulty. Check hidden effects with `/data get entity @s Acti
   the scratch server. Held effects of AE-19 / AE-20 stay in game.
 - 2026-10-27: horse pass moved to one `ServerEvents.tick`, skipping dimensions without a player ([perf.md](perf.md)
   10.4). Scratch SQ-HT-01 / -02 queued; AE-11 / AE-12 unchanged.
+- 2026-10-28: SQ-HT-02 / -03 PASS on the Regeneration half (bot player). The dragon horse armor repair pass in
+  `dragon_autorepair.js` was removed: `HorseArmorItem` has no durability, so it never had anything to repair
+  ([gear_tuning.md](gear_tuning.md)).
+- 2026-10-31: `potions/effects #3` (F6: Magic Resistance on the `magic` tag, Poison / Wither ticks at or below its level
+  cancelled, CEConfig `[magic_resistance] negatedEffectTicks`; description written) and `#4` (F9: horse Regeneration II,
+  Health Boost II, Resistance II, health kept across refreshes). AE-11 updated, AE-29 / AE-30 added; scratch SQ-EFX-02
+  to -04.

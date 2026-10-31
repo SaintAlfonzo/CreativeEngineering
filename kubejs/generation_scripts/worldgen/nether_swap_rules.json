@@ -1,7 +1,7 @@
 {
  "_readme": {
   "what": "Nether blocks in Overworld structures, swapped when a template loads (patcherMod worldgen/TemplateBlockSwaps). python3 tools/gen_nether_swaps.py expands these rules over every template into exact positions in nether_block_swaps.json; rerun it after editing this file or after mod updates.",
-  "rules": "In order; the first rule that matches a block at a position wins. structures: ids (or [\"*\"] = every Overworld structure); except: ids skipped (plus the plan/move_to_nether tag for every rule); blocks: block ids; to: a block id (stairs, slab, wall and axis properties carry over), \"air\" (removed), or \"deepslate\" (the nether brick family to its deepslate brick twin; a fence becomes a wall).",
+  "rules": "In order; the first rule that matches a block at a position wins. structures: ids (or [\"*\"] = every Overworld structure); except: ids skipped (plus the plan/move_to_nether tag for every rule); except_holding: block selectors, skips every structure any of whose templates holds a matching block (\"@sculk\" = the sculk structures); blocks: block ids, \"@nether\", \"@nether_bricks\" or \"@sculk\"; to: a block id (state properties carry over per the generator's KEEP table, else by id suffix: trapdoor, button, pressure plate, slab, stairs, wall, wall torch, lantern, log/wood/hyphae/stem), \"air\" (removed), or \"deepslate\" (the nether brick family to its deepslate brick twin; a fence becomes a wall).",
   "safety": "A template any Nether or End structure can also place is never swapped (Nether builds keep their blocks)."
  },
  "rules": [
@@ -251,6 +251,54 @@
     "minecraft:potted_warped_roots"
    ],
    "to": "minecraft:potted_dead_bush"
+  },
+  {
+   "note": "Soul lanterns to lanterns, hanging kept (K25); ancient cities and sculk structures keep theirs",
+   "structures": [
+    "*"
+   ],
+   "except": [
+    "minecraft:ancient_city"
+   ],
+   "except_holding": [
+    "@sculk"
+   ],
+   "blocks": [
+    "minecraft:soul_lantern"
+   ],
+   "to": "minecraft:lantern"
+  },
+  {
+   "note": "Soul wall torches to wall torches, facing kept (K32); ancient cities and sculk structures keep theirs",
+   "structures": [
+    "*"
+   ],
+   "except": [
+    "minecraft:ancient_city"
+   ],
+   "except_holding": [
+    "@sculk"
+   ],
+   "blocks": [
+    "minecraft:soul_wall_torch"
+   ],
+   "to": "minecraft:wall_torch"
+  },
+  {
+   "note": "Standing soul torches to torches (K32); ancient cities and sculk structures keep theirs",
+   "structures": [
+    "*"
+   ],
+   "except": [
+    "minecraft:ancient_city"
+   ],
+   "except_holding": [
+    "@sculk"
+   ],
+   "blocks": [
+    "minecraft:soul_torch"
+   ],
+   "to": "minecraft:torch"
   }
  ]
 }

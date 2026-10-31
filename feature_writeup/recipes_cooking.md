@@ -17,17 +17,19 @@ fixes in [food.md](food.md); the sample syringe in [engineering.md](engineering.
 | Ruby chocolate with dragon's breath | DEPLOYED |
 | Cultivated meat: sample syringe → culture → ×3 by mixing → raw meat on the cutting board | DEPLOYED |
 | Removals: vanilla smoker and cake, Quark crop crates, duplicate pie, egg, bread recipes | DEPLOYED; smoker made by Quark's deepslate / blackstone smoker recipes (F1), cake by the baking overhaul's recipes and slice reassembly (F2); both closed 2026-10-22 |
-| Meals (TODO `dishes/meals` #1 to #3): heatless grid routes from cooked ingredients (rule in 2.3), all `_manual_only`; per-meal fixes (cooked eggs, tortilla wrap, dearer scrambled eggs, fruit tags, shaped burgers, one quiche); assemblies for 8 burgers, mutton wrap, fruit salad, shepherd's pie, horror lasagna, stuffed potato, crispy skewer, crawling sandwich, steak and potatoes | built, scratch server PASSED 2026-10-22 (SQ-OF-07, SQ-OF-08: ids, inputs, removed ids, one grid recipe per burger), not shipped (2.3); in game RC-55 to RC-64 |
-| Meals (TODO `dishes/meals` #4, #7, #8): grid routes for 8 more pot meals plus dog food; squid ink pasta by two-fluid heated mixing; fish frying in the pot with cooking oil for any whole fish (Fish Tempura, Fries, Fish and Chips), PneumaticCraft's Thermopneumatic frying removed | built, scratch server PASSED 2026-10-22 (SQ-OF-09 to SQ-OF-11), not shipped (2.3); in game RC-66 to RC-69 |
-| Drinks (TODO `food/drinks` #4 to #6): chorus juice fluid and its routes; berry matcha latte in the kettle and a grid recipe that keeps its bottle; glass bottles on CfB milk and cow jars | built, scratch server PASSED 2026-10-22 (SQ-DR-00 to SQ-DR-03: load, recipe ids, jar clicks), not shipped (2.2); in game RC-71 to RC-74 (JEI, kettle screen, sounds) |
-| Bone broth routes and ice cubes (TODO `dishes/ingredients` #4, #5): grid routes for 6 more soups and stews (bone broth) and 7 mod pastas; ice hammered into 4 cubes, IE crusher 3; every ice food takes ice or cubes | built, scratch server PASSED 2026-10-22 (SQ-IN-01, SQ-IN-02), not shipped (2.3); in game RC-75, RC-76 |
-| Cooking fluids (TODO `dishes/ingredients #2`): egg solution (1 egg + 250 mB milk -> 500 mB) with Create routes for dough, cornbread batter, pancakes, batter, scrambled eggs, vegetable omelet, potato salad, two custards, vanilla pudding and quiche; frosting fluid (mixer, compactor, cake spout) | built, scratch server PASSED 2026-10-22 (SQ-FL-01, SQ-FL-02), not shipped (2.2); in game RC-77, RC-78. Needs a restart (new fluids) |
-| Golden food real gold only, smaller machine discount (TODO `dishes/meals #9`) | BUILT 2026-10-21, not shipped (2.4); RC-70 |
-| Feast Plating JEI tab (TODO `dishes/meals #5` part a): what a placed feast gives per right-click, the container it takes and its leftovers | BUILT 2026-10-21, patcherMod 1.1.01 not deployed (2.3); RC-65 |
-| Food grinding by hand: every grinding recipe of the pack's own goes through NCH `foodGrinding` (crushing wheels + Millstone + a mortar and pestle craft with the pack's own mortar); other mods' food milling gets mortar crafts from a generated catalogue; hay bale on the Millstone | BUILT 2026-10-21, not shipped (2.1; the mortar and the catalogue are written up in [kitchen.md](kitchen.md) 2.6) |
+| Meals (TODO `dishes/meals` #1 to #3): heatless grid routes from cooked ingredients (rule in 2.3), all `_manual_only`; per-meal fixes (cooked eggs, tortilla wrap, dearer scrambled eggs, fruit tags, shaped burgers, one quiche); assemblies for 8 burgers, mutton wrap, fruit salad, shepherd's pie, horror lasagna, stuffed potato, crispy skewer, crawling sandwich, steak and potatoes | built, scratch server PASSED 2026-10-22 (SQ-OF-07, SQ-OF-08: ids, inputs, removed ids, one grid recipe per burger), DEPLOYED 1.1.01 (2.3); in game RC-55 to RC-64 |
+| Meals (TODO `dishes/meals` #4, #7, #8): grid routes for 8 more pot meals plus dog food; squid ink pasta by two-fluid heated mixing; fish frying in the pot with cooking oil for any whole fish (Fish Tempura, Fries, Fish and Chips), PneumaticCraft's Thermopneumatic frying removed | built, scratch server PASSED 2026-10-22 (SQ-OF-09 to SQ-OF-11), DEPLOYED 1.1.01 (2.3); in game RC-66 to RC-69 |
+| Drinks (TODO `food/drinks` #4 to #6): chorus juice fluid and its routes; berry matcha latte in the kettle and a grid recipe that keeps its bottle; glass bottles on CfB milk and cow jars | built, scratch server PASSED 2026-10-22 (SQ-DR-00 to SQ-DR-03: load, recipe ids, jar clicks), DEPLOYED 1.1.01 (2.2); in game RC-71 to RC-74 (JEI, kettle screen, sounds) |
+| Bone broth routes and ice cubes (TODO `dishes/ingredients` #4, #5): grid routes for 6 more soups and stews (bone broth) and 7 mod pastas; ice hammered into 4 cubes, IE crusher 3; every ice food takes ice or cubes | built, scratch server PASSED 2026-10-22 (SQ-IN-01, SQ-IN-02), DEPLOYED 1.1.01 (2.3); in game RC-75, RC-76 |
+| Cooking fluids (TODO `dishes/ingredients #2`): egg solution (1 egg + 250 mB milk -> 500 mB) with Create routes for dough, cornbread batter, pancakes, batter, scrambled eggs, vegetable omelet, potato salad, two custards, vanilla pudding and quiche; frosting fluid (mixer, compactor, cake spout) | built, scratch server PASSED 2026-10-22 (SQ-FL-01, SQ-FL-02), DEPLOYED 1.1.01 (2.2); in game RC-77, RC-78. Needs a restart (new fluids) |
+| Golden food real gold only, smaller machine discount (TODO `dishes/meals #9`) | BUILT 2026-10-21, scratch probe PASSED 2026-10-22, DEPLOYED 1.1.01 (2.4); RC-70 |
+| Feast Plating JEI tab (TODO `dishes/meals #5` part a): what a placed feast gives per right-click, the container it takes and its leftovers | BUILT 2026-10-21, DEPLOYED 1.1.01 (2.3); RC-65 |
+| Food grinding by hand: every grinding recipe of the pack's own goes through NCH `foodGrinding` (crushing wheels + Millstone + a mortar and pestle craft with the pack's own mortar); other mods' food milling gets mortar crafts from a generated catalogue; hay bale on the Millstone | BUILT 2026-10-21, `mortar_probe.js` 33 checks pass, DEPLOYED 1.1.01 (2.1; the mortar and the catalogue are written up in [kitchen.md](kitchen.md) 2.6) |
 
-- **Pending:** the cornmeal millstone mirrors (commit c82dd31 of 2026-10-20) and the 2026-10-21 `foodGrinding`
-  change (mortar crafts, hay bale on the Millstone) and the F8 cornmeal fixes are in the tree, not shipped. RC-01 to RC-14 have never been run. Findings F1 to F7 (section 4); F1 and F2
+- **Pending:** everything built up to 2026-10-22 (cornmeal millstone mirrors, `foodGrinding` mortar crafts, F8
+  cornmeal fixes, the meals, fluids, bone broth and ice rows above) DEPLOYED with 1.1.01 (2026-10-22); later rows
+  follow the changelogs (1.1.03 server and players, 1.1.04 client only, rest unreleased). No RC test has been ticked
+  in game; RC-01 to RC-14 have never been run. Findings F1 to F7 (section 4); F1 and F2
   closed 2026-10-22 (removals kept).
 - **Files to open:** [cooking.js](../kubejs/server_scripts/cooking/cooking.js) (lines 1-594; 597-1013 is the old
   `global.CE` copy, deleted 2026-10-22), [golden.js](../kubejs/server_scripts/cooking/golden.js),
@@ -85,7 +87,7 @@ loops of its own: gilding food with gold in machines, and growing meat from mob 
 - **Bread:** FD's furnace and smoker bread removed; dough block → smoke to bread block → saw or knife to 16 bread;
   stonecutter for slab, crustless block, nub (Architect's Palette's own recipes replaced).
 - **Sourdough (PNC):** 8 dough + yeast culture bucket; mixer 500 mB yeast culture + 8 dough heated → 8; Bottler 50 mB per
-  dough; smoke to sourdough bread, knife to 2 bread.
+  dough; smoke to sourdough bread, knife to 3 bread.
 - **Pasta:** IE press with the wire mold, dough → 2 pasta.
 
 ### 2.2 Fluids and sugar
@@ -241,8 +243,8 @@ and skips ids ending in `_manual_only`, so recipes that must stay hand-only carr
 ### Findings (2026-10-18)
 
 - **F1. The vanilla smoker recipe is removed; Quark's make the smoker.** Closed 2026-10-22 (TODO `recipes/cooking #1`):
-  removal kept, comment at `cooking.js` 12 names Quark's recipes; the 2026-10-22 recipe dump lists both Quark smokers
-  and `nethersdelight:nether_brick_smoker`, no `minecraft:smoker`. `cooking.js` line 14 removes it;
+  removal kept, comment names Quark's recipes (since the 2026-10-25 move: Creative Delight `minecraft/recipes.js` lines 12-14, was `cooking.js` 12); the 2026-10-22 recipe dump lists both Quark smokers
+  and `nethersdelight:nether_brick_smoker`, no `minecraft:smoker`. `R.remove` in the same file removes it;
   the pack adds none. Rechecked 2026-10-21: Quark's `quark:building/crafting/furnaces/deepslate_smoker` and
   `blackstone_smoker` (4 logs around a Quark variant furnace, flag on) still make `minecraft:smoker` (Quark 3.4-418
   jar); the old `global.CE` copy (line 575, "minus blackstone") also removed the deepslate one, the live code doesn't. Smoking is how the pack makes bread blocks, sourdough bread and leather; the Quark recipes
@@ -306,9 +308,10 @@ until a row is built.
 - [TODO](todo/TODO.md) `dishes/jams #2`: jam in the pot from 4 fruit, 1 sugar and 1 lemon slice (a lemon gives 5 slices), output
   doubled to 2 jam.
 - [TODO](todo/TODO.md) `dishes/jams #3`: recipes use jam, never bottled jam or jelly (mason-jarred jam is the same item in recipes);
-  mulberry bread merges into bread with jam; jelly bread is renamed bread with jam.
-- [TODO](todo/TODO.md) `dishes/jams #4`: grape and cherry jelly / jam (cherry pie is `baking/baked-goods #13`). Open: jam or jelly
-  names.
+  mulberry bread merges into bread with jam (open); jelly bread is renamed Bread with Jam (BUILT 2026-10-30, `namechanges.js`,
+  unreleased). Vintage bottled jams removed 2026-10-29; PB and J takes `#forge:jams`.
+- [TODO](todo/TODO.md) `dishes/jams #4`: grape and cherry jelly / jam (cherry pie is `baking/baked-goods #13`). BUILT 2026-10-29, unreleased: Green Grape,
+  Red Grape and Cherry Jam Jars (Vintage port -09, not yet in `mods/`), pot 4 fruit + sugar + lemon slice -> 2.
 
 **Meals**
 - [TODO](todo/TODO.md) `dishes/meals #21`: audit meals that take only vanilla or one specific meat, veggie or fruit; keep where
@@ -342,7 +345,7 @@ until a row is built.
 - [TODO](todo/TODO.md) `baking/baked-goods #27`: a recoloured dough block and a dough texture for each dough (with `#17`).
 
 **Other**
-- [TODO](todo/TODO.md) `recipes/cooking #4`: a shulker shell crafts into 12 shulker bowls (now 1).
+- [TODO](todo/TODO.md) `recipes/cooking #4`: a shulker shell crafts into 12 shulker bowls (was 8). BUILT 2026-10-28 (Creative Delight `endersdelight/recipes.js`), scratch PASS SQ-CM-06.
 
 ## 5. File map
 
@@ -469,6 +472,26 @@ None.
 - [ ] **RC-81 Beignet gone, egg fried rice:** JEI search "beignet" → nothing; `/give` one → red REMOVED line. Fried
   rice shows as "Egg Fried Rice", placed on a block as "Placed Egg Fried Rice".
 
+- [ ] **RC-170 Any bread (baking/baked-goods #28):** (recipe level: scratch server PASSED r1031 2026-10-31, SQ-BJ-02, -02b; JEI: in game) JEI `#forge:bread` -> U: the burgers, FD chicken / egg / bacon
+  sandwiches, More Delight's slice sandwiches, the ham and cheese sandwich (hand and sequenced assembly) all accept a
+  bread slice, toast, cornbread, garlic bread and plain bread in their bread slot. A toast-only recipe (cheese toast,
+  caviar toast) still asks for toast.
+- [ ] **RC-171 Bread does not copy:** (recipe level: scratch server PASSED r1031, SQ-BJ-02, -02b; Canned Bread has no recipe under its own id: client check) a knife on garlic bread or banana bread on the cutting board does nothing; bread
+  slice cutting and toasting still take only their own input; Canned Bread still takes plain bread only; the
+  Architect's Palette bread block still takes 9 plain bread.
+- [ ] **RC-172 Jam bottles gone (dishes/jams #1, #3):** (recipe level: scratch server PASSED r1031, SQ-BJ-01, -01b; "jam bottle" also matches Upgrade Aquatic's mulberry jam bottle, not removed; JEI: in game) JEI search "jam bottle", "relish bottle", "sweet berries jam",
+  "glow berries jam" -> nothing; `/give` one -> red REMOVED line; `logs/kubejs/server.log` has no recipe error from
+  `vintagedelight/jams.js`. Pepper Jam Jar and Relish Jar remain, each with its pot recipe and no bottle craft.
+- [ ] **RC-173 Grape and cherry jam (dishes/jams #4):** (recipe ids: scratch server PASSED r1031, SQ-BJ-01; cooking, placing, eating: in game) JEI Green Grape / Red Grape / Cherry Jam Jar -> R: Cooking Pot,
+  4 white grapes (or red grapes, or cherries) + sugar + lemon slice, 2 empty mason jars -> 2 jars; a heated mixer copy
+  (Slice & Dice). Cook one: 2 jars out, 2 empty jars used. Each places 1 to 4 per block (sneak-use), shows its green,
+  purple or red contents, breaks into the jars it holds; eating one gives 7 hunger, Comfort 5 min, an empty jar back.
+  A Supplementaries jar fills from it.
+- [ ] **RC-174 Relish is an ingredient:** (tags: scratch server PASSED r1031, SQ-BJ-03) `/kubejs hand` on a Relish Jar: in `#creativeengineering:food_type/ingredient`,
+  not in `#forge:jam_jars` or `#vintagedelight:savory_jam`; the Pickling Jar's jam -> vinegar recipe does not accept it.
+- [ ] **RC-175 PB and J takes any jam:** grid bread + nut mash bottle + a Fruits Delight jam, or a grape / cherry jam
+  jar -> PB and J; the jar comes back as an empty mason jar.
+
 ## 8. History
 
 - By 2026-09-27 (initial git commit): the folder, first on `global.CE`, then on `global.NCH`; shipped with 1.0.3.
@@ -530,3 +553,10 @@ None.
   all cultivated-meat code reserved for Creative Cultivation (creative_delight.md 29.5). Test RC-82. Not run in game.
 
 - 2026-10-28: planned from the scratchpad: raise coleslaw nutrition (TODO `dishes/meals #42`), rename cucumber pasta to Veggie Pasta with more vegetables and a less minty colour (`dishes/meals #43`). Tropical Pizza stays `dishes/meals #27`. No code changed.
+
+- 2026-10-29: any bread in any bread recipe (`baking/baked-goods #28`, CD `creativeengineering/bread_recipes.js`; ham and
+  cheese sandwich in cooking.js). Jams: the jam and relish bottles and Vintage's sweet berry and glow berry jams removed,
+  relish out of the jam tags, Green Grape, Red Grape and Cherry Jam Jars added (Vintage port `-09` + CD
+  `vintagedelight/jams.js`), PB and J takes any jam. Tests RC-170 to RC-175. Not run in game.
+- 2026-10-31: deep scan: F1 points at the smoker removal's current file (Creative Delight `minecraft/recipes.js`); `recipes/cooking #4` marked built (shell -> 12, SQ-CM-06 PASS). No code changed.
+- 2026-10-31: scratchpad notes translated into TODO rows (`dishes/ingredients #25`). No code changed.
