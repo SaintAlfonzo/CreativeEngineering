@@ -17,8 +17,9 @@ except the parts that already have a writeup: components, coils and the sample s
 | Resource stones: Create ore stones by compacting, 3-heat stone generators, crushing tables for 20 stones | DEPLOYED |
 | Dusts: cinder flour + potion → 10 resources, amethyst / diamond dust, sulfur, TNT, obsidian | DEPLOYED; two crushing clashes (F3) |
 | Smaller files: crystals, power (Create Crafts & Additions), music, bandage, plant oil, leather from flesh, wool → hemp, seashells, bottles, CC speaker | DEPLOYED |
+| Buckets (`process.js`, patcherMod `bucket/`): iron bucket from 3 iron plates; Wooden Bucket (3 planks, water only, stacks to 16) | BUILT 2026-10-29 (patcherMod 1.1.04 rebuilt 2026-10-30, installed 2026-10-31 00:44); RE-28 scratch server PASSED r1031 (2026-10-31, SQ-RE-28); RE-29, RE-30 in game pending; TODO `recipes/engineering #5`, [brief](briefs/recipes_engineering.md) |
 
-- **Pending:** nothing built and unshipped. RE-01 to RE-20 have never been run. Findings F1 to F10 (section 4); F1, F2
+- **Pending:** buckets (built 2026-10-29, jar installed 2026-10-31 00:44; RE-28 PASSED r1031 2026-10-31, RE-29, RE-30 in game). Otherwise nothing built and unshipped. RE-01 to RE-20 have never been run. Findings F1 to F10 (section 4); F1, F2
   and F3 need your call.
 - **Files to open:** [process.js](../kubejs/server_scripts/engineering/process.js) (machine gating),
   [redstone.js](../kubejs/server_scripts/engineering/redstone.js),
@@ -252,6 +253,11 @@ Use JEI (recipe and usage views) and a creative test world with Create, IE and P
   batch.
 - [ ] **RE-21 Obsidian generator:** heated mixer with 250 mB water + 250 mB lava → 1 obsidian, both fluids used up;
   unheated → nothing.
+- [ ] **RE-28 Iron bucket [scratch]:** *PASS r1031 (2026-10-31, SQ-RE-28; JEI look in game).* JEI `minecraft:bucket` → only `shaped/bucket_from_plates` (3 iron plates, V shape).
+- [ ] **RE-29 Wooden bucket [scratch]:** craft from 3 planks; scoops and places water only (lava, a cow's milk do nothing);
+  placing returns the wooden bucket; texture and names show.
+- [ ] **RE-30 Wooden bucket in machines [scratch]:** Create spout / basin / FD cooking pot drain the wooden water bucket
+  and return the empty one; it fills from water only.
 - [ ] **RE-14 Ore stone:** compact 6 iron nuggets + 2 gravel + 250 mB lava → crimsite; IE crush → 5 iron nuggets.
 - [ ] **RE-15 Cinder flour:** 8 cinder flour + a strength potion → 8 redstone and a glass bottle; a pile in the Bottler
   with 180 mB strength → 9 redstone.
@@ -269,3 +275,8 @@ Use JEI (recipe and usage views) and a creative test world with Create, IE and P
 - 2026-10-18: this writeup; findings F1 to F10; tests RE-01 to RE-20. No code changed.
 - 2026-10-21: `create_generators` removed from the pack; its obsidian recipe is now in `resource_blocks.js`
   (`obsidian_generation_heated`), the 5 `R.remove` lines for its other recipes deleted; test RE-21.
+- 2026-10-29: buckets (TODO `recipes/engineering #5`): `process.js` removes `minecraft:bucket`, adds
+  `shaped/bucket_from_plates` and `shaped/wooden_bucket`; patcherMod `bucket/WoodenBucketItems` + `WoodenBucketItem`
+  (`creativeengineering:wooden_bucket`, `wooden_water_bucket`; water only; cech12's MIT texture). Not done: dispenser,
+  cauldron, use as `minecraft:water_bucket` in recipes. Tests RE-28 to RE-30 (scratch queue). Not run in game.
+- 2026-10-31: scratchpad notes translated into TODO rows (`engineering/dreams-and-desires #9`, `recipes/engineering #7`). No code changed.

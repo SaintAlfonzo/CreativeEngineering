@@ -19,7 +19,7 @@ art donors with their gameplay off; then they are dropped. Test prefix `SN-`. Tr
 | Phase 5: our own textures and models, then drop both donor jars | PLANNED, later (3.14) |
 | Headless tests | `tools/creative_labels_test/run.sh`: 4 suites, all pass (2026-10-21, section 6) |
 | Scratch server tests | 2026-10-21: boots on a dedicated server; 60 checks over 41 SN- tests, all PASSED after 3 fixes (Moonlight range, FastWorkbench crafting path, mixin-package crash); section 6.1 |
-| In-game tests | not run yet; first in game: SN-10, SN-12, SN-23, SN-28, SN-29, SN-39, SN-47, SN-48 (client-only), then SN-55 with the crafting table |
+| In-game tests | not run yet (shipped in 1.1.01, deployed 2026-10-22); first in game: SN-10, SN-12, SN-23, SN-28, SN-29, SN-39, SN-47, SN-48 (client-only), then SN-55 with the crafting table |
 
 - **Files to open:** [development/creativeLabels/README.md](../development/creativeLabels/README.md) (what lives where),
   [BRIEF.md](../development/creativeLabels/BRIEF.md) (the build brief); the decompiled donor mods, `python3 tools/decompile_mod.py mods/<jar> <dir>`; Sticky It

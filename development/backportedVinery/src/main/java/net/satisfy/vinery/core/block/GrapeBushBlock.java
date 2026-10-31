@@ -33,6 +33,7 @@ import net.minecraft.world.phys.shapes.VoxelShape;
 import net.satisfy.vinery.core.wine.GrapeType;
 import net.satisfy.vinery.platform.PlatformHelper;
 import org.jetbrains.annotations.NotNull;
+import net.minecraftforge.common.ForgeHooks;
 
 public class GrapeBushBlock extends BushBlock implements BonemealableBlock {
     public static final IntegerProperty AGE;
@@ -74,7 +75,9 @@ public class GrapeBushBlock extends BushBlock implements BonemealableBlock {
     public void randomTick(BlockState state, ServerLevel level, BlockPos pos, RandomSource random) {
         int age = state.getValue(AGE);
         double growthChance = PlatformHelper.getGrapeGrowthChance() * PlatformHelper.getGrapeGrowthMultiplier();
-        if (age < 3 && random.nextDouble() < growthChance && canGrowPlace(level, pos, state)) {
+        // Port: fire Forge's crop-grow event so the pack's crop seasons apply (crops.md 2.12.1)
+        if (age < 3 && random.nextDouble() < growthChance && canGrowPlace(level, pos, state)
+                && ForgeHooks.onCropsGrowPre(level, pos, state, true)) {
             BlockState newState = state.setValue(AGE, age + 1);
             level.setBlock(pos, newState, 2);
             level.gameEvent(GameEvent.BLOCK_CHANGE, pos, GameEvent.Context.of(newState));

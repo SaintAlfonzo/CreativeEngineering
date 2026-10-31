@@ -1,6 +1,6 @@
 # More Delight 26.05.20 against the installed 25.07.28
 
-**Decided and BUILT 2026-10-25 (owner), not run in game.** Installed: `moredelight-25.07.28-1.19-forge.jar` (`mods/`, `server_mods/`), 1.19.2. Evaluated 2026-10-25
+**Decided and BUILT 2026-10-25 (owner); Shipped in 1.1.03 (deployed to server and players 2026-10-26); SQ-MRD-03 recipe half PASSED 2026-10-26; MRD- rows not run in game.** Installed: `moredelight-25.07.28-1.19-forge.jar` (`mods/`, `server_mods/`), 1.19.2. Evaluated 2026-10-25
 against `devmods/checkNewerVersionForContent/moredelight-26.05.20-1.20-forge.jar` (1.20.1 / Forge), method in
 [devmods_evaluation.md](devmods_evaluation.md) section 1. Both jars unpacked in `DecompiledMods/`. Plan row:
 `largecontent/mod-additions #25` in [todo/TODO.md](todo/TODO.md). No config file.

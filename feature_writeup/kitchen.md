@@ -15,17 +15,19 @@ The FD-style stations' leftover slots (pot, kettle, oven; rows #1, #3, #4, #13, 
 | CfB oven: any furnace fuel plus cooking oil; every fuel container comes back | BUILT 2026-10-21 (patcherMod 1.1.01 + config), scratch server PASSED, not in game | `cooking/kitchen #8` |
 | CfB sink: infinite water | BUILT 2026-10-21 (config), scratch server PASSED | `#8` |
 | FD cutting board on a CfB counter or corner, drawn on the worktop, config offset | BUILT 2026-10-21 (patcherMod), placement and cutting PASSED on a scratch server; the drawing not seen | `#8` |
-| Display Delight plates and plated foods, Brewin' coaster on a CfB counter or corner, drawn on the worktop, own offset | BUILT 2026-10-24 (patcherMod 1.1.02 + KubeJS tags), scratch test queued (SQ-KT) | `#20` |
+| Display Delight plates and plated foods, Brewin' coaster on a CfB counter or corner, drawn on the worktop, own offset | BUILT 2026-10-24 (patcherMod 1.1.02 + KubeJS tags), deployed with 1.1.03 (2026-10-26); `/kttest` 30 of 34 on 2026-10-25 / 26 / 27 (KT-15d, KT-17 fail on Display Delight 1.7.0's leg; probe rewritten 2026-10-27, not rerun) | `#20` |
 | CfB 2-tall fridge filled to a full block with a white box on top (the 2026-10-21 stretch reverted) | BUILT 2026-10-25 (resource override); top box rendered missing in a client, texture fixed 2026-10-26, not seen since | `#6`, `#19` |
-| Display Delight blocks, toppers and the coaster break with drops when the block below goes | BUILT 2026-10-25 (patcherMod 1.1.02, not in `mods/`), scratch test queued (SQ-KT) | `#20` |
+| Display Delight blocks, toppers and the coaster break with drops when the block below goes | BUILT 2026-10-25 (patcherMod 1.1.03, deployed 2026-10-26); since Display Delight 1.7.0 only the toppers and the coaster rely on it (2026-10-27); SQ-KT rerun queued | `#20` |
 | CfB kitchen corner storage (27 slots, chest GUI, hoppers, cooking table) | BUILT 2026-10-21 (patcherMod), scratch server PASSED | `#15` |
 | Bamboo bowl | BUILT 2026-10-21 (KubeJS), scratch server PASSED | `#10` |
 | Mortar and pestle food grinding (own recipes through `foodGrinding`, other mods' through a catalogue) | BUILT 2026-10-21 (KubeJS + generator), scratch server PASSED | `#10` |
 | Returned bowls that wouldn't stack | cause found elsewhere: Sticky It!'s tooltip handler, fixed by Creative Labels ([sticky_notes.md](sticky_notes.md) 3.13, SN-48) | `#5` |
-| Scythe, stepstool | Planned | `#16`, `#17` |
+| Coaster contents: only items with a coaster model (tag 304, 208 pack models from `gen_coaster_models.py`), 2.3 | BUILT 2026-10-29 (KubeJS assets + tag), scratch server PASSED r1031 (2026-10-31, SQ-KT-21: tag count logged, coaster accepts and refuses as listed); KT-19, KT-20 in game pending | `#21` |
+| Stepstool | BUILT 2026-10-29 as a worn stool that lifts the player one block ([stepstool.md](stepstool.md)); patcherMod 1.1.04 installed 2026-10-31 00:44, not yet booted | `#17` |
+| Scythe | Planned | `#16` |
 
-- **Pending:** nothing here has been deployed (patcherMod 1.1.01 is in `mods/` and `server_mods/`; 1.1.02 with the
-  counter toppers is in `mods/` only). KT-01 to KT-16.
+- **Pending:** the 1.1.01 parts (oven fuel, sink, board, corner) deployed 2026-10-22, the counter toppers with 1.1.03,
+  as did the break hook (2026-10-26). No KT- test has been run in game (checked 2026-10-30). KT-01 to KT-21.
 - **Files to open:** patcherMod `mixin/CfbOvenFuelMixin`, `mixin/BlockStateCounterTopperMixin`,
   `mixin/CuttingBoardRendererOffsetMixin`, `mixin/CoasterRendererOffsetMixin`, `compat/CounterToppers`,
   `mixin/CfbCornerStorageMixin`, `mixin/CfbCornerUseMixin`, `compat/CfbCornerStorage`;
@@ -104,6 +106,23 @@ water".
   for the plates, plated foods and the coaster (Y -1, X and Z 0 for both). X and Z in the frame of a counter facing
   north (+X east, +Z toward its back), turned with the counter's `facing` (south (-x, -z), east (-z, x), west
   (z, -x)). Visual only: F3+A redraws after a restart.
+- What goes on a coaster (2026-10-29): with `[coaster] taggedItemsOnly` (on) the coaster takes only
+  `#brewinandchewin:placeable_on_coaster`. An item "has a block model" when a coaster JSON
+  (`assets/<ns>/brewinandchewin/coaster/*.json`) names it and its model loads; the renderer draws anything else as a
+  flat item sprite, and a JSON whose model is missing draws nothing (`checkModel`). The tag is the port's 96 files plus
+  every file in `kubejs/assets/creativeengineering/brewinandchewin/coaster/` (`tools/placeable_catalog.py`
+  `add_coaster`), so the tag can only hold modelled items. Since 2026-10-27 the pack folder had been empty
+  (`gen_coaster_models.py` read only plain-variant blockstates; Display Delight 1.7.0's are multipart) and the
+  in-game tag was the port's 96. `gen_coaster_models.py` now writes 208 files from three sources: Display Delight
+  1.7.0's default-state model for every food the port registers a block for (155, all links from the jar, not the
+  10-24 dump), the edible block items whose block is Vinery's `WineBottleBlock` or Vintage Delight's `MasonJarBlock`
+  (34: 26 wines, 8 jars; Vinery's art read from `vinery_upstream/`), and same-sprite borrows (19: Farmer's Respite
+  long/strong drinks take the base drink's model, Create Central Kitchen's pumpkin pie slice Delightful's, the
+  Enchanted Golden Carrot the golden carrot's with the glint). Each model is scaled to 10 px wide and 16 px tall at
+  most. Tag 304. Left out: Fruits Delight jellies (their contents are block-tinted, the coaster draws one colour per
+  model so they would show white; needs a tint modifier in the port) and the colour-shifted look-alikes in
+  [coaster_model_candidates.md](coaster_model_candidates.md) (a borrowed model would show the wrong colour). Foods
+  the dumps have not seen (Creative Delight's newer foods) join after `/dumpall`, then the two generators.
 
 ### 2.4 Fridge
 
@@ -138,11 +157,11 @@ water".
 
 ### 2.6 Bamboo bowl, mortar and pestle
 
-- **Bamboo bowl:** 3 bamboo in the bowl's V -> 1 bowl (`cooking.js`, `shaped/bowl_from_bamboo`). Planks give 4, so
+- **Bamboo bowl:** 3 bamboo in the bowl's V -> 1 bowl (Creative Delight `minecraft/recipes.js` since 2026-10-25, was `cooking.js`; `shaped/bowl_from_bamboo`). Planks give 4, so
   bamboo isn't the cheap route.
 - **Mortar and pestle** (`creativeengineering:mortar_and_pestle`, `i.mortar_and_pestle`, KubeJS item in
   `items/misc_items.js`, 512 durability, texture copied from Old Guns' (AGPL-3.0)). Crafting table: lever over
-  polished granite in Old Guns' bench shape (`cooking.js`, `shaped/mortar_and_pestle`). NCH
+  polished granite in Old Guns' bench shape (Creative Delight `creativeengineering/recipes.js`, was `cooking.js`; `shaped/mortar_and_pestle`). NCH
   `mortar(output, input, e, id, inputCount)` writes a shapeless craft with `damageIngredient` (1 durability, the
   mortar comes back), id `mortar/<id>`, up to 8 inputs.
 - **Powder Pestle:** Old Guns' own `oldguns:mortar_and_pestle` (`i.powder_pestle`) is renamed in `namechanges.js`
@@ -278,6 +297,14 @@ Not covered offline: anything drawn (board offset, fridge), the corner's GUI on 
   coaster breaks and drops its drinks; nothing floats without a leg.
 - [ ] **KT-18 Slime block in the mixer:** a dough block + green dye in a heated basin → slime block; JEI lists it under
   Mixing (needs the Creative Delight jar).
+- [ ] **KT-19 Block-modelled foods on a coaster:** on a Coaster put a Display Delight food (Apple Cider, Hamburger, a
+  Farmer's Respite tea), a Vinery wine (Red Wine, Stal Wine), a Vintage Delight jar (Honey Jar) and an Enchanted
+  Golden Carrot → each shows its small 3D model (wine as a bottle, jar as a jar, carrot with glint), none lies flat as
+  a sprite or is invisible, four fit without overlapping much; the tooltip says "Placeable on a coaster"; no
+  `Failed to get model` in `latest.log`.
+- [ ] **KT-20 Unmodelled items refused:** right click a Coaster with a Fruits Delight jelly, a Golden Cookie and Cooked
+  Goose (no coaster model) → not taken (the item is used or
+  placed as normal); a port drink (Beer) is still taken.
 
 ## 8. History
 
@@ -297,3 +324,7 @@ Not covered offline: anything drawn (board offset, fridge), the corner's GUI on 
   Creative Delight script.
 - 2026-10-27: KT-15d and KT-17 rewritten for Display Delight 1.7.0 (plates over air or on a broken block get a wooden
   leg, only the coaster pops); `/kttest` updated. The 2026-10-27 scratch run's 4 kt fails were these expectations.
+- 2026-10-29: coaster contents (2.3): `tools/gen_coaster_models.py` reads Display Delight 1.7.0's multipart
+  blockstates and all its jar links, and adds Vinery wine bottles, Vintage Delight jars and same-sprite borrows; 208
+  pack coaster files, tag 96 to 304 (`placeable_catalog.py` rerun). Data only, no build. KT-19, KT-20.
+- 2026-10-31: deep scan: bamboo bowl and mortar recipe file paths updated (moved into Creative Delight 2026-10-25); stepstool row: patcherMod 1.1.04 installed 2026-10-31 00:44, not yet booted. No code changed.

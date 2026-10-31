@@ -33,9 +33,9 @@ ServerEvents.recipes(e => {
 			R.ceBaking([k > 1 ? { id: i.sourdough, count: k } : i.sourdough], Item.of(i.sourdough_bread, k), e, 'sourdough_bread_' + k,
 				{ exp: 0.1, time: 200, tool: i.t_bakeware_baking_sheet })
 		})
-		// slice to 2 bread
+		// slice to 3 bread
 		if (Platform.isLoaded('farmersdelight')) {
-			R.fdCutting(i.sourdough_bread, i.any_knife, Item.of(i.bread, 2), e)
+			R.fdCutting(i.sourdough_bread, i.any_knife, Item.of(i.bread, 3), e)
 		}
 		// Mixing
 		if (Platform.isLoaded('create')) {

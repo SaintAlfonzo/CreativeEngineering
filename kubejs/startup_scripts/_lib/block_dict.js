@@ -125,6 +125,7 @@ b.turnip_crop = 'veggiesdelight:turnip_crop';
 b.oat_crop = 'vintagedelight:oat_crop';
 b.peanut_crop = 'vintagedelight:peanut_crop';
 b.adzuki_sprouts = 'neapolitan:adzuki_sprouts';
+b.monster_box = 'quark:monster_box';             // vault box (mob_block_tweaks.md 2.9): obsidian hardness, sneak to break
 
 // Tags
 b.any_bricks = '#minecraft:bricks';
@@ -138,6 +139,7 @@ b.t_keg_heat_sources = '#brewinandchewin:heat_sources';     // Brewin port: keg 
 b.t_keg_freeze_sources = '#brewinandchewin:freeze_sources';
 b.t_own_pick_crops = '#creativeengineering:crops/own_pick'; // CropParity.OWN_PICK_CROPS: Quark leaves these to their own pick
 b.t_ghost_pepper_soil = '#vintagedelight:ghost_pepper_soil'; // Vintage port: where ghost pepper seeds plant (vintage_delight.md 2.1)
+b.t_create_non_movable = '#create:non_movable';    // contraptions can't pick these up
 b.t_ice = '#minecraft:ice';                          // ice, packed, blue, frosted, rare-ice
 b.t_hammer_no_rotate = '#creativeengineering:hammer_no_rotate'; // IECompat.HAMMER_NO_ROTATE: the IE hammer won't turn these
 b.t_end_plant_soil_slow = '#creative_delight:end_plant_soil_slow'; // enders_additions: End plants survive here, grow slowly (ends_delight.md 3.1)
@@ -156,6 +158,7 @@ b.t_counter_toppers = '#creativeengineering:counter_toppers';   // CounterTopper
 b.t_campfire_rain_douses = '#creativeengineering:campfire/rain_douses';         // CampfireRain.RAIN_DOUSES
 b.t_campfire_rain_proof_fuel = '#creativeengineering:campfire/rain_proof_fuel'; // CampfireRain.RAIN_PROOF_FUEL
 b.t_vein_undo_denied = '#creativeengineering:vein_undo_denied'; // VeinUndo.DENIED: an Ore Excavation undo touching these is refused
+b.t_villager_ladders = '#creativeengineering:villager_ladders'; // McaVillagerPathLaddersMixin: villagers path up and down these (also need minecraft:climbable)
 b.t_ores = '#forge:ores';
 b.t_storage_blocks = '#forge:storage_blocks';
 b.t_no_world_dye = '#creativeengineering:no_world_dye'; // SupplementariesDyeBlocksMixin: dye can't recolour these in world

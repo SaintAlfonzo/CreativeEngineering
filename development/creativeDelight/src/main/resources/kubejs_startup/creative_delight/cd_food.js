@@ -20,7 +20,7 @@
 //                   pieBake (flavour, pie, can)       crust + 2 flavour + 2 sweet; with a filling can key also the pot
 //                                                     filling and crust + full can
 //                   cookieBake (flavour, cookie, second)  cookie dough + 2 flavour (or flavour + second) -> 12
-//                   muffinBake (fruit, muffin)        oven 4 on paper; Cooking Pot 2 on dough
+//                   muffinBake (fruit, muffin)        oven 4 on paper; no Cooking Pot route (the mod's pot recipe goes)
 //                   tartBake (fruit, tart)            crust + fruit + egg + sugar + milk -> 2, baking sheet
 //                   handPieBake (fillings, pie)       crust + fillings -> 1, baking sheet, oven only
 //   heatless grid   mealCraft (inputs, meal)          a pot meal's grid route from cooked forms (`_cooked_manual_only`)
@@ -50,7 +50,7 @@ global.CD.FOOD = {
 	},
 	// Oven: xp and ticks for every baked family; output counts
 	bake: { exp: 0.1, time: 200 },
-	cookies: 12, muffinsOven: 4, muffinsPot: 2, tarts: 2,
+	cookies: 12, muffinsOven: 4, tarts: 2,
 	// Golden food: gold in the heated mixer and the Arc Furnace (the grid is a ring of 8)
 	gold: { mixer: 6, arc: 5 },
 }
@@ -155,13 +155,12 @@ global.CD.food = function (e) {
 			var flavours = second ? [flavour, second] : [n(flavour, 2)]
 			R.ceBaking([i.cookie_dough].concat(flavours), Item.of(output, V.cookies), e, suffix(output, ''), ware.sheet)
 		},
-		// The pot route replaces the mod's own (#forge:dough, not only wheat dough)
+		// Muffins bake in the oven only: the mod's Cooking Pot recipe goes and none replaces it (baking/baked-goods,
+		// owner 2026-10-29). Removing it also drops Slice & Dice's mixer copy, which is built from the loaded pot recipes.
 		muffinBake(fruit, output) {
 			var s = suffix(output, '')
 			R.remove({ type: 'farmersdelight:cooking', output: output, not: OURS }, e)
 			R.ceBaking([n(fruit, 2), i.flour, i.t_milk_bottle, i.eggs, i.any_sweetener], Item.of(output, V.muffinsOven), e, s, ware.muffin)
-			R.fdCooking([fruit, fruit, i.any_dough, i.t_milk_bottle, i.eggs, i.any_sweetener], Item.of(output, V.muffinsPot), e, s,
-				V.bake.exp, V.bake.time)
 		},
 		// A one-serving pie: every other recipe of it goes, as for whole pies. fillings: slots (F.slot for a count)
 		handPieBake(fillings, output) {

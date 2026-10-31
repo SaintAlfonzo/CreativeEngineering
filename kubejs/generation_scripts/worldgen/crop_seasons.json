@@ -1,0 +1,159 @@
+{
+  "_readme": [
+    "Crop growing season types. Read by kubejs/server_scripts/tags/cropseasontags.js, which fills the block tags",
+    "creativeengineering:crop_seasons/<type> (blocks) and the item tags of the same name (items); patcherMod",
+    "seasons/CropSeasons reads them for growth, the planting-item tooltip and WTHIT. Edit, then /reload.",
+    "Reference and owner spec: feature_writeup/crops.md 2.12.1; check with python3 tools/crop_season_audit.py.",
+    "",
+    "Each season is fertile (growth +25 %), neutral (normal) or off (growth -25 %), from the biome's own calendar:",
+    "spring/summer/autumn/winter in temperate and cold biomes, wet/dry in tropical, dry and arid ones.",
+    "",
+    "  temperate     spring fertile, summer and autumn neutral, winter off; wet neutral, dry off.",
+    "  cold          winter fertile, spring and autumn neutral, summer off; wet and dry off.",
+    "  warm_dry      summer fertile, spring and autumn neutral, winter off; dry fertile, wet neutral.",
+    "  warm_wet      summer fertile, spring and autumn neutral, winter off; wet fertile, dry neutral.",
+    "  autumn_fruit  autumn fertile, spring and summer neutral, winter off; wet neutral, dry off (Vinery apple trees).",
+    "  nether        fertile in the Nether, off everywhere else.",
+    "  end           fertile in the End, off everywhere else.",
+    "  cave          by height, not season: fertile below y 0, off above y 128 (CEConfig [crop_seasons]).",
+    "  mushroom      fertile in mushroom biomes (#forge:is_mushroom), temperate elsewhere.",
+    "  grape_temperate, grape_cold, grape_warm_dry, grape_warm_wet  by biome family, not season: fertile in their own",
+    "                family, offseason in the opposite temperature (cold against warm dry or warm wet), else neutral.",
+    "                Temperate grapes have no opposite. Families: cold, frozen and permanent winter biomes cold; dry and",
+    "                arid warm dry; tropical warm wet; the rest temperate.",
+    "  grape         the grape type of the grape the block holds (Vinery grapevine stem and lattice).",
+    "  none          seasons never apply (documents the choice; same as unlisted).",
+    "",
+    "blocks: the block whose growth fires the crop-grow event (what growth reads; the planting item of a block",
+    "shows its tooltip automatically). items: extra planting items for the tooltip (saplings of fruit leaves, tree fruits, seeds",
+    "that are not block items). A block or item in two types is an error. Ids that are not registered are skipped."
+  ],
+  "blocks": {
+    "temperate": [
+      "minecraft:wheat", "minecraft:carrots", "minecraft:beetroots", "minecraft:pumpkin_stem",
+      "minecraft:attached_pumpkin_stem", "farmersdelight:cabbages", "farmersdelight:onions",
+      "farmersdelight:budding_tomatoes", "farmersdelight:tomatoes", "supplementaries:rope_tomatoes",
+      "supplementaries:stick_tomatoes", "supplementaries:flax", "corn_delight:corn_crop",
+      "delightful:salmonberry_bush", "immersiveengineering:hemp", "neapolitan:strawberry_bush",
+      "neapolitan:adzuki_sprouts", "fruitsdelight:cranberry_bush", "fruitsdelight:lemon_tree",
+      "fruitsdelight:orange_leaves", "fruitsdelight:pear_leaves",
+      "fruitsdelight:kiwi_leaves", "veggiesdelight:broccoli_crop", "veggiesdelight:cauliflower_crop",
+      "veggiesdelight:garlic_crop", "veggiesdelight:turnip_crop", "veggiesdelight:zucchini_crop",
+      "vintagedelight:cucumber_crop", "vintagedelight:oat_crop", "vinery:cherry_leaves", "floralench:allium_bush",
+      "floralench:azure_bluet_bush", "floralench:blue_orchid_bush", "floralench:cornflower_bush",
+      "floralench:dandelion_bush", "floralench:lilac_bush", "floralench:lily_of_the_valley_bush",
+      "floralench:orange_tulip_bush", "floralench:oxeye_daisy_bush", "floralench:peony_bush",
+      "floralench:pink_tulip_bush", "floralench:poppy_bush", "floralench:red_tulip_bush", "floralench:rose_bush_bush",
+      "floralench:sunflower_bush", "floralench:white_tulip_bush", "floralench:wither_rose_bush", "minecraft:potatoes"
+    ],
+    "cold": [
+      "minecraft:sweet_berry_bush", "fruitsdelight:blueberry_bush", "fruitsdelight:fig_leaves",
+      "fruitsdelight:hawberry_leaves", "fruitsdelight:persimmon_leaves", "neapolitan:mint",
+      "upgrade_aquatic:mulberry_vine"
+    ],
+    "warm_dry": [
+      "minecraft:cactus", "fruitsdelight:hamimelon_stem", "fruitsdelight:attached_hamimelon_stem",
+      "rusticdelight:bell_peppers", "rusticdelight:dark_bell_peppers", "rusticdelight:pale_bell_peppers",
+      "rusticdelight:cotton", "rusticdelight:coffee", "farmersrespite:coffee_bush", "farmersrespite:coffee_stem",
+      "farmersrespite:coffee_stem_double", "farmersrespite:coffee_stem_middle", "vintagedelight:peanut_crop",
+      "veggiesdelight:sweet_potato_crop", "the_dirty_stuff:tobacco_seeds", "delightful:cantaloupe_plant",
+      "neapolitan:vanilla_vine"
+    ],
+    "warm_wet": [
+      "minecraft:melon_stem", "minecraft:attached_melon_stem", "minecraft:cocoa", "minecraft:sugar_cane",
+      "minecraft:bamboo", "farmersdelight:rice", "farmersdelight:rice_panicles", "farmersrespite:tea_bush",
+      "farmersrespite:small_tea_bush", "fruitsdelight:pineapple", "fruitsdelight:lychee_leaves",
+      "fruitsdelight:mango_leaves", "fruitsdelight:peach_leaves", "fruitsdelight:bayberry_leaves",
+      "fruitsdelight:mangosteen_leaves", "fruitsdelight:durian_leaves"
+    ],
+    "autumn_fruit": [
+      "vinery:apple_leaves", "fruitsdelight:apple_leaves"
+    ],
+    "nether": [
+      "minecraft:nether_wart", "minecraft:twisting_vines", "minecraft:weeping_vines",
+      "vintagedelight:ghost_pepper_crop", "nethersdelight:crimson_fungus_colony",
+      "nethersdelight:warped_fungus_colony"
+    ],
+    "end": [
+      "minecraft:chorus_flower", "endercrop:ender_crop", "endersdelight:chorus_flame_block",
+      "ends_delight:chorus_succulent"
+    ],
+    "cave": [
+      "minecraft:cave_vines", "miners_delight:cave_carrots"
+    ],
+    "mushroom": [
+      "farmersdelight:brown_mushroom_colony", "farmersdelight:red_mushroom_colony",
+      "fungidelight:inky_cap_mushroom_colony", "fungidelight:morel_mushroom_colony"
+    ],
+    "none": [
+      "minecraft:kelp", "upgrade_aquatic:ochre_kelp", "upgrade_aquatic:polar_kelp", "upgrade_aquatic:thorny_kelp",
+      "upgrade_aquatic:tongue_kelp", "oceanic_delight:sea_grape_plant", "minecraft:sea_pickle"
+    ],
+    "grape_temperate": [
+      "vinery:red_grape_bush", "vinery:white_grape_bush"
+    ],
+    "grape": [
+      "vinery:grapevine_stem", "vinery:grapevine_lattice"
+    ],
+    "grape_cold": [
+      "vinery:taiga_grape_bush_red", "vinery:taiga_grape_bush_white"
+    ],
+    "grape_warm_dry": [
+      "vinery:savanna_grape_bush_red", "vinery:savanna_grape_bush_white"
+    ],
+    "grape_warm_wet": [
+      "vinery:jungle_grape_bush_red", "vinery:jungle_grape_bush_white"
+    ]
+  },
+  "greenhouse_glass": {
+    "_readme": [
+      "Added to #sereneseasons:greenhouse_glass (Serene Seasons fills it with #forge:glass). A seasonal crop with any of",
+      "these in the 16 blocks straight above it has no seasons: fertile and offseason both become neutral. Only the",
+      "crop's own column counts: one glass block or pane anywhere in it is enough, blocks between do not matter, light",
+      "is not checked. Nether, End and cave crops ignore it. Entries: block ids, '#tags' or '/regex/' (KubeJS).",
+      "Counted: full glass blocks of every kind, glass panes, glass doors and trapdoors. Not counted: pipes, casings,",
+      "hourglasses, cabinets with glass doors."
+    ],
+    "add": [
+      "#forge:glass_panes",
+      "ae2:quartz_glass", "ae2:quartz_vibrant_glass", "alexsmobs:rainbow_glass", "davebuildingmod:reinforced_glass",
+      "engineersdecor:panzerglass_block", "immersive_weathering:frosty_glass", "immersive_weathering:frosty_glass_pane",
+      "immersiveengineering:insulating_glass", "immersiveengineering:slab_insulating_glass",
+      "immersiveengineering:slag_glass", "pneumaticcraft:pressure_chamber_glass",
+      "/^securitycraft:reinforced_([a-z_]+_stained_|tinted_)?glass(_pane)?$/",
+      "/^[a-z0-9_]+:[a-z0-9_]*glass_(door|trapdoor)$/"
+    ]
+  },
+  "items": {
+    "temperate": [
+      "fruitsdelight:orange_sapling", "fruitsdelight:pear_sapling",
+      "fruitsdelight:kiwi_sapling", "vinery:cherry_sapling", "fruitsdelight:orange", "fruitsdelight:pear",
+      "fruitsdelight:kiwi", "fruitsdelight:lemon", "vinery:cherry"
+    ],
+    "cold": [
+      "fruitsdelight:fig_sapling", "fruitsdelight:hawberry_sapling", "fruitsdelight:persimmon_sapling",
+      "fruitsdelight:fig", "fruitsdelight:hawberry", "fruitsdelight:persimmon"
+    ],
+    "warm_wet": [
+      "fruitsdelight:lychee_sapling", "fruitsdelight:mango_sapling", "fruitsdelight:peach_sapling",
+      "fruitsdelight:bayberry_sapling", "fruitsdelight:mangosteen_sapling", "fruitsdelight:durian_sapling",
+      "fruitsdelight:lychee", "fruitsdelight:mango", "fruitsdelight:peach", "fruitsdelight:bayberry",
+      "fruitsdelight:mangosteen", "fruitsdelight:durian"
+    ],
+    "autumn_fruit": [
+      "vinery:apple_tree_sapling", "minecraft:apple"
+    ],
+    "grape_temperate": [
+      "vinery:red_grape_seeds", "vinery:white_grape_seeds"
+    ],
+    "grape_cold": [
+      "vinery:taiga_grape_seeds_red", "vinery:taiga_grape_seeds_white"
+    ],
+    "grape_warm_dry": [
+      "vinery:savanna_grape_seeds_red", "vinery:savanna_grape_seeds_white"
+    ],
+    "grape_warm_wet": [
+      "vinery:jungle_grape_seeds_red", "vinery:jungle_grape_seeds_white"
+    ]
+  }
+}

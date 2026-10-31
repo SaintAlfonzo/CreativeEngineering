@@ -1,0 +1,58 @@
+# Run 2026-10-31, boots B1b and B1c: the B1 world rebooted twice for the Immersive Weathering comparisons.
+# Same RES as B1 (reuses {PL1}/{PL3} from vars.json). Plan steps B1b, B1c.
+#   B1b: add -Dcreativeengineering.iwFastTick=false to srv/user_jvm_args.txt, run row SQ-IWF-02b
+#   B1c: remove that flag, set block_growths = false in srv/config/immersive_weathering-common.toml, run SQ-IWF-04,
+#        then put block_growths back to true
+pace 2
+
+## SQ-IWF-02b | fast path off: same growth as B1 (boot B1b)
+bootreject callTick handler.*now calls IwGrowthFast
+> pbot spawn qa {PL1} 161 {PL3-12} minecraft:overworld creative
+sleep 15
+> fill {PL1-8} 170 {PL3-8} {PL1+8} 170 {PL3+8} minecraft:grass_block
+> fill {PL1-8} 171 {PL3-8} {PL1+8} 173 {PL3+8} minecraft:air
+> fill {PL1+10} 170 {PL3-2} {PL1+14} 170 {PL3+2} minecraft:stone
+> fill {PL1+10} 174 {PL3-2} {PL1+14} 176 {PL3+2} minecraft:oak_leaves[persistent=false,distance=1]
+> fill {PL1+12} 174 {PL3} {PL1+12} 176 {PL3} minecraft:oak_log
+> tp qa {PL1} 171 {PL3-12}
+> gamerule randomTickSpeed 1000
+sleep 60
+> gamerule randomTickSpeed 3
+> zq count {PL1-8} 171 {PL3-8} {PL1+8} 171 {PL3+8} minecraft:grass
+> zq count {PL1-8} 171 {PL3-8} {PL1+8} 171 {PL3+8} minecraft:tall_grass
+> zq count {PL1+10} 171 {PL3-2} {PL1+14} 173 {PL3+2} immersive_weathering:oak_leaf_pile
+> zq count {PL1+10} 174 {PL3-2} {PL1+14} 176 {PL3+2} minecraft:oak_leaves
+look grass/tall grass above 0 on the floor and leaf piles above 0 (about 10 expected: 72 leaves x 1000/4096 x 1200 x 0.0005); leaves still about 72 (the log keeps them from decaying, so the piles come from IW's block-tick growth, the fast path, not from decay); compare with SQ-IWF-02 (fast path on)
+
+## SQ-IWF-04 | block_growths off: no grass, flowers or leaf piles from growths (boot B1c)
+> pbot spawn qa {PL1} 161 {PL3-12} minecraft:overworld creative
+sleep 15
+> fill {PL1-8} 180 {PL3-8} {PL1+8} 180 {PL3+8} minecraft:dirt
+> setblock {PL1} 180 {PL3} minecraft:grass_block
+> fill {PL1+10} 180 {PL3-2} {PL1+14} 180 {PL3+2} minecraft:stone
+> fill {PL1+10} 184 {PL3-2} {PL1+14} 186 {PL3+2} minecraft:oak_leaves[persistent=true]
+> gamerule randomTickSpeed 300
+sleep 60
+> gamerule randomTickSpeed 3
+> zq count {PL1-8} 180 {PL3-8} {PL1+8} 180 {PL3+8} minecraft:grass_block
+> zq count {PL1+10} 181 {PL3-2} {PL1+14} 181 {PL3+2} immersive_weathering:oak_leaf_pile
+look grass still spreads (vanilla), but no IW flowers on it and no leaf piles beyond what leaf decay drops (persistent leaves do not decay, so 0)
+
+## SQ-IWF-04b | block_growths off, corrected block (decides SQ-IWF-04: its old setup grew nothing even with growths on)
+# persistent leaves + log column: no decay drops, so any leaf pile could only come from IW block growth
+> pbot spawn qa {PL1} 161 {PL3-12} minecraft:overworld creative
+sleep 15
+> fill {PL1-8} 190 {PL3-8} {PL1+8} 190 {PL3+8} minecraft:grass_block
+> fill {PL1-8} 191 {PL3-8} {PL1+8} 193 {PL3+8} minecraft:air
+> fill {PL1+10} 190 {PL3-2} {PL1+14} 190 {PL3+2} minecraft:stone
+> fill {PL1+10} 191 {PL3-2} {PL1+14} 193 {PL3+2} minecraft:air
+> fill {PL1+10} 194 {PL3-2} {PL1+14} 196 {PL3+2} minecraft:oak_leaves[persistent=true]
+> fill {PL1+12} 194 {PL3} {PL1+12} 196 {PL3} minecraft:oak_log
+> tp qa {PL1} 191 {PL3-12}
+> gamerule randomTickSpeed 1000
+sleep 60
+> gamerule randomTickSpeed 3
+> zq count {PL1-8} 191 {PL3-8} {PL1+8} 191 {PL3+8} minecraft:grass
+> zq count {PL1-8} 191 {PL3-8} {PL1+8} 191 {PL3+8} minecraft:tall_grass
+> zq count {PL1+10} 191 {PL3-2} {PL1+14} 193 {PL3+2} immersive_weathering:oak_leaf_pile
+look grass 0, tall grass 0, leaf piles 0 (IWF-02 grew 15 piles with growths on)

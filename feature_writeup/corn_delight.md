@@ -1,6 +1,6 @@
 # Corn Delight 1.2.11 against the installed 1.0.3
 
-**BUILT 2026-10-25, not tested.** Owner decisions are in section 2, what was built and where in section 5; the rest of the 1.2.11 diff is not taken (section 3). Needs the patcherMod 1.1.03 and Creative Delight jars installed and a restart. Installed: `corn_delight-1.0.3-1.19.2.jar` (`mods/`, `server_mods/`), 1.19.2, needs Mysterious Mountain
+**BUILT 2026-10-25; Shipped in 1.1.03 (deployed to server and players 2026-10-26); boot check SQ-CN-00 PASSED 2026-10-25; CN-01 to CN-11 not run in game.** Owner decisions are in section 2, what was built and where in section 5; the rest of the 1.2.11 diff is not taken (section 3). Open: Corn Delight 1.0.3's `village_house` and `shipwreck_loot` loot modifiers use `mmlib:add_loot_table` (mmlib not in the pack), so its chest loot never loads (found 2026-10-26, TODO `largecontent/mod-additions #31`). Installed: `corn_delight-1.0.3-1.19.2.jar` (`mods/`, `server_mods/`), 1.19.2, needs Mysterious Mountain
 Lib (installed 1.2.3). Evaluated 2026-10-25 against `devmods/checkNewerVersionForContent/corn_delight-1.2.11-1.20.1.jar`
 (1.20.1 / Forge, needs FD 1.3.2 and MML 1.5.15), method in [devmods_evaluation.md](devmods_evaluation.md) section 1.
 Both jars unpacked in `DecompiledMods/`. Plan row: `largecontent/mod-additions #24` in [todo/TODO.md](todo/TODO.md).

@@ -32,6 +32,7 @@ final class Bots {
         if (old != null && !old.isRemoved()) {
             old.teleportTo(level, x, y, z, 0f, 0f);
             old.setGameMode(mode);
+            old.getLevel().getChunkSource().move(old);
             return old;
         }
         UUID id = UUID.nameUUIDFromBytes(("OfflinePlayer:" + name).getBytes(StandardCharsets.UTF_8));
@@ -41,6 +42,8 @@ final class Bots {
         bot.setHealth(bot.getMaxHealth());
         bot.setGameMode(mode);
         bot.teleportTo(level, x, y, z, 0f, 0f);
+        // the login put its chunk tickets at its saved or spawn position: move them now (see BotPlayer)
+        bot.getLevel().getChunkSource().move(bot);
         bots.put(name, bot);
         return bot;
     }
@@ -98,7 +101,15 @@ final class Bots {
 
     @SubscribeEvent
     public void onServerTick(TickEvent.ServerTickEvent event) {
-        if (event.phase != TickEvent.Phase.END || paths.isEmpty()) return;
+        if (event.phase != TickEvent.Phase.END) return;
+        stepPaths();
+        // the chunk tracker a client's movement packets would drive (BotPlayer explains why not from its tick)
+        for (BotPlayer bot : bots.values()) {
+            if (!bot.isRemoved()) bot.getLevel().getChunkSource().move(bot);
+        }
+    }
+
+    private void stepPaths() {
         for (Iterator<Path> it = paths.iterator(); it.hasNext(); ) {
             Path p = it.next();
             if (p.bot.isRemoved()) {

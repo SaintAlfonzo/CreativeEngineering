@@ -54,7 +54,7 @@ public abstract class KettleScreenTankMixin extends AbstractContainerScreen<Kett
 	@Inject(method = "renderWaterBarIndicatorTooltip", at = @At("HEAD"), cancellable = true, require = 1)
 	private void ce$tankTooltip(PoseStack pose, int mouseX, int mouseY, CallbackInfo ci) {
 		ci.cancel();
-		if (!(menu.tileEntity instanceof KettleTankHolder tank) || !isHovering(34, 17, 5, 32, mouseX, mouseY)) return;
+		if (!(menu.tileEntity instanceof KettleTankHolder tank) || !isHovering(35, 17, 3, 32, mouseX, mouseY)) return;
 		renderComponentTooltip(pose, KettleTankRender.tankLines(tank), mouseX, mouseY);
 	}
 

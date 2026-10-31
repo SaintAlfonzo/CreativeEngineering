@@ -3,8 +3,8 @@
 > **Merge note (2026-10-25):** this port is to be merged with the other Farmer's Delight add-on backports into a single jar, **Creative Delight**. The inventory summary, cross-port interactions and the merge process are in [creative_delight.md](creative_delight.md). This file stays the detailed record for Miner's Delight; its registry namespace and test prefix do not change.
 
 Plan written 2026-10-24, revised the same day with the owner's answers. **The port is BUILT 2026-10-24**
-(`development/backportedMiners`, jar `backportedMiners-1.4.5-ce-19.2-01.jar`, offline checks pass, §7) **and waits to be
-installed** (the game was running; §4.1 P8). The cave carrot worldgen is built too (§4.3). Goal (owner): one Forge 1.19.2 jar that holds all content of the old Miner's Delight (1.1.2,
+(`development/backportedMiners`, jar `backportedMiners-1.4.5-ce-19.2-01.jar`, offline checks pass, §7) **installed in `mods/`
+and shipped in 1.1.03** (deployed to server and players 2026-10-26; boot check SQ-MDP-01 PASSED 2026-10-25). The cave carrot worldgen is built too (§4.3). Goal (owner): one Forge 1.19.2 jar that holds all content of the old Miner's Delight (1.1.2,
 live on the server since 1.1.02) and the new one (1.4.5). Some content will be dropped later, but only after it has
 been seen in game: the first build ships everything, and the drops are decided in a review test (§3.3, `MND-40`).
 Test prefix `MND-`.
@@ -28,7 +28,7 @@ load time (sha1-pinned), and everything the port ships is our own GPLv3 code. Se
 | Decisions | §1 | D2, D3, D6, D9, D11 settled by the owner 2026-10-24; D12 settled by the Modrinth find (P1); the rest are the plan's, built as written |
 | Merged inventory: 69 items, 10 blocks, 4 potions | §2 | reference |
 | Overlap list | §3 | analysis; every overlap ships, review after play |
-| Port work, pack integration, cave carrot worldgen | §4 | port BUILT 2026-10-24, install pending; I2 done; cave carrot worldgen BUILT 2026-10-24 (§4.3) |
+| Port work, pack integration, cave carrot worldgen | §4 | port BUILT 2026-10-24, shipped in 1.1.03; I2 done; I1, I3, I4, I6 to I9 open; cave carrot worldgen BUILT 2026-10-24 (§4.3) |
 | Tests | §8 | MND-01 to MND-41 drafted, none run (MND-32 can run now, it only needs the 1.1.2 jar); queued in scratch_queue.md |
 
 ### 0.1 The four builds on disk
@@ -120,6 +120,8 @@ against the 1.21.1 jar. Because of the licence (D2) neither is a code or asset s
 
 ## 3. Overlaps with the pack
 
+Batch sibling (not installed): [carnivore.md](archive/carnivore.md) section 2 lists where Carnivore's mob meats overlap this mod's drops.
+
 Nothing is settled here. The ocean add-ons and Hostile Delight were added after the last `/dumpall`, so this list
 comes from [ocean_delight.md](ocean_delight.md) and the hostile plan; `MND-01` refreshes the dumps.
 
@@ -192,7 +194,7 @@ close.
 - P5: `TrayFeastBlock` defines the tray shape (FD 1.21's numbers); feast items are plain `BlockItem`s.
 - P6: checked with `javap`: `processCooking(CookingPotRecipe, CopperPotBlockEntity)Z` calls `m_6029_`
   (`setRecipeUsed`, the name CCK's refmap expects), `setTransferCooldown(I)V` public, `isOnTransferCooldown()Z`.
-- P8 still open: close the game, `./gradlew :backportedMiners:installToMods --offline`, then `MND-01`. `mod_sides.md`
+- P8 done: installed with `installToMods`, shipped in 1.1.03 (2026-10-26); `MND-01` server half passed as SQ-MDP-01. `mod_sides.md`
   row updated (one row: matched by mod id). `tools/build_deploy.py` ships and sha1-checks `miners_upstream/` like
   `vinery_upstream/` (`UPSTREAM_DONORS`). `tools/dump_server_mods.py` copies only `mods/`, as for Vinery; the server
   needs `miners_upstream/` copied by hand.

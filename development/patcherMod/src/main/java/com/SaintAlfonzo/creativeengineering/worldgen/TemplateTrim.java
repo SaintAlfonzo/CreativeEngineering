@@ -11,6 +11,7 @@ import net.minecraft.world.level.LevelAccessor;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.level.levelgen.structure.Structure;
 import net.minecraft.world.level.levelgen.structure.StructureStart;
 import net.minecraft.world.level.levelgen.structure.templatesystem.StructureTemplate;
 import net.minecraft.world.level.levelgen.structure.templatesystem.StructureTemplate.StructureBlockInfo;
@@ -36,6 +37,11 @@ import java.util.concurrent.ConcurrentHashMap;
  * plants on them ({@code creativeengineering:template_trim/plants}) are not placed, so the natural ground
  * stays there. A template with no built column at all (a foundation plate another piece stands on) is
  * left alone.
+ *
+ * <p>Structures in {@code creativeengineering:template_trim/air} get the mild form ({@link #trimAir}): only the
+ * air in columns with nothing solid (no built block, pad or plant) is dropped. For a tall rigid structure whose
+ * pieces carry a big air box (Terralith's spire) and whose snow cover rests on another piece's stone, where the
+ * full trim would strip the snow.
  *
  * <p>Runs on the same hook as {@link GroundMatch} (mixin/StructureTemplateGroundMatchMixin, trim first)
  * and only for placements inside StructureStart#placeInChunk: world generation and /place structure.
@@ -141,6 +147,30 @@ public final class TemplateTrim {
 	}
 
 	/**
+	 * The air-only core (template_trim/air): drops the air in every column without a solid block (built, pad or
+	 * plant). Pad and plants are kept everywhere. Null when nothing changes.
+	 */
+	static Result trimAir(List<StructureBlockInfo> infos) {
+		LongOpenHashSet solid = new LongOpenHashSet();
+		for (StructureBlockInfo info : infos) {
+			Kind k = kind(info.state);
+			if (k != Kind.AIR && k != Kind.MARKER) solid.add(column(info.pos.getX(), info.pos.getZ()));
+		}
+		if (solid.isEmpty()) return null;
+
+		List<StructureBlockInfo> out = new ArrayList<>(infos.size());
+		LongOpenHashSet trimmed = new LongOpenHashSet();
+		int air = 0;
+		for (StructureBlockInfo info : infos) {
+			long c = column(info.pos.getX(), info.pos.getZ());
+			if (!solid.contains(c) && info.state.isAir()) { air++; trimmed.add(c); continue; }
+			out.add(info);
+		}
+		if (air == 0) return null;
+		return new Result(out, trimmed.size(), air, 0, 0);
+	}
+
+	/**
 	 * Forge's processBlockInfos, the processed list of one template placement (world positions, the whole
 	 * template): the trimmed list, or null to leave it alone.
 	 */
@@ -149,8 +179,8 @@ public final class TemplateTrim {
 		StructureStart placing = GroundMatch.placing();   // null: a structure block, /place template, a feature
 		if (placing == null || !WorldgenConfig.templateTrimEnabled()) return null;
 		// a meta structure's part trims as the structure it came from (a tower beside a village)
-		if (!TerrainAdaptation.trims(MetaStructure.structureAt(placing, infos.get(0).pos))) return null;
-		Result r = trim(infos);
+		Structure structure = MetaStructure.structureAt(placing, infos.get(0).pos);
+		Result r = TerrainAdaptation.trims(structure) ? trim(infos) : TerrainAdaptation.airTrims(structure) ? trimAir(infos) : null;
 		return r == null ? null : r.infos();
 	}
 }

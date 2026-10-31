@@ -1,7 +1,7 @@
 # Plan: custom JEI tab tweaks (2026-10-26)
 
-Status: **BUILT 2026-10-26** (owner confirmed "execute all"), not seen in game. patcherMod and moreMooblooms built
-(`development/*/build/libs`), not installed: the game was running. World-tab data regenerated
+Status: **BUILT 2026-10-26** (owner confirmed "execute all"), not seen in game. patcherMod and moreMooblooms jars
+installed since and shipped in 1.1.04 (client instance 2026-10-29; the server is on 1.1.03). World-tab data regenerated
 (`python3 tools/gen_jei_world.py`, 3551 rows in 13 tabs). `jeed_providers.js` needs `/reload`. Tests: JW-19 to JW-27
 ([jei_world_tabs.md](jei_world_tabs.md) 4), JC-30, JC-31 ([jei_coverage.md](jei_coverage.md) 7), MB-105, EF-21; queued as
 CQ-JT-01 to CQ-JT-09 in [testing/scratch_queue.md](testing/scratch_queue.md).
@@ -33,7 +33,7 @@ Decisions (owner 2026-10-26):
 - Defaults taken from the briefs (say if any is wrong): Stripping one row per log pair; Soap Washing keeps cycling;
   no basalt + water row; jar icon = jar item with the faucet drawn beside it; bubble column stand-in = water bucket.
 
-The game is running: jars are built, not installed. They wait in `build/libs` until the game is closed.
+Jars installed since; shipped in 1.1.04 (client 2026-10-29). CQ-JT-01 to CQ-JT-10 not run.
 
 ---
 

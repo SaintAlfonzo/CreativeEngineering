@@ -28,7 +28,8 @@ public class ClientSetup {
             ModBlocks.PEANUT_CROP, ModBlocks.WILD_PEANUTS, ModBlocks.GHOST_PEPPER_CROP, ModBlocks.WILD_GHOST_PEPPERS,
             ModBlocks.CUCUMBER_CROP, ModBlocks.WILD_CUCUMBERS, ModBlocks.EMPTY_MASON_JAR, ModBlocks.PEPPER_JAM_JAR,
             ModBlocks.SWEET_BERRY_JAM_JAR, ModBlocks.GLOW_BERRY_JAM_JAR, ModBlocks.APPLE_SAUCE_JAR, ModBlocks.NUT_MASH_JAR,
-            ModBlocks.RELISH_JAR, ModBlocks.VINEGAR_JAR, ModBlocks.HONEY_JAR)) {
+            ModBlocks.RELISH_JAR, ModBlocks.VINEGAR_JAR, ModBlocks.HONEY_JAR,
+            ModBlocks.GREEN_GRAPE_JAM_JAR, ModBlocks.RED_GRAPE_JAM_JAR, ModBlocks.CHERRY_JAM_JAR)) {
             ItemBlockRenderTypes.setRenderLayer(cutout.get(), RenderType.cutout());
         }
     }

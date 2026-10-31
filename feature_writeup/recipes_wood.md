@@ -13,9 +13,13 @@ Sawmill's per-blade recipes (which replace IE's own log and plank sawmill recipe
 | Compost, fertile soil and nulch from mulches and bark | DEPLOYED |
 | Create saw: planks → every wood shape for 13 species; IE sawmill door and stair recipes removed | DEPLOYED |
 | Soot from Sooty Chimneys scraping (75 % / 50 %); torches ×12 from animal fat | DEPLOYED |
-| Removed woods: Upgrade Aquatic's river wood merged into oak; its tree is the Mulberry tree (oak trunk, mulberry leaves and vines) | BUILT 2026-10-22 (KubeJS + datapack; patcherMod `MulberrySapling` in the `mods/` jar of 11:06, md5 b5f60533, and the newer `build/libs` one; not in `server_mods/`); not deployed; built, scratch server PASSED 2026-10-22 (SQ-MB-00 to SQ-MB-04, second bulk run); RW-15, RW-16, RW-18 to RW-20 in game |
+| Removed woods: Upgrade Aquatic's river wood merged into oak; its tree is the Mulberry tree (oak trunk, mulberry leaves and vines) | BUILT 2026-10-22 (KubeJS + datapack; patcherMod `MulberrySapling` in the `mods/` jar of 11:06, md5 b5f60533, and the newer `build/libs` one; not in `server_mods/`); shipped in 1.1.01 (2026-10-22); scratch server PASSED 2026-10-22 (SQ-MB-00 to SQ-MB-04, second bulk run); RW-15, RW-16, RW-18 to RW-20 in game |
 
-- **Pending:** removed woods (2.6) built 2026-10-22, needs a restart; scratch server PASSED 2026-10-22 (SQ-MB, `tools/farm_worldgen_probe.js`); RW-15, RW-16, RW-18 to RW-20 in game. RW-01 to RW-10 have never been run. Findings F1 to F6 (section 4); none needs
+- **Pending:** smoked wood (RW-23 to RW-26) and bark leather (RW-27), built 2026-10-30. Scratch r1031 (2026-10-31):
+  BROKEN, SQ-RW-23 FAILED: the `#creativeengineering:smokable/*` shape tags include Botania and driftwood
+  (`tags/wood_tags.js` excludes them only from the log and wood tags), so those get smoking recipes; the run also
+  lists crimson and warped, which RW-23 below expects to smoke (owner call); SQ-RW-25,
+  -26, -27 PASSED; SQ-RW-24 (filling fluid amounts) client check pending. D&D woods removed: SQ-RW-28 PASSED. Removed woods (2.6) shipped in 1.1.01; scratch server PASSED 2026-10-22 (SQ-MB, `tools/farm_worldgen_probe.js`); RW-15, RW-16, RW-18 to RW-20 in game. RW-01 to RW-10 have never been run. Findings F1 to F6 (section 4); none needs
   a decision, F1 is a bug.
 - **Files to open:** [bark.js](../kubejs/server_scripts/wood/bark.js), [sawdust.js](../kubejs/server_scripts/wood/sawdust.js),
   [wood_types.js](../kubejs/server_scripts/wood/wood_types.js), [ash.js](../kubejs/server_scripts/wood/ash.js),
@@ -117,11 +121,19 @@ the datapack doesn't reach in 1.19.2, so patcherMod `MulberrySapling` swaps it o
 the datapack copy. Switch `[worldgen.systems] mulberrySapling` (off: UA's tree with river logs, which drop oak). The
 mulberry hedge's recipe read `#upgrade_aquatic:river_logs` (empty now) and is re-added with an oak log (x2).
 
+**D&D woods (2026-10-31).** Create: Dreams & Desires rose, rubber and spirit wood have no source: the jar has no tree, sapling,
+leaves or worldgen, no recipe or loot table outputs their logs, and nothing in the pack adds one (creative only). The three
+sets are merged into oak the same way as river (`removedWoods.rose / rubber / spirit`, 82 ids each): the D&D blocks, Every
+Compat variants, Supplementaries and Supp Squared signs and shelves, plus the Immersive Weathering bark (-> oak bark). Their
+Railways tracks (18 ids, no oak twin) are only hidden and their recipes removed (`global.removedWoodTracks`). Smoked wood stays
+(it has its own recipe, RW-23). Tests RW-28 and SQ-RW-28. TODO `engineering/dreams-and-desires #4`.
+
 **Finding (scratch run 2026-10-22, SQ-MB-04): river trees almost never generate.** The override works through the
 holder (UA's `trees_river` grew 90 river leaves, 21 oak logs, 0 river logs), but worldgen placed no river tree at three
 sampled rivers: the feature needs dry land inside the river biome, and the samples had none (0 dry columns in 25 x 25).
 Natural Mulberry trees are therefore rare (UA's placement, not the merge). Since then the try count is 4x (above); river biomes with no
-dry land still get none, since the tree needs an open, dry column on sapling ground.
+dry land still get none, since the tree needs an open, dry column on sapling ground. The driftwood half of the cleanup is still
+open: TODO `structures/contents #2`.
 
 ## 3. What the pack changes
 
@@ -200,7 +212,7 @@ None.
 - [ ] **RW-15 River set gone [game: JEI and names; the startup log lines: scratch server PASSED 2026-10-22, SQ-MB-00, 92 purged, no recipe makes one]:** JEI search `river` → only Mulberry Leaves, Mulberry Sapling, Pile of Mulberry Leaves,
   Mulberry Leaf Carpet, Mulberry Hedge, Mulberry Leaf Pile (IW); the hedge recipe takes river leaves over an oak log (x2).
   The startup log shows `[removedWoods] 1 woods merged into oak` and no `[item_dict] Missing` line for river or oak ids.
-- [ ] **RW-16 Mulberry tree [feature: scratch server PASSED 2026-10-22, SQ-MB-01, SQ-MB-04 through the holder / game: new chunks rarely have a river tree, see the 2.6 finding]:** `/place feature upgrade_aquatic:river_tree` on grass → oak trunk, mulberry leaves, some
+- [ ] **RW-16 Mulberry tree [feature: scratch server PASSED 2026-10-22, SQ-MB-01, SQ-MB-04 through the holder / game: new chunks rarely have a river tree, see the 2.6 finding; driftwood half open, TODO `structures/contents #2`]:** `/place feature upgrade_aquatic:river_tree` on grass → oak trunk, mulberry leaves, some
   mulberry vines; new chunks along a river show the same trees, about 4x as many as before on river banks (8 tries per
   chunk); `zfw rivertrees R` on a river with dry banks places some.
 - [x] **RW-17 Mulberry sapling [scratch server PASSED 2026-10-22, SQ-MB-02, switch off gives river logs]:** bone-meal a Mulberry Sapling → the oak-trunk tree (patcherMod `MulberrySapling`).
@@ -215,6 +227,12 @@ None.
   the time Driftwood Bark (no Tree Bark); driftwood (wood) → 75 %; the same on the Create saw. JEI shows no Abnormals
   Delight driftwood cutting recipe.
 - [ ] **RW-22 Quark stairs:** JEI → blossom planks stairs → U: no Quark Engineering sawmill recipe back to planks.
+- [ ] **RW-23 Smoking:** *r1031 FAIL (SQ-RW-23): Botania and driftwood shapes also smoke (crimson, warped: see Pending).* oak, spruce, a Quark wood (azalea) and crimson: log, wood, stripped, planks, stairs, door in a smoker (or Create fan with a Smoking Sail) → the smoked version; all 13 shapes show a recipe in JEI; a smoked log does not smoke into itself, vertical / polished planks are not accepted.
+- [ ] **RW-24 Create filling:** oak planks + 125 mB creosote under a spout → treated wood; spruce planks the same; smoked planks with 100 mB → treated wood.
+- [ ] **RW-25 IE bottling:** the same three cases in the Bottling Machine; smoked planks with 100 mB works, oak planks with 100 mB does not.
+- [ ] **RW-26 No overlap:** JEI shows smoked planks only in the 100 mB recipes, and the createaddition recipe is gone.
+- [ ] **RW-28 D&D woods gone [game]:** JEI search `rose`, `rubber`, `spirit`: no log, wood, planks, door, Every Compat furniture, sign, track or bark of those woods (rose gold, rose quartz, raw rubber and rubber blocks stay); the item list has no D&D bark. `/give @s create_dd:rose_planks 4` gives 4 oak planks. Startup log: `[removedWoods] 4 woods merged into oak`, no `[item_dict] Missing` line.
+- [ ] **RW-27 Bark leather:** 4 bark (mixed species, also crimson scales and driftwood bark) + salt in the Pickling Jar -> 1 leather after 2400 ticks; non-bark logs do nothing.
 
 ## 8. History
 
@@ -232,3 +250,9 @@ None.
 - 2026-10-23: F5 fixed (`recipes/wood #2`): Quark Engineering stairs sawmill recipes removed, driftwood added to
   the bark species. Tests RW-21, RW-22. Not run in game.
 - 2026-10-24: planned `recipes/wood #4` and `recipes/materials #7` added; no code changed.
+- 2026-10-30: `server_scripts/wood/smoked_wood.js`: smoking recipes (200 ticks) for the 13 Dreams & Desires smoked blocks from
+  any wood of the same shape (tags `creativeengineering:smokable/<shape>`, built in `wood_tags.js` from the vanilla / forge wood tags,
+  minus smoked, polished, vertical, beams, Botania woods); createaddition's treated-wood filling replaced by the same recipe over new tag
+  `creativeengineering:unsmoked_planks` (125 mB), IE bottling mirror (125 mB), and smoked planks 100 mB in Create and IE.
+  Smoked wood had no source before. Tests RW-23 to RW-26. Not run in game.
+- 2026-10-30: `recipes/wood #4` built in `server_scripts/wood/bark.js`: Pickling Jar, 4 `#immersive_weathering:bark` + salt -> leather, 2400 ticks (`leather_from_bark`). RW-27; not run in game.

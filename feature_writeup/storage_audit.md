@@ -156,8 +156,8 @@ Food 9-blocks only (egg crates, sleeping bags, dyed sacks, IE crates and planter
 1. Bottles: built, slim models included (10.14). Test with VB-59, VB-67, VB-71 to VB-75, VB-81 to VB-83.
 2. Crates: decide the apple survivor (FrD crate or Vinery bag); NCH pack / unpack for every survivor (the Vinery bags
    first, C2), hide the losers, check C3 in the jars.
-3. Mushroom crates (scratchpad 2026-10-21): a crate for mushrooms, merged by the same survivor rule (TODO `blocks/new #7`).
-4. Sacks as bundles: built 2026-10-22, scratch server PASSED 2026-10-22 for the logic (SQ-GM-10; patcherMod 1.1.01 in `mods/`, not deployed), section 6. Test SB-01 to SB-09.
+3. Mushroom crates (scratchpad 2026-10-21): implemented by Fungi Delight (5 crates, [fungi_delight.md](fungi_delight.md)); TODO `blocks/new #7` done.
+4. Sacks as bundles: built 2026-10-22, scratch server PASSED 2026-10-22 for the logic (SQ-GM-10; shipped in 1.1.01, 2026-10-22), section 6. Test SB-01 to SB-09.
 
 ## 6. Sacks as bundles (TODO `items/storage-and-item-loss #7`)
 

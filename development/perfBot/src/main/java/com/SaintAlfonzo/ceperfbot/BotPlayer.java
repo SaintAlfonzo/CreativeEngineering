@@ -9,8 +9,10 @@ import net.minecraft.world.damagesource.DamageSource;
 
 /**
  * A player with no client. A real client's packets drive {@code doTick()} (movement, base tick) and the chunk
- * tracker; here {@link #tick()} does both. Bots are invulnerable by default; if one dies anyway (/kill, void) it
- * is logged in again at the same spot by {@link Bots}.
+ * tracker; here {@link #tick()} does the first and {@link Bots} the second, every server tick. The level ticks an
+ * entity only in entity-ticking chunks, so a bot teleported away from its tickets would never tick and its tickets
+ * would never follow it if the chunk tracker were driven from here. Bots are invulnerable by default; if one dies
+ * anyway (/kill, void) it is logged in again at the same spot by {@link Bots}.
  */
 final class BotPlayer extends ServerPlayer {
 
@@ -24,7 +26,6 @@ final class BotPlayer extends ServerPlayer {
     @Override
     public void tick() {
         connection.resetPosition();
-        getLevel().getChunkSource().move(this);
         super.tick();
         doTick();
     }

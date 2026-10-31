@@ -21,6 +21,10 @@ StartupEvents.registry('item', e => {
     e.create('creativeengineering:spool')
     e.create('creativeengineering:transmitter')
 
+    // Prepared flesh keeps the id of the removed JRFTL mod (jrftl:prepared_flesh) so existing worlds keep the item.
+    // Texture: assets/jrftl/textures/item/prepared_flesh.png
+    e.create('jrftl:prepared_flesh').displayName('Prepared Flesh')
+
     e.create('creativeengineering:rose_gold_nugget')
     e.create('creativeengineering:rose_gold_rod')
     e.create('creativeengineering:zinc_plate')

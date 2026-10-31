@@ -25,6 +25,12 @@ MODES
   ... --refit GROUP [GROUP ...]                     new grid for those groups, every member refitted to the
                                                     rate the file gives it now. Spacing and separation are
                                                     re-derived: set a hand-picked separation again afterwards.
+  ... --strip-weights [GROUP ...]                   every group member without "tuned" (and no meta or
+                                                    replacement) back to weight MEDIAN_WEIGHT, fit_base
+                                                    dropped, fit_keep false (--fit-rates leaves it alone);
+                                                    frequencies kept. Standalone members lose their weight
+                                                    override (back to the mod's own). Prints old -> new and
+                                                    the rate ratio; estimates compared to the file before.
   ... --migration-report                            also rewrites structure_group_migration.md: the current
                                                     file against the pre-groups tuning (from the archive)
   python3 tools/gen_structure_groups.py --migrate   one-time conversion of the pre-2026-09-27 tuning
@@ -882,8 +888,10 @@ def sync(pack, doc, refit=()):
     for name in refit:
         if groups.pop(name, None) is not None:
             added.append(f'refit {name}: new grid, every member refitted to its current rate')
+    carried = {}   # "tuned" / "note" of a member that moves group go with it
     for name, g in groups.items():
         for sid in [m for m in g.get('structures', {}) if owner.get(m) != name]:
+            carried[sid] = OrderedDict((k, g['structures'][sid][k]) for k in ('note', 'tuned') if k in g['structures'][sid])
             del g['structures'][sid]
             added.append(f'removed {name}: {sid} (' + (f'now in group/{owner[sid]})' if sid in owner else 'in no group now)'))
     for name in pack.group_names():
@@ -915,7 +923,8 @@ def sync(pack, doc, refit=()):
         for m in new:
             w, c = fitted.get(m, (MEDIAN_WEIGHT, 1.0))
             st[m] = OrderedDict([('weight', w), ('frequency', c)])
-            added.append(f'{name}: {m} (weight {w}, frequency {c})')
+            st[m].update(carried.get(m, {}))
+            added.append(f'{name}: {m} (weight {w}, frequency {c})' + (' (kept its "tuned" note: check it still holds)' if 'tuned' in st[m] else ''))
     standalone = doc.setdefault('standalone', OrderedDict())
     for set_id in list(standalone):
         entry = standalone[set_id]
@@ -1209,7 +1218,10 @@ def groups_readme():
                           'fit_base: written by --fit-rates for structures in a biome fit (biome_fits.json) = the '
                           'weight and frequency it had on its mod\'s own biome list; --fit-rates solves from it. '
                           'fit_keep: true lets --fit-rates raise the weight above fit_base when new neighbours crowd '
-                          'the structure\'s biomes, so it keeps its density (the towers); others are capped instead. '
+                          'the structure\'s biomes, so it keeps its density (the towers); others are capped instead; '
+                          'fit_keep: false = --fit-rates never touches it (set by --strip-weights). '
+                          'tuned: "<what, when, who decided>" marks a weight or frequency a person chose; '
+                          '--strip-weights keeps it and sync carries it when the member moves group. '
                           'replaces + share: this member never wins a slot by its weight; it takes share (0..1) of the '
                           'slots the named member of the same group wins and keeps, where both can stand (the vanilla '
                           'swamp hut in YUNG\'s witch hut slots), so the two together are as common as the named one was. '
@@ -1316,7 +1328,9 @@ def fit_rates(pack, doc, passes=4):
             del v['fit_base']
             changed.append(f'fit rate {sid}: in no fit now, back to weight {v.get("weight", "-")}, frequency {v["frequency"]}')
     # replacements and metas take their rate from the slots they convert, not from a weight
-    todo = [sid for sid in pack.fitted if sid in entries and entries[sid][0].get('enabled', True) and sid not in pack.converted]
+    # fit_keep: false (stripped weights, --strip-weights) is never re-solved
+    todo = [sid for sid in pack.fitted if sid in entries and entries[sid][0].get('enabled', True) and sid not in pack.converted
+            and entries[sid][0].get('fit_keep') is not False]
     if not todo:
         return changed
     bases = {sid: base_of(entries[sid][0]) for sid in todo}
@@ -1407,6 +1421,42 @@ def fit_rates(pack, doc, passes=4):
     return changed
 
 
+def strip_weights(pack, doc, only=()):
+    """--strip-weights: weights nobody chose go back to MEDIAN_WEIGHT (user 2026-10-19: "strip all structure weights
+    unless an explicit increase or decrease note"). Skipped: members with "tuned", metas and replacements (weight 1 by
+    design). Frequencies stay (they hold the migration's rarity; a later pass may reset them after a census).
+    Returns (changed lines, [(sid, group, old weight, new weight, frequency)])."""
+    changed, rows = [], []
+    for name, g in doc.get('groups', {}).items():
+        if only and name not in only:
+            continue
+        for sid, v in g.get('structures', {}).items():
+            if 'tuned' in v or sid in pack.converted or 'replaces' in v:
+                continue
+            old = v.get('weight', MEDIAN_WEIGHT)
+            touched = old != MEDIAN_WEIGHT or 'fit_base' in v or v.get('fit_keep') is not False
+            if not touched:
+                continue
+            v['weight'] = MEDIAN_WEIGHT
+            v.pop('fit_base', None)
+            v['fit_keep'] = False
+            rows.append((sid, name, old, MEDIAN_WEIGHT, v.get('frequency', 1.0)))
+            if old != MEDIAN_WEIGHT:
+                changed.append(f'strip {name}: {sid} weight {old} -> {MEDIAN_WEIGHT} (frequency {v.get("frequency", 1.0)} kept)')
+    if not only:
+        for set_id, e in doc.get('standalone', {}).items():
+            for sid, v in e.get('structures', {}).items():
+                if 'tuned' in v or 'weight' not in v:
+                    continue
+                old = v.pop('weight')
+                v.pop('fit_base', None)
+                v['fit_keep'] = False
+                mod_w = next((s['weight'] for s in pack.sets.get(set_id, {}).get('structures', []) if s['structure'] == sid), '-')
+                rows.append((sid, 'standalone ' + set_id, old, mod_w, v.get('frequency', 1.0)))
+                changed.append(f'strip standalone {set_id}: {sid} weight {old} -> mod default {mod_w}')
+    return changed, rows
+
+
 # ── main ─────────────────────────────────────────────────────────────────────
 
 def main():
@@ -1421,6 +1471,9 @@ def main():
     ap.add_argument('--fit-rates', action='store_true',
                     help='after editing biome_fits.json or the fit structure tags: rescale each fitted structure\'s frequency '
                          'so its density per area of its (new) biomes stays what it was over its mod\'s own list')
+    ap.add_argument('--strip-weights', nargs='*', metavar='GROUP',
+                    help='weights nobody chose (no "tuned", not a meta or replacement) back to MEDIAN_WEIGHT, frequencies '
+                         'kept; no GROUP = every group and the standalone overrides. Estimates compare to the file before')
     ap.add_argument('--migration-report', action='store_true',
                     help='also rewrite structure_group_migration.md (current file vs the archived pre-groups tuning)')
     args = ap.parse_args()
@@ -1444,6 +1497,30 @@ def main():
         if not GROUPS.exists():
             sys.exit(f'{GROUPS.name} is missing: run with --migrate (first time) or restore it.')
         doc = read_json(GROUPS)
+        if args.strip_weights is not None:
+            import copy
+            before_doc = copy.deepcopy(doc)
+            before = new_densities(pack, before_doc)
+            changed, rows = strip_weights(pack, doc, tuple(args.strip_weights))
+            after = new_densities(pack, doc)
+            print(f'stripped {len(rows)} member(s), {len(changed)} weight(s) changed:')
+            print(f'{"structure":60} {"where":28} {"weight":>12} {"freq":>9} {"rate ratio":>10}')
+            out = []
+            for sid in sorted(set(before) | set(after)):
+                o = mean_density(before.get(sid, {}), pack.areas)
+                n = mean_density(after.get(sid, {}), pack.areas)
+                if o > 0 and abs(n / o - 1) > 0.005 or (o == 0) != (n == 0):
+                    out.append((n / o if o else float('inf'), sid))
+            by = {r[0]: r for r in rows}
+            for ratio, sid in sorted(out, key=lambda t: -abs(math.log(t[0])) if 0 < t[0] < float('inf') else -99):
+                r = by.get(sid)
+                w = f'{r[2]} -> {r[3]}' if r else '(unchanged)'
+                print(f'{sid:60} {(r[1] if r else ""):28} {w:>12} {(r[4] if r else ""):>9} {ratio:>10.2f}')
+            write_json(GROUPS, doc)
+            write_estimates(pack, doc, before, 'structure_groups.json before --strip-weights', ESTIMATES,
+                            title='Structure group estimates (after --strip-weights)')
+            print(f'estimates against the file before -> {ESTIMATES} (run --check to compare to mod defaults again)')
+            return
         if not args.check:
             added = sync(pack, doc, args.refit or ())
             if args.fit_rates:

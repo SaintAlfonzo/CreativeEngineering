@@ -14,7 +14,7 @@ classes and Async Locator 1.3.0; decisions in 4)
 | 3.3 StructureCheck thread safety | BUILT 2026-10-12 | `mixin/StructureCheckThreadSafeMixin` |
 | 3.4 Miss logging (misses before a hit, per search and per structure) | BUILT 2026-10-12 | `worldgen/LocateStats` + `mixin/ChunkGeneratorMetaLocateMixin` |
 | 3.5 `/celocate batch` | BUILT 2026-10-12; `stop` label fixed in 1.0.7 (DEPLOYED 2026-10-18) | `worldgen/LocateCommand`, `compat/AsyncLocatorBridge` |
-| 3.6 `/celocate census` (with generation-time miss reasons) | BUILT 2026-10-12; "known" bug (LO-03, LO-14) FIXED in 1.0.7 (DEPLOYED 2026-10-18); biome-tie false negatives FIXED 2026-10-27 (not deployed, SQ-TIE-01) | `worldgen/LocateCensus`; reasons from the earth fill, biome rules, priority and frequency mixins |
+| 3.6 `/celocate census` (with generation-time miss reasons) | BUILT 2026-10-12; "known" bug (LO-03, LO-14) FIXED in 1.0.7 (DEPLOYED 2026-10-18); biome-tie false negatives FIXED 2026-10-27 (DEPLOYED to the client with 1.1.04 2026-10-29, server on 1.1.03; SQ-TIE-01 not run). SQ-WG30-C02 (2026-10-30, 1.1.04 jar) still logged 5 biome false negatives (old refinery x4, a mineshaft): the fix does not cover them, TODO `structures/testing #4`, `structures/rates-and-groups #13` | `worldgen/LocateCensus`; reasons from the earth fill, biome rules, priority and frequency mixins |
 | 3.7 Distant Horizons generation clipped below y 48 with a fake seabed (deep oceans around y 8, other oceans just under 48); pregen on the final server world | BUILT 2026-10-12 (option A), DEPLOYED with 1.0.6 (2026-10-14; LO-12 passed on that jar); LO-11 [game] open; pregen is a deploy step | `worldgen/DistantClip`, `mixin/NoiseBasedChunkGeneratorDistantClipMixin`, `NoiseChunkDistantClipMixin`, `ConfiguredFeatureDistantClipMixin` |
 
 **Main findings:**
@@ -37,9 +37,12 @@ classes and Async Locator 1.3.0; decisions in 4)
 **Knobs:** `config/creativeengineering-common.toml`
 - `[worldgen.locate]`: `foldPlacement` (true), `foldBiomes` (true), `nonBlockingLoads` (true), `threadSafeStructureCheck`
   (true, read when a dimension loads), `logMissesAtLeast` (8; 0 = every search, -1 = never), `batchRadius` (100 chunks),
-  `batchTimeoutSeconds` (120), `censusRegionChunks` (32), `loadTimeoutSeconds` (300), `searchTimeoutSeconds` (120, 3.5).
+  `batchTimeoutSeconds` (120), `censusRegionChunks` (32), `loadTimeoutSeconds` (300), `searchTimeoutSeconds` (300 since 2026-10-30, was 120; 3.5; structure_tuning.md 3.27).
 - `[worldgen.distant]`: `clip` (true), `clipBelowY` (48, rounded down to a multiple of 16), `oceanFloorY` (48),
   `deepOceanFloorY` (8), `floorVariation` (4), `floorScale` (24 blocks), `skipFeatures` (true).
+  The clip and the feature skip apply in the Overworld only (since 2026-10-30, TODO `locate #4`): the Nether and the End
+  also build from y 0, so without the gate their LODs got a stone band up to y 47 (no lava sea, a floor under the End void).
+  DH caches LODs: a client that already saw a wrong Nether or End LOD keeps it until DH's data for that dimension is deleted.
 - Async Locator: `asyncLocatorThreads` in `<world>/serverconfig/asynclocator-server.toml` (pack default 1; 4 on the
   scratch server, see 6).
 
@@ -249,7 +252,7 @@ what the census is for.
   Now each region's slots are grouped by chunk: every set that tries the chunk is predicted, then the chunk loads
   once, then every slot is scored. Chunks generated before the census still count "known", as designed. Retest:
   LO-03, LO-14.
-- **Biome ties (fixed 2026-10-27, not deployed; TODO `structures/testing #4`).** The 10-27 census (perf.md 10.9) had
+- **Biome ties (fixed 2026-10-27, DEPLOYED to the client with 1.1.04; TODO `structures/testing #4`).** The 10-27 census (perf.md 10.9) had
   5 / 10 false negatives, all `terralith:underground/old_refinery` and `mining_outpost` at stage biome. Vanilla's
   `Climate.RTree#search` starts from the calling thread's previous result and keeps it when another entry is equally
   near. Terralith's `cave/deep_caves` and vanilla's `deep_dark` overlap at offset 0 (depth 1.05 to 1.2, erosion below
@@ -461,6 +464,12 @@ fresh level-name.
   `StructureCheckThreadSafeMixin`, `ChunkGeneratorMetaLocateMixin`, `NoiseBasedChunkGeneratorDistantClipMixin`,
   `NoiseChunkDistantClipMixin`, `ConfiguredFeatureDistantClipMixin`; a plain `/locate` works. *2026-10-13 scratch phase 1 (seed 8675309, 1.0.6 build jar): PASSED: no mixin apply errors at all; plain /locate minecraft:village_plains answered (-1792, 2784), 10 misses, 38.8 s.*
 
+- [ ] **LO-22 DH clip Overworld only [game]:** fly over the End's outer islands and the Nether with DH generating
+  (delete the client's DH data for those dimensions first) -> no stone floor at y 47 in LODs, the Nether lava sea is
+  drawn; the Overworld clip still works (LO-11). DH generation needs a client, so the scratch half (SQ-WG30-A04) only
+  checks the boot and that real Nether chunks keep their lava sea and ores. Scratch half PASSED 2026-10-30 (no mixin
+  or `DistantClip` error, Nether lava 31..24, End chunks with no y 47 floor); the client half is still open.
+
 ## 8. History
 
 - 2026-10-12: Written. Investigation from the decompiled 1.19.2 classes and Async Locator 1.3.0: the miss
@@ -493,3 +502,6 @@ fresh level-name.
   census only run in game, so LO-03, LO-05, LO-14, LO-17 are the checks.
 - 2026-10-19: the three fixes above went out in pack 1.0.7 (DEPLOYED 2026-10-18 19:43, [plan_1.0.7.md](plan_1.0.7.md) SF).
   Rerun LO-03, LO-05, LO-14 and LO-17 on 1.0.7 or later.
+- 2026-10-30: DH clip gated to the Overworld (`DistantClip.clipsDimension`, used by `mark` and `skipFeature`; TODO
+  `locate #4`, found in [briefs/worldgen_locate.md](briefs/worldgen_locate.md)). A dimension check, not the brief's
+  `clipDimensions` config list. patcherMod compiles; test LO-22 (CQ-WG30-A04 in game; boot check SQ-WG30-A04). SQ-WG30-A04 PASSED 2026-10-30; CQ-WG30-A04 not run.

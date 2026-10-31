@@ -34,9 +34,9 @@ This file has three parts:
 | Decisions taken 2026-10-23 (purges, keep-all duplicates, wild placement, soils, pickling, no Dehydrated, vinegar, loot unwired, geese) | §1 | SETTLED |
 | Mod inventory after the purges (3 crops: oats, peanuts, cucumbers; ghost peppers; 4 wild plants; pickling jar, salt line, cheese mold, mason jars, about 127 items, about 232 recipe files) | §2 | reference, from `vintagedelight-0.1.6.jar` and `vintagedelight-kots-0.3.1.jar` |
 | Overlap list, all marked `*overlaps w/` | §3 | analysis; every duplicate ships, review after play |
-| Integration list in build order | §4 | BUILT 2026-10-23 except the dump-driven steps (§4.0); food types, cans (configured), jar fluids, compost and cooking rules built the same day |
+| Integration list in build order | §4 | BUILT 2026-10-23 except the dump-driven steps (§4.0, TODO `ports/vintageport #2`); food types, cans (configured), jar fluids, compost and cooking rules built the same day; deployed with 1.1.02 (port `-03`), 1.1.03 shipped `-07`, `-08` in `mods/` and the 1.1.04 client, `-09` built 2026-10-29 and not installed |
 | Open questions | §5 | Mixed Seeds (§2.3a, owner decides after the build); vine tree set is on test (S1) |
-| Tests | §8 | VTD-01 to VTD-53 drafted, none run |
+| Tests | §8 | VTD-01 to VTD-76 drafted, none ticked; server side by `/vtdtest all` 373+ PASS (2026-10-26); group B (SQ-VP-14 / -15) and the CQ-VP client rows open |
 
 - **Source to port from:** `~/.local/share/atlauncher/downloads/vintagedelight-0.1.6.jar` (Forge 1.20.1, closest API,
   109 classes). Decompile with `python3 tools/decompile_mod.py <jar> <out dir>` (94 sources). The KOTS jar
@@ -48,7 +48,7 @@ This file has three parts:
   modifiers, cooking and cutting recipes, `RichSoilFarmland`, Comfort and Nourishment. Optional data for Create, IE,
   Create Crafts & Additions, Serene Seasons, Diet, Moonlight; the Galosphere and Spelunkery recipes stay out (mods not
   in the pack). Supplementaries / Moonlight soft fluids are used for the jars (§4 step 15).
-- **Nothing in the pack references it today**, apart from the TODO rows that wait on it (`dishes/ingredients #6`, `#9`,
+- **Before the port (2026-10-23) nothing in the pack referenced it**, apart from the TODO rows that wait on it (`dishes/ingredients #6`, `#9`,
   `#12`, `food/seasoning #1` step 6) and 22 recipes inside the Veggies jar (§3.4).
 
 ## 1. Decisions taken (2026-10-23)
@@ -582,6 +582,9 @@ Briefs: [dishes_jams](briefs/dishes_jams.md), [dishes_pickles-and-ferments](brie
 - **Jams** ([TODO](todo/TODO.md) `dishes/jams #1`): every jam becomes Fruits Delight's jam item with Vintage's jam block, in
   mason jars; mason jars take glass panes; a new empty-jar texture; jams recolour per fruit. Replaces S2's "keep both" for
   the Vintage jams (§3.1). Open: which jar item stays (recommend the mason jar).
+  Hearth and Harvest (survey 2026-10-30, [hearth_and_harvest.md](hearth_and_harvest.md) 2.1) adds raspberry, cherry and
+  grape jams and pickled cabbage, carrots and potatoes to these families; its jar, five other jams, two pickles,
+  peanut butter, PB & J and roasted peanuts duplicate Vintage's and are not ported.
 - **Nut mash** (`merges/dishes #7`): merged with Delightful's nut butter. Open: which survives (recommend Vintage's nut mash).
 - **Pickled sea pickle** (`dishes/pickles-and-ferments #1`): Brewin's Pickled Pickles is removed; a recoloured pickle is the
   new Pickled Sea Pickle, crafted without honey. Open: the craft (recommend 5 sea pickles + salt).
@@ -819,3 +822,18 @@ Pickles (2026-10-25)
   (port `-06`, VTD-75); #8 Quark vs own pick investigated, own pick kept via `crops/own_pick` (§4.0b, VTD-76).
 - 2026-10-26: the salt layer item shows its one-layer block model instead of salt dust's icon (`food/seasoning #7`, part):
   port `-07` (`tools/port_resources.py` writes the item model), VTD-77.
+- 2026-10-28: port `-08`: shears on lush grass clear its new `fertile` state and stop it spreading (pack addition,
+  [wthit_lines.md](wthit_lines.md) 2.10, WL-34 to WL-36). Installed in `mods/`.
+- 2026-10-29: cucumber noodles renamed Veggie Noodles (namechanges.js), sprite recoloured to the zucchini's palette
+  (`kubejs/assets/vintagedelight/textures/item/cucumber_noodles.png`); the cucumber dough takes cucumber, broccoli,
+  zucchini or its slice, cactus flesh or dandelion leaves (CD `vintagedelight/recipes.js`; briefs/dishes_meals.md
+  meals #43, RC-162). The dough and its block keep their Cucumber names.
+- 2026-10-29: port `-09` (pack addition, not upstream): Green Grape, Red Grape and Cherry Jam Jars, mason jar blocks
+  like the sweet berry jam jar (same food values, 1 to 4 per block, loot, soft fluids, `#forge:jam_jars`,
+  `#vintagedelight:sweet_jam`, Create upright tags); placeholder sprites from the green, purple and red wool. Pack side
+  (CD `vintagedelight/jams.js`): pot 4 fruit + sugar + lemon slice -> 2 jars; the jam and relish bottles and the
+  sweet berry and glow berry jams are removed items (CD startup `vintage_items.js`, recipes removed); relish leaves
+  the jam tags; the pepper jam and relish soft fluids are jar-only (overrides in `kubejs/data/vintagedelight/moonlight/
+  soft_fluids/`); PB and J takes `#forge:jams`. Coaster files and placeable entries for the removed jars dropped
+  (`tools/placeable_catalog.py` EXCLUDE). RC-170 to RC-175 in [recipes_cooking.md](recipes_cooking.md). Needs the
+  `-09` build + install.

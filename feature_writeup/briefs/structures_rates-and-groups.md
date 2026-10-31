@@ -217,7 +217,7 @@ biome tag `#minecraft:is_ocean`. All in the repo's configs.
 ---
 
 ## structures/rates-and-groups #3: Strip unexplained structure weights
-Status Planned · Work data · TODO `structures/rates-and-groups #3`
+Status Testing (built 2026-10-30; SQ-WG30-C01 PASS, C02 PARTIAL) (structure_tuning.md 3.27; `fit_keep: false` marks stripped members) · Work data · TODO `structures/rates-and-groups #3`
 
 ### Goal
 User note (2026-10-19): "strip all structure weights unless an explicit 'increase or decrease' note or change was
@@ -346,7 +346,7 @@ at line 1878 is the pattern). No mod data.
 ---
 
 ## structures/rates-and-groups #5: Rare structures hard to test
-Status Planned · Work config · TODO `structures/rates-and-groups #5`
+Status Complete (built 2026-10-30; SQ-WG30-C03, C04 PASSED 2026-10-30) (structure_tuning.md 3.27; the file ships with boosts, the switch off) · Work config · TODO `structures/rates-and-groups #5`
 
 ### Goal
 Make rare structures testable by loosening soft rules only (frequency, weight, share, spacing, separation, debug
@@ -391,7 +391,7 @@ None. Files: `kubejs/server_scripts/worldgen/structure_overrides.js`, `CEConfig.
 ---
 
 ## structures/rates-and-groups #6: Fortified metas vs the locate timeout
-Status Planned · Work data / config · TODO `structures/rates-and-groups #6`
+Status Testing (built 2026-10-30; SQ-WG30-C04, C05 PASSED 2026-10-30; `locate #5` sets the timeout back to 120) (structure_tuning.md 3.27; timeout 300 and shares 0.25, user) · Work data / config · TODO `structures/rates-and-groups #6`
 
 ### Goal
 ST-135: `/locate` of `meta/fortified_ruins` / `meta/fortified_camps` times out at 120 s; the bastille is dropped by
@@ -510,7 +510,7 @@ Advanced Peripherals' scientist houses are off by its config; the pool tag that 
 ---
 
 ## structures/rates-and-groups #10: Pyramid separation
-Status Planned · Work data · TODO `structures/rates-and-groups #10`
+Status Testing (built 2026-10-23, deployed with 1.1.03; SQ-LE-06 not run) · Work data · TODO `structures/rates-and-groups #10`
 
 ### Goal
 Double the desert pyramids' minimum separation (scratchpad 2026-10-21). Together with #2's jungle temple distance.

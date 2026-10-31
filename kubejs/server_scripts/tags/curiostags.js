@@ -17,4 +17,10 @@ ServerEvents.tags('item', e => {
 		i.cosmetic_ancient_mask, i.cosmetic_eerie_mask, i.cosmetic_tiny_potato_mask,
 		i.cob_pipe,
 	])
+
+	// Feet: the stepstools (patcherMod stepstool/ reads #creativeengineering:stepstools; feature_writeup/stepstool.md).
+	var colours = ['white', 'orange', 'magenta', 'light_blue', 'yellow', 'lime', 'pink', 'gray',
+		'light_gray', 'cyan', 'purple', 'blue', 'brown', 'green', 'red', 'black']
+	t.add(e, i.t_stepstools, colours.map(c => i[c + '_stepstool']))
+	t.add(e, i.t_curios_feet, i.t_stepstools)
 })

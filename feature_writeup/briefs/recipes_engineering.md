@@ -278,7 +278,9 @@ Fold AstikorCarts' four recipes into the pack's progression (iron plates, the th
 
 ## engineering #5: Bucket recipes
 
-Status Planned · Work KubeJS (+ patcherMod or mods/ for the wooden bucket) · TODO `recipes/engineering #5`
+Status Built 2026-10-29 (patcherMod 1.1.04 rebuilt 2026-10-30, installed 2026-10-31 00:44, not yet booted; untested) · Work KubeJS + patcherMod `bucket/` · TODO `recipes/engineering #5`
+
+**Done:** `process.js` Buckets section removes `minecraft:bucket` and adds `shaped/bucket_from_plates` (2 plates + 1 plate, `P P / _P_`) and `shaped/wooden_bucket` (3 planks, same shape). patcherMod `bucket/WoodenBucketItems` + `WoodenBucketItem`: `creativeengineering:wooden_bucket` (stacks to 16) and `wooden_water_bucket` (stacks to 1). Chose patcherMod over cech12's Wooden Bucket (MIT, needs BucketLib, takes lava/milk/fish): it cannot be limited to water. Texture is cech12's `wooden_bucket.png` (MIT) with a painted water surface for the full one. Keys `i.wooden_bucket`, `i.wooden_water_bucket`. Empty bucket scoops only water sources (also waterlogged blocks); full one places water via vanilla and returns the wooden bucket; the fluid-handler wrapper swaps wooden items and accepts only water. Not done: dispenser behaviour, cauldron interactions, use as `minecraft:water_bucket` in recipes.
 (scratchpad 2026-10-19)
 
 ### Goal

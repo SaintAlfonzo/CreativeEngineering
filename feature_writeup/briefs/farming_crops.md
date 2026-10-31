@@ -426,7 +426,16 @@ Audit weeds; no weeds on rich soil.
 
 ## crops #5: Realistic growth seasons
 
-Status Planned · Work config / KubeJS tags · TODO `farming/crops #5`
+Status Testing (BUILT 2026-10-30 to the owner spec in [crops.md](../crops.md) §2.12.1, which replaced the tags-only
+plan below: crop types, fertile / neutral / off by the biome calendar, patcherMod `seasons/CropSeasons`; tests CR-89 to
+CR-97, SQ-CS) · Work patcherMod / KubeJS tags / config · TODO `farming/crops #5`
+
+The Build, Decisions and Tests below are the pre-spec plan, kept for the record. How they ended: steps 2 to 4 became
+crop_seasons.json + cropseasontags.js with types instead of season lists; step 5 (hooks) built for hemp, tobacco, the
+Vinery grapes and fruit leaves, Nether fungus colonies and the chorus flame; decision 1 is moot (Serene Seasons' crop rule
+is off, off seasons are 25 % slower, bone meal still unlimited); decision 2 grapes and tobacco both seasonal (owner
+types); decision 3 every plant typed. The CR-75 / CR-76 ids below were taken by extra stem fruit; the real tests are
+CR-89 to CR-97.
 
 ### Goal
 Every crop has believable, fair growing seasons under Serene Seasons (SS).
@@ -441,28 +450,24 @@ Every crop has believable, fair growing seasons under Serene Seasons (SS).
 - Out of season with behaviour 0: the `CropGrowEvent.Pre` is denied 5 times in 6 (1/6 speed). Bone meal is **not**
   limited with behaviour 0 (the handler sets `Result.DEFAULT`, a no-op); behaviour 1 cancels it. Glass
   (`#sereneseasons:greenhouse_glass` = `#forge:glass`) within 16 blocks above makes any crop fertile.
-- Only growth that fires Forge's `onCropsGrowPre` is affected: `CropBlock`s, FD bushes, FR tea, Fruits Delight bushes
-  and pineapple. Tobacco (no Forge growth event, crops.md §2.5) and the Vinery port's bushes (`GrapeBushBlock.randomTick`
-  has no event) ignore seasons whatever the tags say.
-- Season tags in the jars (block tags; the item tags drive tooltips):
-  - SS itself: wheat summer+autumn, carrots spring+autumn, potatoes spring, beetroots autumn, melon stem summer,
-    pumpkin stem autumn, cocoa summer, sugar cane / cactus summer, sweet berries spring-autumn, saplings and Nether
-    plants all seasons.
-  - FD: cabbages autumn+winter, onions spring+autumn, rice summer+autumn, tomatoes summer.
-  - Delightful: salmonberry bush summer. Corn Delight: corn summer+autumn. Rustic Delight: bell peppers and RD coffee
-    summer+autumn, cotton spring+summer. Supplementaries: flax spring, rope/stick tomatoes summer. Fruits Delight
-    (saplings and leaves): spring pear, peach, blueberry; summer lychee, mango, mangosteen, bayberry, durian, lemon,
-    hamimelon stem, pineapple; autumn orange, apple, fig, cranberry; winter hawberry, persimmon, kiwi.
-  Fruits Delight's summer list also has `fruitsdelight:pineapple`.
-- Unlisted, so all-year today (from the jars read; the crops #3 audit gives the full list): hemp, tobacco, tea, FR
-  coffee, strawberries, adzuki, mint, vanilla, mulberries, grapes, Floral Enchantment bushes, Ender Crop, Nether's
-  Delight crops.
+- Only growth that fires Forge's `onCropsGrowPre` is affected. **Audit 2026-10-30** ([crops.md](../crops.md) §2.12,
+  generated table [crop_seasons_audit.md](../crop_seasons_audit.md), `tools/crop_season_audit.py`) checked all 123
+  growing plants' class files: no event for hemp, tobacco, the Vinery grapes, stems and fruit leaves, sea grapes,
+  Nether's Delight fungus colonies and the two End plants (F-SS2); everything else fires it (vanilla through Forge's
+  patches; tea, coffee, vanilla, mint, strawberry, adzuki, mulberry, mushroom colonies, Floral Enchantment bushes too).
+- Season tags today: the table by season is in crops.md §2.12 (SS itself, FD, Delightful, Corn, Rustic, Supplementaries,
+  Fruits Delight, and since the 1.1.03 ports Veggies Delight and Vintage Delight with their upstream tags unreviewed).
+  Every tagged crop's item tags match its block tags (tooltip correct). Fruits Delight saplings' tags are inert (the
+  leaves grow the fruit and carry the same seasons). The three attached stems are untagged (F-SS1).
+- Unlisted and firing the event, so all year today and taggable: cantaloupe, tea, FR coffee, strawberry, adzuki, mint,
+  vanilla, mulberry, cave carrots, Ender crop, mushroom colonies, glow berries, kelp, chorus flower, Floral Enchantment
+  bushes.
 - No `sereneseasons` tags in `kubejs/` today. [seasontags.js](../../kubejs/server_scripts/tags/seasontags.js) only
   builds biome tags.
 
 ### Build
-1. Run the crops #3 audit (it records season tag membership) to get the exact current table; paste it into a new
-   crops.md section "2.10 Growing seasons".
+1. DONE 2026-10-30: audit in crops.md §2.12 from `tools/crop_season_audit.py` (`/cegen run crop_season_audit`);
+   rerun it after the json is applied to check the result.
 2. New config `kubejs/generation_scripts/worldgen/crop_seasons.json` (`{ "<block id>": ["spring", "summer"], ...,
    "_readme": [...] }`, the season_types.json pattern) with `replace` semantics per crop: the pack's list wins over
    the mods' tags for crops it names.
@@ -479,7 +484,7 @@ Every crop has believable, fair growing seasons under Serene Seasons (SS).
    - winter: cabbages, beetroots (sea beet is hardy), onions, mint (keeps), Nether and colony crops (all year).
    Keep tropical crops (cocoa, coffee, vanilla, bananas, pineapple) summer-only so the tropical rule grows them all year
    in warm biomes and only in summer elsewhere.
-5. Tobacco and grapes: decide whether they should be seasonal (decision 2). If yes, patcherMod: tobacco needs a call to
+5. Tobacco and grapes (and hemp, sea grapes, Nether fungus colonies: F-SS2): decide whether they should be seasonal (decision 2). If yes, patcherMod: tobacco needs a call to
    `ForgeHooks.onCropsGrowPre` in its tick (extend `TobaccoPlacementMixin`'s target set with a mixin on
    `TobaccoSeedsBlock` `m_213898_`), grapes need the same call in `GrapeBushBlock.randomTick` (in-tree port).
 6. Config: decide behaviour (decision 1). If 1, the bone-meal gap closes too.
@@ -514,7 +519,7 @@ Tags `sereneseasons:spring_crops`, `summer_crops`, `autumn_crops`, `winter_crops
 
 ## crops #8: Watering can
 
-Status Planned · Work KubeJS (row) -> patcherMod or mods/ · TODO `farming/crops #8`
+Status Testing (built 2026-10-30 in patcherMod 1.1.04 as H&H's `hearthandharvest:watering_can`, [hearth_and_harvest.md](../hearth_and_harvest.md) 4.0, which replaced the candidates below; installed 2026-10-31 00:44, not yet booted; SQ-WC-01 to -05, HNH-25 to HNH-33) · Work patcherMod · TODO `farming/crops #8`
 
 ### Goal
 A watering can that hydrates farmland and speeds crops a little.

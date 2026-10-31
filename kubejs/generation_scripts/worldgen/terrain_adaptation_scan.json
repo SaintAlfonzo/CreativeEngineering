@@ -1,5 +1,5 @@
 {
- "generated": "2026-10-26",
+ "generated": "2026-10-30",
  "thresholds": {
   "strong": [
    0.3,
@@ -492,7 +492,7 @@
    "origin": "YungsBetterWitchHuts-1.19.2-Forge-2.1.0.jar",
    "adaptation": "none",
    "yung": true,
-   "env": "surface",
+   "env": "afloat",
    "state": null,
    "tags": [],
    "templates": 5,
@@ -508,8 +508,8 @@
    "worst": "betterwitchhuts:witch_hut_lg",
    "missing": [],
    "jigsaw": true,
-   "verdict": "compact",
-   "why": "19% unbuilt"
+   "verdict": "afloat",
+   "why": "floats or stands in water on purpose (earth_fill/exempt)"
   },
   {
    "id": "bighorsestable:big_horse_stable",
@@ -1140,7 +1140,11 @@
    "yung": false,
    "env": "surface",
    "state": null,
-   "tags": [],
+   "tags": [
+    "template_trim",
+    "terrain_adaptation/soft",
+    "terrain_adaptation/sunk_start"
+   ],
    "templates": 1,
    "matching": 0,
    "box": 400,
@@ -1154,8 +1158,8 @@
    "worst": "farmers_structures:aquaculture/aquaculture_carp_spawn",
    "missing": [],
    "jigsaw": true,
-   "verdict": "strong",
-   "why": "33% of the box unbuilt, 87 pad + 1 air-only columns"
+   "verdict": "tagged",
+   "why": "already in template_trim, terrain_adaptation/soft, terrain_adaptation/sunk_start"
   },
   {
    "id": "farmers_structures:aquacultures_common",
@@ -1165,7 +1169,10 @@
    "yung": false,
    "env": "surface",
    "state": null,
-   "tags": [],
+   "tags": [
+    "template_trim",
+    "terrain_adaptation/soft"
+   ],
    "templates": 1,
    "matching": 0,
    "box": 400,
@@ -1179,8 +1186,8 @@
    "worst": "farmers_structures:aquaculture/aquaculture_turtle_spawn",
    "missing": [],
    "jigsaw": true,
-   "verdict": "strong",
-   "why": "61% of the box unbuilt, 109 pad + 50 air-only columns"
+   "verdict": "tagged",
+   "why": "already in template_trim, terrain_adaptation/soft"
   },
   {
    "id": "farmers_structures:cooks",
@@ -2994,7 +3001,7 @@
    "origin": "kubejs/data",
    "adaptation": "beard_thin",
    "yung": false,
-   "env": "surface",
+   "env": "afloat",
    "state": null,
    "tags": [
     "template_trim",
@@ -3130,7 +3137,10 @@
    "yung": false,
    "env": "surface",
    "state": null,
-   "tags": [],
+   "tags": [
+    "template_trim",
+    "terrain_adaptation/soft"
+   ],
    "templates": 1,
    "matching": 0,
    "box": 476,
@@ -3144,8 +3154,8 @@
    "worst": "old_swamp_fisherman_house:fishermanhouse",
    "missing": [],
    "jigsaw": true,
-   "verdict": "mild",
-   "why": "26% unbuilt, 123 pad + 0 air-only columns"
+   "verdict": "tagged",
+   "why": "already in template_trim, terrain_adaptation/soft"
   },
   {
    "id": "oldvillagerstatue:old_villager_statue",
@@ -3183,7 +3193,9 @@
    "yung": false,
    "env": "seabed",
    "state": null,
-   "tags": [],
+   "tags": [
+    "terrain_adaptation/sunk_start"
+   ],
    "templates": 8,
    "matching": 1,
    "box": 1858,
@@ -3197,8 +3209,8 @@
    "worst": "philipsruins:crypt_room3",
    "missing": [],
    "jigsaw": true,
-   "verdict": "skip-env",
-   "why": "seabed: its air and ground are part of the design"
+   "verdict": "tagged",
+   "why": "already in terrain_adaptation/sunk_start"
   },
   {
    "id": "philipsruins:ancient_dungeon",
@@ -3537,7 +3549,10 @@
    "yung": false,
    "env": "surface",
    "state": null,
-   "tags": [],
+   "tags": [
+    "template_trim",
+    "terrain_adaptation/soft"
+   ],
    "templates": 11,
    "matching": 0,
    "box": 3801,
@@ -3551,8 +3566,8 @@
    "worst": "philipsruins:level_three_ruins1",
    "missing": [],
    "jigsaw": true,
-   "verdict": "mild",
-   "why": "21% unbuilt, 801 pad + 0 air-only columns"
+   "verdict": "tagged",
+   "why": "already in template_trim, terrain_adaptation/soft"
   },
   {
    "id": "philipsruins:level_two_ruins",
@@ -4309,16 +4324,16 @@
    "env": "afloat",
    "state": null,
    "tags": [],
-   "templates": 20,
+   "templates": 37,
    "matching": 0,
-   "box": 3595,
-   "built": 2739,
-   "pad": 8,
-   "air": 847,
-   "out_air": 25226,
-   "water": 86,
-   "solid": 18526,
-   "waste": 0.238,
+   "box": 5416,
+   "built": 4051,
+   "pad": 12,
+   "air": 1352,
+   "out_air": 38632,
+   "water": 94,
+   "solid": 27549,
+   "waste": 0.252,
    "worst": "skyvillages:bridge_5",
    "missing": [],
    "jigsaw": true,
@@ -4554,7 +4569,9 @@
    "yung": false,
    "env": "underground",
    "state": null,
-   "tags": [],
+   "tags": [
+    "seabed_clearance"
+   ],
    "templates": 15,
    "matching": 0,
    "box": 1303,
@@ -4568,8 +4585,8 @@
    "worst": "subterrestrial:cabin/default/bottom_0",
    "missing": [],
    "jigsaw": true,
-   "verdict": "skip-env",
-   "why": "underground: its air and ground are part of the design"
+   "verdict": "tagged",
+   "why": "already in seabed_clearance"
   },
   {
    "id": "subterrestrial:desert_cabin",
@@ -4579,7 +4596,9 @@
    "yung": false,
    "env": "underground",
    "state": null,
-   "tags": [],
+   "tags": [
+    "seabed_clearance"
+   ],
    "templates": 12,
    "matching": 0,
    "box": 1086,
@@ -4593,8 +4612,8 @@
    "worst": "subterrestrial:cabin/desert/bottom_0",
    "missing": [],
    "jigsaw": true,
-   "verdict": "skip-env",
-   "why": "underground: its air and ground are part of the design"
+   "verdict": "tagged",
+   "why": "already in seabed_clearance"
   },
   {
    "id": "subterrestrial:ice_cabin",
@@ -4604,7 +4623,9 @@
    "yung": false,
    "env": "underground",
    "state": null,
-   "tags": [],
+   "tags": [
+    "seabed_clearance"
+   ],
    "templates": 12,
    "matching": 0,
    "box": 1114,
@@ -4618,8 +4639,8 @@
    "worst": "subterrestrial:cabin/taiga/bottom_0",
    "missing": [],
    "jigsaw": true,
-   "verdict": "skip-env",
-   "why": "underground: its air and ground are part of the design"
+   "verdict": "tagged",
+   "why": "already in seabed_clearance"
   },
   {
    "id": "subterrestrial:jungle_cabin",
@@ -4629,7 +4650,9 @@
    "yung": false,
    "env": "underground",
    "state": null,
-   "tags": [],
+   "tags": [
+    "seabed_clearance"
+   ],
    "templates": 12,
    "matching": 0,
    "box": 1486,
@@ -4643,8 +4666,8 @@
    "worst": "subterrestrial:cabin/jungle/bottom_0",
    "missing": [],
    "jigsaw": true,
-   "verdict": "skip-env",
-   "why": "underground: its air and ground are part of the design"
+   "verdict": "tagged",
+   "why": "already in seabed_clearance"
   },
   {
    "id": "subterrestrial:mesa_cabin",
@@ -4654,7 +4677,9 @@
    "yung": false,
    "env": "underground",
    "state": null,
-   "tags": [],
+   "tags": [
+    "seabed_clearance"
+   ],
    "templates": 12,
    "matching": 0,
    "box": 1086,
@@ -4668,8 +4693,8 @@
    "worst": "subterrestrial:cabin/desert/bottom_0",
    "missing": [],
    "jigsaw": true,
-   "verdict": "skip-env",
-   "why": "underground: its air and ground are part of the design"
+   "verdict": "tagged",
+   "why": "already in seabed_clearance"
   },
   {
    "id": "subterrestrial:ocean_cabin",
@@ -4704,7 +4729,9 @@
    "yung": false,
    "env": "underground",
    "state": null,
-   "tags": [],
+   "tags": [
+    "seabed_clearance"
+   ],
    "templates": 12,
    "matching": 0,
    "box": 1114,
@@ -4718,8 +4745,8 @@
    "worst": "subterrestrial:cabin/taiga/bottom_0",
    "missing": [],
    "jigsaw": true,
-   "verdict": "skip-env",
-   "why": "underground: its air and ground are part of the design"
+   "verdict": "tagged",
+   "why": "already in seabed_clearance"
   },
   {
    "id": "supplementaries:way_sign",
@@ -4891,7 +4918,9 @@
    "yung": false,
    "env": "surface",
    "state": null,
-   "tags": [],
+   "tags": [
+    "template_trim/air"
+   ],
    "templates": 6,
    "matching": 0,
    "box": 23381,
@@ -4905,8 +4934,8 @@
    "worst": "terralith:spire/layer1",
    "missing": [],
    "jigsaw": true,
-   "verdict": "strong",
-   "why": "44% of the box unbuilt, 841 pad + 5555 air-only columns"
+   "verdict": "tagged",
+   "why": "already in template_trim/air"
   },
   {
    "id": "terralith:underground/frosted_dungeon",
@@ -4916,7 +4945,9 @@
    "yung": false,
    "env": "underground",
    "state": null,
-   "tags": [],
+   "tags": [
+    "seabed_clearance"
+   ],
    "templates": 1,
    "matching": 0,
    "box": 625,
@@ -4930,8 +4961,8 @@
    "worst": "terralith:underground/dungeon1",
    "missing": [],
    "jigsaw": true,
-   "verdict": "skip-env",
-   "why": "underground: its air and ground are part of the design"
+   "verdict": "tagged",
+   "why": "already in seabed_clearance"
   },
   {
    "id": "terralith:underground/giant_bee_hive",
@@ -4941,7 +4972,9 @@
    "yung": false,
    "env": "underground",
    "state": null,
-   "tags": [],
+   "tags": [
+    "seabed_clearance"
+   ],
    "templates": 2,
    "matching": 0,
    "box": 393,
@@ -4955,8 +4988,8 @@
    "worst": "terralith:underground/giant_bee_hive_1",
    "missing": [],
    "jigsaw": true,
-   "verdict": "skip-env",
-   "why": "underground: its air and ground are part of the design"
+   "verdict": "tagged",
+   "why": "already in seabed_clearance"
   },
   {
    "id": "terralith:underground/mining_outpost",
@@ -4966,7 +4999,9 @@
    "yung": false,
    "env": "underground",
    "state": null,
-   "tags": [],
+   "tags": [
+    "seabed_clearance"
+   ],
    "templates": 2,
    "matching": 0,
    "box": 157,
@@ -4980,8 +5015,8 @@
    "worst": "terralith:underground/largeminingoutpost",
    "missing": [],
    "jigsaw": true,
-   "verdict": "skip-env",
-   "why": "underground: its air and ground are part of the design"
+   "verdict": "tagged",
+   "why": "already in seabed_clearance"
   },
   {
    "id": "terralith:underground/oak_cabin",
@@ -4991,7 +5026,9 @@
    "yung": false,
    "env": "underground",
    "state": null,
-   "tags": [],
+   "tags": [
+    "seabed_clearance"
+   ],
    "templates": 2,
    "matching": 0,
    "box": 150,
@@ -5005,8 +5042,8 @@
    "worst": "terralith:underground/large_ruined_oak_cabin",
    "missing": [],
    "jigsaw": true,
-   "verdict": "skip-env",
-   "why": "underground: its air and ground are part of the design"
+   "verdict": "tagged",
+   "why": "already in seabed_clearance"
   },
   {
    "id": "terralith:underground/old_refinery",
@@ -5016,7 +5053,9 @@
    "yung": false,
    "env": "underground",
    "state": null,
-   "tags": [],
+   "tags": [
+    "seabed_clearance"
+   ],
    "templates": 1,
    "matching": 0,
    "box": 253,
@@ -5030,8 +5069,8 @@
    "worst": "terralith:underground/old_refinery",
    "missing": [],
    "jigsaw": true,
-   "verdict": "skip-env",
-   "why": "underground: its air and ground are part of the design"
+   "verdict": "tagged",
+   "why": "already in seabed_clearance"
   },
   {
    "id": "terralith:underground/sunken_tower",
@@ -5041,7 +5080,9 @@
    "yung": false,
    "env": "underground",
    "state": null,
-   "tags": [],
+   "tags": [
+    "seabed_clearance"
+   ],
    "templates": 1,
    "matching": 0,
    "box": 210,
@@ -5055,8 +5096,8 @@
    "worst": "terralith:underground/sunken_tower",
    "missing": [],
    "jigsaw": true,
-   "verdict": "skip-env",
-   "why": "underground: its air and ground are part of the design"
+   "verdict": "tagged",
+   "why": "already in seabed_clearance"
   },
   {
    "id": "terralith:underground/witch_hut",
@@ -5066,7 +5107,9 @@
    "yung": false,
    "env": "underground",
    "state": null,
-   "tags": [],
+   "tags": [
+    "seabed_clearance"
+   ],
    "templates": 1,
    "matching": 0,
    "box": 154,
@@ -5080,8 +5123,8 @@
    "worst": "terralith:underground/witchhut_01",
    "missing": [],
    "jigsaw": true,
-   "verdict": "skip-env",
-   "why": "underground: its air and ground are part of the design"
+   "verdict": "tagged",
+   "why": "already in seabed_clearance"
   },
   {
    "id": "terralith:underground_cabin",

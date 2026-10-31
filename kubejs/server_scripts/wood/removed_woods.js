@@ -10,6 +10,7 @@ ServerEvents.recipes(e => {
 	Object.keys(global.removedWoods).forEach(wood => {
 		global.removedWoods[wood].forEach(m => purged.push({ output: m[0] }))
 	})
+	global.removedWoodTracks.forEach(k => purged.push({ output: i[k] }))
 	R.remove(purged, e)
 
 	// Mulberry hedge: Upgrade Aquatic's recipe reads #upgrade_aquatic:river_logs, empty now; an oak log instead (x2 as before)

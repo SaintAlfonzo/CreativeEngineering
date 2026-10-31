@@ -10,13 +10,17 @@
 | Felsic assembly values from config (`[crafting.felsic_<piece>]`, `NCH.cfg`) | DEPLOYED; the felsic shield has no config section (F1) |
 | Assembly keeps enchantments, name, repair cost, Unbreakable, attribute modifiers (`SequencedAssemblyRecipeMixin`) | DEPLOYED (patcherMod), in-game test pending |
 | Armor enchantability overrides for whole materials (echo 18, felsic 21; `ArmorMaterialEnchantabilityMixin`) | DEPLOYED (patcherMod), in-game test pending |
-| Dragon gear autorepair (`#creativeengineering:dragon_gear`, 50 durability every 10 s while worn or held; horse armor too) | DEPLOYED, in-game test pending |
+| Dragon gear autorepair (`#creativeengineering:dragon_gear`, 50 durability every 10 s while worn or held) | DEPLOYED, in-game test pending |
+| Armor cap 50 (vanilla 30) so the full dragon set's 36 armor counts (`ArmorCapMixin`, `[dragon_gear] armorCap`) | BROKEN: Built 2026-10-30 (patcherMod 1.1.04, installed 2026-10-31 00:44); cap PASSED r1031 (SQ-AC-01, -03), set gives 33 not 36 (SQ-AC-02 FAIL, DragonLoot config overrides the tune) |
 | Dragon scale elytra duplication (`creativeengineering:elytra_duplication`) | DEPLOYED; JEI doesn't show it ([jei_coverage.md](jei_coverage.md), JC-02) |
 | Rocket takeoff with the upgraded dragon chestplate (two Easy Elytra Takeoff mixins, `#creativeengineering:elytra_chestplates`) | DEPLOYED (patcherMod), in-game test pending |
 | Air brake (hold-to-use elytra brake, stall; `AirBrakeHandler`) | DEPLOYED; the 2026-09-13 "does nothing" bug was fixed; in-game test pending |
 
-- **Pending:** nothing built and unshipped. GR-01 to GR-30 have never been run. Findings F2, F4 to F6, F8 to F11
-  and F13 (section 4) are open (F1, F3, F7, F12 fixed in 1.0.9); F4, F5, F10 and F13 need your call. Build plan:
+- **Pending:** built and unshipped: F13 (armor cap 50, patcherMod 1.1.04 installed 2026-10-31 00:44; scratch r1031
+  2026-10-31: cap mixin PASSED (SQ-AC-01, -03), SQ-AC-02 FAILED: full dragon set gives 33, not 36, because
+  `dragonloot-common.toml` [dragonloot.armor] 7 / 10 / 9 / 7 overrides the KubeJS tune 7 / 12 / 10 / 7; owner: set the toml or accept 33)
+  and F4 (dragon tools mining level 4, `tune_tools.js`). GR-01 to GR-30 have never been run. Findings F2, F5, F6, F8 to
+  F11 (section 4) are open (F1, F3, F7, F12 fixed in 1.0.9); F5 and F10 need your call. Build plan:
   [briefs/gear_tuning.md](briefs/gear_tuning.md).
 - **Files to open:** [func/tune_tools.js](../kubejs/startup_scripts/func/tune_tools.js) and
   [func/tune_armor.js](../kubejs/startup_scripts/func/tune_armor.js) (the numbers),
@@ -89,8 +93,8 @@ Tooltip numbers (bare fist = 1 damage / 4.0 speed). All epic and fireproof.
 | Echo pickaxe / axe / shovel / hoe | 6 / 12 / 7 / 1 | 1.2 / 1.0 / 1.2 / 4.5 | 10 | 2124 | 18 | 4 |
 | Felsic sword | 10 | 1.7 | | 2501 (F9, fixed 2026-10-28) | 21 | 4 |
 | Felsic pickaxe / axe / shovel / hoe | 7 / 14 / 7.5 / 1 | 1.2 / 1.1 / 1.4 / 5.0 | 11 | 2501 | 21 | 4 |
-| Dragon sword | 11 | 1.75 | | 3350 | 25 | 5 |
-| Dragon pickaxe / axe / shovel / hoe | 8 / 16 / 8 / 1 | 1.2 / 1.2 / 1.6 / 5.5 | 12 | 3350 | 25 | 5 |
+| Dragon sword | 11 | 1.75 | | 3350 | 25 | 4 |
+| Dragon pickaxe / axe / shovel / hoe | 8 / 16 / 8 / 1 | 1.2 / 1.2 / 1.6 / 5.5 | 12 | 3350 | 25 | 4 |
 
 Not tuned (DragonLoot defaults): dragon bow, crossbow, trident, horse armor (F10). For comparison, vanilla netherite:
 sword 8 / 1.6, pickaxe 6 / 1.2, mining speed 9, 2031 uses, enchantability 15.
@@ -138,9 +142,8 @@ KubeJS build and silently did nothing.
 ### 2.6 Dragon gear autorepair
 
 - **What:** every `intervalTicks` (200), any damaged item in `#creativeengineering:dragon_gear` in a player's four
-  armor slots or two hands gets `amountPerInterval` (50) durability back. A horse wearing dragon horse armor too (the
-  same once-per-interval walk over the level's entities as the horse armor effect; since 2026-10-27 only in
-  dimensions with a player in them, [perf.md](perf.md) 10.4).
+  armor slots or two hands gets `amountPerInterval` (50) durability back. Dragon horse armor has no durability (vanilla
+  `HorseArmorItem`), so it is not repaired; its Regeneration is the horse armor effect.
 - **Not repaired:** items in the inventory, backpacks or curios slots.
 - **Tag:** DragonLoot's 14 gear items (both chestplates, bow, crossbow, trident, horse armor), the dragon anvil, the
   dragon shield and the air brake. The anvil and the air brake have no durability, so they're no-ops (F6).
@@ -233,13 +236,13 @@ From a typical 1.5 blocks/tick glide, the default brake reaches the stall speed 
   `[NCH.cfg] no CEConfig.CRAFTING.FELSIC_SHIELD section` and the hardcoded 250 mB / 1 loop / 8 blows apply.
   [shields.md](shields.md) 2.7 lists it as if it were configurable. Fix: add
   `FELSIC_SHIELD = new FelsicPiece(b, "felsic_shield", magicResistance, 250, 1, 8)`.
-- **F2. `potionMb` feeds both fills.** `felsicAssembly` uses the same mB for the Long Reach fill and the Magic
+- **F2. `potionMb` feeds both fills.** DECIDED 2026-10-29 (owner): split it into two config keys (TODO `gear/tuning #6`, not built). `felsicAssembly` uses the same mB for the Long Reach fill and the Magic
   Resistance fill; the toml comment says "used in the final filling step". A felsic helmet costs 500 + 500 mB a loop.
   Fix the comment, or split it into two keys.
 - **F3.** FIXED 2026-10-19 ([plan_1.0.9.md](plan_1.0.9.md)). **Hand-written tag line.** [equipmenttags.js](../kubejs/server_scripts/tags/equipmenttags.js) line 10 is
   `e.add('creativeengineering:elytra_chestplates', 'dragonloot:upgraded_dragon_chestplate')`, against the
   `global.tags` + item-dict rule. Fix: `global.tags.add(e, 'creativeengineering:elytra_chestplates', [i.upgraded_dragon_chestplate])`.
-- **F4. Mining level 5 probably does nothing over 4. Your call.** As far as I know Forge 43 (unverified, no jars in the
+- **F4. Mining level 5 does nothing over 4. RESOLVED 2026-10-30: dragon set to 4** (`tune_tools.js`, every dragon tool `miningLevel: 4`; TODO `gear/tuning #3`, Testing until GR-05 runs). As far as I know Forge 43 (unverified, no jars in the
   repo): a tier not in `TierSortingRegistry` (KubeJS's per-item tier copies are not) falls back to vanilla's level check,
   and nothing in vanilla needs more than 3; netherite-gated mod blocks (`forge:needs_netherite_tool`) are only checked
   for sorted tiers. So echo, felsic and dragon all mine everything, and dragon's 5 is cosmetic. Check: a block in
@@ -270,10 +273,14 @@ From a typical 1.5 blocks/tick glide, the default brake reaches the stall speed 
   [neoCraftHelper.js](../kubejs/startup_scripts/func/neoCraftHelper.js) lines 621-626 uses the toml keys
   (`potionMb`, `hammerBlows`); the helper reads Java field names (`mb`, `blows`). Copying the example would fall back
   to defaults with a warning per field.
-- **F13. The dragon set is over the armor cap.** 7 + 12 + 10 + 7 = 36 armor, but vanilla's `generic.armor`
-  attribute is clamped to 30 and no mod in [MODLIST.md](../pack/MODLIST.md) is known to lift it (no AttributeFix). So
-  6 points probably do nothing. Toughness (18 of a 20 cap) is fine. GR-02 shows
-  which. Options: accept it, trim the dragon pieces to 30, or add a cap lift.
+- **F13. The dragon set is over the armor cap.** BUILT 2026-10-30 (patcherMod 1.1.04, TODO `gear/tuning #2`): owner
+  decision 2026-10-29, lift the cap to 50 with a config key. 7 + 12 + 10 + 7 = 36 armor, but vanilla's `generic.armor`
+  attribute is clamped to 30 (`RangedAttribute`, max 30, jar-checked). `ArmorCapMixin` overrides
+  `RangedAttribute.sanitizeValue` / `getMaxValue` (SRG `m_6740_` / `m_147362_`; no refmap, so the `maxValue` field
+  can't be shadowed) for `Attributes.ARMOR` only, using `[dragon_gear] armorCap` (default 50, range 30 to 1024; the
+  default applies before the config loads). Damage reduction is unchanged: `CombatRules` still caps effective armor
+  at 20 (80 %); with dragon toughness 18, 36 armor holds that cap for hits up to about 104 damage (30 held it to 65).
+  Toughness (18 of a 20 cap) is fine.
 
 ### Known limits
 
@@ -329,7 +336,7 @@ Survival unless noted. `/dumpgear` after a restart gives every stat for GR-01 to
 - [ ] **GR-01 Tool stats:** hover the echo, felsic and dragon pickaxe and sword → damage and speed as in 2.2; all epic
   (purple name). `/dumpgear tools` matches the table.
 - [ ] **GR-02 Armor stats:** wear a full felsic set → 24 armor on the HUD; each piece's tooltip shows +4 Armor
-  Toughness. Full dragon set → note what the HUD shows: 36 if something lifts vanilla's 30 cap, 30 if not (F13).
+  Toughness. Full dragon set → 36 armor (F13, cap 50); `/attribute @s minecraft:generic.armor get` gives 36.
   The bar draws extra rows past 20 (armor bar fix, backlog row 10).
 - [ ] **GR-03 Fireproof:** throw a felsic sword and an echo helmet into lava → both survive.
 - [ ] **GR-04 Echo tools exist:** JEI shows Echo Pickaxe, Axe, Shovel, Hoe with animated textures; the echo pickaxe
@@ -366,7 +373,7 @@ Survival unless noted. `/dumpgear` after a restart gives every stat for GR-01 to
   slot not selected → doesn't.
 - [ ] **GR-20 Autorepair config:** `[dragon_gear.autorepair] enabled = false` → no repair. `intervalTicks = 20` → once a
   second. Put both back.
-- [ ] **GR-21 Horse armor repair:** damaged dragon horse armor on a horse → repairs within 10 s.
+- [x] **GR-21 Horse armor repair:** dropped 2026-10-28; horse armor has no durability.
 - [ ] **GR-22 Elytra duplication:** crafting grid, enchanted elytra (Unbreaking III, part-damaged) + dragon scale → a
   new plain elytra; the enchanted one stays in the grid unchanged; the scale is gone. Elytra + scale + anything else →
   no result.
@@ -396,7 +403,11 @@ Survival unless noted. `/dumpgear` after a restart gives every stat for GR-01 to
 - 2026-10-18: this writeup; findings F1 to F13; tests GR-01 to GR-30. No code changed.
 - 2026-10-19: F1 (`CRAFTING.FELSIC_SHIELD` in CEConfig, patcherMod 1.0.9), F3 (tag helper) and F7 (`useDurationTicks` read per use) fixed ([plan_1.0.9.md](plan_1.0.9.md)). Not run in game; GR-28 now expects a toml change to apply after a config reload.
 - 2026-10-19: F12 fixed (NCH.cfg example uses the Java field names).
+- 2026-10-30: F13 built: armor cap 50 (`ArmorCapMixin`, `[dragon_gear] armorCap`), patcherMod 1.1.04. Scratch test SQ-AC queued; GR-02 expects 36.
+- 2026-10-31: scratch run r1031: SQ-AC-01, -03 PASSED; SQ-AC-02 FAILED (33 armor: DragonLoot's own armor values win over
+  `tune_tools`). No code changed.
 
 ## Owner ideas (scratchpad 2026-10-26)
 
 - The dragon hoe does not consume tree fertilizer either: `gear/tuning #15`.
+- 2026-10-31: scratchpad notes translated into TODO rows (`gear/tuning #19`). No code changed.

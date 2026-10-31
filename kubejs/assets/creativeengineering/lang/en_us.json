@@ -1,5 +1,6 @@
 {
   "curios.identifier.face": "Face",
+  "curios.identifier.feet": "Feet",
   "effect.alexsmobs.knockback_resistance.description": "Gives 50% knockback resistance per level; at level II and above you ignore knockback entirely.",
   "effect.alexsmobs.power_down.description": "Freezes you in place (no walking or jumping) and plays a power-outage sound. Only from Alex's Mobs' April Fools grizzly bear.",
   "effect.better_beacons.long_reach.description": "TODO: write a description for Long Reach.",
@@ -9,7 +10,7 @@
   "effect.botania.feather_feet.description": "Negates damage caused by falling. This effect doesn't prevent fall damage from other causes like Ender Pearls.",
   "effect.botania.soul_cross.description": "When you kill a creature, heals you by 5% of that creature's maximum health.",
   "effect.createaddition.shocking.description": "Stops you moving entirely while it lasts. From standing near a Tesla coil.",
-  "effect.creativeengineering.magic_resistance.description": "TODO: write a description for Magic Resistance.",
+  "effect.creativeengineering.magic_resistance.description": "Reduces magic damage (potions, evoker fangs, thorns, sonic booms, curses and life drain) by 20% per level. Poison and Wither ticks deal no damage while their level is at most this effect's level.",
   "effect.everythingcopper.copper_poisoning.description": "TODO: write a description for Copper Poisoning.",
   "effect.farmersdelight.comfort.description": "Heals half a heart every 4 seconds while your saturation is empty and you don't have Regeneration.",
   "effect.farmersrespite.caffeinated.description": "Increases walk speed by 10% and attack speed by 20%, and keeps resetting the time since you last slept, so phantoms don't come.",

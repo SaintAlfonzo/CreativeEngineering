@@ -23,11 +23,15 @@ public abstract class LivingEntityMixin {
         }
     }
 
-    @Inject(method = "getJumpBoostPower", at = @At(value = "HEAD"), cancellable = true)
+    /**
+     * Pack: the higher of Double Jump's power and Jump Boost's (vanilla's return value), like two Jump Boost sources.
+     * Upstream replaced Jump Boost at HEAD, so Double Jump I with Jump Boost II jumped lower than Jump Boost II alone.
+     */
+    @Inject(method = "getJumpBoostPower", at = @At(value = "RETURN"), cancellable = true)
     private void vinery$improvedJumpBoost(CallbackInfoReturnable<Double> cir) {
         MobEffectInstance effect = ((LivingEntity) (Object) this).getEffect(MobEffectRegistry.get(MobEffectRegistry.IMPROVED_JUMP_BOOST));
         if (effect != null) {
-            cir.setReturnValue(0.1D * (effect.getAmplifier() + 1));
+            cir.setReturnValue(Math.max(cir.getReturnValue(), 0.1D * (effect.getAmplifier() + 1)));
         }
     }
 }

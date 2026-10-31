@@ -33,6 +33,13 @@ ServerEvents.recipes(e => {
 			})
 		}
 
+		//######################### Tentacles removed #########################
+		// Miner's tentacles, baked tentacles and tentacles on a stick (dishes/ocean #4); dishes take calamari instead
+		;[i.tentacles, i.baked_tentacles, i.tentacles_on_a_stick].forEach(t => {
+			R.remove({ output: t }, e)
+			R.remove({ input: t }, e)
+		})
+
 		//######################### Water cup #########################
 		// Spout and Item Drain: copper cup + 250 mB water <-> water cup (farmers_respite.md K12)
 		R.createBottle(i.water_cup, global.fluid.water, e, 'water_cup', { container: i.copper_cup })

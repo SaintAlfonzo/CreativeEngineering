@@ -1272,7 +1272,7 @@
 		"Max Y" = 0
 		"Min Mob Count" = 5
 		"Max Mob Count" = 8
-		"Enable Extra Loot Table" = true
+		"Enable Extra Loot Table" = false
 		"Activation Range" = 2.5
 		#How many blocks to search vertically from a position before trying to place a block. Higher means you'll get more boxes in open spaces.
 		"Search Range" = 15

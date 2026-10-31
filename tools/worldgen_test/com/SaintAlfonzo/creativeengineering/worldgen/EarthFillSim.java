@@ -43,7 +43,7 @@ import java.util.stream.Stream;
  * Calibration for the earth-fill limits: generates real vanilla structures on the vanilla overworld terrain (builtin
  * registries, no mods) at random sites inside their biomes, runs the EarthFill counting on each, and prints how the
  * water / air counts are distributed and what share each candidate limit pair would cancel.
- * Needs client-extra.jar (the vanilla templates) on the classpath. Args: [seed] [sites per structure].
+ * Needs client-extra.jar (the vanilla templates) on the classpath. Args: [seed] [sites per structure] [beard|footprint].
  */
 public class EarthFillSim {
 
@@ -110,6 +110,10 @@ public class EarthFillSim {
 			beardReach(access, generator, source, randomState, templates, structures, height, earth, seed, sites);
 			System.exit(0);
 		}
+		if (args.length > 2 && args[2].equals("footprint")) {
+			footprint(access, generator, source, randomState, templates, structures, height, earth, seed, sites);
+			System.exit(0);
+		}
 
 		System.out.printf("%-28s %5s %6s | %-27s | %-27s | cancelled %% at (water,air) limits %s | after beard: water %-19s | air %-19s | mound %-13s | sizes s/m/l/h | cancelled %% (by water/air/mound) | pruned starts %% / pieces dropped / cancelled after %% / unlinked pieces%n",
 				"structure", "n", "earth", "over water p50/p90/p99/max", "over air p50/p90/p99/max", Arrays.deepToString(LIMITS), "p50/p90/p99/max", "p50/p90/p99/max", "p50/p90/p99/max");
@@ -142,7 +146,8 @@ public class EarthFillSim {
 				int[] parentOf = EarthFill.links(boxes, joints)[0];
 				int unlinked = 0;
 				for (int i = 1; i < all.size(); i++) if (parentOf[i] < 0) unlinked++;
-				List<StructurePiece> kept = EarthFill.pruned(all, p -> EarthFill.pieceEarth(p, templates, earth, 3), EarthFill.beardOf(structure), terrain, new ArrayList<>());
+				List<StructurePiece> kept = EarthFill.pruned(all, p -> EarthFill.pieceEarth(p, templates, earth, 3), EarthFill.beardOf(structure), 0, terrain,
+						null, -1, -1, new ArrayList<>());   // the earth limits only (the sim has no footprint)
 				List<EarthFill.EarthPiece> keptPieces = new ArrayList<>();
 				for (StructurePiece p : kept) {
 					long[] pe = EarthFill.pieceEarth(p, templates, earth, 3);
@@ -268,6 +273,78 @@ public class EarthFillSim {
 			System.out.println(f);
 			if (m == 0) System.out.println(n);
 		}
+	}
+
+	/**
+	 * "footprint" mode (TODO structures/terrain #2): what earth fill misses under bearded pieces with a built bottom.
+	 * For every rigid template piece of each start, its footprint is the columns with a solid block (not air, not a
+	 * structure block / jigsaw / void) in its bottom baseLayers. Per column the open gap under the piece's bottom is
+	 * read from the predicted terrain (air or water, as EarthFill.Terrain#openBelow). A column deeper than
+	 * maxMoundHeight is a mound column; earth fill counts it only when the column holds template earth. Prints per
+	 * structure the mound columns earth fill counts and the ones it misses, and the share of starts the missed
+	 * columns would push over their size's mound limit (the earth count's size; no earth = small).
+	 */
+	static void footprint(RegistryAccess access, NoiseBasedChunkGenerator generator, MultiNoiseBiomeSource source, RandomState randomState,
+			StructureTemplateManager templates, Registry<Structure> structures, LevelHeightAccessor height, List<TagKey<Block>> earth, long seed, int sites) {
+		int layers = WorldgenConfig.earthBaseLayers(), moundDepth = WorldgenConfig.earthMaxMoundHeight(), reach = WorldgenConfig.earthBeardReach();
+		java.util.function.Function<net.minecraft.world.level.levelgen.structure.templatesystem.StructureTemplate, long[]> bottom = t -> {
+			it.unimi.dsi.fastutil.longs.LongArrayList out = new it.unimi.dsi.fastutil.longs.LongArrayList();
+			for (var info : EarthFill.firstPalette(t)) {
+				if (info.pos.getY() >= layers || TemplateTrim.kind(info.state) == TemplateTrim.Kind.AIR || TemplateTrim.kind(info.state) == TemplateTrim.Kind.MARKER) continue;
+				out.add(info.pos.asLong());
+			}
+			return out.toLongArray();
+		};
+		System.out.printf("Footprint: columns under bearded rigid pieces (bottom %d layers), gap = open blocks under the piece; reach %d, mound depth %d%n", layers, reach, moundDepth);
+		System.out.printf("%-28s %5s | %-21s | %-21s | %-21s | %-21s | %s%n", "structure", "n", "footprint cols p50/p90/max", "over reach p50/p90/max",
+				"mound counted p50/p90/max", "mound missed p50/p90/p99/max", "starts with missed % / newly over the mound limit %");
+		Random rnd = new Random(seed);
+		for (Map.Entry<String, Set<String>> e : SITES.entrySet()) {
+			Structure structure = structures.get(new ResourceLocation(e.getKey()));
+			if (structure == null) { System.out.println(e.getKey() + ": not in the builtin registry"); continue; }
+			if (EarthFill.beardOf(structure) != EarthFill.Beard.BEARD) { System.out.println(e.getKey() + ": no beard (" + structure.terrainAdaptation().getSerializedName() + "), skipped"); continue; }
+			List<int[]> res = new ArrayList<>();   // footprint cols, over reach, mound counted, mound missed, newly over limit
+			int tries = 0;
+			while (res.size() < sites && tries++ < sites * 400) {
+				int cx = rnd.nextInt(8000) - 4000, cz = rnd.nextInt(8000) - 4000;
+				Holder<Biome> b = source.getNoiseBiome(cx * 4 + 2, 16, cz * 4 + 2, randomState.sampler());
+				if (!e.getValue().contains(b.unwrapKey().map(k -> k.location().getPath()).orElse(""))) continue;
+				StructureStart start = structure.generate(access, generator, source, randomState, templates, seed, new ChunkPos(cx, cz), 0, height, h -> true);
+				if (!start.isValid()) continue;
+				EarthFill.Terrain terrain = EarthFill.predicted(generator, randomState, height, GRID);
+				it.unimi.dsi.fastutil.longs.LongOpenHashSet seen = new it.unimi.dsi.fastutil.longs.LongOpenHashSet();
+				List<EarthFill.EarthPiece> earthPieces = new ArrayList<>();
+				int cols = 0, overReach = 0, counted = 0, missed = 0;
+				for (StructurePiece p : start.getPieces()) {
+					int pieceBottom = p.getBoundingBox().minY();
+					long[] pe = EarthFill.pieceEarth(p, templates, earth, layers);
+					if (pe.length > 0) earthPieces.add(new EarthFill.EarthPiece(pe, pieceBottom, EarthFill.Beard.BEARD));
+					it.unimi.dsi.fastutil.longs.LongOpenHashSet earthCols = new it.unimi.dsi.fastutil.longs.LongOpenHashSet();
+					for (long l : pe) earthCols.add(ChunkPos.asLong(net.minecraft.core.BlockPos.getX(l), net.minecraft.core.BlockPos.getZ(l)));
+					for (long l : EarthFill.pieceBlocks(p, templates, bottom)) {
+						int x = net.minecraft.core.BlockPos.getX(l), z = net.minecraft.core.BlockPos.getZ(l);
+						long c = ChunkPos.asLong(x, z);
+						if (!seen.add(c)) continue;
+						cols++;
+						int gap = terrain.openBelow(x, pieceBottom - 1, z, moundDepth + 1);
+						if (gap > reach) overReach++;
+						if (gap > moundDepth) { if (earthCols.contains(c)) counted++; else missed++; }
+					}
+				}
+				int size = EarthFill.sizeOf(EarthFill.earthBlocks(earthPieces), WorldgenConfig.earthSizeBounds());
+				int limit = WorldgenConfig.earthSizeLimits().get(size).get(1);
+				int newlyOver = limit >= 0 && counted <= limit && counted + missed > limit ? 1 : 0;
+				res.add(new int[]{cols, overReach, counted, missed, newlyOver});
+			}
+			if (res.isEmpty()) { System.out.println(e.getKey() + ": no start in " + tries + " tries"); continue; }
+			System.out.printf("%-28s %5d | %-26s | %-22s | %-25s | %-28s | %.0f / %.0f%n", e.getKey(), res.size(), pct3(res, 0), pct3(res, 1), pct3(res, 2), pct(res, 3),
+					100.0 * res.stream().filter(r -> r[3] > 0).count() / res.size(), 100.0 * res.stream().filter(r -> r[4] == 1).count() / res.size());
+		}
+	}
+
+	static String pct3(List<int[]> res, int col) {
+		int[] v = res.stream().mapToInt(r -> r[col]).sorted().toArray();
+		return String.format("%d/%d/%d", v[v.length / 2], v[(int) (v.length * 0.9)], v[v.length - 1]);
 	}
 
 	static double density(net.minecraft.world.level.levelgen.DensityFunction f, int x, int y, int z) {

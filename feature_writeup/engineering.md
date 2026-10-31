@@ -10,8 +10,10 @@
 | 15 components (IE iron and steel plus 13 pack ones) by crafting, sequenced assembly and blueprint, with disassembly | DEPLOYED |
 | Wire coils and coil blocks for 12 metals plus the HV coil, by crafting, assembly and blueprint, with disassembly | DEPLOYED |
 | Sample syringe: empty + 7 filled variants, sample 8 mob types, feeds cultivated meat | DEPLOYED |
+| Exclusive chance outputs (`"exclusive_results"` on any Create processing recipe); rose quartz sand blasting 80 % rough / 20 % polished | BUILT 2026-10-30 (patcherMod 1.1.04, installed 2026-10-31 00:44); EN-21 recipe and log half scratch server PASSED r1031 (2026-10-31, SQ-EN-21, -21b); EN-19, EN-20 in game pending |
 
-- **Pending:** nothing built and unshipped. EN-01 to EN-18 have never been run. Findings F1 to F8 (section 4) are
+- **Pending:** exclusive chance outputs and rose quartz sand blasting (built 2026-10-30, jar installed 2026-10-31 00:44; EN-21 server half PASSED
+  r1031 2026-10-31; EN-19, EN-20 and the EN-21 JEI look in game). EN-01 to EN-18 have never been run. Findings F1 to F8 (section 4) are
   open; F2 and F4 need your call.
 - **Files to open:** [sawmill/SawbladeRouting.java](../development/patcherMod/src/main/java/com/SaintAlfonzo/creativeengineering/sawmill/SawbladeRouting.java),
   [generation_scripts/sawmill.js](../kubejs/generation_scripts/sawmill.js),
@@ -158,6 +160,20 @@ Coil blocks are KubeJS blocks ([coil_blocks.js](../kubejs/startup_scripts/items/
 - **Syringe:** items in [items/sample_syringe.js](../kubejs/startup_scripts/items/sample_syringe.js), the mob list in
   `global.sampleSyringe`, handlers in [server_scripts/engineering/sample_syringe.js](../kubejs/server_scripts/engineering/sample_syringe.js)
   (`ItemEvents.entityInteracted` and `EntityEvents.hurt`).
+- **Exclusive chance outputs** (2026-10-30, `engineering/dreams-and-desires #3`): Create rolls every chance output of a
+  processing recipe independently, so "80 % A, 20 % B" can give both or neither. A recipe JSON with
+  `"exclusive_results": true` instead rolls once per processed item and gives one output, picked by weight: chances are
+  slices of [0, 1) in listed order, a remainder below 1 gives nothing, a sum over 1 logs a warning
+  (`[exclusive-results]`). `ProcessingRecipeSerializerMixin` reads the flag (JSON path only; the client never rolls),
+  `ProcessingRecipeMixin` carries it (`fan/duck/ProcessingRecipeExt`) and replaces `rollResults` with
+  `fan/ExclusiveResults.roll`. Works for every Create processing type that rolls through `rollResults` (fans, D&D
+  sanding, millstone, crushing, basin); sequenced assembly's forced result keeps Create's path. KubeJS: pass
+  `{ exclusive: true }` to a helper that supports it (so far `NCH.ddSanding`).
+- **Rose quartz sand blasting:** D&D's `create_dd:sanding/rose_quartz` (100 % polished) is replaced by
+  `creativeengineering:ddsanding/rose_quartz` in [redstone.js](../kubejs/server_scripts/engineering/redstone.js):
+  exclusive, 80 % rose quartz / 20 % polished. One pass polishes about a fifth; loop the belt (funnel or chute back to
+  the start) or let the items fall back into the stream to polish the rest. D&D's `SandingType.process` goes through
+  `RecipeApplier.applyRecipeOn`, one `rollResults` per item. Sandpaper (100 %) and charging are unchanged.
 
 ## 4. Limits and decisions
 
@@ -176,23 +192,25 @@ Coil blocks are KubeJS blocks ([coil_blocks.js](../kubejs/startup_scripts/items/
 - **F4. Component centres differ by route. Your call.** The iron component's blueprint takes a copper ingot where
   crafting and assembly take a copper rod; the diamond component's blueprint takes a gold component where the others
   take an electrum one. Pick one centre each. The comments are off too ("4 plates around a copper ingot", "deploy 3
-  plates onto a copper ingot", "2 plates + 1 copper ingot").
+  plates onto a copper ingot", "2 plates + 1 copper ingot"). Owner asked for more info 2026-10-30 (brief recommends the copper rod and the electrum
+  component).
 - **F5. Component tier names are decided in the item names but not in the code comments.** `components.js` lines 18 and
   22 still say `--- Light? ---` / `--- Dense? ---`; the items are already "Aluminum Light Component" and "Uranium Heavy
   Component". [TODO](todo/TODO.md) `engineering/sawmill-and-components #6` lists this as undecided; it can be closed by deleting the comments, or the
-  names changed.
+  names changed. DECIDED 2026-10-29: rename to Light / Heavy when usage becomes clear, keeping the adjective order
+  correct (or a tooltip joking about the grammar).
 - **F6. Disassembly comments promise a tool the recipes don't take.** The component, wire-coil and coil-block
   disassembly comments say a screwdriver or wire cutters is spent per craft; only the HV coil block's recipe lists the
   wirecutter. The wire-coil one also says "6 wire coils" (code: 4), and the HV assembly comment says 4 coils (code:
   8). Either add the tool or fix the comments.
 - **F7. The bucket → shulker shell fan recipe eats buckets** 3 times in 4. Intended as a cost, or add the bucket back as
-  a 75% output.
+  a 75% output. DECIDED 2026-10-29: keep (3 in 4 eaten); nothing to build.
 - **F8. `cultivated_meat.js` redefines `i.culture_base`** (line 18) although `item_dict.js` already has it. Harmless
   (same value), against the define-once rule. Belongs to backlog row 20.
 - **F9. Component plans (scratchpad 2026-10-21).** In [TODO](todo/TODO.md) `engineering/sawmill-and-components`:
   - `#8` Remove every existing metal chain recipe and generate them all in KubeJS (an NCH helper) from a 2-D table of
     material x component type (exists or not); hand-tweaked chains are flagged and built separately.
-  - `#9` Wire / wire coil / coil block alternative recipes by conductivity.
+  - `#9` Wire / wire coil / coil block alternative recipes by conductivity. Owner asked for more info 2026-10-30.
   - `#10` A cover for IE wire connectors.
   - `#11` Most electron tubes become a tag in recipes (visual ones like nixie tubes stay); fewer vacuum tubes do, lower
     tier tech only.
@@ -235,6 +253,7 @@ Brief: [briefs/engineering_dreams-and-desires.md](briefs/engineering_dreams-and-
 - Sawmill: patcherMod [sawmill/](../development/patcherMod/src/main/java/com/SaintAlfonzo/creativeengineering/sawmill/) (`SawbladeRouting`, `duck/SawmillProcessExt`, `duck/SawmillRecipeExt`), mixins `SawmillProcessMixin`, `SawmillRecipeMixin`, `SawmillRecipeSerializerMixin`, [item/PrecisionSawbladeItem.java](../development/patcherMod/src/main/java/com/SaintAlfonzo/creativeengineering/item/PrecisionSawbladeItem.java), `data/forge/tags/items/sawblades.json`, `data/creativeengineering/recipes/sawmill/` (211); [generation_scripts/sawmill.js](../kubejs/generation_scripts/sawmill.js); `kubejs/data/creativeengineering/recipes/{blueprint,sawmill}/`; [blueprints.js](../kubejs/server_scripts/engineering/blueprints.js) (blueprint item); [tooltips.js](../kubejs/client_scripts/tooltips.js) line 446.
 - Fan: patcherMod [fan/](../development/patcherMod/src/main/java/com/SaintAlfonzo/creativeengineering/fan/), [compat/DragonBreathingJEI.java](../development/patcherMod/src/main/java/com/SaintAlfonzo/creativeengineering/compat/DragonBreathingJEI.java), `data/creativeengineering/tags/blocks/fan_processing_catalysts/dragon_breathing.json`; [dragon_breathing.js](../kubejs/server_scripts/magic/dragon_breathing.js); `NCH.dragonBreathing`.
 - Components and coils: [items/components.js](../kubejs/startup_scripts/items/components.js), [items/coil_blocks.js](../kubejs/startup_scripts/items/coil_blocks.js), [components.js](../kubejs/server_scripts/engineering/components.js), [metal_base_materials.js](../kubejs/server_scripts/metal/metal_base_materials.js), [transition_items.js](../kubejs/startup_scripts/changes/transition_items.js).
+- Exclusive outputs: patcherMod [fan/ExclusiveResults.java](../development/patcherMod/src/main/java/com/SaintAlfonzo/creativeengineering/fan/ExclusiveResults.java), `fan/duck/ProcessingRecipeExt`, mixins `ProcessingRecipeMixin`, `ProcessingRecipeSerializerMixin`; `NCH.ddSanding`; rose quartz recipe in [redstone.js](../kubejs/server_scripts/engineering/redstone.js).
 - Syringe: [items/sample_syringe.js](../kubejs/startup_scripts/items/sample_syringe.js), [func/sample_syringe.js](../kubejs/startup_scripts/func/sample_syringe.js), [server_scripts/engineering/sample_syringe.js](../kubejs/server_scripts/engineering/sample_syringe.js).
 
 ## 6. Offline checks
@@ -272,6 +291,11 @@ patcherMod's copies to see whether the jar is current.
   moobloom gives the cow one too; right-click a zombie → nothing. Hitting a cow with the empty syringe samples it too
   (F10, fixed 2026-10-22).
 - [ ] **EN-18 Syringe used up:** cow syringe + culture base + slimeball → culture beef, empty syringe left in the grid.
+- [ ] **EN-19 Sanding split:** encased fan through sand onto a belt, 64 rose quartz through it → exactly 64 items out,
+  about 51 rose quartz and 13 polished; no stack ever grows or loses items.
+- [ ] **EN-20 Loop:** feed the rough output back through the fan (funnel loop) until none is left → 64 polished.
+- [ ] **EN-21 JEI and log:** *Recipe and log half: scratch server PASSED r1031 (2026-10-31, SQ-EN-21, -21b).* JEI on rose quartz (U) → the D&D sanding page shows only the pack recipe (80 % / 20 %), not
+  D&D's 100 % one; `latest.log` has no `[exclusive-results]` warning.
 
 ## 8. History
 
@@ -285,3 +309,5 @@ patcherMod's copies to see whether the jar is current.
   `coil_<metal>` and `wire_coil_block_<metal>` are gone from the item dict (one key per id: `wire_coil_<metal>`,
   `coil_block_<metal>`); the coil transition items keep their `kubejs:incomplete_coil_<metal>` ids and now take their
   sprite from `i.wire_coil_<metal>` (`transition_items.js`). No recipe change.
+- 2026-10-30: exclusive chance outputs for Create processing recipes and rose quartz sand blasting
+  (`engineering/dreams-and-desires #3`); tests EN-19 to EN-21. patcherMod 1.1.04 built, not installed.

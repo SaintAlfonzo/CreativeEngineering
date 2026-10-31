@@ -29,15 +29,19 @@ PlayerEvents.loggedIn(e => {
 
 	var $LevelResource = Java.loadClass('net.minecraft.world.level.storage.LevelResource')
 	var worldRoot = server.getWorldPath($LevelResource.ROOT).toAbsolutePath().normalize()
-	var trackingFile = worldRoot.resolve('data').resolve('starterkit').resolve('tracking.json').toFile() // java.io/nio are class-filtered: no loadClass, JsonIO + instance methods only
-	var dedicated = server.isDedicatedServer()
-	var key = dedicated ? String(player.getStringUUID()) : String(worldRoot.getFileName())
+	// java.io/nio are class-filtered: no loadClass, JsonIO + instance methods only. Path.resolve has a Path and a String
+	// overload that Rhino can't choose between, so the String one is named; KubeJS 1902's JsonIO takes a Path.
+	var trackingPath = worldRoot['resolve(java.lang.String)']('data/starterkit/tracking.json')
+	var trackingFile = trackingPath.toFile()
+	var dedicated = server.isDedicated() // KubeJS's name: Rhino can't see MinecraftServer.isDedicatedServer on DedicatedServer
+	// Entity UUID getters are hidden by KubeJS; the profile id is the same uuid
+	var key = dedicated ? String(player.getGameProfile().getId()) : String(worldRoot.getFileName())
 	var env = dedicated ? 'multiplayer' : 'singleplayer'
 
 	var tracking = { singleplayer: {}, multiplayer: {} }
 	if (trackingFile.exists()) {
 		try {
-			var parsed = JSON.parse(String(JsonIO.read(trackingFile)))
+			var parsed = JSON.parse(String(JsonIO.readString(trackingPath)))
 			if (parsed && typeof parsed === 'object') {
 				tracking.singleplayer = parsed.singleplayer || {}
 				tracking.multiplayer = parsed.multiplayer || {}
@@ -79,7 +83,7 @@ PlayerEvents.loggedIn(e => {
 		tracking[env][key] = true
 		try {
 			trackingFile.getParentFile().mkdirs()
-			JsonIO.write(trackingFile, tracking)
+			JsonIO.write(trackingPath, tracking)
 		} catch (err) {
 			console.warn('[starter-kit] could not write ' + trackingFile + ': ' + err)
 		}

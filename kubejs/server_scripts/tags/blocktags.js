@@ -30,6 +30,9 @@ ServerEvents.tags('block', e => {
 	// Stove heat on top: FD's lit gate means a pot or skillet on the oven only heats while the oven is heated.
 	t.add(e, b.t_fd_heat_sources, b.oven)
 	t.mineable(e, 'pickaxe', null, b.oven)
+	// Monster box (mob_block_tweaks.md 2.9): mined like obsidian; a contraption must not carry the vault off.
+	t.mineable(e, 'pickaxe', 'diamond', b.monster_box, { exclusive: true })
+	t.add(e, b.t_create_non_movable, b.monster_box)
 	// Bakeware is hammered on the cutting board (NCH.hammering); without this the IE hammer rotates the board
 	// instead of cutting (patcherMod IECompat.registerHammerNoRotate).
 	t.add(e, b.t_hammer_no_rotate, b.cutting_board)
@@ -38,6 +41,10 @@ ServerEvents.tags('block', e => {
 	// (patcherMod CounterToppers, BlockStateCounterTopperMixin, TODO cooking/kitchen #8, #20).
 	t.add(e, b.t_counter_supports, [b.cfb_counter, b.cfb_corner])
 	t.addMatching(e, b.t_counter_toppers, [b.cutting_board, b.dd_food_plate, b.dd_small_food_plate, b.dd_plated_foods, b.coaster])
+	// Villager ladders (patcherMod McaVillagerPathLaddersMixin, feature_writeup/mob_block_tweaks.md 2.8): every block named
+	// *ladder*; the mixin also requires minecraft:climbable, so a non-climbable match does nothing. Vines, ropes, chains,
+	// scaffolding and grab rails stay out on purpose.
+	t.addMatching(e, b.t_villager_ladders, '*:*ladder*')
 	// Rubidium blends the vanilla grass block's tint per vertex across neighbours (biome blend > 0) but colours
 	// modded blocks flat per block, so Vinery's grass slab came out a shade off next to grass. This tag opts it in.
 	t.add(e, b.t_blendable_blocks, global.item.grass_slab)

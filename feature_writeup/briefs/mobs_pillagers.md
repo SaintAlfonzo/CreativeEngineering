@@ -9,7 +9,7 @@ pillager spawners), [mobs_spawns.md](mobs_spawns.md) (same rule file), [structur
 
 | Row | Change | Status | Size |
 |---|---|---|---|
-| #1 | Pillager overhaul: lone pillagers + per-structure mix + spawner removal | Planned | large; split into 1a (lone pillagers, data), 1b (per-structure mix, data + templates), 1c (= contents #3) |
+| #1 | Pillager overhaul: lone pillagers + per-structure mix + spawner removal | Planned (spawner removal and the per-structure box mixes built 2026-10-30 by contents #3, [structure_tuning.md](../structure_tuning.md) 3.32; template mob swaps and lone pillagers left) | large; split into 1a (lone pillagers, data), 1b (per-structure mix, data + templates), 1c (= contents #3) |
 | #4 | More vindicators in single-mob spawn pools | Planned | small to medium: structure spawn overrides (28 T&T files) and/or pool weights |
 | #3 | Evokers and illusioners in some pillager structures | Planned | medium: template variants + pool overrides |
 | #2 | End pillagers in diving gear | Planned | small: one KubeJS server script |
@@ -53,7 +53,8 @@ templates; T&T's `kaisyn:outpost/pillagers/vindicator.nbt` is the model (size [1
 
 Mobs from templates keep `PersistenceRequired` 0, so non-patrolling pillagers and vindicators despawn like any monster
 once the player is 128+ blocks away (vanilla `PatrollingMonster.removeWhenFarAway` returns true when not patrolling;
-from memory). Structures repopulate only through their spawn override.
+verified 2026-10-30, [structures_contents.md](structures_contents.md) #3). Structures repopulate only through their spawn
+override, and not at all when they are a meta anchor or part (metas drop members' boxes; same brief).
 
 ---
 
@@ -148,7 +149,7 @@ look; structure_tuning.md new subsection "3.20 Pillager garrisons" with the fina
 
 ### Gotchas
 - **Bad Omen from lone pillagers:** natural pillagers become patrol captains with an ominous banner 6 % of the time
-  (`PatrollingMonster.finalizeSpawn`, any reason but PATROL / EVENT / STRUCTURE; from memory). Killing one gives Bad
+  (`PatrollingMonster.finalizeSpawn`, any reason but PATROL / EVENT / STRUCTURE; verified 2026-10-30). Killing one gives Bad
   Omen, so lone pillagers in dark forests start raids. Fine if wanted; else strip leaders in a KubeJS
   `EntityEvents.spawned` handler.
 - Monster cap: lone pillagers and structure boxes share the 70-per-area monster cap with everything else.
@@ -157,7 +158,8 @@ look; structure_tuning.md new subsection "3.20 Pillager garrisons" with the fina
 - Overriding a jar template by path (T&T `kaisyn:*`) hides later fixes from a T&T update; keep the tool's `--check`
   comparing against the jar.
 - Evokers drop a Totem of Undying every time: never put them in a repeating spawn box (spawn overrides), only as
-  one-off template mobs.
+  one-off template mobs. 2026-10-30: the owner wanted evokers in boxes; `spawn_boxes.json` `no_drops` strips the
+  totem from box evokers ([structure_tuning.md](../structure_tuning.md) 3.32).
 
 ### Tests (MS- for the biome rule, ST- for structures; next free numbers)
 - **MS-32 lone pillagers load:** rejoin -> rule `lone_pillagers` matched about 19 biomes; `/dumpspawns` dark_forest
@@ -183,7 +185,7 @@ Single-mob spawn sources that only give pillagers (verified):
   `exclusives/pillager_outpost_*.json` in the T&T jar): `"spawn_overrides": {"monster": {"bounding_box": "full",
   "spawns": [{"type": "minecraft:pillager", "minCount": 1, "maxCount": 2, "weight": 1}]}}`. This is the continuous
   respawn of every T&T outpost.
-- Vanilla `minecraft:pillager_outpost` spawn override (pillager only; vanilla data, from memory).
+- Vanilla `minecraft:pillager_outpost` spawn override (pillager only, 1-1, `full`; defined in code, verified 2026-10-30).
 - Pools `unwrecked_ships:sailors/pillager` (8 slots on the Unwrecked pillager ship), and the spawn boxes
   `structures/contents #3` adds (pillager only, per its brief).
 - Already mixed: `kaisyn:outpost/pillagers/grunt` (1 : 1), `ipo:pillager_outpost/entities` (vindicator only).

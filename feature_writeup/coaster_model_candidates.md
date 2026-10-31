@@ -1,6 +1,15 @@
 # Coaster model candidates
 
-Status: ANALYSIS 2026-10-26, nothing built. Read-only comparison; no model, tag or script was changed by it.
+Status: ANALYSIS 2026-10-26; partly applied 2026-10-29 ([kitchen.md](kitchen.md) 2.3, TODO `cooking/kitchen #21`). Read-only comparison. Open: recoloured models for the Good / Fair matches that would show the wrong colour on a borrowed model.
+
+**2026-10-29 update.** The 56 pack coaster files were gone by 2026-10-27 (the generator could not read Display Delight
+1.7.0's multipart blockstates) and the tag was the port's 96. `tools/gen_coaster_models.py` now reads them and every
+jar link: 155 Display Delight foods (many of the references and matches below, for example the Farmer's Respite
+teas and coffee, now have their own DD model), 26 Vinery wines and 8 Vintage Delight jars from their own block
+models, and 19 borrows in its `BORROW` table. Only same-picture matches were borrowed (Farmer's Respite long/strong
+drinks, Create Central Kitchen pumpkin pie slice, Enchanted Golden Carrot with glint): the score below ignores hue,
+so a Good or Fair match can still show the wrong colour on a borrowed model (golden foods, other teas, cookies).
+Those stay out until they get a recoloured model. Tag 304.
 
 ## 1. Tag state
 

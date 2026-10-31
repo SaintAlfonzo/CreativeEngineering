@@ -1,5 +1,7 @@
 # structures / earthfill: implementation brief
 
+Build plan for every open row: "Build plan (2026-10-30)" below.
+
 Written 2026-10-21 from [todo/TODO.md](../todo/TODO.md) `# structures`, rows `structures/earthfill` #2, #3, #4, #6, #7
 (open) and #1, #5, #8 (Testing). Reference for how earth fill works today: [structure_tuning.md](../structure_tuning.md)
 3.13 (earth fill), 3.14 (water fill), 3.15 (terrain adaptation, sunk starts), 7.5 (the 1.0.9 changes). Code:
@@ -15,21 +17,144 @@ numbers, so renumber against structure_tuning.md 8 (highest today: ST-205) when 
 None of these rows touches recipes, items or the `global.NCH` / `_lib/*_dict.js` dictionaries: they are worldgen data
 (structure tags, which go through `global.tags.add` as today), CEConfig values and patcherMod Java.
 
-## Scope and order
+## Build plan (2026-10-30)
 
-| Order | Row | Kind | Why this order |
+**Executed 2026-10-30 (phases 0 to 3, plus D3 / D4).** Owner decisions: D1 cover all structures (not only earth
+bases), D2 close #1, #2, #6, D3 and D4 prune instead of cancel, including metas near coasts (only the offending part
+goes). Built into patcherMod 1.1.04 (installed in `mods/`), EarthFillTest 91 and MetaTest 76 green; nothing run in
+game yet (queue SQ-EF-01 to -08). Feature writeup: [structure_tuning.md](../structure_tuning.md) 3.28 (ST-235 to
+ST-242). TODO rows: #13 (phase 1), #14 (phase 2), #16 (D3, D4), #3, #4 built; #1, #2 archived; #15 (phase 4) built later the same day (3.29).
+Differences from the plan below:
+- E4 is not a bug (earth below the beard's reach does hang); not changed.
+- E12's silent config fallback was left alone: `WorldgenConfig` falls back on purpose before the config loads and in
+  the headless tests, so a warning there would fire on every early read.
+- Phase 2 builds the code footprint (D1), not the data tag; the spans only cover structures in the
+  `surface_structures` step and pieces reaching above sea level less `baseLayers`, so underground and Nether giants
+  read no terrain. New structure tag `earth_fill/wet_ok` for stilted huts.
+- Phase 2 step 1 (measure first) became the scratch entries SQ-EF-03 and -07, after the build.
+- D3 / D4 (phase 4 in the plan) were built now because the owner decided them and phase 2 makes villages wetter.
+- #3: `startPool` is SRG `f_227605_`; the `f_227607_` in the #3 section below is `maxDepth`. Only `ancient_crypt` was
+  tagged; the seabed ruins wait for SQ-EF-05.
+- #4: override set; fit narrowing waits for SQ-EF-06.
+
+Replaces the 2026-10-21 "Scope and order" table. Inputs: every `structures/earthfill` TODO row, the SQ-WG30 results
+(scratch_queue.md, 2026-10-30), and a full read of `EarthFill.java` (923 lines today; line numbers below are today's).
+Nothing in this section is built yet unless it says so.
+
+### State of every row today
+
+| Row | Real state | Action |
+|---|---|---|
+| #1 water / plinths / `avoidCoasts` | Deployed 1.0.9, ST-199..205 passed | close |
+| #2 `maxWaterSurplus` 0 | SQ-WG30-E01 PASS (6 too-wet cancels inland, all at 1.76x or wetter; 0 on the coast) | close; value stays 0 |
+| #9 `log = ALL` vs all-off overrides | SQ-WG30-A01 PASS; A03 partial. **Fix incomplete**: see E2 below | keep open for E2 |
+| #10 sunk starts and the beard | SQ-WG30-A02 partial (camp flush). **Fix incomplete**: see E3 below | keep open for E3 |
+| #6 modded limits | ST-52 did the calibration in Phase 7 | close, tick ST-52 |
+| #7 hot spots | Deployed with 1.1.04 (client); server still 1.1.03 | close when the server takes 1.1.04 |
+| #3 sunk-start candidates | Not started | phase 3 |
+| #4 undead castle | Not started | phase 3 |
+| #5 stone bases | Drum tower + End House; SQ-EN-07 earth half never run | phase 3 |
+| #8 water fill | ST-57 data exists (07_phase_7.md 2.4), unticked | tick ST-57 after reading it |
+| #11 desert structures in water | Not started; **the row's recommended fix is backwards** (see phase 2) | phase 2 |
+| #12 camps / ruins floating in water | Not started; probably the same cause as #11 | phase 2 |
+
+Stale facts corrected with this pass: the 1.1.04 jar in `mods/` is byte-identical to `build/libs` (so "built, not
+installed" in #2, #9, #10 and `structures/metas #5` is no longer true); #2's "Decisions" and #11's "keep 0.5" predate
+the value 0.
+
+### Phase 0: bookkeeping (docs only)
+Close #1, #2, #6 (tick ST-52), tick ST-57 for #8 if its 07_phase_7.md data has no wrong cancel. Update #9 and #10
+to point at E2 and E3.
+
+### Phase 1: correctness fixes (patcherMod, one build, all offline-testable)
+
+| Id | Defect (verified by reading) | Fix | EarthFillTest case |
 |---|---|---|---|
-| 1 | Bugs A and B (new, below) + #2 | patcherMod (2 small fixes) + config | Two bugs in the 1.0.9 earth fill found while reading the code. Fix them before any calibration, because bug A changes what a `log = ALL` run cancels |
-| 2 | #3 sunk-start candidates | data (+ optional patcherMod) | Uses the sunk-start machinery; bug B changes its earth-fill numbers, so after 1 |
-| 3 | #4 undead castle | data / config | Needs a `log = ALL` sample run; do it in the same scratch run as #2 and #3 |
-| 4 | #6 modded limits | none left (close it) | Phase 7 (ST-52) already did the calibration; what is left is #2 and #4 |
-| 5 | #7 hot spots | patcherMod | Independent; two separate changes (twigs obelisk, terrain cache). Only if worldgen speed matters (decision) |
+| E1 | `earthUnlimited` (627): `o.c() < 0` is true for a two-number override, because a missing mound is `UNSET` = `Integer.MIN_VALUE`. `"id=-1,-1"` (meant: lift water and air, keep the size's mound limit) skips the whole check (mound and footprint share included) | `o.c() != Override.UNSET && o.c() < 0` | `x=-1,-1` over a mound and a wet footprint -> cancelled; `x=-1,-1,-1` -> kept |
+| E2 | `log = ALL` still changes the world for an all -1 override on a `prune` structure: `earthCheck` (881) returns the check under ALL, `filter` (729) then calls `prune`, which never looks at the override (803) and drops pieces on the global `pruneMaxHanging` / `pruneMaxMound`. At CANCELLED nothing is pruned. Same class of bug as #9 | in `filter`, prune only when `!earthUnlimited(structure)`; `prune` still logs what it would drop under ALL, suffixed `(unlimited, not applied)` | unlimited village + `log = ALL` + an offending piece -> piece count unchanged |
+| E3 | `prune` builds each piece's `EarthPiece` at `box.minY()` (835), while `cancels` uses `minY + sink` (#10). A sunk structure in `earth_fill/prune` gets per-piece verdicts against a beard `sink` blocks too low. No structure is both today; latent | use `minY + sink` in `prune` too | sunk piece pruned on the same numbers `cancels` gives it |
+| E4 | `countEarth` (233): `deeper = fills + (y - bottom) + 2` reaches <= 0 when `sink >= beardReach + 2`; then every earth block counts as hanging. Latent at `beardReach` 6 (sink 4 max today) | clamp to 1 (`Math.max(1, ...)`) and warn at load when a sunk start's sink >= `beardReach` | `beardReach` 2, sink 4 -> earth 1 block over a 1-block gap not counted |
+| E5 | Overrides and tags fail silently: ids are compared as raw strings (595), so `village_plains=...` without a namespace never matches; `earthTags` (526) takes a block id as a tag with no warning; unsorted `sizes.bounds` put starts in the wrong bucket (`sizeOf` 611) | at parse: default namespace `minecraft`, warn on an id not in the structure registry or an empty tag, sort `bounds` and warn | parse cases for each |
+| E6 | `LOCAL_WATER` (316-322) is not cleared on `TagsUpdated` / `/reload`; old templates stay referenced until server stop | clear it with `LOCAL` | none (memory) |
 
-One scratch dedicated server run can cover 1 to 3: seed 8675309, `structureDensity` 4, `[worldgen.earth_fill] log =
-"ALL"` (scratch toml only), Chunky r 400 at 2144 -2592 (the inland square of 12_earth_fill_camps.md) and r 400 at 0 0
-(coasts). Recipe for the scratch server: [testing/structures/12_earth_fill_camps.md](../testing/structures/12_earth_fill_camps.md) 2.
+Then: changelog bullet only if E2 shows in normal play (it does not: only `log = ALL` changes); E1 can, if anyone uses a
+two-number override, and the pack's `overrides` list is empty, so no player-visible change. Expect no bullet.
 
-## Bugs found while reading the code (not in TODO yet)
+### Phase 2: structures earth fill cannot see (root of #11 and #12)
+
+Earth fill only cancels, it never fills. It counts only blocks in `earth_fill/earth` (dirt, sand, gravel, clay, path)
+in the bottom 3 layers of `PoolElementStructurePiece` (Single/List elements) and `TemplateStructurePiece` pieces, and
+the footprint share uses only pieces that have such earth. So these are never judged over water:
+- legacy pieces (vanilla `desert_pyramid`, `jungle_pyramid`, `swamp_hut`, igloo top piece; many older mods);
+- templates with no earth at the bottom: wooden or wool camp floors, sandstone and brick plates (desert temples,
+  watchtowers, tent camps), anything on a stone base not in `earth_fill/stone_base`;
+- custom pool elements that do not extend `SinglePoolElement`.
+
+So #11's recommendation (raise `maxOverWater` on the desert group) would keep *more* flooded starts, not fewer. The fix
+is to judge these structures, not to relax a limit.
+
+1. **Measure first** (scratch, `log = ALL`): reproduce a flooded pyramid and a floating camp / ruin; for each, log
+   whether earth fill saw it at all. Small patcherMod help: under `log = ALL`, one line per start with zero counted
+   earth (`no earth: N pieces, legacy L`), so the log shows what is invisible. This also answers whether the
+   2026-10-28 client-scratch result is representative (#12's decision).
+2. **Base footprint for earthless starts** (patcherMod, decision D1): for a start with no counted earth, take each
+   non-terrain-matching piece's bounding box at its bottom layer (legacy pieces: `getBoundingBox().minY()`), read the
+   predicted terrain there, and apply the same `tooWet` share. Air is not judged (pads that hang are a beard /
+   terrain question, and legacy pieces often fill down themselves, like the mansion). Exempt and `water_fill`
+   structures are skipped as today.
+3. **Cheaper data-only alternative** (decision D1): add sandstone, terracotta and planks-based bases per structure
+   group through the existing `earth_fill/stone_base` route (a new block tag `earth_fill/desert_base` for the desert
+   group). This doesn't cover legacy pieces.
+4. Then set per-structure overrides only where a measured structure needs them (#12's original ask).
+
+Player-visible: yes (fewer flooded structures): changelog bullet under the earth-fill family when built.
+
+### Phase 3: data rows (one scratch run with phases 1 and 2)
+- **#3** as in its section below: hardening in `sinkOf` (refuse terrain-matching start pools), look in game, tag
+  `ancient_crypt` (+ seabed ruins after the look).
+- **#4** undead castle: measure per fit, then override `eugene:undead_castle=24,320,400` and drop `land/highlands`
+  if most cancels are there. With E1 fixed, a two-number override is also safe now.
+- **#5** stone bases: look at the drum tower in the #4 run; run SQ-EN-07's earth half (End House, `log = ALL`).
+
+### Phase 4: robustness (decide case by case; each needs real village data)
+
+**Built 2026-10-30 (TODO #15, structure_tuning.md 3.29, ST-297 to ST-299).** Owner ask with it: metas pruned to raise
+their placement chance, wet pieces of every jigsaw pruned. Done: wet-only pruning for every surface jigsaw
+(`pruneWetJigsaws`, tag `earth_fill/no_prune`); E9 meta parts and anchors pruned without `keepShortParts`; E7 floor
+`footprintMinWater` 9 (the E01 sample sizes were not in the scratch notes, so the floor went in as a default); E8 identity
+removal of junctions plus unlinked drops; E10 `(predicted)` tag (LocateStats already skipped predictions); E11 earth fill
+and priority merged into one injector instead of `priority` values; E12 footprint column dedup. Left as notes: template
+processors, the config fallback (see 3.28), volatile caches, `SHARED` lifetime.
+
+| Id | Issue | Status |
+|---|---|---|
+| E7 | `tooWet` has no minimum sample: 1 water / 0 ground cancels. A cliff-edge start whose layer is mostly air can drop on one wet cell | plausible; check the six E01 cancels' sample sizes, then add a floor (e.g. water >= 9) if any is tiny |
+| E8 | `links` (650-675) matches parent jigsaws by x/z only; no match = parent -1, so a dropped house leaves a dangling junction (beard at the street edge) and its children stay. `pj.remove(k)` assumes vanilla junction order (custom placers differ) | plausible; GameTest or `log = ALL` dump of one pruned village per pool family (vanilla, T&T, Veggies) |
+| E9 | Meta parts are never pruned (`filterParts` 740-755): a village inside a meta goes whole where it would prune alone; the javadoc says "as it would be alone" | design gap; decide D3 |
+| E10 | PlacementPriority predictions run the full chain: `CANCELLED` lines can log twice per chunk and `LocateStats.reject(EARTH_FILL)` may count predictions | check `LocateStats` for scratch-chunk filtering; tag prediction lines `(predicted)` |
+| E11 | Four `ModifyVariable` STORE injectors share slot 15 (BiomeRules, EarthFill, PlacementPriority, SeabedClearance); EarthFill must run before PlacementPriority, held only by mixins.json order | add a comment in the json and an explicit `priority` on the two mixins |
+| E12 | Other small items: footprint dedup by (x, y, z) counts a column twice for stacked pieces; template processors ignored (earth a processor removes still counts); `WorldgenConfig` falls back to defaults on any read error with no log line; the two-field volatile caches are not atomic on reload; `SHARED` caches (about 15-20 MB each) per grid only freed at stop | note; fix the silent config fallback (one warn line) with phase 1 |
+
+Village on a lake (the open #2 decision, step 4 of its section) belongs here too: per-piece share in `prune`.
+
+### Decisions for the owner
+- **D1 (phase 2):** base footprint in code (covers legacy and every earthless start; recommended) or the data-only
+  desert base tag (narrower, no Java).
+- **D2:** close #1, #2, #6 now (recommended).
+- **D3:** prune village parts inside metas (E9) or keep cancelling the meta part whole (today).
+- **D4:** village on a lake: prune wet pieces or keep cancelling whole.
+
+### Tests (provisional ids; renumber against structure_tuning.md 8 when built)
+- Offline: the EarthFillTest cases in the phase 1 table (`tools/test_worldgen_tools.sh`).
+- Scratch run (12_earth_fill_camps.md 2 recipe, seed 8675309, density 4, `log = ALL`, inland square 2144 -2592 and a
+  desert square): E1 two-number override keeps the mound limit; E2 ST-54 rerun with a village unlimited: piece count
+  equals the CANCELLED-level world; phase 2 no-earth lines listed, flooded pyramid cancelled (ST-229); #3 ST-209..211;
+  #4 ST-212; SQ-EN-07 earth half. Queue entries go into scratch_queue.md when each phase is built.
+
+Out of scope, adjacent: SQ-WG30-D03 FAIL (seabed clearance ignores aquifer water, `structures/terrain #5`) is the same
+"structure in water" symptom underground, but a different system.
+
+## Bugs A and B (fixed 2026-10-30 as #9 and #10; see E2 and E3 above for what they missed)
 
 **Bug A: `log = ALL` changes which starts are cancelled.** An override with every limit -1 (for example
 `"#creativeengineering:type/village=-1,-1,-1"`) is meant to skip earth fill entirely, footprint share included (CEConfig
@@ -58,7 +183,7 @@ still pass.
 ---
 
 ## structures/earthfill #2: `maxWaterSurplus` first value
-Status Planned · Work config · TODO `structures/earthfill #2`
+Status Testing (built 2026-10-30, value 0) · Work config · TODO `structures/earthfill #2`
 
 ### Goal
 Settle the footprint water share threshold (`[worldgen.earth_fill] maxWaterSurplus`, shipped 0.5 in 1.0.9) from real
@@ -94,6 +219,24 @@ cancels, and decide what happens to a village on a lake (today it goes as a whol
    puddle is not dropped). The `pruned` signature needs the surplus and sink; `EarthCheck.prune` (750) has both.
    Log reason `(... footprint W water / G ground)`.
 
+### Decision and value (2026-10-30)
+User: "set aggressive cancel value". BUILT: `maxWaterSurplus` 0.5 -> **0.0** (instance toml, CEConfig default
+`defineInRange("maxWaterSurplus", 0.0, ...)`, `WorldgenConfig.earthMaxWaterSurplus()` fallback 0.0; patcherMod built,
+not installed). Why 0:
+- The rule is `water > ground x (1 + surplus)` and only runs for surplus >= 0 (`tooWet`), so 0 is the strictest value
+  the code allows: any footprint with more water than dry ground cancels. A value under 0 turns the check off; a
+  stricter rule (cancel below a water majority) would need a code change, not a config value.
+- On the diag3 sample every cancel was already at 2.07 or wetter (739 / 0, 1,691 / 497, 2,123 / 66, 255 / 0, 505 / 244).
+  Of the 5 kept starts with footprint water, only the wettest (a shore village, 470 / 425 = 1.11) crosses 1.0; it is
+  the one extra cancel 0 makes on that sample. The other kept shore villages (113 / 462 and similar) stay.
+- Villages still prune house by house first (`EarthFill.pruned`), so the share is judged on what is left; a village
+  standing mostly on a lake still goes as a whole (step 4 above not built).
+- Interplay: `structures/earthfill #11` (desert structures in water) gets more of its flooded starts cancelled by this
+  value. An override with every limit -1 skips the share too (`structures/earthfill #9` makes that hold under
+  `log = ALL` as well), which is the way to exempt one structure from 0.
+- Fallback if the run shows wrong cancels (a shore with a pond cancelled): 0.25, then 0.5.
+Test: scratch queue SQ-WG30-E01.
+
 ### Ids and data
 Config keys only: `[worldgen.earth_fill] maxWaterSurplus`, new `pruneMinWetColumns` (if step 4). Structures named
 above come from the diag3 log (in-repo summary in 12_earth_fill_camps.md 2). Nothing verified against a jar.
@@ -124,7 +267,7 @@ above come from the diag3 log (in-repo summary in 12_earth_fill_camps.md 2). Not
 ---
 
 ## structures/earthfill #3: Sunk-start candidates not tagged
-Status Planned · Work data · TODO `structures/earthfill #3`
+Status Testing (built 2026-10-30, TODO row) · Work data · TODO `structures/earthfill #3`
 
 ### Goal
 Decide which other structures with a negative start height get the `creativeengineering:terrain_adaptation/sunk_start`
@@ -201,7 +344,7 @@ Structure ids above (verified in the jars). Tag `creativeengineering:terrain_ada
 ---
 
 ## structures/earthfill #4: Undead castle cancelled by earth fill
-Status Planned · Work data · TODO `structures/earthfill #4`
+Status Testing (built 2026-10-30, TODO row) · Work data · TODO `structures/earthfill #4`
 
 ### Goal
 Get `eugene:undead_castle` to survive often enough to be found, without floating pads.
@@ -294,7 +437,7 @@ because `none` counts every earth block of its sunk dirt bowl; the terrain brief
 ---
 
 ## structures/earthfill #7: Worldgen hot spots
-Status **Built 2026-10-27** (A and B, perf.md 10.8; scratch test queued SQ-WGP-03, -04) · Work patcherMod · TODO `structures/earthfill #7`
+Status Testing (A and B built 2026-10-27, perf.md 10.8; SQ-WGP-03, -04 PASSED 2026-10-27) · Work patcherMod · TODO `structures/earthfill #7`
 
 ### Goal
 Remove the two pack-side worldgen costs Phase 10 found: twigs' obelisk check (3.1% of worldgen CPU) and the repeated
@@ -387,7 +530,7 @@ Vanilla: `ChunkGenerator#tryGenerateStructure` `m_223104_`, `getBaseColumn` `m_2
 ---
 
 ## structures/earthfill #11: Desert structures spawn in water
-Status **Planned** / Work data / config / TODO `structures/earthfill #11`
+Status Testing (fixed through `structures/earthfill #14`, 2026-10-30) / Work data / config / TODO `structures/earthfill #11`
 
 ### Goal
 Pyramids and other desert structures no longer start flooded.

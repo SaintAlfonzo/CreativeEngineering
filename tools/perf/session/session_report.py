@@ -14,6 +14,7 @@ import argparse, collections, datetime, glob, json, os, re, shutil, subprocess, 
 
 ROOT = os.path.dirname(os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__)))))
 REPORT = os.path.join(ROOT, 'tools', 'perf', 'perf_report.py')
+MD_WORST = 50
 LOGT = re.compile(r'^\[(\d{2}\w{3}\d{4} \d{2}:\d{2}:\d{2}\.\d{3})\]')
 
 
@@ -108,7 +109,12 @@ def summarize(d):
             for row in open(tp, encoding='utf8').readlines()[1:]:
                 t, k, ms, info = row.rstrip('\n').split('\t')
                 (ticks if k == 'tick' else waits if k == 'chunkwait' else kjs).append((int(t) / 1000.0, float(ms), info))
-        proc = [tuple(map(float, r.split('\t'))) for r in open(os.path.join(b, 'proc.tsv'), encoding='utf8').readlines()[1:] if r.strip()]
+        proc = []
+        for r in open(os.path.join(b, 'proc.tsv'), encoding='utf8').readlines()[1:]:
+            try:
+                proc.append(tuple(map(float, r.split('\t'))))
+            except ValueError:  # a row written while the JVM exited has empty fields
+                pass
         if 'saved' in f:
             ended = 'clean stop'
         elif 'crash' in f:
@@ -146,9 +152,10 @@ def summarize(d):
                 if a <= t < z and ms > 50:
                     before = [c for ct, c in cmds if t - 60 <= ct <= t]
                     worst.append({'time': datetime.datetime.fromtimestamp(t).strftime('%H:%M:%S'), 'boot': boot['boot'],
-                                  'segment': label, 'ms': round(ms, 1), 'last_cmds': before[-3:]})
+                                  'segment': label, 'ms': round(ms, 1), 'last_cmds': before})
     worst.sort(key=lambda w: -w['ms'])
-    return {'session': os.path.basename(os.path.normpath(d)), 'boots': boots, 'segments': segs, 'worst_ticks': worst[:25]}
+    # every tick over 50 ms is kept (summary.json, worst_ticks.tsv); summary.md shows the top MD_WORST
+    return {'session': os.path.basename(os.path.normpath(d)), 'boots': boots, 'segments': segs, 'worst_ticks': worst}
 
 
 def fmt(v, nd=1):
@@ -176,9 +183,15 @@ def write_md(d, s, base):
             return v
         L.append('| %s | %s | %s | %s | %s | %s | %s | %s | %s | %s | %s | %s | %s |' % (g['boot'], g['segment'], g['seconds'], g['ticks'], c('median_ms', 2),
                  c('p95_ms'), c('max_ms', 0), c('over50', 0), c('busy_pct'), c('cpu_cores', 2), fmt(g['rss_max_mb'], 0), c('chunk_wait_ms', 0), g['slow_kubejs']))
-    L += ['', '## Worst ticks (over 50 ms)', '', '| Time | Boot | Segment | ms | Commands in the 60 s before |', '|---|---|---|---|---|']
-    for w in s['worst_ticks']:
-        L.append('| %s | %s | %s | %s | %s |' % (w['time'], w['boot'], w['segment'], w['ms'], '; '.join('`%s`' % x for x in w['last_cmds'])))
+    with open(os.path.join(d, 'worst_ticks.tsv'), 'w', encoding='utf8') as fh:
+        fh.write('time\tboot\tsegment\tms\tcommands_60s_before\n')
+        for w in s['worst_ticks']:
+            fh.write('%s\t%s\t%s\t%s\t%s\n' % (w['time'], w['boot'], w['segment'], w['ms'], ' ; '.join(w['last_cmds'])))
+    L += ['', '## Worst ticks (over 50 ms)', '', '%d ticks over 50 ms; all of them in worst_ticks.tsv and summary.json, the %d longest here.'
+          % (len(s['worst_ticks']), min(MD_WORST, len(s['worst_ticks']))), '',
+          '| Time | Boot | Segment | ms | Last commands in the 60 s before |', '|---|---|---|---|---|']
+    for w in s['worst_ticks'][:MD_WORST]:
+        L.append('| %s | %s | %s | %s | %s |' % (w['time'], w['boot'], w['segment'], w['ms'], '; '.join('`%s`' % x for x in w['last_cmds'][-3:])))
     open(os.path.join(d, 'summary.md'), 'w', encoding='utf8').write('\n'.join(L) + '\n')
 
 

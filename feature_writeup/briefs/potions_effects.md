@@ -3,6 +3,10 @@
 Written 2026-10-21 from [TODO.md](../todo/TODO.md) `# potions`, Sub `effects` (rows 2 to 7 open, row 1 Complete).
 Feature writeup: [armor_effects.md](../armor_effects.md) (test prefix `AE-`, last id AE-24).
 
+**2026-10-31:** `effects #3` and `#4` BUILT (Testing; armor_effects.md 2.2, 2.5, F6, F9). #3 went wider than this brief:
+Poison and Wither ticks at or below the Magic Resistance level are cancelled, and AE-29 / AE-30 are the new tests (not
+the AE-29 / AE-30 proposed under #3 and #6 below). Rows #8 to #11 are in [effects.md](../effects.md) 2.5 to 2.8.
+
 ## Scope and order
 
 | Group | Rows | Work | Why together |

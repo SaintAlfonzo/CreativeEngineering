@@ -133,6 +133,37 @@ public class EarthFillTest {
 				"at the limits is allowed");
 		check(EarthFill.earthBlocks(List.of(new EarthFill.EarthPiece(padRow, 61, EarthFill.Beard.BEARD), new EarthFill.EarthPiece(upper, 61, EarthFill.Beard.BEARD),
 				new EarthFill.EarthPiece(padRow, 61, EarthFill.Beard.BEARD))) == 15, "a start's size counts each earth position once (13 + 2)");
+		// earthfill #10: a start sunk 4 raises the beard's ground level by 4 (EarthCheck.cancels builds the piece at minY + sink),
+		// so under the real bottom the beard reaches 6 - 4 = 2: a gap of 3 or more (x >= 3) is past it
+		er = EarthFill.countEarth(List.of(new EarthFill.EarthPiece(padRow, 61 + 4, EarthFill.Beard.BEARD)), slope, open, reach, false);
+		check(er.air() == 10, "sunk 4: the beard reaches 2 under the real bottom, x 3..12 count (10; unsunk 6)");
+		check(er.mound() == 8, "sunk 4: mound measured from the raised level, x 5..12 (8; unsunk 4)");
+		// terrain #2 beardFootprint: a stone floor on the same slope (row z 1) and the earth pad's own row (z 0)
+		int[][] stoneRow = new int[13][];
+		for (int x = 0; x <= 12; x++) stoneRow[x] = new int[]{x, 61, 1};
+		List<EarthFill.EarthPiece> padPiece = List.of(new EarthFill.EarthPiece(padRow, 61, EarthFill.Beard.BEARD));
+		check(EarthFill.baseMound(List.of(new EarthFill.BasePiece(longs(stoneRow), 61)), List.of(), slope, reach) == 4,
+				"base mound: a stone floor's columns deeper than 8 count (x 9..12 = 4), with no earth at all");
+		check(EarthFill.baseMound(List.of(new EarthFill.BasePiece(padRow, 61)), padPiece, slope, reach) == 0,
+				"base mound: columns that hold earth are left to countEarth");
+		er = EarthFill.withBaseMound(EarthFill.countEarth(padPiece, slope, new EarthFill.EarthLimits(-1, -1, 6), reach, false),
+				EarthFill.baseMound(List.of(new EarthFill.BasePiece(longs(stoneRow), 61)), padPiece, slope, reach), new EarthFill.EarthLimits(-1, -1, 6));
+		check(er.mound() == 8 && er.cancelled(), "earth mound 4 + base mound 4 = 8 > limit 6 cancels (4 alone is kept)");
+		EarthFill.Terrain shelf = (x, y, z) -> y <= 58 ? EarthFill.Kind.SOLID : EarthFill.Kind.AIR;
+		check(EarthFill.countEarth(List.of(new EarthFill.EarthPiece(longs(new int[]{0, 61, 0}), 65, EarthFill.Beard.BEARD)), shelf, open, reach, false).air() == 0,
+				"sunk 4: ground 2 below the real bottom is within the beard's reach, not counted");
+		check(EarthFill.countEarth(List.of(new EarthFill.EarthPiece(longs(new int[]{0, 60, 0}), 64, EarthFill.Beard.BEARD)),
+				(x, y, z) -> y <= 56 ? EarthFill.Kind.SOLID : EarthFill.Kind.AIR, open, reach, false).air() == 1,
+				"brief case: bottom 60, sink 4, earth at y 60 over a 4-block gap counts over air (before the fix: not)");
+
+		// earthfill #9: an override with every limit -1 is never cancelled, also when log = ALL measures it
+		EarthFill.EarthResult over = new EarthFill.EarthResult(10, 5, 5, 3, true, true), under = new EarthFill.EarthResult(10, 0, 0, 0, false, true);
+		EarthFill.Footprint wetFp = new EarthFill.Footprint(10, 2);
+		check(!EarthFill.earthCancelled(true, under, wetFp, 0.5), "unlimited override + log ALL + wet footprint: kept");
+		check(!EarthFill.earthCancelled(true, over, null, 0.5), "unlimited override + over a size limit (mound unset): kept");
+		check(EarthFill.earthCancelled(false, under, wetFp, 0.5), "limited structure + wet footprint: cancelled");
+		check(EarthFill.earthCancelled(false, over, null, -1), "limited structure over its limits: cancelled");
+		check(!EarthFill.earthCancelled(false, under, wetFp, -1), "surplus -1: footprint never cancels");
 		// a river, water up to y 62 over its bed at y 55 (x < 5) or 49; a house floor set into the top water layer (y 62), bottom 62
 		EarthFill.Terrain river = (x, y, z) -> y <= (x >= 5 ? 49 : 55) ? EarthFill.Kind.SEABED : y <= 62 ? EarthFill.Kind.WATER : EarthFill.Kind.AIR;
 		long[] floor = longs(new int[]{0, 62, 0}, new int[]{1, 62, 0}, new int[]{5, 62, 0}, new int[]{6, 62, 0});
@@ -192,6 +223,115 @@ public class EarthFillTest {
 		List<Integer> bounds = List.of(150, 600, 2000);
 		check(EarthFill.sizeOf(149, bounds) == 0 && EarthFill.sizeOf(150, bounds) == 1 && EarthFill.sizeOf(599, bounds) == 1 && EarthFill.sizeOf(600, bounds) == 2
 				&& EarthFill.sizeOf(2000, bounds) == 3 && EarthFill.sizeOf(90000, bounds) == 3, "sizes: under 150 small, 150..599 medium, 600..1999 large, 2000+ huge");
+		check(EarthFill.sizeOf(700, List.of(2000, 150, 600)) == 2, "earthfill #13: unsorted bounds are sorted first (700 is large)");
+
+		// earthfill #14: pieces with no earth join the footprint as spans, by the surface within their height (the
+		// predicted terrain knows each column's top; the lake's and the shore's are both y 62)
+		EarthFill.Terrain lakeTop = new EarthFill.Terrain() {
+			public EarthFill.Kind at(int x, int y, int z) { return lakeShore.at(x, y, z); }
+			public int top(int x, int z) { return 62; }
+		};
+		fp = EarthFill.footprint(List.of(), List.of(new EarthFill.Span(0, 0, 15, 0, 62, 75)), lakeTop, 3);
+		check(fp.water() == 10 && fp.ground() == 6, "span over the lake shore: water x 6..15 (10), ground x 0..5 (6), by the column top");
+		check(EarthFill.footprint(List.of(), List.of(new EarthFill.Span(0, 0, 15, 0, 70, 80)), lakeTop, 3).water() == 0,
+				"span floating 8 above the surface (bottom 70, top y 62): neither");
+		check(EarthFill.footprint(List.of(), List.of(new EarthFill.Span(0, 0, 15, 0, 20, 40)), lakeTop, 3).ground() == 0,
+				"span buried under the surface (top 40 < 62): neither");
+		check(EarthFill.footprint(List.of(), List.of(new EarthFill.Span(0, 0, 15, 0, 64, 75)), lakeTop, 3).water() == 10,
+				"span bottom 64: the surface at 62 is within baseLayers below it, counted");
+		fp = EarthFill.footprint(List.of(new EarthFill.Layer(0, 0, 9, 0, 62)), List.of(new EarthFill.Span(0, 0, 15, 0, 62, 75)), lakeTop, 3);
+		check(fp.water() == 10 && fp.ground() == 6, "a column already in a layer is not counted again by a span");
+		PoolElementStructurePiece street = new PoolElementStructurePiece(null,
+				new SinglePoolElement(new StructureTemplate()) {
+					@Override public net.minecraft.world.level.levelgen.structure.pools.StructureTemplatePool.Projection getProjection() {
+						return net.minecraft.world.level.levelgen.structure.pools.StructureTemplatePool.Projection.TERRAIN_MATCHING;
+					}
+				}, BlockPos.ZERO, 0, Rotation.NONE, new BoundingBox(0, 0, 0, 1, 1, 1));
+		check(!EarthFill.rigid(street), "a terrain-matching street never joins the footprint");
+		check(EarthFill.rigid(new PoolElementStructurePiece(null, new SinglePoolElement(new StructureTemplate()), BlockPos.ZERO, 0, Rotation.NONE,
+				new BoundingBox(0, 0, 0, 1, 1, 1))), "a rigid house does");
+
+		// earthfill #13 E1: a two-number override keeps the size's mound limit, only three -1 lift everything
+		check(!EarthFill.unlimited(new EarthFill.Override("a:b", -1, -1, EarthFill.Override.UNSET)), "\"a:b=-1,-1\" is not unlimited (mound from the size)");
+		check(EarthFill.unlimited(new EarthFill.Override("a:b", -1, -1, -1)), "\"a:b=-1,-1,-1\" is unlimited");
+		check(!EarthFill.unlimited(null), "no override: not unlimited");
+
+		// D4 (2026-10-30): pruning drops a piece whose own footprint is too wet, once it has pruneMinWetColumns water columns
+		List<net.minecraft.world.level.levelgen.structure.StructurePiece> village = new ArrayList<>();
+		for (int i = 0; i < 4; i++) village.add(new PoolElementStructurePiece(null, new SinglePoolElement(new StructureTemplate()), BlockPos.ZERO, 0,
+				Rotation.NONE, new BoundingBox(i * 10, 64, 0, i * 10 + 7, 70, 7)));
+		// piece 1 dry, piece 2 on a lake (40 water / 24 ground), piece 3 over a small pond (5 water / 2 ground)
+		java.util.Map<Object, EarthFill.Footprint> fps = new java.util.IdentityHashMap<>();
+		fps.put(village.get(1), new EarthFill.Footprint(0, 64));
+		fps.put(village.get(2), new EarthFill.Footprint(40, 24));
+		fps.put(village.get(3), new EarthFill.Footprint(5, 2));
+		List<String> why = new ArrayList<>();
+		List<net.minecraft.world.level.levelgen.structure.StructurePiece> kept = EarthFill.pruned(village, p -> new long[0], EarthFill.Beard.BEARD, 0,
+				(x, y, z) -> EarthFill.Kind.SOLID, fps::get, 0.0, 16, why);
+		check(kept.size() == 3 && !kept.contains(village.get(2)) && kept.contains(village.get(3)),
+				"wet piece (40 / 24) pruned; the pond piece (5 water) is under pruneMinWetColumns 16 and stays; root never judged");
+		check(why.size() == 1 && why.get(0).contains("footprint 40 water / 24 ground"), "the log line names the footprint");
+		check(EarthFill.pruned(village, p -> new long[0], EarthFill.Beard.BEARD, 0, (x, y, z) -> EarthFill.Kind.SOLID, fps::get, -1, 16, new ArrayList<>()) == village,
+				"surplus -1: the water share never prunes");
+		// E3: a sunk piece is pruned at its raised ground level. Earth at y 60 over a 4-block gap, bottom 60, sink 4:
+		// unsunk the beard (6) fills it, raised to 64 the beard reaches only 2 below the bottom and the earth hangs
+		EarthFill.Terrain gap = (x, y, z) -> y <= 56 ? EarthFill.Kind.SOLID : EarthFill.Kind.AIR;
+		List<net.minecraft.world.level.levelgen.structure.StructurePiece> two = List.of(village.get(0), new PoolElementStructurePiece(null,
+				new SinglePoolElement(new StructureTemplate()), BlockPos.ZERO, 0, Rotation.NONE, new BoundingBox(0, 60, 0, 8, 66, 0)));
+		long[] sunkPad = new long[9];
+		for (int x = 0; x < 9; x++) sunkPad[x] = new BlockPos(x, 60, 0).asLong();
+		java.util.function.Function<net.minecraft.world.level.levelgen.structure.StructurePiece, long[]> padOf = p -> p == two.get(1) ? sunkPad : new long[0];
+		check(EarthFill.pruned(two, padOf, EarthFill.Beard.BEARD, 0, gap, null, 0, 16, new ArrayList<>()) == two, "unsunk: the beard fills the 4-block gap, kept");
+		check(EarthFill.pruned(two, padOf, EarthFill.Beard.BEARD, 4, gap, null, 0, 16, new ArrayList<>()).size() == 1, "sink 4: 9 earth hang (> pruneMaxHanging 8), pruned");
+
+		// earthfill #15 (phase 4, 2026-10-30). WET pruning (pruneWetJigsaws): no piece limits, only the water share
+		check(EarthFill.pruned(two, padOf, EarthFill.Beard.BEARD, 4, gap, false, null, 0, 16, new ArrayList<>()) == two,
+				"wet only: the 9 hanging earth don't drop the piece");
+		kept = EarthFill.pruned(village, p -> new long[0], EarthFill.Beard.BEARD, 0, (x, y, z) -> EarthFill.Kind.SOLID, false, fps::get, 0.0, 16, new ArrayList<>());
+		check(kept.size() == 3 && !kept.contains(village.get(2)), "wet only: the lake piece (40 / 24) still goes");
+		// which starts prune: villages FULL, other surface jigsaws WET, single pieces / legacy / underground / opted out NONE
+		List<net.minecraft.world.level.levelgen.structure.StructurePiece> legacy = List.of(new net.minecraft.world.level.levelgen.structure.structures.SwampHutPiece(
+				net.minecraft.util.RandomSource.create(0), 0, 0), village.get(1));
+		check(EarthFill.pruneMode(true, true, true, false, false, true, village) == EarthFill.Prune.FULL, "tagged prune: FULL");
+		check(EarthFill.pruneMode(true, true, false, false, false, true, village) == EarthFill.Prune.WET, "other surface jigsaw: WET");
+		check(EarthFill.pruneMode(true, false, false, false, false, true, village) == EarthFill.Prune.NONE, "pruneWetJigsaws off: NONE");
+		check(EarthFill.pruneMode(true, true, false, false, false, false, village) == EarthFill.Prune.NONE, "underground jigsaw: NONE");
+		check(EarthFill.pruneMode(true, true, false, false, false, true, village.subList(0, 1)) == EarthFill.Prune.NONE, "one piece: NONE");
+		check(EarthFill.pruneMode(true, true, false, false, false, true, legacy) == EarthFill.Prune.NONE, "first piece not a jigsaw piece (legacy): NONE");
+		check(EarthFill.pruneMode(true, true, true, true, false, true, village) == EarthFill.Prune.NONE, "earth_fill/no_prune wins over the prune tag");
+		check(EarthFill.pruneMode(true, true, true, false, true, true, village) == EarthFill.Prune.NONE, "unlimited override: NONE");
+		check(EarthFill.pruneMode(false, true, true, false, false, true, village) == EarthFill.Prune.NONE, "prune off: NONE");
+		// E7: the whole-start water share needs footprintMinWater water columns
+		check(new EarthFill.Footprint(1, 0).tooWet(0.0) && !new EarthFill.Footprint(1, 0).tooWet(0.0, 9), "E7: 1 water / 0 ground is under the floor 9");
+		check(new EarthFill.Footprint(9, 0).tooWet(0.0, 9) && !new EarthFill.Footprint(9, 9).tooWet(0.0, 9), "E7: 9 water / 0 ground at the floor is too wet, 9 / 9 is not");
+		EarthFill.EarthResult none = new EarthFill.EarthResult(10, 0, 0, 0, false, true);
+		check(!EarthFill.earthCancelled(false, none, new EarthFill.Footprint(2, 0), 0.0, 9) && EarthFill.earthCancelled(false, none, new EarthFill.Footprint(2, 0), 0.0, 0),
+				"E7: the verdict uses the floor; 0 = any sample");
+		// E12: stacked layers count a column once, at its lowest layer that is not buried
+		EarthFill.Terrain deep = new EarthFill.Terrain() {
+			public EarthFill.Kind at(int x, int y, int z) { return y <= 50 ? EarthFill.Kind.SEABED : y <= 66 ? EarthFill.Kind.WATER : EarthFill.Kind.AIR; }
+			public int top(int x, int z) { return 66; }
+		};
+		check(EarthFill.footprint(List.of(new EarthFill.Layer(0, 0, 9, 0, 64), new EarthFill.Layer(0, 0, 9, 0, 62)), deep, 3).water() == 10,
+				"E12: two stacked layers in deep water: 10 columns, not 20");
+		fp = EarthFill.footprint(List.of(new EarthFill.Layer(0, 0, 4, 0, 62), new EarthFill.Layer(0, 0, 4, 0, 70)), buried, 3);
+		check(fp.ground() == 5 && fp.water() == 0, "E12: a buried lower layer leaves the column to the layer above (rock at 70, 2 under the top)");
+		// E8: a parent forgets its junctions to dropped children by identity, whatever their order
+		int[][] outOfOrder = {{-1, 0, 1, 0, 3, -1}, {-1, 1, 1, 0, 1, -1}};   // house 1 by the street's 2nd junction, house 3 by its 1st
+		List<List<String>> live = new ArrayList<>();
+		live.add(new ArrayList<>(List.of("to house 3", "to house 1")));
+		for (int i = 1; i < 6; i++) live.add(new ArrayList<>(List.of("own " + i)));
+		EarthFill.forgetJunctions(boxes, joints, outOfOrder, new boolean[]{false, true, true, true, true, false}, live);
+		check(live.get(0).isEmpty(), "E8: both houses dropped: the street keeps neither junction (index removal left one)");
+		live.set(0, new ArrayList<>(List.of("to house 3", "to house 1")));
+		EarthFill.forgetJunctions(boxes, joints, outOfOrder, new boolean[]{false, true, true, false, false, false}, live);
+		check(live.get(0).equals(List.of("to house 3")), "E8: house 1 dropped: only its junction goes");
+		// an unlinked dropped piece: kept junctions pointing into its box (and into no kept box) go
+		List<List<EarthFill.Joint>> toLoose = new ArrayList<>(joints);
+		toLoose.set(0, List.of(new EarthFill.Joint(7, 3, 0), new EarthFill.Joint(30, 30, 0)));
+		live.set(0, new ArrayList<>(List.of("to house 1", "to the loose piece")));
+		EarthFill.forgetJunctions(boxes, toLoose, tree, new boolean[]{false, false, false, false, false, true}, live);
+		check(live.get(0).equals(List.of("to house 1")), "E8: the junction into the unlinked dropped piece goes, the one into kept house 1 stays");
 
 		// 2. earth blocks of a template: bottom layers only, rotation, offset. 3x4x3: grass pad y0, dirt skirt y1 at x0, stone walls, dirt roof garden y3.
 		List<StructureTemplate.StructureBlockInfo> blocks = new ArrayList<>();
@@ -244,6 +384,9 @@ public class EarthFillTest {
 				&& parsed.get(0).c() == EarthFill.Override.UNSET && parsed.get(1).key().equals("#minecraft:village") && parsed.get(1).c() == -1,
 				"earth overrides: 2 or 3 numbers parsed (mound left out = from the size), 4 malformed lines skipped");
 		check(EarthFill.parseOverrides("water-fill", List.of("a:b=1,2,3"), false).isEmpty(), "water overrides take exactly 2 numbers");
+		parsed = EarthFill.parseOverrides("earth-fill", List.of("village_plains=1,2", "#village=1,2", "Bad Id=1,2"), true);
+		check(parsed.size() == 2 && parsed.get(0).key().equals("minecraft:village_plains") && parsed.get(1).key().equals("#minecraft:village"),
+				"earthfill #13: an id or tag without a namespace is minecraft's; an id that doesn't parse is skipped");
 
 		ResourceKey<Registry<Structure>> reg = ResourceKey.createRegistryKey(new ResourceLocation("worldgen/structure"));
 		ResourceKey<Structure> key = ResourceKey.create(reg, new ResourceLocation("philipsruins:ancient_ruins"));

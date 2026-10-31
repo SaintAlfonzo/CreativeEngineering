@@ -89,6 +89,11 @@ public final class SeasonClock {
         }
     }
 
+    /** After /cetime date moved the sun and the counter together: the jump is not a step to add. */
+    static void jumped(ServerLevel level) {
+        LAST_DAY_TIME.put(level.dimension(), level.getDayTime());
+    }
+
     /**
      * First SUN tick of a level (or the first since it ran on TICKS): keep its sub-season and day number, with the
      * time inside the day from the sun. Old lengths are Serene Seasons' values before this run's push.

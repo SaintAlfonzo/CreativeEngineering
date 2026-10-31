@@ -78,11 +78,14 @@ import java.util.function.Predicate;
  * CHOICES: a part's structures come from a structure tag (creativeengineering:meta/*, generated from
  * structure_tags.json) or ids, picked uniformly; each must pass its own biome list AND the meta's own valid-
  * biome predicate (which carries patcherMod's biome rules) at its start. Collisions are checked in x/z between
- * piece boxes grown by the part's margin. Tries go from the near end of the distance range outwards, so
- * satellites sit just outside the anchor. A part short of its minimum count makes the whole meta fail, and the
- * group's weighted pick falls through to its next member, as for a wrong biome.
+ * piece boxes grown by the part's margin ('overlap' parts skip it: an AE2 meteorite carves its crater through
+ * whatever its part lands on, since a start places its pieces in order). Tries go from the near end of the distance range outwards, so
+ * satellites sit just outside the anchor. A part short of its minimum count keeps what fitted (CEConfig
+ * [worldgen.meta_structures] keepShortParts, since 2026-10-30); the meta fails only when no satellite fitted at all
+ * (without the switch: whenever a part is short), and the group's weighted pick falls through to its next member,
+ * as for a wrong biome. Earth fill drops a satellite over its limits and prunes village parts the same way.
  *
- * COASTS AND RIVERS (CEConfig [worldgen.meta_structures] avoidCoasts, off by default): no part may start in, or
+ * COASTS AND RIVERS (CEConfig [worldgen.meta_structures] avoidCoasts, on by default since 2026-10-30): no part may start in, or
  * reach with its box (centre and corners) into, a biome of creativeengineering:coast_river. A satellite there is
  * tried elsewhere, an anchor there fails the meta (the slot is then the plain anchor). Metas in the structure tag
  * creativeengineering:meta/coast_ok (fleets, flotillas, wrecks, sunken ruins) and feature parts are not checked.
@@ -171,10 +174,13 @@ public final class MetaStructure extends Structure {
 
 	/**
 	 * One part: 'structures' or 'features' (placed features), placed 'count' times at 'distance' blocks from the
-	 * centre, with 'chance' of being tried at all (a part skipped by chance never fails the meta).
+	 * centre, with 'chance' of being tried at all (a part skipped by chance never fails the meta). 'overlap' lets its
+	 * copies stand on the pieces placed before (a meteorite striking the anchor): no margin check against them.
+	 * 'cluster' (structures, blocks, 0 = off) groups the copies: the first lands in the distance ring, every later
+	 * copy within 'cluster' blocks of the first (at least 'spacing' from it), not around the anchor.
 	 */
 	record Part(Optional<List<String>> structures, Optional<List<String>> features, Range count, float chance, Range distance,
-			int spacing, int margin, int tries, int waterDepth, int radius) {
+			int spacing, int margin, int tries, int waterDepth, int radius, boolean overlap, int cluster) {
 		static final Codec<Part> CODEC = RecordCodecBuilder.<Part>create(i -> i.group(
 				strict(ENTRIES, "structures").forGetter(Part::structures),
 				strict(ENTRIES, "features").forGetter(Part::features),
@@ -185,12 +191,15 @@ public final class MetaStructure extends Structure {
 				strict(Codec.intRange(0, 64), "margin", 4).forGetter(Part::margin),
 				strict(Codec.intRange(1, 64), "tries", 16).forGetter(Part::tries),
 				strict(Codec.intRange(0, 64), "water_depth", 0).forGetter(Part::waterDepth),
-				strict(Codec.intRange(0, 16), "radius", 6).forGetter(Part::radius)
+				strict(Codec.intRange(0, 16), "radius", 6).forGetter(Part::radius),
+				strict(Codec.BOOL, "overlap", false).forGetter(Part::overlap),
+				strict(Codec.intRange(0, REACH * 16), "cluster", 0).forGetter(Part::cluster)
 		).apply(i, Part::new)).flatXmap(Part::validate, DataResult::success);
 
 		DataResult<Part> validate() {
 			if (structures.isPresent() == features.isPresent()) return DataResult.error("a part needs exactly one of \"structures\" and \"features\"");
 			if (distance.max > REACH * 16) return DataResult.error("distance " + distance.max + " is past the reach of a structure start (" + REACH * 16 + ")");
+			if (cluster > 0 && features.isPresent()) return DataResult.error("\"cluster\" is for structure parts");
 			return DataResult.success(this);
 		}
 
@@ -290,15 +299,26 @@ public final class MetaStructure extends Structure {
 			if (!validBiome(origin, ctx, ctx.validBiome())) return Optional.empty();   // vanilla checks this too; skip the work
 		}
 
+		boolean keepShort = WorldgenConfig.metaKeepShortParts();
+		int ownEntries = layout.entries.size();   // the anchor's
+		boolean satellitesWanted = false;
 		for (Part part : parts) {
 			if (part.chance() < 1 && random.nextFloat() >= part.chance()) continue;
 			int wanted = part.count().pick(random);
 			int placed = part.structures().isPresent()
 					? placeStructures(part, wanted, resolveStructures(structures, part.structures().get()), ctx, layout, random, cx, cz, log, avoid)
 					: placeFeatures(part, wanted, ctx, layout, random, cx, cz);
+			if (part.structures().isPresent() && wanted > 0) satellitesWanted = true;
 			if (log != null) log.add(placed + "/" + wanted + " " + part.label());
-			if (placed < part.count().min()) return fail(log, ctx, "part " + part.label() + " placed " + placed + " of at least " + part.count().min());
+			if (placed < part.count().min()) {
+				String why = "part " + part.label() + " placed " + placed + " of at least " + part.count().min();
+				// keepShortParts: what fitted stays (a satellite near a coast or on a cliff is left out, not the whole meta)
+				if (!keepShort) return fail(log, ctx, why);
+				if (log != null) log.add("short: " + why);
+			}
 		}
+		// nothing but the anchor fitted: the plain anchor is the same thing without the meta's name
+		if (keepShort && satellitesWanted && layout.entries.size() == ownEntries) return fail(log, ctx, "no satellite fitted");
 
 		StructurePiecesBuilder builder = new StructurePiecesBuilder();
 		layout.pieces.forEach(builder::addPiece);
@@ -325,10 +345,14 @@ public final class MetaStructure extends Structure {
 		List<int[]> centres = new ArrayList<>();
 		int placed = 0;
 		for (int n = 0; n < wanted; n++) {
+			// a cluster part: once one copy stands, the rest gather around it instead of around the anchor
+			boolean around = part.cluster() > 0 && !centres.isEmpty();
+			int ox = around ? centres.get(0)[0] : cx, oz = around ? centres.get(0)[1] : cz;
+			int dMin = around ? Math.min(part.spacing(), part.cluster()) : part.distance().min(), dMax = around ? part.cluster() : part.distance().max();
 			for (int t = 0; t < part.tries(); t++) {
-				double d = part.distance().min() + (part.distance().max() - part.distance().min()) * (t + random.nextDouble()) / part.tries();
+				double d = dMin + (dMax - dMin) * (t + random.nextDouble()) / part.tries();
 				double angle = random.nextDouble() * Math.PI * 2;
-				int px = cx + (int) Math.round(Math.cos(angle) * d), pz = cz + (int) Math.round(Math.sin(angle) * d);
+				int px = ox + (int) Math.round(Math.cos(angle) * d), pz = oz + (int) Math.round(Math.sin(angle) * d);
 				ChunkPos at = new ChunkPos(px >> 4, pz >> 4);
 				if (!layout.inReach(at.x, at.z)) continue;
 				Placed p = null;
@@ -338,7 +362,7 @@ public final class MetaStructure extends Structure {
 				}
 				if (p == null) continue;
 				int[] c = {(p.box().minX() + p.box().maxX()) / 2, (p.box().minZ() + p.box().maxZ()) / 2};
-				if (!layout.inReach(p) || layout.collides(p, part.margin()) || tooClose(centres, c[0], c[1], part.spacing())) continue;
+				if (!layout.inReach(p) || (!part.overlap() && layout.collides(p, part.margin())) || tooClose(centres, c[0], c[1], part.spacing())) continue;
 				layout.add(p);
 				centres.add(c);
 				placed++;
@@ -363,7 +387,7 @@ public final class MetaStructure extends Structure {
 				double d = Math.sqrt(r0 * r0 + (r1 * r1 - r0 * r0) * random.nextDouble());   // even over the ring's area
 				double angle = random.nextDouble() * Math.PI * 2;
 				int x = cx + (int) Math.round(Math.cos(angle) * d), z = cz + (int) Math.round(Math.sin(angle) * d);
-				if (!layout.inReach(x >> 4, z >> 4) || tooClose(spots, x, z, part.spacing()) || layout.covers(x, z, part.margin())) continue;
+				if (!layout.inReach(x >> 4, z >> 4) || tooClose(spots, x, z, part.spacing()) || (!part.overlap() && layout.covers(x, z, part.margin()))) continue;
 				int surface = gen.getBaseHeight(x, z, Heightmap.Types.WORLD_SURFACE_WG, ctx.heightAccessor(), ctx.randomState());
 				if (part.waterDepth() > 0) {
 					int floor = gen.getBaseHeight(x, z, Heightmap.Types.OCEAN_FLOOR_WG, ctx.heightAccessor(), ctx.randomState());
@@ -546,8 +570,47 @@ public final class MetaStructure extends Structure {
 		return start.getStructure();
 	}
 
-	/** One structure part of a meta start, with its pieces (in order). */
-	public record PartPieces(Holder<Structure> structure, List<StructurePiece> pieces) {}
+	/** One structure part of a meta start, with its pieces (in order) and its entry in the start's index (0 = first placed). */
+	public record PartPieces(Holder<Structure> structure, List<StructurePiece> pieces, int entry) {}
+
+	/**
+	 * The start with some parts' pieces replaced: {@code kept} is parallel to {@code parts}, each the part's new
+	 * pieces (a pruned village) or null to drop the part. Pieces of no part (feature spots) stay; the index is rebuilt
+	 * with the new ranges (dropped parts leave no entry).
+	 */
+	public static StructureStart withParts(StructureStart start, List<PartPieces> parts, List<List<StructurePiece>> kept) {
+		List<StructurePiece> pieces = start.getPieces();
+		Index index = index(pieces);
+		if (index == null) return start;
+		Map<Integer, List<StructurePiece>> byEntry = new java.util.HashMap<>();
+		for (int i = 0; i < parts.size(); i++) byEntry.put(parts.get(i).entry(), kept.get(i));
+		int[] owner = new int[pieces.size() - 1];
+		java.util.Arrays.fill(owner, -1);
+		for (int i = 0; i < index.entries.size(); i++) {
+			Index.Entry e = index.entries.get(i);
+			for (int k = e.from(); k < e.to() && k < owner.length; k++) owner[k] = i;
+		}
+		List<StructurePiece> out = new ArrayList<>(pieces.size());
+		List<Index.Entry> entries = new ArrayList<>();
+		List<Structure> resolved = new ArrayList<>();
+		List<ResourceLocation> ids = new ArrayList<>();
+		List<Holder<Structure>> holders = new ArrayList<>();
+		for (int k = 0; k < owner.length; k++) {
+			int i = owner[k];
+			if (i < 0) { out.add(pieces.get(k)); continue; }
+			Index.Entry e = index.entries.get(i);
+			if (k != e.from()) continue;   // the whole range goes in at its first piece
+			List<StructurePiece> part = byEntry.containsKey(i) ? byEntry.get(i) : pieces.subList(e.from(), Math.min(e.to(), owner.length));
+			if (part == null || part.isEmpty()) continue;
+			entries.add(new Index.Entry(e.structure(), out.size(), out.size() + part.size()));
+			resolved.add(index.resolved.get(i));
+			ids.add(index.ids.get(i));
+			holders.add(index.holders.get(i));
+			out.addAll(part);
+		}
+		out.add(new Index(index, entries, resolved, ids, holders));
+		return new StructureStart(start.getStructure(), start.getChunkPos(), start.getReferences(), new PiecesContainer(out));
+	}
 
 	/**
 	 * A meta start's structure parts (the anchor first), each with its own holder, or null when the start isn't a
@@ -562,7 +625,7 @@ public final class MetaStructure extends Structure {
 		for (int i = 0; i < index.entries.size(); i++) {
 			Index.Entry e = index.entries.get(i);
 			Holder<Structure> h = index.holders.get(i);
-			if (h != null && e.to() <= pieces.size() && e.from() < e.to()) out.add(new PartPieces(h, pieces.subList(e.from(), e.to())));
+			if (h != null && e.to() <= pieces.size() && e.from() < e.to()) out.add(new PartPieces(h, pieces.subList(e.from(), e.to()), i));
 		}
 		return out;
 	}
@@ -675,6 +738,15 @@ public final class MetaStructure extends Structure {
 			this.resolved = entries.stream().map(Entry::structure).toList();
 			this.ids = entries.stream().map(e -> reg.getKey(e.structure())).toList();
 			this.holders = holders(reg, ids);
+		}
+
+		/** A copy of an index at the same spot with new entries (MetaStructure.withParts). */
+		Index(Index old, List<Entry> entries, List<Structure> resolved, List<ResourceLocation> ids, List<Holder<Structure>> holders) {
+			super(INDEX_PIECE.get(), 0, old.getBoundingBox());
+			this.entries = List.copyOf(entries);
+			this.resolved = Collections.unmodifiableList(new ArrayList<>(resolved));
+			this.ids = Collections.unmodifiableList(new ArrayList<>(ids));
+			this.holders = Collections.unmodifiableList(new ArrayList<>(holders));
 		}
 
 		private static List<Holder<Structure>> holders(Registry<Structure> reg, List<ResourceLocation> ids) {

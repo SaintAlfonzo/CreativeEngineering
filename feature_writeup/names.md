@@ -141,11 +141,11 @@ on purpose, so it can't be mistaken for the drink.
 
 ### Planned from the scratchpad (2026-10-24)
 
-Brief: [briefs/ui_names.md](briefs/ui_names.md). Nothing here is built.
+Brief: [briefs/ui_names.md](briefs/ui_names.md). Built since: `ui/names #8` (below), `ui/names #9` (Cantaloupe Stem, Mini Cantaloupe Plant, `namechanges.js`, 1.1.04); `ui/names #7` closed by the owner 2026-10-30 (not done).
 
 - [TODO](todo/TODO.md) `ui/names #8`: "Roll of Ender Guardian" to "Ender Guardian Roll". The item is `oceansdelight:elder_guardian_roll`, named "Roll of
   Elder Guardian" by Ocean's Delight; Display Delight's plated copies already read "Plated Elder Guardian Roll". Open: Ender or Elder
-  (recommended: "Elder Guardian Roll"). One `renameItem` in `namechanges.js`.
+  (recommended: "Elder Guardian Roll"). BUILT 2026-10-30: one `renameItem` in `namechanges.js` names it "Elder Guardian Roll" (unreleased.md bullet); not seen in game.
 
 ## 5. File map
 
@@ -870,3 +870,4 @@ KubeJS Create / Vintage KubeJS / PonderJS need Create but are KubeJS addons, so 
   pipe -> "Pretty Pipes"; WTHIT on a Farmer's Delight stove -> "Farmer's Delight"; Mods screen lists "Death Knell",
   "Target Dummy" and "Creative Engineering (Alfonzo)".
 
+- 2026-10-31: scratchpad notes translated into TODO rows (`ui/misc #7`). No code changed.

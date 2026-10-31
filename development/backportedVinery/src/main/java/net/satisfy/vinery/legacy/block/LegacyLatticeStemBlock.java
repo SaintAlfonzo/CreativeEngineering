@@ -36,6 +36,7 @@ import net.minecraft.world.phys.shapes.VoxelShape;
 import org.jetbrains.annotations.Nullable;
 import net.satisfy.vinery.core.item.GrapeBushSeedItem;
 import net.satisfy.vinery.core.wine.GrapeType;
+import net.minecraftforge.common.ForgeHooks;
 
 public class LegacyLatticeStemBlock extends StemBlock {
    private static final VoxelShape LATTICE_SHAPE_N = Block.box(0.0, 0.0, 15.0, 16.0, 16.0, 16.0);
@@ -113,7 +114,9 @@ public class LegacyLatticeStemBlock extends StemBlock {
 
    public void randomTick(BlockState state, ServerLevel world, BlockPos pos, RandomSource random) {
       int i;
-      if (!this.isMature(state) && (Integer)state.getValue(AGE) > 0 && world.getRawBrightness(pos, 0) >= 9 && (i = (Integer)state.getValue(AGE)) < 4) {
+      // Port: fire Forge's crop-grow event so the pack's crop seasons apply (crops.md 2.12.1)
+      if (!this.isMature(state) && (Integer)state.getValue(AGE) > 0 && world.getRawBrightness(pos, 0) >= 9 && (i = (Integer)state.getValue(AGE)) < 4
+              && ForgeHooks.onCropsGrowPre(world, pos, state, true)) {
          world.setBlock(pos, this.withAge(state, i + 1, (GrapeType)state.getValue(GRAPE)), 2);
       }
 

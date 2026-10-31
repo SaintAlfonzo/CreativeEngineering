@@ -18,228 +18,154 @@
       },
       "structures": {
         "minecraft:village_desert": {
-          "weight": 424,
+          "weight": 100,
           "frequency": 0.734547,
-          "fit_base": {
-            "weight": 424,
-            "frequency": 0.6975
-          }
+          "fit_keep": false
         },
         "minecraft:village_plains": {
-          "weight": 162,
+          "weight": 100,
           "frequency": 1.0,
-          "fit_base": {
-            "weight": 162,
-            "frequency": 0.9263
-          }
+          "fit_keep": false
         },
         "minecraft:village_savanna": {
-          "weight": 103,
+          "weight": 100,
           "frequency": 0.99558,
-          "fit_base": {
-            "weight": 176,
-            "frequency": 0.8134
-          }
+          "fit_keep": false
         },
         "minecraft:village_snowy": {
-          "weight": 132,
+          "weight": 100,
           "frequency": 1.0,
-          "fit_base": {
-            "weight": 132,
-            "frequency": 1.0
-          }
+          "fit_keep": false
         },
         "minecraft:village_taiga": {
-          "weight": 153,
+          "weight": 100,
           "frequency": 1.0,
-          "fit_base": {
-            "weight": 153,
-            "frequency": 0.9436
-          }
+          "fit_keep": false
         },
         "terralith:fortified_desert_village": {
-          "weight": 108,
+          "weight": 100,
           "frequency": 1.0,
-          "fit_base": {
-            "weight": 108,
-            "frequency": 1.0
-          }
+          "fit_keep": false
         },
         "terralith:fortified_village": {
-          "weight": 53,
+          "weight": 100,
           "frequency": 1.0,
-          "fit_base": {
-            "weight": 53,
-            "frequency": 1.0
-          }
+          "fit_keep": false
         },
         "towns_and_towers:exclusives/village_classic": {
-          "weight": 101,
-          "frequency": 0.1623
+          "weight": 100,
+          "frequency": 0.1623,
+          "fit_keep": false
         },
         "towns_and_towers:exclusives/village_iberian": {
           "weight": 100,
-          "frequency": 1.0
+          "frequency": 1.0,
+          "fit_keep": false
         },
         "towns_and_towers:exclusives/village_mediterranean": {
-          "weight": 41,
+          "weight": 100,
           "frequency": 1.0,
-          "fit_base": {
-            "weight": 41,
-            "frequency": 1.0
-          }
+          "fit_keep": false
         },
         "towns_and_towers:exclusives/village_nilotic": {
           "weight": 100,
-          "frequency": 1.0
+          "frequency": 1.0,
+          "fit_keep": false
         },
         "towns_and_towers:exclusives/village_rustic": {
           "weight": 100,
-          "frequency": 1.0
+          "frequency": 1.0,
+          "fit_keep": false
         },
         "towns_and_towers:exclusives/village_swedish": {
-          "weight": 22,
+          "weight": 100,
           "frequency": 1.0,
-          "fit_base": {
-            "weight": 22,
-            "frequency": 1.0
-          }
+          "fit_keep": false
         },
         "towns_and_towers:exclusives/village_tudor": {
-          "weight": 99,
+          "weight": 100,
           "frequency": 1.0,
-          "fit_base": {
-            "weight": 99,
-            "frequency": 0.4132
-          }
+          "fit_keep": false
         },
         "towns_and_towers:village_badlands": {
-          "weight": 173,
+          "weight": 100,
           "frequency": 0.430191,
-          "fit_base": {
-            "weight": 173,
-            "frequency": 0.2113
-          }
+          "fit_keep": false
         },
         "towns_and_towers:village_beach": {
-          "weight": 101,
+          "weight": 100,
           "frequency": 0.171066,
-          "fit_base": {
-            "weight": 101,
-            "frequency": 0.1623
-          }
+          "fit_keep": false
         },
         "towns_and_towers:village_birch_forest": {
-          "weight": 162,
+          "weight": 100,
           "frequency": 0.361997,
-          "fit_base": {
-            "weight": 162,
-            "frequency": 0.197
-          }
+          "fit_keep": false
         },
         "towns_and_towers:village_flower_forest": {
-          "weight": 360,
+          "weight": 100,
           "frequency": 0.41542,
-          "fit_base": {
-            "weight": 360,
-            "frequency": 0.1637
-          }
+          "fit_keep": false
         },
         "towns_and_towers:village_forest": {
-          "weight": 144,
+          "weight": 100,
           "frequency": 0.457061,
-          "fit_base": {
-            "weight": 144,
-            "frequency": 0.1749
-          }
+          "fit_keep": false
         },
         "towns_and_towers:village_grove": {
-          "weight": 213,
+          "weight": 100,
           "frequency": 0.499402,
-          "fit_base": {
-            "weight": 213,
-            "frequency": 0.1696
-          }
+          "fit_keep": false
         },
         "towns_and_towers:village_jungle": {
-          "weight": 46,
+          "weight": 100,
           "frequency": 0.897,
-          "fit_base": {
-            "weight": 46,
-            "frequency": 0.4485
-          }
+          "fit_keep": false
         },
         "towns_and_towers:village_meadow": {
-          "weight": 62,
+          "weight": 100,
           "frequency": 1.0,
-          "fit_base": {
-            "weight": 62,
-            "frequency": 0.6944
-          }
+          "fit_keep": false
         },
         "towns_and_towers:village_mushroom_fields": {
-          "weight": 1,
+          "weight": 100,
           "frequency": 0.1623,
-          "fit_base": {
-            "weight": 101,
-            "frequency": 0.1623
-          }
+          "fit_keep": false
         },
         "towns_and_towers:village_old_growth_taiga": {
-          "weight": 110,
+          "weight": 100,
           "frequency": 0.717581,
-          "fit_base": {
-            "weight": 110,
-            "frequency": 0.2153
-          }
+          "fit_keep": false
         },
         "towns_and_towers:village_snowy_slopes": {
-          "weight": 141,
+          "weight": 100,
           "frequency": 1.0,
-          "fit_base": {
-            "weight": 141,
-            "frequency": 0.2799
-          }
+          "fit_keep": false
         },
         "towns_and_towers:village_snowy_taiga": {
-          "weight": 108,
+          "weight": 100,
           "frequency": 0.590369,
-          "fit_base": {
-            "weight": 108,
-            "frequency": 0.1943
-          }
+          "fit_keep": false
         },
         "towns_and_towers:village_sparse_jungle": {
-          "weight": 46,
+          "weight": 100,
           "frequency": 0.9,
-          "fit_base": {
-            "weight": 46,
-            "frequency": 0.45
-          }
+          "fit_keep": false
         },
         "towns_and_towers:village_sunflower_plains": {
-          "weight": 228,
+          "weight": 100,
           "frequency": 0.544825,
-          "fit_base": {
-            "weight": 228,
-            "frequency": 0.2615
-          }
+          "fit_keep": false
         },
         "towns_and_towers:village_swamp": {
-          "weight": 142,
+          "weight": 100,
           "frequency": 0.582744,
-          "fit_base": {
-            "weight": 142,
-            "frequency": 0.5026
-          }
+          "fit_keep": false
         },
         "towns_and_towers:village_wooded_badlands": {
-          "weight": 205,
+          "weight": 100,
           "frequency": 0.340365,
-          "fit_base": {
-            "weight": 205,
-            "frequency": 0.1738
-          }
+          "fit_keep": false
         },
         "creativeengineering:meta/village_towers": {
           "weight": 1,
@@ -262,12 +188,24 @@
           "note": "Meta structure with an anchor: never picked by this weight; it takes \"share\" (meta_structures.json) of the slots its anchors win here, so no member's rate changes. Keep the weight at 1."
         },
         "eugene:red_roof_castle": {
-          "weight": 106,
+          "weight": 100,
           "frequency": 1.0,
-          "fit_base": {
-            "weight": 106,
-            "frequency": 1.0
-          }
+          "fit_keep": false
+        },
+        "creativeengineering:meta/meteorite_village": {
+          "weight": 1,
+          "frequency": 1.0,
+          "note": "Meta structure with an anchor: never picked by this weight; it takes \"share\" (meta_structures.json) of the slots its anchors win here, so no member's rate changes. Keep the weight at 1."
+        },
+        "creativeengineering:meta/village_siege_camp": {
+          "weight": 1,
+          "frequency": 1.0,
+          "note": "Meta structure with an anchor: never picked by this weight; it takes \"share\" (meta_structures.json) of the slots its anchors win here, so no member's rate changes. Keep the weight at 1."
+        },
+        "creativeengineering:meta/village_siege_ring": {
+          "weight": 1,
+          "frequency": 1.0,
+          "note": "Meta structure with an anchor: never picked by this weight; it takes \"share\" (meta_structures.json) of the slots its anchors win here, so no member's rate changes. Keep the weight at 1."
         }
       }
     },
@@ -284,220 +222,149 @@
       },
       "structures": {
         "minecraft:pillager_outpost": {
-          "weight": 74,
+          "weight": 100,
           "frequency": 1.0,
-          "fit_base": {
-            "weight": 74,
-            "frequency": 0.6336
-          }
+          "fit_keep": false
         },
         "towns_and_towers:exclusives/pillager_outpost_classic": {
-          "weight": 80,
-          "frequency": 0.2338
+          "weight": 100,
+          "frequency": 0.2338,
+          "fit_keep": false
         },
         "towns_and_towers:exclusives/pillager_outpost_iberian": {
           "weight": 100,
-          "frequency": 1.0
+          "frequency": 1.0,
+          "fit_keep": false
         },
         "towns_and_towers:exclusives/pillager_outpost_mediterranean": {
-          "weight": 78,
+          "weight": 100,
           "frequency": 1.0,
-          "fit_base": {
-            "weight": 78,
-            "frequency": 0.3596
-          }
+          "fit_keep": false
         },
         "towns_and_towers:exclusives/pillager_outpost_oriental": {
-          "weight": 65,
+          "weight": 100,
           "frequency": 1.0,
-          "fit_base": {
-            "weight": 65,
-            "frequency": 1.0
-          }
+          "fit_keep": false
         },
         "towns_and_towers:exclusives/pillager_outpost_rustic": {
           "weight": 100,
-          "frequency": 1.0
+          "frequency": 1.0,
+          "fit_keep": false
         },
         "towns_and_towers:exclusives/pillager_outpost_swedish": {
-          "weight": 31,
+          "weight": 100,
           "frequency": 1.0,
-          "fit_base": {
-            "weight": 31,
-            "frequency": 1.0
-          }
+          "fit_keep": false
         },
         "towns_and_towers:exclusives/pillager_outpost_tudor": {
           "weight": 100,
           "frequency": 1.0,
-          "fit_base": {
-            "weight": 100,
-            "frequency": 0.2918
-          }
+          "fit_keep": false
         },
         "towns_and_towers:pillager_outpost_badlands": {
-          "weight": 83,
+          "weight": 100,
           "frequency": 1.0,
-          "fit_base": {
-            "weight": 83,
-            "frequency": 0.3573
-          }
+          "fit_keep": false
         },
         "towns_and_towers:pillager_outpost_beach": {
-          "weight": 4,
+          "weight": 100,
           "frequency": 0.878499,
-          "fit_base": {
-            "weight": 151,
-            "frequency": 0.4394
-          }
+          "fit_keep": false
         },
         "towns_and_towers:pillager_outpost_birch_forest": {
-          "weight": 132,
+          "weight": 100,
           "frequency": 0.720211,
-          "fit_base": {
-            "weight": 132,
-            "frequency": 0.2977
-          }
+          "fit_keep": false
         },
         "towns_and_towers:pillager_outpost_desert": {
-          "weight": 33,
+          "weight": 100,
           "frequency": 0.995091,
-          "fit_base": {
-            "weight": 159,
-            "frequency": 0.3206
-          }
+          "fit_keep": false
         },
         "towns_and_towers:pillager_outpost_flower_forest": {
-          "weight": 210,
+          "weight": 100,
           "frequency": 0.891321,
-          "fit_base": {
-            "weight": 252,
-            "frequency": 0.3165
-          }
+          "fit_keep": false
         },
         "towns_and_towers:pillager_outpost_forest": {
-          "weight": 136,
+          "weight": 100,
           "frequency": 0.610697,
-          "fit_base": {
-            "weight": 136,
-            "frequency": 0.2912
-          }
+          "fit_keep": false
         },
         "towns_and_towers:pillager_outpost_grove": {
-          "weight": 172,
+          "weight": 100,
           "frequency": 1.0,
-          "fit_base": {
-            "weight": 172,
-            "frequency": 0.2852
-          }
+          "fit_keep": false
         },
         "towns_and_towers:pillager_outpost_jungle": {
-          "weight": 109,
+          "weight": 100,
           "frequency": 0.560666,
-          "fit_base": {
-            "weight": 109,
-            "frequency": 0.3648
-          }
+          "fit_keep": false
         },
         "towns_and_towers:pillager_outpost_meadow": {
-          "weight": 152,
+          "weight": 100,
           "frequency": 1.0,
-          "fit_base": {
-            "weight": 152,
-            "frequency": 0.4
-          }
+          "fit_keep": false
         },
         "towns_and_towers:pillager_outpost_mushroom_fields": {
-          "weight": 1,
+          "weight": 100,
           "frequency": 0.237868,
-          "fit_base": {
-            "weight": 100,
-            "frequency": 0.2918
-          }
+          "fit_keep": false
         },
         "towns_and_towers:pillager_outpost_old_growth_taiga": {
-          "weight": 108,
+          "weight": 100,
           "frequency": 1.0,
-          "fit_base": {
-            "weight": 108,
-            "frequency": 0.4216
-          }
+          "fit_keep": false
         },
         "towns_and_towers:pillager_outpost_savanna": {
-          "weight": 42,
+          "weight": 100,
           "frequency": 1.0,
-          "fit_base": {
-            "weight": 42,
-            "frequency": 0.8362
-          }
+          "fit_keep": false
         },
         "towns_and_towers:pillager_outpost_snowy_beach": {
-          "weight": 151,
-          "frequency": 0.4394
+          "weight": 100,
+          "frequency": 0.4394,
+          "fit_keep": false
         },
         "towns_and_towers:pillager_outpost_snowy_plains": {
-          "weight": 156,
+          "weight": 100,
           "frequency": 0.584075,
-          "fit_base": {
-            "weight": 156,
-            "frequency": 0.4073
-          }
+          "fit_keep": false
         },
         "towns_and_towers:pillager_outpost_snowy_slopes": {
-          "weight": 67,
+          "weight": 100,
           "frequency": 1.0,
-          "fit_base": {
-            "weight": 67,
-            "frequency": 0.6132
-          }
+          "fit_keep": false
         },
         "towns_and_towers:pillager_outpost_snowy_taiga": {
           "weight": 100,
           "frequency": 1.0,
-          "fit_base": {
-            "weight": 100,
-            "frequency": 0.3106
-          }
+          "fit_keep": false
         },
         "towns_and_towers:pillager_outpost_sparse_jungle": {
-          "weight": 110,
+          "weight": 100,
           "frequency": 1.0,
-          "fit_base": {
-            "weight": 110,
-            "frequency": 0.6864
-          }
+          "fit_keep": false
         },
         "towns_and_towers:pillager_outpost_sunflower_plains": {
           "weight": 100,
           "frequency": 1.0,
-          "fit_base": {
-            "weight": 100,
-            "frequency": 0.2918
-          }
+          "fit_keep": false
         },
         "towns_and_towers:pillager_outpost_swamp": {
-          "weight": 2,
+          "weight": 100,
           "frequency": 0.915151,
-          "fit_base": {
-            "weight": 100,
-            "frequency": 0.2918
-          }
+          "fit_keep": false
         },
         "towns_and_towers:pillager_outpost_taiga": {
-          "weight": 45,
+          "weight": 100,
           "frequency": 1.0,
-          "fit_base": {
-            "weight": 45,
-            "frequency": 1.0
-          }
+          "fit_keep": false
         },
         "towns_and_towers:pillager_outpost_wooded_badlands": {
-          "weight": 81,
+          "weight": 100,
           "frequency": 1.0,
-          "fit_base": {
-            "weight": 81,
-            "frequency": 0.7962
-          }
+          "fit_keep": false
         },
         "mysticrift_pillagers_towers_aris:acacia_pillager_tower": {
           "weight": 10,
@@ -506,7 +373,8 @@
             "weight": 5,
             "frequency": 0.4211
           },
-          "fit_keep": true
+          "fit_keep": true,
+          "tuned": "fit_keep tower: --fit-rates keeps its density on its own biome list (biome fits, 2026-10-12); kept by the weight strip (user, 2026-10-30)"
         },
         "mysticrift_pillagers_towers_aris:birch_pillager_tower": {
           "weight": 8,
@@ -515,7 +383,8 @@
             "weight": 5,
             "frequency": 0.38
           },
-          "fit_keep": true
+          "fit_keep": true,
+          "tuned": "fit_keep tower: --fit-rates keeps its density on its own biome list (biome fits, 2026-10-12); kept by the weight strip (user, 2026-10-30)"
         },
         "mysticrift_pillagers_towers_aris:cherry_pillager_tower": {
           "weight": 17,
@@ -524,7 +393,8 @@
             "weight": 5,
             "frequency": 0.4211
           },
-          "fit_keep": true
+          "fit_keep": true,
+          "tuned": "fit_keep tower: --fit-rates keeps its density on its own biome list (biome fits, 2026-10-12); kept by the weight strip (user, 2026-10-30)"
         },
         "mysticrift_pillagers_towers_aris:desert_pillager_tower": {
           "weight": 1,
@@ -533,7 +403,8 @@
             "weight": 5,
             "frequency": 0.4692
           },
-          "fit_keep": true
+          "fit_keep": true,
+          "tuned": "fit_keep tower: --fit-rates keeps its density on its own biome list (biome fits, 2026-10-12); kept by the weight strip (user, 2026-10-30)"
         },
         "mysticrift_pillagers_towers_aris:end_pillager_tower": {
           "weight": 1,
@@ -542,7 +413,8 @@
             "weight": 5,
             "frequency": 0.4301
           },
-          "fit_keep": true
+          "fit_keep": true,
+          "tuned": "fit_keep tower: --fit-rates keeps its density on its own biome list (biome fits, 2026-10-12); kept by the weight strip (user, 2026-10-30)"
         },
         "mysticrift_pillagers_towers_aris:jungle_pillager_tower": {
           "weight": 10,
@@ -551,7 +423,8 @@
             "weight": 5,
             "frequency": 0.9278
           },
-          "fit_keep": true
+          "fit_keep": true,
+          "tuned": "fit_keep tower: --fit-rates keeps its density on its own biome list (biome fits, 2026-10-12); kept by the weight strip (user, 2026-10-30)"
         },
         "mysticrift_pillagers_towers_aris:mangrove_pillager_tower": {
           "weight": 5,
@@ -560,7 +433,8 @@
             "weight": 5,
             "frequency": 0.5938
           },
-          "fit_keep": true
+          "fit_keep": true,
+          "tuned": "fit_keep tower: --fit-rates keeps its density on its own biome list (biome fits, 2026-10-12); kept by the weight strip (user, 2026-10-30)"
         },
         "mysticrift_pillagers_towers_aris:oak_wood_pillager_tower": {
           "weight": 5,
@@ -569,7 +443,8 @@
             "weight": 5,
             "frequency": 0.9425
           },
-          "fit_keep": true
+          "fit_keep": true,
+          "tuned": "fit_keep tower: --fit-rates keeps its density on its own biome list (biome fits, 2026-10-12); kept by the weight strip (user, 2026-10-30)"
         },
         "creativeengineering:meta/pillager_camp_ruin": {
           "weight": 1,
@@ -603,27 +478,28 @@
         },
         "takesapillage:bastille": {
           "weight": 34,
-          "frequency": 1.0
+          "frequency": 1.0,
+          "tuned": "Lowered toward 1 per 128 chunks (plan 7.1 decision 5, user, 2026-10-12); kept by the weight strip (user, 2026-10-30)"
         },
         "takesapillage:pillager_camp": {
           "weight": 87,
-          "frequency": 1.0
+          "frequency": 1.0,
+          "tuned": "Lowered toward 1 per 64 chunks (plan 7.1 decision 5, user, 2026-10-12); kept by the weight strip (user, 2026-10-30)"
         },
         "eugene:fake_trader_camp": {
-          "weight": 6,
+          "weight": 100,
           "frequency": 1.0,
-          "fit_base": {
-            "weight": 6,
-            "frequency": 1.0
-          }
+          "fit_keep": false
         },
         "eugene:pillager_camp": {
-          "weight": 26,
+          "weight": 100,
           "frequency": 1.0,
-          "fit_base": {
-            "weight": 26,
-            "frequency": 1.0
-          }
+          "fit_keep": false
+        },
+        "creativeengineering:meta/pillager_camp_meteorite": {
+          "weight": 1,
+          "frequency": 1.0,
+          "note": "Meta structure with an anchor: never picked by this weight; it takes \"share\" (meta_structures.json) of the slots its anchors win here, so no member's rate changes. Keep the weight at 1."
         }
       }
     },
@@ -636,176 +512,114 @@
       },
       "structures": {
         "philipsruins:ancient_ruins": {
-          "weight": 119,
+          "weight": 100,
           "frequency": 0.860538,
-          "fit_base": {
-            "weight": 119,
-            "frequency": 0.6739
-          }
+          "fit_keep": false
         },
         "philipsruins:ancient_towers": {
-          "weight": 197,
+          "weight": 100,
           "frequency": 0.862964,
-          "fit_base": {
-            "weight": 197,
-            "frequency": 0.6758
-          }
+          "fit_keep": false
         },
         "philipsruins:badlands_structures": {
-          "weight": 250,
+          "weight": 100,
           "frequency": 0.266459,
-          "fit_base": {
-            "weight": 250,
-            "frequency": 0.2387
-          }
+          "fit_keep": false
         },
         "philipsruins:desert_structures": {
-          "weight": 250,
+          "weight": 100,
           "frequency": 0.250975,
-          "fit_base": {
-            "weight": 250,
-            "frequency": 0.2387
-          }
+          "fit_keep": false
         },
         "philipsruins:field_stone_ruins": {
-          "weight": 45,
+          "weight": 100,
           "frequency": 1.0,
-          "fit_base": {
-            "weight": 45,
-            "frequency": 0.9895
-          }
+          "fit_keep": false
         },
         "philipsruins:field_stone_ruins_rocks": {
-          "weight": 196,
+          "weight": 100,
           "frequency": 0.513101,
-          "fit_base": {
-            "weight": 196,
-            "frequency": 0.322
-          }
+          "fit_keep": false
         },
         "philipsruins:level_one_ruins": {
-          "weight": 45,
+          "weight": 100,
           "frequency": 1.0,
-          "fit_base": {
-            "weight": 45,
-            "frequency": 0.9895
-          }
+          "fit_keep": false
         },
         "philipsruins:level_three_ruins": {
-          "weight": 35,
+          "weight": 100,
           "frequency": 1.0,
-          "fit_base": {
-            "weight": 35,
-            "frequency": 0.9905
-          }
+          "fit_keep": false
         },
         "philipsruins:level_two_ruins": {
-          "weight": 20,
+          "weight": 100,
           "frequency": 1.0,
-          "fit_base": {
-            "weight": 20,
-            "frequency": 0.9784
-          }
+          "fit_keep": false
         },
         "philipsruins:level_two_ruins_pool": {
-          "weight": 20,
+          "weight": 100,
           "frequency": 1.0,
-          "fit_base": {
-            "weight": 20,
-            "frequency": 0.9784
-          }
+          "fit_keep": false
         },
         "philipsruins:pumpkin_ruins": {
-          "weight": 84,
+          "weight": 100,
           "frequency": 1.0,
-          "fit_base": {
-            "weight": 84,
-            "frequency": 1.0
-          }
+          "fit_keep": false
         },
         "philipsruins:rare_ruin": {
-          "weight": 254,
+          "weight": 100,
           "frequency": 0.007794,
-          "fit_base": {
-            "weight": 254,
-            "frequency": 0.0082
-          }
+          "fit_keep": false
         },
         "philipsruins:start_nether_ruin": {
-          "weight": 3,
-          "frequency": 0.8688
+          "weight": 100,
+          "frequency": 0.8688,
+          "fit_keep": false
         },
         "terralith:glacial_hut": {
-          "weight": 261,
+          "weight": 100,
           "frequency": 0.686437,
-          "fit_base": {
-            "weight": 261,
-            "frequency": 0.249
-          }
+          "fit_keep": false
         },
         "forest_ruins:ruin_1": {
-          "weight": 38,
+          "weight": 100,
           "frequency": 0.904155,
-          "fit_base": {
-            "weight": 38,
-            "frequency": 0.7313
-          }
+          "fit_keep": false
         },
         "forest_ruins:ruin_2": {
-          "weight": 38,
+          "weight": 100,
           "frequency": 0.904155,
-          "fit_base": {
-            "weight": 38,
-            "frequency": 0.7313
-          }
+          "fit_keep": false
         },
         "forest_ruins:ruin_3": {
-          "weight": 38,
+          "weight": 100,
           "frequency": 0.904155,
-          "fit_base": {
-            "weight": 38,
-            "frequency": 0.7313
-          }
+          "fit_keep": false
         },
         "forest_ruins:ruin_4": {
-          "weight": 38,
+          "weight": 100,
           "frequency": 0.904155,
-          "fit_base": {
-            "weight": 38,
-            "frequency": 0.7313
-          }
+          "fit_keep": false
         },
         "forest_ruins:ruin_5": {
-          "weight": 38,
+          "weight": 100,
           "frequency": 0.904155,
-          "fit_base": {
-            "weight": 38,
-            "frequency": 0.7313
-          }
+          "fit_keep": false
         },
         "forest_ruins:ruin_6": {
-          "weight": 38,
+          "weight": 100,
           "frequency": 0.904155,
-          "fit_base": {
-            "weight": 38,
-            "frequency": 0.7313
-          }
+          "fit_keep": false
         },
         "forest_ruins:ruin_7": {
-          "weight": 38,
+          "weight": 100,
           "frequency": 0.904155,
-          "fit_base": {
-            "weight": 38,
-            "frequency": 0.7313
-          }
+          "fit_keep": false
         },
         "forgotten_church:forgotten_church": {
-          "weight": 16,
+          "weight": 100,
           "frequency": 1.0,
-          "fit_base": {
-            "weight": 16,
-            "frequency": 0.9825
-          }
+          "fit_keep": false
         },
         "watchtower_building:abandoned_watchtower": {
           "weight": 21,
@@ -814,7 +628,8 @@
             "weight": 21,
             "frequency": 1.0
           },
-          "fit_keep": true
+          "fit_keep": true,
+          "tuned": "fit_keep tower: --fit-rates keeps its density on its own biome list (biome fits, 2026-10-12); kept by the weight strip (user, 2026-10-30)"
         },
         "creativeengineering:meta/ruin_cluster": {
           "weight": 1,
@@ -828,31 +643,33 @@
         },
         "old_illager_statue:old_illager_statue": {
           "weight": 26,
-          "frequency": 1.0
+          "frequency": 1.0,
+          "tuned": "Lowered to about 1 per 96 chunks in its biomes (plan 7.1 decision 4, user, 2026-10-12); kept by the weight strip (user, 2026-10-30)"
         },
         "oldvillagerstatue:old_villager_statue": {
           "weight": 26,
-          "frequency": 1.0
+          "frequency": 1.0,
+          "tuned": "Lowered to about 1 per 96 chunks in its biomes (plan 7.1 decision 4, user, 2026-10-12); kept by the weight strip (user, 2026-10-30)"
         },
         "small_cat_statues:cat_1": {
           "weight": 19,
-          "frequency": 1.0
+          "frequency": 1.0,
+          "tuned": "Lowered to about 1 per 64 chunks for the three together (plan 7.1 decision 4, user, 2026-10-12); kept by the weight strip (user, 2026-10-30)"
         },
         "small_cat_statues:cat_2": {
           "weight": 19,
-          "frequency": 1.0
+          "frequency": 1.0,
+          "tuned": "Lowered to about 1 per 64 chunks for the three together (plan 7.1 decision 4, user, 2026-10-12); kept by the weight strip (user, 2026-10-30)"
         },
         "small_cat_statues:cat_3": {
           "weight": 19,
-          "frequency": 1.0
+          "frequency": 1.0,
+          "tuned": "Lowered to about 1 per 64 chunks for the three together (plan 7.1 decision 4, user, 2026-10-12); kept by the weight strip (user, 2026-10-30)"
         },
         "eugene:ruined_drum_tower": {
-          "weight": 19,
+          "weight": 100,
           "frequency": 1.0,
-          "fit_base": {
-            "weight": 19,
-            "frequency": 0.9905
-          }
+          "fit_keep": false
         }
       }
     },
@@ -865,44 +682,29 @@
       },
       "structures": {
         "betterjungletemples:jungle_temple": {
-          "weight": 1,
+          "weight": 100,
           "frequency": 0.7481,
-          "fit_base": {
-            "weight": 186,
-            "frequency": 0.7481
-          }
+          "fit_keep": false
         },
         "minecraft:mansion": {
-          "weight": 1,
+          "weight": 100,
           "frequency": 0.1191,
-          "fit_base": {
-            "weight": 30,
-            "frequency": 0.1191
-          }
+          "fit_keep": false
         },
         "philipsruins:badlands_start_dungeon": {
-          "weight": 106,
+          "weight": 100,
           "frequency": 0.441692,
-          "fit_base": {
-            "weight": 106,
-            "frequency": 0.426
-          }
+          "fit_keep": false
         },
         "terralith:spire": {
-          "weight": 1,
+          "weight": 100,
           "frequency": 0.445566,
-          "fit_base": {
-            "weight": 103,
-            "frequency": 0.415
-          }
+          "fit_keep": false
         },
         "towns_and_towers:mimic_desert": {
-          "weight": 79,
+          "weight": 100,
           "frequency": 0.521,
-          "fit_base": {
-            "weight": 79,
-            "frequency": 0.7049
-          }
+          "fit_keep": false
         },
         "minecraft:jungle_pyramid": {
           "weight": 1,
@@ -912,12 +714,14 @@
           "note": "Replacement: never picked by this weight; takes 10% of the slots YUNG's jungle temple wins and keeps (where both can stand), so temples stay as common as before and 1 in 10 is vanilla. Keep the weight at 1."
         },
         "eugene:undead_castle": {
-          "weight": 1,
+          "weight": 100,
           "frequency": 0.026314,
-          "fit_base": {
-            "weight": 1,
-            "frequency": 0.0255
-          }
+          "fit_keep": false
+        },
+        "creativeengineering:meta/jungle_temple_ruins": {
+          "weight": 1,
+          "frequency": 1.0,
+          "note": "Meta structure with an anchor: never picked by this weight; it takes \"share\" (meta_structures.json) of the slots its anchors win here, so no member's rate changes. Keep the weight at 1."
         }
       }
     },
@@ -937,16 +741,24 @@
           "note": "Replacement: never picked by this weight; takes 10% of the slots YUNG's witch hut wins and keeps (where both can stand), so witch huts stay as common as before and 1 in 10 is vanilla. Keep the weight at 1."
         },
         "betterwitchhuts:witch_circle": {
-          "weight": 61,
-          "frequency": 0.9433
+          "weight": 100,
+          "frequency": 0.9433,
+          "fit_keep": false
         },
         "betterwitchhuts:witch_hut": {
-          "weight": 150,
-          "frequency": 0.935
+          "weight": 100,
+          "frequency": 0.935,
+          "fit_keep": false
         },
         "villagesandpillages:village_witch": {
           "weight": 100,
-          "frequency": 0.9374
+          "frequency": 0.9374,
+          "fit_keep": false
+        },
+        "creativeengineering:meta/witch_coven": {
+          "weight": 1,
+          "frequency": 1.0,
+          "note": "Meta structure with an anchor: never picked by this weight; it takes \"share\" (meta_structures.json) of the slots its anchors win here, so no member's rate changes. Keep the weight at 1."
         }
       }
     },
@@ -959,12 +771,14 @@
       },
       "structures": {
         "betterdungeons:spider_dungeon": {
-          "weight": 109,
-          "frequency": 0.9754
+          "weight": 100,
+          "frequency": 0.9754,
+          "fit_keep": false
         },
         "betterdungeons:zombie_dungeon": {
-          "weight": 92,
-          "frequency": 0.971
+          "weight": 100,
+          "frequency": 0.971,
+          "fit_keep": false
         }
       }
     },
@@ -977,44 +791,54 @@
       },
       "structures": {
         "hopo:underwater_ruins": {
-          "weight": 113,
-          "frequency": 1.0
+          "weight": 100,
+          "frequency": 1.0,
+          "fit_keep": false
         },
         "hopo:underwater_small_ruins": {
-          "weight": 513,
-          "frequency": 0.6268
+          "weight": 100,
+          "frequency": 0.6268,
+          "fit_keep": false
         },
         "hopo:underwater_warm_small_ruins": {
-          "weight": 560,
-          "frequency": 0.9701
+          "weight": 100,
+          "frequency": 0.9701,
+          "fit_keep": false
         },
         "minecraft:ocean_ruin_cold": {
-          "weight": 143,
-          "frequency": 0.627
+          "weight": 100,
+          "frequency": 0.627,
+          "fit_keep": false
         },
         "minecraft:ocean_ruin_warm": {
-          "weight": 92,
-          "frequency": 0.9743
+          "weight": 100,
+          "frequency": 0.9743,
+          "fit_keep": false
         },
         "philipsruins:ocean_fortress": {
-          "weight": 29,
-          "frequency": 0.5047
+          "weight": 100,
+          "frequency": 0.5047,
+          "fit_keep": false
         },
         "philipsruins:ocean_ruins": {
-          "weight": 58,
-          "frequency": 0.4946
+          "weight": 100,
+          "frequency": 0.4946,
+          "fit_keep": false
         },
         "towns_and_towers:wreckage_ocean": {
-          "weight": 108,
-          "frequency": 0.3243
+          "weight": 100,
+          "frequency": 0.3243,
+          "fit_keep": false
         },
         "revamped_shipwrecks:shipwreck": {
-          "weight": 258,
-          "frequency": 1.0
+          "weight": 100,
+          "frequency": 1.0,
+          "fit_keep": false
         },
         "revamped_shipwrecks:shipwreck_beached": {
-          "weight": 129,
-          "frequency": 0.4444
+          "weight": 100,
+          "frequency": 0.4444,
+          "fit_keep": false
         },
         "creativeengineering:meta/shipwreck_debris": {
           "weight": 1,
@@ -1032,8 +856,14 @@
           "note": "Meta structure with an anchor: never picked by this weight; it takes \"share\" (meta_structures.json) of the slots its anchors win here, so no member's rate changes. Keep the weight at 1."
         },
         "hopo:underwater_fossils": {
-          "weight": 215,
-          "frequency": 1.0
+          "weight": 100,
+          "frequency": 1.0,
+          "fit_keep": false
+        },
+        "creativeengineering:meta/underwater_meteorite": {
+          "weight": 1,
+          "frequency": 1.0,
+          "note": "Meta structure with an anchor: never picked by this weight; it takes \"share\" (meta_structures.json) of the slots its anchors win here, so no member's rate changes. Keep the weight at 1."
         }
       }
     },
@@ -1048,7 +878,13 @@
       "structures": {
         "minecraft:monument": {
           "weight": 100,
-          "frequency": 0.1
+          "frequency": 0.1,
+          "tuned": "Frequency 0.1 set by hand (rare monuments); kept by the weight strip (user, 2026-10-30)"
+        },
+        "creativeengineering:meta/struck_monument": {
+          "weight": 1,
+          "frequency": 1.0,
+          "note": "Meta structure with an anchor: never picked by this weight; it takes \"share\" (meta_structures.json) of the slots its anchors win here, so no member's rate changes. Keep the weight at 1."
         }
       }
     },
@@ -1061,44 +897,54 @@
       },
       "structures": {
         "towns_and_towers:pillager_outpost_ocean": {
-          "weight": 72,
-          "frequency": 0.9618
+          "weight": 100,
+          "frequency": 0.9618,
+          "fit_keep": false
         },
         "towns_and_towers:village_ocean": {
-          "weight": 138,
-          "frequency": 0.9588
+          "weight": 100,
+          "frequency": 0.9588,
+          "fit_keep": false
         },
         "antiquetradingship:antique_trading_ship": {
-          "weight": 97,
-          "frequency": 1.0
+          "weight": 100,
+          "frequency": 1.0,
+          "fit_keep": false
         },
         "blocky_siege:pillager_ship": {
-          "weight": 57,
-          "frequency": 1.0
+          "weight": 100,
+          "frequency": 1.0,
+          "fit_keep": false
         },
         "illager_viking_longship:illager_longship": {
-          "weight": 148,
-          "frequency": 1.0
+          "weight": 100,
+          "frequency": 1.0,
+          "fit_keep": false
         },
         "illagerwarship:warship": {
-          "weight": 97,
-          "frequency": 1.0
+          "weight": 100,
+          "frequency": 1.0,
+          "fit_keep": false
         },
         "unwrecked_ships:ship": {
-          "weight": 73,
-          "frequency": 1.0
+          "weight": 100,
+          "frequency": 1.0,
+          "fit_keep": false
         },
         "villager_rafts:raft_1": {
-          "weight": 83,
-          "frequency": 1.0
+          "weight": 100,
+          "frequency": 1.0,
+          "fit_keep": false
         },
         "villager_rafts:raft_2": {
-          "weight": 83,
-          "frequency": 1.0
+          "weight": 100,
+          "frequency": 1.0,
+          "fit_keep": false
         },
         "villager_rafts:raft_3": {
-          "weight": 83,
-          "frequency": 1.0
+          "weight": 100,
+          "frequency": 1.0,
+          "fit_keep": false
         },
         "creativeengineering:meta/pillager_fleet": {
           "weight": 1,
@@ -1122,7 +968,8 @@
       "structures": {
         "creativeengineering:meta/driftwood_flotilla": {
           "weight": 100,
-          "frequency": 1.0
+          "frequency": 1.0,
+          "fit_keep": false
         }
       }
     },
@@ -1136,27 +983,33 @@
       "structures": {
         "creativeengineering:meta/deadwood_acacia": {
           "weight": 100,
-          "frequency": 1.0
+          "frequency": 1.0,
+          "fit_keep": false
         },
         "creativeengineering:meta/deadwood_birch": {
           "weight": 100,
-          "frequency": 1.0
+          "frequency": 1.0,
+          "fit_keep": false
         },
         "creativeengineering:meta/deadwood_cherry": {
           "weight": 100,
-          "frequency": 1.0
+          "frequency": 1.0,
+          "fit_keep": false
         },
         "creativeengineering:meta/deadwood_jungle": {
           "weight": 100,
-          "frequency": 1.0
+          "frequency": 1.0,
+          "fit_keep": false
         },
         "creativeengineering:meta/deadwood_oak": {
           "weight": 100,
-          "frequency": 1.0
+          "frequency": 1.0,
+          "fit_keep": false
         },
         "creativeengineering:meta/deadwood_spruce": {
           "weight": 100,
-          "frequency": 1.0
+          "frequency": 1.0,
+          "fit_keep": false
         }
       }
     },
@@ -1170,291 +1023,203 @@
       "structures": {
         "beautify:botanist_house_desert": {
           "weight": 100,
-          "frequency": 1.0
+          "frequency": 1.0,
+          "fit_keep": false
         },
         "beautify:botanist_house_plains": {
           "weight": 100,
-          "frequency": 1.0
+          "frequency": 1.0,
+          "fit_keep": false
         },
         "beautify:botanist_house_savanna": {
           "weight": 100,
-          "frequency": 1.0
+          "frequency": 1.0,
+          "fit_keep": false
         },
         "beautify:botanist_house_snowy": {
           "weight": 100,
-          "frequency": 1.0
+          "frequency": 1.0,
+          "fit_keep": false
         },
         "beautify:botanist_house_taiga": {
           "weight": 100,
-          "frequency": 1.0
+          "frequency": 1.0,
+          "fit_keep": false
         },
         "farmers_structures:aquacultures_beach": {
-          "weight": 64,
-          "frequency": 0.0307
+          "weight": 100,
+          "frequency": 0.0307,
+          "fit_keep": false
         },
         "farmers_structures:aquacultures_common": {
-          "weight": 42,
+          "weight": 100,
           "frequency": 1.0,
-          "fit_base": {
-            "weight": 42,
-            "frequency": 0.9679
-          }
+          "fit_keep": false
         },
         "farmers_structures:cooks": {
-          "weight": 183,
+          "weight": 100,
           "frequency": 0.417675,
-          "fit_base": {
-            "weight": 183,
-            "frequency": 0.3129
-          }
+          "fit_keep": false
         },
         "farmers_structures:cooks_moss": {
           "weight": 100,
-          "frequency": 1.0
+          "frequency": 1.0,
+          "fit_keep": false
         },
         "farmers_structures:sushis": {
-          "weight": 220,
-          "frequency": 0.1058
+          "weight": 100,
+          "frequency": 0.1058,
+          "fit_keep": false
         },
         "greek_villager_house:greek_house": {
-          "weight": 73,
+          "weight": 100,
           "frequency": 1.0,
-          "fit_base": {
-            "weight": 73,
-            "frequency": 1.0
-          }
+          "fit_keep": false
         },
         "hobbit_house_:hobbit_house": {
-          "weight": 69,
+          "weight": 100,
           "frequency": 1.0,
-          "fit_base": {
-            "weight": 69,
-            "frequency": 0.9939
-          }
+          "fit_keep": false
         },
         "minecraft:igloo": {
-          "weight": 389,
+          "weight": 100,
           "frequency": 0.502816,
-          "fit_base": {
-            "weight": 389,
-            "frequency": 0.2286
-          }
+          "fit_keep": false
         },
         "old_swamp_fisherman_house:fisherman_house": {
-          "weight": 247,
+          "weight": 100,
           "frequency": 0.147601,
-          "fit_base": {
-            "weight": 247,
-            "frequency": 0.1192
-          }
+          "fit_keep": false
         },
         "sawmillhouse:sawmill": {
-          "weight": 159,
+          "weight": 100,
           "frequency": 1.0,
-          "fit_base": {
-            "weight": 159,
-            "frequency": 0.8113
-          }
+          "fit_keep": false
         },
         "simply_houses:forest_chapel": {
-          "weight": 67,
+          "weight": 100,
           "frequency": 0.120438,
-          "fit_base": {
-            "weight": 67,
-            "frequency": 0.0718
-          }
+          "fit_keep": false
         },
         "simply_houses:forest_fort": {
-          "weight": 67,
+          "weight": 100,
           "frequency": 0.120438,
-          "fit_base": {
-            "weight": 67,
-            "frequency": 0.0718
-          }
+          "fit_keep": false
         },
         "simply_houses:forest_house": {
-          "weight": 135,
+          "weight": 100,
           "frequency": 0.1196,
-          "fit_base": {
-            "weight": 135,
-            "frequency": 0.0713
-          }
+          "fit_keep": false
         },
         "simply_houses:forest_stonemason": {
-          "weight": 135,
+          "weight": 100,
           "frequency": 0.1196,
-          "fit_base": {
-            "weight": 135,
-            "frequency": 0.0713
-          }
+          "fit_keep": false
         },
         "simply_houses:plains_house": {
-          "weight": 23,
+          "weight": 100,
           "frequency": 1.0,
-          "fit_base": {
-            "weight": 23,
-            "frequency": 1.0
-          }
+          "fit_keep": false
         },
         "simply_houses:plains_mansion": {
-          "weight": 23,
+          "weight": 100,
           "frequency": 1.0,
-          "fit_base": {
-            "weight": 23,
-            "frequency": 1.0
-          }
+          "fit_keep": false
         },
         "simply_houses:taiga_forge": {
           "weight": 100,
           "frequency": 0.266606,
-          "fit_base": {
-            "weight": 100,
-            "frequency": 0.0871
-          }
+          "fit_keep": false
         },
         "simply_houses:taiga_house": {
           "weight": 100,
           "frequency": 0.266606,
-          "fit_base": {
-            "weight": 100,
-            "frequency": 0.0871
-          }
+          "fit_keep": false
         },
         "simply_houses:taiga_inn": {
-          "weight": 200,
+          "weight": 100,
           "frequency": 0.266606,
-          "fit_base": {
-            "weight": 200,
-            "frequency": 0.0871
-          }
+          "fit_keep": false
         },
         "simply_houses:taiga_woodcutter": {
-          "weight": 200,
+          "weight": 100,
           "frequency": 0.266606,
-          "fit_base": {
-            "weight": 200,
-            "frequency": 0.0871
-          }
+          "fit_keep": false
         },
         "small_viking_villager_house:small_viking_house": {
-          "weight": 64,
+          "weight": 100,
           "frequency": 1.0,
-          "fit_base": {
-            "weight": 64,
-            "frequency": 1.0
-          }
+          "fit_keep": false
         },
         "small_villager_greenhouse:small_villager_greenhouse": {
-          "weight": 72,
+          "weight": 100,
           "frequency": 1.0,
-          "fit_base": {
-            "weight": 72,
-            "frequency": 1.0
-          }
+          "fit_keep": false
         },
         "towns_and_towers:exclusives/village_wandering_trader_camp": {
-          "weight": 423,
+          "weight": 100,
           "frequency": 0.36673,
-          "fit_base": {
-            "weight": 423,
-            "frequency": 0.2036
-          }
+          "fit_keep": false
         },
         "villager_butcher_house:butcher_house": {
-          "weight": 87,
+          "weight": 100,
           "frequency": 1.0,
-          "fit_base": {
-            "weight": 87,
-            "frequency": 1.0
-          }
+          "fit_keep": false
         },
         "villager_cartographer_house:villager_cartographer_house": {
-          "weight": 91,
+          "weight": 100,
           "frequency": 1.0,
-          "fit_base": {
-            "weight": 91,
-            "frequency": 1.0
-          }
+          "fit_keep": false
         },
         "villager_cleric_house:villager_cleric_house": {
-          "weight": 104,
+          "weight": 100,
           "frequency": 1.0,
-          "fit_base": {
-            "weight": 104,
-            "frequency": 1.0
-          }
+          "fit_keep": false
         },
         "villager_country_house:country_house": {
-          "weight": 447,
+          "weight": 100,
           "frequency": 0.166203,
-          "fit_base": {
-            "weight": 447,
-            "frequency": 0.1166
-          }
+          "fit_keep": false
         },
         "villager_farmer_house:villager_farmer_house": {
-          "weight": 74,
+          "weight": 100,
           "frequency": 1.0,
-          "fit_base": {
-            "weight": 74,
-            "frequency": 1.0
-          }
+          "fit_keep": false
         },
         "villager_fletcher_house:villager_fletcher_house": {
-          "weight": 109,
+          "weight": 100,
           "frequency": 1.0,
-          "fit_base": {
-            "weight": 109,
-            "frequency": 1.0
-          }
+          "fit_keep": false
         },
         "villager_flower_house:flower_house": {
-          "weight": 781,
+          "weight": 100,
           "frequency": 0.273887,
-          "fit_base": {
-            "weight": 781,
-            "frequency": 0.1035
-          }
+          "fit_keep": false
         },
         "villager_tannery:tannery": {
-          "weight": 73,
+          "weight": 100,
           "frequency": 1.0,
-          "fit_base": {
-            "weight": 73,
-            "frequency": 1.0
-          }
+          "fit_keep": false
         },
         "ancient_enchantment_temple:temple": {
-          "weight": 1,
+          "weight": 100,
           "frequency": 0.1264,
-          "fit_base": {
-            "weight": 110,
-            "frequency": 0.1264
-          }
+          "fit_keep": false
         },
         "animal_barn:barn": {
-          "weight": 116,
+          "weight": 100,
           "frequency": 1.0,
-          "fit_base": {
-            "weight": 116,
-            "frequency": 1.0
-          }
+          "fit_keep": false
         },
         "bighorsestable:big_horse_stable": {
-          "weight": 98,
+          "weight": 100,
           "frequency": 1.0,
-          "fit_base": {
-            "weight": 98,
-            "frequency": 1.0
-          }
+          "fit_keep": false
         },
         "desert_village_temple:village_temple": {
-          "weight": 110,
+          "weight": 100,
           "frequency": 0.293336,
-          "fit_base": {
-            "weight": 110,
-            "frequency": 0.2528
-          }
+          "fit_keep": false
         },
         "desert_watchtower:watchtower": {
           "weight": 110,
@@ -1463,7 +1228,8 @@
             "weight": 110,
             "frequency": 0.2528
           },
-          "fit_keep": true
+          "fit_keep": true,
+          "tuned": "fit_keep tower: --fit-rates keeps its density on its own biome list (biome fits, 2026-10-12); kept by the weight strip (user, 2026-10-30)"
         },
         "forest_watchtower:forest_watchtower": {
           "weight": 135,
@@ -1472,23 +1238,18 @@
             "weight": 135,
             "frequency": 1.0
           },
-          "fit_keep": true
+          "fit_keep": true,
+          "tuned": "fit_keep tower: --fit-rates keeps its density on its own biome list (biome fits, 2026-10-12); kept by the weight strip (user, 2026-10-30)"
         },
         "gothic_church:church": {
-          "weight": 81,
+          "weight": 100,
           "frequency": 1.0,
-          "fit_base": {
-            "weight": 81,
-            "frequency": 1.0
-          }
+          "fit_keep": false
         },
         "llama_stable:llama_stable": {
-          "weight": 62,
+          "weight": 100,
           "frequency": 1.0,
-          "fit_base": {
-            "weight": 62,
-            "frequency": 1.0
-          }
+          "fit_keep": false
         },
         "mini_clock_tower:mini_clock_tower": {
           "weight": 108,
@@ -1497,100 +1258,69 @@
             "weight": 108,
             "frequency": 1.0
           },
-          "fit_keep": true
+          "fit_keep": true,
+          "tuned": "fit_keep tower: --fit-rates keeps its density on its own biome list (biome fits, 2026-10-12); kept by the weight strip (user, 2026-10-30)"
         },
         "plains_villager_tents:big_villager_tent": {
-          "weight": 116,
+          "weight": 100,
           "frequency": 1.0,
-          "fit_base": {
-            "weight": 116,
-            "frequency": 1.0
-          }
+          "fit_keep": false
         },
         "saloon:saloon": {
-          "weight": 326,
+          "weight": 100,
           "frequency": 0.43779,
-          "fit_base": {
-            "weight": 326,
-            "frequency": 0.3554
-          }
+          "fit_keep": false
         },
         "smallhorsestable:horse_stable": {
-          "weight": 111,
+          "weight": 100,
           "frequency": 1.0,
-          "fit_base": {
-            "weight": 111,
-            "frequency": 1.0
-          }
+          "fit_keep": false
         },
         "snowy_tents:snowy_tent": {
-          "weight": 284,
+          "weight": 100,
           "frequency": 1.0,
-          "fit_base": {
-            "weight": 284,
-            "frequency": 1.0
-          }
+          "fit_keep": false
         },
         "villager_archer_camp:villager_archer_camp": {
-          "weight": 85,
+          "weight": 100,
           "frequency": 1.0,
-          "fit_base": {
-            "weight": 85,
-            "frequency": 1.0
-          }
+          "fit_keep": false
         },
         "villager_circus_tent:villager_circus_tent": {
-          "weight": 84,
+          "weight": 100,
           "frequency": 1.0,
-          "fit_base": {
-            "weight": 84,
-            "frequency": 1.0
-          }
+          "fit_keep": false
         },
         "villager_fish_shop:fish_shop": {
-          "weight": 17,
+          "weight": 100,
           "frequency": 1.0,
-          "fit_base": {
-            "weight": 17,
-            "frequency": 0.7785
-          }
+          "fit_keep": false
         },
         "villager_fishermans_hut:villager_fishermans_hut": {
-          "weight": 125,
+          "weight": 100,
           "frequency": 1.0,
-          "fit_base": {
-            "weight": 125,
-            "frequency": 1.0
-          }
+          "fit_keep": false
         },
         "villager_forge:villager_forge": {
-          "weight": 116,
+          "weight": 100,
           "frequency": 1.0,
-          "fit_base": {
-            "weight": 116,
-            "frequency": 1.0
-          }
+          "fit_keep": false
         },
         "villager_gold_washing_facility:villager_gold_washing_facility": {
-          "weight": 37,
+          "weight": 100,
           "frequency": 1.0,
-          "fit_base": {
-            "weight": 37,
-            "frequency": 1.0
-          }
+          "fit_keep": false
         },
         "villager_windmill:windmill": {
-          "weight": 103,
+          "weight": 100,
           "frequency": 1.0,
-          "fit_base": {
-            "weight": 103,
-            "frequency": 1.0
-          }
+          "fit_keep": false
         },
         "watchtower_building:fresh_watchtower": {
           "weight": 160,
           "frequency": 1.0,
-          "fit_keep": true
+          "fit_keep": true,
+          "tuned": "fit_keep tower: --fit-rates keeps its density on its own biome list (biome fits, 2026-10-12); kept by the weight strip (user, 2026-10-30)"
         },
         "creativeengineering:meta/farmers_camp": {
           "weight": 1,
@@ -1619,7 +1349,8 @@
             "weight": 60,
             "frequency": 1.0
           },
-          "note": "Campsite Structures (features until 2026-10-14): weight set by hand for about the tents' density per area, 1 per 155 chunks each in its fitted biomes (the feature was about 1 per 32 on any grass). fit_base = these values; --fit-rates would solve from them."
+          "note": "Campsite Structures (features until 2026-10-14): weight set by hand for about the tents' density per area, 1 per 155 chunks each in its fitted biomes (the feature was about 1 per 32 on any grass). fit_base = these values; --fit-rates would solve from them.",
+          "tuned": "Weight set by hand for the tents' density (Campsite Structures features to structures, 2026-10-14, see note); kept by the weight strip (user, 2026-10-30)"
         },
         "campsite_structures:butcher_campsite": {
           "weight": 60,
@@ -1628,7 +1359,8 @@
             "weight": 60,
             "frequency": 1.0
           },
-          "note": "Campsite Structures (features until 2026-10-14): weight set by hand for about the tents' density per area, 1 per 155 chunks each in its fitted biomes (the feature was about 1 per 32 on any grass). fit_base = these values; --fit-rates would solve from them."
+          "note": "Campsite Structures (features until 2026-10-14): weight set by hand for about the tents' density per area, 1 per 155 chunks each in its fitted biomes (the feature was about 1 per 32 on any grass). fit_base = these values; --fit-rates would solve from them.",
+          "tuned": "Weight set by hand for the tents' density (Campsite Structures features to structures, 2026-10-14, see note); kept by the weight strip (user, 2026-10-30)"
         },
         "campsite_structures:cartographer_campsite": {
           "weight": 60,
@@ -1637,7 +1369,8 @@
             "weight": 60,
             "frequency": 1.0
           },
-          "note": "Campsite Structures (features until 2026-10-14): weight set by hand for about the tents' density per area, 1 per 155 chunks each in its fitted biomes (the feature was about 1 per 32 on any grass). fit_base = these values; --fit-rates would solve from them."
+          "note": "Campsite Structures (features until 2026-10-14): weight set by hand for about the tents' density per area, 1 per 155 chunks each in its fitted biomes (the feature was about 1 per 32 on any grass). fit_base = these values; --fit-rates would solve from them.",
+          "tuned": "Weight set by hand for the tents' density (Campsite Structures features to structures, 2026-10-14, see note); kept by the weight strip (user, 2026-10-30)"
         },
         "campsite_structures:cleric_campsite": {
           "weight": 60,
@@ -1646,7 +1379,8 @@
             "weight": 60,
             "frequency": 1.0
           },
-          "note": "Campsite Structures (features until 2026-10-14): weight set by hand for about the tents' density per area, 1 per 155 chunks each in its fitted biomes (the feature was about 1 per 32 on any grass). fit_base = these values; --fit-rates would solve from them."
+          "note": "Campsite Structures (features until 2026-10-14): weight set by hand for about the tents' density per area, 1 per 155 chunks each in its fitted biomes (the feature was about 1 per 32 on any grass). fit_base = these values; --fit-rates would solve from them.",
+          "tuned": "Weight set by hand for the tents' density (Campsite Structures features to structures, 2026-10-14, see note); kept by the weight strip (user, 2026-10-30)"
         },
         "campsite_structures:farmer_campsite": {
           "weight": 60,
@@ -1655,7 +1389,8 @@
             "weight": 60,
             "frequency": 1.0
           },
-          "note": "Campsite Structures (features until 2026-10-14): weight set by hand for about the tents' density per area, 1 per 155 chunks each in its fitted biomes (the feature was about 1 per 32 on any grass). fit_base = these values; --fit-rates would solve from them."
+          "note": "Campsite Structures (features until 2026-10-14): weight set by hand for about the tents' density per area, 1 per 155 chunks each in its fitted biomes (the feature was about 1 per 32 on any grass). fit_base = these values; --fit-rates would solve from them.",
+          "tuned": "Weight set by hand for the tents' density (Campsite Structures features to structures, 2026-10-14, see note); kept by the weight strip (user, 2026-10-30)"
         },
         "campsite_structures:fisher_campsite": {
           "weight": 15,
@@ -1664,39 +1399,48 @@
             "weight": 15,
             "frequency": 1.0
           },
-          "note": "Campsite Structures (features until 2026-10-14): weight set by hand for about the tents' density per area, 1 per 155 chunks each in its fitted biomes (the feature was about 1 per 32 on any grass). fit_base = these values; --fit-rates would solve from them."
+          "note": "Campsite Structures (features until 2026-10-14): weight set by hand for about the tents' density per area, 1 per 155 chunks each in its fitted biomes (the feature was about 1 per 32 on any grass). fit_base = these values; --fit-rates would solve from them.",
+          "tuned": "Weight set by hand for the tents' density (Campsite Structures features to structures, 2026-10-14, see note); kept by the weight strip (user, 2026-10-30)"
         },
         "eugene:camp": {
-          "weight": 148,
+          "weight": 100,
           "frequency": 1.0,
-          "fit_base": {
-            "weight": 148,
-            "frequency": 1.0
-          }
+          "fit_keep": false
         },
         "farmers_structures:aquacultures_cod": {
           "weight": 100,
-          "frequency": 1.0
+          "frequency": 1.0,
+          "fit_keep": false
         },
         "farmers_structures:cacaos": {
-          "weight": 1,
-          "frequency": 0.1561
+          "weight": 100,
+          "frequency": 0.1561,
+          "fit_keep": false
         },
         "farmers_structures:fishs_stew": {
-          "weight": 387,
-          "frequency": 1.0
+          "weight": 100,
+          "frequency": 1.0,
+          "fit_keep": false
         },
         "farmers_structures:ratatouilles": {
-          "weight": 129,
-          "frequency": 1.0
+          "weight": 100,
+          "frequency": 1.0,
+          "fit_keep": false
         },
         "farmers_structures:shepherd_farms": {
-          "weight": 33,
-          "frequency": 1.0
+          "weight": 100,
+          "frequency": 1.0,
+          "fit_keep": false
         },
         "farmers_structures:squids": {
-          "weight": 389,
-          "frequency": 1.0
+          "weight": 100,
+          "frequency": 1.0,
+          "fit_keep": false
+        },
+        "creativeengineering:meta/trader_caravan": {
+          "weight": 1,
+          "frequency": 1.0,
+          "note": "Meta structure with an anchor: never picked by this weight; it takes \"share\" (meta_structures.json) of the slots its anchors win here, so no member's rate changes. Keep the weight at 1."
         }
       }
     },
@@ -1710,23 +1454,48 @@
       "structures": {
         "ae2:meteorite": {
           "weight": 100,
-          "frequency": 0.985
+          "frequency": 0.985,
+          "fit_keep": false
         },
         "cloudstorage:big_balloon": {
           "weight": 100,
-          "frequency": 0.985
+          "frequency": 0.985,
+          "fit_keep": false
         },
         "cloudstorage:sky_temple": {
           "weight": 100,
-          "frequency": 0.985
+          "frequency": 0.985,
+          "fit_keep": false
         },
         "skyvillages:skyvillage": {
-          "weight": 299,
+          "weight": 100,
           "frequency": 1.0,
-          "fit_base": {
-            "weight": 299,
-            "frequency": 1.0
-          }
+          "fit_keep": false
+        },
+        "creativeengineering:meta/balloon_fleet": {
+          "weight": 1,
+          "frequency": 1.0,
+          "note": "Meta structure with an anchor: never picked by this weight; it takes \"share\" (meta_structures.json) of the slots its anchors win here, so no member's rate changes. Keep the weight at 1."
+        },
+        "creativeengineering:meta/cloud_balloons": {
+          "weight": 1,
+          "frequency": 1.0,
+          "note": "Meta structure with an anchor: never picked by this weight; it takes \"share\" (meta_structures.json) of the slots its anchors win here, so no member's rate changes. Keep the weight at 1."
+        },
+        "creativeengineering:meta/cloud_cluster": {
+          "weight": 1,
+          "frequency": 1.0,
+          "note": "Meta structure with an anchor: never picked by this weight; it takes \"share\" (meta_structures.json) of the slots its anchors win here, so no member's rate changes. Keep the weight at 1."
+        },
+        "creativeengineering:meta/sky_village_islands": {
+          "weight": 1,
+          "frequency": 1.0,
+          "note": "Meta structure with an anchor: never picked by this weight; it takes \"share\" (meta_structures.json) of the slots its anchors win here, so no member's rate changes. Keep the weight at 1."
+        },
+        "creativeengineering:meta/meteor_shower": {
+          "weight": 1,
+          "frequency": 1.0,
+          "note": "Meta structure with an anchor: never picked by this weight; it takes \"share\" (meta_structures.json) of the slots its anchors win here, so no member's rate changes. Keep the weight at 1."
         }
       }
     },
@@ -1740,19 +1509,23 @@
       "structures": {
         "philipsruins:nether_lava_ruins": {
           "weight": 100,
-          "frequency": 0.5993
+          "frequency": 0.5993,
+          "fit_keep": false
         },
         "philipsruins:sealedruinedghaststatue1": {
           "weight": 100,
-          "frequency": 0.5993
+          "frequency": 0.5993,
+          "fit_keep": false
         },
         "philipsruins:start_nether_dungeon": {
           "weight": 100,
-          "frequency": 0.5993
+          "frequency": 0.5993,
+          "fit_keep": false
         },
         "twigs:bloodstone_obelisk": {
-          "weight": 194,
-          "frequency": 1.0
+          "weight": 100,
+          "frequency": 1.0,
+          "fit_keep": false
         }
       }
     },
@@ -1769,8 +1542,9 @@
       },
       "structures": {
         "supplementaries:way_sign": {
-          "weight": 1,
-          "frequency": 1.0
+          "weight": 100,
+          "frequency": 1.0,
+          "fit_keep": false
         }
       }
     },
@@ -1796,7 +1570,8 @@
           "fit_base": {
             "weight": 100,
             "frequency": 1.0
-          }
+          },
+          "tuned": "Vehicles group rates hand-set, equal weights (plan 7.4.5, 2026-10-14); kept by the weight strip (user, 2026-10-30)"
         },
         "eugene:witch_wagon": {
           "weight": 200,
@@ -1805,7 +1580,8 @@
             "weight": 200,
             "frequency": 0.76
           },
-          "note": "Weight 200 x 0.76: 4x the loot carriage's density per area of its biomes, as the mod's sets had (60 vs 120 spacing)."
+          "note": "Weight 200 x 0.76: 4x the loot carriage's density per area of its biomes, as the mod's sets had (60 vs 120 spacing).",
+          "tuned": "Weight 200 x 0.76 = 4x the loot carriage per area, as the mod sets had (2026-10-14, see note); kept by the weight strip (user, 2026-10-30)"
         },
         "illager_siege_weapons:ballista": {
           "weight": 100,
@@ -1813,7 +1589,8 @@
           "fit_base": {
             "weight": 100,
             "frequency": 1.0
-          }
+          },
+          "tuned": "Vehicles group rates hand-set, equal weights (plan 7.4.5, 2026-10-14); kept by the weight strip (user, 2026-10-30)"
         },
         "illager_siege_weapons:battering_ram": {
           "weight": 100,
@@ -1821,7 +1598,8 @@
           "fit_base": {
             "weight": 100,
             "frequency": 1.0
-          }
+          },
+          "tuned": "Vehicles group rates hand-set, equal weights (plan 7.4.5, 2026-10-14); kept by the weight strip (user, 2026-10-30)"
         },
         "illager_siege_weapons:catapult": {
           "weight": 100,
@@ -1829,7 +1607,8 @@
           "fit_base": {
             "weight": 100,
             "frequency": 1.0
-          }
+          },
+          "tuned": "Vehicles group rates hand-set, equal weights (plan 7.4.5, 2026-10-14); kept by the weight strip (user, 2026-10-30)"
         },
         "illager_siege_weapons:reinforced_battering_ram": {
           "weight": 100,
@@ -1837,7 +1616,8 @@
           "fit_base": {
             "weight": 100,
             "frequency": 1.0
-          }
+          },
+          "tuned": "Vehicles group rates hand-set, equal weights (plan 7.4.5, 2026-10-14); kept by the weight strip (user, 2026-10-30)"
         },
         "illager_siege_weapons:siege_tower": {
           "weight": 100,
@@ -1845,7 +1625,8 @@
           "fit_base": {
             "weight": 100,
             "frequency": 1.0
-          }
+          },
+          "tuned": "Vehicles group rates hand-set, equal weights (plan 7.4.5, 2026-10-14); kept by the weight strip (user, 2026-10-30)"
         },
         "illager_siege_weapons:trebuchet": {
           "weight": 100,
@@ -1853,7 +1634,18 @@
           "fit_base": {
             "weight": 100,
             "frequency": 1.0
-          }
+          },
+          "tuned": "Vehicles group rates hand-set, equal weights (plan 7.4.5, 2026-10-14); kept by the weight strip (user, 2026-10-30)"
+        },
+        "creativeengineering:meta/pillager_caravan": {
+          "weight": 1,
+          "frequency": 1.0,
+          "note": "Meta structure with an anchor: never picked by this weight; it takes \"share\" (meta_structures.json) of the slots its anchors win here, so no member's rate changes. Keep the weight at 1."
+        },
+        "creativeengineering:meta/witch_cart_caravan": {
+          "weight": 1,
+          "frequency": 1.0,
+          "note": "Meta structure with an anchor: never picked by this weight; it takes \"share\" (meta_structures.json) of the slots its anchors win here, so no member's rate changes. Keep the weight at 1."
         }
       }
     },
@@ -1869,16 +1661,25 @@
           "weight": 1,
           "frequency": 1.0,
           "replaces": "betterdeserttemples:desert_temple",
-          "share": 0.1,
-          "note": "Replacement: never picked by this weight; takes 10% of the slots YUNG's desert temple wins and keeps (where both can stand), so temples stay as common as before and 1 in 10 is vanilla. Keep the weight at 1."
+          "share": 0.05,
+          "note": "Replacement: never picked by this weight; takes 5% of the slots YUNG's desert temple wins and keeps (where both can stand); 10% until 2026-10-30, when the meteorite-struck pyramid (meta/meteorite_desert_pyramid, 8%) took part of it. Keep the weight at 1."
         },
         "betterdeserttemples:desert_temple": {
-          "weight": 40,
+          "weight": 100,
           "frequency": 0.285,
-          "fit_base": {
-            "weight": 40,
-            "frequency": 0.2
-          }
+          "fit_keep": false
+        },
+        "creativeengineering:meta/meteorite_desert_pyramid": {
+          "weight": 1,
+          "frequency": 1.0,
+          "replaces": "betterdeserttemples:desert_temple",
+          "share": 0.08,
+          "note": "Replacement (a meta structure without an anchor): never picked by this weight; takes 8% of the slots YUNG's desert temple wins and keeps, and builds a vanilla desert pyramid struck by an AE2 meteorite there (user, 2026-10-30: more common than the plain vanilla pyramid, which went from 10% to 5%). Keep the weight at 1."
+        },
+        "creativeengineering:meta/desert_temple_ruins": {
+          "weight": 1,
+          "frequency": 1.0,
+          "note": "Meta structure with an anchor: never picked by this weight; it takes \"share\" (meta_structures.json) of the slots its anchors win here, so no member's rate changes. Keep the weight at 1."
         }
       }
     }
@@ -2346,24 +2147,20 @@
       },
       "structures": {
         "philipsruins:lost_soul_dungeon": {
-          "weight": 86,
-          "frequency": 0.991
+          "frequency": 0.991,
+          "fit_keep": false
         },
         "philipsruins:bone_dungeon": {
-          "weight": 116,
           "frequency": 0.29382,
-          "fit_base": {
-            "weight": 116,
-            "frequency": 0.2939
-          }
+          "fit_keep": false
         },
         "philipsruins:underground_structures": {
-          "weight": 582,
-          "frequency": 0.9885
+          "frequency": 0.9885,
+          "fit_keep": false
         },
         "philipsruins:sculk_dungeon": {
-          "weight": 86,
-          "frequency": 0.991
+          "frequency": 0.991,
+          "fit_keep": false
         }
       }
     },
@@ -2374,28 +2171,28 @@
       },
       "structures": {
         "terralith:underground/oak_cabin": {
-          "weight": 50,
-          "frequency": 1.0
+          "frequency": 1.0,
+          "fit_keep": false
         },
         "terralith:underground/giant_bee_hive": {
-          "weight": 78,
-          "frequency": 0.4261
+          "frequency": 0.4261,
+          "fit_keep": false
         },
         "terralith:underground/mining_outpost": {
-          "weight": 713,
-          "frequency": 0.1097
+          "frequency": 0.1097,
+          "fit_keep": false
         },
         "terralith:underground/old_refinery": {
-          "weight": 258,
-          "frequency": 0.1166
+          "frequency": 0.1166,
+          "fit_keep": false
         },
         "terralith:underground/sunken_tower": {
-          "weight": 129,
-          "frequency": 0.4277
+          "frequency": 0.4277,
+          "fit_keep": false
         },
         "terralith:underground/witch_hut": {
-          "weight": 44,
-          "frequency": 1.0
+          "frequency": 1.0,
+          "fit_keep": false
         }
       }
     },

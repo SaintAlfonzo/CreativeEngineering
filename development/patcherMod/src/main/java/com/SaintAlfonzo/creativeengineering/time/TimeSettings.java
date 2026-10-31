@@ -92,9 +92,13 @@ public final class TimeSettings {
      * 22300 is -1700), so the number matches vanilla's for the hours both call daytime.
      */
     public static long dayNumber(long dayTime) {
+        return Math.floorDiv(dayTime - firstSunrise(), (long) DAY_UNITS) + 1;
+    }
+
+    /** The sunrise nearest dayTime 0 (the pack's 22300 is -1700): day 1 of the world and of the calendar starts here. */
+    public static long firstSunrise() {
         long start = active() ? (long) dayStart() : 0;
-        long sunrise = Math.floorMod(start + DAY_UNITS / 4, (long) DAY_UNITS) - DAY_UNITS / 4; // into [-6000, 18000)
-        return Math.floorDiv(dayTime - sunrise, (long) DAY_UNITS) + 1;
+        return Math.floorMod(start + DAY_UNITS / 4, (long) DAY_UNITS) - DAY_UNITS / 4; // into [-6000, 18000)
     }
 
     /** Real minutes as "5 h 20 min" / "45 min". */

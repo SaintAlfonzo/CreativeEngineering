@@ -107,7 +107,7 @@ No new ids. All keys exist in [item_dict.js](../../kubejs/startup_scripts/_lib/i
 ---
 
 ## composting #4: Seed milling to bone meal
-Status Planned / Work KubeJS / TODO `farming/composting #4` (scratchpad 2026-10-21; [composting.md](../composting.md) 4)
+Status Testing (built 2026-10-30, `wood/compost.js`, SQ-CP-01 queued) / Work KubeJS / TODO `farming/composting #4` (scratchpad 2026-10-21; [composting.md](../composting.md) 4)
 
 ### Goal
 A Create millstone (and so crushing wheels) turns seeds into bone meal at a small chance. That gives seeds an automated

@@ -327,3 +327,4 @@ Tooltip tests are TT-14 and TT-15 in [tooltips.md](tooltips.md). JEI tests are V
   - Found the 50-tick barrel time (the JEI page says 1800, open).
 - 2026-10-19: this file describes 1.3.10, which left the pack in 1.0.7 (DEPLOYED 2026-10-18) for the port; the port's
   behaviour is in [alcohol.md](alcohol.md) Part B. Kept as the reference for what changed.
+- 2026-10-31: scratchpad notes translated into TODO rows (`alcohol/vineryport #28`). No code changed.

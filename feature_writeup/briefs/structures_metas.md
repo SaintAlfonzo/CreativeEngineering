@@ -37,7 +37,13 @@ at 1 in id order; distances at most 112 blocks (7 chunks).
 ---
 
 ## structures/metas #1: Vehicle metas (caravans)
-Status Planned · Work data · TODO `structures/metas #1`
+Status Testing · Work data · TODO `structures/metas #1`
+
+BUILT 2026-10-30 (user: "all 3 caravans ... with clusters, witch hut included"): build steps 1 to 3 and 5 as written,
+except the witch hut part is tried in every witch caravan (count 0 to 1, no chance roll) and its tag is
+`meta/caravan_witch_huts` (YUNG's hut and circle, the vanilla swamp hut). Step 4 (line layout) not built. Tests are
+ST-309 in [structure_tuning.md](../structure_tuning.md) 3.31 (the ST-240 to ST-243 ids proposed below were taken by
+other work).
 
 ### Goal
 Three caravans marked in 7.4.9: a witch cart caravan (witch wagons in a line, maybe by a witch hut; swamps, dark
@@ -293,7 +299,7 @@ contents: user-built.
 ---
 
 ## structures/metas #5: `avoidCoasts` side effect
-Status Planned · Work config · TODO `structures/metas #5`
+Status Testing (built 2026-10-30, switch on) · Work config · TODO `structures/metas #5`
 
 ### Goal
 Decide what to do with `[worldgen.meta_structures] avoidCoasts` (off): with it on, land metas whose satellites can't
@@ -319,8 +325,22 @@ avoid a nearby beach or river fail (three failed at -104 -150, 32 blocks from a 
 
 ### Decisions
 - Keep off (recommended), soften (START), or on (FULL, today's code).
+- DECIDED 2026-10-29 (user): on, FULL. BUILT 2026-10-30: `avoidCoasts = true` in the instance toml and as the CEConfig
+  default (`CEConfig.java` `define("avoidCoasts", true)`, `WorldgenConfig.metaAvoidCoasts()` fallback true, MetaStructure
+  doc). No START mode built.
+
+### Side effect accepted with the switch on
+- A land meta whose satellites can't find a spot clear of a beach, shore or river within their reach fails as a meta;
+  the slot falls back to the plain anchor, which spawns as it would alone. So near coasts and rivers the camps, ruin
+  scatters and farm clusters show up as their single anchor structure, not as a cluster. Seen at -104 -150 (seed
+  8675309, 32 blocks from a gravel beach): three land metas failed. An anchor standing in a coast or river biome
+  itself also falls back to the plain anchor.
+- Rates per anchor are unchanged (a failed meta is still its anchor); only the share of full metas near water drops.
+- The 6 water metas in `meta/coast_ok` (fleets, flotillas, wrecks, sunken ruins) are unaffected.
+- New chunks only; the switch needs a restart (Forge did not reload it live in the 2026-10-19 run).
 
 ### Tests
+- SQ-WG30-E02 (scratch queue): ST-203 / ST-204 with the new default, flotilla still assembles, land-meta count vs diag3.
 - ST-249 (if softened) at -104 -150 (seed 8675309) the three land metas assemble with START and fail with FULL.
 
 ---
@@ -335,3 +355,31 @@ avoid a nearby beach or river fail (three failed at -104 -150, 32 blocks from a 
 
 - [testing/structures/12_earth_fill_camps.md](../testing/structures/12_earth_fill_camps.md) 3 (Deploy state): "Not
   deployed" -> DEPLOYED with pack 1.0.9 (2026-10-19 15:54, plan_1.0.9.md EF).
+
+---
+
+## Ideas (2026-10-30, TODO `structures/metas #9`)
+
+Further metas from structures already in the pack (data only unless noted). BUILT 2026-10-30 evening (user's pick): meteor
+shower (deserts only), witch coven, village under siege (as `village_siege_ring` and `village_siege_camp`), struck
+monument; structure_tuning.md 3.31. Correction: hostile parts inside a peaceful meta need no exemption (placement
+priority compares whole starts); only two separate starts are held apart.
+
+| Idea | Anchor | Parts | Note |
+|---|---|---|---|
+| Meteor shower | an AE2 meteorite (`sky`) | 2 to 4 more meteorites 24 to 96 out | the simplest; plains or desert reads best |
+| Witch coven | YUNG's witch circle | a witch hut, 1 to 2 witch wagons | swamps only |
+| Pirate cove | a pillager ship (`boats`) | a beach pillager camp, 1 to 2 beached shipwrecks | coast; `meta/coast_ok` |
+| Castaway camp | a beached shipwreck | a fisher campsite, a raft, driftwood | coast |
+| Fishing hamlet | an aquaculture farm (Farmer's Structures) | fisher campsite, 1 to 2 rafts offshore, way sign | coast |
+| Monastery | the forgotten church | 1 to 2 Farmer's Structures farms, way sign | ruins group anchor |
+| Haunted grounds | C.C.C. undead castle | 2 to 4 small ruins, a ruined drum tower | surface dungeon |
+| Lost expedition | a large ruin | 1 to 2 friendly camps (abandoned look needs templates), way sign | |
+| Desert oasis outpost | desert village temple | botanist desert house, desert watchtower, trader camp | `remote` |
+| Frontier line | a fortified village | 2 to 4 watchtowers in a ring 64 to 104 out | like `village_towers`, bigger ring |
+| Village under siege | any village | 2 to 3 siege weapons at its edge | built |
+| Ambushed caravan | a trader camp | a pillager camp or carriage 30 to 60 out | no exemption needed (parts of one start) |
+| Sky dock | a sky village | 1 to 3 hot air balloons around it | balloons are absolute y 150, the village is surface + 150: check heights |
+| Struck monument | the ocean monument | an ocean meteorite | big; check the monument's own reach |
+| Meteorite in a mineshaft | a mineshaft | a meteorite overlapping its entrance | needs the mineshaft's surface entrance (YUNG's Extras) |
+

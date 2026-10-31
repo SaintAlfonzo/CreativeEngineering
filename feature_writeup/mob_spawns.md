@@ -383,7 +383,7 @@ First block (down to the ducks) DONE 2026-10-09, see section 3 and 3.1 (not yet 
     - camps- plg, vind 0-2
     - towers- plg, vind, evoker/illusioner 0-1
     - large towers, special structures, 
-  - remove pillager spawners
+  - ~~remove pillager spawners~~ (built 2026-10-30 with per-structure spawn boxes: [structure_tuning.md](structure_tuning.md) 3.32)
 - Lone villager in plains, temperate hills, temperate field and meadow biomes 
 - allay spawns in more structures
 - add mooblooms to spring-autumn skylands, 100% even split between all availible flowers on skyland

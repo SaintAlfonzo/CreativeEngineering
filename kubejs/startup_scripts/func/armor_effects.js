@@ -260,8 +260,10 @@ global.armorEffects.set([i.dragon_helmet, i.upgraded_dragon_chestplate, i.dragon
 
 // dragon_horse_armor (dragonloot:dragon_horse_armor) is a HorseArmorItem worn by an
 // AbstractHorse, not player equipment — see mount() above for why it needs its own path.
-// 'minecraft:strong_regeneration' is a POTION id, not a mob effect - it never resolved, so the
-// horse got nothing. The effect is minecraft:regeneration.
+// Regeneration II, Health Boost II, Resistance II (potions/effects #4, decided 2026-10-29).
+var ef = global.effect
 global.armorEffects.mount(i.dragon_horse_armor, [
-	{ effect: 'minecraft:regeneration' },
+	{ effect: ef.regeneration, amplifier: 1 },
+	{ effect: ef.health_boost, amplifier: 1 },
+	{ effect: ef.resistance, amplifier: 1 },
 ])

@@ -11,7 +11,7 @@ One new row, `misc #15`.
 ---
 
 ## misc #15: Immersive Weathering on Upgrade Aquatic coral
-Status **Planned** / Work data / config / TODO `gameplay/misc #15`
+Status **Testing** (BUILT 2026-10-28, see [fixes_compat.md](../fixes_compat.md) 2.31: 11 kinds, elder prismarine is the dead form of prismarine; UA has no reef biomes, so warm ocean / `#minecraft:is_ocean`; test FX-48, SQ-UC) / Work data / config / TODO `gameplay/misc #15`
 
 ### Goal
 Upgrade Aquatic's corals grow and spread through Immersive Weathering's growth system the way the vanilla corals do.

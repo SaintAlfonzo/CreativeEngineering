@@ -1,6 +1,6 @@
 # Food: types, values, Spice of Life and canned parity
 
-Test prefix **FO-** · Last updated **2026-10-21** · Overall status **DEPLOYED** (types, tags, can recipes, servings,
+Test prefix **FO-** · Last updated **2026-10-30** · Overall status **DEPLOYED** (types, tags, can recipes, servings,
 fried eggs shipped from 1.0.2 on, generated cans 1.0.6; FO-01 PASSED, FO-02 to FO-28 not run); the tuning system in
 3.5 and the egg migration in 3.8 aren't built. Build plan: [briefs/food_types-and-tuning.md](briefs/food_types-and-tuning.md)
 
@@ -32,10 +32,10 @@ per type, with per-item exceptions, and gives every can the value of what went i
 | Vanilla egg -> `#forge:eggs` migration | list in 3.8 | TODO, not built |
 | Every raw egg stacks to 64 | now a rule of the stack size policy ([stack_sizes.js](../kubejs/startup_scripts/changes/stack_sizes.js), `tools/gen_stack_sizes.py`); `item_properties.js` is removed in 1.0.5 | DEPLOYED with 1.0.6; single player 2026-10-11 logged `[stack_sizes] set 1052 stack sizes`. FO-28 |
 | Glistering Melon Slice edible (Golden Melon Slice values, no effects) | [food_values.js](../kubejs/startup_scripts/cooking/food_values.js), `golden` type in food_types.json | built, scratch server PASSED 2026-10-22 (SQ-OF-12), not run in game (3.10). FO-29 |
-| Seasoning JEI page (salting off the Crafting and Mixing pages) | patcherMod `compat/jei/SeasoningJEI` + `SeasoningCategory`, CEConfig `[jei] seasoningCategory` | BUILT 2026-10-21, in the patcherMod 1.1.02 jar installed 2026-10-23 (3.11). FO-30, FO-31 |
-| Pack seasonings framework (NBT seasonings, combine rules, bonus on eating; test set cheese / onion / garlic on popcorn) | patcherMod `food/Seasonings`, `SeasoningRecipe`, `SeasoningTooltip`; [seasonings.js](../development/creativeDelight/src/main/resources/kubejs_startup/creativeengineering/seasonings.js), [seasoning.js](../kubejs/data/creative_delight/kubejs/creativeengineering/seasoning.js), NCH `season` | BUILT 2026-10-23, patcherMod 1.1.02 jar in `mods/` (23:46, md5 57feef44); logic harness 11/11; scratch test queued (SQ-SN-00, 01) (3.12). FO-45 to FO-48 |
+| Seasoning JEI page (salting off the Crafting and Mixing pages) | patcherMod `compat/jei/SeasoningJEI` + `SeasoningCategory`, CEConfig `[jei] seasoningCategory` | BUILT 2026-10-21, deployed with 1.1.01 (3.11). FO-30, FO-31 |
+| Pack seasonings framework (NBT seasonings, combine rules, bonus on eating; test set cheese / onion / garlic on popcorn) | patcherMod `food/Seasonings`, `SeasoningRecipe`, `SeasoningTooltip`; [seasonings.js](../development/creativeDelight/src/main/resources/kubejs_startup/creativeengineering/seasonings.js), [seasoning.js](../kubejs/data/creative_delight/kubejs/creativeengineering/seasoning.js), NCH `season` | BUILT 2026-10-23, deployed with 1.1.03 (2026-10-26); logic harness 11/11; scratch server PASSED 2026-10-25 (SQ-SN-00, -01) and 2026-10-26 (SQ-SNF-01 to -03, by food family) (3.12). FO-45 to FO-48, FO-56 |
 | Spice of Life pack config (10 foods to activate, reset on death, queue 256; tier bonuses still WIP) | `defaultconfigs/solapplepie-server.toml` = `configs_edited/server_config/solapplepie-server.toml` | Shipped with 1.1.01 through the deploy's `defaultconfigs`; the instance copy added 2026-10-22. New-world values: scratch server PASSED 2026-10-22 (SQ-CF-01). FO-32 |
-| Bites from placed pies and cakes count for Spice of Life | patcherMod `food/PlacedFoodSol` + `mixin/ServerPlayerGameModePlacedFoodMixin`, [placed_food_slices.json](../kubejs/generation_scripts/food/placed_food_slices.json) | BUILT 2026-10-22, patcherMod 1.1.01 jar in `mods/` (11:06, md5 b5f60533) (4.2 finding 5); scratch server PASSED 2026-10-22 (SQ-SOL-01: load, 14 map entries, mixin); the bite: FO-43 in game |
+| Bites from placed pies and cakes count for Spice of Life | patcherMod `food/PlacedFoodSol` + `mixin/ServerPlayerGameModePlacedFoodMixin`, [placed_food_slices.json](../kubejs/generation_scripts/food/placed_food_slices.json) | BUILT 2026-10-22, deployed with 1.1.01 (4.2 finding 5); scratch server PASSED 2026-10-22 (SQ-SOL-01: load, 14 map entries, mixin); the bite: FO-43 in game |
 
 **Open first:** [food_catalog.md](food_catalog.md) (every food), [food_types.json](../kubejs/generation_scripts/food/food_types.json)
 (who is in which type), section 2.3 (Spice of Life), section 4.2 (what is broken today).
@@ -590,11 +590,13 @@ Limits: a seasoned food used as a
 recipe input loses the seasoning; JEI shows seasoned and plain popcorn as one entry (no subtype interpreter). Not built
 from row 3: pepper, dill, cream and onion, ice cubes, popcorn variants. FO-45 to FO-48.
 
-### 3.13 Powdered sugar (BUILT 2026-10-25, not run)
+### 3.13 Powdered sugar (BUILT 2026-10-25, rebalanced 2026-10-29; scratch r1031 2026-10-31: recipes PASSED, the 0.5 second results client check pending)
 
 `dishes/ingredients #16`, with the sugar seasoning of `food/seasoning #5`. Three pieces, all `creativeengineering:`:
 - **Item** `powdered_sugar` (KubeJS, [baking_ingredients.js](../development/creativeDelight/src/main/resources/kubejs_startup/creativeengineering/baking_ingredients.js)):
-  ground sugar, 1 sugar -> 1 by Create crushing, Millstone and the mortar (`NCH.foodGrinding`). In `#forge:sugar`
+  ground sugar. Create crushing and Millstone: 1 sugar -> 1 powdered sugar plus a 50% second (1.5 on average); mortar:
+  3 sugar -> 4 (`NCH.foodGrinding`, mortar ratio set by hand; `dishes/ingredients #23`, 2026-10-29, was 1 -> 1 on all
+  three). In `#forge:sugar`
   ([cookingtags.js](../kubejs/server_scripts/tags/cookingtags.js)), so it goes wherever the pack-wide sugar swap
   (cooking.js "Sugar") or a pack recipe takes `i.any_sugar`.
 - **Block** `powdered_sugar_block` (patcherMod `food/PowderedSugarBlock`, extends `PowderSnowBlock`, powder snow's
@@ -603,15 +605,23 @@ from row 3: pepper, dill, cream and onion, ice cubes, popcorn variants. FO-45 to
   no powder snow fog (vanilla checks the powder snow block itself).
 - **Bucket** `powdered_sugar_bucket` (`food/PowderedSugarRegistry`, a `SolidBucketItem`): places the block, an empty
   bucket picks it back up; leaves its bucket in a crafting grid.
-- **Recipes** ([powdered_sugar.js](../kubejs/data/creative_delight/kubejs/creativeengineering/powdered_sugar.js)): Vacuum Chamber, evacuating,
-  bucket + 3 sugar -> powdered sugar bucket, 600 ticks (mirrors Vintage Improvements' bucket + snow block -> powder snow
-  bucket; new `NCH.viVacuumizing`); grid: powdered sugar bucket -> 3 powdered sugar.
+- **Recipes** ([powdered_sugar.js](../kubejs/data/creative_delight/kubejs/creativeengineering/powdered_sugar.js); `dishes/ingredients #23`, 2026-10-29):
+  Vacuum Chamber, evacuating, bucket + 4 sugar -> powdered sugar bucket, 600 ticks (mirrors Vintage Improvements'
+  bucket + snow block -> powder snow bucket; `NCH.viVacuumizing`; was 3 sugar); the best rate, 2 powdered sugar a
+  sugar. Grid: powdered sugar bucket -> 8 powdered sugar, bucket stays (was 3); bucket + 8 powdered sugar -> powdered
+  sugar bucket (new). Tactical Fishing's catch recipe for the bucket is removed (CD `vintagedelight/recipes.js`, with the
+  salt bucket's).
 - **Seasoning** `sugar` ([seasonings.js](../development/creativeDelight/src/main/resources/kubejs_startup/creativeengineering/seasonings.js)): sugar or powdered sugar
   (not glycerol), +1 nutrition (placeholder). Test food: Create Factory's waffle. Popcorn is out: Corn Delight's
   popcorn + sugar is caramel popcorn. Which foods take it is still open (`food/seasoning #5`).
 - **Textures** (`textureswapper/powdered_sugar/make_psugar.py`, sheet `preview_sheet.png`): item = sugar's palette on
-  Create Confectionery's cocoa powder; block = sugar and sugar cube palettes (sugar's two darkest greys dropped) on
-  powder snow; bucket = the same palette on the powder snow bucket's snow pixels.
+  Create Confectionery's cocoa powder; block = the vanilla moss block recoloured with the powdered sugar item's palette
+  minus its darkest grey (`block_moss_soft1`, 2026-10-29; was `block_soft`, sugar and sugar cube palettes on powder
+  snow, which read as snow); bucket = sugar and sugar cube palettes on the powder snow bucket's snow pixels. The block
+  model keeps powder snow's (inner-face) shape.
+- **JEI** (2026-10-29, open): the block has no item of its own. The bucket is a `SolidBucketItem` (a `BlockItem`), so
+  Forge maps the block to it: pick-block, WTHIT and any JEI slot that shows the block show the Powdered Sugar Bucket.
+  No code path found that shows snow or powder snow for it; which JEI view showed snow is not known yet (FO-52).
 
 FO-50 to FO-53.
 
@@ -639,6 +649,16 @@ do not take them.
   `i.any_sweetener_drink`; the pack's keg flaxen cheese and pale jane (`alcohol.js`) use `i.any_sweetener_brewing`.
 - The sugar seasoning (3.12) stays sugar or powdered sugar.
 - Test: RC-25 (SQ-CDB-02).
+
+### 3.15 Batter grains (BUILT 2026-10-29, recipe slots scratch server PASSED r1031 2026-10-31 (SQ-PS-05); TODO `dishes/ingredients #24`)
+
+Each grain slot of Rustic Delight's batter takes wheat flour, cornmeal or rice (`[i.t_flour_or_cornmeal, i.rice]`, the
+pancake recipes' ingredient). Pot: milk + egg + 2 grain -> 2 batter, swapped in place in
+[baked_goods.js](../kubejs/data/creative_delight/kubejs/creativeengineering/baked_goods.js) (`replaceInput` on wheat, which
+also reaches Slice & Dice's heated-mixer copy; was wheat flour since the oven audit, wheat upstream). Heated mixing:
+2 grain + 2 bowls + 250 mB egg solution -> 2 batter
+([rusticdelight/recipes.js](../kubejs/data/creative_delight/kubejs/rusticdelight/recipes.js); was 2 wheat flour). Cornbread
+batter (Corn Delight, cornmeal) is a different item and unchanged. FO-58.
 
 ## 4. Limits and decisions
 
@@ -673,8 +693,11 @@ do not take them.
    skipped; check the log on the next start). The default complexity list names two mods that weren't installed
    then (`farmersrespite`, `largemeals`): harmless. Farmer's Respite was added 2026-10-02, so its 10 entries (black tea twice;
    6 teas at 3, rose hip pie and coffee cake slices at 4, Blazing Chili at 5) now apply; only the 4 `largemeals` entries are dead (the jar's
-   `ComplexityParser` logs `Item is not food: largemeals:...` for each). Unknown benefit attributes are dropped
-   silently (`AttributeBenefit.createAttribute` marks them invalid, no log line).
+   `ComplexityParser` logs `Item is not food: largemeals:...` for each). A Large Meals port is planned
+   ([large_meals.md](large_meals.md)); the entries go live with it. Unknown benefit attributes are dropped
+   silently (`AttributeBenefit.createAttribute` marks them invalid, no log line). Fixed 2026-10-27 in the pack copy
+   (`defaultconfigs/` and `configs_edited/server_config/`): `attribute,generic.movement_speed,0.01`; worlds made before
+   keep the old line until their `serverconfig/` copy is replaced (TODO `food/types-and-tuning #4`).
 5. **Placed pies and non-vanilla cakes** didn't count for Spice of Life when bitten from the block (only the vanilla
    cake does, as Farmer's Delight's cake slice); their slices do when eaten from the hand. FIXED 2026-10-22
    (`types-and-tuning #5`): patcherMod `food/PlacedFoodSol` + `mixin/ServerPlayerGameModePlacedFoodMixin`
@@ -881,14 +904,23 @@ Cooking oil and fried eggs (3.7), after a restart:
   fills by the amount shown. Plain popcorn unchanged.
 - [ ] **FO-48 Stacking:** 2 Garlic + Onion popcorns made in different orders stack in one slot; seasoned and plain
   popcorn don't. `logs/latest.log` has no `Seasonings` error.
-- [ ] **FO-50 Powdered sugar item** (restart; new patcherMod jar in `mods/`): JEI shows Powdered Sugar (white pile) and
-  Powdered Sugar Bucket. JEI uses of Sugar: Crushing, Milling and a mortar craft give 1 Powdered Sugar. Powdered Sugar
-  shows in a `#forge:sugar` recipe (e.g. Frosting: Powdered Sugar + 2 Milk in the grid) and the craft works.
-- [ ] **FO-51 Bucket recipes:** a Vacuum Chamber (evacuating) with a Bucket and 3 Sugar gives a Powdered Sugar Bucket
-  (JEI lists it). Powdered Sugar Bucket alone in the grid gives 3 Powdered Sugar and the empty Bucket stays.
-- [ ] **FO-52 Block:** place the bucket on the ground: a powdered sugar block, empty bucket in hand. Walk in: you sink
+- [ ] **FO-50 Powdered sugar item** (restart; new patcherMod and Creative Delight jars in `mods/`): JEI shows Powdered
+  Sugar (white pile) and Powdered Sugar Bucket. JEI uses of Sugar: Crushing and Milling give 1 Powdered Sugar plus a
+  second at 50%; the mortar craft takes 3 Sugar for 4 Powdered Sugar. Powdered Sugar shows in a `#forge:sugar` recipe
+  (e.g. Frosting: Powdered Sugar + 2 Milk in the grid) and the craft works. Rerun 2026-10-29 (`ingredients #23`).
+- [ ] **FO-51 Bucket recipes:** a Vacuum Chamber (evacuating) with a Bucket and 4 Sugar gives a Powdered Sugar Bucket
+  (JEI lists it; no 3-sugar recipe). Powdered Sugar Bucket alone in the grid gives 8 Powdered Sugar and the empty Bucket
+  stays. Bucket + 8 Powdered Sugar in the grid gives a Powdered Sugar Bucket. JEI uses of the bucket: no Tactical
+  Fishing catch. Rerun 2026-10-29.
+- [ ] **FO-52 Block:** place the bucket on the ground: a powdered sugar block with the grainy moss-pattern sugar texture
+  (not the snow-like one), empty bucket in hand; pick-block and WTHIT show the Powdered Sugar Bucket. Note any JEI view
+  that still shows snow or powder snow for it (2026-10-29 owner report, source not found). Walk in: you sink
   slowly, no frost overlay or freezing damage after 20 s. With leather boots you stand on top. Fall 10 blocks into it: no
   damage. Right-click it with an empty bucket: the block goes, Powdered Sugar Bucket in hand. Break it by hand: no drop.
+- [ ] **FO-58 Batter grains** (restart; Creative Delight jar in `mods/`): JEI recipes for Batter: Cooking Pot (milk,
+  egg, 2 grain) and both heated mixer recipes (Slice & Dice's pot copy, and egg solution + 2 grain + 2 bowls) cycle Wheat
+  Flour, Cornmeal and Rice in each grain slot, no Wheat. Cook one with Rice and one with Cornmeal in the pot: 2 Batter
+  each.
 - [ ] **FO-53 Sugar seasoning (no foods since 2026-10-26):** Waffle + Sugar gives nothing; the Seasoning JEI tab has no
   Sugar page. Popcorn + Sugar still gives Caramel Popcorn.
 - [ ] **FO-54 AppleSkin with salt** (restart, patcherMod with this change): hover plain popcorn, salted popcorn, onion
@@ -986,6 +1018,9 @@ Cooking oil and fried eggs (3.7), after a restart:
   overlays are generated by `textureswapper/seasoning/make_seasoning.py` (palette_swap, sources in `src/`) instead of the
   hand-picked-shade script, which is removed. Creative Delight rebuilt, not installed.
 - 2026-10-24: planned from the scratchpad (4.6): merged pink salt, salt layers placed from inside, seasoning on AppleSkin and per-seasoning icons, honeycomb as sugar, one jam family and merged nut butter. Nothing built.
+- 2026-10-29: powdered sugar rebalance (3.13, `dishes/ingredients #23`): 4 sugar a vacuum bucket, bucket <-> 8,
+  mortar 3 -> 4, machines 1 -> 1 + 50%; block texture from the moss block; JEI snow report not traced. Batter grains
+  (3.15, `#24`). FO-50 to FO-52 rerun, FO-58 new. Not built.
 - 2026-10-25: Powdered sugar (3.13, `dishes/ingredients #16`): item, powder-snow-like block and bucket, vacuum
   chamber bucket recipe, `#forge:sugar`, sugar seasoning (sugar or powdered sugar) tested on the waffle. patcherMod
   built, not installed. FO-50 to FO-53.

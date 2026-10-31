@@ -2,7 +2,7 @@
 
 > **Merge note (2026-10-25):** this port is to be merged with the other Farmer's Delight add-on backports into a single jar, **Creative Delight**. The inventory summary, cross-port interactions and the merge process are in [creative_delight.md](creative_delight.md). This file stays the detailed record for Veggies Delight; its registry namespace and test prefix do not change.
 
-Plan written 2026-10-22; implementation decided by the user the same day (§4, §5). **BUILT 2026-10-22** (port jar in
+Plan written 2026-10-22; implementation decided by the user the same day (§4, §5). **BUILT 2026-10-22, deployed with 1.1.01 (port now `-03`, 1.1.03); SQ-VP-00 to -12 PASS 2026-10-23 / -25** (port jar in
 `mods/`, pack integration in scripts and data; §4.0 lists what is done and what waits for an in-game dump). Veggies Delight
 (mehdinoui) has no 1.19.2 build: the newest are 1.9.2 for Forge 1.20.1 and 1.9.3 for NeoForge 1.21.1, with identical
 content (same lang keys, same blockstates). So getting it into the pack means our own port, like Backported Vinery and
@@ -24,10 +24,11 @@ This file has four parts:
 |---|---|---|
 | Mod inventory (7 crops, 8 wild plants, 72 items, 29 blocks, 215 recipe files, worldgen, loot, village houses, trades, mob food, config) | §2 | reference 2026-10-22, from `VeggiesDelight-1.20.1-1.9.2.jar` |
 | Overlap decisions and the overlaps that remain | §3 | decided 2026-10-22 (user); 10 remaining overlaps listed in §3.3 |
-| Port jar `backportedVeggies-1.9.2-ce-19.2-01.jar` | §4.1 | BUILT 2026-10-22, installed in `mods/`; not yet loaded in game |
+| Port jar `backportedVeggies-1.9.2-ce-19.2-03.jar` | §4.1 | `-01` BUILT 2026-10-22, live since 1.1.01; `-03` (carrot cake cut face) live since 1.1.03. Rebuilt 2026-10-30 18:31 under the same `-03` name with the mature dandelion revert (§2.2): that build is in `build/libs/` only (`mods/` holds the 2026-10-25 `-03`); bump to `-04` before installing |
 | Implementation description (port, wild plants, mature dandelion, seasons, food, cooking rules, baking, drinks, jars, mob food, loot, houses, trades, compost, UI) | §4 | BUILT 2026-10-22 except the dump-driven steps (§4.0) |
 | Marked merges and pins (Fish and Chips, Mashed Potatoes, Stuffed Bell Peppers; Cultural Delight; Vintage and Cultural recipes; doughs; mob food; seasons; tea audit) | §5 | marked 2026-10-22 |
-| Tests | §8 | VD-01 to VD-41 drafted (not all numbers used) |
+| Mature dandelion maturing on rich / fertile soil and shear / knife revert (TODO `ports/veggiesport #4`) | §2.2 | BUILT 2026-10-30: patcherMod part in 1.1.04 (installed 2026-10-31 00:44, not yet booted); port part waits for the `-04` install |
+| Tests | §8 | VD-01 to VD-43 drafted (not all numbers used) |
 
 - **Source to port from:** `~/.local/share/atlauncher/downloads/VeggiesDelight-1.20.1-1.9.2.jar` (Forge, closest API to
   1.19.2). `DecompiledMods/VeggiesDelight-1.21.1-1.9.3.jar` is the NeoForge build, not decompiled, same content.
@@ -87,6 +88,12 @@ Eight wild plants. Seven `wild_*` blocks are `FlowerBlock`s; the mature dandelio
 | Wild Turnips | `minecraft:beach` only (`forge:add_features`) | seeds; knife: seeds |
 | Wild Zucchinis | `#forge:is_hot/overworld` | seeds; knife: seeds |
 | Mature Dandelion | `#forge:is_plains` | dandelion leaf; knife: leaves; yellow dye by hand |
+
+**Mature dandelion maturing and reverting (2026-10-30).** Plain dandelion -> mature: patcherMod `crops/DandelionMaturing`,
+called from the random tick of Rich Soil, Rich Soil Farmland and Fertile Soil (`mixin/Dandelion*Mixin`); odds are
+`[dandelion_maturing] richSoilTicks / fertileSoilTicks` in creativeengineering-common.toml (average soil random ticks per
+conversion, default 10 / 20, 0 = off). Mature -> plain: `DandelionBlock.use` with `#forge:shears` or `#forge:tools/knives`
+turns it into a vanilla dandelion, drops 2-3 leaves and a dandelion at 50 %, and damages the tool.
 
 Breaking one (checked for turnip, garlic, sweet potato and dandelion) drops the planting item, plus a 20 % roll of the
 produce (turnip, garlic clove, sweet potato, leaf); shears give the block itself instead. All exclude `#forge:is_underground` and generate at `vegetal_decoration`. Bone meal on a **vanilla dandelion is not
@@ -178,7 +185,7 @@ The 1.21.1 build of 1.9.3 has the same content as the 1.20.1 one apart from the 
 | Item icons (1.21.1 build only) | The 8 wild plants and the mature dandelion get their own `item/` textures (1.20.1 uses the block texture) | optional, visual only; owner's call |
 
 Carrot cake cut face: built 2026-10-25 (`veggiesport #3`): `port_resources.py` writes `carrot_cake_inner` into slices 1 to 6,
-port `1.9.2-ce-19.2-03` (built, not in `mods/`); VD-41.
+port `1.9.2-ce-19.2-03` (in `mods/`); VD-41.
 
 ## 3. Part 2: overlap with what the pack already has
 
@@ -529,6 +536,10 @@ Crops and worldgen
   block; bone meal pops another.
 - [ ] VD-08 No VD bell pepper, seeds, crate or wild patch exists; Rustic peppers work in every VD recipe.
 - [ ] VD-09 VD crops follow the copied seasons.
+- [ ] VD-42 *Scratch server PASSED r1031 (2026-10-31, SQ-DM-01, -02).* Plant a vanilla Dandelion on Rich Soil and one on Fertile Soil; `/tick` or wait: each turns into a Mature
+  Dandelion (about 10 and 20 minutes); `[dandelion_maturing] richSoilTicks = 0` stops it (TODO `ports/veggiesport #4`).
+- [ ] VD-43 *Scratch server PASSED r1031 (2026-10-31, SQ-DM-03, -03b drop rate).* Right-click a Mature Dandelion with shears, then another with a knife: each becomes a plain Dandelion, drops
+  2-3 Dandelion Leaves (a Dandelion about half the time) and takes 1 durability; other items do nothing. Scratch: SQ-DM-01 to -03.
 
 Food and recipes
 
@@ -586,3 +597,8 @@ UI
 - 2026-10-25: upstream 1.9.3 evaluated against 1.9.2 (§2.7, `tools/jar_diff.py`). Proposed: carry the carrot cake cut
   face over; Nourishment on 9 foods waits for the FD 1.3.4 survey; the rest skipped. No code changed.
 - 2026-10-25: carrot cake cut face carried over from 1.9.3 (§2.7, port `-03`, VD-41).
+- 2026-10-29: coleslaw 12 hunger / 0.6 (14.4 saturation), above its inputs' 9 / 8.2 (CD `veggies_foods.js`;
+  briefs/dishes_meals.md meals #42, RC-161).
+- 2026-10-30: mature dandelion maturing (patcherMod `crops/DandelionMaturing`, soil mixins, `[dandelion_maturing]`) and
+  shear / knife revert (`DandelionBlock.use`, port rebuilt as `-03` in `build/libs/`, not installed); VD-42, VD-43;
+  TODO `ports/veggiesport #4` (scan 2026-10-31).

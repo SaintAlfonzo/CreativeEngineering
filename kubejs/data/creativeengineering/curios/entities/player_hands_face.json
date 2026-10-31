@@ -4,6 +4,7 @@
   ],
   "slots": [
     "hands",
-    "face"
+    "face",
+    "feet"
   ]
 }

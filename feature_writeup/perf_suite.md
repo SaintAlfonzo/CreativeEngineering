@@ -10,9 +10,9 @@ real ones so that random ticks, mob spawning and player-gated code run as they d
 
 | Part | Status |
 |---|---|
-| `perfBot` dev mod (`ceperfbot` 0.1.0): bot players, tick log, `/pbot` | BUILT 2026-10-28, scratch test queued (SQ-PB-01 to -04) |
+| `perfBot` dev mod (`ceperfbot` 0.1.0): bot players, tick log, `/pbot` | BUILT 2026-10-28; chunk-tracking bug fixed 02:24; scratch server PASSED 2026-10-28 (SQ-PB-01 to -04, [testing/scratch_queue_run_2026-10-28.md](testing/scratch_queue_run_2026-10-28.md)) |
 | Runner `tools/perf/suite/perf_suite.py` (RCON, end-of-server triage, retries, resume, report) | BUILT 2026-10-28; offline self-test 12/12 PASS (section 6) |
-| General benchmarks G01 to G12 (`plans/general.py`) | BUILT 2026-10-28, scratch run queued (SQ-PB-05) |
+| General benchmarks G01 to G12 (`plans/general.py`) | BUILT 2026-10-28; first run g1 2026-10-28 03:04 to 05:27, every row ok (baseline; results in [testing/scratch_queue_run_2026-10-28.md](testing/scratch_queue_run_2026-10-28.md) "Perf suite g1"); G09 from rerun g1s |
 | Cooking scenarios C- | PROPOSED, owner veto pending (section 8) |
 | World interaction scenarios W- | PROPOSED, owner veto pending (section 9) |
 
@@ -37,7 +37,7 @@ a hung server thread, another session's JVM, a busy machine, and the runner itse
 setsid nohup python3 tools/perf/suite/perf_suite.py run general g1 > /dev/null 2>&1 &
 python3 tools/perf/suite/perf_suite.py status g1           # progress
 python3 tools/perf/suite/perf_suite.py resume g1           # after the runner was killed or aborted
-python3 tools/perf/suite/perf_suite.py report g1 [--baseline g0]   # perf/suite/g1/summary.md
+python3 tools/perf/suite/perf_suite.py report g1 [--baseline g0]   # perf/suite/g1/summary.md (also rewritten after every result)
 python3 tools/perf/perf_report.py perf/suite/g1/jfr/G04-1.jfr      # per-mod attribution of one window
 ```
 
@@ -58,7 +58,10 @@ The one-game-JVM rule holds: before every boot the runner waits (up to 60 min) w
   has a loopback remote address, since some mods read the player's IP. `send` drops packets but runs their
   listeners, so a disconnect still goes through the normal logout path.
 - `BotPlayer` extends `ServerPlayer`. With no client, nothing calls `doTick()` or the chunk tracker's
-  `move(player)`, so its `tick()` does both (the Carpet fake-player pattern). Bots are invulnerable survival
+  `move(player)`. Its `tick()` calls `doTick()`; `Bots` calls `move` for every bot from the server tick event and
+  right after a spawn's teleport. Not from `tick()` (the Carpet pattern): the level ticks an entity only inside
+  entity-ticking chunks, and a bot teleported away from its login tickets would never tick again (fixed 2026-10-28;
+  before it, a bot spawned outside spawn chunks or a forceload loaded chunks at its login spot). Bots are invulnerable survival
   players. If one dies anyway, it logs in again at the same spot. Spectator mode is refused, because spectators
   don't count for chunk ticking or spawning.
 - `TickLog` writes `perf/bot/ticks-<epoch ms>.csv`: every tick's duration in µs; once a second a status line with
@@ -134,8 +137,9 @@ the same `--scale` and the same world age.
   world to players is not measured. The objects are still built: entity tracking, chunk packets, block updates.
   Network cost needs a real client (`tools/perf/eval/client_drive.sh`).
 - **No client side**: FPS, chunk meshing and client mods are out of scope (perf.md 12 client runs).
-- **Bots don't walk.** They stand still, fall, or follow `/pbot path` at a fixed height (teleport steps, as fast
-  flight). Hostile mobs still target them.
+- **Bots don't walk or fall.** A server-side player gets no movement physics without a client: a bot stays at the
+  height it was spawned at (`spreadplayers X Z 0 1 false NAME` puts it on the ground) or follows `/pbot path` at a
+  fixed height (teleport steps, as fast flight). Hostile mobs still target them.
 - **No GUI clicks.** Anything a client packet starts (Quark sort button, menu clicks) has to be called server-side
   from a probe script, as `tools/kitchen_probe` does.
 - **Worldgen is light by request (2026-10-28).** The play area is pregenerated in setup. Only the boot (G01) and the
@@ -146,7 +150,7 @@ the same `--scale` and the same world age.
 
 ## 5. General benchmarks (G-, built)
 
-Group S = flat lab (difficulty normal, no natural spawning). Group N = normal world on the eval seed
+Group S = flat lab (difficulty normal, no natural spawning: `doMobSpawning false`; `spawn-animals` stays true, since false makes vanilla discard every animal, which emptied g1's G09 pen). Group N = normal world on the eval seed
 (-8188900049893920259), structures on, spawn square r800 plus a 3400 x 320 corridor east of spawn pregenerated in
 setup. View distance 10, simulation distance 8, `-Xmx6G`, JFR on, as shipped.
 
@@ -191,17 +195,20 @@ Also checked: `./gradlew :perfBot:build --offline` builds; every plan command ex
 
 ## 7. Live test list (scratch queue SQ-PB-)
 
-- [ ] **PB-01 bot logs in:** boot with the jar and `-Dceperfbot.out=perf/bot` -> `pbot status` answers. Then `pbot
+Results 2026-10-28 night ([testing/scratch_queue_run_2026-10-28.md](testing/scratch_queue_run_2026-10-28.md)): PB-01 to -04 PASS (PB-02 wheat half: 17 of 81 grew with a bot, 0 without;
+the night-mob half is G03b). PB-05 is the g1 run.
+
+- [x] **PB-01 bot logs in:** boot with the jar and `-Dceperfbot.out=perf/bot` -> `pbot status` answers. Then `pbot
   spawn bot1 ~ ~ ~` -> latest.log shows a normal join (no exception from Forge networking, FTB, KubeJS login
   handlers, Lightman's), `list` names bot1, `forge tps` shows the overworld with loaded chunks near spawn.
-- [ ] **PB-02 bot counts as a player:** flat world, bot beside a 9 x 9 wheat field (age 0) with `randomTickSpeed 3`
+- [x] **PB-02 bot counts as a player:** flat world, bot beside a 9 x 9 wheat field (age 0) with `randomTickSpeed 3`
   -> some wheat grows within 5 min (none grows with the bot removed); in a normal world at night, hostile mobs
   spawn near the bot (`census`).
-- [ ] **PB-03 path and census:** `pbot path bot1 <x+500> 200 <z> 1.5` -> `path_done:bot1` in the tick log after about
+- [x] **PB-03 path and census:** `pbot path bot1 <x+500> 200 <z> 1.5` -> `path_done:bot1` in the tick log after about
   334 ticks; loaded chunks move with the bot (status lines); `census t` writes `perf/bot/census-t.json`.
-- [ ] **PB-04 tick log and endings:** after a kill -9 of the scratch JVM the tick file ends with complete lines up to
+- [x] **PB-04 tick log and endings:** after a kill -9 of the scratch JVM the tick file ends with complete lines up to
   the last second; `jfr assemble` of the repo works (the runner's salvage).
-- [ ] **PB-05 general run:** `perf_suite.py run general g1` end to end -> every G row `ok` or a triaged ending;
+- [x] **PB-05 general run:** *(PASSED 2026-10-28, run g1: every row ok, G02 5.55 ms; G09 rerun in g1s after the group S fix)* `perf_suite.py run general g1` end to end -> every G row `ok` or a triaged ending;
   `report g1` writes `summary.md`; the G02 idle reading matches perf.md 12.1 (about 5-6 ms on a fresh world).
 
 ## 8. Proposed: cooking and farming scenarios (C-), owner veto pending
@@ -313,6 +320,11 @@ The queue in [testing/scratch_queue.md](testing/scratch_queue.md) runs first. Re
 
 ## 12. History
 
+- 2026-10-28 night: run g1 (baseline): G02 5.55, G03a 18.5, G04 50.1 ms (four spread bots reach the budget), G12
+  no drift but heap floor 5.4-5.8 GB of 6 GB with 1.7 s GC-pause ticks; group S animal fix, G09 rerun g1s 16.2 ms.
+- 2026-10-28 night: live tests PB-01 to -04 PASS; bots now move their chunk tickets from the server tick (bug: a bot
+  spawned away from its login spot never ticked); runner rewrites `summary.md` after every result (owner: summaries
+  saved regularly, never capped); first run g1 started 03:04.
 - 2026-10-28: built the mod, the runner, the G- plan and the self-test; C- and W- proposed for veto. Split agreed with
   the parallel "Scratch server performance tests 2" session. This session owns perfBot, `tools/perf/suite/` and this
   file. That session owns `scratch_server.sh`, its session collector (queue runs) and feature tests that use

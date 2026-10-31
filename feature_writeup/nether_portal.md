@@ -80,12 +80,16 @@ the frame, lava lighting the frame interior.
 - **F1. Flint and Terrasteel places Dark Fire on any air block. Your call.** The code calls itself temporary: no
   frame check, so it's also a permanent, unspreading fire and light source anywhere (it damages and ignites mobs
   standing in it). The intended version (per its comment) only places inside a valid obsidian frame. Also: its
-  javadoc names a `TerraFireBlock` that no longer exists.
+  javadoc names a `TerraFireBlock` that no longer exists. DECIDED 2026-10-29: place only on solid blocks; new Dark Fire
+  behaviour: faster, reversed animation, no spreading, burns wood blocks very fast with a high ash chance, sustained by
+  every fire and soul-fire sustain block (add more magic sustain blocks). Not built (TODO `gameplay/tnt-and-portal #5`).
 - **F2. Dark Fire lights portals in any dimension. Your call.** Vanilla only lights portals in the Overworld and the
   Nether; `DarkFireBlock#onPlace` has no such check, so a frame in the End or another dimension opens (and leads to
-  the Nether). Add the dimension check, or keep it.
+  the Nether). Add the dimension check, or keep it. DECIDED 2026-10-29: Overworld only. Not built (TODO
+  `gameplay/tnt-and-portal #6`).
 - **F3. Accidental fire ruins frames.** Lightning or spreading fire reaching a frame (a ruined portal next to lava, a
-  storm) turns it to crying obsidian with nobody nearby. Intended or not?
+  storm) turns it to crying obsidian with nobody nearby. Intended or not? DECIDED 2026-10-29: keep, mirrors vanilla
+  (TODO `gameplay/tnt-and-portal #7`).
 - **F4. The soul fire doesn't stay.** Soul fire needs soul sand or soul soil below; on obsidian it stays only until the
   next block update next to it, then vanishes. The comment says soul fire "is the same flame crying obsidian produces
   when lit", which isn't true in vanilla. Harmless; it reads as a puff.

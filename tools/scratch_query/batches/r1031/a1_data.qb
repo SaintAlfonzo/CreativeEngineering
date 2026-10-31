@@ -1,0 +1,213 @@
+# Run 2026-10-31, boot A1 (superflat): recipe, tag, food and item rows through /zq (zz_zq_probe.js, prep_srv.sh
+# copies it). zq output format: "<recipe id> -> <count> <result>", "makes <id>: N", "itemtag <tag> (N): ids",
+# "food <id>: nutrition N, modifier M, effects [...]". Rows that need a count the probe cannot print end LOOK.
+pace 2
+
+## SQ-PS-05 | powdered sugar and batter recipes
+> zq makes creativeengineering:powdered_sugar_bucket
+> zq makes creativeengineering:powdered_sugar
+> zq rdetail batter
+expect vivacuumizing/powdered_sugar_bucket -> 1 creativeengineering:powdered_sugar_bucket
+expect powdered_sugar_bucket_from_powder -> 1 creativeengineering:powdered_sugar_bucket
+expect powdered_sugar_from_bucket -> 8 creativeengineering:powdered_sugar
+expect mortar/sugar_powdered_sugar -> 4 creativeengineering:powdered_sugar
+expect createmilling/sugar_powdered_sugar
+expect createcrushing/sugar_powdered_sugar
+reject tactical_fishing:fishing_creativeengineering_powdered_sugar_bucket
+look rdetail: vacuum recipe takes bucket + 4 sugar; milling and crushing have a second result at 0.5; the three batter recipes list wheat flour, cornmeal and farmersdelight:rice in the grain slots
+
+## SQ-CM-10 | salt retest (SQ-SALT-01 fix of 10-28)
+> zq uses salt:salt_block
+> zq makes vintagedelight:salt_bucket
+> zq makes creativeengineering:powdered_sugar_bucket
+count froglight_from_fermenting == 3
+reject tactical_fishing:fishing_vintagedelight_salt_bucket
+reject tactical_fishing:fishing_creativeengineering_powdered_sugar_bucket
+
+## SQ-CM-20 | field salad recipes and tags
+> zq recipes field_salad
+> zq itemtag creativeengineering:field_salad/root
+> zq itemtag creativeengineering:field_salad/nut
+> zq itemtag creativeengineering:field_salad/green
+expect creative_delight:shapeless/field_salad_manual_only
+expect creative_delight:shapeless/field_salad_flowers_manual_only
+reject delightful:food/field_salad
+expect itemtag creativeengineering:field_salad/root \(5\)
+expect itemtag creativeengineering:field_salad/nut \(2\)
+expect itemtag creativeengineering:field_salad/green \(8\)
+
+## SQ-CM-21 | coleslaw and shrimp fried rice values
+> zq food veggiesdelight:coleslaw
+> zq food alexsmobs:shrimp_fried_rice
+expect food veggiesdelight:coleslaw: nutrition 12, modifier 0\.6
+expect food alexsmobs:shrimp_fried_rice: nutrition 20, modifier 0\.6.*4800
+look the shrimp fried rice effect named is Comfort
+
+## SQ-CM-22 | veggie noodle dough
+> zq rdetail cucumber_dough
+> zq itemtag creativeengineering:veggie_noodle_veg
+expect creative_delight:shapeless/cucumber_dough
+reject vintagedelight:cucumber_dough \{
+expect itemtag creativeengineering:veggie_noodle_veg \(6\)
+
+## SQ-CM-23 | shrimp fried rice in the Cooking Pot
+> zq rdetail farmersdelightcooking/shrimp_fried_rice
+expect creative_delight:farmersdelightcooking/shrimp_fried_rice
+look inputs: Fried Rice + 2 of #forge:shrimps
+
+## SQ-CM-24 | no strawberry banana smoothie
+> zq makes neapolitan:strawberry_banana_smoothie
+expect makes neapolitan:strawberry_banana_smoothie: 0
+
+## SQ-BJ-01 | muffins oven only, new jam jars (needs Vintage -09 in srv/mods)
+> zq makes fruitsdelight:blueberry_muffin
+> zq makes fruitsdelight:cranberry_muffin
+> zq makes veggiesdelight:sweet_potato_cupcake
+> zq rdetail jam_jar
+reject farmersdelight:cooking.*-> \d+ (fruitsdelight:blueberry_muffin|fruitsdelight:cranberry_muffin|veggiesdelight:sweet_potato_cupcake)
+expect creative_delight:farmersdelightcooking/green_grape_jam_jar
+expect creative_delight:farmersdelightcooking/red_grape_jam_jar
+expect creative_delight:farmersdelightcooking/cherry_jam_jar
+look each new jar recipe gives 2 with container vintagedelight:empty_mason_jar; none of the 6 removed jam items is a result
+
+## SQ-BJ-02 | any bread
+> zq rdetail chicken_sandwich
+> zq rdetail moredelight
+expect farmersdelight:.*chicken_sandwich
+look chicken sandwich and the More Delight slice sandwiches list #forge:bread (rdetail shows the first 3 breads); bread_slice cutting and canned_goods:canned_bread keep their own input
+kjsreject (bread_recipes\.js|jams\.js).*(Error|error)
+
+## SQ-BJ-03 | relish jar not a jam
+> zq tagsof vintagedelight:relish_jar
+> zq itemtag forge:jams
+reject item tags of vintagedelight:relish_jar:.*(forge:jam_jars|vintagedelight:savory_jam)
+expect itemtag forge:jams .*green_grape_jam_jar
+expect itemtag forge:jams .*red_grape_jam_jar
+expect itemtag forge:jams .*cherry_jam_jar
+
+## SQ-STL-02 | stepstool recipes and curios tag
+> zq recipes _stepstool
+> zq itemtag creativeengineering:stepstools
+> zq itemtag curios:feet
+> curios list
+count creativeengineering:shaped/[a-z0-9_]*_stepstool[a-z_]* -> 1 [a-z_]*_stepstool == 16
+expect itemtag creativeengineering:stepstools \(16\)
+expect itemtag curios:feet .*stepstool
+expect (?i)feet
+
+## SQ-CM-30 | no fruit beignet
+> zq makes rusticdelight:fruit_beignet
+> zq uses rusticdelight:fruit_beignet
+expect makes rusticdelight:fruit_beignet: 0
+expect uses rusticdelight:fruit_beignet: 0 alone, 0 with other items
+kjsreject (rusticdelight/recipes\.js|removed_items\.js).*(Error|error)
+
+## SQ-CM-31 | seagrass salad, no tentacles anywhere
+> zq rdetail seagrass_salad
+> zq uses miners_delight:tentacles
+> zq uses miners_delight:baked_tentacles
+> zq uses oceansdelight:tentacles
+> zq uses oceansdelight:cut_tentacles
+> zq uses oceanic_delight:squid_tentacles
+> zq uses oceanic_delight:glow_squid_tentacles
+> zq makes tentacle
+expect creative_delight:shapeless/seagrass_salad
+count : 0 alone, 0 with other items == 6
+expect makes tentacle: 0
+look seagrass salad takes 2 minecraft:seagrass + bowl; the 4 tentacle-on-a-stick and grilled ids are covered by "makes tentacle"
+
+## SQ-CM-32 | tentacle dishes take calamari
+> zq rdetail squid_rings
+> zq rdetail sea_pickle_roll
+> zq rdetail shrimp_rice
+> zq rdetail squid_salad
+> zq rdetail takoyaki
+> zq rdetail glow_squid_stew
+> zq rdetail seafood_skewer
+> zq rdetail squid_and_pickles
+look each takes #forge:raw_fishes/calamari (seafood_skewer, squid_and_pickles: #forge:cooked_fishes/calamari); rdetail lists the tag's first items, so a calamari item there = PASS, a tentacle = FAIL
+
+## SQ-RE-28 | bucket from plates
+> zq makes minecraft:bucket
+expect bucket_from_plates -> 1 minecraft:bucket
+look no other crafting recipe makes minecraft:bucket (emptying recipes are fine)
+
+## SQ-EN-21 | rose quartz sanding recipe
+> zq makes create:polished_rose_quartz
+> zq rdetail ddsanding/rose_quartz
+expect creativeengineering:ddsanding/rose_quartz
+reject create_dd:sanding/rose_quartz
+
+## SQ-SPC-01 | seeds tag
+> zq itemtag forge:seeds
+expect itemtag forge:seeds .*the_dirty_stuff:tobacco_seeds|itemtag forge:seeds .*tobacco_seeds
+expect itemtag forge:seeds .*hamimelon_seeds
+expect itemtag forge:seeds .*lemon_seeds
+reject itemtag forge:seeds .*(botania:[a-z_]*mana[a-z_]*seed|mungal)
+
+## SQ-SPC-02 | seed pouch tag
+> zq itemtag quark:seed_pouch_holdable
+expect itemtag quark:seed_pouch_holdable .*tobacco_seeds
+expect itemtag quark:seed_pouch_holdable .*hamimelon_seeds
+expect itemtag quark:seed_pouch_holdable .*lemon_seeds
+
+## SQ-RW-23 | smoked wood smoking recipes
+> zq recipes smoked
+> zq itemtag creativeengineering:smokable/planks
+look 13 smoking recipes, one per smoked shape, cook time 200 (rdetail if unsure); smokable tags hold oak and spruce, no botania:* and no driftwood
+
+## SQ-RW-24 | treated wood spout recipes
+> zq makes immersiveengineering:treated_wood_horizontal
+count filling.* -> \d+ immersiveengineering:treated_wood_horizontal >= 2
+reject createaddition:.*treated
+look two create:filling (unsmoked planks + 125 mB, smoked planks + 100 mB) and two IE bottling (SQ-RW-25) in the same list
+
+## SQ-RW-25 | treated wood bottling
+> zq rdetail treated_wood
+count bottling.*treated_wood == 2
+
+## SQ-RW-26 | unsmoked planks tag
+> zq itemtag creativeengineering:unsmoked_planks
+expect itemtag creativeengineering:unsmoked_planks .*minecraft:oak_planks
+expect itemtag creativeengineering:unsmoked_planks .*minecraft:spruce_planks
+reject itemtag creativeengineering:unsmoked_planks .*create_dd:smoked_planks
+
+## SQ-RW-27 | leather from bark
+> zq makes minecraft:leather
+> zq itemtag immersive_weathering:bark
+expect creativeengineering:pickling/leather_from_bark -> 1 minecraft:leather
+look the bark tag holds every species (oak to azalea, crimson and warped scales, Upgrade Aquatic driftwood bark)
+
+## SQ-DD-08 | painted asphalt
+> zq recipes painted_asphalt
+count creativeengineering:shaped/[a-z_]*_painted_asphalt -> 8 [a-z_]*_asphalt_block == 16
+expect asphalt_from_painted_asphalt_soap -> 8 asphalt$
+> zq recipes create_dd:crafting/decor
+reject create_dd:crafting/decor/[a-z_]*_asphalt_block
+
+## SQ-CP-01 | seed milling to bone meal
+> zq makes minecraft:bone_meal
+> zq itemtag creativeengineering:millable_seeds
+expect creativeengineering:createmilling/seeds_bone_meal
+reject itemtag creativeengineering:millable_seeds .*(farmersdelight:rice |farmersdelight:rice$|corn_kernels)
+
+## SQ-WC-01b | watering can recipe
+> zq makes hearthandharvest:watering_can
+expect creativeengineering:.*watering_can -> 1 hearthandharvest:watering_can
+
+## SQ-WC-02 | bonemeal substitutes tag
+> zq itemtag hearthandharvest:bonemeal_substitutes
+expect itemtag hearthandharvest:bonemeal_substitutes .*minecraft:bone_meal
+
+## SQ-GF31-01 | Sawmill: slabs, stairs, doors to sticks (new row)
+> zq makes minecraft:stick
+expect creativeengineering:sawmill/recycle_wooden_slab -> 2 minecraft:stick
+expect creativeengineering:sawmill/recycle_wooden_stairs -> 3 minecraft:stick
+expect creativeengineering:sawmill/recycle_wooden_door -> 4 minecraft:stick
+> zq rdetail sawmill/recycle_wooden
+look inputs are the wooden slab / stairs / door tags; the sawdust secondary shows in JEI (CQ-GF31-01)
+
+## SQ-GF31-02 | dispenser vanilla recipe back (new row)
+> zq makes minecraft:dispenser
+expect minecraft:dispenser -> 1 minecraft:dispenser
+

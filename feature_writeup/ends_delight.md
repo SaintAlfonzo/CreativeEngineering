@@ -1,6 +1,6 @@
 # End's Delight and Ender's Delight
 
-**Built 2026-10-25, not installed, not tested in game** (section 5). End's Delight 2.1 is a Creative Delight member
+**Built 2026-10-25, Shipped in 1.1.03 (deployed to server and players 2026-10-26)** (section 5); scratch SQ-EN-01 to -04, -06 PASSED 2026-10-26, SQ-EN-07 partial; EN- rows not run in game. End's Delight 2.1 is a Creative Delight member
 (`repackedEnds`, now `-ce-19.2-02`); Ender's Delight 1.2.2 stays its own ARR jar, and its 1.1.4 content is rebuilt in the
 new CD member `enders_additions` (`development/creativeDelight/members/enders/`). Decision rows: `largecontent/mod-additions
 #4`, `#15`, `#28`, `#29` and `creativedelight/members #7` in [todo/TODO.md](todo/TODO.md). Test prefix `EN-` (section 5.6).

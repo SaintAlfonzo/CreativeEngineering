@@ -19,8 +19,10 @@ Test prefix **CR-** · Last updated **2026-10-22** · Overall status **reference
 | Pack wild-crop placement: every wild crop and fruit tree moved to the biomes you specified (`wild_crops.json`), leaf apples and AM leaf bananas off, FR Nether coffee off | §2.8 | DEPLOYED with 1.0.4 (2026-10-04); `wild_crops.json` changed again for 1.0.5, DEPLOYED with 1.0.6; not looked at in game; V13 to V20; CR-47 to CR-58 |
 | WTHIT growth line for every plant WTHIT skips (hemp, tobacco, strawberries, salmonberries, mint, grapes, blueberries, cranberries, lemons and the other plants, 62 blocks in all) | §2.9 | BUILT 2026-10-04, headless-tested (38 checks, 290-block audit); in patcherMod 1.0.5 (in `mods/`), DEPLOYED with 1.0.6 (2026-10-14); jar boots clean (single player 2026-10-11); CR-59 to CR-66 |
 | Extra stem fruit: melon, pumpkin and hamimelon stems grow up to 4 fruits, each later one after a longer minimum wait | §2.10 | BUILT 2026-10-22 (patcherMod 1.1.01, in `mods/` since the 2026-10-22 scratch run, md5 a4d48336 with the fix below); built, scratch server PASSED 2026-10-22 (SQ-SF-00 to SQ-SF-05, 17 of 17, `tools/farm_worldgen_probe.js`); CR-71 to CR-75 in game; F-SS1 (extra fruit ignores seasons) open |
-| Wild-crops batch 2026-10-22: tea in 20 biomes, Vinery grapes under the system, wild flax off, Rustic Delight patches out of bone meal, white strawberries from Y 192 | §2.8, §4 V1, V6, V7, V20 | BUILT 2026-10-22 (data + KubeJS, not deployed); `tools/test_wild_crops.sh` passes (53 crop tags, 52 add modifiers); built, scratch server PASSED 2026-10-22 (SQ-WC-00 to SQ-WC-05); CR-83, CR-86 to CR-88 in game |
+| Wild-crops batch 2026-10-22: tea in 20 biomes, Vinery grapes under the system, wild flax off, Rustic Delight patches out of bone meal, white strawberries from Y 192 | §2.8, §4 V1, V6, V7, V20 | BUILT 2026-10-22 (data + KubeJS), DEPLOYED 1.1.01; `tools/test_wild_crops.sh` passes (53 crop tags, 52 add modifiers); built, scratch server PASSED 2026-10-22 (SQ-WC-00 to SQ-WC-05); CR-83, CR-86 to CR-88 in game |
 | Wild plants, bushes and trees on Immersive Weathering soils (humus, fluvisol, silt, vertisol, cryosol, rooted grass; not permafrost) | §2.8.1 | BUILT 2026-10-05, scratch-server tested (12 features x 9 grounds, before/after); the 65 `kubejs/data` overrides are DEPLOYED with 1.0.6 (2026-10-14); only new chunks change; CR-67, CR-68 |
+| Village farm crops: farm fields grow crops of the village's climate (`VillageFarmCrops`, `village_farms.json`) | §2.11 | BUILT 2026-10-25, DEPLOYED 1.1.03 (new villages only); SQ-VF-01 to -05 (group B) not run; TODO `farming/crops #16`, `#19` |
+| Growing seasons: every crop has a type (temperate, cold, warm dry, warm wet, Nether, End, cave, mushroom); each season is fertile (+25 %), neutral or off (-25 %) by the biome's calendar | §2.12.1 + generated [crop_seasons_audit.md](crop_seasons_audit.md) | BUILT 2026-10-30 (patcherMod 1.1.04, Vinery `-06`, CD Ender's `-02`; installed 2026-10-31 00:29 to 00:44); scratch server PASSED r1031 (2026-10-31, SQ-CS-01 to -06, -08, -09); CR-89 to CR-99 in game pending; F-SS1, F-SS2 resolved |
 
 - **Open first:** §2.1 for "can I plant X on Y" or "does X replant on right-click". §2.2 and §2.3 explain why.
 - **Knobs:** `config/quark-common.toml` sections `[tweaks.simple_harvest]` and `[tweaks.hoe_harvesting]`.
@@ -442,7 +444,7 @@ jungles picks from the biome's flower features, so it can also grow wild cotton,
 | Peach | 1/8 | jungle log | sparse jungle + 4 Terralith jungles |
 | Bayberry | 1/15 | spruce log | swamps, Terralith jungles |
 | Pear | 1/15 | birch log | birch forests, Terralith Blooming/Lavender/Moonlight |
-| Apple, Fig, Kiwi, Orange | 1/20 | oak (kiwi: jungle) | forest, flower forest, Terralith Blooming/Lavender/Moonlight |
+| Apple (removed 2026-10-30: no Fruits Delight apple trees in new chunks, item_merges.md 2.11), Fig, Kiwi, Orange | 1/20 | oak (kiwi: jungle) | forest, flower forest, Terralith Blooming/Lavender/Moonlight |
 | Hawberry | 1/20 | spruce log | 16 cold biomes (taigas, Terralith cold forests) |
 | Mangosteen | 1/40 | oak log | jungles and swamps |
 | Persimmon | 1/50 | spruce log | 16 snowy biomes (snowy plains/taiga, grove, Terralith wintry) |
@@ -539,7 +541,7 @@ Scope for the planned vegetation system, not yet broken down per biome:
 ### 2.8 Pack wild-crop placement (`wild_crops.json`)
 
 **Status: BUILT 2026-10-03, offline-tested (`tools/test_wild_crops.sh`), DEPLOYED with 1.0.4; rules revised
-2026-10-10 (DEPLOYED with 1.0.6) and 2026-10-22 (tea, grapes, flax; not deployed); not looked at in game. Moved into
+2026-10-10 (DEPLOYED with 1.0.6) and 2026-10-22 (tea, grapes, flax; DEPLOYED 1.1.01); not looked at in game. Moved into
 Creative Delight 2026-10-25 (same rules, ids now `creative_delight:*`; [creative_delight.md](creative_delight.md) 24,
 SQ-WCD queued).** Your 2026-10-03 spec
 decides which biomes each wild crop and fruit tree goes to. The mods' own rates stay; only the biomes change. §2.7
@@ -794,9 +796,8 @@ grow more fruit on its other sides. Applies to every `AttachedStemBlock`: melon,
 
 - **Roll:** on each random tick of an attached stem, vanilla's stem growth roll (1 in 25/speed + 1, speed from soil,
   hydration and the row bonus, light 9 or more) and Forge's crop-grow event, fired with the attached stem's state.
-  Serene Seasons looks the block id up in its season tags, which list `melon_stem`, `pumpkin_stem` and
-  `fruitsdelight:hamimelon_stem` but no attached stem, and treats unlisted blocks as always fertile: so the first fruit
-  follows the seasons (the plain stem rolls it) but the extra fruits grow in any season (finding F-SS1, §4).
+  Crop seasons (§2.12.1) type the attached stems like their stems (melon warm wet, pumpkin temperate, hamimelon warm
+  dry), so the extra fruit follows the same seasons as the first (F-SS1 resolved 2026-10-30).
 - **Where:** a random free side: empty, on farmland, dirt or any soil that takes the stem (vanilla's check). Fruits next to
   the stem of the same kind count toward the cap, even ones placed by hand.
 - **Minimum wait:** since the stem's last fruit. 2nd fruit 10 minutes after the 1st, 3rd 20 minutes after the 2nd, 4th 40
@@ -901,6 +902,171 @@ use the same system: when placed, replace each crop block with a crop that grows
 structure (a table of structure to rule). Farmer's Structures keep their own Farmer's Delight crops. Needs a second data
 list in `village_farms.json` or a sibling file and a biome-to-crop lookup from `wild_crops.json`.
 
+### 2.12 Growing seasons (audit)
+
+Every growing plant's Serene Seasons seasons, from the generated
+[crop_seasons_audit.md](crop_seasons_audit.md) (`python3 tools/crop_season_audit.py`, `/cegen run crop_season_audit`;
+reads `/dumpcropgrowth`, `/dumptags`, `/dumpitemsbymod` and scans the class files in `mods/` for Forge's crop-grow
+event). Rerun it after adding a crop mod. Audited 2026-10-30 (dumps of 2026-10-30): 123 plants. Rules and the design
+work: [briefs/farming_crops.md](briefs/farming_crops.md) crops #5 (TODO `farming/crops #5`).
+
+Superseded 2026-10-30 by the crop season types (§2.12.1); the table below is the Serene Seasons state the audit found,
+kept for the record (those tags are inert now: fertility.toml `seasonal_crops = false`). How it worked: growth read the
+block tags `sereneseasons:<season>_crops`; a block in none grew all year; out of season it grew at 1/6 speed
+(`out_of_season_crop_behavior = 0`; bone meal is not limited). Only growth that fires Forge's
+`onCropsGrowPre` is checked. The tooltip ("Fertile seasons") reads the same tags on the planting item. Today every
+tagged crop's item matches its block (0 tooltip mismatches). No season tags are set by `kubejs/`; all come from the mods,
+the CD members and the in-tree ports (Veggies, Vintage and Fungi Delight carry their upstream tags unreviewed).
+
+Seasons today (Sp spring, Su summer, Au autumn, Wi winter; Fruits Delight trees by their leaves, which grow the fruit):
+
+| Seasons | Crops |
+|---|---|
+| Sp | potatoes, flax, blueberry; peach and pear trees |
+| Sp/Au | carrots, onion, broccoli |
+| Sp/Su | bamboo, cotton, cucumber, ghost pepper |
+| Sp/Su/Au | sweet berries, garlic |
+| Sp/Au/Wi | turnip |
+| Su | melon, cocoa, sugar cane, cactus, tomato (budding, vine, rope, stick), salmonberry, zucchini, hamimelon, lemon, pineapple; bayberry, durian, lychee, mango and mangosteen trees |
+| Su/Au | wheat, rice, corn, bell peppers (all three), Rustic Delight coffee |
+| Au | beetroot, pumpkin, cranberry; apple, fig and orange trees |
+| Au/Wi | cabbage, cauliflower, sweet potato, oat, peanut |
+| Wi | hawberry, kiwi and persimmon trees |
+| all four | nether wart |
+| none (all year, fires the event, can be tagged) | cantaloupe, tea (small and grown bush), Farmer's Respite coffee, strawberry, adzuki, mint, vanilla, mulberry, cave carrots, Ender crop, mushroom colonies (Farmer's Delight, Fungi Delight), glow berries, kelp (vanilla and 4 Upgrade Aquatic), chorus flower, the 17 Floral Enchantment flower bushes, the three attached stems (F-SS1) |
+| none (all year, no event: tags would do nothing) | hemp, tobacco, Vinery grapes (6 bushes, 2 jungle vines, stem, lattice), Vinery apple and cherry leaves, sea grapes, Nether's Delight fungus colonies, chorus flame, chorus succulent |
+
+Findings (2026-10-30):
+- **F-SS2 Plants that can't be seasonal by tags.** Hemp (`HempBlock` grows in `tick`), sea grapes and the Nether's
+  Delight fungus colonies join tobacco and the Vinery grapes (brief decision 2): their growth never fires the event, so
+  each needs a `ForgeHooks.onCropsGrowPre` call (patcherMod mixin, or the in-tree Vinery port) before a tag does
+  anything. The chorus flame and succulent are End plants and can stay all year.
+- **F-SS3 Inert season tags.** Saplings (vanilla and the 13 Fruits Delight ones) grow through the sapling event, not the
+  crop one, so their tags only colour the tooltip; the Fruits Delight leaves carry the real fruit seasons.
+  `sereneseasons:year_round_crops` (Fungi Delight's port) is not read by Serene Seasons 8.1.0.24; harmless.
+  `minecraft:sea_pickle` is tagged all four but grows only by bone meal.
+- F-SS1 (extra stem fruit, §4) is still open: no attached stem is in a season tag.
+
+#### 2.12.1 Season model (owner spec 2026-10-30, BUILT 2026-10-30)
+
+**As built** (patcherMod `seasons/CropSeasons`, `CropSeasonTooltip`, `compat/WthitCropSeasons`,
+`mixin/CropSeasonGrowHookMixin`; data [crop_seasons.json](../kubejs/generation_scripts/worldgen/crop_seasons.json) ->
+[cropseasontags.js](../kubejs/server_scripts/tags/cropseasontags.js) -> block and item tags
+`creativeengineering:crop_seasons/<type>`; CEConfig `[crop_seasons]`):
+
+- Serene Seasons' crop rule is off (`config/sereneseasons/fertility.toml` `seasonal_crops = false`,
+  `crop_tooltips = false`, copy in `configs_edited/root_config/sereneseasons/`). Its season tags stay in the mods but do
+  nothing. Its calendar, weather and the pack's season types are unchanged.
+- **Growth:** every growth check fires Forge's `CropGrowEvent.Pre`. Off: 25 % of checks refused (`offPenalty`).
+  Fertile: 25 % of checks get a second random tick of the same block at the end of the level tick (`fertileBonus`), so
+  the crop's own odds, light and soil still apply; the second tick never queues a third. Neutral and untyped: unchanged.
+  Bone meal is not limited (as before).
+- **Calendar:** the column's biome after the pack's season types (rivers and beaches take the land's). Temperate, cold
+  and untyped temperate biomes: the four seasons; frozen and permanent winter biomes and any spot too cold to rain count
+  as winter; a permanent season as that season. Tropical, dry, arid and untyped tropical biomes: wet (Early, Mid, Late Wet)
+  or dry. Seasons only reach the overworld surface: outside Serene Seasons' dimensions, in a blacklisted biome, or below
+  y 32 without sky (Serene Seasons' `underground_fertility_level`) a seasonal type is neutral. An infertile biome
+  (Serene Seasons' list) is off.
+- **Greenhouse glass** (`greenhouse`, defined 2026-10-30): a seasonal crop (the four season types, autumn fruit, the
+  grape types and mushroom colonies outside mushroom biomes) with a greenhouse glass block anywhere in the 16 blocks
+  straight above it has no season fertility (owner 2026-10-30): fertile and off both become neutral, so a greenhouse
+  trades the fertile bonus for safety from the off penalty. Only the crop's own column is checked (one block or pane is enough, a 3x3 field needs glass
+  over every crop), blocks between the crop and the glass do not matter, and light is not checked. Nether, End and cave
+  crops and `none` ignore it. Greenhouse glass is the block tag `#sereneseasons:greenhouse_glass`: Serene Seasons fills it
+  with `#forge:glass` (114 blocks: vanilla, Quark, Create and Create Framed, Botania, Design Decor glass), and the pack
+  adds, from crop_seasons.json `greenhouse_glass`: every glass pane (`#forge:glass_panes`, 131), AE2 quartz and vibrant
+  glass, rainbow glass, reinforced glass (Dave's, Security Craft, all colours and panes), Engineer's Decor panzer glass,
+  frosty glass and pane, IE insulating glass (and slab) and slag glass, PneumaticCraft pressure chamber glass, and every
+  glass door and trapdoor (ids ending `glass_door` / `glass_trapdoor`: Create, Create Framed, Dramatic Doors, Upgrade
+  Aquatic). Not counted: fluid pipes, glass casings, hourglasses, Storage Delight cabinets with glass doors. WTHIT
+  under glass: green "Greenhouse: preventing offseason debuff" when the season would be off without it, red
+  "Greenhouse: preventing fertile season buff" when it would be fertile, nothing when it would be neutral anyway.
+- **Types** (the json's `_readme` has the full table): temperate, cold, warm_dry, warm_wet as the spec table below;
+  `autumn_fruit` (Vinery apple trees: autumn fertile, spring and summer neutral, winter off, wet/dry as temperate);
+  `nether` / `end` (fertile in that dimension, off elsewhere); `cave` (fertile below y 0, off above y 128, neutral
+  between; `caveFertileBelowY`, `caveOffAboveY`); `mushroom` (fertile in `#forge:is_mushroom` biomes, temperate
+  elsewhere); `grape_temperate`, `grape_cold`, `grape_warm_dry`, `grape_warm_wet` (owner rule 2026-10-30: by biome
+  family, not season; fertile in their own family, offseason in the opposite temperature, cold against warm dry or warm
+  wet, neutral otherwise, so temperate grapes are never off; greenhouse glass lifts off to neutral); `grape` (Vinery
+  grapevine stem and lattice: the type of the grape kind in the block's `grape` property, nothing while empty);
+  `none` (kelp, sea grapes, sea pickle: never seasonal). Biome families (`CropSeasons.familyAt`, after rivers and
+  beaches take the land's): cold, frozen and permanent winter types cold; dry and arid warm dry; tropical warm wet;
+  temperate and the other permanent seasons temperate; untagged biomes: Serene Seasons' tropical ones warm dry if they
+  never rain or have downfall below 0.4, else warm wet; the rest cold below base temperature 0.3, else temperate.
+- **Tooltip** on the planting item (block items through their block; saplings and Vinery seeds by item tag) and on
+  tree fruits (owner scratchpad note, by item tag: Fruits Delight orange, pear, kiwi, lemon, fig, hawberry, persimmon,
+  lychee, mango, peach, bayberry, mangosteen, durian, the Vinery cherry, and the apple, which follows the Vinery apple
+  tree since Fruits Delight's was removed 2026-10-30), in gray with green / red values: "Fertile: Spring" and "Offseason: Winter, Dry" (neutral seasons not shown);
+  warm crops the same way ("Fertile: Summer, Dry" / "Offseason: Winter"; owner 2026-10-30, was "Dry Crop" / "Wet
+  Crop"); grapes "Fertile: Cold biomes" / "Offseason: Warm biomes"; "Season: Nether", "Season: End"; cave
+  "Fertile: y<0", "Offseason: y>128"; mushroom "Fertile: Mushroom Fields, Spring". **WTHIT** shows the same lines on the crop, then green "Fertile here: grows
+  faster" or red "Offseason here: grows slower" (nothing when neutral).
+- **Grow-event hooks** for plants that never fired it (F-SS2): patcherMod mixin on the `tick` of IE hemp, tobacco and
+  Nether's Delight fungus colonies (a refused check skips that tick); in source: the Vinery grape bushes, jungle vines,
+  grapevine stem and lattice, Vinery apple and cherry leaves (`backportedVinery` `-06`), Ender's Delight chorus flame
+  (CD member `endersAdditions` `-02`). Chorus succulent and sea pickle grow by bone meal only (tooltip only).
+- **Assignments** (all 123 audited plants typed; the audit lists them): the owner's lists below, then the wild-biome
+  rule. Owner 2026-10-30: potatoes temperate. Rule calls made 2026-10-30: sweet berries and blueberries cold (wild in
+  taigas and snowy biomes); rice, tea, melon, cocoa, bamboo and the jungle and swamp fruit trees (lychee, mango, peach,
+  bayberry, mangosteen, durian) warm wet; vanilla warm dry (savannas); carrots, onions, cabbage, beetroot, pumpkin,
+  salmonberry, strawberry, adzuki, lemon, orange / pear / kiwi trees, Veggies Delight broccoli, cauliflower,
+  garlic and turnip, flax (until removed) temperate; persimmon cold (snowy); twisting and weeping vines Nether; chorus
+  flower, Ender crop, chorus flame and succulent End (owner confirmed 2026-10-30; the succulent grows by bone meal only,
+  so its type shows in the tooltip only). Floral Enchantment "fruit-tree bushes": the jar has none (only the 17
+  flower bushes), nothing to match yet.
+
+**Owner spec as given:**
+
+Replaces the single "in season / out of season (1/6 speed)" rule. Each crop has a **type** and each season is one of
+**fertile** (growth +25 %), **neutral** (default speed; not shown in the tooltip) or **off** (growth -25 %).
+Types: cold, temperate, warm dry, warm wet; nether (below). Needs a patcherMod change: fertility reads the local
+biome's calendar (4 seasons in a temperate or cold biome, wet/dry in a tropical, dry or arid biome) instead of the
+global clock; tags alone cannot express it. Calendar alignment: wet = winter + spring, dry = summer + autumn, thirds offset
+by one sub-season (weather_by_biome.md 1.2).
+
+| Crop type | In a 4-season biome | In a tropical (wet/dry) biome | Tooltip |
+|---|---|---|---|
+| temperate | spring fertile, summer and autumn neutral, winter off | wet neutral, dry off | seasons |
+| cold | winter fertile, summer off, spring and autumn neutral | always off | "Offseason: Wet, Dry, Summer" |
+| warm dry | winter off, spring and autumn neutral, summer fertile | dry fertile, wet neutral (never off) | "Dry Crop" (superseded 2026-10-30: season lists) |
+| warm wet | winter off, spring and autumn neutral, summer fertile | wet fertile, dry neutral (never off) | "Wet Crop" (superseded 2026-10-30: season lists) |
+| nether | fertile in the Nether only, always off elsewhere, seasons do not apply | same | WTHIT "Season: Nether" |
+
+Reading note: the spec's "tropical crops are out of season in winter, neutral in spring and autumn, fertile in summer"
+is recorded as the warm (dry and wet) rule in a 4-season biome. Arid and dry pack types count as tropical here.
+
+Assigned by the owner: warm dry: cactus, hamimelon, bell peppers (all three), peanuts, tobacco, cotton, sweet potato,
+coffee (Rustic and Farmer's Respite, to be merged), mini cantaloupe. Warm wet: pineapple. Cold: fig, hawberry, mint,
+taiga grapes, mulberry. Temperate: wheat, hemp, Floral Enchantment bushes, cucumber, oat, cranberry, cherry. Nether:
+ghost pepper, nether wart. Fruit-tree bushes follow their parent tree; other grapes take the type of their biome (red
+and white temperate, jungle wet, savanna dry). Rule for the rest: the wild plant's biomes (snowy cold, jungle and swamp
+warm wet, desert warm dry, else temperate).
+
+Owner additions (2026-10-30, second pass):
+- Warm dry also: cantaloupe, savanna grapes (not corn, tomato or zucchini, which stay temperate; giant bell peppers are
+  not a crop). Warm wet also: sugar cane.
+- Cave crops (cave carrots, glow berries) go by height, not season: y < 0 fertile, y 0 to 127 neutral, y >= 128 off.
+  Tooltip "Fertile: y<0" and "Offseason: y>128" (the off rule is y >= 128; the tooltip text is as the owner wrote it,
+  fix one of the two).
+- Mushroom colonies (Farmer's Delight, Fungi Delight): always fertile in mushroom biomes, otherwise temperate.
+- Kelp and sea grapes: unaffected by seasons.
+- Flax: to be removed from the pack (new TODO row).
+- Chorus flower and every Ender crop: fertile in the End, off everywhere else.
+- Vinery apple trees: fertile autumn, neutral spring, otherwise the temperate rule (winter off, summer neutral).
+- Nether's Delight fungus colonies: fertile in the Nether, off everywhere else (as nether wart and ghost pepper).
+- Floral Enchantment: the jar has only the 17 flower bushes (allium to wither rose) and no fruit-tree bushes. All 17 use the temperate rule in a 4-season biome and the warm wet rule in a tropical biome (wet fertile, dry neutral); read from the owner's "wet in tropical biomes", confirm.
+- Nether and End crops (nether wart, ghost pepper, Nether's Delight fungus colonies; chorus flower, chorus flame, chorus succulent, Ender crop and the other End crops) grow only in their own dimension: no growth at all elsewhere, not just off season. This replaces the "off everywhere else" lines above; in their dimension they are fertile.
+- Still open: the no-wild crops not yet typed (Respite tea is warm wet by its wild biomes).
+
+Findings status (built 2026-10-30): F-SS1 resolved (attached stems typed with their stem). F-SS2 resolved (hooks above;
+sea grapes typed none). F-SS3 moot (Serene Seasons' tags are inert). The cave tooltip says y>128 as the owner wrote it,
+so the off rule is y above 128 (128 itself is neutral). Was (spec time): F-SS1 (attached stems untagged) open, resolved by "follow the parent" once built. F-SS2
+(hemp, tobacco, grapes, sea grapes, Nether fungus colonies never fire the grow event): hemp, tobacco and grapes now need
+the event hook because they are assigned types; sea grapes and fungus colonies undecided. F-SS3 (inert sapling and
+`year_round_crops` tags): remove or ignore when the json is built. The 45 untagged event-firing plants: typed per above.
+Open: ghost pepper and nether wart exist only as a fertility exception; the 1/6 out-of-season behaviour and bone-meal gap
+go away if the new rule hooks growth directly.
+
 ## 3. What the pack changes
 
 Soil yield (extra produce on better soil, built 2026-10-28, off per crop by default) and every crop's ripe drop counts:
@@ -917,7 +1083,7 @@ Soil yield (extra produce on better soil, built 2026-10-28, off per crop by defa
 - **Bushier Flowers** growth is disabled, see the bushier-flowers notes in memory. It isn't a crop here.
 - **Wild crop placement (built 2026-10-03, DEPLOYED with 1.0.4, rules revised for 1.0.6; not looked at in game):** §2.8. Also oak/dark oak leaves drop no apples,
   Alex's Mobs leaf bananas are off (`config/alexsmobs.toml`) and Farmer's Respite's Basalt Deltas coffee is off.
-- **Bell pepper colours (built 2026-10-21, not deployed):** the ripe Rustic Delight roll was red 6 : green 1 : yellow 1
+- **Bell pepper colours (built 2026-10-21, DEPLOYED 1.1.01):** the ripe Rustic Delight roll was red 6 : green 1 : yellow 1
   plus 15% bonus green and yellow (red 58% of peppers). [rusticdelight/crop_drops.js](../kubejs/data/creative_delight/kubejs/rusticdelight/crop_drops.js) (Creative Delight; the pack's `loot/09_crop_drops.js` until 2026-10-27)
   (pre-roll, like the leaf apples) sets the roll to 1 : 1 : 1 and appends a 15% bonus red pool, so each colour averages
   0.483 per ripe harvest. Pools are matched by their items, existing positions kept. Wild bell peppers stay red-only
@@ -1065,6 +1231,7 @@ yet; each has a suggested direction for you to approve or reject.
   adding fruit in winter. Fix options: add the three attached stems to the same season tags as their stems
   (`sereneseasons:summer_crops` for melon and hamimelon, `autumn_crops` for pumpkin, through `global.tags`), or fire
   the event with the plain stem's state. Decision open; SQ-SF and CR-71 to CR-75 don't cover it (CR-76 does).
+  RESOLVED 2026-10-30 by crop seasons (§2.12.1): the attached stems are in their stem's type.
 
 Planned (scratchpad 2026-10-21):
 
@@ -1097,6 +1264,11 @@ Brief: [briefs/farming_crops.md](briefs/farming_crops.md). Nothing here is built
 - patcherMod `crops/HoeHarvestArea.java`, `crops/HoeHarvestTooltip.java`, `mixin/QuarkHoeAreaHarvestMixin`,
   `mixin/QuarkHoeAreaBreakMixin`; [equipmenttags.js](../kubejs/server_scripts/tags/equipmenttags.js) "Hoe harvest area"
 - Extra stem fruit (§2.10): patcherMod `crops/StemExtraFruit.java`, `mixin/AttachedStemExtraFruitMixin`, `CEConfig` `[stem_fruit]`
+- Crop seasons (§2.12.1): [crop_seasons.json](../kubejs/generation_scripts/worldgen/crop_seasons.json) (the types, the file
+  to edit), [cropseasontags.js](../kubejs/server_scripts/tags/cropseasontags.js) (tags), patcherMod `seasons/CropSeasons`
+  (growth, rules), `seasons/CropSeasonTooltip`, `compat/WthitCropSeasons`, `mixin/CropSeasonGrowHookMixin`, CEConfig
+  `[crop_seasons]`, [fertility.toml](../config/sereneseasons/fertility.toml) (`seasonal_crops = false`)
+- Growing seasons (§2.12): [tools/crop_season_audit.py](../tools/crop_season_audit.py) -> [crop_seasons_audit.md](crop_seasons_audit.md); `/dumpcropgrowth` ([dump_crop_growth.js](../kubejs/server_scripts/_lib/dump_crop_growth.js)) records each block's item for it; [config/sereneseasons/fertility.toml](../config/sereneseasons/fertility.toml)
 - [kubejs/client_scripts/namechanges.js](../kubejs/client_scripts/namechanges.js): Fertile Soil rename
 - [kubejs/client_scripts/tooltips.js](../kubejs/client_scripts/tooltips.js): soil tooltips
 - [kubejs/server_scripts/wood/sawdust.js](../kubejs/server_scripts/wood/sawdust.js): Fertile Soil recipes
@@ -1280,9 +1452,9 @@ without it). New world, or unexplored chunks; `/locate biome <id>`.
   no 2nd for about 10 minutes, then grows one. Put `randomTickSpeed` back to 3.
 - [x] **CR-74 Off switch [scratch server PASSED 2026-10-22, SQ-SF-05]:** `enabled = false` (or `maxFruits = 1`) → no new extra fruit grows; existing ones stay. Back on.
 - [ ] **CR-75 Hamimelon [scratch server PASSED 2026-10-22, SQ-SF-01 / game]:** a Fruits Delight hamimelon stem grows extra hamimelons the same way.
-- [ ] **CR-76 Seasons [game]:** in winter (`/season set winter`), a melon stem with one melon and `randomTickSpeed` 100:
-  note whether extra melons still grow (expected today: yes, F-SS1; after a fix: no, or slowly as Serene Seasons'
-  `out_of_season_crop_behavior` 0 allows). A plain melon stem grows its first melon slowly or not at all.
+- [ ] **CR-76 Seasons [game]:** in winter (`/season set mid_winter`) in plains, a melon stem with one melon and
+  `randomTickSpeed` 100: extra melons still grow, but slower than the same stem in mid summer (melon is warm wet: winter
+  off, summer fertile; §2.12.1). WTHIT on the attached stem shows red "Offseason here: grows slower".
 - [ ] **CR-77 Saved wait across restart [game]:** a stem with one melon, defaults (10 minutes); stop and restart the
   world after 5 minutes of play → the 2nd melon still comes about 5 minutes later, not straight away and not 10 more
   (`data/creativeengineering_stem_fruit.dat` keeps the time).
@@ -1302,6 +1474,48 @@ Wild-crops batch 2026-10-22 (new chunks only; rejoin a world):
 
 Scratch-checkable parts go through `tools/farm_worldgen_probe.js` (queue SQ-SF, SQ-WC, SQ-CD); `[game]` parts need
 the real client (rendering, tooltips, JEI, natural random ticks with a player nearby).
+
+### Crop seasons (§2.12.1, added 2026-10-30)
+
+Needs patcherMod 1.1.04 built 2026-10-30 after 21:40, backportedVinery `-06` and creative_delight with endersAdditions
+`-02` in `mods/` (and the server), and a full restart. Scratch server half: SQ-CS in testing/scratch_queue.md, all
+PASSED r1031 (2026-10-31; SQ-CS-03 to -05 on a plains superflat), including the CR-91 growth comparison; CQ-CS-07
+(tooltips, WTHIT) is the client half.
+
+- [ ] **CR-89 Tooltips [game]:** wheat seeds "Fertile: Spring" / "Offseason: Winter, Dry"; potato "Fertile: Winter" /
+  "Offseason: Summer, Wet, Dry" on fig sapling, fig and hawberry; potato as wheat; tobacco seeds "Fertile: Summer, Dry" /
+  "Offseason: Winter"; pineapple sapling and mango "Fertile: Summer, Wet" / "Offseason: Winter"; ghost pepper seeds
+  "Season: Nether"; glow berries "Fertile: y<0" / "Offseason: y>128"; taiga grape seeds "Fertile: Cold biomes" /
+  "Offseason: Warm biomes"; red grape seeds "Fertile: Temperate biomes" only; Vinery apple sapling "Fertile: Autumn" /
+  "Offseason: Winter, Dry", and the apple the same. No Serene Seasons "Fertile Seasons" line on any item.
+- [ ] **CR-90 WTHIT here line [game]:** wheat in plains: `/season set mid_spring` green "Fertile here: grows faster";
+  `mid_summer` no here line; `mid_winter` red "Offseason here: grows slower", gone with glass 5 blocks above. In a
+  jungle the same wheat reads off in the dry season (`/season set mid_summer`) and nothing in the wet.
+- [ ] **CR-91 Speed [game or scratch]:** two 9x9 wheat plots on hydrated farmland in plains, `randomTickSpeed` 100,
+  one under glass: in `mid_winter` the open plot ripens visibly later than the glass plot; in `mid_spring` the open
+  plot is ahead of a third plot in `mid_summer` (by about a quarter; eyeball only).
+- [ ] **CR-92 Hooked plants [game]:** hemp and tobacco in plains in `mid_winter` show red "Offseason here"; a crimson
+  fungus colony in the overworld red, in the Nether green.
+- [ ] **CR-99 Greenhouse glass [game]:** wheat in plains in `mid_winter`: red "Offseason here"; a glass pane 10 blocks
+  straight above (dirt between is fine) → green "Greenhouse: preventing offseason debuff"; the pane one block to the
+  side → red "Offseason here" again; `mid_spring` with the pane above → red "Greenhouse: preventing fertile season buff";
+  `mid_summer` with the pane → no here line. Insulating glass, Security Craft reinforced glass, a Create framed glass
+  door and trapdoor work the same; a Storage Delight glass-door cabinet does not. Nether wart in the overworld under
+  glass stays red "Offseason here".
+- [ ] **CR-98 Grapes by biome [game]:** in any season: a taiga grape bush in a taiga green, in a desert or jungle red,
+  in plains nothing; a savanna grape bush in a savanna green, in a snowy taiga red, in a jungle nothing; a red grape bush
+  in plains green, in a taiga or desert nothing. A grapevine stem holding taiga grapes reads like the taiga bush; an
+  empty stem shows no season line.
+- [ ] **CR-93 Nether and End [game]:** nether wart on soul sand in the overworld red, in the Nether green; chorus flower
+  and Ender crop in the End green, in the overworld red.
+- [ ] **CR-94 Cave [game]:** glow berries under a ceiling at y -10 green, at y 60 nothing, at y 140 red; seasons do not
+  change it.
+- [ ] **CR-95 Mushroom colony [game]:** a Farmer's Delight red mushroom colony in Mushroom Fields green in every
+  season; in plains it follows temperate (green spring, red winter).
+- [ ] **CR-96 Wet/dry calendar [game]:** pineapple in a jungle green in the wet (`/season set mid_winter`), nothing in
+  the dry; tobacco in a desert (arid) green in the dry season, nothing in the wet; potato in a jungle red all year.
+- [ ] **CR-97 Reload [game]:** move `minecraft:wheat` from temperate to cold in crop_seasons.json, `/reload`: wheat seeds
+  tooltip and WTHIT change to the cold lines without a restart. Put it back, `/reload`.
 
 ## 8. History
 
@@ -1378,6 +1592,19 @@ the real client (rendering, tooltips, JEI, natural random ticks with a player ne
 - 2026-10-24: planned from the scratchpad: bone meal in planters, other plants in random growth (`farming/crops #14`, `#15`). No code changed.
 - 2026-10-25: own-pick crops (§2.2): `#creativeengineering:crops/own_pick` + patcherMod `QuarkOwnPickMixin` keep Quark
   off the cucumber, ghost pepper and zucchini picks (vintageport #8). Test VTD-76.
+- 2026-10-30: growing seasons audit (§2.12, TODO `farming/crops #5` step 1): `tools/crop_season_audit.py` and the generated crop_seasons_audit.md, `/dumpcropgrowth` records the planting item; findings F-SS2 (hemp, sea grapes, Nether fungus colonies have no grow event), F-SS3 (inert tags). No gameplay change.
+- 2026-10-30: crop seasons BUILT (§2.12.1, TODO `farming/crops #5`): types for all 123 audited plants in
+  crop_seasons.json, patcherMod `seasons/CropSeasons` (fertile +25 % / off -25 % by the biome calendar), tooltip and
+  WTHIT lines, grow-event hooks for hemp, tobacco, fungus colonies, the Vinery grapes and fruit leaves and the chorus
+  flame; Serene Seasons' crop rule off. F-SS1 (crops #12) and F-SS2 resolved. `crop_season_audit.py` now reads the json.
+  CR-76 reworded, CR-89 to CR-97 added; SQ-CS queued.
+- 2026-10-30 (owner review): potatoes temperate; warm crops' tooltips list their seasons (was "Dry Crop" / "Wet Crop");
+  grapes by biome family (four `grape_*` types, `grape` for the Vinery stem and lattice by the grape they hold);
+  tree fruit tooltips; chorus flame and succulent confirmed End. CR-89 reworded, CR-92 trimmed, CR-98 added.
+- 2026-10-30 (owner): Fruits Delight apple tree removed (item_merges.md 2.11, MG-47; apple follows Vinery's tree);
+  greenhouse glass defined (§2.12.1: the rule, the block list, panes and modded glass added, WTHIT greenhouse line). CR-99.
+  Then (owner): a greenhouse removes season fertility both ways (fertile and off become neutral), glass doors and
+  trapdoors count, WTHIT green "preventing offseason debuff" / red "preventing fertile season buff".
 
 ## Owner ideas (scratchpad 2026-10-26)
 
@@ -1386,3 +1613,4 @@ the real client (rendering, tooltips, JEI, natural random ticks with a player ne
 - Village farms grow Rustic crops by the wild-crop rules: `farming/crops #19`.
 
 - 2026-10-28: planned from the scratchpad: a mini melon crop like the Mini Cantaloupe (TODO `farming/crops #25`); a third, most common cantaloupe wild patch in normal and mini (`farming/wild-crops #5`). The seed rename to Mini Cantaloupe (Seeds) is already built (`merges/fruit #1`). No code changed.
+- 2026-10-31: scratchpad notes translated into TODO rows (`farming/trees #3`, `farming/crops #28`, `#29`). No code changed.

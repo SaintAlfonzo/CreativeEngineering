@@ -22,7 +22,7 @@
 	#If dissolved by a fluid source block - salt will convert to a fluid source block instead of air.
 	SaltDissolvesIntoSourceBlocks = true
 	#Salt blocks will dissolve when exposed to rain
-	SaltDissolvingInRain = true
+	SaltDissolvingInRain = false
 	#Chance of salt blocks dissolving in rain on random tick. 1.0 = first random tick. 0.0 = never.
 	#Range: 0.0 ~ 1.0
 	SaltDissolvingInRainChance = 0.15

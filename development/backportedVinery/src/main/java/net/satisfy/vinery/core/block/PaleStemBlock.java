@@ -36,6 +36,7 @@ import net.minecraft.core.Vec3i;
 
 import java.util.Arrays;
 import java.util.List;
+import net.minecraftforge.common.ForgeHooks;
 
 public class PaleStemBlock extends StemBlock {
     private static final VoxelShape PALE_SHAPE = Block.box(6.0, 0, 6.0, 10.0, 16.0, 10.0);
@@ -183,7 +184,9 @@ public class PaleStemBlock extends StemBlock {
         if (random.nextDouble() >= 0.98 * PlatformHelper.getGrapeGrowthMultiplier()) return;
         if (!isMature(state) && hasTrunk(level, pos) && state.getValue(AGE) > 0) {
             final int i;
-            if (level.getRawBrightness(pos, 0) >= MIN_LIGHT && (i = state.getValue(AGE)) < 4) {
+            // Port: fire Forge's crop-grow event so the pack's crop seasons apply (crops.md 2.12.1)
+            if (level.getRawBrightness(pos, 0) >= MIN_LIGHT && (i = state.getValue(AGE)) < 4
+                    && ForgeHooks.onCropsGrowPre(level, pos, state, true)) {
                 level.setBlock(pos, this.withAge(state, i + 1, state.getValue(GRAPE)), Block.UPDATE_CLIENTS);
             }
         }

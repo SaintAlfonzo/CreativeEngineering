@@ -151,6 +151,9 @@ look at temperature only.
 - **Crop fertility:** tropical biomes grow summer crops (and unlisted crops) all year; temperate biomes by season;
   anywhere below 0.15 right now grows winter crops only. A hardcoded infertile list names only a Biomes O' Plenty
   biome, so it does nothing here.
+  Since 2026-10-30 the pack turns this rule off (`seasonal_crops = false`) and uses crop season types instead
+  ([crops.md](crops.md) §2.12.1): the same calendar per type (four seasons, or wet/dry in tropical, dry and arid
+  biomes), fertile +25 % / off -25 %. The Crops column in 3.1 below is the Serene Seasons rule, kept for reference.
 - **Weather frequency** is world-wide, not per biome: winter clears thunder and cuts dry spells to 0.5-1.5 days,
   spring cuts them to 0.5-4 days, summer brings thunder within 0.5-1.5 days.
 - **SeasonHUD** shows Wet/Dry in tropical biomes and the four seasons elsewhere.
@@ -552,7 +555,7 @@ Set the season with `/season set <SUB_SEASON>` (Serene Seasons takes the sub-sea
 - [ ] **WE-13 HUD frozen:** SeasonHUD in snowy plains → Winter icon, "Frozen", day N / year length
 - [ ] **WE-14 HUD river:** stand in a river in a desert → "Arid"; in a jungle river → Wet/Dry
 - [ ] **WE-15 tint:** badlands grass and savanna-badlands trees keep one colour through `/season set` changes; plains change
-- [ ] **WE-16 crops:** wheat on farmland in a desert in winter grows; wheat in snowy plains in summer does not (Serene Seasons fertility)
+- [ ] **WE-16 crops:** superseded by crop seasons (crops.md CR-90, CR-96): wheat in a desert reads off in the dry season, wheat in snowy plains (frozen) off all year. Was: wheat on farmland in a desert in winter grows; wheat in snowy plains in summer does not (Serene Seasons fertility)
 - [ ] **WE-18 dry grasslands:** arid highlands and hot shrubland (declares rain), rain: `LATE_WINTER` → rain; `MID_SPRING` → none. HUD shows Wet/Dry
 - [ ] **WE-19 painted mountains:** rain, any sub-season → nothing falls; HUD "Arid"
 - [ ] **WE-20 temperate highlands:** rain, `MID_WINTER` → snow; `MID_SUMMER` → rain. HUD shows Winter/Summer, not Wet/Dry

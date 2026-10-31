@@ -12,45 +12,48 @@ Friendly settlements: vanilla and Towns & Towers villages, Terralith fortified v
 
 Grid: spacing 48, separation 12 (members never start closer than 13 chunks = 208 blocks apart). At most 1 structure per 48 x 48 chunks anywhere.
 
-Capped (old combined density above the group grid): 77 biome(s), 80% of the group's area. Largest: `terralith:yellowstone` 1 per 22 -> 47, `minecraft:plains` 1 per 22 -> 43, `terralith:highlands` 1 per 22 -> 42, `terralith:lush_desert` 1 per 24 -> 45, `terralith:brushland` 1 per 25 -> 42, `terralith:rocky_mountains` 1 per 22 -> 42.
+Capped (old combined density above the group grid): 77 biome(s), 80% of the group's area. Largest: `terralith:yellowstone` 1 per 22 -> 42, `minecraft:plains` 1 per 22 -> 39, `terralith:highlands` 1 per 22 -> 40, `terralith:lush_desert` 1 per 24 -> 39, `terralith:brushland` 1 per 25 -> 40, `terralith:rocky_mountains` 1 per 22 -> 40.
 
 | Structure | Weight | Frequency | Mod default 1 per | New 1 per | Ratio | Note |
 |---|---|---|---|---|---|---|
-| `minecraft:village_desert` | 424 | 0.734547 | 28 | 67 | 0.17 |  |
-| `minecraft:village_plains` | 162 | 1.0 | 32 | 99 | 0.11 |  |
-| `minecraft:village_savanna` | 103 | 0.99558 | 29 | 57 | 0.26 |  |
-| `minecraft:village_snowy` | 132 | 1.0 | 28 | 105 | 0.07 |  |
-| `minecraft:village_taiga` | 153 | 1.0 | 30 | 83 | 0.13 |  |
-| `terralith:fortified_desert_village` | 108 | 1.0 | 46 | 114 | 0.16 |  |
-| `terralith:fortified_village` | 53 | 1.0 | 46 | 150 | 0.09 |  |
-| `towns_and_towers:exclusives/village_classic` | 101 | 0.1623 | 53 | 119 | 0.20 |  |
+| `minecraft:village_desert` | 100 | 0.734547 | 28 | 86 | 0.11 |  |
+| `minecraft:village_plains` | 100 | 1.0 | 32 | 115 | 0.08 |  |
+| `minecraft:village_savanna` | 100 | 0.99558 | 29 | 62 | 0.21 |  |
+| `minecraft:village_snowy` | 100 | 1.0 | 28 | 109 | 0.07 |  |
+| `minecraft:village_taiga` | 100 | 1.0 | 30 | 105 | 0.08 |  |
+| `terralith:fortified_desert_village` | 100 | 1.0 | 46 | 74 | 0.39 |  |
+| `terralith:fortified_village` | 100 | 1.0 | 46 | 108 | 0.18 |  |
+| `towns_and_towers:exclusives/village_classic` | 100 | 0.1623 | 53 | 119 | 0.20 |  |
 | `towns_and_towers:exclusives/village_iberian` | 100 | 1.0 | - | - | - | no biome in this pack |
-| `towns_and_towers:exclusives/village_mediterranean` | 41 | 1.0 | 56 | 95 | 0.34 |  |
+| `towns_and_towers:exclusives/village_mediterranean` | 100 | 1.0 | 56 | 72 | 0.61 |  |
 | `towns_and_towers:exclusives/village_nilotic` | 100 | 1.0 | - | - | - | no biome in this pack |
 | `towns_and_towers:exclusives/village_rustic` | 100 | 1.0 | - | - | - | no biome in this pack |
-| `towns_and_towers:exclusives/village_swedish` | 22 | 1.0 | 91 | 227 | 0.16 |  |
-| `towns_and_towers:exclusives/village_tudor` | 99 | 1.0 | 85 | 126 | 0.46 |  |
-| `towns_and_towers:village_badlands` | 173 | 0.430191 | 78 | 120 | 0.42 |  |
-| `towns_and_towers:village_beach` | 101 | 0.171066 | 56 | 123 | 0.21 |  |
-| `towns_and_towers:village_birch_forest` | 162 | 0.361997 | 86 | 138 | 0.39 |  |
-| `towns_and_towers:village_flower_forest` | 360 | 0.41542 | 107 | 121 | 0.78 |  |
-| `towns_and_towers:village_forest` | 144 | 0.457061 | 85 | 135 | 0.39 |  |
-| `towns_and_towers:village_grove` | 213 | 0.499402 | 108 | 117 | 0.84 |  |
-| `towns_and_towers:village_jungle` | 46 | 0.897 | 75 | 72 | 1.09 |  |
-| `towns_and_towers:village_meadow` | 62 | 1.0 | 99 | 175 | 0.32 |  |
-| `towns_and_towers:village_mushroom_fields` | 1 | 0.1623 | 53 | 119 | 0.20 |  |
-| `towns_and_towers:village_old_growth_taiga` | 110 | 0.717581 | 82 | 116 | 0.49 |  |
-| `towns_and_towers:village_snowy_slopes` | 141 | 1.0 | 108 | 102 | 1.12 |  |
-| `towns_and_towers:village_snowy_taiga` | 108 | 0.590369 | 108 | 151 | 0.51 |  |
-| `towns_and_towers:village_sparse_jungle` | 46 | 0.9 | 75 | 72 | 1.10 |  |
-| `towns_and_towers:village_sunflower_plains` | 228 | 0.544825 | 99 | 123 | 0.65 |  |
-| `towns_and_towers:village_swamp` | 142 | 0.582744 | 64 | 77 | 0.70 |  |
-| `towns_and_towers:village_wooded_badlands` | 205 | 0.340365 | 78 | 124 | 0.40 |  |
-| `creativeengineering:meta/village_towers` | 1 | 1.0 | - | 106 | new |  |
-| `creativeengineering:meta/fortified_camps` | 1 | 1.0 | - | 265 | new |  |
-| `creativeengineering:meta/fortified_ruins` | 1 | 1.0 | - | 264 | new |  |
-| `creativeengineering:meta/town_villages` | 1 | 1.0 | - | 187 | new |  |
-| `eugene:red_roof_castle` | 106 | 1.0 | 97 | 115 | 0.71 |  |
+| `towns_and_towers:exclusives/village_swedish` | 100 | 1.0 | 91 | 106 | 0.75 |  |
+| `towns_and_towers:exclusives/village_tudor` | 100 | 1.0 | 85 | 115 | 0.55 |  |
+| `towns_and_towers:village_badlands` | 100 | 0.430191 | 78 | 114 | 0.47 |  |
+| `towns_and_towers:village_beach` | 100 | 0.171066 | 56 | 122 | 0.21 |  |
+| `towns_and_towers:village_birch_forest` | 100 | 0.361997 | 86 | 158 | 0.30 |  |
+| `towns_and_towers:village_flower_forest` | 100 | 0.41542 | 107 | 172 | 0.39 |  |
+| `towns_and_towers:village_forest` | 100 | 0.457061 | 85 | 138 | 0.38 |  |
+| `towns_and_towers:village_grove` | 100 | 0.499402 | 108 | 154 | 0.49 |  |
+| `towns_and_towers:village_jungle` | 100 | 0.897 | 75 | 72 | 1.09 |  |
+| `towns_and_towers:village_meadow` | 100 | 1.0 | 99 | 115 | 0.74 |  |
+| `towns_and_towers:village_mushroom_fields` | 100 | 0.1623 | 53 | 119 | 0.20 |  |
+| `towns_and_towers:village_old_growth_taiga` | 100 | 0.717581 | 82 | 124 | 0.44 |  |
+| `towns_and_towers:village_snowy_slopes` | 100 | 1.0 | 108 | 109 | 0.98 |  |
+| `towns_and_towers:village_snowy_taiga` | 100 | 0.590369 | 108 | 141 | 0.58 |  |
+| `towns_and_towers:village_sparse_jungle` | 100 | 0.9 | 75 | 72 | 1.10 |  |
+| `towns_and_towers:village_sunflower_plains` | 100 | 0.544825 | 99 | 156 | 0.40 |  |
+| `towns_and_towers:village_swamp` | 100 | 0.582744 | 64 | 77 | 0.70 |  |
+| `towns_and_towers:village_wooded_badlands` | 100 | 0.340365 | 78 | 128 | 0.37 |  |
+| `creativeengineering:meta/village_towers` | 1 | 1.0 | - | 109 | new |  |
+| `creativeengineering:meta/fortified_camps` | 1 | 1.0 | - | 184 | new |  |
+| `creativeengineering:meta/fortified_ruins` | 1 | 1.0 | - | 181 | new |  |
+| `creativeengineering:meta/town_villages` | 1 | 1.0 | - | 143 | new |  |
+| `eugene:red_roof_castle` | 100 | 1.0 | 97 | 102 | 0.90 |  |
+| `creativeengineering:meta/meteorite_village` | 1 | 1.0 | - | 275 | new |  |
+| `creativeengineering:meta/village_siege_camp` | 1 | 1.0 | - | 294 | new |  |
+| `creativeengineering:meta/village_siege_ring` | 1 | 1.0 | - | 294 | new |  |
 
 ### `pillager_settlements` -> `creativeengineering:group/pillager_settlements`
 
@@ -58,57 +61,58 @@ Pillager outposts: vanilla, and every Towns & Towers tower, fort and camp outpos
 
 Grid: spacing 32, separation 8 (members never start closer than 9 chunks = 144 blocks apart). At most 1 structure per 32 x 32 chunks anywhere. Excluded within 4 chunks of `creativeengineering:group/settlements` grid slots.
 
-Capped (old combined density above the group grid): 70 biome(s), 29% of the group's area. Largest: `terralith:yellowstone` 1 per 27 -> 29, `minecraft:plains` 1 per 26 -> 28, `terralith:highlands` 1 per 26 -> 28, `terralith:brushland` 1 per 30 -> 27, `terralith:lush_desert` 1 per 30 -> 28, `terralith:rocky_mountains` 1 per 26 -> 28.
+Capped (old combined density above the group grid): 70 biome(s), 30% of the group's area. Largest: `terralith:yellowstone` 1 per 27 -> 28, `minecraft:plains` 1 per 26 -> 28, `terralith:highlands` 1 per 26 -> 28, `terralith:brushland` 1 per 30 -> 27, `terralith:lush_desert` 1 per 30 -> 28, `terralith:rocky_mountains` 1 per 26 -> 28.
 
 | Structure | Weight | Frequency | Mod default 1 per | New 1 per | Ratio | Note |
 |---|---|---|---|---|---|---|
-| `minecraft:pillager_outpost` | 74 | 1.0 | 121 | 50 | 5.78 |  |
-| `towns_and_towers:exclusives/pillager_outpost_classic` | 80 | 0.2338 | 110 | 69 | 2.52 |  |
+| `minecraft:pillager_outpost` | 100 | 1.0 | 121 | 66 | 3.36 |  |
+| `towns_and_towers:exclusives/pillager_outpost_classic` | 100 | 0.2338 | 110 | 69 | 2.55 |  |
 | `towns_and_towers:exclusives/pillager_outpost_iberian` | 100 | 1.0 | - | - | - | no biome in this pack |
-| `towns_and_towers:exclusives/pillager_outpost_mediterranean` | 78 | 1.0 | 163 | 61 | 7.07 |  |
-| `towns_and_towers:exclusives/pillager_outpost_oriental` | 65 | 1.0 | 174 | 66 | 7.01 |  |
+| `towns_and_towers:exclusives/pillager_outpost_mediterranean` | 100 | 1.0 | 163 | 62 | 6.89 |  |
+| `towns_and_towers:exclusives/pillager_outpost_oriental` | 100 | 1.0 | 174 | 63 | 7.52 |  |
 | `towns_and_towers:exclusives/pillager_outpost_rustic` | 100 | 1.0 | - | - | - | no biome in this pack |
-| `towns_and_towers:exclusives/pillager_outpost_swedish` | 31 | 1.0 | 222 | 129 | 2.95 |  |
-| `towns_and_towers:exclusives/pillager_outpost_tudor` | 100 | 1.0 | 197 | 72 | 7.54 |  |
-| `towns_and_towers:pillager_outpost_badlands` | 83 | 1.0 | 171 | 64 | 7.18 |  |
-| `towns_and_towers:pillager_outpost_beach` | 4 | 0.878499 | 117 | 58 | 4.10 |  |
-| `towns_and_towers:pillager_outpost_birch_forest` | 132 | 0.720211 | 188 | 66 | 8.08 |  |
-| `towns_and_towers:pillager_outpost_desert` | 33 | 0.995091 | 147 | 85 | 2.99 |  |
-| `towns_and_towers:pillager_outpost_flower_forest` | 210 | 0.891321 | 222 | 63 | 12.47 |  |
-| `towns_and_towers:pillager_outpost_forest` | 136 | 0.610697 | 178 | 72 | 6.12 |  |
-| `towns_and_towers:pillager_outpost_grove` | 172 | 1.0 | 250 | 64 | 15.39 |  |
-| `towns_and_towers:pillager_outpost_jungle` | 109 | 0.560666 | 156 | 63 | 6.11 |  |
-| `towns_and_towers:pillager_outpost_meadow` | 152 | 1.0 | 208 | 65 | 10.40 |  |
-| `towns_and_towers:pillager_outpost_mushroom_fields` | 1 | 0.237868 | 110 | 71 | 2.39 |  |
-| `towns_and_towers:pillager_outpost_old_growth_taiga` | 108 | 1.0 | 204 | 64 | 10.09 |  |
-| `towns_and_towers:pillager_outpost_savanna` | 42 | 1.0 | 141 | 77 | 3.33 |  |
-| `towns_and_towers:pillager_outpost_snowy_beach` | 151 | 0.4394 | 292 | 113 | 6.63 |  |
-| `towns_and_towers:pillager_outpost_snowy_plains` | 156 | 0.584075 | 250 | 88 | 8.16 |  |
-| `towns_and_towers:pillager_outpost_snowy_slopes` | 67 | 1.0 | 250 | 102 | 6.00 |  |
-| `towns_and_towers:pillager_outpost_snowy_taiga` | 100 | 1.0 | 250 | 84 | 8.95 |  |
-| `towns_and_towers:pillager_outpost_sparse_jungle` | 110 | 1.0 | 156 | 47 | 11.01 |  |
-| `towns_and_towers:pillager_outpost_sunflower_plains` | 100 | 1.0 | 208 | 80 | 6.84 |  |
-| `towns_and_towers:pillager_outpost_swamp` | 2 | 0.915151 | 134 | 199 | 0.46 |  |
-| `towns_and_towers:pillager_outpost_taiga` | 45 | 1.0 | 204 | 99 | 4.20 |  |
-| `towns_and_towers:pillager_outpost_wooded_badlands` | 81 | 1.0 | 171 | 65 | 7.01 |  |
-| `mysticrift_pillagers_towers_aris:acacia_pillager_tower` | 10 | 0.930863 | 190 | 171 | 1.23 |  |
-| `mysticrift_pillagers_towers_aris:birch_pillager_tower` | 8 | 0.905604 | 200 | 240 | 0.70 |  |
-| `mysticrift_pillagers_towers_aris:cherry_pillager_tower` | 17 | 0.856877 | 190 | 239 | 0.63 |  |
-| `mysticrift_pillagers_towers_aris:desert_pillager_tower` | 1 | 0.650021 | 180 | 246 | 0.54 |  |
+| `towns_and_towers:exclusives/pillager_outpost_swedish` | 100 | 1.0 | 222 | 85 | 6.85 |  |
+| `towns_and_towers:exclusives/pillager_outpost_tudor` | 100 | 1.0 | 197 | 83 | 5.64 |  |
+| `towns_and_towers:pillager_outpost_badlands` | 100 | 1.0 | 171 | 63 | 7.31 |  |
+| `towns_and_towers:pillager_outpost_beach` | 100 | 0.878499 | 117 | 38 | 9.51 |  |
+| `towns_and_towers:pillager_outpost_birch_forest` | 100 | 0.720211 | 188 | 91 | 4.25 |  |
+| `towns_and_towers:pillager_outpost_desert` | 100 | 0.995091 | 147 | 58 | 6.34 |  |
+| `towns_and_towers:pillager_outpost_flower_forest` | 100 | 0.891321 | 222 | 90 | 6.05 |  |
+| `towns_and_towers:pillager_outpost_forest` | 100 | 0.610697 | 178 | 94 | 3.56 |  |
+| `towns_and_towers:pillager_outpost_grove` | 100 | 1.0 | 250 | 83 | 9.05 |  |
+| `towns_and_towers:pillager_outpost_jungle` | 100 | 0.560666 | 156 | 63 | 6.12 |  |
+| `towns_and_towers:pillager_outpost_meadow` | 100 | 1.0 | 208 | 84 | 6.12 |  |
+| `towns_and_towers:pillager_outpost_mushroom_fields` | 100 | 0.237868 | 110 | 70 | 2.48 |  |
+| `towns_and_towers:pillager_outpost_old_growth_taiga` | 100 | 1.0 | 204 | 85 | 5.79 |  |
+| `towns_and_towers:pillager_outpost_savanna` | 100 | 1.0 | 141 | 58 | 5.99 |  |
+| `towns_and_towers:pillager_outpost_snowy_beach` | 100 | 0.4394 | 292 | 141 | 4.29 |  |
+| `towns_and_towers:pillager_outpost_snowy_plains` | 100 | 0.584075 | 250 | 109 | 5.28 |  |
+| `towns_and_towers:pillager_outpost_snowy_slopes` | 100 | 1.0 | 250 | 83 | 9.05 |  |
+| `towns_and_towers:pillager_outpost_snowy_taiga` | 100 | 1.0 | 250 | 83 | 9.05 |  |
+| `towns_and_towers:pillager_outpost_sparse_jungle` | 100 | 1.0 | 156 | 47 | 10.91 |  |
+| `towns_and_towers:pillager_outpost_sunflower_plains` | 100 | 1.0 | 208 | 84 | 6.12 |  |
+| `towns_and_towers:pillager_outpost_swamp` | 100 | 0.915151 | 134 | 67 | 3.98 |  |
+| `towns_and_towers:pillager_outpost_taiga` | 100 | 1.0 | 204 | 85 | 5.79 |  |
+| `towns_and_towers:pillager_outpost_wooded_badlands` | 100 | 1.0 | 171 | 63 | 7.31 |  |
+| `mysticrift_pillagers_towers_aris:acacia_pillager_tower` | 10 | 0.930863 | 190 | 192 | 0.98 |  |
+| `mysticrift_pillagers_towers_aris:birch_pillager_tower` | 8 | 0.905604 | 200 | 288 | 0.48 |  |
+| `mysticrift_pillagers_towers_aris:cherry_pillager_tower` | 17 | 0.856877 | 190 | 230 | 0.68 |  |
+| `mysticrift_pillagers_towers_aris:desert_pillager_tower` | 1 | 0.650021 | 180 | 599 | 0.09 |  |
 | `mysticrift_pillagers_towers_aris:end_pillager_tower` | 1 | 0.019706 | 188 | 232 | 0.66 |  |
-| `mysticrift_pillagers_towers_aris:jungle_pillager_tower` | 10 | 0.973476 | 128 | 158 | 0.66 |  |
-| `mysticrift_pillagers_towers_aris:mangrove_pillager_tower` | 5 | 0.038089 | 160 | 466 | 0.12 |  |
-| `mysticrift_pillagers_towers_aris:oak_wood_pillager_tower` | 5 | 0.467934 | 127 | 156 | 0.66 |  |
-| `creativeengineering:meta/pillager_camp_ruin` | 1 | 1.0 | - | 168 | new |  |
-| `creativeengineering:meta/pillager_camp_ruins` | 1 | 1.0 | - | 158 | new |  |
-| `creativeengineering:meta/pillager_camp_siege` | 1 | 1.0 | - | 135 | new |  |
-| `creativeengineering:meta/pillager_great_tower_siege` | 1 | 1.0 | - | 249 | new |  |
-| `creativeengineering:meta/pillager_stronghold_siege` | 1 | 1.0 | - | 93 | new |  |
-| `creativeengineering:meta/pillager_tower_siege` | 1 | 1.0 | - | 85 | new |  |
-| `takesapillage:bastille` | 34 | 1.0 | 55 | 106 | 0.28 |  |
-| `takesapillage:pillager_camp` | 87 | 1.0 | 39 | 66 | 0.35 |  |
-| `eugene:fake_trader_camp` | 6 | 1.0 | 200 | 216 | 0.86 |  |
-| `eugene:pillager_camp` | 26 | 1.0 | 58 | 104 | 0.31 |  |
+| `mysticrift_pillagers_towers_aris:jungle_pillager_tower` | 10 | 0.973476 | 128 | 151 | 0.72 |  |
+| `mysticrift_pillagers_towers_aris:mangrove_pillager_tower` | 5 | 0.038089 | 160 | 1304 | 0.02 |  |
+| `mysticrift_pillagers_towers_aris:oak_wood_pillager_tower` | 5 | 0.467934 | 127 | 242 | 0.28 |  |
+| `creativeengineering:meta/pillager_camp_ruin` | 1 | 1.0 | - | 163 | new |  |
+| `creativeengineering:meta/pillager_camp_ruins` | 1 | 1.0 | - | 157 | new |  |
+| `creativeengineering:meta/pillager_camp_siege` | 1 | 1.0 | - | 136 | new |  |
+| `creativeengineering:meta/pillager_great_tower_siege` | 1 | 1.0 | - | 358 | new |  |
+| `creativeengineering:meta/pillager_stronghold_siege` | 1 | 1.0 | - | 104 | new |  |
+| `creativeengineering:meta/pillager_tower_siege` | 1 | 1.0 | - | 87 | new |  |
+| `takesapillage:bastille` | 34 | 1.0 | 55 | 122 | 0.21 |  |
+| `takesapillage:pillager_camp` | 87 | 1.0 | 39 | 77 | 0.26 |  |
+| `eugene:fake_trader_camp` | 100 | 1.0 | 200 | 77 | 6.84 |  |
+| `eugene:pillager_camp` | 100 | 1.0 | 58 | 77 | 0.57 |  |
+| `creativeengineering:meta/pillager_camp_meteorite` | 1 | 1.0 | - | 186 | new |  |
 
 ### `ruins` -> `creativeengineering:group/ruins`
 
@@ -120,37 +124,37 @@ Capped (old combined density above the group grid): 62 biome(s), 62% of the grou
 
 | Structure | Weight | Frequency | Mod default 1 per | New 1 per | Ratio | Note |
 |---|---|---|---|---|---|---|
-| `philipsruins:ancient_ruins` | 119 | 0.860538 | 50 | 45 | 1.22 |  |
-| `philipsruins:ancient_towers` | 197 | 0.862964 | 50 | 35 | 2.02 |  |
-| `philipsruins:badlands_structures` | 250 | 0.266459 | 58 | 35 | 2.78 |  |
-| `philipsruins:desert_structures` | 250 | 0.250975 | 44 | 35 | 1.59 |  |
-| `philipsruins:field_stone_ruins` | 45 | 1.0 | 75 | 79 | 0.90 |  |
-| `philipsruins:field_stone_ruins_rocks` | 196 | 0.513101 | 68 | 49 | 1.95 |  |
-| `philipsruins:level_one_ruins` | 45 | 1.0 | 75 | 79 | 0.90 |  |
-| `philipsruins:level_three_ruins` | 35 | 1.0 | 85 | 90 | 0.90 |  |
-| `philipsruins:level_two_ruins` | 20 | 1.0 | 113 | 119 | 0.91 |  |
-| `philipsruins:level_two_ruins_pool` | 20 | 1.0 | 113 | 119 | 0.91 |  |
-| `philipsruins:pumpkin_ruins` | 84 | 1.0 | 50 | 56 | 0.79 |  |
-| `philipsruins:rare_ruin` | 254 | 0.007794 | 360 | 329 | 1.20 |  |
-| `philipsruins:start_nether_ruin` | 3 | 0.8688 | 310 | 80 | 15.03 |  |
-| `terralith:glacial_hut` | 261 | 0.686437 | 27 | 33 | 0.69 |  |
-| `forest_ruins:ruin_1` | 38 | 0.904155 | 45 | 93 | 0.23 |  |
-| `forest_ruins:ruin_2` | 38 | 0.904155 | 45 | 93 | 0.23 |  |
-| `forest_ruins:ruin_3` | 38 | 0.904155 | 45 | 93 | 0.23 |  |
-| `forest_ruins:ruin_4` | 38 | 0.904155 | 45 | 93 | 0.23 |  |
-| `forest_ruins:ruin_5` | 38 | 0.904155 | 45 | 93 | 0.23 |  |
-| `forest_ruins:ruin_6` | 38 | 0.904155 | 45 | 93 | 0.23 |  |
-| `forest_ruins:ruin_7` | 38 | 0.904155 | 45 | 93 | 0.23 |  |
-| `forgotten_church:forgotten_church` | 16 | 1.0 | 55 | 136 | 0.16 |  |
+| `philipsruins:ancient_ruins` | 100 | 0.860538 | 50 | 46 | 1.18 |  |
+| `philipsruins:ancient_towers` | 100 | 0.862964 | 50 | 46 | 1.18 |  |
+| `philipsruins:badlands_structures` | 100 | 0.266459 | 58 | 35 | 2.73 |  |
+| `philipsruins:desert_structures` | 100 | 0.250975 | 44 | 35 | 1.59 |  |
+| `philipsruins:field_stone_ruins` | 100 | 1.0 | 75 | 64 | 1.37 |  |
+| `philipsruins:field_stone_ruins_rocks` | 100 | 0.513101 | 68 | 68 | 1.00 |  |
+| `philipsruins:level_one_ruins` | 100 | 1.0 | 75 | 64 | 1.37 |  |
+| `philipsruins:level_three_ruins` | 100 | 1.0 | 85 | 64 | 1.76 |  |
+| `philipsruins:level_two_ruins` | 100 | 1.0 | 113 | 64 | 3.11 |  |
+| `philipsruins:level_two_ruins_pool` | 100 | 1.0 | 113 | 64 | 3.11 |  |
+| `philipsruins:pumpkin_ruins` | 100 | 1.0 | 50 | 55 | 0.82 |  |
+| `philipsruins:rare_ruin` | 100 | 0.007794 | 360 | 546 | 0.43 |  |
+| `philipsruins:start_nether_ruin` | 100 | 0.8688 | 310 | 49 | 40.59 |  |
+| `terralith:glacial_hut` | 100 | 0.686437 | 27 | 41 | 0.44 |  |
+| `forest_ruins:ruin_1` | 100 | 0.904155 | 45 | 73 | 0.38 |  |
+| `forest_ruins:ruin_2` | 100 | 0.904155 | 45 | 73 | 0.38 |  |
+| `forest_ruins:ruin_3` | 100 | 0.904155 | 45 | 73 | 0.38 |  |
+| `forest_ruins:ruin_4` | 100 | 0.904155 | 45 | 73 | 0.38 |  |
+| `forest_ruins:ruin_5` | 100 | 0.904155 | 45 | 73 | 0.38 |  |
+| `forest_ruins:ruin_6` | 100 | 0.904155 | 45 | 73 | 0.38 |  |
+| `forest_ruins:ruin_7` | 100 | 0.904155 | 45 | 73 | 0.38 |  |
+| `forgotten_church:forgotten_church` | 100 | 1.0 | 55 | 69 | 0.64 |  |
 | `watchtower_building:abandoned_watchtower` | 21 | 0.194882 | 48 | 115 | 0.17 |  |
-| `creativeengineering:meta/ruin_cluster` | 1 | 1.0 | - | 48 | new |  |
-| `creativeengineering:meta/ruin_scatter` | 1 | 1.0 | - | 48 | new |  |
-| `old_illager_statue:old_illager_statue` | 26 | 1.0 | 42 | 99 | 0.18 |  |
-| `oldvillagerstatue:old_villager_statue` | 26 | 1.0 | 40 | 99 | 0.16 |  |
-| `small_cat_statues:cat_1` | 19 | 1.0 | 30 | 114 | 0.07 |  |
-| `small_cat_statues:cat_2` | 19 | 1.0 | 30 | 114 | 0.07 |  |
-| `small_cat_statues:cat_3` | 19 | 1.0 | 30 | 114 | 0.07 |  |
-| `eugene:ruined_drum_tower` | 19 | 1.0 | 126 | 127 | 0.98 |  |
+| `creativeengineering:meta/ruin_cluster` | 1 | 1.0 | - | 52 | new |  |
+| `creativeengineering:meta/ruin_scatter` | 1 | 1.0 | - | 41 | new |  |
+| `old_illager_statue:old_illager_statue` | 26 | 1.0 | 42 | 104 | 0.16 |  |
+| `oldvillagerstatue:old_villager_statue` | 26 | 1.0 | 40 | 104 | 0.15 |  |
+| `small_cat_statues:cat_1` | 19 | 1.0 | 30 | 120 | 0.06 |  |
+| `small_cat_statues:cat_2` | 19 | 1.0 | 30 | 120 | 0.06 |  |
+| `small_cat_statues:cat_3` | 19 | 1.0 | 30 | 120 | 0.06 |  |
+| `eugene:ruined_drum_tower` | 100 | 1.0 | 126 | 71 | 3.14 |  |
 
 ### `surface_dungeons` -> `creativeengineering:group/surface_dungeons`
 
@@ -160,13 +164,14 @@ Grid: spacing 16, separation 10 (members never start closer than 11 chunks = 176
 
 | Structure | Weight | Frequency | Mod default 1 per | New 1 per | Ratio | Note |
 |---|---|---|---|---|---|---|
-| `betterjungletemples:jungle_temple` | 1 | 0.7481 | 24 | 19 | 1.51 |  |
-| `minecraft:mansion` | 1 | 0.1191 | 80 | 48 | 2.75 |  |
-| `philipsruins:badlands_start_dungeon` | 106 | 0.441692 | 58 | 26 | 5.08 |  |
-| `terralith:spire` | 1 | 0.445566 | 36 | 24 | 2.26 |  |
-| `towns_and_towers:mimic_desert` | 79 | 0.521 | 32 | 24 | 1.72 |  |
+| `betterjungletemples:jungle_temple` | 100 | 0.7481 | 24 | 19 | 1.51 |  |
+| `minecraft:mansion` | 100 | 0.1191 | 80 | 48 | 2.75 |  |
+| `philipsruins:badlands_start_dungeon` | 100 | 0.441692 | 58 | 26 | 4.95 |  |
+| `terralith:spire` | 100 | 0.445566 | 36 | 24 | 2.26 |  |
+| `towns_and_towers:mimic_desert` | 100 | 0.521 | 32 | 24 | 1.76 |  |
 | `minecraft:jungle_pyramid` | 1 | 1.0 | 32 | 58 | 0.30 | replaces `betterjungletemples:jungle_temple` in 10% of its slots |
-| `eugene:undead_castle` | 1 | 0.026314 | 96 | 99 | 0.93 |  |
+| `eugene:undead_castle` | 100 | 0.026314 | 96 | 99 | 0.93 |  |
+| `creativeengineering:meta/jungle_temple_ruins` | 1 | 1.0 | - | 31 | new |  |
 
 ### `witch_huts` -> `creativeengineering:group/witch_huts`
 
@@ -174,14 +179,15 @@ Witch huts, swamps only (land/swamp): YUNG's witch hut and witch circle, the Vil
 
 Grid: spacing 16, separation 8 (members never start closer than 9 chunks = 144 blocks apart). At most 1 structure per 16 x 16 chunks anywhere.
 
-Capped (old combined density above the group grid): 4 biome(s), 100% of the group's area. Largest: `minecraft:swamp` 1 per 15 -> 17, `terralith:orchid_swamp` 1 per 15 -> 17, `terralith:ice_marsh` 1 per 15 -> 17, `minecraft:mangrove_swamp` 1 per 15 -> 17.
+Capped (old combined density above the group grid): 4 biome(s), 100% of the group's area. Largest: `minecraft:swamp` 1 per 15 -> 16, `terralith:orchid_swamp` 1 per 15 -> 16, `terralith:ice_marsh` 1 per 15 -> 16, `minecraft:mangrove_swamp` 1 per 15 -> 16.
 
 | Structure | Weight | Frequency | Mod default 1 per | New 1 per | Ratio | Note |
 |---|---|---|---|---|---|---|
-| `minecraft:swamp_hut` | 1 | 1.0 | 32 | 75 | 0.18 | replaces `betterwitchhuts:witch_hut` in 10% of its slots |
-| `betterwitchhuts:witch_circle` | 61 | 0.9433 | 40 | 37 | 1.16 |  |
-| `betterwitchhuts:witch_hut` | 150 | 0.935 | 30 | 25 | 1.43 |  |
-| `villagesandpillages:village_witch` | 100 | 0.9374 | 24 | 29 | 0.68 |  |
+| `minecraft:swamp_hut` | 1 | 1.0 | 32 | 91 | 0.12 | replaces `betterwitchhuts:witch_hut` in 10% of its slots |
+| `betterwitchhuts:witch_circle` | 100 | 0.9433 | 40 | 29 | 1.97 |  |
+| `betterwitchhuts:witch_hut` | 100 | 0.935 | 30 | 30 | 0.99 |  |
+| `villagesandpillages:village_witch` | 100 | 0.9374 | 24 | 29 | 0.70 |  |
+| `creativeengineering:meta/witch_coven` | 1 | 1.0 | - | 45 | new |  |
 
 ### `entrance_dungeons` -> `creativeengineering:group/entrance_dungeons`
 
@@ -191,8 +197,8 @@ Grid: spacing 32, separation 16 (members never start closer than 17 chunks = 272
 
 | Structure | Weight | Frequency | Mod default 1 per | New 1 per | Ratio | Note |
 |---|---|---|---|---|---|---|
-| `betterdungeons:spider_dungeon` | 109 | 0.9754 | 44 | 44 | 1.00 |  |
-| `betterdungeons:zombie_dungeon` | 92 | 0.971 | 48 | 48 | 1.00 |  |
+| `betterdungeons:spider_dungeon` | 100 | 0.9754 | 44 | 46 | 0.92 |  |
+| `betterdungeons:zombie_dungeon` | 100 | 0.971 | 48 | 46 | 1.09 |  |
 
 ### `ocean_ruins` -> `creativeengineering:group/ocean_ruins`
 
@@ -204,20 +210,21 @@ Capped (old combined density above the group grid): 2 biome(s), 21% of the group
 
 | Structure | Weight | Frequency | Mod default 1 per | New 1 per | Ratio | Note |
 |---|---|---|---|---|---|---|
-| `hopo:underwater_ruins` | 113 | 1.0 | 22 | 26 | 0.70 |  |
-| `hopo:underwater_small_ruins` | 513 | 0.6268 | 13 | 15 | 0.71 |  |
-| `hopo:underwater_warm_small_ruins` | 560 | 0.9701 | 10 | 12 | 0.68 |  |
-| `minecraft:ocean_ruin_cold` | 143 | 0.627 | 20 | 29 | 0.47 |  |
-| `minecraft:ocean_ruin_warm` | 92 | 0.9743 | 20 | 30 | 0.45 |  |
-| `philipsruins:ocean_fortress` | 29 | 0.5047 | 70 | 73 | 0.92 |  |
-| `philipsruins:ocean_ruins` | 58 | 0.4946 | 50 | 52 | 0.92 |  |
-| `towns_and_towers:wreckage_ocean` | 108 | 0.3243 | 32 | 48 | 0.45 |  |
-| `revamped_shipwrecks:shipwreck` | 258 | 1.0 | 24 | 17 | 1.91 |  |
-| `revamped_shipwrecks:shipwreck_beached` | 129 | 0.4444 | 24 | 12 | 4.00 |  |
-| `creativeengineering:meta/shipwreck_debris` | 1 | 1.0 | - | 32 | new |  |
-| `creativeengineering:meta/shipwreck_graveyard` | 1 | 1.0 | - | 48 | new |  |
-| `creativeengineering:meta/sunken_ruin_cluster` | 1 | 1.0 | - | 38 | new |  |
-| `hopo:underwater_fossils` | 215 | 1.0 | 18 | 20 | 0.83 |  |
+| `hopo:underwater_ruins` | 100 | 1.0 | 22 | 20 | 1.17 |  |
+| `hopo:underwater_small_ruins` | 100 | 0.6268 | 13 | 25 | 0.27 |  |
+| `hopo:underwater_warm_small_ruins` | 100 | 0.9701 | 10 | 20 | 0.25 |  |
+| `minecraft:ocean_ruin_cold` | 100 | 0.627 | 20 | 25 | 0.65 |  |
+| `minecraft:ocean_ruin_warm` | 100 | 0.9743 | 20 | 20 | 0.99 |  |
+| `philipsruins:ocean_fortress` | 100 | 0.5047 | 70 | 29 | 5.96 |  |
+| `philipsruins:ocean_ruins` | 100 | 0.4946 | 50 | 28 | 3.17 |  |
+| `towns_and_towers:wreckage_ocean` | 100 | 0.3243 | 32 | 34 | 0.90 |  |
+| `revamped_shipwrecks:shipwreck` | 100 | 1.0 | 24 | 20 | 1.48 |  |
+| `revamped_shipwrecks:shipwreck_beached` | 100 | 0.4444 | 24 | 12 | 4.00 |  |
+| `creativeengineering:meta/shipwreck_debris` | 1 | 1.0 | - | 35 | new |  |
+| `creativeengineering:meta/shipwreck_graveyard` | 1 | 1.0 | - | 53 | new |  |
+| `creativeengineering:meta/sunken_ruin_cluster` | 1 | 1.0 | - | 24 | new |  |
+| `hopo:underwater_fossils` | 100 | 1.0 | 18 | 20 | 0.78 |  |
+| `creativeengineering:meta/underwater_meteorite` | 1 | 1.0 | - | 54 | new |  |
 
 ### `ocean_dungeons` -> `creativeengineering:group/ocean_dungeons`
 
@@ -228,6 +235,7 @@ Grid: spacing 32, separation 6 (members never start closer than 7 chunks = 112 b
 | Structure | Weight | Frequency | Mod default 1 per | New 1 per | Ratio | Note |
 |---|---|---|---|---|---|---|
 | `minecraft:monument` | 100 | 0.1 | 32 | 101 | 0.10 |  |
+| `creativeengineering:meta/struck_monument` | 1 | 1.0 | - | 202 | new |  |
 
 ### `boats` -> `creativeengineering:group/boats`
 
@@ -239,18 +247,18 @@ Capped (old combined density above the group grid): 9 biome(s), 100% of the grou
 
 | Structure | Weight | Frequency | Mod default 1 per | New 1 per | Ratio | Note |
 |---|---|---|---|---|---|---|
-| `towns_and_towers:pillager_outpost_ocean` | 72 | 0.9618 | 110 | 160 | 0.48 |  |
-| `towns_and_towers:village_ocean` | 138 | 0.9588 | 53 | 116 | 0.21 |  |
-| `antiquetradingship:antique_trading_ship` | 97 | 1.0 | 36 | 123 | 0.09 |  |
-| `blocky_siege:pillager_ship` | 57 | 1.0 | 120 | 160 | 0.56 |  |
-| `illager_viking_longship:illager_longship` | 148 | 1.0 | 45 | 96 | 0.22 |  |
-| `illagerwarship:warship` | 97 | 1.0 | 36 | 123 | 0.09 |  |
-| `unwrecked_ships:ship` | 73 | 1.0 | 60 | 150 | 0.16 |  |
-| `villager_rafts:raft_1` | 83 | 1.0 | 50 | 140 | 0.13 |  |
-| `villager_rafts:raft_2` | 83 | 1.0 | 50 | 140 | 0.13 |  |
-| `villager_rafts:raft_3` | 83 | 1.0 | 50 | 140 | 0.13 |  |
-| `creativeengineering:meta/pillager_fleet` | 1 | 1.0 | - | 138 | new |  |
-| `creativeengineering:meta/raft_convoy` | 1 | 1.0 | - | 148 | new |  |
+| `towns_and_towers:pillager_outpost_ocean` | 100 | 0.9618 | 110 | 141 | 0.61 |  |
+| `towns_and_towers:village_ocean` | 100 | 0.9588 | 53 | 141 | 0.14 |  |
+| `antiquetradingship:antique_trading_ship` | 100 | 1.0 | 36 | 124 | 0.08 |  |
+| `blocky_siege:pillager_ship` | 100 | 1.0 | 120 | 131 | 0.84 |  |
+| `illager_viking_longship:illager_longship` | 100 | 1.0 | 45 | 116 | 0.15 |  |
+| `illagerwarship:warship` | 100 | 1.0 | 36 | 124 | 0.08 |  |
+| `unwrecked_ships:ship` | 100 | 1.0 | 60 | 135 | 0.20 |  |
+| `villager_rafts:raft_1` | 100 | 1.0 | 50 | 135 | 0.14 |  |
+| `villager_rafts:raft_2` | 100 | 1.0 | 50 | 135 | 0.14 |  |
+| `villager_rafts:raft_3` | 100 | 1.0 | 50 | 135 | 0.14 |  |
+| `creativeengineering:meta/pillager_fleet` | 1 | 1.0 | - | 141 | new |  |
+| `creativeengineering:meta/raft_convoy` | 1 | 1.0 | - | 142 | new |  |
 
 ### `flotsam` -> `creativeengineering:group/flotsam`
 
@@ -283,7 +291,7 @@ Lone camps and cabins: the T&T wandering trader camp and every single-building h
 
 Grid: spacing 24, separation 12 (members never start closer than 13 chunks = 208 blocks apart). At most 1 structure per 24 x 24 chunks anywhere.
 
-Capped (old combined density above the group grid): 78 biome(s), 78% of the group's area. Largest: `terralith:yellowstone` 1 per 10 -> 24, `minecraft:plains` 1 per 8 -> 22, `minecraft:forest` 1 per 9 -> 25, `terralith:highlands` 1 per 8 -> 22, `terralith:rocky_mountains` 1 per 8 -> 22, `minecraft:meadow` 1 per 7 -> 24.
+Capped (old combined density above the group grid): 78 biome(s), 78% of the group's area. Largest: `terralith:yellowstone` 1 per 10 -> 23, `minecraft:plains` 1 per 8 -> 22, `minecraft:forest` 1 per 9 -> 24, `terralith:highlands` 1 per 8 -> 22, `terralith:rocky_mountains` 1 per 8 -> 22, `minecraft:meadow` 1 per 7 -> 22.
 
 | Structure | Weight | Frequency | Mod default 1 per | New 1 per | Ratio | Note |
 |---|---|---|---|---|---|---|
@@ -292,75 +300,76 @@ Capped (old combined density above the group grid): 78 biome(s), 78% of the grou
 | `beautify:botanist_house_savanna` | 100 | 1.0 | - | - | - | empty biome tag: never spawns unless a mod fills it at runtime |
 | `beautify:botanist_house_snowy` | 100 | 1.0 | - | - | - | empty biome tag: never spawns unless a mod fills it at runtime |
 | `beautify:botanist_house_taiga` | 100 | 1.0 | - | - | - | empty biome tag: never spawns unless a mod fills it at runtime |
-| `farmers_structures:aquacultures_beach` | 64 | 0.0307 | 86 | 427 | 0.04 |  |
-| `farmers_structures:aquacultures_common` | 42 | 1.0 | 63 | 167 | 0.14 |  |
-| `farmers_structures:cooks` | 183 | 0.417675 | 53 | 117 | 0.20 |  |
+| `farmers_structures:aquacultures_beach` | 100 | 0.0307 | 86 | 371 | 0.05 |  |
+| `farmers_structures:aquacultures_common` | 100 | 1.0 | 63 | 100 | 0.41 |  |
+| `farmers_structures:cooks` | 100 | 0.417675 | 53 | 146 | 0.13 |  |
 | `farmers_structures:cooks_moss` | 100 | 1.0 | - | - | - | no biome in this pack |
-| `farmers_structures:sushis` | 220 | 0.1058 | 71 | 74 | 0.94 |  |
-| `greek_villager_house:greek_house` | 73 | 1.0 | 45 | 91 | 0.24 |  |
-| `hobbit_house_:hobbit_house` | 69 | 1.0 | 45 | 149 | 0.09 |  |
-| `minecraft:igloo` | 389 | 0.502816 | 32 | 78 | 0.17 |  |
-| `old_swamp_fisherman_house:fisherman_house` | 247 | 0.147601 | 40 | 104 | 0.15 |  |
-| `sawmillhouse:sawmill` | 159 | 1.0 | 33 | 97 | 0.12 |  |
-| `simply_houses:forest_chapel` | 67 | 0.120438 | 171 | 412 | 0.17 |  |
-| `simply_houses:forest_fort` | 67 | 0.120438 | 171 | 412 | 0.17 |  |
-| `simply_houses:forest_house` | 135 | 0.1196 | 121 | 291 | 0.17 |  |
-| `simply_houses:forest_stonemason` | 135 | 0.1196 | 121 | 291 | 0.17 |  |
-| `simply_houses:plains_house` | 23 | 1.0 | 85 | 268 | 0.10 |  |
-| `simply_houses:plains_mansion` | 23 | 1.0 | 85 | 268 | 0.10 |  |
-| `simply_houses:taiga_forge` | 100 | 0.266606 | 122 | 236 | 0.27 |  |
-| `simply_houses:taiga_house` | 100 | 0.266606 | 122 | 236 | 0.27 |  |
-| `simply_houses:taiga_inn` | 200 | 0.266606 | 87 | 167 | 0.27 |  |
-| `simply_houses:taiga_woodcutter` | 200 | 0.266606 | 87 | 167 | 0.27 |  |
-| `small_viking_villager_house:small_viking_house` | 64 | 1.0 | 48 | 152 | 0.10 |  |
-| `small_villager_greenhouse:small_villager_greenhouse` | 72 | 1.0 | 45 | 148 | 0.09 |  |
-| `towns_and_towers:exclusives/village_wandering_trader_camp` | 423 | 0.36673 | 62 | 53 | 1.37 |  |
-| `villager_butcher_house:butcher_house` | 87 | 1.0 | 43 | 140 | 0.09 |  |
-| `villager_cartographer_house:villager_cartographer_house` | 91 | 1.0 | 42 | 137 | 0.09 |  |
-| `villager_cleric_house:villager_cleric_house` | 104 | 1.0 | 39 | 128 | 0.09 |  |
-| `villager_country_house:country_house` | 447 | 0.166203 | 50 | 90 | 0.31 |  |
-| `villager_farmer_house:villager_farmer_house` | 74 | 1.0 | 47 | 152 | 0.10 |  |
-| `villager_fletcher_house:villager_fletcher_house` | 109 | 1.0 | 38 | 125 | 0.09 |  |
-| `villager_flower_house:flower_house` | 781 | 0.273887 | 45 | 91 | 0.24 |  |
-| `villager_tannery:tannery` | 73 | 1.0 | 45 | 145 | 0.10 |  |
-| `ancient_enchantment_temple:temple` | 1 | 0.1264 | 45 | 95 | 0.22 |  |
-| `animal_barn:barn` | 116 | 1.0 | 45 | 119 | 0.14 |  |
-| `bighorsestable:big_horse_stable` | 98 | 1.0 | 40 | 125 | 0.10 |  |
-| `desert_village_temple:village_temple` | 110 | 0.293336 | 45 | 89 | 0.25 |  |
-| `desert_watchtower:watchtower` | 110 | 0.342886 | 45 | 87 | 0.27 |  |
-| `forest_watchtower:forest_watchtower` | 135 | 0.954795 | 40 | 95 | 0.18 |  |
-| `gothic_church:church` | 81 | 1.0 | 45 | 138 | 0.11 |  |
-| `llama_stable:llama_stable` | 62 | 1.0 | 45 | 111 | 0.16 |  |
-| `mini_clock_tower:mini_clock_tower` | 108 | 0.740947 | 43 | 88 | 0.24 |  |
-| `plains_villager_tents:big_villager_tent` | 116 | 1.0 | 45 | 119 | 0.14 |  |
-| `saloon:saloon` | 326 | 0.43779 | 28 | 45 | 0.38 |  |
-| `smallhorsestable:horse_stable` | 111 | 1.0 | 34 | 119 | 0.08 |  |
-| `snowy_tents:snowy_tent` | 284 | 1.0 | 23 | 64 | 0.13 |  |
-| `villager_archer_camp:villager_archer_camp` | 85 | 1.0 | 45 | 136 | 0.11 |  |
-| `villager_circus_tent:villager_circus_tent` | 84 | 1.0 | 45 | 137 | 0.11 |  |
-| `villager_fish_shop:fish_shop` | 17 | 1.0 | 45 | 145 | 0.10 |  |
-| `villager_fishermans_hut:villager_fishermans_hut` | 125 | 1.0 | 42 | 117 | 0.13 |  |
-| `villager_forge:villager_forge` | 116 | 1.0 | 45 | 122 | 0.14 |  |
-| `villager_gold_washing_facility:villager_gold_washing_facility` | 37 | 1.0 | 50 | 89 | 0.32 |  |
-| `villager_windmill:windmill` | 103 | 1.0 | 50 | 129 | 0.15 |  |
-| `watchtower_building:fresh_watchtower` | 160 | 1.0 | 67 | 85 | 0.62 |  |
-| `creativeengineering:meta/farmers_camp` | 1 | 1.0 | - | 144 | new |  |
-| `creativeengineering:meta/house_camp` | 1 | 1.0 | - | 107 | new |  |
-| `creativeengineering:meta/waysign_camps` | 1 | 1.0 | - | 120 | new |  |
-| `creativeengineering:meta/waysign_house_camp` | 1 | 1.0 | - | 132 | new |  |
+| `farmers_structures:sushis` | 100 | 0.1058 | 71 | 74 | 0.94 |  |
+| `greek_villager_house:greek_house` | 100 | 1.0 | 45 | 68 | 0.44 |  |
+| `hobbit_house_:hobbit_house` | 100 | 1.0 | 45 | 116 | 0.15 |  |
+| `minecraft:igloo` | 100 | 0.502816 | 32 | 112 | 0.08 |  |
+| `old_swamp_fisherman_house:fisherman_house` | 100 | 0.147601 | 40 | 125 | 0.10 |  |
+| `sawmillhouse:sawmill` | 100 | 1.0 | 33 | 115 | 0.08 |  |
+| `simply_houses:forest_chapel` | 100 | 0.120438 | 171 | 319 | 0.29 |  |
+| `simply_houses:forest_fort` | 100 | 0.120438 | 171 | 319 | 0.29 |  |
+| `simply_houses:forest_house` | 100 | 0.1196 | 121 | 320 | 0.14 |  |
+| `simply_houses:forest_stonemason` | 100 | 0.1196 | 121 | 320 | 0.14 |  |
+| `simply_houses:plains_house` | 100 | 1.0 | 85 | 131 | 0.42 |  |
+| `simply_houses:plains_mansion` | 100 | 1.0 | 85 | 131 | 0.42 |  |
+| `simply_houses:taiga_forge` | 100 | 0.266606 | 122 | 193 | 0.40 |  |
+| `simply_houses:taiga_house` | 100 | 0.266606 | 122 | 193 | 0.40 |  |
+| `simply_houses:taiga_inn` | 100 | 0.266606 | 87 | 193 | 0.20 |  |
+| `simply_houses:taiga_woodcutter` | 100 | 0.266606 | 87 | 193 | 0.20 |  |
+| `small_viking_villager_house:small_viking_house` | 100 | 1.0 | 48 | 100 | 0.23 |  |
+| `small_villager_greenhouse:small_villager_greenhouse` | 100 | 1.0 | 45 | 124 | 0.13 |  |
+| `towns_and_towers:exclusives/village_wandering_trader_camp` | 100 | 0.36673 | 62 | 76 | 0.66 |  |
+| `villager_butcher_house:butcher_house` | 100 | 1.0 | 43 | 127 | 0.12 |  |
+| `villager_cartographer_house:villager_cartographer_house` | 100 | 1.0 | 42 | 127 | 0.11 |  |
+| `villager_cleric_house:villager_cleric_house` | 100 | 1.0 | 39 | 127 | 0.09 |  |
+| `villager_country_house:country_house` | 100 | 0.166203 | 50 | 166 | 0.09 |  |
+| `villager_farmer_house:villager_farmer_house` | 100 | 1.0 | 47 | 127 | 0.14 |  |
+| `villager_fletcher_house:villager_fletcher_house` | 100 | 1.0 | 38 | 127 | 0.09 |  |
+| `villager_flower_house:flower_house` | 100 | 0.273887 | 45 | 223 | 0.04 |  |
+| `villager_tannery:tannery` | 100 | 1.0 | 45 | 119 | 0.14 |  |
+| `ancient_enchantment_temple:temple` | 100 | 0.1264 | 45 | 95 | 0.22 |  |
+| `animal_barn:barn` | 100 | 1.0 | 45 | 131 | 0.12 |  |
+| `bighorsestable:big_horse_stable` | 100 | 1.0 | 40 | 119 | 0.11 |  |
+| `desert_village_temple:village_temple` | 100 | 0.293336 | 45 | 77 | 0.34 |  |
+| `desert_watchtower:watchtower` | 110 | 0.342886 | 45 | 75 | 0.36 |  |
+| `forest_watchtower:forest_watchtower` | 135 | 0.954795 | 40 | 88 | 0.21 |  |
+| `gothic_church:church` | 100 | 1.0 | 45 | 119 | 0.14 |  |
+| `llama_stable:llama_stable` | 100 | 1.0 | 45 | 78 | 0.33 |  |
+| `mini_clock_tower:mini_clock_tower` | 108 | 0.740947 | 43 | 85 | 0.26 |  |
+| `plains_villager_tents:big_villager_tent` | 100 | 1.0 | 45 | 131 | 0.12 |  |
+| `saloon:saloon` | 100 | 0.43779 | 28 | 61 | 0.21 |  |
+| `smallhorsestable:horse_stable` | 100 | 1.0 | 34 | 124 | 0.08 |  |
+| `snowy_tents:snowy_tent` | 100 | 1.0 | 23 | 80 | 0.08 |  |
+| `villager_archer_camp:villager_archer_camp` | 100 | 1.0 | 45 | 124 | 0.13 |  |
+| `villager_circus_tent:villager_circus_tent` | 100 | 1.0 | 45 | 124 | 0.13 |  |
+| `villager_fish_shop:fish_shop` | 100 | 1.0 | 45 | 65 | 0.48 |  |
+| `villager_fishermans_hut:villager_fishermans_hut` | 100 | 1.0 | 42 | 127 | 0.11 |  |
+| `villager_forge:villager_forge` | 100 | 1.0 | 45 | 127 | 0.13 |  |
+| `villager_gold_washing_facility:villager_gold_washing_facility` | 100 | 1.0 | 50 | 41 | 1.51 |  |
+| `villager_windmill:windmill` | 100 | 1.0 | 50 | 127 | 0.16 |  |
+| `watchtower_building:fresh_watchtower` | 160 | 1.0 | 67 | 79 | 0.71 |  |
+| `creativeengineering:meta/farmers_camp` | 1 | 1.0 | - | 137 | new |  |
+| `creativeengineering:meta/house_camp` | 1 | 1.0 | - | 101 | new |  |
+| `creativeengineering:meta/waysign_camps` | 1 | 1.0 | - | 128 | new |  |
+| `creativeengineering:meta/waysign_house_camp` | 1 | 1.0 | - | 124 | new |  |
 | `campsite_structures:armorer_campsite` | 60 | 1.0 | 32 | 161 | 0.04 |  |
 | `campsite_structures:butcher_campsite` | 60 | 1.0 | 32 | 161 | 0.04 |  |
 | `campsite_structures:cartographer_campsite` | 60 | 1.0 | 32 | 161 | 0.04 |  |
 | `campsite_structures:cleric_campsite` | 60 | 1.0 | 32 | 161 | 0.04 |  |
 | `campsite_structures:farmer_campsite` | 60 | 1.0 | 32 | 161 | 0.04 |  |
-| `campsite_structures:fisher_campsite` | 15 | 1.0 | 32 | 155 | 0.04 |  |
-| `eugene:camp` | 148 | 1.0 | 59 | 91 | 0.42 |  |
-| `farmers_structures:aquacultures_cod` | 100 | 1.0 | 103 | 108 | 0.91 |  |
-| `farmers_structures:cacaos` | 1 | 0.1561 | 86 | 86 | 1.00 |  |
-| `farmers_structures:fishs_stew` | 387 | 1.0 | 48 | 55 | 0.74 |  |
-| `farmers_structures:ratatouilles` | 129 | 1.0 | 58 | 55 | 1.11 |  |
-| `farmers_structures:shepherd_farms` | 33 | 1.0 | 186 | 178 | 1.09 |  |
-| `farmers_structures:squids` | 389 | 1.0 | 50 | 64 | 0.62 |  |
+| `campsite_structures:fisher_campsite` | 15 | 1.0 | 32 | 168 | 0.04 |  |
+| `eugene:camp` | 100 | 1.0 | 59 | 99 | 0.35 |  |
+| `farmers_structures:aquacultures_cod` | 100 | 1.0 | 103 | 100 | 1.07 |  |
+| `farmers_structures:cacaos` | 100 | 0.1561 | 86 | 86 | 1.00 |  |
+| `farmers_structures:fishs_stew` | 100 | 1.0 | 48 | 80 | 0.36 |  |
+| `farmers_structures:ratatouilles` | 100 | 1.0 | 58 | 48 | 1.46 |  |
+| `farmers_structures:shepherd_farms` | 100 | 1.0 | 186 | 95 | 3.89 |  |
+| `farmers_structures:squids` | 100 | 1.0 | 50 | 116 | 0.19 |  |
+| `creativeengineering:meta/trader_caravan` | 1 | 1.0 | - | 193 | new |  |
 
 ### `sky` -> `creativeengineering:group/sky`
 
@@ -368,14 +377,19 @@ Sky structures: Cloud Storage's hot air balloons and sky temples, AE2 meteorites
 
 Grid: spacing 64, separation 16 (members never start closer than 17 chunks = 272 blocks apart). At most 1 structure per 64 x 64 chunks anywhere.
 
-Capped (old combined density above the group grid): 145 biome(s), 100% of the group's area. Largest: `terralith:cave/deep_caves` 1 per 20 -> 64, `minecraft:lush_caves` 1 per 20 -> 64, `minecraft:deep_ocean` 1 per 19 -> 64, `minecraft:deep_cold_ocean` 1 per 19 -> 64, `minecraft:deep_lukewarm_ocean` 1 per 19 -> 64, `minecraft:ocean` 1 per 19 -> 64.
+Capped (old combined density above the group grid): 145 biome(s), 100% of the group's area. Largest: `terralith:cave/deep_caves` 1 per 20 -> 57, `minecraft:lush_caves` 1 per 20 -> 57, `minecraft:deep_ocean` 1 per 19 -> 59, `minecraft:deep_cold_ocean` 1 per 19 -> 59, `minecraft:deep_lukewarm_ocean` 1 per 19 -> 59, `terralith:cave/andesite_caves` 1 per 20 -> 57.
 
 | Structure | Weight | Frequency | Mod default 1 per | New 1 per | Ratio | Note |
 |---|---|---|---|---|---|---|
-| `ae2:meteorite` | 100 | 0.985 | 32 | 134 | 0.06 |  |
-| `cloudstorage:big_balloon` | 100 | 0.985 | 32 | 134 | 0.06 |  |
-| `cloudstorage:sky_temple` | 100 | 0.985 | 40 | 134 | 0.09 |  |
-| `skyvillages:skyvillage` | 299 | 1.0 | 70 | 91 | 0.60 |  |
+| `ae2:meteorite` | 100 | 0.985 | 32 | 121 | 0.07 |  |
+| `cloudstorage:big_balloon` | 100 | 0.985 | 32 | 121 | 0.07 |  |
+| `cloudstorage:sky_temple` | 100 | 0.985 | 40 | 121 | 0.11 |  |
+| `skyvillages:skyvillage` | 100 | 1.0 | 70 | 128 | 0.30 |  |
+| `creativeengineering:meta/balloon_fleet` | 1 | 1.0 | - | 222 | new |  |
+| `creativeengineering:meta/cloud_balloons` | 1 | 1.0 | - | 272 | new |  |
+| `creativeengineering:meta/cloud_cluster` | 1 | 1.0 | - | 222 | new |  |
+| `creativeengineering:meta/sky_village_islands` | 1 | 1.0 | - | - | - | empty biome tag: never spawns unless a mod fills it at runtime |
+| `creativeengineering:meta/meteor_shower` | 1 | 1.0 | - | - | - | empty biome tag: never spawns unless a mod fills it at runtime |
 
 ### `nether_ruins` -> `creativeengineering:group/nether_ruins`
 
@@ -385,10 +399,10 @@ Grid: spacing 14, separation 7 (members never start closer than 8 chunks = 128 b
 
 | Structure | Weight | Frequency | Mod default 1 per | New 1 per | Ratio | Note |
 |---|---|---|---|---|---|---|
-| `philipsruins:nether_lava_ruins` | 100 | 0.5993 | 52 | 36 | 2.06 |  |
-| `philipsruins:sealedruinedghaststatue1` | 100 | 0.5993 | 52 | 36 | 2.06 |  |
-| `philipsruins:start_nether_dungeon` | 100 | 0.5993 | 52 | 36 | 2.06 |  |
-| `twigs:bloodstone_obelisk` | 194 | 1.0 | 20 | 22 | 0.80 |  |
+| `philipsruins:nether_lava_ruins` | 100 | 0.5993 | 52 | 34 | 2.31 |  |
+| `philipsruins:sealedruinedghaststatue1` | 100 | 0.5993 | 52 | 34 | 2.31 |  |
+| `philipsruins:start_nether_dungeon` | 100 | 0.5993 | 52 | 34 | 2.31 |  |
+| `twigs:bloodstone_obelisk` | 100 | 1.0 | 20 | 28 | 0.51 |  |
 
 ### `way_signs` -> `creativeengineering:group/way_signs`
 
@@ -398,7 +412,7 @@ Grid: spacing 19, separation 10 (members never start closer than 11 chunks = 176
 
 | Structure | Weight | Frequency | Mod default 1 per | New 1 per | Ratio | Note |
 |---|---|---|---|---|---|---|
-| `supplementaries:way_sign` | 1 | 1.0 | 32 | 20 | 2.52 |  |
+| `supplementaries:way_sign` | 100 | 1.0 | 32 | 20 | 2.52 |  |
 
 ### `vehicles` -> `creativeengineering:group/vehicles`
 
@@ -406,7 +420,7 @@ Vehicles (hostile, 2026-10-14, plan 7.4.5): the 6 Illager Siege Weapons camps (m
 
 Grid: spacing 52, separation 16 (members never start closer than 17 chunks = 272 blocks apart). At most 1 structure per 52 x 52 chunks anywhere. Excluded within 4 chunks of `creativeengineering:group/settlements` grid slots.
 
-Capped (old combined density above the group grid): 75 biome(s), 95% of the group's area. Largest: `terralith:yellowstone` 1 per 20 -> 75, `minecraft:plains` 1 per 20 -> 75, `minecraft:dark_forest` 1 per 19 -> 55, `terralith:lush_desert` 1 per 20 -> 53, `terralith:brushland` 1 per 20 -> 75, `terralith:highlands` 1 per 20 -> 75.
+Capped (old combined density above the group grid): 75 biome(s), 95% of the group's area. Largest: `terralith:yellowstone` 1 per 20 -> 75, `minecraft:plains` 1 per 20 -> 73, `minecraft:dark_forest` 1 per 19 -> 53, `terralith:lush_desert` 1 per 20 -> 52, `terralith:brushland` 1 per 20 -> 73, `terralith:highlands` 1 per 20 -> 75.
 
 | Structure | Weight | Frequency | Mod default 1 per | New 1 per | Ratio | Note |
 |---|---|---|---|---|---|---|
@@ -418,6 +432,8 @@ Capped (old combined density above the group grid): 75 biome(s), 95% of the grou
 | `illager_siege_weapons:reinforced_battering_ram` | 100 | 1.0 | 50 | 165 | 0.09 |  |
 | `illager_siege_weapons:siege_tower` | 100 | 1.0 | 50 | 165 | 0.09 |  |
 | `illager_siege_weapons:trebuchet` | 100 | 1.0 | 50 | 165 | 0.09 |  |
+| `creativeengineering:meta/pillager_caravan` | 1 | 1.0 | - | 269 | new |  |
+| `creativeengineering:meta/witch_cart_caravan` | 1 | 1.0 | - | 158 | new |  |
 
 ### `desert_temples` -> `creativeengineering:group/desert_temples`
 
@@ -425,12 +441,14 @@ Desert temples: YUNG's desert temple and the vanilla desert pyramid, which takes
 
 Grid: spacing 32, separation 20 (members never start closer than 21 chunks = 336 blocks apart). At most 1 structure per 32 x 32 chunks anywhere.
 
-Capped (old combined density above the group grid): 9 biome(s), 100% of the group's area. Largest: `terralith:lush_desert` 1 per 24 -> 60, `terralith:red_oasis` 1 per 24 -> 60, `terralith:desert_canyon` 1 per 24 -> 60, `minecraft:desert` 1 per 24 -> 60, `terralith:desert_spires` 1 per 24 -> 60, `terralith:desert_oasis` 1 per 24 -> 60.
+Capped (old combined density above the group grid): 9 biome(s), 100% of the group's area. Largest: `terralith:lush_desert` 1 per 24 -> 52, `terralith:red_oasis` 1 per 24 -> 52, `terralith:desert_canyon` 1 per 24 -> 52, `minecraft:desert` 1 per 24 -> 52, `terralith:desert_spires` 1 per 24 -> 52, `terralith:desert_oasis` 1 per 24 -> 52.
 
 | Structure | Weight | Frequency | Mod default 1 per | New 1 per | Ratio | Note |
 |---|---|---|---|---|---|---|
-| `minecraft:desert_pyramid` | 1 | 1.0 | 32 | 190 | 0.03 | replaces `betterdeserttemples:desert_temple` in 10% of its slots |
-| `betterdeserttemples:desert_temple` | 40 | 0.285 | 35 | 63 | 0.30 |  |
+| `minecraft:desert_pyramid` | 1 | 1.0 | 32 | 268 | 0.01 | replaces `betterdeserttemples:desert_temple` in 5% of its slots |
+| `betterdeserttemples:desert_temple` | 100 | 0.285 | 35 | 64 | 0.29 |  |
+| `creativeengineering:meta/meteorite_desert_pyramid` | 1 | 1.0 | - | 212 | new | replaces `betterdeserttemples:desert_temple` in 8% of its slots |
+| `creativeengineering:meta/desert_temple_ruins` | 1 | 1.0 | - | 101 | new |  |
 
 ## Standalone sets (changed ones only)
 
@@ -460,15 +478,15 @@ Capped (old combined density above the group grid): 9 biome(s), 100% of the grou
 | `philipsruins:end_ruins` | 1 | 1.0 | 49 | 35 | 2.00 |  |
 | `philipsruins:end_gate_fortress` | 1 | 1.0 | 49 | 35 | 2.00 |  |
 | `philipsruins:lost_soul_city` | 1 | 1.0 | 80 | 38 | 4.50 |  |
-| `philipsruins:lost_soul_dungeon` | 86 | 0.991 | 120 | 73 | 2.67 |  |
-| `philipsruins:bone_dungeon` | 116 | 0.29382 | 61 | 43 | 1.99 |  |
-| `philipsruins:underground_structures` | 582 | 0.9885 | 120 | 28 | 18.00 |  |
-| `philipsruins:sculk_dungeon` | 86 | 0.991 | 120 | 73 | 2.67 |  |
-| `terralith:underground/oak_cabin` | 50 | 1.0 | 16 | 7 | 4.47 |  |
-| `terralith:underground/giant_bee_hive` | 78 | 0.4261 | 35 | 9 | 15.14 |  |
-| `terralith:underground/mining_outpost` | 713 | 0.1097 | 13 | 11 | 1.50 |  |
-| `terralith:underground/old_refinery` | 258 | 0.1166 | 18 | 14 | 1.63 |  |
-| `terralith:underground/sunken_tower` | 129 | 0.4277 | 22 | 7 | 10.05 |  |
-| `terralith:underground/witch_hut` | 44 | 1.0 | 23 | 8 | 8.65 |  |
+| `philipsruins:lost_soul_dungeon` | 1 | 0.991 | 120 | 46 | 6.74 |  |
+| `philipsruins:bone_dungeon` | 1 | 0.29382 | 61 | 43 | 2.00 |  |
+| `philipsruins:underground_structures` | 1 | 0.9885 | 120 | 46 | 6.73 |  |
+| `philipsruins:sculk_dungeon` | 1 | 0.991 | 120 | 46 | 6.74 |  |
+| `terralith:underground/oak_cabin` | 11 | 1.0 | 16 | 4 | 13.44 |  |
+| `terralith:underground/giant_bee_hive` | 2 | 0.4261 | 34 | 14 | 5.73 |  |
+| `terralith:underground/mining_outpost` | 13 | 0.1097 | 13 | 11 | 1.47 |  |
+| `terralith:underground/old_refinery` | 5 | 0.1166 | 18 | 14 | 1.57 |  |
+| `terralith:underground/sunken_tower` | 5 | 0.4277 | 22 | 9 | 5.75 |  |
+| `terralith:underground/witch_hut` | 4 | 1.0 | 23 | 6 | 13.44 |  |
 | `unwrecked_ships:nether_ship` | 1 | 1.0 (off) | 60 | - | 0.00 |  |
 

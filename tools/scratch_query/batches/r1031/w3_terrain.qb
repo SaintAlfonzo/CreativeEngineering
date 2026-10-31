@@ -1,0 +1,82 @@
+# Run 2026-10-31, worldgen block W3: terrain batch 4 placements, ocean geode floor patch, Sky Village addon houses.
+# prep: group B seed 8675309. Two worlds: W3a default toml (floorPatch SWAP), rows SQ-TER-02 .. SQ-SVA-04;
+# W3b fresh world with [worldgen.ocean_geodes] floorPatch = "CUT", row SQ-TER-06b. Placements are judged from
+# client screenshots at the logged positions (client block C1 opens a copy of this world), so most rows end LOOK.
+pace 2
+
+## SQ-TER-02 | ponds and the swamp fisherman house sit on a slope
+> pbot spawn qa 0 150 0 minecraft:overworld creative
+> execute positioned 2144 70 -2592 run locate biome minecraft:windswept_hills
+waitlog nearest minecraft:windswept_hills is at 300
+capture HL is at \[(-?\d+), (~|-?\d+), (-?\d+)\]
+> tp qa {HL1} 200 {HL3}
+sleep 25
+> execute positioned {HL1} 120 {HL3} run place structure farmers_structures:aquacultures_common
+> execute positioned {HL1+60} 120 {HL3} run place structure farmers_structures:aquacultures_carp
+> execute positioned {HL1-60} 120 {HL3} run place structure old_swamp_fisherman_house:fisherman_house
+reject (?i)failed to place|unknown structure
+look positions {HL1},{HL3} / +60 / -60: no square pad or air notch, water stays in the pond, rim flush with the slope; carp: no 4-block dip or plinth (ST-300)
+
+## SQ-TER-03 | Terralith spire in an ice biome hillside: no square notch
+> execute positioned 2144 70 -2592 run locate biome minecraft:snowy_slopes
+waitlog nearest minecraft:snowy_slopes is at 300
+capture IC is at \[(-?\d+), (~|-?\d+), (-?\d+)\]
+> tp qa {IC1} 220 {IC3}
+sleep 25
+> execute positioned {IC1} 150 {IC3} run place structure terralith:spire
+> execute positioned {IC1+120} 150 {IC3} run place structure terralith:spire
+reject (?i)failed to place
+look no 94x98 square cut into the hills round the base, snow on the upper ledges whole (ST-301)
+
+## SQ-TER-04 | level-three ruins and large-ruins meta on a slope: no grass slab pad
+> execute positioned {HL1} 120 {HL3+120} run place structure philipsruins:level_three_ruins
+> execute positioned {HL1+80} 120 {HL3+120} run place structure philipsruins:level_three_ruins
+> execute positioned {HL1} 120 {HL3+240} run place structure creativeengineering:meta/large_ruins
+reject (?i)failed to place
+look no grass slab around the walls; the large-ruins cluster looks the same (ST-302)
+
+## SQ-TER-06 | ocean geodes covered in the floor block (floorPatch SWAP)
+> execute positioned 0 70 0 run locate biome minecraft:deep_ocean
+waitlog nearest minecraft:deep_ocean is at 300
+capture GO is at \[(-?\d+), (~|-?\d+), (-?\d+)\]
+> chunky center {GO1} {GO3}
+> chunky radius 300
+> chunky start
+waitlog Task finished 1800
+> zq count {GO1-300} 20 {GO3-300} {GO1-150} 63 {GO3-150} minecraft:calcite
+> zq count {GO1-150} 20 {GO3-150} {GO1} 63 {GO3} minecraft:calcite
+> zq count {GO1} 20 {GO3} {GO1+150} 63 {GO3+150} minecraft:calcite
+> zq count {GO1-300} 20 {GO3-300} {GO1+300} 63 {GO3+300} minecraft:amethyst_block
+> zq count {GO1-300} 20 {GO3-300} {GO1+300} 63 {GO3+300} minecraft:smooth_basalt
+look zq "count" lines give the blocks and "on:" what they stand on; calcite and smooth basalt seen from the water (first block below water) should be about 0: fly 5 geode spots in the client block for the look (ST-305); prismarine geodes untouched. zq count reads loaded chunks only: run right after Chunky while they are still loaded, else forceload the box first
+
+## SQ-SVA-03 | sky villages get addon houses
+> locate structure skyvillages:skyvillage
+waitlog nearest skyvillages:skyvillage is at|type "?skyvillages:skyvillage 330
+capture SVL is at \[(-?\d+), (~|-?\d+), (-?\d+)\]
+> tp qa {SVL1} 200 {SVL3}
+sleep 25
+> zq count {SVL1-64} 100 {SVL3-64} {SVL1+64} 250 {SVL3+64} brewinandchewin:keg
+> zq count {SVL1-64} 100 {SVL3-64} {SVL1+64} 250 {SVL3+64} vinery:wine_press
+> zq count {SVL1-64} 100 {SVL3-64} {SVL1+64} 250 {SVL3+64} farmersdelight:rich_soil_farmland
+> execute positioned 3000 100 3000 run locate structure skyvillages:skyvillage
+> execute positioned -3000 100 3000 run locate structure skyvillages:skyvillage
+> execute positioned 3000 100 -3000 run locate structure skyvillages:skyvillage
+> execute positioned -3000 100 -3000 run locate structure skyvillages:skyvillage
+sleep 120
+look at least one addon house over the 5 villages (keg / press / FD farmland counts above 0 at one of them; tp + zq count for the other four), bridges and villagers attached (SVA-06)
+
+## SQ-SVA-04 | addon house chests roll Lootr loot tables
+look in the client block: open the chest in sky_village_farmersdelight_farm_0 and the 3 chests in sky_village_letsdo_brewery_1 (placed by SQ-SVA-02 in the A1 world copy): Lootr chests rolling sky_village_weaponsmith / butcher / shepherd (SVA-07)
+
+## SQ-TER-06b | floorPatch CUT: geodes cut flush, rim in the floor block (world W3b)
+> execute positioned 0 70 0 run locate biome minecraft:deep_ocean
+waitlog nearest minecraft:deep_ocean is at 300
+capture GC is at \[(-?\d+), (~|-?\d+), (-?\d+)\]
+> chunky center {GC1} {GC3}
+> chunky radius 300
+> chunky start
+waitlog Task finished 1800
+> zq count {GC1-300} 20 {GC3-300} {GC1+300} 63 {GC3+300} minecraft:calcite
+> zq count {GC1-300} 20 {GC3-300} {GC1+300} 63 {GC3+300} minecraft:amethyst_block
+look geodes cut flush with the floor, rim in the floor block; client look at 3 spots (ST-305 second half)

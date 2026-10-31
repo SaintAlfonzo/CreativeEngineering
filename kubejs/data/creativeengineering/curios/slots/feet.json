@@ -1,0 +1,8 @@
+{
+  "icon": "minecraft:item/empty_armor_slot_boots",
+  "size": 1,
+  "order": 50,
+  "validator_predicates": [
+    "curios:tag"
+  ]
+}

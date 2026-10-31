@@ -3,6 +3,7 @@ console.log('Rename Started')
 ClientEvents.lang('en_us', e => {
 	e.renameItem('create:brass_hand', 'Gold Hand')
 	e.renameItem('oldguns:mortar_and_pestle', 'Powder Pestle')
+	e.renameItem('oceansdelight:elder_guardian_roll', 'Elder Guardian Roll')
 	e.add('block.salt.salt_lamp', 'Large Salt Lamp')  // The Salt's lamp next to Vintage Delight's (salt merge)
 	// JEI info: Salt Blocks no longer grow salt since the salt merge (patcherMod block.SaltBlockTicks)
 	e.add('vintagedelight.jei.info.evaporator', 'Place next to water to grow Salt Layers on top. Salt Blocks do not grow salt.')
@@ -240,7 +241,7 @@ ClientEvents.lang('en_us', e => {
   // Immersive Weathering's nulch is the Nether counterpart of Fertile Soil (crops.md 2.4); the ghost pepper seed
   // tooltip names it too
   e.renameItem(global.item.nulch, 'Fertile Soul Soil')
-  e.add('item.vintagedelight.ghost_pepper.planting_soil', 'Plant on Soul Soil, Rich Soul Soil or Fertile Soul Soil')
+  e.add('item.vintagedelight.ghost_pepper.planting_soil', 'Requires a soul soil and the heat of the nether to grow')
   // Oceanic Delight's salmon eggs are Caviar, and its fish egg dishes are named after it (dishes/ocean #5, ocean_delight.md). Ancient
   // Fish Eggs keep their name. The JEI pages follow the fishing net's biome tables (ocean_delight.md 5.1, 5.2).
   e.renameItem(global.item.caviar, 'Caviar')
@@ -260,8 +261,47 @@ ClientEvents.lang('en_us', e => {
   e.renameItem(global.item.potato_noodle, 'Gnocchi')
   e.renameItem(global.item.potato_noodles, 'Creamy Gnocchi')
   e.renameItem(global.item.canned_potato_noodles, 'Canned Creamy Gnocchi')
+  // Vintage Delight's cucumber noodles take more vegetables (dishes/meals #43); sprite recoloured to the zucchini's
+  // palette in kubejs/assets/vintagedelight/textures/item/cucumber_noodles.png
+  e.renameItem(global.item.cucumber_noodles, 'Veggie Noodles')
   // Brewin's Pickled Pickles merged into the Pickled Sea Pickle (dishes/pickles-and-ferments #1): the can holds pickles
   e.renameItem(global.item.canned_pickled_pickles, 'Canned Pickles')
+
+  // Ender's Delight additions: the member jar's lang file shares a path with the ARR jar's and does not render
+  // (creativedelight/members #28); the KubeJS pack sits above both. Same names as the member's lang file.
+  var ed = {
+    'block.endersdelight.amberveil_mushroom': 'Amberveils',
+    'block.endersdelight.ethereal_saffron_bush': 'Ethereal Saffron',
+    'block.endersdelight.chorus_flame_block': 'Chorusflame',
+    'block.endersdelight.voidpepper_block': 'Void Pepper Sprout',
+    'item.endersdelight.crushed_voidpepper': 'Crushed Void Pepper',
+    'item.endersdelight.amberveil_stew': 'Amberveil Stew',
+    'item.endersdelight.amberveiled_curry': 'Amberveiled Curry',
+    'item.endersdelight.chicken_curry': 'Chicken Curry',
+    'item.endersdelight.steak_fries': 'Steak with French Fries',
+    'item.endersdelight.veil_of_flames_risotto': 'Veil of Flames Risotto',
+    'item.endersdelight.voidpepper': 'Void Pepper'
+  }
+  Object.keys(ed).forEach(k => e.add('endersdelight', k, ed[k]))
+  // Veggies Delight crop blocks have no lang key in the backport (ui/names #10)
+  ;['broccoli', 'cauliflower', 'garlic', 'sweet_potato', 'turnip', 'zucchini'].forEach(c =>
+    e.add('veggiesdelight', 'block.veggiesdelight.' + c + '_crop',
+      c.split('_').map(w => w.charAt(0).toUpperCase() + w.slice(1)).join(' ') + ' Plant'))
+
+  // Dish renames (scratchpad 2026-10-30). Ids unchanged.
+  e.renameItem(global.item.cheesy_pasta, 'Cheesy Fish Pasta')  // Brewin's; merges/dishes #5
+  e.renameItem(global.item.canned_cheesy_pasta, 'Canned Cheesy Fish Pasta')
+  e.add('block.displaydelight.bnc_cheesy_pasta', 'Placed Cheesy Fish Pasta')
+  e.renameItem(global.item.deluxe_burger, 'Loaded Burger')  // Vintage's "The Burger"; merges/dishes #10
+  e.add('block.supplementaries.pancake', 'Stackable Pancake')  // merges/baking #1
+  e.renameItem(global.item.jelly_bread, 'Bread with Jam')  // dishes/jams #3
+  e.renameItem(global.item.coffee_cheesecake, 'Coffee Pie')  // creativedelight/members #25
+  e.add('item.rusticdelight.coffee_cheesecake_slice', 'Slice of Coffee Pie')
+  // The Dirty Stuff: the leaf package and the tobacco package both read "Tobacco Package" (food/drugs #2)
+  e.add('item.the_dirty_stuff.tobacco_leafs_package', 'Bundle of Tobacco Leaves')
+  e.add('item.the_dirty_stuff.dried_tobacco_leafs_package', 'Bundle of Dried Tobacco Leaves')
+  e.add('item.the_dirty_stuff.dried_tobacco_leaf_package', 'Bundle of Dried Tobacco Leaves')
+  e.add('item.the_dirty_stuff.tobacco_package', 'Tobacco Bundle')
   // Cantaloupe merge (item_merges.md 2.10): Fruits Delight's hamimelon line is the Cantaloupe, Delightful's cantaloupe
   // (sand crop) the Mini Cantaloupe. Ids unchanged.
   e.renameItem(global.item.hamimelon, 'Cantaloupe')
@@ -286,6 +326,20 @@ ClientEvents.lang('en_us', e => {
   e.add('block.delightful.cantaloupe_plant', 'Mini Cantaloupe Plant')
   e.add('delightful.cantaloupe.desc', 'Found in deserts and badlands.')
   e.add('jei.delightful.info.cantaloupe_seeds', 'Mini Cantaloupe Seeds will sprout when planted in sand next to water.')
+
+  // Lunchbox tiers follow their textures (feature_writeup/lunchboxes.md). The container.* keys are the screen titles.
+  e.renameItem(global.item.copper_lunchbox, 'Copper Lunchbox')
+  e.add('item.solapplepie.container.lunchbox', 'Copper Lunchbox')
+  e.renameItem(global.item.iron_lunchbox, 'Iron Lunchbox')
+  e.add('item.solapplepie.container.golden_lunchbox', 'Iron Lunchbox')
+  e.add('item.solapplepie.netherite_lunchbox', 'Netherite Lunchbox')
+  e.add('item.solapplepie.container.netherite_lunchbox', 'Netherite Lunchbox')
+  // Create D&D asphalt is painted Immersive Petroleum asphalt (server_scripts/engineering/dreams_desires.js)
+  ;['white', 'orange', 'magenta', 'light_blue', 'yellow', 'lime', 'pink', 'gray', 'light_gray', 'cyan', 'purple',
+    'blue', 'brown', 'green', 'red', 'black'].forEach(c => {
+    var name = c.split('_').map(w => w.charAt(0).toUpperCase() + w.slice(1)).join(' ')
+    e.add('create_dd', 'block.create_dd.' + c + '_asphalt_block', name + ' Painted Asphalt')
+  })
 })
 
 console.log('Rename Finished')

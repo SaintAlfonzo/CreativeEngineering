@@ -338,8 +338,11 @@ global.removedItems = [
 	i.cherry_cream_soda,     // Environmental
 	i.dune_platter,          // Atmospheric
 	i.yucca_gateau_slice,    // Atmospheric
-	// Rustic Delight's fruit beignet (dishes/meals #19); recipes removed in server_scripts/cooking/cooking.js
-	i.fruit_beignet,
+	// Tentacles of Ocean's, Oceanic and Miner's Delight (dishes/ocean #4); recipes go in the CD oceansdelight and
+	// miners_delight recipes.js, the dishes that used them take calamari
+	i.tentacles, i.baked_tentacles, i.tentacles_on_a_stick,
+	i.oceansdelight_tentacles, i.cut_tentacles, i.tentacle_on_a_stick, i.baked_tentacle_on_a_stick,
+	i.squid_tentacles, i.glow_squid_tentacles, i.grilled_squid_tentacles,
 	// Upgrade Aquatic bedrolls (gameplay/misc #10); recipes removed in server_scripts/other/misc_mods.js, leatherworker
 	// trade off in config/upgrade_aquatic-common.toml
 	i.bedroll,
@@ -377,6 +380,16 @@ global.removedItems = [
 	i.glow_jelly_bottle,
 	// No prickly pear source in the pack (Ecologics is not installed), so the juice cannot be made (delightful.md 2.6).
 	i.prickly_pear_juice,
+	// Neapolitan's Strawberry Banana Smoothie, the only smoothie (TODO dishes/sweets #5); recipe removed in Creative Delight
+	// neapolitan/recipes.js
+	i.strawberry_banana_smoothie,
+	// Neapolitan's chimpanzee is off (neapolitan-common.toml group chance 0; Alex's Mobs' capuchin is the pack's
+	// monkey, item_merges.md 2.1). Its head only dropped from a chimpanzee.
+	i.chimpanzee_spawn_egg,
+	i.chimpanzee_head,
+	// Upgrade Aquatic's Flare is gone with Restfulness and Insomnia (potions/effects #9); it only ever came from an
+	// Insomnia potion on a Phantom. server_scripts/other/removed_mobs.js stops any other spawn.
+	i.flare_spawn_egg,
 ];
 
 console.log(`[jeiRemove] Registered ${global.removedItems.length} removed items to global scope`)

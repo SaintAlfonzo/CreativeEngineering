@@ -8,7 +8,7 @@ import java.util.*;
  * to patcherMod), rules.raw.json / fits.raw.json (the biome rules and biome fits staged), report.md, tags.raw.json
  * (the creativeengineering:meta/* and fit structure tags its ServerEvents.tags handler adds) and biome_tags.raw.json
  * (the fit biome tags), replacements.raw.json (the replacement table staged to MetaSlots), biome_frequency.raw.json
- * (the group biome factors staged to StructureFrequencies). Usage: RhinoRun <instance root> <out dir> [nopatcher] [density=X] [groupsoff]
+ * (the group biome factors staged to StructureFrequencies). Usage: RhinoRun <instance root> <out dir> [nopatcher] [density=X] [groupsoff] [testoverrides]
  */
 public class RhinoRun {
 	static final Map<String, String> files = new TreeMap<>();
@@ -17,7 +17,7 @@ public class RhinoRun {
 	static final Map<String, List<String>> tags = new TreeMap<>();
 	static final Map<String, List<String>> biomeTags = new TreeMap<>();
 	static Path root;
-	static boolean noPatcher, groupsOff;
+	static boolean noPatcher, groupsOff, testOverrides;
 	static double density = 1;
 
 	public static class Host {
@@ -36,6 +36,7 @@ public class RhinoRun {
 		public boolean noPatcher() { return noPatcher; }
 		public double density() { return density; }
 		public boolean groups() { return !groupsOff; }
+		public boolean testOverrides() { return testOverrides; }
 	}
 
 	public static void main(String[] a) throws Exception {
@@ -43,6 +44,7 @@ public class RhinoRun {
 		for (int i = 2; i < a.length; i++) {
 			if (a[i].equals("nopatcher")) noPatcher = true;
 			else if (a[i].equals("groupsoff")) groupsOff = true;
+			else if (a[i].equals("testoverrides")) testOverrides = true;
 			else if (a[i].startsWith("density=")) density = Double.parseDouble(a[i].substring(8));
 		}
 		Context cx = Context.enter();
@@ -63,7 +65,8 @@ public class RhinoRun {
 			"  if (n.indexOf('MetaSlots') >= 0) { if (__HOST.noPatcher()) throw new Error('Class not found ' + n); return { stageReplacements: function (j) { __HOST.stageReplacements(j) } } }",
 			"  if (n.indexOf('WorldgenConfig') >= 0) { if (__HOST.noPatcher()) throw new Error('Class not found ' + n);",
 			"    return { structureDensity: function () { return __HOST.density() }, structureGroupsEnabled: function () { return __HOST.groups() },",
-			"      metaStructuresEnabled: function () { return true }, structureReplacementsEnabled: function () { return true } } }",
+			"      metaStructuresEnabled: function () { return true }, structureReplacementsEnabled: function () { return true },",
+			"      testOverrides: function () { return __HOST.testOverrides() } } }",
 			"  return { writeText: function (p, t) { __HOST.writeText(p, t) } } } };",
 			"var ServerEvents = { highPriorityData: function (fn) { __cb = fn }, tags: function (t, fn) { if (t == 'worldgen/structure') __tagsCb = fn; if (t == 'worldgen/biome') __biomeTagsCb = fn } };");
 		cx.evaluateString(scope, prelude, "prelude", 1, null);

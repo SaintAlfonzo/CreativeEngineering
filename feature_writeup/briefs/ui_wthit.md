@@ -12,7 +12,12 @@ One new row, `wthit #11`.
 ---
 
 ## wthit #11: Silk Touch required icon
-Status **Planned** / Work patcherMod / TODO `ui/wthit #11`
+Status **Testing** (built 2026-10-28, [wthit_lines.md](../wthit_lines.md) 2.11; rows #9 and #10 built the same day,
+sections 2.13 and 2.12) / Work patcherMod / TODO `ui/wthit #11`
+
+Outcome: option (b), the generated tag. The goal's "ore blocks that drop other items" wins over the proposed test below:
+iron ore needs Silk Touch to drop itself, so it shows the line. The tests are WL-37 and WL-38 (WL-34 went to the
+sheared grass line).
 
 ### Goal
 WTHIT shows a Silk Touch icon on blocks that only drop themselves with Silk Touch (glass, ice, ore blocks that drop

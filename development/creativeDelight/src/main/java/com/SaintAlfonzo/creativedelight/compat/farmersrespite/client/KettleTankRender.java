@@ -23,10 +23,11 @@ import net.minecraftforge.fluids.FluidStack;
 /** Drawing and text for the Kettle tank in its screen (farmers_respite.md K1, K4, K11). */
 public final class KettleTankRender {
 
-	/** 2.0's water bar area in the Kettle texture: x 34, y 17, 5 wide, 32 high (three steps there, four units here). */
-	private static final int BAR_X = 34;
+	/** 2.0's water bar area in the Kettle texture: x 34, y 17, 5 wide, 32 high (three steps there, four units here);
+	 * the pack draws it 1 px narrower on each side (x 35, 3 wide). */
+	private static final int BAR_X = 35;
 	private static final int BAR_Y = 17;
-	private static final int BAR_W = 5;
+	private static final int BAR_W = 3;
 	private static final int BAR_H = 32;
 	/** The container slot frame in the Kettle texture, reused for the boxes. */
 	private static final int FRAME_U = 85;

@@ -24,8 +24,8 @@ Geode+ 1.1.8 (biome tags, placed features, loot tables), Terralith 2.3.12 (geode
 | #4 extra woods | Planned | decide which D&D woods stay, then hide / remove the rest | **first**: #1 and #2 depend on which woods survive |
 | #1 smoked wood recipe | Planned | 4 smoking recipes (logs -> smoked logs) | **second**, with #4 (same file) |
 | #2 rubber chain | Planned | Myrtrees latex -> D&D rubber; sap only from rubber logs; rubber belts; one new NCH helper | **third** |
-| #3 rose quartz sand blasting | Planned | one D&D sanding recipe with chance outputs; one new NCH helper | any time (shares the helper work with #2) |
-| #6 painted asphalt | Planned | 16 recipes out, 16 in, a soap recipe, 16 names | any time |
+| #3 rose quartz sand blasting | Built 2026-10-30, EN-21 server half PASSED r1031 (2026-10-31, SQ-EN-21); EN-19, EN-20 in game | nothing; see the #3 section | done |
+| #6 painted asphalt | Built 2026-10-30, recipes scratch server PASSED r1031 (2026-10-31, SQ-DD-08); DD-08 in game | `server_scripts/engineering/dreams_desires.js` (16 recipes out, 16 in, soap recipe), 16 names in `namechanges.js` | done |
 | #5 glowstone geodes | Planned | the glowstone half is **done** (verified below); only a geode spawn review is left, mostly decisions | last; no code until decided |
 
 Build #2 and #3 together: both need D&D recipe types that no NCH helper covers (`create_dd:hydraulic_compacting`,
@@ -44,7 +44,7 @@ Tests: no writeup prefix exists for D&D. Proposed: a new writeup `feature_writeu
 
 ## dreams-and-desires #4: Extra woods
 
-Status Planned / Work KubeJS / data / `engineering/dreams-and-desires #4`
+Status Testing (built 2026-10-31: rose, rubber and spirit merged into oak, smoked stays; [recipes_wood.md](../recipes_wood.md) 2.6 "D&D woods", SQ-RW-28, RW-28) / Work KubeJS / data / `engineering/dreams-and-desires #4`
 
 ### Goal
 
@@ -139,7 +139,7 @@ no generated compat variants).
 
 ## dreams-and-desires #1: Smoked wood recipe
 
-Status Planned / Work KubeJS / `engineering/dreams-and-desires #1` · depends on #4 (smoked stays)
+Status Testing (built 2026-10-30, `wood/smoked_wood.js`; SQ-RW-23 to -26 queued) / Work KubeJS / `engineering/dreams-and-desires #1` · depends on #4 (smoked stays)
 
 ### Goal
 
@@ -200,7 +200,7 @@ D&D smoked logs are obtainable: smoke ordinary logs.
 
 ## dreams-and-desires #2: Rubber chain
 
-Status Planned / Work KubeJS / `engineering/dreams-and-desires #2` · depends on #4 (which rubber logs exist)
+Status Planned / Work KubeJS / `engineering/dreams-and-desires #2` · depends on #4 (which rubber logs exist; D&D rubber wood merged into oak 2026-10-31)
 
 ### Goal
 
@@ -311,7 +311,15 @@ rubber makes belts more cheaply than dried kelp.
 
 ## dreams-and-desires #3: Rose quartz sand blasting
 
-Status Planned / Work KubeJS / `engineering/dreams-and-desires #3`
+Status Built 2026-10-30 (patcherMod 1.1.04, installed 2026-10-31 00:44, not yet booted), untested / Work KubeJS + patcherMod / `engineering/dreams-and-desires #3`
+
+**Built 2026-10-30, differs from the plan below:** the user asked for exactly one item per item (80 % rough or 20 %
+polished, never both or neither), so the "accept independent rolls" decision is superseded. patcherMod adds an
+`"exclusive_results": true` flag for any Create processing recipe (one weighted pick per item, `fan/ExclusiveResults`,
+mixins on `ProcessingRecipeSerializer.readFromJson` and `ProcessingRecipe.rollResults`); `NCH.ddSanding(..., { exclusive: true })`
+writes it; the recipe is in `redstone.js` next to the other polished rose quartz routes. D&D's `SandingType.process` was
+read: it calls `RecipeApplier.applyRecipeOn(stack, recipe)`, so the per-item roll holds (gotcha below resolved).
+Writeup: [engineering.md](../engineering.md) 3, tests EN-19 to EN-21 (DD-07 is now EN-19).
 
 ### Goal
 
@@ -376,7 +384,7 @@ polished, so a loop of passes does the full job.
 
 ## dreams-and-desires #6: Painted asphalt
 
-Status Planned / Work KubeJS / resource pack / `engineering/dreams-and-desires #6` · speed half in
+Status Testing (built 2026-10-30, `engineering/dreams_desires.js`, SQ-DD-08 scratch server PASSED r1031 2026-10-31) / Work KubeJS / resource pack / `engineering/dreams-and-desires #6` · speed half in
 `gameplay/blockrunner #5`
 
 ### Goal

@@ -13,6 +13,7 @@ import net.minecraft.world.level.block.state.properties.IntegerProperty;
 import net.minecraft.world.level.gameevent.GameEvent;
 import net.minecraft.world.phys.shapes.CollisionContext;
 import net.minecraft.world.phys.shapes.VoxelShape;
+import net.minecraftforge.common.ForgeHooks;
 
 /** Chorusflame (1.1.4 ChorusFlameBlock): three stages, one stage per random tick that passes the soil tier's chance. */
 public class ChorusFlameBlock extends EndPlantBlock {
@@ -45,7 +46,8 @@ public class ChorusFlameBlock extends EndPlantBlock {
         BlockState soil = level.getBlockState(pos.below());
         if (!EndSoil.isSoil(soil)) return;
         double chance = EndSoil.isFast(soil) ? EAConfig.CHORUSFLAME_GROWTH_FAST.get() : EAConfig.CHORUSFLAME_GROWTH_SLOW.get();
-        if (random.nextDouble() < chance) {
+        // fire Forge's crop-grow event so the pack's crop seasons apply (patcherMod seasons/CropSeasons)
+        if (random.nextDouble() < chance && ForgeHooks.onCropsGrowPre(level, pos, state, true)) {
             BlockState grown = state.setValue(AGE, age + 1);
             level.setBlock(pos, grown, Block.UPDATE_CLIENTS);
             level.gameEvent(GameEvent.BLOCK_CHANGE, pos, GameEvent.Context.of(grown));

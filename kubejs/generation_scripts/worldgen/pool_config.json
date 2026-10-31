@@ -1618,6 +1618,20 @@
         "campsite_structures:fisher_campsite": { "original": 1, "current": 1, "enabled": true }
       }
     },
+    "creativeengineering:sky_island": {
+      "fallback": "minecraft:empty",
+      "elements": {
+        "sky_structures:grass_island": { "original": 2, "current": 2, "enabled": true },
+        "sky_structures:grass_island_acacia": { "original": 2, "current": 2, "enabled": true },
+        "sky_structures:grass_island_bees": { "original": 1, "current": 1, "enabled": true },
+        "sky_structures:grass_island_birch": { "original": 2, "current": 2, "enabled": true },
+        "sky_structures:grass_island_darkoak": { "original": 2, "current": 2, "enabled": true },
+        "sky_structures:grass_island_jungle": { "original": 2, "current": 2, "enabled": true },
+        "sky_structures:grass_island_oak": { "original": 2, "current": 2, "enabled": true },
+        "sky_structures:grass_island_spruce": { "original": 2, "current": 2, "enabled": true },
+        "sky_structures:sky_grass_blacksmith": { "original": 1, "current": 1, "enabled": true }
+      }
+    },
     "desert_village_temple:village_temple": {
       "fallback": "minecraft:empty",
       "elements": {
@@ -4815,7 +4829,7 @@
     "minecraft:village/desert/streets": {
       "fallback": "minecraft:village/desert/terminators",
       "elements": {
-        "beautify:botanist_house_desert": { "original": 1, "current": 1, "enabled": true },
+        "beautify:botanist_house_desert": { "original": 2, "current": 1, "enabled": true },
         "minecraft:village/desert/streets/corner_01": { "original": 3, "current": 3, "enabled": true },
         "minecraft:village/desert/streets/corner_02": { "original": 3, "current": 3, "enabled": true },
         "minecraft:village/desert/streets/crossroad_01": { "original": 3, "current": 3, "enabled": true },
@@ -5007,7 +5021,7 @@
     "minecraft:village/plains/streets": {
       "fallback": "minecraft:village/plains/terminators",
       "elements": {
-        "beautify:botanist_house_plains": { "original": 1, "current": 1, "enabled": true },
+        "beautify:botanist_house_plains": { "original": 2, "current": 1, "enabled": true },
         "minecraft:village/plains/streets/corner_01": { "original": 2, "current": 2, "enabled": true },
         "minecraft:village/plains/streets/corner_02": { "original": 2, "current": 2, "enabled": true },
         "minecraft:village/plains/streets/corner_03": { "original": 2, "current": 2, "enabled": true },
@@ -5214,7 +5228,7 @@
     "minecraft:village/savanna/streets": {
       "fallback": "minecraft:village/savanna/terminators",
       "elements": {
-        "beautify:botanist_house_savanna": { "original": 1, "current": 1, "enabled": true },
+        "beautify:botanist_house_savanna": { "original": 2, "current": 1, "enabled": true },
         "minecraft:village/savanna/streets/corner_01": { "original": 2, "current": 2, "enabled": true },
         "minecraft:village/savanna/streets/corner_03": { "original": 2, "current": 2, "enabled": true },
         "minecraft:village/savanna/streets/crossroad_02": { "original": 1, "current": 1, "enabled": true },
@@ -5433,7 +5447,7 @@
     "minecraft:village/snowy/streets": {
       "fallback": "minecraft:village/snowy/terminators",
       "elements": {
-        "beautify:botanist_house_snowy": { "original": 1, "current": 1, "enabled": true },
+        "beautify:botanist_house_snowy": { "original": 2, "current": 1, "enabled": true },
         "minecraft:village/snowy/streets/corner_01": { "original": 2, "current": 2, "enabled": true },
         "minecraft:village/snowy/streets/corner_02": { "original": 2, "current": 2, "enabled": true },
         "minecraft:village/snowy/streets/corner_03": { "original": 2, "current": 2, "enabled": true },
@@ -5640,7 +5654,7 @@
     "minecraft:village/taiga/streets": {
       "fallback": "minecraft:village/taiga/terminators",
       "elements": {
-        "beautify:botanist_house_taiga": { "original": 1, "current": 1, "enabled": true },
+        "beautify:botanist_house_taiga": { "original": 2, "current": 1, "enabled": true },
         "minecraft:village/taiga/streets/corner_01": { "original": 2, "current": 2, "enabled": true },
         "minecraft:village/taiga/streets/corner_02": { "original": 2, "current": 2, "enabled": true },
         "minecraft:village/taiga/streets/corner_03": { "original": 2, "current": 2, "enabled": true },
@@ -12840,7 +12854,16 @@
     "skyvillages:skyvillage_deco": {
       "fallback": "minecraft:empty",
       "elements": {
-        "minecraft:empty": { "original": 5, "current": 5, "enabled": true }
+        "minecraft:empty": { "original": 5, "current": 5, "enabled": true },
+        "skyvillages:letsdo_brewery/sky_village_letsdo_brewery_deco_0": { "original": 1, "current": 1, "enabled": true },
+        "skyvillages:letsdo_brewery/sky_village_letsdo_brewery_deco_1": { "original": 1, "current": 1, "enabled": true },
+        "skyvillages:letsdo_brewery/sky_village_letsdo_brewery_deco_2": { "original": 1, "current": 1, "enabled": true },
+        "skyvillages:letsdo_brewery/sky_village_letsdo_brewery_deco_3": { "original": 1, "current": 1, "enabled": true },
+        "skyvillages:letsdo_brewery/sky_village_letsdo_brewery_deco_4": { "original": 1, "current": 1, "enabled": true },
+        "skyvillages:letsdo_brewery/sky_village_letsdo_brewery_deco_5": { "original": 1, "current": 1, "enabled": true },
+        "skyvillages:letsdo_brewery/sky_village_letsdo_brewery_deco_6": { "original": 1, "current": 1, "enabled": true },
+        "skyvillages:letsdo_brewery/sky_village_letsdo_brewery_deco_7": { "original": 1, "current": 1, "enabled": true },
+        "skyvillages:letsdo_brewery/sky_village_letsdo_brewery_deco_8": { "original": 1, "current": 1, "enabled": true }
       }
     },
     "skyvillages:skyvillage_houses": {
@@ -12851,8 +12874,16 @@
         "skyvillages:farm_1": { "original": 50, "current": 50, "enabled": true },
         "skyvillages:farm_2": { "original": 50, "current": 50, "enabled": true },
         "skyvillages:farm_3": { "original": 50, "current": 50, "enabled": true },
+        "skyvillages:farmersdelight/sky_village_farmersdelight_farm_0": { "original": 20, "current": 20, "enabled": true },
+        "skyvillages:farmersdelight/sky_village_farmersdelight_farm_1": { "original": 20, "current": 20, "enabled": true },
+        "skyvillages:farmersdelight/sky_village_farmersdelight_farm_2": { "original": 20, "current": 20, "enabled": true },
         "skyvillages:fletcher_1": { "original": 50, "current": 50, "enabled": true },
         "skyvillages:house_1": { "original": 50, "current": 50, "enabled": true },
+        "skyvillages:letsdo_brewery/sky_village_letsdo_brewery_0": { "original": 20, "current": 20, "enabled": true },
+        "skyvillages:letsdo_brewery/sky_village_letsdo_brewery_1": { "original": 20, "current": 20, "enabled": true },
+        "skyvillages:letsdo_vinery/sky_village_letsdo_vinery_0": { "original": 20, "current": 20, "enabled": true },
+        "skyvillages:letsdo_vinery/sky_village_letsdo_vinery_1": { "original": 20, "current": 20, "enabled": true },
+        "skyvillages:letsdo_vinery/sky_village_letsdo_vinery_2": { "original": 20, "current": 20, "enabled": true },
         "skyvillages:librarian_1": { "original": 50, "current": 50, "enabled": true },
         "skyvillages:librarian_2": { "original": 50, "current": 50, "enabled": true },
         "skyvillages:loom_1": { "original": 50, "current": 50, "enabled": true },

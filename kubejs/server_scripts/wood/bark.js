@@ -96,5 +96,8 @@ R.bulk('remove', [
 // Weathering's species bark (FD's, Quark Delight's and Abnormals Delight's replaced above) ──
 R.remove({ id: 'farmersdelight:paper_from_tree_bark' }, e)
 
+// ── Leather from fermenting bark (TODO recipes/wood #4): any Immersive Weathering bark, 4 + salt in the Pickling Jar ──
+R.vdPickling(Item.of(i.leather, 1), [i.any_bark, i.any_bark, i.any_bark, i.any_bark, i.salt], e, 'leather_from_bark')
+
 console.log('BarkServerScriptComplete')
 })

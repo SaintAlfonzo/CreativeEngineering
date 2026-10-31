@@ -1,7 +1,7 @@
 
 [sputter]
 	#Enables Sputter creation
-	enableSputter = true
+	enableSputter = false
 
 [arrows]
 	#Tags of blocks that cannot be painted

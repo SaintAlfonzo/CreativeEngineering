@@ -118,6 +118,78 @@
         "projection": "rigid",
         "element_type": "minecraft:single_pool_element"
       }
+    },
+    {
+      "weight": 20,
+      "element": {
+        "location": "skyvillages:farmersdelight/sky_village_farmersdelight_farm_0",
+        "processors": "skyvillages:house_processor",
+        "projection": "rigid",
+        "element_type": "minecraft:single_pool_element"
+      }
+    },
+    {
+      "weight": 20,
+      "element": {
+        "location": "skyvillages:farmersdelight/sky_village_farmersdelight_farm_1",
+        "processors": "skyvillages:house_processor",
+        "projection": "rigid",
+        "element_type": "minecraft:single_pool_element"
+      }
+    },
+    {
+      "weight": 20,
+      "element": {
+        "location": "skyvillages:farmersdelight/sky_village_farmersdelight_farm_2",
+        "processors": "skyvillages:house_processor",
+        "projection": "rigid",
+        "element_type": "minecraft:single_pool_element"
+      }
+    },
+    {
+      "weight": 20,
+      "element": {
+        "location": "skyvillages:letsdo_vinery/sky_village_letsdo_vinery_0",
+        "processors": "skyvillages:house_processor",
+        "projection": "rigid",
+        "element_type": "minecraft:single_pool_element"
+      }
+    },
+    {
+      "weight": 20,
+      "element": {
+        "location": "skyvillages:letsdo_vinery/sky_village_letsdo_vinery_1",
+        "processors": "skyvillages:house_processor",
+        "projection": "rigid",
+        "element_type": "minecraft:single_pool_element"
+      }
+    },
+    {
+      "weight": 20,
+      "element": {
+        "location": "skyvillages:letsdo_vinery/sky_village_letsdo_vinery_2",
+        "processors": "skyvillages:house_processor",
+        "projection": "rigid",
+        "element_type": "minecraft:single_pool_element"
+      }
+    },
+    {
+      "weight": 20,
+      "element": {
+        "location": "skyvillages:letsdo_brewery/sky_village_letsdo_brewery_0",
+        "processors": "skyvillages:house_processor",
+        "projection": "rigid",
+        "element_type": "minecraft:single_pool_element"
+      }
+    },
+    {
+      "weight": 20,
+      "element": {
+        "location": "skyvillages:letsdo_brewery/sky_village_letsdo_brewery_1",
+        "processors": "skyvillages:house_processor",
+        "projection": "rigid",
+        "element_type": "minecraft:single_pool_element"
+      }
     }
   ]
 }

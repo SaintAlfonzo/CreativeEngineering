@@ -104,8 +104,10 @@ def g11b(ctx):
 
 S = dict(
     id="S", title="flat lab, one site per scenario", world="flat", level="pgS",
-    props={"difficulty": "normal", "spawn-monsters": "false", "spawn-animals": "false"},
-    init=lambda ctx: gamerules_fixed(6000),
+    # spawn-animals=false would make vanilla discard every animal each tick (G09 measured an empty pen in g1);
+    # natural spawning is off through doMobSpawning instead
+    props={"difficulty": "normal", "spawn-monsters": "false", "spawn-animals": "true"},
+    init=lambda ctx: gamerules_fixed(6000) + ["gamerule doMobSpawning false"],
     scenarios=[
         dict(id="S00", title="baseline: one bot on an empty flat site", setup=lambda ctx: site_bot(ctx, 0),
              settle=60, measure=120),

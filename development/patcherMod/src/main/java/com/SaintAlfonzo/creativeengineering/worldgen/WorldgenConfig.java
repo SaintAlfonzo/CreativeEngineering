@@ -50,6 +50,8 @@ public final class WorldgenConfig {
 	public static boolean mushroomSpawnsEnabled() { return get(() -> wg().systems.mushroomSpawns.get(), true); }
 	public static boolean permafrostMergeEnabled() { return get(() -> wg().systems.permafrostMerge.get(), true); }
 	public static boolean templateBlockSwapsEnabled() { return get(() -> wg().systems.templateBlockSwaps.get(), true); }
+	public static boolean spawnBoxesEnabled() { return get(() -> wg().systems.spawnBoxes.get(), true); }
+	public static java.util.List<? extends String> removeSpawners() { return get(() -> wg().systems.removeSpawners.get(), java.util.List.of("minecraft:pillager")); }
 	public static boolean oceanGeodesEnabled() { return get(() -> wg().systems.oceanGeodes.get(), true); }
 	public static boolean placementPriorityEnabled() { return get(() -> wg().systems.placementPriority.get(), true); }
 	public static boolean mulberrySaplingEnabled() { return get(() -> wg().systems.mulberrySapling.get(), true); }
@@ -70,7 +72,7 @@ public final class WorldgenConfig {
 	public static int locateBatchTimeoutSeconds() { return get(() -> wg().locate.batchTimeoutSeconds.get(), 120); }
 	public static int locateCensusRegionChunks() { return get(() -> wg().locate.censusRegionChunks.get(), 32); }
 	public static int locateLoadTimeoutSeconds() { return get(() -> wg().locate.loadTimeoutSeconds.get(), 300); }
-	public static int locateSearchTimeoutSeconds() { return get(() -> wg().locate.searchTimeoutSeconds.get(), 120); }
+	public static int locateSearchTimeoutSeconds() { return get(() -> wg().locate.searchTimeoutSeconds.get(), 300); }
 
 	// ── distant (Distant Horizons generation) ────────────────────────────────
 	public static boolean distantClip() { return get(() -> wg().distant.clip.get(), true); }
@@ -83,19 +85,22 @@ public final class WorldgenConfig {
 
 	// ── meta structures ──────────────────────────────────────────────────────
 	public static boolean metaStructuresLog() { return get(() -> wg().metaStructures.log.get(), false); }
-	public static boolean metaAvoidCoasts() { return get(() -> wg().metaStructures.avoidCoasts.get(), false); }
+	public static boolean metaAvoidCoasts() { return get(() -> wg().metaStructures.avoidCoasts.get(), true); }
+	public static boolean metaKeepShortParts() { return get(() -> wg().metaStructures.keepShortParts.get(), true); }
 
 	// ── ocean geodes ─────────────────────────────────────────────────────────
 	public static int oceanGeodeLowestFloorY() { return get(() -> wg().oceanGeodes.lowestFloorY.get(), -8); }
 	public static int oceanGeodeClearance() { return get(() -> wg().oceanGeodes.clearance.get(), 2); }
 	public static int oceanGeodeSpread() { return get(() -> wg().oceanGeodes.spread.get(), 8); }
 	public static double oceanGeodeStayShare() { return get(() -> wg().oceanGeodes.stayShare.get(), 0.1); }
+	public static CEConfig.GeodeFloor oceanGeodeFloorPatch() { return get(() -> wg().oceanGeodes.floorPatch.get(), CEConfig.GeodeFloor.SWAP); }
 	public static java.util.List<? extends String> oceanGeodeUntouched() {
 		return get(() -> wg().oceanGeodes.untouched.get(), java.util.List.of("geode:budding_prismarine"));
 	}
 
 	// ── debug ────────────────────────────────────────────────────────────────
 	public static double structureDensity() { return get(() -> wg().debug.structureDensity.get(), 1.0); }
+	public static boolean testOverrides() { return get(() -> wg().debug.testOverrides.get(), false); }
 
 	// ── solvers ──────────────────────────────────────────────────────────────
 	public static int poolMaxFractionScale() { return get(() -> wg().pools.maxFractionScale.get(), 10); }
@@ -118,13 +123,18 @@ public final class WorldgenConfig {
 
 	// ── earth fill ───────────────────────────────────────────────────────────
 	public static int earthMaxOverWater() { return get(() -> wg().earthFill.maxOverWater.get(), 24); }
-	public static double earthMaxWaterSurplus() { return get(() -> wg().earthFill.maxWaterSurplus.get(), 0.5); }
+	public static double earthMaxWaterSurplus() { return get(() -> wg().earthFill.maxWaterSurplus.get(), 0.0); }
+	public static boolean earthFootprintAllPieces() { return get(() -> wg().earthFill.footprintAllPieces.get(), true); }
 	public static int earthBeardReach() { return get(() -> wg().earthFill.beardReach.get(), 6); }
 	public static int earthBuryReach() { return get(() -> wg().earthFill.buryReach.get(), 10); }
 	public static int earthMaxMoundHeight() { return get(() -> wg().earthFill.maxMoundHeight.get(), 8); }
+	public static boolean earthBeardFootprint() { return get(() -> wg().earthFill.beardFootprint.get(), false); }
 	public static boolean earthPrune() { return get(() -> wg().earthFill.prune.get(), true); }
 	public static int earthPruneMaxHanging() { return get(() -> wg().earthFill.pruneMaxHanging.get(), 8); }
 	public static int earthPruneMaxMound() { return get(() -> wg().earthFill.pruneMaxMound.get(), 4); }
+	public static int earthPruneMinWetColumns() { return get(() -> wg().earthFill.pruneMinWetColumns.get(), 16); }
+	public static boolean earthPruneWetJigsaws() { return get(() -> wg().earthFill.pruneWetJigsaws.get(), true); }
+	public static int earthFootprintMinWater() { return get(() -> wg().earthFill.footprintMinWater.get(), 9); }
 	public static List<? extends Integer> earthSizeBounds() { return get(() -> wg().earthFill.sizes.bounds.get(), List.of(150, 600, 2000)); }
 	/** [maxOverAir, maxMound] of each size, smallest first. */
 	public static List<List<? extends Integer>> earthSizeLimits() {

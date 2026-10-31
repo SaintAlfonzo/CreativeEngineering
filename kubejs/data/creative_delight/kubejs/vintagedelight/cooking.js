@@ -18,7 +18,7 @@ ServerEvents.recipes(e => {
 		// and nut milk (cooked preserves and a drink). Burgers are in "Burgers"; the oatmeal cookie bakes (baking.js).
 		;['vintagedelight:pb_j', 'vintagedelight:cucumber_salad', 'vintagedelight:stuffed_burrito',
 			'veggiesdelight:compat/vintagedelight/stuffed_burrito'].forEach(id => R.remove({ id: id }, e))
-		R.shapeless(i.pb_j, [i.t_bread, i.nut_mash_bottle, i.t_sweet_jam_bottles], e, 'pb_j_manual_only')
+		R.shapeless(i.pb_j, [i.t_bread, i.nut_mash_bottle, i.t_forge_jams], e, 'pb_j_manual_only')   // any jam (dishes/jams #3)
 		R.shapeless(i.cucumber_salad, [i.salad_ingredients, i.pickled_beetroot, i.pickled_onion, i.cucumber, i.bowl], e, 'cucumber_salad_manual_only')
 		var VTD_BURRITO_PEPPER = [i.ghost_pepper, i.t_roasted_bell_pepper]
 		R.shapeless(i.stuffed_burrito, [i.t_tortilla, i.beef_patty, i.salad_ingredients, i.tomato, i.any_cheese, VTD_BURRITO_PEPPER], e,

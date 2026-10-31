@@ -110,6 +110,16 @@ public class MetaTest {
 					&& parts.get(1).count().min() == 8 && parts.get(1).waterDepth() == 2 && parts.get(1).radius() == 6,
 					"driftwood_flotilla: optional raft + 8-16 driftwood over 2+ deep water");
 		}
+		MetaStructure struck = parsed.get("creativeengineering:meta/meteorite_village");
+		if (struck != null) {
+			MetaStructure.Part p = partsOf(struck).get(0);
+			check(p.overlap() && p.structures().orElseThrow().equals(List.of("#creativeengineering:meta/meteorites")) && p.distance().max() == 16,
+					"meteorite_village: the meteorite part overlaps the village");
+		}
+		check(villages == null || !partsOf(villages).get(0).overlap(), "overlap defaults to false");
+		MetaStructure siege = parsed.get("creativeengineering:meta/village_siege_camp");
+		if (siege != null) check(partsOf(siege).get(0).cluster() == 40 && partsOf(siege).get(0).spacing() == 18, "village_siege_camp: siege weapons clustered within 40");
+		check(villages == null || partsOf(villages).get(0).cluster() == 0, "cluster defaults to 0 (off)");
 
 		// 2. bad input is a codec error (structure_overrides.js checks the same, so it never reaches the game)
 		String base = "{\"biomes\":[],\"step\":\"surface_structures\",\"spawn_overrides\":{},\"parts\":[%s]}";
@@ -122,6 +132,9 @@ public class MetaTest {
 			{"{\"structures\":\"a:b\",\"count\":[3,1]}", "count [3, 1]"},
 			{"{\"structures\":\"#Not An Id\"}", "a bad tag"},
 			{"{\"structures\":\"a:b\",\"chance\":1.5}", "chance 1.5"},
+			{"{\"structures\":\"a:b\",\"overlap\":\"yes\"}", "overlap \"yes\""},
+			{"{\"features\":\"c:d\",\"cluster\":20}", "cluster on a feature part"},
+			{"{\"structures\":\"a:b\",\"cluster\":200}", "cluster past the reach"},
 		};
 		for (String[] b : bad) {
 			DataResult<MetaStructure> r = MetaStructure.CODEC.parse(ops, JsonParser.parseString(String.format(base, b[0])));

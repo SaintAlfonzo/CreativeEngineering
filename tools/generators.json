@@ -30,7 +30,7 @@
     "  build_deploy.py: stages a release",
     "  need arguments or a choice: biome_rarity_floor.py (floor values; rewrites the biome tuning), cd_move_diff.py",
     "    (snapshot / diff), decompile_mod.py, jar_diff.py, seabed_heights.py (a save), log_warnings_scan.py (a client",
-    "    log), diff_block_state_ranges.py (both sides' logs), echo_texture.py and potion_bucket_texture.py (one-off art)",
+    "    log), diff_block_state_ranges.py (both sides' logs), echo_texture.py, potion_bucket_texture.py and gen_lunchbox_looks.py (one-off art)",
     "  one-off rewrites of kubejs/data structures: port_structure_jars.py, lootr_fixed_containers.py",
     "  write mod resources, so a jar rebuild (not a restart) applies them: gen_bedspreads/elytra_pattern_compat.py and",
     "    gen_dd_dishes.py (patcherMod), gen_moobloom_variants.py (More Mooblooms), gen_compost_values.py (Creative",
@@ -233,6 +233,14 @@
       "apply": "report only"
     },
     {
+      "id": "silk_touch_blocks",
+      "script": "tools/gen_silk_touch_blocks.py",
+      "groups": ["loot", "wthit"],
+      "dumps": ["dumploot"],
+      "outputs": ["kubejs/generation_scripts/wthit/silk_touch_blocks.json"],
+      "apply": "/reload (block tag for the WTHIT Silk Touch icon)"
+    },
+    {
       "id": "loot_breakdown",
       "script": "tools/loot_breakdown.py",
       "groups": ["reports", "loot", "slow"],
@@ -432,6 +440,13 @@
       "apply": "report only"
     },
     {
+      "id": "ua_coral_growths",
+      "script": "tools/gen_ua_coral_growths.py",
+      "groups": ["core", "pack"],
+      "outputs": ["kubejs/data/immersive_weathering/block_growths"],
+      "apply": "/reload (Immersive Weathering reads block growths at data load)"
+    },
+    {
       "id": "jei_world",
       "script": "tools/gen_jei_world.py",
       "groups": ["jei"],
@@ -446,6 +461,22 @@
       "groups": ["reports", "jei"],
       "outputs": ["feature_writeup/jei_order_catalog.md"],
       "apply": "report only (reads kubejs/exported/jei_order.json, written at JEI start with CEConfig [jei] orderReport = true)"
+    },
+    {
+      "id": "item_physics_audit",
+      "script": "tools/item_physics_audit.py",
+      "groups": ["reports", "physics"],
+      "dumps": ["dumpitemsbymod", "dumptags", "dumpgear", "dumpphysics"],
+      "outputs": ["feature_writeup/item_physics_audit.md", "kubejs/generation_scripts/physics/item_physics_families.json"],
+      "apply": "report only (families are not applied to the physics tags yet; item_physics.md section 9)"
+    },
+    {
+      "id": "crop_season_audit",
+      "script": "tools/crop_season_audit.py",
+      "groups": ["reports", "food"],
+      "dumps": ["dumpcropgrowth", "dumptags", "dumpitemsbymod"],
+      "outputs": ["feature_writeup/crop_seasons_audit.md"],
+      "apply": "report only (crop season type per crop from crop_seasons.json, grow-event check; crops.md section 2.12.1)"
     }
   ]
 }

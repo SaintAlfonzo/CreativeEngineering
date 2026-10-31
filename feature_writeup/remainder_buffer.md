@@ -18,10 +18,10 @@ cooking pot?", and drink > tea "integrate with later bottle/bowl output buffer s
 | Design (3) | DECIDED 2026-10-18: D1-D5 as recommended (5) |
 | Cooking pot + kettle (mixins), oven (native), config `[cooking]` | BUILT 2026-10-18: patcherMod compiles and builds (reobf checked); 10 GameTests pass (6). DEPLOYED with 1.0.7; one leftover per item used (for the oven's ingredient counts) DEPLOYED with 1.0.8 (2026-10-19); not run in game (RB-01 to RB-11) |
 | Keg | BUILT 2026-10-19 in the port's `-03` (now the jar in `pack/manifest.json`), see 3.6; not tested |
-| WTHIT line "Holding: ..." | BUILT 2026-10-21 (patcherMod 1.1.01, `compat/WthitRemainderBuffer`, 3.3); not seen in game (WL-31) |
-| Oven client sync (leftovers vanished from the GUI) | FIXED 2026-10-21 (patcherMod 1.1.01, 3.4); GameTest RB-T11; not seen in game (RB-12) |
+| WTHIT line "Holding: ..." | BUILT 2026-10-21 (patcherMod 1.1.01, `compat/WthitRemainderBuffer`, 3.3), deployed with 1.1.01 (2026-10-22); not seen in game (WL-31) |
+| Oven client sync (leftovers vanished from the GUI) | FIXED 2026-10-21 (patcherMod 1.1.01, 3.4), deployed with 1.1.01; GameTest RB-T11; not seen in game (RB-12) |
 | Bowl count ("duplicate bowl", [TODO](todo/TODO.md) `cooking/kitchen #4`) | no duplication: RB-T13 counts bowls before and after on the pot (4 ways) and oven, all equal (3.1) |
-| Plating delay: a recycled container shows in the container slot before plating (`[cooking] recycleShowTicks`, [TODO](todo/TODO.md) `cooking/kitchen #13`) | BUILT 2026-10-21 (patcherMod 1.1.01, not deployed); GameTests RB-T14, RB-T15; not seen in game (RB-14) |
+| Plating delay: a recycled container shows in the container slot before plating (`[cooking] recycleShowTicks`, [TODO](todo/TODO.md) `cooking/kitchen #13`) | BUILT 2026-10-21 (patcherMod 1.1.01, deployed 2026-10-22); GameTests RB-T14, RB-T15; not seen in game (RB-14) |
 
 Files to open first:
 

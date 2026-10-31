@@ -36,6 +36,8 @@ feature are documented with that feature and only pointed to here.
 | 2.27 | Config-only (2026-10-22): JEI tooltip search behind `$`, Breezy wind particles x3, every Chalk symbol unlocked; Cosmetic Armor keep-on-death checked, unchanged | `jei-client.ini`, `breezy-client.toml`, `chalk-common.toml` (all in `configs_edited/root_config/`) | done, not deployed, untested: FX-25, FX-26 client only; FX-27 server half scratch server PASSED 2026-10-22 (SQ-GM-06); FX-28 in game |
 | 2.28 | Polymorph recipe choice in the Sophisticated Backpacks crafting upgrade | `compat/SophisticatedPolymorphCompat`, `compat/SophisticatedPolymorphClient`, `SophisticatedCraftingPolymorphMixin`, `SophisticatedUpgradeOpenMixin`, `PolymorphRecipeSelectionPacketMixin` | built 2026-10-22, jar not yet in `mods/`, untested: FX-35 to FX-38 in game |
 | 2.29 | Polymorph recipe choice in the IE Engineer's Crafting Table and the Pretty Pipes Crafting Terminal | `compat/CraftingMenuPolymorphCompat`, `compat/CraftingMenuPolymorphClient`, `IECraftingTablePolymorphMixin`, `PrettyPipesCraftingTerminalPolymorphMixin` | built 2026-10-22, jar not yet in `mods/`, untested: FX-39 to FX-42 in game |
+| 2.31 | Upgrade Aquatic coral grows like vanilla coral (Immersive Weathering growths) | [tools/gen_ua_coral_growths.py](../tools/gen_ua_coral_growths.py), `kubejs/data/immersive_weathering/block_growths/ua_*` | BUILT 2026-10-28; scratch r1031 (2026-10-31): growth files parse (SQ-UC-01), prismarine grows in a cold ocean (SQ-UC-03, weak PASS); acan growth unproven, the setup grew no vanilla coral either (SQ-UC-02 client check pending); FX-48 |
+| 2.32 | Falling blocks (anvil, sand, gravel) splash on entering water via Effective | `mixin/FallingBlockWaterSplashMixin` | BUILT 2026-10-28, untested (FX-49) |
 
 - **Pending:** nothing built and unshipped (2.22 went out with 1.0.8, 2026-10-19). FX-01 to FX-20 are new (the entries pointing elsewhere keep their tests
   there). Findings F1 to F6 (section 4); none needs a decision.
@@ -332,6 +334,40 @@ the vanilla texture). Off: nothing is swapped, moss is vanilla. Read at model lo
 - No jar or resource pack in the pack overrides the vanilla moss models (checked 2026-10-23); a later pack that does
   is replaced while `biomeTint` is on.
 
+### 2.31 Upgrade Aquatic coral growth
+
+Immersive Weathering grows fans, wall fans, coral and rarely wet sponge into the water around each vanilla coral
+block (`gameplay/misc #15`). It does this with one data file per kind, `block_growths/<kind>_coral.json`, and the five
+files differ only in the kind name. `tools/gen_ua_coral_growths.py` (`/cegen run ua_coral_growths`) copies IW's
+`brain_coral.json` once per living UA coral kind into `kubejs/data/immersive_weathering/block_growths/ua_<kind>_coral.json`.
+It finds the kinds from the UA jar: every kind with a block, coral, fan and wall fan, dead kinds excluded. That gives 11
+kinds: acan, branch, chrome, finger, moss, petal, pillow, prismarine, rock, silk, star.
+
+- IW's numbers are unchanged: chance 0.0005 per random tick; no growth with 6 or more matching blocks within 2;
+  sides give a wall fan 50 : wet sponge 1; up gives fan 25 : coral 25 : wet sponge 1 and is picked 3x as often as each
+  side. Only water is replaced, with a 0.8 chance.
+- Biome: the 10 reef kinds keep IW's `minecraft:warm_ocean`. UA 1.19.2 has no reef worldgen for them (no feature, no
+  biome modifier, no mixin), so they only exist where players place them. Prismarine coral generates in every ocean
+  (UA's `prismarine_coral` feature, `#minecraft:is_ocean`), so its growth uses that tag.
+- Recipes: UA already turns 4 corals or fans of a kind into its block, so IW's coral block recipes are not copied.
+- Dead coral blocks do not grow, as in IW. Elder prismarine coral is prismarine coral's dead form (user 2026-10-28), so
+  it gets no growth either (`DEAD` in the generator).
+- The Weathering and Growth JEI tab picks the files up after `/cegen run jei_world` (82 rows before this).
+
+### 2.32 Falling block water splash
+
+Entities splash when they enter water through `Entity.doWaterSplashEffect`, which the Effective mod hooks to draw its own
+splash model and droplets. `FallingBlockEntity.tick` never calls `baseTick`, so the water check never runs and anvils, sand,
+gravel and concrete powder (and any modded falling block) entered water silently. A scan of the 1.19.2 client jar found
+the same gap only in `EndCrystal`, `HangingEntity` and `Marker`; those are not fixed. `ExperienceOrb` overrides the
+splash as a no-op by design.
+
+- `mixin/FallingBlockWaterSplashMixin` (client list): at the tail of the tick it reads the fluid at the block position
+  and calls `doWaterSplashEffect` on the first tick in water. It does not call the vanilla water-state method, so falling
+  blocks get no water-current pushing. Size and sound scale with the block's speed as for other entities.
+- Effective's config: `splashes` in `config/effective_fg-client.toml` turns its model off; the vanilla splash sound and
+  bubbles still play.
+
 ## 3. What the pack changes
 
 Every entry above is a patcherMod mixin or class except 2.6 (KubeJS tag script), 2.14 (exposureBackport) and 2.27 (config only). Mixins on
@@ -372,17 +408,10 @@ reobfuscated with no refmap).
 - **Dropping the broken mods:** each is used; a mixin was cheaper.
 - **Real banner textures on beds and elytra:** wrong placement (2.2).
 
-### Planned from the scratchpad (2026-10-24)
-
-Brief: [briefs/gameplay_misc.md](briefs/gameplay_misc.md). Nothing here is built.
-
-- [TODO](todo/TODO.md) `gameplay/misc #15`: Immersive Weathering weathering on Upgrade Aquatic's coral. IW has one `block_growths/<kind>_coral.json` per vanilla
-  coral (warm ocean, fans and wall fans, wet sponge). UA 5.1.0 has 11 kinds (acan to star); generate matching growth files into
-  `kubejs/data/immersive_weathering/block_growths/` with a `/cegen` tool, with UA's reef biomes as the predicate (ids unverified).
-
 ## 5. File map
 
 All in patcherMod `src/main/java/com/SaintAlfonzo/creativeengineering/` unless noted:
+- 2.32 `mixin/FallingBlockWaterSplashMixin`
 - 2.1 `mixin/ForgivingVoidMixin`, `forgivingvoid/ForgivingVoidBridge`; 2.2 `mixin/BedspreadsBannerPatternMixin`, `mixin/CustomizableElytraBannerPatternMixin`, `compat/BannerPatternAtlasCompat`, [tools/gen_bedspreads_pattern_compat.py](../tools/gen_bedspreads_pattern_compat.py), [tools/gen_elytra_pattern_compat.py](../tools/gen_elytra_pattern_compat.py); 2.3 `mixin/ExcavationDrillItemMixin`, `mixin/DeforesterSawItemMixin`; 2.4 `mixin/SyncGlDebugOutputMixin`.
 - 2.6 [blocktags.js](../kubejs/server_scripts/tags/blocktags.js) lines 6-16; 2.7 `compat/DetailArmorBarCompat`, `compat/ArmorOverflowRenderer`, `mixin/ArmorBarRendererAccessor`, `mixin/ArmorBarRendererOverflowTickMixin`; 2.8 `mixin/SubMenuConfigScreenMixin`, `compat/StringEntry`; 2.9 `mixin/BonemealCharmMixin`, `util/BonemealCharms`, [equipmenttags.js](../kubejs/server_scripts/tags/equipmenttags.js).
 - 2.10 `util/BlockStateIdOverflow`, `mixin/SectionUpdateEncodeFixMixin`, `mixin/SectionUpdateNullStateMixin`, `mixin/BlockUpdateNullStateMixin`, `devtools/BlockStateSyncDebug`, [tools/diff_block_state_ranges.py](../tools/diff_block_state_ranges.py); 2.11 `mixin/SupplementariesBreezyCompatMixin`; 2.12 `mixin/LevelThreadSafeRandomMixin`; 2.13 `compat/AsyncMapTrades`, `compat/AsyncLocatorBridge`, `mixin/LCItemsForMapTradeMixin`, `mixin/CSSellingMapMixin`.
@@ -392,6 +421,7 @@ All in patcherMod `src/main/java/com/SaintAlfonzo/creativeengineering/` unless n
 - 2.28 `compat/SophisticatedPolymorphCompat`, `compat/SophisticatedPolymorphClient`, `mixin/SophisticatedCraftingPolymorphMixin`, `mixin/SophisticatedUpgradeOpenMixin`, `mixin/PolymorphRecipeSelectionPacketMixin`; compile dep `development/patcherMod/libs/polymorph-forge-0.46.6+1.19.2.jar` (copied from `mods/`, git-ignored).
 - 2.29 `compat/CraftingMenuPolymorphCompat`, `compat/CraftingMenuPolymorphClient`, `mixin/IECraftingTablePolymorphMixin`, `mixin/PrettyPipesCraftingTerminalPolymorphMixin`; compile deps `libs/ImmersiveEngineering-1.19.2-9.2.4-170.jar`, `libs/PrettyPipes-1.13.6.jar`.
 - 2.30 `block/MossTint`, `CEConfig.Moss`; `assets/creativeengineering/models/block/moss_block_tinted.json`, `moss_carpet_tinted.json`, `textures/block/moss_block_tinted.png` (grayscale made with a one-off PIL script: luminance / brightest pixel).
+- 2.31 [tools/gen_ua_coral_growths.py](../tools/gen_ua_coral_growths.py) writes `kubejs/data/immersive_weathering/block_growths/ua_*_coral.json` (generated, do not edit).
 
 ## 6. Offline checks
 
@@ -499,6 +529,13 @@ All in patcherMod `src/main/java/com/SaintAlfonzo/creativeengineering/` unless n
 - [ ] **FX-47 Ghost blocks after the long-shift encoder** (scratch server + client, then the live server): repeat
   FX-13 (an explosion among Quark / Every Compat blocks, high state ids) and a few vanilla blocks (low ids): every
   change shows; no "Error executing task on Client"; with `[debug.block_state_sync] enabled` no unresolved id.
+- [ ] **FX-48 Upgrade Aquatic coral grows** (scratch server, then in game): in a warm ocean, `/gamerule randomTickSpeed
+  1000`, place an acan coral block under water with open water around it: within a few minutes acan wall fans appear
+  on its sides and acan fans or acan coral on top, rarely a wet sponge; growth stops once 6 or more surround it. A
+  prismarine coral block in a cold or plain ocean grows prismarine fans the same way; an acan block there does not.
+  A dead acan coral block and an elder prismarine coral block grow nothing. After `/cegen run jei_world`, the Weathering and Growth tab has a row per UA
+  kind.
+- [ ] **FX-49 Falling block splash** (in game, client): over a pool, drop an anvil from height (`/summon falling_block ~ ~20 ~ {BlockState:{Name:"minecraft:anvil"},HurtEntities:1b}`) and sand from 2 blocks up. Each splashes once on entering the water (Effective splash model, droplets, splash sound) and the high drop splashes larger. No splash when it lands on dry ground; the block is not pushed sideways by the water.
 
 ## 8. History
 
@@ -537,6 +574,8 @@ All in patcherMod `src/main/java/com/SaintAlfonzo/creativeengineering/` unless n
 - 2026-10-26: F2 fixed (TODO `server #6`): `SectionUpdateEncodeFixMixin` writes the multi-block packet with a long
   shift instead of masking, no 2^20 ceiling. patcherMod 1.1.03 in `mods/`, not run; FX-47.
 - 2026-10-26: F3 closed: version-pinned fixes tracked in [deploy.md](deploy.md) "Mod updates" plus a staging warning; 2.8 corrected (the text-field mixin is silent on a renamed lambda, not loud).
+- 2026-10-28: 2.31 Upgrade Aquatic coral growth (`gameplay/misc #15`): 11 IW growth files from a `/cegen` generator; prismarine in every ocean, elder prismarine treated as dead. Data only, not run; FX-48.
+- 2026-10-28: 2.32 falling block water splash: client mixin calls `doWaterSplashEffect` once on entering water (Effective draws it); FallingBlockEntity only. Built, not run; FX-49.
 
 ## Owner ideas (scratchpad 2026-10-26)
 

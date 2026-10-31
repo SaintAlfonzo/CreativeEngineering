@@ -27,6 +27,7 @@ import net.satisfy.vinery.core.registry.GrapeTypeRegistry;
 import net.satisfy.vinery.core.registry.ObjectRegistry;
 import net.satisfy.vinery.core.wine.GrapeType;
 import org.jetbrains.annotations.NotNull;
+import net.minecraftforge.common.ForgeHooks;
 
 public class GrapeVineBlock extends VineBlock implements BonemealableBlock {
     public static final IntegerProperty AGE;
@@ -67,7 +68,9 @@ public class GrapeVineBlock extends VineBlock implements BonemealableBlock {
     @Override
     public void randomTick(BlockState state, ServerLevel level, BlockPos pos, RandomSource random) {
         int i = state.getValue(AGE);
-        if (i < 3 && random.nextInt(5) == 0 && level.getRawBrightness(pos.above(), 0) >= 9) {
+        // Port: fire Forge's crop-grow event so the pack's crop seasons apply (crops.md 2.12.1)
+        if (i < 3 && random.nextInt(5) == 0 && level.getRawBrightness(pos.above(), 0) >= 9
+                && ForgeHooks.onCropsGrowPre(level, pos, state, true)) {
             BlockState blockState = state.setValue(AGE, i + 1);
             level.setBlock(pos, blockState, 2);
             level.gameEvent(GameEvent.BLOCK_CHANGE, pos, GameEvent.Context.of(blockState));

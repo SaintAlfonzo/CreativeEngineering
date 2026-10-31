@@ -63,7 +63,8 @@ With the defaults: 24 pieces, about 12 blocks, 3 damage each; a mob standing clo
 
 - **F1. The player who lit the TNT is immune to its shrapnel. Your call.** The owner is excluded from hits. TNT lit by
   redstone, a dispenser, fire or another explosion has no owner and hits everyone. Keep (no self-damage for the
-  lighter), or include the owner.
+  lighter), or include the owner. Owner 2026-10-29: "keep (shrapnel hurts the igniter)"; the two halves disagree
+  (the code excludes the owner, `ShrapnelEntity#canHitEntity`), so confirm which is meant (TODO `gameplay/tnt-and-portal #2`).
 - **F2. Chain reactions multiply entities.** Every TNT in a chain fires its own 24 pieces: 50 TNT is 1,200 projectiles
   for about half a second. Not measured; lower `count` if a TNT crater lags the server.
 - **F3. Only vanilla TNT.** Modded explosives (IE, Create, PneumaticCraft) don't burst; adding one is a line in

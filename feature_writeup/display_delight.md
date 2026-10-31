@@ -1,7 +1,7 @@
 # Display Delight 1.7.0 port (Backported Display)
 
-Test prefix **DDP-** · Last updated **2026-10-25** · Status **BUILT 2026-10-25, installed in `mods/`, not deployed;
-not run in game (scratch test queued SQ-DDP, client checks CQ-DDP)**
+Test prefix **DDP-** · Last updated **2026-10-25** · Status **BUILT 2026-10-25, installed in `mods/`, Shipped in 1.1.03 (deployed to server and players 2026-10-26);
+boot check SQ-DDP-01 PASSED 2026-10-25, SQ-DDP-02 to 05 and CQ-DDP queued; not run in game**
 
 The pack's 1.19.2 port of Display Delight 1.7.0 (`development/backportedDisplay`, jar
 `backportedDisplay-1.7.0-ce-19.2-01.jar`, mod id `displaydelight`, display name "Display Delight (Backport)") replaces
@@ -128,7 +128,7 @@ prefix and rerun the tool if the mod is ever added). Whether each has a Forge 1.
 | `ctd_` | Cultural Delights (`culturaldelights`) | 31 | 6 / 18 / 7 | 29 | Eggplant Parmesan, Chicken Taco, Avocado Toast, Midori Roll, Rice Ball |
 | `acd_` | Aquaculture Delight (`aquaculturedelight`) | 18 | 15 / 1 / 2 | no | Fish and Chips, Halaszle, Bass Stew, Catfish Barbecue, Fish Fillet Roll |
 | `crd_` | Crabber's Delight (`crabbersdelight`) | 15 | 10 / 5 / 0 | no | Clam Chowder, Seafood Gumbo, Coconut Milk, Shrimp Skewer, Stuffed Nautilus Shell |
-| `lm_` | Large Meals (`largemeals`) | 13 | 13 / 0 / 0 | 13 | Omurice, Chicken Curry, Rice Pudding, Roasted Mutton Rack |
+| `lm_` | Large Meals (`largemeals`) | 13 | 13 / 0 / 0 | 13 | Omurice, Chicken Curry, Rice Pudding, Roasted Mutton Rack (port planned: [large_meals.md](large_meals.md) step 19) |
 | `pd_` | Pineapple Delight (`pineapple_delight`) | 6 | 4 / 0 / 2 | 4 | Pineapple Fried Rice, Pineapple Juice, Pineapple Cake slice |
 | `fd_` | Festive Delight (`festive_delight`) | 3 | 3 / 0 / 0 | 3 | Festive Chicken, Christmas Tea, Salmon Verrines |
 | **Total** | 8 mods | **163** | | **78** | |

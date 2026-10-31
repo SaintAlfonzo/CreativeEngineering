@@ -1,0 +1,348 @@
+# Run 2026-10-31, boot B1: fresh normal world (prep_srv.sh ... B spawn-animals=true spawn-monsters=true
+# difficulty=normal), toml [named_mobs] chance = 1.0 before boot. Seed 8675309 (spawn area mostly ocean, so rows
+# locate their biome and send the bot there). Locates go through the console: Async Locator answers later, hence
+# waitlog + capture. Bot "qa" spawns in creative so a drop from y 200 does no damage.
+pace 2
+
+## SQ-B1-BOOT | boot clean, bot up
+bootexpect Done \(
+bootreject (Mixin apply failed|InvalidInjectionException).*(creativeengineering|creative_delight)
+bootreject \[named_mobs\].*(?i)warn
+> pbot spawn qa 0 120 0 minecraft:overworld creative
+> pbot status
+expect ceperfbot ok
+
+## SQ-GF31-04 | fresh world: next year is Year 2 at the first Early Spring (TI-37 server half, new row)
+> cetime date
+> cetime date next year
+> cetime date
+expect Year 2, Early Spring, day 1
+> cetime date reset
+
+## SQ-TD-01 | reset
+> cetime date
+# units are singular (day, month, season, year): `40 days` is refused (TI-32 and the queue wrote days)
+> cetime date add 40 day
+> cetime date reset
+> cetime date
+> time query daytime
+expect Year 1, Early Spring, day 1 of 8, 7:42 am \(world day 1\)
+expect The time is [0-9]{1,2}$
+expect (?i)early spring
+
+## SQ-TD-02 | next / previous / restart
+> cetime date next month
+> cetime date
+> cetime date next month
+> cetime date
+> cetime date next month
+> cetime date
+> cetime date previous season
+> cetime date
+> cetime date add 3 day
+> cetime date
+> cetime date restart month
+> cetime date
+expect Mid Spring
+expect Late Spring
+expect Early Summer, day 1 of 8, 6:00 am
+expect Early Spring, day 4
+look order of the /cetime date answers: Mid Spring, Late Spring, Early Summer day 1 6:00 am, Early Spring day 1, Early Spring day 4, Early Spring day 1
+
+## SQ-TD-03 | set an exact date, no double step
+> cetime date set 3 mid_autumn 5 7:30 pm
+> cetime date
+> season
+sleep 30
+> cetime date
+expect Year 3, Mid Autumn, day 5 of 8, 7:30 pm \(world day 253\)
+count Mid Autumn, day 5 >= 2
+expect (?i)mid autumn
+
+## SQ-TD-04 | wine clock follows
+> wine clock set 0 days
+> cetime date add 1 month
+> wine time
+> cetime date add -1 month
+> wine time
+reject (?i)WARN.*(VintageClock|wine)
+look wine time reads 8 days after the forward step and about 0 after the backward one; the chat line "wine clock moved back" goes to the console too
+
+## SQ-TD-05 | every /cetime date change is logged
+count \[time\] /cetime date >= 8
+
+## SQ-NM-01 | naturally spawned cows, sheep, pigs get names (chance 1.0)
+> execute positioned 3000 70 3000 run locate biome minecraft:plains
+waitlog nearest minecraft:plains is at 300
+capture PL is at \[(-?\d+), (~|-?\d+), (-?\d+)\]
+> tp qa {PL1} 150 {PL3}
+sleep 40
+> execute at qa as @e[type=minecraft:cow,distance=..96] run data get entity @s CustomName
+> execute at qa as @e[type=minecraft:sheep,distance=..96] run data get entity @s CustomName
+> execute at qa as @e[type=minecraft:pig,distance=..96] run data get entity @s CustomName
+> execute at qa as @e[type=minecraft:cow,distance=..96,limit=1] run data get entity @s ForgeData
+> execute at qa as @e[type=minecraft:rabbit,distance=..96] run data get entity @s CustomName
+reject Accessing LegacyRandomSource from multiple threads
+expect creativeengineering:named_mob": 2b
+look every cow/sheep/pig answer is a name ("has the following entity data"); rabbits "Found no elements"; no animals at all = locate plains from another far origin
+
+## SQ-NM-02 | command spawns never roll
+# a failed `data get` inside `execute as` prints nothing: tag the cow and read it directly
+> execute at qa run summon minecraft:cow ~ ~ ~ {Tags:["qnm2"]}
+> data get entity @e[tag=qnm2,limit=1] CustomName
+expect Found no elements matching CustomName
+
+## SQ-NM-03 | a named cow dies cleanly
+> execute at qa run kill @e[type=minecraft:cow,limit=1,sort=furthest,distance=..96]
+reject (?i)NamedMobs.*(exception|error)
+expect (?i)named entity|died|was killed
+
+## SQ-MG-18 | no chimpanzees in a jungle; gorillas forage Neapolitan bananas
+> execute positioned 0 70 0 run locate biome minecraft:jungle
+waitlog nearest minecraft:jungle is at 300
+capture JG is at \[(-?\d+), (~|-?\d+), (-?\d+)\]
+> tp qa {JG1} 200 {JG3}
+sleep 20
+repeat 10
+> execute at qa run spreadplayers ~ ~ 1 24 false qa
+> execute at qa run place feature neapolitan:banana_plant ~ ~ ~
+end
+> execute at qa run tp qa ~ ~ ~
+> kill @e[type=neapolitan:chimpanzee]
+> execute at qa run summon alexsmobs:gorilla ~2 ~ ~
+> execute at qa run summon alexsmobs:gorilla ~-2 ~ ~
+> execute at qa run summon alexsmobs:gorilla ~ ~ ~2
+> time add 6000
+sleep 120
+> execute at qa if entity @e[type=item,nbt={Item:{id:"alexsmobs:banana"}},distance=..48]
+> execute at qa if entity @e[type=item,nbt={Item:{id:"neapolitan:banana"}},distance=..48]
+expect No entity was found
+look the chimp kill finds nothing; the alexsmobs banana check fails and the neapolitan one passes (if neither, gorillas did not forage in 2 min: zq count leaves near qa, wait longer); spreadplayers moves the bot across the canopy
+# `if entity ...nbt` and `place feature` left no log line on 10-31 B1: data get probes instead
+> execute at qa run tp qa ~ ~ ~
+sleep 1
+capture QA Teleported qa to (-?\d+)\.\d+, (-?\d+)\.\d+, (-?\d+)
+> zq count {QA1-32} {QA2-40} {QA3-32} {QA1+32} {QA2+20} {QA3+32} neapolitan:banana_stalk
+> execute at qa as @e[type=minecraft:item,distance=..48] run data get entity @s Item.id
+> execute at qa as @e[type=alexsmobs:gorilla,distance=..48] run data get entity @s HandItems
+reject alexsmobs:banana
+look at least one neapolitan:banana among the item ids or hands; banana_stalk count above 0 (plants placed)
+sleep 3
+
+## SQ-MG-19 | sugar gliders drop Neapolitan bananas
+> execute at qa run summon alexsmobs:sugar_glider ~1 ~ ~1
+> execute at qa run summon alexsmobs:sugar_glider ~-1 ~ ~1
+> execute at qa run summon alexsmobs:sugar_glider ~1 ~ ~-1
+sleep 120
+> execute at qa if entity @e[type=item,nbt={Item:{id:"alexsmobs:banana"}},distance=..48]
+> execute at qa if entity @e[type=item,nbt={Item:{id:"neapolitan:banana"}},distance=..48]
+look first check fails, second passes
+# `if entity ...nbt` and `place feature` left no log line on 10-31 B1: data get probes instead
+> execute at qa run tp qa ~ ~ ~
+sleep 1
+capture QA Teleported qa to (-?\d+)\.\d+, (-?\d+)\.\d+, (-?\d+)
+> zq count {QA1-32} {QA2-40} {QA3-32} {QA1+32} {QA2+20} {QA3+32} neapolitan:banana_stalk
+> execute at qa as @e[type=minecraft:item,distance=..48] run data get entity @s Item.id
+> execute at qa as @e[type=alexsmobs:sugar_glider,distance=..48] run data get entity @s HandItems
+reject alexsmobs:banana
+look at least one neapolitan:banana among the item ids or hands; banana_stalk count above 0 (plants placed)
+sleep 3
+
+## SQ-CS-09 | Fruits Delight apple sapling merges into Vinery's; no Fruits Delight apple trees
+> give qa fruitsdelight:apple_sapling
+> data get entity qa Inventory
+> execute positioned 0 70 0 run locate biome minecraft:flower_forest
+waitlog nearest minecraft:flower_forest is at 300
+capture FF is at \[(-?\d+), (~|-?\d+), (-?\d+)\]
+> tp qa {FF1} 200 {FF3}
+sleep 30
+> zq count {FF1-48} 40 {FF3-48} {FF1+48} 140 {FF3+48} fruitsdelight:apple_leaves
+reject fruitsdelight:apple_sapling
+bootexpect \[itemMerges\]
+look the inventory shows the Vinery apple sapling id; the leaves count is 0; the [itemMerges] boot line count includes the creative_delight pairs
+
+## CQ-FF-01 | firefly bushes in savanna, shrubland, brushland, mangrove and orchid swamps
+> execute positioned 0 70 0 run locate biome minecraft:savanna
+waitlog nearest minecraft:savanna is at 300
+capture SV is at \[(-?\d+), (~|-?\d+), (-?\d+)\]
+> tp qa {SV1} 200 {SV3}
+sleep 30
+> zq count {SV1-48} 40 {SV3-48} {SV1+48} 140 {SV3+48} fireflybushport:firefly_bush
+> execute positioned 0 70 0 run locate biome minecraft:mangrove_swamp
+waitlog nearest minecraft:mangrove_swamp is at 300
+capture MS is at \[(-?\d+), (~|-?\d+), (-?\d+)\]
+> tp qa {MS1} 200 {MS3}
+sleep 30
+> zq count {MS1-48} 40 {MS3-48} {MS1+48} 140 {MS3+48} fireflybushport:firefly_bush
+> execute positioned 0 70 0 run locate biome terralith:shrubland
+> execute positioned 0 70 0 run locate biome terralith:brushland
+> execute positioned 0 70 0 run locate biome terralith:orchid_swamp
+sleep 60
+# Terralith biomes (added 10-31 after the first pass counted only savanna and mangrove)
+> execute positioned 0 70 0 run locate biome terralith:shrubland
+waitlog nearest terralith:shrubland is at 300
+capture SH is at \[(-?\d+), (~|-?\d+), (-?\d+)\]
+> tp qa {SH1} 200 {SH3}
+sleep 30
+> zq count {SH1-48} 40 {SH3-48} {SH1+48} 140 {SH3+48} fireflybushport:firefly_bush
+> execute positioned 0 70 0 run locate biome terralith:brushland
+waitlog nearest terralith:brushland is at 300
+capture BR is at \[(-?\d+), (~|-?\d+), (-?\d+)\]
+> tp qa {BR1} 200 {BR3}
+sleep 30
+> zq count {BR1-48} 40 {BR3-48} {BR1+48} 140 {BR3+48} fireflybushport:firefly_bush
+> execute positioned 0 70 0 run locate biome terralith:orchid_swamp
+waitlog nearest terralith:orchid_swamp is at 300
+capture OS is at \[(-?\d+), (~|-?\d+), (-?\d+)\]
+> tp qa {OS1} 200 {OS3}
+sleep 30
+> zq count {OS1-48} 40 {OS3-48} {OS1+48} 140 {OS3+48} fireflybushport:firefly_bush
+look all five counts above 0
+sleep 3
+
+## SQ-PF16-03 | an underground bee hovers while no player is near
+> tp qa {PL1} 150 {PL3}
+sleep 10
+> fill {PL1-4} 20 {PL3-4} {PL1+4} 24 {PL3+4} minecraft:air
+> tp qa {PL1} 20 {PL3}
+> summon minecraft:bee {PL1} 22 {PL3+3}
+sleep 20
+> execute positioned {PL1} 22 {PL3+3} as @e[type=minecraft:bee,distance=..8,limit=1,sort=nearest] run data get entity @s Pos
+sleep 5
+> execute positioned {PL1} 22 {PL3+3} as @e[type=minecraft:bee,distance=..8,limit=1,sort=nearest] run data get entity @s Pos
+> tp qa {PL1} 150 {PL3+3}
+sleep 20
+> execute positioned {PL1} 22 {PL3+3} as @e[type=minecraft:bee,distance=..8,limit=1,sort=nearest] run data get entity @s Pos
+sleep 10
+> execute positioned {PL1} 22 {PL3+3} as @e[type=minecraft:bee,distance=..8,limit=1,sort=nearest] run data get entity @s Pos
+> tp qa {PL1} 20 {PL3}
+sleep 10
+> execute positioned {PL1} 22 {PL3+3} as @e[type=minecraft:bee,distance=..8,limit=1,sort=nearest] run data get entity @s Pos
+sleep 5
+> execute positioned {PL1} 22 {PL3+3} as @e[type=minecraft:bee,distance=..8,limit=1,sort=nearest] run data get entity @s Pos
+look reads 1-2 differ (qa near), reads 3-4 equal (qa 128 blocks above, same chunk, still entity-ticking), reads 5-6 differ
+
+## SQ-MCL-05 | forced level 2: no new monster more than 32 blocks above or below the player
+# needs [perf] mobCapForceLevel = 2 set in the toml BEFORE the boot (a running server does not reload the toml);
+# run on its own restart (A2: after a2_variants; B1: on the B1b boot), then set it back to -1
+> pbot spawn qm {PL1} 120 {PL3} minecraft:overworld survival
+# fresh boot: nothing spawns near a just-joined bot for about 2.5 min (10-31): wait it out
+sleep 160
+> time set 18000
+> kill @e[type=#zq:monsters]
+sleep 120
+> execute at qm as @e[type=#zq:monsters,distance=..128] run data get entity @s Pos[1]
+> execute at qm run data get entity qm Pos[1]
+look every monster Y within 32 of qm's Y; qm stands in plains over caves
+> pbot remove qm
+> time set noon
+
+## SQ-UC-02 | acan coral grows in a warm ocean, dead one does not
+> execute positioned 0 70 0 run locate biome minecraft:warm_ocean
+waitlog nearest minecraft:warm_ocean is at 300
+capture WO is at \[(-?\d+), (~|-?\d+), (-?\d+)\]
+> tp qa {WO1} 70 {WO3}
+sleep 15
+> fill {WO1-8} 54 {WO3-3} {WO1+14} 60 {WO3+3} minecraft:water
+> setblock {WO1-6} 57 {WO3} upgrade_aquatic:acan_coral_block
+> setblock {WO1-3} 57 {WO3} upgrade_aquatic:acan_coral_block
+> setblock {WO1} 57 {WO3} upgrade_aquatic:acan_coral_block
+> setblock {WO1+3} 57 {WO3} upgrade_aquatic:acan_coral_block
+> setblock {WO1+6} 57 {WO3} upgrade_aquatic:acan_coral_block
+> setblock {WO1+12} 57 {WO3} upgrade_aquatic:dead_acan_coral_block
+> gamerule randomTickSpeed 1000
+sleep 240
+> gamerule randomTickSpeed 3
+> zq count {WO1-7} 56 {WO3-1} {WO1+7} 58 {WO3+1} upgrade_aquatic:acan_coral_wall_fan
+> zq count {WO1-7} 56 {WO3-1} {WO1+7} 58 {WO3+1} upgrade_aquatic:acan_coral_fan
+> zq count {WO1-7} 56 {WO3-1} {WO1+7} 58 {WO3+1} upgrade_aquatic:acan_coral
+> zq count {WO1-7} 56 {WO3-1} {WO1+7} 58 {WO3+1} minecraft:wet_sponge
+> zq count {WO1+11} 56 {WO3-1} {WO1+13} 58 {WO3+1} upgrade_aquatic:acan_coral_wall_fan
+> zq count {WO1+11} 56 {WO3-1} {WO1+13} 58 {WO3+1} upgrade_aquatic:acan_coral_fan
+> zq count {WO1+11} 56 {WO3-1} {WO1+13} 58 {WO3+1} upgrade_aquatic:acan_coral
+look counts 1-4 above 0 in total (about 2.9 growths expected); counts 5-7 all 0
+
+## SQ-UC-03 | prismarine coral grows in a cold ocean; elder prismarine and acan do not
+> execute positioned 0 70 0 run locate biome minecraft:cold_ocean
+waitlog nearest minecraft:cold_ocean is at 300
+capture CO is at \[(-?\d+), (~|-?\d+), (-?\d+)\]
+> tp qa {CO1} 70 {CO3}
+sleep 15
+> fill {CO1-14} 54 {CO3-3} {CO1+14} 60 {CO3+3} minecraft:water
+> setblock {CO1-12} 57 {CO3} upgrade_aquatic:prismarine_coral_block
+> setblock {CO1-9} 57 {CO3} upgrade_aquatic:prismarine_coral_block
+> setblock {CO1-6} 57 {CO3} upgrade_aquatic:prismarine_coral_block
+> setblock {CO1-3} 57 {CO3} upgrade_aquatic:prismarine_coral_block
+> setblock {CO1} 57 {CO3} upgrade_aquatic:prismarine_coral_block
+> setblock {CO1+6} 57 {CO3} upgrade_aquatic:elder_prismarine_coral_block
+> setblock {CO1+12} 57 {CO3} upgrade_aquatic:acan_coral_block
+> gamerule randomTickSpeed 1000
+sleep 240
+> gamerule randomTickSpeed 3
+> zq count {CO1-13} 56 {CO3-1} {CO1+1} 58 {CO3+1} upgrade_aquatic:prismarine_coral_wall_fan
+> zq count {CO1-13} 56 {CO3-1} {CO1+1} 58 {CO3+1} upgrade_aquatic:prismarine_coral_fan
+> zq count {CO1-13} 56 {CO3-1} {CO1+1} 58 {CO3+1} upgrade_aquatic:prismarine_coral
+> zq count {CO1+5} 56 {CO3-1} {CO1+7} 58 {CO3+1} upgrade_aquatic:elder_prismarine_coral_wall_fan
+> zq count {CO1+5} 56 {CO3-1} {CO1+7} 58 {CO3+1} upgrade_aquatic:elder_prismarine_coral_fan
+> zq count {CO1+11} 56 {CO3-1} {CO1+13} 58 {CO3+1} upgrade_aquatic:acan_coral_wall_fan
+> zq count {CO1+11} 56 {CO3-1} {CO1+13} 58 {CO3+1} upgrade_aquatic:acan_coral_fan
+look counts 1-3 above 0 in total; counts 4-7 all 0
+
+## SQ-UC-02c | acan vs vanilla brain coral side by side (control for SQ-UC-02; added 10-31)
+> tp qa {WO1} 70 {WO3+10}
+sleep 15
+> fill {WO1-8} 54 {WO3+7} {WO1+14} 60 {WO3+13} minecraft:water
+> setblock {WO1-6} 57 {WO3+8} upgrade_aquatic:acan_coral_block
+> setblock {WO1-3} 57 {WO3+8} upgrade_aquatic:acan_coral_block
+> setblock {WO1} 57 {WO3+8} upgrade_aquatic:acan_coral_block
+> setblock {WO1+3} 57 {WO3+8} upgrade_aquatic:acan_coral_block
+> setblock {WO1+6} 57 {WO3+8} upgrade_aquatic:acan_coral_block
+> setblock {WO1-6} 57 {WO3+12} minecraft:brain_coral_block
+> setblock {WO1-3} 57 {WO3+12} minecraft:brain_coral_block
+> setblock {WO1} 57 {WO3+12} minecraft:brain_coral_block
+> setblock {WO1+3} 57 {WO3+12} minecraft:brain_coral_block
+> setblock {WO1+6} 57 {WO3+12} minecraft:brain_coral_block
+> gamerule randomTickSpeed 1000
+sleep 300
+> gamerule randomTickSpeed 3
+> zq count {WO1-7} 56 {WO3+7} {WO1+7} 58 {WO3+9} upgrade_aquatic:acan_coral_wall_fan
+> zq count {WO1-7} 56 {WO3+7} {WO1+7} 58 {WO3+9} upgrade_aquatic:acan_coral_fan
+> zq count {WO1-7} 56 {WO3+7} {WO1+7} 58 {WO3+9} upgrade_aquatic:acan_coral
+> zq count {WO1-7} 56 {WO3+11} {WO1+7} 58 {WO3+13} minecraft:brain_coral_wall_fan
+> zq count {WO1-7} 56 {WO3+11} {WO1+7} 58 {WO3+13} minecraft:brain_coral_fan
+> zq count {WO1-7} 56 {WO3+11} {WO1+7} 58 {WO3+13} minecraft:brain_coral
+look acan total (first three) about the brain total (last three); brain above 0 and acan 0 = the UA growth files are not used
+sleep 3
+
+## SQ-IWF-02 | grass, flowers and leaf piles grow (fast path on; repeated on boot B1b with it off)
+> tp qa {PL1} 150 {PL3}
+sleep 20
+> fill {PL1-8} 160 {PL3-8} {PL1+8} 160 {PL3+8} minecraft:grass_block
+> fill {PL1-8} 161 {PL3-8} {PL1+8} 163 {PL3+8} minecraft:air
+> fill {PL1+10} 160 {PL3-2} {PL1+14} 160 {PL3+2} minecraft:stone
+> fill {PL1+10} 164 {PL3-2} {PL1+14} 166 {PL3+2} minecraft:oak_leaves[persistent=false,distance=1]
+> fill {PL1+12} 164 {PL3} {PL1+12} 166 {PL3} minecraft:oak_log
+> tp qa {PL1} 161 {PL3-12}
+> gamerule randomTickSpeed 1000
+sleep 60
+> gamerule randomTickSpeed 3
+> zq count {PL1-8} 161 {PL3-8} {PL1+8} 161 {PL3+8} minecraft:grass
+> zq count {PL1-8} 161 {PL3-8} {PL1+8} 161 {PL3+8} minecraft:tall_grass
+> zq count {PL1+10} 161 {PL3-2} {PL1+14} 163 {PL3+2} immersive_weathering:oak_leaf_pile
+> zq count {PL1+10} 164 {PL3-2} {PL1+14} 166 {PL3+2} minecraft:oak_leaves
+look grass/tall grass above 0 on the floor and leaf piles above 0 (about 10 expected: 72 leaves x 1000/4096 x 1200 x 0.0005); leaves still about 72 (the log keeps them from decaying, so the piles come from IW's block-tick growth, the fast path, not from decay); record the numbers for B1b
+
+## SQ-IWF-03 | snowy stone or icicles in a snowy biome in thunder
+> execute positioned 0 70 0 run locate biome minecraft:snowy_plains
+waitlog nearest minecraft:snowy_plains is at 300
+capture SN is at \[(-?\d+), (~|-?\d+), (-?\d+)\]
+> tp qa {SN1} 150 {SN3}
+sleep 20
+> weather thunder
+> gamerule randomTickSpeed 300
+sleep 60
+> gamerule randomTickSpeed 3
+> weather clear
+> zq count {SN1-32} 40 {SN3-32} {SN1+32} 140 {SN3+32} immersive_weathering:icicle
+> zq count {SN1-32} 40 {SN3-32} {SN1+32} 140 {SN3+32} immersive_weathering:snowy_stone
+look either count above 0

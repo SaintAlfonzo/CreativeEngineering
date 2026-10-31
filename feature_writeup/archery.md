@@ -143,13 +143,13 @@ IE's own cartridge recipes are untouched.
   no recipe in the pack makes a `{blueprint:"projectiles"}` and IE's own categories are `bullet` and `specialBullet`
   (checked 2026-10-21 in the IE 9.2.4-170 jar: IE's own armor-piercing recipe is in `bullet`). Fix: change the category to `bullet`, or add a `projectiles` blueprint
   to [blueprints.js](../kubejs/server_scripts/engineering/blueprints.js) and its duplication list.
-- **F2. Split arrow costs differ. Your call.** The grid recipe takes 6 arrows + 1 wire for 2 split arrows; the
+- **F2. Split arrow costs differ.** DECIDED 2026-10-29 (owner): keep both costs (TODO `gear/archery #3`). The grid recipe takes 6 arrows + 1 wire for 2 split arrows; the
   blueprint takes 4 arrows + 1 wire for the same 2. Pick one.
 - **F3. The archery blueprint needs an Ethereal Arrow.** KEPT 2026-10-22 (TODO `gear/archery #4`): intended, the
   blueprint's arrows are all trader arrows. The finding: Ethereal arrows only come from the wandering
   trader (6 emeralds), so every arrow blueprint recipe waits on a trader roll. Fine if intended;
   otherwise swap it for a craftable arrow (e.g. a seeker or teleportation arrow).
-- **F4. Hand-written tags.** The fletching and shaft tags are 44 `e.add` lines, against the `global.tags` rule
+- **F4.** FIXED 2026-10-27 ([pack_hygiene.md](pack_hygiene.md) 3.3 finding 15: `equipmenttags.js` uses `global.tags`). **Hand-written tags.** The fletching and shaft tags are 44 `e.add` lines, against the `global.tags` rule
   (also [gear_tuning.md](gear_tuning.md) F3 in the same file). One `global.tags.add` call per tag would do.
 - **F5. `#forge:arrow_shaft/blazing` is unused;** the explosive arrow named the blaze rod directly. FIXED 2026-10-22
   (TODO `gear/archery #5`): both explosive arrow recipes take the tag.

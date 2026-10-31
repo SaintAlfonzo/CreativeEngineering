@@ -13,6 +13,20 @@ const jeiF = global.fluid
 const jeiE = global.effect
 const jeiMb = global.multiblock
 
+// Storage Delight (repackedStorage): wood by wood in the vanilla wood order, bamboo last, each wood's pieces in one fixed
+// order (creativedelight/members #23). The ids are the mod's own pattern, so they are built here, not listed in the dict.
+const jeiStorageWoods = ['oak', 'spruce', 'birch', 'jungle', 'acacia', 'dark_oak', 'mangrove', 'crimson', 'warped', 'bamboo']
+const jeiStorageKinds = [
+	w => w + '_drawer', w => w + '_drawer_with_door', w => w + '_drawer_with_books', w => 'small_' + w + '_drawers',
+	w => w + '_single_door_cabinet', w => w + '_cabinet_with_glass_doors', w => 'glass_' + w + '_cabinet',
+	w => w + '_cabinet_with_polished_andesite_countertop', w => w + '_cabinet_with_polished_diorite_countertop',
+	w => w + '_cabinet_with_polished_deepslate_countertop', w => w + '_cabinet_with_polished_blackstone_countertop',
+	w => w + '_cabinet_with_stone_bricks_countertop', w => w + '_cabinet_with_polished_tuff_countertop',
+	w => w + '_bookshelf_with_door',
+]
+const jeiStorageList = []
+jeiStorageWoods.forEach(w => jeiStorageKinds.forEach(k => jeiStorageList.push('storagedelight:' + k(w))))
+
 global.jeiOrder.define({
 	types: ['item', 'multiblock', 'fluid', 'effect'],
 
@@ -262,6 +276,7 @@ global.jeiOrder.define({
 					] },
 				] },
 			] },
+			{ id: 'storage_delight', sort: ['list', 'mod', 'creative'], list: jeiStorageList },
 		],
 
 		multiblock: [

@@ -24,7 +24,7 @@ import java.util.Set;
 
 /**
  * One salt (item_merges.md 2.9): every salt block acts like The Salt's. The Salt's own blocks (ISaltBlock) melt
- * touching ice and snow and dissolve in water and rain by themselves; Vintage Delight's salt family is not ISaltBlock,
+ * touching ice and snow and dissolve in water by themselves; Vintage Delight's salt family is not ISaltBlock,
  * so this gives it the same random tick, through The Salt's own {@link Melting} and {@link Dissolving} (its config and
  * chances apply). All of {@link #MELTERS} melt; {@link #DISSOLVERS} also dissolve. Vintage's blocks mostly do not
  * random tick, so {@link #init} turns it on (the final field BlockBehaviour.isRandomlyTicking, f_60445_, set by
@@ -99,7 +99,7 @@ public final class SaltBlockTicks {
 
     /**
      * ISaltBlock.onSaltRandomTick without cluster growth: one touching meltable may melt, else a touching water (not
-     * below) may dissolve the block, then rain may. Directions start at a random one instead of a shuffled list.
+     * below) may dissolve the block. Rain never does (salt-common.toml SaltDissolvingInRain = false). Directions start at a random one instead of a shuffled list.
      * True when the vanilla random tick must not run: the block is gone, or it is Vintage's leftover Salt Block
      * (its tick grows salt layers).
      */
@@ -115,7 +115,6 @@ public final class SaltBlockTicks {
                 return true;
             }
         }
-        if (dissolves && Dissolving.maybeDissolveInRain(Blocks.AIR.defaultBlockState(), level, pos)) return true;
         return state.getBlock() == leftoverSaltBlock;
     }
 }

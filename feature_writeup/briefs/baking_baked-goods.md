@@ -224,7 +224,7 @@ Cookie ids: item_dict 2147 (`i.cookie`), 11533, 11586, 12823, 12229, 12241, 1230
 ---
 
 ## baked-goods #10: Bread block
-Status Planned / Work KubeJS / TODO `baking/baked-goods #10` (cooking plan misc)
+Status In Progress / Work KubeJS / TODO `baking/baked-goods #10` (cooking plan misc)
 
 ### Goal
 The crustless bread block comes from cutting a bread block with a knife, and the bread slab has the standard 3 -> 6 craft.
@@ -264,7 +264,7 @@ model has crusty sides and crumb top/bottom **(jar)**.
 ---
 
 ## baked-goods #4: Pie sequenced assembly and chorus pie
-Status Planned / Work KubeJS / TODO `baking/baked-goods #4` (cooking plan baked/pie)
+Status In Progress / Work KubeJS / TODO `baking/baked-goods #4` (cooking plan baked/pie)
 
 ### Goal
 Every obtainable pie can be made by Create sequenced assembly; the chorus pie's assembly spouts chorus juice as a fluid.
@@ -334,7 +334,7 @@ Pie ids item_dict 11492, 11511, 11946, 12825, 11349, 12248, 12312, 13014, 2596; 
 ---
 
 ## baked-goods #5: Cakes
-Status Planned / Work KubeJS / TODO `baking/baked-goods #5` (cooking plan baked/cake, scratchpad 2026-10-21)
+Status In Progress / Work KubeJS / TODO `baking/baked-goods #5` (cooking plan baked/cake, scratchpad 2026-10-21)
 
 ### Goal
 Five parts: (a) dragon egg cake, (b) rename the mangosteen "cake", (c) remove unobtainable cake and pie slices,
@@ -444,7 +444,7 @@ Slices: item_dict 4274, 5134-5157, 11264-11357, 12108-12132. `i.chocolate_cake` 
 ---
 
 ## baked-goods #6: Cake paste and tarts
-Status Planned / Work KubeJS / TODO `baking/baked-goods #6` (cooking plan baked)
+Status In Progress / Work KubeJS / TODO `baking/baked-goods #6` (cooking plan baked)
 
 ### Goal
 Cake paste can be made in the FD cooking pot; waffles get more recipes and uses; more tart variants exist.
@@ -501,7 +501,17 @@ pear, orange, peach, lychee, kiwi, lemon, pineapple, bayberry, blueberry **(jar)
 ---
 
 ## baked-goods #2: Muffins as a decent food source
-Status Planned / Work KubeJS / TODO `baking/baked-goods #2` (cooking plan baked/muffins)
+Status In Progress / Work KubeJS / TODO `baking/baked-goods #2` (cooking plan baked/muffins)
+
+**Update 2026-10-29 (owner):** muffins are not made in the Cooking Pot. `F.muffinBake` (CD `cd_food.js`) bakes 4 in the
+oven and removes the mods' pot recipes (Fruits Delight blueberry and cranberry; Slice & Dice's mixer copies go with them);
+the pot route below (Build 1, RC-32's pot half) is dropped. Veggies Delight's sweet potato cupcake is named Sweet Potato
+Muffin (CD client `veggiesdelight/client.js`, id unchanged; row `#32`'s rename). Veggies Delight's hand craft (sweet
+potato dough + egg + milk -> 3) stays. Tests OV-36, OV-37 ([oven.md](../oven.md)).
+- **TODO (texture):** retexture the Sweet Potato Muffin (`veggiesdelight:sweet_potato_cupcake`, item model
+  `development/backportedVeggies/src/main/resources/assets/veggiesdelight/models/item/sweet_potato_cupcake.json`) to
+  match the Fruits Delight muffins (same paper case and dome shape as `blueberry_muffin` / `cranberry_muffin`, an
+  orange sweet potato top). Today it is still Veggies Delight's frosted cupcake sprite.
 
 ### Goal
 Muffins worth eating: more variants including two-fruit muffins with mixed, shorter effects (orange cranberry, lemon
@@ -558,7 +568,15 @@ OV-19 when this lands). Cookies stay flour-only.
 ---
 
 ## baked-goods #9: Sliced bread / toast in recipes
-Status Planned / Work KubeJS / TODO `baking/baked-goods #9` (cooking plan baked/sliced bread, scratchpad 2026-10-21)
+Status In Progress / Work KubeJS / TODO `baking/baked-goods #9` (cooking plan baked/sliced bread, scratchpad 2026-10-21)
+
+**Update 2026-10-29 (`#28`, owner): any bread in any bread recipe, no burger or square restrictions.** CD
+`creativeengineering/bread_recipes.js` swaps every loaded recipe slot that holds vanilla bread or the bread slice
+(`minecraft:bread`, `#forge:bread/wheat`, `#forge:bread_slices`) for `#forge:bread` (loaves, flavored breads, slice,
+toast). Skipped so nothing copies: recipes that make a bread or slice (slicing, toasting, garlic bread, dough bakes),
+bread blocks, and cans. A toast-only slot stays toast. The pack's ham and cheese sandwich (cooking.js, hand and
+sequenced assembly) takes any bread. This supersedes the per-sandwich bread type audit below (square slices vs
+rolls vs buns): no recipe asks for one bread form. Tests RC-170, RC-171 ([recipes_cooking.md](../recipes_cooking.md)).
 
 ### Goal
 Every sandwich takes the bread its sprite shows: square slices -> bread slices (or toast), long rolls -> whole bread,
@@ -622,7 +640,7 @@ item_dict (moredelight block from 12364, FD block from 11492). Recipe ids in the
 ---
 
 ## baked-goods #8: Yeast
-Status Planned / Work KubeJS / TODO `baking/baked-goods #8` (cooking plan baked/yeast)
+Status In Progress / Work KubeJS / TODO `baking/baked-goods #8` (cooking plan baked/yeast)
 
 ### Goal
 Yeast culture from mushroom colonies or mushroom blocks by crafting and heated mixing; fix the in-world yeast process;
@@ -672,7 +690,7 @@ yeast feeds the sourdough chain (#7).
 ---
 
 ## baked-goods #7: Sourdough chain
-Status Planned / Work KubeJS / patcherMod / TODO `baking/baked-goods #7` (cooking plan baked/sourdough)
+Status In Progress / Work KubeJS / patcherMod / TODO `baking/baked-goods #7` (cooking plan baked/sourdough)
 
 ### Goal
 Starter -> growing -> fermenting -> sourdough, with a timed wait between steps; the sprite grows through the chain; milling
@@ -845,7 +863,7 @@ Cookie ids as #3; `i.golden_cookie` 12352, `i.enchanted_golden_cookie` 12330, `i
 ---
 
 ## baked-goods #13: Cherry pie
-Status: Planned / Work: patcherMod / KubeJS / TODO `baking/baked-goods #13` ([oven.md](../oven.md) 2.6; no earlier section here)
+Status: In Progress / Work: patcherMod / KubeJS / TODO `baking/baked-goods #13` ([oven.md](../oven.md) 2.6; no earlier section here)
 
 ### Goal
 A whole cherry pie item that places Create Central Kitchen's `create_central_kitchen:cherry_pie` block (the whole
@@ -865,7 +883,7 @@ Whether to add the item at all (row says so); recommend yes, via a startup item 
 ---
 
 ## baked-goods #17: Dough unification
-Status: Planned / Work: KubeJS / TODO `baking/baked-goods #17` ([veggies_delight.md](../veggies_delight.md) 5.2; no earlier section here)
+Status: In Progress / Work: KubeJS / TODO `baking/baked-goods #17` ([veggies_delight.md](../veggies_delight.md) 5.2; no earlier section here)
 
 Folded scope (scratchpad 2026-10-24): a dough texture for each dough, and a recoloured dough block for each dough
 (see `baking/baked-goods #27`, below). Doughs today (verified in `item_dict.js`): Create `create:dough`, Farmer's
@@ -876,7 +894,7 @@ Delight `wheat_dough`, `#forge:dough` (`i.any_dough`), Veggies Delight `sweet_po
 ---
 
 ## baked-goods #22: Chorus cookie from the uncanny cookie
-Status: Planned / Work: KubeJS / resource pack / TODO `baking/baked-goods #22` ([recipes_cooking.md](../recipes_cooking.md))
+Status: In Progress / Work: KubeJS / resource pack / TODO `baking/baked-goods #22` ([recipes_cooking.md](../recipes_cooking.md))
 
 ### Goal
 The chorus cookie is made from an uncanny cookie.
@@ -902,7 +920,7 @@ RC-100 Craft a chorus cookie from an uncanny cookie; the wheat recipe is gone fr
 ---
 
 ## baked-goods #23: Oatmeal cookies from oat dough
-Status: Planned / Work: KubeJS / resource pack / TODO `baking/baked-goods #23` ([recipes_cooking.md](../recipes_cooking.md))
+Status: In Progress / Work: KubeJS / resource pack / TODO `baking/baked-goods #23` ([recipes_cooking.md](../recipes_cooking.md))
 
 ### Goal
 Oatmeal cookie uses oat dough. Oatmeal raisin cookie: oat dough + 1 raw oat + 1 grape, textured from the oatmeal
@@ -934,7 +952,7 @@ RC-101 Oatmeal cookie bakes from oat dough. RC-102 Oatmeal raisin cookie bakes f
 ---
 
 ## baked-goods #24: No shapeless pie-to-crust recipes
-Status: Planned / Work: KubeJS / TODO `baking/baked-goods #24` ([recipes_cooking.md](../recipes_cooking.md))
+Status: In Progress / Work: KubeJS / TODO `baking/baked-goods #24` ([recipes_cooking.md](../recipes_cooking.md))
 
 ### Goal
 Remove the shapeless recipes that turn a pie into a crust.
@@ -959,7 +977,7 @@ RC-103 JEI on pie crust: only the flour, dough and Create mixing routes.
 ---
 
 ## baked-goods #25: Sponge cake becomes sponge pie
-Status: Planned / Work: KubeJS / lang / TODO `baking/baked-goods #25` ([recipes_cooking.md](../recipes_cooking.md))
+Status: Testing / Work: KubeJS / lang / TODO `baking/baked-goods #25` ([recipes_cooking.md](../recipes_cooking.md))
 
 ### Goal
 Rename the sponge cake to sponge pie.
@@ -980,7 +998,7 @@ RC-104 JEI and the item tooltip say Sponge Pie, slice and whole.
 ---
 
 ## baked-goods #26: Honey cake honey and comb split
-Status: Planned / Work: KubeJS / TODO `baking/baked-goods #26` ([recipes_cooking.md](../recipes_cooking.md))
+Status: Testing / Work: KubeJS / TODO `baking/baked-goods #26` ([recipes_cooking.md](../recipes_cooking.md))
 
 ### Goal
 Split the honey cake's flavour between honey and honeycomb, 50 / 50.
@@ -1007,7 +1025,7 @@ RC-105 Honey cake bakes from base, frosting, 1 honey bottle, 1 honeycomb; the 2-
 ---
 
 ## baked-goods #27: Dough block for every dough
-Status: Planned / Work: KubeJS / resource pack / TODO `baking/baked-goods #27` ([recipes_cooking.md](../recipes_cooking.md))
+Status: Testing / Work: KubeJS / resource pack / TODO `baking/baked-goods #27` ([recipes_cooking.md](../recipes_cooking.md))
 
 ### Goal
 A recoloured dough block for each dough, and a texture for each dough item (with `baking/baked-goods #17`).

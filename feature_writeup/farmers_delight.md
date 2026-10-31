@@ -1,6 +1,6 @@
 # Farmer's Delight 1.3.4 against the installed 1.2.4
 
-**BUILT 2026-10-25, not installed, not tested** (section 4: repack `-02` in the Creative Delight jar, CD-tree scripts; tests SQ-FDB-01 to 12). Onion Soup still to evaluate. Installed: `FarmersDelight-1.19.2-1.2.4.jar` (`mods/`). Evaluated 2026-10-25 against
+**BUILT 2026-10-25, Shipped in 1.1.03 (deployed to server and players 2026-10-26); boot check SQ-FDB-01 PASSED 2026-10-25, SQ-FDB-02 to 12 queued** (section 4: repack `-02` in the Creative Delight jar, CD-tree scripts; tests SQ-FDB-01 to 12). Onion Soup still to evaluate. Installed: `FarmersDelight-1.19.2-1.2.4.jar` (`mods/`). Evaluated 2026-10-25 against
 `devmods/checkNewerVersionForContent/FarmersDelight-1.20.1-1.3.4.jar` (1.20.1 / Forge 47), method in
 [devmods_evaluation.md](devmods_evaluation.md) section 1. Both jars unpacked in `DecompiledMods/`. Plan row:
 `largecontent/mod-additions #18` in [todo/TODO.md](todo/TODO.md).
@@ -163,7 +163,7 @@ Added by the owner 2026-10-25 and built the same day: the placeable vanilla Pump
 all three), Rabbit Stew (any potato), Cabbage Rolls (inlined filling), the feedback lines and the Rich Soil tooltip. Only
 Onion Soup is still TODO (evaluate). Build detail in section 4.
 
-## 4. Built 2026-10-25 (not installed, not tested)
+## 4. Built 2026-10-25 (shipped in 1.1.03, not tested in game)
 
 Owner request 2026-10-25: execute the backport; keep Onion Soup for evaluation; add Gleaming Salad, the third placeable
 pumpkin pie with a way to compare all three in game, Rope Fence and Gate, the Rabbit Stew / Vegetable Noodles / Cabbage

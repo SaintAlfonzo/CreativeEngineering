@@ -51,6 +51,25 @@ ServerEvents.recipes(e => {
 		R.remove({ id: 'vintagedelight:salt_from_smelting' }, e)
 		R.remove({ id: 'vintagedelight:salt_bucket_to_salt' }, e)
 
+		// The 3 froglight jar recipes took Vintage's salt block, which no longer exists as an item: rebuilt on The Salt's
+		// block (the merged one). Same inputs, time and outputs otherwise.
+		var froglights = [
+			['ochre', i.ochre_froglight, i.blaze_powder, i.magma_cream],
+			['verdant', i.verdant_froglight, i.glowstone, i.glow_berries],
+			['pearlescent', i.pearlescent_froglight, i.prismarine_crystals, i.sea_pickle]
+		]
+		froglights.forEach(f => {
+			var id = f[0] + '_froglight_from_fermenting'
+			R.remove({ id: 'vintagedelight:fermenting/' + id }, e)
+			R.vdPickling(Item.of(f[1], 3), [Item.of(i.slime_block, 2), f[2], f[3], i.salt_salt_block, i.vinegar], e, id,
+				{ time: 2400, secondary: i.glass_bottle })
+		})
+
+		// Tactical Fishing writes a catch recipe for every bucket item. No salt bucket (removed) and no powdered sugar
+		// bucket catch.
+		R.remove({ id: 'tactical_fishing:fishing_vintagedelight_salt_bucket' }, e)
+		R.remove({ id: 'tactical_fishing:fishing_creativeengineering_powdered_sugar_bucket' }, e)
+
 		//######################### Salted fish #########################
 		// Salted cod and salmon are out (vintageport #11, removed_items.js); Surstromming stays. The Salt's Salted
 		// cooked fish is a different thing and stays.
@@ -72,6 +91,12 @@ ServerEvents.recipes(e => {
 		// into bread in the oven like every dough (farmersdelight/recipes.js "Bread from dough").
 		R.remove({ id: 'vintagedelight:bread_from_smelting' }, e)
 		R.remove({ id: 'vintagedelight:bread_from_smoking' }, e)
+
+		//######################### Veggie Noodles #########################
+		// The cucumber noodles are Veggie Noodles (client namechanges.js; TODO dishes/meals #43): the cucumber dough
+		// (cut into the noodles) takes cucumber, broccoli, zucchini or its slice, raw cactus steak or dandelion leaves
+		R.remove({ id: 'vintagedelight:cucumber_dough' }, e)
+		R.shapeless(Item.of(i.cucumber_dough, 2), [i.t_veggie_noodle_veg, i.any_dough], e, 'cucumber_dough')
 
 		//######################### Overnight oats #########################
 		// A craft beside the Pickling Jar recipe (TODO dishes/meals #22): 3 raw oats, a fruit slice, a berry, milk, bowl

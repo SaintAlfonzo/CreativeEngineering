@@ -178,7 +178,7 @@ Decide what the LootJS layer is for, fill only what has a user, and prove the po
 ---
 
 ## lootjs-layer #2: Legacy loot dump
-Status Planned / Work none / `loot/lootjs-layer #2`
+Status In Progress (script and dump deleted; `.gitignore` line left) / Work none / `loot/lootjs-layer #2`
 
 ### Goal
 No trace of the 2026-08-25 dump script or its 40 MB output.

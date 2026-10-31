@@ -18,6 +18,7 @@ keeps its own writeup.
 | FramedBlocks renamed "Framed Copycat …" | edited resource pack `Copycat Framed Block.zip` | DEPLOYED 2026-09-27; F3+T |
 | BlockRunner "Speed Multiplier" line, rewritten on camouflage blocks | BlockRunner + patcherMod `CamoSpeedTooltip` | DEPLOYED (incl. the "no matter its camo" and "newest camo sets walk behaviors for hybrid blocks" wording) |
 | Framework tooltips: armor effects, tool effects, potion buckets | dedicated client scripts | VERIFIED per their own memories |
+| Stepstools: "Worn in the Feet slot", "Stand still and hold Sprint + Jump to step up", "Move, crouch or jump to step off" | tooltips.js Tools section ([stepstool.md](stepstool.md)) | BUILT 2026-10-29; STL-02 |
 | Placeable food lines ("Placeable", "(while sneaking)", "Placeable on plate", "Placeable on small plate"); DD + Fruits Delight placement lines removed | [placeable_tooltip.js](../kubejs/assets/creative_delight/kubejs/_qol/placeable_tooltip.js), tags from [placeable_food.md](placeable_food.md) | DEPLOYED with 1.0.6 (2026-10-14), PL-01 to PL-08 |
 | Legendary Tooltips name underline no longer crosses the spinning item model (Iceberg's title break moved after LT's model spacer) | patcherMod client mixin `IcebergTitleBreakMixin` | BUILT 2026-10-05, in patcherMod 1.0.5, DEPLOYED with 1.0.6; TT-16 |
 | AppleSkin food bars in JEI recipe slots + catalysts and in Lightman's Currency trade buttons / storage tabs (those screens drew tooltips without the item stack) | patcherMod `JeiRecipeLayoutTooltipMixin`, `JeiRecipesGuiTooltipMixin`, `LCEasyScreenHelperMixin`, `LCEasyGuiGraphicsMixin`, `compat/LightmansTooltipStacks` | BUILT 2026-10-05, in patcherMod 1.0.5, DEPLOYED with 1.0.6; TT-17, TT-18. The other screens: next row |
@@ -278,7 +279,7 @@ Hover items in JEI or the inventory. BlockRunner's line needs `block_speed_multi
 - [] Cans- Needs appleskin mixin. (shanks, saturation, of single meal, standard appleskin render) x(number of meals in can)
 - [] Chalk- Right click to mark block w/ arrow, hold right click to change mark (Chalk 1.6.4 code: it is sneak + right-click that opens the symbol picker; plan in [briefs/ui_tooltips.md](briefs/ui_tooltips.md))
 - [] Pretty Pipes- Use pipe wrench w/ block in off-hand to add cover
-- [] Lunchboxes- number of slots (scratchpad 2026-10-21, [TODO](todo/TODO.md) `ui/tooltips #2`)
+- [x] Lunchboxes- number of slots: `Slots: N` under the name, BUILT 2026-10-29 (patcherMod `lunchbox/LunchboxTooltip`, [lunchboxes.md](lunchboxes.md) LB-02; scratchpad 2026-10-21, [TODO](todo/TODO.md) `ui/tooltips #2`)
 - [] AE2 cables- how to make covers, once the covers are hidden from JEI (scratchpad 2026-10-21, `jei/jei-coverage #3`)
 - [] Flower pots- a label on every pot, every pot distinct (scratchpad 2026-10-21, `blocks/framed-and-decor #6`)
 
@@ -322,3 +323,4 @@ Not a line but the tooltip box: large item tooltips should run off the bottom of
 - 2026-10-20: test round: the Vinery fit lines were clunky, so they now name the racks, renamed Single / Small / Big
   Wine Rack; the Brewin' heat / cold line puts "Useful for keg brewing and wine casking" on its own line
   ([alcohol.md](alcohol.md) 10.18; VB-84, VB-92, AL-77).
+- 2026-10-31: scratchpad notes translated into TODO rows (`ui/tooltips #12`). No code changed.

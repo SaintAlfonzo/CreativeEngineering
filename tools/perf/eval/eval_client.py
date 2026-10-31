@@ -56,15 +56,15 @@ def setup(game, world=None):
     print("client dir ready:", len(os.listdir(mods)), "jars")
 
 
-def launch(game, nodebuglog=False):
+def launch(game, nodebuglog=False, maxage="60m", maxsize="1g"):
     live = subprocess.run(["bash", os.path.join(INST, "tools/scratch_query/game_jvms.sh")],
                           capture_output=True, text=True).stdout.strip()
     if live:
         sys.exit("game JVM already up: " + live)
     jfc = os.path.join(game, "perf/ce-server.jfc")
     jvm = ["-XX:FlightRecorderOptions=stackdepth=256,repository=" + os.path.join(game, "perf/jfr-repo"),
-           "-XX:StartFlightRecording=name=ce,settings=%s,disk=true,maxage=60m,maxsize=1g,dumponexit=true,filename=%s"
-           % (jfc, os.path.join(game, "perf/exit.jfr"))]
+           "-XX:StartFlightRecording=name=ce,settings=%s,disk=true,maxage=%s,maxsize=%s,dumponexit=true,filename=%s"
+           % (jfc, maxage, maxsize, os.path.join(game, "perf/exit.jfr"))]
     args = launch_client.build_args(game, jvm_extra=jvm, username="PerfEval")
     args = [a if not a.startswith("-Xmx") else next(x for x in launch_client.logged_args() if x.startswith("-Xmx"))
             for a in args]

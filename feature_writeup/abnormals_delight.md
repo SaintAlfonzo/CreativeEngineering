@@ -1,6 +1,6 @@
 # Abnormals Delight 6.0.3 against the installed 4.1.2
 
-**Decided 2026-10-25 (owner); all five changes BUILT 2026-10-25 (section 3), Creative Delight jar installed, not run in game.** Installed: `abnormals_delight-1.19.2-4.1.2.jar` (`mods/`, `server_mods/`), 1.19.2 Forge. Evaluated
+**Decided 2026-10-25 (owner); all five changes BUILT 2026-10-25 (section 3), Creative Delight jar installed; Shipped in 1.1.03 (deployed to server and players 2026-10-26); scratch SQ-ABD-01 to 05 PASSED 2026-10-26; ABD-01 to 05 not run in game.** Installed: `abnormals_delight-1.19.2-4.1.2.jar` (`mods/`, `server_mods/`), 1.19.2 Forge. Evaluated
 2026-10-25 against `devmods/checkNewerVersionForContent/abnormals_delight-1.21.1-6.0.3.jar` (1.21.1 NeoForge), method in
 [devmods_evaluation.md](devmods_evaluation.md) section 1. Both jars unpacked in `DecompiledMods/`. Plan row:
 `largecontent/mod-additions #26` in [todo/TODO.md](todo/TODO.md). Config: `config/abnormals_delight-common.toml` (one key,

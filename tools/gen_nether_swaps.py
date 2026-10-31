@@ -9,8 +9,11 @@ Owners: every structure (live or not) whose pool walk reaches the template (terr
 some Nether or End structure can also place is skipped (the walk ignores jigsaw names, so it overcounts: an Overworld
 ship "reaches" the Nether ship's crimson keel). A rule applies to a template when one of its Overworld owners is in
 the rule's structures and none of its owners is excepted (rule "except" plus the plan/move_to_nether tag).
+"except_holding" (block selectors) also skips every structure any of whose templates holds a matching block (palette
+check), e.g. ["@sculk"] for the sculk structures.
 Block selectors: an id, "@nether" (every block nether_blocks_scan classifies), "@nether_bricks" (the nether brick
-family). Targets: a block id (stairs, slab, wall, axis properties carried over when the target has them), "air", or
+family), "@sculk" (any block whose id path contains "sculk"). Targets: a block id (properties carried over per KEEP,
+else by id suffix, FAMILY_KEEP), "air", or
 "deepslate" (the nether brick family to its deepslate brick twin; a fence becomes a wall).
 Also writes feature_writeup/nether_swaps.md (what changed where).
 """
@@ -46,8 +49,28 @@ KEEP = {
     'minecraft:deepslate_brick_wall': ['east', 'north', 'south', 'west', 'up', 'waterlogged'],
     'minecraft:basalt': ['axis'],
     'minecraft:campfire': ['facing', 'lit', 'signal_fire', 'waterlogged'],
+    'minecraft:lantern': ['hanging', 'waterlogged'],
+    'minecraft:wall_torch': ['facing'],
 }
+# fallback by id suffix for targets not in KEEP (first match), so a new target never silently drops its state
+FAMILY_KEEP = [
+    ('_trapdoor', ['facing', 'half', 'open', 'powered', 'waterlogged']),
+    ('_button', ['face', 'facing', 'powered']),
+    ('_pressure_plate', ['powered']),
+    ('_slab', ['type', 'waterlogged']),
+    ('_stairs', ['facing', 'half', 'shape', 'waterlogged']),
+    ('_wall', ['east', 'north', 'south', 'west', 'up', 'waterlogged']),
+    ('wall_torch', ['facing']),
+    ('lantern', ['hanging', 'waterlogged']),
+    ('_log', ['axis']), ('_wood', ['axis']), ('_hyphae', ['axis']), ('_stem', ['axis']),
+]
 SIDES = ('east', 'north', 'south', 'west')
+
+
+def keep_for(name):
+    if name in KEEP:
+        return KEEP[name]
+    return next((k for suf, k in FAMILY_KEEP if name.endswith(suf)), [])
 
 
 def target_state(src, to):
@@ -63,7 +86,7 @@ def target_state(src, to):
         if 'waterlogged' in props:
             out['waterlogged'] = props['waterlogged']
     else:
-        out = {k: v for k, v in props.items() if k in KEEP.get(name, [])}
+        out = {k: v for k, v in props.items() if k in keep_for(name)}
     if name == 'immersive_weathering:permafrost':
         out = {'dirty': 'false'}
     return {'Name': name, 'Properties': out} if out else {'Name': name}
@@ -74,18 +97,13 @@ def matches(selector, block):
         return N.classify(block) is not None
     if selector == '@nether_bricks':
         return block in BRICKS
+    if selector == '@sculk':
+        return 'sculk' in block.partition(':')[2]
     return block == selector
 
 
-def main():
-    doc = GSG.read_json(RULES)
-    rules = doc['rules']
-    pack = GSG.Pack()
-    dims = GSG.read_json(GSG.BIOME_CONFIG)['dimensions']
-    overworld = set(dims['minecraft:overworld']['biomes'])
-    elsewhere = set(dims['minecraft:the_nether']['biomes']) | set(dims['minecraft:the_end']['biomes'])
-    moving = set(pack.tag_members.get(MOVE_TAG, ()))
-
+def structure_owners(pack, overworld, elsewhere):
+    """template id -> structures whose pool walk reaches it; plus the Overworld-owned and Nether/End-shared sets."""
     structs, pools, templates, _ = T.load_worldgen()
     live = GSG.read_json(T.WORLDGEN / 'pool_config.json')['pools']
     pad, plants, _ = T.load_tags()
@@ -117,19 +135,44 @@ def main():
             if pack.pool_all[sid] & elsewhere or not ow:
                 other_dim.add(t)
     cache.save()
+    return owners, ow_owned, other_dim, templates
 
-    out, report = OrderedDict(), defaultdict(Counter)
-    skipped_dim = Counter()
+
+def main():
+    doc = GSG.read_json(RULES)
+    rules = doc['rules']
+    pack = GSG.Pack()
+    dims = GSG.read_json(GSG.BIOME_CONFIG)['dimensions']
+    overworld = set(dims['minecraft:overworld']['biomes'])
+    elsewhere = set(dims['minecraft:the_nether']['biomes']) | set(dims['minecraft:the_end']['biomes'])
+    moving = set(pack.tag_members.get(MOVE_TAG, ()))
+
+    owners, ow_owned, other_dim, templates = structure_owners(pack, overworld, elsewhere)
+
+    loaded = OrderedDict()   # template id -> (palette, blocks), every Overworld-owned template
     for t in sorted(owners):
         if t not in templates or t not in ow_owned:
             continue
         _, read, name = templates[t]
         d = S.read_template(read(name))
-        if not d:
-            continue
-        pal = d.get('palette') or (d.get('palettes') or [[]])[0]
+        if d:
+            loaded[t] = (d.get('palette') or (d.get('palettes') or [[]])[0], d.get('blocks', []))
+    # except_holding: per rule, the structures any of whose (Overworld) templates hold a matching block
+    holding = []
+    for r in rules:
+        sels = r.get('except_holding', [])
+        found = set()
+        if sels:
+            for t, (pal, _) in loaded.items():
+                if any(matches(sel, p.get('Name', '')) for p in pal for sel in sels):
+                    found |= owners[t]
+        holding.append(found)
+
+    out, report = OrderedDict(), defaultdict(Counter)
+    skipped_dim = Counter()
+    for t, (pal, blocks) in loaded.items():
         entries = []
-        for b in d.get('blocks', []):
+        for b in blocks:
             s = b.get('state', 0)
             if s >= len(pal):
                 continue
@@ -142,7 +185,7 @@ def main():
                 ow_owners = owners[t]
                 if scope != ['*'] and not (ow_owners & set(scope)):
                     continue
-                if ow_owners & (set(r.get('except', [])) | moving):
+                if ow_owners & (set(r.get('except', [])) | moving | holding[i]):
                     continue
                 if t in other_dim:
                     skipped_dim[block] += 1
@@ -158,13 +201,13 @@ def main():
         'entries': 'template id -> [{pos, from, to}], the same format as meat_block_swaps.json; applied by patcherMod '
                    'worldgen/TemplateBlockSwaps when the template loads, only where the template still has `from` at `pos`.'},
         'templates': out}, indent=1) + '\n')
-    write(rules, report, owners, skipped_dim, moving)
+    write(rules, report, owners, skipped_dim, moving, holding)
     n = sum(len(v) for v in out.values())
     print(f'{n} block swap(s) in {len(out)} template(s) -> {OUT_JSON.relative_to(ROOT)}; '
           f'{sum(skipped_dim.values())} matching block(s) left alone in templates Nether/End structures share')
 
 
-def write(rules, report, owners, skipped_dim, moving):
+def write(rules, report, owners, skipped_dim, moving, holding):
     L = ['# Nether block swaps', '', 'Written by `python3 tools/gen_nether_swaps.py` from '
          '`kubejs/generation_scripts/worldgen/nether_swap_rules.json`. Do not edit. Per rule: every template it changes, '
          'with block counts. Applied by patcherMod `TemplateBlockSwaps` when a template loads.', '',
@@ -174,6 +217,9 @@ def write(rules, report, owners, skipped_dim, moving):
         rows = report.get(i, {})
         total = sum(rows.values())
         L += [f"## {i + 1}. {r.get('note', '')} ({total} blocks)", '']
+        if r.get('except_holding'):
+            L += [f"Skipped, holding {', '.join(f'`{x}`' for x in r['except_holding'])}: "
+                  + (', '.join(f'`{o}`' for o in sorted(holding[i])) or 'none') + '.', '']
         if not rows:
             L += ['Nothing matched.', '']
             continue

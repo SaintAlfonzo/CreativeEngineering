@@ -132,6 +132,16 @@ public class TerrainAdaptationTest {
 		marked.add(info(0, 2, 2, Blocks.STRUCTURE_BLOCK));
 		TemplateTrim.Result rm = TemplateTrim.trim(marked);
 		check(rm != null && rm.infos().stream().anyMatch(i -> i.state.is(Blocks.STRUCTURE_BLOCK)), "a structure block in a trimmed column is kept");
+		// template_trim/air: a stone column with air over it, a snow-only column, an air-only column
+		List<StructureBlockInfo> ledge = List.of(info(0, 0, 0, Blocks.STONE), info(0, 1, 0, Blocks.AIR), info(1, 0, 0, Blocks.SNOW_BLOCK),
+				info(1, 1, 0, Blocks.SNOW), info(2, 0, 0, Blocks.AIR), info(2, 1, 0, Blocks.AIR));
+		TemplateTrim.Result ra = TemplateTrim.trimAir(ledge);
+		check(ra != null && ra.air() == 2 && ra.columns() == 1 && ra.pad() == 0 && ra.plants() == 0 && ra.infos().size() == 4,
+				"air trim: only the air-only column goes (got " + (ra == null ? "null" : ra.air() + " air in " + ra.columns()) + ")");
+		check(ra != null && ra.infos().stream().filter(i -> i.state.is(Blocks.SNOW_BLOCK) || i.state.is(Blocks.SNOW)).count() == 2
+				&& ra.infos().stream().anyMatch(i -> i.state.isAir()), "air trim keeps snow-only columns and air over a built block");
+		check(TemplateTrim.trimAir(List.of(info(0, 0, 0, Blocks.STONE))) == null && TemplateTrim.trimAir(List.of(info(0, 0, 0, Blocks.AIR))) == null,
+				"air trim: nothing to drop, or nothing solid at all, leaves the list alone");
 		List<StructureBlockInfo> compact = new ArrayList<>();
 		for (StructureBlockInfo i : hut) if (i.pos.getX() >= 2 && i.pos.getX() <= 4 && i.pos.getZ() >= 1 && i.pos.getZ() <= 3) compact.add(i);
 		check(TemplateTrim.trim(compact) == null, "nothing to drop -> null (list untouched)");

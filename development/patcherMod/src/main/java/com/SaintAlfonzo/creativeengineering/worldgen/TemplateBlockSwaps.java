@@ -47,9 +47,9 @@ public final class TemplateBlockSwaps {
 	static final List<String> CONFIGS = List.of(BiomeLayoutTuner.WORLDGEN_DIR + "meat_block_swaps.json",
 			BiomeLayoutTuner.WORLDGEN_DIR + "nether_block_swaps.json");
 
-	private static final Field PALETTES = ObfuscationReflectionHelper.findField(StructureTemplate.class, "f_74482_");
-	private static final Field PALETTE_BLOCKS = ObfuscationReflectionHelper.findField(StructureTemplate.Palette.class, "f_74645_");
-	private static final Field PALETTE_CACHE = ObfuscationReflectionHelper.findField(StructureTemplate.Palette.class, "f_74646_");
+	static final Field PALETTES = ObfuscationReflectionHelper.findField(StructureTemplate.class, "f_74482_");
+	static final Field PALETTE_BLOCKS = ObfuscationReflectionHelper.findField(StructureTemplate.Palette.class, "f_74645_");
+	static final Field PALETTE_CACHE = ObfuscationReflectionHelper.findField(StructureTemplate.Palette.class, "f_74646_");
 
 	record Swap(BlockPos pos, Block from, BlockState to) {}
 

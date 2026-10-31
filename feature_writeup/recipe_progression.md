@@ -87,8 +87,8 @@ Nock Enough Arrows' quiver and torch arrow; Quark's dragon scale; IE's potion bu
 | What | Where | State |
 |---|---|---|
 | Vintage Improvements recipes for unused metals (vanadium storage, plate, rolling, pressing; shadow steel, netherite, refined radiance, andesite, cast iron and uranium coiling; sulfur trioxide pressurizing) | [dead_recipe_removal.js](../kubejs/server_scripts/other/dead_recipe_removal.js) | removed (21 ids) |
-| `kubejs/recipes/food/bonemeal_broth.json` | not a load path | dead; superseded by `cooking.js`'s bone broth pot recipe |
-| `kubejs/recipes/recycle/sawmill_recycle_{slab,stairs,door}.json` (IE sawmill: slabs → 2 sticks + sawdust, ...) | not a load path | dead; never ported (F3) |
+| `kubejs/recipes/food/bonemeal_broth.json` | not a load path | dead; superseded: Creative Delight `farmersdelight/recipes.js` bone broth pot recipe takes a bone or bone meal |
+| `kubejs/recipes/recycle/sawmill_recycle_{slab,stairs,door}.json` (IE sawmill: slabs → 2 sticks + sawdust, ...) | not a load path | ported 2026-10-31 as `kubejs/data/creativeengineering/recipes/sawmill/recycle_wooden_{slab,stairs,door}.json` (F3) |
 | Old `global.CE` blocks | `misc_mods.js`, `resource_blocks.js`, `cooking.js` | deleted 2026-10-22 |
 | `kubejs/archive/` | only `worldgen/pre_groups_2026-09-27/` left (the 9 old scripts and the other `worldgen/` files deleted 2026-10-22) | not loaded |
 
@@ -118,7 +118,9 @@ Nothing beyond the files above; every removal and replacement is in the folder s
 - **F3. The sawmill recycle recipes never loaded.** `kubejs/recipes/recycle/` (slabs, stairs, doors back to sticks) was
   meant for IE's sawmill. They have sawdust secondaries, which `R.ieSawmill` can't do (the KubeJS IE schema bug), so
   porting means moving them to `kubejs/data/creativeengineering/recipes/sawmill/`, where the other sawmill JSONs load;
-  or delete them ([TODO](todo/TODO.md) `recipes/progression #3`).
+  or delete them ([TODO](todo/TODO.md) `recipes/progression #3`). The three recycle JSONs (with `food/bonemeal_broth.json`, 4 in
+  all) were deleted in commit 1b1d45f (2026-10-23), recoverable from git. Decision 2026-10-29: confirm they are absent in JEI,
+  then fold them in as sawmill recipes through the helpers.
 - **F4. `global.hasRemovedTags` is set and never read.** Fixed 2026-10-22: the assignment was deleted.
 - **F5. Define-once across the recipe folders:** local redefinitions of dict keys in `end.js`, `dust.js`, `redstone.js`,
   `cooking.js`, `cultivated_meat.js`, `ash.js`; duplicate keys inside `item_dict.js` (`mulch_brown` ×4, `xp_block` ×3,
@@ -155,7 +157,7 @@ None. The scan runs in game (`/recipescan`, or at load with the config on); its 
 The per-folder suites carry the recipe tests: RE-01 to RE-20, RM-01 to RM-14, RW-01 to RW-10, RC-01 to RC-14, RA-01 to
 RA-08.
 
-- [ ] **RP-01 Scan:** default config: world load prints no `[recipe_scan]` line. `/recipescan` → chat "Recipe scan: N
+- [x] **RP-01 Scan [scratch: SQ-RS-01 PASS 2026-10-23]:** default config: world load prints no `[recipe_scan]` line. `/recipescan` → chat "Recipe scan: N
   references to M removed items"; log has `[jeiRemove]` blocks with `(input)`/`(output)` and `[recipe_scan] Scan
   complete. ... N recipes read, U unreadable`. No `[jeiRemove]` line for a merged id (item_merges.md). With
   `[debug.recipe_scan] runAtLoad = true`: one scan when the server finishes loading, none on `/reload` or a second
@@ -167,7 +169,7 @@ RA-08.
 - [ ] **RP-04 Dead removal:** JEI vanadium and shadow steel coiling → no recipes.
 - [ ] **RP-05 Missing recipes (F1):** JEI blast furnace, dispenser, smoker, Explorer's Compass, cake → note which have a
   recipe (same checks as RE-03, RE-08, RC-01, RC-02, RA-07).
-- [ ] **RP-06 Recycle JSONs (F3):** an IE sawmill with oak slabs → note the output (expect no recipe, or IE's own).
+- [ ] **RP-06 Recycle JSONs (F3):** an IE sawmill with oak slabs → note the output (expect 2 sticks + sawdust; stairs 3, doors 4; recycle JSONs ported 2026-10-31).
 - [ ] **RP-07 Progression walk:** in a fresh survival world, check each step in 1.1 is reachable in order (no step needs
   an item from a later one).
 - [ ] **RP-08 Steel before blueprints:** try to craft an Engineer's Workbench before any steel → impossible; after one

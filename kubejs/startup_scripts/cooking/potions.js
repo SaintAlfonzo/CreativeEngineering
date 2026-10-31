@@ -93,6 +93,13 @@ const LUCK_POTION_MIXES = [
 	[global.item.redstone,          'buzzier_bees:unluck', 'buzzier_bees:long_unluck'],
 	[global.item.glowstone,         'buzzier_bees:unluck', 'buzzier_bees:strong_unluck'],
 ]
+// potions/effects #9: Resilience (Quark) duplicates Knockback Resistance and goes; Restfulness and Insomnia (Upgrade
+// Aquatic) go with the Flare, which only an Insomnia potion on a Phantom can make. Every mix that outputs one is
+// removed; the effects themselves are refused or swapped by patcherMod (CEConfig [effects] remap / removed).
+const REMOVED_POTIONS = ['quark:resilience', 'quark:long_resilience', 'quark:strong_resilience',
+	'upgrade_aquatic:restfulness', 'upgrade_aquatic:restfulness_strong',
+	'upgrade_aquatic:insomnia', 'upgrade_aquatic:insomnia_strong']
+
 // every potion a Buzzier Bees luck mix can output; removeByPotion(null, null, <this>) clears them
 const LUCK_POTIONS = ['minecraft:luck', 'buzzier_bees:long_luck', 'buzzier_bees:strong_luck',
 	'buzzier_bees:unluck', 'buzzier_bees:long_unluck', 'buzzier_bees:strong_unluck']
@@ -122,6 +129,8 @@ const AM_POTION_MIXES = [
 	['minecraft:redstone',       'alexsmobs:clinging',             'alexsmobs:long_clinging'],
 	['alexsmobs:komodo_spit',    'alexsmobs:poison_resistance',    'alexsmobs:long_poison_resistance'],
 	['minecraft:glowstone_dust', 'alexsmobs:knockback_resistance', 'alexsmobs:strong_knockback_resistance'],
+	// crab shell: Quark's Resilience reagent, now a second Knockback Resistance base next to AM's Strength + bear fur
+	[global.item.crab_shell,     'minecraft:awkward',              'alexsmobs:knockback_resistance'],
 	['minecraft:glowstone_dust', 'alexsmobs:soulsteal',            'alexsmobs:strong_soulsteal'],
 	['alexsmobs:gazelle_horn',   'minecraft:strong_swiftness',     'alexsmobs:speed_iii'],
 
@@ -204,6 +213,12 @@ MoreJSEvents.registerPotionBrewing(event => {
 		if (p !== null) event.removeByPotion(null, null, p)
 	})
 	LUCK_POTION_MIXES.forEach(row => mix(row[0], row[1], row[2]))
+
+	// Resilience, Restfulness, Insomnia: out (REMOVED_POTIONS)
+	REMOVED_POTIONS.forEach(id => {
+		const p = potion(id)
+		if (p !== null) event.removeByPotion(null, null, p)
+	})
 
 	// Haste — Rustic Delight's own potions, made item-agnostic
 	RD_POTION_MIXES.forEach(row => mix(row[0], row[1], row[2]))

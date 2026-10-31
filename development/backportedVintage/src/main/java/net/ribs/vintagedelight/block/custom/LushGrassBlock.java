@@ -14,6 +14,7 @@ import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.HoeItem;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.ShearsItem;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.LevelReader;
 import net.minecraft.world.level.block.Block;
@@ -22,6 +23,9 @@ import net.minecraft.world.level.block.GrassBlock;
 import net.minecraft.world.level.block.SnowLayerBlock;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.state.BlockBehaviour.Properties;
+import net.minecraft.world.level.block.state.StateDefinition;
+import net.minecraft.world.level.block.state.properties.BooleanProperty;
+import net.minecraft.world.level.gameevent.GameEvent;
 import net.minecraft.world.level.chunk.ChunkGenerator;
 import net.minecraft.world.level.lighting.LayerLightEngine;
 import net.minecraft.world.level.BlockGetter;
@@ -29,8 +33,21 @@ import net.minecraft.world.phys.BlockHitResult;
 import vectorwing.farmersdelight.common.registry.ModBlocks;
 
 public class LushGrassBlock extends GrassBlock {
+   // Pack addition: shears clear it, as on Immersive Weathering's grass block; sheared grass stops ticking (no spreading)
+   public static final BooleanProperty FERTILE = BooleanProperty.create("fertile");
+
    public LushGrassBlock(Properties properties) {
       super(properties);
+      this.registerDefaultState(this.defaultBlockState().setValue(FERTILE, true));
+   }
+
+   protected void createBlockStateDefinition(StateDefinition.Builder<Block, BlockState> builder) {
+      super.createBlockStateDefinition(builder);
+      builder.add(FERTILE);
+   }
+
+   public boolean isRandomlyTicking(BlockState state) {
+      return state.getValue(FERTILE) && super.isRandomlyTicking(state);
    }
 
    public boolean isValidBonemealTarget(BlockGetter world, BlockPos pos, BlockState state, boolean isClient) {
@@ -55,6 +72,17 @@ public class LushGrassBlock extends GrassBlock {
    public InteractionResult use(BlockState state, Level world, BlockPos pos, Player player, InteractionHand hand, BlockHitResult hit) {
       ItemStack itemInHand = player.getItemInHand(hand);
       Item usedItem = itemInHand.getItem();
+      if (usedItem instanceof ShearsItem && state.getValue(FERTILE)) {
+         if (world.isClientSide) {
+            world.addDestroyBlockEffect(pos, Blocks.GRASS.defaultBlockState());
+         } else {
+            world.playSound(null, pos, SoundEvents.GROWING_PLANT_CROP, SoundSource.BLOCKS, 1.0F, 1.0F);
+            world.setBlock(pos, state.setValue(FERTILE, false), 11);
+            itemInHand.hurtAndBreak(1, player, p -> p.broadcastBreakEvent(hand));
+            world.gameEvent(player, GameEvent.SHEAR, pos);
+         }
+         return InteractionResult.sidedSuccess(world.isClientSide);
+      }
       if (usedItem instanceof HoeItem && !world.isClientSide && world.getBlockState(pos.above()).isAir()) {
          world.setBlock(pos, ((Block)ModBlocks.RICH_SOIL_FARMLAND.get()).defaultBlockState(), 11);
          world.playSound(null, pos, SoundEvents.HOE_TILL, SoundSource.BLOCKS, 1.0F, 1.0F);

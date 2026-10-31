@@ -28,8 +28,8 @@ public abstract class KettleJeiBaseMixin {
 	private void ce$baseSlot(IRecipeLayoutBuilder builder, KettleRecipe recipe, IFocusGroup focuses, CallbackInfo ci) {
 		FluidStack base = KettleBases.get(recipe);
 		if (base.isEmpty()) return;
-		builder.addSlot(RecipeIngredientRole.INPUT, 5, 1)
-				.setFluidRenderer(KettleTank.CAPACITY, false, 5, 32)
+		builder.addSlot(RecipeIngredientRole.INPUT, 6, 1)
+				.setFluidRenderer(KettleTank.CAPACITY, false, 3, 32)
 				.addIngredient(mezz.jei.api.forge.ForgeTypes.FLUID_STACK, base.copy());
 	}
 

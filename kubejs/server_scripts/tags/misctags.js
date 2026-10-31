@@ -42,6 +42,9 @@ ServerEvents.tags('item', e => {
 	])
 
 	
+	// Seeds missing from forge:seeds (so also from Quark's pouch tag, which nests it)
+	t.add(e, 'forge:seeds', [i.tobacco_seeds, i.hamimelon_seeds, i.lemon_seeds])
+
 	t.add(e, '#forge:animal_fat', [i.animal_fat, i.tallow, i.animal_oil_bottle])
 
 	// Remove dye tags from chalk (no accidental crafts)

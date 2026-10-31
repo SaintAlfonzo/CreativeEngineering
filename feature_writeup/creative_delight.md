@@ -3,7 +3,7 @@
 Written 2026-10-25, scope revised 2026-10-25 (owner). **Status: framework built, scratch test queued (2026-10-25, section 19):**
 startup loader and helpers in patcherMod, NCH namespace option, repack and bundle build, the Farmer's Delight / Ocean's /
 Oceanic / End's repacks nested in `creative_delight-1.0.0.jar`, Oceanic fishing net overlay; FD staged for the 1.3.4
-backports (section 21). Not installed in `mods/`. The four ports, the QoL moves, the
+backports (section 21). Live since 1.1.03 (deployed 2026-10-26); the latest build (Delightful HUD effect icons, Kettle bar, banana forage mixins, Ender's chorus flame seasons) installed in `mods/` 2026-10-31 00:29, not yet booted (scan 2026-10-31). The four ports, the QoL moves, the
 member script rows, the tool and misc dicts and swappers are not done (section 19.3); the food dict is built (13.5, 2026-10-25). Goal (owner):
 fold the Delight add-ons the pack owns into a single Forge 1.19.2 jar, **Creative Delight**, "multiple jars in a trenchcoat".
 Members: four ports from `development/backported*` (Veggies, Vintage, Fungi, Miner's), four third-party native 1.19.2
@@ -31,12 +31,12 @@ engine" now means these scripts.
 
 ### 0.1 Ports (own projects under `development/`)
 
-| Port | Project | Mod id | Upstream, ported version | Writeup | Test prefix | State (2026-10-25) |
+| Port | Project | Mod id | Upstream, ported version | Writeup | Test prefix | State (2026-10-30) |
 |---|---|---|---|---|---|---|
-| Veggies Delight | `backportedVeggies` | `veggiesdelight` | mehdinoui 1.9.2 (Forge 1.20.1) | [veggies_delight.md](veggies_delight.md) | `VD-` | `-02` built, live since 1.1.02 |
-| Vintage Delight | `backportedVintage` | `vintagedelight` | Ribs 0.1.6 (Forge 1.20.1) + KOTS 0.3.1 ids | [vintage_delight.md](vintage_delight.md) | `VTD-` | `-03` built, live since 1.1.02 |
-| Fungi Delight | `backportedFungi` | `fungidelight` | Eggmain 1.3 (Forge 1.20.1) | [fungi_delight.md](fungi_delight.md) | `FGD-` | `-01` built, scratch test queued |
-| Miner's Delight | `backportedMiners` | `miners_delight` | Sammy Semicolon 1.4.5 + the live 1.1.2 merged | [miners_delight.md](miners_delight.md) | `MND-` | `-01` built, not in `mods/` |
+| Veggies Delight | `backportedVeggies` | `veggiesdelight` | mehdinoui 1.9.2 (Forge 1.20.1) | [veggies_delight.md](veggies_delight.md) | `VD-` | `-03` in `mods/`, live since 1.1.01 (a 2026-10-30 rebuild under the same `-03` name, mature dandelion revert, waits in `build/libs/`: bump to `-04`) |
+| Vintage Delight | `backportedVintage` | `vintagedelight` | Ribs 0.1.6 (Forge 1.20.1) + KOTS 0.3.1 ids | [vintage_delight.md](vintage_delight.md) | `VTD-` | `-08` in `mods/` (`-09` built, not installed), live since 1.1.02 |
+| Fungi Delight | `backportedFungi` | `fungidelight` | Eggmain 1.3 (Forge 1.20.1) | [fungi_delight.md](fungi_delight.md) | `FGD-` | `-01` in `mods/`, live since 1.1.02 |
+| Miner's Delight | `backportedMiners` | `miners_delight` | Sammy Semicolon 1.4.5 + the live 1.1.2 merged | [miners_delight.md](miners_delight.md) | `MND-` | `-01` in `mods/`, live since 1.1.03 |
 
 ### 0.2 Third-party native 1.19.2 jars (no port; today only pack integration)
 
@@ -934,7 +934,7 @@ files return early, and the deploy ships the trees only in the jar (Q25). Conten
 `creativeengineering.mixins.json`. Old to new: the three helpers to patcherMod `src/main/resources/kubejs_startup/creativeengineering/func/`;
 the mixin to `members/oceanic/src/main/java/com/SaintAlfonzo/creativedelight/oceanic/mixin/`.
 
-### 19.5 Install (not done; never while the game runs)
+### 19.5 Install (done before the 1.1.03 build, 2026-10-26; never while the game runs)
 
 patcherMod and CD go in together: the patcherMod jar in `development/patcherMod/build/libs/` holds the helpers the pack folder no
 longer has, and the fishing net mixin is only in CD now. `./gradlew :patcherMod:installToMods :creativeDelight:installToMods
@@ -1409,7 +1409,7 @@ Read from this file, `todo/TODO.md`, `mod_sides.md` and `mods/` on 2026-10-25. T
 
 ### 30.1 Creative Delight
 
-- **Installed, never booted.** `creative_delight-1.0.0.jar` (rebuilt and reinstalled 2026-10-27 after the compost, `cd_food` and Rustic translator edits) is in `mods/` and is byte-identical to
+- **Installed and deployed with 1.1.03 (2026-10-26); played since 2026-10-27** (TODO `creativedelight/framework #2` done). `creative_delight-1.0.0.jar` (rebuilt and reinstalled 2026-10-27 after the compost, `cd_food` and Rustic translator edits) is in `mods/` and is byte-identical to
   `development/creativeDelight/build/libs/creative_delight-1.0.0.jar`, beside `creativeengineering-1.1.03.jar`
   (patcherMod). The standalone Farmer's, Ocean's, Oceanic, End's, Rustic and Delightful jars are gone from `mods/`
   (nested). Older text in this file, `mod_sides.md` and TODO framework #2 still says "not installed": out of date.
@@ -1492,12 +1492,24 @@ are in `global.CD.FOOD` at the top of the file.
   were `cooked_glowing_calamari[_slice]`); every oven id is unchanged. Results unchanged, so no changelog bullet. Offline:
   `tools/test_cd_food.sh` (FFH-03). The hand-written cut, cook and bake rows in the member files and the heatless, hand food and
   golden rows are not moved: TODO `creativedelight/framework #12`.
+- **Open bug (2026-10-30): an array in `assemble`'s step list becomes a filling step with fluid `minecraft:empty`.** The
+  zucchini quiche assembly (`veggiesdelight/recipes.js`, cooked meat as an array) fails to load (`Error parsing recipe
+  creative_delight:createsequencedassembly/zucchini_quiche_sequenced_assembly` in `logs/kubejs/server.log`). Cause (scan 2026-10-31): `assemble` tests `s.fill`, and every
+  array has `Array.prototype.fill`, so an array step takes the filling branch with a function as its fluid. Fix: test
+  `Array.isArray(s)` first (deploying with `Ingredient.of(s)`), or check `s.fill` only on plain objects. The quiche is the
+  only `assemble` caller with an array step (grep 2026-10-31). Not fixed; record the fix here when made. Check: SQ-FFH-03.
 
 
 ## 31. Owner change list (scratchpad 2026-10-27)
 
 Moved out of the scratchpad; each item is a TODO row (`creativedelight/members` last rows, `textures/art`, `dishes`,
-`farming/crops`). Nothing here is built.
+`farming/crops`). Built 2026-10-29: Storage Delight name tag and JEI wood order (`members #23`, repack jar rebuilt 2026-10-29 23:54, still not in `mods/` on 2026-10-31), seagrass salad and no tentacles (`members #24`), Fruit Beignet dropped (`members #22`), powdered sugar values, batter grains and flowers in field salad (unreleased changelog). The rest is open.
+
+Scratch r1031 (2026-10-31): Fruit Beignet gone (SQ-CM-30) and seagrass salad, no tentacle items (SQ-CM-31) PASSED.
+SQ-CM-32 FAILED: `kubejs/oceansdelight/recipes.js` removes the tentacle recipes (line 39) before the calamari
+`replaceInputs` (41-47), so 4 dishes are gone and others keep empty `#forge:squid_tentacles` slots (NCH error x16 at boot).
+Fixed 2026-10-31 ([ocean_delight.md](ocean_delight.md) 5.5): removals after the swaps, raw calamari added to the two tentacle tags; rerun SQ-CM-32, SQ-CM-35.
+SQ-CM-33, -34 (Storage Delight JEI order and name) not run: repack jar not installed, client.
 
 - Storage Delight: change the mod name tag to (Creative Delight); sort its JEI items by wood order.
 - Ocean's Delight: disable all tentacles (`dishes/ocean #4`); seagrass salad takes 2 sea grass.
@@ -1527,3 +1539,6 @@ where a bread becomes more bread (Veggies garlic bread, Veggies bread slice cutt
 Explicit vanilla-bread inputs moved to `i.t_bread`: Hostile guardian burger/sandwich, turtle egg sandwich, FD roast chicken,
 Ocean's caesar salad, End's crawling sandwich, Create sweet roll and Create Factory rolls. Caviar toast now takes toast.
 Slice-only recipes (`#forge:bread_slices`) are unchanged. Tests: BR-01..03 in scratch_queue.md. Needs a full restart (item_dict) for `i.t_bread_loaf`.
+
+Sourdough Bread cut with a knife (Farmer's Delight cutting, `pneumaticcraft/recipes.js`) gives 3 Bread (was 2), 2026-10-28.
+Scratch check SQ-CM-10 in scratch_queue.md; changelog bullet in Food & Cooking.

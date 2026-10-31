@@ -20,6 +20,7 @@ types, SeasonHUD mixins), [weather_by_biome.md](weather_by_biome.md) (rain per s
 | GUI integration (3.6) | BUILT 2026-10-18, DEPLOYED with 1.0.8, not tested: `[time]` in Create's Configs screen, SeasonHUD "Day x/24" + time of day, calendar tooltip and action bar, `/cetime` |
 | Offline checks (6) | not built: `tools/time_table.py`, the SUN-counter GameTest |
 | Presets (3.9) | BUILT 2026-10-18, DEPLOYED with 1.0.8, not tested: SINGLEPLAYER (default) / SERVER / CUSTOM |
+| Admin date commands, year fix (3.11) | BUILT 2026-10-30 in patcherMod, installed 2026-10-31 00:44; scratch server PASSED r1031 (2026-10-31, SQ-TD-01 to -03, -05, SQ-GF31-04 = TI-37 server half); SQ-TD-04 (wine clock, `/wine time` prints bare lang keys on a dedicated server) client check pending; `add` takes singular units only, TI-32 writes `days`; TI-32 to TI-37 in game pending (TODO `gameplay/time #6`) |
 | Decisions | DECIDED: T1 (A), T2, T3 (SUN), T4 (on), T6, T7 (rejoin), T8, T9, T10, T12, T5 (2026-10-19: cold / warm, 3.5); T11 dropped |
 
 **Files to open first:** `config/creativeengineering-common.toml` `[time]` (once built), `config/betterdays-common.toml`,
@@ -503,6 +504,47 @@ mixins, nothing stops it: sleeping runs at 110 units per tick, Better Days sends
 clock model, and no pack code touches client time. No log errors. The cause needs one in-game look (TI-31) to tell
 apart: night not fast-forwarding, client time standing still in bed, or the clock property itself.
 
+### 3.11 Admin date commands (`/cetime date`, built 2026-10-30)
+
+Op-level (2) commands that move the calendar and keep every clock on the same date. They need Serene Seasons and
+`[time.seasons] clock = SUN` (both presets); on TICKS they refuse.
+
+| Command | Goes to |
+|---|---|
+| `/cetime date` | prints the date: "Year 1, Early Spring, day 1 of 8, 7:42 am (world day 1)" |
+| `/cetime date reset` | the world's start: year 1, day 1 of Serene Seasons' `starting_sub_season`, at dayTime 0's time of day (7:42 am) |
+| `/cetime date set <year> <month> [day] [time]` | that date; `month` is `early_spring` ... `late_winter`, day defaults to 1, time to 6:00 am; time reads "7:30 pm", "7pm" or "19:30" |
+| `/cetime date next <unit>` | sunrise on the first day of the next day / month / season / year |
+| `/cetime date previous <unit>` | sunrise on the first day of the previous one (not the current) |
+| `/cetime date restart <unit>` | sunrise on the first day of the current one |
+| `/cetime date add <n> <unit>` | `n` units on (negative: back), same time of day |
+
+`<unit>` is `day`, `month` (one sub-season), `season` (3 months) or `year` (12 months). Months, seasons and years line
+up with the calendar: a season starts on Early Spring / Summer / Autumn / Winter, a year on Early Spring.
+
+**One position, every clock.** A date is one number: day time units since the first sunrise
+(`TimeSettings.firstSunrise()`, -1700 for the pack's 22300, the same sunrise the minimap's "Day N" counts from). Year 1,
+Early Spring, day 1, 6:00 am is 0. `TimeDate.apply` sets:
+
+- **Sun:** `dayTime` = first sunrise + position, in every level (as `/time set`), with the time packet sent at once.
+  Clamped at dayTime 0, so year 1 Early Spring day 1 can't go earlier than 7:42 am.
+- **Seasons:** `seasonCycleTicks` = position within the year, in every level that has seasons, then
+  `sendSeasonUpdate` (after the time packet, so the client's own sun step is overwritten).
+  `SeasonClock.jumped` resets the step tracker, so the jump isn't added a second time.
+- **Year:** not stored. `CalendarDate.year` reads it from the world day minus the day of the year, which the two above
+  set together.
+- **Wine** (`[time.wine] clock = SUN`): the vintage clock moves by the same amount as the sun. Forward it does this
+  itself on its next tick; backward (it ignores backward steps) `TimeDate` calls `VintageClock.add` by reflection.
+  So wines age or un-age with the calendar. A wine put away after the target date reads age 0 until the clock passes
+  its storage time again. PLAYTIME wine is not moved.
+- **Better Days, SeasonHUD, calendar tooltip, minimap:** read `dayTime` and Serene Seasons, nothing of their own to move.
+
+**Year fix (same build).** The year used to count from the sunrise after dayTime 0 (22300) and round down. On a fresh
+world the world day ran one behind the season day, so year 1 lasted until the second Early Spring (almost two years).
+It now counts from the first sunrise and rounds up: a fresh world reaches year 2 at its first Early Spring, also when
+it starts after Early Spring. Worlds whose date was already off (migrated, `/season set`) may read one year higher;
+`/cetime date set` puts them on a clean date.
+
 ## 4. Limits and decisions
 
 | # | Decision | Options | Recommendation |
@@ -550,7 +592,7 @@ apart: night not fast-forwarding, client time standing still in bed, or the cloc
 | [../development/backportedVinery/src/main/java/net/satisfy/vinery/core/wine/VintageClock.java](../development/backportedVinery/src/main/java/net/satisfy/vinery/core/wine/VintageClock.java) | vintage clock |
 | [../development/backportedVinery/src/main/java/net/satisfy/vinery/core/wine/WineYears.java](../development/backportedVinery/src/main/java/net/satisfy/vinery/core/wine/WineYears.java) | wine age, storage rate, cellar boost |
 | [../development/patcherMod/src/main/java/com/SaintAlfonzo/creativeengineering/CEConfig.java](../development/patcherMod/src/main/java/com/SaintAlfonzo/creativeengineering/CEConfig.java) | `Time` section |
-| [../development/patcherMod/src/main/java/com/SaintAlfonzo/creativeengineering/time/](../development/patcherMod/src/main/java/com/SaintAlfonzo/creativeengineering/time/) | `TimeSettings` (derived values, clock text), `TimePush`, `SeasonClock` (SUN counter, migration), `TimePause`, `TimeCommand` (`/cetime`), `CalendarDate`, `TimeClient` (calendar), `WineTime` (public, read by the Vinery port's `forge/PackTime`) |
+| [../development/patcherMod/src/main/java/com/SaintAlfonzo/creativeengineering/time/](../development/patcherMod/src/main/java/com/SaintAlfonzo/creativeengineering/time/) | `TimeSettings` (derived values, clock text), `TimePush`, `SeasonClock` (SUN counter, migration), `TimePause`, `TimeCommand` (`/cetime`), `TimeDate` (`/cetime date`, 3.11), `CalendarDate`, `TimeClient` (calendar), `WineTime` (public, read by the Vinery port's `forge/PackTime`) |
 | `../development/patcherMod/.../mixin/BetterDaysConfigMixin.java`, `BetterDaysTimePauseMixin.java`, `ServerLevelTimePauseMixin.java`, `SereneSeasonsClockMixin.java`, `SereneSeasonsClientClockMixin.java`, `SereneSeasonsTimeSkipMixin.java`, `SeasonHudCurrentSeasonMixin.java`, `XaeroTimeInfoMixin.java` | the mixins (3.8, 3.10) |
 | [../development/patcherMod/src/main/java/com/SaintAlfonzo/creativeengineering/mixin/SeasonHudHelperMixin.java](../development/patcherMod/src/main/java/com/SaintAlfonzo/creativeengineering/mixin/SeasonHudHelperMixin.java) | season-type HUD day; reads the same lengths |
 
@@ -612,6 +654,12 @@ TI-27 cover what the build added (3.8).
 - [ ] **TI-30 Minimap lines agree (3.10):** overworld, Xaero's time line on (default profile) -> `/time set 11800`: the SeasonHUD line ends "7:30 pm" and Xaero's reads "Day N, 19:30"; `/time set 22250`, wait for sunrise -> SeasonHUD's "Day x/24" and Xaero's "Day N" step together at 6:00 am; in the Nether Xaero's line is unchanged
 - [ ] **TI-31 Bed clock turns (3.10):** single player, clock in the hotbar, sleep at dusk -> note how long the night takes (about 5 s expected), whether Better Days' bed clock (top right) and the hotbar clock turn, and whether SeasonHUD's time races. Report which of the three moved
 
+- [ ] **TI-32 Date reset (3.11):** *r1031: `add` refuses plural units ("Unknown unit days"); use `40 day` or change the command.* `/cetime date add 40 days`, then `/cetime date reset` -> `/cetime date` reads "Year 1, Early Spring, day 1 of 8, 7:42 am (world day 1)"; `/time query daytime` 0; SeasonHUD and the calendar tooltip agree
+- [ ] **TI-33 Month and season steps (3.11):** after TI-32, `/cetime date next month` three times -> Mid Spring, Late Spring, Early Summer, each day 1 at 6:00 am; `/cetime date previous season` -> Early Spring day 1; `/cetime date restart month` mid-month -> day 1 of the same month; the world re-tints once per sub-season change
+- [ ] **TI-34 Year and set (3.11):** `/cetime date next year` -> "Year 2, Early Spring, day 1"; `/cetime date set 3 mid_autumn 5 7:30 pm` -> exactly that on `/cetime date`, SeasonHUD ("Mid Autumn (Day 13/24) 7:30 pm" with totals) and the calendar; minimap "Day N" = (3-1) x 96 + 7 x 8 + 5 = 253
+- [ ] **TI-35 Wine follows (3.11):** a fresh wine in storage, `/wine info`; `/cetime date add 1 month` -> 1 month older (cellar boosts apply); `/cetime date add -1 month` -> back to the first reading; the chat line says "wine clock moved back"
+- [ ] **TI-36 No double count (3.11):** `/cetime date next day`, wait 10 s -> SeasonHUD day went up by exactly 1, not 2; `/season` in every whitelisted dimension shows the same sub-season and day
+- [ ] **TI-37 Fresh world year (3.11):** new single-player world, `/cetime date next year` -> "Year 2" (before the fix it read Year 1)
 ## 8. History
 
 - 2026-10-18: writeup created. Read Better Days 3.3.4.3, Serene Seasons 8.1.0.24 and SeasonHUD 2.0.4 decompiled, plus the
@@ -655,3 +703,6 @@ TI-27 cover what the build added (3.8).
 - 2026-10-27: the Vinery port owns its config (pack_hygiene.md finding 39). `TimePush.pushVinery` (reflection into
   `VineryConfig`) is gone; the port reads the master through patcherMod's public `time/WineTime` (3.2). Same values
   and behaviour. The 1.3.10 wine `Year` conversion and `legacyYearLengthDays` were removed (finding 10).
+- 2026-10-30: 3.11 built in patcherMod (`time/TimeDate`): `/cetime date` reset / set / next / previous / restart / add,
+  moving the sun, Serene Seasons in every level and the vintage clock together. The year now counts from the first
+  sunrise and rounds up (`CalendarDate.year`), fixing a fresh world's two-year year 1. Compiles; TI-32 to TI-37 not run.

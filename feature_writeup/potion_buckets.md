@@ -7,7 +7,7 @@
 | Three potion buckets (`creativeengineering:potion_bucket`, `splash_potion_bucket`, `lingering_potion_bucket`): right-click a block to burst a dome of potion clouds | DEPLOYED (in the 2026-09-27 initial commit; shipped since 1.0.3, live in 1.0.6); the dome shape was never confirmed in game |
 | Dispenser bursts a bucket (`PotionBucketDispenser`) | DEPLOYED, in-game test pending |
 | Recipes: bucket ↔ 4 bottles in the crafting grid, Create Spout fill and Item Drain empty, IE Bottling Machine fill (1000 mB) | DEPLOYED; never confirmed in game ([todo.txt](todo/todo.txt)) |
-| JEI pages for Tipped Arrows and Potion Buckets (config `[jei]` toggles `tippedArrowCategory`, `potionBucketCategory`) | BUILT 2026-10-22, not in `mods/` yet; see [jei_coverage.md](jei_coverage.md) |
+| JEI pages for Tipped Arrows and Potion Buckets (config `[jei]` toggles `tippedArrowCategory`, `potionBucketCategory`) | BUILT 2026-10-22, DEPLOYED with 1.1.01 (2026-10-22); see [jei_coverage.md](jei_coverage.md) |
 | Vanilla potion bottles leave a glass bottle when used in a crafting grid | DEPLOYED (fixed 2026-09-12); never confirmed in game |
 | Vanilla-style effect tooltip on the buckets, two-layer tinted textures | DEPLOYED |
 | Machine-tipped arrows: IE Bottling Machine and Create Spout, lingering `create:potion` | DEPLOYED; cheaper than the crafting-grid recipe (F1) |
@@ -130,11 +130,11 @@ Lingering `create:potion` only; one recipe pair per potion.
   or keep the discount and fix the comment.
 - **F2.** FIXED 2026-10-19: the tooltip shows the applied duration via `global.potionArea.scaled` ([plan_1.0.9.md](plan_1.0.9.md)). **Tooltip durations ignore `effectMult`.** A lingering bucket gives 1.2 × what its tooltip says, a splash bucket
   1.1 ×. Scale the tooltip or add a "× 1.2" line.
-- **F3. The bottle remainder is global. Your call.** Added for the bucket fill recipe, but it also changes vanilla
+- **F3. The bottle remainder is global.** DECIDED 2026-10-29 (owner): keep it global. Added for the bucket fill recipe, but it also changes vanilla
   tipped arrows (you now get the glass bottle back) and any modded grid recipe that eats a potion. Farmer's Delight's
   stations already return bottles ([remainder_buffer.md](remainder_buffer.md)), so most of the pack already behaves
   this way. Keep, or scope it.
-- **F4. Raw `e.custom` for the bucket and arrow machine recipes** (Create filling/emptying, IE bottling), against the
+- **F4.** FIXED 2026-10-27 ([pack_hygiene.md](pack_hygiene.md) 3.3 finding 13, TODO `tooling/conventions #1`, PH-07). **Raw `e.custom` for the bucket and arrow machine recipes** (Create filling/emptying, IE bottling), against the
   NCH-helper rule. Same fix as [potions.md](potions.md) F6.
 - **F5.** FIXED 2026-10-23 (TODO `potions/potion-buckets #5`, with the Night Vision fallback bug). **Recipes for potions no machine holds.** 15 bucket recipes and 2 arrow recipes per registered potion, water,
   awkward, thick and mundane included. Water never exists as `create:potion` (Create uses plain water), so those

@@ -46,3 +46,10 @@ ef.darkness = 'minecraft:darkness';
 
 // Neutral
 ef.glowing = 'minecraft:glowing';
+
+// ############################## Modded ##############################
+ef.caffeinated = 'farmersrespite:caffeinated';
+ef.agility = 'neapolitan:agility';
+ef.climbing = 'vinery:climbing_effect';
+ef.knockback_resistance = 'alexsmobs:knockback_resistance';
+ef.phantom_bane = 'better_beacons:phantom_bane';

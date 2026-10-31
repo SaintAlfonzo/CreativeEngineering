@@ -1,0 +1,209 @@
+# Run 2026-10-31, worldgen block W2: meta batch (SQ-META31) and spawn boxes (SQ-SB) in one fresh normal world.
+# prep: group B seed 8675309, difficulty=normal, spawn-monsters=true, spawn-animals=true; srv toml
+# [worldgen.meta_structures] log = true. Each /locate may take up to 300 s (the timeout); waitlog uses 330.
+# Spawn rows: a creative bot (counts as a player for spawning, mobs leave it alone) stands at the box edge;
+# mob types are counted per structure with execute-if-entity (one line per type, "count: N").
+pace 2
+
+## SQ-META31-01 | metas take slots, replacements, no part errors
+bootexpect meta structure\(s\) take slots
+bootexpect 4 replacement\(s\)
+bootreject (?i)share above 100
+bootreject failed to generate as a part
+look meta count 13 higher than the 10-30 W30 boots (perf/sessions or the WG30 rows' logs)
+
+## SQ-SB-01 | spawn boxes load
+bootexpect \[spawn-boxes\].*15 box\(es\)
+bootreject \[spawn-boxes\].*(no pool|no entity type|is in box)
+> pbot spawn qa 0 120 0 minecraft:overworld creative
+> gamerule doDaylightCycle false
+> time set 18000
+look after the first spawns the log has "N structure(s) boxed" (about 75); re-check at the end of the batch
+
+## SQ-META31-02 | sky metas: clouds, balloons, sky village islands
+> locate structure creativeengineering:meta/cloud_cluster
+waitlog nearest creativeengineering:meta/cloud_cluster is at|type "?creativeengineering:meta/cloud_cluster|creativeengineering:meta/cloud_cluster.*timed out 330
+> locate structure creativeengineering:meta/balloon_fleet
+waitlog nearest creativeengineering:meta/balloon_fleet is at|type "?creativeengineering:meta/balloon_fleet|creativeengineering:meta/balloon_fleet.*timed out 330
+> locate structure creativeengineering:meta/cloud_balloons
+waitlog nearest creativeengineering:meta/cloud_balloons is at|type "?creativeengineering:meta/cloud_balloons|creativeengineering:meta/cloud_balloons.*timed out 330
+> locate structure creativeengineering:meta/sky_village_islands
+waitlog nearest creativeengineering:meta/sky_village_islands is at|type "?creativeengineering:meta/sky_village_islands|creativeengineering:meta/sky_village_islands.*timed out 330
+count nearest creativeengineering:meta/(cloud_cluster|balloon_fleet|cloud_balloons|sky_village_islands) is at == 4
+look meta log lines: 2-4 clouds, 2-6 balloons, 1-2 of each, 2-5 islands near the sky village height and none inside it (ST-307, ST-308); visual check in the client block at the logged positions
+
+## SQ-META31-03 | caravans
+> locate structure creativeengineering:meta/witch_cart_caravan
+waitlog nearest creativeengineering:meta/witch_cart_caravan is at|type "?creativeengineering:meta/witch_cart_caravan|creativeengineering:meta/witch_cart_caravan.*timed out 330
+> locate structure creativeengineering:meta/pillager_caravan
+waitlog nearest creativeengineering:meta/pillager_caravan is at|type "?creativeengineering:meta/pillager_caravan|creativeengineering:meta/pillager_caravan.*timed out 330
+> locate structure creativeengineering:meta/trader_caravan
+waitlog nearest creativeengineering:meta/trader_caravan is at|type "?creativeengineering:meta/trader_caravan|creativeengineering:meta/trader_caravan.*timed out 330
+count nearest creativeengineering:meta/(witch_cart_caravan|pillager_caravan|trader_caravan) is at == 3
+look meta lines: wagons / carriages / camps together; the swamp witch caravan has a hut; trader caravan has a way sign (ST-309). Not found in 300 s: rerun this row on a W2 boot with testOverrides (share 1)
+
+## SQ-META31-04 | meteorite strikes
+> locate structure creativeengineering:meta/meteorite_village
+waitlog nearest creativeengineering:meta/meteorite_village is at|type "?creativeengineering:meta/meteorite_village|creativeengineering:meta/meteorite_village.*timed out 330
+> locate structure creativeengineering:meta/meteorite_desert_pyramid
+waitlog nearest creativeengineering:meta/meteorite_desert_pyramid is at|type "?creativeengineering:meta/meteorite_desert_pyramid|creativeengineering:meta/meteorite_desert_pyramid.*timed out 330
+> locate structure minecraft:desert_pyramid
+waitlog nearest minecraft:desert_pyramid is at|type "?minecraft:desert_pyramid|minecraft:desert_pyramid.*timed out 330
+> locate structure creativeengineering:meta/underwater_meteorite
+waitlog nearest creativeengineering:meta/underwater_meteorite is at|type "?creativeengineering:meta/underwater_meteorite|creativeengineering:meta/underwater_meteorite.*timed out 330
+> locate structure creativeengineering:meta/pillager_camp_meteorite
+waitlog nearest creativeengineering:meta/pillager_camp_meteorite is at|type "?creativeengineering:meta/pillager_camp_meteorite|creativeengineering:meta/pillager_camp_meteorite.*timed out 330
+count nearest .* is at >= 5
+reject 0/1 #creativeengineering:meta/meteorites
+look crater through the village middle, no floating house; struck pyramid has a crater and a plain pyramid still exists; sky stone sphere in a sunken ruin; camp strikes on and beside camps (ST-310, ST-311, ST-313, ST-314): client block at the logged positions
+
+## SQ-META31-04b | meteorite village from a second origin (another village type)
+> execute positioned 4000 70 4000 run locate structure creativeengineering:meta/meteorite_village
+waitlog nearest creativeengineering:meta/meteorite_village is at|type "?creativeengineering:meta/meteorite_village|creativeengineering:meta/meteorite_village.*timed out 330
+expect nearest creativeengineering:meta/meteorite_village is at
+look a different village type than SQ-META31-04's (meta log line names the anchor)
+
+## SQ-META31-05 | temples with ruins
+> locate structure creativeengineering:meta/desert_temple_ruins
+waitlog nearest creativeengineering:meta/desert_temple_ruins is at|type "?creativeengineering:meta/desert_temple_ruins|creativeengineering:meta/desert_temple_ruins.*timed out 330
+> locate structure creativeengineering:meta/jungle_temple_ruins
+waitlog nearest creativeengineering:meta/jungle_temple_ruins is at|type "?creativeengineering:meta/jungle_temple_ruins|creativeengineering:meta/jungle_temple_ruins.*timed out 330
+count nearest .* is at == 2
+look 2-4 small ruins of the right biome around each temple, none touching it (ST-312)
+
+## SQ-META31-06 | meteor shower, struck monument
+> locate structure creativeengineering:meta/meteor_shower
+waitlog nearest creativeengineering:meta/meteor_shower is at|type "?creativeengineering:meta/meteor_shower|creativeengineering:meta/meteor_shower.*timed out 330
+> locate structure creativeengineering:meta/struck_monument
+waitlog nearest creativeengineering:meta/struck_monument is at|type "?creativeengineering:meta/struck_monument|creativeengineering:meta/struck_monument.*timed out 330
+capture SM is at \[(-?\d+), (~|-?\d+), (-?\d+)\]
+count nearest .* is at == 2
+look 2-4 craters in a sand desert; a sky stone sphere in or by the monument (ST-316)
+
+## SQ-META31-09 | struck monument: guardians in the monument only
+> tp qa {SM1} 70 {SM3}
+> difficulty normal
+sleep 240
+> execute positioned {SM1} 50 {SM3} if entity @e[type=minecraft:guardian,distance=..30]
+> execute positioned {SM1} 50 {SM3} as @e[type=minecraft:guardian,distance=..96] run data get entity @s Pos
+look guardians respawn inside the monument (first check passes) and none out over the meteorite's water (Pos list all within the monument box, ST-319)
+
+## SQ-META31-07 | witch coven: witch respawns in the hut, not on the wagons
+> locate structure creativeengineering:meta/witch_coven
+waitlog nearest creativeengineering:meta/witch_coven is at|type "?creativeengineering:meta/witch_coven|creativeengineering:meta/witch_coven.*timed out 330
+capture WC is at \[(-?\d+), (~|-?\d+), (-?\d+)\]
+> tp qa {WC1} 90 {WC3}
+sleep 30
+> execute positioned {WC1} 70 {WC3} run kill @e[type=minecraft:witch,distance=..64]
+sleep 240
+> execute positioned {WC1} 70 {WC3} as @e[type=minecraft:witch,distance=..64] run data get entity @s Pos
+look a witch respawned and its Pos is in the hut, none on the wagons (ST-317); no witch = patcherMod older than 10-30 17:55
+
+## SQ-META31-08 | village sieges: ring and one-side camp
+> locate structure creativeengineering:meta/village_siege_ring
+waitlog nearest creativeengineering:meta/village_siege_ring is at|type "?creativeengineering:meta/village_siege_ring|creativeengineering:meta/village_siege_ring.*timed out 330
+> locate structure creativeengineering:meta/village_siege_camp
+waitlog nearest creativeengineering:meta/village_siege_camp is at|type "?creativeengineering:meta/village_siege_camp|creativeengineering:meta/village_siege_camp.*timed out 330
+count nearest .* is at == 2
+look ring: 2-6 weapons around, none in the village; camp: grouped on one side (ST-318), from the meta log part offsets
+
+## SQ-SB-02 | no pillager spawners in the templates
+> execute positioned 3000 100 3000 run ceplace structures illager_siege_weapons:catapult mysticrift_pillagers_towers_aris:oak_wood_pillager_tower blocky_siege:pillager_ship
+> execute in minecraft:the_end run ceplace structures mysticrift_pillagers_towers_aris:end_pillager_tower
+waitlog \[ceplace\] done 600
+reject \[ceplace\] done.* [1-9]\d* failed
+expect \[spawner-filter\].*removed
+expect \[spawner-filter\].*plus 2 with no mob
+look no spawner block in any (zq count around the logged placements for minecraft:spawner = 0); /ceplace syntax per memory worldgen-config-ceplace if the command is rejected
+
+## SQ-SB-03 | lone large pillager tower: illager mix at night, pillagers only by day
+> locate structure mysticrift_pillagers_towers_aris:birch_pillager_tower
+waitlog nearest mysticrift_pillagers_towers_aris:birch_pillager_tower is at|type "?mysticrift_pillagers_towers_aris:birch_pillager_tower|mysticrift_pillagers_towers_aris:birch_pillager_tower.*timed out 330
+capture BT is at \[(-?\d+), (~|-?\d+), (-?\d+)\]
+> tp qa {BT1+30} 100 {BT3}
+> time set 18000
+sleep 240
+> execute positioned {BT1} 80 {BT3} if entity @e[type=minecraft:pillager,distance=..48]
+> execute positioned {BT1} 80 {BT3} if entity @e[type=minecraft:vindicator,distance=..48]
+> execute positioned {BT1} 80 {BT3} if entity @e[type=minecraft:evoker,distance=..48]
+> execute positioned {BT1} 80 {BT3} if entity @e[type=minecraft:illusioner,distance=..48]
+> execute positioned {BT1} 80 {BT3} if entity @e[type=minecraft:witch,distance=..48]
+> execute positioned {BT1} 80 {BT3} if entity @e[type=minecraft:ravager,distance=..48]
+> execute positioned {BT1} 80 {BT3} if entity @e[type=minecraft:zombie,distance=..48]
+> execute positioned {BT1} 80 {BT3} if entity @e[type=minecraft:creeper,distance=..48]
+> execute positioned {BT1} 80 {BT3} run kill @e[type=!minecraft:player,distance=..64]
+> time set 6000
+sleep 180
+> execute positioned {BT1} 80 {BT3} if entity @e[type=minecraft:pillager,distance=..48]
+> execute positioned {BT1} 80 {BT3} if entity @e[type=minecraft:vindicator,distance=..48]
+> execute positioned {BT1} 80 {BT3} if entity @e[type=minecraft:witch,distance=..48]
+look night: pillager, vindicator, evoker, illusioner, witch present (counts), ravager / zombie / creeper "Test failed"; day: only pillagers (ST-322). y 80 is a guess: if every check fails, read the tower's y from the locate line or a meta log line and rerun with that y
+> time set 18000
+
+## SQ-SB-04 | tower siege meta: both spots spawn the large-tower mix; lone T&T tower its own mix
+> locate structure creativeengineering:meta/pillager_tower_siege
+waitlog nearest creativeengineering:meta/pillager_tower_siege is at|type "?creativeengineering:meta/pillager_tower_siege|creativeengineering:meta/pillager_tower_siege.*timed out 330
+capture TS is at \[(-?\d+), (~|-?\d+), (-?\d+)\]
+> tp qa {TS1+30} 100 {TS3}
+sleep 240
+> execute positioned {TS1} 80 {TS3} if entity @e[type=minecraft:evoker,distance=..64]
+> execute positioned {TS1} 80 {TS3} if entity @e[type=minecraft:illusioner,distance=..64]
+> execute positioned {TS1} 80 {TS3} if entity @e[type=minecraft:zombie,distance=..64]
+> locate structure towns_and_towers:pillager_outpost_forest
+waitlog nearest towns_and_towers:pillager_outpost_forest is at|type "?towns_and_towers:pillager_outpost_forest|towns_and_towers:pillager_outpost_forest.*timed out 330
+capture TT is at \[(-?\d+), (~|-?\d+), (-?\d+)\]
+> tp qa {TT1+30} 100 {TT3}
+sleep 240
+> execute positioned {TT1} 80 {TT3} if entity @e[type=minecraft:pillager,distance=..48]
+> execute positioned {TT1} 80 {TT3} if entity @e[type=minecraft:vindicator,distance=..48]
+> execute positioned {TT1} 80 {TT3} if entity @e[type=minecraft:evoker,distance=..48]
+look meta: evokers and illusioners present, no zombie; T&T tower: pillagers and vindicators, no evoker (ST-323)
+
+## SQ-SB-05 | pillager camp + ruin meta: camp illagers, ruin its own mobs
+> locate structure creativeengineering:meta/pillager_camp_ruin
+waitlog nearest creativeengineering:meta/pillager_camp_ruin is at|type "?creativeengineering:meta/pillager_camp_ruin|creativeengineering:meta/pillager_camp_ruin.*timed out 330
+capture PR is at \[(-?\d+), (~|-?\d+), (-?\d+)\]
+> tp qa {PR1+30} 100 {PR3}
+sleep 240
+> execute positioned {PR1} 70 {PR3} as @e[type=!minecraft:player,type=!minecraft:item,distance=..96] run data get entity @s id
+look camp: pillagers, vindicators, witches, evokers; the ruin part (offset from the meta log): its Philip's Ruins mobs, no illagers (ST-324)
+
+## SQ-SB-06 | box evokers drop no totem; a mansion's generated evoker does
+> locate structure towns_and_towers:pillager_outpost_badlands
+waitlog nearest towns_and_towers:pillager_outpost_badlands is at|type "?towns_and_towers:pillager_outpost_badlands|towns_and_towers:pillager_outpost_badlands.*timed out 330
+capture BF is at \[(-?\d+), (~|-?\d+), (-?\d+)\]
+> tp qa {BF1+30} 110 {BF3}
+sleep 240
+> execute positioned {BF1} 80 {BF3} as @e[type=minecraft:evoker,distance=..64,limit=1] run data get entity @s ForgeData
+> execute positioned {BF1} 80 {BF3} run kill @e[type=minecraft:evoker,distance=..64]
+sleep 3
+> execute positioned {BF1} 80 {BF3} if entity @e[type=item,nbt={Item:{id:"minecraft:totem_of_undying"}},distance=..64]
+expect Test failed|No entity was found
+look the ForgeData shows the spawn-box mark; the totem check fails. Mansion half (generated evoker drops a totem) in the client block: kill one with a player (kill command drops count, but a client kill is the honest check)
+
+## SQ-SB-07 | pillager ship crews: boat mix; villager ships none
+> locate structure unwrecked_ships:ship
+waitlog nearest unwrecked_ships:ship is at|type "?unwrecked_ships:ship|unwrecked_ships:ship.*timed out 330
+capture US is at \[(-?\d+), (~|-?\d+), (-?\d+)\]
+> tp qa {US1+20} 90 {US3}
+sleep 240
+> execute positioned {US1} 63 {US3} as @e[type=!minecraft:player,type=!minecraft:item,distance=..48] run data get entity @s id
+look pillager-crew ship: pillagers, vindicators, evokers, witches; villager-crew ship: no illagers (ST-326). Ship crew type: the first locate may hit either; rerun from another origin for the other
+
+## SQ-SB-08 | witch wagon, Terralith underground witch hut, swamp hut: witches only inside
+> locate structure eugene:witch_wagon
+waitlog nearest eugene:witch_wagon is at|type "?eugene:witch_wagon|eugene:witch_wagon.*timed out 330
+capture WW is at \[(-?\d+), (~|-?\d+), (-?\d+)\]
+> tp qa {WW1+24} 100 {WW3}
+sleep 240
+> execute positioned {WW1} 70 {WW3} as @e[type=!minecraft:player,type=!minecraft:item,distance=..32] run data get entity @s id
+> locate structure minecraft:swamp_hut
+waitlog nearest minecraft:swamp_hut is at|type "?minecraft:swamp_hut|minecraft:swamp_hut.*timed out 330
+capture SH is at \[(-?\d+), (~|-?\d+), (-?\d+)\]
+> tp qa {SH1+24} 90 {SH3}
+sleep 240
+> execute positioned {SH1} 70 {SH3} as @e[type=!minecraft:player,type=!minecraft:item,distance=..24] run data get entity @s id
+look witches only inside each; swamp hut cats still spawn (ST-327); the Terralith underground hut: rerun with terralith:underground/witch_hut if time allows
+
+## SQ-SB-01e | boxed structure count after the spawn rows
+bootexpect \[spawn-boxes\].*structure\(s\) boxed

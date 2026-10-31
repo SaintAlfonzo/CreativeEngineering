@@ -7,6 +7,87 @@
       "element": {
         "element_type": "minecraft:empty_pool_element"
       }
+    },
+    {
+      "weight": 1,
+      "element": {
+        "location": "skyvillages:letsdo_brewery/sky_village_letsdo_brewery_deco_0",
+        "processors": "minecraft:empty",
+        "projection": "rigid",
+        "element_type": "minecraft:single_pool_element"
+      }
+    },
+    {
+      "weight": 1,
+      "element": {
+        "location": "skyvillages:letsdo_brewery/sky_village_letsdo_brewery_deco_1",
+        "processors": "minecraft:empty",
+        "projection": "rigid",
+        "element_type": "minecraft:single_pool_element"
+      }
+    },
+    {
+      "weight": 1,
+      "element": {
+        "location": "skyvillages:letsdo_brewery/sky_village_letsdo_brewery_deco_2",
+        "processors": "minecraft:empty",
+        "projection": "rigid",
+        "element_type": "minecraft:single_pool_element"
+      }
+    },
+    {
+      "weight": 1,
+      "element": {
+        "location": "skyvillages:letsdo_brewery/sky_village_letsdo_brewery_deco_3",
+        "processors": "minecraft:empty",
+        "projection": "rigid",
+        "element_type": "minecraft:single_pool_element"
+      }
+    },
+    {
+      "weight": 1,
+      "element": {
+        "location": "skyvillages:letsdo_brewery/sky_village_letsdo_brewery_deco_4",
+        "processors": "minecraft:empty",
+        "projection": "rigid",
+        "element_type": "minecraft:single_pool_element"
+      }
+    },
+    {
+      "weight": 1,
+      "element": {
+        "location": "skyvillages:letsdo_brewery/sky_village_letsdo_brewery_deco_5",
+        "processors": "minecraft:empty",
+        "projection": "rigid",
+        "element_type": "minecraft:single_pool_element"
+      }
+    },
+    {
+      "weight": 1,
+      "element": {
+        "location": "skyvillages:letsdo_brewery/sky_village_letsdo_brewery_deco_6",
+        "processors": "minecraft:empty",
+        "projection": "rigid",
+        "element_type": "minecraft:single_pool_element"
+      }
+    },
+    {
+      "weight": 1,
+      "element": {
+        "location": "skyvillages:letsdo_brewery/sky_village_letsdo_brewery_deco_7",
+        "processors": "minecraft:empty",
+        "projection": "rigid",
+        "element_type": "minecraft:single_pool_element"
+      }
+    },
+    {
+      "weight": 1,
+      "element": {
+        "location": "skyvillages:letsdo_brewery/sky_village_letsdo_brewery_deco_8",
+        "processors": "minecraft:empty",
+        "projection": "rigid",
+        "element_type": "minecraft:single_pool_element"
+      }
     }
   ]
 }

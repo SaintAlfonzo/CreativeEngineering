@@ -1,5 +1,16 @@
 # Scratch test queue
 
+> **Agents running this queue: capture performance for the whole run.** Open a perf session before the first boot
+> (`bash tools/perf/session/perf_session.sh start <name>`), mark every row (`perf_session.sh mark <ID>`;
+> `tools/scratch_query/qrun.py` marks each row itself), keep JFR on for every server and client (never `CE_PERF=0`;
+> a client gets `jcmd <pid> JFR.dump` before it closes), and report the session **without `--prune`** so the raw
+> recordings stay for debugging later. If disk runs short, drop the recordings of all-PASS boots first, never those
+> with a FAIL. Details: "Perf session" below and [scratch_run_2026-10-31.md](scratch_run_2026-10-31.md) section 0.
+>
+> **Next bulk run (built 2026-10-31, not run):** [scratch_run_2026-10-31.md](scratch_run_2026-10-31.md): every row
+> queued since the 10-28 night run, 202 rows in `tools/scratch_query/batches/r1031/` (server with fake players, then
+> worldgen, then the client, then the longest operations).
+
 Live checks waiting for a bulk scratch-server session. A bulk session groups the entries by world group, runs each
 group on one server (`tools/creative_labels_test/scratch_server.sh`, memory `scratch-server-verify`), then marks
 each entry PASS / FAIL here and moves the result into the feature's writeup. One game JVM at a time: check
@@ -8,14 +19,14 @@ each entry PASS / FAIL here and moves the result into the feature's writeup. One
 Status word for a feature with entries here: "built, scratch test queued"; once its run passes, "built, scratch
 server PASSED" (legend in [../README.md](../README.md)).
 
-Refreshed 2026-10-27 against the unreleased changelog: new section "Texture fixes, 2026-10-27" at the bottom (crop, platter and fridge
+Gap-fill rows (seed pouch, smoked wood) added 2026-10-30 at the bottom. Refreshed 2026-10-27 against the unreleased changelog: new section "Texture fixes, 2026-10-27" at the bottom (crop, platter and fridge
 missing textures), moreMooblooms 1.1.0 rebuilt 2026-10-27 00:14 (needed for CQ-JT-09). Earlier refresh 2026-10-25: new entries SQ-MDP-05 to -13, SQ-RM, SQ-SK, CQ-NEW-04 to -06;
 SQ-FN and the Round 0 / jar-state notes corrected. Every change a player can notice in `unreleased.md` now has a row.
 
-Run results live in the Run log at the bottom, not in the entry rows. Latest: the 2026-10-27 evening run measuring the perf fixes (wgp_* worlds, group A qa_1027; perf.md 10.9). Before it, the 2026-10-27 perf evaluation (pe1-pe3; its probe and queue fixes are listed under it, ready for a rerun). Before it, the 2026-10-26 afternoon run (group B nb2: dumps, generators, SQ-SNF, SQ-PF, SQ-INV-01 to -06; perf mixin fix). Before it, the 2026-10-26 run (group A qb1 and one group B
+Run results live in the Run log at the bottom, not in the entry rows. Latest: the 2026-10-31 bulk run r1031 ([scratch_run_2026-10-31.md](scratch_run_2026-10-31.md) sections 7-8; client block, L1-L4, W2 rest and W3 deferred). Before it: the 2026-10-28 night run (recent feature block, bot players, perf suite g1; [scratch_queue_run_2026-10-28.md](scratch_queue_run_2026-10-28.md)). Before it: the 2026-10-27 evening run measuring the perf fixes (wgp_* worlds, group A qa_1027; perf.md 10.9). Before it, the 2026-10-27 perf evaluation (pe1-pe3; its probe and queue fixes are listed under it, ready for a rerun). Before it, the 2026-10-26 afternoon run (group B nb2: dumps, generators, SQ-SNF, SQ-PF, SQ-INV-01 to -06; perf mixin fix). Before it, the 2026-10-26 run (group A qb1 and one group B
 boot nb1, patcherMod 1.1.03 and the 2026-10-25 23:59 jars) passed the Creative Delight boot, Abnormals, Storage, End's server half and
 Farmer's Structures placement entries; its "Not run" row lists what is still open (group B worldgen counts and all client rows).
-Jars in `mods/` now: patcherMod 1.1.03 (2026-10-26 14:32), CD, Vintage -06, Incubation Additions 1.1.0, repackedStorage; copy them
+Jars in `mods/` now (refreshed 2026-10-30 18:35): patcherMod 1.1.04 (17:55; spawn boxes, spawner filter, DH clip Overworld-only, `/ceperf mobcap`), creative_delight 1.0.0 (10-29 18:18), backportedVintage -08 (the built -09 with the Green Grape, Red Grape and Cherry Jam Jars is NOT installed, so SQ-BJ-01 to -03 wait for it), backportedVinery -05, Incubation Additions 1.1.0, repackedStorage; copy them
 into the scratch `mods/` before any run.
 
 Entry fields: ID, feature, target state, world group, commands, expected log, pass / fail, if it fails.
@@ -23,10 +34,10 @@ Entry fields: ID, feature, target state, world group, commands, expected log, pa
 **Perf session (every bulk run, added 2026-10-28; [../perf.md](../perf.md) 14).** Every `scratch_server.sh` server now
 records JFR (`CE_PERF=0` at setup turns it off). Before the first boot run `bash tools/perf/session/perf_session.sh start`;
 before each entry run `perf_session.sh mark <ID>` (scratch_server.sh logs boot / cmd / stop itself); after the last
-server has stopped run `perf_session.sh stop`, then `perf_session.sh report --prune` (no server up while it parses).
+server has stopped run `perf_session.sh stop`, then `perf_session.sh report` (no server up while it parses; no `--prune`, the raw recordings are kept for debugging since 2026-10-31).
 `perf/sessions/<name>/summary.md` gives each boot's launch-to-Done time and each entry's tick median / p95 / ticks over
 50 ms / CPU / chunk waits, plus the worst ticks with the commands before them. Add a line to the Run log naming the
-session. Disk: `/` is nearly full; one boot's recording is capped at `JFR_MAX` (1g) and `--prune` deletes the raw files.
+session. Disk: `/` is nearly full; one boot's recording is capped at `JFR_MAX` (1g) and `--prune` deletes every raw file, so do not use it; when space runs out, delete by hand the recordings of boots whose rows all passed.
 Benchmarks (boot, idle, pregen, reload) are the perf suite's G scenarios ([../perf_suite.md](../perf_suite.md), its own
 runner), not queue rows.
 
@@ -261,6 +272,50 @@ Features: [../recipe_progression.md](../recipe_progression.md) F2, RP-01; TODO `
 | ID | Group | Commands | Pass | If it fails |
 |---|---|---|---|---|
 | SQ-RS-01 | A | boot with default config; then `/recipescan`; then set `[debug.recipe_scan] runAtLoad = true` in the scratch copy of `creativeengineering-common.toml`, restart, `/reload` once | Default boot: no `[recipe_scan]` or `[jeiRemove]` line. `/recipescan`: chat line with the counts, `[recipe_scan] Scan complete. ... N recipes read, U unreadable` in `logs/kubejs/server.log`, entries end in `(input)` / `(output)`, no merged id (`global.itemMerges` first column) listed. Config on: exactly one scan after `Done (`, none after `/reload`. Note the scan time from log timestamps and N, U | `ServerEvents.loaded` not firing (try the command alone); `stack.id` on Rhino; a large U means `getIngredients` throws for a whole recipe class: log the class |
+
+#### SQ-NM: named mobs (added 2026-10-30)
+
+Feature: [../mob_block_tweaks.md](../mob_block_tweaks.md) 2.6; TODO `mobs/tweaks #6`. Needs patcherMod 1.1.04 of
+2026-10-30 21:12 or later (in `mods/`). Set `[named_mobs] chance = 1.0` in `OUT/srv/config/creativeengineering-common.toml`
+before boot (the key may be absent until the first boot, see setup notes).
+
+| ID | Group | Commands | Pass | If it fails |
+|---|---|---|---|---|
+| SQ-NM-01 | B | `forceload add` a 64 x 64 area of fresh plains/meadow chunks far from spawn, wait 30 s, `/execute as @e[type=minecraft:cow] run data get entity @s CustomName`, same for `minecraft:sheep`, `minecraft:pig`, `minecraft:rabbit` | every cow, sheep and pig has a CustomName and `ForgeData."creativeengineering:named_mob"` = 2b; rabbits none; no `[named_mobs]` warning, no `Accessing LegacyRandomSource from multiple threads` in the log | no names: is `SpecialSpawn` fired for CHUNK_GENERATION (breakpoint/log in `onSpecialSpawn`); mark 1b left: `EntityJoinLevelEvent` not reached for worldgen entities |
+| SQ-NM-02 | B | `/summon minecraft:cow ~ ~ ~` near the loaded area, `data get` it | no CustomName (command spawns never roll) | `spawnReasons` parse (log warning) |
+| SQ-NM-03 | B | `/kill` one named cow from SQ-NM-01 | log has vanilla's `Named entity ... died` line and no error from `NamedMobs.onDeath`; the chat line itself needs a player (MT-32) | stack trace names the cause |
+
+#### SQ-VG: villager gates and Dramatic Doors (added 2026-10-30)
+
+Feature: [../mob_block_tweaks.md](../mob_block_tweaks.md) 2.7; TODO `mobs/tweaks #15`. Needs patcherMod 1.1.04 of
+2026-10-30 (after the villager gate mixins; in `mods/`).
+
+| ID | Group | Commands | Pass | If it fails |
+|---|---|---|---|---|
+| SQ-VG-00 | B | boot, grep the log for `McaVillagerPathGatesMixin` / `WalkNodeEvaluatorVillagerGateMixin` | no mixin apply error, no `InvalidInjectionException` / `Redirect` conflict | injector target changed: check MCA's `getCommonNodeType` / `findNearbyNodeTypes` names in the jar |
+| SQ-VG-01 | B | flat area: 5 x 5 oak fence ring with one closed oak gate, `/summon minecraft:villager` inside (becomes MCA), a bed 10 blocks outside; `/time set 13000`, wait 60 s; repeat with the gate open (`setblock ... open=true`) | villager never leaves the ring either time | gate still WALKABLE_DOOR: redirect did not apply |
+| SQ-VG-02 | B | house: 3 x 3 stone room, only door a Dramatic Doors `tall_oak_door` (closed), bed inside, villager summoned 6 blocks outside; `/time set 13000`, wait 60 s, `data get` the door block state while it passes | villager inside, door `open` went true then back to false | stays outside: DOOR_WOOD_CLOSED not reached (check door tags `dramaticdoors:tall_wooden_doors`); reaches the door but it stays shut: Dramatic Doors' `InteractWithDoor` mixin |
+| SQ-VG-03 | B | SQ-VG-02 with a tall iron door | villager stays outside, door shut | |
+
+#### SQ-VL: villager ladders (added 2026-10-30)
+
+Feature: [../mob_block_tweaks.md](../mob_block_tweaks.md) 2.8; TODO `mobs/tweaks #15`. Needs patcherMod 1.1.04 of
+2026-10-30 21:50 or later (in `mods/`). Run with SQ-VG (same boot).
+
+| ID | Group | Commands | Pass | If it fails |
+|---|---|---|---|---|
+| SQ-VL-00 | B | boot, grep the log for `McaVillagerPathLadders` / `GroundPathNavigationClimb` / `MoveControlVillagerLadder`; `/execute if block <a minecraft:ladder> #creativeengineering:villager_ladders` | no mixin error; the tag test passes | MCA method names (`getLandNodeType`, `m_6065_`, `m_7171_`) changed; tag script not loaded |
+| SQ-VL-01 | B | stone wall 6 high, `minecraft:ladder` on it from the ground to the top, 5 x 5 platform on top with a bed; `/summon minecraft:villager` 5 blocks from the ladder foot; `/time set 13000`; every 2 s for 40 s `data get entity <villager> Pos` | Y rises along the ladder column to the platform, villager reaches the bed | stays on the ground: no vertical successor (tag, or box check); climbs and stops at the top: exit step |
+| SQ-VL-02 | B | after SQ-VL-01, `/time set 1000` (villager leaves the bed to work or wander; give it a job site on the ground) and log Pos | Y falls step by step in the ladder column, no `fall` damage in the log, then walks off at the bottom | Y goes up and down at the top: move control fix not applied; falls from high up: navigation fix not applied |
+
+#### SQ-WT: WTHIT Silk Touch tag on the server (added 2026-10-28)
+
+Feature: [../wthit_lines.md](../wthit_lines.md) 2.11 (WL-37); TODO `ui/wthit #11`. Needs patcherMod 1.1.03 of
+2026-10-28 22:59 or later (built, not yet in `mods/`) for the client half only; the tag is KubeJS (`/reload`).
+
+| ID | Group | Commands | Pass | If it fails |
+|---|---|---|---|---|
+| SQ-WT-01 | any | `/setblock 0 100 0 minecraft:glass`, `/execute if block 0 100 0 #creativeengineering:wthit/needs_silk_touch`; same for `minecraft:iron_ore`, `minecraft:dirt`, `minecraft:oak_leaves` | glass and iron ore: "Test passed"; dirt and oak leaves: "Test failed"; no `[wthit-silk-touch]` error in the log | `wthittags.js` read error: path of `silk_touch_blocks.json`; empty tag: rerun `tools/gen_silk_touch_blocks.py` |
 
 #### SQ-LE: low-effort TODO batch (added 2026-10-23)
 
@@ -734,7 +789,7 @@ server. Full restart (mixins, startup fluids, NCH).
 | SQ-RSP-06 | A | water in the tank: 2 black tea leaves, wait; `/data get` | Black Tea brewed, level down by 1, `Container` glass bottle | base water check |
 | SQ-RSP-07 | A | a glass bottle in an ingredient slot (`/item replace block ~ ~ ~ container.0 with minecraft:glass_bottle 3`), wait 1 s | the 3 bottles move to the leftover slots (WTHIT "Holding: 3 Glass Bottle" or `/data get`), plating slot unchanged | `ce$stowBottles`; `[qol] remainderBuffer` off |
 | SQ-RSP-08 | A | Create pump into the Kettle from a tank of water at 16 rpm, then at 256 rpm; a Fluid Tank under the Kettle with a pump pulling | fills in whole 250 mB steps, never above 1000; drains to 0 | K6 handler: `KettleTank.Handler.fill` |
-| SQ-RSP-09 | A | Spout over a glass bottle with Milk Coffee fluid (`/fluid` via creative tank), Item Drain with a Milk Coffee bottle; same for Lavender Tea, Matcha Latte, Coffee; Spout over a Copper Cup with water, drain a Water Cup | each gives its drink / 250 mB; cup <-> water | NCH `createBottle` ids `createfilling/<drink>`, fluid registered (`fluids.js`) |
+| SQ-RSP-09 | A | Spout over a glass bottle with Milk Coffee fluid (`/fluid` via creative tank), Item Drain with a Milk Coffee bottle; same for Lavender Tea, Matcha Latte, Coffee; Spout over a Copper Cup with water, drain a Water Cup | each gives its drink / 250 mB; cup <-> water; no `Error parsing recipe creative_delight:createfilling/` line in `logs/kubejs/server.log` | NCH `createBottle` ids `createfilling/<drink>`, fluid registered (`fluids.js`) |
 | SQ-RSP-10 | A | dispenser facing a Kettle with tea in it: water bucket; then an empty Kettle: water bucket | first: bucket stays in the dispenser; second: level 4 | `KettleDispenseMixin` method name |
 | SQ-RSP-11 | A | break a Kettle with 3 water; place it again | item tooltip line (client, CQ-RSP-01); placed Kettle has level 3 | `writeMeal` RETURN / `setPlacedBy` |
 | SQ-RSP-12 | A | place a Flower Pot, right-click with a Wild Tea Bush; break it | pot holds the bush; breaking drops pot + bush | patcherMod `RespitePottedTeaBush` log warning |
@@ -778,19 +833,20 @@ and pregen / debug-build work (`Level.random` caller, watchdog kills).
 
 Feature: [../crop_yields.md](../crop_yields.md) (SY-n = SQ-SY-n). Scratch `mods/`: patcherMod built 2026-10-28 or later
 (has `[crop_drops.soil_yield]`) and the Creative Delight scripts. Group A. Switch crops on in
-`OUT/srv/config/creativeengineering-common.toml` `[crop_drops.soil_yield.crops]` and `/reload` (grep the section first,
-setup notes above). Count drops over 30+ harvests per case (`/fill` the soil, place ripe crops with `/setblock ...[age=7]`,
+`OUT/srv/config/creativeengineering-common.toml` `[crop_drops.soil_yield.crops]` and restart (a running server does
+not reread the toml; `/reload` alone keeps the old switches, 2026-10-28). `tools/soil_yield_probe/sy_probe.js`
+(`/syt roll`) rolls the loot table on placed blocks instead of counting harvests. Count drops over 30+ harvests per case (`/fill` the soil, place ripe crops with `/setblock ...[age=7]`,
 `/fill ... air destroy`, count with a hopper or `/clear @s <item> 0`).
 
 | ID | Group | Run | Pass | If not |
 |---|---|---|---|---|
-| SQ-SY-01 | A | Boot and `/reload` with every crop `false` | `latest.log`: `[soil-yield] no crop switched on`; no `Error occurred` for `soil_yield.js`; a ripe wheat on Rich Farmland drops 1 wheat, 1 to 4 seeds | Error: script order or `CEConfig.CROP_DROPS.SOIL_YIELD` missing (old patcherMod) |
-| SQ-SY-02 | A | `wheat = true`, `carrots = true`, `/reload`; 30 ripe wheat each on farmland, Rich Farmland, Fertile Soil | Log line lists `wheat, carrots` and `rich farmland 2 x 0.35, fertile soil 2 x 0.25, rich soil 2 x 0.35`; wheat per plant averages about 1.0 / 1.7 / 1.5, never above 3; seeds unchanged | Same on every soil: `location_check` offset or block predicate not read |
+| SQ-SY-01 | A | Boot with every crop `false` (then `/reload` once: still off) | `latest.log`: `[soil-yield] no crop switched on`; no `Error occurred` for `soil_yield.js`; a ripe wheat on Rich Farmland drops 1 wheat, 1 to 4 seeds | Error: script order or `CEConfig.CROP_DROPS.SOIL_YIELD` missing (old patcherMod) |
+| SQ-SY-02 | A | `wheat = true`, `carrots = true`, restart; 30 ripe wheat each on farmland, Rich Farmland, Fertile Soil | Log line lists `wheat, carrots` and `rich farmland 2 x 0.35, fertile soil 2 x 0.25, rich soil 2 x 0.35`; wheat per plant averages about 1.0 / 1.7 / 1.5, never above 3; seeds unchanged | Same on every soil: `location_check` offset or block predicate not read |
 | SQ-SY-03 | A | Same for carrots | About 3.7 / 4.4 / 4.2 per plant; unripe carrots drop 1 on every soil | Unripe gets extra: ripe condition missing |
 | SQ-SY-04 | A | `rice = true`: rice in water on Rich Soil and on dirt, ripe panicles; harvest by hand and with a knife | Rich Soil gives extra panicles (by hand) or extra rice (knife), dirt none | No extra: offset -2 wrong |
 | SQ-SY-05 | A | `corn`, `hemp`, `flax` true: ripe plants on Rich Farmland; break the top, then the bottom | Corn: extra only once per plant; hemp: extra fibre from the top; flax: extra flax from the lower half | Double extra on corn: `upper=false` condition dropped |
 | SQ-SY-06 | A | `bell_peppers = true`, ripe peppers on Rich Farmland | Colours still roll about 1:1:1; log has the `[crop-drops] bell peppers` line as before | Bell pepper rewrite skipped (`table shape changed`): pools mistaken |
-| SQ-SY-07 | A | Set `richFarmlandTries = 0`, `/reload` | Log no longer lists rich farmland; Rich Farmland drops as farmland | Pool still added: soil filter |
+| SQ-SY-07 | A | Set `richFarmlandTries = 0`, restart | Log no longer lists rich farmland; Rich Farmland drops as farmland | Pool still added: soil filter |
 
 Results: not run yet.
 
@@ -836,6 +892,17 @@ cropped PNG per test ID in `test_captures/`; once it exists these rows get a `Ca
 | CQ-VP-13 | VD-32, VD-33 | Farmer buys VD produce; wandering trader sells VD seeds, clove, sweet potato, leaf; animal breeding / taming by real right-click |
 | CQ-VP-14 | VTD-23 | Brew the 6 custom-effect jar drinks and record how the potion mixers and fluid handle them (record only) |
 
+#### CQ-WT: WTHIT Silk Touch, crop seasons, operator blocks (added 2026-10-28)
+
+Needs patcherMod 1.1.03 of 2026-10-28 22:59 or later in `mods/` (and `server_mods/` for the server rows).
+
+| ID | Existing test | What to do and look at |
+|---|---|---|
+| CQ-WT-01 | WL-37, WL-38 | Silk Touch book line on glass, ice, grass block, iron ore, stone; none on dirt, oak log, leaves; gone while holding a Silk Touch pickaxe |
+| CQ-WT-02 | WL-39, WL-40 | (reworded 2026-10-30 for crop seasons) "Fertile: Spring" / "Offseason: Winter, Dry" on wheat; green "Fertile here" in mid spring in plains, red "Offseason here" in mid winter, gone under greenhouse glass |
+| CQ-WT-03 | WL-41, WL-42 | Barrier and structure void shown as an op; on a server, `/deop` hides them, `/op` shows them again without a relog |
+| CQ-WT-04 | WL-31 | the six new `[wthit]` switches (`silkTouch`, `cropSeasons`, `cropOutOfSeason`, `operatorBlocks`, `operatorBlockList`, `operatorBlockLevel`) each turn their part off |
+
 #### CQ-OLD: client halves left open by earlier runs
 
 Tests already named in their writeups with "in game" as the open half; one pass in one creative world covers them.
@@ -872,6 +939,65 @@ Anything that fails here is written to the feature's writeup first, then fixed; 
 TODO row's status word changes.
 
 ## Run log
+
+### 2026-10-31: bulk run r1031 (group A superflat r31a1, group B r31b1, worldgen r31w1a/b/c and r31w2, seed 8675309; perf session `r1031`)
+
+Plan, run notes and the final verdict table: [scratch_run_2026-10-31.md](scratch_run_2026-10-31.md) sections 7 and 8.
+Batches in `tools/scratch_query/batches/r1031/`, results and row logs in `perf/runs/r1031/` (judged_a1/b1/w2.md).
+Perf: `perf/sessions/r1031/summary.md` (15 boots, JFR on, no prune). 167 row results (reruns and follow-up rows
+included): PASS 134, FAIL 10, OPEN 18, BATCH-FAULT 5 (fixed rows written into the batches / judged files).
+
+| Entries | Result |
+|---|---|
+| SQ-TER-01, SQ-EF-05 | FAIL: `philipsruins:ancient_crypt` is in terrain_adaptation/sunk_start but refused ("start pool has a terrain_matching piece; ignored") |
+| SQ-AC-02 | FAIL: dragon set 33 armor, not 36; dragonloot-common.toml (7/10/9/7) overrides the KubeJS tune; the cap mixin works |
+| SQ-CM-32, SQ-R31-BOOT | FAIL: CD `kubejs/oceansdelight/recipes.js` removes the tentacle recipes (line 39) before the calamari replaceInputs (41-47); 4 dishes gone, empty `#forge:squid_tentacles` slots, NCH error x16 |
+| SQ-RW-23 | FAIL: `#creativeengineering:smokable/*` shape tags include Botania, driftwood, crimson and warped |
+| SQ-MCL-04 | FAIL on superflat only: forced level 2 spawned 0 monsters in 8 min (level 0: 13 zombies); normal world passes (SQ-MCL-05) |
+| SQ-META31-04 | FAIL: `meta/meteorite_desert_pyramid` placed with "0/1 desert_pyramid, short" = crater with no pyramid (MetaStructure keepShortParts: a replacement meta should fail when its first part is short) |
+| SQ-SB-03 | FAIL, cause not settled: no illager at the lone birch tower by night or day (zombies and a creeper did spawn); may be the monster cap / player distance, see judged_w2.md for the rerun |
+| SQ-EF-06 | owner call: 1 of 3 undead castles kept; 2 cancelled over-air 708 / 562 against limit 320 |
+| Findings outside rows | Farmer's Structures cook / angler pieces point at missing `minecraft:cook_additions_1..4_pool`, `cook_end_1_pool`, `angler_additions_3_pool`; census 11 biome false negatives for underground structures (deep-biome ties); spec conflict ST-317 vs `spawn_boxes.json` boxing `eugene:witch_wagon`; 7 of 8 sky villages at y 213 got no islands; six moredelight potato recipes with an empty `#forge:sliced_potatoes` slot; `/cetime` accepts singular units only |
+| OPEN (client, deferred) | SQ-EF-02, -03, -10, SQ-MB-05, SQ-MG-18, -19, SQ-PF16-02, SQ-POT-06, SQ-PS-05, SQ-RW-24, SQ-TD-04, SQ-UC-02, SQ-META31-02, -03, -05, -06 |
+| Not run (deferred by the owner 2026-10-31) | client block `c1_client.qb` (32 rows); L1 to L4 (SQ-WGP-07 pregen, perf suite, rpack bench, CQ-WG30-A04); W2 rest SQ-SB-04 to -08, SQ-SB-01e; W3a / W3b SQ-TER-02, -03, -04, -06, -06b, SQ-SVA-03, -04 |
+| Everything else in the r1031 batches | PASS (list in the run doc section 8) |
+
+### 2026-10-30 00:40: owner client dumps (recorded by the 2026-10-31 TODO scan)
+
+The owner's client `/dumpall` of 2026-10-30 00:40 (files in `kubejs/exported/` from that time; they list `vintagedelight:`
+items). CQ-DUMP-01: dumps done; its follow-up generator steps are not run. CQ-DUMP-03 partly: stacks, potions and tags
+done; `/cedumpnames`, `/cedumpicons` and `/dumpwinetextures` not run.
+
+### 2026-10-30 afternoon: SQ-WG30 worldgen batch (group B worlds `wg30a`, `wg30e`, `wg30c1`, `wg30c2`, seed 8675309)
+
+patcherMod `creativeengineering-1.1.04.jar` (13:38). No perf session (JFR off). PASS: A01, A04, B01 to B04, C01, C03,
+C04, C05, D01, D02, E01, E02. PARTIAL: A02, A03, C02, E03. FAIL: D03 (kept starts under the ocean flooded from
+cave water below an intact seabed). Not run: CQ-WG30-A04 (client). Details in each row of the SQ-WG30 section. Boot logs
+clean of CE warnings and mixin errors; run-time noise only (Hanging entity / POI mismatch, Farmer's Structures pool
+names, Hearths far-chunk setBlock in the Nether).
+
+### 2026-10-28 night: recent feature block and bot players (group A `fq_a1`, group B `fq_b_on` / `fq_b_off` / `fq_b_gfb` on the eval seed; perf session `q1028`; then perf suite `g1`)
+
+Full log, findings and tooling changes: [scratch_queue_run_2026-10-28.md](scratch_queue_run_2026-10-28.md). Jars:
+patcherMod 1.1.03 00:16 build (installed 01:19; the 00:01 jar in `mods/` had no soil yield), Creative Delight 00:16,
+perfBot rebuilt 02:24 (chunk-tracking fix). Perf: `perf/sessions/q1028/summary.md` (8 boots, every marked row a
+segment, every tick over 50 ms in `worst_ticks.tsv`).
+
+| Entries | Result |
+|---|---|
+| SQ-CM-01 to -09 | PASS (CM-06 note: sourdough bread cuts into plain bread) |
+| SQ-SALT-01 | FAIL: Vintage fermenting froglight recipes still take `vintagedelight:salt_block`; `tactical_fishing:fishing_vintagedelight_salt_bucket` catches `vintagedelight:salt_bucket` |. Fixed 2026-10-28 (CD recipes.js: froglights on The Salt's block, both fishing recipes removed); retest: `zq uses salt:salt_block` lists the 3 froglight recipes, `zq makes vintagedelight:salt_bucket` and `makes creativeengineering:powdered_sugar_bucket` give 0 fishing recipes
+| SQ-SALT-02, -03 | PASS for tags and the give swap; Salting craft and cauldron evaporation not run |
+| SQ-SALT-04 | PASS |
+| SQ-SY-01 to -07 | PASS; the soil yield switches need a restart, `/reload` does not pick up the toml |
+| SQ-STC-01, -02 | PASS (logic, via `/zq season`; HUD not looked at) |
+| SQ-HT-02 | Regeneration PASS; repair cannot happen (dragon horse armor has max damage 0) |
+| SQ-HT-03 | PASS (via Regeneration) |
+| SQ-GFB-03, -04, SQ-FTW-03 | PASS |
+| SQ-PB-01 to -04 | PASS (PB-02 wheat half; night mobs in the suite) |
+| SQ-SK / FP-10 | FAIL -> fixed (`starter_kit.js`, three KubeJS API calls) -> PASS on bots |
+| SQ-PB-05 | PASS: suite `g1` every row ok (G02 5.55, G03a 18.5, G04 50.1 ms; G12 heap floor near 6 GB, GC-pause spikes); G09 rerun `g1s` after a group S fix |
+| Not run | SQ-WGP-08 (with CQ-WGP-01), all CQ- rows |
 
 ### 2026-10-27 late: brief overall rerun (normal world ov2, seed -8188900049893920259, JFR on)
 
@@ -1287,7 +1413,8 @@ Needs the Creative Delight jar rebuilt and installed (`:creativeDelight:build`, 
 | ID | Group | Action | Expect | Depends on |
 |---|---|---|---|---|
 | SQ-FFH-01 | B | Retired 2026-10-27: `global.foodFamily` is deleted (PASSED before, run log). Its dump diff is SQ-FFH-02 now | - | - |
-| SQ-FFH-02 | B | Rewritten 2026-10-27 (callers moved to `global.CD.food`, creative_delight.md 30): install the CD jar built 2026-10-27 19:33 (`:creativeDelight:installToMods`), boot, `/dumpall`, then diff the recipe dump against the 10-26 one | No `cd_food.js` or `global.CD.food` error in `logs/latest.log`. Every `creative_delight:baking/` id and the muffin `farmersdelightcooking/` ids unchanged; new: `farmersdelightcutting/<meat>_from_culture_<x>` (7, replacing `culture_*_by_fdcutting`) and `{smelting,smoking,campfirecooking}/cooked_calamari[_slice]_from_glowing_calamari[_slice]` (6, replacing `cooked_glowing_calamari*`); one Cooking Pot muffin recipe per muffin (no duplicate id error); nothing else gone | CD jar; creative_delight.md 30 |
+| SQ-FFH-02 | B | Rewritten 2026-10-27 (callers moved to `global.CD.food`, creative_delight.md 30); the 2026-10-27 CD jar is installed and in 1.1.04, so this is the dump diff only: boot, `/dumpall`, then diff the recipe dump against the 10-26 one | No `cd_food.js` or `global.CD.food` error in `logs/latest.log`. Every `creative_delight:baking/` id and the muffin `farmersdelightcooking/` ids unchanged; new: `farmersdelightcutting/<meat>_from_culture_<x>` (7, replacing `culture_*_by_fdcutting`) and `{smelting,smoking,campfirecooking}/cooked_calamari[_slice]_from_glowing_calamari[_slice]` (6, replacing `cooked_glowing_calamari*`); one Cooking Pot muffin recipe per muffin (no duplicate id error); nothing else gone | CD jar; creative_delight.md 30 |
+| SQ-FFH-03 | A | Added 2026-10-30. After the `CD.food` `assemble` fix (an array step became a filling step with fluid `minecraft:empty`, creative_delight.md 30): boot, grep `logs/kubejs/server.log`, `/dumpall` recipe dump | No `Error parsing recipe creative_delight:createsequencedassembly/zucchini_quiche_sequenced_assembly`; that id is in the recipe dump: pie crust base, 3 roasted zucchini deploys, one cooked-meat deploy (any of 5), 250 mB milk fill | SQ-FFH-02 |
 
 ## Storage Delight additions (storage_delight.md section 5)
 
@@ -1408,7 +1535,7 @@ superflat world covers all but CQ-JT-07, which needs a world with IE.
 | CQ-JT-10 | same | Flower crown freeze (TODO `jei/jei-coverage #8`): time uses of Flower Crown with and without a crafting table open, then another hat (Crown); grep latest.log for `craftable-first sort of N` and note N; if it freezes, `jstack` the client mid-freeze; retry with `[jei] craftableFirst = false` | none |
 | CQ-JT-09 | same | Sunbloom pages (Moobloom Conversion, Shearing): sunflower faces show, not the green back | MB-105 |
 
-Results: not run yet.
+Results 2026-10-28 (Run log): SQ-SY-01 to -07 PASS.
 
 ## Salt merge, 2026-10-26 ([item_merges.md](../item_merges.md) 2.9, TODO `food/seasoning #6`)
 
@@ -1422,8 +1549,9 @@ MG-29 and MG-31 in game.
 | SQ-SALT-03 | same | Give `salt:salt 3`, `vintagedelight:salt_block 1`: swapped to 3 salt dust, 1 `salt:salt_block`. Evaporate a full water cauldron 20 times: only salt dust | MG-32, MG-33 |
 | SQ-SALT-04 | new world | `/place feature vintagedelight:patch_salt` on a beach 10 times: layers on `salt:raw_rock_salt_block`, no `salt:salt_block` / `vintagedelight:salt_block`; after 5 min at `randomTickSpeed 300` no rock salt next to water is gone | MG-34 |
 | SQ-SALT-05 | same | patcherMod 23:36 jar. latest.log: `[salt] 30 Vintage salt blocks random tick`, no mixin error for `SaltBlockRandomTickMixin` / `SaltLayerRandomTickMixin` / `SaltRockNoDissolveMixin`. Block half: copy `tools/salt_probe/salt_probe.js` into `srv/kubejs/server_scripts/zz_salt_probe.js`, `/salttest`: `[salttest] PASS ... melts minecraft:snow` and `minecraft:ice` for salt bricks, brick stairs, a Vintage lamp, a Salt Layer, raw rock salt and The Salt's Salt Block | MG-36 |
-| SQ-SALT-06 | same | same `/salttest` run (it calls `randomTick` itself: forceloaded chunks get no random ticks without a player, 2026-10-27): Salt Layer beside a water source becomes water, Salt Layer in rain in open sky becomes air (the NOTE line names the biome; a cold one snows, rerun elsewhere), layer by a torch stays; raw rock salt beside water and in rain stays; Evaporator by water grows layers to 8; `vintagedelight:salt_block` by water dissolves and grows no layer | MG-35, MG-37 |
+| SQ-SALT-06 | same | same `/salttest` run (it calls `randomTick` itself: forceloaded chunks get no random ticks without a player, 2026-10-27): Salt Layer beside a water source becomes water, Salt Layer in rain in open sky stays (rain dissolving is off since 2026-10-28, `SaltDissolvingInRain = false`; the NOTE line names the biome), layer by a torch stays; raw rock salt beside water and in rain stays; Evaporator by water grows layers to 8; `vintagedelight:salt_block` by water dissolves and grows no layer | MG-35, MG-37 |
 | SQ-SALT-07 | same | same `/salttest` run, `cost` line: one salt-brick random tick (minus a stone one, both through Rhino) times 146 hits/s for 10 000 bricks under 0.1 % of server time. A JFR with real bricks needs a player (client session) | none |
+| SQ-SALT-08 | A | `config/salt-common.toml` `SaltDissolvingInRain = false` (and the `configs_edited/root_config/` copy): `/weather rain`, `randomTickSpeed 300`, a Salt Block, a Salt Layer, salt ore and a Vintage salt brick in open sky (not a snowing biome) for 2 min; then beside a water source | None dissolve in rain; the layer and the Salt Block beside water still dissolve | MG-35 |
 
 ## Texture fixes, 2026-10-27 (unreleased.md: Farming & Nature, Food & Cooking, Mobs & Animals)
 
@@ -1466,6 +1594,16 @@ Client checks (no scratch server): **CQ-POT-01** Vinery pot with `farmersdelight
 flower, flower box with a sunflower, Floral large pot with a lilac: both halves drawn, no render crash, note how much
 the Floral pot blocks the view (F8, F9).
 
+**SQ-POT-06** (patcherMod 1.1.04 built 2026-10-29, copy into the scratch `mods/`; [flower_pots.md](../flower_pots.md) 3.1):
+boot, grep latest.log for `BotanistWorkbenchPotMixin` / `StructureTemplateBotanistPotMixin` warnings; then
+`/place structure beautify:botanist_house_plains ~ ~ ~` (and `_desert`), find the workbench and
+`/data get block <pos>` → `Plant: "minecraft:<flower>"` with a vanilla flower (no wither rose), different ones across
+a few placements; `/setblock <pos2> beautify:botanist_workbench` then `/data get block <pos2>` → no `Plant`. If it fails: no
+NBT at all = the mixin did not apply (Beautify class name, `@Pseudo`); `Plant` missing on placed houses only = the
+pool places the bench through another path (check `processBlockInfos` callers).
+
+Client check **CQ-POT-02**: test POT-08 in [flower_pots.md](../flower_pots.md) 7 (render, facing, tint, F3+T).
+
 Results 2026-10-27 evening run (Run log): SQ-POT-01 PASS after two dump fixes (121 potted, 101 pot-like, 543 plants); SQ-POT-02 to -04 ran, audit regenerated `flower_pots_matrix.md` (427 probe mismatches, 6 probe exceptions): framed pot 5 and Supplementaries hanging pot 0 accepted (probe face, see "If it fails"), `minecraft:hanging_roots` throws `Cannot set property DirectionProperty` in 6 holders, the expected F1 `ClassCastException` on the planter box did not show. For the flower-pot owner to read; SQ-POT-05 analysis not done.
 
 ## Armor Trims list cache, 2026-10-27 ([perf.md](../perf.md) 10.3, TODO `perf #10`)
@@ -1507,8 +1645,8 @@ Target: current `kubejs/server_scripts` (script only, `/reload` on a running ser
 | ID | World | Commands | Expected | If it fails |
 |---|---|---|---|---|
 | SQ-HT-01 | A | Boot; `/reload`; grep latest.log for `armor_effects.js`, `dragon_autorepair.js` | No script error; no `Error occurred while handling event` on `ServerEvents.tick` | `level.players()` or `server.getAllLevels()` not visible to Rhino: use `level.getPlayers()` |
-| SQ-HT-02 | same | Summon a tamed horse, `/item replace entity @e[type=horse,limit=1,sort=nearest] horse.armor with dragonloot:dragon_horse_armor{Damage:500}`; wait 11 s; `/data get entity @e[type=horse,limit=1,sort=nearest] ActiveEffects` and `ArmorItem` | Regeneration (Amplifier 0) present; `ArmorItem` Damage 450 or lower | Handler never fires: check `event.getServer()` on `ServerEvents.tick` |
-| SQ-HT-03 | same | Same horse; `/execute in minecraft:the_nether run tp @s 0 100 0`, `/forceload add` the horse's chunk first, wait 30 s, come back, `/data get` the horse's `ArmorItem` | Damage unchanged while away (no player in the overworld); repair resumes within 10 s after return | |
+| SQ-HT-02 | same | Summon a tamed horse, `/item replace entity @e[type=horse,limit=1,sort=nearest] horse.armor with dragonloot:dragon_horse_armor`; wait 11 s; `/data get entity @e[type=horse,limit=1,sort=nearest] ActiveEffects`; same on the player and on a second horse without armor | Regeneration (Amplifier 0) on the armored horse only; no repair (armor has no durability, branch removed 2026-10-28) | Handler never fires: check `event.getServer()` on `ServerEvents.tick` |
+| SQ-HT-03 | same | Same horse; `/execute in minecraft:the_nether run tp @s 0 100 0`, `/forceload add` the horse's chunk first, wait 30 s, come back, `/data get` the horse's `ActiveEffects` | No Regeneration while away (no player in the overworld); back within 10 s after return | |
 
 ## CTM removed, 2026-10-27 ([perf.md](../perf.md) 10.5, TODO `server #16`)
 
@@ -1743,6 +1881,7 @@ patcherMod 1.1.03 `AllurementItemCurses` (ItemPhysic + Allurement). Group A, any
 | ID | World | Commands | Expected | If it fails |
 |---|---|---|---|---|
 | SQ-IP-15 | A | `/give` a sword with `allurement:ascension_curse` 1 and one with `allurement:fleeting_curse` 1; drop each (Q) near a mob | Ascension item rises; Fleeting item pushes the mob away; no errors in latest.log | Mixin not applied (grep `ItemPhysicServerMixin`), or reflection failed (AllurementUtil method names) |
+| SQ-IP-16 | A | `/reload`; `/dumpphysics`; then on the host `python3 tools/item_physics_audit.py` | Chat "Dumped N items (M survive lava)"; `kubejs/exported/physics/item_physics.json` exists, block-item rows carry `material` / `sound`; audit header says "dump yes", unclassified below 650, `minecraft:netherite_scrap` listed under `fire_resistant_item` (IP-21) | `[dumpphysics] skipped` lines in latest.log: a reflection name (Material / SoundType constant, `ForgeHooks.getBurnTime`, `ItemPhysic.CONFIG`) failed; fix in `_lib/dump_physics.js` |
 
 Results: not run yet.
 
@@ -1782,7 +1921,7 @@ patcherMod 1.1.03 (19:58 source, in the 20:44 jar). Client only, Round 2 (creati
 
 ## Easy-fix batch, 2026-10-28 ([item_merges.md](../item_merges.md) 2.10, TODO rows named per entry)
 
-Install the patcherMod 1.1.03 and Creative Delight jars of 2026-10-28 00:00 first (both in `mods/`). Server checks; the
+Install the patcherMod 1.1.03 and Creative Delight jars of 2026-10-28 00:00 first (both in `mods/`). Creative Delight must be rebuilt and installed again first: `pneumaticcraft/recipes.js` (sourdough cut to 3 Bread, 18:03) is newer than the installed jar (18:01). Server checks; the
 names, JEI and wild-patch looks are MG-39 to MG-44 in game.
 
 | ID | World | What to do and look at | Existing test |
@@ -1791,10 +1930,11 @@ names, JEI and wild-patch looks are MG-39 to MG-44 in game.
 | SQ-CM-02 | same | Recipe lookups: `fruitsdelight:hamimelon_seeds` takes the cantaloupe slice; `creative_delight:shaped/mini_cantaloupe`, `shapeless/mini_cantaloupe_seeds`, `shapeless/cantaloupe_seeds_from_mini` exist; `creative_delight:shapeless/cantaloupe_seeds` is gone, Delightful's two popsicle recipes stay and `fruitsdelight:hamimelon_popsicle` makes nothing | MG-41 |
 | SQ-CM-03 | same | `#creativeengineering:exotic_fruit` holds `delightful:cantaloupe_slice`; `#forge:seeds` holds `fruitsdelight:hamimelon_seeds`; `#forge:pasta` holds `veggiesdelight:potato_noodle` | MG-43 |
 | SQ-CM-04 | same | Pasta: every recipe that took `farmersdelight:raw_pasta` or `#forge:pasta/raw_pasta` (FD pasta dishes, Brewin's cheesy pasta, More Delight, Alex's Delight pastas) now takes `#forge:pasta`; count the swapped recipes, none left naming raw pasta alone | none (TODO `dishes/meals #38`) |
-| SQ-CM-05 | same | Food values: `veggiesdelight:coleslaw` nutrition 11, modifier 0.6, Comfort kept; `veggiesdelight:fermented_garlic_honey` Regeneration amplifier 1 100 ticks, Health Boost amplifier 1 600 ticks, nothing else | none (TODO `dishes/pickles-and-ferments #10`) |
+| SQ-CM-05 | same | Food values (the 1.1.04 check, PASSED 2026-10-28 at 11; the 12 of 2026-10-29 is SQ-CM-21): `veggiesdelight:coleslaw` nutrition 11, modifier 0.6, Comfort kept; `veggiesdelight:fermented_garlic_honey` Regeneration amplifier 1 100 ticks, Health Boost amplifier 1 600 ticks, nothing else | none (TODO `dishes/pickles-and-ferments #10`) |
 | SQ-CM-06 | same | Recipes: `endersdelight:shulker_bowl` gone, `creative_delight:shapeless/shulker_bowl` shell -> 12; `vintagedelight:bread_from_smelting` and `bread_from_smoking` absent, no campfire bread from oat dough, oven `bread_from_dough_1`, `_3`, `_6` present (oat dough bakes in each), `sourdough_bread_1/3/6` make sourdough bread and sourdough never makes plain bread; `creative_delight:shapeless/overnight_oats` present | none (TODO `recipes/cooking #4`, `baking/baked-goods #29`, `dishes/meals #22`) |
 | SQ-CM-07 | same | `felsic_sword` max damage 2501. `creativeengineering:strong_phantom_bane` not in the potion registry, no brewing mix with glowstone on Phantom Bane, base and long present; latest.log no `[CE potions]` error | none (gear_tuning F9, armor_effects F7) |
 | SQ-CM-08 | new world | Echo set on a player (or fake player): Night Vision and Phantom Bane amplifier 0 | AE-10 (expected now 0) |
+| SQ-CM-10 | any | `creative_delight:...` oven/knife check: `zq makes minecraft:bread` shows the knife cut of `sourdough_bread` giving 3 Bread (was 2); `vintagedelight:fermenting/{ochre,verdant,pearlescent}_froglight_from_fermenting` take `salt:salt_block` and are present once; `tactical_fishing:fishing_vintagedelight_salt_bucket` and `fishing_creativeengineering_powdered_sugar_bucket` absent (retest of SQ-SALT-01 leftovers) | none |
 | SQ-CM-09 | new world | `/place feature creative_delight:wild/mini_cantaloupe` in a desert 10 times: Mini Cantaloupe blocks on sand / red sand / terracotta; biome tag `creative_delight:wild_crops/cantaloupe` lists deserts and badlands, no savanna | MG-44 |
 
 ## Perf suite and bot players, 2026-10-28 ([perf_suite.md](../perf_suite.md), TODO `server #28`)
@@ -1811,3 +1951,513 @@ the first full run is the baseline. Never copy the jar into the instance's `mods
 | SQ-PB-03 | A | `pbot path bot1 <x+500> 200 <z> 1.5`; after 20 s grep `perf/bot/ticks-*.csv` for `path_done:bot1`; status lines' chunk column; `pbot census t` | `path_done` after about 334 ticks; loaded chunks follow; `perf/bot/census-t.json` written | Chunks don't follow: `ServerChunkCache.move` not reached |
 | SQ-PB-04 | A | `kill -9` the scratch JVM (recorded pid only); `tail -2` of the tick file; `jfr assemble srv/perf/jfr-repo/<dir> x.jfr` | Complete lines to the last second; assemble works | |
 | SQ-PB-05 | suite S and N | `setsid nohup python3 tools/perf/suite/perf_suite.py run general g1 > /dev/null 2>&1 &` (about 2 h 15 min); then `perf_suite.py report g1` | Every G row `ok` or a triaged ending in `perf/suite/g1/*/endings/`; G02 about 5-6 ms (perf.md 12.1); record the summary in perf_suite.md | Read `runner.log`; `resume g1` after fixing |
+
+## Whistle goal skip and underground bees, 2026-10-28 ([perf.md](../perf.md) 16, TODO `server #30`)
+
+patcherMod 1.1.03 with `NeaWhistleGoalSkipMixin`, `MobBeeIdleMixin`, `perf.WhistleArrowTracker`. Group A, one player
+or bot unless stated.
+
+| ID | World | Commands | Expected | If it fails |
+|---|---|---|---|---|
+| SQ-PF16-01 | A | Boot; `grep -i -E "NeaWhistleGoalSkip|MobBeeIdle|Mixin.*(error|fail)" logs/latest.log` | No mixin error; server reaches `Done` | Name the mixin; SRG ids m_8036_ (TemptByWhistleGoal), m_6140_ (Mob) |
+| SQ-PF16-02 | A | Summon cows and sheep near the player, shoot a whistling arrow (`/give @p nock_enough_arrows:whistling_arrow`, bow) into the ground 6 to 10 blocks from them | Mobs within 12 blocks walk to the arrow as before; after it is picked up or despawns they stop following | Mobs ignore the arrow: tracker missed the join (check the entity class name) |
+| SQ-PF16-03 | A | `/tp` to y 20 in a cave; `/summon minecraft:bee ~ ~ ~5`; watch it 20 s; then `/tp @p ~ ~ ~100` for 30 s; `/execute as @e[type=bee,limit=1,sort=nearest] run data get entity @s Pos` twice 10 s apart; come back | Near: flies about. Away: Pos unchanged between reads (hovers). Back within 32 blocks: flies again | Moves while away: mixin did not apply. Falls or takes damage: check flying state |
+| SQ-PF16-04 | A | Four bots as suite G04 (perf_suite.md), JFR, `perf_report.py` against `perf/suite/g1/reports/G04.summary.json` | No `TemptByWhistleGoal` above 0.1%; `Bee.m_8119_` share lower than 5.9%; MSPT mean below 50.1 | Whistle samples remain: tracker set not empty (leak); bees unchanged: few bees below y 32 this run, record the bee heights |
+
+## Mob cap levels, spawn radius and vertical band, 2026-10-28 ([perf.md](../perf.md) 17, TODO `server #31`)
+
+patcherMod 1.1.03 with `MobCapLevelTickMixin`, `MobCapMixin`, `MobCapSpawnAreaMixin`, `perf.MobCapLevels`. Group A.
+Levels can be forced with `[perf] mobCapForceLevel` in `config/creativeengineering-common.toml` (read live).
+
+| ID | World | Commands | Expected | If it fails |
+|---|---|---|---|---|
+| SQ-MCL-01 | A | Boot; `grep -i -E "MobCap|Mixin.*(error|fail)" logs/latest.log` | No mixin error; server reaches `Done` | Name the mixin; SRG ids m_8490_ (tickChunks), m_186524_ (createState), m_186548_ / m_186522_ (cap reads), m_47045_ / m_220421_ (NaturalSpawner) |
+| SQ-MCL-02 | A | One player, night, `/ceperf mobcap` | overworld about 289 spawnable chunks, level 0; monster count reaches about 70 as vanilla | Level above 0 alone: chunk count read wrong |
+| SQ-MCL-03 | A | Two bots 600 apart, `/ceperf mobcap`; then bring them together | Apart: about 578 chunks, level 1; together: back to level 0 once below 400 | Level does not drop: hysteresis bug |
+| SQ-MCL-04 | A | `mobCapForceLevel 2`, one player at night, `/kill @e[type=!player]`, wait 2 min, `/execute if entity @e[type=minecraft:zombie]` style counts for the common hostiles, then `/tp @p @e[type=minecraft:zombie,sort=furthest,limit=1]` and read the distance moved | Hostiles settle near 25 (not 70); the farthest is no more than about 5 chunks (80 to 90 blocks) from where the player stood | About 70: cap redirect did not apply; far spawns: radius check off |
+| SQ-MCL-05 | A | `mobCapForceLevel 2`, player on the surface over deep caves, wait 2 min, `/execute as @e[type=#forge:monsters,distance=..128] run data get entity @s Pos[1]` | No new monster more than 32 blocks above or below the player | Deep cave spawns: band mixin did not apply |
+| SQ-MCL-06 | A | Four bots as suite G04 (perf_suite.md), `mobCapForceLevel -1`, JFR, `perf_report.py` against `perf/suite/g1/reports/G04.summary.json`; repeat with level 1 and 2 forced | Auto picks level 2 (about 1150 chunks); monster share below 22.0%, natural spawning below 5.3%, MSPT mean below 50.1 | Record the numbers per level in perf.md 17.5 for the thresholds |
+
+## Immersive Weathering growth fast path, 2026-10-28 ([perf.md](../perf.md) 15.4, TODO `server #29`)
+
+patcherMod 1.1.03 with `IwBlockGrowthHandlerMixin`, `IwBlockGrowthHolderMixin`, `IwServerLevelTickMixin` and the
+config plugin `perf/CEMixinPlugin` (rewrites IW's `callTick` handler). Group B (normal world, real biomes). Any player
+with op. The JVM switch `-Dcreativeengineering.iwFastTick=false` turns all three parts off for the comparison boots.
+
+| ID | World | Commands | Expected | If it fails |
+|---|---|---|---|---|
+| SQ-IWF-01 | B | Boot; grep latest.log for `[perf] Immersive Weathering`, `IwBlockGrowth`, `IwServerLevel`, `Mixin` errors | One `callTick handler handler$...$callTick now calls IwGrowthFast.blockTick` line; no mixin error; `Loaded N block growths configurations` as before | `not found` / `unknown signature` warning: IW's handler name or descriptor differs (javap the merged ServerLevel); crash at load: read the mixin error |
+| SQ-IWF-02 | B | In a plains area: `/fill` a 16x1x16 grass_block floor with air above, a 5x3x5 oak_leaves block 3 above air next to it; `/gamerule randomTickSpeed 300` for 60 s, then 3; count grass / flowers on the floor and leaf piles under the leaves. Repeat on a boot with `-Dcreativeengineering.iwFastTick=false` | Grass and flowers grow on the floor and leaf piles form, in both boots, counts of the same order | Nothing in the fast boot only: the per-block tables were not filled (`IwGrowthFast.rebuilt` not called: check the `rebuild` RETURN inject) |
+| SQ-IWF-03 | B | Snowy biome (`/locate biome minecraft:snowy_plains`): `/weather thunder`, `/gamerule randomTickSpeed 300` 60 s; look for snowy stone and icicles near exposed stone; then `/weather clear` | Snow-covered stone or icicles appear (universal snow growths through the sky tick) | None: the universal table is empty, check `universal[]` after rebuild |
+| SQ-IWF-04 | B | `/stop`; set `block_growths = false` in `config/immersive_weathering-common.toml`; boot; SQ-IWF-02 setup again; then restore `true` | No grass, flowers or leaf piles from growths (leaf piles still come from decay) | Growths run: the switch is not read (`growthsOn`) |
+| SQ-IWF-05 | B | Perf suite run on the new jar: `perf_suite.py run general g2` (or at least G03a, G04, G12); compare with `g1` (perf.md 15.1) | IW `tickBlock` share of the Server thread well under 0.5% (g1: 1.9 to 2.6%); IW allocation share near 0 (g1: 5.5 to 6.4%); tickChunk share down by about the same | Shares unchanged: the overwrite is not live (check `IwGrowthFast` frames in the JFR) |
+
+## Upgrade Aquatic coral growth, 2026-10-28 ([fixes_compat.md](../fixes_compat.md) 2.31, TODO `gameplay/misc #15`)
+
+Data only: `kubejs/data/immersive_weathering/block_growths/ua_*_coral.json` (11 files from `tools/gen_ua_coral_growths.py`).
+Copy the instance's `kubejs/data` into the scratch instance. Group B (real biomes); can share a boot with SQ-IWF. Any player
+with op; place blocks with `/setblock`, all inside water (`/fill ... water` first).
+
+| ID | Group | Commands | Pass | If it fails |
+|---|---|---|---|---|
+| SQ-UC-01 | B | Boot; grep latest.log for `block_growths`, `ua_`, `upgrade_aquatic:`, `Failed to` near IW's load lines | IW's `Loaded N block growths` count is 11 higher than the boot before; no parse error naming a `ua_` file | A block id or property in the template does not exist on UA's block: check the error's block name against the UA jar's blockstates |
+| SQ-UC-02 | B | `/locate biome minecraft:warm_ocean`, tp there; fill a 7x5x7 water box, `/setblock` `upgrade_aquatic:acan_coral_block` in the middle, `upgrade_aquatic:dead_acan_coral_block` 3 blocks away; `/gamerule randomTickSpeed 1000` 120 s, then 3 | Acan wall fans on the live block's sides and acan fans or acan coral on top (an occasional wet sponge); nothing around the dead block | Nothing grows: run `/reload` and repeat; still nothing: check the IW fast path (SQ-IWF-01) and `block_growth_blacklist` |
+| SQ-UC-03 | B | Same box in a `minecraft:cold_ocean`: one `upgrade_aquatic:prismarine_coral_block`, one `upgrade_aquatic:elder_prismarine_coral_block`, one `upgrade_aquatic:acan_coral_block`; `randomTickSpeed 1000` 120 s, then 3 | Prismarine fans / coral around the prismarine block; nothing around the elder prismarine or acan block | Prismarine silent: the `#minecraft:is_ocean` tag string is not read by IW's `biome_match`; acan grows: the warm ocean predicate is missing |
+
+## Sheared grass, 2026-10-28 ([wthit_lines.md](../wthit_lines.md) 2.10, TODO `misc #6`)
+
+Jars: patcherMod 1.1.03, `backportedVintage-0.1.6-ce-19.2-08`, `backportedVinery-1.5.5-ce-19.2-05` (all in `mods/`).
+Group A (superflat), daylight (`/time set noon`). Shearing needs a player, so the server checks place the sheared
+state directly; the line itself is WL-34 in game. Each check: two 5x1x5 patches 8 blocks apart, on a stone layer 4 blocks above the superflat grass (grass spreads at most 1 up), the centre block
+sheared in one and not in the other, `/gamerule randomTickSpeed 300`, wait 60 s, then count what is left with
+`/fill <patch> minecraft:coarse_dirt replace <soil>` (the printed count = soil not converted). Set randomTickSpeed back to 3.
+
+| ID | Group | Commands | Pass | If it fails |
+|---|---|---|---|---|
+| SQ-SG-01 | A | Boot | `Done (`; no error naming `LushGrassBlock`, `SpreadableGrassSlabBlock` or `WthitSheared`; no blockstate/model warning for `vintagedelight:lush_grass_block` or `vinery:grass_slab` | Read the trace; a model warning means a blockstate variant needs the `fertile` key |
+| SQ-SG-02 | A | Patches of `minecraft:dirt`; centres `minecraft:grass_block[fertile=false]` and `minecraft:grass_block` | Sheared patch: 24 dirt left, centre still `fertile=false` (`/execute if block ... minecraft:grass_block[fertile=false]`); other patch: fewer than 24 | IW behaviour changed: re-read `ModGrassBlock#isRandomlyTicking` |
+| SQ-SG-03 | A | Same with `farmersdelight:rich_soil` + `vintagedelight:lush_grass_block[fertile=false]` / unsheared, and `vinery:dirt_slab` + `vinery:grass_slab[fertile=false]` / unsheared | Sheared patches: 24 left; unsheared: fewer | Check the port's `isRandomlyTicking` override is in the jar (`javap`, `m_6724_`) |
+
+## Falling block water splash, 2026-10-28 ([fixes_compat.md](../fixes_compat.md) 2.32, test FX-49)
+
+patcherMod 1.1.03 (`FallingBlockWaterSplashMixin`, client list). Client only: a dedicated server cannot show it. Needs the
+real client with a creative world; Effective installed.
+
+| ID | Group | Commands | Pass | If it fails |
+|---|---|---|---|---|
+| CQ-FBS-01 | client | Launch; grep latest.log for `FallingBlockWaterSplash` and `Mixin` errors | No mixin error; client reaches the title screen | Name the mixin; SRG id m_8119_ (FallingBlockEntity.tick) |
+| CQ-FBS-02 | client | Over a pool: `/summon falling_block ~ ~20 ~ {BlockState:{Name:"minecraft:anvil"},HurtEntities:1b}`; sand from 2 blocks up | Each splashes once on entering water (Effective model, droplets, sound); the high drop splashes larger | No splash: tail inject not reached or `level` not ClientLevel |
+| CQ-FBS-03 | client | Same drops over dry ground; watch a block in water | No splash on dry ground; no sideways push by the water | Splash on land: fluid check wrong |
+
+## Resource pack bench, 2026-10-29 ([perf_rpack.md](../perf_rpack.md) 8, TODO `server #32`)
+
+Client run, not a scratch server: a throwaway client window opens on DISPLAY :1 for about an hour (no other game
+JVM may run; `eval_client.py launch` refuses). Targets the instance's `mods/` and `resourcepacks/` as they are at the
+run. Offline first: `python3 tools/perf/rpack/selftest/run_selftest.py` (4/4 PASS). G = a scratchpad dir.
+
+| ID | World | Commands | Expected | If it fails |
+|---|---|---|---|---|
+| CQ-RP-01 | copy of the smallest save (or `--world`), scenes in the End void | `python3 tools/perf/rpack/rp_bench.py setup $G`; `setsid nohup python3 tools/perf/rpack/rp_bench.py drive $G perf/reports/rpbench-1 > perf/reports/rpbench-1.out 2>&1 &`; follow `perf/reports/rpbench-1/timeline.txt` | `[rpbench] start` with `"sodium":true`; `site` `nonAirSamples` 0; 23 `reload` lines, each followed by its `scene` lines; `done` with `failed` 0; no `error` lines in `$G/logs/kubejs/client.log` | No `start`: the click path missed (window not 854x480) or `global.rpbenchPlan` missing; `error` with a Rhino message: the call in `rp_bench.js` named there (overload ambiguity, see memory `rhino-fieldandmethods-gotcha`); site not void: move `SITE` in `rp_bench.py` |
+| CQ-RP-02 | results of RP-01 | `python3 tools/perf/rpack/rp_report.py perf/reports/rpbench-1` | Control drift under 3%; `all` reload sd under 10% of its mean; block atlas of `all` 8192x4096 (as in the user's latest.log); every target has a reload delta | Large drift: rerun with `--repeat 2`; no atlas column: latest.log lacks `Created:` lines in the reload window (check the wall-clock fields) |
+| CQ-RP-03 | none | Copy the per-pack table and the all vs none table into perf_rpack.md 9 | Any pack that steps the atlas, lowers the mip level or costs over 3% of frame time gets a TODO row for the owner | |
+
+## Lunchboxes, 2026-10-29 ([lunchboxes.md](../lunchboxes.md), TODO `storage-and-item-loss #9`)
+
+Server half only: the item, the recipes and the mixins loading. Looks, tooltip, dye colors and seagulls need the
+client (LB-01 to LB-13). Jars: patcherMod 1.1.04 and Creative Delight 1.0.0 from `mods/` (both 2026-10-29).
+
+| ID | Group | Commands | Pass | If it fails |
+|---|---|---|---|---|
+| SQ-LB-01 | A | boot; console: `summon item 0 100 0 {Item:{id:"solapplepie:netherite_lunchbox",Count:1b},NoGravity:1b}`, then `execute if entity @e[type=item,nbt={Item:{id:"solapplepie:netherite_lunchbox"}}]` | the test prints `Test passed`; boot log has no `InvalidInjectionException` / `Mixin apply failed` naming `AlexsMobsSeagull`; `latest.log` has no `Unknown item 'solapplepie:netherite_lunchbox'`; the id resolves | mixin target names changed in Alex's Mobs: javap `SeagullAIStealFromPlayers.isBlacklisted`, `EntitySeagull.canTargetItem`; item: `LunchboxItems` registered only with solapplepie loaded |
+| SQ-LB-02 | A | boot; grep `server.log` for `lunchbox` after the recipe load | no `Error occurred while handling event` or `[NCH]` warning from `solapplepie/lunchboxes.js`; no `Parsing error loading recipe creative_delight:` for the 6 lunchbox recipes (`shaped/...lunchbox...`, `smithing/...`, `smithing/lunchbox_skin`, `lunchbox/lunchbox_dye`, `lunchbox/lunchbox_soap`); `solapplepie:lunchbox` / `golden_lunchbox` recipes removed | serializer id typo (`LunchboxRecipes`), or `global.CD` missing (CD jar not copied) |
+
+## Food batch: powdered sugar, batter, meals, coasters, 2026-10-29 ([food.md](../food.md) 3.13, 3.15; [briefs/dishes_meals.md](../briefs/dishes_meals.md); [kitchen.md](../kitchen.md) 2.3)
+
+Jars: Creative Delight and patcherMod rebuilt 2026-10-29 (see the session hand-over for install state).
+
+| ID | Group | Commands | Pass | If it fails |
+|---|---|---|---|---|
+| SQ-PS-05 | A | boot; recipe probe (RecipeManager id dump) | `creative_delight:vivacuumizing/powdered_sugar_bucket` has bucket + 4 sugar; `createcrushing/` and `createmilling/sugar_powdered_sugar` each have 2 results (second at chance 0.5); `mortar/sugar_powdered_sugar` takes 3 sugar and gives 4; `shapeless/powdered_sugar_from_bucket` gives 8; `shapeless/powdered_sugar_bucket_from_powder` exists; no `tactical_fishing:fishing_creativeengineering_powdered_sugar_bucket`; `rusticdelight:cooking/batter`, `sliceanddice:cooking/rusticdelight/cooking/batter` and `creative_delight:createmixing/batter_egg_solution` grain slots list wheat flour, cornmeal and `farmersdelight:rice`; no `[NCH]` errors | food.md 3.13, 3.15 (`dishes/ingredients #23`, `#24`) |
+| SQ-CM-20 | A | same probe | `creative_delight:shapeless/field_salad_manual_only` and `field_salad_flowers_manual_only` exist, `delightful:food/field_salad` does not; tags `#creativeengineering:field_salad/root` (5), `/nut` (acorn, peanut), `/green` (8) resolve | RC-160 |
+| SQ-CM-21 | A | same probe | `veggiesdelight:coleslaw` nutrition 12, modifier 0.6; `alexsmobs:shrimp_fried_rice` nutrition 20, modifier 0.6, Comfort 4800 ticks | RC-161, RC-163 |
+| SQ-CM-22 | A | same probe | `creative_delight:shapeless/cucumber_dough` takes `#creativeengineering:veggie_noodle_veg` (6 items); `vintagedelight:cucumber_dough` gone | RC-162 |
+| SQ-CM-23 | A | same probe | `creative_delight:farmersdelightcooking/shrimp_fried_rice` takes Fried Rice + 2 `#forge:shrimps` | RC-163 |
+| SQ-CM-24 | A | same probe | no recipe outputs `neapolitan:strawberry_banana_smoothie`; no errors from the edited CD scripts | RC-164 |
+| SQ-KT-21 | A | boot with current kubejs | latest.log has `[placeable] ... placeable_on_coaster=` with the new count and no `not item ids` warning; a Coaster accepts `vinery:red_wine`, `farmersdelight:hamburger`, `farmersrespite:long_black_tea`, refuses `fruitsdelight:apple_jelly`, `goldenfood:golden_cookie` | kitchen.md 2.3, KT-20 (client half KT-19) |
+| SQ-BJ-01 | A | boot after the CD and Vintage `-09` install; recipe dump | no `farmersdelight:cooking` output of `fruitsdelight:blueberry_muffin`, `cranberry_muffin` or `veggiesdelight:sweet_potato_cupcake`; `creative_delight:farmersdelightcooking/{green_grape,red_grape,cherry}_jam_jar` exist, count 2, container `vintagedelight:empty_mason_jar`; no recipe outputs the 6 removed jam items | RC-172 to RC-175, OV-36 |
+| SQ-BJ-02 | A | same | `farmersdelight:chicken_sandwich` and the `moredelight` slice sandwiches list `#forge:bread`; `moredelight` bread_slice cutting and `canned_goods:canned_bread` keep their own input; no errors from `bread_recipes.js` or `jams.js` | RC-170, RC-171 |
+| SQ-BJ-03 | A | same; tag dump | `vintagedelight:relish_jar` not in `#forge:jam_jars` or `#vintagedelight:savory_jam`; the 3 new jars in `#forge:jams` | RC-174 |
+
+## Stepstools, 2026-10-29 ([stepstool.md](../stepstool.md))
+
+Needs patcherMod 1.1.04 (built 2026-10-29, `development/patcherMod/build/libs/creativeengineering-1.1.04.jar`, not yet in `mods/`) and current kubejs.
+
+| ID | Group | Commands | Pass | If it fails |
+|---|---|---|---|---|
+| SQ-STL-01 | A | boot | boot log has no `Mixin apply failed` / `InvalidInjectionException` naming `EntityStepstoolCollisionMixin` or `ServerGamePacketListenerStepstoolMixin`; no KubeJS errors from `stepstools.js`, `equipment/stepstool.js`, `curiostags.js` | SRG names `m_20272_` (Entity.collide), `m_9793_` (noBlocksAround); the `@ModifyVariable` STORE on the List local |
+| SQ-STL-02 | A | same; recipe + tag probe | 16 `creativeengineering:shaped/*_stepstool` recipes (seat over `minecraft:oak_fence`); `#creativeengineering:stepstools` has 16, `#curios:feet` resolves to them; `/curios list` shows `feet` | dict keys `i.<colour>_seat`, `i.fence_oak`; `feet.json` path |
+
+## CD members 22 to 24, 2026-10-29 ([creative_delight.md](../creative_delight.md) 31)
+
+Script-only except the Storage Delight name (repackedStorage jar rebuilt 2026-10-29, not installed: a game was running). Recipe checks need a full restart (removed_items.js, order.js are startup scripts).
+
+| ID | Group | Commands | Pass | If it fails |
+|---|---|---|---|---|
+| SQ-CM-30 | A | boot with current kubejs; recipe id dump | no recipe outputs or takes `rusticdelight:fruit_beignet`; no errors from `rusticdelight/recipes.js` or `removed_items.js` | `creativedelight/members #22` |
+| SQ-CM-31 | A | same probe | `oceansdelight:seagrass_salad` recipe is `creative_delight:shapeless/seagrass_salad` with 2 `minecraft:seagrass` + bowl; no tentacle item (`miners_delight:tentacles`, `baked_tentacles`, `tentacles_on_a_stick`, `oceansdelight:tentacles`, `cut_tentacles`, `tentacle_on_a_stick`, `baked_tentacle_on_a_stick`, `oceanic_delight:squid_tentacles`, `glow_squid_tentacles`, `grilled_squid_tentacles`) is an output or input of any recipe (`/recipescan`) | `creativedelight/members #24`, `dishes/ocean #4` |
+| SQ-CM-32 | A | same probe | `oceansdelight:cooking/squid_rings`, `oceanic_delight:sea_pickle_roll`, `shrimp_rice`, `squid_salad`, `takoyaki` take `#forge:raw_fishes/calamari`; `glow_squid_stew` takes `#forge:raw_fishes/calamari` (glowing and every slice included); `seafood_skewer`, `squid_and_pickles` take `#forge:cooked_fishes/calamari` (the tag replace in the four `#forge:squid_tentacles` recipes is the part most likely to miss) | replaceInput on a tag |
+| SQ-CM-33 | A | boot; JEI item list (client) | the 140 Storage Delight blocks sit together in wood order (oak, spruce, birch, jungle, acacia, dark oak, mangrove, crimson, warped, bamboo); no tag error naming `creativeengineering:jei/storage_delight` | `creativedelight/members #23` |
+| SQ-CM-34 | A | after the repackedStorage install; mod list | Storage Delight shows as "Storage Delight (Creative Delight)" | jar not installed |
+| SQ-CM-35 | A | boot with the 2026-10-31 12:32 CD jar; recipe probe + kubejs/startup.log and latest.log | `#forge:squid_tentacles` and `#forge:foods/tentacles` hold the raw calamari items; `miners_delight:cooking/takoyaki` takes calamari in both tentacle slots; `squid_rings`, `glow_squid_stew`, `seafood_skewer`, `squid_and_pickles` exist (rerun SQ-CM-32 alongside); no `[NCH]` error naming `squid_tentacles` or `truffle_pie` | `dishes/ocean #4` |
+| SQ-CM-36 | A | same boot; recipe probe, `/fgdtest all`, then a client | `create_central_kitchen:truffle_pie` is an item (Truffle Pie, chocolate pie sprite) that places CCK's truffle pie block; `creative_delight:baking/truffle_pie` exists and takes `fungidelight:truffle`; the placed pie gives truffle pie slices; `/fgdtest` oven truffle pie PASS; no `[NCH] ceBaking ... truffle_pie` error and no `truffle_pie` in the item_dict missing-id list | `ports/fungiport #3` |
+
+## Buckets (recipes/engineering #5), 2026-10-29
+
+Needs the patcherMod jar installed (built, not installed: a game was running) and a full restart.
+
+| ID | Group | Commands | Pass | If it fails |
+|---|---|---|---|---|
+| RE-28 | A | boot; JEI `minecraft:bucket` | only `shaped/bucket_from_plates` (3 iron plates, V shape); craft one | `recipes/engineering #5` |
+| RE-29 | A | craft `wooden_bucket` from 3 planks; right-click a water source, place it, refill; try lava, a waterlogged slab, milk from a cow | scoops and places water only; lava/cow do nothing; placing returns the wooden bucket (not iron); texture and names show | `recipes/engineering #5` |
+| RE-30 | B | Create spout / basin / FD cooking pot with the wooden water bucket | water is drained and the wooden bucket returns; empty one fills from water only | wrapper in `WoodenBucketItem` |
+
+## Rose quartz sand blasting (engineering/dreams-and-desires #3), 2026-10-30
+
+Needs patcherMod 1.1.04 installed (built 2026-10-30, not installed: a game was running; the same jar as the Buckets
+entries) and a full restart. Setup: encased fan blowing through a sand block (or a D&D sanding sail) over a belt.
+
+| ID | Group | Commands | Pass | If it fails |
+|---|---|---|---|---|
+| EN-19 | A | 64 `create:rose_quartz` onto the belt through the stream; count the output | exactly 64 items, about 51 rough / 13 polished (roughly 40-62 / 2-24) | 128 or fewer than 64 items: flag not read, `ProcessingRecipeSerializerMixin`; all polished: D&D recipe not removed (`redstone.js`) |
+| EN-20 | A | funnel the rough output back to the belt start, run until none is left | 64 polished | as EN-19 |
+| EN-21 | A | JEI U on rose quartz, D&D sanding page; grep `latest.log` for `exclusive-results` | only `creativeengineering:ddsanding/rose_quartz` (80 % / 20 %); no warning | `NCH.ddSanding` |
+
+
+## Gap fill, 2026-10-30: changelog bullets that had no row (oldest to newest)
+
+Added by the 2026-10-30 coverage pass over `unreleased.md`: seed pouch tags and smoked wood (the Autumn painting rename was dropped, TODO `#7` closed as not implemented). Both are
+script or data only; a full restart with the current kubejs and the installed patcherMod 1.1.04 covers them.
+
+| ID | Group | Commands | Pass | If it fails |
+|---|---|---|---|---|
+| SQ-SPC-01 | A | boot; tag probe (`Ingredient.of('#forge:seeds').getStacks()` or `/dumptags`) | `#forge:seeds` contains tobacco, hamimelon and lemon seeds; no Botania mana seed or Mungal spore in it | `tags/misctags.js` line 46 (`farming/crops #13`) |
+| SQ-SPC-02 | A | same probe, `#quark:seed_pouch_holdable` (the pouch tag that nests `#forge:seeds`) | the three seeds are members | Quark tag name differs: dump `#quark:*` tags that contain `minecraft:wheat_seeds` |
+| SQ-RW-23 | A | boot; recipe id dump for `smoking` outputs of `create_dd:smoked_*` | 13 smoking recipes, cook time 200, one per smoked shape (log, wood, stripped log, stripped wood, planks, slab, stairs, fence, fence gate, door, trapdoor, button, pressure plate); `creativeengineering:smokable/*` tags each hold oak and spruce, none hold `botania:*` or driftwood | `server_scripts/wood/smoked_wood.js`, `tags/wood_tags.js` 36-40 (RW-23) |
+| SQ-RW-24 | A | same dump; `create:filling` outputs of `immersiveengineering:treated_wood_horizontal` | two recipes: `#creativeengineering:unsmoked_planks` + 125 mB creosote, and `create_dd:smoked_planks` + 100 mB; `createaddition` treated-wood filling absent | `smoked_wood.js` 33-37 (RW-24, RW-26) |
+| SQ-RW-25 | A | same dump; IE `bottling_machine` outputs of `treated_wood_horizontal` | two recipes, creosote 125 and 100 mB, same inputs as SQ-RW-24 | `NCH.ieBottling` (RW-25) |
+| SQ-RW-26 | A | tag probe `#creativeengineering:unsmoked_planks` | contains oak and spruce planks, not `create_dd:smoked_planks` | `wood_tags.js` line 32 |
+| SQ-RW-27 | A | boot; recipe dump for `vintagedelight:fermenting` outputs of `minecraft:leather`; tag probe `#immersive_weathering:bark` | one recipe `creativeengineering:pickling/leather_from_bark`: 4 `#immersive_weathering:bark` + `#forge:salt`, 2400 ticks; the tag holds every species' bark (oak to azalea, crimson / warped scales, Upgrade Aquatic driftwood bark) | `server_scripts/wood/bark.js` (RW-27) |
+| SQ-DD-08 | A | boot; recipe dump for `create_dd:*_asphalt_block` outputs | 16 shaped recipes `creativeengineering:*_painted_asphalt` (8 out, `#create_dd:asphalt_blocks` or Immersive Petroleum asphalt around a dye), none of the 16 `create_dd:crafting/decor/*_asphalt_block`; 1 recipe `asphalt_from_painted_asphalt_soap` (8 Immersive Petroleum asphalt out) | `server_scripts/engineering/dreams_desires.js` (DD-08, DD-09) |
+| SQ-CP-01 | A | boot; tag probe `#creativeengineering:millable_seeds`; recipe dump for `create:milling` outputs of `minecraft:bone_meal` | tag holds the vanilla and modded seeds, not `farmersdelight:rice` nor corn kernels; one milling recipe `creativeengineering:createmilling/seeds_bone_meal`, chance 0.15 | `tags/wood_tags.js`, `wood/compost.js` (CP-01) |
+| CQ-SPC-01 | client | put tobacco, hamimelon and lemon seeds into a Quark seed pouch | each is accepted (`farming/crops #13` test) | server rows above |
+| CQ-RW-23 | client | RW-23 to RW-26 in [../recipes_wood.md](../recipes_wood.md): smoker and Create fan with a Smoking Sail on oak, spruce, azalea, crimson; spout and IE Bottling Machine fills; JEI shows smoked planks only in the 100 mB recipes | all 13 shapes smoke; creosote costs match; 100 mB with plain oak planks does not work | server rows above |
+
+## SQ-WG30 worldgen batch 2026-10-30
+
+Worldgen TODO rows built in parallel on 2026-10-30, tested together on one scratch run. patcherMod build of 2026-10-30.
+
+**Run 2026-10-30 (afternoon, `creativeengineering-1.1.04.jar` of 13:38, seed 8675309, RCON driven):** worlds `wg30a`
+(density 4, `log = ALL`, A01 + A03 overrides; A, B, D02), `wg30e` (density 4, no overrides; E, D03), `wg30c1` (density 1,
+switch off; C01, C02, C05), `wg30c2` (switch on; C03, C04). Result per row in its ID cell. Not run: CQ-WG30-A04
+(client). Method note: `/locate` sent over RCON runs on the server thread (Async Locator only takes player and console
+sources), so a slow search stalls the server there (rare ruin: 65 s); use the stdin fifo for locate timing.
+
+### A. Earth fill and DH clip (TODO `structures/earthfill #9`, `#10`, `locate #4`; [structure_tuning.md](../structure_tuning.md) 3.13, [locate.md](../locate.md) 3.7, LO-22)
+
+Earth-fill rows: group B, the recipe of [structures/12_earth_fill_camps.md](structures/12_earth_fill_camps.md) 2 (seed 8675309, `structureDensity` 4, scratch toml `[worldgen.earth_fill] log = "ALL"`, Chunky r 400 at 2144 -2592). A01 and A02/A03 can share one world if A01's override is added to the A03 list.
+
+| ID | Group | Commands | Pass | If it fails |
+|---|---|---|---|---|
+| SQ-WG30-A01 **PASS 2026-10-30**: 34 village starts in the square, all `-> kept`, no `too wet`; 3 with water over 1.5x ground kept (e.g. T&T snowy slopes 315 / 0) | B | scratch toml `overrides = ["#creativeengineering:type/village=-1,-1,-1"]`, `log = "ALL"`; Chunky the square; `grep '\[earth-fill\]' latest.log` for village ids | every village line ends `-> kept`, none `CANCELLED`, none says `too wet`, also lines whose footprint has water more than 1.5x ground (#9) | `EarthFill.earthCancelled` / `EarthCheck.cancels` |
+| SQ-WG30-A02 **PARTIAL 2026-10-30**: 27 Campsite starts, 1 cancel (fisher at [124, -115], 208 over water, too wet), none for air; ST-199 not checkable: the weight strip changed the pick at [-7, -9] (now a circus tent, cancelled by mounds); a sampled sunk camp (butcher, 2138 102 -2426) sits flush; no 1.1.04-jar run to compare air counts | B | same run; the `[earth-fill]` lines of the 6 Campsite camps (sunk 4); then ST-199 (armorer campsite at chunk [-7, -9]) | ST-199 passes; camp lines on slopes show more air than the same starts on the 1.1.04 jar; Campsite cancels rise by a few at most, each with a gap of 3 or more blocks under the camp (#10) | `EarthCheck.cancels` (`box.minY() + sink`); TerrainAdaptation sink value |
+| SQ-WG30-A03 **PARTIAL 2026-10-30**: `minecraft:village_plains` [177, -93] logged at limit -1 and kept; the 31 `philipsruins:ancient_ruins` lines show limit 0 but none had earth over water or air, so the cancel path was not exercised; exempt ids not checked | B | ST-54 at `log = "ALL"`: `overrides = ["minecraft:village_plains=-1,-1,-1", "philipsruins:ancient_ruins=0,0,0"]` (village_savanna if no plains in the square) | the `-1,-1,-1` village is logged but never cancelled; ruins cancel at any earth over water or air past the beard; exempt ids log nothing | as A01 |
+| SQ-WG30-A04 **PASS 2026-10-30**: no mixin or `DistantClip` error; Nether chunk at 24 24 and 8 24: lava 31..24; End chunks at 1208 8 / 1224 24 have no floor at y 47 | B-nether | boot with `[worldgen.distant] clip` true; forceload a Nether chunk and an End chunk (`execute in ... run forceload add`) | no mixin apply error for the three `*DistantClip*` mixins, no exception from `DistantClip`; Nether chunk has its lava sea at y 31 (real chunks are never clipped) | `DistantClip.clipsDimension` |
+| CQ-WG30-A04 **NOT RUN** (client row) | client | LO-22: delete the client's DH data for the Nether and the End, fly over the End's outer islands and the Nether with DH generating; then a fresh Overworld area | no stone floor at y 47 in Nether / End LODs, the lava sea is drawn; Overworld LODs still clipped (LO-11) | `DistantClip.mark` / `skipFeature` gate |
+
+### B. Soul lanterns and soul torches to plain ones (TODO `structures/netherblockswap #3`; [nether_worldgen.md](../nether_worldgen.md) K25, K32, NW-13 to NW-17)
+
+Data only: `nether_block_swaps.json` (1407 swaps, 323 new) and `config/betterdungeons-forge-1_19.toml`
+(`Enable Nether Blocks in Dungeons` false). Group B world (any seed); `/place template` goes through
+`StructureTemplateManager#get`, so it shows the swaps without finding the structure.
+
+| ID | Group | Commands | Pass | If it fails |
+|---|---|---|---|---|
+| SQ-WG30-B01 **PASS 2026-10-30**: `[template-swaps] 1412 block swap(s) in 105 template(s)`, no `bad entry` | B | boot; `grep '\[template-swaps\]' latest.log` | the load line reads `1412 block swap(s) in 105 template(s)` (1407 nether + 5 meat; was 1089); no `bad entry` line | file not regenerated or not copied: rerun `python3 tools/gen_nether_swaps.py` |
+| SQ-WG30-B02 **PASS 2026-10-30**: 0 soul blocks; layer1 12 hanging + 57 standing lanterns (template 12 + 61; the 4 missing stood on air at the template's bottom layer, placed in mid-air), base_l 13 + 1 + wall torch west, parkour wall torches N2 S2 W4, snowy depot E1 S2 W1 (facings as the template); no `no longer hold` | B | `/place template terralith:spire/layer1` and `terralith:spire/base_l`; `/place template betterjungletemples:challenge_room/challenge_room_water_parkour`; `/place template veggiesdelight:village/houses/snowy_depot_house`; then grep the log for `no longer hold` | plain lanterns, none soul; hanging ones hang under their chains, standing ones stand; wall torches plain and on their walls (facing kept); no `no longer hold` warning for these templates | standing where it should hang or torch facing north everywhere: `keep_for` / `FAMILY_KEEP` in `gen_nether_swaps.py`; warnings: template moved, rerun the generator |
+| SQ-WG30-B03 **PASS 2026-10-30**: ancient city center 6 soul lanterns (+57 soul sand), bone dungeon start 1 soul lantern | B | `/place template minecraft:ancient_city/city_center/city_center_1` and `philipsruins:bone_dungeon_start` | both still have soul lanterns (ancient city and sculk structure exclusion) | `except` / `except_holding` `@sculk` in rule 23 |
+| SQ-WG30-B04 **PASS 2026-10-30**: 1 zombie + 3 small dungeons placed and scanned (y 28 to 38): plain lanterns (44) and campfires, coarse dirt, no soul block in them; the only soul blocks in the scanned area are inside a Philip's `lost_soul_city` start (y -53..1) | B | `/place structure betterdungeons:zombie_dungeon` and `betterdungeons:small_dungeon` a few times each (or `/locate` and visit 3) | no soul lantern, soul campfire or soul sand anywhere in them (plain lanterns, campfires, coarse dirt) | the YUNG's config line did not reach the server copy of the toml |
+
+### C. Weight strip, test overrides, fortified metas vs `/locate` (TODO `structures/rates-and-groups #3`, `#5`, `#6`; [structure_tuning.md](../structure_tuning.md) 3.27, ST-217, ST-218, ST-221 to ST-223, ST-135)
+
+Data + patcherMod (CEConfig `[worldgen.debug] testOverrides`, `[worldgen.locate] searchTimeoutSeconds` default 300).
+`structure_groups.json` weights stripped (204 members to 100, `tuned` ones kept), `meta_structures.json` fortified shares
+0.25, new `structure_test_overrides.json`. Needs the 2026-10-30 patcherMod jar (without it the switch reads off and
+the timeout stays at the toml value). C01, C02, C05 run at density 1 with the switch **off**; C03 and C04 in a second
+fresh world with it **on**. Seed 8675309.
+
+| ID | Group | Commands | Pass | If it fails |
+|---|---|---|---|---|
+| SQ-WG30-C01 **PASS 2026-10-30**: summary without TEST OVERRIDES, no ERROR; report: swamp outpost 100, flower house 100, camps 60 (fisher 15), witch wagon 200, cats 19, statues 26, bastille 34, `takesapillage:pillager_camp` 87; no `## Test overrides` | B | boot (switch off); `grep '\[structure-tuning\]' latest.log` | summary line has no `TEST OVERRIDES` and no ERROR line; `structure_tag_report.md` shows weight 100 for stripped members (e.g. `towns_and_towers:pillager_outpost_swamp`, `villager_flower_house:flower_house`), the Campsite camps 60 (fisher 15), witch wagon 200, cats 19, statues 26, bastille 34, camp 87; no `## Test overrides` section (ST-217) | a member with `tuned` changed: `strip_weights` in `gen_structure_groups.py`; unknown field `tuned`: old `structure_overrides.js` |
+| SQ-WG30-C02 **PARTIAL 2026-10-30**: census done (100,616 slot chunks, 2,749 starts, 316 s, 5 false negatives: old refinery x4 and a mineshaft, reason biome); at density 1 the counts are too small to judge evenness (settlements 6 starts in 17 slots); counts in structure_tuning.md 3.27 | B | same world: Chunky square r 400 at 2144 -2592, then `/celocate census 96 2144 -2592` | per group, members that share a biome and have equal frequencies start in about equal numbers (x0.7 to x1.4), e.g. the T&T villages with frequency 1.0 in plains; write the per-member counts into structure_tuning.md 3.27 for TODO #2 (ST-218) | uneven: check `biome_frequency` and the frequencies (kept on purpose); not a failure of the strip itself |
+| SQ-WG30-C03 **PASS 2026-10-30**: one `TEST OVERRIDES ACTIVE` line with 33 changes, summary `TEST OVERRIDES (33)`, report `## Test overrides`, no REFUSED | B | stop; scratch toml `[worldgen.debug] testOverrides = true`; new world; boot; `grep 'TEST OVERRIDES' latest.log` | exactly one `TEST OVERRIDES ACTIVE` warning listing 33 changes (towers weight 100, rare ruin frequency 0.25, fortified shares 0.45, town villages 0.1...); summary starts `TEST OVERRIDES (33)`; report has `## Test overrides`; no `REFUSED` line; for ST-221 the C01 boot is the switch-off half | no line: the jar lacks `WorldgenConfig.testOverrides` (old patcherMod) or the toml key did not reach the server copy |
+| SQ-WG30-C04 **PASS 2026-10-30**: fortified_ruins 2728 blocks (4 s; fortified village + 3 ruins 64 to 71 out), fortified_camps 2608 (8 s; 2 camps 79 and 81 out), mangrove tower 2254 (9 s), rare ruin 2771 (65 s); bad `biomes` key: one `TEST OVERRIDES REFUSED ... "biomes" refused (... 7.4.8 ...)`, report "None applied: the file was refused" | B | same world (switch on): ST-135 `/locate structure creativeengineering:meta/fortified_ruins` and `.../meta/fortified_camps` from 0 0, with `[worldgen.meta_structures] log = true`; then `/locate structure mysticrift_pillagers_towers_aris:mangrove_pillager_tower` and `philipsruins:rare_ruin`; then add `"biomes": "#minecraft:is_overworld"` to one entry of the scratch copy of `structure_test_overrides.json` and `/reload` | both metas answer inside 300 s; the meta log lists a fortified village (or red roof castle) with 2 to 6 ruins / 2 to 4 camps 44 to 108 blocks out; the tower and the rare ruin answer; after the bad key: one `TEST OVERRIDES REFUSED ... "biomes" refused (... 7.4.8 ...)` warning and the report says the file was refused (ST-222, ST-135) | metas time out even with the overrides: earth fill or peaceful radius cancels (grep `[earth-fill]` / `[placement-priority] dropped` for the anchor), not a rate problem |
+| SQ-WG30-C05 **PASS 2026-10-30**: toml `searchTimeoutSeconds = 300`; fortified_camps from 0 0: 1823 blocks (4 s), from 2448 -624: same village, 3019 blocks (1 s); fortified_ruins from 0 0: 2608 blocks (5 s); camps 56 / 74 and ruins 73 to 97 blocks out; no timeout | B | first world (switch off, density 1): `/zcfg` or the toml shows `searchTimeoutSeconds = 300`; `/locate structure creativeengineering:meta/fortified_camps` from 0 0 and from 2448 -624, then `meta/fortified_ruins` from 0 0 | each answers, or ends with a clean `[locate] ... timed out after 300 s` line (no stall, server keeps ticking; LO-05 style); record the time and load count of each (ST-223) | timeout still 120: Forge kept the old toml value; a stall: `LocateStats.expired` path |
+
+### E. Water share 0, metas off coasts, Nullscape biomes (TODO `structures/earthfill #2`, `structures/metas #5`, `worldgen/biomes #8`)
+
+New defaults (patcherMod CEConfig and the instance toml): `[worldgen.earth_fill] maxWaterSurplus` 0.5 -> 0.0,
+`[worldgen.meta_structures] avoidCoasts` false -> true (restart only, not reloaded live). `biome_config.json` End:
+`nullscape:crystal_peaks` x0.25 -> x3 (model 0.61 % -> 3.95 % of the End surface), `nullscape:void_barrens` x0.75 -> x2
+(1.825 % -> 5.41 %). All three are new-chunk or new-world changes. E01 and E02 use the A world recipe (group B, seed
+8675309, Chunky r 400 at 2144 -2592) but **without** A01's village override: an override with every limit -1 skips the
+share check, so villages would never show a share cancel.
+
+| ID | Group | Commands | Pass | If it fails |
+|---|---|---|---|---|
+| SQ-WG30-E01 **PASS 2026-10-30**: every line `surplus limit 0.0`; inland square 359 starts, 15 cancelled, 6 too wet (all share-only, ratios 1.76 to inf, none under 1.5); coast r 200: 143 starts, 0 too wet; no kept start with water > ground; the 470 / 425 village is not in this world (weight strip) | B | scratch toml `[worldgen.earth_fill] log = "ALL"`, no `overrides`; Chunky the square, then a coast square (r 200 at the spawn beach -80 -16); `grep '\[earth-fill\].*footprint' latest.log` and tabulate water / ground for kept and cancelled starts | every line shows `surplus limit 0.0`; every `too wet` line has water > ground, every kept start has water <= ground; on diag3's numbers expect about one more cancel (the 470 / 425 shore village); for each share-only cancel with a ratio under 1.5 teleport there: open water or a lake island = right, a shore with a pond = wrong | more than two wrong cancels: raise `maxWaterSurplus` to 0.25 (then 0.5) in the toml and CEConfig; `EarthFill.Footprint.tooWet` |
+| SQ-WG30-E02 **PASS 2026-10-30**: toml `avoidCoasts = true`; ST-203 all three `not placed, no anchor fits`; ST-204 all three built; driftwood flotilla found 144 blocks out and assembles (15/15, 10/10); square: 35 land metas, all built (diag3 count not recorded, no comparison) | B | same world, toml `[worldgen.meta_structures] log = true`; ST-203: `/place structure` `creativeengineering:meta/farmers_camp`, `house_camp`, `ruin_scatter` at the spawn beach (-80 100 -16); ST-204: the same three at 2144 -2592; `/locate structure` a driftwood flotilla; count assembled land metas in the Chunky square vs the 2026-10-19 diag3 log | the switch reads true (log or `/zcfg`); ST-203: all three "not placed, no anchor fits"; ST-204: all three build; the flotilla (in `meta/coast_ok`) still assembles; land metas within about 32 blocks of a beach or river fail (expected side effect, written up), elsewhere their count matches diag3 | switch still false: Forge kept an old toml value, check the instance toml; flotilla gone: `meta/coast_ok` tag in `structure_tags.json` |
+| SQ-WG30-E03 **PARTIAL 2026-10-30**: End line `override minecraft:the_end`, no note for either biome; crystal peaks 1361 (0 0) / 1647 (3000 0), void barrens 906 / 1345, so only one find is nearer than 1,064 / 1,086 (other seed); a 20,000-point `getNoiseBiome` sample of the End (r 20,000) gives crystal peaks 5.28 %, void barrens 7.11 % (model 3.95 / 5.41) | B (new world, second seed: 8675309) | boot, check the biome tuner lines in latest.log; `execute in minecraft:the_end run locate biome nullscape:crystal_peaks`, same for `nullscape:void_barrens`, from 0 0 and from 3000 0; optionally `/dumpclimate` in the End and compare the shares | the End line says `override minecraft:the_end`, no `note` for crystal peaks or void barrens; both biomes found from both points, each nearer than the 1,064 / 1,086 blocks seen on seed -8188900049893920259 at the old multipliers; a dump (if taken) holds both biomes | not found: the model and the live End disagree (biome_tuning.md F4); raise the multiplier or set `target_pct`, or check whether `ModdedBiomeSource` replaces the layout |
+
+### D. Floating islands and seabed clearance (TODO `structures/terrain #5`, `#7`; [structure_tuning.md](../structure_tuning.md) 3.26, ST-233, ST-234)
+
+patcherMod `SkyIslands` (Sky Structures' 9 island features: one island per hit, based on the higher of ground and sea)
+and `SeabedClearance` (structure tag `creativeengineering:seabed_clearance`: 7 Terralith `underground/*`, 6
+Subterrestrial land cabins). New chunks only. D01 and D03 can share the A / E world (group B); D02 needs any Overworld.
+
+| ID | Group | Commands | Pass | If it fails |
+|---|---|---|---|---|
+| SQ-WG30-D01 **PASS 2026-10-30**: `[seabed-clearance] world load: 13 structures tagged (clearance 8, reach 4)` in all four boots; no mixin error | B | boot; `grep -E 'seabed-clearance\|SkyIslands\|SeabedClearance' latest.log` | `[seabed-clearance] world load: 13 structures tagged (clearance 8, reach 4)`; no mixin apply error for `ConfiguredFeatureSkyIslandsMixin` or `ChunkGeneratorSeabedClearanceMixin` | 0 tagged: `terrain_adaptation.js` tag block did not load (KubeJS error) or ids changed; mixin error: SRG names in the two mixins |
+| SQ-WG30-D02 **PASS 2026-10-30**: 13 placed (7 over deep ocean, 3 on a hillside, 3 on flat land): each one island (bees 207 blocks every time), ocean ones y 100 to 149, land ones above the ground and roofs under them; stop line `placed 22` = 13 + 9 from worldgen. Label note: the hillside and flat blacksmith islands count as `over water` (see TODO terrain #5 note) | B | over a deep ocean (`/locate biome minecraft:deep_ocean`, stand on the water) run `/place feature sky_structures:grass_island_bees` 5 times, then `grass_island`, `grass_island_blacksmith` once each; same 3 over flat land and on a hillside; stop the server | every island stands 16 to 79 blocks above the sea surface (land: above the highest ground under it), never in or under water; each command places exactly one island (no second copy nearby); stop line `[sky-islands] placed 13: {... over water=..., ... over land=...}` with counts that match | island in water: `SkyIslands.place` base / heightmap; two islands: the mixin is not applied (Sky Structures' own loop ran); `failed to place`: template id (blacksmith uses `sky_grass_blacksmith`) |
+| SQ-WG30-D03 **FAIL 2026-10-30** (seabed part passes): stop lines `dropped 148` / `dropped 145 starts`, tag ids only; 9 boxes checked (3 cabin, 6 witch hut finds): seabed intact over every one, but kept starts under the ocean sit in flooded caves: jungle cabin [104, 84] (top y 28, seabed 51) has water at 13..19 around its slabs, 3,768 water in the box (template has 3); witch huts [-92, 0] and [94, 93] also hold water. Clearance checks only the seabed distance, not aquifer water | B | Chunky r 400 around a jungle coast with deep ocean (`/locate biome minecraft:jungle` from an ocean spawn, or any lush-caves-under-ocean area); then `/locate structure subterrestrial:jungle_cabin` and `terralith:underground/witch_hut` from the ocean side, tp to 3 finds each; stop the server | no cabin or Terralith cave structure has an open hole in the seabed above it or water inside; stop line `[seabed-clearance] dropped N starts: {...}` with N above 0 for a sea-heavy square, ids only from the tag; finds under land look as before | flooded start still present: compare its box top with the floor there (8-block clearance too small for a `beard_box` piece: raise `CLEARANCE`); N 0 in an ocean square: tag not bound (D01) |
+
+## Sky Village addon houses (skyvillages #1), 2026-10-30
+
+Data only ([sky_village_addons.md](../sky_village_addons.md)): `kubejs/data/skyvillages` templates and pools, nothing to
+install. Copy `kubejs/data/skyvillages/` to the scratch server, full restart. Looks (SVA-03 to SVA-05) are for the user in
+game; the server half is load errors, placement and loot.
+
+| ID | Group | Commands | Pass | If it fails |
+|---|---|---|---|---|
+| SQ-SVA-01 | A | boot; `grep -iE 'skyvillages\|template' latest.log \| grep -iE 'error\|unknown\|failed'` | no line for `skyvillages` (SVA-02) | template file or pool JSON named in the line |
+| SQ-SVA-02 | A | `/place template skyvillages:<path>` for the 8 houses and 9 deco pieces (paths in the doc, 3.1) | each places; `/data get block` on the keg, wine press, shelf and a cabinet returns a block entity | swap table entry for that block (`tools/skyvillage_addon_remap.json`), rerun the tool |
+| SQ-SVA-03 | A | `/locate structure skyvillages:skyvillage` x5 (teleport, look or count pieces with the structure scan) | at least one addon house over 5 villages, bridges and villagers attached (SVA-06) | pool weights in `skyvillage_houses.json` |
+| SQ-SVA-04 | A | open the chest in `sky_village_farmersdelight_farm_0` and the 3 chests in `sky_village_letsdo_brewery_1` | Lootr chests rolling `sky_village_weaponsmith` / `butcher` / `shepherd` (SVA-07) | template `LootTable` field |
+
+## SQ-EF earth fill build plan, 2026-10-30
+
+TODO `structures/earthfill #13`, `#14`, `#16`, `#3`, `#4`; [structure_tuning.md](../structure_tuning.md) 3.28, ST-235 to
+ST-242; plan in [briefs/structures_earthfill.md](../briefs/structures_earthfill.md). patcherMod `creativeengineering-1.1.04.jar`
+rebuilt 2026-10-30 16:2x (in `mods/`). Group B, the recipe of [structures/12_earth_fill_camps.md](structures/12_earth_fill_camps.md) 2
+(seed 8675309, `structureDensity` 4, scratch toml `[worldgen.earth_fill] log = "ALL"`, Chunky r 400 at 2144 -2592), plus
+a desert square and a swamp square found with `/locate biome`. Fill lines: `grep -E '\[earth-fill\]' logs/latest.log`.
+
+| ID | Group | Commands | Pass | If it fails |
+|---|---|---|---|---|
+| SQ-EF-01 | B | scratch toml `overrides = ["minecraft:village_plains=-1,-1", "village_savanna=-1,-1,-1"]`; Chunky the inland square (and a savanna square r 200) | plains lines show `mound columns (limit N)` with N the size's limit, not -1; savanna lines `limit -1` everywhere, `-> kept`, and no `pruned` line for savanna villages (ST-242) | plains at -1: `EarthFill.unlimited`; savanna pruned: `prunes()` in `filter`; savanna unmatched: `parseOverrides` namespace default |
+| SQ-EF-02 | B | same world, no overrides; `grep 'pruned.*footprint'` | at least one village logs `pruned K of N pieces` with a `(footprint W water / G ground)` reason, W >= 16; tp there: the dry part of the village stands, no house over the lake (ST-239) | none in the square: Chunky a coast square r 200; wrong house gone: `pruneMinWetColumns` |
+| SQ-EF-03 | B | desert square r 300 with a river or oasis (`/locate biome minecraft:desert`, Terralith `desert_oasis` if present); `grep -E 'desert_pyramid\|desert_temple\|desert'` | every pyramid / temple line has a `footprint` part; no kept one with water > ground; tp to 3 kept pyramids: none in standing water; a line for a tent camp or ruin with `0 earth` and a footprint exists (#12) (ST-235, ST-237) | no footprint on pyramid lines: the structure's step is not `surface_structures` (check `/dumpstructuregen`) or `footprintAllPieces` false; kept in water: span top rule |
+| SQ-EF-04 | B | swamp + mangrove square r 300; `grep -E 'swamp_hut\|witch_hut\|mangrove_pillager_tower'` | their lines (if any) show no footprint part; `/locate structure minecraft:swamp_hut` and `betterwitchhuts:witch_hut` still find huts standing in water (ST-236) | lines say `too wet`: the `earth_fill/wet_ok` tag did not load (KubeJS error) |
+| SQ-EF-05 | B | boot: `grep 'terrain-adaptation'`; `/place structure philipsruins:ancient_crypt` on a slope and on flat ground; `/place structure philipsruins:ocean_ruins` and `ocean_fortress` on a seabed | load line counts 7 sunk starts, no `ignored` warning; crypt: the ground ring sits at the entrance roof, no pit, rooms open; record how the seabed ruins sit, for brief #3's tag decision (ST-238) | `ignored` for the crypt: its start pool has a terrain-matching element after all (read the pool json) |
+| SQ-EF-06 | B | two r 400 squares, one plains/taiga, one highlands (`/locate biome terralith:alpine_highlands`); `grep 'eugene:undead_castle'`; biome per line with the `/zcol`-style `getNoiseBiome` probe (brief #4) | at least half the castles kept; lines show `limit 400` for mound; tp to one kept castle on a slope: no earth over more than 6 blocks of air (ST-240); write the per-fit table into brief #4 | most cancels on air in highlands: drop `land/highlands` from its fits (brief #4 option 2) |
+| SQ-EF-07 | B-perf | the SQ-WGP-07 pregen (2601 chunks, same square and settings) with the new jar | pregen within 10% of 3:50; `[earth-fill]` CANCELLED count noted against SQ-WG30-E01 (15 inland) (ST-237) | much slower: spans read too many columns; check which structures log footprints under `log = ALL` and narrow `rigid()` |
+| SQ-EF-08 | B | toml `[worldgen.meta_structures] log = true`; `/place structure creativeengineering:meta/farmers_camp` (then `house_camp`, `ruin_scatter`) about 40 blocks inland from the spawn beach (-80 100 -16), and at the beach itself; then save, stop, start, rejoin a built one | inland: the meta builds, its log line has `short:` for the part that met the coast; at the beach: `not placed, no anchor fits` as before; any `dropped K of N parts` earth-fill line names satellite ids; after the restart the meta loads with no error and `/locate structure` finds it (ST-241) | meta still `not placed`: `keepShortParts` false in the toml; error on load: `MetaStructure.withParts` index ranges |
+| SQ-EF-09 | B | same world as SQ-EF-02, `log = "ALL"`; a lake or river square r 300; `grep 'wet only'` | at least one non-village jigsaw (outpost, camp, ruin) logs `pruned K of N pieces (wet only)` with a `footprint` reason; tp there: its dry part stands, no piece over the water; no `type/village` id with `wet only` (ST-297) | none logged: `pruneWetJigsaws` false in the toml, or the structure's step is not `surface_structures`; a broken-looking building: add it to `earth_fill/no_prune` |
+| SQ-EF-10 | B | toml `[worldgen.meta_structures] log = true`; `/place structure` a meta with a jigsaw anchor (`creativeengineering:meta/farmers_camp`, a village meta) at a lake shore | `[earth-fill] ... pruned` line names the anchor or satellite id and the meta builds; a `dropped K of N parts` line only for a part still over its limits (ST-298) | meta `CANCELLED` with no pruned line: `EarthFill.filterParts` / `prunes` |
+| SQ-EF-11 | B | same `log = "ALL"` world; `grep -E 'too wet\|under 9 water\|\(predicted\)'`; `/celocate census` on a village | every `too wet` line has water >= 9; `under 9 water` lines end `-> kept`; `(predicted)` lines exist; census shows EARTH_FILL and PRIORITY rejects; boot log has no mixin error for ChunkGeneratorEarthFillMixin / PlacementPriorityMixin (ST-299) | mixin error: the merged injector in ChunkGeneratorEarthFillMixin |
+
+## Terrain batch 4, beard footprint, geode floor (structures/terrain #1, #2, #6), 2026-10-30
+
+patcherMod built (compileJava); installed 2026-10-30 17:06 with the meta batch below (SQ-META31): `TemplateTrim#trimAir` + tag `template_trim/air`, `EarthFill`
+`beardFootprint` (default off), `OceanGeodes` `floorPatch` (OFF / CUT / SWAP, default SWAP). Data: `kubejs/server_scripts/worldgen/terrain_adaptation.js`
+(batch 4). Install the patcherMod jar and copy the toml (new keys `[worldgen.earth_fill] beardFootprint`,
+`[worldgen.ocean_geodes] floorPatch`), full restart, new chunks only. Writeup [structure_tuning.md](../structure_tuning.md) 3.30.
+
+| ID | Group | Commands | Pass | If it fails |
+|---|---|---|---|---|
+| SQ-TER-01 | A | boot; `grep '\[terrain-adaptation\] world load' latest.log` | `trimmed` up by 4 (ponds x3, level-three ruins), `1 air-trimmed`, sunk starts up by 1 (carp pond); no warning naming a batch-4 id (ST-303) | warning `sunk_start ... ignored`: the carp pond's start height is not a constant below 0 in this jar |
+| SQ-TER-02 | A | on a hillside: `/place structure farmers_structures:aquacultures_common`, `_carp`, `old_swamp_fisherman_house:fisherman_house` | no square pad or air notch, the water stays in the pond, the rim flush with the slope; carp: no 4-block dip or plinth (ST-300) | pond spills: water fill override `#water_fill/ponds`; plinth: `TerrainAdaptation#sink` |
+| SQ-TER-03 | A | an ice biome hillside: `/place structure terralith:spire` (twice, two spots) | no 94x98 square cut into the hills round the base; snow on the upper ledges whole (ST-301) | bare stone ledges: the air trim dropped snow (should never: only air goes), check `TemplateTrim#apply` picked `trimAir` |
+| SQ-TER-04 | A | a slope: `/place structure philipsruins:level_three_ruins` x2; `/place structure creativeengineering:meta/large_ruins` | no grass slab around the walls; a large-ruins cluster with one as anchor looks the same (ST-302) | pad left: template_trim tag not bound (SQ-TER-01) |
+| SQ-TER-05 | B | toml `[worldgen.earth_fill] log = "ALL"`, `beardFootprint = true`; Chunky r 300 in hills with outposts and villages; `grep 'under built floors' latest.log` | lines show `(N under built floors)`; cancels rise for outposts on cliff edges; tabulate cancels per family against `tools/earth_fill_sim.sh 4242 60 footprint` (outposts 23%, villages 2 to 18% newly over) and look at 3 cancelled and 3 kept starts (ST-304). Calibration only: turn the switch back off unless the user decides | no `under built floors` line at all: the switch did not load (check the toml); every outpost cancelled: limits too tight for footprint mounds, report numbers |
+| SQ-TER-06 | B | Chunky r 300 over deep ocean; `/locate feature` is not available, so fly the floor (spectator) over 5 geode spots (`/locate biome minecraft:deep_ocean`, look for calcite / basalt) | `SWAP` (default): no basalt or calcite showing; geodes that reach the floor are mounds of the floor's own sand / gravel, amethyst only in the opening; then set `floorPatch = "CUT"`, restart, a fresh square: geodes cut flush, rim in the floor block; prismarine geodes (Geode Plus) untouched in both (ST-305) | basalt still showing: `floorPatch` OFF or the RETURN injector failed (mixin error in latest.log); air pocket under water: `patchColumn` water rule |
+
+## SQ-META31 meta batch: sky, caravans, meteorite strikes, temples with ruins, 2026-10-30
+
+patcherMod 1.1.04 (new part field `overlap`) installed in `mods/` 2026-10-30 17:06; data in `meta_structures.json`,
+`structure_tags.json`, `structure_groups.json`, `kubejs/data/creativeengineering/worldgen/{structure,template_pool}/sky_island.json`.
+Full restart, new chunks only. Writeup [structure_tuning.md](../structure_tuning.md) 3.31 (ST-306 to ST-315). All in group B
+(fresh normal world, toml `[worldgen.meta_structures] log = true`); one world for all rows.
+
+| ID | Group | Commands | Expected | If it fails |
+|---|---|---|---|---|
+| SQ-META31-01 | B | boot; `grep 'meta structure(s) take slots\|replacement(s)\|failed to generate as a part' logs/latest.log` | metas 13 higher than the last run's count, `4 replacement(s)`, no share-above-100% warning, no part error (ST-306) | count short: a meta not in its group tag (structure_overrides report); part error for `ae2:meteorite`: AE2 jar changed |
+| SQ-META31-02 | B | `/locate structure creativeengineering:meta/cloud_cluster`, `balloon_fleet`, `cloud_balloons`, `sky_village_islands`; tp to each (spectator) | 2-4 clouds; 2-6 balloons; 1-2 of each; 2-5 islands near the sky village's height, none inside it (ST-307, ST-308) | islands at the wrong height: `sky_island.json` start height; none placed: `/place structure creativeengineering:sky_island` alone, check the pool's template ids |
+| SQ-META31-03 | B | `/locate` `witch_cart_caravan`, `pillager_caravan`, `trader_caravan` | wagons/carriages/camps together; a swamp witch caravan has a hut; trader caravan has a way sign (ST-309) | none found in 300 s: rates are 1 per 152/273/193 chunks, widen with test overrides (share 1) |
+| SQ-META31-04 | B | `/locate` `meteorite_village` (twice, two village types), `meteorite_desert_pyramid`, `minecraft:desert_pyramid`, `underwater_meteorite`, `pillager_camp_meteorite` (two) | crater through the village middle, no floating house; struck pyramid has a crater and the plain one still exists; sky stone sphere in a sunken ruin; camp strikes on and beside camps (ST-310, ST-311, ST-313, ST-314) | meteorite missing: log `0/1 #creativeengineering:meta/meteorites` (reach: the meteorite chunk must be within 3 chunks of the start); no crater cut: piece order (anchor first) changed |
+| SQ-META31-05 | B | `/locate` `desert_temple_ruins`, `jungle_temple_ruins` | 2-4 small ruins of the right biome around each temple, none touching it (ST-312) | ruins of a wrong biome: a small ruin without a biome fit |
+| SQ-META31-06 | B | (patcherMod jar of 17:44, adds `cluster`) `/locate` `meta/meteor_shower`, `meta/struck_monument` | 2-4 craters in a sand desert; a sky stone sphere in or by a monument, guardians respawn there (ST-316, ST-319) | shower not found in 300 s: about 1 per 240 chunks of desert, use a test override (share 1) |
+| SQ-META31-07 | B | `/locate` `meta/witch_coven`; night, kill the hut's witch, wait | circle + hut + 1-2 wagons; a witch respawns in the hut, none on the wagons (ST-317) | no respawn: patcherMod older than 2026-10-30 17:55 (per-part lookup) |
+| SQ-META31-09 | B | `/locate` `meta/struck_monument`, `meta/pillager_tower_siege`; night, peaceful off, wait in each | guardians respawn in the monument but not out over the meteorite's water; pillagers in the tower and outworks (ST-319, ST-320) | guardians across the meteorite area: the meta's `spawn_overrides` not empty (staged json) |
+| SQ-META31-08 | B | `/locate` `meta/village_siege_ring`, `meta/village_siege_camp` (plains) | ring: 2-6 weapons around, none in the village; camp: grouped on one side (ST-318) | camp spread all round: `cluster` not in the jar (old patcherMod) |
+
+## SQ-SB pillager spawners out, spawn boxes on pillager and witch structures, 2026-10-30
+
+patcherMod 1.1.04 of 17:55 in `mods/` (`TemplateSpawnerFilter`, `StructureSpawnBoxes`, `ChunkGeneratorSpawnBoxesMixin`,
+CEConfig `[worldgen.systems] spawnBoxes`, `removeSpawners`); data `kubejs/generation_scripts/worldgen/spawn_boxes.json`.
+Full restart. Spawners: new chunks only; boxes: old chunks too. Writeup [structure_tuning.md](../structure_tuning.md) 3.32
+(ST-320 to ST-327). Group B (fresh normal world, difficulty Normal, `/gamerule doDaylightCycle false`, `/time set night`
+unless a row says day); one world for all rows. Spawns need a player 24-128 blocks away: stand at the box edge.
+
+| ID | Group | Commands | Expected | If it fails |
+|---|---|---|---|---|
+| SQ-SB-01 | B | boot; `grep -E '\[spawn-boxes\]\|\[spawner-filter\]' logs/latest.log` | `15 box(es)`; after the first spawns `N structure(s) boxed` (about 75), no `is in box` warning, no `no pool` / `no entity type` (ST-321) | 0 boxes: `spawn_boxes.json` missing or unreadable (error line) |
+| SQ-SB-02 | B | `/ceplace` `illager_siege_weapons:catapult`, `mysticrift_pillagers_towers_aris:oak_wood_pillager_tower`, `blocky_siege:pillager_ship`, `mysticrift_pillagers_towers_aris:end_pillager_tower` (in the End) | no spawner block in any; a `[spawner-filter] ... removed` line per template, the End tower's with `plus 2 with no mob` (ST-320) | spawner left: its NBT shape (not `SpawnData.entity.id`), `TemplateSpawnerFilter.entities` |
+| SQ-SB-03 | B | `/locate structure mysticrift_pillagers_towers_aris:birch_pillager_tower` (a lone one, not in a meta); wait 3-5 min at night, then `/time set day` 3 min; `/kill @e[type=!player,distance=..64]` between | night: pillagers, vindicators, evokers, illusioners, witches, no ravager, no zombie or creeper inside; day: only pillagers (ST-322) | biome mobs inside: mixin not applied (boot log mixin error) or tag `meta/pillager_large_towers` empty |
+| SQ-SB-04 | B | `/locate structure creativeengineering:meta/pillager_tower_siege`; wait by the anchor tower, then by a siege weapon; then a lone T&T tower (`towns_and_towers:pillager_outpost_forest`) | meta: both spots spawn the large-tower mix; lone T&T tower: pillagers, vindicators, rare witch (ST-323) | meta spots spawn nothing or biome mobs: `StructureSpawnBoxes.inMeta` / `MetaStructure.parts` |
+| SQ-SB-05 | B | `/locate structure creativeengineering:meta/pillager_camp_ruin` | camp: pillagers, vindicators, witches, evokers; the ruin: its own Philip's Ruins mobs (ST-324) | ruin spawns illagers: meta box applied to an unboxed part |
+| SQ-SB-06 | B | `/locate structure towns_and_towers:pillager_outpost_badlands` (a fort); kill evokers that spawn there; `/locate structure minecraft:mansion`, kill a generated evoker | fort evokers drop no Totem of Undying; the mansion's generated evoker does (ST-325) | totem from a box evoker: `onSpecialSpawn` mark missing (`/data get entity @e[type=evoker,limit=1,sort=nearest] ForgeData`) |
+| SQ-SB-07 | B | `/locate structure unwrecked_ships:ship` until one has pillager sailors; wait on its deck; then a villager-crew ship | pillager ship: boat mix (pillagers, vindicators, evokers, witches); villager ship: no illagers (ST-326) | illagers on every ship: `requires_piece` ignored |
+| SQ-SB-08 | B | `/locate structure eugene:witch_wagon`, `terralith:underground/witch_hut`, `minecraft:swamp_hut` | witches only inside each; swamp hut cats still spawn (ST-327) | no witches: wrong box type for the piece layout |
+
+| SQ-DM-01 | D | plant a dandelion on Rich Soil, one on Fertile Soil, one on grass; `/gamerule randomTickSpeed 300`; wait 1 min | rich and fertile dandelions become Mature Dandelions, the grass one does not | nothing: soil mixin not applied (boot log), or `[dandelion_maturing]` value 0 |
+| SQ-DM-02 | D | set `richSoilTicks = 0` in the toml, reload world; repeat SQ-DM-01 on Rich Soil | Rich Soil dandelion stays plain | config not read live |
+| SQ-DM-03 | D | right-click a Mature Dandelion with shears, then with a Farmer's Delight knife (50 times for the drop rate) | becomes a plain dandelion, 2-3 leaves every time, a dandelion about half the time, tool loses 1 durability; bare hand does nothing | no drop: `DandelionBlock.use` not reached |
+
+## UI renames, names and Kettle bar, 2026-10-30
+
+| Entry | Tier | Steps | Pass | Fail meaning |
+|---|---|---|---|---|
+| CQ-UI-01 | client | JEI search each rename: Cheesy Fish Pasta (and canned, plated), Loaded Burger, Stackable Pancake, Bread with Jam, Coffee Pie and its slice, the three tobacco bundles | new names show; no old name left | a resource-pack zip beats the lang override |
+| CQ-UI-02 | client | look at Amberveils, Ethereal Saffron, Chorusflame and Void Pepper Sprout with WTHIT, and Veggies Delight crop blocks (broccoli, cauliflower, garlic, sweet potato, turnip, zucchini); hover the Ender's Delight dishes | names, not keys | ops lang route does not reach the member keys |
+| CQ-UI-03 | client | ghost pepper tooltip | "Requires a soul soil and the heat of the nether to grow" | old soils line |
+| CQ-UI-04 | client | needs the creativeDelight jar installed: open a Kettle with tea, the JEI Kettle page | bar is 3 px wide, centred in its old 5 px slot; hover tooltip matches | bar off-centre or tooltip gap |
+
+## Firefly bush biomes, 2026-10-30
+
+| Entry | Tier | Steps | Pass | Fail meaning |
+|---|---|---|---|---|
+| CQ-FF-01 | server | fresh world, `/locate biome` or fly through savanna, Terralith shrubland and brushland, mangrove swamp, orchid swamp; look for firefly bushes | bushes found in each, plus river and swamp | none found in a new biome: kubejs/data override not winning over the mod's own modifier |
+
+## Monkey merge, 2026-10-30 ([item_merges.md](../item_merges.md) 2.1, TODO `merges/mobs #1`)
+
+Needs the creativeDelight jar of 2026-10-30 installed and a full restart (mixins, startup scripts, Neapolitan config).
+
+| Entry | Tier | Steps | Pass | Fail meaning |
+|---|---|---|---|---|
+| SQ-MG-17 | server | Boot; grep latest.log for `GorillaForageBananaMixin`, `SugarGliderForageBananaMixin`, `Mixin apply`, `[creative_delight]` | No mixin apply error; the alexsmobs compartment is on | target changed (Alex's Mobs updated) or the compartment gate is off |
+| SQ-MG-18 | server | Fresh world; `/locate biome minecraft:jungle`; `/place feature neapolitan:banana_plant` 20 times around; `/kill @e[type=neapolitan:chimpanzee]` count; then summon 3 gorillas by jungle leaves, `/time add` until they forage | No chimpanzees (kill count 0); gorillas drop and eat Neapolitan bananas, never Alex's Mobs' | chimps: config not read (check the group chance line); Alex's banana: gorilla mixin not applied |
+| SQ-MG-19 | server | Summon 3 sugar gliders by jungle leaves, wait for them to forage; check dropped items with `/data get entity @e[type=item,limit=5,sort=nearest]` | Neapolitan bananas among the drops, no `alexsmobs:banana` | sugar glider mixin not applied |
+| SQ-MG-20 | client | JEI: search chimpanzee | Banner pattern only; no spawn egg, no head | removed items list not reloaded (full restart) |
+
+## Admin date commands, 2026-10-30 ([time.md](../time.md) 3.11, TI-32 to TI-37)
+
+Needs patcherMod built after 2026-10-30 21:45 (`time/TimeDate`) installed and a full restart. Fresh normal world with
+Serene Seasons on SUN (either preset); ops level 4 console is enough.
+
+| Entry | Tier | Steps | Pass | Fail meaning |
+|---|---|---|---|---|
+| SQ-TD-01 | server | `/cetime date`; `/cetime date add 40 days`; `/cetime date reset`; `/cetime date`; `/time query daytime`; `/season` | after reset "Year 1, Early Spring, day 1 of 8, 7:42 am (world day 1)", daytime 0, `/season` Early Spring day 1 | start() or firstSunrise offset wrong |
+| SQ-TD-02 | server | `/cetime date next month` x3, `/cetime date` after each; `/cetime date previous season`; `/cetime date add 3 days`; `/cetime date restart month` | Mid Spring, Late Spring, Early Summer day 1 6:00 am; then Early Spring day 1; then Early Spring day 4 -> day 1 | unit alignment or now() wrong |
+| SQ-TD-03 | server | `/cetime date set 3 mid_autumn 5 7:30 pm`; `/cetime date`; `/season`; wait 30 s; `/cetime date` again | "Year 3, Mid Autumn, day 5 of 8, 7:30 pm (world day 253)"; `/season` agrees; 30 s later still day 5 (no double step) | SeasonClock.jumped not reached, season counter added the jump twice |
+| SQ-TD-04 | server | `/wine clock set 0 days`; `/cetime date add 1 month`; `/wine time`; `/cetime date add -1 month`; `/wine time` | clock 8 days after the forward step, back to about 0 after the backward one; chat says "wine clock moved back"; no WARN in latest.log | VintageClock.add reflection failed (name or signature changed) |
+| SQ-TD-05 | server | grep latest.log for `[time] /cetime date` | one line per command with before / after position, dayTime and seasonCycleTicks | logging missing |
+| CQ-TD-06 | client | after SQ-TD-03 on a client: SeasonHUD line, calendar tooltip, Xaero time line | "Mid Autumn (Day 13/24) 7:30 pm", calendar Year 3, Xaero "Day 253, 19:30"; the world re-tints once | client counter ran ahead (packet order) |
+
+## Armor cap 50 (gear/tuning #2), 2026-10-30 ([gear_tuning.md](../gear_tuning.md) F13)
+
+Needs patcherMod 1.1.04 built 2026-10-30 after 21:47 (ArmorCapMixin).
+
+| ID | Group | Commands | Expected | If it fails |
+|---|---|---|---|---|
+| SQ-AC-01 | server | Boot; grep latest.log for `ArmorCapMixin`, `Mixin apply` | No mixin apply error | SRG name wrong for `RangedAttribute.sanitizeValue` / `getMaxValue` |
+| SQ-AC-02 | server | Give a bot player the full dragon set (helmet, chestplate, leggings, boots) and equip it; `/attribute <bot> minecraft:generic.armor get` | 36 (was 30) | mixin not applied, or config `[dragon_gear] armorCap` below 36 |
+| SQ-AC-03 | server | `/attribute <bot> minecraft:generic.armor base set 100`; `/attribute <bot> minecraft:generic.armor get` | 50 (the cap), not 100 | sanitizeValue inject missing |
+| SQ-AC-04 | client | Wear the full dragon set | HUD armor bar shows 36 (one extra row past 20) | client-side config or mixin |
+
+
+## SQ-CS crop seasons, 2026-10-30 ([crops.md](../crops.md) §2.12.1, TODO `farming/crops #5`, CR-89 to CR-97)
+
+Needs patcherMod 1.1.04 built 2026-10-30 after 21:40 (`seasons/CropSeasons`, `CropSeasonGrowHookMixin`), backportedVinery
+`-06`, creative_delight with endersAdditions `-02`, the new `config/sereneseasons/fertility.toml` and the KubeJS files
+(`crop_seasons.json`, `tags/cropseasontags.js`). Fresh normal world, plains spawn.
+
+| Entry | Tier | Steps | Pass | Fail meaning |
+|---|---|---|---|---|
+| SQ-CS-01 | server | Boot; grep latest.log for `CropSeasonGrowHookMixin`, `Mixin apply`, `[crop-seasons]` | No mixin apply error; no `[crop-seasons]` error line (an info line about unregistered ids is fine) | SRG name or target class changed (IE, The Dirty Stuff, Nether's Delight updated); json typo |
+| SQ-CS-02 | server | `/execute if block` on placed `minecraft:wheat`, `the_dirty_stuff:tobacco_seeds`, `minecraft:attached_melon_stem`, `minecraft:cave_vines` against `#creativeengineering:crop_seasons/temperate`, `warm_dry`, `warm_wet`, `cave` | each passes for its own type only | tags not filled (script not run, registry check) |
+| SQ-CS-03 | server | Two 16x16 wheat fields on hydrated farmland, plains, one roofed with glass 3 blocks up; `/season set mid_winter`; `/gamerule randomTickSpeed 30`; wait 2 min; count ripe wheat in each (`/execute store` or eyeball). Repeat in `mid_spring` | winter: open field behind the glass field (about 3/4 of it); spring: open field ahead of the glass field (about 5/4) | off penalty or fertile bonus not cancelled under glass, or glass not counted |
+| SQ-CS-04 | server | Same fields replanted, `/season set mid_spring` vs a third field in `mid_summer` (separate runs, same timing) | spring run ahead of the summer run (about 5/4) | fertile bonus not queued / extra tick not run |
+| SQ-CS-05 | server | Hemp, tobacco, a red grape bush, a crimson fungus colony and an Ender crop planted in the overworld in `mid_winter`, `randomTickSpeed` 100 for 1 min | all still grow (off is slower, never stopped); no exception in latest.log | hook cancels the whole tick wrongly or crashes |
+| SQ-CS-06 | server | Edit crop_seasons.json (wheat to cold), `/reload`, repeat SQ-CS-02 for wheat | wheat now in `cold`, not `temperate`; put it back | tag cache not cleared on reload |
+| SQ-CS-08 | server | `/execute if block` on placed `minecraft:glass_pane`, `immersiveengineering:insulating_glass`, `securitycraft:reinforced_red_stained_glass_pane`, `create:framed_glass_door`, `storagedelight:oak_cabinet_with_glass_doors` against `#sereneseasons:greenhouse_glass` | all but the cabinet pass | greenhouse_glass list not added (addMatching, regex) |
+| SQ-CS-09 | server | `/give @s fruitsdelight:apple_sapling`; new world, `/locate biome minecraft:flower_forest`, fly over 10 chunks; grep latest.log `[itemMerges]` | the sapling becomes Vinery's apple tree sapling; no Fruits Delight apple trees; merge count line includes the creative_delight pairs | biome modifier override not loaded, or merge group skipped by `requires: vinery` |
+| CQ-CS-07 | client | CR-89, CR-90 tooltips and WTHIT lines on the same world | lines as in CR-89 / CR-90 | client tag sync or lang keys |
+
+## SQ-WC watering can, 2026-10-30 ([hearth_and_harvest.md](../hearth_and_harvest.md) 4.0, HNH-25 to HNH-33)
+
+Needs patcherMod 1.1.04 built 2026-10-30 after 22:03 (`wateringcan/`) and `server_scripts/equipment/watering_can.js`.
+Group A (superflat), a bot player.
+
+| ID | Group | Commands | Expected | If it fails |
+|---|---|---|---|---|
+| SQ-WC-01 | A | Boot; grep latest.log for `hearthandharvest`, `watering_can`, `Potentially Dangerous alternative prefix` | at most the Forge alternative-prefix warning for `hearthandharvest:watering_can`; no error; recipe `creativeengineering:...watering_can` loaded (`/kubejs` recipe dump or JEI) | registration under the foreign namespace refused, or NCH key missing |
+| SQ-WC-02 | A | `/execute if items` is 1.20; instead `/give <bot> minecraft:bone_meal 64` and check the tag: `/kubejs hand` not usable on a bot, so grep the tag dump (`/dumptags`) for `hearthandharvest:bonemeal_substitutes` | the tag holds `minecraft:bone_meal` | tag script not loaded |
+| SQ-WC-03 | A | Bot holds the can, bone meal off hand; bot uses it 3 times; `data get entity <bot> SelectedItem` | `tag:{BonemealLevel:3,FertilizerItem:"minecraft:bone_meal"}`, 61 bone meal left | off-hand load path broken |
+| CQ-WC-04 | client | HNH-26, HNH-28, HNH-29 by hand: fill at water, charged use on a 3x3 of young wheat, campfire | one use = water -1, fertiliser -1 (not -2), 3x3 grows; campfire unlit | double application (client claim not working) |
+| SQ-WC-05 | A | (patcherMod 1.1.04 from 2026-10-30 23:40, soil watering) `/fill ~-1 ~-1 ~-1 ~1 ~-1 ~1 minecraft:farmland[moisture=0]`, `/fill ~-1 ~ ~-1 ~1 ~ ~1 minecraft:wheat[age=7]`; give the bot a can with `{WaterLevel:16}`, bot uses it on the centre wheat; `/execute if block ~1 ~-1 ~1 minecraft:farmland[moisture=7]`; `data get entity <bot> SelectedItem`. Repeat on `immersive_weathering:mulch_block[moisture=0]` | all 9 farmland at moisture 7, WaterLevel 15; second use leaves 15; mulch soaked likewise | soil check or client claim; mulch property not `moisture` |
+
+## SQ-MB monster box vaults, 2026-10-30 ([mob_block_tweaks.md](../mob_block_tweaks.md) 2.9, TODO `mobs/tweaks #5`, MT-34 to MT-37, MT-47 to MT-50)
+
+Needs patcherMod 1.1.04 from 2026-10-30 22:59 or later (`mobs/MonsterBoxVault`, `MonsterBoxBlockEntityMixin`,
+`CreateBreakerMonsterBoxMixin`), the KubeJS block properties, block tags and reward table, and
+`quark-common.toml` with `Enable Extra Loot Table = false`. Group A (superflat), Normal difficulty, a bot player.
+For SQ-MB-04 set `[monster_box] cooldownTicks = 200` in the scratch `creativeengineering-common.toml` before boot.
+
+| ID | Group | Commands | Expected | If it fails |
+|---|---|---|---|---|
+| SQ-MB-01 | A | Boot; grep latest.log for `MonsterBoxBlockEntityMixin`, `CreateBreakerMonsterBoxMixin`, `monster box reward` | no mixin apply error, no missing-table warning | mixin target or SRG name wrong; table path |
+| SQ-MB-02 | A | `/setblock ~2 ~ ~ quark:monster_box`; tp the bot next to it; wait 3 s; `/execute if block ~2 ~ ~ quark:monster_box`; `/data get block ~2 ~ ~` | box still there; NBT has `creativeengineering:phase` 1b and a `creativeengineering:wave` list of 5-8 UUIDs | redirect not applied (box gone) or claim scan missed the mobs |
+| SQ-MB-03 | A | `/kill @e[type=!player,type=!item,distance=..20]`; wait 2 s; `/data get block ~2 ~ ~`; count `@e[type=item,distance=..3]` | phase 2b, `until` = game time + 72000; exactly 1 item entity at the box | wave check or reward roll |
+| SQ-MB-04 | A | (cooldownTicks 200) after SQ-MB-03 wait 11 s with the bot away, then bring it back | phase 0b, then a new wave and phase 1b | cooldown never ends |
+| SQ-MB-05 | A | `/data get block ~2 ~ ~` on a box in phase 2; check the block's destroy speed with `/kubejs` dump or WTHIT (client) | hardness 50, needs diamond pickaxe | startup modification or tags not loaded |
+| SQ-MB-06 | A | Powered Create drill facing a box, 30 s | box still there | Create mixin not applied |
+| SQ-MB-07 | A | `[monster_box] vaultMode = false`, boot, repeat SQ-MB-02 | box breaks after spawning (Quark behaviour) | off switch |
+| CQ-MB-08 | client | MT-48, MT-49 by hand: diamond pickaxe standing (warning, box back), sneaking (breaks, no drop); flames gone in cooldown | as MT-48, MT-49 | break guard or client phase sync |
+
+## Vine shearing, 2026-10-31 ([vine_shearing.md](../vine_shearing.md), TODO `potions/enchanting #5`)
+
+patcherMod 1.1.04 build of 2026-10-31 (`VineShearing`, `VineBlockShearMixin`). Group A (superflat). Shearing needs a
+player, so the server checks place the sheared state directly; the shears interaction and the look are VS-01 to VS-11
+in game. Each growth check: `/gamerule randomTickSpeed 300`, wait 60 s, look, set it back to 3.
+
+| ID | Group | Commands | Pass | If it fails |
+|---|---|---|---|---|
+| SQ-VS-01 | A | Boot | `Done (`; no mixin error naming `VineBlockShearMixin`; no blockstate/model warning for `floralench:*_vine` or `botania:solid_vine` | Mixin error: SRG names `m_7926_` / `m_213898_`; a model warning means a variant file names every property and needs `fertile` |
+| SQ-VS-02 | A | Stone wall 8 high; `/setblock` at the top on its face `floralench:poppy_vine[north=true,fertile=false]` and 6 blocks along `floralench:poppy_vine[north=true]` | Sheared: still one block (`/execute if block ... floralench:poppy_vine[fertile=false]`); unsheared: has grown down or sideways | Sheared one grew: the randomTick cancel is not applied (check the mixin loaded) |
+| SQ-VS-03 | A | `/setblock` `minecraft:weeping_vines[age=25]` and `minecraft:weeping_vines[age=0]` under a ceiling 10 up, 6 apart | age 25: still one block; age 0: grown down | Vanilla, not this feature: re-read `GrowingPlantHeadBlock#isRandomlyTicking` |
+| SQ-VS-04 | A | `/setblock ~ ~ ~ floralench:poppy_vine` (no properties) | Placed state has `fertile=true` (`/execute if block ... [fertile=true]`) | Default flipped: a vine constructor sets defaults from a state with `fertile=false`; set it in the mixin |
+| SQ-RW-28 | A | boot; probe `global.removedWoods` keys and `global.removedItems` | `river`, `rose`, `rubber`, `spirit`; every rose / rubber / spirit id and the 18 track ids in `removedItems`; no `[itemMerges]` skipped or chain line; no `[item_dict] Missing` | `startup_scripts/_lib/removed_woods.js` (RW-28) |
+
+## SQ-EFX effect changes, 2026-10-31 ([effects.md](../effects.md) 2.6 to 2.9, [armor_effects.md](../armor_effects.md) 2.2, 2.5, TODO `potions/effects #3, #4, #8, #9, #10, #11`)
+
+Jars built 2026-10-31 00:28-00:30: patcherMod 1.1.04 (`MagicResistanceEffect`, `CopperPoisoningHandler`, `EffectRules`,
+`PhantomBaneRules`, `CompoundEffects`, mixins `CopperPoisoningEffectMixin`, `LivingEntityEffectRemapMixin`,
+`FruitsDelightEffectFuncMixin`, `CaffeinatedEffectMixin`, client `GuiEffectIconMixin`, `JeedEffectRendererMixin`,
+`JeedEffectInfoMixin`), backportedVinery -06 (multi-effect wines, Jellie effect gone), backportedBrewin -04 (food effect
+icons), creative_delight 1.0.0 (Baklava icon). Group A (superflat), bot player for the player checks. Client rows (HUD,
+tooltips, JEI) are in-game checks EF-22 to EF-30.
+
+| ID | Group | Commands | Pass | If it fails |
+|---|---|---|---|---|
+| SQ-EFX-01 | A | Boot; grep latest.log for the seven mixin names above and `Mixin apply` | `Done (`; no apply error; `[potions]`/`[CE potions]` line with no `removeByPotion` error | SRG names (`m_147207_`, `m_6742_`), or a target class renamed in the jar |
+| SQ-EFX-02 | A | `/effect give <bot> creativeengineering:magic_resistance 60 0`; `/effect give <bot> minecraft:poison 10 0`; read health over 5 s | Health unchanged, no hurt flash | `MagicResistanceEffect.onAttack`: `EffectTickContext` not set (MobEffectTickContextMixin) or config `[magic_resistance] negatedEffectTicks` |
+| SQ-EFX-03 | A | As 02 with `minecraft:poison 10 1` (Poison II), then `minecraft:wither 10 0` | Poison II: damage taken at 80 %; Wither I: none | Level compare or tick cover |
+| SQ-EFX-04 | A | Spawn a horse, tame it (`/data merge entity @e[type=horse,limit=1] {Tame:1b}`), `/item replace entity @e[type=horse,limit=1] horse.armor with dragonloot:dragon_horse_armor`; wait 10 s; `/data get entity @e[type=horse,limit=1] ActiveEffects`; read Health twice 6 s apart | Regeneration, Health Boost, Resistance all Amplifier 1; Health does not drop at each 5 s refresh | `armor_effects.js` mount list; health restore in `applyEffects` |
+| SQ-EFX-05 | A | `/effect give <bot> neapolitan:agility 30 0`; `/effect give <bot> quark:resilience 30 0`; `/effect give <bot> fruitsdelight:chorus 1 0`; `/data get entity <bot> ActiveEffects` | Climbing and Knockback Resistance present, no Agility / Resilience; Chorus gave Teleport (position changed) | `LivingEntityEffectRemapMixin`, config `[effects] remap` |
+| SQ-EFX-06 | A | `/effect give <bot> upgrade_aquatic:restfulness 1 0`, `alexsmobs:power_down 10 0`; `/summon upgrade_aquatic:flare` | No effect added; no Flare (`/execute if entity @e[type=upgrade_aquatic:flare]` fails) | `[effects] removed`; `removed_mobs.js` (server scripts loaded?) |
+| SQ-EFX-07 | A | `/effect give <bot> farmersrespite:caffeinated 30 0`; `/data get entity <bot> ActiveEffects`; `/scoreboard objectives add rest minecraft.custom:minecraft.time_since_rest`, read it during and 2 s after the effect ends | Phantom Bane present (hidden); rest score keeps rising during (not set to -24000), reads 0 right after Phantom Bane expires | `PhantomBaneRules`, `CaffeinatedEffectMixin` |
+| SQ-EFX-08 | A | Give the bot oxidized copper armor (`/give <bot> everythingcopper:copper_helmet{state:"oxidized"}`, all four pieces, equip); set `[copper_poisoning] intervalSeconds` 10, `jitterSeconds` 0, `chancePerPiece` 1.0 in the scratch config; wait 25 s | Poison I, about 10 s (4 + 3 x 2); unoxidized armor: never | `CopperPoisoningHandler` (persistent key `ce_copper_poison_roll`), `isOxidized` NBT check |
+| SQ-EFX-09 | A | Bot eats `everythingcopper:copper_nugget` (or `/effect give <bot> everythingcopper:copper_poisoning 1 1`) | Poison I 8 s; no direct damage | `CopperPoisoningEffectMixin` not applied |
+| SQ-EFX-10 | A | `/vinery effect vinery:jellie_wine <bot>` (or drink a Jellie Wine) | Regeneration, Absorption, Resistance, Fire Resistance, same level; no `Ignoring invalid wine effect entry` in the log | `config/vinery-common.toml` entry, `WineEffects.parse` `+` split |
+| SQ-EFX-11 | A | Brewing stand: Awkward Potion + Crab Shell | Potion of Knockback Resistance; Awkward + cocoa beans gives nothing | `potions.js` AM_POTION_MIXES row, REMOVED_POTIONS |
+| SQ-EFX-12 | A | `/effect give <bot> vinery:double_jump 60 0`, `/effect give <bot> minecraft:jump_boost 60 1`; probe `<bot>.getJumpBoostPower()` (KubeJS `/kubejs eval` or a server script log) | 0.2 (Jump Boost II), not 0.1 | Vinery mixin still at HEAD (old jar) |
+| SQ-EFX-13 | A | Bot eats `canned_goods:canned_pufferfishs` and an Immersive Weathering food; `/data get entity <bot> ActiveEffects` | Their effects have `ShowIcon:1b`; Fire Resistance from the dragon set still `ShowIcon:0b` | `LivingEntityUseItemIconMixin` (`m_8095_`), `[effects] forceHudIconItems` |
+| SQ-EFX-14 | A | Fluid tank of Builder's Tea feeding an open-ended pipe, bot standing under it 2 s; `/data get entity <bot> ActiveEffects` | Haste with `ShowIcon:1b`; boot log has no `CreateTeaPipeIconMixin` warning | `require = 0` let it miss: constructor descriptor `(MobEffect;IIZZZ)V` in `TeaEffectHandler#applyEffects` |
+
+## Gap fill, 2026-10-31: changelog bullets that had no row
+
+Added with the 2026-10-31 run plan ([scratch_run_2026-10-31.md](scratch_run_2026-10-31.md)); the batch files hold the
+exact commands and checks.
+
+| ID | Group | Commands | Pass | If it fails |
+|---|---|---|---|---|
+| SQ-GF31-01 | A | `zq makes minecraft:stick` | `creativeengineering:sawmill/recycle_wooden_slab` -> 2, `_stairs` -> 3, `_door` -> 4 sticks | recipe JSONs in `kubejs/data/creativeengineering/recipes/sawmill/` |
+| SQ-GF31-02 | A | `zq makes minecraft:dispenser` | `minecraft:dispenser` -> 1 (vanilla craft back) | `engineering/redstone.js` still removes it |
+| SQ-GF31-03 | A | bot places a carved pumpkin on a barrel; `execute if entity @e[type=nock_enough_arrows:sputter]` | test fails, the pumpkin stays | `config/nock_enough_arrows-common.toml` `enableSputter` not false on the server copy |
+| SQ-GF31-04 | B (fresh world) | `cetime date next year`; `cetime date` | "Year 2, Early Spring, day 1" (TI-37 server half) | `TimeDate` first-sunrise rounding |
+| SQ-RW-28 | A | `zq makes create_dd:{rose,rubber,spirit}_planks`; `zq tagsof create_dd:rose_log` | 0 recipes each, no tags; smoked planks keep their recipe | `removed_woods.js` (start and server) |
+| CQ-GF31-01 | client | JEI: IE Sawmill uses of oak slab / stairs / door | 2 / 3 / 4 sticks plus sawdust | |
+| CQ-GF31-05 | client | hover the Explorer's Compass | "Not craftable" line | `client_scripts/tooltips.js` |
+| CQ-GF31-06 | client | look at `myrtrees:rubberwood_log` and `filled_rubberwood_log` | bark textured on every side | `kubejs/assets/myrtrees/blockstates/` |
+| SQ-TL-09 | A | `/cegen` (op, console) | lists 50 generators from `tools/generators.json` with their groups (`stacks` among them) and the last run; no `[cegen]` error in `latest.log` | pack_tooling.md TL-09, TODO `tooling/generators-and-tests #1` |
+| SQ-JRFTL-01 | A | after JRFTL jar is out of mods/: `/give @s jrftl:prepared_flesh`; creosote filling and IE bottling on rotten flesh; smoke it | item exists with the new texture and name "Prepared Flesh"; recipes work; smoking gives leather; no jrftl errors in latest.log | `misc_items.js` |

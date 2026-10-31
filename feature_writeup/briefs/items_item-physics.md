@@ -171,6 +171,11 @@ does: splash particles, bubbles and the splash sound.
 ## item-physics #2: Classify modded items
 Status Planned / Work KubeJS / TODO `items/item-physics #2` (item_physics.md F4)
 
+**Superseded 2026-10-28 by the family design, [item_physics.md](../item_physics.md) section 9** (21 material families, the
+`/dumpphysics` dump and `tools/item_physics_audit.py`). The Create / flour / treated-wood rules below are covered by the
+metal, light_powder and wood families; the user's adjustments (totem, crossbow, armor stand, shield, trident) become
+manual overrides.
+
 ### Goal
 Modded items get sensible water and fire behaviour instead of all falling to the default (sink, burn in fire and
 lava), starting with the "Future" list the user wrote in the tag file.

@@ -23,6 +23,9 @@ Mods are matched by **mod id**, so updating a mod to a new version needs no edit
 
 | Side | Mod | Mod id | Jar | Notes |
 |---|---|---|---|---|
+| both | Botany Pots | `botanypots` | `BotanyPots-Forge-1.19.2-9.0.44.jar` |  |
+| both | Cozy's Improved Cats | `cozys_improved_cats` | `cozys-improved-cats-2.1.0-forge-1.19.2.jar` |  |
+| both | Room for Two | `roomfortwo` | `roomfortwo-forge-1.19.2-0.2.0.jar` |  |
 | both | Dustrial Decor | `dustrial_decor` | `DustrialDecor-1.3.3-1.19.2.jar` |  |
 | both | Advanced Peripherals | `advancedperipherals` | `AdvancedPeripherals-1.19.2-0.7.37r.jar` |  |
 | both | Alex's Delight | `alexsdelight` | `alexsdelight-1.4.1.jar` |  |
@@ -182,7 +185,6 @@ Mods are matched by **mod id**, so updating a mod to a new version needs no edit
 | both | Iron Fishing Rods | `iron_fishing_rods` | `Iron Fishing Rods 1.0.0 - 1.19.2.jar` |  |
 | both | Item Filters | `itemfilters` | `item-filters-forge-1902.2.9-build.51.jar` | Required by: FTB Quests |
 | both | ItemPhysic | `itemphysic` | `ItemPhysic_FORGE_v1.6.7_mc1.19.2.jar` |  |
-| both | JRFTL | `jrftl` | `JRFTL [1.19.1]-1.4.3.jar` |  |
 | both | Kiwi | `kiwi` | `Kiwi-1.19.2-forge-8.3.6.jar` | Required by: Per-Dimension Game Rules |
 | both | kotlinforforge | - | `kotlinforforge-3.12.0-all.jar` | Datapack/library jar with no Forge mod id; matched by file name |
 | both | KubeJS | `kubejs` | `kubejs-forge-1902.6.2-build.73.jar` | Required by: KubeJS + CC: Tweaked, KubeJS Botania, KubeJS CSV, KubeJS Create, KubeJS Immersive Engineering, LootJS (+2 more) |
@@ -287,10 +289,10 @@ Mods are matched by **mod id**, so updating a mod to a new version needs no edit
 | both | TrashSlot | `trashslot` | `trashslot-forge-1.19.2-12.1.0.jar` |  |
 | both | Twigs | `twigs` | `twigs-forge-1.19.2-3.0.1.jar` |  |
 | both | Veggies Delight (Backport) | `veggiesdelight` | `backportedVeggies-1.9.2-ce-19.2-03.jar` | This pack's port of Veggies Delight 1.9.2 (development/backportedVeggies); no 1.19.2 build of the mod exists. Added 2026-10-22; -02 2026-10-23 ships the Vintage Delight compat recipes (feature_writeup/veggies_delight.md) |
-| both | Vintage Delight (Backport) | `vintagedelight` | `backportedVintage-0.1.6-ce-19.2-07.jar` | This pack's port of Vintage Delight 0.1.6 (development/backportedVintage) with KOTS 0.3.1's jar ids; no 1.19.2 build of the mod exists. Added 2026-10-23 (feature_writeup/vintage_delight.md) |
+| both | Vintage Delight (Backport) | `vintagedelight` | `backportedVintage-0.1.6-ce-19.2-08.jar` | This pack's port of Vintage Delight 0.1.6 (development/backportedVintage) with KOTS 0.3.1's jar ids; no 1.19.2 build of the mod exists. Added 2026-10-23 (feature_writeup/vintage_delight.md) |
 | both | Via Romana | `via_romana` | `Via_Romana-1.19.2-1.1.3.jar` |  |
 | both | Villagers Sell Animals (by NoCube) | `villagersellanimals` | `nocube's_villagers_sell_animals_1.2.1_forge_1.19.2.jar` |  |
-| both | Vinery (Backport) | `vinery` | `backportedVinery-1.5.5-ce-19.2-04.jar` | This pack's port of Let's Do Vinery 1.5.5 (development/backportedVinery); one jar with mod ids vinery and foundation. Reads its art and data from the two jars in `vinery_upstream/` (not mods/). Replaced letsdo-vinery-forge-1.3.10.jar and doapi-1.1.0b.jar (feature_writeup/alcohol.md Part B) |
+| both | Vinery (Backport) | `vinery` | `backportedVinery-1.5.5-ce-19.2-05.jar` | This pack's port of Let's Do Vinery 1.5.5 (development/backportedVinery); one jar with mod ids vinery and foundation. Reads its art and data from the two jars in `vinery_upstream/` (not mods/). Replaced letsdo-vinery-forge-1.3.10.jar and doapi-1.1.0b.jar (feature_writeup/alcohol.md Part B) |
 | both | Vintage KubeJS | `vintage_kubejs` | `vintage_kubejs-1.19.2-1.0.0rc-2.jar` |  |
 | both | Wardrobe | `wardrobe` | `wardrobe-1.0.3-1.19.2.jar` |  |
 | both | Wares | `wares` | `wares-1.19.2-1.2.9.jar` |  |

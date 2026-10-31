@@ -8,12 +8,12 @@ Test prefix `CM-` (the backlog proposed `CP-`, which [can_parity.md](can_parity.
 |---|---|
 | `global.compost`: rebuilds the composter table (`ComposterBlock.COMPOSTABLES`) from nothing every time tags load | DEPLOYED (in the 2026-09-27 initial commit; shipped since 1.0.3) |
 | Rules: 10 categories by tag, id pattern, block class and edibility, first match wins | DEPLOYED |
-| Values: 688 explicit per-item chances (generated once from the mods' own table, hand-edited since) | DEPLOYED (684); the 4 Brewin' port rows (2026-10-19, [alcohol.md](alcohol.md) 10.16) are built, not deployed |
+| Values: 688 explicit per-item chances (generated once from the mods' own table, hand-edited since) | DEPLOYED (688, the 4 Brewin' port rows of 2026-10-19 ([alcohol.md](alcohol.md) 10.16) with 1.1.01) |
 | Exclusions: never compostable (Canned Goods, golden food, incomplete items, Botania world seed and altered grass, ...) | DEPLOYED |
 | `/dumpcompost` (before / after / why) and `tools/gen_compost_values.py` (`--add-new` after adding mods, `--check`) | in use |
 | Compost and fertile soil crafting from mulch (in `sawdust.js`) | DEPLOYED; belongs to recipe progression (backlog row 20) |
 
-- **Pending:** the 4 Brewin' 4.5.0 port rows in `compost_values.js` (built 2026-10-19, not in the 1.0.9 deploy). CM-01 to CM-08 have never been run. Findings F1 to F4 (section 4); none
+- **Pending:** seed milling to bone meal (built 2026-10-30, unreleased, TODO `farming/composting #4`, SQ-CP-01 scratch server PASSED r1031 2026-10-31). CM-01 to CM-08 have never been run. Findings F1 to F4 (section 4); none
   needs a decision.
 - **Files to open:** [compost_rules.js](../development/creativeDelight/src/main/resources/kubejs_startup/creativeengineering/compost_rules.js) (categories, exclusions),
   [compost_values.js](../kubejs/startup_scripts/compost/compost_values.js) (per-item chances),
@@ -86,6 +86,10 @@ the first rebuild), `now` (each item's chance, whether a value or a rule put it 
   build the same table from the same scripts, and categories that read tags see the live tags.
 - **Rebuild order:** clear → rules → values (beat rules) → exclusions (beat both). The log has `[compost] <cause>: N
   compostable (...)` and warnings for values naming items that don't exist or an unknown tier.
+- **Seed milling (2026-10-30, TODO `farming/composting #4`):** `server_scripts/wood/compost.js` mills any seed in
+  `#creativeengineering:millable_seeds` into bone meal at 15 % (Create millstone and crushing wheels; the tag is built in
+  `tags/wood_tags.js` from `#forge:seeds` and `#c:seeds` minus corn kernels, which mill into cornmeal, and rice). The
+  composter needs about 21 seeds per bone meal; the mill about 7. Test CP-01 (scratch queue SQ-CP-01): PASSED r1031 (2026-10-31). Unreleased (player changelog bullet in `unreleased.md`).
 - **Generator:** since 2026-10-25 (creative_delight.md 29) the rows are 35 generated `<mod>/compost_values.js` files in
   Creative Delight's startup tree (`development/creativeDelight/src/main/resources/kubejs_startup/`), and
   `tools/gen_compost_values.py` regenerates them exactly from a `/dumpcompost` (its `value` rows); hand rows go in a
@@ -156,3 +160,4 @@ Use a composter and watch its level; or read `/dumpcompost`.
 - 2026-10-18: this writeup; findings F1 to F4; tests CM-01 to CM-08. No code changed.
 - 2026-10-19: the Brewin' 4.5.0 port's four chances (kimchi, pickled pickles, quiche, quiche slice) added by hand as
   rows ([alcohol.md](alcohol.md) 10.16); 688 values. Not deployed yet.
+- 2026-10-31: scratchpad notes translated into TODO rows (`farming/composting #5`). No code changed.

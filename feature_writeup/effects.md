@@ -6,19 +6,21 @@
 |---|---|
 | Effect table (2.1): 140 effects from vanilla and 25 mods, with brewing, tipped arrow, superset, JEI potion fluid, JEI description, food sources, subset effects, overlaps, brief and detailed descriptions | reference, written 2026-10-19 from code (decompiled jars and the two ports), the `/dumppotions` and `/dumpfood` exports, and every lang table the client loads |
 | `tools/effect_audit.py`: offline check of names, JEED descriptions, placeholders and potion / arrow names | BUILT 2026-10-19 |
-| Findings F1 to F13 (section 4): 3 effects or arrows with no name, 11 effects with no real description, 11 wrong or incomplete descriptions, 12 total-overlap groups, a duplicate Luck brew | F3, F4, F7, F11, F13 done 2026-10-20; F2 down to 10 `TODO`s (kept, your call); F5 and F12 need your call |
+| Findings F1 to F13 (section 4): 3 effects or arrows with no name, 11 effects with no real description, 11 wrong or incomplete descriptions, 12 total-overlap groups, a duplicate Luck brew | F3, F4, F7, F11, F13 done 2026-10-20; F2 down to 10 `TODO`s (kept, your call), 12 since Hostile Delight (2026-10-23) added Dioxide and Collapsing placeholders (TODO `ui/effects #1`); 11 since Magic Resistance got its text (checked 2026-10-31); F5 and F12 need your call |
 | JEI item lists for every effect (3, [jeed_providers.js](../kubejs/server_scripts/other/jeed_providers.js)): mobs, blocks, gear, code-applied food, brews, wines, potion carriers | BUILT 2026-10-20, server half scratch server PASSED 2026-10-22 (SQ-OM-00, SQ-OM-16); not seen in game (EF-15, EF-16) |
 | Update 2026-10-22: Rustic Delight's five coffees (Coffee, Milk, Honey, Chocolate, Dark) give Farmer's Respite's Caffeinated instead of Speed + Haste (food_values.js, [item_merges.md](item_merges.md) 2.8); the Speed, Haste and Caffeinated food-source cells in 2.1 predate this | reference note |
 | Description fixes (3): 16 wrong, partial or misspelt JEED texts replaced, Travel Fatigue ported from Effect Insights, 7 stale placeholders gone | BUILT 2026-10-20, not seen in game (EF-17) |
 | Category audit (2.4): all 140 effects checked for red / blue; 6 overridden in CEConfig `[effects]` | BUILT 2026-10-20 (patcherMod 1.1.01, rebuilt and installed), not seen in game (EF-18) |
+| HUD icons (2.5), swaps and removals (2.6), compound effects and Jellie Wine (2.7), copper poisoning (2.8), Double Jump with Jump Boost (2.7) | BUILT 2026-10-31 (patcherMod 1.1.04 installed 00:44, backportedVinery -06, backportedBrewin -04, Creative Delight 1.0.0, all in `mods/`); scratch server PASSED r1031 (2026-10-31, SQ-EFX-01 to -11: mixins, Magic Resistance, swaps and removals, Caffeinated, copper poisoning, Jellie Wine, crab shell brew); SQ-EFX-12 to -14 not run (client block); EF-22 to EF-31 in game. Open: Phantom Bane cancels phantoms for every player (2.7, TODO `potions/effects #13`), pipe tea Haste and more pipe fluids (2.5, `#15`, `#16`) |
 
 - **Pending:** EF-01 to EF-20 have never been run. The 2026-10-20 work (providers, description fixes, category
-  overrides) is built but not seen in game. The exports are from 2026-10-18 18:30, before the Vinery and Brewin ports
-  went into `mods/` (2026-10-19 00:50), so rerun `/dumppotions` and `/dumpfood` on the next boot (F10).
+  overrides) is built but not seen in game. The exports were refreshed by the client `/dumpall` of 2026-10-30 00:40 (with the ports); left from F10:
+  empty `EFFECT_OVERRIDES` in `effect_audit.py` and rerun it.
 - **Files to open:** the table below; [potions.md](potions.md) for how potions are brewed on every machine;
   [armor_effects.md](armor_effects.md) for effects given by gear; [alcohol.md](alcohol.md) for the Brewin and Vinery
   drinks.
-- **Knobs:** CEConfig `[effects] categoryOverrides` (2.4). JEED's `config/jeed-client.toml` (`hidden_effects`), the
+- **Knobs:** CEConfig `[effects] categoryOverrides` (2.4), `forceHudIcon` (2.5), `remap` and `removed` (2.6);
+  `[copper_poisoning]` (2.8). JEED's `config/jeed-client.toml` (`hidden_effects`), the
   Vinery wine table (`config/vinery-common.toml` `effects`), Fruits Delight aura ranges
   (`config/fruitsdelight-common.toml`).
 - **How to look:** JEI → the effect list (JEED adds one entry per effect) → click for its description and the items
@@ -417,6 +419,93 @@ it?
 | No World Map `xaeroworldmap:no_world_map` | Xaero's World Map | NEUTRAL | blue | | Server switch; Xaero ships a neutral and a harmful twin on purpose |
 | No World Map `xaeroworldmap:no_world_map_harmful` | Xaero's World Map | HARMFUL | red | | Server switch; Xaero ships a neutral and a harmful twin on purpose |
 
+### 2.5 HUD icons: auto-hidden effects (audit 2026-10-31, TODO `potions/effects #8`)
+
+How the game decides (Forge 43.3.9, decompiled): the HUD (`Gui#renderEffects`) draws an icon only when
+`IClientMobEffectExtensions#isVisibleInGui` and `MobEffectInstance#showIcon()` are true. The inventory list checks only
+`isVisibleInInventory`, never `showIcon`, so every effect below already showed in the inventory. The five-argument
+`MobEffectInstance(effect, ticks, level, ambient, visible)` sets `showIcon = visible`, so a mod that only wanted to drop
+particles also hid the icon.
+
+Fix: CEConfig `[effects] forceHudIcon` (client, read live; `mixin/GuiEffectIconMixin`) forces the icon for listed effects
+from any source; CEConfig `[effects] forceHudIconItems` (server; `mixin/LivingEntityUseItemIconMixin` marks the item in
+`LivingEntity#completeUsingItem`) turns the icon on for every effect added while one of the listed items is finished, so
+the same effect from armor stays hidden; pack-owned foods use the six-argument constructor (no particles, icon on).
+
+| Effect | Source | Hidden how | Decision |
+|---|---|---|---|
+| Intoxication | every alcoholic drink (backportedBrewin `BnCFoods`, `alcohol_drinks.js`) | 5-arg, visible false | **shown** (`forceHudIcon`) |
+| Travel Fatigue | Via Romana | 5-arg | **shown** (`forceHudIcon`) |
+| Thief | Monobank | 5-arg | **shown** (`forceHudIcon`) |
+| Sweet Heart, Nourishment, Speed | Mead, Pale Jane, Saccharine Rum, the Brewin' dishes, Cocoa Fudge (`BnCFoods`) | 5-arg | **shown** (6-arg, backportedBrewin -04) |
+| Haste | Baklava (Creative Delight `DelightfulBackportFoods`) | 5-arg | **shown** (6-arg) |
+| Armor `piece` / `set` / `mount` and dragon tool `held` effects | `armor_effects.js`, `tool_effects.js` | 5-arg, `visible: false` | hidden: refreshed every tick, the tooltip is the indicator |
+| Echo set Night Vision + Phantom Bane, D&D visor, PneumaticCraft and SecurityCraft night vision, Felsic regeneration | gear | hidden | hidden: gear-sustained |
+| Spice of Life (Apple Pie) milestone benefits | SoL | 5-arg, permanent | hidden (decided 2026-10-31): permanent icons |
+| Completionist banner, raid Glowing, camera flash, Quark held chicken, Sophisticated Backpacks slowness, Create Misc gear, mob-side effects | various | hidden | hidden: auras, mobs, short marks |
+| Builder's Tea Haste (Create), Canned Pufferfish (Canned Goods), Farmer's Respite foods, Immersive Weathering foods | third-party | 5- or 6-arg, hidden | **shown** (`forceHudIconItems`, 2026-10-31); Builder's Tea from an open-ended pipe: `mixin/CreateTeaPipeIconMixin` |
+| Anti-Fire (Immersive Petroleum) | `isVisibleInGui` / `isVisibleInInventory` false | client extension | hidden: internal marker |
+
+Open (owner 2026-10-31, not built): the open-ended pipe's Builder's Tea Haste lasts 21 ticks, refreshed every 5; make it
+20 s from a CEConfig value (TODO `potions/effects #15`). More fluids drinkable from an open-ended pipe (the pack's drink
+fluids, `OpenEndedPipe.registerEffectHandler`; TODO `potions/effects #16`).
+
+### 2.6 Swaps and removals (TODO `potions/effects #9`, built 2026-10-31)
+
+CEConfig `[effects] remap` and `removed` (server, read live; `potion/EffectRules`, `mixin/LivingEntityEffectRemapMixin` on
+`LivingEntity#addEffect`) swap or refuse an effect from every source: foods, cakes, potions already brewed, commands,
+mob code. `mixin/FruitsDelightEffectFuncMixin` does the swap inside Fruits Delight's `EffectFunc` so jam and jelly
+tooltips name the new effect; `global.foodEffectSwaps` (`food_values.js`) does it for plain food tooltips.
+
+| Change | How |
+|---|---|
+| Agility (Neapolitan) -> Climbing (Vinery), same durations | remap; food tooltips: bananas, banana bread, dried banana, banana ice cream and milkshake, strawberry banana smoothie, adzuki curry |
+| Chorus (Fruits Delight) -> Teleport (Vinery) | remap + `EffectFunc` mixin. Teleport is players only, no dismount, no Forge chorus event |
+| Resilience (Quark) -> Knockback Resistance (Alex's Mobs) | remap (Quark Delight's crab gives it by command); Resilience mixes removed (`potions.js` REMOVED_POTIONS); new mix Awkward + Crab Shell -> Knockback Resistance (no crab claw exists; decided 2026-10-31) |
+| Restfulness and Insomnia (Upgrade Aquatic) removed, with the Flare | removed; their 4 potions' mixes removed; the Flare only came from Insomnia on a Phantom (no natural spawn); `removed_mobs.js` refuses it joining a level; spawn egg in `global.removedItems` |
+| Power Outage (Alex's Mobs) removed | removed (only source: the April Fools grizzly bear AI) |
+
+All six old effects are in JEED's `hidden_effects` (`config/jeed-client.toml`). The effects stay registered (other mods'
+code names them).
+
+### 2.7 Compound effects (TODO `potions/effects #10`, built 2026-10-31)
+
+`potion/CompoundEffects` holds the part list; the parts are listed under "When Applied:" in item tooltips
+(`potion/CompoundEffectTooltip`: potions, foods, Vinery wines), the JEED hover (`mixin/JeedEffectRendererMixin`) and the
+JEED page text ("Compound of: ...", `mixin/JeedEffectInfoMixin`). Text only, except Caffeinated's Phantom Bane.
+
+| Compound | Parts | Notes |
+|---|---|---|
+| Caffeinated (Farmer's Respite) | Phantom Bane | Its +10% speed and +20% attack speed show as its own modifiers. Phantom Bane is really applied, hidden, same time (`PhantomBaneRules`); Caffeinated's own tick (Time Since Rest set to -24000 every tick, phantoms gone for days after) is cancelled (`CaffeinatedEffectMixin`). Decided 2026-10-31 |
+| Stimulation (Create Confectionery) | Refreshing, Sweetening | Same result: clears Slowness and Mining Fatigue each tick (the parts refuse them) |
+| Recovering (Fruits Delight) | Poison Resistance, Wither Immunity (text) | |
+| Double Jump (Vinery) | Jump Boost (same level), One Mid-Air Jump (text) | With Jump Boost on too, the higher jump power counts (fixed 2026-10-31, backportedVinery -06; upstream replaced Jump Boost's) |
+| Flashed (Immersive Engineering) | Slowness, Screen Flash (text) | -15% speed is exactly Slowness I |
+| Sunbird's Blessing (Alex's Mobs) | Slow Falling, Elytra Lift (text) | |
+
+Not compounds: Sugar Rush (Speed then Slowness, in sequence), the auras (Heal Aura, Alienating, Vibing, Repellence give
+effects to others), Frosty Armor, Armor, Berserking, Brightening (no existing parts).
+
+**Phantom Bane ending** (any source) resets the player's Time Since Rest to 0, as after sleeping (decided 2026-10-31).
+Finding: Better Beacons' spawner check returns from the whole phantom spawn pass, so one player with Phantom Bane skips
+phantom spawns for every player after them in the list (TODO `potions/effects #13`).
+
+**Golden apple wine:** Jellie Wine gives Regeneration + Absorption + Resistance + Fire Resistance at the wine's level (the
+enchanted golden apple set); the "Better than Golden Apples!" effect (`vinery:jellie`) is unregistered (decided
+2026-10-31). Vinery wine entries take several effects: `wine|a+b+c|level|ticks` (`WineEffects`, backportedVinery -06).
+
+### 2.8 Copper poisoning (TODO `potions/effects #11`, built 2026-10-31)
+
+Everything Copper's Copper Poisoning is instant and only came from eating a Copper Nugget (level II, 4 damage through its
+own sources). Its tick now gives Poison I for `effectPoisonSeconds` (4) per level instead (`CopperPoisoningEffectMixin`).
+
+Gear: every player has a next roll time (persistent data `ce_copper_poison_roll`, game time), `intervalSeconds` (300)
++- `jitterSeconds` (120) apart. At a roll the four armor slots, the hotbar and the offhand are scanned for Everything
+Copper items whose `state` NBT is `oxidized` (waxed or not). Each piece poisons with `chancePerPiece` (0.15), so n pieces
+give 1 - 0.85^n (4 pieces: 48%). A hit: Poison I for `baseSeconds` (4) + `secondsPerExtraPiece` (2) per piece after the
+first, capped at `maxSeconds` (20). Creative and spectator players are skipped. All CEConfig `[copper_poisoning]`.
+Cost: one game-time compare per player per second; the 14-stack scan only at a roll. Chance numbers are first guesses.
+
 ## 3. What the pack changes
 
 - **Potions for effects that had none** ([potions.md](potions.md) 2.1, 2.2): 12 vanilla effects (`kubejs:*`), Long Reach,
@@ -488,6 +577,9 @@ it?
   **11 effects have no real JEI description:** Long Reach, Patrol Nullifier, Phantom Bane, Magic Resistance,
   Anti-Fire, Travel Fatigue, the 4 Xaero World Map switches (all `TODO` placeholders) and Copper Poisoning (nothing at
   all: with no name key the generator can't see it). PROPOSED text for each is in 2.1.
+  Checked 2026-10-31: 11 `TODO` placeholders in the overlay: Long Reach, Patrol Nullifier, Phantom Bane, Copper
+  Poisoning, Anti-Fire, the 4 Xaero switches, Dioxide, Collapsing. Magic Resistance now has its text (Poison and Wither
+  immunity, magic damage cut). Copper Poisoning's text must describe its new tick (Poison I per level, 2.8).
 - **F3.** FIXED 2026-10-20: all 11 plus the 5 typo lines (Sticky too) replaced in the pack's lang overlay, with the
   2.1 texts. **11 descriptions are wrong or incomplete:**
   - Wrong: Comfort (JEED describes an older Farmer's Delight that cleared Slowness/Hunger/Weakness; 1.2.4 only heals
@@ -506,10 +598,13 @@ it?
 - **F5. 12 total-overlap groups (2.3). Your call** which to keep. The two that cost something: Resilience and Knockback
   Resistance are two brewable potion lines for one stat (drop Quark's crab brew or AM's bear-fur brew), and Caffeinated
   gives the whole of Phantom Bane for free from tea and coffee, which undercuts the Phantom Bane potion and the echo
-  armor set bonus.
+  armor set bonus. Both settled 2026-10-31 (2.6, 2.7): Resilience is remapped to Knockback Resistance and its brews
+  removed (crab shell now brews Knockback Resistance); Caffeinated is a compound that applies Phantom Bane. The other
+  10 groups are still open (TODO `potions/potions #8`).
 - **F6.** FIXED 2026-10-23 (user: remove Buzzier Bees' luck brews, keep the pack's; TODO `potions/potions #5`):
-  `potions.js` removes every `Mix` whose output is a luck or bad luck potion, then adds the pack's four rows (clover,
-  redstone, silverfish bottle, redstone). Strong luck / bad luck and the fermented spider eye corruption no longer brew.
+  `potions.js` removes every `Mix` whose output is a luck or bad luck potion, then adds the pack's six rows (clover and
+  silverfish bottle, then redstone and glowstone on each; `potions.js` 88-94). Strong luck / bad luck brew with glowstone;
+  only the fermented spider eye corruption is gone. DEPLOYED with 1.1.03.
   **Luck is brewed twice.** Buzzier Bees 5.0.1 already registers awkward + four-leaf clover → Luck, Luck + redstone
   → long, + glowstone → strong, + fermented spider eye → Bad Luck, and Bad Luck + redstone → long, + glowstone → strong
   (`BBMobEffects.registerRecipes`, all real `PotionBrewing.Mix` entries via Blueprint `DataUtil.addMix`; checked
@@ -531,10 +626,11 @@ it?
   Plan: [briefs/ui_effects.md](briefs/ui_effects.md).)
 - **F9.** FIXED 2026-10-19 (header now points at `MagicResistancePotions` and `CE_POTION_MIXES`). **Stale comment:** [magic_resistance.js](../kubejs/startup_scripts/magic/magic_resistance.js) lines 19-23 say
   Magic Resistance has no potion; patcherMod's `MagicResistancePotions` added base, long and strong.
-- **F10. Exports predate the ports.** `mob_effects.json`, `potions.json` and `foods.json` are from 2026-10-18 18:30; the
+- **F10. Exports predate the ports.** `mob_effects.json`, `potions.json` and `foods.json` were from 2026-10-18 18:30; the
   Vinery and Brewin ports went into `mods/` at 2026-10-19 00:50. The table uses the port sources for those two mods
-  and `effect_audit.py` drops the three removed Vinery effects (`EFFECT_OVERRIDES`). Rerun `/dumppotions` and
-  `/dumpfood`, then empty `EFFECT_OVERRIDES`.
+  and `effect_audit.py` drops the three removed Vinery effects (`EFFECT_OVERRIDES`). Dumps refreshed 2026-10-30 00:40
+  (client `/dumpall`): the three effects are absent there, so the dump now agrees. Left: empty `EFFECT_OVERRIDES` and
+  rerun `effect_audit.py` (TODO `pack/release #5`).
 - **F11.** FIXED 2026-10-20, and the finding was partly wrong. JEED does list every `FoodProperties` food by itself
   (`EffectInfo.buildStaticCache`). What it missed were code-applied foods, mobs, blocks, gear and brews; section 3
   adds them all. **Food sources are partial in JEI.** JEED lists items that give an effect only for vanilla effects (its own 20
@@ -542,7 +638,8 @@ it?
   `jeed:effect_provider` set from `foods.json` would put them in JEI too.
 - **F12. Unbrewable beneficial effects. Your call** whether any should get a potion: Fleet-Footed, Orca's Might, Oiled,
   Agility/Climbing, Water Walker, Lava Walker, Magnet, Experience, Allure. The 18 Fruits Delight effects, Neapolitan and
-  Vinery are food-only by design.
+  Vinery are food-only by design. Agility is remapped to Climbing since 2026-10-31 (2.6), so only Climbing is left of
+  that pair.
 - **F13.** FIXED 2026-10-20: CEConfig `[effects]` makes it BENEFICIAL (blue), with 5 more recolours from the 2.4
   audit. **Rest is filed as harmful.** Create Confectionery registers it `HARMFUL`, so it shows red, although all it does
   is remove nearby phantoms. Cosmetic.
@@ -684,6 +781,26 @@ ingredient type.
 - [ ] **EF-19 Sunny stays hidden:** search JEI for "Sunny" → no effect entry (same as EF-11, after the config was
   confirmed).
 
+- [ ] **EF-22 Intoxication icon:** drink a Beer → Intoxication's icon is on the HUD (top right) as well as in the inventory.
+- [ ] **EF-23 Food icons:** eat Cocoa Fudge and a Baklava slice → Speed and Haste icons on the HUD, no particles. Drink
+  Builder's Tea, a Farmer's Respite tea, eat Canned Pufferfish and an Immersive Weathering food → their effect icons show;
+  with the dragon set on, its Fire Resistance stays without an icon. Stand under an open-ended pipe spilling Builder's
+  Tea → Haste icon on the HUD.
+- [ ] **EF-24 Compound tooltip:** hover a Coffee → "When Applied:" lists Phantom Bane above the speed lines; a Stimulation
+  chocolate bar lists Refreshing and Sweetening; Clark Wine lists Jump Boost and One Mid-Air Jump.
+- [ ] **EF-25 JEED page:** JEI → Caffeinated effect → text ends "Compound of: Phantom Bane."; hover the icon → Phantom Bane
+  under "When Applied:".
+- [ ] **EF-26 Swaps in tooltips:** hover a banana → Climbing (not Agility); a chorus jelly → Teleport.
+- [ ] **EF-27 Removed effects hidden:** JEI search "Resilience", "Restfulness", "Insomnia", "Power Outage", "Agility" →
+  no effect entries; Flare spawn egg absent.
+- [ ] **EF-28 Phantoms after coffee:** drink Coffee, skip sleep 4 nights → no phantoms while Caffeinated lasts; after it
+  ends, Statistics → Time Since Rest restarted from 0.
+- [ ] **EF-29 Jellie Wine:** hover → four effect lines (Regeneration, Absorption, Resistance, Fire Resistance); drink → all four.
+- [ ] **EF-31 Double Jump with Jump Boost:** drink Clark Wine, then `/effect give @s minecraft:jump_boost 60 1` → jumps
+  as high as Jump Boost II alone, and the mid-air jump still works.
+- [ ] **EF-30 Oxidized copper:** wear four oxidized copper pieces for 20 min → poisoned at least once; tooltip-free, Poison
+  icon only.
+
 ## 9. History
 
 - 2026-10-19: this writeup: table of all 140 effects (vanilla, 25 mods, the pack), counts, overlap groups, findings
@@ -705,3 +822,8 @@ ingredient type.
   Atmospheric / Environmental items removed, soda out of the Slow Falling providers). EF-05 and EF-12 reworded, EF-20
   added. Not run in game.
 - 2026-10-24: planned from the scratchpad: potion bundles in provider pages, Hostile Mobs and Weak Stomach providers (`ui/effects #9` to `#11`). No code changed.
+- 2026-10-31: TODO `potions/effects #8, #9, #10, #11` built (2.5 to 2.8): HUD icon audit and `forceHudIcon`, effect
+  remap / removal, compound effects text and Caffeinated's Phantom Bane, Jellie Wine set, copper poisoning. Tests EF-22
+  to EF-30, scratch SQ-EFX-01 to -11.
+- 2026-10-31: `forceHudIconItems` (Builder's Tea, Canned Pufferfish, Farmer's Respite, Immersive Weathering); Double Jump
+  and Jump Boost together (`potions/effects #14`).

@@ -138,11 +138,11 @@ ServerEvents.recipes(e => {
 		COOKIES.forEach(c => F.cookieBake(c[1], i[c[0]], c[2]))
 
 		//######################### Muffins (muffin tin, paper) #########################
-		// The family call makes both routes: oven 4 (flour, one paper each), Cooking Pot 2 (any dough; it replaces
-		// Fruits Delight's, which asks for wheat dough). The oven is the efficient route.
+		// The family call bakes 4 in the oven (flour, one paper each) and removes the mods' Cooking Pot recipes: muffins
+		// are not made in the pot (owner 2026-10-29).
 		F.muffinBake(i.t_fruits_blueberry, i.blueberry_muffin)
 		F.muffinBake(i.t_fruits_cranberry, i.cranberry_muffin)
-		F.muffinBake(i.baked_sweet_potato, i.sweet_potato_cupcake)   // Veggies Delight's (its sweet potato dough craft stays)
+		F.muffinBake(i.baked_sweet_potato, i.sweet_potato_cupcake)   // Veggies Delight's, named Sweet Potato Muffin (its sweet potato dough craft stays)
 
 		//######################### Tarts (baking sheet) #########################
 		// Fruits Delight pot recipes.

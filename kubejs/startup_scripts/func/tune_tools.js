@@ -122,11 +122,11 @@ var i = global.item;
 	tune(i.felsic_hoe,     { damage: 1,   attackSpeed: 5.0, miningSpeed: 11, durability: 2501, enchantability: 21, miningLevel: 4, rarity: 'epic', fireproof: true })
 
 	// ─────────────────────────────────── Dragon ────────────────────────────────
-	tune(i.dragon_sword,   { damage: 11,  attackSpeed: 1.75,                durability: 3350, enchantability: 25, miningLevel: 5, rarity: 'epic', fireproof: true })
-	tune(i.dragon_pickaxe, { damage: 8,   attackSpeed: 1.2, miningSpeed: 12, durability: 3350, enchantability: 25, miningLevel: 5, rarity: 'epic', fireproof: true })
-	tune(i.dragon_axe,     { damage: 16,  attackSpeed: 1.2, miningSpeed: 12, durability: 3350, enchantability: 25, miningLevel: 5, rarity: 'epic', fireproof: true })
-	tune(i.dragon_shovel,  { damage: 8, attackSpeed: 1.6, miningSpeed: 12, durability: 3350, enchantability: 25, miningLevel: 5, rarity: 'epic', fireproof: true })
-	tune(i.dragon_hoe,     { damage: 1,   attackSpeed: 5.5, miningSpeed: 12, durability: 3350, enchantability: 25, miningLevel: 5, rarity: 'epic', fireproof: true })
+	tune(i.dragon_sword,   { damage: 11,  attackSpeed: 1.75,                durability: 3350, enchantability: 25, miningLevel: 4, rarity: 'epic', fireproof: true })
+	tune(i.dragon_pickaxe, { damage: 8,   attackSpeed: 1.2, miningSpeed: 12, durability: 3350, enchantability: 25, miningLevel: 4, rarity: 'epic', fireproof: true })
+	tune(i.dragon_axe,     { damage: 16,  attackSpeed: 1.2, miningSpeed: 12, durability: 3350, enchantability: 25, miningLevel: 4, rarity: 'epic', fireproof: true })
+	tune(i.dragon_shovel,  { damage: 8, attackSpeed: 1.6, miningSpeed: 12, durability: 3350, enchantability: 25, miningLevel: 4, rarity: 'epic', fireproof: true })
+	tune(i.dragon_hoe,     { damage: 1,   attackSpeed: 5.5, miningSpeed: 12, durability: 3350, enchantability: 25, miningLevel: 4, rarity: 'epic', fireproof: true })
 
 	// ─────────────────────────────────── More Delight knives ─────────────────�
 	// Vanilla Wood / Stone tier values (More Delight 26.05.20, feature_writeup/more_delight.md 2.2); the installed

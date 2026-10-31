@@ -1,6 +1,6 @@
 # Baby mobs: the 1.21.2 / 26.1 "Tiny Takeover" babies on 1.19.2 (Baby Mobs, our own jar)
 
-Test prefix `BM-`. Status: **milestone 1 BUILT 2026-10-20 (babyMobs-1.0.0.jar in `mods/`, not deployed): baby squid, glow
+Test prefix `BM-`. Status: **milestone 1 BUILT 2026-10-20 (babyMobs-1.0.0.jar, deployed since 1.1.01, 2026-10-22): baby squid, glow
 squid and dolphin with the 26.1 baby models and textures; BM-01 and BM-02 PASSED on the scratch server, the server halves of BM-04 to BM-07 scratch server PASSED 2026-10-22 (SQ-OM-13, SQ-OM-14), the rest need a client. Milestone 2 (the 26.1
 remodel of the ~38 existing babies) is planned, not built.** [TODO](todo/TODO.md) `ports/babymobport #1`.
 

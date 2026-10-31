@@ -6,12 +6,6 @@ ServerEvents.recipes(e => {
     var i = global.item;
     var f = global.fluid;
 
-    //Remove unneeded recipes
-    R.bulk('remove', [
-        [{id:'jrftl:rotten_flesh_smelting'}, e],
-        [{id:'jrftl:rotten_flesh_smoking'}, e]
-    ]);
-
     // ############################## Leather ##############################
 
     // Ersatz leather waxing recipe balance

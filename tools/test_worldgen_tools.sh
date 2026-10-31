@@ -46,4 +46,6 @@ echo "== 10. pool order + processor rebind"
 java -cp "$T/stub:$T/test:$CP" com.SaintAlfonzo.creativeengineering.worldgen.PoolTunerTest 2>&1 | grep -E '^(ok|FAIL|ALL|[0-9]+ FAILED)|Exception|Error' || status=1
 echo "== 11. biome tuner disk cache"
 java -cp "$T/stub:$T/test:$CP" com.SaintAlfonzo.creativeengineering.worldgen.BiomeLayoutCacheTest "$ROOT" 2>&1 | grep -E '^(ok|FAIL|ALL|[0-9]+ FAILED)|Exception|Error' || status=1
+echo "== 12. ocean geode floor patch"
+java -cp "$T/stub:$T/test:$CP" com.SaintAlfonzo.creativeengineering.worldgen.OceanGeodesTest 2>&1 | grep -E '^(ok|FAIL|ALL|[0-9]+ FAILED)|Exception|Error' || status=1
 exit $status

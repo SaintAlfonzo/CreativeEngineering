@@ -27,7 +27,7 @@
 
 	[mobs.chimpanzee]
 		#The percentage chance for a Banana Plant to generate with a group of Chimpanzees
-		"Chimpanzee group chance" = 0.25
+		"Chimpanzee group chance" = 0.0
 		#The maximum amount of Chimpanzees that can spawn with a Banana Plant
 		"Chimpanzee maximum group size" = 10
 		#The minimum attempts for Chimpanzees to spawn with a Banana Plant
