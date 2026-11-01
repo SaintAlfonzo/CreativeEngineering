@@ -1835,6 +1835,7 @@ i.glowing_calamari = 'creativeengineering:glowing_calamari';
 i.glowing_calamari_slice = 'creativeengineering:glowing_calamari_slice';
 i.glowing_calamari_roll = 'creativeengineering:glowing_calamari_roll';
 i.pickled_sea_pickle = 'creativeengineering:pickled_sea_pickle';  // CD vintagedelight/vintage_items.js (TODO dishes/pickles-and-ferments #1)
+i.sliced_sweet_potato = 'creativeengineering:sliced_sweet_potato';  // CD veggiesdelight/veggies_items.js (TODO dishes/ingredients #26)
 i.t_raw_calamari = '#forge:raw_fishes/calamari';
 i.t_cooked_calamari = '#forge:cooked_fishes/calamari';
 i.t_foods_tentacles = '#forge:foods/tentacles';      // Miner's takoyaki slot; its tentacles are removed, raw calamari fills it (CD oceansdelight/tags.js)
@@ -1953,6 +1954,10 @@ i.t_tortilla = '#forge:tortilla';
 // frying (TODO dishes/meals #7): Rustic Delight's oil tag; sliced potatoes = Rustic's slices + More Delight's diced
 i.t_cooking_oil = '#rusticdelight:cooking_oil';
 i.t_sliced_potato = '#forge:sliced_potato';
+// More Delight's own tag (mashed potatoes, potato salad, diced potatoes with ...): it held only the merged diced
+// potatoes, so Creative Delight fills it with Rustic's slices (moredelight/item_merges.js, dishes/ingredients #26)
+i.t_sliced_potatoes = '#forge:sliced_potatoes';
+i.t_vegetables_sweet_potato = '#forge:vegetables/sweet_potato';  // Veggies Delight's; the sliced sweet potato joins it as Rustic's slices join #forge:vegetables/potato
 // pack tags for meals (cookingtags.js, TODO dishes/meals #1, #2)
 i.t_soup_veggie_cooked = '#creativeengineering:soup_veggie_cooked';
 i.t_roasted_bell_pepper = '#creativeengineering:roasted_bell_pepper';   // Rustic's 9 colours with Creative Delight (3 before) (Veggies Delight's smoked pepper inputs)

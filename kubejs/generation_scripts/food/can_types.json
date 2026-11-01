@@ -807,7 +807,8 @@
    "glow": false,
    "effects": [],
    "sources": [
-    "sweet_potato"
+    "sweet_potato",
+    "sliced_sweet_potato"
    ],
    "recipes": [
     {
@@ -815,7 +816,8 @@
      "inputs": [
       {
        "any": [
-        "sweet_potato"
+        "sweet_potato",
+        "sliced_sweet_potato"
        ],
        "n": 5
       }
@@ -826,7 +828,8 @@
      "inputs": [
       {
        "any": [
-        "sweet_potato"
+        "sweet_potato",
+        "sliced_sweet_potato"
        ],
        "n": 3
       },
@@ -844,7 +847,8 @@
      "inputs": [
       {
        "any": [
-        "sweet_potato"
+        "sweet_potato",
+        "sliced_sweet_potato"
        ],
        "n": 3
       },

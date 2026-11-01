@@ -83,7 +83,7 @@ Trims list cache) and `gear/tuning #18`; #17 pairs with `jei/jei-ordering #8` (k
 ---
 
 ## tuning #6: Felsic `potionMb` feeds both fills
-Status **Bug** (decided 2026-10-29: split the key; not built, checked 2026-10-31) · Work: patcherMod / config · id `gear/tuning #6`
+Status **BUILT 2026-11-01** (patcherMod built, not installed; steps 1-4 below done, toml in `config/` and `configs_edited/`; test GR-31) · Work: patcherMod / config · id `gear/tuning #6`
 
 ### Goal
 The config says what it does: either the toml comment is right, or the Long Reach fill and the final fill have
@@ -603,7 +603,7 @@ durability and enchantability, the dragon rod with its own bonus.
 ---
 
 ## tuning #20: Dragon set gives 33 armor, not 36
-Status **Bug** · Work: config · id `gear/tuning #20` (found by scratch r1031, 2026-10-31, SQ-AC-02 FAIL)
+Status **FIXED 2026-11-01** (config only: `dragonloot-common.toml` 7 / 12 / 10 / 7, toughness 4.5, copied to `configs_edited/root_config/`; re-run SQ-AC-02) · Work: config · id `gear/tuning #20` (found by scratch r1031, 2026-10-31, SQ-AC-02 FAIL)
 
 ### Goal
 The full dragon set gives the 36 armor that `tune_armor.js`, the tooltips and gear_tuning.md 2.3 / F13 promise, or the

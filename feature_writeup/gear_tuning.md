@@ -18,7 +18,7 @@
 
 - **Pending:** built and unshipped: F13 (armor cap 50, patcherMod 1.1.04 installed 2026-10-31 00:44; scratch r1031
   2026-10-31: cap mixin PASSED (SQ-AC-01, -03), SQ-AC-02 FAILED: full dragon set gives 33, not 36, because
-  `dragonloot-common.toml` [dragonloot.armor] 7 / 10 / 9 / 7 overrides the KubeJS tune 7 / 12 / 10 / 7; owner: set the toml or accept 33)
+  `dragonloot-common.toml` [dragonloot.armor] 7 / 10 / 9 / 7 overrides the KubeJS tune 7 / 12 / 10 / 7; FIXED 2026-11-01: toml set to 7 / 12 / 10 / 7, toughness 4.5, config only, SQ-AC-02 re-run pending)
   and F4 (dragon tools mining level 4, `tune_tools.js`). GR-01 to GR-30 have never been run. Findings F2, F5, F6, F8 to
   F11 (section 4) are open (F1, F3, F7, F12 fixed in 1.0.9); F5 and F10 need your call. Build plan:
   [briefs/gear_tuning.md](briefs/gear_tuning.md).
@@ -236,7 +236,9 @@ From a typical 1.5 blocks/tick glide, the default brake reaches the stall speed 
   `[NCH.cfg] no CEConfig.CRAFTING.FELSIC_SHIELD section` and the hardcoded 250 mB / 1 loop / 8 blows apply.
   [shields.md](shields.md) 2.7 lists it as if it were configurable. Fix: add
   `FELSIC_SHIELD = new FelsicPiece(b, "felsic_shield", magicResistance, 250, 1, 8)`.
-- **F2. `potionMb` feeds both fills.** DECIDED 2026-10-29 (owner): split it into two config keys (TODO `gear/tuning #6`, not built). `felsicAssembly` uses the same mB for the Long Reach fill and the Magic
+- **F2. `potionMb` feeds both fills.** BUILT 2026-11-01 (patcherMod built, not installed; TODO `gear/tuning #6`): `FelsicPiece.reachMb`
+  (toml `reachPotionMb`, default = the piece's `potionMb`, so no recipe changes) feeds the Long Reach fill, `mb` (`potionMb`) the last
+  fill; `felsicAssembly(..., hammerBlows, reachMb)` falls back to `mb`; `end_gear.js` passes `reachMb`. Test GR-31. DECIDED 2026-10-29 (owner): split it into two config keys. `felsicAssembly` uses the same mB for the Long Reach fill and the Magic
   Resistance fill; the toml comment says "used in the final filling step". A felsic helmet costs 500 + 500 mB a loop.
   Fix the comment, or split it into two keys.
 - **F3.** FIXED 2026-10-19 ([plan_1.0.9.md](plan_1.0.9.md)). **Hand-written tag line.** [equipmenttags.js](../kubejs/server_scripts/tags/equipmenttags.js) line 10 is
@@ -281,6 +283,10 @@ From a typical 1.5 blocks/tick glide, the default brake reaches the stall speed 
   default applies before the config loads). Damage reduction is unchanged: `CombatRules` still caps effective armor
   at 20 (80 %); with dragon toughness 18, 36 armor holds that cap for hits up to about 104 damage (30 held it to 65).
   Toughness (18 of a 20 cap) is fine.
+  FIXED 2026-11-01 (config only): scratch r1031 measured 33, because `DragonArmor.getAttributeModifiers` (DragonLoot 1.1.15,
+  jar-checked) rebuilds armor, toughness and knockback resistance (toml value / 10) from `dragonloot-common.toml` on every call,
+  so the toml beats `tune_armor.js`. Toml [dragonloot.armor] now 7 / 12 / 10 / 7 and toughness 4.5 (was 7 / 10 / 9 / 7, 5.0;
+  toughness had the same override, 20 not 18); knockback 3 = 0.3 already matches. Copied to `configs_edited/root_config/`.
 
 ### Known limits
 
@@ -337,7 +343,8 @@ Survival unless noted. `/dumpgear` after a restart gives every stat for GR-01 to
   (purple name). `/dumpgear tools` matches the table.
 - [ ] **GR-02 Armor stats:** wear a full felsic set → 24 armor on the HUD; each piece's tooltip shows +4 Armor
   Toughness. Full dragon set → 36 armor (F13, cap 50); `/attribute @s minecraft:generic.armor get` gives 36.
-  The bar draws extra rows past 20 (armor bar fix, backlog row 10).
+  The bar draws extra rows past 20 (armor bar fix, backlog row 10). `/attribute @s minecraft:generic.armor_toughness get`
+  gives 18 (4 x 4.5; dragonloot-common.toml, F13).
 - [ ] **GR-03 Fireproof:** throw a felsic sword and an echo helmet into lava → both survive.
 - [ ] **GR-04 Echo tools exist:** JEI shows Echo Pickaxe, Axe, Shovel, Hoe with animated textures; the echo pickaxe
   mines obsidian and ancient debris.
@@ -392,6 +399,9 @@ Survival unless noted. `/dumpgear` after a restart gives every stat for GR-01 to
   → stock Easy Elytra Takeoff behaviour (no forced takeoff).
 - [ ] **GR-30 Tooltips:** felsic pieces show "Capable of binding to dragon scale"; the air brake, dragon scale and
   dragon anvil show their lines.
+- [ ] **GR-31 Felsic Long Reach fill (F2):** JEI on the felsic helmet assembly: 500 mB Long Reach, then 500 mB Magic
+  Resistance. Set `[crafting.felsic_helmet] reachPotionMb = 100`, `/reload` → log `CRAFTING.FELSIC_HELMET.reachMb
+  overridden: default 500 -> 100`; JEI shows 100 mB Long Reach, 500 mB Magic Resistance. Put it back.
 
 ## 8. History
 
@@ -406,6 +416,9 @@ Survival unless noted. `/dumpgear` after a restart gives every stat for GR-01 to
 - 2026-10-30: F13 built: armor cap 50 (`ArmorCapMixin`, `[dragon_gear] armorCap`), patcherMod 1.1.04. Scratch test SQ-AC queued; GR-02 expects 36.
 - 2026-10-31: scratch run r1031: SQ-AC-01, -03 PASSED; SQ-AC-02 FAILED (33 armor: DragonLoot's own armor values win over
   `tune_tools`). No code changed.
+- 2026-11-01: F13 toml fix (`dragonloot-common.toml` 12 chest, 10 legs, toughness 4.5; `gear/tuning #20`). F2 built: `reachPotionMb`
+  key per felsic piece (`gear/tuning #6`, patcherMod built, not installed); GR-31 added. NCH numeric defaults (`?? N` returned 0
+  in this Rhino) now go through `NCH._or`, incl. `felsicAssembly` hammerBlows.
 
 ## Owner ideas (scratchpad 2026-10-26)
 

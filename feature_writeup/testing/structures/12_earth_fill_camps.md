@@ -90,7 +90,7 @@ DEPLOYED with pack 1.0.9 (2026-10-19 15:54, [plan_1.0.9.md](../../plan_1.0.9.md)
   Reasoning: [briefs/structures_earthfill.md](../../briefs/structures_earthfill.md) #2. Test SQ-WG30-E01 PASSED 2026-10-30 (every line `surplus limit 0.0`; inland square 6 too-wet cancels, all
   share-only with water over 1.76x ground or more; coast square none; no kept start with more water than ground; the
   470 / 425 village is not picked in the stripped-weight world).
-- Sunk-start candidates: 2026-10-30 `ancient_crypt` tagged; the terrain-matching `antiquus_crypta` and T&T nilotic village are refused by patcherMod; ocean fortress, ocean ruins and the -1 ruins wait for the look in SQ-EF-05 ([structure_tuning.md](../../structure_tuning.md) 3.28).
+- Sunk-start candidates: 2026-10-30 `ancient_crypt` tagged (dropped 2026-11-01: its start element is terrain matching too, TODO `structures/earthfill #17`); the terrain-matching `antiquus_crypta` and T&T nilotic village are refused by patcherMod; ocean fortress, ocean ruins and the -1 ruins wait for the look in SQ-EF-05 ([structure_tuning.md](../../structure_tuning.md) 3.28).
 - `avoidCoasts` on in a coastal area also stops land metas whose satellites can't avoid a nearby beach or river
   (at -104 -150, 32 blocks from a gravel beach, three land metas failed with it on; not compared with it off there).
   Accepted 2026-10-29: the switch is ON since 2026-10-30 (toml and CEConfig default). Near coasts and rivers such metas

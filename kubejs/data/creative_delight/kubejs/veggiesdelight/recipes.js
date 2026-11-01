@@ -64,5 +64,11 @@ ServerEvents.recipes(e => {
 		global.CD.food(e).assemble(i.pie_crust, [i.roasted_zucchini, i.roasted_zucchini, i.roasted_zucchini,
 			[i.cooked_mutton, i.cooked_chicken, i.cooked_beef, i.cooked_pork, i.cooked_bacon], { fill: Fluid.of(f.milk, 250) }],
 			i.zucchini_quiche)
+
+		//######################### Sliced sweet potato #########################
+		// A sweet potato cuts into 3 (TODO dishes/ingredients #26; the item: kubejs_startup/veggiesdelight/veggies_items.js),
+		// as a potato into 3 Rustic Delight potato slices (rusticdelight/recipes.js). Slice & Dice's slicer copies the
+		// cutting board recipe.
+		R.fdCutting(i.sweet_potato, i.any_knife, Item.of(i.sliced_sweet_potato, 3), e, 'sliced_sweet_potato')
 	})
 })

@@ -1,0 +1,12 @@
+pace 2
+## CQ-WGLOOK-W2c | desert pyramid under the meteorite, top-down
+> tp @s -5958 130 -1910 0 90
+sleep 15
+shot pyr1_top
+> tp @s -5958 80 -1910 0 90
+sleep 5
+shot pyr1_low
+> tp @s 5802 120 -8182 0 90
+sleep 40
+shot pyr2_top
+look sandstone pyramid footprint visible next to / inside the crater, or not

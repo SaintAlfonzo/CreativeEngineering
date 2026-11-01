@@ -1,0 +1,15 @@
+pace 2
+## CQ-WGLOOK-W2b | far W2 spots, longer render wait
+> tp @s -5958 120 -1880 180 35
+sleep 45
+shot meteor_pyramid
+> tp @s 5802 110 -8150 180 35
+sleep 45
+shot meteor_pyramid2
+> tp @s -4496 115 -1395 180 35
+sleep 45
+shot temple_ruins
+> tp @s -4304 70 3790 180 35
+sleep 45
+shot struck_monument
+look meteorite craters beside / into intact pyramids; temple with ruins; monument with a meteorite

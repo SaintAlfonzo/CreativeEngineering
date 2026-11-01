@@ -120,10 +120,9 @@ ServerEvents.tags('worldgen/structure', function (e) {
 	global.tags.add(e, 'creativeengineering:terrain_adaptation/sunk_start', [
 		'campsite_structures:armorer_campsite', 'campsite_structures:butcher_campsite', 'campsite_structures:cartographer_campsite',
 		'campsite_structures:cleric_campsite', 'campsite_structures:farmer_campsite', 'campsite_structures:fisher_campsite',
-		// Philip's crypt entrance (start height -5, rigid start piece; 2026-10-30, TODO structures/earthfill #3): the
-		// ground around it levels at the entrance roof instead of a 5-deep pit. Its terrain-matching sibling
-		// antiquus_crypta and T&T's nilotic village are refused by patcherMod (terrain-matching start pool).
-		'philipsruins:ancient_crypt',
+		// Not here: Philip's ancient_crypt and antiquus_crypta, T&T's nilotic village. Their start element is terrain
+		// matching (patcherMod refuses them), so they keep their own placement (owner call 2026-11-01, TODO
+		// structures/earthfill #17).
 		// the carp pond (batch 4): a 4-layer dirt bowl under its grass rim, start height -4
 		'farmers_structures:aquacultures_carp',
 	])

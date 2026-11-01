@@ -167,6 +167,7 @@ global.food = {}
 	f.veggie_slice_cooked_potato                   = i.baked_potato_slices;
 	f.veggie_slice_potato                          = i.potato_slices;
 	f.veggie_slice_sea_pickle                      = i.sea_pickle_slices;
+	f.veggie_slice_sweet_potato                    = i.sliced_sweet_potato;
 	f.veggie_slice_zucchini                        = i.zucchini_slice;
 	f.veggie_sweet_potato                          = i.sweet_potato;
 	f.veggie_tomato                                = i.farmersdelight_tomato;

@@ -30,7 +30,7 @@
 //                   burgerAssemble / skewerAssemble / sandwichAssemble (pattern, keys, food, steps, base): shaped by hand
 //                   (`_manual_only`) plus one assembly on base (bread, stick, bread unless given)
 //                   assemble (base, steps, food, loops): the sequenced assembly alone. A step is an ingredient
-//                   (deploy), { fill: Fluid.of(...) } (spout) or { press: true } (press)
+//                   or an array of choices (deploy), { fill: Fluid.of(...) } (spout) or { press: true } (press)
 //   golden          goldenGild (food, golden, gold)   food in a ring of 8 gold; heated mixer + 6; Arc Furnace + 5
 //                   goldenEnchant (golden, enchanted) assembly: gold block, 250 mB liquid XP, press, 4 loops
 //   oven parts      F.slot(id, count), F.ware.sheet / pie / cake / muffin, F.SWEET for one-off oven recipes
@@ -185,6 +185,8 @@ global.CD.food = function (e) {
 			var key = incKey(output)
 			var inc = R.incomplete(key)
 			var seq = steps.map(s => {
+				// An array step is a choice of items (deploy). Test it first: arrays have Array.prototype.fill
+				if (Array.isArray(s)) return e.recipes.create.deploying(inc, [inc, Ingredient.of(s)])
 				if (s && s.press) return e.recipes.create.pressing(inc, inc)
 				if (s && s.fill) return e.recipes.create.filling(inc, [inc, s.fill])
 				return e.recipes.create.deploying(inc, [inc, Ingredient.of(s)])

@@ -399,3 +399,12 @@ Delight `tentacle_on_a_stick`), `glow_ink_pasta` (Farmer's Delight `squid_ink_pa
 `largecontent/mod-additions #7`: gains an investigation of the soup cup. Finding so far: the cups come from the
   data file `miners_delight/cup_conversion/default_conversions.json` (bowl -> cup pairs), not from recipes, which is why JEI
   shows none.
+
+## 11. Before and after comparison graphic (2026-11-01)
+
+Owner asked for a picture of what the 1.1.2 to 1.4.5 swap changes. Made from the displaced 1.1.2 jar and the donor jar:
+13 textures redrawn (cave carrot stages, gossypium, wild cave carrots, sticky basket, baked cave carrot, tentacles, baked
+tentacles, stuffed squid bowl, weird caviar), 62 textures new, none removed (the hot cocoa cup has no texture in either
+folder). Magenta cells are masks and overlays that are not standalone art. Generated into the session scratchpad
+(`mj/miners_before_after.png`, script `mj/make.py`), deliberately not in the repo: the art is all rights reserved.
+Haste: one Creative Engineering effect shared by all sources (`potions/effects #17`, D7 overlap with Rustic's haste).

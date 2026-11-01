@@ -1,0 +1,8 @@
+pace 1
+## SQ-WCT-05c | diamond can recipe by output; supreme pizza id
+> zq makes hearthandharvest:diamond_watering_can
+> zq rdetail diamond_watering_can
+> zq recipes supreme
+> zq recipes scarlet_pierogi
+> zq tagsof hearthandharvest:raspberry
+look smithing base golden can + diamond

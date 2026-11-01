@@ -24,7 +24,7 @@ What the pack has today (all verified against jars or the repo on 2026-10-21 unl
 
 | Row | Status | Size |
 |---|---|---|
-| `potions/enchanting #1` Enchanted books out of villager trades | Planned | small: ~6 lines in `trades.js`, plus a decision on already-spawned librarians |
+| `potions/enchanting #1` Enchanted books out of villager trades | Planned | small: ~6 lines in `trades.js` plus the LC cashier (see Now), plus a decision on already-spawned librarians |
 | `potions/enchanting #3` Enchanting overhaul | Planned | medium: one patcherMod mixin + CEConfig section, Easy Magic config, tooltips, a dump command |
 | `potions/enchanting #4` Enchanting power item audit | Planned | medium: a power table (patcherMod mixin + CEConfig list), one tag fix, two Supplementaries config values |
 | `potions/enchanting #2` XP tomes | Planned | medium-large: recipe, stack size, tooltip, config, fluid capability, book-pile power |
@@ -76,6 +76,17 @@ printing (the Printer copies a book for liquid XP, recipe in [xp.js:19-20](../..
   them; the removal covers both).
 - Enchanted tools / armour (`EnchantedItemForEmeralds`: armorer, weaponsmith, toolsmith, fletcher) are not books
   and are out of this row's scope (see Decisions).
+
+### Update 2026-11-01 (`loot/tables #10`)
+- The NEA hole is closed at the source, independently of this row: patcherMod's three NEA mixins now also override
+  `isTradeable` (SRG `m_6594_`) to false, so DVT librarians and Lightman's Currency cashiers skip them. Built, not
+  installed. This row (all books out of trades) is still Planned; nothing in `trades.js` was changed.
+- Not in this brief before: **Lightman's Currency cashiers** sell random books too (`lightmanscurrency:enchanted_book_for_coins`
+  at levels 1 to 4, from `config/trades/lightmanscurrency/custom_cashier_trades.json`; it picks from enchantments whose
+  `isTradeable()` is true, javap). Step 1 below does not reach it: when building this row, also delete those four
+  entries (and back the file up in `configs_edited/root_config/trades/lightmanscurrency/`).
+- Other book trades the row should decide on: LC banker Money Mending (levels 4, 5), Domestication Innovation animal
+  tamer pet books (level 5), Quark tome exchange.
 
 ### Build
 1. In [trades.js](../../kubejs/server_scripts/economy/trades.js), inside `MoreJSEvents.villagerTrades` (line 12), add

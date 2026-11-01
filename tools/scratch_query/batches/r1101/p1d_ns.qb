@@ -1,0 +1,12 @@
+pace 1
+## SQ-NS-01d | nightstand items survive the restart and drop on break
+> pbot spawn qa 0 -60 0
+> data get block 40 -60 10
+> data get block 42 -60 10
+count minecraft:sugar >= 2
+> kill @e[type=item]
+> setblock 40 -60 10 minecraft:air destroy
+sleep 2
+> execute positioned 40 -60 10 as @e[type=item,distance=..3] run data get entity @s Item.id
+count "minecraft:sugar" >= 1
+> kill @e[type=item]

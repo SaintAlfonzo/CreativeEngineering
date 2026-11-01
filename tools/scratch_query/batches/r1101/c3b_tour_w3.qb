@@ -1,0 +1,30 @@
+pace 3
+## CQ-WGLOOK-W3b | terrain and sky village looks (spectator)
+> gamemode spectator
+sleep 2
+shot mode
+> tp @s 2016 135 -1486 180 35
+sleep 35
+shot pond_common
+> tp @s 2076 135 -1486 180 35
+sleep 35
+shot pond_carp
+> tp @s 2560 210 -3182 180 35
+sleep 35
+shot spire
+> tp @s 2016 135 -1366 180 35
+sleep 35
+shot ruins3
+> tp @s 2016 135 -1246 180 35
+sleep 35
+shot large_ruins
+> tp @s -1568 240 738 180 35
+sleep 35
+shot skyvillage1
+> tp @s 2768 240 2722 180 35
+sleep 35
+shot skyvillage2
+> tp @s 64 80 18 180 35
+sleep 35
+shot geodes
+look as CQ-WGLOOK-W3

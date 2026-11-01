@@ -1,0 +1,42 @@
+# Run r1101 client worldgen tour in QA_W3 (copy of r11w3a): terrain batch 4 placements and sky villages.
+pace 2
+## CQ-WGLOOK-W3 | terrain and sky village looks
+sleep 100
+> gamemode spectator
+> time set noon
+> weather clear
+> gamerule doDaylightCycle false
+> tp @s 2016 125 -1496 180 35
+sleep 35
+shot pond_common
+> tp @s 2076 125 -1496 180 35
+sleep 35
+shot pond_carp
+> tp @s 2560 200 -3192 180 35
+sleep 35
+shot spire
+> tp @s 2680 200 -3192 180 35
+sleep 35
+shot spire2
+> tp @s 2016 125 -1376 180 35
+sleep 35
+shot ruins3
+> tp @s 2096 125 -1376 180 35
+sleep 35
+shot ruins3b
+> tp @s 2016 125 -1256 180 35
+sleep 35
+shot large_ruins
+> tp @s -1568 230 728 180 35
+sleep 35
+shot skyvillage1
+> tp @s 2768 230 2712 180 35
+sleep 35
+shot skyvillage2
+> tp @s -2496 230 2792 180 35
+sleep 35
+shot skyvillage3
+> tp @s 64 70 8 180 35
+sleep 35
+shot geodes
+look ponds and fisherman house flush with the slope (no pad, no notch); spire with no square notch; ruins without grass slab pads; sky villages with addon houses; geodes covered by the floor block

@@ -16,13 +16,13 @@
 		#Range: 0 ~ 20
 		dragon_armor_protection_helmet = 7
 		#Range: 0 ~ 20
-		dragon_armor_protection_chest = 10
+		dragon_armor_protection_chest = 12
 		#Range: 0 ~ 20
-		dragon_armor_protection_leggings = 9
+		dragon_armor_protection_leggings = 10
 		#Range: 0 ~ 20
 		dragon_armor_protection_boots = 7
 		#Range: 0.0 ~ 10.0
-		dragon_armor_toughness = 5.0
+		dragon_armor_toughness = 4.5
 		#Range: 0.0 ~ 5.0
 		dragon_armor_knockback_resistance = 3
 		#Range: 1 ~ 50

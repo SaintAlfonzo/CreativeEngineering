@@ -336,9 +336,16 @@ global.NCH = {
     }
   },
 
+  // v unless it is null or undefined, else d. Use this, never 'v ?? <number>': this Rhino build (1902.2.3-284,
+  // interpreter) returns 0 for 'nullish ?? <numeric literal>' (undefined ?? 250 -> 0; a variable or string on the
+  // right works). createBottle's 'opts.mb ?? 250' wrote 0 mB, an empty fluid (TODO food/drinks #12).
+  _or(v, d) {
+    return v != null ? v : d
+  },
+
   // Resolves any accepted fluid-like shape (string, Fluid.of() stack, {fluid}/{tag} object) to {id, amount}
 	_resolveFluidAmount(v, defaultAmount) {
-		var amt = defaultAmount != null ? defaultAmount : 1000 // not '??': this Rhino build turns undefined ?? x into 0
+		var amt = global.NCH._or(defaultAmount, 1000)
 
 		if (typeof v === 'string') return { id: v, amount: amt }
 		if (v == null) return { id: undefined, amount: amt }
@@ -955,7 +962,7 @@ global.NCH = {
 	smelting(output, input, e, idOverride, xp, cookingtime, conditions) {
 		if (!e) throw new Error('smelting called without event object!')
 		xp = xp ?? 0
-		cookingtime = cookingtime ?? 200
+		cookingtime = global.NCH._or(cookingtime, 200)
 		var idSuffix = idOverride ?? global.NCH.toId(output, input, "smelting")
 		var ctx = 'smelting ' + idSuffix
 
@@ -978,7 +985,7 @@ global.NCH = {
 	blasting(output, input, e, idOverride, xp, cookingtime, conditions) {
 		if (!e) throw new Error('blasting called without event object!')
 		xp = xp ?? 0
-		cookingtime = cookingtime ?? 100
+		cookingtime = global.NCH._or(cookingtime, 100)
 		var idSuffix = idOverride ?? global.NCH.toId(output, input, "blasting")
 		var ctx = 'blasting ' + idSuffix
 
@@ -1001,7 +1008,7 @@ global.NCH = {
 	campfireCooking(output, input, e, idOverride, exp, time) {
 		if (!e) throw new Error('campfireCooking called without event object!')
 		exp = exp ?? 0
-		time = time ?? 600
+		time = global.NCH._or(time, 600)
 		var idSuffix = idOverride ?? global.NCH.toId(output, input, "campfirecooking")
 		var ctx = 'campfireCooking ' + idSuffix
 
@@ -1016,7 +1023,7 @@ global.NCH = {
 	smoking(output, input, e, idOverride, xp, cookingtime) {
 		if (!e) throw new Error('smoking called without event object!')
 		xp = xp ?? 0
-		cookingtime = cookingtime ?? 100
+		cookingtime = global.NCH._or(cookingtime, 100)
 		var idSuffix = idOverride ?? global.NCH.toId(output, input, "smoking")
 		var ctx = 'smoking ' + idSuffix
 
@@ -1067,13 +1074,13 @@ global.NCH = {
 			arrowhead: toIngredient(arrowhead),
 			shaft: toIngredient(shaft),
 			fin: toIngredient(fin),
-			result: { item: result.item ?? result, count: result.count ?? 1 }
+			result: { item: result.item ?? result, count: global.NCH._or(result.count, 1) }
 		}).id(`${global.NCH.ns()}:fletching/${idSuffix}`)
 	},
 
   	fdCooking(input, output, e, idOverride, exp, time, container) {
 		exp = exp ?? 0
-		time = time ?? 200
+		time = global.NCH._or(time, 200)
 		if (!e) throw new Error('fdCooking called without event object!')
 
 		var idSuffix = idOverride ?? global.NCH.toId(output, input, "fdcooking")
@@ -1128,8 +1135,8 @@ global.NCH = {
 			ingredients: inputs.map((v, n) => global.NCH._itemJson(v, { countMode: 'none', context: ctx + ' input[' + n + ']' })),
 			result: global.NCH._itemJson(output, { allowTag: false, context: ctx + ' result' }),
 			container: global.NCH._itemJson(opts.container ?? global.item.glass_bottle, { allowTag: false, countMode: 'none', context: ctx + ' container' }),
-			experience: opts.exp ?? 0.35,
-			cookingtime: opts.time ?? 200
+			experience: global.NCH._or(opts.exp, 0.35),
+			cookingtime: global.NCH._or(opts.time, 200)
 		}).id(`${global.NCH.ns()}:farmersrespitebrewing/${idSuffix}`)
 	},
 
@@ -1176,7 +1183,7 @@ global.NCH = {
 				global.NCH._itemJson(v, { countMode: 'flat', context: ctx + ' input[' + idx + ']' })),
 			result: global.NCH._itemJson(output, { allowTag: false, context: ctx + ' result' }),
 			experience: opts.exp ?? 0,
-			cookingtime: opts.time ?? 200
+			cookingtime: global.NCH._or(opts.time, 200)
 		}
 		if (opts.tool) json.tool = global.NCH._itemJson(opts.tool, { countMode: 'none', context: ctx + ' tool' })
 		if (opts.container)
@@ -1234,7 +1241,7 @@ global.NCH = {
 			ingredients: slots,
 			// the jar reads output NBT (a string), e.g. Berserker's Brew's potion effects
 			output: global.NCH._nbtItemJson(output, { allowTag: false, role: 'result', context: ctx + ' result' }),
-			processingTime: opts.time ?? 2400
+			processingTime: global.NCH._or(opts.time, 2400)
 		}
 		if (opts.secondary)
 			json.secondaryOutput = global.NCH._nbtItemJson(opts.secondary, { allowTag: false, role: 'result', context: ctx + ' secondary' })
@@ -1517,13 +1524,16 @@ global.NCH = {
 		], [key], e, key + '_sequenced_assembly', 1)
 	},
 
-	felsicAssembly(out, base, key, e, potion, mb, loops, hammerBlows) {
+	// mb: the last fill (potion); reachMb: the first fill (Long Reach), mb when not given. CEConfig
+	// CRAFTING.FELSIC_<PIECE> potionMb / reachPotionMb (gear_tuning.md F2).
+	felsicAssembly(out, base, key, e, potion, mb, loops, hammerBlows, reachMb) {
 		if (!e) throw new Error('felsicAssembly called without event object!')
 		var inc = global.NCH.incomplete(key)
+		var firstMb = global.NCH._or(reachMb, mb)
 		global.NCH.createSequencedAssembly(Item.of(out, 1), base, [
-			e.recipes.create.filling(inc, [inc, Fluid.of(global.fluid.create_potion, mb, '{Bottle:"REGULAR",Potion:"creativeengineering:long_reach"}')]),
+			e.recipes.create.filling(inc, [inc, Fluid.of(global.fluid.create_potion, firstMb, '{Bottle:"REGULAR",Potion:"creativeengineering:long_reach"}')]),
 			e.recipes.create.deploying(inc, [inc, global.item.ingot_felsic]),
-			e.custom({ type: 'vintageimprovements:hammering', hammerBlows: hammerBlows ?? 3, ingredients: [{ item: inc }], results: [{ item: inc }] }),
+			e.custom({ type: 'vintageimprovements:hammering', hammerBlows: global.NCH._or(hammerBlows, 3), ingredients: [{ item: inc }], results: [{ item: inc }] }),
 			e.recipes.create.filling(inc, [inc, Fluid.of(global.fluid.create_potion, mb, '{Bottle:"REGULAR",Potion:"' + potion + '"}')])
 		], [key], e, key + '_sequenced_assembly', loops)
 	},
@@ -1885,7 +1895,7 @@ global.NCH = {
 		opts = opts || {}
 		var idSuffix = idOverride ?? global.NCH.toId(drink, fluid, 'createbottle')
 		var container = opts.container ?? global.item.glass_bottle
-		var mb = opts.mb ?? 250
+		var mb = global.NCH._or(opts.mb, 250)
 		global.NCH._checkFluid(fluid, 'createBottle ' + idSuffix + ' fluid')
 		global.NCH.createFilling(drink, [container, Fluid.of(fluid, mb)], e, idSuffix)
 		global.NCH.createEmptying([container, Fluid.of(fluid, mb)], drink, e, idSuffix)
@@ -1913,8 +1923,8 @@ global.NCH = {
 			type: 'createaddition:charging',
 			input: global.NCH._itemJson(input, { countMode: 'flat', context: ctx + ' input' }),
 			result: global.NCH._itemJson(output, { countMode: 'flat', allowTag: false, context: ctx + ' output' }),
-			energy: energy ?? 4000,
-			maxChargeRate: maxChargeRate ?? 200
+			energy: global.NCH._or(energy, 4000),
+			maxChargeRate: global.NCH._or(maxChargeRate, 200)
 		}
 
 		e.custom(json).id(`${global.NCH.ns()}:createcharging/${idSuffix}`)
@@ -1941,7 +1951,7 @@ global.NCH = {
 					: global.NCH._itemJson(i, { countMode: 'flat', context: ctx + ' ingredient[' + idx + ']' })
 			}),
 			result: global.NCH._itemJson(output, { countMode: 'flat', allowTag: false, context: ctx + ' output' }),
-			requiredBonks: bonks ?? 1
+			requiredBonks: global.NCH._or(bonks, 1)
 		}
 
 		if (catalyst) json.catalyst = global.NCH._itemJson(catalyst, { countMode: 'flat', context: ctx + ' catalyst' })
@@ -1964,7 +1974,7 @@ global.NCH = {
 		  results: (Array.isArray(outputs) ? outputs : [outputs]).map((o, idx) => {
 		      return global.NCH._itemJson(o, { countMode: 'flat', allowTag: false, includeChance: true, context: ctx + ' result[' + idx + ']' })
 		  }),
-		  processingTime: processingTime ?? 300
+		  processingTime: global.NCH._or(processingTime, 300)
 		}
 
 		e.custom(json).id(`${global.NCH.ns()}:vivibrating/${idSuffix}`)
@@ -1993,7 +2003,7 @@ global.NCH = {
 		  results: (Array.isArray(outputs) ? outputs : [outputs]).map((o, idx) => {
 		      return global.NCH._itemJson(o, { countMode: 'flat', allowTag: false, includeChance: true, context: ctx + ' result[' + idx + ']' })
 		  }),
-		  processingTime: processingTime ?? 600
+		  processingTime: global.NCH._or(processingTime, 600)
 		}
 
 		e.custom(json).id(`${global.NCH.ns()}:vivacuumizing/${idSuffix}`)
@@ -2014,8 +2024,8 @@ global.NCH = {
 			results: (Array.isArray(outputs) ? outputs : [outputs]).map((o, idx) => {
 				return global.NCH._itemJson(o, { countMode: 'flat', allowTag: false, includeChance: true, context: ctx + ' result[' + idx + ']' })
 			}),
-			energy: energy ?? 2000,
-			maxChargeRate: maxChargeRate ?? 50
+			energy: global.NCH._or(energy, 2000),
+			maxChargeRate: global.NCH._or(maxChargeRate, 50)
 		}
 
 		e.custom(json).id(`${global.NCH.ns()}:lasercutting/${idSuffix}`)
@@ -2045,7 +2055,7 @@ global.NCH = {
 			results: (Array.isArray(output) ? output : [output]).map((o, idx) => {
 				return global.NCH._itemJson(o, { countMode: 'flat', allowTag: false, includeChance: true, context: ctx + ' result[' + idx + ']' })
 			}),
-			speed_limits: speedLimits ?? 1
+			speed_limits: global.NCH._or(speedLimits, 1)
 		}
 
 		if (processingTime) json.processingTime = processingTime
@@ -2139,7 +2149,7 @@ global.NCH = {
 	ieCrushing(output, input, e, idOverride, secondaries, energy) {
 		if (!e) throw new Error('ieCrushing called without event object!')
 		secondaries = secondaries ?? []
-		energy = energy ?? 6000
+		energy = global.NCH._or(energy, 6000)
 		var idSuffix = idOverride ?? global.NCH.toId(output, input, "iecrushing")
 		var ctx = 'ieCrushing ' + idSuffix
 
@@ -2170,7 +2180,7 @@ global.NCH = {
 			input0: global.NCH._itemJson(input0, { countMode: 'base_ingredient', context: ctx + ' input0' }),
 			input1: global.NCH._itemJson(input1, { countMode: 'base_ingredient', context: ctx + ' input1' }),
 			result: global.NCH._itemJson(output, { countMode: 'base_ingredient', context: ctx + ' output' }),
-			time: time ?? 200
+			time: global.NCH._or(time, 200)
 		}
 
 		e.custom(json).id(`${global.NCH.ns()}:iealloy/${idSuffix}`)
@@ -2201,8 +2211,8 @@ global.NCH = {
 		    global.NCH._validateAny(s.output, ctx + ' secondary[' + idx + ']')
 		    return { chance: s.chance, output: Item.of(s.output) }
 		  }),
-		  time: time ?? 100,
-		  energy: energy ?? 25600
+		  time: global.NCH._or(time, 100),
+		  energy: global.NCH._or(energy, 25600)
 		}).id(`${global.NCH.ns()}:iearcfurnace/${idSuffix}`)
 	},
 
@@ -2215,7 +2225,7 @@ global.NCH = {
 		  type: 'immersiveengineering:squeezer',
 		  input: global.NCH._itemJson(input, { countMode: 'none', context: ctx + ' input' }),
 		  fluid: global.NCH._fluidJson(fluidOutput, { defaultAmount: 1000, context: ctx + ' fluid output' }),
-		  energy: energy ?? 6000
+		  energy: global.NCH._or(energy, 6000)
 		}
 
 		if (itemOutput) {
@@ -2244,7 +2254,7 @@ global.NCH = {
 		      return global.NCH._itemJson(i, { countMode: 'base_ingredient', context: ctx + ' input[' + idx + ']' })
 		  }),
 		  result: result,
-		  energy: energy ?? 3200
+		  energy: global.NCH._or(energy, 3200)
 		}
 
 		e.custom(json).id(`${global.NCH.ns()}:iemixer/${idSuffix}`)
@@ -2327,7 +2337,7 @@ global.NCH = {
 
 		e.custom({
 			type: 'immersiveengineering:sawmill',
-			energy: opts.energy ?? 800,
+			energy: global.NCH._or(opts.energy, 800),
 			input: global.NCH._itemJson(input, { countMode: 'none', context: ctx + ' input' }),
 			result: global.NCH._itemJson(output, { countMode: 'flat', context: ctx + ' output' }),
 			secondaries: [] // required by IE's serializer even when empty

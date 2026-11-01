@@ -2,7 +2,7 @@
   "_readme": ["Food type assignments: every food in exactly one type, as item_dict keys (kubejs/startup_scripts/_lib/item_dict.js).", "server_scripts/tags/foodtypetags.js turns each type into #creativeengineering:food_type/<type>; a nested type", "(raw/meat/sliced) is also in its parents (raw/meat, raw, and #creativeengineering:food_type).", "Move an item by moving its key. python3 tools/food_catalog.py adds foods that are in no type yet and checks", "the rest; it never moves an item you placed. Reference: feature_writeup/food.md.", "excluded: edible items that are not food for tuning (never tagged). canned: can -> the foods it is made from", "(those land in #creativeengineering:canned_source)."],
   "types": {
     "raw/veggie": ["bell_pepper_green", "bell_pepper_red", "bell_pepper_yellow", "broccoli", "cactus_flesh", "cauliflower", "cave_carrot", "chorus_fruit_grain", "chorus_succulent", "cleaned_cap", "corn", "corn_seeds", "cucumber", "dandelion_leaf", "farmersdelight_cabbage", "farmersdelight_tomato", "garlic_clove", "ghost_pepper", "gongylidia", "minecraft_beetroot", "minecraft_carrot", "minecraft_potato", "miners_delight_moss", "mint_leaves", "onion_farmersdelight", "raw_oats", "raw_vegetarian_patty", "sea_grape", "sweet_potato", "truffle", "turnip", "zucchini"],
-    "raw/veggie/sliced": ["cabbage_leaf", "cauliflower_floret", "potato_slices", "preparedseapickle", "pumpkin_slice", "sea_pickle_slices", "truffle_slice", "zucchini_slice"],
+    "raw/veggie/sliced": ["cabbage_leaf", "cauliflower_floret", "potato_slices", "preparedseapickle", "pumpkin_slice", "sea_pickle_slices", "sliced_sweet_potato", "truffle_slice", "zucchini_slice"],
     "raw/fruit": ["acorn", "apple", "banana", "bayberry", "blueberry", "cantaloupe_slice", "cherry", "coffee_berries", "cranberry", "durian_flesh", "fig", "glow_berries", "hamimelon_slice", "hawberry", "jungle_grapes_red", "jungle_grapes_white", "kiwi", "lemon", "lemon_slice", "lychee", "mango", "mangosteen", "melon", "mulberry", "neapolitan_banana", "orange", "orange_slice", "peach", "peanut", "pear", "persimmon", "pineapple_slice", "raspberry", "red_grape", "salmonberries", "savanna_grapes_red", "savanna_grapes_white", "strawberries", "sweet_berries", "taiga_grapes_red", "taiga_grapes_white", "white_grape", "white_strawberries"],
     "raw/meat": ["arthropod", "bat_wing", "beef", "chicken", "dragon_leg", "enderman_gristle", "ghasttentacle", "ham", "hoglin_loin", "kangaroo_meat", "mite_crust", "moose_ribs", "mutton", "porkchop", "rabbit", "raw_bison", "raw_bunfungus", "raw_dragon_meat", "raw_duck", "raw_ender_mite_meat", "raw_ender_sausage", "raw_goose", "rawendermite", "shulker_meat", "silverfish_eggs", "spider_leg"],
     "raw/meat/sliced": ["bison_mince", "chicken_cuts", "duck_fillet", "bacon", "ground_strider", "hoglin_ear", "kangaroo_shank", "loose_moose_rib", "minced_beef", "mint_chops", "mutton_chops", "raw_bunfungus_drumstick", "raw_dragon_meat_cuts", "rottenham", "shulker_meat_slice", "strider_slice"],
@@ -322,7 +322,7 @@
     "canned_sweet_berry": ["sweet_berries"],
     "canned_sweet_berry_cookie": ["sweet_berry_cookie"],
     "canned_sweet_berry_pie_filling": ["sweet_berry_cheesecake_slice"],
-    "canned_sweet_potato": ["sweet_potato"],
+    "canned_sweet_potato": ["sweet_potato", "sliced_sweet_potato"],
     "canned_sweet_potato_pie_filling": ["sweet_potato_pie_slice"],
     "canned_sweet_roll": ["sweet_roll"],
     "canned_tomato": ["farmersdelight_tomato"],

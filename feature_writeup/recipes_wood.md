@@ -16,9 +16,10 @@ Sawmill's per-blade recipes (which replace IE's own log and plank sawmill recipe
 | Removed woods: Upgrade Aquatic's river wood merged into oak; its tree is the Mulberry tree (oak trunk, mulberry leaves and vines) | BUILT 2026-10-22 (KubeJS + datapack; patcherMod `MulberrySapling` in the `mods/` jar of 11:06, md5 b5f60533, and the newer `build/libs` one; not in `server_mods/`); shipped in 1.1.01 (2026-10-22); scratch server PASSED 2026-10-22 (SQ-MB-00 to SQ-MB-04, second bulk run); RW-15, RW-16, RW-18 to RW-20 in game |
 
 - **Pending:** smoked wood (RW-23 to RW-26) and bark leather (RW-27), built 2026-10-30. Scratch r1031 (2026-10-31):
-  BROKEN, SQ-RW-23 FAILED: the `#creativeengineering:smokable/*` shape tags include Botania and driftwood
-  (`tags/wood_tags.js` excludes them only from the log and wood tags), so those get smoking recipes; the run also
-  lists crimson and warped, which RW-23 below expects to smoke (owner call); SQ-RW-25,
+  SQ-RW-23 FAILED: the `#creativeengineering:smokable/*` shape tags included Botania, driftwood, crimson and warped.
+  FIXED 2026-11-01 (`engineering/dreams-and-desires #10`, owner call): the 13 tags are now an allow-list of the seven
+  vanilla overworld woods (oak, spruce, birch, jungle, acacia, dark oak, mangrove), no modded or nether wood;
+  SQ-RW-23 to rerun; SQ-RW-25,
   -26, -27 PASSED; SQ-RW-24 (filling fluid amounts) client check pending. D&D woods removed: SQ-RW-28 PASSED. Removed woods (2.6) shipped in 1.1.01; scratch server PASSED 2026-10-22 (SQ-MB, `tools/farm_worldgen_probe.js`); RW-15, RW-16, RW-18 to RW-20 in game. RW-01 to RW-10 have never been run. Findings F1 to F6 (section 4); none needs
   a decision, F1 is a bug.
 - **Files to open:** [bark.js](../kubejs/server_scripts/wood/bark.js), [sawdust.js](../kubejs/server_scripts/wood/sawdust.js),
@@ -227,7 +228,7 @@ None.
   the time Driftwood Bark (no Tree Bark); driftwood (wood) → 75 %; the same on the Create saw. JEI shows no Abnormals
   Delight driftwood cutting recipe.
 - [ ] **RW-22 Quark stairs:** JEI → blossom planks stairs → U: no Quark Engineering sawmill recipe back to planks.
-- [ ] **RW-23 Smoking:** *r1031 FAIL (SQ-RW-23): Botania and driftwood shapes also smoke (crimson, warped: see Pending).* oak, spruce, a Quark wood (azalea) and crimson: log, wood, stripped, planks, stairs, door in a smoker (or Create fan with a Smoking Sail) → the smoked version; all 13 shapes show a recipe in JEI; a smoked log does not smoke into itself, vertical / polished planks are not accepted.
+- [ ] **RW-23 Smoking:** *r1031 FAIL (SQ-RW-23), allow-list fix 2026-11-01, rerun.* oak, spruce and mangrove: log, wood, stripped, planks, stairs, door in a smoker (or Create fan with a Smoking Sail) → the smoked version; all 13 shapes show a recipe in JEI listing only the seven vanilla overworld woods; crimson, warped, a Quark wood (azalea), Botania and driftwood planks are not accepted; a smoked log does not smoke into itself, vertical / polished planks are not accepted.
 - [ ] **RW-24 Create filling:** oak planks + 125 mB creosote under a spout → treated wood; spruce planks the same; smoked planks with 100 mB → treated wood.
 - [ ] **RW-25 IE bottling:** the same three cases in the Bottling Machine; smoked planks with 100 mB works, oak planks with 100 mB does not.
 - [ ] **RW-26 No overlap:** JEI shows smoked planks only in the 100 mB recipes, and the createaddition recipe is gone.
@@ -256,3 +257,7 @@ None.
   `creativeengineering:unsmoked_planks` (125 mB), IE bottling mirror (125 mB), and smoked planks 100 mB in Create and IE.
   Smoked wood had no source before. Tests RW-23 to RW-26. Not run in game.
 - 2026-10-30: `recipes/wood #4` built in `server_scripts/wood/bark.js`: Pickling Jar, 4 `#immersive_weathering:bark` + salt -> leather, 2400 ticks (`leather_from_bark`). RW-27; not run in game.
+- 2026-11-01: `engineering/dreams-and-desires #10`: the 13 `creativeengineering:smokable/<shape>` tags in `wood_tags.js`
+  are built from an allow-list (item_dict keys of oak, spruce, birch, jungle, acacia, dark oak, mangrove) instead of the
+  vanilla / forge wood tags minus exclusions; Botania, driftwood, Quark and every other modded wood and crimson / warped
+  no longer smoke. RW-23 rewritten. `/reload`; not run in game.

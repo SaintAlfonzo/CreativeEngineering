@@ -1,0 +1,8 @@
+pace 2
+## SQ-HR-05c | natural raspberry patches, 256 forest/plains chunks fully loaded
+> forceload add -384 -160 -129 95
+sleep 150
+> zq count -384 40 -160 -129 200 95 hearthandharvest:raspberry_bush
+> zq count -384 40 -160 -129 200 95 minecraft:sweet_berry_bush
+> forceload remove all
+look raspberry count > 0 outside the placed one at about -272 -46 (columns skipped should be 0)

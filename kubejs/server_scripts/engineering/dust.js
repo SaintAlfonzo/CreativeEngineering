@@ -6,7 +6,9 @@ ServerEvents.recipes(e => {
     var R = global.NCH
 
     // ############################## Amethyst ##############################
+    // One shard recipe per machine: millstone and crushing wheels 0.75 dust, IE crusher 1 + 25 % (1.25).
 
+    R.createMilling(Item.of(i.amethyst_dust, 1).withChance(0.75), i.amethyst_shard, e)
     R.createCrushing(Item.of(i.amethyst_dust, 1).withChance(0.75), i.amethyst_shard, e)
     R.ieCrushing(Item.of(i.amethyst_dust, 1), i.amethyst_shard, e, undefined, [{ chance: 0.25, output: Item.of(i.amethyst_dust, 1) }])
 
@@ -96,11 +98,7 @@ ServerEvents.recipes(e => {
     R.remove({id: 'minecraft:tnt'}, e)
     R.shaped(Item.of(i.tnt, 4), ['ABA','BAB', 'ABA'], {A: i.gunpowder, B: i.dust_sulfur}, e)
 
-    // ############################## Glowstone ##############################
-
-    R.createMilling(Item.of(i.glowstone, 1).withChance(0.75), i.amethyst_shard, e)
-    R.createCrushing(Item.of(i.glowstone, 1).withChance(0.75), i.amethyst_shard, e)
-    R.ieCrushing(Item.of(i.glowstone, 1), i.amethyst_shard, e, undefined, [{ chance: 0.25, output: Item.of(i.amethyst_dust, 1) }])
+    // Glowstone from amethyst shards was removed (recipes/engineering #2); glowstone comes from cinder flour above.
 
     // ############################## Obsidian ##############################
 

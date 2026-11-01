@@ -122,9 +122,12 @@
 	[crafting.felsic_sword]
 		#Potion effect id filled in during assembly.
 		potion = "creativeengineering:magic_resistance"
-		#mB of potion fluid used in the final filling step.
+		#mB of potion fluid (the potion above) used in the last filling step.
 		#Range: 1 ~ 10000
 		potionMb = 250
+		#mB of Long Reach potion fluid used in the first filling step.
+		#Range: 1 ~ 10000
+		reachPotionMb = 250
 		#Number of times the sequenced assembly repeats.
 		#Range: 1 ~ 64
 		loops = 1
@@ -135,9 +138,12 @@
 	[crafting.felsic_helmet]
 		#Potion effect id filled in during assembly.
 		potion = "creativeengineering:magic_resistance"
-		#mB of potion fluid used in the final filling step.
+		#mB of potion fluid (the potion above) used in the last filling step.
 		#Range: 1 ~ 10000
 		potionMb = 500
+		#mB of Long Reach potion fluid used in the first filling step.
+		#Range: 1 ~ 10000
+		reachPotionMb = 500
 		#Number of times the sequenced assembly repeats.
 		#Range: 1 ~ 64
 		loops = 1
@@ -148,9 +154,12 @@
 	[crafting.felsic_chestplate]
 		#Potion effect id filled in during assembly.
 		potion = "creativeengineering:magic_resistance"
-		#mB of potion fluid used in the final filling step.
+		#mB of potion fluid (the potion above) used in the last filling step.
 		#Range: 1 ~ 10000
 		potionMb = 500
+		#mB of Long Reach potion fluid used in the first filling step.
+		#Range: 1 ~ 10000
+		reachPotionMb = 500
 		#Number of times the sequenced assembly repeats.
 		#Range: 1 ~ 64
 		loops = 1
@@ -161,9 +170,12 @@
 	[crafting.felsic_leggings]
 		#Potion effect id filled in during assembly.
 		potion = "creativeengineering:magic_resistance"
-		#mB of potion fluid used in the final filling step.
+		#mB of potion fluid (the potion above) used in the last filling step.
 		#Range: 1 ~ 10000
 		potionMb = 500
+		#mB of Long Reach potion fluid used in the first filling step.
+		#Range: 1 ~ 10000
+		reachPotionMb = 500
 		#Number of times the sequenced assembly repeats.
 		#Range: 1 ~ 64
 		loops = 1
@@ -174,9 +186,12 @@
 	[crafting.felsic_boots]
 		#Potion effect id filled in during assembly.
 		potion = "creativeengineering:magic_resistance"
-		#mB of potion fluid used in the final filling step.
+		#mB of potion fluid (the potion above) used in the last filling step.
 		#Range: 1 ~ 10000
 		potionMb = 500
+		#mB of Long Reach potion fluid used in the first filling step.
+		#Range: 1 ~ 10000
+		reachPotionMb = 500
 		#Number of times the sequenced assembly repeats.
 		#Range: 1 ~ 64
 		loops = 1
@@ -187,9 +202,12 @@
 	[crafting.felsic_pickaxe]
 		#Potion effect id filled in during assembly.
 		potion = "creativeengineering:magic_resistance"
-		#mB of potion fluid used in the final filling step.
+		#mB of potion fluid (the potion above) used in the last filling step.
 		#Range: 1 ~ 10000
 		potionMb = 250
+		#mB of Long Reach potion fluid used in the first filling step.
+		#Range: 1 ~ 10000
+		reachPotionMb = 250
 		#Number of times the sequenced assembly repeats.
 		#Range: 1 ~ 64
 		loops = 1
@@ -200,9 +218,12 @@
 	[crafting.felsic_axe]
 		#Potion effect id filled in during assembly.
 		potion = "creativeengineering:magic_resistance"
-		#mB of potion fluid used in the final filling step.
+		#mB of potion fluid (the potion above) used in the last filling step.
 		#Range: 1 ~ 10000
 		potionMb = 250
+		#mB of Long Reach potion fluid used in the first filling step.
+		#Range: 1 ~ 10000
+		reachPotionMb = 250
 		#Number of times the sequenced assembly repeats.
 		#Range: 1 ~ 64
 		loops = 1
@@ -213,9 +234,12 @@
 	[crafting.felsic_shovel]
 		#Potion effect id filled in during assembly.
 		potion = "creativeengineering:magic_resistance"
-		#mB of potion fluid used in the final filling step.
+		#mB of potion fluid (the potion above) used in the last filling step.
 		#Range: 1 ~ 10000
 		potionMb = 250
+		#mB of Long Reach potion fluid used in the first filling step.
+		#Range: 1 ~ 10000
+		reachPotionMb = 250
 		#Number of times the sequenced assembly repeats.
 		#Range: 1 ~ 64
 		loops = 1
@@ -226,9 +250,12 @@
 	[crafting.felsic_hoe]
 		#Potion effect id filled in during assembly.
 		potion = "creativeengineering:magic_resistance"
-		#mB of potion fluid used in the final filling step.
+		#mB of potion fluid (the potion above) used in the last filling step.
 		#Range: 1 ~ 10000
 		potionMb = 250
+		#mB of Long Reach potion fluid used in the first filling step.
+		#Range: 1 ~ 10000
+		reachPotionMb = 250
 		#Number of times the sequenced assembly repeats.
 		#Range: 1 ~ 64
 		loops = 1
@@ -239,9 +266,12 @@
 	[crafting.felsic_shield]
 		#Potion effect id filled in during assembly.
 		potion = "creativeengineering:magic_resistance"
-		#mB of potion fluid used in the final filling step.
+		#mB of potion fluid (the potion above) used in the last filling step.
 		#Range: 1 ~ 10000
 		potionMb = 250
+		#mB of Long Reach potion fluid used in the first filling step.
+		#Range: 1 ~ 10000
+		reachPotionMb = 250
 		#Number of times the sequenced assembly repeats.
 		#Range: 1 ~ 64
 		loops = 1

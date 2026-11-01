@@ -1,0 +1,16 @@
+# Run 2026-11-01, priority boot 2: Flower Test world (level-type creativeengineering:flower_test), SQ-POT-07.
+pace 1
+
+## SQ-POT-07 | Flower Test world builds its table
+bootexpect \[flowerworld\] Flower Test world without a table: building
+bootexpect \[flowerworld\].*DONE
+bootreject Error occurred while handling event.*flower_world
+bootreject fill click did not take
+sleep 5
+> data get block 2 -60 -2
+> execute if block 6 -59 0 supplementaries:hanging_flower_pot
+> execute if block 6 -60 0 minecraft:air
+> execute if block 20 -60 0 twigs:silt_pot[filled=true]
+count Test passed >= 3
+> zq count 27 -64 -40 200 -40 60 handcrafted:oak_nightstand
+look holder lines (12 holders), rows line; a sign at 2 -60 -2; nothing at x > 26 in the table (grep the holder lines: last holder x = 24); no handcrafted / floralench / melon / pumpkin / moss block in the table

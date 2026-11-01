@@ -44,7 +44,7 @@ Contact sheets (regenerable): unzip the jar's `assets/rusticdelight/textures` an
 | `potato_salad` | `moredelight:potato_salad` | Both a bowl of potato salad; More Delight's is yellower with green flecks. Merge candidate (item_merges) |
 | `chocolate_pancakes`, `honey_pancakes`, `vegetable_pancakes` | `supplementaries:pancake` | Supplementaries' is a plain pancake disc item; Rustic's are placeable stacks. Not a straight merge |
 | `coffee_beans`, coffee plant, `wild_coffee` | Farmer's Respite coffee | Already tracked: drinks #3, wild-crops #4 |
-| `potato_slices` | `moredelight:diced_potatoes` | Done: item_merges 2.4 |
+| `potato_slices` | `moredelight:diced_potatoes` | Done: item_merges 2.4. Also the Sliced Sweet Potato's sprite (2026-11-01, `.texture()` in place, veggies_delight.md 5.6): the two look the same |
 
 ### 2.3 Templates for new items
 

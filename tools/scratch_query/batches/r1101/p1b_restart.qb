@@ -1,0 +1,33 @@
+# Run 2026-11-01, priority boot 1b: same world as p1_server.qb after a restart (bot qa respawned).
+# NS-01 restart half, KT-24 drop half with data merge (vanilla /item replace refuses a non-Container BE), GT-31 on boot.
+pace 1
+
+## SQ-R11B-BOOT | restart clean, bot joins
+bootexpect Done \(
+> pbot spawn qa 0 -60 0
+expect ceperfbot|spawned|qa
+
+## SQ-NS-01b | nightstand items survive the restart and drop on break
+> data get block 40 -60 10
+> data get block 42 -60 10
+count CENightstandItems >= 2
+count minecraft:sugar >= 2
+> kill @e[type=item]
+> setblock 40 -60 10 minecraft:air destroy
+sleep 2
+> execute positioned 40 -60 10 as @e[type=item,distance=..3] run data get entity @s Item.id
+expect "minecraft:sugar"
+> kill @e[type=item]
+
+## SQ-KT-24b | spice rack: items kept in the BE and dropped on break
+> setblock 40 -60 1 minecraft:oak_planks
+> setblock 40 -60 0 cookingforblockheads:oak_spice_rack[facing=north]
+> data merge block 40 -60 0 {ItemHandler:{Size:9,Items:[{Slot:0,id:"minecraft:sugar",Count:1b}]}}
+> data get block 40 -60 0
+expect minecraft:sugar
+> kill @e[type=item]
+> setblock 40 -60 0 minecraft:air destroy
+sleep 2
+> execute positioned 40 -60 0 as @e[type=item,distance=..3] run data get entity @s Item.id
+expect "minecraft:sugar"
+> kill @e[type=item]

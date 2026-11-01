@@ -1,0 +1,17 @@
+# Run 2026-11-01: nightstand storage via data merge (vanilla /item replace refuses the Handcrafted BE). Part 1 = before a
+# restart, part 2 (SQ-NS-01d) after it.
+pace 1
+
+## SQ-NS-01c | nightstand items set by NBT, hopper pulls one
+> data merge block 40 -60 10 {CENightstandItems:[{Slot:0b,id:"minecraft:sugar",Count:1b}]}
+> data merge block 42 -60 10 {CENightstandItems:[{Slot:0b,id:"minecraft:sugar",Count:1b}]}
+> data get block 40 -60 10
+> data get block 42 -60 10
+count minecraft:sugar >= 2
+> setblock 44 -60 10 handcrafted:oak_nightstand
+> setblock 44 -61 10 minecraft:hopper
+> data merge block 44 -60 10 {CENightstandItems:[{Slot:0b,id:"minecraft:sugar",Count:1b}]}
+sleep 3
+> data get block 44 -61 10 Items
+> data get block 44 -60 10
+look the hopper Items hold sugar and the nightstand list is empty = the item handler is exposed

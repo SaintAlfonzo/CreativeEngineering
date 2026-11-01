@@ -1501,12 +1501,16 @@ are in `global.CD.FOOD` at the top of the file.
   were `cooked_glowing_calamari[_slice]`); every oven id is unchanged. Results unchanged, so no changelog bullet. Offline:
   `tools/test_cd_food.sh` (FFH-03). The hand-written cut, cook and bake rows in the member files and the heatless, hand food and
   golden rows are not moved: TODO `creativedelight/framework #12`.
-- **Open bug (2026-10-30): an array in `assemble`'s step list becomes a filling step with fluid `minecraft:empty`.** The
+- **Fixed 2026-11-01 (`baking/baked-goods #37`): an array in `assemble`'s step list became a filling step with fluid `minecraft:empty`.** The
   zucchini quiche assembly (`veggiesdelight/recipes.js`, cooked meat as an array) fails to load (`Error parsing recipe
   creative_delight:createsequencedassembly/zucchini_quiche_sequenced_assembly` in `logs/kubejs/server.log`). Cause (scan 2026-10-31): `assemble` tests `s.fill`, and every
   array has `Array.prototype.fill`, so an array step takes the filling branch with a function as its fluid. Fix: test
   `Array.isArray(s)` first (deploying with `Ingredient.of(s)`), or check `s.fill` only on plain objects. The quiche is the
-  only `assemble` caller with an array step (grep 2026-10-31). Not fixed; record the fix here when made. Check: SQ-FFH-03.
+  only `assemble` caller with an array step (grep 2026-10-31). Fix: `cd_food.js` `assemble` now tests `Array.isArray(s)`
+  first and deploys `Ingredient.of(s)`; `{ press }`, `{ fill }` and single ingredients are unchanged (no other caller has an
+  array step; `goldenEnchant` has no caller yet). Offline run in the pack's Rhino (FfhRun with `veggiesdelight/recipes.js`,
+  extra stubs for `replaceInput`, `createEmptying`, `ieBottling` and the create deploying / filling / pressing calls): 4
+  deploys (3 roasted zucchini, the cooked meat choice) then 250 mB milk. CD built 2026-11-01. Check: SQ-FFH-03.
 
 
 ## 31. Owner change list (scratchpad 2026-10-27)
@@ -1551,3 +1555,18 @@ Slice-only recipes (`#forge:bread_slices`) are unchanged. Tests: BR-01..03 in sc
 
 Sourdough Bread cut with a knife (Farmer's Delight cutting, `pneumaticcraft/recipes.js`) gives 3 Bread (was 2), 2026-10-28.
 Scratch check SQ-CM-10 in scratch_queue.md; changelog bullet in Food & Cooking.
+
+## 33. Owner decisions on the open member items (2026-11-01)
+
+Recorded in the Decisions column of each TODO row; this is the index. Nothing here is built unless stated.
+
+| Member | Decision | Rows |
+|---|---|---|
+| Veggies | M1: keep Veggies' Fish and Chips, remove PneumaticCraft's. M2: split. More Delight = Mashed Potatoes (potatoes, potato slices), Veggies = Mashed Sweet Potatoes (sweet potatoes, sweet potato slices); one mashed-veggie family (pot: 2 of the type + 1 milk + bowl; bake: 3 baked potatoes or cooked slices + milk + bowl). Sliced potato tag holds both slice items; add the sweet potato slice (potato slice texture, 1 -> 3) if missing. M3: remove Veggies' stuffed pepper, only Rustic's tricolor. Sweet potato dough follows the bread-cooking dough rule | `merges/dishes #1 #2 #3`, `dishes/ingredients #20 #21`, `baking/baked-goods #17 #31` |
+| Vintage | Only nut mash, renamed Nut Butter, takes peanuts or acorns. Mason jar is the only jam jar. Pickled Sea Pickle = 5 sea pickles + salt. Fermented garlic honey 4 hearts = Health Boost II (already built) | `merges/dishes #7`, `dishes/jams #1`, `pickles-and-ferments #1 #10` |
+| Miner's | Before / after comparison graphic made (miners_delight.md 11). Haste: one Creative Engineering effect shared by all haste sources | `potions/effects #17` |
+| Rustic | Rustic pancake dropped for Supplementaries' (Stackable Pancake), which is an ingredient of the Rustic pancake plate. Cherry blossom foods take both leaf kinds. Pizza: dough - tomato sauce - dough; Supreme has topping slots (cheese, non-fish meat, fish, any mushroom, bell pepper in any raw / sliced / roasted form, onion). Maple foods: 50/50 maple syrup and honey split as the main ingredient type, per the food families. Fried dough removed. Pepper blocks do not connect (as is); medley plate renders correctly. New coffees' Caffeinated durations match the bean-input coffees | `members #11 #15 #16 #19 #20 #25 #27`, `merges/baking #1`, `merges/dishes #8`, `baking/baked-goods #15` |
+| Ender's | Donor-jar route (Miner's method) in case of licence issues; the shipped `enders_additions` member (MIT 1.1.4 art and data in our jar) is to be reviewed against this | `members #9` |
+| Ocean's | Calamari swaps run before the tentacle recipes are removed: already so in `oceansdelight/recipes.js`; retest SQ-CM-32 | `members #29` |
+
+Durian and pineapple pie (`baking/baked-goods #12`): retextured, block texture, rebuilt as pie block items. Pepper blocks stay unconnected and the medley plate renders correctly today (`members #27` closed).

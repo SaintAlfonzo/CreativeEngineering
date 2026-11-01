@@ -1,13 +1,17 @@
 package com.SaintAlfonzo.creativeengineering.worldgen;
 
+import net.minecraft.core.BlockPos;
 import net.minecraft.core.Holder;
+import net.minecraft.core.QuartPos;
 import net.minecraft.core.Registry;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.world.level.ChunkPos;
+import net.minecraft.world.level.biome.Biome;
 import net.minecraft.world.level.chunk.ChunkAccess;
 import net.minecraft.world.level.chunk.ChunkGenerator;
 import net.minecraft.world.level.levelgen.RandomState;
+import net.minecraft.world.level.levelgen.structure.BoundingBox;
 import net.minecraft.world.level.levelgen.structure.Structure;
 import net.minecraft.world.level.levelgen.structure.StructureCheckResult;
 import net.minecraft.world.level.levelgen.structure.StructureSet;
@@ -22,11 +26,13 @@ import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Locale;
 import java.util.Map;
+import java.util.Optional;
 import java.util.Set;
 import java.util.TreeMap;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.concurrent.atomic.AtomicInteger;
+import java.util.function.Predicate;
 
 /**
  * /celocate census (feature_writeup/locate.md 3.6): every slot of every live structure set in a square, the
@@ -190,7 +196,7 @@ final class LocateCensus {
 		ChunkAccess chunk = LocateLoads.structureStarts(level, pos.x, pos.z);
 		Map<Structure, StructureStart> starts = chunk.getAllStarts();
 		Map<Structure, LocateStats.Reason> why = reasons.getOrDefault(pos.toLong(), Map.of());
-		for (Predicted p : predicted) score(p, starts, why, local, localSets, structures, sets);
+		for (Predicted p : predicted) score(p, starts, why, local, localSets, structures, sets, generator, randomState, seed);
 	}
 
 	/** What a search would see, before the chunk exists. */
@@ -216,7 +222,8 @@ final class LocateCensus {
 	}
 
 	private void score(Predicted p, Map<Structure, StructureStart> starts, Map<Structure, LocateStats.Reason> why, Map<String, Row> local,
-			Map<String, SetRow> localSets, Registry<Structure> structures, Registry<StructureSet> sets) {
+			Map<String, SetRow> localSets, Registry<Structure> structures, Registry<StructureSet> sets, ChunkGenerator generator,
+			RandomState randomState, long seed) {
 		ChunkPos pos = p.slot().pos();
 		boolean setTries = p.setTries();
 		String setId = String.valueOf(sets.getKey(p.slot().set().value()));
@@ -257,10 +264,55 @@ final class LocateCensus {
 				row.no[LocateStats.Stage.valueOf(pr.substring(3)).ordinal()]++;
 				if (built) {
 					row.falseNegatives++;
-					if (row.falseNegativeAt.size() < 20) row.falseNegativeAt.add(pos.x + "," + pos.z + " (" + pr.substring(3).toLowerCase(Locale.ROOT) + ")");
+					if (row.falseNegativeAt.size() < 20) row.falseNegativeAt.add(pos.x + "," + pos.z + " (" + pr.substring(3).toLowerCase(Locale.ROOT) + ")"
+							+ (pr.equals("no:BIOME") ? ": " + diagnose(s, pos, st, generator, randomState, seed) : ""));
 				}
 			}
 		}
+	}
+
+	/**
+	 * A biome false negative, looked at again on the census thread after the chunk loaded (TODO structures/rates-and-groups
+	 * #13): the generation point found now and its biome (one sample, then every entry at the nearest distance, + passes,
+	 * - fails), against the built start's first piece. A point away from the start piece means the point is not
+	 * reproducible; a tied biome that passes means the "no" depended on the thread's lookup history.
+	 */
+	private String diagnose(Structure s, ChunkPos pos, StructureStart built, ChunkGenerator generator, RandomState randomState, long seed) {
+		if (s instanceof MetaStructure) return "meta";   // its point is assembled, with side effects: not repeated here
+		try {
+			Registry<Biome> biomes = level.registryAccess().registryOrThrow(Registry.BIOME_REGISTRY);
+			Predicate<Holder<Biome>> valid = StructureBiomeRules.filter(s, s.biomes()::contains);
+			StringBuilder out = new StringBuilder();
+			Structure.GenerationContext ctx = new Structure.GenerationContext(level.registryAccess(), generator, generator.getBiomeSource(), randomState,
+					level.getStructureManager(), seed, pos, level, valid);
+			Optional<Structure.GenerationStub> stub = s.findGenerationPoint(ctx);
+			if (stub.isEmpty()) out.append("no point now");
+			else {
+				BlockPos p = stub.get().position();
+				int qx = QuartPos.fromBlock(p.getX()), qy = QuartPos.fromBlock(p.getY()), qz = QuartPos.fromBlock(p.getZ());
+				Holder<Biome> one = generator.getBiomeSource().getNoiseBiome(qx, qy, qz, randomState.sampler());
+				out.append("point ").append(p.getX()).append(' ').append(p.getY()).append(' ').append(p.getZ())
+						.append(", biome ").append(biomeId(biomes, one)).append(valid.test(one) ? "+" : "-");
+				List<String> tied = new ArrayList<>();
+				TiedBiomes.any(generator.getBiomeSource(), randomState.sampler(), qx, qy, qz, b -> {
+					tied.add(biomeId(biomes, b) + (valid.test(b) ? "+" : "-"));
+					return false;
+				});
+				out.append(", nearest ").append(tied);
+			}
+			if (built != null && !built.getPieces().isEmpty()) {
+				BoundingBox box = built.getPieces().get(0).getBoundingBox();
+				out.append("; start piece centre ").append((box.minX() + box.maxX()) / 2).append(' ').append(box.minY()).append(' ')
+						.append((box.minZ() + box.maxZ()) / 2);
+			}
+			return out.toString();
+		} catch (RuntimeException e) {
+			return "diagnose failed: " + e;
+		}
+	}
+
+	private static String biomeId(Registry<Biome> biomes, Holder<Biome> b) {
+		return b.unwrapKey().map(k -> k.location().toString()).orElseGet(() -> String.valueOf(biomes.getKey(b.value())));
 	}
 
 	private static String idOf(Registry<Structure> structures, Structure s) {

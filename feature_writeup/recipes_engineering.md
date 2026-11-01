@@ -15,12 +15,12 @@ except the parts that already have a writeup: components, coils and the sample s
 | Redstone: vanilla, Create, Gates and Project Red parts rebuilt with assembly and blueprint routes; transmitter and redstone links | DEPLOYED |
 | Rails and Little Logistics: iron-rod rails, plates, Create tanks, redstone links instead of LL wireless | DEPLOYED |
 | Resource stones: Create ore stones by compacting, 3-heat stone generators, crushing tables for 20 stones | DEPLOYED |
-| Dusts: cinder flour + potion → 10 resources, amethyst / diamond dust, sulfur, TNT, obsidian | DEPLOYED; two crushing clashes (F3) |
+| Dusts: cinder flour + potion → 10 resources, amethyst / diamond dust, sulfur, TNT, obsidian | DEPLOYED; amethyst crushing clash fixed 2026-11-01 (F3) |
 | Smaller files: crystals, power (Create Crafts & Additions), music, bandage, plant oil, leather from flesh, wool → hemp, seashells, bottles, CC speaker | DEPLOYED |
 | Buckets (`process.js`, patcherMod `bucket/`): iron bucket from 3 iron plates; Wooden Bucket (3 planks, water only, stacks to 16) | BUILT 2026-10-29 (patcherMod 1.1.04 rebuilt 2026-10-30, installed 2026-10-31 00:44); RE-28 scratch server PASSED r1031 (2026-10-31, SQ-RE-28); RE-29, RE-30 in game pending; TODO `recipes/engineering #5`, [brief](briefs/recipes_engineering.md) |
 
-- **Pending:** buckets (built 2026-10-29, jar installed 2026-10-31 00:44; RE-28 PASSED r1031 2026-10-31, RE-29, RE-30 in game). Otherwise nothing built and unshipped. RE-01 to RE-20 have never been run. Findings F1 to F10 (section 4); F1, F2
-  and F3 need your call.
+- **Pending:** buckets (built 2026-10-29, jar installed 2026-10-31 00:44; RE-28 PASSED r1031 2026-10-31, RE-29, RE-30 in game). Otherwise nothing built and unshipped. RE-01 to RE-20 have never been run. Findings F1 to F10 (section 4); F1 and F2
+  need your call; F3 fixed 2026-11-01 (script, `/reload`).
 - **Files to open:** [process.js](../kubejs/server_scripts/engineering/process.js) (machine gating),
   [redstone.js](../kubejs/server_scripts/engineering/redstone.js),
   [resource_blocks.js](../kubejs/server_scripts/engineering/resource_blocks.js),
@@ -135,7 +135,7 @@ tuff. Stone recipes in Gates, Create Things and Misc, stonecutter, repeater and 
   | Long invisibility | saltpeter | Strong slowness | coke dust |
 
 - **Other dusts:** amethyst shard → amethyst dust; diamond → diamond dust (Create Crafts & Additions' own removed);
-  amethyst shard → glowstone (millstone, crushing wheels, IE crusher; F3); ender pearl → 2-3 ender shards (Ender's
+  amethyst shard → amethyst dust also on the millstone (no glowstone from shards since 2026-11-01, F3); ender pearl → 2-3 ender shards (Ender's
   Delight).
 - **Sulfur:** Vintage Improvements' scoria → sulfur removed; blaze powder → 75 % sulfur. **TNT ×4** from 5 gunpowder + 4
   sulfur (vanilla recipe removed), so TNT needs the Nether.
@@ -179,9 +179,10 @@ tuff. Stone recipes in Gates, Create Things and Misc, stonecutter, repeater and 
   ([brief](briefs/recipes_engineering.md)).
 - **F2. The dispenser has no recipe. Your call.** `redstone.js` removes it ("must be crafted from dropper") and adds
   nothing. Unless a mod adds dropper → dispenser, dispensers are loot only. Check with RE-08.
-- **F3. Amethyst shards have two crushing recipes in each machine. Your call.** Crushing wheels: 75 % amethyst dust and
-  75 % glowstone; IE crusher: amethyst dust (+25 %) and glowstone (+25 % amethyst dust). Each machine uses one and the
-  other is dead (JEI shows both). The millstone only has glowstone. Pick one per machine, or move one to another input.
+- **F3. Amethyst shards had two crushing recipes in each machine. FIXED 2026-11-01** (user call): no glowstone from
+  shards. One recipe per machine: millstone and crushing wheels 75 % amethyst dust, IE crusher amethyst dust + 25 %
+  amethyst dust (1.25 average). Glowstone keeps its other sources (cinder flour + night vision, soul sandstone, Create's
+  glowstone block crushing). Verify with RE-16.
 - **F4. Coal blocks in the pressure chamber:** 9 blocks → diamond and 4 blocks → diamond shard at the same pressure.
   With 9 or more in the chamber which one runs depends on PNC's recipe order (not checked). Check with RE-12.
 - **F5. Cinder flour routes don't line up.** Redstone, glowstone and gunpowder have no single-flour Create filling (only
@@ -261,7 +262,8 @@ Use JEI (recipe and usage views) and a creative test world with Create, IE and P
 - [ ] **RE-14 Ore stone:** compact 6 iron nuggets + 2 gravel + 250 mB lava → crimsite; IE crush → 5 iron nuggets.
 - [ ] **RE-15 Cinder flour:** 8 cinder flour + a strength potion → 8 redstone and a glass bottle; a pile in the Bottler
   with 180 mB strength → 9 redstone.
-- [ ] **RE-16 Amethyst crushing (F3):** amethyst shards in crushing wheels and in the IE crusher → note what comes out.
+- [ ] **RE-16 Amethyst crushing (F3):** JEI uses of an amethyst shard: millstone and crushing wheels each show one
+  recipe (75 % amethyst dust), IE crusher one (amethyst dust + 25 % amethyst dust); no glowstone recipe from shards.
 - [ ] **RE-17 TNT:** JEI TNT → only gunpowder + sulfur, ×4.
 - [ ] **RE-18 Layered obsidian:** superheated mixer, powdered obsidian block + 2000 mB lava → layered obsidian; saw → 12
   sturdy plates.

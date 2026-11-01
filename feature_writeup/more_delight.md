@@ -66,7 +66,7 @@ All other hunger, saturation and effects are unchanged.
 |---|---|
 | Pot meals name the bowl container | skip: same behaviour on FD 1.2.4 (remainder fallback) |
 | Create cutting: Potato -> 2 Diced Potatoes, Bread -> 4 Bread Slices. The installed jar has both in `data/create/cutting/` (never loaded) with the potato recipe on the crop block | skip: Slice and Dice already turns the cutting-board Bread -> slices recipe into a slicer recipe, and diced potatoes are merged into Rustic's slices |
-| Tag `forge:sliced_potatoes` renamed `forge:sliced_potato` | **Decided: follow it** (section 5.3). The installed 25.07.28 recipes already read the singular; only its tag file is plural |
+| Tag `forge:sliced_potatoes` renamed `forge:sliced_potato` | **Decided: follow it** (section 5.3). Correction 2026-11-01: the installed 25.07.28 cooking recipes (mashed potatoes, potato salad, the four diced potatoes with ...) read the plural `forge:sliced_potatoes`; with the diced potatoes merged it was empty, so CD fills it with Rustic's slices too (`dishes/ingredients #26`) |
 | Brewin' cheese recipes for Hamburger with Cheese and Toast with Cheese | skip as is (items need Casualness Delight). **Decided:** the Cheese Toast is added (section 5.1), no Casualness Delight items. The cheeseburger exists twice already (Delightful, Vintage) |
 | Toast with Honey drops `extraResults` | skip: the bottle comes back through vanilla remainder either way |
 | Casualness potato slice -> 1 diced (was 2) | skip: Casualness not installed |
@@ -86,7 +86,7 @@ Prefix `MRD-`. Restart needed (startup scripts and a CD jar change).
 | MRD-01 | Wooden Knife tooltip: 1.5 attack damage, 2.0 speed; mining speed 2, cannot harvest stone-level blocks faster than a wooden tool. Stone Knife 2.5 / 2.0, mining speed 4 |
 | MRD-02 | Eat Toast, a topped toast and Caviar Toast: each takes the fast eating time (about 0.8 s) |
 | MRD-03 | Cheese Toast: shapeless Toast + Flaxen Cheese Wedge, eats fast, 5 hunger; JEI shows the recipe, the icon is the cheese toast sprite |
-| MRD-04 | `/dumptags`: `forge:sliced_potato` holds Rustic's potato slices, no `forge:sliced_potatoes` use left; fries and the Veggies Delight potato dishes still craft |
+| MRD-04 | `/dumptags`: `forge:sliced_potato` and `forge:sliced_potatoes` hold Rustic's potato slices and the Sliced Sweet Potato; More Delight's mashed potatoes, potato salad and four diced potato dishes show the slices in JEI; fries and the Veggies Delight potato dishes still craft |
 | MRD-05 | `/dumptags`: `creativeengineering:exotic_fruit`, `fruit_salad_slice`, `roasted_bell_pepper`, `soup_veggie_cooked` filled; Bowl of Exotic Fruits and Fruit Salad still craft from fruit |
 | MRD-06 | Carrot Soup still gives Comfort |
 
@@ -112,6 +112,10 @@ Delight startup script `kubejs_startup/moredelight/toast.js` (list `global.fastT
 `exotic_fruit` / `fruit_salad_slice` / `roasted_bell_pepper` / `soup_veggie_cooked`. Kept plural on purpose: Forge's
 shared `forge:fruits/*`, `forge:berries`, `forge:mushrooms/*` (other mods read them) and the `jar_family/*` tags, which
 follow the plural family names (cookies, candies, apples). Veggies Delight's port no longer remaps the tag.
+Exception (2026-11-01, `dishes/ingredients #26`): More Delight's own six potato cooking recipes read the plural
+`forge:sliced_potatoes` (`i.t_sliced_potatoes`), which CD's `moredelight/item_merges.js` fills with Rustic's slices; the
+recipes stay on that tag. Since 2026-11-01 the Sliced Sweet Potato (veggies_delight.md 5.6) is in both sliced tags too
+(CD `veggiesdelight/tags.js`), so More Delight's six dishes also take it.
 
 ### 5.4 Not touched
 

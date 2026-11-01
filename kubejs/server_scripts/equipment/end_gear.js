@@ -63,28 +63,28 @@ ServerEvents.recipes(e => {
     ])
     
     // Felsic default values + config override 
-    const felsicHelmet = R.cfg({potion: 'creativeengineering:magic_resistance', mb: 500, loops: 1, blows: 5}, 'CRAFTING.FELSIC_HELMET')
-    const felsicChestplate = R.cfg({potion: 'creativeengineering:magic_resistance', mb: 500, loops: 1, blows: 5}, 'CRAFTING.FELSIC_CHESTPLATE')
-    const felsicLeggings = R.cfg({potion: 'creativeengineering:magic_resistance', mb: 500, loops: 1, blows: 5}, 'CRAFTING.FELSIC_LEGGINGS')
-    const felsicBoots = R.cfg({potion: 'creativeengineering:magic_resistance', mb: 500, loops: 1, blows: 5}, 'CRAFTING.FELSIC_BOOTS')
-    const felsicSword = R.cfg({potion: 'creativeengineering:magic_resistance', mb: 250, loops: 1, blows: 3}, 'CRAFTING.FELSIC_SWORD')
-    const felsicPickaxe = R.cfg({potion: 'creativeengineering:magic_resistance', mb: 250, loops: 1, blows: 3}, 'CRAFTING.FELSIC_PICKAXE')
-    const felsicAxe = R.cfg({potion: 'creativeengineering:magic_resistance', mb: 250, loops: 1, blows: 3}, 'CRAFTING.FELSIC_AXE')
-    const felsicShovel = R.cfg({potion: 'creativeengineering:magic_resistance', mb: 250, loops: 1, blows: 3}, 'CRAFTING.FELSIC_SHOVEL')
-    const felsicHoe = R.cfg({potion: 'creativeengineering:magic_resistance', mb: 250, loops: 1, blows: 3}, 'CRAFTING.FELSIC_HOE')
-    const felsicShield = R.cfg({potion: 'creativeengineering:magic_resistance', mb: 250, loops: 1, blows: 8}, 'CRAFTING.FELSIC_SHIELD')
+    const felsicHelmet = R.cfg({potion: 'creativeengineering:magic_resistance', mb: 500, reachMb: 500, loops: 1, blows: 5}, 'CRAFTING.FELSIC_HELMET')
+    const felsicChestplate = R.cfg({potion: 'creativeengineering:magic_resistance', mb: 500, reachMb: 500, loops: 1, blows: 5}, 'CRAFTING.FELSIC_CHESTPLATE')
+    const felsicLeggings = R.cfg({potion: 'creativeengineering:magic_resistance', mb: 500, reachMb: 500, loops: 1, blows: 5}, 'CRAFTING.FELSIC_LEGGINGS')
+    const felsicBoots = R.cfg({potion: 'creativeengineering:magic_resistance', mb: 500, reachMb: 500, loops: 1, blows: 5}, 'CRAFTING.FELSIC_BOOTS')
+    const felsicSword = R.cfg({potion: 'creativeengineering:magic_resistance', mb: 250, reachMb: 250, loops: 1, blows: 3}, 'CRAFTING.FELSIC_SWORD')
+    const felsicPickaxe = R.cfg({potion: 'creativeengineering:magic_resistance', mb: 250, reachMb: 250, loops: 1, blows: 3}, 'CRAFTING.FELSIC_PICKAXE')
+    const felsicAxe = R.cfg({potion: 'creativeengineering:magic_resistance', mb: 250, reachMb: 250, loops: 1, blows: 3}, 'CRAFTING.FELSIC_AXE')
+    const felsicShovel = R.cfg({potion: 'creativeengineering:magic_resistance', mb: 250, reachMb: 250, loops: 1, blows: 3}, 'CRAFTING.FELSIC_SHOVEL')
+    const felsicHoe = R.cfg({potion: 'creativeengineering:magic_resistance', mb: 250, reachMb: 250, loops: 1, blows: 3}, 'CRAFTING.FELSIC_HOE')
+    const felsicShield = R.cfg({potion: 'creativeengineering:magic_resistance', mb: 250, reachMb: 250, loops: 1, blows: 8}, 'CRAFTING.FELSIC_SHIELD')
 
     R.bulk('felsicAssembly', [
-        [i.felsic_helmet, i.echo_helmet, 'felsic_helmet', e, felsicHelmet.potion, felsicHelmet.mb, felsicHelmet.loops, felsicHelmet.blows],
-        [i.felsic_chestplate, i.echo_chestplate, 'felsic_chestplate', e, felsicChestplate.potion, felsicChestplate.mb, felsicChestplate.loops, felsicChestplate.blows],
-        [i.felsic_leggings, i.echo_leggings, 'felsic_leggings', e, felsicLeggings.potion, felsicLeggings.mb, felsicLeggings.loops, felsicLeggings.blows],
-        [i.felsic_boots, i.echo_boots, 'felsic_boots', e, felsicBoots.potion, felsicBoots.mb, felsicBoots.loops, felsicBoots.blows],
-        [i.felsic_sword, i.echo_sword, 'felsic_sword', e, felsicSword.potion, felsicSword.mb, felsicSword.loops, felsicSword.blows],
-        [i.felsic_pickaxe, i.echo_pickaxe, 'felsic_pickaxe', e, felsicPickaxe.potion, felsicPickaxe.mb, felsicPickaxe.loops, felsicPickaxe.blows],
-        [i.felsic_axe, i.echo_axe, 'felsic_axe', e, felsicAxe.potion, felsicAxe.mb, felsicAxe.loops, felsicAxe.blows],
-        [i.felsic_shovel, i.echo_shovel, 'felsic_shovel', e, felsicShovel.potion, felsicShovel.mb, felsicShovel.loops, felsicShovel.blows],
-        [i.felsic_hoe, i.echo_hoe, 'felsic_hoe', e, felsicHoe.potion, felsicHoe.mb, felsicHoe.loops, felsicHoe.blows],
-        [i.ce_felsic_shield, i.ce_echo_shield, 'felsic_shield', e, felsicShield.potion, felsicShield.mb, felsicShield.loops, felsicShield.blows]
+        [i.felsic_helmet, i.echo_helmet, 'felsic_helmet', e, felsicHelmet.potion, felsicHelmet.mb, felsicHelmet.loops, felsicHelmet.blows, felsicHelmet.reachMb],
+        [i.felsic_chestplate, i.echo_chestplate, 'felsic_chestplate', e, felsicChestplate.potion, felsicChestplate.mb, felsicChestplate.loops, felsicChestplate.blows, felsicChestplate.reachMb],
+        [i.felsic_leggings, i.echo_leggings, 'felsic_leggings', e, felsicLeggings.potion, felsicLeggings.mb, felsicLeggings.loops, felsicLeggings.blows, felsicLeggings.reachMb],
+        [i.felsic_boots, i.echo_boots, 'felsic_boots', e, felsicBoots.potion, felsicBoots.mb, felsicBoots.loops, felsicBoots.blows, felsicBoots.reachMb],
+        [i.felsic_sword, i.echo_sword, 'felsic_sword', e, felsicSword.potion, felsicSword.mb, felsicSword.loops, felsicSword.blows, felsicSword.reachMb],
+        [i.felsic_pickaxe, i.echo_pickaxe, 'felsic_pickaxe', e, felsicPickaxe.potion, felsicPickaxe.mb, felsicPickaxe.loops, felsicPickaxe.blows, felsicPickaxe.reachMb],
+        [i.felsic_axe, i.echo_axe, 'felsic_axe', e, felsicAxe.potion, felsicAxe.mb, felsicAxe.loops, felsicAxe.blows, felsicAxe.reachMb],
+        [i.felsic_shovel, i.echo_shovel, 'felsic_shovel', e, felsicShovel.potion, felsicShovel.mb, felsicShovel.loops, felsicShovel.blows, felsicShovel.reachMb],
+        [i.felsic_hoe, i.echo_hoe, 'felsic_hoe', e, felsicHoe.potion, felsicHoe.mb, felsicHoe.loops, felsicHoe.blows, felsicHoe.reachMb],
+        [i.ce_felsic_shield, i.ce_echo_shield, 'felsic_shield', e, felsicShield.potion, felsicShield.mb, felsicShield.loops, felsicShield.blows, felsicShield.reachMb]
     ])
 
     // ============================== Dragon ==============================
