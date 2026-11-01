@@ -18,7 +18,7 @@
     const $KTRL = Java.loadClass('net.minecraft.resources.ResourceLocation')
     const $KTBlocks = Java.loadClass('net.minecraft.world.level.block.Blocks')
     const $KTCfbOven = Java.loadClass('net.blay09.mods.cookingforblockheads.tile.OvenBlockEntity')
-    const $KTCEConfig = Java.loadClass('com.SaintAlfonzo.creativeengineering.CEConfig')
+    const $KTCEConfig = Java.loadClass('com.SaintAlfonzo.creativedelight.blockheads.BAConfig')
     const $KTDirProp = Java.loadClass('net.minecraft.world.level.block.state.properties.DirectionProperty')
 
     const Y = -58
@@ -123,9 +123,9 @@
         // model offset: default (0, -1 px, 0); then X = 1, Z = 2 px turned with the counter's facing
         let off = level.getBlockState(b).getOffset(level, b)
         check('KT-05a board drawn 1 px lower', Math.abs(off.y() + 1 / 16) < 1e-6 && off.x() == 0 && off.z() == 0, String(off))
-        let K = $KTCEConfig.KITCHEN
-        K.cuttingBoardOffsetX.set(1.0)
-        K.cuttingBoardOffsetZ.set(2.0)
+        let K = $KTCEConfig
+        K.CUTTING_BOARD_OFFSET_X.set(1.0)
+        K.CUTTING_BOARD_OFFSET_Z.set(2.0)
         let facingProp = level.getBlockState(h).getBlock().getStateDefinition().getProperty('facing')
         let want = { north: [1, 2], south: [-1, -2], east: [-2, 1], west: [2, -1] }
         Object.keys(want).forEach(f => {
@@ -134,8 +134,8 @@
             let ok = Math.abs(o.x() * 16 - want[f][0]) < 1e-6 && Math.abs(o.z() * 16 - want[f][1]) < 1e-6
             check('KT-05b offset turns with a ' + f + ' counter', ok, 'px ' + (o.x() * 16) + ', ' + (o.y() * 16) + ', ' + (o.z() * 16))
         })
-        K.cuttingBoardOffsetX.set(0.0)
-        K.cuttingBoardOffsetZ.set(0.0)
+        K.CUTTING_BOARD_OFFSET_X.set(0.0)
+        K.CUTTING_BOARD_OFFSET_Z.set(0.0)
         let stone = level.getBlockState(b).getOffset(level, h.above(5))
         check('KT-05c no offset off a counter', stone.y() == 0, String(stone))
     }
@@ -166,11 +166,11 @@
         set(level, h.above(), 'displaydelight:plated_hamburger')
         check('KT-15c plated hamburger stays on a counter', level.getBlockState(h.above()).canSurvive(level, h.above()), '')
         // the plate keys move plates only, the board keys the board only
-        let K = $KTCEConfig.KITCHEN
-        K.plateOffsetY.set(-3.0)
+        let K = $KTCEConfig
+        K.PLATE_OFFSET_Y.set(-3.0)
         let o = level.getBlockState(h.above()).getOffset(level, h.above())
         check('KT-16b plateOffsetY moves the plate', Math.abs(o.y() * 16 + 3) < 1e-6, 'px y ' + (o.y() * 16))
-        K.plateOffsetY.set(-1.0)
+        K.PLATE_OFFSET_Y.set(-1.0)
         // not a support: Display Delight 1.7.0 keeps a plate over air and gives it a wooden leg (display_delight.md 3)
         let air = pos(11, Y + 2, 2)
         set(level, air, 'displaydelight:food_plate')

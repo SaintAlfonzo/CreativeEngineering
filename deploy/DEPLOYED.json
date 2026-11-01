@@ -6,9 +6,9 @@
   "snapshotSha1": "2d6806f7d47c565363a3c258bd9bc98fdef7ba67"
  },
  "client": {
-  "version": "1.1.05",
-  "date": "2026-10-31T12:52",
-  "snapshotSha1": "2d6806f7d47c565363a3c258bd9bc98fdef7ba67"
+  "version": "1.1.06",
+  "date": "2026-10-31T17:58",
+  "snapshotSha1": "8d9f57ef022d26f837eaf24afc1bbe29a65b3fee"
  },
  "log": [
   {
@@ -129,6 +129,13 @@
    "date": "2026-10-31T12:52",
    "targets": [
     "server",
+    "client"
+   ]
+  },
+  {
+   "version": "1.1.06",
+   "date": "2026-10-31T17:58",
+   "targets": [
     "client"
    ]
   }

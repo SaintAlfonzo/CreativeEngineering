@@ -252,6 +252,7 @@ Wild jungle vines spawn at a random stage from 0 to 2.
   - wood tier: cherry fence gate, cherry beams and floorboards, stackable log, crates
   - dirt tier: Vinery dirt/grass slabs and loam
 - **BlockRunner display:** the taiga bush is listed as a 0.8 slow block in patcherMod `StuckInBlock` (display only).
+- **Flower box and flower pot** (port `-07`, 2026-10-31): the box takes `#creativeengineering:flower_box_plants` and sits centred on floors (`wall` state); the pot takes any plant a planter grows; both draw Supplementaries' flower box models. [flower_pots.md](flower_pots.md) 3.2.
 - **Textures:** `vinery:item/mash` is the generic fallback texture for incomplete sequenced-assembly items ([transition_items.js](../kubejs/startup_scripts/changes/transition_items.js)).
 
 ## 4. Limits and decisions
@@ -328,3 +329,4 @@ Tooltip tests are TT-14 and TT-15 in [tooltips.md](tooltips.md). JEI tests are V
 - 2026-10-19: this file describes 1.3.10, which left the pack in 1.0.7 (DEPLOYED 2026-10-18) for the port; the port's
   behaviour is in [alcohol.md](alcohol.md) Part B. Kept as the reference for what changed.
 - 2026-10-31: scratchpad notes translated into TODO rows (`alcohol/vineryport #28`). No code changed.
+- 2026-10-31: port `-07` flower box and flower pot changes ([flower_pots.md](flower_pots.md) 3.2); built, not installed.

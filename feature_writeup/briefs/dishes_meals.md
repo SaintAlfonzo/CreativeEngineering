@@ -1,763 +1,229 @@
 # Brief: dishes / meals
 
-Written 2026-10-21 from [todo/TODO.md](../todo/TODO.md) `# dishes`, Sub `meals` (rows 1 to 10). Layout per
-[README.md](README.md). Feature writeup for this area: [recipes_cooking.md](../recipes_cooking.md) (2.3 Prepared food,
-2.4 Golden food); the Brewin' recipes in [alcohol.md](../alcohol.md) 8.6. Every recipe below goes in
-[cooking.js](../../kubejs/server_scripts/cooking/cooking.js) (section "Prepared", lines 172-342, or a new
-`//##### Meals #####` section after it) or [golden.js](../../kubejs/server_scripts/cooking/golden.js), through
-`global.NCH` (`R`), with ids from `global.item` (`i`) / `global.fluid` (`f`).
+Written 2026-10-21 from [todo/TODO.md](../todo/TODO.md) `# dishes`, Sub `meals`; re-checked against the pack 2026-10-31
+(brief sweep), which also brought in the rows moved to other families whose plan lives here (`merges/dishes #5`, #6, #8,
+#10, `textures/food #2`) and the Barbeque's Delight rows (#46 to #50). Layout per [README.md](README.md). Feature writeups:
+[recipes_cooking.md](../recipes_cooking.md) (2.3 Prepared food, 2.4 Golden food), [food.md](../food.md) (2.1 food types),
+[food_families.md](../food_families.md) (3.1 family rules), [barbeques_delight.md](../barbeques_delight.md) (rows #46 to #50),
+[item_merges.md](../item_merges.md) (merges). Test prefix RC- (recipes_cooking.md, next free RC-176); new tests below are
+placeholders `RC-newN` / `FO-newN` / `MG-newN` / `BBQ-newN`, numbered when queued.
 
-**Verified against jars** (scratchpad cache, 2026-10-21): Farmer's Delight 1.19.2-1.2.4, Quark Delight 1.0.0, Ender's
-Delight 1.19-1.2.2, Alex's Mobs 1.21.1, Alex's Delight 1.4.1, PneumaticCraft 4.3.15, More Delight 25.07.28, Incubation
-3.0.1, Delightful 3.4.1, Fruits Delight 0.5.11, Create Central Kitchen 1.3.11.c, Rustic Delight 1.3.0, Corn Delight
-1.0.3, Golden Food 2.0.0, Create 0.5.1.i; the Brewin' port from `development/backportedBrewin/src/main/resources`.
-Recipe ids, ingredient lists and tags quoted below are from those jars unless marked *unverified*. What another datapack
-or KubeJS does to them at runtime is only knowable in game (`/dumprecipes`, `/dumptags item`, JEI).
+**Where the code is now (2026-10-31).** `kubejs/server_scripts/cooking/cooking.js` is an empty stub: every food recipe
+moved to the Creative Delight server tree by the mod of the food it makes (2026-10-25; the Brewin' dishes 2026-10-31),
+`kubejs/data/creative_delight/kubejs/<mod>/recipes.js` (or `cooking.js`). The ones this brief touches:
+[farmersdelight/recipes.js](../../kubejs/data/creative_delight/kubejs/farmersdelight/recipes.js) (Meals section from line
+258, heatless meal rule comment line 259), [brewinandchewin/recipes.js](../../kubejs/data/creative_delight/kubejs/brewinandchewin/recipes.js)
+(pizza, quiche, omelet, cheesy pasta), [veggiesdelight/cooking.js](../../kubejs/data/creative_delight/kubejs/veggiesdelight/cooking.js),
+[vintagedelight/cooking.js](../../kubejs/data/creative_delight/kubejs/vintagedelight/cooking.js),
+[creativeengineering/recipes.js](../../kubejs/data/creative_delight/kubejs/creativeengineering/recipes.js) (burgers, line 54),
+[creativeengineering/baking.js](../../kubejs/data/creative_delight/kubejs/creativeengineering/baking.js) (oven). Food values:
+CD startup `development/creativeDelight/src/main/resources/kubejs_startup/<mod>/<mod>_foods.js` (pattern:
+`alexsmobs/alexsmobs_foods.js`). Food tooltips and names: `kubejs/assets/creative_delight/kubejs/<mod>/client.js`
+(the pack's `tooltips.js` Food section moved there 2026-10-27). The Brewin' port is a Creative Brewing member,
+`development/creativeBrewing/members/brewin` (was `development/backportedBrewin`); build through `:creativeBrewing:`.
+Farmer's Delight 1.2.4, Ocean's, Oceanic, End's, Delightful and Rustic 1.7.0 are nested in `mods/creative_delight-1.0.0.jar`
+(`META-INF/jarjar/`), not in `mods/` on their own.
+
+**Shared rules, built 2026-10-21 (rows 1-4, 7-9):** the heatless meal rule (a pot meal is also a shapeless craft from
+cooked forms, one more main, id ending `_manual_only` so Create's unheated basin and mechanical crafters skip it) and the
+tag keys `i.t_bread`, `i.t_tortilla`, `i.t_cooking_oil`, `i.t_sliced_potato`, `i.t_soup_veggie_cooked`, `i.t_exotic_fruit`,
+`i.t_fruit_salad_slice` (item_dict.js lines 1949-2037). Every new shapeless meal below follows the rule; the writeup is
+[recipes_cooking.md](../recipes_cooking.md) 2.3.
 
 ## Scope and order
 
-| Row | Change | Status | Build group |
+| Row | Change | Status | Group |
 |---|---|---|---|
-| 1 | Cooked ingredients in heatless shapeless meals | Testing (built 2026-10-21) | A (the rule, plus a coverage list) |
-| 2 | Per-meal recipe changes (12 meals) | Testing (built 2026-10-21) | A |
-| 4 | Expensive cooked shapeless meals (9 meals) | Testing (built 2026-10-21) | A |
-| 8 | Dog food | Testing (built 2026-10-21) | A |
-| 3 | Sequenced assembly meals | Testing (built 2026-10-21) | B |
-| 5 | Feasts: JEI plating tab, assemblies, pizza 8 slices | In Progress (JEI tab built 2026-10-21) | B (assemblies), C (JEI tab, pizza: Java) |
-| 7 | Fish recipes for any fish (tempura, fish and chips, fries, PNC deep frying out) | Testing (built 2026-10-21) | D |
-| 6 | Glistering melon edible + gilding | Planned | E |
-| 9 | Gold food cheap in machines | Testing (built 2026-10-21; numbers revisited with tuning) | E (after `food/types-and-tuning #1`, #3) |
-| 10 | Shrimp fried rice | In Progress (pot recipe and values built 2026-10-29) | F (tooltip + JEI note; Alex's Mobs already does the rest) |
+| `dishes/meals #5` | Feasts: assemblies, pizza 8 slices | In Progress (JEI tab shipped 1.1.01) | C |
+| `dishes/meals #6` | Glistering melon: gilding routes | In Progress (edible shipped 1.1.01) | A |
+| `dishes/meals #10` | Shrimp fried rice: tooltip, JEI note | In Progress (pot recipe and values built 2026-10-29, scratch PASSED r1031) | A |
+| `dishes/meals #12` | Pancake food type | In Progress | B |
+| `dishes/meals #13` | Skewer food type | In Progress | B |
+| `dishes/meals #14` | Patty food type (or tag) | In Progress | B |
+| `dishes/meals #15` | Wrap food type (salad type exists) | In Progress | B |
+| `dishes/meals #18` | Cheese in nachos | In Progress | A |
+| `dishes/meals #20` | Feasts in ovens | In Progress | C |
+| `dishes/meals #21` | Meal-specific ingredients audit | In Progress | D |
+| `dishes/meals #23` | Fried egg and omelette batches | In Progress | A |
+| `dishes/meals #24` | Extra veggie omelette recipe | In Progress | A |
+| `dishes/meals #27` | Tropical Pizza | In Progress | E (Java) |
+| `dishes/meals #29` | Fermented veg in uncooked crafts | In Progress | D |
+| `dishes/meals #31` | Nut butter sandwich | In Progress | F (after `merges/dishes #7`) |
+| `dishes/meals #33` | Creamy Gnocchi: textures, potato dough | In Progress (names and recipes shipped 1.1.03) | E |
+| `dishes/meals #34` | Fries from any potato slice | In Progress | F (after `dishes/ingredients #20`) |
+| `dishes/meals #35` | Steak and broccoli sides | In Progress | A |
+| `dishes/meals #37` | Pancake coverings review | In Progress | E (after `dishes/jams #1`) |
+| `dishes/meals #40` | New sushi roll medleys | Planned | E (Java) |
+| `dishes/meals #44` | One stuffed pumpkin recipe | Planned | A |
+| `dishes/meals #45` | Broccoli soup: milk to cheese | Planned | A |
+| `dishes/meals #46` | Skewer fold into the Barbeque's Delight system | Planned | G (after the port and `food/seasoning #11`) |
+| `dishes/meals #47` | Kebab Wrap on a tortilla | Planned | G (after the port) |
+| `dishes/meals #48` | Kebab Sandwich and Bibimbap by pack rules | Planned | G (after the port) |
+| `dishes/meals #49` | Decide: smelt or smoke raw skewers | Planned | G (decision only) |
+| `dishes/meals #50` | Raw versions of the 8 pack skewers | Planned | G (after the port) |
+| `merges/dishes #5` | Cheesy pastas: bone broth in the heatless craft | In Progress (rename built 2026-10-30) | A |
+| `merges/dishes #6` | Merge Caesar salads | Planned | A |
+| `merges/dishes #8` | Supreme Pizza shape, quiche family, nutrients | In Progress (rename and recipe shipped 1.1.03) | A (with #5's pizza cost) |
+| `merges/dishes #10` | Loaded Burger: drop More Delight's, any cheese, burger audit | In Progress (rename built 2026-10-30) | A, then D |
+| `textures/food #2` | Retexture cauliflower soup | Planned | E (art) |
+| `merges/dishes #4` | Merge potato salad | Planned | owned by [merges_dishes.md](merges_dishes.md); old section kept below |
 
-**Built 2026-10-21 (rows 1-3), as recommended here, with these differences** (writeup:
-[recipes_cooking.md](../recipes_cooking.md) 2.3; tests renumbered RC-55 to RC-64 there, since RC-30 to RC-52 are
-proposed in other briefs):
-- Row 1 coverage: rows 2/4/8 plus vegetable soup, vegetable noodles, ratatouille, corn soup. All the pack's older cooked
-  shapeless meals (fish stew, cabbage rolls, horror lasagna, pasta with mutton, the three Ender's Delight ones) got
-  `_manual_only` ids too. `soup_veggie_cooked` is listed by key (cookingtags.js runs before foodtypetags.js).
-- Burgers: each assembly needs its own first step (CCK's bacon, chicken and egg sandwiches already start on
-  `#forge:bread` with bacon, chicken, fried egg), so the egg burger is built on a beef patty and the others start with
-  salad, cheese, onion, patty, tomato, bison patty, kangaroo. Loaded hamburger's cabbage is `#forge:crops/cabbage`
-  (holds the leaf).
-- Horror lasagna assembly starts by deploying pasta, not by spouting tomato sauce: Create checks sequenced assemblies
-  before plain spout recipes, so a tomato-sauce first step on a bowl would take over bowl filling. A beetroot step was
-  added to match the pot.
-- Quiche shaped id is `quiche_manual_only` (it has an assembly).
-
-**Built 2026-10-21 (rows 4, 7, 8, 9)**, as recommended here, with these differences (tests RC-66 to RC-70 in
-[recipes_cooking.md](../recipes_cooking.md); the RC-40/41/46/47/48 below are the brief's old numbers):
-- Row 7: fries and fish and chips take `#forge:sliced_potato` now, after Rustic Delight's slices were added to it
-  (cookingtags.js), so diced potatoes fry too. Not checked: whether the cooking oil bottle comes back from the pot.
-- Row 9: no pure-gold tag; each forge gold tag holds only the vanilla item and the rose gold one, so golden.js names
-  `i.nugget_gold`, `i.ingot_gold`, `i.block_gold`. Ingots too (MCA tags its rose gold ingot as gold). Costs set to
-  the first proposal, mixing 6 and arc 5, for nuggets and ingots alike. IE arc additives are listed 5 times (NCH's
-  `ieArcFurnace` drops counts).
-
-Suggested order:
-
-1. **Group A** (rows 1, 2, 4, 8): one pass over `cooking.js`. Do row 1's two shared pieces first: the new dict keys
-   and tags (A0 below) and the `_manual_only` decision. Coordinate with `dishes/ingredients #4` (bone broth), which owns
-   bone broth itself; this brief owns the meal recipes that consume it. Row 2's baked cod stew is also in row 4: build it
-   once (row 2).
-2. **Group B** (row 3, the assembly half of row 5): all new sequenced assemblies plus their `transition_items.js` rows.
-   Shepherd's pie appears in both rows; build it once (row 3).
-3. **Group D** (row 7): needs the `#rusticdelight:cooking_oil` key from A0; touches `dishes/ingredients #8` (diced
-   potatoes merge) and `#10` (fish oil as cooking oil).
-4. **Group E** (rows 6, 9): `golden.js` and `food_values.js`; row 9's numbers wait for food tuning.
-5. **Group F** (row 10) any time: client scripts only.
-6. **Group C** (row 5's JEI tab and pizza servings) last: Java (patcherMod, Brewin' port), a jar rebuild each.
-
-**Shared A0: keys and tags to add first.** Key style in `item_dict.js`: plain keys for items, `t_<path>` for tags
-(`i.t_cheese_wedge`, `i.t_crops_corn`, `i.t_fruits_*`, `i.t_cooking_oil_ingredients`); new tags made by the pack go
-through `global.tags` in [cookingtags.js](../../kubejs/server_scripts/tags/cookingtags.js).
-
-| Key (new) | Value | Used by |
-|---|---|---|
-| `i.t_bread` | `'#forge:bread'` (vanilla bread, `corn_delight:cornbread`, `pneumaticcraft:sourdough_bread`; not slices: those are `#forge:bread_slices`) | row 2 burgers. Note `i.bread` is `#forge:bread/wheat` |
-| `i.t_tortilla` | `'#forge:tortilla'` (`corn_delight:tortilla`) | row 2 mutton wrap |
-| `i.t_cooking_oil` | `'#rusticdelight:cooking_oil'` (`rusticdelight:cooking_oil`) | row 7 |
-| `i.t_sliced_potato` | `'#forge:sliced_potato'` (today only `moredelight:diced_potatoes`) | row 7 |
-| `i.t_soup_veggie_cooked` | `'#creativeengineering:soup_veggie_cooked'` (new tag, below) | rows 2, 4 |
-| `i.t_exotic_fruit` | `'#creativeengineering:exotic_fruit'` (new tag, below) | row 2 exotic fruits |
-| `i.t_fruit_salad_slice` | `'#creativeengineering:fruit_salad_slice'` (new tag, below) | row 2 fruit salad |
-
-New tags (in `cookingtags.js`, all through `global.tags`):
-
-```js
-// cooked veggies that make sense in a soup or stew: the cooked/veggie food type minus snacks and rice
-t.addMatching(e, i.t_soup_veggie_cooked, [i.t_food_cooked_veggie, i.t_food_cooked_veggie_sliced],
-	{ except: [i.chips, i.popcorn, i.tortilla_chip, i.cooked_rice, i.dried_kelp] })
-// Fruits Delight's 15 #forge:fruits members + its two melons + vanilla melon
-t.add(e, i.t_exotic_fruit, [i.pear, i.hawberry, i.lychee, i.mango, i.persimmon, i.peach, i.orange, i.mangosteen,
-	i.bayberry, i.kiwi, i.fig, i.blueberry, i.lemon, i.cranberry, i.pineapple, i.durian_flesh, i.hamimelon_slice, i.melon])
-t.add(e, i.t_fruit_salad_slice, [i.melon, i.cantaloupe_slice, i.hamimelon_slice, i.pineapple_slice, i.lemon_slice,
-	i.orange_slice])
-```
-
-`addMatching` with `except` expands the food-type tags to their members at tag time (tag_helper.js lines 26-48), so the
-food-type tags must already be filled: [foodtypetags.js](../../kubejs/data/creative_delight/kubejs/creativeengineering/food_type_tags.js) and
-`cookingtags.js` both run in `ServerEvents.tags('item')`; if order bites, list the members by key instead (the
-cooked/veggie list is in [food_catalog.md](../food_catalog.md) "cooked/veggie").
-
-**Shared decision A1: `_manual_only` on the new shapeless meals.** Create runs every shapeless crafting recipe in an
-unheated basin (`allowShapelessInMixer`, default true, verified in Create's `CRecipes`) and skips any recipe whose id
-path ends in `_manual_only` (`AllRecipeTypes.CAN_BE_AUTOMATED`, verified; also used by mechanical crafters). Without
-the suffix every "heatless cooked shapeless" meal becomes a no-heat mixer recipe, cheaper to automate than the pot
-(which Slice & Dice turns into heated mixing). `dishes/ingredients #4` already says "no Create shapeless mixing".
-**Recommend:** every new shapeless meal in rows 1, 2, 4 and 8 gets an id ending `_manual_only`
-(`R.shapeless(out, inputs, e, 'chicken_soup_cooked_manual_only')` -> `creativeengineering:shapeless/chicken_soup_cooked_manual_only`),
-and the 1.0.3-era bone-broth shapeless recipes (cooking.js lines 22-32, auto ids) are re-id'd the same way in the same
-pass (`R.remove` nothing; just pass an `idOverride`). Same for the shaped burgers in row 2 (automation through their
-sequenced assembly only).
-
----
-
-## meals #1: Cooked ingredients in heatless shapeless meal recipes
-Status: Testing (built 2026-10-21) / Work: KubeJS / id `dishes/meals #1`
-
-### Goal
-Every pot meal (soup, stew, pasta, rice dish) also has a heatless shapeless recipe that takes the cooked form of each
-raw ingredient (baked potato for potato, cooked meat for raw, tomato sauce for tomato, cooked rice for rice, fried
-egg for egg) plus bone broth for soups and stews. The pot stays the efficient route; the grid route costs a cooking
-step per ingredient.
-
-### Now
-- [cooking.js](../../kubejs/server_scripts/cooking/cooking.js) lines 16-32: bone broth (pot x2 and shapeless x1) and
-  eight bone-broth / cooked-rice shapeless meals: beef stew, baked cod stew, noodle soup, chicken soup, cooked rice
-  (line 26), fried rice, mushroom rice, sinigang (lines 30-32). Ids are `toId` auto ids
-  (`creativeengineering:shapeless/<inputs>_to_<output>_by_shapeless`).
-- Also cooked-shapeless already: fish stew (252), cabbage rolls (255), horror lasagna (326), pasta with mutton (330),
-  stuffed shulker, ender paella, pearl pasta (414-418), crab bars (241, `_manual_only`).
-- Several of these still take raw ingredients (fried rice: raw eggs; baked cod stew: raw eggs, raw potato, tomato;
-  mushroom rice: raw carrot / potato): fixed in row 2.
-
-### Build
-1. A0 keys and tags (top of this file), A1 decision.
-2. Write the conversion rule as a comment block at the top of the new Meals section, so later meals follow it:
-   raw meat -> the cooked tag (`i.cooked_beef`, `i.cooked_pork`, `i.cooked_chicken`, `i.cooked_mutton`,
-   `i.cooked_fish`, `i.cooked_meat`); potato -> `i.baked_potato`; tomato -> `i.tomato_sauce` (bowl, consumed);
-   rice -> `i.cooked_rice`; egg -> `i.cooked_eggs`; raw pasta stays `i.pasta`; generic `#forge:vegetables` ->
-   `i.t_soup_veggie_cooked`; soups and stews add `i.bone_broth` (which brings the bowl, so no extra `i.bowl`).
-   "Expensive" = at least one more main ingredient than the pot recipe, or the pot's output count halved.
-3. Rows 2, 4 and 8 are the concrete recipes. Beyond them, coverage candidates (pot recipes with a soup / meal output
-   and no shapeless route, from the jars above; decide which to add, see Decisions): FD `vegetable_soup`,
-   `vegetable_noodles`, `ratatouille`, `stuffed_pumpkin_block`; Corn Delight `corn_soup`, `cornbread_stuffing`;
-   Fruits Delight `fig_chicken_stew`, `lychee_chicken`, `orange_chicken`, `orange_marinated_pork`,
-   `pineapple_marinated_pork`, `pineapple_fried_rice`; More Delight `carrot_soup`, `cooked_rice_with_{beef,porkchop,chicken_cuts}`,
-   `diced_potatoes_with_*` (4), `mashed_potatoes`, `creamy_pasta_with_{chicken_cuts,ham}`; Quark Delight `miso_with_bamboo_sprouts`,
-   `cooked_whole_crab`; Alex's Delight `kangaroo_stew`, `kangaroo_pasta`, `lobster_pasta`, `acacia_blossom_soup`;
-   Rustic Delight `bell_pepper_soup`, `bell_pepper_pasta`, `coffee_braised_beef`, `stuffed_bell_pepper_*` (3). Not in
-   the downloaded set (check with `/dumprecipes` and filter `type: farmersdelight:cooking`): Nether's Delight,
-   Neapolitan, Brewin' (`cheesy_pasta`, `vegetable_omelet`), Delightful (`coconut_curry`, conditional recipes),
-   Alex's Delight others.
-4. Leave out: drinks, jellies, teas, custards (sweets / drinks rows), Rustic Delight `fried_*` (frying is the point),
-   vanilla `rabbit_stew` / `mushroom_stew` / `beetroot_soup` (already shapeless in vanilla).
-
-### Ids and data
-- Pot recipe ids follow `<ns>:cooking/<name>`; Fruits Delight's are under `farmersdelight:cooking/<name>` (verified).
-- `i.bone_broth` (`farmersdelight:bone_broth`), `i.cooked_rice`, `i.tomato_sauce`, `i.baked_potato` exist in the dict.
-- Output keys for the coverage list: run `tools/food_catalog.py` output ([food_catalog.md](../food_catalog.md)) for ids;
-  most already have keys in the generated block at the end of `item_dict.js` (grep the id).
-
-### Decisions
-- **Coverage:** only the meals rows 2, 4, 8 name, or the whole candidate list? Recommend rows 2/4/8 now, then the FD
-  and Corn Delight candidates (vegetable soup, vegetable noodles, ratatouille, corn soup), and leave mod-specific dishes
-  to their own rows.
-- **A1 `_manual_only`:** recommend yes (see top).
-
-### Gotchas
-- Shapeless inputs max 9 slots; `Item.of(x, 2)` counts as 2 slots.
-- `i.tomato_sauce` is a bowl item: a shapeless recipe that takes it plus `i.bowl` costs two bowls and returns one meal.
-  Don't add `i.bowl` when tomato sauce or bone broth is already in the grid (bone broth is a bowl food; the bowl is
-  consumed with it, not returned: vanilla remainder only applies to `craftRemainder` items).
-- Bowl-returning crafts and the remainder buffer: [remainder_buffer.md](../remainder_buffer.md).
-
-### Tests
-- RC-30 Heatless route: for each new meal, JEI shows the shapeless recipe; crafting it by hand works; a basin under an
-  unheated mixer with the same items does nothing (A1).
-
----
-
-## meals #2: Per-meal recipe changes
-Status: Testing (built 2026-10-21) / Work: KubeJS / id `dishes/meals #2`
-
-### Goal
-Twelve meal fixes from the cooking plan and scratchpad 2026-10-21. Per meal below: now -> change -> sketch.
-
-### Now / Build (per meal)
-1. **Fried rice + fried egg.** Pack shapeless cooking.js line 30 `[i.cooked_rice, i.eggs, i.carrot, i.onion]` (raw
-   egg). Pot: `farmersdelight:cooking/fried_rice` (rice, `#forge:eggs`, carrot, onion) and
-   `rusticdelight:cooking/fried_rice_from_cooking_oil` (rice, `#rusticdelight:fried_rice_ingredients` = eggs or
-   cooking oil, carrot, onion). Change line 30's egg to `i.cooked_eggs`, id `fried_rice_cooked_manual_only`. Pots stay.
-2. **Baked cod stew + fried egg, baked potato, tomato sauce.** Line 23 `[i.bone_broth, i.cooked_cod, i.eggs, i.potato,
-   i.tomato]` -> `[i.bone_broth, i.cooked_cod, i.cooked_eggs, i.baked_potato, i.tomato_sauce]` (`_manual_only` id).
-   This also covers the row 4 entry.
-3. **Chicken soup any cooked veggie.** Line 25 `[i.bone_broth, i.cooked_chicken, i.vegetables, i.salad_ingredients,
-   i.carrot]` -> `[i.bone_broth, i.cooked_chicken, i.t_soup_veggie_cooked, i.salad_ingredients, i.t_soup_veggie_cooked]`
-   (the raw carrot goes too; salad stays raw: cabbage / lettuce aren't cooked).
-4. **Mushroom rice + baked potato.** Line 31 `[i.cooked_rice, i.brown_mushroom, i.red_mushroom, [i.carrot, i.potato]]`
-   -> `[i.cooked_rice, i.brown_mushroom, i.red_mushroom, i.baked_potato]`. (Decision: keep a carrot option? There is no
-   cooked carrot item; recommend baked potato only, as written.)
-5. **Mutton roll needs tortilla.** The item is `farmersdelight:mutton_wrap` (`i.mutton_wrap`, "Mutton Wrap"). Two
-   recipes: `farmersdelight:mutton_wrap` (shapeless `#forge:bread`, `#forge:cooked_mutton`, salad, onion) and Create
-   Central Kitchen's `create_central_kitchen:sequenced_assembly/mutton_wrap` (base `#forge:bread`; deploy cooked mutton,
-   salad, onion; verified in CCK `FDRecipes`, shipped in its built-in `farmersdelight` datapack). Remove both; re-add
-   `R.shapeless(i.mutton_wrap, [i.t_tortilla, i.cooked_mutton, i.salad_ingredients, i.onion], e, 'mutton_wrap')` and an
-   assembly on `i.t_tortilla` (new transition row `['mutton_wrap']`, auto texture `farmersdelight:item/mutton_wrap`
-   exists).
-6. **Scrambled eggs dearer.** `incubation:scrambled_eggs` is already an unheated shapeless (`#forge:eggs` x2,
-   `#forge:milk`, bowl; verified, no other recipe). So only "dearer" is left: remove it, re-add with 3 eggs + milk +
-   bowl (or 2 eggs + milk + a cheese wedge). Decision below.
-7. **Omelette with fried eggs + shapeless veggie omelette.** `moredelight:omelette` already cooks from
-   `#forge:cooked_eggs` (smelting / smoking / campfire, verified): nothing to do there. The change is Brewin's
-   `brewinandchewin:vegetable_omelet` (pot `brewinandchewin:cooking/vegetable_omelet`: cheese wedge, egg x2, onion,
-   carrot, bowl): `R.replaceInput({ id: 'brewinandchewin:cooking/vegetable_omelet' }, i.eggs, i.cooked_eggs, e)` (the
-   port's data stays 4.5.0, alcohol.md 8.6; `replaceInput` was used the same way for the pierogi, cooking.js line 174),
-   plus `R.shapeless(i.vegetable_omelet, [i.omelette, i.t_cheese_wedge, i.onion, i.carrot, i.bowl], e,
-   'vegetable_omelet_from_omelette_manual_only')`.
-8. **Exotic fruits: any Fruits Delight fruit, shapeless.** `quarkdelight:bowl_of_exotic_fruits` is already shapeless
-   (`quark:ancient_fruit`, `minecraft:melon_slice`, `minecraft:chorus_fruit`, bowl; conditional on Quark). Remove it;
-   re-add with `i.t_exotic_fruit` in the melon slot.
-9. **Fruit salad: sequenced + slice tag.** Id `farmersdelight:fruit_salad` ships twice (FD: apple, melon x2, berries
-   x2, pumpkin slice, bowl; Delightful overrides the same id with apple, melon, pumpkin slice, `#forge:fruits`, berries
-   x2, bowl). Which one loads depends on datapack order: check JEI. Remove the id; re-add shapeless
-   `[i.apple, i.t_fruit_salad_slice, i.t_fruit_salad_slice, i.t_berries, i.t_berries, i.pumpkin_slice, i.bowl]`
-   (`i.t_berries` = `#forge:berries`, exists) and an assembly on `i.bowl` deploying apple,
-   slice, slice, berries, berries (transition row `['fruit_salad']`, auto texture exists).
-10. **Burgers: cheese only, shaped, assembly the only automation, bread or cornbread only.** Recipes in the pack
-    (verified): `farmersdelight:hamburger` (shapeless `#forge:bread`, `farmersdelight:beef_patty`, salad, tomato,
-    onion) and CCK's `create_central_kitchen:sequenced_assembly/hamburger` (base `#forge:bread`, deploy patty, salad,
-    tomato, onion); Delightful `delightful:food/cheeseburger` and `delightful:food/deluxe_cheeseburger`
-    (`forge:conditional`; `#forge:cheese` = `brewinandchewin:flaxen_cheese_wedge` from Delightful's own tag), with
-    `_from_milk` and `_from_bun` variants that only load when `#forge:cheese` is empty, `use_milk_tag = true`
-    ([config/delightful-common.toml](../../config/delightful-common.toml) line 134: false) or a bun tag exists, so today
-    the milk ones should not load (check JEI); More Delight `moredelight:simple_hamburger`, `hamburger_with_egg`,
-    `loaded_hamburger` (shapeless, `#forge:bread`); Alex's Delight `alexsdelight:bison_burger`; and
-    `alexsmobs:kangaroo_burger` (Alex's Mobs ships it shaped `B/K/B` with bread; Alex's Delight ships the same id as a
-    shapeless; datapack order decides). For each: `R.remove` the id(s), add `R.shaped(..., e, '<name>_manual_only')`
-    with `i.t_bread` as the bun (cheese burgers: `i.t_cheese_wedge`, never milk), and one `R.createSequencedAssembly`
-    on `i.t_bread`. "Cheese only" = remove `delightful:food/cheeseburger_from_milk` and
-    `delightful:food/deluxe_cheeseburger_from_milk` explicitly too (harmless if not loaded). Pattern rule (suggested):
-    top row toppings, middle row patty (cheese either side), bottom row the bread, e.g. hamburger `['STO', ' P ', ' B ']`.
-11. **Quiche recipes combined so they alternate in JEI.** Now: Brewin's `brewinandchewin:quiche_from_bacon` (shaped
-    `blb/mcm/eCe`, cooked bacon) and the pack's `creativeengineering:shaped/quiche_from_mushroom` (cooking.js lines
-    199-202), plus two assemblies `quiche_bacon_sequenced_assembly` / `quiche_mushroom_sequenced_assembly` (lines
-    205-219). Merge into one shaped recipe whose `b` key is `[i.cooked_bacon, i.brown_mushroom]` and `l` key
-    `[i.cabbage_leaf, i.cabbage]` (JEI cycles the options), id `quiche`; remove `brewinandchewin:quiche_from_bacon`.
-    Merge the two assemblies into one whose first step deploys `Ingredient.of([i.cooked_bacon, i.brown_mushroom])`:
-    this also removes the "Create only picks one of two recipes with the same first step" problem noted at line 203.
-    Keep transition row `quiche_bacon` (rename to `quiche`) and drop `quiche_mushroom` from
-    [transition_items.js](../../kubejs/startup_scripts/changes/transition_items.js) lines 45-46. Side effect: one bacon
-    plus one mushroom in the two `b` slots also crafts; fine.
-12. **Shepherd's pie takes cooked mutton chops.** Already true: FD's `farmersdelight:shepherds_pie_block` (shapeless:
-    baked potato x2, `#forge:milk`, `#forge:cooked_mutton` x3, onion x2, bowl) and FD's `#forge:cooked_mutton` holds
-    `minecraft:cooked_mutton` and `farmersdelight:cooked_mutton_chops` (both verified). Nothing in `kubejs/` removes the
-    chops from the tag. Confirm in JEI; if it works, close this item. Row 3 rebuilds the recipe anyway (cheese for
-    milk) and keeps `i.cooked_mutton`.
-
-### Ids and data
-- Missing keys to add: `i.t_bread`, `i.t_tortilla` (A0). All meal outputs have
-  keys (`i.fried_rice`, `i.baked_cod_stew`, `i.chicken_soup`, `i.mushroom_rice`, `i.mutton_wrap`, `i.scrambled_eggs`,
-  `i.omelette`, `i.vegetable_omelet`, `i.bowl_of_exotic_fruits`, `i.fruit_salad`, `i.hamburger`, `i.cheeseburger`,
-  `i.deluxe_cheeseburger`, `i.simple_hamburger`, `i.hamburger_with_egg`, `i.loaded_hamburger`, `i.bison_burger`,
-  `i.kangaroo_burger`, `i.quiche`, `i.shepherds_pie_block`; checked by value in `item_dict.js`).
-- Patties: `i.beef_patty`, `i.bison_patty` (`alexsdelight:bison_patty`); kangaroo: `#alexsdelight:cooked_kangaroo`
-  (no key: add `i.t_cooked_kangaroo`).
-
-### Decisions
-- Scrambled eggs cost: recommend 3 eggs + milk + bowl (one more egg).
-- Fruit salad assembly yield: recommend 2 (assemblies in this file give a bonus over the grid, e.g. salmon roll 3 vs 2).
-- Burgers: whether sourdough bread (in `#forge:bread`) counts as "bread". Recommend yes (it is bread); `i.t_bread`
-  as is. Bun item: none exists; `baking/baked-goods #9` may add one ("buns in burgers"), then swap the key.
-- Quiche merge: recommend as above (one shaped, one assembly).
-
-### Gotchas
-- The burgers' new shaped ids must end `_manual_only` or mechanical crafters automate them (A1).
-- `R.remove` of a CCK sequenced assembly id works like any other id (it is a normal datapack recipe).
-- Delightful's conditional recipes are `forge:conditional` wrappers; the inner recipe keeps the outer id
-  (`delightful:food/cheeseburger`).
-
-### Tests
-- RC-31 Fried rice / baked cod stew / chicken soup / mushroom rice take the cooked ingredients, not the raw ones.
-- RC-32 Mutton wrap needs a tortilla in the grid and on the deployer belt; bread no longer works.
-- RC-33 Vegetable omelet pot needs fried eggs; omelette + cheese + onion + carrot + bowl crafts one.
-- RC-34 Exotic fruits accept a lemon (or any Fruits Delight fruit) in place of melon; fruit salad accepts a pineapple
-  slice; fruit salad assembly on a bowl works.
-- RC-35 Burgers: shaped only, no milk version in JEI, assembly on bread works; a mechanical crafter with the shaped
-  pattern does nothing.
-- RC-36 Quiche: one shaped recipe in JEI cycling bacon / mushroom; assembly with mushrooms first works.
-- RC-37 Shepherd's pie with 3 cooked mutton chops crafts.
-
----
-
-## meals #3: Sequenced assembly meals
-Status: Testing (built 2026-10-21) / Work: KubeJS / id `dishes/meals #3`
-
-### Goal
-Create sequenced assembly (deployer, spout) routes for the remaining hand-made meals: shepherd's pie (also shapeless
-with cheese for milk), horror lasagna, stuffed potato (with spouting), crispy skewer, crawling sandwich, steak and
-potatoes (the last three also become shaped).
-
-### Now
-- Done: quiche (bacon, mushroom; cooking.js lines 203-219, 1.0.8). Pattern to copy: the barbecue stick (lines 228-237)
-  and grilled salmon (lines 257-268).
-- Upstream recipes (verified): `farmersdelight:shepherds_pie_block` shapeless (above, row 2 item 12);
-  `brewinandchewin:cooking/horror_lasagna` pot (scarlet wedge, beetroot, tomato sauce, pasta, cheese wedge; bowl) and
-  the pack's shapeless (cooking.js line 326: scarlet wedge x2, beetroot soup, tomato sauce x2, pasta,
-  `#brewinandchewin:cooked_horror_lasagna_meats` x2, bowl; that tag is filled by the pack, cookingtags.js lines 34-37);
-  `farmersdelight:stuffed_potato` shapeless (baked potato, `#forge:cooked_beef`, `#forge:milk`);
-  `endersdelight:crispy_skewer` shapeless (mite crust, popped chorus fruit, chorus fruit, stick);
-  `endersdelight:crawling_sandwich` shapeless (`#endersdelight:shulker_loot`, mite crust, chorus fruit, bread);
-  `farmersdelight:steak_and_potatoes` shapeless (baked potato, cooked beef, bowl, onion, cooked rice).
-
-### Build
-1. Transition rows in [transition_items.js](../../kubejs/startup_scripts/changes/transition_items.js) "cooking" block
-   (lines 32-46): `['shepherds_pie']`, `['horror_lasagna']`, `['stuffed_potato']`, `['crispy_skewer']`,
-   `['crawling_sandwich']`, `['steak_and_potatoes']`. Auto textures exist for all
-   (`farmersdelight:item/shepherds_pie`, `brewinandchewin:item/horror_lasagna`, `farmersdelight:item/stuffed_potato`,
-   `endersdelight:item/crispy_skewer`, `endersdelight:item/crawling_sandwich`, `farmersdelight:item/steak_and_potatoes`;
-   verified in the jars / port). Startup change: needs a restart.
-2. Recipes (sketch; `inc = R.incomplete(key)`, one loop unless noted):
-
-   | Meal | Grid change | Assembly: base, steps -> output |
-   |---|---|---|
-   | Shepherd's pie (`i.shepherds_pie_block`) | remove `farmersdelight:shepherds_pie_block`; shapeless baked potato x2, `i.t_cheese_wedge`, `i.cooked_mutton` x3, onion x2, bowl | `i.bowl`; deploy cooked mutton x3, onion, onion, baked potato, baked potato, cheese wedge -> 1 |
-   | Horror lasagna (`i.horror_lasagna`) | keep line 326 | `i.bowl`; spout `Fluid.of(f.tomato_sauce, 250)`, deploy pasta, scarlet wedge, lasagna meat, lasagna meat, scarlet wedge -> 2 (the efficient route the plan asked for) |
-   | Stuffed potato (`i.stuffed_potato`) | keep | `i.baked_potato`; deploy `i.cooked_beef`, spout `Fluid.of(f.milk, 250)` -> 1 |
-   | Crispy skewer (`i.crispy_skewer`) | remove `endersdelight:crispy_skewer`; shaped (pattern: Decisions) | `i.stick`; deploy chorus fruit, popped chorus, mite crust -> 1 |
-   | Crawling sandwich (`i.crawling_sandwich`) | remove `endersdelight:crawling_sandwich`; shaped `['SMC', ' B ']` | `i.minecraft_bread` (or `i.t_bread`); deploy shulker loot, mite crust, chorus fruit -> 1 |
-   | Steak and potatoes (`i.steak_and_potatoes`) | remove `farmersdelight:steak_and_potatoes`; shaped `['ROP', ' B ', ' W ']` (rice, onion, potato, beef, bowl) | `i.bowl`; deploy cooked rice, baked potato, cooked beef, onion -> 1 |
-
-   ```js
-   const incShep = R.incomplete('shepherds_pie')
-   R.createSequencedAssembly(i.shepherds_pie_block, i.bowl, [
-   	e.recipes.create.deploying(incShep, [incShep, i.cooked_mutton]),
-   	// ... as in the table
-   	e.recipes.create.deploying(incShep, [incShep, i.t_cheese_wedge])
-   ], ['shepherds_pie'], e, 'shepherds_pie_sequenced_assembly', 1)
-   ```
-3. Shepherd's pie is also in row 5's feast list: built here, row 5 points to it.
-4. Update [recipes_cooking.md](../recipes_cooking.md) 2.3 table when built.
-
-### Ids and data
-- Keys exist: `i.shepherds_pie_block`, `i.horror_lasagna`, `i.stuffed_potato`, `i.crispy_skewer`,
-  `i.crawling_sandwich`, `i.steak_and_potatoes`, `i.mite_crust`, `i.popped_chorus_fruit`, `i.chorus_fruit`,
-  `i.shulker_loot`, `i.scarlet_cheese_wedge`, `i.cooked_horror_lasagna_meat`, `i.t_cheese_wedge`; fluids
-  `f.tomato_sauce` (`create_central_kitchen:tomato_sauce`), `f.milk`.
-
-### Decisions
-- Crispy skewer shaped pattern: recommend a diagonal skewer, stick bottom-left, mite crust and chorus fruit at the top:
-  `[' MC', ' P ', 'S  ']` (M mite crust, C chorus fruit, P popped chorus fruit, S stick). Check JEI for clashes.
-- Horror lasagna assembly yield 2: recommend yes (it is the "efficient" route); check against food tuning.
-
-### Gotchas
-- Two assemblies on the same base with the same first step: Create only ever picks one (cooking.js line 203). Bowl-based
-  assemblies here start with different items (cooked mutton, tomato sauce spout, cooked rice), and the existing bowl
-  ones start with onion (grilled salmon), cooked bacon, tomato (roasted mutton chops), cod roll (rice medley): no clash.
-  Keep it that way when adding feasts (row 5).
-- A spout step uses `e.recipes.create.filling(inc, [inc, Fluid.of(...)])` (as the quiche, line 213).
-- `createSequencedAssembly` throws without an explicit idOverride (NCH line 1340).
-
-### Tests
-- RC-38 Each assembly runs on a belt with deployers / spout and gives the listed output; JEI shows each.
-- RC-39 Shepherd's pie by hand needs a cheese wedge, milk no longer works; crispy skewer, crawling sandwich, steak and
-  potatoes have only shaped grid recipes.
-
----
-
-## meals #4: Expensive cooked shapeless meals
-Status: Planned / Work: KubeJS / id `dishes/meals #4`
-
-### Goal
-Grid routes (heatless, from cooked ingredients, costlier than the pot) for chorus stew, endermite stew, crab pasta,
-baked cod stew (row 2), pumpkin soup, pasta with meatballs, dumplings, cavern explorer stew; squid ink pasta as a
-two-fluid mix (ink + tomato sauce) or an expensive shapeless.
-
-### Now (pot recipes, verified)
-| Meal | Pot inputs (container) |
-|---|---|
-| `endersdelight:chorus_stew` | chorus fruit, chorus flower (`endersdelight:shulker_bowl`) |
-| `endersdelight:endermite_stew` | `#endersdelight:enderman_loot` (ender pearl, ender shard), mite crust (shulker bowl) |
-| `quarkdelight:crab_pasta` | `quark:crab_leg`, `farmersdelight:raw_pasta`, `#forge:vegetables` (bowl) |
-| `farmersdelight:pumpkin_soup` | pumpkin slice, salad, `#forge:raw_pork`, `#forge:milk` |
-| `farmersdelight:pasta_with_meatballs` | minced beef, `#forge:pasta`, tomato sauce |
-| `farmersdelight:dumplings` x2 | `#forge:dough`, cabbage, onion, raw chicken / pork / beef or brown mushroom |
-| `quarkdelight:cavern_explorer_stew` | `quark:glow_shroom`, glow ink sac, `#forge:vegetables` (bowl) |
-| `farmersdelight:squid_ink_pasta` | `#forge:raw_fishes`, `#forge:pasta`, tomato, ink sac |
-
-### Build
-Shapeless, each with an `_manual_only` id (A1). Suggested inputs (one more main ingredient than the pot):
-
-```js
-R.shapeless(i.chorus_stew, [i.popped_chorus_fruit, i.popped_chorus_fruit, i.chorus_flower, i.shulker_bowl], e, 'chorus_stew_cooked_manual_only')
-R.shapeless(i.endermite_stew, [i.enderman, i.mite_crust, i.mite_crust, i.shulker_bowl], e, 'endermite_stew_cooked_manual_only')
-R.shapeless(i.crab_pasta, [i.cooked_crab, i.cooked_crab, i.pasta, i.t_soup_veggie_cooked, i.bowl], e, 'crab_pasta_cooked_manual_only')
-R.shapeless(i.pumpkin_soup, [i.bone_broth, i.pumpkin_slice, i.pumpkin_slice, i.salad_ingredients, i.cooked_pork, i.milk], e, 'pumpkin_soup_cooked_manual_only')
-R.shapeless(i.pasta_with_meatballs, [i.beef_patty, i.beef_patty, i.pasta, i.tomato_sauce], e, 'pasta_with_meatballs_cooked_manual_only')
-R.shapeless(Item.of(i.dumplings, 1), [i.any_dough, i.cabbage, i.onion, [i.cooked_meat, i.brown_mushroom]], e, 'dumplings_cooked_manual_only')
-R.shapeless(i.cavern_explorer_stew, [i.bone_broth, i.glow_shroom, i.glow_shroom, i.glow_ink, i.t_soup_veggie_cooked], e, 'cavern_explorer_stew_cooked_manual_only')
-R.shapeless(i.squid_ink_pasta, [i.cooked_fish, i.pasta, i.tomato_sauce, i.ink_sac, i.ink_sac], e, 'squid_ink_pasta_cooked_manual_only')
-// two-fluid heated mix: Create's basin takes two input fluids
-R.createMixing(Item.of(i.squid_ink_pasta, 2), [Fluid.of(f.ink, 250), Fluid.of(f.tomato_sauce, 250),
-	i.pasta, i.pasta, i.raw_fish, Item.of(i.bowl, 2)], e, 'squid_ink_pasta_mixing', 'heated')
-```
-
-- Pasta with meatballs uses `i.beef_patty` (cooked minced beef) in place of minced beef; tomato sauce brings its bowl.
-- Dumplings: the pot gives 2, the grid 1 ("expensive" by yield).
-- Chorus / endermite stews come in a shulker bowl (Ender's Delight's container); the `_wood` variants
-  (`chorus_stew_wood`, `endermite_stew_wood`) have no recipe here (the pack removed `twisted_cereal_wood`, cooking.js
-  line 410); leave them.
-
-### Ids and data
-- Keys exist (checked): `i.chorus_stew`, `i.endermite_stew`, `i.crab_pasta`, `i.pumpkin_soup`,
-  `i.pasta_with_meatballs`, `i.dumplings`, `i.cavern_explorer_stew`, `i.squid_ink_pasta`, `i.popped_chorus_fruit`,
-  `i.chorus_flower`, `i.shulker_bowl`, `i.enderman` (`#endersdelight:enderman_loot`), `i.mite_crust`, `i.cooked_crab`
-  (`quark:cooked_crab_leg`), `i.pumpkin_slice`, `i.beef_patty`, `i.glow_shroom`, `i.glow_ink`, `i.ink_sac`,
-  `i.any_dough`, `i.cooked_meat`. Fluids `f.ink` (`create_enchantment_industry:ink`), `f.tomato_sauce`.
-- Ink fluid source: Create Enchantment Industry turns ink sacs into ink (its own recipes; *unverified*, check JEI).
-
-### Decisions
-- Squid ink pasta: both the mix and the shapeless (recommend both; the mix is the efficient route, 2 per batch).
-- Cheaper / dearer counts are first guesses; revisit with `food/types-and-tuning #1` (soup values, row 8 of that
-  sub).
-
-### Gotchas
-- `i.enderman` is a tag key with a misleading name (`#endersdelight:enderman_loot`).
-- Quark Delight recipes are conditional on Quark; Quark is in the pack, so the outputs exist.
-
-### Tests
-- RC-40 Each of the 8 meals has a shapeless grid recipe from cooked ingredients, not automatable in an unheated basin.
-- RC-41 Heated mixer with 250 mB ink + 250 mB tomato sauce, 2 pasta, a raw fish, 2 bowls -> 2 squid ink pasta.
+Order: **A** (recipe-only KubeJS in the CD trees, no dependencies; one pass) -> **B** (one pass over
+`kubejs/generation_scripts/food/food_types.json`, then `/dumpfood` and `python3 tools/food_catalog.py`) -> **D** (audits,
+after A so they see the new recipes) -> **C** (feast assemblies and oven; the pizza servings are a Creative Brewing jar
+change) -> **E** (new blocks and art) -> **F** when their blockers land -> **G** after `largecontent/mod-additions #37`
+(the Barbeque's Delight port, nothing built yet: no `barbequesdelight` jar, member or dict key on 2026-10-31).
 
 ---
 
 ## meals #5: Feasts
-Status: In Progress (part a built 2026-10-21 as the patcherMod category: [recipes_cooking.md](../recipes_cooking.md) 2.3, RC-65; pies and pancakes left out, eaten in place) / Work: KubeJS (+ patcherMod for a JEI category, Brewin' port for pizza servings) / id `dishes/meals #5`
+Status: In Progress (JEI "Feast Plating" tab shipped 1.1.01, RC-65; assemblies and pizza servings open) / Work: KubeJS + Creative Brewing jar (pizza) / id `dishes/meals #5`
 
 ### Goal
-(a) Show "use a bowl on a placed feast to plate it" in JEI. (b) Sequenced assembly for roast chicken, shepherd's pie,
-honey glazed ham, pizza, popcorn (popcorn box also becomes shaped). (c) Pizza: 8 slices per pizza to match its texture,
-dearer dough and cheese.
+(a) JEI plating tab: **done** (patcherMod `compat/jei/FeastPlatingJEI.java`, `FeastPlatingCategory.java`; every FD
+feast block, popcorn box, pizza, stuffed hoglin, leftovers from the loot table). (b) Sequenced assembly for roast chicken,
+honey glazed ham, pizza, popcorn (popcorn box also shaped); shepherd's pie is done (row 3). (c) Pizza: 8 slices to match
+its texture, dearer dough and cheese.
 
 ### Now
-- Plating already works in game: FD `FeastBlock.takeServing` (decompiled, FD 1.2.4) gives `servingItem` when the held
-  stack matches the serving's crafting remainder (a bowl for FD's plates), 4 servings, then leftovers.
-- Feast recipes (verified, all shapeless in FD 1.2.4): `farmersdelight:roast_chicken_block` (onion, eggs, bread,
-  carrot x2, cooked chicken, baked potato x2, bowl), `farmersdelight:shepherds_pie_block` (row 3),
-  `farmersdelight:honey_glazed_ham_block` (sweet berries x4, honey bottle, smoked ham, cooked rice x2, bowl).
-  Popcorn: `corn_delight:popcorn_box` shapeless (caramel popcorn x4, paper).
-- Pizza: pack shaped `creativeengineering:shaped/pizza` (cooking.js lines 176-178: `' f '/'ptp'/' d '`, 1 cheese
-  wedge, 2 toppings, tomato sauce, 1 dough). The Brewin' port's `PizzaBlock`
-  (`development/backportedBrewin/src/main/java/umpaz/brewinandchewin/common/block/PizzaBlock.java` line 29) has
-  `SERVINGS` 0-3 (4 slices), 4 shapes, models `pizza`, `pizza_slice1..3`; `brewinandchewin:cutting/pizza` gives 4
-  slices, `pizza_from_slices` is `pp/pp`; `BnCSlicingModifier` drops the remaining servings on a knife break.
+- Plating works in game: FD `FeastBlock.takeServing` gives the serving when the held stack matches the serving's
+  crafting remainder (a bowl), 4 servings, then leftovers.
+- Feast recipes (FD 1.2.4, all shapeless): `farmersdelight:roast_chicken_block` (onion, eggs, bread, carrot x2, cooked
+  chicken, baked potato x2, bowl; its bread is `i.t_bread` since `farmersdelight/recipes.js` line 16),
+  `farmersdelight:honey_glazed_ham_block` (sweet berries x4, honey bottle, smoked ham, cooked rice x2, bowl). Popcorn:
+  `corn_delight:popcorn_box` shapeless (caramel popcorn x4, paper). Shepherd's pie assembly: `farmersdelight/recipes.js`
+  lines 331-340 (base `i.bowl`). No assembly for the other four exists (grep 2026-10-31).
+- Pizza: Supreme Pizza (`i.pizza`, `brewinandchewin:pizza`), `brewinandchewin/recipes.js` line 36-37:
+  `['bfo', 'mtc', ' d ']` (bell pepper, cheese wedge, onion, mushrooms, tomato sauce, cooked meat, 1 dough), id
+  `creative_delight:shaped/pizza`. The port's `PizzaBlock`
+  (`development/creativeBrewing/members/brewin/src/main/java/umpaz/brewinandchewin/common/block/PizzaBlock.java` line 29)
+  still has `SERVINGS` 0-3 (4 slices); `BnCSlicingModifier` (`forge/loot/BnCSlicingModifier.java`) drops the rest on a knife
+  break. Slice values `BnCFoods.PIZZA_SLICE` 5 / 1.0 (line 143).
 
 ### Build
-1. **JEI plating (a).** Two options:
-   - Quick (KubeJS client): a JEI information page on each feast block item (`JEIEvents.information`, KubeJS 6;
-     *unverified* event name / method `addItem(ids, lines)` in 1902.6.2: test once) saying "Place, then use a bowl on
-     it: 4 servings of <serving>".
-   - Proper (patcherMod): a `FeastPlatingCategory` registered from a new `@JeiPlugin` next to
-     `compat/DragonBreathingJEI.java`: iterate `ForgeRegistries.BLOCKS`, keep `instanceof FeastBlock`
-     (`vectorwing.farmersdelight.common.block.FeastBlock`, public fields `servingItem`, method
-     `getServingItem(BlockState)`, `getMaxServings()` = 4), one recipe per block: inputs block item + the serving's
-     `getCraftingRemainingItem()`, output serving x4. Catalyst: none. Pizza and quiche (Brewin' `PizzaBlock`, not a
-     `FeastBlock`) and Corn Delight's popcorn box / nachos (check their block classes) need their own entries.
-   Recommend the JEI category (the row asks for a tab); the info page is a stopgap.
-2. **Assemblies (b)** (transition rows `['roast_chicken']` texture `farmersdelight:item/roast_chicken_block`,
-   `['honey_glazed_ham']` texture `farmersdelight:item/honey_glazed_ham_block`, `['pizza']` (auto
-   `brewinandchewin:item/pizza` exists), `['popcorn_box', 'corn_delight:item/caramel_popcorn']` (the box has no flat
-   item sprite); shepherd's pie is row 3):
-   - Roast chicken: base `i.bowl`; deploy cooked chicken, baked potato, baked potato, carrot, carrot, bread, onion,
-     egg -> `i.roast_chicken_block`.
-   - Honey glazed ham: base `i.bowl`; deploy smoked ham, cooked rice, cooked rice, spout `Fluid.of(f.honey, 250)`,
-     deploy sweet berries x4 (or 2 loops of 2) -> `i.honey_glazed_ham_block`.
-   - Pizza: base `i.dough`; spout `Fluid.of(f.tomato_sauce, 250)`, deploy cheese wedge, topping, topping, cheese wedge
-     -> `i.pizza`.
-   - Popcorn box: base `i.paper`; deploy caramel popcorn, 4 loops -> `i.popcorn_box`; and the grid recipe becomes
-     shaped: remove `corn_delight:popcorn_box`, `R.shaped(i.popcorn_box, ['C C', 'CPC'], { C: i.caramel_popcorn,
-     P: i.paper }, e, 'popcorn_box')`.
-   Bowl-based first steps: cooked chicken (roast chicken), smoked ham (ham) - unique against the list in row 3
-   Gotchas.
-3. **Pizza 8 slices (c)** (Brewin' port, new jar `-04` or next): `SERVINGS` 0-7, 8 `SHAPES`, models
-   `pizza_slice1..7` and blockstate entries (the top texture already shows 8 slices, per the plan), `takeServing`
-   unchanged (1 slice per click), `BnCSlicingModifier` drops `servings + 1`. Pack side: remove
-   `brewinandchewin:cutting/pizza`, `R.fdCutting(i.pizza, i.any_knife, Item.of(i.pizza_slice, 8), e, 'pizza')`; remove
-   `brewinandchewin:pizza_from_slices`, `R.shaped(i.pizza, ['SSS', 'S S', 'SSS'], { S: i.pizza_slice }, e,
-   'pizza_from_slices')`; dearer pizza: e.g. `['fff', 'ptp', 'ddd']` (3 cheese, 3 dough). Slice food (5 / 1.0 in
-   `BnCFoods.PIZZA_SLICE`) should halve-ish: a port change or a tuning-config value (`food/types-and-tuning #1`).
-   Note in alcohol.md 3.2 (port deviations from 4.5.0).
+1. **Assemblies (b)** in `farmersdelight/recipes.js` Meals (roast chicken, ham) and `corn_delight/recipes.js` (popcorn),
+   `brewinandchewin/recipes.js` (pizza), all `R.createSequencedAssembly` with `R.incomplete(<key>)`; transition rows
+   `['roast_chicken']` texture `farmersdelight:item/roast_chicken_block`, `['honey_glazed_ham']`
+   `farmersdelight:item/honey_glazed_ham_block`, `['pizza']` (sprite `brewinandchewin:item/pizza`),
+   `['popcorn_box', 'corn_delight:item/caramel_popcorn']`:
+   - Roast chicken: base `i.bowl`; deploy cooked chicken, baked potato x2, carrot x2, `i.t_bread`, onion, egg.
+   - Honey glazed ham: base `i.bowl`; deploy smoked ham, cooked rice x2, spout `Fluid.of(f.honey, 250)`, sweet berries x4.
+   - Pizza: base `i.dough`; spout `Fluid.of(f.tomato_sauce, 250)`, deploy the Supreme toppings in the grid's order.
+   - Popcorn box: base `i.paper`; deploy caramel popcorn, 4 loops; grid becomes shaped: remove `corn_delight:popcorn_box`,
+     `R.shaped(i.popcorn_box, ['C C', 'CPC'], { C: i.caramel_popcorn, P: i.paper }, e, 'popcorn_box')`.
+   First steps must differ from every other bowl / dough / paper assembly (Create picks one by first step): cooked
+   chicken and smoked ham on a bowl are free; check `/dumprecipes` `create:sequenced_assembly` for `i.dough` bases.
+2. **Pizza 8 slices (c)** (Creative Brewing member `brewin`): `SERVINGS` 0-7, 8 `SHAPES`, models `pizza_slice1..7` and
+   blockstate entries, `takeServing` unchanged, `BnCSlicingModifier` drops `servings + 1`. Pack side in
+   `brewinandchewin/recipes.js`: remove `brewinandchewin:cutting/pizza` and `brewinandchewin:pizza_from_slices`, then
+   `R.fdCutting(i.pizza, i.any_knife, Item.of(i.pizza_slice, 8), e, 'pizza')` and
+   `R.shaped(i.pizza, ['SSS', 'S S', 'SSS'], { S: i.pizza_slice }, e, 'pizza_from_slices')`. Slice values roughly halve
+   (CD startup `brewinandchewin/brewin_foods.js`, new). The dearer grid is `merges/dishes #8`'s shape. Note the change
+   in [creative_brewing.md](../creative_brewing.md) (the Brewin' port notes).
 
 ### Ids and data
-- Keys exist: `i.roast_chicken_block`, `i.honey_glazed_ham_block`, `i.shepherds_pie_block`, `i.pizza`,
-  `i.popcorn_box`, `i.caramel_popcorn`, `i.smoked_ham`, `i.paper`, `i.dough`, `i.t_pizza_topping`, `i.pizza_slice`,
-  `i.any_knife`.
-- Feast block registry: FD feasts are `FeastBlock`; the pack's placeable feasts also sit in a blocktags.js list (line
-  370-375) for BlockRunner.
+Keys exist: `i.roast_chicken_block`, `i.honey_glazed_ham_block`, `i.pizza`, `i.pizza_slice`, `i.popcorn_box`,
+`i.caramel_popcorn`, `i.smoked_ham`, `i.paper`, `i.dough`, `i.any_knife`, `i.bowl`. Placed feasts for BlockRunner:
+`kubejs/server_scripts/tags/blocktags.js` lines 384-390.
 
 ### Decisions
-- JEI route: patcherMod category (recommend) vs KubeJS info page.
-- Pizza: 8 servings in the port (recommend; matches the texture) vs 4 servings that each drop 2 slices (no model work,
-  but the texture still shows quarters going).
-- Pizza cost: recommend `['fff', 'ptp', 'ddd']` for 8 slices.
+- Pizza: 8 servings in the port (recommend; matches the texture) vs 4 servings that each drop 2 slices.
+- Vintage's cheese and meat pizzas (`backportedVintage` `PizzaBlock`) follow the same 8 later, or stay 4: recommend the
+  same change in the same session so all pizzas agree.
 
 ### Gotchas
-- A feast assembly output is the block item; Create's sequenced assembly handles block items fine.
-- The port is a separate jar (`development/backportedBrewin`): build + replace in `mods/`, client and server.
-- Bowl stacking issues with plated servings: `cooking/kitchen #5`.
+- A feast assembly outputs the block item; fine in Create.
+- The pizza change is a Creative Brewing jar rebuild and install (client and server); never while the game runs.
 
 ### Tests
-- RC-42 JEI shows the plating tab (or info page) for every feast, with the bowl and 4 servings.
 - RC-43 Each feast assembly runs and gives the block; popcorn box is shaped only.
 - RC-44 Pizza: 8 slices by hand and by knife; the placed pizza shows 8 stages; 8 slices craft back to a pizza.
 
 ---
 
 ## meals #6: Glistering melon edible
-Status: Planned / Work: KubeJS / id `dishes/meals #6`
+Status: In Progress (edible shipped 1.1.01, FO-29, server part scratch PASSED 2026-10-22 SQ-OF-12; gilding left) / Work: KubeJS / id `dishes/meals #6`
 
 ### Goal
-`minecraft:glistering_melon_slice` becomes food, and gets heated "gilding" routes like the golden carrot.
+Heated "gilding" routes for `minecraft:glistering_melon_slice`, like the golden carrot.
 
 ### Now
-- Vanilla: not edible; crafted from melon slice + 8 gold nuggets; a brewing ingredient.
-- Golden Food's `goldenfood:golden_melon_slice` (shaped: melon slice ringed by 8 gold ingots, recipe id
-  `minecraft:golden_melon_slice` in that jar, verified) is the edible golden melon: 4 / 1.2, regeneration II 5 s,
-  absorption 120 s ([food_catalog.md](../food_catalog.md) "golden").
-- Food-value copying exists: [food_values.js](../../kubejs/startup_scripts/cooking/food_values.js) lines 6-8
-  (`global.foodValueCopies`, target key <- source key, `ItemEvents.modification`, restart to apply).
-- Gilding pattern: golden.js lines 10-14 (golden carrot: heated mixing with 5 nuggets, arc furnace with 3).
+- Edible: CD startup `minecraft/food_values.js` line 8 (`glistering_melon_slice: { from: 'golden_melon_slice', effects: false }`:
+  4 / 1.2, always edible, no effects), type `golden` ([food.md](../food.md) 3.10).
+- Gilding pattern: golden carrot heated mixing with 6 nuggets
+  ([create/golden.js](../../kubejs/data/creative_delight/kubejs/create/golden.js) line 19), arc furnace with 5 nuggets
+  ([immersiveengineering/golden.js](../../kubejs/data/creative_delight/kubejs/immersiveengineering/golden.js) line 16), from
+  row 9's numbers (machines 6 and 5 of the grid's 8). Vanilla's grid (melon slice in 8 nuggets) already fits the rule.
+- No glistering melon recipe in either file (grep 2026-10-31).
 
 ### Build
-1. `food_values.js`: add `glistering_melon_slice: 'golden_carrot'` (same nugget tier as the golden carrot; the
-   golden melon slice is ingot tier). `setFoodProperties` on a non-food item makes it edible (`Item.isEdible` reads the
-   food properties; *unverified in game*, test RC-45).
-2. golden.js, after the golden carrot:
-   ```js
-   R.createMixing(i.glistering_melon_slice, [i.melon, Ingredient.of([i.any_nugget_gold]).withCount(5)], e, 'glistering_melon_gilding', 'heated')
-   R.ieArcFurnace(i.glistering_melon_slice, i.melon, e, 'glistering_melon_arc_gilding', [], [i.any_nugget_gold, i.any_nugget_gold, i.any_nugget_gold])
-   ```
-   (Row 9 may swap `i.any_nugget_gold` for a gold-only nugget.)
-3. After a `/dumpfood` export, rerun `python3 tools/food_catalog.py` so the slice lands in
-   `kubejs/generation_scripts/food/food_types.json` type `golden` (gives the type tag, canning parity and SoL value).
+1. `create/golden.js`, after the golden carrot:
+   `R.createMixing(i.glistering_melon_slice, [i.melon, Ingredient.of([i.any_nugget_gold]).withCount(6)], e, 'glistering_melon_gilding', 'heated')`.
+2. `immersiveengineering/golden.js`: `R.ieArcFurnace(i.glistering_melon_slice, i.melon, e, 'glistering_melon_arc_gilding', [], [nugget x5])`
+   (list `i.any_nugget_gold` five times: NCH's `ieArcFurnace` drops counts).
 
 ### Ids and data
-- `i.glistering_melon_slice`, `i.melon`, `i.golden_carrot`, `i.any_nugget_gold` exist.
+`i.glistering_melon_slice` (item_dict line 2378), `i.melon` (`minecraft:melon_slice`), `i.any_nugget_gold` (`#forge:nuggets/gold`, holds rose gold).
 
 ### Decisions
-- Food values: copy the golden carrot (recommend) or the golden melon slice. Either follows whatever row
-  `food/types-and-tuning #3` (golden food values, D2) sets later.
-- Keep Golden Food's golden melon slice (ingot tier) alongside: recommend yes, the two tiers mirror carrot / apple.
+None open (numbers follow row 9; `food/types-and-tuning #3` may move them for every golden food at once).
 
 ### Gotchas
-- `ItemEvents.modification` is startup: restart, not `/reload`.
-- Glistering melon stays a brewing ingredient; eating it uses one.
+Glistering melon stays a brewing ingredient; the machine routes make brewing cheaper too (accepted with the golden carrot).
 
 ### Tests
-- RC-45 Glistering melon can be eaten (golden carrot values / effects); heated mixer melon + 5 gold nuggets -> 1; arc
-  furnace melon + 3 nuggets -> 1; brewing still works.
-
----
-
-## meals #7: Fish recipes for any fish
-Status: Planned / Work: KubeJS / id `dishes/meals #7`
-
-### Goal
-Frying with cooking oil in the pot for any fish; Salmon Tempura becomes Fish Tempura; Fish and Chips from raw potato
-slices + any raw fish, plated with paper, with a joke tooltip about the "chips"; PneumaticCraft's chips renamed (fries)
-and made from diced potato + oil; every PneumaticCraft deep-frying recipe removed.
-
-### Now (verified)
-- PNC deep frying = two Thermopneumatic Processing Plant recipes: `pneumaticcraft:thermo_plant/chips`
-  (`#forge:crops/potato` + 100 mB `#forge:plantoil` at 423 K -> 4 `pneumaticcraft:chips`) and
-  `pneumaticcraft:thermo_plant/salmon_tempura` (raw salmon tempura + 100 mB plant oil -> salmon tempura).
-- PNC crafting: `pneumaticcraft:raw_salmon_tempura` (salmon + sourdough; the pack swaps salmon for
-  `#forge:raw_fishes/salmon`, cooking.js lines 272-276), `pneumaticcraft:cod_n_chips` (chips, cooked cod, paper).
-- The pack's own deep frying: cooking.js line 271, heated mixing 250 mB `f.plantoil` + raw salmon tempura -> salmon
-  tempura (auto id).
-- Pot frying precedent: Rustic Delight `rusticdelight:cooking/fried_calamari` (`#rusticdelight:cooking_oil`,
-  `rusticdelight:batter`, `#forge:raw_fishes/calamari`, tomato; bowl) and `fried_chicken`.
-- Potato slices: `rusticdelight:potato_slices` (knife: potato -> 2) and `moredelight:diced_potatoes` (knife: potato ->
-  1; the only member of `#forge:sliced_potato`). `dishes/ingredients #8` merges diced potatoes into Rustic Delight's
-  slices.
-
-### Build
-1. Remove: `pneumaticcraft:thermo_plant/chips`, `pneumaticcraft:thermo_plant/salmon_tempura`, the pack's line-271
-   mixing, `pneumaticcraft:cod_n_chips` (replaced below).
-2. Fish tempura: keep the item `pneumaticcraft:salmon_tempura`, rename in
-   [namechanges.js](../../kubejs/client_scripts/namechanges.js) (`e.renameItem(i.salmon_tempura, 'Fish Tempura')`,
-   `e.renameItem(i.raw_salmon_tempura, 'Raw Fish Tempura')`). Raw tempura: replace the line 272-276 replaceInput with
-   `R.remove({ id: 'pneumaticcraft:raw_salmon_tempura' })` + `R.shapeless(i.raw_salmon_tempura, [i.t_food_raw_fish,
-   i.batter], e, 'raw_fish_tempura')` (batter in place of sourdough; decision). Frying:
-   `R.fdCooking([i.t_cooking_oil, i.raw_salmon_tempura], i.salmon_tempura, e, 'fish_tempura', 0.35, 200)`. Slice &
-   Dice gives it a heated mixing copy automatically (cooking.js line 388 note).
-3. Fries: rename `pneumaticcraft:chips` to "Fries" (`e.renameItem(i.chips, 'Fries')`); recipe
-   `R.fdCooking([i.t_cooking_oil, i.potato_slices, i.potato_slices], Item.of(i.chips, 2), e, 'fries', 0.35, 200)`
-   (switch `i.potato_slices` to `i.t_sliced_potato` once `dishes/ingredients #8` puts Rustic's slices in the tag).
-4. Fish and chips: rename `pneumaticcraft:cod_n_chips` "Fish and Chips"; pot recipe
-   `R.fdCooking([i.t_cooking_oil, i.t_food_raw_fish, i.potato_slices, i.potato_slices], i.cod_n_chips, e,
-   'fish_and_chips', 0.35, 200, i.paper)` (container paper = "plated with paper"); plus the cooked shapeless
-   `R.shapeless(i.cod_n_chips, [i.chips, i.cooked_fish, i.paper], e, 'fish_and_chips_cooked_manual_only')`.
-   Tooltip in [tooltips.js](../../kubejs/client_scripts/tooltips.js) Food section (lines 484-494):
-   `[i.cod_n_chips, ["The chips are fries. Don't tell the British.", col.uncm]]` (wording is yours).
-5. "Any fish": `i.t_food_raw_fish` (`#creativeengineering:food_type/raw/fish`, 13 whole fish incl. blobfish, flying
-   fish, catfish, lionfish, tropical fish) vs `i.raw_fish` (`#forge:raw_fishes`: cod, salmon, tropical fish and their
-   slices, calamari, koi / glowfish entries; cross-mod). Decision below.
-6. [recipes_cooking.md](../recipes_cooking.md) 2.3: replace the "Salmon tempura" row.
-
-### Ids and data
-- Keys exist: `i.salmon_tempura`, `i.raw_salmon_tempura`, `i.chips`, `i.cod_n_chips`, `i.batter`, `i.cooking_oil`,
-  `i.potato_slices`, `i.paper`, `i.t_food_raw_fish`, `i.raw_fish`, `i.cooked_fish`. New: `i.t_cooking_oil`,
-  `i.t_sliced_potato` (A0).
-- `#rusticdelight:cooking_oil` = `rusticdelight:cooking_oil` (+ an optional Frycook's canola oil, not installed);
-  `dishes/ingredients #10` plans fish oil as cooking oil: it would join this tag.
-
-### Decisions
-- Fish set: recommend `i.t_food_raw_fish` (whole fish only; the pack's type tag, avoids slices and calamari), and leave
-  the poisonous ones in (it is fried).
-- Raw tempura binder: batter (recommend; Rustic's frying recipes use it) or keep sourdough.
-- Names: "Fish Tempura", "Fries", "Fish and Chips" (TODO says "names" is open).
-
-### Gotchas
-- A pot recipe with a `container` puts the output in the plate slot only when the container is there: paper must be
-  supplied (as the oven's `container`).
-- `R.remove` of the thermo plant ids: PNC's recipe ids are `pneumaticcraft:thermo_plant/<name>` (verified file paths).
-- Slice & Dice skips ids ending `_manual_only`; don't suffix the pot recipes unless the mixer copy is unwanted.
-
-### Tests
-- RC-46 No Thermopneumatic chips or tempura in JEI; pot: cooking oil + 2 potato slices -> 2 Fries; cooking oil + raw
-  tempura -> Fish Tempura; cooking oil + any raw fish + 2 slices with paper -> Fish and Chips; tooltip shows.
-
----
-
-## meals #8: Dog food
-Status: Planned / Work: KubeJS / id `dishes/meals #8`
-
-### Goal
-An expensive cooked shapeless recipe for `farmersdelight:dog_food`.
-
-### Now
-- Only `farmersdelight:cooking/dog_food` (rotten flesh, bone meal, `#farmersdelight:wolf_prey` = raw chicken / raw
-  mutton / rabbit, `#forge:crops/rice`; verified). Bowl comes from the pot. Food type `special`.
-
-### Build
-`R.shapeless(i.dog_food, [i.rotten_flesh, i.bonemeal, i.cooked_meat, i.cooked_meat, i.cooked_rice], e,
-'dog_food_cooked_manual_only')` (cooked rice brings the bowl; two cooked meats = "expensive"). Optional
-`i.t_wolf_prey_cooked` tag (cooked chicken / mutton / rabbit) to mirror the pot's set; recommend `i.cooked_meat`.
-
-### Ids and data
-`i.dog_food`, `i.rotten_flesh`, `i.bonemeal`, `i.cooked_meat` (`#forge:cooked_meat`, filled by cookingtags.js lines
-40-57), `i.cooked_rice`.
-
-### Decisions
-None beyond the meat set (recommend `i.cooked_meat`).
-
-### Gotchas
-Cooked rice is a bowl item; no separate bowl.
-
-### Tests
-- RC-47 Dog food crafts by hand from the cooked set; not in an unheated basin.
-
----
-
-## meals #9: Gold food cheap in machines
-Status: Planned / Work: KubeJS / id `dishes/meals #9`
-
-### Goal
-Revisit the machine gilding costs once food tuning settles, and stop rose gold counting as gold for golden carrots.
-
-### Now
-- [golden.js](../../kubejs/server_scripts/cooking/golden.js): golden carrot grid 8 `i.any_nugget_gold` (line 10-11),
-  heated mixing carrot + 5 (line 13), arc furnace carrot + 3 (line 14); golden apple heated mixing apple + 5
-  `i.any_ingot_gold` (line 17), arc + 3 (line 18), vanilla grid 8; enchanted golden apple assembly 4 loops of
-  `i.any_block_gold` + 250 mB XP + pressing (lines 21-26).
-- `i.any_nugget_gold` = `#forge:nuggets/gold`, which the pack extends with `creativeengineering:rose_gold_nugget`
-  ([metaltags.js](../../kubejs/server_scripts/tags/metaltags.js) line 40); `#forge:storage_blocks/gold` also gets the
-  rose gold block (line 42), so the enchanted golden apple takes rose gold blocks too.
-- [recipes_cooking.md](../recipes_cooking.md) F5, F7; [recipes_metal.md](../recipes_metal.md) F5 and TODO
-  `recipes/metal #3` (rose gold in gold tags, decision "keep in the block tag?").
-
-### Build
-1. Rose gold: if `recipes/metal #3` takes rose gold out of `forge:nuggets/gold`, nothing to do here. Otherwise swap the
-   golden food recipes to a gold-only ingredient: `i.nugget_gold` (`minecraft:gold_nugget`) or a new tag
-   `creativeengineering:nuggets/pure_gold` (`i.t_nugget_pure_gold`, `#forge:nuggets/gold` minus rose gold via
-   `t.addMatching(..., { except: i.nugget_rose_gold })`). Same for `i.any_block_gold` in the enchanted golden apple.
-2. Costs: after `food/types-and-tuning #1` / #3 set golden food values, adjust golden.js counts. A first proposal:
-   mixing 6 ingots, arc 5 (the arc furnace is the cheap route today at 3).
-
-### Ids and data
-`i.nugget_gold`, `i.nugget_rose_gold`, `i.any_nugget_gold`, `i.any_ingot_gold`, `i.any_block_gold`.
-
-### Decisions
-- Rose gold: fix in the metal tags (`recipes/metal #3`) or locally here. Recommend locally (a pure-gold tag), since rose
-  gold rods in `forge:rods/gold` may be intended.
-- Machine discount size: wait for tuning (recommend keeping a discount, smaller than now).
-
-### Gotchas
-Row 6's glistering melon gilding should use whatever nugget ingredient this row picks.
-
-### Tests
-- RC-48 Golden carrot (grid, mixer, arc) refuses rose gold nuggets; enchanted golden apple refuses rose gold blocks.
+- RC-45 Heated mixer melon slice + 6 gold nuggets -> 1; arc furnace melon slice + 5 nuggets -> 1; brewing still works.
 
 ---
 
 ## meals #10: Shrimp fried rice
-Status: Planned / Work: KubeJS / data / id `dishes/meals #10`
+Status: In Progress (pot recipe and values built 2026-10-29, unreleased; scratch PASSED r1031 2026-10-31: SQ-CM-21, SQ-CM-23) / Work: KubeJS / id `dishes/meals #10`
 
 ### Goal
-`alexsmobs:shrimp_fried_rice` only from the mantis shrimp, with the tooltip "You're telling me a shrimp fried this
-rice?".
+`alexsmobs:shrimp_fried_rice` with the tooltip "You're telling me a shrimp fried this rice?", a JEI note for the mantis
+shrimp route, and a balance check of that route.
 
-Folded scope (scratchpad 2026-10-24): part of the ocean merge, and a crafting recipe for shrimp fried rice (see
-`dishes/ocean #4`, `dishes/ocean #5`). Oceanic Delight's `shrimp_rice` (pot: rice, tomato, eggs, `#forge:shrimps`,
-`#forge:squid_tentacles`, bowl; verified in the jar) is the nearest existing dish and would be the template. Conflict
-to settle: "shrimp only from the mantis shrimp" versus Oceanic's shrimp item, which the fishing net drops (ocean
-#1 boosts it); a crafting recipe needs `#forge:shrimps` or the mantis shrimp's own drop, which does not exist yet.
-
-### Now (verified in Alex's Mobs 1.21.1)
-- No crafting recipe makes it (no recipe JSON in Alex's Mobs or the other jars checked).
-- Alex's Mobs already has the behaviour: `MantisShrimpAIFryRice` (decompiled). A tamed, not sitting mantis shrimp
-  holding items in `#alexsmobs:shrimp_rice_fryables` (= `#forge:crops/rice`) walks to a furnace-type block (or a block in
-  a vanilla block tag, likely `#minecraft:campfires`; SRG `BlockTags.f_13087_`, *unverified*) with air above, punches
-  it (lighting a furnace) and after 200 ticks swaps its whole held stack for the same count of shrimp fried rice.
-- The mantis shrimp has no entity loot table in the jar (drops nothing); tamed by 10-30 tropical fish.
-- Food type `meal` (`food_types.json`), dict key `i.shrimp_fried_rice`; can parity row is `/` (no can).
+### Now
+- Built: pot Fried Rice + 2 `#forge:shrimps` -> 1, 1.0 xp, 200 ticks, no container
+  ([alexsmobs/recipes.js](../../kubejs/data/creative_delight/kubejs/alexsmobs/recipes.js) line 16, id
+  `creative_delight:farmersdelightcooking/shrimp_fried_rice`, only with the Oceanic member on); values 20 / 0.6, Comfort
+  240 s (CD startup `alexsmobs/alexsmobs_foods.js`). RC-163.
+- Alex's Mobs' own route (`MantisShrimpAIFryRice`, verified 2026-10-21): a tamed, standing mantis shrimp holding
+  `#alexsmobs:shrimp_rice_fryables` (= `#forge:crops/rice`) punches a furnace-type block and after 200 ticks swaps the
+  whole held stack for the same count of shrimp fried rice. So 1 raw rice -> one 20 / 24 meal.
+- No tooltip or JEI page for it (grep 2026-10-31). Food tooltips live in `kubejs/assets/creative_delight/kubejs/<mod>/client.js`;
+  there is no `alexsmobs/` folder there yet. JEI pages: `JEIEvents.information`, `e.addItem(id, [Text.of(...)])`, gated
+  on `global.CD.qol('jeiInfoPages')` (pattern `endersdelight/client.js` lines 18-26).
 
 ### Build
-1. Nothing to remove (confirm with `/dumprecipes`: no recipe outputs `alexsmobs:shrimp_fried_rice`).
-2. Tooltip in tooltips.js Food section: `[i.shrimp_fried_rice, ["You're telling me a shrimp fried this rice?",
-   col.uncm], ['Hand rice to a tamed Mantis Shrimp next to a furnace', col.norm]]`.
-3. Optional JEI info page with the same how-to (see row 5's `JEIEvents.information` note).
+1. New `kubejs/assets/creative_delight/kubejs/alexsmobs/client.js` (`// requires: alexsmobs`): `ItemEvents.tooltip`
+   adding "You're telling me a shrimp fried this rice?" (gray italic, flavour) to `i.shrimp_fried_rice`; JEI page "Hand
+   rice to a tamed Mantis Shrimp next to a furnace: it fries the whole stack." on the same item.
+2. Balance (decision below), then the changelog bullet under the existing shrimp fried rice bullet's family.
 
 ### Ids and data
-`i.shrimp_fried_rice`, `i.spawn_egg_mantis_shrimp`; tag `#alexsmobs:shrimp_rice_fryables`.
+`i.shrimp_fried_rice`, `i.fried_rice`, `i.t_shrimps`; tag `#alexsmobs:shrimp_rice_fryables`.
 
 ### Decisions
-- "Only drops from mantis shrimp": recommend the existing frying behaviour (no loot change). The alternative, a LootJS
-  drop on death, would make it a kill reward instead of a tame-and-cook one.
+- Mantis route gives a full meal per raw rice (the pot needs Fried Rice + 2 shrimp). Recommend: keep it (tame-and-cook
+  reward, slow: one shrimp, 200 ticks per stack); if it proves too cheap, a LootJS-free fix is to point
+  `#alexsmobs:shrimp_rice_fryables` at `i.fried_rice` instead of raw rice (tag edit through `global.tags`), so the shrimp
+  only adds the shrimp step.
 
 ### Gotchas
-The shrimp converts the whole held stack at once; fine as a bulk route.
+The shrimp converts the whole held stack at once.
 
 ### Tests
-- RC-49 Tame a mantis shrimp, give it a stack of rice (sneak-use), stand it next to a furnace: the stack turns into
-  shrimp fried rice; tooltip shows both lines.
-
-### Built 2026-10-29 (crafting route and values; tooltip and JEI note not done)
-- Cooking pot: Fried Rice + 2 `#forge:shrimps` (Oceanic Delight's shrimp or shrimp slices) -> 1 Shrimp Fried Rice,
-  1.0 xp, 200 ticks, no container (the Fried Rice's bowl comes back as its remainder). Creative Delight
-  `kubejs/data/creative_delight/kubejs/alexsmobs/recipes.js`, id `creative_delight:farmersdelightcooking/shrimp_fried_rice`,
-  only with the Oceanic member on.
-- Food values set from the inputs (Fried Rice 14 / 21 + 2 shrimp 4 / 0.8 = 22 / 22.6): hunger 20 (the full bar),
-  modifier 0.6 = 24 saturation, Comfort 240 s as the pack's Fried Rice (upstream 12 / 1.0, no effect). CD startup
-  `alexsmobs/alexsmobs_foods.js`.
-- Open: the mantis shrimp route turns 1 raw rice into the same 20 / 24 meal; the tooltip of step 2.
-- Tests: RC-163.
+- RC-49 Tame a mantis shrimp, give it rice, stand it by a furnace: the stack turns into shrimp fried rice; the tooltip
+  line and the JEI page show.
 
 ---
 
 ## meals #11: Merge potato salad
-Status: Planned / Work: KubeJS / TODO `merges/dishes #4` (scratchpad 2026-10-22, repeated 2026-10-24; no earlier section here)
+Status: Planned / Work: KubeJS / TODO `merges/dishes #4` (scratchpad 2026-10-22, repeated 2026-10-24)
+
+Moved 2026-10-31: the row's brief is [merges_dishes.md](merges_dishes.md); this old section is kept until that one has
+the facts. 2026-10-31: Oceanic's `oceanic_delight:potato_salad` now has a dict key (Oceanic is a CD member).
 
 ### Goal
 Merge the potato salad items into one, through `global.itemMerges` and the helpers.
@@ -775,60 +241,282 @@ Survivor: recommend Rustic's (it has the pack's cooking-fluid egg route and a ca
 
 ---
 
-## meals #20: Feasts in ovens
-Status: In Progress / Work: KubeJS / TODO `dishes/meals #20` (scratchpad 2026-10-22; no earlier section here)
+## meals #12: Pancake food type
+Status: In Progress / Work: KubeJS / data / id `dishes/meals #12` ([food_families.md](../food_families.md) 3.1 Dessert / Pastry rows)
 
 ### Goal
-Feasts cooked in the oven, starting with the hoglin feast. Folded scope (scratchpad 2026-10-24): all feasts in the
-pot and the oven, applying to every feast, not just the hoglin one. Related `dishes/meals #5`.
+A pancake food type, sweet potato pancakes placeable, and a decision on which pancakes survive (the TODO row folds in the
+Autumnity leftover "remove or integrate pancakes").
 
 ### Now
-Feasts are shapeless grid crafts of a cooked set plus a bowl (`meals #5` Now: roast chicken, shepherd's pie,
-honey glazed ham; `plate_of_stuffed_hoglin_*` is Nether's Delight). The oven recipes are `R.ceBaking(inputs, output,
-e, id, tool)` in [baking.js](../../kubejs/data/creative_delight/kubejs/creativeengineering/baking.js); the pot is `R.fdCooking`. The feast list is
-`food_types.json` `meal/feast` plus the pizza and stuffed pepper blocks (`cans/canning #17` lists them).
+- Food types: [food_types.json](../../kubejs/generation_scripts/food/food_types.json) `types`, one type per food, `/` nests
+  (`sweet` holds 220 foods); `kubejs/data/creative_delight/kubejs/creativeengineering/food_type_tags.js` turns each into
+  `#creativeengineering:food_type/<type>` (nested types also in their parents). No pancake type; the family is
+  `dessert/pastry` in food_families.md.
+- Pancakes in the pack (2026-10-31):
+  - Supplementaries `supplementaries:pancake` (`i.pancakes`, renamed Stackable Pancake, `namechanges.js` line 300,
+    `merges/baking #1`): a placeable stack block; recipes in
+    [supplementaries/recipes.js](../../kubejs/data/creative_delight/kubejs/supplementaries/recipes.js) lines 17-32 (grid 3,
+    mixer 5, egg-solution mixer 5). Not in `food_types.json` (block item, eaten placed).
+  - Veggies Delight `veggiesdelight:sweet_potato_pancakes` (`i.sweet_potato_pancakes`, type `sweet`): pot sweet potato
+    dough + honey bottle + milk, bowl (`veggiesdelight:cooking/sweet_potato_pancakes`). Not in any placeable tag.
+  - Rustic Delight 1.7.0 port (CD member `rustic`): 7 pancake stack blocks (`pancakes`, `honey_`, `chocolate_`,
+    `cherry_blossom_`, `vegetable_`, `pumpkin_`, `coffee_pancakes`) and 7 serving items (`pancake`, `honey_pancake`...),
+    `PancakeStackBlock` ([rustic_delight.md](../rustic_delight.md) 5). **None has an item_dict key** and none is in
+    `food_types.json` (the 2026-10-30 dumps list the recipes, e.g. `rusticdelight:cherry_blossom_pancakes`).
+  - Autumnity is not in the pack (no jar, no port, no dict ids): its pancakes need nothing here.
+- Related rows: `creativedelight/members #15` (Rustic pancake rework, evaluate against Supplementaries), `merges/baking #1`
+  (stackable pancakes recolour), `dishes/meals #37` (coverings).
 
 ### Build
-One loop over a `FEASTS` list in a new section of cooking.js (or baking.js for the oven side): pot recipe with the
-raw inputs, oven recipe with the same inputs and a `tool` (a roasting pan is *unverified*; the oven needs a tool id
-from `bakeware.js`), the grid recipe re-id'd `_manual_only`.
+1. Dict keys for the 14 Rustic pancake ids in the Rustic block of `item_dict.js` (or CD startup `rusticdelight/`), then
+   `/dumpall` and `python3 tools/food_catalog.py` so they get types.
+2. New type `sweet/pancake` in `food_types.json`: move `sweet_potato_pancakes` and the 7 Rustic servings into it (the
+   stacks are block items, in the type only if they are edible as items). Run `/cegen run food_catalog` to check.
+3. Sweet potato pancakes placeable: add the key to the Food Plate list through `tools/placeable_catalog.py` rules (the
+   generated `kubejs/generation_scripts/food/placeable.json`, read by `creativeengineering/placeable_tags.js`), not by hand.
+   Alternative: make it a Rustic-style stack (Java), not recommended now.
+4. Changelog bullet (food types are not player-visible unless a recipe or tooltip reads them; the placeable line is).
+
+### Ids and data
+`i.pancakes`, `i.pancake_disc`, `i.sweet_potato_pancakes` exist; Rustic pancakes (`rusticdelight:*pancake*`) need keys.
+Tag `#creativeengineering:food_type/sweet/pancake` (new).
 
 ### Decisions
-Which tool the oven uses for a feast (recommend a new "roasting pan" bakeware, or no tool); which feasts take the
-pot as well. Recommend all feasts in both, as the row asks.
+- Which pancakes survive: recommend all three lines stay (Supplementaries = the stackable topping block, Rustic = the
+  flavoured stacks, Veggies = a bowl dish); settle overlaps in `creativedelight/members #15`, not here.
+- Type name `sweet/pancake` (recommend, nests under sweet for tuning) vs a top-level `pancake`.
+
+### Gotchas
+A Rustic stack block takes single pancakes back (sneak-use, up to 12); placeable tags must not double-claim it.
+
+### Tests
+- FO-new1 `/dumpfood` lists the pancake type with sweet potato pancakes and the Rustic servings; `#creativeengineering:food_type/sweet/pancake` holds them.
+- FO-new2 Sweet potato pancakes can be placed on a Food Plate and show "Placeable on plate".
+
+---
+
+## meals #13: Skewer food type
+Status: In Progress / Work: KubeJS / data / id `dishes/meals #13` ([food_families.md](../food_families.md) 3.1 Skewer row)
+
+### Goal
+A skewer food type covering the pack's skewers, with family recipes (shaped plus one sequenced assembly, stick kept).
+
+### Now
+- Skewers sit in `handheld` in `food_types.json` (line 22): `bbq_stick` (FD Barbecue on a Stick), `end_barbecue_stick`
+  (End's), `improvised_barbecue_stick` (Miner's), `nether_skewer` (Nether's), `seafood_skewer` (Oceanic),
+  `turnip_mutton_skewer` (Veggies), `caveskewer` (Hostile), `crispy_skewer` (Ender's), plus `tentacle_on_a_stick`,
+  `baked_tentacle_on_a_stick` (Ocean's) and `tentacles_on_a_stick` (Miner's). The `skewer` family has 11 members, 6 of
+  them on the rule (food_families.md 3.2 line 291); Crispy Skewer is the rule's example (shaped `_manual_only` plus one
+  assembly, recipes_cooking.md 2.1).
+- Barbeque's Delight (10 raw, 10 cooked, burnt) is not ported yet; owner O1 (barbeques_delight.md 0.1): its skewers do
+  **not** join the type or family until `dishes/meals #46`.
+
+### Build
+1. New type `handheld/skewer` in `food_types.json`: move the 11 keys above (hawberry stick and marshmallow sticks stay
+   `sweet`). `/cegen run food_catalog`.
+2. Recipes by the family rule, per skewer not yet on it (food_families.md 3.4 "Skewer" table lists which): shaped
+   `R.shaped(..., e, '<key>_manual_only')` with the stick, one `R.createSequencedAssembly` on `i.stick` (first step must
+   be unique per skewer: deploy the main meat), in the CD tree of the skewer's mod.
+3. Saltable: add the type to the seasonable set (`food/seasoning` rules, seasonings.md) only if the owner wants skewers
+   seasonable before the Barbeque's fold; recommend waiting for `food/seasoning #11`.
+
+### Ids and data
+Keys above exist (item_dict lines 1792, 12039, 12340, 12547, 12687, 12698, 12716, 14321, 14608, 14626, 14685).
+
+### Decisions
+- Which foods: recommend the 11 above; Barbeque's skewers join in `#46`.
+- Recipes now or with `#46`: recommend the type now (data only) and the family recipes in `#46`'s pass, since the fold
+  adds raw versions and grill recipes to the same 8 items.
+
+### Tests
+- FO-new3 `#creativeengineering:food_type/handheld/skewer` holds the 11 skewers and they are still in `handheld`.
+
+---
+
+## meals #14: Patty food type
+Status: In Progress / Work: KubeJS / data / id `dishes/meals #14` ([food_families.md](../food_families.md) 3.1)
+
+### Goal
+One patty group so recipes take any patty ("every patty type is always interchangeable", [item_merges.md](../item_merges.md) 5.1).
+
+### Now
+- Patties (food_types.json): cooked `beef_patty` (FD, `cooked/meat`), `bison_patty` (Alex's Delight, `cooked/meat`),
+  `cooked_vegetarian_patty` (Veggies, `cooked/veggie`), `vegan_patty` (Miner's, `cooked/veggie/sliced`); raw
+  `raw_vegetarian_patty` (`raw/veggie`), `guardianpatty` (Hostile, `raw/fish/sliced`).
+- Recipes name patties one by one: the burger table in `creativeengineering/recipes.js` lines 70-85 (`i.beef_patty`,
+  `i.bison_patty`), Vintage's burgers `vintagedelight/recipes.js` line 115 (`vtdPatty = [i.beef_patty, i.cooked_vegetarian_patty]`),
+  the stuffed burrito (`vintagedelight/cooking.js` line 23, `i.beef_patty`), pasta with meatballs
+  (`farmersdelight/recipes.js` line 278, 2 `i.beef_patty`).
+- A food type cannot hold them: food types are by food group (meat, veggie, fish), one type per food.
+
+### Build
+1. Tag `#creativeengineering:patty/cooked` (key `i.t_patty_cooked`) via `global.tags` in
+   `creativeengineering/tags.js`: beef, bison, cooked vegetarian, vegan patty (and the cooked guardian patty if Hostile has
+   one: check the jar). Optional `#creativeengineering:patty/raw`.
+2. Replace the single-patty slots with `i.t_patty_cooked` in the recipes above, keeping the named burgers that are the
+   dish (bison burger keeps bison, the vegetarian burger keeps the vegetarian patty: decision below).
+3. Family: the patty members stay in their food groups; add a "patty" note row in food_families.md only if the owner
+   wants a subfamily (`meat/cooked_cut` already says "patty piece").
+
+### Ids and data
+`i.beef_patty` (line 586), `i.bison_patty` (585), `i.cooked_vegetarian_patty` (14305), `i.vegan_patty` (14599),
+`i.raw_vegetarian_patty` (14304), `i.guardianpatty` (12575).
+
+### Decisions
+- Food type vs tag: recommend the tag (the row says "food type", but a type would pull meat and veggie patties out of
+  their groups and break tuning); answer before building.
+- Which recipes open up: recommend every recipe with a generic "patty" (hamburger, cheeseburger, deluxe, simple, egg,
+  loaded, burrito, meatballs); bison, kangaroo and vegetarian burgers keep their own.
+
+### Tests
+- RC-new1 A hamburger and a cheeseburger craft with a vegan patty and a bison patty; the bison burger still needs bison.
+
+---
+
+## meals #15: Salad and wrap food types
+Status: In Progress / Work: KubeJS / data / id `dishes/meals #15` ([food_families.md](../food_families.md) 3.1 Salad, Wrap rows)
+
+### Goal
+Salad type; field salad takes more ingredients; wrap type, which requires a tortilla.
+
+### Now
+- **Salad type exists**: `salad` in `food_types.json` (25 foods, since 1.0.2, [food.md](../food.md) 2.1). The field salad
+  part is built (`dishes/meals #39`, Testing). What is left is the wrap half.
+- Wraps (food_types `handheld`): `mutton_wrap` (FD; on `i.t_tortilla` since 1.1.01, `farmersdelight/recipes.js` lines
+  294-303), `chicken_fajitas_wrap` and `vegetables_wrap` (Veggies; on a tortilla, `veggiesdelight/cooking.js` lines
+  75-94), `stuffed_burrito` (Vintage; tortilla, `vintagedelight/cooking.js` lines 22-31), `taco` (Corn Delight,
+  `corn_delight:taco` shapeless, *unverified* inputs), `vegan_wrap`, `insect_wrap` (Miner's; `miners_delight:vegan_wrap`,
+  `insect_wrap`, `alt_insect_wrap`, inputs *unverified*: the port converts the donor jar in memory, so read them with
+  `/dumprecipes` or JEI).
+- The wrap family (`sandwich/wrap`, 6 members) says "A tortilla in place of bread" (planned) and "Shaped crafting + one
+  sequenced assembly" (decision).
+
+### Build
+1. New type `handheld/wrap` in `food_types.json`: the 7 keys above (`taco` too, if the owner counts it as a wrap).
+2. Tortilla rule: re-make the Miner's wraps and the taco on `i.t_tortilla` where they use bread or a leaf (CD
+   `miners_delight/recipes.js`, `corn_delight/recipes.js`), each `_manual_only` plus one assembly on the tortilla with a
+   unique first step (mutton wrap: cooked mutton; fajitas: chicken; vegetables wrap: greens; burrito: pepper).
+3. The family's "shaped" decision is open for all sandwiches; the wraps built so far are shapeless `_manual_only`.
+
+### Ids and data
+`i.mutton_wrap`, `i.chicken_fajitas_wrap`, `i.vegetables_wrap`, `i.vegan_wrap`, `i.insect_wrap`, `i.taco`,
+`i.stuffed_burrito`, `i.t_tortilla` (`#forge:tortilla` = `corn_delight:tortilla` only).
+
+### Decisions
+- Which foods are wraps: recommend the 6 tortilla or leaf wraps plus the taco; cabbage-wrapped elder guardian stays a meal.
+- Shapeless (as built) or shaped: recommend shapeless stays for wraps (the assembly is the automation) until the
+  sandwich family decision is answered.
+
+### Tests
+- FO-new4 `#creativeengineering:food_type/handheld/wrap` holds the wraps.
+- RC-new2 Every wrap needs a tortilla (JEI uses of bread show no wrap).
+
+---
+
+## meals #18: Cheese in nachos
+Status: In Progress / Work: KubeJS / id `dishes/meals #18` ([food_families.md](../food_families.md) 3.1 Snack row)
+
+### Goal
+Nachos take cheese.
+
+### Now
+`corn_delight:cooking/nachos_block` (Corn Delight 1.0.3 jar, verified): pot 2 tortilla chips, any cooked meat
+(chicken, pork, beef or mutton tag), `#forge:milk`, tomato sauce, bowl -> `corn_delight:nachos_block` (a feast block;
+serving `nachos_bowl`). No pack change to it (grep 2026-10-31); Slice and Dice copies it to a heated mixer.
+
+### Build
+In [corn_delight/recipes.js](../../kubejs/data/creative_delight/kubejs/corn_delight/recipes.js):
+`R.replaceInput({ id: 'corn_delight:cooking/nachos_block' }, i.milk, i.any_cheese, e)` (Slice and Dice rebuilds its copy
+from the edited pot recipe). If a heatless route is wanted: `R.shapeless(i.nachos_block, [Item.of(i.tortilla_chip, 3),
+i.cooked_meat, i.any_cheese, i.tomato_sauce, i.bowl], e, 'nachos_block_cooked_manual_only')` (one more main, rule).
+
+### Ids and data
+`i.nachos_block`, `i.nachos_bowl`, `i.tortilla_chip`, `i.any_cheese` (`#forge:cheese`: flaxen wedge, cheese slice),
+`i.milk`, `i.tomato_sauce` exist.
+
+### Decisions
+- Replace milk (recommend) or add a cheese alternative; the row's "recipe shape" decision: recommend the pot only, no
+  heatless grid (nachos are a feast block, and feasts get their grid in `#20`).
+- `#forge:cheese` vs `i.t_cheese_wedge`: recommend `#forge:cheese` (takes the cheese slice).
+
+### Tests
+- RC-new3 The nachos pot recipe takes a cheese wedge or slice, not milk.
+
+---
+
+## meals #20: Feasts in ovens
+Status: In Progress (nothing built, grep 2026-10-31) / Work: KubeJS / id `dishes/meals #20`
+
+### Goal
+Feasts cooked in the oven, starting with the hoglin feast; then every feast in the pot and the oven. Related `#5`.
+
+### Now
+- Feast recipes: FD's roast chicken, honey glazed ham, shepherd's pie are shapeless grid crafts (`#5` Now);
+  `farmersdelight:stuffed_pumpkin_block` and `corn_delight:cooking/nachos_block` are pot recipes;
+  `nethersdelight:raw_stuffed_hoglin` is shaped and `nethersdelight:cooking/stuffed_hoglin` cooks it in the pot
+  (`i.raw_stuffed_hoglin` -> `i.stuffed_hoglin`). Rustic's medleys and Rice Roll Royale are shapeless (Rustic member).
+- Oven helper (patcherMod `neoCraftHelper.js` line 1161): `R.ceBaking(input, output, e, idOverride, { exp, time, container, tool })`,
+  1-6 slots, tool = bakeware kept in the tool slot. Bakeware keys: `i.t_bakeware_baking_sheet`, `_cake_pan`, `_pie_tin`,
+  `_muffin_tin` (item_dict lines 43-46); no roasting pan.
+- Feast list for a loop: the feast blocks of `blocktags.js` lines 384-390 and the `feast/whole` family (food_families.md 3.1).
+
+### Build
+1. Hoglin first, in CD `nethersdelight/recipes.js` (new): `R.ceBaking([i.raw_stuffed_hoglin], i.stuffed_hoglin, e,
+   'stuffed_hoglin', { exp: 1.0, time: 400, tool: i.t_bakeware_baking_sheet })`.
+2. Then one `FEASTS` table per mod file (roast chicken, honey glazed ham, shepherd's pie in `farmersdelight/recipes.js`):
+   `[key, inputs, container]`, each giving a pot recipe (`R.fdCooking(inputs, i[key], e, key, xp, time, container)`) and
+   an oven recipe (`R.ceBaking`, same inputs, baking sheet). The shapeless grids stay (feasts are crafted cold today);
+   re-id them `_manual_only` only if Create mixing of them is unwanted.
+3. Oven inputs over 6 slots are trimmed by `_bakingSlots` (logged): list filler first.
+
+### Decisions
+- Which feasts: recommend every feast with a cooked main (roast chicken, ham, shepherd's pie, stuffed hoglin, stuffed
+  pumpkin); not the cold ones (rice roll medley, Rice Roll Royale, pepper medleys, popcorn box).
+- Tool: recommend the baking sheet (no new bakeware); a roasting pan is a new item for later.
+- Raw inputs (the pot rule) vs cooked inputs: recommend raw in the pot and oven, cooked stays the grid.
+
+### Tests
+- RC-new4 Raw stuffed hoglin bakes into a stuffed hoglin in the oven with a baking sheet.
+- RC-new5 Each listed feast has a pot and an oven recipe in JEI.
 
 ---
 
 ## meals #21: Meal-specific ingredients audit
-Status: In Progress / Work: KubeJS / TODO `dishes/meals #21` ([recipes_cooking.md](../recipes_cooking.md))
+Status: In Progress (audit not started) / Work: KubeJS / id `dishes/meals #21` ([recipes_cooking.md](../recipes_cooking.md))
 
 ### Goal
-Audit every meal that takes only vanilla or one specific meat, veggie or fruit. Keep it where the dish is the
-specific thing (glazed salmon takes only cooked salmon, not cooked fish); otherwise accept any meat, veggie or fruit.
-See `dishes/meals #7` (fish for any fish, built) for the pattern.
+Audit every meal that accepts only vanilla or one specific meat, veggie or fruit. Keep it where the dish is the specific
+thing (glazed salmon keeps cooked salmon); otherwise accept any. Pattern: `dishes/meals #7` (any fish).
 
 ### Now
-The pack already has the tag aliases: `i.cooked_meat`, `#forge:cooked_fishes`, `i.t_soup_veggie_cooked`,
-`i.salad_ingredients`, `i.t_exotic_fruit`, `i.t_fruit_salad_slice`, `i.t_berries` (cooking.js, cookingtags.js). The
-count of affected meals is not known yet: that is step 1.
+Tag aliases to open slots with: `i.cooked_meat` (`#forge:cooked_meat`), `i.cooked_fish` (`#forge:cooked_fishes`),
+`i.t_food_raw_fish`, `i.t_food_cooked_meat`, `i.t_soup_veggie_cooked`, `i.vegetables`, `i.salad_ingredients`,
+`i.t_exotic_fruit`, `i.t_fruit_salad_slice`, `i.t_berries`, `i.mushrooms` (item_dict 1874-2037, 12788-12794). The
+dumps of 2026-10-30 (`kubejs/exported/recipes/all.csv`, `crafting_audit.json`) are the input. Count of affected meals
+not known yet.
 
 ### Build
-1. `/dumprecipes`, filter cooking pot and shapeless meal outputs whose inputs are single item ids of those families;
-   write the list into this brief (`keep` / `open up`).
-2. `R.replaceInput({ id: ... }, i.x, i.tag, e)` per opened recipe (pattern at cooking.js line 629), heatless twins
-   through the `*_cooked_manual_only` rule.
+1. Script the list: from `crafting_audit.json`, every `farmersdelight:cooking` and shapeless meal (food type `meal`,
+   `soup`, `salad`) with a single-item ingredient whose item is in a raw/cooked meat, fish, veggie or fruit food type;
+   write it into this section as `keep` / `open up`.
+2. Per opened recipe: `R.replaceInput({ id: ... }, i.x, i.tag, e)` in the CD tree of the recipe's mod; heatless twins
+   (`*_cooked_manual_only`) the same.
 
 ### Decisions
-Per meal, keep or open up (the row's decision). Recommend keeping named dishes (glazed salmon, tuna melt style) and
-opening generic stews and pastas. Overlaps `meals #36` (whole versus cut) and `#35`.
+Per meal, keep or open up. Recommend keeping named dishes (glazed salmon, steak and potatoes, chicken soup) and opening
+generic stews, pastas and stir-fries. Overlaps `#29` (pickled swaps) and `#35`.
 
 ### Tests
-RC-120 For each opened meal: a second meat or veggie works; for each kept meal: only the named one.
+RC-120 For each opened meal a second meat or veggie works; each kept meal takes only the named one.
 
 ---
 
 ## meals #22: Overnight oats
-Status: Testing / Work: KubeJS / TODO `dishes/meals #22` ([recipes_cooking.md](../recipes_cooking.md))
+Status: Testing (shipped 1.1.04 client; SQ-CM-06 PASSED 2026-10-28) / Work: KubeJS / TODO `dishes/meals #22` ([recipes_cooking.md](../recipes_cooking.md))
+
+Built 2026-10-28 as the grid option, not the Pickling Jar: shapeless 3 raw oats, `#creativeengineering:fruit_salad_slice`,
+`#forge:berries`, `#forge:milk`, bowl (CD `vintagedelight/recipes.js`); fold into [vintage_delight.md](../vintage_delight.md) (recipes). The plan below is history.
 
 ### Goal
 Overnight oats from 3 oats, 1 fruit slice, 1 berry fruit and 1 milk.
@@ -853,25 +541,31 @@ RC-121 Overnight oats craft from the row's inputs; the old fermenting recipe is 
 ---
 
 ## meals #23: Fried egg and omelette batches
-Status: In Progress / Work: KubeJS / TODO `dishes/meals #23` ([recipes_cooking.md](../recipes_cooking.md))
+Status: In Progress (nothing built, grep 2026-10-31) / Work: KubeJS / id `dishes/meals #23` ([recipes_cooking.md](../recipes_cooking.md))
 
 ### Goal
-Cooking oil + 3 eggs gives 3 fried eggs; a cooking pot recipe turns 4 fried eggs into 4 omelettes.
+Cooking oil plus 3 eggs makes 3 fried eggs; a cooking pot recipe turns 4 fried eggs into 4 omelettes.
 
 ### Now
-Fried egg is `farmersdelight:fried_egg`: smelting / smoking / campfire (cooking.js lines 821-823, restored) and
-Rustic's pot recipe oil + 1 egg -> 1 egg. Omelette is `moredelight:omelette`: smelting / smoking / campfire from
-`#forge:cooked_eggs`, 1 : 1. Oil is `#rusticdelight:cooking_oil` (`i.t_cooking_oil`).
+Fried egg `farmersdelight:fried_egg` (`i.farmersdelight_fried_egg`; `#forge:cooked_eggs` = `i.cooked_eggs` holds only it):
+smelting / smoking / campfire in [farmersdelight/recipes.js](../../kubejs/data/creative_delight/kubejs/farmersdelight/recipes.js)
+lines 367-368 and the egg-to-fried-egg ids; Rustic's pot `rusticdelight:fried_egg_from_cooking_oil` (oil + 1 egg -> 1;
+Slice and Dice copy `sliceanddice:cooking/rusticdelight/fried_egg_from_cooking_oil`). Omelette `moredelight:omelette`
+(`i.omelette`): `moredelight:omelette_smelting` / `_smoking` / `_campfire_cooking` from a cooked egg, 1 : 1. Oil
+`i.t_cooking_oil` (`#rusticdelight:cooking_oil`).
 
 ### Build
-`R.fdCooking([i.t_cooking_oil, Item.of(i.eggs, 3)], Item.of(i.fried_egg, 3), e, 'fried_egg_batch', 0.35, 100)` and
-`R.fdCooking([Item.of(i.cooked_eggs, 4)], Item.of(i.omelette, 4), e, 'omelette_batch', ...)`; remove Rustic's single
-egg pot recipe (id `rusticdelight:cooking/fried_egg_from_cooking_oil` by recipe file name) to avoid a better single
-route. Slice & Dice copies the pot recipes into mixers unless the id ends `_manual_only`.
+In CD `rusticdelight/recipes.js` (the oil route) and `moredelight/recipes.js` (omelette):
+`R.remove({ id: 'rusticdelight:fried_egg_from_cooking_oil' }, e)`;
+`R.fdCooking([i.t_cooking_oil, i.eggs, i.eggs, i.eggs], Item.of(i.farmersdelight_fried_egg, 3), e, 'fried_egg_batch', 0.35, 100)`;
+`R.fdCooking([i.cooked_eggs, i.cooked_eggs, i.cooked_eggs, i.cooked_eggs], Item.of(i.omelette, 4), e, 'omelette_batch', 0.35, 100)`.
+Slice and Dice copies pot recipes into heated mixers (fine: both are heated).
 
 ### Decisions
-Keep the single-egg pot recipe: recommend remove (the batch replaces it). Dict keys for `fried_egg` are
-`i.farmersdelight_fried_egg` / `i.cooked_eggs`: check the right one in `item_dict`.
+Remove the single-egg pot recipe: recommend yes (the batch replaces it; the furnace keeps 1 : 1).
+
+### Gotchas
+Does the cooking oil bottle come back from the pot? Not checked for the fries either (recipes_cooking.md 2.3 note).
 
 ### Tests
 RC-122 Oil + 3 eggs -> 3 fried eggs. RC-123 4 fried eggs -> 4 omelettes in the pot.
@@ -879,200 +573,248 @@ RC-122 Oil + 3 eggs -> 3 fried eggs. RC-123 4 fried eggs -> 4 omelettes in the p
 ---
 
 ## meals #24: Extra veggie omelette recipe
-Status: In Progress / Work: KubeJS / TODO `dishes/meals #24` ([recipes_cooking.md](../recipes_cooking.md))
+Status: In Progress (nothing built) / Work: KubeJS / id `dishes/meals #24` ([recipes_cooking.md](../recipes_cooking.md))
 
 ### Goal
 A veggie omelette recipe where one ingredient is swapped for tomato, beetroot, any bell pepper or ghost pepper.
 
 ### Now
-`brewinandchewin:vegetable_omelet` (`i.vegetable_omelet`): pot with cheese wedge, carrot, onion, eggs (made
-`#forge:cooked_eggs` by `R.replaceInput`, cooking.js line 629), bowl; plus the grid fold of 2 omelettes + cheese + onion +
-carrot + bowl (line 630). Bell pepper is `#forge:crops/bell_pepper`, ghost pepper `i.ghost_pepper`.
-
-### Decisions
-The note is terse (the TODO row says so): which slot is swapped. Options: the carrot slot, the onion slot, or the
-omelette slot of the grid fold. Recommend the carrot slot, in both the pot recipe and the grid fold, as an added
-alternative recipe (the carrot version stays).
+`brewinandchewin:vegetable_omelet` (`i.vegetable_omelet`), all in
+[brewinandchewin/recipes.js](../../kubejs/data/creative_delight/kubejs/brewinandchewin/recipes.js): the pot
+`brewinandchewin:cooking/vegetable_omelet` (cheese wedge, carrot, onion, eggs made `#forge:cooked_eggs` by
+`R.replaceInput`, line 86, bowl), the grid fold of 2 omelettes + cheese + onion + carrot + bowl (line 87), and the heated
+egg-solution mixing (line 17). Bell pepper `i.any_bell_pepper` (`#forge:crops/bell_pepper`, 9 Rustic colours), ghost
+pepper `i.ghost_pepper`, `i.tomato`, `i.beetroot` (crop tags).
 
 ### Build
-Second `R.fdCooking` / `R.shapeless` with `[i.tomato, i.beetroot, i.t_bell_pepper..., i.ghost_pepper]` as the carrot
-slot (tag for peppers to be defined through `global.tags`).
+A shared slot `var omeletVeg = [i.carrot, i.tomato, i.beetroot, i.any_bell_pepper, i.ghost_pepper]` in place of the
+carrot in all three recipes: the pot through `R.replaceInput({ id: 'brewinandchewin:cooking/vegetable_omelet' }, i.carrot,
+omeletVeg, e)`, the fold and the mixing by editing their lines. One recipe each, JEI cycles the options.
+
+### Decisions
+Which slot: recommend the carrot slot (as above), widened rather than a second recipe. Confirm with the owner (the note
+is terse).
 
 ### Tests
-RC-124 Each swap works and gives the same omelet.
+RC-124 Each swap works in the pot, the grid fold and the mixer and gives the same omelet.
 
 ---
 
-## meals #25: Retexture cauliflower soup
-Status: Planned / Work: resource pack / TODO `textures/food #2` ([veggies_delight.md](../veggies_delight.md))
+## textures/food #2: Retexture cauliflower soup
+Status: Planned / Work: resource pack / id `textures/food #2` (was `dishes/meals #25`; [veggies_delight.md](../veggies_delight.md))
 
 ### Goal
 New texture for Veggies Delight's cauliflower soup.
 
 ### Now
-The texture is `development/backportedVeggies/src/main/resources/assets/veggiesdelight/textures/item/cauliflower_soup.png`
-(in-tree port). The can is a separate can texture (unaffected). KubeJS overrides live in `kubejs/assets/<ns>/...`
-(there is no `veggiesdelight` folder yet).
+Texture `development/backportedVeggies/src/main/resources/assets/veggiesdelight/textures/item/cauliflower_soup.png`
+(in-tree port, `mods/backportedVeggies-1.9.2-ce-19.2-03.jar`). No `kubejs/assets/veggiesdelight/` folder yet; the
+precedent for a port sprite override is `kubejs/assets/vintagedelight/textures/item/cucumber_noodles.png` (`#43`). No
+Display Delight placed model for it (grep `backportedDisplay` 2026-10-31); the can uses the generated can sprite.
 
 ### Build
-Draw the texture; ship as `kubejs/assets/veggiesdelight/textures/item/cauliflower_soup.png` (resource reload, no jar
-rebuild) or replace the in-tree PNG (`./gradlew :backportedVeggies:build`, restart). Recommend the KubeJS override.
+Draw it (palette swap tools in `textureswapper/`); ship as `kubejs/assets/veggiesdelight/textures/item/cauliflower_soup.png`
+(resource reload, no jar). Changelog bullet (visible).
+
+### Decisions
+Override in `kubejs/assets` (recommend) or replace the port PNG (rebuild `backportedVeggies`).
 
 ### Tests
-RC-125 The soup shows the new texture in inventory and in the placed bowl.
+RC-125 The soup shows the new texture in the inventory and JEI.
 
 ---
 
-## meals #26: Merge Brewin' pizza
-Status: In Progress / Work: KubeJS / TODO `merges/dishes #8` ([recipes_cooking.md](../recipes_cooking.md)); related `baking/baked-goods #20`
+## merges/dishes #8: Pizza and quiche
+Status: In Progress (Supreme Pizza rename and recipe shipped 1.1.03) / Work: KubeJS / id `merges/dishes #8` (was `dishes/meals #26`); related `baking/baked-goods #19`, `#20`, `dishes/meals #5`
 
 ### Goal
-One pizza, renamed Deluxe Pizza: tomato, peppers, mushrooms, cheese and cooked meat or fish, best nutrients.
+Owner 2026-10-27 ([item_merges.md](../item_merges.md) 5.1): no overlap to merge. Brewin's pizza is Supreme Pizza, its
+craft rebuilt with dough, sauce, dough on the bottom row; the quiche food family exists; best nutrients.
 
 ### Now
-Four pizzas (jars): Brewin' `brewinandchewin:pizza` (`i.pizza`; pack recipe cooking.js line 277: cheese wedge, 2
-`#brewinandchewin:foods/pizza_topping` (mushrooms, carrot, beetroot, cabbage leaf, onion, cooked bacon / beef / cod /
-mutton / pork), tomato sauce, dough), Vintage Delight `cheese_pizza` and `meat_pizza` (the latter takes cheese, dough,
-tomato sauce and a cooked meat or fish), Veggies Delight `vegan_pizza` (vegetables, bell pepper, onion).
-
-### Decisions
-Ambiguous: "merge the Brewin' pizza" can mean (a) Brewin's becomes Deluxe and Vintage's meat pizza merges into it,
-or (b) all four merge. Recommend (a): Brewin's pizza id survives as Deluxe Pizza (name via namechanges.js), Vintage's
-`meat_pizza` is merged into it through `global.itemMerges`; cheese and vegan pizza stay as plain and veggie options.
-Deluxe takes the row's toppings (peppers, mushrooms, tomato sauce, cheese, cooked meat or fish).
+- Done: name (`namechanges.js` lines 65-66, block and slice), recipe `brewinandchewin/recipes.js` lines 33-37 (moved from
+  `cooking.js` 2026-10-31): `['bfo', 'mtc', ' d ']`, one dough, sauce in the middle. Vintage's `cheese_pizza`,
+  `meat_pizza` and Veggies' `vegan_pizza` stay the simple ones.
+- Quiche family: `quiche` and `quiche/slice` exist in food_families.md 3.1 (rows 297-299; Brewin's quiche and Vintage's
+  zucchini quiche). `baking/baked-goods #19` (quiche baking type) is its own row.
+- Values: Supreme slice 5 / 1.0 (`BnCFoods.PIZZA_SLICE`), meat pizza slice 5 / 0.75, cheese 4 / 0.75 (Vintage
+  `ModFoods.java` lines 216-226), vegan 5 / 0.5 (Veggies `ModFoods.java` line 100).
 
 ### Build
-`R.remove({ id: 'brewinandchewin:pizza' })` is already done; re-point the pack recipe to the Deluxe ingredients;
-item merge entry; slices (`pizza_slice`) follow the survivor. Cans: no pizza can yet (`cans/canning #17`).
+1. Shape: `R.shaped(i.pizza, ['bfo', 'mcf', 'dtd'], { b: i.any_bell_pepper, f: i.t_cheese_wedge, o: i.onion,
+   m: i.mushrooms, c: i.cooked_meat, t: i.tomato_sauce, d: i.dough }, e, 'pizza')` (2 cheese, 2 dough: also `#5`'s
+   "dearer dough and cheese"). Same id, so the old recipe is replaced.
+2. Nutrients: Supreme slice above every other slice: e.g. 6 / 1.0 in a new CD startup `brewinandchewin/brewin_foods.js`
+   (`setFoodProperties`), halved again if `#5`'s 8 slices land.
+
+### Decisions
+Slice values (recommend 6 / 1.0 at 4 slices; 3 / 1.0 at 8). Whether Vintage's two pizzas get the same bottom-row shape:
+recommend yes for one pizza rule (`baking/baked-goods #20`).
 
 ### Tests
-RC-126 Deluxe Pizza recipe, name and 8 (or 4) slices; the meat pizza item is gone.
+RC-126 Supreme Pizza crafts only from the new shape; its slice shows the new values.
 
 ---
 
 ## meals #27: Pineapple pizza
-Status: In Progress / Work: KubeJS / lang / TODO `dishes/meals #27` ([recipes_cooking.md](../recipes_cooking.md))
+Status: In Progress (nothing built, grep "tropical" 2026-10-31) / Work: KubeJS / lang / new jar / id `dishes/meals #27` ([recipes_cooking.md](../recipes_cooking.md))
 
 ### Goal
-Pineapple pizza with bacon, named Tropical Pizza, with a funny tooltip.
+Pineapple pizza with bacon, named **Tropical Pizza**, tooltip **"Misnomer, invented in Canada"** (owner 2026-10-30).
 
 ### Now
-No such item. Pineapple is Fruits Delight (`i.pineapple`, `i.pineapple_slice`); bacon `#forge:cooked_bacon`. Pizzas are
-`PizzaBlock` blocks (Brewin' port `development/backportedBrewin/.../PizzaBlock.java`, Vintage / Veggies ports likewise),
-so a new pizza needs a block, a block item and a slice item: *unverified* whether the port can register a variant
-cheaply (Vintage's `cheese_pizza` is the model to copy).
+No such item. Pineapple slice `i.pineapple_slice` (Fruits Delight), bacon `i.cooked_bacon`. Pizzas are blocks: Vintage
+`PizzaBlock` (`development/backportedVintage/src/main/java/net/ribs/vintagedelight/block/ModBlocks.java` lines 147-148,
+items `item/ModItems.java` lines 104-105, slice foods `ModFoods.java` lines 216-226), Brewin's in the Creative Brewing
+member. A new pizza needs a block, a block item, a slice item, models and a cutting recipe.
 
 ### Build
-Register `tropical_pizza` + slice in `backportedVintage` (in-tree Java, same class as `cheese_pizza`), recipe
-`R.shaped` like cooking.js line 277 with pineapple slice, cooked bacon, cheese, tomato sauce, dough; name and a
-tooltip line in [tooltips.js](../../kubejs/client_scripts/tooltips.js).
+1. Register `tropical_pizza` + `tropical_pizza_slice` in `backportedVintage` (copy `meat_pizza`: block, item, slice food,
+   blockstate, models, recoloured textures with pineapple and bacon on top), cutting board and Slice and Dice data as the
+   meat pizza's. Build `:backportedVintage:`, install.
+2. Dict keys `i.tropical_pizza`, `i.tropical_pizza_slice`; recipe in CD `vintagedelight/recipes.js` with the pizza rule
+   (`merges/dishes #8` shape): `['pcp', 'bfb', 'dtd']` pineapple slice, cheese, cooked bacon, dough, tomato sauce.
+3. Name and tooltip: `kubejs/assets/creative_delight/kubejs/vintagedelight/client.js` (new): lang "Tropical Pizza",
+   "Tropical Pizza Slice"; tooltip "Misnomer, invented in Canada" on both.
+4. Food families row, placeable (own block), cans none (pizzas not canned yet, `cans/canning #17`).
 
 ### Decisions
-Tooltip text (the TODO row's decision; user to write). Merge with `meals #26` as a topping instead of a new item:
-recommend a separate item as asked.
+Owner-decided name and tooltip. Namespace: Vintage port (recommend: same class and loot as its pizzas) vs a CD member.
 
 ### Tests
-RC-127 Tropical Pizza crafts, places, slices; tooltip shows.
+RC-127 Tropical Pizza crafts, places, slices (knife and Slice and Dice); name and tooltip show.
 
 ---
 
-## meals #28: Merge cheesy pastas
-Status: In Progress / Work: KubeJS / TODO `merges/dishes #5` ([recipes_cooking.md](../recipes_cooking.md))
+## merges/dishes #5: Merge cheesy pastas
+Status: In Progress (rename built 2026-10-30, unreleased) / Work: KubeJS / id `merges/dishes #5` (was `dishes/meals #28`)
 
 ### Goal
-Merge the cheesy pasta dishes of the mods into one.
+Owner 2026-10-27: rename Brewin's to Cheesy Fish Pasta (done) and add bone broth to the cheesy pasta heatless craft. With
+the rename the two dishes are distinct (fish pasta vs cheese pasta): no item merge is left.
 
 ### Now
-Two found (jars): Brewin' `brewinandchewin:cheesy_pasta` (lang "Pasta with Cheese"; pot: tomato, pasta, raw fish,
-flaxen cheese wedge, bowl) and Vintage Delight `vintagedelight:cheese_pasta` ("Cheese Pasta"). The pack's cheese pasta
-heatless route is noted in cooking.js (line 579). `i.cheesy_pasta` is in `item_dict`; the canned form
-`canned_cheesy_pasta` exists.
-
-### Decisions
-Which survives (the row's decision). Recommend Vintage's `cheese_pasta` (the generic cheese, the port the pack owns);
-merge Brewin's into it, and keep the fish and flaxen cheese variant as an alternative recipe of the survivor.
+- Brewin `brewinandchewin:cheesy_pasta` (`i.cheesy_pasta`) renamed Cheesy Fish Pasta with its can and placed block
+  (`namechanges.js` lines 296-298). Pot upstream; heatless `brewinandchewin/recipes.js` line 83: flaxen wedge, pasta,
+  tomato sauce, 2 cooked fish (comment line 82: "Pastas take no broth").
+- Vintage `vintagedelight:cheese_pasta` (`i.cheese_pasta`, "Cheese Pasta"): pot `vintagedelight:cooking/cheese_pasta`;
+  heatless `vintagedelight/cooking.js` line 34: pasta, 3 `#forge:cheese`, bowl.
 
 ### Build
-`global.itemMerges` entry; carry the can (`canned_cheesy_pasta`) or rename it in the can generator.
+Add `i.bone_broth` to the heatless craft the owner meant (decision), in place of the bowl where the dish is a soup-style
+pasta: e.g. `R.shapeless(i.cheese_pasta, [i.pasta, i.any_cheese, i.any_cheese, i.any_cheese, i.bone_broth], e,
+'cheese_pasta_cooked_manual_only')` (bone broth brings its bowl). Update the "Pastas take no broth" comment.
+
+### Decisions
+- Which heatless craft takes bone broth: recommend Vintage's Cheese Pasta (the plain cheese one; the fish pasta has
+  tomato sauce as its liquid). Confirm.
+- Close the merge: recommend renaming the row "Cheesy pastas: names and bone broth" (no `global.addItemMerges` pair).
 
 ### Tests
-RC-128 Only one cheese pasta in JEI; Brewin's recipe still gives it.
+RC-128 Cheesy Fish Pasta and Cheese Pasta both in JEI under those names; the chosen heatless craft takes bone broth.
 
 ---
 
 ## meals #29: Fermented veg in uncooked crafts
-Status: In Progress / Work: KubeJS / TODO `dishes/meals #29` ([vintage_delight.md](../vintage_delight.md)); related `dishes/pickles-and-ferments #2`
+Status: In Progress (nothing built) / Work: KubeJS / id `dishes/meals #29` ([vintage_delight.md](../vintage_delight.md)); related `dishes/pickles-and-ferments #2`
 
 ### Goal
-Allow fermented garlic, onion and the like in place of the raw version in some uncooked crafts: burgers and the
-"maggot potato chicken broccoli cucumber salad" list (the note is garbled; confirm). Not the field salad. More pickled
+Fermented or pickled garlic, onion and the like accepted in place of the raw one in some uncooked crafts: burgers and
+the salads the note lists as "maggot potato chicken broccoli cucumber salad" (confirm). Not the field salad. More pickled
 options in the cucumber salad.
 
 ### Now
-Fermented items in the pack: `pickled_onion`, `pickled_pepper`, `pickled_beetroot`, `pickle`, `kimchi`
-(Vintage backport); no fermented garlic item yet (garlic honey is `pickles-and-ferments #10`). `i.cucumber_salad`
-(cooking.js line 584) already takes pickled beetroot and onion. The likely dishes: Alex's Delight maggot salad,
-potato salad, chicken salad, VD broccoli salad (cooking.js line 483), cucumber salad: *unverified*.
+- Pickled items: `i.pickled_onion`, `i.pickled_pepper`, `i.pickled_beetroot`, `i.pickle` (Vintage), `i.kimchi`
+  (Brewin'); tag `i.t_pickled_veg` (`#creativeengineering:pickled_veg`, pickle soup). Garlic: only
+  `i.fermented_garlic_honey` (Veggies), no pickled garlic.
+- Targets: burgers `creativeengineering/recipes.js` lines 70-85 and `vintagedelight/recipes.js` lines 117-121 (onion
+  slots); salads: maggot salad (`alexsdelight:maggot_salad_recipe`, `_2`), potato salad (`rusticdelight:potato_salad`,
+  `moredelight:cooking/potato_salad`, `oceanic_delight:potato_salad`; the merge is `merges/dishes #4`), chicken salad
+  (`moredelight:chicken_salad`), broccoli salad (`veggiesdelight/cooking.js` line 37: broccoli, tomato, onion, bowl),
+  cucumber salad (`vintagedelight/cooking.js` line 22: salad ingredients, pickled beetroot, pickled onion, cucumber, bowl).
 
 ### Build
-`R.replaceInput` of the raw onion / garlic with `[raw, pickled]` lists in the listed recipes; define a
-`#creativeengineering:pickleable_swap` style tag via `global.tags` if reused.
+1. Key `i.onion_or_pickled = [i.onion, i.pickled_onion]` style lists in each file (or a tag
+   `#creativeengineering:onion_or_pickled` via `global.tags` if more than two files use it).
+2. Burgers: swap `O: i.onion` for the list in both burger tables (shaped and assembly steps).
+3. Salads: `R.replaceInput` on the upstream ids (onion -> list); broccoli salad line 37 edited in place.
+4. Cucumber salad: widen its two pickled slots to `i.t_pickled_veg`.
 
 ### Decisions
-The exact dish list; confirm before building. Recommend burgers plus the salads named, not sandwiches.
+The dish list (confirm before building); garlic needs a pickled garlic item first (`pickles-and-ferments`), so garlic
+slots stay raw for now.
 
 ### Tests
-RC-129 Each listed dish accepts the pickled version and still the raw one.
+RC-129 Each listed dish takes the pickled onion and still the raw one; the cucumber salad takes any pickled veg.
 
 ---
 
-## meals #30: Merge Caesar salads
-Status: Planned / Work: KubeJS / lang / TODO `merges/dishes #6` ([recipes_cooking.md](../recipes_cooking.md))
+## merges/dishes #6: Merge Caesar salads
+Status: Planned / Work: KubeJS / lang / id `merges/dishes #6` (was `dishes/meals #30`)
 
 ### Goal
-Merge the two Caesar salads (spelled differently in two mods) into one.
+One Caesar Salad: correct spelling, Veggies Delight's texture, lettuce + tomato + cheese + bread (owner 2026-10-27).
 
 ### Now
-`veggiesdelight:cesar_salad` (id spelled Cesar; shown as "Caesar Salad" already, `name_rules.json` line 4; `i.cesar_salad`, pack recipe cooking.js line 484: cabbage, bread, garlic or
-cheese, tomato, bowl; `canned_cesar_salad` exists) and `oceanic_delight:caesar_salad` ("Caesar Salad": cooked chicken,
-cabbage, milk, bread, bowl; not in `item_dict` yet).
+- `veggiesdelight:cesar_salad` (`i.cesar_salad`, shown "Caesar Salad" via `name_rules.json` line 4; can
+  `canned_cesar_salad`): upstream and compat recipes removed and replaced by
+  `creative_delight:shapeless/cesar_salad_manual_only` ([veggiesdelight/cooking.js](../../kubejs/data/creative_delight/kubejs/veggiesdelight/cooking.js)
+  line 38: cabbage, `i.t_bread`, garlic clove or any cheese, tomato, bowl).
+- `oceanic_delight:caesar_salad` (`i.caesar_salad`, item_dict line 14656; Oceanic is a CD member since 2026-10, so the
+  merge is unblocked): `oceanic_delight:caesar_salad` shapeless (cooked chicken, cabbage, milk, bread, bowl), bread made
+  `i.t_bread` at `oceansdelight/recipes.js` line 14.
+
+### Build
+1. CD startup `oceanic_delight/item_merges.js` (new; or the Veggies one): `global.addItemMerges('<group>', [[i.caesar_salad, i.cesar_salad]])`
+   (group per item_merges.md 1.1).
+2. Recipe: lettuce = `i.salad_ingredients` (cabbage, cabbage leaf, chopped clover, dandelion leaf). Rewrite line 38 as
+   `[i.salad_ingredients, i.tomato, i.any_cheese, i.t_bread, i.bowl]`; keep Oceanic's chicken version as an alternative
+   (`R.replaceInput` milk -> `i.any_cheese`) or remove it (decision).
+3. Lang: the display name is already right; no texture change (Veggies' survives).
 
 ### Decisions
-Survivor: recommend VD's (in-tree port, tuned, canned; its display name is already "Caesar Salad", so the two
-spellings only differ in ids); merge Oceanic's in through `global.itemMerges` when Oceanic is integrated, keeping its chicken and milk version as an
-alternative recipe.
+Keep Oceanic's chicken recipe as a second route (recommend yes, with cheese for milk) or drop it.
 
 ### Tests
-RC-130 One Caesar Salad in JEI, name spelled Caesar, both recipes give it.
+RC-130 One Caesar Salad in JEI; Oceanic's id turns into it in an inventory; both recipes give it.
 
 ---
 
 ## meals #31: Nut butter sandwich
-Status: In Progress / Work: KubeJS / TODO `dishes/meals #31` ([recipes_cooking.md](../recipes_cooking.md))
+Status: In Progress / Work: KubeJS / id `dishes/meals #31`; blocked on `merges/dishes #7` (nut butter / nut mash)
 
 ### Goal
 Nut butter sandwich: more jam options, and only square bread.
 
 ### Now
-Vintage's `pb_j` (`i.pb_j`): cooking.js line 583, shapeless `i.t_bread` + nut mash bottle + `#vintagedelight:sweet_jam_bottles`
-(`i.t_sweet_jam_bottles`). Delightful has its own `delightful:nut_butter_and_jelly_sandwich`. Jams follow
-`dishes/jams #1` to #4. "Square bread" is *unverified*: the whole loaf (`#forge:bread`) versus bread slices
-(`#forge:bread_slices`, More Delight `bread_slice`).
-
-### Decisions
-Which items count as square bread; recommend slices only (a sandwich takes two square slices). Two sandwich items for
-one dish (Vintage's and Delightful's): recommend merging them with `merges/dishes #7` nut butter / nut mash.
+- More jam options: **done** (`dishes/jams #3`): Vintage's `pb_j` is `creative_delight:shapeless/pb_j_manual_only`,
+  `[i.t_bread, i.nut_mash_bottle, i.t_forge_jams]` ([vintagedelight/cooking.js](../../kubejs/data/creative_delight/kubejs/vintagedelight/cooking.js)
+  line 21; `#forge:jams` 22 items).
+- Bread slot is `i.t_bread` (`#forge:bread`, whole loaves). Square bread = `#forge:bread_slices` (`moredelight:bread_slice`,
+  `moredelight:toast`).
+- Delightful's `delightful:food/nut_butter_and_jelly_sandwich` still ships (a second sandwich for the same dish).
+- `merges/dishes #7` (owner 2026-10-27) says "Nut butter sandwich: Vintage's texture, Delightful's name; **any bread** +
+  any jam + a nut mash jar", which conflicts with this row's "only square bread".
 
 ### Build
-Change the bread slot, widen the jam tag via `global.tags` once the jam merge decides the item set.
+After `merges/dishes #7`: one sandwich item (its merge pair), recipe `[2 x bread slot, i.nut_mash_bottle, i.t_forge_jams]`
+shaped plus one assembly by the square sandwich rule (food_families `sandwich/square`), bread slot per the decision.
+
+### Decisions
+Square slices only (this row) vs any bread (`merges/dishes #7`): needs the owner. Recommend 2 `#forge:bread_slices` (the
+sprite shows slices; `baking/baked-goods #9` plans the same for square sandwiches).
 
 ### Tests
-RC-131 Sandwich accepts each jam and square bread only.
+RC-131 The sandwich takes each jam and only the chosen bread.
 
 ---
 
 ## meals #32: Remove mhadjeb
 Status: Testing / Work: KubeJS / TODO `dishes/meals #32` ([recipes_cooking.md](../recipes_cooking.md)); also `baking/baked-goods #17`
+
+Built 2026-10-25 (shipped 1.1.03; CD `veggiesdelight/veggies_items.js`, `recipes.js`); fold into [veggies_delight.md](../veggies_delight.md) 5.2.
+Still open: `creativeengineering:canned_mhadjeb` is registered with `creative_delight:shapeless/canned_mhadjeb` (exports
+2026-10-30): run `/dumpfood`, then `/cegen` (can generator), SQ-CDB-12.
 
 ### Goal
 Remove the mhadjeb.
@@ -1097,44 +839,48 @@ RC-132 No mhadjeb in JEI or the creative tab; no `canned_mhadjeb`.
 ---
 
 ## meals #33: Potato noodles become creamy gnocchi
-Status: In Progress / Work: KubeJS / lang / TODO `dishes/meals #33` ([veggies_delight.md](../veggies_delight.md))
+Status: In Progress (names and recipes shipped 1.1.03, scratch SQ-CDB-10 PASS 2026-10-25; textures and potato dough open) / Work: KubeJS / lang / art / id `dishes/meals #33` ([veggies_delight.md](../veggies_delight.md))
 
 ### Goal
-Rename potato noodles to Creamy Gnocchi (milk, gnocchi, onion or garlic, either can be pickled). Cutting potato dough
-and sweet potato dough gives gnocchi.
+Creamy Gnocchi (milk, gnocchi, onion or garlic, either can be pickled); cutting potato dough and sweet potato dough gives gnocchi.
 
 ### Now
-`veggiesdelight:potato_noodle` (pot, from `#forge:vegetables/potato`) is the ingredient and `potato_noodles` the meal
-(pot: noodle, garlic, onion, bowl; or noodle, cheese, bowl from the Vintage compat file). There is no potato dough
-item (only `sweet_potato_dough`, `oat_dough`, `cucumber_dough`...) and no gnocchi anywhere (jars).
+- Built: names Gnocchi, Creamy Gnocchi, Canned Creamy Gnocchi (`namechanges.js` lines 263-267); pot
+  `R.fdCooking([i.milk, i.potato_noodle, i.potato_noodle, [i.onion, i.t_crops_garlic, i.pickled_onion]], i.potato_noodles, ...)`
+  replacing `veggiesdelight:cooking/potato_noodles` ([veggiesdelight/recipes.js](../../kubejs/data/creative_delight/kubejs/veggiesdelight/recipes.js)
+  lines 57-58); knife `gnocchi_from_sweet_potato_dough` (line 56, 2 gnocchi); gnocchi in `#forge:pasta`
+  (`veggiesdelight/tags.js` line 12, `#38`). Vintage's cheese variant (`veggiesdelight:compat/vintagedelight/cooking/potato_noodles`) stays.
+- Open: both sprites still show the noodle art; there is no potato dough item (only `i.sweet_potato_dough`; grep 2026-10-31).
+  RC-133.
 
 ### Build
-Names in namechanges.js: `potato_noodle` -> Gnocchi, `potato_noodles` -> Creamy Gnocchi; re-recipe the meal (milk,
-gnocchi, `[onion, garlic, pickled onion]`); `R.fdCutting(i.sweet_potato_dough, i.any_knife, gnocchi, e, ...)`.
+1. Two sprites: `kubejs/assets/veggiesdelight/textures/item/potato_noodle.png` (gnocchi pieces) and `potato_noodles.png`
+   (bowl), same folder as `textures/food #2`; the can follows the generated can art.
+2. Potato dough: only with `baking/baked-goods #17` (dough unification); then
+   `R.fdCutting(i.potato_dough, i.any_knife, Item.of(i.potato_noodle, 2), e, 'gnocchi_from_potato_dough')`.
 
 ### Decisions
-"Potato dough" does not exist: either add a potato dough item (startup item, `baking/baked-goods #17`) or cut only the
-sweet potato dough and keep the potato pot recipe. Recommend the second until doughs are unified.
+Potato dough now (new startup item) or with the dough unification: recommend with the unification.
 
 ### Tests
-RC-133 Creamy Gnocchi name and recipe; knifing sweet potato dough gives gnocchi.
+RC-133 Creamy Gnocchi name, recipe and new sprites; knifing sweet potato dough gives gnocchi.
 
 ---
 
 ## meals #34: Fries from any potato slice
-Status: In Progress / Work: KubeJS / TODO `dishes/meals #34` ([veggies_delight.md](../veggies_delight.md))
+Status: In Progress (waits for `dishes/ingredients #20`) / Work: KubeJS / id `dishes/meals #34` ([veggies_delight.md](../veggies_delight.md))
 
 ### Goal
-Fries are made from any potato slice (sweet potato slices too).
+Fries from any potato slice, sweet potato slices too.
 
 ### Now
-Fries are `pneumaticcraft:chips` (renamed Fries): `R.fdCooking([oil, #forge:sliced_potato x2], chips x2)`
-(cooking.js line 369); fish and chips takes the same tag. The tag holds only Rustic `potato_slices` today
-(cookingtags.js line 38). So the recipes are already tag-based; the work is the sweet potato slice item and its tag
-entry (`dishes/ingredients #20`). Baked potato slices are a separate cooked item.
+Fries (`i.chips`, PneumaticCraft chips renamed) and fish and chips already read `i.t_sliced_potato`
+([pneumaticcraft/recipes.js](../../kubejs/data/creative_delight/kubejs/pneumaticcraft/recipes.js) lines 60-64).
+`#forge:sliced_potato` holds only `rusticdelight:potato_slices` (`rusticdelight/tags.js` line 21; More Delight's diced
+potatoes merged into it). No sweet potato slice item yet (`dishes/ingredients #20`).
 
 ### Build
-After `ingredients #20`: `t.add(e, i.t_sliced_potato, i.sweet_potato_slices)`. Nothing else.
+After `ingredients #20`: `t.add(e, i.t_sliced_potato, i.sweet_potato_slices)` in CD `veggiesdelight/tags.js`. Nothing else.
 
 ### Tests
 RC-134 Fries from sweet potato slices; fish and chips accepts them.
@@ -1142,23 +888,26 @@ RC-134 Fries from sweet potato slices; fish and chips accepts them.
 ---
 
 ## meals #35: Steak and broccoli sides
-Status: In Progress / Work: KubeJS / TODO `dishes/meals #35` ([veggies_delight.md](../veggies_delight.md))
+Status: In Progress (nothing built) / Work: KubeJS / id `dishes/meals #35` ([veggies_delight.md](../veggies_delight.md))
 
 ### Goal
 Steak and broccoli accepts rice, mashed potatoes, any baked potato plus a bowl, and other baked veggies plus a bowl.
 
 ### Now
-`veggiesdelight:steak_and_broccoli`: VD recipe shapeless cooked beef, broccoli, cooked rice, bowl; the pack's
-heatless version cooking.js line 487 (cooked beef, broccoli, cooked rice, no bowl). Mashed potatoes are two items
-(`i.mashed_potatoes` More Delight, `i.veggiesdelight_mashed_potatoes` VD; pinned merge, `merges/dishes #1 to #3`).
-`i.t_soup_veggie_cooked` (cookingtags.js line 96) already lists baked potato, baked sweet potato, roasted zucchini.
+`veggiesdelight:steak_and_broccoli`: upstream shapeless (cooked beef, broccoli, cooked rice, bowl) removed
+([veggiesdelight/cooking.js](../../kubejs/data/creative_delight/kubejs/veggiesdelight/cooking.js) line 23) and replaced by
+`creative_delight:shapeless/steak_and_broccoli_cooked_manual_only` (line 41: cooked beef, broccoli, cooked rice; the rice
+brings the bowl). Mashed: `i.mashed_potatoes` (More Delight, Mashed Potatoes) and `i.veggiesdelight_mashed_potatoes`
+(Mashed Sweet Potatoes after `merges/dishes #2`); both bowl items. Baked sides: `i.t_soup_veggie_cooked` holds baked
+potato, baked sweet potato, roasted zucchini and the other cooked veggies.
 
 ### Build
-Replace the rice slot by `[i.cooked_rice, i.mashed_potatoes, i.veggiesdelight_mashed_potatoes, Item.of(i.t_soup_veggie_cooked)]`
-with the bowl required for the baked options: two recipe variants (rice or mashed, no extra bowl; baked plus bowl).
+Two recipes in place of line 41: `[i.cooked_beef, i.broccoli, [i.cooked_rice, i.mashed_potatoes, i.veggiesdelight_mashed_potatoes]]`
+(the side brings its bowl) and `[i.cooked_beef, i.broccoli, i.t_soup_veggie_cooked, i.bowl]`
+(`steak_and_broccoli_baked_cooked_manual_only`).
 
 ### Decisions
-Whether the rice and mashed variants also take the bowl: the row says bowl only for baked sides; recommend as written.
+None beyond the row (bowl only for baked sides).
 
 ### Tests
 RC-135 Each side crafts the meal; baked sides need the bowl.
@@ -1167,6 +916,10 @@ RC-135 Each side crafts the meal; baked sides need the bowl.
 
 ## meals #36: Cacciatore takes chicken cuts
 Status: Testing / Work: KubeJS / TODO `dishes/meals #36` ([recipes_cooking.md](../recipes_cooking.md))
+
+Built 2026-10-25 (nothing to build: `i.cooked_chicken` is `#forge:cooked_chicken`, which holds the cooked cuts; grid fix 4
+makes the heatless recipe cycle them; SQ-CDB-11 PASS); fold into [recipes_cooking.md](../recipes_cooking.md) 2.3. The heatless
+route is now in CD `veggiesdelight/cooking.js`, not `cooking.js`; the line numbers below are stale.
 
 ### Goal
 Allow chicken cuts in the cacciatore; mark another whole versus cut audit.
@@ -1191,33 +944,41 @@ RC-136 Heatless cacciatore with cooked cuts.
 ---
 
 ## meals #37: Pancake coverings review
-Status: In Progress / Work: KubeJS / patcherMod / TODO `dishes/meals #37` ([recipes_cooking.md](../recipes_cooking.md)); related `dishes/jams #1`
+Status: In Progress (review not started) / Work: KubeJS / patcherMod / id `dishes/meals #37` ([recipes_cooking.md](../recipes_cooking.md)); after `dishes/jams #1`
 
 ### Goal
-Review the Supplementaries pancake covering options, the JEI screen and the tooltip. Recolour jams to their jam
-colour.
+Review the Supplementaries pancake covering options, the JEI screen and the tooltip; recolour the jam covering to each
+jam's colour.
 
 ### Now
-Supplementaries ships pancake top textures (`pancake_top_syrup`, `pancake_top_honey1..`, `pancake_top_jam`, chocolate)
-and the tag `supplementaries:pancake_syrup`; one jam texture, so every jam looks the same. Pack touches: `cookingtags.js`,
-`blocktags.js`, `jeed_providers.js`, `tooltips.js` (all mention pancakes). The JEI screen for placing a covering was
-not found in the pack: *unverified* (probably none).
+- Supplementaries 2.4.20 jar: covering textures `textures/blocks/pancake_top_` / `pancake_side_` `syrup`, `honey`,
+  `honey1`, `jam`, `chocolate` (one jam texture for every jam); item tag `supplementaries:pancake_syrup`.
+- Pack touches: `supplementaries/recipes.js` (pancake recipes, lines 17-32), `namechanges.js` line 300 (Stackable Pancake),
+  `jeed_providers.js` line 94 (speed). No JEI screen for coverings in the pack (none found); Rustic's pancake stacks carry
+  their own toppings (`#12`).
+- `dishes/jams #1` (one jam item and block, recoloured per jam) is In Progress.
 
 ### Build
-1. Audit: which items are valid toppings, what JEI shows, what the tooltip says (in game).
-2. Jam colour: a per-jam tint for the jam top, from `dishes/jams #1`'s jam colours; needs a patcherMod render hook or one
-   recoloured texture per jam (resource pack). Recommend textures if jams stay a handful.
+1. Audit in game: which items apply which covering (Supplementaries code: `PancakeBlock` topping by item / tag), what JEI
+   and the tooltip say; write the list here.
+2. Jam colour: per-jam tint of `pancake_top_jam` / `pancake_side_jam` by a patcherMod `BlockColor` on
+   `supplementaries:pancake` keyed on the stored topping item (the block entity holds it: check), colours from
+   `dishes/jams #1`. Or one texture per jam if jams stay a handful (resource pack).
+3. A JEI information page on `i.pancakes` listing the coverings (`JEIEvents.information`, CD `supplementaries/client.js`).
 
 ### Decisions
-Mixin tint versus per-jam textures; depends on the jam merge (`dishes/jams #1`). Do after it.
+Tint (one mixin or colour handler, any number of jams) vs per-jam textures: recommend the tint, after `jams #1` settles
+the jam set.
 
 ### Tests
-RC-137 Each jam covering shows its colour; JEI and tooltip match the real options.
+RC-137 Each jam covering shows its colour; JEI page and tooltip match the real options.
 
 ---
 
 ## meals #39: Field salad revamp
-Status: Built 2026-10-29, not run / Work: KubeJS / TODO `dishes/meals #39` ([delightful.md](../delightful.md))
+Status: Testing (built 2026-10-29, unreleased; SQ-CM-20 PASSED r1031 2026-10-31) / Work: KubeJS / TODO `dishes/meals #39` ([delightful.md](../delightful.md))
+
+Built 2026-10-29; fold into [delightful.md](../delightful.md) (recipes) or [creative_delight.md](../creative_delight.md) section 31.
 
 ### Built
 Delightful's `delightful:food/field_salad` (2 `#forge:salad_ingredients`, cactus steak, carrot, salmonberries, acorn,
@@ -1238,23 +999,58 @@ a zucchini slice; then 2 dandelions in place of the leaves); the upstream recipe
 
 ---
 
-## meals #42: Raise coleslaw nutrition
-Status: Built 2026-10-29, not run / Work: KubeJS / TODO `dishes/meals #42` ([veggies_delight.md](../veggies_delight.md))
+## meals #40: New sushi roll medleys
+Status: Planned / Work: new jar / KubeJS / data / id `dishes/meals #40`; related `creativedelight/members #14`, `#26`
 
-### Built
-Rule (owner 2026-10-28): hunger and saturation both above the sum of the inputs. The pack recipe is zucchini 3 / 2.4,
-potato 1 / 0.6, carrot 3 / 3.6, cabbage 2 / 1.6 (+ bowl) = 9 / 8.2. Coleslaw is now 12 hunger, modifier 0.6 = 14.4
-saturation (upstream 8 / 9.6; 11 / 13.2 since 2026-10-27). CD startup `veggiesdelight/veggies_foods.js`. Comfort
-seconds follow the comfort/nourishment rule: rerun `/cegen run comfort_nourishment` after the next `/dumpfood` (12
-hunger is in the 240 s band; the JSON still says 120 s from the 8-hunger dump), and `gen_can_types.py` for the can.
+### Goal
+New roll medleys (feast platters like FD's Rice Roll Medley): hostile rolls, shrimp and sea pickle rolls, egg rolls, and
+the bell pepper rolls.
+
+### Now
+- FD `farmersdelight:rice_roll_medley_block` (`i.rice_medley`): a `FeastBlock` serving salmon rolls, cod rolls and kelp
+  roll slices; shapeless grid plus the pack's assembly (`farmersdelight/recipes.js` lines 228-235: bowl, cod roll, salmon
+  roll, kelp roll slice -> 1).
+- Rustic port (CD member `rustic`, built 2026-10-25): `RiceRollRoyaleBlock` (`members/rustic/.../content/RiceRollRoyaleBlock.java`,
+  `extends FeastBlock`, 8 servings from a fixed `ROLLS` list: cherry blossom, calamari, yellow, red, green pepper rolls, 3 kelp
+  roll slices), registered `rusticdelight:rice_roll_royale` (`RDBlocks.java` line 66), and **the bell pepper rolls
+  already exist**: `bell_pepper_roll_<colour>` for all 9 colours (`RDItems.java` line 111). None of these has an item_dict key.
+- Roll items for the new medleys (dict keys exist): Hostile `i.ghastroll`, `i.guardianroll`; Ocean's `i.elder_guardian_roll`;
+  Oceanic `i.shrimp_roll`, `i.sea_pickle_roll` / `_slice`, `i.egg_roll`, `i.fish_egg_roll` / `_slice`.
+
+### Build
+1. Generalise the Royale block: a `RollMedleyBlock(List<Supplier<Item>> rolls)` in the Rustic member (or the CD
+   `farmers` member), servings = list size, shape and leftovers as the Royale. Register 4 blocks + block items:
+   `hostile_roll_medley` (ghast, guardian, elder guardian rolls), `ocean_roll_medley` (shrimp and sea pickle rolls and
+   slices), `egg_roll_medley` (egg and fish egg rolls and slices), `bell_pepper_roll_medley` (the 9 colours or the 3 common
+   ones). Models: recolours of `rice_roll_medley_block` stages; loot tables (full drops itself, as the Royale).
+2. Dict keys for the 4 medleys and the Rustic rolls; recipes in the CD tree of the namespace: shapeless rolls + bowl
+   (as FD's medley), plus one assembly each on `i.bowl` with a unique first roll.
+3. JEI plating: the `FeastPlatingCategory` (patcherMod) picks up any `FeastBlock` subclass from the registry: check it
+   lists the new ones. Food families `feast/whole`, placeable own block, compost, names.
+
+### Ids and data
+Namespace decision below; servings verified to exist only as listed above (the Hostile and Oceanic roll recipes and values
+not read for this brief).
+
+### Decisions
+- Namespace: `rusticdelight:` (the Royale's home; one class) vs `creative_delight:` vs each roll's own mod (needs a CD
+  additions member per ARR mod). Recommend `rusticdelight:` for the pepper medley and a `creative_delight:` namespace for
+  the three cross-mod ones, since they mix mods.
+- Bell pepper medley: 9 colours or 3: recommend the 3 common (green, yellow, red), like the Royale.
+
+### Gotchas
+Create picks a sequenced assembly by its first step: every bowl-based medley needs a different first roll (rice medley
+starts with a cod roll).
 
 ### Tests
-RC-161 Coleslaw tooltip / AppleSkin: 12 hunger, 14.4 saturation.
+- RC-new6 Each medley crafts (grid and assembly), places, and serves its rolls in order with a bowl; JEI plating lists it.
 
 ---
 
 ## meals #43: Veggie Noodles
-Status: Built 2026-10-29, not run / Work: KubeJS / resource pack / lang / TODO `dishes/meals #43` ([vintage_delight.md](../vintage_delight.md))
+Status: Testing (built 2026-10-29, unreleased; SQ-CM-22 PASSED r1031 2026-10-31) / Work: KubeJS / resource pack / lang / TODO `dishes/meals #43` ([vintage_delight.md](../vintage_delight.md))
+
+Built 2026-10-29; fold into [vintage_delight.md](../vintage_delight.md) (recipes, textures).
 
 ### Built
 - The row's "cucumber pasta" is `vintagedelight:cucumber_noodles` (Cucumber Noodles; cut from `cucumber_dough`, in
@@ -1273,15 +1069,283 @@ from it and still work as `#forge:pasta`.
 
 ---
 
+## meals #44: Unify the two stuffed pumpkin recipes
+Status: Planned / Work: KubeJS / id `dishes/meals #44`
+
+### Goal
+Owner decision 2026-10-30: one new recipe: tomato sauce + any raw potato + any bread + any berries + any mushroom + any veggie.
+
+### Now
+Two pot recipes make `farmersdelight:stuffed_pumpkin_block` (`i.stuffed_pumpkin_block`), both with a pumpkin container,
+verified in the jars 2026-10-31:
+- `farmersdelight:cooking/stuffed_pumpkin_block` (FD 1.2.4, nested in CD): `#forge:crops/rice`, `#forge:crops/onion`,
+  brown mushroom, potato, `#forge:berries`, `#forge:vegetables`; 2.0 xp, 400 ticks.
+- `corn_delight:cooking/stuffed_pumpkin_from_cornbread`: cornbread, `#forge:vegetables`, tomato sauce, brown mushroom
+  colony, sweet berries; 0.5 xp, 400 ticks.
+Slice and Dice copies both. No pack change to either (grep 2026-10-31); `can_stuffed_pumpkin` exists.
+
+### Build
+In CD `farmersdelight/recipes.js` (Meals):
+```js
+R.remove({ id: 'farmersdelight:cooking/stuffed_pumpkin_block' }, e)
+R.remove({ id: 'corn_delight:cooking/stuffed_pumpkin_from_cornbread' }, e)   // Corn Delight is always loaded in the pack
+R.fdCooking([i.tomato_sauce, i.any_potato, i.t_bread, i.t_berries, i.mushrooms, i.vegetables],
+	i.stuffed_pumpkin_block, e, 'stuffed_pumpkin_block', 2.0, 400, i.pumpkin)
+```
+`i.any_potato` = `#forge:vegetables/potato` (potato, potato slices, sweet potato). Slice and Dice rebuilds its copy.
+
+### Ids and data
+`i.tomato_sauce`, `i.any_potato`, `i.t_bread` (loaves incl. cornbread), `i.t_berries`, `i.mushrooms` (`#forge:mushrooms`,
+27 incl. Botania's), `i.vegetables`, `i.pumpkin` exist.
+
+### Decisions
+`#forge:mushrooms` includes the 16 Botania mushrooms: recommend a narrower edible set if that reads wrong (`i.brown_mushroom`,
+red, and the Fungi Delight ones). Rice and onion drop out (the owner's list): confirm.
+
+### Tests
+- RC-new7 Only one stuffed pumpkin recipe in JEI (pot and its mixer copy), with the six slots; it takes a sweet potato and cornbread.
+
+---
+
+## meals #45: Broccoli soup: milk to cheese
+Status: Planned / Work: KubeJS / id `dishes/meals #45`
+
+### Goal
+Broccoli soup takes cheese, not milk.
+
+### Now
+- Pot `veggiesdelight:cooking/broccoli_soup`: 2 `#forge:crops/broccoli` + `#forge:milk`, bowl. **A cheese version already
+  exists**: `veggiesdelight:compat/vintagedelight/cooking/broccoli_soup` (2 broccoli + `#forge:cheese`, bowl; Vintage is
+  loaded), both in the backportedVeggies jar and the 2026-10-30 recipe dump.
+- Heatless `creative_delight:shapeless/broccoli_soup_cooked_manual_only`
+  ([veggiesdelight/cooking.js](../../kubejs/data/creative_delight/kubejs/veggiesdelight/cooking.js) line 51): bone broth,
+  3 broccoli, milk.
+
+### Build
+1. `R.remove({ id: 'veggiesdelight:cooking/broccoli_soup' }, e)` (the cheese pot stays).
+2. Line 51: `i.milk` -> `i.any_cheese`.
+
+### Decisions
+Replace (recommend: the cheese pot already covers the dish) vs keep both. Cauliflower soup (line 52, milk) is the same
+shape: change it too only if asked.
+
+### Tests
+- RC-new8 Broccoli soup: one pot recipe (cheese) and the heatless craft with cheese; no milk route.
+
+---
+
+## merges/dishes #10: Burger audit and loaded burger
+Status: In Progress (rename built 2026-10-30, unreleased) / Work: KubeJS / data / id `merges/dishes #10`
+
+### Goal
+Owner 2026-10-27: drop More Delight's loaded burger in favour of Vintage's "The Burger", renamed Loaded Burger, which
+accepts any cheese; mark every burger for an ingredient-variant audit and balancing.
+
+### Now
+- Rename done: `vintagedelight:deluxe_burger` (`i.deluxe_burger`, upstream name "The Burger") -> Loaded Burger
+  (`namechanges.js` line 299).
+- Its recipe ([vintagedelight/recipes.js](../../kubejs/data/creative_delight/kubejs/vintagedelight/recipes.js) lines
+  108-128): shaped `['STO', 'APE', 'CB ']` with `C: i.cheese_slice` only, patty `[i.beef_patty, i.cooked_vegetarian_patty]`,
+  plus an assembly on the patty.
+- More Delight `moredelight:loaded_hamburger` (`i.loaded_hamburger`): pack shaped `_manual_only` + assembly in
+  [creativeengineering/recipes.js](../../kubejs/data/creative_delight/kubejs/creativeengineering/recipes.js) line 82-83.
+- Burgers (14): hamburger, cheeseburger, deluxe cheeseburger, simple hamburger, hamburger with egg, loaded hamburger, bison,
+  kangaroo (`creativeengineering/recipes.js` lines 70-87), Vintage cheese and Loaded (`vintagedelight/recipes.js`),
+  vegetarian burger (Veggies), vegan and cave hamburger (Miner's), guardian burger (Hostile).
+
+### Build
+1. Drop: `global.addItemMerges(<group>, [[i.loaded_hamburger, i.deluxe_burger]])` in CD startup `moredelight/item_merges.js`;
+   delete the `loaded_hamburger` row from the burger table (line 82-83) so no recipe makes the purged item.
+2. Any cheese: `C: i.any_cheese` and the first assembly step `i.any_cheese` (keeps the slice; adds the flaxen wedge). Its
+   first step then equals Vintage's cheese burger's (`i.cheese_slice`, a subset): give the Loaded Burger a different first
+   step (it already starts on the patty, not the bread: fine), and check the cheese burger stays unique.
+3. Audit: a table here of every burger's slots (patty, cheese, greens, bread) and values; open slots per `#14` (patty tag)
+   and `#29` (pickled onion); balance in `food/types-and-tuning`.
+
+### Decisions
+Merge (inventory swap, the item disappears) vs only removing its recipe: recommend the merge (old worlds carry it).
+
+### Tests
+- MG-new1 A More Delight loaded burger in an inventory becomes a Loaded Burger; JEI hides it.
+- RC-new9 The Loaded Burger crafts with a flaxen wedge and with a cheese slice.
+
+---
+
+## meals #46: Skewer fold: the pack's skewers join the Barbeque's Delight system
+Status: Planned / Work: KubeJS / data / id `dishes/meals #46`; after `largecontent/mod-additions #37` (the port), `food/seasoning #11`, `#13`
+
+### Goal
+[barbeques_delight.md](../barbeques_delight.md) 4.1 (revised 2026-10-31): the BBQ system stays; the 8 pack skewers get raw
+versions (`#50`) that the Grill cooks into the existing items; raw skewers worse food, chicken "nasty"; seasonings on raw
+skewers copy to the cooked one, sauces refused; cooked skewers craftable from cooked ingredients (shaped plus one
+assembly) without `grilled`; family membership, skewer type (`#13`), saltable, stack sizes, plate.
+
+### Now
+Nothing of Barbeque's Delight is in the pack (no jar, no `development/backportedBarbeques`, no dict keys, 2026-10-31).
+The 8 pack skewers and their keys: `#13` Now. The overlap evaluation table (5 rows, keep both) is in TODO.
+
+### Build (after the port)
+1. Skewer type and family: add the 10 BBQ cooked skewers and the burnt skewer (`hazard` overlay) to `handheld/skewer`
+   (`#13`) and the `skewer` family (`tools/food_families.py`), and the raw ones to a raw type (decision).
+2. Raw items and grill recipes: `#50`.
+3. Cooked-ingredient crafts for the 10 BBQ lines and the 8 pack lines: shaped `_manual_only` + one assembly on
+   `i.stick`, cooked meat in place of raw (barbeques_delight.md 4.3 #8 default), in CD `barbequesdelight/recipes.js`
+   and each skewer's mod file. They carry no `grilled` (O21), so they do not stack with grilled ones (O30, no code).
+4. Seasoning rules ride on `food/seasoning #11` / `#13`: raw skewers in the seasonable tags (seasonings yes, sauces no);
+   the grill copies seasonings over (port Java).
+5. Saltable tag, stack sizes (skewer 64), Food Plate review (`food/placeable #5`), values (`food/types-and-tuning #19`).
+
+### Decisions
+barbeques_delight.md 4.3 decisions 8 (ingredients per line, default cooked meat for raw) and 10 (combos carry `grilled`).
+
+### Tests
+BBQ-20 to BBQ-24 (planned in barbeques_delight.md 4.3 #14): names, raw skewer food and poison, `grilled` saturation,
+crafted skewer without `grilled`, sauce refused on a raw skewer.
+
+---
+
+## meals #47: Kebab Wrap on a tortilla
+Status: Planned / Work: KubeJS / data / id `dishes/meals #47`; after `largecontent/mod-additions #37`
+
+### Goal
+Owner O3: the Kebab Wrap ships on bread (upstream combine: bread, 1 cooked skewer, cabbage); switch it to `forge:tortilla`
+to match the wrap rule (`#15`, the mutton wrap), keeping the skewer-effect NBT; family `sandwich/wrap`.
+
+### Now
+Not ported yet. Upstream recipe type `barbequesdelight:combine` (shapeless with NBT, stores the skewers in `content`).
+
+### Build (after the port)
+1. Edit the port's combine JSON for `kebab_wrap` (bread -> `{"tag": "forge:tortilla"}`), or re-emit it from KubeJS through a
+   new `R.bbqCombine` emitter in `neoCraftHelper.js` (barbeques_delight.md 4 step 7 already plans `bbqSkewering` /
+   `bbqGrilling`; add `bbqCombine` there) with `i.t_tortilla`.
+2. Type `handheld/wrap` (`#15`), family `sandwich/wrap`, values check.
+
+### Decisions
+Port data edit (simplest) vs a KubeJS emitter (keeps "recipes through the helper"): recommend the emitter, since the port
+will need it for `#48` too.
+
+### Tests
+- BBQ-new1 Kebab Wrap combines from a tortilla, a cooked skewer and cabbage; not from bread; the skewer's effects carry.
+
+---
+
+## meals #48: Integrate Kebab Sandwich and Bibimbap
+Status: Planned / Work: KubeJS / data / id `dishes/meals #48`; after `largecontent/mod-additions #37`
+
+### Goal
+Owner O15: in the integration stage, the Kebab Sandwich gets the sandwich rule (shaped plus one sequenced assembly) and
+the Bibimbap the meal rule (takes and returns a bowl, Cooking Pot plus a heatless `_manual_only` craft); food families
+`sandwich`, `meal`; values; plates.
+
+### Now
+Not ported. Upstream: Kebab Sandwich combine = bread, 2 cooked skewers, cabbage, onion (14 / 19.6); Bibimbap combine =
+cooked rice, onion, carrot, 3 cooked skewers (16 / 22.4, Nourishment 2:00). Both carry the skewers' effects through the
+`content` NBT (barbeques_delight.md 3.2).
+
+### Build (after the port)
+1. The NBT is the obstacle: shaped grids, the Cooking Pot and Create assemblies do not copy input NBT into the output.
+   Either keep the combine type and add a shaped-pattern variant of it in the port (`ShapedCombineRecipe`), or accept that
+   the pot and assembly versions carry no skewer effects.
+2. Sandwich: shaped (bread top and bottom, the 2 skewers, cabbage and onion between; pattern per the decision), plus one assembly on `i.t_bread` with a unique first step.
+3. Bibimbap: pot `R.fdCooking([cooked rice, onion, carrot, 3 skewers], bibimbap, e, ..., i.bowl)` and a heatless shapeless
+   `_manual_only` from cooked parts (one more main); the bowl returns on eating (port `craftRemainder` / food container).
+4. Families, values (`food/types-and-tuning #19`), Food Plate tag.
+
+### Decisions
+Recipe shapes (the row's decision) and whether the pot / assembly versions may lose the skewer effects: recommend keeping
+the combine (effects) as the hand route and letting the machine routes give the plain item.
+
+### Tests
+- BBQ-new2 Kebab Sandwich: shaped and assembly recipes; Bibimbap: pot and heatless craft, bowl in and back.
+
+---
+
+## meals #49: Decide: smelt or smoke raw skewers
+Status: Planned (decision only) / Work: KubeJS / id `dishes/meals #49` ([barbeques_delight.md](../barbeques_delight.md) 4.3 decision 6, O22)
+
+### Goal
+Decide whether a raw skewer can be smelted, smoked or campfire-cooked into a cooked skewer **without** `grilled`. Until
+decided only the Grill cooks raw skewers.
+
+### Now
+Nothing ported. The pack's cooking heat rule for cooked meat is Smoker + Furnace + Campfire (food_families.md 3.1 Cooked
+meat row); O19 originally said "never cooked in furnaces", O22 reopened it.
+
+### Options
+- **No** (the Grill keeps its reason to exist; matches O19).
+- **Yes, worse:** smoker and campfire only (`R.smoking`, `R.campfire`), result without `grilled` (so 2 less saturation,
+  O25), longer time than the grill.
+- **Yes, all three** by the heat rule.
+
+### Recommendation
+Smoker and campfire only, no furnace, result without `grilled`: one helper loop over the 18 raw skewers in
+`barbequesdelight/recipes.js` once `#50` exists. Answer before `#46` is built.
+
+### Tests
+- BBQ-new3 (if yes) A raw skewer smoked gives the cooked skewer with no Grilled line; a furnace refuses it.
+
+---
+
+## meals #50: Raw versions of the pack skewers
+Status: Planned / Work: new jar / KubeJS / data / id `dishes/meals #50`; after `largecontent/mod-additions #37`
+
+### Goal
+Owner O24 (2026-10-31): the 8 pack skewers (Barbecue on a Stick, End Barbecue Stick, Improvised Barbecue Stick, Nether
+Skewer, Seafood Skewer, Turnip Mutton Skewer, Cave Skewer, Crispy Skewer) each get a raw item; the Grill cooks it into
+the existing item.
+
+### Now
+The 8 cooked items and keys: `#13` Now. Nothing raw exists. barbeques_delight.md 4.3 decision 2 (namespace, recipe,
+grill time, stack, texture) and 7 (names) hold the defaults.
+
+### Build (after the port)
+1. Items: 8 raw skewers, by default in a CD member under each original mod's namespace (decision 2 default), e.g.
+   `farmersdelight:raw_barbecue_stick`; recoloured textures (raw tones of the cooked sprite); stack 64; food values worse
+   than cooked (`food/types-and-tuning #19`), chicken ones "nasty" (O27).
+2. Recipes: one `barbequesdelight:skewering` (basin) recipe per raw skewer from the cooked recipe's raw ingredients, and one
+   `barbequesdelight:grilling` recipe raw -> existing cooked item, grill time from the closest BBQ line (3.1 table), both
+   through the planned `R.bbqSkewering` / `R.bbqGrilling` emitters.
+3. Names (decision 7 default): "Raw " prefix; Crispy Skewer -> "Uncooked Crispy Skewer". Lang in the CD client file.
+4. JEI: they appear in the Skewering and Grilling categories by recipe; dict keys, food types (raw type per `#46`).
+
+### Decisions
+barbeques_delight.md 4.3 #2 (namespace, recipes, grill time, textures) and #7 (names); defaults as above.
+
+### Tests
+- BBQ-new4 Each of the 8 raw skewers is made in the basin and grills into the existing cooked item; names read Raw.
+
+---
+
 ## Built, needs play
 
-None: no `meals` row is at Testing or Complete.
+Rows at Testing; the build facts are in their TODO rows and writeups. Their old build sections were cut 2026-10-31 where
+the writeup covers them (rows 1-4, 7-9 in [recipes_cooking.md](../recipes_cooking.md) 2.3 / 2.4, row 42 in
+[veggies_delight.md](../veggies_delight.md) history 2026-10-29); the others keep a short section above.
+
+- `dishes/meals #1` Heatless shapeless meals from cooked ingredients, `_manual_only` (shipped 1.1.01) - [recipes_cooking.md](../recipes_cooking.md) 2.3 - open C P (RC-55; SQ-OF-07 PASSED).
+- `dishes/meals #2` Per-meal recipe changes, burgers shaped + one assembly (shipped 1.1.01) - [recipes_cooking.md](../recipes_cooking.md) 2.3 - open C P (RC-56 to RC-62).
+- `dishes/meals #3` Sequenced assembly meals (shipped 1.1.01) - [recipes_cooking.md](../recipes_cooking.md) 2.3 - open C P (RC-63, RC-64).
+- `dishes/meals #4` Expensive cooked shapeless meals, squid ink pasta mixing (shipped 1.1.01) - [recipes_cooking.md](../recipes_cooking.md) 2.3 - open C P (RC-66, RC-67).
+- `dishes/meals #7` Fish recipes for any fish, pot frying (shipped 1.1.01) - [recipes_cooking.md](../recipes_cooking.md) 2.3 - open C P (RC-69). Not checked: whether the cooking oil bottle comes back from the pot.
+- `dishes/meals #8` Dog food (shipped 1.1.01; any raw meat 1.1.03) - [recipes_cooking.md](../recipes_cooking.md) 2.3 - open C P (RC-68).
+- `dishes/meals #9` Gold food cheap in machines, every gold tag (shipped 1.1.01) - [recipes_cooking.md](../recipes_cooking.md) 2.4 - open C P T (RC-70; final numbers with `food/types-and-tuning #1`, #3). IE arc additives are listed 5 times (NCH's `ieArcFurnace` drops counts).
+- `dishes/meals #17` Fried rice renamed Egg Fried Rice (shipped 1.1.03) - `namechanges.js` - open C P.
+- `dishes/meals #19` Beignet removed; Rustic port no longer registers it (2026-10-29) - [rustic_delight.md](../rustic_delight.md) 5.7 - open C (SQ-CM-30 PASSED r1031 2026-10-31).
+- `dishes/meals #22` Overnight oats shapeless (shipped 1.1.04 client) - section above - open C P (SQ-CM-06 PASSED).
+- `dishes/meals #32` Mhadjeb removed (shipped 1.1.03) - section above - open S~ C P (RC-132; `canned_mhadjeb` waits for the can regeneration, SQ-CDB-12).
+- `dishes/meals #36` Cacciatore takes chicken cuts (nothing to build; grid fix 2026-10-25) - section above - open C P (RC-136; SQ-CDB-11 PASSED).
+- `dishes/meals #38` Gnocchi in `#forge:pasta`, every pasta recipe on the tag (shipped 1.1.04 client) - [veggies_delight.md](../veggies_delight.md) - open C P (SQ-CM-03, -04 PASSED).
+- `dishes/meals #39` Field salad: flowers and slot tags (built 2026-10-29) - section above - open C P (RC-160; SQ-CM-20 PASSED r1031).
+- `dishes/meals #41` Second stuffed pepper recipe from a roasted pepper (shipped 1.1.04 client) - [rustic_delight.md](../rustic_delight.md) 5.2 - open S C P (SQ-RD-33 not run).
+- `dishes/meals #42` Coleslaw 12 / 0.6 (built 2026-10-29) - [veggies_delight.md](../veggies_delight.md) history 2026-10-29 - open P T (RC-161; SQ-CM-21 PASSED r1031; rerun `comfort_nourishment` after `/dumpfood`).
+- `dishes/meals #43` Veggie Noodles: name, sprite, six-vegetable dough (built 2026-10-29) - section above - open C P (RC-162; SQ-CM-22 PASSED r1031).
 
 Recipe level of RC-160 to RC-164 (field salad, coleslaw and shrimp fried rice values, cucumber dough, shrimp fried rice,
 no smoothie): scratch server PASSED r1031 (2026-10-31, SQ-CM-20 to -24); JEI, tooltips and crafting stay in game.
 
-Test ids: [recipes_cooking.md](../recipes_cooking.md) ends at RC-18; this brief proposes RC-30 to RC-49 to stay clear of
-other briefs that may claim RC-19 onward (renumber when folding into the writeup).
+Test ids: RC-42 to RC-49 and RC-120 to RC-137 in the sections above are this brief's proposals (only RC-132, RC-133,
+RC-136 are in the writeup or the scratch queue); new sections use `RC-newN` placeholders. Renumber from RC-176 when
+folding into [recipes_cooking.md](../recipes_cooking.md).
 
 ## Writeup corrections made
 

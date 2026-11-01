@@ -1,7 +1,7 @@
 // requires: cookingforblockheads
 // Cooking for Blockheads kitchen tooltips, moved from the pack's client_scripts/tooltips.js 2026-10-27, rows unchanged.
-// The oven burns any furnace fuel plus cooking oil (ovenRequiresCookingOil = false + patcherMod CfbOvenFuelMixin), and
-// fuel containers come back to the output. It cooks food from furnace and smoker recipes (patcherMod
+// The oven burns any furnace fuel plus cooking oil (ovenRequiresCookingOil = false + Creative Delight blockheads_additions CfbOvenFuelMixin), and
+// fuel containers come back to the output. It cooks food from furnace and smoker recipes (blockheads_additions
 // CfbOvenSmokingMixin, TODO cooking/oven #4). TODO cooking/kitchen #8.
 ItemEvents.tooltip(e => {
 	if (!global.CD) return

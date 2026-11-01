@@ -1,0 +1,7 @@
+{
+  "parent": "cookingforblockheads:block/fruit_basket",
+  "textures": {
+    "particle": "cookingforblockheads:block/fruit_basket/rubberwood",
+    "texture": "cookingforblockheads:block/fruit_basket/rubberwood"
+  }
+}

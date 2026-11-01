@@ -1,31 +1,39 @@
 # Brief: dishes / jams
 
-Written 2026-10-24 from [todo/TODO.md](../todo/TODO.md) `# dishes`, Sub `jams` (rows 1 to 5, all from the scratchpad).
-Layout per [README.md](README.md). Writeups: [recipes_cooking.md](../recipes_cooking.md), [food.md](../food.md),
-[vintage_delight.md](../vintage_delight.md) (§3.1 overlaps: jams, nut mash). Recipes through `global.NCH` (`R`) in
-[cooking.js](../../kubejs/server_scripts/cooking/cooking.js), ids from `global.item` / `global.fluid`; merges in
-`kubejs/startup_scripts/_lib/item_merges.js`.
+Written 2026-10-24 from [todo/TODO.md](../todo/TODO.md) `# dishes`, Sub `jams` (rows 1 to 4) and `merges/dishes #7` (was
+`dishes/jams #5`); checked and updated 2026-10-31. Layout per [README.md](README.md). Writeups:
+[recipes_cooking.md](../recipes_cooking.md) (test prefix `RC-`, jam tests RC-170 to RC-175),
+[food.md](../food.md), [vintage_delight.md](../vintage_delight.md) (3.1 overlaps: jams, nut mash),
+[item_merges.md](../item_merges.md) 5 (nut butter decision). Recipes through `global.NCH` (`R`) in the Creative Delight
+server tree by mod (`kubejs/data/creative_delight/kubejs/<mod>/`), tags through `global.tags`, ids from `global.item`
+/ `global.fluid`; food merges through `global.addItemMerges('creative_delight', ...)` in CD startup scripts
+(`development/creativeDelight/src/main/resources/kubejs_startup/<mod>/item_merges.js`).
 
-**Jam families today (verified against `item_dict.js` and the jars, 2026-10-24):**
-- Fruits Delight (FD) 0.5.11: `fruitsdelight:<fruit>_jelly` (named "Jam", glass bottle container, 1 jam from 2 fruit +
-  sugar + lemon slice in the pot), `<fruit>_jelly_block` ("Jam Block", honey-like block), `<fruit>_jello`, `jelly_bread`
-  and per-jam `filling/*_jelly_bread` Create recipes.
-- Vintage Delight (port): `sweet_berry_jam`, `glow_berry_jam`, `pepper_jam` as `_bottle` items and `_jar` mason-jar blocks
-  (`empty_mason_jar`; craft: glass + wooden slab, shaped, `mason_jar.json`); tags `#vintagedelight:sweet_jam_bottles`,
-  `savory_jam_bottles`; `forge:jam_jars` / `forge:jam_bottles` are used by its vinegar recipes.
-- Delightful: `jelly_bottle` ("Jam Jar"), `glow_jelly_bottle`, `nut_butter_bottle`; tag `#forge:jam` (exports predate Vintage).
-- Upgrade Aquatic: `mulberry_jam_bottle`, `mulberry_jam_block`, `mulberry_bread`. Brewin's jams are already gone.
+## Scope and order
 
-**Update 2026-10-29 (owner): jams are mason jars only.** Built, not run: Vintage's jam bottles (sweet berry, glow
-berry, pepper) and the relish bottle are removed items, and so are Vintage's sweet berry and glow berry jam jars
-(Fruits Delight has both jams); their crafts and pots are gone (CD `vintagedelight/jams.js`, startup
-`vintage_items.js`). Pepper Jam Jar stays; the Relish Jar stays as an ingredient (`food_type/ingredient`) and leaves
-`#forge:jam_jars` / `#vintagedelight:savory_jam`. New mason jar jams: Green Grape, Red Grape and Cherry Jam Jar (Vintage
-port `-09`, placeholder wool sprites), pot 4 fruit + sugar + lemon slice -> 2 jars. PB and J takes `#forge:jams`.
-Tests RC-172 to RC-175 ([recipes_cooking.md](../recipes_cooking.md)).
-**Still open:** Fruits Delight's 22 jams (`*_jelly`) and Upgrade Aquatic's mulberry jam bottle are still glass bottle
-items (eating returns a glass bottle; the bottle is set in their jars' Java). Making them mason jars needs a jar item
-per jam (or a container swap in a repack) and the jam colour per fruit (row 1 Build 3): owner to decide.
+| Row | Change | Status | Note |
+|---|---|---|---|
+| `jams #3` | Recipes use jam, never bottled jam or jelly | In Progress | Only the mulberry bread merge is left; do first (KubeJS only) |
+| `merges/dishes #7` | Merge nut butter and nut mash | In Progress | KubeJS + lang; owner rules 2026-10-27 settle the survivor |
+| `jams #2` | 4 fruit, sugar, lemon slice for 2 jam | In Progress | Pattern built (row 4); applying it to Fruits Delight's 22 jams is open |
+| `jams #1` | Merge all jams into one jam jar | In Progress | Fruits Delight and mulberry to mason jars needs Java or a repack: owner |
+| `jams #4` | Grape and cherry jam | Testing | Built, shipped 1.1.05; see Built, needs play |
+
+**Jam families today (checked 2026-10-31 against `item_dict.js`, the CD tree and `mods/`):**
+- Fruits Delight 0.5.11: 22 `fruitsdelight:<fruit>_jelly` (named "Jam", glass bottle, 2 fruit + sugar + lemon slice in the
+  pot -> 1), `<fruit>_jelly_block`, `<fruit>_jello`, `jelly_bread` (renamed **Bread with Jam**, `client_scripts/namechanges.js:301`,
+  shipped 1.1.05). All 22 are in `#forge:jams` (`i.t_forge_jams`) through `#fruitsdelight:jelly`
+  ([fruitsdelight/tags.js:17](../../kubejs/data/creative_delight/kubejs/fruitsdelight/tags.js)). Orange jam from 4 slices:
+  [fruitsdelight/recipes.js:40-46](../../kubejs/data/creative_delight/kubejs/fruitsdelight/recipes.js) (pot -> 1, mixer -> 125 mB `f.orange_jam`).
+- Vintage Delight port, `mods/backportedVintage-0.1.6-ce-19.2-09.jar` (installed 2026-10-31 11:27): mason jar jams only.
+  The jam and relish bottles and the sweet berry / glow berry jam jars are removed items (CD startup
+  `vintagedelight/vintage_items.js:43-48`); their recipes go in
+  [vintagedelight/jams.js](../../kubejs/data/creative_delight/kubejs/vintagedelight/jams.js). Kept: Pepper Jam Jar, Relish Jar
+  (ingredient, out of the jam tags), new Green Grape / Red Grape / Cherry Jam Jars. Mason jar craft is still
+  `vintagedelight:mason_jar` (glass + wooden slab -> 3), not panes.
+- Delightful: `jelly_bottle` and `glow_jelly_bottle` are removed items (`_lib/removed_items.js:379-380`).
+- Upgrade Aquatic: `mulberry_jam_bottle` (`i.mulberry_jam_bottle`, glass bottle, not removed), `mulberry_jam_block`,
+  `mulberry_bread`. Brewin's jams are gone.
 - **TODO (texture):** real sprites for the three new jam jars (item and interior texture) to replace the wool
   placeholders (`development/backportedVintage/.../textures/item/{green_grape,red_grape,cherry}_jam_jar.png`,
   `textures/block/*_jam_interior_texture.png`).
@@ -36,32 +44,38 @@ per jam (or a container swap in a repack) and the jam colour per fruit (row 1 Bu
 Status **In Progress** / Work: KubeJS / patcherMod / resource pack / id `dishes/jams #1`
 
 ### Goal
-Every jam is Fruits Delight's jam item and Vintage Delight's jam block; every jam jar is a mason jar (mason jars take
-glass panes; a new empty mason jar texture); each jam recolours to its fruit (also for the pancake coverings, `dishes/meals #37`).
+Every jam is a mason jar (mason jars take glass panes; a new empty mason jar texture); each jam recolours to its fruit
+(also for the pancake coverings, `dishes/meals #37`).
 
 ### Now
-Three overlapping jam stacks (above). The only pack jam code is orange jam in `cooking.js` lines 799-804 (pot with
-4 slices, mixer with a fluid `f.orange_jam`). The mason jar craft is `vintagedelight:mason_jar` (glass, not panes).
+Done 2026-10-29 (shipped 1.1.05, changelog "Jams"): Vintage's bottles and duplicate berry jars removed, Delightful's jellies
+removed, relish out of the jam tags. Open: Fruits Delight's 22 jams and Upgrade Aquatic's mulberry jam are still glass
+bottle items (eating returns the bottle; set in their Java); the mason jar craft still takes glass; no recolour.
 
 ### Build
-1. `item_merges.js`: `[i.jelly_bottle, <fd jam>]`-style pairs are not one-to-one (Delightful's is generic); decide first
-   (Decisions). Mulberry, sweet berry, glow berry and pepper jams map to FD-style items (new where FD lacks them, row 4).
-2. Mason jar craft: change the pane input via `R.remove({id:'vintagedelight:mason_jar'})` + `R.shaped`; or edit the port
-   recipe (`development/backportedVintage/.../recipes/mason_jar.json`) and rebuild.
-3. Colour: the jam item takes its colour by an item colour hook or per-jam textures; the jar block needs a tinted
-   model or per-jam models (the port has one model set per jam). Recolour is a resource-pack and port job.
-4. `item_merges` swap the recipes (pb_j: `cooking.js` line 583 uses `#vintagedelight:sweet_jam_bottles`).
+1. Container swap for the 23 bottle jams (decision D1). Repack route: Fruits Delight and Upgrade Aquatic are not CD
+   members, so either a new CD repack member per mod (memory `creative-delight-routing`) or a patcherMod mixin on
+   their item's `getCraftingRemainingItem` / finish-using to return `i.empty_mason_jar`. Then the pot recipes take
+   `i.empty_mason_jar` as the container: `R.replaceInput({ type: 'farmersdelight:cooking', output: i.t_fruitsdelight_jelly }, ...)`
+   does not touch the container field, so remove and re-add each pot recipe (row 2 does this anyway).
+2. Mason jar from panes: in CD `vintagedelight/recipes.js`, `R.remove({ id: 'vintagedelight:mason_jar' }, e)` then
+   `R.shaped(Item.of(i.empty_mason_jar, 3), [' s ', 'p p', 'ppp'], { s: <wooden slab tag key>, p: <glass pane tag key> }, e, 'mason_jar')`
+   (add dict keys if missing). New empty jar texture: port resource, needs a port build.
+3. Colour per fruit: per-jam textures in the repack, or a tint layer; the jar blocks need per-jam models (the port has one
+   model set per jam). Resource-pack and port work.
 
 ### Decisions
-- **Which jar item stays.** Options: `vintagedelight:empty_mason_jar` (the row's own wording), Delightful's
-  `jelly_bottle`, FD's glass bottle (today's container). Recommend the mason jar; glass bottle remains the drink bottle.
-- Whether FD's `*_jelly_block` (storage) stays beside the placeable jar block. Recommend yes (different jobs).
+- **D1 Which jar item stays:** the mason jar (`vintagedelight:empty_mason_jar`); the glass bottle stays the drink bottle.
+  Owner still to choose the route: recommend a patcherMod remainder mixin (no repacks of two non-member mods).
+- FD's `*_jelly_block` stays beside the placeable jar block (storage vs placed food). Recommend yes.
 
 ### Gotchas
-- Cans: `canned_*_jam`-style cans and `can_parity.md` rows reference FD jams; rerun `/cegen` after merges.
+- Cans: `canned_*_jam` rows in `can_parity.md` name FD jams; rerun `/cegen` after any id change.
+- RC-172 note: a JEI search "jam bottle" still finds Upgrade Aquatic's mulberry jam bottle (scratch r1031).
 
 ### Tests
-- RC-J1 JEI: one jam per fruit; its jar is a mason jar; no Delightful / Mulberry / Vintage duplicate remains.
+- RC-new1 (proposed, numbered when queued): eating any Fruits Delight jam or the mulberry jam returns an empty mason jar;
+  mason jar crafts from panes.
 
 ---
 
@@ -69,25 +83,29 @@ Three overlapping jam stacks (above). The only pack jam code is orange jam in `c
 Status **In Progress** / Work: KubeJS / id `dishes/jams #2`
 
 ### Goal
-Cooking pot jam: 4 fruit, 1 sugar, 1 lemon slice (a lemon gives 5 lemon slices) for 2 jam (output doubled).
+Cooking pot jam: 4 fruit, 1 sugar, 1 lemon slice for 2 jam (output doubled).
 
 ### Now
-FD's own pot recipe is 2 fruit + sugar + lemon slice for 1 jam (`farmersdelight:cooking/apple_jelly`, verified; glass
-bottle container). The pack's orange recipe already uses 4 slices (`cooking.js` 799-804, `R.fdCooking(..., i.glass_bottle)`).
-`i.any_sugar`, `i.lemon_slice` exist.
+- The pattern is built for the three new jars (row 4): [vintagedelight/jams.js](../../kubejs/data/creative_delight/kubejs/vintagedelight/jams.js)
+  `R.fdCooking([fruit x4, i.any_sugar, i.lemon_slice], Item.of(jar, 2), e, id, 1.0, 400, i.empty_mason_jar)`; Slice & Dice
+  copies it to the heated mixer. The container question is settled: the pot output of 2 takes one container per serving
+  (shipped 1.1.05, recipe ids scratch PASS r1031 SQ-BJ-01).
+- Fruits Delight's 22 jams keep their own 2 fruit -> 1 recipes (`farmersdelight:cooking` type, ids under `fruitsdelight:`),
+  Vintage's pepper jam its own; orange keeps the 4-slice recipe (1 jam).
 
 ### Build
-Loop every jam: `R.remove({id:'farmersdelight:cooking/<fruit>_jelly'})`, then
-`R.fdCooking([fruit x4, i.any_sugar, i.lemon_slice], Item.of(jam, 2), e, '<fruit>_jam', 0.1, 200, i.glass_bottle)`.
-A 2-output pot recipe needs 2 containers: check the pot's container rule (unverified; orange jam does 1 bottle).
-Mirror in Create heated mixing (`f.orange_jam` pattern) so the machine route stays better than hand.
+1. In CD `fruitsdelight/recipes.js` (new block "Jams, 4 fruit for 2"): for each Fruits Delight jam read its fruit from the
+   upstream recipe list (or a table `[fruit key, jam key]` written once), `R.remove({ type: 'farmersdelight:cooking', output: jam }, e)`,
+   then the call above with `Item.of(jam, 2)` and `i.glass_bottle` (or the mason jar once row 1 lands).
+2. Orange: 4 slices = 1 orange's worth today; decide whether it becomes 8 slices -> 2 (consistent) or stays.
+3. Upgrade Aquatic mulberry jam: same rule, if it is kept as a jam.
 
 ### Decisions
-- Container for 2 jams: the pot may need one container per output (unverified; read FD 1.2.4 `CookingPotBlockEntity`
-  before building). If so, recommend a 2-jam output with a stack of 2 bottles accepted as the container slot's count.
+- **Apply to Fruits Delight's jams:** TODO says "the existing jams keep their own recipes" (2026-10-29). Recommend asking the
+  owner whether that was final; if so, close the row as done for the new jams.
 
 ### Tests
-- RC-J2 pot: 4 apples + sugar + lemon slice + bottle -> 2 jam (or the decided container result); JEI shows one recipe.
+- RC-new2 (proposed, numbered when queued): pot 4 apples + sugar + lemon slice + 2 bottles -> 2 Apple Jam; JEI one pot recipe.
 
 ---
 
@@ -95,69 +113,79 @@ Mirror in Create heated mixing (`f.orange_jam` pattern) so the machine route sta
 Status **In Progress** / Work: KubeJS / id `dishes/jams #3`
 
 ### Goal
-Ditch bottled jams (mason-jarred jams are the same in crafting); jam always over jelly; merge mulberry bread into bread with
-jam; rename jelly bread to bread with jam.
+Ditch bottled jams; jam always over jelly; merge mulberry bread into bread with jam; rename jelly bread to bread with jam.
 
 ### Now
-Consumers: `jelly_bread` (`fruitsdelight:jelly_bread`, "Jelly Bread", FD filling per jam), `upgrade_aquatic:mulberry_bread`,
-`pb_j` (`cooking.js` 583, `#vintagedelight:sweet_jam_bottles`), `delightful:nut_butter_and_jelly_sandwich` ("Nut Butter and
-Jam Sandwich"), Vintage's vinegar (`jam_jars` + mushroom). Exact recipe list is unverified; grep `kubejs/exported/recipes/all.csv`
-(it predates Vintage) and re-dump.
+Done: Vintage bottles gone and PB and J takes `#forge:jams` (2026-10-29,
+[vintagedelight/cooking.js:21](../../kubejs/data/creative_delight/kubejs/vintagedelight/cooking.js)); Jelly Bread renamed
+Bread with Jam (2026-10-30, shipped 1.1.05). Open: `upgrade_aquatic:mulberry_bread` (`i.mulberry_bread`) is still its own
+item (compost row in CD startup `upgrade_aquatic/compost_values.js:37`).
 
 ### Build
-1. Merge `upgrade_aquatic:mulberry_bread` into `fruitsdelight:jelly_bread` in `item_merges.js` (`i.mulberry_bread` -> `i.jelly_bread`).
-2. Rename: `kubejs/assets/*/lang` entry for `fruitsdelight:jelly_bread` -> "Bread with Jam" (and `namechanges.js`).
-3. Inputs: `R.replaceInput` every recipe that takes a bottle-jam or jelly with the jam item or tag `#forge:jam`.
+1. CD startup `upgrade_aquatic/item_merges.js` (new, `// requires: upgrade_aquatic`, `// requires: fruitsdelight`):
+   `global.addItemMerges('creative_delight', [[i.mulberry_bread, i.jelly_bread]])`. The CD `_core/item_merges.js` run swaps
+   recipes, loot and inventories.
+2. Drop the mulberry bread compost row (the purged id), and its can if any (`/cegen`).
+3. If the merged bread should still be makeable from mulberries: `#forge:jams` holds only the 22 Fruits Delight jams
+   (tag dump 2026-10-30, before the new jars), so add `i.mulberry_jam_bottle` with `global.tags` and check that the Bread
+   with Jam fillings read the tag rather than per-jam ids.
 
 ### Tests
-- RC-J3 JEI: "Bread with Jam" only; mulberry bread gone; no recipe lists a jam bottle or a jelly.
+- RC-new3 (proposed, numbered when queued): JEI shows no Mulberry Bread; Bread with Jam from mulberry jam; old stacks swap.
 
 ---
 
-## jams #4: Grape and cherry jam
-Status **Testing** / Work: KubeJS / data / id `dishes/jams #4`
+## merges/dishes #7: Merge nut butter and nut mash
+Status **In Progress** / Work: KubeJS / id `merges/dishes #7` (was `dishes/jams #5`). Also briefed in [merges_dishes.md](merges_dishes.md)
+(general merge steps).
 
-### Goal
-Add grape and cherry jam (grape jelly / jam, cherry jelly / jam). Cherry pie is `baking/baked-goods #13`.
+### Goal (owner, scratchpad 2026-10-27, [item_merges.md](../item_merges.md) 5)
+Remove nut dough. Only the nut mash jar remains: 5 nuts (acorn or peanut) + sugar -> 3 nut mash, needs a mason jar. Nut
+butter sandwich: Vintage's texture, Delightful's name; any bread + any jam + a nut mash jar.
 
-### Now
-Fruits: `i.cherry` (`vinery:cherry`), `i.red_grape`, `i.white_grape` (Vinery backport; the port already has grape juices
-that are not foods). FD has no grape or cherry jam; Vintage has no such jar either. No fluid, block or filling set exists.
+### Now (checked 2026-10-31)
+- Delightful `nut_butter_bottle` (`i.nut_butter_bottle`; pot `delightful:food/cooking/nut_butter_bottle` from `#forge:nuts`),
+  `nut_dough` (`i.nut_dough`, [delightful/recipes.js:69](../../kubejs/data/creative_delight/kubejs/delightful/recipes.js): nut butter + egg -> 3),
+  `nut_butter_and_jelly_sandwich` (two upstream crafts).
+- Vintage `nut_mash_jar` (pot 5 roasted peanuts + sugar + empty mason jar -> 1, `vintagedelight:cooking/nut_mash_jar`) and
+  `nut_mash_bottle` (`jam/nut_mash_jar_deconstruct`: jar + 3 bottles -> 3). `pb_j` (bread + nut mash bottle + any jam,
+  [vintagedelight/cooking.js:21](../../kubejs/data/creative_delight/kubejs/vintagedelight/cooking.js)), pad thai (line 35) take the bottle.
+- `#forge:nut_butter` (`i.t_nut_butter`) = both bottles ([delightful/tags.js:12](../../kubejs/data/creative_delight/kubejs/delightful/tags.js)).
+- `#forge:nuts` holds only `delightful:acorn`; the peanut is not in it. Food dict: `f.sauce_nut_butter`,
+  `f.ingredient_nut_mash`, `f.ingredient_nut_mash_jar` (food_dict.js 456, 472-473).
 
 ### Build
-Add per jam: the item, the placeable jar block, the fluid (`f.orange_jam` pattern), pot and mixer recipes (row 2's
-recipe), bread fillings, cans. The pack adds items in `kubejs/startup_scripts/items/`; follow the chorus juice item
-(`drinks #4`). Colours per `jams #1`.
+1. Merges (CD startup `delightful/item_merges.js`, new): `[i.nut_butter_bottle, i.nut_mash_jar]`,
+   `[i.nut_mash_bottle, i.nut_mash_jar]`, `[i.nut_butter_and_jelly_sandwich, i.pb_j]` (Vintage's item keeps its texture);
+   `global.removedItems.push(i.nut_dough)` and remove its recipe (delightful/recipes.js:69).
+2. Recipe (CD `vintagedelight/recipes.js`): remove `vintagedelight:cooking/nut_mash_jar` and the deconstruct craft, then
+   `R.fdCooking([n x5, i.any_sugar], Item.of(i.nut_mash_jar, 3), e, 'nut_mash_jar', 1.0, 400, i.empty_mason_jar)` with a nut
+   slot of `[i.t_nuts, i.roasted_peanut]` (or add the peanut forms to `#forge:nuts` via `global.tags`: decision D2).
+3. Sandwich: `pb_j` becomes any bread + any jam + nut mash jar (`R.shapeless(i.pb_j, [i.t_bread, i.nut_mash_jar, i.t_forge_jams], ...)`,
+   jar returned as a remainder or consumed: D3); pad thai takes the jar. Rename `pb_j` to "Nut Butter and Jam Sandwich" in
+   `namechanges.js`. `#forge:nut_butter` then holds the jar only.
+4. Food dict: drop the purged keys; rerun `/cegen` (cans) and the food catalog.
 
 ### Decisions
-- **Jam or jelly names.** Recommend "Grape Jam" and "Cherry Jam" (FD names its jellies "Jam"; row 3 prefers jam).
-- Grape: red, white or both? Recommend one Grape Jam from `#vinery:grapes`-style tag (unverified tag), red tint.
+- **D1 Survivor:** settled by the owner (nut mash jar). Recommend the sandwich survivor be `vintagedelight:pb_j` (texture
+  wanted), named as Delightful's.
+- **D2 Peanuts:** raw `vintagedelight:peanut` or `roasted_peanut`? Today's recipe uses roasted. Recommend roasted peanut
+  or acorn (raw or roasted), by a slot array, not by adding peanuts to `#forge:nuts` (that tag feeds Delightful's other nut recipes).
+- **D3 Jar in the sandwich:** a whole jar per sandwich is costly at 3 per pot; recommend the jar is a crafting remainder
+  that goes down one serving (needs Java) or simply 1 jar -> 3 sandwiches (`Item.of(i.pb_j, 3)`). Recommend the latter.
+
+### Gotchas
+- The jar is a placeable block item; check stack size and the coaster / placeable tags after the merge.
+- A merged pair cannot be in two groups: these go in `creative_delight` only.
 
 ### Tests
-- RC-J4 pot: 4 cherries + sugar + lemon slice -> cherry jam; same for grapes; bread with jam takes both.
+- RC-new4 (proposed, numbered when queued): JEI one nut butter (the jar); pot 5 acorns + sugar + jar -> 3 jars; nut butter and
+  jam sandwich from any bread and jam; no nut dough.
 
 ---
 
-## jams #5: Merge nut butter and nut mash
-Status **In Progress** / Work: KubeJS / id `merges/dishes #7`
+## Built, needs play
 
-### Goal
-Merge nut butter and nut mash into one item across the mods.
-
-### Now
-- Delightful `nut_butter_bottle` (`i.nut_butter_bottle`, recipe `food/cooking/nut_butter_bottle`, made from `#forge:nuts`, only acorn today per vintage_delight.md 3.1).
-- Vintage `nut_mash_bottle` and `nut_mash_jar` (pot: 5 roasted peanuts + sugar in a mason jar; used by `pb_j`
-  and `pad_thai`, `cooking.js` lines 583 and 597; `i.nut_mash_bottle`).
-- Both feed a "peanut butter and jam" sandwich (Delightful `nut_butter_and_jelly_sandwich`, Vintage `pb_j`;
-  `dishes/meals #31` covers the sandwich).
-
-### Build
-`item_merges.js` pair `[i.nut_butter_bottle, i.nut_mash_bottle]` (recommended survivor, below); keep one pot recipe; rename in lang; check `can_types`/can rows for both ids.
-
-### Decisions
-- **Which survives.** Recommend Vintage's nut mash (jar form, placeable, already in recipes of the pack), renamed Nut
-  Butter in lang, with Delightful's merged into it (`[i.nut_butter_bottle, i.nut_mash_bottle]`).
-
-### Tests
-- RC-J5 JEI: one nut butter item; PB and J and pad thai accept it; no Delightful nut butter bottle.
-
+| Row | What | Writeup | Open tiers |
+|---|---|---|---|
+| `jams #4` | Green Grape, Red Grape, Cherry Jam Jars (Vintage port `-09`, installed in `mods/` 2026-10-31), pot 4 fruit + sugar + lemon slice -> 2, shipped 1.1.05; recipe ids scratch PASS r1031 (SQ-BJ-01) | [recipes_cooking.md](../recipes_cooking.md) RC-173, RC-175 | C P (cooking, placing, eating in game); coaster entries after `/dumpall` + `gen_coaster_models.py` |

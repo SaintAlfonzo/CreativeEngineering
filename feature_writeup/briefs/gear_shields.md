@@ -1,7 +1,8 @@
 # gear / shields: implementation brief
 
-Written 2026-10-21 from [TODO.md](../todo/TODO.md) `# gear`, Sub `shields` (rows 2 to 5 open, row 1 Complete).
-Feature writeup: [shields.md](../shields.md) (test prefix `SH-`, last id SH-43).
+Written 2026-10-21 from [TODO.md](../todo/TODO.md) `# gear`, Sub `shields` (rows 2 to 4 open, row 5 Testing, row 1
+Complete); line refs re-checked 2026-10-31 (brief sweep). Feature writeup: [shields.md](../shields.md) (test prefix
+`SH-`, last id SH-44). New test ids below are placeholders (`SH-newN`), numbered when queued.
 
 ## Scope and order
 
@@ -10,7 +11,7 @@ Feature writeup: [shields.md](../shields.md) (test prefix `SH-`, last id SH-43).
 | 1 | `shields #4` damage-type sanity check | tool (`tools/shield_check.py`), then data | Do it first: it prints the per-source table the other rows tune against, and it may move ids between tags |
 | 2 | `shields #3` 1-damage ticks | patcherMod + data | Most of the row is already done (see below); only powder snow is left, plus the acid decision |
 | 3 | `shields #2` knockback thresholds + per-tier disable cooldown | patcherMod + config | The only real Java work: new per-tier keys, both disable mixins, tooltip, `ShieldConfigTest` |
-| 4 | `shields #5` Resistance while blocking | **config only** (recommended) | `shielderEffects` already does this. Can ship any time, even before 1-3 |
+| - | `shields #5` Resistance while blocking | Testing | Built 2026-10-22 (see Built, needs play) |
 
 Steps 2 and 3 go into one patcherMod build together with `potions/effects #3` and the F7 mixin change
 ([potions_effects.md](potions_effects.md), group B). Run `tools/test_shields.sh` (needs `./gradlew build`) after each.
@@ -49,9 +50,13 @@ and fix the misfits.
   (~127 message ids). Every flag tag also has an explicit json listing the known ids (since 2026-09-24), so a static
   classification is possible for everything except `mob`, `player` and the bare `arrow`, which only the live flag tells
   apart.
-- Live tier values (toml, 2026-10-21, matches shields.md 2.1): physical 20/30/40/50/60/70/80/100; magic 0/30/0/25/50/60/75/100;
-  elemental copper electric 50, iron fire 25, diamond fire 50, netherite fire 100, gold 30 / echo 50 / felsic 75 / dragon
-  100 blanket.
+- Live tier values (toml, re-checked 2026-10-31 with `python3 tools/shield_check.py`, matches shields.md 2.1):
+  physical 20/30/40/50/60/70/80/100; magic 0/30/0/25/50/60/75/100; elemental copper electric 50, iron fire 25, diamond
+  fire 50, netherite fire 100, gold 30 / echo 50 / felsic 75 / dragon 100 blanket.
+- **The code defaults differ from the toml for physical** (`shield_check.py` section 2, 7 differences):
+  `ShieldTier.java:53-63` has 40/50/60/70/80/90/95/100. The toml wins in play, but a fresh toml (new server, deleted
+  config) gets the higher values. The matrix should use the toml; ask the user which set is meant and align the other
+  (shields.md 0 rule: the toml wins, code defaults should match it).
 
 ### Build
 1. **`shield_check.py --matrix [--md]`** (new section 5, reuses `load_tags` / `members` / `effective_reductions`):
@@ -93,7 +98,7 @@ No new ids. Output only, unless the review moves tag entries.
 
 ### Tests
 - `tools/test_shields.sh` still passes (the new section is print-only).
-- **SH-44 Matrix spot check:** pick three rows from 2.10 (a lava tick on netherite, a lightning bolt on copper, a Create saw
+- **SH-new1 Matrix spot check** (proposed; SH-44 is now the shields #5 test): pick three rows from 2.10 (a lava tick on netherite, a lightning bolt on copper, a Create saw
   on dragon) and confirm each in game.
 
 ---
@@ -107,7 +112,7 @@ completely, with a shield sound each tick. Decide which of these ticks to exclud
 
 ### Now (the row is mostly stale)
 The row lists magma, stoves, powder snow, acid, copper poisoning and modded magic ticks. Since the second 2026-10-05
-build (DEPLOYED with 1.0.6, now live in 1.0.9):
+build (DEPLOYED with 1.0.6, unchanged through 1.1.05; checked 2026-10-31):
 - **magma (`hotFloor`), stoves (`farmersdelight.stove`, `endersdelight.endstone_stove`):** in
   [burn_tick.json](../../development/patcherMod/src/main/resources/data/creativeengineering/damage_tags/burn_tick.json), so they are
   only attempted by tiers with `blocksBurnTicks` (netherite and above).
@@ -131,11 +136,11 @@ generalises burn and contact.
 1. `ShieldTickGate`: `FREEZE("freeze_tick", "blocksFreezeTicks", "Blocks freezing")`.
 2. New data file `damage_tags/freeze_tick.json`: `{"description": "Freezing ticks: powder snow ...", "values": ["freeze"]}`.
    Not `icicle` / `fallingIcicle` (one-off hits).
-3. `ShieldTier.defaultBlocksTicks` (ShieldTier.java:191-196): `case FREEZE -> ordinal() >= ECHO.ordinal();`. Both this
-   switch and the comment switch in `CEConfig.Shields.TierCfg` (CEConfig.java:1537-1546) are exhaustive switch
+3. `ShieldTier.defaultBlocksTicks` (ShieldTier.java:193-198): `case FREEZE -> ordinal() >= ECHO.ordinal();`. Both this
+   switch and the comment switch in `CEConfig.Shields.TierCfg` (CEConfig.java:2186-2195) are exhaustive switch
    expressions, so the build fails until both have the new case. Comment text: "Whether this tier may block powder-snow
    freezing ticks at all: the creativeengineering:freeze_tick damage tag. Default: echo and above."
-4. The tooltip (ShieldTooltip.java:72-75) and the toml loop (CEConfig.java:1550) iterate `ShieldTickGate.values()`, so
+4. The tooltip (ShieldTooltip.java:72) and the toml loop (CEConfig.java:2186, `blocksTicks.put` at 2200) iterate `ShieldTickGate.values()`, so
    they need nothing.
 5. `tools/shield_test/.../ShieldConfigTest.java:36-37`: add the FREEZE default check. `shield_check.py`: print the third
    gate column (line ~135, beside burn / thorn).
@@ -159,8 +164,8 @@ Damage tag `creativeengineering:freeze_tick` (new). Config `[shields.<tier>] blo
 - A gated tick ignores facing and armour-piercing (ShieldBlocking.java:69-71). Powder snow has no position anyway.
 
 ### Tests
-- **SH-45 Powder snow below echo:** stand in powder snow with gold raised → you freeze and take damage, no shield sound.
-- **SH-46 Powder snow from echo:** echo raised in powder snow → no freeze damage, shield sound every 2 s. Shift tooltip:
+- **SH-new2 Powder snow below echo:** stand in powder snow with gold raised → you freeze and take damage, no shield sound.
+- **SH-new3 Powder snow from echo:** echo raised in powder snow → no freeze damage, shield sound every 2 s. Shift tooltip:
   "Blocks freezing: Yes" on echo, "No" on gold.
 
 ---
@@ -176,7 +181,8 @@ The `TODO` at [ShieldTier.java:46](../../development/patcherMod/src/main/java/co
 - **Knockback:** `ShieldBlockHandler.onShieldBlock` ([ShieldBlockHandler.java:80-82](../../development/patcherMod/src/main/java/com/SaintAlfonzo/creativeengineering/shield/ShieldBlockHandler.java))
   flags the holder when `remaining < knockbackThreshold(tier)`. `onKnockback` (103-109) then cancels the holder's next
   `LivingKnockBackEvent`. Binary: a full push or none. Thresholds are 1, 2, 3, 4, 5, 6, 7, 8 (copper → dragon), the same in
-  code and toml.
+  code and toml (checked 2026-10-31). The physical % in the table below are the live toml's; the code defaults are higher
+  (see `shields #4` Now), which changes the push columns if the toml is ever regenerated.
 - **Why it reads as unreasonable:** the threshold rises up the ladder while the damage that gets through falls, so the two
   stack. Remaining damage per reference hit (Normal difficulty, physical %; push = remaining ≥ threshold):
 
@@ -192,7 +198,7 @@ The `TODO` at [ShieldTier.java:46](../../development/patcherMod/src/main/java/co
 
   (The mob damage numbers are vanilla values from memory. Check one in game before tuning on them.) From felsic up nothing
   pushes, warden included. Dragon's 8 does nothing because 100% physical leaves 0.
-- **Disable cooldown:** one global `[shields] disableCooldownTicks` = 20 (CEConfig.java:1471-1477), read by
+- **Disable cooldown:** one global `[shields] disableCooldownTicks` = 20 (CEConfig.java:2121-2127), read by
   `ShieldConfig.disableCooldownTicks()` (ShieldConfig.java:40-46) from two mixins:
   - [ShieldDisableCooldownMixin](../../development/patcherMod/src/main/java/com/SaintAlfonzo/creativeengineering/mixin/ShieldDisableCooldownMixin.java):
     `@ModifyConstant` on the `100` in `Player#disableShield` (`m_36384_`). The shield isn't a parameter, but
@@ -203,7 +209,7 @@ The `TODO` at [ShieldTier.java:46](../../development/patcherMod/src/main/java/co
 
 ### Build
 1. **Per-tier cooldown:**
-   - `CEConfig.Shields.TierCfg` (CEConfig.java:1508+): `disableCooldownTicks = b.comment("Ticks this shield stays
+   - `CEConfig.Shields.TierCfg` (CEConfig.java:2158+): `disableCooldownTicks = b.comment("Ticks this shield stays
      unusable after an axe disables it. -1 = use [shields].disableCooldownTicks.").defineInRange("disableCooldownTicks",
      t.defaultDisableCooldownTicks(), -1, 12000);`
    - `ShieldTier`: a `defaultDisableCooldownTicks()` returning -1 for every tier. Adding a 10th constructor argument to
@@ -213,7 +219,7 @@ The `TODO` at [ShieldTier.java:46](../../development/patcherMod/src/main/java/co
    - `ShieldDisableCooldownMixin`: `Player self = (Player) (Object) this; return ShieldConfig.disableCooldownTicks(self.getUseItem());`
      (the `try`/`catch` fallback stays).
    - `MobShieldDisableMixin:46`: `ShieldConfig.disableCooldownTicks(shield)`.
-   - Tooltip, full view (ShieldTooltip.java after line 77): `§7Disable cooldown: §f1.0 s`.
+   - Tooltip, full view (ShieldTooltip.java, before the effect lines at 79): `§7Disable cooldown: §f1.0 s`.
 2. **Knockback** (see Decisions for the values):
    - New per-tier key `knockbackScale` (IntValue 0-100, default 100): the share of the push left after a block that lands
      at or above the threshold. Or the alternative mode: scale by `remaining / incoming`.
@@ -221,11 +227,11 @@ The `TODO` at [ShieldTier.java:46](../../development/patcherMod/src/main/java/co
      `onKnockback`: if the factor is 0, `setCanceled(true)`; else `event.setStrength(event.getStrength() * factor)`. It
      keeps the same self-clearing rule. `LivingKnockBackEvent#setStrength` exists in Forge 43 (from memory; it is the
      event's documented setter).
-   - Update the code defaults in the `ShieldTier` enum rows (lines 51-59) and the toml.
-3. Remove the `TODO` on line 46 and fix the "Placeholder ladder" javadoc at ShieldTier.java:175-179.
+   - Update the code defaults in the `ShieldTier` enum rows (lines 53-63) and the toml.
+3. Remove the `TODO` on line 46 and fix the "Placeholder ladder" javadoc at ShieldTier.java:178-182.
 4. `ShieldConfigTest`: per-tier cooldown falls back to the global value at -1, and a tier value wins. `shield_check.py`:
    show `kb` and `cd` per tier.
-5. Docs: shields.md 2.1 (columns), 2.4 Knockback, 3 Disable cooldown, 4 (close the open TODO bullet at line 321).
+5. Docs: shields.md 2.1 (columns), 2.4 Knockback, 3 Disable cooldown, 4 (close the open TODO bullet at line 325).
 
 ### Ids and data
 Config `[shields.<tier>] disableCooldownTicks` (new, -1 default) and `[shields.<tier>] knockbackScale` (new). No item or tag ids.
@@ -251,55 +257,10 @@ Config `[shields.<tier>] disableCooldownTicks` (new, -1 default) and `[shields.<
 - Toml first: run once, then set values (the Conventions above).
 
 ### Tests
-- **SH-47 Per-tier cooldown:** `[shields.dragon] disableCooldownTicks = 5`, a vindicator disables your dragon shield → back
+- **SH-new4 Per-tier cooldown:** `[shields.dragon] disableCooldownTicks = 5`, a vindicator disables your dragon shield → back
   up in 0.25 s; copper (40) → 2 s; `-1` → the global 20.
-- **SH-48 Scaled push:** diamond raised, a zombie hit above the threshold → visibly shorter push than with no shield; SH-16
+- **SH-new5 Scaled push:** diamond raised, a zombie hit above the threshold → visibly shorter push than with no shield; SH-16
   re-run with the new thresholds.
-
----
-
-## shields #5: Resistance while blocking with echo and up
-Status **Testing** (built 2026-10-22, patcherMod 1.1.01 in `mods/`; SH-44) · Work: patcherMod (per the row; config is enough) · id `gear/shields #5`
-
-### Goal
-A short Resistance for the holder while blocking with the echo, felsic and dragon shields.
-
-### Now
-`[shields.<tier>] shielderEffects` already gives the holder effects on every blocked hit, live, with a category filter.
-Format: `effectId;ticks[;amplifier[;category|...]]` ([ShieldEffects.java](../../development/patcherMod/src/main/java/com/SaintAlfonzo/creativeengineering/shield/ShieldEffects.java),
-CEConfig.java:1553-1562). Today only dragon uses it (`minecraft:regeneration;100;0`). Echo and felsic are `""`.
-
-### Build (config only, recommended)
-1. Shipped toml:
-   - `[shields.echo] shielderEffects = "minecraft:resistance;40;0"`
-   - `[shields.felsic] shielderEffects = "minecraft:resistance;60;0"`
-   - `[shields.dragon] shielderEffects = "minecraft:regeneration;100;0, minecraft:resistance;60;1"`
-2. Mirror the defaults in the `ShieldTier` enum. ECHO and FELSIC (lines 56-57) use the 9-argument blanket constructor;
-   switch them to the 11-argument one (`..., 6, "minecraft:resistance;40;0", "")`) so a fresh toml matches.
-   `shield_check.py` validates the strings (`check_effects`).
-3. The tooltip shows "On block, you gain:" by itself (ShieldTooltip.java:79). shields.md 2.1 Extras column and 2.4.
-
-### Ids and data
-`minecraft:resistance` (`ef.resistance`); no new ids.
-
-### Decisions
-- **"While blocking" = on each blocked hit, or the whole time the shield is up?** On-hit is what the existing knob does,
-  and it matches "short Resistance". **Recommend on-hit.** If the user wants it while raised, add
-  `[shields.<tier>] raisedEffects` (same format) applied from a `LivingTickEvent` handler every 10 ticks when
-  `entity.isBlocking()` and `ShieldTier.of(getUseItem())` is set: about 30 lines in a new `shield/ShieldRaisedEffects.java`.
-- **Level and length:** the numbers above (echo I 2 s, felsic I 3 s, dragon II 3 s). **Recommend** them as a start.
-
-### Gotchas
-- **Resistance applies to the same hit.** `ShieldBlockEvent` fires inside `LivingEntity#hurt` before `actuallyHurt`,
-  which applies Resistance to what the shield let through (vanilla order, from memory). So echo's 70% physical block plus
-  Resistance I lets through 30% x 0.8 = 24%: effectively a stronger shield. Say so in the tooltip / writeup, or apply it
-  next tick if the user doesn't want it.
-- Dragon physical is 100%, so its Resistance only helps elemental / magic remainders and hits from behind in the 3 s window.
-- Effects are added visible (with particles), unlike the gear framework's hidden ones.
-
-### Tests
-- **SH-49 Echo Resistance:** echo raised, a zombie hits → `ActiveEffects` shows Resistance (Amplifier 0, ~40 ticks);
-  felsic → 60; dragon → Resistance 1 and Regeneration.
 
 ---
 
@@ -307,6 +268,7 @@ CEConfig.java:1553-1562). Today only dragon uses it (`minecraft:regeneration;100
 
 | Row | Change | Status | Notes |
 |---|---|---|---|
+| `gear/shields #5` | Resistance while blocking with echo and up | Testing | Built 2026-10-22 (`ShieldTier` defaults + instance toml: echo Resistance I 2 s, felsic and dragon Resistance II 2 s, dragon keeps Regeneration 5 s; toml values checked 2026-10-31), deployed 1.1.01; [shields.md](../shields.md) 0 and SH-44. Scratch SQ-GM-01 PASSED; open: SH-44 tooltip in a client (C P) |
 | shields #1 | Seven tier shields | Complete | Code matches shields.md (live toml = 2.1 table, 2026-10-21). SH-01 to SH-43 open except SH-06 |
 
 ## Writeup corrections made

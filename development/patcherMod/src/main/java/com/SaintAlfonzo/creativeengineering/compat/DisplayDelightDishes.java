@@ -39,7 +39,7 @@ public final class DisplayDelightDishes {
     /** (block path, food item id) from the list. */
     public record Dish(String block, ResourceLocation item) {}
 
-    /** The dish block ids, for {@link CounterToppers#popsUnsupported}; empty without Display Delight. */
+    /** The dish block ids; empty without Display Delight. */
     private static final Set<ResourceLocation> BLOCK_IDS = ConcurrentHashMap.newKeySet();
 
     private DisplayDelightDishes() {}

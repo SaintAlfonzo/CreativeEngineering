@@ -92,7 +92,7 @@ Eight wild plants. Seven `wild_*` blocks are `FlowerBlock`s; the mature dandelio
 **Mature dandelion maturing and reverting (2026-10-30).** Plain dandelion -> mature: patcherMod `crops/DandelionMaturing`,
 called from the random tick of Rich Soil, Rich Soil Farmland and Fertile Soil (`mixin/Dandelion*Mixin`); odds are
 `[dandelion_maturing] richSoilTicks / fertileSoilTicks` in creativeengineering-common.toml (average soil random ticks per
-conversion, default 10 / 20, 0 = off). Mature -> plain: `DandelionBlock.use` with `#forge:shears` or `#forge:tools/knives`
+conversion, default 20 / 10 since 2026-10-31 (was 10 / 20; Fertile Soil is the faster one), 0 = off). Mature -> plain: `DandelionBlock.use` with `#forge:shears` or `#forge:tools/knives`
 turns it into a vanilla dandelion, drops 2-3 leaves and a dandelion at 50 %, and damages the tool.
 
 Breaking one (checked for turnip, garlic, sweet potato and dandelion) drops the planting item, plus a 20 % roll of the

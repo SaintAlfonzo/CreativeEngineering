@@ -58,7 +58,7 @@ TAGS = OrderedDict([
 ])
 
 # The Brewin' port's coaster models (one file per item that has its own look on a coaster).
-COASTER_DIR = INSTANCE / 'development/backportedBrewin/src/main/resources/assets/brewinandchewin/brewinandchewin/coaster'
+COASTER_DIR = INSTANCE / 'development/creativeBrewing/members/brewin/src/main/resources/assets/brewinandchewin/brewinandchewin/coaster'
 # The pack's coaster models (Display Delight's placed models, other mods' wine bottles and jars, borrowed models),
 # from tools/gen_coaster_models.py.
 PACK_COASTER_DIR = INSTANCE / 'kubejs/assets/creativeengineering/brewinandchewin/coaster'

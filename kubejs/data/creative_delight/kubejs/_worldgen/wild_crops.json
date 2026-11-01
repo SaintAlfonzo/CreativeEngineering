@@ -141,6 +141,13 @@
       "features": ["delightful:patch_wild_salmonberries"],
       "disable_modifiers": ["delightful:salmonberries"]
     },
+    "raspberry": {
+      "label": "Raspberry",
+      "where": ["temperate grassy"],
+      "features": ["creative_delight:wild/raspberry_bush"],
+      "requires": "hearthandharvest",
+      "notes": "Hearth and Harvest 1.4.1's patch (Farmer's Delight wild crop: ripe bushes on dirt with grass and coarse dirt, 1 in 62 chunks), as Creative Delight's copy. 1.4.1 placed it in every overworld biome of temperature 0.4 to 0.9; here the temperate grassy biomes."
+    },
     "blueberry": {
       "label": "Blueberry",
       "where": ["cold grassy snowy"],

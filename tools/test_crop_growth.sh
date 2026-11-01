@@ -8,7 +8,7 @@ ROOT="$(cd "$(dirname "$0")/.." && pwd)"
 T="$(mktemp -d)"; trap 'rm -rf "$T"' EXIT
 GSON="$HOME/.local/share/atlauncher/libraries/com/google/code/gson/gson/2.8.9/gson-2.8.9.jar"
 CLS="$ROOT/development/patcherMod/build/classes/java/main"
-RULES="$ROOT/development/patcherMod/src/main/resources/assets/creativeengineering/crop_growth.json"
+RULES="$ROOT/development/creativeDelight/src/main/resources/assets/creative_delight/crop_growth.json"
 cd "$ROOT"
 
 echo "== 1. logic"

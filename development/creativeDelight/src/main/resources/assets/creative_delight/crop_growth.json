@@ -9,6 +9,7 @@
   ],
   "rules": [
     { "blocks": ["delightful:salmonberry_bush"], "harvest": 3 },
+    { "blocks": ["hearthandharvest:raspberry_bush"], "harvest": 3 },
     { "blocks": ["delightful:cantaloupe_plant"] },
 
     { "blocks": ["vinery:red_grape_bush", "vinery:white_grape_bush", "vinery:savanna_grape_bush_*", "vinery:taiga_grape_bush_*"], "harvest": 2 },

@@ -17,12 +17,19 @@ ProjectRed 4.19.0-beta+33 (core, integration, fabrication, transmission), create
 add-ons for the tube scan. "Verified" below means read from those jars (JSON or decompiled class); "unverified" means
 from code comments or general knowledge.
 
+Updated 2026-10-31 (brief sweep): every file:line and dict line below re-checked against the pack (same jar versions in
+`mods/`); #7 closed, #14 added, #2 and the related rows updated for work done since. **Test ids:** EN-19 to EN-21 now
+belong to the D&D rose quartz sanding tests (engineering.md 7), so this brief's proposed ids are placeholders
+`EN-new1`, `EN-new2`, ... (proposed, numbered when queued).
+
 ## Scope and order
 
-Open rows: #5 (Bug), #2, #3, #4, #6, #7, #8, #9, #10, #11, #12, #13 (Planned). #1 is Testing (table at the end).
+Open rows: #5 (Bug), #2, #3, #4, #6, #8, #9, #10, #11, #12, #13, #14 (Planned). #1 is Testing (table at the end).
+#7 (bucket -> shulker shell eats buckets) was decided 2026-10-29: keep, nothing to build (TODO Complete); its section is
+removed.
 
 1. **Cleanups, one sitting (KubeJS, `/reload`):** #6 tier comments, #5 disassembly comments / tool, #4 one centre per
-   component, #7 bucket decision. All in `components.js`, `metal_base_materials.js`, `dragon_breathing.js`. If #8 is
+   component. All in `components.js` and `metal_base_materials.js`. If #8 is
    built right after, #4 and #5 become columns of its table; they are small enough to do first anyway.
 2. **Sawmill:** #2 (move the 211 recipes into a KubeJS data helper), then #3 (JEI shows the blade; patcherMod). #3 does
    not need #2, but #2 settles the recipe ids #3 tests against.
@@ -31,16 +38,20 @@ Open rows: #5 (Bug), #2, #3, #4, #6, #7, #8, #9, #10, #11, #12, #13 (Planned). #
    `tooling/conventions #2`; decide those rows' questions as #8's table rows.
 4. **Redstone tier:** #11 (tube tag) -> #12 (redstone mechanism uses the tag) -> #13 (gates use the mechanism).
 5. **#10 last:** the row doesn't say what the cover is; needs your answer first (options below).
+6. **#14 any time:** smaller structural-rope connectors are a patcherMod block plus a model and texture; independent of
+   the rest (the model / texture decision first).
 
 Related rows elsewhere: `recipes/engineering #6` (Create add-on machines on components, after #8),
-`recipes/magic #4` (magic components), `recipes/progression #3` (`kubejs/recipes/recycle/` sawmill JSONs that never
-load; fold into #2), `recipes/wood #1` (twisted wood), `tooling/conventions #1` (the 12 precision-sawblade blueprint
-JSONs, literal shape tags, `mechanisms.js` raw vibrating step).
+`recipes/magic #4` (magic components), `recipes/progression #3` (Testing, built 2026-10-31: the three recycle sawmill
+JSONs now load from `kubejs/data/creativeengineering/recipes/sawmill/`; #2 folds them in), `recipes/wood #1` (twisted
+wood), `tooling/conventions #1` (Testing, built 2026-10-27: the 12 precision-sawblade blueprints are an `R.ieBlueprint`
+loop in `blueprints.js` 200-218; still open here: the literal shape tags in `engineeringtags.js` 21-35 and the raw
+vibrating step in `mechanisms.js` 40).
 
 ---
 
 ## sawmill-and-components #5: Disassembly tools
-Status Bug / Work KubeJS / `engineering/sawmill-and-components #5`
+Status Bug / Work KubeJS / `engineering/sawmill-and-components #5` (all line refs re-checked 2026-10-31)
 
 ### Goal
 The disassembly recipes and their comments agree: either the tool is spent per craft, or the comments say the tool is
@@ -80,7 +91,7 @@ Option B (the tool really is spent):
 
 ### Ids and data
 `i.wirecutter` = `immersiveengineering:wirecutter`, `i.screwdriver` = `immersiveengineering:screwdriver` (dict lines
-1602-1603). Blueprint categories `disassembly_components`, `disassembly_springs`, `disassembly_small_springs`,
+1569-1570). Blueprint categories `disassembly_components`, `disassembly_springs`, `disassembly_small_springs`,
 `disassembly_wire_coils`, `disassembly_coil_blocks`; recipe ids `creativeengineering:blueprint/<category>/<id>`.
 
 ### Decisions
@@ -91,13 +102,14 @@ Option B (the tool really is spent):
 - With B, each tool counts as one input of the recipe; IE needs the tool in the workbench's input slots (it has 5-6).
 
 ### Tests
-- EN-19 Disassembly tool: workbench with the coil-block disassembly blueprint, 1 copper coil block (+ wire cutter if B)
+- EN-new1 Disassembly tool: workbench with the coil-block disassembly blueprint, 1 copper coil block (+ wire cutter if B)
   -> 4 copper wire coils; with B the cutter comes back 1 damage lower.
 
 ---
 
 ## sawmill-and-components #2: Sawmill recipes off the manual pipeline
-Status Planned / Work KubeJS / patcherMod / `engineering/sawmill-and-components #2`
+Status Planned / Work KubeJS / patcherMod / `engineering/sawmill-and-components #2` (re-checked 2026-10-31: 211 files,
+generation copy and jar copy still identical)
 
 ### Goal
 The 211 profiled sawmill recipes are built at load time from one species table of dict keys; no node script, no copies
@@ -114,12 +126,16 @@ in the patcherMod jar.
   `profileFor`, slabs and vertical slabs ×2). Crimson / warped use their scales and roots instead of bark and sawdust.
   13 species: 9 vanilla (no planks -> slab recipe: the profile-less default is IE's own
   `immersiveengineering:sawmill/<wood>_slab`, verified), twisted (no sign), ancient / azalea / blossom (with slab).
-- Two non-wood JSONs in `kubejs/data/creativeengineering/recipes/sawmill/` (layered obsidian, rose quartz) and three
-  never-loaded recycle JSONs in `kubejs/recipes/recycle/` (slab / stairs / door -> sticks; `recipes/progression #3`).
+- Five JSONs in `kubejs/data/creativeengineering/recipes/sawmill/`: two non-wood (`layered_obsidian_sawing`,
+  `rose_quartz_sawing`) and, since 2026-10-31, `recycle_wooden_slab` / `_stairs` / `_door` (2 / 3 / 4 sticks plus
+  sawdust; moved there from the never-loaded `kubejs/recipes/recycle/` under `recipes/progression #3`, Testing). They
+  load as plain datapack JSON.
 - `wood_types.js` 8-22 already has the species table (planks + 13 shape keys per species, from `item_dict.js`), but as a
   local `var` inside `ServerEvents.recipes`; it also removes IE's door / stairs recycling (41-44) and Quark
   Engineering's sawmill recipes (47-52; the comment at 51 is a leftover). `bark.js` 90-95 removes IE's log recipes.
-- Why JSON: `NCH.ieSawmill` (neoCraftHelper.js 1812-1845) goes through kubejs-immersive-engineering's
+- Why JSON: `NCH.ieSawmill` (neoCraftHelper.js 2302-2330; the helper now ships in patcherMod's jar,
+  `development/patcherMod/src/main/resources/kubejs_startup/creativeengineering/func/`, and its error already points at
+  a sawmill JSON) goes through kubejs-immersive-engineering's
   `SawmillRecipeSchema`, which re-serializes secondaries in a shape IE rejects. Verified in kubejs 1902.6.2
   `RecipesEventJS` / `RecipeJS.createRecipe`: a datapack recipe nobody changed is handed to the game as IE's own parsed
   object (`originalRecipe`); only new (`e.custom`) or modified recipes are re-serialized. So JSON from
@@ -133,7 +149,8 @@ in the patcherMod jar.
    `bark_oak`, lines 380-450 all exist), `byproduct` (`i.sawdust`; `i.crimson_roots` / `i.warped_roots` for the stems),
    and flags `ieSlabDefault: true` (the 9 vanilla), `removeIeRecycling` (today's `sawmill: true`), `quarkSawmill`.
    `wood_types.js` then reads `global.woodSpecies` instead of its local table.
-2. **NCH helper for data events.** Add to neoCraftHelper.js, next to `ieSawmill`:
+2. **NCH helper for data events.** Add to neoCraftHelper.js, next to `ieSawmill` (a patcherMod resource: rebuild,
+   install, restart; the `kubejs/startup_scripts/` copy no longer exists):
    ```js
    // ServerEvents.highPriorityData only: writes an immersiveengineering:sawmill JSON, secondaries and "blade" intact.
    ieSawmillData(event, output, input, opts) {
@@ -150,7 +167,7 @@ in the patcherMod jar.
      event.add(global.NCH.modId + ':recipes/sawmill/' + id + '.json', JSON.stringify(json))
    },
    ```
-   (`event.add(path, string)` as `wild_flowers.js` 513 and `bee_nests.js` 265 use it.)
+   (`event.add(path, string)` as `worldgen/wild_flowers.js` 518 and `worldgen/bee_nests.js` 253 use it.)
 3. **Generator script** `kubejs/server_scripts/wood/sawmill_data.js`, IIFE like the worldgen scripts:
    `ServerEvents.highPriorityData(event => global.woodSpecies.forEach(s => ...))`. Profiles by form key, not regex:
    `{ stairs:'stairs', fencegate:'fence_gate', fence:'fence', door:'door', trapdoor:'trapdoor',
@@ -158,26 +175,24 @@ in the patcherMod jar.
    vslab:'vertical_slab', vplanks:'vertical_planks', slab:'' }`. Skip forms whose dict value is `i.na`; skip `slab`
    when `ieSlabDefault`. Build the old ids (`<input path>-<output path with / -> _>`) so the new files shadow the jar
    copies path for path (KubeJS's high-priority pack sits above mod jars).
-4. Move the 2 `kubejs/data/.../sawmill/` JSONs and the 3 `kubejs/recipes/recycle/` ones into the same script (closes
-   `recipes/progression #3`; the recycle ones replace the IE door / stairs recycling that `wood_types.js` removes; decide
-   whether you want them).
+4. Optional: move the 5 `kubejs/data/.../sawmill/` JSONs into the same script under their current ids. They already
+   load (the recycle ones since 2026-10-31), so this is only for one source; skip it if the JSONs are easier to read.
 5. Optional, same files: generate the `creativeengineering:vertical_planks` / `railings` tags
-   (`engineeringtags.js` 21-35, literal ids) from `global.woodSpecies` (`vplanks`, `railing`) through `global.tags.add`,
-   and the 12 blueprint JSONs (`kubejs/data/creativeengineering/recipes/blueprint/precision_sawblade_*.json`) through
-   `R.ieBlueprint(Item.of(i.precision_sawblade, '{Profile:"stairs"}'), [i.sawblade, '#minecraft:wooden_stairs',
-   Item.of(i.plate_steel, 2)], 'precision_sawblades', e, 'precision_sawblade_stairs')` (F3, `tooling/conventions #1`).
+   (`engineeringtags.js` 21-35, literal ids) from `global.woodSpecies` (`vplanks`, `railing`) through `global.tags.add`.
+   (The 12 blueprint JSONs are DONE: `blueprints.js` 200-218 loop, 2026-10-27, `tooling/conventions #1`.)
 6. Check, then delete: `generation_scripts/sawmill.js`, `generation_scripts/recipes/sawmill/`, the 211 jar copies
-   (patcherMod rebuild + `mods/` swap), and update engineering.md 2.1 / 3 / 5 / 6.
+   (patcherMod rebuild + `mods/` swap); fix the comments that name the generator (`blueprints.js` 201,
+   `engineeringtags.js` 20); update engineering.md 2.1 / 3 / 5 / 6.
 
 ### Ids and data
-- Inputs/outputs all in `item_dict.js` (planks / shape keys 198-379, logs / bark 380-450, `i.sawdust` 1621 =
-  `immersiveengineering:dust_wood`, `i.precision_sawblade` 5448, `i.sawblade` 534).
+- Inputs/outputs all in `item_dict.js` (planks / shape keys 253-434, logs / bark 435-519, `i.sawdust` 1587 =
+  `immersiveengineering:dust_wood`, `i.precision_sawblade` 5538, `i.sawblade` 593).
 - Expected diff vs today: none in ids or content (twisted sign is `i.na`, matching the generator). Count: 9 × 16 + 16 +
   3 × 17 = 211.
 
 ### Decisions
-- Keep the recycle recipes (planks shapes -> sticks) or drop them? **Recommend keep**, under ids
-  `creativeengineering:sawmill/recycle_<shape>`, they give sawdust for the creosote loop.
+- Recycle recipes: settled, kept (built 2026-10-31 as `creativeengineering:sawmill/recycle_wooden_*`).
+- Move the 5 hand JSONs into the script (step 4)? **Recommend leave them as JSON** unless step 3 is being written anyway.
 
 ### Gotchas
 - A later `replaceInput` / `replaceOutput` whose filter matches these recipes (e.g. on planks or `#forge:dusts/wood`)
@@ -191,13 +206,14 @@ in the patcherMod jar.
   on them.
 
 ### Tests
-- EN-20 Generated sawmill: `/dumprecipes creativeengineering` before and after; `recipes/by_mod/creativeengineering.json`
-  lists the same 213 `immersiveengineering:sawmill` ids. Then EN-01, EN-02, EN-05 again (blade and bark survive).
+- EN-new2 Generated sawmill: `/dumprecipes creativeengineering` before and after; `recipes/by_mod/creativeengineering.json`
+  lists the same 216 `immersiveengineering:sawmill` ids (211 generated + 5 hand JSONs). Then EN-01, EN-02, EN-05 again (blade and bark survive).
 
 ---
 
 ## sawmill-and-components #3: JEI doesn't show the sawmill blade
-Status Planned / Work patcherMod / KubeJS / `engineering/sawmill-and-components #3`
+Status Planned / Work patcherMod / KubeJS / `engineering/sawmill-and-components #3` (re-checked 2026-10-31: no blade
+sync or JEI slot added yet)
 
 ### Goal
 Every sawmill page in JEI shows which blade it needs: the plain IE sawblade for the default, the programmed precision
@@ -213,9 +229,11 @@ sawblade for a profiled recipe; U on a stairs blade lists the stairs recipes.
   `fromNetwork`, so their blade is `""`; JEI runs on the client. (Single player may show it, since the integrated
   server's recipe objects can reach the client unserialized; don't rely on it.)
 - The precision sawblade has no JEI subtype: JEI treats all 12 programmed blades as one ingredient.
-- The KubeJS tooltip (`tooltips.js` 446-454) already prints "Sawmill profile: Stairs" on any stack with `{Profile}`.
+- The KubeJS tooltip (`client_scripts/tooltips.js` 451-459) already prints "Sawmill profile: Stairs" on any stack with
+  `{Profile}`.
 - Precedent for JEI-category mixins: `ItemDrainCategoryMixin`, `SpoutCategoryMixin` in the `client` list of
-  `creativeengineering.mixins.json` (line 122 on).
+  `creativeengineering.mixins.json` (list opens at line 221; the two at 232-233). The sawmill mixins sit in the common
+  list at 63-65.
 
 ### Build
 1. **Sync the blade** (common mixin list): in `SawmillRecipeSerializerMixin` add
@@ -231,7 +249,8 @@ sawblade for a profiled recipe; U on a stairs blade lists the stairs recipes.
    blade empty -> `new ItemStack(IE sawblade)`; else a `PRECISION_SAWBLADE` stack with `Profile` set; add
    `builder.addSlot(RecipeIngredientRole.CATALYST, 3, 29).addItemStack(stack)` (`CATALYST` exists in JEI 11.8.1,
    verified). The slot tooltip then carries the KubeJS "Sawmill profile" line.
-3. **Subtype** in patcherMod's JEI plugin (`compat/DragonBreathingJEI.java` is an `@JeiPlugin`):
+3. **Subtype** in a patcherMod JEI plugin (`compat/DragonBreathingJEI.java` is an `@JeiPlugin`; the newer ones sit in
+   `compat/jei/`, e.g. `SmithingTemplateJEI.java`):
    `registerItemSubtypes(r -> r.registerSubtypeInterpreter(CreativeEngineeringItems.PRECISION_SAWBLADE.get(), (stack, ctx) -> SawbladeRouting.profileOf(stack)))`,
    so focus on a stairs blade finds only `blade == "stairs"` recipes.
 4. Rebuild patcherMod; it changes the recipe packet, so server and every client need the same jar (they always do).
@@ -252,12 +271,13 @@ sawblade for a profiled recipe; U on a stairs blade lists the stairs recipes.
 
 ### Tests
 - EN-04 (rewrite): JEI on oak planks (U) on the server: each sawmill page shows the blade in the slot below the input.
-- EN-21 Blade focus: U on a stairs precision sawblade -> only the 13 planks -> stairs pages.
+- EN-new3 Blade focus: U on a stairs precision sawblade -> only the 13 planks -> stairs pages.
 
 ---
 
 ## sawmill-and-components #4: One centre per component
-Status Planned / Work KubeJS / `engineering/sawmill-and-components #4`
+Status Planned / Work KubeJS / `engineering/sawmill-and-components #4` (owner asked for more info 2026-10-30; line refs
+re-checked 2026-10-31)
 
 ### Goal
 Each component has one centre item across crafting, sequenced assembly and blueprint.
@@ -277,8 +297,13 @@ Each component has one centre item across crafting, sequenced assembly and bluep
 3. engineering.md 2.3 table: drop the two **(F4)** marks; mark F4 fixed.
 
 ### Decisions
-- **Recommend copper rod and electrum component** (the two routes out of three, and the diamond component stays above
-  the electrum one in the chain).
+- **Recommend copper rod and electrum component.** The more information asked for: the copper rod and the electrum
+  component are what two of the three routes (crafting table and sequenced assembly) already use, so only the workbench
+  blueprint changes; the copper ingot there is IE's own leftover from the recipe the pack removed. For diamond, the
+  electrum component keeps the chain order (diamond sits above electrum, the Electrical tier), while the gold component
+  would let the diamond component skip the electrum step. Cost change on the blueprint: iron component needs 1 copper
+  rod (a quarter ingot by machine) instead of 1 ingot; diamond component needs one electrum component instead of one gold
+  component.
 
 ### Tests
 - EN-13 covers it: add "JEI on the iron component: all three routes take a copper rod".
@@ -286,7 +311,7 @@ Each component has one centre item across crafting, sequenced assembly and bluep
 ---
 
 ## sawmill-and-components #6: Tier names in comments
-Status Planned / Work KubeJS / `engineering/sawmill-and-components #6`
+Status Planned / Work KubeJS / `engineering/sawmill-and-components #6` (decided 2026-10-29, see Decisions)
 
 ### Now
 `components.js` 18 `// Aluminum  --- Light? ---`, 22 `// Uranium     --- Dense? ---`. Already decided elsewhere:
@@ -295,35 +320,18 @@ display names "Aluminum / Silver / Nickel Light Component", "Lead / Uranium Heav
 (`metaltags.js` 94-99).
 
 ### Build
-Replace the two comments with `// Aluminum Light` / `// Uranium Heavy` (and label 19-20, 23 the same way). Close the
-row; engineering.md F5 -> fixed.
+1. Comments: replace the two with `// Aluminum Light` / `// Uranium Heavy` (and label 19-20, 23 the same way).
+2. Display names (owner, 2026-10-29: when the usage becomes clear, keep the adjective order correct, or add a joking
+   tooltip about the grammar). Either:
+   - rename in `startup_scripts/items/components.js` 7-11 to "Light Aluminum Component" ... "Heavy Uranium Component"
+     (size before material, as English orders adjectives); a startup change, needs a restart; or
+   - keep "Aluminum Light Component" and add a one-line tooltip on the five items through `tooltips.js`'s
+     `addTooltips` (e.g. "Yes, the adjectives are in the wrong order", `col.eng`).
+3. Close the row; engineering.md F5 -> fixed.
 
 ### Decisions
-None left (keep Light / Heavy; renaming would also mean the tags).
-
----
-
-## sawmill-and-components #7: Bucket -> shulker shell fan recipe eats buckets
-Status Planned / Work KubeJS / `engineering/sawmill-and-components #7`
-
-### Now
-`magic/dragon_breathing.js` 8: `R.dragonBreathing(Item.of(i.shulker_shell, 1).withChance(0.25), i.bucket, e)`.
-The fan uses Create's `RecipeApplier.applyRecipeOn` (patcherMod `DragonBreathingFanProcessingType.process`, line 96),
-which rolls every output on its own (`ProcessingRecipe.rollResults`, verified in create 0.5.1): an item whose rolls all
-miss is gone. `NCH.dragonBreathing` (neoCraftHelper.js 1128) takes an array of chance outputs.
-
-### Build
-- Keep: nothing to build; close the row and mark F7 decided.
-- Bucket back: `R.dragonBreathing([Item.of(i.shulker_shell).withChance(0.25), Item.of(i.bucket).withChance(0.75)], i.bucket, e)`.
-  Rolls are independent, so this is 18.75 % shell + bucket, 56.25 % bucket only, 6.25 % shell only, 18.75 % nothing;
-  "exactly one of the two" needs a Java change in the fan type.
-
-### Decisions
-- **Recommend keep** (3 iron per try, about 12 iron per shell, behind a dragon head). A 100 % bucket return would make
-  one bucket an endless shell source.
-
-### Tests
-EN-12 already shows the 25 %.
+- Rename or tooltip, and when: **recommend waiting for `recipes/engineering #6`** (the first real uses of the light /
+  heavy components), then rename; the tags `forge:components/light` / `heavy` stay either way.
 
 ---
 
@@ -336,11 +344,11 @@ one set of machines and yields per step; foreign recipes for the same steps are 
 written by hand.
 
 ### Now
-- The dict already holds the chain per metal (`item_dict.js` "Component Chain" blocks from line 816): keys
+- The dict already holds the chain per metal (`item_dict.js` "Component Chain" blocks from line 821): keys
   `<form>_<metal>` for ore, ds_ore, raw, raw_block, crushed, crushed_block, dust, dust_block, nugget, ingot, block,
   plate, plate_block, rod, wire, wire_coil (alias coil_), coil_block (alias wire_coil_block_), spring, small_spring,
   component; `i.none` (`createdeco:gray_decal`) = doesn't exist, `i.na` (`minecraft:barrier`) = not applicable.
-  `_lib/metal_test_recipes.js` 9-13 walks the same matrix. Effective matrix (last assignment wins), parts columns:
+  `server_scripts/_lib/metal_test_recipes.js` 9-13 walks the same matrix. Effective matrix (last assignment wins), parts columns:
 
   | metal | plate | plate_block | rod | wire | coil | coil block | spring | small spring | component |
   |---|---|---|---|---|---|---|---|---|---|
@@ -353,25 +361,28 @@ written by hand.
   | netherite | Y | Y | none | none | none | none | none | none | Y |
   | diamond | (dust as plate) | | | | | | | | Y |
 
-- **Dict duplicates in the chain:** `spring_lead` / `small_spring_lead` are `i.none` at 958-959 and VI's lead springs at
-  4270-4271; `raw_netherite` `i.none` at 1074, `minecraft:netherite_scrap` at 1092. The pack also removes VI's lead
+- **Dict duplicates in the chain:** `spring_lead` / `small_spring_lead` are `i.none` at 947-948 and VI's lead springs at
+  4360-4361 (still both, 2026-10-31; `tooling/conventions #2` did not take them). `raw_netherite` is single now
+  (`minecraft:netherite_scrap`, 1063). The pack also removes VI's lead
   coiling (`metal_base_materials.js` 156-157), so lead springs have no recipe, yet `metaltags.js` 71-73 tags them and
   `components.js` 101-107 makes lead spring disassembly blueprints. Decide lead springs in the table.
 - Part recipes today: `metal_base_materials.js` 577-759 (plate blocks, Create pressing for 4 metals, IE press for gold,
   hand rods for zinc, rolling / press rods and wires for 9 / 8 metals, wire cutter wires, coils, coil blocks, HV), plus
   per-metal removal blocks 36-184; components and disassembly in `components.js`. Metal lists repeated 6 times:
-  `COIL_METALS` (`metal_base_materials.js` 688, `metaltags.js` 80, `transition_items.js` 145), `COMP_METALS`
-  (`components.js` 93), `COMPONENT_METALS` (`metaltags.js` 88, `transition_items.js` 165), `SPRING_METALS`
-  (`components.js` 101), `SPRINGS` (`metaltags.js` 55-58).
-- Foreign duplicates still loaded (IE jar, verified; no removal found in `kubejs/`): `immersiveengineering:crafting/`
-  `wirecoil_copper` (stick centre), `wirecoil_electrum`, `wirecoil_steel` (HV), `wirecoil_structure_steel`, `coil_lv`
-  / `coil_mv` / `coil_hv` (iron ingot centre), `wire_copper` / `wire_electrum` / `wire_steel` (cutter), the 12
-  `plate_*_hammering`, and the 8 IE `metalpress/plate_*` (recipes_metal F1). Confirm in JEI (EN-15).
+  `COIL_METALS` (`metal_base_materials.js` 688, `metaltags.js` 80, `startup_scripts/changes/transition_items.js` 169),
+  `COMP_METALS` (`components.js` 93), `COMPONENT_METALS` (`metaltags.js` 88, `transition_items.js` 190),
+  `SPRING_METALS` (`components.js` 101), `SPRINGS` (`metaltags.js` 56).
+- Foreign duplicates (corrected 2026-10-31): IE's coil crafts are **already removed**, `metal_base_materials.js` 57-63
+  (`crafting/coil_lv`, `coil_mv`, `coil_hv`, `wirecoil_copper`, `wirecoil_electrum`, `wirecoil_steel`,
+  `wirecoil_structure_steel`), as are the cutter wires for copper (49), aluminum (140) and lead (151). Still loaded:
+  `crafting/wire_electrum` / `wire_steel` (cutter), 11 `plate_*_hammering` (gold's removed at 109), and 8 IE
+  `metalpress/plate_*` (gold's removed at 110); the file's own header (lines 3-20) lists the plate gaps. Confirm in JEI
+  (EN-15).
 - Components are consumed almost nowhere: only `i.wire_coil_block_steel` in the `electricalcomponents` blueprint item
   (`blueprints.js` 126, 133); `recipes/engineering #6` is where they get uses.
 
 ### Build
-1. **Clean the dict** first: delete 958-959 or 4270-4271 and 1074 or 1092 (`tooling/conventions #2`).
+1. **Clean the dict** first: delete 947-948 or 4360-4361 (the netherite duplicate is gone).
 2. **Table** `kubejs/startup_scripts/_lib/metal_chain.js` (`// priority: 990`): `global.metalChain` with
    - `forms`: the parts columns above (start at ingot; leave ore -> ingot processing, lines 185-575, as it is: it is
      already tabled and balanced, recipes_metal 2.2);
@@ -380,7 +391,7 @@ written by hand.
    - `centre`: per metal component centre (the #4 table: `iron: 'rod_copper'`, `aluminum: ['ingot_nickel','ingot_silver']`, ...)
      and `part` overrides (`diamond: 'dust_diamond'`).
    Validation at load: a `Y` cell must resolve to a real item (not `i.na` / `i.none`), else warn with the key.
-3. **Startup consumers read it:** `transition_items.js` 145-167 registers `coil_<m>`, `coil_block_<m>`, `component_<m>`
+3. **Startup consumers read it:** `transition_items.js` 169-193 registers `coil_<m>`, `coil_block_<m>`, `component_<m>`
    from the table instead of its own lists (a new `Y` gets its incomplete item; needs a restart).
 4. **NCH generator** `NCH.metalChain(e, table)` (or a server script `metal/metal_chain.js` calling existing helpers per
    link). One link = one source form -> one target form, with its machine set:
@@ -426,14 +437,16 @@ quest references survive.
 ### Tests
 - Offline: a small `tools/metal_chain_check.py` that parses `item_dict.js` (last assignment wins) and the table and
   prints the matrix, flagging `Y` on `i.none` / `i.na` and duplicate keys.
-- EN-22 Chain coverage: JEI on aluminum plate, rod, wire, coil, coil block, component: each shows its machine set and
+- EN-new4 Chain coverage: JEI on aluminum plate, rod, wire, coil, coil block, component: each shows its machine set and
   only `creativeengineering:` recipes (plus recycling).
-- EN-23 Removed duplicates: JEI on the LV coil block shows no IE `crafting/coil_lv`.
+- EN-new5 Removed duplicates: JEI on an aluminum plate shows no IE `metalpress/plate_aluminum` or
+  `plate_aluminum_hammering`; the LV coil block still shows no IE `crafting/coil_lv`.
 
 ---
 
 ## sawmill-and-components #9: Wire alternatives by conductivity
-Status Planned / Work KubeJS / `engineering/sawmill-and-components #9`
+Status Planned / Work KubeJS / `engineering/sawmill-and-components #9` (owner asked for more info 2026-10-30; see
+Decisions)
 
 ### Goal
 Recipes that need a wire, wire coil or coil block of one metal also accept the other metals of the same conductivity
@@ -477,7 +490,13 @@ class, so the 9 pack coils and 10 coil blocks have uses.
 
 ### Decisions
 - Whether at all (the row's question). **Recommend yes, same-class tags first** (cheap, no new recipes), the ×2
-  lower-class recipes only for 3-5 machines.
+  lower-class recipes only for 3-5 machines. The more information asked for, in player terms: today a copper LV
+  machine (dynamo, thermoelectric generator, charging station) takes exactly copper coils, and the pack's silver, gold
+  and electrum coils have no use at all. Same-class tags let any high conductor stand in one for one (silver is rarer
+  than copper, so nobody loses); a mid conductor (aluminum, brass, zinc, nickel) only through a second recipe that
+  takes twice the coils. Nothing changes IE's wire networks: LV / MV / HV cable stays copper / electrum / steel; this
+  is recipe inputs only. Effort: one tag table plus about 10 `replaceInput` ids for step 1; each x2 recipe is one
+  `R.shaped` copy.
 - Which consumer ids: start with the IE LV list and CCA spools above.
 
 ### Gotchas
@@ -485,13 +504,13 @@ class, so the 9 pack coils and 10 coil blocks have uses.
 - After #8 the copper wire coil recipe is the pack's; don't replace its own input with the tag.
 
 ### Tests
-- EN-24 Conductor tag: JEI on the IE dynamo shows a silver coil block alternative (high class); an aluminum one only
+- EN-new6 Conductor tag: JEI on the IE dynamo shows a silver coil block alternative (high class); an aluminum one only
   in the ×2 recipe.
 
 ---
 
 ## sawmill-and-components #10: IE wire connector cover
-Status Planned / Work KubeJS / patcherMod / `engineering/sawmill-and-components #10`
+Status Planned / Work KubeJS / patcherMod / `engineering/sawmill-and-components #10` (still undecided 2026-10-31)
 
 ### Goal
 Unknown: the row says "a cover for IE wire connectors", decision "what it is". Ask before building.
@@ -500,7 +519,7 @@ Unknown: the row says "a cover for IE wire connectors", decision "what it is". A
 - **IE Feedthrough Insulator** (`immersiveengineering:feedthrough`, built in): passes a wire through a solid block
   with no hole; "created with any normal solid block in the middle, by right-clicking either of two connectors with an
   Engineer's Hammer" (IE manual `wiring.txt`, verified). No recipe; nothing to build except telling players (tooltip on
-  the connectors in `tooltips.js`, IE section line 436 on).
+  the connectors in `client_scripts/tooltips.js`, IE section from line 442).
 - **Cosmetic cover block** (KubeJS startup block, thin plate with a hole): can't share the block space with the
   connector, so it only frames it from a neighbouring block. Low value.
 - **Camouflage on the connector** (patcherMod): right-click a connector with a block to store a `BlockState` in the
@@ -512,7 +531,7 @@ Unknown: the row says "a cover for IE wire connectors", decision "what it is". A
   want connectors hidden inside walls or casings, say so and this becomes a patcherMod feature with its own writeup.
 
 ### Tests
-- EN-25 Feedthrough: two LV connectors on either side of a stone block, hammer one -> a feedthrough; power passes.
+- EN-new7 Feedthrough: two LV connectors on either side of a stone block, hammer one -> a feedthrough; power passes.
 
 ---
 
@@ -524,8 +543,8 @@ Recipes take "an electron tube" (Create's electron tube or IE's vacuum tube) thr
 (nixie tubes) and high-tier IE recipes.
 
 ### Now
-- Items: `i.electron_tube` = `create:electron_tube` (dict 1551), `i.vacuum_tube` = `immersiveengineering:electron_tube`
-  ("Vacuum Tube" in IE's lang; dict 703 and 1624, same value). No tag.
+- Items: `i.electron_tube` = `create:electron_tube` (dict 1496), `i.vacuum_tube` = `immersiveengineering:electron_tube`
+  ("Vacuum Tube" in IE's lang; dict 730, now the only key). No tag (grep `electron_tubes`: none, 2026-10-31).
 - Mod recipes using `create:electron_tube` (verified in jars: create, createaddition, create_dd, railways,
   create_tweaked_controllers, vintageimprovements; none found in the other Create add-ons scanned):
   create `crafting/kinetics/` adjustable_chain_gearshift, clockwork_bearing, contraption_controls, controller_rail,
@@ -537,8 +556,8 @@ Recipes take "an electron tube" (Create's electron tube or IE's vacuum tube) thr
 - Using the IE vacuum tube: IE `blueprint/component_electronic_adv`, `crafting/charging_station`, `crafting/logic_unit`,
   powerpack induction and revolver electro upgrades; pack `transport.js` 140 (Little Logistics vessel charger).
 - Pack recipes on `i.electron_tube`: `transport.js` 53-54 (controller rail), `power.js` 28-29 (capacitor),
-  `redstone.js` 32-34 (copper bulb), `mechanisms.js` 38, 45 (redstone mechanism). The tube itself: `redstone.js`
-  103-106 (deploying, arc furnace, blueprint ×2); vacuum tube `power.js` 23 (blueprint ×3).
+  `redstone.js` 30-32 (copper bulb), `mechanisms.js` 38, 45 (redstone mechanism). The tube itself: `redstone.js`
+  103-106 (deploying, arc furnace, blueprint ×2); vacuum tube `power.js` 22-23 (IE blueprint removed, pack blueprint ×3).
 
 ### Build
 1. Tag `creativeengineering:electron_tubes` = [`i.electron_tube`, `i.vacuum_tube`] in `engineeringtags.js` via
@@ -562,7 +581,7 @@ Recipes take "an electron tube" (Create's electron tube or IE's vacuum tube) thr
 - `sequenced_assembly` steps inside mod recipes are covered by `replaceInput` (KubeJS walks the whole JSON).
 
 ### Tests
-- EN-26 Tube tag: craft a deployer with an IE vacuum tube; the nixie tube still needs a Create electron tube.
+- EN-new8 Tube tag: craft a deployer with an IE vacuum tube; the nixie tube still needs a Create electron tube.
 
 ---
 
@@ -570,7 +589,8 @@ Recipes take "an electron tube" (Create's electron tube or IE's vacuum tube) thr
 Status Planned / Work KubeJS / `engineering/sawmill-and-components #12`
 
 ### Goal
-The redstone mechanism (`vintageimprovements:redstone_module`, renamed "Redstone Mechanism" in `namechanges.js` 110)
+The redstone mechanism (`vintageimprovements:redstone_module`, renamed "Redstone Mechanism" in
+`client_scripts/namechanges.js` 113)
 becomes a low-tier part made from low-tier redstone pieces, gives cheaper bulk routes to low-tier redstone, and stands
 in for redstone dust in high-tier components.
 
@@ -581,7 +601,7 @@ in for redstone dust in high-tier components.
   (`redstonecomponents`): 2 copper rods, tube, 2 redstone, randomizer, 2 rose quartz plates, gold plate. Used by the
   mechanical crafter (`process.js` 55). recipes_engineering F7 already asks for an `R.incomplete` key and a vibrating step
   helper.
-- Low-tier redstone today, one per craft: repeater (`redstone.js` 151-159), comparator 181-189, redstone link 131-141
+- Low-tier redstone today, one per craft: repeater (`redstone.js` 151-159), comparator 181-189, redstone link 132-141
   (×2 / ×4 from a transmitter), Create logistics (pulse repeater / extender, powered latch / toggle latch, content
   observer, stockpile switch, redstone contact: Create's own crafting, verified in the jar).
 
@@ -602,10 +622,11 @@ in for redstone dust in high-tier components.
    (Gold / Electrum Electrical centres are wires today).
 
 ### Ids and data
-`i.redstone_mechanism` (dict 1762), `i.i_redstone_mechanism` (19), `i.rose_quartz_plate` (1543), `i.redstone_link`,
-`i.repeater`, `i.comparator`, `i.transmitter`, `i.andesite_casing`; Create logistics ids `create:pulse_repeater`,
-`create:pulse_extender`, `create:powered_latch`, `create:powered_toggle_latch`, `create:content_observer`,
-`create:stockpile_switch` (add dict keys if missing).
+`i.redstone_mechanism` (dict 1710), `i.i_redstone_mechanism` (19), `i.rose_quartz_plate` (1489,
+`create_things_and_misc:rose_quartz_sheet`), `i.redstone_link` (1497), `i.repeater`, `i.comparator`, `i.transmitter`
+(1501), `i.andesite_casing`; Create logistics keys exist for `i.pulse_repeater` (4982), `i.powered_latch` (4979),
+`i.content_observer` (4676), `i.stockpile_switch` (5072); check `pulse_extender` / `powered_toggle_latch` and add keys
+if missing.
 
 ### Decisions
 - Mechanism recipe as proposed in step 1? **Recommend yes**, low tier means no vibrating table.
@@ -617,12 +638,12 @@ in for redstone dust in high-tier components.
 - `R.replaceInput` only on mod recipes; the pack's own repeater / link recipes are script recipes: add new ones.
 
 ### Tests
-- EN-27 Mechanism: assemble one on a rose quartz plate in 2 loops; a mechanism + 3 slabs -> 6 repeaters.
+- EN-new9 Mechanism: assemble one on a rose quartz plate in 2 loops; a mechanism + 3 slabs -> 6 repeaters.
 
 ---
 
 ## sawmill-and-components #13: Gates and Project Red
-Status Planned / Work KubeJS (row says KubeJS / mods/) / `engineering/sawmill-and-components #13`
+Status Planned / Work KubeJS / `engineering/sawmill-and-components #13`
 
 ### Goal
 Basic gates stay simple and vanilla-like but expensive at scale; Project Red's gates are complex to craft by hand
@@ -630,12 +651,12 @@ but much cheaper at scale, for real computing.
 
 ### Now
 - **Project Red is already in the pack:** Core, Fabrication, Illumination, Integration, Transmission 4.19.0-beta+33
-  (`pack/MODLIST.md` 318-322). `redstone.js` 240-253 removes only Core's misc items (draw plate, coils, motor, woven
+  (`pack/MODLIST.md` 324-328). `redstone.js` 240-253 removes only Core's misc items (draw plate, coils, motor, woven
   cloth, sail) and the CB Microblock saws; the gates are untouched. Integration's gates are shaped crafts from
   `projectred_core:plate` (smooth stone smelted ×2), `anode` (3 redstone + 3 plates -> 3), `cathode`,
   `conductive_plate` (redstone + plate), e.g. `and_gate`: `ACA / CCC / PWP` (verified). Fabrication = IC workbench /
-  lithography (designs whole circuits as one gate: the at-scale route). Dict has them (`i.anode` 6461 ...
-  `i.and_gate` 6522 = PR's, `i.gates_and_gate` 6793 = the Gates mod's).
+  lithography (designs whole circuits as one gate: the at-scale route). Dict has them (`i.anode` 6544 ...
+  `i.and_gate` 6605 = PR's, `i.gates_and_gate` 6876 = the Gates mod's).
 - **Redstone Gates** (`gates` 1.8.0): `redstone.js` 145-149 removes NAND / NOR / XOR / XNOR and 231-238 the wireless
   parts; left: AND / OR / NOT (3 torches + iron ingot + 3 stone, verified), RS flip-flop, clocks, rotary switch, fast /
   slow repeater, rain / thunder detector (the pack's).
@@ -660,8 +681,69 @@ but much cheaper at scale, for real computing.
 - `replaceInput` of `projectred_core:conductive_plate` by id only, not globally: Transmission's wires use it too.
 
 ### Tests
-- EN-28 PR gate: JEI on `projectred_integration:and_gate` shows the hand craft with a mechanism and the ×N blueprint;
+- EN-new10 PR gate: JEI on `projectred_integration:and_gate` shows the hand craft with a mechanism and the ×N blueprint;
   Gates mod AND gate unchanged.
+
+---
+
+## sawmill-and-components #14: Smaller hemp coil connectors
+Status Planned / Work KubeJS / new jar (recommended: patcherMod) / `engineering/sawmill-and-components #14` (scratchpad
+2026-10-22; decision: model and texture)
+
+### Goal
+A small connector for IE's Hemp Rope Coil, so ropes (clotheslines, rope bridges, banner lines, ship rigging) can hang
+from a hook-sized fitting instead of IE's chunky Structural Connector.
+
+### Now
+- The rope: `i.wirecoil_structure_rope` = `immersiveengineering:wirecoil_structure_rope` (dict 1621, "Hemp Rope Coil"),
+  wire category `STRUCTURE`, like the steel structure rope `i.wire_coil_steel` (dict 1171; its IE craft is removed at
+  `metal_base_materials.js` 61, the pack makes it in the `COIL_METALS` loop).
+- The only block that takes it: `i.connector_structural` = `immersiveengineering:connector_structural` (dict 3959).
+  Verified in IE 9.2.4-170 (`javap`): `ConnectorStructuralBlockEntity extends ImmersiveConnectableBlockEntity`, has a
+  public `(BlockEntityType, BlockPos, BlockState)` constructor, `canConnectCable` accepts any wire whose category is
+  `"STRUCTURE"`, `getConnectionOffset` puts the wire end 0.5 out from the face (constants 0.03125 / 0.5), bounds come
+  from `getBlockBounds`, rotation by hammer (`hammerUseSide`, `rotation` field). Model is an OBJ
+  (`models/block/connector/connector_structural.obj.ie`).
+- No mod in the pack adds a second structural connector (grep of the dict: only `connector_structural`). Supplementaries
+  ropes are blocks, not IE wires.
+- KubeJS 6 cannot register a block entity that joins IE's wire network, so "KubeJS" in the row can only mean the recipe.
+
+### Build
+1. **patcherMod** (recommended over a new jar: patcherMod already compiles against IE for the sawmill mixins). New
+   `ie/RopeHookBlock` (a thin directional block, `Properties.copy(Blocks.IRON_BARS)`, no collision box beyond the
+   hook) and `ie/RopeHookBlockEntity extends ConnectorStructuralBlockEntity` using the 3-arg constructor with its own
+   `BlockEntityType`. Override `getConnectionOffset` (wire end about 0.15 out from the face instead of 0.5) and
+   `getBlockBounds` (a 4x4x3 px box). Keep `canConnectCable` as inherited (rope and steel rope both fit; restrict to
+   `wirecoil_structure_rope`'s type if you want hemp only). Register next to the oven (`OvenRegistry.register(modEventBus)`,
+   `CreativeEngineering.java` 99).
+2. Check before coding (unverified): how IE's block (`ConnectorBlock` / `IEEntityBlock`) wires up placement facing and
+   the BE ticker, and whether the wire renderer needs the block to be in an IE tag or registry for connection
+   rendering. Decompile IE's `MetalDevices` / `Connectors` registration for `connector_structural` first.
+3. **Model and texture** (the row's decision): a JSON model (no OBJ needed), e.g. an iron eye hook or a wooden belaying
+   peg, 16x16 texture. Variants by material are optional (iron hook, wooden peg).
+4. Dict `i.rope_hook = 'creativeengineering:rope_hook'` (and `b.rope_hook` in block_dict.js), lang, loot table (drops
+   itself), `global.tags.mineable(e, 'pickaxe', ...)`.
+5. Recipe through `global.NCH`: e.g. `R.shaped(Item.of(i.rope_hook, 4), [' N ', 'N N', ' N '], { N: i.nugget_iron }, e,
+   'rope_hook')` plus an `R.ieBlueprint` in `electricalcomponents` or a new small category. Cheaper than the
+   Structural Connector, since it is cosmetic.
+
+### Ids and data
+New `creativeengineering:rope_hook` (block, item, BE type; name proposed). IE ids above verified in the jar.
+
+### Decisions
+- Model: **recommend one iron eye hook** first (reads as "small connector", tints well); wooden peg later if wanted.
+- Steel rope too, or hemp only? **Recommend both** (inherited; no reason to forbid it).
+- New jar vs patcherMod: **patcherMod** (one less jar, IE already on its compile path).
+
+### Gotchas
+- Wire sag and length come from the wire type, not the connector: a smaller connector does not shorten max length.
+- `getConnectionOffset` is called on both client and server; keep it pure (no level reads).
+- The rope's render origin follows the offset: test both ends on a hook and on a Structural Connector.
+
+### Tests
+- EN-new11 Rope hook: place two hooks 8 blocks apart, connect them with a Hemp Rope Coil; the rope starts at the hook
+  (not half a block out); a hook to a Structural Connector also connects; an LV wire coil is refused; breaking a hook
+  drops it and the rope.
 
 ---
 
@@ -669,7 +751,7 @@ but much cheaper at scale, for real computing.
 
 | Row | Status | Notes |
 |---|---|---|
-| #1 Engineering features | Testing | EN-01 to EN-18 still unrun. EN-01's default (oak planks -> slabs) is IE's own `immersiveengineering:sawmill/oak_slab`; the pack generates no vanilla planks -> slab. IE's own coil / wire crafting recipes (`wirecoil_copper` with a stick, `coil_lv` with an iron ingot, ...) are not removed, so JEI should show them beside the pack's (EN-15 / EN-16: note it; #8 removes them). Lead springs have no recipe but have disassembly blueprints (#8). |
+| #1 Engineering features ([engineering.md](../engineering.md) 7) | Testing | Open tiers S C P: EN-01 to EN-18 still unrun (2026-10-31); sawblade routing never checked in game. EN-01's default (oak planks -> slabs) is IE's own `immersiveengineering:sawmill/oak_slab`; the pack generates no vanilla planks -> slab. IE's coil crafts (`coil_lv`, `wirecoil_copper`, ...) are removed (`metal_base_materials.js` 57-63); its electrum / steel cutter wires, 11 hammer plates and 8 press plates still load, so JEI shows them beside the pack's (EN-15 / EN-16: note it; #8 removes them). Lead springs have no recipe but have disassembly blueprints (#8). |
 
 ## Writeup corrections made
 

@@ -531,7 +531,6 @@ file/Fancy Crops v1.2.zip
 | Fast Leaf Decay | `FastLeafDecay-30.jar` | [CF](https://www.curseforge.com/minecraft/mc-mods/fast-leaf-decay/files/3894512) |
 | Fireflies | `Fireflies Mod-1.0.1 (Forge 1.19.2).jar` | [CF](https://www.curseforge.com/minecraft/mc-mods/fireflies-mod/files/4086384) |
 | Galosphere | `Galosphere-1.19.2-1.3.0-Forge.jar` | [CF](https://www.curseforge.com/minecraft/mc-mods/galosphere/files/4574834) [MR](https://modrinth.com/mod/galosphere/version/lnBzxe5j) |
-| Just Another Rotten Flesh to Leather Mod | `JRFTL [1.19.1]-1.4.3.jar` | [CF](https://www.curseforge.com/minecraft/mc-mods/just-another-rotten-flesh-to-leather-mod/files/4459026) [MR](https://modrinth.com/mod/jrftl/version/HqEAO1Tg) |
 | Paintings N' Discs Backport | `PaintingsN'DiscsBackport_1.19.2Forge_V1.3.1.jar` | [CF](https://www.curseforge.com/minecraft/mc-mods/paintings-n-discs-backport/files/6668150) |
 | AE2 QoL Recipes | `ae2qolrecipes-forge-1.18-1.20.1-1.3.0.jar` | [CF](https://www.curseforge.com/minecraft/mc-mods/ae2-qol-recipes/files/6196957) |
 | Autumnity | `autumnity-1.19.2-4.0.1.jar` | [CF](https://www.curseforge.com/minecraft/mc-mods/autumnity/files/4776187) [MR](https://modrinth.com/mod/autumnity/version/zukiG2Xb) |

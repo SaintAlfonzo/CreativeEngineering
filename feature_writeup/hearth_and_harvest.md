@@ -325,7 +325,7 @@ No load errors: the jar was never loaded in the pack.
 
 ## 4. Fold-in, in build order
 
-### 4.0 Watering can, ahead of the port (built 2026-10-30)
+### 4.0 Watering can, ahead of the port (built 2026-10-30; moved into the member with tiers 2026-10-31)
 
 Owner, 2026-10-30: the watering can only, now, through patcherMod; the rest waits for the full port. Settles TODO
 `farming/crops #8` (Extra Delight has none, [extra_delight.md](extra_delight.md) 2.5).
@@ -335,7 +335,37 @@ Owner, 2026-10-30: the watering can only, now, through patcherMod; the rest wait
   item class header.
 - **Id:** `hearthandharvest:watering_can` (upstream id, registered from patcherMod under H&H's namespace like the
   Netherite Lunchbox under `solapplepie:`). Creative tab: Tools. `global.item` keys `watering_can`, `t_bonemeal_substitutes`.
-- **Code:** patcherMod `wateringcan/` (`WateringCanItem`, `WateringCanItems`, `WateringCanJeiPlugin`). Data components
+- **Moved and tiered (owner, 2026-10-31):** the can now lives in the CD member `backportedHearth` (4.1), version
+  `1.4.1-ce-19.2-02`; patcherMod's `wateringcan/`, `assets/hearthandharvest/`, the `credit.txt` line and
+  `META-INF/licenses/hearthandharvest-MIT.txt` are gone (the member's `NOTICE-upstream-MIT.txt` lists the texture and
+  strings). Code: `item/WateringCanItem`, `item/WateringCanTier`, registered in `item/HHItems`; JEI info page per tier in
+  `compat/HHJeiPlugin` (JEI compileOnly). Recipe and fertiliser tag moved to CD `kubejs/data/creative_delight/kubejs/
+  hearthandharvest/recipes.js` and `tags.js` (recipe ids `creative_delight:...`); `server_scripts/equipment/watering_can.js`
+  deleted. patcherMod and CD must be installed together (old patcherMod + new CD registers the id twice).
+- **Tiers (pack addition, owner 2026-10-31):** one class, `WateringCanTier` holds the numbers. Capacity is for water
+  and fertiliser each. Fills from a water source stay free; a well or any block entity with a water fluid handler costs
+  exactly 1000 mB per fill (the well's roof half routes to the block below); a water cauldron costs the tier's levels.
+  Every fill tops the can to full whatever it held.
+
+  | Tier | Id | Area | Capacity | Cauldron levels per fill | Upgrade (smithing, from the tier before) |
+  |---|---|---|---|---|---|
+  | Copper | `hearthandharvest:watering_can` (1.4.1 id) | 1x1 | 8 | 1 | crafted: 5 copper ingots around a bucket |
+  | Iron | `hearthandharvest:iron_watering_can` | 2x2 | 12 | 1 | + iron block |
+  | Gold | `hearthandharvest:golden_watering_can` | 3x3 | 16 (1.4.1's can) | 1 | + gold block |
+  | Diamond | `hearthandharvest:diamond_watering_can` | 4x4 | 20 | 2 | + diamond |
+  | Netherite | `hearthandharvest:netherite_watering_can` | 5x5 | 32 | 3 (all) | + netherite ingot; fire resistant |
+  | Dragon | `hearthandharvest:dragon_watering_can` | 7x7 | 64 | 3 (all) | + Dragon Loot dragon scale; fire resistant |
+
+  A cauldron with fewer levels than the tier's fill takes is emptied for a partial fill: capacity x levels / tier levels,
+  rounded down, added to what the can holds (Diamond 1 level = 10; Netherite 1 = 10, 2 = 21; Dragon 1 = 21, 2 = 42).
+  Owner, 2026-10-31 (first build refused the low cauldron instead).
+  Even areas (2x2, 4x4): the extra row on each axis goes to the side of the clicked block the hit point is on. Upgrade
+  materials and the smithing route are Claude's picks (owner gave tiers, areas, capacities and
+  cauldron costs only); smithing was picked because vanilla smithing copies the base's NBT, so the contents carry over.
+  Old cans holding more than a tier's capacity read as the capacity (clamped on read). The copper tier is now
+  "Copper Watering Can". All tiers use the copper (1.4.1) texture for now. Not in `#creativeengineering:dragon_gear`
+  (no durability).
+- **Code (before 2026-10-31):** patcherMod `wateringcan/` (`WateringCanItem`, `WateringCanItems`, `WateringCanJeiPlugin`). Data components
   became stack NBT (`WaterLevel`, `BonemealLevel`, `FertilizerItem`; keys removed at 0, so a used-up can is a plain
   stack again).
 - **Mechanics (same as upstream):** 16 water, filled to full by using it on a water source. 16 fertiliser, loaded one
@@ -351,6 +381,16 @@ Owner, 2026-10-30: the watering can only, now, through patcherMod; the rest wait
   grew: one water if any soil was dry, nothing spent otherwise. Fertile Soil then stays soaked (IW dries it only next
   to a heat source); vanilla farmland dries one step per random tick without water nearby, as after rain. The client
   claims the click only when the server will act (water, and fertiliser on a bonemealable block or dry soil in the 3x3).
+- **Splash on plants (pack addition, owner 2026-10-31):** every block bone meal grew also gets water splash particles
+  (server `sendParticles`, seen by all nearby players), like soaked soil. A plant whose soil this click soaks gets the
+  soil's splash only, so berry bushes on grass, crops on soaked farmland and the like now show water too.
+- **Not on trees (pack addition, owner 2026-10-31):** tree growers are skipped. Rule (`WateringCanItem.isTreeGrower`):
+  `#minecraft:saplings` (vanilla and modded saplings, azaleas, mangrove propagule), any `SaplingBlock` subclass
+  (modded saplings left out of the tag; the propagule is one), `AzaleaBlock`, `FungusBlock` (crimson / warped fungus
+  into huge fungi), `MushroomBlock` (huge mushrooms), plus the block tag `#hearthandharvest:watering_can_tree_growers`
+  (empty; for growers none of these catch). A click on one does nothing (no water, no soaking); in the area, they
+  get no bone meal. Not counted as tree growers: mangrove leaves (grow a propagule, not a tree), moss, grass, bamboo,
+  FD / Nether's Delight mushroom colonies (pack check 2026-10-31: no other sapling-like block outside the tag).
 - **Upstream bug fixed:** a charged click on a crop fertilised twice on the server (the client's `useOn` passed, so it
   also sent the use packet, whose ray trace hit the same block). The client now claims the click; the `use` bone-meal
   branch is gone (unreachable after the fix).
@@ -359,15 +399,54 @@ Owner, 2026-10-30: the watering can only, now, through patcherMod; the rest wait
   adds it. Upstream's `c:tools` membership not carried (no pack use).
 - **Model:** upstream's item model routes every view to the 2D sprite (its 3D model is never shown and has `#missing`
   textures), so ours is a plain generated model.
-- **Full port:** `backportedHearth` takes the id over; delete patcherMod `wateringcan/`, its `assets/hearthandharvest/`
-  and the MIT notice lines in the same change (two registrations of one id crash the boot).
-- Tests HNH-25 to HNH-33 (section 8). Scratch server r1031 (2026-10-31) PASSED SQ-WC-01 (boot, recipe), -01b, -02,
+- **Full port:** done 2026-10-31 (see "Moved and tiered" above).
+- Tests HNH-25 to HNH-33, HNH-38 to HNH-47 (section 8; HNH-25 to -33 were written for the 16 / 3x3 can, now the Golden tier). Scratch server r1031 (2026-10-31) PASSED SQ-WC-01 (boot, recipe), -01b, -02,
   -03 (off-hand bone meal load), -05 (soil watering on farmland and mulch); CQ-WC-04 in game pending.
+
+### 4.1 Raspberries, first piece of the port (built 2026-10-31)
+
+Owner, 2026-10-31: the raspberry crop (behaviour and textures) only, the way the watering can was done, into the
+H&H port as a Creative Delight member. Settles D3 (raspberry pips kept). Jar built, **not installed** (the game was
+running).
+
+- **Home:** CD member `backportedHearth` (`development/creativeDelight/members/hearth/`, mod id `hearthandharvest`,
+  version `1.4.1-ce-19.2-01`), nested in the CD jar (`bundle_members`, `replaces_jars` also moves any standalone
+  `hearthandharvest-*.jar` / `backportedHearth-*.jar` out of `mods/`). Member switch `creative_delight-common.toml
+  [members] hearthandharvest` (added by CD from the members list). Later H&H pieces go in the same member; the
+  watering can moved here 2026-10-31 (4.0).
+- **Route:** MIT (as 4.0). Art and data copied unchanged from the 1.4.1 jar (`NOTICE-upstream-MIT.txt` lists them);
+  the loot table loses the 1.21 `random_sequence`. Java is our own, written for 1.19.2.
+- **Ids:** `hearthandharvest:raspberry_bush` (block), `hearthandharvest:raspberry` (food), `hearthandharvest:raspberry_pips`
+  (planting item). Upstream registers the pips only with Berry Good loaded (then the raspberry is plain food, else the
+  raspberry plants the bush); the pack ships Berry Good, so only that form is built. Creative tab: Farmer's Delight's,
+  as the other members. `global.item` keys `raspberry`, `raspberry_pips`, `t_fruits_raspberries`, `t_crops_raspberry`,
+  `t_seeds_raspberry`, `t_fox_food`.
+- **Behaviour (as 1.4.1):** a sweet berry bush (ages 0-3, random-tick growth, bone meal, placed on `#minecraft:dirt` or
+  farmland). Differences from sweet berries: picked by hand only at age 3, 2-3 raspberries, back to age 1 (sweet berries
+  from age 2); slows walkers but never hurts them (foxes and bees pass freely); pick block gives the pips. Breaking it
+  drops 2-3 raspberries at age 3, 1-2 at age 2 (Fortune adds). Raspberry: 2 hunger, 0.4 saturation modifier, eaten fast.
+  Foxes get 1.4.1's berry bush goal (priority 10): walk to a ripe bush (age 2+), take one raspberry into the mouth if
+  empty, drop the rest (1-2, one more at age 3), bush to age 1; needs mob griefing.
+- **Recipe:** 1 raspberry -> 1 pips (shapeless, upstream), CD `kubejs/data/creative_delight/kubejs/hearthandharvest/recipes.js`.
+- **Tags** (CD `hearthandharvest/tags.js`, 1.4.1's `c:` tags as `forge:`): raspberry in `#forge:fruits/raspberries`
+  (the pack's existing plural tag) and `#forge:fruits`, `#forge:crops/raspberry` and `#forge:crops`, `#forge:berries`,
+  `#forge:fruits/berries`, `#minecraft:fox_food`; pips in `#forge:seeds/raspberry` and `#forge:seeds`. Food type
+  `raw/fruit` (`food_types.json`), jar family `berries` (`creativeengineering/jar_tags.js`).
+- **Seasons:** `temperate` in `crop_seasons.json` (1.4.1: spring and summer crop), not Serene Seasons tags.
+- **WTHIT:** growth line rule in CD `crop_growth.json`, harvestable at age 3.
+- **Worldgen:** wild crop rule `raspberry` in `wild_crops.json` ("temperate grassy", 26 biomes, crops_by_biome.md),
+  feature `creative_delight:wild/raspberry_bush` = 1.4.1's patch (Farmer's Delight wild crop: ripe bushes on dirt, with
+  grass and coarse dirt; 1 in 62 chunks; `short_grass` -> 1.19.2 `minecraft:grass`). Upstream's biome modifier (every
+  overworld biome of temperature 0.4-0.9) is not carried. The pips have no other source.
+- **Not in this piece:** raspberry crate, juice, wine, jam, pie, scone (later H&H pieces or the jam family, 2.1);
+  compost uses the pack rules (seeds and fruit categories), no own row. Cans, food families, names, JEI coverage and
+  stack sizes come from `/dumpall` + `/cegen` after install.
+- Tests HNH-03, HNH-04 (raspberry half), HNH-34 to HNH-37; scratch SQ-HR-01 to SQ-HR-05, CQ-HR-06.
 
 0. **Decide D1 first** (port all vs port the new content only). The steps below assume the recommendation: an in-tree
    port that registers only the kept content (sections 2 and 3), so nothing needs an item merge.
-1. **Port** (skill `port`, [feature_porting.md](feature_porting.md)): new `development/backportedHearth/` (mod id
-   `hearthandharvest`, version `1.4.1-ce-19.2-01`), root `settings.gradle`. NeoForge 1.21.1 -> Forge 1.19.2: data
+1. **Port** (skill `port`, [feature_porting.md](feature_porting.md)): the CD member `backportedHearth`
+   (`development/creativeDelight/members/hearth/`, mod id `hearthandharvest`, started with 4.1). NeoForge 1.21.1 -> Forge 1.19.2: data
    components (`SALTED`, vintage tier, jug and pouch contents) -> NBT; 1.21 data-driven enchantment -> Java
    `Enchantment` (only if Tilling stays, D11); `DeferredHolder` -> `RegistryObject`; data paths `recipe` -> `recipes`,
    `loot_table` -> `loot_tables`, `tags/item` -> `tags/items`, `advancement` dropped; result format `id` -> `item`;
@@ -458,14 +537,13 @@ port jar; brewing and alcohol stay in the alcohol scripts (reserved for Creative
 
 | Path | What |
 |---|---|
-| `development/backportedHearth/` | the port (Java, assets, data of kept content) |
 | `development/creativeDelight/src/main/resources/kubejs_startup/hearthandharvest/` | items dict glue, food values, tags (CD startup) |
 | `kubejs/data/creative_delight/kubejs/hearthandharvest/` | recipes (NCH), cooking rules, removals (CD server) |
 | `kubejs/startup_scripts/_lib/item_dict.js` | `global.item` keys for kept ids |
 | `kubejs/startup_scripts/cooking/alcohol_drinks.js` | kept drinks in `global.alcohol` |
 | `kubejs/data/creative_delight/kubejs/_worldgen/wild_crops.json`, `kubejs/generation_scripts/worldgen/wild_flowers.json` | wild hops, raspberry, mums |
 | `mod_sides.md`, `configs_edited/root_config/hearthandharvest-*.toml` | sides row, config backup |
-| patcherMod `wateringcan/`, `assets/hearthandharvest/` | the early watering can (4.0); removed when the port lands |
+| `development/creativeDelight/members/hearth/` | the port as a CD member (`backportedHearth`): Java, assets, data of kept content; raspberries (4.1), watering cans (4.0) |
 
 ## 7. Offline checks (once built)
 
@@ -481,7 +559,7 @@ port jar; brewing and alcohol stay in the alcohol scripts (reserved for Creative
 |---|---|---|
 | HNH-01 | Boot with the port: no H&H errors in `latest.log`, JEI shows only kept items | |
 | HNH-02 | None of the 2.1 Drop ids exists (`/give` fails) | |
-| HNH-03 | Raspberry bush grows on dirt, farmland, rich soil; harvest by hand and by hoe area | |
+| HNH-03 | Raspberry bush (4.1): pips plant it on dirt, farmland, rich soil (not on sand or stone); it grows; picked by hand at age 3 only (2-3 raspberries, back to age 1); hoe area harvest breaks it | |
 | HNH-04 | Wild raspberry and wild hops appear in their biomes (crop table) | |
 | HNH-05 | Hops climb the trellis and ripen; harvested by hand | |
 | HNH-06 | Mums generate as wild flowers and go in flower pots | |
@@ -512,6 +590,20 @@ port jar; brewing and alcohol stay in the alcohol scripts (reserved for Creative
 | HNH-31 | Can with water, no fertiliser, on young wheat over dry farmland (3x3): farmland in the 3x3 turns wet, splash, water -1; again at once spends nothing | server half PASSED r1031 (SQ-WC-05: 3x3 farmland and mulch soaked, water -1 once) |
 | HNH-32 | Same on dry Fertile Soil under a crop and on the soil block itself: soaked texture in the 3x3, water -1; stays soaked after a few minutes away from heat | |
 | HNH-33 | Charged can on young wheat over dry farmland: crops grow and soil soaks for 1 water and 1 fertiliser total; on grown wheat over dry soil: soaks for 1 water, no fertiliser spent | |
+| HNH-34 | Raspberry Pips from 1 raspberry (crafting grid); pick block on the bush gives the pips; both in Farmer's Delight's tab | |
+| HNH-35 | Walking through the bush slows, never hurts; a fox walks through freely and picks a ripe bush (raspberry in its mouth, bush to age 1) | |
+| HNH-36 | WTHIT on the bush shows the growth line, "Mature" at age 3; the pips tooltip shows the temperate season line | |
+| HNH-37 | Raspberry: 2 hunger, eaten fast; in `#forge:fruits/raspberries`, `#forge:berries`, `#minecraft:fox_food`; pips in `#forge:seeds` | |
+| HNH-38 | Watering can tiers (4.0): every tier in the Tools tab with its name, tooltip "Area: NxN" and its capacity; JEI info page shows that tier's numbers | |
+| HNH-39 | Smithing: Copper + Iron Block -> Iron, then Gold Block, Diamond, Netherite Ingot, Dragon Scale up the chain; a can with water and bone meal keeps both | |
+| HNH-40 | Area: Copper grows / soaks 1 block, Iron 2x2 (extra row toward the aimed side), Golden 3x3, Diamond 4x4, Netherite 5x5, Dragon 7x7; still 1 water and 1 fertiliser per use | |
+| HNH-41 | Water cauldron, 3 levels: Copper / Iron / Golden fill to full for 1 level, Diamond for 2, Netherite and Dragon empty it; an empty Diamond can on a 1-level cauldron empties it for 10 water, an empty Netherite can on 2 levels for 21 | |
+| HNH-42 | Well (Just a Well) with water: any tier fills to full and the well loses 1 bucket; clicking the roof half works too; an empty well does nothing | |
+| HNH-43 | An old can holding 16 / 16 (pre-tier) shows 8 / 8 as Copper and works | |
+| HNH-44 | Netherite and Dragon cans survive lava and fire as items | |
+| HNH-45 | Fertilised can on a sweet berry bush on grass: bush grows, water splash particles show on it (also seen by a second player) | |
+| HNH-46 | Fertilised can on an oak sapling, a modded sapling (Vinery / Fruits Delight), a mangrove propagule, a crimson fungus on nylium, an azalea and a red mushroom: nothing happens, no water or fertiliser spent; a sapling inside the area of a click on a crop does not grow | |
+| HNH-47 | Water Spout Gun (Create: Misc and Things) shot at dry farmland, or at a crop on dry farmland: the farmland turns wet with a splash; the lava / honey guns do not wet it | |
 
 ## 9. History
 
@@ -524,3 +616,11 @@ port jar; brewing and alcohol stay in the alcohol scripts (reserved for Creative
 - 2026-10-30: soil watering added (4.0): a use on a plant or soil soaks the 3x3 soil, also without fertiliser;
   tests HNH-31 to HNH-33, scratch SQ-WC-05.
 - 2026-10-31: scratchpad notes translated into TODO rows (`gameplay/misc #17`, `#18`, `ui/names #11`). No code changed.
+- 2026-10-31: raspberries built as the first piece of the port (4.1), in the new CD member `backportedHearth`; CD jar
+  built, not installed (game running). Tests HNH-03, HNH-04, HNH-34 to HNH-37; scratch SQ-HR-01 to CQ-HR-06.
+- 2026-10-31: watering can moved from patcherMod into `backportedHearth` (4.0) with six tiers (copper to dragon), well and
+  cauldron filling, smithing upgrades. patcherMod and CD built, not installed (game running). Tests HNH-38 to HNH-44;
+  scratch SQ-WCT-01 to -05.
+- 2026-10-31: splash particles on every plant the can grows; tree growers (saplings, propagules, fungi, azaleas,
+  mushrooms) excluded; the water Spout Gun (Create: Misc and Things) soaks farmland it hits (patcherMod
+  `compat/SpoutGunFarmland`, `ProjectileImpactEvent`). Tests HNH-45 to HNH-47.

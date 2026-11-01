@@ -392,4 +392,8 @@ global.removedItems = [
 	i.flare_spawn_egg,
 ];
 
+// Floral Enchantment's 31 large pots (empty and filled) are hidden; a pack pot replaces them (flower_pots.md 3.2.9).
+// Placed ones keep working. Recipe removed in server_scripts/other/flowers.js.
+Object.keys(i).filter(k => k.indexOf('floral_large_') === 0).forEach(k => global.removedItems.push(i[k]))
+
 console.log(`[jeiRemove] Registered ${global.removedItems.length} removed items to global scope`)

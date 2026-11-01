@@ -29,7 +29,7 @@ plugins {
 rootProject.name = 'CreativeEngineering'
 
 // The mod folders live under development/; project names (and :task paths) stay the bare mod names.
-['patcherMod', 'exposureBackport', 'incubationAdditions', 'moreMooblooms', 'backportedBrewin', 'backportedVinery', 'babyMobs', 'creativeLabels', 'backportedVeggies', 'backportedVintage', 'backportedFungi', 'clientCapture', 'backportedMiners', 'backportedDisplay', 'repackedStorage', 'perfBot'].each { name ->
+['patcherMod', 'exposureBackport', 'incubationAdditions', 'moreMooblooms', 'babyMobs', 'creativeLabels', 'backportedVeggies', 'backportedVintage', 'backportedFungi', 'clientCapture', 'backportedMiners', 'backportedDisplay', 'repackedStorage', 'perfBot'].each { name ->
     include name
     project(":${name}").projectDir = file("development/${name}")
 }
@@ -38,7 +38,16 @@ rootProject.name = 'CreativeEngineering'
 // under development/creativeDelight/members/. Project name = the member's jar_name.
 include 'creativeDelight'
 project(':creativeDelight').projectDir = file('development/creativeDelight')
-['repackedFarmers': 'farmers', 'repackedOceans': 'oceans', 'repackedOceanic': 'oceanic', 'repackedEnds': 'ends', 'backportedRustic': 'rustic', 'repackedDelightful': 'delightful', 'endersAdditions': 'enders'].each { name, dir ->
+['repackedFarmers': 'farmers', 'repackedOceans': 'oceans', 'repackedOceanic': 'oceanic', 'repackedEnds': 'ends', 'backportedRustic': 'rustic', 'repackedDelightful': 'delightful', 'endersAdditions': 'enders', 'backportedHearth': 'hearth', 'blockheadsAdditions': 'blockheads'].each { name, dir ->
     include name
     project(":${name}").projectDir = file("development/creativeDelight/members/${dir}")
+}
+
+// Creative Brewing (feature_writeup/creative_brewing.md): the bundle, and its members under
+// development/creativeBrewing/members/ (the Vinery and Brewin' and Chewin' ports; project names unchanged).
+include 'creativeBrewing'
+project(':creativeBrewing').projectDir = file('development/creativeBrewing')
+['backportedVinery': 'vinery', 'backportedBrewin': 'brewin'].each { name, dir ->
+    include name
+    project(":${name}").projectDir = file("development/creativeBrewing/members/${dir}")
 }

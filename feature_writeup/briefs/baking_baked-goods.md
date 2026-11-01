@@ -1,61 +1,115 @@
 # baking / baked-goods: implementation brief
 
-Written 2026-10-21 from [TODO](../todo/TODO.md) `# baking`, Sub `baked-goods` (rows 1 to 11). Feature writeups:
-[oven.md](../oven.md) (test prefix `OV-`, the oven and its 38 baking recipes), [recipes_cooking.md](../recipes_cooking.md)
-(`RC-`, flour / dough / bread / sourdough / pie crust), [placeable_food.md](../placeable_food.md) (`PL-`),
-[wthit_lines.md](../wthit_lines.md) 2.3 (`WL-`, jar contents). The "cooking plan" the rows cite is the removed
-`feature_writeup/cooking.md`; its text is in git (`git show 2e8687f^:feature_writeup/cooking.md`, lines 54-66 and 157-201).
+Written 2026-10-21 from [TODO](../todo/TODO.md) `# baking`, Sub `baked-goods` (rows 1 to 11); rows 12 to 37 added and every
+section re-checked against the pack 2026-10-31. Feature writeups: [oven.md](../oven.md) (test prefix `OV-`, last OV-37:
+the oven, bakeware and the baking overhaul, 2.6), [food_families.md](../food_families.md) (`FF-`, last FF-14: family rules,
+4.6 baked families), [recipes_cooking.md](../recipes_cooking.md) (`RC-`, last RC-175: flour, dough, bread, sourdough),
+[placeable_food.md](../placeable_food.md) (`PL-`, last PL-14), [mixed_jars.md](../mixed_jars.md) (`MJ-`). The "cooking plan"
+the rows cite is the removed `feature_writeup/cooking.md`; its text is in git (`git show 2e8687f^:feature_writeup/cooking.md`,
+lines 54-66 and 157-201). Test ids marked "proposed" are free on 2026-10-31 in their writeup; the 2026-10-21 proposals
+(RC-19 to RC-39, RC-100 to RC-107, PL-10) were taken by other tests since and are renumbered below.
 
-Mod facts marked **(jar)** were read from the pack's jars (versions from `pack/manifest.json`); **(unverified)** means
-check in game. Jars read: FarmersDelight 1.2.4, Fruits Delight 0.5.11, Create 0.5.1.i, Create Central Kitchen 1.3.11.c
-(CCK), Create Crafts & Additions 1.2.3 (CA), Create Factory 0.0.2, Neapolitan 4.1.0, Abnormals Delight 4.1.2, Delightful
-3.4.1, Ender's Delight 1.2.2, Farmer's Respite 2.0, Quark 418, Upgrade Aquatic 5.1.0, untitledduckmod 0.6.1, Architect's
-Palette 1.3.5, PneumaticCraft 4.3.15, More Delight 25.07.28, Supplementaries 2.4.20, Rustic Delight 1.3.0, Display Delight
-1.2.0, KubeJS 1902.6.2-build.73.
+Where the code lives now (moved 2026-10-25, [creative_delight.md](../creative_delight.md)): server scripts in
+`kubejs/data/creative_delight/kubejs/<mod>/` (oven tables in
+[creativeengineering/baking.js](../../kubejs/data/creative_delight/kubejs/creativeengineering/baking.js)), the family helper
+`global.CD.food(e)` in [cd_food.js](../../development/creativeDelight/src/main/resources/kubejs_startup/creative_delight/cd_food.js)
+(Creative Delight jar: an edit needs `:creativeDelight:build`, install, restart), CD startup items under
+`development/creativeDelight/src/main/resources/kubejs_startup/<mod>/`. Every cake, pie and cookie recipe of every mod is
+swept by its family call (`F._sweep`, cd_food.js 135) and rebuilt on shared bases (oven.md 2.6).
+
+Mod facts marked **(jar)** were read from the pack's jars; **(dump)** from `kubejs/exported/` (recipes 2026-10-30, tags and
+items 2026-10-30); **(unverified)** means check in game.
 
 ## Scope and order
 
 | Row | Change | Status | Size |
 |---|---|---|---|
-| #1 | Flour, crust and cake base in every baked recipe | In Progress | medium, KubeJS (one decision blocks it, see below) |
-| #3 | Cookie recipes (bent, heated compacting, efficient oven) | Done 2026-10-22 (superseded by the baking overhaul, scratch server PASSED) | small, KubeJS |
-| #10 | Bread block (knife to crustless, 3 -> 6 slab) | Planned | small, KubeJS |
-| #4 | Pie sequenced assembly, chorus pie through chorus juice | Planned | medium, KubeJS; the chorus half needs `food/drinks #4` |
-| #5 | Cakes (dragon egg cake, rename, dead slices, placeable slices, chocolate cake merge) | Planned | large: KubeJS + assets, flight needs patcherMod |
-| #6 | Cake paste in the pot, waffles, more tarts | Planned | medium, KubeJS + textures |
-| #2 | Muffins as a real food (variants, paper, assembly) | Planned | medium, KubeJS + textures |
-| #9 | Bread slices / toast / buns in sandwiches | Planned | medium, KubeJS (an audit, table below) |
-| #8 | Yeast (new recipes, in-world fix) | Planned | small KubeJS + an in-game test first |
-| #7 | Sourdough chain with timed waits | Planned | large, KubeJS (patcherMod only if the KubeJS route is rejected) |
-| #11 | Mixed cookie jars, more jarable foods | Planned | tags: small KubeJS; mixed jars: patcherMod mixins |
-
-No Testing / Complete rows in this subfamily.
-
-**The blocking decision (RESOLVED 2026-10-22).** The user chose the baking overhaul ([oven.md](../oven.md) 2.6): every cake,
-pie and cookie recipe is removed and rebuilt on shared bases, cookies are oven only, cakes and pie fillings keep a
-hand-craft route, and the oven is the efficient one. It supersedes "originals stay" (oven.md 4). Rows 1, 3 and
-`cooking/oven #6` are built (BUILT, not tested); the remaining open parts of row 1 are in TODO.
+| #37 | Zucchini quiche sequenced assembly fails to load | Bug | one-line fix in cd_food.js, CD rebuild |
+| #1 | Flour, crust and cake base in every baked recipe | In Progress | small: 2 recipes left (crust press, dough block -> bases) |
+| #2 | Muffins as a decent food source | In Progress | medium, KubeJS items + textures |
+| #4 | Pie sequenced assembly and chorus pie | In Progress | medium, one cd_food.js helper + transition items |
+| #5 | Cakes | In Progress | medium: rename, dead cake slices, slice placement, dragon egg cake |
+| #6 | Cake paste and tarts | In Progress | medium, KubeJS + lang + textures |
+| #7 | Sourdough chain | In Progress | large, KubeJS (`modifyResult` timestamps) |
+| #8 | Yeast | In Progress | small KubeJS + an in-game test first |
+| #9 | Sliced bread / toast in recipes | In Progress | superseded by #28; close or keep a bun item only |
+| #10 | Bread block | In Progress | small, KubeJS |
+| #12 | Durian and pineapple pie rework | In Progress | small-medium, decision first |
+| #13 | Cherry pie | In Progress | small, CD startup item + table row + can |
+| #14 | Unobtainable pie slices | In Progress | small, per slice add or hide |
+| #17 | Dough unification | In Progress | small-medium, mostly decisions |
+| #18 | Brownie and cupcake baking types | In Progress | medium; cupcake half dropped by #32 |
+| #19 | Quiche baking type | In Progress | medium |
+| #20 | Pizza food type | In Progress | medium |
+| #21 | Lasagna baking type | In Progress | medium, needs #30 |
+| #22 | Chorus cookie from the uncanny cookie | In Progress | small, one table row |
+| #23 | Oatmeal cookies from oat dough | In Progress | small + one new item |
+| #24 | No shapeless pie-to-crust recipes | In Progress | nothing to build (dump check 2026-10-30): close after JEI |
+| #32 | Merge muffin and cupcake | In Progress | small: retexture left |
+| #30 | Baking dish bakeware | Planned | small, CD startup item + tag + ware key |
+| #34 | Every cake as a sequenced assembly | Planned | medium, one cd_food.js helper + transition items |
+| #35 | Investigate brownie tray and adzuki bun family | Planned | investigation only |
+| #36 | Dessert cookware and recipe treatments | Planned | medium, decision first |
+| #3, #11, #15, #25-#29, #31, #33 | built rows | Testing | listed under Built, needs play |
 
 Build order:
 
-1. **Batch A, one `/reload`:** #1 steps 1-2 (wheat -> flour, crusts), #3, #10, and #11's tag half. All in server scripts.
-   Put the new code in a new `kubejs/server_scripts/cooking/baked_goods.js` (cooking.js is already 852 lines, half of it
-   a commented-out copy) and leave `baking.js` for oven recipes.
-2. **Batch B, restart:** #4 (non-chorus pies) and #1 step 3 (cake base everywhere, cake assembly). New incomplete items
-   in `transition_items.js` need a restart.
-3. **Batch C:** #5 slice removal, rename, chocolate cake merge, coaster models (with `food/drinks #3`, which also lists the
-   chocolate cake merge). Restart (removed_items.js, assets).
-4. **Batch D, restart + textures:** #2, #6 tarts, #5 dragon egg cake (new KubeJS items). The flight effect, if wanted,
-   rides the next patcherMod release.
-5. **Batch E:** #8, then #7 (the chain uses yeast).
-6. **Later:** #11 mixed jars (patcherMod mixins), #9 (with `dishes/meals #2`, which decides burger bread).
+1. **#37 first** (one line, CD rebuild): it unblocks every later `F.assemble` caller (#4, #19, #20, #34).
+2. **One CD rebuild for the helpers:** `F.pieAssemble` (#4), `F.cakeAssemble` (#34), `ware.dish` (#30), cornmeal in
+   `F.muffinBake` (#2), plus their transition items (`kubejs/startup_scripts/changes/transition_items.js`, restart).
+3. **Startup items, one restart:** baking dish (#30), cherry pie and blueberry pie block items (#13, #14), new muffins
+   (#2), oatmeal raisin cookie (#23), dragon egg cake (#5); hidden slices in `global.removedItems` (#5, #14).
+4. **Server tables (`/reload`):** #1, #10, #22, #23, then #18 to #21 and #36 once their decisions are in.
+5. **Later:** #8 then #7 (the chain uses yeast); #5 slice placement with `food/placeable`.
 
-Cross-family links: `cooking/oven #3` (muffins not cookable), `#5` (muffin oven yield 4), `#6` (baking audit: banana bread,
-honey cake); `dishes/ingredients #1` (cornmeal as flour), `#2` (egg solution and frosting fluids), `#7` (batter);
-`food/drinks #3` (chocolate cake merge), `#4` (chorus juice fluid); `dishes/meals #2` (burgers "bread or cornbread only"),
-`#3` (sequenced meals), `#5` (feasts); `cans/canning #15` (canned cake), `food/types-and-tuning #1` (food values),
-`#5` (placed pies and SoL); `food/placeable #2` (`/dumpplaceable`); `cooking/kitchen #10` (mortar and pestle);
-`ui/wthit #3` (jar Contents line).
+Cross-family links: `dishes/ingredients #2` (frosting fluid, built), `#14` (cornmeal as flour), `#24` (batter grains);
+`food/drinks #4` (chorus juice fluid, built); `dishes/meals #2` (burgers, quiche), `#3` (sequenced meals), `#12` (pancake
+type); `dishes/jams #4` (cherry jam); `cans/canning` (filling cans); `food/placeable` (slice placement); `cooking/kitchen
+#10` (mortar); `merges/baking #1` (stackable pancakes); `ports/fungiport #3` (truffle pie item).
+
+---
+
+## baked-goods #37: Zucchini quiche sequenced assembly fails to load
+Status Bug / Work KubeJS (Creative Delight jar) / TODO `baking/baked-goods #37` ([creative_delight.md](../creative_delight.md) 30, [food_families.md](../food_families.md) `quiche/whole`)
+
+### Goal
+The zucchini quiche assembly the 1.1.04 changelog announced loads: pie crust -> 3 roasted zucchini -> one cooked meat ->
+250 mB milk -> Zucchini Quiche.
+
+### Now
+- Caller: [veggiesdelight/recipes.js](../../kubejs/data/creative_delight/kubejs/veggiesdelight/recipes.js) 61-66,
+  `global.CD.food(e).assemble(i.pie_crust, [zucchini x3, [cooked_mutton, cooked_chicken, cooked_beef, cooked_pork,
+  cooked_bacon], { fill: Fluid.of(f.milk, 250) }], i.zucchini_quiche)`. Transition row `['zucchini_quiche']` exists
+  (`transition_items.js` 46).
+- Cause: `F.assemble` in [cd_food.js](../../development/creativeDelight/src/main/resources/kubejs_startup/creative_delight/cd_food.js)
+  187-190 tests `s.press`, then `s.fill`; every JS array has `Array.prototype.fill`, so the meat array becomes a
+  `create:filling` step with an empty fluid (`Can't modify the empty stack` in the owner's `logs/kubejs/server.log`,
+  2026-10-29). Not fixed: cd_food.js last edited 2026-10-29 20:07, lines 188-189 unchanged on 2026-10-31.
+- The quiche is the only `assemble` caller (grep 2026-10-31: no `burgerAssemble`, `wrapAssemble`, `goldenEnchant`
+  callers either). Brewin's quiche assemblies (`brewinandchewin/recipes.js` 20-26, 65-73) are written inline and load
+  (both ids in the 2026-10-30 recipe dump).
+
+### Build
+1. cd_food.js 187: put the array test first:
+   ```js
+   var seq = steps.map(s => {
+     if (Array.isArray(s)) return e.recipes.create.deploying(inc, [inc, Ingredient.of(s)])
+     if (s && s.press) return e.recipes.create.pressing(inc, inc)
+     if (s && s.fill) return e.recipes.create.filling(inc, [inc, s.fill])
+     return e.recipes.create.deploying(inc, [inc, Ingredient.of(s)])
+   })
+   ```
+   Also update the header comment (cd_food.js 1-36) to say a step may be a list of alternatives.
+2. `./gradlew :creativeDelight:build --offline`, `:creativeDelight:installToMods` with the game closed; restart.
+3. Changelog: a "Fixed" bullet (the 1.1.04 changelog promised the assembly, it never loaded), e.g. under the quiche
+   or baking family: "**Fixed:** The Zucchini Quiche sequenced assembly on a Pie Crust did not load".
+
+### Gotchas
+- Strings have no `fill`, so tag and item steps are safe; only arrays hit the branch.
+
+### Tests
+- FF-14 (exists): JEI shows the assembly; a Create line makes one quiche. Queue a boot grep for
+  `zucchini_quiche_sequenced_assembly` errors (SQ-FFB-00 already greps CD script errors).
 
 ---
 
@@ -63,273 +117,149 @@ honey cake); `dishes/ingredients #1` (cornmeal as flour), `#2` (egg solution and
 Status In Progress / Work KubeJS / TODO `baking/baked-goods #1` (cooking plan sweet/baked, [oven.md](../oven.md) 2.6)
 
 ### Goal
-Every crafting and pot recipe for a cookie, pie, cake or the strange eclair takes flour (or cornmeal) instead of wheat,
-every pie sits on a pie crust, and every cake starts from a cake base. The oven half is done (1.0.8).
+Every baked recipe takes flour (or cornmeal), every pie sits on a pie crust, every cake starts from a cake base.
 
-### Now
-- Oven recipes: [baking.js](../../kubejs/data/creative_delight/kubejs/creativeengineering/baking.js) 41-117 already use `i.flour`
-  (`#forge:flour/wheat`), `i.t_flour_or_cornmeal`, `i.pie_crust` and `i.cake_base` (oven.md 2.6).
-- Pie crust from flour is built (1.0.8, [recipes_cooking.md](../recipes_cooking.md) 2.1):
-  [cooking.js](../../kubejs/server_scripts/cooking/cooking.js) 347 `R.shaped(2 crust, ['FMF',' F '], F flour-or-cornmeal,
-  M milk)` id `creativeengineering:shaped/pie_crust_flour`; 348-349 unheated compacting, 3 flour + 250 mB milk -> 2.
-  FD's `farmersdelight:pie_crust` (`wMw / w`, wheat) and FD's `farmersdelight:integration/create/mixing/pie_crust_from_mixing`
-  (3 `create:wheat_flour` + 250 mB milk) stay **(jar)**. An egg crust was asked first and dropped: the shapeless
-  `3 flour + egg -> 6 dough` (cooking.js 92) matches the same grid.
-- No crafting recipe has had wheat swapped yet. Live wheat recipes **(jar)**:
-  - cookies: `minecraft:cookie` (Quark's copy, `#X#`), `quark:tweaks/crafting/utility/bent/cookie` (`X#`/`# `, Quark
-    "Bent Recipes" = true in `config/quark-common.toml` 613), `farmersdelight:honey_cookie`, `farmersdelight:sweet_berry_cookie`,
-    `farmersrespite:green_tea_cookie`, `abnormals_delight:upgrade_aquatic/mulberry_cookie`, `endersdelight:uncanny_cookies`,
-    `fruitsdelight:lemon_cookie`, `cranberry_cookie`, `persimmon_cookie`, `bayberry_cookie`. CCK's compacting cookies
-    (`create_central_kitchen:compacting/cookie`, `.../green_tea_cookie`, `.../mulberry_cookie`) already take flour.
-  - pies: `farmersdelight:apple_pie`, `endersdelight:chorus_pie`, `delightful:food/salmonberry_pie`,
-    `delightful:food/pumpkin_pie` (result `minecraft:pumpkin_pie`), `create_central_kitchen:crafting/mulberry_pie`
-    (CCK built-in datapack `farmersdelight`, loaded with pie overhaul on: `enablePieOverhaul = true` in
-    `config/create_central_kitchen-common.toml`).
-  - eclair: `endersdelight:strange_eclair` (shapeless ender eye, 2 wheat, sugar).
-- Crustless crafting pies **(jar)**: `upgrade_aquatic:mulberry_pie` (mulberry, sugar, egg; CCK's datapack carries a copy
-  under the same id), `untitledduckmod:crafting_shaped/pumpkin_pie` (pumpkin, sugar, duck egg), and whatever
-  `minecraft:pumpkin_pie` resolves to (vanilla, Delightful and CCK all ship a conditional file at that id; which one
-  wins is load order, **(unverified)**: look it up in JEI).
-- Cakes still built from egg + sugar + wheat/dough **(jar)**: `farmersdelight:cake_from_milk_bottle`, `neapolitan:cake`,
-  `create:crafting/curiosities/cake`, `untitledduckmod:crafting_shaped/duck_cake` and `goose_cake`, the six Neapolitan
-  flavoured cakes (`neapolitan:adzuki/adzuki_cake` ...), CCK's seven `crafting/*_cake_from_dough` and eight compacting /
-  mixing cakes, `farmersrespite:coffee_cake`, `farmersdelight:cooking/mangosteen_cake` (Fruits Delight pot, 2 wheat 2 sugar
-  2 mangosteen). CA's three filling cakes already start from a baked cake base. `minecraft:cake` (vanilla) is removed
-  (cooking.js 357).
-- Cake base sources: `createaddition:compacting/cake_base` (egg, 2 sugar, `create:dough`), oven `baking/cake_base`
-  (egg, 2 sugar, 2 flour-or-cornmeal); baked by `createaddition:smoking/cake_base_baked` or oven `baking/cake_base_baked`.
+### Done (evidence 2026-10-31)
+- Cookies, pies, cakes: the baking overhaul 2026-10-22 (oven.md 2.6, OV-25 to OV-31): bases, crust and frosting in
+  [baking.js](../../kubejs/data/creative_delight/kubejs/creativeengineering/baking.js) 94-118 (cake base raw 99-101, baked
+  102-107; crust `3 flour/cornmeal + egg + milk` or `3 dough + milk` -> 3, 110-111; frosting 113). Every mod's recipe for
+  a cake, pie, cookie, base or crust is swept (94-95 and each family call).
+- Strange eclair wheat -> flour: [baked_goods.js](../../kubejs/data/creative_delight/kubejs/creativeengineering/baked_goods.js)
+  16-19 (with bread, adzuki bun, banana bread, scones).
+- Frosting fluid and plain cake spout: baking.js 116-117 and 131 (baked base + 750 mB frosting; `dishes/ingredients #2`).
+- Sequenced assembly with spouting for every cake: moved to row #34 (same work; see TODO discrepancies in the report).
 
-### Build
-1. **Wheat -> flour** (new `cooking/baked_goods.js`, `ServerEvents.recipes`):
-   ```js
-   var COOKIE_WHEAT = ['minecraft:cookie', 'quark:tweaks/crafting/utility/bent/cookie', 'farmersdelight:honey_cookie',
-     'farmersdelight:sweet_berry_cookie', 'farmersrespite:green_tea_cookie', 'abnormals_delight:upgrade_aquatic/mulberry_cookie',
-     'endersdelight:uncanny_cookies', 'fruitsdelight:lemon_cookie', 'fruitsdelight:cranberry_cookie',
-     'fruitsdelight:persimmon_cookie', 'fruitsdelight:bayberry_cookie', 'endersdelight:strange_eclair']
-   COOKIE_WHEAT.forEach(id => R.replaceInput({ id: id }, i.wheat, i.flour, e))
-   var PIE_WHEAT = ['farmersdelight:apple_pie', 'endersdelight:chorus_pie', 'delightful:food/salmonberry_pie',
-     'delightful:food/pumpkin_pie', 'create_central_kitchen:crafting/mulberry_pie']
-   PIE_WHEAT.forEach(id => R.replaceInput({ id: id }, i.wheat, i.t_flour_or_cornmeal, e))
-   ```
-   Cookies take wheat flour only and pies take cornmeal too, as in the oven (oven.md OV-19). If row 3 replaces the
-   cookie recipes outright, drop the cookie ids here.
-2. **A crust in every pie.** `R.remove` the three crustless recipes above and re-add them through `R.shapeless` with
-   `i.pie_crust` added, ids `mulberry_pie_simple`, `pumpkin_pie_duck_egg`, `pumpkin_pie_simple` (the same names the oven
-   uses). Crust "pressing dough" from the plan: `R.createPressing(i.pie_crust, i.any_dough, e, 'pie_crust_pressing')`
-   (Create press, 1 dough -> 1 crust; 1 dough = 1/2 flour by the `3 flour + egg -> 6` craft, so the press is the
-   cheapest crust, fine for automation). Check that `#forge:dough` doesn't already press into something else (CA's
-   rolling uses dough? **(unverified)**; `create_factory:uncooked_waffle` presses `cake_paste`, not dough **(jar)**).
-3. **Cake base everywhere.**
-   - Remove the egg+sugar+wheat crafting cakes listed in Now (keep `createaddition:filling/*`), and add one shaped
-     recipe per cake: plain cake `['MMM', ' B ']` (3 milk, raw cake base), flavoured `['MDM', ' B ', ' D ']` (2 milk,
-     2 flavour, base), the same counts as the oven recipes (baking.js 96-105), ids `<cake>_cake_base`. The flavour list
-     is `FLAVOURED_CAKES` in baking.js 97-102; move it to `global` (e.g. `global.bakedGoods.flavouredCakes` in a startup
-     file) so the oven and crafting recipes share one list.
-   - Replace CCK's compacting/mixing cakes with `R.createCompacting(cake, [i.cake_base, flavour, flavour,
-     Fluid.of(f.milk, 1000)], e, '<cake>_compacting')`.
-   - Sequenced assembly with spouting (the plan's "cake base recipe for all cakes, sequenced assembly w/ spouting"):
-     input `i.cake_base_baked` (CA's model: the base is baked before it is filled), steps deploy flavour, deploy flavour,
-     fill 500 mB milk, loops 1, through `R.createSequencedAssembly(..., ['<cake>'], e, '<cake>_sequenced_assembly', 1)`.
-     One `transition_items.js` row per cake (auto texture works: `neapolitan:item/<cake>` etc.).
-   - Mangosteen "cake" (pot): `[i.cake_base, mangosteen x2]` with bowl, as the oven version; or leave it if row 5 renames it
-     to something that isn't a cake (recommended there).
-   - "Slice a dough block into bases": `R.fdCutting(i.dough_block, i.any_knife, Item.of(i.cake_base, 3), e,
-     'cake_base_from_dough_block')`. A dough block is 9 dough; a base is egg + 2 sugar + 1 dough, so 3 bases per block
-     prices the missing egg and sugar at 2 dough each. See Decisions.
+### Still open
+1. **Crust from a press:** `R.createPressing(i.pie_crust, i.any_dough, e, 'pie_crust_pressing')` in baking.js
+   "Bases". No Create pressing recipe takes dough today (dump: only `create_factory:uncooked_waffle` presses cake paste;
+   IE's metal press makes raw pasta from `#forge:dough/wheat`). 1 dough -> 1 crust is cheaper than the grid's 3 dough +
+   milk -> 3 (the same rate, no milk): see Decisions.
+2. **Dough block -> cake bases:** `R.fdCutting(i.dough_block, i.any_knife, Item.of(i.cake_base, 3), e,
+   'cake_base_from_dough_block')`. Seven dough blocks exist since #27 (`i.dough_block` Create Compressed's, and
+   `i.gingerdough_block` ... `i.sourdough_block`, item_dict 1853-1858); only the plain dough blocks should cut to bases
+   (Create's, sweet potato, oat: the doughs in `#forge:dough`). A dough block on the board has no other knife recipe
+   **(dump, unverified in JEI)**.
 
 ### Ids and data
-`i.flour` `#forge:flour/wheat`, `i.t_flour_or_cornmeal` `#creativeengineering:flour_or_cornmeal`, `i.pie_crust`
-`farmersdelight:pie_crust`, `i.cake_base` / `i.cake_base_baked` (`createaddition:*`), `i.dough_block`
-`create_compressed:dough_block`, `i.any_dough` `#forge:dough`, `i.duck_egg` `untitledduckmod:duck_egg` (13280). All
-recipe ids above **(jar)**; the winning `minecraft:pumpkin_pie` **(unverified)**.
+`i.pie_crust` `farmersdelight:pie_crust`, `i.any_dough` `#forge:dough` (= `create:dough`, `veggiesdelight:sweet_potato_dough`,
+`vintagedelight:oat_dough` **(dump)**), `i.cake_base` / `i.cake_base_baked` (`createaddition:*`), `i.dough_block` 202,
+`i.sweet_potato_dough_block` 1855, `i.oat_dough_block` 1856.
 
 ### Decisions
-- **Crafting routes stay?** See "The blocking decision" at the top. Recommendation: stay, priced above the oven.
-- **Swap milk to egg in the crust** (TODO decision). The plan's reason was "allows using frosting" (frosting = milk +
-  sugar, `dishes/ingredients #2`). An egg crust with 3 flour clashes with the dough craft. Recommendation: no swap now; if
-  wanted, an extra egg crust with a shape the dough craft can't match, 4 flour + egg `['F F', 'FEF'] -> 3`. Revisit with
-  `dishes/ingredients #2`.
-- **Dough block -> how many cake bases.** Recommendation 3 (above). 9 would make bases free of egg and sugar.
+- **Press yield.** Recommendation 1 dough -> 1 crust (the grid's rate without the milk; automation is meant to be cheaper).
+- **Dough block -> how many bases.** Recommendation 3 (a base is 3 dough + egg + 2 sugar by hand; 3 per 9-dough block
+  prices the missing egg and sugar at about 2 dough each).
 
-### Gotchas
-- `R.replaceInput` by recipe id only touches that recipe; conditional recipes (`forge:conditional`) keep their file id
-  (`delightful:food/salmonberry_pie`), so the ids above are right.
-- Fruits Delight's `lemon_cookie` is shaped `' C '/'ABA'` with a milk bottle; replacing wheat keeps the shape.
-- Rustic Delight 1.3.0 ships `cherry_blossom_cookie` / `cherry_blossom_cheesecake` recipes, but `ModItems` registers
-  no cherry blossom items in this 1.19.2 build **(jar)**, so those recipes don't load. Nothing to do.
-- Slice & Dice turns pot recipes into heated mixing after KubeJS runs; a new pot recipe gets a mixer twin unless its id
-  ends in `_manual_only` (cooking.js 388-389 note).
-
-### Tests (RC-)
-- RC-19 Wheat gone: JEI uses of `minecraft:wheat` show no cookie, pie or strange eclair recipe; each listed recipe shows
-  Create wheat flour (pies: flour or cornmeal).
-- RC-20 Crusts: the UA mulberry pie, duck-egg pumpkin pie and `minecraft:pumpkin_pie` crafts need a pie crust; a dough
-  in a Create press gives a crust.
-- RC-21 Cake base: every cake's crafting, compacting and assembly recipe takes a cake base; no cake recipe takes wheat,
-  dough or flour directly; a dough block on a cutting board gives 3 bases.
+### Tests (proposed)
+- RC-176 Crust press: a dough under a Create press gives a pie crust; JEI lists it with the two grid crusts.
+- RC-177 Dough block bases: Create's, sweet potato and oat dough blocks on a cutting board with a knife give 3 raw cake
+  bases; the other dough blocks have no such recipe.
 
 ---
 
-## baked-goods #3: Cookie recipes
-Status Done 2026-10-22 (superseded by the baking overhaul: cookies are oven only, cookie dough + 2 flavour -> 12, [oven.md](../oven.md) 2.6, OV-30) / Work KubeJS / TODO `baking/baked-goods #3` (cooking plan baked/cookies)
+## baked-goods #2: Muffins as a decent food source
+Status In Progress / Work KubeJS / TODO `baking/baked-goods #2` (cooking plan baked/muffins, [food_families.md](../food_families.md) 3.1)
 
 ### Goal
-Each cookie gets a 2x2 "bent" craft, a heated compacting recipe for automation, and a more efficient oven recipe.
+Muffins worth eating: more variants including two-fruit muffins with mixed, shorter effects (orange cranberry, lemon
+poppy), "fruit, milk, egg, sugar, flour", served on paper, a sequenced assembly, and cornmeal accepted wherever flour is.
 
 ### Now
-- Crafting recipes as listed in #1 (3-wide `F X F` or Fruits Delight's `ABA`; FD/Ender's/Abnormals shapeless). Only the
-  vanilla cookie has Quark's bent version.
-- Compacting: CCK `compacting/cookie` (cocoa + 2 flour -> 8, **unheated**), `[dp farmersrespite] compacting/green_tea_cookie`,
-  `[dp abnormals_delight] compacting/mulberry_cookie` **(jar)**.
-- Oven: 10 cookie recipes, 2 flour + flavour -> 8, baking sheet (baking.js 43-52).
-- Dead cookies: `abnormals_delight:cherry_cookie` and `maple_cookie` are registered but their only recipes are conditional
-  on Environmental / Autumnity, which aren't in the pack **(jar + manifest)**. The pack still ships
-  `creativeengineering:canned_cherry_cookie` / `canned_maple_cookie` (can_parity 2.x rows, `food_types.json` 83, 199),
-  which can't be made.
+- `F.muffinBake(fruit, output)` ([cd_food.js](../../development/creativeDelight/src/main/resources/kubejs_startup/creative_delight/cd_food.js)
+  160-164): oven only, muffin tin, plated on paper, `[2 fruit, i.flour, i.t_milk_bottle, i.eggs, i.any_sweetener]` -> 4
+  (`V.muffinsOven`, line 53). It removes the mods' Cooking Pot recipes (owner 2026-10-29, shipped in 1.1.05; Slice &
+  Dice's mixer copies go with them). Takes **wheat flour only** (`i.flour`, line 163): the cornmeal ask is not built.
+- Three muffins ([baking.js](../../kubejs/data/creative_delight/kubejs/creativeengineering/baking.js) 143-145): Fruits
+  Delight blueberry (5 / 0.4, night vision + brightening 20 s) and cranberry (5 / 0.4, shrinking 80 s), Veggies Delight's
+  sweet potato cupcake, named Sweet Potato Muffin (row #32; its own sweet potato dough craft stays).
+- No new muffin item, no muffin assembly. No poppy seed item; `i.poppy` is the flower.
 
 ### Build
-1. One table in `baked_goods.js`: `[key, flavour]` per cookie (cookie/cocoa, honey_cookie/honey bottle,
-   sweet_berry_cookie/sweet berries, green_tea_cookie/green tea leaves, bayberry, cranberry, persimmon (dried),
-   lemon (+ milk bottle), mulberry, uncanny_cookies/mite crust), the same pairs as baking.js 43-52. Move that list to
-   a shared global (startup) so baking.js reads it too.
-2. Bent craft per cookie: `R.shaped(Item.of(cookie, 8), ['XF', 'F '], { X: flavour, F: i.flour }, e, key + '_bent')`.
-   Lemon cookie has 4 ingredients: `['XF', 'FM']`. Remove `quark:tweaks/crafting/utility/bent/cookie` (it would become a
-   duplicate after #1's swap) or leave the vanilla one to Quark and skip it in the table.
-3. Heated compacting: `R.createCompacting(Item.of(cookie, 8), [i.flour, i.flour, flavour], e, key + '_compacting',
-   'heated')`; remove the three CCK unheated ones (`R.remove({ id: 'create_central_kitchen:compacting/cookie' })`, and the
-   two `[dp]` ids, same id form).
-4. Efficient oven: change the 10 `ceBaking` results in baking.js 43-52 from 8 to 12 (see Decisions).
-5. Dead cookies: give the cherry cookie a recipe from `vinery:cherry` (`i.cherry`, item_dict 11126; check whether it is
-   in `#forge:fruits/cherry`) and add it to the table; put `maple_cookie` (no syrup in the pack) in
-   `global.removedItems` and tell `cans/canning` its can is dead.
-
-### Ids and data
-Cookie ids: item_dict 2147 (`i.cookie`), 11533, 11586, 12823, 12229, 12241, 12306, 12272, 12123, 11960; Abnormals
-`i.cherry_cookie` 12110, `i.maple_cookie` 12120. Flavours as baking.js. Recipe ids `creativeengineering:shaped/<key>_bent`,
-`creativeengineering:createcompacting/<key>_compacting`.
+1. Cornmeal: cd_food.js 163 `i.flour` -> `i.t_flour_or_cornmeal` (CD rebuild). Update OV-19 and the `cake/muffin` rule
+   text in food_families.md ("wheat flour") when it lands.
+2. New muffins as CD startup items (new `kubejs_startup/fruitsdelight/muffins.js`, the pack's own ids
+   `creativeengineering:<name>_muffin`, routing per memory `creative-delight-routing`), each `.food(f => f.hunger(n)
+   .saturation(m).effect(id, ticks, 0, 1))` and a texture `creativeengineering:item/<name>_muffin` recoloured from
+   `fruitsdelight:item/blueberry_muffin`:
+   - `orange_cranberry_muffin`: orange + cranberry; regeneration 10 s + shrinking 40 s.
+   - `lemon_poppy_muffin`: lemon + poppy; haste 10 s + refreshing 10 s.
+   - veggie muffins from row #32: carrot, zucchini, pumpkin (and the existing sweet potato).
+   Dict keys next to `i.blueberry_muffin` (item_dict 12411); Fruits Delight effects as `ef.fd_<name>` in effect_dict.js.
+3. Recipes: one `F.muffinBake` per single-fruit muffin; two-fruit muffins need a 2-flavour form: extend `muffinBake(fruit,
+   output, second)` the way `cakeBake` takes `second` (cd_food.js 136-143).
+4. Assembly: add to `muffinBake`: `F.assemble(i.paper, [flour-or-cornmeal, i.eggs, SWEET, fruit, fruit or second,
+   { fill: Fluid.of(global.fluid.milk, 250) }], output)` -> yields 1 by the helper; for 4 per run pass the output as
+   `Item.of(output, 4)` only if `incKey` resolves it (it reads the id, so it does). One transition row per muffin.
+5. Food values: set every muffin together when `food/types-and-tuning #1` sets family values; proposed 6 / 0.6.
 
 ### Decisions
-- **Yields.** Recommendation: grid 8 (as today), heated compacting 8, oven 12. The oven is the "efficient baking recipe".
-- **Keep the 3-wide crafts?** Recommendation: keep (after #1's flour swap); the bent one is the convenience.
+- **Variants** (TODO decision). Recommendation: the two combos, banana and strawberry singles, and the three veggie
+  muffins from #32.
+- Poppy: the flower (no new item). Recommendation: the flower.
 
 ### Gotchas
-- A 2x2 shaped recipe also matches in the 3x3 grid; `['XF','F ']` vs the 3-wide `FXF` don't collide.
-- `#forge:flour/wheat` vs cornmeal: cookies stay wheat flour only (OV-19).
+- Paper is the plating container (oven slot 8): automation must feed paper.
+- KubeJS food effects take ticks (20 per second).
 
-### Tests (RC-)
-- RC-22 Bent cookies: each cookie crafts in the 2x2 inventory grid from flour + flavour.
-- RC-23 Cookie compacting: a heated basin under a press makes 8 of each cookie; an unheated one makes none.
-- OV-20 Oven cookies: each oven cookie recipe gives 12.
-
----
-
-## baked-goods #10: Bread block
-Status In Progress / Work KubeJS / TODO `baking/baked-goods #10` (cooking plan misc)
-
-### Goal
-The crustless bread block comes from cutting a bread block with a knife, and the bread slab has the standard 3 -> 6 craft.
-
-### Now
-[cooking.js](../../kubejs/server_scripts/cooking/cooking.js) 143-152: removes Architect's Palette's `bread_block`
-(9 hay -> 9 bread blocks), `bread_slab` (3 -> 6) and `stonecutting/bread_nub`; dough block smoked to a bread block;
-saw / knife bread block -> 16 bread; stonecutter bread block -> slab, -> crustless block; slab -> nub. AP's bread slab
-model has crusty sides and crumb top/bottom **(jar)**.
-
-### Build
-1. `R.fdCutting(i.bread_block, i.any_knife, i.crustless_bread_block, e, 'crustless_bread_block')`. The knife recipe on the
-   same input already gives 16 bread (line 149): FD's cutting board picks the first matching recipe, so two knife
-   recipes on one input can't coexist. Move "bread block -> 16 bread" to the saw only (line 148 stays) and the
-   crustless block to the knife. The cut could also give a crust by-product (e.g. 4 bread, as the trimmed crust), but no
-   crumb item exists; recommend the crustless block alone.
-2. Keep the stonecutter crustless recipe (line 151) or drop it (recommend drop: the knife is the "cut").
-3. `R.shaped(Item.of(i.bread_slab, 6), ['BBB'], { B: i.bread_block }, e, 'bread_slab')` (AP's own shape, which line 145
-   removed). Keep the stonecutter slab.
-
-### Ids and data
-`i.bread_block` 1809, `i.crustless_bread_block` 156, `i.bread_slab` 155, `i.bread_nub` 157 (item_dict).
-
-### Decisions
-- Knife on a bread block: crustless block or 16 bread? Recommendation: crustless (row 10), bread via saw and by
-  smoking dough directly.
-
-### Gotchas
-- Lines 148-149 output `Item.of(i.bread, 16)` where `i.bread` is the tag `#forge:bread/wheat`; whether KubeJS 6 resolves
-  a tag to its first item as a result is untested (RC-06). Use `i.minecraft_bread` (item_dict 2076) for outputs while
-  touching these lines; the same applies to the sourdough knife recipe (line 161).
-
-### Tests (RC-)
-- RC-24 Bread block: knife on a bread block on the cutting board -> crustless bread block; 3 bread blocks -> 6 slabs;
-  the saw still gives 16 bread.
+### Tests (proposed)
+- OV-38 Muffin cornmeal: each muffin bakes with cornmeal in the flour slot.
+- FF-15 New muffins: each new muffin bakes 4 on paper and assembles from paper; the two-fruit ones give both effects at
+  the shorter length.
 
 ---
 
 ## baked-goods #4: Pie sequenced assembly and chorus pie
-Status In Progress / Work KubeJS / TODO `baking/baked-goods #4` (cooking plan baked/pie)
+Status In Progress / Work KubeJS / TODO `baking/baked-goods #4` (cooking plan baked/pie, [food_families.md](../food_families.md) 3.1 `pie/whole` R6)
 
 ### Goal
-Every obtainable pie can be made by Create sequenced assembly; the chorus pie's assembly spouts chorus juice as a fluid.
+Every obtainable pie can be made by Create sequenced assembly on a pie crust; the chorus pie's assembly spouts chorus
+juice.
 
 ### Now
-- Existing SA **(jar)**: CCK `[dp farmersdelight]` `create_central_kitchen:sequenced_assembly/apple_pie` (crust ->
-  deploy apple, deploy `#forge:flour/wheat`, deploy sugar, loops 2, transitional `create_central_kitchen:incomplete_apple_pie`),
-  `.../mulberry_pie`, `.../pumpkin_pie` (pumpkin slices), `.../sweet_berry_cheesecake` (2 berries + 250 mB milk, loops 2).
-  The pack's own: quiche (cooking.js 198-219, meals #3). FD fills a crust with 500 mB chocolate for the chocolate pie
-  (`farmersdelight:integration/create/filling/chocolate_pie`).
-- No SA for: `endersdelight:chorus_pie`, `farmersrespite:rose_hip_pie`, `delightful:salmonberry_pie`,
-  `fruitsdelight:durian_pie`, `pineapple_pie`, the two tarts. Obtainable pies: can_parity 2.13 note (apple, chocolate,
-  chorus, mulberry, pumpkin, rose hip, salmonberry, durian, pineapple, sweet berry). 2026-10-22: the cheesecake is
-  renamed Sweet Berry Pie (filling can added); durian and pineapple are marked for a rework (not really pies,
-  TODO `baking/baked-goods #12`); source mods of the slices with no whole pie in TODO `#14`.
-- Chorus juice is only an item (`endersdelight:chorus_juice`, item_dict 1869; chorus fruit + sugar + bottle). No chorus
-  fluid in the pack or in any jar read. The pack registers no fluids of its own yet (`fluid_dict.js` names mod fluids only).
+- No pie has an assembly: the family sweep (`pieBake` -> `F._sweep`, cd_food.js 135, 145-152) removed CCK's
+  `sequenced_assembly/{apple,mulberry,pumpkin}_pie` and `sweet_berry_cheesecake` and FD's chocolate pie filling (dump
+  2026-10-30: no pie assembly id; only quiche, shepherd's pie and horror lasagna assemblies). The family rule R5 "no other
+  recipe" and the planned R6 "assembly for every pie" (food_families.md `pie/whole`) are this row.
+- `PIES` ([baking.js](../../kubejs/data/creative_delight/kubejs/creativeengineering/baking.js) 57-71): apple, chocolate,
+  chorus, mulberry, pumpkin, rose hip, salmonberry, durian, pineapple, sweet berry cheesecake (Sweet Berry Pie), sweet
+  potato, truffle, End's chorus fruit pie; oven: crust + 2 flavour + 2 sugar. Sponge Pie is a one-off (154-155).
+- Chorus juice is a fluid now (`f.chorus_juice` `creativeengineering:chorus_juice`, fluid_dict 89; mixing, spout,
+  drain and IE bottler in `endersdelight/recipes.js` 19-26; `food/drinks #4` built 2026-10-22).
+- `F.assemble` (cd_food.js 183-193) builds an assembly from a step list; it needs #37's fix for list steps.
 
 ### Build
-1. Table of new pie assemblies, each `R.createSequencedAssembly(pie, i.pie_crust, steps, ['<pie>'], e,
-   '<pie>_sequenced_assembly', 2)` with a `transition_items.js` row per pie (auto texture verified for chorus_pie,
-   rose_hip_pie, salmonberry_pie, durian_pie, pineapple_pie, lemon_tart **(jar)**). Steps follow CCK's pattern
-   (filling, flour, sugar per loop; 2 loops), with the oven's ingredients:
-   | Pie | Steps (x2 loops) |
-   |---|---|
-   | salmonberry | deploy `i.t_fruits_salmonberries`, deploy flour-or-cornmeal, deploy sugar |
-   | rose hip | deploy rose hips, deploy honey bottle (or fill 125 mB honey), fill 250 mB milk |
-   | durian | deploy durian flesh, deploy egg, deploy sugar (loops 1: the pot makes 2 from 2 flesh) |
-   | pineapple | deploy pineapple slice, deploy egg, deploy sugar (loops 1) |
-   | chocolate | deploy `#forge:bars/chocolate`, fill 250 mB milk, deploy sugar; keep FD's 500 mB chocolate filling |
-   | tarts (optional) | lemon / fig, egg, sugar, fill 250 mB milk, loops 1, result 2 |
-   Write the steps inline with `e.recipes.create.deploying(inc, [inc, x])` / `.filling(inc, [inc, Fluid.of(...)])`
-   as cooking.js 210-218 does; NCH has no per-step helper and doesn't need one.
-2. Override CCK's apple and mulberry SAs to use `i.t_flour_or_cornmeal` (they take wheat flour only) only if cornmeal
-   pies matter; otherwise leave them.
-3. **Chorus pie** (after `food/drinks #4` decides the fluid):
-   - startup: `StartupEvents.registry('fluid', e => e.create('creativeengineering:chorus_juice').thinTexture(0xa985a9)
-     .bucketColor(0xa985a9).displayName('Chorus Juice'))` (new file `development/creativeDelight/src/main/resources/kubejs_startup/creativeengineering/fluids.js`); add
-     `f.chorus_juice = 'creativeengineering:chorus_juice'` to `fluid_dict.js`, and `f.t_chorus_juice =
-     '#forge:fluid/chorus_juice'` if a tag is wanted (dict style of `f.t_honey`).
-   - server: `R.createFilling(i.chorus_juice, [i.glass_bottle, Fluid.of(f.chorus_juice, 250)], e)`,
-     `R.createEmptying([i.glass_bottle, Fluid.of(f.chorus_juice, 250)], i.chorus_juice, e)`, heated mixing chorus fruit
-     + sugar + 250 mB water -> 250 mB juice.
-   - SA: crust -> deploy chorus fruit, deploy flour-or-cornmeal, fill 250 mB chorus juice, loops 2.
+1. cd_food.js, new helper next to `pieBake`:
+   ```js
+   // crust -> flavour, sweet, loops 2 (= the oven's 2 flavour + 2 sugar)
+   pieAssemble(flavour, output, steps) {
+     F.assemble(i.pie_crust, steps || [flavour, SWEET], output, 2)
+   },
+   ```
+   and call it from `pieBake` so every PIES row gets one (or from the PIES loop in baking.js, which keeps `pieBake` as is).
+2. One `transition_items.js` row per pie key (`apple_pie`, `chocolate_pie`, ... `chorus_fruit_pie`); check each auto
+   sprite (`<ns>:item/<path>`): FD pies and cheesecake have item sprites **(jar)**; the truffle pie uses FD's chocolate
+   pie sprite (CD model), pass a texture override.
+3. Chorus pie: `F.pieAssemble(i.chorus_fruit, i.chorus_pie, [i.chorus_fruit, { fill: Fluid.of(global.fluid.chorus_juice,
+   250) }])` (loops 2: 2 fruit + 500 mB juice in place of the sugar; 250 mB juice = 1 chorus fruit + sugar).
+4. CD rebuild, restart (new transition items).
 
 ### Ids and data
-Pie ids item_dict 11492, 11511, 11946, 12825, 11349, 12248, 12312, 13014, 2596; `i.pie_crust` 11556;
-`i.rose_hips` 12827, `i.durian_flesh` 12858, `i.pineapple_slice` 12901. CCK's incomplete items
-(`i.incomplete_apple_pie` ... item_dict 5140-5150) can be reused for apple / mulberry / pumpkin / cheesecake.
+Pie keys as `PIES`; `i.pie_crust`, `f.chorus_juice`, `F.SWEET` (`i.any_sweetener`). Incomplete ids are
+`kubejs:incomplete_<key>` (NCH `incomplete`, neoCraftHelper.js 1807). CCK's own `create_central_kitchen:incomplete_*`
+items are unused and could be hidden.
 
 ### Decisions
-- **Chorus juice fluid** (TODO decision): a pack fluid (recommended) vs. deploying the juice bottle (no fluid; the bottle
-  comes back as an extra output only through a remainder, which SA deploying doesn't give). Shared with `food/drinks #4`
-  and `dishes/meals #4` (pearl pasta uses the bottle, cooking.js 418).
-- Yield: SA pies 1 per crust like CCK. Recommendation: same as CCK.
+- **Yield:** 1 pie per crust, 2 loops. Recommendation: as CCK had it.
+- **Hand pies, tarts, Sponge Pie:** no assembly (oven-only rule). Recommendation: leave them out.
 
 ### Gotchas
-- Two SAs on the same input whose first step is the same deploy item can shadow each other (cooking.js 203 note): every
-  pie here starts with a different fruit, so fine; don't start two with "deploy sugar".
-- A new KubeJS fluid needs a restart and its bucket gets a generated item `creativeengineering:chorus_juice_bucket`;
-  add it to item_dict if referenced.
+- Two assemblies on one input whose first step is the same item shadow each other in Create: every pie starts with its
+  own flavour, so never start one with the sweetener.
 
-### Tests (OV- is the oven's; use RC-)
-- RC-25 Pie assembly: each pie in the table assembles from a crust in a Create line; JEI lists one SA per pie.
-- RC-26 Chorus juice: spout fills a bottle with chorus juice, a drain empties it; the chorus pie SA takes 250 mB per loop.
+### Tests (proposed)
+- FF-16 Pie assembly: every `PIES` pie assembles from a crust in a Create line (2 loops, flavour + sweetener); JEI lists
+  one assembly per pie.
+- FF-17 Chorus pie spout: the chorus pie assembly takes a chorus fruit and 250 mB chorus juice per loop.
 
 ---
 
@@ -337,723 +267,734 @@ Pie ids item_dict 11492, 11511, 11946, 12825, 11349, 12248, 12312, 13014, 2596; 
 Status In Progress / Work KubeJS / TODO `baking/baked-goods #5` (cooking plan baked/cake, scratchpad 2026-10-21)
 
 ### Goal
-Five parts: (a) dragon egg cake, (b) rename the mangosteen "cake", (c) remove unobtainable cake and pie slices,
-(d) every obtainable slice placeable, (e) merge the two chocolate cakes, keeping CA's texture and both the spout and the
-baking recipe.
+Four open parts: (a) a dragon egg cake, (b) rename the mangosteen "cake", (c) hide the unobtainable cake slices, (d) every
+obtainable cake and pie slice placeable. (e) the chocolate cake merge is built (2026-10-22, item_merges.md 2.3, MG-09,
+MG-10; CA's sprite, `neapolitan:chocolate_cake` merged by `kubejs/startup_scripts/_lib/item_merges.js`; baking.js 50 and
+the spout 129).
 
 ### Now
-- (b) `fruitsdelight:mangosteen_cake` is a bowl food placed only while sneaking (`FDBlockItem`, placeable_food.md 1),
-  made in the pot with a bowl; its sprite is mangosteen flesh on a plate. Name key `block.fruitsdelight.mangosteen_cake`
-  **(jar)**. 9 / 0.6, comfort 60 s, sliding 120 s (food_catalog.md 452).
-- (c) Slices with no source in the pack **(jar + manifest)**:
-  - CCK: `aloe_cake_slice`, `passionfruit_cake_slice`, `yucca_cake_slice` (cut from Peculiars cakes), `pumpkin_cake_slice`,
-    `sweet_berry_cake_slice` (Seasonals), `cherry_pie_slice`, `truffle_pie_slice` (Environmental), plus the transitional
-    `incomplete_cherry_pie`, `incomplete_truffle_pie`. None of Peculiars, Seasonals, Environmental, Atmospheric is in
-    `pack/manifest.json`.
-  - CCK `pumpkin_pie_slice`: its cutting recipes are removed by the pack (cooking.js 351-353), so it is dead too;
-    Delightful's `pumpkin_pie_slice` is the live one.
-  - Delightful: `blueberry_pie_slice`, `crimson_berry_pie_slice`, `gloomgourd_pie_slice`, `green_apple_pie_slice`,
-    `nightshade_berry_pie_slice`, `source_berry_pie_slice` (whole pies come from BYG, Undergarden, Ars Nouveau, none in the
-    pack). `config/delightful-common.toml` 65-73 enables all eight slice overhauls.
-  - can_parity.md 2.13 (the note under the pie table) found the same 8 pie slices on 2026-10-13.
-- (d) Slices with a Display Delight small-plate model: FD apple / chocolate pie, cake, cheesecake slices, Delightful
-  pumpkin and salmonberry pie slices. Those also have coaster models (`kubejs/assets/creativeengineering/brewinandchewin/
-  coaster/*.json`, pointing at DD's `small_plated_*` / `plated_*` models). No placement for: `endersdelight:chorus_pie_slice`,
-  `farmersrespite:rose_hip_pie_slice`, `farmersrespite:coffee_cake_slice`, `create_central_kitchen:mulberry_pie_slice`,
-  `chocolate_cake_slice`, `honey_cake_slice`, Abnormals' six Neapolitan cake slices, `fruitsdelight:fig_pudding_slice`,
-  Brewin's quiche slice.
-- (e) Two chocolate cakes: `createaddition:chocolate_cake` (CA `CACakeBlock`, 7 bites; made only by
-  `createaddition:filling/chocolate_cake`, baked base + 500 mB `create:chocolate`; CCK cuts it into 7
-  `create_central_kitchen:chocolate_cake_slice`, 3 / 0.3, speed 20 s + sugar rush 10 s) and `neapolitan:chocolate_cake`
-  (crafted, CCK compacted / dough variants, oven `baking/neapolitan_chocolate_cake`; Abnormals cuts it into 7
-  `abnormals_delight:chocolate_cake_slice`, 1 / 0.1, speed 20 s). `createaddition:honey_cake` has no oven recipe
-  (`cooking/oven #6`).
-- (a) Nothing exists. The dragon egg is unique per world unless Enderdragon Loot drops more (**(unverified)**, its
-  config has no egg setting). No flight effect in the pack; `startup_scripts/magic/magic_resistance.js` shows how the
-  pack registers its own `MobEffect` (KubeJS registers, patcherMod does the behaviour).
+- Cakes: `CAKES` ([baking.js](../../kubejs/data/creative_delight/kubejs/creativeengineering/baking.js) 48-56) through
+  `F.cakeBake` (cd_food.js 136-143): baked base + frosting + 2 flavour by hand, raw base in the oven (cake pan).
+- (b) `fruitsdelight:mangosteen_cake` (`i.mangosteen_cake` 12461) is a sneak-placed bowl food, now a `CAKES` row (54);
+  no rename in any lang file (grep 2026-10-31).
+- (c) Cake slices with no cake in the pack: CCK `aloe_cake_slice`, `passionfruit_cake_slice`, `yucca_cake_slice`,
+  `pumpkin_cake_slice`, `sweet_berry_cake_slice` (item_dict 5224-5246; CCK registers no block for them **(dump)**). Not in
+  `global.removedItems` ([removed_items.js](../../kubejs/startup_scripts/_lib/removed_items.js); only CCK's
+  `pumpkin_pie_slice` is, line 151). Pie slices are row #14.
+- (d) Slices with a Display Delight plate: FD apple / chocolate pie, cake, sweet berry pie slices, Delightful pumpkin and
+  salmonberry pie slices (food_families.md `pie/slice`, `cake/slice`). Every other slice has none.
+- (a) Nothing exists. Dragon Loot 1.1.15 is in `mods/` (`i.dragon_scale` 6406); `f.dragon_breath`
+  (`create_central_kitchen:dragon_breath`, fluid_dict 69). Own effects are registered like
+  `kubejs/startup_scripts/magic/magic_resistance.js`.
 
 ### Build
-1. (c) Add the 7 dead CCK slices, CCK `pumpkin_pie_slice`, the 2 CCK incompletes and the 6 Delightful slices to
-   `global.removedItems` ([removed_items.js](../../kubejs/startup_scripts/_lib/removed_items.js)): that hides them in JEI
-   (`client_scripts/jeichanges.js`), strips their tags (`recipe_scan.js` 51-55), and labels stray stacks. Optionally also set
-   the six Delightful slice switches to false in `config/delightful-common.toml` (whether that unregisters the item is
-   **(unverified)**; if it does, old stacks vanish, which is fine for items no one can have). Tell `cans/canning`: the
-   can_parity rows for these slices stay `/`.
-2. (b) Rename in `kubejs/client_scripts/namechanges.js`: `e.add('block.fruitsdelight.mangosteen_cake', 'Mangosteen
-   Platter')` (the item uses the block key). Decide the name (below). If it is no longer a cake, take it out of #1's
-   cake base list and give it back its pot recipe shape.
-3. (e) Chocolate cake merge, keeping `createaddition:chocolate_cake` (the CA texture comes with the id):
-   - `R.replaceOutput({ output: i.neapolitan_chocolate_cake }, i.neapolitan_chocolate_cake, i.chocolate_cake, e)`, then
-     check the oven recipe `baking/neapolitan_chocolate_cake` (baking.js 99) now outputs CA's; rename its id
-     `chocolate_cake`.
-   - `R.replaceInput({ input: i.neapolitan_chocolate_cake }, ...)` for anything that eats Neapolitan's (golden or canned
-     recipes: grep `neapolitan_chocolate_cake` in `generation_scripts/food/` and canning.js).
-   - Add `i.neapolitan_chocolate_cake` and `i.abnormals_delight_chocolate_cake_slice` to `global.removedItems`.
-     Abnormals' knife recipe `abnormals_delight:neapolitan/cutting/chocolate_cake` goes with it (remove it explicitly).
-   - Keep CA's spout recipe; it already exists. The surviving slice is CCK's (3 / 0.3), better than Abnormals' (1 / 0.1).
-   - Same row in `food/drinks #3`; build once and tick both.
-4. (d) Placeable slices via the Brewin' port's coaster (the cheap route, no Java): for each slice without a model, a model
-   `kubejs/assets/creativeengineering/models/block/coaster/<slice>.json` with `"parent":
-   "displaydelight:block/plated_apple_pie_slice"` and its `top_texture` / `inner_texture` / `side_texture` pointed at the
-   whole pie's or cake's own block textures, plus a coaster file `.../brewinandchewin/coaster/<ns>__<slice>.json`
-   `{ "item": "<id>", "models": "creativeengineering:block/coaster/<slice>" }` (format as the existing
-   `farmersdelight__apple_pie_slice.json`). Then rerun `tools/placeable_catalog.py` so they join
-   `#creativeengineering:placeable_on_coaster`. The Display Delight small plate is the nicer route but DD links only its
-   own registered blocks (`DisplayEvents.onWorldLoad`, placeable_food.md 2): new plated blocks need patcherMod blocks
-   plus a mixin into that method. Leave it for later.
-5. (a) Dragon egg cake: a KubeJS item first (`StartupEvents.registry('item')`, `creativeengineering:dragon_egg_cake`,
-   `.food(f => f.hunger(14).saturation(1.2).alwaysEdible().effect(...))`, texture in
-   `kubejs/assets/creativeengineering/textures/item/`), dict key `i.dragon_egg_cake`. Recipe: oven
-   `R.ceBaking([i.cake_base, i.dragon_breath, i.dragon_scale, n(i.milk, 2)], i.dragon_egg_cake, e, 'dragon_egg_cake', CAKE)`
-   and an SA with a 250 mB `f.dragon_breath` fill (the pack already mixes that fluid, chocolate.js 14). A placeable cake
-   block needs patcherMod (a `CakeBlock` subclass; KubeJS 6 has no cake block type). Flight: a patcherMod `MobEffect`
-   that sets `abilities.mayfly` while active and clears it (unless creative/spectator) on expiry, synced with
-   `onUpdateAbilities()`; registered like magic resistance.
-
-### Ids and data
-Slices: item_dict 4274, 5134-5157, 11264-11357, 12108-12132. `i.chocolate_cake` 5052 (CA), `i.neapolitan_chocolate_cake`
-12948, `i.chocolate_cake_slice` 5136, `i.abnormals_delight_chocolate_cake_slice` 12111, `i.mangosteen_cake` 12287,
-`i.dragon_egg` 2239, `i.dragon_breath` 2238 (item), `f.dragon_breath` (`create_central_kitchen:dragon_breath`),
-`i.dragon_scale` 6321 (`dragonloot:dragon_scale`). New: `i.dragon_egg_cake`; effect key (if flight) `ef.flight =
-'creativeengineering:flight'` in effect_dict.js.
+1. (c) Add the five CCK cake slices to `global.removedItems` (restart): hidden in JEI, tags stripped. The `cake/slice`
+   family table then drops them on the next `/cegen`.
+2. (b) Rename in `kubejs/assets/creative_delight/kubejs/fruitsdelight/client.js` (new, the CD client pattern of
+   `veggiesdelight/client.js`): `e.renameItem(i.mangosteen_cake, '<name>')`. If it stops being a cake, move it from
+   `CAKES` to its own oven line (bowl as the plating container) and out of `cake/whole`.
+3. (d) Placement: the cheap route is a coaster model per slice (format of
+   `kubejs/assets/creativeengineering/brewinandchewin/coaster/farmersdelight__apple_pie_slice.json`, parent a Display
+   Delight `plated_*` model with the pie's block textures), then rerun `tools/placeable_catalog.py`. The family rule asks
+   for the Small Food Plate, which needs new placed blocks (CD or patcherMod, placeable_food.md 2): decide with
+   `food/placeable`.
+4. (a) Dragon egg cake: a CD startup item `creativeengineering:dragon_egg_cake` (`i.dragon_egg_cake`), a `CAKES`-style
+   oven line `R.ceBaking([i.cake_base, i.frosting, i.dragon_breath, i.dragon_scale], ...)` with `F.ware.cake`, and a
+   hand line on the baked base. A placeable cake block needs Java (a `CakeBlock` subclass in CD); flight needs a
+   patcherMod `MobEffect` (sets `abilities.mayfly` while active, clears it on expiry unless creative or spectator).
 
 ### Decisions
-- **Dragon egg cake effects** (TODO decision) and **does it eat the egg?** Recommendation: don't consume the dragon egg
-  (one per world); build it from dragon's breath + dragon scale + cake base, keep the name for the look. Effects:
-  regeneration II 30 s, resistance 120 s, slow falling 300 s; flight (if wanted) 60 s, as a patcherMod effect.
-- **Mangosteen name.** Recommendation "Mangosteen Platter" (the sprite is fruit on a plate); "Mangosteen Pudding" if it
-  should stay a dessert.
-- **Chocolate cake id.** Recommendation CA's (texture, better slice, existing spout recipe); the row already says CA's
-  texture.
-- **Slice placement route.** Recommendation coaster now, DD small plate later.
+- **Dragon egg cake effects** (TODO decision). Recommendation: no dragon egg in the recipe (one per world); regeneration
+  II 30 s, resistance 120 s, slow falling 300 s; flight 60 s only if a patcherMod effect is wanted.
+- **Mangosteen name.** Recommendation "Mangosteen Platter" (the sprite is fruit on a plate), out of the cake family.
+- **Slice placement route.** Recommendation coaster now, Small Food Plate later with `food/placeable`.
 
 ### Gotchas
-- Removing Neapolitan's chocolate cake also removes it from CCK's compacting recipes (cooking side) and the oven
-  table; the shared flavour list (row 1 step 3) must drop it or point at CA's.
-- `global.removedItems` is read at startup (restart), and `recipe_scan.js` only logs recipes using removed items: remove
-  those recipes explicitly.
-- `food/types-and-tuning #5`: placed non-vanilla cakes don't count for Spice of Life; a merged CA cake inherits that.
+- `global.removedItems` is read at startup; recipes using a removed item are logged, not removed.
+- Placed non-vanilla cakes don't count for Spice of Life (`food/types-and-tuning #5`).
 
-### Tests (RC- / PL-)
-- RC-27 Dead slices: the 16 slices and 2 incompletes don't show in JEI; `latest.log` has no recipe error naming them.
-- RC-28 Chocolate cake: one chocolate cake in JEI (CA's sprite) with the spout, oven, crafting and compacting recipes;
-  a knife gives 7 CCK slices.
-- PL-10 Slices on coasters: each slice in (d) sits on a coaster with its pie's look.
-- RC-29 Dragon egg cake: bakes in the oven with a cake pan, eats with the chosen effects, never takes the dragon egg.
+### Tests (proposed)
+- FF-18 Dead cake slices: the five CCK cake slices are absent from JEI.
+- FF-19 Mangosteen: JEI and the tooltip show the new name; its recipe follows the decision.
+- FF-20 Dragon egg cake: bakes in the cake pan, eats with the chosen effects, never takes the dragon egg.
+- PL-15 Slices placed: each slice in (d) sits on a coaster with its pie's or cake's look.
 
 ---
 
 ## baked-goods #6: Cake paste and tarts
-Status In Progress / Work KubeJS / TODO `baking/baked-goods #6` (cooking plan baked)
+Status In Progress / Work KubeJS / TODO `baking/baked-goods #6` (cooking plan baked, [food_families.md](../food_families.md) 3.1)
 
 ### Goal
-Cake paste can be made in the FD cooking pot; waffles get more recipes and uses; more tart variants exist.
+Cake paste can be made in the Cooking Pot; waffles get more recipes and uses; every tart becomes a pie (renamed and
+retextured, owner 2026-10-21), with more variants.
 
 ### Now
-- `create_factory:cake_paste` **(jar)**: only heated mixing (sugar, `create:dough`, `minecraft:egg`, 250 mB milk).
-  `create_factory:uncooked_waffle`: Create press on cake paste. `waffle`: smoking. Flavoured waffles: spout 250 mB of
-  chocolate / honey / caramel / black / ruby / white chocolate onto a waffle. Waffle 4 / 0.4; flavoured 6-11 hunger
-  (food_catalog.md 381-544).
-- Tarts: `fruitsdelight:lemon_tart`, `fig_tart` (FD pot: fruit, crust, egg, sugar, milk bottle -> 2) and their oven
-  copies (baking.js 56-59).
-- can_parity.md (the note after the pie table, line ~486) holds an older user note pulling the other way: "move all
-  tarts to pies, rename and retexture, recipe parity w/ other pies".
+- `create_factory:cake_paste` (`i.cake_paste` 5348): only Create Factory's heated mixing (sugar, `create:dough`, egg,
+  250 mB milk) **(jar)**; nothing in the pack touches it (grep 2026-10-31). `uncooked_waffle` presses from paste
+  (`create_factory:uncooked_waffle`, dump), `waffle` smokes, flavoured waffles spout 250 mB onto a waffle.
+- Tarts: `F.tartBake` ([baking.js](../../kubejs/data/creative_delight/kubejs/creativeengineering/baking.js) 149-150,
+  cd_food.js 170-173): fruit + crust + egg + sugar + milk bottle -> 2 on the baking sheet; the Fruits Delight pot
+  recipes stay. No rename yet (no lang entry). The filling cans are already Canned Fig / Lemon Pie Filling.
+- food_families.md `pie/small` R4 "Planned: every tart becomes a pie".
 
 ### Build
-1. Pot cake paste: `R.fdCooking([i.any_sugar, i.any_dough, i.eggs, i.t_milk_bottle], i.cake_paste, e,
-   'cake_paste_manual_only', 0.1, 200)` (the `_manual_only` suffix keeps Slice & Dice from making a heated-mixing twin of
-   create_factory's). Also swap create_factory's mixing to tags: `R.replaceInput({ id: 'create_factory:cake_paste' },
-   i.minecraft_egg, i.eggs, e)`, `i.sugar -> i.any_sugar` (already done pack-wide by cooking.js 58), `create:dough ->
-   i.any_dough`.
-2. Waffles: oven `R.ceBaking([i.uncooked_waffle], Item.of(i.waffle, 1), e, 'waffle', SHEET)` (baking sheet), and a
-   one-step oven route from paste, `R.ceBaking([i.cake_paste], i.waffle, e, 'waffle_from_paste', SHEET)`. A hand route
-   without a press: `R.shapeless(i.uncooked_waffle, [i.cake_paste, i.baking_sheet], e, 'uncooked_waffle')` with the sheet
-   kept through KubeJS's keep action (`recipe.keepIngredient(i.baking_sheet)`; `NCH.shapeless` returns the recipe, and
-   `KeepAction` is in the KubeJS 1902.6.2 jar). Flavoured waffles by hand: waffle + honey bottle / chocolate bar /
-   caramel bar, shapeless (the honey bottle's remainder is the glass bottle).
-3. More cake paste uses: cake paste as a cake base substitute (`[i.cake_base, i.cake_paste]` alternatives in #1's cake
-   recipes) and in muffins (#2).
-4. Tarts: new KubeJS food items (`creativeengineering:<fruit>_tart`) for 3-4 fruits with tags in the pack
-   (`#forge:fruits/blueberry`, `peach`, `orange`, `strawberry`), each with a pot recipe mirroring the lemon tart, an oven
-   recipe on the baking sheet, and a sprite. Food values/effects copied from the fruit's jello effects at tart length
-   (lemon tart: 5 / 0.4, haste + refreshing 20 s).
-
-### Ids and data
-`i.cake_paste` 5258, `i.uncooked_waffle` 5274, `i.waffle` 5275, flavoured waffles 5261-5278; tarts `i.lemon_tart` 12277,
-`i.fig_tart` 12253. Fruit tags verified in Fruits Delight: persimmon, fig, mango, cranberry, hawberry, mangosteen,
-pear, orange, peach, lychee, kiwi, lemon, pineapple, bayberry, blueberry **(jar)**.
+1. Pot cake paste: `R.fdCooking([i.any_sweetener, i.any_dough, i.eggs, i.t_milk_bottle], i.cake_paste, e,
+   'cake_paste_manual_only', 0.1, 200)` (the suffix keeps Slice & Dice from adding a mixer twin of Create Factory's);
+   swap the mixer's egg and dough to `i.eggs` / `i.any_dough` with `R.replaceInput({ id: 'create_factory:cake_paste' },
+   ...)`. File: a new `kubejs/data/creative_delight/kubejs/create_factory/recipes.js` (`// requires: create_factory`).
+2. Waffles: oven `R.ceBaking([i.uncooked_waffle], Item.of(i.waffle, 1), e, 'waffle', F.ware.sheet)` and
+   `R.ceBaking([i.cake_paste], ...)` from paste in one bake; keep the smoker (dessert/waffle rule: "Oven for the plain
+   bake; toppings by Spout"). Same work as #36's waffle line: build once.
+3. Tarts -> pies: rename in a CD client file (`fruitsdelight/client.js`): Lemon Tart -> Lemon Pie, Fig Tart -> Fig Pie;
+   retexture in kubejs assets (a pie sprite recoloured from FD's apple pie); move both from `tartBake` to `PIES`-style
+   rows only if they become whole placed pies (they are single items: see Decisions).
+4. More variants: new pie items for blueberry, peach, orange (`#forge:fruits/*` exist in Fruits Delight **(jar)**) on
+   the same route as the renamed tarts.
 
 ### Decisions
-- **Tarts: more variants, or fold tarts into pies** (can_parity note)? Recommendation: more variants as tarts (cheap,
-  baking sheet), since tarts plate 2 per bake and pies are placed blocks; drop the can_parity note when decided.
-- Which tart fruits. Recommendation: blueberry, peach, orange (no tart or pie uses them yet).
+- **Tart -> pie shape.** The tarts are hand-held, 2 per bake. Recommendation: keep them as small pies (`pie/small`,
+  baking sheet, 2 per bake) with the new names, the same treatment as #12's durian and pineapple pies.
+- Which new fruits. Recommendation: blueberry, peach, orange.
 
-### Gotchas
-- Every new item needs a texture and a restart, and a food type: rerun `tools/food_catalog.py` after a `/dumpfood` so it
-  lands in `generation_scripts/food/food_types.json`.
-- The oven has 6 ingredient slots; a waffle recipe with paste + flavour is fine.
-
-### Tests (RC- / OV-)
-- RC-30 Cake paste pot: sugar, dough, egg, milk bottle in the cooking pot -> cake paste; no extra mixer recipe in JEI.
-- OV-21 Oven waffle: uncooked waffle + baking sheet -> waffle.
-- RC-31 Tarts: each new tart cooks in the pot and bakes in the oven, 2 per batch.
+### Tests (proposed)
+- RC-178 Cake paste pot: sweetener, dough, egg and milk bottle in the Cooking Pot give cake paste; JEI shows no new mixer
+  copy.
+- OV-39 Oven waffle: uncooked waffle (or cake paste) + baking sheet -> waffle.
+- FF-21 Tarts as pies: Lemon and Fig show their pie names and sprites; each new fruit pie bakes 2 per batch.
 
 ---
 
-## baked-goods #2: Muffins as a decent food source
-Status In Progress / Work KubeJS / TODO `baking/baked-goods #2` (cooking plan baked/muffins)
-
-**Update 2026-10-29 (owner):** muffins are not made in the Cooking Pot. `F.muffinBake` (CD `cd_food.js`) bakes 4 in the
-oven and removes the mods' pot recipes (Fruits Delight blueberry and cranberry; Slice & Dice's mixer copies go with them);
-the pot route below (Build 1, RC-32's pot half) is dropped. Veggies Delight's sweet potato cupcake is named Sweet Potato
-Muffin (CD client `veggiesdelight/client.js`, id unchanged; row `#32`'s rename). Veggies Delight's hand craft (sweet
-potato dough + egg + milk -> 3) stays. Tests OV-36, OV-37 ([oven.md](../oven.md)).
-- **TODO (texture):** retexture the Sweet Potato Muffin (`veggiesdelight:sweet_potato_cupcake`, item model
-  `development/backportedVeggies/src/main/resources/assets/veggiesdelight/models/item/sweet_potato_cupcake.json`) to
-  match the Fruits Delight muffins (same paper case and dome shape as `blueberry_muffin` / `cranberry_muffin`, an
-  orange sweet potato top). Today it is still Veggies Delight's frosted cupcake sprite.
+## baked-goods #7: Sourdough chain
+Status In Progress / Work KubeJS / patcherMod / TODO `baking/baked-goods #7` (cooking plan baked/sourdough, [food_families.md](../food_families.md) 3.1)
 
 ### Goal
-Muffins worth eating: more variants including two-fruit muffins with mixed, shorter effects (orange cranberry, lemon
-poppy), "fruit, milk, egg, sugar, flour", served on paper, and a sequenced assembly. **Cornmeal too (asked
-2026-10-21 with `dishes/ingredients #14`):** every rebuilt muffin recipe takes `i.t_flour_or_cornmeal` where it takes
-flour (today the oven muffins use `i.flour`, baking.js 36 and 38, and oven.md OV-19 says they take no cornmeal; update
-OV-19 when this lands). Cookies stay flour-only.
+Starter -> growing -> fermenting -> sourdough with a timed wait between steps; the sprite grows through the chain;
+milling or the mortar turns sourdough back into starter; a starter keeps its start date and a name and passes both to any
+sourdough made from it. Sourdough counts as any dough in recipes (scratchpad 2026-10-22).
 
 ### Now
-- Two muffins, both Fruits Delight: `blueberry_muffin` (5 / 0.4, night vision + brightening 20 s), `cranberry_muffin`
-  (5 / 0.4, shrinking 80 s) (food_catalog.md 375, 411).
-- Pot: cooking.js 364-369, `#forge:dough`, 2 per batch, **no paper** (FD pot container = none). Oven: baking.js 36-39,
-  flour, muffin tin, plated on paper, 2 per bake. `cooking/oven #5` wants 4 per oven bake; `cooking/oven #3` says muffins may
-  not cook in the pot.
-- Fruits Delight effects (mob_effect textures in the jar): `brightening`, `shrinking`, `refreshing`, `recovering`,
-  `digesting`, `sliding`, `astringent`, `leaf_piercing`, ... **(jar)**. effect_dict.js has vanilla effects only.
-- No poppy seed item in the pack; `i.poppy` is the flower (item_dict 2583).
+- [pneumaticcraft/recipes.js](../../kubejs/data/creative_delight/kubejs/pneumaticcraft/recipes.js) 25-46: PNC's
+  `sourdough` replaced by a shapeless yeast bucket + 8 dough -> **1** (line 26; PNC's own gave 8 from 8 flour, so likely a
+  bug); smoking -> sourdough bread (29); oven `sourdough_bread_1/3/6` (30-35, baking sheet, row #31); knife on sourdough
+  bread -> 3 bread (38); heated mixing 500 mB yeast + 8 dough -> 8 (42); IE bottler 50 mB + dough -> 1 (46).
+- Sourdough is **not** in `#forge:dough` (dump: Create, sweet potato, oat only). Owner rule 2026-10-28 (row #31): only
+  doughs with no bread of their own bake into plain bread; putting sourdough in `#forge:dough` would make
+  `bread_from_dough_1/3/6` turn it into plain bread.
+- Tools: KubeJS `modifyResult` on crafting recipes (returns empty to block a craft); patcherMod's
+  `CalendarDate.worldDay(Level)` (time.md 3.7) through `Java.loadClass`; the Brewin' keg (`R.bncFermenting`).
 
-### Build
-1. Pot muffins plated on paper: add `i.paper` as the `container` arg of the two `fdCooking` calls (cooking.js 366-369),
-   matching the oven.
-2. New muffins as KubeJS items (new `startup_scripts/cooking/muffins.js`), each `.food(f => f.hunger(n).saturation(m)
-   .effect(id, ticks, amp, 1))`:
-   - `creativeengineering:orange_cranberry_muffin`: orange + cranberry; regeneration 10 s + shrinking 40 s (half each).
-   - `creativeengineering:lemon_poppy_muffin`: lemon + poppy (flower); haste 10 s + refreshing 10 s.
-   - single-fruit ones if wanted: banana (`#forge:fruits/banana`), strawberry, peach.
-   Dict keys `i.orange_cranberry_muffin` etc. near the Fruits Delight muffins (item_dict 12237); effect keys
-   `ef.fd_refreshing = 'fruitsdelight:refreshing'` style in effect_dict.js (add a "Fruits Delight" block).
-3. Recipes per muffin, one table: pot `[fruitA, fruitB, i.flour, i.t_milk_bottle, i.eggs, i.any_sugar]` with paper,
-   oven (baking.js MUFFIN opts), and an SA: input `i.paper` -> deploy flour, deploy egg, deploy sugar, deploy fruit,
-   fill 250 mB milk, loops 1 -> 2 muffins.
-4. "Decent food source": set hunger / saturation for all muffins together, from `food/types-and-tuning #1` (food.md 3.5).
-   Until that exists, extend `startup_scripts/cooking/food_values.js` with explicit values (it only copies whole
-   FoodProperties today) or set them in the new items' builders. Proposed: 6 / 0.6 for every muffin.
-
-### Ids and data
-`i.blueberry_muffin` 12237, `i.cranberry_muffin` 12244, `i.paper` 1359, `i.t_fruits_*` 1898-1906 (add
-`i.t_fruits_orange = '#forge:fruits/orange'`, `i.t_fruits_lemon` exists), `i.poppy` 2583.
+### Build (recommended route: KubeJS, lazy timestamps)
+1. Items (CD startup, `kubejs_startup/pneumaticcraft/sourdough.js`): `creativeengineering:sourdough_starter`,
+   `growing_sourdough_starter`, `fermenting_sourdough` (three sprites, stack size 1 so each carries NBT).
+2. Recipes (server, pneumaticcraft/recipes.js): start = 2 flour + water bottle + yeast with `.modifyResult` writing
+   `{ Started: worldDay }` (`i.water_bottle` item_dict 1305); feed = starter + flour + water -> growing starter, blocked
+   until a day passed, copying `Started` and the custom name; ferment = growing starter + 8 dough -> fermenting sourdough
+   (`keepIngredient` keeps the starter); bake-ready = fermenting sourdough -> 8 sourdough with lore "From <name>'s
+   starter, day N". Client tooltip from the NBT.
+3. Back to starter: `R.createMilling(i.sourdough_starter, i.sourdough, e, 'sourdough_starter_milling')`, and
+   `R.mortar` / `foodGrinding` (NCH, `cooking/kitchen #10`, built).
+4. "Sourdough as any dough": add sourdough to the dough slots by recipe (`R.replaceInput` of `i.any_dough` with
+   `[i.any_dough, i.sourdough]` outside the bread bakes), not to the tag. See #17.
+5. Fix line 26 to 8 sourdough, or remove it once the chain replaces it.
 
 ### Decisions
-- **Variants** (TODO decision). Recommendation: the two combos plus banana and strawberry singles (the pack's
-  Neapolitan fruits).
-- Poppy: the flower (no new item) vs. a `poppy_seeds` item from cutting a poppy. Recommendation: the flower.
+- **How the timed wait works** (TODO decision): (A, recommended) NBT timestamp + `modifyResult`, no Java, SUN clock;
+  (B) Brewin' keg per stage (a real timer, but no name or date carries); (C) a CD item class that ticks in inventory.
+- Yeast form: a yeast culture bottle (filled from the fluid) per starter. Recommendation yes (see #8).
+- Wait: 1 world day per step.
 
 ### Gotchas
-- Fixing `cooking/oven #3` first: if pot muffins don't cook, new pot muffins won't either. Run OV-13.
-- Paper as the FD pot container makes the pot wait for paper in its bowl slot; automation must feed paper.
-- KubeJS food builder effects take ticks (20 per second).
+- `modifyResult` runs on the server; the client result slot can flicker. Test on a dedicated server.
+- `getPlayer()` is null for autocrafters: treat null as "block" so the chain stays hand-made.
 
-### Tests (RC- / OV-)
-- RC-32 Muffins on paper: the pot asks for paper; each new muffin cooks in the pot, bakes in the oven and assembles.
-- RC-33 Muffin effects: orange cranberry gives both effects at the shorter length.
+### Tests (proposed)
+- RC-179 Starter: crafting stamps the day; feeding the same day gives nothing; a day later it works and keeps the name.
+- RC-180 Sourdough from a starter: 8 sourdough named after the starter; the starter stays in the grid.
+- RC-181 Sourdough hand craft: yeast bucket + 8 dough gives 8 (or the recipe is gone).
+
+---
+
+## baked-goods #8: Yeast
+Status In Progress / Work KubeJS / TODO `baking/baked-goods #8` (cooking plan baked/yeast, [food_families.md](../food_families.md) 3.1)
+
+### Goal
+Yeast culture from mushroom colonies or blocks by crafting and heated mixing; fix the in-world yeast process; yeast feeds
+the sourdough chain (#7).
+
+### Now (unchanged 2026-10-31: no yeast recipe in the pack's scripts)
+- PNC's fluid `pneumaticcraft:yeast_culture` (`f.yeast_culture`, tag `#forge:fluid/yeast_culture` in
+  `server_scripts/tags/fluidtags.js` 43), `i.yeast_culture_bucket` (item_dict 207). Sources **(jar)**: thermo plant,
+  `#forge:mushrooms` + 1000 mB water -> 250 mB; in world: sugar item entities in a culture source block spread it into
+  an adjacent water source when the fluid ticks (exact `Items.SUGAR`). `in_world_yeast_crafting = true`
+  (`config/pneumaticcraft-common.toml` 255).
+- What "fix the in-world process" means is not written down. Candidates: ItemPhysic sinks sugar (item_physics.md 2) so
+  it rests below the culture block; glycerol and other sweeteners are refused; the tick runs only when the water is placed.
+
+### Build
+1. In game first: culture bucket in a 1-deep pool, drop sugar in, place water next to it; note what fails.
+2. Recipes (`kubejs/data/creative_delight/kubejs/pneumaticcraft/recipes.js`): `R.shapeless(i.yeast_culture_bucket,
+   [i.water_bucket, [i.brown_mushroom_colony, i.red_mushroom_colony], i.any_sweetener], e, 'yeast_culture_bucket')` with
+   `.consumeIngredient(i.water_bucket)` (no spare empty bucket); `R.createMixing(Fluid.of(f.yeast_culture, 500),
+   [Fluid.of(f.water, 500), [colonies, mushroom blocks], i.any_sweetener], e, 'yeast_culture_mixing', 'heated')`.
+3. If sugar sinking is the problem, float sugar in `server_scripts/tags/item_physics_tags.js`; if it is the tick timing,
+   document it as PNC's design in recipes_cooking.md.
+
+### Ids and data
+`i.brown_mushroom_colony` 671, `i.red_mushroom_colony` 670 (Fungi Delight's inky cap and morel colonies 14549, 14559 could
+join), `i.water_bucket` 201.
+
+### Decisions
+- Yield. Recommendation 1 colony -> 1 bucket by hand, 500 mB per batch in the mixer.
+
+### Tests (proposed)
+- RC-182 Yeast crafting: colony + water bucket + sugar gives one yeast culture bucket and no spare empty bucket.
+- RC-183 In-world yeast: sugar in a culture pool and water placed next to it turns the water to culture.
 
 ---
 
 ## baked-goods #9: Sliced bread / toast in recipes
 Status In Progress / Work KubeJS / TODO `baking/baked-goods #9` (cooking plan baked/sliced bread, scratchpad 2026-10-21)
 
-**Update 2026-10-29 (`#28`, owner): any bread in any bread recipe, no burger or square restrictions.** CD
-`creativeengineering/bread_recipes.js` swaps every loaded recipe slot that holds vanilla bread or the bread slice
-(`minecraft:bread`, `#forge:bread/wheat`, `#forge:bread_slices`) for `#forge:bread` (loaves, flavored breads, slice,
-toast). Skipped so nothing copies: recipes that make a bread or slice (slicing, toasting, garlic bread, dough bakes),
-bread blocks, and cans. A toast-only slot stays toast. The pack's ham and cheese sandwich (cooking.js, hand and
-sequenced assembly) takes any bread. This supersedes the per-sandwich bread type audit below (square slices vs
-rolls vs buns): no recipe asks for one bread form. Tests RC-170, RC-171 ([recipes_cooking.md](../recipes_cooking.md)).
-
-### Goal
-Every sandwich takes the bread its sprite shows: square slices -> bread slices (or toast), long rolls -> whole bread,
-round burgers -> buns, stuffing -> whole bread only; ambiguous ones take both.
-
-### Now
-- Bread slice and toast: More Delight `moredelight:bread_slice` (knife on `#forge:bread/wheat` -> 4), `toast` (smoke or
-  campfire a slice). Tag `#forge:bread_slices` = `#forge:bread_slices/wheat` = slice **and toast** **(jar)**.
-- Already done: Brewin's ham and cheese sandwich takes `[bread_slice, bread]` per side (cooking.js 180-196).
-  More Delight already overrides `farmersdelight:bacon_sandwich` to 2 `#forge:bread_slices` **(jar)**.
-- No bun item in the pack. `#forge:bread` is FD's `#forge:bread/wheat` = `minecraft:bread` **(jar)**.
-- Audit (sprites checked from the jars, 2026-10-21):
-
-  | Food (recipe id) | Sprite | Takes now | Proposed |
-  |---|---|---|---|
-  | `farmersdelight:bacon_sandwich` (More Delight's) | square slices | 2 slices | keep |
-  | `moredelight:egg_with_bacon_sandwich`, `tomato_sandwich` | square slices | 2 slices | keep |
-  | `delightful:food/nut_butter_and_jelly_sandwich` | square slices | bread (or SAR slices, absent) | 2 slices |
-  | `alexsdelight:bunfungus_sandwich` | square slices | bread | 2 slices |
-  | `alexsdelight:gongylidia_bruschetta` | toasted slices | bread | toast (2 -> 2) |
-  | `farmersdelight:chicken_sandwich`, `egg_sandwich`, `moredelight:chicken_sandwich_with_egg_and_tomato`, `porkchop_sandwich`, `steak_sandwich`, `endersdelight:crawling_sandwich`, `alexsmobs:kangaroo_burger` (both recipes) | long roll | bread | bread (keep) |
-  | `farmersdelight:hamburger`, `moredelight:simple_hamburger`, `hamburger_with_egg`, `loaded_hamburger`, `delightful:cheeseburger`, `deluxe_cheeseburger`, `alexsdelight:bison_burger` | round bun | bread | bun |
-  | `farmersdelight:mutton_wrap` | tortilla wrap | bread | tortilla (`dishes/meals #2` "mutton roll needs tortilla") |
-  | `fruitsdelight:jelly_bread`, `buzzier_bees:honey_bread`, `upgrade_aquatic:mulberry_bread`, Create `sweet_roll`, create_factory rolls | whole loaf | bread | keep; slices/toast already have More Delight's `toast_with_*` |
-  | `farmersdelight:roast_chicken_block`, `corn_delight:cornbread_stuffing` (stuffing) | - | bread | whole bread only (keep) |
-
-  CCK's sandwich SAs (`create_central_kitchen:sequenced_assembly/{bacon,chicken,egg}_sandwich`, `hamburger`,
-  `mutton_wrap`) start from `#forge:bread` **(jar)**.
-
-### Build
-1. Slices: `R.replaceInput({ id }, '#forge:bread', [slice x2]...)` doesn't work for "1 bread -> 2 slices"; re-add the
-   recipe instead: `R.remove` + `R.shapeless(out, [i.t_bread_slices, filling..., i.t_bread_slices], e, id)` with
-   `i.t_bread_slices = '#forge:bread_slices'` (new dict key). Slices include toast via the tag; for "slice only" use
-   `i.bread_slice`.
-2. Buns: new KubeJS item `creativeengineering:burger_bun` (dict `i.burger_bun`, tag `#forge:bread/bun` or
-   `#creativeengineering:burger_buns`), oven `R.ceBaking([i.any_dough, i.eggs], Item.of(i.burger_bun, 4), e,
-   'burger_bun', SHEET)`, smoking 1 dough -> 1 bun, knife on bread -> 2 buns. Burgers then take 1 bun (or bread,
-   if "ambiguous take both"). Also redo CCK's hamburger SA with a bun input.
-3. Toast for the bruschetta: shapeless with `i.toast` x2 for the bread.
-4. Mutton wrap: leave to `dishes/meals #2`.
-
-### Ids and data
-`i.bread_slice` 12364, `i.toast` 12388, `i.minecraft_bread` 2076, `i.bread` `#forge:bread/wheat`; the
-[meals brief](dishes_meals.md) proposes `i.t_bread = '#forge:bread'` (bread, cornbread, sourdough bread) for whole-bread
-inputs, use the same key here; sandwich ids from
-item_dict (moredelight block from 12364, FD block from 11492). Recipe ids in the table **(jar)**.
-
-### Decisions
-- **Buns** (row says buns; `dishes/meals #2` says burgers "bread or cornbread only"). Recommendation: a bun item, with
-  cornbread accepted as a bun stand-in, decided together with meals #2.
-- Cost: 1 bread = 4 slices; a 2-slice sandwich is half a bread, cheaper than today's 1 bread. Recommendation: accept
-  (it is the point of slicing).
-
-### Gotchas
-- `#forge:bread_slices` contains toast; a recipe that should take untoasted slices only must use the item.
-- More Delight's bacon sandwich override shares FD's id; touch it by id, not by output.
-
-### Tests (RC-)
-- RC-34 Sandwich bread: every row of the table takes the proposed bread in JEI; burgers take a bun.
+Superseded by row #28 (owner 2026-10-29, built, shipped in 1.1.05): any bread works in any bread recipe, no burger, bun or
+square-slice restrictions. [bread_recipes.js](../../kubejs/data/creative_delight/kubejs/creativeengineering/bread_recipes.js)
+swaps every vanilla-bread / bread-slice slot for `#forge:bread` (loaves, flavoured breads, slice, toast); toast-only slots
+stay toast; RC-170, RC-171 ([recipes_cooking.md](../recipes_cooking.md)). The 2026-10-21 per-sandwich audit (slices vs
+rolls vs buns) is dropped. What could remain: a burger bun item (oven, dough + egg -> 4 on the baking sheet, in
+`#forge:bread`), only if the owner wants one for looks; it would not be required by any recipe. Recommendation: close the
+row as superseded by #28.
 
 ---
 
-## baked-goods #8: Yeast
-Status In Progress / Work KubeJS / TODO `baking/baked-goods #8` (cooking plan baked/yeast)
+## baked-goods #10: Bread block
+Status In Progress / Work KubeJS / TODO `baking/baked-goods #10` (cooking plan misc, [food_families.md](../food_families.md) 3.1)
 
 ### Goal
-Yeast culture from mushroom colonies or mushroom blocks by crafting and heated mixing; fix the in-world yeast process;
-yeast feeds the sourdough chain (#7).
+The crustless bread block comes from cutting a bread block with a knife; the bread slab has the standard 3 -> 6 craft.
 
 ### Now
-- Yeast is PneumaticCraft's fluid `pneumaticcraft:yeast_culture` (`f.yeast_culture`, `f.t_yeast_culture`
-  `#forge:fluid/yeast_culture`) with `i.yeast_culture_bucket`. Sources **(jar)**: Thermopneumatic Processing Plant,
-  `#forge:mushrooms` + 1000 mB water -> 250 mB at 30-60 °C (`pneumaticcraft:thermo_plant/yeast_culture`); in-world: a
-  yeast culture source block with **`minecraft:sugar`** item entities in its block space spreads into an adjacent water
-  source when its fluid tick runs (`FluidYeastCulture$Source.tick`: exact `Items.SUGAR`, neighbour must be
-  `Blocks.WATER` source). `in_world_yeast_crafting = true` (`config/pneumaticcraft-common.toml` 255).
-- What "fix the in-world yeast process" means isn't written down. Candidates: ItemPhysic makes sugar **sink**
-  (item_physics.md 2, "heavy powders ... sugar") so it can rest below the culture block's box when the culture sits on
-  a slab or the pool is deeper; glycerol (`#forge:sugar`, cookingtags.js 7) is not accepted; the tick only runs when the
-  water is placed (PNC's own book says so).
+[architects_palette/recipes.js](../../kubejs/data/creative_delight/kubejs/architects_palette/recipes.js) 15-29: removes
+Architect's Palette's `bread_block`, `bread_slab` and `stonecutting/bread_nub`; smokes Create Compressed's dough block into
+a bread block (19); Create saw bread block -> 16 bread (22); **knife on a bread block -> 16 bread** (25); stonecutter bread
+block -> slab (27), -> crustless block (28), slab -> nub (29).
 
 ### Build
-1. In game first: pour a culture bucket in a 1-deep pool, drop sugar into it, place water next to it; repeat with the
-   culture on top of another culture block. Note what fails.
-2. KubeJS recipes (in `baked_goods.js` or a new `cooking/yeast.js`):
-   - `R.shapeless(i.yeast_culture_bucket, [i.water_bucket, [i.brown_mushroom_colony, i.red_mushroom_colony], i.any_sugar],
-     e, 'yeast_culture_bucket')`.
-   - `R.createMixing(Fluid.of(f.yeast_culture, 500), [Fluid.of(f.water, 500), [i.brown_mushroom_block,
-     i.red_mushroom_block, i.brown_mushroom_colony, i.red_mushroom_colony], i.any_sugar], e, 'yeast_culture_mixing', 'heated')`.
-3. If step 1 shows the sugar-sinking problem, add sugar to `#creativeengineering:physics/floats` in
-   `server_scripts/tags/item_physics_tags.js` (and out of the sinks rule) or accept and document; if the tick timing is
-   the problem, it is PNC's design (document it in recipes_cooking.md).
-
-### Ids and data
-`i.brown_mushroom_colony` / `i.red_mushroom_colony` (item_dict 612-613, duplicated at 633-634 and 740-741),
-`i.brown_mushroom_block` 2090, `i.red_mushroom_block` 2632, `i.mushrooms` `#forge:mushrooms`, `i.water_bucket` 152.
-
-### Decisions
-- Yield: Recommendation 1 colony -> 1 bucket by hand, 500 mB per block in the mixer.
+1. Line 25: knife -> `i.crustless_bread_block` (FD's board takes the first matching recipe, so the two knife recipes can't
+   coexist); bread stays on the saw (22).
+2. Drop the stonecutter crustless recipe (28): the knife is the "cut". Keep slab and nub on the stonecutter.
+3. `R.shaped(Item.of(i.bread_slab, 6), ['BBB'], { B: i.bread_block }, e, 'bread_slab')`.
 
 ### Gotchas
-- A water bucket in a crafting grid leaves its empty bucket behind (vanilla crafting remainder), so water bucket ->
-  yeast culture bucket would also return an empty bucket: a bucket dupe. Chain `.consumeIngredient(i.water_bucket)` on
-  the `R.shapeless` result (KubeJS `ConsumeAction`, in the 1902.6.2 jar) so the water bucket is used up without a
-  remainder.
+- Lines 22 and 25 output `Item.of(i.bread, 16)` with `i.bread` the tag `#forge:bread/wheat`: use `i.minecraft_bread`
+  for outputs while touching them.
+- The dough block smoking (19) predates the oven bread rule (#31: dough bakes in the oven); leave it unless the owner
+  wants dough blocks in the oven too.
 
-### Tests (RC-)
-- RC-35 Yeast crafting: a colony + water bucket + sugar gives one yeast culture bucket and no spare empty bucket.
-- RC-36 In-world yeast: sugar in a culture pool + water placed next to it -> the water turns to culture.
+### Tests (proposed)
+- RC-184 Bread block: a knife on a bread block on the cutting board gives a crustless bread block; 3 bread blocks make
+  6 slabs; the saw still gives 16 bread.
 
 ---
 
-## baked-goods #7: Sourdough chain
-Status In Progress / Work KubeJS / patcherMod / TODO `baking/baked-goods #7` (cooking plan baked/sourdough)
+## baked-goods #12: Durian and pineapple pie rework
+Status In Progress / Work KubeJS / TODO `baking/baked-goods #12` ([oven.md](../oven.md) 2.6, [food_families.md](../food_families.md) 3.1)
 
 ### Goal
-Starter -> growing -> fermenting -> sourdough, with a timed wait between steps; the sprite grows through the chain; milling
-or the mortar turns sourdough back into starter; a starter keeps its start date and a name, and passes both to any
-sourdough made from it.
+Fruits Delight's durian and pineapple "pies" (hand-held items, no placed block or slices) get a shape that fits: a real
+4-slice pie, or a small pie with its own name, recipe and can.
 
 ### Now
-- cooking.js 153-165: `pneumaticcraft:sourdough` removed and re-added as `R.shapeless(Item.of(i.sourdough, **1**),
-  [i.yeast_culture_bucket, Item.of(i.dough, 8)], e)`; heated mixing 500 mB yeast + 8 dough -> 8; IE bottler 50 mB per
-  dough -> 1; smoking -> `pneumaticcraft:sourdough_bread` (7 / 1.0); knife -> 2 bread. PNC's own recipe was 8 flour +
-  1000 mB yeast -> **8** **(jar)**, so the pack's hand craft gives 1 where PNC gave 8 (likely a bug; see Gotchas).
-- Farmer's Respite's `nether_wart_sourdough` is unrelated (mushrooms + wart, no yeast).
-- Tools the chain can use:
-  - KubeJS `modifyResult` on crafting recipes **(jar)**: `RecipeJS.modifyResult(callback)`, called from
-    `KubeJSCraftingRecipe.kjs$assemble` with a `ModifyRecipeCraftingGrid` (`get(i)`, `find(ingredient)`, `findAll()`,
-    `getPlayer()`) and the result stack; returning an empty stack means no output, which blocks the craft.
-    `R.shaped` / `R.shapeless` return the recipe, so `.modifyResult(...)` chains.
-  - patcherMod's calendar: `com.SaintAlfonzo.creativeengineering.time.CalendarDate.worldDay(Level)` (sunrises on the
-    pack's SUN clock, time.md 3.7) is callable from KubeJS with `Java.loadClass`.
-  - The Brewin' keg (port, alcohol.md 2.2): `brewinandchewin:fermenting` with item results, `fermenting_time` and
-    `temperature`, through `R.bncFermenting`.
+- `fruitsdelight:durian_pie`, `pineapple_pie` (item_dict 12422, 12486): item sprites only, no block textures **(jar)**;
+  5 hunger each. In `PIES` ([baking.js](../../kubejs/data/creative_delight/kubejs/creativeengineering/baking.js) 65-66):
+  crust + 2 durian flesh / pineapple slice + 2 sugar -> 1 in the pie tin (a whole pie's cost); Fruits Delight's pot
+  recipes (2 per batch) are swept.
+- Cans: `canned_durian_pie_filling`, `canned_pineapple_pie_filling` (`kubejs/generation_scripts/food/can_types.json`,
+  section `pie`, 4 servings, 5 / 0.4, the pies' effects); made in the pot from 2 fruit + 2 sugar (`pieBake` can route) and
+  baked with a crust back into 1 pie (`_from_filling`). food_families.md lists both in `pie/small`.
 
-### Build (recommended route: KubeJS, lazy timestamps)
-1. Items (startup, new `startup_scripts/cooking/sourdough.js`): `creativeengineering:sourdough_starter`,
-   `growing_sourdough_starter`, `fermenting_sourdough` (three sprites growing in size; stack size 1 so each carries its
-   own NBT). Dict keys under the sourdough lines (item_dict 1812).
-2. Recipes (server):
-   - start: `R.shapeless(i.sourdough_starter, [i.flour, i.flour, i.water_bottle, yeast], e, 'sourdough_starter')`
-     with `.modifyResult((grid, out) => { var p = grid.player; if (!p) return Item.empty; out.nbt = { Started:
-     CalendarDate.worldDay(p.level) }; return out })`. `i.water_bottle` exists (item_dict 1362, an NBT ingredient).
-     The name is the vanilla custom name (rename the starter on an anvil); copy it with `out.setHoverName(...)` in the
-     later steps. Yeast from #8 (see Decisions on its form).
-   - feed: starter + flour + water -> growing starter, blocked (`return Item.empty`) until `worldDay - Started >= 1`;
-     copy `Started` and the stack's custom name.
-   - ferment: growing starter + 8 dough -> fermenting sourdough (keeps NBT), blocked until 1 more day.
-   - bake-ready: fermenting sourdough -> `Item.of(i.sourdough, 8)` with lore "From <name>'s starter, day N". To keep a
-     starter alive, the ferment step (not this one) keeps the growing starter in the grid with
-     `recipe.keepIngredient(i.growing_sourdough_starter)` (KubeJS keep action; a crafting remainder can't carry NBT).
-   - client tooltip (`client_scripts`): "Started day N, ready in M days" from the NBT and the client's level.
-3. Back to starter: `R.createMilling(i.sourdough_starter, i.sourdough, e, 'sourdough_starter_milling')` (NBT can't carry
-   through a machine) and the mortar route when `cooking/kitchen #10` adds one.
-4. Fix the existing shapeless to 8 (Gotchas) or remove it once the chain replaces it.
-
-### Ids and data
-`i.sourdough` `pneumaticcraft:sourdough` 1812, `i.sourdough_bread` 1813, `i.yeast_culture_bucket` 158, `f.yeast_culture`.
-New: three starter items; NBT key `Started` (long, world day on the SUN clock) plus the vanilla custom name. `i.water_bottle`
-(item_dict 1362) and `i.flour` exist.
+### Build (recommended: small pies)
+1. Move both from `PIES` to their own lines: oven, baking sheet, crust + 2 fruit + 2 sugar -> 2 (`F.ware.sheet`), so a
+   crust gives two hand pies like the tarts.
+2. Can: keep the 4-serving filling can (pot 2 fruit + 2 sugar); crust + full can -> 4 small pies on the baking sheet.
+3. Names: "Durian Hand Pie", "Pineapple Hand Pie" in a CD client file (`fruitsdelight/client.js`, shared with #5 and #6).
+4. food_families.md: they stay in `pie/small`; update the R4 can note.
 
 ### Decisions
-- **How the timed wait works** (TODO decision):
-  - (A, recommended) NBT timestamp + `modifyResult` check, as above. No Java; the wait is real time on the SUN clock
-    (sleeping skips it forward); the starter can sit in a chest. JEI shows the recipe normally.
-  - (B) Brewin' keg fermenting recipes per stage (`R.bncFermenting(i.growing_sourdough_starter, [...], f.water, e, ...,
-    { time: 24000 })`): a real timer and temperature, but the keg makes a fresh stack, so no name or date carries.
-  - (C) patcherMod item class with `inventoryTick` that advances the stage by itself: sprites change on their own, but
-    needs Java and only ticks in a player's inventory.
-- **Yeast form**: a yeast culture *bottle* (new item, filled from the fluid with `R.createFilling` / IE bottler) as the
-  starter's yeast. Recommendation yes; a bucket per starter is wasteful.
-- Wait lengths: Recommendation 1 world day per step.
+- **What each becomes** (TODO decision). Recommendation: small pies, 2 per bake, as above; a 4-slice placed pie needs a
+  new block (CD Java), block textures and slice items for two fruits the pack hardly uses.
+- **Yield and can.** Recommendation 2 per crust; a full can bakes 4.
 
-### Gotchas
-- `modifyResult` runs on the server; the client predicts the unmodified result, so the result slot can flicker or show
-  a stack that the server then refuses. Test on a dedicated server.
-- `getPlayer()` can be null (Create mechanical crafter, autocrafters): treat null as "block" for the timed steps, so the
-  chain stays hand-made.
-- cooking.js 156 `Item.of(i.dough, 8)` wraps a **tag** (`#forge:dough/wheat`) in `Item.of`; whether KubeJS turns that
-  into 8 dough slots is untested (RC-07 only covers the mixer). Check the JEI page; use 8 copies of `i.dough` in the
-  input array otherwise.
-
-### Tests (RC-)
-- RC-37 Starter: crafting a starter stamps the day; feeding it the same day gives no output; a day later it does and
-  keeps the name.
-- RC-38 Sourdough from a starter: 8 sourdough named after the starter; the starter stays in the grid.
-- RC-39 Sourdough hand craft: yeast bucket + 8 dough gives 8 sourdough (or the recipe is gone, if the chain replaces it).
-
----
-
-## baked-goods #11: Mixed cookie jars
-Status BUILT 2026-10-21, see [mixed_jars.md](../mixed_jars.md) (families, slot-per-item design, tests MJ-01 to MJ-10; BG-J1 became MJ-05) / Work patcherMod / TODO `baking/baked-goods #11` (cooking plan cooked/soup, [wthit_lines.md](../wthit_lines.md) 2.3, scratchpad 2026-10-21)
-
-### Goal
-(a) Every cookie and the listed sweets/fruits fit in a Supplementaries jar; (b) one jar can hold several kinds.
-
-### Now
-- Supplementaries 2.4.20 **(jar)**: `JarBlockTile` (extends `ItemDisplayTile`, one display stack) accepts an item when
-  `jar_cookies` is on (`config/supplementaries-common.toml` 109), the fluid tank and mob container are empty, the jar
-  isn't full and the item is in `#supplementaries:cookies`; then `return isEmpty() || item == getDisplayedItem().getItem()`
-  (`canPlaceItem`, SRG `m_7013_`; same check in `canPlaceItemThroughFace`, `m_7155_`). `addItem` grows the one stack.
-  `JarBlockTileRenderer.render` draws `getDisplayedItem()` once per count, stacked. Capacity = `[functional.jar]` capacity
-  (12). The tag is read only by the jar and the creative tab.
-- `#supplementaries:cookies` already holds `minecraft:cookie`, FD honey / sweet berry cookies, `farmersrespite:green_tea_cookie`,
-  `abnormals_delight:mulberry_cookie`, `botania:mana_cookie`, `create:honeyed_apple`, `create:chocolate_glazed_berries`,
-  `create:chocolate_bar`, `supplementaries:candy` (plus absent mods) **(jar)**.
-- WTHIT line: patcherMod `compat/WthitHolderContents.java` 100-101 reads `jar.getDisplayedItem()` ("Cookie (5 / 12)").
-
-### Done 2026-10-21
-- Cookies only, in `server_scripts/tags/cookingtags.js` (end) with the dict key `i.t_jar_cookies` (item_dict, next to
-  `i.candy`): cherry, maple, bayberry, cranberry, lemon, persimmon, golden, enchanted golden cookie, uncanny cookies,
-  and `create_confectionery:gingerbread_man` (not in the list below; it is a cookie). Cans and
-  `create_confectionery:gingerbread` (a slab piece) left out. Cherry and maple have no recipe yet (#3) but tagging is harmless.
-
-### Mixing: what has to change (re-checked against the decompiled jar 2026-10-21)
-The jar's inventory is Moonlight `ItemDisplayTile.stacks`, a private `NonNullList` sized 1 by the 3-arg constructor;
-`getMaxStackSize()` (`m_6893_`) returns the jar capacity, so all 12 cookies are one stack in slot 0. Code that reads
-only slot 0: `canPlaceItem` / `canPlaceItemThroughFace` (same-item test), `addItem` (grows slot 0), `extractItem`
-(splits slot 0), `isFull` (slot 0 count), `handleInteraction`'s eat branch (off here: `drink_from_jar = false`),
-`JarBlockTileRenderer.render`, `JarItemRenderer` (reads `Items[0]` only), `JarBlock#getAnalogOutputSignal`
-(`AbstractContainerMenu.getRedstoneSignalFromContainer`, which scales by slot count), and patcherMod
-`WthitHolderContents` 100-103. `JarItem`'s tooltip already loops over up to 27 stored stacks, so it shows a mix as is.
-Nothing else in Supplementaries touches `JarBlockTile`.
-
-A simpler alternative to the `CE_Layers` list below: give the jar `capacity` slots of one item each, in insertion
-order. `@Inject` at RETURN of the `JarBlockTile` constructor calls `setItems` (`m_6520_`, public) with
-`NonNullList.withSize(capacity, EMPTY)`; Moonlight's load rebuilds the list at the current size and
-`ContainerHelper` saves the `Slot` byte, so old single-slot jars load into slot 0 (a 5-cookie stack in slot 0 then
-needs splitting on load, or the code just treats slot counts generally). That keeps the data in the vanilla `Items`
-tag, so the client sync, the jar item's `BlockEntityTag` and the tooltip work with no extra tag. The mixins are then:
-`canPlaceItem` / `canPlaceItemThroughFace` (any cookie while total < capacity), `addItem` (first empty slot),
-`extractItem` (last filled slot), `isFull` (total count), `getMaxStackSize` -> 1 (fixes the comparator; check that
-nothing else depends on it being capacity, the WTHIT line reads it as the capacity and must switch to the
-config value), and the two renderers loop over the slots. Hoppers then see 12 slots, which is fine.
-
-### Build
-1. (a) Tags, KubeJS only (`server_scripts/tags/cookingtags.js`):
-   `t.add(e, 'supplementaries:cookies', [i.lemon_cookie, i.cranberry_cookie, i.bayberry_cookie, i.persimmon_cookie,
-   i.uncanny_cookies, i.golden_cookie, i.enchanted_golden_cookie, i.cherry_cookie (if #3 revives it), i.apple,
-   i.golden_apple, i.enchanted_golden_apple, i.sweet_berries, i.golden_sweet_berries, i.enchanted_golden_sweet_berries,
-   i.glow_berries, i.golden_glow_berries, i.caramel_apple, i.chocolate_glazed_berries (already in), the
-   create_confectionery glazed berries, i.hyper_experience_bottle])`. Use a dict key for the tag
-   (`i.t_jar_cookies = '#supplementaries:cookies'`). "Candy apples" = `create_factory:caramel_apple`, `create:honeyed_apple`;
-   "Hyperexperience" = `create_enchantment_industry:hyper_experience_bottle` (item_dict 5249).
-2. (b) Mixed jars, patcherMod (client + common mixins in `creativeengineering.mixins.json`):
-   - `JarBlockTile`: `@Inject` at HEAD of `m_7013_` and `m_7155_` returning true for any `#supplementaries:cookies` item
-     when not full (drop the same-item test); `@Inject`/`@Overwrite`-style on `addItem` to append the item id to a
-     `CE_Layers` list tag (saved in `m_183515_`, loaded in `m_142466_`) and keep the display stack as the first item
-     with the total count; `extractItem` pops the top layer and returns that item.
-   - `JarBlockTileRenderer.render`: in the per-layer loop, render `CE_Layers[i]` instead of the display stack
-     (`@Redirect` of the `ItemRenderer.renderStatic` call, or `@ModifyVariable` on the stack local).
-   - `WthitHolderContents.contents`: list the kinds ("Contents: 3 Cookie, 2 Lemon Cookie (5 / 12)").
-   - The jar item (picked up jar) keeps `BlockEntityTag`, so the list travels; `JarItem`'s tooltip shows only the display
-     stack unless mixed too.
-
-### Ids and data
-Cookie ids as #3; `i.golden_cookie` 12352, `i.enchanted_golden_cookie` 12330, `i.golden_sweet_berries` / `golden_glow_berries`
-(Golden Food block, item_dict 12315-12360), `i.caramel_apple` 5259, `i.honeyed_apple` 181. Mixin targets: class
-`net.mehvahdjukaar.supplementaries.common.block.tiles.JarBlockTile`, methods `m_7013_`, `m_7155_`, `addItem`,
-`extractItem`, `m_183515_`, `m_142466_`; `net.mehvahdjukaar.supplementaries.client.renderers.tiles.JarBlockTileRenderer#render`
-**(jar, decompiled)**.
-
-### Decisions
-- **Whether** (TODO decision) to build mixed jars. Recommendation: do (a) now (tags only); (b) only if mixed jars are
-  wanted for decor, since it is three mixins on another mod's tile and renderer. A cheaper stand-in for (b): an
-  "Assorted Cookies" KubeJS item (crafted from 4 different cookies -> 4) in the cookies tag, with a mixed sprite.
-
-### Gotchas
-- Apples and berries in the "cookies" tag also become jar-able for hoppers / dispensers (Supplementaries' jar
-  dispenser behaviour), which is intended.
-- The renderer draws every layer as a flat cookie-sized item; apples will look like stacked apples. Check the look.
-- `ItemDisplayTile` syncs its inventory to the client; the `CE_Layers` tag must go through the same save so the client
-  renderer sees it (it does if written in `saveAdditional`, which `getUpdateTag` uses **(unverified)**).
-
-### Tests (WL- / PL-)
-- BG-J1 Jar cookies (built 2026-10-21): each of cherry, maple, bayberry, cranberry, lemon, persimmon, golden, enchanted
-  golden cookie, uncanny cookies and gingerbread man goes into an empty jar and stacks to 12. After a restart (new dict key),
-  `/kubejs hand` on one shows `#supplementaries:cookies`.
-- BG-J2 Jar foods (if the step-1 apples/berries are added): each goes into an empty jar and stacks to 12.
-- BG-J3 Mixed jar (if built): two cookie kinds in one jar render in order, the WTHIT line lists both, breaking and
-  replacing the jar keeps them.
+### Tests (proposed)
+- FF-22 Durian and pineapple: each bakes 2 on the baking sheet from crust + 2 fruit + 2 sugar; a full filling can + crust
+  gives 4; the pie tin recipe is gone.
 
 ---
 
 ## baked-goods #13: Cherry pie
-Status: In Progress / Work: patcherMod / KubeJS / TODO `baking/baked-goods #13` ([oven.md](../oven.md) 2.6; no earlier section here)
+Status In Progress / Work patcherMod / KubeJS / TODO `baking/baked-goods #13` ([oven.md](../oven.md) 2.6, [food_families.md](../food_families.md) 3.1; decided 2026-10-29: add item, slice, block)
 
 ### Goal
-A whole cherry pie item that places Create Central Kitchen's `create_central_kitchen:cherry_pie` block (the whole
-pie is Environmental's, not in the pack). Folded scope (scratchpad 2026-10-24): cherry jelly, jam and pie, so the
-pie filling and the jam share one cherry route (jam: `dishes/jams #4`).
+A whole cherry pie that places Create Central Kitchen's `create_central_kitchen:cherry_pie` block (the whole pie is
+Environmental's, not in the pack), on the pie family's recipe, cut into 4 slices, with a filling can. Folded scope:
+cherry jelly / jam share the cherry route (jam: `dishes/jams #4`).
+
+### Now
+- CCK has the block (blockstate, models `block/cherry_pie*`, textures `block/cherry_pie_{top,inner,side,bottom}`), the
+  slice `create_central_kitchen:cherry_pie_slice` (`i.cherry_pie_slice` 5225) and `incomplete_cherry_pie`; no whole item
+  **(jar)**. Its own recipes (`crafting/cherry_pie`, `cutting/cherry_pie_slice`, `sequenced_assembly/cherry_pie`) sit in its
+  built-in `farmersdelight` datapack, gated on Environmental.
+- The truffle pie is the same case, built 2026-10-31: [truffle_pie_item.js](../../development/creativeDelight/src/main/resources/kubejs_startup/create_central_kitchen/truffle_pie_item.js)
+  registers a `BlockItem` under CCK's id for CCK's block (`e.createCustom`), item model
+  `development/creativeDelight/src/main/resources/assets/create_central_kitchen/models/item/truffle_pie.json`, name in
+  `kubejs/assets/creative_delight/kubejs/create_central_kitchen/names.js`, `PIES` row with no can (baking.js 69).
+- `i.cherry` = `vinery:cherry` (item_dict 11209). No `canned_cherry_pie_filling`.
 
 ### Build
-- Add `['cherry_pie', i.cherry, 'canned_cherry_pie_filling']` to `PIES` in
-  [baking.js](../../kubejs/data/creative_delight/kubejs/creativeengineering/baking.js) once the item exists (pie crust, 2 cherries, 2 sugar in
-  the pie tin; the loop also makes the pot filling and the `_from_filling` bake); a 4-slice knife cut exists in CCK.
-- The item itself needs a registered block item (patcherMod or startup script): *unverified* which; decide with the row.
-- `i.cherry` is already in `item_dict` (the `cherry_cookie` flavour in `COOKIES`).
+1. Item: add `create_central_kitchen:cherry_pie` to truffle_pie_item.js (loop over both ids); dict key `i.cherry_pie`
+   next to `i.truffle_pie` (item_dict 14574); item model in CD assets; texture in kubejs assets (decided 2026-10-29), e.g.
+   `kubejs/assets/create_central_kitchen/textures/item/cherry_pie.png`; name "Cherry Pie" in names.js.
+2. Recipe: `['cherry_pie', i.cherry, 'canned_cherry_pie_filling']` in `PIES` (crust + 2 cherries + 2 sugar, pie tin; the
+   pot filling and `_from_filling` come with the row). Slices: `F.pieSlice(i.cherry_pie, i.cherry_pie_slice)` if CCK's
+   cutting recipe stays gated (it is: Environmental) **(unverified: check JEI after the item exists)**.
+3. Can: a `canned_cherry_pie_filling` row in the can generator (`cans/canning`), section `pie`, 4 servings.
+4. Restart (startup item) and `/cegen` for the can.
 
 ### Decisions
-Whether to add the item at all (row says so); recommend yes, via a startup item placing the CCK block.
+- Resolved 2026-10-29: add item, slice and block.
+
+### Gotchas
+- The block's pick-block and drops may still point at Environmental's missing item; check that middle-click and breaking
+  a full pie give the new item (the truffle pie needs the same check).
+
+### Tests (proposed)
+- FF-23 Cherry pie: bakes in the pie tin from crust + 2 cherries + 2 sugar; places CCK's block; a knife cuts 4 slices;
+  the filling can bakes back into a pie.
+
+---
+
+## baked-goods #14: Unobtainable pie slices
+Status In Progress / Work KubeJS / patcherMod / TODO `baking/baked-goods #14` ([oven.md](../oven.md) 2.6, [can_parity.md](../can_parity.md), [food_families.md](../food_families.md) 3.1)
+
+### Goal
+Every pie slice in the pack can be obtained, or is hidden.
+
+### Now (2026-10-31)
+- CCK cherry: row #13. CCK truffle: obtainable since 2026-10-31 (whole item, `ports/fungiport #3`; baking.js 69).
+- Delightful: `blueberry_pie_slice`, `crimson_berry_pie_slice`, `gloomgourd_pie_slice`, `green_apple_pie_slice`,
+  `nightshade_berry_pie_slice`, `source_berry_pie_slice` (item_dict 11347-11440). Their whole pies are BYG, The
+  Undergarden and Ars Nouveau items (absent), but Delightful **registers the placed blocks**: `delightful:<x>_pie` appear
+  in the block tag dump, and the upstream jar has their blockstates and block textures **(dump, jar)**. So each can get a
+  whole item the truffle pie way. `config/delightful-common.toml` 65-73 enables all eight slice overhauls.
+- Fruit sources in the pack: blueberry only (`i.t_fruits_blueberry`, Fruits Delight). No crimson berry, nightshade
+  berry, green apple, gloomgourd or source berry item (their crates and sacks are dead too: `i.green_apple_crate`,
+  `i.crimson_berry_sack`, `i.nightshade_berry_sack`).
+- None has a can. CCK's `pumpkin_pie_slice` is already in `global.removedItems` (line 151).
+
+### Build
+1. Blueberry: a CD startup block item for `delightful:blueberry_pie` (new `kubejs_startup/delightful/pie_items.js`, the
+   truffle_pie_item.js pattern), dict key, item model and texture, name; `['blueberry_pie', i.t_fruits_blueberry,
+   'canned_blueberry_pie_filling']` in `PIES`; a filling can row.
+2. The other five: add the slices to `global.removedItems`
+   ([removed_items.js](../../kubejs/startup_scripts/_lib/removed_items.js)); optionally set their config switches to false
+   (whether that unregisters the item is **(unverified)**). The dead crates and sacks can go with them.
+3. Restart; `/cegen` (can parity, families).
+
+### Decisions
+- **Add or hide, per slice** (TODO decision). Recommendation: add blueberry (a fruit the pack has, a block that exists);
+  hide crimson berry, nightshade berry, green apple, gloomgourd and source berry.
+
+### Tests (proposed)
+- FF-24 Pie slices: the blueberry pie bakes, places and cuts into 4 slices; the five hidden slices are absent from JEI.
 
 ---
 
 ## baked-goods #17: Dough unification
-Status: In Progress / Work: KubeJS / TODO `baking/baked-goods #17` ([veggies_delight.md](../veggies_delight.md) 5.2; no earlier section here)
+Status In Progress / Work KubeJS / TODO `baking/baked-goods #17` ([veggies_delight.md](../veggies_delight.md) 5.2, [food_families.md](../food_families.md) 3.1)
 
-Folded scope (scratchpad 2026-10-24): a dough texture for each dough, and a recoloured dough block for each dough
-(see `baking/baked-goods #27`, below). Doughs today (verified in `item_dict.js`): Create `create:dough`, Farmer's
-Delight `wheat_dough`, `#forge:dough` (`i.any_dough`), Veggies Delight `sweet_potato_dough`, Vintage Delight
-`oat_dough` and `cucumber_dough`, Create Confectionery `gingerdough`, the pack's `cookie_dough`, Pneumaticcraft
-`sourdough`, Farmer's Respite `nether_wart_sourdough`. `cookingtags.js` line 68 adds `oat_dough` to `#forge:dough`.
+### Goal
+One dough system across the mods: which doughs count as "any dough", which stay distinct, each with its own texture and
+block.
+
+### Now (2026-10-31)
+- `#forge:dough` (`i.any_dough`) = `create:dough`, `veggiesdelight:sweet_potato_dough`, `vintagedelight:oat_dough` (oat
+  added in `vintagedelight/tags.js` 12) **(dump)**; `#forge:dough/wheat` (`i.dough`) = `create:dough`. FD's `wheat_dough` is
+  not in the pack's tag dump.
+- Distinct doughs: `creativeengineering:cookie_dough` (dough + 2 sugar), Create Confectionery `gingerdough`, Vintage
+  `cucumber_dough`, PNC `sourdough`, Farmer's Respite `nether_wart_sourdough`.
+- Dough blocks and textures: built by #27 (2026-10-25; six blocks, oven.md 2.6, OV-35). Uncooked mhadjeb is removed
+  (`dishes/meals #32`).
+- Owner rule 2026-10-28 (#31): only doughs with no bread of their own bake into plain bread; the tag is exactly those.
+
+### Build
+1. Keep `#forge:dough` as the plain doughs (no change). Sourdough "as any dough" (#7): add it slot by slot with
+   `R.replaceInput(..., i.any_dough, [i.any_dough, i.sourdough])`, skipping the bread bakes and dough blocks.
+2. Item textures per dough: the open half of the folded scope; recoloured sprites in `kubejs/assets/<ns>/textures/item/`
+   for doughs that share Create's look **(unverified which do: check the sprites)**.
+3. Veggies Delight's sweet potato dough still smelts, smokes and campfires into bread (`veggiesdelight:bread_from_*`,
+   row #31 note): sweep those with `F._sweep`-style removal so it bakes in the oven like every dough.
+
+### Decisions
+- **Which doughs stay distinct** (TODO decision). Recommendation: cookie dough, gingerdough, cucumber dough (it is pasta
+  dough) and both sourdoughs stay distinct; Create, sweet potato and oat are "any dough".
+- Sweet potato dough smelting routes: recommendation remove (oven only, as the owner ruled for oat dough).
+
+### Tests (proposed)
+- RC-185 Doughs: JEI `#forge:dough` lists Create, sweet potato and oat dough; sourdough fills a dough slot where the
+  decision allows; no furnace, smoker or campfire recipe makes bread from sweet potato dough.
+
+---
+
+## baked-goods #18: Brownie and cupcake baking types
+Status In Progress / Work KubeJS / data / TODO `baking/baked-goods #18` (scratchpad 2026-10-22, [food_families.md](../food_families.md) 3.1)
+
+### Goal
+A brownie baking type: brownies made in the oven as a tray that is cut into pieces. The cupcake half is dropped: row #32
+merged cupcakes into muffins (decided 2026-10-29).
+
+### Now
+- Family `dessert/brownie` (food_families.md, rules: tray as its own block cut into brownies; "Oven: the tray (cake pan);
+  Cutting Board: tray -> brownies"): Beetroot Brownie Tray `veggiesdelight:beetroot_brownie_tray` (14306, shapeless 3
+  beetroot, 2 cocoa, 2 sugar, 2 eggs **(jar)**), Beetroot Brownie (14307, cut from the tray), Hostile Delight's Magma
+  Brownie (blaze powder, carrot, magma cream, ardent sauce) and Slime Brownie (candied slime, melon slice, 2 refined
+  gelatin), both shapeless singles **(jar)**. None has an oven route.
+
+### Build
+1. cd_food.js: `brownieBake(flavours, output)`: sweep, oven `[i.t_flour_or_cornmeal, i.eggs, SWEET, n(i.cocoa_beans, 2)]
+   .concat(flavours)` within 6 slots, `ware.cake` (or `ware.dish` once #30 lands), 1 tray; hand route `_manual_only` on the
+   same inputs if the family keeps a grid recipe.
+2. Beetroot: `F.brownieBake([i.beetroot], i.beetroot_brownie_tray)` (one beetroot slot; the 3 beetroot of the original
+   need `F.slot(i.beetroot, 3)` and 1 cocoa to fit 6 slots).
+3. Hostile's brownies: singles, baking sheet, their own odd fillings (as `handPieBake` does for its pies).
+
+### Decisions
+- **Recipes, textures** (TODO decision). Recommendation: the oven tray for beetroot; the Hostile brownies as single
+  bakes; no new textures (all three have sprites).
+
+### Tests (proposed)
+- FF-25 Brownies: the beetroot tray bakes in the oven and cuts into brownies; the two Hostile brownies bake on the
+  baking sheet; their grid recipes follow the decision.
+
+---
+
+## baked-goods #19: Quiche baking type
+Status In Progress / Work KubeJS / data / TODO `baking/baked-goods #19` (scratchpad 2026-10-22, [food_families.md](../food_families.md) 3.1)
+
+### Goal
+Quiche as a baking type: a pie variant for vegetables and eggs, with its own family rule and more variants.
+
+### Now
+- Family `quiche` exists (food_families.md 4.6, applied 2026-10-27): rule "shaped recipe on a pie crust + one sequenced
+  assembly on a pie crust (as Brewin' quiche)"; slices cut on the board, Small Food Plate planned.
+- Members: Brewin' `quiche` (shaped `quiche_manual_only` and two assemblies, `brewinandchewin/recipes.js` 20-26, 58-73);
+  Veggies Delight `zucchini_quiche` (shaped VD recipes + the assembly that fails, #37). No oven route.
+
+### Build
+1. Fix #37.
+2. Optional oven route per quiche: pie tin, crust + 2 eggs + milk + cheese + 2 filling (6 slots), through a new
+   `F.quicheBake(fillings, output)` in cd_food.js beside `pieBake`.
+3. New variants (decision): each a CD startup block item needs a placed block, so variants come from mods first.
+
+### Decisions
+- **Recipes, textures** (TODO decision). Recommendation: keep the family rule (grid + assembly), add the oven route for
+  both quiches, no new quiche items until a mod brings one.
+
+### Tests (proposed)
+- FF-26 Quiche oven: both quiches bake in the pie tin from crust, eggs, milk, cheese and filling.
+
+---
+
+## baked-goods #20: Pizza food type
+Status In Progress / Work KubeJS / data / TODO `baking/baked-goods #20` (scratchpad 2026-10-22, [food_families.md](../food_families.md) 3.1)
+
+### Goal
+Pizza as a food type with one recipe shape across the four pizzas.
+
+### Now
+- Family `pizza` exists (food_families.md): rule "one shaped recipe + one sequenced assembly (as Brewin' pizza)"; all
+  four members fail it (no assembly). Slices: cutting board; Small Food Plate planned.
+- Members: Brewin' `pizza` (Supreme Pizza, shaped on dough, `brewinandchewin/recipes.js` 33-37); Vintage `cheese_pizza`
+  (3 cheese over dough + tomato sauce + dough), `meat_pizza`; Veggies `vegan_pizza` (bell pepper, vegetable, onion over
+  dough + sauce + dough) **(jar)**. Ids item_dict 11858, 14328, 14412, 14451.
+
+### Build
+1. Per pizza: `F.assemble(i.any_dough, [i.tomato_sauce, toppings...], output)` (the pizza's own toppings as steps;
+   cheese as `i.t_cheese_wedge`), plus a transition row per pizza.
+2. Oven route (decision): `F.pizzaBake(toppings, output)` on the baking sheet: dough + sauce + up to 4 toppings.
+3. Keep the shaped recipes (family rule).
+
+### Decisions
+- **Oven or sequenced assembly** (TODO decision). Recommendation: the assembly (the family rule) now; the oven route only
+  if the owner wants pizza baked like the other baked families.
+- Textures: none needed for existing pizzas.
+
+### Tests (proposed)
+- FF-27 Pizza: each pizza assembles on a dough in a Create line; the shaped recipes stay.
+
+---
+
+## baked-goods #21: Lasagna baking type
+Status In Progress / Work KubeJS / data / TODO `baking/baked-goods #21` (scratchpad 2026-10-22, [food_families.md](../food_families.md) 3.1)
+
+### Goal
+Lasagna as a baking type, baked in the baking dish (#30).
+
+### Now
+- Family `lasagna` exists: `lasagna/whole` Veggies Delight `lasagna_pan` (14352; a feast block, `LasagnaPanBlock`;
+  Cooking Pot: 2 dough, tomato sauce, milk, a raw meat, a vegetable, bowl container, 400 ticks **(jar)**; rule "Cooking
+  Pot (Mixer mirrors it)"); `lasagna/serving` VD `lasagna_slice` (from the pan) and Brewin' `horror_lasagna` (a bowl dish:
+  pot, grid `horror_lasagna_cooked_manual_only`, assembly `horror_lasagna_sequenced_assembly`).
+
+### Build (after #30)
+1. Oven: `R.ceBaking([n(i.pasta, 2), i.tomato_sauce, i.t_cheese_wedge, i.milk, meat], Item.of(i.lasagna_pan, 1), e,
+   'lasagna_pan', F.ware.dish)` (6 slots; `i.pasta` is every raw pasta); sweep VD's pot recipe or keep it as the second
+   route (decision).
+2. The pan stays the placed block; servings are taken with a bowl as VD has it.
+
+### Decisions
+- **Dish vs pan** (TODO decision). Recommendation: the baking dish is the oven tool, the VD lasagna pan stays the placed
+  block; dough becomes raw pasta (the IE press and the board make it from dough).
+- Keep the Cooking Pot route? Recommendation: remove it (baked families are oven-made).
+
+### Tests (proposed)
+- FF-28 Lasagna: the lasagna pan bakes in the oven with a baking dish in the tool slot and serves slices with a bowl.
 
 ---
 
 ## baked-goods #22: Chorus cookie from the uncanny cookie
-Status: In Progress / Work: KubeJS / resource pack / TODO `baking/baked-goods #22` ([recipes_cooking.md](../recipes_cooking.md))
+Status In Progress / Work KubeJS / resource pack / TODO `baking/baked-goods #22` ([recipes_cooking.md](../recipes_cooking.md), [food_families.md](../food_families.md) 3.1)
 
 ### Goal
 The chorus cookie is made from an uncanny cookie.
 
 ### Now
-- `ends_delight:chorus_cookie` is End's Delight (jar installed, not integrated, no dict keys yet; `mod-additions #4`).
-  Its recipe `ends_delight:food/chorus_cookie` is shapeless `chorus_fruit_grain` + `minecraft:wheat`
-  (verified in the jar).
-- The uncanny cookie is `endersdelight:uncanny_cookies` (`i.uncanny_cookies`), baked in the oven 12 a batch from
-  cookie dough + 2 mite crust (`COOKIES` in [baking.js](../../kubejs/data/creative_delight/kubejs/creativeengineering/baking.js)).
+- End's Delight is integrated (CD member): `i.chorus_cookie` `ends_delight:chorus_cookie` (item_dict 12324),
+  `i.chorus_fruit_grain` (12327). The baking audit 2026-10-27 put it in `COOKIES`
+  ([baking.js](../../kubejs/data/creative_delight/kubejs/creativeengineering/baking.js) 81): cookie dough + 2 chorus fruit
+  grain -> 12, End's own recipe swept. Not from the uncanny cookie (food_families.md 4.6 says so).
+- Uncanny cookie `endersdelight:uncanny_cookies` (12049): cookie dough + 2 mite crust -> 12 (baking.js 76).
 
 ### Build
-After End's Delight is integrated (`/dumpall` for the keys): `R.remove({ id: 'ends_delight:food/chorus_cookie' }, e)`
-and a `R.shapeless` of uncanny cookie plus the chorus ingredient, id ending `_manual_only` if a heat route exists.
+Take `chorus_cookie` out of `COOKIES` and add `F._sweep(i.chorus_cookie)` plus one recipe on the uncanny cookie: oven,
+baking sheet, `[n(i.uncanny_cookies, 4), i.chorus_fruit_grain]` -> 4 (a dip, not a new batch), or a hand craft
+`R.shapeless(Item.of(i.chorus_cookie, 8), [8 uncanny cookies, i.chorus_fruit_grain], e, 'chorus_cookie_manual_only')`.
 
 ### Decisions
-Recipe shape not stated. Options: uncanny cookie + chorus fruit grain (keeps End's own ingredient), or uncanny
-cookie + popped chorus fruit. Recommend the first. Blocked on `largecontent/mod-additions #4`.
+- Recipe shape not stated. Recommendation: the hand craft, 8 uncanny cookies + 1 chorus fruit grain -> 8 (the dye
+  pattern; cookies stay oven-made at the base).
 
-### Tests
-RC-100 Craft a chorus cookie from an uncanny cookie; the wheat recipe is gone from JEI.
+### Tests (proposed)
+- RC-186 Chorus cookie: 8 uncanny cookies + a chorus fruit grain craft 8 chorus cookies; the cookie dough recipe is gone.
 
 ---
 
 ## baked-goods #23: Oatmeal cookies from oat dough
-Status: In Progress / Work: KubeJS / resource pack / TODO `baking/baked-goods #23` ([recipes_cooking.md](../recipes_cooking.md))
+Status In Progress / Work KubeJS / resource pack / TODO `baking/baked-goods #23` ([recipes_cooking.md](../recipes_cooking.md), [food_families.md](../food_families.md) 3.1)
 
 ### Goal
-Oatmeal cookie uses oat dough. Oatmeal raisin cookie: oat dough + 1 raw oat + 1 grape, textured from the oatmeal
+The oatmeal cookie uses oat dough. Oatmeal raisin cookie: oat dough + 1 raw oat + 1 grape, textured from the oatmeal
 cookie.
 
 ### Now
-- `['oatmeal_cookie', i.raw_oats]` is in `COOKIES` (baking.js): cookie dough (any dough + 2 sugar) + 2 raw oats ->
-  12 cookies in the baking sheet. Vintage's own recipe `vintagedelight:oatmeal_cookie` (raw oats + honey bottle) is
-  removed by the `REMOVED_OUTPUTS` sweep.
-- `i.oat_dough` = `vintagedelight:oat_dough` (raw oats + water bucket or egg), in `#forge:dough`.
-- No raisin item. Grapes: `i.red_grape`, `i.white_grape` (Vinery); a "raisin" cookie takes a grape directly.
+- `['oatmeal_cookie', i.raw_oats]` in `COOKIES` ([baking.js](../../kubejs/data/creative_delight/kubejs/creativeengineering/baking.js)
+  78): cookie dough (any dough + 2 sugar; oat dough counts, it is in `#forge:dough`) + 2 raw oats -> 12. Unchanged
+  2026-10-31.
+- `i.oat_dough` (14463), `i.raw_oats` (14484), `i.oatmeal_cookie` (14466). No raisin item; grapes `i.red_grape` 11273,
+  `i.white_grape` 11303 (Vinery). No oatmeal raisin cookie item.
 
 ### Build
-1. Take `oatmeal_cookie` out of `COOKIES`; add `R.ceBaking([i.oat_dough, n(i.raw_oats, 2)], Item.of(i.oatmeal_cookie, 12),
-   e, 'oatmeal_cookie', SHEET)` (inputs and count are a decision).
-2. New item `oatmeal_raisin_cookie` (startup script like `development/creativeDelight/src/main/resources/kubejs_startup/creativeengineering/baking_ingredients.js`, texture =
-   `vintagedelight:item/oatmeal_cookie` recoloured, food values in `food_values.js` copying the oatmeal cookie);
-   dict key, `food_types.json` entry (`baked`), can row if the other cookies have one.
-3. Which grape (red, white or either through a tag) is open.
+1. Take `oatmeal_cookie` out of `COOKIES`; `F._sweep(i.oatmeal_cookie)`; oven `R.ceBaking([i.oat_dough, F.SWEET, F.SWEET,
+   n(i.raw_oats, 2)], Item.of(i.oatmeal_cookie, 12), e, 'oatmeal_cookie', F.ware.sheet)`.
+2. New CD startup item `creativeengineering:oatmeal_raisin_cookie` (`kubejs_startup/vintagedelight/`, texture recoloured
+   from `vintagedelight:item/oatmeal_cookie`, food values copied from it), dict key, jar tag (`jar_tags.js`, every cookie
+   is jarable), food type; oven `[i.oat_dough, F.SWEET, F.SWEET, i.raw_oats, [i.red_grape, i.white_grape]]` -> 12.
 
 ### Decisions
-Inputs and batch size are not stated. Recommend keeping the `COOKIES` shape (12 cookies, 2 raw oats) and swapping
-cookie dough for oat dough (oat dough has no sugar, so decide whether the sugar still goes in). The raisin cookie
-takes 1 oat dough + 1 raw oat + 1 grape as the row says; batch size there is also open.
+- Sugar with oat dough (oat dough has none). Recommendation: keep 2 sweetener so it matches cookie dough's cost.
+- Grape: either. Recommendation: either grape (a list slot).
 
-### Tests
-RC-101 Oatmeal cookie bakes from oat dough. RC-102 Oatmeal raisin cookie bakes from oat dough, raw oat, grape.
+### Tests (proposed)
+- RC-187 Oatmeal cookie bakes from oat dough, 2 sugar and 2 raw oats. RC-188 Oatmeal raisin cookie bakes from oat dough,
+  2 sugar, a raw oat and a grape, and goes in a jar.
 
 ---
 
 ## baked-goods #24: No shapeless pie-to-crust recipes
-Status: In Progress / Work: KubeJS / TODO `baking/baked-goods #24` ([recipes_cooking.md](../recipes_cooking.md))
+Status In Progress / Work KubeJS / TODO `baking/baked-goods #24` ([recipes_cooking.md](../recipes_cooking.md))
 
 ### Goal
 Remove the shapeless recipes that turn a pie into a crust.
 
-### Now (unverified)
-No recipe with `farmersdelight:pie_crust` as output and a pie as input was found: Farmer's Delight 1.2.4 has only
-`pie_crust` (shaped, wheat + milk) and the Create mixing copy; Create 0.5.1.i and the extracted delight jars have
-none; the 2026-10-22 recipe id dump (`kubejs/exported/recipes/all.csv`) lists only the pack's own two crust recipes.
-`baking.js` already removes every crust-making recipe except the pack's (`REMOVED_OUTPUTS` includes `i.pie_crust`),
-and `canning.js` line 63 makes the opposite direction (can + crust -> pie), which stays.
+### Now (checked 2026-10-31)
+The 2026-10-30 crafting dump (`kubejs/exported/recipes/crafting_audit.json`) has exactly two recipes with a pie crust
+result: `creative_delight:shapeless/pie_crust_flour_manual_only` and `pie_crust_dough_manual_only`; `all.csv` has no other
+crust recipe of any type. baking.js 94-95 sweeps every crust-making recipe but the pack's. Nothing to remove.
 
 ### Build
-Find the recipe first: `/dumprecipes` then search for pie slice or pie inputs with a crust output (JEI: output pie
-crust). Then add the output or the id to the removal sweep in baking.js, not a new hand-written `R.remove` event.
-
-### Decisions
-If nothing exists the row is already satisfied: recommend close it after one JEI check.
+None. Close the row after one JEI look (pie crust -> R: the two grid crafts only). SQ-INV-11 and CQ-DUMP-06 in the
+scratch queue ask the same scan and can be marked answered.
 
 ### Tests
-RC-103 JEI on pie crust: only the flour, dough and Create mixing routes.
+- RC-189 (proposed) JEI on pie crust: only the flour and the dough grid crafts.
 
 ---
 
-## baked-goods #25: Sponge cake becomes sponge pie
-Status: Testing / Work: KubeJS / lang / TODO `baking/baked-goods #25` ([recipes_cooking.md](../recipes_cooking.md))
+## baked-goods #32: Merge muffin and cupcake
+Status In Progress / Work KubeJS / lang / resource pack / TODO `baking/baked-goods #32` (decided 2026-10-29: merge into muffins)
 
-### Goal
-Rename the sponge cake to sponge pie.
+### Done
+- Sweet Potato Cupcake named Sweet Potato Muffin (`kubejs/assets/creative_delight/kubejs/veggiesdelight/client.js` 6-7,
+  id `veggiesdelight:sweet_potato_cupcake` kept) and muffins out of the Cooking Pot (`F.muffinBake`, cd_food.js 160-164):
+  both shipped in 1.1.05 (changelog 1.1.05.md 95-96). OV-36, OV-37 ([oven.md](../oven.md)).
 
-### Now
-- `oceanic_delight:sponge_cake` (+ `sponge_cake_slice`), Oceanic Delight, installed, not integrated. Its recipe is
-  already pie-shaped: shaped sponge + prismarine shard + sugar + `farmersdelight:pie_crust` (verified), knife cut
-  to slices, slices back by a shaped recipe. It is a placed block (`SpongeCakeBlock`).
-- Names live in [namechanges.js](../../kubejs/client_scripts/namechanges.js) (client lang overrides); no entry yet.
+### Left
+1. Retexture: the sprite is still Veggies Delight's frosted cupcake
+   (`development/backportedVeggies/src/main/resources/assets/veggiesdelight/textures/item/sweet_potato_cupcake.png`). Put
+   a muffin sprite (paper case and dome of `fruitsdelight:item/blueberry_muffin`, an orange sweet potato top) in kubejs
+   assets at `assets/veggiesdelight/textures/item/sweet_potato_cupcake.png` (resource pack override, no jar change).
+   A player-visible change: changelog bullet.
+2. Veggie muffins (carrot, zucchini, pumpkin): built with #2.
+3. TODO #18: drop its cupcake half (the main session).
 
-### Build
-Name entries for the block item and the slice ("Sponge Pie", "Sponge Pie Slice"); put the id in the `PIES` list of
-baking.js only if its recipe should join the oven route (pie tin) - optional, decide with `mod-additions #5`.
-
-### Tests
-RC-104 JEI and the item tooltip say Sponge Pie, slice and whole.
-
----
-
-## baked-goods #26: Honey cake honey and comb split
-Status: Testing / Work: KubeJS / TODO `baking/baked-goods #26` ([recipes_cooking.md](../recipes_cooking.md))
-
-### Goal
-Split the honey cake's flavour between honey and honeycomb, 50 / 50.
-
-### Now
-`['honey_cake', i.honey_bottle]` in `CAKES` ([baking.js](../../kubejs/data/creative_delight/kubejs/creativeengineering/baking.js) line 46):
-every cake takes 2 of its flavour item (`Item.of(c[1], 2)`) in both the grid and the oven recipe. Honey cake is
-`createaddition:honey_cake` (`i.honey_cake`).
-
-### Build
-Let a `CAKES` entry's flavour be a list: `['honey_cake', [i.honey_bottle, i.honeycomb]]` meaning one of each, and
-expand it in the two `R.shapeless` / `R.ceBaking` lines (`[].concat(...)`). Honeycomb is `i.honeycomb`
-(`minecraft:honeycomb`). Check the canned honey bread and other users of honey stay unaffected.
-
-### Decisions
-"50 / 50" read as 1 honey bottle + 1 honeycomb (the cake takes 2 flavour items). Recommend that.
-
-### Gotchas
-The honey bottle returns a glass bottle in the grid; the oven slot recipe has no remainder rule: *unverified*.
-
-### Tests
-RC-105 Honey cake bakes from base, frosting, 1 honey bottle, 1 honeycomb; the 2-honey recipe is gone.
+### Tests (proposed)
+- FF-29 Sweet Potato Muffin sprite: the item shows the muffin sprite in hand, inventory and JEI.
 
 ---
 
-## baked-goods #27: Dough block for every dough
-Status: Testing / Work: KubeJS / resource pack / TODO `baking/baked-goods #27` ([recipes_cooking.md](../recipes_cooking.md))
+## baked-goods #30: Baking dish bakeware
+Status Planned / Work KubeJS / resource pack / TODO `baking/baked-goods #30` (scratchpad 2026-10-27, [oven.md](../oven.md) 2.5)
 
 ### Goal
-A recoloured dough block for each dough, and a texture for each dough item (with `baking/baked-goods #17`).
+A glass baking dish next to the baking sheet, muffin tin, pie tin and cake pan, for lasagna (#21) and other dish bakes
+(brownies #18, puddings #36).
 
 ### Now
-- One dough block exists: `create_compressed:dough_block` (`i.dough_block`, 9 dough); made by the IE bottler
-  (cooking.js line 176), smoked into a bread block (line 246), cut to 3 cake bases (brief `baked-goods #1`).
-- Other doughs (oat, sweet potato, cucumber, ginger, cookie, sourdough) have no block; several share Create's
-  texture: *unverified* which share (check `assets/*/textures/item`).
+- Bakeware items: CD [bakeware.js](../../development/creativeDelight/src/main/resources/kubejs_startup/creativeengineering/bakeware.js)
+  13-18; dict keys item_dict 38-46 (`i.t_bakeware_<kind>`, `i.t_bakeware` the tool-slot filter); tags in CD
+  [creativeengineering/tags.js](../../kubejs/data/creative_delight/kubejs/creativeengineering/tags.js) 23-29; `ware` keys in
+  cd_food.js 63-68; hammered chain in baking.js 176-179 (iron plate -> sheet -> muffin tin -> pie tin -> cake pan).
 
 ### Build
-1. Per dough: a new block (startup script, the `create_compressed` dough block texture recoloured), a 3x3 compress and un-compress recipe through `global.NCH`
-   (`R.shaped` / `R.shapeless`), and the smoke-to-bread-block recipe if each should bake.
-2. Per dough item: a recoloured item texture in `kubejs/assets/<ns>/textures/item`.
-3. Dict keys via `/dumpall`; names in namechanges.js.
+1. bakeware.js: `e.create(i.baking_dish).displayName('Baking Dish').texture('creativeengineering:item/baking_dish')`;
+   item_dict `i.baking_dish = 'creativeengineering:baking_dish'`, `i.t_bakeware_baking_dish =
+   '#creativeengineering:bakeware/baking_dish'`.
+2. tags.js: `t.add(e, i.t_bakeware_baking_dish, i.baking_dish)` and the kind tag into `i.t_bakeware`.
+3. cd_food.js `ware`: `dish: { exp: V.bake.exp, time: V.bake.time, tool: i.t_bakeware_baking_dish }`.
+4. Recipe in baking.js "Oven and bakeware": `R.shaped(i.baking_dish, ['G G', 'GGG'], { G: i.glass }, e, 'baking_dish')`
+   (`i.glass` item_dict 522); not in the iron hammering chain.
+5. Texture `kubejs/assets/creativeengineering/textures/item/baking_dish.png` (or the CD assets, as the other bakeware).
+6. oven.md 2.4 and 2.5 rows; CD rebuild (bakeware.js and cd_food.js are in the jar), restart. No `mod_sides.md` row
+   (no new jar).
 
 ### Decisions
-Whether each coloured block bakes to the same bread block (recommend yes, one bread block) and whether the blocks
-get slabs: recommend neither extra.
+- **Craft recipe** (TODO decision). Recommendation: shaped 5 glass, the bowl shape; not hammered (glass can't be).
 
-### Tests
-RC-106 Each dough crafts into its block and back; RC-107 each block smokes to a bread block; textures differ.
+### Tests (proposed)
+- OV-40 Baking dish: crafts from 5 glass, sits in the oven tool slot, is not used up by a dish bake.
+
+---
+
+## baked-goods #34: Every cake as a sequenced assembly
+Status Planned / Work KubeJS / TODO `baking/baked-goods #34` (owner 2026-10-27, [food_families.md](../food_families.md) 4.6)
+
+### Goal
+Every cake can be assembled on a baked base (frosting, flavour steps); the two existing spouts get more steps.
+
+### Now
+- Cakes: `CAKES` (baking.js 48-56: adzuki, banana, chocolate, honey, mint, strawberry, vanilla, coffee, mangosteen,
+  carrot) through `F.cakeBake` (cd_food.js 136-143), plain cake 123-126.
+- Spouts (single fill): chocolate cake = baked base + 500 mB chocolate (129); plain cake = baked base + 750 mB frosting
+  (131). No cake assembly (dump 2026-10-30).
+- Row #1's open "sequenced assembly with spouting" is the same work.
+
+### Build
+1. cd_food.js: `cakeAssemble(flavour, output, second)`: `F.assemble(i.cake_base_baked, [{ fill:
+   Fluid.of(global.fluid.frosting, 250) }, flavour, second || flavour], output)`; call it from `cakeBake`.
+2. Replace the two spouts with assemblies: plain cake = frosting 250 mB x3 steps (or frosting + red berry); chocolate
+   cake = 250 mB frosting, 500 mB chocolate.
+3. Transition rows per cake (cakes are block items: pass `<ns>:item/<cake>` texture overrides where the auto sprite is
+   wrong, **(unverified)** per cake).
+4. Needs #37's fix only if a step is a list (the red berry choice is one).
+
+### Decisions
+- **Transition item per cake** (TODO decision). Recommendation: one per cake (each shows its own grey sprite), not the
+  shared `i.incomplete`.
+
+### Tests (proposed)
+- FF-30 Cake assembly: each cake assembles on a baked base (frosting fill, two flavour deploys); plain and chocolate cake
+  show their new steps.
+
+---
+
+## baked-goods #35: Investigate brownie tray and adzuki bun family
+Status Planned / Work investigation / TODO `baking/baked-goods #35` ([food_families.md](../food_families.md) 4.6)
+
+### Goal
+Decide the family and recipe shape of the Beetroot Brownie Tray and the Adzuki Bun.
+
+### Now
+- Beetroot Brownie Tray (`veggiesdelight:beetroot_brownie_tray`): a placed block cut into 4 brownies, cake-like; family
+  `dessert/brownie` (rule already: tray as own block, oven in the cake pan, board cut). Shapeless 3 beetroot, 2 cocoa,
+  2 sugar, 2 eggs **(jar)**; no flour.
+- Adzuki Bun (`neapolitan:adzuki_bun`): shapeless roasted adzuki beans + milk + wheat (now flour, baked_goods.js 17)
+  **(jar)**; family `dessert/pastry` (was `bread/flat`); a can exists (`canned_adzuki_bun`). A filled sweet bun.
+
+### Findings to decide on
+- Tray: treat as a cake-pan (or baking dish) oven bake, as #18 builds. Recommendation: `dessert/brownie`, built by #18.
+- Adzuki Bun: a filled bun is not bread under #33's rule (filled breads left `#forge:bread`). Recommendation: stay
+  `dessert/pastry`; give it the pastry rule's oven bake (flour + roasted adzuki + milk, baking sheet, 2) with #36.
+This row then closes into #18 and #36.
+
+---
+
+## baked-goods #36: Dessert cookware and recipe treatments
+Status Planned / Work KubeJS / TODO `baking/baked-goods #36` ([food_families.md](../food_families.md) 4.6)
+
+### Goal
+Desserts (gingerbread, brownies, puddings, waffles, rolls, pastries) get their own cookware or recipe treatment instead
+of cookie / cake / pie shapes.
+
+### Now
+- Family rules already written (food_families.md): `dessert/pudding` bowl puddings in the pot, fig pudding in the oven;
+  `dessert/pastry`, `waffle`, `roll`, `other`: "Oven for the plain bake; toppings by Spout". Most members fail R3 today
+  (grid, smoker or press recipes).
+- Gingerbread moved to `dessert/other` 2026-10-27 (keeps its furnace / smoker recipes); the Gingerbread Man is a cookie
+  (baking.js 87).
+
+### Build (per family, one table each in baking.js)
+1. Waffle: oven bake from uncooked waffle or cake paste (#6 step 2).
+2. Pastry: adzuki bun, strawberry scones, strange eclair: oven, baking sheet, their flour recipes moved to the oven
+   (`F._sweep` + `R.ceBaking`).
+3. Sweet roll: `create:sweet_roll` oven bake from dough + sugar; the spout toppings stay.
+4. Pudding: fig pudding in the baking dish (#30).
+5. Brownies: #18.
+
+### Decisions
+- **Cookware items** (TODO decision). Recommendation: no new cookware beyond the baking dish (#30); waffles, pastries and
+  rolls use the baking sheet.
+
+### Tests (proposed)
+- FF-31 Desserts: each family member listed above has its oven recipe on the stated bakeware; the spout toppings stay.
 
 ---
 
 ## Built, needs play
 
-None: no baked-goods row is at Testing or Complete.
+- `baked-goods #3` Cookie recipes: oven only, cookie dough + 2 flavour -> 12 ([oven.md](../oven.md) 2.6, OV-30); open S P.
+- `baked-goods #11` Mixed cookie jars (patcherMod, every cookie jarable): [mixed_jars.md](../mixed_jars.md), MJ-01 to MJ-10;
+  scratch passed (`/jartest`); open C P.
+- `baked-goods #15` Maple cookie: cookie dough + 2 Rustic syrup -> 12 (baking.js 82), [food_families.md](../food_families.md)
+  4.6, FF-11, SQ-FFB; open S P.
+- `baked-goods #25` Sponge Pie rename and pie-tin bake (baking.js 154-155, CD `oceanic_delight/names.js`): food_families.md
+  4.6, FF-13, SQ-FFB; open S C P.
+- `baked-goods #26` Honey cake 1 honey bottle + 1 honeycomb (baking.js 51): food_families.md 4.6, FF-13; open S P.
+- `baked-goods #27` Dough block for every dough (six blocks, 1.1.03): [oven.md](../oven.md) 2.6, OV-35, SQ-DB passed
+  2026-10-25; open C P.
+- `baked-goods #28` Any bread in any bread recipe (`bread_recipes.js`, shipped 1.1.05): [recipes_cooking.md](../recipes_cooking.md)
+  RC-170, RC-171; recipe level passed 2026-10-31 (SQ-BJ-02, -02b); open P.
+- `baked-goods #29` No smelting bread from oat dough (reversed 2026-10-28): oven.md 2.6, SQ-CM-06 passed; open P.
+- `baked-goods #31` Bread baked from dough on a baking sheet (`bread_from_dough_1/3/6`, `sourdough_bread_1/3/6`): oven.md
+  2.6, SQ-CM-06 passed; open P. Left over: Veggies' sweet potato dough smelting routes, carried in #17.
+- `baked-goods #33` Filled breads out of `#forge:bread` (`bread_tags.js`, `tools/food_families.py`):
+  [creative_delight.md](../creative_delight.md) 32; open S P.
 
 ## Writeup corrections made
 
@@ -1061,3 +1002,7 @@ None: no baked-goods row is at Testing or Complete.
   crust, pancakes) went out with 1.0.8. (Its section 0 status and cooking.js line ranges were already corrected by
   another brief the same day.)
 - [oven.md](../oven.md) 4: "a third cheaper for those 25" -> "those 9" (2.6.1 lists 9 trimmed recipes).
+
+Found 2026-10-31, not made (writeups are outside this brief's sweep): oven.md 2.4 names `cookingtags.js` for the bakeware
+tags, which live in CD `creativeengineering/tags.js` 23-29 (the CD bakeware.js header says the same stale path);
+food_families.md `cake/muffin` R2 still lists a Cooking Pot muffin route (dropped 2026-10-29).

@@ -110,6 +110,7 @@ the plant is caught by the area break when you break a plant with a hoe (breaks 
   makes the top fail its survival check, so the top breaks and drops its own corn. Clicking the top does nothing.
 - **Tomatoes:** both resets go to stage 0, so the result is the same. Tomatoes on Supplementaries sticks and ropes
   (`supplementaries:stick_tomatoes`, `rope_tomatoes`) use the same tomato code and the same own pick.
+  So do tomatoes on placed IE treated sticks (`creative_delight:treated_stick_tomatoes`, [treated_sticks.md](treated_sticks.md)).
 
 **Water crop**
 

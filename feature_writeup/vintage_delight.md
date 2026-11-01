@@ -564,6 +564,24 @@ detail.
 22. **Release.** `/dumpall` and the generators in order, changelog bullets under the farming and food headings, a
     `plan_*.md` row; flip the Veggies plan's 22 compat recipes on (§3.4).
 
+### 4.0c Oat crop look (2026-10-31)
+
+Oats match the pack's wheat, which the enabled resource pack `Fancy Crops v1.2.zip` reshapes: stages 0 to 6 keep the
+vanilla crop model with bushier textures, stage 7 is a two-block-tall six-plane model (`tall_wheat_crop`) picked at
+random per position from three textures (7, 7a, 7b), so a ripe field has three heights and shapes.
+
+- Overrides in `kubejs/assets/vintagedelight/` (pack level, not the port jar: the shapes are Fancy Crops' work, whose
+  licence is not stated, so the derived files stay beside the pack that uses the resource pack):
+  `blockstates/oat_crop.json` (age 7 = a weighted-equal list of `oat_stage7`, `oat_stage7a`, `oat_stage7b`),
+  `models/block/tall_oat_crop.json` (Fancy Crops' tall model, unchanged), `models/block/oat_stage7{,a,b}.json`,
+  `textures/block/oat_stage0..6, 7, 7a, 7b.png`. Stages 0 to 6 keep the port's own models (vanilla `block/crop`).
+- Textures: Fancy Crops' `wheat_stageN` shapes recoloured with the port's `oat_stageN` colours, stage by stage (both
+  have ages 0 to 7). Mapping by luminance rank, pixel-weighted: the wheat texture's colours sorted by brightness take
+  the oat colour at the same brightness quantile, alpha kept. The three ripe variants all take `oat_stage7`'s colours.
+  Redo with a short PIL script by this rule if either texture set changes (none is kept in tools/).
+- Unused now: the port's own `oat_stage7.png` (16x20) and `tall_crop` model stay in the jar, shadowed.
+- Test VTD-78.
+
 ## 5. Open questions
 
 | # | Question | Default if not answered |
@@ -775,6 +793,12 @@ Overlap review and UI
 - [ ] VTD-74 **Crop loot:** `/loottuning` (or the log) lists the Vintage crop packs (oat bale, oat bag, peanut, cucumber,
   ghost pepper crates) and the Rustic bell pepper crates and seed bag; village house, ruined portal and bastion hoglin
   stable chests can hold the Vintage crops.
+
+Oat look (2026-10-31)
+
+- [ ] VTD-78 Plant oats beside wheat on farmland and grow them with bone meal: every stage has the bushy wheat shape in
+  oat colours; ripe oats are two blocks tall and vary between three shapes by position, like the ripe wheat next to
+  them. Break a ripe oat: same drops as before. F3+T with Fancy Crops off: oats still use these textures.
 
 Pickles (2026-10-25)
 

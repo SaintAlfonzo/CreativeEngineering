@@ -561,6 +561,10 @@ The covered/uncovered split comes from bytecode, not a running JEI. A few looks 
   Jar Storage row) shows the tank clearly part-filled, and 250 / 1000 mB look different; set `[jei]
   fluidAmountScale = "SQRT"`, reopen: a milder curve; `"LINEAR"`: JEI's own thin sliver. No mixin warning for
   `JeiFluidTankScaleMixin` in latest.log.
+- [ ] **JC-32 berries listed (2026-10-31):** restart with the new patcherMod jar. JEI search "sweet berries" shows
+  Sweet Berries and Sweet Berry Pips as two entries; "glow berries" shows Glow Berries and Glow Berry Pips. The
+  creative Food tab has Sweet Berries and Glow Berries once each (no doubled pips). Wheat Seeds, Carrot, Potato, Melon
+  Seeds still show once.
 
 ## 8. History
 
@@ -586,3 +590,9 @@ The covered/uncovered split comes from bytecode, not a running JEI. A few looks 
   `RecipeRows`; config `[jei] tippedArrowCategory`, `potionBucketCategory`, `canCategories`).
 - 2026-10-24: planned from the scratchpad: soup cups, Vintage Delight screens, arrow update (`jei/jei-coverage #14`, `#15`, `#24`). No code changed.
 - 2026-10-31: scratchpad notes translated into TODO rows (`jei/jei-coverage #29`, `#30`). No code changed.
+- 2026-10-31: Sweet Berries and Glow Berries were missing from JEI and the creative tabs. A plain `ItemNameBlockItem`
+  fills a tab with `new ItemStack(block)`, which is the last item registered for that block; Berry Good's pips are
+  registered for the sweet berry bush and cave vines after vanilla, so the berries added a second pips stack. Fixed by
+  patcherMod `BlockItemOwnStackFillMixin` (exact `ItemNameBlockItem` whose block's item is another item adds itself).
+  Not a JEI hide: the blacklist, KubeJS hides (`global.removedItems`, 735 ids checked) and every JEI plugin's runtime
+  removals were ruled out. JC-32.

@@ -1,460 +1,281 @@
 # Brief: food / types-and-tuning
 
-Written 2026-10-21 from [TODO](../todo/TODO.md) `# food`, rows with Sub `types-and-tuning`. Reference writeup:
-[food.md](../food.md) (sections 2.3, 3.5, 3.8, 4.2, 4.3) and the generated [food_catalog.md](../food_catalog.md).
+Written 2026-10-21 from [TODO](../todo/TODO.md) `# food`, rows with Sub `types-and-tuning`; updated 2026-10-31 (brief
+sweep: rows 13, 16 to 19 added; #3, #4, #6, #9 brought to the pack of 2026-10-31; Testing rows #2, #5, #10 cut to one
+line). Reference writeups: [food.md](../food.md) (sections 2.3, 3.5, 3.8, 4.2, 4.3; test prefix `FO-`),
+[food_families.md](../food_families.md) (`FF-`), [comfort_nourishment.md](../comfort_nourishment.md) (`CNS-`),
+[barbeques_delight.md](../barbeques_delight.md) (`BBQ-`) and the generated [food_catalog.md](../food_catalog.md).
 Mod facts marked **(jar)** were read from the decompiled jars on 2026-10-21 (Canned Goods 1.19.2-3, Golden Foods
 2.0.0, Spice of Life Apple Pie 2.2.0, Farmer's Delight 1.2.4, KubeJS 1902.6.2-build.73, Delightful 3.4.1, Abnormals
-Delight 4.1.2, Untitled Duck Mod 0.6.1, the Brewin' backport sources in `development/backportedBrewin`). Values marked
-**(dump)** come from the 2026-10-20 `/dumpfood` via food_catalog.md. `kubejs/exported/` is not in the repo: any
-step that runs `tools/food_catalog.py` or `tools/gen_can_types.py` needs a fresh `/dumpfood` first.
+Delight 4.1.2, Untitled Duck Mod 0.6.1). Values marked **(dump)** come from the 2026-10-30 `/dumpfood`
+(`kubejs/exported/food/foods.json`, `recipes.json`) unless dated otherwise. Proposed test ids FO-33 to FO-42 below are
+from 2026-10-21 and not in food.md yet; renumber when queued.
 
 ## Scope and order
 
-Open rows: #1, #3, #5, #6, #8, #10, #12 (Planned), #2, #4 (Bug), #9 (In Progress). #11 is Testing (table at the end).
+Open rows: #1, #12, #16, #17, #18, #19 (Planned), #4 (Bug), #3, #6, #8, #9, #13 (In Progress). Testing: #2, #5, #10,
+#11, #15 (listed at the end).
 
-**State on 2026-10-21 that changes the rows:**
+**State on 2026-10-31 that changes the rows:**
 
-- `setFoodProperties` works in both forms (the old "ambiguous overload" risk in food.md 3.5 is gone): cans.js uses
-  the consumer form, food_values.js and alcohol_drinks.js pass a built `FoodProperties`; the 10-20 dump shows the
-  results (Canned Steak 16 / 0.8, Cantaloupe Slice 3 / 0.3, alcohol 1 / 0).
-- The consumer form starts from the item's own properties **(jar)**: `ItemKJS.kjs$setFoodProperties(Consumer)` does
-  `new FoodBuilder(existing)`, which copies meat, alwaysEdible, fast and effects. So cans.js's re-valued Canned Goods
-  cans keep Canned Goods' meat flag: the dump still shows Canned Cookies `MF`, Canned Cooked Cod / Cooked Salmon /
-  Honey Bottles `M` (row #2).
-- Half of row #2 is already done by `tools/gen_can_types.py`: 20 Canned Goods cans are `existing` entries in
-  can_types.json and get parity values at startup. 18 Canned Goods food cans and the 3 soda cans still carry the
-  mod's values; 3 of them can be obtained (row #2).
-- The generated enchanted golden cans copy Golden Foods' broken modifier: 2 hunger / **8.0** per serving, 10
-  servings (can_types.json `canned_enchanted_golden_*`). Row #3 fixes the source; rerun the generator after it.
-- Farmer's Respite is installed now (since 2026-10-02), so 10 of Spice of Life's default complexity entries apply;
-  only `largemeals` is missing (row #4).
-- `#forge:eggs` has 12 items, not 10 (Untitled Duck Mod adds duck and goose eggs) **(jar)**; the Brewin' 4.5.0 port
-  already uses `#forge:eggs` in the omelet and egg grog (row #6).
+- Food code lives in Creative Delight (memory `creative-delight-routing`): cans.js, food_value_copies.js,
+  comfort_nourishment.js and cultures.js are CD startup scripts
+  (`development/creativeDelight/src/main/resources/kubejs_startup/creativeengineering/`), recipes are CD server scripts
+  by mod (`kubejs/data/creative_delight/kubejs/<mod>/`). The pack's `startup_scripts/cooking/food_values.js` keeps
+  only effect swaps; `alcohol_drinks.js` stays in the pack until Creative Brewing takes it.
+- **Comfort and Nourishment have an owner:** CD `comfort_nourishment.js` (priority -100, runs after every other food
+  rebuild) sets them from `generation_scripts/food/comfort_nourishment.json` (row #15). Any value writer here must
+  leave those two effects alone.
+- **Food families exist** (row #13): 33 families / 76 subfamilies, `generation_scripts/food/food_families.json`, tags
+  `#creativeengineering:food_family/<path>` (CD seasoning_tags.js). Types (31, food_types.json, 1429 keys) still drive
+  cans, stack sizes and the catalog.
+- Fresh dumps: `/dumpall` 2026-10-30. `can_types.json` is from 2026-10-27 (cans don't follow #15 yet).
 
 **Build groups and order:**
 
-1. **Quick fixes, no export needed** (one session, one restart):
-   #4 SoL config file -> #2 Canned Goods leftovers (cans.js flags, hide / re-value, trade swap) -> #3 golden values
-   -> #6 egg migration -> #10 unused meats -> #9 culture food values.
-2. **Export round:** `/dumpfood` on the restarted game, then `gen_can_types.py` (picks up #3's golden values and
-   #9's cultures), then `food_catalog.py`.
-3. **#1 tuning system**: A tool report -> B startup apply -> C SoL complexity map. #8 (soups) is the first content
-   pass through it; then the rest of the types.
-4. **#12 SoL pace and benefits** on top of #1's complexities (it changes the same toml as #4).
-5. **#5 placed pies and cakes** (patcherMod), any time after #1C (it needs complexities for non-food block items).
+1. **Quick fixes, no export needed:** #4 leftovers (largemeals lines) -> #3 golden values -> #6 egg migration -> #9
+   culture food values.
+2. **Export round:** `/dumpfood`, `gen_can_types.py` (picks up #3, #9 and #15), `food_catalog.py`.
+3. **#1 tuning system** (A report -> B startup apply -> C SoL map), then #8 soups as the first content pass, then
+   #19 skewers (after the BBQ port), #18 meal effects, then the rest by family (#13).
+4. **#12 SoL pace and benefits** on top of #1's complexities (same toml as #4).
+5. Independent: #16 (one item), #17 (crates), #13 (decisions, then rule passes).
 
 Rows of other subfamilies that depend on this: `cans/canning #1`, `#3` (can values follow #1), `cans/canning #4`
-(effect passthrough, waits on D6), `dishes/meals #9` (gold food cost, look again after #3).
+(effect passthrough, D6), `dishes/meals #9` (gold food cost, after #3), `food/seasoning #1` (salt cap needs #1),
+`dishes/meals #13`, `#46`, `#50` (skewers, #19).
 
 ---
 
 ## types-and-tuning #4: Spice of Life config
-Update 2026-10-27: the dead speed benefit is now `attribute,generic.movement_speed,0.01` (ADDITION on a base of 0.1, so +10%) in both config copies.
-Status Bug (the pack config is in place: `defaultconfigs/solapplepie-server.toml` 2026-10-22, same file as `configs_edited/server_config/`, new-world values checked on the scratch server by SQ-CF-01; the speed benefit stays open for the tier rework) / Work config / `food/types-and-tuning #4`
+Status **Bug** / Work config / `food/types-and-tuning #4`
 
 ### Goal
-One pack-level Spice of Life server config that every new world gets, with the broken benefit fixed.
+One pack-level Spice of Life server config that every new world gets, with the broken entries fixed.
 
-### Now
-- No `solapplepie-server.toml` anywhere in the repo (`config/` has only `solapplepie-client.toml`). The mod
-  registers it as `ModConfig.Type.SERVER` **(jar)**, so it lives in `saves/<world>/serverconfig/` and new worlds get
-  the mod defaults.
-- `tools/build_deploy.py` lines 48-49, 103, 386-389: everything in `configs_edited/server_config/` is merged into
-  `defaultconfigs/` on deploy (configs_edited wins). Today that folder holds seasonhud, sereneseasons, unlitcampfire.
-- Mod defaults **(jar, `SOLSweetPotatoConfig.Server`)**: queueSize 32, startDecay 0, endDecay 32,
-  minContribution 0, defaultContribution 1.0, minFoodsToActivate 0, resetOnDeath false,
-  limitProgressionToSurvival false, shouldForbiddenCount true, blacklist / whitelist empty (glob patterns).
-  17 thresholds `2,5,7,10,15,20,25,30,35,40,45,50,60,70,80,90,100`, 17 benefit strings (11th:
-  `attribute,generic.max_health,1;attribute,generic.speed,2`).
-- `attribute,generic.speed,2`: `AttributeBenefit.createAttribute` looks up `minecraft:generic.speed`, gets null and
-  marks the benefit invalid, silently **(jar)**. The +1 max health on the same threshold still applies (separate
-  benefit). Real name: `generic.movement_speed` (base 0.1, so `,2` would be 20x speed: never use it as is).
-- Complexity list defaults: 4 `largemeals:*` (not installed: `ComplexityParser` warns `Item is not food`), 10
-  `farmersrespite:*` (installed, now live: 6 teas at 3, two slices at 4, blazing chili 5), vanilla cooked porkchop / beef 2, golden carrot 2,
-  golden apple 4, notch apple 10, FD cake slice and three pie slices 4.
-- Workspace world was hand-edited (food.md 2.3: queue 1000, minFoods 10, resetOnDeath, 31 benefits for 17
-  thresholds). Its file isn't in the repo.
+### Done
+- 2026-10-22: [defaultconfigs/solapplepie-server.toml](../../defaultconfigs/solapplepie-server.toml) =
+  `configs_edited/server_config/solapplepie-server.toml` (identical, `cmp` 2026-10-31), shipped with 1.1.01; user kept
+  `minFoodsToActivate = 10` (line 40), `resetOnDeath = true` (57), `queueSize = 256` (72); new-world values PASSED on
+  the scratch server (SQ-CF-01).
+- 2026-10-27: the 11th benefit `attribute,generic.speed,2` (not a real attribute, dropped silently **(jar)**) is now
+  `attribute,generic.movement_speed,0.01` (additive on base 0.1, +10 %) in both copies.
+
+### Now (left)
+- `complexityUnparsed` (line 120) still has the 4 `largemeals:*` entries (`sweet_berry_custard,5`,
+  `pufferfish_broth,5`, `mushroom_pot_pie,5`, `hearty_lunch,6`); the mod is not installed, `ComplexityParser` warns
+  `Item is not food` at load.
+- Existing worlds keep their own `serverconfig/` copy: `saves/Workspace`, `WorldA` to `WorldG` still have
+  `generic.speed,2` (checked 2026-10-31); `saves/New World` does not.
+- Tier bonuses (`benefitsUnparsed`) still WIP, belongs to #12.
 
 ### Build
-1. Write `configs_edited/server_config/solapplepie-server.toml` with the full default layout (generate it by
-   starting a fresh single-player world once and copying `saves/<new world>/serverconfig/solapplepie-server.toml`, so
-   the section names and comments are the mod's own; the server spec pushes `[Benefits]`, `[Filtering]`,
-   `[Miscellaneous]`, `[Advanced]`, `[Complexity]` **(jar)**).
-2. Change only: the 11th benefit -> `attribute,generic.max_health,1`; drop the 4 `largemeals` complexity lines. Keep
-   everything else at default until #1 / #12 decide values (the file is where #12 lands).
-3. Existing worlds: copy the file into each world's `serverconfig/` by hand (WorldC, Workspace if wanted, and the
-   dedicated server world). defaultconfigs only seeds worlds that have no copy yet. Note it in the deploy notes.
-4. food.md 2.3 "Config is per world" and the at-a-glance "Knobs today" line: point at the new file.
-
-### Ids and data
-Config keys verified in the jar: `thresholds`, `benefitsUnparsed`, `complexityUnparsed`, `queueSize`, `startDecay`,
-`endDecay`, `minContribution`, `defaultContribution`, `minFoodsToActivate`, `resetOnDeath`,
-`limitProgressionToSurvival`, `shouldForbiddenCount`, `blacklist`, `whitelist`. Section names: from a generated file.
+1. Drop the 4 `largemeals` lines from `complexityUnparsed` in both copies (defaultconfigs and configs_edited).
+2. Existing worlds: copy the file into each world's `serverconfig/` by hand (world closed), at least the dedicated
+   server's world; note it in the deploy notes. defaultconfigs seeds only worlds without a copy.
 
 ### Decisions
-- Keep Workspace's resetOnDeath / minFoods 10? Recommend the defaults (false / 0) pack-wide for now; #12 revisits.
+- Copy into existing worlds: recommend yes for the server world and Workspace; the test worlds don't matter.
 
 ### Gotchas
-- A server config is synced to clients on login (`ConfigHandler.syncConfig`), so clients need nothing.
+- A server config is synced to clients on login, so clients need nothing.
 - The benefit list must have exactly one entry per threshold or the extra entries are ignored.
 
 ### Tests
-- FO-29 new world: `serverconfig/solapplepie-server.toml` equals the pack file; the log has no
-  `Item is not food: largemeals` lines; the food book (Benefits page) lists +1 max health at the 11th threshold.
-
----
-
-## types-and-tuning #2: Canned Goods data broken
-Status Testing (fixed 2026-10-21, see the TODO row) / Work data / `food/types-and-tuning #2`
-
-### Goal
-No can in play with Canned Goods' broken values (modifiers 1 to 42, crossed ids, meat flags, amplified effects).
-
-### Now
-- **Re-valued (built):** 20 Canned Goods cans are `existing: true` in
-  [can_types.json](../../kubejs/generation_scripts/food/can_types.json) (tropical fish, pufferfish, poisonous potato,
-  spider eye, rotten flesh, chorus, cookies, baked potato, dried kelp, beef, pork, chicken, cooked mutton, cooked
-  rabbit, fish, cooked salmon, rabbit stew, mushrooms, bread, honey bottles) and get their values in
-  [cans.js](../../development/creativeDelight/src/main/resources/kubejs_startup/creativeengineering/cans.js) lines 105-120 (`ceCanFood`, lines 74-81).
-- **Bug in that override:** `ceCanFood` only *adds* flags (`if (c.meat) f.meat()`), and the consumer form starts from
-  Canned Goods' own properties, so Canned Goods' meat flag stays on `canned_cookies`, `canned_fish`,
-  `canned_cooked_salmon`, `canned_honey_bottles` (dump: Canned Cookies `MF`, the others `M`; can_types says
-  `meat: false`).
-- **Not re-valued** (Canned Goods values **(jar)**, servings from can_servings.json):
-
-  | Can (`canned_goods:`) | Food h / mod | Code effect per serving | Source in play |
-  |---|---|---|---|
-  | `canned_food` | 12 / 28 | none | **butcher level 3 trade, 3 emeralds** (`CannedGoodsModTrades`) |
-  | `canned_golden_apples` | 8 / 10, meat | Regeneration III 5 s, Absorption II 120 s | **wandering trader** ([tradetags.js](../../kubejs/server_scripts/tags/tradetags.js) line 16, [wandering_trades.js](../../kubejs/server_scripts/economy/wandering_trades.js) line 62) |
-  | `canned_golden_carrot` ("Canned Golden Carrots") | 12 / 28 | none | **wandering trader** (same tag) |
-  | `canned_enchanted_apples` | 8 / 10, meat | Regen III 20 s, Resistance II, Fire Res II 300 s, Absorption V 120 s | none |
-  | `canned_suspicious_stew` | 26 / 42, meat | 9 effects 11 s incl. **Saturation II** | none |
-  | `canned_cake` 28 / 4, `canned_carrots` ("Canned Pumpkin Pies") 16 / 8, `canned_pumpkin_pie` ("Canned Golden Carrots") 12 / 28, `canned_beetroot_soup` ("Canned Bread") 12 / 14, `canned_apples` 8 / 5, `canned_beets` 2 / 3, `canned_potatos` 2 / 1, `canned_melon_slice` 4 / 2, `canned_sweet_berries` 4 / 3, `canned_glow_berries` 4 / 1 (+ Glowing 3 s) | | | none (recipes removed, canning.js lines 92-104) |
-  | `hot_hot_hotpot` | 3 / 3, always | Regen II, Speed II, Fire Res II 75 s | none (recipe removed) |
-  | `soda`, `reef_cola`, `oculemonade` | 0 / 0, always | Speed II 30 s; Water Breathing II 30 s; **Speed II** (Oculemonade calls `SodaPlayerFinishesUsingItemProcedure`) | crafting (kept) |
-
-  The pack has its own replacements for every no-source can (`creativeengineering:canned_apple`, `canned_beetroot`,
-  `canned_carrot`, `canned_potato`, `canned_melon`, `canned_sweet_berry`, `canned_glow_berry`, `canned_ce_beetroot_soup`,
-  `canned_ce_golden_carrot`, `canned_golden_apple`, `canned_enchanted_golden_apple`, `canned_pumpkin_pie_filling`).
-  None of the leftovers is hidden: they still show in JEI and the creative tab.
-- Crossed names only matter for items that stay visible (lang `item.canned_goods.canned_carrots` = "Canned Pumpkin
-  Pies", `canned_pumpkin_pie` = "Canned Golden Carrots", `canned_beetroot_soup` = "Canned Bread").
-
-### Build
-1. **cans.js `ceCanFood`**: set every flag explicitly so the existing cans lose Canned Goods' ones:
-   ```js
-   f.hunger(c.hunger).saturation(c.modifier)
-   f.meat(!!c.meat); f.fastToEat(!!c.fast); f.alwaysEdible(!!c.always)
-   ```
-   (`FoodBuilder.meat(boolean)` etc. exist **(jar)**.) Harmless for the generated cans (fresh builders).
-2. **Hide the 13 no-source cans** by adding their item_dict keys to `global.removedItems` in
-   [removed_items.js](../../kubejs/startup_scripts/_lib/removed_items.js) (the pack's removal path: JEI hide in
-   `client_scripts/jeichanges.js` line 5, tags stripped in `server_scripts/_lib/recipe_scan.js` line 50, red "REMOVED
-   ITEM" tooltip). Keys: `canned_enchanted_apples`, `canned_suspicious_stew`, `canned_carrots`, `canned_pumpkin_pie`,
-   `canned_beetroot_soup`, `canned_apples`, `canned_beets`, `canned_potatos`, `canned_melon_slice`,
-   `canned_sweet_berries`, `canned_glow_berries`, `hot_hot_hotpot`, and `canned_cake` **unless** `cans/canning #15`
-   takes it (its brief recommends reusing `canned_cake`: then leave it out of the list). Then move those keys from
-   food_types.json `types.canned` / `canned` into `excluded` with reason `"removed item (Canned Goods leftover)"` and
-   drop them from can_servings.json (via `tools/gen_can_types.py`'s preserved entries, not by hand, if the tool
-   rewrites the file; check its `SERVINGS` write).
-3. **Wandering trader**: in tradetags.js line 16 swap `[i.canned_golden_apples, i.canned_golden_carrot]` for the pack's
-   `[i.canned_golden_apple, i.canned_ce_golden_carrot]`, then hide the two Canned Goods golden cans too (step 2).
-   This also settles D4 for golden cans: the pack's golden cans take effects from food properties, no code.
-4. **Butcher's `canned_food`**: keep the trade (it's the only Canned Goods can a villager sells) and give it values:
-   an EXPLICIT `existing` row in `tools/gen_can_types.py` (section `raw_meat`, fixed meal like the raw meat cans
-   5 / 3 points, meat, 2 servings) so it is re-valued like the other 20. Alternative: hide it and remove the trade with
-   MoreJS in [trades.js](../../kubejs/server_scripts/economy/trades.js) (`e.removeModdedTrades(['minecraft:butcher'], [3, 3])`
-   removes every modded level-3 butcher trade, so check the others first).
-5. **Soda cans**: values are right (drinks, 0 food). Oculemonade: decide (below); if it gets its own effect, a
-   patcherMod mixin on `net.mcreator.cannedgoods.item.OculemonadeItem#m_5922_` (`finishUsingItem`, remap = false)
-   `@Redirect` of the `SodaPlayerFinishesUsingItemProcedure.execute(Entity)` call to apply the new effect.
-6. Rerun `gen_can_types.py` only if step 4 is taken (needs the export); restart.
-
-### Ids and data
-All ids above are in item_dict (lines 12143-12183) **(jar for values and effects)**. Trade: Canned Goods registers it
-in `VillagerTradesEvent` for `VillagerProfession.BUTCHER`, level index 2 (= level 3), 3 emeralds, 10 uses **(jar)**.
-
-### Decisions
-- Hide vs re-value the no-source cans: recommend hide (the pack already has its own can for each; re-valuing 13
-  duplicates adds JEI noise).
-- Oculemonade effect: recommend Night Vision 30 s (the name is "eye lemonade"); or accept it as a lime soda.
-- `canned_food`: recommend re-value (step 4).
-
-### Gotchas
-- The servings mixin (patcherMod `food/CanServings`) runs the can's own `finishUsingItem` per serving, so code effects
-  apply per serving; hiding the golden Canned Goods cans removes the amplified ones from play.
-- Old copies already in chests and inventories stay edible with the old values; the tooltip flags them.
-- `existing` overrides need a restart (startup event).
-
-### Tests
-- FO-30: hold Canned Cookies, AppleSkin / `/dumpfood`: no meat flag (wolves refuse it); Canned Cooked Cod likewise.
-- FO-31: JEI search "Canned Pumpkin Pies", "Canned Bread", "Canned Notch Apples", "Hot Hot Hotpot" -> no results;
-  `/give` one -> red REMOVED tooltip.
-- FO-32: a wandering trader's golden listing sells `creativeengineering:canned_golden_apple` or
-  `canned_ce_golden_carrot` (10 servings), never a Canned Goods golden can.
-- FO-33: butcher level 3 sells Canned Food at 5 hunger / 3 saturation points per serving (AppleSkin).
+- FO-32 (food.md 7): new single-player world, `serverconfig/solapplepie-server.toml` equals the pack file; after
+  step 1 no `Item is not food: largemeals` lines in the log.
 
 ---
 
 ## types-and-tuning #3: Golden food changes vanilla values
-Status Planned / Work data / `food/types-and-tuning #3` (decision D2)
+Status **In Progress** / Work data / `food/types-and-tuning #3` (decision D2)
 
 ### Goal
-Golden Foods! stops changing vanilla values: enchanted foods 4 / 1.2 like the notch apple, golden carrot back to
-vanilla.
+Golden Foods! stops changing vanilla values: enchanted foods 4 / 1.2 like the vanilla notch apple, golden carrot back
+to vanilla.
 
-### Now
-- Golden Foods replaces three vanilla items through a `minecraft` DeferredRegister **(jar, `GFItems`)**:
-  `minecraft:golden_apple` (4 / 1.2, Regen II 5 s, Absorption I 120 s, always: same as vanilla),
-  `minecraft:enchanted_golden_apple` (**8 / 8.0**, Regen II 20 s, Resistance I 300 s, Fire Res I 300 s, Absorption IV
-  120 s, always, **stacksTo(1)**; vanilla is 4 / 1.2, stacks to 64) and `minecraft:golden_carrot` (**4 / 1.2 + the
-  golden apple's two effects + always edible**; vanilla 6 / 1.2, no effects, not always edible).
-- Its 23 `goldenfood:enchanted_golden_*` foods are 8 / 8.0 with the notch effects; the 23 golden ones 4 / 1.2 with
-  the golden apple effects (dump; list in food_catalog.md `golden` / `golden/enchanted`).
-  `immersive_weathering:golden_moss_clump` (4 / 0.6) and `enchanted_golden_moss_clump` (6 / 0.8) are a different
-  mod and already sane.
-- Stack size: the pack's stack policy sets the enchanted foods to 16 (`stack_sizes.json`).
-- SoL: notch apple 10 and golden carrot 2 from the config list; the 23 enchanted foods 7.02 by formula.
-- Generated cans copy the source: `canned_enchanted_golden_*` are 2 / 8.0 per serving (32 saturation points),
-  `canned_ce_golden_carrot` 1 / 1.2 with golden-apple effects.
+### Now (2026-10-30 dump; nothing in the pack writes these values yet)
+- Golden Foods replaces three vanilla items through a `minecraft` DeferredRegister **(jar, `GFItems`)**.
+  `minecraft:enchanted_golden_apple` is **8 / 8.0** (128 saturation points), Regen II 20 s, Resistance I 300 s, Fire
+  Res I 300 s, Absorption IV 120 s; vanilla is 4 / 1.2. `minecraft:golden_carrot` is **4 / 1.2 + Regen II 5 s,
+  Absorption I 120 s** (vanilla 6 / 1.2, no effects). `minecraft:golden_apple` 4 / 1.2 as vanilla.
+- The 23 `goldenfood:enchanted_golden_*` foods are 8 / 8.0 with the notch effects (dump: Enchanted Golden Cookie the
+  same); the 23 golden ones 4 / 1.2 with the golden apple effects.
+- Since 2026-10-27 (#15) every golden food also has Nourishment 120 s, every enchanted one 240 s, set by CD
+  comfort_nourishment.js (rule 4); keep it.
+- Stack sizes: golden and enchanted foods 16 (`gen_stack_sizes.py` golden rule).
+- SoL: enchanted golden apple 10 and golden carrot 2 from the toml list (#4); the 23 enchanted foods by formula.
+- Generated cans copy the source: `creativeengineering:canned_enchanted_golden_apple` is 2 / 8.0 per serving
+  (32 points) in the dump.
+- Files: the pack's `startup_scripts/cooking/food_values.js` holds only effect swaps now; whole-food value copies are
+  CD `kubejs_startup/creativeengineering/food_value_copies.js` with rows in `minecraft/food_values.js`. Recipes for
+  golden foods: CD `minecraft/golden.js`, `create/golden.js`, `immersiveengineering/golden.js`.
 
 ### Build
-1. Write the values where #1 will keep them: if #1 isn't built yet, a startup file
-   `kubejs/startup_scripts/cooking/golden_values.js` on `ItemEvents.modification` (same shape as
-   [food_values.js](../../kubejs/startup_scripts/cooking/food_values.js)); when #1 lands, move the entries into
-   `food_tuning.json` `items` and delete the file. Sketch:
+1. New CD startup script `development/creativeDelight/src/main/resources/kubejs_startup/goldenfood/golden_values.js`
+   (Creative Delight tree by mod; when #1 lands, its entries move into food_tuning.json `items`):
    ```js
    ItemEvents.modification(e => {
      var i = global.item
-     global.foodTypes /* or read food_types.json */['golden/enchanted'].forEach(key => {
+     var types = JSON.parse(String(JsonIO.readString('kubejs/generation_scripts/food/food_types.json'))).types
+     types['golden/enchanted'].forEach(key => {
        if (key === 'enchanted_golden_moss_clump') return
        e.modify(i[key], item => item.setFoodProperties(f => { f.hunger(4); f.saturation(1.2) }))
      })
      e.modify(i.golden_carrot, item => item.setFoodProperties(f => {
        f.hunger(6); f.saturation(1.2); f.alwaysEdible(false)
-       f.removeEffect(/* MobEffect */ regen); f.removeEffect(absorption)
+       f.removeEffect(regen); f.removeEffect(absorption)   // MobEffect objects via ForgeRegistries.MOB_EFFECTS
      }))
    })
    ```
-   Read the key list from food_types.json (`JsonIO.readString`, as cans.js does) instead of hard-coding 24 keys.
-   `removeEffect` takes a `MobEffect` (load through `ForgeRegistries.MOB_EFFECTS`, as alcohol_drinks.js does), or
-   build a fresh vanilla `FoodProperties$Builder` like alcohol_drinks.js lines 61-82.
-2. SoL: leave the config values (notch apple 10, golden carrot 2) until #1C sets per-type complexities.
-3. Export round, then `gen_can_types.py`: the enchanted cans become 1 / 1.2, the golden carrot can 2 / 1.2 with no
-   effects (or keep effects, per the decision).
+   The consumer form starts from the item's own properties and keeps the effects; comfort_nourishment.js (priority
+   -100) runs later and adds Nourishment back, so do not strip it here. `removeEffect` takes a `MobEffect`; or build
+   a fresh `FoodProperties$Builder` as `startup_scripts/cooking/alcohol_drinks.js` does.
+2. SoL: leave the toml values until #1C.
+3. Export round, then `gen_can_types.py`: the enchanted cans become 1 / 1.2 per serving, the golden carrot can follows.
 4. food.md 4.2 finding 3 -> fixed; can_parity.md 2.17 note.
 
 ### Decisions
 - D2 enchanted foods: recommend 4 / 1.2 (vanilla) and keep the notch effects.
-- Golden carrot: recommend fully vanilla (6 / 1.2, no effects, not always edible): it costs 8 nuggets (the pack makes
-  it from rose gold nuggets, `dishes/meals #9`), a ninth of a golden apple, so golden-apple effects on it are cheap
-  healing. Alternative: 6 / 1.2 and keep the effects.
-- Stack size of the notch apple: leave the policy's 16.
+- Golden carrot: recommend fully vanilla (6 / 1.2, no effects, not always edible): it costs 8 nuggets, a ninth of a
+  golden apple, so golden-apple effects on it are cheap healing. Alternative: 6 / 1.2 and keep the effects.
+- Stack size: leave the policy's 16.
 
 ### Gotchas
 - `minecraft:golden_carrot` and `minecraft:enchanted_golden_apple` are Golden Foods' objects; `e.modify` on the
-  vanilla id reaches them (one registry entry), no special handling.
-- The golden cans' effects follow the source (D-B in cans.md); recheck them after this row.
+  vanilla id reaches them.
+- The golden cans' effects follow the source; recheck them after this row.
 
 ### Tests
-- FO-34: AppleSkin on an Enchanted Golden Apple and an Enchanted Golden Cookie: 4 hunger, saturation 9.6; Golden
-  Carrot 6 hunger, no effects, can't be eaten at full hunger.
+- FO-34 (proposed): AppleSkin on an Enchanted Golden Apple and an Enchanted Golden Cookie: 4 hunger, saturation 9.6;
+  Golden Carrot 6 hunger, no Regeneration or Absorption (Nourishment 120 s stays), not edible at full hunger.
 
 ---
 
 ## types-and-tuning #6: Vanilla egg -> `#forge:eggs` in recipes
-Status Planned / Work KubeJS / `food/types-and-tuning #6`
+Status **In Progress** / Work KubeJS / `food/types-and-tuning #6`
 
 ### Goal
 Every food recipe that takes the vanilla egg takes any egg (cooking plan: "any egg to fried egg").
 
-### Now (rescan of the jars and pack scripts, 2026-10-21)
-`#forge:eggs` = `minecraft:egg` (FD), `minecraft:turtle_egg` (Supplementaries), `alexsmobs:crocodile_egg`,
-`emu_egg`, `terrapin_egg`, 5 `quark:egg_parrot_*` (Quark Delight, optional entries), `untitledduckmod:duck_egg`,
-`goose_egg` **(jar)**. `i.egg` / `i.eggs` already point at `#forge:eggs` (item_dict lines 1947-1950);
-`i.minecraft_egg` is the vanilla egg (line 2243).
+### Now (rescan of the 2026-10-30 recipe dump, `kubejs/exported/food/recipes.json`, 2026-10-31)
+`i.eggs` = `#forge:eggs` (item_dict.js 1939), `i.minecraft_egg` = `minecraft:egg` (2332). 75 recipes already take
+`#forge:eggs`. Done since 2026-10-21: `fruitsdelight:fig_pudding` (CD `fruitsdelight/recipes.js` line 22
+replaceInput); `farmersrespite:coffee_cake` no longer takes an egg (the pack's oven and `_manual_only` routes build it
+from a cake base); Brewin's two quiche recipes are removed (CD `brewinandchewin/recipes.js` lines 57-58).
 
-Recipes that still take `minecraft:egg` as an item:
+Recipes that still take `minecraft:egg` as an item (dump, IE recipes and 7 unreadable ones not covered):
 
 | Recipe id | Type | Where | Change |
 |---|---|---|---|
-| `creativeengineering:smelting/...`, `smoking/...`, `campfirecooking/...` fried egg | furnace / smoker / campfire | [cooking.js](../../kubejs/server_scripts/cooking/cooking.js) lines 383-385, input `i.minecraft_egg` | edit the input to `i.eggs` |
-| `creativeengineering:quiche_from_mushroom` | crafting shaped | cooking.js lines 200-202, key `e: i.minecraft_egg` | edit to `i.eggs` |
-| `brewinandchewin:quiche_from_bacon` | crafting shaped | Brewin' backport `data/brewinandchewin/recipes/quiche_from_bacon.json` | replaceInput |
-| `rusticdelight:cooking/fried_egg_from_cooking_oil` | `farmersdelight:cooking` | Rustic Delight jar | replaceInput (Slice & Dice's mixer copy follows) |
+| `creative_delight:smelting/egg_to_fried_egg_by_smelting`, `smoking/...`, `campfirecooking/...` | furnace / smoker / campfire | CD [farmersdelight/recipes.js](../../kubejs/data/creative_delight/kubejs/farmersdelight/recipes.js) lines 367-369, input `i.minecraft_egg` | edit to `i.eggs` |
+| `creativeengineering:shaped/quiche_manual_only` | crafting shaped | CD [brewinandchewin/recipes.js](../../kubejs/data/creative_delight/kubejs/brewinandchewin/recipes.js) line 62, key `e: i.minecraft_egg` (its assembly twin already deploys `i.eggs`, lines 69-70) | edit to `i.eggs` |
+| `rusticdelight:fried_egg_from_cooking_oil` (+ `sliceanddice:cooking/rusticdelight/...` copy) | `farmersdelight:cooking` | Rustic Delight jar | replaceInput (the Slice & Dice copy follows) |
 | `create_factory:cake_paste` | `create:mixing` | Create: Factory jar | replaceInput |
 | `create_deep_dark:compacting_echo_cake_base` | `create:compacting` | Create Deep Dark jar | replaceInput |
-| `farmersrespite:coffee_cake` | crafting shaped | Farmer's Respite jar (new since the 09-28 list) | replaceInput |
-| `fruitsdelight:fig_pudding` | crafting shaped | Fruits Delight jar (new) | replaceInput |
+| `hostiledelight:gpudrecp` (Ghast Pudding) | crafting shapeless | Hostile Delight jar (new in the list) | replaceInput |
+| `vintagedelight:fermenting/pickled_egg_from_fermenting` | `vintagedelight:fermenting` | Vintage port (new in the list) | decision |
 | `incubation:chicken_egg_crate` | crafting shaped | Incubation | **no** (storage block) |
 | `mca:potion_of_feminity`, `potion_of_masculinity` | crafting shaped | MCA | no (not food) |
 
-Already fine: Brewin' `cooking/vegetable_omelet` and `fermenting/egg_grog_from_milk` use `#forge:eggs` in the 4.5.0
-port; `dread_nog_from_egg_grog` takes a turtle egg; Delightful's `minecraft:pumpkin_pie` override, FD's fried rice /
-baked cod stew, the pack's oven recipes ([baking.js](../../kubejs/data/creative_delight/kubejs/creativeengineering/baking.js)) and cooking.js
-lines 23, 30, 92, 140, 214, 224 use `i.eggs`. `tmted:wheat_dough_from_egg` and vanilla `minecraft:cake` are removed
-(cooking.js lines 90, 357). Jars scanned: the ~40 food and kitchen mods (list in the session's
-`scratchpad/egg_scan.py` run); IE has no egg recipe. Not scanned: the other ~360 mods.
-
 ### Build
-1. cooking.js: change the four own recipes' egg to `i.eggs`.
-2. cooking.js "Protein / Egg" block, after line 385:
-   ```js
-   R.bulk('replaceInput', [
-     [{ id: 'brewinandchewin:quiche_from_bacon' }, i.minecraft_egg, i.eggs, e],
-     [{ id: 'rusticdelight:cooking/fried_egg_from_cooking_oil' }, i.minecraft_egg, i.eggs, e],
-     [{ id: 'create_factory:cake_paste' }, i.minecraft_egg, i.eggs, e],
-     [{ id: 'create_deep_dark:compacting_echo_cake_base' }, i.minecraft_egg, i.eggs, e],
-     [{ id: 'farmersrespite:coffee_cake' }, i.minecraft_egg, i.eggs, e],
-     [{ id: 'fruitsdelight:fig_pudding' }, i.minecraft_egg, i.eggs, e],
-   ])
-   ```
-   (`NCH.replaceInput(filter, old, new, e)` at neoCraftHelper.js line 593; `R.bulk` pattern as in
-   `magic/storage.js` line 11.)
-3. Before building, confirm the list with a fresh `/dumpfood`: `kubejs/exported/food/recipes.json` keeps the raw
-   ingredient JSON, so `grep -l '"minecraft:egg"'` style filtering on it catches mods not scanned here (IE excepted).
-4. food.md 3.8 -> built, with this table.
+1. CD farmersdelight/recipes.js 367-369 and brewinandchewin/recipes.js 62: `i.minecraft_egg` -> `i.eggs`.
+   **Edit the source, don't replaceInput:** `NCH.replaceInput` (neoCraftHelper.js 635) walks only data-loaded
+   recipes unless `includeAdded`, and these are script-added.
+2. Mod recipes, in the CD tree of each mod (`kubejs/data/creative_delight/kubejs/<mod>/recipes.js`, as fruitsdelight
+   does): `R.replaceInput({ id: '<id>' }, i.minecraft_egg, i.eggs, e)` for the Rustic, Create Factory, Create Deep
+   Dark and Hostile Delight ids. If several share a file, `R.bulk('replaceInput', [...])` (neoCraftHelper.js 760).
+3. Pickled egg: per the decision, a replaceInput in CD `vintagedelight/recipes.js` (the port is ours, so a data edit
+   in the port is the other option).
+4. Next `/dumpfood`: rerun the scan (`'minecraft:egg' in json.dumps(r['in'])` over `recipes.json`). food.md 3.8 ->
+   built, with this table.
 
 ### Ids and data
-All ids verified in the jars or the backport sources, 2026-10-21. Recipe types: shaped crafting, `farmersdelight:cooking`,
-`create:mixing`, `create:compacting`.
+Ids from the 2026-10-30 recipe dump. Recipe types: smelting, smoking, campfire, shaped and shapeless crafting,
+`farmersdelight:cooking`, `create:mixing`, `create:compacting`, `vintagedelight:fermenting`.
 
 ### Decisions
-- Turtle and parrot eggs in `#forge:eggs`: recommend keep them (Supplementaries and Quark Delight add them on
-  purpose; turtle eggs are rare enough, parrot eggs come from fed parrots). If not wanted: `global.tags.remove(event,
-  i.eggs, [i.turtle_egg, i.egg_parrot_blue, ...])` (tag_helper.js line 19) in a tag script, which also changes the egg
-  stack rule (`tools/gen_stack_sizes.py`).
-- The oven's `pumpkin_pie_duck_egg` recipe (baking.js line 81) is now a duplicate path for duck eggs; keep it (it is
-  a cheaper mirror of Untitled Duck Mod's own recipe).
+- Turtle and parrot eggs in `#forge:eggs`: recommend keep them. If not wanted: `global.tags.remove` in a tag script,
+  which also changes the egg stack rule.
+- Pickled egg: recommend any egg (a pickled duck egg is real food); Vintage's fermenting type must accept a tag
+  ingredient (check the port's serializer reads `tag`).
 
 ### Gotchas
-- `replaceInput` needs KubeJS to understand the recipe type: shaped crafting and Create types are native (KubeJS
-  Create), `farmersdelight:cooking` comes from KubeJS Delight. If JEI still shows the vanilla egg after `/reload` for
-  one of them, remove it and re-add through `R.fdCooking` / `R.createMixing` / `R.createCompacting` with the same id
-  suffix (`_manual_only` for a pot recipe whose Slice & Dice copy must not double, food.md 3.7).
-- The fried egg is the only `#forge:cooked_eggs` source besides Incubation's (removed); this widens it to every egg.
+- `replaceInput` needs KubeJS to understand the recipe type: crafting and Create types are native,
+  `farmersdelight:cooking` comes from KubeJS Delight. If JEI still shows the vanilla egg, remove and re-add through
+  `R.fdCooking` / `R.createMixing` / `R.createCompacting` (`_manual_only` for a pot recipe whose Slice & Dice copy
+  must not double, food.md 3.7).
+- The fried egg is the main `#forge:cooked_eggs` source; this widens it to every egg.
 
 ### Tests
-- FO-35: JEI uses of Duck Egg and Emu Egg show Fried Egg (furnace, smoker, campfire, cooking-oil pot), both quiches,
-  coffee cake, fig pudding, cake paste (mixer), echo cake base (compacting). JEI uses of Egg still show the chicken
-  egg crate; Duck Egg doesn't.
-
----
-
-## types-and-tuning #10: Remove unused meats from recipes and view
-Status Planned / Work KubeJS / `food/types-and-tuning #10`
-
-### Goal
-Meats with no source in this pack (and the dishes that need them) are out of JEI and out of the food types.
-
-### Now (checked against the jars and configs)
-- **Venison, no source:** Delightful `venison_chops`, `cooked_venison_chops` (only from Twilight Forest / Goodall /
-  Naturalist compat recipes, none installed; [delightful-common.toml](../../config/delightful-common.toml) lines 96,
-  131 still `true`); Abnormals Delight `venison_shanks`, `cooked_venison_shanks`, `seared_venison`,
-  `venison_with_bamboo_shoots` (every recipe has `forge:mod_loaded environmental`, not installed) **(jar)**.
-- **Goat (chevon), disabled:** Delightful `raw_goat`, `cooked_goat` are `false` in delightful-common.toml (lines 94,
-  120), so the goat drop (`delightful:raw_goat` loot modifier, condition `delightful:enabled`) and recipes are off,
-  but the items are registered and typed (dump: Raw / Cooked Chevon in `raw/meat`, `cooked/meat`).
-- **Duck (Abnormals Delight), no recipe:** `duck_fillet`, `cooked_duck_fillet`, `duck_noodles`,
-  `passion_fruit_glazed_duck`: all recipes need Environmental (or Atmospheric) **(jar)**. Untitled Duck Mod's
-  `untitledduckmod:raw_duck` is in `#forge:raw_duck` **(jar)**, so the duck line could be wired instead of removed.
-- Item keys (all exist): item_dict lines 529 `venison_chops_cooked`, 11280 `cooked_goat`, 11339 `raw_goat`, 11365
-  `venison_chops`, 12112 `cooked_duck_fillet`, 12115 `cooked_venison_shanks`, 12116 `duck_fillet`, 12117
-  `duck_noodles`, 12124 `passion_fruit_glazed_duck`, 12129 `seared_venison`, 12133 `venison_shanks`, 12134
-  `venison_with_bamboo_shoots`, 12496 `raw_duck`.
-- Removal path: `global.removedItems` (removed_items.js) -> JEI hide, tag strip, REMOVED tooltip.
-
-### Build
-1. delightful-common.toml: `venison_chops = false`, `cooked_venison_chops = false` (drops their smelting /
-   smoking / campfire recipes at the source).
-2. removed_items.js: add the venison (6) and goat (2) keys. Leave the duck items out if the decision is to wire them.
-3. Duck wiring (recommended): cooking.js, FD cutting `R.fdCutting(i.raw_duck, i.any_knife, Item.of(i.duck_fillet, 2), e, 'duck_fillet')`,
-   furnace / smoker / campfire `cooked_duck_fillet` through `R.smelting` / `R.smoking` / `R.campfireCooking` (FD's
-   0.35 xp, 200 / 100 / 600 ticks), and re-add `duck_noodles` (`i.duck_noodles`, item_dict line 12117) as
-   `R.fdCooking([i.raw_duck, i.pasta, i.carrot, i.vegetables], Item.of(i.duck_noodles, 1), e, 'duck_noodles', 1.0, 200, i.bowl)`
-   (the jar recipe: `#forge:raw_duck`, `#forge:pasta`, carrot, `#forge:vegetables`; `i.raw_duck` is the only raw duck,
-   or add `i.t_raw_duck = '#forge:raw_duck'` to item_dict). `passion_fruit_glazed_duck` also needs Atmospheric's
-   passion fruit: remove it (removed_items.js).
-4. food_types.json: move the removed keys to `excluded` (reason `"removed: no source in the pack"`); run
-   `food_catalog.py --check` after the next export. can_parity.md: the chevon rows are already `/` (2026-10-13).
-5. Find "other unused meats" with the next export: every `raw/meat*` and `raw/fish*` item that is the output of no
-   recipe in `recipes.json` and drops from no entity (`/kubejs` loot check or JEI "Recipes" on each). Candidates
-   to look at: Alex's Delight cuts (all come from Alex's Mobs animals, present), Nether's Delight strider / hoglin
-   (present).
-
-### Decisions
-- Which meats: recommend venison (all 6) and goat (2) removed, duck wired to Untitled Duck Mod.
-- Goat: alternatively turn it on (`raw_goat = true`, `cooked_goat = true`) since goats exist; the cooking plan says
-  remove. Recommend remove (goats are rare mountain mobs, and there is no chevon dish).
-
-### Gotchas
-- `recipe_scan.js` logs every recipe that still references a removed item at startup: read it after the change;
-  conditional recipes that don't load won't show.
-- Removing items from food_types.json changes the `food_type` tag counts in FO-02 / FO-06.
-
-### Tests
-- FO-36: JEI search "venison", "chevon" -> nothing. Raw Duck on a cutting board with a knife -> 2 Raw Duck Fillets;
-  a fillet cooks in the furnace.
+- FO-35 (proposed): JEI uses of Duck Egg and Emu Egg show Fried Egg (furnace, smoker, campfire, cooking-oil pot), the
+  quiche, cake paste (mixer), echo cake base (compacting), ghast pudding; Egg still shows the chicken egg crate, Duck
+  Egg doesn't.
 
 ---
 
 ## types-and-tuning #9: Cultivated meat cultures have no nutrition
-Status In Progress / Work KubeJS / `food/types-and-tuning #9`
+Status **In Progress** / Work KubeJS / `food/types-and-tuning #9`
 
 ### Goal
-The 7 cultures are (poor) food, and the Cooking Pot can grow them, less efficiently than the mixer.
+The 7 cultures are (poor) food; the Cooking Pot grows them less efficiently than the mixer.
 
-### Now
-- Items: [cultures.js](../../kubejs/startup_scripts/items/cultures.js) lines 15-23, plain items; line 6 says "no
-  .food(), add nutrition once the cooking recipes are designed". Keys `i.culture_beef` ... `i.culture_salmon`
-  (item_dict lines 92-98), blocks 100-106.
-- Recipes ([cultivated_meat.js](../../kubejs/data/creative_delight/kubejs/creativeengineering/cultivated_meat.js), DEPLOYED per
-  recipes_cooking.md 2.5): syringe + `#creativeengineering:culture_base` + slime -> 1 culture (lines 20-26); heated
-  mixing 1 culture + 250 mB diluted bonemeal + 250 mB plant oil -> 3 (lines 28-34); cutting board culture -> 4 raw
-  beef / pork / mutton, 3 chicken / rabbit, 8 cod / salmon slices (lines 36-42); blocks 9 <-> 1. So the "cooking
-  recipes" the comment waits for exist; cultures.js's header ("still WIP over there") is stale.
-- Not typed in food_types.json (not edible yet), not in can_parity.md.
+### Done
+- Recipes ([cultivated_meat.js](../../kubejs/data/creative_delight/kubejs/creativeengineering/cultivated_meat.js), CD,
+  85 lines): syringe; syringe + culture base + slime -> 1 culture (29-35); heated mixing 1 culture + 250 mB diluted
+  bonemeal + 250 mB plant oil -> 3 (37-43); cutting board -> raw meat / fish slices (57 on); blocks 9 <-> 1.
+- 2026-10-27: Cooking Pot route, culture + bone meal + cooking oil -> **3** (lines 45-54, `<animal>_culture_cooking`,
+  0.35 xp, 200 ticks); pack_hygiene.md PH-34, scratch PH-25. Cultures moved into CD and reserved for a future Creative
+  Cultivation mod (creative_delight.md 29.5).
+
+### Now (left)
+- Items: CD [cultures.js](../../development/creativeDelight/src/main/resources/kubejs_startup/creativeengineering/cultures.js)
+  lines 20-29, plain `e.create(i.culture_*)` items, no `.food()` (header line 11: "Plain items, no .food()").
+- Not in foods.json (not edible), not typed in food_types.json, not in can_parity.md.
+- The pot gives the same 1 -> 3 as the mixer, so the row's "inefficient cultivation with the pot" is not met.
 
 ### Build
-1. cultures.js: add `.food(f => f.hunger(1).saturation(0.1).meat().effect('minecraft:hunger', 600, 0, 0.8))` to the
-   five meat cultures, the same without `.meat()` on cod / salmon (wolves). Values per the decision. Fix the header
-   comment.
-2. Pot cultivation in cultivated_meat.js: `R.fdCooking([i.culture_beef, i.bone_meal, i.t_seeds], Item.of(i.culture_beef, 2), e, 'beef_culture_pot_manual_only', 0.35, 400)`
-   (`R.fdCooking(input, output, e, id, exp, time, container)`, neoCraftHelper.js line 926)
-   per culture (2 per craft vs the mixer's 3, no fluids). The `_manual_only` suffix stops Slice & Dice from turning
-   it into a second, fluid-free mixer recipe (food.md 3.7).
-3. Export round: `food_catalog.py` types the cultures (expect `raw/meat`, cod / salmon `raw/fish`; move them to
-   `hazard` if the decision is "eat in a pinch"), gives them nothing new in item_dict (keys exist).
-4. can_parity.md: add the 7 as `/` rows (no can) so the worksheet stays complete.
+1. cultures.js: `.food(f => f.hunger(1).saturation(0.1).meat().effect('minecraft:hunger', 600, 0, 0.8))` on the five
+   meat cultures, the same without `.meat()` on cod / salmon. Update the header comment.
+2. Pot efficiency (decision): in cultivated_meat.js lines 48-54 change the output to `Item.of(i.culture_*, 2)`, or keep
+   3 and lengthen the time to 400 ticks.
+3. Export round: `food_catalog.py` types the cultures (`hazard` per the decision: add the keys to food_types.json
+   `hazard`), `tools/food_families.py` gives them a family or leaves them in 3.3.
+4. can_parity.md: add the 7 as `/` rows (no can).
 
 ### Decisions
-- Values: recommend 1 / 0.1 + 80% Hunger 30 s (a raw culture is worse than the 12+ hunger it cuts into); type
-  `hazard`, so tuning doesn't band it as raw meat.
-- Pot recipe inputs: recommend culture + bone meal + a sugar or seed "feed" item, 2 out, 20 s.
+- Values: recommend 1 / 0.1 + 80 % Hunger 30 s, type `hazard` (so tuning doesn't band it as raw meat).
+- Pot vs mixer: recommend 2 out of the pot (the mixer's 3 needs two fluids and heat, the pot only items).
 
 ### Gotchas
-- Startup change: restart. The cultures' SoL complexity by formula is tiny (0.02), fine.
+- Startup change: restart. SoL complexity by formula is tiny (0.02), fine.
+- comfort_nourishment.js strips Nourishment from every food not in its lists; the cultures have none, no conflict.
 
 ### Tests
-- RC-19 (recipes_cooking.md prefix): eat a Beef Culture -> 1 hunger, usually Hunger; a heated Cooking Pot with a culture
-  + bone meal + feed -> 2 cultures; JEI shows no mixer copy of it.
+- **RC-new1** (recipes_cooking.md prefix, proposed; the 2026-10-21 "RC-19" is taken by grinding mirrors): eat a
+  Beef Culture -> 1 hunger, usually Hunger; a heated Cooking Pot with a culture + bone meal + cooking oil -> 2 cultures; the mixer still gives 3.
 
 ---
 
 ## types-and-tuning #1: Food tuning system
-Status Planned / Work KubeJS / data / tool / `food/types-and-tuning #1` (D1 to D6)
+Status **Planned** / Work KubeJS / data / tool / `food/types-and-tuning #1` (D1 to D6)
 
 ### Goal
 Every food's hunger, saturation, flags, effects and Spice of Life value follow its type (31 types,
-food_types.json), with named exceptions; cans follow their source.
+food_types.json), with named exceptions; cans follow their source. Since 2026-10-23 the families of row #13 are the
+finer grouping: `types` in food_tuning.json may also be keyed by family (`family:soup/stew`), a family entry beating a
+type entry.
 
 ### Now
 - Design: food.md 3.5 (one config, startup apply, server SoL map, starting bands per type, canned parity rule).
   Decisions D1 to D6 (4.3) are open.
-- Pieces that exist: types and tags (foodtypetags.js), `tools/food_catalog.py` (classifier, `--check`, catalog,
+- Pieces that exist: types and tags (CD `kubejs/data/creative_delight/kubejs/creativeengineering/food_type_tags.js`;
+  families and their tags, row #13), `tools/food_catalog.py` (classifier, `--check`, catalog,
   `kubejs/exported/food/catalog.json` per food with values, effects, code effects, SoL now and by formula), three
-  value writers already at startup: cans.js (generated cans + 20 Canned Goods overrides), food_values.js (whole-food
-  copies, 1 entry), alcohol_drinks.js (44 drinks: 1 / 0, Intoxication, Nausea).
+  value writers already at startup: CD cans.js (generated cans + the Canned Goods overrides, `ceCanFood` sets flags
+  both ways since 2026-10-21), CD food_value_copies.js (whole-food copies, 1 row: glistering melon slice), the pack's
+  alcohol_drinks.js (drinks: 1 / 0, Intoxication, Nausea), and CD comfort_nourishment.js (priority -100: owns Comfort
+  and Nourishment on every food, row #15).
 - Canned parity has moved: it is no longer the 3.5 rule but `tools/gen_can_types.py` SECTIONS (per-section
   multipliers and servings, can_parity.md 3.1, 4.2), owned by `cans/canning #1` / `#3`. What #1 still owes cans:
   tuned source values (they flow in on the next `gen_can_types.py` run) and the SoL value per can (D5).
@@ -486,7 +307,8 @@ food_types.json), with named exceptions; cans follow their source.
    `c (k - k(k-1)/(2*endDecay))`, tiers reached against the toml thresholds) so #12's ladder can be checked offline.
 
 **B. Apply values (startup):**
-4. `kubejs/startup_scripts/cooking/food_tuning.js` on `ItemEvents.modification`. Read food_tuning.json and
+4. CD `development/creativeDelight/src/main/resources/kubejs_startup/creativeengineering/food_tuning.js` on
+   `ItemEvents.modification`. Read food_tuning.json and
    food_types.json with `JsonIO.readString` (as cans.js does). For each typed key: resolve the type chain, merge
    type defaults <- item overrides, skip `exempt`, and write with a fresh vanilla builder so flags are explicit
    (alcohol_drinks.js lines 61-82 is the pattern; the consumer form would keep old flags, see "State"):
@@ -503,13 +325,15 @@ food_types.json), with named exceptions; cans follow their source.
    Only clamp when D1 says snap; with review-and-exempt the script applies `items` values and the hard rules only,
    and the bands stay a report. Log `[food tuning] N foods changed, M exempt, K skipped`.
 5. Order with the other writers: cans.js re-values the Canned Goods cans and must stay the only writer for
-   `canned` (skip the type here). alcohol (exempt). food_values.js removed. All are startup `ItemEvents.modification`
+   `canned` (skip the type here). alcohol (exempt). food_value_copies.js rows fold into `items`.
+   comfort_nourishment.js runs last (priority -100) and owns Comfort / Nourishment: the tuning never writes those two
+   effects (keep them from `old` when rebuilding). All are startup `ItemEvents.modification`
    handlers, so whichever registers last wins on a shared item: keep the sets disjoint instead of relying on order.
-6. tools/build_deploy.py KUBEJS_CLASSES (lines 193-197): add
+6. tools/build_deploy.py KUBEJS_CLASSES (the `generation_scripts/food/` rows, lines 265-273): add
    `('generation_scripts/food/food_tuning.json', 'runtime')`, or the deploy preflight fails.
 
 **C. Spice of Life values (server):**
-7. `kubejs/server_scripts/cooking/sol_complexity.js`:
+7. CD `kubejs/data/creative_delight/kubejs/solapplepie/sol_complexity.js` (server):
    ```js
    var SOL = { CH: Java.loadClass('com.tarinoita.solsweetpotato.ConfigHandler'),
                FI: Java.loadClass('com.tarinoita.solsweetpotato.tracking.FoodInstance') }
@@ -521,7 +345,7 @@ food_types.json), with named exceptions; cans follow their source.
    ServerEvents.loaded(e => ceFillSol(e.server))       // after SoL's ServerStartingEvent rebuild
    if (Utils.server) ceFillSol(Utils.server)            // /reload re-runs scripts; refill
    ```
-   The dump already loads these classes (dump_food.js lines 64-66), so the class filter allows them. Remove the
+   The dump already loads these classes (`kubejs/server_scripts/_lib/dump_food.js` lines 64-66), so the class filter allows them. Remove the
    per-item complexity lines from the toml (#4) once the script owns them, or the two disagree on restart order
    only for a moment (the script runs last).
 8. Cans (D5): each can's value = its source's per-type SoL value (from food_types.json `canned`), so a can no longer
@@ -534,7 +358,7 @@ food_types.json), with named exceptions; cans follow their source.
 ### Ids and data
 Effects: `farmersdelight:comfort`, `farmersdelight:nourishment`, `minecraft:hunger`. food_tuning.json names them by
 effect_dict key (`global.effect`, `startup_scripts/_lib/effect_dict.js`): `ef.hunger` exists (line 38); the
-Farmer's Delight ones are not in the dict yet: add `ef.comfort = 'farmersdelight:comfort'` and
+Farmer's Delight ones are not in the dict yet (checked 2026-10-31): add `ef.comfort = 'farmersdelight:comfort'` and
 `ef.nourishment = 'farmersdelight:nourishment'` under a new "Farmer's Delight" heading. Type tag keys
 `i.t_food_*` (item_dict, generated block). SoL classes and fields verified in the jar.
 
@@ -563,13 +387,14 @@ Farmer's Delight ones are not in the dict yet: add `ef.comfort = 'farmersdelight
 ---
 
 ## types-and-tuning #8: Soup and stew values from their ingredients
-Status Planned / Work data / `food/types-and-tuning #8` (part of #1)
+Status **In Progress** (nothing built; checked 2026-10-31) / Work data / `food/types-and-tuning #8` (part of #1)
 
 ### Goal
 Each soup's hunger and saturation follow what goes into it; outliers marked first, then changed.
 
 ### Now
-31 foods in `soup` (dump). Main recipes from the jars, with known ingredient hunger (catalog values; tags and
+31 foods in `soup` (2026-10-20 dump); the families split them finer: `soup/soup` 36, `soup/stew` 30 members
+(food_families.json, 2026-10-31). Main recipes from the jars (table from 2026-10-21), with known ingredient hunger (catalog values; tags and
 non-food items count 0):
 
 | Soup | Now h / mod | Pot recipe ingredients | Known hunger |
@@ -580,7 +405,7 @@ non-food items count 0):
 | Fish Stew (FD) | 12 / 0.8 | raw fish, tomato sauce (4), onion | ~8 |
 | Pumpkin Soup (FD) | 14 / 0.75 | 3 pumpkin slices, salad ingredient, raw pork, milk | ~11 |
 | Noodle Soup (FD) | 14 / 0.75 | pasta, cooked egg, dried kelp, raw pork | ~10 |
-| Baked Cod Stew (FD) | 14 / 0.75 | cod, potato, egg, tomato (pack: + bone broth, shapeless, cooking.js line 23) | ~6 |
+| Baked Cod Stew (FD) | 14 / 0.75 | cod, potato, egg, tomato (pack: + bone broth, shapeless) | ~6 |
 | Rabbit Stew (vanilla, FD pot) | 10 / 0.6 | baked potato, rabbit, carrot, mushroom | 11 |
 | Mushroom / Beetroot Soup | 6 / 0.6 | 2 mushrooms / 3 beetroot | 0 / 3 |
 | Carrot Soup (More Delight) | 12 / 0.8 | milk, 2 carrots | 6 |
@@ -612,6 +437,8 @@ stew, kangaroo stew, miso, strider moss stew, suspicious stew) need tag resoluti
   those land too.
 
 ### Gotchas
+- Effects are not part of this row: Comfort / Nourishment on soups come from comfort_nourishment.js (row #15),
+  whose input-hunger rule reads the same ingredients; rerun `gen_comfort_nourishment.py` after soup values change.
 - Two recipes for one soup (pot vs shapeless): use the pot recipe (the "full" one).
 - Soup cans follow on the next `gen_can_types.py` run (section `soup`, mult 1.25).
 
@@ -622,19 +449,20 @@ stew, kangaroo stew, miso, strider moss stew, suspicious stew) need tag resoluti
 ---
 
 ## types-and-tuning #12: Spice of Life much slower
-Status Planned / Work config / KubeJS / `food/types-and-tuning #12`
+Status **Planned** / Work config / KubeJS / `food/types-and-tuning #12`
 
 ### Goal
 Spice of Life takes about twice as long; a shorter chain (about 12 tiers) that ends at triple max health (60, i.e.
 +40 health); low-level effects spread along it instead of Strength III / Haste II at the top.
 
 ### Now
-Defaults in #4 (17 tiers, +16 health total, Strength up to III, Haste II, Speed II, Luck II, armor toughness 6, full
-knockback resistance). food.md 3.5's ladder (1 to 26) was sized for the per-type complexities with queue 32.
+The pack toml of #4 (2026-10-31): 17 thresholds `2 ... 100`, the mod's benefits (the 11th fixed to movement speed),
+`queueSize = 256`, `endDecay = 32`, `startDecay = 0`, `minFoodsToActivate = 10`, `resetOnDeath = true` (the last
+three kept by the user 2026-10-22). food.md 3.5's ladder (1 to 26) was sized for the per-type complexities with queue 32.
 
 ### Build
-1. In the #4 toml: `queueSize = 64`, `endDecay = 64` (twice as many distinct meals remembered and needed), keep
-   `startDecay = 0`. With food.md 3.5's per-type values (mean complexity about 1.5 for a varied kitchen diet, 2.5 for
+1. In the #4 toml: keep `queueSize = 256` (user), set `endDecay = 64` (twice as many distinct meals needed), keep
+   `startDecay = 0`; the decay window, not the queue, sets the pace while the queue is longer than `endDecay`. With food.md 3.5's per-type values (mean complexity about 1.5 for a varied kitchen diet, 2.5 for
    meals), steady-state diversity is `c (k - k(k-1)/128)`: FD kitchen 12 foods about 17, chef 32 foods about 40,
    64 distinct foods about 53.
 2. Thresholds (12): `2, 4, 6, 8, 11, 14, 18, 22, 27, 32, 38, 45`. That gives: steak only 0, vanilla 5 foods 1,
@@ -659,7 +487,8 @@ knockback resistance). food.md 3.5's ladder (1 to 26) was sized for the per-type
 ### Decisions
 - Chain length and the effect list (with D3): recommend the 12 above. Permanent Regeneration I at the top is strong
   (benefit effects are kept on constantly); alternative: drop it and give the last tier +4 health instead.
-- `resetOnDeath`: recommend false (Workspace had true); with +40 health on the line a death reset is harsh.
+- `resetOnDeath`: the user kept true on 2026-10-22; with +40 health on the line a death reset is harsh, so ask again
+  when the ladder ships (recommend false).
 
 ### Gotchas
 - Raising `queueSize` keeps old food lists (they only grow); lowering it later trims them on the next eat
@@ -669,96 +498,218 @@ knockback resistance). food.md 3.5's ladder (1 to 26) was sized for the per-type
 - Max-health benefits rescale current health (`AttributeBenefit.applyTo`, unless First Aid is loaded) **(jar)**.
 
 ### Tests
-- FO-42: fresh player, eat 6 different FD meals: the food book shows 2 or 3 tiers; `/kill` keeps them (resetOnDeath
-  false).
+- FO-42 (proposed): fresh player, eat 10 then 16 different FD meals: no tier before the 10th food
+  (`minFoodsToActivate`), 2 or 3 tiers after; the food book lists the 12 benefits.
 
 ---
 
-## types-and-tuning #5: Placed pies and non-vanilla cakes don't count for SoL
-Status Testing / Work patcherMod / `food/types-and-tuning #5`
-
-BUILT 2026-10-22 (patcherMod jar in `mods/` since 11:06, not run; scratch server PASSED 2026-10-22 for load and map (SQ-SOL-01), the bite itself is client-only FO-43), differing from the build plan below: the mixin is on `ServerPlayerGameMode#useItemOn` (m_7179_;
-server only, so no side check and Create's deployer never reaches it), not `BlockStateBase#use`; cakes without a
-slice item count as `farmersdelight:cake_slice` (mirrors the vanilla cake; SoL drops non-food items on load, so a
-cake block item can't be recorded); map at `generation_scripts/food/placed_food_slices.json`. See food.md 4.2
-finding 5, FO-43.
+## types-and-tuning #13: Food families: one set of cooking rules per family
+Status **In Progress** / Work tool / docs (then KubeJS per rule) / `food/types-and-tuning #13`
 
 ### Goal
-A bite from a placed pie or cake counts as eating its slice, like the vanilla cake does.
+Every food sits in a family, and each family has one set of rules (cannable, placeable, recipe shape by station,
+values); the members are brought in line.
 
-### Now (verified in the jars)
-- SoL counts `LivingEntityUseItemEvent.Finish` of an edible item, plus `FoodTracker.onCakeBlockEaten`: a
-  `RightClickBlock` at LOWEST priority on exactly `Blocks.CAKE`, main hand, `player.canEat(false)`, server side,
-  which fires `ForgeEventFactory.onItemUseFinish` with `farmersdelight:cake_slice`. Candle cakes don't count.
-- FD `PieBlock.use` (`m_6227_`): a knife cuts a slice, otherwise `consumeBite` (protected): if `canEat(false)`, eats
-  the slice item's food, applies its effects, bites + 1 or removes the block. Subclasses: FD apple / chocolate pie,
-  sweet berry cheesecake, Brewin' quiche, Delightful salmonberry pie, End's Delight chorus pie, Farmer's Respite rose
-  hip pie, Upgrade Aquatic mulberry pie, `minecraft:pumpkin_pie` (Central Kitchen makes it a PieBlock).
-- Cakes each have their own eat code: Golden Foods `GoldenCakeBlock.eat` (static, `getFoodData().eat(4, 1.2)`),
-  Neapolitan `FlavoredCakeBlock`, Create Crafts & Additions `CACakeBlock`, Farmer's Respite `CoffeeCakeBlock`, plus
-  candle variants.
-- `FoodTracker.updateFoodList(Item, Player)` is public static: one call records a food and updates benefits.
-- Placed-food list: food_catalog.md "Placed food" (31 blocks from an older export; the 10-20 dump counted 139 food
-  blocks incl. candle cakes and Display Delight).
+### Done
+- 2026-10-23: [tools/food_families.py](../../tools/food_families.py) (`FAMILIES`, `classify()`, `RULES`), writeup
+  [food_families.md](../food_families.md) 3.1 to 3.4 (generated), findings F1 to F9 (4.3).
+- 2026-10-25: produce families decided and applied (4.4: fruit, veggie, meat, fish, egg, dairy): recipes, coaster tag,
+  Display Delight dish blocks, cans; recipe helpers (4.5). FF-01 to FF-10; SQ-FF-01 (rule columns read full after
+  `/dumpall`) **PASSED 2026-10-31** in r1031.
+- 2026-10-26: `food_families.json` and `#creativeengineering:food_family/<path>` tags (CD seasoning_tags.js), used by
+  the seasonings.
+- 2026-10-27: baked families restructured and applied (4.6): pizza, quiche, lasagna, dessert; cookie, cake, pie,
+  muffin, quiche members. FF-11 to FF-14.
+- Counts (2026-10-27 tree): 1416 items, 33 families, 76 subfamilies, 22 without a family, 64 skipped.
+
+### Now (left)
+- Decisions open (4.2): **D1** every Decision entry of 3.1 for the families not yet decided (soup, meal, sandwich,
+  roll, skewer, stuffed, salad, drink, alcohol, preserve, snack, candy, frozen, golden, feast, can ...); **D2** the
+  family list (`meal/plate` catch-all, drinks by kind, sweet and savory pies together); **D3** sandwich bread shapes
+  (Chunkwich, Zucchini Sandwich, Kangaroo Burger); **D4** the foods without a family (3.3, e.g. Crab Bars).
+- Findings still open (4.3): F1 heatless `_manual_only` crafts missing for 14 pot soups and 26 pot meals; F2 stews
+  with no pot recipe; F3 cakes outside Oven / Crafting; F5 burgers with shapeless recipes; F6 Sweet Potato Pie can
+  route; F7 6 pie slices with no source; F8 can worksheet gaps; F9 pie / feast assemblies, drink shapes, tea and cake
+  slice placement.
+- Rule application for the undecided families: not started.
 
 ### Build
-1. patcherMod mixin on `net.minecraft.world.level.block.state.BlockBehaviour$BlockStateBase#m_60664_`
-   (`use(Level, Player, InteractionHand, BlockHitResult)`, remap = false; Create's deployer calls the same method,
-   so the SRG name is confirmed): `@Inject` at HEAD stores the state, at RETURN, if the result `consumesAction()`,
-   the level is server side, the player is not a `FakePlayer`, the hand is MAIN_HAND, the block is in the map below
-   and not `minecraft:cake`, and the state at the pos changed (bites property + 1, or the block is gone or became the
-   plain cake from a candle cake), call `FoodTracker.updateFoodList(item, player)`.
-2. Map, data-driven: `kubejs/generation_scripts/food/placed_food_sol.json` `{ block key: item key }`, read by a small
-   Java loader (patcherMod already reads pack JSON elsewhere; follow that) or filled from KubeJS through a static
-   setter. Pies default to `PieBlock#getPieSliceItem()` when the block is an FD `PieBlock` (no map entry needed);
-   cakes map to their slice (`farmersdelight:cake_slice` for candle cakes, Abnormals Delight's Neapolitan cake slices,
-   `farmersrespite:coffee_cake_slice`), or to the cake block item when there is no slice (golden cakes, Create C&A
-   cakes).
-3. Block items aren't food, so their SoL value comes only from the complexity map: #1C puts them there (e.g. the
-   golden cake's slice-equivalent value).
-4. SoL as a compile-only dependency: copy `solapplepie-1.19.2-2.2.0.jar` into `development/patcherMod/libs/` (the
-   flatDir compileOnly tree), and guard the call with `ModList.get().isLoaded("solapplepie")`.
+1. Owner pass over 4.2 D1 to D4 (the cost of each proposal is in 3.2's compliance counts).
+2. Per decided family, one pass in the CD tree of each member's mod, with the family helpers of 4.5 (`global.CD.food`
+   callers, `global.NCH` recipes, `global.tags` for placement tags); then `/dumpall` and
+   `python3 tools/food_families.py` (or `/cegen run food_families`) until 3.2 reads full.
+3. Suggested order (small to large): soup (F1, F2: the heatless crafts and pot recipes), sandwich and roll (D3, F5),
+   skewer (with `dishes/meals #13`, #46 and row #19), drinks (F9, `food/drinks #8`), the rest.
+4. Values per family land through #1 (`types` keyed by family), not in this row.
 
 ### Decisions
-- Whether to fix (the row asks): recommend yes; it is one mixin and makes pies a real SoL food.
-- Feasts (served into bowls) stay out: their servings are eaten as items and already count.
+- Recommend D2 as drafted (keep `meal/plate` as the catch-all until a split earns its keep), D3 as the audit read the
+  sprites, D4 keep the 22 out except Crab Bars -> `snack` (also unblocks `food/seasoning #4`).
 
 ### Gotchas
-- `use` runs on both sides; check `!level.isClientSide`.
-- Knife on a pie cuts a slice (no bite): the state check (bites + 1 without a slice drop) can't tell the two apart
-  by state alone, since cutting also adds a bite: also require the held item not in `#forge:tools/knives`
-  (FD's `ModTags.KNIVES`).
-- Don't double-count `minecraft:cake`: SoL already records it.
+- 3.2 and 3.4 are generated from the dumps: a rule pass only shows after `/dumpall`.
+- Family tags move when the tool reruns; the seasonable tags follow on the next restart.
 
 ### Tests
-- FO-43 (as built, in food.md 7): bite a placed Apple Pie and a Golden Cake; the food book's eaten list shows Slice
-  of Apple Pie and Slice of Cake; a knife on the pie gives a slice and records nothing.
+- FF-01 to FF-14 (food_families.md 7, in game); per family pass, **FF-new1** (proposed): the family's 3.2 row reads
+  full after `/dumpall`.
+
+---
+
+## types-and-tuning #16: Spice of Life carrot for the food dictionary only
+Status **Planned** / Work KubeJS / data / `food/types-and-tuning #16`
+
+### Goal
+Add a "Spice of Life carrot" item only so the food dictionary lists it: no recipe, loot or other way to obtain it
+(decided 2026-10-29: add it).
+
+### Now
+- The installed Spice of Life (`solapplepie-1.19.2-2.2.0`) registers only `food_book`, `lunchbox`,
+  `golden_lunchbox`, `lunchbag` (jar item models, 2026-10-31); no carrot item in it or in the display-name dump. The
+  "carrot" is presumably the mascot of Spice of Life: Carrot Edition, the mod Apple Pie is forked from. **Unverified:**
+  which "food dictionary": SoL's Food Book lists only foods the player has eaten, so an unobtainable item never shows
+  there; the starter kit's planned food dictionary (`items/starter-kit #1`) or JEI are the other readings.
+- Pack items for the food system are CD startup items under `creativeengineering:` (e.g. powdered sugar,
+  `kubejs_startup/creativeengineering/baking_ingredients.js`).
+
+### Build
+1. Item `creativeengineering:spice_of_life_carrot` (dict key `i.spice_of_life_carrot`, item_dict.js next to the
+   solapplepie block at 12753) in a CD startup script (`kubejs_startup/solapplepie/items.js`), `.food()` with vanilla
+   carrot values so it is a food, texture a recolour of the carrot (textureswapper).
+2. No recipe, no loot, no trade. Keep it out of `global.removedItems` (that would hide it).
+3. food_types.json: `excluded` (reason "display only"), so tuning, cans and stack rules skip it; food_families.py skip
+   list likewise.
+
+### Decisions
+- **Which dictionary** (premise check): recommend asking the owner; if it is JEI or the starter-kit book, step 1 is
+  enough; if it is SoL's Food Book, the item cannot appear without being eaten, so the row is moot.
+
+### Tests
+- **FO-new5** (proposed): JEI search "Spice of Life" shows the carrot with no recipe; `/give` it and eat it: carrot
+  values.
+
+---
+
+## types-and-tuning #17: Expand crated golden food
+Status **Planned** / Work KubeJS / data / `food/types-and-tuning #17`
+
+### Goal
+Storage crates for more golden foods, like Quark's golden apple and golden carrot crates.
+
+### Now
+- Only `quark:golden_apple_crate`, `quark:golden_carrot_crate` (`i.golden_apple_crate`, `i.golden_carrot_crate`,
+  item_dict.js 3156-3157), 9 <-> 1; left out of chest loot on purpose ([loot.md](../loot.md), crate split).
+- Golden foods: 23 `goldenfood:golden_*` and 23 `goldenfood:enchanted_golden_*` (food_types.json `golden`,
+  `golden/enchanted`), plus the pack's golden items (glistering melon slice).
+- No pack-made crate block exists; pack blocks are KubeJS startup registries (pack `startup_scripts/items/*_blocks.js`,
+  CD `creativeengineering/cultures.js` culture blocks as the 9-item storage pattern, hand-authored blockstate and
+  models).
+
+### Build
+1. Pick the foods (decision). For each, a block `creativeengineering:golden_<food>_crate` in a new CD startup script
+   `kubejs_startup/goldenfood/golden_crates.js` (dict keys `i.golden_<food>_crate`), wood material, axe tag, a
+   texture from Quark's golden crate with the food's sprite (textureswapper).
+2. Recipes in CD `kubejs/data/creative_delight/kubejs/goldenfood/crates.js`: `R.shaped` 9 -> crate and `R.shapeless`
+   crate -> 9 (`global.NCH`), plus the storage-block tags with `global.tags`.
+3. Stack 64; no compost, no loot.
+
+### Decisions
+- Which foods: recommend the raw-produce golden foods only (`golden_beetroot`, `golden_sweet_berries`,
+  `golden_glow_berries`, `golden_melon_slice`, `golden_chorus_fruit`, `golden_dried_kelp`; food_types.json `golden`),
+  not cooked dishes or the enchanted tier (enchanted foods stack to 16 and are rare).
+
+### Tests
+- **FO-new6** (proposed): 9 Golden Beetroots -> Golden Beetroot Crate -> 9 back; the crate places, breaks with an axe and
+  drops itself.
+
+---
+
+## types-and-tuning #18: Other effects on high-value meals
+Status **Planned** / Work KubeJS / `food/types-and-tuning #18`
+
+### Goal
+High-value meals get effects beyond Nourishment (today the only effect on them, and only on bowls).
+
+### Now
+- Row #15 (built 2026-10-27, [comfort_nourishment.md](../comfort_nourishment.md) 9.0, 10): bowls, mason jars,
+  shulker bowls and copper cups get Nourishment (4+ inputs, input hunger 8+, output 10+) or Comfort; bottles lose
+  every effect; every other food loses Nourishment; golden foods Nourishment 120 / 240 s. Generator
+  `tools/gen_comfort_nourishment.py`, output `generation_scripts/food/comfort_nourishment.json`, applier CD
+  `comfort_nourishment.js` (priority -100).
+- Meals' other effects today are their mods' own (e.g. FD's), left as they are by the applier.
+
+### Build
+1. Add a third pass to `gen_comfort_nourishment.py` (or a sibling `gen_meal_effects.py` writing
+   `meal_effects.json`): for foods the rule gives Nourishment (high-value), one extra effect chosen by family from a
+   table in the tool, e.g. `meal/pasta` Haste I, `fish/*` dishes Water Breathing, `meal/plate` roasts Strength I,
+   spicy dishes (`i.t_hot_spices` = `#delightful:hot_spices` inputs) Fire Resistance, `feast/serving` Regeneration I; 60 to 120 s.
+2. Applier: extend comfort_nourishment.js to add the `extra` list (or a second CD script after it, priority -101).
+3. Keep the mod's own effects; add only where the food has none besides Comfort / Nourishment.
+4. `gen_can_types.py` picks the effects up for cans (it already reads comfort_nourishment.json for the source).
+
+### Decisions
+- **Which effects, which meals** (TODO): recommend one mild effect per family as in step 1, short, level I, only on
+  foods that already pass the Nourishment test.
+- Interaction with BBQ sauces (`food/seasoning #11` transforms): sauces rewrite these effects too; fine.
+
+### Gotchas
+- SoL benefits also grant effects (#12): avoid giving meals the same effects the ladder hands out permanently.
+
+### Tests
+- **CNS-new1** (proposed): AppleSkin / tooltip on a high-value pasta shows Nourishment plus Haste; a low-value bowl
+  shows only Comfort; `[comfort_nourishment]` log counts include the extra effects.
+
+---
+
+## types-and-tuning #19: Barbeque's Delight skewers: food and saturation investigation
+Status **Planned** / Work KubeJS / data / `food/types-and-tuning #19`
+
+### Goal
+Tune the 10 BBQ skewers, their raw versions and the pack's skewers together: hunger, saturation, the `grilled` bonus,
+raw-skewer downsides (worse food, poison chance; "nasty" hazard downside for chicken only).
+
+### Now
+- BBQ is not installed; the port (`largecontent/mod-additions #37`) is not built. Upstream values
+  (barbeques_delight.md 3.1, saturation in points): beef 8 / 11.2, chicken 7 / 9.8, cod and salmon 7 / 14, lamb
+  12 / 19.2, mushroom 6 / 4.8, pork sausage 8 / 11.2, potato 6 / 7.2, rabbit 10 / 16, vegetable 5 / 5; effects 50 %
+  Strength, Regeneration, Resistance, Nourishment, 100 % Jump Boost. Raw skewers are not edible upstream.
+- Pack skewer family `skewer` (food_families.json, 11 members, 2026-10-30 dump, hunger / modifier): Classic Corn Dog
+  10 / 0.9, Corn Dog 8 / 0.9, Barbecue on a Stick 8 / 0.9, Seafood Skewer 11 / 0.7, Nether Skewer 7 / 0.5, Turnip
+  Mutton Skewer 7 / 0.7, Cave Skewer 6 / 0.7, Baked Tentacle on a Stick 6 / 0.6, Tentacles on a Stick 4 / 0.2,
+  Tentacle on a Stick 3 / 0.3, Crispy Skewer 2 / 0.2.
+- `grilled` = +2 saturation points (`food/seasoning #13`). The skewer food type is `dishes/meals #13` (In Progress).
+
+### Build
+1. After the port: `/dumpfood`, then a skewer table in `food_catalog.py --report` (or #1's report filtered to the
+   skewer family): hunger, saturation points, effects, ingredient hunger sum, per skewer.
+2. Proposed rule: cooked skewer hunger = round(1.2 x ingredient hunger), saturation from the meat / fish family
+   modifier; lamb and rabbit brought down to the beef line; raw skewer = half hunger, modifier 0.3; raw chicken
+   skewer 30 % Hunger 30 s plus 10 % Poison 5 s (the hazard downside); other raw meat 30 % Hunger only.
+3. Values through #1's food_tuning.json (`types` key `family:skewer`, `items` per skewer) or, before #1, a CD startup
+   script in the port's tree (`kubejs_startup/barbequesdelight/skewer_values.js`).
+
+### Decisions
+- Target values (TODO): recommend step 2, checked against the report; a grilled skewer (+2) should edge out the same
+  skewer crafted from cooked ingredients, not beat a bowl meal.
+
+### Tests
+- **FO-new7** (proposed): AppleSkin on the lamb and beef skewers shows the tuned values; eating a raw chicken skewer
+  sometimes gives Poison, a raw beef skewer only Hunger. BBQ-01 to BBQ-21 (barbeques_delight.md 8) cover the port.
 
 ---
 
 ## Built, needs play
 
-| Row | What | Note |
-|---|---|---|
-| `food/types-and-tuning #11` | Food tests FO-02 to FO-28: type tags, canned recipes, servings, fried eggs, egg stacks | All shipped (1.0.2 to 1.0.6). FO-02 expected counts are from 2026-10-02 (now about 1016 foods, 252 sources; note added). FO-14 to FO-22 numbers updated by the canning brief (Canned Beef holds 3). FO-28: 12 eggs in `#forge:eggs` now, the three `/give` checks still hold. Proposed new tests FO-29 to FO-43 are in the sections above. |
+| Row | What | Writeup | Open |
+|---|---|---|---|
+| `food/types-and-tuning #2` | Canned Goods food cans take their family's values (`gen_can_types.py`), `ceCanFood` flags both ways, Canned Food and Hot Hot Hotpot removed (fixed 2026-10-21) | [food.md](../food.md) 4.2 findings 1-2 | S+ C P; SQ-OF-01 to -03 passed 2026-10-22; Oculemonade / golden-can code effects left as is (can_parity CP-21, CP-22) |
+| `food/types-and-tuning #5` | Placed pie bites count as their slice, cakes via `placed_food_slices.json` (patcherMod `PlacedFoodSol`, 2026-10-22) | [food.md](../food.md) 4.2 finding 5 | S+ P; SQ-SOL-01 passed (FO-44); FO-43 (the bite) in game |
+| `food/types-and-tuning #10` | Venison, chevon and passion fruit glazed duck removed; Abnormals Delight duck line wired to Untitled Duck Mod (2026-10-25, shipped 1.1.03) | [food_families.md](../food_families.md) 4.4 | S P; SQ-FF-01 PASSED 2026-10-31; FF-03, FF-05 in game; open: Maple Glazed Bacon has no source (remove with its can, or a recipe) |
+| `food/types-and-tuning #11` | Food tests FO-02 to FO-28: type tags, canned recipes, servings, fried eggs, egg stacks | [food.md](../food.md) 7 | S C P (all shipped 1.0.2 to 1.0.6; FO-02 counts from 2026-10-02) |
+| `food/types-and-tuning #15` | Comfort vs Nourishment split (R5, built 2026-10-27, CD jar in the 1.1.04 client payload) | [comfort_nourishment.md](../comfort_nourishment.md) 10 | S C P T; CNS-01 to CNS-08, SQ-CNS not run; left: `gen_can_types.py` on the 2026-10-30 dump (can_types.json is from 2026-10-27), the B.2 hand check |
+| `food/types-and-tuning #15, #6` (Blocked on Dumps, CQ-DUMP-06) | Read the 2026-10-30 food and recipe dumps | this brief #6 (egg rescan done 2026-10-31 offline) | Comfort foods per type count and the rest of CQ-DUMP-06 |
 
-## Proposed TODO.md corrections
-
-- `#4` Details: "complexity list names two missing mods" -> "complexity list names `largemeals` (missing; Farmer's
-  Respite is installed since 10-02, its 10 entries apply)".
-- `#2` Details: add "20 cans already re-valued by can_types.json `existing`; left: meat flag kept by cans.js
-  `ceCanFood`, 13 no-source leftovers, wandering-trader golden cans, butcher Canned Food"; Decisions "fixed by row 1
-  or by hand first" -> "hide leftovers, re-value canned_food".
-- `#6` Details: "omelet, quiches, egg grog, dread nog" -> "fried eggs (3 own + Rustic oil), both quiches
-  (`creativeengineering:quiche_from_mushroom`, `brewinandchewin:quiche_from_bacon`), cake paste, echo cake base,
-  coffee cake, fig pudding (omelet and egg grog already `#forge:eggs`; dread nog takes a turtle egg)".
-- `#9` Details: "culture items are plain items until the cooking recipes exist" -> "cutting / mixing recipes exist
-  (cultivated_meat.js); left: food values and the pot route".
-- `#10` Details: add "venison (Delightful 2, Abnormals Delight 4) has no source; goat is disabled in
-  delightful-common.toml; Abnormals Delight duck has no recipe (wire to Untitled Duck Mod)".
-- `#3` Details: add "generated enchanted golden cans copy the 8.0 modifier (rerun gen_can_types.py after)".
-
-## Writeup corrections made
+## Writeup corrections made (2026-10-21)
 
 - [food.md](../food.md) header: status "BUILT, restart pending" -> DEPLOYED (1.0.2 on), FO-02 to FO-28 not run, link
   to this brief; last updated 2026-10-21.

@@ -1,206 +1,159 @@
 # Brief: engineering / dreams-and-desires
 
-Written 2026-10-21 from [TODO.md](../todo/TODO.md) `# engineering`, Sub `dreams-and-desires`. There is no feature
-writeup for Create: Dreams n' Desires (D&D, `create_dd`, `Create-DnDesire-1.19.2-1.2c.Beta Mid-Dev.jar`) yet; the
-pack touches it in [blockrunner.md](../blockrunner.md) 3.5 (asphalt friction), [fixes_compat.md](../fixes_compat.md)
-2.3 / 2.6 (drill and saw crash, axe ghosts) and [nether_worldgen.md](../nether_worldgen.md) F7 (deep layer).
+Written 2026-10-21 from [TODO.md](../todo/TODO.md) `# engineering`, Sub `dreams-and-desires`; rechecked 2026-10-31 (rows #9
+and #10 added; the built rows #1, #3, #4 condensed into Built, needs play). There is no feature writeup for Create: Dreams
+n' Desires (D&D, `create_dd`, `Create-DnDesire-1.19.2-1.2c.Beta Mid-Dev.jar`, MIT) yet; the pack's D&D work is written up
+in [recipes_wood.md](../recipes_wood.md) (2.6 D&D woods, smoked wood RW-23 to RW-28), [engineering.md](../engineering.md) 3
+(exclusive outputs, rose quartz sanding, EN-19 to EN-21), [blockrunner.md](../blockrunner.md) 3.5 (asphalt friction),
+[fixes_compat.md](../fixes_compat.md) 2.3 / 2.6 (drill and saw crash, axe ghosts) and
+[nether_worldgen.md](../nether_worldgen.md) F7 (deep layer). D&D code is in
+`kubejs/server_scripts/engineering/dreams_desires.js` (painted asphalt), `wood/smoked_wood.js` + `tags/wood_tags.js`
+(smoked wood), `startup_scripts/_lib/removed_woods.js` (removed woods), `engineering/redstone.js` (rose quartz sanding).
 
-All six rows cite "scratchpad 2026-10-19"; the source (git `2e8687f`, `feature_writeup/todo/change_scratchpad.md`
-lines 86-95) is the whole spec: "smoked wood recipe; rubber: integrate with rubber tree mod, latex process chain to
-rubber, dreams and desires sap machine on rubber logs, less efficient, rubber to belts, more efficient; rose quartz
-sand blasting: 80rough/20smooth recursive split; remove extra woods? keep smoked/merge with treated?; remove
-glowstone geodes, review geode spawns". Row #6 (painted asphalt) was written straight into TODO.md in `c82dd31`.
+Rows #1 to #6 cite "scratchpad 2026-10-19" (git `2e8687f`, `feature_writeup/todo/change_scratchpad.md` lines 86-95):
+"smoked wood recipe; rubber: integrate with rubber tree mod, latex process chain to rubber, dreams and desires sap machine
+on rubber logs, less efficient, rubber to belts, more efficient; rose quartz sand blasting: 80rough/20smooth recursive
+split; remove extra woods? keep smoked/merge with treated?; remove glowstone geodes, review geode spawns". #7, #8 from
+scratchpad 2026-10-24, #9 from scratchpad 2026-10-31, #10 from scratch run r1031.
 
 **Verified against jars** (decompiled or unzipped in the scratchpad, 2026-10-21): D&D 1.2c (recipes, tags, lang,
 `DesiresOreFeaturesEntries`, `DesiresLayerPatterns`, `SandingRecipe`, `HydraulicCompactingRecipe`), Myrtrees
-1.2.0 build 32 (all classes), Create 0.5.1.i (`FanProcessing`, `TransportedItemStack`, `RecipeApplier`, belt and
-rose quartz recipes), Immersive Petroleum 4.2.0-29b (asphalt recipes), Supplementaries 2.4.20 (soap recipes),
-Geode+ 1.1.8 (biome tags, placed features, loot tables), Terralith 2.3.12 (geode feature file names only).
+1.2.0 build 32 (all classes; All Rights Reserved), Create 0.5.1.i, Immersive Petroleum 4.2.0-29b, Supplementaries 2.4.20,
+Geode+ 1.1.8, Terralith 2.3.12 (geode feature file names only). Rechecked 2026-10-31: the same jars are in `mods/`.
+
+Shipped: #1 smoked wood, #3 rose quartz sanding, #4 removed woods and #6 painted asphalt are in the 1.1.05 changelog
+(`kubejs/assets/creativeengineering/changelog/1.1.05.md` lines 45-61, 114, 169; server on 1.1.05 since 2026-10-31 12:52,
+`deploy/DEPLOYED.json`).
 
 ## Scope and order
 
 | Row | Status | What is left | Build order |
 |---|---|---|---|
-| #4 extra woods | Planned | decide which D&D woods stay, then hide / remove the rest | **first**: #1 and #2 depend on which woods survive |
-| #1 smoked wood recipe | Planned | 4 smoking recipes (logs -> smoked logs) | **second**, with #4 (same file) |
-| #2 rubber chain | Planned | Myrtrees latex -> D&D rubber; sap only from rubber logs; rubber belts; one new NCH helper | **third** |
-| #3 rose quartz sand blasting | Built 2026-10-30, EN-21 server half PASSED r1031 (2026-10-31, SQ-EN-21); EN-19, EN-20 in game | nothing; see the #3 section | done |
-| #6 painted asphalt | Built 2026-10-30, recipes scratch server PASSED r1031 (2026-10-31, SQ-DD-08); DD-08 in game | `server_scripts/engineering/dreams_desires.js` (16 recipes out, 16 in, soap recipe), 16 names in `namechanges.js` | done |
-| #5 glowstone geodes | Planned | the glowstone half is **done** (verified below); only a geode spawn review is left, mostly decisions | last; no code until decided |
+| #10 smokable shape tags too wide | Bug | move the Botania / driftwood exclusions to every shape tag; owner call on crimson and warped | **first**: one line in `wood_tags.js`, `/reload` |
+| #9 bark cleanup | Planned | the D&D barks are already merged (2026-10-31); left: a texture for Myrtrees' rubberwood bark | small, resource pack only |
+| #2 rubber chain | Planned | Myrtrees latex -> D&D rubber; sap only from Myrtrees rubber logs; rubber belts; one new NCH helper | after #10 |
+| #7 milkshake lava generation | Planned | values + machine rows | decisions first |
+| #8 sulfuric acid lava generation | Planned | values + machine rows | with #7 |
+| #5 geode spawn review | Planned | Geode+ budding drops and rates, mostly decisions | last; no code until decided |
+| #6 painted asphalt | Testing | built 2026-10-30, shipped 1.1.05; section kept below until a D&D writeup exists | done |
+| #1, #3, #4 | Testing | see Built, needs play | done |
 
-Build #2 and #3 together: both need D&D recipe types that no NCH helper covers (`create_dd:hydraulic_compacting`,
-`create_dd:sanding`). Suggested new script: `kubejs/server_scripts/engineering/dreams_desires.js` for #1, #2, #3, #6
-(and the recipe removals of #4); tags in a new block in `kubejs/server_scripts/tags/engineeringtags.js`.
+`dreams_desires.js` stays the D&D script for #2, #7 (and the recipe half of #8); tags in
+`kubejs/server_scripts/tags/engineeringtags.js` (or `wood_tags.js` for wood).
 
-Related rows: `worldgen/biomes/netherblocks #4` (no glowstone in the Overworld; its brief
-[worldgen_biomes_netherblocks.md](worldgen_biomes_netherblocks.md) #4 already records the D&D finding),
-`structures/rates-and-groups #7` (ocean geode depth, [brief](structures_rates-and-groups.md)),
-`magic #2` (uses for the Geode+ shards), `gameplay/blockrunner #5` (asphalt speed, owns the speed half of #6).
+Related rows: `worldgen/biomes/netherblocks #4` (no glowstone in the Overworld; [brief](worldgen_biomes_netherblocks.md) #4),
+`structures/rates-and-groups #7` (ocean geode depth, [brief](structures_rates-and-groups.md)), `magic #2` (Geode+ shards),
+`gameplay/blockrunner #5` (asphalt speed, owns the speed half of #6).
 
-Tests: no writeup prefix exists for D&D. Proposed: a new writeup `feature_writeup/dreams_desires.md` with prefix
-`DD-`, written when the first row is built (then fold each section here into it and delete it from this brief).
-
----
-
-## dreams-and-desires #4: Extra woods
-
-Status Testing (built 2026-10-31: rose, rubber and spirit merged into oak, smoked stays; [recipes_wood.md](../recipes_wood.md) 2.6 "D&D woods", SQ-RW-28, RW-28) / Work KubeJS / data / `engineering/dreams-and-desires #4`
-
-### Goal
-
-Decide which of D&D's four wood families stay in play, and take the rest out cleanly (no recipes, hidden in JEI,
-no generated compat variants).
-
-### Now
-
-- D&D registers four full wood families: `rose`, `smoked`, `rubber`, `spirit`. Each has `<w>_log`, `<w>_wood`,
-  `stripped_<w>_log`, `stripped_<w>_wood`, `<w>_planks`, `_slab`, `_stairs`, `_fence`, `_fence_gate`, `_door`,
-  `_trapdoor`, `_button`, `_pressure_plate` (lang `assets/create_dd/lang/en_us.json`; 13 blocks per wood).
-- **No recipe produces any D&D log or wood** (verified: none of the 777 jar recipes outputs a `*_log`; no trees, no
-  saplings, no worldgen). The planks, stairs etc. craft from the logs (`create_dd:<w>_planks`, `create_dd:<w>_wood`,
-  ...; Create cutting `create_dd:cutting/<w>_log` strips them). So all four families are creative-only today, but
-  visible in JEI (nothing in `kubejs/client_scripts/jeichanges.js` hides them).
-- Generated compat variants exist for all four: Every Compat (`config/everycomp-wood_types.toml` lines 65-69:
-  `[types.wood_type.create_dd] rose = true, smoked = true, rubber = true, spirit = true`; modules enabled at line 83 on:
-  handcrafted, architects_palette, beautify, another_furniture, quark, decorative_blocks, farmersdelight,
-  storagedrawers, twigs, lightmanscurrency, dramaticdoors, create), plus Moonlight-generated ones not controlled by
-  that file: `supplementaries:create_dd/{sign_post,hanging_sign}_<w>`, `suppsquared:create_dd/item_shelf_<w>`,
-  `immersive_weathering:create_dd/<w>_bark` (dict keys `i.create_dd_<w>_bark`, item_dict.js 12905-12908; composted at
-  0.8 in `kubejs/startup_scripts/compost/compost_values.js` 491-494).
-- D&D tags: `#create_dd:{rose,smoked,rubber,spirit}_logs`, the stripped logs in `#forge:stripped_logs`, planks etc. in
-  the vanilla wooden tags, all in `#create_dd:flammable_wood`.
-- Myrtrees (`myrtrees`) is the pack's rubber tree: `myrtrees:rubberwood_log`, `_planks`, `_leaves`, `_sapling`, no
-  stripped log, no stairs / doors of its own (Every Compat adds variants: `[types.wood_type.myrtrees] rubberwood`).
-  D&D's rubber family duplicates it.
-- IE treated wood (`immersiveengineering:treated_wood_{horizontal,vertical,packaged}`, `#forge:treated_wood`) is
-  planks only: IE has no treated log.
-- Removal machinery: `kubejs/startup_scripts/_lib/removed_items.js` (`global.removedItems`) is hidden in JEI
-  (`jeichanges.js` line 5) and stripped of item tags (`server_scripts/_lib/recipe_scan.js` line 51), and the scan at
-  the top of `recipe_scan.js` prints every recipe still naming one. It does **not** remove recipes; that is done by
-  hand with `R.remove(...)`.
-
-### Build
-
-1. Decide (below). Recommended: keep `smoked` (it gets a recipe in #1), remove `rose`, `spirit` and `rubber`.
-2. `item_dict.js`, D&D section (line 1580): add literal keys for every removed id, style
-   `i.create_dd_<w>_<form>` (prefixed like `i.create_dd_hazard_block`, since bare `i.rubber_planks` etc. would read as
-   generic), e.g. `i.create_dd_rose_log = 'create_dd:rose_log'`. 3 woods x 13 = 39 lines; generate them once with a
-   shell loop and paste, the dict has no loops. Add keys for the Moonlight variants too
-   (`i.create_dd_<w>_sign_post = 'supplementaries:create_dd/sign_post_<w>'`, `_hanging_sign`, `_item_shelf`).
-3. `removed_items.js`: append all of them (and `i.create_dd_<w>_bark`; also take those 3 barks out of
-   `compost_values.js`).
-4. Recipes: in `dreams_desires.js`, `R.bulk('remove', ...)` over `{output: id}` for every removed id, plus
-   `{input: id}` (the Moonlight sign / shelf recipes take the planks). Then run the server once and check that
-   `[jeiRemove]` in the log prints no recipe for these ids.
-5. Every Compat: set `rose = false`, `spirit = false`, `rubber = false` under `[types.wood_type.create_dd]` in
-   `config/everycomp-wood_types.toml` (it is a common config: client and server must match, so this ships through
-   the normal deploy). Unverified that `false` drops the type from every module; check after a restart that
-   `/dumpitemsbymod everycomp` (`server_scripts/_lib/dump_items.js`) lists no `create_dd/rose` etc.
-6. If smoked stays: nothing else; if merged with treated (option B below), see #1 Decisions.
-
-### Ids and data
-
-- D&D: `create_dd:{rose,rubber,spirit}_{log,wood,planks,slab,stairs,fence,fence_gate,door,trapdoor,button,pressure_plate}`,
-  `create_dd:stripped_{rose,rubber,spirit}_{log,wood}` (verified, lang + loot tables).
-- Moonlight variants (from `stack_sizes.json` and loot ids in the repo, verified for these 12): `supplementaries:create_dd/{sign_post,hanging_sign}_{rose,rubber,smoked,spirit}`,
-  `suppsquared:create_dd/item_shelf_{rose,rubber,smoked,spirit}`; Every Compat ids are generated at runtime and not
-  in the repo: list them in game.
-
-### Decisions
-
-- **Which woods stay.** Recommendation: smoked stays (theme fits Create; #1 gives it a source), rubber goes (duplicate
-  of Myrtrees; the rubber *material* items `create_dd:raw_rubber`, `rubber`, `rubber_block`, `padded_rubber` etc.
-  stay, they are not wood), rose and spirit go (no source, no theme in this pack).
-- **"Keep smoked or merge with treated".** A: keep smoked as its own decorative family (recommended). B: make smoked
-  logs IE's missing "treated log": smoked log -> 4 treated planks, smoked planks into `#forge:treated_wood`, remove
-  D&D's smoked planks set. B is worse: any `#forge:treated_wood` recipe would then accept smoked planks, which come
-  from a smoker with no creosote, so it bypasses IE's creosote cost. If treated-log flavour is wanted, add it the
-  other way round in #1 (a creosote route that also makes smoked logs).
-- **Rubber wood alternative**: keep D&D rubber as the building set for Myrtrees rubberwood (stonecut
-  `myrtrees:rubberwood_planks` <-> `create_dd:rubber_planks`). Not recommended: Every Compat already gives Myrtrees
-  rubberwood its stairs / doors etc.
-
-### Gotchas
-
-- Every Compat and Moonlight register their variants at startup: changing the toml needs a full restart of both
-  sides, and blocks of a disabled type already placed in a world turn to air. The logs were never obtainable in
-  survival, so only creative builds are at risk.
-- Moonlight variants (signs, shelves, bark) cannot be turned off per wood type; they stay registered and are only
-  hidden and recipe-less.
-- `#forge:stripped_logs` also feeds D&D's sap recipes (see #2); removing the stripped rose / spirit / rubber logs
-  from tags happens automatically through `recipe_scan.js`.
-
-### Tests
-
-- **DD-01 Woods gone:** JEI search `@create_dd rose`, `spirit`, `rubber_log` -> nothing; `@everycomp rose` -> nothing;
-  `@create_dd smoked` -> the smoked family is still there. Server log `[jeiRemove]` lists no recipe for the removed ids.
+Tests: no writeup prefix exists for D&D. Proposed: a new writeup `feature_writeup/dreams_desires.md` with prefix `DD-`,
+written with the next D&D build (fold the #6 section and the decided parts of #2 / #5 into it). Rows already written up use
+their writeup's prefix (RW-, EN-).
 
 ---
 
-## dreams-and-desires #1: Smoked wood recipe
+## dreams-and-desires #10: Smokable shape tags too wide
 
-Status Testing (built 2026-10-30, `wood/smoked_wood.js`; SQ-RW-23 to -26 queued) / Work KubeJS / `engineering/dreams-and-desires #1` · depends on #4 (smoked stays)
+Status Bug / Work KubeJS / `engineering/dreams-and-desires #10` · breaks `#1` (SQ-RW-23 FAIL)
 
 ### Goal
 
-D&D smoked logs are obtainable: smoke ordinary logs.
+Only the woods meant to smoke get smoking recipes: no Botania magic woods and no driftwood in any of the 13 smoked shapes.
 
 ### Now
 
-- No recipe makes `create_dd:smoked_log` or any smoked wood (verified, #4). The rest of the family crafts from it:
-  `create_dd:smoked_planks` (4 from `#create_dd:smoked_logs`), `create_dd:smoked_wood`, Create cutting
-  `create_dd:cutting/smoked_log` -> `stripped_smoked_log`.
-- Create's fan "bulk smoking" (fan through fire / campfire) runs vanilla `minecraft:smoking` recipes, so one smoking
-  recipe covers the Smoker and the fan. `R.smoking(output, input, e, idOverride, xp, cookingtime)`
-  (`neoCraftHelper.js` line 868) builds it; its input goes through `_itemJson`, which takes an array (one recipe for
-  several logs).
-- Vanilla log keys exist in the dict: `i.log_oak`, `i.wood_oak`, `i.log_oak_stripped`, `i.wood_oak_stripped`
-  (item_dict.js 380-383), the same pattern for the other species.
+- `kubejs/server_scripts/tags/wood_tags.js` lines 35-52 build the 13 `#creativeengineering:smokable/<shape>` tags with
+  `global.tags.addMatching` from the vanilla / forge wood tags. `smokeExcept` (line 39) = `*:*smoked*`, `*:*polished*`,
+  `*:*vertical*`. Botania (`botania:*`) and driftwood (`*:driftwood`, `*:driftwood_log`) are excluded only in the log
+  (line 40) and wood (41) tags; the stripped, planks, slab, stairs, fence, fence gate, door, trapdoor, button and pressure
+  plate tags (42-52) use `smokeExcept` alone.
+- `wood/smoked_wood.js` turns each tag into one smoking recipe (200 ticks; smoker, campfire, Create fan with a Smoking Sail).
+- Scratch r1031 ([scratch_run_2026-10-31.md](../testing/scratch_run_2026-10-31.md) lines 246, 273, 421): `smokable/planks`
+  holds 9 Botania planks and `upgrade_aquatic:driftwood_planks`; RW-23b: 13 recipes, Botania, driftwood, crimson and warped
+  inputs in most shapes.
+- Crimson and warped are in on purpose (the log tag takes `*_stem`; the wood tag drops stems, keeps hyphae), and RW-23
+  ([recipes_wood.md](../recipes_wood.md) line 230) expects crimson to smoke.
+- Shipped in 1.1.05 (changelog "Smoked Wood": "from any wood type").
 
 ### Build
 
-1. `item_dict.js` D&D section: `i.smoked_log`, `i.stripped_smoked_log`, `i.smoked_wood`, `i.stripped_smoked_wood`
-   (`create_dd:` ids; no clash with existing keys, `i.smoked_ham` is the only `smoked_` key).
-2. `dreams_desires.js`: four recipes, one per form, each taking the seven Overworld vanilla species:
-   ```js
-   var sp = ['oak', 'spruce', 'birch', 'jungle', 'acacia', 'dark_oak', 'mangrove']
-   R.smoking(i.smoked_log,           sp.map(s => i['log_' + s]),            e, 'smoked_log',           0.1, 200)
-   R.smoking(i.stripped_smoked_log,  sp.map(s => i['log_' + s + '_stripped']), e, 'stripped_smoked_log', 0.1, 200)
-   R.smoking(i.smoked_wood,          sp.map(s => i['wood_' + s]),           e, 'smoked_wood',          0.1, 200)
-   R.smoking(i.stripped_smoked_wood, sp.map(s => i['wood_' + s + '_stripped']), e, 'stripped_smoked_wood', 0.1, 200)
-   ```
-   All 28 keys exist (`i.log_<s>`, `i.wood_<s>`, `i.log_<s>_stripped`, `i.wood_<s>_stripped`, item_dict.js from
-   line 380).
-3. Optional (Decision 2): a Create filling route, `R.createFilling(i.smoked_log, [sp logs, Fluid.of(f.creosote, 125)], e)`.
-
-### Ids and data
-
-- `create_dd:smoked_log`, `stripped_smoked_log`, `smoked_wood`, `stripped_smoked_wood` (verified).
-- Fluid `immersiveengineering:creosote` = `f.creosote` (fluid_dict.js 106).
+1. `wood_tags.js` line 39: `var smokeExcept = ['*:*smoked*', '*:*polished*', '*:*vertical*', 'botania:*', '*:driftwood*']`;
+   drop `'botania:*'` and the driftwood patterns from the extra lists on lines 40 and 41 (they keep `*stripped*`, `_wood`,
+   `_hyphae`, `_log`, `_stem`, `_beam`).
+2. Only if the owner excludes the nether woods: add `'#minecraft:non_flammable_wood'` to `smokeExcept` (`except` takes
+   `#tags`, tag_helper.js line 37; covers crimson, warped and modded nether woods) and change RW-23's crimson case.
+3. `/reload`; rerun SQ-RW-23 and SQ-RW-23b. Player changelog: a **Fixed** bullet under "Smoked Wood" in `unreleased.md`
+   (1.1.05 is deployed), past tense, e.g. Botania woods and driftwood no longer smoke into Smoked wood.
 
 ### Decisions
 
-- **Which logs.** Recommendation: the seven vanilla Overworld species, explicit (not `#minecraft:logs_that_burn`, which
-  would include smoked logs themselves, hollow logs, modded stems and the removed D&D woods).
-- **Creosote route too?** Recommendation: no. One route keeps JEI simple; smoking is the name.
-- **Smoking time**: 200 ticks (twice a food item) so a Smoker is not a free decor machine; the fan ignores the time.
+- **Crimson and warped** (TODO decision): keep (recommended; RW-23 as written, and smoking a stem is no stranger than a log)
+  or exclude through `#minecraft:non_flammable_wood`.
+- Other woods to keep out (Twisted, Ancient, Azalea, Bamboo...): recommend none; the row names only Botania and driftwood.
 
 ### Gotchas
 
-- Bulk smoking also cooks anything else on the belt; logs are not food, so nothing else on them changes.
-- Charcoal is a *smelting* recipe, so the smoker and blasting / smelting do not conflict.
+- `addMatching` with `except` expands nested `#tag` entries to their members as the script runs, so woods added to the
+  vanilla tags later (by another tag script) are not filtered; keep `wood_tags.js` late in load order as it is.
+- Upgrade Aquatic river wood was merged away (removed_woods.js `river`); only driftwood remains of that mod's woods.
 
 ### Tests
 
-- **DD-02 Smoker:** oak log in a Smoker -> smoked log; stripped birch log -> stripped smoked log.
-- **DD-03 Fan:** encased fan through a campfire onto a belt of spruce logs -> smoked logs; JEI "Bulk Smoking" shows
-  the four recipes.
+- SQ-RW-23, SQ-RW-23b (rerun): no `botania:` or driftwood input in any smoked-shape recipe; crimson per the decision.
+- RW-23 in game (recipes_wood.md).
+
+---
+
+## dreams-and-desires #9: Bark cleanup for removed woods
+
+Status Planned / Work KubeJS / data / `engineering/dreams-and-desires #9`
+
+### Goal
+
+No Immersive Weathering bark is left for the D&D woods removed in #4, and no bark item is shown without a texture.
+
+### Now
+
+- **The removal is done** (2026-10-31, with #4): `startup_scripts/_lib/removed_woods.js` merges `i.create_dd_rose_bark`
+  (line 188), `i.create_dd_rubber_bark` (268) and `i.create_dd_spirit_bark` (348) into `i.bark_oak` (hidden, tags stripped,
+  old items turn into oak bark; 1.1.05 changelog line 114 "... and bark"). Smoked bark (`i.create_dd_smoked_bark`) stays with
+  smoked wood.
+- **The textureless bark is Myrtrees', not D&D's**: the log scan
+  ([log_warnings_lists.md](../log_warnings_lists.md) line 1019, "Texture file not found") lists
+  `immersive_weathering:textures/item/myrtrees/rubberwood_bark.png` (item `i.myrtrees_rubberwood_bark`, item_dict.js line
+  13288), next to `myrtrees:textures/block/rubberwood_log_side.png` (line 1007). Myrtrees ships `rubberwood_log.png` and
+  `_log_top.png` but no `_log_side`, so the generated bark has no source. Removing D&D rubber does not fix it; Myrtrees
+  rubberwood stays (it is #2's rubber tree).
+- Leftover: CD startup `immersive_weathering/compost_values.js` lines 68, 69, 71 still give the removed rose, rubber and
+  spirit barks a compost value (line 70, smoked bark, is right).
+- Licences: Myrtrees is All Rights Reserved (no copying its art); D&D is MIT (its
+  `textures/block/palettes/wood_types/rubber/rubber_log.png` can be used with a notice).
+
+### Build
+
+1. Texture: make `kubejs/assets/immersive_weathering/textures/item/myrtrees/rubberwood_bark.png` from D&D's rubber log side
+   (the TODO's "give it the Dreams and Desires texture"), in the shape of the other IW bark items (`textureswapper/`
+   palette swap of an existing IW bark item onto the D&D rubber log palette); MIT notice beside it.
+2. Drop the rose, rubber and spirit bark rows (lines 68, 69, 71) from CD `immersive_weathering/compost_values.js`; ships with
+   the next CD build.
+3. Rerun `tools/log_warnings_scan.py` after the next launch: the rubberwood bark line is gone. Changelog bullet only if the
+   texture counts as player-visible (it does: **Fixed:** Rubberwood Bark had no texture).
+
+### Decisions
+
+None open (TODO: none). Optional: also supply `myrtrees:textures/block/rubberwood_log_side.png` from the same D&D source if
+the log warning matters (not needed for the bark).
+
+### Tests
+
+- RW-new1 (proposed, numbered when queued): Rubberwood Bark shows a bark texture in JEI and in hand; no
+  `rubberwood_bark.png` line in `latest.log`.
+- RW-28 (existing) already checks that no rose, rubber or spirit bark is in JEI.
 
 ---
 
 ## dreams-and-desires #2: Rubber chain
 
-Status Planned / Work KubeJS / `engineering/dreams-and-desires #2` · depends on #4 (which rubber logs exist; D&D rubber wood merged into oak 2026-10-31)
+Status Planned / Work KubeJS / `engineering/dreams-and-desires #2` · #4 settled 2026-10-31: D&D rubber wood is merged into oak, so Myrtrees rubberwood is the only rubber log. Nothing built (2026-10-31: no latex, sap or rubber key in item_dict.js, no recipe in `dreams_desires.js`)
 
 ### Goal
 
@@ -210,7 +163,7 @@ rubber makes belts more cheaply than dried kelp.
 ### Now
 
 - **Myrtrees** (verified, decompiled): one `myrtrees:filled_rubberwood_log` per tree at trunk height +1 (also in the
-  pack's own copy `kubejs/data/creativeengineering/worldgen/configured_feature/wild/rubber_tree.json`, which uses
+  pack's own copy `kubejs/data/creative_delight/worldgen/configured_feature/wild/rubber_tree.json`, which uses
   `myrtrees:rubber_trunk_placer`, and in sapling-grown trees). It holds 10 000 latex units and never refills; a
   `myrtrees:tree_tap` on it drips 2 units every 5 ticks into a `myrtrees:wooden_bucket` under the tap (holds 2 000);
   right-clicking the bucket with >= 1 000 pops one `myrtrees:latex` item. So one tree = 10 latex, one latex per about
@@ -230,15 +183,16 @@ rubber makes belts more cheaply than dried kelp.
 - `create_dd:hydraulic_compacting` is a Create `BasinRecipe` (`HydraulicCompactingRecipe`): the normal basin JSON
   (`ingredients` with items / fluids, `results`, `heatRequirement`). No NCH helper and no KubeJS schema for it.
 - Create belt: `create:crafting/kinetics/belt_connector`, 6 `minecraft:dried_kelp` (`DDD/DDD`) -> 1
-  `create:belt_connector` (`i.belt_connector`, item_dict.js 175). Not touched by the pack.
-- NCH: `createEmptying(outputs, input, e, idOverride)` line 1449, `createCompacting(output, input, e, idOverride, heat)`
-  line 1250, `createMixing` 1266, `smoking` 868, `shaped` 698.
+  `create:belt_connector` (`i.belt_connector`, item_dict.js 224). Not touched by the pack.
+- NCH (line numbers 2026-10-31): `createEmptying(outputs, input, e, idOverride)` line 1848, `createCompacting(output, input, e,
+  idOverride, heat)` 1649, `createMixing` 1665, `smoking` 1016, `shaped` 798; `ddSanding` 1377 (built for #3) is the
+  pattern for a D&D recipe-type helper.
 
 ### Build
 
 1. Dicts. `item_dict.js` D&D section: `i.create_dd_raw_rubber = 'create_dd:raw_rubber'`,
    `i.create_dd_rubber = 'create_dd:rubber'`, `i.any_rubber = '#forge:rubbers'` (style of `i.any_dye_white`);
-   a Myrtrees block next to `i.rubberwood_sapling` (line 13309): `i.latex = 'myrtrees:latex'`,
+   a Myrtrees block next to `i.rubberwood_sapling` (line 13733): `i.latex = 'myrtrees:latex'`,
    `i.rubberwood_log = 'myrtrees:rubberwood_log'`, `i.rubberwood_planks`, `i.tree_tap = 'myrtrees:tree_tap'`,
    `i.myrtrees_wooden_bucket = 'myrtrees:wooden_bucket'`. `fluid_dict.js`: `f.sap = 'create_dd:sap'`.
 2. NCH helper (extend `neoCraftHelper.js`, next to the Create section): 
@@ -250,13 +204,13 @@ rubber makes belts more cheaply than dried kelp.
      var idSuffix = idOverride ?? global.NCH.toId(outArr[0], inArr[0], 'ddhydraulic')
      var ctx = 'ddHydraulicCompacting ' + idSuffix
      // items via _itemJson (countMode 'none', one entry per count like Create), fluids via _fluidJson,
-     // results via _itemJson({countMode:'flat', includeChance:true}) / _fluidJson; see dragonBreathing (line 1128)
+     // results via _itemJson({countMode:'flat', includeChance:true}) / _fluidJson; see ddSanding (line 1377) and dragonBreathing (1341)
      e.custom({ type: 'create_dd:hydraulic_compacting', ingredients: ..., results: ...,
                 heatRequirement: heat || 'none' }).id(`${global.NCH.modId}:ddhydraulic/${idSuffix}`)
    },
    ```
-3. Tag (`engineeringtags.js`, through `global.tags.add`): `creativeengineering:sap_logs` = `i.rubberwood_log` (plus
-   the D&D rubber logs only if #4 keeps them).
+3. Tag (`engineeringtags.js`, through `global.tags.add`): `creativeengineering:sap_logs` = `i.rubberwood_log` (the D&D
+   rubber logs are merged into oak since 2026-10-31, so nothing else).
 4. `dreams_desires.js`:
    - remove `create_dd:emptying/sap_from_logs`, `sap_from_wood`, `create_dd:hydraulic_compacting/sap_from_logs`,
      `sap_from_wood` (`R.bulk('remove', ...)`);
@@ -296,7 +250,8 @@ rubber makes belts more cheaply than dried kelp.
   latex; worth a tooltip on the tree tap (`client_scripts/tooltips.js`).
 - `create_dd:hydraulic_compacting` needs D&D's Hydraulic Press over a heated basin; JEI shows it under D&D's
   category. Confirm the custom recipe loads (no `[NCH]` warning, JEI entry visible).
-- Myrtrees' own worldgen is removed (wild_crops.json `rubber`, pack copy in 1 chunk of 4 in jungles); saplings are
+- Myrtrees' own worldgen is removed (CD `kubejs/data/creative_delight/kubejs/_worldgen/wild_crops.json` `rubber`, line 338;
+  the pack's copy `creative_delight:wild/rubber_tree` places it in jungles); saplings are
   also sold by the wandering trader (`wandering_trades.js` line 28).
 
 ### Tests
@@ -309,157 +264,76 @@ rubber makes belts more cheaply than dried kelp.
 
 ---
 
-## dreams-and-desires #3: Rose quartz sand blasting
-
-Status Built 2026-10-30 (patcherMod 1.1.04, installed 2026-10-31 00:44, not yet booted), untested / Work KubeJS + patcherMod / `engineering/dreams-and-desires #3`
-
-**Built 2026-10-30, differs from the plan below:** the user asked for exactly one item per item (80 % rough or 20 %
-polished, never both or neither), so the "accept independent rolls" decision is superseded. patcherMod adds an
-`"exclusive_results": true` flag for any Create processing recipe (one weighted pick per item, `fan/ExclusiveResults`,
-mixins on `ProcessingRecipeSerializer.readFromJson` and `ProcessingRecipe.rollResults`); `NCH.ddSanding(..., { exclusive: true })`
-writes it; the recipe is in `redstone.js` next to the other polished rose quartz routes. D&D's `SandingType.process` was
-read: it calls `RecipeApplier.applyRecipeOn(stack, recipe)`, so the per-item roll holds (gotcha below resolved).
-Writeup: [engineering.md](../engineering.md) 3, tests EN-19 to EN-21 (DD-07 is now EN-19).
+## dreams-and-desires #7: Tune milkshake lava generation
+Status **Planned** / Work KubeJS / data / TODO `engineering/dreams-and-desires #7`
 
 ### Goal
-
-D&D's sanding fan ("sand blasting") polishes rose quartz only partly per pass: 80 % stays rough, 20 % comes out
-polished, so a loop of passes does the full job.
+Tune what lava touching a milkshake generates, and fold the same results into mixing / extruding (machine recipes).
 
 ### Now
-
-- `create_dd:sanding/rose_quartz` (`create_dd:sanding`, `create:rose_quartz` -> `create:polished_rose_quartz`, 100 %).
-  The sanding fan runs through `#create_dd:fan_processing_catalysts/sanding` (`create_dd:sanding_sail`, sand, red sand).
-  `SandingRecipe` is a Create `ProcessingRecipe`, 1 input, up to 12 outputs, so chance outputs work.
-- Other polished rose quartz routes: Create sandpaper `create:sandpaper_polishing/rose_quartz` (by hand, 100 %, not
-  touched by the pack), charging `polished_rose_quartz_charging` in `kubejs/server_scripts/engineering/redstone.js`
-  line 91. Rose quartz itself: redstone.js 80-87.
-- No NCH helper for D&D fan types. `dragonBreathing` (line 1128) is the template: a custom fan type with chance results
-  through `_itemJson(..., {includeChance: true})`.
-- How Create applies it (verified, Create 0.5.1.i): `RecipeApplier` rolls every output once **per item in the stack**,
-  each output independently. `FanProcessing`: an item entity is processed once per fan type (its `Time` goes to -1 and
-  stays there); extra result stacks spawn as fresh entities; on a belt the results copy `processedBy` and
-  `processingTime = -1`, so nothing is processed twice by the same fan type on the same belt.
+- The generation is code in D&D 1.2c (`DesiresFluids.addMilkshakeInteraction`, read with `javap` for the JEI manual rows):
+  lava beside a milkshake makes a stone (flowing lava) or obsidian (a lava source) by flavour: chocolate -> scorchia,
+  vanilla -> dolomite, strawberry -> cobbled deepslate, glowberry -> gabbro, pumpkin -> dripstone block; over bedrock an
+  ore stone (veridium, asurine, crimsite, ochrum, breccia) at `chanceForOreStone` 25 %, over artificial bedrock (beacon,
+  netherite block, dragon egg, end portal, reinforced deepslate) at `chanceForArtificialOreStone` 5 %.
+- Those two numbers are in the **server config** `serverconfig/create_dd-server.toml` (per world: `saves/<world>/serverconfig/`
+  in New World, Workspace and WorldA to WorldG, 25 / 5 where read; no `defaultconfigs/create_dd-server.toml` exists, checked
+  2026-10-31), range 1 to 100 and 0 to 100.
+- The pack's machine route for ore stones exists: `kubejs/server_scripts/engineering/resource_blocks.js` has
+  `R.createExtruding(i.veridium, [lava 1000, water 1000], e, 'veridium_extruding', catalyst dust block, 10)` and the same for
+  crimsite and the other stones, plus compacting (250 mB lava + 2 gravel + 6 nuggets). Extruding with milkshake instead of
+  water for the base stones (scorchia, dolomite, ...) is not defined: unverified (grep `milkshake` in server_scripts finds nothing).
+- JEI shows the world rows in the Lava Generation tab (`jei_world/lava_generation/manual.json`, renamed by
+  `jei/jei-coverage #21`).
 
 ### Build
-
-1. NCH helper `ddSanding(outputs, input, e, idOverride)`: copy `dragonBreathing`, type `create_dd:sanding`, id
-   `${modId}:ddsanding/${idSuffix}`. (If D&D's seething or freezing get recipes later, generalise it to
-   `ddFan(type, outputs, input, e, idOverride)`.)
-2. `dreams_desires.js`:
-   ```js
-   R.remove({ id: 'create_dd:sanding/rose_quartz' }, e)
-   R.ddSanding([Item.of(i.rose_quartz).withChance(0.8), Item.of(i.polished_rose_quartz).withChance(0.2)],
-       i.rose_quartz, e, 'rose_quartz')
-   ```
-3. Document in the writeup how to make it "recursive": route the belt through a funnel / depot / chute and back
-   (re-inserted items are new `TransportedItemStack`s and get processed again), or let thrown items fall back into
-   the stream (a new entity each time).
-
-### Ids and data
-
-`create:rose_quartz` = `i.rose_quartz`, `create:polished_rose_quartz` = `i.polished_rose_quartz` (item_dict.js
-1541-1542); recipe `create_dd:sanding/rose_quartz` (verified).
+1. Choose values (Decisions). Config: add `defaultconfigs/create_dd-server.toml` with the new chances (hand-edited, so copy it
+   to `configs_edited/server_config/`), and note that existing worlds keep their own serverconfig file.
+2. Folding: `R.createExtruding` / `R.createMixing` rows for each milkshake stone through `global.NCH`, with the chance
+   outputs of the ore stones kept lower than the machine rows; ids from `global.item` / `global.fluid` (the five
+   fluids `create_dd:{chocolate,vanilla,strawberry,glowberry,pumpkin}_milkshake` have no fluid_dict.js keys yet: add them).
+3. Update the JEI manual rows and notes for the new chances.
 
 ### Decisions
-
-- **Exact 80/20 is not possible** with Create chances: the two rolls are independent, so per item 64 % rough only,
-  16 % both (2 items), 4 % polished only, 16 % nothing. The expected count is 0.8 rough + 0.2 polished = 1.0 per item,
-  i.e. 80/20 on average and no net loss. Recommendation: accept this. The alternative (polished 20 %, nothing else)
-  destroys 80 % per pass.
-- Keep sandpaper at 100 %: hand work stays the slow but sure route. Recommendation: yes.
+The new values (the row says "values"); recommend lowering `chanceForOreStone` only if the machine route is as cheap, so the
+world trick is not the best ore source. Whether the world interaction stays: it is hardcoded, so only the numbers can change.
 
 ### Gotchas
+Config read per world; a pack release needs the new numbers in `world_serverconfig/` of the deploy payload (deploy.md).
 
-- Whether D&D's sanding type goes through Create's `RecipeApplier` (and so rolls per item) is assumed, not read from
-  D&D's fan type class; DD-07 checks it.
-- JEI shows the two chances per output; the "recursive" behaviour needs a line in the writeup or a tooltip.
-
-### Tests
-
-- **DD-07 Sanding split:** 64 rose quartz on a belt through a sanding fan -> about 51 rough and 13 polished (each
-  pass); feed the rough back through a funnel loop until none is left -> all polished.
+### Tests (EN-)
+- EN-new1 (proposed, numbered when queued; EN-19 is now rose quartz sanding): lava over bedrock beside chocolate milkshake gives scorchia and veridium at the configured share (50 trials).
 
 ---
 
-## dreams-and-desires #6: Painted asphalt
-
-Status Testing (built 2026-10-30, `engineering/dreams_desires.js`, SQ-DD-08 scratch server PASSED r1031 2026-10-31) / Work KubeJS / resource pack / `engineering/dreams-and-desires #6` · speed half in
-`gameplay/blockrunner #5`
+## dreams-and-desires #8: Tune sulfuric acid lava generation
+Status **Planned** / Work KubeJS / data / TODO `engineering/dreams-and-desires #8`
 
 ### Goal
-
-D&D's 16 coloured asphalt blocks become "Painted Asphalt": made by painting Immersive Petroleum asphalt (8 asphalt +
-1 dye -> 8), washed back with soap, and running like IP asphalt.
+Tune what lava generates against Vintage Improvements' sulfuric acid.
 
 ### Now
-
-- D&D recipes (verified): `create_dd:crafting/decor/<colour>_asphalt_block`, shaped `BSB/SDS/BSB`, slime ball x4 +
-  `create:scorchia` x4 + `#forge:dyes/<colour>` -> 4. `create_dd:hazard_block_from_asphalt_blocks_stonecutting`:
-  `#create_dd:asphalt_blocks` -> 2 hazard blocks (keep).
-- Item ids in the dict: `i.<colour>_asphalt_block` (item_dict.js 1581-1596), IP: `i.asphalt`, `i.asphalt_slab`,
-  `i.asphalt_stair` (4144-4146). Dyes: `i.any_dye_<colour>` = `#forge:dyes/<colour>` (from line 1991). Soap:
-  `i.soap = 'supplementaries:soap'` (1495).
-- "IE asphalt" in the row is **Immersive Petroleum** asphalt (`immersivepetroleum:asphalt`, IP recipe
-  `immersivepetroleum:asphalt`, 8 per craft from bitumen, sand, gravel, water). IE itself has none.
-- Speed: already done in 1.0.9. `kubejs/startup_scripts/changes/block_properties.js` resets D&D asphalt friction 0.35
-  -> 0.6 and speed factor 0.001 -> 1.0 (jump factor 1.25 kept), and `blocktags.js` line 125 puts
-  `create_dd:*_asphalt_block` in BlockRunner's `asphalt` tier with IP asphalt (1.50). BR-28 / BR-29 untested.
-- Supplementaries soap recipes are plain shapeless crafts (e.g. `supplementaries:soap/piston`: sticky piston + soap ->
-  piston); its `supplementaries:soap_clearing` special recipe uses Moonlight's colour sets, which have no uncoloured
-  member for D&D asphalt, so soap does nothing to it today (unverified in game).
-- Names: D&D lang `block.create_dd.<colour>_asphalt_block` = "<Colour> Asphalt Block".
+- Vintage Improvements 0.2.0.3 (`VintageFluids`): sulfuric acid + lava: flowing lava sets to `create:scoria`, a lava source
+  to obsidian (`jei_world/lava_generation/manual.json`, requires `vintageimprovements` and `create`). The class is code; no
+  option for it was found in `config/vintageimprovements-common.toml` (grep for lava / acid is empty).
+- Acid fluid key `f.sulfuric_acid` (fluid_dict.js line 202), bucket `i.sulfuric_acid_bucket`.
 
 ### Build
-
-1. `dreams_desires.js`:
-   ```js
-   var colors = ['white', 'orange', 'magenta', 'light_blue', 'yellow', 'lime', 'pink', 'gray', 'light_gray', 'cyan',
-       'purple', 'blue', 'brown', 'green', 'red', 'black']
-   R.bulk('remove', colors.map(c => [{ id: 'create_dd:crafting/decor/' + c + '_asphalt_block' }, e]))
-   colors.forEach(c => R.shaped(Item.of(i[c + '_asphalt_block'], 8), ['AAA', 'ADA', 'AAA'],
-       { A: [i.asphalt, '#create_dd:asphalt_blocks'], D: i['any_dye_' + c] }, e, c + '_painted_asphalt'))
-   R.shaped(Item.of(i.asphalt, 8), ['AAA', 'ASA', 'AAA'], { A: '#create_dd:asphalt_blocks', S: i.soap }, e,
-       'asphalt_from_painted_asphalt_soap')
-   ```
-   (Add `i.any_asphalt_painted = '#create_dd:asphalt_blocks'` to the dict instead of the literal tag.)
-2. Names, `kubejs/client_scripts/namechanges.js`: 16 lines in the namespace form
-   `e.add('create_dd', 'block.create_dd.<colour>_asphalt_block', '<Colour> Painted Asphalt')` (the 3-argument form,
-   see the comment at the top of `name_fixes.js`: the 2-argument one lands in `minecraft` and can lose). A loop over
-   `colors` with a name map is fine. That is the whole "resource pack" part unless the textures change.
-3. Leave `block_properties.js` and the BlockRunner tier as they are; `gameplay/blockrunner #5` owns speed.
-
-### Ids and data
-
-Verified: the 16 D&D recipe ids, `#create_dd:asphalt_blocks` (16 blocks), IP asphalt recipes, soap recipe shape.
+Same two routes as #7: values (needs a mixin if the numbers are hardcoded: read `VintageFluids` first) and folding the result
+into mixing / extruding rows through `global.NCH`. Likely only a recipe route, since no config exists.
 
 ### Decisions
+Values (the row names none). Recommend recipe route only and a note in the JEI row.
 
-- **Re-dyeing**: the sketch accepts painted asphalt as the "A" ingredient too (8 red + white dye -> 8 white).
-  Recommendation: yes, it costs nothing.
-- **Soap ratio**: 8 painted + 1 soap -> 8 asphalt (mirrors the paint recipe). Recommendation over 1 + 1 -> 1.
-- **Textures**: keep D&D's. A "painted" look (IP asphalt texture with a coloured stripe) would need new textures in
-  the resource pack; not in the row's scope.
-- **Slabs / stairs**: IP's slab and stair recipes take `#forge:asphalt`; painted asphalt is not in it, so painted
-  asphalt has no slabs or stairs. Recommendation: leave it (adding it would turn painted asphalt into plain IP slabs).
-
-### Gotchas
-
-- `create:scorchia` loses its only D&D use; scorchia still has the pack's recipes (`engineering/resource_blocks.js`
-  99-105).
-- D&D's jump factor 1.25 stays on painted asphalt (blockrunner.md 3.5); IP asphalt jumps normally.
-
-### Tests
-
-- **DD-08 Paint:** 8 IP asphalt + red dye -> 8 Red Painted Asphalt; the old scorchia recipe is gone from JEI.
-- **DD-09 Soap:** 8 painted (mixed colours) + soap -> 8 IP asphalt.
-- **DD-10 Speed:** BR-28 (blockrunner.md): IP and painted asphalt read the same `M`.
+### Tests (EN-)
+- EN-new2 (proposed, numbered when queued; EN-20 is taken): the acid + lava rows in JEI match the world result; the machine recipe gives the same block.
 
 ---
 
-## dreams-and-desires #5: Glowstone geodes
+## dreams-and-desires #5: Geode spawn review
 
-Status Planned / Work data / `engineering/dreams-and-desires #5`
+Status Planned / Work data / `engineering/dreams-and-desires #5` (rechecked 2026-10-31: `config/geode.json5` unchanged since the
+initial commit, no `kubejs/data/geode/` overrides, the `create_dd` striated override still in place)
 
 ### Goal
 
@@ -531,78 +405,96 @@ Only after the decisions:
 
 ---
 
-## dreams-and-desires #7: Tune milkshake lava generation
-Status **Planned** / Work KubeJS / data / TODO `engineering/dreams-and-desires #7`
+## dreams-and-desires #6: Painted asphalt
+
+Status Testing (built 2026-10-30, `engineering/dreams_desires.js`, SQ-DD-08 scratch server PASSED r1031 2026-10-31; shipped 1.1.05) / Work KubeJS / resource pack / `engineering/dreams-and-desires #6` · speed half in
+`gameplay/blockrunner #5`
+
+Built 2026-10-30 as planned (`dreams_desires.js` lines 7-19, with dict key `i.t_painted_asphalt` for
+`#create_dd:asphalt_blocks`; 16 names by a loop in `namechanges.js` line 345; right-clicking with soap still gives white
+painted asphalt, Supplementaries' colour set). Fold into a D&D writeup (`dreams_desires.md`, DD-08 to DD-10) when one is
+written, then delete this section; the plan below is kept as written.
 
 ### Goal
-Tune what lava touching a milkshake generates, and fold the same results into mixing / extruding (machine recipes).
+
+D&D's 16 coloured asphalt blocks become "Painted Asphalt": made by painting Immersive Petroleum asphalt (8 asphalt +
+1 dye -> 8), washed back with soap, and running like IP asphalt.
 
 ### Now
-- The generation is code in D&D 1.2c (`DesiresFluids.addMilkshakeInteraction`, read with `javap` for the JEI manual rows):
-  lava beside a milkshake makes a stone (flowing lava) or obsidian (a lava source) by flavour: chocolate -> scorchia,
-  vanilla -> dolomite, strawberry -> cobbled deepslate, glowberry -> gabbro, pumpkin -> dripstone block; over bedrock an
-  ore stone (veridium, asurine, crimsite, ochrum, breccia) at `chanceForOreStone` 25 %, over artificial bedrock (beacon,
-  netherite block, dragon egg, end portal, reinforced deepslate) at `chanceForArtificialOreStone` 5 %.
-- Those two numbers are in the **server config** `serverconfig/create_dd-server.toml` (per world: `saves/WorldB/serverconfig`,
-  `WorldC`, `Workspace`; no `defaultconfigs/create_dd-server.toml` exists), range 1 to 100 and 0 to 100.
-- The pack's machine route for ore stones exists: `kubejs/server_scripts/engineering/resource_blocks.js` has
-  `R.createExtruding(i.veridium, [lava 1000, water 1000], e, 'veridium_extruding', catalyst dust block, 10)` and the same for
-  crimsite and the other stones, plus compacting (250 mB lava + 2 gravel + 6 nuggets). Extruding with milkshake instead of
-  water for the base stones (scorchia, dolomite, ...) is not defined: unverified (grep `milkshake` in server_scripts finds nothing).
-- JEI shows the world rows in the Lava Generation tab (`jei_world/lava_generation/manual.json`, renamed by
-  `jei/jei-coverage #21`).
+
+- D&D recipes (verified): `create_dd:crafting/decor/<colour>_asphalt_block`, shaped `BSB/SDS/BSB`, slime ball x4 +
+  `create:scorchia` x4 + `#forge:dyes/<colour>` -> 4. `create_dd:hazard_block_from_asphalt_blocks_stonecutting`:
+  `#create_dd:asphalt_blocks` -> 2 hazard blocks (keep).
+- Item ids in the dict: `i.<colour>_asphalt_block` (item_dict.js 1581-1596), IP: `i.asphalt`, `i.asphalt_slab`,
+  `i.asphalt_stair` (4144-4146). Dyes: `i.any_dye_<colour>` = `#forge:dyes/<colour>` (from line 1991). Soap:
+  `i.soap = 'supplementaries:soap'` (1495).
+- "IE asphalt" in the row is **Immersive Petroleum** asphalt (`immersivepetroleum:asphalt`, IP recipe
+  `immersivepetroleum:asphalt`, 8 per craft from bitumen, sand, gravel, water). IE itself has none.
+- Speed: already done in 1.0.9. `kubejs/startup_scripts/changes/block_properties.js` resets D&D asphalt friction 0.35
+  -> 0.6 and speed factor 0.001 -> 1.0 (jump factor 1.25 kept), and `blocktags.js` line 125 puts
+  `create_dd:*_asphalt_block` in BlockRunner's `asphalt` tier with IP asphalt (1.50). BR-28 / BR-29 untested.
+- Supplementaries soap recipes are plain shapeless crafts (e.g. `supplementaries:soap/piston`: sticky piston + soap ->
+  piston); its `supplementaries:soap_clearing` special recipe uses Moonlight's colour sets, which have no uncoloured
+  member for D&D asphalt, so soap does nothing to it today (unverified in game).
+- Names: D&D lang `block.create_dd.<colour>_asphalt_block` = "<Colour> Asphalt Block".
 
 ### Build
-1. Choose values (Decisions). Config: add `defaultconfigs/create_dd-server.toml` with the new chances (hand-edited, so copy it
-   to `configs_edited/server_config/`), and note that existing worlds keep their own serverconfig file.
-2. Folding: `R.createExtruding` / `R.createMixing` rows for each milkshake stone through `global.NCH`, with the chance
-   outputs of the ore stones kept lower than the machine rows; ids from `global.item` / `global.fluid` (the milkshake fluids
-   `create_dd:*_milkshake`, check the keys in fluid_dict).
-3. Update the JEI manual rows and notes for the new chances.
+
+1. `dreams_desires.js`:
+   ```js
+   var colors = ['white', 'orange', 'magenta', 'light_blue', 'yellow', 'lime', 'pink', 'gray', 'light_gray', 'cyan',
+       'purple', 'blue', 'brown', 'green', 'red', 'black']
+   R.bulk('remove', colors.map(c => [{ id: 'create_dd:crafting/decor/' + c + '_asphalt_block' }, e]))
+   colors.forEach(c => R.shaped(Item.of(i[c + '_asphalt_block'], 8), ['AAA', 'ADA', 'AAA'],
+       { A: [i.asphalt, '#create_dd:asphalt_blocks'], D: i['any_dye_' + c] }, e, c + '_painted_asphalt'))
+   R.shaped(Item.of(i.asphalt, 8), ['AAA', 'ASA', 'AAA'], { A: '#create_dd:asphalt_blocks', S: i.soap }, e,
+       'asphalt_from_painted_asphalt_soap')
+   ```
+   (Add `i.any_asphalt_painted = '#create_dd:asphalt_blocks'` to the dict instead of the literal tag.)
+2. Names, `kubejs/client_scripts/namechanges.js`: 16 lines in the namespace form
+   `e.add('create_dd', 'block.create_dd.<colour>_asphalt_block', '<Colour> Painted Asphalt')` (the 3-argument form,
+   see the comment at the top of `name_fixes.js`: the 2-argument one lands in `minecraft` and can lose). A loop over
+   `colors` with a name map is fine. That is the whole "resource pack" part unless the textures change.
+3. Leave `block_properties.js` and the BlockRunner tier as they are; `gameplay/blockrunner #5` owns speed.
+
+### Ids and data
+
+Verified: the 16 D&D recipe ids, `#create_dd:asphalt_blocks` (16 blocks), IP asphalt recipes, soap recipe shape.
 
 ### Decisions
-The new values (the row says "values"); recommend lowering `chanceForOreStone` only if the machine route is as cheap, so the
-world trick is not the best ore source. Whether the world interaction stays: it is hardcoded, so only the numbers can change.
+
+- **Re-dyeing**: the sketch accepts painted asphalt as the "A" ingredient too (8 red + white dye -> 8 white).
+  Recommendation: yes, it costs nothing.
+- **Soap ratio**: 8 painted + 1 soap -> 8 asphalt (mirrors the paint recipe). Recommendation over 1 + 1 -> 1.
+- **Textures**: keep D&D's. A "painted" look (IP asphalt texture with a coloured stripe) would need new textures in
+  the resource pack; not in the row's scope.
+- **Slabs / stairs**: IP's slab and stair recipes take `#forge:asphalt`; painted asphalt is not in it, so painted
+  asphalt has no slabs or stairs. Recommendation: leave it (adding it would turn painted asphalt into plain IP slabs).
 
 ### Gotchas
-Config read per world; a pack release needs the new numbers in `world_serverconfig/` of the deploy payload (deploy.md).
 
-### Tests (EN-)
-- EN-19 (proposed): lava over bedrock beside chocolate milkshake gives scorchia and veridium at the configured share (50 trials).
+- `create:scorchia` loses its only D&D use; scorchia still has the pack's recipes (`engineering/resource_blocks.js`
+  99-105).
+- D&D's jump factor 1.25 stays on painted asphalt (blockrunner.md 3.5); IP asphalt jumps normally.
 
----
+### Tests
 
-## dreams-and-desires #8: Tune sulfuric acid lava generation
-Status **Planned** / Work KubeJS / data / TODO `engineering/dreams-and-desires #8`
-
-### Goal
-Tune what lava generates against Vintage Improvements' sulfuric acid.
-
-### Now
-- Vintage Improvements 0.2.0.3 (`VintageFluids`): sulfuric acid + lava: flowing lava sets to `create:scoria`, a lava source
-  to obsidian (`jei_world/lava_generation/manual.json`, requires `vintageimprovements` and `create`). The class is code; no
-  option for it was found in `config/vintageimprovements-common.toml` (grep for lava / acid is empty).
-- Acid fluid key `f.sulfuric_acid` (fluid_dict line 178), bucket `i.sulfuric_acid_bucket`.
-
-### Build
-Same two routes as #7: values (needs a mixin if the numbers are hardcoded: read `VintageFluids` first) and folding the result
-into mixing / extruding rows through `global.NCH`. Likely only a recipe route, since no config exists.
-
-### Decisions
-Values (the row names none). Recommend recipe route only and a note in the JEI row.
-
-### Tests (EN-)
-- EN-20 (proposed): the acid + lava rows in JEI match the world result; the machine recipe gives the same block.
+- **DD-08 Paint:** 8 IP asphalt + red dye -> 8 Red Painted Asphalt; the old scorchia recipe is gone from JEI.
+- **DD-09 Soap:** 8 painted (mixed colours) + soap -> 8 IP asphalt.
+- **DD-10 Speed:** BR-28 (blockrunner.md): IP and painted asphalt read the same `M`.
 
 ---
 
 ## Built, needs play
 
-None: every row of this subfamily is Planned.
+- `engineering/dreams-and-desires #1` Smoked wood recipe: [recipes_wood.md](../recipes_wood.md) "Pending" and history 2026-10-30; shipped 1.1.05; open: S (SQ-RW-23 FAILED r1031, fix is `#10`; SQ-RW-24 client), C (CQ-RW-23), P (RW-23 to RW-26).
+- `engineering/dreams-and-desires #3` Rose quartz sand blasting: [engineering.md](../engineering.md) 3; shipped 1.1.05; open: S (EN-21 server half PASSED r1031), C P T (EN-19, EN-20, EN-21 JEI look).
+- `engineering/dreams-and-desires #4` Extra woods: [recipes_wood.md](../recipes_wood.md) 2.6 "D&D woods"; shipped 1.1.05; open: S (SQ-RW-28 PASSED r1031), C (CQ-RW-28), P (RW-28).
+- `engineering/dreams-and-desires #6` Painted asphalt: section above (no writeup yet); shipped 1.1.05; open: S (SQ-DD-08 PASSED r1031), C P (DD-08 to DD-10).
 
 ## Writeup corrections made
 
-None. The linked writeups (nether_worldgen.md F7, blockrunner.md 3.5, mob_block_tweaks.md) match the code and the
+None (2026-10-21; rechecked 2026-10-31). The linked writeups (nether_worldgen.md F7, blockrunner.md 3.5, mob_block_tweaks.md) match the code and the
 1.0.9 deploy.
 
 ## Extra woods: overlap survey (scratchpad 2026-10-27)

@@ -15,7 +15,7 @@ checks pass; the owner has used the button in game (CL-13 found 2026-10-27, fixe
 | Deploy integration (ship `unreleased.md` as `<version>.md`, rename on snapshot, deployed files frozen, lint) | BUILT | `tools/build_deploy.py` (`check_changelog`, `freeze_changelog`), `tools/changelog_lint.py` |
 | Writing rules for entries | DESIGN | section 3.6 of this file |
 | 1.1.01 changelog (every change since 1.0.9) | DEPLOYED 2026-10-22, frozen as `changelog/1.1.01.md`. 1.1.02 deployed 2026-10-23, frozen as `changelog/1.1.02.md`; `unreleased.md` now holds the 1.1.03 working list. Written 2026-10-21, audited 2026-10-22 (section 8) | `unreleased.md`: one bullet per player-visible change in 9 families, kept true as work lands (re-synced 2026-10-22 against the working tree); lint 0 errors, length warnings only (the lint counts sub-bullets into the 300, every single bullet and sub-bullet is under it). Same-behaviour ports (tier 1, Glowing Illagers, Comfortable Campfires, Bottled Air, Fast Leaf Decay's cascade) have no bullet |
-| Historic changelogs 1.0.0 to 1.0.9 (brief) | Planned | TODO `ui/changelog #2` |
+| Historic changelogs 1.0.0 to 1.0.9 | WRITTEN 2026-10-31: 1.0.1 to 1.0.9 brief; 1.0.0 complete (424 bullets, 57 families: the whole pack against vanilla and the stock mods, owner request). Not shipped yet | `changelog/1.0.0.md` to `1.0.9.md`; TODO `ui/changelog #2` |
 
 Knobs (CEConfig `[changelog]`, client side): `enabled` (true), `titleButton` (true), `pauseButton` (true),
 `updatePopup` (true).
@@ -165,6 +165,9 @@ a bullet if its change was pulled. The list should read at every moment as if it
 **Deployed versions are permanent.** Never edit a version file after it ships, not even to point at a newer
 version. If something from an older version changes, it gets its own bullet in the working list, written so it
 stands on its own ("**Changed:** Wine now ages in any cold room, not only in a cellar.").
+Exception: a restyle the user asks for (same facts, current format and wording; done 2026-10-31 for 1.1.01 to
+1.1.04). Record each restyled file's new sha1 in `deploy/changelog_restyles.json`, or the next build fails the
+frozen check.
 
 **Who it is for.** A player who knows the game and this pack's mods but not its code, configs or history. They
 read it to learn what changed. It is a change list, not a guide or a pitch.
@@ -252,7 +255,8 @@ is not run in dev.
 - **Families per changelog, not a fixed list** (your call, 2026-10-21). Suggested names keep versions alike; the
   lint checks shape, not names.
 - **Deployed changelogs are permanent** (your call, 2026-10-21). Enforced by the history sha1 check, so a slip is
-  a build error rather than a silent edit.
+  a build error rather than a silent edit. Restyles the user asks for are allowed through
+  `deploy/changelog_restyles.json` (3.6).
 - **The working list is shipped as written.** The lint is the only gate, so the writing rules in 3.6 apply at the
   time of writing, not at release.
 
@@ -352,3 +356,25 @@ NOTICE, and the MC overrides reobfuscated (`m_6303_`, `m_5646_`, ...).
   covers every block with stored data, camera bag flashes named. Added: the `/undo_excavation` logout crash fix.
   Conditional: if extra stem fruit keeps ignoring seasons (TODO `farming/crops #12`), its bullet needs "Extra fruit
   grows in any season."
+- 2026-10-31: restyled the deployed 1.1.01 to 1.1.04 files to the 1.1.05 format at the user's request: feature
+  families with catch-alls last, one line per bullet, multi-change bullets split, 3.6 wording. Same facts (the
+  numbers in each file are unchanged). New sha1s recorded in `deploy/changelog_restyles.json`; build_deploy's frozen
+  check accepts a shipped file that matches either its history sha1 or its restyle entry.
+- 2026-10-31: historic changelog 1.0.9 written (TODO `ui/changelog #2`) from plan_1.0.9.md, the deploy log and the
+  feature writeups, in the 1.1.05 family style. Left out as dev-only: code comments, tag and item-dictionary cleanup,
+  the reload log line, server-only config sections (felsic shield, air brake), the shield class pre-load (the
+  09-24 shield crash was a stale jar). 1.0.0 to 1.0.8 still to write.
+- 2026-10-31: historic changelogs 1.0.1 to 1.0.8 written (1.0.6 includes 1.0.5, which never deployed; 1.0.2 says it
+  reached clients only, the server going from 1.0.1 to 1.0.3). Sources: plan docs, deploy log entries, git commits
+  for 1.0.1 and 1.0.2 (no plans), feature writeups. Same brevity and leave-outs as 1.0.9. 1.0.0 not written.
+- 2026-10-31: historic changelog 1.0.0 written at the owner's request as a complete catalogue, not brief (exception to
+  the 3.6 brevity rule for this one file): everything the pack adds, changes or removes against vanilla 1.19.2 and the
+  stock mods, 424 bullets in 57 families. Sources: the deploy record `deploy/history/1.0.0.json` (mod list, file
+  hashes), the initial commit 609cd21 (657 of 687 kubejs files and every config byte-identical to the record), and the
+  deployed jar `development/patcherMod/jar_archive/creativeengineering-1.0.0.jar` as the truth for Java (the 609cd21
+  source is newer). Left out as post-deploy: everything dated 2026-09-27 in the 1.0.0-era writeups and every class
+  missing from the jar (surface sticky facing, camo speed, sinking, WTHIT Run Speed, Lootr container swaps, pool
+  tuner, Jetpack tooltip freeze fix, NVIDIA exit fix, Framed Copycat rename, D&D asphalt friction). Not shipped in
+  1.0.0, nothing reflects it; uncertain values (structure and biome multipliers, Item Physics burn leftovers, tooltip
+  lines, deployed block-runner tier contents) follow 609cd21 where the deployed copy differs. Lint 0 errors, 25 length
+  warnings from sub-bullet lists.

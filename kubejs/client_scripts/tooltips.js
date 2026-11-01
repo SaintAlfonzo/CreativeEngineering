@@ -792,6 +792,19 @@ var i = global.item;
 	);
 	addTooltipPattern(e, 'framedblocks:*double*', ['Hybrid block: each part holds its own camo', col.norm]);
 
+// ############################## Flower Pots ##############################
+
+	// Wall-mountable plant boxes (feature_writeup/flower_pots.md 3.4)
+	addTooltips(e,
+		[i.flower_box, ['Can be placed on walls', col.norm]],
+		[i.vinery_flower_box, ['Can be placed on walls', col.norm]]
+	);
+	addTooltipPattern(e, '*:*_planter_box', ['Can be placed on walls', col.norm]);
+	// Silt pots are soil for any plant once filled with rooted dirt (patcherMod SiltPotSoilMixin)
+	addTooltipPattern(e, 'twigs:*silt_pot', ['Use Rooted Dirt on it to fill it; plants then grow on top', col.norm]);
+	// Vinery's own "Can be placed" line on the box (the new line says it)
+	removeTooltipKey(e, 'block.vinery.canbeplaced.tooltip', i.vinery_flower_box);
+
 // ############################## Botania ##############################	 
    
    	addTooltips(e,

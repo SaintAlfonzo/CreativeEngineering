@@ -13,6 +13,7 @@ can be potted, a tooltip label on every flower pot, every pot distinct, pots hol
 | Probe `/pottest` (`tools/flower_pot_test/pot_probe.js`, scratch-only) | BUILT 2026-10-27; SQ-POT-02 to -04 ran 2026-10-27 evening (427 probe mismatches, 6 probe exceptions: `minecraft:hanging_roots` in 6 holders; the F1 `ClassCastException` did not show) | read the mismatches (SQ-POT-05) |
 | Matrix generator `tools/flower_pot_audit.py` -> [flower_pots_matrix.md](flower_pots_matrix.md) | BUILT 2026-10-27; regenerated from both dumps 2026-10-27 evening | none |
 | Botanist workbench as a flower pot (section 3.1, TODO `#5`) | BUILT 2026-10-29, installed 2026-10-29 (patcherMod 1.1.04); r1031 (2026-10-31): mixins and own block entity PASSED (SQ-POT-06b), a placed bench holds no plant; the flower in the house benches not read, SQ-POT-06 open (client check pending) | POT-08, SQ-POT-06, CQ-POT-02 |
+| Flower pot tweaks (section 3.2: framed pot before framing, Rich Hanging Pot, Large Flower Box, wall tooltips, WTHIT "Contains", box plant lists and models, silt pot and Vinery pot as planters, Vinery box centred on floors) | BUILT 2026-10-31 (patcherMod 1.1.04, backportedVinery `-07`), not installed, not tested | POT-10 to POT-16, SQ-POT-08; Floral pot rebuild planned (3.2.8) |
 | Bugs found (section 3) | open, none fixed | decisions D1 to D6 |
 | Tooltip labels, "every pot distinct", "pots hold every flower" | not started | decisions D1, D2, D6 |
 
@@ -109,6 +110,48 @@ adds `EntityBlock`, `use` and `onRemove`; the block entity `creativeengineering:
 - **Not covered:** the `flower_pot_audit.py` matrix and `/pottest` have no workbench column (it takes exactly the
   vanilla pot's column).
 
+### 3.2 Flower pot tweaks (scratchpad 2026-10-31, built 2026-10-31)
+
+1. **Framed pot before framing** (`mixin/FramedFlowerPotUnframedMixin`). With no frame, FramedBlocks treated any
+   block item as a frame attempt; a plant is not a valid frame, so the click was used up ("block not valid") and never
+   reached the pot. Now a plant the vanilla pot takes goes in first, by the framed pot's own steps.
+2. **Box plant models** (`compat/PlantBoxModels`, `PlantBoxModelsClient`, `SuppFlowerBox`). Supplementaries keeps a
+   list of special flower box models (`FlowerPotHandler`: crops, seeds, cactus, chorus, nether wart, tall flowers...).
+   The pack adds glow berries (Quark's potted cave vines texture on Supplementaries' cross) and glow lichen (Beautify's
+   two crossed lichen planes) to it, so the Large Flower Box takes and draws both. Another Furniture's planter box
+   renderer draws every plant that has such a model with it (`mixin/AnotherFurniturePlanterRenderMixin`, client);
+   the Vinery box and pot do the same in the port (`legacy/client/PlantRenderer`).
+3. **Plant lists** (`kubejs/server_scripts/tags/misctags.js`). `#another_furniture:planter_box_placeables` gains beetroot
+   seeds, cactus, carrot, chorus flower, cocoa beans, crimson and warped roots, dead bush, grass, fern, lilac, melon
+   seeds, peony, potato, pumpkin seeds, rose bush, sunflower, nether sprouts, nether wart, glow berries, glow lichen.
+   `#creativeengineering:not_in_flower_boxes` (azalea, flowering azalea) goes in AF's `planter_box_banned` and the
+   Supplementaries box refuses it (`mixin/SuppFlowerBoxPlantsMixin`; boxes already holding one keep it).
+   `#creativeengineering:flower_box_plants` = the planter box list minus that tag, the Vinery box's list.
+4. **Botanist workbench** takes glow lichen (not in the vanilla pot map): `BotanistPot.pottedFor` returns the glow lichen
+   block itself, drawn from `creativeengineering:block/flower_box/glow_lichen_pot` (base at the pot soil, y4).
+5. **Soil holders.** A Twigs silt pot filled with rooted dirt sustains any plant on top, like a Supplementaries planter
+   (`mixin/SiltPotSoilMixin`, `canSustainPlant` true facing up). Silt pot items say "Use Rooted Dirt on it to fill it;
+   plants then grow on top" (`tooltips.js`). The Vinery flower pot takes any `IPlantable` block
+   item plus `#minecraft:tall_flowers`, never azalea; non-double plants are no longer forced to the upper half.
+6. **Vinery flower box** (port `-07`): state `wall` (default true, so placed boxes keep their look), false when placed
+   on a floor: shape, model (`vinery:block/flower_box_centered`, built in memory by `UpstreamTranslator`) and plants
+   move 4.5 px forward to the centre of the block.
+7. **Names, looks, tooltips.** Supplementaries' Flower Box is the Large Flower Box; Beautify's hanging pot is the Rich
+   Hanging Pot (`namechanges.js`), its soil repainted in Farmer's Delight rich soil colours on all 51 pot textures
+   (`kubejs/assets/beautify/textures/blocks/`, generated from the 1.4.3 textures: the 6x6 soil patch at x0-5 y32-37),
+   recipe rope / flower pot / rich soil (`other/flowers.js`; was rope over a flower pot), and WTHIT names it "Rich Pot"
+   when it stands on the ground. "Can be placed on walls" on the Large Flower Box, the Vinery box (replacing Vinery's
+   "Can be placed") and every `*_planter_box` (`tooltips.js` Flower Pots).
+8. **WTHIT "Contains: Poppy"** (`compat/WthitPotContents`, `[wthit] potContents`): vanilla and modded potted blocks,
+   framed pot, Supplementaries hanging pot and flower box, AF planter boxes (Every Compat woods too), Beautify hanging
+   pot (`potflower` index into `HangingPot.validFlowers`), botanist workbench, Floral large pots (from the block id),
+   Vinery pot and box. Same plant twice: "2 Poppy". A silt pot shows "Rooted Dirt: Yes / No"; planters show nothing
+   (the plant is its own block).
+9. **Floral Enchantment large pot: hidden 2026-10-31** (all 31 `floralench:large_*pot` items in `global.removedItems`,
+   recipe removed in `other/flowers.js`; placed ones still work). **Replacement planned, not built.** User decision 2026-10-31: a new pack block with the Floral pot
+   texture that takes small flowers inside like the flower box (box logic, Supplementaries models) and grows tall
+   flowers on top like a planter. Estimate in TODO `potions/enchanting #7`.
+
 ## 4. Decisions (open, owner)
 
 - **D1 "pots hold every flower":** which plants get a vanilla `potted_*` block (map entry + model)? Options: (a) all
@@ -129,8 +172,22 @@ adds `EntityBlock`, `use` and `onRemove`; the block entity `creativeengineering:
 
 - [../kubejs/server_scripts/_lib/dump_flower_pots.js](../kubejs/server_scripts/_lib/dump_flower_pots.js): `/dumppots`
 - [../tools/flower_pot_test/pot_probe.js](../tools/flower_pot_test/pot_probe.js): `/pottest` scratch probe
-- [../tools/flower_pot_test/flower_world.js](../tools/flower_pot_test/flower_world.js): `/flowerworld` scratch builder of
-  the `saves/flower test` superflat world (every potted plant x one block per holder type, axis of plants on grass)
+- [../kubejs/server_scripts/_lib/flower_world.js](../kubejs/server_scripts/_lib/flower_world.js): the Flower Test
+  world builder (every plant some holder takes x one block per holder type, one table along +z, axis of plants on
+  grass, hanging holders one block up under glass). Runs by itself on the first start of a world made with the
+  "Flower Test" world type; `/flowerworld` (op) rebuilds it in any world
+- patcherMod `compat/PlantBoxModels`, `PlantBoxModelsClient`, `SuppFlowerBox`, `WthitPotContents`; mixins
+  `FramedFlowerPotUnframedMixin`, `SuppFlowerBoxPlantsMixin`, `SiltPotSoilMixin`, `AnotherFurniturePlanterRenderMixin`
+  (client); models `assets/creativeengineering/models/block/flower_box/` (section 3.2)
+- backportedVinery `legacy/block/LegacyFlowerBoxBlock`, `LegacyFlowerPotBlock`, `legacy/client/PlantRenderer`,
+  `SupplementariesFlowerModels`, `forge/upstream/UpstreamTranslator` (centred box model)
+- [../kubejs/server_scripts/tags/misctags.js](../kubejs/server_scripts/tags/misctags.js) flower box tags;
+  [../kubejs/client_scripts/tooltips.js](../kubejs/client_scripts/tooltips.js) Flower Pots;
+  [../kubejs/client_scripts/namechanges.js](../kubejs/client_scripts/namechanges.js); Rich Hanging Pot recipe in
+  [../kubejs/server_scripts/other/flowers.js](../kubejs/server_scripts/other/flowers.js)
+- [../development/patcherMod/src/main/resources/data/creativeengineering/worldgen/world_preset/flower_test.json](../development/patcherMod/src/main/resources/data/creativeengineering/worldgen/world_preset/flower_test.json):
+  the "Flower Test" world type (flat plains, no features or structures, bedrock / stone / dirt / grass, the stack
+  the builder checks for), listed in the World Type button through `#minecraft:normal`
 - [../tools/flower_pot_audit.py](../tools/flower_pot_audit.py): matrix generator, holder rules as data
 - [flower_pots_matrix.md](flower_pots_matrix.md): generated matrix
 - Botanist workbench pot: patcherMod `compat/BotanistPot.java`, `BotanistPotBlockEntity.java`, `BotanistPotClient.java`,
@@ -146,6 +203,37 @@ adds `EntityBlock`, `use` and `onRemove`; the block entity `creativeengineering:
 
 Scratch server entries: SQ-POT-01 to SQ-POT-05 in [testing/scratch_queue.md](testing/scratch_queue.md). In game:
 
+- [ ] **POT-09 Flower Test world type:** Create New World, More World Options, World Type cycles to "Flower Test";
+  on entering, chat says "Flower Test: N plants x 12 holders built" within ~30 s; you stand at -5 -5 in front of one
+  unbroken table (header signs at z = -2, rows every 2 blocks along +z, no second section); the Supplementaries and
+  Beautify hanging pots hang one block above the grass under glass; no Handcrafted pot column; no melon, pumpkin or
+  moss rows, no Floral large pot column; the silt pot column is filled with rooted dirt and has plants on top; no
+  animals in the table; leave and rejoin → no rebuild message; a normal Superflat world gets no table.
+- [ ] **POT-10 framed pot before framing:** place a framed flower pot, click it with a poppy → the poppy goes in (no
+  "block not valid" message); then frame it with a block → frame applied, poppy stays; empty hand takes the poppy out.
+- [ ] **POT-11 planter box plants:** an oak planter box takes beetroot seeds, cactus, carrot, chorus flower, cocoa
+  beans, crimson roots, dead bush, grass, lilac, nether wart, glow berries, glow lichen; each looks like the same plant
+  in the Large Flower Box (no tiny seedling, no missing-model cube; lilac whole, not two halves); grass is green.
+  Azalea and flowering azalea are refused by the planter box, the Large Flower Box and the Vinery box.
+- [ ] **POT-12 Large Flower Box and botanist workbench:** the box is named Large Flower Box and takes glow berries and
+  glow lichen (drawn as small cross plants); a botanist workbench takes glow lichen, drawn in its small pot, and gives it
+  back on an empty-hand click.
+- [ ] **POT-13 Rich Hanging Pot:** named Rich Hanging Pot; recipe rope, flower pot, rich soil in a column (the old
+  rope-over-pot recipe is gone); soil is dark rich soil in every flower variant; hanging under a block WTHIT says
+  Rich Hanging Pot, standing on the ground it says Rich Pot.
+- [ ] **POT-14 tooltips and WTHIT:** "Can be placed on walls" on the Large Flower Box, the Vinery flower box (Vinery's
+  own "Can be placed" gone) and an oak planter box; WTHIT shows "Contains: Poppy" on a vanilla pot with a poppy, a
+  framed pot, a Supplementaries hanging pot, the Large Flower Box ("Poppy, Dandelion"), a planter box, a Rich Hanging
+  Pot, a botanist workbench, a Floral large double poppy pot ("2 Poppy"), a Vinery pot and box; nothing on an empty pot.
+  A silt pot item says "Use Rooted Dirt on it to fill it; plants then grow on top"; WTHIT on a silt pot says
+  "Rooted Dirt: No", after a rooted dirt click "Rooted Dirt: Yes". Floral large pots are not in JEI or creative
+  search and have no recipe; one placed before still takes and shows its flowers.
+- [ ] **POT-17 sunflower:** an oak planter box and a Vinery flower box take a sunflower, drawn whole.
+- [ ] **POT-15 Vinery box and pot:** a Vinery flower box placed on the floor sits in the middle of the block (model,
+  outline, plants), against a wall at the back as before; an old box keeps its place; it takes everything the planter
+  box takes. The Vinery flower pot takes an oak sapling, wheat seeds, cactus, a fern, a rose bush (both halves).
+- [ ] **POT-16 silt pot as soil:** fill a silt pot with rooted dirt; wheat seeds, an oak sapling, sugar cane, cactus and
+  a poppy each plant on top and stay after a block update; an unfilled silt pot takes none.
 - [ ] **POT-01 vanilla pot map:** with the matrix open, put 10 plants marked Y in a flower pot and 5 marked blank → Y ones
   plant, blank ones do nothing.
 - [ ] **POT-02 framed and hanging pots:** the same 5 Y plants in a framed pot and a Supplementaries hanging pot (empty
@@ -184,3 +272,15 @@ Scratch server entries: SQ-POT-01 to SQ-POT-05 in [testing/scratch_queue.md](tes
   hanging pot takes the vanilla map (115) once its block entity holds an empty pot (the probe's 0 was its setup)
   and the botanist workbench takes the same 115.
 - 2026-10-31: scratchpad notes translated into TODO rows (`blocks/framed-and-decor #11`). No code changed.
+- 2026-10-31: Flower Test world type (patcherMod preset, builds on first start), builder moved from
+  `tools/flower_pot_test/` into `kubejs/server_scripts/_lib/` so it ships. Table is one line along +z (was 6 sections
+  of 48 rows along +x); hanging holders and their glass one block up; rows no longer need the dev-only
+  `pot_probe.json` (bush-type block items, cactus, bamboo, hanging roots added as candidates, a candidate no
+  non-planter holder takes is cleared); generated mobs killed at the end. patcherMod 1.1.04 built, not installed
+  (game was running). POT-09, SQ-POT-07 added.
+- 2026-10-31 (later): flower pot tweaks from the scratchpad (section 3.2) built: patcherMod 1.1.04 and backportedVinery
+  `-07`, neither installed (game running). Flower Test world: Handcrafted pots out, melon / pumpkin / moss blocks out
+  (13 holders). Candle-like pot placement skipped (user). POT-10 to POT-16, SQ-POT-08 added.
+- 2026-10-31 (later): Flower Test silt pot filled by a rooted dirt click before planting; Floral large pots hidden and
+  out of the Flower Test world (12 holders); sunflower in the planter box list; silt pot tooltip and WTHIT
+  "Rooted Dirt" line. patcherMod 1.1.04 rebuilt, not installed. POT-17 added.

@@ -1,0 +1,40 @@
+# Creative Brewing: manifest mod id (no registry content yet). The members are nested jars, each with its own mods.toml
+# (META-INF/jarjar/metadata.json). feature_writeup/creative_brewing.md 2.
+modLoader="javafml"
+loaderVersion="${loader_version_range}"
+license="${mod_license}"
+[[mods]]
+modId="${mod_id}"
+version="${mod_version}"
+displayName="${mod_name}"
+authors="${mod_authors}"
+description='''${mod_description}'''
+
+[[dependencies.creative_brewing]]
+modId="forge"
+mandatory=true
+versionRange="${forge_version_range}"
+ordering="NONE"
+side="BOTH"
+[[dependencies.creative_brewing]]
+modId="minecraft"
+mandatory=true
+versionRange="${minecraft_version_range}"
+ordering="NONE"
+side="BOTH"
+# patcherMod: supplies KubeJS (it requires it), the shared helpers (global.NCH, global.tags) and the startup script
+# loader.
+[[dependencies.creative_brewing]]
+modId="creativeengineering"
+mandatory=true
+versionRange="[1.1.03,)"
+ordering="AFTER"
+side="BOTH"
+# Creative Delight: nests Farmer's Delight (Brewin's base) and defines global.CD. AFTER so CB's startup script pack
+# loads after CD's (patcherMod's loader runs jar packs in mod-list order).
+[[dependencies.creative_brewing]]
+modId="creative_delight"
+mandatory=true
+versionRange="[1.0.0,)"
+ordering="AFTER"
+side="BOTH"

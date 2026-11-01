@@ -101,8 +101,13 @@ keg). Set `"unsupported": "keep"` to keep those as fragile lattices. Every latti
 houses' too) passes the survival rule offline.
 
 Dried barley and corn (user, 2026-10-30): hanging herbs wanted, from Dusty Decorations if it is in the pack. It is not
-(`disabledmods/`), and it has no herb block anyway (its hanging pieces are cod, salmon, knives, pans and a lasso); no
-installed mod has one. Air until a mod with hanging herbs is added: then point both entries at it and rerun.
+(`disabledmods/`), and it has no herb block anyway (its hanging pieces are cod, salmon, knives, pans and a lasso).
+2026-10-31 (user, TODO scratchpad "hanging herb variations (fantasy furniture)"): both now become Fantasy Furniture
+6.7.0's `fantasyfurniture:decorations/hanging_herbs`, its only herb block (one look, no variants), facing kept. Six
+spots: 4 in `letsdo_brewery_0`, 2 in `letsdo_brewery_1`; only those two templates changed on the rerun. Fantasy
+Furniture's `facing` points away from the wall the rack hangs on (model at the back edge), as the Brewery bundles'
+did: 4 of the 6 have a block behind them; `brewery_0` (6, 17, 10) and `brewery_1` (4, 17, 11) hang free, as upstream.
+The block has no survival rule, so nothing breaks.
 
 | From | To | Properties | Why |
 | --- | --- | --- | --- |
@@ -130,8 +135,8 @@ installed mod has one. Air until a mod with hanging herbs is added: then point b
 | `brewery:silo_wood` | `minecraft:barrel` | keep none; set facing=up, open=false; block entity dropped | grain silo; barrel standing up |
 | `brewery:hops_crop_body` | `vinery:grapevine_lattice` | keep none; set grape=jungle_red, age=4; facing per block (attach), alone: air | hops lower half; no hops in the pack: a ripe grape lattice facing away from the nearest block |
 | `brewery:hops_crop` | `vinery:grapevine_lattice` | keep none; set grape=jungle_red, age=4; facing per block (attach), alone: air | hops upper half, as the lower half |
-| `brewery:dried_barley` | air |  | hanging dried bundle; no hanging herbs in the pack (Dusty Decorations, disabled, has none either) |
-| `brewery:dried_corn` | air |  | hanging dried bundle; no hanging herbs in the pack (Dusty Decorations, disabled, has none either) |
+| `brewery:dried_barley` | `fantasyfurniture:decorations/hanging_herbs` | keep facing; set waterlogged=false | hanging dried bundle; Fantasy Furniture hanging herbs (its only herb block) |
+| `brewery:dried_corn` | `fantasyfurniture:decorations/hanging_herbs` | keep facing; set waterlogged=false | hanging dried bundle; Fantasy Furniture hanging herbs (its only herb block) |
 | `brewery:table` | `vinery:table` | keep all | same facing/type/waterlogged connecting table |
 | `brewery:bench` | `vinery:chair` | keep facing | bench seat; check facing in game |
 | `brewery:bar_counter` | `farmersdelight:dark_oak_cabinet` | keep facing; set open=false | counter with storage; houses are dark oak |
@@ -203,6 +208,7 @@ templates place, block entities present) PASSED; SQ-SVA-03 (SVA-06) and SQ-SVA-0
 | SVA-05 | Same for `letsdo_brewery/sky_village_letsdo_brewery_0..1` and `_deco_0..8`: keg and heating cask, chairs (bench swap) face the tables, grape lattices stand and stay when one is harvested, placed meals and drinks, barrels |
 | SVA-06 | `/locate structure skyvillages:skyvillage` over several villages: addon houses appear (about 1 in 5 houses), bridges and villagers attach |
 | SVA-07 | Chests in the new houses roll the existing sky village tables (Lootr where the pack uses it) |
+| SVA-08 | `/place template skyvillages:letsdo_brewery/sky_village_letsdo_brewery_0` and `_1`: Fantasy Furniture hanging herbs at the 6 old dried barley / corn spots (4 + 2), each rack against its wall where there is one (facing away from it), none missing |
 
 ## 5. Changelog
 

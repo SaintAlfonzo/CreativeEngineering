@@ -1,0 +1,28 @@
+
+#Small blocks on a Cooking for Blockheads counter or corner (#creativeengineering:counter_supports):
+#Farmer's Delight's cutting board, Display Delight's plates and plated foods, Brewin' and Chewin's
+#coaster (#creativeengineering:counter_toppers). The counter's worktop is 1 px lower than a full
+#block, so they and what lies on them are drawn shifted by these offsets, in pixels (1/16 block):
+#cuttingBoardOffset* for the board, plateOffset* for the plates and the coaster. X and Z are as
+#seen on a counter facing north (door to the north, back edge to the south: +X = east, +Z = toward
+#the back) and turn with the counter. Visual only; F3+A redraws.
+[kitchen]
+	#Sideways shift.
+	#Range: -8.0 ~ 8.0
+	cuttingBoardOffsetX = 0.0
+	#Height shift; -1 puts the board on the worktop.
+	#Range: -8.0 ~ 8.0
+	cuttingBoardOffsetY = -1.0
+	#Shift toward the counter's back (negative = toward the door).
+	#Range: -8.0 ~ 8.0
+	cuttingBoardOffsetZ = 0.0
+	#Plates and coasters: sideways shift.
+	#Range: -8.0 ~ 8.0
+	plateOffsetX = 0.0
+	#Plates and coasters: height shift; -1 puts them on the worktop.
+	#Range: -8.0 ~ 8.0
+	plateOffsetY = -1.0
+	#Plates and coasters: shift toward the counter's back (negative = toward the door).
+	#Range: -8.0 ~ 8.0
+	plateOffsetZ = 0.0
+

@@ -4,7 +4,11 @@ ClientEvents.lang('en_us', e => {
 	e.renameItem('create:brass_hand', 'Gold Hand')
 	e.renameItem('oldguns:mortar_and_pestle', 'Powder Pestle')
 	e.renameItem('oceansdelight:elder_guardian_roll', 'Elder Guardian Roll')
-	e.add('block.salt.salt_lamp', 'Large Salt Lamp')  // The Salt's lamp next to Vintage Delight's (salt merge)
+	e.add('block.salt.salt_lamp', 'Large Salt Lamp')
+	// Flower pots (feature_writeup/flower_pots.md 3.4): Supplementaries' 3-plant box; Beautify's hanging pot has rich
+	// soil (recipe in other/flowers.js; on the ground WTHIT names it Rich Pot, patcherMod WthitPotContents)
+	e.add('block.supplementaries.flower_box', 'Large Flower Box')
+	e.add('block.beautify.hanging_pot', 'Rich Hanging Pot')  // The Salt's lamp next to Vintage Delight's (salt merge)
 	// JEI info: Salt Blocks no longer grow salt since the salt merge (patcherMod block.SaltBlockTicks)
 	e.add('vintagedelight.jei.info.evaporator', 'Place next to water to grow Salt Layers on top. Salt Blocks do not grow salt.')
 	e.add('item.creativeengineering.precision_sawblade', 'Precision Sawblade')

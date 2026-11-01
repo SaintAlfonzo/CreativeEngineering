@@ -75,7 +75,8 @@ Preflight (errors stop the build unless --force; warnings go into the log entry)
   - every kubejs/ file matches a KUBEJS_CLASSES rule                              (error)
   - tools/changelog_lint.py passes on the changelog folder (its warnings are warnings)  (error)
   - no <version>.md in the tree for the version being built (one source per version)  (error)
-  - every changelog file a deployed version shipped is unchanged (sha1 in its history json) (error)
+  - every changelog file a deployed version shipped is unchanged (sha1 in its history json, or the
+    approved restyle sha1 in deploy/changelog_restyles.json)                        (error)
   - unreleased.md has no bullets: this version ships without player notes          (warning)
   - structure_config.json regenerated from the installed jars + kubejs/data matches the file, and
     gen_structure_groups.py sync would change nothing (both run on a scratch copy)   (error)
@@ -120,6 +121,7 @@ from changelog_lint import FOLDER as CHANGELOG_DIR, KUBEJS_PREFIX as CHANGELOG_P
 DEPLOY = os.path.join(ROOT, 'deploy')
 OUT = os.path.join(DEPLOY, 'latest')
 HISTORY = os.path.join(DEPLOY, 'history')
+CHANGELOG_RESTYLES = os.path.join(DEPLOY, 'changelog_restyles.json')  # approved rewrites of shipped changelogs
 LOG = os.path.join(DEPLOY, 'DEPLOY_LOG.md')
 DEPLOYED = os.path.join(DEPLOY, 'DEPLOYED.json')
 RUNBOOK = os.path.join(DEPLOY, 'RUNBOOK.md')  # operator one-pager (perf capture, dumps), copied into every payload
@@ -133,8 +135,6 @@ IN_TREE_MODS = [
     ('exposureBackport', 'exposureBackport', True),
     ('incubationAdditions', 'incubationAdditions', True),
     ('moreMooblooms', 'moreMooblooms', True),
-    ('backportedVinery', 'backportedVinery', True),
-    ('backportedBrewin', 'backportedBrewin', True),
     ('babyMobs', 'babyMobs', True),
     ('creativeLabels', 'creativeLabels', True),
     ('backportedVeggies', 'backportedVeggies', True),
@@ -142,12 +142,16 @@ IN_TREE_MODS = [
     ('backportedFungi', 'backportedFungi', True),
     # Creative Delight: the bundle jar; its members (development/creativeDelight/members/) never ship on their own.
     ('creativeDelight', 'creative_delight', True),
+    # Creative Brewing: the same for the Vinery and Brewin' ports (development/creativeBrewing/members/).
+    ('creativeBrewing', 'creative_brewing', True),
 ]
 # Extra source trees per in-tree project for the "src newer than the jar" check (paths from the instance root).
 IN_TREE_EXTRA_SRC = {
     'creativeDelight': ['development/creativeDelight/members', 'kubejs/data/creative_delight/kubejs',
                         'kubejs/assets/creative_delight/kubejs', 'kubejs/data/creative_delight/worldgen',
                         'kubejs/data/creative_delight/cup_conversion'],
+    'creativeBrewing': ['development/creativeBrewing/members', 'kubejs/data/creative_brewing/kubejs',
+                        'kubejs/assets/creative_brewing/kubejs'],
 }
 # Third-party jars that patcherMod fixes target by version (deploy.md "Mod updates"): (jar file prefix, the file the
 # fixes were written against). A different file under the same prefix means the mod was updated: rerun the checklist.
@@ -216,6 +220,9 @@ KUBEJS_CLASSES = [
     ('data/creative_delight/worldgen/*', 'dev'),
     ('data/creative_delight/cup_conversion/*', 'dev'),
     ('assets/creative_delight/kubejs/*', 'dev'),
+    # Creative Brewing's script trees: the same, shipped only inside the creative_brewing jar
+    ('data/creative_brewing/kubejs/*', 'dev'),
+    ('assets/creative_brewing/kubejs/*', 'dev'),
     ('startup_scripts/*', 'runtime'),
     ('server_scripts/*', 'runtime'),       # incl. loot/loot_config.json + loot_index.json (05_tuning.js)
     ('data/*', 'runtime'),
@@ -427,7 +434,7 @@ def collect(pre, root=ROOT, unknown_side=None, config_mode='full', pack_version=
         for jar, meta in mods.items():
             if meta['modId']:
                 by_id.setdefault(meta['modId'], []).append(jar)
-        # Nested (Jar-in-Jar) mods count too: a stale upstream jar beside Creative Delight would silently win
+        # Nested (Jar-in-Jar) mods count too: a stale upstream jar beside Creative Delight or Creative Brewing would silently win
         # if its version string sorts newer (creative_delight.md 14.1.4).
         for jar, path in files['mods'].items() | files['client_mods'].items():
             for nested_jar, nested_id in nested_modids(path):
@@ -436,9 +443,9 @@ def collect(pre, root=ROOT, unknown_side=None, config_mode='full', pack_version=
                 pre.error(f'mods/{jar} was built with -Pcd_test_suite (holds the scratch test suite): '
                           'rebuild it with ./gradlew :creativeDelight:build --offline before a release')
         # Third-party jars nesting the same library (xaerolib, spectrelib, ...) are resolved by FML's Jar-in-Jar
-        # version selection; only a clash with a top-level jar or a Creative Delight member needs action.
+        # version selection; only a clash with a top-level jar or a Creative Delight / Creative Brewing member needs action.
         dupes = {m: jars for m, jars in by_id.items()
-                 if len(jars) > 1 and any('!' not in j or j.startswith('creative_delight') for j in jars)}
+                 if len(jars) > 1 and any('!' not in j or j.startswith(('creative_delight', 'creative_brewing')) for j in jars)}
         if dupes:
             pre.error('mods/ holds more than one jar for a mod id (FML loads only one; remove the others):\n'
                       + '\n'.join(f'    {m}: {", ".join(jars)}' for m, jars in sorted(dupes.items())))
@@ -498,7 +505,9 @@ def collect(pre, root=ROOT, unknown_side=None, config_mode='full', pack_version=
 
 # Donor folders: {folder: (port jar prefix, name in messages, UpstreamJars.java that pins the jars)}.
 UPSTREAM_DONORS = {
-    'vinery_upstream': ('backportedVinery', 'Vinery', ('backportedVinery', 'net', 'satisfy', 'vinery', 'forge', 'upstream')),
+    # nested in the Creative Brewing jar, so the CB jar in mods/ is what needs the donor
+    'vinery_upstream': ('creative_brewing', 'Vinery (Creative Brewing)',
+                        ('creativeBrewing/members/vinery', 'net', 'satisfy', 'vinery', 'forge', 'upstream')),
     'miners_upstream': ('backportedMiners', "Miner's Delight", ('backportedMiners', 'com', 'sammy', 'minersdelight', 'upstream')),
     # nested in the Creative Delight jar, so the CD jar in mods/ is what needs the donor
     'farmers_upstream': ('creativeengineering', "Farmer's Structures donor (patcherMod)",
@@ -685,6 +694,11 @@ def check_changelog(pre, files, version, deployed, stage_dir):
             pre.error(f'changelog lint, {label}: {e}')
         for w in warnings:
             pre.warn(f'changelog lint, {label}: {w}')
+    # Restyles the user approved for deployed changelogs: {rel: {"sha1": ..., "date": ..., "note": ...}}.
+    # A shipped file may differ from its history sha1 only if it matches its entry here exactly.
+    restyled = {}
+    if os.path.isfile(CHANGELOG_RESTYLES):
+        restyled = {rel: e['sha1'] for rel, e in json.load(open(CHANGELOG_RESTYLES, encoding='utf8')).items()}
     for v in sorted(deployed_versions(deployed), key=parse_version):
         hist = history_path(v)
         if not os.path.isfile(hist):
@@ -696,7 +710,7 @@ def check_changelog(pre, files, version, deployed, stage_dir):
             path = os.path.join(ROOT, 'kubejs', rel)
             if not os.path.isfile(path):
                 pre.error(f'kubejs/{rel} shipped with {v} and is gone: deployed changelogs are permanent (restore it from git)')
-            elif sha1(path) != want:
+            elif sha1(path) != want and sha1(path) != restyled.get(rel):
                 pre.error(f'kubejs/{rel} changed after it shipped with {v}: deployed changelogs are permanent '
                           '(restore it from git; put the correction in unreleased.md as its own bullet)')
     target = changelog_path(version)

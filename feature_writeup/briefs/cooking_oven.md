@@ -1,292 +1,215 @@
 # Brief: cooking / oven
 
-Written 2026-10-21 from [TODO.md](../todo/TODO.md) `# cooking`, Sub `oven`. Reference writeups: [oven.md](../oven.md)
-(block, `creativeengineering:baking`, 38 recipes, OV- tests), [remainder_buffer.md](../remainder_buffer.md),
-[tooltips.md](../tooltips.md). Code: [baking.js](../../kubejs/data/creative_delight/kubejs/creativeengineering/baking.js),
-[cooking.js](../../kubejs/server_scripts/cooking/cooking.js) (muffin pot recipes, lines 359-369),
-`global.NCH.ceBaking` / `fdCooking` in [neoCraftHelper.js](../../kubejs/startup_scripts/func/neoCraftHelper.js)
-(`fdCooking` line 926, `ceBaking` line 984), [tooltips.js](../../kubejs/client_scripts/tooltips.js), patcherMod `oven/`.
-Oven bugs in the shared leftover slots are in [cooking_kitchen.md](cooking_kitchen.md) (#14).
+Written 2026-10-21 from [TODO.md](../todo/TODO.md) `# cooking`, Sub `oven`; swept 2026-10-31. Reference writeups:
+[oven.md](../oven.md) (block, `creativeengineering:baking`, OV- tests),
+[food_families.md](../food_families.md) 3.1 and 4.6 (family rules), [remainder_buffer.md](../remainder_buffer.md),
+[creative_delight.md](../creative_delight.md) 30 (`global.CD.food`).
+Code: [baking.js](../../kubejs/data/creative_delight/kubejs/creativeengineering/baking.js) (181 lines: cake / pie /
+cookie / muffin / tart / hand-pie tables, oven and bakeware recipes),
+[baked_goods.js](../../kubejs/data/creative_delight/kubejs/creativeengineering/baked_goods.js) (wheat -> flour swap),
+the family calls in [cd_food.js](../../development/creativeDelight/src/main/resources/kubejs_startup/creative_delight/cd_food.js)
+(Creative Delight jar), `global.NCH.ceBaking` (line 1161), `fdCooking` (1074), `hammering` (1142) in
+[neoCraftHelper.js](../../development/patcherMod/src/main/resources/kubejs_startup/creativeengineering/func/neoCraftHelper.js)
+(patcherMod jar), patcherMod `oven/` (`OvenBlockEntity`, `BakingRecipe`, `jei/OvenJeiPlugin`).
 
 ## Scope and order
 
-Open rows: #3 (Bug), #4, #5, #6 (Planned), #2 (In Progress). #1 is Testing (table at the end).
+Open rows: #2, #6, #7 (In Progress). Testing: #1, #4, #5 (table at the end). #3 is archived (superseded 2026-10-29:
+muffins are oven only, `baking/baked-goods #32`).
 
-**Findings that change the rows:**
+| Step | Row | Work | Notes |
+|---|---|---|---|
+| 1 | `oven #6` baking audit, remainder | KubeJS (CD tree) | Audit and wheat swap done 2026-10-27; left: oven routes for the breads, buns, scones, eclair, brownies, fig pudding, waffles, rolls, pizzas, lasagna |
+| 2 | `oven #7` pot recipes that suit the oven, plus smoking | KubeJS (CD tree; `cd_food.js` needs a CD rebuild) | Shares the baking dish (`baking/baked-goods #30`) with lasagna (`#21`) |
+| 3 | `oven #2` oven pattern | KubeJS, one line | Owner picks the final pattern; no offline clash data in the dumps |
 
-- **#3 is most likely not a recipe bug.** The pack's muffin pot recipes are fine on paper, and FD's matching
-  (verified, `CookingPotRecipe.matches`, FD 1.2.4) counts one item per *slot*: the recipe lists two blueberries, so it
-  needs two separate slots with one berry each, six filled slots in all. A stack of berries in one slot never
-  matches. Confirm in game with JEI's [+] (OV-13) before changing anything.
-- **#4: the Fantasy Furniture ovens are not decorative.** All seven `fantasyfurniture:*/oven` blocks (6.7.0) have a
-  block entity and a menu (input, fuel, output) and cook **smoking** recipes (`RecipeType.SMOKING`, verified from the
-  decompiled `OvenBlockEntity`). The decorative ones are Farmhouse Decorations' three antique ovens (no block entity).
-  The Cooking for Blockheads oven cooks **smelting** recipes with food results only (verified) and, with the pack's
-  config, takes no fuel but cooking oil (see [cooking_kitchen.md](cooking_kitchen.md) #8).
-- **#2: only the oven's own pattern is a placeholder.** The bakeware is hammered since 2026-10-18 (oven.md 2.5).
-- **#6 and `baking/baked-goods #1` share one decision:** whether "no leftover crafting route" removes hand crafting
-  for baked goods. [baking_baked-goods.md](baking_baked-goods.md) recommends reading it as "no *wheat* route" and asking
-  the user first. This brief follows that.
-
-**Build groups and order:**
-
-1. **#3 in-game check** (no code), then **#5** (two numbers in baking.js). One `/reload`.
-2. **#6 baking audit**: banana bread + honey cake first (known), then the listed audit. With `baking/baked-goods #1`.
-3. **#4 tooltips** (client script, `F3+T`) and the CfB oven smoking mixin (patcherMod, restart). Pair the mixin with
-   kitchen #8's fuel fix.
-4. **#2**: pick the final oven pattern after a clash check; with the next recipe pass.
-
----
-
-## oven #3: Muffins may not be cookable
-Status Bug / Work KubeJS / TODO `cooking/oven #3`
-
-### Goal
-Blueberry and cranberry muffins cook in the FD pot (and bake in the oven), or the reason they don't is known.
-
-### Now
-- Fruits Delight 0.5.11 ships the pot recipes as `farmersdelight:cooking/blueberry_muffin` / `cranberry_muffin`
-  (file `data/farmersdelight/recipes/cooking/*.json` in the fruitsdelight jar, verified): `#forge:fruits/blueberry` x2
-  (two ingredient entries), `#forge:dough/wheat`, `#forge:milk/milk_bottle`, `#forge:eggs`, `minecraft:sugar` -> 2
-  muffins. `#forge:fruits/blueberry` = `fruitsdelight:blueberry` only (verified).
-- `cooking.js` lines 364-369 remove those ids and add `creativeengineering:farmersdelightcooking/blueberry_muffin` /
-  `cranberry_muffin` through `R.fdCooking`: the same, but with `i.any_dough` (`#forge:dough`) and `i.any_sugar`
-  (`#forge:sugar`). Since 1.0.8.
-- Create 0.5.1.i puts `create:dough` in both dough tags (oven.md 3.8), so the dough was never the cause.
-- FD `CookingPotRecipe.matches` (decompiled): counts non-empty slots 0-5, requires that count == the number of
-  ingredients (6), then `RecipeMatcher` pairs one stack per ingredient. **Two berries stacked in one slot = 5
-  inputs = no match.** This is the most likely "not cookable".
-- The oven version (`baking.js` lines 36-39, `MUFFIN` settings line 32) has the same 2-berries-in-2-slots shape with
-  `ovenIngredientCounts` off. It needs the muffin tin in the tool slot, and the result waits for paper (one per
-  muffin). Both are easy to mistake for "doesn't cook".
-
-### Build
-1. In game (OV-13): open JEI on `fruitsdelight:blueberry_muffin`, find the Cooking Pot recipe
-   (`creativeengineering:farmersdelightcooking/blueberry_muffin`), and press [+] next to a pot holding the
-   ingredients. If it cooks, the earlier failure was the slot rule: close the row (Bug -> Complete), no code.
-2. If [+] can't fill it or it still won't cook: hold each ingredient and run `/kubejs hand` to list its tags.
-   Check the six against the recipe above (JEI shows the recipe id with advanced tooltips). Then also look for a second
-   pot recipe with the same inputs that wins first (`getRecipeFor` returns the first match).
-3. Optional polish if players keep hitting the slot rule: a line on the pot ("one ingredient per slot") in
-   `tooltips.js`. Not recommended: it is FD's standard behaviour and JEI shows it.
-
-### Ids and data
-`fruitsdelight:blueberry_muffin` (`i.blueberry_muffin`), `fruitsdelight:cranberry_muffin` (`i.cranberry_muffin`),
-`fruitsdelight:blueberry` (`i.blueberry`), tags `i.t_fruits_blueberry`, `i.t_fruits_cranberry`, `i.any_dough`,
-`i.t_milk_bottle` (`#forge:milk/milk_bottle`, bottles only), `i.eggs`, `i.any_sugar`. All verified against the jar
-or item_dict.js.
-
-### Decisions
-None unless step 2 finds a real cause.
-
-### Gotchas
-- The `farmersdelight:` namespace on Fruits Delight's recipe ids is real (the file sits under `data/farmersdelight`),
-  so the `R.remove` lines do hit them.
-
-### Tests
-OV-13 as written in oven.md 7, plus: "two berries in one slot does not cook; split into two slots and it does".
-
----
-
-## oven #5: Muffin yield 4 from baking
-Status Planned / Work KubeJS / TODO `cooking/oven #5`
-
-### Goal
-An oven muffin bake gives 4 muffins (the pot keeps 2), so the oven is the efficient route.
-
-### Now
-`baking.js` lines 36-39: `R.ceBaking([n(i.t_fruits_blueberry, 2), i.flour, i.t_milk_bottle, i.eggs, i.any_sugar],
-Item.of(i.blueberry_muffin, 2), e, 'blueberry_muffin', MUFFIN)`, same for cranberry. `MUFFIN` (line 32) = muffin tin
-tool, paper plating, 200 ticks, 0.1 xp. The recipe id `creativeengineering:baking/blueberry_muffin` stays the same.
-
-### Build
-1. `Item.of(i.blueberry_muffin, 2)` -> `4`, `Item.of(i.cranberry_muffin, 2)` -> `4`. Update the comment above them
-   (line 35: "2 muffins" mirror note -> "4 in the oven, 2 in the pot").
-2. oven.md 2.6 "Muffins (... 2 per bake)" -> 4; OV-07 says "one paper per muffin", which now means 4 paper a bake.
-3. `/reload`.
-
-### Ids and data
-As #3. Paper `i.paper` (`minecraft:paper`).
-
-### Decisions
-- Cost of 4 paper per bake: fine (paper is cheap), **keep paper plating per muffin**.
-- Also raise ingredients (e.g. 3 berries)? **No**: the row asks for a better route.
-
-### Gotchas
-- The waiting result slot (7) takes up to 64, so `hasRoomForResult` (OvenBlockEntity line 189) needs no change.
-- Food values: `food/types-and-tuning #1` may retune muffins; `baking/baked-goods #2` (muffin variants) should copy
-  the 4 yield for new oven muffins.
-
-### Tests
-**OV-20 Muffin yield**: one oven bake of blueberry muffins gives 4 (with 4 paper); the pot still gives 2.
+Related rows elsewhere: `baking/baked-goods #30` (baking dish), `#21` (lasagna), `#37` (zucchini quiche assembly bug,
+`assemble` array steps; creative_delight.md 30), `#31` (bread from dough on the sheet, Testing).
 
 ---
 
 ## oven #6: Baking audit
-Status Planned / Work KubeJS / TODO `cooking/oven #6`
+Status In Progress / Work KubeJS / TODO `cooking/oven #6`
 
 ### Goal
-Every baked good has an oven recipe that uses flour (not wheat), and no wheat crafting route is left.
+Every baked good has an oven recipe on flour (not wheat), and no wheat crafting route is left.
 
 ### Now
-- Known gaps (scratchpad 2026-10-21, checked against the jars):
-  - `neapolitan:banana_bread` (`i.banana_bread`): only `neapolitan:banana/banana_bread`, shapeless wheat +
-    `#forge:fruits/banana` + sugar. No oven recipe.
-  - `createaddition:honey_cake` (`i.honey_cake`): only `createaddition:filling/honey_cake` (Create filling:
-    `createaddition:cake_base_baked` + 500 mB `#forge:honey`). No oven recipe.
-- Candidates for the full audit: the `baked` food type (12 items in `kubejs/generation_scripts/food/food_types.json`:
-  adzuki_bun, banana_bread, bread_slice, cornbread, honey_bread, minecraft_bread, mulberry_bread,
-  nether_wart_sourdough, sourdough_bread, strawberry_scones, toast, tortilla) plus the baked members of `sweet`
-  (muffins, cookies, tarts, pies, cakes, gingerbread, fruit beignet, waffles...). Tag
-  `#creativeengineering:food_type/baked` (`kubejs/data/creative_delight/kubejs/creativeengineering/food_type_tags.js`).
-- The oven covers muffins, cookies, tarts, pies, cakes (38 recipes, oven.md 2.6); no breads yet.
+- **Audit done 2026-10-27** ([oven.md](../oven.md) 4, last bullet): 156 baked foods from the 2026-10-24 dump; cookies,
+  cakes, pies, muffins, tarts, hand pies on their family calls in `baking.js` (each call sweeps the mod's own recipes).
+- **Honey cake: done.** `baking.js` line 51, `['honey_cake', i.honey_bottle, i.honeycomb]` in the CAKES table (cake pan,
+  raw base). The row's "Known: honey cake (add a baking recipe)" is stale.
+- **Wheat swap: done.** `baked_goods.js` 16-19 turns wheat into flour in bread, Quark's bent bread, Glow Bread, Adzuki
+  Bun, Banana Bread, Strawberry Scones, Strange Eclair; sweet potato dough and Rustic batter 25-27. Left on wheat, not
+  baked: Brewin' vodka, sweet gelatine bucket, fried shrimp, turnip cake, nutritional bar.
+- **Bread from dough in the oven since 2026-10-28** (`baking/baked-goods #31`, Testing): 1 / 3 / 6 dough -> bread on the
+  baking sheet. Cauliflower bread: `veggiesdelight/recipes.js` 45.
+- **Still without an oven recipe** (oven.md 4): Banana, Glow, Garlic, Honey and Mulberry Bread, Nether Wart Sourdough,
+  Cornbread and tortilla (furnace trio), Adzuki Bun, Strawberry Scones, Strange Eclair, the brownies, Fig Pudding,
+  Create Factory waffles and rolls, pizzas, lasagna. Banana bread is a hand craft on flour now (`neapolitan:banana/banana_bread`).
 
 ### Build
-1. Known two, in `baking.js`:
-   - `R.remove({ id: 'neapolitan:banana/banana_bread' }, e)` (only if the "no wheat route" decision says so; else
-     swap wheat for flour with `R.replaceInput` or a new `R.shapeless` with `i.flour`).
-   - `R.ceBaking([i.flour, i.t_fruits_banana, i.any_sugar], Item.of(i.banana_bread, 1), e, 'banana_bread', SHEET)`.
-     Check `i.t_fruits_banana` is in item_dict.js (the banana_cake recipe uses it, line 98).
-   - `R.ceBaking([n(i.honey_bottle, 2), i.cake_base_baked], Item.of(i.honey_cake, 1), e, 'honey_cake', CAKE)`. 500 mB
-     is two 250 mB bottles. The two glass bottles go to the oven's leftover slots. Or use the raw `i.cake_base`
-     to match the other oven cakes (they all start from the raw base).
-2. Audit: for each item in the `baked` type and the baked members of `sweet`, list its recipes (`/dumpall` crafting
-   audit, or JEI) and mark: oven recipe yes / no, wheat in a crafting route yes / no. Put the table in oven.md 2.6
-   ("Audit 2026-10-xx"). Then add the missing `R.ceBaking` lines grouped by bakeware.
-3. Breads need a bakeware: none of the four fits a loaf.
+1. **Loaf breads** (banana, glow, garlic, honey, mulberry, nether wart sourdough): one `R.ceBaking([...the hand
+   recipe's inputs, flour as is], Item.of(<bread>, 1), e, '<bread>', { tool: F.ware.sheet })` each, in `baking.js`'s
+   empty "Breads (baking sheet)" block (line 167), or a new family call `F.breadBake(inputs, bread)` in `cd_food.js` if
+   the owner wants the hand craft removed (decision). Keep the hand craft (dearer route, decision).
+2. **Buns, scones, eclair** (`dessert/pastry`): `R.ceBaking` on the baking sheet from the hand recipe's inputs.
+3. **Brownies** (`dessert/brownie` rule: oven bakes the tray in the cake pan, board cuts it): an oven recipe for the
+   tray block where one exists; check the brownie ids in `kubejs/exported/food/recipes.json` first.
+4. **Fig pudding** (`dessert/pudding`: oven, cut on the board), **waffles, rolls** (Create Factory; dessert "Oven for
+   the plain bake"): oven recipes on the sheet; waffles may need an iron (out of scope: sheet for now).
+5. **Pizzas and lasagna**: leave to `baking/baked-goods` (pizza rule is shaped + sequenced assembly; lasagna waits for
+   the baking dish `#30` / `#21`). Note them as "not oven by rule" in oven.md 4.
+6. Cornbread and tortilla: the furnace trio is their family rule (`bread` "Smoker + Furnace + Campfire: the dough");
+   add an oven mirror only if the owner wants one.
+7. Update oven.md 4's "Still without an oven recipe" list and 2.6's tables.
 
 ### Ids and data
-`neapolitan:banana_bread`, `createaddition:honey_cake`, `createaddition:cake_base` / `cake_base_baked` (`i.cake_base`,
-`i.cake_base_baked`), `minecraft:honey_bottle` (`i.honey_bottle`), `#forge:flour/wheat` (`i.flour`). Recipe type
-`creativeengineering:baking` via `NCH.ceBaking`.
+Breads from the dict (`i.banana_bread`, `i.garlic_bread`, ... check each key in `item_dict.js`), `i.flour`,
+`i.any_dough`, `F.ware.sheet` / `.cake`, `F.SWEET`, recipe type `creativeengineering:baking` (ids
+`creative_delight:baking/<suffix>` inside `global.CD.recipes`).
 
 ### Decisions
-- "No leftover crafting route" (shared with `baking/baked-goods #1`): **read as "no wheat route"**, keep a dearer
-  flour hand recipe, ask the user before removing hand crafting.
-- Bakeware for breads: **baking sheet for now**; a loaf pan (hammered from the cake pan, `R.hammering`) if the user
-  wants one more step.
-- Honey cake from the raw or the baked base: **raw base**, like every other oven cake.
+- Hand craft for breads that gain an oven recipe: **keep it** (dearer, by hand); the oven is the efficient route, as
+  for cakes (oven.md 4).
+- Pizzas and lasagna: **not this row** (their own rules and rows).
+- Cornbread / tortilla: **stay on the furnace trio** (family rule).
 
 ### Gotchas
-- `ovenIngredientCounts` off: a counted ingredient becomes n slots. Keep each new recipe within 6 slots or check
-  `ceBaking`'s drop log (oven.md 2.6.1).
-- Changing a crafting recipe changes the can parity sheet's "craft sum" for canned breads (`canned_banana_bread`
-  etc.): note it in [can_parity.md](../can_parity.md).
+- With `ovenIngredientCounts` off each counted ingredient is a slot; keep recipes within 6 (oven.md 2.6.1).
+- A family call sweeps the output's other recipes; a plain `R.ceBaking` does not. Use plain calls unless the
+  hand route is meant to go.
+- Changing a bread's recipe changes its can parity "craft sum" (can_parity.md).
 
 ### Tests
-**OV-21 Banana bread / honey cake bake** with their bakeware. **OV-22 Audit**: each baked item in the audit table has
-a Baking page in JEI, and no recipe in JEI takes plain wheat for it.
+- OV-new1 (proposed, numbered when queued): each listed bread, bun, scone, eclair, pudding, waffle and roll has a Baking page in JEI with its bakeware.
+- OV-new2 (proposed, numbered when queued): no recipe in JEI takes plain wheat for a baked good (the five non-baked leftovers excepted).
+- Scratch: a probe listing the new recipe ids loaded, and an `exported/food/recipes.json` check after `/dumpfood`.
 
 ---
 
-## oven #4: Oven tooltips for other ovens
-Status Planned / Work KubeJS / TODO `cooking/oven #4`
+## oven #7: Cooking pot recipes that suit the oven
+Status In Progress / Work KubeJS / TODO `cooking/oven #7` (related to #6)
 
 ### Goal
-Each oven-like block says what it does: works like a smoker, works like a furnace (and smoker), or decorative.
+Move or mirror the Cooking Pot recipes that are really bakes (casseroles, stuffed and roasted dishes, baked stews) to
+the oven, add tools or dishes where needed, and let the oven smoke (decided 2026-10-29: smoking is allowed in the oven).
 
 ### Now
-- Fantasy Furniture 6.7.0: `fantasyfurniture:royal/oven`, `nordic/oven`, `venthyr/oven`, `necrolord/oven`,
-  `bone/skeleton/oven`, `bone/wither/oven`, `dunmer/oven` ("Dunmer Cooking Spit"). Their `OvenBlockEntity` runs
-  `RecipeType.SMOKING` with normal fuel (`ForgeHooks.getBurnTime`). **Working smokers**, verified.
-- Farmhouse Decorations: `farmhouse_decorations:antique_oven`, `kitchen_antique_oven`, `kitchen_antique_oven_decorated`.
-  Block classes only, no block entity: **decorative**.
-- Cooking for Blockheads 13.3.4 `cookingforblockheads:oven`: `getSmeltingResult` uses CfB's registry, else
-  `RecipeType.SMELTING`, and keeps only food results (or CfB's non-food list). No smoking. Fuel is cooking oil only
-  with the pack config (kitchen #8).
-- None of these has an item_dict key. `tooltips.js` has `addTooltips(e, [id, [text, col.x]])` and
-  `addTooltipPattern(e, 'ns:*glob', ...)` (lines 15-53). Roles: `col.norm` gray, `col.uncm` green (line 122 on).
+- The oven runs only `creativeengineering:baking` (`OvenBlockEntity.getMatchingRecipe`, lines 139-166:
+  `getRecipeFor(OvenRegistry.BAKING_TYPE ...)`); JEI catalyst only for the baking category (`jei/OvenJeiPlugin.java` 45).
+- Food dump 2026-10-30 (`kubejs/exported/food/recipes.json`): 338 `farmersdelight:cooking`, 135 `minecraft:smoking`,
+  84 `creativeengineering:baking`. Pot recipes with bake-like outputs (from the dump, by name):
+  - Stuffed: FD stuffed pumpkin (and Corn Delight's from cornbread), Rustic stuffed bell peppers (9 colours, and CD's
+    `_from_roasted` copies), Veggies stuffed bell peppers block, stuffed zucchinis, garlic stuffed mushrooms,
+    Delightful stuffed cantaloupe, Fungi stuffed morels, Ender's stuffed shulker, Nether's stuffed hoglin, Miner's
+    stuffed squid, Oceanic stuffed pufferfish.
+  - Baked or roasted: FD baked cod stew, Veggies roasted vegetables, Miner's fake meatloaf, Corn Delight cornbread
+    stuffing, Veggies turnip cake.
+  - Layered: Brewin' horror lasagna, Veggies lasagna pan (wait for the baking dish, `baking/baked-goods #21`, `#30`).
+  - Tarts: FD fig / lemon tart keep their pot recipe by rule (`tartBake` "tarts keep theirs", cd_food.js header).
+  - Not bakes (stay in the pot): pancakes, mashed / diced potatoes, potato salad, gnocchi, pierogi, pie fillings.
+- Family helpers in `cd_food.js` (lines 19-25, 136-170): `cakeBake`, `pieBake`, `cookieBake`, `muffinBake`, `tartBake`,
+  `handPieBake`; oven parts `F.slot`, `F.ware.sheet / pie / cake / muffin`, `F.SWEET`. No casserole or smoking family yet.
 
 ### Build
-1. item_dict.js: add keys in the mods' blocks (file style `i.<name> = 'ns:id'`): `i.cfb_oven =
-   'cookingforblockheads:oven'`, `i.antique_oven`, `i.kitchen_antique_oven`, `i.kitchen_antique_oven_decorated`.
-   For Fantasy Furniture use the pattern helper (seven ids, one glob).
-2. `tooltips.js`, kitchen section (next to the heating cask lines, ~496-504):
-   - `addTooltipPattern(e, 'fantasyfurniture:*oven', ['Works like a smoker', col.norm])`
-   - `addTooltips(e, [i.antique_oven, ['Decorative', col.norm]], [i.kitchen_antique_oven, ...], [i.kitchen_antique_oven_decorated, ...])`
-   - `addTooltips(e, [i.cfb_oven, ['Cooks food like a furnace and a smoker', col.norm], ['Burns cooking oil', col.uncm]])`
-     (the second line per kitchen #8's fuel decision).
-   - The pack's own oven: optional `[i.oven, ['Bakes with bakeware; needs fire or magma below', col.norm]]`.
-3. CfB oven smoking (patcherMod): new mixin `mixin/CfbOvenSmokingMixin` on
-   `net.blay09.mods.cookingforblockheads.tile.OvenBlockEntity`, `@Inject(method = "getSmeltingResult", at =
-   @At("RETURN"), cancellable = true, remap = false)`: if the result is empty, query `RecipeType.SMOKING` with the
-   `@Shadow` field `singleSlotRecipeWrapper` (decompiled name; it is set to the stack just before) and return its
-   result if it is food. The insert filter (`OvenBlockEntity$1`) calls the same method, so smoker-only food is
-   accepted too. Register in `creativeengineering.mixins.json` (no guard for a missing CfB; the pack always has it).
+1. **Smoking in the oven, KubeJS route** (recommended): in a new CD script
+   `kubejs/data/creative_delight/kubejs/creativeengineering/oven_smoking.js`, walk every loaded `minecraft:smoking`
+   recipe with a food result (`e.forEachRecipe({ type: 'minecraft:smoking' }, r => ...)`, skip non-food results) and
+   write `R.ceBaking([input], result, e, 'smoking/<path>', { time: <its cookingtime>, exp: <its xp> })` with no tool
+   (a recipe without `tool` ignores the tool slot, oven.md 2.2). Inside `global.CD.recipes`, ids
+   `creative_delight:baking/smoking/<path>`. JEI then lists them on the Baking page.
+2. **Bake family** in `cd_food.js`: `F.dishBake(inputs, output, ware)` = the pot recipe's ingredients as an oven recipe
+   on `ware`, plus removal of that output's `farmersdelight:cooking` recipes (the family is authoritative, as
+   `muffinBake`). Container: keep the pot recipe's container (bowl) through `ceBaking`'s `container`.
+3. Rows: stuffed dishes and baked stews from the list above in their mod folders (`farmersdelight/`, `rusticdelight/`,
+   `veggiesdelight/`, ...; memory `creative-delight-routing`), on the baking sheet (stuffed) or the baking dish once
+   `#30` exists (stews, casseroles, lasagna). Owner picks the list (decision).
+4. food_families.md 3.1: the stations column for the families that change (stuffed, stew), and oven.md 2.6 a
+   "From the pot" table. Changelog bullet (Oven family): which dishes moved, "the oven also smokes food".
 
 ### Ids and data
-Ids above (jar-verified). The CfB method and field names are from the decompiled 13.3.4 jar; the vanilla calls in it
-are SRG (`m_44015_` getRecipeFor), which the mixin uses as normal Mojang calls.
+`minecraft:smoking` (135 recipes in the 2026-10-30 dump), `farmersdelight:cooking`, `creativeengineering:baking`; ids of
+the dishes above from the dump (verified by name, not by dict key; check each key in `item_dict.js`).
 
 ### Decisions
-- Fantasy Furniture text: **"Works like a smoker"**, not "Decorative" (the row's word; the jar says they work).
-- CfB oven: **add the smoking fallback** (row: "make sure it both smelts and smokes").
+- Smoking route: **KubeJS mirror** (no Java, JEI pages for free, `/reload`) over a Java fallback in
+  `OvenBlockEntity.getMatchingRecipe` (needs a BakingRecipe wrapper, a JEI catalyst for the smoking category and a
+  patcherMod rebuild). The CfB oven already smokes through `CfbOvenSmokingMixin` (oven.md 2.8).
+- Move or mirror pot dishes: **move** (family call removes the pot recipe) for stuffed dishes and baked stews;
+  **keep** pot-only for soups, mashes, pancakes.
+- Bakeware for stuffed dishes: **baking sheet**; stews and casseroles: **baking dish** (`#30`).
 
 ### Gotchas
-- Glob `fantasyfurniture:*oven` also matches any future id ending in `oven`; the console log line prints the count
-  (expect 7).
-- The CfB smoking fallback makes smoker-only foods cookable there, not furnace-only non-food items (CfB filters to
-  food).
+- The smoking mirror must skip non-food smoking recipes (mod sponges, dyes) and the oat dough / sourdough cases the pack
+  removed (`baking/baked-goods #29`: no smoker bread from oat dough).
+- A single-input oven recipe matches a lone item in any slot; with 6 slots a stack still bakes one at a time.
+- Family sweeps skip `creativeengineering` and `creative_delight` recipes (cd_food.js header), so CD's own
+  `_from_roasted` stuffed pepper copies need an explicit removal.
 
 ### Tests
-**OV-23 Tooltips** on all three kinds. **OV-24 CfB oven smokes**: a smoker-only food (find one with JEI, e.g. Corn
-Delight `popcorn_from_smoking`'s input if it has no smelting twin) cooks in the CfB oven.
+- OV-new3 (proposed, numbered when queued): a raw porkchop alone in the oven (no bakeware) becomes a cooked porkchop at smoker speed; JEI's
+  Baking page lists the smoking mirrors.
+- OV-new4 (proposed, numbered when queued): each moved dish bakes in the oven with its bakeware and has no Cooking Pot recipe in JEI.
+- Scratch: recipe-id probe for the mirror count (equals the food-result smoking count) and the removed pot ids.
 
 ---
 
-## oven #2: Oven and bakeware crafting patterns
+## oven #2: Oven crafting pattern (bakeware is hammered)
 Status In Progress / Work KubeJS / TODO `cooking/oven #2`
 
 ### Goal
 A final crafting pattern for the oven that clashes with no other recipe.
 
 ### Now
-- Oven: `baking.js` line 121, `R.shaped(i.oven, ['PPP', 'B B', 'BBB'], { P: i.any_plate_iron, B: i.bricks }, e,
-  'oven')`, id `creativeengineering:shaped/oven`. Placeholder (oven.md 2.1, 4).
-- Bakeware: not shaped any more. Hammered chain `R.hammering` lines 125-128 (plate -> baking sheet -> muffin tin ->
-  pie tin -> cake pan), oven.md 2.5. The row's "bakeware patterns" part is done.
-- No clash tool in `tools/`.
+- Oven: `baking.js` line 172, `R.shaped(i.oven, ['PPP', 'B B', 'BBB'], { P: i.any_plate_iron, B: i.bricks }, e,
+  'oven')`, id `creative_delight:shaped/oven` (in the 2026-10-30 dump; it moved into the CD tree 2026-10-25, so not
+  `creativeengineering:shaped/oven` any more). Placeholder (oven.md 2.1, 4).
+- Bakeware: hammered chain `R.hammering` lines 176-179 (plate -> baking sheet -> muffin tin -> pie tin -> cake pan),
+  oven.md 2.5. Done.
+- No clash data offline: `kubejs/exported/recipes/crafting_audit.json` keeps only ingredient counts, `all.csv` only ids.
 
 ### Build
-1. Clash check: in game, place the pattern with each `#forge:plates/iron` member and plain bricks in a crafting
-   table; only the oven may come out. Also look in JEI under "uses" of iron plate for shaped 3x3 brick patterns.
-   (FD's stove is `III / B B / BCB` with ingots and a campfire; close, but different.)
-2. Final pattern (decision), then change line 121 only (same id, so advancements and JEI stay).
-3. oven.md 2.1 "Crafting" row and 4 ("placeholder") updated.
+1. Clash check in game: JEI "uses" of an iron plate and of bricks, looking for 3x3 brick patterns (FD's stove is
+   `III / B B / BCB`, close but different). Or extend `/dumpall`'s crafting audit to write shaped patterns (a
+   `server_scripts/_lib` dump command) and compare offline.
+2. Final pattern (decision), then change line 172 only (same suffix, so the id stays).
+3. oven.md 2.1 "Crafting" row and 4 ("placeholder") updated; changelog bullet if the pattern changes.
 
 ### Ids and data
-`creativeengineering:oven` (`i.oven`), `#forge:plates/iron` (`i.any_plate_iron`), `minecraft:bricks` (`i.bricks`),
-FD stove `farmersdelight:stove`.
+`creativeengineering:oven` (`i.oven`, item_dict.js 37), `#forge:plates/iron` (`i.any_plate_iron`, 1714), `minecraft:bricks`
+(`i.bricks`, 2171), `minecraft:furnace` (`i.furnace`), FD stove `farmersdelight:stove`.
 
 ### Decisions
-- Pattern: **`PPP / BFB / BBB` with F = `minecraft:furnace`** (reads as an oven, no clash with the stove's campfire),
-  or keep the current one if the clash check is clean. User's call.
+- Pattern: **`PPP / BFB / BBB` with F = furnace** (reads as an oven, no clash with the stove's campfire centre), or keep
+  the current one if the clash check is clean. Owner's call.
 
 ### Gotchas
 - `i.any_plate_iron` is a tag: test every member (IE, Create plates).
 
 ### Tests
-**OV-03** (oven.md 7) with the final pattern.
+OV-03 (oven.md 7) with the final pattern.
 
 ---
 
 ## Open side item (no row)
 
-Brewin's `heating_cask` (`i.heating_cask`, in the pack since the 4.5.0 port) is not in
-`#creativeengineering:oven_heat_sources` (`kubejs/server_scripts/tags/blocktags.js` lines 24-26). It heats a pot like
-a stove (tooltips.js), so the oven's "non-stove" rule suggests leaving it out. Worth a one-line decision in oven.md 4;
-no TODO row exists.
+Brewin's `heating_cask` (`i.heating_cask`) is still not in `#creativeengineering:oven_heat_sources`
+(`kubejs/server_scripts/tags/blocktags.js` line 27; checked 2026-10-31, the cask appears only in the walk-speed list at
+294). The oven's "non-stove" rule suggests leaving it out. A one-line decision in oven.md 4; no TODO row.
 
 ## Built, needs play
 
-| Row | Change | Status | Note |
-|---|---|---|---|
-| oven #1 | Oven block, baking type, JEI, bakeware, baking recipes, counts option, hammered bakeware, hammer no-rotate | Testing | The row says "37 baking recipes"; baking.js has 38 (31 `R.ceBaking` lines + 7 from `FLAVOURED_CAKES`), as oven.md says. Leftover-slot sync bug: kitchen #14. OV-01 to OV-19 not run |
+| Row | Change | Open tiers | Tests | Writeup |
+|---|---|---|---|---|
+| oven #1 | Oven block, baking type, JEI, bakeware, baking recipes, counts option, hammered bakeware, hammer no-rotate | C P | OV-01 to OV-19 (OV-13 dropped) | [oven.md](../oven.md) 0, 7 |
+| oven #4 | Tooltips on the Fantasy Furniture and CfB ovens; CfB oven smokes | C P | OV-23 (OV-24 passed, SQ-OF-06) | [oven.md](../oven.md) 2.8 |
+| oven #5 | Muffin yield 4 from baking (pot route gone in the 2026-10-31 CD jar) | P | OV-20, OV-36 | [oven.md](../oven.md) 3.8, 7 |
 
 ## Writeup corrections made
 
-- [oven.md](../oven.md) 0: "(placeholder pattern, 3.6)" -> "2.1" (the pattern is in 2.1; 3.6 is about FD changes).
+- [oven.md](../oven.md) 0: "(placeholder pattern, 3.6)" -> "2.1" (the pattern is in 2.1; 3.6 is about FD changes). (2026-10-21)
 - [oven.md](../oven.md) 4: "Crafting patterns for the oven and bakeware are placeholders" -> only the oven's is (bakeware
-  is hammered, 2.5), linking this brief.
+  is hammered, 2.5), linking this brief. (2026-10-21)
 - [oven.md](../oven.md) 4: the heating cask "the pack's Brewin 2.0 jar doesn't have that block" -> the port has it;
-  adding it is open.
+  adding it is open. (2026-10-21)

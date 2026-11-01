@@ -18,7 +18,10 @@
     "farmersrespite.KettleDispenseMixin",
     "farmersrespite.KettleMenuTankMixin",
     "alexsmobs.GorillaForageBananaMixin",
-    "alexsmobs.SugarGliderForageBananaMixin"
+    "alexsmobs.SugarGliderForageBananaMixin",
+    "immersiveengineering.TreatedStickPlaceMixin",
+    "farmersdelight.TomatoClimbTreatedStickMixin",
+    "supplementaries.SuppTomatoClimbTreatedStickMixin"
   ],
   "client": [
     "farmersdelight.CookingPotScreenRemainderMixin",

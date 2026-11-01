@@ -91,8 +91,6 @@ public class CreativeEngineering
         com.SaintAlfonzo.creativeengineering.shield.ShieldItems.register(modEventBus);
         // Wooden bucket: water-only early bucket (bucket/WoodenBucketItems).
         com.SaintAlfonzo.creativeengineering.bucket.WoodenBucketItems.register(modEventBus);
-        // Hearth and Harvest's Watering Can under its own id, ahead of the full port (wateringcan/).
-        com.SaintAlfonzo.creativeengineering.wateringcan.WateringCanItems.register(modEventBus);
         // Meta structures: the creativeengineering:meta structure type and its two piece types
         // (worldgen/MetaStructure; the structures themselves are kubejs meta_structures.json).
         com.SaintAlfonzo.creativeengineering.worldgen.MetaStructure.register(modEventBus);
@@ -105,6 +103,10 @@ public class CreativeEngineering
         com.SaintAlfonzo.creativeengineering.compat.DisplayDelightDishes.register(modEventBus);
         // Beautify botanist workbench as a flower pot (compat/BotanistPot, mixin/BotanistWorkbenchPotMixin; flower_pots.md).
         com.SaintAlfonzo.creativeengineering.compat.BotanistPot.register(modEventBus);
+        // Flower box plant models: glow berries / lichen, Supplementaries models in Another Furniture boxes (compat/PlantBoxModels).
+        if (net.minecraftforge.fml.loading.FMLEnvironment.dist == Dist.CLIENT) {
+            modEventBus.addListener(com.SaintAlfonzo.creativeengineering.compat.PlantBoxModelsClient::onRegisterAdditional);
+        }
         // Backpack skins: smithing + clearing recipes, Curios equip block (backpackskin/; the looks are mixin/BackpackSkin*).
         com.SaintAlfonzo.creativeengineering.backpackskin.BackpackSkinSerializers.register(modEventBus);
         if (net.minecraftforge.fml.ModList.get().isLoaded("curios")) {
@@ -130,9 +132,7 @@ public class CreativeEngineering
         // Remainder buffer: pot/kettle/oven keep ingredient leftovers in two slots instead of throwing them
         // (cooking/ package; the pot and kettle mixins are Creative Delight QoL-1; remainder_buffer.md). Saved as an attached cap.
         MinecraftForge.EVENT_BUS.register(com.SaintAlfonzo.creativeengineering.cooking.RemainderBufferStorage.class);
-        MinecraftForge.EVENT_BUS.register(com.SaintAlfonzo.creativeengineering.compat.CfbCornerStorage.class);
-        // Cutting board, plates, coaster on CfB counters: the per-state topper cache resets on tag reload.
-        com.SaintAlfonzo.creativeengineering.compat.CounterToppers.init();
+        // Cooking for Blockheads corner storage and counter toppers moved to Creative Delight's blockheadsAdditions (2026-10-31).
         // Armor Trims' item lists cached once the registry locks; the trimmable list resets on tag reload (perf.md 10.2 #1).
         com.SaintAlfonzo.creativeengineering.compat.ArmorTrimsItemCache.init();
         // Sacks work like bundles in inventory screens (compat.SackBundle, mixin.SupplementariesSackItemMixin):
@@ -372,6 +372,7 @@ public class CreativeEngineering
 			LOGGER.info("[forgiving-void] {}", com.SaintAlfonzo.creativeengineering.forgivingvoid.ForgivingVoidBridge.summary());
 
 			event.enqueueWork(FluidBridge::logStartupDiagnostic);
+			event.enqueueWork(com.SaintAlfonzo.creativeengineering.compat.PlantBoxModels::commonSetup);
 			event.enqueueWork(com.SaintAlfonzo.creativeengineering.fluidbrewing.DragonBreathBrewing::build);
 			event.enqueueWork(com.SaintAlfonzo.creativeengineering.fluidbrewing.Lingerification::registerListGenerator);
 			event.enqueueWork(com.SaintAlfonzo.creativeengineering.fan.DragonBreathingFanProcessingType::register);

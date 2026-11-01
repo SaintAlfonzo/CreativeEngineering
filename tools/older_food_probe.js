@@ -383,7 +383,7 @@
         }
         let omelet = recipe('brewinandchewin:cooking/vegetable_omelet')
         ok(omelet != null && takes(omelet, 'cooked_eggs') && !takesId(omelet, 'minecraft:egg'), 'vegetable omelet pot takes fried eggs')
-        present(CE + 'shapeless/vegetable_omelet_from_omelette_manual_only', 'vegetable_omelet', 1)
+        present('creative_delight:' + 'shapeless/vegetable_omelet_from_omelette_manual_only', 'vegetable_omelet', 1)
         // fruit bowls
         absent('quarkdelight:bowl_of_exotic_fruits')
         absent('farmersdelight:fruit_salad')
@@ -411,8 +411,8 @@
         // quiche: one shaped grid recipe
         absent('brewinandchewin:quiche_from_bacon')
         absent('brewinandchewin:quiche_from_mushroom')
-        present(CE + 'shaped/quiche_manual_only', 'quiche', 1)
-        present(CE + 'createsequencedassembly/quiche_sequenced_assembly', 'quiche', 1)
+        present('creative_delight:' + 'shaped/quiche_manual_only', 'quiche', 1)
+        present('creative_delight:' + 'createsequencedassembly/quiche_sequenced_assembly', 'quiche', 1)
         // brewinandchewin:quiche_from_slices puts 4 slices back together: not a way to make one
         let qgrid = makersOf([i.quiche]).filter(isGrid).filter(r => !/_from_slices$/.test(String(r.getId())))
         ok(qgrid.length == 1, 'quiche: one grid recipe (' + qgrid.map(r => String(r.getId())).join(', ') + ')')
@@ -424,7 +424,7 @@
         let sp = present(CE + 'shapeless/shepherds_pie_manual_only', 'shepherds_pie_block', 1)
         if (sp) ok(takes(sp, 't_cheese_wedge') && !takes(sp, 'milk'), "shepherd's pie takes a cheese wedge, not milk")
         present(CE + 'createsequencedassembly/shepherds_pie_sequenced_assembly', 'shepherds_pie_block', 1)
-        present(CE + 'createsequencedassembly/horror_lasagna_sequenced_assembly', 'horror_lasagna', 2)
+        present('creative_delight:' + 'createsequencedassembly/horror_lasagna_sequenced_assembly', 'horror_lasagna', 2)
         present(CE + 'createsequencedassembly/stuffed_potato_sequenced_assembly', 'stuffed_potato', 1)
         ;['crispy_skewer', 'crawling_sandwich', 'steak_and_potatoes'].forEach(k => {
             present(CE + 'shaped/' + k + '_manual_only', k, 1)
@@ -436,7 +436,7 @@
         absent('endersdelight:crawling_sandwich')
         absent('farmersdelight:steak_and_potatoes')
         // horror lasagna: pasta first, so a bowl under a tomato sauce spout stays tomato sauce
-        let hl = recipe(CE + 'createsequencedassembly/horror_lasagna_sequenced_assembly')
+        let hl = recipe('creative_delight:' + 'createsequencedassembly/horror_lasagna_sequenced_assembly')
         if (hl) {
             let first = ''
             try { first = String(hl.getSequence().get(0).getRecipe().getId()) + ' ' + ingIds(hl.getSequence().get(0).getRecipe()).map(s => s[0]).join(',') } catch (e) { first = 'ERROR ' + e }

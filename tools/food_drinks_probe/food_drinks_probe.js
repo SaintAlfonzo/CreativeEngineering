@@ -119,10 +119,12 @@
             resultOf(recipes(server)[id]).indexOf('endersdelight:chorus_juice') == 0)
         check('IE bottling chorus juice', bottling.length == 1, bottling.join(', ') || 'none')
         expectIds(server, ['egg_solution', 'dough_egg_solution', 'cornbread_batter_egg_solution', 'pancakes_egg_solution',
-            'batter_egg_solution', 'scrambled_eggs_egg_solution', 'vegetable_omelet_egg_solution',
+            'batter_egg_solution', 'scrambled_eggs_egg_solution',
             'potato_salad_egg_solution', 'glow_berry_custard_egg_solution', 'blueberry_custard_egg_solution',
             'vanilla_pudding_egg_solution'].map(s => C + 'createmixing/' + s))
-        expectIds(server, [C + 'createsequencedassembly/quiche_egg_solution_sequenced_assembly'])
+        // Brewin' dishes: Creative Delight brewinandchewin/recipes.js since 2026-10-31
+        expectIds(server, ['creative_delight:createmixing/vegetable_omelet_egg_solution',
+            'creative_delight:createsequencedassembly/quiche_egg_solution_sequenced_assembly'])
         expectIds(server, [C + 'createmixing/frosting', C + 'createcompacting/frosting', C + 'createfilling/cake_frosting_spout',
             C + 'shapeless/frosting_manual_only'])
         // berry matcha latte (RC-73)

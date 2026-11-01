@@ -1,5 +1,4 @@
 Some textures used from CreateNumismatics by Layers-of-Railways, licensed under LGPL-3.0
-The Watering Can (code, texture, lang) is ported from Hearth and Harvest by AlabasterLeking, licensed under the MIT License (see META-INF/licenses/hearthandharvest-MIT.txt)
 
 GNU LESSER GENERAL PUBLIC LICENSE
                        Version 3, 29 June 2007

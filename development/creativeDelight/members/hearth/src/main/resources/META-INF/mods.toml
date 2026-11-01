@@ -1,0 +1,35 @@
+# Hearth and Harvest 1.4.1 ported to Forge 1.19.2 piece by piece (Creative Delight member). Registers the upstream ids
+# under the hearthandharvest namespace.
+modLoader="javafml"
+loaderVersion="${loader_version_range}"
+license="${mod_license}"
+issueTrackerURL="https://github.com/SaintAlfonzo/CreativeEngineering/issues"
+
+[[mods]]
+modId="hearthandharvest"
+version="${mod_version}"
+displayName="${mod_name}"
+authors="${mod_authors}"
+credits="Hearth and Harvest by AlabasterLeking (1.4.1 art and data, MIT)"
+description='''${mod_description}'''
+
+[[dependencies.hearthandharvest]]
+modId="forge"
+mandatory=true
+versionRange="${forge_version_range}"
+ordering="NONE"
+side="BOTH"
+
+[[dependencies.hearthandharvest]]
+modId="minecraft"
+mandatory=true
+versionRange="${minecraft_version_range}"
+ordering="NONE"
+side="BOTH"
+
+[[dependencies.hearthandharvest]]
+modId="farmersdelight"
+mandatory=true
+versionRange="[1.19.2-1.2.4,)"
+ordering="AFTER"
+side="BOTH"

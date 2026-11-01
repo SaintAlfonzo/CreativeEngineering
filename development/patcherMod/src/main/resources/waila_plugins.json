@@ -105,5 +105,15 @@
       "client": "com.SaintAlfonzo.creativeengineering.compat.WthitOperatorBlocks"
     },
     "side": "client"
+  },
+  "creativeengineering:pot_contents": {
+    "entrypoints": {
+      "client": "com.SaintAlfonzo.creativeengineering.compat.WthitPotContents"
+    },
+    "side": "client",
+    "required": [
+      "framedblocks",
+      "supplementaries"
+    ]
   }
 }

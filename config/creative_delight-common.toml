@@ -8,6 +8,8 @@
 	rusticdelight = true
 	delightful = true
 	enders_additions = true
+	hearthandharvest = true
+	blockheads_additions = true
 
 #One switch per Creative Delight QoL feature (feature_writeup/creative_delight.md 8). Off: that feature
 #is skipped entirely. Startup and Java parts need a restart, server scripts re-read on /reload, client

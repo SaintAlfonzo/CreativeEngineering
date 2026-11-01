@@ -1,0 +1,17 @@
+{
+  "item.hearthandharvest.raspberry": "Raspberry",
+  "item.hearthandharvest.raspberry_pips": "Raspberry Pips",
+  "block.hearthandharvest.raspberry_bush": "Raspberry Bush",
+  "item.hearthandharvest.watering_can": "Copper Watering Can",
+  "item.hearthandharvest.iron_watering_can": "Iron Watering Can",
+  "item.hearthandharvest.golden_watering_can": "Golden Watering Can",
+  "item.hearthandharvest.diamond_watering_can": "Diamond Watering Can",
+  "item.hearthandharvest.netherite_watering_can": "Netherite Watering Can",
+  "item.hearthandharvest.dragon_watering_can": "Dragon Watering Can",
+  "tooltip.hearthandharvest.watering_can.water": "Water Level",
+  "tooltip.hearthandharvest.watering_can.bone_meal": "Fertilizer Level",
+  "tooltip.hearthandharvest.watering_can.fertilizer": "%s Level",
+  "tooltip.hearthandharvest.watering_can.area": "Area: %sx%s",
+  "tooltip.hearthandharvest.watering_can.wrong_fertilizer": "Already loaded with %s!",
+  "hearthandharvest.jei.info.watering_can": "Holds %1$s water and %1$s fertilizer. Hold fertilizer in the off hand and use the can to load it, one item per use (one kind at a time). Fill it to full from a water source, from a well (1 bucket) or from a water cauldron (%4$s level(s); a cauldron with fewer levels is emptied for a partial fill). Using it on a crop or other bone-mealable block spends one water and one fertilizer and applies bone meal to the %2$sx%3$s area around it. Using it on a crop or soil also soaks the farmland or Fertile Soil in that area; with no fertilizer, or nothing left to grow, that costs one water. On an even-sized area the extra row is on the side of the block you aim at. It also puts out fire and lit campfires for one water."
+}

@@ -89,10 +89,23 @@ i.ce_lingering_potion_bucket = 'creativeengineering:lingering_potion_bucket';
 // (not the Myrtrees latex block myrtrees:wooden_bucket)
 i.wooden_bucket = 'creativeengineering:wooden_bucket';
 i.wooden_water_bucket = 'creativeengineering:wooden_water_bucket';
-// Watering can - Hearth and Harvest's, ahead of the full port (kept upstream id). Java item: patcherMod wateringcan/ |
-// recipe: server_scripts/equipment/watering_can.js | fertiliser tag: same file
+// Watering cans - Hearth and Harvest's (copper keeps the upstream id; iron to dragon are pack tiers), Creative Delight
+// member hearthandharvest (hearth_and_harvest.md 4.0). Recipes and fertiliser tag: kubejs/data/creative_delight/kubejs/hearthandharvest/
 i.watering_can = 'hearthandharvest:watering_can';
+i.iron_watering_can = 'hearthandharvest:iron_watering_can';
+i.golden_watering_can = 'hearthandharvest:golden_watering_can';
+i.diamond_watering_can = 'hearthandharvest:diamond_watering_can';
+i.netherite_watering_can = 'hearthandharvest:netherite_watering_can';
+i.dragon_watering_can = 'hearthandharvest:dragon_watering_can';
 i.t_bonemeal_substitutes = '#hearthandharvest:bonemeal_substitutes';
+// Raspberries - Hearth and Harvest's, Creative Delight member hearthandharvest (hearth_and_harvest.md 4.1). Recipes and
+// tags: kubejs/data/creative_delight/kubejs/hearthandharvest/
+i.raspberry = 'hearthandharvest:raspberry';
+i.raspberry_pips = 'hearthandharvest:raspberry_pips';
+i.t_fruits_raspberries = '#forge:fruits/raspberries';
+i.t_crops_raspberry = '#forge:crops/raspberry';
+i.t_seeds_raspberry = '#forge:seeds/raspberry';
+i.t_fox_food = '#minecraft:fox_food';
 // Camera bags - item inventory for Exposure gear (#exposure_extras:camera_equipment only).
 // Java items: exposureBackport src/extras (mod exposure_extras) | slot counts: exposure_extras-common.toml
 // [camera_bag] | recipes: server_scripts/equipment/camera_bag.js (smithing upgrades keep the contents)
@@ -13165,6 +13178,38 @@ i.poppy_basket              = 'floralench:poppy_basket';
 i.red_tulip_basket          = 'floralench:red_tulip_basket';
 i.white_tulip_basket        = 'floralench:white_tulip_basket';
 i.wither_rose_basket        = 'floralench:wither_rose_basket';
+// Floral Enchantment large pots: hidden (global.removedItems; flower_pots.md 3.2.9, a pack pot replaces them)
+i.floral_large_allium_pot                  = 'floralench:large_allium_pot';
+i.floral_large_azure_bluet_pot             = 'floralench:large_azure_bluet_pot';
+i.floral_large_blue_orchid_pot             = 'floralench:large_blue_orchid_pot';
+i.floral_large_cornflower_pot              = 'floralench:large_cornflower_pot';
+i.floral_large_dandelion_pot               = 'floralench:large_dandelion_pot';
+i.floral_large_double_allium_pot           = 'floralench:large_double_allium_pot';
+i.floral_large_double_azure_bluet_pot      = 'floralench:large_double_azure_bluet_pot';
+i.floral_large_double_blue_orchid_pot      = 'floralench:large_double_blue_orchid_pot';
+i.floral_large_double_cornflower_pot       = 'floralench:large_double_cornflower_pot';
+i.floral_large_double_dandelion_pot        = 'floralench:large_double_dandelion_pot';
+i.floral_large_double_lily_of_the_valley_pot = 'floralench:large_double_lily_of_the_valley_pot';
+i.floral_large_double_orange_tulip_pot     = 'floralench:large_double_orange_tulip_pot';
+i.floral_large_double_oxeye_daisy_pot      = 'floralench:large_double_oxeye_daisy_pot';
+i.floral_large_double_pink_tulip_pot       = 'floralench:large_double_pink_tulip_pot';
+i.floral_large_double_poppy_pot            = 'floralench:large_double_poppy_pot';
+i.floral_large_double_red_tulip_pot        = 'floralench:large_double_red_tulip_pot';
+i.floral_large_double_white_tulip_pot      = 'floralench:large_double_white_tulip_pot';
+i.floral_large_double_wither_rose_pot      = 'floralench:large_double_wither_rose_pot';
+i.floral_large_lilac_pot                   = 'floralench:large_lilac_pot';
+i.floral_large_lily_of_the_valley_pot      = 'floralench:large_lily_of_the_valley_pot';
+i.floral_large_orange_tulip_pot            = 'floralench:large_orange_tulip_pot';
+i.floral_large_oxeye_daisy_pot             = 'floralench:large_oxeye_daisy_pot';
+i.floral_large_peony_pot                   = 'floralench:large_peony_pot';
+i.floral_large_pink_tulip_pot              = 'floralench:large_pink_tulip_pot';
+i.floral_large_poppy_pot                   = 'floralench:large_poppy_pot';
+i.floral_large_pot                         = 'floralench:large_pot';
+i.floral_large_red_tulip_pot               = 'floralench:large_red_tulip_pot';
+i.floral_large_rose_bush_pot               = 'floralench:large_rose_bush_pot';
+i.floral_large_sunflower_pot               = 'floralench:large_sunflower_pot';
+i.floral_large_white_tulip_pot             = 'floralench:large_white_tulip_pot';
+i.floral_large_wither_rose_pot             = 'floralench:large_wither_rose_pot';
 
 // ===== fruitsdelight (54) =====
 i.fruitsdelight_apple_leaves = 'fruitsdelight:apple_leaves';
@@ -13312,13 +13357,83 @@ i.wild_bell_peppers        = 'rusticdelight:wild_bell_peppers';
 i.wild_coffee              = 'rusticdelight:wild_coffee';
 i.wild_cotton              = 'rusticdelight:wild_cotton';
 
-// ===== cookingforblockheads (kitchen parts, TODO cooking/kitchen #8) =====
+// ===== cookingforblockheads (kitchen parts, TODO cooking/kitchen #8; wood racks) =====
 i.cfb_oven    = 'cookingforblockheads:oven';
 i.cfb_sink    = 'cookingforblockheads:sink';
 i.cfb_counter = 'cookingforblockheads:counter';
 i.cfb_corner  = 'cookingforblockheads:corner';
 i.cow_jar     = 'cookingforblockheads:cow_jar';
 i.milk_jar    = 'cookingforblockheads:milk_jar';
+i.cfb_spice_rack = 'cookingforblockheads:spice_rack';
+i.cfb_tool_rack  = 'cookingforblockheads:tool_rack';
+i.t_balm_iron_nuggets = '#balm:iron_nuggets'; // CfB's tool rack recipe
+i.t_rack_slabs_other  = '#creative_delight:rack_slabs/other'; // wooden slabs with no wood rack: CfB's own racks (cookingforblockheads/kitchen.js)
+// Wood spice racks and tool racks (Creative Delight member blockheadsAdditions, kitchen.md 9)
+i.oak_spice_rack                   = 'cookingforblockheads:oak_spice_rack';
+i.oak_tool_rack                    = 'cookingforblockheads:oak_tool_rack';
+i.spruce_spice_rack                = 'cookingforblockheads:spruce_spice_rack';
+i.spruce_tool_rack                 = 'cookingforblockheads:spruce_tool_rack';
+i.birch_spice_rack                 = 'cookingforblockheads:birch_spice_rack';
+i.birch_tool_rack                  = 'cookingforblockheads:birch_tool_rack';
+i.jungle_spice_rack                = 'cookingforblockheads:jungle_spice_rack';
+i.jungle_tool_rack                 = 'cookingforblockheads:jungle_tool_rack';
+i.acacia_spice_rack                = 'cookingforblockheads:acacia_spice_rack';
+i.acacia_tool_rack                 = 'cookingforblockheads:acacia_tool_rack';
+i.dark_oak_spice_rack              = 'cookingforblockheads:dark_oak_spice_rack';
+i.dark_oak_tool_rack               = 'cookingforblockheads:dark_oak_tool_rack';
+i.mangrove_spice_rack              = 'cookingforblockheads:mangrove_spice_rack';
+i.mangrove_tool_rack               = 'cookingforblockheads:mangrove_tool_rack';
+i.crimson_spice_rack               = 'cookingforblockheads:crimson_spice_rack';
+i.crimson_tool_rack                = 'cookingforblockheads:crimson_tool_rack';
+i.warped_spice_rack                = 'cookingforblockheads:warped_spice_rack';
+i.warped_tool_rack                 = 'cookingforblockheads:warped_tool_rack';
+i.twisted_spice_rack               = 'cookingforblockheads:twisted_spice_rack';
+i.twisted_tool_rack                = 'cookingforblockheads:twisted_tool_rack';
+i.dreamwood_spice_rack             = 'cookingforblockheads:dreamwood_spice_rack';
+i.dreamwood_tool_rack              = 'cookingforblockheads:dreamwood_tool_rack';
+i.livingwood_spice_rack            = 'cookingforblockheads:livingwood_spice_rack';
+i.livingwood_tool_rack             = 'cookingforblockheads:livingwood_tool_rack';
+i.smoked_spice_rack                = 'cookingforblockheads:smoked_spice_rack';
+i.smoked_tool_rack                 = 'cookingforblockheads:smoked_tool_rack';
+i.treated_wood_spice_rack          = 'cookingforblockheads:treated_wood_spice_rack';
+i.treated_wood_tool_rack           = 'cookingforblockheads:treated_wood_tool_rack';
+i.vertical_treated_wood_spice_rack = 'cookingforblockheads:vertical_treated_wood_spice_rack';
+i.vertical_treated_wood_tool_rack  = 'cookingforblockheads:vertical_treated_wood_tool_rack';
+i.rubberwood_spice_rack            = 'cookingforblockheads:rubberwood_spice_rack';
+i.rubberwood_tool_rack             = 'cookingforblockheads:rubberwood_tool_rack';
+i.ancient_spice_rack               = 'cookingforblockheads:ancient_spice_rack';
+i.ancient_tool_rack                = 'cookingforblockheads:ancient_tool_rack';
+i.azalea_spice_rack                = 'cookingforblockheads:azalea_spice_rack';
+i.azalea_tool_rack                 = 'cookingforblockheads:azalea_tool_rack';
+i.bamboo_spice_rack                = 'cookingforblockheads:bamboo_spice_rack';
+i.bamboo_tool_rack                 = 'cookingforblockheads:bamboo_tool_rack';
+i.driftwood_spice_rack             = 'cookingforblockheads:driftwood_spice_rack';
+i.driftwood_tool_rack              = 'cookingforblockheads:driftwood_tool_rack';
+// Wood fruit baskets (same member)
+i.cfb_fruit_basket = 'cookingforblockheads:fruit_basket';
+i.oak_fruit_basket                  = 'cookingforblockheads:oak_fruit_basket';
+i.spruce_fruit_basket               = 'cookingforblockheads:spruce_fruit_basket';
+i.birch_fruit_basket                = 'cookingforblockheads:birch_fruit_basket';
+i.jungle_fruit_basket               = 'cookingforblockheads:jungle_fruit_basket';
+i.acacia_fruit_basket               = 'cookingforblockheads:acacia_fruit_basket';
+i.dark_oak_fruit_basket             = 'cookingforblockheads:dark_oak_fruit_basket';
+i.mangrove_fruit_basket             = 'cookingforblockheads:mangrove_fruit_basket';
+i.crimson_fruit_basket              = 'cookingforblockheads:crimson_fruit_basket';
+i.warped_fruit_basket               = 'cookingforblockheads:warped_fruit_basket';
+i.twisted_fruit_basket              = 'cookingforblockheads:twisted_fruit_basket';
+i.dreamwood_fruit_basket            = 'cookingforblockheads:dreamwood_fruit_basket';
+i.livingwood_fruit_basket           = 'cookingforblockheads:livingwood_fruit_basket';
+i.smoked_fruit_basket               = 'cookingforblockheads:smoked_fruit_basket';
+i.treated_wood_fruit_basket         = 'cookingforblockheads:treated_wood_fruit_basket';
+i.vertical_treated_wood_fruit_basket= 'cookingforblockheads:vertical_treated_wood_fruit_basket';
+i.rubberwood_fruit_basket           = 'cookingforblockheads:rubberwood_fruit_basket';
+i.ancient_fruit_basket              = 'cookingforblockheads:ancient_fruit_basket';
+i.azalea_fruit_basket               = 'cookingforblockheads:azalea_fruit_basket';
+i.bamboo_fruit_basket               = 'cookingforblockheads:bamboo_fruit_basket';
+i.driftwood_fruit_basket            = 'cookingforblockheads:driftwood_fruit_basket';
+// slab / planks of the rack woods the dict did not have
+i.slab_driftwood     = 'upgrade_aquatic:driftwood_slab';
+i.planks_rubberwood  = 'myrtrees:rubberwood_planks'; // no rubberwood slab exists: its racks take planks
 
 // ===== the_dirty_stuff (7) =====
 i.dried_tobacco_leafs         = 'the_dirty_stuff:dried_tobacco_leafs';
@@ -14137,6 +14252,8 @@ i.another_furniture_oak_table      = 'another_furniture:oak_table';
 i.oak_blinds                       = 'beautify:oak_blinds';
 i.oak_picture_frame                = 'beautify:oak_picture_frame';
 i.oak_trellis                      = 'beautify:oak_trellis';
+i.rich_hanging_pot                 = 'beautify:hanging_pot';   // renamed Rich Hanging Pot (flower_pots.md 3.4)
+i.beautify_rope                     = 'beautify:rope';
 i.oak_beam                         = 'decorative_blocks:oak_beam';
 i.oak_palisade                     = 'decorative_blocks:oak_palisade';
 i.oak_seat                         = 'decorative_blocks:oak_seat';
