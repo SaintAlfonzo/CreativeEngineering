@@ -1,6 +1,7 @@
 # Time system: day length, seasons, wine aging
 
-One master section, `[time]` in `config/creativeengineering-common.toml`, sets the length of a day (Better Days), the
+One master section, `[time]` in `config/creativecalendar-common.toml` (Creative Calendar since 2026-11-01,
+[creative_calendar.md](creative_calendar.md); before that `creativeengineering-common.toml`), sets the length of a day (Better Days), the
 length of the seasons (Serene Seasons and SeasonHUD) and how fast wine ages (Backported Vinery). It also covers how
 all three show up in the GUI. Every length is given in **world days**: one sunrise to the next, as the player sees it.
 
@@ -23,7 +24,7 @@ types, SeasonHUD mixins), [weather_by_biome.md](weather_by_biome.md) (rain per s
 | Admin date commands, year fix (3.11) | BUILT 2026-10-30 in patcherMod, installed 2026-10-31 00:44; scratch server PASSED r1031 (2026-10-31, SQ-TD-01 to -03, -05, SQ-GF31-04 = TI-37 server half); SQ-TD-04 (wine clock, `/wine time` prints bare lang keys on a dedicated server) client check pending; `add` takes singular units only, TI-32 writes `days`; TI-32 to TI-37 in game pending (TODO `gameplay/time #6`) |
 | Decisions | DECIDED: T1 (A), T2, T3 (SUN), T4 (on), T6, T7 (rejoin), T8, T9, T10, T12, T5 (2026-10-19: cold / warm, 3.5); T11 dropped |
 
-**Files to open first:** `config/creativeengineering-common.toml` `[time]` (once built), `config/betterdays-common.toml`,
+**Files to open first:** `config/creativecalendar-common.toml` `[time]`, `config/betterdays-common.toml`,
 `<world>/serverconfig/sereneseasons-server.toml`, `<world>/serverconfig/seasonhud-server.toml`,
 `config/vinery-common.toml` `[aging]` and `[wine]`.
 
@@ -154,8 +155,8 @@ that already agrees with the sun. It agrees only as long as nobody changes Bette
 
 ### 3.1 The master section
 
-One section in `creativeengineering-common.toml`. It shows in Create's Configs screen like the rest of CEConfig
-(3.6). Every length is in world days, and one world day is `dayMinutes + nightMinutes`.
+One section in `creativecalendar-common.toml` (until 2026-11-01 in `creativeengineering-common.toml`). It shows in
+Create's Configs screen (3.6). Every length is in world days, and one world day is `dayMinutes + nightMinutes`.
 
 ```toml
 [time]
@@ -228,13 +229,14 @@ every client at login, so the HUD sees the same numbers. The fields are public s
 `club.iananderson.seasonhud.config.SeasonHudServer`), reached by reflection, so patcherMod gets no compile dependency.
 Old worlds get the master values on their next start, and new worlds get them on their first.
 
-**Vinery port (since 2026-10-27, [pack_hygiene.md](pack_hygiene.md) finding 39):** nothing is pushed. patcherMod has
+**Vinery port (since 2026-10-27, [pack_hygiene.md](pack_hygiene.md) finding 39):** nothing is pushed. Creative Calendar has
 a small public class `time/WineTime` (`active()`, `sunClock()`, `worldDayMinutes()`, `daysPerMonth()`,
-`monthsPerLevel()`, `maxLevel()`, `cellar` / `cold` / `warmMultiplier()`), and the port's `forge/PackTime` calls it when
-patcherMod is loaded (soft dependency, `compileOnly project(':patcherMod')`). The port's `VineryConfig` getters
+`monthsPerLevel()`, `maxLevel()`, `cellar` / `cold` / `warmMultiplier()`), and the port's `forge/PackTime` calls it
+directly (`compileOnly project(':creativeCalendar')`; Creative Brewing requires Calendar since 2026-11-01, before that a
+soft dependency on patcherMod). The port's `VineryConfig` getters
 (`clockMode()`, `dayUnit()`, `daysPerYear()` and on) return the master's values while `[time] enabled`, else the port's
-own keys. So `vinery-common.toml` is never written by patcherMod, and its matching `[wine]` / `[aging]` keys are only
-used with the master off or without patcherMod (their comments say so). The port's `VintageClockPacket` still carries
+own keys. So `vinery-common.toml` is never written by the pack, and its matching `[wine]` / `[aging]` keys are only
+used with the master off (their comments say so). The port's `VintageClockPacket` still carries
 the values to clients. Until 2026-10-27 patcherMod set the `VineryConfig` values by reflection (`TimePush.pushVinery`).
 
 **Live edits:** a change through Create's Configs screen fires CEConfig's reload, which pushes again. Better Days
@@ -582,19 +584,19 @@ it starts after Early Spring. Worlds whose date was already off (migrated, `/sea
 
 | File | Role |
 |---|---|
-| [../config/creativeengineering-common.toml](../config/creativeengineering-common.toml) | master `[time]` |
+| [../config/creativecalendar-common.toml](../config/creativecalendar-common.toml) | master `[time]` (Creative Calendar) |
 | [../config/betterdays-common.toml](../config/betterdays-common.toml) | Better Days; time values ignored while `[time] enabled` |
 | [../config/betterdays-client.toml](../config/betterdays-client.toml) | bed clock position |
 | [../config/seasonhud-client.toml](../config/seasonhud-client.toml) | HUD position and day display |
 | `../saves/<world>/serverconfig/sereneseasons-server.toml`, `seasonhud-server.toml` | per-world, written by the push |
 | [../configs_edited/server_config/sereneseasons-server.toml](../configs_edited/server_config/sereneseasons-server.toml), [seasonhud-server.toml](../configs_edited/server_config/seasonhud-server.toml) | backups; become reference copies of what the push writes |
 | [../config/vinery-common.toml](../config/vinery-common.toml) | Vinery port `[aging]`, `[wine]` (the keys the master supplies are unused while it is on) |
-| [../development/backportedVinery/src/main/java/net/satisfy/vinery/core/wine/VintageClock.java](../development/backportedVinery/src/main/java/net/satisfy/vinery/core/wine/VintageClock.java) | vintage clock |
-| [../development/backportedVinery/src/main/java/net/satisfy/vinery/core/wine/WineYears.java](../development/backportedVinery/src/main/java/net/satisfy/vinery/core/wine/WineYears.java) | wine age, storage rate, cellar boost |
-| [../development/patcherMod/src/main/java/com/SaintAlfonzo/creativeengineering/CEConfig.java](../development/patcherMod/src/main/java/com/SaintAlfonzo/creativeengineering/CEConfig.java) | `Time` section |
-| [../development/patcherMod/src/main/java/com/SaintAlfonzo/creativeengineering/time/](../development/patcherMod/src/main/java/com/SaintAlfonzo/creativeengineering/time/) | `TimeSettings` (derived values, clock text), `TimePush`, `SeasonClock` (SUN counter, migration), `TimePause`, `TimeCommand` (`/cetime`), `TimeDate` (`/cetime date`, 3.11), `CalendarDate`, `TimeClient` (calendar), `WineTime` (public, read by the Vinery port's `forge/PackTime`) |
-| `../development/patcherMod/.../mixin/BetterDaysConfigMixin.java`, `BetterDaysTimePauseMixin.java`, `ServerLevelTimePauseMixin.java`, `SereneSeasonsClockMixin.java`, `SereneSeasonsClientClockMixin.java`, `SereneSeasonsTimeSkipMixin.java`, `SeasonHudCurrentSeasonMixin.java`, `XaeroTimeInfoMixin.java` | the mixins (3.8, 3.10) |
-| [../development/patcherMod/src/main/java/com/SaintAlfonzo/creativeengineering/mixin/SeasonHudHelperMixin.java](../development/patcherMod/src/main/java/com/SaintAlfonzo/creativeengineering/mixin/SeasonHudHelperMixin.java) | season-type HUD day; reads the same lengths |
+| [../development/creativeBrewing/members/vinery/src/main/java/net/satisfy/vinery/core/wine/VintageClock.java](../development/creativeBrewing/members/vinery/src/main/java/net/satisfy/vinery/core/wine/VintageClock.java) | vintage clock |
+| [../development/creativeBrewing/members/vinery/src/main/java/net/satisfy/vinery/core/wine/WineYears.java](../development/creativeBrewing/members/vinery/src/main/java/net/satisfy/vinery/core/wine/WineYears.java) | wine age, storage rate, cellar boost |
+| [../development/creativeCalendar/src/main/java/com/SaintAlfonzo/creativecalendar/CalendarConfig.java](../development/creativeCalendar/src/main/java/com/SaintAlfonzo/creativecalendar/CalendarConfig.java) | `Time` section |
+| [../development/creativeCalendar/src/main/java/com/SaintAlfonzo/creativecalendar/time/](../development/creativeCalendar/src/main/java/com/SaintAlfonzo/creativecalendar/time/) | `TimeSettings` (derived values, clock text), `TimePush`, `SeasonClock` (SUN counter, migration), `TimePause`, `TimeCommand` (`/cetime`), `TimeDate` (`/cetime date`, 3.11), `CalendarDate`, `TimeClient` (calendar), `WineTime` (public, read by the Vinery port's `forge/PackTime`) |
+| `../development/creativeCalendar/.../mixin/BetterDaysConfigMixin.java`, `BetterDaysTimePauseMixin.java`, `ServerLevelTimePauseMixin.java`, `SereneSeasonsClockMixin.java`, `SereneSeasonsClientClockMixin.java`, `SereneSeasonsTimeSkipMixin.java`, `SeasonHudCurrentSeasonMixin.java`, `XaeroTimeInfoMixin.java` | the mixins (3.8, 3.10) |
+| [../development/creativeCalendar/src/main/java/com/SaintAlfonzo/creativecalendar/mixin/SeasonHudHelperMixin.java](../development/creativeCalendar/src/main/java/com/SaintAlfonzo/creativecalendar/mixin/SeasonHudHelperMixin.java) | season-type HUD day; reads the same lengths |
 
 ## 6. Offline checks
 
@@ -706,3 +708,6 @@ TI-27 cover what the build added (3.8).
 - 2026-10-30: 3.11 built in patcherMod (`time/TimeDate`): `/cetime date` reset / set / next / previous / restart / add,
   moving the sun, Serene Seasons in every level and the vintage clock together. The year now counts from the first
   sunrise and rounds up (`CalendarDate.year`), fixing a fresh world's two-year year 1. Compiles; TI-32 to TI-37 not run.
+- 2026-11-01: moved to Creative Calendar ([creative_calendar.md](creative_calendar.md)): the `time/` package, `[time]`
+  (now in `config/creativecalendar-common.toml`, same keys and comments) and the time mixins, same behaviour. The Vinery
+  port's `PackTime` calls Calendar's `time/WineTime` directly. Compiles; SQ-CAL rows queued.

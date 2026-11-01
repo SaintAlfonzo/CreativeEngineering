@@ -1034,7 +1034,7 @@ blocks, all logged on `main` during mod loading; Copycats is gone from the prege
 
 Each bulk scratch-queue run is also a performance run: every server records, and each queue entry is a measured
 segment. Benchmarks with fixed windows (boot, idle, pregen, reload) are the perf suite's G scenarios
-([perf_suite.md](perf_suite.md), its own runner, bot players from `development/perfBot`); this section covers
+([perf_suite.md](perf_suite.md), its own runner, bot players from `development/creativeDevtools/members/perfbot`); this section covers
 queue runs driven through `scratch_server.sh` only. Servers the suite owns (`srv/perf_suite.owner`) are skipped.
 
 | Part | Status |

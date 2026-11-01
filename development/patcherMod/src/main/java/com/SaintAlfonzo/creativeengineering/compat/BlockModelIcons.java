@@ -21,7 +21,7 @@ import net.minecraftforge.registries.ForgeRegistries;
 
 /**
  * Which blocks get their own model as the WTHIT icon ({@link WthitBlockModelIcon}), kept free of WTHIT types so
- * devtools/WthitIconDump can ask the same question for every block.
+ * Creative Devtools' dump/WthitIconDump can ask the same question for every block.
  *
  * <p>The rule: WTHIT's core icon is the block's vanilla clone stack. When that stack is empty (the block has no
  * item) or its item draws as the missing model: a block listed in {@code [wthit] iconExclude} keeps WTHIT's icon; one

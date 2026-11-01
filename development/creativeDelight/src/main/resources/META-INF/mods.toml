@@ -31,6 +31,14 @@ mandatory=true
 versionRange="[1.1.03,)"
 ordering="AFTER"
 side="BOTH"
+# Creative Calendar: seasons, season types and crop seasons the CD crops grow by (feature_writeup/creative_calendar.md).
+# AFTER so its startup script pack (global.CAL) runs before CD's.
+[[dependencies.creative_delight]]
+modId="creativecalendar"
+mandatory=true
+versionRange="[1.0.0,)"
+ordering="AFTER"
+side="BOTH"
 [[dependencies.creative_delight]]
 modId="farmersdelight"
 mandatory=true

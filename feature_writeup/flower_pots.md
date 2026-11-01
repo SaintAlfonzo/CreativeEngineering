@@ -172,7 +172,7 @@ adds `EntityBlock`, `use` and `onRemove`; the block entity `creativeengineering:
 
 - [../kubejs/server_scripts/_lib/dump_flower_pots.js](../kubejs/server_scripts/_lib/dump_flower_pots.js): `/dumppots`
 - [../tools/flower_pot_test/pot_probe.js](../tools/flower_pot_test/pot_probe.js): `/pottest` scratch probe
-- [../kubejs/server_scripts/_lib/flower_world.js](../kubejs/server_scripts/_lib/flower_world.js): the Flower Test
+- [../kubejs/data/creativedevtools/kubejs/flowerworld/flower_world.js](../kubejs/data/creativedevtools/kubejs/flowerworld/flower_world.js) (Creative Devtools since 2026-11-01, dev only): the Flower Test
   world builder (every plant some holder takes x one block per holder type, one table along +z, axis of plants on
   grass, hanging holders one block up under glass). Runs by itself on the first start of a world made with the
   "Flower Test" world type; `/flowerworld` (op) rebuilds it in any world
@@ -185,7 +185,7 @@ adds `EntityBlock`, `use` and `onRemove`; the block entity `creativeengineering:
   [../kubejs/client_scripts/tooltips.js](../kubejs/client_scripts/tooltips.js) Flower Pots;
   [../kubejs/client_scripts/namechanges.js](../kubejs/client_scripts/namechanges.js); Rich Hanging Pot recipe in
   [../kubejs/server_scripts/other/flowers.js](../kubejs/server_scripts/other/flowers.js)
-- [../development/patcherMod/src/main/resources/data/creativeengineering/worldgen/world_preset/flower_test.json](../development/patcherMod/src/main/resources/data/creativeengineering/worldgen/world_preset/flower_test.json):
+- [../development/creativeDevtools/src/main/resources/data/creativeengineering/worldgen/world_preset/flower_test.json](../development/creativeDevtools/src/main/resources/data/creativeengineering/worldgen/world_preset/flower_test.json) (Creative Devtools):
   the "Flower Test" world type (flat plains, no features or structures, bedrock / stone / dirt / grass, the stack
   the builder checks for), listed in the World Type button through `#minecraft:normal`
 - [../tools/flower_pot_audit.py](../tools/flower_pot_audit.py): matrix generator, holder rules as data
@@ -203,7 +203,7 @@ adds `EntityBlock`, `use` and `onRemove`; the block entity `creativeengineering:
 
 Scratch server entries: SQ-POT-01 to SQ-POT-05 in [testing/scratch_queue.md](testing/scratch_queue.md). In game:
 
-- [ ] **POT-09 Flower Test world type:** Create New World, More World Options, World Type cycles to "Flower Test";
+- [ ] **POT-09 Flower Test world type (dev instance with Creative Devtools):** Create New World, More World Options, World Type cycles to "Flower Test";
   on entering, chat says "Flower Test: N plants x 12 holders built" within ~30 s; you stand at -5 -5 in front of one
   unbroken table (header signs at z = -2, rows every 2 blocks along +z, no second section); the Supplementaries and
   Beautify hanging pots hang one block above the grass under glass; no Handcrafted pot column; no melon, pumpkin or
@@ -284,3 +284,5 @@ Scratch server entries: SQ-POT-01 to SQ-POT-05 in [testing/scratch_queue.md](tes
 - 2026-10-31 (later): Flower Test silt pot filled by a rooted dirt click before planting; Floral large pots hidden and
   out of the Flower Test world (12 holders); sunflower in the planter box list; silt pot tooltip and WTHIT
   "Rooted Dirt" line. patcherMod 1.1.04 rebuilt, not installed. POT-17 added.
+- 2026-11-01: the Flower Test world builder, its preset and lang key moved to Creative Devtools (dev only,
+  creative_devtools.md 2); players no longer get the world type.

@@ -51,7 +51,7 @@ The one-game-JVM rule holds: before every boot the runner waits (up to 60 min) w
 
 ## 3. Design
 
-### 3.1 The bot mod (`development/perfBot`)
+### 3.1 The bot mod (`development/creativeDevtools/members/perfbot`, nested in Creative Devtools since 2026-11-01)
 
 - `BotConnection` extends `Connection`. Its channel is an `EmbeddedChannel` set by reflection (fields found by
   type). It carries Forge's `fml:netversion` attribute, because `ConnectionType.forVersionFlag(null)` throws. It also
@@ -310,7 +310,7 @@ The queue in [testing/scratch_queue.md](testing/scratch_queue.md) runs first. Re
 
 | File | Role |
 |---|---|
-| `development/perfBot/` | the dev-only mod (`CePerfBot`, `BotConnection`, `BotPlayer`, `Bots`, `TickLog`, `BotCommands`) |
+| `development/creativeDevtools/members/perfbot/` (nested in Creative Devtools) | the dev-only mod (`CePerfBot`, `BotConnection`, `BotPlayer`, `Bots`, `TickLog`, `BotCommands`) |
 | `tools/perf/suite/perf_suite.py` | runner: run / resume / status / report |
 | `tools/perf/suite/server.py` | setup on `eval_server.sh`, boot, liveness, RCON calls, stop, triage, JFR salvage |
 | `tools/perf/suite/rcon.py`, `ticklog.py`, `builders.py` | RCON client, tick log reader and window stats, command builders |

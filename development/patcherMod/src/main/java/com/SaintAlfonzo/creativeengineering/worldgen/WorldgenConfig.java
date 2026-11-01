@@ -2,7 +2,6 @@ package com.SaintAlfonzo.creativeengineering.worldgen;
 
 import com.SaintAlfonzo.creativeengineering.CEConfig;
 import com.SaintAlfonzo.creativeengineering.CEConfig.GroundMode;
-import com.SaintAlfonzo.creativeengineering.CEConfig.VerticalAlign;
 
 import java.util.List;
 import java.util.function.Supplier;
@@ -156,12 +155,4 @@ public final class WorldgenConfig {
 	// ── terrain adaptation ───────────────────────────────────────────────────
 	public static int softSkirtBump() { return get(() -> wg().terrainAdaptation.skirtBump.get(), 0); }
 
-	// ── /ceplace ─────────────────────────────────────────────────────────────
-	public static int placeGap() { return get(() -> wg().massPlace.gap.get(), 12); }
-	public static int placeRowGap() { return get(() -> wg().massPlace.rowGap.get(), 16); }
-	public static boolean placeLabels() { return get(() -> wg().massPlace.labels.get(), true); }
-	public static VerticalAlign placeVerticalAlign() { return get(() -> wg().massPlace.verticalAlign.get(), VerticalAlign.AUTO); }
-	public static int placeAutoAlignBand() { return get(() -> wg().massPlace.autoAlignBand.get(), 8); }
-	public static int placeMaxItems() { return get(() -> wg().massPlace.maxItems.get(), 1000); }
-	public static int placeTickBudgetMs() { return get(() -> wg().massPlace.tickBudgetMs.get(), 40); }
 }

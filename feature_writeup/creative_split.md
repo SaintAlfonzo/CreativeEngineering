@@ -1,6 +1,7 @@
 # Creative split: audit plan for breaking patcherMod into high-level jars
 
-Written 2026-11-01. **Status: audit done 2026-11-01, nothing moved; owner sign-off on 7.4 pending.** Owner, 2026-11-01: plan an audit of Creative
+Written 2026-11-01. **Status: signed off 2026-11-01 (7.6 holds every decision and overrides older rows); execution
+started on branch `creative-split`.** Owner, 2026-11-01: plan an audit of Creative
 Engineering with the intent of splitting content into its own high-level jars; the core systems go into a mod called
 Creative Common, beside Creative Engineering, Creative Equipment, Creative Worldgen, Creative Compat (misc tweaks for
 various mods) and Creative Calendar, plus any other large content categories worth splitting out.
@@ -348,6 +349,72 @@ G section 7.2 holds the eleven items every new jar needs: `settings.gradle` incl
 (each jar creates its own `DeferredRegister` for it), and the 31 `@Mod.EventBusSubscriber` annotations must change
 `modid` when their class moves.
 
+### 7.6 Owner sign-off (2026-11-01)
+
+These decisions override sections 2, 6, 7.2 to 7.4 wherever they differ. Execution runs on git branch
+`creative-split`, one commit per carve, and each carve is verified by a scratch dedicated-server boot before the next.
+
+**Jars (9 carved plus Common).** Devtools, Calendar, Compat, CD, CB, Worldgen, **Magic**, Equipment, Engineering.
+Creative Magic is carved in this split, no longer only reserved. Creative Computers is dropped and folded into
+Engineering for good.
+
+**Dependencies.**
+- **Compat is required by every other Creative jar.** It sits between Common and the content jars: Common <- Compat <-
+  everything else. Compat applies each tweak only when the target mod (third-party, or one of ours) is loaded
+  (`GatedMixinPlugin` and `ModList` checks). Content jars may call Compat (downward). Compat never hard-links a content
+  jar: a Compat row that needs a content jar uses an API the content jar registers into (for example, Engineering
+  registers the burning-TNT shrapnel transform with Compat's ItemBurnTransform).
+- CD requires Common, Compat, Calendar. CB requires Common, Compat, Calendar, CD (all mandatory, `AFTER`).
+- Jars carved before Compat exists get the `creativecompat` dependency when Compat is carved.
+
+**Ids.**
+- Q1: the `creativecommon` swap is the last step, after Engineering, as recommended.
+- Q2: CD and CB are renamed to `creativedelight` and `creativebrewing` (mod id, config file name,
+  `kubejs/data|assets/<id>` script trees, NCH recipe namespace). The ids CD registers under its own namespace
+  (`creative_delight:treated_stick*` blocks, the `creative_delight:village_farm_crops` structure processor) keep the
+  `creative_delight` namespace (rule 3.1: ids stay, no conversions).
+
+**Q6:** Devtools goes in dev `mods/` only. **Q7:** Creative Brewing is the first jar to publish. Its required chain
+(Common, Compat, Calendar, CD) has to be published with it, so each needs the licence audit that creative_brewing.md
+9 did for CB. Compat's 950 painting files and CD's ARR overrides are the known risks.
+
+**7.4 rows.**
+
+| Row | Decision |
+|---|---|
+| Mooshrooms and Mooblooms | **Worldgen** handles all mooshroom and moobloom spawning: `mooshroom/`, `MooshroomFamily`, More Mooblooms as a Worldgen member (not CD). Fungi Delight stays a CD member, and Worldgen takes over its mooshrooms' natural spawning. |
+| Dark Fire, Flint and Terrasteel, the Nether portal-failure rule (`dimension/PortalFailureHandler`) | **Creative Magic**. The Magic sweep (`split/H_magic.md`) lists any other content that belongs there. |
+| `damage/` | Equipment; `DamageTags` becomes a Common API. |
+| `campfire/` (comfort, rain) | **Compat**. |
+| `MossTint`, `VineShearing` and their mixins | Compat. **Salt** (`SaltBlockTicks` and the salt mixins) goes to **CD**. |
+| Wandering trader | **Everything trader goes to Common**: `TradeListings`, `TagItemListing`, `trade_helper.js`, `WanderingTraderTweaks` (spawn interval and offer counts) with its two mixins and `[wandering_trader]`, `wandering_trades.js`, `tradetags.js`. The Winemaker stock and `WinemakerTrades` stay CB's (creative_brewing.md 4.2). |
+| `MonsterBoxVault` | **Compat**. |
+| `item/BottledAir`, `[bottled_air]` | **Equipment**. |
+| `fan/` dragon breathing | **All Engineering**: the type, the lingering rows and `DragonBreathingJEI`. |
+| `WthitCoaster`, `WthitHive`, `WthitKitchenStation`, `WthitRemainderBuffer`, `WthitSheared` | **All in Common**, each line gated on its content mod being loaded. Common must not import content classes: the line reads an accessor interface Common defines, and the content block entity implements it (like `ce$tankLevel`). |
+| IE recycling diagnostics (`onServerStarted`) | Devtools. |
+| `NockRecipeBookSync` | Equipment. The Equipment carve checks whether it is still needed now that the recipe book is removed; delete it if not. |
+| `SequencedAssemblyRecipeMixin` | **Common**. |
+| `[botania]` and `TrinketCaseRules` | **Creative Magic**. |
+| `MassPlacer` (`/ceplace`) | **Devtools** (optional dependency on Worldgen). |
+| `other/harvest.js` | **CD**. |
+| `other/creative_labels.js` | the creativeLabels jar, which stays its own mod. |
+| `items/decor_blocks.js`, `tags/entitytags.js` | Compat, Worldgen. |
+| `_lib` test recipes (`metal_test_recipes`, `wood_test_recipes`, `sequence_assembly_processes`) and `_lib/flower_world.js` | Devtools. |
+| Remainder extras: `ArmorEnchantabilityBridge`, `BonemealCharms`, `ElytraChestplates`; `PotionFluidTooltip` | Equipment (unless the Magic sweep claims the enchantability bridge); CB. |
+
+**Carve order (replaces 7.3).**
+1. **Devtools** and **Calendar** (owner: start with these two). Neither needs the 7.3 step 0 APIs: Devtools brings its
+   own null-state listener hook into Common, and Calendar takes `[perf] seasonsMeltIntervalTicks` into its own config.
+2. Prep in patcherMod (7.3 step 0: `GatedMixinPlugin`, `NCH.cfg` per-jar registration, the remaining Common APIs) and
+   the CD and CB id rename.
+3. **Compat**, then each earlier jar gains the `creativecompat` dependency.
+4. **CB** phases 1 to 3, then **CD** (troughs, babyMobs, incubationAdditions, salt, harvest).
+5. **Worldgen** with fauna and More Mooblooms.
+6. **Magic.**
+7. **Equipment.**
+8. **Engineering** with the former Computers rows, then the Q1 `creativecommon` swap.
+
 ## 8. History
 
 - 2026-11-01: plan written (owner request). Measurements in section 1. Nothing audited, nothing moved.
@@ -365,3 +432,6 @@ G section 7.2 holds the eleven items every new jar needs: `settings.gradle` incl
 - 2026-11-01, audit done: section 7 filled (sizes, 25 edges with fixes, carve order with a prep step 0, remainder
   check, 16 owner rows). Reservation docs creative_magic.md and creative_computers.md written. Awaiting owner sign-off
   on the 7.4 rows and Q1, Q2, Q6, Q7 before any execution doc.
+- 2026-11-01, owner sign-off (7.6): Compat is required by every jar; Magic is carved now and Computers folds into
+  Engineering; CD and CB lose the underscore; every 7.4 row is settled; CB is the first publishing goal. Execution
+  starts with Devtools and Calendar on branch `creative-split`.

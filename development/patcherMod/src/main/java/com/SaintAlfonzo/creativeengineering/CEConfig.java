@@ -70,9 +70,6 @@ public final class CEConfig {
     public static final Wthit WTHIT;
     public static final Alcohol ALCOHOL;
     public static final Perf PERF;
-    public static final Seasons SEASONS;
-    public static final CropSeasons CROP_SEASONS;
-    public static final Time TIME;
     public static final Surface SURFACE;
     public static final Worldgen WORLDGEN;
     public static final VeinUndo VEIN_UNDO;
@@ -83,7 +80,6 @@ public final class CEConfig {
     public static final Advancements ADVANCEMENTS;
     public static final Effects EFFECTS;
     public static final ModNames MOD_NAMES;
-    public static final Debug DEBUG;
 
     static {
         ForgeConfigSpec.Builder builder = new ForgeConfigSpec.Builder();
@@ -123,9 +119,7 @@ public final class CEConfig {
         WTHIT = new Wthit(builder);
         ALCOHOL = new Alcohol(builder);
         PERF = new Perf(builder);
-        SEASONS = new Seasons(builder);
-        CROP_SEASONS = new CropSeasons(builder);
-        TIME = new Time(builder);
+        // [seasons], [crop_seasons], [time]: creativecalendar-common.toml (Creative Calendar, 2026-11-01)
         SURFACE = new Surface(builder);
         WORLDGEN = new Worldgen(builder);
         VEIN_UNDO = new VeinUndo(builder);
@@ -136,7 +130,6 @@ public final class CEConfig {
         ADVANCEMENTS = new Advancements(builder);
         EFFECTS = new Effects(builder);
         MOD_NAMES = new ModNames(builder);
-        DEBUG = new Debug(builder);
         COMMON_SPEC = builder.build();
     }
 
@@ -1129,7 +1122,6 @@ public final class CEConfig {
      */
     public static final class Perf {
         public final ForgeConfigSpec.IntValue troughMissCooldownTicks;
-        public final ForgeConfigSpec.IntValue seasonsMeltIntervalTicks;
         public final ForgeConfigSpec.BooleanValue gravityLimitDimensions;
         public final ForgeConfigSpec.ConfigValue<java.util.List<? extends String>> gravityDimensions;
         public final ForgeConfigSpec.IntValue mountEffectIntervalTicks;
@@ -1158,12 +1150,7 @@ public final class CEConfig {
                     "refilled next to an animal is noticed up to this long late. 0 = off (Quark's own behaviour)."
             ).defineInRange("troughMissCooldownTicks", 600, 0, 72000);
 
-            seasonsMeltIntervalTicks = b.comment(
-                    "Serene Seasons snow/ice melt: the per-chunk melt roll runs once every N ticks instead of every",
-                    "tick, with its chance multiplied by N so the average melt rate is unchanged (a roll's chance",
-                    "is capped at 1, so N above 4 melts slightly slower in summer). Walking every loaded chunk on",
-                    "every tick was the cost. Cost: melting is a little lumpier. 1 = off."
-            ).defineInRange("seasonsMeltIntervalTicks", 4, 1, 40);
+            // seasonsMeltIntervalTicks: creativecalendar-common.toml [perf] (Creative Calendar, 2026-11-01)
 
             gravityLimitDimensions = b.comment(
                     "Create: Gravity runs its biome lookup and gravity-attribute update for every living entity in",
@@ -1336,8 +1323,6 @@ public final class CEConfig {
         public final ForgeConfigSpec.BooleanValue sheared;
         public final ForgeConfigSpec.BooleanValue silkTouch;
         public final ForgeConfigSpec.BooleanValue silkTouchShowFalse;
-        public final ForgeConfigSpec.BooleanValue cropSeasons;
-        public final ForgeConfigSpec.BooleanValue cropOutOfSeason;
         public final ForgeConfigSpec.BooleanValue operatorBlocks;
         public final ForgeConfigSpec.ConfigValue<List<? extends String>> operatorBlockList;
         public final ForgeConfigSpec.IntValue operatorBlockLevel;
@@ -1461,15 +1446,7 @@ public final class CEConfig {
                     "Also show 'Silk Touch Required: False' (red) on every other block. Off by default."
             ).define("silkTouchShowFalse", false);
 
-            cropSeasons = b.comment(
-                    "Every crop with a crop season type: its seasons as on the planting item ('Fertile: Spring',",
-                    "'Offseason: Winter, Dry', 'Season: Nether', 'Fertile: Cold biomes'). [crop_seasons]."
-            ).define("cropSeasons", true);
-
-            cropOutOfSeason = b.comment(
-                    "Under it, green 'Fertile here: grows faster' or red 'Offseason here: grows slower' for where the",
-                    "crop stands (greenhouse glass counted). Nothing when it is neutral there."
-            ).define("cropOutOfSeason", true);
+            // cropSeasons, cropOutOfSeason: creativecalendar-common.toml [wthit] (Creative Calendar, 2026-11-01)
 
             operatorBlocks = b.comment(
                     "WTHIT's blacklist hides barriers, structure voids and light blocks from everyone. With this on, players",
@@ -1546,179 +1523,8 @@ public final class CEConfig {
         }
     }
 
-    /**
-     * Season types for Serene Seasons ({@code seasons/SeasonTypes}): arid, frozen and tropical biomes by
-     * tag, and rivers/beaches that take on the land around them. feature_writeup/weather.md.
-     */
-    public static final class Seasons {
-        public final ForgeConfigSpec.BooleanValue enabled;
-        public final ForgeConfigSpec.IntValue adaptiveRadius;
-        public final ForgeConfigSpec.IntValue snowLineY;
-
-        private Seasons(ForgeConfigSpec.Builder b) {
-            b.comment(
-                    "Season types on top of Serene Seasons. The biome lists are the tags creativeengineering:seasons/",
-                    "arid, frozen, tropical and adaptive (kubejs/generation_scripts/worldgen/season_types.json).",
-                    "Arid: no rain all year. Frozen: snow all year. Tropical: wet and dry seasons, savannas included.",
-                    "Adaptive (rivers, beaches): each column behaves like the nearest land biome. SeasonHUD shows",
-                    "'Arid' / 'Frozen' with the day of the year. Read live on both sides."
-            ).push("seasons");
-
-            enabled = b.comment("false: Serene Seasons' own rules everywhere, the tags are ignored.")
-                    .define("enabled", true);
-
-            adaptiveRadius = b.comment(
-                    "How far (blocks) a river or beach column looks for land to copy, in rings of 8 directions",
-                    "at 8, 16, 24, 32, 48, 64, ... blocks. The first ring that reaches land decides by majority.",
-                    "Nothing found: the river or beach keeps its own biome."
-            ).defineInRange("adaptiveRadius", 64, 8, 256);
-
-            snowLineY = b.comment(
-                    "The snow line (default 320, the overworld build height). Below it height alone never turns rain",
-                    "into snow (vanilla cools 0.05 per 40 blocks above y80): a column snows only if its biome snows at",
-                    "y80 in the current sub-season. At and above it temperate and cold biomes always snow, so falling",
-                    "snow tells a flyer they are above build height. Frozen and permanent-season biomes keep their own",
-                    "rules. Also the ceiling for the snow_seasons lists in season_types.json."
-            ).defineInRange("snowLineY", 320, -64, 4096);
-
-            b.pop(); // seasons
-        }
-    }
-
-    /**
-     * Crop growing seasons by crop type ({@code seasons/CropSeasons}): fertile, neutral or off for the season of the
-     * biome the crop stands in. feature_writeup/crops.md 2.12.1. Read live on both sides (the client for tooltips).
-     */
-    public static final class CropSeasons {
-        public final ForgeConfigSpec.BooleanValue enabled;
-        public final ForgeConfigSpec.DoubleValue fertileBonus;
-        public final ForgeConfigSpec.DoubleValue offPenalty;
-        public final ForgeConfigSpec.BooleanValue greenhouse;
-        public final ForgeConfigSpec.IntValue caveFertileBelowY;
-        public final ForgeConfigSpec.IntValue caveOffAboveY;
-
-        private CropSeasons(ForgeConfigSpec.Builder b) {
-            b.comment(
-                    "Every crop has a type (block tags creativeengineering:crop_seasons/<type>, filled from",
-                    "kubejs/generation_scripts/worldgen/crop_seasons.json). Each season is fertile (grows faster),",
-                    "neutral or off (grows slower) for that type, read from the biome's own calendar: spring to winter",
-                    "in temperate and cold biomes, wet and dry in tropical, dry and arid ones. Replaces Serene Seasons'",
-                    "in/out of season rule (its fertility.toml seasonal_crops is off). A crop in no type grows as usual."
-            ).push("crop_seasons");
-
-            enabled = b.comment("false: no crop seasons at all (crops grow at their own speed everywhere).")
-                    .define("enabled", true);
-            fertileBonus = b.comment(
-                    "Fertile: this share of growth checks gets a second growth check right after (0.25 = 25 % faster)."
-            ).defineInRange("fertileBonus", 0.25, 0.0, 1.0);
-            offPenalty = b.comment("Off: this share of growth checks is refused (0.25 = 25 % slower).")
-                    .defineInRange("offPenalty", 0.25, 0.0, 1.0);
-            greenhouse = b.comment(
-                    "Greenhouse glass: any block in #sereneseasons:greenhouse_glass (filled from crop_seasons.json",
-                    "greenhouse_glass: glass blocks, panes, doors and trapdoors) in the 16 blocks straight above a seasonal",
-                    "crop makes every season neutral (no fertile bonus, no off penalty). Only that column counts."
-            ).define("greenhouse", true);
-            caveFertileBelowY = b.comment("Cave crops (cave carrots, glow berries) are fertile below this height.")
-                    .defineInRange("caveFertileBelowY", 0, -64, 320);
-            caveOffAboveY = b.comment("Cave crops are off above this height; neutral in between.")
-                    .defineInRange("caveOffAboveY", 128, -64, 320);
-
-            b.pop(); // crop_seasons
-        }
-    }
-
-    /**
-     * The one place day length, seasons and wine aging are set ({@code time/} package, feature_writeup/time.md).
-     * patcherMod pushes the derived values into Better Days (getter mixin), Serene Seasons and SeasonHUD (their
-     * per-world server configs); the Vinery port reads its wine values through {@code time.WineTime}. Their own
-     * files stop being edited by hand. Every length is in world days of {@code dayMinutes + nightMinutes} real minutes.
-     */
-    public static final class Time {
-        public enum Clock { SUN, TICKS }
-        public enum WineClock { SUN, PLAYTIME }
-        /** {@code time/TimePresets}: CUSTOM is only a label, shown when the values match neither preset. */
-        public enum Preset { SINGLEPLAYER, SERVER, CUSTOM }
-
-        public final ForgeConfigSpec.EnumValue<Preset> preset;
-        public final ForgeConfigSpec.BooleanValue enabled;
-        public final ForgeConfigSpec.BooleanValue pauseWhenEmpty;
-        public final ForgeConfigSpec.BooleanValue hudTimeOfDay;
-        public final ForgeConfigSpec.DoubleValue dayMinutes;
-        public final ForgeConfigSpec.DoubleValue nightMinutes;
-        public final ForgeConfigSpec.DoubleValue dayStart;
-        public final ForgeConfigSpec.DoubleValue nightStart;
-        public final ForgeConfigSpec.EnumValue<Clock> seasonClock;
-        public final ForgeConfigSpec.IntValue daysPerSubSeason;
-        public final ForgeConfigSpec.IntValue startingSubSeason;
-        public final ForgeConfigSpec.EnumValue<WineClock> wineClock;
-        public final ForgeConfigSpec.IntValue monthsPerLevel;
-        public final ForgeConfigSpec.IntValue maxLevel;
-        public final ForgeConfigSpec.DoubleValue cellarMultiplier;
-        public final ForgeConfigSpec.DoubleValue coldMultiplier;
-        public final ForgeConfigSpec.DoubleValue warmMultiplier;
-
-        private Time(ForgeConfigSpec.Builder b) {
-            b.comment(
-                    "Day length, seasons and wine aging in one place (feature_writeup/time.md). While enabled, the",
-                    "time values in betterdays-common.toml, the world's sereneseasons-server.toml and seasonhud-server.toml",
-                    "are overwritten from here at server start and on every edit. The Vinery port reads [time.wine] and the",
-                    "lengths from here and ignores the matching vinery-common.toml [wine]/[aging] keys while enabled.",
-                    "/cetime shows every derived value."
-            ).push("time");
-
-            preset = b.comment(
-                    "SINGLEPLAYER or SERVER sets every value below to that preset (they differ only in monthsPerLevel:",
-                    "1 in single player, 3 on a server). Editing any value by hand turns this into CUSTOM, unless the",
-                    "values then match a preset again. CUSTOM itself changes nothing."
-            ).defineEnum("preset", Preset.SINGLEPLAYER);
-            enabled = b.comment("Master switch. false: Better Days, Serene Seasons, SeasonHUD and Vinery use their own files again.")
-                    .define("enabled", true);
-            pauseWhenEmpty = b.comment(
-                    "Dedicated server with nobody online: the sun stops, so the seasons and wine aging stop with it.",
-                    "Game time, weather and random ticks keep running. Single player is unaffected."
-            ).define("pauseWhenEmpty", true);
-            hudTimeOfDay = b.comment("SeasonHUD shows the time of day after the season, \"Mid Spring (Day 3/24) 7:30 pm\" (client side).")
-                    .define("hudTimeOfDay", true);
-
-            b.push("day");
-            dayMinutes = b.comment("Real minutes from dayStart to nightStart.").defineInRange("dayMinutes", 45.0, 1.0, 10000.0);
-            nightMinutes = b.comment("Real minutes from nightStart to the next dayStart.").defineInRange("nightMinutes", 15.0, 1.0, 10000.0);
-            dayStart = b.comment(
-                    "dayTime of sunrise; the clock reads it as 6:00 am. Better Days reads it once, so a change needs a restart."
-            ).defineInRange("dayStart", 22300.0, 0.0, 24000.0);
-            nightStart = b.comment("dayTime of sunset. Needs a restart, like dayStart.").defineInRange("nightStart", 13000.0, 0.0, 24000.0);
-            b.pop();
-
-            b.push("seasons");
-            seasonClock = b.comment(
-                    "SUN: the seasons count sunrises; sleeping and /time move them as far as the sun.",
-                    "TICKS: Serene Seasons' own counter (one world day of real ticks per day; sleeping skips ahead)."
-            ).defineEnum("clock", Clock.SUN);
-            daysPerSubSeason = b.comment("World days per sub-season (12 sub-seasons a year). Also the length of a wine month.")
-                    .defineInRange("daysPerSubSeason", 8, 1, 1000);
-            startingSubSeason = b.comment("Sub-season a new world starts in: 1 = Early Spring ... 12 = Late Winter, 0 = random.")
-                    .defineInRange("startingSubSeason", 1, 0, 12);
-            b.pop();
-
-            b.push("wine");
-            wineClock = b.comment(
-                    "SUN: wine ages with the world days, sleeping and /time included. PLAYTIME: while a player is online."
-            ).defineEnum("clock", WineClock.SUN);
-            monthsPerLevel = b.comment("A wine month is one sub-season. Months per effect level (SINGLEPLAYER 1, SERVER 3 = one season).")
-                    .defineInRange("monthsPerLevel", 1, 1, 100);
-            maxLevel = b.comment("Highest effect level from aging.").defineInRange("maxLevel", 5, 0, 10);
-            b.push("boosts");
-            cellarMultiplier = b.comment("Aging speed in storage with no sky light.").defineInRange("cellarMultiplier", 2.0, 1.0, 5.0);
-            coldMultiplier = b.comment("Aging speed in cold storage (Brewin' keg freeze sources outweigh heat sources nearby).",
-                    "Multiplies with cellarMultiplier: a cold cellar ages at both.").defineInRange("coldMultiplier", 2.0, 1.0, 5.0);
-            warmMultiplier = b.comment("Aging speed in warm storage (Brewin' keg heat sources outweigh freeze sources nearby).",
-                    "Multiplies with cellarMultiplier; below 1.0 slows aging.").defineInRange("warmMultiplier", 0.75, 0.1, 1.0);
-            b.pop();
-            b.pop();
-
-            b.pop(); // time
-        }
-    }
+    // Season types ([seasons]), crop seasons ([crop_seasons]) and the [time] master: Creative Calendar's
+    // CalendarConfig (creativecalendar-common.toml), moved with their keys and comments on 2026-11-01.
 
     /**
      * Everything about walking on blocks ({@code surface/} package): BlockRunner's tier speeds,
@@ -2288,9 +2094,6 @@ public final class CEConfig {
     /** How a structure's grass/dirt base is swapped for the local ground ({@code worldgen/GroundMatch}). */
     public enum GroundMode { TERRAIN, PALETTE, REMOVE }
 
-    /** Where /ceplace puts each structure vertically ({@code worldgen/MassPlacer}). */
-    public enum VerticalAlign { AUTO, KEEP, GROUND }
-
     /** Which structure starts the earth-fill check logs ({@code worldgen/EarthFill}). */
     public enum EarthFillLog { OFF, CANCELLED, ALL }
 
@@ -2314,7 +2117,6 @@ public final class CEConfig {
         public final WaterFill waterFill;
         public final TerrainAdaptation terrainAdaptation;
         public final MetaStructures metaStructures;
-        public final MassPlace massPlace;
         public final OceanGeodes oceanGeodes;
         public final PlacementPriorityCfg placementPriority;
         public final LocateCfg locate;
@@ -2337,7 +2139,6 @@ public final class CEConfig {
             waterFill = new WaterFill(b);
             terrainAdaptation = new TerrainAdaptation(b);
             metaStructures = new MetaStructures(b);
-            massPlace = new MassPlace(b);
             oceanGeodes = new OceanGeodes(b);
             placementPriority = new PlacementPriorityCfg(b);
             locate = new LocateCfg(b);
@@ -3097,42 +2898,6 @@ public final class CEConfig {
         }
     }
 
-    public static final class MassPlace {
-        public final ForgeConfigSpec.IntValue gap;
-        public final ForgeConfigSpec.IntValue rowGap;
-        public final ForgeConfigSpec.BooleanValue labels;
-        public final ForgeConfigSpec.EnumValue<VerticalAlign> verticalAlign;
-        public final ForgeConfigSpec.IntValue autoAlignBand;
-        public final ForgeConfigSpec.IntValue maxItems;
-        public final ForgeConfigSpec.IntValue tickBudgetMs;
-
-        private MassPlace(ForgeConfigSpec.Builder b) {
-            b.comment(
-                    "/ceplace structures <filter> and /ceplace templates <glob>: place every match in rows (one row per",
-                    "type tag, group, mod or template folder), starting at your position and going +X, rows stacked +Z.",
-                    "Meant for a flat world with Generate Structures off. /ceplace preview ... lists without placing."
-            ).push("mass_place");
-            gap = b.comment("Blocks between two structures in a row.").defineInRange("gap", 12, 0, 512);
-            rowGap = b.comment("Blocks between rows (the aisle the labels stand in).").defineInRange("rowGap", 16, 4, 512);
-            labels = b.comment("Put a sign with the id in front of each structure and at the start of each row.")
-                    .define("labels", true);
-            verticalAlign = b.comment(
-                    "KEEP: each structure at the height it generated at here. GROUND: its bottom layer at ground level.",
-                    "AUTO: GROUND only for structures that generated more than autoAlignBand blocks above or below the",
-                    "ground (underground and sky structures); surface ones keep their height."
-            ).defineEnum("verticalAlign", VerticalAlign.AUTO);
-            autoAlignBand = b.comment("AUTO's tolerance, in blocks.").defineInRange("autoAlignBand", 8, 0, 256);
-            maxItems = b.comment("Refuse a run with more matches than this (preview first, or narrow the filter).")
-                    .defineInRange("maxItems", 1000, 1, 100000);
-            tickBudgetMs = b.comment(
-                    "Milliseconds of work per server tick. Each structure is laid out, then its chunks are generated and",
-                    "built one at a time until the budget is used, so a big village takes several ticks instead of one",
-                    "long one (a dedicated server kills a tick over 60 s). Higher = faster runs, choppier server."
-            ).defineInRange("tickBudgetMs", 40, 5, 1000);
-            b.pop(); // mass_place
-        }
-    }
-
     /**
      * Which screens show TrashSlot's trash slot by default, read on the client by
      * {@code compat.TrashSlotCompat}. TrashSlot itself only turns the slot on for the player
@@ -3531,109 +3296,6 @@ public final class CEConfig {
                     "alexsmobs:power_down"
             ), o -> o instanceof String s && s.matches("[a-z0-9_.-]+:[a-z0-9_/.-]+"));
             b.pop();
-        }
-    }
-
-    /** Dev-instance knobs: the Python generator runner ({@code devtools/GeneratorRunner}, /cegen). */
-    public static final class Debug {
-        public final ForgeConfigSpec.BooleanValue runGeneratorsAtStartup;
-        public final ForgeConfigSpec.ConfigValue<String> generatorTarget;
-        public final ForgeConfigSpec.ConfigValue<String> python;
-        public final ForgeConfigSpec.IntValue timeoutSeconds;
-        public final ForgeConfigSpec.IntValue startupWaitSeconds;
-        public final ForgeConfigSpec.BooleanValue stateSyncEnabled;
-        public final ForgeConfigSpec.IntValue stateSyncMaxDetailLines;
-        public final ForgeConfigSpec.BooleanValue dumpNamesAtTitle;
-        public final ForgeConfigSpec.BooleanValue dumpIconsAtTitle;
-        public final ForgeConfigSpec.BooleanValue recipeScanAtLoad;
-        public final ForgeConfigSpec.BooleanValue levelRandomProbe;
-
-        private Debug(ForgeConfigSpec.Builder b) {
-            b.comment("Developer tools. Only meaningful in the dev instance (the one with tools/ and mods/ source).").push("debug");
-            b.comment(
-                    "The pack's generator scripts (tools/*.py: structure/biome/loot configs, effect descriptions,",
-                    "pack manifest, reports) listed in tools/generators.json. /cegen run [target] runs them in game;",
-                    "these knobs also let them run by themselves every time the game starts."
-            ).push("generators");
-
-            runGeneratorsAtStartup = b.comment(
-                    "Debug mode. When true, the generators run in the background as the game starts (from common",
-                    "setup), and loading waits for them before finishing, so the first world load already reads",
-                    "fresh files. Results go to latest.log, logs/cegen/<id>.log and /cegen status. Off by default."
-            ).define("runAtStartup", false);
-
-            generatorTarget = b.comment(
-                    "What the startup run and a bare /cegen run execute: 'all', a group or one generator id",
-                    "from tools/generators.json."
-            ).define("target", "core");
-
-            python = b.comment("Python interpreter to run the scripts with (a name on PATH or a full path).")
-                    .define("python", "python3");
-
-            timeoutSeconds = b.comment("A script still running after this long is killed and reported as TIMEOUT.")
-                    .defineInRange("timeoutSeconds", 300, 10, 3600);
-
-            startupWaitSeconds = b.comment(
-                    "How long the end of loading waits for the startup run. The core generators take about 10 s and",
-                    "run alongside the rest of loading, so this rarely waits at all. 0 = never wait (files may then",
-                    "change after the first world has loaded)."
-            ).defineInRange("startupWaitSeconds", 120, 0, 3600);
-
-            b.pop(); // generators
-
-            b.comment(
-                    "Block-state sync diagnostics, for ghost blocks that only appear on a dedicated server (the client",
-                    "throws 'Error executing task on Client' because a block-update packet names a block state it does",
-                    "not have, and drops the rest of that packet). Turn it on on the CLIENT, and on the SERVER to get its",
-                    "half of the comparison."
-            ).push("block_state_sync");
-
-            stateSyncEnabled = b.comment(
-                    "Debug mode. Client: logs every block-update packet containing a state id the client cannot resolve",
-                    "(the raw id, the block position, the client's state count) and writes",
-                    "logs/ce_block_state_ranges_client.txt. Dedicated server: writes logs/ce_block_state_ranges_server.txt",
-                    "when it starts. tools/diff_block_state_ranges.py compares the two files and names the block."
-            ).define("enabled", false);
-
-            stateSyncMaxDetailLines = b.comment(
-                    "Per-packet detail lines to log before falling back to one summary line every 500 bad packets.",
-                    "Each distinct bad id is always logged the first time it is seen."
-            ).defineInRange("maxDetailLines", 200, 0, 100000);
-
-            b.pop(); // block_state_sync
-
-            b.comment("The names audit (feature_writeup/names.md, tools/name_audit.py).").push("names");
-            dumpNamesAtTitle = b.comment(
-                    "Client: write kubejs/exported/display_names.json (every block, item, effect... name and the pack",
-                    "that set it) and names.json the first time the title screen opens, as /cedumpnames does in game.",
-                    "For a scratch client that never joins a world. Off by default."
-            ).define("dumpAtTitle", false);
-            b.pop(); // names
-
-            b.comment("The WTHIT icon audit (feature_writeup/wthit_lines.md, tools/wthit_icon_audit.py).").push("wthit");
-            dumpIconsAtTitle = b.comment(
-                    "Client: write kubejs/exported/wthit_icons.json (every block's WTHIT icon verdict and every item",
-                    "with a missing model) the first time the title screen opens, as /cedumpicons does in game.",
-                    "For a scratch client that never joins a world. Off by default."
-            ).define("dumpIconsAtTitle", false);
-            b.pop(); // wthit
-
-            b.comment("The removed-item recipe scan (kubejs/server_scripts/_lib/recipe_scan.js, /recipescan).").push("recipe_scan");
-            recipeScanAtLoad = b.comment(
-                    "Server: once per session, when the server has loaded (after every recipe change is applied), log",
-                    "each recipe that still uses or makes a removed item ([jeiRemove] lines). /recipescan runs it on",
-                    "demand whatever this says. Off by default."
-            ).define("runAtLoad", false);
-            b.pop(); // recipe_scan
-
-            b.comment("Finds the off-thread caller of Level.random (feature_writeup/fixes_compat.md F4).").push("level_random");
-            levelRandomProbe = b.comment(
-                    "Debug mode. When true, a Level's shared random logs the stack trace of every access from a thread other",
-                    "than the one that created the Level ([LevelRandomProbe] lines in latest.log, at most 20 distinct",
-                    "callers per session). Read when the world loads: restart to apply. Off by default."
-            ).define("probe", false);
-            b.pop(); // level_random
-            b.pop(); // debug
         }
     }
 }

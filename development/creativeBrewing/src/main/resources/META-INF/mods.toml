@@ -30,6 +30,14 @@ mandatory=true
 versionRange="[1.1.03,)"
 ordering="AFTER"
 side="BOTH"
+# Creative Calendar: the [time] master; the Vinery member's PackTime calls its time.WineTime directly
+# (feature_writeup/creative_calendar.md). AFTER so its startup script pack (global.CAL) runs before CB's.
+[[dependencies.creative_brewing]]
+modId="creativecalendar"
+mandatory=true
+versionRange="[1.0.0,)"
+ordering="AFTER"
+side="BOTH"
 # Creative Delight: nests Farmer's Delight (Brewin's base) and defines global.CD. AFTER so CB's startup script pack
 # loads after CD's (patcherMod's loader runs jar packs in mod-list order).
 [[dependencies.creative_brewing]]

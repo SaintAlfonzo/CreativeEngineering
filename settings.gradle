@@ -29,7 +29,7 @@ plugins {
 rootProject.name = 'CreativeEngineering'
 
 // The mod folders live under development/; project names (and :task paths) stay the bare mod names.
-['patcherMod', 'exposureBackport', 'incubationAdditions', 'moreMooblooms', 'babyMobs', 'creativeLabels', 'backportedVeggies', 'backportedVintage', 'backportedFungi', 'clientCapture', 'backportedMiners', 'backportedDisplay', 'repackedStorage', 'perfBot'].each { name ->
+['patcherMod', 'exposureBackport', 'incubationAdditions', 'moreMooblooms', 'babyMobs', 'creativeLabels', 'backportedVeggies', 'backportedVintage', 'backportedFungi', 'backportedMiners', 'backportedDisplay', 'repackedStorage', 'creativeCalendar'].each { name ->
     include name
     project(":${name}").projectDir = file("development/${name}")
 }
@@ -50,4 +50,13 @@ project(':creativeBrewing').projectDir = file('development/creativeBrewing')
 ['backportedVinery': 'vinery', 'backportedBrewin': 'brewin'].each { name, dir ->
     include name
     project(":${name}").projectDir = file("development/creativeBrewing/members/${dir}")
+}
+
+// Creative Devtools (feature_writeup/creative_devtools.md): the dev-only bundle, and its members under
+// development/creativeDevtools/members/ (the perf bot and the client capture driver; project names unchanged).
+include 'creativeDevtools'
+project(':creativeDevtools').projectDir = file('development/creativeDevtools')
+['perfBot': 'perfbot', 'clientCapture': 'capture'].each { name, dir ->
+    include name
+    project(":${name}").projectDir = file("development/creativeDevtools/members/${dir}")
 }

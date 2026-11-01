@@ -60,7 +60,7 @@ import java.util.Set;
  */
 public final class BiomeLayoutTuner {
 
-	static final String WORLDGEN_DIR = "kubejs/generation_scripts/worldgen/";
+	public static final String WORLDGEN_DIR = "kubejs/generation_scripts/worldgen/";
 	static final String CONFIG = WORLDGEN_DIR + "biome_config.json";
 	// /dumpclimate samples: compact JSON, gzipped (about 7% of the old pretty-printed size), shipped with
 	// the pack next to the config they feed. Before 1.0.3 they lived in exported/ as plain JSON; that

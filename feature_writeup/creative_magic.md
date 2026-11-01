@@ -1,8 +1,9 @@
 # Creative Magic: enchanting, magic recipes and Botania tweaks in one mod (reserved)
 
 Written 2026-11-01 from the Creative Split audit ([creative_split.md](creative_split.md) 2.3 and [split/](split/README.md)).
-**Status: reserved, not planned.** The rows below ride in Creative Equipment until this mod is planned; Creative Common
-never holds them. No source header marks them (owner, 2026-11-01); this list is the marker.
+**Status: carved in this split (owner, 2026-11-01; creative_split.md 7.6).** Magic also takes Dark Fire, Flint and
+Terrasteel, the Nether portal-failure rule, `[botania]` and `TrinketCaseRules`; the full sweep is
+[split/H_magic.md](split/H_magic.md). Creative Common never holds these rows. No source header marks them (owner, 2026-11-01); this list is the marker.
 
 Mod id `creativemagic`, package `com.SaintAlfonzo.creativemagic`, config `creativemagic-common.toml`, script packs
 `kubejs_startup/creativemagic/`, `kubejs/data/creativemagic/kubejs/`. Potions, effects, alcohol and gear effects are

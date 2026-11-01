@@ -1,0 +1,11 @@
+{
+  "creativeengineering:crop_seasons": {
+    "entrypoints": {
+      "client": "com.SaintAlfonzo.creativecalendar.compat.WthitCropSeasons"
+    },
+    "side": "client",
+    "required": [
+      "sereneseasons"
+    ]
+  }
+}

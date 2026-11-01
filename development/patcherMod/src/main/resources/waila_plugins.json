@@ -91,15 +91,6 @@
     },
     "side": "client"
   },
-  "creativeengineering:crop_seasons": {
-    "entrypoints": {
-      "client": "com.SaintAlfonzo.creativeengineering.compat.WthitCropSeasons"
-    },
-    "side": "client",
-    "required": [
-      "sereneseasons"
-    ]
-  },
   "creativeengineering:operator_blocks": {
     "entrypoints": {
       "client": "com.SaintAlfonzo.creativeengineering.compat.WthitOperatorBlocks"

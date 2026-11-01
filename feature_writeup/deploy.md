@@ -138,7 +138,7 @@ Runtime inputs in `generation_scripts/`, with their readers:
 | `worldgen/bee_nests.json` | `worldgen/bee_nests.js` (BeeNests) |
 | `worldgen/wild_flowers.json`, `worldgen/flower_features.json` (snapshot) | `worldgen/wild_flowers.js` |
 | `worldgen/meta_structures.json`, `worldgen/biome_fits.json` | `structure_overrides.js` (MetaStructure, StructureBiomeFits) |
-| `worldgen/season_types.json` | `tags/seasontags.js` (SeasonTypes) |
+| `worldgen/season_types.json` | Calendar `sereneseasons/seasontags.js` (SeasonTypes) |
 
 Generator-only files stay home (dev): e.g. `biome_merge_proposals.json`, `bee_nests_baseline.json`,
 `soil_compat_manifest.json`, `terrain_adaptation_scan.json`.

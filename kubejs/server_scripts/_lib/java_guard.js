@@ -1,4 +1,4 @@
-// guardThrowable(fn) -> { ok, value, error }
+// guardThrowable(fn) -> { ok, value, error }   (also global.guardThrowable, for the Creative Devtools scripts)
 //
 // JS try/catch in this Rhino fork does NOT catch java.lang.Error (NoClassDefFoundError, LinkageError,
 // AbstractMethodError, ExceptionInInitializerError...): the interpreter gives Errors no JS catch state,
@@ -26,3 +26,7 @@ var guardThrowable = (function () {
 		return out
 	}
 })()
+
+// Also a global: the Creative Devtools dump scripts are another script pack (creative_devtools.md 1) and only see
+// globals; its _core/cdv_server.js wraps this.
+global.guardThrowable = guardThrowable

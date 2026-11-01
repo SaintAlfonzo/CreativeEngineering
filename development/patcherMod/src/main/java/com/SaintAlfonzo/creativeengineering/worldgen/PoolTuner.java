@@ -592,7 +592,7 @@ public final class PoolTuner {
 
 	// ── json ─────────────────────────────────────────────────────────────────
 
-	static JsonObject parseLenient(String text) {
+	public static JsonObject parseLenient(String text) {
 		JsonReader reader = new JsonReader(new StringReader(text));
 		reader.setLenient(true);
 		return JsonParser.parseReader(reader).getAsJsonObject();

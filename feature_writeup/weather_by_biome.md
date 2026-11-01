@@ -40,7 +40,7 @@ Tropical seasons (`SeasonTime.getTropicalSeason`):
 
 The renderer, the gameplay rain check, snow layers, freezing, melting and snow golem burning all use the seasonal temperature (coremod `transformers/temperature.js` plus the mixins). `generate_snow_ice` = `true`, `change_weather_frequency` = `true` (`RandomUpdateHandler.adjustWeatherFrequency`: in winter thunder is cleared and a dry spell longer than 1.5 days is cut to 0.5-1.5; in spring a dry spell longer than 4 days is cut to 0.5-4; in summer the wait for thunder is cut the same way to 0.5-1.5 days).
 
-### 1.3 The pack's season types (patcherMod `seasons/SeasonTypes`)
+### 1.3 The pack's season types (Creative Calendar `seasons/SeasonTypes`)
 
 Biome tags `creativeengineering:seasons/<type>` from `kubejs/generation_scripts/worldgen/season_types.json`; details and tests in [weather.md](weather.md). A tagged biome ignores Serene Seasons' tropical rule and its blacklist (oceans). Oceans that are not frozen-tagged get the seasonal weather but keep vanilla ice (they never freeze over); frozen oceans freeze with the season.
 
@@ -59,7 +59,7 @@ Biome tags `creativeengineering:seasons/<type>` from `kubejs/generation_scripts/
 | adaptive | 7 (rivers, beaches) | the nearest land biome's, per column | the land's | the land's |
 | (untagged) | rest | Serene Seasons' own rule (1.2) | | |
 
-**Snow line** (CEConfig `[seasons] snowLineY` = 320, the build height is 320): below it, height alone never turns rain into snow. A column snows there only if its biome snows at y80 in the current sub-season (every dimension). At and above it, temperate and cold biomes always snow (overworld): no block can sit that high, so snow only tells a flyer they are above build height; their snow-line column reads "y320". Frozen and permanent-season biomes keep their own rules. World generation keeps vanilla snow caps, which melt in seasons warm enough to rain.
+**Snow line** (`creativecalendar-common.toml` `[seasons] snowLineY` = 320, the build height is 320): below it, height alone never turns rain into snow. A column snows there only if its biome snows at y80 in the current sub-season (every dimension). At and above it, temperate and cold biomes always snow (overworld): no block can sit that high, so snow only tells a flyer they are above build height; their snow-line column reads "y320". Frozen and permanent-season biomes keep their own rules. World generation keeps vanilla snow caps, which melt in seasons warm enough to rain.
 
 **Snow seasons** (`season_types.json` `snow_seasons`, tags `creativeengineering:snow/no_<sub_season>`): the sub-seasons a biome may snow in. In any other sub-season it rains instead, however cold the season makes it (below the snow line). Frozen biomes ignore it.
 
@@ -450,7 +450,7 @@ Cells: what falls during a storm (the world is raining), at sea level (y80 or be
 
 ### 3.12 Adaptive (rivers and beaches) (7, 5.9%)
 
-Each column takes the nearest land biome's type and temperature (rings of 8 directions out to CEConfig `[seasons] adaptiveRadius`). "Land in its bands" is what the climate samples put around it: the most common land classes in the bands where the biome was sampled.
+Each column takes the nearest land biome's type and temperature (rings of 8 directions out to the Calendar config `[seasons] adaptiveRadius`). "Land in its bands" is what the climate samples put around it: the most common land classes in the bands where the biome was sampled.
 
 | Biome | Base | Bands | Share | Land in its bands |
 |---|---|---|---|---|

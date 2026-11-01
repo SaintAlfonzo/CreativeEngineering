@@ -49,7 +49,7 @@
 - **Changed:** A Silt Pot filled with rooted dirt grows any plant on top, like a Planter [flowers only]
 - **New:** Silt Pots say how to fill them with Rooted Dirt; What The Hell Is That shows whether a Silt Pot holds Rooted Dirt
 - **Removed:** Floral Enchantment's Large Pot can no longer be crafted and is hidden; placed ones still work
-- **New:** "Flower Test" world type: a flat world that builds a table of every plant in every kind of flower pot, planter and flower box on first entry
+- **Removed:** The "Flower Test" world type
 
 ## Treated Sticks
 
@@ -70,6 +70,7 @@
 - **Fixed:** Seasoned food tooltips showed a raw key instead of the seasoning's name
 - **Fixed:** Creative Delight food tooltips, placeable food lines, names and JEI info pages appeared only after a resource reload
 - **Fixed:** Sweet Berries and Glow Berries were missing from JEI and the creative tabs
+- **Fixed:** JEI listed test recipes: Mechanical Crafting grids that turned every form of a metal or wood into one ingot or plank, and a Nether Star to Nether Star Sequenced Assembly
 - **Changed:** Oats are bushier like wheat; ripe Oats are two blocks tall in three shapes [one block, one shape]
 - **New:** Handcrafted Nightstands hold 27 slots, opened like a chest; hoppers and pipes reach them
 - **Changed:** Brewery sky village houses have Fantasy Furniture Hanging Herbs where the dried barley and corn hung [empty]

@@ -7,7 +7,7 @@
 //   recipes    every input and output naming a purged id now names the survivor; duplicates that leaves
 //              behind are removed below
 //   tags       survivors join the purged item's tags where a recipe or mob reads them (the purged id's own
-//              tags are stripped by recipe_scan.js)
+//              tags are stripped by _lib/removed_item_tags.js)
 //   loot       any table entry for a purged id drops the survivor (LootJS, same count)
 //   inventory  a purged item that still reaches a player (mod code, old chests, old worlds) turns into the
 //              survivor, same count

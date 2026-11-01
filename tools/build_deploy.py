@@ -43,7 +43,8 @@ rebuilt (its history json is what the machines are checked against): build the n
 
 What goes where:
   mods/*.jar               side from mod_sides.md (same lookup as tools/dump_server_mods.py). Jars in
-                           sub-folders (mods/panorama/) are never shipped.
+                           sub-folders (mods/panorama/) are never shipped, nor side `dev` jars (Creative
+                           Devtools: dev mods/ only, feature_writeup/creative_devtools.md).
   kubejs/                  files .gitignore doesn't ignore, filtered by KUBEJS_CLASSES: runtime and client
                            files ship, dev files (notes, reports, generator inputs, /dump output in
                            exported/) never do. An unclassified file is a preflight error.
@@ -144,6 +145,8 @@ IN_TREE_MODS = [
     ('creativeDelight', 'creative_delight', True),
     # Creative Brewing: the same for the Vinery and Brewin' ports (development/creativeBrewing/members/).
     ('creativeBrewing', 'creative_brewing', True),
+    # Creative Calendar: time, seasons, crop seasons (feature_writeup/creative_calendar.md); CD and CB require it.
+    ('creativeCalendar', 'creativecalendar', True),
 ]
 # Extra source trees per in-tree project for the "src newer than the jar" check (paths from the instance root).
 IN_TREE_EXTRA_SRC = {
@@ -152,6 +155,7 @@ IN_TREE_EXTRA_SRC = {
                         'kubejs/data/creative_delight/cup_conversion'],
     'creativeBrewing': ['development/creativeBrewing/members', 'kubejs/data/creative_brewing/kubejs',
                         'kubejs/assets/creative_brewing/kubejs'],
+    'creativeCalendar': ['kubejs/data/creativecalendar/kubejs'],
 }
 # Third-party jars that patcherMod fixes target by version (deploy.md "Mod updates"): (jar file prefix, the file the
 # fixes were written against). A different file under the same prefix means the mod was updated: rerun the checklist.
@@ -223,6 +227,11 @@ KUBEJS_CLASSES = [
     # Creative Brewing's script trees: the same, shipped only inside the creative_brewing jar
     ('data/creative_brewing/kubejs/*', 'dev'),
     ('assets/creative_brewing/kubejs/*', 'dev'),
+    # Creative Devtools' script trees: dev only, like its jar (feature_writeup/creative_devtools.md)
+    ('data/creativedevtools/kubejs/*', 'dev'),
+    ('assets/creativedevtools/kubejs/*', 'dev'),
+    # Creative Calendar's server script tree: the same, shipped only inside the creativecalendar jar
+    ('data/creativecalendar/kubejs/*', 'dev'),
     ('startup_scripts/*', 'runtime'),
     ('server_scripts/*', 'runtime'),       # incl. loot/loot_config.json + loot_index.json (05_tuning.js)
     ('data/*', 'runtime'),
@@ -237,7 +246,7 @@ KUBEJS_CLASSES = [
     ('generation_scripts/worldgen/loot_container_swaps.json', 'runtime'),  # LootContainerSwaps
     ('generation_scripts/worldgen/pool_config.json', 'runtime'),        # PoolTuner
     ('generation_scripts/worldgen/pool_tags.json', 'runtime'),          # PoolTuner
-    ('generation_scripts/worldgen/crop_seasons.json', 'runtime'),       # server_scripts/tags/cropseasontags.js
+    ('generation_scripts/worldgen/crop_seasons.json', 'runtime'),       # Calendar sereneseasons/cropseasontags.js
     ('generation_scripts/worldgen/structure_config.json', 'runtime'),   # worldgen/structure_overrides.js
     ('generation_scripts/worldgen/structure_groups.json', 'runtime'),   # worldgen/structure_overrides.js
     ('generation_scripts/worldgen/structure_tags.json', 'runtime'),     # structure_overrides.js, MassPlacer
@@ -249,7 +258,7 @@ KUBEJS_CLASSES = [
     ('generation_scripts/worldgen/biome_fits.json', 'runtime'),         # structure_overrides.js (StructureBiomeFits)
     ('generation_scripts/worldgen/meta_structures.json', 'runtime'),    # structure_overrides.js (MetaStructure)
     ('generation_scripts/worldgen/structure_test_overrides.json', 'runtime'),  # structure_overrides.js, only with [worldgen.debug] testOverrides
-    ('generation_scripts/worldgen/season_types.json', 'runtime'),       # tags/seasontags.js (SeasonTypes)
+    ('generation_scripts/worldgen/season_types.json', 'runtime'),       # Calendar sereneseasons/seasontags.js (SeasonTypes)
     ('generation_scripts/worldgen/wild_flowers.json', 'runtime'),       # worldgen/wild_flowers.js
     ('generation_scripts/worldgen/flower_features.json', 'runtime'),    # worldgen/wild_flowers.js (snapshot)
     ('generation_scripts/worldgen/meat_block_swaps.json', 'runtime'),   # TemplateBlockSwaps (tools/meat_block_scan.py)
@@ -418,6 +427,8 @@ def collect(pre, root=ROOT, unknown_side=None, config_mode='full', pack_version=
         if side is None:
             unknown.append(f'{jar} (mod id: {modid or "none"})')
             continue
+        if side == 'dev':
+            continue  # dev mods/ only (Creative Devtools, Q6): never in a payload or a recorded version
         entry = by_file.get(('mods', jar))
         # hand-added jars (patcherMod) get an entry named after the file, version "Unknown"
         name = entry['name'] if entry and not entry['name'].endswith('.jar') else modid or os.path.splitext(jar)[0]

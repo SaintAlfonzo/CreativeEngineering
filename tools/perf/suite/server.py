@@ -18,7 +18,7 @@ import ticklog
 INST = os.path.dirname(os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__)))))
 EVAL = os.path.join(INST, "tools/perf/eval/eval_server.sh")
 GAME_JVMS = os.path.join(INST, "tools/scratch_query/game_jvms.sh")
-BOT_JAR = os.path.join(INST, "development/perfBot/build/libs")
+BOT_JAR = os.path.join(INST, "development/creativeDevtools/members/perfbot/build/libs")
 RCON_PORT = 25598
 CRASH_MARKS = ("Crash report saved", "rolling back to VANILLA", "Failed to start the minecraft server",
                "Encountered an unexpected exception")

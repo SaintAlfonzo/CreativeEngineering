@@ -1,7 +1,7 @@
 {
   "_readme": [
-    "Generator manifest for the in-game /cegen command (patcherMod devtools/GeneratorRunner) and the",
-    "optional run at game startup (config/creativeengineering-common.toml [debug.generators]).",
+    "Generator manifest for the in-game /cegen command (Creative Devtools generators/GeneratorRunner) and the",
+    "optional run at game startup (config/creativedevtools-common.toml [debug.generators]).",
     "",
     "Entries run one at a time, in this order, so put a generator after anything it reads:",
     "gen_structure_config writes structure_config.json, which gen_structure_groups reads;",

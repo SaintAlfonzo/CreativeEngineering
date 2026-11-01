@@ -9,7 +9,7 @@ the decisions and the tests.
 | Part | Status |
 |---|---|
 | Season types (arid, frozen, dry, tropical, temperate, adaptive) | BUILT 2026-10-08, dry + temperate + oceans 2026-10-09, in patcherMod 1.0.5 (in `mods/`, md5 68509043), DEPLOYED with pack 1.0.6 (2026-10-14). Server side checked on scratch servers (sections 6.2, 6.3); client side (rendering, tint, HUD) not run yet |
-| Biome lists | `kubejs/generation_scripts/worldgen/season_types.json` -> tags `creativeengineering:seasons/<type>` (`kubejs/server_scripts/tags/seasontags.js`) |
+| Biome lists | `kubejs/generation_scripts/worldgen/season_types.json` -> tags `creativeengineering:seasons/<type>` (`kubejs/data/creativecalendar/kubejs/sereneseasons/seasontags.js`, Creative Calendar) |
 | Arid | 15 sand/terracotta biomes: no rain all year, no seasonal temperature or tint, summer crops all year. HUD: "Arid", day N of the year |
 | Frozen | 24 cold land biomes plus frozen and deep frozen ocean: snow all year (held at 0.1 or colder), no melting, no seasonal tint, winter crops only. HUD: "Frozen", day N of the year |
 | Dry | 11 savannas, shrublands and hot grasslands (arid_highlands, savanna_badlands): Serene Seasons' wet/dry cycle, rain in Mid Wet only (Late Winter + Early Spring), as the mod does for a savanna |
@@ -23,10 +23,11 @@ the decisions and the tests.
 | Snow seasons (3.4) | BUILT 2026-10-11, same jar. `season_types.json` `snow_seasons`: ocean, deep_ocean, meadow, basalt_cliffs, blooming_plateau, granite_cliffs, lush_valley, valley_clearing, white_cliffs snow in winter only |
 | Rain and cloud height (3.4) | 2026-10-11: Pretty Rain `cloudHeight` 191 -> 350 (`config/prettyrain.json5`); Rubidium Extra `cloud_height` 192 -> 350 (`config/sodium-extra-options.json`, vanilla clouds, which are off; Distant Horizons' clouds follow the same value via `DhCloudHeightMixin`). Both client, backed up in `configs_edited/root_config/` |
 
-**Files to open first:** `development/patcherMod/src/main/java/com/SaintAlfonzo/creativeengineering/seasons/SeasonTypes.java`
-(everything shared, with the design comment), then the mixins `Season*Mixin.java` in `mixin/`.
+**Files to open first:** `development/creativeCalendar/src/main/java/com/SaintAlfonzo/creativecalendar/seasons/SeasonTypes.java`
+(everything shared, with the design comment), then the mixins `Season*Mixin.java` in `mixin/` (Creative Calendar since
+2026-11-01, [creative_calendar.md](creative_calendar.md); before that patcherMod).
 
-**Knobs:** `season_types.json` (which biome is which, and `snow_seasons`, `/reload`); `config/creativeengineering-common.toml`
+**Knobs:** `season_types.json` (which biome is which, and `snow_seasons`, `/reload`); `config/creativecalendar-common.toml`
 `[seasons]`: `enabled` (false = Serene Seasons alone), `adaptiveRadius` (how far rivers/beaches look for land, default 64),
 `snowLineY` (default 320, the build height; -64 = vanilla height snow); `config/prettyrain.json5` `cloudHeight` (highest y
 rain particles spawn at, 350); `config/sodium-extra-options.json` `cloud_height` (vanilla cloud layer, 350).
@@ -462,11 +463,11 @@ climbs back over 0.15.
 ## 5. File map
 
 - [season_types.json](../kubejs/generation_scripts/worldgen/season_types.json): the lists, with a `_readme`
-- [seasontags.js](../kubejs/server_scripts/tags/seasontags.js): json -> biome tags via `global.tags`
-- [SeasonTypes.java](../development/patcherMod/src/main/java/com/SaintAlfonzo/creativeengineering/seasons/SeasonTypes.java)
-- Mixins: [mixin/](../development/patcherMod/src/main/java/com/SaintAlfonzo/creativeengineering/mixin/) `Season*Mixin.java`
-- CEConfig `[seasons]`: [CEConfig.java](../development/patcherMod/src/main/java/com/SaintAlfonzo/creativeengineering/CEConfig.java)
-- Lang: `development/patcherMod/src/main/resources/assets/creativeengineering/lang/en_us.json`
+- [seasontags.js](../kubejs/data/creativecalendar/kubejs/sereneseasons/seasontags.js): json -> biome tags via `global.tags` (ships in the Calendar jar)
+- [SeasonTypes.java](../development/creativeCalendar/src/main/java/com/SaintAlfonzo/creativecalendar/seasons/SeasonTypes.java)
+- Mixins: [mixin/](../development/creativeCalendar/src/main/java/com/SaintAlfonzo/creativecalendar/mixin/) `Season*Mixin.java`, `PrettyRainSeasonMixin.java`
+- `[seasons]` in `creativecalendar-common.toml`: [CalendarConfig.java](../development/creativeCalendar/src/main/java/com/SaintAlfonzo/creativecalendar/CalendarConfig.java)
+- Lang: `development/creativeCalendar/src/main/resources/assets/creativeengineering/lang/en_us.json` (keys unchanged)
 - Generator: [tools/gen_weather_table.py](../tools/gen_weather_table.py) -> [weather_by_biome.md](weather_by_biome.md)
 
 ## 6. Offline checks
@@ -575,7 +576,7 @@ Set the season with `/season set <SUB_SEASON>` (Serene Seasons takes the sub-sea
 - [ ] **WE-34 skylands spring:** HUD with sub-seasons on: `/season set EARLY_WINTER` → "Early Spring", day 1 of 30 (24 in single-player), rain → snow; `/season set EARLY_SPRING` → "Mid Spring", day 1 of 60 (48), rain → rain; `/season set EARLY_AUTUMN` → "Late Spring", day 1 of 30 (24). Grass tint follows (Early Spring tint in world winter). Spring crops grow in world summer
 - [ ] **WE-35 skylands autumn:** `/season set EARLY_SPRING` → "Early Autumn" day 1 of 30 (24 in single-player), rain; `EARLY_SUMMER` → "Mid Autumn" day 1 of 60 (48); `EARLY_WINTER` → "Late Autumn" day 1 of 30 (24), snow. HUD with sub-seasons off: "Autumn", day N of 120 (96)
 - [ ] **WE-36 clouds:** overworld, look up from the ground and fly up: Distant Horizons' clouds at y350 (fly through them there; nothing at y520); rain particles reach the cloud layer. Turn vanilla clouds on (Video Settings) → vanilla layer at the same height
-- [ ] **WE-17 switch off:** `[seasons] enabled = false` in creativeengineering-common.toml, rejoin → deserts rain again in Mid Wet (Serene Seasons alone)
+- [ ] **WE-17 switch off:** `[seasons] enabled = false` in creativecalendar-common.toml, rejoin → deserts rain again in Mid Wet (Serene Seasons alone)
 
 ## 9. History
 

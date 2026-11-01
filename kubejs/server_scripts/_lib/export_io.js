@@ -24,3 +24,7 @@ var writeExportJson = (function () {
 		JsonIO.write(path, data)
 	}
 })()
+
+// Also a global: the Creative Devtools dump scripts are another script pack (creative_devtools.md 1) and only see
+// globals; its _core/cdv_server.js wraps this.
+global.writeExportJson = writeExportJson

@@ -1,6 +1,6 @@
 package com.SaintAlfonzo.creativeengineering.mixin;
 
-import com.SaintAlfonzo.creativeengineering.devtools.BlockStateSyncDebug;
+import com.SaintAlfonzo.creativeengineering.util.BlockStateLookupHook;
 
 import net.minecraft.core.IdMap;
 import net.minecraft.network.FriendlyByteBuf;
@@ -22,11 +22,11 @@ public abstract class BlockUpdateNullStateMixin {
     @Redirect(method = "<init>(Lnet/minecraft/network/FriendlyByteBuf;)V",
             at = @At(value = "INVOKE", target = "Lnet/minecraft/network/FriendlyByteBuf;m_236816_(Lnet/minecraft/core/IdMap;)Ljava/lang/Object;"))
     private Object creativeengineering$trackLookup(FriendlyByteBuf buf, IdMap<?> map) {
-        return BlockStateSyncDebug.lookup(map, buf.readVarInt());
+        return BlockStateLookupHook.lookup(map, buf.readVarInt());
     }
 
     @Inject(method = "<init>(Lnet/minecraft/network/FriendlyByteBuf;)V", at = @At("RETURN"))
     private void creativeengineering$reportNulls(FriendlyByteBuf buf, CallbackInfo ci) {
-        BlockStateSyncDebug.finishSingle((ClientboundBlockUpdatePacket) (Object) this);
+        BlockStateLookupHook.finishSingle((ClientboundBlockUpdatePacket) (Object) this);
     }
 }

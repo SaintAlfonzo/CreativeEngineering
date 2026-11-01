@@ -1,0 +1,53 @@
+# Creative Calendar (feature_writeup/creative_calendar.md): the [time] master, seasons, season types and crop seasons.
+# Registers no blocks or items; its ids (tags, WTHIT lines, lang keys) keep the creativeengineering namespace.
+modLoader="javafml"
+loaderVersion="${loader_version_range}"
+license="${mod_license}"
+[[mods]]
+modId="${mod_id}"
+version="${mod_version}"
+displayName="${mod_name}"
+authors="${mod_authors}"
+description='''${mod_description}'''
+
+[[dependencies.creativecalendar]]
+modId="forge"
+mandatory=true
+versionRange="${forge_version_range}"
+ordering="NONE"
+side="BOTH"
+[[dependencies.creativecalendar]]
+modId="minecraft"
+mandatory=true
+versionRange="${minecraft_version_range}"
+ordering="NONE"
+side="BOTH"
+# patcherMod: supplies KubeJS (it requires it), the shared helpers (global.NCH, global.tags) and the startup script
+# loader. Becomes creativecommon at the final swap (creative_split.md 7.6 Q1). The range must exclude every patcherMod
+# that still carries time/ and seasons/ (it would register /cetime and the season mixins twice).
+[[dependencies.creativecalendar]]
+modId="creativeengineering"
+mandatory=true
+versionRange="[1.1.05,)"
+ordering="AFTER"
+side="BOTH"
+# The mods the season and time code steers: optional, each mixin is gated on its mod (compat/CalendarMixinPlugin).
+# No ordering: patcherMod never declared them either, so the load order stays as it was before the carve.
+[[dependencies.creativecalendar]]
+modId="sereneseasons"
+mandatory=false
+versionRange="*"
+ordering="NONE"
+side="BOTH"
+[[dependencies.creativecalendar]]
+modId="betterdays"
+mandatory=false
+versionRange="*"
+ordering="NONE"
+side="BOTH"
+[[dependencies.creativecalendar]]
+modId="seasonhud"
+mandatory=false
+versionRange="*"
+ordering="NONE"
+side="BOTH"

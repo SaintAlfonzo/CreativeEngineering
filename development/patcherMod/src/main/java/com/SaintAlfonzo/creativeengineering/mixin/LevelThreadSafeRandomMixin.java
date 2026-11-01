@@ -25,7 +25,7 @@ import org.spongepowered.asm.mixin.injection.Redirect;
  *   RandomSource#create (m_216327_) calls to that factory: its next() retries the CAS instead
  *   of throwing. The two calls are the one-shot randValue seed (f_46435_) and the random field
  *   itself; both are unseeded, so nothing deterministic changes. Covers ServerLevel and
- *   ClientLevel alike. With debug.level_random.probe on, LevelRandomProbe is used instead and logs
+ *   ClientLevel alike. With Creative Devtools and its debug.level_random.probe on, LevelRandomProbe (registered on util/LevelRandomHook) is used instead and logs
  *   the off-thread callers.
  */
 @Mixin(value = Level.class, remap = false)
@@ -35,6 +35,6 @@ public class LevelThreadSafeRandomMixin {
 			at = @At(value = "INVOKE", remap = false,
 					target = "Lnet/minecraft/util/RandomSource;m_216327_()Lnet/minecraft/util/RandomSource;"))
 	private RandomSource creativeengineering$threadSafeRandom() {
-		return com.SaintAlfonzo.creativeengineering.devtools.LevelRandomProbe.create();
+		return com.SaintAlfonzo.creativeengineering.util.LevelRandomHook.create();
 	}
 }

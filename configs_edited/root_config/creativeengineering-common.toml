@@ -1201,74 +1201,6 @@
 		#so this only matters with hideNormal = false: tiered 1.0 blocks (Glass, Dirt) still show.
 		hideUntyped = true
 
-#Developer tools. Only meaningful in the dev instance (the one with tools/ and mods/ source).
-[debug]
-
-	#The pack's generator scripts (tools/*.py: structure/biome/loot configs, effect descriptions,
-	#pack manifest, reports) listed in tools/generators.json. /cegen run [target] runs them in game;
-	#these knobs also let them run by themselves every time the game starts.
-	[debug.generators]
-		#Debug mode. When true, the generators run in the background as the game starts (from common
-		#setup), and loading waits for them before finishing, so the first world load already reads
-		#fresh files. Results go to latest.log, logs/cegen/<id>.log and /cegen status. Off by default.
-		runAtStartup = false
-		#What the startup run and a bare /cegen run execute: 'all', a group or one generator id
-		#from tools/generators.json.
-		target = "core"
-		#Python interpreter to run the scripts with (a name on PATH or a full path).
-		python = "python3"
-		#A script still running after this long is killed and reported as TIMEOUT.
-		#Range: 10 ~ 3600
-		timeoutSeconds = 300
-		#How long the end of loading waits for the startup run. The core generators take about 10 s and
-		#run alongside the rest of loading, so this rarely waits at all. 0 = never wait (files may then
-		#change after the first world has loaded).
-		#Range: 0 ~ 3600
-		startupWaitSeconds = 120
-
-	#Block-state sync diagnostics, for ghost blocks that only appear on a dedicated server (the client
-	#throws 'Error executing task on Client' because a block-update packet names a block state it does
-	#not have, and drops the rest of that packet). Turn it on on the CLIENT, and on the SERVER to get its
-	#half of the comparison.
-	[debug.block_state_sync]
-		#Debug mode. Client: logs every block-update packet containing a state id the client cannot resolve
-		#(the raw id, the block position, the client's state count) and writes
-		#logs/ce_block_state_ranges_client.txt. Dedicated server: writes logs/ce_block_state_ranges_server.txt
-		#when it starts. tools/diff_block_state_ranges.py compares the two files and names the block.
-		enabled = false
-		#Per-packet detail lines to log before falling back to one summary line every 500 bad packets.
-		#Each distinct bad id is always logged the first time it is seen.
-		#Range: 0 ~ 100000
-		maxDetailLines = 200
-
-	#The names audit (feature_writeup/names.md, tools/name_audit.py).
-	[debug.names]
-		#Client: write kubejs/exported/display_names.json (every block, item, effect... name and the pack
-		#that set it) and names.json the first time the title screen opens, as /cedumpnames does in game.
-		#For a scratch client that never joins a world. Off by default.
-		dumpAtTitle = false
-
-	#The WTHIT icon audit (feature_writeup/wthit_lines.md, tools/wthit_icon_audit.py).
-	[debug.wthit]
-		#Client: write kubejs/exported/wthit_icons.json (every block's WTHIT icon verdict and every item
-		#with a missing model) the first time the title screen opens, as /cedumpicons does in game.
-		#For a scratch client that never joins a world. Off by default.
-		dumpIconsAtTitle = false
-
-	#The removed-item recipe scan (kubejs/server_scripts/_lib/recipe_scan.js, /recipescan).
-	[debug.recipe_scan]
-		#Server: once per session, when the server has loaded (after every recipe change is applied), log
-		#each recipe that still uses or makes a removed item ([jeiRemove] lines). /recipescan runs it on
-		#demand whatever this says. Off by default.
-		runAtLoad = false
-
-	#Finds the off-thread caller of Level.random (feature_writeup/fixes_compat.md F4).
-	[debug.level_random]
-		#Debug mode. When true, a Level's shared random logs the stack trace of every access from a thread other
-		#than the one that created the Level ([LevelRandomProbe] lines in latest.log, at most 20 distinct
-		#callers per session). Read when the world loads: restart to apply. Off by default.
-		probe = false
-
 #World generation: switches per system, a debug rate multiplier, and the constants of the pack's
 #worldgen code. The per-structure, per-piece and per-biome tables are the JSON files in
 #kubejs/generation_scripts/worldgen/ (see feature_writeup/structure_tuning.md). Structure and
@@ -1460,35 +1392,6 @@
 			#Tallest plant (in blocks) removed from a swapped block.
 			#Range: 1 ~ 16
 			maxPlantHeight = 4
-
-	#/ceplace structures <filter> and /ceplace templates <glob>: place every match in rows (one row per
-	#type tag, group, mod or template folder), starting at your position and going +X, rows stacked +Z.
-	#Meant for a flat world with Generate Structures off. /ceplace preview ... lists without placing.
-	[worldgen.mass_place]
-		#Blocks between two structures in a row.
-		#Range: 0 ~ 512
-		gap = 12
-		#Blocks between rows (the aisle the labels stand in).
-		#Range: 4 ~ 512
-		rowGap = 16
-		#Put a sign with the id in front of each structure and at the start of each row.
-		labels = true
-		#KEEP: each structure at the height it generated at here. GROUND: its bottom layer at ground level.
-		#AUTO: GROUND only for structures that generated more than autoAlignBand blocks above or below the
-		#ground (underground and sky structures); surface ones keep their height.
-		#Allowed Values: AUTO, KEEP, GROUND
-		verticalAlign = "AUTO"
-		#AUTO's tolerance, in blocks.
-		#Range: 0 ~ 256
-		autoAlignBand = 8
-		#Refuse a run with more matches than this (preview first, or narrow the filter).
-		#Range: 1 ~ 100000
-		maxItems = 1000
-		#Milliseconds of work per server tick. Each structure is laid out, then its chunks are generated and
-		#built one at a time until the budget is used, so a big village takes several ticks instead of one
-		#long one (a dedicated server kills a tick over 60 s). Higher = faster runs, choppier server.
-		#Range: 5 ~ 1000
-		tickBudgetMs = 40
 
 	#Structures that would need a lot of earth to stand on. Just before a structure start is stored,
 	#every earth block (tag below) in the bottom layers of its template pieces is compared with the
@@ -1876,12 +1779,6 @@
 	#refilled next to an animal is noticed up to this long late. 0 = off (Quark's own behaviour).
 	#Range: 0 ~ 72000
 	troughMissCooldownTicks = 600
-	#Serene Seasons snow/ice melt: the per-chunk melt roll runs once every N ticks instead of every
-	#tick, with its chance multiplied by N so the average melt rate is unchanged (a roll's chance
-	#is capped at 1, so N above 4 melts slightly slower in summer). Walking every loaded chunk on
-	#every tick was the cost. Cost: melting is a little lumpier. 1 = off.
-	#Range: 1 ~ 40
-	seasonsMeltIntervalTicks = 4
 	#Create: Gravity runs its biome lookup and gravity-attribute update for every living entity in
 	#every dimension on every tick. On: only entities in the dimensions below run it (entities that
 	#still carry the low-gravity modifier from one run it once more to drop it). Off: the mod's own
@@ -2012,96 +1909,6 @@
 	#Record every title that needed a stretch in kubejs/exported/gui_title_overflow.json
 	#(screen class, texture, title and widths; kept across sessions).
 	logOverflow = true
-
-#Season types on top of Serene Seasons. The biome lists are the tags creativeengineering:seasons/
-#arid, frozen, tropical and adaptive (kubejs/generation_scripts/worldgen/season_types.json).
-#Arid: no rain all year. Frozen: snow all year. Tropical: wet and dry seasons, savannas included.
-#Adaptive (rivers, beaches): each column behaves like the nearest land biome. SeasonHUD shows
-#'Arid' / 'Frozen' with the day of the year. Read live on both sides.
-[seasons]
-	#false: Serene Seasons' own rules everywhere, the tags are ignored.
-	enabled = true
-	#How far (blocks) a river or beach column looks for land to copy, in rings of 8 directions
-	#at 8, 16, 24, 32, 48, 64, ... blocks. The first ring that reaches land decides by majority.
-	#Nothing found: the river or beach keeps its own biome.
-	#Range: 8 ~ 256
-	adaptiveRadius = 64
-	#The snow line (default 320, the overworld build height). Below it height alone never turns rain
-	#into snow (vanilla cools 0.05 per 40 blocks above y80): a column snows only if its biome snows at
-	#y80 in the current sub-season. At and above it temperate and cold biomes always snow, so falling
-	#snow tells a flyer they are above build height. Frozen and permanent-season biomes keep their own
-	#rules. Also the ceiling for the snow_seasons lists in season_types.json.
-	#Range: -64 ~ 4096
-	snowLineY = 320
-
-#Day length, seasons and wine aging in one place (feature_writeup/time.md). While enabled, the
-#time values in betterdays-common.toml, the world's sereneseasons-server.toml and seasonhud-server.toml
-#are overwritten from here at server start and on every edit. The Vinery port reads [time.wine] and the
-#lengths from here and ignores the matching vinery-common.toml [wine]/[aging] keys while enabled.
-#/cetime shows every derived value.
-[time]
-	#SINGLEPLAYER or SERVER sets every value below to that preset (they differ only in monthsPerLevel:
-	#1 in single player, 3 on a server). Editing any value by hand turns this into CUSTOM, unless the
-	#values then match a preset again. CUSTOM itself changes nothing.
-	#Allowed Values: SINGLEPLAYER, SERVER, CUSTOM
-	preset = "SINGLEPLAYER"
-	#Master switch. false: Better Days, Serene Seasons, SeasonHUD and Vinery use their own files again.
-	enabled = true
-	#Dedicated server with nobody online: the sun stops, so the seasons and wine aging stop with it.
-	#Game time, weather and random ticks keep running. Single player is unaffected.
-	pauseWhenEmpty = true
-	#SeasonHUD shows the time of day after the season, "Mid Spring (Day 3/24) 7:30 pm" (client side).
-	hudTimeOfDay = true
-
-	[time.day]
-		#Real minutes from dayStart to nightStart.
-		#Range: 1.0 ~ 10000.0
-		dayMinutes = 45.0
-		#Real minutes from nightStart to the next dayStart.
-		#Range: 1.0 ~ 10000.0
-		nightMinutes = 15.0
-		#dayTime of sunrise; the clock reads it as 6:00 am. Better Days reads it once, so a change needs a restart.
-		#Range: 0.0 ~ 24000.0
-		dayStart = 22300.0
-		#dayTime of sunset. Needs a restart, like dayStart.
-		#Range: 0.0 ~ 24000.0
-		nightStart = 13000.0
-
-	[time.seasons]
-		#SUN: the seasons count sunrises; sleeping and /time move them as far as the sun.
-		#TICKS: Serene Seasons' own counter (one world day of real ticks per day; sleeping skips ahead).
-		#Allowed Values: SUN, TICKS
-		clock = "SUN"
-		#World days per sub-season (12 sub-seasons a year). Also the length of a wine month.
-		#Range: 1 ~ 1000
-		daysPerSubSeason = 8
-		#Sub-season a new world starts in: 1 = Early Spring ... 12 = Late Winter, 0 = random.
-		#Range: 0 ~ 12
-		startingSubSeason = 1
-
-	[time.wine]
-		#SUN: wine ages with the world days, sleeping and /time included. PLAYTIME: while a player is online.
-		#Allowed Values: SUN, PLAYTIME
-		clock = "SUN"
-		#A wine month is one sub-season. Months per effect level (SINGLEPLAYER 1, SERVER 3 = one season).
-		#Range: 1 ~ 100
-		monthsPerLevel = 1
-		#Highest effect level from aging.
-		#Range: 0 ~ 10
-		maxLevel = 5
-
-		[time.wine.boosts]
-			#Aging speed in storage with no sky light.
-			#Range: 1.0 ~ 5.0
-			cellarMultiplier = 2.0
-			#Aging speed in cold storage (Brewin' keg freeze sources outweigh heat sources nearby).
-			#Multiplies with cellarMultiplier: a cold cellar ages at both.
-			#Range: 1.0 ~ 5.0
-			coldMultiplier = 2.0
-			#Aging speed in warm storage (Brewin' keg heat sources outweigh freeze sources nearby).
-			#Multiplies with cellarMultiplier; below 1.0 slows aging.
-			#Range: 0.1 ~ 1.0
-			warmMultiplier = 0.75
 
 #Advancements (vanilla, every mod, every datapack).
 [advancements]
@@ -2285,12 +2092,6 @@
 	#(yellow) when something else drops (block tags creativeengineering:wthit/needs_silk_touch and
 	#wthit/silk_touch_differs, from tools/gen_silk_touch_blocks.py). Hidden while the main-hand tool has Silk Touch.
 	silkTouch = true
-	#Every crop with a crop season type: its seasons as on the planting item ('Fertile: Spring',
-	#'Offseason: Winter, Dry', 'Season: Nether', 'Fertile: Cold biomes'). [crop_seasons].
-	cropSeasons = true
-	#Under it, green 'Fertile here: grows faster' or red 'Offseason here: grows slower' for where the
-	#crop stands (greenhouse glass counted). Nothing when it is neutral there.
-	cropOutOfSeason = true
 	#WTHIT's blacklist hides barriers, structure voids and light blocks from everyone. With this on, players
 	#with operatorBlockLevel see the blocks in operatorBlockList; everyone else still sees through them.
 	operatorBlocks = true
@@ -2607,31 +2408,6 @@
 	#Ticks between checks of an active box's wave.
 	#Range: 1 ~ 200
 	checkIntervalTicks = 20
-
-#Every crop has a type (block tags creativeengineering:crop_seasons/<type>, filled from
-#kubejs/generation_scripts/worldgen/crop_seasons.json). Each season is fertile (grows faster),
-#neutral or off (grows slower) for that type, read from the biome's own calendar: spring to winter
-#in temperate and cold biomes, wet and dry in tropical, dry and arid ones. Replaces Serene Seasons'
-#in/out of season rule (its fertility.toml seasonal_crops is off). A crop in no type grows as usual.
-[crop_seasons]
-	#false: no crop seasons at all (crops grow at their own speed everywhere).
-	enabled = true
-	#Fertile: this share of growth checks gets a second growth check right after (0.25 = 25 % faster).
-	#Range: 0.0 ~ 1.0
-	fertileBonus = 0.25
-	#Off: this share of growth checks is refused (0.25 = 25 % slower).
-	#Range: 0.0 ~ 1.0
-	offPenalty = 0.25
-	#Greenhouse glass: any block in #sereneseasons:greenhouse_glass (filled from crop_seasons.json
-	#greenhouse_glass: glass blocks, panes, doors and trapdoors) in the 16 blocks straight above a seasonal
-	#crop makes every season neutral (no fertile bonus, no off penalty). Only that column counts.
-	greenhouse = true
-	#Cave crops (cave carrots, glow berries) are fertile below this height.
-	#Range: -64 ~ 320
-	caveFertileBelowY = 0
-	#Cave crops are off above this height; neutral in between.
-	#Range: -64 ~ 320
-	caveOffAboveY = 128
 
 #A listed mob that spawns for one of the listed reasons has a small chance to get a random name
 #(Minecraft Comes Alive's citizen names, else fallbackNames). Its death is announced in chat.

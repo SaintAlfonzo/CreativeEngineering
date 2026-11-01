@@ -950,10 +950,10 @@ Findings (2026-10-30):
 
 #### 2.12.1 Season model (owner spec 2026-10-30, BUILT 2026-10-30)
 
-**As built** (patcherMod `seasons/CropSeasons`, `CropSeasonTooltip`, `compat/WthitCropSeasons`,
+**As built** (Creative Calendar since 2026-11-01, before that patcherMod: `seasons/CropSeasons`, `CropSeasonTooltip`, `compat/WthitCropSeasons`,
 `mixin/CropSeasonGrowHookMixin`; data [crop_seasons.json](../kubejs/generation_scripts/worldgen/crop_seasons.json) ->
-[cropseasontags.js](../kubejs/server_scripts/tags/cropseasontags.js) -> block and item tags
-`creativeengineering:crop_seasons/<type>`; CEConfig `[crop_seasons]`):
+[cropseasontags.js](../kubejs/data/creativecalendar/kubejs/sereneseasons/cropseasontags.js) -> block and item tags
+`creativeengineering:crop_seasons/<type>`; `[crop_seasons]` in `creativecalendar-common.toml`):
 
 - Serene Seasons' crop rule is off (`config/sereneseasons/fertility.toml` `seasonal_crops = false`,
   `crop_tooltips = false`, copy in `configs_edited/root_config/sereneseasons/`). Its season tags stay in the mods but do
@@ -1266,8 +1266,8 @@ Brief: [briefs/farming_crops.md](briefs/farming_crops.md). Nothing here is built
   `mixin/QuarkHoeAreaBreakMixin`; [equipmenttags.js](../kubejs/server_scripts/tags/equipmenttags.js) "Hoe harvest area"
 - Extra stem fruit (§2.10): patcherMod `crops/StemExtraFruit.java`, `mixin/AttachedStemExtraFruitMixin`, `CEConfig` `[stem_fruit]`
 - Crop seasons (§2.12.1): [crop_seasons.json](../kubejs/generation_scripts/worldgen/crop_seasons.json) (the types, the file
-  to edit), [cropseasontags.js](../kubejs/server_scripts/tags/cropseasontags.js) (tags), patcherMod `seasons/CropSeasons`
-  (growth, rules), `seasons/CropSeasonTooltip`, `compat/WthitCropSeasons`, `mixin/CropSeasonGrowHookMixin`, CEConfig
+  to edit), [cropseasontags.js](../kubejs/data/creativecalendar/kubejs/sereneseasons/cropseasontags.js) (tags), Creative Calendar `seasons/CropSeasons`
+  (growth, rules), `seasons/CropSeasonTooltip`, `compat/WthitCropSeasons`, `mixin/CropSeasonGrowHookMixin`, `creativecalendar-common.toml`
   `[crop_seasons]`, [fertility.toml](../config/sereneseasons/fertility.toml) (`seasonal_crops = false`)
 - Growing seasons (§2.12): [tools/crop_season_audit.py](../tools/crop_season_audit.py) -> [crop_seasons_audit.md](crop_seasons_audit.md); `/dumpcropgrowth` ([dump_crop_growth.js](../kubejs/server_scripts/_lib/dump_crop_growth.js)) records each block's item for it; [config/sereneseasons/fertility.toml](../config/sereneseasons/fertility.toml)
 - [kubejs/client_scripts/namechanges.js](../kubejs/client_scripts/namechanges.js): Fertile Soil rename

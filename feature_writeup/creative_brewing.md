@@ -67,9 +67,11 @@ moves `backportedVinery-*`, `backportedBrewin-*` out of `mods/` (to `development
 
 ### 2.2 Load order and dependencies
 
-`mods.toml`: `creativeengineering` (KubeJS, helpers, startup loader) and `creative_delight` (nests Farmer's Delight,
-Brewin's base; defines `global.CD`), both mandatory, both `ordering="AFTER"`. patcherMod's startup loader runs jar packs
-in mod-list order, so the startup order is: patcherMod's pack, `startup_scripts/`, CD, CB. Check
+`mods.toml`: `creativeengineering` (KubeJS, helpers, startup loader), `creativecalendar` (the `[time]` master the Vinery
+member's `PackTime` calls, since 2026-11-01, [creative_calendar.md](creative_calendar.md)) and `creative_delight` (nests
+Farmer's Delight, Brewin's base; defines `global.CD`), all mandatory, all `ordering="AFTER"`. patcherMod's startup
+loader runs jar packs in mod-list order, so the startup order is: patcherMod's pack, `startup_scripts/`, Calendar, CD,
+CB. Check
 `[jar-startup] startup script packs in order:` in `logs/kubejs/startup.log` (SQ-CBJ-02). Server and client script packs
 from jars run in resource order, one pack per namespace, after the pack folder; event callbacks of all packs run in the
 same passes (creative_delight.md 10.2). If a CB server script ever needs a CD row's result, do it in a later event
@@ -182,10 +184,10 @@ otherwise write defaults), plus a startup WARN in CB when the old keys are still
 `JeiFluidHelperTooltipMixin` (all drinks, not only alcohol), Central Kitchen's brewing guide tooltip (shares
 `MealSlotTooltip` with the cooking guide). Each stays unless the owner says otherwise (4.4 Q4).
 
-**Not CB, not patcherMod for long: Creative Calendar.** `time/WineTime` and `[time.wine]` (the wine clock) are reserved
-for the future Creative Calendar mod with the rest of the calendar, day and night, seasons and biome weather (owner,
-2026-10-31; [creative_calendar.md](creative_calendar.md)). Creative Brewing will depend on it; until it exists Vinery
-keeps reading WineTime from patcherMod.
+**Not CB: Creative Calendar.** `time/WineTime` and `[time.wine]` (the wine clock) moved to Creative Calendar with the
+rest of the calendar, day and night, seasons and biome weather on 2026-11-01 ([creative_calendar.md](creative_calendar.md)).
+Creative Brewing requires Calendar; the Vinery member's `PackTime` calls `com.SaintAlfonzo.creativecalendar.time.WineTime`
+directly (`compileOnly project(':creativeCalendar')`).
 
 ### 4.3 What a move must check
 

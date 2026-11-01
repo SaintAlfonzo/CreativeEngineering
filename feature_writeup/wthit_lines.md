@@ -262,7 +262,7 @@ season types, `farming/crops #5`, [crops.md](crops.md) §2.12.1), after the Grow
   biomes; neutral below y 32 with no sky and outside the overworld; greenhouse glass within 16 blocks above turns off
   into neutral). Nothing when neutral. Under greenhouse glass (every season neutral, crops.md §2.12.1): green
   "Greenhouse: preventing offseason debuff" or red "Greenhouse: preventing fertile season buff".
-- Nothing shows when CEConfig `[crop_seasons] enabled` is off. Client side only: the tags, the season and the configs
+- Nothing shows when `[crop_seasons] enabled` (creativecalendar-common.toml) is off. Client side only: the tags, the season and the configs
   are all there. Serene Seasons' own "Fertile Seasons" words are no longer used (its crop rule is off).
 - `[wthit] cropSeasons`, `[wthit] cropOutOfSeason`.
 

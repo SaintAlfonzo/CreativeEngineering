@@ -1,6 +1,6 @@
 package com.SaintAlfonzo.creativeengineering.mixin;
 
-import com.SaintAlfonzo.creativeengineering.devtools.BlockStateSyncDebug;
+import com.SaintAlfonzo.creativeengineering.util.BlockStateLookupHook;
 import com.SaintAlfonzo.creativeengineering.util.BlockStateIdOverflow;
 
 import net.minecraft.core.IdMapper;
@@ -18,7 +18,7 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
  * unfixed server sends ids of 2^19 and up as negative numbers; the redirect on {@code IdMapper#byId}
  * ({@code m_7942_}) adds 2^20 back first, so the client also works against a server without the patch.
  *
- * <p>It is also the debug tool ({@code [debug.block_state_sync]}, see {@link BlockStateSyncDebug}):
+ * <p>It also feeds the debug tool through {@link BlockStateLookupHook} (Creative Devtools, {@code [debug.block_state_sync]}):
  * remember the raw id of every state the client still cannot resolve, then report them with their
  * block positions once the packet is built. Nothing is logged while the switch is off.
  *
@@ -32,11 +32,11 @@ public abstract class SectionUpdateNullStateMixin {
     @Redirect(method = "<init>(Lnet/minecraft/network/FriendlyByteBuf;)V",
             at = @At(value = "INVOKE", target = "Lnet/minecraft/core/IdMapper;m_7942_(I)Ljava/lang/Object;"))
     private Object creativeengineering$trackLookup(IdMapper<?> map, int id) {
-        return BlockStateSyncDebug.lookup(map, BlockStateIdOverflow.repairId(id));
+        return BlockStateLookupHook.lookup(map, BlockStateIdOverflow.repairId(id));
     }
 
     @Inject(method = "<init>(Lnet/minecraft/network/FriendlyByteBuf;)V", at = @At("RETURN"))
     private void creativeengineering$reportNulls(FriendlyByteBuf buf, CallbackInfo ci) {
-        BlockStateSyncDebug.finishSection((ClientboundSectionBlocksUpdatePacket) (Object) this);
+        BlockStateLookupHook.finishSection((ClientboundSectionBlocksUpdatePacket) (Object) this);
     }
 }
