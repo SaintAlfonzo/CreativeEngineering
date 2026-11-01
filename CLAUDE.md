@@ -8,8 +8,9 @@ Forge 1.19.2 modpack (KubeJS + in-tree Java mods). Repo root is the ATLauncher i
   commands), `client_scripts/`. `generation_scripts/` = generated data, `exported/` = game dumps
   (large; grep, never read whole). `data/` = datapack files.
 - `development/` = in-tree mods: `patcherMod` (main mixin/coremod, mod id `creativeengineering`),
-  `creativeLabels`, `incubationAdditions`, `moreMooblooms`, `babyMobs`, `exposureBackport`,
-  `backportedBrewin`, `backportedVinery`. Root `settings.gradle` + `build-logic/` build them all.
+  `creativeLabels`, `incubationAdditions`, `moreMooblooms`, `babyMobs`, `exposureBackport`, and two bundles:
+  `creativeDelight` (food) and `creativeBrewing` (brewing, alcohol, potions; nests the Vinery and Brewin' ports,
+  `members/vinery`, `members/brewin`). Root `settings.gradle` + `build-logic/` build them all.
 - `tools/*.py` = generators, listed in `tools/generators.json` and run in game with `/cegen`.
   `/dumpall` refreshes the dumps they read. `build_deploy.py` stages releases into `deploy/`.
 - `mod_sides.md` = client/server side of every jar (add a row for each new mod).
@@ -75,7 +76,8 @@ fold-in), `add-mod`, `release`, `port` (ports and backports). When the user asks
   patcherMod change need a full restart.
 - The shared helpers (`neoCraftHelper.js`, `tag_helper.js`, `compost.js`) live in patcherMod's jar
   (`src/main/resources/kubejs_startup/`, loaded before `startup_scripts/`): an edit needs a patcherMod rebuild, install
-  and restart. Creative Delight (`development/creativeDelight`) nests its members; build/install via `:creativeDelight:`.
+  and restart. Creative Delight (`development/creativeDelight`) and Creative Brewing (`development/creativeBrewing`) nest
+  their members; build/install via `:creativeDelight:` / `:creativeBrewing:`, never a member's own task.
 - Add a mod, release, port: skills `add-mod`, `release`, `port`.
 
 ## Debugging

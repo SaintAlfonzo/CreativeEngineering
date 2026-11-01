@@ -30,8 +30,7 @@ SWAPS=(
   "creative_delight-*.jar|$INST/development/creativeDelight/build/libs/creative_delight-1.0.0.jar"
   "backportedVintage-*.jar|$INST/development/backportedVintage/build/libs/backportedVintage-0.1.6-ce-19.2-09.jar"
   "backportedVeggies-*.jar|$INST/development/backportedVeggies/build/libs/backportedVeggies-1.9.2-ce-19.2-03.jar"
-  "backportedVinery-*.jar|$INST/development/backportedVinery/build/libs/backportedVinery-1.5.5-ce-19.2-06.jar"
-  "backportedBrewin-*.jar|$INST/development/backportedBrewin/build/libs/backportedBrewin-4.5.0-ce-19.2-04.jar"
+  "creative_brewing-*.jar|$INST/development/creativeBrewing/build/libs/creative_brewing-1.0.0.jar"
   "repackedStorage-*.jar|$INST/development/repackedStorage/build/libs/repackedStorage-25.12.09-1.19-forge-ce-19.2-01.jar"
 )
 for s in "${SWAPS[@]}"; do
@@ -44,6 +43,10 @@ for s in "${SWAPS[@]}"; do
   rm -f mods/$g; cp -l "$b" mods/ 2>/dev/null || cp "$b" mods/
   echo "swap: $(basename "${old:-none}") -> $(basename "$b") ($(date -r "$b" +%m-%d_%H:%M))"
 done
+# Creative Brewing nests the Vinery and Brewin' ports: their standalone jars (and what they replace) would win over it
+if ls mods/creative_brewing-*.jar >/dev/null 2>&1; then
+  rm -f mods/backportedVinery-*.jar mods/backportedBrewin-*.jar mods/letsdo-vinery-forge-1.3.10.jar mods/doapi-*.jar mods/BrewinAndChewin-1.19-*.jar
+fi
 PB="$INST/development/perfBot/build/libs/ceperfbot-0.1.0.jar"
 [ -f "$PB" ] && { cp "$PB" mods/; echo "-Dceperfbot.out=perf/bot" >> user_jvm_args.txt; echo "perfBot added"; }
 cp "$INST/tools/scratch_query/zq_probe.js" kubejs/server_scripts/zz_zq_probe.js

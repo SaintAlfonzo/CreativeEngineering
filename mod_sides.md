@@ -50,7 +50,6 @@ Mods are matched by **mod id**, so updating a mod to a new version needs no edit
 | both | Book Fishing | `book_fishing` | `Book Fishing 1.0.0 - 1.19.2.jar` |  |
 | both | Bookshelf | `bookshelf` | `Bookshelf-Forge-1.19.2-16.3.20.jar` |  |
 | both | Botania | `botania` | `Botania-1.19.2-440.2-FORGE.jar` | Required by: Applied Botanics, KubeJS Botania |
-| both | Brewin' and Chewin' (Backport) | `brewinandchewin` | `backportedBrewin-4.5.0-ce-19.2-03.jar` | This pack's port of Brewin' and Chewin' 4.5.0 (development/backportedBrewin); replaces BrewinAndChewin-1.19-2.0.jar |
 | both | Brick Hopper | `brickhopper` | `brickhopper-1.19-1.4.2.1.jar` |  |
 | both | Buzzier Bees | `buzzier_bees` | `buzzier_bees-1.19.2-5.0.1.jar` |  |
 | both | Caelus API | `caelus` | `caelus-forge-1.19.2-3.0.0.6.jar` | Required by: Elytra Slot |
@@ -77,7 +76,7 @@ Mods are matched by **mod id**, so updating a mod to a new version needs no edit
 | both | Connectible Chains | `connectiblechains` | `Connectible Chains-forge-1.19.2-2.1.4.jar` |  |
 | both | Construction Wand | `constructionwand` | `constructionwand-1.19.2-2.10.jar` |  |
 | both | Control Engineering | `controlengineering` | `ControlEngineering-0.2.0.jar` |  |
-| both | CookingForBlockheads | `cookingforblockheads` | `cookingforblockheads-forge-1.19.2-13.3.4.jar` |  |
+| both | CookingForBlockheads | `cookingforblockheads` | `cookingforblockheads-forge-1.19.2-13.3.4.jar` | All Rights Reserved, stays its own jar; Creative Delight's nested `blockheads_additions` needs it (2026-10-31) |
 | both | Corpse | `corpse` | `corpse-forge-1.19.2-1.0.17.jar` | Required by: corpsecurioscompat |
 | both | corpsecurioscompat | `corpsecurioscompat` | `corpsecurioscompat-1.18.x-1.20.x-Forge-2.2.2.jar` |  |
 | both | Cosmetic Armor x Corpse Compat | `cosmeticcorpsecompat` | `cosmeticcorpsecompat-1.19.x-1.20.x-Forge-1.0.0.jar` |  |
@@ -292,7 +291,6 @@ Mods are matched by **mod id**, so updating a mod to a new version needs no edit
 | both | Vintage Delight (Backport) | `vintagedelight` | `backportedVintage-0.1.6-ce-19.2-08.jar` | This pack's port of Vintage Delight 0.1.6 (development/backportedVintage) with KOTS 0.3.1's jar ids; no 1.19.2 build of the mod exists. Added 2026-10-23 (feature_writeup/vintage_delight.md) |
 | both | Via Romana | `via_romana` | `Via_Romana-1.19.2-1.1.3.jar` |  |
 | both | Villagers Sell Animals (by NoCube) | `villagersellanimals` | `nocube's_villagers_sell_animals_1.2.1_forge_1.19.2.jar` |  |
-| both | Vinery (Backport) | `vinery` | `backportedVinery-1.5.5-ce-19.2-05.jar` | This pack's port of Let's Do Vinery 1.5.5 (development/backportedVinery); one jar with mod ids vinery and foundation. Reads its art and data from the two jars in `vinery_upstream/` (not mods/). Replaced letsdo-vinery-forge-1.3.10.jar and doapi-1.1.0b.jar (feature_writeup/alcohol.md Part B) |
 | both | Vintage KubeJS | `vintage_kubejs` | `vintage_kubejs-1.19.2-1.0.0rc-2.jar` |  |
 | both | Wardrobe | `wardrobe` | `wardrobe-1.0.3-1.19.2.jar` |  |
 | both | Wares | `wares` | `wares-1.19.2-1.2.9.jar` |  |
@@ -435,6 +433,7 @@ Mods are matched by **mod id**, so updating a mod to a new version needs no edit
 | both | Unlit Campfire | `unlitcampfire` | `unlitcampfire-forge-1.19-1.7.1.0.jar` | Campfires placed unlit / burn out; block mixins + config, Jade/TOP compat. Added 2026-10-14 |
 | both | Create : The Salt | `create__the_salt` | `create_salt 1.19.2-1.1.0.jar` | Create salt integration. Added 2026-10-18 |
 | both | Labels | `labels` | `labels-1.19.2-1.10.jar` | Art donor for Creative Labels, gameplay off (item hidden, recipes removed; sticky_notes.md 3.13). Added 2026-10-18 |
-| both | Creative Delight | `creative_delight` | `creative_delight-1.0.0.jar` | The pack's own bundle (development/creativeDelight): nests Farmer's Delight (`farmersdelight`), Ocean's Delight (`oceansdelight`), Oceanic Delight (`oceanic_delight`), End's Delight (`ends_delight`), Ender's Delight Additions (`enders_additions`, Ender's 1.1.4 content under `endersdelight:` ids, added 2026-10-25), the Rustic Delight 1.7.0 port (`rusticdelight`, reads `rustic_upstream/` on both sides) and Delightful 3.4.1 with 3.8.1 items (`delightful`) as Jar-in-Jar mods; nested ids take this row's side. Needs patcherMod. Added 2026-10-25; the member mods have no rows of their own (rows removed 2026-10-27) |
+| both | Creative Delight | `creative_delight` | `creative_delight-1.0.0.jar` | The pack's own bundle (development/creativeDelight): nests Farmer's Delight (`farmersdelight`), Ocean's Delight (`oceansdelight`), Oceanic Delight (`oceanic_delight`), End's Delight (`ends_delight`), Ender's Delight Additions (`enders_additions`, Ender's 1.1.4 content under `endersdelight:` ids, added 2026-10-25), the Rustic Delight 1.7.0 port (`rusticdelight`, reads `rustic_upstream/` on both sides) Delightful 3.4.1 with 3.8.1 items (`delightful`) the Hearth and Harvest 1.4.1 port (`hearthandharvest`, raspberries so far, added 2026-10-31) and Cooking for Blockheads Additions (`blockheads_additions`: wood racks and the pack's CfB changes, needs the separate Cooking for Blockheads jar, added 2026-10-31) as Jar-in-Jar mods; nested ids take this row's side. Needs patcherMod. Added 2026-10-25; the member mods have no rows of their own (rows removed 2026-10-27) |
+| both | Creative Brewing | `creative_brewing` | `creative_brewing-1.0.0.jar` | The pack's own bundle for brewing, alcohol and potions (development/creativeBrewing, feature_writeup/creative_brewing.md): nests the Let's Do Vinery 1.5.5 port (`vinery` and `foundation`, reads its art and data from the two jars in `vinery_upstream/` on both sides; replaced letsdo-vinery-forge-1.3.10.jar and doapi-1.1.0b.jar) and the Brewin' and Chewin' 4.5.0 port (`brewinandchewin`; replaced BrewinAndChewin-1.19-2.0.jar) as Jar-in-Jar mods; nested ids take this row's side. Needs patcherMod and Creative Delight. Added 2026-10-31, replacing the standalone backportedVinery and backportedBrewin rows |
 | both | Hostile Delight | `hostiledelight` | `Hostile_Delight_0.2.2_1.19.2.jar` | Needs Farmer's Delight. Added 2026-10-23, not yet integrated |
 | both | Miner's Delight (Backport) | `miners_delight` | `backportedMiners-1.4.5-ce-19.2-01.jar` | This pack's merged port of Miner's Delight 1.4.5 + 1.1.2 (development/backportedMiners), needs Farmer's Delight. Reads its art and data from the jar in `miners_upstream/` (not mods/). Replaces miners_delight-1.19.2-1.1.2.jar (live since 1.1.02); built 2026-10-24, installed by `:backportedMiners:installToMods` (feature_writeup/miners_delight.md) |

@@ -9,5 +9,7 @@
   "creative_delight.kettle.box.empty.hint": "Glass bottles put here fill from the tank",
   "creative_delight.kettle.item.tank": "Tank: %s, %s / %s",
   "creative_delight.wthit.kettle_tank": "Tank",
-  "creative_delight.wthit.kettle_tank.value": "%s %s / %s"
+  "creative_delight.wthit.kettle_tank.value": "%s %s / %s",
+  "block.creative_delight.treated_stick": "Treated Stick",
+  "block.creative_delight.treated_stick_tomatoes": "Tomatoes"
 }

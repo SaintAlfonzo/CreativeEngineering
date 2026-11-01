@@ -1,7 +1,7 @@
 # gameplay / time: implementation brief
 
 Written 2026-10-21 from [TODO](../todo/TODO.md) `# gameplay`, Sub `time`. Feature writeup: [time.md](../time.md)
-(test prefix `TI-`, used up to TI-29; new tests here start at TI-30, check the next free number before adding them).
+(test prefix `TI-`, used up to TI-37 on 2026-10-31; new tests here are placeholders `TI-newN`, numbered when queued).
 Related: [weather.md](../weather.md) (SeasonHUD mixins), [alcohol.md](../alcohol.md) B7 (the wine side of the master).
 
 Jars checked (decompiled with vineflower or read with `javap`, under `scratchpad/decomp/` and `scratchpad/vanilla/`):
@@ -12,117 +12,24 @@ SRG names below). A fact is marked "verified" when it was read from one of them.
 Both bugs come from one scratchpad line each (git `2e8687f`, `change_scratchpad.md`): "clock icon while sleeping is
 frozen" and "season day and day counter on gui are misaligned". Nothing else describes them.
 
+Re-checked 2026-10-31 (brief sweep): #5 (built 2026-10-23) and #6 (built 2026-10-30) are Testing and listed under
+"Built, needs play"; #5's build section was cut (time.md 3.10 holds it). Line refs in #3 and #4 re-read.
+
 ## Scope and order
 
 | Row | Change | Status | Size |
 |---|---|---|---|
-| #5 | Season day and day counter misaligned on the GUI | Testing (built 2026-10-23, TI-30) | small: one client mixin on Xaero's minimap |
 | #4 | Clock icon frozen while sleeping | Bug (offline check 2026-10-23 found no cause; TI-31 next) | unknown cause: a 5-minute in-game diagnosis first, then likely a small client mixin or a config line |
 | #3 | Offline checks (`tools/time_table.py`, SUN-counter test) | Planned | small: one Python tool + one headless Java test |
+| #5, #6, #1 | Minimap line, `/cetime date`, time master | Testing | built, see "Built, needs play" |
 
 Build order:
 
-1. **#5** first: the cause is known (below), and the fix is one client mixin plus a `TimeSettings` helper.
-2. **#4 diagnosis** (TI-31) in the same play session as #5's test (TI-30); then its fix goes in the same patcherMod
-   build as #5.
-3. **#3** any time; no game needed. Do it before the next `[time]` change so the table catches mistakes.
+1. **#4 diagnosis** (TI-31) in the same play session as #5's test (TI-30); both are queued together as client row
+   CQ-NEW-01 (scratch_queue.md 979). A fix (config line or a client mixin) goes into the next patcherMod build.
+2. **#3** any time; no game needed. Do it before the next `[time]` change so the table catches mistakes.
 
 Related rows: `pack/release #2` (the server preset gotcha, time.md 3.9), `alcohol` Vinery rows (wine clock).
-
----
-
-## time #5: Season day and day counter misaligned on the GUI
-Status Testing (built 2026-10-23, shipped in 1.1.03; TI-30) / Work patcherMod / TODO `gameplay/time #5`
-
-### Goal
-The two date lines the player sees together agree: SeasonHUD's "Mid Spring (Day 3/24) 7:30 pm" and the "day counter"
-change day at the same moment and read the same time of day.
-
-### Now
-- **What the "day counter" is (verified).** Xaero's Minimap is installed and its info display shows, in this order,
-  `coords:biome:season:time:real_time` ([config/xaero/minimap/profiles/info_display_config/default.cfg.txt](../../config/xaero/minimap/profiles/info_display_config/default.cfg.txt)
-  lines 1-6). `season` is SeasonHUD's line (SeasonHUD's `XaeroInfoDisplays` calls `CurrentSeason.getHudText()`, so the
-  pack's time-of-day suffix from `SeasonHudCurrentSeasonMixin` is on it). `time` is Xaero's own, at state `1` =
-  "Day + 24h". So the minimap shows, one line apart:
-  `Mid Spring (Day 3/24) 7:30 pm` and `Day 57, 17:48`.
-- **Xaero's math (verified, `xaero.hud.minimap.info.BuiltInInfoDisplays`, the `TIME` compiler lambda, bytecode name
-  `lambda$static$14`):** `totalTime = 6000 + mc.level.getDayTime()`; `dayNumber = totalTime / 24000 + 1`;
-  hours/minutes from `totalTime % 24000`. That is vanilla's clock: midnight at dayTime 18000.
-- **The pack's math:** `TimeSettings.clock` ([TimeSettings.java](../../development/patcherMod/src/main/java/com/SaintAlfonzo/creativeengineering/time/TimeSettings.java)
-  69) reads sunrise (`[time.day] dayStart` 22300) as 6:00 am, so the pack clock = Xaero clock + 1:42. The SeasonHUD day
-  ticks over at sunrise (`SeasonClock.migrate` lines the counter up with `dayStart`, time.md 3.3). Xaero's day ticks over
-  at dayTime 18000, which the pack clock reads as **1:42 am**.
-- So the two lines disagree three ways: the clock (17:48 vs 7:30 pm for the same instant), the moment the day changes
-  (1:42 am vs 6:00 am), and what is counted (days since the world began vs day of the season). The third is by design;
-  the first two are the bug.
-- **Also found (Better Days, verified):** sleeping ends at `dayTime % 24000 == 0` (`TimeService.correctForOvershoot`
-  uses `Time.DAY_LENGTH`, `Time.crossedMorning` compares `dayTime / 24000`), which the pack clock reads as **7:42 am**,
-  not the 6:00 am sunrise. Players wake 1:42 after the season day changed. Not part of this bug, see Decisions.
-- `CalendarDate.worldDay(level)` ([CalendarDate.java](../../development/patcherMod/src/main/java/com/SaintAlfonzo/creativeengineering/time/CalendarDate.java)
-  15) already counts sunrises since dayTime 0, the same day boundary as the HUD.
-
-### Build
-1. `TimeSettings`: add `clock24(long dayTime)` ("19:30") next to `clock` (same offset math, 24 h format), so both
-   formats come from one place.
-2. New client mixin `mixin/XaeroTimeInfoMixin.java`, listed under `"client"` in
-   [creativeengineering.mixins.json](../../development/patcherMod/src/main/resources/creativeengineering.mixins.json)
-   (122) next to `SereneSeasonsClientClockMixin` (Xaero is client-only, the server has no such class):
-   ```java
-   @Pseudo
-   @Mixin(targets = "xaero.hud.minimap.info.BuiltInInfoDisplays", remap = false)
-   public class XaeroTimeInfoMixin {
-       // the TIME display's compiler lambda; its four addWords calls are, in order:
-       // 0 "Day N, HH:MM", 1 "HH:MM", 2 "Day N, HH:MM AM", 3 "HH:MM AM"
-       @ModifyArg(method = "lambda$static$14", require = 0, remap = false,
-               at = @At(value = "INVOKE", remap = false,
-                        target = "Lxaero/hud/minimap/info/render/compile/InfoDisplayCompiler;addWords(Ljava/lang/String;)V"))
-       private static String creativeengineering$packClock(String original) { ... }
-   }
-   ```
-   The handler (no Xaero type in its signature, so no compile dependency): if `!TimeSettings.active()` or the level has
-   fixed time, return `original`. Otherwise rebuild the text: day = `CalendarDate.worldDay(level) + 1`, time =
-   `clock24` when `original` has no "AM"/"PM", else `clock`; keep the "Day N, " prefix only when `original` contains
-   ", " (the two "Day +" modes). Use `I18n.get("gui.xaero_day")` for the word, as Xaero does. A cleaner alternative is
-   four `@ModifyArg`s with `index`/`ordinal` 0-3, one per format.
-3. Test with TI-30. If the lambda name changed (a Xaero update), `require = 0` keeps the game booting and the line
-   simply shows Xaero's own text; the log line `Mixing XaeroTimeInfoMixin` confirms it applied.
-
-Zero-code alternative: set `infoDisplay:time:0` in the Xaero profile (and the `configs_edited/` copy if one exists),
-so only SeasonHUD's line (which already carries the pack's time) is shown. It loses the absolute day number.
-
-### Ids and data
-- Xaero class `xaero.hud.minimap.info.BuiltInInfoDisplays`, lambda `lambda$static$14(InfoDisplay,
-  InfoDisplayCompiler, MinimapSession, int, BlockPos)`, `ClientLevel.m_46468_()J` (getDayTime) at bytecode 31,
-  `InfoDisplayCompiler.addWords(String)` at 148, 181, 275, 313 (verified in 25.3.10). Lambda numbers are compiler
-  assigned: re-check with `javap -p` after any Xaero update.
-- Lang key `gui.xaero_day` (Xaero's).
-- Xaero info display state ids: 0 off, 1 Day+24h, 2 Day+12h, 3 24h, 4 12h (verified).
-
-### Decisions
-- **Mixin or switch Xaero's line off.** Recommendation: the mixin. The absolute day count is the only place a player
-  sees "how long has this world run" outside the calendar's year line, and it is cheap.
-- **Day number change at sunrise or at midnight.** Recommendation: sunrise (`worldDay`), so it changes together with
-  the HUD's "Day x/24". A clock reading "Day 58, 5:59 am" before sunrise is the trade-off.
-- **Keep both times?** With Xaero showing the pack time, SeasonHUD's suffix (`[time] hudTimeOfDay`) repeats it one
-  line up. Recommendation: keep `hudTimeOfDay = true` (it is the only time shown when the minimap is hidden or a
-  player turns Xaero's line off); the user can turn it off.
-- **Wake-up time (Better Days).** Optional: make sleeping end at the pack's sunrise (dayStart) instead of vanilla
-  morning. That is a `@Pseudo` mixin on `betterdays.time.TimeService.correctForOvershoot` / `Time.crossedMorning`
-  (both read `Time.DAY_LENGTH` / `getDay()`), offset by `dayStart`. Recommendation: not now; 7:42 am is fine and the
-  change touches every sleep. Note it in time.md 3.8 if left.
-
-### Gotchas
-- `@ModifyArg` on a static lambda needs a `static` handler.
-- Xaero's minimap only exists on clients; never list the mixin under `"mixins"` (common): the 1.0.8 dedicated-server
-  boot crash came from exactly that (time.md 3.8, `SereneSeasonsClientClockMixin`).
-- `CalendarDate.worldDay` uses the client's dayTime, which Better Days' `TimeInterpolator` smooths on the client; it is
-  the same value SeasonHUD reads, so the two stay in step.
-- Nether and End: `dimensionType().hasFixedTime()`; return Xaero's own text there (SeasonHUD shows no time there either).
-
-### Tests
-- **TI-30 Minimap lines agree:** overworld, Xaero time line on (default profile): the two lines read the same time of
-  day (`/time set 11800` -> "7:30 pm" on the SeasonHUD line and "19:30" on Xaero's); `/time set 22299` then wait for
-  sunrise -> the HUD's "Day x/24" and Xaero's "Day N" both step at 6:00 am. In the Nether, Xaero's line is unchanged.
 
 ---
 
@@ -154,6 +61,9 @@ fast-forwarding night.
   (`TimePause.paused`), `SereneSeasonsClientClockMixin` only reads dayTime. `BetterDaysConfigMixin` replaces the four
   speed/sunrise getters, which the sleep path doesn't use (it uses `sleepSpeedMax`, and `daySpeed` only for the
   overshoot after morning).
+- Investigated offline 2026-10-23 and written up in [time.md](../time.md) 3.10 "Bed clock (open, TI-31)"; no log
+  errors. Rechecked 2026-10-31: the configs above unchanged, `enableSleepFeature = true` (common 99), jars the same
+  versions. TI-31 is in time.md 7 (655) and queued with TI-30 as client row CQ-NEW-01 (scratch_queue.md 979).
 - So no cause is visible offline. Ranked hypotheses:
   1. **The night isn't fast-forwarding** (`enableSleepFeature` off in a profile, or the sleep ratio not reached;
      `betterdays-common.toml` `[sleep] ratioPlayersForSleep = 0.0` (134) means any one sleeper is enough), so the face moves at the normal night pace: 9,300 units in 15 min, one of the clock's 64
@@ -177,7 +87,7 @@ fast-forwarding night.
    - The HUD suffix also freezes -> hypothesis 2: client time. Check F3's day counter and `/time query daytime`
      before and after; look at Better Days' `TimeInterpolator` (it rewrites the client's dayTime every render frame) and
      at any mod that pauses the client in bed.
-2. Record the result in time.md (a new 3.10 "Bed clock" paragraph) whatever it is.
+2. Record the result in time.md 3.10's "Bed clock" paragraph (it exists since 2026-10-23, marked open) whatever it is.
 
 ### Ids and data
 - Better Days classes (verified in 3.3.4.3): `betterdays.client.gui.SleepGui` (`onClientTick`, `renderClock`,
@@ -199,7 +109,7 @@ fast-forwarding night.
   lie down and get up.
 
 ### Tests
-- **TI-31 Bed clock turns:** single player, sleep at dusk with a clock in the hotbar -> the night passes in about 4 s,
+- **TI-31 Bed clock turns** (exists, time.md 655; it says about 5 s): single player, sleep at dusk with a clock in the hotbar -> the night passes in about 4-5 s,
   Better Days' bed clock (top right) and the hotbar clock both turn from night to morning, SeasonHUD's time suffix
   races to about 7:42 am (Better Days wakes at vanilla morning, see #5).
 
@@ -214,15 +124,19 @@ that the SUN season counter moves exactly as far as the sun.
 
 ### Now
 - Neither exists: no `tools/time_table.py`, no `time_table` entry in [tools/generators.json](../../tools/generators.json)
-  (25 generators, none for time), no test under `tools/` for the time package.
+  (50 entries on 2026-10-31, none for time), no `tools/test_time.sh` or time test sources under `tools/`.
 - The derivations live in [TimeSettings.java](../../development/patcherMod/src/main/java/com/SaintAlfonzo/creativeengineering/time/TimeSettings.java)
-  (`dayUnits`, `daySpeed`, `nightSpeed`, `seasonDayDuration`, `yearDays`, `clock`, `realMinutes`) and the push targets in
+  (`dayUnits` 28, `daySpeed` 34, `nightSpeed` 38, `seasonDayDuration` 51, `yearDays` 59, `clock` 69, `clock24` 78,
+  `dayNumber` 94, `realMinutes` 114) and the push targets in
   [TimePush.java](../../development/patcherMod/src/main/java/com/SaintAlfonzo/creativeengineering/time/TimePush.java)
-  (76-115: Serene Seasons `day_duration` / `sub_season_duration` / `starting_sub_season`, SeasonHUD, Vinery
-  `WORLD_DAY_MINUTES`, `YEARS_PER_EFFECT_LEVEL` (= monthsPerLevel), `CELLAR_AGING_MULTIPLIER`).
-- The `[time]` values: [config/creativeengineering-common.toml](../../config/creativeengineering-common.toml) 1790-1849.
+  (74-87: Serene Seasons `day_duration` / `sub_season_duration` / `progress_season_while_offline`, SeasonHUD
+  `day_length` / `sub_season_length`). Vinery is no longer pushed: the port reads `WineTime` itself (TimePush.java
+  23-24, time.md 3.7), so the wine rows come from `[time.wine]` directly.
+- New since the first brief: `TimeDate.java` (`/cetime date`, row #6) does calendar math (Early Spring day 1 6:00 am
+  = 0, time.md 3.11) inside command code; `CalendarDate.java` has `worldDay` / `year` helpers that need a `Level`.
+- The `[time]` values: [config/creativeengineering-common.toml](../../config/creativeengineering-common.toml) from 2012.
 - The SUN counter: `SeasonClock.onLevelTick` ([SeasonClock.java](../../development/patcherMod/src/main/java/com/SaintAlfonzo/creativeengineering/time/SeasonClock.java)
-  63-90) adds every forward dayTime step to `seasonCycleTicks`, mod the cycle; it reads `SeasonSavedData` and
+  63-90, the step at 85) adds every forward dayTime step to `seasonCycleTicks`, mod the cycle; it reads `SeasonSavedData` and
   `SeasonHandler`, so a test can't call it without Serene Seasons on the classpath.
 - Headless pattern to copy: [tools/test_shields.sh](../../tools/test_shields.sh) + `tools/shield_test/` (sources
   [tools/java_test_cp.sh](../../tools/java_test_cp.sh) for the mapped Forge classpath, an `FMLEnvironment` stub, runs
@@ -233,7 +147,8 @@ that the SUN season counter moves exactly as far as the sun.
    Read `[time]`, `[time.day]`, `[time.seasons]`, `[time.wine]`, `[time.wine.boosts]` and print:
    - Better Days: `dayUnits = (nightStart - dayStart) mod 24000` (0 -> 12000), `daySpeed = dayUnits / (dayMinutes*1200)`,
      `nightSpeed = (24000 - dayUnits) / (nightMinutes*1200)`;
-   - Serene Seasons / SeasonHUD: `day_duration` (24000 on SUN, else world-day ticks), `sub_season_duration`;
+   - Serene Seasons / SeasonHUD: `day_duration` (24000 on SUN, else world-day ticks), `sub_season_duration`,
+     `progress_season_while_offline`;
    - real time per sub-season, season, year (`daysPerSubSeason * 12` days), with and without sleeping (night skipped);
    - wine: real time per month and per level, times `cellarMultiplier`, `coldMultiplier`, cold x cellar, warm;
    - the clock reading at sunrise / sunset (6:00 am / 8:42 pm for 22300 / 13000), using the same formula as
@@ -249,7 +164,8 @@ that the SUN season counter moves exactly as far as the sun.
    + `tools/test_time.sh` (copy `test_shields.sh`): feed dayTime sequences stepping 0.125-equivalent (1 unit every 8
    ticks), 0.272, 0.517, 1, 110 (sleep) and a backward `/time set`, and check the counter moved by exactly the summed
    forward steps, wraps at `cycle`, and never moves backward. Also check `TimeSettings.clock` at 22300, 13000, 11800 (the
-   TI-23 values) and `CalendarDate`-style day math if it gets a pure helper.
+   TI-23 values), `TimeSettings.dayNumber` at the sunrise step (TI-30's -1700 offset), and `TimeDate`'s date-to-dayTime
+   math if it is pulled into a pure helper (the plural-units fix of #6 could land in the same refactor).
 4. time.md 6: replace "(planned)" with the commands; add the two to the File map (5).
 
 ### Ids and data
@@ -263,7 +179,7 @@ that the SUN season counter moves exactly as far as the sun.
 ### Gotchas
 - `java_test_cp.sh` expects the Forge Gradle cache and ATLauncher libraries of the dev machine (`$HOME/.gradle/...`,
   `$HOME/.local/share/atlauncher/libraries`); they are not in a cloud container.
-- The toml's `[time]` block sits at line 1790 of a 3000-line file; read by section name, never by line.
+- The toml's `[time]` block sits at line 2012 of a 2624-line file (it moves); read by section name, never by line.
 
 ### Tests
 - `python3 tools/time_table.py` prints `daySpeed 0.272`, `nightSpeed 0.517`, sub-season 8 h, year 96 h, sunrise
@@ -277,6 +193,8 @@ that the SUN season counter moves exactly as far as the sun.
 | Row | Change | Status | Note |
 |---|---|---|---|
 | #1 | Time master | Testing | Code matches time.md 3.8 / 3.9. Fixed stale test text and values in time.md (below): the pushed sub-season is 8, not 10, and the cellar boost is x2.0, not x2.5. The 3.9 deploy gotcha (server preset) is still open as `pack/release #2`. TI-01 to TI-29 open |
+| #5 | Season day and day counter misaligned on the GUI | Testing | Built 2026-10-23, shipped 1.1.03: `XaeroTimeInfoMixin` puts Xaero's minimap time line on the pack clock, day steps at sunrise; Better Days still wakes at vanilla morning (7:42 am). Open: TI-30 in game (client row CQ-NEW-01). Writeup [time.md](../time.md) 3.10 |
+| #6 | Admin time commands | Testing | Built 2026-10-30 as `/cetime date` (`TimeDate.java`; reset / set / next / previous / restart / add). Scratch r1031 PASSED SQ-TD-01 to -03, -05; open: SQ-TD-04 client half, TI-32 to TI-37 in game, and the plural-units decision (`add 40 days` refused, TI-32 and the docs write plurals). Writeup [time.md](../time.md) 3.11 |
 
 ## Writeup corrections made
 

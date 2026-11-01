@@ -1,8 +1,0 @@
-{
-  "item.hearthandharvest.watering_can": "Watering Can",
-  "tooltip.hearthandharvest.watering_can.water": "Water Level",
-  "tooltip.hearthandharvest.watering_can.bone_meal": "Fertilizer Level",
-  "tooltip.hearthandharvest.watering_can.fertilizer": "%s Level",
-  "tooltip.hearthandharvest.watering_can.wrong_fertilizer": "Already loaded with %s!",
-  "hearthandharvest.jei.info.watering_can": "Hold fertilizer in the off hand and use the can to load it, one item per use (16 max, one kind at a time). Use it on a water source to fill it (16). Using it on a crop or other bone-mealable block spends one water and one fertilizer and applies bone meal to the 3x3 area around it. Using it on a crop or soil also soaks the farmland or Fertile Soil in the 3x3; with no fertilizer, or nothing left to grow, that costs one water. It also puts out fire and lit campfires for one water."
-}

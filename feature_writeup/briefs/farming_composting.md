@@ -1,191 +1,184 @@
 # farming / composting: implementation brief
 
 Written 2026-10-21 from [TODO](../todo/TODO.md) `# farming`, Sub `composting`. Feature writeup:
-[composting.md](../composting.md) (test prefix `CM-`); the soil recipes are also documented in
-[recipes_wood.md](../recipes_wood.md) 2.3 (`RW-`).
+[composting.md](../composting.md) (tests CM-01 to CM-08 and CP-01; CM-09 and up are now creative_delight.md's ids, so
+new composting tests take the CP- prefix); the soil recipes are also documented in [recipes_wood.md](../recipes_wood.md)
+2.3 (`RW-`). Updated 2026-10-31 (brief sweep): #2 re-scoped to the owner's recipe review, #5 added, #4 built and shipped
+(moved to Built, needs play), file and line refs re-checked. Proposed test ids are placeholders `CP-new1`, ... (numbered
+when queued).
 
 ## Scope and order
 
 | Row | Change | Status | Size |
 |---|---|---|---|
-| #2 | Nulch recipe into the compost file | Planned | small, KubeJS only |
-| #4 | Seed milling to bone meal | Planned | small, KubeJS only |
+| #2 | Fertile Soul Soil (nulch) recipe: review, then move into the compost file | Planned | small, KubeJS only; needs the owner's pick of inputs |
+| #5 | Expand organic compost (more rot items, more dirt blocks) | Planned | small, KubeJS only (tags + 4 recipe edits) |
 | #3 | Composters in more wood types | Planned | medium: new blocks in patcherMod + textures + KubeJS recipes |
+| #4 | Seed milling to bone meal | Testing | built 2026-10-30, shipped in 1.1.05 (Built, needs play) |
 
 Build order:
 
-1. **#2 and #4 together.** #2 creates the new server file `kubejs/server_scripts/wood/compost.js`; #4 puts its
-   milling recipe in that file. One `/reload` to test both.
+1. **#5 and #2 together.** `kubejs/server_scripts/wood/compost.js` already exists (9 lines, made by #4). #2 moves the
+   compost, fertile soil and nulch recipes into it from `sawdust.js`; #5 edits the compost recipes on the way. One
+   `/reload` for both. #5 does not wait for #2's recipe review: move the compost block first, nulch when its inputs are
+   picked.
 2. **#3 on its own.** It needs a patcherMod build (new blocks), textures and a restart, so it rides with the next
-   patcherMod release. TODO lists it as KubeJS. That's wrong: KubeJS 6 can't register a `ComposterBlock` (see #3 Now).
+   patcherMod release.
 
-Nothing here depends on other families. Related rows: `tooling/conventions #2` (the 55 duplicate keys in
-`item_dict.js`, among them `mulch_*` x4, which sit in the compost block that #2 touches), `recipes/wood #2` (leftover
-comments; the `sawdust.js` comment goes away with #2), `recipes/wood #3` (mulberry wood removal; it doesn't change the
-#3 species list, because mulberry isn't in it).
+Nothing here depends on other families. Related rows: `recipes/wood #2` (leftover comments; the `sawdust.js` note goes
+away with #2), `recipes/wood #3` (mulberry wood removal; mulberry isn't in #3's species list).
 
 ---
 
-## composting #2: Nulch recipe into the compost file
-Status Planned / Work KubeJS / TODO `farming/composting #2` ([composting.md](../composting.md) F4)
+## composting #2: Fertile Soul Soil (Nulch) recipe: review, then move into the compost file
+Status Planned / Work KubeJS / TODO `farming/composting #2` ([composting.md](../composting.md) F4). Decision: the new
+inputs (owner, 2026-10-23).
 
 ### Goal
-Move the compost, fertile-soil and nulch recipes out of `sawdust.js` into a file of their own and drop the author's
-note (`//****...Integrate nulch, move to compost file`). Recipes and ids stay the same.
+Fertile Soul Soil (`immersive_weathering:nulch_block`, renamed 2026-10-23) gets a recipe that fits its place: the Nether
+counterpart of Fertile Soil and a ghost pepper soil. Then it and the compost / fertile soil recipes move out of
+`sawdust.js` into `wood/compost.js`, and the author's note goes.
 
 ### Now
-- [kubejs/server_scripts/wood/sawdust.js](../../kubejs/server_scripts/wood/sawdust.js):
+- [kubejs/server_scripts/wood/sawdust.js](../../kubejs/server_scripts/wood/sawdust.js) (89 lines, re-checked
+  2026-10-31):
   - lines 10-12, inside the `R.bulk('remove', ...)` at 9-18: removes `farmersdelight:organic_compost_from_rotten_flesh`,
-    `farmersdelight:organic_compost_from_tree_bark` and `immersive_weathering:mulch_block`. These belong to compost too.
+    `farmersdelight:organic_compost_from_tree_bark` and `immersive_weathering:mulch_block`.
   - lines 60-81: compost (`i.compost` = `farmersdelight:organic_compost`) and fertile soil (`i.fertile_soil` =
-    `immersive_weathering:mulch_block`), as `R.shaped` and `R.createMixing`, every one with an `idOverride`
-    (`compost_manual_only`, `compost_mixing`, `fertile_soil_var_manual_only`, ... `fertile_soil_mixing_waste`).
-  - line 83: the note. Line 84: `R.remove({ id: 'immersive_weathering:nulch_block' }, e)`. Line 85:
-    `R.shapeless(Item.of(i.nulch, 6), [3 netherrack, 2 #immersive_weathering:scales, ash, magma cream, nether wart,
-    blaze powder], e, 'nulch_manual_only')`. Line 86: `R.createMixing(... 2 netherrack, 1 scale ...)`, id `nulch_mixing`.
-- Resulting ids: `creativeengineering:shaped/compost_manual_only`, `creativeengineering:createmixing/nulch_mixing`,
-  `creativeengineering:shapeless/nulch_manual_only` and so on (`NCH.shaped` / `shapeless` / `createMixing` build
-  `<modId>:<type>/<idSuffix>`, [neoCraftHelper.js](../../kubejs/startup_scripts/func/neoCraftHelper.js) 698, 722, 1266).
-- Mulch tags `forge:mulch/{brown,bone,waste,green,fungus,fertilizer}` are filled in
-  [tags/wood_tags.js](../../kubejs/server_scripts/tags/wood_tags.js) 12-35 with raw `e.add` (not `global.tags`).
-- No server script file holds compost recipes today. `startup_scripts/compost/` is the composter *table*
-  (`global.compost`), not recipes.
-- Verified against `immersive_weathering-1.19.2-1.2.10-forge.jar`: `data/immersive_weathering/recipes/nulch_block.json`
-  (shapeless: netherrack, magma cream, 2 scales, ash layer block, nether wart -> 3 nulch) and `mulch_block.json` exist.
-  So both removals hit real ids.
+    `immersive_weathering:mulch_block`), `R.shaped` and `R.createMixing` with `idOverride`s (`compost_manual_only`,
+    `compost_bark_manual_only`, `compost_mixing`, `compost_mixing_bark`, `fertile_soil_var_manual_only`, ...
+    `fertile_soil_mixing_waste`).
+  - line 83: the note. 84: `R.remove({ id: 'immersive_weathering:nulch_block' }, e)`. 85: `R.shapeless(Item.of(i.nulch,
+    6), [3 netherrack, 2 i.any_scale, ash, magma cream, nether wart, blaze powder], e, 'nulch_manual_only')`. 86:
+    `R.createMixing(... 2 netherrack, 1 scale ...)`, id `nulch_mixing`.
+- [kubejs/server_scripts/wood/compost.js](../../kubejs/server_scripts/wood/compost.js): one recipe, seed milling (#4).
+- The Fertile Soil ladder (what the review compares against): FD organic compost (pack recipe: dirt + rot / bone /
+  brown mulch, `sawdust.js` 61-65) -> rich soil -> **Fertile Soil**: 3 rich soil + one of each of the six mulches -> 6, or
+  3 rich soil + 3 of one mulch + green, fungus, fertilizer -> 3 (67-81). Mulch tags `forge:mulch/{brown,bone,waste,
+  green,fungus,fertilizer}` in [tags/wood_tags.js](../../kubejs/server_scripts/tags/wood_tags.js) 11-16, already through
+  `global.tags` (the 2026-10-21 optional step is done).
+- The Nether ladder today: Nether's Delight soul compost (its own two recipes, not touched by the pack, verified in
+  `NethersDelight-1.19-3.1.jar`: soul soil + 2 twisting vines + 4 bone meal + 2 hoglin hide, or + 4 warped roots) matures
+  into **rich soul soil** (`nethersdelight:rich_soul_soil`; ND ships no crafting recipe for it). Fertile Soul Soil is
+  made from netherrack, not from rich soul soil, so it skips the ladder.
+- Its jobs: ghost pepper soil (`#vintagedelight:ghost_pepper_soil` = soul soil, rich soul soil, nulch,
+  `kubejs/data/creative_delight/kubejs/vintagedelight/tags.js` 48); tooltip "Grows nether crops faster"
+  (`client_scripts/tooltips.js` 498); name and planting line `client_scripts/namechanges.js` 245-249; compost value 1.0
+  (Creative Delight `kubejs_startup/immersive_weathering/compost_values.js` 95).
+- Recipe ids come out as `creativeengineering:<type>/<idSuffix>` (`NCH.shaped` 798, `shapeless` 822, `createMixing`
+  1665 in [neoCraftHelper.js](../../development/patcherMod/src/main/resources/kubejs_startup/creativeengineering/func/neoCraftHelper.js)).
 
 ### Build
-1. Create `kubejs/server_scripts/wood/compost.js` (next to `sawdust.js`, `bark.js` and `ash.js`, which make its inputs;
-   recipes_wood.md already covers "mulch soils"). Skeleton:
-   ```js
-   // Compost, fertile soil (IW mulch block) and nulch from the mulches, bark and nether scraps.
-   // Composter table: startup_scripts/compost/. Writeups: composting.md, recipes_wood.md 2.3.
-   ServerEvents.recipes(e => {
-   	const R = global.NCH
-   	var i = global.item
-   	R.bulk('remove', [
-   		[{ id: 'farmersdelight:organic_compost_from_rotten_flesh' }, e],
-   		[{ id: 'farmersdelight:organic_compost_from_tree_bark' }, e],
-   		[{ id: 'immersive_weathering:mulch_block' }, e],
-   		[{ id: 'immersive_weathering:nulch_block' }, e],
-   	])
-   	// compost + fertile soil: sawdust.js 60-81 moved verbatim
-   	// nulch: sawdust.js 85-86 moved verbatim
-   	// seed milling: composting #4
-   })
-   ```
-2. Cut `sawdust.js` lines 10-12, 60-81 and 83-86 into it. Keep every `idOverride` exactly, so recipe ids, JEI
-   bookmarks and any advancement or quest that names them stay valid. `sawdust.js` keeps sawdust, ash, mud-to-dirt,
-   creosote and pellets.
-3. Drop the `//****...` note. "Integrate" is already done: the pack's nulch recipes replace IW's.
-4. Optional, same touch: move the `forge:mulch/*` adds in `wood_tags.js` to `global.tags.add(e, 'forge:mulch/brown',
-   [i.sawdust, i.straw])` form (CLAUDE.md convention). Leave the duplicate `mulch_*` dict keys to
-   `tooling/conventions #2`.
-5. Update the docs: [composting.md](../composting.md) F4 (resolved), 0 (compost and fertile soil crafting "in
-   `sawdust.js`"), and 5 (file map "Related recipes"); [recipes_wood.md](../recipes_wood.md) 2.3 and file map, plus F5
-   (the `sawdust.js` comment is gone); [crops.md](../crops.md) about line 761 (links `sawdust.js` for the Fertile Soil
-   recipes).
+1. **Review (owner).** Proposed recipe, mirroring Fertile Soil one rung up the Nether ladder:
+   - shaped `SSS / ROW / GFZ` -> 6 Fertile Soul Soil, `S` = rich soul soil, the six slots from Nether mulch tags
+     (`creativeengineering:nether_mulch/<slot>`, through `global.tags.add` in `wood_tags.js`):
+     brown = `i.any_scale` (IW crimson / warped scales, the stems' bark), bone = `forge:mulch/bone`, waste = rotten
+     flesh / hoglin hide, green = nether wart, warped wart block, twisting / weeping vines, fungus = crimson / warped
+     fungus, roots, fertilizer = ash, blaze powder, magma cream;
+   - the 3-output "3 of one mulch" variants and `createMixing` copies with 2 rich soul soil, as Fertile Soil has.
+   - Drop the netherrack recipe (85-86): netherrack-based soil undercuts rich soul soil.
+2. Create the tags and dict keys: `i.rich_soul_soil = 'nethersdelight:rich_soul_soil'` (only `b.rich_soul_soil`
+   exists, block_dict.js 85), `i.hoglin_hide = 'nethersdelight:hoglin_hide'`, `i.nether_mulch_<slot> =
+   '#creativeengineering:nether_mulch/<slot>'`; `i.twisting_vines` (2835), `i.weeping_vines` (2867),
+   `i.crimson_fungus` (2246), `i.warped_fungus` (2842), `i.crimson_roots` (2248), `i.warped_roots` (2845),
+   `i.nether_wart_block` (2583), `i.warped_wart_block` (2846) exist.
+3. **Move** into `wood/compost.js`: the three removals (10-12) plus 84, the compost and fertile soil block (60-81) with
+   every `idOverride` unchanged, and the new nulch recipes (ids `nulch_manual_only`, `nulch_mixing` kept for the main
+   pair so JEI bookmarks survive; `nulch_<slot>_manual_only` etc. for the variants). Drop the note (83).
+4. Docs: composting.md F4 resolved, 3 and 5 (file map "Related recipes" -> `wood/compost.js`); recipes_wood.md 2.3 and
+   file map, F5; crops.md about line 761 (links `sawdust.js` for the Fertile Soil recipes). Changelog bullet (Fertile
+   Soul Soil recipe changed, old inputs in brackets).
 
 ### Ids and data
-No new ids. All keys exist in [item_dict.js](../../kubejs/startup_scripts/_lib/item_dict.js): `i.compost` (581),
-`i.fertile_soil` / `i.nulch` (641-642), `i.rich_soil`, `i.dirt`, `i.any_bark`, `i.any_scale` (582), `i.ash` (1345,
-`supplementaries:ash`), `i.netherrack` (1325), `i.blaze_powder` (1331), `i.magma_cream`, `i.nether_wart`, `i.mulch_*`.
+Keys exist: `i.compost` (639), `i.fertile_soil` / `i.nulch` (677-678), `i.rich_soil` (675), `i.dirt` (680),
+`i.any_bark` (638), `i.any_scale` (640), `i.mulch_*` (632-637), `i.ash` (1292, `supplementaries:ash`), `i.netherrack`
+(1275), `i.blaze_powder` (1279), `i.magma_cream` / `i.nether_wart` (641-642), `i.soul_soil` (1289), `i.bonemeal`
+(1291). New: `i.rich_soul_soil`, `i.hoglin_hide`, the `nether_mulch` tag keys. ND ids verified in the jar.
 
 ### Decisions
-- **Folder:** `wood/compost.js` (recommended) or `other/compost.js`. There is no `farming/` server folder. `wood/` keeps
-  the soils next to their inputs and matches recipes_wood.md. Recipe order across files doesn't matter.
+- **Inputs:** recommend the rich-soul-soil + Nether mulch recipe above (owner's "a Nether mulch?"). Simpler fallback:
+  keep netherrack, swap it for rich soul soil 1 : 1 and keep the five other inputs.
+- **Soul compost:** leave ND's two recipes as they are (recommended; ND's own ladder, and #5 only covers FD compost).
+- **Folder:** `wood/compost.js` (exists).
 
 ### Gotchas
-- `R.bulk('remove', ...)` in two files is fine. Don't leave a removed id in both files, or the log will show duplicates.
-- The startup engine needs `/kubejs reload startup_scripts`, but this row is server only: `/reload` is enough.
+- Don't leave a removed id in both files (duplicate removal warnings).
+- Server only: `/reload` is enough; the new dict keys are startup (restart) unless added before the session.
+- Fertile Soul Soil's compost value (1.0) and the ghost pepper tag need no change.
 
 ### Tests
-- **CM-09 Recipes moved:** after `/reload`, JEI shows compost (3x3 and mixer), fertile soil x6 / x3 (all 12 variants) and
-  nulch x6 (shapeless and mixer) with ids unchanged (`creativeengineering:shaped/compost_manual_only`, ...); IW's own
-  nulch and mulch recipes and FD's two compost recipes are still gone; no `[NCH]` warnings in the log.
+- CP-new1 Recipes moved: after `/reload`, JEI shows compost (3x3 and mixer), fertile soil x6 / x3 (all 12 variants) with
+  ids unchanged; IW's mulch / nulch recipes and FD's two compost recipes stay gone; no `[NCH]` warning.
+- CP-new2 Fertile Soul Soil: JEI on it shows only the rich-soul-soil recipes (crafting and mixer); a ghost pepper seed
+  plants on it.
 
 ---
 
-## composting #4: Seed milling to bone meal
-Status Testing (built 2026-10-30, `wood/compost.js`, SQ-CP-01 queued) / Work KubeJS / TODO `farming/composting #4` (scratchpad 2026-10-21; [composting.md](../composting.md) 4)
+## composting #5: Expand organic compost
+Status Planned / Work KubeJS / TODO `farming/composting #5` (scratchpad 2026-10-31; [composting.md](../composting.md))
 
 ### Goal
-A Create millstone (and so crushing wheels) turns seeds into bone meal at a small chance. That gives seeds an automated
-sink that's worse than the composter. The scratchpad sets the rate: 32 seeds to 1 bone meal.
+The pack's organic compost recipes take more rot items (rotten tomato, rotten cherry, organic mash) and more dirt
+blocks (any dirt, podzol, moss block) in the dirt slot.
 
 ### Now
-- No seed-input milling or crushing recipe in the pack except corn kernels:
-  [cooking.js](../../kubejs/server_scripts/cooking/cooking.js) 112 (`createCrushing`, `#forge:seeds/corn` -> 0.333
-  cornmeal, id `corn_kernels_cornmeal`) and 119 (`createMilling`, same id). Mods: of the cached jars (Create, Farmer's
-  Delight, Corn Delight, Delightful, Fruits Delight, Rustic Delight and others in `scratchpad/jars`), none has a
-  milling, crushing or IE-crusher recipe whose *input* is a seed. Create's wheat, grass and flax milling only *output*
-  seeds. Other mods weren't checked.
-- Composter rate for comparison: seeds compost at `low` = 0.3 (compost_rules.js 26-36; values rows 0.3 for vanilla
-  seeds, but **1.0 for Botania's seeds**, compost_values.js 20-35). Vanilla's composter always takes the first item into
-  an empty composter, then rolls the chance for the other 6 layers, so 1 + 6 / 0.3 = **about 21 seeds per bone meal**.
-  32 per bone meal on the mill is worse, as asked.
-- Tags, verified against the jars: `#forge:seeds` holds `corn_delight:corn_seeds` (the pack's corn kernels, Corn Delight
-  `data/forge/tags/items/seeds.json`) and, through `#forge:seeds/rice`, `farmersdelight:rice` (FD
-  `data/forge/tags/items/seeds.json` + `seeds/rice.json`). Rice is a cooking ingredient and kernels already mill into
-  cornmeal, so both must be left out.
-- Create, verified (create-1.19.2-0.5.1.i, `CrushingWheelControllerBlockEntity.findRecipe`): crushing wheels try
-  CRUSHING first and fall back to MILLING. A milling recipe therefore also runs on crushing wheels, except for an item
-  that has a crushing recipe (corn kernels).
-- IE crusher: skip. It can't roll its main output (comment at cooking.js 120-121), so it can't do a 1/32 chance per seed.
+- The four compost recipes, `sawdust.js` 61-65 (moving to `compost.js` with #2): shaped `DWO / WOR / ORR` (and the bark
+  version `DWO / WOB / OBB`), `D` = `i.dirt`, `W` = `i.mulch_waste` (the rot slot), `O` = `i.mulch_bone`, `R` =
+  `i.mulch_brown` or `i.any_bark`; `createMixing` copies take 1 dirt + 2 each.
+- `forge:mulch/waste` = rotten flesh, spider eye, poisonous potato (`wood_tags.js` 13). It is also the waste slot of
+  four Fertile Soil recipes (67-81).
+- The three new rot items, all with dict keys: `i.rotten_tomato` = `farmersdelight:rotten_tomato` (11652),
+  `i.rotten_cherry` = `vinery:rotten_cherry` (11276; Vinery port nested in `creative_brewing-1.0.0.jar`, registered in
+  `members/vinery/.../ObjectRegistry.java` 107), `i.organic_mash` = `vintagedelight:organic_mash` (14468; Vintage port,
+  a byproduct of jam -> vinegar fermenting).
+- Vintage Delight ships its own compost recipes that the pack does not remove (verified in
+  `backportedVintage-0.1.6-ce-19.2-09.jar`): `vintagedelight:organic_compost_from_rotten_flesh_mash` and
+  `organic_compost_from_tree_bark_mash` (dirt + 2 organic mash + straw + bone meal ... -> organic compost), the VD twins
+  of the two FD recipes `sawdust.js` 10-11 removes. `organic_compost_tree_fertilizer` (flowers + mash -> Create tree
+  fertilizer) is a different output.
+- Dirt: `#minecraft:dirt` (dump `kubejs/exported/tags/item_tags.json`) = dirt, coarse dirt, grass block, moss block,
+  mud, muddy mangrove roots, mycelium, podzol, rooted dirt. Keys: `i.dirt` (680), `i.coarse_dirt` (2219),
+  `i.rooted_dirt` (2740), `i.podzol` (2645), `i.moss` = moss block (661).
 
 ### Build
-1. Dict keys ([item_dict.js](../../kubejs/startup_scripts/_lib/item_dict.js), "Compost rule tags" block at ~1916, `t_`
-   prefix for tags):
-   `i.t_millable_seeds = '#creativeengineering:millable_seeds'; // seeds the millstone turns into bone meal (composting #4)`
-   and `i.t_seeds_rice = '#forge:seeds/rice';`. `i.t_seeds`, `i.t_seeds_c`, `i.t_seeds_corn` (1889) and `i.bone_meal`
-   (1344) exist.
-2. Tag (server, `ServerEvents.tags('item')`, in [tags/wood_tags.js](../../kubejs/server_scripts/tags/wood_tags.js)
-   next to the mulch tags, through `global.tags`):
-   ```js
-   global.tags.addMatching(e, 'creativeengineering:millable_seeds', [i.t_seeds, i.t_seeds_c], {
-   	except: [i.t_seeds_corn, i.t_seeds_rice],   // kernels mill into cornmeal; rice is food
-   })
-   ```
-   `addMatching` with `except` expands the `#` entries to their members at that point (tag_helper.js). That's fine here:
-   mod seed tags come from datapacks, which load before KubeJS's tag event. If a later pack script adds to
-   `#forge:seeds`, it won't reach the copy. Note that in a comment.
-3. Recipe in `wood/compost.js` (from #2):
-   ```js
-   // Seeds -> bone meal: 1 in 32 (the composter averages ~21 seeds per bone meal). composting #4
-   R.createMilling(Item.of(i.bone_meal).withChance(0.03125), i.t_millable_seeds, e, 'seeds_bone_meal')
-   ```
-   This gives id `creativeengineering:createmilling/seeds_bone_meal`. Create milling JSON: `{"type":"create:milling",
-   "ingredients":[{"tag":"creativeengineering:millable_seeds"}],"results":[{"item":"minecraft:bone_meal","chance":0.03125}]}`.
-   An all-chance result list is allowed: a failed roll gives nothing and the seed is gone. Milling time defaults
-   (KubeJS Create sets it from the recipe; add `.processingTime(n)` only if the default reads wrong in JEI).
-4. Add a line under composting.md 4 ("Planned" bullet -> built) and a recipe row in 2 or 3.
+1. Rot slot: add the three to `forge:mulch/waste` in `wood_tags.js` 13 (`global.tags.add`, dict keys). That widens the
+   Fertile Soil waste slot too, which reads the same ("rot"); recommended over a second tag.
+2. Dirt slot: new item tag `creativeengineering:compost_dirt` = `i.dirt`, `i.coarse_dirt`, `i.rooted_dirt`,
+   `i.podzol`, `i.moss` (`global.tags.add` in `wood_tags.js`), dict key `i.t_compost_dirt`; swap `D: i.dirt` and the
+   mixer's `Item.of(i.dirt, 1)` for it in the 4 compost recipes (ids unchanged).
+3. Remove VD's two compost twins in the same `R.bulk('remove', ...)`
+   (`vintagedelight:organic_compost_from_rotten_flesh_mash`, `..._from_tree_bark_mash`): organic mash now goes through
+   the pack recipe.
+4. composting.md 3 ("What the pack changes") gets a line; changelog bullet under a compost family (more rot items and
+   dirt blocks in Organic Compost; Vintage Delight's own compost recipes removed).
 
 ### Ids and data
-- New tag `creativeengineering:millable_seeds`. New dict keys `t_millable_seeds`, `t_seeds_rice`.
-- Recipe `creativeengineering:createmilling/seeds_bone_meal`. Mod: Create (KubeJS Create schema).
+New tag `creativeengineering:compost_dirt` (item), key `i.t_compost_dirt`. Changed tag `forge:mulch/waste`. Removed
+`vintagedelight:organic_compost_from_rotten_flesh_mash`, `vintagedelight:organic_compost_from_tree_bark_mash` (verified
+in the jar).
 
 ### Decisions
-- **Edible seeds:** some mods tag edible seeds as `#forge:seeds`. Recommend: after the first `/dumptags item`, read
-  `kubejs/exported/tags` for `creativeengineering:millable_seeds` and add any food item to `except` by id. Don't add
-  code that checks edibility.
-- **Botania seeds** (compost at 1.0): leave them in if they're tagged. The mill is still worse than the composter.
-- **Also on IE crusher:** no (see Now).
+- Grass block, mycelium, mud in the dirt slot? **Recommend no** (the row names dirt, podzol and moss; grass / mycelium
+  need silk touch and mud is a different material). Using all of `#minecraft:dirt` is the one-line alternative.
+- Remove VD's two compost recipes? **Recommend yes** (same reason the FD pair went).
+- Moss block is also in `forge:mulch/green`: fine, it can fill either slot.
 
 ### Gotchas
-- Two milling recipes on one item: Create picks one of them in no fixed order. Before shipping, check in JEI (uses of
-  wheat seeds, and of a few modded seeds) that no other milling recipe takes a member of the tag.
-- The mill takes seeds one at a time. Crushing wheels roll the chance once per item of the stack.
+- A shaped recipe with a tag in `D` and the mixer's `Item.of(tag, 1)`: pass the tag key as the ingredient
+  (`global.NCH` validates `#` keys); check the `[NCH]` log line after `/reload`.
+- Spoiled food items from other mods (`*_rotten`, spoiled jars) are not covered; add them by key when found.
 
 ### Tests
-- **CM-10 Seed milling:** a millstone fed 320 wheat seeds -> about 10 bone meal (5 to 16 is normal); corn kernels still
-  give cornmeal, never bone meal; rice isn't accepted (it isn't in the tag). JEI shows the recipe at 3.13 %.
-- **CM-11 Crushing wheels:** a stack of beetroot seeds dropped into crushing wheels -> bone meal at the same rate.
+- CP-new3 Rot slot: JEI on rotten tomato, rotten cherry and organic mash each list the organic compost recipes (and the
+  Fertile Soil waste ones); VD's two compost recipes are gone.
+- CP-new4 Dirt slot: craft organic compost with podzol, coarse dirt, rooted dirt and a moss block in the dirt slot;
+  grass block is refused.
 
 ---
 
 ## composting #3: Composters in more wood types
-Status Planned / Work KubeJS (wrong, see Gotchas) / TODO `farming/composting #3` (scratchpad 2026-10-19: "give
-composters more wood types", under "other, migrate elsewhere")
+Status Planned / Work patcherMod / resource pack / KubeJS / TODO `farming/composting #3` (scratchpad 2026-10-19; refs
+re-checked 2026-10-31, still no composter variant in any jar in `mods/`)
 
 ### Goal
 A composter per wood species. Crafting it from that wood's slabs gives that wood's look. It works exactly like the
@@ -202,16 +195,16 @@ vanilla composter: same chance table, hoppers, comparator, bone meal output.
   and only the recipes are KubeJS.
 - patcherMod pattern to copy: [oven/OvenRegistry.java](../../development/patcherMod/src/main/java/com/SaintAlfonzo/creativeengineering/oven/OvenRegistry.java)
   (own `DeferredRegister<Block>` / `<Item>`, `BlockItem` in `CreativeModeTab.TAB_DECORATIONS`, `register(modEventBus)`
-  called from `CreativeEngineering.java` near line 95). Assets in
+  called from `CreativeEngineering.java` line 99). Assets in
   `development/patcherMod/src/main/resources/assets/creativeengineering/{blockstates,models,textures,lang}`, loot in
   `data/creativeengineering/loot_tables/blocks/` (the oven has one).
-- Species: the 13 in [wood_types.js](../../kubejs/server_scripts/wood/wood_types.js) 9-23 (`species` table, slab
-  keys `i.slab_<name>` at item_dict.js 199-367): oak, spruce, birch, dark_oak, jungle, acacia, mangrove, crimson, warped,
+- Species: the 13 in [wood_types.js](../../kubejs/server_scripts/wood/wood_types.js) 8-22 (`species` table, slab
+  keys `i.slab_<name>` at item_dict.js 254-422): oak, spruce, birch, dark_oak, jungle, acacia, mangrove, crimson, warped,
   twisted (`architects_palette:twisted_slab`), ancient / blossom / azalea (`quark:<name>_planks_slab`).
 - Vanilla composter loot (verified, `loot_tables/blocks/composter.json`): drops itself (explosion decay) and, when
   `level` = 8, one bone meal.
 - Other places that name the composter: [item_physics_tags.js](../../kubejs/server_scripts/tags/item_physics_tags.js)
-  151 (`'composter'` in the floats list); `config/waila/waila_plugins.json5` 231 (`level.composter`: WTHIT's
+  126 (`'composter'` in the floats list opened at 102); `config/waila/waila_plugins.json5` 231 (`level.composter`: WTHIT's
   composter level line, probably by `ComposterBlock` class, unverified).
 
 ### Build
@@ -248,12 +241,12 @@ vanilla composter: same chance table, hoppers, comparator, bone meal output.
    item names swapped (bone meal pool condition `"block": "creativeengineering:<wood>_composter"`, `level` 8).
 4. **Dicts:** item_dict.js next to each species block (style `i.<form>_<species>`, e.g. after `i.slab_spruce`):
    `i.composter_spruce = 'creativeengineering:spruce_composter';` ... and `i.composter_oak = i.composter` (the
-   `minecraft:composter` key at 2145). [block_dict.js](../../kubejs/startup_scripts/_lib/block_dict.js): `b.composter_spruce`
+   `minecraft:composter` key at 2234). [block_dict.js](../../kubejs/startup_scripts/_lib/block_dict.js): `b.composter_spruce`
    ... (for the tags in step 5). New tag keys: `i.t_composters = '#creativeengineering:composters'`,
    `i.t_composter_slabs = '#creativeengineering:composter_slabs'`.
 5. **Tags** (`global.tags`): block tags `minecraft:mineable/axe` (`global.tags.mineable(e, 'axe', null, [...])`) and
    `creativeengineering:composters` (block + item, holding `minecraft:composter` and the 12). Item physics: add
-   `'#creativeengineering:composters'` to the `physicsFromTag(e, 'floats', ...)` list in item_physics_tags.js 126
+   `'#creativeengineering:composters'` to the `physicsFromTag(e, 'floats', ...)` list in item_physics_tags.js 102
    (crimson / warped: check how `#minecraft:non_flammable_wood` is treated there and match it).
 6. **Recipes:** add a `composter` field to each row of the `species` table in wood_types.js (`composter:
    i.composter_spruce`, oak `i.composter`). Then:
@@ -293,7 +286,6 @@ vanilla composter: same chance table, hoppers, comparator, bone meal output.
 - **Textures:** generated (recommended, repeatable for new woods) or hand-drawn.
 
 ### Gotchas
-- TODO says Work = KubeJS / "Recipes per wood". It's patcherMod + resources + KubeJS (proposed TODO correction).
 - The pack's composter table (`ComposterBlock.COMPOSTABLES`) is static and shared, so variants take exactly the same
   items. Nothing to change in `global.compost`.
 - Keep the vanilla recipe removed. Otherwise a grid of spruce slabs matches both `minecraft:composter` and
@@ -303,13 +295,13 @@ vanilla composter: same chance table, hoppers, comparator, bone meal output.
 - Structures that place `minecraft:composter` are unaffected.
 
 ### Tests
-- **CM-12 Wood composters:** craft a spruce composter from 7 spruce slabs (JEI shows the 13 wood recipes and the
+- **CP-new5 Wood composters:** craft a spruce composter from 7 spruce slabs (JEI shows the 13 wood recipes and the
   other-slab one); fill it with seeds by hand and from a hopper; the comparator reads the level; at full it gives bone
   meal and a hopper below pulls it; breaking it full drops the composter and a bone meal.
-- **CM-13 Fuel and fire:** a birch composter burns in a furnace (300 ticks); fire spreads to it; a crimson composter
+- **CP-new6 Fuel and fire:** a birch composter burns in a furnace (300 ticks); fire spreads to it; a crimson composter
   doesn't burn.
-- **CM-14 Other slabs:** 7 bamboo slabs -> plain `minecraft:composter`.
-- **CM-15 Farmer (decision):** an unemployed villager next to a spruce composter doesn't become a farmer (or does, if
+- **CP-new7 Other slabs:** 7 bamboo slabs -> plain `minecraft:composter`.
+- **CP-new8 Farmer (decision):** an unemployed villager next to a spruce composter doesn't become a farmer (or does, if
   the job-site mixin is built).
 
 ---
@@ -318,12 +310,11 @@ vanilla composter: same chance table, hoppers, comparator, bone meal output.
 
 | Row | Change | Status | Notes |
 |---|---|---|---|
-| composting #1 | Composting tests and rule checks | Complete | Marked Complete, but [composting.md](../composting.md) 7 has CM-01 to CM-08 all unchecked and the writeup and README say "pending"; looks like it should be Testing (or the boxes ticked). The "Brewin' 4.5.0 compost values" part is done ([alcohol.md](../alcohol.md) 10.16: the port's four chances are rows in `compost_values.js`, now 688 values), built 2026-10-19 but not in the deployed 1.0.9 (the deploy log's kubejs list doesn't have `compost_values.js`; committed in c82dd31, 2026-10-20) |
+| composting #4 | Seed milling to bone meal | Testing | Built 2026-10-30, shipped in 1.1.05 (changelog `1.1.05.md` 140): `wood/compost.js` mills `#creativeengineering:millable_seeds` into bone meal at 15 % (millstone and crushing wheels), corn kernels and rice left out; [composting.md](../composting.md) 3. Server half SQ-CP-01 PASSED r1031 (2026-10-31); open tiers P T (millstone in play). |
 
 ## Writeup corrections made
 
-- [composting.md](../composting.md) 0: values count 684 -> 688, with the 4 Brewin' port rows marked built, not deployed;
-  "Pending: nothing built and unshipped" -> names those 4 rows.
-- [composting.md](../composting.md) 2.3: "684 items" -> "688 items" (the header of `compost_values.js` says 688).
-- [composting.md](../composting.md) 8: added the 2026-10-19 history line for the Brewin' rows.
-- [README.md](../README.md) composting row: "684 per-item values" -> "688 per-item values".
+- 2026-10-21: [composting.md](../composting.md) 0 and 2.3 value counts 684 -> 688 (Brewin' port rows), 8 history line,
+  [README.md](../README.md) composting row. Not edited by the 2026-10-31 sweep (reported instead): composting.md 0 and 3
+  still say seed milling is unreleased, though it shipped in 1.1.05; 5 still links `startup_scripts/func/compost.js`,
+  which now ships in patcherMod's jar (`kubejs_startup/creativeengineering/func/compost.js`).

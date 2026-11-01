@@ -66,7 +66,6 @@ public final class CEConfig {
     public static final BottledAir BOTTLED_AIR;
     public static final Canning CANNING;
     public static final Cooking COOKING;
-    public static final Kitchen KITCHEN;
     public static final Coaster COASTER;
     public static final Wthit WTHIT;
     public static final Alcohol ALCOHOL;
@@ -120,7 +119,6 @@ public final class CEConfig {
         BOTTLED_AIR = new BottledAir(builder);
         CANNING = new Canning(builder);
         COOKING = new Cooking(builder);
-        KITCHEN = new Kitchen(builder);
         COASTER = new Coaster(builder);
         WTHIT = new Wthit(builder);
         ALCOHOL = new Alcohol(builder);
@@ -936,9 +934,9 @@ public final class CEConfig {
             ).push("dandelion_maturing");
 
             richSoilTicks = b.comment("Rich Soil and Rich Soil Farmland (Farmer's Delight).")
-                    .defineInRange("richSoilTicks", 10, 0, 100000);
+                    .defineInRange("richSoilTicks", 20, 0, 100000);
             fertileSoilTicks = b.comment("Fertile Soil (Immersive Weathering's mulch block).")
-                    .defineInRange("fertileSoilTicks", 20, 0, 100000);
+                    .defineInRange("fertileSoilTicks", 10, 0, 100000);
 
             b.pop(); // dandelion_maturing
         }
@@ -1282,44 +1280,7 @@ public final class CEConfig {
         }
     }
 
-    /**
-     * Cooking for Blockheads kitchen parts with other mods' items: {@code compat.CounterToppers} and
-     * {@code mixin/BlockStateCounterTopperMixin} (FD cutting board, Display Delight plates, Brewin' coaster on a
-     * counter), {@code mixin/CfbOvenFuelMixin}. TODO cooking/kitchen #8, #20.
-     */
-    public static final class Kitchen {
-        public final ForgeConfigSpec.DoubleValue cuttingBoardOffsetX;
-        public final ForgeConfigSpec.DoubleValue cuttingBoardOffsetY;
-        public final ForgeConfigSpec.DoubleValue cuttingBoardOffsetZ;
-        public final ForgeConfigSpec.DoubleValue plateOffsetX;
-        public final ForgeConfigSpec.DoubleValue plateOffsetY;
-        public final ForgeConfigSpec.DoubleValue plateOffsetZ;
-
-        private Kitchen(ForgeConfigSpec.Builder b) {
-            b.comment(
-                    "Small blocks on a Cooking for Blockheads counter or corner (#creativeengineering:counter_supports):",
-                    "Farmer's Delight's cutting board, Display Delight's plates and plated foods, Brewin' and Chewin's",
-                    "coaster (#creativeengineering:counter_toppers). The counter's worktop is 1 px lower than a full",
-                    "block, so they and what lies on them are drawn shifted by these offsets, in pixels (1/16 block):",
-                    "cuttingBoardOffset* for the board, plateOffset* for the plates and the coaster. X and Z are as",
-                    "seen on a counter facing north (door to the north, back edge to the south: +X = east, +Z = toward",
-                    "the back) and turn with the counter. Visual only; F3+A redraws."
-            ).push("kitchen");
-
-            cuttingBoardOffsetX = b.comment("Sideways shift.").defineInRange("cuttingBoardOffsetX", 0.0, -8.0, 8.0);
-            cuttingBoardOffsetY = b.comment("Height shift; -1 puts the board on the worktop.")
-                    .defineInRange("cuttingBoardOffsetY", -1.0, -8.0, 8.0);
-            cuttingBoardOffsetZ = b.comment("Shift toward the counter's back (negative = toward the door).")
-                    .defineInRange("cuttingBoardOffsetZ", 0.0, -8.0, 8.0);
-            plateOffsetX = b.comment("Plates and coasters: sideways shift.").defineInRange("plateOffsetX", 0.0, -8.0, 8.0);
-            plateOffsetY = b.comment("Plates and coasters: height shift; -1 puts them on the worktop.")
-                    .defineInRange("plateOffsetY", -1.0, -8.0, 8.0);
-            plateOffsetZ = b.comment("Plates and coasters: shift toward the counter's back (negative = toward the door).")
-                    .defineInRange("plateOffsetZ", 0.0, -8.0, 8.0);
-
-            b.pop(); // kitchen
-        }
-    }
+    // [kitchen] (counter-top offsets) moved to Creative Delight's blockheadsAdditions config (2026-10-31).
 
     /**
      * Brewin' and Chewin' coaster (the port) extras: {@code compat.WthitCoaster}. Which items go on a coaster is the
@@ -1355,6 +1316,7 @@ public final class CEConfig {
         public final ForgeConfigSpec.ConfigValue<List<? extends String>> iconExclude;
         public final ForgeConfigSpec.ConfigValue<List<? extends String>> iconItems;
         public final ForgeConfigSpec.BooleanValue holderContents;
+        public final ForgeConfigSpec.BooleanValue potContents;
         public final ForgeConfigSpec.BooleanValue holderPotionEffects;
         public final ForgeConfigSpec.BooleanValue holderSingleName;
         public final ForgeConfigSpec.BooleanValue hiveBees;
@@ -1369,6 +1331,7 @@ public final class CEConfig {
         public final ForgeConfigSpec.BooleanValue remainderBuffer;
         public final ForgeConfigSpec.BooleanValue sheared;
         public final ForgeConfigSpec.BooleanValue silkTouch;
+        public final ForgeConfigSpec.BooleanValue silkTouchShowFalse;
         public final ForgeConfigSpec.BooleanValue cropSeasons;
         public final ForgeConfigSpec.BooleanValue cropOutOfSeason;
         public final ForgeConfigSpec.BooleanValue operatorBlocks;
@@ -1407,6 +1370,12 @@ public final class CEConfig {
                     "Supplementaries jars, goblets and cages: 'Contents: Honey (6 / 12)' (fluid in bottles, with the",
                     "jar's capacity; a goblet just 'Water'), 'Contents: Cookie (5 / 12)', or the mob inside."
             ).define("holderContents", true);
+
+            potContents = b.comment(
+                    "Flower pots, flower boxes and planter boxes: 'Contains: Poppy' (every plant inside, a box's plants",
+                    "in slot order, '2 Poppy' for a double); a Twigs silt pot 'Rooted Dirt: Yes / No'. A Beautify hanging",
+                    "pot standing on the ground is named 'Rich Pot'."
+            ).define("potContents", true);
 
             holderPotionEffects = b.comment(
                     "Under a potion in a jar or goblet, one line per effect with its strength and length, as the",
@@ -1480,10 +1449,13 @@ public final class CEConfig {
             ).define("sheared", true);
 
             silkTouch = b.comment(
-                    "Blocks that only drop themselves with Silk Touch (block tag creativeengineering:wthit/needs_silk_touch,",
-                    "from tools/gen_silk_touch_blocks.py): a Silk Touch book and 'Needs Silk Touch'. Hidden while the",
-                    "main-hand tool has Silk Touch."
+                    "'Silk Touch Required' line: True (green) when nothing drops without Silk Touch, Drops Differently",
+                    "(yellow) when something else drops (block tags creativeengineering:wthit/needs_silk_touch and",
+                    "wthit/silk_touch_differs, from tools/gen_silk_touch_blocks.py). Hidden while the main-hand tool has Silk Touch."
             ).define("silkTouch", true);
+            silkTouchShowFalse = b.comment(
+                    "Also show 'Silk Touch Required: False' (red) on every other block. Off by default."
+            ).define("silkTouchShowFalse", false);
 
             cropSeasons = b.comment(
                     "Every crop with a crop season type: its seasons as on the planting item ('Fertile: Spring',",

@@ -108,6 +108,9 @@ b.beetroots = 'minecraft:beetroots';
 b.cabbages = 'farmersdelight:cabbages';
 b.onions = 'farmersdelight:onions';
 b.tomatoes = 'farmersdelight:tomatoes';
+// Placed treated sticks (CD treatedstick/, feature_writeup/treated_sticks.md); unresolved until CD is installed
+b.treated_stick = 'creative_delight:treated_stick';
+b.treated_stick_tomatoes = 'creative_delight:treated_stick_tomatoes'; // FD tomato vine on a treated stick
 b.rice_panicles = 'farmersdelight:rice_panicles';
 b.bell_peppers = 'rusticdelight:bell_peppers';
 b.coffee_crop = 'rusticdelight:coffee';

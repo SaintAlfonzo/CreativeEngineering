@@ -70,7 +70,9 @@
   "creativeengineering.wthit.sheared": "Sheared, prevents spreading and converting to dirt",
   "creativeengineering.wthit.sheared_vine": "Sheared, stops growing",
   "creativeengineering.wthit.not_growing": "Stopped growing",
-  "creativeengineering.wthit.silk_touch": "Needs Silk Touch",
+  "creativeengineering.wthit.silk_touch.true": "Silk Touch Required: True",
+  "creativeengineering.wthit.silk_touch.differs": "Silk Touch Required: Drops Differently",
+  "creativeengineering.wthit.silk_touch.false": "Silk Touch Required: False",
   "creativeengineering.wthit.crop_season_here.fertile": "Fertile here: grows faster",
   "creativeengineering.wthit.crop_season_here.off": "Offseason here: grows slower",
   "creativeengineering.wthit.crop_season_here.greenhouse_off": "Greenhouse: preventing offseason debuff",
@@ -170,7 +172,7 @@
   "config.waila.plugin_creativeengineering.sheetmetal_tank": "Sheetmetal Tank Contents",
   "config.waila.plugin_creativeengineering.kitchen_station": "ME Kitchen Station",
   "config.waila.plugin_creativeengineering.sheared": "Sheared Grass and Vines",
-  "config.waila.plugin_creativeengineering.silk_touch": "Silk Touch Needed",
+  "config.waila.plugin_creativeengineering.silk_touch": "Silk Touch Required",
   "config.waila.plugin_creativeengineering.crop_seasons": "Crop Seasons",
   "config.waila.plugin_creativeengineering.operator_blocks": "Barriers for Operators",
   "creativeengineering.changelog.button": "What's New",
@@ -208,5 +210,11 @@
   "effect.creativeengineering.part.wither_immunity": "Wither Immunity",
   "effect.creativeengineering.part.mid_air_jump": "One Mid-Air Jump",
   "effect.creativeengineering.part.screen_flash": "Screen Flash",
-  "effect.creativeengineering.part.elytra_lift": "Elytra Lift"
+  "effect.creativeengineering.part.elytra_lift": "Elytra Lift",
+  "generator.creativeengineering.flower_test": "Flower Test",
+  "creativeengineering.wthit.pot_contains": "Contains",
+  "block.creativeengineering.rich_pot": "Rich Pot",
+  "creativeengineering.wthit.rooted_dirt": "Rooted Dirt",
+  "creativeengineering.wthit.yes": "Yes",
+  "creativeengineering.wthit.no": "No"
 }

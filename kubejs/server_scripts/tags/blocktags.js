@@ -36,11 +36,7 @@ ServerEvents.tags('block', e => {
 	// Bakeware is hammered on the cutting board (NCH.hammering); without this the IE hammer rotates the board
 	// instead of cutting (patcherMod IECompat.registerHammerNoRotate).
 	t.add(e, b.t_hammer_no_rotate, b.cutting_board)
-	// Cooking for Blockheads worktops are 15 px tall with no full top face, so FD's cutting board, Display Delight's
-	// plates and the coaster found no support on them. Toppers on a support stay and are drawn on the worktop
-	// (patcherMod CounterToppers, BlockStateCounterTopperMixin, TODO cooking/kitchen #8, #20).
-	t.add(e, b.t_counter_supports, [b.cfb_counter, b.cfb_corner])
-	t.addMatching(e, b.t_counter_toppers, [b.cutting_board, b.dd_food_plate, b.dd_small_food_plate, b.dd_plated_foods, b.coaster])
+	// Counter supports / toppers (Cooking for Blockheads): Creative Delight cookingforblockheads/kitchen.js (2026-10-31).
 	// Villager ladders (patcherMod McaVillagerPathLaddersMixin, feature_writeup/mob_block_tweaks.md 2.8): every block named
 	// *ladder*; the mixin also requires minecraft:climbable, so a non-climbable match does nothing. Vines, ropes, chains,
 	// scaffolding and grab rails stay out on purpose.

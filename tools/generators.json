@@ -36,7 +36,7 @@
     "    gen_dd_dishes.py (patcherMod), gen_moobloom_variants.py (More Mooblooms), gen_compost_values.py (Creative",
     "    Delight's startup tree; also needs the --merge / --add-new choice)",
     "  hand workflows run with --check first: gen_can_types.py (rewrites item_dict.js and the can tables),",
-    "    gen_cfb_fridge_models.py (only when Cooking for Blockheads updates)",
+    "    gen_cfb_racks.py (Cooking for Blockheads wood racks and fridge fill, Creative Delight's blockheadsAdditions; jar rebuild)",
     "  checks that print and write nothing: effect_audit, shield_check, check_moobloom_data, check_worldgen_json,",
     "    crop_growth_coverage, wthit_icon_audit, structure_biome_coverage, leaf_path_scan, changelog_lint",
     "  libraries and tests: pack_paths (shared paths, item_dict parser, lenient json, jar locator), lang_index, gen_out,",

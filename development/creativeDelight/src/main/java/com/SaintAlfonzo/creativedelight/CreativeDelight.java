@@ -2,6 +2,7 @@ package com.SaintAlfonzo.creativedelight;
 
 import com.mojang.logging.LogUtils;
 import com.SaintAlfonzo.creativedelight.farm.VillageFarmCrops;
+import com.SaintAlfonzo.creativedelight.treatedstick.TreatedSticks;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.fml.ModList;
 import net.minecraftforge.fml.javafmlmod.FMLJavaModLoadingContext;
@@ -18,7 +19,7 @@ import java.util.List;
 /**
  * Creative Delight (feature_writeup/creative_delight.md): the Delight add-ons the pack owns, in one jar. Each member is
  * its own mod, nested under META-INF/jarjar/ with its own mod id and namespace; this mod id ({@code creative_delight})
- * holds no registry content. What CD adds is KubeJS scripts (startup scripts in {@code kubejs_startup/}, server and
+ * registers only the placed treated-stick blocks ({@link TreatedSticks}). What CD adds is KubeJS scripts (startup scripts in {@code kubejs_startup/}, server and
  * client scripts under {@code data/} and {@code assets/creative_delight/kubejs/}) that call the pack's helpers, and
  * {@link CDConfig}.
  */
@@ -32,6 +33,7 @@ public class CreativeDelight {
 		ModLoadingContext.get().registerConfig(ModConfig.Type.COMMON, CDConfig.SPEC, "creative_delight-common.toml");
 		VillageFarmCrops.PROCESSORS.register(FMLJavaModLoadingContext.get().getModEventBus());
 		MinecraftForge.EVENT_BUS.addListener(VillageFarmCrops::onServerAboutToStart);
+		TreatedSticks.register(FMLJavaModLoadingContext.get().getModEventBus());
 
 		List<String> members = CDConfig.MEMBERS;
 		List<String> missing = members.stream().filter(id -> !ModList.get().isLoaded(id)).toList();

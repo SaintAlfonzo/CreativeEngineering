@@ -30,5 +30,6 @@
   "creativeengineering:sheared": true,
   "creativeengineering:silk_touch": true,
   "creativeengineering:crop_seasons": true,
-  "creativeengineering:operator_blocks": true
+  "creativeengineering:operator_blocks": true,
+  "creativeengineering:pot_contents": true
 }

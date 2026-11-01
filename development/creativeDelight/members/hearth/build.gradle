@@ -1,0 +1,15 @@
+// backportedHearth: Hearth and Harvest 1.4.1 (NeoForge 1.21.1, MIT) ported to Forge 1.19.2 piece by piece (mod id
+// hearthandharvest), nested in Creative Delight. First piece: the raspberry bush (hearth_and_harvest.md 4.1).
+// Shared Forge setup comes from build-logic/src/main/groovy/ce.forge-mod.gradle.
+// Build from the instance root (`./gradlew :backportedHearth:build`); it ships through `:creativeDelight:installToMods`.
+plugins {
+    id 'ce.forge-mod'
+}
+
+dependencies {
+    // Farmer's Delight: the creative tab (ModItems.basicItem()), as the other Creative Delight members.
+    // flatDir notation: 'local:<file name without -version>:<version>'
+    compileOnly fg.deobf('local:FarmersDelight-1.19.2:1.2.4')
+    // Optional: the watering can info pages (compat/HHJeiPlugin). The plugin class is only loaded by JEI.
+    compileOnly fg.deobf('local:jei-1.19.2-forge:11.8.1.1034')
+}

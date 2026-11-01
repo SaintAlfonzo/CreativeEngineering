@@ -1,270 +1,285 @@
 # Brief: dishes / pickles-and-ferments
 
 Written 2026-10-24 from [todo/TODO.md](../todo/TODO.md) `# dishes`, Sub `pickles-and-ferments` (rows 1 to 10, all from the
-scratchpad). Layout per [README.md](README.md). Writeups: [vintage_delight.md](../vintage_delight.md) (§2.3 pickling jar,
-§2.7 recipes, §3.1 overlaps), [ocean_delight.md](../ocean_delight.md). Pickling recipes go through
-`R.vdPickling` (`neoCraftHelper.js` line 1139; opts `time`, `secondary`, `container`), ids from `global.item`, tags through
-`global.tags` in [cookingtags.js](../../kubejs/server_scripts/tags/cookingtags.js).
+scratchpad); rechecked 2026-10-31 (row 11 and `merges/dishes #9`, the former row 8, added; built rows condensed). Layout per
+[README.md](README.md). Writeups: [vintage_delight.md](../vintage_delight.md) (2.7 recipes, "Planned from the scratchpad"
+and "Built 2026-10-25" in section 5, tests in 8; prefix VTD-), [ocean_delight.md](../ocean_delight.md) 5.4,
+[veggies_delight.md](../veggies_delight.md). Test ids VTD-56 and VTD-59 to VTD-64 below were proposed here on 2026-10-24
+and are not in the writeup yet (VTD-65 to VTD-74 there are other checks).
 
-**Shared Now (verified 2026-10-24 against `development/backportedVintage/src/main/resources/data/vintagedelight/recipes`,
-the Oceans' / Oceanic Delight jars and `alcohol.js`):**
-- Pickling jar recipes (`vintagedelight:fermenting`): `pickle_from_fermenting` (5 `#forge:cucumber` + `#forge:salt` -> 5
-  pickles, 2400 ticks), `pickled_egg_from_fermenting` (5 eggs + salt), `century_egg_from_fermenting` (`#forge:eggs` + coal +
-  salt, 216000 ticks), `kimchi_from_fermenting` (4 cabbage leaves + salt + `#forge:chilipepper` -> 4 kimchi + a pickled pepper),
-  `slime_block_from_fermenting`, `vinegar_from_jam` (+ `_bottles`), plus pickled onion / beetroot / pepper, surstromming.
-- Brewin' `pickled_pickles` and `kimchi` (`i.pickled_pickles`, `i.kimchi`, item_dict 11801 / 11806): their keg recipes are
-  removed and rebuilt in the jar in `kubejs/server_scripts/cooking/alcohol.js` lines 15-18 (kimchi from cabbage /
-  `i.vegetables` / kelp; pickled pickles from 2 sea pickles + glow berries + honey bottle). Vintage's kimchi is
-  `i.vintagedelight_kimchi`. Compost rows `compost_values.js` 914-915; `cookingtags.js` line 103 lists both.
-- Sea pickle: `minecraft:sea_pickle`, Oceanic Delight `sea_pickle_slices` (2 per sea pickle by knife); `#forge:sea_pickles`
-  = both. Pickle: `vintagedelight:pickle` (`i.pickle`). There is no `#forge:pickles` tag in the dump (it predates Vintage).
+**Where the code goes** (memory `creative-delight-routing`): food code lives in the Creative Delight trees by mod: server
+`kubejs/data/creative_delight/kubejs/vintagedelight/` (`recipes.js`, `cooking.js`, `tags.js`, `jams.js`), Ocean's / Oceanic
+`.../oceansdelight/`, startup `development/creativeDelight/src/main/resources/kubejs_startup/vintagedelight/`
+(`vintage_items.js`, `item_merges.js`, `compost.js`). Pickling jar recipes through `R.vdPickling(output, inputs, e, id, opts)`
+(neoCraftHelper.js line 1217; opts `time`, `secondary`, `container`), pot through `R.fdCooking` (1074), grinding through
+`R.foodGrinding` (1602). Tags through `global.tags` (`t.add` / `t.remove`), ids from `global.item`.
 
----
+**Shared Now** (2026-10-31; Vintage is the port `development/backportedVintage`, recipes in
+`src/main/resources/data/vintagedelight/recipes/fermenting/`; Brewin' is the Creative Brewing member
+`development/creativeBrewing/members/brewin`):
+- Jar recipes: `pickle_from_fermenting`, `pickled_egg_from_fermenting` (5 eggs + salt), `century_egg_from_fermenting`
+  (`#forge:eggs` + coal + `#forge:salt`, 216000 ticks), `kimchi_from_fermenting` (4 cabbage leaves + salt + `#forge:chilipepper`
+  -> 4 + a pickled pepper), `vinegar_from_jam` (`#forge:jam_jars` + `#forge:mushrooms` -> vinegar jar + 3 organic mash, 2400),
+  `vinegar_from_jam_bottles` (`#forge:jam_bottles` + mushrooms -> vinegar bottle + 1 organic mash, 1200). None of these is
+  overridden in CD today.
+- `kubejs/server_scripts/cooking/alcohol.js` line 15 removes Brewin's keg kimchi, line 16 adds the jar copy
+  `brewin_kimchi` (cabbage + `i.vegetables` + kelp -> 2 `i.kimchi`), line 19 removes the pickled pickles honey recipe.
+- `#forge:sea_pickles` (`i.t_sea_pickles`) = `minecraft:sea_pickle` + Oceanic `sea_pickle_slices`. No `#forge:pickles` tag.
+  `#creativeengineering:pickled_veg` (`i.t_pickled_veg`, CD `vintagedelight/tags.js` line 18) = pickle, pickled sea pickle,
+  pickled beetroot / onion / pepper, both kimchis.
 
-## pickles-and-ferments #1: Remove pickled pickles; pickled sea pickle
-Status **Testing** / Work: KubeJS / resource pack / id `dishes/pickles-and-ferments #1`
+## Scope and order
 
-### Goal
-Remove Brewin's Pickled Pickles; add a recoloured pickle texture as the new Pickled Sea Pickle, made without honey.
-
-### Build
-1. New item `i.pickled_sea_pickle` (startup items; the pack's item pattern in `kubejs/startup_scripts/items/`), texture
-   a recolour of `vintagedelight:item/pickle` in `kubejs/assets/creativeengineering/textures/item/`.
-2. `item_merges.js`: `[i.pickled_pickles, i.pickled_sea_pickle]` (swaps recipes, loot, inventories); drop the
-   `brewin_pickled_pickles` recipe (`alcohol.js` line 18) and its `canned_pickled_pickles` source (`tools/gen_can_types.py`
-   line 263, then `/cegen`); compost row moves to the new item.
-3. Craft: `R.vdPickling(Item.of(i.pickled_sea_pickle, 5), [Item.of(i.sea_pickle, 5), i.salt], e, 'pickled_sea_pickle')`.
-
-### Decisions
-- **Craft without honey.** Options: 5 sea pickles + salt (the Pickle recipe's pattern); 2 sea pickles + salt + vinegar
-  (`i.vinegar`). Recommend the first. Alternative reading: keep the item id, retexture and rename only; recommend the
-  merge, because the row says remove.
-
-### Tests
-- VTD-55 Pickling jar: sea pickles + salt -> Pickled Sea Pickle; no Pickled Pickles in JEI, creative or loot.
+| Row | Change | Status | Note |
+|---|---|---|---|
+| merges/dishes #9 | Merge kimchis | In Progress | merge pair + one recipe; independent |
+| 2 | Pickle recipes take real pickles only | In Progress | needs the per-recipe list below confirmed |
+| 9 | Pickled egg for the century egg | In Progress | one recipe |
+| 5 | Enzymes from mushrooms | In Progress | new item; before 6 |
+| 6 | Vinegar craft | In Progress | needs 5; reconcile with 11 |
+| 11 | Vinegar: drop bottle recipe, any jam | Planned | same recipes as 6 |
+| 7 | Foul Taste on vinegar foods | In Progress | needs an effect and a way to mark "vinegar added" |
+| 1, 3, 4, 10 | Pickled sea pickle; pickle soup; braised sea pickle slices; garlic honey | Testing | see Built, needs play |
 
 ---
 
 ## pickles-and-ferments #2: Pickle recipes take real pickles only
-Status **In Progress** / Work: KubeJS / id `dishes/pickles-and-ferments #2`
+Status: In Progress / Work: KubeJS / TODO `dishes/pickles-and-ferments #2`
 
 ### Goal
-Recipes that want a pickle accept only `vintagedelight:pickle`: not pickled pickles, not raw sea pickles. Swap the sea
-pickle "fake pickles" for real ones; squid and pickles swaps the onion for a real pickle; more pickled options in the
-cucumber salad (`dishes/meals #29`).
+Recipes that mean a pickle take `vintagedelight:pickle` (`i.pickle`): not Pickled Pickles (merged into Pickled Sea Pickle
+since 1.1.03) and not raw sea pickles. Squid and pickles swaps the onion for a real pickle. More pickled options in the
+cucumber salad belong to `dishes/meals #29`.
 
-### Now
-`oceanic_delight:squid_and_pickles` (shapeless: grilled squid tentacles, baked potato, `#forge:sea_pickles`,
-`#forge:crops/onion`, bowl) and `sea_pickle_roll` (shaped, `#forge:sea_pickles`) take sea pickles; Oceans' `braised_sea_pickle`
-is `#4`. Full list of recipes naming `pickled_pickles` or `#forge:sea_pickles`: unverified, re-run `/dumpall`.
-
-### Build
-`R.remove({id:'oceanic_delight:squid_and_pickles'})` then `R.shapeless(i.squid_and_pickles /*add dict key*/, [grilled tentacles,
-baked potato, i.pickle, i.pickled_onion?, bowl])`; same swap for the roll (`R.shaped`); `R.replaceInput` for the tag.
-Add `#forge:pickles` = `[i.pickle]` in `cookingtags.js` (`t.add(e, 'forge:pickles', i.pickle)`) so later rows share it.
-
-### Decisions
-- Squid and pickles loses the onion: replace it with the real pickle (the row); recommend `1 pickle` in the onion slot,
-  no extra slot.
-
-### Tests
-- VTD-56 JEI: squid and pickles and the sea pickle roll list a pickle, never a sea pickle, pickled pickles or onion.
-
----
-
-## pickles-and-ferments #3: Pickle soup
-Status **Testing** / Work: KubeJS / id `dishes/pickles-and-ferments #3`
-
-### Goal
-Pickle soup takes pickles, other pickled veggies, and a veggie variant.
-
-### Now
-`vintagedelight:cooking/pickle_soup`: pot, `vintagedelight:pickle`, carrot, potato, beetroot, `#forge:salad_ingredients`,
-no container listed.
+### Now (dump `kubejs/exported/food/recipes.json`, 2026-10-30; nothing built for this row)
+Recipes taking a sea pickle, by role:
+- Pickle stand-ins (swap): `oceanic_delight:squid_and_pickles` (shapeless: grilled squid tentacles, now cooked calamari via
+  CD `oceansdelight/recipes.js` line 43; baked potato; `#forge:sea_pickles`; `#forge:crops/onion`; bowl),
+  `oceanic_delight:potato_salad` (2 potatoes, `#forge:sea_pickles`, `#forge:crops/cabbage`, bowl), Hostile Delight
+  `gsandrecp` guardian sandwich (bread, cooked guardian fillet, kelp, `minecraft:sea_pickle`).
+- Sea food (keep the sea pickle): `sea_pickle_roll`, `sea_salad`, `seafood_skewer`, `stuffed_pufferfish` (Oceanic),
+  `braised_sea_pickle` (Ocean's, row 4), Hostile `mcocktrecp` marine cocktail, `cucumbertearecp`.
+- Already real pickles: Veggies' compat `veggiesdelight:compat/vintagedelight/cooking/pickle_soup` (`i.pickle` only; see Built,
+  row 3).
 
 ### Build
-Replace the pot recipe (`R.remove` + `R.fdCooking`) with the pickle slot as a new tag `#creativeengineering:pickled_veg`
-(pickle, pickled beetroot / onion / pepper, kimchi; filled in `cookingtags.js`); add the "veggie variant" as a second
-recipe (exact content: Decisions). Mirror `cooking.js`'s `_manual_only` shapeless pattern for the hand craft.
+1. Tag: `i.t_pickles = '#forge:pickles'` in item_dict.js (tag block near `i.t_pickled_veg`, line 1842); CD
+   `vintagedelight/tags.js`: `t.add(e, i.t_pickles, i.pickle)`.
+2. CD `oceansdelight/recipes.js` (Oceanic branch, after the calamari swaps): `R.replaceInput({ id: 'oceanic_delight:squid_and_pickles' },
+   i.t_sea_pickles, i.t_pickles, e)` and the same for the onion slot (`#forge:crops/onion` -> `i.t_pickles`, so 2 pickles;
+   or drop the onion, see Decisions); `potato_salad` the same sea pickle swap.
+3. Hostile Delight: guardian sandwich `R.replaceInput({ id: 'hostiledelight:gsandrecp' }, i.sea_pickle, i.t_pickles, e)` in a CD
+   `hostiledelight/` server script (folder exists).
+4. Changelog bullet (dishes that named pickles now take a pickle).
 
 ### Decisions
-- **Exact ingredients** (the row's own decision). Options: the veggie variant swaps carrot / potato / beetroot for
-  `#forge:vegetables`; or it is a no-pickle soup from a pickled veggie. Recommend: pickle slot = the tag, the other
-  slots unchanged, and the variant takes `#forge:vegetables/*` for carrot and potato.
+- Which recipes are pickle stand-ins: recommend the three listed (squid and pickles, potato salad, guardian sandwich); confirm.
+- Squid and pickles' onion: recommend a second pickle in that slot (the row says swap the onion for a real pickle; the
+  sea pickle slot becomes a pickle too).
 
 ### Tests
-- VTD-57 Pot: each pickled veggie in the pickle slot makes pickle soup.
-
----
-
-## pickles-and-ferments #4: Braised sea pickle accepts slices
-Status **Testing** / Work: KubeJS / id `dishes/pickles-and-ferments #4`
-
-### Goal
-Braised sea pickle also takes a sliced sea pickle.
-
-### Now
-`oceansdelight:cooking/braised_sea_pickle`: pot, 1 `minecraft:sea_pickle` + 2 brown mushrooms, bowl. Slices come from
-`oceanic_delight:sea_pickle_slices` (a sea pickle cut gives 2). Display Delight has `displaydelight:od_braised_sea_pickle`.
-
-### Build
-`R.fdCooking([i.t_sea_pickles?, brown_mushroom, brown_mushroom], ...)` through `#forge:sea_pickles` (it already holds both
-items) in place of the single item: remove the mod recipe, add one with the tag; or add a second recipe with 2 slices.
-
-### Decisions
-- One slice or two slices for one pickle. Recommend 2 slices (matches the cut yield).
-
-### Tests
-- VTD-58 Pot: 2 sea pickle slices + 2 brown mushrooms -> braised sea pickle.
+VTD-56 (proposed): JEI shows squid and pickles, potato salad and the guardian sandwich with a pickle, never a sea pickle,
+pickled sea pickle or onion; the sea pickle roll and sea salad still take sea pickles.
 
 ---
 
 ## pickles-and-ferments #5: Enzymes from crushed or milled mushrooms
-Status **In Progress** / Work: KubeJS / id `dishes/pickles-and-ferments #5`
+Status: In Progress / Work: KubeJS / TODO `dishes/pickles-and-ferments #5`
 
 ### Goal
-Crush or mill mushrooms into enzymes (the vinegar craft uses crushed fungus as its enzyme, `#6`).
+Crush or mill mushrooms into an enzyme, the vinegar craft's ferment starter (row 6).
 
 ### Now
-No enzyme item exists (grep of `item_dict.js`: none). `#forge:mushrooms` holds 16 Botania colours plus brown, red and Quark's
-glow shroom (exports). Helper: `R.foodGrinding(output, input, e, id, opts)` (`neoCraftHelper.js` ~1440) builds Create crushing,
-milling and the mortar craft.
+No enzyme item (2026-10-31: no `enzyme` in item_dict.js, CD startup or scripts). `#forge:mushrooms` (dump) = 16 Botania
+mushrooms, Fungi Delight's caps, morel, inky cap, truffle and slices, brown and red, Quark's glow shroom; the vinegar recipes
+take this tag today.
 
 ### Build
-1. Item `i.enzyme` (startup, new texture).
-2. `R.foodGrinding(i.enzyme, <mushrooms>, e, 'enzyme')`; IE crusher through its helper if wanted (unverified).
+1. Item: `i.enzyme = 'creativeengineering:enzyme'` (pack block of item_dict.js); registered in CD startup
+   `vintagedelight/vintage_items.js` (`e.create(i.enzyme).displayName('Enzyme')`, not food); texture in
+   `kubejs/assets/creativeengineering/textures/item/enzyme.png` (palette swap of a powder, `textureswapper/`).
+2. Input tag `i.t_enzyme_mushrooms = '#creativeengineering:enzyme_mushrooms'` in CD `vintagedelight/tags.js` per Decisions.
+3. CD `vintagedelight/recipes.js`: `R.foodGrinding(i.enzyme, i.t_enzyme_mushrooms, e, 'enzyme')` (crushing wheels, millstone,
+   mortar).
+4. Compost value and JEI info line; changelog bullet.
 
 ### Decisions
-- **Which mushrooms.** Options: brown and red only; `#forge:mushrooms`; plus crimson and warped fungus ("fungus" in #6).
-  Recommend `#forge:mushrooms` minus Botania's (a new tag in `cookingtags.js`) plus the two fungi.
-- **Which machines.** Recommend crushing wheels, millstone, mortar (what `foodGrinding` gives); skip the IE crusher.
+- Which mushrooms: recommend brown, red, the Fungi Delight mushrooms and crimson / warped fungus ("crushed fungus" in row 6);
+  leave Botania's coloured mushrooms out (they are Botania's flower ingredients).
+- Which machines: recommend what `foodGrinding` gives (crushing wheels, millstone, mortar); skip the IE crusher.
 
 ### Tests
-- VTD-59 Crushing wheels and millstone turn a brown mushroom into an enzyme.
+VTD-59 (proposed): crushing wheels, millstone and the mortar turn a brown mushroom and a crimson fungus into an enzyme; a
+Botania mushroom does not.
 
 ---
 
 ## pickles-and-ferments #6: Vinegar craft
-Status **In Progress** / Work: KubeJS / id `dishes/pickles-and-ferments #6`
+Status: In Progress / Work: KubeJS / TODO `dishes/pickles-and-ferments #6`
 
 ### Goal
 The vinegar craft becomes 3 apple mash plus an enzyme.
 
 ### Now
-Today: `vinegar_from_jam` (jam jar + `#forge:mushrooms` -> vinegar jar + 3 organic mash, 2400 ticks) and
-`vinegar_from_jam_bottles` (bottle form, 1200 ticks, 1 mash). `i.vinegar` = `vintagedelight:vinegar_bottle`.
-`i.apple_mash` = `vinery:apple_mash` (Vinery apple press, `alcohol.md` B2.3).
+Not built. Vinegar recipes as in Shared Now (jam jar or jam bottle + mushroom). `i.vinegar` = `vintagedelight:vinegar_bottle`,
+`i.vinegar_jar`; the jar and bottle convert by `vintagedelight:jam/vinegar_jar` and `_deconstruct`. `i.apple_mash` =
+`vinery:apple_mash` (Vinery port, Creative Brewing; apple press). `i.organic_mash` comes only from the two vinegar recipes
+(vintage_delight.md 2.7) and feeds organic compost.
 
 ### Build
-`R.remove` both recipes by id (`vintagedelight:fermenting/vinegar_from_jam`, `..._bottles`), then
-`R.vdPickling(i.vinegar, [Item.of(i.apple_mash, 3), i.enzyme], e, 'vinegar', { container: i.glass_bottle })` and a jar
-variant. Depends on `#5`.
-
-### Gotchas
-- Organic mash lost its source (vintage_delight.md 2.7 "not a dead item": secondary output of the old recipes; input to
-  organic compost): keep it as the `secondary:` output or give it another source.
+1. CD `vintagedelight/recipes.js`: `R.remove` `vintagedelight:fermenting/vinegar_from_jam` (and `_bottles`, row 11).
+2. `R.vdPickling(i.vinegar_jar, [Item.of(i.apple_mash, 3), i.enzyme], e, 'vinegar_from_apple_mash', { secondary: Item.of(i.organic_mash, 3) })`
+   (jar output keeps the container rule of the old recipe; check whether the jar needs a mason jar input).
+3. Row 11's jam route if kept (see there). Changelog bullet.
 
 ### Decisions
-- Keep organic mash as a secondary output? Recommend yes (`{ secondary: i.organic_mash }`).
+- Keep organic mash as a secondary output: recommend yes (its only source).
+- Replace the jam route or add beside it: row 11 asks for "any jam", so recommend two routes: 3 apple mash + enzyme, and any
+  jam + enzyme (the enzyme replaces the raw mushroom in both).
+
+### Gotchas
+Apple mash only exists with the Vinery port loaded (Creative Brewing): guard with `Platform.isLoaded('vinery')`.
 
 ### Tests
-- VTD-60 Pickling jar: 3 apple mash + enzyme + bottle -> vinegar bottle; the old jam recipes are gone.
+VTD-60 (proposed): Pickling Jar: 3 apple mash + enzyme -> vinegar jar + organic mash; a raw mushroom no longer works.
+
+---
+
+## pickles-and-ferments #11: Vinegar: drop bottle recipe, accept any jam
+Status: Planned / Work: KubeJS / TODO `dishes/pickles-and-ferments #11` (related `#6`)
+
+### Goal
+Remove the bottle vinegar recipe; any jam makes vinegar in the jar.
+
+### Now (2026-10-31)
+- `vinegar_from_jam_bottles` still loads; since the jam bottles were removed (CD startup `vintagedelight/vintage_items.js`
+  line 47) `#forge:jam_bottles` holds only `minecraft:honey_bottle` and `vintagedelight:apple_sauce_bottle`.
+- `vinegar_from_jam` takes `#forge:jam_jars`: the port's tag (`backportedVintage/.../data/forge/tags/items/jam_jars.json`)
+  minus the removed sweet / glow berry jars and the relish jar (CD `vintagedelight/jams.js` line 14) = pepper jam, apple
+  sauce, honey, green grape, red grape, cherry jars.
+- Not covered: the 22 Fruits Delight jellies, which are in `#forge:jams` (`i.t_forge_jams`; CD `fruitsdelight/tags.js`
+  line 17); the grape and cherry jars are in both tags.
+
+### Build
+1. CD `vintagedelight/recipes.js`: `R.remove({ id: 'vintagedelight:fermenting/vinegar_from_jam_bottles' }, e)`.
+2. Jam slot: `R.replaceInput({ id: 'vintagedelight:fermenting/vinegar_from_jam' }, i.t_jam_jars, [i.t_jam_jars, i.t_forge_jams], e)`
+   (or a new tag `#creativeengineering:vinegar_jams` = both, in CD `vintagedelight/tags.js`), unless row 6 rebuilds the recipe;
+   then build its jam route with the same input.
+3. Changelog bullet (vinegar bottle recipe removed; any jam ferments into vinegar).
+
+### Decisions
+- Honey jar and apple sauce jar count as jams (they are in `#forge:jam_jars`): recommend keep.
+- Build with row 6 (same recipe): recommend yes.
+
+### Gotchas
+Fruits Delight jellies are bowl / bottle items, not mason jars; check the jar's container return so a jelly does not leave
+a mason jar behind.
+
+### Tests
+VTD-new1 (proposed, numbered when queued): JEI has one jam vinegar recipe and it cycles a Fruits Delight jelly; no bottle
+vinegar recipe.
 
 ---
 
 ## pickles-and-ferments #7: Foul Taste on foods with vinegar added
-Status **In Progress** / Work: KubeJS / patcherMod / id `dishes/pickles-and-ferments #7`
+Status: In Progress / Work: KubeJS / patcherMod / TODO `dishes/pickles-and-ferments #7`
 
 ### Goal
 Foods that get vinegar added carry a Foul Taste effect, on more foods than today.
 
-### Now
-Unverified: no effect named Foul Taste exists in `kubejs/exported/mob_effects.json`, in `effect_dict.js` or the
-docs (grep), and no food rule adds one. Vinegar is used as a canning additive (`_vinegar` recipes on 66 cans,
-`tools/gen_can_types.py` lines 72-83) and in Vintage's cheese curds only (`cooking.js` has no vinegar rule). So "than
-today" cannot be measured; the note may mean the canned additive foods.
+### Now (2026-10-31)
+- No Foul Taste effect anywhere (`effect_dict.js`, `kubejs/exported/mob_effects.json`, patcherMod `potion/`). Candidates
+  that exist: Fruits Delight `fruitsdelight:disgusted` (Disgusted), vanilla Nausea.
+- Vinegar as an addition: 80 cans in `kubejs/generation_scripts/food/can_types.json` have a `_vinegar` recipe
+  (`tools/gen_can_types.py` lines 71-84: raw veggie, raw fruit, raw fish and more; salads 5 + vinegar). The `_vinegar` recipe
+  makes the same can item as the plain and salt recipes.
+- Foods with vinegar as an ingredient: only Vintage's cheese curds (and the leather / froglight jar crafts, not food).
+
+### Build
+1. Effect: per Decisions. A new one is a patcherMod `MobEffect` (pattern `potion/MagicResistanceEffect.java`), id
+   `creativeengineering:foul_taste`, JEED text per [effects.md](../effects.md).
+2. Marking "vinegar added": the can item cannot tell, so either (a) the `_vinegar` recipes output the can with an NBT flag and a
+   KubeJS `ItemEvents.foodEaten` handler (CD `creativeengineering/canning.js` area) applies the effect, or (b) the effect goes on
+   every food whose recipe includes vinegar as an ingredient (cheese curds today, and any dish built later).
+3. JEED provider (jeed_providers.js) and tooltip line; changelog bullet.
 
 ### Decisions
-- **Which effect.** Options: a new Foul Taste effect in patcherMod; reuse Fruits Delight's `fruitsdelight:disgusted`
-  (Disgusted, in `mob_effects.json` line 315); vanilla Nausea. Recommend a new patcherMod effect only if the pack wants
-  its own icon; otherwise reuse Disgusted.
-- **Which foods.** Options: the 66 `_vinegar` cans; every food with vinegar as an ingredient; pickled foods. Recommend the
-  `_vinegar` cans, via the can additive effect list, once the effect is chosen.
+- Which effect: recommend reuse Disgusted unless the owner wants a pack icon.
+- Which foods: recommend (b) only, plus pickled foods if wanted; (a) splits stacks (memory `empty-tag-stacking`: an NBT can
+  never stacks with a plain one) and makes vinegar a penalty additive nobody picks.
 
 ### Gotchas
-- The can additive's effect plumbing is generated (`can_types.json`); effects there are per-additive (check before building).
+Can effects are generated (`can_types.json`); a per-item effect added by hand is overwritten by the next `/cegen` unless
+the generator learns it.
 
 ### Tests
-- VTD-61 Eat a vinegar can: Foul Taste (or the chosen effect) for the decided time; plain can: none.
+VTD-61 (proposed): eat a food made with vinegar: the chosen effect for the decided time; the same food without vinegar
+(or a salt can): none.
 
 ---
 
-## pickles-and-ferments #8: Merge kimchis
-Status **In Progress** / Work: KubeJS / data / id `merges/dishes #9`
+## merges/dishes #9: Merge kimchis
+Status: In Progress / Work: KubeJS / data / TODO `merges/dishes #9` (was `dishes/pickles-and-ferments #8`;
+[item_merges.md](../item_merges.md) section 5, [brief](merges_dishes.md))
 
 ### Goal
-Use Vintage Delight's kimchi, remove the Brewin' brewing of it, and allow any pickleable veggie as the base
-(alternative recipe).
+One kimchi: Vintage Delight's (item and texture) survives, the Brewin' jar copy of its brewing goes, and any pickleable
+veggie works as the base in an alternative recipe.
 
-### Now
-The Brewin' keg recipe is already removed (`alcohol.js` line 15); its replacement is the pack's `brewin_kimchi` jar recipe
-(line 16: cabbage / `#forge:vegetables` / kelp -> 2 `brewinandchewin:kimchi`). Vintage's own recipe (cabbage leaf x4 + salt +
-chili) outputs `vintagedelight:kimchi`. Both items exist, both canned (`canned_kimchi`), both composted.
+### Now (2026-10-31, not built)
+- `i.kimchi` = `brewinandchewin:kimchi` (Creative Brewing's Brewin' member), `i.vintagedelight_kimchi` = `vintagedelight:kimchi`.
+- `alcohol.js` line 15 removes the keg recipe (the member still ships `data/brewinandchewin/recipes/fermenting/kimchi.json`);
+  line 16 is the jar copy `brewin_kimchi` (cabbage + `i.vegetables` + kelp -> 2).
+- Vintage's own: 4 cabbage leaves + salt + chili -> 4 + pickled pepper (2400 ticks).
+- Brewin's kimchi also sits in CD `brewinandchewin/tags.js` line 20, `vintagedelight/tags.js` line 19 (`pickled_veg`), CD
+  startup `brewinandchewin/compost_values.js` line 17, `tools/gen_can_types.py` line 263 (`canned_kimchi` from both).
 
 ### Build
-1. `item_merges.js`: `[i.kimchi, i.vintagedelight_kimchi]`; `R.remove` the `brewin_kimchi` jar recipe; `tools/gen_can_types.py`
-   line 260 comment and can sources fold to one kimchi (then `/cegen`).
-2. Alternative recipe: `R.vdPickling(Item.of(i.vintagedelight_kimchi, 4), [<pickleable veg> x4, i.salt, chili], e, 'kimchi_veg')`
-   with the veg slot a tag (`#creativeengineering:pickleable_veg`, new in `cookingtags.js`).
+1. Merge: CD startup `vintagedelight/item_merges.js`, add `[i.kimchi, i.vintagedelight_kimchi]` behind
+   `Platform.isLoaded('brewinandchewin')` (the merge swaps recipes and loot, hides the item, rescues inventories).
+2. Recipes: delete `alcohol.js` line 16 (`brewin_kimchi`); keep line 15. Alternative recipe in CD `vintagedelight/recipes.js`:
+   `R.vdPickling(Item.of(i.vintagedelight_kimchi, 4), [Item.of(i.t_pickleable_veg, 4), i.salt, i.t_chilipepper], e, 'kimchi_from_veg',
+   { secondary: i.pickled_pepper })` (`i.t_chilipepper`, item_dict.js line 2035), new tag `i.t_pickleable_veg` in CD
+   `vintagedelight/tags.js`.
+3. Clean-up: drop `i.kimchi` from the two tag lines and the compost row; `gen_can_types.py` line 263 to one source; `/cegen`.
+4. item_merges.md 2.x section, SQ-MG- queue entries (next free number), changelog bullet.
 
 ### Decisions
-- Which veggies count as pickleable: recommend `#forge:vegetables` minus the poisonous or non-veg ones (cabbage leaf stays
-  the primary; kelp as Brewin's had).
+- Pickleable veggies: recommend `#forge:vegetables` (38 items: carrot, potato, beetroot, onion, cucumber, peppers, broccoli,
+  cauliflower, turnip, zucchini, garlic...) minus peanut and plain potato slices, plus cabbage leaf and kelp (Brewin's base).
 
 ### Tests
-- VTD-62 JEI: one Kimchi; a non-cabbage vegetable makes kimchi in the jar; the keg has no kimchi recipe.
+VTD-62 (proposed): JEI shows one Kimchi with Vintage's texture; 4 carrots + salt + chili make kimchi in the jar; no
+`brewin_kimchi` recipe; an old Brewin' kimchi in an inventory becomes Vintage's.
 
 ---
 
 ## pickles-and-ferments #9: Pickled egg for the century egg
-Status **In Progress** / Work: KubeJS / id `dishes/pickles-and-ferments #9`
+Status: In Progress / Work: KubeJS / TODO `dishes/pickles-and-ferments #9`
 
 ### Goal
-The century egg uses a pickled egg.
+The century egg is made from a pickled egg.
 
 ### Now
-`century_egg_from_fermenting`: `#forge:eggs` + coal + `#forge:salt`, 216000 ticks (3 hours); decided 2026-10-23 ("any egg",
-vintage_delight.md §2.7; VTD-35). Pickled egg: 5 eggs + salt in the jar, 2400 ticks.
+Not built (2026-10-31: no `century_egg` line in CD scripts). Recipe as in Shared Now (`#forge:eggs` + coal + salt, 216000
+ticks; "any egg" decided 2026-10-23, vintage_delight.md 2.7, VTD-35). `i.pickled_egg`, `i.century_egg`, `i.coal` exist.
 
 ### Build
-`R.remove({id:'vintagedelight:fermenting/century_egg_from_fermenting'})` then
-`R.vdPickling(i.century_egg, [i.pickled_egg, i.coal], e, 'century_egg', { time: 216000 })`. Whether salt stays in the craft
-is unclear (the pickled egg already has it); recommend coal only.
+CD `vintagedelight/recipes.js`: `R.remove({ id: 'vintagedelight:fermenting/century_egg_from_fermenting' }, e)`, then
+`R.vdPickling(i.century_egg, [i.pickled_egg, i.coal], e, 'century_egg_from_fermenting', { time: 216000 })`. Changelog bullet.
+Update VTD-35 in vintage_delight.md 8.
+
+### Decisions
+- Salt in the craft: recommend drop it (the pickled egg already took salt).
 
 ### Tests
-- VTD-63 Pickling jar: pickled egg + coal -> century egg after 3 hours; an unpickled egg no longer works. Supersedes VTD-35.
+VTD-63 (proposed): pickled egg + coal -> century egg after 3 hours; a raw egg no longer works. Supersedes VTD-35.
 
 ---
 
-## pickles-and-ferments #10: Fermented garlic honey effects
-Status **Testing** / Work: KubeJS / data / id `dishes/pickles-and-ferments #10`
+## Built, needs play
 
-### Goal
-Fermented garlic honey gives Regeneration II for 5 seconds and Health Boost (3 hearts) for 30 seconds.
-
-### Now
-`veggiesdelight:fermented_garlic_honey` (`i.fermented_garlic_honey`): 7 hunger, Regeneration I 5 s and Health Boost I 5 s
-(`development/backportedVeggies/.../ModFoods.java` line 31; `exported/food/foods.json`). The jar recipe ships in the Veggies
-port (`recipes/compat/vintagedelight/fermenting/fermented_garlic.json`).
-
-### Build
-KubeJS startup `ItemEvents.modification` with a built `FoodProperties` (the pattern of `startup_scripts/cooking/alcohol_drinks.js`
-and `food_values.js`), or edit `ModFoods` in the port and rebuild `:backportedVeggies`. Recommend KubeJS (no jar swap).
-
-### Decisions
-- **"3 hearts".** Health Boost gives +4 health (2 hearts) per level: I = 2 hearts, II = 4 hearts; 3 hearts is not a level.
-  Options: Health Boost I (2), II (4), or the note meant 3 levels. Recommend Health Boost II (4 hearts) and confirm.
-
-### Tests
-- VTD-64 Drink it: Regeneration II 0:05 and Health Boost for 0:30; tooltip and JEED agree.
-
+- `dishes/pickles-and-ferments #1` Remove pickled pickles; pickled sea pickle: [vintage_delight.md](../vintage_delight.md) "Built 2026-10-25"; open: S~ (SQ-CDB-08 JEI, SQ-CDB-12 cans after `/dumpfood` + `/cegen`), C P (VTD-55); Canned Pickled Pickles rename waits for the can regeneration.
+- `dishes/pickles-and-ferments #3` Pickle soup: [vintage_delight.md](../vintage_delight.md) "Built 2026-10-25"; open: C P (VTD-57). Veggies' compat pickle soup (`veggiesdelight:compat/vintagedelight/cooking/pickle_soup`, pickle + carrot + potato + turnip or beetroot) is still in the 2026-10-30 dump beside the new recipe.
+- `dishes/pickles-and-ferments #4` Braised sea pickle accepts slices: [ocean_delight.md](../ocean_delight.md) 5.4; open: C P (VTD-58).
+- `dishes/pickles-and-ferments #10` Fermented garlic honey effects: Built 2026-10-28 (CD startup `veggiesdelight/veggies_foods.js` lines 15-22: Regeneration II 5 s, Health Boost II 30 s, owner chose II), shipped 1.1.04; SQ-CM-05 PASS; open: P T (VTD-64 proposed: drink it, both effects and lengths, tooltip and JEED agree). Fold into [veggies_delight.md](../veggies_delight.md) (drinks table line 118 still says 5 s).

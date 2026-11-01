@@ -23,4 +23,11 @@ ServerEvents.recipes(e => {
     ].map(p => [Item.of(p[0], 1), [p[1], p[1], p[1], p[1]], e, p[0].split(':')[1]]))
 
     console.log('flowers done')
+
+    // Beautify's hanging pot is the Rich Hanging Pot: its soil is Farmer's Delight rich soil, so the recipe takes one
+    // (feature_writeup/flower_pots.md 3.4). Was rope over a flower pot.
+    R.remove({ id: 'beautify:hanging_pot' }, e)
+    // Floral Enchantment's large pot is hidden (global.removedItems; flower_pots.md 3.2.9)
+    R.remove({ id: 'floralench:large_pot' }, e)
+    R.shaped(Item.of(i.rich_hanging_pot, 1), ['A', 'B', 'C'], { A: i.beautify_rope, B: i.flower_pot, C: i.rich_soil }, e)
 })

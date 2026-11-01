@@ -2,6 +2,111 @@
 
 ## Idea, Notes, Changes (Human scratchpad, don't write up or add to plans unless directed)
 
+- magic resistance vs shields
+    - resistance can protect from poison, wither, other bodily magic damage
+    - shields cannot
+- swap rich and fertile dandolion grow times
+- coaster/small plate compat?
+- glass item frame slot on top of botanist workbench?
+    - hold shears, hoe, shovel, etc
+- merge organic mash compost recipe
+    - add organic waste to some cutting recipes?
+        - new compost/rind/peel texture, melons, oranges and lemons
+- trashcan rework
+    - remove current gui, replace with limited sophisticated storage screen
+        - 2 upgrade slots, only accept magnet or slot upgrade
+- mesa villages
+- turn down random waystone, increase waystone structure frequency (minus towers)
+- fungi delight cow display names
+- witch villages carve out dirt and spawn on stone
+- fold floating island into sky structers, increase height variability
+    - lower overall frequency than now
+- siege weapon and wagon facing direction when spawning?
+- watering can filled by well and cauldron
+- flower pots placable like candles, up to 2?
+    - 2nd one spawns taller than first, flowers chosen individually
+- treated sticks placeable, tomato grown
+- sweet berries missing from jei
+- all flower pots w/ pottable tooltip, group by families
+- hanging herb variations (fantasy furniture)
+    - put in lets do brewing sky villages where hanging blocks were removed
+- flower pot tweaks
+    - 'Contains:' wthit tooltip for every flower pot
+    - remove handcrafted flower pots from flower world (dont have flower inventory)
+    - framed pots should accept flowers before framing, mirror flower pot models
+    - beautify hanging pot renamed lush hanging pot, dirt color change, this will explain limited compat due to custom models
+        - call block 'lush pot' when placed on ground
+    - rename supp flower box to large flower box
+    - move vinery flower box to center of block when placed on ground
+    - add 'Can be placed on walls' to supps, vinery, and another furniture flower boxes 
+    - exclude melon, moss, pumpkin blocks from flower pot world
+    - missing
+        - another furniture flower boxes (use supp flower boxes models)
+            - beetroot seeds
+            - cactus, carrot, chorus, cocoa
+            - crimson roots, warped roots
+            - dead bush, grass
+            - fern, lilac, melon seeds, peony, potato, pumpkin seeds, rose bush
+            - nether sprouts, nether wart
+        - floral enchant large pot and vinery flower box
+            - mirror another furniture flower box models, many missing
+        - silt pot, vinery pot
+            - mirror supp planters (may have exceptions, all seem correct for now)
+    - azalea block
+        - remove from flower boxes
+    - glow berries
+        - missing another furn and supp flower box, use flower pot
+    - glow lichen
+        - missing beautify workshop, another furn and supp flower box, use beautify hanging pot
+- create spout gun wets farmlands
+- different wood textures for cooking for block heads tool and spice racks
+- seasoning tooltips dont have names
+- upgradable watering cans, size and capacity, higher material texture
+- oats grow taller, bushier, and variable height
+- nightstands (handcrafted) have storage
+- merge wells to large well
+- wooden buckets dont interact with containers like cauldrons
+- add watering particles to watering berry bushes
+- find placeable apple model
+- wooden cauldron, only holds water
+- copper cauldron, leaks and hold less water when oxidized
+- wild raspberries grow where blueberries do?
+- limit botany pots by x0.2 growth rate
+- hanging pots place as wall lanterns, remove
+- Curios mouth slot needs removal
+- curios face slot not rendering
+- add face slot to simple hats smoking pipe
+- catenary for any chain, rope, etc
+- configure availible ftb essentials commands availible
+- integrate ftb chunks
+- ensure squid only drop 1 full squid
+    - also flee whales from far distance
+- ensure organic mass is compostable
+    - fertilizer? for water can?
+- wise oak
+    - is cooldown tied to days? change to playtime if so
+    - do wise oaks know if another is killed? say more insults if so 
+- powdered sugar still shows as snow in wthit
+- ocean monument spawns empty?
+- merge rustic delight pancake and supp pancake, use supp texture
+- change cherry blossom pancake to be lighter pink
+- veggie pancakes have ligher yellows in the item, red tomato tone in item, block and block item
+- rename stackable pancakes to pancakes, add tooltip about stackable
+- remove prepared sea pickles
+- remove block runner tooltip from items, wthit only
+- remvoe vinegar bottle, applessauce bottle (only mason jar bottles, same value as bottles like jam jars)
+- vegan patty usable as meat patty anywhere
+- swap all shulker meat to enders delight
+- glowing sauce
+    - new secondary ingredient, glowberries?
+    - new fluid, food and tech usage?
+- refined gelatin 
+    - rename to gelatin
+    - used in jello, gummy candy
+    - bone to bonemeal
+    - automated crafts, efficiencies
+- no jei brewing for basic potions?
+    - dioxide
 
 ## Low-effort lists (compiled by Claude 2026-10-29 from TODO.md, briefs/ and testing/scratch_queue.md)
 

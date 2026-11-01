@@ -1,4 +1,4 @@
-// TODO cooking/kitchen #15 probe: storage in Cooking for Blockheads' kitchen corner (patcherMod CfbCornerStorage).
+// TODO cooking/kitchen #15 probe: storage in Cooking for Blockheads' kitchen corner (Creative Delight blockheads_additions kitchen/CornerStorage; patcherMod CfbCornerStorage until 2026-10-31).
 // Scratch-only: copy into a scratch server's kubejs/server_scripts (tools/creative_labels_test/scratch_server.sh),
 // never into the pack. Run /kctest; results are "[kctest] PASS|FAIL ..." lines in logs/latest.log.
 (() => {

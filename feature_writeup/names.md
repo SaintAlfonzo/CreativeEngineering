@@ -854,7 +854,7 @@ written with `sun.misc.Unsafe`). The list is the config default in `CEConfig.Mod
 | "&" for and / 'n | Brewin' And Chewin' -> Brewin' & Chewin', Towns and Towers -> Towns & Towers, Steam 'n' Rails -> Steam & Rails, Design n' Decor -> Design & Decor, things and misc -> Things & Misc |
 | Create addons as "Create: <name>" | every mod that requires Create, plus the `create_*` ones: Create Deco -> Create: Deco, Guardian Beam Defense -> Create: Guardian Beam Defense, Extended Cogwheels -> Create: Extended Cogwheels, Little Contraptions -> Create: Little Contraptions, Bobber Detector -> Create: Bobber Detector, CC:C Bridge -> Create: CC Bridge, Create : The Salt -> Create: The Salt |
 | No author handles | Create Compact Exp (by NoCube) -> Create: Compact Exp, Villagers Sell Animals (by NoCube) -> Villagers Sell Animals, SuperMartijn642's Config Library / Core Lib -> Config Library / Core Lib |
-| Your own mods end in "(Alfonzo)", the only bracket they keep ("Backport" moves out of brackets) | Creative Engineering (Alfonzo), Brewin' & Chewin' Backport (Alfonzo), Let's Do Vinery Backport (Alfonzo), Foundation Vinery Backport (Alfonzo), Exposure Backport & Extras (Alfonzo), Exposure: Expanded / Polaroid / Catalog Backport (Alfonzo), Exposure Extras, Incubation Additions, More Mooblooms, Baby Mobs (Alfonzo) |
+| Your own mods carry no tag (owner, 2026-10-31: "(Alfonzo)" dropped; it was the rule from 2026-10-20). Bundle members show their bundle in brackets from their own mods.toml and have no override: "<Name> (Creative Delight)", "<Name> (Creative Brewing)" | Creative Engineering, Exposure Backport & Extras, Exposure: Expanded / Polaroid / Catalog Backport, Exposure Extras, Incubation Additions, More Mooblooms, Baby Mobs; Brewin' & Chewin' (Creative Brewing), Let's Do Vinery (Creative Brewing); Vinery's second mod id `foundation` shows as "Creative Brewing" |
 | Renamed | MmmMmmMmmmmm -> Target Dummy |
 | Title Case, readable ids | Fish On The Line -> Fish on the Line, Everything is Copper -> Everything Is Copper, (backport) -> (Backport), fortuneonneterite i ig z -> Fortune on Netherite, corpsecurioscompat -> Corpse Curios Compat, restApi -> REST API, wthit -> WTHIT |
 
@@ -868,6 +868,6 @@ KubeJS Create / Vintage KubeJS / PonderJS need Create but are KubeJS addons, so 
 
 - [ ] **NM-13 Mod names in game:** hover any Create Deco item in JEI -> blue mod line "Create: Deco"; a Pretty Pipes
   pipe -> "Pretty Pipes"; WTHIT on a Farmer's Delight stove -> "Farmer's Delight"; Mods screen lists "Death Knell",
-  "Target Dummy" and "Creative Engineering (Alfonzo)".
+  "Target Dummy" and "Creative Engineering" (no "(Alfonzo)" since 2026-10-31).
 
 - 2026-10-31: scratchpad notes translated into TODO rows (`ui/misc #7`). No code changed.

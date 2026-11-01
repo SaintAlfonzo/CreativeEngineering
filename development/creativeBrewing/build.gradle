@@ -1,0 +1,59 @@
+// creativeBrewing: the Creative Brewing jar (feature_writeup/creative_brewing.md). The bundling (members nested under
+// META-INF/jarjar/, metadata.json) is build-logic/src/main/groovy/ce.forge-bundle.gradle; this file adds what is
+// specific to CB, the same way creativeDelight/build.gradle does for CD:
+//   - the CB script trees, authored in the pack folder so /reload and F3+T pick them up without a rebuild, copied into
+//     the jar at the same resource paths:
+//       kubejs/data/creative_brewing/kubejs/    -> data/creative_brewing/kubejs/    (server scripts)
+//       kubejs/assets/creative_brewing/kubejs/  -> assets/creative_brewing/kubejs/  (client scripts)
+//     Startup scripts live in this project (src/main/resources/kubejs_startup/creative_brewing/ and one folder per mod),
+//     loaded from the jar by patcherMod's startup loader.
+//   - creative_brewing_members.txt: the mod ids of bundle_members, read by CBConfig (one list).
+// Build: ./gradlew :creativeBrewing:build --offline   Install: ./gradlew :creativeBrewing:installToMods
+plugins {
+    id 'ce.forge-bundle'
+}
+
+dependencies {
+    // CEConfig, the remainder buffer API and the other pack Java CB's compartments call; patcherMod is a hard dependency.
+    compileOnly project(':patcherMod')
+}
+
+def scriptTrees = ['data/creative_brewing/kubejs', 'assets/creative_brewing/kubejs']
+
+def membersFile = layout.buildDirectory.file('generated/cb_members/creative_brewing_members.txt')
+def writeMembers = tasks.register('writeMembersList') {
+    def ids = providers.provider {
+        (findProperty('bundle_members') ?: '').toString().split(',')*.trim().findAll { it }
+                .collect { project(it).findProperty('mod_id').toString() }
+    }
+    inputs.property('ids', ids)
+    outputs.file(membersFile)
+    doLast {
+        def f = membersFile.get().asFile
+        f.parentFile.mkdirs()
+        f.text = '# Mod ids of the members nested in this jar (generated from bundle_members)\n' + ids.get().join('\n') + '\n'
+    }
+}
+
+tasks.named('processResources', ProcessResources).configure {
+    dependsOn writeMembers
+    from(membersFile)
+    scriptTrees.each { tree ->
+        from(rootProject.file("kubejs/${tree}")) {
+            into tree
+            exclude '**/*.md'
+        }
+    }
+}
+
+// The scripts in the jar run only through KubeJS; a missing tree means the pack-folder path moved.
+tasks.named('jar', Jar).configure {
+    doLast {
+        def entries = new java.util.zip.ZipFile(archiveFile.get().asFile).withCloseable { z -> z.entries().collect { it.name } }
+        ['kubejs_startup/creative_brewing/', 'data/creative_brewing/kubejs/', 'assets/creative_brewing/kubejs/'].each { dir ->
+            if (!entries.any { it.startsWith(dir) && it.endsWith('.js') }) {
+                throw new GradleException("creative_brewing jar has no scripts under ${dir}")
+            }
+        }
+    }
+}

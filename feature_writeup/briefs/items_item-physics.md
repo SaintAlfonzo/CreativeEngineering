@@ -1,271 +1,225 @@
 # items / item-physics: implementation brief
 
-Written 2026-10-21 from [TODO](../todo/TODO.md) `# items`, Sub `item-physics` (row 5 added 2026-10-24). Feature writeup:
-[item_physics.md](../item_physics.md) (test prefix `IP-`, used up to IP-14; new tests here start at IP-15, check the
-next free number before adding them). Related: [tnt_shrapnel.md](../tnt_shrapnel.md) (burning TNT items).
+Written 2026-10-21 from [TODO](../todo/TODO.md) `# items`, Sub `item-physics` (row 5 added 2026-10-24; rows 6 and 7 and the
+2026-10-31 sweep: #3 and #4 built, #2 re-based on the family design). Feature writeup:
+[item_physics.md](../item_physics.md) (test prefix `IP-`, used: IP-01 to IP-15, IP-21; new tests here are placeholders
+`IP-newN`, numbered when queued). Related: [tnt_shrapnel.md](../tnt_shrapnel.md) (burning TNT items),
+[fixes_compat.md](../fixes_compat.md) 2.32 (falling block splash).
 
 Jars checked (decompiled with vineflower or read with `javap`, under `scratchpad/decomp/` and `scratchpad/vanilla/`):
 `ItemPhysic_FORGE_v1.6.7_mc1.19.2.jar` (`ItemEntityMixin`, `ItemPhysicServer`, `CommonPhysic`),
-`allurement-1.19.2-3.2.1.jar` (`ItemEntityMixin`, `AllurementUtil`, the two curse enchantments, `AllurementConfig`),
-`create-1.19.2-0.5.1.i.jar` (item list from its lang), the vanilla 1.19.2 client jar with Mojang's mappings
-(`ItemEntity`, `FallingBlockEntity`, `PrimedTnt`, `AbstractMinecart`, `Entity` bytecode) and MCP `joined.tsrg` for
+`allurement-1.19.2-3.2.1.jar`, `create-1.19.2-0.5.1.i.jar`, `alexsmobs-1.21.1.jar` (`EffectLavaVision`, read
+2026-10-28 for item_physics.md 10.4), the vanilla 1.19.2 client jar with Mojang's mappings and MCP `joined.tsrg` for
 SRG names. "Verified" means read from one of them.
 
 ## Scope and order
 
 | Row | Change | Status | Size |
 |---|---|---|---|
-| #3 | Allurement curses and item physics | Bug | small: one `@Inject` in the existing `ItemPhysicServerMixin` + a 40-line helper. **Cause found** |
-| #2 | Classify modded items | Planned | medium: KubeJS tags only (`item_physics_tags.js`), but needs the "how far" decision and an item dump |
-| #4 | Water splash from anvils and other entities | Planned | small: one common mixin on `FallingBlockEntity` |
+| #2 | Classify modded items (families) | Planned | medium: rerun the audit on the 10-30 dump, settle 9.6, then a generator mode writes `physics/family/*` tags; KubeJS maps families to behaviour |
+| #6 | Light items skim on water; lavaproof items float on lava | Planned | small-medium: one `Buoyancy` query, extend the existing `updatePre` TAIL inject, a new tag, a config section |
+| #5 | Golden egg gets gravity | Planned | tiny once reproduced: one tag line; folds into #2 (egg -> `organic` family) |
+| #7 | Player speed in lava; Lava Vision speed | Planned | investigation, then a small `LivingEntity#travel` mixin |
+| #4 | Water splash from falling blocks | built 2026-10-28 (TODO still says Planned) | see Built, needs play |
+| #1, #3 | Fire / lava split; Allurement curses | Testing | see Built, needs play |
 
 Build order:
 
-1. **#3 and #4 together**: one patcherMod build (both are small common mixins, no config migration).
-2. **#2** after the user picks the scope; KubeJS only, `/reload` applies it. It can go before or after the jar.
+1. **#2 first**: it decides which items skim (foliage, fibre, light_powder) and which float on lava (refractory), so #6
+   reads its tags. #5 rides along (one manual override or the `organic` family).
+2. **#6** in one patcherMod build; **#7** can share that build if its investigation is done by then.
 
-Related rows: `farming/composting` ([farming_composting.md](farming_composting.md): adds `#creativeengineering:composters`
-to the floats list), `baking/baked-goods` ([baking_baked-goods.md](baking_baked-goods.md): may move sugar from sinks to
-floats for the culture blocks), `gameplay/tnt-and-portal #1` (burning TNT items, shrapnel).
-
----
-
-## item-physics #3: Allurement curses and item physics
-Status Bug / Work patcherMod / TODO `items/item-physics #3`
-
-### Goal
-Allurement's two item curses work on dropped items again: Curse of Ascension makes a dropped item float upward, Curse
-of Fleeting makes it slide away from the nearest entity.
-
-### Now
-- **The row's guess is right (verified).** Allurement's `com.teamabnormals.allurement.core.mixin.ItemEntityMixin`
-  injects into `ItemEntity#tick` at `INVOKE Vec3.add(DDD)`, `shift = BY, by = 2`, and calls
-  `AllurementUtil.ascendItem(item)` / `repelItem(item)` when the stack has `allurement:ascension_curse` /
-  `allurement:fleeting_curse`.
-- In vanilla's `ItemEntity.tick` (bytecode, `bqv.k`) the only `Vec3.add(DDD)` is the gravity line inside
-  `else if (!this.isNoGravity()) setDeltaMovement(getDeltaMovement().add(0, -0.04, 0))` (offset 154, guarded by
-  `isNoGravity` at 138). ItemPhysic's own `ItemEntityMixin` redirects `isNoGravity()` in `tick` to `true` (and
-  `isInWater` / `isInLava` to `false`), then applies gravity itself in `ItemPhysicServer.updatePre`. So the branch
-  holding Allurement's hook never runs: the mixin applies (Allurement's `defaultRequire 1` would crash otherwise) but is
-  dead. Both curses do nothing on a dropped item.
-- `AllurementUtil.ascendItem` (verified): `motion.y = (0.25 - motion.y) * 0.3`. `repelItem`: nearest `LivingEntity`
-  within 5 blocks; push of 0.1 horizontally away from it (x0.2 in the air, +0.25 up on the ground).
-- Allurement config (`config/allurement-common.toml` 58-64): both curses enabled. Its item-entity hook doesn't check
-  the switches (only the enchantments' availability does).
-- patcherMod already mixes into `team.creative.itemphysic.server.ItemPhysicServer`:
-  [mixin/ItemPhysicServerMixin.java](../../development/patcherMod/src/main/java/com/SaintAlfonzo/creativeengineering/mixin/ItemPhysicServerMixin.java)
-  (`@Mixin(value = ItemPhysicServer.class, remap = false)`, redirects in `fireImmune`, `hurt`, `updatePre` (57),
-  `updateFluidHeightAndDoFluidPushing`). ItemPhysic is a compile-only jar in `development/patcherMod/libs/`.
-- `ItemPhysicServer.updatePre(ItemEntity, RandomSource)` (static, verified): adds -0.04 gravity out of fluids, or the
-  fluid force in one; one return at the end; it may `hurt` (and so discard) the item in lava / fire.
-
-### Build
-1. New `itemphysic/AllurementCurses.java`:
-   - resolve both enchantments once by id from `ForgeRegistries.ENCHANTMENTS` (`allurement:ascension_curse`,
-     `allurement:fleeting_curse`); null when Allurement is absent, then do nothing;
-   - `static void tick(ItemEntity item)`: return if `item.isRemoved()`; read levels with
-     `EnchantmentHelper.getItemEnchantmentLevel(ench, stack)` (`getTagEnchantmentLevel` in Allurement's code is the same
-     method); apply the two formulas above (copy them, credit `AllurementUtil` in the javadoc). No compile dependency on
-     Allurement.
-2. In `ItemPhysicServerMixin` add:
-   ```java
-   @Inject(method = "updatePre", at = @At("RETURN"), remap = false)
-   private static void creativeengineering$allurementCurses(ItemEntity item, RandomSource rand, CallbackInfo ci) {
-       if (CommonPhysic.getFluid(item) == null) AllurementCurses.tick(item); // vanilla: the hook sat in the no-fluid branch
-   }
-   ```
-   (`team.creative.itemphysic.common.CommonPhysic.getFluid(ItemEntity)`, verified). It runs on both sides, as
-   vanilla's tick and Allurement's hook do.
-3. item_physics.md: new 3.x "Allurement curses" paragraph and a finding (F7: cause and fix); File map gets the helper.
-
-### Ids and data
-- Enchantment ids (verified): `allurement:ascension_curse`, `allurement:fleeting_curse`.
-- Classes (verified): `team.creative.itemphysic.server.ItemPhysicServer#updatePre(ItemEntity, RandomSource)`,
-  `team.creative.itemphysic.common.CommonPhysic#getFluid(ItemEntity)`.
-
-### Decisions
-- **In water too?** Vanilla only ran the curses out of fluids (the hook was in the gravity branch). Recommendation:
-  keep that (the sketch's `getFluid == null`); an ascending item in water would fight ItemPhysic's float/sink rule.
-
-### Gotchas
-- `@Inject` into a static method needs a static handler; `remap = false` as for the other ItemPhysic hooks.
-- Don't call Allurement's `AllurementUtil` directly: a compile dependency for two one-liners isn't worth it, and
-  reflection would load it on every item tick.
-
-### Tests
-- **IP-15 Curse of Ascension:** `/give @s minecraft:stone{Enchantments:[{id:"allurement:ascension_curse",lvl:1}]}`,
-  drop it on open ground -> it rises; in water it follows the normal float/sink rule.
-- **IP-16 Curse of Fleeting:** same with `allurement:fleeting_curse`, walk toward the dropped item -> it slides away;
-  a plain stone doesn't.
-
----
-
-## item-physics #4: Water splash from anvils and other entities
-Status Planned / Work patcherMod / TODO `items/item-physics #4`
-
-### Goal
-A falling anvil (and sand, gravel, concrete powder, any falling block) that drops into water splashes like a mob
-does: splash particles, bubbles and the splash sound.
-
-### Now
-- Vanilla splashes from `Entity#doWaterSplashEffect` (`m_5841_`), called from `updateInWaterStateAndDoWaterCurrentPushing`
-  (`aZ`) on the first tick an entity touches water (`!wasTouchingWater && !firstTick`), reached through `baseTick`
-  or `updateInWaterStateAndDoFluidPushing` (`aY`).
-- **Which entities miss it (verified in the bytecode):** `FallingBlockEntity.tick` (`bqu.k`, SRG `m_8119_`) never calls
-  `super.tick()`, `baseTick` or `aY`, so falling blocks never splash (and never know they are in water).
-  `PrimedTnt.tick` calls `aY` (splashes), `AbstractMinecart.tick` calls `aY` (splashes). `ItemEntity` calls
-  `super.tick()`; ItemPhysic overrides `updateFluidHeightAndDoFluidPushing` (`m_204031_`) and returns "touching", so
-  dropped items splash too (small: the splash scales with the entity's width and speed). Projectiles, boats and mobs
-  go through `baseTick`.
-- So "anvils and other entities" is in practice falling blocks. Modded entities that skip `baseTick` are unknown;
-  Create contraptions are the likeliest (not checked).
-- `doWaterSplashEffect` (vanilla): sound volume from speed (fast -> "high speed splash"), `1 + width*20` bubble and
-  splash particles at the water surface. It runs on both sides: particles on the client, the sound broadcast from the
-  server.
-
-### Build
-1. New common mixin `mixin/FallingBlockSplashMixin.java` (add to `"mixins"` in creativeengineering.mixins.json):
-   ```java
-   @Mixin(FallingBlockEntity.class)
-   public abstract class FallingBlockSplashMixin extends Entity {
-       protected FallingBlockSplashMixin(EntityType<?> t, Level l) { super(t, l); }
-
-       @Inject(method = "m_8119_", at = @At("TAIL"), remap = false)
-       private void creativeengineering$splash(CallbackInfo ci) {
-           if (!CEConfig.<switch>.get()) return;
-           boolean inWater = this.level.getFluidState(this.blockPosition()).is(FluidTags.WATER);
-           if (inWater && !this.wasTouchingWater && !this.firstTick) this.doWaterSplashEffect();
-           this.wasTouchingWater = inWater; // unused by FallingBlockEntity otherwise
-       }
-   }
-   ```
-   (`wasTouchingWater` `f_19798_`, `firstTick` `f_19803_`, `doWaterSplashEffect` `m_5841_`, all protected in `Entity`,
-   so reachable from a mixin that extends it; mojmap names in source, reobf maps them. Check the existing patcherMod
-   mixins for the house style on `remap` with SRG method names: e.g. `ServerLevelTimePauseMixin` uses
-   `method = "m_8809_", remap = false`.)
-2. Config switch: a boolean in CEConfig, e.g. a new small `[splash] fallingBlocks = true` section, or a line in an
-   existing "fixes"-like section; read every tick, so keep it a cached `BooleanValue`.
-3. item_physics.md: a short 3.x "Splashes" paragraph (it is about entities in water, the nearest writeup).
-
-### Ids and data
-- SRG names (verified with MCP `joined.tsrg`): `FallingBlockEntity.tick` `m_8119_`, `Entity.doWaterSplashEffect`
-  `m_5841_`, `Entity.wasTouchingWater` `f_19798_`, `Entity.firstTick` `f_19803_`.
-
-### Decisions
-- **Which entities.** Recommendation: falling blocks only (the verified gap). If a modded entity is seen not
-  splashing in play, add it the same way.
-- **Also make falling blocks slow in water?** Out of scope; vanilla lets them fall through water at full speed.
-
-### Gotchas
-- `blockPosition()` is the entity's feet block; a block falling fast (about 2 blocks a tick at terminal speed) can
-  skip a 1-deep pool between ticks. Acceptable; if wanted, also check the block above.
-- `doWaterSplashEffect` uses the entity's width (falling blocks are 0.98): about 20 particles, like a mob.
-- Concrete powder converts on landing in water (vanilla, its own raytrace); the splash just happens first.
-
-### Tests
-- **IP-17 Anvil splash:** drop an anvil and a block of sand into a 3-deep pool from 10 blocks up -> a splash and the
-  splash sound as each hits the surface; on land, nothing new.
+Related rows: `farming/composting` ([farming_composting.md](farming_composting.md): `#creativeengineering:composters` in
+the floats list), `baking/baked-goods` ([baking_baked-goods.md](baking_baked-goods.md): sugar may move to floats),
+`gameplay/tnt-and-portal #1` (burning TNT items, shrapnel).
 
 ---
 
 ## item-physics #2: Classify modded items
-Status Planned / Work KubeJS / TODO `items/item-physics #2` (item_physics.md F4)
-
-**Superseded 2026-10-28 by the family design, [item_physics.md](../item_physics.md) section 9** (21 material families, the
-`/dumpphysics` dump and `tools/item_physics_audit.py`). The Create / flour / treated-wood rules below are covered by the
-metal, light_powder and wood families; the user's adjustments (totem, crossbow, armor stand, shield, trident) become
-manual overrides.
+Status **Planned** / Work KubeJS / tools / TODO `items/item-physics #2` (item_physics.md 9, F4)
 
 ### Goal
-Modded items get sensible water and fire behaviour instead of all falling to the default (sink, burn in fire and
-lava), starting with the "Future" list the user wrote in the tag file.
+Every item gets exactly one of the 21 material families of [item_physics.md](../item_physics.md) 9.2, and the family
+fixes its water and fire behaviour through the existing four physics tags. Nothing falls to the default by accident:
+89% of items (17,650 of 19,743 in the tag-only run) are in no physics tag today and sink and burn.
 
 ### Now
-- Default (config/itemphysic.json): `swimmingItems` whitelist empty (nothing floats), `burningItems` blacklist empty
-  (everything burns). Tags `#creativeengineering:physics/{floats,sinks,fireproof,lavaproof}` change it (2.1 of the
-  writeup); `sinks` beats `floats`, `lavaproof` beats `fireproof`.
-- The tag script, [kubejs/server_scripts/tags/item_physics_tags.js](../../kubejs/server_scripts/tags/item_physics_tags.js):
-  - lines 116-123, the user's notes, not done:
-    "Adjustments: Totem sinks, crossbow sinks, armor stand sinks, shields sink, trident is fireproof" and "Not done
-    yet: Most create components will sink and be fireproof, belts will float, flour/cinder flour float. Behavior
-    carries to compacted items. Treated wood will sink. Add items from all other mods!";
-  - today `armor_stand` (152), `crossbow` (156), `shield` (157) and `totem_of_undying` (195) are in **floats**, the
-    opposite of the note; `trident` is in no tag;
-  - `#forge:ingots`, `#forge:nuggets`, `#forge:raw_materials` are already fireproof (209), so every modded metal
-    ingot already survives fire;
-  - the stone family and `#create:stone_types/*` are lavaproof (283-), so Create's stone blocks already survive lava.
-  - `physicsFromTag` (50-82) duplicates `global.tags.add` / `addMatching` and calls `event.add` itself (F6). No call
-    in the file passes `except` or `expand`.
-- Create 0.5.1 has 671 item / block ids (lang, verified): metal parts (shafts, cogwheels, casings, gearboxes,
-  mechanisms, sheets, pipes, tanks, funnels, chutes...), wooden or cloth ones (sails, seats, water wheels,
-  windows), foods (bar of chocolate, chocolate-glazed berries, honeyed apple, builder's tea, sweet roll, blaze cake,
-  dough, wheat flour, cinder flour) and stone (already lavaproof).
-- Dict keys present: `i.belt_connector` (175), `i.cinder_flour` (1328), `i.wheat_flour_pile` (154),
-  `i.cinder_flour_pile` (5127), `i.flour = '#forge:flour/wheat'` (1884), `i.t_flour_corn` (1886), `i.armor_stand`
-  (2020), `i.crossbow` (2160), `i.shield` (2671), `i.totem_of_undying` (2732), `i.trident` (2735). No key for
-  `#forge:flour` (all flours) or `#forge:treated_wood`.
+- **Audit built 2026-10-28, report only:** `/dumpphysics`
+  ([kubejs/server_scripts/_lib/dump_physics.js](../../kubejs/server_scripts/_lib/dump_physics.js)) and
+  [tools/item_physics_audit.py](../../tools/item_physics_audit.py) (568 lines, generator `item_physics_audit` in
+  [tools/generators.json](../../tools/generators.json) 466-471, "report only") write
+  [item_physics_audit.md](../item_physics_audit.md) and `kubejs/generation_scripts/physics/item_physics_families.json`.
+- **The dump has been run since** (checked 2026-10-31): `kubejs/exported/physics/item_physics.json`, dated
+  2026-10-30 00:41, `total 19547`, `skipped 0`, `lavaSurvivors 1410`. The audit was **not** rerun on it: the report
+  (2026-10-28 20:26) still says "not dumped yet", so the material rung (block Material and SoundType) is unused and the
+  650 unclassified are the tag-only figure. SQ-IP-16 has no run-log entry.
+- The tag script, [item_physics_tags.js](../../kubejs/server_scripts/tags/item_physics_tags.js) (400 lines):
+  `physicsFromTag` (50, a private copy of `global.tags.add` that calls `event.add` itself, F6); the user's notes at
+  91-95 ("Adjustments: Totem sinks, crossbow sinks, armor stand sinks, shields sink, trident is fireproof" and the
+  "Not done yet" Create / flour / treated-wood list). Today `armor_stand` (127), `crossbow` (131) and
+  `totem_of_undying` (170) and `shield` (132) are in **floats**, the opposite of the note; `trident` is in no tag.
+- No `physics/family/*` tag exists (`kubejs/data/creativeengineering/tags/items/physics/` is absent).
 
 ### Build
-1. **Dict keys** (item_dict.js, tag-key style `i.t_*`): `i.t_flour = '#forge:flour'`, `i.t_treated_wood =
-   '#forge:treated_wood'`, `i.t_treated_wood_slab = '#forge:treated_wood_slab'`, and keys for any single ids below
-   that lack one (Create seats / sails / water wheels have tags or wildcards; see 3).
-2. **Adjustments** (the user's own list, no decision needed): add `i.totem_of_undying`, `i.crossbow`, `i.armor_stand`,
-   `i.shield` to `sinks` (sinks wins over floats; or delete them from the floats lists at 152-157 / 195, cleaner),
-   `i.trident` to `fireproof`.
-3. **The "Future" list:**
-   ```js
-   // Create components: sink (default) and fireproof; wood, cloth and food parts keep burning
-   t.addMatching(e, PHYSICS_TAG.fireproof, ['@create', '@create_dd', '@createaddition'], { except: [
-       '#create:seats', 'create:*_sail', 'create:sail_frame', 'create:water_wheel', 'create:large_water_wheel',
-       '/^create:(oak|spruce|birch|jungle|acacia|dark_oak|mangrove|crimson|warped)_window(_pane)?$/', i.belt_connector,
-       '/^create:(bar_of_chocolate|chocolate_glazed_berries|honeyed_apple|builders_tea|sweet_roll|blaze_cake.*|dough|wheat_flour|cinder_flour)$/',
-   ] })
-   t.add(e, PHYSICS_TAG.floats, [i.belt_connector, i.t_flour, i.cinder_flour, i.wheat_flour_pile, i.cinder_flour_pile])
-   t.add(e, PHYSICS_TAG.sinks, [i.t_treated_wood, i.t_treated_wood_slab, '/^immersiveengineering:treated_/'])
-   ```
-   (The mod list in `@...` is the "how far" decision. The except list is a starting point: check it against
-   `kubejs/exported/items_by_mod/create.json` after `/kubejs export` or `/cegen run ... dumps`.)
-4. **"Behaviour carries to compacted items."** Create: Compressed and similar storage blocks follow their content:
-   `create_compressed:*_pile` of flour float (above); compressed metal blocks are in `#forge:storage_blocks/*` ->
-   add `'#forge:storage_blocks'` to fireproof (metal storage blocks are already fireproof by id for vanilla only, 2.2),
-   minus any organic storage block (`#forge:storage_blocks/{wheat,...}` if the dump shows some).
-5. **F6:** replace `physicsFromTag` by `t.add(e, target, sources.map(s => '#' + s))` (nothing uses its other options)
-   and delete the function, so the file only uses `global.tags`.
-6. **Beyond Create (scope decision):** apply the same three rules per mod family once picked: metal machine parts ->
-   fireproof (IE: `@immersiveengineering` minus treated wood, hemp, foods; PneumaticCraft: `@pneumaticcraft` minus
-   foods), wood / cloth / paper items -> floats (most already through `#minecraft:planks` etc.), foods stay default.
-7. Update item_physics.md 2.2 (what's in the tags), F4 (done / scope), and replace the "Not done yet" comment at
-   item_physics_tags.js 119-123 with what was done.
+1. **Rerun the audit** on the existing dump (`/cegen run item_physics_audit`, or `python3 tools/item_physics_audit.py`)
+   and check the IP-21 / SQ-IP-16 pass line: header "dump yes", unclassified below 650, `minecraft:netherite_scrap`
+   under `fire_resistant_item`. If the dump is stale against `mods/` (new jars since 10-30), `/dumpphysics` again first.
+2. **Settle 9.6 with the user** (nether wood fireproof, ice floats, machines fireproof, skim, stone scope) and add the
+   user's own adjustments from lines 91-92 as manual overrides (totem, crossbow, armor stand, shield sink; trident
+   fireproof). Record each in item_physics.md 9.6.
+3. **Generator mode** in `item_physics_audit.py` (`--write-tags`, a second `generators.json` entry or a changed
+   `apply`): one JSON item tag per family, `creativeengineering:physics/family/<family>`, under
+   `kubejs/data/creativeengineering/tags/items/physics/family/`; reads the manual-override list so every item is in
+   exactly one family tag. Write ids, not nested tags, so a reload never depends on tag order.
+4. **Map families to behaviour** in `item_physics_tags.js` through `global.tags` only:
+   `t.add(e, PHYSICS_TAG.floats, ['#creativeengineering:physics/family/wood', ...])`, sinks / fireproof / lavaproof the
+   same way (table 9.2); skim families go to the new `physics/skims` tag of #6 (and to floats until #6 ships). Replace
+   `physicsFromTag` (F6) and shrink the hand lists to the override list.
+5. Update item_physics.md 0, 2.2, 9.4 (new figures), 9.5 (built), F4.
 
 ### Ids and data
-- Verified: the Create ids named above exist in Create 0.5.1's lang; `create:belt_connector` is the belt item.
-- Verified in Create 0.5.1: item tag `create:seats` (also `casing`, `toolboxes`, `valve_handles`, `stone_types/*`);
-  sails are `create:<colour>_sail` + `create:sail_frame`; windows are the nine wood types plus
-  `create:ornate_iron_window` (metal, so it stays fireproof: the except regex names the wood ones only).
-- Unverified: whether IE puts treated wood into `#minecraft:planks` (if not, treated wood already sinks and step 3's
-  sinks line is harmless). Check with `/kubejs export` or a `/dumptags` export.
+- Tags: `creativeengineering:physics/{floats,sinks,fireproof,lavaproof}` (ItemPhysicSplit 49-52, verified), new
+  `creativeengineering:physics/family/<21 names>`.
+- Dict keys for the overrides (item_dict, verified 2026-10-31): `i.armor_stand` 2109, `i.crossbow` 2249, `i.shield`
+  2760, `i.totem_of_undying` 2821, `i.trident` 2824.
 
 ### Decisions
-- **How far (the row's question).** A: Create + the user's adjustments only (recommended first step, it is what the
-  note asks for). B: also IE, PneumaticCraft, Create addons, by the same rules. C: every mod ("Add items from all other
-  mods!"), which needs a per-mod pass over the item dump. Recommendation: A now, B in the same sitting if the dump makes
-  it quick; C as a running task with the "rules" above.
-- **Create cogwheels and shafts** contain planks (cogwheel) or are andesite (shaft); the note says "most create
-  components sink and fireproof". Recommendation: follow the note, cogwheels included.
-- **Flour in fire.** Floats, but burns (default). Recommendation: keep burning (flour is flammable).
+- The five in 9.6: recommendations stand (yes, yes, fireproof, skim for foliage / fibre / light powder, keep stone).
+- **Ids or nested tags in the family files:** recommend ids (generated, so size is not a cost; no ordering risk).
+- **Ship families before #6?** Recommend yes: skim families simply float until #6 lands.
 
 ### Gotchas
-- A Rhino quirk the file already notes: no spread in array literals; build lists with `.concat()`.
-- `addMatching`'s `except` expands every `#tag` entry into ids (tag_helper.js 36-55), so put `#tags` you want live
-  in a separate `t.add` call.
+- Rhino: no spread in array literals; build lists with `.concat()` (the file notes it).
+- `global.tags.addMatching`'s `except` expands `#tag` entries into ids; keep live `#tags` in a separate `t.add`.
 - Tag membership is live on `/reload`; the burn-transform API (`global.itemPhysics`) is startup-only.
+- `sinks` beats `floats`, `lavaproof` beats `fireproof` (item_physics.md 2.1): an override must remove an item from the
+  losing tag's source, not only add it to the winner.
 
 ### Tests
-- **IP-18 Create parts:** drop a cogwheel, a shaft and an andesite casing into a campfire -> survive; into lava ->
-  burn; a belt in water -> floats; a Create sail in fire -> burns.
-- **IP-19 Adjustments:** a totem, a crossbow, an armor stand and a shield in water -> sink; a trident in fire ->
-  survives.
-- **IP-20 Flour and treated wood:** Create wheat flour and a flour pile in water -> float; IE treated planks -> sink.
+- IP-21 (exists; SQ-IP-16): dump + audit pass line.
+- **IP-new1 Families applied:** after the generator, drop one item per family (oak log, iron ingot, AE2 drive, brick,
+  sand, amethyst, glass, potion, redstone, ice, crimson planks, carrot, bread, bone, oak leaves, wool, flour) into water,
+  a campfire and lava; each matches table 9.2.
+- **IP-new2 Adjustments:** totem, crossbow, armor stand, shield sink; a trident survives a campfire.
+
+---
+
+## item-physics #6: Light items skim on water; lavaproof items float on lava
+Status **Planned** / Work patcherMod / TODO `items/item-physics #6` (item_physics.md 10)
+
+### Goal
+Light items (foliage, fibre, light powder) land on water and stay on the surface (dip about 0.1 block, no bob); the
+other floaters settle without bobbing forever; items that survive lava float on top of it instead of sinking.
+
+### Now
+- ItemPhysic's floaters dive 2.8 blocks from a 3-block drop and bob 0.35 for good (no vertical drag in fluids); in lava
+  every item sinks at -0.0033 a tick and floating is never applied (item_physics.md 10.1, F8, F9).
+- [ItemPhysicServerMixin.java](../../development/patcherMod/src/main/java/com/SaintAlfonzo/creativeengineering/mixin/ItemPhysicServerMixin.java)
+  already has a TAIL inject on `updatePre` (53-56) that calls `AllurementItemCurses.tick(item)`; the redirects at
+  58-79 route ItemPhysic's lists through `ItemPhysicSplit`.
+- [ItemPhysicSplit.java](../../development/patcherMod/src/main/java/com/SaintAlfonzo/creativeengineering/itemphysic/ItemPhysicSplit.java):
+  tag keys 48-52, `forcedSink` 154, `isFloat` 159, `touchingLava` 179. No buoyancy concept beyond float / sink.
+- No `[itemphysic]` section in CEConfig (only a label at CEConfig.java 3417) or in the toml.
+- Simulated constants (scratchpad `float_sim.py`, 10.2): skim drag 0.45 / k 0.12 / rest 0.05 with entry look-ahead;
+  damped float 0.75 / 0.06 / 0.15; lava float 0.35 / 0.10 / 0.08.
+
+### Build
+1. `ItemPhysicSplit`: `SKIMS = itemTag(TAG_NS, "physics/skims")` and
+   `enum Buoyancy { SKIM, FLOAT, SINK }`, `static Buoyancy water(ItemStack)` (sinks wins, then skims, then `isFloat`),
+   `static boolean floatsOnLava(ItemStack)` (`LAVAPROOF`).
+2. `ItemPhysicServerMixin`: extend the TAIL inject (keep the Allurement call first). Read the fluid from
+   `ItemPhysicServer.fluid` (public ThreadLocal set at the start of `updatePre`, per 10.3; re-check the field name in the
+   jar). In water: SKIM or (config) damped FLOAT apply `vy = vy * drag + clamp((restY - y) * k, +-0.06)`, `restY` from
+   the top fluid block's height (walk up at most 4 blocks). In lava with `floatsOnLava`: the lava spring.
+   Out of fluid: entry look-ahead when `CommonPhysic.getFluid(item, true)` says the block below is fluid and this tick's
+   fall passes the surface: clamp `vy` so the item lands on it.
+3. CEConfig `[itemphysic]`: `skimDrag`, `skimSpring`, `skimRestDepth`, `dampedFloat` (bool, default true) with its three,
+   `lavaFloat` (bool) with its three; cached `DoubleValue`s (read every item tick). Run the jar once, then copy the toml
+   to `configs_edited/root_config/creativeengineering-common.toml`.
+4. KubeJS: fill `physics/skims` from the foliage / fibre / light_powder families (#2) or, if #2 is not in yet, from the
+   leaves / flowers / wool / paper / feathers lines of the floats list, through `global.tags`.
+5. Writeup: item_physics.md 10 (built), 2.1 (third water behaviour), 5 (file map).
+
+### Ids and data
+- New tag `creativeengineering:physics/skims` (item). Existing `physics/lavaproof`.
+- ItemPhysic members (from item_physics.md 10.3, verified there 2026-10-28): `ItemPhysicServer.fluid`,
+  `CommonPhysic.getFluid(ItemEntity, boolean)`.
+
+### Decisions
+- **Damped float for the other floaters:** recommend on (it ends the endless bob; heavier floaters still dip and rise).
+- **Lava float for every lavaproof item:** recommend yes (lava is dense; the refractory family is the lavaproof set).
+- **Skim on currents:** keep ItemPhysic's 0.3 inflate in `updateFluidHeightAndDoFluidPushing`, so currents still push
+  skimmers (10.3). Recommend keep.
+
+### Gotchas
+- The inject runs on both sides (item ticks are simulated on the client and tags are synced): keep it deterministic,
+  no randomness, or the client and server positions drift until the next sync.
+- `updatePre` may already have discarded the item (lava / fire `hurt`): return when `item.isRemoved()`.
+- `sinks` must still win: a sinking item never gets the spring.
+- Waterlogged blocks and bubble columns report water: test an item on a waterlogged slab and in a column.
+
+### Tests
+- **IP-new3 Skim:** drop oak leaves, wool and flour from 3 blocks into still water: each stops near the surface
+  (no visible dive), no bob after 5 s; a current carries them.
+- **IP-new4 Damped float:** oak planks from 3 blocks: one dip under a block deep, then still.
+- **IP-new5 Lava float:** cobblestone and a netherite ingot into a lava lake: they float on top and survive; an iron
+  ingot sinks and burns.
+- **IP-new6 Sinks unchanged:** gunpowder and a cogwheel into water sink as before.
+
+---
+
+## item-physics #7: Player speed in lava; Lava Vision gives water-like lava speed
+Status **Planned** / Work patcherMod / TODO `items/item-physics #7` (item_physics.md 10.4)
+
+### Goal
+Investigate, then possibly: players move slower in lava than today, and Lava Vision (`alexsmobs:lava_vision`) lets them
+move through lava about as fast as through water.
+
+### Now
+- Lava Vision only changes fog: `EffectLavaVision`'s effect tick is empty (read 2026-10-28, item_physics.md 10.4).
+- The full netherite set gives Fire Resistance, Lava Vision and Knockback Resistance through
+  [armor_effects.js](../../kubejs/startup_scripts/func/armor_effects.js) 227-234 (verified 2026-10-31). Lava Vision
+  potions brew from a lava bottle + bone serpent tooth ([lava_vision.js](../../kubejs/server_scripts/magic/lava_vision.js),
+  [potions.js](../../kubejs/startup_scripts/cooking/potions.js) 126).
+- Vanilla `LivingEntity#travel` (unverified this session): in lava `moveRelative(0.02)` then the motion is scaled by
+  0.5 (0.5 / 0.8 / 0.5 when shallow); in water by 0.8 (0.9 sprinting) plus Depth Strider and Forge's `SWIM_SPEED`
+  attribute on the water branch. Whether Forge 1.19.2 also applies `SWIM_SPEED` in lava, or routes lava through
+  `FluidType#move`, is unverified.
+- Nothing in patcherMod touches player fluid movement (grep `SWIM_SPEED`, `isInLava` in mixins: none).
+
+### Build
+1. **Read** the Forge-patched `LivingEntity#travel` (SRG `m_7023_`) in the 1.19.2 Forge jar: the lava branch, whether
+   `SWIM_SPEED` or `FluidType.move` covers it. Write the finding into item_physics.md 10.4.
+2. **Lava Vision speed:** a common mixin on `LivingEntity#travel`, `@ModifyArg` on the lava branch's `moveRelative`
+   speed and `@ModifyConstant` on its 0.5 drag: when the entity has `alexsmobs:lava_vision` (resolved once from
+   `ForgeRegistries.MOB_EFFECTS`, null when AM is absent), use the water values (0.02 * swim speed, drag 0.8).
+   If Forge's `FluidType` path applies, hook `ForgeMod.LAVA_TYPE` behaviour there instead.
+3. **Slower lava without it (optional, per decision):** scale the lava drag by a config factor `[lava_movement]
+   playerDrag` (default 0.5 = vanilla), players only.
+4. Config switch `[lava_movement] lavaVisionSwimming = true`; writeup section 10.4 -> built.
+
+### Ids and data
+- Effect `alexsmobs:lava_vision` (verified in AM 1.21.1 and the pack's scripts). SRG names to check in `joined.tsrg`:
+  `LivingEntity.travel`, `Entity.moveRelative`, `Entity.isInLava`.
+
+### Decisions
+- **`SWIM_SPEED` attribute or a `travel` mixin:** recommend the mixin; an attribute modifier from the effect would also
+  speed water, and the Forge lava branch may ignore it.
+- **Needs Fire Resistance too?** Recommend no: the effect alone gives speed; without fire protection the player still
+  burns, which is the cost.
+- **Mobs or players only:** recommend every `LivingEntity` with the effect (it is effect-driven, so only potion users
+  and netherite wearers get it); the slower-lava factor players only.
+- **Lower plain lava speed:** recommend leaving vanilla until the user tries the Lava Vision change.
+
+### Gotchas
+- Movement runs on the client for the local player: the mixin must be common (both sides) and read the effect from the
+  client entity (effects are synced).
+- Elytra and riding branches of `travel` must stay untouched; inject only in the lava branch.
+
+### Tests
+- **IP-new7 Lava Vision swim:** in a lava pool with Fire Resistance, time 10 blocks of swimming without and with Lava
+  Vision: with it, about the water time.
+- **IP-new8 Netherite set:** full netherite armour in lava: same speed as IP-new7 with the effect.
 
 ---
 
@@ -273,37 +227,32 @@ lava), starting with the "Future" list the user wrote in the tag file.
 Status **Planned** / Work patcherMod / tags / TODO `items/item-physics #5`
 
 ### Goal
-The goose's golden egg (`vintagedelight:golden_egg`, `i.golden_egg`) behaves as an ordinary dropped item: it falls with
-gravity and floats on water.
+The goose's golden egg item (`vintagedelight:golden_egg`, `i.golden_egg`) behaves as an ordinary dropped item: it falls
+with gravity and floats on water.
 
 ### Now
-- The egg is dropped by `incubationAdditions` `goldenegg/GoldenGooseEgg.drop` (line 58-98): a plain
-  `bird.spawnAtLocation(item)` then `setPos` onto the chosen spot. No `setNoGravity` or velocity edit appears in the
-  incubationAdditions code (grep), so gravity itself is not removed there. What the user saw (hovering, or sinking) is
-  not reproduced: unverified.
-- Item physics classes: [item_physics_tags.js](../../kubejs/server_scripts/tags/item_physics_tags.js). Eggs float:
-  `'egg', 'turtle_egg', 'frogspawn'` (line 193, in the vanilla list of `physicsFromTag(e, 'floats', ...)`);
-  anything untagged sinks and burns. `golden_egg` is in none of the four tags, so it sinks. `i.golden_egg` is item_dict
-  line 13836; the block is `GoldenEggBlock` in the Vintage port jar (a block item).
-- ItemPhysic's own flat-lying render and physics (`ItemPhysicServerMixin`, `ItemPhysicSplit` in patcherMod) may treat a
-  block item differently: unverified.
+- Since 2026-10-25 the goose lays it as a block (Vintage's Golden Egg falls like sand) and drops the item only in a
+  closed 1x1 pen: `incubationAdditions` `goldenegg/GoldenGooseEgg.lay` (62-122; block path 97-108, item path 112-117:
+  `bird.spawnAtLocation(item)` then `setPos`). No `setNoGravity` or velocity edit (verified 2026-10-31).
+- Physics: eggs float (`'egg', 'turtle_egg', 'frogspawn'`, [item_physics_tags.js](../../kubejs/server_scripts/tags/item_physics_tags.js)
+  168); `golden_egg` is in none of the four tags, so it sinks and burns. `i.golden_egg` is item_dict 14437.
+- The cause of "no gravity" is unreproduced.
 
 ### Build
-1. Reproduce: drop a golden egg in water and over a pit; note whether it falls and whether it floats.
-2. Floats: add `i.golden_egg` to the `floats` group with the eggs (a `add('floats', ...)` with the key, since the file
-   lists vanilla by short name; modded items use `i.` keys elsewhere in the file).
-3. Fire: gold items are `fireproof` (`gold_block`, `golden_*`); decide whether the egg is too (Decisions).
-4. If gravity really is missing in game, read `GoldenEggBlock` / the item class in the Vintage jar for `isNoGravity` or
-   a custom `ItemEntity`.
+1. Reproduce: `/give` the egg, drop it over a pit and into water; also let a goose lay one in a 1x1 pen.
+2. Floats: `t.add(e, PHYSICS_TAG.floats, [i.golden_egg])` (or the `organic` family from #2).
+3. Fireproof per the decision.
+4. Only if gravity is really missing: read the Vintage port's golden egg item class (`development/backportedVintage`)
+   for `isNoGravity` or a custom `ItemEntity`.
 
 ### Decisions
-Fireproof or lavaproof as well? Recommend fireproof like the gold block (it drops 8 to 32 gold nuggets when broken).
+Fireproof too? Recommend fireproof like the gold block (it breaks into gold nuggets).
 
 ### Gotchas
 Tag changes need only `/reload`; a mixin change needs a restart. Only the tag edit is expected.
 
-### Tests (IP-)
-- IP-15 (proposed): goose or `/give` egg: falls off a ledge, floats in water, survives open fire.
+### Tests
+- **IP-new9 Golden egg:** falls off a ledge, floats in water, survives a campfire.
 
 ---
 
@@ -311,13 +260,12 @@ Tag changes need only `/reload`; a mixin change needs a restart. Only the tag ed
 
 | Row | Change | Status | Note |
 |---|---|---|---|
-| #1 | Fire / lava split, float / sink tags, burn transforms | Testing | Code matches the writeup (F1 if-chain at `ItemPhysicSplit` 128-133). item_physics.md still called F1 a live crash in two places and cited a wrong force-load line: fixed (below). IP-01 to IP-14 open |
+| #1 | Fire / lava split, float / sink tags, burn transforms | Testing | [item_physics.md](../item_physics.md) 0-3; IP-01 to IP-14 open (IP-13 checks the `$1` crash fixed in 1.0.9) |
+| #3 | Allurement curses and item physics | Testing | Built 2026-10-27 (`AllurementItemCurses`, TAIL inject `ItemPhysicServerMixin` 53-56); item_physics.md history 2026-10-27. Shipped to the client in 1.1.04; the server runs 1.1.05 since 2026-10-31 (`deploy/DEPLOYED.json`), so it is live there too. IP-15, SQ-IP-15 open |
+| #4 | Water splash from falling blocks | built 2026-10-28 (TODO says Planned) | `FallingBlockWaterSplashMixin` (client list), [fixes_compat.md](../fixes_compat.md) 2.32; 1.1.04 changelog Fixed bullet. FX-49, CQ-FBS-01 to -03 open. The planned server-side config switch was not built (client-only mixin, no switch) |
 
 ## Writeup corrections made
 
-- [item_physics.md](../item_physics.md) 0, first table row: "a recurring crash in it is unfixed (F1)" -> fixed in
-  1.0.9.
-- [item_physics.md](../item_physics.md) 0, Pending: "F1 is a live crash bug" -> fixed in 1.0.9, IP-13 checks it.
-- [item_physics.md](../item_physics.md) 4, F1: "**The `ItemPhysicSplit$1` crash is still in the code.** `burnDecision`
-  switches on" -> "Was (before the fix): `burnDecision` switched on" (the FIXED note before it already said so).
-- [item_physics.md](../item_physics.md) 3: force-load at `CreativeEngineering.java` line 254 -> 273.
+- 2026-10-21: [item_physics.md](../item_physics.md) 0 and 4 (F1 called live in two places, wrong force-load line) fixed.
+- 2026-10-31: none made (the sweep edits briefs only). Stale in the writeup: item_physics.md 0 (row 5 and Pending) and
+  9.4 say `/dumpphysics` has not run, but `kubejs/exported/physics/item_physics.json` exists (2026-10-30 00:41).

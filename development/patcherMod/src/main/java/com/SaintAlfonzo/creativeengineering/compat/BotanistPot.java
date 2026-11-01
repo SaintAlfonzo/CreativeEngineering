@@ -57,6 +57,9 @@ public final class BotanistPot {
     @Nullable
     private static Block workbench;
 
+    /** Not in the vanilla pot map; the workbench takes it anyway (flower_pots.md 3.2). */
+    static final ResourceLocation GLOW_LICHEN = new ResourceLocation("minecraft", "glow_lichen");
+
     private BotanistPot() {}
 
     public static void register(IEventBus modEventBus) {
@@ -81,6 +84,8 @@ public final class BotanistPot {
     @Nullable
     public static Block pottedFor(@Nullable ResourceLocation plant) {
         if (plant == null) return null;
+        // Glow lichen has no potted block: it stands in for itself, drawn from PlantBoxModels.GLOW_LICHEN_POT
+        if (GLOW_LICHEN.equals(plant)) return Blocks.GLOW_LICHEN;
         Supplier<? extends Block> potted = fullPots().get(plant);
         Block block = potted == null ? null : potted.get();
         return block == null || block == Blocks.AIR ? null : block;

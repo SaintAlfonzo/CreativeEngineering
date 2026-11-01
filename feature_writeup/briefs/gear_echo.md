@@ -1,6 +1,6 @@
 # Brief: gear / echo
 
-Written 2026-10-21 from [TODO.md](../todo/TODO.md) `# gear`, Sub `echo`. Reference writeups:
+Written 2026-10-21 from [TODO.md](../todo/TODO.md) `# gear`, Sub `echo`; updated 2026-10-31 (brief sweep: row #2 is now `textures/art #3`, ids and lines re-checked). Reference writeups:
 [gear_tuning.md](../gear_tuning.md) 2.5 (echo tools), [armor_effects.md](../armor_effects.md) 2.3 (on-hit table), 2.4
 (echo armor bonus), F5 / F7. Code: [echo_tools.js](../../kubejs/startup_scripts/items/echo_tools.js),
 [tool_effects.js](../../kubejs/startup_scripts/func/tool_effects.js) (registrations 109-133),
@@ -14,19 +14,20 @@ echo tools human generated textures (only non human textures in pack)". The memo
 
 ## Scope and order
 
-Open rows: #1, #2 (both Planned). No Testing / Complete rows in this subfamily.
+| Order | Row | Status | Work |
+|---|---|---|---|
+| 1 | `gear/echo #1` Echo tool buffs | Planned | KubeJS (four pack tools), small patcherMod mixin if the CDD echo sword joins; restart |
+| any | `textures/art #3` Human-made echo textures (was `gear/echo #2`) | Planned | art in `kubejs/assets`, pipeline exists; independent of #1 |
 
-- **#1 first** (decide the buffs; KubeJS for the four pack tools, a small patcherMod mixin if the CDD echo sword
-  joins). Restart for tooltips, nothing else.
-- **#2 any time** (art; the pipeline exists). Independent of #1.
+No Testing / Complete rows here.
 
 Related rows: `potions/effects #5` (F5 main-hand keying, F7 echo Phantom Bane level) and `potions/effects #6` (dragon
-bonuses; echo must stay below them). `gear/tuning #12` makes the echo assembly configurable but not the effects.
+bonuses, still Planned 2026-10-31; its pickaxe idea is "Haste unless crouching"; echo must stay below them). `gear/tuning #12` makes the echo assembly configurable but not the effects.
 
 ---
 
 ## echo #1: Echo tool buffs
-Status Planned / Work KubeJS / `gear/echo #1`
+Status **Planned** · Work: KubeJS · id `gear/echo #1` (checked 2026-10-31: nothing built, `echoHit` unchanged)
 
 ### Goal
 The echo tools' effects are worth having, clearly below dragon's, and simple: one idea per tool, one table for all
@@ -34,7 +35,9 @@ five echo tools including the sword.
 
 ### Now
 - Pack echo tools (`creativeengineering:echo_pickaxe/axe/shovel/hoe`): `global.toolEffects.onHit(i.echo_*, echoHit)`
-  (tool_effects.js 117-133), `echoHit` = Weakness II 100 t + Darkness II 100 t to the target. No held effect.
+  ([tool_effects.js](../../kubejs/startup_scripts/func/tool_effects.js) 117-120 `echoHit`, 130-133 registrations),
+  `echoHit` = Weakness II 100 t + Darkness II 100 t to the target. No held effect. Dragon registrations follow at
+  136-157.
 - CDD echo sword (`create_deep_dark:echo_sword`): **not** in the framework. CDD's own
   `create_deep_dark.procedures.EchoSwordEffectProcedure` (verified in `create_deep_dark-1.7.0`): a
   `LivingAttackEvent` subscriber, `private static execute(Event, Entity, Entity)`; if the attacker's main-hand item is
@@ -70,8 +73,9 @@ five echo tools including the sword.
      the method is SRG `m_7373_`) to no-ops, so the framework's tooltip (client_scripts/tool_effects_tooltip.js) is
      the only one. Pattern: `EchoArmorTooltipMixin` / `EchoArmorEffectProcedureMixin`.
    - `global.toolEffects.onHit(i.echo_sword, echoHit)`. Dict key `i.echo_sword` exists.
-   - Register the mixin in `creativeengineering.mixins.json` (next to `EchoArmorTooltipMixin`, line 35).
-4. armor_effects.md 2.3 table and AE-13 / AE-14; tooltips check.
+   - Register the mixin in `creativeengineering.mixins.json` (next to `EchoArmorTooltipMixin`, line 74).
+4. armor_effects.md 2.3 table (line 83) and 2.1 echo sword line (38), AE-13 / AE-14; tooltips check; changelog bullet
+   (echo tool effects, old values in brackets).
 
 Alternative to step 3 without Java: leave the sword on CDD's Weakness + Darkness and only change the four pack tools
 (inconsistent sword vs axe).
@@ -93,14 +97,16 @@ Effects `minecraft:weakness`, `minecraft:slowness`, `minecraft:haste`. Items `i.
 
 ### Tests
 - AE-13 (update): echo axe on a zombie → Weakness II + Slowness II; no Darkness.
-- AE-25: echo pickaxe in either hand → Haste I icon; tooltip "While held: Haste I (infinite)".
-- AE-26 (after D2): echo sword tooltip shows only the framework lines (no duplicate "On hit" header); hit a zombie →
+- AE-new1 (proposed, numbered when queued; AE-25 to AE-28 are taken by the potions_effects brief): echo pickaxe in
+  either hand → Haste I icon; tooltip "While held: Haste I (infinite)".
+- AE-new2 (after D2): echo sword tooltip shows only the framework lines (no duplicate "On hit" header); hit a zombie →
   the new effects, no Darkness.
 
 ---
 
-## echo #2: Human-made echo textures
-Status Planned / Work resource pack / `textures/art #3`
+## textures/art #3: Human-made echo textures
+Status **Planned** · Work: art (kubejs/assets) · id `textures/art #3` (was `gear/echo #2`; checked 2026-10-31: the
+four textures are still the generated ones, untouched since `609cd21`)
 
 ### Goal
 Hand-drawn sprites for the four echo tools, keeping the CDD-style animated glow.
@@ -117,7 +123,7 @@ Hand-drawn sprites for the four echo tools, keeping the CDD-style animated glow.
 ### Build
 1. Draw four 16x16 frame-0 sprites (pickaxe, axe, shovel, hoe) in the echo sword's style: dark outline, sculk-teal
    head, the glow in exact `RAMP` colours. Use CDD's `echo_sword.png` frame 0 as the reference (from the CDD jar,
-   `assets/create_deep_dark/textures/item/echo_sword.png`).
+   `assets/create_deep_dark/textures/items/echo_sword.png`, with `.mcmeta`; path checked 2026-10-31).
 2. Save each as `kubejs/assets/creativeengineering/textures/item/echo_<tool>.png` (16x16), run
    `python3 tools/echo_texture.py animate kubejs/assets/creativeengineering/textures/item/echo_<tool>.png` for each; it
    writes the 16x192 strip and the `.mcmeta` in place.
@@ -128,7 +134,8 @@ Hand-drawn sprites for the four echo tools, keeping the CDD-style animated glow.
 
 ### Gotchas
 - Any colour that is not exactly a `RAMP` entry is static; anti-aliased glow pixels won't animate.
-- The TODO Work column says "resource pack"; the files are KubeJS assets.
+- The files are KubeJS assets (the TODO Work column now says so).
+- Player-visible: changelog bullet under the echo gear family (new echo tool textures).
 
 ### Tests
 - GR-04 (existing): JEI shows the four tools with animated textures.

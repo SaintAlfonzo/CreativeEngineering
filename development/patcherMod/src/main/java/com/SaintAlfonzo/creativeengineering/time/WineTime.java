@@ -6,6 +6,10 @@ import com.SaintAlfonzo.creativeengineering.CEConfig;
  * Public read-only view of {@code [time]} for the Vinery port's vintage clock (feature_writeup/time.md 3.7). The port
  * calls this when patcherMod is loaded (soft dependency) and uses it instead of its own [wine]/[aging] lengths and
  * boosts while {@link #active()}. patcherMod never writes the port's config. Every getter reads the toml live.
+ *
+ * Reserved for Creative Calendar (owner, 2026-10-31): moves with the whole time/ package, [time] and the season code into
+ * that future mod, which Creative Delight and Creative Brewing will both depend on (feature_writeup/creative_calendar.md).
+ * Until then it stays here, and Creative Brewing's Vinery reads it through its soft dependency on patcherMod.
  */
 public final class WineTime {
     private WineTime() {}

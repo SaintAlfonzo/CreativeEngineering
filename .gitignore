@@ -63,15 +63,15 @@
 /development/*/run-data/
 /development/*/.idea/
 /development/*/tools/__pycache__/
-# Creative Delight members (one level deeper) and the build-time upstream jars of its repacks (sha1-pinned in each
-# member's gradle.properties; copied from the mods' releases, never committed)
-/development/creativeDelight/members/*/build/
-/development/creativeDelight/members/*/jar_archive/
-/development/creativeDelight/members/*/.gradle/
-/development/creativeDelight/members/*/run/
-/development/creativeDelight/members/*/run-data/
-/development/creativeDelight/members/*/libs/
-/development/creativeDelight/members/*/tools/__pycache__/
+# Bundle members, one level deeper (Creative Delight, Creative Brewing), and the build-time upstream jars of CD's
+# repacks (sha1-pinned in each member's gradle.properties; copied from the mods' releases, never committed)
+/development/*/members/*/build/
+/development/*/members/*/jar_archive/
+/development/*/members/*/.gradle/
+/development/*/members/*/run/
+/development/*/members/*/run-data/
+/development/*/members/*/libs/
+/development/*/members/*/tools/__pycache__/
 /development/creativeDelight/upstream/
 # root Gradle build output
 /.gradle/

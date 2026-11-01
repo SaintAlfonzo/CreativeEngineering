@@ -1797,33 +1797,6 @@
 	#Range: 0 ~ 100
 	recycleShowTicks = 10
 
-#Small blocks on a Cooking for Blockheads counter or corner (#creativeengineering:counter_supports):
-#Farmer's Delight's cutting board, Display Delight's plates and plated foods, Brewin' and Chewin's
-#coaster (#creativeengineering:counter_toppers). The counter's worktop is 1 px lower than a full
-#block, so they and what lies on them are drawn shifted by these offsets, in pixels (1/16 block):
-#cuttingBoardOffset* for the board, plateOffset* for the plates and the coaster. X and Z are as
-#seen on a counter facing north (door to the north, back edge to the south: +X = east, +Z = toward
-#the back) and turn with the counter. Visual only; F3+A redraws.
-[kitchen]
-	#Sideways shift.
-	#Range: -8.0 ~ 8.0
-	cuttingBoardOffsetX = 0.0
-	#Height shift; -1 puts the board on the worktop.
-	#Range: -8.0 ~ 8.0
-	cuttingBoardOffsetY = -1.0
-	#Shift toward the counter's back (negative = toward the door).
-	#Range: -8.0 ~ 8.0
-	cuttingBoardOffsetZ = 0.0
-	#Plates and coasters: sideways shift.
-	#Range: -8.0 ~ 8.0
-	plateOffsetX = 0.0
-	#Plates and coasters: height shift; -1 puts them on the worktop.
-	#Range: -8.0 ~ 8.0
-	plateOffsetY = -1.0
-	#Plates and coasters: shift toward the counter's back (negative = toward the door).
-	#Range: -8.0 ~ 8.0
-	plateOffsetZ = 0.0
-
 #TrashSlot defaults (client side). Screens are full Java class names; F3 can't show them,
 #but TrashSlotSaveState.json in the game folder lists every screen opened so far.
 [trash_slot]
@@ -2278,9 +2251,9 @@
 	#sterilized jungle grape vine: 'Sheared, stops growing'. Weeping, twisting and cave vine and kelp
 	#tips and Immersive Weathering ivy at their last age: 'Stopped growing'.
 	sheared = true
-	#Blocks that only drop themselves with Silk Touch (block tag creativeengineering:wthit/needs_silk_touch,
-	#from tools/gen_silk_touch_blocks.py): a Silk Touch book and 'Needs Silk Touch'. Hidden while the
-	#main-hand tool has Silk Touch.
+	#'Silk Touch Required' line: True (green) when nothing drops without Silk Touch, Drops Differently
+	#(yellow) when something else drops (block tags creativeengineering:wthit/needs_silk_touch and
+	#wthit/silk_touch_differs, from tools/gen_silk_touch_blocks.py). Hidden while the main-hand tool has Silk Touch.
 	silkTouch = true
 	#Every crop with a crop season type: its seasons as on the planting item ('Fertile: Spring',
 	#'Offseason: Winter, Dry', 'Season: Nether', 'Fertile: Cold biomes'). [crop_seasons].
@@ -2297,6 +2270,12 @@
 	#player with cheats on), 4 = server owners only, 0 = every player.
 	#Range: 0 ~ 4
 	operatorBlockLevel = 2
+	#Also show 'Silk Touch Required: False' (red) on every other block. Off by default.
+	silkTouchShowFalse = false
+	#Flower pots, flower boxes and planter boxes: 'Contains: Poppy' (every plant inside, a box's plants
+	#in slot order, '2 Poppy' for a double); a Twigs silt pot 'Rooted Dirt: Yes / No'. A Beautify hanging
+	#pot standing on the ground is named 'Rich Pot'.
+	potContents = true
 
 	#One switch per state line (a label added by an overriding state_lines.json is always on).
 	[wthit.state_lines]
@@ -2353,7 +2332,7 @@
 	#Removing an entry gives the mod its own name back. The mod id stays the same (JEI @<modid> still works).
 	#Pack style (feature_writeup/names.md 12): words spaced, possessive apostrophes, '&' for and / 'n',
 	#Title Case, Create addons as "Create: <name>", no author handles, the pack's own mods end in (Alfonzo).
-	overrides = ["abnormals_delight=Abnormals' Delight", "apexcore=Apex Core", "appleskin=Apple Skin", "astikorcarts=Astikor Carts", "autoreglib=Auto Reg Lib", "baby_mobs=Baby Mobs (Alfonzo)", "betterdays=Better Days", "betterf3=Better F3", "boatview360=Boat View 360", "bobberdetector=Create: Bobber Detector", "brewinandchewin=Brewin' & Chewin' Backport (Alfonzo)", "canned_goods=Canned Goods", "cb_microblock=CB Microblock", "cb_multipart=CB Multipart", "cb_multipart_minecraft=CB Multipart Minecraft", "cccbridge=Create: CC Bridge", "chefsdelight=Chef's Delight", "cherisheditems=Cherished Items", "codechickenlib=Code Chicken Lib", "compressedcreativity=Create: Compressed Creativity", "conditional_mixin=Conditional Mixin", "cookingforblockheads=Cooking for Blockheads", "corpsecurioscompat=Corpse Curios Compat", "cosmeticarmorreworked=Cosmetic Armor Reworked", "create__the_salt=Create: The Salt", "create_compressed=Create: Compressed", "create_confectionery=Create: Confectionery", "create_crush_everything=Create: Recycling", "create_enchantment_industry=Create: Enchantment Industry", "create_mechanical_extruder=Create: Mechanical Extruder", "create_questing=Create: Questing", "create_things_and_misc=Create: Things & Misc", "createaddition=Create: Crafts & Additions", "createappliedkinetics=Create: Applied Kinetics", "createdeco=Create: Deco", "creategbd=Create: Guardian Beam Defense", "creategoggles=Create: Goggles", "createliquidfuel=Create: Liquid Fuel", "creativecore=Creative Core", "creativeengineering=Creative Engineering (Alfonzo)", "ctm=Connected Textures Mod", "darkpaintings=Dark Paintings", "deathknell=Death Knell", "design_decor=Create: Design & Decor", "do_a_barrel_roll=Do a Barrel Roll", "dont_void_arrows=Don't Void Arrows", "dragonloot=Dragon Loot", "dummmmmmy=Target Dummy", "enchdesc=Enchantment Descriptions", "enderstorage=Ender Storage", "entityculling=Entity Culling", "everythingcopper=Everything Is Copper", "exposure=Exposure Backport & Extras (Alfonzo)", "exposure_catalog=Exposure Catalog Backport (Alfonzo)", "exposure_expanded=Exposure: Expanded Backport (Alfonzo)", "exposure_extras=Exposure Extras (Alfonzo)", "exposure_polaroid=Exposure Polaroid Backport (Alfonzo)", "extendedgears=Create: Extended Cogwheels", "farmers_structures=Farmer's Structures", "fastfurnace=Fast Furnace", "fireflybushport=Firefly Bush Port", "fishontheline=Fish on the Line", "fortuneonneterite_i_ig_z=Fortune on Netherite", "foundation=Foundation Vinery Backport (Alfonzo)", "framedblocks=Framed Blocks", "geckolib3=Gecko Lib", "hobbit_house_=Hobbit House", "hopour=Hopo Better Underwater Ruins", "immediatelyfast=Immediately Fast", "incubation_additions=Incubation Additions (Alfonzo)", "ipo=Improved Pillager Outpost", "itemphysic=Item Physic", "just_enough_beacons=Just Enough Beacons", "kotlinforforge=Kotlin for Forge", "kubejsdelight=KubeJS Delight", "lightmansdiscord=Lightman's Discord Integration", "littlecontraptions=Create: Little Contraptions", "minecraft_style_paintings=Minecraft Style Paintings", "mixinsquared=Mixin Squared", "more_mooblooms=More Mooblooms (Alfonzo)", "netherportalfix=Nether Portal Fix", "nocubescreateexp=Create: Compact Exp", "notenoughanimations=Not Enough Animations", "old_swamp_fisherman_house=Old Swamp Fisherman House", "oreexcavation=Ore Excavation", "portablewardrobe=Portable Wardrobe", "projectred_core=Project Red Core", "projectred_fabrication=Project Red Fabrication", "projectred_illumination=Project Red Illumination", "projectred_integration=Project Red Integration", "projectred_transmission=Project Red Transmission", "railways=Create: Steam & Rails", "restapi=REST API", "sawmillhouse=Sawmill House", "seasonhud=Season HUD", "simplehats=Simple Hats", "sliceanddice=Create: Slice & Dice", "spectrelib=Spectre Lib", "supermartijn642configlib=Config Library", "supermartijn642corelib=Core Lib", "swingthroughgrass=Swing Through Grass", "t_and_t=Towns & Towers", "takesapillage=It Takes a Pillage", "tmted=Engineer's Delight", "transition=Transition", "trashslot=Trash Slot", "treechop=HT's Tree Chop", "villagersellanimals=Villagers Sell Animals", "vinery=Let's Do Vinery Backport (Alfonzo)", "w2w2=Waystones 2 Waypoints 2", "waila=Waila", "whitenoise=White Noise", "worldedit=World Edit", "wthit=WTHIT", "xaerolib=Xaero Lib", "xaerozoomout=Xaero Zoomout"]
+	overrides = ["abnormals_delight=Abnormals' Delight", "apexcore=Apex Core", "appleskin=Apple Skin", "astikorcarts=Astikor Carts", "autoreglib=Auto Reg Lib", "baby_mobs=Baby Mobs", "betterdays=Better Days", "betterf3=Better F3", "boatview360=Boat View 360", "bobberdetector=Create: Bobber Detector", "canned_goods=Canned Goods", "cb_microblock=CB Microblock", "cb_multipart=CB Multipart", "cb_multipart_minecraft=CB Multipart Minecraft", "cccbridge=Create: CC Bridge", "chefsdelight=Chef's Delight", "cherisheditems=Cherished Items", "codechickenlib=Code Chicken Lib", "compressedcreativity=Create: Compressed Creativity", "conditional_mixin=Conditional Mixin", "cookingforblockheads=Cooking for Blockheads", "corpsecurioscompat=Corpse Curios Compat", "cosmeticarmorreworked=Cosmetic Armor Reworked", "create__the_salt=Create: The Salt", "create_compressed=Create: Compressed", "create_confectionery=Create: Confectionery", "create_crush_everything=Create: Recycling", "create_enchantment_industry=Create: Enchantment Industry", "create_mechanical_extruder=Create: Mechanical Extruder", "create_questing=Create: Questing", "create_things_and_misc=Create: Things & Misc", "createaddition=Create: Crafts & Additions", "createappliedkinetics=Create: Applied Kinetics", "createdeco=Create: Deco", "creategbd=Create: Guardian Beam Defense", "creategoggles=Create: Goggles", "createliquidfuel=Create: Liquid Fuel", "creativecore=Creative Core", "creativeengineering=Creative Engineering", "ctm=Connected Textures Mod", "darkpaintings=Dark Paintings", "deathknell=Death Knell", "design_decor=Create: Design & Decor", "do_a_barrel_roll=Do a Barrel Roll", "dont_void_arrows=Don't Void Arrows", "dragonloot=Dragon Loot", "dummmmmmy=Target Dummy", "enchdesc=Enchantment Descriptions", "enderstorage=Ender Storage", "entityculling=Entity Culling", "everythingcopper=Everything Is Copper", "exposure=Exposure Backport & Extras", "exposure_catalog=Exposure Catalog Backport", "exposure_expanded=Exposure: Expanded Backport", "exposure_extras=Exposure Extras", "exposure_polaroid=Exposure Polaroid Backport", "extendedgears=Create: Extended Cogwheels", "farmers_structures=Farmer's Structures", "fastfurnace=Fast Furnace", "fireflybushport=Firefly Bush Port", "fishontheline=Fish on the Line", "fortuneonneterite_i_ig_z=Fortune on Netherite", "framedblocks=Framed Blocks", "geckolib3=Gecko Lib", "hobbit_house_=Hobbit House", "hopour=Hopo Better Underwater Ruins", "immediatelyfast=Immediately Fast", "incubation_additions=Incubation Additions", "ipo=Improved Pillager Outpost", "itemphysic=Item Physic", "just_enough_beacons=Just Enough Beacons", "kotlinforforge=Kotlin for Forge", "kubejsdelight=KubeJS Delight", "lightmansdiscord=Lightman's Discord Integration", "littlecontraptions=Create: Little Contraptions", "minecraft_style_paintings=Minecraft Style Paintings", "mixinsquared=Mixin Squared", "more_mooblooms=More Mooblooms", "netherportalfix=Nether Portal Fix", "nocubescreateexp=Create: Compact Exp", "notenoughanimations=Not Enough Animations", "old_swamp_fisherman_house=Old Swamp Fisherman House", "oreexcavation=Ore Excavation", "portablewardrobe=Portable Wardrobe", "projectred_core=Project Red Core", "projectred_fabrication=Project Red Fabrication", "projectred_illumination=Project Red Illumination", "projectred_integration=Project Red Integration", "projectred_transmission=Project Red Transmission", "railways=Create: Steam & Rails", "restapi=REST API", "sawmillhouse=Sawmill House", "seasonhud=Season HUD", "simplehats=Simple Hats", "sliceanddice=Create: Slice & Dice", "spectrelib=Spectre Lib", "supermartijn642configlib=Config Library", "supermartijn642corelib=Core Lib", "swingthroughgrass=Swing Through Grass", "t_and_t=Towns & Towers", "takesapillage=It Takes a Pillage", "tmted=Engineer's Delight", "transition=Transition", "trashslot=Trash Slot", "treechop=HT's Tree Chop", "villagersellanimals=Villagers Sell Animals", "w2w2=Waystones 2 Waypoints 2", "waila=Waila", "whitenoise=White Noise", "worldedit=World Edit", "wthit=WTHIT", "xaerolib=Xaero Lib", "xaerozoomout=Xaero Zoomout"]
 
 #Player changelog, "What's New" (client side). The notes are the pack's
 #assets/creativeengineering/changelog/<version>.md files. Takes effect the next time a menu opens.
@@ -2562,10 +2541,10 @@
 [dandelion_maturing]
 	#Rich Soil and Rich Soil Farmland (Farmer's Delight).
 	#Range: 0 ~ 100000
-	richSoilTicks = 10
+	richSoilTicks = 20
 	#Fertile Soil (Immersive Weathering's mulch block).
 	#Range: 0 ~ 100000
-	fertileSoilTicks = 20
+	fertileSoilTicks = 10
 
 #Shears on a modded vine (Floral Enchantment's flower vines, Botania's solid vine) stop it growing,
 #as Quark's Shear Vines does for the vanilla vine. Shears on the tip of a weeping, twisting or cave

@@ -1,5 +1,11 @@
 # Alcohol: Brewin' and Chewin' and Vinery backports
 
+> **Creative Brewing (2026-10-31):** both ports are now members of the Creative Brewing bundle: sources in
+> `development/creativeBrewing/members/vinery` and `.../members/brewin` (Gradle projects `:backportedVinery`, `:backportedBrewin`
+> unchanged), shipped only inside `creative_brewing-<v>.jar`, display names "Let's Do Vinery (Creative Brewing)" and "Brewin' &
+> Chewin' (Creative Brewing)" (`foundation`: "Creative Brewing"). Vinery `-08` and Brewin' `-05` are the first nested builds (built, not installed). Paths
+> `development/backportedVinery` / `development/backportedBrewin` below mean those folders. See [creative_brewing.md](creative_brewing.md).
+
 > **Merge note (2026-10-25):** this port is to be merged with the other Farmer's Delight add-on backports into a single jar, **Creative Delight**. The inventory summary, cross-port interactions and the merge process are in [creative_delight.md](creative_delight.md). This file stays the detailed record for Brewin' and Chewin' (Part A) and Vinery (Part B); its registry namespace and test prefix do not change.
 
 Two backports live in this file:

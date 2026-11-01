@@ -552,7 +552,10 @@ Salted items keep Salt's own "Salted: +N nutrition" tooltip, so the page adds no
 - **Eating:** `Seasonings.onEaten` (`LivingEntityUseItemEvent.Finish`, server, players, edible items) applies each
   seasoning's bonus after the food's own.
 - **Tooltip:** `food/SeasoningTooltip`, one line per seasoning under the name: "Garlic: Speed (0:10)", "Onion: +2
-  nutrition".
+  nutrition". The name is lang key `seasoning.<ns>.<path>`, from seasoning_lang.js (a CD client script under
+  `assets/`). From the 10-27 move until 2026-10-31 that script did not load at game start (KubeJS loads resource client
+  scripts only on F3+T), so the line showed the raw key; patcherMod `KubeJSClientResourceScriptsMixin` loads them at
+  start (creative_delight.md 10.2). FO-59.
 - **JEI:** each seasoning recipe is a page on the Seasoning tab (3.11): food | seasoning item(s) -> seasoned food,
   food and result cycling together.
 
@@ -591,6 +594,8 @@ recipe input loses the seasoning; JEI shows seasoned and plain popcorn as one en
 from row 3: pepper, dill, cream and onion, ice cubes, popcorn variants. FO-45 to FO-48.
 
 ### 3.13 Powdered sugar (BUILT 2026-10-25, rebalanced 2026-10-29; scratch r1031 2026-10-31: recipes PASSED, the 0.5 second results client check pending)
+
+2026-10-31 (owner): block texture is the sugar cube palette on vitrified sand (`textureswapper/powdered_sugar/out2/vitrified_sand__sugar_cube.png`, `make_moss_candidates.py`); replaces the moss shape. WTHIT: no pick item, so the block model is the icon and the name is the block's own, "Powdered Sugar" (check PS-WT in game).
 
 `dishes/ingredients #16`, with the sugar seasoning of `food/seasoning #5`. Three pieces, all `creativeengineering:`:
 - **Item** `powdered_sugar` (KubeJS, [baking_ingredients.js](../development/creativeDelight/src/main/resources/kubejs_startup/creativeengineering/baking_ingredients.js)):
@@ -941,6 +946,11 @@ Cooking oil and fried eggs (3.7), after a restart:
   shows one page per seasoning (cheese, onion, garlic) and one for garlic + onion, each with popcorn only.
   Server half PASSED on a scratch server 2026-10-26 (SQ-SNF-01 to -03: tags, recipe ids, `/sntest` grid matches 5/5);
   the JEI tab is the open client half.
+- [ ] **FO-59 Seasoning names at game start** (restart with the new patcherMod jar, no F3+T): Popcorn + Garlic shows
+  "Garlic: Speed (0:10)", not `seasoning.creativeengineering.garlic`; Cheese, Onion and Void Pepper lines show their
+  names too. `logs/kubejs/client.log` lists `Loaded script creative_delight:kubejs/creativeengineering/seasoning_lang.js`
+  (and the other `creative_delight:kubejs/...` client scripts) once, before any F3+T. Placeable food lines (PL-01) show
+  without F3+T.
 
 ## 8. History
 

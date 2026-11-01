@@ -241,9 +241,12 @@ Silk Touch.
 - **Not seen:** global loot modifiers and drops made in code. A mod update needs the generator rerun.
 - `[wthit] silkTouch`.
 
-Open rework (owner, scratchpad 2026-10-29, TODO `ui/wthit #12`): drop the book icon; fold the line between harvest
-level and run speed; text "Silk Touch Required: xxx" with False (hidden by default, configurable, red), True (green)
-and Drops Differently (yellow). Not built.
+Reworked 2026-10-31 (TODO `ui/wthit #12`, built, not yet in game): no book icon; one line "Silk Touch Required: ..." in
+three states. True (green) = tag `wthit/needs_silk_touch`, nothing drops without Silk Touch (341 blocks); Drops
+Differently (yellow) = tag `wthit/silk_touch_differs`, something else drops, Silk Touch gives the block (362); False
+(red) = every other block, only with `[wthit] silkTouchShowFalse` (default off). The generator splits the two lists
+(`required` / `differs` in the JSON). Still hidden while the main hand has Silk Touch. Not done: the line sits at
+default body priority, not yet ordered between harvest level and run speed.
 
 ### 2.12 Crop seasons
 

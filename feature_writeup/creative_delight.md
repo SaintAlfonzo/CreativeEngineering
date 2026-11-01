@@ -45,6 +45,7 @@ engine" now means these scripts.
 | End's Delight | `ends_delight-1.19.2-2.1.jar` | `ends_delight` | MIT (FoggyHillside) | [ends_delight.md](ends_delight.md) | CD member `repackedEnds` -02 (overlay: dragon loot, tooth tier mixin, 13 textures) and rows in CD `ends_delight/`, BUILT 2026-10-25 (ends_delight.md 5) |
 | Ender's Delight | `endersdelight-1.19-1.2.2.jar` | `endersdelight` | **All rights reserved** (Ax3dgaming, Furti Two) | [ends_delight.md](ends_delight.md) | dict, cooking, potions, `end.js`, shield and damage tags |
 | Ender's Delight Additions | in `creative_delight` (member `endersAdditions`) | `enders_additions` (registers `endersdelight:` ids) | MIT art and data from Ender's 1.1.4 (Axedgaming); code GPL3 | [ends_delight.md](ends_delight.md) 5.3 | BUILT 2026-10-25: 4 End plants, 6 items, End House, Chorus Crate and Endstone Stove loot tables |
+| Cooking for Blockheads Additions | in `creative_delight` (member `blockheadsAdditions`); Cooking for Blockheads itself stays `cookingforblockheads-forge-1.19.2-13.3.4.jar` | `blockheads_additions` (registers `cookingforblockheads:` ids) | Cooking for Blockheads **All rights reserved** (BlayTheNinth; modpack use only, no rehosting or published modified files), so not repacked; member code, art and data ours, GPL3 | [kitchen.md](kitchen.md) 9 | BUILT 2026-10-31: 40 wood racks, the CfB mixins, corner storage and counter toppers from patcherMod, fridge fill in code |
 | Ocean's Delight | `oceansdelight-1.0.2-1.19.2.jar` | `oceansdelight` | MIT (Scouter456) | [ocean_delight.md](ocean_delight.md) | names (caviar) only |
 | Oceanic Delight | `oceanic_delight-1.0.1-forge-1.19.2.jar` | `oceanic_delight` | MIT (DariusZeBaguette, MCreator build) | [ocean_delight.md](ocean_delight.md) | dict block, fishing net mixin and loot tables |
 
@@ -279,6 +280,9 @@ the Creative Delight jar or to patcherMod. Counts below are literal `namespace:`
 
 ## 7. Parked: Brewin' and Chewin' and Let's Do Vinery
 
+**Superseded 2026-10-31:** both ports are now members of their own bundle, Creative Brewing ([creative_brewing.md](creative_brewing.md)),
+built on the same `ce.forge-bundle` plugin; CB depends on CD (Farmer's Delight, `global.CD`). The text below is the 2026-10-25 record.
+
 Removed from this plan on 2026-10-25 (owner). They stay separate jars (`backportedBrewin`, `backportedVinery`) with their own
 projects, `IN_TREE_MODS` entries and writeups ([alcohol.md](alcohol.md) Parts A and B, tests `AL-` and `VB-`). Facts kept here so
 a later plan can pick them up without re-reading everything:
@@ -400,7 +404,7 @@ How KubeJS 1902.6.2-build.73 finds scripts (read from `ScriptManager` bytecode, 
 | Script type | Read from | From a mod jar? |
 |---|---|---|
 | Server | `kubejs/server_scripts/`, then every `data/<ns>/kubejs/**/*.js` in the server resources (`loadFromResources`: one script pack per namespace) | **Yes, native.** Also from world datapacks and `kubejs/data/` |
-| Client | `kubejs/client_scripts/`, then every `assets/<ns>/kubejs/**/*.js` in the client resources | **Yes, native.** Also from resource packs and `kubejs/assets/` |
+| Client | `kubejs/client_scripts/`, then every `assets/<ns>/kubejs/**/*.js` in the client resources | **Only on F3+T natively.** KubeJS's first load runs in the mod constructor with no resource manager, so the resource scripts were not loaded at game start (found 2026-10-31: seasoning names, placeable lines and every other CD client script were missing until F3+T). patcherMod `KubeJSClientResourceScriptsMixin` loads them once on the first client pack load, from the mod packs plus the `kubejs/` folder (folder copies win) |
 | Startup | `kubejs/startup_scripts/` only (`KubeJS` calls `reload(null)`, so `loadFromResources` is skipped) | **No.** Needs a patcherMod loader (10.5) |
 
 Facts that make the server and client halves work:
@@ -411,7 +415,8 @@ Facts that make the server and client halves work:
   CD's scripts load, and CD's event callbacks run in the same passes as the pack's.
 - **`// requires: <modid>`** at the top of a file makes KubeJS skip it when that mod is absent
   (`ScriptFileInfo.skipLoading`). That is the compartment mechanism for scripts (section 12), with no code of ours.
-- `/reload` reloads server scripts from jars too; client scripts reload with the resource reload (F3+T).
+- `/reload` reloads server scripts from jars too; client scripts reload on F3+T (KubeJS's `KeyboardHandlerMixin`), not on
+  other resource reloads. Game start: patcherMod `KubeJSClientResourceScriptsMixin` (table above).
 
 Not planned: **calling the helpers from Java.** NCH is a JavaScript object in the Rhino scope; Java could reach it only
 through KubeJS's script context, which is fragile. CD's Java (mixins, block entities, QoL-1, WTHIT) does not make
@@ -1331,6 +1336,10 @@ dough blocks, cornmeal, the pack fluids, generated cans, seasonings, compost) is
 world on a CD jar built before this move.
 
 ### 29.3 Left for Creative Brewing (TODO `creativebrewing/move #1`)
+
+**2026-10-31 (owner):** the Brewin' and Chewin' food rows and tags below stay in CD after all: moved to
+`kubejs/data/creative_delight/kubejs/brewinandchewin/recipes.js` and `tags.js` (`// requires: brewinandchewin`, ids
+`creative_delight:`). The rest goes to Creative Brewing ([creative_brewing.md](creative_brewing.md) 4).
 
 `startup_scripts/cooking/potions.js`, `alcohol_drinks.js`, `server_scripts/cooking/alcohol.js`; the effect swaps and
 Farmer's Respite cake-slice effects (`startup_scripts/cooking/food_values.js`); the Brewin' and Chewin' food rows in

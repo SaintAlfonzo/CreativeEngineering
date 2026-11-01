@@ -1,0 +1,43 @@
+# The pack's Cooking for Blockheads additions and changes (Creative Delight member). Cooking for Blockheads is All Rights
+# Reserved and stays its own jar; this mod needs it. New blocks register under the cookingforblockheads namespace.
+modLoader="javafml"
+loaderVersion="${loader_version_range}"
+license="${mod_license}"
+issueTrackerURL="https://github.com/SaintAlfonzo/CreativeEngineering/issues"
+
+[[mods]]
+modId="blockheads_additions"
+version="${mod_version}"
+displayName="${mod_name}"
+authors="${mod_authors}"
+credits="Cooking for Blockheads by BlayTheNinth (not included; install it separately)"
+description='''${mod_description}'''
+
+[[dependencies.blockheads_additions]]
+modId="forge"
+mandatory=true
+versionRange="${forge_version_range}"
+ordering="NONE"
+side="BOTH"
+
+[[dependencies.blockheads_additions]]
+modId="minecraft"
+mandatory=true
+versionRange="${minecraft_version_range}"
+ordering="NONE"
+side="BOTH"
+
+# AFTER: the fridge fill wraps CfB's fridge model, which Balm puts in place in CfB's own ModelEvent.BakingCompleted.
+[[dependencies.blockheads_additions]]
+modId="cookingforblockheads"
+mandatory=true
+versionRange="[13.3,14)"
+ordering="AFTER"
+side="BOTH"
+
+[[dependencies.blockheads_additions]]
+modId="balm"
+mandatory=true
+versionRange="[4.6,)"
+ordering="AFTER"
+side="BOTH"

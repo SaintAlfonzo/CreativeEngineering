@@ -24,6 +24,62 @@ of 2026-10-24; rows 1 to 13 predate this brief). Layout per [README.md](README.m
 
 ---
 
+## jei-coverage #2: Part 2, rest of part 3
+Status **Planned** / Work tool (really: patcherMod dump + tool, then world-tab json) / TODO `jei/jei-coverage #2`
+(section added 2026-10-31, brief sweep)
+
+### Goal
+Part 2: every recipe type with no JEI category, and every category that drops some of its type's recipes, listed in
+[jei_coverage.md](../jei_coverage.md) 3. Rest of part 3: the world interactions still without a page get one.
+
+### Now
+- Part 2 is "not started" (jei_coverage.md 0 and 3). Input exists: `kubejs/exported/recipes/recipe_types.json`
+  (2026-10-30 00:41, 117 types, each with count, classes, serializers). Nothing dumps JEI's side: no patcherMod code
+  calls `createRecipeCategoryLookup`, and `tools/jei_coverage.py` has no part-2 mode (grep 2026-10-31).
+- Part 2 candidates already found: jei_coverage.md 4.9 (IE fertilizer, thermoelectric, windmill biome, generator fuel,
+  mineral mix; Immersive Petroleum reservoir; Botania flower fuels; Dirty Stuff workstation; PneumaticCraft fuel
+  quality; anvil recipes of Golden Food and Domestication Innovation, ...).
+- Part 3 left (jei_coverage.md 4 intro and 4.11): hoe tilling / shovel pathing, FD rich soil, Botania flowers,
+  Neapolitan cauldrons, Quark map washing, Regrowth, nests, info pages; the TODO adds Vinery leaf / bush harvesting,
+  stem pruning, kitchen sink, Nock Enough Arrows paint arrow, Cloud Storage balloon arrow.
+- Vinery is now a Creative Brewing member (`development/creativeBrewing/members/vinery`). Its Grape Planting pages
+  already say how bushes, stems and lattices are picked and that shears give the seed back
+  (`assets/vinery_backport/lang/en_us.json` lines 45-49), so bush harvesting and stem pruning may be covered; leaf
+  harvesting lives in `core/block/AppleLeavesBlock.java` and `DarkCherryLeavesBlock.java`. No sink block class was
+  found under `core/block` (kitchen sink id unverified).
+
+### Build
+1. **JEI dump** (patcherMod, client): in the pack's JEI plugin `onRuntimeAvailable`, behind a new `[jei]
+   categoryReport` flag (default off, like `orderReport`), write `kubejs/exported/jei/categories.json`: per category its
+   `RecipeType` uid, recipe class and recipe count (`createRecipeLookup(type).includeHidden()`), plus, per vanilla
+   `RecipeType` in the client `RecipeManager`, how many of its recipe objects appear in some category (identity set).
+   The second part finds categories that drop recipes, which a uid diff cannot (JEI uids often differ from recipe
+   type ids).
+2. **Tool**: `tools/jei_coverage.py --part2` reads both files and renders jei_coverage.md 3 (types with no category,
+   types with dropped recipes, counts). Add it to `tools/generators.json` only if it should run from `/cegen`.
+3. Review the list with the user; per type pick a fix kind from jei_coverage.md 0 (stand-in, info, none). Java
+   categories go in patcherMod `compat/jei/` (`RowPagesCategory` for simple input -> output pages).
+4. **Part 3 rows**: read each mechanic in its jar first, then add `manual.json` rows to an existing world tab with
+   `requires` (Vinery leaves -> a harvesting row; paint arrow -> Block Dyeing if it dyes blocks; balloon arrow by what it
+   does), or a `JEIEvents.information` page in the owning tree (Creative Delight / Creative Brewing by mod) for one-off
+   facts.
+
+### Decisions
+- Scope of part 3 here: recommend only the TODO's named items plus 4.11 step 6 info pages; the bigger 4.11 groups
+  (Immersive Weathering data, loot modifier drops) are their own rows if wanted.
+- Vinery bush / stem rows: recommend none if the in-game Grape Planting pages already read right (see `#12`).
+
+### Gotchas
+- JEI's recipe lookup needs the client runtime, so the dump runs in a client world, not on a scratch server.
+- Rows citing another mod must carry `requires` so they drop out when the mod goes.
+
+### Tests (JC-)
+- JC-new1 (proposed, numbered when queued): with `categoryReport = true`, join a world: `categories.json` written, no
+  error in latest.log; `python3 tools/jei_coverage.py --part2` renders section 3 with a count per type.
+- JC-new2 (proposed): each new part-3 row shows in JEI uses of its item (Apple Leaves, Paint Arrow, Balloon Arrow).
+
+---
+
 ## jei-coverage #14: No JEI recipe for soup cups
 Status **Planned** / Work KubeJS / data / TODO `jei/jei-coverage #14`
 

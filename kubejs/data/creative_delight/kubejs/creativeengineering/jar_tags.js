@@ -60,7 +60,7 @@ ServerEvents.tags('item', e => {
 		berries: [
 			i.sweet_berries, i.glow_berries, i.golden_sweet_berries, i.enchanted_golden_sweet_berries,
 			i.golden_glow_berries, i.enchanted_golden_glow_berries, i.blueberry, i.cranberry, i.bayberry, i.hawberry,
-			i.salmonberries, i.strawberries, i.white_strawberries, i.mulberry, i.cherry, i.red_grape, i.white_grape,
+			i.salmonberries, i.raspberry, i.strawberries, i.white_strawberries, i.mulberry, i.cherry, i.red_grape, i.white_grape,
 			i.savanna_grapes_red, i.savanna_grapes_white, i.taiga_grapes_red, i.taiga_grapes_white, i.jungle_grapes_red,
 			i.jungle_grapes_white,
 		],

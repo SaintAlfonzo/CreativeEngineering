@@ -166,6 +166,7 @@ public final class BotanistPotClient {
         }
 
         private static BakedModel plantModel(Block potted) {
+            if (potted == Blocks.GLOW_LICHEN) return Minecraft.getInstance().getModelManager().getModel(PlantBoxModels.GLOW_LICHEN_POT);
             return Minecraft.getInstance().getBlockRenderer().getBlockModel(potted.defaultBlockState());
         }
 
