@@ -13,6 +13,12 @@ public class CycleEnchantmentMixin {
         return false;
     }
 
+    // Vanilla Enchantment#isTradeable (SRG, same reason): keeps the book out of every trade that picks from tradeable
+    // enchantments (vanilla and Dynamic Villager Trades librarians, Lightman's Currency cashiers).
+    public boolean m_6594_() {
+        return false;
+    }
+
     public boolean canApplyAtEnchantingTable(ItemStack stack) {
         return false;
     }

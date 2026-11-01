@@ -1,0 +1,39 @@
+# Run r1101 client worldgen tour in QA_W2 (copy of r11w2, seed 8675309): spectator views of logged positions.
+pace 2
+## CQ-WGLOOK-W2 | worldgen looks in the W2 world
+sleep 100
+> gamemode spectator
+> time set noon
+> weather clear
+> gamerule doDaylightCycle false
+> tp @s -1568 135 973 180 40
+sleep 15
+shot crypt
+> tp @s -5958 132 -1865 180 40
+sleep 15
+shot meteor_pyramid
+> tp @s 5802 118 -8137 180 40
+sleep 15
+shot meteor_pyramid2
+> tp @s -384 125 77 180 40
+sleep 15
+shot siege
+> tp @s -307 115 3523 180 40
+sleep 15
+shot witch_wagon
+> tp @s -304 115 3517 180 40
+sleep 15
+shot caravan
+> tp @s -784 225 1149 180 40
+sleep 15
+shot cloud_cluster
+> tp @s -4496 125 -1379 180 40
+sleep 15
+shot temple_ruins
+> tp @s -4304 85 3805 180 40
+sleep 15
+shot struck_monument
+> tp @s -2013 115 1185 180 40
+sleep 15
+shot swamp_hut
+look craters / pyramids / siege / caravans / temple ruins / sunk crypt: no floating parts, no air gaps, pieces present

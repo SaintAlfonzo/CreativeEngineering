@@ -1,0 +1,156 @@
+# Run 2026-11-01, worldgen block: one fresh normal world (group B, seed 8675309) for the priority SQ-HR-05, the group B /
+# C rows of the 2026-11-01 bug batch, and the r1031 W2 rows deferred on 10-31 (SQ-SB-04 to -08, SQ-SB-01e).
+# prep: prep_srv.sh OUT r11w2 B difficulty=normal spawn-monsters=true spawn-animals=true; srv toml
+# [worldgen.meta_structures] log = true. Each /locate may take up to 300 s; waitlog uses 330.
+# W3a / W3b: tools/scratch_query/batches/r1031/w3_terrain.qb on their own worlds (plan scratch_run_2026-10-31.md 4).
+pace 2
+
+## SQ-W11-BOOT | boot clean, bot joins
+bootexpect Done \(
+bootreject (Mixin apply failed|InvalidInjectionException|Critical injection failure).*(creativeengineering|creative_delight|creative_brewing)
+> gamerule sendCommandFeedback true
+> pbot spawn qa 0 120 0 minecraft:overworld creative
+> pbot status
+expect ceperfbot ok
+
+## SQ-TER-01b | ancient crypt sunk without warning; places on its own projection
+bootexpect \[terrain-adaptation\] world load
+bootreject ancient_crypt.*ignored
+> locate structure philipsruins:ancient_crypt
+waitlog nearest philipsruins:ancient_crypt is at|type "?philipsruins:ancient_crypt|philipsruins:ancient_crypt.*timed out 330
+capture AC is at \[(-?\d+), (~|-?\d+), (-?\d+)\]
+> tp qa {AC1} 140 {AC3}
+sleep 25
+look load line: 7 sunk starts, no crypt warning; the crypt position goes to the client tour (sunk, not floating)
+
+## SQ-HR-05 | wild raspberry patches in forest
+bootexpect \[wild-crops\].*raspberry
+> locate biome minecraft:forest
+waitlog nearest minecraft:forest is at 300
+capture FO is at \[(-?\d+), (~|-?\d+), (-?\d+)\]
+> tp qa {FO1} 150 {FO3}
+sleep 40
+> forceload add {FO1-64} {FO3-64} {FO1+64} {FO3+64}
+sleep 30
+> zq count {FO1-64} 50 {FO3-64} {FO1+64} 120 {FO3+64} hearthandharvest:raspberry_bush
+> forceload remove all
+look the [wild-crops] line lists rule raspberry (26 biomes); bushes counted in the forest square (> 0), ripe (age 3) ones among them; record the count
+
+## SQ-EN-01 | librarians: no Nock Enough Arrows enchantments in trades
+> forceload add -16 -16 16 16
+> setblock 2 100 2 minecraft:lectern
+> summon minecraft:villager 2 101 3 {VillagerData:{profession:"minecraft:librarian",level:1,type:"minecraft:plains"},NoAI:1b,Tags:["en1"]}
+> data get entity @e[tag=en1,limit=1] Offers
+> data merge entity @e[tag=en1,limit=1] {VillagerData:{level:5},Offers:{}}
+sleep 2
+> data get entity @e[tag=en1,limit=1] Offers
+> dumptrades
+sleep 5
+reject nock_enough_arrows:(stockpile|recovery|cycle)
+shell ! grep -rqE "nock_enough_arrows:(stockpile|recovery|cycle)" kubejs/exported/villager_trades.json
+look librarians offer enchanted books; Offers reset at a level change may need a trade-up; record what the level-5 librarian offered
+
+## SQ-EN-02 | Lightman's Currency cashiers: no NEA enchantments
+> summon lightmanscurrency:cashier 6 101 3 {Tags:["en2"]}
+sleep 2
+> execute as @e[tag=en2] run data get entity @s
+reject nock_enough_arrows:(stockpile|recovery|cycle)
+look cashiers still offer enchanted books; the cashier trader type may not use villager offers: record what data shows
+
+## SQ-MRD-03 | cheese toast, sliced potato tags
+> zq rdetail cheese_toast
+> zq itemtag forge:sliced_potato
+> zq itemtag forge:sliced_potatoes
+> zq rdetail moredelight:mashed_potatoes
+expect itemtag forge:sliced_potatoes .*rusticdelight
+look cheese toast shapeless (toast + flaxen cheese wedge); both slice tags hold Rustic's slices; More Delight potato recipes show a slice item
+
+## SQ-META31-04b | meteorite desert pyramid never placed short
+> locate structure creativeengineering:meta/meteorite_desert_pyramid
+waitlog nearest creativeengineering:meta/meteorite_desert_pyramid is at|type "?creativeengineering:meta/meteorite_desert_pyramid|creativeengineering:meta/meteorite_desert_pyramid.*timed out 330
+> execute positioned 6000 70 -6000 run locate structure creativeengineering:meta/meteorite_desert_pyramid
+sleep 240
+> execute positioned -6000 70 6000 run locate structure creativeengineering:meta/meteorite_desert_pyramid
+sleep 240
+bootreject meteorite_desert_pyramid.*0/1.*desert_pyramid
+look every placed line 1/1 minecraft:desert_pyramid plus a meteorite; short ones "not placed, core part" or "no satellite fitted"
+
+## SQ-SB-04 | tower siege meta: both spots spawn the large-tower mix; lone T&T tower its own mix
+> locate structure creativeengineering:meta/pillager_tower_siege
+waitlog nearest creativeengineering:meta/pillager_tower_siege is at|type "?creativeengineering:meta/pillager_tower_siege|creativeengineering:meta/pillager_tower_siege.*timed out 330
+capture TS is at \[(-?\d+), (~|-?\d+), (-?\d+)\]
+> tp qa {TS1+30} 100 {TS3}
+sleep 240
+> execute positioned {TS1} 80 {TS3} if entity @e[type=minecraft:evoker,distance=..64]
+> execute positioned {TS1} 80 {TS3} if entity @e[type=minecraft:illusioner,distance=..64]
+> execute positioned {TS1} 80 {TS3} if entity @e[type=minecraft:zombie,distance=..64]
+> locate structure towns_and_towers:pillager_outpost_forest
+waitlog nearest towns_and_towers:pillager_outpost_forest is at|type "?towns_and_towers:pillager_outpost_forest|towns_and_towers:pillager_outpost_forest.*timed out 330
+capture TT is at \[(-?\d+), (~|-?\d+), (-?\d+)\]
+> tp qa {TT1+30} 100 {TT3}
+sleep 240
+> execute positioned {TT1} 80 {TT3} if entity @e[type=minecraft:pillager,distance=..48]
+> execute positioned {TT1} 80 {TT3} if entity @e[type=minecraft:vindicator,distance=..48]
+> execute positioned {TT1} 80 {TT3} if entity @e[type=minecraft:evoker,distance=..48]
+look meta: evokers and illusioners present, no zombie; T&T tower: pillagers and vindicators, no evoker (ST-323)
+
+## SQ-SB-05 | pillager camp + ruin meta: camp illagers, ruin its own mobs
+> locate structure creativeengineering:meta/pillager_camp_ruin
+waitlog nearest creativeengineering:meta/pillager_camp_ruin is at|type "?creativeengineering:meta/pillager_camp_ruin|creativeengineering:meta/pillager_camp_ruin.*timed out 330
+capture PR is at \[(-?\d+), (~|-?\d+), (-?\d+)\]
+> tp qa {PR1+30} 100 {PR3}
+sleep 240
+> execute positioned {PR1} 70 {PR3} as @e[type=!minecraft:player,type=!minecraft:item,distance=..96] run data get entity @s id
+look camp: pillagers, vindicators, witches, evokers; the ruin part (offset from the meta log): its Philip's Ruins mobs, no illagers (ST-324)
+
+## SQ-SB-06 | box evokers drop no totem
+> locate structure towns_and_towers:pillager_outpost_badlands
+waitlog nearest towns_and_towers:pillager_outpost_badlands is at|type "?towns_and_towers:pillager_outpost_badlands|towns_and_towers:pillager_outpost_badlands.*timed out 330
+capture BF is at \[(-?\d+), (~|-?\d+), (-?\d+)\]
+> tp qa {BF1+30} 110 {BF3}
+sleep 240
+> execute positioned {BF1} 80 {BF3} as @e[type=minecraft:evoker,distance=..64,limit=1] run data get entity @s ForgeData
+> execute positioned {BF1} 80 {BF3} run kill @e[type=minecraft:evoker,distance=..64]
+sleep 3
+> execute positioned {BF1} 80 {BF3} if entity @e[type=item,nbt={Item:{id:"minecraft:totem_of_undying"}},distance=..64]
+expect Test failed|No entity was found
+look ForgeData shows the spawn-box mark; the totem check fails. Mansion half (generated evoker drops a totem) is a client check
+
+## SQ-SB-07 | pillager ship crews: boat mix; villager ships none
+> locate structure unwrecked_ships:ship
+waitlog nearest unwrecked_ships:ship is at|type "?unwrecked_ships:ship|unwrecked_ships:ship.*timed out 330
+capture US is at \[(-?\d+), (~|-?\d+), (-?\d+)\]
+> tp qa {US1+20} 90 {US3}
+sleep 240
+> execute positioned {US1} 63 {US3} as @e[type=!minecraft:player,type=!minecraft:item,distance=..48] run data get entity @s id
+look pillager-crew ship: pillagers, vindicators, evokers, witches; villager-crew ship: no illagers (ST-326)
+
+## SQ-SB-08 | witch wagon and swamp hut: witches only inside
+> locate structure eugene:witch_wagon
+waitlog nearest eugene:witch_wagon is at|type "?eugene:witch_wagon|eugene:witch_wagon.*timed out 330
+capture WW is at \[(-?\d+), (~|-?\d+), (-?\d+)\]
+> tp qa {WW1+24} 100 {WW3}
+sleep 240
+> execute positioned {WW1} 70 {WW3} as @e[type=!minecraft:player,type=!minecraft:item,distance=..32] run data get entity @s id
+> locate structure minecraft:swamp_hut
+waitlog nearest minecraft:swamp_hut is at|type "?minecraft:swamp_hut|minecraft:swamp_hut.*timed out 330
+capture SH is at \[(-?\d+), (~|-?\d+), (-?\d+)\]
+> tp qa {SH1+24} 90 {SH3}
+sleep 240
+> execute positioned {SH1} 70 {SH3} as @e[type=!minecraft:player,type=!minecraft:item,distance=..24] run data get entity @s id
+look witches only inside each; swamp hut cats still spawn (ST-327)
+
+## SQ-SB-01e | boxed structure count after the spawn rows
+bootexpect \[spawn-boxes\].*structure\(s\) boxed
+
+## SQ-WG30-C02b | census false negatives carry a diagnosis (long: Chunky r 400 + census r 96)
+> tp qa 2144 200 -2592
+> chunky center 2144 -2592
+> chunky radius 400
+> chunky shape square
+> chunky start
+waitlog (?i)\[Chunky\].*(task finished|finished generating|complete) 3000
+> celocate census 96 2144 -2592
+waitlog (?i)census.*(done|finished|written) 2400
+shell python3 -c "import json,sys; d=json.load(open('kubejs/exported/worldgen/locate_census.json')); s=json.dumps(d); sys.exit(0 if 'falseNegativeAt' in s else 1)"
+look every biome false negative has a diagnosis string (regenerated point, biome, nearest-distance entries, start-piece centre); copy the census json into RES

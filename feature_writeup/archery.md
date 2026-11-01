@@ -9,7 +9,7 @@
 | Fletching from feathers (knife), emu feather → feathers | DEPLOYED |
 | Torch arrow on Quark's item (5 recipes), NEA's torch arrow and quiver hidden; Supplementaries quiver recipe; slingshot takes leather / hemp fabric / canvas | DEPLOYED |
 | `archery` and `bullet` blueprints | DEPLOYED; the archery blueprint needs the trader-only Ethereal Arrow, kept on purpose (F3) |
-| NEA's Stockpile, Recovery and Cycle enchantments taken out (mixins, MoreJS filters, red tooltip on books) | DEPLOYED; the `isDiscoverable` override (F6) fixed in 1.0.9 (SRG `m_6592_`), not yet checked in game (`pack/release #4`, `loot/tables #10`) |
+| NEA's Stockpile, Recovery and Cycle enchantments taken out (mixins, MoreJS filters, red tooltip on books) | DEPLOYED; the `isDiscoverable` override (F6) fixed in 1.0.9 (SRG `m_6592_`), not yet checked in game (`pack/release #4`); trade leak (F9) FIXED 2026-11-01 (`isTradeable` override, patcherMod built, not installed; `loot/tables #10`) |
 | IE armor-piercing bullets from a dragon scale (64 per scale) | DEPLOYED unreachable; moved to the `bullet` blueprint (F1), BUILT 2026-10-22, not run |
 | Dedicated-server join kick from NEA's fletching recipe book (`NockRecipeBookSync`) | DEPLOYED; belongs to fixes and compat (backlog row 10), noted here because it's NEA |
 
@@ -165,6 +165,15 @@ IE's own cartridge recipes are untouched.
 - **F8. Supplementaries' own quiver recipe isn't removed.** If it's enabled in Supplementaries' config, JEI shows two
   quiver recipes. Check in JEI (AR-15). Moot (checked 2026-10-21): `supplementaries-1.19.2-2.4.20.jar` has no crafting
   recipe for the quiver (it is loot-only there); AR-15 only confirms that JEI shows one recipe.
+- **F9. The books came from trades, not loot.** FIXED 2026-11-01 (`loot/tables #10`).
+  No loot table in the dumps or `kubejs/data` names Stockpile, Recovery or Cycle; the random-enchant functions
+  (`enchant_randomly`, `enchant_with_levels`) honour the F6 override (present in the installed patcherMod jar). The
+  `/dumptrades` dump (2026-10-30) had NEA books in two trade paths the MoreJS filter in `enchants.js` never sees:
+  Dynamic Villager Trades librarians (one offer per enchantment whose `isTradeable()` is true, built from vanilla's
+  `EnchantBookForEmeralds` listing) and Lightman's Currency cashiers (`enchanted_book_for_coins`, levels 1 to 4, which
+  filters the registry on `Enchantment::isTradeable`, javap). Fix at the source: the three NEA mixins also override
+  `isTradeable` (SRG `m_6594_`) to false. Every other book trade stays. Villagers that already rolled an NEA book keep
+  that offer (saved in their NBT). Built in patcherMod (`creativeengineering-1.1.04.jar` in `build/libs`), not installed.
 
 ### Known limits
 
@@ -226,7 +235,7 @@ replacement or a hidden item.
   screen: in game): Engineer's Workbench with the bullet blueprint → the dragon scale recipe is
   listed; 64 casings + 32 gunpowder + a dragon scale → 64 armor-piercing cartridges.
 - [ ] **AR-14 Enchantments gone:** enchanting table with a book at level 30, many rolls → never Stockpile, Recovery or
-  Cycle; librarians never sell them; an anvil refuses a book of one. `/give` an enchanted book with Cycle → red "REMOVED
+  Cycle; new librarians and cashiers still sell enchanted books, never one of these three (F9); an anvil refuses a book of one. `/give` an enchanted book with Cycle → red "REMOVED
   ITEM: DO NOT USE".
 - [ ] **AR-15 Quiver:** JEI on the Supplementaries quiver → the pack's copper recipe; note whether Supplementaries' own
   recipe is also listed (F8).
@@ -246,3 +255,6 @@ replacement or a hidden item.
 - 2026-10-22: F1 (`bullet` category), F5 (blazing shaft tag on the explosive arrow) and F7 (`bullets.js` cleanup)
   fixed; F3 kept (Ethereal Arrow stays in the archery blueprint); AR-07, AR-13 updated.
 - 2026-10-22 (second bulk run): SQ-GM-04 PASS on the scratch server; JEI and the workbench screen stay in game.
+- 2026-11-01: F9 found and fixed (`loot/tables #10`): loot already clean; the three NEA mixins now also override
+  `isTradeable` (`m_6594_`), so no librarian (vanilla or DVT) or LC cashier offers them. AR-14 updated. patcherMod built,
+  not installed; needs install + restart. Not run in game.

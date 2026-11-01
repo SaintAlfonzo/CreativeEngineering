@@ -10,6 +10,12 @@ ServerEvents.tags('item', e => {
 	t.add(e, i.t_soup_veggie_cooked, [i.baked_sweet_potato, i.roasted_zucchini])
 	// Gnocchi is a raw pasta: every pasta recipe takes it (TODO dishes/meals #38, farmersdelight/recipes.js)
 	t.add(e, i.pasta, i.potato_noodle)
+	// Sliced sweet potato (TODO dishes/ingredients #26): the sliced potato tags (More Delight's dishes, the pack's frying)
+	// beside Rustic's potato slices, and its whole sweet potato's vegetable tags, as the slices sit in the potato's
+	t.add(e, i.t_sliced_potato, i.sliced_sweet_potato)
+	t.add(e, i.t_sliced_potatoes, i.sliced_sweet_potato)
+	t.add(e, i.t_vegetables_sweet_potato, i.sliced_sweet_potato)
+	t.add(e, i.any_potato, i.sliced_sweet_potato)
 })
 
 // Zucchini picks its fruit and drops back to stage 4; Quark's replant to stage 0 skips it (vintageport #8, crops.md 2.2)

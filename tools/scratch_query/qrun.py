@@ -150,8 +150,14 @@ class Client:
         self._x("windowactivate", "--sync", self.w)
         self._x("key", "--window", self.w, "t")
         time.sleep(0.4)
-        self._x("type", "--window", self.w, "--delay", "15", "--", c)
+        # batch lines are console commands (no slash); in chat they must start with one or they are sent as messages
+        if not c.startswith("/"):
+            c = "/" + c
+        # 15 ms per key dropped characters in the 2026-11-01 run; 40 ms and a pause after Return keep chat in step
+        self._x("type", "--window", self.w, "--delay", "40", "--", c)
+        time.sleep(0.2)
         self._x("key", "--window", self.w, "Return")
+        time.sleep(0.7)
 
     def shot(self, path):
         subprocess.run(["import", "-window", self.w, path], check=False)

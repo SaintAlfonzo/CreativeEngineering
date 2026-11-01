@@ -430,16 +430,16 @@ Both items stay in the pack, unmerged, until the user decides. When decided, the
 
 | Merge | Items | Note |
 |---|---|---|
-| M1 Fish and Chips | `veggiesdelight:fish_and_chips`, `pneumaticcraft:cod_n_chips` | Same name in JEI meanwhile (§3.3 R9) |
-| M2 Mashed Potatoes (pinned) | `veggiesdelight:mashed_potatoes`, `moredelight:mashed_potatoes` | VD's also takes sweet potato |
-| M3 Stuffed Bell Peppers | VD's placed feast and serving, Rustic's three stuffed peppers | The placed feast is kept either way |
+| M1 Fish and Chips | `veggiesdelight:fish_and_chips`, `pneumaticcraft:cod_n_chips` | DECIDED 2026-11-01: keep Veggies Delight's, remove PneumaticCraft's (`merges/dishes #1`) |
+| M2 Mashed Potatoes (pinned) | `veggiesdelight:mashed_potatoes`, `moredelight:mashed_potatoes` | DECIDED 2026-11-01: split, not merged. More Delight = Mashed Potatoes (potatoes and potato slices only); Veggies = Mashed Sweet Potatoes (sweet potatoes and sweet potato slices only); one mashed-veggie family: pot 2 + 1 milk + bowl, 3 baked / cooked slices + milk + bowl; sliced potato tag holds both slice items (`merges/dishes #2`, `dishes/ingredients #20`) |
+| M3 Stuffed Bell Peppers | VD's placed feast and serving, Rustic's three stuffed peppers | DECIDED 2026-11-01: remove Veggies Delight's; only Rustic Delight's tricolor stays (`merges/dishes #3`) |
 
 ### 5.2 Notes for later work (each has a TODO row)
 
 - **Grow season overhaul:** VD's seasons are copied, not reviewed (`farming/crops #5`).
 - **Tea audit:** the three VD juices go through the tea cleanup and the juice / tea rule with the teas
   (`food/drinks #2`, `#8`).
-- **Dough unification:** sweet potato dough stays as VD has it until doughs are unified. The mhadjeb was removed
+- **Dough unification:** (decided 2026-11-01: sweet potato dough follows the dough-for-bread-cooking rule) sweet potato dough stays as VD has it until doughs are unified. The mhadjeb was removed
   2026-10-25 (`dishes/meals #32`, 5.5).
 - **Mob food overhaul:** VD's mob food is copied as is; the whole mob food system needs an overhaul.
 
@@ -465,7 +465,7 @@ Rows added to [TODO](todo/TODO.md) on 2026-10-24; nothing is built. Plans: [dish
   dough block (`baking/baked-goods #27`). Open: which doughs stay distinct. Note `dishes/meals #32` removes the mhadjeb, so
   the "uncooked mhadjeb stays" rule above ends.
 - [TODO](todo/TODO.md) `dishes/ingredients #20`: a cut sweet potato gives 3 sweet potato slices (a new item; the potato slice is
-  Rustic Delight's).
+  Rustic Delight's). Built 2026-11-01 as the Sliced Sweet Potato (5.6).
 - [TODO](todo/TODO.md) `dishes/ingredients #21`: recipes that take a potato also take a sweet potato, and the cooked and sliced
   forms. Open: which recipes.
 - [TODO](todo/TODO.md) `textures/food #2`: new cauliflower soup texture.
@@ -489,6 +489,29 @@ Rows added to [TODO](todo/TODO.md) on 2026-10-24; nothing is built. Plans: [dish
 - **Cacciatore** (`dishes/meals #36`): nothing to build; the heatless recipe's `#forge:cooked_chicken` already holds the
   cooked chicken cuts.
 - Tests: RC-132, RC-133, RC-136 (SQ-CDB-10, -11).
+
+### 5.6 Built 2026-11-01: Sliced Sweet Potato (TODO `dishes/ingredients #20`, `#26` follow-up)
+
+- **Item:** `creativeengineering:sliced_sweet_potato` (`i.sliced_sweet_potato`), "Sliced Sweet Potato", registered in CD
+  `kubejs_startup/veggiesdelight/veggies_items.js`. Food as Rustic's potato slices: 1 hunger, modifier 0.3. No own art: the
+  model reads `rusticdelight:item/potato_slices` in place (`.texture()`, not copied; Rustic is ARR), so it looks like the
+  potato slices and needs the Rustic member for its sprite. No baked form (the potato's baked slices are not mirrored).
+- **Recipe:** knife on a sweet potato -> 3 (`creative_delight:farmersdelightcutting/sliced_sweet_potato`, CD
+  `veggiesdelight/recipes.js`); Slice & Dice's slicer copies it. Same session: a potato cuts into 3 Rustic slices [2]
+  (rustic_delight.md 5.2), so both have the board and the slicer at 3. No Create saw or IE route exists for either.
+- **Tags** (CD `veggiesdelight/tags.js`): `#forge:sliced_potato` (the pack's fries, cod and chips) and
+  `#forge:sliced_potatoes` (More Delight's mashed potatoes, potato salad, four diced potato dishes), beside the potato
+  slices; `#forge:vegetables/sweet_potato` and `#forge:vegetables/potato`, as the whole sweet potato (the slices sit in the
+  potato's tag the same way). Through those it is in `#forge:vegetables` and the roll and stuffed pepper ingredient tags.
+- **Pack systems:** compost 0.5 (CD `veggiesdelight/compost.js`, as the potato slices); food type `raw/veggie/sliced`
+  (`food_types.json`); food family `veggie/raw_cut` (`food_families.json`, the row the generator writes); food dict
+  `f.veggie_slice_sweet_potato`; a source of the Canned Sweet Potato, same slots as the whole sweet potato
+  (`tools/gen_can_types.py` spec, `can_types.json`, `food_types.json` canned map).
+- **Open:** `gen_can_types.py --check` reports the item as missing from the food catalog until a `/dumpfood` after the
+  restart (as the Pickled Sea Pickle); then rerun it and `/cegen food_families`, `item_physics_audit`. The More Delight
+  mashed potatoes take the sliced sweet potato through `#forge:sliced_potatoes`, against M2's split (5.1: More Delight's
+  mashed potatoes from potatoes and potato slices only); a `R.replaceInput` on that recipe would restore the split.
+- Tests: VD-44, VD-45, VD-46.
 
 ## 6. File map
 
@@ -560,6 +583,12 @@ Food and recipes
 - [ ] VD-23 Cauliflower Bread bakes in the Oven from dough and 2 cauliflowers; no grid recipe.
 - [ ] VD-24 VD grid meals and the heatless pot-meal routes are not offered by the Create mixer or mechanical crafter.
 - [ ] VD-25 A ripe zucchini plant gives 1 or 2 zucchinis on right-click and drops back 3 ages.
+- [ ] VD-44 Knife on a sweet potato on a cutting board gives 3 Sliced Sweet Potatoes, a potato 3 Potato Slices; a Slice &
+  Dice slicer with a knife does the same; JEI shows both at 3 (5.6, RD-34).
+- [ ] VD-45 Sliced Sweet Potato: shows the potato slices sprite and its name, eats for 1 hunger, composts (50%); JEI lists it
+  in fries, cod and chips, More Delight's mashed potatoes, potato salad and diced potato dishes, and the Canned Sweet Potato.
+- [ ] VD-46 `/dumptags`: the Sliced Sweet Potato is in `forge:sliced_potato`, `forge:sliced_potatoes`,
+  `forge:vegetables/sweet_potato`, `forge:vegetables/potato` and `creativeengineering:food_type/raw/veggie/sliced`.
 
 World and economy
 
@@ -602,3 +631,5 @@ UI
 - 2026-10-30: mature dandelion maturing (patcherMod `crops/DandelionMaturing`, soil mixins, `[dandelion_maturing]`) and
   shear / knife revert (`DandelionBlock.use`, port rebuilt as `-03` in `build/libs/`, not installed); VD-42, VD-43;
   TODO `ports/veggiesport #4` (scan 2026-10-31).
+- 2026-11-01: Sliced Sweet Potato (5.6): sweet potato -> 3 on the board and the slicer, potato -> 3 Rustic slices [2]; sliced
+  potato and vegetable tags, compost, food type, family, dict, Canned Sweet Potato source; VD-44 to VD-46. CD built, not installed.

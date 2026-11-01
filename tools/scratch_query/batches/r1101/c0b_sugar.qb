@@ -1,0 +1,9 @@
+pace 2
+## CQ-PRI-02b | powdered sugar block texture and WTHIT mod name
+> tp @s 220 -55 8 180 20
+sleep 2
+> fill 220 -60 0 221 -59 0 creativeengineering:powdered_sugar_block
+> tp @s 220.5 -59 2.5 180 20
+sleep 2
+shot sugar_block
+look new texture, seamless edges; WTHIT mod line Creative Engineering, no "(Alfonzo)"

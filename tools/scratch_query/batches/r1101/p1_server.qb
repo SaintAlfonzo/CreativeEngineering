@@ -1,0 +1,505 @@
+# Run 2026-11-01, priority run boot 1 (group A superflat, grass at y -61, air from y -60) plus the group A rows of the
+# 2026-11-01 bug batch. qrun.py run OUT tools/scratch_query/batches/r1101/p1_server.qb RES
+# Rows: scratch_queue.md "Priority run" and "Bug batch, 2026-11-01". Bot "qa" at 0 -60 0, spawn-animals=true.
+# Areas: WCT x -40..-20 z -20..-10, HR x 20..30 z -10, KT x 40 z 0, NS x 40 z 10, TSK x -10..0 z 30, DM x 20..30 z 30,
+# POT x 50..70 z 30, SVA x 100 z 100.
+pace 1
+
+## SQ-R11-BOOT | boot clean of CE / CD / CB mixin and registry errors
+bootexpect Done \(
+bootreject (Mixin apply failed|InvalidInjectionException|Critical injection failure).*(creativeengineering|creative_delight|creativedelight|creative_brewing|blockheads_additions)
+bootreject Registry Object not present
+bootreject \[NCH\].*(does not exist or is empty|error|Error)
+look latest.log NCH / KubeJS lines listed by the following rows
+
+## SQ-R11-BOT | fake player joins
+> gamerule sendCommandFeedback true
+> time set noon
+> pbot spawn qa 0 -60 0
+> pbot status
+expect ceperfbot ok
+
+## SQ-CBJ-01 | Creative Brewing nests both ports
+bootexpect \[creative_brewing\] members: \[vinery, brewinandchewin\]
+bootreject \[creative_brewing\].*NOT loaded
+bootreject member .* is loaded from
+shell grep -qE "JarInJarDependencyLocator.*backportedVinery|backportedVinery.*(JarInJar|jij)" logs/debug.log
+shell grep -qE "JarInJarDependencyLocator.*backportedBrewin|backportedBrewin.*(JarInJar|jij)" logs/debug.log
+
+## SQ-CBJ-02 | startup script order and server scripts ready
+shell grep -n "startup script packs in order" logs/kubejs/startup.log | grep -q "creative_delight.*creative_brewing"
+shell grep -q "\[creative_brewing\] core finished, members: vinery, brewinandchewin" logs/kubejs/startup.log logs/latest.log
+shell ! grep -q "global.CD missing" logs/kubejs/startup.log logs/latest.log
+shell grep -q "\[creative_brewing\] server scripts ready, members on: vinery, brewinandchewin" logs/kubejs/server.log logs/latest.log
+
+## SQ-CBJ-03 | members config and the three namespaces
+shell grep -qE "^\s*vinery\s*=\s*true" config/creative_brewing-common.toml
+shell grep -qE "^\s*brewinandchewin\s*=\s*true" config/creative_brewing-common.toml
+shell test "$(grep -c '^\s*\[' config/creative_brewing-common.toml)" = 1
+> zq item vinery:red_grape
+> zq item brewinandchewin:keg
+> zq recipes foundation:
+reject Unknown item
+look the three items resolve; foundation recipes list is non-empty (any foundation id)
+
+## SQ-KT-22 | Cooking for Blockheads member boots
+bootexpect blockheads_additions
+bootreject (Mixin apply failed|InvalidInjectionException).*(BlockStateCounterTopperMixin|CfbOven|CfbCorner)
+bootreject Duplicate capability key
+bootreject creativeengineering:corner_storage
+bootreject \[blockheads_additions\] could not add the wood racks
+shell grep -q "^\s*\[kitchen\]" config/blockheads_additions-common.toml
+
+## SQ-KT-23 | 40 wood racks: recipes, slab tag, mineable
+> zq recipes _spice_rack
+> zq recipes _tool_rack
+> zq itemtag creative_delight:rack_slabs/other
+> zq blocktag minecraft:mineable/axe
+> zq rdetail cookingforblockheads:spice_rack
+count creative_delight:shaped/[a-z_]+_spice_rack >= 20
+count creative_delight:shaped/[a-z_]+_tool_rack >= 20
+expect itemtag creative_delight:rack_slabs/other .*quark:blossom_planks_slab
+reject itemtag creative_delight:rack_slabs/other .*minecraft:oak_slab
+look 40 rack recipes (20 + 20); cookingforblockheads:spice_rack and tool_rack take #creative_delight:rack_slabs/other; mineable/axe lists the racks (blocktag line is long; grep spice_rack)
+
+## SQ-KT-24 | oak spice rack block entity keeps and drops items
+> setblock 40 -60 1 minecraft:oak_planks
+> setblock 40 -60 0 cookingforblockheads:oak_spice_rack[facing=north]
+> data get block 40 -60 0
+> item replace block 40 -60 0 container.0 with minecraft:sugar
+> data get block 40 -60 0
+expect minecraft:sugar
+> kill @e[type=item]
+> setblock 40 -60 0 minecraft:air destroy
+sleep 2
+> execute positioned 40 -60 0 as @e[type=item,distance=..3] run data get entity @s Item.id
+expect "minecraft:sugar"
+> kill @e[type=item]
+
+## SQ-KT-25 | /kttest and /kctest against the moved code
+> kttest
+sleep 20
+> kctest
+sleep 10
+count \[kttest\] PASS >= 28
+count \[kctest\] PASS >= 9
+look kt 30 of 34 expected with the known KT-15d / KT-17 expectation fails; kc 9 of 9; any class-not-found = member jar not nested
+
+## SQ-CDF-07 | Brewin' dishes in Creative Delight (boot with Brewin')
+> zq rdetail quiche
+> zq rdetail horror_lasagna
+> zq itemtag brewinandchewin:cooked_horror_lasagna_meats
+expect creative_delight:createsequencedassembly/quiche_egg_solution_sequenced_assembly
+look horror lasagna recipe present; the without-Brewin' half runs on boot 1b (p1b_nocb.qb)
+
+## SQ-PRI-01 | Brewin' tags moved to CD; emptied pack scripts silent
+> zq itemtag brewinandchewin:cooked_horror_lasagna_meats
+> zq tagsof farmersdelight:beef_patty
+> zq tagsof brewinandchewin:kimchi
+> zq tagsof vintagedelight:green_bell_pepper
+> zq makes supreme_pizza
+> zq makes ham_and_cheese_sandwich
+> zq makes scarlet_pierogi
+shell test ! -s kubejs/server_scripts/tags/cookingtags.js && test ! -s kubejs/server_scripts/cooking/cooking.js
+bootreject brewinandchewin/tags\.js.*(Error|error)
+kjsreject Error occurred while handling event
+expect itemtag brewinandchewin:cooked_horror_lasagna_meats .*minecraft:beef
+expect itemtag brewinandchewin:cooked_horror_lasagna_meats .*minecraft:mutton
+look lasagna meats = beef, mutton, beef patty, cooked mutton chops; kimchi in the cooked soup-veggie tag; bell peppers in the pizza topping tag; the three dishes have recipes
+
+## SQ-WCT-01 | six watering can ids, recipes
+bootreject (?i)duplicate.*watering_can
+> zq item hearthandharvest:watering_can
+> zq item hearthandharvest:iron_watering_can
+> zq item hearthandharvest:golden_watering_can
+> zq item hearthandharvest:diamond_watering_can
+> zq item hearthandharvest:netherite_watering_can
+> zq item hearthandharvest:dragon_watering_can
+> zq makes watering_can
+reject Unknown item
+expect creative_delight:.*watering_can -> 1 hearthandharvest:watering_can
+count smithing/[a-z_]*watering_can >= 5
+look six ids resolve once; base can recipe under creative_delight; five smithing recipes
+
+## SQ-WCT-02 | cauldron fills by tier
+> setblock -30 -60 -15 minecraft:water_cauldron[level=3]
+> tp qa -30 -60 -13
+> item replace entity qa weapon.mainhand with hearthandharvest:watering_can
+> pbot use qa -30 -60 -15 up
+> data get entity qa SelectedItem
+> execute if block -30 -60 -15 minecraft:water_cauldron[level=2]
+expect WaterLevel: 8
+> setblock -30 -60 -15 minecraft:water_cauldron[level=3]
+> item replace entity qa weapon.mainhand with hearthandharvest:diamond_watering_can
+> pbot use qa -30 -60 -15 up
+> data get entity qa SelectedItem
+> execute if block -30 -60 -15 minecraft:water_cauldron[level=1]
+expect WaterLevel: 20
+> setblock -30 -60 -15 minecraft:water_cauldron[level=3]
+> item replace entity qa weapon.mainhand with hearthandharvest:netherite_watering_can
+> pbot use qa -30 -60 -15 up
+> data get entity qa SelectedItem
+> execute if block -30 -60 -15 minecraft:cauldron
+expect WaterLevel: 32
+> setblock -30 -60 -15 minecraft:water_cauldron[level=1]
+> item replace entity qa weapon.mainhand with hearthandharvest:diamond_watering_can
+> pbot use qa -30 -60 -15 up
+> data get entity qa SelectedItem
+expect WaterLevel: 10
+> setblock -30 -60 -15 minecraft:water_cauldron[level=2]
+> item replace entity qa weapon.mainhand with hearthandharvest:netherite_watering_can
+> pbot use qa -30 -60 -15 up
+> data get entity qa SelectedItem
+expect WaterLevel: 21
+count Test passed >= 3
+
+## SQ-WCT-03 | Just a Well fills an iron can (lower and roof half)
+> setblock -36 -60 -15 well:well
+> data get block -36 -60 -15
+> data get block -36 -59 -15
+sleep 20
+> data get block -36 -60 -15
+> tp qa -36 -60 -13
+> item replace entity qa weapon.mainhand with hearthandharvest:iron_watering_can
+> pbot use qa -36 -60 -15 north
+> data get entity qa SelectedItem
+> data get block -36 -60 -15
+> item replace entity qa weapon.mainhand with hearthandharvest:iron_watering_can
+> pbot use qa -36 -59 -15 north
+> data get entity qa SelectedItem
+> data get block -36 -60 -15
+look WaterLevel 12 after each use; well tank down 1000 mB per fill; an empty well (no rain / no water below) = setup, not the can: record the tank NBT
+
+## SQ-WCT-04 | dragon can soaks 7x7, copper can the centre only
+> gamerule randomTickSpeed 0
+> fill -43 -61 -33 -37 -61 -27 minecraft:farmland[moisture=0]
+> fill -43 -60 -33 -37 -60 -27 minecraft:wheat[age=0]
+> item replace entity qa weapon.mainhand with hearthandharvest:dragon_watering_can{WaterLevel:64}
+> item replace entity qa weapon.offhand with minecraft:air
+> tp qa -40 -60 -35
+> pbot use qa -40 -60 -30 up
+> data get entity qa SelectedItem
+> execute if block -37 -61 -27 minecraft:farmland[moisture=7]
+> execute if block -43 -61 -33 minecraft:farmland[moisture=7]
+expect WaterLevel: 63
+count Test passed >= 2
+> fill -43 -61 -33 -37 -61 -27 minecraft:farmland[moisture=0]
+> item replace entity qa weapon.mainhand with hearthandharvest:watering_can{WaterLevel:8}
+> pbot use qa -40 -60 -30 up
+> execute if block -40 -61 -30 minecraft:farmland[moisture=7]
+> execute if block -39 -61 -30 minecraft:farmland[moisture=0]
+count Test passed >= 4
+> gamerule randomTickSpeed 3
+
+## SQ-WCT-05 | diamond can smithing recipe; over-full can clamps
+> zq rdetail smithing/diamond_watering_can
+expect golden_watering_can
+> gamerule randomTickSpeed 0
+> setblock -48 -61 -30 minecraft:farmland[moisture=0]
+> setblock -48 -60 -30 minecraft:wheat[age=0]
+> item replace entity qa weapon.mainhand with hearthandharvest:watering_can{WaterLevel:16,BonemealLevel:16}
+> tp qa -48 -60 -32
+> pbot use qa -48 -60 -30 up
+> data get entity qa SelectedItem
+> gamerule randomTickSpeed 3
+look smithing base golden can, addition diamond; old can reads 8 and drops to 7 after the use (WaterLevel 7 in the NBT, or 15 if the clamp is on read only: record)
+
+## SQ-WC-03 | (rerun on the moved can) bone meal loads from the off hand
+> setblock -20 -61 -20 minecraft:farmland
+> setblock -20 -60 -20 minecraft:wheat[age=0]
+> tp qa -20 -60 -22
+> item replace entity qa weapon.mainhand with hearthandharvest:watering_can{WaterLevel:16}
+> item replace entity qa weapon.offhand with minecraft:bone_meal 64
+repeat 3
+> zq useitem qa
+end
+> data get entity qa SelectedItem
+> data get entity qa Inventory[{Slot:-106b}].Count
+expect BonemealLevel: 3
+expect FertilizerItem: "minecraft:bone_meal"
+expect entity data: 61b
+> item replace entity qa weapon.offhand with minecraft:air
+
+## SQ-WC-05 | (rerun on the moved can) golden can soaks 3x3 farmland and mulch
+> gamerule randomTickSpeed 0
+> fill -26 -61 -21 -24 -61 -19 minecraft:farmland[moisture=0]
+> fill -26 -60 -21 -24 -60 -19 minecraft:wheat[age=0]
+> item replace entity qa weapon.mainhand with hearthandharvest:golden_watering_can{WaterLevel:16}
+> tp qa -25 -60 -23
+> pbot use qa -25 -60 -20 up
+> data get entity qa SelectedItem
+> fill -26 -61 -21 -24 -61 -19 minecraft:stone replace minecraft:farmland[moisture=7]
+expect WaterLevel: 15
+expect Successfully filled 9 block
+> fill -32 -61 -21 -30 -61 -19 immersive_weathering:mulch_block[moisture=0]
+> fill -32 -60 -21 -30 -60 -19 minecraft:wheat[age=0]
+> item replace entity qa weapon.mainhand with hearthandharvest:golden_watering_can{WaterLevel:16}
+> tp qa -31 -60 -23
+> pbot use qa -31 -60 -20 up
+> fill -32 -61 -21 -30 -61 -19 minecraft:stone replace immersive_weathering:mulch_block[moisture=1]
+> gamerule randomTickSpeed 3
+look second "filled 9" = mulch soaked (moisture=1); if 0, the mulch property value differs: record the mulch state
+
+## SQ-HR-01 | raspberry member loads
+bootreject (?i)(missing|unknown).*(raspberry)
+bootreject hearthandharvest/.*\.js.*(Error|error)
+> zq item hearthandharvest:raspberry_pips
+> zq item hearthandharvest:raspberries
+> zq makes hearthandharvest:raspberry_pips
+reject Unknown item
+expect raspberry_pips_from_raspberry
+
+## SQ-HR-02 | pips plant on dirt, not sand; grow to age 3
+> setblock 20 -61 -10 minecraft:dirt
+> setblock 22 -61 -10 minecraft:sand
+> tp qa 21 -60 -12
+> pbot hold qa hearthandharvest:raspberry_pips
+> pbot use qa 20 -61 -10 up
+> pbot hold qa hearthandharvest:raspberry_pips
+> pbot use qa 22 -61 -10 up
+> execute if block 20 -60 -10 hearthandharvest:raspberry_bush
+> execute if block 22 -60 -10 minecraft:air
+count Test passed >= 2
+> gamerule randomTickSpeed 300
+sleep 45
+> gamerule randomTickSpeed 3
+> execute if block 20 -60 -10 hearthandharvest:raspberry_bush[age=3]
+count Test passed >= 3
+
+## SQ-HR-03 | harvest: age 2 nothing, age 3 drops 2-3, bush to age 1
+> kill @e[type=item]
+> clear qa
+> setblock 24 -61 -10 minecraft:grass_block
+> setblock 24 -60 -10 hearthandharvest:raspberry_bush[age=2]
+> tp qa 24 -60 -12
+> pbot use qa 24 -60 -10 north
+sleep 1
+> execute positioned 24 -60 -10 if entity @e[type=item,distance=..3]
+> setblock 24 -60 -10 hearthandharvest:raspberry_bush[age=3]
+> pbot use qa 24 -60 -10 north
+sleep 2
+> execute positioned 24 -60 -10 as @e[type=item,distance=..4] run data get entity @s Item
+> data get entity qa Inventory
+> execute if block 24 -60 -10 hearthandharvest:raspberry_bush[age=1]
+look age 2: the first `if entity` fails (no drop); age 3: 2-3 raspberries on the ground or in qa's inventory; bush age 1 Test passed
+
+## SQ-HR-04 | tags; fox eats from the bush
+> zq tagsof hearthandharvest:raspberries
+> zq tagsof hearthandharvest:raspberry_pips
+expect forge:fruits/raspberries
+expect forge:berries
+expect minecraft:fox_food
+expect forge:seeds/raspberry
+> setblock 28 -61 -10 minecraft:grass_block
+> setblock 28 -60 -10 hearthandharvest:raspberry_bush[age=3]
+> fill 26 -60 -12 30 -58 -8 minecraft:glass hollow
+> setblock 28 -60 -10 hearthandharvest:raspberry_bush[age=3]
+> summon fox 27 -60 -10
+sleep 60
+> execute if block 28 -60 -10 hearthandharvest:raspberry_bush[age=1]
+> execute as @e[type=fox,limit=1,sort=nearest] at @s run data get entity @s HandItems
+look fox emptied the bush (age 1 Test passed) and holds a raspberry; a fox asleep at noon does not forage (vanilla): rerun at night if it fails
+
+## SQ-SB31-01 | small changes batch mixins load; treated stick places
+bootreject (Mixin apply failed|InvalidInjectionException).*(SpoutGunFarmland|HandcraftedNightstand|HandcraftedItemHoldingSaveMixin|TreatedStickPlaceMixin|TomatoClimbTreatedStickMixin|SuppTomatoClimbTreatedStickMixin|BlockItemOwnStackFillMixin)
+> setblock -5 -60 30 creative_delight:treated_stick
+> execute if block -5 -60 30 creative_delight:treated_stick
+expect Test passed
+
+## SQ-NS-01 | nightstand storage (first half; restart half in p1b)
+> setblock 40 -60 10 handcrafted:oak_nightstand
+> setblock 42 -60 10 everycomp:hc/architects_palette/twisted_nightstand
+> item replace block 40 -60 10 container.0 with minecraft:sugar
+> item replace block 42 -60 10 container.0 with minecraft:sugar
+> data get block 40 -60 10
+> data get block 42 -60 10
+count CENightstandItems >= 2
+> setblock 44 -60 10 handcrafted:oak_nightstand
+> item replace block 44 -60 10 container.0 with minecraft:sugar
+> setblock 44 -61 10 minecraft:hopper
+sleep 3
+> data get block 44 -61 10 Items
+expect minecraft:sugar
+look the hopper below pulled the sugar; restart and break halves in p1b
+
+## SQ-SVA-05 | brewery sky houses carry hanging herbs
+> forceload add 96 96 160 160
+> place template skyvillages:letsdo_brewery/sky_village_letsdo_brewery_0 100 -40 100
+> place template skyvillages:letsdo_brewery/sky_village_letsdo_brewery_1 130 -40 100
+sleep 3
+> zq count 95 -45 95 128 0 128 fantasyfurniture:decorations/hanging_herbs
+> zq count 128 -45 95 160 0 128 fantasyfurniture:decorations/hanging_herbs
+> zq count 95 -45 95 160 0 128 brewery:dried_wheat
+look counts 4 (template 0) and 2 (template 1); no brewery:dried_* left; `count` prints the total per box
+
+## SQ-TSK-02 | tomato vines climb treated sticks
+> gamerule randomTickSpeed 0
+> setblock -10 -61 30 minecraft:farmland[moisture=7]
+> setblock -10 -60 30 farmersdelight:tomatoes[age=3]
+> setblock -10 -59 30 creative_delight:treated_stick
+> setblock -10 -58 30 creative_delight:treated_stick
+> setblock -8 -61 30 minecraft:farmland[moisture=7]
+> setblock -8 -60 30 supplementaries:stick_tomatoes
+> setblock -8 -59 30 creative_delight:treated_stick
+> gamerule randomTickSpeed 300
+sleep 60
+> gamerule randomTickSpeed 3
+> execute if block -10 -59 30 creative_delight:treated_stick_tomatoes
+> execute if block -10 -57 30 minecraft:air
+> execute if block -8 -59 30 creative_delight:treated_stick_tomatoes
+count Test passed >= 2
+look FD vine climbed into treated_stick_tomatoes, at most three high; Supplementaries stick tomatoes likewise (third Test passed)
+
+## SQ-TSK-03 | broken soil reverts vines; treated stick loot
+> kill @e[type=item]
+> setblock -10 -61 30 minecraft:air destroy
+sleep 2
+> execute if block -10 -59 30 creative_delight:treated_stick
+> execute positioned -10 -60 30 as @e[type=item,distance=..4] run data get entity @s Item
+> kill @e[type=item]
+> loot spawn -5 -55 34 mine -5 -60 30 minecraft:wooden_axe
+> loot spawn -5 -55 34 mine -5 -60 30 minecraft:iron_axe
+> loot spawn -5 -55 34 mine -5 -60 30 minecraft:netherite_axe
+look vine reverted to treated_stick and dropped FD tomato loot; each axe loot = 1 treated stick (3 total)
+
+## SQ-DM-03 | dandelion maturing: fertile soil about twice as fast as rich soil
+> gamerule randomTickSpeed 0
+> fill 20 -61 30 29 -61 30 farmersdelight:rich_soil
+> fill 20 -61 32 29 -61 32 creative_delight:fertile_soil
+> fill 20 -60 30 29 -60 30 minecraft:dandelion
+> fill 20 -60 32 29 -60 32 minecraft:dandelion
+> gamerule randomTickSpeed 30
+sleep 30
+> zq count 20 -60 30 29 -60 30 veggiesdelight:mature_dandelion
+> zq count 20 -60 32 29 -60 32 veggiesdelight:mature_dandelion
+sleep 30
+> zq count 20 -60 30 29 -60 30 veggiesdelight:mature_dandelion
+> zq count 20 -60 32 29 -60 32 veggiesdelight:mature_dandelion
+> gamerule randomTickSpeed 3
+look fertile row (z 32) matures about twice as fast as rich row (z 30); fertile soil id may differ (record the fill error if any)
+
+## SQ-POT-08 | flower pot rules: mixins, tags, recipe
+bootreject (Mixin apply failed|InvalidInjectionException).*(FramedFlowerPotUnframedMixin|SuppFlowerBoxPlantsMixin|SiltPotSoilMixin)
+bootreject Failed to load model.*(creativeengineering:block/flower_box|vinery:block/flower_box_centered)
+bootreject (?i)blockstate.*vinery:flower_box
+> zq blocktag creativeengineering:flower_box_plants
+> zq itemtag creativeengineering:flower_box_plants
+> zq blocktag another_furniture:planter_box_banned
+> zq makes beautify:hanging_pot
+expect farmersdelight:rich_soil
+look flower_box_plants has cactus, glow_berries, poppy and not azalea; planter_box_banned has azalea; one hanging_pot recipe with rich soil. Fake-player click half: `/flowerworld` table on boot 2 (SQ-POT-07)
+
+## SQ-PRI-02 | Floral Enchantment large pots: recipe gone, block kept
+> zq recipes floral_large
+> zq makes floralench:
+> setblock 60 -60 30 floralench:floral_large_pot_poppy
+> execute if block 60 -60 30 floralench:floral_large_pot_poppy
+look no floral large pot recipe; the setblock works or names the real id (31 ids, prefix floral_large_); JEI / creative tabs hiding is CQ-PRI-02 side
+
+## SQ-PRI-03 | JRFTL gone
+shell ! ls mods config | grep -qi jrftl
+bootreject (?i)jrftl
+> zq item jrftl:prepared_flesh
+> zq uses minecraft:rotten_flesh
+look prepared_flesh: a CE or KubeJS replacement item resolves, or the route lists the pack's own prepared flesh; rotten flesh still in the Create / IE recipes
+
+## SQ-JRFTL-01 | prepared flesh recipes
+> zq makes prepared_flesh
+> zq uses prepared_flesh
+> zq makes minecraft:leather
+look creosote filling and IE bottling on rotten flesh make prepared flesh; smoking prepared flesh gives leather
+
+## SQ-NCH-01 | NCH numeric defaults: no empty-stack error, sawdust smelts in 10 s
+bootreject Can't modify the empty stack
+kjsreject Can't modify the empty stack
+> zq rdetail sawdust
+> setblock 70 -60 0 minecraft:furnace{Items:[{Slot:0b,id:"immersiveengineering:dust_wood",Count:1b},{Slot:1b,id:"minecraft:coal",Count:1b}]}
+sleep 12
+> data get block 70 -60 0 Items
+look sawdust smelting recipe cookingtime 200; the furnace output slot (Slot 2b) holds ash after 12 s
+
+## SQ-GT-31 | felsic helmet reach potion mB from config
+bootreject \[NCH.cfg\] no CEConfig.CRAFTING.FELSIC_
+shell python3 $INST/tools/scratch_query/qrun.py toml config/creativeengineering-common.toml crafting.felsic_helmet reachPotionMb 100
+> reload
+waitlog (Reloaded|reload)
+sleep 5
+expect CRAFTING.FELSIC_HELMET.reachMb overridden: default 500 -> 100
+> zq rdetail felsic_helmet
+shell sed -i '/reachPotionMb = 100/d' config/creativeengineering-common.toml
+look recipe shows a 100 mB Long Reach fill and a 500 mB Magic Resistance fill; if the override line is missing, the toml change is not re-read on /reload (record, check on the p1b restart)
+
+## SQ-RE-16 | amethyst shard crushing
+> zq uses minecraft:amethyst_shard
+look millstone and crushing wheels: one recipe each, 75 % amethyst dust; IE crusher: dust + 25 % dust; no glowstone output from shards
+
+## SQ-RW-23c | smokable shape tags hold only overworld woods (bug batch SQ-RW-23b)
+> zq rdetail smoking/
+> zq itemtag creativeengineering:smokable/planks
+> zq itemtag creativeengineering:smokable/logs
+reject itemtag creativeengineering:smokable/.*(botania:|driftwood|quark:|crimson|warped)
+look 13 smoking recipes (cookingtime 200); each smokable/* tag = the 7 minecraft overworld woods incl. mangrove
+
+## SQ-TER-01b | ancient crypt sunk without warning
+bootexpect \[terrain-adaptation\] world load
+bootreject ancient_crypt.*ignored
+look the load line counts 7 sunk starts; placement half on the worldgen boot
+
+## SQ-CM-35 | calamari tags and dishes (with SQ-CM-32)
+> zq itemtag forge:squid_tentacles
+> zq itemtag forge:foods/tentacles
+> zq rdetail takoyaki
+> zq rdetail squid_rings
+> zq rdetail glow_squid_stew
+> zq rdetail seafood_skewer
+> zq rdetail squid_and_pickles
+> zq rdetail sea_pickle_roll
+> zq rdetail shrimp_rice
+> zq rdetail squid_salad
+bootreject \[NCH\].*(squid_tentacles|truffle_pie)
+expect squid_rings
+expect glow_squid_stew
+expect seafood_skewer
+expect squid_and_pickles
+look both tags hold raw calamari; takoyaki (miners_delight) takes calamari in both slots; no empty slots
+
+## SQ-FFH-03 | zucchini quiche sequenced assembly parses
+kjsreject Error parsing recipe creative_delight:createsequencedassembly/zucchini_quiche
+> zq rdetail zucchini_quiche
+expect zucchini_quiche_sequenced_assembly
+look pie crust base, 3 roasted zucchini deploys, cooked meat deploy, 250 mB milk fill
+
+## SQ-RSP-09 | drink filling and draining recipes
+kjsreject Error parsing recipe creative_delight:createfilling/
+> zq rdetail createfilling/
+> zq rdetail createemptying/
+> zq rdetail cup
+look Milk Coffee, Lavender Tea, Matcha Latte, Coffee filling + emptying at 250 mB; copper cup <-> water; machine run is a client hand check
+
+## SQ-AC-02 | dragon set 36 armor, 18 toughness
+> item replace entity qa armor.head with dragonloot:dragon_helmet
+> item replace entity qa armor.chest with dragonloot:dragon_chestplate
+> item replace entity qa armor.legs with dragonloot:dragon_leggings
+> item replace entity qa armor.feet with dragonloot:dragon_boots
+sleep 2
+> attribute qa minecraft:generic.armor get
+> attribute qa minecraft:generic.armor_toughness get
+expect for entity qa is 36
+expect armor_toughness for entity qa is 18
+> clear qa
+
+## SQ-TL-09 | /cegen lists the generators
+> cegen
+sleep 3
+reject \[cegen\].*(Error|error|failed)
+look lists the generators from tools/generators.json with groups (stacks among them)
+
+## SQ-CBJ-05 | Brewin' member switch read on /reload (last: changes the config)
+shell sed -i -E 's/^(\s*brewinandchewin\s*=\s*)true/\1false/' config/creative_brewing-common.toml
+> reload
+sleep 15
+shell grep -q "members on: vinery$\|members on: vinery\b[^,]" logs/kubejs/server.log
+shell sed -i -E 's/^(\s*brewinandchewin\s*=\s*)false/\1true/' config/creative_brewing-common.toml
+> reload
+sleep 15
+look server log says `members on: vinery` after the first reload; set back to true and reloaded

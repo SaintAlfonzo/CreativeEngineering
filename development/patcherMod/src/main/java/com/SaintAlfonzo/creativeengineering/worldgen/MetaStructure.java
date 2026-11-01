@@ -83,7 +83,9 @@ import java.util.function.Predicate;
  * satellites sit just outside the anchor. A part short of its minimum count keeps what fitted (CEConfig
  * [worldgen.meta_structures] keepShortParts, since 2026-10-30); the meta fails only when no satellite fitted at all
  * (without the switch: whenever a part is short), and the group's weighted pick falls through to its next member,
- * as for a wrong biome. Earth fill drops a satellite over its limits and prunes village parts the same way.
+ * as for a wrong biome. A meta without an anchor whose first part sits on the start (distance [0, 0], chance 1) has
+ * that part as its core ({@link #core}): a short core always fails the meta, and the core counts as the anchor, not
+ * as a satellite (TODO structures/metas #11: a struck pyramid with no pyramid). Earth fill drops a satellite over its limits and prunes village parts the same way.
  *
  * COASTS AND RIVERS (CEConfig [worldgen.meta_structures] avoidCoasts, on by default since 2026-10-30): no part may start in, or
  * reach with its box (centre and corners) into, a biome of creativeengineering:coast_river. A satellite there is
@@ -229,6 +231,17 @@ public final class MetaStructure extends Structure {
 
 	boolean anchored() { return anchor.isPresent(); }
 
+	/**
+	 * The core of a meta without an anchor: its first part, when that is a structure part at distance [0, 0] (placed on
+	 * the start itself, the replacement's stand-in for an anchor: the pyramid of meta/meteorite_desert_pyramid). A
+	 * short core fails the meta even with keepShortParts, and the core is not a satellite. Null for everything else.
+	 */
+	Part core() {
+		if (anchor.isPresent() || parts.isEmpty()) return null;
+		Part first = parts.get(0);
+		return first.structures().isPresent() && first.distance().max() == 0 && first.chance() >= 1 ? first : null;
+	}
+
 	float share() { return share; }
 
 	/** The structures the anchor entries name (existing ones, in order). */
@@ -300,6 +313,7 @@ public final class MetaStructure extends Structure {
 		}
 
 		boolean keepShort = WorldgenConfig.metaKeepShortParts();
+		Part core = core();
 		int ownEntries = layout.entries.size();   // the anchor's
 		boolean satellitesWanted = false;
 		for (Part part : parts) {
@@ -308,14 +322,16 @@ public final class MetaStructure extends Structure {
 			int placed = part.structures().isPresent()
 					? placeStructures(part, wanted, resolveStructures(structures, part.structures().get()), ctx, layout, random, cx, cz, log, avoid)
 					: placeFeatures(part, wanted, ctx, layout, random, cx, cz);
-			if (part.structures().isPresent() && wanted > 0) satellitesWanted = true;
 			if (log != null) log.add(placed + "/" + wanted + " " + part.label());
 			if (placed < part.count().min()) {
 				String why = "part " + part.label() + " placed " + placed + " of at least " + part.count().min();
-				// keepShortParts: what fitted stays (a satellite near a coast or on a cliff is left out, not the whole meta)
-				if (!keepShort) return fail(log, ctx, why);
+				// keepShortParts: what fitted stays (a satellite near a coast or on a cliff is left out, not the whole meta);
+				// never for the core, which stands in for an anchor (a struck pyramid without its pyramid is only a crater)
+				if (!keepShort || part == core) return fail(log, ctx, part == core ? "core " + why : why);
 				if (log != null) log.add("short: " + why);
 			}
+			if (part == core) ownEntries = layout.entries.size();   // the core counts as the anchor, not as a satellite
+			else if (part.structures().isPresent() && wanted > 0) satellitesWanted = true;
 		}
 		// nothing but the anchor fitted: the plain anchor is the same thing without the meta's name
 		if (keepShort && satellitesWanted && layout.entries.size() == ownEntries) return fail(log, ctx, "no satellite fitted");

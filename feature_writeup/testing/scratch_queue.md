@@ -13,6 +13,10 @@
 
 ## Priority run: everything since the 1.1.05 snapshot (updated 2026-10-31, run this BEFORE the rest of the queue)
 
+> **RUN 2026-11-01 (r1101):** server rows, bug batch, deferred W2 / W3 rows and the client block ran; per-row results in
+> [scratch_run_2026-11-01.md](scratch_run_2026-11-01.md) sections 1 to 5 (server rows all PASS apart from SQ-CDF-07's
+> without-Brewin' half, SQ-CBJ-05, SQ-TL-09; client hand steps still OPEN).
+
 Short on purpose: one group A superflat boot (plus one flower_test boot and one fresh normal world), and one client
 session. Everything below is built (patcherMod, Creative Delight, Creative Brewing, backportedVinery
 as of 2026-10-31); confirm the jars in `mods/` match before booting (not re-checked 2026-10-31 evening); the long r1031 batch and the older rounds wait until this passes. Rows already written
@@ -40,11 +44,11 @@ New rows (written 2026-10-31, not in the sections below):
 
 | ID | Group | Commands | Pass | If it fails |
 |---|---|---|---|---|
-| SQ-PRI-01 | A | `/dumptags`; grep latest.log for `brewinandchewin/tags.js`, `Error occurred while handling event`; `kubejs/server_scripts/tags/cookingtags.js` and `cooking/cooking.js` are now empty files | `#brewinandchewin:cooked_horror_lasagna_meats` holds beef, mutton, beef patty, cooked mutton chops; the soup-veggie cooked tag holds kimchi; the pizza topping tag holds the bell peppers; no tag or recipe error from the two emptied scripts; Supreme Pizza, Ham and Cheese Sandwich, Scarlet Pierogi recipes still load (recipe dump) | CD `brewinandchewin/tags.js` / `recipes.js` `requires` header; a stale copy of the old scripts |
+| SQ-PRI-01 | A | (r1101 PASS; no 'Supreme Pizza' item exists, use `brewinandchewin:pizza`; the two emptied scripts are comment-only stubs, not empty files) `/dumptags`; grep latest.log for `brewinandchewin/tags.js`, `Error occurred while handling event`; `kubejs/server_scripts/tags/cookingtags.js` and `cooking/cooking.js` are now empty files | `#brewinandchewin:cooked_horror_lasagna_meats` holds beef, mutton, beef patty, cooked mutton chops; the soup-veggie cooked tag holds kimchi; the pizza topping tag holds the bell peppers; no tag or recipe error from the two emptied scripts; Supreme Pizza, Ham and Cheese Sandwich, Scarlet Pierogi recipes still load (recipe dump) | CD `brewinandchewin/tags.js` / `recipes.js` `requires` header; a stale copy of the old scripts |
 | SQ-PRI-02 | A | recipe dump and `/give @s floralench:` large pot ids (31) | the Floral Enchantment large pot recipe is gone; the 31 large pots are not in JEI or the creative tabs; a pot placed with `/setblock` still renders and keeps its plant | `removed_items.js` (`floral_large_` prefix), `other/flowers.js` recipe removal |
 | SQ-PRI-03 | A | boot; `ls mods config \| grep -i jrftl`; grep latest.log for `jrftl` | no JRFTL jar and no `jrftl-common.toml`; no log line naming jrftl; rotten flesh in a Create or IE recipe is unchanged (prepared flesh route, SQ-JRFTL-01) | stale file in the scratch `mods/` |
-| CQ-PRI-01 | client | WTHIT on glass, ice, grass block, iron ore, stone, dirt, oak log, leaves (replaces the book-icon wording of CQ-WT-01) | glass, ice, iron ore: green "Silk Touch Required: True"; grass block and other blocks that drop something else: yellow "Drops Differently"; dirt, oak log: no line; no book icon anywhere; with the Silk Touch pickaxe the line follows the wthit_lines.md WL-37 rule; the `[wthit]` option that shows "Silk Touch Required: False" (default off) turns red False lines on for dirt and oak log | `WthitSilkTouch.java`, `silk_touch_blocks.json` (run `tools/gen_silk_touch_blocks.py`) |
-| CQ-PRI-02 | client | look at the Powdered Sugar block; JEI | the new texture, no missing texture, edge tiling seamless | `powdered_sugar_block.png` |
+| CQ-PRI-01 | client | WTHIT on glass, ice, grass block, iron ore, stone, dirt, oak log, leaves (replaces the book-icon wording of CQ-WT-01) | (r1101: glass, ice, iron ore, stone are yellow 'Drops Differently' in this pack, since glass drops shards, ice cubes, raw iron; green 'True' needs a block with no drop at all) glass, ice, iron ore: green "Silk Touch Required: True"; grass block and other blocks that drop something else: yellow "Drops Differently"; dirt, oak log: no line; no book icon anywhere; with the Silk Touch pickaxe the line follows the wthit_lines.md WL-37 rule; the `[wthit]` option that shows "Silk Touch Required: False" (default off) turns red False lines on for dirt and oak log | `WthitSilkTouch.java`, `silk_touch_blocks.json` (run `tools/gen_silk_touch_blocks.py`) |
+| CQ-PRI-02 | client | look at the Powdered Sugar block (`creativeengineering:powdered_sugar_block`); JEI | the new texture, no missing texture, edge tiling seamless | `powdered_sugar_block.png` |
 | CQ-PRI-03 | client | mod list screen, JEI mod filter, WTHIT mod name on a Vinery block, a Brewin' keg, a Foundation block, Creative Engineering item, baby mob, incubation nest, moobloom, Exposure camera | "Let's Do Vinery (Creative Brewing)", "Brewin' & Chewin' (Creative Brewing)", "Creative Brewing" for Foundation; the pack's own mods show no "(Alfonzo)" | `credit.txt`, `mods.toml` display names, `waila_plugins.json` |
 | CQ-PRI-04 | client | flower pots (flower_pots.md 5 table, built in the flower_test boot): WTHIT on a pot, flower box, planter box and Silt Pot; hover Large Flower Box, Vinery Flower Box, Planter Box, Silt Pot, Rich Hanging Pot | WTHIT shows the contents; "Can be placed on walls" on the three boxes; the Silt Pot hint; names "Large Flower Box" and "Rich Hanging Pot" (a Rich Pot on the ground); Planter Box plants drawn as in the Large Flower Box | `tooltips.js` Flower Pots block, `namechanges.js`, `WthitPotContents` |
 
@@ -506,9 +510,9 @@ press, wine rack). Not run yet (owner: queue only).
 |---|---|---|---|---|
 | SQ-CBJ-01 | A | Boot; `grep -E "JarInJarDependencyLocator.*backported(Vinery\|Brewin)\|\[creative_brewing\]" logs/debug.log logs/latest.log` | Both member jars found by the Jar-in-Jar locator; `[creative_brewing] members: [vinery, brewinandchewin]` with no `NOT loaded`; no `member ... is loaded from` ERROR | A standalone port jar left in `mods/` (prep_srv), or metadata.json range wrong |
 | SQ-CBJ-02 | A | Same boot: `grep "startup script packs in order\|creative_brewing\]" logs/kubejs/startup.log logs/kubejs/server.log` | Startup order lists `creative_delight` before `creative_brewing`; `[creative_brewing] core finished, members: vinery, brewinandchewin`; no `global.CD missing`; server log has `[creative_brewing] server scripts ready, members on: vinery, brewinandchewin` | `ordering="AFTER"` not honoured by the mod sort: order the loader by dependency |
-| SQ-CBJ-03 | A | Same boot: open `config/creative_brewing-common.toml`; `/give @p vinery:red_grape`, `/give @p brewinandchewin:keg`, `/give @p foundation:` (tab-complete one) | `[members]` has `vinery = true`, `brewinandchewin = true`, no other section; all three namespaces have items | CBConfig members file missing from the jar (`creative_brewing_members.txt`) |
+| SQ-CBJ-03 | A | Same boot: open `config/creative_brewing-common.toml`; `/give @p vinery:red_grape`, `/give @p brewinandchewin:keg`, `foundation:chair` (Foundation has no items or recipes of its own) | `[members]` has `vinery = true`, `brewinandchewin = true`, no other section; all three namespaces have items | CBConfig members file missing from the jar (`creative_brewing_members.txt`) |
 | SQ-CBJ-04 | A | Same boot, the old world: `/data get block` on the keg and the aging barrel; tick 2 minutes | Contents kept; no `Unknown block` / missing registry lines for `vinery`, `foundation`, `brewinandchewin`; Vinery donor check silent (`vinery_upstream` found) | Donor path or nested resource lookup broke: compare with the standalone `-06` jar |
-| SQ-CBJ-05 | A | Set `brewinandchewin = false` in `[members]`, `/reload` | Server log `members on: vinery`; Brewin' blocks and recipes unchanged (no CB rows exist for it yet) | `global.CB.on` not reading the config |
+| SQ-CBJ-05 | A | **Dropped 2026-11-01:** Vinery and Brewin' are one package under Creative Brewing; the per-member switch is not tested (no reload-time log exists, the members line is logged only at server start) | | | |
 
 #### SQ-CDT: Creative Delight framework suite (added 2026-10-25)
 
@@ -765,7 +769,7 @@ Compare against a `/dumpall` from before the move (backup tree: `development/cre
 | SQ-CDF-04 | A | `/dumptags`: `creativeengineering:food_type/*`, `forge:sugar`, `forge:cooked_meat`, `creativeengineering:soup_veggie_cooked`, bakeware tags, can servings, jar tags | same members as before; removed items (wheat dough, Delightful venison, chocolate coins) in none | `_core/removed_item_tags.js` did not run last |
 | SQ-CDF-05 | A | `/dumpcompost` | table equal to the pre-move `kubejs/exported/compost/compost.json` (744 values, 10 categories, 5 tiers) | a `compost_values.js` skipped by its `// requires:` |
 | SQ-CDF-06 | A | oven: bake a cake with a cake pan; mortar a catalog entry; season popcorn; Cooking for Blockheads milk jar with a bottle | each works as before | the file for that system under `creativeengineering/` or `cookingforblockheads/` |
-| SQ-CDF-07 | A | Brewin' dishes (in CD since 2026-10-31, `brewinandchewin/recipes.js`, `// requires: brewinandchewin`): craft a quiche from egg solution, cook horror lasagna; `/kubejs recipes` or JEI recipe id on the quiche assembly; then boot once without Creative Brewing (no Brewin') | still made, ids `creative_delight:createsequencedassembly/quiche_egg_solution_sequenced_assembly` etc.; `#brewinandchewin:cooked_horror_lasagna_meats` holds the four meats; without Brewin' the file is skipped (`server.log` lists it as skipped by `requires`) and no recipe error | CD `brewinandchewin/recipes.js` / `tags.js` |
+| SQ-CDF-07 | A | Brewin' dishes (in CD since 2026-10-31, `brewinandchewin/recipes.js`, `// requires: brewinandchewin`): craft a quiche from egg solution, cook horror lasagna; `/kubejs recipes` or JEI recipe id on the quiche assembly; Vinery and Brewin' ship together inside Creative Brewing and are never tested separately (no without-Brewin' boot) | still made, ids `creative_delight:createsequencedassembly/quiche_egg_solution_sequenced_assembly` etc.; `#brewinandchewin:cooked_horror_lasagna_meats` holds the four meats | CD `brewinandchewin/recipes.js` / `tags.js` |
 | SQ-CDF-08 | A | `python3 tools/gen_compost_values.py --check` and `python3 tools/creative_delight_test/gen_cdtest_mirror.py --check` after a fresh `/dumpall` | compost check exits 0; the mirror is frozen (README), its stale report is expected | generator rules |
 
 #### SQ-CN: Corn Delight 1.2.11 items and rules (added 2026-10-25)
@@ -992,6 +996,18 @@ Anything that fails here is written to the feature's writeup first, then fixed; 
 TODO row's status word changes.
 
 ## Run log
+
+### 2026-11-01: run r1101 (group A superflat r11p1 + flower_test r11ft, worldgen r11w2 / r11w3a / r11w3b, seed 8675309, client QA_*; perf session `r1101`)
+
+Plan, results and owner points: [scratch_run_2026-11-01.md](scratch_run_2026-11-01.md). Batches
+`tools/scratch_query/batches/r1101/`, results `perf/runs/r1101/` (judged_p1.md, judged_c1.md, shots/), perf
+`perf/sessions/r1101/summary.md` (11 boots, JFR on, no prune). Jars: patcherMod and Creative Delight builds of
+2026-11-01 01:56. Priority server rows and the bug batch: PASS (SQ-AC-02, SQ-CM-32 / -35, SQ-RW-23, SQ-TER-01 now PASS)
+except SQ-CDF-07 without-Brewin' half (pack does not start without Vinery), SQ-CBJ-05 and SQ-TL-09 (OPEN). Worldgen:
+SQ-HR-05, SQ-EN-01 / -02, SQ-MRD-03, SQ-META31-04b, SQ-WG30-C02b, SQ-SB-01e PASS; SQ-SB-04 likely FAIL, SQ-SB-05 to
+-08 OPEN; meteorite desert pyramids lose their above-ground pyramid (client look). Client: priority CQ rows PASS on
+looks (CQ-PRI-02 block shows as "Snow Block" in WTHIT); r1031 client batch PASS 5, FAIL 2 (CQ-UI-01 tobacco name,
+CQ-TD-06 recheck), BATCH-FAULT 5, OPEN 20. qrun.py client mode fixed (slash prefix, slower typing). Not run: L1 to L4.
 
 ### 2026-10-31: bulk run r1031 (group A superflat r31a1, group B r31b1, worldgen r31w1a/b/c and r31w2, seed 8675309; perf session `r1031`)
 
@@ -1457,7 +1473,7 @@ Needs the patcherMod and Creative Delight jars rebuilt and installed. Details: [
 |---|---|---|---|---|
 | SQ-MRD-01 | B | `/dumpgear` knives | Wooden Knife 1.5 / 2.0, mining speed 2, level 0; Stone Knife 2.5 / 2.0, speed 4, level 1 | tuneTools |
 | SQ-MRD-02 | B | `/dumpfood` | Toast, the 5 topped toasts, Caviar Toast and Cheese Toast flagged fast; Cheese Toast 5 hunger, 0.7 | CD `moredelight/toast.js` |
-| SQ-MRD-03 | B | `/dumpall` recipe dump, `/dumptags` | `creative_delight:...cheese_toast` shapeless (Toast + Flaxen Cheese Wedge); `forge:sliced_potato` holds Rustic's slices; the four renamed pack tags filled; no use of the plural names | tags |
+| SQ-MRD-03 | B | `/dumpall` recipe dump, `/dumptags` | `creative_delight:...cheese_toast` shapeless (Toast + Flaxen Cheese Wedge); `forge:sliced_potato` and `forge:sliced_potatoes` both hold Rustic's slices (More Delight's six potato recipes read the plural, `dishes/ingredients #26`); the four renamed pack tags filled | tags |
 
 ## Food family recipe helpers (food_families.md 4.5)
 
@@ -2555,7 +2571,7 @@ exact commands and checks.
 | CQ-GF31-05 | client | hover the Explorer's Compass | "Not craftable" line | `client_scripts/tooltips.js` |
 | CQ-GF31-06 | client | look at `myrtrees:rubberwood_log` and `filled_rubberwood_log` | bark textured on every side | `kubejs/assets/myrtrees/blockstates/` |
 | SQ-TL-09 | A | `/cegen` (op, console) | lists 50 generators from `tools/generators.json` with their groups (`stacks` among them) and the last run; no `[cegen]` error in `latest.log` | pack_tooling.md TL-09, TODO `tooling/generators-and-tests #1` |
-| SQ-JRFTL-01 | A | after JRFTL jar is out of mods/: `/give @s jrftl:prepared_flesh`; creosote filling and IE bottling on rotten flesh; smoke it | item exists with the new texture and name "Prepared Flesh"; recipes work; smoking gives leather; no jrftl errors in latest.log | `misc_items.js` |
+| SQ-JRFTL-01 (r1101 PASS) | A | after JRFTL jar is out of mods/: `/give @s jrftl:prepared_flesh`; creosote filling and IE bottling on rotten flesh; smoke it | item exists with the new texture and name "Prepared Flesh"; recipes work; smoking gives leather; no jrftl errors in latest.log | `misc_items.js` |
 
 ## SQ-HR raspberries, 2026-10-31 ([hearth_and_harvest.md](../hearth_and_harvest.md) 4.1, HNH-03, HNH-04, HNH-34 to HNH-37)
 
@@ -2568,7 +2584,7 @@ items, worldgen). Group A (superflat) and a bot player, except SQ-HR-05 (group B
 | SQ-HR-02 | A | `/setblock ~ ~-1 ~ minecraft:dirt`, bot uses `hearthandharvest:raspberry_pips` on it; also on sand; `/gamerule randomTickSpeed 300`, wait; `/execute if block ~ ~ ~ hearthandharvest:raspberry_bush[age=3]` | placed on dirt, refused on sand; reaches age 3 | soil rule |
 | SQ-HR-03 | A | Bot right-clicks the bush at age 2, then at age 3 (`/setblock ... [age=2]` / `[age=3]`); count dropped items | age 2: nothing; age 3: 2-3 raspberries, bush age 1 | `use` override |
 | SQ-HR-04 | A | `/tag` check via `/kubejs` or `/dumptags`: `forge:fruits/raspberries`, `forge:berries`, `minecraft:fox_food`, `forge:seeds/raspberry`, `forge:seeds`; `/summon fox` next to an age 3 bush, wait 60 s | tags hold the items; the fox empties the bush to age 1 and holds a raspberry | tags.js not run (member switch); fox goal not added |
-| SQ-HR-05 | B | New world, seed 8675309; `/locate biome minecraft:forest`, fly there; grep `[wild-crops]` | log lists rule `raspberry` (26 biomes); ripe raspberry bush patches in forest / plains | `requires` skipped the rule; feature json invalid in 1.19.2 |
+| SQ-HR-05 | B | New world, seed 8675309; `/locate biome minecraft:forest`, fly there (r1101: the `[wild-crops]` log names no rules; use `/zq biometag creative_delight:wild_crops/raspberry` and a fully loaded 256-chunk `/zq count`) | tag lists 26 biomes; ripe raspberry bush patches in forest / plains | `requires` skipped the rule; feature json invalid in 1.19.2 |
 | CQ-HR-06 | client | Look at the bush through its four ages with WTHIT; hover the pips; walk into the bush | art matches upstream (cutout, no black faces); growth line, "Mature" at age 3; season line on the pips; slowed, no damage | render type; crop_growth.json rule |
 
 ## Cooking for Blockheads in Creative Delight, 2026-10-31 ([kitchen.md](../kitchen.md) 2.7, 9; TODO `cooking/kitchen #22`)
@@ -2607,3 +2623,22 @@ Jars: patcherMod and Creative Delight, built 2026-10-31, installed together (see
 | CQ-TSK-01 | client | TSK-01 to TSK-05 | as written in treated_sticks.md | textures under `kubejs/assets/creative_delight/textures/block/` |
 | CQ-CSR-01 | client | restart, no F3+T; FO-59, PL-01 | `logs/kubejs/client.log` lists every `creative_delight:kubejs/...` client script once with no new errors; garlic-seasoned popcorn shows "Garlic: Speed (0:10)" | `KubeJSClientResourceScriptsMixin` |
 | CQ-JB-01 | client | JC-32 | JEI shows Sweet Berries, Glow Berries and both pips separately; no doubled pips in the Food tab | `BlockItemOwnStackFillMixin` |
+
+## Bug batch, 2026-11-01 (TODO rows in each ID's Depends column)
+
+Needs the patcherMod jar (`creativeengineering-1.1.04.jar`, built 2026-11-01 01:35) and the Creative Delight jar (`creative_delight-1.0.0.jar`, 01:23) installed, and a full restart. Already-queued checks to rerun with these jars: SQ-RSP-09 (Spout / Item Drain drinks), SQ-FFH-03 (zucchini quiche), SQ-MRD-03 (tags half, rewritten), SQ-CM-32 and SQ-CM-35 (calamari), SQ-AC-02 (also `/attribute <bot> minecraft:generic.armor_toughness get`: armor 36, toughness 18).
+
+| ID | Group | Action | Expect | Depends on |
+|---|---|---|---|---|
+| SQ-NCH-01 | A | After boot grep `logs/latest.log` and `logs/kubejs/server.log` for `Can't modify the empty stack`; sawdust in a furnace with fuel; JEI Smelting page for sawdust | no hits; ash after 10 s; JEI shows 10 s, not 0 | `food/drinks #12` (NCH `_or` replaces numeric `??` defaults) |
+| SQ-GT-31 | A | grep the log for `[NCH.cfg] no CEConfig.CRAFTING.FELSIC_`; set `[crafting.felsic_helmet] reachPotionMb = 100`, `/reload`; revert after | no missing-key lines; log shows `CRAFTING.FELSIC_HELMET.reachMb overridden: default 500 -> 100`; recipe has a 100 mB Long Reach fill and a 500 mB Magic Resistance fill | `gear/tuning #6` |
+| SQ-RE-16 | A | JEI uses of an amethyst shard (RE-16) | millstone and crushing wheels: one recipe each, 75 % amethyst dust; IE crusher: amethyst dust + 25 % amethyst dust; no glowstone from shards | `recipes/engineering #2`, `dust.js` |
+| SQ-RW-23b | A | recipe dump for `smoking` outputs of `create_dd:smoked_*`; `/dumptags` | 13 smoking recipes, cook time 200; each `creativeengineering:smokable/*` tag holds exactly the 7 `minecraft:` overworld woods (mangrove included); no `botania:*`, driftwood, `quark:*`, crimson or warped | `engineering/dreams-and-desires #10` |
+| SQ-EN-01 | B | `/dumptrades`; summon a librarian with a lectern, step `VillagerData.level` 1 to 5 (reset offers each level) | librarians still offer enchanted books; no offer or dump entry holds `nock_enough_arrows:stockpile`, `:recovery` or `:cycle` | `loot/tables #10` (NEA mixins isTradeable) |
+| SQ-EN-02 | B | summon several Lightman's Currency cashiers at levels 1 to 4 | cashiers still offer enchanted books; none of the three NEA enchantments | `loot/tables #10` |
+| SQ-META31-04b | C | `[worldgen.meta_structures] log` on, new world, `/locate structure creativeengineering:meta/meteorite_desert_pyramid` a few times, grep `meteorite_desert_pyramid` in latest.log | every placed line `1/1 minecraft:desert_pyramid` plus a meteorite; short ones `not placed, core part ...` or `no satellite fitted`; none placed with `0/1 desert_pyramid` | `structures/metas #11` |
+| SQ-WG30-C02b | C | new world, Chunky square, `/celocate census 96 <x> <z>`; read `falseNegativeAt` in `kubejs/exported/worldgen/locate_census.json` | every biome false negative has a diagnosis string (regenerated point, its biome, nearest-distance entries, start-piece centre); record which case it shows | `structures/rates-and-groups #13` |
+| SQ-TER-01b | A | boot, grep `latest.log` for the terrain adaptation load line; `/locate structure philipsruins:ancient_crypt` in new chunks | load line counts 7 sunk starts with no `ancient_crypt ... ignored` warning; the crypt places on its own terrain-matching projection | `structures/earthfill #17` |
+| SQ-SSP-01 | A | knife on a cutting board with a potato, then a sweet potato; Slice & Dice slicer with a knife over a depot, 1 potato then 1 sweet potato | board and slicer each give 3 Potato Slices and 3 Sliced Sweet Potatoes; no recipe error for `creative_delight:farmersdelightcutting/potato_slices` or `.../sliced_sweet_potato` | `dishes/ingredients #20` |
+| SQ-SSP-02 | A | `/dumptags`, grep `kubejs/exported/tags/item_tags_by_item.json` for `creativeengineering:sliced_sweet_potato` | lists `forge:sliced_potato`, `forge:sliced_potatoes`, `forge:vegetables/sweet_potato`, `forge:vegetables/potato`, `forge:vegetables`, `creativeengineering:food_type/raw/veggie/sliced` | `dishes/ingredients #20` |
+| SQ-SSP-03 | A | `/dumpfood`, `/dumpcompost`; client: JEI on the item | nutrition 1, modifier 0.3, compost 0.5; JEI shows the potato slices sprite, "Sliced Sweet Potato", uses in fries, More Delight potato dishes and Canned Sweet Potato | `dishes/ingredients #20`, `dishes/meals #34` |

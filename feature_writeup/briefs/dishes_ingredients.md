@@ -28,7 +28,7 @@ tags through `global.tags` (`t`), ids from `global.item` (`i`) / `global.fluid` 
 | 25 | Cabbage cutting gives 4 leaves | Planned | B (replaces the cabbage clause of row 8) |
 | 18 | Cutting banana bunch | In Progress | B |
 | 8 | Produce fixes (melon, chorus crate machine, raw pasta box) | In Progress | B |
-| 20 | Sweet potato slices | In Progress | C (new item, restart) |
+| 20 | Sweet potato slices | Testing (built 2026-11-01) | C (new item, restart) |
 | 21 | Potato and sweet potato compatibility | In Progress | C (after 20) |
 | 22 | Honeycomb as sugar, honey and spread | In Progress | D |
 | 7 | Batter uses | In Progress | D |
@@ -174,10 +174,16 @@ The small produce changes from the cooking plan and the 2026-10-21 scratchpad.
 ---
 
 ## ingredients #20: Sweet potato slices
-Status **In Progress** / Work: KubeJS (+ new item) / id `dishes/ingredients #20` ([veggies_delight.md](../veggies_delight.md))
+Status **Testing** / Work: KubeJS (+ new item) / id `dishes/ingredients #20` ([veggies_delight.md](../veggies_delight.md))
 
 ### Goal
 A cut sweet potato gives 3 sweet potato slices.
+
+### Built 2026-11-01 (veggies_delight.md 5.6)
+- `creativeengineering:sliced_sweet_potato` "Sliced Sweet Potato" (owner's name, not `sweet_potato_slices`); the owner chose
+  Rustic's potato slices sprite with no new art, so the model reads `rusticdelight:item/potato_slices` in place (nothing copied).
+- Board and slicer 3; the potato went to 3 slices [2] at the same time. No baked form. Tags, compost, food type, family,
+  dict and the Canned Sweet Potato source as in 5.6. Tests VD-44 to VD-46 (replace RC-new1, RC-new2). CD built, not installed.
 
 ### Now (checked 2026-10-31)
 - No sweet potato slice item (Veggies port and `item_dict.js`: `sweet_potato` 14284, `baked_sweet_potato` 14295, dough, pie,

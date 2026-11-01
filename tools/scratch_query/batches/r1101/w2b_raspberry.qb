@@ -1,0 +1,14 @@
+# Follow-up for SQ-HR-05 on r11w2: the wild-crops log never names rules; check the biome tag, a direct placement,
+# and a larger forest count (y 40 to 200).
+pace 2
+## SQ-HR-05b | raspberry wild-crop tag, feature places, bushes in a 256 x 256 forest square
+> zq biometag creative_delight:wild_crops/raspberry
+expect biometag creative_delight:wild_crops/raspberry
+> tp qa -272 160 -46
+> forceload add -384 -160 -129 95
+sleep 60
+> zq count -384 40 -160 -129 200 95 hearthandharvest:raspberry_bush
+> execute positioned -272 100 -46 run place feature creative_delight:wild/raspberry_bush
+> zq count -290 40 -64 -254 200 -28 hearthandharvest:raspberry_bush
+> forceload remove all
+look tag has about 26 biomes incl. minecraft:forest; natural count over 256 chunks (expect a few patches at 1 in 62); `place feature` succeeds and the second count > 0

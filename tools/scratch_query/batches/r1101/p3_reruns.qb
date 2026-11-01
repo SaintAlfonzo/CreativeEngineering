@@ -1,0 +1,122 @@
+# Run 2026-11-01, priority boot 3: reruns of the p1 BATCH-FAULT rows (perf/runs/r1101/judged_p1.md) on the r11p1
+# superflat world. The GT-31 toml is set BEFORE this boot (bootexpect).
+pace 1
+
+## SQ-R11C-BOOT | boot, bot joins
+bootexpect Done \(
+> pbot spawn qa 0 -60 0
+> time set midnight
+
+## SQ-GT-31b | felsic helmet reach mB override read at boot
+bootreject \[NCH.cfg\] no CEConfig.CRAFTING.FELSIC_
+bootexpect CRAFTING.FELSIC_HELMET.reachMb overridden: default 500 -> 100
+> zq rdetail felsic_helmet
+look one 100 mB Long Reach fill and one 500 mB Magic Resistance fill
+
+## SQ-PRI-01b | pizza topping tag, bell peppers, dishes
+> zq itemtag brewinandchewin:foods/pizza_topping
+> zq tagsof rusticdelight:bell_pepper_green
+> zq makes brewinandchewin:pizza
+> zq makes supreme_pizza
+> zq makes ham_and_cheese_sandwich
+> zq makes scarlet_pierogi
+> zq tagsof brewinandchewin:kimchi
+look bell peppers in the pizza topping tag; kimchi in the cooked soup-veggie tag; the dishes have recipes
+
+## SQ-WCT-03b | Just a Well, two halves
+> setblock -36 -60 -15 well:well
+> setblock -36 -59 -15 well:well[half=upper]
+sleep 20
+> tp qa -36 -60 -13
+> item replace entity qa weapon.mainhand with hearthandharvest:iron_watering_can
+> data get block -36 -60 -15
+> pbot use qa -36 -59 -15 north
+> data get block -36 -60 -15
+> data get entity qa SelectedItem
+look WaterLevel 12 after the roof-half use; tank down 1000 mB; an empty well tank = setup (no water source), record
+
+## SQ-WCT-05b | diamond can smithing recipe
+> zq uses hearthandharvest:golden_watering_can
+expect diamond_watering_can
+
+## SQ-WC-05b | mulch soaked by the golden can
+> gamerule randomTickSpeed 0
+> fill -32 -61 -21 -30 -61 -19 immersive_weathering:mulch_block[moisture=0]
+> fill -32 -60 -21 -30 -60 -19 minecraft:wheat[age=0]
+> item replace entity qa weapon.mainhand with hearthandharvest:golden_watering_can{WaterLevel:16}
+> tp qa -31 -60 -23
+> pbot use qa -31 -60 -20 up
+> fill -32 -61 -21 -30 -61 -19 minecraft:stone replace immersive_weathering:mulch_block[moisture=7]
+> gamerule randomTickSpeed 3
+expect Successfully filled 9 block
+
+## SQ-HR-04b | raspberry tags; fox at night
+> zq tagsof hearthandharvest:raspberry
+expect forge:fruits/raspberries
+expect forge:berries
+expect minecraft:fox_food
+> kill @e[type=fox]
+> setblock 28 -60 -10 hearthandharvest:raspberry_bush[age=3]
+> summon fox 27 -60 -10
+sleep 60
+> execute if block 28 -60 -10 hearthandharvest:raspberry_bush[age=1]
+> execute as @e[type=fox] run data get entity @s HandItems
+look fox empties the bush (age 1) and holds hearthandharvest:raspberry
+
+## SQ-DM-03c | dandelions: fertile (mulch) vs rich soil
+> gamerule randomTickSpeed 0
+> fill 20 -61 30 29 -61 30 farmersdelight:rich_soil
+> fill 20 -61 32 29 -61 32 immersive_weathering:mulch_block
+> fill 20 -60 30 29 -60 30 minecraft:dandelion
+> fill 20 -60 32 29 -60 32 minecraft:dandelion
+> gamerule randomTickSpeed 30
+sleep 30
+> zq count 20 -60 30 29 -60 30 veggiesdelight:mature_dandelion
+> zq count 20 -60 32 29 -60 32 veggiesdelight:mature_dandelion
+sleep 30
+> zq count 20 -60 30 29 -60 30 veggiesdelight:mature_dandelion
+> zq count 20 -60 32 29 -60 32 veggiesdelight:mature_dandelion
+> gamerule randomTickSpeed 3
+look mulch row (z 32) about twice the rich row (z 30) at each read
+
+## SQ-POT-08b | planter box ban tag, hanging pot recipe
+> zq itemtag another_furniture:planter_box_banned
+> zq itemtag creativeengineering:flower_box_plants
+> zq rdetail rope_to_1_hanging_pot
+> zq makes beautify:hanging_pot
+expect farmersdelight:rich_soil
+look planter_box_banned has azalea; flower_box_plants has cactus, glow_berries, poppy and not azalea; one hanging_pot recipe
+
+## SQ-PRI-02b | Floral large pot block kept
+> setblock 60 -60 30 floralench:large_poppy_pot
+> execute if block 60 -60 30 floralench:large_poppy_pot
+> zq recipes large_poppy_pot
+expect Test passed
+
+## SQ-NCH-01b | sawdust smelts in 10 s
+> setblock 70 -60 0 minecraft:furnace
+> item replace block 70 -60 0 container.1 with minecraft:coal
+> item replace block 70 -60 0 container.0 with immersiveengineering:dust_wood
+> data get block 70 -60 0 CookTimeTotal
+sleep 12
+> data get block 70 -60 0 Items
+> zq makes supplementaries:ash
+look CookTimeTotal 200; slot 2 holds ash after 12 s
+
+## SQ-RE-16b | IE crusher amethyst
+> zq makes creativeengineering:amethyst_dust
+look IE crusher: amethyst shard -> dust + 25 % dust; no glowstone from shards
+
+## SQ-RSP-09b | drink filling / emptying ids
+kjsreject Error parsing recipe creative_delight:createfilling/
+> zq rdetail createfilling/milk_coffee
+> zq rdetail createfilling/lavender_tea
+> zq rdetail matcha_latte
+> zq rdetail createfilling/coffee
+> zq rdetail createemptying/coffee
+> zq rdetail createemptying/matcha
+look each drink has a 250 mB filling and emptying recipe
+
+## SQ-RW-23d | smokable log tag
+> zq itemtag creativeengineering:smokable/log
+reject itemtag creativeengineering:smokable/.*(botania:|driftwood|quark:|crimson|warped)

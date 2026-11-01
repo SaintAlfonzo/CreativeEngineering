@@ -86,5 +86,12 @@ ServerEvents.recipes(e => {
 			R.createMixing(Item.of(i.cooking_oil, 1), [i.t_cooking_oil_ingredients, i.t_cooking_oil_ingredients,
 				i.t_cooking_oil_ingredients, i.glass_bottle], e, 'cooking_oil_heated_mixing', 'heated')
 		}
+
+		//######################### Potato slices #########################
+		// A potato cuts into 3 slices (upstream 2; TODO dishes/ingredients #26), as a sweet potato into 3 sliced sweet
+		// potatoes (veggiesdelight/recipes.js). Slice & Dice's slicer copies every cutting board recipe after KubeJS
+		// runs, so it follows. The baked potato's 2 baked slices stay.
+		R.remove({ id: 'rusticdelight:cutting/potato_slices' }, e)
+		R.fdCutting(i.minecraft_potato, i.any_knife, Item.of(i.potato_slices, 3), e, 'potato_slices')
 	})
 })

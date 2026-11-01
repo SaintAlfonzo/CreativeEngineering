@@ -32,24 +32,32 @@ t.add(e, ['vinery:barrel', 'vinery:wooden_barrels'], i.barrel)
 t.addMatching(e, 'creativeengineering:unsmoked_planks', '#minecraft:planks', { except: i.smoked_planks })
 
 // ============================================================
-// Smokable wood: every wood type, per block shape (smoking recipes in wood/smoked_wood.js)
+// Smokable wood: vanilla overworld woods, per block shape (smoking recipes in wood/smoked_wood.js)
 // ============================================================
-// Expanded from the vanilla / forge wood tags as they stand when this runs. Left out: the smoked blocks themselves,
-// polished and vertical variants, beams, Botania's magic woods and, for logs, the other half of the log / wood pair.
-var smokeExcept = ['*:*smoked*', '*:*polished*', '*:*vertical*']
-t.addMatching(e, 'creativeengineering:smokable/log', '#minecraft:logs', { except: smokeExcept.concat(['*:*stripped*','*:*_wood','*:*_hyphae','*:*_beam','botania:*','*:driftwood']) })
-t.addMatching(e, 'creativeengineering:smokable/wood', '#minecraft:logs', { except: smokeExcept.concat(['*:*stripped*','*:*_log','*:*_stem','*:*_beam','botania:*','*:driftwood','*:driftwood_log']) })
-t.addMatching(e, 'creativeengineering:smokable/log_stripped', '#forge:stripped_logs', { except: smokeExcept })
-t.addMatching(e, 'creativeengineering:smokable/wood_stripped', '#forge:stripped_wood', { except: smokeExcept })
-t.addMatching(e, 'creativeengineering:smokable/planks', '#minecraft:planks', { except: smokeExcept })
-t.addMatching(e, 'creativeengineering:smokable/slab', '#minecraft:wooden_slabs', { except: smokeExcept })
-t.addMatching(e, 'creativeengineering:smokable/stairs', '#minecraft:wooden_stairs', { except: smokeExcept })
-t.addMatching(e, 'creativeengineering:smokable/fence', '#minecraft:wooden_fences', { except: smokeExcept })
-t.addMatching(e, 'creativeengineering:smokable/fencegate', '#forge:fence_gates/wooden', { except: smokeExcept })
-t.addMatching(e, 'creativeengineering:smokable/door', '#minecraft:wooden_doors', { except: smokeExcept })
-t.addMatching(e, 'creativeengineering:smokable/trapdoor', '#minecraft:wooden_trapdoors', { except: smokeExcept })
-t.addMatching(e, 'creativeengineering:smokable/button', '#minecraft:wooden_buttons', { except: smokeExcept })
-t.addMatching(e, 'creativeengineering:smokable/pressureplate', '#minecraft:wooden_pressure_plates', { except: smokeExcept })
+// Allow-list (decided 2026-11-01, engineering/dreams-and-desires #10): only the seven vanilla overworld woods smoke.
+// Every modded wood (Botania, driftwood, Quark ...) and the nether woods (crimson, warped) are left out. The item_dict
+// keys are <shape>_<wood>, with stripped logs / wood as log_<wood>_stripped / wood_<wood>_stripped.
+var smokeWoods = ['oak', 'spruce', 'birch', 'jungle', 'acacia', 'dark_oak', 'mangrove']
+var smokeShapes = {
+	log: w => 'log_' + w,
+	wood: w => 'wood_' + w,
+	log_stripped: w => 'log_' + w + '_stripped',
+	wood_stripped: w => 'wood_' + w + '_stripped',
+	planks: w => 'planks_' + w,
+	slab: w => 'slab_' + w,
+	stairs: w => 'stairs_' + w,
+	fence: w => 'fence_' + w,
+	fencegate: w => 'fencegate_' + w,
+	door: w => 'door_' + w,
+	trapdoor: w => 'trapdoor_' + w,
+	button: w => 'button_' + w,
+	pressureplate: w => 'pressureplate_' + w,
+}
+Object.keys(smokeShapes).forEach(shape => {
+	var ids = smokeWoods.map(w => i[smokeShapes[shape](w)])
+	if (ids.some(id => !id)) console.warn('wood_tags: missing item_dict key for creativeengineering:smokable/' + shape)
+	t.add(e, 'creativeengineering:smokable/' + shape, ids.filter(id => id))
+})
 
 console.log('wood tag finished')
 })

@@ -56,6 +56,15 @@
 - **New:** Treated Sticks can be placed like sticks, up to three per block
 - **New:** Tomatoes climb placed Treated Sticks. Right-clicking a young tomato vine with a Treated Stick puts it on one.
 
+## Potato Slices
+
+- **New:** Sliced Sweet Potato: a knife or the Slice & Dice slicer cuts a sweet potato into 3; recipes that take potato slices accept it
+- **Changed:** A potato cuts into 3 Potato Slices [2]
+
+## Smoked Wood
+
+- **Changed:** Only oak, spruce, birch, jungle, acacia, dark oak and mangrove blocks can be smoked into Smoked blocks [any wood type]
+
 ## Gameplay
 
 - **Fixed:** Seasoned food tooltips showed a raw key instead of the seasoning's name
@@ -65,6 +74,14 @@
 - **New:** Handcrafted Nightstands hold 27 slots, opened like a chest; hoppers and pipes reach them
 - **Changed:** Brewery sky village houses have Fantasy Furniture Hanging Herbs where the dried barley and corn hung [empty]
 - **New:** The water Spout Gun wets the farmland it hits
+- **Fixed:** The Zucchini Quiche sequenced assembly on a Pie Crust was missing
+- **Fixed:** Four calamari dishes were missing and others had an empty tentacle slot
+- **Fixed:** More Delight Mashed Potatoes, Potato Salad and the four Diced Potatoes dishes had an empty sliced potato slot
+- **Fixed:** Spout and Item Drain recipes for the coffees, Lavender Tea, the matcha lattes and the Water Cup were missing
+- **Fixed:** Librarians and cashiers offered Stockpile, Recovery and Cycle books
+- **Fixed:** Struck desert pyramids could generate as a meteorite crater with no pyramid
+- **Changed:** Dragon Chestplate 12 armor [10], Dragon Leggings 10 [9], each dragon armor piece 4.5 toughness [5]; full set 36 armor [33]
+- **Changed:** Amethyst Shards no longer give Glowstone Dust in the Millstone, Crushing Wheels or Crusher; the Millstone gives Amethyst Dust (75 %) [Glowstone Dust]
 - **Changed:** Dandelions mature into Mature Dandelions faster on Fertile Soil than on Rich Soil: about 10 minutes on Fertile Soil [20], 20 on Rich Soil and Rich Soil Farmland [10]
 
 ## Interface & Tooltips <!-- icon: minecraft:written_book -->

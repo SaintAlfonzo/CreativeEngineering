@@ -1,0 +1,262 @@
+# Copy of r1031/c1_client.qb for run r1101 (2026-11-01): a tp to each row's build area is inserted before its first
+# setblock / fill / summon (chunks there were not loaded in the client). World QA_A1 = r11p1 with the r1031 A1 look targets rebuilt.
+# Run 2026-10-31, client block C1: a throwaway client (tools/perf/eval/eval_client.py, JFR on) in single player.
+# World QA_A1 = copy of the A1 superflat world (tools/scratch_query/sp_world.py patches allowCommands). Run with
+#   qrun.py client GAME tools/scratch_query/batches/r1031/c1_client.qb RES
+# after the world is open (in game, no screen open). "> cmd" lines are typed into chat; "shot" takes a window
+# screenshot into RES/shots/ for the agent to read. Look-at checks use tp facing so WTHIT shows the block.
+# "hand:" in a look line = GUI steps (hover, JEI search, crafting) the agent does with xdotool and screenshots.
+pace 2
+
+## CQ-R31-BOOT | client boot and world join clean
+bootexpect FIRST_CLIENT_TICK|Sound engine started
+bootreject (Mixin apply failed|InvalidInjectionException).*(creativeengineering|creative_delight)
+bootreject (?i)(FallingBlockWaterSplash|KettleScreenTankMixin|KettleJeiBaseMixin|WateringCanJeiPlugin|CropSeasonTooltip).*(error|fail)
+kjsreject (?i)error occurred
+> gamemode creative
+> time set noon
+> gamerule doDaylightCycle false
+shot joined
+
+## CQ-UI-01 | renamed items (hotbar name popup)
+> item replace entity @s hotbar.0 with brewinandchewin:cheesy_pasta
+> item replace entity @s hotbar.1 with vintagedelight:deluxe_burger
+> item replace entity @s hotbar.2 with supplementaries:pancake
+> item replace entity @s hotbar.3 with fruitsdelight:jelly_bread
+> item replace entity @s hotbar.4 with rusticdelight:coffee_cheesecake
+> item replace entity @s hotbar.5 with the_dirty_stuff:tobacco_package
+> item replace entity @s hotbar.6 with vintagedelight:cucumber_noodles
+> item replace entity @s hotbar.7 with veggiesdelight:sweet_potato_cupcake
+> item replace entity @s hotbar.8 with oceansdelight:elder_guardian_roll
+key 9
+key 1
+shot cheesy_fish_pasta
+key 2
+shot loaded_burger
+key 3
+shot stackable_pancake
+key 4
+shot bread_with_jam
+key 5
+shot coffee_pie
+key 6
+shot tobacco_bundle
+key 7
+shot veggie_noodles
+key 8
+shot sweet_potato_muffin
+key 9
+shot elder_guardian_roll
+look each shot shows the new name above the hotbar: Cheesy Fish Pasta, Loaded Burger, Stackable Pancake, Bread with Jam, Coffee Pie, a tobacco bundle, Veggie Noodles (green zucchini texture), Sweet Potato Muffin, Elder Guardian Roll. hand: JEI search for the canned and plated pasta, the Coffee Pie slice and the other two tobacco bundles
+
+## CQ-LB-01 | lunchbox names and looks (LB-01, LB-02 tooltip by hand)
+> item replace entity @s hotbar.0 with solapplepie:lunchbox
+> item replace entity @s hotbar.1 with solapplepie:golden_lunchbox
+> item replace entity @s hotbar.2 with solapplepie:netherite_lunchbox
+key 2
+key 1
+shot copper
+key 2
+shot iron
+key 3
+shot netherite
+look names Copper Lunchbox, Iron Lunchbox, Netherite Lunchbox with copper / iron / netherite textures. hand: lunchboxes.md LB-02 to LB-14 (tooltip slots, recipes, upgrade keeps food, fire, skins, dye, soap, seagulls, camera bags)
+
+## CQ-UI-02 | Ender's Delight and Veggies Delight crop blocks show names in WTHIT
+> tp @s 0 -55 68 180 20
+sleep 3
+> fill 0 -60 60 20 -60 60 minecraft:air
+> setblock 0 -61 60 minecraft:farmland
+> setblock 0 -60 60 veggiesdelight:broccoli_crop
+> tp @s 0 -59 57 0 30
+shot broccoli
+> setblock 0 -60 60 veggiesdelight:cauliflower_crop
+shot cauliflower
+> setblock 0 -60 60 veggiesdelight:garlic_crop
+shot garlic
+> setblock 0 -60 60 veggiesdelight:sweet_potato_crop
+shot sweet_potato
+> setblock 0 -60 60 veggiesdelight:turnip_crop
+shot turnip
+> setblock 0 -60 60 veggiesdelight:zucchini_crop
+shot zucchini
+look WTHIT names, not translation keys, in each shot (an "Unknown block" chat error = crop id differs: read the id from the item_dict). hand: Amberveils, Ethereal Saffron, Chorusflame, Void Pepper Sprout the same way on end stone; hover the Ender's Delight dishes
+
+## CQ-UI-03 | ghost pepper planting tooltip
+> item replace entity @s hotbar.0 with vintagedelight:ghost_pepper_seeds
+look hand: open the inventory, hover slot 1: "Requires a soul soil and the heat of the nether to grow"
+
+## CQ-UI-04 | Kettle fluid bar 3 px, centred (screen and JEI)
+> tp @s 3 -55 5 180 20
+sleep 3
+> setblock 3 -60 -3 farmersrespite:kettle
+look hand: put water and tea leaves in the Kettle, open it, screenshot with the bar at GUI scale 2; JEI Kettle page: bar 3 px wide centred in the old 5 px slot, tooltip hover matches
+
+## CQ-MB-08 | monster box: standing warning, sneak break, no flames in cooldown (MT-48, MT-49)
+> tp @s 8 -55 -22 180 20
+sleep 3
+> setblock 8 -60 -30 quark:monster_box
+> tp @s 6 -60 -30 -90 20
+shot box
+look hand: diamond pickaxe standing -> warning, box back; sneaking -> breaks, no drop; WTHIT hardness 25 (changelog) vs the queue's 50; flames gone while it rests (SQ-MB phase 2)
+
+## CQ-VS-09 | WTHIT lines on sheared vines and tips (VS-05, VS-09)
+> tp @s 12 -54 6 0 0
+shot sheared_flower_vine
+> tp @s 22 -54 13 180 -40
+shot capped_weeping_tip
+> tp @s 40 -55 48 180 20
+sleep 3
+> setblock 40 -60 40 minecraft:jungle_log
+> setblock 40 -60 41 vinery:jungle_grape_vine[fertile=false]
+> tp @s 40 -59 44 180 30
+shot sheared_grape_vine
+look "Sheared, stops growing" on the A1 sheared poppy vine (12 -54 9) and the grape vine; "Stopped growing" on the capped weeping vine (22 -51 10). Grape vine id or property may differ ("Unknown block"): use the Vinery jungle grape vine item by hand. hand: VS-01 (sound, durability, trimmed bottom), VS-04 Botania solid vine, VS-08 vanilla vine with Quark, VS-10 trimmedLook false + F3+T, VS-11 break and replace
+
+## CQ-CS-07 | crop season tooltips and WTHIT lines (CR-89, CR-90)
+> tp @s 30 -59 27 0 30
+shot wheat_wthit
+> item replace entity @s hotbar.0 with minecraft:wheat_seeds
+> item replace entity @s hotbar.1 with vinery:red_grape_seeds
+> item replace entity @s hotbar.2 with minecraft:nether_wart
+look WTHIT on the A1 wheat (30 -60 30): the crop's seasons and whether it is fertile or offseason here. hand: hover the three seeds (fertile / offseason seasons; grapes by biome; "Season: Nether")
+
+## CQ-WC-04 | watering can by hand (HNH-26, HNH-28, HNH-29)
+> item replace entity @s hotbar.0 with hearthandharvest:watering_can
+> item replace entity @s weapon.offhand with minecraft:bone_meal 64
+> tp @s -40 -55 -32 180 20
+sleep 3
+> fill -40 -61 -40 -36 -61 -36 minecraft:farmland[moisture=7]
+> fill -39 -60 -39 -37 -60 -37 minecraft:wheat[age=0]
+> setblock -40 -60 -34 minecraft:water
+> setblock -34 -60 -38 minecraft:campfire[lit=true]
+look hand: fill the can at the water (-40 -60 -34); one charged use on the 3x3 wheat: water -1 and fertiliser -1 (not -2), the 3x3 grows; on the campfire: unlit, water -1
+
+## CQ-AC-04 | armor bar shows 36
+> item replace entity @s armor.head with dragonloot:dragon_helmet
+> item replace entity @s armor.chest with dragonloot:dragon_chestplate
+> item replace entity @s armor.legs with dragonloot:dragon_leggings
+> item replace entity @s armor.feet with dragonloot:dragon_boots
+> gamemode survival
+shot armor_bar
+> gamemode creative
+> clear @s
+look the HUD armor bar shows 36 (one extra row past 20)
+
+## CQ-STL | stepstool standing (STL-03 to STL-10)
+> item replace entity @s hotbar.0 with creativeengineering:white_stepstool
+look hand: stepstool.md STL-03 to STL-10: recipe in JEI, Curios Feet slot, Sprint + Jump while still to step up (a block higher), quick press, stays, moving / crouching / jumping / damage steps off, "Step Up" in Controls
+
+## CQ-TD-06 | calendar on the client after a date set
+> cetime date set 3 mid_autumn 5 7:30 pm
+sleep 5
+shot hud
+look SeasonHUD "Mid Autumn (Day 13/24) 7:30 pm", Xaero time line "Day 253, 19:30", the world re-tints once. hand: calendar item tooltip Year 3
+> cetime date reset
+
+## CQ-MG-20 | chimpanzee spawn egg and head hidden in JEI
+look hand: JEI search "chimpanzee": banner pattern only, no spawn egg, no head
+
+## CQ-CM-33 | Storage Delight blocks in wood order in JEI; mod name
+look hand: JEI search "@storagedelight": the 140 blocks sit together in wood order (oak, spruce, birch, jungle, acacia, dark oak, mangrove, crimson, warped, bamboo); Mods list shows "Storage Delight (Creative Delight)" when the rebuilt repackedStorage jar is in the client's mods (SQ-CM-34)
+
+## CQ-SPC-01 | seeds go into a seed pouch
+> item replace entity @s hotbar.0 with quark:seed_pouch
+> item replace entity @s hotbar.1 with the_dirty_stuff:tobacco_seeds 16
+> item replace entity @s hotbar.2 with fruitsdelight:hamimelon_seeds 16
+> item replace entity @s hotbar.3 with fruitsdelight:lemon_seeds 16
+look hand: drop each stack onto the pouch in the inventory: all three accepted (seed ids from the SQ-SPC-01 tag dump if one is unknown)
+
+## CQ-RW-23 | smoked wood in the smoker, Create fan, spout and Bottling Machine (RW-23 to RW-26)
+look hand: recipes_wood.md RW-23 to RW-26: smoker and a Create fan with a Smoking Sail on oak, spruce, azalea, crimson; spout and IE Bottling Machine creosote fills; JEI shows smoked planks only in the 100 mB recipes; 100 mB with plain oak planks does not work
+
+## CQ-SALT | Salting craft and cauldron evaporation (SQ-SALT-02, -03 halves left open on 10-28)
+look hand: item_merges.md 2.9 SALT rows: craft with The Salt's salt in a Salting recipe; evaporate water in a heated cauldron: The Salt's salt comes out
+
+## CQ-RE-29 | wooden bucket (RE-29, RE-30)
+> item replace entity @s hotbar.0 with creativeengineering:wooden_bucket
+> tp @s -44 -55 -36 180 20
+sleep 3
+> setblock -44 -60 -44 minecraft:water
+look hand: scoop and place water, refill; lava and a cow do nothing; placing returns the wooden bucket; stacks to 16 empty; RE-30 Create spout / basin / FD cooking pot drain it and return the wooden bucket
+
+## CQ-EN-19 | rose quartz sand blasting on a belt (EN-19, EN-20)
+look hand: encased fan through a sand block (or a D&D sanding sail) over a belt, 64 rose quartz through it: exactly 64 items out, about 51 rough / 13 polished (40-62 / 2-24); loop the rough back until 64 polished
+
+## CQ-KT-19 | coaster models (KT-19, KT-20)
+> tp @s 9 -59 -2 180 40
+shot coasters
+look the A1 coasters (5..13 -60 -5) show 3D models for red wine, hamburger, long black tea; the jelly and golden cookie were refused (empty coasters). hand: KT-19 Display Delight food, Apple Cider
+
+## CQ-POT-02 | botanist workbench render (POT-08)
+look hand: flower_pots.md POT-08 at the A1 botanist houses (70 -60 -80, 110 -60 -80): plant drawn, facing, tint, F3+T
+
+## CQ-SVA | Sky Village addon houses look and loot (SVA-03 to SVA-05, SVA-07)
+> tp @s 120 -20 90 180 30
+shot farms
+> tp @s 300 -20 90 180 30
+shot vinery
+> tp @s 220 -20 170 180 30
+shot brewery_deco
+look no air holes, crops and FD blocks right, Vinery presses and barrels, Brewin' kegs and trellises. hand: open the farm_0 chest and the brewery_1 chests: Lootr loot tables sky_village_weaponsmith / butcher / shepherd (SQ-SVA-04)
+
+## CQ-FBS | falling block splash (FX-49: CQ-FBS-02, -03)
+> tp @s -50 -55 58 180 20
+sleep 3
+> fill -50 -61 50 -46 -61 54 minecraft:water
+> summon falling_block -48 -40 52 {BlockState:{Name:"minecraft:anvil"},HurtEntities:1b}
+> tp @s -48 -55 46 0 40
+sleep 2
+shot anvil_splash
+> summon falling_block -48 -58 52 {BlockState:{Name:"minecraft:sand"}}
+sleep 1
+shot sand_splash
+> summon falling_block -40 -55 52 {BlockState:{Name:"minecraft:sand"}}
+sleep 2
+shot dry_land
+look one splash per block entering water (larger for the high drop), none on dry ground
+
+## CQ-GF31-01 | sawmill sticks show sawdust (new row)
+look hand: JEI uses of oak slab / stairs / door in the IE Sawmill: 2 / 3 / 4 sticks plus sawdust
+
+## CQ-GF31-05 | Explorer's Compass tooltip (new row)
+> item replace entity @s hotbar.0 with explorerscompass:explorerscompass
+look hand: hover it: "Points to any structure!" and "Not craftable"
+
+## CQ-GF31-06 | rubberwood bark texture (new row)
+> tp @s 50 -55 58 180 20
+sleep 3
+> setblock 50 -60 50 myrtrees:rubberwood_log[axis=x]
+> setblock 50 -60 52 myrtrees:filled_rubberwood_log[axis=y]
+> setblock 50 -60 54 myrtrees:rubberwood_wood
+> tp @s 46 -59 52 -90 20
+shot rubberwood
+look bark sides textured (no purple-black checker) on the log, the filled log and the wood block; an "Unknown block" for rubberwood_wood is fine (only the logs changed)
+
+## CQ-PF16-02 | whistling arrow shot from a bow
+> tp @s -60 -55 8 180 20
+sleep 3
+> summon minecraft:cow -60 -60 0
+> summon minecraft:sheep -62 -60 2
+> item replace entity @s hotbar.0 with minecraft:bow
+> item replace entity @s hotbar.1 with nock_enough_arrows:whistling_arrow 4
+look hand: shoot it 6-10 blocks from the animals: those within 12 blocks walk to it; after pickup or despawn they stop following
+
+## CQ-SB-06 | a mansion's generated evoker drops a totem (W2 world)
+look hand: open the W2 world copy (QA_W2), locate minecraft:mansion, kill a generated evoker with a sword: Totem of Undying drops (ST-325 second half)
+
+## CQ-EFX | effect icons, tooltips, JEED pages (EF-22 to EF-30; SQ-EFX-12 to -14 client halves)
+> item replace entity @s hotbar.0 with farmersrespite:coffee
+> item replace entity @s hotbar.1 with neapolitan:banana
+> item replace entity @s hotbar.2 with vinery:jellie_wine
+> item replace entity @s hotbar.3 with canned_goods:canned_pufferfishs
+> effect give @s vinery:double_jump 60 0
+> effect give @s minecraft:jump_boost 60 1
+shot effects_hud
+look the HUD (top right) shows the Double Jump and Jump Boost icons. hand: effects.md EF-22 to EF-30 (Intoxication icon from a Beer; Cocoa Fudge and Baklava icons, no particles; Coffee tooltip "When Applied:" with Phantom Bane; JEED Caffeinated page "Compound of: Phantom Bane."; banana shows Climbing, chorus jelly Teleport; JEI search Resilience / Restfulness / Insomnia / Power Outage / Agility finds nothing; Jellie Wine four lines; oxidized copper poisons). SQ-EFX-12: with both effects a jump clears 2 blocks (Jump Boost II), not 1. SQ-EFX-13: eat the canned pufferfish and an Immersive Weathering food: their icons show on the HUD. SQ-EFX-14: tank of Builder's Tea into an open-ended pipe, stand under it 2 s: Haste icon on the HUD
+
+## CQ-RW-28 | Dreams & Desires woods gone from JEI (RW-28)
+look hand: JEI search rose, rubber, spirit: no log, wood, planks, door, Every Compat furniture, sign, track or bark of those woods; smoked wood still listed
+
+## CQ-WGLOOK | worldgen looks at the logged positions (W1 / W2 / W3 world copies)
+look hand: open QA_W1 / QA_W2 / QA_W3 and tp to the positions the LOOK rows of w1_earthfill, w2_metas_spawns, w3_terrain logged (RES/rows/*.log, vars.json): pruned villages, crypt, castles, metas (craters, clouds, caravans, sieges, temples with ruins), ponds / spire / ruins on slopes, ocean geodes (spectator), sky village addon houses; screenshot each

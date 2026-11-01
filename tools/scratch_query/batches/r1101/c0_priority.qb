@@ -1,0 +1,206 @@
+# Run 2026-11-01, client block, priority rows (scratch_queue.md "Priority run" client session and CQ-PRI-01 to -04).
+# World QA_A1 = copy of r11p1 (superflat, the priority boot-1 world plus the r1031 look targets rebuilt).
+# qrun.py client GAME tools/scratch_query/batches/r1101/c0_priority.qb RES; run BEFORE r1031/c1_client.qb.
+# Client jars: instance mods/ plus the 01:56 patcherMod and Creative Delight builds hard-linked into GAME/mods.
+pace 2
+
+## CQ-R11-BOOT | client boot and world join clean
+bootexpect Sound engine started|FIRST_CLIENT_TICK
+bootreject (Mixin apply failed|InvalidInjectionException).*(creativeengineering|creative_delight|creative_brewing|blockheads_additions)
+sleep 5
+> gamemode creative
+> time set noon
+> gamerule doDaylightCycle false
+> gamerule doWeatherCycle false
+> weather clear
+shot joined
+
+## CQ-PRI-01 | WTHIT silk touch lines
+> tp @s 200 -55 8 180 20
+sleep 3
+> fill 200 -60 0 216 -60 0 minecraft:air
+> setblock 200 -60 0 minecraft:glass
+> setblock 202 -60 0 minecraft:ice
+> setblock 204 -60 0 minecraft:grass_block
+> setblock 206 -60 0 minecraft:iron_ore
+> setblock 208 -60 0 minecraft:stone
+> setblock 210 -60 0 minecraft:dirt
+> setblock 212 -60 0 minecraft:oak_log
+> setblock 214 -60 0 minecraft:oak_leaves[persistent=true]
+> item replace entity @s weapon.mainhand with minecraft:air
+> tp @s 200.5 -60 2.5 180 30
+shot glass
+> tp @s 202.5 -60 2.5 180 30
+shot ice
+> tp @s 204.5 -60 2.5 180 30
+shot grass
+> tp @s 206.5 -60 2.5 180 30
+shot iron_ore
+> tp @s 208.5 -60 2.5 180 30
+shot stone
+> tp @s 210.5 -60 2.5 180 30
+shot dirt
+> tp @s 212.5 -60 2.5 180 30
+shot oak_log
+> tp @s 214.5 -60 2.5 180 30
+shot leaves
+> item replace entity @s weapon.mainhand with minecraft:diamond_pickaxe{Enchantments:[{id:"minecraft:silk_touch",lvl:1s}]}
+> tp @s 200.5 -60 2.5 180 30
+shot glass_silk
+> tp @s 204.5 -60 2.5 180 30
+shot grass_silk
+look glass, ice, iron ore: green "Silk Touch Required: True"; grass: yellow "Drops Differently"; dirt, oak log: no line; no book icon; silk pickaxe rows per WL-37
+
+## CQ-PRI-02 | powdered sugar block texture
+> tp @s 220 -55 8 180 20
+sleep 3
+> setblock 220 -60 0 creative_delight:powdered_sugar_block
+> setblock 221 -60 0 creative_delight:powdered_sugar_block
+> setblock 220 -59 0 creative_delight:powdered_sugar_block
+> setblock 221 -59 0 creative_delight:powdered_sugar_block
+> tp @s 220.5 -59 3.5 180 15
+shot powdered_sugar
+look new texture, no magenta checker, edges tile seamlessly (an "Unknown block" = id differs: hand JEI search)
+
+## CQ-PRI-03 | mod names (WTHIT)
+> tp @s 230 -55 8 180 20
+sleep 3
+> setblock 230 -60 0 vinery:wine_press
+> setblock 232 -60 0 brewinandchewin:keg
+> setblock 234 -60 0 foundation:chair
+> setblock 236 -60 0 creativeengineering:copper_coil
+> tp @s 230.5 -60 2.5 180 30
+shot vinery_press
+> tp @s 232.5 -60 2.5 180 30
+shot keg
+> tp @s 234.5 -60 2.5 180 30
+shot foundation_chair
+> tp @s 236.5 -60 2.5 180 30
+shot ce_block
+look WTHIT mod line: "Let's Do Vinery (Creative Brewing)", "Brewin' & Chewin' (Creative Brewing)", "Creative Brewing" for the Foundation chair, Creative Engineering without "(Alfonzo)". hand: Mods list screen
+
+## CQ-PRI-04 | flower pots: WTHIT contents and names
+> tp @s 240 -55 8 180 20
+sleep 3
+> setblock 240 -60 0 minecraft:potted_poppy
+> setblock 242 -60 0 supplementaries:flower_box[facing=north,floor=true]
+> setblock 244 -60 0 another_furniture:oak_planter_box[facing=north]
+> setblock 246 -60 0 twigs:silt_pot
+> tp @s 240.5 -60 2.5 180 30
+shot pot
+> tp @s 242.5 -60 2.5 180 30
+shot flower_box
+> tp @s 244.5 -60 2.5 180 30
+shot planter_box
+> tp @s 246.5 -60 2.5 180 30
+shot silt_pot
+look WTHIT names; contents shown when planted (hand: plant a flower in each); hover Large Flower Box, Vinery Flower Box, Planter Box, Silt Pot, Rich Hanging Pot tooltips (hand)
+
+## CQ-HR-06 | raspberry bush ages and WTHIT growth line
+> tp @s 250 -55 8 180 20
+sleep 3
+> setblock 250 -61 0 minecraft:grass_block
+> setblock 252 -61 0 minecraft:grass_block
+> setblock 254 -61 0 minecraft:grass_block
+> setblock 256 -61 0 minecraft:grass_block
+> setblock 250 -60 0 hearthandharvest:raspberry_bush[age=0]
+> setblock 252 -60 0 hearthandharvest:raspberry_bush[age=1]
+> setblock 254 -60 0 hearthandharvest:raspberry_bush[age=2]
+> setblock 256 -60 0 hearthandharvest:raspberry_bush[age=3]
+> tp @s 250.5 -60 2.5 180 30
+shot age0
+> tp @s 252.5 -60 2.5 180 30
+shot age1
+> tp @s 254.5 -60 2.5 180 30
+shot age2
+> tp @s 256.5 -60 2.5 180 30
+shot age3
+> tp @s 253 -58 4 180 25
+shot all_ages
+look cutout art, no black faces; WTHIT growth line, "Mature" at age 3. hand: hover the pips (season line); walk into a bush (slowed, no damage)
+
+## CQ-KT-22 | Cooking for Blockheads member: fridge box and racks
+> tp @s 260 -55 8 180 20
+sleep 3
+> setblock 260 -60 0 cookingforblockheads:fridge[facing=south]
+> setblock 262 -60 1 minecraft:oak_planks
+> setblock 262 -60 0 cookingforblockheads:oak_spice_rack[facing=north]
+> setblock 264 -60 1 minecraft:spruce_planks
+> setblock 264 -60 0 cookingforblockheads:spruce_tool_rack[facing=north]
+> tp @s 262 -59 3.5 180 20
+shot racks_fridge
+look fridge textured (no checker), racks in their wood. hand: kitchen.md KT-22 to KT-24 (dyed fridge box)
+
+## CQ-WC-06 | bone-meal can on a sweet berry bush
+> item replace entity @s hotbar.0 with hearthandharvest:golden_watering_can{WaterLevel:16,BonemealLevel:8,FertilizerItem:"minecraft:bone_meal"}
+> tp @s 270 -55 8 180 20
+sleep 3
+> setblock 270 -61 0 minecraft:grass_block
+> setblock 270 -60 0 minecraft:sweet_berry_bush[age=0]
+> tp @s 270.5 -60 2.5 180 35
+key 1
+shot berry_before
+look hand: right-click the bush with the can: it grows with splash particles (HNH-45)
+
+## CQ-WC-07 | can does nothing on saplings and fungi
+> tp @s 274 -55 8 180 20
+sleep 3
+> setblock 274 -60 0 minecraft:oak_sapling
+> setblock 276 -60 0 minecraft:mangrove_propagule
+> setblock 278 -61 0 minecraft:crimson_nylium
+> setblock 278 -60 0 minecraft:crimson_fungus
+> setblock 280 -60 0 minecraft:azalea
+> setblock 282 -60 0 minecraft:red_mushroom
+> tp @s 278 -59 3 180 30
+shot saplings
+look hand: click each with the loaded can: nothing changes, can counts unchanged (HNH-46)
+
+## CQ-SG-01 | spout gun wets farmland
+> tp @s 290 -55 8 180 20
+sleep 3
+> setblock 290 -61 0 minecraft:farmland[moisture=0]
+> setblock 292 -61 0 minecraft:farmland[moisture=0]
+> setblock 292 -60 0 minecraft:wheat[age=0]
+> tp @s 291 -59 4 180 30
+shot farmland_dry
+look hand: water Spout Gun at both (HNH-47): both moist; lava / honey guns do not wet
+
+## CQ-NS-02 | nightstand menu and looks
+> tp @s 300 -55 8 180 20
+sleep 3
+> setblock 300 -60 0 handcrafted:oak_nightstand
+> tp @s 300.5 -60 2.5 180 30
+shot nightstand
+look hand: furniture_storage.md NS-01 to NS-05 (open the chest menu by right-click; sheet and lamp unchanged)
+
+## CQ-OAT-01 | oats at every stage
+> tp @s 310 -55 8 180 20
+sleep 3
+> fill 310 -61 0 318 -61 0 minecraft:farmland[moisture=7]
+> setblock 310 -60 0 vintagedelight:oat_crop[age=0]
+> setblock 312 -60 0 vintagedelight:oat_crop[age=2]
+> setblock 314 -60 0 vintagedelight:oat_crop[age=4]
+> setblock 316 -60 0 vintagedelight:oat_crop[age=6]
+> setblock 318 -60 0 vintagedelight:oat_crop[age=7]
+> tp @s 314 -58 4 180 25
+shot oats
+look bushy at every stage; ripe two tall (VTD-78); an "Unknown block" or bad property = id or age range differs (record)
+
+## CQ-TSK-01 | treated sticks and tomato vines look
+> tp @s 320 -55 8 180 20
+sleep 3
+> setblock 320 -61 0 minecraft:farmland[moisture=7]
+> setblock 320 -60 0 creative_delight:treated_stick_tomatoes
+> setblock 320 -59 0 creative_delight:treated_stick
+> setblock 322 -60 0 creative_delight:treated_stick
+> tp @s 321 -59 3 180 20
+shot treated_sticks
+look textures present (treated_sticks.md TSK-01 to TSK-05)
+
+## CQ-JB-01 | JEI berries and pips (hand)
+look hand: JEI search "berries" and "pips": Sweet Berries, Glow Berries and both pips listed separately; no doubled pips in the Food tab (JC-32)
+
+## CQ-CSR-01 | client scripts from the CD jar load once
+kjsreject (?i)error occurred
+shell grep -c "creative_delight:kubejs/" logs/kubejs/client.log
+look client.log lists every creative_delight:kubejs/... client script once with no new errors; hand: garlic-seasoned popcorn tooltip "Garlic: Speed (0:10)"

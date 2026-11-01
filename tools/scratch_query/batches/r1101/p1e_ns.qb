@@ -1,0 +1,8 @@
+pace 1
+## SQ-NS-01e | Every Compat nightstand drops its stored sugar on break (after the restart)
+> kill @e[type=item]
+> setblock 42 -60 10 minecraft:air destroy
+sleep 2
+> execute positioned 42 -60 10 as @e[type=item,distance=..3] run data get entity @s Item.id
+expect "minecraft:sugar"
+> kill @e[type=item]

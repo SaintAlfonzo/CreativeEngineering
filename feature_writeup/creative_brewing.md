@@ -5,6 +5,8 @@ creative delight, called creative brewing ... eventually all of the potion chang
 moved here too, so plan the infrastructure for that as well").
 
 **Status: bundle BUILT 2026-10-31, not installed, not booted.** `creative_brewing-1.0.0.jar`
+
+> **Testing rule (owner, 2026-11-01):** Vinery and Brewin' are a package deal under Creative Brewing. They are never booted or tested separately: no without-Brewin' / without-Vinery boot, no per-member switch check (`[members]` toggles), no standalone port jars. The pack does not start without Vinery anyway (`startup_scripts/_lib/effect_dict.js` needs `vinery:climbing_effect`). Scratch rows SQ-CDF-07 (second half) and SQ-CBJ-05 were dropped for this reason.
 (`development/creativeBrewing/build/libs/`) nests the Vinery port `-08` and the Brewin' port `-05`. `mods/` still holds the
 standalone `backportedVinery-1.5.5-ce-19.2-06.jar` and `backportedBrewin-4.5.0-ce-19.2-04.jar` until
 `./gradlew :creativeBrewing:installToMods` (game closed). Scratch checks SQ-CBJ queued (section 6). The framework for the

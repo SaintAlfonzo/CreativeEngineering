@@ -5,3 +5,15 @@
 // Mhadjeb is out (TODO dishes/meals #32; ends veggies_delight.md 5.2's "until dough unification"): hidden in JEI, tags
 // stripped; its recipes are removed in data/creative_delight/kubejs/veggiesdelight/recipes.js.
 global.removedItems.push(global.item.uncooked_mhadjeb, global.item.mhadjeb)
+
+// Sliced Sweet Potato (TODO dishes/ingredients #26): a sweet potato cuts into 3 on the cutting board and the Slice & Dice
+// slicer, as a potato into 3 Rustic Delight potato slices (recipe: data/creative_delight/kubejs/veggiesdelight/recipes.js).
+// It fills the sliced potato tags More Delight's dishes and the pack's frying read (veggiesdelight/tags.js there).
+// Food values copy the potato slices: 1 hunger, modifier 0.3. No own art: the model reads Rustic Delight's potato slices
+// sprite in place (not copied; Rustic is ARR), so the sprite comes with the Rustic member.
+StartupEvents.registry('item', e => {
+	e.create(global.item.sliced_sweet_potato).displayName('Sliced Sweet Potato').texture('rusticdelight:item/potato_slices')
+		.food(f => {
+			f.hunger(1).saturation(0.3)
+		})
+})

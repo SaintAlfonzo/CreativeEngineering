@@ -16,6 +16,7 @@
 		[i.wild_sweet_potatoes,    0.65],
 		[i.wild_turnips,           0.65],
 		[i.wild_zucchinis,         0.65],
+		[i.sliced_sweet_potato,    0.5],   // as Rustic's potato slices (TODO dishes/ingredients #26)
 	], ON)
 	C.values('crates', [
 		[i.broccoli_crate,                      1.0],

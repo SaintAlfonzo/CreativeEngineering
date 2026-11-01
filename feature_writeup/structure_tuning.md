@@ -1783,7 +1783,20 @@ search sees about 33 loads (9 s each, phase 2b); at a settlements grid of 48 the
 (48/182)^2 = 7%, so about 9 in 10 searches should answer. The bastille is unchanged (3.22: peaceful radius by design).
 
 - [x] **ST-217 Strip report [scratch]:** SQ-WG30-C01 PASSED 2026-10-30 (stripped members 100, tuned ones kept).
-- [ ] **ST-218 Census after the strip [scratch]:** SQ-WG30-C02 PARTIAL 2026-10-30: `/celocate census 96 2144 -2592`
+- [ ] **ST-218 Census after the strip [scratch]:** 2026-11-01 (`structures/rates-and-groups #13`): cause of the biome
+  false negatives not found from the code. Ruled out: the `seabed_clearance` drop (it reports reason `surface_check`, and
+  a drop is a miss, never a false negative); the point (vanilla's jigsaw and mineshaft points are seeded from the seed
+  and chunk, and generation's `Structure#isValidBiome` is the same lookup the prediction makes); the biome predicate
+  (prediction and generation both use `StructureBiomeRules.filter` over the fitted `biomes()`); a non-exact biome search
+  (1.19.2 `Climate.RTree` is an exact nearest search, so its answer is always one of the entries `TiedBiomes` walks);
+  Citadel's `MultiNoiseBiomeSource` mixin (posts `EventReplaceBiome`, no listener in the pack); Tectonic's density
+  functions (stateless records); ModernFix `faster_structure_location` (placement only). The 11 r1031 ones include
+  `ancient_city` x2 (deep_dark only) and a mineshaft, which `TiedBiomes` should cover, so the prediction's point or
+  biome differs from generation's in a way the code doesn't show. patcherMod now writes a diagnosis into
+  `falseNegativeAt` for every biome false negative: the point found again after the load, its one-sample biome and
+  every entry at the nearest distance (`+` passes, `-` fails), and the built start's first-piece centre. The next census
+  (SQ-WG30-C02b) says which: a point away from the start piece, or a passing nearest biome.
+  SQ-WG30-C02 PARTIAL 2026-10-30: `/celocate census 96 2144 -2592`
   at density 1 after the Chunky square (100,616 slot chunks, 2,749 starts, 316 s, 5 biome false negatives: old refinery
   x4, a mineshaft). Starts per group member: settlements 6 in 17 slots (Mediterranean 2, plains, taiga, jungle, old
   growth taiga 1 each); pillager settlements 24 in 37 (fake trader camp 4, savanna outpost 3, 2 each for camp ruin,
@@ -1841,7 +1854,7 @@ warns once; E6 the water-block cache is cleared on a tag reload. Not a bug after
 beard's reach counts when its spot is open; it is not filled).
 
 **Sunk starts (#3).** `philipsruins:ancient_crypt` added to `terrain_adaptation/sunk_start` (start height -5, rigid
-start piece). patcherMod now refuses the tag for a structure whose start pool has a terrain-matching element (warning
+start piece; wrong, 2026-11-01: its only start element is terrain_matching, so the guard refuses it, see ST-238; owner call: dropped from `sunk_start`, TODO `structures/earthfill #17`). patcherMod now refuses the tag for a structure whose start pool has a terrain-matching element (warning
 `... its start pool has a terrain_matching piece; ignored`): `antiquus_crypta`, `village_nilotic`. Field
 `JigsawStructure.startPool` is SRG `f_227605_` (the brief's `f_227607_` is `maxDepth`). The seabed ruins
 (`ocean_ruins`, `ocean_fortress`) wait for the in-game look (ST-238).
@@ -1857,7 +1870,7 @@ its fits waits for the per-fit measurement (ST-240).
   footprint (`wet_ok`) and generate in water as before. SQ-EF-04.
 - [ ] **ST-237 Earthless counts and cost [scratch]:** *r1031: counts read with SQ-EF-03 (look pending); the pregen cost half (SQ-EF-07) not run.* `grep -c` of `[earth-fill]` lines before and after; tent camps
   and ruins over lakes (#12) now cancelled; pregen time of the SQ-WGP square within 10% of 3:50. SQ-EF-03, SQ-EF-07.
-- [ ] **ST-238 Crypt flush, nilotic refused [scratch]:** *FAIL r1031 (2026-10-31, SQ-EF-05 = SQ-TER-01): the load line warns `philipsruins:ancient_crypt` is in `sunk_start` but its start pool has a terrain_matching piece, ignored; the crypt is not sunk. Seabed look pending.* load line counts 7 sunk starts and warns for no tagged
+- [ ] **ST-238 Crypt flush, nilotic refused [scratch]:** *FAIL r1031 (2026-10-31, SQ-EF-05 = SQ-TER-01): the load line warns `philipsruins:ancient_crypt` is in `sunk_start` but its start pool has a terrain_matching piece, ignored; the crypt is not sunk. Seabed look pending. 2026-11-01: the guard is right for the crypt and narrowing it changes nothing: the crypt's start pool (`ancient_crypt/crypt_start`, Philip's 10.8 jar, not overridden) has one element, `crypt_start`, and that element is itself `terrain_matching` (its json comment says rigid; the value is not). A terrain-matching start has no beard, ignores its start height (each column is placed on the heightmap), and its rigid rooms are placed from the surface at their jigsaw, so the -5 start height sinks nothing and a raised beard would bury the rooms 5 layers. The 3.28 note "rigid start piece" was wrong. Owner call 2026-11-01: dropped from `sunk_start` (`terrain_adaptation.js`); the crypt keeps its own terrain-matching placement. Rerun as SQ-TER-01b.* load line counts 7 sunk starts and warns for no tagged
   structure; `/place structure philipsruins:ancient_crypt` on a slope: ground ring at the entrance roof, no pit, rooms
   open; then look at an `ocean_ruins` and `ocean_fortress` on a seabed to decide their tag (brief #3). SQ-EF-05.
 - [ ] **ST-239 Wet house pruned [scratch]:** *r1031: client look pending (SQ-EF-02).* a village at a lake logs `pruned K of N pieces` with a `footprint` reason
@@ -1922,7 +1935,7 @@ after pruning (satellite dropped, anchor cancels the meta).
 
 ### 3.30 Terrain batch 4, beard footprint, ocean geode floor (added 2026-10-30, TODO `structures/terrain #1`, `#2`, `#6`)
 
-Status: BUILT 2026-10-30, patcherMod installed 2026-10-30 17:06; BROKEN: scratch r1031 (2026-10-31) SQ-TER-01 FAILED (ancient_crypt sunk start refused), SQ-TER-05 PASSED; SQ-TER-02 to -04, -06 not run. New chunks only.
+Status: BUILT 2026-10-30, patcherMod installed 2026-10-30 17:06; BROKEN: scratch r1031 (2026-10-31) SQ-TER-01 FAILED (ancient_crypt sunk start refused), SQ-TER-05 PASSED; SQ-TER-02 to -04, -06 not run. FIXED 2026-11-01: the crypt is off `sunk_start` (`structures/earthfill #17`), `/reload`; rerun SQ-TER-01b. New chunks only.
 
 **Batch 4 (#1).** Scan re-run 2026-10-30 (`terrain_adaptation_scan.py --fresh`: nothing new since 10-26 apart from the
 grown Sky Villages and the seabed-clearance labels). Tagged in `terrain_adaptation.js`:
@@ -1980,7 +1993,7 @@ Tests:
 - [ ] **ST-301 Spire in the hills [scratch]:** a placed spire leaves the hills round its base uncut; its snow is whole.
 - [ ] **ST-302 Level-three ruins [scratch]:** two on a slope, no grass slab around them; a `meta/large_ruins` cluster
   with one as anchor looks the same.
-- [ ] **ST-303 Load line [scratch]:** *FAIL r1031 (2026-10-31, SQ-TER-01): counts 109 tagged, 99 trimmed, 1 air-trimmed, 7 sunk starts, plus the ancient_crypt `ignored` warning (ST-238).* `[terrain-adaptation] world load:` trimmed +4, `1 air-trimmed`, sunk starts +1.
+- [ ] **ST-303 Load line [scratch]:** *FAIL r1031 (2026-10-31, SQ-TER-01): counts 109 tagged, 99 trimmed, 1 air-trimmed, 7 sunk starts, plus the ancient_crypt `ignored` warning (ST-238). 2026-11-01: crypt dropped from `sunk_start`; rerun SQ-TER-01b (7 sunk starts, no warning).* `[terrain-adaptation] world load:` trimmed +4, `1 air-trimmed`, sunk starts +1.
 - [ ] **ST-304 Beard footprint calibration [scratch]:** *PASS r1031 (2026-10-31, SQ-TER-05, calibration table in the run doc); the look is in game.* `beardFootprint = true`, `log = "ALL"`: lines show
   `under built floors`; cancels per family against the sim table above.
 - [ ] **ST-305 Geode floor [scratch]:** `SWAP` (default): ocean geodes that reach the floor are mounds of the floor's
@@ -2012,7 +2025,8 @@ the meteorite on the floor with no crater: the sky stone sphere replaces the rui
 weight (it replaces YUNG's temple, 3.18), so no meta can anchor on it. The struck pyramid is a meta with no anchor whose
 `structure_groups.json` entry has `"replaces": "betterdeserttemples:desert_temple", "share": 0.08`: MetaSlots already
 converts any structure (`Conversion.target`), so in its slots it builds its parts centred on the start chunk, the pyramid
-first (`distance [0, 0]`), then the meteorite. `structure_overrides.js` now allows this (only a meta with an anchor may
+first (`distance [0, 0]`), then the meteorite. That first part is the meta's core (2026-11-01, `MetaStructure#core`,
+`structures/metas #11`): a short core fails the meta even with `keepShortParts`, and the core is not a satellite. `structure_overrides.js` now allows this (only a meta with an anchor may
 not replace, and no meta may be replaced). The user asked for it more common than the plain vanilla pyramid, and for a
 lower vanilla rate: plain pyramid 10% -> 5% of YUNG's temple slots, struck pyramid 8%, so YUNG's own temples go from 90% to
 87% of their slots (the only anchor whose rate changes in this batch; the 35% `desert_temple_ruins` share is of the
@@ -2075,7 +2089,7 @@ Tests (rates in 3.16; `[worldgen.meta_structures] log = true` shows anchor and p
 - [ ] **ST-310 Struck village [scratch]:** *PASS r1031 (2026-10-31, log half, SQ-META31-04, -04b: two village types); crater look in game.* `/locate ... meta/meteorite_village`: a sky stone meteorite within 16 blocks
   of the village middle, the crater cut through the houses (no house floating over it), villagers alive around it.
   Try two village types (vanilla plains, a T&T one).
-- [ ] **ST-311 Struck pyramid [scratch]:** *FAIL r1031 (2026-10-31, SQ-META31-04): a `meta/meteorite_desert_pyramid` placed with `0/1 desert_pyramid` (short) is a crater with no pyramid; with `keepShortParts` a replacement meta should fail when its first part is short.* `/locate ... meta/meteorite_desert_pyramid` and `/locate structure
+- [ ] **ST-311 Struck pyramid [scratch]:** *FAIL r1031 (2026-10-31, SQ-META31-04): a `meta/meteorite_desert_pyramid` placed with `0/1 desert_pyramid` (short) is a crater with no pyramid; with `keepShortParts` a replacement meta should fail when its first part is short. FIXED 2026-11-01 (patcherMod, `MetaStructure#core`): a meta without an anchor whose first part is a structure part at distance [0, 0] with chance 1 has it as its core; a short core fails the meta even with `keepShortParts` (log `not placed, core part ... placed 0 of at least 1`), and the core is not a satellite, so a pyramid without its meteorite also fails (`no satellite fitted`). Either way the slot is YUNG's plain temple. Built, not installed; retest SQ-META31-04b.* `/locate ... meta/meteorite_desert_pyramid` and `/locate structure
   minecraft:desert_pyramid` both answer; the struck one has a crater cutting the pyramid. The report line says 8% / 5%.
 - [ ] **ST-312 Temples with ruins [scratch]:** *r1031: log half PASSED (SQ-META31-05: 2 to 3 ruins, 46 to 60 out); biome fit and spacing client check pending.* `/locate ... meta/desert_temple_ruins` (desert ruins only) and
   `meta/jungle_temple_ruins` (Philip's jungle-fitted ruins), 2 to 4 each, clear of the temple.

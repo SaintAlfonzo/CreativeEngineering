@@ -157,6 +157,11 @@ Pack rows (`kubejs/data/creative_delight/kubejs/rusticdelight/recipes.js` unless
   filling -> the stuffed pepper of that colour (9 recipes; upstream's raw pepper recipe stays). The roasted pepper is an
   ingredient, not the container: the pot matches ingredients only, so 9 recipes differing by container would all match
   the first colour. Time and experience as upstream; Slice & Dice copies each. RD-33.
+- Potato slices (2026-11-01, TODO `dishes/ingredients #26` follow-up): a knife cuts a potato into 3 slices [2]; upstream's
+  `rusticdelight:cutting/potato_slices` is replaced by `creative_delight:farmersdelightcutting/potato_slices`, and Slice &
+  Dice's slicer copies it (it copies every cutting board recipe after KubeJS runs). The baked potato's 2 baked slices stay.
+  Veggies' sweet potato cuts the same way into 3 Sliced Sweet Potatoes (veggies_delight.md 5.6), which borrow the slices'
+  sprite in place. RD-34.
 - Tags: bell peppers in `#brewinandchewin:foods/pizza_topping` (`cookingtags.js`); the six new roasted colours in the
   roasted pepper and cooked veggie tags (`rusticdelight/tags.js`).
 
@@ -200,7 +205,7 @@ resolves the new row; `build_deploy.py` reads the donor pin. 2026-10-26: all 30 
 match the translator's rename; `platter.png` is in the built repackedFarmers. Live: SQ-RD-01 to SQ-RD-32 in
 [testing/scratch_queue.md](testing/scratch_queue.md) (RD-n = SQ-RD-n), queued. RD-01 to RD-12 cover the boot, old
 worlds and the pack rows; RD-13 to RD-31 (added 2026-10-25, owner: every scratch test the port needs) cover each new
-content group, the worldgen and village rows, the client side and the cutover. RD-32 (2026-10-26): crop and medley textures. RD-33 (2026-10-28): the roasted-pepper stuffed pepper recipes.
+content group, the worldgen and village rows, the client side and the cutover. RD-32 (2026-10-26): crop and medley textures. RD-33 (2026-10-28): the roasted-pepper stuffed pepper recipes. RD-34 (2026-11-01): potato -> 3 slices on the board and the slicer.
 
 ### 5.7 Cutover (when the Creative Delight jar is installed)
 

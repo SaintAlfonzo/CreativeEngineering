@@ -29,7 +29,7 @@ Shipped: #1 smoked wood, #3 rose quartz sanding, #4 removed woods and #6 painted
 
 | Row | Status | What is left | Build order |
 |---|---|---|---|
-| #10 smokable shape tags too wide | Bug | move the Botania / driftwood exclusions to every shape tag; owner call on crimson and warped | **first**: one line in `wood_tags.js`, `/reload` |
+| #10 smokable shape tags too wide | Bug, BUILT 2026-11-01 | allow-list of the seven vanilla overworld woods in `wood_tags.js` (owner call: no modded, no nether wood); SQ-RW-23 rerun | done, `/reload` |
 | #9 bark cleanup | Planned | the D&D barks are already merged (2026-10-31); left: a texture for Myrtrees' rubberwood bark | small, resource pack only |
 | #2 rubber chain | Planned | Myrtrees latex -> D&D rubber; sap only from Myrtrees rubber logs; rubber belts; one new NCH helper | after #10 |
 | #7 milkshake lava generation | Planned | values + machine rows | decisions first |
@@ -61,6 +61,8 @@ Only the woods meant to smoke get smoking recipes: no Botania magic woods and no
 
 ### Now
 
+- BUILT 2026-11-01: owner call is vanilla overworld woods only (oak, spruce, birch, jungle, acacia, dark oak, mangrove);
+  `wood_tags.js` now adds those 91 item_dict ids per shape (allow-list). The notes below describe the old state.
 - `kubejs/server_scripts/tags/wood_tags.js` lines 35-52 build the 13 `#creativeengineering:smokable/<shape>` tags with
   `global.tags.addMatching` from the vanilla / forge wood tags. `smokeExcept` (line 39) = `*:*smoked*`, `*:*polished*`,
   `*:*vertical*`. Botania (`botania:*`) and driftwood (`*:driftwood`, `*:driftwood_log`) are excluded only in the log

@@ -404,12 +404,13 @@ public final class CEConfig {
         /**
          * Tuning for one felsic_gear piece's sequenced-assembly recipe
          * (kubejs/server_scripts/equipment/end_gear.js, {@code R.cfg(..., 'CRAFTING.FELSIC_<PIECE>')}).
-         * One instance per piece rather than one class per piece - same 4 fields, only the toml
+         * One instance per piece rather than one class per piece - same 5 fields, only the toml
          * section name and defaults differ.
          */
         public static final class FelsicPiece {
             public final ForgeConfigSpec.ConfigValue<String> potion;
             public final ForgeConfigSpec.IntValue mb;
+            public final ForgeConfigSpec.IntValue reachMb;
             public final ForgeConfigSpec.IntValue loops;
             public final ForgeConfigSpec.IntValue blows;
 
@@ -427,8 +428,11 @@ public final class CEConfig {
                 // in Create's own GUI.
                 potion = b.comment("Potion effect id filled in during assembly.")
                         .define("potion", defaultPotion);
-                mb = b.comment("mB of potion fluid used in the final filling step.")
+                mb = b.comment("mB of potion fluid (the potion above) used in the last filling step.")
                         .defineInRange("potionMb", defaultMb, 1, 10000);
+                // Default = the piece's potionMb, the amount both fills used before the split (gear_tuning.md F2).
+                reachMb = b.comment("mB of Long Reach potion fluid used in the first filling step.")
+                        .defineInRange("reachPotionMb", defaultMb, 1, 10000);
                 loops = b.comment("Number of times the sequenced assembly repeats.")
                         .defineInRange("loops", defaultLoops, 1, 64);
                 blows = b.comment("Hammer blows required by the hammering step.")

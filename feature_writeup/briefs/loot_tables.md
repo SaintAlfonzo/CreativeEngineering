@@ -51,8 +51,10 @@ extensions" below): `L.define` (a new table from pools), `L.addRef` (a `loot_tab
 2. **Framework extensions** (`define`, `addRef`, `replaceEntries`, `remap`) + sim checks.
 3. **Content on top:** #11 book tiers (also the durable fix for #10), #5 cans, #6 MCA items, #12 azalea. One
    session; they share the "define a small sub-table, `addRef` it into a table group" pattern.
-4. **#10:** the in-game check comes first (it may already be fixed by 1.0.9); whatever is left is closed by group 3's
-   #11.
+4. **#10:** FIXED 2026-11-01 ([archery.md](../archery.md) F9): no table names the three enchantments and the random
+   functions honour the 1.0.9 override; the books came from Dynamic Villager Trades librarians and Lightman's Currency
+   cashiers. The NEA mixins now also make the three enchantments non-tradeable (`isTradeable`, patcherMod built, not
+   installed); other book trades stay. In-game check AR-14 left; #11 stays the durable loot-side guard.
 5. **#1 comprehensive tree + #2 island folding:** last, a project of its own. #2 is a subset of #1 (recommend
    merging the rows). Groups 1 to 3 are written so they survive #1: their sub-tables become tree nodes.
 

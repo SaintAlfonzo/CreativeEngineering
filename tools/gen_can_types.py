@@ -151,7 +151,7 @@ EXPLICIT = [
     # Not canned: garlic and dandelion leaves (seasoning), raw oats (a grain, as corn kernels)
     ('raw_veggie', 'canned_broccoli', 'Canned Broccoli', ['broccoli'], False),
     ('raw_veggie', 'canned_cauliflower', 'Canned Cauliflower', ['cauliflower', 'cauliflower_floret'], False),
-    ('raw_veggie', 'canned_sweet_potato', 'Canned Sweet Potato', ['sweet_potato'], False),
+    ('raw_veggie', 'canned_sweet_potato', 'Canned Sweet Potato', ['sweet_potato', 'sliced_sweet_potato'], False),
     ('raw_veggie', 'canned_turnip', 'Canned Turnip', ['turnip'], False),
     ('raw_veggie', 'canned_zucchini', 'Canned Zucchini', ['zucchini', 'zucchini_slice'], False),
     ('raw_veggie', 'canned_cucumber', 'Canned Cucumber', ['cucumber'], False),
