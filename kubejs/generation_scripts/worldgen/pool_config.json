@@ -996,9 +996,9 @@
         "betterfortresses:bridge/bridge_junction_2": { "original": 10, "current": 10, "enabled": true },
         "betterfortresses:bridge/bridge_junction_3": { "original": 6, "current": 6, "enabled": true },
         "betterfortresses:bridge/bridge_junction_4": { "original": 3, "current": 3, "enabled": true },
-        "betterfortresses:bridge/bridge_pillar": { "original": 10, "current": 20, "enabled": true },
-        "betterfortresses:bridge/bridge_pillar #2": { "original": 15, "current": 10, "enabled": true },
-        "betterfortresses:bridge/bridge_pillar #3": { "original": 20, "current": 15, "enabled": true },
+        "betterfortresses:bridge/bridge_pillar": { "original": 10, "current": 10, "enabled": true },
+        "betterfortresses:bridge/bridge_pillar #2": { "original": 15, "current": 15, "enabled": true },
+        "betterfortresses:bridge/bridge_pillar #3": { "original": 20, "current": 20, "enabled": true },
         "betterfortresses:bridge/bridge_stairs_l": { "original": 1, "current": 1, "enabled": true },
         "betterfortresses:bridge/bridge_stairs_l #2": { "original": 1, "current": 1, "enabled": true },
         "betterfortresses:bridge/bridge_stairs_r": { "original": 1, "current": 1, "enabled": true },
@@ -5881,36 +5881,36 @@
       "elements": {
         "nullscape:skeleton/1": { "original": 2, "current": 2, "enabled": true },
         "nullscape:skeleton/1 #2": { "original": 3, "current": 3, "enabled": true },
-        "nullscape:skeleton/1 #3": { "original": 4, "current": 5, "enabled": true },
-        "nullscape:skeleton/1 #4": { "original": 5, "current": 4, "enabled": true },
+        "nullscape:skeleton/1 #3": { "original": 4, "current": 4, "enabled": true },
+        "nullscape:skeleton/1 #4": { "original": 5, "current": 5, "enabled": true },
         "nullscape:skeleton/2": { "original": 2, "current": 2, "enabled": true },
         "nullscape:skeleton/2 #2": { "original": 3, "current": 3, "enabled": true },
-        "nullscape:skeleton/2 #3": { "original": 4, "current": 5, "enabled": true },
-        "nullscape:skeleton/2 #4": { "original": 5, "current": 4, "enabled": true },
+        "nullscape:skeleton/2 #3": { "original": 4, "current": 4, "enabled": true },
+        "nullscape:skeleton/2 #4": { "original": 5, "current": 5, "enabled": true },
         "nullscape:skeleton/3": { "original": 2, "current": 2, "enabled": true },
         "nullscape:skeleton/3 #2": { "original": 3, "current": 3, "enabled": true },
-        "nullscape:skeleton/3 #3": { "original": 4, "current": 5, "enabled": true },
-        "nullscape:skeleton/3 #4": { "original": 5, "current": 4, "enabled": true },
+        "nullscape:skeleton/3 #3": { "original": 4, "current": 4, "enabled": true },
+        "nullscape:skeleton/3 #4": { "original": 5, "current": 5, "enabled": true },
         "nullscape:skeleton/4": { "original": 2, "current": 2, "enabled": true },
         "nullscape:skeleton/4 #2": { "original": 3, "current": 3, "enabled": true },
-        "nullscape:skeleton/4 #3": { "original": 4, "current": 5, "enabled": true },
-        "nullscape:skeleton/4 #4": { "original": 5, "current": 4, "enabled": true },
+        "nullscape:skeleton/4 #3": { "original": 4, "current": 4, "enabled": true },
+        "nullscape:skeleton/4 #4": { "original": 5, "current": 5, "enabled": true },
         "nullscape:skeleton/5": { "original": 2, "current": 2, "enabled": true },
         "nullscape:skeleton/5 #2": { "original": 3, "current": 3, "enabled": true },
-        "nullscape:skeleton/5 #3": { "original": 4, "current": 5, "enabled": true },
-        "nullscape:skeleton/5 #4": { "original": 5, "current": 4, "enabled": true },
+        "nullscape:skeleton/5 #3": { "original": 4, "current": 4, "enabled": true },
+        "nullscape:skeleton/5 #4": { "original": 5, "current": 5, "enabled": true },
         "nullscape:skeleton/6": { "original": 2, "current": 2, "enabled": true },
         "nullscape:skeleton/6 #2": { "original": 3, "current": 3, "enabled": true },
-        "nullscape:skeleton/6 #3": { "original": 4, "current": 5, "enabled": true },
-        "nullscape:skeleton/6 #4": { "original": 5, "current": 4, "enabled": true },
+        "nullscape:skeleton/6 #3": { "original": 4, "current": 4, "enabled": true },
+        "nullscape:skeleton/6 #4": { "original": 5, "current": 5, "enabled": true },
         "nullscape:skeleton/7": { "original": 2, "current": 2, "enabled": true },
         "nullscape:skeleton/7 #2": { "original": 3, "current": 3, "enabled": true },
-        "nullscape:skeleton/7 #3": { "original": 4, "current": 5, "enabled": true },
-        "nullscape:skeleton/7 #4": { "original": 5, "current": 4, "enabled": true },
+        "nullscape:skeleton/7 #3": { "original": 4, "current": 4, "enabled": true },
+        "nullscape:skeleton/7 #4": { "original": 5, "current": 5, "enabled": true },
         "nullscape:skeleton/8": { "original": 2, "current": 2, "enabled": true },
         "nullscape:skeleton/8 #2": { "original": 3, "current": 3, "enabled": true },
-        "nullscape:skeleton/8 #3": { "original": 4, "current": 5, "enabled": true },
-        "nullscape:skeleton/8 #4": { "original": 5, "current": 4, "enabled": true }
+        "nullscape:skeleton/8 #3": { "original": 4, "current": 4, "enabled": true },
+        "nullscape:skeleton/8 #4": { "original": 5, "current": 5, "enabled": true }
       }
     },
     "nullscape:dragon_skeleton_boneyard": {
@@ -5918,36 +5918,36 @@
       "elements": {
         "nullscape:skeleton/1": { "original": 2, "current": 2, "enabled": true },
         "nullscape:skeleton/1 #2": { "original": 3, "current": 3, "enabled": true },
-        "nullscape:skeleton/1 #3": { "original": 4, "current": 5, "enabled": true },
-        "nullscape:skeleton/1 #4": { "original": 5, "current": 4, "enabled": true },
+        "nullscape:skeleton/1 #3": { "original": 4, "current": 4, "enabled": true },
+        "nullscape:skeleton/1 #4": { "original": 5, "current": 5, "enabled": true },
         "nullscape:skeleton/2": { "original": 2, "current": 2, "enabled": true },
         "nullscape:skeleton/2 #2": { "original": 3, "current": 3, "enabled": true },
-        "nullscape:skeleton/2 #3": { "original": 4, "current": 5, "enabled": true },
-        "nullscape:skeleton/2 #4": { "original": 5, "current": 4, "enabled": true },
+        "nullscape:skeleton/2 #3": { "original": 4, "current": 4, "enabled": true },
+        "nullscape:skeleton/2 #4": { "original": 5, "current": 5, "enabled": true },
         "nullscape:skeleton/3": { "original": 2, "current": 2, "enabled": true },
         "nullscape:skeleton/3 #2": { "original": 3, "current": 3, "enabled": true },
-        "nullscape:skeleton/3 #3": { "original": 4, "current": 5, "enabled": true },
-        "nullscape:skeleton/3 #4": { "original": 5, "current": 4, "enabled": true },
+        "nullscape:skeleton/3 #3": { "original": 4, "current": 4, "enabled": true },
+        "nullscape:skeleton/3 #4": { "original": 5, "current": 5, "enabled": true },
         "nullscape:skeleton/4": { "original": 2, "current": 2, "enabled": true },
         "nullscape:skeleton/4 #2": { "original": 3, "current": 3, "enabled": true },
-        "nullscape:skeleton/4 #3": { "original": 4, "current": 5, "enabled": true },
-        "nullscape:skeleton/4 #4": { "original": 5, "current": 4, "enabled": true },
+        "nullscape:skeleton/4 #3": { "original": 4, "current": 4, "enabled": true },
+        "nullscape:skeleton/4 #4": { "original": 5, "current": 5, "enabled": true },
         "nullscape:skeleton/5": { "original": 2, "current": 2, "enabled": true },
         "nullscape:skeleton/5 #2": { "original": 3, "current": 3, "enabled": true },
-        "nullscape:skeleton/5 #3": { "original": 4, "current": 5, "enabled": true },
-        "nullscape:skeleton/5 #4": { "original": 5, "current": 4, "enabled": true },
+        "nullscape:skeleton/5 #3": { "original": 4, "current": 4, "enabled": true },
+        "nullscape:skeleton/5 #4": { "original": 5, "current": 5, "enabled": true },
         "nullscape:skeleton/6": { "original": 2, "current": 2, "enabled": true },
         "nullscape:skeleton/6 #2": { "original": 3, "current": 3, "enabled": true },
-        "nullscape:skeleton/6 #3": { "original": 4, "current": 5, "enabled": true },
-        "nullscape:skeleton/6 #4": { "original": 5, "current": 4, "enabled": true },
+        "nullscape:skeleton/6 #3": { "original": 4, "current": 4, "enabled": true },
+        "nullscape:skeleton/6 #4": { "original": 5, "current": 5, "enabled": true },
         "nullscape:skeleton/7": { "original": 2, "current": 2, "enabled": true },
         "nullscape:skeleton/7 #2": { "original": 3, "current": 3, "enabled": true },
-        "nullscape:skeleton/7 #3": { "original": 4, "current": 5, "enabled": true },
-        "nullscape:skeleton/7 #4": { "original": 5, "current": 4, "enabled": true },
+        "nullscape:skeleton/7 #3": { "original": 4, "current": 4, "enabled": true },
+        "nullscape:skeleton/7 #4": { "original": 5, "current": 5, "enabled": true },
         "nullscape:skeleton/8": { "original": 2, "current": 2, "enabled": true },
         "nullscape:skeleton/8 #2": { "original": 3, "current": 3, "enabled": true },
-        "nullscape:skeleton/8 #3": { "original": 4, "current": 5, "enabled": true },
-        "nullscape:skeleton/8 #4": { "original": 5, "current": 4, "enabled": true }
+        "nullscape:skeleton/8 #3": { "original": 4, "current": 4, "enabled": true },
+        "nullscape:skeleton/8 #4": { "original": 5, "current": 5, "enabled": true }
       }
     },
     "nullscape:phantom/hives": {
@@ -12949,235 +12949,235 @@
     "subterrestrial:cabin/deepslate/base": {
       "fallback": "minecraft:empty",
       "elements": {
-        "subterrestrial:cabin/deepslate/base_0": { "original": 5, "current": 100, "enabled": true },
-        "subterrestrial:cabin/deepslate/base_0 #2": { "original": 100, "current": 5, "enabled": true },
-        "subterrestrial:cabin/deepslate/base_1": { "original": 5, "current": 100, "enabled": true },
-        "subterrestrial:cabin/deepslate/base_1 #2": { "original": 100, "current": 5, "enabled": true },
-        "subterrestrial:cabin/deepslate/base_lower_0": { "original": 5, "current": 100, "enabled": true },
-        "subterrestrial:cabin/deepslate/base_lower_0 #2": { "original": 100, "current": 5, "enabled": true },
-        "subterrestrial:cabin/deepslate/base_lower_1": { "original": 5, "current": 100, "enabled": true },
-        "subterrestrial:cabin/deepslate/base_lower_1 #2": { "original": 100, "current": 5, "enabled": true },
-        "subterrestrial:cabin/deepslate/base_upper_0": { "original": 5, "current": 100, "enabled": true },
-        "subterrestrial:cabin/deepslate/base_upper_0 #2": { "original": 100, "current": 5, "enabled": true },
-        "subterrestrial:cabin/deepslate/base_upper_1": { "original": 5, "current": 100, "enabled": true },
-        "subterrestrial:cabin/deepslate/base_upper_1 #2": { "original": 100, "current": 5, "enabled": true }
+        "subterrestrial:cabin/deepslate/base_0": { "original": 5, "current": 5, "enabled": true },
+        "subterrestrial:cabin/deepslate/base_0 #2": { "original": 100, "current": 100, "enabled": true },
+        "subterrestrial:cabin/deepslate/base_1": { "original": 5, "current": 5, "enabled": true },
+        "subterrestrial:cabin/deepslate/base_1 #2": { "original": 100, "current": 100, "enabled": true },
+        "subterrestrial:cabin/deepslate/base_lower_0": { "original": 5, "current": 5, "enabled": true },
+        "subterrestrial:cabin/deepslate/base_lower_0 #2": { "original": 100, "current": 100, "enabled": true },
+        "subterrestrial:cabin/deepslate/base_lower_1": { "original": 5, "current": 5, "enabled": true },
+        "subterrestrial:cabin/deepslate/base_lower_1 #2": { "original": 100, "current": 100, "enabled": true },
+        "subterrestrial:cabin/deepslate/base_upper_0": { "original": 5, "current": 5, "enabled": true },
+        "subterrestrial:cabin/deepslate/base_upper_0 #2": { "original": 100, "current": 100, "enabled": true },
+        "subterrestrial:cabin/deepslate/base_upper_1": { "original": 5, "current": 5, "enabled": true },
+        "subterrestrial:cabin/deepslate/base_upper_1 #2": { "original": 100, "current": 100, "enabled": true }
       }
     },
     "subterrestrial:cabin/deepslate/bottom": {
       "fallback": "minecraft:empty",
       "elements": {
-        "subterrestrial:cabin/default/bottom_0": { "original": 5, "current": 100, "enabled": true },
-        "subterrestrial:cabin/default/bottom_0 #2": { "original": 100, "current": 5, "enabled": true },
-        "subterrestrial:cabin/default/bottom_1": { "original": 5, "current": 100, "enabled": true },
-        "subterrestrial:cabin/default/bottom_1 #2": { "original": 100, "current": 5, "enabled": true },
-        "subterrestrial:cabin/default/bottom_2": { "original": 5, "current": 100, "enabled": true },
-        "subterrestrial:cabin/default/bottom_2 #2": { "original": 100, "current": 5, "enabled": true },
-        "subterrestrial:cabin/default/bottom_3": { "original": 5, "current": 100, "enabled": true },
-        "subterrestrial:cabin/default/bottom_3 #2": { "original": 100, "current": 5, "enabled": true }
+        "subterrestrial:cabin/default/bottom_0": { "original": 5, "current": 5, "enabled": true },
+        "subterrestrial:cabin/default/bottom_0 #2": { "original": 100, "current": 100, "enabled": true },
+        "subterrestrial:cabin/default/bottom_1": { "original": 5, "current": 5, "enabled": true },
+        "subterrestrial:cabin/default/bottom_1 #2": { "original": 100, "current": 100, "enabled": true },
+        "subterrestrial:cabin/default/bottom_2": { "original": 5, "current": 5, "enabled": true },
+        "subterrestrial:cabin/default/bottom_2 #2": { "original": 100, "current": 100, "enabled": true },
+        "subterrestrial:cabin/default/bottom_3": { "original": 5, "current": 5, "enabled": true },
+        "subterrestrial:cabin/default/bottom_3 #2": { "original": 100, "current": 100, "enabled": true }
       }
     },
     "subterrestrial:cabin/deepslate/top": {
       "fallback": "minecraft:empty",
       "elements": {
-        "subterrestrial:cabin/default/top_0": { "original": 5, "current": 100, "enabled": true },
-        "subterrestrial:cabin/default/top_0 #2": { "original": 100, "current": 5, "enabled": true },
-        "subterrestrial:cabin/default/top_1": { "original": 5, "current": 100, "enabled": true },
-        "subterrestrial:cabin/default/top_1 #2": { "original": 100, "current": 5, "enabled": true },
-        "subterrestrial:cabin/default/top_2": { "original": 5, "current": 100, "enabled": true },
-        "subterrestrial:cabin/default/top_2 #2": { "original": 100, "current": 5, "enabled": true },
-        "subterrestrial:cabin/default/top_3": { "original": 5, "current": 100, "enabled": true },
-        "subterrestrial:cabin/default/top_3 #2": { "original": 100, "current": 5, "enabled": true }
+        "subterrestrial:cabin/default/top_0": { "original": 5, "current": 5, "enabled": true },
+        "subterrestrial:cabin/default/top_0 #2": { "original": 100, "current": 100, "enabled": true },
+        "subterrestrial:cabin/default/top_1": { "original": 5, "current": 5, "enabled": true },
+        "subterrestrial:cabin/default/top_1 #2": { "original": 100, "current": 100, "enabled": true },
+        "subterrestrial:cabin/default/top_2": { "original": 5, "current": 5, "enabled": true },
+        "subterrestrial:cabin/default/top_2 #2": { "original": 100, "current": 100, "enabled": true },
+        "subterrestrial:cabin/default/top_3": { "original": 5, "current": 5, "enabled": true },
+        "subterrestrial:cabin/default/top_3 #2": { "original": 100, "current": 100, "enabled": true }
       }
     },
     "subterrestrial:cabin/default/base": {
       "fallback": "minecraft:empty",
       "elements": {
-        "subterrestrial:cabin/default/base_0": { "original": 5, "current": 100, "enabled": true },
-        "subterrestrial:cabin/default/base_0 #2": { "original": 100, "current": 5, "enabled": true },
-        "subterrestrial:cabin/default/base_1": { "original": 5, "current": 100, "enabled": true },
-        "subterrestrial:cabin/default/base_1 #2": { "original": 100, "current": 5, "enabled": true },
-        "subterrestrial:cabin/default/base_lower_0": { "original": 5, "current": 100, "enabled": true },
-        "subterrestrial:cabin/default/base_lower_0 #2": { "original": 100, "current": 5, "enabled": true },
-        "subterrestrial:cabin/default/base_lower_1": { "original": 5, "current": 100, "enabled": true },
-        "subterrestrial:cabin/default/base_lower_1 #2": { "original": 100, "current": 5, "enabled": true },
-        "subterrestrial:cabin/default/base_upper_0": { "original": 5, "current": 100, "enabled": true },
-        "subterrestrial:cabin/default/base_upper_0 #2": { "original": 100, "current": 5, "enabled": true },
-        "subterrestrial:cabin/default/base_upper_1": { "original": 5, "current": 100, "enabled": true },
-        "subterrestrial:cabin/default/base_upper_1 #2": { "original": 100, "current": 5, "enabled": true }
+        "subterrestrial:cabin/default/base_0": { "original": 5, "current": 5, "enabled": true },
+        "subterrestrial:cabin/default/base_0 #2": { "original": 100, "current": 100, "enabled": true },
+        "subterrestrial:cabin/default/base_1": { "original": 5, "current": 5, "enabled": true },
+        "subterrestrial:cabin/default/base_1 #2": { "original": 100, "current": 100, "enabled": true },
+        "subterrestrial:cabin/default/base_lower_0": { "original": 5, "current": 5, "enabled": true },
+        "subterrestrial:cabin/default/base_lower_0 #2": { "original": 100, "current": 100, "enabled": true },
+        "subterrestrial:cabin/default/base_lower_1": { "original": 5, "current": 5, "enabled": true },
+        "subterrestrial:cabin/default/base_lower_1 #2": { "original": 100, "current": 100, "enabled": true },
+        "subterrestrial:cabin/default/base_upper_0": { "original": 5, "current": 5, "enabled": true },
+        "subterrestrial:cabin/default/base_upper_0 #2": { "original": 100, "current": 100, "enabled": true },
+        "subterrestrial:cabin/default/base_upper_1": { "original": 5, "current": 5, "enabled": true },
+        "subterrestrial:cabin/default/base_upper_1 #2": { "original": 100, "current": 100, "enabled": true }
       }
     },
     "subterrestrial:cabin/default/bottom": {
       "fallback": "minecraft:empty",
       "elements": {
-        "subterrestrial:cabin/default/bottom_0": { "original": 5, "current": 100, "enabled": true },
-        "subterrestrial:cabin/default/bottom_0 #2": { "original": 100, "current": 5, "enabled": true },
-        "subterrestrial:cabin/default/bottom_1": { "original": 5, "current": 100, "enabled": true },
-        "subterrestrial:cabin/default/bottom_1 #2": { "original": 100, "current": 5, "enabled": true },
-        "subterrestrial:cabin/default/bottom_2": { "original": 5, "current": 100, "enabled": true },
-        "subterrestrial:cabin/default/bottom_2 #2": { "original": 100, "current": 5, "enabled": true },
-        "subterrestrial:cabin/default/bottom_3": { "original": 5, "current": 100, "enabled": true },
-        "subterrestrial:cabin/default/bottom_3 #2": { "original": 100, "current": 5, "enabled": true }
+        "subterrestrial:cabin/default/bottom_0": { "original": 5, "current": 5, "enabled": true },
+        "subterrestrial:cabin/default/bottom_0 #2": { "original": 100, "current": 100, "enabled": true },
+        "subterrestrial:cabin/default/bottom_1": { "original": 5, "current": 5, "enabled": true },
+        "subterrestrial:cabin/default/bottom_1 #2": { "original": 100, "current": 100, "enabled": true },
+        "subterrestrial:cabin/default/bottom_2": { "original": 5, "current": 5, "enabled": true },
+        "subterrestrial:cabin/default/bottom_2 #2": { "original": 100, "current": 100, "enabled": true },
+        "subterrestrial:cabin/default/bottom_3": { "original": 5, "current": 5, "enabled": true },
+        "subterrestrial:cabin/default/bottom_3 #2": { "original": 100, "current": 100, "enabled": true }
       }
     },
     "subterrestrial:cabin/default/top": {
       "fallback": "minecraft:empty",
       "elements": {
-        "subterrestrial:cabin/default/top_0": { "original": 5, "current": 100, "enabled": true },
-        "subterrestrial:cabin/default/top_0 #2": { "original": 100, "current": 5, "enabled": true },
-        "subterrestrial:cabin/default/top_1": { "original": 5, "current": 100, "enabled": true },
-        "subterrestrial:cabin/default/top_1 #2": { "original": 100, "current": 5, "enabled": true },
-        "subterrestrial:cabin/default/top_2": { "original": 5, "current": 100, "enabled": true },
-        "subterrestrial:cabin/default/top_2 #2": { "original": 100, "current": 5, "enabled": true },
-        "subterrestrial:cabin/default/top_3": { "original": 5, "current": 100, "enabled": true },
-        "subterrestrial:cabin/default/top_3 #2": { "original": 100, "current": 5, "enabled": true }
+        "subterrestrial:cabin/default/top_0": { "original": 5, "current": 5, "enabled": true },
+        "subterrestrial:cabin/default/top_0 #2": { "original": 100, "current": 100, "enabled": true },
+        "subterrestrial:cabin/default/top_1": { "original": 5, "current": 5, "enabled": true },
+        "subterrestrial:cabin/default/top_1 #2": { "original": 100, "current": 100, "enabled": true },
+        "subterrestrial:cabin/default/top_2": { "original": 5, "current": 5, "enabled": true },
+        "subterrestrial:cabin/default/top_2 #2": { "original": 100, "current": 100, "enabled": true },
+        "subterrestrial:cabin/default/top_3": { "original": 5, "current": 5, "enabled": true },
+        "subterrestrial:cabin/default/top_3 #2": { "original": 100, "current": 100, "enabled": true }
       }
     },
     "subterrestrial:cabin/desert/base": {
       "fallback": "minecraft:empty",
       "elements": {
-        "subterrestrial:cabin/desert/base_0": { "original": 5, "current": 100, "enabled": true },
-        "subterrestrial:cabin/desert/base_0 #2": { "original": 100, "current": 5, "enabled": true },
-        "subterrestrial:cabin/desert/base_lower_0": { "original": 5, "current": 100, "enabled": true },
-        "subterrestrial:cabin/desert/base_lower_0 #2": { "original": 100, "current": 5, "enabled": true },
-        "subterrestrial:cabin/desert/base_upper_0": { "original": 5, "current": 100, "enabled": true },
-        "subterrestrial:cabin/desert/base_upper_0 #2": { "original": 100, "current": 5, "enabled": true }
+        "subterrestrial:cabin/desert/base_0": { "original": 5, "current": 5, "enabled": true },
+        "subterrestrial:cabin/desert/base_0 #2": { "original": 100, "current": 100, "enabled": true },
+        "subterrestrial:cabin/desert/base_lower_0": { "original": 5, "current": 5, "enabled": true },
+        "subterrestrial:cabin/desert/base_lower_0 #2": { "original": 100, "current": 100, "enabled": true },
+        "subterrestrial:cabin/desert/base_upper_0": { "original": 5, "current": 5, "enabled": true },
+        "subterrestrial:cabin/desert/base_upper_0 #2": { "original": 100, "current": 100, "enabled": true }
       }
     },
     "subterrestrial:cabin/desert/bottom": {
       "fallback": "minecraft:empty",
       "elements": {
-        "subterrestrial:cabin/desert/bottom_0": { "original": 5, "current": 100, "enabled": true },
-        "subterrestrial:cabin/desert/bottom_0 #2": { "original": 100, "current": 5, "enabled": true },
+        "subterrestrial:cabin/desert/bottom_0": { "original": 5, "current": 5, "enabled": true },
+        "subterrestrial:cabin/desert/bottom_0 #2": { "original": 100, "current": 100, "enabled": true },
         "subterrestrial:cabin/desert/bottom_1": { "original": 100, "current": 100, "enabled": true },
-        "subterrestrial:cabin/desert/bottom_2": { "original": 5, "current": 100, "enabled": true },
+        "subterrestrial:cabin/desert/bottom_2": { "original": 5, "current": 5, "enabled": true },
         "subterrestrial:cabin/desert/bottom_2 #2": { "original": 5, "current": 5, "enabled": true },
-        "subterrestrial:cabin/desert/bottom_2 #3": { "original": 100, "current": 5, "enabled": true },
-        "subterrestrial:cabin/desert/bottom_3": { "original": 5, "current": 100, "enabled": true },
-        "subterrestrial:cabin/desert/bottom_3 #2": { "original": 100, "current": 5, "enabled": true }
+        "subterrestrial:cabin/desert/bottom_2 #3": { "original": 100, "current": 100, "enabled": true },
+        "subterrestrial:cabin/desert/bottom_3": { "original": 5, "current": 5, "enabled": true },
+        "subterrestrial:cabin/desert/bottom_3 #2": { "original": 100, "current": 100, "enabled": true }
       }
     },
     "subterrestrial:cabin/desert/top": {
       "fallback": "minecraft:empty",
       "elements": {
-        "subterrestrial:cabin/desert/top_0": { "original": 5, "current": 100, "enabled": true },
-        "subterrestrial:cabin/desert/top_0 #2": { "original": 100, "current": 5, "enabled": true },
-        "subterrestrial:cabin/desert/top_1": { "original": 5, "current": 100, "enabled": true },
-        "subterrestrial:cabin/desert/top_1 #2": { "original": 100, "current": 5, "enabled": true },
-        "subterrestrial:cabin/desert/top_2": { "original": 5, "current": 100, "enabled": true },
-        "subterrestrial:cabin/desert/top_2 #2": { "original": 100, "current": 5, "enabled": true },
-        "subterrestrial:cabin/desert/top_3": { "original": 5, "current": 100, "enabled": true },
-        "subterrestrial:cabin/desert/top_3 #2": { "original": 100, "current": 5, "enabled": true }
+        "subterrestrial:cabin/desert/top_0": { "original": 5, "current": 5, "enabled": true },
+        "subterrestrial:cabin/desert/top_0 #2": { "original": 100, "current": 100, "enabled": true },
+        "subterrestrial:cabin/desert/top_1": { "original": 5, "current": 5, "enabled": true },
+        "subterrestrial:cabin/desert/top_1 #2": { "original": 100, "current": 100, "enabled": true },
+        "subterrestrial:cabin/desert/top_2": { "original": 5, "current": 5, "enabled": true },
+        "subterrestrial:cabin/desert/top_2 #2": { "original": 100, "current": 100, "enabled": true },
+        "subterrestrial:cabin/desert/top_3": { "original": 5, "current": 5, "enabled": true },
+        "subterrestrial:cabin/desert/top_3 #2": { "original": 100, "current": 100, "enabled": true }
       }
     },
     "subterrestrial:cabin/ice/base": {
       "fallback": "minecraft:empty",
       "elements": {
-        "subterrestrial:cabin/ice/base_0": { "original": 5, "current": 100, "enabled": true },
-        "subterrestrial:cabin/ice/base_0 #2": { "original": 100, "current": 5, "enabled": true },
-        "subterrestrial:cabin/ice/base_lower_0": { "original": 5, "current": 100, "enabled": true },
-        "subterrestrial:cabin/ice/base_lower_0 #2": { "original": 100, "current": 5, "enabled": true },
-        "subterrestrial:cabin/ice/base_upper_0": { "original": 5, "current": 100, "enabled": true },
-        "subterrestrial:cabin/ice/base_upper_0 #2": { "original": 100, "current": 5, "enabled": true }
+        "subterrestrial:cabin/ice/base_0": { "original": 5, "current": 5, "enabled": true },
+        "subterrestrial:cabin/ice/base_0 #2": { "original": 100, "current": 100, "enabled": true },
+        "subterrestrial:cabin/ice/base_lower_0": { "original": 5, "current": 5, "enabled": true },
+        "subterrestrial:cabin/ice/base_lower_0 #2": { "original": 100, "current": 100, "enabled": true },
+        "subterrestrial:cabin/ice/base_upper_0": { "original": 5, "current": 5, "enabled": true },
+        "subterrestrial:cabin/ice/base_upper_0 #2": { "original": 100, "current": 100, "enabled": true }
       }
     },
     "subterrestrial:cabin/ice/bottom": {
       "fallback": "minecraft:empty",
       "elements": {
-        "subterrestrial:cabin/taiga/bottom_0": { "original": 5, "current": 100, "enabled": true },
-        "subterrestrial:cabin/taiga/bottom_0 #2": { "original": 100, "current": 5, "enabled": true },
-        "subterrestrial:cabin/taiga/bottom_1": { "original": 5, "current": 100, "enabled": true },
-        "subterrestrial:cabin/taiga/bottom_1 #2": { "original": 100, "current": 5, "enabled": true },
-        "subterrestrial:cabin/taiga/bottom_2": { "original": 5, "current": 100, "enabled": true },
-        "subterrestrial:cabin/taiga/bottom_2 #2": { "original": 100, "current": 5, "enabled": true },
-        "subterrestrial:cabin/taiga/bottom_3": { "original": 5, "current": 100, "enabled": true },
-        "subterrestrial:cabin/taiga/bottom_3 #2": { "original": 100, "current": 5, "enabled": true }
+        "subterrestrial:cabin/taiga/bottom_0": { "original": 5, "current": 5, "enabled": true },
+        "subterrestrial:cabin/taiga/bottom_0 #2": { "original": 100, "current": 100, "enabled": true },
+        "subterrestrial:cabin/taiga/bottom_1": { "original": 5, "current": 5, "enabled": true },
+        "subterrestrial:cabin/taiga/bottom_1 #2": { "original": 100, "current": 100, "enabled": true },
+        "subterrestrial:cabin/taiga/bottom_2": { "original": 5, "current": 5, "enabled": true },
+        "subterrestrial:cabin/taiga/bottom_2 #2": { "original": 100, "current": 100, "enabled": true },
+        "subterrestrial:cabin/taiga/bottom_3": { "original": 5, "current": 5, "enabled": true },
+        "subterrestrial:cabin/taiga/bottom_3 #2": { "original": 100, "current": 100, "enabled": true }
       }
     },
     "subterrestrial:cabin/ice/top": {
       "fallback": "minecraft:empty",
       "elements": {
-        "subterrestrial:cabin/taiga/top_0": { "original": 5, "current": 100, "enabled": true },
-        "subterrestrial:cabin/taiga/top_0 #2": { "original": 100, "current": 5, "enabled": true },
-        "subterrestrial:cabin/taiga/top_1": { "original": 5, "current": 100, "enabled": true },
-        "subterrestrial:cabin/taiga/top_1 #2": { "original": 100, "current": 5, "enabled": true },
-        "subterrestrial:cabin/taiga/top_2": { "original": 5, "current": 100, "enabled": true },
-        "subterrestrial:cabin/taiga/top_2 #2": { "original": 100, "current": 5, "enabled": true },
-        "subterrestrial:cabin/taiga/top_3": { "original": 5, "current": 100, "enabled": true },
-        "subterrestrial:cabin/taiga/top_3 #2": { "original": 100, "current": 5, "enabled": true }
+        "subterrestrial:cabin/taiga/top_0": { "original": 5, "current": 5, "enabled": true },
+        "subterrestrial:cabin/taiga/top_0 #2": { "original": 100, "current": 100, "enabled": true },
+        "subterrestrial:cabin/taiga/top_1": { "original": 5, "current": 5, "enabled": true },
+        "subterrestrial:cabin/taiga/top_1 #2": { "original": 100, "current": 100, "enabled": true },
+        "subterrestrial:cabin/taiga/top_2": { "original": 5, "current": 5, "enabled": true },
+        "subterrestrial:cabin/taiga/top_2 #2": { "original": 100, "current": 100, "enabled": true },
+        "subterrestrial:cabin/taiga/top_3": { "original": 5, "current": 5, "enabled": true },
+        "subterrestrial:cabin/taiga/top_3 #2": { "original": 100, "current": 100, "enabled": true }
       }
     },
     "subterrestrial:cabin/jungle/base": {
       "fallback": "minecraft:empty",
       "elements": {
-        "subterrestrial:cabin/jungle/base_0": { "original": 5, "current": 100, "enabled": true },
-        "subterrestrial:cabin/jungle/base_0 #2": { "original": 100, "current": 5, "enabled": true },
-        "subterrestrial:cabin/jungle/base_lower_0": { "original": 5, "current": 100, "enabled": true },
-        "subterrestrial:cabin/jungle/base_lower_0 #2": { "original": 100, "current": 5, "enabled": true },
-        "subterrestrial:cabin/jungle/base_upper_0": { "original": 5, "current": 100, "enabled": true },
-        "subterrestrial:cabin/jungle/base_upper_0 #2": { "original": 100, "current": 5, "enabled": true }
+        "subterrestrial:cabin/jungle/base_0": { "original": 5, "current": 5, "enabled": true },
+        "subterrestrial:cabin/jungle/base_0 #2": { "original": 100, "current": 100, "enabled": true },
+        "subterrestrial:cabin/jungle/base_lower_0": { "original": 5, "current": 5, "enabled": true },
+        "subterrestrial:cabin/jungle/base_lower_0 #2": { "original": 100, "current": 100, "enabled": true },
+        "subterrestrial:cabin/jungle/base_upper_0": { "original": 5, "current": 5, "enabled": true },
+        "subterrestrial:cabin/jungle/base_upper_0 #2": { "original": 100, "current": 100, "enabled": true }
       }
     },
     "subterrestrial:cabin/jungle/bottom": {
       "fallback": "minecraft:empty",
       "elements": {
-        "subterrestrial:cabin/jungle/bottom_0": { "original": 5, "current": 100, "enabled": true },
-        "subterrestrial:cabin/jungle/bottom_0 #2": { "original": 100, "current": 5, "enabled": true },
-        "subterrestrial:cabin/jungle/bottom_1": { "original": 5, "current": 100, "enabled": true },
-        "subterrestrial:cabin/jungle/bottom_1 #2": { "original": 100, "current": 5, "enabled": true },
-        "subterrestrial:cabin/jungle/bottom_2": { "original": 5, "current": 100, "enabled": true },
-        "subterrestrial:cabin/jungle/bottom_2 #2": { "original": 100, "current": 5, "enabled": true },
-        "subterrestrial:cabin/jungle/bottom_3": { "original": 5, "current": 100, "enabled": true },
-        "subterrestrial:cabin/jungle/bottom_3 #2": { "original": 100, "current": 5, "enabled": true }
+        "subterrestrial:cabin/jungle/bottom_0": { "original": 5, "current": 5, "enabled": true },
+        "subterrestrial:cabin/jungle/bottom_0 #2": { "original": 100, "current": 100, "enabled": true },
+        "subterrestrial:cabin/jungle/bottom_1": { "original": 5, "current": 5, "enabled": true },
+        "subterrestrial:cabin/jungle/bottom_1 #2": { "original": 100, "current": 100, "enabled": true },
+        "subterrestrial:cabin/jungle/bottom_2": { "original": 5, "current": 5, "enabled": true },
+        "subterrestrial:cabin/jungle/bottom_2 #2": { "original": 100, "current": 100, "enabled": true },
+        "subterrestrial:cabin/jungle/bottom_3": { "original": 5, "current": 5, "enabled": true },
+        "subterrestrial:cabin/jungle/bottom_3 #2": { "original": 100, "current": 100, "enabled": true }
       }
     },
     "subterrestrial:cabin/jungle/top": {
       "fallback": "minecraft:empty",
       "elements": {
-        "subterrestrial:cabin/jungle/top_0": { "original": 5, "current": 100, "enabled": true },
-        "subterrestrial:cabin/jungle/top_0 #2": { "original": 100, "current": 5, "enabled": true },
-        "subterrestrial:cabin/jungle/top_1": { "original": 5, "current": 100, "enabled": true },
-        "subterrestrial:cabin/jungle/top_1 #2": { "original": 100, "current": 5, "enabled": true },
-        "subterrestrial:cabin/jungle/top_2": { "original": 5, "current": 100, "enabled": true },
-        "subterrestrial:cabin/jungle/top_2 #2": { "original": 100, "current": 5, "enabled": true },
-        "subterrestrial:cabin/jungle/top_3": { "original": 5, "current": 100, "enabled": true },
-        "subterrestrial:cabin/jungle/top_3 #2": { "original": 100, "current": 5, "enabled": true }
+        "subterrestrial:cabin/jungle/top_0": { "original": 5, "current": 5, "enabled": true },
+        "subterrestrial:cabin/jungle/top_0 #2": { "original": 100, "current": 100, "enabled": true },
+        "subterrestrial:cabin/jungle/top_1": { "original": 5, "current": 5, "enabled": true },
+        "subterrestrial:cabin/jungle/top_1 #2": { "original": 100, "current": 100, "enabled": true },
+        "subterrestrial:cabin/jungle/top_2": { "original": 5, "current": 5, "enabled": true },
+        "subterrestrial:cabin/jungle/top_2 #2": { "original": 100, "current": 100, "enabled": true },
+        "subterrestrial:cabin/jungle/top_3": { "original": 5, "current": 5, "enabled": true },
+        "subterrestrial:cabin/jungle/top_3 #2": { "original": 100, "current": 100, "enabled": true }
       }
     },
     "subterrestrial:cabin/mesa/base": {
       "fallback": "minecraft:empty",
       "elements": {
-        "subterrestrial:cabin/mesa/base_0": { "original": 5, "current": 100, "enabled": true },
-        "subterrestrial:cabin/mesa/base_0 #2": { "original": 100, "current": 5, "enabled": true },
-        "subterrestrial:cabin/mesa/base_lower_0": { "original": 5, "current": 100, "enabled": true },
-        "subterrestrial:cabin/mesa/base_lower_0 #2": { "original": 100, "current": 5, "enabled": true },
-        "subterrestrial:cabin/mesa/base_upper_0": { "original": 5, "current": 100, "enabled": true },
-        "subterrestrial:cabin/mesa/base_upper_0 #2": { "original": 100, "current": 5, "enabled": true }
+        "subterrestrial:cabin/mesa/base_0": { "original": 5, "current": 5, "enabled": true },
+        "subterrestrial:cabin/mesa/base_0 #2": { "original": 100, "current": 100, "enabled": true },
+        "subterrestrial:cabin/mesa/base_lower_0": { "original": 5, "current": 5, "enabled": true },
+        "subterrestrial:cabin/mesa/base_lower_0 #2": { "original": 100, "current": 100, "enabled": true },
+        "subterrestrial:cabin/mesa/base_upper_0": { "original": 5, "current": 5, "enabled": true },
+        "subterrestrial:cabin/mesa/base_upper_0 #2": { "original": 100, "current": 100, "enabled": true }
       }
     },
     "subterrestrial:cabin/mesa/bottom": {
       "fallback": "minecraft:empty",
       "elements": {
-        "subterrestrial:cabin/desert/bottom_0": { "original": 5, "current": 100, "enabled": true },
-        "subterrestrial:cabin/desert/bottom_0 #2": { "original": 100, "current": 5, "enabled": true },
+        "subterrestrial:cabin/desert/bottom_0": { "original": 5, "current": 5, "enabled": true },
+        "subterrestrial:cabin/desert/bottom_0 #2": { "original": 100, "current": 100, "enabled": true },
         "subterrestrial:cabin/desert/bottom_1": { "original": 100, "current": 100, "enabled": true },
-        "subterrestrial:cabin/desert/bottom_2": { "original": 5, "current": 100, "enabled": true },
+        "subterrestrial:cabin/desert/bottom_2": { "original": 5, "current": 5, "enabled": true },
         "subterrestrial:cabin/desert/bottom_2 #2": { "original": 5, "current": 5, "enabled": true },
-        "subterrestrial:cabin/desert/bottom_2 #3": { "original": 100, "current": 5, "enabled": true },
-        "subterrestrial:cabin/desert/bottom_3": { "original": 5, "current": 100, "enabled": true },
-        "subterrestrial:cabin/desert/bottom_3 #2": { "original": 100, "current": 5, "enabled": true }
+        "subterrestrial:cabin/desert/bottom_2 #3": { "original": 100, "current": 100, "enabled": true },
+        "subterrestrial:cabin/desert/bottom_3": { "original": 5, "current": 5, "enabled": true },
+        "subterrestrial:cabin/desert/bottom_3 #2": { "original": 100, "current": 100, "enabled": true }
       }
     },
     "subterrestrial:cabin/mesa/top": {
       "fallback": "minecraft:empty",
       "elements": {
-        "subterrestrial:cabin/desert/top_0": { "original": 5, "current": 100, "enabled": true },
-        "subterrestrial:cabin/desert/top_0 #2": { "original": 100, "current": 5, "enabled": true },
-        "subterrestrial:cabin/desert/top_1": { "original": 5, "current": 100, "enabled": true },
-        "subterrestrial:cabin/desert/top_1 #2": { "original": 100, "current": 5, "enabled": true },
-        "subterrestrial:cabin/desert/top_2": { "original": 5, "current": 100, "enabled": true },
-        "subterrestrial:cabin/desert/top_2 #2": { "original": 100, "current": 5, "enabled": true },
-        "subterrestrial:cabin/desert/top_3": { "original": 5, "current": 100, "enabled": true },
-        "subterrestrial:cabin/desert/top_3 #2": { "original": 100, "current": 5, "enabled": true }
+        "subterrestrial:cabin/desert/top_0": { "original": 5, "current": 5, "enabled": true },
+        "subterrestrial:cabin/desert/top_0 #2": { "original": 100, "current": 100, "enabled": true },
+        "subterrestrial:cabin/desert/top_1": { "original": 5, "current": 5, "enabled": true },
+        "subterrestrial:cabin/desert/top_1 #2": { "original": 100, "current": 100, "enabled": true },
+        "subterrestrial:cabin/desert/top_2": { "original": 5, "current": 5, "enabled": true },
+        "subterrestrial:cabin/desert/top_2 #2": { "original": 100, "current": 100, "enabled": true },
+        "subterrestrial:cabin/desert/top_3": { "original": 5, "current": 5, "enabled": true },
+        "subterrestrial:cabin/desert/top_3 #2": { "original": 100, "current": 100, "enabled": true }
       }
     },
     "subterrestrial:cabin/ocean/base": {
@@ -13198,38 +13198,38 @@
     "subterrestrial:cabin/taiga/base": {
       "fallback": "minecraft:empty",
       "elements": {
-        "subterrestrial:cabin/taiga/base_0": { "original": 5, "current": 100, "enabled": true },
-        "subterrestrial:cabin/taiga/base_0 #2": { "original": 100, "current": 5, "enabled": true },
-        "subterrestrial:cabin/taiga/base_lower_0": { "original": 5, "current": 100, "enabled": true },
-        "subterrestrial:cabin/taiga/base_lower_0 #2": { "original": 100, "current": 5, "enabled": true },
-        "subterrestrial:cabin/taiga/base_upper_0": { "original": 5, "current": 100, "enabled": true },
-        "subterrestrial:cabin/taiga/base_upper_0 #2": { "original": 100, "current": 5, "enabled": true }
+        "subterrestrial:cabin/taiga/base_0": { "original": 5, "current": 5, "enabled": true },
+        "subterrestrial:cabin/taiga/base_0 #2": { "original": 100, "current": 100, "enabled": true },
+        "subterrestrial:cabin/taiga/base_lower_0": { "original": 5, "current": 5, "enabled": true },
+        "subterrestrial:cabin/taiga/base_lower_0 #2": { "original": 100, "current": 100, "enabled": true },
+        "subterrestrial:cabin/taiga/base_upper_0": { "original": 5, "current": 5, "enabled": true },
+        "subterrestrial:cabin/taiga/base_upper_0 #2": { "original": 100, "current": 100, "enabled": true }
       }
     },
     "subterrestrial:cabin/taiga/bottom": {
       "fallback": "minecraft:empty",
       "elements": {
-        "subterrestrial:cabin/taiga/bottom_0": { "original": 5, "current": 100, "enabled": true },
-        "subterrestrial:cabin/taiga/bottom_0 #2": { "original": 100, "current": 5, "enabled": true },
-        "subterrestrial:cabin/taiga/bottom_1": { "original": 5, "current": 100, "enabled": true },
-        "subterrestrial:cabin/taiga/bottom_1 #2": { "original": 100, "current": 5, "enabled": true },
-        "subterrestrial:cabin/taiga/bottom_2": { "original": 5, "current": 100, "enabled": true },
-        "subterrestrial:cabin/taiga/bottom_2 #2": { "original": 100, "current": 5, "enabled": true },
-        "subterrestrial:cabin/taiga/bottom_3": { "original": 5, "current": 100, "enabled": true },
-        "subterrestrial:cabin/taiga/bottom_3 #2": { "original": 100, "current": 5, "enabled": true }
+        "subterrestrial:cabin/taiga/bottom_0": { "original": 5, "current": 5, "enabled": true },
+        "subterrestrial:cabin/taiga/bottom_0 #2": { "original": 100, "current": 100, "enabled": true },
+        "subterrestrial:cabin/taiga/bottom_1": { "original": 5, "current": 5, "enabled": true },
+        "subterrestrial:cabin/taiga/bottom_1 #2": { "original": 100, "current": 100, "enabled": true },
+        "subterrestrial:cabin/taiga/bottom_2": { "original": 5, "current": 5, "enabled": true },
+        "subterrestrial:cabin/taiga/bottom_2 #2": { "original": 100, "current": 100, "enabled": true },
+        "subterrestrial:cabin/taiga/bottom_3": { "original": 5, "current": 5, "enabled": true },
+        "subterrestrial:cabin/taiga/bottom_3 #2": { "original": 100, "current": 100, "enabled": true }
       }
     },
     "subterrestrial:cabin/taiga/top": {
       "fallback": "minecraft:empty",
       "elements": {
-        "subterrestrial:cabin/taiga/top_0": { "original": 5, "current": 100, "enabled": true },
-        "subterrestrial:cabin/taiga/top_0 #2": { "original": 100, "current": 5, "enabled": true },
-        "subterrestrial:cabin/taiga/top_1": { "original": 5, "current": 100, "enabled": true },
-        "subterrestrial:cabin/taiga/top_1 #2": { "original": 100, "current": 5, "enabled": true },
-        "subterrestrial:cabin/taiga/top_2": { "original": 5, "current": 100, "enabled": true },
-        "subterrestrial:cabin/taiga/top_2 #2": { "original": 100, "current": 5, "enabled": true },
-        "subterrestrial:cabin/taiga/top_3": { "original": 5, "current": 100, "enabled": true },
-        "subterrestrial:cabin/taiga/top_3 #2": { "original": 100, "current": 5, "enabled": true }
+        "subterrestrial:cabin/taiga/top_0": { "original": 5, "current": 5, "enabled": true },
+        "subterrestrial:cabin/taiga/top_0 #2": { "original": 100, "current": 100, "enabled": true },
+        "subterrestrial:cabin/taiga/top_1": { "original": 5, "current": 5, "enabled": true },
+        "subterrestrial:cabin/taiga/top_1 #2": { "original": 100, "current": 100, "enabled": true },
+        "subterrestrial:cabin/taiga/top_2": { "original": 5, "current": 5, "enabled": true },
+        "subterrestrial:cabin/taiga/top_2 #2": { "original": 100, "current": 100, "enabled": true },
+        "subterrestrial:cabin/taiga/top_3": { "original": 5, "current": 5, "enabled": true },
+        "subterrestrial:cabin/taiga/top_3 #2": { "original": 100, "current": 100, "enabled": true }
       }
     },
     "subterrestrial:main": {
@@ -13926,7 +13926,7 @@
         "unwrecked_ships:ship/sails/horizontal_white_sails_primary": { "original": 1, "current": 1, "enabled": true },
         "unwrecked_ships:ship/sails/horizontal_white_sails_primary #2": { "original": 1, "current": 1, "enabled": true },
         "unwrecked_ships:ship/sails/horizontal_white_sails_primary #3": { "original": 1, "current": 1, "enabled": true },
-        "unwrecked_ships:ship/sails/horizontal_white_sails_primary #4": { "original": 1, "current": 30, "enabled": true },
+        "unwrecked_ships:ship/sails/horizontal_white_sails_primary #4": { "original": 1, "current": 1, "enabled": true },
         "unwrecked_ships:ship/sails/horizontal_white_sails_primary #5": { "original": 1, "current": 1, "enabled": true },
         "unwrecked_ships:ship/sails/horizontal_white_sails_primary #6": { "original": 1, "current": 1, "enabled": true },
         "unwrecked_ships:ship/sails/horizontal_white_sails_primary #7": { "original": 1, "current": 1, "enabled": true },
@@ -13938,11 +13938,11 @@
         "unwrecked_ships:ship/sails/horizontal_white_sails_primary #13": { "original": 1, "current": 1, "enabled": true },
         "unwrecked_ships:ship/sails/horizontal_white_sails_primary #14": { "original": 1, "current": 1, "enabled": true },
         "unwrecked_ships:ship/sails/horizontal_white_sails_primary #15": { "original": 1, "current": 1, "enabled": true },
-        "unwrecked_ships:ship/sails/horizontal_white_sails_primary #16": { "original": 30, "current": 1, "enabled": true },
+        "unwrecked_ships:ship/sails/horizontal_white_sails_primary #16": { "original": 30, "current": 30, "enabled": true },
         "unwrecked_ships:ship/sails/vertical_white_sails_primary": { "original": 1, "current": 1, "enabled": true },
         "unwrecked_ships:ship/sails/vertical_white_sails_primary #2": { "original": 1, "current": 1, "enabled": true },
         "unwrecked_ships:ship/sails/vertical_white_sails_primary #3": { "original": 1, "current": 1, "enabled": true },
-        "unwrecked_ships:ship/sails/vertical_white_sails_primary #4": { "original": 1, "current": 30, "enabled": true },
+        "unwrecked_ships:ship/sails/vertical_white_sails_primary #4": { "original": 1, "current": 1, "enabled": true },
         "unwrecked_ships:ship/sails/vertical_white_sails_primary #5": { "original": 1, "current": 1, "enabled": true },
         "unwrecked_ships:ship/sails/vertical_white_sails_primary #6": { "original": 1, "current": 1, "enabled": true },
         "unwrecked_ships:ship/sails/vertical_white_sails_primary #7": { "original": 1, "current": 1, "enabled": true },
@@ -13954,13 +13954,13 @@
         "unwrecked_ships:ship/sails/vertical_white_sails_primary #13": { "original": 1, "current": 1, "enabled": true },
         "unwrecked_ships:ship/sails/vertical_white_sails_primary #14": { "original": 1, "current": 1, "enabled": true },
         "unwrecked_ships:ship/sails/vertical_white_sails_primary #15": { "original": 1, "current": 1, "enabled": true },
-        "unwrecked_ships:ship/sails/vertical_white_sails_primary #16": { "original": 30, "current": 1, "enabled": true },
+        "unwrecked_ships:ship/sails/vertical_white_sails_primary #16": { "original": 30, "current": 30, "enabled": true },
         "unwrecked_ships:ship/sails/white_sails": { "original": 1, "current": 1, "enabled": true },
         "unwrecked_ships:ship/sails/white_sails #2": { "original": 1, "current": 1, "enabled": true },
         "unwrecked_ships:ship/sails/white_sails #3": { "original": 1, "current": 1, "enabled": true },
-        "unwrecked_ships:ship/sails/white_sails #4": { "original": 1, "current": 30, "enabled": true },
+        "unwrecked_ships:ship/sails/white_sails #4": { "original": 1, "current": 1, "enabled": true },
         "unwrecked_ships:ship/sails/white_sails #5": { "original": 1, "current": 1, "enabled": true },
-        "unwrecked_ships:ship/sails/white_sails #6": { "original": 1, "current": 10, "enabled": true },
+        "unwrecked_ships:ship/sails/white_sails #6": { "original": 1, "current": 1, "enabled": true },
         "unwrecked_ships:ship/sails/white_sails #7": { "original": 1, "current": 1, "enabled": true },
         "unwrecked_ships:ship/sails/white_sails #8": { "original": 1, "current": 1, "enabled": true },
         "unwrecked_ships:ship/sails/white_sails #9": { "original": 1, "current": 1, "enabled": true },
@@ -13969,8 +13969,8 @@
         "unwrecked_ships:ship/sails/white_sails #12": { "original": 1, "current": 1, "enabled": true },
         "unwrecked_ships:ship/sails/white_sails #13": { "original": 1, "current": 1, "enabled": true },
         "unwrecked_ships:ship/sails/white_sails #14": { "original": 1, "current": 1, "enabled": true },
-        "unwrecked_ships:ship/sails/white_sails #15": { "original": 10, "current": 1, "enabled": true },
-        "unwrecked_ships:ship/sails/white_sails #16": { "original": 30, "current": 1, "enabled": true }
+        "unwrecked_ships:ship/sails/white_sails #15": { "original": 10, "current": 10, "enabled": true },
+        "unwrecked_ships:ship/sails/white_sails #16": { "original": 30, "current": 30, "enabled": true }
       }
     },
     "unwrecked_ships:ship/sailor_layout": {
@@ -14022,22 +14022,22 @@
         "unwrecked_ships:ship/sails/vertical_white_sails_primary #14": { "original": 1, "current": 1, "enabled": true },
         "unwrecked_ships:ship/sails/vertical_white_sails_primary #15": { "original": 1, "current": 1, "enabled": true },
         "unwrecked_ships:ship/sails/vertical_white_sails_primary #16": { "original": 1, "current": 1, "enabled": true },
-        "unwrecked_ships:ship/sails/white_sails": { "original": 3, "current": 40, "enabled": true },
-        "unwrecked_ships:ship/sails/white_sails #2": { "original": 3, "current": 40, "enabled": true },
-        "unwrecked_ships:ship/sails/white_sails #3": { "original": 3, "current": 5, "enabled": true },
+        "unwrecked_ships:ship/sails/white_sails": { "original": 3, "current": 3, "enabled": true },
+        "unwrecked_ships:ship/sails/white_sails #2": { "original": 3, "current": 3, "enabled": true },
+        "unwrecked_ships:ship/sails/white_sails #3": { "original": 3, "current": 3, "enabled": true },
         "unwrecked_ships:ship/sails/white_sails #4": { "original": 3, "current": 3, "enabled": true },
-        "unwrecked_ships:ship/sails/white_sails #5": { "original": 3, "current": 20, "enabled": true },
+        "unwrecked_ships:ship/sails/white_sails #5": { "original": 3, "current": 3, "enabled": true },
         "unwrecked_ships:ship/sails/white_sails #6": { "original": 3, "current": 3, "enabled": true },
         "unwrecked_ships:ship/sails/white_sails #7": { "original": 3, "current": 3, "enabled": true },
-        "unwrecked_ships:ship/sails/white_sails #8": { "original": 3, "current": 10, "enabled": true },
+        "unwrecked_ships:ship/sails/white_sails #8": { "original": 3, "current": 3, "enabled": true },
         "unwrecked_ships:ship/sails/white_sails #9": { "original": 3, "current": 3, "enabled": true },
         "unwrecked_ships:ship/sails/white_sails #10": { "original": 3, "current": 3, "enabled": true },
         "unwrecked_ships:ship/sails/white_sails #11": { "original": 3, "current": 3, "enabled": true },
-        "unwrecked_ships:ship/sails/white_sails #12": { "original": 5, "current": 3, "enabled": true },
-        "unwrecked_ships:ship/sails/white_sails #13": { "original": 10, "current": 3, "enabled": true },
-        "unwrecked_ships:ship/sails/white_sails #14": { "original": 20, "current": 3, "enabled": true },
-        "unwrecked_ships:ship/sails/white_sails #15": { "original": 40, "current": 3, "enabled": true },
-        "unwrecked_ships:ship/sails/white_sails #16": { "original": 40, "current": 3, "enabled": true }
+        "unwrecked_ships:ship/sails/white_sails #12": { "original": 5, "current": 5, "enabled": true },
+        "unwrecked_ships:ship/sails/white_sails #13": { "original": 10, "current": 10, "enabled": true },
+        "unwrecked_ships:ship/sails/white_sails #14": { "original": 20, "current": 20, "enabled": true },
+        "unwrecked_ships:ship/sails/white_sails #15": { "original": 40, "current": 40, "enabled": true },
+        "unwrecked_ships:ship/sails/white_sails #16": { "original": 40, "current": 40, "enabled": true }
       }
     },
     "unwrecked_ships:ship/shell": {
@@ -14229,27 +14229,27 @@
     "villagesandpillages:village_witch/road_and_house": {
       "fallback": "villagesandpillages:village_witch/terminators",
       "elements": {
-        "villagesandpillages:village_witch/house/medium/medium_house_01": { "original": 1, "current": 3, "enabled": true },
+        "villagesandpillages:village_witch/house/medium/medium_house_01": { "original": 1, "current": 1, "enabled": true },
         "villagesandpillages:village_witch/house/medium/medium_house_01 #2": { "original": 1, "current": 1, "enabled": true },
         "villagesandpillages:village_witch/house/medium/medium_house_01 #3": { "original": 1, "current": 1, "enabled": true },
         "villagesandpillages:village_witch/house/medium/medium_house_01 #4": { "original": 2, "current": 2, "enabled": true },
-        "villagesandpillages:village_witch/house/medium/medium_house_01 #5": { "original": 3, "current": 1, "enabled": true },
-        "villagesandpillages:village_witch/house/medium/medium_house_02": { "original": 1, "current": 3, "enabled": true },
+        "villagesandpillages:village_witch/house/medium/medium_house_01 #5": { "original": 3, "current": 3, "enabled": true },
+        "villagesandpillages:village_witch/house/medium/medium_house_02": { "original": 1, "current": 1, "enabled": true },
         "villagesandpillages:village_witch/house/medium/medium_house_02 #2": { "original": 1, "current": 1, "enabled": true },
         "villagesandpillages:village_witch/house/medium/medium_house_02 #3": { "original": 1, "current": 1, "enabled": true },
         "villagesandpillages:village_witch/house/medium/medium_house_02 #4": { "original": 2, "current": 2, "enabled": true },
-        "villagesandpillages:village_witch/house/medium/medium_house_02 #5": { "original": 3, "current": 1, "enabled": true },
+        "villagesandpillages:village_witch/house/medium/medium_house_02 #5": { "original": 3, "current": 3, "enabled": true },
         "villagesandpillages:village_witch/house/small/small_house_01": { "original": 1, "current": 1, "enabled": true },
         "villagesandpillages:village_witch/house/small/small_house_01 #2": { "original": 1, "current": 1, "enabled": true },
-        "villagesandpillages:village_witch/house/small/small_house_01 #3": { "original": 1, "current": 2, "enabled": true },
-        "villagesandpillages:village_witch/house/small/small_house_01 #4": { "original": 2, "current": 1, "enabled": true },
+        "villagesandpillages:village_witch/house/small/small_house_01 #3": { "original": 1, "current": 1, "enabled": true },
+        "villagesandpillages:village_witch/house/small/small_house_01 #4": { "original": 2, "current": 2, "enabled": true },
         "villagesandpillages:village_witch/house/small/small_house_01 #5": { "original": 2, "current": 2, "enabled": true },
         "villagesandpillages:village_witch/house/small/small_house_02": { "original": 1, "current": 1, "enabled": true },
-        "villagesandpillages:village_witch/house/small/small_house_02 #2": { "original": 1, "current": 2, "enabled": true },
+        "villagesandpillages:village_witch/house/small/small_house_02 #2": { "original": 1, "current": 1, "enabled": true },
         "villagesandpillages:village_witch/house/small/small_house_02 #3": { "original": 1, "current": 1, "enabled": true },
         "villagesandpillages:village_witch/house/small/small_house_02 #4": { "original": 1, "current": 1, "enabled": true },
         "villagesandpillages:village_witch/house/small/small_house_02 #5": { "original": 1, "current": 1, "enabled": true },
-        "villagesandpillages:village_witch/house/small/small_house_02 #6": { "original": 2, "current": 1, "enabled": true },
+        "villagesandpillages:village_witch/house/small/small_house_02 #6": { "original": 2, "current": 2, "enabled": true },
         "villagesandpillages:village_witch/house/small/small_house_03": { "original": 1, "current": 1, "enabled": true },
         "villagesandpillages:village_witch/house/small/small_house_03 #2": { "original": 1, "current": 1, "enabled": true },
         "villagesandpillages:village_witch/house/small/small_house_03 #3": { "original": 2, "current": 2, "enabled": true },

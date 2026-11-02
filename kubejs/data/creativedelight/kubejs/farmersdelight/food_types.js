@@ -182,6 +182,9 @@ if (global.CD) global.CD.genPut('food_types', 'farmersdelight', {
   "canned_pumpkin_soup": [
    "pumpkin_soup"
   ],
+  "canned_ratatouille": [
+   "ratatouille"
+  ],
   "canned_roast_chicken": [
    "roast_chicken"
   ],

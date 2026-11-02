@@ -8,8 +8,7 @@ ServerEvents.tags('item', e => {
 
 	t.storageBlock(e, 'chorus_fruit', i.chorus_crate)
 	t.add(e, i.t_chorus_pie_slice, i.chorus_pie_slice)
-	// Ender's shulker filet in End's shulker meat tag, so End's pot meals take it
-	t.add(e, i.t_shulker_meat, i.shulker_filet)
+	// Shulker meat: Ender's mollusk and filet merge into End's meat and slice (CD startup endersdelight/item_merges.js)
 
 	// Void Pepper is the first spice (briefs/food_seasoning.md); saffron is not (owner, 2026-10-25)
 	if (global.CD.on('enders_additions')) t.add(e, i.t_spices, [i.voidpepper, i.crushed_voidpepper])

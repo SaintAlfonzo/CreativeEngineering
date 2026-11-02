@@ -136,11 +136,9 @@ IN_TREE_MODS = [
     ('exposureBackport', 'exposureBackport', True),
     ('moreMooblooms', 'moreMooblooms', True),
     ('creativeLabels', 'creativeLabels', True),
-    ('backportedVeggies', 'backportedVeggies', True),
-    ('backportedVintage', 'backportedVintage', True),
-    ('backportedFungi', 'backportedFungi', True),
     # Creative Delight: the bundle jar; its members (development/creativeDelight/members/, Baby Mobs and Incubation
-    # Additions included since 2026-11-01) never ship on their own.
+    # Additions included since 2026-11-01; the Veggies, Vintage, Fungi, Miner's and Display ports since 2026-11-02,
+    # creativedelight members #1 / #35) never ship on their own.
     ('creativeDelight', 'creativedelight', True),
     # Creative Brewing: the same for the Vinery and Brewin' ports (development/creativeBrewing/members/).
     ('creativeBrewing', 'creativebrewing', True),
@@ -153,7 +151,8 @@ IN_TREE_MODS = [
 IN_TREE_EXTRA_SRC = {
     'creativeDelight': ['development/creativeDelight/members', 'kubejs/data/creativedelight/kubejs',
                         'kubejs/assets/creativedelight/kubejs', 'kubejs/data/creativedelight/worldgen',
-                        'kubejs/data/creativedelight/cup_conversion'],
+                        'kubejs/data/creativedelight/cup_conversion', 'kubejs/data/creativedelight/loot_tables',
+                        'development/shared'],
     'creativeBrewing': ['development/creativeBrewing/members', 'kubejs/data/creativebrewing/kubejs',
                         'kubejs/assets/creativebrewing/kubejs'],
     'creativeCalendar': ['kubejs/data/creativecalendar/kubejs'],
@@ -231,6 +230,7 @@ KUBEJS_CLASSES = [
     ('data/creativedelight/kubejs/*', 'dev'),
     ('data/creativedelight/worldgen/*', 'dev'),
     ('data/creativedelight/cup_conversion/*', 'dev'),
+    ('data/creativedelight/loot_tables/*', 'dev'),   # Oceanic fishing net tables (creative_delight.md 36), in the CD jar
     ('assets/creativedelight/kubejs/*', 'dev'),
     # Creative Brewing's script trees: the same, shipped only inside the creativebrewing jar
     ('data/creativebrewing/kubejs/*', 'dev'),
@@ -533,8 +533,9 @@ UPSTREAM_DONORS = {
     # nested in the Creative Brewing jar, so the CB jar in mods/ is what needs the donor
     'vinery_upstream': ('creativebrewing', 'Vinery (Creative Brewing)',
                         ('creativeBrewing/members/vinery', 'net', 'satisfy', 'vinery', 'forge', 'upstream')),
-    'miners_upstream': ('backportedMiners', "Miner's Delight", ('backportedMiners', 'com', 'sammy', 'minersdelight', 'upstream')),
     # nested in the Creative Delight jar, so the CD jar in mods/ is what needs the donor
+    'miners_upstream': ('creativedelight', "Miner's Delight (Creative Delight)",
+                        ('creativeDelight/members/miners', 'com', 'sammy', 'minersdelight', 'upstream')),
     'farmers_upstream': ('creativeengineering', "Farmer's Structures donor (patcherMod)",
                          ('patcherMod', 'com', 'SaintAlfonzo', 'creativeengineering', 'worldgen', 'donor')),
     'rustic_upstream': ('creativedelight', 'Rustic Delight (Creative Delight)',
@@ -686,6 +687,10 @@ def check_display_delight_models(pre):
     JEI draws as the purple cube (WTHIT falls back to the block model). The item list comes from
     /dumpitemsbymod, so an export older than the jar may miss the new items."""
     jars = [j for j in os.listdir(MODS) if re.match(r'(displaydelight|backportedDisplay)-.*\.jar$', j)]
+    if not jars:
+        # nested in the Creative Delight jar since 2026-11-02 (plan_creative_delight.md A2)
+        jars = [j for j in os.listdir(MODS) if re.match(r'creativedelight-.*\.jar$', j)
+                and any(n.startswith('backportedDisplay-') for n, _ in nested_modids(os.path.join(MODS, j)))]
     if not jars:
         return
     export = os.path.join(ROOT, 'kubejs', 'exported', 'items_by_mod', 'displaydelight.json')

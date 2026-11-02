@@ -15,6 +15,7 @@ import org.slf4j.Logger;
  * stack, block entities and entities all load as the survivor, and the world saves under the new id from then on.
  * Covers every Forge registry (blocks, items, fluids, block entity types, entity types, ...). Vanilla-only registries
  * (structure processors) have no remap hook; the jar that moved such an id keeps a load-only alias for it.
+ * Ids a list names as removed get Forge's ignore action: no missing-registry warning, the old blocks and items are dropped.
  */
 public final class SwapRemapper {
 	private static final Logger LOGGER = LogUtils.getLogger();
@@ -27,9 +28,16 @@ public final class SwapRemapper {
 		if (lists.isEmpty()) return;
 		int remapped = 0;
 		int unresolved = 0;
+		int ignored = 0;
 		for (MissingMappingsEvent.Mapping<?> mapping : all(event)) {
 			ResourceLocation target = lists.target(mapping.getKey());
-			if (target == null) continue;
+			if (target == null) {
+				if (lists.isRemoved(mapping.getKey())) {
+					mapping.ignore();
+					ignored++;
+				}
+				continue;
+			}
 			if (remap(mapping, target)) {
 				remapped++;
 			} else {
@@ -38,6 +46,7 @@ public final class SwapRemapper {
 			}
 		}
 		if (remapped > 0) LOGGER.info("[swaps] {}: {} id(s) remapped to their survivors", event.getKey().location(), remapped);
+		if (ignored > 0) LOGGER.info("[swaps] {}: {} removed id(s) dropped (listed as removed, no replacement)", event.getKey().location(), ignored);
 		if (unresolved > 0) LOGGER.warn("[swaps] {}: {} listed id(s) had no survivor", event.getKey().location(), unresolved);
 	}
 

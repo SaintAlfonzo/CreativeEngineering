@@ -6,7 +6,7 @@
 //       kubejs/data/creativedelight/kubejs/    -> data/creativedelight/kubejs/    (server scripts)
 //       kubejs/assets/creativedelight/kubejs/  -> assets/creativedelight/kubejs/  (client scripts)
 //       kubejs/data/creativedelight/worldgen/  -> data/creativedelight/worldgen/  (wild crop features, 24)
-//       kubejs/data/creativedelight/cup_conversion/ -> data/creativedelight/cup_conversion/ (Miner's cups, 27)
+//       kubejs/data/creativedelight/cup_conversion/ -> data/creativedelight/cup_conversion/ (Miner's cups, 27; empty since the cup foods went, dishes/meals #53)
 //       kubejs/data/creativedelight/loot_tables/ -> data/creativedelight/loot_tables/ (Oceanic fishing net tables, 5)
 //     Startup scripts live in this project (src/main/resources/kubejs_startup/creativedelight/), loaded from the
 //     jar by patcherMod's startup loader.

@@ -6,8 +6,8 @@ ServerEvents.tags('item', e => {
 	var t = global.tags
 	var i = global.item
 
-	// sugar (powdered sugar: creativeengineering/tags.js)
-	t.add(e, 'forge:sugar', i.glycerol)
+	// Glycerol is not a sugar (TODO dishes/ingredients #29, 2026-11-02): out of #forge:sugar and so out of every sweetener slot
+	t.remove(e, 'forge:sugar', i.glycerol)
 
 	// flour / dough cleanup (the Farmer's Delight dough: farmersdelight/tags.js)
 	t.clearAll(e, i.wheat_flour_pc)

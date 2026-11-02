@@ -344,3 +344,5 @@ just stops working (at most a log warning) or breaks later in play. The pack's m
   `pack/release #7`). Since then patcherMod 1.1.04 (2026-10-31 00:44), Creative Delight (00:29), Vinery `-06` (00:41),
   Brewin' `-04` (00:30) and three new third-party jars (Botany Pots, Cozy's Improved Cats, Room for Two) went into
   `mods/`; they belong to the next version.
+
+- 2026-11-02, owner: the Creative Delight cutover goes in the next deployment (unless a fix has to be pushed first); the Creative Split deployment is **1.2.00**. Release numbers are not yet staged.

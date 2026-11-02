@@ -11,6 +11,8 @@
 //   /zq count x1 y1 z1 x2 y2 z2 <block>   blocks of that id in a box and what they stand on (loaded chunks only)
 //   /zq ages x1 y1 z1 x2 y2 z2 <block>    histogram and mean of the block's age property in a box (crop growth comparisons)
 //   /zq floating <x> <z> <r> sand / red sand / gravel with air below, y 0 to 140 (loaded chunks only, first 10)
+//   /zq under <x> <z> <rChunks> [id text|-] [dim]   structure starts judged on the placed blocks: air / water under the
+//                            built bottom, water and earth_fill/earth ids in the base, native ring, foreign earth (SQ-EFB)
 //   /zq chunk <x> <z> [dim]  ticket level, status and tickets of the chunk at block x z
 //   /zq biometag <tag id>    biomes in a biome tag
 //   /zq itemtag <tag id>     items in an item tag
@@ -153,6 +155,92 @@
                 }
                 if (want) out('count ' + want + ': ' + n + (skipped ? ' (' + skipped + ' columns in unloaded chunks skipped)' : '') + '; on: ' + Object.keys(under).map(k => k + ' ' + under[k]).join(', '))
                 else { found.forEach(f => out('floating ' + f)); out('floating: ' + found.length + ' found' + (skipped ? ', ' + skipped + ' columns unloaded' : '')) }
+            } else if (what == 'under') {
+                // under <x> <z> <rChunks> [id text] [dim]: every structure start in the loaded chunks of the square, judged on
+                // the blocks really placed (earth fill only cancels or prunes; the beard fills and ground match swaps).
+                // Per start, over the columns of its pieces (each column once, at the lowest built block of the boxes):
+                //   air-below    columns whose first block under the built bottom is air; max gap; gaps over 6 (beardReach)
+                //   water-below  same for water (waterlogged counts); max depth
+                //   base water   water inside the bottom 3 layers of the structure (a flooded floor)
+                //   base earth   ids of earth_fill/earth blocks left in the bottom 3 layers (after ground match)
+                //   ring         top blocks (OCEAN_FLOOR) every 2 blocks on a ring 3 out from the start's box: the native ground
+                //   foreign      base earth ids that never occur in the ring (ground match should have swapped them)
+                // Untested before its first scratch run (written 2026-11-02 for SQ-EFB); first 30 starts only.
+                let a = arg.split(' '), cx0 = (+a[0]) >> 4, cz0 = (+a[1]) >> 4, r = +a[2], filt = a[3] && a[3] != '-' ? a[3] : null
+                let dim = a[4] || 'minecraft:overworld', lv = null
+                server.getAllLevels().forEach(l => { if (String(l.dimension) == dim) lv = l })
+                if (!lv) { out('under: no level ' + dim); out('done'); return }
+                let $P = Java.loadClass('net.minecraft.core.BlockPos')
+                let $HT = Java.loadClass('net.minecraft.world.level.levelgen.Heightmap$Types')
+                let sreg = lv.registryAccess().registryOrThrow($ZQReg.STRUCTURE_REGISTRY)
+                let earth = {}
+                $ZQReg.BLOCK.getTagOrEmpty($ZQTagKey.create($ZQReg.BLOCK_REGISTRY, new $ZQRL('creativeengineering:earth_fill/earth')))
+                    .forEach(h => { earth[String($ZQReg.BLOCK.getKey(h.value()))] = 1 })
+                function idAt(x, y, z) { return String($ZQReg.BLOCK.getKey(lv.getBlockState(new $P(x, y, z)).getBlock())) }
+                function kind(x, y, z) {
+                    let st = lv.getBlockState(new $P(x, y, z))
+                    let fl = String($ZQReg.FLUID.getKey(st.getFluidState().getType()))
+                    if (fl.indexOf('water') >= 0) return 'water'
+                    if (st.isAir() || !st.getMaterial().isSolid()) return 'air'
+                    return 'solid'
+                }
+                function top(m) { return Object.keys(m).sort((p, q) => m[q] - m[p]).slice(0, 6).map(k => k + ' ' + m[k]).join(', ') }
+                let shown = 0, skipped = 0
+                for (let cx = cx0 - r; cx <= cx0 + r && shown < 30; cx++) for (let cz = cz0 - r; cz <= cz0 + r && shown < 30; cz++) {
+                    if (!lv.hasChunk(cx, cz)) { skipped++; continue }
+                    lv.getChunk(cx, cz).getAllStarts().entrySet().forEach(en => {
+                        if (shown >= 30) return
+                        let st = en.getValue()
+                        if (!st.isValid()) return
+                        let id = String(sreg.getKey(en.getKey()))
+                        if (filt && id.indexOf(filt) < 0) return
+                        let cols = {}
+                        st.getPieces().forEach(pc => {
+                            let b = pc.getBoundingBox()
+                            for (let x = b.minX(); x <= b.maxX(); x++) for (let z = b.minZ(); z <= b.maxZ(); z++) {
+                                let k = x + ',' + z, c = cols[k]
+                                if (!c) cols[k] = [b.minY(), b.maxY()]
+                                else { c[0] = Math.min(c[0], b.minY()); c[1] = Math.max(c[1], b.maxY()) }
+                            }
+                        })
+                        let n = 0, airB = 0, gapMax = 0, deep = 0, watB = 0, watMax = 0, baseWat = 0, baseEarth = {}, unloaded = 0
+                        Object.keys(cols).forEach(k => {
+                            let xz = k.split(','), x = +xz[0], z = +xz[1], c = cols[k]
+                            if (!lv.hasChunk(x >> 4, z >> 4)) { unloaded++; return }
+                            let y0 = null
+                            for (let y = c[0]; y <= c[1]; y++) if (kind(x, y, z) == 'solid') { y0 = y; break }
+                            if (y0 == null) return
+                            n++
+                            for (let y = y0; y <= y0 + 2; y++) {
+                                if (kind(x, y, z) == 'water') baseWat++
+                                let bid = idAt(x, y, z)
+                                if (earth[bid]) baseEarth[bid] = (baseEarth[bid] || 0) + 1
+                            }
+                            let first = kind(x, y0 - 1, z)
+                            if (first == 'solid') return
+                            let gap = 0, wat = 0
+                            for (let y = y0 - 1; y > y0 - 65; y--) { let kd = kind(x, y, z); if (kd == 'solid') break; gap++; if (kd == 'water') wat++ }
+                            if (first == 'air') { airB++; gapMax = Math.max(gapMax, gap) } else { watB++; watMax = Math.max(watMax, wat) }
+                            if (gap > 6) deep++
+                        })
+                        let bb = st.getBoundingBox(), ring = {}
+                        for (let x = bb.minX() - 3; x <= bb.maxX() + 3; x += 2) for (let z = bb.minZ() - 3; z <= bb.maxZ() + 3; z += 2) {
+                            if (x > bb.minX() - 3 && x < bb.maxX() + 2 && z > bb.minZ() - 3 && z < bb.maxZ() + 2) continue
+                            if (!lv.hasChunk(x >> 4, z >> 4)) continue
+                            let t = idAt(x, lv.getHeight($HT.OCEAN_FLOOR, x, z) - 1, z)
+                            ring[t] = (ring[t] || 0) + 1
+                        }
+                        let foreign = Object.keys(baseEarth).filter(k => !ring[k])
+                        let o = st.getChunkPos()
+                        out('under ' + id + ' chunk ' + o.x + ' ' + o.z + ' box ' + bb.minX() + ' ' + bb.minY() + ' ' + bb.minZ() + ' to ' + bb.maxX() + ' ' + bb.maxY() + ' ' + bb.maxZ()
+                            + ' | pieces ' + st.getPieces().size() + ' cols ' + n + (unloaded ? ' (' + unloaded + ' unloaded)' : '')
+                            + ' | air-below ' + airB + ' max ' + gapMax + ' over6 ' + deep + ' | water-below ' + watB + ' max ' + watMax
+                            + ' | base water ' + baseWat + ' | base earth: ' + (top(baseEarth) || 'none') + ' | ring: ' + top(ring)
+                            + ' | foreign: ' + (foreign.length ? foreign.join(', ') : 'none'))
+                        shown++
+                    })
+                }
+                out('under: ' + shown + ' starts' + (skipped ? ', ' + skipped + ' chunks unloaded' : ''))
             } else if (what == 'chunk') {
                 // chunk <x> <z> (block coords) [dim]: ticket level, status and tickets (ServerChunkCache.getChunkDebugData)
                 let a = arg.split(' '), dim = a[2] || 'minecraft:overworld', lv = null

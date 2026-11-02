@@ -44,11 +44,11 @@ engine" now means these scripts.
 |---|---|---|---|---|---|
 | End's Delight | `ends_delight-1.19.2-2.1.jar` | `ends_delight` | MIT (FoggyHillside) | [ends_delight.md](ends_delight.md) | CD member `repackedEnds` -02 (overlay: dragon loot, tooth tier mixin, 13 textures) and rows in CD `ends_delight/`, BUILT 2026-10-25 (ends_delight.md 5) |
 | Nether's Delight | `NethersDelight-1.19-3.1.jar` (until the CD install moves it out) | `nethersdelight` | MIT (Umpaz) | [nethers_delight.md](nethers_delight.md) | CD member `repackedNethers` -01 (overlay: Potted Mimicarnation, Fungus Colony 4.0 rules mixin, 4.0 recipe paths) and rows in CD `nethersdelight/`, BUILT 2026-11-01, not installed (nethers_delight.md 4.9) |
-| Ender's Delight | `endersdelight-1.19-1.2.2.jar` | `endersdelight` | **All rights reserved** (Ax3dgaming, Furti Two) | [ends_delight.md](ends_delight.md) | dict, cooking, potions, `end.js`, shield and damage tags |
+| Ender's Delight | `endersdelight-1.19-1.2.2.jar` (to leave `mods/`; donor `enders_upstream/endersdelight-1.2.2.jar`) | `endersdelight` | **All rights reserved** (Ax3dgaming, Furti Two) | [ends_delight.md](ends_delight.md) | dict, cooking, potions, `end.js`, shield and damage tags. **Owner 2026-11-02: becomes a donor-route member nested in CD (section 38.1, `members #33`), not built** |
 | Ender's Delight Additions | in `creativedelight` (member `endersAdditions`) | `enders_additions` (registers `endersdelight:` ids) | MIT art and data from Ender's 1.1.4 (Axedgaming); code GPL3 | [ends_delight.md](ends_delight.md) 5.3 | BUILT 2026-10-25: 4 End plants, 6 items, End House, Chorus Crate and Endstone Stove loot tables |
 | Cooking for Blockheads Additions | in `creativedelight` (member `blockheadsAdditions`); Cooking for Blockheads itself stays `cookingforblockheads-forge-1.19.2-13.3.4.jar` | `blockheads_additions` (registers `cookingforblockheads:` ids) | Cooking for Blockheads **All rights reserved** (BlayTheNinth; modpack use only, no rehosting or published modified files), so not repacked; member code, art and data ours, GPL3 | [kitchen.md](kitchen.md) 9 | BUILT 2026-10-31: 40 wood racks, the CfB mixins, corner storage and counter toppers from patcherMod, fridge fill in code |
 | Ocean's Delight | `oceansdelight-1.0.2-1.19.2.jar` | `oceansdelight` | MIT (Scouter456) | [ocean_delight.md](ocean_delight.md) | names (caviar) only |
-| Oceanic Delight | `oceanic_delight-1.0.1-forge-1.19.2.jar` | `oceanic_delight` | MIT (DariusZeBaguette, MCreator build) | [ocean_delight.md](ocean_delight.md) | dict block, fishing net mixin and loot tables |
+| Oceanic Delight | donor `oceanic_upstream/oceanic_delight-1.0.1-forge-1.19.2.jar` (not in `mods/`) | `oceanic_delight` | MIT upstream; our code GPL3 | [ocean_delight.md](ocean_delight.md) 5.6 | CD member `portedOceanic` `-02` on the donor route (section 36): own code for every upstream id, art and data read from the donor jar; fishing net, dict block, loot tables |
 
 "The Ender and Ocean mods" is read as all four jars above (End's and Ender's, Ocean's and Oceanic). Corrections welcome.
 
@@ -524,6 +524,9 @@ Unlike patcherMod, Creative Delight runs **swappers** on removed or replaced ite
 `data/<modid>/swaps/*.json` from every loaded jar and `swap/SwapRemapper` remaps them on Forge's `MissingMappingsEvent`
 (creative_split.md 7.7). Format as proposed below plus a `namespaces` table. First use: the `creative_delight` ->
 `creativedelight` id move. The script half (row 2) and live-item merges are still open.
+A `removed` list (2026-11-02, plan_creative_delight.md I1) names ids dropped with no replacement: `SwapRemapper` gives them
+Forge's ignore action (no missing-registry warning; the blocks and items are gone, never converted). First entry, in CD
+`swaps/removed.json`: `displaydelight:od_plated_baked_tentacle_on_a_stick`.
 Survivors are resolved in Forge's ACTIVE registry: on a world load the event comes from the STAGING copy, which holds
 only the save's ids (1.1.06 looked there and left every renamed block missing; fixed in 1.1.07, scratch run
 2026-11-01 7). Blocks in chunks are saved by name, so a world opened once without the remap keeps unresolved names
@@ -1587,7 +1590,7 @@ Scratch check SQ-CM-10 in scratch_queue.md; changelog bullet in Food & Cooking.
 
 ## 33. Owner decisions on the open member items (2026-11-01)
 
-Recorded in the Decisions column of each TODO row; this is the index. Nothing here is built unless stated.
+Recorded in the Decisions column of each TODO row; this is the index. Nothing here is built unless stated.  Later answers: section 38 (2026-11-02).
 
 | Member | Decision | Rows |
 |---|---|---|
@@ -1810,3 +1813,73 @@ sha1-pinned in the member's `upstream/UpstreamJars`, read at load into two botto
 ## 37. Drink rules (owner, 2026-11-01)
 
 Juice, tea and coffee recipe rules, exceptions and the missed-drink audit are in [creative_delight_drinks.md](creative_delight_drinks.md). Not built.
+
+## 38. Owner decisions of 2026-11-02 and the cooking mod survey
+
+Recorded in the TODO rows named below. Only the Oceanic wording, docs and TODO rows changed; nothing here is built.
+
+### 38.1 Ender's Delight 1.2.2 as a donor-route member (`members #33`)
+
+Owner: Ender's Delight should also reference its upstream jar and be nested in Creative Delight, as Oceanic is (section 36).
+Plan, nothing built:
+
+1. Inventory the installed 1.2.2 jar (items, blocks, block entities, recipes, loot, tags, lang, mixins) against what the pack
+   already builds: the pack scripts, the dict rows, `end.js`, shield and damage tags, and the `enders_additions` member.
+2. New member (name `portedEnders`, mod id `endersdelight`, same ids and block state properties, so old worlds load): our own
+   code for every upstream id; art and data read from the sha1-pinned, unmodified `enders_upstream/endersdelight-1.2.2.jar`
+   (ARR: nothing of it ships; `checkNoUpstreamResources`, `check_donor.py`).
+3. Fold the 1.1.4 content of `enders_additions` into it (the 1.1.4 donor jar can then go); one display name,
+   "Ender's Delight (Creative Delight)".
+4. The standalone `endersdelight-1.19-1.2.2.jar` leaves `mods/`; `replaces_jars` and `UPSTREAM_DONORS` gain the row; the
+   server and clients get `enders_upstream/` with the 1.2.2 file.
+5. Same checks as Oceanic: SQ-DNR rows for a missing and a wrong jar, an old world with End plants.
+
+The 1.2.2 licence stays ARR; this is the Miner's method, no copied file. The open question from `members #9` (does the 1.1.4
+MIT grant cover shared content) becomes moot for the new member.
+
+### 38.2 Cooking and food mods not in Creative Delight
+
+Read from `mods/`, `mod_sides.md` and `development/creativeDelight/members/` on 2026-11-02. Nested members today:
+Farmer's, Ocean's, End's, Nether's (built, not installed), Oceanic and Ender's Additions (donor), Rustic, Delightful, Hearth and
+Harvest, Roll, Large Meals, Barbeque's, Cooking for Blockheads Additions, Baby Mobs, Incubation.
+
+| Mod (jar in `mods/`) | Where it is now | Note |
+|---|---|---|
+| Veggies, Vintage, Fungi, Miner's, Display Delight ports (`backported*`) | Own jars, pack rows already in CD trees | Bundling is `members #1`; Display is not in that list |
+| Ender's Delight 1.2.2 | Standalone ARR jar | To become a member (38.1) |
+| Fruits Delight, Farmer's Respite, Corn Delight, More Delight, Abnormals Delight, Alex's Delight, Quark Delight, Hostile Delight | Standalone jars, CD script folders for their rows | Third-party; can only nest if MIT/repack-able or by donor route; licences not yet checked per mod |
+| Chefs Delight, Engineers Delight, KubeJSDelight | Standalone | No CD folder and no integration found |
+| Storage Delight | `repackedStorage` own jar, not a member | Built but not nested |
+| Cooking for Blockheads | Standalone, ARR | Stays; `blockheads_additions` is the member |
+| Applied Cooking, Golden Food, Create Central Kitchen, Farmer's Structures, Canned Goods, SoL: Apple Pie, The Salt / Salt | Standalone | Cooking or food adjacent, not Delight add-ons; Farmer's Structures has its own donor handling |
+| Brewin' and Vinery | Creative Brewing | Not CD |
+
+Decision needed per row (`members #34`): member, donor, or stays separate. Hostile, Display and the three no-folder mods are
+the first to decide.
+
+### 38.3 Drinks, pancakes, reviews, release numbers
+
+- Drink rules answered in full: [creative_delight_drinks.md](creative_delight_drinks.md) sections 3, 4, 6, 7. Build is `food/drinks #15`.
+- Milkshakes pinned as their own family (`food/drinks #13`). Hot cocoa and apple cider review (`food/drinks #14`).
+- Supplementaries pancake art approved. The Stackable Pancake as the family base is under review (`merges/baking #2`); it
+  blocks the pancake family rule and Veggies R7.
+- Vintage overlap review closed: pizzas are all in the pack and none overlap; salt merge verified complete; salted cod and
+  salmon removed (vintage_delight.md 3.3). Only the vine tree set (VTD-47) remains in `ports/vintageport #6`.
+- Release numbers: the CD cutover goes in the next deployment unless a fix must go first; Creative Split is 1.2.00.
+
+### 38.4 Display Delight member, namespace and config (owner, 2026-11-02)
+
+- Display Delight becomes a Creative Delight member (`members #35`): mod id `displaydelight` kept, display name
+  "Display Delight (Creative Delight)", joins the bundling list of `members #1`.
+- Recipes written by Creative Delight use the namespace `creativedelight`.
+- CD has its own config (`creativedelight-common.toml`) and handles intra-mod changes: a setting that can be isolated to one
+  mod, or that belongs to a backport or rebuild, lives in the CD config.
+- Execution plan with the decided and waiting rows: [plan_creative_delight.md](plan_creative_delight.md). G steps 1 to 3
+  built 2026-11-02 (plan section H): Display is `members/display` and the five ports are nested in the installed CD jar;
+  Display and Vintage settings live in CD `[display]` / `[vintage]`, old files read once and renamed `.moved`. Not tested.
+  Plan I (fixes after r1102) built 2026-11-02 afternoon: the Veggies, Vintage, Fungi and Miner's folders moved to
+  `members/{veggies,vintage,fungi,miners}` (I8, all five ports are now members in folder as well as in the jar). Confirmed
+  as built (I9, owner): the tool and misc dictionary category names with the `item_` catch-all (`tool_dict.js`,
+  `misc_dict.js`), and Display's `[display]` keys with the old "Disable..." keys inverted. Swap lists gained a
+  `removed` key for ids dropped with no replacement (section 11; first entry the Display tentacle plate).
+

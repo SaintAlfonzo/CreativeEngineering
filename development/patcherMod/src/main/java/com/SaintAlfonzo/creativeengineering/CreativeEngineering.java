@@ -345,6 +345,8 @@ public class CreativeEngineering
             // Lunchbox looks, cob pipe renderer and the oven screen: Creative Delight (2026-11-01).
             if (net.minecraftforge.fml.ModList.get().isLoaded("curios")) {
                 MinecraftForge.EVENT_BUS.register(com.SaintAlfonzo.creativeengineering.stepstool.client.StepstoolClient.class);
+                // "Slot:" line on every Curios item, also where the item's mod hides it (ui/tooltips #8).
+                MinecraftForge.EVENT_BUS.register(com.SaintAlfonzo.creativeengineering.compat.CuriosSlotTooltip.class);
             }
         }
 

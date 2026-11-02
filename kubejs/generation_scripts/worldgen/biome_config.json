@@ -1261,7 +1261,7 @@
           "result_pct": 3.95
         },
         "nullscape:shadowlands": {
-          "multiplier": 0.5,
+          "multiplier": 0.75,
           "replace_with": null,
           "entries": 1,
           "layer": "surface",

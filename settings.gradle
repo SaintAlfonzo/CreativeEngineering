@@ -29,16 +29,17 @@ plugins {
 rootProject.name = 'CreativeEngineering'
 
 // The mod folders live under development/; project names (and :task paths) stay the bare mod names.
-['patcherMod', 'exposureBackport', 'moreMooblooms', 'creativeLabels', 'backportedVeggies', 'backportedVintage', 'backportedFungi', 'backportedMiners', 'backportedDisplay', 'repackedStorage', 'creativeCalendar', 'creativeCompat'].each { name ->
+['patcherMod', 'exposureBackport', 'moreMooblooms', 'creativeLabels', 'repackedStorage', 'creativeCalendar', 'creativeCompat'].each { name ->
     include name
     project(":${name}").projectDir = file("development/${name}")
 }
 
 // Creative Delight (feature_writeup/creative_delight.md 14.3): the bundle, and its repacked members (ce.forge-repack)
-// under development/creativeDelight/members/. Project name = the member's jar_name.
+// under development/creativeDelight/members/. Project name = the member's jar_name. The Veggies, Vintage, Fungi,
+// Miner's and Display ports are members too (bundle_members, 2026-11-02; folders moved here the same day).
 include 'creativeDelight'
 project(':creativeDelight').projectDir = file('development/creativeDelight')
-['repackedFarmers': 'farmers', 'repackedOceans': 'oceans', 'portedOceanic': 'oceanic', 'repackedEnds': 'ends', 'repackedNethers': 'nethers', 'backportedRustic': 'rustic', 'backportedRoll': 'roll', 'backportedLargeMeals': 'largemeals', 'repackedDelightful': 'delightful', 'endersAdditions': 'enders', 'backportedHearth': 'hearth', 'blockheadsAdditions': 'blockheads', 'babyMobs': 'babymobs', 'incubationAdditions': 'incubation', 'backportedBarbeques': 'barbeques'].each { name, dir ->
+['repackedFarmers': 'farmers', 'repackedOceans': 'oceans', 'portedOceanic': 'oceanic', 'repackedEnds': 'ends', 'repackedNethers': 'nethers', 'backportedRustic': 'rustic', 'backportedRoll': 'roll', 'backportedLargeMeals': 'largemeals', 'repackedDelightful': 'delightful', 'endersAdditions': 'enders', 'backportedHearth': 'hearth', 'blockheadsAdditions': 'blockheads', 'babyMobs': 'babymobs', 'incubationAdditions': 'incubation', 'backportedBarbeques': 'barbeques', 'backportedDisplay': 'display', 'backportedVeggies': 'veggies', 'backportedVintage': 'vintage', 'backportedFungi': 'fungi', 'backportedMiners': 'miners'].each { name, dir ->
     include name
     project(":${name}").projectDir = file("development/creativeDelight/members/${dir}")
 }

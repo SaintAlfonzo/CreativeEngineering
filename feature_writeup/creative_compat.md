@@ -10,7 +10,7 @@ Every other Creative jar requires it (Common <- Compat <- content jars). Same be
 ## 1. What it holds
 
 - **Java** (`com.SaintAlfonzo.creativecompat`, same subpackages as in patcherMod): `compat/` (banner pattern atlas,
-  botanist pot, Polymorph in Sophisticated / vanilla crafting, Supplementaries jar mixing, Handcrafted nightstands,
+  botanist pot, Polymorph in Sophisticated / vanilla crafting, Supplementaries jar mixing, jar fluid pipes (JarFluidPipes, 2026-11-02), Handcrafted nightstands,
   plant box models, Quark safe sort, sack bundle and scroll, spout gun farmland, Supplementaries flower box, TrashSlot),
   `itemphysic/` (split, burn transform, burn blast damage, Allurement curses), `campfire/` (comfort, rain),
   `block/` (MossTint, VineShearing), `mobs/MonsterBoxVault`, and the JEI world rows `compat/jei/BurnRows`,

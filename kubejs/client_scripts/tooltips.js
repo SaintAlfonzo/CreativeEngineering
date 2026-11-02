@@ -410,10 +410,10 @@ var i = global.item;
 		[i.slingshot, ['Place blocks from a distance', col.uncm], ['Stasis enchantment removes gravity and highlights target', col.norm]]
 	);
 
-	//Stepstools (patcherMod stepstool/; feature_writeup/stepstool.md)
+	//Stepstools (patcherMod stepstool/; feature_writeup/stepstool.md). The slot comes from Curios' "Slot: Feet" line.
 	;['white', 'orange', 'magenta', 'light_blue', 'yellow', 'lime', 'pink', 'gray',
 		'light_gray', 'cyan', 'purple', 'blue', 'brown', 'green', 'red', 'black'].forEach(c =>
-		addTooltips(e, [i[c + '_stepstool'], ['Worn in the Feet slot', col.uncm],
+		addTooltips(e, [i[c + '_stepstool'],
 			['Stand still and hold Sprint + Jump to step up', col.norm], ['Move, crouch or jump to step off', col.norm]]))
 				
 // ############################## Crafting Materials ##############################	

@@ -3,7 +3,7 @@
 > **Merge note (2026-10-25):** this port is to be merged with the other Farmer's Delight add-on backports into a single jar, **Creative Delight**. The inventory summary, cross-port interactions and the merge process are in [creative_delight.md](creative_delight.md). This file stays the detailed record for Miner's Delight; its registry namespace and test prefix do not change.
 
 Plan written 2026-10-24, revised the same day with the owner's answers. **The port is BUILT 2026-10-24**
-(`development/backportedMiners`, jar `backportedMiners-1.4.5-ce-19.2-01.jar`, offline checks pass, §7) **installed in `mods/`
+(`development/creativeDelight/members/miners`, jar `backportedMiners-1.4.5-ce-19.2-01.jar`, offline checks pass, §7) **installed in `mods/`
 and shipped in 1.1.03** (deployed to server and players 2026-10-26; boot check SQ-MDP-01 PASSED 2026-10-25). The cave carrot worldgen is built too (§4.3). Goal (owner): one Forge 1.19.2 jar that holds all content of the old Miner's Delight (1.1.2,
 live on the server since 1.1.02) and the new one (1.4.5). Some content will be dropped later, but only after it has
 been seen in game: the first build ships everything, and the drops are decided in a review test (§3.3, `MND-40`).
@@ -160,12 +160,12 @@ holds it) and in the data the port ships.
 
 ## 4. Work
 
-### 4.1 Port (development/backportedMiners)
+### 4.1 Port (development/creativeDelight/members/miners)
 
 | Step | Work |
 |---|---|
 | P1 | Pick the donor (D12): confirm where the Forge 1.20.1 1.4.5 jar is downloaded from, record its sha1 and download URL for the publish step |
-| P2 | New project `development/backportedMiners` like `backportedVintage`: `gradle.properties` (`mod_id=miners_delight`, `mod_version=1.4.5-ce-19.2-01`, `jar_name=backportedMiners`, GPLv3, **no** upstream notice file because nothing upstream is shipped), `settings.gradle` include, `installToMods`. Copy the three generic donor classes from the Vinery port's `forge/upstream` (`UpstreamJars` sha1 pin, `MemoryPackResources`, `UpstreamPacks`) |
+| P2 | New project `development/creativeDelight/members/miners` like `backportedVintage`: `gradle.properties` (`mod_id=miners_delight`, `mod_version=1.4.5-ce-19.2-01`, `jar_name=backportedMiners`, GPLv3, **no** upstream notice file because nothing upstream is shipped), `settings.gradle` include, `installToMods`. Copy the three generic donor classes from the Vinery port's `forge/upstream` (`UpstreamJars` sha1 pin, `MemoryPackResources`, `UpstreamPacks`) |
 | P3 | `upstream/MinersTranslator`: the in-memory view of the donor: lists the donor's assets and data as a `PackResources` (client resource pack and server data pack, both sides), drops `hot_cocoa_cup` and every file naming it, moves the 10 stray `data/minersdelight/` recipes under `miners_delight/`, applies `REMOVED` ids and `patchData` for later drops, takes lang from the donor `en_us.json`. Fail fast at startup if the donor jar is missing or its sha1 differs (Vinery behaviour). A tool `tools/check_donor.py` reports every id the donor's data names against the registered ids |
 | P4 | Java, written from behaviour (D13): `DeferredRegister` for 69 items / 10 blocks / 4 potions, copper pot (block, entity, menu, screen, recipe book, result slot, item handler), sticky basket, cups (`CopperCupItem`, `SolidCupItem`, `MilkCupItem`, `CopperCupFoodItem`, `HoneyBarItem`, `SilverfishEggsItem`), the 3 feast blocks, wild cave carrot and gossypium blocks, loot modifier types (`AddSeveralItemsModifier`, `ReplaceDroppedLootModifier`, block tag condition, copy-meal function), cup conversion reload listener, cauldron interactions, composting, food values (read from the donor's behaviour, kept equal), the one `FoodPropertiesMixin`, JEI category for JEI 11. 1.19.2 API from the start (no `GuiGraphics`, `getResultItem()`, a `CreativeModeTab` subclass); this is where the 1.20 differences found by grep do not matter any more, because nothing is translated |
 | P5 | Farmer's Delight 1.19.2-1.2.4 gaps: `BlockShapes` (used by the two new feast blocks; copy the shapes) and `PlaceableItem` (`MDBlocks`; a small `BlockItem` subclass) are missing; every other FD class the code imports exists |
@@ -183,10 +183,10 @@ close.
   `jar_archive/displaced/` together with any older port jar. No upstream notice file.
 - P3: `MinersTranslator` also renames the 1.20 loot condition `minecraft:any_of` to `minecraft:alternative` (4 loot
   modifiers use it; 1.19.2 would reject them) and drops the 5 dangling entries of `global_loot_modifiers.json` (D8). The
-  check tool is `development/backportedMiners/tools/check_donor.py` (0 problems: 63 recipes, 11 loot tables, 18 loot
+  check tool is `development/creativeDelight/members/miners/tools/check_donor.py` (0 problems: 63 recipes, 11 loot tables, 18 loot
   modifiers, 35 tags, the cup rows).
 - P4: 49 classes. The pot and basket follow Farmer's Delight's own pot and basket (MIT), which the upstream classes
-  mirror. Differences from upstream behaviour are listed in `development/backportedMiners/README.md` (the empty cup
+  mirror. Differences from upstream behaviour are listed in `development/creativeDelight/members/miners/README.md` (the empty cup
   milks only cows and goats, no Forge fluid capability on cups, two no-op brewing steps left out, "Served on" tooltip
   on the meal display slot, cup table sent to clients). The cup foods read their bowl's effects through the accessor
   mixin (`FoodPropertiesAccessor`) so FD's effects resolve only when eaten; `PotionBrewing.addMix` is opened by the
@@ -257,8 +257,8 @@ rule (`forge:none`); it is skipped without the mod.
 
 | File | Role |
 |---|---|
-| `development/backportedMiners/` | The port (new) |
-| `development/backportedMiners/.../upstream/` | Donor view: sha1 pin (`UpstreamJars`), translator (nothing upstream in the jar); the jar reading and the in-memory packs are the shared `DonorJars` / `BuiltInPacks` / `MemoryPackResources` ([pack_tooling.md](pack_tooling.md) 2.8), registered in `MinersDelightMod` |
+| `development/creativeDelight/members/miners/` | The port (new) |
+| `development/creativeDelight/members/miners/.../upstream/` | Donor view: sha1 pin (`UpstreamJars`), translator (nothing upstream in the jar); the jar reading and the in-memory packs are the shared `DonorJars` / `BuiltInPacks` / `MemoryPackResources` ([pack_tooling.md](pack_tooling.md) 2.8), registered in `MinersDelightMod` |
 | `miners_upstream/` | The donor jar (server and client), like `vinery_upstream/` |
 | `settings.gradle` | Include |
 | `kubejs/startup_scripts/_lib/item_dict.js` | Keys |
@@ -363,6 +363,7 @@ Review (decides the drops)
   checks pass (§7), I2 done; jar swap (P8) waits for the game to close. Found while building: 1.20's `any_of` loot
   condition and 5 dangling global loot modifier entries (both handled in the translator), and the cup conversion data
   path (`cup_conversion/` at the namespace root).
+- **2026-11-02:** nested in Creative Delight (`creativedelight/members #1`): `bundled_in=creativeDelight`, jar `backportedMiners-1.4.5-ce-19.2-03` inside the CD jar, "Miner's Delight (Creative Delight)" (also in the donor-missing message); folder stays `development/creativeDelight/members/miners`. `miners_upstream/` is unchanged (both jars, next to `mods/` on server and clients); `build_deploy.py` now ties it to the CD jar. `miners_delight-*.jar` moved to CD's `replaces_jars`.
 
 ## 10. Original survey (2026-10-23, before the port plan)
 
@@ -427,3 +428,9 @@ tentacles, stuffed squid bowl, weird caviar), 62 textures new, none removed (the
 folder). Magenta cells are masks and overlays that are not standalone art. Generated into the session scratchpad
 (`mj/miners_before_after.png`, script `mj/make.py`), deliberately not in the repo: the art is all rights reserved.
 Haste: one Creative Engineering effect shared by all sources (`potions/effects #17`, D7 overlap with Rustic's haste).
+- **2026-11-02 (afternoon):** folder moved to `development/creativeDelight/members/miners` (plan_creative_delight.md I8),
+  port `-04`. Fixes after scratch r1102: Cave Hamburger recipe back with calamari or brown mushroom in the former
+  baked-tentacle slots (I3, CD `miners_delight/recipes.js`); the Copper Pot no longer cooks into a full leftover slot when
+  the meal slot is empty (I4, `canCook`); the cave carrot crate rule now reaches `md_abandoned_mineshaft` because
+  `tools/gen_loot_config.py` reads the 1.4.5 donor jar (I5); `scavenging_spider` gets the upstream-missing `is_on_fire:false`
+  through `MinersTranslator.PATCH_DATA` (I7). Reruns: SQ-MDP-13, -14, -16 / -09, new SQ-MDP-18.

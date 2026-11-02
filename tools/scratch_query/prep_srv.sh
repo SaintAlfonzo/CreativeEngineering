@@ -29,8 +29,8 @@ done
 SWAPS=(
   "creativeengineering-*.jar|$(ls -t "$INST"/development/patcherMod/build/libs/creativeengineering-*.jar | head -1)"
   "creativedelight-*.jar|$INST/development/creativeDelight/build/libs/creativedelight-1.0.0.jar"
-  "backportedVintage-*.jar|$INST/development/backportedVintage/build/libs/backportedVintage-0.1.6-ce-19.2-09.jar"
-  "backportedVeggies-*.jar|$INST/development/backportedVeggies/build/libs/backportedVeggies-1.9.2-ce-19.2-03.jar"
+  # Veggies, Vintage, Fungi, Miner's and Display are nested in the CD jar since 2026-11-02 (plan_creative_delight.md H):
+  # no standalone swap rows for them (a rebuilt member reaches the scratch server through a rebuilt CD jar)
   "creativebrewing-*.jar|$INST/development/creativeBrewing/build/libs/creativebrewing-1.0.0.jar"
   "creativecompat-*.jar|$INST/development/creativeCompat/build/libs/creativecompat-1.0.0.jar"
   "creativecalendar-*.jar|$INST/development/creativeCalendar/build/libs/creativecalendar-1.0.0.jar"
@@ -54,11 +54,11 @@ done
 if ls mods/creativebrewing-*.jar >/dev/null 2>&1; then
   rm -f mods/backportedVinery-*.jar mods/backportedBrewin-*.jar mods/letsdo-vinery-forge-1.3.10.jar mods/doapi-*.jar mods/BrewinAndChewin-1.19-*.jar
 fi
-# Creative Delight nests Baby Mobs and Incubation Additions since wave 4 (creative_split.md 7.8): a standalone jar
-# would win over the nested one
+# Creative Delight nests Baby Mobs and Incubation Additions since wave 4 (creative_split.md 7.8) and the five ports
+# (Veggies, Vintage, Fungi, Miner's, Display) since 2026-11-02: a standalone jar would win over the nested one
 for cd in mods/creativedelight-*.jar; do
   [ -f "$cd" ] || continue
-  for m in babyMobs incubationAdditions; do
+  for m in babyMobs incubationAdditions backportedVeggies backportedVintage backportedFungi backportedMiners backportedDisplay; do
     if unzip -l "$cd" | grep -q "META-INF/jarjar/$m-"; then rm -f mods/$m-*.jar; echo "nested in CD: dropped standalone $m"; fi
   done
 done

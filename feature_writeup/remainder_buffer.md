@@ -226,6 +226,27 @@ Scratch server 2026-10-22 (SQ-OM-01, alcohol.md AL-81 to AL-84): 9 slots; the ou
 slots take nothing from any face; bottom and sides pull output, empties and leftovers, the top only ingredients; an
 8-slot `-02` keg loads into the same slots. The leftover overflow and stall (AL-79, AL-80) stay in game.
 
+### 3.7 Copper pot and pickling jar: recycle (BUILT 2026-11-02, TODO `food/drinks #17`)
+
+Owner 2026-11-02: every station gets the same treatment as the cooking pot and oven: leftovers back into the
+plating slot, a leftover slot, a wait when full, and the overflow thrown, never lost. The cooking pot, oven and
+kettle already had all of it (3.1 to 3.3; the kettle tank's GUI boxes keep their empties in their own box). The two
+native Creative Delight stations had the leftover slot, the wait and the overflow, not the recycle:
+
+- **Copper pot** (Miner's Delight port, `CopperPotBlockEntity`): a leftover that is what the waiting meal is served
+  in (the recipe's container, or the Copper Cup for a cup soup) goes into the container slot, as many as the waiting
+  meals still need (`recycleRoom`: meals minus containers already there, 0 when the slot holds another item); the
+  next tick plates the meal. The rest goes to the leftover slot (7), then out of the pot's side. The stall check
+  (`leftoversFit`) simulates the same split. Setting: the port's `remainderBuffer` (recycle and slot together).
+- **Pickling jar** (Vintage Delight port, `FermentingJarBlockEntity`): the batch's container is taken before the
+  leftovers; a leftover that matches the recipe's container ingredient (and `#vintagedelight:container_items`) goes
+  back into the container slot when that slot is now empty, one at a time, so a run of batches keeps its container.
+  The rest goes to the leftover slot (9), then the delayed throw on top of the jar. The stall check simulates the
+  same. Setting: `vintage.pickling_jar.remainderBuffer`.
+
+No plating delay (`recycleShowTicks`) on these two: the recycled container plates on the next tick. Tests RB-15,
+RB-16; scratch SQ-RB-21, SQ-RB-22.
+
 ## 4. Risks
 
 - **Menu sync**: the extra slots exist only where patcherMod is loaded. It is `both` in
@@ -321,6 +342,13 @@ In patcherMod 1.0.7 and later (pack 1.0.7, DEPLOYED 2026-10-18).
 - [ ] **RB-14 Recycle shows** (patcherMod 1.1.01): watch an FD pot cook a tomato-sauce bowl meal with the plating
   slot empty: the bowl appears in the plating slot for half a second, then the meal is plated. The same with hot
   cocoa and a milk bottle in the pot, and strong green tea in the kettle.
+- [ ] **RB-15 Copper pot recycle** (Creative Delight jar of 2026-11-02 13:19): a Miner's copper pot over heat, plating
+  slot empty, a bowl-served recipe with a bowl-food ingredient (tomato sauce): the bowl lands in the container slot and
+  the meal comes out plated; nothing on the ground; with 3 meals waiting and 1 bowl in the slot, at most 2 recycled
+  bowls go there, the rest to the leftover slot.
+- [ ] **RB-16 Pickling jar recycle:** a pickling jar recipe whose ingredient leaves the same item as its container (find
+  one in JEI) with one container in the container slot and ingredients for 3 batches: all 3 batches run, the container
+  slot ends with 1, nothing thrown.
 
 ## 8. History
 
@@ -333,6 +361,8 @@ In patcherMod 1.0.7 and later (pack 1.0.7, DEPLOYED 2026-10-18).
   checked and found to be the designed recycle (3.1, `cooking/kitchen #4`); WTHIT "Holding" / "Waiting" line built
   (3.3, `cooking/kitchen #3`). GameTests 17, harness stand-in config resynced.
 - 2026-10-21 (later): plating delay `[cooking] recycleShowTicks` (3.1, `cooking/kitchen #13`); GameTests 19.
+- 2026-11-02: container-slot recycle added to the copper pot and pickling jar (3.7, `food/drinks #17`); Creative
+  Delight jar built, not installed.
 
 > **Superseded copy below (noted 2026-10-21):** everything from here on is the 2026-10-18 feasibility draft, left in
 > the file by mistake. Sections 0-8 above are current; delete the copy once checked.

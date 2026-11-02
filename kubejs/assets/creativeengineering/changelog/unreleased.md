@@ -47,6 +47,7 @@
 ## Powdered Sugar <!-- icon: creativeengineering:powdered_sugar -->
 
 - **Changed:** The Powdered Sugar block has a new texture
+- **Fixed:** What The Hell Is That showed the Powdered Sugar block as Snow Block from Minecraft
 
 ## Raspberries <!-- icon: hearthandharvest:raspberry -->
 
@@ -124,13 +125,19 @@
 ## Miner's Delight <!-- icon: miners_delight:copper_pot -->
 
 - **New:** The Copper Pot keeps its ingredients' empty buckets, bottles and bowls in a take-only slot right of the output; it waits when that slot is full. Hoppers below take them out.
+- **New:** An empty bowl, bottle or cup from the Copper Pot's ingredients that the waiting meal is served in goes into its container slot and serves the meal
 - **Changed:** The Sticky Basket side, Baked Cave Carrot, Tentacles and Baked Tentacles have their older look back
 - **New:** Cave Carrot Crates can turn up in chests where Cave Carrots do
+- **Fixed:** Cave Hamburger had no recipe; Calamari or a Brown Mushroom fills the two slots that took Baked Tentacles
+- **Fixed:** A Spider killed with a Knife while burning also dropped raw Arthropod
 
 ## Vintage Delight <!-- icon: vintagedelight:mixed_seeds -->
 
 - **New:** Mixed Seeds: each one planted becomes Wheat, Beetroot, Cabbage, a Melon or a Pumpkin at random. Found in village house and pillager outpost chests, and when breaking grass without shears (2 %).
 - **Changed:** Chef Hats stack to 8 [1]; Cheese Pizza, Meat Pizza and Cheese Wheel stack to 8 [64]
+- **Fixed:** The Pickling Jar stopped after one batch when a recipe's ingredients were spread over several slots; it takes one item from each slot the recipe uses
+- **Changed:** Leftovers the Pickling Jar throws out (leftover slot off or full) leave it 1 second after the batch [at once]
+- **New:** A Pickling Jar leftover that is the recipe's container goes back into the emptied container slot for the next batch
 - **Changed:** Walking speed on Vintage Delight blocks: crates 1.1x, oat bags and bales and Salt Blocks 1.05x, salt bricks, Smooth Salt Blocks and Salt Pillars 1.25x, whole pizzas 0.85x [1x]
 
 ## Veggies Delight <!-- icon: veggiesdelight:fish_and_chips -->
@@ -201,6 +208,7 @@
 - **Fixed:** JEI listed test recipes: Mechanical Crafting grids that turned every form of a metal or wood into one ingot or plank, and a Nether Star to Nether Star Sequenced Assembly
 - **Changed:** Oats are bushier like wheat; ripe Oats are two blocks tall in three shapes [one block, one shape]
 - **New:** Handcrafted Nightstands hold 27 slots, opened like a chest; hoppers and pipes reach them
+- **New:** Create pumps and fluid pipes fill and drain Supplementaries Jars and Goblets, 250 mB per bottle; liquids with no fluid form (soups) stay hand-filled only
 - **Changed:** Brewery sky village houses have Fantasy Furniture Hanging Herbs where the dried barley and corn hung [empty]
 - **New:** The water Spout Gun wets the farmland it hits
 - **Fixed:** The Zucchini Quiche sequenced assembly on a Pie Crust was missing
@@ -208,17 +216,41 @@
 - **Fixed:** More Delight Mashed Potatoes, Potato Salad and the four Diced Potatoes dishes had an empty sliced potato slot
 - **Fixed:** Spout and Item Drain recipes for the coffees, Lavender Tea, the matcha lattes and the Water Cup were missing
 - **Fixed:** Farmer's Respite Kettle brews finished instantly; they take 10 seconds
+- **Fixed:** Farmer's Delight chest loot (village houses, shipwrecks, mineshafts and others) had no crates or bags; cabbages, tomatoes, onions and rice there can come packed again
+- **Removed:** The Display Delight plate for Baked Tentacle on a Stick; placed ones disappear from old worlds
 - **Fixed:** Librarians and cashiers offered Stockpile, Recovery and Cycle books
 - **Fixed:** Struck desert pyramids could generate as a meteorite crater with no pyramid
 - **Changed:** Dragon Chestplate 12 armor [10], Dragon Leggings 10 [9], each dragon armor piece 4.5 toughness [5]; full set 36 armor [33]
 - **Changed:** Amethyst Shards no longer give Glowstone Dust in the Millstone, Crushing Wheels or Crusher; the Millstone gives Amethyst Dust (75 %) [Glowstone Dust]
 - **Changed:** Dandelions mature into Mature Dandelions faster on Fertile Soil than on Rich Soil: about 10 minutes on Fertile Soil [20], 20 on Rich Soil and Rich Soil Farmland [10]
 
+## World Generation <!-- icon: minecraft:grass_block -->
+
+- **Changed:** Shadowlands cover about 16 % of the End in new worlds [11 %]
+- **Changed:** Structure searches (locate, maps) give up after 120 seconds [300]
+- **Changed:** Undead Castles no longer generate in highland biomes; they still generate in plains and taiga
+- **Fixed:** Undead Castles over deep dips in the ground were cancelled
+- **Changed:** Mysticrift Pillager Towers generate about 1.7 times as often; End Pillager Towers unchanged
+- **Changed:** Lone Waystones generate about 60 chunks apart [25]
+- **Changed:** Nearly every village has a Waystone, near its centre [some villages]
+- **Fixed:** Pieces of 27 structures generated at another piece's rate, among them Subterrestrial cabins, YUNG's Better Nether Fortresses bridges, Nullscape dragon skeletons, Unwrecked ship sails and witch village houses
+- **Fixed:** Cool Rain played rain sounds in deserts and in snowy seasons
+- **Changed:** Structures whose foundation would fill water more than 2 blocks deep are cancelled or lose those pieces [6]
+- **Fixed:** Truffle Dirt did not generate; it generates inside Rooted Dirt patches again. New chunks only.
+- **Changed:** Rooted Dirt patches with Truffle Dirt also generate in birch forests [dark forests and cold forests]
+- **Changed:** Desert and badlands villages, outposts and ruins no longer generate with sandstone or terracotta floors over deep water or cliffs
+
 ## Interface & Tooltips <!-- icon: minecraft:written_book -->
 
+- **Changed:** The sparkle on seasoned and salted food sits in the top-right corner of the icon [top left]
 - **New:** The changelog screen lists versions 1.0.0 to 1.0.9. 1.0.0 lists everything the pack adds, changes or removes against Minecraft and its mods.
 - **Changed:** Let's Do Vinery and Brewin' & Chewin' are listed as "Let's Do Vinery (Creative Brewing)" and "Brewin' & Chewin' (Creative Brewing)" in the mod list, JEI and WTHIT ["Let's Do Vinery Backport (Alfonzo)", "Brewin' & Chewin' Backport (Alfonzo)"]
 - **Changed:** Foundation is listed as "Creative Brewing" ["Foundation Vinery Backport (Alfonzo)"]
+- **Changed:** Veggies Delight, Vintage Delight, Fungi Delight, Miner's Delight and Display Delight come inside Creative Delight and are listed as "(Creative Delight)" in the mod list ["(Backport)"]
 - **Changed:** The pack's own mods no longer end in "(Alfonzo)": Creative Engineering, Baby Mobs, Incubation Additions, More Mooblooms and the Exposure backports
 - **New:** Every item that plants something names its type in the tooltip: "Seed Item", "Plantable Crop", "Sapling", "Fungi Sapling", "Water Plant", "Vine" or "Vertical Crop"
 - **New:** "Plantable Crop" is a food that plants (carrots, berries); "Fungi Sapling" is a mushroom or nether fungus; "Vertical Crop" is sugar cane, cactus, bamboo or a chorus flower
+- **Changed:** A tooltip taller than the screen starts at the top and runs off the bottom [the name was cut off at the top]
+- **Changed:** Every item that fits a Curios slot shows the "Slot:" line, including items whose mod hid it
+- **Changed:** PneumaticCraft item descriptions show without holding Shift, in gray
+- **Changed:** Stepstools no longer say "Worn in the Feet slot"; the "Slot: Feet" line shows it

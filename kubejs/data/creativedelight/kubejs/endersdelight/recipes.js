@@ -14,9 +14,8 @@ ServerEvents.recipes(e => {
 		//######################### Fluids #########################
 		//Chorus juice
 		// The pack's chorus juice fluid (development/creativeDelight/src/main/resources/kubejs_startup/creativeengineering/fluids.js, TODO food/drinks #4). Grid: Ender's Delight's
-		// 1 fruit + sugar + bottle (kept). Pot: 2 fruit + sugar -> 2 bottles (manual only: the fluid is the mixer route).
+		// 1 fruit + sugar + bottle (kept). Pot and Kettle: the juice rule (creativeengineering/drinks.js, food/drinks #15).
 		// Create mixer, heated: 1 fruit + sugar + 250 mB water -> 250 mB; spout, drain and IE Bottling Machine at 250 mB.
-		R.fdCooking([i.chorus_fruit, i.chorus_fruit, i.any_sweetener_drink], Item.of(i.chorus_juice, 2), e, 'chorus_juice_manual_only', 0.35, 200, i.glass_bottle)
 		if (Platform.isLoaded('create')) {
 			R.createMixing(Fluid.of(f.chorus_juice, 250), [i.chorus_fruit, i.any_sweetener_drink, Fluid.of(f.water, 250)], e, 'chorus_juice', 'heated')
 			R.createFilling(i.chorus_juice, [i.glass_bottle, Fluid.of(f.chorus_juice, 250)], e, 'chorus_juice')
@@ -30,6 +29,11 @@ ServerEvents.recipes(e => {
 		// One unpack route for both chorus crates (#forge:storage_blocks/chorus_fruit: this mod's and End's; ends_delight.md 3.1)
 		R.remove({ id: 'endersdelight:chorus_fruit_from_crate' }, e)
 		R.shapeless(Item.of(i.chorus_fruit, 9), [i.t_storage_chorus_fruit], e, 'chorus_fruit_from_crate')
+
+		//######################### Shulker meat #########################
+		// Ender's mollusk and filet merge into End's shulker meat and slice (TODO dishes/ingredients #32; CD startup
+		// endersdelight/item_merges.js): the mollusk-to-filet cut would duplicate End's meat-to-slice cut
+		R.remove({ id: 'endersdelight:cutting/shulker_filet' }, e)
 
 		//######################### Shulker bowls #########################
 		// One shulker shell -> 12 bowls (Ender's Delight's gave 8; TODO recipes/cooking #4)

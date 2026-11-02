@@ -1405,7 +1405,7 @@
 		#e.g. "philipsruins:ancient_ruins=0,16" (never over water, at most 16 over air after the beard,
 		#mound from its size) or "#creativeengineering:type/village=-1,-1,-1" (no limits). They replace the
 		#size's limits. The first matching entry wins; -1 = no limit.
-		overrides = ["eugene:undead_castle=24,320,400"]
+		overrides = ["eugene:undead_castle=24,800,400"]
 		#The predicted terrain is read once per N x N block cell instead of per column (cheaper, a little
 		#coarser at cliffs). 1 = every column. [worldgen.water_fill] uses it too.
 		#Range: 1 ~ 8
@@ -1425,6 +1425,12 @@
 		#The same for bury (the structure sinks into the ground): filled 100% to 10 blocks, 27% at 11.
 		#Range: 0 ~ 32
 		buryReach = 10
+		#Earth over water counts toward maxOverWater once the water under it is deeper than this (and than the
+		#beard's reach, when that is shorter). The beard fills shallow water, but deep fill reads as a dam in
+		#a lake or river. Air keeps beardReach / buryReach.
+		#Tuned 2026-11-02 (user): 2 [the beard's reach, 6].
+		#Range: 0 ~ 32
+		waterReach = 2
 		#A column whose ground lies more than this many blocks below a piece's bottom is a mound column:
 		#the beard would build a tall pillar there, or can't reach the piece at all (an edge of a ravine, a
 		#pad over a cliff). Each column counts once per structure, toward the size's mound limit.
@@ -1461,7 +1467,7 @@
 		#creativeengineering:water_fill/structures; an override with every limit -1 skips it too. Default 0
 		#(2026-10-30, was 0.5): the strictest setting, any start standing more on water than on ground goes.
 		#Range: -1.0 ~ 1000.0
-		maxWaterSurplus = 0.0
+		maxWaterSurplus = 0.5
 		#The footprint water share also judges pieces with no earth in their base: plank, wool, sandstone or brick
 		#floors, and pieces that are not jigsaw or template pieces (vanilla desert and jungle pyramids, igloos).
 		#A column of such a piece counts when the predicted surface (its topmost block) lies within the piece's
@@ -1636,9 +1642,9 @@
 		#Any structure search (/locate, maps, Async Locator) still running after this long ends as not found and
 		#logs a [locate] line with its counters; its thread is free again. /celocate stop ends running searches
 		#too, and so does the server stopping. 0 = no deadline. Applies to new searches immediately.
-		#Tuned 2026-10-30 (user): 300 [120], so the fortified villages' meta camps and ruins can answer.
+		#Tuned 2026-11-02 (user): 120 [300]; the fortified metas answer within 120 s.
 		#Range: 0 ~ 3600
-		searchTimeoutSeconds = 300
+		searchTimeoutSeconds = 120
 
 	#Distant Horizons' distant generation only (chunks it generates for LODs and throws away). Below clipBelowY
 	#no terrain noise is computed: land columns are filled with stone, and an ocean column whose block at

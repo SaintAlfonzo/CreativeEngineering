@@ -124,6 +124,9 @@ public final class EarthFill {
 	/** Structures built on a stone or brick base (the drum tower's andesite plate): their base blocks count as earth too. */
 	static final TagKey<Structure> STONE_BASE = TagKey.create(Registry.STRUCTURE_REGISTRY, new ResourceLocation(CreativeEngineering.MODID, "earth_fill/stone_base"));
 	static final TagKey<Block> STONE_BLOCKS = BlockTags.create(new ResourceLocation(CreativeEngineering.MODID, "earth_fill/stone_base"));
+	/** Desert and badlands structures on sandstone or terracotta floors: those blocks count as earth too (2026-11-02). */
+	static final TagKey<Structure> SAND_BASE = TagKey.create(Registry.STRUCTURE_REGISTRY, new ResourceLocation(CreativeEngineering.MODID, "earth_fill/sand_base"));
+	static final TagKey<Block> SAND_BLOCKS = BlockTags.create(new ResourceLocation(CreativeEngineering.MODID, "earth_fill/sand_base"));
 	static final TagKey<Structure> WATER_STRUCTURES = TagKey.create(Registry.STRUCTURE_REGISTRY, new ResourceLocation(CreativeEngineering.MODID, "water_fill/structures"));
 	/** Structures that stand in water on purpose (stilted huts): no footprint water share, the other limits as usual. */
 	static final TagKey<Structure> WET_OK = TagKey.create(Registry.STRUCTURE_REGISTRY, new ResourceLocation(CreativeEngineering.MODID, "earth_fill/wet_ok"));
@@ -204,9 +207,14 @@ public final class EarthFill {
 		boolean none() { return water < 0 && air < 0 && mound < 0; }
 	}
 
-	/** How deep the beard fills (beardReach, buryReach) and the mound column depth (maxMoundHeight), in blocks below a piece. */
-	record Reach(int beard, int bury, int mound) {
+	/**
+	 * How deep the beard fills (beardReach, buryReach) and the mound column depth (maxMoundHeight), in blocks below a
+	 * piece; water: how deep water under earth may be before it counts (waterReach, never past the beard's reach).
+	 */
+	record Reach(int beard, int bury, int mound, int water) {
+		Reach(int beard, int bury, int mound) { this(beard, bury, mound, Integer.MAX_VALUE); }
 		int of(Beard b) { return b == Beard.BURY ? bury : beard; }
+		int ofWater(Beard b) { return Math.min(of(b), water); }
 	}
 
 	record EarthResult(int blocks, int water, int air, int mound, boolean cancelled, boolean complete) {}
@@ -259,15 +267,18 @@ public final class EarthFill {
 		int blocks = 0, water = 0, air = 0, mound = 0;
 		for (EarthPiece piece : pieces) {
 			int fills = piece.beard() == Beard.NONE ? -1 : reach.of(piece.beard());
+			int fillsWater = piece.beard() == Beard.NONE ? -1 : reach.ofWater(piece.beard());
 			for (long p : piece.blocks()) {
 				if (!seen.add(p)) continue;
 				blocks++;
 				int x = BlockPos.getX(p), y = BlockPos.getY(p), z = BlockPos.getZ(p);
 				Kind kind = terrain.at(x, y, z);
 				if (kind == Kind.WATER || kind == Kind.AIR) {
-					// open down to the piece's bottom (y - bottom of its own layers), then more than 'fills' below it
-					int deeper = fills + (y - piece.bottom()) + 2;
-					if (fills < 0 || terrain.openBelow(x, y, z, deeper) >= deeper) {
+					// open down to the piece's bottom (y - bottom of its own layers), then more than 'fills' below it;
+					// water by its own, shorter reach (waterReach, 2026-11-02)
+					int f = kind == Kind.WATER ? fillsWater : fills;
+					int deeper = f + (y - piece.bottom()) + 2;
+					if (f < 0 || terrain.openBelow(x, y, z, deeper) >= deeper) {
 						if (kind == Kind.WATER) water++; else air++;
 					}
 				}
@@ -640,18 +651,27 @@ public final class EarthFill {
 		return blockTags;
 	}
 
-	private static volatile List<TagKey<Block>> stoneSource;
-	private static volatile List<TagKey<Block>> stoneTags = List.of();
+	/** The earth tags with the base tags added, per earth list: [stone, sand, stone + sand]. */
+	private record BaseTags(List<TagKey<Block>> source, List<List<TagKey<Block>>> lists) {}
+	private static volatile BaseTags baseTags;
 
-	/** The earth tags plus creativeengineering:earth_fill/stone_base, for structures in the structure tag of that name. */
-	private static List<TagKey<Block>> withStone(List<TagKey<Block>> earth) {
-		if (earth != stoneSource) {
-			List<TagKey<Block>> out = new ArrayList<>(earth);
-			if (!out.contains(STONE_BLOCKS)) out.add(STONE_BLOCKS);
-			stoneTags = List.copyOf(out);
-			stoneSource = earth;
+	/**
+	 * The earth tags plus creativeengineering:earth_fill/stone_base and / or earth_fill/sand_base, for structures in the
+	 * structure tags of those names.
+	 */
+	static List<TagKey<Block>> withBases(List<TagKey<Block>> earth, boolean stone, boolean sand) {
+		if (!stone && !sand) return earth;
+		BaseTags b = baseTags;
+		if (b == null || b.source() != earth) {
+			List<List<TagKey<Block>>> lists = new ArrayList<>();
+			for (List<TagKey<Block>> add : List.of(List.of(STONE_BLOCKS), List.of(SAND_BLOCKS), List.of(STONE_BLOCKS, SAND_BLOCKS))) {
+				List<TagKey<Block>> out = new ArrayList<>(earth);
+				for (TagKey<Block> t : add) if (!out.contains(t)) out.add(t);
+				lists.add(List.copyOf(out));
+			}
+			baseTags = b = new BaseTags(earth, List.copyOf(lists));
 		}
-		return stoneTags;
+		return b.lists().get(stone && sand ? 2 : sand ? 1 : 0);
 	}
 
 	/** "id=a,b[,c]" or "#tag=a,b[,c]": earth fill reads (water, air, mound), water fill (ground, air). c is UNSET when left out. */
@@ -849,7 +869,8 @@ public final class EarthFill {
 	}
 
 	static Reach reach() {
-		return new Reach(WorldgenConfig.earthBeardReach(), WorldgenConfig.earthBuryReach(), WorldgenConfig.earthMaxMoundHeight());
+		return new Reach(WorldgenConfig.earthBeardReach(), WorldgenConfig.earthBuryReach(), WorldgenConfig.earthMaxMoundHeight(),
+				WorldgenConfig.earthWaterReach());
 	}
 
 	/** Water limits for one structure: the first matching override, else the global pair. */
@@ -1193,7 +1214,8 @@ public final class EarthFill {
 		if (log != EarthFillLog.ALL && earthUnlimited(structure)) return null;
 		// a stone base counts too: its size and its overhang (02_new_mods_tests.md 4.2: the drum tower's 49x45
 		// andesite plate was "small, 10 earth" and could hang over a cliff unchecked)
-		List<TagKey<Block>> earth = structure.is(STONE_BASE) ? withStone(earthTags()) : earthTags();
+		// and a sandstone or terracotta floor in the desert and badlands (2026-11-02, earth_base_scan.py)
+		List<TagKey<Block>> earth = withBases(earthTags(), structure.is(STONE_BASE), structure.is(SAND_BASE));
 		if (earth.isEmpty()) return null;
 		int layers = WorldgenConfig.earthBaseLayers();
 		boolean trimmed = WorldgenConfig.templateTrimEnabled() && TerrainAdaptation.trims(structure.value());

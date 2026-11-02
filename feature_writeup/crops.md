@@ -21,7 +21,7 @@ Test prefix **CR-** · Last updated **2026-10-22** · Overall status **reference
 | Extra stem fruit: melon, pumpkin and hamimelon stems grow up to 4 fruits, each later one after a longer minimum wait | §2.10 | BUILT 2026-10-22 (patcherMod 1.1.01, in `mods/` since the 2026-10-22 scratch run, md5 a4d48336 with the fix below); built, scratch server PASSED 2026-10-22 (SQ-SF-00 to SQ-SF-05, 17 of 17, `tools/farm_worldgen_probe.js`); CR-71 to CR-75 in game; F-SS1 (extra fruit ignores seasons) open |
 | Wild-crops batch 2026-10-22: tea in 20 biomes, Vinery grapes under the system, wild flax off, Rustic Delight patches out of bone meal, white strawberries from Y 192 | §2.8, §4 V1, V6, V7, V20 | BUILT 2026-10-22 (data + KubeJS), DEPLOYED 1.1.01; `tools/test_wild_crops.sh` passes (53 crop tags, 52 add modifiers); built, scratch server PASSED 2026-10-22 (SQ-WC-00 to SQ-WC-05); CR-83, CR-86 to CR-88 in game |
 | Wild plants, bushes and trees on Immersive Weathering soils (humus, fluvisol, silt, vertisol, cryosol, rooted grass; not permafrost) | §2.8.1 | BUILT 2026-10-05, scratch-server tested (12 features x 9 grounds, before/after); the 65 `kubejs/data` overrides are DEPLOYED with 1.0.6 (2026-10-14); only new chunks change; CR-67, CR-68 |
-| Village farm crops: farm fields grow crops of the village's climate (`VillageFarmCrops`, `village_farms.json`) | §2.11 | BUILT 2026-10-25, DEPLOYED 1.1.03 (new villages only); SQ-VF-01 to -05 (group B) not run; TODO `farming/crops #16`, `#19` |
+| Village farm crops: farm fields grow crops of the village's climate (`VillageFarmCrops`, `village_farms.json`) | §2.11 | BUILT 2026-10-25, DEPLOYED 1.1.03 (new villages only); SQ-VF-01 to -05 (group B) not run; TODO `farming/crops #16`; `#19` (Rustic crops by wild rule) BUILT 2026-11-02, SQ-PSD rows |
 | Growing seasons: every crop has a type (temperate, cold, warm dry, warm wet, Nether, End, cave, mushroom); each season is fertile (+25 %), neutral or off (-25 %) by the biome's calendar | §2.12.1 + generated [crop_seasons_audit.md](crop_seasons_audit.md) | BUILT 2026-10-30 (patcherMod 1.1.04, Vinery `-06`, CD Ender's `-02`; installed 2026-10-31 00:29 to 00:44); scratch server PASSED r1031 (2026-10-31, SQ-CS-01 to -06, -08, -09); CR-89 to CR-99 in game pending; F-SS1, F-SS2 resolved |
 
 - **Open first:** §2.1 for "can I plant X on Y" or "does X replant on right-click". §2.2 and §2.3 explain why.
@@ -851,7 +851,9 @@ server start (the old hook, the five vanilla `farm_*` lists, missed nearly every
 A **field** is every block of one vanilla crop in one placed farm piece. Each field rolls `share` (**35%**, was 25% per
 block). A rolled field is **split 50/50**: one half (first or last along the field's longer axis, chosen at random) keeps
 the original crop, the other half grows one crop picked from the village's group. Growth stage keeps its share of full
-growth. The crop list ignores the wild spawn biome rules (a crop is in a group when the owner put it there). Gate:
+growth. The crop list ignores the wild spawn biome rules (a crop is in a group when the owner put it there), except the
+Rustic Delight crops, which follow their wild rule (2026-11-02, `farming/crops #19`): bell peppers and coffee warm wet only,
+cotton warm dry only. Gate:
 `[worldgen] wildCrops`. Crops from mods that are not loaded are skipped. 1.19.2 has no whole-piece processor hook, so the
 roll is seeded by the piece origin and crop and every block of the field reaches the same answer.
 
@@ -884,9 +886,9 @@ Zombie village variants share their village's group. Other Towns & Towers villag
 | Oats | Vintage | W | W | W | - | - |
 | Cucumbers | Vintage | x | W | W | - | - |
 | Peanuts | Vintage | - | - | - | W | x |
-| Bell Peppers | Rustic | - | - | - | x | W |
-| Cotton | Rustic | - | - | - | W | x |
-| Coffee | Rustic | - | - | - | x | W |
+| Bell Peppers | Rustic | - | - | - | - | W |
+| Cotton | Rustic | - | - | - | W | - |
+| Coffee | Rustic | - | - | - | - | W |
 | Corn | Corn Delight | - | - | x | W | x |
 | Hemp | IE | x | x | x | x | x |
 | Pumpkin stem | vanilla | x | W | x | - | - |

@@ -3,6 +3,7 @@ package com.SaintAlfonzo.creativedelight.food;
 import java.util.List;
 
 import net.minecraft.ChatFormatting;
+import net.minecraft.client.resources.language.I18n;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.MutableComponent;
 import net.minecraft.resources.ResourceLocation;
@@ -34,9 +35,13 @@ public final class SeasoningTooltip {
     }
 
     private static Component line(ResourceLocation id) {
-        MutableComponent name = Component.translatable("seasoning." + id.getNamespace() + "." + id.getPath())
-                .withStyle(ChatFormatting.GOLD);
         Seasonings.Definition def = Seasonings.get(id);
+        // The lang key comes from Creative Delight's seasoning_lang.js; without it (TODO food/seasoning #16) the line
+        // showed the raw key, so the script's name stands in
+        String key = "seasoning." + id.getNamespace() + "." + id.getPath();
+        MutableComponent name = (I18n.exists(key) || def == null || def.name().isEmpty()
+                ? Component.translatable(key) : Component.literal(def.name()))
+                .withStyle(ChatFormatting.GOLD);
         if (def == null) {
             return name;
         }

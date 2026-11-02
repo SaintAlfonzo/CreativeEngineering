@@ -717,7 +717,7 @@ crop season types are checked for every plant that spreads.
 ---
 
 ## crops #19: Village farms grow Rustic crops by the wild-crop rules
-Status **Planned** · Work Creative Delight / data · id `farming/crops #19`
+Status **Built 2026-11-02** (village_farms.json + crops.md 2.11 table edited; pale and dark peppers left out) · Work Creative Delight / data · id `farming/crops #19`
 
 ### Goal
 Rustic Delight crops appear in village farms only in the climates where their wild patches grow (extends

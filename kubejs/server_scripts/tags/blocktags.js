@@ -465,6 +465,13 @@ ServerEvents.tags('block', e => {
 		// End builds (the End House): end stone, its bricks and purpur
 		item.end_stone, item.end_stone_bricks, item.purpur_block,
 	])
+	// Sandstone and terracotta floors, counted as earth only for structures in the structure tag of the same name
+	// (worldgen/earth_fill.js): desert and badlands builds that stand on them instead of sand (2026-11-02,
+	// tools/earth_base_scan.py: Towns and Towers badlands villages 0 % earth, Better Desert Temples 0 %).
+	t.add(e, 'creativeengineering:earth_fill/sand_base', [
+		'#forge:sandstone', '#minecraft:terracotta', item.philips_sand_stone_brick, item.philips_red_sand_stone_brick,
+		item.philips_sandstone_tiles,
+	])
 
 	// ── Template trim (patcherMod worldgen/TemplateTrim, CEConfig [worldgen.terrain_adaptation]) ──
 	// For structures in creativeengineering:template_trim: a template column holding only air, pad and plants

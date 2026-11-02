@@ -46,6 +46,7 @@ public final class CEConfig {
     public static final Jei JEI;
     public static final GuiTitle GUI_TITLE;
     public static final Toasts TOASTS;
+    public static final Tooltips TOOLTIPS;
     public static final Changelog CHANGELOG;
     public static final Shields SHIELDS;
     public static final DamageTagConfig DAMAGE_TAGS;
@@ -79,6 +80,7 @@ public final class CEConfig {
         JEI = new Jei(builder);
         GUI_TITLE = new GuiTitle(builder);
         TOASTS = new Toasts(builder);
+        TOOLTIPS = new Tooltips(builder);
         CHANGELOG = new Changelog(builder);
         SHIELDS = new Shields(builder);
         DAMAGE_TAGS = new DamageTagConfig(builder);
@@ -1271,6 +1273,31 @@ public final class CEConfig {
         }
     }
 
+    /**
+     * Item tooltip dials (client side; a server ignores them): {@code mixin/ScreenTooltipTopMixin} and
+     * {@code compat/CuriosSlotTooltip} (feature_writeup/tooltips.md 3).
+     */
+    public static final class Tooltips {
+        public final ForgeConfigSpec.BooleanValue keepTopOnScreen;
+        public final ForgeConfigSpec.BooleanValue curiosSlotLine;
+
+        private Tooltips(ForgeConfigSpec.Builder b) {
+            b.comment("Item tooltips (client side).").push("tooltips");
+
+            keepTopOnScreen = b.comment(
+                    "A tooltip taller than the screen starts at the top and runs off the bottom (vanilla keeps the",
+                    "bottom on screen and cuts off the name). Takes effect on the next frame."
+            ).define("keepTopOnScreen", true);
+
+            curiosSlotLine = b.comment(
+                    "Every item that fits a Curios slot shows Curios' \"Slot:\" line, also when the item's own mod",
+                    "hides or replaces it. Off: only the lines Curios and the item's mod add."
+            ).define("curiosSlotLine", true);
+
+            b.pop(); // tooltips
+        }
+    }
+
     /** Player changelog, "What's New" ({@code changelog/} package, feature_writeup/changelog.md). */
     public static final class Changelog {
         public final ForgeConfigSpec.BooleanValue enabled;
@@ -1873,6 +1900,7 @@ public final class CEConfig {
         public final ForgeConfigSpec.BooleanValue footprintAllPieces;
         public final ForgeConfigSpec.IntValue beardReach;
         public final ForgeConfigSpec.IntValue buryReach;
+        public final ForgeConfigSpec.IntValue waterReach;
         public final ForgeConfigSpec.IntValue maxMoundHeight;
         public final ForgeConfigSpec.BooleanValue beardFootprint;
         public final ForgeConfigSpec.BooleanValue prune;
@@ -1939,6 +1967,12 @@ public final class CEConfig {
             buryReach = b.comment(
                     "The same for bury (the structure sinks into the ground): filled 100% to 10 blocks, 27% at 11."
             ).defineInRange("buryReach", 10, 0, 32);
+            waterReach = b.comment(
+                    "Earth over water counts toward maxOverWater once the water under it is deeper than this (and than the",
+                    "beard's reach, when that is shorter). The beard fills shallow water, but deep fill reads as a dam in",
+                    "a lake or river. Air keeps beardReach / buryReach.",
+                    "Tuned 2026-11-02 (user): 2 [the beard's reach, 6]."
+            ).defineInRange("waterReach", 2, 0, 32);
             maxMoundHeight = b.comment(
                     "A column whose ground lies more than this many blocks below a piece's bottom is a mound column:",
                     "the beard would build a tall pillar there, or can't reach the piece at all (an edge of a ravine, a",
@@ -2234,8 +2268,8 @@ public final class CEConfig {
                     "Any structure search (/locate, maps, Async Locator) still running after this long ends as not found and",
                     "logs a [locate] line with its counters; its thread is free again. /celocate stop ends running searches",
                     "too, and so does the server stopping. 0 = no deadline. Applies to new searches immediately.",
-                    "Tuned 2026-10-30 (user): 300 [120], so the fortified villages' meta camps and ruins can answer.")
-                    .defineInRange("searchTimeoutSeconds", 300, 0, 3600);
+                    "Tuned 2026-11-02 (user): 120 [300]; the fortified metas answer within 120 s.")
+                    .defineInRange("searchTimeoutSeconds", 120, 0, 3600);
             b.pop();
         }
     }

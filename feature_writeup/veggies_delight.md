@@ -233,11 +233,11 @@ Folds as built 2026-11-01 (CD `veggiesdelight/recipes.js` unless named; tests VD
 | # | Fold | State |
 |---|---|---|
 | R2 | Grows from a Dandelion on rich soils, shears or a knife revert it (§2.2, `ports/veggiesport #4`) | CLOSED 2026-11-01 (owner): Dandelion, Grown Dandelion and Mature Dandelion are three valid flowers with uses, no fold; all three share the flower tags and each has its own uses |
-| R3 | With Farmer's Respite's dandelion tea | open: waits for the juice and tea rule (`food/drinks #8`, decision "the rule" open) |
+| R3 | With Farmer's Respite's dandelion tea | DECIDED 2026-11-02 by the drink rules ([creative_delight_drinks.md](creative_delight_drinks.md) 1, 2.1): dandelion juice pot 2 leaves + 2 sugar cane, kettle 1 leaf + 1 sugar cane + 250 mb water; dandelion tea on the standard tea rule (dandelion as the extra), also heated-mixer; builds with `food/drinks #15` |
 | R4 | One shaped recipe on a pie crust (milk or any cheese), manual only as Brewin's quiche, plus the assembly (already there); VD's milk and Vintage cheese shaped recipes go | BUILT |
 | R5 | Pizza rule: bottom row any dough, tomato sauce, any dough; toppings bell pepper, vegetable, onion; manual only plus an assembly on dough | BUILT |
 | R6 | Stuffed rule: both keep their crafts (boat grid, bowl pot + heatless grid); each gets an assembly on a roasted zucchini | BUILT |
-| R7 | Pancake family | open: the family has no recipe rule yet (`creativedelight/members #15`, `merges/baking #1`, `dishes/meals #12` open) |
+| R7 | Pancake family | open: the family has no recipe rule yet; the Stackable Pancake as the family base is under review (2026-11-02, `merges/baking #2`) before the rule is written |
 | R8 | Already made in the Pickling Jar (fermenting); now in the `preserve/pickle` family (`tools/food_families.py`, `food_families.json`) | BUILT |
 | R10 | Skewer rule: shaped diagonal (stick, turnip, cooked mutton) plus an assembly on a stick; the shapeless goes | BUILT |
 | R11 | Burger rule for the Vegetarian Burger (shaped, assembly on the patty); the patty fills the patty slot of More Delight's simple, egg and loaded hamburgers (`creativeengineering/recipes.js`), VD's shapeless versions go; raw patty by the cooking trio (`F.veggieCook`) | BUILT |
@@ -261,7 +261,7 @@ Folds as built 2026-11-01 (CD `veggiesdelight/recipes.js` unless named; tests VD
 
 | Part | State | Where / note |
 |---|---|---|
-| 4.1 Port | BUILT | `development/backportedVeggies`: 89 items, Java ported from the decompile; resources from the upstream jar through `tools/port_resources.py` (MIT, kept in the jar). `./gradlew :backportedVeggies:build` passes; installed with `installToMods`. Package and ids unchanged (`net.mehdinoui.veggiesdelight`) |
+| 4.1 Port | BUILT | `development/creativeDelight/members/veggies`: 89 items, Java ported from the decompile; resources from the upstream jar through `tools/port_resources.py` (MIT, kept in the jar). `./gradlew :backportedVeggies:build` passes; installed with `installToMods`. Package and ids unchanged (`net.mehdinoui.veggiesdelight`) |
 | 4.2 Ids, names | BUILT | 89 keys in `item_dict.js` (Veggies Delight section; `veggiesdelight_mashed_potatoes` because More Delight's has the bare key). `name_rules.json`: Caesar Salad. Case fixes (Zucchini Seeds, "with", "and") come from the next name dump and `tools/name_audit.py` |
 | 4.3 Wild crops | BUILT | 6 rules in `wild_crops.json`. No `disable_modifiers`: the port ships no biome modifiers. Turnip patch takes sand or dirt below (the pack's sea beet feature does the same). `gen_crop_worldgen_table.py` knows the 6 wild blocks; `test_wild_crops.sh` passes. `gen_soil_compat.py`: nothing to do (VD's features test `#minecraft:dirt`) |
 | 4.4 Mature dandelion | BUILT | `wild_flowers.json` entry with `follows`; the generator writes the resolved list into `flower_features.json` (`follows`), `wild_flowers.js` reads it. 61 biomes (no snowy, desert, bare badlands, swamp). New loot table in the port. `test_wild_flowers.sh` passes |
@@ -286,7 +286,7 @@ dicts (CLAUDE.md).
 
 ### 4.1 The port (new jar)
 
-- `development/backportedVeggies`, mod id `veggiesdelight` (ids unchanged so the data and textures carry over), root
+- `development/creativeDelight/members/veggies`, mod id `veggiesdelight` (ids unchanged so the data and textures carry over), root
   `settings.gradle` entry, `installToMods`, `mod_sides.md` row (both sides). GPLv3 for our code, MIT notice kept.
 - 1.20.1 to 1.19.2: block properties need a `Material`; the creative tab is a `CreativeModeTab` subclass (no
   `BuildCreativeModeTabContentsEvent`); recipe JSON drops the `category` field; loot and worldgen JSON in 1.19.2 form.
@@ -530,7 +530,7 @@ Rows added to [TODO](todo/TODO.md) on 2026-10-24; nothing is built. Plans: [dish
 
 | File | Role |
 |---|---|
-| `development/backportedVeggies/` | The port. `tools/port_resources.py` rewrites `src/main/resources/{assets,data}` from the upstream jar (run it after changing it) |
+| `development/creativeDelight/members/veggies/` | The port. `tools/port_resources.py` rewrites `src/main/resources/{assets,data}` from the upstream jar (run it after changing it) |
 | `kubejs/startup_scripts/_lib/item_dict.js` | VD keys |
 | `kubejs/generation_scripts/worldgen/wild_crops.json`, `wild_flowers.json`; `tools/gen_wild_flowers.py`, `server_scripts/worldgen/wild_flowers.js` (`follows`) | Wild placement |
 | `kubejs/server_scripts/cooking/` (`cooking.js`, `baking.js`), `development/creativeDelight/src/main/resources/kubejs_startup/creativeengineering/fluids.js` | Recipes, juice fluids |
@@ -642,7 +642,7 @@ UI
 
 ## 9. History
 
-- 2026-10-22: built. Port jar (`development/backportedVeggies`), pack integration (§4.0). Found while building: zucchini
+- 2026-10-22: built. Port jar (`development/creativeDelight/members/veggies`), pack integration (§4.0). Found while building: zucchini
   has its own right-click harvest; the five wagon tables are the depot houses' chests; two upstream recipe mistakes
   fixed in the port. Open: the dump-driven steps (cans, stacks, placeables, compost check, crop rows, WTHIT, JEI).
 
@@ -670,3 +670,4 @@ UI
 - 2026-11-01: M1 to M3 built (5.1), the §3.3 folds R4 to R8, R10, R11 (`creativedelight/members #30`), sweet potato dough
   bread routes removed (5.2); port `-04` built (mature dandelion revert), not installed; VD-47 to VD-54, SQ-VDF-01 to -06.
   Needs a CD rebuild and restart.
+- **2026-11-02:** nested in Creative Delight (`creativedelight/members #1`): `bundled_in=creativeDelight`, jar `backportedVeggies-1.9.2-ce-19.2-05` inside the CD jar, "Veggies Delight (Creative Delight)"; the folder stays `development/creativeDelight/members/veggies`; build and install through `:creativeDelight:` only. Veggies pilot of the food dict: `veggiesdelight/recipes.js` and `cooking.js` read food items as `fd.<food key>` (`global.food`), recipe calls identical offline (`tools/test_cd_food.sh`, CDT-09).

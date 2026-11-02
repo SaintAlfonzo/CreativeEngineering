@@ -3,8 +3,9 @@
 Test prefix **DDP-** · Last updated **2026-10-25** · Status **BUILT 2026-10-25, installed in `mods/`, Shipped in 1.1.03 (deployed to server and players 2026-10-26);
 boot check SQ-DDP-01 PASSED 2026-10-25, SQ-DDP-02 to 05 and CQ-DDP queued; not run in game**
 
-The pack's 1.19.2 port of Display Delight 1.7.0 (`development/backportedDisplay`, jar
-`backportedDisplay-1.7.0-ce-19.2-01.jar`, mod id `displaydelight`, display name "Display Delight (Backport)") replaces
+The pack's 1.19.2 port of Display Delight 1.7.0 (`development/creativeDelight/members/display` since 2026-11-02, was
+`development/backportedDisplay`; jar `backportedDisplay-1.7.0-ce-19.2-02.jar` nested in the Creative Delight jar, was the
+standalone `-01`; mod id `displaydelight`, display name "Display Delight (Creative Delight)", was "(Backport)"; section 3.1) replaces
 `displaydelight-1.2.0.jar` (moved to `development/backportedDisplay/jar_archive/displaced/`). Evaluated 2026-10-25 against
 `devmods/checkNewerVersionForContent/displaydelight-1.7.0.jar` (1.20.1 / Forge), method in
 [devmods_evaluation.md](devmods_evaluation.md) section 1. Plan row: `largecontent/mod-additions #22` in
@@ -14,7 +15,7 @@ The pack's 1.19.2 port of Display Delight 1.7.0 (`development/backportedDisplay`
 **Licence:** LGPLv3 for the mod code and models (Copyright (c) 2024 jkvin114), with a third-party MIT notice (owner-supplied
 2026-10-25). 5 models are derived from the Farmers 3D resource pack by Pder (MIT, Copyright (c) 2024 Pder; the notice must stay
 with copies). The port is GPLv3 (LGPLv3 section 2 / GPLv3 section 7 allow it); both upstream notices and the LGPLv3 text
-are in `development/backportedDisplay/NOTICE-upstream.txt`, shipped in the jar.
+are in `development/creativeDelight/members/display/NOTICE-upstream.txt`, shipped in the jar.
 
 **Result in one line:** 210 food display blocks and the 2 plates (1.2.0: 191 and 2). 101 are new, 93 of them for foods the
 pack has today (95 with Creative Delight's Farmer's Delight 1.3.4 foods); every 1.2.0 block for a mod in the pack keeps its id, so placed blocks stay.
@@ -109,8 +110,29 @@ Pack interactions checked:
 | Pack models | `tools/gen_display_delight_models.py` | The port has an item model for every item and fixes the faces itself, so this now writes none and deleted the 92 overrides it wrote for 1.2.0 (`kubejs/assets/displaydelight/models/`) |
 | Shared tooling | `tools/display_delight_jar.py` (new), `placeable_catalog.py`, `gen_dd_dishes.py`, `build_deploy.py`, `lang_index.py` | The DD jar is found as `backportedDisplay-*.jar` or `displaydelight-*.jar`; links by name for the port, by loot table for 1.2.0. `lang_index` now also reads jars nested in `mods/` jars (Creative Delight's members) and the `*_upstream/` jars the ports load, which the names needed (Farmer's Delight and Miner's names were missing) |
 
-Rebuild: `python3 development/backportedDisplay/tools/port_resources.py`, then `./gradlew :backportedDisplay:build --offline`
-and `:backportedDisplay:installToMods` (game closed), then `python3 tools/gen_display_delight_names.py`.
+Rebuild: `python3 development/creativeDelight/members/display/tools/port_resources.py`, then
+`./gradlew :creativeDelight:build --offline` and `:creativeDelight:installToMods` (game closed; since 2026-11-02, 3.1), then
+`python3 tools/gen_display_delight_names.py`.
+
+### 3.1 Creative Delight member (2026-11-02, `creativedelight/members #35`, plan_creative_delight.md A)
+
+- **Module:** `development/creativeDelight/members/display` (root `settings.gradle` member map), `ce.forge-mod` as the
+  Rustic member (a source port, not a `ce.forge-repack` like `members/ends`). `bundled_in=creativeDelight`, in CD's
+  `bundle_members`; version `1.7.0-ce-19.2-02`. The port's `replaces_jars` (`displaydelight-*.jar`) and the old
+  `backportedDisplay-*.jar` are globs in CD's `replaces_jars`. Registry namespace, ids and block states unchanged.
+- **Config:** the port registers no file. Its nine settings are Creative Delight's `[display]` section
+  (`creativedelight-common.toml`, defined in CD's `CDConfig`), read by the port through the shared
+  `development/shared/cdconfig` `CdSettings` by path; positive switches now: `placeMessage`, `vanillaFoodPlacement`,
+  `eatingAnimationFix`, `silkTouchDropsFoodBlock`, `creativeTabItems`, `placeAll`, `takeAll`, `axeHidesPlates`,
+  `platesPutBack` (was `Display-Message` and the `Disable...` keys of `[Features]`). On the first boot CD's
+  `compat/MemberConfigMove` copies the old `displaydelight-common.toml` values (inverted for the `Disable...` keys) and
+  renames that file to `displaydelight-common.toml.moved`. Before CD's config loads, every setting reads as its default.
+- **Recipes:** the port's own two plate recipes stay `displaydelight:`; no pack or CD script writes a Display recipe, and
+  the `md_` links are blockstates and loot only, so there was nothing to move to `creativedelight:` (R2).
+- **Member switch:** `displaydelight` in CD's `[members]` (from `bundle_members`); there are no CD script rows for it yet.
+- **Tools:** `tools/display_delight_jar.py`, `gen_display_delight_models.py` and `gen_coaster_models.py` find the port jar
+  nested in the CD jar (`pack_paths.mod_jars`, extracted to the git-ignored `tools/.nested_jars/`); `build_deploy.py`'s
+  model check looks inside the CD jar too.
 
 Not done: `gen_dd_dishes.py --check` stops on `ends_delight:shulker_omelette` (End's Delight is now nested in the Creative
 Delight jar and `item_sprite` reads only top-level jars); the committed dish models are unchanged and render with the
@@ -140,17 +162,21 @@ Farmer's Delight Onion Soup.
 
 ## 5. Open for the owner
 
-1. Silk-touch display items: upstream default (on) kept. Turn `SilkTouchDropFoodBlock` off in the pack config if the
-   display items should stay creative-only.
+1. Silk-touch display items: upstream default (on) kept. Turn `[display] silkTouchDropsFoodBlock` off in
+   `creativedelight-common.toml` (was `SilkTouchDropFoodBlock` in the port's own file) if the display items should stay creative-only.
 2. Creative tab: kept (JEI lists the items with or without it).
 
 ## 6. Tests
 
 Scratch-server halves are queued as SQ-DDP, the client halves as CQ-DDP in
-[testing/scratch_queue.md](testing/scratch_queue.md).
+[testing/scratch_queue.md](testing/scratch_queue.md). Nested-jar rerun (2026-11-02): DDP-13 is SQ-DDP-06 and SQ-DDP-07; DDP-01 is SQ-DDP-01 and CQ-CDJ-01; run plan in the
+queue section SQ-CDJ5.
 
 - [ ] **DDP-01 Load:** start the game. -> No `displaydelight` error in `logs/latest.log`; the mod list shows "Display Delight
-  (Backport)"; a "Display Delight" creative tab with plates first.
+  (Creative Delight)" (nested in Creative Delight, no `backportedDisplay` jar in `mods/`); a "Display Delight" creative tab with plates first.
+- [ ] **DDP-13 Config move:** boot once with the old `config/displaydelight-common.toml` (set `DisableTakeAllInteratction = true`).
+  -> `creativedelight-common.toml` has `[display]` with `takeAll = false`, the old file is `displaydelight-common.toml.moved`,
+  the log has the "carried into" line; sneak + right click on a plate with 3 cookies takes one, not all. Set `takeAll = true`, rejoin: takes all.
 - [ ] **DDP-02 Old world:** open a world with 1.2.0 display blocks placed (plate, plated hamburger, beef stew, cake
   slice). -> All still there, same models; breaking each gives the food and the plate.
 - [ ] **DDP-03 New foods, one per mod:** sneak + right click on the floor: Duck Noodles, Dragon Meat Stew, Chorus Stew,
@@ -175,3 +201,10 @@ Scratch-server halves are queued as SQ-DDP, the client halves as CQ-DDP in
 ## 7. History
 
 - **2026-10-25:** evaluated 1.7.0 against 1.2.0 (sections 1, 2), then built the port (section 3), installed in `mods/`.
+- **2026-11-02:** moved into Creative Delight as a member (3.1): `members/display`, `-02`, "(Creative Delight)", settings in
+  CD's `[display]`.
+- **2026-11-02 (afternoon):** `-03`. The baked tentacle on a stick plate stays dropped (owner, plan_creative_delight.md I1):
+  `od_plated_baked_tentacle_on_a_stick` is listed in CD `data/creativedelight/swaps/removed.json`, a new swap-list key
+  (patcherMod `SwapLists`) that makes Forge ignore the old id, so an old world loads without the missing-registry warning
+  and the placed plates are gone; its `plate_displayable.json` entry removed. Rerun SQ-CDJ-05 / SQ-DDP-01 with the new
+  patcherMod.

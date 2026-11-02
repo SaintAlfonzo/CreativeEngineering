@@ -147,6 +147,7 @@
   ],
   "client": [
     "KubeJSClientResourceScriptsMixin",
+    "ScreenTooltipTopMixin",
     "SkullBlockEntityMixin",
     "JeiRecipeGuiLogicMixin",
     "JeiMissingSlotsErrorAccessor",

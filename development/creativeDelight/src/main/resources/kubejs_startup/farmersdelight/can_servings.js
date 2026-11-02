@@ -35,6 +35,7 @@ if (global.CD) global.CD.genPut('can_servings', 'farmersdelight', {
   "canned_stuffed_pumpkin": 6,
   "canned_dumplings": 4,
   "canned_tomato_sauce": 4,
-  "canned_sweet_berry_pie_filling": 4
+  "canned_sweet_berry_pie_filling": 4,
+  "canned_ratatouille": 8
  }
 })

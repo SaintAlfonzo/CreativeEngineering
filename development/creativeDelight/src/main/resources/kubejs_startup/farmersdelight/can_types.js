@@ -406,6 +406,61 @@ if (global.CD) global.CD.genPut('can_types', 'farmersdelight', {
    ],
    "texture": "canned_goods:items/canned_baked_potato"
   },
+  "canned_ratatouille": {
+   "section": "soup",
+   "existing": false,
+   "name": "Canned Ratatouille",
+   "servings": 8,
+   "hunger": 13,
+   "modifier": 0.577,
+   "meat": false,
+   "fast": false,
+   "always": false,
+   "glow": false,
+   "effects": [
+    {
+     "effect": "farmersdelight:comfort",
+     "ticks": 3600,
+     "amp": 0,
+     "chance": 1
+    }
+   ],
+   "sources": [
+    "ratatouille"
+   ],
+   "recipes": [
+    {
+     "suffix": "",
+     "inputs": [
+      {
+       "any": [
+        "ratatouille"
+       ],
+       "n": 6
+      }
+     ]
+    },
+    {
+     "suffix": "_broth",
+     "inputs": [
+      {
+       "any": [
+        "ratatouille"
+       ],
+       "n": 3
+      },
+      {
+       "any": [
+        "salt",
+        "bone_broth"
+       ],
+       "n": 1
+      }
+     ]
+    }
+   ],
+   "texture": "canned_goods:items/canned_rabit_stew"
+  },
   "canned_pasta_with_meatballs": {
    "section": "meal",
    "existing": false,

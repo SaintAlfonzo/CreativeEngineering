@@ -1,6 +1,6 @@
 # Tooltips
 
-Test prefix **TT-** · Last updated **2026-10-11** · Overall status **DEPLOYED (new removals), in-game test pending**
+Test prefix **TT-** · Last updated **2026-11-02** · Overall status **DEPLOYED (new removals), in-game test pending**
 
 ## 0. At a glance
 
@@ -18,7 +18,10 @@ keeps its own writeup.
 | FramedBlocks renamed "Framed Copycat …" | edited resource pack `Copycat Framed Block.zip` | DEPLOYED 2026-09-27; F3+T |
 | BlockRunner "Speed Multiplier" line, rewritten on camouflage blocks | BlockRunner + patcherMod `CamoSpeedTooltip` | DEPLOYED (incl. the "no matter its camo" and "newest camo sets walk behaviors for hybrid blocks" wording) |
 | Framework tooltips: armor effects, tool effects, potion buckets | dedicated client scripts | VERIFIED per their own memories |
-| Stepstools: "Worn in the Feet slot", "Stand still and hold Sprint + Jump to step up", "Move, crouch or jump to step off" | tooltips.js Tools section ([stepstool.md](stepstool.md)) | BUILT 2026-10-29; STL-02 |
+| Stepstools: "Stand still and hold Sprint + Jump to step up", "Move, crouch or jump to step off" (the slot is Curios' "Slot: Feet"; the pack's "Worn in the Feet slot" line dropped 2026-11-02) | tooltips.js Tools section ([stepstool.md](stepstool.md)) | BUILT 2026-10-29; STL-02 |
+| Tall tooltips keep their top on screen and run off the bottom (`[tooltips] keepTopOnScreen`) | patcherMod client mixin `ScreenTooltipTopMixin` | BUILT 2026-11-02 (patcherMod 1.1.07 installed), TT-39 |
+| Curios "Slot: ..." line on every item that fits a Curios slot, also where the item's mod hides it (`[tooltips] curiosSlotLine`) | patcherMod `compat/CuriosSlotTooltip` | BUILT 2026-11-02 (patcherMod 1.1.07 installed), TT-40 |
+| PneumaticCraft "Hold Shift" hint replaced by the item's description, wrapped, plain gray, on every PneumaticCraft item | [pnc_tooltips.js](../kubejs/startup_scripts/changes/pnc_tooltips.js) (startup, LOW-priority Forge listener) | BUILT 2026-11-02 (glycerol only since 2026-10-23), TT-41 |
 | Placeable food lines ("Placeable", "(while sneaking)", "Placeable on plate", "Placeable on small plate"); DD + Fruits Delight placement lines removed | [placeable_tooltip.js](../kubejs/assets/creativedelight/kubejs/_qol/placeable_tooltip.js), tags from [placeable_food.md](placeable_food.md) | DEPLOYED with 1.0.6 (2026-10-14), PL-01 to PL-08 |
 | Plantable lines ("Seed Item", "Plantable Crop", "Sapling", "Fungi Sapling", "Water Plant", "Vine", "Vertical Crop") | [plantable_tooltip.js](../kubejs/client_scripts/plantable_tooltip.js), tags from [plantable.md](plantable.md) | BUILT 2026-11-01, PT-01 to PT-06 |
 | Legendary Tooltips name underline no longer crosses the spinning item model (Iceberg's title break moved after LT's model spacer) | patcherMod client mixin `IcebergTitleBreakMixin` | BUILT 2026-10-05, in patcherMod 1.0.5, DEPLOYED with 1.0.6; TT-16 |
@@ -113,6 +116,13 @@ Examples:
 - **BlockRunner's line on framed/copycat blocks:** patcherMod `CamoSpeedTooltip` swaps it for
   "matches its camo", "matches its camo (newest camo sets walk behaviors for hybrid blocks)" on hybrid-capable items, or "1.0, no matter its camo", depending on
   `[surface.camouflage] copyCamo` ([blockrunner.md §3.3](blockrunner.md)).
+- **PneumaticCraft "Hold Shift for info" (2026-11-02, `ui/tooltips #9`; glycerol only since 2026-10-23, `#6`):** PNC's
+  `TooltipEventHandler` shows each item's description (key from `ICustomTooltipName.getTranslationKey`, 96 items in
+  PNC's lang) only while Shift is held, in aqua with `§` colour codes, else a "Hold Shift" line. `pnc_tooltips.js`
+  (startup script, Forge listener at LOW, after PNC's NORMAL) swaps that hint for the text: wrapped by PNC's own
+  `PneumaticCraftUtils.splitString` (which turns `${br}` into line breaks), colour codes stripped, gray. Holding Shift
+  still shows PNC's own aqua text. Pack wording goes in `kubejs/assets/pneumaticcraft/lang/en_us.json` (glycerol:
+  "Tastes sweet!").
 - **Create: Deep Dark echo armor set bonus:** patcherMod `EchoArmorTooltipMixin` shows the pack's
   replacement bonus (Night Vision + Phantom Bane). See memory `echo-armor-set-bonus`.
 
@@ -151,6 +161,20 @@ Examples:
 - precision sawblade profile (`addAdvanced`, reads NBT)
 
 **Fixed**
+- **Tall tooltips (2026-11-02, `ui/tooltips #5`).** Forge 43.3.9 `Screen.renderTooltipInternal` (`m_169383_`) clamps
+  `if (y + height + 6 > screenHeight) y = screenHeight - height - 6`, so a tooltip taller than the screen got a
+  negative `y` and lost its name. `ScreenTooltipTopMixin` (`@ModifyVariable` on local slot 9, the clamped `y`, just
+  before `pushPose`; slot checked with javap on the Forge client jar) raises it to at least 4, so the box starts at the
+  top and runs off the bottom. Legendary Tooltips and Iceberg draw their frames from this position. A short tooltip only
+  moves when the mouse is within 16 px of the top of the screen. CEConfig `[tooltips] keepTopOnScreen` (default on,
+  read live). Not covered: tooltips FTB Library draws with its own text renderer (text-only quest hovers), and
+  Iceberg's own `Tooltips.calculateRect` path if a test shows a tall tooltip going through it (brief step 2).
+- **Curios slot line (2026-11-02, `ui/tooltips #8`).** Curios 5.1.6.4 (`ClientEventHandler.onTooltip`) builds
+  "Slot: Face, Head" (gold, names yellow) from `getCurioTags(item)` (the `curios:<slot>` tags plus mixins such as
+  Simple Hats' head rule), but for an item with a curio capability it passes the line through
+  `ICurio.getSlotsTooltip`, which a mod can override to hide it. `compat/CuriosSlotTooltip` (Forge LOW, client, only
+  with Curios) adds the same line in the same place to any curio item whose tooltip has no `curios.slot` line.
+  CEConfig `[tooltips] curiosSlotLine` (default on). Owner rule in [curios_slots.md](curios_slots.md) 1.
 - **AppleSkin food bars (2026-10-20).** AppleSkin only adds its bars in Forge's `RenderTooltipEvent.GatherComponents`
   when the event carries an item. Screens that build an item's lines themselves and draw them with the stackless
   `renderComponentTooltip(pose, lines, x, y)` / `renderTooltip(pose, lines, image, x, y)` send `ItemStack.EMPTY`. Each fix
@@ -268,6 +292,18 @@ Hover items in JEI or the inventory. BlockRunner's line needs `block_speed_multi
 - [ ] **TT-28 Wares:** open a delivery agreement requesting food, hover the requested item → food bar
 - [ ] **TT-29 Patchouli:** in any Patchouli book page that shows a food item, hover it → food bar, and the "(Shift for recipe)" line still there
 - [ ] **TT-30 AE2:** request a crafting job for bread; hover bread in the crafting plan and in the CPU status table → food bar; in the pattern encoding terminal, put bread in a processing input and hover it → food bar with the amount lines
+**Tall tooltips, Curios slots, PneumaticCraft (2026-11-02)**
+- [ ] **TT-39 Tall tooltip:** at GUI scale 4 (or a small window), hover an item with a very long tooltip (a shulker box
+  full of named items, or a PneumaticCraft module such as the Logistics Module) → the name is at the top of the screen,
+  the end runs off the bottom. Set `[tooltips] keepTopOnScreen = false` → vanilla (name cut off). A short tooltip near
+  the bottom of the screen still moves up to fit.
+- [ ] **TT-40 Curios slots:** hover a Stepstool → "Slot: Feet" (no "Worn in the Feet slot"); a Simple Hats mask →
+  "Slot: Face, Head" (any order); the Falconry Glove → "Slot: Hands"; a Sophisticated Backpack and a Lightman's wallet →
+  their slot. No item shows the "Slot:" line twice. A non-curio item (stone) has none.
+- [ ] **TT-41 PneumaticCraft:** without Shift, hover the Air Canister → its description in gray, wrapped, no "Hold
+  Shift" line; the Pressure Gauge Module → the formula and text in gray (no blue or aqua), paragraphs on their own
+  lines; Glycerol → "Tastes sweet!" in gray. Holding Shift → PNC's own aqua text.
+
 - [ ] **TT-09 No dead patterns:** search `logs/latest.log` for `[addTooltipPattern]`. → Every line reports more than 0 matches.
 
 ## 8. Tooltips To Add
@@ -285,7 +321,7 @@ Hover items in JEI or the inventory. BlockRunner's line needs `block_speed_multi
 - [] Flower pots- a label on every pot, every pot distinct (scratchpad 2026-10-21, `blocks/framed-and-decor #6`)
 
 Not a line but the tooltip box: large item tooltips should run off the bottom of the screen, not the top (scratchpad
-2026-10-21, `ui/tooltips #5`).
+2026-10-21, `ui/tooltips #5`): BUILT 2026-11-02, section 3 "Fixed".
 
 ### Mods to Cover
 - [] Botania
@@ -325,3 +361,8 @@ Not a line but the tooltip box: large item tooltips should run off the bottom of
   Wine Rack; the Brewin' heat / cold line puts "Useful for keg brewing and wine casking" on its own line
   ([alcohol.md](alcohol.md) 10.18; VB-84, VB-92, AL-77).
 - 2026-10-31: scratchpad notes translated into TODO rows (`ui/tooltips #12`). No code changed.
+- 2026-11-02: `ui/tooltips #5` tall tooltips keep their top (`ScreenTooltipTopMixin`), `#8` Curios "Slot:" line on
+  every curio item (`CuriosSlotTooltip`), both CEConfig `[tooltips]`; `#9` every PneumaticCraft "Hold Shift" hint
+  replaced by the description in plain gray (`pnc_tooltips.js`, was glycerol only, in aqua); stepstools' "Worn in the
+  Feet slot" line dropped. patcherMod 1.1.07 built and installed. `#12` (tree fruit season lines) was already built
+  with `farming/crops #5` on 2026-10-30. TT-39 to TT-41.

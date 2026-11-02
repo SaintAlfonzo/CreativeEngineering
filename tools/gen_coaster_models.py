@@ -169,7 +169,10 @@ def file_name(item_id):
 def jars_for(patterns):
     out = []
     for pattern in patterns:
-        found = sorted(lang_index.INSTANCE.glob(pattern))
+        folder, _, name = pattern.rpartition('/')
+        # mods/ jars may be nested in a bundle (Creative Delight members)
+        found = (lang_index.pack_paths.mod_jars(name, lang_index.INSTANCE / folder) if folder == 'mods'
+                 else sorted(lang_index.INSTANCE.glob(pattern)))
         if found:
             out.append(found[-1])
     return out

@@ -141,7 +141,7 @@ drinks go, Rustic's drinks give Caffeinated instead of Speed and Haste, every ot
   schema, so gambler's tea is removed and rebuilt with `R.frBrewing` on Rustic's beans. `mortar.js` skips catalogue
   entries naming a purged item (`[mortar] 6 of 7`).
 
-### 2.9 Salt (built 2026-10-26, scratch server PASSED r1031 2026-10-31 after the 2026-10-28 fix; TODO `food/seasoning #6`)
+### 2.9 Salt (VERIFIED COMPLETE 2026-11-02: code in CD `vintage_items.js` and `vintagedelight/recipes.js`, scratch r1031 pass; only play is open; built 2026-10-26, scratch server PASSED r1031 2026-10-31 after the 2026-10-28 fix; TODO `food/seasoning #6`)
 
 Scratch run 2026-10-28 ([run log](testing/scratch_queue_run_2026-10-28.md)): SQ-SALT-01 FAILED on two leftovers, fixed
 2026-10-28 in CD `vintagedelight/recipes.js` (rebuilt, CD jar installed, retest SQ-SALT-01): the 3 froglight jar recipes

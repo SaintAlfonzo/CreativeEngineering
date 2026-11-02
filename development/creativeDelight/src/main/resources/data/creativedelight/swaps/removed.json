@@ -1,0 +1,6 @@
+{
+  "_comment": "Ids dropped with no replacement (swap lists 'removed', SwapLists.java). Old worlds load them as missing without the warning; never converted. Never prune. Display baked tentacle plate: tentacle foods removed (creativedelight members #36, plan_creative_delight.md I1, 2026-11-02).",
+  "removed": [
+    "displaydelight:od_plated_baked_tentacle_on_a_stick"
+  ]
+}

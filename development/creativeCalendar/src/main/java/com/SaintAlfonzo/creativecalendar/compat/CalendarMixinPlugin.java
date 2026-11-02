@@ -34,7 +34,8 @@ public class CalendarMixinPlugin extends GatedMixinPlugin {
             Map.entry("XaeroTimeInfoMixin", List.of("xaerominimap")),
             Map.entry("SeasonHudHelperMixin", List.of("seasonhud")),
             Map.entry("SeasonHudCurrentSeasonMixin", List.of("seasonhud")),
-            Map.entry("PrettyRainSeasonMixin", List.of("particlerain")));
+            Map.entry("PrettyRainSeasonMixin", List.of("particlerain")),
+            Map.entry("CoolRainSeasonMixin", List.of("coolrain")));
 
     public CalendarMixinPlugin() {
         super("[creativecalendar]", NEEDS_MOD);

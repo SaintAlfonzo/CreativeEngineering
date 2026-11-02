@@ -198,6 +198,7 @@ After the sweeps, a single pass merges them and adds:
 4. **Dicts** (`startup_scripts/_lib`, 18k lines): closed 2026-11-01: into Common's jar `kubejs_startup`.
 5. **perfBot and clientCapture:** closed 2026-11-01: nested in Creative Devtools.
 6. **Devtools on the live server:** dev `mods/` only, or also on CreEngServer for `/dumpall` there?
+8. **Release number: CLOSED 2026-11-02 (owner): the Creative Split deployment is 1.2.00.** The Creative Delight cutover (creative_delight.md `members #10`) goes in the next deployment unless a fix must be pushed first, so it ships before 1.2.00.
 7. **Publishing:** which jars are meant to be published alone (that drives the licence audit, as creative_brewing.md 9
    did for CB)?
 
@@ -565,6 +566,8 @@ rides the Worldgen carve. Game closed for every install: `./gradlew :creativeCom
 Mimicarnation, colony rule, renames) to players: bullets under a `## Nether's Delight` family when built.
 
 ## 8. History
+
+- 2026-11-02, owner: Creative Split deploys as 1.2.00; the Creative Delight cutover goes in the next deployment before it.
 
 - 2026-11-01: plan written (owner request). Measurements in section 1. Nothing audited, nothing moved.
 - 2026-11-01, owner notes:

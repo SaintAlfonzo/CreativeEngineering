@@ -45,7 +45,7 @@ Share = the biome's % of its layer in the sample set (surface or underground); r
 | Overworld | `terralith:yellowstone` | 1.5 | 3.175 → 4.775 % | |
 | Overworld | `terralith:yosemite_cliffs`, `yosemite_lowlands` | 1.5 | 0.14 / 0.11 → 0.2 / 0.16 % | |
 | Overworld | rarity floor + targets: 41 rare biomes lifted (37 surface, 4 cave), 9 never-spawning biomes targeted (volcanic crater included), 14 donors (tables below) | see below | | 2026-10-19 |
-| End | `nullscape:shadowlands` | 0.5 | 18.933 → 9.633 % | |
+| End | `nullscape:shadowlands` | 0.75 (0.5 before 2026-11-02, row #9) | 18.933 → about 14.2 % (old samples; aimed about 16 % of the 21.3 % share) | confirm in the boot log (SQ-WG-BIOME-SHADOW) |
 | End | `nullscape:void_barrens` | 2 (0.75 before 2026-10-30) | 2.71 → 5.41 % (2026-10-26 samples) | |
 | End | `nullscape:crystal_peaks` | 3 (0.25 before 2026-10-30) | 1.315 → 3.95 % (2026-10-26 samples) | |
 | Nether | `minecraft:nether_wastes` | 2.0 | 34.9 → 46.8 % | aimed 69.8 % |

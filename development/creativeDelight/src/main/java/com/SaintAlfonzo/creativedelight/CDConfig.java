@@ -29,6 +29,9 @@ import java.util.Map;
  * {@code global.CD.qol(id)}, Java through {@link #qol}.</li>
  * <li>{@code [worldgen]}: one switch per worldgen system CD owns ({@link #WORLDGEN}, creative_delight.md 24), default on;
  * scripts read it through {@code global.CD.worldgen(id)}, Java through {@link #worldgen}.</li>
+ * <li>{@code [display]}, {@code [vintage]}: the settings of the Display Delight and Vintage Delight ports, one section per
+ * member (plan_creative_delight.md R3, B1; 2026-11-02). Defined here, read by the member through its shared
+ * {@code CdSettings} by path; the ports' old files are read once ({@link #MEMBER_FILES}) and renamed.</li>
  * </ul>
  * The {@code integrations} and {@code swappers} sections of 8.1 are added with the first feature that uses them.
  *
@@ -110,6 +113,7 @@ public final class CDConfig {
 		WORLDGEN.put(WILD_CROPS, b.comment("Which biomes each wild crop and fruit tree spawns in (_worldgen/wild_crops.json).",
 				"Off: every crop as its mod ships it.").define(WILD_CROPS, true));
 		b.pop();
+		defineMemberSettings(b);
 		// Moved from creativeengineering-common.toml at the CD carve (2026-11-01, creative_delight.md 34): same keys,
 		// comments and defaults, in the old order; ConfigRename carries the player's values over on the first boot.
 		CROP_GROWTH = new CropGrowth(b);
@@ -150,6 +154,61 @@ public final class CDConfig {
 		LogUtils.getLogger().warn("[creativedelight] config/{} still has entries that moved to config/{}: {}. "
 				+ "Creative Delight reads only its own file; copy any edited value over (patcherMod drops these from its file).",
 				OLD_FILE, FILE, found);
+	}
+
+	/**
+	 * Old config files of members whose settings moved here (plan_creative_delight.md A6): file -> {old path -> new path},
+	 * a new path starting with {@code !} takes the old value inverted (the "Disable..." keys became positive switches).
+	 * Read once by {@code compat.MemberConfigMove} at construction, then the old file is renamed to {@code <file>.moved}.
+	 */
+	public static final Map<String, Map<String, String>> MEMBER_FILES = Map.of(
+			"displaydelight-common.toml", Map.of(
+					"Features.Display-Message", "display.placeMessage",
+					"Features.Disable-Vanila-Food-Placement", "!display.vanillaFoodPlacement",
+					"Features.Disable-Eating-Animation-Fix", "!display.eatingAnimationFix",
+					"Features.SilkTouchDropFoodBlock", "display.silkTouchDropsFoodBlock",
+					"Features.DisableCreativeTabItems", "!display.creativeTabItems",
+					"Features.DisablePlaceAllInteratction", "!display.placeAll",
+					"Features.DisableTakeAllInteratction", "!display.takeAll",
+					"Features.DisableHidePlateInteratction", "!display.axeHidesPlates",
+					"Features.DisablePutPlateInteratction", "!display.platesPutBack"),
+			"vintagedelight-common.toml", Map.of(
+					"worldgen.magicVineConvertsDirtToLushGrass", "vintage.worldgen.magicVineConvertsDirtToLushGrass",
+					"pickling_jar.remainderBuffer", "vintage.pickling_jar.remainderBuffer",
+					"pickling_jar.stallWhenFull", "vintage.pickling_jar.stallWhenFull"));
+
+	/** The member sections (R3): keys the ports read by path (their CdSettings); names must match those reads. */
+	private static void defineMemberSettings(ForgeConfigSpec.Builder b) {
+		b.comment("Display Delight (Creative Delight): placing food on the floor and on plates. Was displaydelight-common.toml",
+				"(its [Features] values are carried over once). Changes apply at once.").push("display");
+		b.comment("A chat message when a food cannot be placed.").define("placeMessage", true);
+		b.comment("Mushroom stew, rabbit stew and beetroot soup can be placed. Off if that clashes with another mod.")
+				.define("vanillaFoodPlacement", true);
+		b.comment("Skip the eating animation while plating some foods. Off if foods can't be eaten or plated.")
+				.define("eatingAnimationFix", true);
+		b.comment("A placed food broken with Silk Touch drops the food block item.").define("silkTouchDropsFoodBlock", true);
+		b.comment("Display Delight's items in its creative tab (and so in JEI's list).").define("creativeTabItems", true);
+		b.comment("Shift right-click places all held items at once.").define("placeAll", true);
+		b.comment("Shift right-click takes all items at once.").define("takeAll", true);
+		b.comment("Right-click with an axe hides a food's plate.").define("axeHidesPlates", true);
+		b.comment("Right-click with a plate puts a hidden plate back.").define("platesPutBack", true);
+		b.pop();
+
+		b.comment("Vintage Delight (Creative Delight). Was vintagedelight-common.toml (its values are carried over once).")
+				.push("vintage");
+		b.push("worldgen");
+		b.comment("Magic vine trees turn nearby dirt-like blocks into lush grass while they generate.")
+				.define("magicVineConvertsDirtToLushGrass", true);
+		b.pop();
+		b.push("pickling_jar");
+		b.comment("Keep ingredient leftovers (glass bottles, bowls, buckets) in the Pickling Jar's leftover slot instead of",
+				"throwing them out.").define("remainderBuffer", true);
+		b.comment("With remainderBuffer on, the jar waits instead of pickling when a batch's leftovers would not fit.",
+				"Off pickles anyway and throws what does not fit.").define("stallWhenFull", true);
+		b.comment("Ticks a leftover the jar throws out (remainderBuffer off, or the slot full) waits before it leaves the jar.",
+				"0 throws it on the same tick as the batch.").defineInRange("overflowEjectDelayTicks", 20, 0, 1200);
+		b.pop();
+		b.pop();
 	}
 
 	private static void qolSwitch(ForgeConfigSpec.Builder b, String id, String... comment) {

@@ -587,7 +587,16 @@ salted overlay in three shades of the seasoning's own item (cheese wedge, onion 
 texture swapper, so the colours shifted slightly). Salt's own overlay is off (`config/salt-client.toml` `SaltingOverlayEnabled =
 false`, backup in `configs_edited/`): Salt caches its layered model per item, so it would show the first seasoned stack's
 icon on every salted one. All overlays share one shape, so on a food with several the last one drawn covers the
-others. FO-55.
+others. FO-55. **Top right (2026-11-02, TODO `food/seasoning #15`):** every overlay, Salt's salted overlay included
+(pack copy `kubejs/assets/salt/textures/item/salted_overlay.png`, source `textureswapper/seasoning/src/salt_overlay.png`),
+moved from the top-left to the top-right corner of the item (x 10 to 14, `SHIFT_X = 9` in make_seasoning.py); only the
+textures changed, the models and the code are the same. FO-60.
+
+**Powdered sugar block in WTHIT (2026-11-02, TODO `food/seasoning #14`):** WTHIT's vanilla plugin shows every
+`PowderSnowBlock` as a snow block (its `override_powder_snow` option), so the powdered sugar block read "Snow Block" /
+Minecraft. Creative Delight `compat/wthit/WthitPowderedSugar` (plugin `creativedelight:powdered_sugar_name`, client)
+overrides the powdered sugar block first (priority 0) with its own state, so WTHIT shows the block's own name and mod;
+real powder snow keeps WTHIT's default. FO-61.
 
 Limits: a seasoned food used as a
 recipe input loses the seasoning; JEI shows seasoned and plain popcorn as one entry (no subtype interpreter). Not built
@@ -951,6 +960,13 @@ Cooking oil and fried eggs (3.7), after a restart:
   names too. `logs/kubejs/client.log` lists `Loaded script creativedelight:kubejs/creativeengineering/seasoning_lang.js`
   (and the other `creativedelight:kubejs/...` client scripts) once, before any F3+T. Placeable food lines (PL-01) show
   without F3+T.
+- [ ] **FO-60 Seasoned icons top right** (client, Creative Delight jar of 2026-11-02 13:19 and the pack's `kubejs/assets`):
+  Popcorn + Cheese, + Onion, + Garlic, + Crushed Void Pepper, salted popcorn and salted cooked beef show their sparkle in
+  the top-right corner of the item (hotbar, hand, dropped, JEI Seasoning page), nothing left in the top-left corner;
+  F3+T keeps it there; no missing-texture squares.
+- [ ] **FO-61 Powdered sugar in WTHIT** (client): place powdered sugar from its bucket and look at it: WTHIT reads
+  "Powdered Sugar" with the mod Creative Engineering (or Creative Delight), not "Snow Block" / Minecraft. Real powder
+  snow still reads as WTHIT shows it by default (Snow Block unless `override_powder_snow` is off).
 
 ## 8. History
 

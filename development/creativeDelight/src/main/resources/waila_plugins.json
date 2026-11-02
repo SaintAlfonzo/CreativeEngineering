@@ -13,5 +13,11 @@
     "required": [
       "farmersrespite"
     ]
+  },
+  "creativedelight:powdered_sugar_name": {
+    "entrypoints": {
+      "client": "com.SaintAlfonzo.creativedelight.compat.wthit.WthitPowderedSugar"
+    },
+    "side": "client"
   }
 }

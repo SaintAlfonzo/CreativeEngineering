@@ -54,6 +54,8 @@ public class CreativeDelight {
 				CDConfig.OLD_FILE, CDConfig.FILE, CDConfig.MOVED_SECTIONS)
 				|| !com.SaintAlfonzo.creativeengineering.swap.ConfigRename.mergeSections(
 				CDConfig.OLD_FILE, CDConfig.FILE, CDConfig.MOVED_SECTIONS).isEmpty();
+		// The Display and Vintage ports' own files, read once into [display] / [vintage] (plan_creative_delight.md A6).
+		com.SaintAlfonzo.creativedelight.compat.MemberConfigMove.run();
 		ModLoadingContext.get().registerConfig(ModConfig.Type.COMMON, CDConfig.SPEC, CDConfig.FILE);
 		if (!carried) CDConfig.warnOldKeys();
 		VillageFarmCrops.PROCESSORS.register(FMLJavaModLoadingContext.get().getModEventBus());

@@ -65,6 +65,7 @@ global.seasoning = {
 		})
 		$Seasonings.define(JSON.stringify({
 			id: s.id,
+			name: s.name,
 			nutrition: s.nutrition || 0,
 			saturation: s.saturation || 0,
 			heal: s.heal || 0,

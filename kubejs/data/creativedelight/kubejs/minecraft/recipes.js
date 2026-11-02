@@ -18,10 +18,10 @@ ServerEvents.recipes(e => {
 
 		//######################### Sugar #########################
 		// Every sugar slot takes a sweetener tag by kind of recipe (TODO dishes/ingredients #3; tags in creativeengineering/tags.js):
-		//   brewing (keg, wine)   sugar, powdered sugar, honey bottle, honeycomb (no glycerol)
+		//   brewing (keg, wine)   sugar, powdered sugar, honey bottle, honeycomb
 		//   plain (not food)      sugar, powdered sugar: Botania, speed modules and upgrades, ethanol, potions, spider eye, blaze cake
-		//   drinks                sugar, powdered sugar, honey bottle (no honeycomb, no glycerol)
-		//   cooking (the rest)    sugar, powdered sugar, glycerol, honey bottle, honeycomb
+		//   drinks                sugar, powdered sugar, honey bottle (no honeycomb)
+		//   cooking (the rest)    sugar, powdered sugar, honey bottle, honeycomb (glycerol is no sugar since 2026-11-02)
 		// The four passes are disjoint (a swapped slot holds a tag with sugar in it, so a later pass would match it again).
 		// Drinks: the drink food type, plus fluid drinks and the two drinks with no food type, by recipe id. Recipes that need
 		// real sugar (powdered sugar, sugar cube, powdered sugar bucket) are script-added on i.sugar, so no pass sees them.

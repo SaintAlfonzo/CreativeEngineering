@@ -23,7 +23,7 @@ ServerEvents.recipes(e => {
 		// either colour (upgrade_aquatic/tags.js). Results, 1.0 xp and 200 ticks as 4.1.2.
 		R.remove({ id: 'abnormals_delight:pickerelweed_juice' }, e)
 		R.remove({ id: 'abnormals_delight:pike_with_beetroot' }, e)
-		R.fdCooking([i.t_pickerelweed, i.t_pickerelweed, i.any_sweetener_drink], i.pickerelweed_juice, e, 'pickerelweed_juice', 1.0, 200)
+		// Pickerelweed Juice: pot and Kettle by the drink rules (creativeengineering/drinks.js, food/drinks #15)
 		R.fdCooking([i.raw_pike, i.t_pickerelweed, i.t_pickerelweed, i.beetroot], i.pike_with_beetroot, e, 'pike_with_beetroot', 1.0, 200)
 	})
 })

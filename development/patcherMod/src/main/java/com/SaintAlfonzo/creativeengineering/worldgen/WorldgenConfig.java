@@ -71,7 +71,7 @@ public final class WorldgenConfig {
 	public static int locateBatchTimeoutSeconds() { return get(() -> wg().locate.batchTimeoutSeconds.get(), 120); }
 	public static int locateCensusRegionChunks() { return get(() -> wg().locate.censusRegionChunks.get(), 32); }
 	public static int locateLoadTimeoutSeconds() { return get(() -> wg().locate.loadTimeoutSeconds.get(), 300); }
-	public static int locateSearchTimeoutSeconds() { return get(() -> wg().locate.searchTimeoutSeconds.get(), 300); }
+	public static int locateSearchTimeoutSeconds() { return get(() -> wg().locate.searchTimeoutSeconds.get(), 120); }
 
 	// ── distant (Distant Horizons generation) ────────────────────────────────
 	public static boolean distantClip() { return get(() -> wg().distant.clip.get(), true); }
@@ -126,6 +126,7 @@ public final class WorldgenConfig {
 	public static boolean earthFootprintAllPieces() { return get(() -> wg().earthFill.footprintAllPieces.get(), true); }
 	public static int earthBeardReach() { return get(() -> wg().earthFill.beardReach.get(), 6); }
 	public static int earthBuryReach() { return get(() -> wg().earthFill.buryReach.get(), 10); }
+	public static int earthWaterReach() { return get(() -> wg().earthFill.waterReach.get(), 2); }
 	public static int earthMaxMoundHeight() { return get(() -> wg().earthFill.maxMoundHeight.get(), 8); }
 	public static boolean earthBeardFootprint() { return get(() -> wg().earthFill.beardFootprint.get(), false); }
 	public static boolean earthPrune() { return get(() -> wg().earthFill.prune.get(), true); }

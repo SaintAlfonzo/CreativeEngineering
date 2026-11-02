@@ -6,6 +6,8 @@ ServerEvents.recipes(e => {
 	if (!global.CD || !global.CD.on('veggiesdelight')) return
 
 	var i = global.item
+	// Food items by their food dict key (creative_delight.md 13; Veggies pilot, framework #4): fd is global.food
+	var fd = global.food
 	var f = global.fluid
 	var R = global.NCH
 
@@ -20,16 +22,16 @@ ServerEvents.recipes(e => {
 
 		//######################### Juices #########################
 		// Fluids like chorus juice (development/creativeDelight/src/main/resources/kubejs_startup/creativeengineering/fluids.js; feature_writeup/veggies_delight.md 4.9). Pot: Veggies
-		// Delight's own inputs, re-id'd manual only. Create mixer, heated: the same inputs + 250 mB water -> 250 mB; spout, drain
-		// and IE Bottling Machine at 250 mB. The juice and tea rule (TODO food/drinks #8) may change the ratios.
+		// Delight's pot recipes removed: pot and Kettle follow the drink rules (creativeengineering/drinks.js, food/drinks #15).
+		// Create mixer, heated: Veggies Delight's pot inputs + 250 mB water -> 250 mB; spout, drain and IE Bottling Machine at
+		// 250 mB.
 		;[
-			['carrot_juice', [i.minecraft_carrot, i.minecraft_carrot, i.any_sweetener_drink]],
-			['dandelion_juice', [i.dandelion_leaf, i.dandelion_leaf, i.sugar_cane]],
-			['turnip_water', [i.turnip, i.turnip, i.any_sweetener_drink]],
+			['carrot_juice', [fd.veggie_carrot, fd.veggie_carrot, i.any_sweetener_drink]],
+			['dandelion_juice', [fd.veggie_dandelion_leaf, fd.veggie_dandelion_leaf, i.sugar_cane]],
+			['turnip_water', [fd.veggie_turnip, fd.veggie_turnip, i.any_sweetener_drink]],
 		].forEach(j => {
 			var item = i[j[0]], fluid = f[j[0]]
 			R.remove({ id: 'veggiesdelight:cooking/' + j[0] }, e)
-			R.fdCooking(j[1], Item.of(item, 1), e, j[0] + '_manual_only', 1.0, 200, i.glass_bottle)
 			R.createMixing(Fluid.of(fluid, 250), j[1].concat([Fluid.of(f.water, 250)]), e, j[0], 'heated')
 			R.createFilling(item, [i.glass_bottle, Fluid.of(fluid, 250)], e, j[0])
 			R.createEmptying([i.glass_bottle, Fluid.of(fluid, 250)], item, e, j[0])
@@ -42,7 +44,7 @@ ServerEvents.recipes(e => {
 		var n = (id, count) => ({ id: id, count: count })
 		var SHEET = { exp: 0.1, time: 200, tool: i.t_bakeware_baking_sheet }
 		R.remove({ id: 'veggiesdelight:cauliflower_bread' }, e)
-		R.ceBaking([i.any_dough, n(i.cauliflower, 2)], Item.of(i.cauliflower_bread, 1), e, 'cauliflower_bread', SHEET)
+		R.ceBaking([i.any_dough, n(fd.veggie_cauliflower, 2)], Item.of(fd.grain_cauliflower_bread, 1), e, 'cauliflower_bread', SHEET)
 
 		//######################### Mhadjeb removed #########################
 		// Both items are in removed_items.js (TODO dishes/meals #32); their recipes, the Vintage cheese variant included.
@@ -53,14 +55,14 @@ ServerEvents.recipes(e => {
 		// Potato noodle is Gnocchi and potato noodles are Creamy Gnocchi (namechanges.js; TODO dishes/meals #33). Gnocchi:
 		// the potato pot recipe as before, or 2 from sweet potato dough on the board (there is no potato dough yet).
 		// Creamy Gnocchi: milk, 2 gnocchi and onion, garlic or pickled onion; Vintage's cheese variant stays.
-		R.fdCutting(i.sweet_potato_dough, i.any_knife, Item.of(i.potato_noodle, 2), e, 'gnocchi_from_sweet_potato_dough')
+		R.fdCutting(fd.dough_sweet_potato, i.any_knife, Item.of(fd.grain_potato_noodle, 2), e, 'gnocchi_from_sweet_potato_dough')
 		R.remove({ id: 'veggiesdelight:cooking/potato_noodles' }, e)
-		R.fdCooking([i.milk, i.potato_noodle, i.potato_noodle, [i.onion, i.t_crops_garlic, i.pickled_onion]], i.potato_noodles, e,
+		R.fdCooking([i.milk, fd.grain_potato_noodle, fd.grain_potato_noodle, [i.onion, i.t_crops_garlic, fd.veggie_pickled_onion]], fd.dish_potato_noodles, e,
 			'creamy_gnocchi', 1.0, 200, i.bowl)
 
 		var F = global.CD.food(e)
 		var VD_COOKED_MEAT = [i.cooked_beef, i.cooked_chicken, i.cooked_mutton]
-		var VD_QUICHE_MEAT = [i.cooked_mutton, i.cooked_chicken, i.cooked_beef, i.cooked_pork, i.cooked_bacon]
+		var VD_QUICHE_MEAT = [i.cooked_mutton, i.cooked_chicken, i.cooked_beef, i.cooked_pork, fd.meat_cooked_bacon]
 
 		//######################### Zucchini quiche #########################
 		// Quiche family rule (food_families.md `quiche/whole`; creativedelight/members #30 R4): one quiche variant beside
@@ -68,36 +70,36 @@ ServerEvents.recipes(e => {
 		// cheese), plus one assembly on the crust. 3 roasted zucchini, the cooked meat, milk or any cheese.
 		R.remove({ id: 'veggiesdelight:zucchini_quiche' }, e)
 		R.remove({ id: 'veggiesdelight:compat/vintagedelight/zucchini_quiche' }, e)
-		R.shaped(i.zucchini_quiche, ['zzz', 'aOm'], { z: i.roasted_zucchini, a: [i.milk, i.any_cheese], O: i.pie_crust, m: VD_QUICHE_MEAT },
+		R.shaped(fd.dish_zucchini_quiche, ['zzz', 'aOm'], { z: fd.veggie_cooked_zucchini, a: [i.milk, i.any_cheese], O: fd.dough_pie_crust, m: VD_QUICHE_MEAT },
 			e, 'zucchini_quiche_manual_only')
-		F.assemble(i.pie_crust, [i.roasted_zucchini, i.roasted_zucchini, i.roasted_zucchini, VD_QUICHE_MEAT,
-			{ fill: Fluid.of(f.milk, 250) }], i.zucchini_quiche)
+		F.assemble(fd.dough_pie_crust, [fd.veggie_cooked_zucchini, fd.veggie_cooked_zucchini, fd.veggie_cooked_zucchini, VD_QUICHE_MEAT,
+			{ fill: Fluid.of(f.milk, 250) }], fd.dish_zucchini_quiche)
 
 		//######################### Vegan pizza #########################
 		// Pizza family rule (food_families.md `pizza/whole`; owner 2026-11-01, creativedelight/members #20, #30 R5): base
 		// row any dough, tomato sauce, any dough; toppings above (VD's own: bell pepper, a vegetable, onion). One shaped
 		// recipe (manual only) plus one assembly on the dough.
 		R.remove({ id: 'veggiesdelight:vegan_pizza' }, e)
-		R.shaped(i.vegan_pizza, ['abc', 'xOx'], { a: i.any_bell_pepper, b: i.vegetables, c: i.onion, x: i.any_dough, O: i.tomato_sauce },
+		R.shaped(fd.dish_vegan_pizza, ['abc', 'xOx'], { a: i.any_bell_pepper, b: i.vegetables, c: i.onion, x: i.any_dough, O: fd.sauce_tomato },
 			e, 'vegan_pizza_manual_only')
-		F.assemble(i.any_dough, [i.tomato_sauce, i.any_dough, i.any_bell_pepper, i.vegetables, i.onion], i.vegan_pizza)
+		F.assemble(i.any_dough, [fd.sauce_tomato, i.any_dough, i.any_bell_pepper, i.vegetables, i.onion], fd.dish_vegan_pizza)
 
 		//######################### Stuffed zucchini #########################
 		// Stuffed family rule (food_families.md `stuffed`; creativedelight/members #30 R6): both VD stuffed zucchinis are one
 		// family, crafting (cooking.js, heatless) plus one assembly on the roasted zucchini, as the Stuffed Potato. The boat:
 		// meat, then milk (as the stuffed potato). The bowl: 2 more roasted zucchini, meat, tomato sauce (its bowl is the dish's).
-		F.assemble(i.roasted_zucchini, [VD_COOKED_MEAT, { fill: Fluid.of(f.milk, 250) }], i.stuffed_zucchini_boat)
-		F.assemble(i.roasted_zucchini, [i.roasted_zucchini, i.roasted_zucchini, VD_COOKED_MEAT, i.tomato_sauce], i.stuffed_zucchinis)
+		F.assemble(fd.veggie_cooked_zucchini, [VD_COOKED_MEAT, { fill: Fluid.of(f.milk, 250) }], fd.dish_stuffed_zucchini_boat)
+		F.assemble(fd.veggie_cooked_zucchini, [fd.veggie_cooked_zucchini, fd.veggie_cooked_zucchini, VD_COOKED_MEAT, fd.sauce_tomato], fd.dish_stuffed_zucchinis)
 
 		//######################### Vegetarian patty #########################
 		// Patty family (creativedelight/members #30 R11): the raw patty cooks by the cooking trio like any cooked cut piece
 		// (VD's own furnace, smoker and campfire recipes are replaced by the family's).
-		F.veggieCook(i.raw_vegetarian_patty, i.cooked_vegetarian_patty)
+		F.veggieCook(fd.veggie_vegetarian_patty, fd.veggie_cooked_vegetarian_patty)
 		// Burger rule (creativeengineering/recipes.js): shaped, toppings on top, patty in the middle, bread at the bottom,
 		// plus one assembly. Started on the patty, as the egg burger: assemblies on bread need a first step of their own.
 		R.remove({ id: 'veggiesdelight:vegetarian_burger' }, e)
-		F.burgerAssemble(['C T', ' P ', ' B '], { C: i.cabbage, T: i.tomato, P: i.cooked_vegetarian_patty, B: i.t_bread },
-			i.vegetarian_burger, [i.cabbage, i.tomato, i.t_bread], i.cooked_vegetarian_patty)
+		F.burgerAssemble(['C T', ' P ', ' B '], { C: i.cabbage, T: i.tomato, P: fd.veggie_cooked_vegetarian_patty, B: i.t_bread },
+			fd.sandwich_burger_vegetarian, [i.cabbage, i.tomato, i.t_bread], fd.veggie_cooked_vegetarian_patty)
 		// VD's shapeless More Delight burgers on its patty go; the patty is in their shaped recipes and assemblies instead
 		;['simple_hamburger', 'hamburger_with_egg', 'loaded_hamburger'].forEach(b =>
 			R.remove({ id: 'veggiesdelight:compat/moredelight/' + b }, e))
@@ -106,13 +108,13 @@ ServerEvents.recipes(e => {
 		// Skewer family rule (food_families.md `skewer`; creativedelight/members #30 R10): shaped, a diagonal skewer as the
 		// Crispy Skewer, plus one assembly on the stick.
 		R.remove({ id: 'veggiesdelight:turnip_mutton_skewer' }, e)
-		F.skewerAssemble(['  M', ' T ', 'S  '], { M: i.cooked_mutton, T: i.turnip, S: i.stick }, i.turnip_mutton_skewer,
-			[i.turnip, i.cooked_mutton])
+		F.skewerAssemble(['  M', ' T ', 'S  '], { M: i.cooked_mutton, T: fd.veggie_turnip, S: i.stick }, fd.dish_turnip_mutton_skewer,
+			[fd.veggie_turnip, i.cooked_mutton])
 
 		//######################### Stuffed Bell Peppers removed #########################
 		// The feast and its serving are in removedItems (veggies_items.js; TODO merges/dishes #3, M3); Rustic's stay.
-		R.remove({ output: i.stuffed_bellpeppers_block }, e)
-		R.remove({ output: i.stuffed_bellpepper }, e)
+		R.remove({ output: fd.feast_stuffed_bellpeppers }, e)
+		R.remove({ output: fd.dish_stuffed_bellpepper }, e)
 
 		//######################### Sweet potato dough #########################
 		// Dough-for-bread rule (owner 2026-11-01, TODO baking/baked-goods #17, #31): like every plain dough it bakes into
@@ -127,13 +129,13 @@ ServerEvents.recipes(e => {
 		// (sweet potato + potato + milk) and its Vintage cheese version go.
 		R.remove({ id: 'veggiesdelight:cooking/mashed_potatoes' }, e)
 		R.remove({ id: 'veggiesdelight:compat/vintagedelight/cooking/mashed_potatoes' }, e)
-		var sweetMash = [i.sweet_potato, i.sliced_sweet_potato]
-		R.fdCooking([sweetMash, sweetMash, i.milk], i.veggiesdelight_mashed_potatoes, e, 'mashed_sweet_potatoes', 1.0, 200, i.bowl)
+		var sweetMash = [fd.veggie_sweet_potato, fd.veggie_slice_sweet_potato]
+		R.fdCooking([sweetMash, sweetMash, i.milk], fd.dish_mashed_potatoes_veggiesdelight, e, 'mashed_sweet_potatoes', 1.0, 200, i.bowl)
 
 		//######################### Sliced sweet potato #########################
 		// A sweet potato cuts into 3 (TODO dishes/ingredients #26; the item: kubejs_startup/veggiesdelight/veggies_items.js),
 		// as a potato into 3 Rustic Delight potato slices (rusticdelight/recipes.js). Slice & Dice's slicer copies the
 		// cutting board recipe.
-		R.fdCutting(i.sweet_potato, i.any_knife, Item.of(i.sliced_sweet_potato, 3), e, 'sliced_sweet_potato')
+		R.fdCutting(fd.veggie_sweet_potato, i.any_knife, Item.of(fd.veggie_slice_sweet_potato, 3), e, 'sliced_sweet_potato')
 	})
 })

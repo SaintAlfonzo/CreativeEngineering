@@ -89,3 +89,5 @@ __pycache__/
 *.pyc
 *.class
 /tools/creative_delight_test/move_diff_snapshot.json
+/tools/creative_delight_test/move_diff_dump_snapshot.json
+/tools/.nested_jars/

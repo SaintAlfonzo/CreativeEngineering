@@ -162,3 +162,7 @@ None run. Queued: SQ-RSP-01 to 15 (server), CQ-RSP-01 (client). In game:
 - RSP-15 Wither Roots death message: "while gardening", and the "whilst fighting" version when a mob hit you.
 - RSP-16 A world with a 2.0 Kettle at 3 water: unchanged and brews.
 - RSP-17 A heated Kettle with water and 2 black tea leaves takes 10 s (not 1 tick) to make one Black Tea.
+
+## Owner drink rules (2026-11-02)
+
+Coffee in the Kettle builds the same milk and flavoured coffees as the pot, step by step or straight from the coffee tank; new fruit teas and the heated-mixer variants follow [creative_delight_drinks.md](creative_delight_drinks.md). Nothing built; TODO `food/drinks #15`.

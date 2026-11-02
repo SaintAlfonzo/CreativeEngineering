@@ -1,8 +1,9 @@
 # Creative Delight: juice, tea and coffee rules (owner, 2026-11-01)
 
-Owner decisions for the drink families. Nothing here is built. It refines TODO `food/drinks #8` (standard rule),
+Owner decisions for the drink families. **Built 2026-11-02 (section 8), Testing.** It refines TODO `food/drinks #8` (standard rule),
 `food/drinks #10` (azalea tea and tea audit), `merges/drinks #1` (dandelion) and `flowers #5` (azalea flower merge).
-Item state comes from `kubejs/exported/items_by_mod/` and `fluids.json` (2026-11-01). Section 6 lists what is still open.
+Item state comes from `kubejs/exported/items_by_mod/` and `fluids.json` (2026-11-01). **Owner answers of 2026-11-02 are folded in
+(sections 3, 4, 6, 7); nothing is open except the two review notes in section 7.**
 
 Terms: "pot" = Cooking Pot, "kettle" = the patched Kettle (250 mb per craft), "heated mixing" = Create mixer with a
 heater, "unheated mixing" = Create mixer without heat (shapeless craft where there is no mixer), "sugar-like" = the
@@ -50,7 +51,7 @@ teas.
 
 | Tea | Pot | Kettle / mixing | Note |
 |---|---|---|---|
-| Azalea | 2 flowering azalea (bush or leaves), 2 azalea flowers | kettle: 1 of each, 250 mb green tea; heated mixing: the kettle cost + 1 extra ingredient | Flowers: Twigs' and Immersive Weathering's for now; merge them (`flowers #5`). Better effects. Fixes the missing recipe (`drinks #10`) |
+| Azalea | 2 flowering azalea (bush or leaves), 2 azalea flowers | kettle: 1 of each, 250 mb green tea; heated mixing: the kettle cost + 1 extra ingredient | Flowers: Twigs' and Immersive Weathering's for now; merge them (`flowers #5`). Better effects. Fixes the missing recipe (`drinks #10`). "Extra ingredient" in mixing = one more of the tea's own pot / kettle ingredient (confirmed 2026-11-02) |
 | Lavender | 2 pink flowers (pink tulip, peony, lilac, allium), 2 of (amethyst shard or Quark lavender / Serene blossom leaves) | kettle: 1 of each, 250 mb green tea; heated mixing: the kettle cost + 1 extra ingredient | Better effects |
 | Sea pickle (replaces Sea Cucumber Tea) | 2 sea pickles + 1 extra sea pickle | kettle: 2 sea pickles, 250 mb sea grape or pickerelweed juice; heated mixing: the kettle cost + 1 extra ingredient | Better effects. `hostiledelight:seacucumbertea` becomes this tea |
 | Chorus tea (was Ender Nectar) | chorus juice recipe + 1 extra ender eye | kettle: 250 mb chorus juice, 1 any tea leaf, 1 ender eye | Rename `delightful:ender_nectar` |
@@ -67,7 +68,7 @@ and black are the tea leaf kinds; green tea is the base and is untouched.
 | Drink | Pot | Other |
 |---|---|---|
 | Cloud latte | 250 mb milk, cloud in a bottle, cocoa beans + 1 extra cloud in a bottle | Review effect and duration |
-| Matcha (plain) | the existing matcha craft + 1 extra matcha powder | |
+| Matcha (plain) | the existing matcha craft + 1 extra matcha powder (confirmed 2026-11-02: powder) | |
 | Matcha latte | honey becomes sugar-like, folded into the pot craft + 1 extra matcha powder | |
 | Ice berry matcha (was Berry Matcha Latte) | - | unheated mixing / shapeless: 250 mb matcha, 1 ice or ice cube, 1 of any berry + 1 extra ice and berry |
 
@@ -86,29 +87,117 @@ already merges into it).
 
 Ingredient per flavour: chocolate = chocolate or cocoa, pumpkin = pumpkin, syrup = Rustic syrup, honey = honey.
 
-### 4.1 Fluids and mixing
+### 4.1 Coffee in the Kettle and the flavour chain (owner, 2026-11-02)
 
-- Every coffee (coffee, dark, milk, chocolate, pumpkin, syrup, honey, cherry blossom) is registered as a fluid, with a
-  fluid recipe wherever the bottle-less form applies (no bottle in the pot or kettle craft gives the fluid).
-- Every coffee gets a mixing recipe. Coffee and dark coffee need +3 roasted beans over their kettle cost.
-- Coffee + milk mixes to milk coffee.
-- Milk coffee + the additive (honey, chocolate, syrup, pumpkin, sweet blossom and cherry leaves) mixes to that derivative.
-- A derivative can also be made from another milk coffee derivative... read as: derivative + milk coffee + the specific
-  additive mixes to the same derivative (confirm).
+The Kettle makes the same milk coffee and flavoured coffees as the pot, by any number of steps. A flavoured coffee is
+reached three ways, all giving the same item:
+
+| Route | Kettle | Pot (hand) |
+|---|---|---|
+| Step by step | coffee tank + milk -> milk coffee; milk coffee tank + additive -> flavoured | 3 roasted beans + 1 milk, then the additive on that |
+| Straight from plain coffee | coffee tank + milk + additive -> flavoured (one craft, 5 ingredients counting the beans) | 3 roasted beans + 1 milk + additive (the table in 4) |
+| Straight from beans | 2 roasted beans + 250 mb water + milk + additive | same |
+
+Built today (`farmersrespite/kettle.js` section 2): coffee from beans on water, milk coffee from the coffee tank, the flavours only
+from the milk coffee tank, dark coffee from the coffee tank. To add: the flavours from the plain coffee tank with milk +
+additive in the same craft, and (mixing) the same chain below. Dark coffee keeps its own line (not a flavour base).
+
+### 4.2 Fluids and mixing
+
+- All eight coffees are already registered as fluids with 250 mb <-> bottle pairs (`fluid_dict.js` `f.coffee` is Central
+  Kitchen's; the seven others are `creativeengineering:*_coffee`, `kettle.js` BOTTLES). Nothing new to register; the bottle-less
+  rule is the existing Spout / Item Drain pair.
+- Every coffee gets a **heated** Create mixing recipe (confirmed 2026-11-02). Coffee and dark coffee need +3 roasted beans
+  over their kettle cost.
+- Coffee + milk mixes to milk coffee. Milk coffee + the additive (honey, chocolate, syrup, pumpkin, sweet blossom and
+  cherry leaves) mixes to that flavour; coffee + milk + additive mixes to the flavour straight; plain coffee to flavoured in
+  one mixer step is allowed (any number of steps).
+- A flavour made from another flavour is not a route: flavours branch off milk coffee or coffee, never off each other.
 
 ## 5. Parked
 
 - **Long and strong variants** (Respite's potion-style tiers) of every tea, coffee and juice: pinned until the effects of
   teas, coffees and juices are audited and rules set. New teas do not get long or strong variants before that.
 - Effects to design in that audit: lavender, azalea, sea pickle; review cloud latte.
+- **Milkshakes: pinned (owner, 2026-11-02) as a completely separate cooking / food family**, not part of the juice, tea
+  or coffee rules. The matcha, mango and salmonberry milkshakes wait for that family's own rule (TODO
+  `food/drinks #13`).
 
-## 6. Open
+## 6. Ids (generated 2026-11-02, in line with the family)
 
-- Plain matcha: "extra matcha" read as matcha powder; the milkshake still has no rule.
-- Azalea, lavender, sea pickle mixing: "an extra ingredient" read as one more of the tea's own pot/kettle ingredient on top
-  of the kettle cost (not the 2.2 tea leaf and sugar-like); confirm.
-- Coffee mixing: "+3 coffee beans" read as added to the kettle cost; the "coffee milk" derivative line (4.1) read as milk
-  coffee; heated or unheated mixing for coffee not stated (assumed heated like tea).
-- Kiwi and turnip teas need item ids; coffee fluids need ids and a bottle rule (what the bottle-less recipe is for
-  Rustic's bottle-based coffees).
-- Hot cocoa, apple cider, mango and salmonberry milkshake and the matcha milkshake are untouched.
+Dict key = `i.<key>` in `item_dict.js`; food dict key = `drink_<name>` for teas, `fruit_juice_<name>` for juices (grammar
+13.2). Namespace: pack-added items live under `creativeengineering:` (as `canned_*`); third-party ids stay as they are
+and only get a new display name. Fluids follow the Respite pattern (`f.<name>_tea`, `creativeengineering:` since the
+teas are not Central Kitchen's). Not registered yet: these are the reserved names for the build.
+
+| Drink | Item id | Dict key | Food dict key | Fluid |
+|---|---|---|---|---|
+| Kiwi tea | `creativeengineering:kiwi_tea` | `kiwi_tea` | `drink_kiwi_tea` | `creativeengineering:kiwi_tea` |
+| Turnip tea | `creativeengineering:turnip_tea` | `turnip_tea` | `drink_turnip_tea` | `creativeengineering:turnip_tea` |
+| Bayberry tea | `creativeengineering:bayberry_tea` | `bayberry_tea` | `drink_bayberry_tea` | same |
+| Cantaloupe tea (Fruits Delight calls it hamimelon) | `creativeengineering:hamimelon_tea` | `hamimelon_tea` | `drink_hamimelon_tea` | same |
+| Carrot tea | `creativeengineering:carrot_tea` | `carrot_tea` | `drink_carrot_tea` | same |
+| Lemon tea | `creativeengineering:lemon_tea` | `lemon_tea` | `drink_lemon_tea` | same |
+| Melon tea | `creativeengineering:melon_tea` | `melon_tea` | `drink_melon_tea` | same |
+| Orange tea | `creativeengineering:orange_tea` | `orange_tea` | `drink_orange_tea` | same |
+| Pear tea | `creativeengineering:pear_tea` | `pear_tea` | `drink_pear_tea` | same |
+| Chorus tea (was Ender Nectar) | `delightful:ender_nectar` (id kept) | `ender_nectar` | `fruit_juice_ender_nectar` -> `drink_chorus_tea` | `creativeengineering:chorus_tea` |
+| Lychee juice (new) | `creativeengineering:lychee_juice` | `lychee_juice` | `fruit_juice_lychee` | `creativeengineering:lychee_juice` |
+| Hawberry juice (new) | `creativeengineering:hawberry_juice` | `hawberry_juice` | `fruit_juice_hawberry` | same |
+| Mango juice (new) | `creativeengineering:mango_juice` | `mango_juice` | `fruit_juice_mango` | same |
+| Mangosteen juice (new) | `creativeengineering:mangosteen_juice` | `mangosteen_juice` | `fruit_juice_mangosteen` | same |
+| Peach juice (new) | `creativeengineering:peach_juice` | `peach_juice` | `fruit_juice_peach` | same |
+
+Renames only (ids unchanged): Turnip Water -> Turnip Juice (`veggiesdelight:turnip_water`, existing `fruit_juice_`
+key to add), Sea Cucumber Tea -> Sea Pickle Tea (`hostiledelight:seacucumbertea`), Bubble Tea -> Chorus Fruit Bubble Tea
+(`ends_delight:bubble_tea`), Berry Matcha Latte -> Ice Berry Matcha (`delightful:berry_matcha_latte`). Mixed (heated
+mixer) teas reuse the same item ids; no separate item.
+
+## 7. Reviews noted (owner, 2026-11-02)
+
+- **Hot cocoa and apple cider review.** Both stay untouched by these rules; review them against the juice / tea /
+  coffee families once the rules are built (TODO `food/drinks #14`).
+- **Milkshake family** pinned (section 5, `food/drinks #13`).
+
+## 8. Build (2026-11-02, TODO `food/drinks #15`)
+
+Status **Testing**: written, not booted. Needs a Creative Delight rebuild and a restart (new items and fluids).
+
+| Part | Where |
+|---|---|
+| 14 new drink items (9 teas, 5 juices), 17 new fluids (the 14, chorus tea, sea grape juice, pickerelweed juice) | CD `kubejs_startup/creativeengineering/drinks.js`; ids `item_dict.js`, `fluid_dict.js`, food dict keys `food_dict.js`, food type `drink` (`food_types.json`) |
+| Every rule in sections 1 to 4 | `kubejs/data/creativedelight/kubejs/creativeengineering/drinks.js`; input tags `drink_tags.js` |
+| Superseded recipes taken out | `farmersrespite/kettle.js` (dandelion tea, melon juice, lavender tea, the five Fruits Delight teas; matcha latte takes any sugar-like; chocolate and pumpkin coffee take the tags), `veggiesdelight/recipes.js` (pot), `endersdelight/recipes.js` (pot), `abnormals_delight/upgrade_aquatic.js` (pot), `delightful/recipes.js` (grid berry latte) |
+| Renames | client `assets/creativedelight/kubejs/creativeengineering/names.js`; fluid names in CD `fluids.js` |
+| Art | `kubejs/assets/creativeengineering/textures/item/<id>.png`: teas recoloured from Farmer's Respite's green tea, juices from Farmer's Delight's melon juice (MIT, `drink_rules_art_notice.txt`) |
+
+Build choices (not decided by the owner; change freely):
+
+- New items: 1 hunger, 0.2 modifier, always drinkable, 32 per stack, bottle back; **no effects** (effects wait for the
+  audit, section 5).
+- Bayberry juice is Fruits Delight's `bayberry_soup` (already named Bayberry Juice, fluid `fruitsdelight:bayberry_soup`), so it
+  needed no new id. Sea grape and pickerelweed juice got pack fluids (`creativeengineering:`) because the Sea Pickle Tea's
+  Kettle brews on them.
+- Grid recipes of the juices stay (Fruits Delight's, Farmer's Delight's melon juice, Ender's Delight's chorus juice, Oceanic's sea
+  grape juice); the rule replaces pot and Kettle recipes only.
+- Juices with no mixer recipe of their own (the 5 new ones) mix heated at the Kettle cost (2 fruit + 250 mB water). Existing juice
+  mixer recipes are unchanged.
+- Fruits Delight's tea pot recipes stay, and so do Slice & Dice's bottle copies of them; the 2.2 fluid mixer recipe is added next to them.
+- Mixed teas without a fluid (azalea, sea pickle) mix into the bottle (a glass bottle is one of the mixer inputs).
+- Builder's Tea pot uses a water bottle as "water". Chorus fruit milk tea: the pot keeps the milk.
+- Coffee pots: Rustic's own recipes already had the rule's counts; only the beans (roasted only) and the chocolate / pumpkin
+  inputs change. Heated milk coffee takes 250 mB of milk fluid.
+
+Not built:
+
+- **Plain matcha**: there is no matcha drink; `delightful:matcha` is the powder. Matcha latte got the +1 powder.
+- **Kettle "straight from beans" flavours** (beans + water + milk + additive): the Kettle takes two ingredients.
+- **Serene blossom leaves** for lavender tea: no such item found; lavender takes amethyst shards and `#forge:lavender` (Quark
+  lavender blossom leaves).
+- **`flowers #5` item merge**: only the recipe side (`#creativeengineering:azalea_flowers` holds both); the two flower items
+  are still separate.
+- Display Delight's placed-drink names ("Placed Ender Nectar", "Placed Iced Berry Matcha Latte") are generated: rerun
+  `tools/gen_display_delight_names.py` after a `/dumpnames`.
+
+Tests: SQ-DRK-01 to -06, CQ-DRK-01 ([scratch_queue.md](testing/scratch_queue.md)).
+

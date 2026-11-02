@@ -1,6 +1,6 @@
 # Curios slots
 
-Test prefix **CS-** · Last updated **2026-11-01** · Overall status **BUILT (IMC fix 2026-11-01), jar not installed, untested in game**
+Test prefix **CS-** · Last updated **2026-11-02** · Overall status **BUILT (IMC fix 2026-11-01; slot line 2026-11-02), in patcherMod 1.1.07 installed 2026-11-02, not booted, untested in game**
 
 ## 0. At a glance
 
@@ -34,10 +34,14 @@ Notes:
 
 ## 1. Rule: every Curios item shows its slots in the tooltip
 
-**Open (owner request 2026-10-25, not built).** Every item that can go in a Curios slot should carry a tooltip line naming the
-slot(s) it fits, e.g. "Fits: Face, Head". Source of truth is the `curios:<slot>` item tags, so the line can be generated from the
-tags rather than hand-written per item (client script reading the tag keys, or a patcherMod tooltip hook). Applies to the pack's
-own slots and every mod's. Plan row `ui/tooltips #8` in [todo/TODO.md](todo/TODO.md); line wording goes in [tooltips.md](tooltips.md).
+**BUILT 2026-11-02 (patcherMod 1.1.07 installed, not booted; owner request 2026-10-25).** Every item that can go in a Curios
+slot names the slot(s) it fits. Curios itself already prints "Slot: Face, Head" (gold, names yellow) from
+`getCurioTags(item)`, the `curios:<slot>` item tags plus mixins such as Simple Hats' head rule, so the pack's own slots
+get it once registered. The gap: an item with a curio capability passes that line through `ICurio.getSlotsTooltip`,
+which its mod can override to hide. patcherMod `compat/CuriosSlotTooltip` (client, Forge LOW, only with Curios) adds the
+same line to any curio item whose tooltip has none; CEConfig `[tooltips] curiosSlotLine`. Owner 2026-11-02: extend the
+current line to all items (wording is Curios'). The stepstools' own "Worn in the Feet slot" line was dropped. Row
+`ui/tooltips #8`, tests TT-40 in [tooltips.md](tooltips.md) and CS-08 below.
 
 Owner idea (scratchpad 2026-10-29, TODO `largecontent/mod-additions #32`): Terraria-like accessories for these slots
 (defense, abilities, effects). Which accessories and their design are open; nothing built.
@@ -51,3 +55,5 @@ Owner idea (scratchpad 2026-10-29, TODO `largecontent/mod-additions #32`): Terra
 - CS-05 Slot names read "Hands" and "Face" (no raw `curios.identifier` key).
 - CS-06 Once the Cob Pipe exists: it goes in Face.
 - CS-07 The Curios screen shows a Feet slot (boots icon, "Feet"); only stepstools go in it; `/curios list` shows `feet` from `creativeengineering`.
+- CS-08 Hover a stepstool, a Simple Hats mask, the Falconry Glove and the Cob Pipe: one gold "Slot: ..." line each
+  (Feet; Face, Head; Hands; the Cob Pipe's registered slots), never two (same check as TT-40).

@@ -54,10 +54,11 @@ public final class Seasonings {
     /**
      * A seasoning's bonus: {@code nutrition} hunger points, {@code saturation} saturation points (absolute, capped at
      * the food level like vanilla), {@code heal} health points, timed effects. {@code combines}: the seasonings it may
-     * share a food with (either side listing the other is enough).
+     * share a food with (either side listing the other is enough). {@code name}: the display name from the script, used
+     * by the tooltip when the lang key {@code seasoning.<ns>.<path>} is missing (empty when the script gave none).
      */
     public record Definition(ResourceLocation id, int nutrition, float saturation, float heal, List<Effect> effects,
-                             Set<ResourceLocation> combines) {
+                             Set<ResourceLocation> combines, String name) {
     }
 
     private static final Map<ResourceLocation, Definition> DEFINITIONS = new LinkedHashMap<>();
@@ -89,7 +90,8 @@ public final class Seasonings {
                     o.has("nutrition") ? o.get("nutrition").getAsInt() : 0,
                     o.has("saturation") ? o.get("saturation").getAsFloat() : 0f,
                     o.has("heal") ? o.get("heal").getAsFloat() : 0f,
-                    List.copyOf(effects), Set.copyOf(combines));
+                    List.copyOf(effects), Set.copyOf(combines),
+                    o.has("name") ? o.get("name").getAsString() : "");
             DEFINITIONS.put(id, def);
             LOGGER.info("[seasoning] defined {}", id);
         } catch (Exception e) {

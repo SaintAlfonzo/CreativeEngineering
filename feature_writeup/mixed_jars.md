@@ -214,3 +214,30 @@ sinigang, both golden mushroom stews). Contact sheet checked against the texture
 **Limits:** drinking from a placed jar (`drink_from_jar`) is off in this pack, so a jar of soup is storage only. The
 curries (Coconut Curry, Tea Curry, Adzuki Curry) and the canned soups are not soups here and stay out. Display
 Delight's placed soups are blocks, not bowls.
+
+## 10. Pipes into and out of jars (2026-11-02, TODO `items/jars #7`)
+
+Supplementaries 2.4.20 gives the jar no Forge fluid capability, so a Create pump or pipe ignored it. Creative Compat
+`compat/JarFluidPipes` attaches one (Forge `AttachCapabilitiesEvent`, no edit of the Supplementaries jar) to every
+Moonlight soft-fluid tank block entity: the jar and the goblet. Any Forge fluid pipe works the same way.
+
+- **Units:** one bottle = 250 mB, so a 12-bottle jar holds 3000 mB.
+- **Which fluids:** a Forge fluid goes in when a soft fluid lists it (`equivalent_fluids`): water, lava, milk, honey,
+  chocolate, potions (`create:potion`, NBT kept: Potion, Bottle, CustomPotionEffects), tea and the other drinks that
+  have a Forge fluid. Soups and drinks with no Forge fluid stay hand-only: a pipe puts nothing in and sees the jar as
+  empty.
+- **Part bottles:** pipes move a few mB a tick, so up to 249 mB waits in a buffer saved with the block (ForgeCaps, kept
+  when the jar is picked up). Pipes see tank + buffer; the jar draws only whole bottles. Pouring a different liquid into
+  the emptied jar by hand drops the buffer.
+- **Refused:** a jar with items or a mob, the pony jar, or `jar_liquids` off.
+
+Tests (in game; server half in the scratch queue, SQ-JFP-):
+
+- [ ] **MJ-15 Pump in:** Create pump from a water tank into an empty jar → the jar fills to 12 bottles and stops; a
+  glass bottle on it gives water bottles.
+- [ ] **MJ-16 Pump out:** jar of 12 honey bottles, pump pulling from it into a Fluid Tank → the tank gets 3000 mB of
+  honey, the jar empties.
+- [ ] **MJ-17 Potion:** Spout or pump of Create potion fluid (Swiftness) into a jar → bottles out are Potions of
+  Swiftness; a jar filled with Swiftness by hand also takes the piped Swiftness.
+- [ ] **MJ-18 Refused:** jar holding cookies next to a pumping pipe → nothing goes in; jar of soup → a pump pulls
+  nothing.

@@ -85,6 +85,6 @@ ServerEvents.recipes(e => {
 		// an extra bottle (TODO food/drinks #5). Kettle: a tier like FR's, berries on the Matcha Latte in the tank (Creative
 		// Delight farmersrespite/kettle.js, needs its Kettle tank). Grid: latte + berries + ice; the latte's bottle comes back.
 		R.remove({ id: 'delightful:food/berry_matcha_latte_from_matcha_latte_neapolitan' }, e)
-		R.shapeless(i.berry_matcha_latte, [i.matcha_latte, i.t_fruits_berries, i.t_ice_cubes], e, 'berry_matcha_latte')
+		// Its grid recipe (Ice Berry Matcha): creativeengineering/drinks.js (food/drinks #15)
 	})
 })

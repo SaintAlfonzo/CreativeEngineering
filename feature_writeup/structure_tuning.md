@@ -1608,6 +1608,11 @@ of them act on new chunks only.
    work, and rebuilds every pool whose order changed (logged as "put in canonical order"). Switch: CEConfig
    `[worldgen.pools] canonicalOrder` (default true). The order is no longer vanilla's, so a seed's villages differ
    from a vanilla game's (they already did) but repeat on every start.
+   **Weight bug from the sort, fixed 2026-11-02 (`rates-and-groups #9`, plan_worldgen_edit.md B1).** The sort
+   renumbered duplicate pieces (`#2`, `#3`) while `pool_config.json` kept `current` under the old keys, so 223
+   duplicates in 27 pools played another piece's weight. Data reset to the originals (the 9 vinery / beautify edits
+   kept); `PoolTuner.mergeCurrent` now lets an unedited entry follow the live weight when its stored `original`
+   differs, and keeps an edited one with a warning in `pool_tag_report.md`.
 2. **Cloud Storage and Domestication Innovation houses dropped on reload (05_phase_5.md 3.2).** Their pieces hold
    the builtin `ProcessorLists` holder, which the world's registry codec refuses: saving logs "Element ...
    minecraft:empty is not valid in current registry set" and writes the piece as `{}`. **Fix:** at ServerAboutToStart,
@@ -1775,7 +1780,7 @@ pyramid replacement share) and the fortified metas (anchors weight 400, camps / 
 Sim: `node tools/structure_tuning_sim.js --test-overrides[=FILE]`; RhinoRun arg `testoverrides`.
 `build_deploy.py` ships the file and warns when a staged toml has `testOverrides = true` or `structureDensity` != 1.
 
-**Fortified metas (#6).** `[worldgen.locate] searchTimeoutSeconds` 120 -> 300 (CEConfig default and instance toml,
+**Fortified metas (#6).** `[worldgen.locate] searchTimeoutSeconds` 120 -> 300 on 2026-10-30, back to 120 on 2026-11-02 (user, `locate #5`: SQ-WG30-C05 answered in 1 to 5 s) (CEConfig default and instance toml,
 marked tuned in its comment; searches are non-blocking, a long one only holds a locator thread). Shares
 `meta/fortified_ruins` and `meta/fortified_camps` 0.20 -> 0.25 each (`tuned` in `meta_structures.json`; D1 now 25 / 25
 / 40, 10% plain). With the strip: fortified ruins 1 per ~340 -> 182 chunks, camps ~337 -> 185 (estimates). A 300 s
@@ -1933,6 +1938,11 @@ after pruning (satellite dropped, anchor cancels the meta).
   `under 9 water` lines end `-> kept`; `(predicted)` lines appear with placement priority on, and `/celocate` census
   counts EARTH_FILL and PRIORITY rejects as before (no mixin error at boot). SQ-EF-11.
 
+- [ ] **ST-328 Earth fill on the placed blocks [scratch]:** under `log = "ALL"`, kept starts have no column more than
+  `beardReach` over air or water, no flooded base, no foreign template earth (ground match), ponds and `wet_ok` stilts keep
+  their water, the logged counts match the world, cancelled and pruned pieces are absent. SQ-EFB-00 to SQ-EFB-16
+  (`/zq under` probe). TODO `structures/earthfill #18`.
+
 ### 3.30 Terrain batch 4, beard footprint, ocean geode floor (added 2026-10-30, TODO `structures/terrain #1`, `#2`, `#6`)
 
 Status: BUILT 2026-10-30, patcherMod installed 2026-10-30 17:06; BROKEN: scratch r1031 (2026-10-31) SQ-TER-01 FAILED (ancient_crypt sunk start refused), SQ-TER-05 PASSED; SQ-TER-02 to -04, -06 not run. FIXED 2026-11-01: the crypt is off `sunk_start` (`structures/earthfill #17`), `/reload`; rerun SQ-TER-01b. New chunks only.
@@ -1999,6 +2009,33 @@ Tests:
 - [ ] **ST-305 Geode floor [scratch]:** `SWAP` (default): ocean geodes that reach the floor are mounds of the floor's
   own block with the crystals showing only in the opening; `CUT`: flush with the floor, rim in the floor's block;
   prismarine geodes untouched in both.
+
+### 3.33 Earth fill: water depth 2, sandstone and terracotta bases (added 2026-11-02, TODO `structures/earthfill #19`)
+
+BUILT 2026-11-02 (patcherMod 1.1.07 build/libs 00:42, not in `mods/`; EarthFillTest +8 checks, not run yet). New chunks only.
+
+**Water depth (user: "lower the water depth required for cancelled to 2, not 6").** Earth over water counted toward
+`maxOverWater` only where the water ran deeper than the beard's reach (`beardReach` 6, `buryReach` 10), because the beard
+fills shallower water. Now water has its own reach, `[worldgen.earth_fill] waterReach` (default 2, never past the beard's
+reach): earth over water 3 or more deep counts. Air keeps `beardReach`. Pruning counts the same way (`pruneMaxHanging` 8
+counts water past 2), so a village drops a house on a deep fill before the whole start is judged. Expect more cancels and
+prunes at rivers, lakes and coasts (SQ-EFB-19 measures it against a `waterReach = 6` world).
+
+**Desert and badlands bases.** Only `earth_fill/earth` blocks (dirt, sand, gravel, clay, path) are counted, so a structure on
+a sandstone or terracotta floor showed little earth and the water and air limits saw little of it. `tools/earth_base_scan.py`
+(bottom 3 layers of every rigid template): T&T badlands village 0 % earth (red sandstone 56 %, terracotta 14 %), wooded
+badlands village 0 % (terracotta 37 %), badlands outpost 0 %, Philip's badlands dungeon 0 %, vanilla desert village 24 %
+(sandstone 54 %), fortified desert village 43 %, T&T desert outpost 49 %, desert village temple 22 %, Philip's desert ruins 42 %.
+New pair like `stone_base`: block tag `creativeengineering:earth_fill/sand_base` (`#forge:sandstone`, `#minecraft:terracotta`,
+Philip's sand stone brick, red sand stone brick, sandstone tiles) counts for the structures in the structure tag of the same
+name (`worldgen/earth_fill.js`, those 9). Their size class rises with the counted floor, so their air and mound limits grow
+with it. Left out: Better Desert Temples and the desert mimic (buried / underground); the desert pyramid is a legacy piece,
+judged by its footprint (3.28). Code: `EarthFill.withBases` (earth tags plus either base tag, cached per earth list).
+
+- [ ] **ST-329 Water depth 2 [scratch]:** kept starts have no water deeper than 2 under their earth; more over-water cancels and
+  prunes than with `waterReach = 6`, villages lost near rivers reported. SQ-EFB-17 to -19.
+- [ ] **ST-330 Desert bases counted [scratch]:** desert and badlands structures in `sand_base` log their sandstone / terracotta
+  floor as earth, houses over water or cliffs are pruned, dry-desert counts within 10 % of before. SQ-EFB-20 to -22.
 
 ### 3.31 Meta batch: sky clusters, caravans, meteorite strikes, temples with ruins (added 2026-10-30)
 

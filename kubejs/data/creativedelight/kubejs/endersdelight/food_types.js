@@ -54,10 +54,6 @@ if (global.CD) global.CD.genPut('food_types', 'endersdelight', {
   "canned_pearl_pasta": [
    "pearl_pasta"
   ],
-  "canned_shulker": [
-   "shulker_mollusk",
-   "shulker_filet"
-  ],
   "canned_stuffed_shulker": [
    "stuffed_shulker_bowl"
   ],

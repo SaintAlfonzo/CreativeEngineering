@@ -258,7 +258,9 @@ public final class PoolTuner {
 				if (o.has("current")) {
 					JsonElement c = o.get("current");
 					if (c.isJsonPrimitive() && c.getAsJsonPrimitive().isNumber() && c.getAsDouble() >= 0 && Double.isFinite(c.getAsDouble())) {
-						p.current = c.getAsDouble();
+						JsonElement oo = o.get("original");
+						double oldOriginal = oo != null && oo.isJsonPrimitive() && oo.getAsJsonPrimitive().isNumber() ? oo.getAsDouble() : Double.NaN;
+						p.current = mergeCurrent(info.id, p.key, p.original, oldOriginal, c.getAsDouble(), warnings);
 					} else {
 						errors.add(info.id + " / " + p.key + ": current must be a number >= 0 (got " + c + ")");
 					}
@@ -601,6 +603,21 @@ public final class PoolTuner {
 
 	private static JsonObject optObject(JsonObject o, String key) {
 		return o.has(key) && o.get(key).isJsonObject() ? o.getAsJsonObject(key) : new JsonObject();
+	}
+
+	/**
+	 * The weight a piece plays with, from its stored entry. Keys of duplicate pieces ({@code #2}, {@code #3}) follow
+	 * list order, so a reordered pool (canonicalOrder, a mod update) can hand a key to a piece with another weight.
+	 * The stored {@code original} tells: when it differs from the live piece's weight, an unedited entry
+	 * ({@code current == original}) follows the live weight; an edited one keeps its value and is reported.
+	 * Before 2026-11-02 the stored current always won, so 223 duplicates in 27 pools played another piece's weight.
+	 */
+	static double mergeCurrent(String poolId, String key, int liveOriginal, double oldOriginal, double oldCurrent, List<String> warnings) {
+		if (Double.isNaN(oldOriginal) || oldOriginal == liveOriginal) return oldCurrent;
+		if (oldCurrent == oldOriginal) return liveOriginal;
+		warnings.add(poolId + " / " + key + ": " + (key.contains(" #") ? "piece order changed under an edited duplicate" : "the mod changed this edited piece's weight")
+				+ " (stored original " + fmt(oldOriginal) + ", live " + liveOriginal + "); current " + fmt(oldCurrent) + " kept: check it");
+		return oldCurrent;
 	}
 
 	private static boolean isEdited(JsonObject o) {

@@ -22,9 +22,9 @@ ServerEvents.tags('item', e => {
 		i.rice_roll, i.rice_roll_slice, i.amazing_salmon_roll, i.amazing_salmon_roll_slice, i.mushroom_roll,
 		i.mushroom_roll_slice, i.ancient_roll, i.ancient_roll_slice, i.golden_roll, i.golden_roll_slice, i.nether_roll,
 		i.tobiko_roll, i.cooked_nether_wart,
-		// 3.3 table rows: FD slices raw and cooked, Fish Tempura, Hostile Guardian Roll and Sashimi, Ocean's rolls, Pufferfish
+		// 3.3 table rows: FD slices raw and cooked (Fish Tempura removed 2026-11-02), Hostile Guardian Roll and Sashimi, Ocean's rolls, Pufferfish
 		// (typed hazard, so no fish tag holds it; it keeps its poison, chopsticks lengthen that too, 3.3.3)
-		i.salmon_slice, i.cod_slice, i.salmon_slice_cooked, i.cod_slice_cooked, i.salmon_tempura, i.guardianroll,
+		i.salmon_slice, i.cod_slice, i.salmon_slice_cooked, i.cod_slice_cooked, i.guardianroll,
 		i.guardiansashimi, i.fugu_roll, i.elder_guardian_roll, i.pufferfish,
 		// Rustic Delight (3.3.1)
 		i.bell_pepper_roll_green, i.bell_pepper_roll_red, i.bell_pepper_roll_yellow, i.bell_pepper_roll_orange,
@@ -42,7 +42,7 @@ ServerEvents.tags('item', e => {
 		// noodle and pasta sweep (3.3.1)
 		i.duck_noodles, i.kangaroo_pasta, i.lobster_pasta, i.cheesy_pasta, i.pearl_pasta, i.pasta_with_meatballs,
 		i.pasta_with_mutton, i.raw_pasta, i.squid_ink_pasta, i.vegetable_noodles, i.noodle_soup, i.truffle_pasta, i.glowpasta,
-		i.noodle_soup_cup, i.pasta_with_veggieballs, i.creamy_pasta_with_chicken_cuts, i.creamy_pasta_with_ham, i.crab_pasta,
+		i.pasta_with_veggieballs, i.creamy_pasta_with_chicken_cuts, i.creamy_pasta_with_ham, i.crab_pasta,
 		i.bell_pepper_pasta, i.pasta_with_broccoli, i.cheese_pasta, i.cucumber_noodles, i.pad_thai,
 		// rice, FD and others (3.3.1)
 		i.kelp_roll, i.kelp_roll_slice, i.salmon_roll, i.cod_roll, i.dumplings, i.cooked_rice, i.fried_rice,

@@ -109,6 +109,38 @@ f.cherry_blossom_coffee = 'creativeengineering:cherry_blossom_coffee';
 f.lavender_tea = 'creativeengineering:lavender_tea';
 f.matcha_latte = 'creativeengineering:matcha_latte';
 f.berry_matcha_latte = 'creativeengineering:berry_matcha_latte';
+// Drink rules (feature_writeup/creative_delight_drinks.md 6, food/drinks #15): new teas and juices, chorus tea, the
+// sea juices the sea pickle tea brews on (Creative Delight kubejs_startup/creativeengineering/drinks.js)
+f.kiwi_tea = 'creativeengineering:kiwi_tea';
+f.turnip_tea = 'creativeengineering:turnip_tea';
+f.bayberry_tea = 'creativeengineering:bayberry_tea';
+f.hamimelon_tea = 'creativeengineering:hamimelon_tea';
+f.carrot_tea = 'creativeengineering:carrot_tea';
+f.lemon_tea = 'creativeengineering:lemon_tea';
+f.melon_tea = 'creativeengineering:melon_tea';
+f.orange_tea = 'creativeengineering:orange_tea';
+f.pear_tea = 'creativeengineering:pear_tea';
+f.chorus_tea = 'creativeengineering:chorus_tea';
+f.lychee_juice = 'creativeengineering:lychee_juice';
+f.hawberry_juice = 'creativeengineering:hawberry_juice';
+f.mango_juice = 'creativeengineering:mango_juice';
+f.mangosteen_juice = 'creativeengineering:mangosteen_juice';
+f.peach_juice = 'creativeengineering:peach_juice';
+f.sea_grape_juice = 'creativeengineering:sea_grape_juice';
+f.pickerelweed_juice = 'creativeengineering:pickerelweed_juice';
+// Fruits Delight's own juice and tea fluids (bottle pairs ship with the mod); bayberry_soup is Bayberry Juice
+f.bayberry_juice = 'fruitsdelight:bayberry_soup';
+f.hamimelon_juice = 'fruitsdelight:hamimelon_juice';
+f.kiwi_juice = 'fruitsdelight:kiwi_juice';
+f.lemon_juice = 'fruitsdelight:lemon_juice';
+f.orange_juice = 'fruitsdelight:orange_juice';
+f.pear_juice = 'fruitsdelight:pear_juice';
+f.hawberry_tea = 'fruitsdelight:hawberry_tea';
+f.lychee_cherry_tea = 'fruitsdelight:lychee_cherry_tea';
+f.mango_tea = 'fruitsdelight:mango_tea';
+f.mangosteen_tea = 'fruitsdelight:mangosteen_tea';
+f.peach_tea = 'fruitsdelight:peach_tea';
+f.chorus_fruit_bubble_tea = 'create_central_kitchen:chorus_fruit_bubble_tea';
 
 //Create: Confectionery
 f.black_chocolate = 'create_confectionery:black_chocolate';
@@ -116,6 +148,7 @@ f.caramel = 'create_confectionery:caramel';
 f.hot_chocolate = 'create_confectionery:hot_chocolate';
 f.ruby_chocolate = 'create_confectionery:ruby_chocolate';
 f.orange_jam = 'fruitsdelight:orange_jam';
+f.lemon_jam = 'fruitsdelight:lemon_jam';
 f.white_chocolate = 'create_confectionery:white_chocolate';
 
 //Create: Enchantment Industry

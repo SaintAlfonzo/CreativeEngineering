@@ -39,6 +39,12 @@ ServerEvents.recipes(e => {
 			R.remove({ output: t }, e)
 			R.remove({ input: t }, e)
 		})
+		// Cave Hamburger (members #38): the removal above also took upstream's recipe. Same shape as upstream (bread,
+		// crunchy bar or vegan patty, smoked bat wing, two of baked tentacles or brown mushroom); calamari replaces the
+		// baked tentacles in both slots.
+		var caveFilling = global.CD.on('rusticdelight') ? Ingredient.of([i.calamari, i.brown_mushroom]) : i.brown_mushroom
+		R.shapeless(i.cave_hamburger, [i.t_bread, Ingredient.of([i.crunchy_bar, i.vegan_patty]), i.smoked_bat_wing,
+			caveFilling, caveFilling], e, 'cave_hamburger')
 
 		//######################### Water cup #########################
 		// Spout and Item Drain: copper cup + 250 mB water <-> water cup (farmers_respite.md K12)

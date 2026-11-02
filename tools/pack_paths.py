@@ -7,6 +7,7 @@ loader and the vanilla / Forge jar locator. Standard library only, so importing 
     P.item_dict_first_keys()                      # value -> first key that assigns it
     P.loads_lenient(raw)                          # json with // and /* */ comments and trailing commas
     P.vanilla_jar(), P.forge_jar(), P.forge_mapped_jar()
+    P.mod_jars('backportedDisplay-*.jar')       # that jar in mods/, or nested in a bundle (META-INF/jarjar/), newest last
 
 Jar locations come from the instance: Minecraft and Forge versions from instance.json, the jars from the launcher's
 shared libraries folder (the instance's ../../libraries, as AT Launcher lays it out). Nothing here pins a version.
@@ -21,6 +22,37 @@ INSTANCE = Path(__file__).resolve().parent.parent
 MODS = INSTANCE / 'mods'
 ITEM_DICT = INSTANCE / 'kubejs/startup_scripts/_lib/item_dict.js'
 GRADLE_CACHE = Path.home() / '.gradle/caches/forge_gradle'
+
+
+NESTED_CACHE = INSTANCE / 'tools/.nested_jars'
+
+
+def mod_jars(pattern, folder=None):
+    """Jars matching a file glob: in mods/ (or `folder`) itself, else nested in a bundle jar there (Creative Delight,
+    Creative Brewing: META-INF/jarjar/<name>). A nested jar is extracted once to tools/.nested_jars/ (git-ignored) and
+    that path is returned, so callers can open it as any jar. Sorted by name, newest version last."""
+    import fnmatch
+    import zipfile
+    folder = Path(folder) if folder else MODS
+    plain = sorted(folder.glob(pattern))
+    if plain:
+        return plain
+    out = []
+    for bundle in sorted(folder.glob('*.jar')):
+        try:
+            with zipfile.ZipFile(bundle) as z:
+                for n in z.namelist():
+                    name = n.rsplit('/', 1)[-1]
+                    if n.startswith('META-INF/jarjar/') and fnmatch.fnmatch(name, pattern):
+                        dst = NESTED_CACHE / name
+                        info = z.getinfo(n)
+                        if not dst.is_file() or dst.stat().st_size != info.file_size or dst.stat().st_mtime < bundle.stat().st_mtime:
+                            dst.parent.mkdir(parents=True, exist_ok=True)
+                            dst.write_bytes(z.read(n))
+                        out.append(dst)
+        except (zipfile.BadZipFile, OSError):
+            pass
+    return sorted(out)
 
 
 # ── item_dict.js ─────────────────────────────────────────────────────────────

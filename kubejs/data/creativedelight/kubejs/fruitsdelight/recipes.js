@@ -52,5 +52,14 @@ ServerEvents.recipes(e => {
 			R.createMixing(Fluid.of(f.orange_jam, 125), [Item.of(i.orange_slice, 4), i.lemon_slice, i.any_sweetener, Fluid.of(f.water, 100)],
 				e, 'orange_jam_from_slices', 'heated')
 		}
+
+		// Lemon jam (TODO dishes/jams #6): Fruits Delight's 2-lemon pot and heated mixing recipes stay; one lemon's 5 slices
+		// also work (the slices stand in for the 2 lemons and the extra slice)
+		var lemonSlices = [i.lemon_slice, i.lemon_slice, i.lemon_slice, i.lemon_slice, i.lemon_slice]
+		R.fdCooking(lemonSlices.concat([i.any_sweetener]), i.lemon_jelly, e, 'lemon_jam_from_slices', 0.1, 200, i.glass_bottle)
+		if (Platform.isLoaded('create')) {
+			R.createMixing(Fluid.of(f.lemon_jam, 125), [Item.of(i.lemon_slice, 5), i.any_sweetener, Fluid.of(f.water, 100)],
+				e, 'lemon_jam_from_slices', 'heated')
+		}
 	})
 })

@@ -6,10 +6,10 @@ ServerEvents.tags('item', e => {
 	var t = global.tags
 	var i = global.item
 
-	// sugar (glycerol: pneumaticcraft/tags.js)
+	// sugar (glycerol is not one: pneumaticcraft/tags.js)
 	t.add(e, 'forge:sugar', i.powdered_sugar)
 	// sweeteners: what a sugar slot takes, by kind of recipe (TODO dishes/ingredients #3; the swaps are in minecraft/recipes.js).
-	// Cooking: everything. Drinks: no honeycomb or glycerol. Keg and wine brewing: no glycerol. Non-food uses: sugar and
+	// Cooking: everything. Drinks: no honeycomb. Keg and wine brewing: everything. Non-food uses: sugar and
 	// powdered sugar. Honeycomb and the honey bottle stay out of #forge:sugar, so cans and the strict recipes do not take them.
 	t.add(e, i.any_sweetener, [i.any_sugar, i.honey_bottle, i.honeycomb])
 	t.add(e, i.any_sweetener_drink, [i.sugar, i.powdered_sugar, i.honey_bottle])

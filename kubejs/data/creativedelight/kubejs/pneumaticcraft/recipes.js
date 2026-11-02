@@ -48,16 +48,14 @@ ServerEvents.recipes(e => {
 
 		//######################### Frying #########################
 		// Frying with cooking oil in the pot, any whole fish (TODO dishes/meals #7). PneumaticCraft's Thermopneumatic deep
-		// frying is gone; Slice & Dice gives each pot recipe its heated mixing copy. Renames in namechanges.js:
-		// Fish Tempura, Raw Fish Tempura, Fish and Chips. PneumaticCraft's Chips (Fries) are removed; both their recipes go here.
+		// frying is gone; Slice & Dice gives each pot recipe its heated mixing copy. PneumaticCraft's Chips (Fries) and its
+		// two tempuras are removed; their recipes go here.
 		R.remove({ id: 'pneumaticcraft:thermo_plant/chips' }, e)
 		R.remove({ id: 'pneumaticcraft:thermo_plant/salmon_tempura' }, e)
 		R.remove({ id: 'pneumaticcraft:raw_salmon_tempura' }, e)
 		R.remove({ id: 'pneumaticcraft:cod_n_chips' }, e)
-		R.shapeless(i.raw_salmon_tempura, [i.t_food_raw_fish, i.batter], e, 'raw_fish_tempura')
-		if (Platform.isLoaded('farmersdelight')) {
-			R.fdCooking([i.t_cooking_oil, i.raw_salmon_tempura], i.salmon_tempura, e, 'fish_tempura', 0.35, 200)
-		}
+		// Fish Tempura and Raw Fish Tempura are removed items (TODO merges/dishes #11, 2026-11-02; CD startup
+		// pneumaticcraft/pneumatic_items.js): no recipe makes them. Fried fish stays as Fish and Chips below.
 		// Fish and Chips (TODO merges/dishes #1, Veggies Delight M1): PneumaticCraft's Cod 'n' Chips merges into Veggies
 		// Delight's (CD startup pneumaticcraft/item_merges.js). One frying route makes the survivor, in its bowl; Veggies
 		// Delight's two pot recipes (egg and potato, egg and diced potatoes) go as duplicates. PneumaticCraft's Chips

@@ -79,7 +79,7 @@ its colour. They stay up until they move, crouch, jump or something else knocks 
 ## 7. In-game test suite
 
 - [ ] **STL-01 boot:** start the game → no `Mixin apply failed` / `InvalidInjectionException` naming `Stepstool`; `latest.log` no KubeJS errors from `stepstools.js`, `stepstool.js`, `curiostags.js`.
-- [ ] **STL-02 items:** JEI shows 16 stepstools, each looking like that colour's tall stool, names "<Colour> Stepstool", tooltip 3 lines.
+- [ ] **STL-02 items:** JEI shows 16 stepstools, each looking like that colour's tall stool, names "<Colour> Stepstool", tooltip: Curios' "Slot: Feet" and the two use lines (the pack's "Worn in the Feet slot" line dropped 2026-11-02, `ui/tooltips #8`).
 - [ ] **STL-03 recipe:** red seat above an oak fence gives a Red Stepstool; same for one other colour.
 - [ ] **STL-04 slot:** the Curios screen has a Feet slot (boots icon, "Feet"); a stepstool goes in, other items do not.
 - [ ] **STL-05 step up:** wear one, stand still, hold Sprint + Jump → after about a quarter second you are a block higher, the stool is drawn under you (first and third person), no jump happens, wood sound.

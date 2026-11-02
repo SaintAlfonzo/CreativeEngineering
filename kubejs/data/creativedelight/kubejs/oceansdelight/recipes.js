@@ -10,8 +10,9 @@ ServerEvents.recipes(e => {
 	global.CD.recipes(() => {
 
 		//######################### Bread ####################
-		// Caesar salad takes any bread (creativeengineering/bread_tags.js); caviar toast is made on toast, not bread
-		R.replaceInput({ id: 'oceanic_delight:caesar_salad' }, i.minecraft_bread, i.t_bread, e)
+		// Caviar toast is made on toast, not bread. Oceanic's Caesar salad merged into Veggies Delight's (TODO merges/dishes #6;
+		// its recipe: veggiesdelight/cooking.js)
+		R.remove({ id: 'oceanic_delight:caesar_salad' }, e)
 		R.replaceInput({ id: 'oceanic_delight:caviar_toast' }, i.minecraft_bread, i.toast, e)
 
 		//######################### Braised sea pickle #########################

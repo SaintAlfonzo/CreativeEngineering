@@ -3,20 +3,20 @@
 // Squid drops for the squid chain (TODO dishes/ocean #3): a squid drops one Miner's Delight squid item and a glow squid
 // one glow squid item, every kill, knife or not; the ink and the calamari come from cutting it (miners_delight/recipes.js).
 // LootJS runs after every mod's loot modifiers, so this also takes out what they add: Rustic's calamari, Miner's knife
-// squid item, and the tentacles of Miner's, Ocean's and Oceanic Delight (those items are removed, dishes/ocean #4; the filter keeps the drops out of any left in a world).
+// squid item, and the tentacles of Miner's, Ocean's and Oceanic Delight (those items are removed, dishes/ocean #4).
+// Exactly one (TODO dishes/ocean #9, 2026-11-02): every other drop goes, whatever added it, so looting, a knife or
+// another mod's modifier can't add a second squid or anything else; the rule no longer waits on Rustic Delight.
 
 LootJS.modifiers(event => {
-	if (!global.CD || !global.CD.on('rusticdelight')) return
+	if (!global.CD) return
 	var i = global.item
-	var TENTACLES = [i.tentacles, i.oceansdelight_tentacles, i.squid_tentacles, i.glow_squid_tentacles]
-		.filter(id => typeof id === 'string' && Item.exists(id))
 
 	;[
-		['minecraft:squid', i.squid, [i.ink_sac, i.calamari]],
-		['minecraft:glow_squid', i.glow_squid, [i.glow_ink, i.calamari, i.glowing_calamari]],
+		['minecraft:squid', i.squid],
+		['minecraft:glow_squid', i.glow_squid],
 	].forEach(s => {
 		event.addEntityLootModifier(s[0])
-			.removeLoot(s[2].concat(TENTACLES, [s[1]]))
+			.removeLoot(Ingredient.all)
 			.addLoot(s[1])
 			.logName('CE/squid_chain/' + s[0].split(':')[1])
 	})

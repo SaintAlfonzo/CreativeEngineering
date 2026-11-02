@@ -6,7 +6,6 @@ if (global.CD) global.CD.genPut('can_servings', 'endersdelight', {
  "servings": {
   "canned_chorus_stew": 8,
   "canned_endermite_stew": 8,
-  "canned_shulker": 4,
   "canned_uncanny_cookie": 5,
   "canned_pearl_pasta": 4,
   "canned_chorus_pie_filling": 4,

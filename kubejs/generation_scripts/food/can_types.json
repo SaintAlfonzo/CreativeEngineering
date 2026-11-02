@@ -3529,19 +3529,19 @@
    "modifier": 0.25,
    "meat": true,
    "fast": false,
-   "always": false,
+   "always": true,
    "glow": false,
    "effects": [
     {
-     "effect": "minecraft:nausea",
-     "ticks": 200,
-     "amp": 0,
+     "effect": "minecraft:levitation",
+     "ticks": 80,
+     "amp": 1,
      "chance": 1
     }
    ],
    "sources": [
-    "shulker_mollusk",
-    "shulker_filet"
+    "shulker_meat",
+    "shulker_meat_slice"
    ],
    "recipes": [
     {
@@ -3549,10 +3549,10 @@
      "inputs": [
       {
        "any": [
-        "shulker_mollusk",
-        "shulker_filet"
+        "shulker_meat",
+        "shulker_meat_slice"
        ],
-       "n": 8
+       "n": 1
       }
      ]
     },
@@ -3561,10 +3561,10 @@
      "inputs": [
       {
        "any": [
-        "shulker_mollusk",
-        "shulker_filet"
+        "shulker_meat",
+        "shulker_meat_slice"
        ],
-       "n": 6
+       "n": 1
       },
       {
        "any": [
@@ -3580,10 +3580,10 @@
      "inputs": [
       {
        "any": [
-        "shulker_mollusk",
-        "shulker_filet"
+        "shulker_meat",
+        "shulker_meat_slice"
        ],
-       "n": 6
+       "n": 1
       },
       {
        "any": [
@@ -7481,6 +7481,61 @@
       {
        "any": [
         "bayberry_soup"
+       ],
+       "n": 3
+      },
+      {
+       "any": [
+        "salt",
+        "bone_broth"
+       ],
+       "n": 1
+      }
+     ]
+    }
+   ],
+   "texture": "canned_goods:items/canned_rabit_stew"
+  },
+  "canned_ratatouille": {
+   "section": "soup",
+   "existing": false,
+   "name": "Canned Ratatouille",
+   "servings": 8,
+   "hunger": 13,
+   "modifier": 0.577,
+   "meat": false,
+   "fast": false,
+   "always": false,
+   "glow": false,
+   "effects": [
+    {
+     "effect": "farmersdelight:comfort",
+     "ticks": 3600,
+     "amp": 0,
+     "chance": 1
+    }
+   ],
+   "sources": [
+    "ratatouille"
+   ],
+   "recipes": [
+    {
+     "suffix": "",
+     "inputs": [
+      {
+       "any": [
+        "ratatouille"
+       ],
+       "n": 6
+      }
+     ]
+    },
+    {
+     "suffix": "_broth",
+     "inputs": [
+      {
+       "any": [
+        "ratatouille"
        ],
        "n": 3
       },

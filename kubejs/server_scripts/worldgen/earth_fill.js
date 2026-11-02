@@ -46,4 +46,18 @@ ServerEvents.tags('worldgen/structure', function (e) {
 	global.tags.add(e, 'creativeengineering:earth_fill/stone_base', [
 		'eugene:ruined_drum_tower', 'endersdelight:end_house',
 	])
+	// Desert and badlands structures on sandstone or terracotta floors: those blocks (block tag
+	// creativeengineering:earth_fill/sand_base) count as earth, so a house floor over a river or a cliff is seen
+	// (2026-11-02, tools/earth_base_scan.py, bottom 3 layers): T&T badlands village 0 % earth (red sandstone 56 %,
+	// terracotta 14 %), wooded badlands village 0 % (terracotta 37 %), badlands outpost 0 %, Philip's badlands dungeon 0 %,
+	// vanilla desert village 24 % (sandstone 54 %), fortified desert village 43 % (37 %), T&T desert outpost 49 %,
+	// desert village temple 22 %, Philip's desert ruins 42 %. Left out: Better Desert Temples and the T&T desert mimic
+	// (buried / underground: their floors sit in caves and aquifers by design); the desert pyramid is a legacy piece
+	// (judged by its footprint, 3.28).
+	global.tags.add(e, 'creativeengineering:earth_fill/sand_base', [
+		'minecraft:village_desert', 'terralith:fortified_desert_village', 'desert_village_temple:village_temple',
+		'philipsruins:desert_structures', 'philipsruins:badlands_start_dungeon',
+		'towns_and_towers:pillager_outpost_desert', 'towns_and_towers:pillager_outpost_badlands',
+		'towns_and_towers:village_badlands', 'towns_and_towers:village_wooded_badlands',
+	])
 })

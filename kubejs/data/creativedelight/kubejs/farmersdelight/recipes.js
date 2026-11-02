@@ -36,6 +36,16 @@ ServerEvents.recipes(e => {
 		// Slices from the placed Farmer's Delight pumpkin pie ([pumpkin_pie] placeAs) go back into a pie
 		R.shaped(i.pumpkin_pie, ['##', '##'], { '#': i.fd_pumpkin_pie_slice }, e, 'pumpkin_pie_from_fd_slices')
 
+		//######################### Cabbage leaves #########################
+		// A cabbage cuts into 4 leaves (TODO dishes/ingredients #25; upstream 2), on the board and in the Create mixer
+		// (Slice & Dice copies the board recipe). The leaves-back-to-cabbage grid craft takes 4 to match (upstream 2).
+		R.remove({ id: 'farmersdelight:cutting/cabbage' }, e)
+		R.remove({ id: 'farmersdelight:integration/create/mixing/cabbage_slice_from_mixing' }, e)
+		R.remove({ id: 'farmersdelight:cabbage_from_leaves' }, e)
+		R.fdCutting(i.cabbage, i.any_knife, Item.of(i.cabbage_leaf, 4), e, 'cabbage_leaves')
+		R.createMixing(Item.of(i.cabbage_leaf, 4), [i.cabbage], e, 'cabbage_leaves')
+		R.shapeless(i.farmersdelight_cabbage, [i.cabbage_leaf, i.cabbage_leaf, i.cabbage_leaf, i.cabbage_leaf], e, 'cabbage_from_leaves')
+
 		//######################### Ingredient changes #########################
 		R.replaceInput({ id: 'farmersdelight:cooking/rabbit_stew' }, i.baked_potato, i.potato, e)
 		R.replaceInput({ id: 'farmersdelight:cooking/vegetable_noodles' }, i.brown_mushroom, i.mushrooms, e)

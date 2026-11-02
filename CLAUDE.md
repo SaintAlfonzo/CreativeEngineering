@@ -9,7 +9,7 @@ Forge 1.19.2 modpack (KubeJS + in-tree Java mods). Repo root is the ATLauncher i
   (large; grep, never read whole). `data/` = datapack files.
 - `development/` = in-tree mods: `patcherMod` (main mixin/coremod, mod id `creativeengineering`),
   `creativeLabels`, `incubationAdditions`, `moreMooblooms`, `babyMobs`, `exposureBackport`, and two bundles:
-  `creativeDelight` (food) and `creativeBrewing` (brewing, alcohol, potions; nests the Vinery and Brewin' ports,
+  `creativeDelight` (food; its ports and repacks, Veggies, Vintage, Fungi, Miner's and Display included, are members in `members/`) and `creativeBrewing` (brewing, alcohol, potions; nests the Vinery and Brewin' ports,
   `members/vinery`, `members/brewin`). Root `settings.gradle` + `build-logic/` build them all.
 - `tools/*.py` = generators, listed in `tools/generators.json` and run in game with `/cegen`.
   `/dumpall` refreshes the dumps they read. `build_deploy.py` stages releases into `deploy/`.
@@ -26,7 +26,8 @@ AE2 Applied Energistics 2 | JEI Just Enough Items | JEED Just Enough Effect Desc
 FTB Feed The Beast mods (Quests, Teams, Library) | NCH neoCraftHelper (`global.NCH`)
 
 Processes are project skills in `.claude/skills/`: `integration-report` (new or updated mod: overlap, new content,
-fold-in), `add-mod`, `release`, `port` (ports and backports). When the user asks for one, follow its skill.
+fold-in), `add-mod`, `release`, `port` (ports and backports), `scratch-test` (queue rows, runs, run status). When the
+user asks for one, follow its skill.
 
 ## Preferences
 
@@ -68,17 +69,17 @@ fold-in), `add-mod`, `release`, `port` (ports and backports). When the user asks
   jars to `jar_archive/displaced/`). Never replace a jar while the game is running; if unsure, ask.
 - Logic tests without the game: plain `javac`/`java` harness (patcherMod `build/classes`, Mojmap, an
   `FMLEnvironment` stub first on the classpath). Live checks: throwaway dedicated server in the
-  scratchpad. Details: memory `patchermod-headless-smoke-test`, `scratch-server-verify`.
+  scratchpad. Details: memory `patchermod-headless-smoke-test`, skill `scratch-test`.
 - **Scratch server tests default to the queue.** Add every live check a change needs to
   [scratch_queue.md](feature_writeup/testing/scratch_queue.md) in the same session; only boot a scratch server when the
-  user says to. Details: memory `scratch-test-now-or-batch`.
+  user says to. Writing rows and running them: skill `scratch-test`.
 - Script-only change: `/reload` is enough for server scripts; startup scripts, items and any
   patcherMod change need a full restart.
 - The shared helpers (`neoCraftHelper.js`, `tag_helper.js`, `compost.js`) live in patcherMod's jar
   (`src/main/resources/kubejs_startup/`, loaded before `startup_scripts/`): an edit needs a patcherMod rebuild, install
   and restart. Creative Delight (`development/creativeDelight`) and Creative Brewing (`development/creativeBrewing`) nest
   their members; build/install via `:creativeDelight:` / `:creativeBrewing:`, never a member's own task.
-- Add a mod, release, port: skills `add-mod`, `release`, `port`.
+- Add a mod, release, port, scratch tests: skills `add-mod`, `release`, `port`, `scratch-test`.
 
 ## Debugging
 

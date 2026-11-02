@@ -16,9 +16,9 @@ ServerEvents.recipes(e => {
 			i.minecraft_bread, i.t_bread, e)
 
 		//######################### Upstream bugs #########################
-		// B2: ppicklerecp outputs `preapredseapickle` (typo), so Prepared Sea Pickle had no working recipe
+		// B2: ppicklerecp outputs `preapredseapickle` (typo). Prepared Sea Pickle is a removed item since 2026-11-02
+		// (TODO dishes/pickles-and-ferments #12, CD startup hostiledelight/hostile_items.js): no recipe makes it
 		R.remove({ id: 'hostiledelight:ppicklerecp' }, e)
-		R.fdCutting(i.sea_pickle, i.any_knife, i.preparedseapickle, e, 'prepared_sea_pickle')
 
 		//######################### Cooking trio #########################
 		// Plain cooked meat and eggs are made in all three of smoker, furnace and campfire (food_families.md 3.1

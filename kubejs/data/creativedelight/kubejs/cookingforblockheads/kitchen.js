@@ -2,10 +2,9 @@
 // Wood spice racks, tool racks and fruit baskets (Creative Delight member blockheads_additions, kitchen.md 9), and the counter-topper
 // block tags. Each takes CfB's own
 // recipe shape in its wood's slabs: spice rack 2 slabs in a row, tool rack 3 slabs over 2 iron nuggets. Rubberwood has
-// no slab, so its racks take planks. CfB's own spice rack and tool rack keep their recipes, limited to the wooden slabs
-// with no rack of their own (#creativedelight:rack_slabs/other), so no grid matches two recipes.
-// Fruit basket: CfB's shape (slab, pressure plate, slab) in the wood's slabs, any wooden pressure plate; CfB's own
-// fruit basket takes the same leftover slab tag. Recipe ids are creativedelight:shaped/<rack>.
+// no slab, so its racks take planks. CfB's own spice rack, tool rack and fruit basket are merged into the oak versions
+// (cooking/kitchen #24, 2026-11-02): their recipes are removed. Fruit basket: CfB's shape (slab, pressure plate, slab)
+// in the wood's slabs, any wooden pressure plate. Recipe ids are creativedelight:shaped/<rack>.
 
 // wood rack key prefix -> its slab (or planks) dict key
 var CD_RACK_WOODS = {
@@ -53,8 +52,10 @@ ServerEvents.recipes(e => {
 			R.shaped(Item.of(i[w + '_tool_rack']), ['SSS', 'N N'], { S: slab, N: i.t_balm_iron_nuggets }, e, w + '_tool_rack')
 			R.shaped(Item.of(i[w + '_fruit_basket']), ['SPS'], { S: slab, P: i.any_wooden_pressure_plates }, e, w + '_fruit_basket')
 		})
-		R.replaceInput({ output: i.cfb_fruit_basket }, i.wood_slab, i.t_rack_slabs_other, e)
-		R.replaceInput({ output: i.cfb_spice_rack }, i.wood_slab, i.t_rack_slabs_other, e)
-		R.replaceInput({ output: i.cfb_tool_rack }, i.wood_slab, i.t_rack_slabs_other, e)
+		// CfB's own Spice Rack, Tool Rack and Fruit Basket are merged into the oak versions (TODO cooking/kitchen #24,
+		// 2026-11-02; CD startup cookingforblockheads/item_merges.js): their recipes go, so only the 20 wood versions are made
+		R.remove({ output: i.cfb_fruit_basket }, e)
+		R.remove({ output: i.cfb_spice_rack }, e)
+		R.remove({ output: i.cfb_tool_rack }, e)
 	})
 })

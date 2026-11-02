@@ -3,7 +3,8 @@
 // (1000) and before food_dict.js (980).
 //
 // A subdict is a mask over global.item: every value is an i.xxx value, so items stay defined once in item_dict.js
-// and the subdict only gives them a development name. global.food (food_dict.js) is the first; tool and misc follow.
+// and the subdict only gives them a development name. global.food (food_dict.js) is the first; global.tool (tool_dict.js) and
+// global.misc (misc_dict.js) follow (2026-11-02).
 //
 // Food key: <category>[_<form>][_<state>]_<name>, e.g. veggie_slice_cooked_potato. Parts are matched longest first,
 // so ice_cream beats a shorter entry and a name may hold underscores. Raw is implicit (no state).
@@ -13,6 +14,19 @@ global.foodGrammar = {
 	categories: ['fruit', 'veggie', 'mushroom', 'nut', 'grain', 'dough', 'meat', 'fish', 'egg', 'dairy', 'spice', 'sauce', 'ingredient', 'cake', 'pie', 'cookie', 'pastry', 'candy', 'ice_cream', 'dessert', 'sandwich', 'salad', 'soup', 'snack', 'dish', 'feast', 'drink', 'alcohol', 'golden', 'can', 'hazard'],
 	forms: ['slice', 'diced', 'ground', 'cut', 'chop', 'fillet', 'strip', 'leaf', 'patty', 'wedge', 'wheel', 'flour', 'juice', 'jam', 'square', 'burger', 'roll', 'wrap', 'toast', 'serving', 'enchanted'],
 	states: ['cooked', 'dried', 'smoked', 'pickled', 'fermented'],
+}
+
+// Tool and misc keys: <category>_<name>, no forms or states (tool_dict.js, misc_dict.js; tools/kitchen_dicts.py reads
+// these lists too). misc `item` is the catch-all.
+global.toolGrammar = {
+	categories: ['knife', 'machete', 'skillet', 'kettle', 'pot', 'stove', 'oven', 'grill', 'board', 'basket', 'bowl', 'cup', 'jar', 'bottle', 'mold', 'net', 'tray', 'basin', 'plate', 'watering_can', 'station'],
+	forms: [],
+	states: [],
+}
+global.miscGrammar = {
+	categories: ['crate', 'bag', 'seed', 'wild', 'colony', 'spawn_egg', 'hat', 'compost', 'soil', 'crop', 'sapling', 'leaves', 'wood', 'block', 'material', 'item'],
+	forms: [],
+	states: [],
 }
 
 global.subdict = {

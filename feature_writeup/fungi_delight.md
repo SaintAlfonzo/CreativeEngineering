@@ -239,9 +239,9 @@ none from these). The overlaps are dish families and systems.
 Steps that match the Veggies or Vintage ports are only named; see [veggies_delight.md](veggies_delight.md) §4 and
 [vintage_delight.md](vintage_delight.md) §4 for the detail.
 
-1. **Port (new jar).** `development/backportedFungi`, mod id `fungidelight` (ids unchanged), version
+1. **Port (new jar).** `development/creativeDelight/members/fungi`, mod id `fungidelight` (ids unchanged), version
    `1.3-ce-19.2-01`, root `settings.gradle`, `installToMods`, `mod_sides.md` row (both sides: entities and a client
-   renderer). Resources through a copy of `development/backportedVeggies/tools/port_resources.py`, MIT notice kept. 1.20.1 -> 1.19.2: block `Material`,
+   renderer). Resources through a copy of `development/creativeDelight/members/veggies/tools/port_resources.py`, MIT notice kept. 1.20.1 -> 1.19.2: block `Material`,
    `CreativeModeTab` subclass, recipe JSON without `category`, `MushroomBlock(Properties, Supplier<Holder<...>>)`,
    `canBeReplaced()` -> material check, 1.19.2 loot table call in the pig goal, placement modifier codec, the
    1.20-only block tags left out. **Dropped:** `SnifferAiMixin`, the `sniffer_food` tag and the sniffer config;
@@ -291,7 +291,7 @@ fails to load. Game closed: `./gradlew :backportedFungi:installToMods :patcherMo
 
 | Part | Where | Notes |
 |---|---|---|
-| Port jar `backportedFungi-1.3-ce-19.2-01` | `development/backportedFungi` (README lists every deviation) | No config (defaults hard-coded), no sniffer, advancements, Botany Pots, compost hook, Autumnity / Spawn tags, `has_*` biome tags, `#forge:alcohol` file; no biome modifiers or placed features (8 configured features ship). Fixes: inky patch on `inky_cap_placeable_on`; pig digging asks `getMobGriefingEvent` before digging and before changing the block (loot table call on the CHEST parameter set); veil capped at 16 (bone meal refused at the cap); Weak Stomach reads `#creativeengineering:food_type/drink/alcohol`; Burrowing as `PotionBrewing.addMix` (AT); stews as `fungidelight:effect_stew` (Luck / Comfort / Haste, 160 ticks; upstream's numeric ids were Blindness, Saturation and 35). `MushroomCowMixin` deleted, `FDMCow` keeps lightning immunity, shearing, renderer. Trades and sounds kept |
+| Port jar `backportedFungi-1.3-ce-19.2-01` | `development/creativeDelight/members/fungi` (README lists every deviation) | No config (defaults hard-coded), no sniffer, advancements, Botany Pots, compost hook, Autumnity / Spawn tags, `has_*` biome tags, `#forge:alcohol` file; no biome modifiers or placed features (8 configured features ship). Fixes: inky patch on `inky_cap_placeable_on`; pig digging asks `getMobGriefingEvent` before digging and before changing the block (loot table call on the CHEST parameter set); veil capped at 16 (bone meal refused at the cap); Weak Stomach reads `#creativeengineering:food_type/drink/alcohol`; Burrowing as `PotionBrewing.addMix` (AT); stews as `fungidelight:effect_stew` (Luck / Comfort / Haste, 160 ticks; upstream's numeric ids were Blindness, Saturation and 35). `MushroomCowMixin` deleted, `FDMCow` keeps lightning immunity, shearing, renderer. Trades and sounds kept |
 | Mooshroom family | patcherMod `mooshroom/MooshroomFamily`, `MushroomTypeSetter`, mixins `MushroomCowBreedingMixin`, `AnimalCanMateMooshroomMixin`; `SpawnTuning` `brown_chance` | Brown on NATURAL / CHUNK_GENERATION `SpecialSpawn` of `minecraft:mooshroom` by the biome's `brown_chance`; any two of red, brown, inky cap cow, morel cow breed, calf 50 % either parent's kind (vanilla 1/1024 mutation only for two same-type vanilla parents); the calf is the chosen parent's entity type. Fungi cows are found by entity id, so patcherMod does not depend on the port. Headless `pickCalf` test passed (400k rolls per pair). Mooblooms extend `Cow`, untouched |
 | Cow spawns | `mob_spawns.json` | `mooshroom_dark_forests` gains `brown_chance` 0.5; new `mooshroom_mushroom_fields` (factor 1, `brown_chance` 0.25); `inky_cap_cow_dark_forests` (2), `inky_cap_cow_mushroom_fields` (8), `morel_cow_dark_forests_swamps` (2), `morel_cow_mushroom_fields` (8), groups 3 to 4. `spawn_ground` is already met (`#minecraft:mooshrooms_spawnable_on` holds `#minecraft:dirt`). `spawns_by_biome.md` regenerated from the 10-23 dump |
 | Mushroom spawn system (§5.1.1) | `mushroom_spawns.json` / `.js`, shared code `worldgen/_biome_rules.js`, CEConfig `[worldgen.systems] mushroomSpawns`, `tools/test_mushroom_spawns.sh` | Table below. FD brown / red colony rules moved here unchanged. Pack copies of the colony feature for inky cap and morel (dirt and podzol, not mycelium only). Cave mode: no light predicate in 1.19.2 placement, so vanilla's underground test (`surface_relative_threshold_filter` OCEAN_FLOOR_WG at most -13) after an `environment_scan` to a floor; colonies only over `#minecraft:mushroom_grow_block` or `#minecraft:dirt`; noise caves only (features accept `air`, carvers leave `cave_air`) |
@@ -409,10 +409,11 @@ using the existing info-page route (step 18).
 
 ### 5.1.3 Truffles, rooted dirt, pigs, wolves
 
-- **Placement folded into `wild_crops.json`:** rooted dirt blob and truffle dirt become two `wild_crops.json` rules
-  (with the per-rule `step` field already planned in §4 step 4 for `underground_ores`). **Biomes: dark forest and
-  cold forest only** (clauses `dark_oak` or `cold forest`, no longer all of `coniferous`); the other taiga
-  and conifer biomes lose them. Truffle dirt keeps "every chunk the blob is there".
+- **Placement folded into `wild_crops.json`:** rooted dirt blob and truffle dirt are one `wild_crops.json` rule
+  (`rooted_dirt`, step `underground_ores`, features blob then truffle ore, so one modifier places them in that order; as
+  two rules no truffle dirt generated, r1102 SQ-FGD-14, `creativedelight/members #42`, merged 2026-11-02). **Biomes: dark
+  forest, cold forest and birch forest** (clauses `dark_oak`, `cold forest` or `birch`; birch added by the owner
+  2026-11-02, no longer all of `coniferous`); the other taiga and conifer biomes lose them. Truffle dirt keeps "every chunk the blob is there".
 - **Pig food:** the Fungi additions (brown and red mushroom, inky cap, morel, truffle) go onto `Pig.FOOD_ITEMS`
   as in §2.3 and are listed **for review with the whole mob-food system** (`tweaks #13`): marker in the TODO row
   and in [mob_block_tweaks.md](mob_block_tweaks.md); no other pig-food change until then.
@@ -505,7 +506,7 @@ filter value against the live cave biomes, and the starting rates above (FGD-28)
 
 | Path | What |
 |---|---|
-| `development/backportedFungi/` | the port (README with every deviation, `NOTICE-upstream-MIT.txt`) |
+| `development/creativeDelight/members/fungi/` | the port (README with every deviation, `NOTICE-upstream-MIT.txt`) |
 | `kubejs/startup_scripts/_lib/item_dict.js`, block dict | ids |
 | `kubejs/generation_scripts/worldgen/wild_crops.json`, `kubejs/server_scripts/worldgen/wild_crops.js` | wild rules, `step` field |
 | `kubejs/generation_scripts/worldgen/mob_spawns.json` | cow spawns, `brown_chance` |
@@ -589,3 +590,7 @@ filter value against the live cave biomes, and the starting rates above (FGD-28)
 - 2026-11-01: `creativedelight/members #8` (move the mooshroom family into More Mooblooms) not built: creative_split.md
   7.6 (owner) sends `mooshroom/`, `MooshroomFamily` and More Mooblooms to Creative Worldgen as fauna, not CD. The
   move rides the Worldgen carve (`creativesplit/worldgen #8`); the classes stay in patcherMod until then.
+- **2026-11-02:** nested in Creative Delight (`creativedelight/members #1`): `bundled_in=creativeDelight`, jar `backportedFungi-1.3-ce-19.2-02` inside the CD jar, "Fungi Delight (Creative Delight)"; folder stays `development/creativeDelight/members/fungi`; build and install through `:creativeDelight:` only.
+- **2026-11-02 (afternoon):** folder moved to `development/creativeDelight/members/fungi` (plan_creative_delight.md I8).
+  Truffle dirt fix (I6): the blob and truffle ore rules merged into one, birch forests added (5.1.3); crops_by_biome.md
+  regenerated. Rerun SQ-FGD-14 in the SQ-FGDC world.

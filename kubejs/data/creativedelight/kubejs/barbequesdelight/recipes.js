@@ -40,7 +40,8 @@ ServerEvents.recipes(e => {
 		R.bbqGrilling(i.grilled_vegetable_skewer, i.raw_vegetable_skewer, 160, e, 'grilled_vegetable_skewer')
 
 		// Combos (combine: the result keeps the skewers, seasoning included; sticks come back)
-		R.bbqCombine(i.kebab_wrap, [i.t_bread, i.t_grilled_skewers, i.cabbage], e, 'kebab_wrap')
+		// The wrap is on a tortilla, like every wrap (TODO dishes/meals #47, #15); upstream took bread
+		R.bbqCombine(i.kebab_wrap, [i.t_tortilla, i.t_grilled_skewers, i.cabbage], e, 'kebab_wrap')
 		R.bbqCombine(i.kebab_sandwich, [i.t_bread, Item.of(i.t_grilled_skewers, 2), i.cabbage, i.onion], e, 'kebab_sandwich')
 		R.bbqCombine(i.bibimbap, [i.cooked_rice, i.onion, i.carrot, Item.of(i.t_grilled_skewers, 3)], e, 'bibimbap')
 	})

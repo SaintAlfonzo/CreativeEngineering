@@ -4,6 +4,7 @@ import com.SaintAlfonzo.creativecompat.block.VineShearing;
 import com.SaintAlfonzo.creativecompat.compat.BotanistPot;
 import com.SaintAlfonzo.creativecompat.compat.CraftingMenuPolymorphClient;
 import com.SaintAlfonzo.creativecompat.compat.CraftingMenuPolymorphCompat;
+import com.SaintAlfonzo.creativecompat.compat.JarFluidPipes;
 import com.SaintAlfonzo.creativecompat.compat.JarMixing;
 import com.SaintAlfonzo.creativecompat.compat.PlantBoxModels;
 import com.SaintAlfonzo.creativecompat.compat.PlantBoxModelsClient;
@@ -107,6 +108,8 @@ public class CreativeCompat {
         // scroll-to-rotate packet. The scroll listener is compat.SackBundleScroll (client).
         if (ModList.get().isLoaded("supplementaries")) {
             SackBundle.register();
+            // Jars and goblets take Forge fluid pipes (Create pumps): compat.JarFluidPipes, mixed_jars.md 10.
+            JarFluidPipes.register();
         }
         // Polymorph recipe selection in the IE Engineer's Crafting Table and the Pretty Pipes Crafting Terminal, and in
         // the Sophisticated crafting upgrade (server half; the client half is ClientModEvents).

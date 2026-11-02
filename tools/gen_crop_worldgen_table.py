@@ -25,7 +25,7 @@ How it works:
   rule's features go to the biomes it matches (mushroom rules in cave mode also match ocean and cave biomes). The
   Creative Delight wildCrops / CEConfig mushroomSpawns switches can't be read offline: the tables assume both are on, and the
   summary's "mod default" column shows the numbers with them off.
-- The Fungi Delight port (development/backportedFungi) ships only configured features, under the upstream ids. While
+- The Fungi Delight port (development/creativeDelight/members/fungi) ships only configured features, under the upstream ids. While
   no jar in mods/ has them, they are read from the upstream jar in the ATLauncher downloads folder.
 
 Rates are patch attempts per chunk (1/N = one chunk in N on average). "Per 1000 chunks" multiplies the
@@ -251,14 +251,14 @@ CROP_BLOCKS = {
     'farmersdelight:wild_cabbages': 'Cabbage', 'farmersdelight:wild_beetroots': 'Beetroot (Sea Beet)',
     'farmersdelight:brown_mushroom_colony': 'Brown Mushroom Colony', 'farmersdelight:red_mushroom_colony': 'Red Mushroom Colony',
     'fruitsdelight:hamimelon': 'Cantaloupe', 'delightful:cantaloupe': 'Mini Cantaloupe',  # item_merges.md 2.10
-    # Veggies Delight backport (development/backportedVeggies)
+    # Veggies Delight backport (development/creativeDelight/members/veggies)
     'veggiesdelight:wild_broccoli': 'Broccoli', 'veggiesdelight:wild_cauliflowers': 'Cauliflower',
     'veggiesdelight:wild_garlic': 'Garlic', 'veggiesdelight:wild_sweet_potatoes': 'Sweet Potato',
     'veggiesdelight:wild_turnips': 'Turnip', 'veggiesdelight:wild_zucchinis': 'Zucchini',
-    # Vintage Delight backport (development/backportedVintage); wild ghost peppers are Nether-only
+    # Vintage Delight backport (development/creativeDelight/members/vintage); wild ghost peppers are Nether-only
     'vintagedelight:wild_oats': 'Oats', 'vintagedelight:wild_peanuts': 'Peanuts',
     'vintagedelight:wild_cucumbers': 'Cucumbers',
-    # Fungi Delight backport (development/backportedFungi); placement in mushroom_spawns.json / wild_crops.json
+    # Fungi Delight backport (development/creativeDelight/members/fungi); placement in mushroom_spawns.json / wild_crops.json
     'miners_delight:wild_cave_carrots': 'Cave Carrot',
     'fungidelight:inky_cap_mushroom': 'Inky Cap', 'fungidelight:morel_mushroom': 'Morel',
     'fungidelight:inky_cap_mushroom_colony': 'Inky Cap Colony', 'fungidelight:morel_mushroom_colony': 'Morel Colony',

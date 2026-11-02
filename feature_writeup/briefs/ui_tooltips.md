@@ -250,7 +250,7 @@ lang and Lexicon (general knowledge, unverified against 440.2 code for the Pure 
 ---
 
 ## tooltips #5: Large tooltips run off the bottom
-Status **Planned** · Work: patcherMod · id `ui/tooltips #5`
+Status **Testing** (BUILT 2026-11-02 as below with `index = 9`, the javap check: int locals x 3, y 4, width 6, height 7, tooltipX 8, tooltipY 9; [tooltips.md](../tooltips.md) 3 "Fixed") · Work: patcherMod · id `ui/tooltips #5`
 
 ### Goal
 A tooltip taller than the screen keeps its top (name and first lines) on screen and runs off the bottom, instead of the

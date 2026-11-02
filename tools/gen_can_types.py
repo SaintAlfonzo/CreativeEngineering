@@ -211,8 +211,9 @@ EXPLICIT = [
     ('raw_meat', 'canned_raw_mutton', 'Canned Raw Mutton', ['mutton'], False, dict(input=['raw_mutton'])),
     ('raw_meat', 'canned_raw_pork', 'Canned Raw Pork', ['porkchop'], False, dict(input=['raw_pork'])),
     ('raw_meat', 'canned_raw_rabbit', 'Canned Raw Rabbit', ['rabbit'], False),
-    # Shulker: a low value meat (1.2 a mollusk), so its own small meal (2, 1) x 4 keeps a full can at 8 mollusks
-    ('raw_meat', 'canned_shulker', 'Canned Shulker Flesh', ['shulker_mollusk', 'shulker_filet'], False,
+    # Shulker: a low value meat, so its own small meal (2, 1) x 4 keeps a full can at 8 pieces. End's Delight's meat and
+    # slice since 2026-11-02 (Ender's mollusk and filet merged into them, TODO dishes/ingredients #32)
+    ('raw_meat', 'canned_shulker', 'Canned Shulker Flesh', ['shulker_meat', 'shulker_meat_slice'], False,
      dict(meal=(2, 1))),
 
     # raw fish: sliced cuts share the whole fish's count
@@ -309,6 +310,8 @@ EXPLICIT = [
     ('soup', 'canned_mushrooms', None, ['mushroom_stew'], True),
     # Bayberry Soup is typed drink since 1.1.03, so the soup loop no longer finds it; its can (shipped) stays
     ('soup', 'canned_bayberry_soup', 'Canned Bayberry Soup', ['bayberry_soup'], False),
+    # Farmer's Delight's Ratatouille (TODO cans/canning #18, 2026-11-02): a vegetable stew, canned like the soups
+    ('soup', 'canned_ratatouille', 'Canned Ratatouille', ['ratatouille'], False),
     # Miner's Delight (owner 2026-11-01): these four only; Miner's stays in UNDECIDED_MODS so no other food is canned
     # and the cups stay cups (miners_delight.md I3)
     ('soup', 'canned_bat_soup', 'Canned Bat Soup', ['bat_soup'], False),
@@ -434,7 +437,7 @@ SKIP = {
 # Mod namespaces installed but not yet in a /dumpfood: their cans are configured above and skipped (listed as waiting)
 # until the catalog has their foods. Empty this once the dump is taken. Vintage Delight: vintage_delight.md 4.0 step 8;
 # Fungi Delight: fungi_delight.md step 8.
-AWAIT_DUMP = {'roll_delight'}   # emptied 2026-10-25 (Vintage, Fungi Delight); Roll Delight port added 2026-11-01
+AWAIT_DUMP = {'roll_delight', 'largemeals'}   # emptied 2026-10-25 (Vintage, Fungi Delight); Roll Delight port added 2026-11-01; Large Meals 2026-11-02 (its 4 soup cans)
 # Mods whose foods are typed but whose cans are not decided yet (each mod page's "Cans" row: hostile_delight.md step
 # 12, ends_delight.md, ocean_delight.md, miners_delight.md I3 "cups are not cans"). The type loops skip their foods;
 # explicit cans above still apply. Take a mod out once its cans are decided (Miner's: decided 2026-11-01, four explicit

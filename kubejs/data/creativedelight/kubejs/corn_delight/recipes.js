@@ -11,6 +11,23 @@ ServerEvents.recipes(e => {
 
 	global.CD.recipes(() => {
 
+		//######################### Taco #########################
+		// One taco recipe (TODO dishes/meals #51): Corn Delight's took an onion, Veggies Delight's a roasted red, green or
+		// yellow bell pepper; the one recipe takes an onion or any roasted bell pepper (9 colours). No roasted onion
+		// item exists in the pack.
+		R.remove({ id: 'corn_delight:taco' }, e)
+		R.remove({ id: 'veggiesdelight:compat/corndelight/taco' }, e)
+		R.shapeless(i.taco, [i.t_tortilla, i.salad_ingredients, [i.onion, i.t_roasted_bell_pepper],
+			[i.cooked_chicken, i.cooked_pork, i.cooked_beef, i.cooked_mutton]], e, 'taco')
+
+		//######################### Cornbread stuffing #########################
+		// One recipe (TODO merges/dishes #12): Corn Delight's took a baked potato, Veggies Delight's a baked sweet potato;
+		// the one recipe takes either. Time and xp as upstream.
+		R.remove({ id: 'corn_delight:cooking/cornbread_stuffing' }, e)
+		R.remove({ id: 'veggiesdelight:compat/corndelight/cooking/cornbread_stuffing' }, e)
+		var bakedPotato = Platform.isLoaded('veggiesdelight') ? [i.baked_potato, i.baked_sweet_potato] : i.baked_potato
+		R.fdCooking([i.cornbread, i.vegetables, bakedPotato, i.sweet_berries], i.cornbread_stuffing, e, 'cornbread_stuffing', 0.5, 200)
+
 		//######################### Egg solution #########################
 		// The pack's egg solution fluid: 250 mB stands in for one egg and its milk (create/recipes.js)
 		if (Platform.isLoaded('create')) {

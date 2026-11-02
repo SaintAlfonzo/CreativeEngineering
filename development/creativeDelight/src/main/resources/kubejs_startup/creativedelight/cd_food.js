@@ -66,7 +66,7 @@ global.CD.food = function (e) {
 		cake: { exp: V.bake.exp, time: V.bake.time, tool: i.t_bakeware_cake_pan },
 		muffin: { exp: V.bake.exp, time: V.bake.time, tool: i.t_bakeware_muffin_tin, container: i.paper },
 	}
-	var SWEET = i.any_sweetener   // one sweet slot: any sweetener (sugar, powdered sugar, glycerol, honey bottle, honeycomb)
+	var SWEET = i.any_sweetener   // one sweet slot: any sweetener (sugar, powdered sugar, honey bottle, honeycomb)
 	// Recipes the pack and CD add themselves are never swept by a family's removal
 	var OURS = [{ mod: 'creativeengineering' }, { mod: 'creativedelight' }]
 

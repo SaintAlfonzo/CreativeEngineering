@@ -1926,7 +1926,7 @@ i.bread = '#forge:bread/wheat';
 i.pasta = '#forge:pasta'; // every raw pasta: FD raw pasta, cucumber noodles, gnocchi (potato noodle)
 i.t_pasta_raw_pasta = '#forge:pasta/raw_pasta'; // FD raw pasta only; recipes naming it are widened to i.pasta
 i.any_sugar = '#forge:sugar';
-i.any_sweetener = '#creativeengineering:sweeteners'; // #forge:sugar (sugar, powdered sugar, glycerol) + honey bottle + honeycomb: cooking sugar slots
+i.any_sweetener = '#creativeengineering:sweeteners'; // #forge:sugar (sugar, powdered sugar) + honey bottle + honeycomb: cooking sugar slots
 i.any_sweetener_drink = '#creativeengineering:sweeteners/drink';       // sugar, powdered sugar, honey bottle: drink sugar slots
 i.any_sweetener_brewing = '#creativeengineering:sweeteners/brewing';   // sugar, powdered sugar, honey bottle, honeycomb: keg and wine brewing
 i.any_sweetener_plain = '#creativeengineering:sweeteners/plain';       // sugar, powdered sugar: non-food sugar uses (Botania, modules, ethanol, potions)
@@ -1980,6 +1980,34 @@ i.t_nuts = '#forge:nuts';
 i.t_tea_leaves = '#forge:tea_leaves';
 i.t_respite_tea_leaves = '#farmersrespite:tea_leaves';   // Farmer's Respite's own tea leaf tag (Kettle recipes)
 i.t_lavender = '#forge:lavender';
+// Drink rules (feature_writeup/creative_delight_drinks.md 6, food/drinks #15): pack teas and juices (Creative Delight
+// kubejs_startup/creativeengineering/drinks.js) and the input tags the rules use (CD creativeengineering/drink_tags.js)
+i.kiwi_tea = 'creativeengineering:kiwi_tea';
+i.turnip_tea = 'creativeengineering:turnip_tea';
+i.bayberry_tea = 'creativeengineering:bayberry_tea';
+i.hamimelon_tea = 'creativeengineering:hamimelon_tea';
+i.carrot_tea = 'creativeengineering:carrot_tea';
+i.lemon_tea = 'creativeengineering:lemon_tea';
+i.melon_tea = 'creativeengineering:melon_tea';
+i.orange_tea = 'creativeengineering:orange_tea';
+i.pear_tea = 'creativeengineering:pear_tea';
+i.lychee_juice = 'creativeengineering:lychee_juice';
+i.hawberry_juice = 'creativeengineering:hawberry_juice';
+i.mango_juice = 'creativeengineering:mango_juice';
+i.mangosteen_juice = 'creativeengineering:mangosteen_juice';
+i.peach_juice = 'creativeengineering:peach_juice';
+i.t_fruits_kiwi = '#forge:fruits/kiwi';
+i.t_fruits_orange = '#forge:fruits/orange';
+i.t_azalea_flowers = '#creativeengineering:azalea_flowers';         // Twigs' and Immersive Weathering's (flowers #5)
+i.t_flowering_azalea = '#creativeengineering:flowering_azalea';     // the bush and its leaves
+i.t_pink_flowers = '#creativeengineering:pink_flowers';             // lavender tea: pink tulip, peony, lilac, allium
+i.t_lavender_tea_herbs = '#creativeengineering:lavender_tea_herbs'; // lavender tea: amethyst shard, lavender blossom leaves, #forge:lavender
+i.t_coffee_chocolate = '#creativeengineering:coffee_chocolate';     // chocolate coffee: cocoa beans, chocolate bars
+i.t_coffee_pumpkin = '#creativeengineering:coffee_pumpkin';         // pumpkin coffee: pumpkin, pumpkin slice
+i.t_drink_fruits_lemon = '#creativeengineering:drink_fruits/lemon';         // whole or sliced (drinks 0)
+i.t_drink_fruits_orange = '#creativeengineering:drink_fruits/orange';
+i.t_drink_fruits_hamimelon = '#creativeengineering:drink_fruits/hamimelon'; // hamimelon and mini cantaloupe slices
+i.t_sea_pickles = '#creativeengineering:sea_pickles';               // sea pickle tea: whole or sliced
 i.t_straw = '#minecraft:straw';
 i.t_botania_special_flowers = '#botania:special_flowers';
 i.t_botania_special_floating_flowers = '#botania:special_floating_flowers';
@@ -2019,6 +2047,7 @@ i.t_sliced_potatoes = '#forge:sliced_potatoes';
 i.t_vegetables_sweet_potato = '#forge:vegetables/sweet_potato';  // Veggies Delight's; the sliced sweet potato joins it as Rustic's slices join #forge:vegetables/potato
 // pack tags for meals (cookingtags.js, TODO dishes/meals #1, #2)
 i.t_soup_veggie_cooked = '#creativeengineering:soup_veggie_cooked';
+i.t_patty = '#creativeengineering:patty';   // any cooked patty: Farmer's beef, Veggies' vegetarian, Miner's vegan (CD creativeengineering/patties.js)
 i.t_roasted_bell_pepper = '#creativeengineering:roasted_bell_pepper';   // Rustic's 9 colours with Creative Delight (3 before) (Veggies Delight's smoked pepper inputs)
 // Rustic Delight 1.7.0 ids (Creative Delight member, feature_writeup/rustic_delight.md 5): only registered once the
 // Creative Delight jar replaces the 1.3.0 jar, so only Creative Delight's scripts use them.
@@ -12368,6 +12397,11 @@ i.metro_window                = 'bellsandwhistles:metro_window';
 i.stone_pillar                = 'decorative_blocks:stone_pillar';
 i.frozen_prismarine           = 'philipsruins:frozen_prismarine';
 i.frozen_dark_prismarine      = 'philipsruins:frozen_dark_prismarine';
+
+// ===== Earth fill sand base: Philip's desert brick blocks in server_scripts/tags/blocktags.js (2026-11-02) =====
+i.philips_sand_stone_brick     = 'philipsruins:sand_stone_brick';
+i.philips_red_sand_stone_brick = 'philipsruins:red_sand_stone_brick';
+i.philips_sandstone_tiles      = 'philipsruins:sandstone_tiles';
 i.steel_floor_grating         = 'engineersdecor:steel_floor_grating';
 i.steel_railing               = 'engineersdecor:steel_railing';
 i.iron_hatch                  = 'engineersdecor:iron_hatch';
@@ -12987,7 +13021,7 @@ i.salt_lamp                     = 'salt:salt_lamp';     // named Large Salt Lamp
 i.any_potato                    = '#forge:vegetables/potato';       // potato, potato slices
 i.any_bell_pepper               = '#forge:crops/bell_pepper';       // green, red, yellow
 // ===== BEGIN GENERATED CANS (tools/gen_can_types.py, do not edit) =====
-// 276 cans: raw veggie/fruit/meat/fish, hazard, special, cookies, cooked, bread, salad, soup, meal, pie, feast, drink, golden, dairy, preserve, dessert (kubejs/generation_scripts/food/can_types.json)
+// 277 cans: raw veggie/fruit/meat/fish, hazard, special, cookies, cooked, bread, salad, soup, meal, pie, feast, drink, golden, dairy, preserve, dessert (kubejs/generation_scripts/food/can_types.json)
 i.canned_beetroot                           = 'creativeengineering:canned_beetroot';
 i.canned_cabbage                            = 'creativeengineering:canned_cabbage';
 i.canned_carrot                             = 'creativeengineering:canned_carrot';
@@ -13100,6 +13134,7 @@ i.canned_cooked_pike                        = 'creativeengineering:canned_cooked
 i.canned_cooked_lionfish                    = 'creativeengineering:canned_cooked_lionfish';
 i.canned_surstromming                       = 'creativeengineering:canned_surstromming';
 i.canned_bayberry_soup                      = 'creativeengineering:canned_bayberry_soup';
+i.canned_ratatouille                        = 'creativeengineering:canned_ratatouille';
 i.canned_bat_soup                           = 'creativeengineering:canned_bat_soup';
 i.canned_cave_soup                          = 'creativeengineering:canned_cave_soup';
 i.canned_insect_stew                        = 'creativeengineering:canned_insect_stew';
@@ -14454,7 +14489,7 @@ i.oak_trim                         = 'storagedrawers:oak_trim';
 
 // ############################## Veggies Delight backport (generated 2026-10-22) ##############################
 // ===== veggiesdelight (89) =====
-// Veggies Delight backport (development/backportedVeggies, feature_writeup/veggies_delight.md). No bell pepper line:
+// Veggies Delight backport (development/creativeDelight/members/veggies, feature_writeup/veggies_delight.md). No bell pepper line:
 // Rustic Delight's peppers are i.bell_pepper_red / _green / _yellow.
 i.broccoli_crate                 = 'veggiesdelight:broccoli_crate';
 i.cauliflower_crate              = 'veggiesdelight:cauliflower_crate';
@@ -14589,7 +14624,7 @@ i.simplehats_hockeymask          = 'simplehats:hockeymask';
 i.simplehats_horsemask           = 'simplehats:horsemask';
 i.simplehats_sleepeyemask        = 'simplehats:sleepeyemask';
 
-// ===== vintagedelight (134) - development/backportedVintage, feature_writeup/vintage_delight.md; 2026-10-23 =====
+// ===== vintagedelight (134) - development/creativeDelight/members/vintage, feature_writeup/vintage_delight.md; 2026-10-23 =====
 // Prefixed where the bare key was taken: kimchi, salt
 i.apple_sauce_bottle             = 'vintagedelight:apple_sauce_bottle';
 i.apple_sauce_jar                = 'vintagedelight:apple_sauce_jar';
@@ -14731,7 +14766,7 @@ i.wild_peanuts                   = 'vintagedelight:wild_peanuts';
 i.yellow_chefs_hat               = 'vintagedelight:yellow_chefs_hat';
 i.vinegar                      = 'vintagedelight:vinegar_bottle';   // the pack vinegar (vintage_delight.md S9)
 
-// ===== fungidelight (32) - development/backportedFungi, feature_writeup/fungi_delight.md; 2026-10-23 =====
+// ===== fungidelight (32) - development/creativeDelight/members/fungi, feature_writeup/fungi_delight.md; 2026-10-23 =====
 i.brown_mushroom_crate           = 'fungidelight:brown_mushroom_crate';
 i.cleaned_cap                    = 'fungidelight:cleaned_cap';            // Cleaned Inky Cap
 i.cooked_cleaned_cap             = 'fungidelight:cooked_cleaned_cap';     // Cooked Inky Cap
@@ -14770,7 +14805,7 @@ i.t_mushrooms_inky_cap           = '#forge:mushrooms/inky_cap';
 i.t_mushrooms_morel              = '#forge:mushrooms/morel';
 i.t_mushrooms_truffle            = '#forge:mushrooms/truffle';
 
-// ===== miners_delight (69) - development/backportedMiners, feature_writeup/miners_delight.md; 2026-10-24 =====
+// ===== miners_delight (69) - development/creativeDelight/members/miners, feature_writeup/miners_delight.md; 2026-10-24 =====
 // Merged 1.4.5 + 1.1.2 port (the 1.1.2 jar has 37 of these). Prefixed where the bare key was taken: moss
 i.copper_pot                        = 'miners_delight:copper_pot';
 i.sticky_basket                     = 'miners_delight:sticky_basket';

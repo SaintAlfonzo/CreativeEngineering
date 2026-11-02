@@ -39,7 +39,22 @@ if (global.CD) global.CD.genPut('food_types', 'creativeengineering', {
   "soup": [],
   "meal": [],
   "meal/feast": [],
-  "drink": [],
+  "drink": [
+   "bayberry_tea",
+   "carrot_tea",
+   "hamimelon_tea",
+   "hawberry_juice",
+   "kiwi_tea",
+   "lemon_tea",
+   "lychee_juice",
+   "mango_juice",
+   "mangosteen_juice",
+   "melon_tea",
+   "orange_tea",
+   "peach_juice",
+   "pear_tea",
+   "turnip_tea"
+  ],
   "drink/alcohol": [],
   "golden": [],
   "golden/enchanted": [],
@@ -321,7 +336,8 @@ if (global.CD) global.CD.genPut('food_types', 'creativeengineering', {
    "canned_insect_stew",
    "canned_golden_nutritional_bar",
    "canned_mashed_potatoes",
-   "canned_mashed_sweet_potatoes"
+   "canned_mashed_sweet_potatoes",
+   "canned_ratatouille"
   ]
  },
  "canned": {}

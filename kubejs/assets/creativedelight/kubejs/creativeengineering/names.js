@@ -17,6 +17,13 @@ ClientEvents.lang('en_us', e => {
   e.renameItem(global.item.bayberry_soup, 'Bayberry Juice')
   e.add('fluid.fruitsdelight.bayberry_soup', 'Bayberry Juice')
   e.renameItem(global.item.canned_bayberry_soup, 'Canned Bayberry Juice')
+  // Drink rules (creative_delight_drinks.md 6, food/drinks #15): renames only, ids unchanged. The pack fluids of
+  // Turnip Juice and Ice Berry Matcha are named in CD startup fluids.js; Central Kitchen already names the bubble tea fluid.
+  e.renameItem(global.item.turnip_water, 'Turnip Juice')
+  e.renameItem(global.item.seacucumbertea, 'Sea Pickle Tea')
+  e.renameItem(global.item.bubble_tea, 'Chorus Fruit Bubble Tea')
+  e.renameItem(global.item.berry_matcha_latte, 'Ice Berry Matcha')
+  e.renameItem(global.item.ender_nectar, 'Chorus Tea')
   // Veggies Delight's potato noodle is Gnocchi and potato noodles are Creamy Gnocchi (dishes/meals #33). The two
   // sprites are still the noodle art (texture swap open in the TODO row).
   e.renameItem(global.item.potato_noodle, 'Gnocchi')
