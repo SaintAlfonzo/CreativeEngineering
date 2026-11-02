@@ -4,7 +4,9 @@ Written 2026-10-31 (owner request: "move the vinery backport and brewin and chew
 creative delight, called creative brewing ... eventually all of the potion changes made in the main mod and kubejs will be
 moved here too, so plan the infrastructure for that as well").
 
-**Status: bundle BUILT 2026-10-31, not installed, not booted.** `creative_brewing-1.0.0.jar`
+**Status: phases 2 and 3 (potion, effect and machine Java, mixins, config) BUILT 2026-11-01 (Creative Split wave 4, 4.6),
+not installed, not booted; install with patcherMod 1.1.07 (section 5). Earlier status: bundle BUILT 2026-10-31.**
+`creativebrewing-1.0.0.jar`
 
 > **Testing rule (owner, 2026-11-01):** Vinery and Brewin' are a package deal under Creative Brewing. They are never booted or tested separately: no without-Brewin' / without-Vinery boot, no per-member switch check (`[members]` toggles), no standalone port jars. The pack does not start without Vinery anyway (`startup_scripts/_lib/effect_dict.js` needs `vinery:climbing_effect`). Scratch rows SQ-CDF-07 (second half) and SQ-CBJ-05 were dropped for this reason.
 (`development/creativeBrewing/build/libs/`) nests the Vinery port `-08` and the Brewin' port `-05`. `mods/` still holds the
@@ -22,7 +24,7 @@ Ports' own content and tests stay in [alcohol.md](alcohol.md) (Part A Brewin', `
 |---|---|---|---|---|---|
 | Let's Do Vinery 1.5.5 port | `:backportedVinery` | `development/creativeBrewing/members/vinery` | `vinery`, `foundation` | "Let's Do Vinery (Creative Brewing)", "Creative Brewing" (the `foundation` id) | `1.5.5-ce-19.2-08` |
 | Brewin' and Chewin' 4.5.0 port | `:backportedBrewin` | `development/creativeBrewing/members/brewin` | `brewinandchewin` | "Brewin' & Chewin' (Creative Brewing)" | `4.5.0-ce-19.2-05` |
-| (the bundle itself) | `:creativeBrewing` | `development/creativeBrewing` | `creative_brewing` | "Creative Brewing" | `1.0.0` |
+| (the bundle itself) | `:creativeBrewing` | `development/creativeBrewing` | `creativebrewing` | "Creative Brewing" | `1.0.0` |
 
 Version bumps: Vinery `-07` was already built (in `jar_archive/`, never installed) and the tree has uncommitted work since,
 so the first nested build is `-08`; Brewin' `-04` is the installed one, so `-05`. Both carry only the display-name change
@@ -39,11 +41,11 @@ on top of their last builds.
   `tools/check_data.py` and `tools/port_resources.py` find the instance root four levels up.
 - `.gitignore`: the member build/libs/jar_archive rules are now `/development/*/members/*/...` (CD and CB).
 - `settings.gradle`: the two projects left the flat list; a Creative Brewing block includes the bundle and its members.
-- `tools/build_deploy.py`: `IN_TREE_MODS` has `creativeBrewing` / `creative_brewing` in place of the two ports;
+- `tools/build_deploy.py`: `IN_TREE_MODS` has `creativeBrewing` / `creativebrewing` in place of the two ports;
   `IN_TREE_EXTRA_SRC` watches the members and CB's script trees; the CB script trees are dev-only (ship in the jar);
-  `vinery_upstream` donors are now required by the `creative_brewing` jar and pinned from
+  `vinery_upstream` donors are now required by the `creativebrewing` jar and pinned from
   `creativeBrewing/members/vinery/.../UpstreamJars.java`; the duplicate-mod-id check treats CB members like CD's.
-- `tools/scratch_query/prep_srv.sh`: swaps in `creative_brewing-1.0.0.jar` and drops the standalone port jars beside it.
+- `tools/scratch_query/prep_srv.sh`: swaps in `creativebrewing-1.0.0.jar` and drops the standalone port jars beside it.
 - `tools/placeable_catalog.py`: coaster model path.
 - `mod_sides.md`: one Creative Brewing row replaces the two port rows.
 - Names (owner, 2026-10-31): `foundation` displays as "Creative Brewing"; Brewin' uses the pack's "&". CEConfig
@@ -61,14 +63,14 @@ on top of their last builds.
 
 `ce.forge-bundle` like CD (`build-logic/src/main/groovy/ce.forge-bundle.gradle`): the own jar plus each member under
 `META-INF/jarjar/` with a generated `metadata.json`. `development/creativeBrewing/build.gradle` copies the pack-folder
-script trees into the jar and writes `creative_brewing_members.txt`; the jar task fails if any of the three script dirs
+script trees into the jar and writes `creativebrewing_members.txt`; the jar task fails if any of the three script dirs
 has no `.js`. `replaces_jars` lists the old standalone port jars and what each port replaced, so the first install
 moves `backportedVinery-*`, `backportedBrewin-*` out of `mods/` (to `development/creativeBrewing/jar_archive/displaced/`).
 
 ### 2.2 Load order and dependencies
 
 `mods.toml`: `creativeengineering` (KubeJS, helpers, startup loader), `creativecalendar` (the `[time]` master the Vinery
-member's `PackTime` calls, since 2026-11-01, [creative_calendar.md](creative_calendar.md)) and `creative_delight` (nests
+member's `PackTime` calls, since 2026-11-01, [creative_calendar.md](creative_calendar.md)) and `creativedelight` (nests
 Farmer's Delight, Brewin's base; defines `global.CD`), all mandatory, all `ordering="AFTER"`. patcherMod's startup
 loader runs jar packs in mod-list order, so the startup order is: patcherMod's pack, `startup_scripts/`, Calendar, CD,
 CB. Check
@@ -78,7 +80,7 @@ same passes (creative_delight.md 10.2). If a CB server script ever needs a CD ro
 (`ServerEvents.highPriorityData` / `recipes` with a late `// priority:`) and check the server pack order in
 `logs/kubejs/server.log` first.
 
-### 2.3 Config: `config/creative_brewing-common.toml` (CBConfig)
+### 2.3 Config: `config/creativebrewing-common.toml` (CBConfig)
 
 - `[members]`: one switch per member id (`vinery`, `brewinandchewin`), default on; off makes CB's scripts skip that
   member's rows (`global.CB.on(id)`), the member's own data stays.
@@ -86,21 +88,29 @@ same passes (creative_delight.md 10.2). If a CB server script ever needs a CD ro
   (`{section, id, comment...}`); a section is written only once it has a row. Read with `global.CB.feature(id)` (scripts,
   inside an event callback) or `CBConfig.feature(id)` (Java).
 - Dials that move from `creativeengineering-common.toml` keep their key names and comments in the section of their
-  feature (4.3).
+  feature (4.3). Moved 2026-11-01 (phase 3): `[alcohol]` (quarkLine), `[effects]` (categoryOverrides, forceHudIcon,
+  forceHudIconItems, remap, removed), `[magic_resistance]`, `[copper_poisoning]`, same keys, comments and defaults
+  (`CBConfig.MOVED_SECTIONS`). `[alcohol]` and `[effects]` also hold that family's feature switches. On the first boot
+  `CreativeBrewing` copies the four tables with the player's values from `creativeengineering-common.toml`
+  (`ConfigRename.carrySections` when the CB file is new, else `ConfigRename.mergeSections`, which adds only the tables
+  the CB file lacks); patcherMod then drops them from its file. When nothing was carried and the CE file still has them,
+  CB logs a WARN naming them. `[coaster]` stays in patcherMod (WthitCoaster stays Common, creative_split.md 7.6), as do
+  `[jei] potionBucketCategory` / `tippedArrowCategory` (CB's PotionPagesJEI reads them from `CEConfig`, a downward
+  call) and `[perf] mountEffectIntervalTicks`.
 
 ### 2.4 Scripts
 
 | Type | Authored in | In the jar | Core file |
 |---|---|---|---|
-| Startup | `development/creativeBrewing/src/main/resources/kubejs_startup/<modid>/` | same path | `kubejs_startup/creative_brewing/cb_core.js`: `global.CB` (`on`, `feature`, `members`, `recipes`) |
-| Server | `kubejs/data/creative_brewing/kubejs/<modid>/` | `data/creative_brewing/kubejs/` | `_core/cb_server.js` (checks `global.CB` on load) |
-| Client | `kubejs/assets/creative_brewing/kubejs/<modid>/` | `assets/creative_brewing/kubejs/` | `_core/cb_client.js` (checks `global.CB` on login) |
+| Startup | `development/creativeBrewing/src/main/resources/kubejs_startup/<modid>/` | same path | `kubejs_startup/creativebrewing/cb_core.js`: `global.CB` (`on`, `feature`, `members`, `recipes`) |
+| Server | `kubejs/data/creativebrewing/kubejs/<modid>/` | `data/creativebrewing/kubejs/` | `_core/cb_server.js` (checks `global.CB` on load) |
+| Client | `kubejs/assets/creativebrewing/kubejs/<modid>/` | `assets/creativebrewing/kubejs/` | `_core/cb_client.js` (checks `global.CB` on login) |
 
 Rules, as CD's (creative_delight.md 29): one folder per mod the rows touch (`vinery/`, `brewinandchewin/`,
 `minecraft/` for vanilla potions, `immersiveengineering/`, `create/`, `alexsmobs/`, ...), pack-native systems in
 `creativeengineering/`; each file headed `// requires: <modid>`; member rows wrapped in an early return on
 `!global.CB || !global.CB.on('<id>')`; recipes inside `global.CB.recipes(() => ...)`, so NCH writes
-`creative_brewing:<type>/<suffix>` ids. Server and client scripts load from the pack folder on `/reload` / F3+T;
+`creativebrewing:<type>/<suffix>` ids. Server and client scripts load from the pack folder on `/reload` / F3+T;
 startup scripts need a CB rebuild and restart.
 
 ### 2.5 Java
@@ -108,20 +118,33 @@ startup scripts need a CB rebuild and restart.
 Package `com.SaintAlfonzo.creativebrewing`. `CreativeBrewing` (the `@Mod`: config, member log, the stale-jar ERROR line
 of creative_delight.md 28.3), `CBConfig`, `compat/CBMixinPlugin` (the shared `GatedMixinPlugin`: a mixin in
 `mixin.<modid>.` applies only when that mod is loaded; vanilla targets in `mixin.minecraft.`).
-`creative_brewing.mixins.json` is empty. Mixins use SRG names with `remap = false` (no refmap), as patcherMod's do, so a
-mixin moves over unchanged apart from its package. `compileOnly project(':patcherMod')` is there for CEConfig and pack
-APIs; add `:creativeDelight` the first time a compartment needs CD Java.
+Mixins use SRG names with `remap = false` (no refmap), as patcherMod's do, so a mixin moves over unchanged apart from its
+package. `compileOnly project(':patcherMod')` is there for CEConfig and pack APIs, plus patcherMod's `libs/` (the target
+mods' jars); add `:creativeDelight` the first time a compartment needs CD Java.
+
+Since phase 2 (2026-11-01): `potion/` (CEPotions, CompoundEffects, CompoundEffectTooltip, CopperPoisoningHandler,
+EffectCategories, EffectRules, MagicResistanceEffect, PhantomBaneRules, PotionBucketDispenser), `fluidbrewing/`
+(DragonBreathBrewing, Lingerification, PotionMixDedup), `compat/jei/` (AutomatedPotionMixingCategory,
+LingerificationCategory, PotionPagesJEI, and `PotionMachinesJEI`, the `@JeiPlugin` that registers the first two, split
+out of patcherMod's DragonBreathingJEI), `alcohol/IntoxicatingDrinkTooltip`, `trader/WinemakerTrades`. Ids keep the
+`creativeengineering` namespace (`CreativeBrewing.NS`). `CreativeBrewing` registers CEPotions, the three FORGE-bus
+handlers and the three setup tasks that `CreativeEngineering` used to. 25 mixins in compartments: `minecraft` (4),
+`create` (6), `immersiveengineering` (8), `jeed` (2), `create_deep_dark` (2), `everythingcopper`, `farmersrespite`,
+`fruitsdelight` (1 each); 14 common, 11 client. Resources: 10 lang keys in `assets/creativeengineering/lang/en_us.json`
+(JEI page titles, the intoxicating drink word, the compound effect parts) and `data/creativeengineering/recipes/
+lingerification_list.json`. Scripts load three of these classes by name: `com.SaintAlfonzo.creativebrewing.potion.
+PotionBucketDispenser`, `.fluidbrewing.DragonBreathBrewing`, `.trader.WinemakerTrades`.
 
 ## 3. Vinery donors
 
 The `vinery_upstream/` donor folder works as before: the game stops with a message if the two pinned jars are missing.
-Deploy now ties the folder to the `creative_brewing` jar (`UPSTREAM_DONORS`).
+Deploy now ties the folder to the `creativebrewing` jar (`UPSTREAM_DONORS`).
 
 ## 4. Move plan: potion, alcohol and effect code into CB
 
 Inventory taken 2026-10-31 (read-only sweep of patcherMod and the pack folders; full list in section 7). Owner decision
 2026-10-25 (TODO `creativebrewing/move #1`): potion brewing, alcohol, Vinery, effect descriptions, changes and swaps go
-to Creative Brewing. Nothing below is moved yet.
+to Creative Brewing. Phases 2 and 3 were built on 2026-11-01 (4.6); phase 1 runs in the same wave (4.5 log).
 
 ### 4.1 Rules for every move
 
@@ -143,7 +166,8 @@ to Creative Brewing. Nothing below is moved yet.
 
 ### 4.2 Phases
 
-**Phase 1: KubeJS only** (CB rebuild + restart; no patcherMod change). Whole files:
+**Phase 1: KubeJS only** (CB rebuild + restart; no patcherMod change). **Done 2026-11-01 (wave 4, move log 4.5; scratch
+SQ-CBM).** Whole files:
 `startup_scripts/cooking/potions.js`, `cooking/alcohol_drinks.js`, `cooking/food_values.js` (effect swaps and Respite
 cake slices), `items/potion_buckets.js`, `func/potion_area.js`, `magic/magic_resistance.js`;
 `server_scripts/cooking/alcohol.js`, `other/jeed_providers.js` (incl. the Vinery wine rows), `engineering/potion_bottling.js`,
@@ -174,7 +198,7 @@ its own `@JeiPlugin` and a `waila_plugins.json`. Registrations at `CreativeEngin
 move to `CreativeBrewing`. A Java class another patcherMod class still calls stays, or moves with an interface left in
 patcherMod (patcherMod must not depend on CB: CB is optional to it).
 
-**Phase 3: config.** `[effects]`, `[magic_resistance]`, `[alcohol]`, `[coaster]`, `[copper_poisoning]` leave `CEConfig` for `creative_brewing-common.toml` with the same keys. Edited values in
+**Phase 3: config.** `[effects]`, `[magic_resistance]`, `[alcohol]`, `[coaster]`, `[copper_poisoning]` leave `CEConfig` for `creativebrewing-common.toml` with the same keys. Edited values in
 `config/creativeengineering-common.toml` and `configs_edited/` are copied over by hand in the same session (Forge would
 otherwise write defaults), plus a startup WARN in CB when the old keys are still in the CE file.
 
@@ -210,18 +234,81 @@ directly (`compileOnly project(':creativeCalendar')`).
 
 ### 4.5 Move log
 
-One line per moved file, `old path -> new path, date`.
+One line per moved file, `old path -> new path, date`. `PM` = patcherMod's Java root, `CB` = `development/creativeBrewing/
+src/main/java/com/SaintAlfonzo/creativebrewing/`.
+
+- Phase 2, 2026-11-01: `PM/potion/*` (9) -> `CB/potion/`; `PM/fluidbrewing/*` (3) -> `CB/fluidbrewing/`;
+  `PM/compat/AutomatedPotionMixingCategory`, `LingerificationCategory`, `PM/compat/jei/PotionPagesJEI` -> `CB/compat/jei/`
+  (new `PotionMachinesJEI` there holds the two pages' registration cut from `PM/compat/DragonBreathingJEI`);
+  `PM/food/IntoxicatingDrinkTooltip` -> `CB/alcohol/`; `PM/trader/WinemakerTrades` -> `CB/trader/`; 25 `PM/mixin/*Mixin`
+  -> `CB/mixin/<modid>/` (list in 2.5); patcherMod lang keys (10) -> CB `assets/creativeengineering/lang/en_us.json`;
+  patcherMod `data/creativeengineering/recipes/lingerification_list.json` -> CB same path.
+- Phase 3, 2026-11-01: `CEConfig` `Alcohol`, `Effects`, `Magic`, `CopperPoisoning` -> `CBConfig` (same keys).
+- Phase 1 (scripts), 2026-11-01. `KJ` = `kubejs/`, `CBS` = `development/creativeBrewing/src/main/resources/kubejs_startup/`,
+  `CBD` = `kubejs/data/creativebrewing/kubejs/`, `CBA` = `kubejs/assets/creativebrewing/kubejs/`. Recipe ids written by
+  the moved files are now `creativebrewing:<type>/<suffix>` (were `creativeengineering:`; nothing referenced them).
+  - `KJ/startup_scripts/cooking/potions.js` -> `CBS/creativeengineering/potions.js`
+  - `KJ/startup_scripts/cooking/alcohol_drinks.js` -> `CBS/creativeengineering/alcohol_drinks.js`
+  - `KJ/startup_scripts/cooking/food_values.js` -> `CBS/creativeengineering/effect_swaps.js` (renamed: only effect edits)
+  - `KJ/startup_scripts/items/potion_buckets.js` -> `CBS/creativeengineering/potion_buckets.js`
+  - `KJ/startup_scripts/func/potion_area.js` -> `CBS/creativeengineering/potion_area.js` (loads `creativebrewing.potion.PotionBucketDispenser`)
+  - `KJ/startup_scripts/magic/magic_resistance.js` -> `CBS/creativeengineering/magic_resistance.js`
+  - `KJ/startup_scripts/func/armor_effects.js`, `tool_effects.js` -> `CBS/creativeengineering/` (same names)
+  - `KJ/startup_scripts/func/trade_helper.js` Winemaker helpers -> `CBS/vinery/winemaker_trades.js` (adds them to
+    `global.trades`; loads `creativebrewing.trader.WinemakerTrades`)
+  - CD `kubejs_startup/brewinandchewin/compost_values.js`, `vinery/compost_values.js` -> `CBS/brewinandchewin/`, `CBS/vinery/`
+    (`tools/gen_compost_values.py` writes those two namespaces there now)
+  - `KJ/server_scripts/cooking/alcohol.js` -> `CBD/brewinandchewin/alcohol.js` (keg, spout and drain) and
+    `CBD/vinery/alcohol.js` (banner, stained glass); member switch guards
+  - `KJ/server_scripts/other/jeed_providers.js` -> `CBD/creativeengineering/jeed_providers.js`
+  - `KJ/server_scripts/engineering/potion_bottling.js`, `potion_buckets.js` -> `CBD/creativeengineering/`
+  - `KJ/server_scripts/equipment/tipped_arrows.js` -> `CBD/creativeengineering/tipped_arrows.js`
+  - `KJ/server_scripts/magic/lava_vision.js` -> `CBD/alexsmobs/lava_vision.js`
+  - `KJ/server_scripts/magic/armor_effects.js`, `tool_effects.js` -> `CBD/creativeengineering/`
+  - `KJ/server_scripts/economy/wandering_trades.js` Winemaker stock -> `CBD/vinery/wandering_trades.js`
+  - `KJ/server_scripts/tags/fluidtags.js` potion and dragon's breath rows and the IE potion removal ->
+    `CBD/creativeengineering/fluid_tags.js` (ink and XP stay)
+  - `KJ/client_scripts/potion_buckets.js`, `armor_effects_tooltip.js`, `tool_effects_tooltip.js` -> `CBA/creativeengineering/`
+  - `KJ/client_scripts/fluid_jei.js` create:potion stacks -> `CBA/creativeengineering/potion_fluid_jei.js`
+  - `KJ/client_scripts/tooltips.js` keg heat lines -> `CBA/brewinandchewin/tooltips.js`; Vinery section and flower box ->
+    `CBA/vinery/tooltips.js` (both read `global.tooltips`)
+  - `KJ/client_scripts/namechanges.js` Vinery names and the Winemaker profession -> `CBA/vinery/names.js`
+  - Not moved: generator outRoots (the effect lang overlay and coaster models stay in the KubeJS resource pack, 4.6);
+    the keg heat and cold source block tags in `KJ/server_scripts/tags/blocktags.js` (Brewin' port rows, not on the
+    phase 1 list).
 
 - `kubejs/server_scripts/cooking/cooking.js` (Brewin' dishes, all rows) -> **Creative Delight**
-  `kubejs/data/creative_delight/kubejs/brewinandchewin/recipes.js`, 2026-10-31 (Q1; ids now `creative_delight:`). The pack
+  `kubejs/data/creativedelight/kubejs/brewinandchewin/recipes.js`, 2026-10-31 (Q1; ids now `creativedelight:`). The pack
   file is left empty.
 - `kubejs/server_scripts/tags/cookingtags.js` (Brewin' tags) -> **Creative Delight** `.../brewinandchewin/tags.js`,
   2026-10-31. The pack file is left empty.
 
+### 4.6 Phases 2 and 3 as built (2026-11-01, Creative Split wave 4)
+
+Moved as 4.2 lists, with these changes from the plan (creative_split.md 7.6 and what the code showed):
+
+- **Stay in patcherMod (Common):** `compat/WthitCoaster` and `[coaster]` (7.6: every WTHIT line in Common; it reads the
+  Brewin' coaster by reflection, no CB class); `DragonBreathingJEI` without its two potion pages (7.6: fan is
+  Engineering); `compat/PotionFluidTooltip`, `compat/jei/RecipeRows`, `RowPagesCategory` (shared JEI helpers: Common's
+  RowPagesCategory attaches the potion fluid tooltip, CD's CanPagesJEI calls RecipeRows; `RecipeRows` is now public);
+  `compat/jei/world/PotionRows` (expands `per_potion` rows of the JEI world tabs over every potion, vanilla included:
+  Interface, not CB data). 7.6 listed PotionFluidTooltip for CB on the premise that only CB used it; that does not hold.
+- **Common API added:** `swap/ConfigRename.mergeSections` (sections into an existing file). patcherMod 1.1.07; CB
+  requires `[1.1.07,)`.
+- `[jei]` tipped arrow and potion bucket switches stay in `CEConfig` (CB reads them downward).
+- Pack-folder assets of CB features (`kubejs/assets/creativeengineering/textures/mob_effect/magic_resistance.png`, the
+  potion bucket textures, the effect rename lang overlay, the coaster models) are not moved: they stay in the KubeJS
+  resource pack.
+
 ## 5. Install (game closed)
 
+Phases 2 and 3 (2026-11-01): install patcherMod 1.1.07 and CB together (`./gradlew :patcherMod:installToMods
+:creativeBrewing:installToMods --offline`), only after the wave 2 and 3 scratch runs (SQ-CS2, SQ-CMP) pass; then SQ-CBJ4.
+The instance's config was moved by hand: the four sections are in `config/creativebrewing-common.toml` (backup in
+`configs_edited/root_config/`) and gone from the CE file.
+
 patcherMod is unchanged. Run `./gradlew :creativeBrewing:installToMods --offline`. It moves `backportedVinery-1.5.5-ce-19.2-06.jar` and
-`backportedBrewin-4.5.0-ce-19.2-04.jar` out of `mods/` and copies `creative_brewing-1.0.0.jar` in. Creative Delight must
+`backportedBrewin-4.5.0-ce-19.2-04.jar` out of `mods/` and copies `creativebrewing-1.0.0.jar` in. Creative Delight must
 be installed (it is). The pack's dedicated server (CreEngServer) needs the same swap at the next deploy.
 
 ## 6. Tests
@@ -233,11 +320,11 @@ Scratch server: SQ-CBJ-01 to -05 in [scratch_queue.md](testing/scratch_queue.md)
   line on a keg and a grapevine show the same names; no mod name ends in "(Alfonzo)".
 - [ ] **CBR-02 Old world:** a world with kegs, coasters, aging barrels, apple presses and wine racks loads with every block
   and its contents; no "missing registry" or "unknown block" warnings for `vinery`, `foundation` or `brewinandchewin`.
-- [ ] **CBR-03 Config:** `config/creative_brewing-common.toml` exists with a `[members]` section holding `vinery` and
+- [ ] **CBR-03 Config:** `config/creativebrewing-common.toml` exists with a `[members]` section holding `vinery` and
   `brewinandchewin`, both `true`.
-- [ ] **CBR-04 Log:** `logs/latest.log` has `[creative_brewing] members: [vinery, brewinandchewin]` and no
-  `[creative_brewing] member ... is loaded from` ERROR line; `logs/kubejs/startup.log` lists `creative_delight` before
-  `creative_brewing` in the startup pack order.
+- [ ] **CBR-04 Log:** `logs/latest.log` has `[creativebrewing] members: [vinery, brewinandchewin]` and no
+  `[creativebrewing] member ... is loaded from` ERROR line; `logs/kubejs/startup.log` lists `creativedelight` before
+  `creativebrewing` in the startup pack order.
 - [ ] **CBR-05 Brewin' and Vinery still work:** brew one keg batch and pour a tankard; press apples; age one wine.
   (Spot check; the full suites are AL- and VB- in alcohol.md.)
 
@@ -295,11 +382,11 @@ Paths: `PM` = `development/patcherMod/src/main/java/com/SaintAlfonzo/creativeeng
 
 ## 9. Publishing on CurseForge (licence audit 2026-11-01)
 
-Audit of the built `creative_brewing-1.0.0.jar` and its two nested members (TODO `creativebrewing/publish #3`).
+Audit of the built `creativebrewing-1.0.0.jar` and its two nested members (TODO `creativebrewing/publish #3`).
 
 | Part | Source licence | In the jar | Verdict |
 |---|---|---|---|
-| CB's own jar (Java, config, 3 KubeJS scripts) | own, GPLv3 | `creative_brewing-LICENSE.txt` | OK |
+| CB's own jar (Java, config, 3 KubeJS scripts) | own, GPLv3 | `creativebrewing-LICENSE.txt` | OK |
 | Brewin' member: code, textures, models, data, `logo.png` | Brewin' And Chewin' 4.5.0, MIT (Umpaz; checked against upstream `LICENSE`) | GPLv3 `LICENSE` + MIT notice in `backportedBrewin-NOTICE-upstream-MIT.txt` | OK. NeoForge milk textures (LGPL 2.1) left out |
 | Brewin' `fd_tray.png` | Farmer's Delight 1.21, MIT (vectorwing) | named in the same NOTICE | OK |
 | Vinery member: code (Vinery 1.5.5, 1.3.10 blocks, Foundation 1.0.1) | MIT (satisfy, Cristelknight) | GPLv3 `LICENSE` + both MIT notices | OK |
@@ -312,7 +399,7 @@ Open before upload:
 - **Pack deploy still ships the two ARR Vinery jars** in the payload (`deploy.md`, `vinery_upstream_jars`). Fine for a
   private server; a public pack must make players download them instead.
 - GPLv3: the upload must link the source (the GitHub repo, public, with the commit or tag of each released file).
-- Hard dependencies `creativeengineering` (patcherMod) and `creative_delight` must be published too, or CB can't be
+- Hard dependencies `creativeengineering` (patcherMod) and `creativedelight` must be published too, or CB can't be
   installed outside the pack. CD carries ARR overrides of its own (memory `arr-mod-overrides-route`); audit it separately.
 - The Vinery donor jars can't be CurseForge "Required dependencies": CurseForge would put Vinery 1.3.10 in `mods/`
   (same mod id `vinery`, duplicate-id crash) and can't install a Fabric 1.21.1 file into a Forge 1.19.2 profile. The

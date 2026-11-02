@@ -11,7 +11,7 @@ Vintage Delight 0.1.6 (Ribs, Forge 1.20.1, MIT) ported to Forge 1.19.2 for the C
 
 `libs/` holds compile-only copies of FarmersDelight-1.19.2-1.2.4 and jei-1.19.2-forge-11.8.1.1034 from `mods/`
 (git-ignored). Resources are generated: `python3 tools/port_resources.py` rewrites `src/main/resources/{assets,data}`
-from the upstream jar (and three KOTS 0.3.1 files) and prints any id the pack's dumps do not know.
+from the upstream jar (and three KOTS 0.3.1 files), then lays `src/own/` (pack-owned files) over it, and prints any id the pack's dumps do not know.
 
 ## What differs from upstream
 
@@ -24,6 +24,11 @@ from the upstream jar (and three KOTS 0.3.1 files) and prints any id the pack's 
   tooltip, the `magicVineConvertsDirtToLushGrass` common config switch.
 - Ghost pepper crops grow on `#vintagedelight:ghost_pepper_soil` (soul soil; the pack adds more); wild ghost peppers
   on nylium or that tag; wild oats, peanuts and cucumbers on `#minecraft:dirt`.
+- Pack addition (`-10`, TODO `creativedelight/members #32`): `mixed_seeds` is a registered item (`MixedSeedsItem`; upstream
+  ships only its texture). Each use plants a random kind from `#vintagedelight:mixed_seeds_plants` (shipped empty; the
+  pack fills it). Its model, lang and the empty tag are written by `tools/port_resources.py`. The `-09` grape and
+  cherry jam jars are pack-owned files in `src/own/`, which the script lays over its output last (new files copied, tag
+  values and lang keys merged), so a rerun keeps them.
 - The fermenting jar keeps its id and is named Pickling Jar. Recipe type and serializer `vintagedelight:fermenting`.
 - 1.19.2 API: Materials, a CreativeModeTab subclass, Recipe without RegistryAccess, JEI 11, PoseStack screens,
   trunk placer on the vanilla registry key.

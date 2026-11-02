@@ -110,7 +110,7 @@ Only the Farmer's Delight rows are built (2026-10-25, not installed); the others
 **State: BUILT 2026-10-25, not installed, not run in game.** FD 1.2.4 is now a Creative Delight member (`repackedFarmers`,
 repack `1.19.2-1.2.4-ce-19.2-02`, [creative_delight.md](creative_delight.md) 21); the 1.3.4 jar is the MIT donor in
 `development/creativeDelight/upstream/donors/`. The Java of the backports lives in the repack overlay, recipes, tags and loot in the
-CD script tree (`kubejs/data/creative_delight/kubejs/farmersdelight/`). Live checks SQ-CDJ-07 / -08 and SQ-FDB-01 to 12 are queued
+CD script tree (`kubejs/data/creativedelight/kubejs/farmersdelight/`). Live checks SQ-CDJ-07 / -08 and SQ-FDB-01 to 12 are queued
 ([testing/scratch_queue.md](testing/scratch_queue.md)); they need the CD jar installed first (`creativedelight/framework #2`).
 
 | Change | Class | Decision | State |

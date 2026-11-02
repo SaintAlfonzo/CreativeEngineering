@@ -134,28 +134,30 @@ DEVELOPMENT = os.path.join(ROOT, 'development')
 IN_TREE_MODS = [
     ('patcherMod', 'creativeengineering', True),
     ('exposureBackport', 'exposureBackport', True),
-    ('incubationAdditions', 'incubationAdditions', True),
     ('moreMooblooms', 'moreMooblooms', True),
-    ('babyMobs', 'babyMobs', True),
     ('creativeLabels', 'creativeLabels', True),
     ('backportedVeggies', 'backportedVeggies', True),
     ('backportedVintage', 'backportedVintage', True),
     ('backportedFungi', 'backportedFungi', True),
-    # Creative Delight: the bundle jar; its members (development/creativeDelight/members/) never ship on their own.
-    ('creativeDelight', 'creative_delight', True),
+    # Creative Delight: the bundle jar; its members (development/creativeDelight/members/, Baby Mobs and Incubation
+    # Additions included since 2026-11-01) never ship on their own.
+    ('creativeDelight', 'creativedelight', True),
     # Creative Brewing: the same for the Vinery and Brewin' ports (development/creativeBrewing/members/).
-    ('creativeBrewing', 'creative_brewing', True),
+    ('creativeBrewing', 'creativebrewing', True),
     # Creative Calendar: time, seasons, crop seasons (feature_writeup/creative_calendar.md); CD and CB require it.
     ('creativeCalendar', 'creativecalendar', True),
+    # Creative Compat: tweaks to third-party mods (feature_writeup/creative_compat.md); every other Creative jar requires it.
+    ('creativeCompat', 'creativecompat', True),
 ]
 # Extra source trees per in-tree project for the "src newer than the jar" check (paths from the instance root).
 IN_TREE_EXTRA_SRC = {
-    'creativeDelight': ['development/creativeDelight/members', 'kubejs/data/creative_delight/kubejs',
-                        'kubejs/assets/creative_delight/kubejs', 'kubejs/data/creative_delight/worldgen',
-                        'kubejs/data/creative_delight/cup_conversion'],
-    'creativeBrewing': ['development/creativeBrewing/members', 'kubejs/data/creative_brewing/kubejs',
-                        'kubejs/assets/creative_brewing/kubejs'],
+    'creativeDelight': ['development/creativeDelight/members', 'kubejs/data/creativedelight/kubejs',
+                        'kubejs/assets/creativedelight/kubejs', 'kubejs/data/creativedelight/worldgen',
+                        'kubejs/data/creativedelight/cup_conversion'],
+    'creativeBrewing': ['development/creativeBrewing/members', 'kubejs/data/creativebrewing/kubejs',
+                        'kubejs/assets/creativebrewing/kubejs'],
     'creativeCalendar': ['kubejs/data/creativecalendar/kubejs'],
+    'creativeCompat': ['kubejs/data/creativecompat/kubejs', 'kubejs/assets/creativecompat/kubejs'],
 }
 # Third-party jars that patcherMod fixes target by version (deploy.md "Mod updates"): (jar file prefix, the file the
 # fixes were written against). A different file under the same prefix means the mod was updated: rerun the checklist.
@@ -188,6 +190,12 @@ CATEGORIES = {
     # the unmodified Rustic Delight 1.7.0 jar the Creative Delight port reads its art and data from (rustic_delight.md
     # 5), as for Miner's Delight. Never in mods/.
     'rustic_upstream': (('server', 'client'), 'rustic_upstream'),
+    # the unmodified Roll Delight 1.3.1 jar the Creative Delight port reads its art from (roll_delight.md 4), as for
+    # Rustic Delight. Never in mods/.
+    'roll_upstream': (('server', 'client'), 'roll_upstream'),
+    # the unmodified Large Meals 1.3.0 jar the Creative Delight port reads its art from (large_meals.md 4), as for
+    # Roll Delight. Never in mods/.
+    'largemeals_upstream': (('server', 'client'), 'largemeals_upstream'),
     # the unmodified Farmer's Structures 1.0.6 jar the patcherMod worldgen donor reads (farmers_structures.md 5).
     # Never in mods/: it is a NeoForge jar.
     'farmers_upstream': (('server', 'client'), 'farmers_upstream'),
@@ -219,19 +227,22 @@ KUBEJS_CLASSES = [
     ('assets/creativeengineering/changelog/unreleased.md', 'dev'),  # working list: shipped as <version>.md (check_changelog)
     ('assets/creativeengineering/changelog/*.md', 'client'),        # player changelog, one file per version
     ('*.md', 'dev'),                       # notes and reports; the tuners rewrite their *_report.md on every load
-    # Creative Delight's script and data trees: authored here, shipped only inside the creative_delight jar (Q25)
-    ('data/creative_delight/kubejs/*', 'dev'),
-    ('data/creative_delight/worldgen/*', 'dev'),
-    ('data/creative_delight/cup_conversion/*', 'dev'),
-    ('assets/creative_delight/kubejs/*', 'dev'),
-    # Creative Brewing's script trees: the same, shipped only inside the creative_brewing jar
-    ('data/creative_brewing/kubejs/*', 'dev'),
-    ('assets/creative_brewing/kubejs/*', 'dev'),
+    # Creative Delight's script and data trees: authored here, shipped only inside the creativedelight jar (Q25)
+    ('data/creativedelight/kubejs/*', 'dev'),
+    ('data/creativedelight/worldgen/*', 'dev'),
+    ('data/creativedelight/cup_conversion/*', 'dev'),
+    ('assets/creativedelight/kubejs/*', 'dev'),
+    # Creative Brewing's script trees: the same, shipped only inside the creativebrewing jar
+    ('data/creativebrewing/kubejs/*', 'dev'),
+    ('assets/creativebrewing/kubejs/*', 'dev'),
     # Creative Devtools' script trees: dev only, like its jar (feature_writeup/creative_devtools.md)
     ('data/creativedevtools/kubejs/*', 'dev'),
     ('assets/creativedevtools/kubejs/*', 'dev'),
     # Creative Calendar's server script tree: the same, shipped only inside the creativecalendar jar
     ('data/creativecalendar/kubejs/*', 'dev'),
+    # Creative Compat's script trees: the same, shipped only inside the creativecompat jar
+    ('data/creativecompat/kubejs/*', 'dev'),
+    ('assets/creativecompat/kubejs/*', 'dev'),
     ('startup_scripts/*', 'runtime'),
     ('server_scripts/*', 'runtime'),       # incl. loot/loot_config.json + loot_index.json (05_tuning.js)
     ('data/*', 'runtime'),
@@ -271,11 +282,14 @@ KUBEJS_CLASSES = [
     ('generation_scripts/worldgen/nether_worldgen_rules.json', 'dev'),  # tools/gen_nether_worldgen.py input
     ('generation_scripts/worldgen/nether_worldgen_manifest.json', 'dev'),  # tools/gen_nether_worldgen.py
     ('generation_scripts/worldgen/terrain_adaptation_scan.json', 'dev'),  # tools/terrain_adaptation_scan.py
-    ('generation_scripts/food/food_types.json', 'runtime'),             # CD creativeengineering/food_type_tags.js
-    ('generation_scripts/food/can_servings.json', 'runtime'),           # creative_delight creativeengineering/can_tags.js
-    ('generation_scripts/food/can_types.json', 'runtime'),              # items/cans.js (generated per-type cans)
-    ('generation_scripts/food/placeable.json', 'runtime'),             # CD creativeengineering/placeable_tags.js (placeable food tooltips)
-    ('generation_scripts/food/mortar_catalog.json', 'runtime'),        # cooking/mortar.js (tools/gen_mortar_catalog.py)
+    # The next five are generator records since framework #7 (2026-11-01): the game reads the CD member scripts
+    # (<mod>/food_types.js, placeable.js, mortar_catalog.js in data/creativedelight/kubejs, kubejs_startup/<mod>/
+    # can_types.js and can_servings.js in the CD jar), which the generators write from them.
+    ('generation_scripts/food/food_types.json', 'dev'),                 # tools/food_catalog.py record (hand edits)
+    ('generation_scripts/food/can_servings.json', 'dev'),               # tools/gen_can_types.py record
+    ('generation_scripts/food/can_types.json', 'dev'),                  # tools/gen_can_types.py record
+    ('generation_scripts/food/placeable.json', 'dev'),                  # tools/placeable_catalog.py record
+    ('generation_scripts/food/mortar_catalog.json', 'dev'),             # tools/gen_mortar_catalog.py record
     ('generation_scripts/food/placed_food_slices.json', 'runtime'),    # PlacedFoodSol (Spice of Life bites of placed cakes)
     ('generation_scripts/food/food_families.json', 'runtime'),         # CD seasoning_tags.js (food family item tags)
     ('generation_scripts/food/comfort_nourishment.json', 'runtime'),   # CD creativeengineering/comfort_nourishment.js (tools/gen_comfort_nourishment.py)
@@ -456,7 +470,7 @@ def collect(pre, root=ROOT, unknown_side=None, config_mode='full', pack_version=
         # Third-party jars nesting the same library (xaerolib, spectrelib, ...) are resolved by FML's Jar-in-Jar
         # version selection; only a clash with a top-level jar or a Creative Delight / Creative Brewing member needs action.
         dupes = {m: jars for m, jars in by_id.items()
-                 if len(jars) > 1 and any('!' not in j or j.startswith(('creative_delight', 'creative_brewing')) for j in jars)}
+                 if len(jars) > 1 and any('!' not in j or j.startswith(('creativedelight', 'creativebrewing')) for j in jars)}
         if dupes:
             pre.error('mods/ holds more than one jar for a mod id (FML loads only one; remove the others):\n'
                       + '\n'.join(f'    {m}: {", ".join(jars)}' for m, jars in sorted(dupes.items())))
@@ -517,14 +531,22 @@ def collect(pre, root=ROOT, unknown_side=None, config_mode='full', pack_version=
 # Donor folders: {folder: (port jar prefix, name in messages, UpstreamJars.java that pins the jars)}.
 UPSTREAM_DONORS = {
     # nested in the Creative Brewing jar, so the CB jar in mods/ is what needs the donor
-    'vinery_upstream': ('creative_brewing', 'Vinery (Creative Brewing)',
+    'vinery_upstream': ('creativebrewing', 'Vinery (Creative Brewing)',
                         ('creativeBrewing/members/vinery', 'net', 'satisfy', 'vinery', 'forge', 'upstream')),
     'miners_upstream': ('backportedMiners', "Miner's Delight", ('backportedMiners', 'com', 'sammy', 'minersdelight', 'upstream')),
     # nested in the Creative Delight jar, so the CD jar in mods/ is what needs the donor
     'farmers_upstream': ('creativeengineering', "Farmer's Structures donor (patcherMod)",
                          ('patcherMod', 'com', 'SaintAlfonzo', 'creativeengineering', 'worldgen', 'donor')),
-    'rustic_upstream': ('creative_delight', 'Rustic Delight (Creative Delight)',
+    'rustic_upstream': ('creativedelight', 'Rustic Delight (Creative Delight)',
                         ('creativeDelight/members/rustic', 'com', 'SaintAlfonzo', 'creativedelight', 'rustic', 'upstream')),
+    'roll_upstream': ('creativedelight', 'Roll Delight (Creative Delight)',
+                      ('creativeDelight/members/roll', 'com', 'SaintAlfonzo', 'creativedelight', 'roll', 'upstream')),
+    'largemeals_upstream': ('creativedelight', 'Large Meals (Creative Delight)',
+                            ('creativeDelight/members/largemeals', 'com', 'SaintAlfonzo', 'creativedelight', 'largemeals', 'upstream')),
+    'oceanic_upstream': ('creativedelight', 'Oceanic Delight (Creative Delight)',
+                         ('creativeDelight/members/oceanic', 'com', 'SaintAlfonzo', 'creativedelight', 'oceanic', 'upstream')),
+    'enders_upstream': ('creativedelight', "Ender's Delight Additions (Creative Delight)",
+                        ('creativeDelight/members/enders', 'com', 'SaintAlfonzo', 'creativedelight', 'enders', 'upstream')),
 }
 
 
@@ -1497,14 +1519,18 @@ def render_readme(cur, prev, d, dpay, base, payload):
         rm('server'),
         ("Copy `mods/` into the server's `mods/`" + only_changed + '. Do not copy `client_mods/`.') if has('mods') else
         'No server jars changed.',
-        f"Copy {folders(('kubejs', 'config', 'defaultconfigs', 'vinery_upstream', 'miners_upstream', 'rustic_upstream', 'farmers_upstream'))} over the server's folders{only_changed}."
-        if folders(('kubejs', 'config', 'defaultconfigs', 'vinery_upstream', 'miners_upstream', 'rustic_upstream', 'farmers_upstream')) else None,
+        f"Copy {folders(('kubejs', 'config', 'defaultconfigs', 'vinery_upstream', 'miners_upstream', 'rustic_upstream', 'roll_upstream', 'largemeals_upstream', 'farmers_upstream'))} over the server's folders{only_changed}."
+        if folders(('kubejs', 'config', 'defaultconfigs', 'vinery_upstream', 'miners_upstream', 'rustic_upstream', 'roll_upstream', 'largemeals_upstream', 'farmers_upstream')) else None,
         ('`vinery_upstream/` goes next to `mods/`, never inside it: the Vinery backport reads those two jars and '
          'stops the game with a message if they are missing.') if has('vinery_upstream') else None,
         ("`miners_upstream/` goes next to `mods/`, never inside it: the Miner's Delight backport reads that jar and "
          'stops the game with a message if it is missing.') if has('miners_upstream') else None,
         ("`rustic_upstream/` goes next to `mods/`, never inside it: Creative Delight's Rustic Delight port reads that jar "
          'and stops the game with a message if it is missing.') if has('rustic_upstream') else None,
+        ("`roll_upstream/` goes next to `mods/`, never inside it: Creative Delight's Roll Delight port reads that jar "
+         'and stops the game with a message if it is missing.') if has('roll_upstream') else None,
+        ("`largemeals_upstream/` goes next to `mods/`, never inside it: Creative Delight's Large Meals port reads that jar "
+         'and stops the game with a message if it is missing.') if has('largemeals_upstream') else None,
         ("`farmers_upstream/` goes next to `mods/`, never inside it: patcherMod reads Farmer's Structures 1.0.6 from it for the "
          'new farm structures and house pieces. Without it the old 1.0.0 structures run alone.') if has('farmers_upstream') else None,
         ('Copy the *contents* of `server/` into the server folder itself (`LaunchServer.sh`/`.bat`, `perf/`); if you '
@@ -1513,7 +1539,7 @@ def render_readme(cur, prev, d, dpay, base, payload):
     ])
     rp_order = [p[len('file/'):] for p in cur['resourcePackOrder'] if p.startswith('file/')]
     show_order = rp_order and (not update or (base or {}).get('resourcePackOrder') != cur['resourcePackOrder'])
-    client_trees = folders(('kubejs', 'config', 'defaultconfigs', 'resourcepacks', 'shaderpacks', 'vinery_upstream', 'miners_upstream', 'rustic_upstream', 'farmers_upstream'))
+    client_trees = folders(('kubejs', 'config', 'defaultconfigs', 'resourcepacks', 'shaderpacks', 'vinery_upstream', 'miners_upstream', 'rustic_upstream', 'roll_upstream', 'largemeals_upstream', 'farmers_upstream'))
     lines += ['', '## Client', ''] + numbered([
         'Close the game.',
         rm('client'),

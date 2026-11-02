@@ -5,9 +5,10 @@ future migration of the calendar, day-night cycles, season and effects by biomes
 brewing would rely on, called creative calendar". Carved in wave 1 of the Creative Split
 ([creative_split.md](creative_split.md) 7.6), beside Creative Devtools.
 
-**Status: carve BUILT 2026-11-01 (compiles), not installed, not booted.** `creativecalendar-1.0.0.jar`
-(`development/creativeCalendar/build/libs/`). patcherMod, Creative Delight and Creative Brewing were rebuilt in the same
-pass and must be installed together with it (section 7). Scratch checks SQ-CAL queued (section 6).
+**Status: carve INSTALLED 2026-11-01, scratch-verified (SQ-CAL-01 to -07 PASS, run rcs1,
+[scratch_run_2026-11-01.md](testing/scratch_run_2026-11-01.md) 6); client CQ-CAL-08 and in-game CAL-01 to -04 open.**
+`creativecalendar-1.0.0.jar` (`development/creativeCalendar/build/libs/`) is in `mods/` with the patcherMod, Creative
+Delight and Creative Brewing jars of the same pass (section 7).
 
 Written for: the owner and the split agents, as the working reference for Calendar. Same shape as
 [creative_brewing.md](creative_brewing.md); the systems themselves stay documented in [time.md](time.md),
@@ -24,7 +25,7 @@ Written for: the owner and the split agents, as the working reference for Calend
 | Config | `config/creativecalendar-common.toml` (`CalendarConfig`) |
 | Script global | `global.CAL` (`kubejs_startup/creativecalendar/cal_core.js`) |
 | Requires | `creativeengineering` (patcherMod; `creativecommon` after the Q1 swap), later `creativecompat` (creative_split.md 7.6) |
-| Required by | `creative_delight`, `creative_brewing` (mandatory, `ordering="AFTER"`) |
+| Required by | `creativedelight`, `creativebrewing` (mandatory, `ordering="AFTER"`) |
 | Ids | unchanged: tags, WTHIT option ids and lang keys keep `creativeengineering`; `/cetime` keeps its name |
 
 ## 1. Shape
@@ -172,7 +173,7 @@ The moved features keep their own suites: TI- ([time.md](time.md)), WE- ([weathe
 - [ ] **CAL-03 Config:** `config/creativecalendar-common.toml` holds the sections of 4.3 with the values from before;
   editing `[time.day] dayMinutes` in Create's Configs screen pushes again (`[time]` lines in latest.log).
 - [ ] **CAL-04 Log:** latest.log has `[creativecalendar] time, seasons and crop seasons loaded`; startup.log lists
-  `creativecalendar` before `creative_delight` and `creative_brewing`.
+  `creativecalendar` before `creativedelight` and `creativebrewing`.
 
 ## 7. Install (game closed)
 

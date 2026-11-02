@@ -98,7 +98,7 @@ Knives: `kubejs/startup_scripts/func/tune_tools.js` (More Delight block). Fast t
 Delight startup script `kubejs_startup/moredelight/toast.js` (list `global.fastToasts`). Item
 `creativeengineering:cheese_toast` (`i.cheese_toast`, food type `handheld`), art from More Delight's Toast with Cheese
 (`kubejs/assets/creativeengineering/textures/item/cheese_toast.png`, notice in `more_delight_art_notice.txt`). Recipe in
-`data/creative_delight/kubejs/moredelight/recipes.js`.
+`data/creativedelight/kubejs/moredelight/recipes.js`.
 
 ### 5.2 Family rule
 

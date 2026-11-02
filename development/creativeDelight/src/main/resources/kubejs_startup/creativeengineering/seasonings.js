@@ -3,12 +3,12 @@
 // Restart to apply.
 //
 // Pack seasonings (patcherMod food/Seasonings): a seasoning goes on a food as NBT (Seasonings:[...]) by a
-// creativeengineering:seasoning craft (global.NCH.season, kubejs/data/creative_delight/kubejs/creativeengineering/seasoning.js), and eating the food adds
+// creativeengineering:seasoning craft (global.NCH.season, kubejs/data/creativedelight/kubejs/creativeengineering/seasoning.js), and eating the food adds
 // the seasoning's bonus on top of the food's own. Salt (the Salt mod's Salted) is separate and not listed here.
 //
 // key: {
 //   id         seasoning id (NBT value, lang key seasoning.<ns>.<path>)
-//   name       display name (assets/creative_delight/kubejs/creativeengineering/seasoning_lang.js)
+//   name       display name (assets/creativedelight/kubejs/creativeengineering/seasoning_lang.js)
 //   item       item_dict key value of what you put in the grid (item or tag)
 //   nutrition  hunger points added                     (optional)
 //   saturation saturation points added, capped at food (optional)
@@ -16,7 +16,7 @@
 //   effects    [{ effect, duration (ticks), amplifier }] (optional)
 //   combines   keys of seasonings that may share a food with this one; either side listing the other is enough.
 //              Unlisted pairs don't combine.
-//   Which foods take it (the tag #<ns>:seasonable/<path>, built by kubejs/data/creative_delight/kubejs/creativeengineering/seasoning_tags.js):
+//   Which foods take it (the tag #<ns>:seasonable/<path>, built by kubejs/data/creativedelight/kubejs/creativeengineering/seasoning_tags.js):
 //   families   food families (paths in tools/food_families.py, e.g. 'snack', 'meat/cooked'), each with its
 //              subfamilies: the bulk of the foods
 //   add        item_dict values (items or tags) added after the families
@@ -52,7 +52,7 @@ global.seasoning = {
 ;(function () {
 	var $Seasonings
 	try {
-		$Seasonings = Java.loadClass('com.SaintAlfonzo.creativeengineering.food.Seasonings')
+		$Seasonings = Java.loadClass('com.SaintAlfonzo.creativedelight.food.Seasonings')
 	} catch (err) {
 		console.warn('[seasoning] patcherMod Seasonings missing, seasonings not defined: ' + err)
 		return

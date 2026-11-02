@@ -1,7 +1,7 @@
 package com.SaintAlfonzo.creativeengineering.compat;
 
 import com.SaintAlfonzo.creativeengineering.CEConfig;
-import com.SaintAlfonzo.creativeengineering.campfire.CampfireRain;
+import com.SaintAlfonzo.creativeengineering.campfire.CampfireRainInfo;
 import com.SaintAlfonzo.creativeengineering.campfire.CampfireRainTicks;
 
 import cech12.unlitcampfire.mixinaccess.ICampfireBlockEntityMixin;
@@ -34,7 +34,7 @@ import net.minecraftforge.fml.ModList;
  * <ul>
  *   <li>Unlit Campfire's own burn line, which it only wrote for Jade: "Burns forever" (the pack sets
  *       {@code campfireLitTime = 0}) or "Burn time: 42s", in that mod's words ({@code hud.unlitcampfire.*}).</li>
- *   <li>The pack's rain rule ({@link CampfireRain}): "Rain: Puts it out", "Rain: Going out in 6s" while it rains on
+ *   <li>The pack's rain rule (Creative Compat's CampfireRain, read through {@link CampfireRainInfo}): "Rain: Puts it out", "Rain: Going out in 6s" while it rains on
  *       it, or "Rain: Safe (fuel block below)". Only campfires rain can douse (the plain campfire) get it.</li>
  * </ul>
  * Off with {@code [wthit] campfireBurn} and {@code campfireRain}. feature_writeup/wthit_lines.md 2.6.
@@ -73,13 +73,13 @@ public final class WthitCampfire implements IWailaCommonPlugin, IWailaClientPlug
         if (ModList.get().isLoaded("unlitcampfire")) {
             Unlit.write(raw, campfire, state);
         }
-        if (CEConfig.CAMPFIRE.rainDouses.get() && state.is(CampfireRain.RAIN_DOUSES)) {
+        if (CampfireRainInfo.rainDouses() && state.is(CampfireRainInfo.RAIN_DOUSES)) {
             Level level = accessor.getLevel();
             BlockPos pos = campfire.getBlockPos();
-            if (level.getBlockState(pos.below()).is(CampfireRain.RAIN_PROOF_FUEL)) {
+            if (level.getBlockState(pos.below()).is(CampfireRainInfo.RAIN_PROOF_FUEL)) {
                 raw.putInt(RAIN, RAIN_PROOF);
             } else if (level.isRainingAt(pos.above())) {
-                int left = CEConfig.CAMPFIRE.rainOutTicks.get() - ((CampfireRainTicks) campfire).ce$getRainTicks();
+                int left = CampfireRainInfo.rainOutTicks() - ((CampfireRainTicks) campfire).ce$getRainTicks();
                 raw.putInt(RAIN, RAIN_GOING);
                 raw.putInt(RAIN_LEFT, Math.max(0, (left + 19) / 20));
             } else {

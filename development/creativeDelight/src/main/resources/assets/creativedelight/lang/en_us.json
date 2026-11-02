@@ -1,0 +1,15 @@
+{
+  "creativedelight.wthit.crop_harvestable": "(Harvestable)",
+  "creativedelight.kettle.tank.empty": "Empty",
+  "creativedelight.kettle.tank.level": "%s: %s / %s",
+  "creativedelight.kettle.tank.mb": "%s / %s mB",
+  "creativedelight.kettle.box.fill": "Pour in",
+  "creativedelight.kettle.box.fill.hint": "Drinks put here fill the tank, one bottle at a time",
+  "creativedelight.kettle.box.empty": "Bottle up",
+  "creativedelight.kettle.box.empty.hint": "Glass bottles put here fill from the tank",
+  "creativedelight.kettle.item.tank": "Tank: %s, %s / %s",
+  "creativedelight.wthit.kettle_tank": "Tank",
+  "creativedelight.wthit.kettle_tank.value": "%s %s / %s",
+  "block.creativedelight.treated_stick": "Treated Stick",
+  "block.creativedelight.treated_stick_tomatoes": "Tomatoes"
+}

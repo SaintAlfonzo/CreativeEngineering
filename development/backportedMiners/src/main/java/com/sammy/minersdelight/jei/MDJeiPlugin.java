@@ -60,6 +60,6 @@ public class MDJeiPlugin implements IModPlugin {
     @Override
     public void registerRecipeTransferHandlers(IRecipeTransferRegistration registration) {
         registration.addRecipeTransferHandler(CopperPotMenu.class, MDMenuTypes.COPPER_POT.get(), CopperPotCategory.TYPE,
-                0, CopperPotBlockEntity.INPUT_SLOTS, CopperPotBlockEntity.OUTPUT_SLOT + 1, 36);
+                0, CopperPotBlockEntity.INPUT_SLOTS, CopperPotMenu.PLAYER_INVENTORY_START, 36);
     }
 }

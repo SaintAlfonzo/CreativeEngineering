@@ -370,9 +370,11 @@ Engineering for good.
 **Ids.**
 - Q1: the `creativecommon` swap is the last step, after Engineering, as recommended.
 - Q2: CD and CB are renamed to `creativedelight` and `creativebrewing` (mod id, config file name,
-  `kubejs/data|assets/<id>` script trees, NCH recipe namespace). The ids CD registers under its own namespace
-  (`creative_delight:treated_stick*` blocks, the `creative_delight:village_farm_crops` structure processor) keep the
-  `creative_delight` namespace (rule 3.1: ids stay, no conversions).
+  `kubejs/data|assets/<id>` script trees, NCH recipe namespace). **Superseded 2026-11-01 (owner, at wave 2):** the ids
+  under the old namespaces move too ("any items with the current underscore naming are correctly swapped over to the
+  new ones with all data using the swapper system"). `creative_delight:*` became `creativedelight:*` (treated sticks,
+  the village farm processor, the wild crop features, recipes, loot, tags, lang keys); `creative_brewing` registered
+  nothing. Saved worlds carry over through the swap lists (7.7).
 
 **Q6:** Devtools goes in dev `mods/` only. **Q7:** Creative Brewing is the first jar to publish. Its required chain
 (Common, Compat, Calendar, CD) has to be published with it, so each needs the licence audit that creative_brewing.md
@@ -385,7 +387,7 @@ Engineering for good.
 | Mooshrooms and Mooblooms | **Worldgen** handles all mooshroom and moobloom spawning: `mooshroom/`, `MooshroomFamily`, More Mooblooms as a Worldgen member (not CD). Fungi Delight stays a CD member, and Worldgen takes over its mooshrooms' natural spawning. |
 | Dark Fire, Flint and Terrasteel, the Nether portal-failure rule (`dimension/PortalFailureHandler`) | **Creative Magic**. The Magic sweep (`split/H_magic.md`) lists any other content that belongs there. |
 | `damage/` | Equipment; `DamageTags` becomes a Common API. |
-| `campfire/` (comfort, rain) | **Compat**. |
+| `campfire/` (comfort, rain) | ~~**Compat**~~. **CD** (owner, 2026-11-01, 7.9 step 1). |
 | `MossTint`, `VineShearing` and their mixins | Compat. **Salt** (`SaltBlockTicks` and the salt mixins) goes to **CD**. |
 | Wandering trader | **Everything trader goes to Common**: `TradeListings`, `TagItemListing`, `trade_helper.js`, `WanderingTraderTweaks` (spawn interval and offer counts) with its two mixins and `[wandering_trader]`, `wandering_trades.js`, `tradetags.js`. The Winemaker stock and `WinemakerTrades` stay CB's (creative_brewing.md 4.2). |
 | `MonsterBoxVault` | **Compat**. |
@@ -397,7 +399,7 @@ Engineering for good.
 | `SequencedAssemblyRecipeMixin` | **Common**. |
 | `[botania]` and `TrinketCaseRules` | **Creative Magic**. |
 | `MassPlacer` (`/ceplace`) | **Devtools** (optional dependency on Worldgen). |
-| `other/harvest.js` | **CD**. |
+| `other/harvest.js` | **Equipment** (owner, wave 4 close; supersedes the earlier CD row). |
 | `other/creative_labels.js` | the creativeLabels jar, which stays its own mod. |
 | `items/decor_blocks.js`, `tags/entitytags.js` | Compat, Worldgen. |
 | `_lib` test recipes (`metal_test_recipes`, `wood_test_recipes`, `sequence_assembly_processes`) and `_lib/flower_world.js` | Devtools. |
@@ -409,11 +411,158 @@ Engineering for good.
 2. Prep in patcherMod (7.3 step 0: `GatedMixinPlugin`, `NCH.cfg` per-jar registration, the remaining Common APIs) and
    the CD and CB id rename.
 3. **Compat**, then each earlier jar gains the `creativecompat` dependency.
-4. **CB** phases 1 to 3, then **CD** (troughs, babyMobs, incubationAdditions, salt, harvest).
-5. **Worldgen** with fauna and More Mooblooms.
+4. **CB** phases 1 to 3, then **CD** (troughs, babyMobs, incubationAdditions, salt, harvest). Finished by 7.9.
+5. **Worldgen** with fauna, More Mooblooms and babyMobs (owner, 2026-11-01: babyMobs leaves CD here, 7.9 step 4).
 6. **Magic.**
 7. **Equipment.**
 8. **Engineering** with the former Computers rows, then the Q1 `creativecommon` swap.
+
+### 7.7 Wave 2 as built (2026-11-01)
+
+- **Rename.** Mod ids, config files, mixin configs, script trees (`kubejs/data|assets/creativedelight`,
+  `kubejs_startup/creativedelight`, the same for CB), lang keys, NCH group and the `itemMergeGroups` key lost the
+  underscore across code, tools, scripts and current docs (history, deployed plans and run records untouched). Jars are
+  now `creativedelight-1.0.0.jar` and `creativebrewing-1.0.0.jar`.
+- **Swap lists (first built part of creative_delight.md 11, TODO `creativedelight/swappers`).** Common
+  `swap/SwapLists` reads every loaded jar's `data/<modid>/swaps/*.json` (`namespaces` old -> new, `replaces` survivor
+  -> [old ids]; never pruned). `swap/SwapRemapper` answers Forge's `MissingMappingsEvent` for every Forge registry, so
+  saved blocks, items in any container or inventory, block entities and entities load under the new id and the world
+  saves under it. CD and CB ship `swaps/creative_split.json` with the namespace move. Vanilla-only registries have no
+  remap hook: CD keeps a load-only alias `creative_delight:village_farm_crops` for farm pieces saved inline in structure
+  starts. `swap/ConfigRename.carryOver` renames an old `creative_delight-common.toml` / `creative_brewing-common.toml`
+  to the new name before the config loads, so player values stay.
+- **Prep (7.3 step 0).** `CEMixinPlugin` is a `GatedMixinPlugin` (`shared_sources=packs,mixinplugin`; table holds
+  `IwServerLevelTickMixin`; each carve takes its rows); IW `postApply` kept. `NCH.cfg` looks a section up in every
+  registered config class (`global.NCH.registerConfig(modId, className)`; `modid:SECTION` pins one). Common APIs:
+  `util/WorldgenFiles` (moved from `worldgen/`), `util/Globs` (`CropGrowth.glob` delegates), `compat/jei/JeiIcons`
+  (`CanPagesJEI.doubleIcon` delegates), `compat/kubejs/IngredientActions` (the can action registers into it; NCH
+  re-applies all actions and names only the id). `global.seasoning` already is the hook CD fills (NCH reads it at event
+  time, guarded): no change. `DamageTags` stays in `damage/` with its snapshot and loader; which of the four classes stay
+  Common is settled at the Equipment carve. The null-state hook came in wave 1.
+- patcherMod 1.1.06; CD and CB require `[1.1.06,)` (they call `ConfigRename`).
+
+### 7.8 Wave 4 as built (2026-11-01; built, scratch-tested, NOT installed)
+
+Built on waves 2 and 3 (installed). Scratch run 2026-11-01 ([scratch_run_2026-11-01.md](testing/scratch_run_2026-11-01.md)
+7): waves 2, 3 and 4 PASS on the server side after three fixes, all in 1.1.07 / CD: `SwapRemapper` now resolves the
+survivor in Forge's ACTIVE registry (the event comes from the STAGING copy, so 1.1.06 left every renamed block
+missing); `NCH.cfg` treats a missing Java field as "not here" (Rhino throws, so every section moved to CD or CB read as
+undefined); CD `MobCobPipeSlotMixin` targets `LivingEntity` (on `Mob` it never applied in patcherMod and crashed CD,
+which sets `defaultRequire: 1`). Client rows and the baby squid row remain. Detail: [creative_brewing.md](creative_brewing.md) 4.5 and 4.6 (CB), [creative_delight.md](creative_delight.md)
+34 and 29.1 / 29.5 (CD).
+
+- **CB phase 1 (scripts):** the startup, server and client files of creative_brewing.md 4.2 phase 1 and the gear
+  effects moved into CB's trees; splits of `tooltips.js`, `namechanges.js`, `fluid_jei.js`, `fluidtags.js`,
+  `wandering_trades.js`, `trade_helper.js` (Winemaker helpers now `vinery/winemaker_trades.js`); the two compost
+  files moved from CD to CB. CB recipe ids are now `creativebrewing:` (nothing referenced the old ones).
+- **CB phases 2 and 3 (Java, config):** 17 classes plus a new `PotionMachinesJEI`, 25 mixins (gated per mod), 10 lang
+  keys, the lingerification list; `[alcohol]`, `[effects]`, `[magic_resistance]`, `[copper_poisoning]` to
+  `creativebrewing-common.toml` (Common `ConfigRename.mergeSections`, for a file that already exists). Stay in
+  patcherMod against 7.6: `PotionFluidTooltip`, `RecipeRows`, `RowPagesCategory` (shared by Common and CD),
+  `PotionRows` (all potions, interface), `WthitCoaster` and `[coaster]` (reflection, no CB class).
+- **CD (Java, config, members):** 59 classes (`oven/`, `lunchbox/`, `cooking/`, `food/`, `crops/`, the CD `compat/`
+  and JEI pages, troughs, `salt/SaltBlockTicks`), 24 mixins, 45 resource files and 41 lang keys; `[crop_growth]`,
+  `[dandelion_maturing]`, `[crop_drops]`, `[stem_fruit]`, `[canning]`, `[cooking]` and `[perf]
+  troughMissCooldownTicks` to `creativedelight-common.toml` (NCH finds them through `registerConfig`). Common hook
+  `compat/RemainderView` for the WTHIT leftover line. babyMobs and incubationAdditions nested as CD members
+  (`members/babymobs`, `members/incubation`; mod ids unchanged). CD scripts: sample syringe, `other/harvest.js`, the
+  kitchen, crop and food-fluid tag rows, Delight names and the bowl / basket / soil tooltips.
+- patcherMod 1.1.07 (never installed before; holds both the CB and CD API changes). CB and CD require `[1.1.07,)`.
+- Instance config values were moved by hand into the CB and CD files and `configs_edited/`.
+- **Settled (owner):** `other/harvest.js` (metal and ore mining tiers) goes to **Equipment**. It moved to CD in this wave, so the Equipment carve must take it back out of CD's script tree.
+- **Known:** `tools/gen_dd_dishes.py --check` cannot see models inside nested jars (old gap); `tools/remainder_buffer_test`
+  and `crop_growth_test` repointed but not rerun.
+- **Install** (game closed, after SQ-CS2 and SQ-CMP pass): `./gradlew :patcherMod:installToMods
+  :creativeCompat:installToMods :creativeCalendar:installToMods :creativeDelight:installToMods
+  :creativeBrewing:installToMods --offline`. Scratch: SQ-CBM, SQ-CBJ4, SQ-CDS, SQ-CDJ4 in
+  [scratch_queue.md](testing/scratch_queue.md).
+
+- **Installed 2026-11-01:** patcherMod 1.1.07, Compat, Calendar, CD, CB in the dev instance `mods/`.
+- **Client tests on hold (owner):** every client row for waves 2 to 7 is pinned until wave 8 is done or later, then run as one bulk session. Server rows keep running per carve.
+
+### 7.9 Plan: finishing Creative Delight (owner, 2026-11-01; plan only, nothing built)
+
+Owner request: move the `oven/`, `lunchbox/`, `food/`, `cooking/`, `crops/` and `campfire/` folders to CD; move
+incubationAdditions to CD; move babyMobs and moreMooblooms to Worldgen; make Nether's Delight, Cooking for Blockheads,
+End's Delight and Ender's Delight CD members. These decisions override the 7.6 rows on campfire and babyMobs.
+
+**Already done (wave 4, 7.8; built and installed, not committed).**
+
+| Item | Where it is |
+|---|---|
+| `oven/` (11), `lunchbox/` (10), `food/` (9; `IntoxicatingDrinkTooltip` went to CB), `cooking/` (6), `crops/` (7) | `development/creativeDelight/src/main/java/com/SaintAlfonzo/creativedelight/`; nothing left in patcherMod |
+| incubationAdditions | CD member `members/incubation` (mod id unchanged) |
+| End's Delight | CD member `repackedEnds` (repack of the MIT 2.1 jar) |
+| Ender's Delight | ARR, so the jar stays in `mods/`; MIT 1.1.4 content is CD member `endersAdditions` |
+| Cooking for Blockheads | ARR, so the jar stays in `mods/`; CD member `blockheadsAdditions` |
+
+Owner, 2026-11-01: Ender's and Cooking for Blockheads stay additions members ("member" = the additions member plus every
+leftover row moved into CD). Nether's Delight is **repacked** into CD like End's (supersedes the 11-01 additions-overlay
+decision in nethers_delight.md 1).
+
+**Step 1: campfire, Compat -> CD** (one commit; Compat and CD rebuild).
+
+| From (Compat unless noted) | To | Note |
+|---|---|---|
+| `campfire/CampfireComfort`, `campfire/CampfireRain` | CD `creativedelight/campfire/` | package rename only |
+| `mixin/CampfireRainMixin` and its `creativecompat.mixins.json` entry and `CompatMixinPlugin` gate row | CD mixins json and CD's `GatedMixinPlugin` table | targets vanilla `CampfireBlockEntity`; CD sets `defaultRequire: 1`, so confirm it applies in the scratch boot |
+| `compat/jei/CampfireRows` and the `WorldRows.provider(WorldTab.CAMPFIRE, ...)` call in `CreativeCompat` | CD JEI setup | uses BurnRows' JSON helpers: move those helpers to a Common util (beside `JeiIcons`) or copy the two methods; no CD -> Compat class edge for a JEI helper |
+| `CampfireRainInfo.set(...)` in `CreativeCompat` (lines 85-87) | CD main class | |
+| `CompatConfig.CAMPFIRE` and `"campfire"` in its section list (line 28) and the config regex (`CreativeCompat` 163) | `CDConfig` `[campfire]` | `ConfigRename.mergeSections` carries the section from `creativecompat-common.toml` to `creativedelight-common.toml`; copy both files to `configs_edited/` |
+| patcherMod `campfire/CampfireRainInfo`, `CampfireRainTicks`, `compat/WthitCampfire` | **stay in Common** | the accessor interfaces behind the WTHIT line (7.6 WTHIT rule) |
+| `#creativeengineering:campfire/*` tags | unchanged | ids keep `creativeengineering:` |
+
+No registry ids move, so no swap list. Tests: reuse the campfire rows of [creative_compat.md](creative_compat.md) as a new SQ entry: rain douses a lit campfire after the configured ticks, the coal-block
+fuel exception, the comfort effect, the `[campfire]` value carried over from an old Compat config.
+
+**Step 2: Nether's Delight repacked as CD member `repackedNethers`** (one commit; CD rebuild; replaces a live jar).
+BUILT 2026-11-01 with the 4.0 carry-overs (TODO `largecontent/mod-additions #16`; as built: nethers_delight.md 4.9); not
+installed, not tested. Items 1 to 3 done; items 2 (jar out of `mods/`) and 5 (`mod_sides.md`) happen at the CD install.
+
+1. `development/creativeDelight/members/nethers/` with `ce.forge-repack` (copy `members/ends/` shape):
+   `mod_id=nethersdelight`, `mod_name=Nether's Delight (Creative Delight)`, `mod_license=MIT (upstream); overlay GNU GPL3`,
+   `upstream_jar=NethersDelight-1.19-3.1.jar`, `upstream_sha1=844fcf67924c682d65adee493e4dd5ba2f6cc9f3`,
+   `bundled_in=creativeDelight`, `NOTICE-upstream-MIT.txt`. Add `'repackedNethers': 'nethers'` to the member map in
+   root `settings.gradle`.
+2. Upstream jar to `development/creativeDelight/upstream/` (git-ignored); the 3.1 jar leaves `mods/` to
+   `jar_archive/displaced/`; `build_deploy.py` `replaces_jars` for CD gains `NethersDelight-*` (the nested-id check at
+   459 then catches a stale copy).
+3. The 4.0 carry-overs of nethers_delight.md 4.1 to 4.6 and 4.8 go into the overlay (Potted Mimicarnation block, the
+   Fungus Colony mixin as `nethersdelight.ce.mixins.json`) and into CD `kubejs/data/creativedelight/kubejs/nethersdelight/`
+   (tags through `global.tags`, the `stuffed_hoglin` file move through `global.NCH`). Ids keep 3.1's; renames are lang only.
+4. Edges that stay where they are: Calendar `CropSeasonGrowHookMixin` (gated on `nethersdelight`, id unchanged),
+   CD `FeastPlatingCategory` and `crop_growth.json` rows (already CD), patcherMod `surface/StuckInBlock` (one class-name
+   string in a generic table), Display Delight's tags, Engineering `fabric.js` hoglin mount row (non-food, rule 9).
+5. `mod_sides.md`: drop the Nether's row, add `nethersdelight` to CD's nested list. Writeup: nethers_delight.md 1 and 4.
+
+Tests: the ND- rows (nethers_delight.md 4.7) plus a load check: one `nethersdelight` mod in the list, display name
+with the suffix, existing worlds keep Nether's blocks and stove contents (same ids, same save format).
+
+**Step 3: Ender's and Cooking for Blockheads leftovers into CD** (one commit with step 2 or 4).
+
+| Row | Decision |
+|---|---|
+| `endersdelight.endstone_stove` in patcherMod `data/creativeengineering/damage_tags/fire.json` and `burn_tick.json` | **moves**: `DamageTagLoader` merges every pack's copy (`listResourceStacks`), so CD ships its own `data/creativeengineering/damage_tags/fire.json` and `burn_tick.json` with only that entry, and patcherMod's copies drop it |
+| `endersdelight:phasing` in `ShieldConfig`'s default effect list | stays: one id in an Equipment config default; moving it needs a hook for one string |
+| `endersdelight:end_house` in `worldgen/earth_fill.js`, `terrain_adaptation.js` | stays: structure rules, Worldgen owns every structure's row |
+| `cookingforblockheads:*_kitchen_floor` in `blocktags.js` 164 | stays: one member of a broad pack block tag (smooth stone family) |
+| `cookingforblockheads=Cooking for Blockheads` in `CEConfig` 2484 | stays: Common's mod display-name table |
+| `config/jei/recipe-category-sort-order.ini` | stays: instance config |
+
+**Step 4: babyMobs to Worldgen** (in the Worldgen carve, `creativesplit/worldgen #8`).
+
+babyMobs depends only on Forge and Minecraft and nothing in CD imports it, so the move is wiring only: the member map
+entry `'babyMobs': 'babymobs'` goes to the Worldgen bundle with More Mooblooms, `bundled_in=creativeWorldgen`, and the
+`mod_sides.md` note moves from CD's row to Worldgen's. Mod id `baby_mobs` is unchanged, so no swap list. Until Worldgen
+exists it stays nested in CD (pulling it out now would mean a standalone jar for one carve).
+
+**Order and gates.** Commit the installed wave 4 first (the CD Java move is uncommitted). Then step 1 and steps 2 + 3
+as separate commits, each with a scratch dedicated-server boot queued (SQ entries, owner runs them in a batch); step 4
+rides the Worldgen carve. Game closed for every install: `./gradlew :creativeCompat:installToMods
+:creativeDelight:installToMods --offline` (plus `:patcherMod:` for the damage-tag edit in step 3).
+
+**Changelog.** Steps 1, 3, 4 are same-behaviour moves: no bullet. Step 2 brings Nether's 4.0 changes (Potted
+Mimicarnation, colony rule, renames) to players: bullets under a `## Nether's Delight` family when built.
 
 ## 8. History
 
@@ -435,3 +584,12 @@ Engineering for good.
 - 2026-11-01, owner sign-off (7.6): Compat is required by every jar; Magic is carved now and Computers folds into
   Engineering; CD and CB lose the underscore; every 7.4 row is settled; CB is the first publishing goal. Execution
   starts with Devtools and Calendar on branch `creative-split`.
+- 2026-11-01, wave 2 (7.7): CD and CB renamed with their ids, swap lists and remapper built in Common, prep step 0
+  done. Owner changed Q2: the underscored ids move too, through the swapper.
+- 2026-11-01, wave 3: Creative Compat carved ([creative_compat.md](creative_compat.md)); patcherMod 1.1.06 installed with
+  Compat, CD, CB, Calendar, Devtools. Scratch SQ-CS2 and SQ-CMP queued. Next: wave 4 (CB phases 1 to 3, then CD).
+- 2026-11-01, wave 4 (7.8): CB phases 1 to 3 and the CD carve built (patcherMod 1.1.07), not installed while waves 2
+  and 3 are untested. Next: test waves 2 and 3, install wave 4, then wave 5 (Worldgen with fauna and More Mooblooms).
+- 2026-11-01, scratch run of waves 2 to 4 ([scratch_run_2026-11-01.md](testing/scratch_run_2026-11-01.md) 7): one save
+  taken from the 1.1.05 jars through 1.1.06 to 1.1.07; three bugs fixed (7.8). Next: install wave 4, client rows.
+- 2026-11-01, wave 4 close: `harvest.js` goes to Equipment; wave 4 jars installed to the dev instance; client tests pinned until wave 8+.

@@ -279,23 +279,6 @@
 		#Range: 0 ~ 64
 		hammerBlows = 8
 
-#Tuning for creativeengineering:magic_resistance's damage reduction against
-#the creativeengineering:magic damage tag (the same tag the shields' MAGIC column
-#reads: potions, poison, evoker fangs, thorns, sonic booms, curses, life drain) and
-#against the periodic damage of the effects listed in negatedEffectTicks.
-[magic_resistance]
-	#Damage reduction per effect amplifier level (amplifier 0 = level I), same
-	#shape as vanilla Resistance. Total reduction is capped at 1.0 (full immunity)
-	#regardless of amplifier.
-	#Range: 0.0 ~ 1.0
-	reductionPerLevel = 0.2
-	#Effects whose periodic damage Magic Resistance stops outright, comma-separated
-	#effect ids. A tick of one of these deals no damage while its level is at most the
-	#Magic Resistance level (Poison I against Magic Resistance I); a higher level takes
-	#the per-level cut instead. These are ticks no shield can block
-	#([shields].unblockableEffectTicks).
-	negatedEffectTicks = "minecraft:poison, minecraft:wither"
-
 #Botania tweaks.
 [botania]
 	#Let the Trinket Case hold any item, not just trinkets, rods and mana items.
@@ -1690,66 +1673,6 @@
 		#Range: 0 ~ 72000
 		windowTicks = 600
 
-#Cans in #creativeengineering:cans/servings/<n> hold n servings. Eating or crafting with
-#one takes a serving; the servings left show as a durability bar and a tooltip line. The
-#last serving leaves an empty can, a crushed can or nothing, rolled with the chances below.
-[canning]
-	#Off = every can behaves like the Canned Goods original (one serving, always an empty can).
-	enabled = true
-	#Chance [0-1] that an emptied can comes back as an empty can.
-	#Range: 0.0 ~ 1.0
-	emptyCanChance = 0.7
-	#Chance [0-1] that it comes back as a crushed can instead. Whatever is left after both
-	#chances gives nothing; if the two add up past 1, the crushed chance is cut to fit.
-	#Range: 0.0 ~ 1.0
-	crushedCanChance = 0.25
-	#Item id handed back as the empty can.
-	emptyCanItem = "canned_goods:empty_can"
-	#Item id handed back as the crushed can.
-	crushedCanItem = "canned_goods:crushed_empty_can"
-
-#Leftover containers from ingredients (glass bottles, bowls, buckets) on the FD cooking pot, the
-#Farmer's Respite kettle and the oven. A leftover the waiting meal is served in goes to the
-#container slot; the rest goes to two leftover slots right of the output, which hoppers and
-#funnels on the output faces can empty.
-[cooking]
-	#Oven only. Off = its leftovers are thrown out of the front. The pot and kettle
-	#switch is creative_delight-common.toml [qol] remainderBuffer.
-	remainderBuffer = true
-	#On = a station whose leftover slots can't take a craft's leftovers waits (like a full output).
-	#Off = it crafts anyway and throws what doesn't fit.
-	stallWhenFull = true
-	#On = an oven recipe ingredient with a count takes that many from one slot (3 wheat from a wheat
-	#stack), so oven copies of 9-item crafting recipes cost the same as the craft. Off = every
-	#ingredient takes one item from its own slot, and recipes that don't fit the 6 slots drop some of
-	#their repeated items (feature_writeup/oven.md 2.6). Recipes are built at /reload.
-	ovenIngredientCounts = false
-	#Ticks a leftover recycled into the container slot (a bowl-food ingredient's bowl, a milk bottle's
-	#bottle) stays visible there before the meal is plated with it, so the step can be seen.
-	#0 = plate at once. Containers a player or hopper puts in plate at once either way.
-	#Range: 0 ~ 100
-	recycleShowTicks = 10
-
-#TrashSlot defaults (client side). Screens are full Java class names; F3 can't show them,
-#but TrashSlotSaveState.json in the game folder lists every screen opened so far.
-[trash_slot]
-	#Screens that show the trash slot by default. Each one is switched on once per client, the
-	#first time it opens after being added here; pressing the toggle key afterwards still sticks.
-	enabledScreens = ["net.minecraft.client.gui.screens.inventory.InventoryScreen", "net.minecraft.client.gui.screens.inventory.CreativeModeInventoryScreen", "net.minecraft.client.gui.screens.inventory.ContainerScreen", "net.minecraft.client.gui.screens.inventory.CraftingScreen", "net.minecraft.client.gui.screens.inventory.FurnaceScreen", "net.minecraft.client.gui.screens.inventory.BlastFurnaceScreen", "net.minecraft.client.gui.screens.inventory.SmokerScreen", "net.minecraft.client.gui.screens.inventory.AnvilScreen", "net.minecraft.client.gui.screens.inventory.SmithingScreen", "net.minecraft.client.gui.screens.inventory.GrindstoneScreen", "net.minecraft.client.gui.screens.inventory.StonecutterScreen", "net.minecraft.client.gui.screens.inventory.LoomScreen", "net.minecraft.client.gui.screens.inventory.CartographyTableScreen", "net.minecraft.client.gui.screens.inventory.EnchantmentScreen", "net.minecraft.client.gui.screens.inventory.BrewingStandScreen", "net.p3pp3rf1y.sophisticatedbackpacks.client.gui.BackpackScreen"]
-	#true: every other container screen (modded machines, storage, ...) also shows it by default,
-	#except the ones in excludedScreens. false: only enabledScreens do.
-	allContainers = false
-	#Never switched on by allContainers.
-	excludedScreens = ["net.p3pp3rf1y.sophisticatedbackpacks.client.gui.BackpackSettingsScreen"]
-	#Starting position for a screen the player hasn't opened yet: 'class|anchorX|anchorY|x|y'.
-	#The anchor is a fraction of the panel (0.5 = centre, 1.0 = right/bottom edge) and x/y are
-	#pixels from it to the slot's top-left; the slot is 28x28. Screens not listed start under the
-	#panel's bottom-right corner. Dragging the slot in game overrides this.
-	positions = ["net.minecraft.client.gui.screens.inventory.CreativeModeInventoryScreen|1.0|1.0|0|-28", "net.p3pp3rf1y.sophisticatedbackpacks.client.gui.BackpackScreen|1.0|1.0|-28|0"]
-	#true: each Sophisticated Backpacks tier (leather, copper, iron, gold, diamond, netherite)
-	#remembers its own trash slot position and on/off state. false: all backpacks share one.
-	splitBackpacksByTier = true
-
 #Wandering Trader spawning and offer counts (the Wandering Winemaker: vinery-common.toml [trader]).
 #The spawner rolls once per interval, counted in server ticks (20 = 1 second) while the
 #overworld runs with doMobSpawning on. Day length (Better Days), sleeping and /time do not
@@ -1773,12 +1696,6 @@
 
 #Performance throttles for other mods' per-tick work. See feature_writeup/perf.md section 7.
 [perf]
-	#Quark feeding trough: after an animal's trough search finds nothing, it does not search again for
-	#this many ticks (600 = 30 s). Each search is a point-of-interest scan plus a ray cast, and a
-	#hungry animal with no trough nearby repeated it every few ticks. Cost: a trough placed or
-	#refilled next to an animal is noticed up to this long late. 0 = off (Quark's own behaviour).
-	#Range: 0 ~ 72000
-	troughMissCooldownTicks = 600
 	#Create: Gravity runs its biome lookup and gravity-attribute update for every living entity in
 	#every dimension on every tick. On: only entities in the dimensions below run it (entities that
 	#still carry the low-gravity modifier from one run it once more to drop it). Off: the mod's own
@@ -1884,22 +1801,6 @@
 	#Allowed Values: LOG, SQRT, LINEAR
 	fluidAmountScale = "LOG"
 
-#WTHIT shows 'Growth: 60%' / 'Growth: Mature' only for CropBlock subclasses plus a few vanilla
-#plants. This adds the same line, with the same wording and the same 'Crop progress' toggle in
-#WTHIT's own config, to every other growing plant. The blocks and their stages are in
-#assets/creative_delight/crop_growth.json (override it from kubejs/assets/creative_delight/).
-#Client-side only; reads the block state the client already has. The line is Creative Delight's:
-#its on/off switch is creative_delight-common.toml [qol] wthitCropLine.
-[crop_growth]
-	#true: a bush-type plant (BushBlock, not a sapling) with an integer 'age' that no rule in
-	#crop_growth.json lists still gets a line, fully grown at its top age. Catches plants from
-	#mods added later. false: only the plants in the file.
-	fallback = true
-	#true: plants that can be picked before they are fully grown (salmonberries from stage 3,
-	#grapes from stage 2) read 'Growth: 75% (Harvestable)' until they finish. false: the
-	#percentage only.
-	showHarvestable = true
-
 #Container title plaques from GUI resource packs (client side).
 [gui_title]
 	#When a container title is wider than the plaque the resource pack painted behind it, stretch the
@@ -1966,42 +1867,6 @@
 	#as it did with Fast Leaf Decay installed. Chance and blacklist are IW's own [leaf_piles]
 	#spawn_entity_from_decay / leaf_piles_blacklist. false: decayed leaves only drop their items.
 	leafPiles = true
-
-#A lit campfire in #creativeengineering:campfire/rain_douses (the plain campfire; not soul or
-#Tinted campfires) goes out in open rain, unless it sits on a block in
-##creativeengineering:campfire/rain_proof_fuel (coal and charcoal blocks). Otherwise campfires
-#burn forever. Server side.
-[campfire]
-	#Master on/off switch. Off = rain never puts a campfire out.
-	rainDouses = true
-	#Ticks of unbroken rain before the campfire goes out (160 = 8 s, Unlit Campfire's default).
-	#Leaving the rain or being on a fuel block resets the count.
-	#Range: 1 ~ 72000
-	rainOutTicks = 160
-	#Comfortable Campfires port (campfire.CampfireComfort): players near a lit campfire get Farmer's
-	#Delight's Comfort, refreshed while under 3 s are left.
-	comfort = true
-	#Comfort when Farmer's Delight is present; false (or no Farmer's Delight) = Regeneration, as the mod.
-	useComfort = true
-	#Blocks around (and above) the campfire that count as near (the mod's 3).
-	#Range: 1 ~ 16
-	comfortDistance = 3
-	#Seconds of Comfort per application (the mod's 5).
-	#Range: 1 ~ 600
-	comfortSeconds = 5
-	#A campfire looks for players once per this many ticks (the mod checked every tick; campfires are
-	#spread over the period). 1 = every tick.
-	#Range: 1 ~ 200
-	comfortEveryTicks = 20
-
-#Immersive Weathering leaf piles (1-8 layers). Their slowdown is still IW's own (on/off: IW
-#leaf_piles_slow; Depth Strider, foxes and bees walk through); this sets the height it starts at.
-[leaf_piles]
-	#Layers a leaf pile needs before it slows walking, and before WTHIT shows a Run Speed line for it.
-	#IW's own rule is 4 (more than 3 layers). 9 = piles never slow. Movement is worked out on the
-	#client too, so keep this the same on the server and every client.
-	#Range: 1 ~ 9
-	slowFromLayers = 4
 
 #Raids (server side).
 [raids]
@@ -2125,37 +1990,6 @@
 		#'Pickles: 3 / 4' (sea pickles)
 		pickles = true
 
-#Alcoholic drinks (client side).
-[alcohol]
-	#Replace Quark's saturation word ('Disgusting Snack') with 'Intoxicating Drink' on every food whose
-	#effects include Brewin' and Chewin's Intoxication (food.IntoxicatingDrinkTooltip).
-	quarkLine = true
-
-#Mob effects (client and server).
-[effects]
-	#Category overrides, "namespace:effect=CATEGORY" with CATEGORY one of BENEFICIAL, HARMFUL, NEUTRAL.
-	#The category colours the effect's name in potion, food and gear tooltips (HARMFUL red, the other
-	#two blue), and AppleSkin, Quark's saturation word and isBeneficial() go by it. The defaults are the
-	#effects whose own category showed the wrong colour (feature_writeup/effects.md 2.4). Read live.
-	categoryOverrides = ["create_confectionery:rest=BENEFICIAL", "alexsmobs:debilitating_sting=HARMFUL", "alexsmobs:fear=HARMFUL", "alexsmobs:power_down=HARMFUL", "neapolitan:slipping=HARMFUL", "vinery:trippy=HARMFUL"]
-	#Effects that always get their HUD icon (top right), even when the mod that gave them hid it
-	#(showIcon false, mostly to drop particles). The inventory list shows them either way. Armor, held
-	#tool and aura effects are left hidden on purpose (feature_writeup/effects.md 2.6). Client, read live.
-	forceHudIcon = ["brewinandchewin:intoxication", "via_romana:travellers_fatigue", "monobank:thief"]
-	#Items whose effects always get their HUD icon: every effect added while an entity finishes using
-	#one (eating, drinking, the item's own code). "namespace" for a whole mod or "namespace:item". Effect
-	#ids in forceHudIcon show from any source; this list only for these items, so the same effect from
-	#armor stays hidden. Server side, read live.
-	forceHudIconItems = ["create:builders_tea", "canned_goods:canned_pufferfishs", "farmersrespite", "immersive_weathering"]
-	#Effects swapped for another wherever they are applied, "from=to". Same duration, level and
-	#visibility. Covers foods, potions, blocks, commands and mob code (LivingEntity#addEffect), and
-	#Fruits Delight's jam / jelly effect lines. Food tooltips are swapped by KubeJS
-	#(global.foodEffectSwaps). Server side, read live.
-	remap = ["neapolitan:agility=vinery:climbing_effect", "fruitsdelight:chorus=vinery:teleport", "quark:resilience=alexsmobs:knockback_resistance"]
-	#Effects that are never applied (LivingEntity#addEffect refuses them). Their brews are removed
-	#by KubeJS (startup_scripts/cooking/potions.js). Server side, read live.
-	removed = ["upgrade_aquatic:restfulness", "upgrade_aquatic:insomnia", "alexsmobs:power_down"]
-
 #Mod display names (client side: JEI's mod line and @ search, WTHIT, the Mods screen).
 [mod_names]
 	#"modid=Name" entries replacing the name from the mod's mods.toml. Applied at startup and when this
@@ -2178,119 +2012,6 @@
 	#changelog once acknowledges it (config/creativeengineering/changelog_seen.txt).
 	updatePopup = true
 
-#Pack changes to crop harvest drops (server side, applied on /reload).
-[crop_drops]
-
-	#Rustic Delight bell peppers. A ripe plant drops one pepper picked by weight, then each
-	#colour has its own bonus chance for one extra. Each colour's share of the picked pepper is
-	#weight / (sum of weights). Per harvest, colour X averages
-	#  weightX / (sum of weights) + bonusChanceX
-	#Defaults (1:1:1, 0.15 each) give 0.483 of every colour. The mod ships 6:1:1 with no red
-	#bonus (red about 58% of peppers). A weight of 0 takes the colour out of the main roll.
-	[crop_drops.bell_peppers]
-		#true: use the values below. false: the mod's own table, untouched.
-		enabled = true
-		#Weight of red in the main roll.
-		#Range: 0 ~ 100
-		redWeight = 1
-		#Weight of green in the main roll.
-		#Range: 0 ~ 100
-		greenWeight = 1
-		#Weight of yellow in the main roll.
-		#Range: 0 ~ 100
-		yellowWeight = 1
-		#Chance [0-1] of one extra red pepper (0.15 = 15%).
-		#Range: 0.0 ~ 1.0
-		redBonusChance = 0.15
-		#Chance [0-1] of one extra green pepper.
-		#Range: 0.0 ~ 1.0
-		greenBonusChance = 0.15
-		#Chance [0-1] of one extra yellow pepper.
-		#Range: 0.0 ~ 1.0
-		yellowBonusChance = 0.15
-
-	#Extra produce on better soil. A ripe crop whose block below is the soil gets 'tries' extra
-	#chances at one more of its produce (seeds are not included), each at 'chance'. Average extra per
-	#harvest = tries x chance. The crop's own drops are unchanged. 0 tries = nothing for that soil.
-	#Each crop is switched on in [crop_drops.soil_yield.crops]; all are off by default.
-	#feature_writeup/crop_yields.md lists every crop's drops.
-	[crop_drops.soil_yield]
-		#Vanilla farmland: extra tries.
-		#Range: 0 ~ 8
-		farmlandTries = 0
-		#Vanilla farmland: chance [0-1] per try.
-		#Range: 0.0 ~ 1.0
-		farmlandChance = 0.0
-		#Rich Soil Farmland: extra tries.
-		#Range: 0 ~ 8
-		richFarmlandTries = 2
-		#Rich Soil Farmland: chance [0-1] per try.
-		#Range: 0.0 ~ 1.0
-		richFarmlandChance = 0.35
-		#Fertile Soil (Immersive Weathering mulch): extra tries.
-		#Range: 0 ~ 8
-		fertileSoilTries = 2
-		#Fertile Soil: chance [0-1] per try.
-		#Range: 0.0 ~ 1.0
-		fertileSoilChance = 0.25
-		#Untilled Rich Soil (only rice and adzuki grow on it): extra tries.
-		#Range: 0 ~ 8
-		richSoilTries = 2
-		#Untilled Rich Soil: chance [0-1] per try.
-		#Range: 0.0 ~ 1.0
-		richSoilChance = 0.35
-
-		#true: the crop gets the soil pools above. false: its drops are the same on every soil.
-		[crop_drops.soil_yield.crops]
-			wheat = false
-			carrots = false
-			potatoes = false
-			beetroots = false
-			cabbages = false
-			onions = false
-			tomatoes = false
-			rice = false
-			bell_peppers = false
-			coffee = false
-			cotton = false
-			ender_crop = false
-			tobacco = false
-			flax = false
-			hemp = false
-			corn = false
-			cave_carrots = false
-			broccoli = false
-			cauliflower = false
-			garlic = false
-			sweet_potato = false
-			turnip = false
-			zucchini = false
-			cucumber = false
-			oats = false
-			peanuts = false
-			adzuki = false
-
-#A stem that has grown its fruit (melon, pumpkin, hamimelon) can grow more on its other free
-#sides, one at a time. Each extra fruit uses vanilla's stem growth roll (light, soil and
-#hydration count the same) and also waits a minimum time since the stem's last fruit. The
-#wait counts from the first random tick after a fruit grows. When the fruit the stem faces is
-#taken, the stem turns to another of its fruits instead of back into a plain stem. Server side.
-[stem_fruit]
-	#Master on/off switch. Off = vanilla (one fruit per stem).
-	enabled = true
-	#Most fruits next to one stem (1 = vanilla, 4 = every side).
-	#Range: 1 ~ 4
-	maxFruits = 4
-	#Minimum game minutes (1200 ticks) after the first fruit before a 2nd can grow.
-	#Range: 0 ~ 1440
-	secondFruitMinutes = 10
-	#Minimum game minutes after the 2nd fruit before a 3rd can grow.
-	#Range: 0 ~ 1440
-	thirdFruitMinutes = 20
-	#Minimum game minutes after the 3rd fruit before a 4th can grow.
-	#Range: 0 ~ 1440
-	fourthFruitMinutes = 40
-
 #Ore Excavation's /undo_excavation. An undo is refused when the vein mine broke a block in
 ##creativeengineering:vein_undo_denied (ores, storage blocks, budding blocks, spawners, ancient
 #debris; filled by KubeJS). Server side.
@@ -2308,17 +2029,6 @@
 	#On: it can, and the skin block is drawn on the back.
 	allowEquip = false
 
-#Moss block and moss carpet colour (client only; the server ignores this section).
-[moss]
-	#On: moss block and moss carpet take the biome's grass colour, like grass blocks.
-	#Off: vanilla's fixed green moss. Read when models load: press F3+T or restart after changing it.
-	biomeTint = true
-	#How far moss follows the grass colour. 1.0 = shifts as much as grass does from Lush Caves
-	#grass (where moss keeps its vanilla green); 0.0 = vanilla green everywhere. Chunks pick up
-	#a change when they re-render (F3+A).
-	#Range: 0.0 ~ 1.0
-	tintStrength = 1.0
-
 #Stepstools: a stool in the Curios feet slot. Standing still and holding the step-up keys stands the
 #player on it, a block higher; moving, crouching or jumping steps off.
 [stepstool]
@@ -2334,80 +2044,6 @@
 	maxDrift = 0.3
 	#Taking damage knocks the player off the stool.
 	stepOffWhenHurt = true
-
-#Fully oxidized Everything Copper gear (armor worn, or any piece in the hotbar or
-#offhand) poisons its holder now and then, and the Copper Poisoning effect (copper
-#nuggets) gives Poison instead of dealing damage itself.
-[copper_poisoning]
-	#Roll for poison from oxidized gear.
-	enabled = true
-	#Average seconds between rolls, per player.
-	#Range: 10 ~ 86400
-	intervalSeconds = 300
-	#Random spread either side of intervalSeconds.
-	#Range: 0 ~ 86400
-	jitterSeconds = 120
-	#Chance per fully oxidized piece that a roll poisons; pieces roll independently, so
-	#n pieces give 1 - (1 - chancePerPiece)^n.
-	#Range: 0.0 ~ 1.0
-	chancePerPiece = 0.15
-	#Poison I duration with one oxidized piece.
-	#Range: 1 ~ 600
-	baseSeconds = 4
-	#Extra Poison seconds per oxidized piece after the first.
-	#Range: 0 ~ 600
-	secondsPerExtraPiece = 2
-	#Cap on the Poison duration from one roll.
-	#Range: 1 ~ 600
-	maxSeconds = 20
-	#Poison I seconds the Copper Poisoning effect gives per effect level (a copper nugget
-	#gives level II, so twice this).
-	#Range: 1 ~ 600
-	effectPoisonSeconds = 4
-
-#Plain Dandelions mature into Mature Dandelions when planted on Rich Soil / Rich Soil Farmland
-#or Fertile Soil. Values are the average number of soil random ticks per conversion
-#(about one random tick a minute per block at the default randomTickSpeed). 0 = off for that soil.
-#Takes effect immediately.
-[dandelion_maturing]
-	#Rich Soil and Rich Soil Farmland (Farmer's Delight).
-	#Range: 0 ~ 100000
-	richSoilTicks = 20
-	#Fertile Soil (Immersive Weathering's mulch block).
-	#Range: 0 ~ 100000
-	fertileSoilTicks = 10
-
-#Shears on a modded vine (Floral Enchantment's flower vines, Botania's solid vine) stop it growing,
-#as Quark's Shear Vines does for the vanilla vine. Shears on the tip of a weeping, twisting or cave
-#vine or kelp stop it growing longer (1.20's behaviour).
-[vine_shearing]
-	#Shears stop vines growing. Off: shears do nothing to vines (vines already sheared stay so).
-	enabled = true
-	#Shearing a modded vine also removes the same vine hanging below it, as Quark does.
-	cutBelow = true
-	#Client: a sheared modded vine is drawn with its bottom trimmed, like Quark's cut vine. Read when
-	#models load: press F3+T or restart after changing it.
-	trimmedLook = true
-
-#Quark monster boxes (server side).
-[monster_box]
-	#true: a box stays after it spawns its wave, ejects one reward when the wave is gone, then waits
-	#cooldownTicks before it can trigger again; it only breaks while sneaking, and Create drills skip it.
-	#false: Quark's own box (breaks itself after spawning).
-	vaultMode = true
-	#Game ticks between the reward and the box re-arming (72000 = 1 hour).
-	#Range: > 20
-	cooldownTicks = 72000
-	#Loot table rolled once for the reward; one stack of the result is ejected.
-	rewardTable = "creativeengineering:misc/monster_box_reward"
-	#true: the ejected stack is cut to 1 item; false: the stack as the table rolled it.
-	rewardSingleCount = false
-	#A wave mob farther than this many blocks from its box counts as gone.
-	#Range: 4 ~ 256
-	leashRange = 24
-	#Ticks between checks of an active box's wave.
-	#Range: 1 ~ 200
-	checkIntervalTicks = 20
 
 #A listed mob that spawns for one of the listed reasons has a small chance to get a random name
 #(Minecraft Comes Alive's citizen names, else fallbackNames). Its death is announced in chat.

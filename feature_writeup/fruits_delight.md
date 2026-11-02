@@ -99,13 +99,13 @@ All of it ships in the Creative Delight jar and is inactive without Fruits Delig
 | `getFoodData` null guard (2.5) | CD `compat/CDMixinPlugin` + empty `mixin/fruitsdelight/FruitsDelightFoodDataAnchorMixin` (Player, priority 5000) + `compat/FruitsDelightHooks` | Same pattern as the leaf check (next row): `postApply` swaps the handler's `FoodDataAccessor.fruitsdelight$setPlayer` call for `FruitsDelightHooks.setPlayer(Object, Player)`, which skips a null FoodData. Same stack effect, no frames change; a warning if the call is not found |
 | Leaf collision check (perf.md; in patcherMod until 2026-10-27) | CD `compat/CDMixinPlugin` + empty `mixin/fruitsdelight/FruitsDelightLeafCheckMixin` (BlockStateBase, priority 5000) + `FruitsDelightHooks.isLeafForProjectile` | `postApply` turns the merged `passableLeave` handler's leading `is(BlockTags.LEAVES)` into a projectile-first test; same result. Like every compartment mixin it is now off on a Fruits Delight other than 0.5.11 |
 | Bellini Cocktail Heal Aura once (2.3) | CD `kubejs_startup/fruitsdelight/fruits_foods.js` | 0.5.11 lists Heal Aura 10 s (its own) and 5 s (peach at level 10: `FoodType.build` compares suppliers, so the fruit's effect is never skipped). The script keeps the longest entry per effect. It runs after the pack's `alcohol_drinks.js` (jar scripts load after the pack folder), so Intoxication and Nausea stay |
-| Fig Pudding any egg (2.2) | `kubejs/data/creative_delight/kubejs/fruitsdelight/recipes.js` | `replaceInput` `fruitsdelight:fig_pudding`: `i.minecraft_egg` -> `i.eggs` |
+| Fig Pudding any egg (2.2) | `kubejs/data/creativedelight/kubejs/fruitsdelight/recipes.js` | `replaceInput` `fruitsdelight:fig_pudding`: `i.minecraft_egg` -> `i.eggs` |
 | Jam and crate tags (2.5) | `.../fruitsdelight/tags.js` | `forge:jams` gets `#fruitsdelight:jelly`; the 16 crates go through `global.tags.storageBlock` (`forge:storage_blocks` and `forge:storage_blocks/<fruit>`, item and block, no mineable change). No pack recipe uses either tag today, so no player-visible change |
 
-**Compartment gate.** `creative_delight.mixins.json` (CD's first mixin config) has `CDMixinPlugin`: a mixin in
+**Compartment gate.** `creativedelight.mixins.json` (CD's first mixin config) has `CDMixinPlugin`: a mixin in
 `mixin.<modid>.` applies only when that mod is loaded, and Fruits Delight's only at version `0.5.11` (a newer jar may carry
 the upstream fixes, and the cake redirect would then swap the arguments back to wrong). Another version logs
-`[creative_delight] fruitsdelight <v> is not 0.5.11: its fix mixins are off`. The scripts carry `// requires: fruitsdelight`.
+`[creativedelight] fruitsdelight <v> is not 0.5.11: its fix mixins are off`. The scripts carry `// requires: fruitsdelight`.
 Build: CD compiles against `development/creativeDelight/libs/fruitsdelight-0.5.11.jar` (git-ignored, from `mods/`).
 
 **Checks run (offline).** CD's own jar builds and holds the mixins, config and the three scripts; the reobfed cake mixin keeps
@@ -118,7 +118,7 @@ bundle did not build at the time: the in-progress `:backportedRustic` member did
 
 | ID | Test | Where |
 |---|---|---|
-| FR-01 | Boot with Fruits Delight: no mixin error for `creative_delight.mixins.json`; no `null guard not applied` warning | SQ-FR-01 |
+| FR-01 | Boot with Fruits Delight: no mixin error for `creativedelight.mixins.json`; no `null guard not applied` warning | SQ-FR-01 |
 | FR-02 | Place a Mangosteen Cake, eat a slice: Comfort 0:20 and Sliding 0:40 | SQ-FR-02 |
 | FR-03 | Bellini Cocktail tooltip: one Heal Aura (0:10), Intoxication, Nausea 0:05; drinking gives Heal Aura 0:10 | SQ-FR-03, game |
 | FR-04 | Fig Pudding in JEI / crafting accepts a duck egg | SQ-FR-04 |
@@ -128,6 +128,6 @@ bundle did not build at the time: the in-progress `:backportedRustic` member did
 ## Bayberry Juice (2026-10-25, TODO `food/drinks #9`)
 
 Bayberry Soup is renamed Bayberry Juice (item, Forge fluid and can; `namechanges.js`) and typed `drink`
-(`food_types.json`, food dict `drink_juice_bayberry`); ids and recipes unchanged. Its jar fluid
+(`food_types.json`, food dict `fruit_juice_bayberry`); ids and recipes unchanged. Its jar fluid
 (`kubejs/data/creativeengineering/moonlight/soft_fluids/bayberry_soup.json`) is hand-written now, with the potion still
 texture, so the soup fluid generator keeps it. Test RC-D2, MJ-14 (SQ-CDB-11).

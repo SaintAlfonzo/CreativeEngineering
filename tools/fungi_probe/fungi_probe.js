@@ -36,8 +36,8 @@
     function itemId(st) { return String($GReg.ITEMS.getKey(st.getItem())) }
     function block(id) { return $GReg.BLOCKS.getValue(rl(id)) }
     function blockId(state) { return String($GReg.BLOCKS.getKey(state.getBlock())) }
-    // Grid and pot meals moved into Creative Delight's tree (creative_delight: ids) on 2026-10-25; the oven pie is still C
-    const FG = 'fungidelight:', C = 'creativeengineering:', CDN = 'creative_delight:'
+    // Grid and pot meals moved into Creative Delight's tree (creativedelight: ids) on 2026-10-25; the oven pie is still C
+    const FG = 'fungidelight:', C = 'creativeengineering:', CDN = 'creativedelight:'
 
     let byId = null
     function recipes(server) {

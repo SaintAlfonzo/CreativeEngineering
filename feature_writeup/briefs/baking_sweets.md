@@ -18,8 +18,8 @@ Fruits Delight 0.5.11, Farmer's Delight 1.2.4, Abnormals Delight 4.1.2, More Del
 **Where the code goes (since 2026-10-25, memory `creative-delight-routing`):** all food KubeJS lives in the Creative
 Delight trees, one folder per mod; pack-native sweets go in `creativeengineering/`: startup
 `development/creativeDelight/src/main/resources/kubejs_startup/creativeengineering/sweets.js` (needs a CD rebuild +
-restart), server `kubejs/data/creative_delight/kubejs/creativeengineering/sweets.js` inside `global.CD.recipes(() => ...)`
-(recipe ids `creative_delight:<type>/<suffix>`). Edits to an upstream mod's own recipes go in that mod's folder
+restart), server `kubejs/data/creativedelight/kubejs/creativeengineering/sweets.js` inside `global.CD.recipes(() => ...)`
+(recipe ids `creativedelight:<type>/<suffix>`). Edits to an upstream mod's own recipes go in that mod's folder
 (`delightful/`, `neapolitan/`, `fruitsdelight/`). Item ids keep the `creativeengineering:` namespace, as
 `creativeengineering:corn_popsicle` (CD `corn_delight/corn_items.js:16`).
 
@@ -68,7 +68,7 @@ Order: #4 b/e → #2 → #1 → #3 → #4 c/d/f/g.
   (food_families.md 3.1), compost values (Delightful gives its gummy 0.65:
   [delightful/compost_values.js:60](../../development/creativeDelight/src/main/resources/kubejs_startup/delightful/compost_values.js#L60);
   pack items go in CD `creativeengineering/` compost per compost_rules.js), the Supplementaries jar tag for candies
-  ([jar_tags.js:42](../../kubejs/data/creative_delight/kubejs/creativeengineering/jar_tags.js#L42)), and a `/`
+  ([jar_tags.js:42](../../kubejs/data/creativedelight/kubejs/creativeengineering/jar_tags.js#L42)), and a `/`
   row per item in [can_parity.md](../can_parity.md) (`cans/canning #2`). Sprites go in
   `kubejs/assets/creativeengineering/textures/item/<id>.png` (as `corn_popsicle.png`; recolours of the mod sprite
   named in each row).
@@ -98,9 +98,9 @@ Cooking Pot recipe, and a bulk Create recipe.
 - Recipes (verified): `delightful:gummy/salmonberries` FD pot `[#forge:fruits/salmonberries, minecraft:sugar,
   minecraft:honey_bottle, minecraft:kelp]` → 1, 200 ticks, 1.0 xp, no container; `delightful:mixing/salmonberry_gummy`
   Create heated mixing `[salmonberries, sugar, honey_block, kelp]` → 9. The cantaloupe and matcha gummies copy that
-  shape in CD [delightful/recipes.js:39-46](../../kubejs/data/creative_delight/kubejs/delightful/recipes.js#L39-L46)
+  shape in CD [delightful/recipes.js:39-46](../../kubejs/data/creativedelight/kubejs/delightful/recipes.js#L39-L46)
   (`GUMMIES` loop: pot `[fruit, i.any_sweetener, i.honey_bottle, i.kelp]` → 1, heated mixing with a honey block → 9).
-  The pack's sugar swap ([CD minecraft/recipes.js:42-47](../../kubejs/data/creative_delight/kubejs/minecraft/recipes.js#L42-L47))
+  The pack's sugar swap ([CD minecraft/recipes.js:42-47](../../kubejs/data/creativedelight/kubejs/minecraft/recipes.js#L42-L47))
   turns `minecraft:sugar` into `i.any_sweetener` (`#creativeengineering:sweeteners`) in most recipes.
 - Slice & Dice copies every pot recipe to heated mixing after KubeJS runs, unless the id ends in `_manual_only`
   ([food.md](../food.md) 3.7).
@@ -108,7 +108,7 @@ Cooking Pot recipe, and a bulk Create recipe.
 ### Build
 1. Pick the fruits (D1) and add `i.<fruit>_gummy` keys plus any missing `i.t_fruits_*` keys (see Shared).
 2. Tag `#creativeengineering:gelling_agents` = kelp, slime ball (D3 for dried kelp) in CD
-   [creativeengineering/tags.js](../../kubejs/data/creative_delight/kubejs/creativeengineering/tags.js) via
+   [creativeengineering/tags.js](../../kubejs/data/creativedelight/kubejs/creativeengineering/tags.js) via
    `global.tags` `t.add(e, i.t_gelling_agents, [i.kelp, i.slime_ball])`, dict key
    `i.t_gelling_agents = '#creativeengineering:gelling_agents'` (no such key or tag yet).
 3. Register the items from the sweets table:
@@ -252,7 +252,7 @@ The Fruits Delight hamimelon popsicle is merged into the cantaloupe one (owner 2
 `fruitsdelight/item_merges.js:15-16`; its recipe removed in the server `fruitsdelight/item_merges.js:17`).
 Values: food_catalog.md `sweet` table. **Ice is unified (1.1.01, `dishes/ingredients #5`):** `#forge:ice_cubes` holds
 `minecraft:ice` and Neapolitan's cubes (CD `minecraft/tags.js:10`), dict key `i.t_ice_cubes` (item_dict.js:1894), and CD
-[neapolitan/recipes.js:36-44](../../kubejs/data/creative_delight/kubejs/neapolitan/recipes.js#L36-L44) swaps
+[neapolitan/recipes.js:36-44](../../kubejs/data/creativedelight/kubejs/neapolitan/recipes.js#L36-L44) swaps
 `neapolitan:ice_cubes` for the tag pack-wide and `minecraft:ice` for it in the melon / chocolate / kiwi popsicles, the
 hamimelon shaved ice and the bellini.
 
@@ -313,7 +313,7 @@ Cream joins as a flavour (TODO row, its grid recipe is a placeholder).
   `IceCreamItem` adds 200 freeze ticks instead (verified).
 - Fungi Delight's `fungidelight:truffle_ice_cream` (7 / 0.5, Haste 10 s, bowl, stack 16, fungi_delight.md) has only the
   placeholder grid recipe `truffle_ice_cream_manual_only` (slice, snowball, sweetener, milk, bowl;
-  [CD fungidelight/cooking.js:22](../../kubejs/data/creative_delight/kubejs/fungidelight/cooking.js#L22)); it joins as a
+  [CD fungidelight/cooking.js:22](../../kubejs/data/creativedelight/kubejs/fungidelight/cooking.js#L22)); it joins as a
   flavour (TODO).
 - Shapeless recipes (verified): Neapolitan `[bowl, flavour, #forge:milk, neapolitan:ice_cubes (item), minecraft:sugar]`,
   flavour = vanilla pods, chocolate bar, `#forge:fruits/strawberry`, `#forge:fruits/banana`, mint leaves, roasted adzuki
@@ -329,7 +329,7 @@ Cream joins as a flavour (TODO row, its grid recipe is a placeholder).
   is listed in a writeup; the live fluid list needs `/dumpfluids`.
 - No fluid and no spouting for matcha or salmonberry. **Milkshakes exist since the 3.8.1 repack (2026-10-25):**
   `delightful:matcha_milkshake`, `salmonberry_milkshake` (`ShakeItem`), grid `[3 bottles, ice cream, milk]` → 3
-  ([CD delightful/recipes.js:62-63](../../kubejs/data/creative_delight/kubejs/delightful/recipes.js#L62-L63)), plus the
+  ([CD delightful/recipes.js:62-63](../../kubejs/data/creativedelight/kubejs/delightful/recipes.js#L62-L63)), plus the
   Neapolitan milk-cauldron interaction in the repack (delightful.md 3, DF-07). No milkshake fluid for them.
 - Create: Dreams and Desires also registers milkshake fluids (`create_dd:chocolate|glowberry|pumpkin|strawberry|vanilla_milkshake`,
   live `kubejs/exported/fluids.json`); its mixing recipes are already handled in CD `minecraft/recipes.js:39` (sugar
@@ -345,7 +345,7 @@ Cream joins as a flavour (TODO row, its grid recipe is a placeholder).
 
 ### Build
 a. ~~**Unify the recipes.**~~ DONE 1.1.01 (`dishes/ingredients #5`, Testing): `i.t_ice_cubes` exists and CD
-   [neapolitan/recipes.js:39](../../kubejs/data/creative_delight/kubejs/neapolitan/recipes.js#L39) swaps
+   [neapolitan/recipes.js:39](../../kubejs/data/creativedelight/kubejs/neapolitan/recipes.js#L39) swaps
    `neapolitan:ice_cubes` for it in every recipe but `neapolitan:ice`, so the Neapolitan shapeless and the CCK mixing
    recipes take ice cubes or an ice block. Sugar slots take `i.any_sweetener` (CD minecraft/recipes.js:47). Left: the
    truffle ice cream onto the same shape (step f).
@@ -448,7 +448,7 @@ Built 2026-10-29 (owner: remove); fold into [recipes_cooking.md](../recipes_cook
 only by this brief, TODO and SQ-CM-24) and the parity note into food_families.md 3.1 `frozen`.
 - `i.strawberry_banana_smoothie` (`neapolitan:strawberry_banana_smoothie`, item_dict.js:12668) is in `global.removedItems`
   ([removed_items.js:385](../../kubejs/startup_scripts/_lib/removed_items.js#L385): hidden in JEI, tags stripped), and CD
-  [neapolitan/recipes.js:16](../../kubejs/data/creative_delight/kubejs/neapolitan/recipes.js#L16) removes every recipe
+  [neapolitan/recipes.js:16](../../kubejs/data/creativedelight/kubejs/neapolitan/recipes.js#L16) removes every recipe
   with it as output. Player bullet "Removed: Strawberry Banana Smoothie." is in the 1.1.05 changelog.
 - Leftovers that still name it (harmless, clean up with the next touch): the Supplementaries soft fluid
   `kubejs/data/supplementaries/moonlight/soft_fluids/strawberry_banana_smoothie.json` (jar fill for a hidden item),
@@ -465,7 +465,7 @@ Status **Testing** · Work: KubeJS · id `baking/sweets #6`
 
 Built 2026-10-23, shipped 1.1.03; the writeup covers it: [recipes_cooking.md](../recipes_cooking.md) RC-79 and its
 2026-10-23 log line. As built (owner: oranges or slices): Fruits Delight's 2-orange pot and heated mixing recipes stay;
-CD [fruitsdelight/recipes.js:39-46](../../kubejs/data/creative_delight/kubejs/fruitsdelight/recipes.js#L39-L46) adds pot
+CD [fruitsdelight/recipes.js:39-46](../../kubejs/data/creativedelight/kubejs/fruitsdelight/recipes.js#L39-L46) adds pot
 `orange_jam_from_slices` (4 slices, `i.any_sweetener`, lemon slice, bottle) and the heated mixing (4 slices, lemon slice,
 sweetener, 100 mB water → 125 mB `f.orange_jam`, fluid_dict.js:118). The test is RC-79, not RC-31 / RC-32 (those ids
 belong to other briefs). Tiers S P open.

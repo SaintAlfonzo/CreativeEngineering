@@ -10,12 +10,12 @@ public class FfhRun {
 		cx.evaluateString(scope, Files.readString(root.resolve("kubejs/startup_scripts/_lib/item_dict.js")), "item_dict.js", 1, null);
 		cx.evaluateString(scope, Files.readString(root.resolve("kubejs/startup_scripts/_lib/fluid_dict.js")), "fluid_dict.js", 1, null);
 		cx.evaluateString(scope, "global.CD = { recipes: function (fn) { fn() }, on: function () { return true } };", "cd", 1, null);
-		String cd = "development/creativeDelight/src/main/resources/kubejs_startup/creative_delight/cd_food.js";
+		String cd = "development/creativeDelight/src/main/resources/kubejs_startup/creativedelight/cd_food.js";
 		cx.evaluateString(scope, Files.readString(root.resolve(cd)), "cd_food.js", 1, null);
 		for (int k = 2; k < a.length; k++) {
-			String p = "kubejs/data/creative_delight/kubejs/" + a[k];
+			String p = "kubejs/data/creativedelight/kubejs/" + a[k];
 			if (a[k].startsWith("parse:")) {
-				p = "kubejs/data/creative_delight/kubejs/" + a[k].substring(6);
+				p = "kubejs/data/creativedelight/kubejs/" + a[k].substring(6);
 				cx.compileString(Files.readString(root.resolve(p)), p, 1, null);
 				System.out.println("parsed " + p);
 				continue;

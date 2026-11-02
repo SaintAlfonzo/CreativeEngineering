@@ -2,8 +2,8 @@
 # Boot-time bench: Creative Delight jar against the three upstream member jars (ocean_delight / creative_delight.md).
 #   bench_boot.sh OUT ROUNDS
 # OUT is a scratch dir already set up by tools/creative_labels_test/scratch_server.sh (server stopped). Each round
-# boots once without CD (upstream Ocean's, Oceanic, End's jars, pack's kubejs/data/creative_delight moved aside)
-# and once with development/creativeDelight/build/libs/creative_delight-<v>.jar, both with the built patcherMod.
+# boots once without CD (upstream Ocean's, Oceanic, End's jars, pack's kubejs/data/creativedelight moved aside)
+# and once with development/creativeDelight/build/libs/creativedelight-<v>.jar, both with the built patcherMod.
 # Prints one line per boot: variant, seconds to "Done", KubeJS startup / server script times, recipe event time.
 # Nothing here writes into the instance. Scratch servers only; one JVM at a time.
 set -uo pipefail
@@ -12,19 +12,19 @@ SS="$INST/tools/creative_labels_test/scratch_server.sh"
 OUT=${1:?OUT dir}
 ROUNDS=${2:-2}
 SRV="$OUT/srv"
-CDJAR=$(ls "$INST"/development/creativeDelight/build/libs/creative_delight-*.jar | grep -v -- '-cdtest\|-own' | head -1)
+CDJAR=$(ls "$INST"/development/creativeDelight/build/libs/creativedelight-*.jar | grep -v -- '-cdtest\|-own' | head -1)
 PMJAR="$INST/development/patcherMod/build/libs/creativeengineering-1.1.02.jar"
 
 mods() {
   cd "$SRV/mods" || exit 1
-  rm -f creativeengineering-*.jar creative_delight-*.jar oceansdelight-* oceanic_delight-* ends_delight-*
+  rm -f creativeengineering-*.jar creativedelight-*.jar oceansdelight-* oceanic_delight-* ends_delight-*
   ln -s "$PMJAR" .
   if [ "$1" = cd ]; then
     cp "$CDJAR" .
-    [ -d "$OUT/cd_data_off" ] && mv "$OUT/cd_data_off" "$SRV/kubejs/data/creative_delight"
+    [ -d "$OUT/cd_data_off" ] && mv "$OUT/cd_data_off" "$SRV/kubejs/data/creativedelight"
   else
     for j in "$INST"/mods/oceansdelight-* "$INST"/mods/oceanic_delight-* "$INST"/mods/ends_delight-*; do ln -s "$j" .; done
-    [ -d "$SRV/kubejs/data/creative_delight" ] && mv "$SRV/kubejs/data/creative_delight" "$OUT/cd_data_off"
+    [ -d "$SRV/kubejs/data/creativedelight" ] && mv "$SRV/kubejs/data/creativedelight" "$OUT/cd_data_off"
   fi
   cd - >/dev/null
 }

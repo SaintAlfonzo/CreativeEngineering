@@ -11,12 +11,12 @@
 // from the group's own server script:
 //   pack              general merges, here and in removed_woods.js (later split out by mod);
 //                     server half in server_scripts/other/item_merges.js
-//   creative_delight  food merges, in Creative Delight's startup scripts; server half in
-//                     kubejs/data/creative_delight/kubejs/_core/item_merges.js
+//   creativedelight  food merges, in Creative Delight's startup scripts; server half in
+//                     kubejs/data/creativedelight/kubejs/_core/item_merges.js
 // A purged id belongs to one group only: global.addItemMerges refuses it a second time, so no item is swapped twice.
 
 global.itemMerges = []      // every pair, all groups (probes and tools read this)
-global.itemMergeGroups = { pack: [], creative_delight: [] }
+global.itemMergeGroups = { pack: [], creativedelight: [] }
 
 global.addItemMerges = (group, pairs) => {
 	var list = global.itemMergeGroups[group]

@@ -3,9 +3,9 @@ package com.SaintAlfonzo.creativedelight.mixin.farmersrespite;
 import javax.annotation.Nullable;
 
 import com.SaintAlfonzo.creativedelight.qol.RemainderBufferQol;
-import com.SaintAlfonzo.creativeengineering.cooking.RemainderBuffer;
-import com.SaintAlfonzo.creativeengineering.cooking.RemainderBufferHolder;
-import com.SaintAlfonzo.creativeengineering.cooking.RemainderOutputHandler;
+import com.SaintAlfonzo.creativedelight.cooking.RemainderBuffer;
+import com.SaintAlfonzo.creativedelight.cooking.RemainderBufferHolder;
+import com.SaintAlfonzo.creativedelight.cooking.RemainderOutputHandler;
 
 import net.minecraft.core.Direction;
 import net.minecraft.core.NonNullList;

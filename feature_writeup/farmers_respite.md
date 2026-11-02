@@ -116,17 +116,19 @@ All of section 2 is built. Where each piece lives:
 | Tank, brewing, boxes, pipes (K1-K6, K13) | Creative Delight `mixin/farmersrespite/KettleTankMixin` (block entity), `KettleBlockMixin` (`water_level` 0-4, right-click, placing a kept tank), `KettleMenuTankMixin`, `KettleDispenseMixin`; rules in `compat/farmersrespite/KettleTank` |
 | Recipe format (K8) | `KettleRecipeSerializerMixin` + `compat/farmersrespite/KettleBases`; NCH `frBrewing` option `base` (`needWater` gone, warns) |
 | Which bottles pour (K3, K4, K7) | `compat/farmersrespite/KettleDrinks`: read from Create filling / emptying recipes (glass bottle <-> 250 mB, one item, untagged fluid); water bottle hard-wired. A drink with no such pair can't go in the tank |
-| Recipes (K8, K9) | `kubejs/data/creative_delight/kubejs/farmersrespite/kettle.js` (48 Kettle recipes); gambler's tea is in `farmersrespite/item_merges.js` (the coffee merge, item_merges.md 1.1) |
+| Recipes (K8, K9) | `kubejs/data/creativedelight/kubejs/farmersrespite/kettle.js` (48 Kettle recipes); gambler's tea is in `rusticdelight/coffee_merge.js` (the coffee merge, item_merges.md 1.1) |
 | Fluids (K9) | 10 new pack fluids in `development/creativeDelight/src/main/resources/kubejs_startup/creativeengineering/fluids.js` (`f.milk_coffee` ... `f.berry_matcha_latte`), tags in `fluidtags.js`; Central Kitchen's tea, cider, cocoa, melon and coffee fluids reused |
-| Spout / drain (K10, K12) | NCH `createBottle` (filling + emptying), called in `kettle.js` and `miners_delight/recipes.js` (water cup). BROKEN: every `creative_delight:createfilling/*` fails to load (`Error parsing recipe`, fluid `minecraft:empty`; 12 in the owner's `logs/kubejs/server.log` 2026-10-29, also the 2026-10-28 scratch boots), so the Spout half is missing; the emptying half was broken the same way (`latest.log` 2026-10-31: JEI `Found a broken recipe ... createemptying/coffee`, `Can't modify the empty stack`). **FIXED 2026-11-01 (patcherMod built, not installed; TODO `food/drinks #12`)**: cause was not the startup scope but this Rhino build (interpreter, 1902.2.3-284) returning 0 for `nullish ?? <numeric literal>`, so `opts.mb ?? 250` gave 0 mB and `Fluid.of(fluid, 0)` the empty stack (checked in a headless Rhino run: `undefined ?? 250` -> 0, `undefined ?? 'x'` -> 'x'). New `NCH._or(v, d)`; every numeric `?? N` default in `neoCraftHelper.js` (27) goes through it. Test SQ-RSP-09 / RSP-07 |
+| Spout / drain (K10, K12) | NCH `createBottle` (filling + emptying), called in `kettle.js` and `miners_delight/recipes.js` (water cup). BROKEN: every `creativedelight:createfilling/*` fails to load (`Error parsing recipe`, fluid `minecraft:empty`; 12 in the owner's `logs/kubejs/server.log` 2026-10-29, also the 2026-10-28 scratch boots), so the Spout half is missing; the emptying half was broken the same way (`latest.log` 2026-10-31: JEI `Found a broken recipe ... createemptying/coffee`, `Can't modify the empty stack`). **FIXED 2026-11-01 (patcherMod built, not installed; TODO `food/drinks #12`)**: cause was not the startup scope but this Rhino build (interpreter, 1902.2.3-284) returning 0 for `nullish ?? <numeric literal>`, so `opts.mb ?? 250` gave 0 mB and `Fluid.of(fluid, 0)` the empty stack (checked in a headless Rhino run: `undefined ?? 250` -> 0, `undefined ?? 'x'` -> 'x'). New `NCH._or(v, d)`; every numeric `?? N` default in `neoCraftHelper.js` (27) goes through it. Test SQ-RSP-09 / RSP-07 |
 | GUI, tooltip, WTHIT, JEI (K11) | `KettleScreenTankMixin` + `compat/farmersrespite/client/KettleTankRender`; `KettleItemTooltipMixin`; `compat/wthit/WthitKettleTank`; `KettleJeiBaseMixin` (base fluid slot in the bar) |
 | Pot, slices, death text (2.2-2.4) | patcherMod `compat/RespitePottedTeaBush`; `startup_scripts/cooking/food_values.js`; `kubejs/assets/farmersrespite/lang/en_us.json` |
 
 Decisions taken during the build (correct them if wrong):
 
-1. **Brew time stays 10 s.** 2.0 reads `brewingtime`; every recipe (Respite's, NCH's) writes `cookingtime`, so every brew
-   took the 200-tick default. The serializer now reads `cookingtime` (2.1's key), and every rewritten recipe says 200.
-   2.1's 2400 would make one bottle take 2 minutes.
+1. **Brew time stays 10 s** (owner, 2026-11-01). 2.0 reads `brewingtime`; every recipe (Respite's, NCH's) writes
+   `cookingtime`, so every brew took the 200-tick default. The serializer now reads `cookingtime` (2.1's key), and
+   every rewritten recipe says 200 (2.1's 2400 would make one bottle take 2 minutes). **Bug, fixed 2026-11-01:** the
+   1.1.04 jar played on 10-31 wrote `opts.time ?? 200`, which this Rhino evaluates to 0 (the `??` bug of K10), so
+   every recipe had `cookingtime: 0` and brewed in 1 tick. `NCH._or` (in patcherMod 1.1.06 and later) fixes it.
 2. **Recipes that took milk** (hot cocoa's milk-bottle container, Delightful's matcha latte and builder's tea, End's
    chorus fruit milk tea) use milk (`minecraft:milk`) as their base and bottle in glass.
 3. **Rustic coffees:** Coffee = water + 2 roasted beans; Milk and Dark Coffee build on Coffee in the tank (+ milk,
@@ -141,7 +143,7 @@ Decisions taken during the build (correct them if wrong):
 
 ## 6. Tests
 
-None run. Queued: SQ-RSP-01 to 14 (server), CQ-RSP-01 (client). In game:
+None run. Queued: SQ-RSP-01 to 15 (server), CQ-RSP-01 (client). In game:
 
 - RSP-01 Kettle takes water by bucket (level 4) and refuses a tea on top of water; empties to 4 water bottles.
 - RSP-02 Pour 2 Black Tea, then honey + plating bottle: Strong Black Tea, level 1, honey bottle to a leftover slot.
@@ -159,3 +161,4 @@ None run. Queued: SQ-RSP-01 to 14 (server), CQ-RSP-01 (client). In game:
 - RSP-14 Slice of Coffee Cake: Caffeinated 0:30, no Speed; Rose Hip Pie Slice: Regeneration only.
 - RSP-15 Wither Roots death message: "while gardening", and the "whilst fighting" version when a mob hit you.
 - RSP-16 A world with a 2.0 Kettle at 3 water: unchanged and brews.
+- RSP-17 A heated Kettle with water and 2 black tea leaves takes 10 s (not 1 tick) to make one Black Tea.

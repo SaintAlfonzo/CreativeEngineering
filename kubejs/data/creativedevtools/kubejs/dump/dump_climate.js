@@ -36,7 +36,7 @@
 
 	const $Types = Java.loadClass('net.minecraft.world.level.levelgen.Heightmap$Types')
 	const $Random = Java.loadClass('java.util.Random')
-	const $WorldgenFiles = Java.loadClass('com.SaintAlfonzo.creativeengineering.worldgen.WorldgenFiles')
+	const $WorldgenFiles = Java.loadClass('com.SaintAlfonzo.creativeengineering.util.WorldgenFiles')
 
 	// JSON.stringify is Gson-backed and prints every number as a double ("675.0"); the points are
 	// joined by hand so the integers stay integers. Array.join uses JS number formatting.

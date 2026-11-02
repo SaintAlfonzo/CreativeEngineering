@@ -94,7 +94,7 @@ literal shape tag ids in `engineeringtags.js` (TODO `tooling/conventions #1`).
 
 ### G. A second solution beside an existing one (scripts)
 
-30. **Hand-rolled item merges.** Reinvent. CD `kubejs/data/creative_delight/kubejs/create/recipes.js:38-39` swaps
+30. **Hand-rolled item merges.** Reinvent. CD `kubejs/data/creativedelight/kubejs/create/recipes.js:38-39` swaps
     `i.out_flour` (in `removedItems`) into `i.in_flour` with `R.replaceOutput` / `R.replaceInput`: recipes only, no
     loot or inventory. Judgement: `engineering/transport.js:111-122` swaps removed Little Logistics components to
     `i.redstone_link` in inputs. Fix: `global.addItemMerges`.
@@ -166,7 +166,7 @@ each. Checks for an older copy add code paths that are never taken and hide a br
 
 1. **Creative Delight gates on a patcherMod helper version.** **FIXED 2026-10-27** (section 9). Rule, Reinvent. Current state:
    - [neoCraftHelper.js:17](../development/patcherMod/src/main/resources/kubejs_startup/creativeengineering/func/neoCraftHelper.js) publishes `apiVersion: 1` on `global.NCH`.
-   - [cd_core.js:19-22](../development/creativeDelight/src/main/resources/kubejs_startup/creative_delight/cd_core.js) sets `CD.apiVersion: 1` (read nowhere) and `CD.needsNchApi: 1`; lines 49-52 log an error when `NCH.apiVersion` is lower or missing.
+   - [cd_core.js:19-22](../development/creativeDelight/src/main/resources/kubejs_startup/creativedelight/cd_core.js) sets `CD.apiVersion: 1` (read nowhere) and `CD.needsNchApi: 1`; lines 49-52 log an error when `NCH.apiVersion` is lower or missing.
    - Introduced in c36dfc4 (Mid 1.1.03). The docs make it a rule for callers: [creative_delight.md](creative_delight.md) line 478 ("a caller checks it", 10.6), line 505 and the 10.3 row at line 862.
    - Tests depend on it: `tools/creative_delight_test/suite/` (`cdtest_startup.js:7`, `cdtest_probe.js:50` asserts `apiVersion >= 1`, `cdtest_client.js:2`) and [scratch_queue.md](testing/scratch_queue.md) SQ-CDT-02 expects "NCH apiVersion 1".
    - The uncommitted `NCH.replaceItems` addition (item merges) does not touch the gate and is clean.
@@ -185,12 +185,12 @@ each. Checks for an older copy add code paths that are never taken and hide a br
    `mob_spawns.js:22`, `bee_nests.js:18`, and CD `_worldgen/wild_crops.js:42`
    (`global.CD.worldgen ? ... : true`). Fix: call the getter directly.
 5. **Dead fallbacks for keys and globals that always exist.** **FIXED 2026-10-27** (section 9). Reinvent.
-   - CD [_qol/placeable_tooltip.js:23-28](../kubejs/assets/creative_delight/kubejs/_qol/placeable_tooltip.js) `tagOf(key, fallback)` hard-codes five tag ids in case `i.t_placeable*` is missing; all five keys exist (`item_dict.js:13744-13748`).
+   - CD [_qol/placeable_tooltip.js:23-28](../kubejs/assets/creativedelight/kubejs/_qol/placeable_tooltip.js) `tagOf(key, fallback)` hard-codes five tag ids in case `i.t_placeable*` is missing; all five keys exist (`item_dict.js:13744-13748`).
    - [placeabletags.js:51](../kubejs/server_scripts/tags/placeabletags.js) and CD `creativeengineering/food_type_tags.js:56`: `i.t_placeable_on_coaster || '#creativeengineering:...'`.
-   - CD `kubejs/data/creative_delight/kubejs/_core/item_merges.js:8`: `!global.itemMergeRun` (always set by `startup_scripts/_lib/item_merges.js:40`).
+   - CD `kubejs/data/creativedelight/kubejs/_core/item_merges.js:8`: `!global.itemMergeRun` (always set by `startup_scripts/_lib/item_merges.js:40`).
    - CD startup `compost.js:10` in farmersdelight, fungidelight, veggiesdelight, vintagedelight, and the CD client scripts (`endersdelight/client.js`, `ends_delight/*`, `fungidelight/jei_info.js`, `_core/cd_client.js`): `!!global.CD &&` inside the jar that defines `global.CD` at priority 1000. The routing memory documents this guard for server scripts only.
    - [seasoning_lang.js:3-8](../kubejs/client_scripts/seasoning_lang.js): `global.seasoning || {}`.
-   - [tooltips.js:32-34](../kubejs/client_scripts/tooltips.js) `fdVillagerLine`: `Platform.isLoaded('creative_delight')` feature-detects the pack's own mod.
+   - [tooltips.js:32-34](../kubejs/client_scripts/tooltips.js) `fdVillagerLine`: `Platform.isLoaded('creativedelight')` feature-detects the pack's own mod.
    - Judgement: `neoCraftHelper.js:1375` `global.seasoning && ...` (patcherMod's helper detects a global CD owns).
    - Fix: use the keys and globals directly; delete the fallbacks.
 6. **patcherMod still carries Vinery 1.3.10 support.** **FIXED 2026-10-27** (section 9). Reinvent. Only `backportedVinery-1.5.5-ce-19.2-04` is in
@@ -310,7 +310,7 @@ effects reserved for Creative Brewing). The Brewin' / alcohol rows in `cooking/c
 
 29. **Two food-family recipe helpers with drifted values.** **FIXED 2026-10-27** (section 9). Reinvent. `global.foodFamily` / `global.FOOD_FAMILY`
     (CD `creativeengineering/food_family_recipes.js:17, :44`) and `global.CD.food` / `global.CD.FOOD`
-    (CD `creative_delight/cd_food.js:36, :56`) share method names. creative_delight.md 30 calls `CD.food` the successor,
+    (CD `creativedelight/cd_food.js:36, :56`) share method names. creative_delight.md 30 calls `CD.food` the successor,
     not yet adopted; 10 server files still call `foodFamily`. Values differ: veggie slice count 4
     (`food_family_recipes.js:21`) against 2 (`cd_food.js:38`), fruit cook xp 0.1 against 0.35 (`cd_food.js:43`).
     Migrating as is would change recipes silently. Fix: one table as the source now, then finish the migration.
@@ -402,7 +402,7 @@ effects reserved for Creative Brewing). The Brewin' / alcohol rows in `cooking/c
 
 ## 6. File map
 
-- Reference pattern: [neoCraftHelper.js](../development/patcherMod/src/main/resources/kubejs_startup/creativeengineering/func/neoCraftHelper.js), [cd_core.js](../development/creativeDelight/src/main/resources/kubejs_startup/creative_delight/cd_core.js), [creative_delight.md](creative_delight.md) 10.3 / 10.6
+- Reference pattern: [neoCraftHelper.js](../development/patcherMod/src/main/resources/kubejs_startup/creativeengineering/func/neoCraftHelper.js), [cd_core.js](../development/creativeDelight/src/main/resources/kubejs_startup/creativedelight/cd_core.js), [creative_delight.md](creative_delight.md) 10.3 / 10.6
 - Rules: [CLAUDE.md](../CLAUDE.md); dicts: [item_dict.js](../kubejs/startup_scripts/_lib/item_dict.js), [effect_dict.js](../kubejs/startup_scripts/_lib/effect_dict.js)
 - Helpers: [tag_helper.js](../development/patcherMod/src/main/resources/kubejs_startup/creativeengineering/func/tag_helper.js), [item_merges.js](../kubejs/startup_scripts/_lib/item_merges.js)
 - Manifest: [generators.json](../tools/generators.json); sides: [mod_sides.md](../mod_sides.md)

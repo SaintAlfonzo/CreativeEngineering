@@ -37,7 +37,7 @@ public abstract class GatedMixinPlugin implements IMixinConfigPlugin {
     private final Map<String, Boolean> compartmentOn = new HashMap<>();
 
     /**
-     * @param logTag            prefix of the log lines, for example {@code [creative_delight]}
+     * @param logTag            prefix of the log lines, for example {@code [creativedelight]}
      * @param compartmentPrefix mixin package prefix with a trailing dot whose next segment is a mod id, or null
      * @param forVersion        compartment mod id -> the only version it applies to
      * @param needsMod          mixin simple name -> mod ids it serves (any one loaded is enough)

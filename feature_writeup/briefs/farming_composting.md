@@ -62,7 +62,7 @@ counterpart of Fertile Soil and a ghost pepper soil. Then it and the compost / f
   into **rich soul soil** (`nethersdelight:rich_soul_soil`; ND ships no crafting recipe for it). Fertile Soul Soil is
   made from netherrack, not from rich soul soil, so it skips the ladder.
 - Its jobs: ghost pepper soil (`#vintagedelight:ghost_pepper_soil` = soul soil, rich soul soil, nulch,
-  `kubejs/data/creative_delight/kubejs/vintagedelight/tags.js` 48); tooltip "Grows nether crops faster"
+  `kubejs/data/creativedelight/kubejs/vintagedelight/tags.js` 48); tooltip "Grows nether crops faster"
   (`client_scripts/tooltips.js` 498); name and planting line `client_scripts/namechanges.js` 245-249; compost value 1.0
   (Creative Delight `kubejs_startup/immersive_weathering/compost_values.js` 95).
 - Recipe ids come out as `creativeengineering:<type>/<idSuffix>` (`NCH.shaped` 798, `shapeless` 822, `createMixing`
@@ -128,7 +128,7 @@ blocks (any dirt, podzol, moss block) in the dirt slot.
 - `forge:mulch/waste` = rotten flesh, spider eye, poisonous potato (`wood_tags.js` 13). It is also the waste slot of
   four Fertile Soil recipes (67-81).
 - The three new rot items, all with dict keys: `i.rotten_tomato` = `farmersdelight:rotten_tomato` (11652),
-  `i.rotten_cherry` = `vinery:rotten_cherry` (11276; Vinery port nested in `creative_brewing-1.0.0.jar`, registered in
+  `i.rotten_cherry` = `vinery:rotten_cherry` (11276; Vinery port nested in `creativebrewing-1.0.0.jar`, registered in
   `members/vinery/.../ObjectRegistry.java` 107), `i.organic_mash` = `vintagedelight:organic_mash` (14468; Vintage port,
   a byproduct of jam -> vinegar fermenting).
 - Vintage Delight ships its own compost recipes that the pack does not remove (verified in

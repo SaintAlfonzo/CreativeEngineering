@@ -32,7 +32,7 @@ i.wood_pellets = 'creativeengineering:wood_pellets';
 i.layered_obsidian = 'creativeengineering:layered_obsidian';
 i.weathered_cardboard_box = 'creativeengineering:weathered_cardboard_box';
 // Oven — FD cooking-pot style baking block. Java: patcherMod oven/ package (block, GUI, JEI, the
-// creativeengineering:baking recipe type) | recipes: kubejs/data/creative_delight/kubejs/creativeengineering/baking.js (NCH.ceBaking) |
+// creativeengineering:baking recipe type) | recipes: kubejs/data/creativedelight/kubejs/creativeengineering/baking.js (NCH.ceBaking) |
 // bakeware items: Creative Delight kubejs_startup/creativeengineering/bakeware.js | feature_writeup/oven.md
 i.oven = 'creativeengineering:oven';
 i.baking_sheet = 'creativeengineering:baking_sheet';
@@ -81,7 +81,7 @@ i.ce_echo_shield = 'creativeengineering:echo_shield';
 i.ce_felsic_shield = 'creativeengineering:felsic_shield';
 i.ce_dragon_shield = 'creativeengineering:dragon_shield';
 // Potion buckets — area-of-effect lingering-potion items (i.potion_bucket is IE's).
-// Items: startup_scripts/items/potion_buckets.js | effect: startup_scripts/func/potion_area.js
+// Items and effect: Creative Brewing kubejs_startup/creativeengineering/potion_buckets.js, potion_area.js
 i.ce_potion_bucket = 'creativeengineering:potion_bucket';
 i.ce_splash_potion_bucket = 'creativeengineering:splash_potion_bucket';
 i.ce_lingering_potion_bucket = 'creativeengineering:lingering_potion_bucket';
@@ -90,7 +90,7 @@ i.ce_lingering_potion_bucket = 'creativeengineering:lingering_potion_bucket';
 i.wooden_bucket = 'creativeengineering:wooden_bucket';
 i.wooden_water_bucket = 'creativeengineering:wooden_water_bucket';
 // Watering cans - Hearth and Harvest's (copper keeps the upstream id; iron to dragon are pack tiers), Creative Delight
-// member hearthandharvest (hearth_and_harvest.md 4.0). Recipes and fertiliser tag: kubejs/data/creative_delight/kubejs/hearthandharvest/
+// member hearthandharvest (hearth_and_harvest.md 4.0). Recipes and fertiliser tag: kubejs/data/creativedelight/kubejs/hearthandharvest/
 i.watering_can = 'hearthandharvest:watering_can';
 i.iron_watering_can = 'hearthandharvest:iron_watering_can';
 i.golden_watering_can = 'hearthandharvest:golden_watering_can';
@@ -99,13 +99,57 @@ i.netherite_watering_can = 'hearthandharvest:netherite_watering_can';
 i.dragon_watering_can = 'hearthandharvest:dragon_watering_can';
 i.t_bonemeal_substitutes = '#hearthandharvest:bonemeal_substitutes';
 // Raspberries - Hearth and Harvest's, Creative Delight member hearthandharvest (hearth_and_harvest.md 4.1). Recipes and
-// tags: kubejs/data/creative_delight/kubejs/hearthandharvest/
+// tags: kubejs/data/creativedelight/kubejs/hearthandharvest/
 i.raspberry = 'hearthandharvest:raspberry';
 i.raspberry_pips = 'hearthandharvest:raspberry_pips';
 i.t_fruits_raspberries = '#forge:fruits/raspberries';
 i.t_crops_raspberry = '#forge:crops/raspberry';
 i.t_seeds_raspberry = '#forge:seeds/raspberry';
 i.t_fox_food = '#minecraft:fox_food';
+// Barbeque's Delight - the 1.3.0 port, Creative Delight member barbequesdelight (barbeques_delight.md 4). Recipes, tags:
+// kubejs/data/creativedelight/kubejs/barbequesdelight/ | compost: CD startup barbequesdelight/compost.js
+// Stations (i.basin is Create's Basin; the BBQ one is the "Ingredients Basin")
+i.bbq_grill = 'barbequesdelight:grill';
+i.bbq_basin = 'barbequesdelight:basin';
+i.bbq_tray = 'barbequesdelight:tray';
+// Skewers: raw (not edible) and cooked (ids grilled_*, named "Cooked ..."; lamb is named Mutton)
+i.raw_beef_skewer = 'barbequesdelight:raw_beef_skewer';
+i.raw_chicken_skewer = 'barbequesdelight:raw_chicken_skewer';
+i.raw_cod_skewer = 'barbequesdelight:raw_cod_skewer';
+i.raw_lamb_skewer = 'barbequesdelight:raw_lamb_skewer';
+i.raw_mushroom_skewer = 'barbequesdelight:raw_mushroom_skewer';
+i.raw_pork_sausage_skewer = 'barbequesdelight:raw_pork_sausage_skewer';
+i.raw_potato_skewer = 'barbequesdelight:raw_potato_skewer';
+i.raw_rabbit_skewer = 'barbequesdelight:raw_rabbit_skewer';
+i.raw_salmon_skewer = 'barbequesdelight:raw_salmon_skewer';
+i.raw_vegetable_skewer = 'barbequesdelight:raw_vegetable_skewer';
+i.grilled_beef_skewer = 'barbequesdelight:grilled_beef_skewer';
+i.grilled_chicken_skewer = 'barbequesdelight:grilled_chicken_skewer';
+i.grilled_cod_skewer = 'barbequesdelight:grilled_cod_skewer';
+i.grilled_lamb_skewer = 'barbequesdelight:grilled_lamb_skewer';
+i.grilled_mushroom_skewer = 'barbequesdelight:grilled_mushroom_skewer';
+i.grilled_pork_sausage_skewer = 'barbequesdelight:grilled_pork_sausage_skewer';
+i.grilled_potato_skewer = 'barbequesdelight:grilled_potato_skewer';
+i.grilled_rabbit_skewer = 'barbequesdelight:grilled_rabbit_skewer';
+i.grilled_salmon_skewer = 'barbequesdelight:grilled_salmon_skewer';
+i.grilled_vegetable_skewer = 'barbequesdelight:grilled_vegetable_skewer';
+i.burnt_skewer = 'barbequesdelight:burnt_skewer';
+// Combos (combine recipes store the skewers inside)
+i.kebab_wrap = 'barbequesdelight:kebab_wrap';
+i.kebab_sandwich = 'barbequesdelight:kebab_sandwich';
+i.bibimbap = 'barbequesdelight:bibimbap';
+// Seasonings: durability items (powders 64 uses, sauces 16), no survival source yet (food/seasoning #12)
+i.cumin_powder = 'barbequesdelight:cumin_powder';
+i.pepper_powder = 'barbequesdelight:pepper_powder';
+i.chili_powder = 'barbequesdelight:chili_powder';
+i.honey_mustard_sauce = 'barbequesdelight:honey_mustard_sauce';
+i.buffalo_sauce = 'barbequesdelight:buffalo_sauce';
+i.barbeque_sauce = 'barbequesdelight:barbeque_sauce';
+i.t_raw_skewers = '#barbequesdelight:raw_skewers';
+i.t_grilled_skewers = '#barbequesdelight:grilled_skewers';
+// skewering inputs the dict lacked
+i.t_raw_cod = '#forge:raw_fishes/cod';
+i.t_raw_bacon = '#forge:raw_bacon';
 // Camera bags - item inventory for Exposure gear (#exposure_extras:camera_equipment only).
 // Java items: exposureBackport src/extras (mod exposure_extras) | slot counts: exposure_extras-common.toml
 // [camera_bag] | recipes: server_scripts/equipment/camera_bag.js (smithing upgrades keep the contents)
@@ -118,7 +162,7 @@ i.netherite_camera_bag = 'exposure_extras:netherite_camera_bag';
 // like book/written_book/enchanted_book instead of one item + NBT (NBT-matched ingredients
 // via .weakNBT()/PartialNBTIngredient kept silently matching zero items here - not worth
 // re-litigating why; plain item ids side-step it entirely).
-// Items: startup_scripts/items/sample_syringe.js | behaviour: startup_scripts/func/sample_syringe.js
+// Items and behaviour: Creative Delight kubejs_startup/creativeengineering/sample_syringe_items.js, sample_syringe.js
 i.sample_syringe = 'creativeengineering:sample_syringe';
 i.cow_sample_syringe = 'creativeengineering:cow_sample_syringe';
 i.pig_sample_syringe = 'creativeengineering:pig_sample_syringe';
@@ -128,7 +172,7 @@ i.rabbit_sample_syringe = 'creativeengineering:rabbit_sample_syringe';
 i.cod_sample_syringe = 'creativeengineering:cod_sample_syringe';
 i.salmon_sample_syringe = 'creativeengineering:salmon_sample_syringe';
 // Meat cultures — raw lab-grown precursors for cultivated meat. Items and blocks: Creative Delight
-// kubejs_startup/creativeengineering/cultures.js; recipes: kubejs/data/creative_delight/kubejs/creativeengineering/cultivated_meat.js
+// kubejs_startup/creativeengineering/cultures.js; recipes: kubejs/data/creativedelight/kubejs/creativeengineering/cultivated_meat.js
 i.culture_beef = 'creativeengineering:culture_beef';
 i.culture_pork = 'creativeengineering:culture_pork';
 i.culture_mutton = 'creativeengineering:culture_mutton';
@@ -1464,7 +1508,7 @@ i.blue_bomb = 'supplementaries:bomb_blue';
 i.spiky_bomb = 'supplementaries:bomb_spiky';
 i.antique_ink = 'supplementaries:antique_ink';
 i.candy = 'supplementaries:candy';
-i.t_jar_cookies = '#supplementaries:cookies';    // what a Supplementaries jar takes at all (kubejs/data/creative_delight/kubejs/creativeengineering/jar_tags.js)
+i.t_jar_cookies = '#supplementaries:cookies';    // what a Supplementaries jar takes at all (kubejs/data/creativedelight/kubejs/creativeengineering/jar_tags.js)
 // What may share one jar (patcherMod compat/JarMixing): two items mix when one jar_family tag holds both.
 i.t_jar_family_cookies = '#creativeengineering:jar_family/cookies';
 i.t_jar_family_candied_apples = '#creativeengineering:jar_family/candied_apples';
@@ -1676,6 +1720,19 @@ i.deed_of_ownership = 'domesticationinnovation:deed_of_ownership';
 i.pet_drum = 'domesticationinnovation:drum';
 i.collar_tag = 'domesticationinnovation:collar_tag';
 
+//Cozy's Improved Cats (feature_writeup/cozy_cats.md); the four ancient fish are merged into vanilla fish
+i.ancient_cod = 'cozys-improved-cats:ancient_cod';
+i.ancient_salmon = 'cozys-improved-cats:ancient_salmon';
+i.ancient_cooked_cod = 'cozys-improved-cats:ancient_cooked_cod';
+i.ancient_cooked_salmon = 'cozys-improved-cats:ancient_cooked_salmon';
+i.cat_treat = 'cozys-improved-cats:cat_treat';
+i.yarn_ball = 'cozys-improved-cats:yarn_ball';
+i.training_string = 'cozys-improved-cats:training_string';
+i.cat_collar = 'cozys-improved-cats:cat_collar';
+i.cat_guidebook = 'cozys-improved-cats:cat_guidebook';
+i.cat_bed = 'cozys-improved-cats:cat_bed';
+i.cat_food_bowl = 'cozys-improved-cats:cat_food_bowl';
+
 //Waystones
 i.warpstone = 'waystones:warp_stone';
 
@@ -1841,6 +1898,7 @@ i.t_cooked_calamari = '#forge:cooked_fishes/calamari';
 i.t_foods_tentacles = '#forge:foods/tentacles';      // Miner's takoyaki slot; its tentacles are removed, raw calamari fills it (CD oceansdelight/tags.js)
 i.t_squid_tentacles = '#forge:squid_tentacles';     // Oceanic Delight's dish slot; its tentacles are removed, raw calamari fills it (CD oceansdelight/tags.js)
 i.t_pickled_veg = '#creativeengineering:pickled_veg';  // pickle soup's pickle slot (TODO dishes/pickles-and-ferments #3)
+i.t_mixed_seeds_plants = '#vintagedelight:mixed_seeds_plants';  // what Mixed Seeds plant, one picked per use (vintage_delight.md 2.3a)
 i.t_curios_head = '#curios:head';
 i.t_curios_mouth = '#curios:mouth';                   // no such slot; the pack's face slot covers it (feature_writeup/curios_slots.md)
 i.t_curios_face = '#curios:face';                     // pack slot: kubejs/data/creativeengineering/curios/slots/face.json
@@ -1951,6 +2009,7 @@ i.t_bread = '#forge:bread';
 // plain loaves only (vanilla, corn, cauliflower, sourdough): for recipes that turn a bread into more bread
 i.t_bread_loaf = '#creativeengineering:bread_loaves';
 i.t_tortilla = '#forge:tortilla';
+i.t_can_be_salted = '#salt:can_be_salted';  // The Salt's Salting craft takes any food in it (food/seasoning #1)
 // frying (TODO dishes/meals #7): Rustic Delight's oil tag; sliced potatoes = Rustic's slices + More Delight's diced
 i.t_cooking_oil = '#rusticdelight:cooking_oil';
 i.t_sliced_potato = '#forge:sliced_potato';
@@ -2006,6 +2065,94 @@ i.stuffed_bell_pepper_blue     = 'rusticdelight:stuffed_bell_pepper_blue';
 i.stuffed_bell_pepper_purple   = 'rusticdelight:stuffed_bell_pepper_purple';
 i.stuffed_bell_pepper_black    = 'rusticdelight:stuffed_bell_pepper_black';
 i.t_stuffed_bell_pepper_ingredients = '#rusticdelight:stuffed_bell_pepper_ingredients';   // any raw meat, fish, egg, mushroom, vegetable (rustic_delight.md 2.2)
+// Rustic Delight rolls and soup named in the chopstick food tag (roll_delight.md 3.3.1)
+i.bell_pepper_roll_green       = 'rusticdelight:bell_pepper_roll_green';
+i.bell_pepper_roll_red         = 'rusticdelight:bell_pepper_roll_red';
+i.bell_pepper_roll_yellow      = 'rusticdelight:bell_pepper_roll_yellow';
+i.bell_pepper_roll_orange      = 'rusticdelight:bell_pepper_roll_orange';
+i.bell_pepper_roll_white       = 'rusticdelight:bell_pepper_roll_white';
+i.bell_pepper_roll_pink        = 'rusticdelight:bell_pepper_roll_pink';
+i.bell_pepper_roll_blue        = 'rusticdelight:bell_pepper_roll_blue';
+i.bell_pepper_roll_purple      = 'rusticdelight:bell_pepper_roll_purple';
+i.bell_pepper_roll_black       = 'rusticdelight:bell_pepper_roll_black';
+i.cherry_blossom_roll          = 'rusticdelight:cherry_blossom_roll';
+i.calamari_soup                = 'rusticdelight:calamari_soup';
+// Rustic Delight member items, 2026-11-01 (rustic_delight.md 5.10): roll assemblies, Supreme Pizza, golden coffee beans
+i.rice_roll_royale             = 'rusticdelight:rice_roll_royale';
+i.glowing_calamari_crate       = 'rusticdelight:glowing_calamari_crate';   // the port's own block, not upstream's
+i.t_coffee_ingredients         = '#rusticdelight:coffee_ingredients';      // coffee beans, roasted coffee beans
+i.t_coffee_food_ingredients    = '#rusticdelight:coffee_food_ingredients'; // Coffee-Braised Beef's coffee slot
+i.t_vegetables_bell_pepper     = '#forge:vegetables/bell_pepper';          // raw bell peppers and slices, 9 colours
+i.t_roasted_bell_pepper_slice  = '#creativeengineering:roasted_bell_pepper_slice';   // 9 colours (CD rusticdelight/tags.js)
+i.bell_pepper_slice_green      = 'rusticdelight:bell_pepper_slice_green';
+i.bell_pepper_slice_red        = 'rusticdelight:bell_pepper_slice_red';
+i.bell_pepper_slice_yellow     = 'rusticdelight:bell_pepper_slice_yellow';
+i.bell_pepper_slice_orange     = 'rusticdelight:bell_pepper_slice_orange';
+i.bell_pepper_slice_white      = 'rusticdelight:bell_pepper_slice_white';
+i.bell_pepper_slice_pink       = 'rusticdelight:bell_pepper_slice_pink';
+i.bell_pepper_slice_blue       = 'rusticdelight:bell_pepper_slice_blue';
+i.bell_pepper_slice_purple     = 'rusticdelight:bell_pepper_slice_purple';
+i.bell_pepper_slice_black      = 'rusticdelight:bell_pepper_slice_black';
+i.roasted_bell_pepper_slice_green  = 'rusticdelight:roasted_bell_pepper_slice_green';
+i.roasted_bell_pepper_slice_red    = 'rusticdelight:roasted_bell_pepper_slice_red';
+i.roasted_bell_pepper_slice_yellow = 'rusticdelight:roasted_bell_pepper_slice_yellow';
+i.roasted_bell_pepper_slice_orange = 'rusticdelight:roasted_bell_pepper_slice_orange';
+i.roasted_bell_pepper_slice_white  = 'rusticdelight:roasted_bell_pepper_slice_white';
+i.roasted_bell_pepper_slice_pink   = 'rusticdelight:roasted_bell_pepper_slice_pink';
+i.roasted_bell_pepper_slice_blue   = 'rusticdelight:roasted_bell_pepper_slice_blue';
+i.roasted_bell_pepper_slice_purple = 'rusticdelight:roasted_bell_pepper_slice_purple';
+i.roasted_bell_pepper_slice_black  = 'rusticdelight:roasted_bell_pepper_slice_black';
+// Roll Delight 1.3.1 port (Creative Delight member `roll`, feature_writeup/roll_delight.md 4): only registered once the
+// Creative Delight jar carries the member, so only Creative Delight's scripts use them. Display names: Salmon Maki Roll
+// and Salmon Maki for the amazing_salmon_roll ids (D4).
+i.rice_roll                    = 'roll_delight:rice_roll';
+i.rice_roll_slice              = 'roll_delight:rice_roll_slice';
+i.amazing_salmon_roll          = 'roll_delight:amazing_salmon_roll';
+i.amazing_salmon_roll_slice    = 'roll_delight:amazing_salmon_roll_slice';
+i.mushroom_roll                = 'roll_delight:mushroom_roll';
+i.mushroom_roll_slice          = 'roll_delight:mushroom_roll_slice';
+i.ancient_roll                 = 'roll_delight:ancient_roll';
+i.ancient_roll_slice           = 'roll_delight:ancient_roll_slice';
+i.golden_roll                  = 'roll_delight:golden_roll';
+i.golden_roll_slice            = 'roll_delight:golden_roll_slice';
+i.nether_roll                  = 'roll_delight:nether_roll';
+i.tobiko_roll                  = 'roll_delight:tobiko_roll';
+i.cooked_nether_wart           = 'roll_delight:cooked_nether_wart';
+i.chopsticks                   = 'roll_delight:chopsticks';
+i.wrapped_chopsticks           = 'roll_delight:wrapped_chopsticks';
+i.legendary_roll_medley        = 'roll_delight:legendary_roll_medley';
+i.mythical_roll_medley         = 'roll_delight:mythical_roll_medley';
+i.t_nether_roll_meat           = '#roll_delight:nether_roll_meat';          // any raw pork + Prepared Flesh (3.1)
+// Large Meals 1.3.0 port (Creative Delight member `largemeals`, feature_writeup/large_meals.md 4 step 2): only registered
+// once the Creative Delight jar carries the member, so only Creative Delight's scripts use them. The bowl-named serving
+// items (omurice, mushroom_pot_pie, roasted_mutton_rack) are the plated servings; the *_block items are the whole feasts.
+// lm_chicken_curry: chicken_curry is Ender's Delight's (renamed End Chicken Curry, D2).
+i.raw_mutton_rack              = 'largemeals:raw_mutton_rack';
+i.cooked_mutton_rack           = 'largemeals:cooked_mutton_rack';
+i.pufferfish_broth             = 'largemeals:pufferfish_broth';
+i.potato_soup                  = 'largemeals:potato_soup';
+i.red_soup                     = 'largemeals:red_soup';
+i.tomato_egg_soup              = 'largemeals:tomato_egg_soup';
+i.cod_deluxe                   = 'largemeals:cod_deluxe';
+i.hearty_lunch                 = 'largemeals:hearty_lunch';
+i.lm_chicken_curry             = 'largemeals:chicken_curry';
+i.pasta_with_mushroom_sauce    = 'largemeals:pasta_with_mushroom_sauce';
+i.omurice_block                = 'largemeals:omurice_block';
+i.omurice                      = 'largemeals:omurice';
+i.mushroom_pot_pie_block       = 'largemeals:mushroom_pot_pie_block';
+i.mushroom_pot_pie             = 'largemeals:mushroom_pot_pie';
+i.roasted_mutton_rack_block    = 'largemeals:roasted_mutton_rack_block';
+i.roasted_mutton_rack          = 'largemeals:roasted_mutton_rack';
+i.sweet_berry_custard          = 'largemeals:sweet_berry_custard';
+i.rice_pudding                 = 'largemeals:rice_pudding';
+i.t_mushrooms_brown            = '#forge:mushrooms/brown';                  // minecraft brown mushroom (CD largemeals/tags.js, B4)
+i.t_chopstick_foods            = '#creativeengineering:chopstick_foods';    // read by the member's tooltip and Finish hook (3.3)
+i.t_crops_nether_wart          = '#forge:crops/nether_wart';
+// Food family tags (CD creativeengineering/seasoning_tags.js from food_families.json)
+i.t_food_family_fish_raw        = '#creativeengineering:food_family/fish/raw';
+i.t_food_family_fish_raw_cut    = '#creativeengineering:food_family/fish/raw_cut';
+i.t_food_family_fish_cooked     = '#creativeengineering:food_family/fish/cooked';
+i.t_food_family_fish_cooked_cut = '#creativeengineering:food_family/fish/cooked_cut';
 // Delightful 3.8.1 items backported into the Delightful repack (Creative Delight member, feature_writeup/delightful.md
 // 3): only registered once the Creative Delight jar replaces the 3.4.1 jar, so only Creative Delight's scripts use them.
 i.cantaloupe_seeds             = 'delightful:cantaloupe_seeds';
@@ -2050,7 +2197,7 @@ i.t_shrimps = '#forge:shrimps'; // Oceanic Delight's shrimp and shrimp slices
 
 //Farmer's Delight
 i.cabbage_roll_veg = '#farmersdelight:cabbage_roll_ingredients';
-i.t_wolf_prey = '#farmersdelight:wolf_prey';            // Dog Food meat in 1.2.4 (replaced in creative_delight farmersdelight/recipes.js)
+i.t_wolf_prey = '#farmersdelight:wolf_prey';            // Dog Food meat in 1.2.4 (replaced in creativedelight farmersdelight/recipes.js)
 
 //Ender's Delight
 i.shulker_loot = '#endersdelight:shulker_loot';
@@ -12083,6 +12230,10 @@ i.t_chorus_pie_slice      = '#creativeengineering:chorus_pie_slice';
 i.t_shulker_meat          = '#forge:shulker_meat';                  // End's raw shulker meat + slice, Ender's filet
 i.t_spices                = '#creativeengineering:spices';          // seasoning work (briefs/food_seasoning.md); void pepper only so far
 
+// ===== nethersdelight non-food (Creative Delight repackedNethers, nethers_delight.md 4.9) =====
+i.hoglin_mount            = 'nethersdelight:hoglin_mount';          // named "Hoglin Trophy" (4.0 name; id kept)
+i.t_nd_meal_item          = '#nethersdelight:meal_item';            // filled in CD nethersdelight/tags.js
+
 // ===== alexsdelight  -  15 new  (23 items, 8 already mapped) =====
 i.acacia_blossom_soup     = 'alexsdelight:acacia_blossom_soup';
 i.bison_burger            = 'alexsdelight:bison_burger';
@@ -12782,7 +12933,7 @@ i.mulberry_jam_bottle        = 'upgrade_aquatic:mulberry_jam_bottle';
 i.perch                      = 'upgrade_aquatic:perch';
 i.pike                       = 'upgrade_aquatic:pike';
 
-// ===== food type tags (kubejs/data/creative_delight/kubejs/creativeengineering/food_type_tags.js) =====
+// ===== food type tags (kubejs/data/creativedelight/kubejs/creativeengineering/food_type_tags.js) =====
 i.t_food_type                 = '#creativeengineering:food_type';
 i.t_food_raw                  = '#creativeengineering:food_type/raw';
 i.t_food_raw_veggie           = '#creativeengineering:food_type/raw/veggie';
@@ -12820,11 +12971,11 @@ i.t_food_canned               = '#creativeengineering:food_type/canned';
 i.t_canned_source             = '#creativeengineering:canned_source';
 // ===== end food mods (generated) =====
 
-// ===== can tags (kubejs/data/creative_delight/kubejs/creativeengineering/can_tags.js, patcherMod food.CanServings) =====
+// ===== can tags (kubejs/data/creativedelight/kubejs/creativeengineering/can_tags.js, patcherMod food.CanServings) =====
 i.t_cans                        = '#creativeengineering:cans';
 i.t_can_servings                = '#creativeengineering:cans/servings'; // + '/<n>' = cans holding n servings
 
-// ===== canning (kubejs/data/creative_delight/kubejs/creativeengineering/canning.js, development/creativeDelight/src/main/resources/kubejs_startup/creativeengineering/cans.js) =====
+// ===== canning (kubejs/data/creativedelight/kubejs/creativeengineering/canning.js, development/creativeDelight/src/main/resources/kubejs_startup/creativeengineering/cans.js) =====
 // every can key is in the generated block below (tools/gen_can_types.py); Canned Goods' own cans are under canned_goods
 // additives
 i.salt                          = '#forge:salt';
@@ -12836,7 +12987,7 @@ i.salt_lamp                     = 'salt:salt_lamp';     // named Large Salt Lamp
 i.any_potato                    = '#forge:vegetables/potato';       // potato, potato slices
 i.any_bell_pepper               = '#forge:crops/bell_pepper';       // green, red, yellow
 // ===== BEGIN GENERATED CANS (tools/gen_can_types.py, do not edit) =====
-// 272 cans: raw veggie/fruit/meat/fish, hazard, special, cookies, cooked, bread, salad, soup, meal, pie, feast, drink, golden, dairy, preserve, dessert (kubejs/generation_scripts/food/can_types.json)
+// 276 cans: raw veggie/fruit/meat/fish, hazard, special, cookies, cooked, bread, salad, soup, meal, pie, feast, drink, golden, dairy, preserve, dessert (kubejs/generation_scripts/food/can_types.json)
 i.canned_beetroot                           = 'creativeengineering:canned_beetroot';
 i.canned_cabbage                            = 'creativeengineering:canned_cabbage';
 i.canned_carrot                             = 'creativeengineering:canned_carrot';
@@ -12929,7 +13080,6 @@ i.canned_dried_persimmon                    = 'creativeengineering:canned_dried_
 i.canned_kimchi                             = 'creativeengineering:canned_kimchi';
 i.canned_pickled_pickles                    = 'creativeengineering:canned_pickled_pickles';
 i.canned_roasted_adzuki_beans               = 'creativeengineering:canned_roasted_adzuki_beans';
-i.canned_chips                              = 'creativeengineering:canned_chips';
 i.canned_grilled_corn                       = 'creativeengineering:canned_grilled_corn';
 i.canned_tortilla_chip                      = 'creativeengineering:canned_tortilla_chip';
 i.canned_baked_sweet_potato                 = 'creativeengineering:canned_baked_sweet_potato';
@@ -12949,6 +13099,11 @@ i.canned_cooked_perch                       = 'creativeengineering:canned_cooked
 i.canned_cooked_pike                        = 'creativeengineering:canned_cooked_pike';
 i.canned_cooked_lionfish                    = 'creativeengineering:canned_cooked_lionfish';
 i.canned_surstromming                       = 'creativeengineering:canned_surstromming';
+i.canned_bayberry_soup                      = 'creativeengineering:canned_bayberry_soup';
+i.canned_bat_soup                           = 'creativeengineering:canned_bat_soup';
+i.canned_cave_soup                          = 'creativeengineering:canned_cave_soup';
+i.canned_insect_stew                        = 'creativeengineering:canned_insect_stew';
+i.canned_golden_nutritional_bar             = 'creativeengineering:canned_golden_nutritional_bar';
 i.canned_sweet_roll                         = 'creativeengineering:canned_sweet_roll';
 i.canned_bell_pepper_pasta                  = 'creativeengineering:canned_bell_pepper_pasta';
 i.canned_cheesy_pasta                       = 'creativeengineering:canned_cheesy_pasta';
@@ -12971,6 +13126,8 @@ i.canned_potato_noodles                     = 'creativeengineering:canned_potato
 i.canned_cheese_pasta                       = 'creativeengineering:canned_cheese_pasta';
 i.canned_pad_thai                           = 'creativeengineering:canned_pad_thai';
 i.canned_truffle_pasta                      = 'creativeengineering:canned_truffle_pasta';
+i.canned_mashed_potatoes                    = 'creativeengineering:canned_mashed_potatoes';
+i.canned_mashed_sweet_potatoes              = 'creativeengineering:canned_mashed_sweet_potatoes';
 i.canned_apple_pie_filling                  = 'creativeengineering:canned_apple_pie_filling';
 i.canned_chocolate_pie_filling              = 'creativeengineering:canned_chocolate_pie_filling';
 i.canned_chorus_pie_filling                 = 'creativeengineering:canned_chorus_pie_filling';
@@ -13006,7 +13163,6 @@ i.canned_cauliflower_bread                  = 'creativeengineering:canned_caulif
 i.canned_cornbread                          = 'creativeengineering:canned_cornbread';
 i.canned_garlic_bread                       = 'creativeengineering:canned_garlic_bread';
 i.canned_honey_bread                        = 'creativeengineering:canned_honey_bread';
-i.canned_mhadjeb                            = 'creativeengineering:canned_mhadjeb';
 i.canned_mulberry_bread                     = 'creativeengineering:canned_mulberry_bread';
 i.canned_nether_wart_sourdough              = 'creativeengineering:canned_nether_wart_sourdough';
 i.canned_sourdough_bread                    = 'creativeengineering:canned_sourdough_bread';
@@ -13027,7 +13183,6 @@ i.canned_turnip_salad                       = 'creativeengineering:canned_turnip
 i.canned_acacia_blossom_soup                = 'creativeengineering:canned_acacia_blossom_soup';
 i.canned_adzuki_stew                        = 'creativeengineering:canned_adzuki_stew';
 i.canned_baked_cod_stew                     = 'creativeengineering:canned_baked_cod_stew';
-i.canned_bayberry_soup                      = 'creativeengineering:canned_bayberry_soup';
 i.canned_beef_stew                          = 'creativeengineering:canned_beef_stew';
 i.canned_ce_beetroot_soup                   = 'creativeengineering:canned_ce_beetroot_soup';
 i.canned_bell_pepper_soup                   = 'creativeengineering:canned_bell_pepper_soup';
@@ -13372,7 +13527,7 @@ i.milk_jar    = 'cookingforblockheads:milk_jar';
 i.cfb_spice_rack = 'cookingforblockheads:spice_rack';
 i.cfb_tool_rack  = 'cookingforblockheads:tool_rack';
 i.t_balm_iron_nuggets = '#balm:iron_nuggets'; // CfB's tool rack recipe
-i.t_rack_slabs_other  = '#creative_delight:rack_slabs/other'; // wooden slabs with no wood rack: CfB's own racks (cookingforblockheads/kitchen.js)
+i.t_rack_slabs_other  = '#creativedelight:rack_slabs/other'; // wooden slabs with no wood rack: CfB's own racks (cookingforblockheads/kitchen.js)
 // Wood spice racks and tool racks (Creative Delight member blockheadsAdditions, kitchen.md 9)
 i.oak_spice_rack                   = 'cookingforblockheads:oak_spice_rack';
 i.oak_tool_rack                    = 'cookingforblockheads:oak_tool_rack';
@@ -13766,7 +13921,7 @@ i.sealed_delivery_agreement = 'wares:sealed_delivery_agreement';
 
 // ############################## Placeable food (generated by tools/placeable_catalog.py) ##############################
 // Placeable foods that had no key elsewhere, plus the placeable tag keys
-// (data/creative_delight/kubejs/creativeengineering/placeable_tags.js, assets/creative_delight/kubejs/_qol/placeable_tooltip.js). Re-run the tool to add more.
+// (data/creativedelight/kubejs/creativeengineering/placeable_tags.js, assets/creativedelight/kubejs/_qol/placeable_tooltip.js). Re-run the tool to add more.
 
 i.chorus_fruit_pie         = 'ends_delight:chorus_fruit_pie';
 i.dragon_meat_stew_block   = 'ends_delight:dragon_meat_stew_block';
@@ -13785,7 +13940,17 @@ i.t_placeable_on_small_plate = '#creativeengineering:placeable_on_small_plate';
 i.t_placeable_on_coaster     = '#creativeengineering:placeable_on_coaster';
 // ===== end placeable food (generated) =====
 
-// ===== AE2 cables (2026-10-20, AE2 QoL Recipes port: server_scripts/other/feature_ports.js) =====
+// ===== plantable families (server_scripts/tags/plantabletags.js, client_scripts/plantable_tooltip.js) =====
+i.t_plantable               = '#creativeengineering:plantable';
+i.t_plantable_seed          = '#creativeengineering:plantable/seed';
+i.t_plantable_crop          = '#creativeengineering:plantable/crop';
+i.t_plantable_sapling       = '#creativeengineering:plantable/sapling';
+i.t_plantable_fungi_sapling = '#creativeengineering:plantable/fungi_sapling';
+i.t_plantable_water         = '#creativeengineering:plantable/water';
+i.t_plantable_vine          = '#creativeengineering:plantable/vine';
+i.t_plantable_vertical      = '#creativeengineering:plantable/vertical';
+
+// ===== AE2 cables (2026-10-20, AE2 QoL Recipes port: creativecompat/kubejs/other/feature_ports.js) =====
 i.black_covered_cable            = 'ae2:black_covered_cable';
 i.black_covered_dense_cable      = 'ae2:black_covered_dense_cable';
 i.black_glass_cable              = 'ae2:black_glass_cable';
@@ -13872,7 +14037,7 @@ i.yellow_glass_cable             = 'ae2:yellow_glass_cable';
 i.yellow_smart_cable             = 'ae2:yellow_smart_cable';
 i.yellow_smart_dense_cable       = 'ae2:yellow_smart_dense_cable';
 
-// ===== JEED effect providers (2026-10-20, server_scripts/other/jeed_providers.js, effects.md 3) =====
+// ===== JEED effect providers (2026-10-20, CB creativeengineering/jeed_providers.js, effects.md 3) =====
 i.any_sign                       = '#minecraft:signs';
 i.cherry_cream_soda              = 'abnormals_delight:cherry_cream_soda';
 i.pickerelweed_juice             = 'abnormals_delight:pickerelweed_juice';
@@ -14481,6 +14646,7 @@ i.mixed_salt_brick_slab          = 'vintagedelight:mixed_salt_brick_slab';
 i.mixed_salt_brick_stairs        = 'vintagedelight:mixed_salt_brick_stairs';
 i.mixed_salt_brick_wall          = 'vintagedelight:mixed_salt_brick_wall';
 i.mixed_salt_bricks              = 'vintagedelight:mixed_salt_bricks';
+i.mixed_seeds                    = 'vintagedelight:mixed_seeds';  // port -10 addition (creativedelight/members #32)
 i.nut_mash_bottle                = 'vintagedelight:nut_mash_bottle';
 i.nut_mash_jar                   = 'vintagedelight:nut_mash_jar';
 i.nut_milk_bottle                = 'vintagedelight:nut_milk_bottle';

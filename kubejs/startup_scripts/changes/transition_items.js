@@ -36,6 +36,19 @@ StartupEvents.registry('item', e => {
 		['salmon_roll',              'farmersdelight:item/salmon_roll'],
 		['kelp_roll',                'farmersdelight:item/kelp_roll'],
 		['rice_medley',              'farmersdelight:item/rice_roll_medley_block'],
+		// Roll Delight port (CD roll_delight/recipes.js, roll_delight.md 4 step 8)
+		['rice_roll'],
+		['amazing_salmon_roll'],
+		['mushroom_roll'],
+		['ancient_roll'],
+		['tobiko_roll',              'roll_delight:item/tobiko_roll_slice'],   // the mod's tobiko roll model uses this sprite
+		['nether_roll'],
+		['legendary_roll_medley'],
+		['mythical_roll_medley'],
+		// Large Meals port (CD largemeals/recipes.js, large_meals.md 4 step 8): the feast assemblies, keyed by the serving
+		['omurice'],
+		['mushroom_pot_pie'],
+		['roasted_mutton_rack'],
 		['bbq_stick'],
 		['grilled_salmon'],
 		['bacon_and_eggs'],
@@ -44,6 +57,17 @@ StartupEvents.registry('item', e => {
 		['ham_and_cheese_sandwich'],                                 // alcohol.js (alcohol.md 8.6)
 		['quiche'],
 		['zucchini_quiche'],                                         // CD veggiesdelight/recipes.js (food_families.md quiche/whole)
+		['vegan_pizza'],                                             // CD veggiesdelight/recipes.js (creativedelight/members #30)
+		['pizza',                    'brewinandchewin:item/pizza'],  // Supreme Pizza, CD brewinandchewin/recipes.js (creativedelight/members #20)
+		// Rustic Delight rolls (CD rusticdelight/recipes.js, creativedelight/members #26)
+		['bell_pepper_roll_green'], ['bell_pepper_roll_red'], ['bell_pepper_roll_yellow'],
+		['bell_pepper_roll_orange'], ['bell_pepper_roll_white'], ['bell_pepper_roll_pink'],
+		['bell_pepper_roll_blue'], ['bell_pepper_roll_purple'], ['bell_pepper_roll_black'],
+		['cherry_blossom_roll'], ['calamari_roll'], ['glowing_calamari_roll'], ['rice_roll_royale'],
+		['stuffed_zucchini_boat'],
+		['stuffed_zucchinis'],
+		['turnip_mutton_skewer'],
+		['vegetarian_burger'],
 		// meals (cooking.js "Meals", TODO dishes/meals #2, #3)
 		['mutton_wrap'],
 		['chicken_fajitas_wrap'],                                    // Veggies Delight (veggies_delight.md 4.7)

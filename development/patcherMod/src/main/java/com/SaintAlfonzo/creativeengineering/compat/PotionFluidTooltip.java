@@ -5,7 +5,7 @@ import mezz.jei.api.forge.ForgeTypes;
 import mezz.jei.api.gui.ingredient.IRecipeSlotTooltipCallback;
 
 /**
- * Shared JEI slot tooltip: when a fluid slot displays a Create {@code create:potion} stack (i.e.
+ * Shared JEI slot tooltip (Common; Creative Brewing's IE category mixins and RowPagesCategory attach it): when a fluid slot displays a Create {@code create:potion} stack (i.e.
  * it carries a {@code Potion} NBT tag), replace the generic first line with the potion's display
  * name and append the per-effect duration / amplifier lines — exactly what Create's own JEI
  * categories do via {@code PotionFluidHandler.addPotionTooltip}.

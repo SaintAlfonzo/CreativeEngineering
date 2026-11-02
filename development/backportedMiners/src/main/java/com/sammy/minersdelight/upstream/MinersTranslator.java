@@ -27,6 +27,17 @@ public final class MinersTranslator {
     /** 1.20 renamed the loot condition {@code alternative} to {@code any_of}; 1.19.2 only knows the old name. */
     private static final String ANY_OF = "\"minecraft:any_of\"";
     private static final String ALTERNATIVE = "\"minecraft:alternative\"";
+    /**
+     * Textures 1.4.5 redrew that keep their 1.1.2 look (owner 2026-11-01, TODO creativedelight/members #31): read from the
+     * 1.1.2 jar over the 1.4.5 ones. The other nine redraws (cave carrot stages, item and wild patch, gossypium, weird
+     * caviar, bowl of stuffed squid) stay 1.4.5's.
+     */
+    static final String[] OLD_LOOK = {
+            "assets/miners_delight/textures/block/sticky_basket_side.png",
+            "assets/miners_delight/textures/item/baked_cave_carrot.png",
+            "assets/miners_delight/textures/item/tentacles.png",
+            "assets/miners_delight/textures/item/baked_tentacles.png",
+    };
     /** Per-file data edits for later pack decisions, keyed by the translated path. */
     private static final Map<String, UnaryOperator<JsonObject>> PATCH_DATA = Map.of();
 
@@ -49,7 +60,12 @@ public final class MinersTranslator {
                 }
                 assets.put(path, bytes);
             });
-            MinersDelightMod.LOGGER.info("Miner's Delight upstream assets: {} files", assets.size());
+            Map<String, byte[]> oldLook = UpstreamJars.miners112(OLD_LOOK);
+            if (oldLook.size() != OLD_LOOK.length) {
+                throw new IllegalStateException("Miner's Delight 1.1.2 jar lacks some of the old-look textures: found " + oldLook.keySet());
+            }
+            assets.putAll(oldLook);
+            MinersDelightMod.LOGGER.info("Miner's Delight upstream assets: {} files ({} in the 1.1.2 look)", assets.size(), oldLook.size());
         }
         return assets;
     }

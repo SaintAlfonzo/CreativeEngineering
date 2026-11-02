@@ -15,7 +15,7 @@ import java.util.Map;
  * Placement modifier {@code rusticdelight:configurable_rarity_filter}: passes one chunk in N, N named by {@code option}.
  * The port has no worldgen config: N is upstream 1.7.0's default for each option, except wild cotton, which keeps the
  * pack's 1.3.0 value of 96 (1.7.0: 32), and the giant pepper patch, which is 64 (1.7.0: 16, owner 2026-10-25: fairly rare). Where the pack places each patch is set by
- * Creative Delight's kubejs/data/creative_delight/kubejs/_worldgen/wild_crops.json.
+ * Creative Delight's kubejs/data/creativedelight/kubejs/_worldgen/wild_crops.json.
  */
 public final class ChanceFilter extends PlacementFilter {
     private static final Map<String, Integer> DEFAULTS = Map.of("wild_cotton_chance", 96, "wild_bell_peppers_chance", 15,

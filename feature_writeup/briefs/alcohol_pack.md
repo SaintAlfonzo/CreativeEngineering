@@ -37,7 +37,7 @@ Vintage Delight brews: do any add effects? Split them into their own category, a
 
   Names are spaced correctly in the data ("Oily Oaf"; the earlier "OilyOaf" note is stale).
 - **Berserker's Brew is already rebuilt by the pack** (salt dust -> `#forge:salt`, vintageport #10) in Creative Delight
-  [vintagedelight/recipes.js](../../kubejs/data/creative_delight/kubejs/vintagedelight/recipes.js) lines 18-24, with the same
+  [vintagedelight/recipes.js](../../kubejs/data/creativedelight/kubejs/vintagedelight/recipes.js) lines 18-24, with the same
   effects. The other five ship as upstream.
 - `R.vdPickling` ([neoCraftHelper.js](../../development/patcherMod/src/main/resources/kubejs_startup/creativeengineering/func/neoCraftHelper.js)
   lines 1211-1244) writes the output through `_nbtItemJson`, so an `Item.of(i.potion, nbt)` output keeps its NBT (the
@@ -48,13 +48,13 @@ Vintage Delight brews: do any add effects? Split them into their own category, a
 - The pack's potion system (`kubejs/startup_scripts/cooking/potions.js`, [potions.md](../potions.md)) treats any
   `minecraft:potion` with custom effects like other potions. SQ-VP-12 PASSED: the six brews' effects are vanilla ids.
 - Routing: brewing, alcohol and effect content is moving to Creative Brewing (`creativebrewing/move #1`; memory
-  `creative-delight-routing`). CB's server tree is `kubejs/data/creative_brewing/kubejs/<modid>/` with
+  `creative-delight-routing`). CB's server tree is `kubejs/data/creativebrewing/kubejs/<modid>/` with
   `global.CB.recipes(() => ...)` (creative_brewing.md 2.4); it has no `vintagedelight/` folder yet.
 
 ### Build
 1. Decide the category and the per-brew table (Decisions). Keep Goblin's Piss with a fermented spider eye (decided
    2026-10-23).
-2. Recipes: one file `kubejs/data/creative_brewing/kubejs/vintagedelight/recipes.js` (`// requires: vintagedelight`, early
+2. Recipes: one file `kubejs/data/creativebrewing/kubejs/vintagedelight/recipes.js` (`// requires: vintagedelight`, early
    return on `!global.CB`, rows inside `global.CB.recipes`). For each brew, `R.remove({ id: 'vintagedelight:fermenting/<id>' }, e)`
    then `R.vdPickling(output, inputs, e, '<id>', { time, container: i.glass_bottle })`. Move the Berserker's Brew row out of the
    CD file into it, so the six live together. Give every brew `container: i.glass_bottle` (three take no bottle today).
@@ -68,7 +68,7 @@ Vintage Delight brews: do any add effects? Split them into their own category, a
 - Item keys used: `i.potion`, `i.glass_bottle`, `i.salt` (`#forge:salt`), `i.fermented_spider_eye`, plus each brew's inputs
   (vanilla, FD `farmersdelight:tomato_seeds` / `rotten_tomato` / `milk_bottle`, Vintage `vintagedelight:ghost_pepper_seeds`,
   `raw_oats`, `pickled_onion`). Verified in the port data, keys unverified for the Vintage ones.
-- With (b), new ids `creative_brewing:<brew>` (unverified that CB registers items from startup scripts yet: it has no item
+- With (b), new ids `creativebrewing:<brew>` (unverified that CB registers items from startup scripts yet: it has no item
   rows so far).
 
 ### Decisions

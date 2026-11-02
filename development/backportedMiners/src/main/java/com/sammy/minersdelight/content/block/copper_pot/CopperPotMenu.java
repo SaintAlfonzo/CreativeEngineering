@@ -28,6 +28,7 @@ import vectorwing.farmersdelight.common.block.entity.container.CookingPotMealSlo
 
 import static com.sammy.minersdelight.content.block.copper_pot.CopperPotBlockEntity.CONTAINER_SLOT;
 import static com.sammy.minersdelight.content.block.copper_pot.CopperPotBlockEntity.INPUT_SLOTS;
+import static com.sammy.minersdelight.content.block.copper_pot.CopperPotBlockEntity.LEFTOVER_SLOT;
 import static com.sammy.minersdelight.content.block.copper_pot.CopperPotBlockEntity.MEAL_DISPLAY_SLOT;
 import static com.sammy.minersdelight.content.block.copper_pot.CopperPotBlockEntity.OUTPUT_SLOT;
 
@@ -37,7 +38,9 @@ import static com.sammy.minersdelight.content.block.copper_pot.CopperPotBlockEnt
  */
 public class CopperPotMenu extends RecipeBookMenu<RecipeWrapper> {
     private static final ResourceLocation EMPTY_CONTAINER_SLOT = new ResourceLocation("farmersdelight", "item/empty_container_slot_bowl");
-    private static final int PLAYER_INVENTORY_START = OUTPUT_SLOT + 1;
+    /** Port: the leftover slot's position, right of the output (its frame is drawn by the screen). */
+    public static final int LEFTOVER_X = 139, LEFTOVER_Y = 56;
+    public static final int PLAYER_INVENTORY_START = LEFTOVER_SLOT + 1;
     private static final int PLAYER_INVENTORY_END = PLAYER_INVENTORY_START + 36;
 
     public final CopperPotBlockEntity blockEntity;
@@ -67,6 +70,12 @@ public class CopperPotMenu extends RecipeBookMenu<RecipeWrapper> {
             }
         });
         addSlot(new CopperPotResultSlot(playerInventory.player, blockEntity, inventory, OUTPUT_SLOT, 115, 56));
+        addSlot(new SlotItemHandler(inventory, LEFTOVER_SLOT, LEFTOVER_X, LEFTOVER_Y) {
+            @Override
+            public boolean mayPlace(ItemStack stack) {
+                return false;
+            }
+        });
 
         for (int row = 0; row < 3; row++) {
             for (int column = 0; column < 9; column++) {
@@ -104,7 +113,7 @@ public class CopperPotMenu extends RecipeBookMenu<RecipeWrapper> {
         }
         ItemStack moving = slot.getItem();
         ItemStack original = moving.copy();
-        if (index == OUTPUT_SLOT) {
+        if (index == OUTPUT_SLOT || index == LEFTOVER_SLOT) {
             if (!moveItemStackTo(moving, PLAYER_INVENTORY_START, PLAYER_INVENTORY_END, true)) {
                 return ItemStack.EMPTY;
             }

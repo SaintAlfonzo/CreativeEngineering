@@ -21,8 +21,11 @@
     "  highlight extra regexes, on top of the top-level list, whose matching output lines go to chat",
     "  outRoot   output folder for a generator that writes Creative Delight member rows (optional; read by the",
     "            script through tools/gen_out.py, not by /cegen). Must be one of the CD trees the jar build copies,",
-    "            e.g. kubejs/data/creative_delight/kubejs/<modid>; its outputs must lie under it. Missing = pack folder.",
-    "            The CD jar has to be rebuilt after such a run (build_deploy refuses a stale jar)",
+    "            e.g. kubejs/data/creativedelight/kubejs/<modid>; its outputs must lie under it. Missing = pack folder.",
+    "            The CD jar has to be rebuilt after such a run (build_deploy refuses a stale jar). Since framework #7",
+    "            (2026-11-01) cans, food types, placeable and mortar write one <mod>/<name>.js member script per item",
+    "            namespace there (gen_out.write_member_scripts); their JSON in generation_scripts/food is the record only",
+    "  handRun   top-level list (not read by /cegen): hand-run scripts that need an outRoot, e.g. gen_can_types.py",
     "",
     "Every tools/*.py generator or report is either listed below or named here with the reason it is run by hand:",
     "  dump_server_mods.py: the only way to fill server_mods/ (no in-game command any more). Run it by hand before a",
@@ -33,9 +36,10 @@
     "    log), diff_block_state_ranges.py (both sides' logs), echo_texture.py, potion_bucket_texture.py and gen_lunchbox_looks.py (one-off art)",
     "  one-off rewrites of kubejs/data structures: port_structure_jars.py, lootr_fixed_containers.py",
     "  write mod resources, so a jar rebuild (not a restart) applies them: gen_bedspreads/elytra_pattern_compat.py and",
-    "    gen_dd_dishes.py (patcherMod), gen_moobloom_variants.py (More Mooblooms), gen_compost_values.py (Creative",
+    "    gen_dd_dishes.py (Creative Delight), gen_moobloom_variants.py (More Mooblooms), gen_compost_values.py (Creative",
     "    Delight's startup tree; also needs the --merge / --add-new choice)",
-    "  hand workflows run with --check first: gen_can_types.py (rewrites item_dict.js and the can tables),",
+    "  hand workflows run with --check first: gen_can_types.py (rewrites item_dict.js and the can tables; its outRoot entry",
+    "    is in the top-level handRun list, which /cegen does not read),",
     "    gen_cfb_racks.py (Cooking for Blockheads wood racks and fridge fill, Creative Delight's blockheadsAdditions; jar rebuild)",
     "  checks that print and write nothing: effect_audit, shield_check, check_moobloom_data, check_worldgen_json,",
     "    crop_growth_coverage, wthit_icon_audit, structure_biome_coverage, leaf_path_scan, changelog_lint",
@@ -54,6 +58,21 @@
     "^\\s*removed ",
     "no entry under",
     "not found"
+  ],
+  "handRun": [
+    {
+      "id": "can_types",
+      "script": "tools/gen_can_types.py",
+      "_note": "Not run by /cegen (hand workflow, --check first; see _readme). Listed for tools/gen_out.py: its outRoot is the CD jar's startup tree.",
+      "outRoot": "development/creativeDelight/src/main/resources/kubejs_startup",
+      "outputs": [
+        "kubejs/generation_scripts/food/can_types.json",
+        "kubejs/generation_scripts/food/can_servings.json",
+        "kubejs/generation_scripts/food/food_types.json",
+        "kubejs/startup_scripts/_lib/item_dict.js",
+        "development/creativeDelight/src/main/resources/kubejs_startup"
+      ]
+    }
   ],
   "generators": [
     {
@@ -325,13 +344,15 @@
       "script": "tools/food_catalog.py",
       "groups": ["food"],
       "dumps": ["dumpfood"],
+      "outRoot": "kubejs/data/creativedelight/kubejs",
       "outputs": [
         "kubejs/generation_scripts/food/food_types.json",
+        "kubejs/data/creativedelight/kubejs",
         "kubejs/startup_scripts/_lib/item_dict.js",
         "feature_writeup/food_catalog.md",
         "kubejs/exported/food/catalog.json"
       ],
-      "apply": "restart the game (item_dict.js and the food type tags are startup data); move misfiled new foods by hand",
+      "apply": "restart the game (item_dict.js and the food type tags are startup data); move misfiled new foods by hand in food_types.json, then python3 tools/food_catalog.py --members; rebuild the CD jar before a release",
       "warnExit": [1],
       "highlight": ["^\\s*new ", "PROBLEM"]
     },
@@ -348,8 +369,10 @@
       "script": "tools/placeable_catalog.py",
       "groups": ["reports", "food"],
       "dumps": ["dumpplaceable"],
+      "outRoot": "kubejs/data/creativedelight/kubejs",
       "outputs": [
         "kubejs/generation_scripts/food/placeable.json",
+        "kubejs/data/creativedelight/kubejs",
         "feature_writeup/placeable_catalog.md",
         "kubejs/startup_scripts/_lib/item_dict.js"
       ],
@@ -378,7 +401,7 @@
       "script": "tools/gen_immersive_paintings.py",
       "groups": ["pack"],
       "dumps": ["dumppaintings"],
-      "outputs": ["kubejs/data/creativeengineering/paintings"],
+      "outputs": ["development/creativeCompat/src/main/resources/data/creativeengineering/paintings"],
       "apply": "/reload (Immersive Paintings re-reads its datapack paintings)"
     },
     {
@@ -395,8 +418,9 @@
       "script": "tools/gen_mortar_catalog.py",
       "groups": ["food"],
       "dumps": ["dumpfood"],
-      "outputs": ["kubejs/generation_scripts/food/mortar_catalog.json"],
-      "apply": "/reload (kubejs/server_scripts/cooking/mortar.js reads the catalog in the recipe event)"
+      "outRoot": "kubejs/data/creativedelight/kubejs",
+      "outputs": ["kubejs/generation_scripts/food/mortar_catalog.json", "kubejs/data/creativedelight/kubejs"],
+      "apply": "/reload (Creative Delight's creativeengineering/mortar.js reads the <mod>/mortar_catalog.js member scripts); rebuild the CD jar before a release"
     },
     {
       "id": "soup_soft_fluids",

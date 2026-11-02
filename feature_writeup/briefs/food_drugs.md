@@ -84,7 +84,7 @@ The pack already ships **The Dirty Stuff 2.1** (`the_dirty_stuff`, `the_dirty_st
   adds `chests/tobacco_village_chest` to `chests/village/village_plains_house`.
 - **Pack side so far (2026-10-31):** tobacco crop parity (`development/patcherMod/.../mixin/TobaccoPlacementMixin.java`,
   crops.md 2.5); WTHIT growth line now in Creative Delight
-  (`development/creativeDelight/src/main/resources/assets/creative_delight/crop_growth.json:28`); compost values
+  (`development/creativeDelight/src/main/resources/assets/creativedelight/crop_growth.json:28`); compost values
   (`development/creativeDelight/src/main/resources/kubejs_startup/the_dirty_stuff/compost_values.js`); tobacco follows
   the seasons (1.1.05); the three packages renamed to bundles (namechanges.js:304-308, shipped 1.1.05, `drugs #2`);
   seed-pouch fit (1.1.05). item_dict has 7 keys (`item_dict.js:13416-13423`, `i.tobacco`, `i.tobacco_leafs`...).
@@ -269,7 +269,7 @@ the paper is lost on unpacking). Canvas is
   `i.dried_tobacco_leafs_package`, `i.tobacco_seeds` (item_dict.js 13416-13423).
 
 ### Build
-1. **Canvas packing:** in a CD `the_dirty_stuff/` server tree (`kubejs/data/creative_delight/kubejs/the_dirty_stuff/recipes.js`,
+1. **Canvas packing:** in a CD `the_dirty_stuff/` server tree (`kubejs/data/creativedelight/kubejs/the_dirty_stuff/recipes.js`,
    new folder, `// requires: the_dirty_stuff`, wrapped in `global.CD.recipes`): per package
    `R.shapeless(i.tobacco_leafs_package, [Item.of(i.tobacco_leafs, 8), i.canvas], e, 'tobacco_leafs_package_canvas')`
    (keep the paper recipe or replace it, Decisions); the mod's unpack recipes stay (canvas lost on unpacking, like
@@ -281,7 +281,7 @@ the paper is lost on unpacking). Canvas is
 
 ### Ids and data
 Verified: the three package recipes and their ingredients, lang keys, texture files. New recipe ids under the CD
-namespace NCH writes (`creative_delight:...`).
+namespace NCH writes (`creativedelight:...`).
 
 ### Decisions
 - Paper or canvas: recommendation canvas replaces paper (`R.remove` the three mod ids, re-add with canvas), so one

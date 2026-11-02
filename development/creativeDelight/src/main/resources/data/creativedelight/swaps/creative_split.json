@@ -1,0 +1,7 @@
+{
+  "_comment": "Creative Split wave 2 (2026-11-01, creative_split.md 7.6): the mod id lost its underscore. Never prune.",
+  "namespaces": {
+    "creative_delight": "creativedelight"
+  },
+  "replaces": {}
+}

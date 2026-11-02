@@ -31,6 +31,13 @@ mandatory=true
 versionRange="[1.1.05,)"
 ordering="AFTER"
 side="BOTH"
+# Creative Compat: required by every other Creative jar (creative_split.md 7.6).
+[[dependencies.creativecalendar]]
+modId="creativecompat"
+mandatory=true
+versionRange="[1.0.0,)"
+ordering="AFTER"
+side="BOTH"
 # The mods the season and time code steers: optional, each mixin is gated on its mod (compat/CalendarMixinPlugin).
 # No ordering: patcherMod never declared them either, so the load order stays as it was before the carve.
 [[dependencies.creativecalendar]]

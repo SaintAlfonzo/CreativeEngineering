@@ -6,7 +6,7 @@ pace 2
 
 ## CQ-R11-BOOT | client boot and world join clean
 bootexpect Sound engine started|FIRST_CLIENT_TICK
-bootreject (Mixin apply failed|InvalidInjectionException).*(creativeengineering|creative_delight|creative_brewing|blockheads_additions)
+bootreject (Mixin apply failed|InvalidInjectionException).*(creativeengineering|creativedelight|creativebrewing|blockheads_additions)
 sleep 5
 > gamemode creative
 > time set noon
@@ -54,10 +54,10 @@ look glass, ice, iron ore: green "Silk Touch Required: True"; grass: yellow "Dro
 ## CQ-PRI-02 | powdered sugar block texture
 > tp @s 220 -55 8 180 20
 sleep 3
-> setblock 220 -60 0 creative_delight:powdered_sugar_block
-> setblock 221 -60 0 creative_delight:powdered_sugar_block
-> setblock 220 -59 0 creative_delight:powdered_sugar_block
-> setblock 221 -59 0 creative_delight:powdered_sugar_block
+> setblock 220 -60 0 creativedelight:powdered_sugar_block
+> setblock 221 -60 0 creativedelight:powdered_sugar_block
+> setblock 220 -59 0 creativedelight:powdered_sugar_block
+> setblock 221 -59 0 creativedelight:powdered_sugar_block
 > tp @s 220.5 -59 3.5 180 15
 shot powdered_sugar
 look new texture, no magenta checker, edges tile seamlessly (an "Unknown block" = id differs: hand JEI search)
@@ -190,9 +190,9 @@ look bushy at every stage; ripe two tall (VTD-78); an "Unknown block" or bad pro
 > tp @s 320 -55 8 180 20
 sleep 3
 > setblock 320 -61 0 minecraft:farmland[moisture=7]
-> setblock 320 -60 0 creative_delight:treated_stick_tomatoes
-> setblock 320 -59 0 creative_delight:treated_stick
-> setblock 322 -60 0 creative_delight:treated_stick
+> setblock 320 -60 0 creativedelight:treated_stick_tomatoes
+> setblock 320 -59 0 creativedelight:treated_stick
+> setblock 322 -60 0 creativedelight:treated_stick
 > tp @s 321 -59 3 180 20
 shot treated_sticks
 look textures present (treated_sticks.md TSK-01 to TSK-05)
@@ -202,5 +202,5 @@ look hand: JEI search "berries" and "pips": Sweet Berries, Glow Berries and both
 
 ## CQ-CSR-01 | client scripts from the CD jar load once
 kjsreject (?i)error occurred
-shell grep -c "creative_delight:kubejs/" logs/kubejs/client.log
-look client.log lists every creative_delight:kubejs/... client script once with no new errors; hand: garlic-seasoned popcorn tooltip "Garlic: Speed (0:10)"
+shell grep -c "creativedelight:kubejs/" logs/kubejs/client.log
+look client.log lists every creativedelight:kubejs/... client script once with no new errors; hand: garlic-seasoned popcorn tooltip "Garlic: Speed (0:10)"

@@ -18,6 +18,8 @@ import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.eventbus.api.IEventBus;
 import net.minecraftforge.fml.DistExecutor;
+import net.minecraftforge.fml.ModLoadingContext;
+import net.minecraftforge.fml.config.ModConfig;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.javafmlmod.FMLJavaModLoadingContext;
 import org.slf4j.Logger;
@@ -35,6 +37,7 @@ public class MinersDelightMod {
 
     public MinersDelightMod() {
         UpstreamJars.verifyOrFail();
+        ModLoadingContext.get().registerConfig(ModConfig.Type.COMMON, MDConfig.SPEC);
         IEventBus bus = FMLJavaModLoadingContext.get().getModEventBus();
         MDBlocks.BLOCKS.register(bus);
         MDItems.ITEMS.register(bus);

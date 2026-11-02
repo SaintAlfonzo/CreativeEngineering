@@ -684,6 +684,25 @@ Brief: [briefs/ui_effects.md](briefs/ui_effects.md). Nothing here is built.
 - [TODO](todo/TODO.md) `ui/effects #11`: Weak Stomach (`fungidelight:weak_stomach`) gets a provider listing the cap foods; the cause (foods in
   `fungidelight:alcohol_reaction`) and the trigger (alcohol or any non-water potion) are worded separately.
 
+### One Haste effect (2026-11-01, `potions/effects #17`): finding, nothing built
+
+Checked what registers Haste and who gives it. The effect is vanilla `minecraft:haste` (`MobEffects.DIG_SPEED`); no
+mod in the pack registers a second Haste effect, and every source already gives the vanilla one:
+
+| Source | Where | Effect |
+|---|---|---|
+| Rustic Delight haste potions (`rusticdelight:haste`, `long_haste`, `strong_haste`) | CD member `rustic`, `RDPotions` | vanilla Haste |
+| Rustic haste foods and coffees | CD member `rustic`, `RDFoods` (coffees then swap to Caffeinated in `food_values.js`, 2.1) | vanilla Haste |
+| Miner's Delight haste potions (`miners_delight:haste`, `long_haste`, `strong_haste`) | `backportedMiners` `MDPotions` | vanilla Haste |
+| Builder's Tea (open-ended pipe) | Create; icon from CB `CreateTeaPipeIconMixin` | vanilla Haste |
+
+So there is nothing to unify at the effect level, and no new effect was made. The real overlap is two **potion**
+lines with the same effect (Miner's D7, `MND-40`): one of them would have to stop registering, which leaves stacks in
+old worlds without a potion (no conversions) and, by Miner's D4, is decided only after an in-game test. Also, potion
+registration left patcherMod in wave 4: the pack's own potions are CB's `CEPotions` (creative_split.md 7.8), so a
+pack-owned Haste potion line would be CB's, not patcherMod's. Owner choice needed: keep both lines, or drop one
+(which, and whether its brewing ingredient then brews the survivor).
+
 ## 5. File map
 
 - [tools/effect_audit.py](../tools/effect_audit.py): names, descriptions, placeholders, potion and arrow names, JEI sources.
@@ -827,3 +846,5 @@ ingredient type.
   to EF-30, scratch SQ-EFX-01 to -11.
 - 2026-10-31: `forceHudIconItems` (Builder's Tea, Canned Pufferfish, Farmer's Respite, Immersive Weathering); Double Jump
   and Jump Boost together (`potions/effects #14`).
+- 2026-11-01: `potions/effects #17` checked (4, One Haste effect): every Haste source already gives vanilla
+  `minecraft:haste`; the open question is the duplicate Rustic and Miner's potion lines (MND-40). Nothing built.

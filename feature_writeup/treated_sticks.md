@@ -7,13 +7,13 @@ Delight (CD); test prefix `TSK-`.
 ## 1. Behaviour
 
 - Right-click a block face with a treated stick (after the clicked block's own use passed, the same order as
-  Supplementaries' sticks): places `creative_delight:treated_stick` on that face's axis. Clicking a placed treated
+  Supplementaries' sticks): places `creativedelight:treated_stick` on that face's axis. Clicking a placed treated
   stick on a new axis adds a crossing stick in the same block (up to three: x, y, z). Sneak places beside it instead.
   Waterloggable, flammable like a placed stick (60/60, none while waterlogged), mined instantly, `mineable/axe`.
 - Breaking drops one treated stick per axis; pick-block gives a treated stick. The block has no item of its own.
 - Tomatoes:
   - Right-click a bottom FD tomato vine (not on a rope) with a treated stick: it becomes
-    `creative_delight:treated_stick_tomatoes` at the same age (Supplementaries' stick behaviour).
+    `creativedelight:treated_stick_tomatoes` at the same age (Supplementaries' stick behaviour).
   - A tomato vine below a placed treated stick climbs onto it (30% per growth tick or bone meal, at most three vines
     high, only with FD's `enableTomatoVineClimbingTaggedRopes` on), from FD's vine, Supplementaries' stick/rope vines,
     or a treated-stick vine.
@@ -33,13 +33,13 @@ Delight (CD); test prefix `TSK-`.
 | Placement hook: `Item#useOn` for the IE item, compartment `immersiveengineering` | `.../mixin/immersiveengineering/TreatedStickPlaceMixin.java` |
 | Climb hook on FD's vine | `.../mixin/farmersdelight/TomatoClimbTreatedStickMixin.java` |
 | Climb hook on Supplementaries' stick/rope vines (`@Pseudo`, `require = 0`) | `.../mixin/supplementaries/SuppTomatoClimbTreatedStickMixin.java` |
-| Blockstates, models (parents are Supplementaries' stick and `crop_with_rope` models; vine stages use FD's textures) | CD `src/main/resources/assets/creative_delight/blockstates/treated_stick*.json`, `models/block/treated_stick*.json` |
-| Textures (pack level, see 3) | `kubejs/assets/creative_delight/textures/block/treated_stick.png`, `treated_stick_cross.png` |
-| Lang (`Treated Stick`, `Tomatoes`) | CD `assets/creative_delight/lang/en_us.json` |
+| Blockstates, models (parents are Supplementaries' stick and `crop_with_rope` models; vine stages use FD's textures) | CD `src/main/resources/assets/creativedelight/blockstates/treated_stick*.json`, `models/block/treated_stick*.json` |
+| Textures (pack level, see 3) | `kubejs/assets/creativedelight/textures/block/treated_stick.png`, `treated_stick_cross.png` |
+| Lang (`Treated Stick`, `Tomatoes`) | CD `assets/creativedelight/lang/en_us.json` |
 | Axe tag | CD `src/main/resources/data/minecraft/tags/blocks/mineable/axe.json` |
 | Dict keys `b.treated_stick`, `b.treated_stick_tomatoes` | `kubejs/startup_scripts/_lib/block_dict.js` |
 
-The blocks are the first registry content of the `creative_delight` mod id itself (not a member): the feature
+The blocks are the first registry content of the `creativedelight` mod id itself (not a member): the feature
 joins IE, Supplementaries and FD, so no member namespace fits.
 
 ## 3. Decisions

@@ -8,6 +8,7 @@ import org.jetbrains.annotations.Nullable;
 
 import static com.sammy.minersdelight.content.block.copper_pot.CopperPotBlockEntity.CONTAINER_SLOT;
 import static com.sammy.minersdelight.content.block.copper_pot.CopperPotBlockEntity.INPUT_SLOTS;
+import static com.sammy.minersdelight.content.block.copper_pot.CopperPotBlockEntity.LEFTOVER_SLOT;
 import static com.sammy.minersdelight.content.block.copper_pot.CopperPotBlockEntity.OUTPUT_SLOT;
 
 /** Automation view of the pot: from above, the four inputs; from the sides and below, containers in and meals out. */
@@ -41,7 +42,7 @@ public class CopperPotItemHandler implements IItemHandler {
     @Override
     @NotNull
     public ItemStack extractItem(int slot, int amount, boolean simulate) {
-        boolean allowed = top ? slot < INPUT_SLOTS : slot == OUTPUT_SLOT;
+        boolean allowed = top ? slot < INPUT_SLOTS : slot == OUTPUT_SLOT || slot == LEFTOVER_SLOT;
         return allowed ? inventory.extractItem(slot, amount, simulate) : ItemStack.EMPTY;
     }
 

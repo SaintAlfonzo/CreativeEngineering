@@ -10,7 +10,7 @@
 // .model() call just points at that same model; the on-disk files win). Loot table (drop
 // self) is KubeJS's block-builder default, same as the old Java family.
 //
-// No mineable/tool tag here - server_scripts/other/harvest.js owns ALL tool-type (pickaxe)
+// No mineable/tool tag here - CD server creativeengineering/harvest.js owns ALL tool-type (pickaxe)
 // and tool-tier tags for every plate block in one place, so tags don't fight between two files.
 
 const PLATE_BLOCK_METALS = [

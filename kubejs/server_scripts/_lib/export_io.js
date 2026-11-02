@@ -18,7 +18,7 @@ var writeExportJson = (function () {
 		}
 		var slash = path.lastIndexOf('/')
 		if (slash > 0) {
-			if (!$WorldgenFiles) $WorldgenFiles = Java.loadClass('com.SaintAlfonzo.creativeengineering.worldgen.WorldgenFiles')
+			if (!$WorldgenFiles) $WorldgenFiles = Java.loadClass('com.SaintAlfonzo.creativeengineering.util.WorldgenFiles')
 			$WorldgenFiles.writeText(path.substring(0, slash) + '/.keep', '')
 		}
 		JsonIO.write(path, data)

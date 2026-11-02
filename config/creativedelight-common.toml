@@ -1,0 +1,231 @@
+
+#One switch per Creative Delight member. Off: Creative Delight's scripts skip that member's recipe,
+#tag and loot rows (the member's own data is untouched). Server scripts re-read it on /reload.
+[members]
+	oceansdelight = true
+	oceanic_delight = true
+	ends_delight = true
+	rusticdelight = true
+	delightful = true
+	enders_additions = true
+	hearthandharvest = true
+	blockheads_additions = true
+
+#One switch per Creative Delight QoL feature (feature_writeup/creative_delight.md 8). Off: that feature
+#is skipped entirely. Startup and Java parts need a restart, server scripts re-read on /reload, client
+#scripts on F3+T.
+[qol]
+	#QoL-1: ingredient leftovers (bottles, bowls, buckets) stay in the Farmer's Delight cooking
+	#pot and the Farmer's Respite kettle (two take-only slots). Off: they are thrown out as in the original mods.
+	#The stall and recycle dials are creativeengineering-common.toml [cooking]; the oven is its own block there.
+	remainderBuffer = true
+	#QoL-2: the 'Placeable' / 'Placeable on plate' tooltip lines, in place of the mods' own.
+	placeableTooltips = true
+	#QoL-4: Creative Delight's composter chances for member foods. Off: those foods fall to the pack's
+	#compost rules.
+	compost = true
+	#QoL-5: grid meals on cooked food re-made as manual-only crafts, heatless routes for pot
+	#meals, tortilla wraps (Veggies, Vintage and Fungi Delight). Off: the mods' own recipes stay.
+	manualOnlyRoutes = true
+	#QoL-6: the WTHIT 'Growth' line for plants WTHIT doesn't cover (only with WTHIT).
+	#Dials: creativeengineering-common.toml [crop_growth].
+	wthitCropLine = true
+	#QoL-6: JEI information pages for member mechanics (only with JEI).
+	jeiInfoPages = true
+
+#One switch per Creative Delight worldgen system (feature_writeup/creative_delight.md 24). Rejoin the world
+#to apply; only chunks generated afterwards change.
+[worldgen]
+	#Which biomes each wild crop and fruit tree spawns in (_worldgen/wild_crops.json).
+	#Off: every crop as its mod ships it.
+	wildCrops = true
+
+#WTHIT shows 'Growth: 60%' / 'Growth: Mature' only for CropBlock subclasses plus a few vanilla
+#plants. This adds the same line, with the same wording and the same 'Crop progress' toggle in
+#WTHIT's own config, to every other growing plant. The blocks and their stages are in
+#assets/creativedelight/crop_growth.json (override it from kubejs/assets/creativedelight/).
+#Client-side only; reads the block state the client already has. The line is Creative Delight's:
+#its on/off switch is creativedelight-common.toml [qol] wthitCropLine.
+[crop_growth]
+	#true: a bush-type plant (BushBlock, not a sapling) with an integer 'age' that no rule in
+	#crop_growth.json lists still gets a line, fully grown at its top age. Catches plants from
+	#mods added later. false: only the plants in the file.
+	fallback = true
+	#true: plants that can be picked before they are fully grown (salmonberries from stage 3,
+	#grapes from stage 2) read 'Growth: 75% (Harvestable)' until they finish. false: the
+	#percentage only.
+	showHarvestable = true
+
+#Plain Dandelions mature into Mature Dandelions when planted on Rich Soil / Rich Soil Farmland
+#or Fertile Soil. Values are the average number of soil random ticks per conversion
+#(about one random tick a minute per block at the default randomTickSpeed). 0 = off for that soil.
+#Takes effect immediately.
+[dandelion_maturing]
+	#Rich Soil and Rich Soil Farmland (Farmer's Delight).
+	#Range: 0 ~ 100000
+	richSoilTicks = 20
+	#Fertile Soil (Immersive Weathering's mulch block).
+	#Range: 0 ~ 100000
+	fertileSoilTicks = 10
+
+#Pack changes to crop harvest drops (server side, applied on /reload).
+[crop_drops]
+
+	#Rustic Delight bell peppers. A ripe plant drops one pepper picked by weight, then each
+	#colour has its own bonus chance for one extra. Each colour's share of the picked pepper is
+	#weight / (sum of weights). Per harvest, colour X averages
+	#  weightX / (sum of weights) + bonusChanceX
+	#Defaults (1:1:1, 0.15 each) give 0.483 of every colour. The mod ships 6:1:1 with no red
+	#bonus (red about 58% of peppers). A weight of 0 takes the colour out of the main roll.
+	[crop_drops.bell_peppers]
+		#true: use the values below. false: the mod's own table, untouched.
+		enabled = true
+		#Weight of red in the main roll.
+		#Range: 0 ~ 100
+		redWeight = 1
+		#Weight of green in the main roll.
+		#Range: 0 ~ 100
+		greenWeight = 1
+		#Weight of yellow in the main roll.
+		#Range: 0 ~ 100
+		yellowWeight = 1
+		#Chance [0-1] of one extra red pepper (0.15 = 15%).
+		#Range: 0.0 ~ 1.0
+		redBonusChance = 0.15
+		#Chance [0-1] of one extra green pepper.
+		#Range: 0.0 ~ 1.0
+		greenBonusChance = 0.15
+		#Chance [0-1] of one extra yellow pepper.
+		#Range: 0.0 ~ 1.0
+		yellowBonusChance = 0.15
+
+	#Extra produce on better soil. A ripe crop whose block below is the soil gets 'tries' extra
+	#chances at one more of its produce (seeds are not included), each at 'chance'. Average extra per
+	#harvest = tries x chance. The crop's own drops are unchanged. 0 tries = nothing for that soil.
+	#Each crop is switched on in [crop_drops.soil_yield.crops]; all are off by default.
+	#feature_writeup/crop_yields.md lists every crop's drops.
+	[crop_drops.soil_yield]
+		#Vanilla farmland: extra tries.
+		#Range: 0 ~ 8
+		farmlandTries = 0
+		#Vanilla farmland: chance [0-1] per try.
+		#Range: 0.0 ~ 1.0
+		farmlandChance = 0.0
+		#Rich Soil Farmland: extra tries.
+		#Range: 0 ~ 8
+		richFarmlandTries = 2
+		#Rich Soil Farmland: chance [0-1] per try.
+		#Range: 0.0 ~ 1.0
+		richFarmlandChance = 0.35
+		#Fertile Soil (Immersive Weathering mulch): extra tries.
+		#Range: 0 ~ 8
+		fertileSoilTries = 2
+		#Fertile Soil: chance [0-1] per try.
+		#Range: 0.0 ~ 1.0
+		fertileSoilChance = 0.25
+		#Untilled Rich Soil (only rice and adzuki grow on it): extra tries.
+		#Range: 0 ~ 8
+		richSoilTries = 2
+		#Untilled Rich Soil: chance [0-1] per try.
+		#Range: 0.0 ~ 1.0
+		richSoilChance = 0.35
+
+		#true: the crop gets the soil pools above. false: its drops are the same on every soil.
+		[crop_drops.soil_yield.crops]
+			wheat = false
+			carrots = false
+			potatoes = false
+			beetroots = false
+			cabbages = false
+			onions = false
+			tomatoes = false
+			rice = false
+			bell_peppers = false
+			coffee = false
+			cotton = false
+			ender_crop = false
+			tobacco = false
+			flax = false
+			hemp = false
+			corn = false
+			cave_carrots = false
+			broccoli = false
+			cauliflower = false
+			garlic = false
+			sweet_potato = false
+			turnip = false
+			zucchini = false
+			cucumber = false
+			oats = false
+			peanuts = false
+			adzuki = false
+
+#A stem that has grown its fruit (melon, pumpkin, hamimelon) can grow more on its other free
+#sides, one at a time. Each extra fruit uses vanilla's stem growth roll (light, soil and
+#hydration count the same) and also waits a minimum time since the stem's last fruit. The
+#wait counts from the first random tick after a fruit grows. When the fruit the stem faces is
+#taken, the stem turns to another of its fruits instead of back into a plain stem. Server side.
+[stem_fruit]
+	#Master on/off switch. Off = vanilla (one fruit per stem).
+	enabled = true
+	#Most fruits next to one stem (1 = vanilla, 4 = every side).
+	#Range: 1 ~ 4
+	maxFruits = 4
+	#Minimum game minutes (1200 ticks) after the first fruit before a 2nd can grow.
+	#Range: 0 ~ 1440
+	secondFruitMinutes = 10
+	#Minimum game minutes after the 2nd fruit before a 3rd can grow.
+	#Range: 0 ~ 1440
+	thirdFruitMinutes = 20
+	#Minimum game minutes after the 3rd fruit before a 4th can grow.
+	#Range: 0 ~ 1440
+	fourthFruitMinutes = 40
+
+#Cans in #creativeengineering:cans/servings/<n> hold n servings. Eating or crafting with
+#one takes a serving; the servings left show as a durability bar and a tooltip line. The
+#last serving leaves an empty can, a crushed can or nothing, rolled with the chances below.
+[canning]
+	#Off = every can behaves like the Canned Goods original (one serving, always an empty can).
+	enabled = true
+	#Chance [0-1] that an emptied can comes back as an empty can.
+	#Range: 0.0 ~ 1.0
+	emptyCanChance = 0.7
+	#Chance [0-1] that it comes back as a crushed can instead. Whatever is left after both
+	#chances gives nothing; if the two add up past 1, the crushed chance is cut to fit.
+	#Range: 0.0 ~ 1.0
+	crushedCanChance = 0.25
+	#Item id handed back as the empty can.
+	emptyCanItem = "canned_goods:empty_can"
+	#Item id handed back as the crushed can.
+	crushedCanItem = "canned_goods:crushed_empty_can"
+
+#Leftover containers from ingredients (glass bottles, bowls, buckets) on the FD cooking pot, the
+#Farmer's Respite kettle and the oven. A leftover the waiting meal is served in goes to the
+#container slot; the rest goes to two leftover slots right of the output, which hoppers and
+#funnels on the output faces can empty.
+[cooking]
+	#Oven only. Off = its leftovers are thrown out of the front. The pot and kettle
+	#switch is creativedelight-common.toml [qol] remainderBuffer.
+	remainderBuffer = true
+	#On = a station whose leftover slots can't take a craft's leftovers waits (like a full output).
+	#Off = it crafts anyway and throws what doesn't fit.
+	stallWhenFull = true
+	#On = an oven recipe ingredient with a count takes that many from one slot (3 wheat from a wheat
+	#stack), so oven copies of 9-item crafting recipes cost the same as the craft. Off = every
+	#ingredient takes one item from its own slot, and recipes that don't fit the 6 slots drop some of
+	#their repeated items (feature_writeup/oven.md 2.6). Recipes are built at /reload.
+	ovenIngredientCounts = false
+	#Ticks a leftover recycled into the container slot (a bowl-food ingredient's bowl, a milk bottle's
+	#bottle) stays visible there before the meal is plated with it, so the step can be seen.
+	#0 = plate at once. Containers a player or hopper puts in plate at once either way.
+	#Range: 0 ~ 100
+	recycleShowTicks = 10
+
+#Performance throttles for other mods' per-tick work. See feature_writeup/perf.md section 7.
+[perf]
+	#Quark feeding trough: after an animal's trough search finds nothing, it does not search again for
+	#this many ticks (600 = 30 s). Each search is a point-of-interest scan plus a ray cast, and a
+	#hungry animal with no trough nearby repeated it every few ticks. Cost: a trough placed or
+	#refilled next to an animal is noticed up to this long late. 0 = off (Quark's own behaviour).
+	#Range: 0 ~ 72000
+	troughMissCooldownTicks = 600

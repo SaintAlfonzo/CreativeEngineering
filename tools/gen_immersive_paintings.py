@@ -16,7 +16,7 @@ Paintings smaller than 32 px per block are scaled up (nearest neighbour, whole-n
 the Datapacks page opens filtered to resolution 32, and a 16 px painting would be hidden until the
 player changes the filter. Pixel art stays sharp. Larger ones keep their own resolution.
 
-Output: kubejs/data/creativeengineering/paintings/<ns>/<id>.png + .json. The folder is generated only
+Output: development/creativeCompat/src/main/resources/data/creativeengineering/paintings/<ns>/<id>.png + .json. The folder is generated only
 and is rebuilt from scratch on every run. In game a painting's id is
 creativeengineering:paintings/<ns>/<id>.png, so the screen's search box matches mod ids and names.
 Writeup and tests: feature_writeup/immersive_paintings.md.
@@ -35,7 +35,7 @@ from PIL import Image
 import lang_index
 
 DUMP = lang_index.INSTANCE / 'kubejs/exported/paintings.json'
-OUT = lang_index.INSTANCE / 'kubejs/data/creativeengineering/paintings'
+OUT = lang_index.INSTANCE / 'development/creativeCompat/src/main/resources/data/creativeengineering/paintings'
 KUBEJS_ASSETS = lang_index.INSTANCE / 'kubejs/assets'
 TEXTURE_RE = re.compile(r'^assets/([^/]+)/textures/painting/(.+)\.png$')
 TARGET_RES = 32

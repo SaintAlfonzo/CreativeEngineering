@@ -165,7 +165,7 @@ rubber makes belts more cheaply than dried kelp.
 ### Now
 
 - **Myrtrees** (verified, decompiled): one `myrtrees:filled_rubberwood_log` per tree at trunk height +1 (also in the
-  pack's own copy `kubejs/data/creative_delight/worldgen/configured_feature/wild/rubber_tree.json`, which uses
+  pack's own copy `kubejs/data/creativedelight/worldgen/configured_feature/wild/rubber_tree.json`, which uses
   `myrtrees:rubber_trunk_placer`, and in sapling-grown trees). It holds 10 000 latex units and never refills; a
   `myrtrees:tree_tap` on it drips 2 units every 5 ticks into a `myrtrees:wooden_bucket` under the tap (holds 2 000);
   right-clicking the bucket with >= 1 000 pops one `myrtrees:latex` item. So one tree = 10 latex, one latex per about
@@ -252,8 +252,8 @@ rubber makes belts more cheaply than dried kelp.
   latex; worth a tooltip on the tree tap (`client_scripts/tooltips.js`).
 - `create_dd:hydraulic_compacting` needs D&D's Hydraulic Press over a heated basin; JEI shows it under D&D's
   category. Confirm the custom recipe loads (no `[NCH]` warning, JEI entry visible).
-- Myrtrees' own worldgen is removed (CD `kubejs/data/creative_delight/kubejs/_worldgen/wild_crops.json` `rubber`, line 338;
-  the pack's copy `creative_delight:wild/rubber_tree` places it in jungles); saplings are
+- Myrtrees' own worldgen is removed (CD `kubejs/data/creativedelight/kubejs/_worldgen/wild_crops.json` `rubber`, line 338;
+  the pack's copy `creativedelight:wild/rubber_tree` places it in jungles); saplings are
   also sold by the wandering trader (`wandering_trades.js` line 28).
 
 ### Tests

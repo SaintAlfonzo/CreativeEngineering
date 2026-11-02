@@ -133,7 +133,7 @@ Coil blocks are KubeJS blocks ([coil_blocks.js](../kubejs/startup_scripts/items/
   syringe, bottle-fill sound, "Sampled Cow." in chat. A filled syringe says "This syringe already has a sample."
 - **Mobs:** cow, pig, chicken, sheep, rabbit, cod, salmon, and a More Mooblooms moobloom (gives a cow sample).
 - **Recipe:** iron rod + 4 glass panes + iron plate. Filled syringes start the cultivated meat cultures
-  ([cultivated_meat.js](../kubejs/data/creative_delight/kubejs/creativeengineering/cultivated_meat.js); backlog row 20).
+  ([cultivated_meat.js](../kubejs/data/creativedelight/kubejs/creativeengineering/cultivated_meat.js); backlog row 20).
 - **Reserved for Creative Cultivation (2026-10-27):** the syringe exists only to start meat cultures, so its three
   scripts carry the Creative Cultivation header with the rest of the cultivated-meat code
   ([creative_delight.md](creative_delight.md) 29.5). They stay in the pack folder for now.

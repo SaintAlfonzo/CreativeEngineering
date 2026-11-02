@@ -133,7 +133,7 @@ class Server:
         # which build of our own jars this run measured (results are only comparable at the same builds)
         ours = {f: time.strftime("%m-%d %H:%M", time.localtime(os.path.getmtime(os.path.join(self.srv, "mods", f))))
                 for f in os.listdir(os.path.join(self.srv, "mods"))
-                if f.startswith(("creativeengineering", "creative_delight", "ceperfbot"))}
+                if f.startswith(("creativeengineering", "creativedelight", "ceperfbot"))}
         return {"jars": len(os.listdir(os.path.join(self.srv, "mods"))), "bot_jar": os.path.basename(jars[-1]),
                 "our_jars": ours}
 

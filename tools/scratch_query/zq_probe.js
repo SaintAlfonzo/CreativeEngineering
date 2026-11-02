@@ -31,7 +31,7 @@
     const $ZQBR = Java.loadClass('net.minecraftforge.common.brewing.BrewingRecipeRegistry')
     const $ZQRK = Java.loadClass('net.minecraft.resources.ResourceKey')
     const $ZQHand = Java.loadClass('net.minecraft.world.InteractionHand')
-    const $ZQSeason = Java.loadClass('com.SaintAlfonzo.creativeengineering.seasons.SeasonTypes')
+    const $ZQSeason = Java.loadClass('com.SaintAlfonzo.creativecalendar.seasons.SeasonTypes')
     function out(s) { console.info('[zq] ' + s) }
     function run(server, what, arg) {
         try {

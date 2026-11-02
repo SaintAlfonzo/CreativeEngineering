@@ -140,6 +140,7 @@ Changelog: no bullet yet (plans only). The bullets come with the build.
 | Overlap survey (section 1) | Written 2026-10-23 |
 | Integration | Partly started (fishing net, item dictionary); rest is `largecontent/mod-additions #5` and `dishes/ocean` |
 | Fishing net, caviar names, squid chain (section 5) | DEPLOYED 1.1.03 (server and players, 2026-10-26); SQ-FN-01, SQ-FN-04 and the squid half SQ-CDB-03, -04 PASSED 2026-10-25; SQ-FN-02, -03 (ocean and river biomes, group B) not run |
+| Oceanic donor route (section 5.6) | BUILT 2026-11-01 (`portedOceanic` -02 in the CD jar, not installed); needs `oceanic_upstream/` on server and clients; SQ-DNR-O-01 to -05 queued |
 | Tentacles removed, seagrass salad (section 5.5) | Built 2026-10-29, unreleased; SQ-CM-31 PASSED, SQ-CM-32 FAILED r1031, fixed 2026-10-31 (5.5), CD jar in `mods/`; SQ-CM-32, SQ-CM-35 to rerun |
 | Test list | Section 6 (DA-01 to DA-03, DA-08 to DA-11); `DA-04` to `DA-07` stay proposed in the dishes_ocean brief; boot check `SQ-AD-00` |
 
@@ -226,6 +227,52 @@ their name. Caviar in the sea pickle roll was deferred by the user to the caviar
 CD `oceansdelight/recipes.js`: a second pot recipe, 2 Sea Pickle Slices + 2 brown mushrooms + bowl (Ocean's own
 one-pickle recipe stays). Only with Oceanic Delight on (the slices are its item).
 
+### 5.6 Oceanic Delight on the donor route (2026-11-01, TODO `creativedelight/framework #3`, `members #6`)
+
+Owner 2026-11-01 (creative_delight.md 33.1): Oceanic Delight becomes a donor jar, Miner's route. The repack
+(`repackedOceanic`, upstream classes and files plus the fishing net mixin) is gone from the Creative Delight jar. In its place
+the member `portedOceanic` (`development/creativeDelight/members/oceanic`, `1.0.1-ce-19.2-02`, mod id `oceanic_delight`,
+display name "Oceanic Delight (Creative Delight)", GPLv3) holds only our own code, written from the mod's behaviour. Art and
+data are read at load from the unmodified upstream jar:
+
+- **Donor:** `oceanic_upstream/oceanic_delight-1.0.1-forge-1.19.2.jar`, sha1 `91fd8842a5bf9b55c2d9fb39f721129bc6cae1b5`, from
+  https://cdn.modrinth.com/data/O1qboAbB/versions/9JkMCuAa/oceanic_delight-1.0.1-forge-1.19.2.jar (the same file the repack
+  used). Pinned in `upstream/UpstreamJars`; the game stops with a message naming the folder, the file and the URL when it is
+  missing or different. Shipped through `UPSTREAM_DONORS` in `tools/build_deploy.py` (server and every client).
+- **Packs:** `oceanic_upstream_assets` / `oceanic_upstream_data`, built in, always on, at the bottom (`upstream/OceanicTranslator`).
+  Upstream is a native 1.19.2 build with the same ids, so its files are used as they are, except: the English lang gains our
+  two keys (`message.oceanic_delight.needs_bowl`, `tooltip.oceanic_delight.effect`); advancements are left out (the pack drops
+  them anyway); the two upstream fishing net tables are left out (the net rolls the pack's tables, below).
+- **Ids:** the 47 items, 8 blocks (same block state properties), Instant Breath, the three Mining Fatigue potions and the loot
+  modifier type `oceanic_delight:oceanic_delight_loot_modifier` keep upstream's ids, so old worlds and upstream's data load
+  unchanged. `tools/check_donor.py` (in the member) compares them with the last dump and the donor (0 problems 2026-11-01).
+- **Behaviour kept:** food values, stack sizes, rarities and eating times; containers (bowl, glass bottle, stick, nautilus
+  shell); Comfort / Nourishment 3:00 or 5:00 on the eight dishes, Instant Breath on Sea Grape, Sea Grape Juice and Squid Salad,
+  and their blue tooltip lines; the sea grape crop (grows 1 tick in 10 into still water above, the third plant tops out with a
+  fruit, bone meal adds a plant), wild sea grape, the two placed dishes (bowl needed, four servings; the paella pan stays empty
+  and is picked up by using it), the sponge cake (knife cuts a slice, else eat a slice: 3 hunger, 1 saturation, Water Breathing
+  0:30), the crates; the fishing net (5.1: same cooldowns, durability, break and pufferfish chances, attributes); compost
+  chances; the Mining Fatigue brewing steps; the wandering trader's Salmon Eggs; the six JEI information pages.
+- **Fishing net, now our own code** (`content/FishingNetItem`): it reads `#creativeengineering:fishing_net/kelp` and
+  `/sea_grass` directly (the mixin and its `getBlock` redirect are gone) and rolls `creativedelight:gameplay/fishing_net/kelp`
+  and `/sea_grass`. Those tables, with their `coral`, `ocean_treasure` and `junk` sub-tables, moved out of the pack
+  (`kubejs/data/oceanic_delight/loot_tables/gameplay/`, `kubejs/data/creativeengineering/loot_tables/gameplay/fishing_net/`) to
+  `kubejs/data/creativedelight/loot_tables/gameplay/fishing_net/`, shipped in the CD jar (`dataTrees`). Contents unchanged
+  except the sub-table ids (`creativedelight:` for `creativeengineering:`). The tag fill is in CD
+  `oceanic_delight/fishing_net_tags.js` (moved earlier the same day). So `members #6`'s move is complete.
+- **Small differences** (none a player should see): the extra effect goes to the eater (upstream ran `/effect give @p`,
+  the nearest player); a paella or stuffed pufferfish placed without properties starts full (upstream started empty unless
+  placed by a player); the net sound plays for everyone near (upstream: the user only); the sponge cake caps hunger at 20
+  (upstream could pass it); a net used as a crafting tool keeps its enchantments; the "Why'd you hit me" advancement is not
+  granted (the pack drops it); Mining Fatigue brewing is three Forge recipes per bottle type (JEI lists them itself).
+
+**Integration pass (`members #6`, second half).** Squid drops: settled and built (one squid item per kill, tentacles
+filtered out; CD `miners_delight/loot.js`, `dishes/ocean #3`, `#4`). Takoyaki: settled and built (raw calamari, 5.5).
+**Guardian food** (Oceanic Elder Guardian Eye against Ocean's and Hostile Delight's guardian lines) has no decision in
+`mod-additions #5`: open, nothing built.
+
+Tests: SQ-DNR-O-01 to -05 (scratch queue). Old-world check: a 1.1.03+ world with every Oceanic block placed.
+
 ## 6. In-game tests
 
 | ID | Setup | Action | Expected |
@@ -239,7 +286,7 @@ one-pickle recipe stays). Only with Oceanic Delight on (the slices are its item)
 | DA-08 | JEI | Look up Caviar, the roll, the slice, the noodle soup; open the Caviar and Shrimp info pages | Names read Caviar, Caviar Roll, Caviar Roll Slice, Caviar Noodle Soup; Ancient Fish Eggs unchanged; the pages name the knife, the net and the biomes |
 | DA-09 | Upgrade Aquatic kelp (any colour) with kelp above; tall seagrass; wild sea grape; pickerelweed | Search each | Kelps give the kelp table (kelp item, clay); the others the sea grass table (no kelp item, scute possible) |
 | DA-10 | A stack of nets, an ocean | Search about 200 times | A few nautilus shells; a heart of the sea is rare; junk about 1 in 20; never a lily pad, water bottle, rod or ink sacs |
-| DA-11 | `latest.log` after start and `/reload` | grep `fishing_net`, `biome_tag`, `OceanicDelightFishingNetMixin` | No loot table parse error, no mixin apply error |
+| DA-11 | `latest.log` after start and `/reload` | grep `fishing_net`, `biome_tag`, `oceanic_upstream` | No loot table parse error; both upstream packs listed (the mixin is gone since 5.6) |
 
 
 ### 5.5 Tentacles removed, seagrass salad (2026-10-29, TODO `dishes/ocean #4`, `creativedelight/members #24`)

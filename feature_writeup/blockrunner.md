@@ -599,3 +599,8 @@ Slower blocks show red. Frames add "from camo"; a sticky piston that isn't facin
   like before: cauldrons, jelly bottles, plants, the kettle and the wells (furniture). New single ids come from new
   item_dict keys (173 added for the new mods), so a restart is needed. Sim: 6355 ids, 0 overlaps, no dead patterns.
   BR-52 added.
+- 2026-11-01: Vintage Delight port tiered (`vintageport #2`, [vintage_delight.md](vintage_delight.md) 4.0 step 21): crates
+  wood, oat bag and bale natural smooth, salt bricks and mixed salt bricks constructed brick, Smooth Salt Block and Salt
+  Pillar constructed smooth, the salt blocks (The Salt's Salt Block and raw rock salt block, Vintage's Salt Block)
+  natural smooth, Cheese and Meat Pizza confectionery. Sim: 6453 ids, 0 overlaps; jars, machines and wild plants left
+  untiered. Test SQ-VTD7-02.

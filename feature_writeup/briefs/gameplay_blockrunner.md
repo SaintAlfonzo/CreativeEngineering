@@ -76,11 +76,11 @@ walkable block that nothing gives a speed to, so the next mod added doesn't sile
 - **Mods added in 1.1.01 to 1.1.06 (checked 2026-10-31, blockstate json count per jar; none has a pattern in
   blocktags.js yet):** Botany Pots 9.0.44 (98, pots: functional), Vintage Delight port `-09` (71), Veggies Delight port
   `-03` (26), Fungi Delight port (16, huge mushroom blocks: `ports/fungiport #2` asks for their tier), Miner's Delight
-  port `backportedMiners-1.4.5` (in `mods/`), and inside `creative_delight-1.0.0.jar`'s nested members: End's Delight
+  port `backportedMiners-1.4.5` (in `mods/`), and inside `creativedelight-1.0.0.jar`'s nested members: End's Delight
   (8), Oceanic Delight (8), Ocean's Delight (1), Ender's additions (4), Hearth and Harvest port (1), Cooking for
-  Blockheads additions (40, kitchen furniture: functional), plus `creative_delight` itself (2). Hostile Delight (1).
+  Blockheads additions (40, kitchen furniture: functional), plus `creativedelight` itself (2). Hostile Delight (1).
   No blocks: Sky Structures, Room for Two, Carry Cats, Baby Mobs, Cozy's Improved Cats (2 vanilla-namespace
-  overrides), ModernFix, `creative_brewing` (its Vinery and Brewin' members are the ones above). patcherMod now also
+  overrides), ModernFix, `creativebrewing` (its Vinery and Brewin' members are the ones above). patcherMod now also
   ships `powdered_sugar_block` and `placed_*` egg dishes (placed food: thin).
 - **KubeJS blocks:** culture blocks are tiered (`'creativeengineering:*_culture_block'`, spongy, blocktags.js 404);
   prepared flesh, layered obsidian, coils, plates and dust piles are tiered (blockrunner.md 2).

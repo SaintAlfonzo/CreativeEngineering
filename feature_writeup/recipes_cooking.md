@@ -33,7 +33,7 @@ fixes in [food.md](food.md); the sample syringe in [engineering.md](engineering.
   closed 2026-10-22 (removals kept).
 - **Files to open:** [cooking.js](../kubejs/server_scripts/cooking/cooking.js) (lines 1-594; 597-1013 is the old
   `global.CE` copy, deleted 2026-10-22), [golden.js](../kubejs/server_scripts/cooking/golden.js),
-  [cultivated_meat.js](../kubejs/data/creative_delight/kubejs/creativeengineering/cultivated_meat.js).
+  [cultivated_meat.js](../kubejs/data/creativedelight/kubejs/creativeengineering/cultivated_meat.js).
 - **Knobs:** none. Server scripts (`/reload`); the meal assemblies' incomplete items and the new tag keys are
   startup (`transition_items.js`, `item_dict.js`): restart.
 
@@ -125,7 +125,7 @@ loops of its own: gilding food with gold in machines, and growing meat from mob 
   `#forge:fruits/berries`, no water, glass bottle container, like FR's long / strong teas; the latte's bottle goes
   through the remainder buffer) and grid `shapeless/berry_matcha_latte` (latte + berries + `#forge:ice_cubes`, the
   latte's bottle comes back). New NCH helper `frBrewing(input, output, e, id, opts)` for kettle recipes.
-- **Milk from jars** (TODO `food/drinks #6`, [milk_jar.js](../kubejs/data/creative_delight/kubejs/cookingforblockheads/milk_jar.js)): a glass
+- **Milk from jars** (TODO `food/drinks #6`, [milk_jar.js](../kubejs/data/creativedelight/kubejs/cookingforblockheads/milk_jar.js)): a glass
   bottle on a CfB Milk Jar or Cow in a Jar takes 250 mB out as FD's milk bottle; a milk bottle puts 250 mB back
   (refused when it would overflow). CfB itself only handles buckets. The Cow in a Jar refills at 1 mB/tick (a bottle
   every 12.5 s). The item check uses `Ingredient.of(id).test(stack)`: the first version called `stack.is(id)`, which
@@ -225,7 +225,7 @@ reverted.
   + slime ball → a culture (beef, pork, poultry, mutton, rabbit, cod, salmon); heated mixing culture + 250 mB diluted
   bone meal + 250 mB plant oil → 3; knife on the cutting board → 4 raw beef / pork / mutton, 3 chicken / rabbit, 8 cod or
   salmon slices. Culture blocks 9 ↔ 1. Since 2026-10-27 the cooking pot grows them too: culture + bone meal + Rustic
-  Delight cooking oil → 3 (0.35 xp, 200 ticks; `creative_delight:farmersdelightcooking/<animal>_culture_cooking`, only
+  Delight cooking oil → 3 (0.35 xp, 200 ticks; `creativedelight:farmersdelightcooking/<animal>_culture_cooking`, only
   with Rustic Delight on).
 - **Creative Cultivation reservation (2026-10-27):** all cultivated-meat code (sample syringe, cultures, culture blocks,
   recipes, tags, lang, textures) is marked for a future own mod, Creative Cultivation, the way brewing and alcohol are
@@ -461,7 +461,7 @@ None.
 - [ ] **RC-14 Cultivated beef:** cow sample syringe + culture base + slime ball → beef culture; heated mixer with diluted
   bone meal and plant oil → 3; knife → 4 raw beef.
 - [ ] **RC-82 Culture in the cooking pot:** JEI beef culture → U: a cooking pot recipe beef culture + bone meal +
-  cooking oil → 3 beef cultures (`creative_delight:farmersdelightcooking/beef_culture_cooking`); same for the other 6
+  cooking oil → 3 beef cultures (`creativedelight:farmersdelightcooking/beef_culture_cooking`); same for the other 6
   cultures. Cook one on a lit stove → 3 cultures.
 - [ ] **RC-79 Orange jam from slices:** JEI orange jam → R: the 2-orange pot recipe and a pot recipe with 4 orange
   slices + sugar + lemon slice (bottle); a heated basin with 4 slices + lemon slice + sugar + 100 mB water gives 125 mB

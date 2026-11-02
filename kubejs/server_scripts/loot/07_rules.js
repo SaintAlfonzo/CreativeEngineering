@@ -75,7 +75,7 @@
     L.pack(i.cocoa_beans_sack,              i.cocoa_beans)
     L.pack(i.chorus_crate,                  i.chorus_fruit)
     L.pack(i.ancient_fruit_crate,           i.ancient_fruit)
-    // Veggies Delight's crates and chest entries: Creative Delight members #2 (kubejs/data/creative_delight/kubejs/veggiesdelight/loot.js)
+    // Veggies Delight's crates and chest entries: Creative Delight members #2 (kubejs/data/creativedelight/kubejs/veggiesdelight/loot.js)
 
     // ── Golden Food: its village overrides out, its loot folded into golden food pools ───────
     // goldenfood ships copies of all 16 vanilla village chest tables that only add its enchanted book.

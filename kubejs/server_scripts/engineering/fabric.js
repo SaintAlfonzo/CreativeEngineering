@@ -86,7 +86,7 @@ R.replaceInput({ id: i.ia_robe_leggings },
   i.any_wool, [i.white_wool, i.hemp_fabric], e)
 R.replaceInput({ id: i.ia_robe_boots },
   i.any_wool, [i.white_wool, i.hemp_fabric], e)
-R.replaceInput({ id: 'nethersdelight:hoglin_mount' },
+R.replaceInput({ id: i.hoglin_mount },  // Hoglin Trophy (display name; id kept, nethers_delight.md 4.5)
   i.white_wool, [i.white_wool, i.hemp_fabric], e)
 R.replaceInput({ id: 'vinery:winemaker_leggings' },
   i.white_wool, [i.white_wool, i.hemp_fabric], e)

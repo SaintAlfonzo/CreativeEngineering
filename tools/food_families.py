@@ -177,7 +177,9 @@ SQUARE_SANDWICH = {
     'delightful:chunkwich', 'veggiesdelight:zucchini_sandwich',
 }
 # Renamed foods whose dump name still says the old one (renames take effect at the next /dumpall)
-FAMILY_OVERRIDE = {'oceanic_delight:sponge_cake': 'pie/whole', 'oceanic_delight:sponge_cake_slice': 'pie/slice'}
+FAMILY_OVERRIDE = {'oceanic_delight:sponge_cake': 'pie/whole', 'oceanic_delight:sponge_cake_slice': 'pie/slice',
+                   # rice bowl with no "rice" in its name (barbeques_delight.md 4 step 10)
+                   'barbequesdelight:bibimbap': 'meal/rice'}
 # Sweet or baked one-offs that fit no other family: the dessert catchall, ahead of the special-type no-family rule
 DESSERT_OTHER = {'botania:mana_cookie', 'create_confectionery:gingerbread'}
 UNSORTED = 'unsorted'
@@ -187,6 +189,10 @@ SKIP = None
 NO_FAMILY = {
     'endersdelight:twisted_cereal': 'meal/plate', 'endersdelight:twisted_cereal_wood': 'meal/plate',
     'quarkdelight:crab_bars': 'snack', 'berry_good:sweet_berry_meatballs': 'skewer',
+    # Barbeque's Delight cooked skewers: kept out of the skewer family until the skewer fold (barbeques_delight.md O1,
+    # TODO dishes/meals #46); the burnt skewer is in hazard by its type
+    **{'barbequesdelight:grilled_%s_skewer' % k: 'skewer (dishes/meals #46)' for k in (
+        'beef', 'chicken', 'cod', 'lamb', 'mushroom', 'pork_sausage', 'potato', 'rabbit', 'salmon', 'vegetable')},
 }
 
 # Recipe type -> station label. Types not listed are shown by their id.
@@ -282,7 +288,10 @@ def classify(r):
         return 'hazard'
     if r['id'] in DESSERT_OTHER:
         return 'dessert/other'
-    if t == 'special' or r['id'] in NO_FAMILY or has(n, 'fermented garlic honey'):
+    # Fermented garlic honey: a vegetable fermented in the Pickling Jar (creativedelight/members #30 R8)
+    if has(n, 'fermented garlic honey'):
+        return 'preserve/pickle'
+    if t == 'special' or r['id'] in NO_FAMILY:
         return NOFAM
     if has(n, 'bellini'):
         return 'alcohol/mixed'

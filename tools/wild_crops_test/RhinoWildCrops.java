@@ -3,7 +3,7 @@ import java.nio.file.*;
 import java.util.*;
 
 /**
- * Runs Creative Delight's kubejs/data/creative_delight/kubejs/_worldgen/wild_crops.js (or the pack's
+ * Runs Creative Delight's kubejs/data/creativedelight/kubejs/_worldgen/wild_crops.js (or the pack's
  * kubejs/server_scripts/worldgen/mushroom_spawns.js with script=mushroom_spawns) in the pack's own Rhino fork with the
  * KubeJS globals and global.CD stubbed (tag_helper.js and _biome_rules.js loaded first). Fires the worldgen/biome tags handler and highPriorityData, and
  * writes tags.json (tag -> biomes) and every data file the script adds under <out>/data/. ServerEvents.loaded
@@ -53,7 +53,7 @@ public class RhinoWildCrops {
 		cx.evaluateString(scope, prelude, "prelude", 1, null);
 		cx.evaluateString(scope, Files.readString(root.resolve("development/patcherMod/src/main/resources/kubejs_startup/creativeengineering/func/tag_helper.js")), "tag_helper.js", 1, null);
 		cx.evaluateString(scope, Files.readString(root.resolve("kubejs/server_scripts/worldgen/_biome_rules.js")), "_biome_rules.js", 1, null);
-		String path = script.equals("wild_crops") ? "kubejs/data/creative_delight/kubejs/_worldgen/wild_crops.js"
+		String path = script.equals("wild_crops") ? "kubejs/data/creativedelight/kubejs/_worldgen/wild_crops.js"
 				: "kubejs/server_scripts/worldgen/" + script + ".js";
 		cx.evaluateString(scope, Files.readString(root.resolve(path)), script + ".js", 1, null);
 		cx.evaluateString(scope, "__tags({ add: function (t, id) { __HOST.tag(String(t), String(id)) } });", "fire_tags", 1, null);

@@ -3,13 +3,14 @@
 // this file adds what is specific to CD:
 //   - the CD script trees, authored in the pack folder so /reload and F3+T pick them up without a rebuild (10.4),
 //     copied into the jar at the same resource paths:
-//       kubejs/data/creative_delight/kubejs/    -> data/creative_delight/kubejs/    (server scripts)
-//       kubejs/assets/creative_delight/kubejs/  -> assets/creative_delight/kubejs/  (client scripts)
-//       kubejs/data/creative_delight/worldgen/  -> data/creative_delight/worldgen/  (wild crop features, 24)
-//       kubejs/data/creative_delight/cup_conversion/ -> data/creative_delight/cup_conversion/ (Miner's cups, 27)
-//     Startup scripts live in this project (src/main/resources/kubejs_startup/creative_delight/), loaded from the
+//       kubejs/data/creativedelight/kubejs/    -> data/creativedelight/kubejs/    (server scripts)
+//       kubejs/assets/creativedelight/kubejs/  -> assets/creativedelight/kubejs/  (client scripts)
+//       kubejs/data/creativedelight/worldgen/  -> data/creativedelight/worldgen/  (wild crop features, 24)
+//       kubejs/data/creativedelight/cup_conversion/ -> data/creativedelight/cup_conversion/ (Miner's cups, 27)
+//       kubejs/data/creativedelight/loot_tables/ -> data/creativedelight/loot_tables/ (Oceanic fishing net tables, 5)
+//     Startup scripts live in this project (src/main/resources/kubejs_startup/creativedelight/), loaded from the
 //     jar by patcherMod's startup loader.
-//   - creative_delight_members.txt: the mod ids of bundle_members, read by CreativeDelight / CDConfig (one list).
+//   - creativedelight_members.txt: the mod ids of bundle_members, read by CreativeDelight / CDConfig (one list).
 //   - -Pcd_test_suite: also packs the scratch test suite (tools/creative_delight_test/, all three script types)
 //     into the jar, for the jar-path checks of SQ-CDT. Never for a release (build_deploy refuses such a jar).
 // Build: ./gradlew :creativeDelight:build --offline   Install: ./gradlew :creativeDelight:installToMods
@@ -20,7 +21,7 @@ plugins {
 dependencies {
     // Fruits Delight compartment (compat/FruitsDelightHooks). SRG-named jar; only its own type is used.
     compileOnly 'local:fruitsdelight:0.5.11'
-    // QoL compartments (creative_delight.md 8): the remainder buffer API, CEConfig and CropGrowth are patcherMod's
+    // QoL compartments (creative_delight.md 8): CEConfig, ConfigRename, RemainderView and the JEI helpers are patcherMod's
     // (a hard dependency); the pot (QoL-1), kettle (QoL-1) and WTHIT (QoL-6) jars as in patcherMod/libs.
     compileOnly project(':patcherMod')
     compileOnly 'local:FarmersDelight:1.19.2-1.2.4'
@@ -32,14 +33,19 @@ dependencies {
     compileOnly 'local:jei:1.19.2-forge-11.8.1.1034'
     // Banana merge (item_merges.md 2.1): the gorilla and sugar glider forage mixins.
     compileOnly 'local:alexsmobs:1.21.1'
+    // The kitchen and food Java moved from patcherMod at the CD carve (2026-11-01, creative_delight.md 34): the mods it
+    // touches (Quark, Spice of Life, Corn Delight, Canned Goods, The Salt, Immersive Weathering, AppleSkin, Curios, KubeJS,
+    // The Dirty Stuff, ...) from patcherMod's git-ignored libs/, and the Display Delight port for the placed dishes.
+    compileOnly fileTree(dir: rootProject.file('development/patcherMod/libs'), include: '*.jar')
+    compileOnly project(':backportedDisplay')
 }
 
-def scriptTrees = ['data/creative_delight/kubejs', 'assets/creative_delight/kubejs']
-def dataTrees = ['data/creative_delight/worldgen', 'data/creative_delight/cup_conversion']
+def scriptTrees = ['data/creativedelight/kubejs', 'assets/creativedelight/kubejs']
+def dataTrees = ['data/creativedelight/worldgen', 'data/creativedelight/cup_conversion', 'data/creativedelight/loot_tables']
 def testSuite = rootProject.file('tools/creative_delight_test/suite')
 def withTestSuite = project.hasProperty('cd_test_suite')
 
-def membersFile = layout.buildDirectory.file('generated/cd_members/creative_delight_members.txt')
+def membersFile = layout.buildDirectory.file('generated/cd_members/creativedelight_members.txt')
 def writeMembers = tasks.register('writeMembersList') {
     def ids = providers.provider {
         (findProperty('bundle_members') ?: '').toString().split(',')*.trim().findAll { it }
@@ -75,15 +81,15 @@ tasks.named('processResources', ProcessResources).configure {
 tasks.named('jar', Jar).configure {
     doLast {
         def entries = new java.util.zip.ZipFile(archiveFile.get().asFile).withCloseable { z -> z.entries().collect { it.name } }
-        ['kubejs_startup/creative_delight/', 'data/creative_delight/kubejs/', 'assets/creative_delight/kubejs/'].each { dir ->
+        ['kubejs_startup/creativedelight/', 'data/creativedelight/kubejs/', 'assets/creativedelight/kubejs/'].each { dir ->
             if (!entries.any { it.startsWith(dir) && it.endsWith('.js') }) {
-                throw new GradleException("creative_delight jar has no scripts under ${dir}")
+                throw new GradleException("creativedelight jar has no scripts under ${dir}")
             }
         }
     }
 }
 
-// A test-suite build is a separate jar (creative_delight-<v>-cdtest.jar): never archived, never installed.
+// A test-suite build is a separate jar (creativedelight-<v>-cdtest.jar): never archived, never installed.
 if (withTestSuite) {
     tasks.named('bundleJar', Jar).configure { archiveClassifier = 'cdtest' }
     tasks.named('archiveJar').configure { enabled = false }

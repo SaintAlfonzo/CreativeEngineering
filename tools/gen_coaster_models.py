@@ -18,7 +18,7 @@ Block models are full-size blocks (a DD plate is 14 px across), so each entry ge
 side down to TARGET_PX (about the size of the port's own bowls) and its height to MAX_HEIGHT_PX.
 
 placeable_catalog.py reads these files too: their items join #creativeengineering:placeable_on_coaster, and
-data/creative_delight/kubejs/creativeengineering/placeable_tags.js puts that tag into
+data/creativedelight/kubejs/creativeengineering/placeable_tags.js puts that tag into
 #brewinandchewin:placeable_on_coaster. So run this first. Items not in the dumps (kubejs/exported/food/placeable.json,
 items_by_mod/) are left out until /dumpall has seen them.
 

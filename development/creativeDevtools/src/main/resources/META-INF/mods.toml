@@ -30,6 +30,13 @@ mandatory=true
 versionRange="[1.1.05,)"
 ordering="AFTER"
 side="BOTH"
+# Creative Compat: required by every other Creative jar (creative_split.md 7.6).
+[[dependencies.creativedevtools]]
+modId="creativecompat"
+mandatory=true
+versionRange="[1.0.0,)"
+ordering="AFTER"
+side="BOTH"
 # Immersive Engineering: only for the recycling log (ie/IeRecyclingDiagnostics), registered when IE is loaded.
 [[dependencies.creativedevtools]]
 modId="immersiveengineering"

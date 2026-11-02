@@ -14,7 +14,7 @@ reaches a player. Open merges are in [todo/TODO.md](todo/TODO.md) family `merges
 |---|---|---|
 | Merge lists | pack: `kubejs/startup_scripts/_lib/item_merges.js`, `_lib/removed_woods.js`; Creative Delight: `development/creativeDelight/src/main/resources/kubejs_startup/<mod>/item_merges.js` | `global.addItemMerges(group, pairs)`: `[purged, survivor]` pairs (item dict keys) into one group. Adds each purged id to `global.removedItems`; `global.itemMerges` is every pair (probes, tools) |
 | Hide and strip | `removed_items.js` consumers | JEI hides the purged item (`client_scripts/jeichanges.js`); its item tags are stripped and `recipe_scan.js` (`/recipescan`, off at load by default) logs any recipe that still uses or makes it (`[jeiRemove] <id> -> n recipe(s)`) |
-| Recipes | pack: `kubejs/server_scripts/other/item_merges.js` (priority -100); CD: `kubejs/data/creative_delight/kubejs/_core/item_merges.js` (priority -100, last in the CD tree) | `global.itemMergeRun.recipes(e, group)` -> `NCH.replaceItems`: every input and output of every recipe, data and script-added. Per-merge removals of duplicates: the pack file (general), CD `<mod>/item_merges.js` (food) |
+| Recipes | pack: `kubejs/server_scripts/other/item_merges.js` (priority -100); CD: `kubejs/data/creativedelight/kubejs/_core/item_merges.js` (priority -100, last in the CD tree) | `global.itemMergeRun.recipes(e, group)` -> `NCH.replaceItems`: every input and output of every recipe, data and script-added. Per-merge removals of duplicates: the pack file (general), CD `<mod>/item_merges.js` (food) |
 | Tags | same files as the per-merge removals | The survivor joins the tags recipes or mobs read |
 | Loot | the two run files, LootJS | Every table: purged entry -> survivor, same count (`CE/item_merges/<group>`) |
 | Inventory | the two run files, `PlayerEvents.inventoryChanged` | A purged stack in a player inventory becomes the survivor, same count. Catches mod code (Neapolitan's milk cauldron), old chests and old worlds |
@@ -32,7 +32,7 @@ script. The recipe swap tool runs twice per recipe event (once per group); no pa
 | Group | Pairs | Run from | Sees |
 |---|---|---|---|
 | `pack` | general: rocky dirt (2.5), the removed woods ([recipes_wood.md](recipes_wood.md) 2.6), 93 pairs. Later split out by mod | `server_scripts/other/item_merges.js`, priority -100 | data recipes, and recipes added by the pack's scripts before it. A CD script that adds a recipe naming a pack-purged id is not swapped: name the survivor there |
-| `creative_delight` | food: banana, milk bottle, chocolate cake, diced potatoes, the 7 coffee pairs, pickled pickles, the 2 salt pairs, 14 pairs | CD `_core/item_merges.js`, priority -100 (CD loads after every pack script) | data recipes and every added recipe (pack and CD) |
+| `creativedelight` | food: banana, milk bottle, chocolate cake, diced potatoes, the 7 coffee pairs, pickled pickles, the 2 salt pairs, 14 pairs | CD `_core/item_merges.js`, priority -100 (CD loads after every pack script) | data recipes and every added recipe (pack and CD) |
 
 - `global.addItemMerges` refuses a purged id already in any group (logs `already merged`), and warns when a pair
   chains with another (a survivor that is purged elsewhere).
@@ -44,7 +44,7 @@ script. The recipe swap tool runs twice per recipe event (once per group); no pa
   two Rhino walks of the added recipes per pair, and Creative Delight repeated the whole pass for every pair. No
   fallback: the pack scripts and patcherMod ship together, so the run needs a patcherMod with `replaceItems`.
 - Recipe ids that moved with the food work: the chocolate cake cutting recipe and Gambler's Tea are now
-  `creative_delight:` ids (were `creativeengineering:`).
+  `creativedelight:` ids (were `creativeengineering:`).
 
 ## 2. Merges
 
@@ -123,7 +123,7 @@ drinks go, Rustic's drinks give Caffeinated instead of Speed and Haste, every ot
 
 - Recipes after the swap: FR coffee cake (grid, CCK mixing and dough craft, pack baking.js) and blazing chili take
   roasted beans; gambler's tea (kettle) and Canned Coffee Berries take raw beans.
-- Removed in `kubejs/data/creative_delight/kubejs/farmersrespite/item_merges.js` (in the pack's
+- Removed in `kubejs/data/creativedelight/kubejs/rusticdelight/coffee_merge.js` (in the pack's
   `server_scripts/other/item_merges.js` until 2026-10-27; the swap would leave them as loops, duplicates or a kettle
   route to Rustic's coffee): `farmersrespite:brewing/{coffee,long_coffee,strong_coffee}`,
   `create_central_kitchen:{filling,emptying}/{coffee,long_coffee,strong_coffee}`, `create_central_kitchen:mixing/coffee`,
@@ -233,7 +233,7 @@ Pairs: Creative Delight `kubejs_startup/fruitsdelight/item_merges.js`; server ha
 - Compost: the hami slice row removed; food_dict: `fruit_slice_hamimelon`, `can_hamimelon` removed.
 - Worldgen (`_worldgen/wild_crops.json`): the hamimelon rule (warm desert, warm badlands; sand, red sand, terracotta,
   grass-like soils) is labelled Cantaloupe. The Mini Cantaloupe rule moved there too (owner: same spawn locations):
-  new pack feature `creative_delight:wild/mini_cantaloupe`, a copy of `wild/hamimelon` placing `delightful:cantaloupe`.
+  new pack feature `creativedelight:wild/mini_cantaloupe`, a copy of `wild/hamimelon` placing `delightful:cantaloupe`.
   Was warm dry grassy with Delightful's `patch_cantaloupe`.
 - Open: the Mini Cantaloupe Plant still needs sand next to water to be planted (Delightful's rule); the wild patch
   places the fruit block, not the plant. `crops_by_biome.md` needs `python3 tools/gen_crop_worldgen_table.py`.
@@ -255,6 +255,42 @@ their apple trees; Vinery's grow in plains, sunflower plains, meadow and 9 Terra
 stay and keep fruiting; their leaves are typed `autumn_fruit` like Vinery's. The apple itself (`minecraft:apple`) is
 unchanged and its tooltip shows the Vinery apple tree's seasons. Apple jelly, jello and crates stay (made from apples).
 The Botany Pots apple recipe goes through the recipe swap onto the Vinery sapling.
+
+### 2.12 Ancient fish (built 2026-11-01, not run; SQ-CAT-02, SQ-CAT-04; [cozy_cats.md](cozy_cats.md) 10.2)
+
+Owner 2026-11-01: Cozy's Improved Cats' ancient fish go; cats tame with vanilla cod and salmon.
+
+| Purged | Survivor | Why |
+|---|---|---|
+| `cozys-improved-cats:ancient_cod` | `minecraft:cod` | taming fish is vanilla cod |
+| `cozys-improved-cats:ancient_salmon` | `minecraft:salmon` | taming fish is vanilla salmon |
+| `cozys-improved-cats:ancient_cooked_cod` | `minecraft:cooked_cod` | same food |
+| `cozys-improved-cats:ancient_cooked_salmon` | `minecraft:cooked_salmon` | same food |
+
+Pairs: Creative Delight `kubejs_startup/cozys_improved_cats/item_merges.js`; the server half
+(`data/creativedelight/kubejs/cozys_improved_cats/item_merges.js`) removes the 8 smelting / blasting recipes, which
+the swap would turn into copies of vanilla's. The Training String recipe goes through the swap (cod + salmon +
+string). Sources are off at the mod too: fishing swap and mob drops by config, fisherman trades by Creative Compat
+(`cats.CozyCats.onTrades`). The cooked fish's random effect on eating is lost with them.
+
+### 2.13 Fish and chips (built 2026-11-01, not run; SQ-MG-21; TODO `merges/dishes #1`, Veggies Delight M1)
+
+Owner 2026-11-01: Veggies Delight's Fish and Chips stays, PneumaticCraft's goes.
+
+| Purged | Survivor | Why |
+|---|---|---|
+| `pneumaticcraft:cod_n_chips` | `veggiesdelight:fish_and_chips` | same dish; both were shown as Fish and Chips |
+
+Pair: Creative Delight `kubejs_startup/pneumaticcraft/item_merges.js`. Server half in
+`data/creativedelight/kubejs/pneumaticcraft/recipes.js`: one frying route (Cooking Pot, cooking oil + any raw fish + 2
+sliced potatoes, in a bowl; was on a paper plate); the grid route (Fries + cooked fish + bowl) left with the Fries. Veggies Delight's two pot recipes (raw fish, potato, egg; its More Delight diced-potato version) are removed as
+duplicates. The survivor's food is Veggies Delight's (10, 12 saturation points, returns the bowl), not PneumaticCraft's
+(12, 24, no container). The "chips are fries" tooltip moved to the survivor. Fries (`pneumaticcraft:chips`) are
+removed outright (owner 2026-11-01, not a merge: no survivor): CD startup `pneumaticcraft/pneumatic_items.js`
+(removedItems), the pack's frying recipe gone, Canned Chips dropped from `gen_can_types.py`; `dishes/meals #34` closed.
+
+Tests: SQ-MG-21, SQ-VDF-07 (scratch); MG-48 (in game: JEI shows one Fish and Chips with the frying route, an old Cod 'n' Chips in an
+inventory turns into Fish and Chips).
 
 ## 3. Known limits
 
@@ -336,12 +372,15 @@ from `item_merges.js` or `cooking.js`, no `ieMixer` warning, no mixin apply erro
 | MG-41 | Craft: 1 slice; 9 slices; 4 slices (2x2); 1 Cantaloupe Seeds; 1 Mini Cantaloupe Seeds; Mini Cantaloupe + 2 ice cubes + stick | Cantaloupe Seeds; Cantaloupe; Mini Cantaloupe; Mini Cantaloupe Seeds; Cantaloupe Seeds; Cantaloupe Popsicle |
 | MG-42 | Knife on a Cantaloupe block on the cutting board; knife on a placed Mini Cantaloupe | 9 Cantaloupe Slices; 4 Cantaloupe Slices |
 | MG-43 | JEI uses of the Cantaloupe Slice: jam, juice, jello, popsicle, exotic fruits bowl, fruit salad, Cantaloupe Bread | All accept it |
-| MG-44 | New world, desert and badlands: find wild Cantaloupes and Mini Cantaloupes (`/place feature creative_delight:wild/mini_cantaloupe` to see one); WTHIT on the stem | Both on sand, red sand or terracotta; stem named Cantaloupe Stem |
+| MG-44 | New world, desert and badlands: find wild Cantaloupes and Mini Cantaloupes (`/place feature creativedelight:wild/mini_cantaloupe` to see one); WTHIT on the stem | Both on sand, red sand or terracotta; stem named Cantaloupe Stem |
 | MG-45 | Wares package and cardboard box (block and item): look; place an Old and a Weathered Cardboard Box; wash a Dustrial Decor box, then the result, in a Create fan; JEI for other recipes of Old/Weathered | Wares boxes brown; Weathered grey-brown; only the washing recipes exist; boxes walk and sink like Dustrial's (server half: scratch queue SQ-MG-16) |
 | MG-46 | Jungle: gorillas and sugar gliders foraging leaves; new world near banana plants | Neapolitan bananas only; no chimpanzees; JEI shows no chimpanzee spawn egg or head (server half: scratch queue SQ-MG-17 to -20) |
 - [ ] **MG-47 Apple tree [game]:** JEI has no Fruits Delight apple sapling or leaves; a Fruits Delight apple sapling
   given by `/give` turns into the Vinery apple tree sapling in the inventory; a new world's forest has no Fruits Delight
   apple trees; an apple's tooltip reads "Fertile: Autumn" / "Offseason: Winter, Dry".
+- [ ] **MG-48 Fish and chips [game]:** JEI shows one Fish and Chips (Veggies Delight's art) with the Cooking Pot
+  frying route, no Cod 'n' Chips, Fries or Canned Chips entry; a Cod 'n' Chips given by `/give`
+  turns into Fish and Chips in the inventory; eating it returns a bowl (2.13).
 
 Server half of MG-35 to MG-37 without a player: `tools/salt_probe/salt_probe.js` (`/salttest`, scratch queue SQ-SALT-05
 to -07) calls each block's random tick itself and times a salt-brick tick against a stone one (added 2026-10-27).

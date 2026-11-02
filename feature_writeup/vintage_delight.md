@@ -35,7 +35,7 @@ This file has three parts:
 | Mod inventory after the purges (3 crops: oats, peanuts, cucumbers; ghost peppers; 4 wild plants; pickling jar, salt line, cheese mold, mason jars, about 127 items, about 232 recipe files) | §2 | reference, from `vintagedelight-0.1.6.jar` and `vintagedelight-kots-0.3.1.jar` |
 | Overlap list, all marked `*overlaps w/` | §3 | analysis; every duplicate ships, review after play |
 | Integration list in build order | §4 | BUILT 2026-10-23 except the dump-driven steps (§4.0, TODO `ports/vintageport #2`); food types, cans (configured), jar fluids, compost and cooking rules built the same day; deployed with 1.1.02 (port `-03`), 1.1.03 shipped `-07`, `-08` in `mods/` and the 1.1.04 client, `-09` built 2026-10-29 and not installed |
-| Open questions | §5 | Mixed Seeds (§2.3a, owner decides after the build); vine tree set is on test (S1) |
+| Open questions | §5 | vine tree set is on test (S1); Mixed Seeds BUILT 2026-11-01 (§2.3a) |
 | Tests | §8 | VTD-01 to VTD-76 drafted, none ticked; server side by `/vtdtest all` 373+ PASS (2026-10-26); group B (SQ-VP-14 / -15) and the CQ-VP client rows open |
 
 - **Source to port from:** `~/.local/share/atlauncher/downloads/vintagedelight-0.1.6.jar` (Forge 1.20.1, closest API,
@@ -162,9 +162,10 @@ This file has three parts:
 - **Purged mechanics, for the record:** the gearo bush pick and the Dehydrated
   effect and potions (S1, S8).
 
-#### 2.3a Mixed Seeds: investigation done, decision postponed
+#### 2.3a Mixed Seeds: BUILT 2026-11-01 (port `-10`)
 
-The owner postponed the decision until the port is built and seen in game (2026-10-23). Nothing is implemented.
+The owner postponed the decision until the port is built and seen in game (2026-10-23), then decided a real seed item
+(2026-11-01). Built as described at the end of this section; the findings below are the 2026-10-23 investigation.
 
 Findings (2026-10-23, from both jars and the web):
 
@@ -182,8 +183,27 @@ Findings (2026-10-23, from both jars and the web):
 - **Conclusion:** no evidence of an intended function; it looks like an abandoned idea (a texture and a stray table).
 - **What the port does:** registers no item; the texture ships unused; the table ships with the 1.20-only trim entry
   stripped, unwired like the other chest tables (§2.7).
-- **Open for the owner after the build:** drop it entirely, or define a function (an exception to the scope rule).
-  Test `VTD-46` waits on that decision.
+- **DECIDED 2026-11-01 (owner):** a real seed item, found in chests and dropped from grass; planted, it randomly plants
+  beetroot, wheat, cabbage, melon or pumpkin seeds (TODO `creativedelight/members #32`). The owner first asked for a mark
+  only, then the same day for the build (second batch); the builder's calls are below.
+- **Built 2026-11-01** (port `0.1.6-ce-19.2-10`, built, not installed; Creative Delight scripts):
+  - Item `vintagedelight:mixed_seeds` ("Mixed Seeds", tooltip "Plants a random crop"), port class `MixedSeedsItem`, the
+    shipped texture, in the Vintage tab beside the other seeds; `i.mixed_seeds`. A pack addition, the one exception to the
+    port's scope rule.
+  - Use on a block: the seed kinds in item tag `#vintagedelight:mixed_seeds_plants` are tried in a random order and the
+    first that plants there is planted, as if that seed had been used; one Mixed Seed is spent (none in creative).
+    **The pick is made per planting** (each use), not per crop block: the planted block is an ordinary wheat, beetroot,
+    cabbage, melon stem or pumpkin stem and drops its own seeds. Nothing plants where none of the five would.
+  - Tag (`i.t_mixed_seeds_plants`, filled in CD `vintagedelight/tags.js`; the jar ships it empty): wheat, beetroot,
+    melon and pumpkin seeds and **`farmersdelight:cabbage_seeds`** (`i.cabbage_seeds`, the only cabbage seed in the
+    pack). Mixed Seeds are in `#forge:seeds`; compost 0.3 through the seeds rule.
+  - Chests (CD `vintagedelight/loot.js`, `L.add`, share 0.04, 1 to 4): the five village house tables (plains, taiga,
+    savanna, snowy, desert) and the pillager outpost, the tables that already carry farm seeds. Upstream's own
+    `chests/mixed_seeds` table (books and paper) stays unwired.
+  - Grass (same file, LootJS): 2 % per grass or tall grass broken without shears, on top of the vanilla wheat seed drop
+    (12.5 %).
+  - JEI information page (CD client `vintagedelight/jei_info.js`).
+  - Tests VTD-46, VTD-79; scratch SQ-MXS-01 to -03.
 
 Organic Mash, checked at the same time: it is **not** a dead item. It is the secondary output of both vinegar pickling
 recipes (`fermenting/vinegar_from_jam`, `vinegar_from_jam_bottles`) and an input to Vintage's organic compost crafting
@@ -202,7 +222,7 @@ block it works as bone meal x3. All ported as shipped.
 | Placeable food | cheese pizza, meat pizza (`PizzaBlock`, 4 slices by knife) and their slices |
 | Blocks (decor) | salt block, smooth salt block, salt bricks / slab / stairs / wall, mixed salt bricks / slab / stairs / wall, salt pillar, 17 salt lamps (light 15), oat bag, oat bale, cucumber / peanut / ghost pepper crates |
 | Blocks (working) | pickling jar, evaporator, salt layer, cheese mold, golden egg, 3 crops + ghost pepper crop, 4 wild plants |
-| Other | 16 chef hats, ghost charcoal (mixed seeds is not a registered item upstream, §2.3a) |
+| Other | 16 chef hats, ghost charcoal; Mixed Seeds (not registered upstream; a pack addition since port `-10`, §2.3a) |
 
 ### 2.5 Goose golden egg (the one new mechanic, requested)
 
@@ -403,24 +423,24 @@ back to this table; removal of a side is a separate change at that point.
 | 2 Ids, tags | BUILT | 134 keys in `item_dict.js` (`vintagedelight_kimchi`, `vintagedelight_salt` prefixed); `i.vinegar` = vinegar bottle. `cookingtags.js`: `#forge:crops/*`, `#forge:seeds/*`, `#forge:storage_blocks/*` for the 4 crops; oat dough in `#forge:dough` (owner, 2026-10-23; was taken out), cucumber dough not. Cucumber noodles stay in `#forge:pasta` for `VTD-40` |
 | 3 Crop parity | soil tag BUILT; crops.md rows OPEN | `#vintagedelight:ghost_pepper_soil` = soul soil, rich soul soil, nulch (`blocktags.js`). Quark replant interplay is `VTD-02` / `VTD-03` |
 | 4 Wild crops | BUILT | 3 rules in `wild_crops.json` (oats cold and temperate grassy, peanuts warm dry grassy, cucumbers wet / swamp and cold and temperate grassy; rules changed 2026-10-23); ghost peppers: `literal` biome modifier in `nether_worldgen_rules.json` (crimson, warped forest). `test_wild_crops.sh` passes; `crops_by_biome.md` regenerated; `gen_soil_compat.py` adds the salt patch |
-| 5 Crop docs, WTHIT | OPEN | `/dumpcropgrowth` + `crop_growth_coverage.py` need the game |
+| 5 Crop docs, WTHIT | DONE 2026-11-01 | 10-30 dump: the four crops are WTHIT-native, Magic Peanut skipped (sapling), 0 Vintage UNKNOWN; crops.md §2.1 rows written (oats, peanuts; picked crops cucumber, ghost pepper, zucchini) |
 | 6 Seasons | BUILT | the jar's tags, as shipped |
-| 7 Food types | BUILT | 54 foods typed by hand in `food_types.json` (existing types only): produce raw veggie / fruit, pickles and kimchi cooked veggie (Brewin's precedent), roasted peanut cooked fruit, salted fish and surströmming cooked fish, the two eggs egg, cheese slice dairy, cookies / granola / honey roasted peanuts sweet, burgers / PB & J / burrito / pizza slices handheld, cucumber salad salad, pickle soup / ghostly chili / oatmeal soup (soup band and Comfort), cheese pasta / pad thai / overnight oats meal, nut milk and honey jar drink, doughs / noodles / curds / vinegar / every jam, sauce, relish and nut mash jar and bottle ingredient. `food_catalog.py` flags all 54 as not installed until a dump has them. No Dehydrated on any food (in the jar). Veggies: all 64 foods were already typed |
+| 7 Food types | BUILT; catalog rerun 2026-11-01: Ghost Charcoal (edible since vintageport #13) typed `special`; the three new jam jars show as not installed only because the 10-30 dump predates port `-09` | 54 foods typed by hand in `food_types.json` (existing types only): produce raw veggie / fruit, pickles and kimchi cooked veggie (Brewin's precedent), roasted peanut cooked fruit, salted fish and surströmming cooked fish, the two eggs egg, cheese slice dairy, cookies / granola / honey roasted peanuts sweet, burgers / PB & J / burrito / pizza slices handheld, cucumber salad salad, pickle soup / ghostly chili / oatmeal soup (soup band and Comfort), cheese pasta / pad thai / overnight oats meal, nut milk and honey jar drink, doughs / noodles / curds / vinegar / every jam, sauce, relish and nut mash jar and bottle ingredient. `food_catalog.py` flags all 54 as not installed until a dump has them. No Dehydrated on any food (in the jar). Veggies: all 64 foods were already typed |
 | 7a Compost | BUILT | CD `kubejs_startup/vintagedelight/compost.js` (was `compost_values.js`, QoL-4): the port's 14 chances (`other`), wild oats / peanuts / cucumbers / ghost peppers 0.65 (`crops`), 3 crates + oat bag 1.0 (`crates`); the Veggies wild crops and crates the same. Startup reload + `/reload` |
-| 8 Cans | config BUILT, Vintage run OPEN | `gen_can_types.py`: 16 Vintage cans (cucumber, ghost pepper, pickled beetroot / onion / pepper, roasted peanuts, Surströmming, cheese slices, oatmeal cookies, cheese pasta, pad thai; cucumber salad and the 3 soups by type) and 4 shared sources (Vintage kimchi and pickle in Brewin's cans, salted cod and salmon in the cooked fish cans), skipped through `AWAIT_DUMP` until a dump has them. The vinegar additive ran (66 cans). Veggies: 24 cans generated. Rows in [can_parity.md](can_parity.md), CP-27 to CP-31 |
-| 9 Cooking rules | BUILT | (Since 2026-10-25 the grid-meal moves, burrito wrap and heatless routes are Creative Delight QoL-5: `kubejs/data/creative_delight/kubejs/vintagedelight/cooking.js`; the burger rule stays in `cooking.js`.) `cooking.js`: burger rule for both burgers (shaped on the cheese slice so Delightful's wedge cheeseburgers keep their grids, beef or vegetarian patty; assemblies start on the slice, the deluxe on the patty), stuffed burrito on `#forge:tortilla` + assembly (ghost pepper or roasted bell pepper first), PB & J and cucumber salad `_manual_only`, heatless cheese pasta (pasta + 3 cheese + bowl), pad thai (2 cooked chicken cuts, roasted peanut) and pickle soup (bone broth, 2 pickles, baked potato), oat dough's furnace bread removed (3 raw oats -> bread stays); the Veggies compat grid recipes folded in (§3.4). `baking.js`: oatmeal cookie oven only (cookie dough + 2 raw oats -> 12). No rule applies: pizzas (one `#forge:dough` each already; oven.md has no pizza rule), granola bars, oatmeal (no cooked oat), ghostly chili (Nether, as blazing chili), jams, curds, nut milk |
+| 8 Cans | BUILT; rerun 2026-11-01 on the 10-30 dump: no change | `gen_can_types.py`: 16 Vintage cans (cucumber, ghost pepper, pickled beetroot / onion / pepper, roasted peanuts, Surströmming, cheese slices, oatmeal cookies, cheese pasta, pad thai; cucumber salad and the 3 soups by type) and 4 shared sources (Vintage kimchi and pickle in Brewin's cans, salted cod and salmon in the cooked fish cans), skipped through `AWAIT_DUMP` until a dump has them. The vinegar additive ran (66 cans). Veggies: 24 cans generated. Rows in [can_parity.md](can_parity.md), CP-27 to CP-31 |
+| 9 Cooking rules | BUILT | (Since 2026-10-25 the grid-meal moves, burrito wrap and heatless routes are Creative Delight QoL-5: `kubejs/data/creativedelight/kubejs/vintagedelight/cooking.js`; the burger rule stays in `cooking.js`.) `cooking.js`: burger rule for both burgers (shaped on the cheese slice so Delightful's wedge cheeseburgers keep their grids, beef or vegetarian patty; assemblies start on the slice, the deluxe on the patty), stuffed burrito on `#forge:tortilla` + assembly (ghost pepper or roasted bell pepper first), PB & J and cucumber salad `_manual_only`, heatless cheese pasta (pasta + 3 cheese + bowl), pad thai (2 cooked chicken cuts, roasted peanut) and pickle soup (bone broth, 2 pickles, baked potato), oat dough's furnace bread removed (3 raw oats -> bread stays); the Veggies compat grid recipes folded in (§3.4). `baking.js`: oatmeal cookie oven only (cookie dough + 2 raw oats -> 12). No rule applies: pizzas (one `#forge:dough` each already; oven.md has no pizza rule), granola bars, oatmeal (no cooked oat), ghostly chili (Nether, as blazing chili), jams, curds, nut milk |
 | 10, 11 Salt, cheese | BUILT (both lines ship; salt merged 2026-10-26: Vintage's dust and The Salt's block stay, salt bucket removed, [item_merges.md](item_merges.md) 2.9) | `#forge:salt` holds salt dust from the jar; JEI info / WTHIT slices line OPEN |
 | 12 Pickling jar | BUILT; remainder buffer OPEN | NCH `R.vdPickling`. `alcohol.js`: Brewin' kimchi and pickled pickles moved from the keg (honey 250 mB -> honey bottle). Fermented garlic honey: the Veggies port ships Vintage's jar recipe (Veggies `-02`), its pot route is gone. The jar keeps no leftover bottles (a honey bottle input loses its glass bottle); a remainder-buffer slot is a TODO row |
 | 13 Potions | BUILT | no Dehydrated class, registry entry or brewing mix in the port; the 6 brews use vanilla effect ids only (checked); `VTD-23` records the mixers |
-| 14 Placeables, stacks | OPEN | `/dumpplaceable`, `gen_stack_sizes.py` |
+| 14 Placeables, stacks | DONE 2026-11-01 | placeables: the 9 Vintage placeables already in `placeable.json` (the file is stale for other mods only); stacks: Vintage foods by type, plus new rules in `gen_stack_sizes.py`: the 16 chef hats 8 (the simple hat rule), Cheese Pizza, Meat Pizza and Cheese Wheel 8 (placed cake / feast) |
 | 15 Jar fluids | BUILT | 8 soft fluids in the jar (1.19.2 texture paths, `*_jar` ids); nut milk: `kubejs/data/creativeengineering/moonlight/soft_fluids/nut_milk.json`; pickle soup, ghostly chili, oatmeal from `gen_soup_soft_fluids.py` (which now keeps the hand-written drink fluids). Veggies: carrot juice, dandelion juice, turnip water (with their tank fluids as equivalents) and fermented garlic honey |
 | 16 Loot | BUILT (unwired) | 8 chest tables ship, no GLM; straw modifier kept. Crops loot tables row in TODO |
 | 17 Machines | BUILT | Create milling, IE recipes as shipped (IE gated) |
 | 18 Mob audit | BUILT | Vintage and Veggies both edit `Chicken.FOOD_ITEMS`, `Pig.FOOD_ITEMS`, `Villager.WANTED_ITEMS` (and Vintage `Parrot.TAME_FOOD`); both combine with the current value, so load order does not matter. The pack has no other edit of these fields; Quark troughs read the chicken / pig temptation, so they take the new foods too. Baby mobs: no food hook. Result: no conflict |
 | 19 Goose golden egg | BUILT | `incubationAdditions-1.1.0.jar` in `mods/`; [nests.md](nests.md) 3.11, NE-15, NE-16. Deviations: the roll is at the start of the 400-tick nest window (the only point before the nest walk), drop spots must be in the goose's line of sight, the roll is not saved across a reload |
-| 19a Mixed Seeds | investigated | §2.3a; decision after the build |
+| 19a Mixed Seeds | BUILT 2026-11-01 (port `-10`, not installed) | §2.3a |
 | 20 Chef hats | BUILT | Simple Hats' hat: bag weight 0 (`config/simplehats.json`, copy in `configs_edited/`), in `removed_items.js`, stack row gone. The 16 Vintage hats' stack rows come with step 14 |
-| 21 UI | OPEN | names audit, JEI coverage, BlockRunner tiers, WTHIT icons after `/dumpall` |
+| 21 UI | PARTLY 2026-11-01 | JEI coverage: no Vintage gap (the fermenting type has its category; 4 info pages; better screens are `jei #15`); BlockRunner: 18 blocks tiered in `blocktags.js` (crates wood, oat bag and bale natural smooth, salt bricks constructed brick, smooth salt and pillar constructed smooth, the salt blocks natural smooth, pizzas confectionery; sim 0 overlaps), the 18 left are jars, machines and plants; missing names: none. **Needs the game:** the name audit and WTHIT icons read client dumps of 2026-10-20 (no Vintage): `/dumpnames` client side and the WTHIT icon dump |
 | 22 Release | changelog BUILT | `unreleased.md` bullets; `build_deploy.py` `IN_TREE_MODS` now lists the Veggies and Vintage ports |
 
 Port notes (what the jar does differently from 0.1.6, all in `development/backportedVintage/README.md`):
@@ -435,7 +455,7 @@ Port notes (what the jar does differently from 0.1.6, all in `development/backpo
   `#minecraft:dirt` (`DirtWildCropBlock`); the cucumber patch tests `#minecraft:dirt` (sand out).
 - Upstream id bugs fixed: Frost Fermenta's `minecraft:rotten_tomato` -> FD's; the pickled pepper potato-cannon type;
   `#forge:protein` named an undefined tag (now optional); the jam advancement's tag.
-- Mixed Seeds is not registered (§2.3a); its texture and table ship.
+- Mixed Seeds: not registered upstream; registered by the port since `-10` as a pack addition (§2.3a). The table ships unwired.
 
 ### 4.0b Built 2026-10-25 (TODO ports/vintageport #5, #9 to #18)
 
@@ -449,7 +469,7 @@ Smooth Salt Block and Vine Tile, and now also the two fixes that had been hand-m
 Meat Pizza tables (the slices left: 4 at `bites` 0 down to 1 at 3); no other port block lacks a table.
 
 Creative Delight scripts (the first member rows, [creative_delight.md](creative_delight.md) 10.3): server
-`kubejs/data/creative_delight/kubejs/vintagedelight/recipes.js` (slime block pickling removed; Berserker's Brew and
+`kubejs/data/creativedelight/kubejs/vintagedelight/recipes.js` (slime block pickling removed; Berserker's Brew and
 leather rebuilt on `#forge:salt` with `R.vdPickling`; salted cod / salmon crafts removed; wild ghost pepper 2 seeds by
 Create milling and crushing, 3 by the IE Crusher), `vintagedelight/loot.js` (Vintage crop crates and bags through
 `L.pack`, the crops of the port's 7 chest tables joined to the vanilla tables at a small share), `veggiesdelight/loot.js`
@@ -504,6 +524,13 @@ Read from the files each system uses, not from the plans. The game dumps (`kubej
 | Pickling Jar remainders | n/a | open: honey bottles lose their glass bottle (`vintageport #4`) | port or mixin |
 | Potion handling of the 6 brews | n/a | no mixer reads their NBT (`VTD-23`) | record only |
 
+**Vintage column, 2026-11-01 (`vintageport #2`, on the 2026-10-30 dumps):** food catalog, cans, stack sizes, placeables,
+crop growth, crops.md rows and BlockRunner tiers done (§4.0 steps 5, 7, 8, 14, 21). Compost confirmed by `/dumpcompost`:
+produce, seeds, crates and wild crops are in; dishes, jams, cheese and salt are not (as other mods' dishes); every dough
+(oat, cucumber, Create's and the rest) composts at 0.85 since 2026-11-01 (owner; `doughs` rule, [composting.md](composting.md));
+the cucumber (Veggie) noodles are not a dough and stay out. Still open: the name audit and WTHIT icons (client dumps of 2026-10-20 predate Vintage),
+jar families (hand list).
+
 Steps that are the same as the Veggies port are only named; see [veggies_delight.md](veggies_delight.md) §4 for the
 detail.
 
@@ -556,7 +583,7 @@ detail.
     [mob_block_tweaks.md](mob_block_tweaks.md) and [baby_mobs.md](baby_mobs.md); note the result.
 19. **Goose golden egg** (§2.5) in `incubationAdditions`; chance 1 in 1000 as a config value; wall-avoiding drop spot;
     Golden Egg block in the dict.
-19a. **Mixed Seeds:** investigation done (§2.3a); the decision and any implementation wait until after the build.
+19a. **Mixed Seeds:** BUILT 2026-11-01 (§2.3a).
 20. **Chef hats.** Remove `simplehats:chefshat` from hat bags, recipes, `item_dict.js` and `stack_sizes.json`; Vintage's
     16 hats take the stack size rows and a names check.
 21. **UI.** Names audit ("Pickle" vs "Pickled Pickles", "Salt Layer", the Pickling Jar name, the Cask name used in alcohol.md), JEI coverage,
@@ -741,7 +768,11 @@ Overlap review and UI
 - [ ] VTD-40 **Overlap review:** for each `*overlaps w/*` row in §3.1, compare both versions in JEI, in the shared tag
   recipes, in cans and in food types; write keep both / keep one / merge back into §3.1.
 - [ ] VTD-45 Names audit fixes; every Vintage item in JEI has a recipe or a use.
-- [ ] VTD-46 Mixed Seeds: after the owner's decision (§2.3a), the item is either absent or its function works.
+- [ ] VTD-46 Mixed Seeds (§2.3a, port `-10`): use a stack of 20 on tilled farmland; each use plants wheat, beetroot, cabbage, a
+  melon stem or a pumpkin stem (all five seen over 20), one seed spent per planting, none in creative; used on grass or
+  stone it does nothing and is kept. JEI shows its info page; tooltip "Plants a random crop".
+- [ ] VTD-79 Mixed Seeds loot: break about 100 grass with an empty hand and see a few Mixed Seeds (2 %); with shears none.
+  `/loot` the village plains house table 20 times: Mixed Seeds turn up now and then.
 - [ ] VTD-48 **Burgers:** Cheese Burger is shaped (salad, tomato, onion / cheese slice, patty / bread) with a beef or
   vegetarian patty; a flaxen wedge in the cheese slot gives Delightful's Cheeseburger instead. The Deluxe Burger is
   shaped (salad, tomato, onion / bacon, patty, fried egg / cheese slice, bread). JEI shows one sequenced assembly
@@ -861,3 +892,6 @@ Pickles (2026-10-25)
   soft_fluids/`); PB and J takes `#forge:jams`. Coaster files and placeable entries for the removed jars dropped
   (`tools/placeable_catalog.py` EXCLUDE). RC-170 to RC-175 in [recipes_cooking.md](recipes_cooking.md). Needs the
   `-09` build + install.
+- 2026-11-01: `vintageport #2` dump-driven steps on the 2026-10-30 dumps (4.0 steps 5, 7, 8, 14, 21): Ghost Charcoal typed,
+  cans unchanged, chef hats and whole pizzas / cheese wheel get stack rules, BlockRunner tiers for 18 blocks, crops.md
+  §2.1 rows; the name audit and WTHIT icons wait for client dumps. Mixed Seeds built (§2.3a, port `-10`).

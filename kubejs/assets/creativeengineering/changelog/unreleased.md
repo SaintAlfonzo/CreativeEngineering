@@ -1,9 +1,48 @@
 # Unreleased
 
+## Large Meals <!-- icon: largemeals:omurice_block -->
+
+- **New:** Large Meals dishes cooked in the Cooking Pot: Pufferfish Broth, Potato Soup, Red Soup, Tomato Egg Soup, Cod Deluxe, Hearty Lunch, Chicken Curry, Pasta with Mushroom Sauce, Sweet Berry Custard and Rice Pudding, each also craftable by hand from cooked ingredients
+- **New:** Omurice, Mushroom Pot Pie and Roasted Rack of Mutton feasts: 4 servings each, taken with a bowl; the Roasted Rack of Mutton is a Cooking Pot recipe on a Raw Rack of Mutton (or, with more ingredients, a Cooked Rack of Mutton) as well as a hand craft
+- **New:** Killing a Sheep with a Knife drops a Raw Rack of Mutton (50%, +10% per Looting level), a Cooked Rack of Mutton if the Sheep is burning; a rack cuts into 4 Mutton Chops, and a Raw Rack of Mutton cooks in a Furnace, Smoker or Campfire
+- **New:** The Display Delight plates for the Large Meals dishes
+- **Changed:** Ender's Delight's Chicken Curry is now called End Chicken Curry
+
+## Roll Delight <!-- icon: roll_delight:amazing_salmon_roll -->
+
+- **New:** Roll Delight sushi: Rice Roll, Salmon Maki Roll, Mushroom Roll, Ancient Roll and Golden Roll, each cut on a Cutting Board into 3 slices (Rice Roll Slice, Salmon Maki, Mushroom, Ancient and Golden Roll Slices)
+- **New:** Tobiko Roll (Frogspawn and 3 Rice Roll Slices, makes 3) and Nether Roll (2 raw pork, bacon or Prepared Flesh and a Cooked Nether Wart, makes 2)
+- **New:** Cooked Nether Wart: boiled in the Cooking Pot with a bowl, 6 hunger, gives the bowl back
+- **New:** The Ancient Roll takes an Ancient Fruit and a Chorus Flower; the Golden Roll is a Rice Roll ringed with 8 Gold Nuggets (also in the heated Mixer and the Arc Furnace)
+- **New:** Legendary and Mythical Roll Medleys: 8 servings each, taken with an empty hand; breaking a part-eaten medley drops what is left and the bowl
+- **New:** Chopsticks (2 sticks): with Chopsticks in the main hand, a sushi, seafood, rice or noodle food in the off hand is eaten as normal and its effects last 1.5 times as long. 64 uses, one per food eaten; take Unbreaking and Mending; repaired with any planks
+- **New:** Chopsticks on a roll medley eat one serving in place
+- **New:** Wrapped Chopsticks: a table decoration holding up to 4 pairs
+- **New:** Foods that can be eaten with Chopsticks say so in their tooltip
+- **New:** Breaking Frogspawn with Shears drops it
+
+## Barbeque's Delight <!-- icon: barbequesdelight:grill -->
+
+- **New:** Ingredients Basin (a log in the Stonecutter makes 2): holds 2 stacks; right-click a stack with a stick in the main hand and the side ingredient in the off hand to make a raw skewer
+- **New:** Skewers with a side (basin item, off-hand item): Beef (2 raw beef, 2 cabbage), Chicken (2 raw chicken, 2 onions), Cod and Salmon (2 raw fish, 2 tomatoes), Rabbit (2 raw rabbit, 2 cabbage), Potato (2 potatoes, 2 bacon), Vegetable (2 vegetables, 2 fruits)
+- **New:** Skewers with an empty off hand: Mutton (4 raw mutton), Mushroom (4 brown mushrooms), Pork Sausage (4 raw pork)
+- **New:** Grill (iron trapdoor and 7 iron ingots): 2 slots, heated by a heat source below or a campfire built into it; sneak-right-click with an empty hand to flip a skewer at half time, it cooks at full time; left on twice as long it becomes a Burnt Skewer
+- **New:** A Grill used on a campfire (or a campfire used on a Grill's side) takes it in, unlit; it lights, goes out in water, under a shovel or a splash water bottle, and in rain as a campfire does, and drops the campfire when broken
+- **New:** Powders, right-clicked on a skewer on the Grill or a Cutting Board, one seasoning per skewer, 64 uses: Cumin Powder (heals 1 heart), Pepper Powder (eaten fast), Chili Powder (always edible, 1 heart of fire damage); a powder on a raw skewer stays after grilling
+- **New:** Sauces, the same way on cooked skewers only, 16 uses: Honey Mustard Sauce (effects twice as likely, half as long), Buffalo Sauce (effects one level stronger, half as long, 1 heart of fire damage), Barbeque Sauce (effects twice as long)
+- **New:** Kebab Wrap (bread, a cooked skewer, cabbage), Kebab Sandwich (bread, 2 cooked skewers, cabbage, onion) and Bibimbap (Cooked Rice, onion, carrot, 3 cooked skewers): they list the skewers inside and give their effects and seasonings
+- **New:** Tray (a log in the Stonecutter makes 4): 3-slot display, stacks on itself
+- **New:** WTHIT shows each skewer on a Grill with its time to flip or done, Ready to Flip, Cooked or Burnt
+
 ## What The Hell Is That
 
 - **Changed:** Silk Touch line reads "Silk Touch Required: True" (green, nothing drops without it) or "Drops Differently" (yellow); the book icon and "Needs Silk Touch" text are gone [book icon + "Needs Silk Touch"]
 - **New:** New option to also show "Silk Touch Required: False" (red) on every other block, off by default
+
+## Lemons
+
+- **Changed:** A lemon tree drops 2 to 5 Lemons [1 to 2]
+- **Changed:** A Lemon cuts into 8 Lemon Slices [4], by knife and by Create saw
 
 ## Powdered Sugar <!-- icon: creativeengineering:powdered_sugar -->
 
@@ -65,8 +104,97 @@
 
 - **Changed:** Only oak, spruce, birch, jungle, acacia, dark oak and mangrove blocks can be smoked into Smoked blocks [any wood type]
 
+## Cob Pipe
+
+- **Fixed:** The Hands, Face and Feet Curios slots were missing, so Stepstools, the Falconry Glove, face masks and the Cob Pipe could not be worn in them
+- **Fixed:** The Cob Pipe could not be put in the helmet slot by hand or shift click, and dispensers did not put it on
+
+## Baby Mobs
+
+- **Fixed:** A spawn egg used on an adult Squid, Glow Squid or Dolphin did nothing; it now spawns a baby
+- **New:** New baby models and textures for Mooshrooms, Cats (also Cozy's Improved Cats), Ocelots, Foxes and Rabbits
+- **New:** New baby models and textures for Horses, Donkeys, Mules, Skeleton Horses, Zombie Horses, Llamas and Trader Llamas
+- **New:** New baby models and textures for Bees, Axolotls, Goats, Pandas, Polar Bears, Turtles, Striders, Hoglins and Zoglins
+- **New:** New baby models and textures for Husks, Drowned, Zombie Villagers, Villagers, Piglins and Zombified Piglins
+- **New:** These baby humanoids wear baby-sized vanilla armour; held items and worn heads are full size [half size]
+- **Changed:** Babies with a coat from another mod keep the old baby model: Cozy's Improved Cats nether and end cats, Quark pride Bees and shiny animals
+- **Changed:** Baby cats with a More Mob Variants coat use the new baby of their vanilla coat
+- **New:** Client option to give every baby the new model instead; coats with no new baby texture then use the mob's plain baby
+
+## Miner's Delight <!-- icon: miners_delight:copper_pot -->
+
+- **New:** The Copper Pot keeps its ingredients' empty buckets, bottles and bowls in a take-only slot right of the output; it waits when that slot is full. Hoppers below take them out.
+- **Changed:** The Sticky Basket side, Baked Cave Carrot, Tentacles and Baked Tentacles have their older look back
+- **New:** Cave Carrot Crates can turn up in chests where Cave Carrots do
+
+## Vintage Delight <!-- icon: vintagedelight:mixed_seeds -->
+
+- **New:** Mixed Seeds: each one planted becomes Wheat, Beetroot, Cabbage, a Melon or a Pumpkin at random. Found in village house and pillager outpost chests, and when breaking grass without shears (2 %).
+- **Changed:** Chef Hats stack to 8 [1]; Cheese Pizza, Meat Pizza and Cheese Wheel stack to 8 [64]
+- **Changed:** Walking speed on Vintage Delight blocks: crates 1.1x, oat bags and bales and Salt Blocks 1.05x, salt bricks, Smooth Salt Blocks and Salt Pillars 1.25x, whole pizzas 0.85x [1x]
+
+## Veggies Delight <!-- icon: veggiesdelight:fish_and_chips -->
+
+- **Changed:** PneumaticCraft's Fish and Chips is merged into Veggies Delight's Fish and Chips; old ones in inventories become it. Fried in the Cooking Pot, served in a bowl [on paper]
+- **Removed:** PneumaticCraft's Fries and Canned Chips, with their recipes
+- **Removed:** Veggies Delight's two Cooking Pot recipes for Fish and Chips with an egg
+- **Changed:** Veggies Delight's Mashed Potatoes is renamed Mashed Sweet Potatoes: Cooking Pot 2 sweet potatoes or Sliced Sweet Potatoes and milk [sweet potato, potato and milk]; by hand 3 Baked Sweet Potatoes, milk and a bowl [Baked Sweet Potato, 2 Baked Potatoes]
+- **Changed:** More Delight Mashed Potatoes: Cooking Pot 2 potatoes or Potato Slices and milk, in a bowl [2 Potato Slices and milk]; new hand recipe: 3 Baked Potatoes or Baked Potato Slices, milk and a bowl
+- **Changed:** Mashed Potatoes and Mashed Sweet Potatoes can be salted
+- **Removed:** Veggies Delight's Stuffed Bell Peppers and their serving; Rustic Delight's Stuffed Bell Peppers stay
+- **Removed:** Sweet Potato Dough no longer bakes into bread in a furnace, smoker or campfire; it bakes in the Oven like other dough
+- **Changed:** Zucchini Quiche has one crafting recipe, with milk or any cheese, by hand only
+- **Changed:** Vegan Pizza takes any dough; new sequenced assembly on dough
+- **New:** Sequenced assemblies on a Roasted Zucchini for the Stuffed Zucchini Boat and Stuffed Zucchinis
+- **Changed:** Turnip Mutton Skewer is a shaped diagonal recipe; new sequenced assembly on a stick
+- **Changed:** Vegetarian Burger is shaped: cabbage and tomato over the patty over bread; new sequenced assembly on the Cooked Vegetarian Patty
+- **Changed:** Simple Hamburger, Hamburger with Egg and Loaded Hamburger take a Cooked Vegetarian Patty in place of the beef patty [separate recipes]
+
+## Rustic Delight <!-- icon: rusticdelight:bell_pepper_red -->
+
+- **Changed:** Syrup Coffee, Pumpkin Coffee and Cherry Blossom Coffee give Caffeinated for 0:45 [Speed and Haste: Syrup Coffee 1:30, Pumpkin and Cherry Blossom Coffee 1:00 with one of them at level II]
+- **Removed:** Rustic Delight's plain Pancake. The Pancakes plate takes 6 Supplementaries Pancakes and a Bowl, and gives Supplementaries Pancakes back by hand, by knife and when broken
+- **Changed:** Stackable Pancake renamed Pancake; its tooltip says it stacks up to 8
+- **Removed:** Fried Dough
+- **New:** Glowing Calamari Crate: 9 Glowing Calamari, and back
+- **Changed:** Maple Glazed Bacon takes Cooked Bacon, Syrup and a Honey Bottle [Cooked Bacon and Syrup]
+- **Changed:** Supreme Pizza: Cheese, cooked meat, cooked fish, a mushroom, a bell pepper (raw, sliced or roasted) and Onion over Dough, Tomato Sauce, Dough, any dough [Bell Pepper, Cheese, Onion, mushroom, Tomato Sauce, cooked meat or fish on one Dough]. New sequenced assembly
+- **Changed:** Golden Coffee Beans take any gold nugget. New: heated Mixer (6 nuggets) and Arc Furnace (5 nuggets)
+- **New:** Sequenced assembly for the nine Bell Pepper Rolls, Cherry Blossom Roll, Calamari Roll and Glowing Calamari Roll (on Cooked Rice, 2 each) and Rice Roll Royale (on a Bowl)
+- **New:** Crafting grid recipes from cooked parts: Bell Pepper Soup (Bone Broth, 4 roasted bell peppers), Calamari Soup (Bone Broth, 2 Cooked Calamari, Baked Potato, Onion, milk), Coffee-Braised Beef (2 cooked beef, Coffee or Dark Coffee, Carrot, Baked Potato, Bowl)
+
+## Nether's Delight <!-- icon: nethersdelight:hoglin_mount -->
+
+- **New:** Potted Mimicarnation: a Mimicarnation can be planted in a Flower Pot
+- **Changed:** Fungus Colonies on Rich Soul Soil grow with a 1 in 4 chance per growth tick [1 in 5]
+- **Changed:** Fungus Colonies off Rich Soul Soil can only be placed, and only stay, where the light level is below 13 [any light level]
+- **Changed:** A Stuffed Potato can be offered to a Mimicarnation on Rich Soul Soil, like the other meals
+- **Changed:** The Hoglin Mount is now called Hoglin Trophy; placed ones stay
+
+## Food Families
+
+- **Changed:** Baked Durian, Baked Pear and Dried Persimmon cook in a furnace, smoker or campfire for 0.35 xp [0.1]
+- **Changed:** Grilled Ghast, Cooked Rotten Ham and Fried Turtle Egg cook in a furnace, smoker or campfire for 0.35 xp [1]
+- **Changed:** Cooked Arthropod gives 0.35 xp in a furnace [0.25]
+- **Changed:** Cutting a Catfish on the Cutting Board also gives a Bone Meal
+- **Changed:** The Golden Apple crafting recipe takes any gold ingot, rose gold included [gold ingots only]
+
+## Cans
+
+- **New:** Canned Bat Soup, Canned Cave Soup, Canned Insect Stew, Canned Golden Nutritional Bar, Canned Mashed Potatoes and Canned Mashed Sweet Potatoes
+- **Removed:** Canned Mhadjeb
+- **Changed:** Canned soups, stews and meals give the same Comfort or Nourishment as the food they hold
+
+## Stack Sizes
+
+- **Changed:** Jellos, Hamimelon Shaved Ice, Pear with Rock Sugar, Mangosteen Cake, Dog Food and Sweet Potato Pancakes stack to 32 [16]; Glowgurt and Scrambled Eggs stack to 32 [1]
+- **Changed:** Hot Cocoa, Melon Juice, Gambler's Teas, Builder's Tea, Cherry Cream Soda, Passion Aloe Nectar and Pickerelweed Juice stack to 32 [16]
+- **Changed:** Milk Bottles stack to 64 [16]
+- **Changed:** Flaxen and Scarlet Cheese Wheels, ripe and unripe, stack to 32 [16]
+
 ## Gameplay
 
+- **Changed:** Every dough composts at 85 %: Create Dough, Oat Dough, Cucumber Dough, Sweet Potato Dough, Sourdough and the other doughs [Farmer's Delight Wheat Dough only]
 - **Fixed:** Seasoned food tooltips showed a raw key instead of the seasoning's name
 - **Fixed:** Creative Delight food tooltips, placeable food lines, names and JEI info pages appeared only after a resource reload
 - **Fixed:** Sweet Berries and Glow Berries were missing from JEI and the creative tabs
@@ -79,6 +207,7 @@
 - **Fixed:** Four calamari dishes were missing and others had an empty tentacle slot
 - **Fixed:** More Delight Mashed Potatoes, Potato Salad and the four Diced Potatoes dishes had an empty sliced potato slot
 - **Fixed:** Spout and Item Drain recipes for the coffees, Lavender Tea, the matcha lattes and the Water Cup were missing
+- **Fixed:** Farmer's Respite Kettle brews finished instantly; they take 10 seconds
 - **Fixed:** Librarians and cashiers offered Stockpile, Recovery and Cycle books
 - **Fixed:** Struck desert pyramids could generate as a meteorite crater with no pyramid
 - **Changed:** Dragon Chestplate 12 armor [10], Dragon Leggings 10 [9], each dragon armor piece 4.5 toughness [5]; full set 36 armor [33]
@@ -91,3 +220,5 @@
 - **Changed:** Let's Do Vinery and Brewin' & Chewin' are listed as "Let's Do Vinery (Creative Brewing)" and "Brewin' & Chewin' (Creative Brewing)" in the mod list, JEI and WTHIT ["Let's Do Vinery Backport (Alfonzo)", "Brewin' & Chewin' Backport (Alfonzo)"]
 - **Changed:** Foundation is listed as "Creative Brewing" ["Foundation Vinery Backport (Alfonzo)"]
 - **Changed:** The pack's own mods no longer end in "(Alfonzo)": Creative Engineering, Baby Mobs, Incubation Additions, More Mooblooms and the Exposure backports
+- **New:** Every item that plants something names its type in the tooltip: "Seed Item", "Plantable Crop", "Sapling", "Fungi Sapling", "Water Plant", "Vine" or "Vertical Crop"
+- **New:** "Plantable Crop" is a food that plants (carrots, berries); "Fungi Sapling" is a mushroom or nether fungus; "Vertical Crop" is sugar cane, cactus, bamboo or a chorus flower

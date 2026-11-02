@@ -25,7 +25,9 @@ DONOR = os.path.join(INSTANCE, 'rustic_upstream', 'rusticdelight-forge-1.20.1-1.
 JAVA = os.path.join(MOD, 'src', 'main', 'java', 'com', 'SaintAlfonzo', 'creativedelight', 'rustic', 'registry')
 ITEMS_BY_MOD = os.path.join(INSTANCE, 'kubejs', 'exported', 'items_by_mod')
 NS = 'rusticdelight'
-REMOVED = {'fruit_beignet'}
+REMOVED = {'fruit_beignet', 'pancake', 'fried_dough'}      # RusticTranslator.REMOVED
+REPLACED = {'pancake': 'supplementaries:pancake'}          # RusticTranslator.REPLACED
+OWN = {'glowing_calamari_crate'}                           # the port's own ids, not in upstream
 COLOURS = ['green', 'yellow', 'red', 'orange', 'white', 'pink', 'blue', 'purple', 'black']
 DROPPED = ('/advancements/', 'data/rusticdelight/forge/biome_modifier/', 'data/farmersdelight/recipes/')
 DROPPED_MODIFIERS = {'coffee_beans_from_jungle_temple', 'pale_bell_pepper_seeds_from_jungle_temple',
@@ -42,10 +44,10 @@ def port_ids():
     ids = set()
     for name in ('RDBlocks.java', 'RDItems.java'):
         text = open(os.path.join(JAVA, name)).read()
-        ids.update(re.findall(r'(?<!\.get)\(\s*"([a-z_]+)"\s*[,)]', text))
+        ids.update(re.findall(r'(?<!\.get)(?<!ResourceLocation)\(\s*"([a-z_]+)"\s*[,)]', text))
         for prefix, suffix in re.findall(r'"([a-z_]+)" \+ colour(?: \+ "([a-z_]+)")?', text):
             ids.update(prefix + c + suffix for c in COLOURS)
-    return ids - {NS} - set(COLOURS)
+    return ids - {NS} - set(COLOURS) - OWN
 
 
 def main():
@@ -79,6 +81,8 @@ def main():
         if n.startswith('data/rusticdelight/loot_modifiers/') and n.rsplit('/', 1)[1][:-5] in DROPPED_MODIFIERS:
             continue
         text = zf.read(n).decode()
+        for old, new in REPLACED.items():
+            text = text.replace('"%s:%s"' % (NS, old), '"%s"' % new)
         if any('"%s:%s"' % (NS, r) in text for r in REMOVED) and '/tags/' not in n:
             continue
         for ref in set(re.findall(r'"rusticdelight:([a-z_/]+)"', text)):

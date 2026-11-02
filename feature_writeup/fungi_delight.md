@@ -297,9 +297,9 @@ fails to load. Game closed: `./gradlew :backportedFungi:installToMods :patcherMo
 | Mushroom spawn system (§5.1.1) | `mushroom_spawns.json` / `.js`, shared code `worldgen/_biome_rules.js`, CEConfig `[worldgen.systems] mushroomSpawns`, `tools/test_mushroom_spawns.sh` | Table below. FD brown / red colony rules moved here unchanged. Pack copies of the colony feature for inky cap and morel (dirt and podzol, not mycelium only). Cave mode: no light predicate in 1.19.2 placement, so vanilla's underground test (`surface_relative_threshold_filter` OCEAN_FLOOR_WG at most -13) after an `environment_scan` to a floor; colonies only over `#minecraft:mushroom_grow_block` or `#minecraft:dirt`; noise caves only (features accept `air`, carvers leave `cave_air`) |
 | Truffle dirt | `wild_crops.json` rules `rooted_dirt` (1 in 3) and `truffle_dirt` (every chunk, count 5), new per-rule `step` (`underground_ores`), `dark_oak` or `cold forest` (25 biomes) | Order relies on modifier id order (rooted before truffle): FGD-32 |
 | Items, tags | `item_dict.js` (32 + truffle pie + 3 tags), `cookingtags.js` | `#forge:mushrooms/inky_cap` (+ cooked cap, colony), `/morel` (+ colony), `/truffle`; all in `#forge:mushrooms`; 5 `#forge:storage_blocks/*`. Pack users of `#forge:mushrooms`: bone broth, veg wrap filling (fine) |
-| Recipes | `cooking.js`, `baking.js`; since 2026-10-25 the meal rows below are Creative Delight QoL-5 (`kubejs/data/creative_delight/kubejs/fungidelight/cooking.js`) | Grid meals re-id'd `_manual_only` (ice cream marked placeholder for `sweets #4`); heatless routes for the 7 pot meals; truffle pie in the oven pie list (crust + 2 truffles + 2 sugar, no can) |
+| Recipes | `cooking.js`, `baking.js`; since 2026-10-25 the meal rows below are Creative Delight QoL-5 (`kubejs/data/creativedelight/kubejs/fungidelight/cooking.js`) | Grid meals re-id'd `_manual_only` (ice cream marked placeholder for `sweets #4`); heatless routes for the 7 pot meals; truffle pie in the oven pie list (crust + 2 truffles + 2 sugar, no can) |
 | Food, cans, compost | `food_types.json` (16 foods), `gen_can_types.py` (truffle, cooked inky cap, truffle pasta; soup and salad by the type loops; `AWAIT_DUMP` holds `fungidelight`), `compost_values.js` (19 rows, upstream values) | Values are tuned after `/dumpfood` (CQ-FGD-DUMP) |
-| Effects, JEI | `kubejs/assets/creativeengineering/lang/en_us.json` (JEED text), `kubejs/assets/creative_delight/kubejs/fungidelight/jei_info.js` (Creative Delight QoL-6 since 2026-10-25) (the pack's first JEI info pages: mushroom colonies, truffle, Weak Stomach foods) | [potions.md](potions.md) 2.3 row, PO-27 |
+| Effects, JEI | `kubejs/assets/creativeengineering/lang/en_us.json` (JEED text), `kubejs/assets/creativedelight/kubejs/fungidelight/jei_info.js` (Creative Delight QoL-6 since 2026-10-25) (the pack's first JEI info pages: mushroom colonies, truffle, Weak Stomach foods) | [potions.md](potions.md) 2.3 row, PO-27 |
 
 Mushroom rules (1 in N chunks; brown / red rates read from vanilla, Terralith and FD data; a Fungi form compared
 with the mean of brown and red):
@@ -514,7 +514,7 @@ filter value against the live cave biomes, and the starting rates above (FGD-28)
 | `mod_sides.md`, `tools/build_deploy.py` | release |
 | `kubejs/server_scripts/worldgen/_biome_rules.js` | code shared by wild crops and mushroom spawns |
 | `development/patcherMod/.../mooshroom/`, `mixin/MushroomCowBreedingMixin.java`, `mixin/AnimalCanMateMooshroomMixin.java`, `worldgen/SpawnTuning.java` | brown mooshrooms, breeding |
-| `kubejs/assets/creative_delight/kubejs/fungidelight/jei_info.js` (CD), `kubejs/assets/creativeengineering/lang/en_us.json` | JEI info pages, JEED text |
+| `kubejs/assets/creativedelight/kubejs/fungidelight/jei_info.js` (CD), `kubejs/assets/creativeengineering/lang/en_us.json` | JEI info pages, JEED text |
 | `tools/test_mushroom_spawns.sh`, `tools/test_wild_crops.sh`, `tools/gen_crop_worldgen_table.py` | offline checks, [crops_by_biome.md](crops_by_biome.md) |
 | `kubejs/assets/creativeengineering/changelog/unreleased.md` | bullets when built |
 
@@ -586,3 +586,6 @@ filter value against the live cave biomes, and the starting rates above (FGD-28)
   mushroom spawn system with cave mode, truffle dirt rules, ids, tags, recipes, truffle pie, food types, cans (waiting
   on the dump), compost, JEED text, JEI info pages, changelog. FGD-02, FGD-15, FGD-23 retired into FGD-28, -30, -35.
   Offline checks (§7) pass. Live checks queued as SQ-FGD at the top of the scratch queue. Jars not installed.
+- 2026-11-01: `creativedelight/members #8` (move the mooshroom family into More Mooblooms) not built: creative_split.md
+  7.6 (owner) sends `mooshroom/`, `MooshroomFamily` and More Mooblooms to Creative Worldgen as fauna, not CD. The
+  move rides the Worldgen carve (`creativesplit/worldgen #8`); the classes stay in patcherMod until then.

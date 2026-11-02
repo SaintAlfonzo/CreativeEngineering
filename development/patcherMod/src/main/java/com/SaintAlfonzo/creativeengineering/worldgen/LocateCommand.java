@@ -1,5 +1,6 @@
 package com.SaintAlfonzo.creativeengineering.worldgen;
 
+import com.SaintAlfonzo.creativeengineering.util.WorldgenFiles;
 import com.SaintAlfonzo.creativeengineering.compat.AsyncLocatorBridge;
 import com.google.gson.GsonBuilder;
 import com.mojang.brigadier.arguments.IntegerArgumentType;

@@ -23,7 +23,7 @@ import umpaz.farmersrespite.common.block.entity.KettleBlockEntity;
  */
 public final class WthitKettleTank implements IWailaClientPlugin, IBlockComponentProvider {
 
-	private static final ResourceLocation LINE = new ResourceLocation("creative_delight", "kettle_tank");
+	private static final ResourceLocation LINE = new ResourceLocation("creativedelight", "kettle_tank");
 
 	@Override
 	public void register(IClientRegistrar registrar) {
@@ -35,9 +35,9 @@ public final class WthitKettleTank implements IWailaClientPlugin, IBlockComponen
 		if (!(accessor.getBlockEntity() instanceof KettleTankHolder tank)) return;
 		FluidStack fluid = tank.ce$tankFluid();
 		Component value = fluid.isEmpty()
-				? Component.translatable("creative_delight.kettle.tank.empty")
-				: Component.translatable("creative_delight.wthit.kettle_tank.value", fluid.getDisplayName(), tank.ce$tankLevel(),
+				? Component.translatable("creativedelight.kettle.tank.empty")
+				: Component.translatable("creativedelight.wthit.kettle_tank.value", fluid.getDisplayName(), tank.ce$tankLevel(),
 						KettleTank.MAX_LEVEL);
-		tooltip.setLine(LINE, new PairComponent(Component.translatable("creative_delight.wthit.kettle_tank"), value));
+		tooltip.setLine(LINE, new PairComponent(Component.translatable("creativedelight.wthit.kettle_tank"), value));
 	}
 }

@@ -318,7 +318,7 @@ global.removedItems = [
 	i.q_dragon_scale,
 	i.potion_bucket, // immersiveengineering:potion_bucket - immersiveengineering:potion fluid
 	// has no source left (Mixer redirected to create:potion, bottling_list removed, see
-	// engineering/potion_bottling.js + patcherMod PotionRecipeGeneratorsMixin), so this is
+	// CB creativeengineering/potion_bottling.js + PotionRecipeGeneratorsMixin), so this is
 	// unreachable in survival; kept hidden/flagged rather than craftable.
 	// Creative Labels donors (sticky_notes.md 3.13): Sticky It! and Labels stay installed as art donors until
 	// phase 5, their items are out of play (recipes removed in server_scripts/other/creative_labels.js, creative
@@ -343,7 +343,7 @@ global.removedItems = [
 	i.tentacles, i.baked_tentacles, i.tentacles_on_a_stick,
 	i.oceansdelight_tentacles, i.cut_tentacles, i.tentacle_on_a_stick, i.baked_tentacle_on_a_stick,
 	i.squid_tentacles, i.glow_squid_tentacles, i.grilled_squid_tentacles,
-	// Upgrade Aquatic bedrolls (gameplay/misc #10); recipes removed in server_scripts/other/misc_mods.js, leatherworker
+	// Upgrade Aquatic bedrolls (gameplay/misc #10); recipes removed in creativecompat/kubejs/other/misc_mods.js, leatherworker
 	// trade off in config/upgrade_aquatic-common.toml
 	i.bedroll,
 	i.white_bedroll,
@@ -393,7 +393,7 @@ global.removedItems = [
 ];
 
 // Floral Enchantment's 31 large pots (empty and filled) are hidden; a pack pot replaces them (flower_pots.md 3.2.9).
-// Placed ones keep working. Recipe removed in server_scripts/other/flowers.js.
+// Placed ones keep working. Recipe removed in creativecompat/kubejs/other/flowers.js.
 Object.keys(i).filter(k => k.indexOf('floral_large_') === 0).forEach(k => global.removedItems.push(i[k]))
 
 console.log(`[jeiRemove] Registered ${global.removedItems.length} removed items to global scope`)

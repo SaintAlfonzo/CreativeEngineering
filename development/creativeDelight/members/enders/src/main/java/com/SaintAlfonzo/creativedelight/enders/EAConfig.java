@@ -13,7 +13,7 @@ public final class EAConfig {
     static {
         ForgeConfigSpec.Builder b = new ForgeConfigSpec.Builder();
         b.comment("Growth of the End plants. Each plant only grows on its soil: blocks in the block tag",
-                "creative_delight:end_plant_soil_fast use the Fast chance, blocks in creative_delight:end_plant_soil_slow",
+                "creativedelight:end_plant_soil_fast use the Fast chance, blocks in creativedelight:end_plant_soil_slow",
                 "the Slow chance. Off those blocks the plants cannot be placed and break.").push("growth");
         CHORUSFLAME_GROWTH_SLOW = b.comment("Chance per random tick that a Chorusflame on slow soil grows one stage (3 stages).")
                 .defineInRange("chorusflameGrowthSlow", 0.1, 0.0, 1.0);

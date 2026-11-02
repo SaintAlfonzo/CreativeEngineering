@@ -1,5 +1,6 @@
 package com.sammy.minersdelight.content.block.copper_pot;
 
+import com.sammy.minersdelight.MDConfig;
 import com.sammy.minersdelight.logic.CupConversions;
 import com.sammy.minersdelight.registry.MDBlockEntities;
 import com.sammy.minersdelight.registry.MDItems;
@@ -62,7 +63,11 @@ public class CopperPotBlockEntity extends SyncedBlockEntity implements MenuProvi
     public static final int MEAL_DISPLAY_SLOT = 4;
     public static final int CONTAINER_SLOT = 5;
     public static final int OUTPUT_SLOT = 6;
-    public static final int INVENTORY_SIZE = 7;
+    /** Port (miners_delight.md I8): take-only slot for the ingredients' leftover containers, right of the output. */
+    public static final int LEFTOVER_SLOT = 7;
+    public static final int INVENTORY_SIZE = 8;
+    /** Inputs, meal, container and output: the slots a recipe sees, and all a pot saved before the leftover slot holds. */
+    private static final int COOKING_SLOTS = OUTPUT_SLOT + 1;
     /** FD cooking recipes match against the cooking pot's 9-slot layout (6 inputs, then meal, container, output). */
     private static final int FD_INVENTORY_SIZE = 9;
 
@@ -146,7 +151,13 @@ public class CopperPotBlockEntity extends SyncedBlockEntity implements MenuProvi
     @Override
     public void load(CompoundTag compound) {
         super.load(compound);
-        inventory.deserializeNBT(compound.getCompound("Inventory"));
+        // pots saved before the leftover slot hold 7 slots; deserializeNBT would shrink the handler to that
+        CompoundTag saved = compound.getCompound("Inventory");
+        if (saved.getInt("Size") < INVENTORY_SIZE) {
+            saved = saved.copy();
+            saved.putInt("Size", INVENTORY_SIZE);
+        }
+        inventory.deserializeNBT(saved);
         cookTime = compound.getInt("CookTime");
         cookTimeTotal = compound.getInt("CookTimeTotal");
         mealContainerStack = ItemStack.of(compound.getCompound("Container"));
@@ -244,8 +255,8 @@ public class CopperPotBlockEntity extends SyncedBlockEntity implements MenuProvi
     /** The four inputs in the first slots of FD's 9-slot layout; meal, container and output in its last three. */
     public RecipeWrapper createFakeRecipeWrapper() {
         ItemStackHandler handler = new ItemStackHandler(FD_INVENTORY_SIZE);
-        for (int slot = 0; slot < INVENTORY_SIZE; slot++) {
-            handler.setStackInSlot(slot < INPUT_SLOTS ? slot : slot + (FD_INVENTORY_SIZE - INVENTORY_SIZE), inventory.getStackInSlot(slot));
+        for (int slot = 0; slot < COOKING_SLOTS; slot++) {
+            handler.setStackInSlot(slot < INPUT_SLOTS ? slot : slot + (FD_INVENTORY_SIZE - COOKING_SLOTS), inventory.getStackInSlot(slot));
         }
         return new RecipeWrapper(handler);
     }
@@ -320,7 +331,50 @@ public class CopperPotBlockEntity extends SyncedBlockEntity implements MenuProvi
             return false;
         }
         int total = stored.getCount() + result.getCount();
-        return total <= inventory.getSlotLimit(MEAL_DISPLAY_SLOT) || total <= result.getMaxStackSize();
+        return (total <= inventory.getSlotLimit(MEAL_DISPLAY_SLOT) || total <= result.getMaxStackSize()) && leftoversFit();
+    }
+
+    /** With stallWhenFull, true only when every leftover of one meal fits in the leftover slot. */
+    private boolean leftoversFit() {
+        if (!MDConfig.remainderBuffer() || !MDConfig.stallWhenFull()) {
+            return true;
+        }
+        ItemStack slot = inventory.getStackInSlot(LEFTOVER_SLOT).copy();
+        for (int i = 0; i < INPUT_SLOTS; i++) {
+            ItemStack input = inventory.getStackInSlot(i);
+            if (input.isEmpty() || !input.hasCraftingRemainingItem()) {
+                continue;
+            }
+            ItemStack leftover = input.getCraftingRemainingItem();
+            if (slot.isEmpty()) {
+                slot = leftover.copy();
+            } else if (ItemStack.isSameItemSameTags(slot, leftover) && slot.getCount() + leftover.getCount() <= slot.getMaxStackSize()) {
+                slot.grow(leftover.getCount());
+            } else {
+                return false;
+            }
+        }
+        return true;
+    }
+
+    /** Into the leftover slot (config remainderBuffer); else, or when it does not fit, thrown out of the pot's side. */
+    private void storeOrThrowLeftover(ItemStack leftover) {
+        if (MDConfig.remainderBuffer()) {
+            ItemStack existing = inventory.getStackInSlot(LEFTOVER_SLOT);
+            if (existing.isEmpty()) {
+                inventory.setStackInSlot(LEFTOVER_SLOT, leftover.copy());
+                return;
+            }
+            if (ItemStack.isSameItemSameTags(existing, leftover) && existing.getCount() + leftover.getCount() <= existing.getMaxStackSize()) {
+                existing.grow(leftover.getCount());
+                inventory.setStackInSlot(LEFTOVER_SLOT, existing);
+                return;
+            }
+        }
+        Direction side = getBlockState().getValue(CopperPotBlock.FACING).getCounterClockWise();
+        ItemUtils.spawnItemEntity(level, leftover.copy(),
+                worldPosition.getX() + 0.5 + side.getStepX() * 0.25, worldPosition.getY() + 0.7, worldPosition.getZ() + 0.5 + side.getStepZ() * 0.25,
+                side.getStepX() * 0.08F, 0.25, side.getStepZ() * 0.08F);
     }
 
     /** One tick of cooking; true when a meal was finished. CCK injects at the setRecipeUsed call. */
@@ -343,13 +397,10 @@ public class CopperPotBlockEntity extends SyncedBlockEntity implements MenuProvi
             stored.grow(result.getCount());
         }
         pot.setRecipeUsed(recipe);
-        Direction side = getBlockState().getValue(CopperPotBlock.FACING).getCounterClockWise();
         for (int slot = 0; slot < INPUT_SLOTS; slot++) {
             ItemStack input = inventory.getStackInSlot(slot);
             if (input.hasCraftingRemainingItem()) {
-                ItemUtils.spawnItemEntity(level, input.getCraftingRemainingItem(),
-                        worldPosition.getX() + 0.5 + side.getStepX() * 0.25, worldPosition.getY() + 0.7, worldPosition.getZ() + 0.5 + side.getStepZ() * 0.25,
-                        side.getStepX() * 0.08F, 0.25, side.getStepZ() * 0.08F);
+                storeOrThrowLeftover(input.getCraftingRemainingItem());
             }
             if (!input.isEmpty()) {
                 input.shrink(1);

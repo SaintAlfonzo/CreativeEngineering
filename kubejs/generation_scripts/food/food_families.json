@@ -419,7 +419,8 @@
    "vintagedelight:pickled_beetroot",
    "vintagedelight:pickled_egg",
    "vintagedelight:pickled_onion",
-   "vintagedelight:pickled_pepper"
+   "vintagedelight:pickled_pepper",
+   "veggiesdelight:fermented_garlic_honey"
   ],
   "jello": [
    "fruitsdelight:apple_jello",
@@ -787,7 +788,6 @@
    "rusticdelight:stuffed_bell_pepper_red",
    "rusticdelight:stuffed_bell_pepper_yellow",
    "veggiesdelight:garlic_stuffed_mushrooms",
-   "veggiesdelight:stuffed_bellpepper",
    "veggiesdelight:stuffed_zucchini_boat",
    "veggiesdelight:stuffed_zucchinis",
    "vintagedelight:stuffed_burrito"
@@ -967,7 +967,6 @@
    "oceanic_delight:fried_shrimp",
    "oceansdelight:honey_fried_kelp",
    "oceansdelight:squid_rings",
-   "pneumaticcraft:cod_n_chips",
    "pneumaticcraft:salmon_tempura",
    "rusticdelight:fried_calamari",
    "rusticdelight:fried_chicken",

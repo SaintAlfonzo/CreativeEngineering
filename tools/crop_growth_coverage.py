@@ -4,7 +4,7 @@
     python3 tools/crop_growth_coverage.py [audit.json] [--md]
 
 Reads kubejs/exported/crops/crop_growth_audit.json (from /dumpcropgrowth) and the rule file the
-WTHIT plugin ships (development/creativeDelight/.../assets/creative_delight/crop_growth.json). Every
+WTHIT plugin ships (development/creativeDelight/.../assets/creativedelight/crop_growth.json). Every
 block the audit says WTHIT doesn't cover lands in one of:
 
   rule      a rule in crop_growth.json matches it, and the rule's properties / stages / numbers fit the block
@@ -22,7 +22,7 @@ import sys
 
 ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 AUDIT = os.path.join(ROOT, 'kubejs/exported/crops/crop_growth_audit.json')
-RULES = os.path.join(ROOT, 'development/creativeDelight/src/main/resources/assets/creative_delight/crop_growth.json')
+RULES = os.path.join(ROOT, 'development/creativeDelight/src/main/resources/assets/creativedelight/crop_growth.json')
 
 
 def simple(name):

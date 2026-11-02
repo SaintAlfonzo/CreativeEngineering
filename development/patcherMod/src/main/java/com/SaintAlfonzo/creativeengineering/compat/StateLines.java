@@ -5,7 +5,6 @@ import java.util.List;
 import java.util.Locale;
 import java.util.regex.Pattern;
 
-import com.SaintAlfonzo.creativeengineering.crops.CropGrowth;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
@@ -87,12 +86,12 @@ public final class StateLines {
                 if (s.startsWith("#")) {
                     tags.add(s.substring(1));
                 } else {
-                    ids.add(CropGrowth.glob(s));
+                    ids.add(com.SaintAlfonzo.creativeengineering.util.Globs.glob(s));
                 }
             }
             List<Pattern> except = new ArrayList<>();
             if (o.has("except")) {
-                o.getAsJsonArray("except").forEach(e -> except.add(CropGrowth.glob(e.getAsString())));
+                o.getAsJsonArray("except").forEach(e -> except.add(com.SaintAlfonzo.creativeengineering.util.Globs.glob(e.getAsString())));
             }
             if (ids.isEmpty() && tags.isEmpty()) {
                 throw new IllegalArgumentException("rule " + n + " matches no blocks");

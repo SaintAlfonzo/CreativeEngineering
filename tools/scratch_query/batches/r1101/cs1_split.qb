@@ -1,0 +1,95 @@
+# Run 2026-11-01, Creative Split wave 1: SQ-CAL (Calendar carve) and SQ-CDV (Devtools carve), group A superflat.
+# Boot 1 on the instance config (CE toml still holds [seasons]/[time]/[crop_seasons]). Restart rows in cs1b_restart.qb.
+pace 2
+
+## SQ-CAL-01 | calendar loads, first-boot moved-keys WARN, mixins
+bootexpect \[creativecalendar\] time, seasons and crop seasons loaded
+bootexpect still has keys that moved to config/creativecalendar-common.toml
+bootreject creativecalendar\.mixins\.json.*(Error|error|failed)
+shell grep -c "from creativecalendar.mixins.json" logs/debug.log; grep -o "Mixing [A-Za-z]* from creativecalendar.mixins.json" logs/debug.log | sort -u
+look debug.log mixes 10 common mixins (CropSeasonGrowHook only with IE / Dirty Stuff / Nether's Delight)
+
+## SQ-CAL-02 | config split (first half; restart half in cs1b)
+shell grep -nE "^\s*\[" config/creativecalendar-common.toml; grep -n "seasonsMeltIntervalTicks\|cropSeasons\|cropOutOfSeason" config/creativecalendar-common.toml; echo CE:; grep -nE "^\[(seasons|time|crop_seasons)\]" config/creativeengineering-common.toml || echo "CE has no calendar sections"
+look calendar file has [seasons], [crop_seasons], [time.*], [perf] seasonsMeltIntervalTicks = 4, [wthit]; CE file lost them
+
+## SQ-CAL-03 | script pack order and calendar scripts
+shell grep -E "startup script packs in order|creativecalendar\]|global.CAL missing" logs/kubejs/startup.log logs/kubejs/server.log
+kjsexpect \[creativecalendar\] server scripts ready, features on: seasons, crop_seasons, time
+kjsreject global\.CAL missing
+look pack order lists creativecalendar before creativedelight and creativebrewing; core finished line present
+
+## SQ-CDV-01 | devtools loads
+bootexpect \[creativedevtools\] loaded, members: \[ceperfbot, cecapture\]
+bootreject \[creativedevtools\].*NOT loaded
+bootreject NoClassDefFoundError.*(BlockStateLookupHook|LevelRandomHook)
+kjsexpect \[creativedevtools\] server scripts ready
+shell grep -E "\[creativedevtools\]" logs/kubejs/startup.log; grep -E "ERROR.*creativedevtools" logs/latest.log | head -5; grep -nE "^\s*\[" config/creativedevtools-common.toml; echo CE:; grep -nE "^\s*\[(debug|worldgen\.mass_place)" config/creativeengineering-common.toml || echo "CE has no debug/mass_place"
+look startup core finished; toml has [debug.*], [worldgen.mass_place], [features]; CE toml lost [debug] and [worldgen.mass_place]
+
+## SQ-CAL-04 | /cetime commands
+bootexpect \[time\] Better Days from \[time\]
+> cetime
+> cetime push
+> cetime date
+reject Unknown command
+expect 45
+look /cetime shows day 45 + night 15 min, 8 days per sub-season, preset SINGLEPLAYER; push and date answer in SQ-TD-01 format
+
+## SQ-CAL-05 | season clock follows the sun
+> cetime date
+> time add 24000
+sleep 3
+> cetime date
+> season
+reject Unknown command
+look day +1 in both cetime lines, /season agrees
+
+## SQ-CAL-06 | season and crop season tags
+> locate biome #creativeengineering:seasons/arid
+waitlog (Located|Could not find) 180
+expect (desert|badlands)
+> forceload add 30 30
+sleep 3
+> setblock 30 -61 30 minecraft:farmland
+> setblock 30 -60 30 minecraft:wheat
+> execute if block 30 -60 30 #creativeengineering:crop_seasons/temperate run say CALTAG temperate
+> setblock 32 -60 30 minecraft:glass
+> execute if block 32 -60 30 #sereneseasons:greenhouse_glass run say CALTAG glass
+expect CALTAG temperate
+expect CALTAG glass
+
+## SQ-CAL-07 | wine clock moves with the calendar
+> wine time
+> cetime date add 1 month
+> wine time
+reject Unknown command
+reject WineTime|NoClassDefFound
+look wine clock moves 8 days with the month
+
+## SQ-CDV-02 | devtools commands answer
+> cegen list
+> ceperf status
+> ceplace status
+> recipescan
+waitlog (recipescan|recipe scan).*(done|summary|checked|recipes) 300
+> dumpworldjei
+sleep 10
+> dumpspawns
+sleep 10
+reject Unknown command
+shell ls -la kubejs/exported/spawns.json; grep -rn "flowerworld" kubejs/server_scripts logs/kubejs/server.log | head -3
+look every command answered; /recipescan summary line; spawns.json written now; /flowerworld registered (not run)
+
+## SQ-CDV-04 | devtools test recipes under the creativedevtools namespace (probe half in cs1b)
+> dumprecipes create
+sleep 20
+shell grep -rho "creativedevtools:[^\"]*" kubejs/exported/recipes/ | sort -u | head -30
+look one *_mech_crafting per metal and wood, netherite, one sequenced assembly, all creativedevtools:
+
+## SQ-CDV-03 | /dumpall (about 5 min)
+> dumpall
+waitlog \[dumpall\] all \d+ dumps done 900
+expect \[dumpall\] all 25 dumps done
+kjsreject ReferenceError
+kjsreject guardThrowable.*(not|undefined)|writeExportJson.*(not|undefined)

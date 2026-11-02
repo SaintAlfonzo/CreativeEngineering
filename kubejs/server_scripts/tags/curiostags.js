@@ -5,15 +5,10 @@ ServerEvents.tags('item', e => {
 	var t = global.tags
 	var i = global.item
 
-	// Hands: the Falconry Glove (no mod registered a hands slot, so it had nowhere to go).
-	t.add(e, i.t_curios_hands, i.falconry_glove)
+	// Hands (Falconry Glove) and the Simple Hats face rows: Creative Compat (creativecompat/kubejs/tags/curiostags.js).
 
-	// Face: Simple Hats' masks and chalk stick, Botania's cosmetic masks, the Cob Pipe (corn_delight.md 2.3).
-	// Simple Hats adds every hat to curios:head through a mixin, so these stay valid in a head slot too.
+	// Face: Botania's cosmetic masks, the Cob Pipe (corn_delight.md 2.3).
 	t.add(e, i.t_curios_face, [
-		i.simplehats_chalk_stick,
-		i.simplehats_angrymask, i.simplehats_cucumbereyemask, i.simplehats_ghostmask,
-		i.simplehats_hockeymask, i.simplehats_horsemask, i.simplehats_sleepeyemask,
 		i.cosmetic_ancient_mask, i.cosmetic_eerie_mask, i.cosmetic_tiny_potato_mask,
 		i.cob_pipe,
 	])

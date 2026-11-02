@@ -24,7 +24,7 @@ import net.minecraftforge.registries.ForgeRegistries;
  * WTHIT plugin: "Sheared, prevents spreading and converting to dirt" on a grass-like block cut with shears. Shears clear the block's
  * {@code fertile} state (Immersive Weathering's grass, mycelium and soils; the pack's Vintage lush grass and Vinery
  * grass slab), and a block with {@code fertile=false} never random-ticks, so it neither spreads nor grows plants.
- * Vines ({@code block.VineShearing}): "Sheared, stops growing" on a sheared modded vine ({@code fertile=false}) and
+ * Vines (Creative Compat {@code block.VineShearing}): "Sheared, stops growing" on a sheared modded vine ({@code fertile=false}) and
  * on Vinery's jungle grape vine with {@code sterilized=true}; "Stopped growing" on a weeping, twisting or cave vine
  * or kelp tip at its last age and on Immersive Weathering's ivy at its last age (10), sheared or grown that far.
  * Client-side only: block state is always on the client. Off with {@code [wthit] sheared}.

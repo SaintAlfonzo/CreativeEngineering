@@ -934,7 +934,7 @@
       }
     },
     "endersdelight:end_house": {
-      "source": "creative_delight-1.0.0.jar!endersAdditions-1.1.4-ce-19.2-02.jar",
+      "source": "creativedelight-1.0.0.jar!endersAdditions-1.1.4-ce-19.2-02.jar",
       "structures": [
         {
           "structure": "endersdelight:end_house",

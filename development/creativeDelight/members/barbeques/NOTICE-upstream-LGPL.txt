@@ -1,0 +1,9 @@
+Barbeque's Delight 1.3.0
+Copyright (c) Mao (original mod) and lcy0x1 / xkmc (1.3.0)
+Licensed under the GNU Lesser General Public License, version 2.1 (LGPL-2.1).
+Source: https://github.com/xkmc-mc/BarbequesDelight
+
+This Creative Delight member (mod id barbequesdelight) is a modified version: the 1.3.0 Java was rewritten for Forge
+1.19.2 without the Registrate and L2 libraries, and the textures, models and translations of 1.3.0 are carried with
+format changes for 1.19.2. The LGPL-2.1 terms continue to apply to the upstream parts; the modifications are released
+under the GNU General Public License, version 3, which LGPL-2.1 section 3 permits.

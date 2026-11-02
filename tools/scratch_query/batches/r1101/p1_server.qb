@@ -7,7 +7,7 @@ pace 1
 
 ## SQ-R11-BOOT | boot clean of CE / CD / CB mixin and registry errors
 bootexpect Done \(
-bootreject (Mixin apply failed|InvalidInjectionException|Critical injection failure).*(creativeengineering|creative_delight|creativedelight|creative_brewing|blockheads_additions)
+bootreject (Mixin apply failed|InvalidInjectionException|Critical injection failure).*(creativeengineering|creativedelight|creativedelight|creativebrewing|blockheads_additions)
 bootreject Registry Object not present
 bootreject \[NCH\].*(does not exist or is empty|error|Error)
 look latest.log NCH / KubeJS lines listed by the following rows
@@ -20,22 +20,22 @@ look latest.log NCH / KubeJS lines listed by the following rows
 expect ceperfbot ok
 
 ## SQ-CBJ-01 | Creative Brewing nests both ports
-bootexpect \[creative_brewing\] members: \[vinery, brewinandchewin\]
-bootreject \[creative_brewing\].*NOT loaded
+bootexpect \[creativebrewing\] members: \[vinery, brewinandchewin\]
+bootreject \[creativebrewing\].*NOT loaded
 bootreject member .* is loaded from
 shell grep -qE "JarInJarDependencyLocator.*backportedVinery|backportedVinery.*(JarInJar|jij)" logs/debug.log
 shell grep -qE "JarInJarDependencyLocator.*backportedBrewin|backportedBrewin.*(JarInJar|jij)" logs/debug.log
 
 ## SQ-CBJ-02 | startup script order and server scripts ready
-shell grep -n "startup script packs in order" logs/kubejs/startup.log | grep -q "creative_delight.*creative_brewing"
-shell grep -q "\[creative_brewing\] core finished, members: vinery, brewinandchewin" logs/kubejs/startup.log logs/latest.log
+shell grep -n "startup script packs in order" logs/kubejs/startup.log | grep -q "creativedelight.*creativebrewing"
+shell grep -q "\[creativebrewing\] core finished, members: vinery, brewinandchewin" logs/kubejs/startup.log logs/latest.log
 shell ! grep -q "global.CD missing" logs/kubejs/startup.log logs/latest.log
-shell grep -q "\[creative_brewing\] server scripts ready, members on: vinery, brewinandchewin" logs/kubejs/server.log logs/latest.log
+shell grep -q "\[creativebrewing\] server scripts ready, members on: vinery, brewinandchewin" logs/kubejs/server.log logs/latest.log
 
 ## SQ-CBJ-03 | members config and the three namespaces
-shell grep -qE "^\s*vinery\s*=\s*true" config/creative_brewing-common.toml
-shell grep -qE "^\s*brewinandchewin\s*=\s*true" config/creative_brewing-common.toml
-shell test "$(grep -c '^\s*\[' config/creative_brewing-common.toml)" = 1
+shell grep -qE "^\s*vinery\s*=\s*true" config/creativebrewing-common.toml
+shell grep -qE "^\s*brewinandchewin\s*=\s*true" config/creativebrewing-common.toml
+shell test "$(grep -c '^\s*\[' config/creativebrewing-common.toml)" = 1
 > zq item vinery:red_grape
 > zq item brewinandchewin:keg
 > zq recipes foundation:
@@ -53,14 +53,14 @@ shell grep -q "^\s*\[kitchen\]" config/blockheads_additions-common.toml
 ## SQ-KT-23 | 40 wood racks: recipes, slab tag, mineable
 > zq recipes _spice_rack
 > zq recipes _tool_rack
-> zq itemtag creative_delight:rack_slabs/other
+> zq itemtag creativedelight:rack_slabs/other
 > zq blocktag minecraft:mineable/axe
 > zq rdetail cookingforblockheads:spice_rack
-count creative_delight:shaped/[a-z_]+_spice_rack >= 20
-count creative_delight:shaped/[a-z_]+_tool_rack >= 20
-expect itemtag creative_delight:rack_slabs/other .*quark:blossom_planks_slab
-reject itemtag creative_delight:rack_slabs/other .*minecraft:oak_slab
-look 40 rack recipes (20 + 20); cookingforblockheads:spice_rack and tool_rack take #creative_delight:rack_slabs/other; mineable/axe lists the racks (blocktag line is long; grep spice_rack)
+count creativedelight:shaped/[a-z_]+_spice_rack >= 20
+count creativedelight:shaped/[a-z_]+_tool_rack >= 20
+expect itemtag creativedelight:rack_slabs/other .*quark:blossom_planks_slab
+reject itemtag creativedelight:rack_slabs/other .*minecraft:oak_slab
+look 40 rack recipes (20 + 20); cookingforblockheads:spice_rack and tool_rack take #creativedelight:rack_slabs/other; mineable/axe lists the racks (blocktag line is long; grep spice_rack)
 
 ## SQ-KT-24 | oak spice rack block entity keeps and drops items
 > setblock 40 -60 1 minecraft:oak_planks
@@ -89,7 +89,7 @@ look kt 30 of 34 expected with the known KT-15d / KT-17 expectation fails; kc 9 
 > zq rdetail quiche
 > zq rdetail horror_lasagna
 > zq itemtag brewinandchewin:cooked_horror_lasagna_meats
-expect creative_delight:createsequencedassembly/quiche_egg_solution_sequenced_assembly
+expect creativedelight:createsequencedassembly/quiche_egg_solution_sequenced_assembly
 look horror lasagna recipe present; the without-Brewin' half runs on boot 1b (p1b_nocb.qb)
 
 ## SQ-PRI-01 | Brewin' tags moved to CD; emptied pack scripts silent
@@ -117,9 +117,9 @@ bootreject (?i)duplicate.*watering_can
 > zq item hearthandharvest:dragon_watering_can
 > zq makes watering_can
 reject Unknown item
-expect creative_delight:.*watering_can -> 1 hearthandharvest:watering_can
+expect creativedelight:.*watering_can -> 1 hearthandharvest:watering_can
 count smithing/[a-z_]*watering_can >= 5
-look six ids resolve once; base can recipe under creative_delight; five smithing recipes
+look six ids resolve once; base can recipe under creativedelight; five smithing recipes
 
 ## SQ-WCT-02 | cauldron fills by tier
 > setblock -30 -60 -15 minecraft:water_cauldron[level=3]
@@ -302,8 +302,8 @@ look fox emptied the bush (age 1 Test passed) and holds a raspberry; a fox aslee
 
 ## SQ-SB31-01 | small changes batch mixins load; treated stick places
 bootreject (Mixin apply failed|InvalidInjectionException).*(SpoutGunFarmland|HandcraftedNightstand|HandcraftedItemHoldingSaveMixin|TreatedStickPlaceMixin|TomatoClimbTreatedStickMixin|SuppTomatoClimbTreatedStickMixin|BlockItemOwnStackFillMixin)
-> setblock -5 -60 30 creative_delight:treated_stick
-> execute if block -5 -60 30 creative_delight:treated_stick
+> setblock -5 -60 30 creativedelight:treated_stick
+> execute if block -5 -60 30 creativedelight:treated_stick
 expect Test passed
 
 ## SQ-NS-01 | nightstand storage (first half; restart half in p1b)
@@ -336,17 +336,17 @@ look counts 4 (template 0) and 2 (template 1); no brewery:dried_* left; `count` 
 > gamerule randomTickSpeed 0
 > setblock -10 -61 30 minecraft:farmland[moisture=7]
 > setblock -10 -60 30 farmersdelight:tomatoes[age=3]
-> setblock -10 -59 30 creative_delight:treated_stick
-> setblock -10 -58 30 creative_delight:treated_stick
+> setblock -10 -59 30 creativedelight:treated_stick
+> setblock -10 -58 30 creativedelight:treated_stick
 > setblock -8 -61 30 minecraft:farmland[moisture=7]
 > setblock -8 -60 30 supplementaries:stick_tomatoes
-> setblock -8 -59 30 creative_delight:treated_stick
+> setblock -8 -59 30 creativedelight:treated_stick
 > gamerule randomTickSpeed 300
 sleep 60
 > gamerule randomTickSpeed 3
-> execute if block -10 -59 30 creative_delight:treated_stick_tomatoes
+> execute if block -10 -59 30 creativedelight:treated_stick_tomatoes
 > execute if block -10 -57 30 minecraft:air
-> execute if block -8 -59 30 creative_delight:treated_stick_tomatoes
+> execute if block -8 -59 30 creativedelight:treated_stick_tomatoes
 count Test passed >= 2
 look FD vine climbed into treated_stick_tomatoes, at most three high; Supplementaries stick tomatoes likewise (third Test passed)
 
@@ -354,7 +354,7 @@ look FD vine climbed into treated_stick_tomatoes, at most three high; Supplement
 > kill @e[type=item]
 > setblock -10 -61 30 minecraft:air destroy
 sleep 2
-> execute if block -10 -59 30 creative_delight:treated_stick
+> execute if block -10 -59 30 creativedelight:treated_stick
 > execute positioned -10 -60 30 as @e[type=item,distance=..4] run data get entity @s Item
 > kill @e[type=item]
 > loot spawn -5 -55 34 mine -5 -60 30 minecraft:wooden_axe
@@ -365,7 +365,7 @@ look vine reverted to treated_stick and dropped FD tomato loot; each axe loot = 
 ## SQ-DM-03 | dandelion maturing: fertile soil about twice as fast as rich soil
 > gamerule randomTickSpeed 0
 > fill 20 -61 30 29 -61 30 farmersdelight:rich_soil
-> fill 20 -61 32 29 -61 32 creative_delight:fertile_soil
+> fill 20 -61 32 29 -61 32 creativedelight:fertile_soil
 > fill 20 -60 30 29 -60 30 minecraft:dandelion
 > fill 20 -60 32 29 -60 32 minecraft:dandelion
 > gamerule randomTickSpeed 30
@@ -464,13 +464,13 @@ expect squid_and_pickles
 look both tags hold raw calamari; takoyaki (miners_delight) takes calamari in both slots; no empty slots
 
 ## SQ-FFH-03 | zucchini quiche sequenced assembly parses
-kjsreject Error parsing recipe creative_delight:createsequencedassembly/zucchini_quiche
+kjsreject Error parsing recipe creativedelight:createsequencedassembly/zucchini_quiche
 > zq rdetail zucchini_quiche
 expect zucchini_quiche_sequenced_assembly
 look pie crust base, 3 roasted zucchini deploys, cooked meat deploy, 250 mB milk fill
 
 ## SQ-RSP-09 | drink filling and draining recipes
-kjsreject Error parsing recipe creative_delight:createfilling/
+kjsreject Error parsing recipe creativedelight:createfilling/
 > zq rdetail createfilling/
 > zq rdetail createemptying/
 > zq rdetail cup
@@ -495,11 +495,11 @@ reject \[cegen\].*(Error|error|failed)
 look lists the generators from tools/generators.json with groups (stacks among them)
 
 ## SQ-CBJ-05 | Brewin' member switch read on /reload (last: changes the config)
-shell sed -i -E 's/^(\s*brewinandchewin\s*=\s*)true/\1false/' config/creative_brewing-common.toml
+shell sed -i -E 's/^(\s*brewinandchewin\s*=\s*)true/\1false/' config/creativebrewing-common.toml
 > reload
 sleep 15
 shell grep -q "members on: vinery$\|members on: vinery\b[^,]" logs/kubejs/server.log
-shell sed -i -E 's/^(\s*brewinandchewin\s*=\s*)false/\1true/' config/creative_brewing-common.toml
+shell sed -i -E 's/^(\s*brewinandchewin\s*=\s*)false/\1true/' config/creativebrewing-common.toml
 > reload
 sleep 15
 look server log says `members on: vinery` after the first reload; set back to true and reloaded

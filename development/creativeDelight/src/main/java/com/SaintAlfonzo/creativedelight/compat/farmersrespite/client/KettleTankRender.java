@@ -74,18 +74,18 @@ public final class KettleTankRender {
 		List<Component> lines = new ArrayList<>();
 		FluidStack fluid = tank.ce$tankFluid();
 		if (fluid.isEmpty()) {
-			lines.add(Component.translatable("creative_delight.kettle.tank.empty"));
+			lines.add(Component.translatable("creativedelight.kettle.tank.empty"));
 		} else {
-			lines.add(Component.translatable("creative_delight.kettle.tank.level", fluid.getDisplayName(),
+			lines.add(Component.translatable("creativedelight.kettle.tank.level", fluid.getDisplayName(),
 					tank.ce$tankLevel(), KettleTank.MAX_LEVEL));
-			lines.add(Component.translatable("creative_delight.kettle.tank.mb", fluid.getAmount(), KettleTank.CAPACITY)
+			lines.add(Component.translatable("creativedelight.kettle.tank.mb", fluid.getAmount(), KettleTank.CAPACITY)
 					.withStyle(ChatFormatting.GRAY));
 		}
 		return lines;
 	}
 
 	public static List<Component> boxLines(int box) {
-		String key = box == KettleTankHolder.FILL_BOX ? "creative_delight.kettle.box.fill" : "creative_delight.kettle.box.empty";
+		String key = box == KettleTankHolder.FILL_BOX ? "creativedelight.kettle.box.fill" : "creativedelight.kettle.box.empty";
 		return List.of(Component.translatable(key), Component.translatable(key + ".hint").withStyle(ChatFormatting.GRAY));
 	}
 
@@ -95,7 +95,7 @@ public final class KettleTankRender {
 		if (tag == null || !tag.contains("CETankFluid") || tag.getInt("CETankLevel") <= 0) return null;
 		FluidStack type = FluidStack.loadFluidStackFromNBT(tag.getCompound("CETankFluid"));
 		if (type.isEmpty()) return null;
-		return Component.translatable("creative_delight.kettle.item.tank", type.getDisplayName(), tag.getInt("CETankLevel"),
+		return Component.translatable("creativedelight.kettle.item.tank", type.getDisplayName(), tag.getInt("CETankLevel"),
 				KettleTank.MAX_LEVEL).withStyle(ChatFormatting.GRAY);
 	}
 }

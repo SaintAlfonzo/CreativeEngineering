@@ -2,7 +2,7 @@
 
 Written 2026-11-01 (Creative Split wave 1, [creative_split.md](creative_split.md) 2.1, 7.6; TODO `creativesplit/devtools #4`).
 
-**Status: BUILT 2026-11-01 (compile only), not installed, not booted.** `creativedevtools-1.0.0.jar`
+**Status: INSTALLED 2026-11-01 (dev `mods/`), scratch-verified: SQ-CDV-01 to -04 PASS (run rcs1, [scratch_run_2026-11-01.md](testing/scratch_run_2026-11-01.md) 6); CDV-01 to -06 in game open.** `creativedevtools-1.0.0.jar`
 (`development/creativeDevtools/build/libs/`) nests perfBot (`ceperfbot`) and clientCapture (`cecapture`). patcherMod
 lost the moved code in the same pass, so `/cegen`, `/dumpall`, the `/dump*` commands, `/ceperf`, `/ceplace` and the
 probes are gone from the dev instance until this jar is installed beside a rebuilt patcherMod.

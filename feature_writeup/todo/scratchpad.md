@@ -16,12 +16,35 @@
     - remove current gui, replace with limited sophisticated storage screen
         - 2 upgrade slots, only accept magnet or slot upgrade
 - mesa villages
+- jei farmers respite
+    - clicking on kettle fluid bar or pressing r brings up crafting recipe for fluid in glass
+- backpack force sorting items to memory slots first
+- merge cornbread stuffing recipes into single multioption recipe (any baked potato)
 - turn down random waystone, increase waystone structure frequency (minus towers)
 - fungi delight cow display names
 - witch villages carve out dirt and spawn on stone
+- no azalea tea recipe
+- wooden buckets hold milk
+- water and milk wooden buckets used in crafting recipes where iron is 
 - fold floating island into sky structers, increase height variability
     - lower overall frequency than now
 - siege weapon and wagon facing direction when spawning?
+- potato dough
+- taco
+    - any roasted pepper, onion in one recipe
+- creamy onion soup not in copper pot? (4 ingredients) 
+    - craftable but served on copper cup when plated, doesnt show in jei
+- remove all copper cup foods
+- can rattatoulie
+- create pump doesnt fill supp jar 
+- onion and creamy onion soup placable
+    - one removed?
+- move seasoned icon to top right
+- fix sliced potato tag, use any sliced potato
+- glycerol
+    - remove sugar usage, tooltip
+- can additive audit 
+    - sugar in fruit salad
 - watering can filled by well and cauldron
 - flower pots placable like candles, up to 2?
     - 2nd one spawns taller than first, flowers chosen individually
@@ -107,6 +130,45 @@
     - automated crafts, efficiencies
 - no jei brewing for basic potions?
     - dioxide
+- remove old spice rack and tool rack from blockheads, baskets as well, ensure usable by blockheads
+- stone cutting boards
+- cat food like dog food
+- grass, tall grass, leaf piles dont show wthit lines
+- cantaloupe plant (delightful) name to mini cantaloupe plant
+- hamimelon stem to cantaloupe stem
+- unicorns? rare horse mobs in magic biomes?
+- edit mca tombstones
+- ensure all seeds in botany pot
+- mulberry leaves dont attatch to oak logs
+- ensure hummingbird feeder is integraded with all sugars, honey? research irl
+- honey bottle and mason jar conversion, 1-1, keeps honey jar placable
+- remove azalea wood, swap for oak tree
+- show banner shader in wthit
+- spear backport, jousting
+- hemp no rmb harvest
+- general surface food loot table
+    - add seeds for each general food, mixed seeds
+- faucet adjusts to container height/depth
+    - kettle?
+- kettle brews near instantly? slow down to reasonable
+- farmers respite fluid and ingredient bottling return automatically go to plating slot like oven/cooking pot
+- fortune on shears?
+    - vanilla, other harvesting?
+- sol unlockable selectable bonus, like beacons
+- keep wardrobe backpacks as decorative, only take regular leather (sophisticated storage takes hardened leather)
+- pick up cooking pot, copper pot, kettle, cooking pan with shift rmb
+- grape, cherry jam should only give 1 jam
+- allow lemon jam w/ 5 lemon slices
+- salmonberry, raspberry jam
+- seed tooltip for every seed, pip, and seed fruit/veggie
+- foot slot not registered in curios
+- baby squid, glow squid, dolphin not spawning baby
+- improved cats
+    - no ancient fish, use normal fish taming
+    - no gender on cats
+    - allow both petting and picking up cats
+    - ensure feather on stick always works w/ cozy cats
+    - use feather on stick on mob (sticks like a fishing rod) for cat to target mob, gain high strngth resistance and regen when hitting a feathered target
 
 ## Low-effort lists (compiled by Claude 2026-10-29 from TODO.md, briefs/ and testing/scratch_queue.md)
 

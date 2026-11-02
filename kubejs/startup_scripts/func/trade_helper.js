@@ -1,7 +1,8 @@
-// Trade helper — global.trades. Edits the Wandering Trader's two pools and the Wandering Winemaker's
-// pool. Call it inside MoreJSEvents.wandererTrades: MoreJS fires that at server start (after every mod
-// has added its listings) and again on /reload, each time from the untouched pools, so edits never stack.
-// Listings are built in patcherMod (trader.TradeListings / WinemakerTrades); counts and spawn timers
+// Trade helper — global.trades. Edits the Wandering Trader's two pools. The Wandering Winemaker's pool
+// helpers (winemakerReset / winemakerSell / winemakerSize) moved to Creative Brewing 2026-11-01
+// (kubejs_startup/vinery/winemaker_trades.js in the CB jar), which adds them to this object.
+// Call it inside MoreJSEvents.wandererTrades: MoreJS fires that at server start (after every mod has added its listings) and again on /reload, each time from the untouched pools, so edits never stack.
+// Listings are built in patcherMod (trader.TradeListings); counts and spawn timers
 // are CEConfig [wandering_trader]. Reference: feature_writeup/wandering_trader.md
 console.log('Trade Helper starting')
 
@@ -88,29 +89,6 @@ global.trades = {
 		const copies = weight || 1
 		taken.forEach(l => { for (let w = 0; w < copies; w++) list.add(l) })
 		return taken.length
-	},
-
-	// Wandering Winemaker (Vinery): its own pool, separate from the Wandering Trader's.
-	// Call winemakerReset() once at the top of the event, then winemakerSell() as often as needed.
-	winemakerReset() {
-		this._java('WinemakerTrades').reset()
-	},
-
-	winemakerSell(items, opts) {
-		const o = this._opts(opts)
-		const TL = this._java('TradeListings')
-		const WT = this._java('WinemakerTrades')
-		let added = 0
-		this._arr(items).forEach(id => {
-			if (!this._validItem(id, 'winemakerSell')) return
-			const listing = TL.item(id, o.count, o.emeralds, o.maxUses)
-			for (let w = 0; w < o.weight; w++) if (WT.add(listing)) added++
-		})
-		return added
-	},
-
-	winemakerSize() {
-		return this._java('WinemakerTrades').size()
 	},
 }
 

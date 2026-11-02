@@ -5,9 +5,6 @@ import java.util.function.Supplier;
 
 import javax.annotation.ParametersAreNonnullByDefault;
 
-import blusunrize.immersiveengineering.api.crafting.MixerRecipe;
-import blusunrize.immersiveengineering.api.crafting.RefineryRecipe;
-import blusunrize.immersiveengineering.common.register.IEBlocks;
 
 import com.SaintAlfonzo.creativeengineering.CreativeEngineering;
 import com.SaintAlfonzo.creativeengineering.fan.DragonBreathingRecipe;
@@ -40,7 +37,8 @@ import net.minecraft.world.level.block.Blocks;
  * JEI page for {@code creativeengineering:dragon_breathing} fan recipes: the same
  * "processing via fan" layout Create uses for washing / smoking / blasting / haunting,
  * with the Encased Fan + a Dragon Head as catalysts. Adapted from Create: Halitosis'
- * {@code HalitosisJEI} to Create 0.5.1.i / JEI 11.8.
+ * {@code HalitosisJEI} to Create 0.5.1.i / JEI 11.8. The Automated Potion Mixing and Lingerification pages it used to
+ * register moved to Creative Brewing (compat.jei.PotionMachinesJEI, 2026-11-01).
  */
 @ParametersAreNonnullByDefault
 @JeiPlugin
@@ -50,8 +48,6 @@ public class DragonBreathingJEI implements IModPlugin {
     private static final String LANG_KEY = "create.recipe.fan_dragon_breathing";
 
     private Category category;
-    private AutomatedPotionMixingCategory potionMixing;
-    private LingerificationCategory lingerification;
 
     @Override
     public ResourceLocation getPluginUid() {
@@ -87,32 +83,6 @@ public class DragonBreathingJEI implements IModPlugin {
 
         category = new Category(info);
         registration.addRecipeCategories(category);
-
-        try {
-            potionMixing = new AutomatedPotionMixingCategory(
-                    registration.getJeiHelpers().getGuiHelper());
-            registration.addRecipeCategories(potionMixing);
-            AutomatedPotionMixingCategory.ACTIVE = true;
-        } catch (Throwable t) {
-            potionMixing = null;
-            AutomatedPotionMixingCategory.ACTIVE = false;
-            org.apache.logging.log4j.LogManager.getLogger("creativeengineering").error(
-                    "[CE] Automated Potion Mixing JEI category disabled - potion recipes stay in the "
-                            + "IE Mixer category", t);
-        }
-
-        try {
-            lingerification = new LingerificationCategory(
-                    registration.getJeiHelpers().getGuiHelper());
-            registration.addRecipeCategories(lingerification);
-            LingerificationCategory.ACTIVE = true;
-        } catch (Throwable t) {
-            lingerification = null;
-            LingerificationCategory.ACTIVE = false;
-            org.apache.logging.log4j.LogManager.getLogger("creativeengineering").error(
-                    "[CE] Lingerification JEI category disabled - refinery lingering recipes stay in "
-                            + "the IE Refinery category", t);
-        }
     }
 
     @Override
@@ -120,35 +90,12 @@ public class DragonBreathingJEI implements IModPlugin {
         if (category != null) {
             category.registerRecipes(registration);
         }
-
-        net.minecraft.world.level.Level level = Minecraft.getInstance().level;
-        if (potionMixing != null && level != null) {
-            List<MixerRecipe> potions = MixerRecipe.RECIPES.getRecipes(level).stream()
-                    .filter(AutomatedPotionMixingCategory::isPotionMixer)
-                    .toList();
-            registration.addRecipes(AutomatedPotionMixingCategory.TYPE, potions);
-        }
-
-        if (lingerification != null && level != null) {
-            List<RefineryRecipe> lingering = RefineryRecipe.RECIPES.getRecipes(level).stream()
-                    .filter(LingerificationCategory::isLingerification)
-                    .toList();
-            registration.addRecipes(LingerificationCategory.TYPE, lingering);
-        }
     }
 
     @Override
     public void registerRecipeCatalysts(IRecipeCatalystRegistration registration) {
         if (category != null) {
             category.registerCatalysts(registration);
-        }
-        if (potionMixing != null) {
-            registration.addRecipeCatalyst(
-                    new ItemStack(IEBlocks.Multiblocks.MIXER), AutomatedPotionMixingCategory.TYPE);
-        }
-        if (lingerification != null) {
-            registration.addRecipeCatalyst(
-                    new ItemStack(IEBlocks.Multiblocks.REFINERY), LingerificationCategory.TYPE);
         }
     }
 

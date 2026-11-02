@@ -2,7 +2,7 @@
 
 Test prefix `BM-`. Status: **milestone 1 BUILT 2026-10-20 (babyMobs-1.0.0.jar, deployed since 1.1.01, 2026-10-22): baby squid, glow
 squid and dolphin with the 26.1 baby models and textures; BM-01 and BM-02 PASSED on the scratch server, the server halves of BM-04 to BM-07 scratch server PASSED 2026-10-22 (SQ-OM-13, SQ-OM-14), the rest need a client. Milestone 2 (the 26.1
-remodel of the ~38 existing babies) is planned, not built.** [TODO](todo/TODO.md) `ports/babymobport #1`.
+remodel of every other baby) BUILT 2026-11-01 as babyMobs 1.1.0 (nested in Creative Delight), not yet installed or seen in game; spawn egg on an adult fixed the same day.** [TODO](todo/TODO.md) `ports/babymobport #1`.
 
 ## 0. At a glance
 
@@ -14,9 +14,9 @@ remodel of the ~38 existing babies) is planned, not built.** [TODO](todo/TODO.md
   (38 mobs), gave five of them their own sounds, added baby armour models for the undead and the golden dandelion.
   Nothing else in 1.20+ is a "baby mob" that 1.19.2 lacks: camels, sniffers and armadillos are whole mobs (not in the
   pack); baby zombie / villager / animal forms already exist here.
-- **Where:** `development/babyMobs` (mod id `baby_mobs`, jar `babyMobs-<version>.jar`, GPLv3 like our other mods; the
-  three baby textures are Mojang's 26.1 files). Root `settings.gradle` includes it; `tools/build_deploy.py`
-  `IN_TREE_MODS` lists it; `mod_sides.md` row `both`.
+- **Where:** `development/creativeDelight/members/babymobs` (mod id `baby_mobs`, jar `babyMobs-<version>.jar` nested in
+  Creative Delight since the 2026-11-01 split; build with `:creativeDelight:build`). GPLv3 like our other mods; the baby
+  textures are Mojang's 26.1 files (D6).
 - **Knobs (`config/baby_mobs-common.toml`):** `[spawns] squidBabyChance 0.05, glowSquidBabyChance 0.05,
   dolphinBabyChance 0.10`; `[growth] growTicks 24000, dolphinFishFeeding true`; `[client] babyModels true`.
 - **How to see it:** `/summon minecraft:squid ~ ~ ~ {Age:-24000}` (also `glow_squid`, `dolphin`): a small squid
@@ -32,7 +32,7 @@ world that loses the jar keeps every squid and dolphin, grown up (their `Age` ta
 
 | | Squid, glow squid | Dolphin |
 |---|---|---|
-| How a baby appears | 5 % of natural spawns (vanilla `AgeableMobGroupData`: the first mob of a spawn group is always an adult, every further member rolls the chance); spawn eggs give adults; no breeding | 10 % of natural spawns, same rule; no breeding |
+| How a baby appears | 5 % of natural spawns (vanilla `AgeableMobGroupData`: the first mob of a spawn group is always an adult, every further member rolls the chance); spawn eggs give adults, one used on an adult gives a baby; no breeding | 10 % of natural spawns, same rule; no breeding |
 | Growing up | 24000 ticks (20 min), can't be sped up | 24000 ticks; each fish fed (`#minecraft:fishes`) takes 10 % off the time left (`AgeableMob.getSpeedUpSecondsWhenFeeding`), eat sound, fish used up |
 | Size | hitbox 0.5 x 0.63 (26.2: 0.5 x 0.5) against 0.8 x 0.8; eye height 0.37 | 0.65 of the adult (0.585 x 0.39) |
 | Looks (26.1) | own 32x32 texture (`squid_baby.png`, `glow_squid_baby.png`) and model: 8x10x8 body at y 13, 8 tentacles 2x6x2 on a 3-block ring at y 18.5; renderer offsets 0.25 / -0.6 instead of 0.5 / -1.2 | own 64x64 texture and model: 6x5x8 body at y 21.5, head 6x5x4 with a 2x2x2 nose, fins 1x3x6 at 0.8727 / 1.7017 rad, tail 4x3x7 + fin 8x1x4, back fin 1x3x4 |
@@ -64,6 +64,71 @@ world that loses the jar keeps every squid and dolphin, grown up (their `Age` ta
 - **Spawning in the pack:** nothing to wire beyond the chances: babies are part of the adult spawn groups, and the
   adult lists stay with [mob_spawns.md](mob_spawns.md) (`mob_spawns.json`). Spawn eggs and `/summon` give adults
   unless `Age:-24000` is set, as vanilla.
+- **Spawn egg on an adult (fixed 2026-11-01):** vanilla's `spawnOffspringFromSpawnEgg` creates the mob, calls
+  `Mob.setBaby(true)` and drops it unless `isBaby()` is then true. `Mob.setBaby` is empty in 1.19.2 and squid /
+  dolphins don't override it, so the egg did nothing on an adult. `MobBabyMixin` now hooks `m_6863_` setBaby:
+  `BabyAges.setBaby` -> age `-growTicks` (or 0 for false).
+
+## 3a. Milestone 2: the 26.1 remodels (built 2026-11-01, babyMobs 1.1.0)
+
+User (2026-11-01): "id also like all of the other new baby mob textures ported". The 26.1 baby textures only fit the
+26.1 baby meshes, so every family got its model ported too. Reference: the 26.1 client jar from piston-meta,
+decompiled with Vineflower (models, renderers, `LayerDefinitions`).
+
+- **Framework (`client/kit/`):** `BabyKit` = one baby per entity type: the 26.1 mesh, a factory that builds an
+  instance of the 1.19.2 adult model class, the texture choice, layer swaps keyed by the adult layer texture
+  (`layerTexture`, `layerTexturePrefix` fallback, `layerModel` for layers with their own model), an optional pose
+  transform. `BabyRender` = registry + render stack. `mixin/client/LivingEntityRendererBabyMixin`: at render HEAD the
+  renderer's `model` becomes the baked baby model (only if the renderer's model is an instance of the kit's adult
+  class, so Quark's variant renderers work and foreign models are left alone), `young` is forced false (no 1.19.2
+  half-size shrink), the kit's texture replaces the body texture in `getRenderType`, the pose hook runs after
+  `scale()`, the adult model is restored at RETURN. `RenderLayerBabyMixin`: swaps layer textures / models in
+  `coloredCutoutModelCopyLayerRender` and `renderColoredCutoutModel`. A kit with no texture for an entity is skipped.
+  Squid and dolphins keep their milestone 1 renderers. `babyModels = false` turns all of it off.
+- **Families (`client/family/`):** `FarmBabies` cow, mooshroom, pig, sheep (+ wool layer), chicken; `PetBabies` cat,
+  ocelot, wolf, fox, rabbit (+ `PetAnimations` keyframes); `EquineBabies` horse, donkey, mule, skeleton / zombie
+  horse, llama, trader llama; `MiscBabies` bee, axolotl, goat, panda, polar bear, turtle, strider, hoglin, zoglin
+  (+ `MiscAxolotlAnimation`); `UndeadBabies` zombie, husk, drowned (+ outer layer), zombie villager, villager,
+  piglin, zombified piglin, with baby armour (26.1 `humanoid_baby` textures, per-slot baby armour meshes). Family
+  mixins: `EquineHorseMarkingMixin`, `EquineHorseArmorMixin`, `EquineLlamaDecorMixin`, `PetFoxHeldItemMixin`,
+  `UndeadArmorLayerMixin`, `UndeadItemInHandMixin`, `UndeadCustomHeadMixin`.
+- **How the ports fit 1.19.2:** each baby model is a subclass (or plain instance) of the 1.19.2 adult class, with
+  empty placeholder parts where 1.19.2's constructor needs parts the baby lacks; 1.19.2 code that writes absolute
+  adult positions is replaced by the 26.1 baby animation (or, humanoids, offset by baby minus adult defaults; piglin
+  default poses set by reflection, `f_103333_/f_103334_/f_103337_/f_103338_`). Renderer-wide scales 26.1 moved into the
+  adult meshes are undone for babies by pose hooks (horse 1.1, donkey 0.87, mule 0.92, cat 0.8, polar bear 1.2,
+  strider 0.5, husk 1.0625, villager 0.46875).
+- **Variant mobs (owner, 2026-11-01): config `[client] variantBabies`.** A variant = the renderer's own adult
+  texture (with other mods' hooks applied; `BabyRender.begin` asks the renderer) is outside the `minecraft`
+  namespace: More Mob Variants coats, Quark pride bees / shiny animals / cow-pig-chicken coats, Cozy's end and
+  nether cats. Kits can name pool namespaces that count as regular coats (cat: `moremobvariants`).
+  - `OLD_MODELS` (default): the species in `keepVanillaBabies` (wolf, cow, pig, chicken, sheep, zombie) keep the
+    1.19.2 baby; on every other kit a variant baby keeps the 1.19.2 baby with its coat, mixed in with remodelled
+    babies of the same mob (pride bees among new-model bees, Cozy's end / nether kittens among new-model kittens,
+    Quark shiny rabbits and llamas). More Mob Variants cat coats use the baby of the cat's own vanilla coat.
+  - `NEW_MODELS`: every kit applies to every baby. A coat with a 26.1 baby gets it (More Mob Variants ashen, black,
+    chestnut, rusty, snowy, spotted, striped and woods wolves, also tame / angry); any other coat uses the mob's
+    regular baby (cow, pig, chicken temperate; pale wolf; plain bee; the cat's vanilla coat). More Mob Variants' wool
+    and wolf collar textures go to the baby wool / collar (`layerPrefixAs`); its pig mud, sheep horns and
+    sheared-wool layers are skipped on remodelled babies (`PetMoreMobVariantsLayersMixin`, @Pseudo).
+  - MCA villagers are their own types (`mca:male_villager`, `mca:female_villager` and the zombie ones): no kit, their
+    baby skins stay. Modded villager biomes on vanilla villagers use the plains baby clothes in both modes.
+  - Squid and dolphins keep their milestone 1 renderers (a Quark shiny dolphin baby shows the plain baby).
+  - Open: baby art for every variant, TODO `ports/babymobport #2`.
+- **Cozy's Improved Cats:** its `cozys-improved-cats:improved_cat` (extends Cat, renderer extends CatRenderer,
+  vanilla CatModel) shares the cat kit, registered by id (`BabyRender.register(ResourceLocation, kit)`, resolved at
+  render time, since the type doesn't exist when the families register). `PetCozyYarnMixin` (@Pseudo, require 0):
+  the yarn ball in a baby's mouth skips Cozy's old half-size baby offset and scales 0.75 at the head.
+- **Decisions / deviations (from the family reports):** babies never show carpets, horse armour, saddles or chests
+  (as 26.1); trader llama babies get the 26.1 baby trader decor; held items and head items are full size (26.1);
+  modded armour on a baby falls back to 1.19.2's half-size adult armour; no armour trims on babies (26.1);
+  ElytraLayer and the villager crossed-arms item layer are not ported; catloaf's loaf pose doesn't apply to baby
+  cats; cozy's improved cats (own entity type) keep the 1.19.2 baby; Quark variant / pride bee, More Mob Variants
+  zombie and modded villager-type babies use the single baby texture (modded villager types: plains clothes);
+  the 26.1 axolotl quirk (no underwater-walk animation) is kept; the rabbit head-tilt timer only runs while rendered;
+  baby turtle legs draw without back-face culling; humanoid attack swing keeps the baby shoulder offset.
+- **Mixin check:** every injection target was checked against the SRG Forge jar (`forge-1.19.2-43.3.9-srg.jar`,
+  javap) on 2026-11-01; all resolve.
 
 ## 4. Limits and decisions
 
@@ -74,7 +139,7 @@ world that loses the jar keeps every squid and dolphin, grown up (their `Age` ta
 - D3 **Ink offset:** the 0.1 / 0.3 ink particle offset for babies is not ported (private `spawnInk`; cosmetic).
 - D4 **Hitbox height:** 26.1's 0.63 became 0.5 in 26.2; the port uses a uniform 0.625 scale (0.5 x 0.5), the later
   value.
-- D5 **Milestone 2, the 26.1 remodels (NOT BUILT):** 26.1 gives these babies new models (classes
+- D5 **Milestone 2, the 26.1 remodels: BUILT 2026-11-01, see section 3a.** Original plan: 26.1 gives these babies new models (classes
   `net.minecraft.client.model.*.Baby*Model`, read from the unobfuscated 26.1 client jar) and textures (`*_baby.png`):
   armadillo (n/a), axolotl, bee, camel (n/a), cat / ocelot, chicken, cow, mooshroom, donkey, horse, mule, skeleton and
   zombie horse, fox, goat, llama, trader llama, panda, pig, polar bear, rabbit (whole mob), sheep, strider, turtle,
@@ -88,7 +153,7 @@ world that loses the jar keeps every squid and dolphin, grown up (their `Age` ta
 
 ## 5. File map
 
-- [development/babyMobs/](../development/babyMobs/): `BabyMobs` (entry), `BMConfig`, `age/BabyAges`,
+- [development/creativeDelight/members/babymobs/](../development/creativeDelight/members/babymobs/) (milestone 2 files: section 3a): `BabyMobs` (entry), `BMConfig`, `age/BabyAges`,
   `age/BabyAgeHolder`, `mixin/MobBabyMixin`, `mixin/LivingEntityBabyMixin`, `mixin/DolphinFeedMixin`,
   `client/ClientSetup`, `client/BabyModels`, `client/BabySquidRenderer`, `client/BabyGlowSquidRenderer`,
   `client/BabyDolphinRenderer`; `baby_mobs.mixins.json`; `assets/baby_mobs/textures/entity/squid/{squid,glow_squid}_baby.png`,
@@ -99,7 +164,7 @@ world that loses the jar keeps every squid and dolphin, grown up (their `Age` ta
 
 ## 6. Offline checks
 
-- `./gradlew :babyMobs:build --offline` (root), jar in `development/babyMobs/build/libs/`.
+- `./gradlew :creativeDelight:build --offline` (root); Baby Mobs is nested in the Creative Delight jar (`META-INF/jarjar/babyMobs-<version>.jar`). `:babyMobs:compileJava` for a quick compile.
 - SRG names in the mixins were taken from the ForgeGradle `srg_to_official_1.19.2.tsrg` (m_6518_ finalizeSpawn,
   m_8097_ defineSynchedData, m_7380_ / m_7378_ save / load, m_6162_ isBaby, m_6134_ getScale, m_8107_ aiStep,
   m_6779_ canAttack, m_7350_ onSyncedDataUpdated, m_6071_ mobInteract).
@@ -123,8 +188,45 @@ world that loses the jar keeps every squid and dolphin, grown up (their `Age` ta
 - [ ] **BM-07 Config [game]:** *Server half: scratch server PASSED 2026-10-22 (SQ-OM-14, 1200 of 1200 pack members after the first are babies).* `babyModels = false` -> babies render as half-size adults; `squidBabyChance = 1` -> every
   squid after the first of a group is a baby
 - [ ] **BM-08 Without the jar [game]:** remove the jar -> existing babies are adults, no errors
+- [ ] **BM-09 Spawn egg on an adult [game]:** a squid / glow squid / dolphin spawn egg used on an adult of its kind
+  spawns a baby (egg used up outside creative); used on the ground it still gives an adult
+- [ ] **BM-10 Farm babies [game]:** baby mooshroom (red, brown): 26.1 shape and texture, legs walk; baby cow, pig,
+  chicken, sheep, wolf and zombie keep the 1.19.2 half-size baby with their More Mob Variants / Quark coat
+  (`keepVanillaBabies`); with `variantBabies = NEW_MODELS` all six are remodelled: a More Mob Variants ashen wolf
+  baby shows the ashen baby (tame, angry, collar), an albino cow baby the temperate baby, a fuzzy sheep baby the baby
+  wool with no horns, a muddy pig baby no mud
+- [ ] **BM-11 Pet babies [game]:** baby cat (variants, collar on a tamed one, sit, lie down, sprint; a More Mob
+  Variants coat shows its vanilla coat's baby), Cozy's improved cat (ordinary: new model; end and nether: 1.19.2 baby
+  with its coat, and with `NEW_MODELS` the baby of its vanilla coat; yarn ball in a new-model kitten's mouth sits at
+  the snout), ocelot, fox (red, snow, sleeping, item in mouth),
+  rabbit (types, Toast, killer rabbit, hop, idle head tilt)
+- [ ] **BM-12 Horse babies [game]:** baby horse in all 7 coats with each marking (size not 1.1x, legs visible,
+  rearing, grazing, tail), skeleton / zombie horse, donkey, mule, llama (4 colours, no carpet), trader llama (baby
+  decor fits); summoned with armour: none drawn
+- [ ] **BM-13 Other babies [game]:** bee (hover height, angry, nectar; pride bees: 1.19.2 baby with the flag, mixed
+  in with new-model babies; `NEW_MODELS` -> plain baby bee), axolotl (5 colours, land / water / play dead),
+  goat (head tipped), panda (7 genes, sit, sneeze, eat), polar bear (not 1.2x), turtle, strider (full size, cold
+  texture), hoglin / zoglin (headbutt)
+- [ ] **BM-14 Humanoid babies [game]:** baby husk, drowned (outer layer), zombie villager and villager (7
+  biomes; MCA replaces most villagers, use `/summon minecraft:villager ~ ~ ~ {Age:-24000}`), piglin (admire, dance),
+  zombified piglin: shape, texture, walk, zombie arms; armour on each slot (all vanilla materials, dyed leather,
+  glint, turtle helmet) fits; a sword / gold / trident in hand and a pumpkin / skull on the head sit right; one
+  modded armour piece falls back to half-size armour; chicken jockey
+- [ ] **BM-16 MCA [game]:** MCA baby villagers and zombie villagers keep their own skins and model
+- [ ] **BM-15 Adults and log [game]:** adults of every mob above unchanged; inventory / spawn egg previews fine;
+  `logs/latest.log` has no "Baby Mobs:" errors (an info line "renders with ..., not ..." names a mod renderer the kit
+  skipped) and no "piglin default poses not reachable"; `babyModels = false` -> all babies are the 1.19.2 half-size
+  adults
 
 ## 8. History
+
+- 2026-11-01: spawn egg on an adult squid / dolphin fixed (`setBaby` hook). Milestone 2 built (babyMobs 1.1.0): the
+  generic renderer framework plus five families (33 mobs), ported from the decompiled 26.1 client by family, in
+  parallel; compiles, mixin targets checked against the SRG jar, not run in game. Same day (owner): wolf, cow, pig,
+  chicken, sheep, zombie back to the 1.19.2 baby (`keepVanillaBabies`); Cozy's improved cats get the cat kit; cat
+  coats without a baby use their vanilla coat's baby. Then (owner): `variantBabies` OLD_MODELS / NEW_MODELS; Cozy end
+  / nether kittens and Quark pride bee babies keep the 1.19.2 baby in OLD_MODELS; More Mob Variants wolf coats map to
+  the 26.1 wolf variant babies in NEW_MODELS; TODO `ports/babymobport #2` for baby art of every variant.
 
 - 2026-10-20: milestone 1 built (babyMobs-1.0.0) after the tier-1 / tier-2 feature ports; milestone 2 planned.
 - 2026-10-22 (second bulk run): SQ-OM-13 and SQ-OM-14 PASS on the scratch server (drops, dolphin feeding, pack shares,

@@ -10,37 +10,7 @@ ServerEvents.tags('fluid', e => {
 		['forge:fluid/lava', f.lava],
 		['forge:fluid/milk', f.milk],
 
-		// food / drink
-		['forge:fluid/tea', f.tea],
-		['forge:fluid/apple_cider', f.apple_cider],
-		['forge:fluid/long_apple_cider', f.long_apple_cider],
-		['forge:fluid/strong_apple_cider', f.strong_apple_cider],
-		['forge:fluid/honey', f.honey],
-		['forge:fluid/chocolate/milk', f.chocolate],
-		['forge:fluid/chocolate/dark', f.black_chocolate],
-		['forge:fluid/chocolate/white', f.white_chocolate],
-		['forge:fluid/chocolate/ruby', f.ruby_chocolate],
-		['forge:fluid/hot_chocolate', f.hot_chocolate],
-		['forge:fluid/caramel', f.caramel],
-		['forge:fluid/tomato_sauce', f.tomato_sauce],
-		['forge:fluid/melon_juice', f.melon_juice],
-		['forge:fluid/chorus_juice', f.chorus_juice],
-		['forge:fluid/carrot_juice', f.carrot_juice],
-		['forge:fluid/dandelion_juice', f.dandelion_juice],
-		['forge:fluid/turnip_water', f.turnip_water],
-		['forge:fluid/egg_solution', f.egg_solution],
-		['forge:fluid/frosting', f.frosting],
-		['forge:fluid/milk_coffee', f.milk_coffee],
-		['forge:fluid/honey_coffee', f.honey_coffee],
-		['forge:fluid/chocolate_coffee', f.chocolate_coffee],
-		['forge:fluid/dark_coffee', f.dark_coffee],
-		['forge:fluid/syrup_coffee', f.syrup_coffee],
-		['forge:fluid/pumpkin_coffee', f.pumpkin_coffee],
-		['forge:fluid/cherry_blossom_coffee', f.cherry_blossom_coffee],
-		['forge:fluid/lavender_tea', f.lavender_tea],
-		['forge:fluid/matcha_latte', f.matcha_latte],
-		['forge:fluid/berry_matcha_latte', f.berry_matcha_latte],
-		['forge:fluid/yeast_culture', f.yeast_culture],
+		// food / drink: Creative Delight (creativeengineering/fluid_tags.js)
 
 		// plant growth
 		['forge:fluid/diluted_bonemeal', f.diluted_bonemeal],
@@ -72,16 +42,12 @@ ServerEvents.tags('fluid', e => {
 		['forge:fluid/ethylene', f.ethylene],
 		['forge:fluid/lpg', f.lpg],
 
-		// magic / potion
-		['forge:fluid/dragon_breath', f.dragon_breath],
+		// magic (potion and dragon's breath rows: Creative Brewing, kubejs/data/creativebrewing/kubejs/creativeengineering/fluid_tags.js)
 		['forge:fluid/ink', f.ink],
-		['forge:fluid/potion', f.create_potion],
 		['forge:fluid/xp', f.experience],
 		['forge:fluid/hyper_xp', f.hyper_experience],
 	].forEach(([tag, fluid]) => t.addFluid(e, tag, fluid))
 
-	// Remove IE potion tag
-	t.remove(e, 'forge:fluid/potion', f.ie_potion)
 
 		// ── XP fluid merge: Create's Liquid Experience is the ONLY #forge:experience ──
 	t.add(e, 'forge:experience', [f.experience, f.flowing_experience])

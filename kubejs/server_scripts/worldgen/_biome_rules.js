@@ -1,6 +1,6 @@
 // priority: 1
 // Shared machinery of the biome-rule worldgen systems: mushroom_spawns.js (mushroom_spawns.json) and Creative Delight's
-// wild crops (kubejs/data/creative_delight/kubejs/_worldgen/wild_crops.js, shipped in the CD jar). Both read the biome
+// wild crops (kubejs/data/creativedelight/kubejs/_worldgen/wild_crops.js, shipped in the CD jar). Both read the biome
 // words of biome_traits.json, match rules with the same clause rules, and write the same three kinds of data.
 // global.biomeRules.system(opts) returns the three handlers ({ tags, data, loaded }) a system script hands to ServerEvents.
 //
@@ -11,7 +11,7 @@
 //     (ServerEvents.highPriorityData: KubeJS's top-priority virtual datapack, above the mod jars);
 //   - remove_features (vanilla patches that Terralith's biome files list) go into one forge:remove_features
 //     modifier over #minecraft:is_overworld. Forge removes after it adds, which is why those rules add the
-//     copies (creative_delight:wild/*) instead of the original ids.
+//     copies (creativedelight:wild/*) instead of the original ids.
 // A feature or modifier of a mod that isn't loaded is skipped: an unknown feature id stops the world loading.
 //
 // Rule matching is the same as tools/gen_crop_worldgen_table.py: clauses OR'ed, the traits in a clause AND'ed,

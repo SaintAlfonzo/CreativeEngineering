@@ -2,10 +2,10 @@
 
 Written 2026-10-21 from [TODO.md](../todo/TODO.md) `# cans`, Sub `canning`. Reference writeups:
 [cans.md](../cans.md) (hub), [can_parity.md](../can_parity.md) (worksheet, decisions 4, sprites 5.1),
-[food.md](../food.md) 3.5 (tuning) and 3.6 (servings). Code: [canning.js](../../kubejs/data/creative_delight/kubejs/creativeengineering/canning.js),
+[food.md](../food.md) 3.5 (tuning) and 3.6 (servings). Code: [canning.js](../../kubejs/data/creativedelight/kubejs/creativeengineering/canning.js),
 [cans.js](../../development/creativeDelight/src/main/resources/kubejs_startup/creativeengineering/cans.js), [gen_can_types.py](../../tools/gen_can_types.py) ->
 [can_types.json](../../kubejs/generation_scripts/food/can_types.json), [can_servings.json](../../kubejs/generation_scripts/food/can_servings.json),
-[cantags.js](../../kubejs/data/creative_delight/kubejs/creativeengineering/can_tags.js), patcherMod `food/CanServings.java`, `compat/KubeJSCanAction.java`.
+[cantags.js](../../kubejs/data/creativedelight/kubejs/creativeengineering/can_tags.js), patcherMod `food/CanServings.java`, `compat/KubeJSCanAction.java`.
 
 Updated 2026-10-31 (brief sweep): sections for the built rows (#3, #4, #5, #6, #9, #12, #14, #15) cut to one line
 each under [Built, needs play](#built-needs-play) (can_parity.md and cans.md hold their facts); #2 and #7 closed; the
@@ -129,7 +129,7 @@ Real goals for the placeholder sections, then rerun the generator.
 - Placeholders in gen_can_types.py `SECTIONS` (from line 72): `hazard` line 78 (Meat Meal 5 / 3), `meal` 88 (x0.75,
   2 -> 4), `pie` 89 (x1, 4 -> 4), `feast` 90 (x1, 1 block -> 6), `drink` 91 (x1, 4 -> 4), `golden` 92 (x0.25, 10
   servings, `dur=0.25`). The TODO's "line 86" is now 88 (meal).
-- Goal comments in [canning.js](../../kubejs/data/creative_delight/kubejs/creativeengineering/canning.js) (621 lines):
+- Goal comments in [canning.js](../../kubejs/data/creativedelight/kubejs/creativeengineering/canning.js) (621 lines):
   Hazard 357, Meals 467 (`// TBD` 471), Pie 485, Feasts 509, Drinks 524 (`// TBD` 528), Special / golden 558 (`// TBD`
   562). The TODO's lines 471, 528, 562 are right.
 - Value vs goal per can: can_parity 4.3, now generated for every can by `tools/can_audit.py` (#3). Findings for this
@@ -208,7 +208,7 @@ or patcherMod yet. No can opener id exists.
 ### Build
 1. KubeJS: item `creativeengineering:can_opener` (cans.js or items/), key `i.can_opener` in item_dict's canning block,
    tag `#creativeengineering:can_openers` (`i.t_can_openers`) added through `global.tags` in
-   [can_tags.js](../../kubejs/data/creative_delight/kubejs/creativeengineering/can_tags.js); a recipe (iron nugget +
+   [can_tags.js](../../kubejs/data/creativedelight/kubejs/creativeengineering/can_tags.js); a recipe (iron nugget +
    iron ingot, NCH `shaped`). Sound: `StartupEvents.registry('sound_event', e => e.create('creativeengineering:can_open'))`,
    `kubejs/assets/creativeengineering/sounds.json` + `sounds/can_open.ogg`.
 2. patcherMod `CanServings.finishServing`: before `afterServing` (line 163), `boolean opening = !level.isClientSide &&

@@ -100,13 +100,13 @@ public final class WthitHolderContents implements IWailaClientPlugin, IBlockComp
             }
         }
         if (be instanceof JarBlockTile jar) {
-            // Mixed jars (JarMixing): one item per slot, slot count = capacity. Via Container so reobf maps the calls.
+            // Mixed jars (Creative Compat JarMixing, through JarContents): one item per slot, slot count = capacity. Via Container so reobf maps the calls.
             Container items = (Container) jar;
             List<ItemStack> kinds = new ArrayList<>();
             for (int i = 0; i < items.getContainerSize(); i++) {
                 kinds.add(items.getItem(i));
             }
-            kinds = JarMixing.kinds(kinds);
+            kinds = JarContents.kinds(kinds);
             if (kinds.size() == 1) {
                 return amount(kinds.get(0).getHoverName(), kinds.get(0).getCount(), items.getContainerSize());
             }
@@ -119,7 +119,7 @@ public final class WthitHolderContents implements IWailaClientPlugin, IBlockComp
                     list.append(Component.translatable("creativeengineering.wthit.contents.kind",
                             kinds.get(i).getCount(), kinds.get(i).getHoverName()));
                 }
-                return amount(list, JarMixing.total(items), items.getContainerSize());
+                return amount(list, JarContents.total(items), items.getContainerSize());
             }
         }
         if (be instanceof IMobContainerProvider p) {

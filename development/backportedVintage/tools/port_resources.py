@@ -45,6 +45,7 @@ INSTANCE = os.path.dirname(os.path.dirname(MOD))
 JAR = os.path.expanduser('~/.local/share/atlauncher/downloads/vintagedelight-0.1.6.jar')
 KOTS = os.path.expanduser('~/.local/share/atlauncher/downloads/vintagedelight-kots-0.3.1.jar')
 OUT = os.path.join(MOD, 'src', 'main', 'resources')
+OWN = os.path.join(MOD, 'src', 'own')  # pack-owned files laid over the output (own_files)
 NS = 'vintagedelight'
 
 PURGED = re.compile(r'gearo|dehydrat|pitcher|sniffer', re.I)
@@ -258,6 +259,8 @@ def convert_lang(d, english):
     if english:
         out[f'item.{NS}.cucumber_dough'] = 'Cucumber Dough'
         out[f'item.{NS}.ghost_pepper.planting_soil'] = 'Plant on Soul Soil, Rich Soul Soil or Fertile Soul Soil'
+        out[f'item.{NS}.mixed_seeds'] = 'Mixed Seeds'
+        out[f'item.{NS}.mixed_seeds.tooltip'] = 'Plants a random crop'
     return out
 
 
@@ -292,6 +295,11 @@ def kots_files():
         'tool': {'tag': 'forge:tools/knives'},
     })
     write_json(f'data/{NS}/tags/blocks/ghost_pepper_soil.json', {'replace': False, 'values': ['minecraft:soul_soil']})
+    # Mixed Seeds (pack addition, -10; vintage_delight.md 2.3a): upstream ships only the texture. The plant list tag
+    # ships empty; the pack fills it.
+    write_json(f'assets/{NS}/models/item/mixed_seeds.json',
+               {'parent': 'minecraft:item/generated', 'textures': {'layer0': f'{NS}:item/mixed_seeds'}})
+    write_json(f'data/{NS}/tags/items/mixed_seeds_plants.json', {'replace': False, 'values': []})
 
 
 def own_ids():
@@ -359,6 +367,29 @@ def check_refs():
     return sorted(set(missing))
 
 
+
+def own_files():
+    """Pack-owned files in src/own (same layout as resources), laid over the converted output last: a new file is
+    copied; a tag file that already exists gets its values appended (no duplicates); a lang file gets its keys set.
+    Holds the -09 grape and cherry jam jars (dishes/jams #4) so a rerun of this script keeps them."""
+    for root, _, files in os.walk(OWN):
+        for f in files:
+            src = os.path.join(root, f)
+            rel = os.path.relpath(src, OWN)
+            dst = os.path.join(OUT, rel)
+            if os.path.exists(dst) and f.endswith('.json') and ('/tags/' in rel or '/lang/' in rel):
+                cur = json.load(open(dst, encoding='utf-8'))
+                add = json.load(open(src, encoding='utf-8'))
+                if '/tags/' in rel:
+                    cur['values'] = cur.get('values', []) + [v for v in add['values'] if v not in cur.get('values', [])]
+                else:
+                    cur.update(add)
+                write_json(rel, cur)
+            else:
+                os.makedirs(os.path.dirname(dst), exist_ok=True)
+                shutil.copyfile(src, dst)
+
+
 def main():
     for sub in ('assets', 'data'):
         shutil.rmtree(os.path.join(OUT, sub), ignore_errors=True)
@@ -410,6 +441,7 @@ def main():
             write_json(path, d)
             counts[kind] = counts.get(kind, 0) + 1
     kots_files()
+    own_files()
     print('written:', ', '.join(f'{k} {v}' for k, v in sorted(counts.items())))
     leftovers = []
     for root, _, files in os.walk(OUT):

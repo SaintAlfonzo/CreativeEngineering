@@ -39,7 +39,7 @@ function dumpPhysics() {
 	var $TieredItem = Java.loadClass('net.minecraft.world.item.TieredItem')
 	var $ArmorItem = Java.loadClass('net.minecraft.world.item.ArmorItem')
 	var SPLIT = null, IP = null
-	try { SPLIT = Java.loadClass('com.SaintAlfonzo.creativeengineering.itemphysic.ItemPhysicSplit') } catch (e) { console.warn('[dumpphysics] no ItemPhysicSplit: ' + e) }
+	try { SPLIT = Java.loadClass('com.SaintAlfonzo.creativecompat.itemphysic.ItemPhysicSplit') } catch (e) { console.warn('[dumpphysics] no ItemPhysicSplit: ' + e) }
 	try { IP = Java.loadClass('team.creative.itemphysic.ItemPhysic') } catch (e) { console.warn('[dumpphysics] no ItemPhysic: ' + e) }
 
 	// Material and SoundType have no names of their own: match by identity against the vanilla constants.

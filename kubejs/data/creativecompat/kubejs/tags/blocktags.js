@@ -1,0 +1,26 @@
+// Creative Compat: block tags for the mod tweaks; moved from kubejs/server_scripts/tags/blocktags.js on 2026-11-01.
+
+ServerEvents.tags('block', e => {
+	var t = global.tags
+	var b = global.blocks
+	var i = global.item
+
+	// Monster box (mob_block_tweaks.md 2.9): mined like obsidian; a contraption must not carry the vault off.
+	t.mineable(e, 'pickaxe', 'diamond', b.monster_box, { exclusive: true })
+	t.add(e, b.t_create_non_movable, b.monster_box)
+
+	// Rubidium blends the vanilla grass block's tint per vertex across neighbours (biome blend > 0) but colours
+	// modded blocks flat per block, so Vinery's grass slab came out a shade off next to grass. This tag opts it in.
+	t.add(e, b.t_blendable_blocks, i.grass_slab)
+
+	// Campfire rain (campfire/CampfireRain.java, config [campfire]). Unlit Campfire burns campfires forever; rain puts
+	// out the ones in rain_douses unless the block below is in rain_proof_fuel.
+	// Soul campfires stay out of rain_douses; Tinted Campfires aren't CampfireBlocks, so never ticked.
+	t.add(e, b.t_campfire_rain_douses, b.campfire)
+	t.add(e, b.t_campfire_rain_proof_fuel, [b.coal_block, b.quark_charcoal_block, b.architects_palette_charcoal_block])
+
+	// In-world dyeing (Supplementaries [tweaks.dye_blocks], SupplementariesDyeBlocksMixin). Blocks with a block entity
+	// never dye in world (sacks lost their contents, canvas signs their text); no_world_dye is for plain blocks the
+	// dyeing audit takes out too (TODO blocks/dyeing #1). Empty until then.
+	t.add(e, b.t_no_world_dye, [])
+})

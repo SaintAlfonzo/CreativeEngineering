@@ -31,16 +31,7 @@ global.tags.add(e, 'creativeengineering:dragon_gear', [
 // CEConfig.BonemealCharm (chance/damageChance/damagePerUse).
 global.tags.add(e, 'creativeengineering:bonemeal_charms', [i.dragon_hoe])
 
-// Hoe harvest area: side of the square Quark's hoe right-click (harvest + replant) and hoe
-// area break cover. Read by patcherMod crops.HoeHarvestArea, which also writes the
-// "Harvest area: NxN" tooltip. Any size 1x1 to 9x9 works; the largest tag wins. An even
-// area reaches one block further toward where the player looks. A hoe in none of these
-// keeps Quark's own 3x3 / 5x5 (config/quark-common.toml [tweaks.hoe_harvesting]).
-global.tags.add(e, 'creativeengineering:hoe_harvest/1x1', [i.wooden_hoe, i.stone_hoe])
-global.tags.add(e, 'creativeengineering:hoe_harvest/2x2', [i.copper_hoe, i.golden_hoe])
-global.tags.add(e, 'creativeengineering:hoe_harvest/3x3', [i.iron_hoe, i.hoe_steel])
-global.tags.add(e, 'creativeengineering:hoe_harvest/4x4', [i.diamond_hoe, i.netherite_hoe, i.elementium_hoe, i.manasteel_hoe])
-global.tags.add(e, 'creativeengineering:hoe_harvest/5x5', [i.echo_hoe, i.felsic_hoe, i.dragon_hoe])
+// Hoe harvest area tags: Creative Delight (creativeengineering/crop_tags.js).
 
 // Add fletching tag to feathers and fletchings
 t.add(e, 'forge:fletching', [i.feather, i.arrow_fletching, i.roadrunner_feather])

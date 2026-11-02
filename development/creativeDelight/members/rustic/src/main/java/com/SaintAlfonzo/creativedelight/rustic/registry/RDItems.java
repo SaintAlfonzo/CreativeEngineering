@@ -20,8 +20,9 @@ import java.util.Map;
 import java.util.function.Function;
 
 /**
- * The items of Rustic Delight 1.7.0 less Fruit Beignet (removed from the pack), every 1.3.0 id among them. Block items
- * first, then the rest in upstream's order, which is also the creative tab's order.
+ * The items of Rustic Delight 1.7.0 less the ones removed from the pack (RusticTranslator.REMOVED: Fruit Beignet, the plain
+ * Pancake, Fried Dough), every other 1.3.0 id among them, plus the pack's Glowing Calamari Crate. Block items first, then
+ * the rest in upstream's order, which is also the creative tab's order.
  */
 public final class RDItems {
     public static final DeferredRegister<Item> ITEMS = DeferredRegister.create(ForgeRegistries.ITEMS, RusticDelightMod.MODID);
@@ -33,6 +34,7 @@ public final class RDItems {
         }
         RDBlocks.PEPPER_CRATES.values().forEach(block -> block(block, props()));
         block(RDBlocks.CALAMARI_CRATE, props());
+        block(RDBlocks.GLOWING_CALAMARI_CRATE, props());
         RDBlocks.GIANT_PEPPERS.values().forEach(block -> block(block, props()));
         for (RegistryObject<Block> block : java.util.List.of(RDBlocks.WILD_COTTON, RDBlocks.WILD_BELL_PEPPERS, RDBlocks.WILD_PALE_BELL_PEPPERS,
                 RDBlocks.WILD_DARK_BELL_PEPPERS, RDBlocks.WILD_COFFEE, RDBlocks.SYRUP_CHEESECAKE, RDBlocks.CHERRY_BLOSSOM_CHEESECAKE, RDBlocks.COFFEE_CHEESECAKE)) {
@@ -92,7 +94,6 @@ public final class RDItems {
     public static final RegistryObject<Item> COFFEE_COOKIE = food("coffee_cookie", FoodValues.COOKIES);
     public static final RegistryObject<Item> SYRUP_SANDWICH = food("syrup_sandwich", RDFoods.SYRUP_SANDWICH);
 
-    public static final RegistryObject<Item> PANCAKE = food("pancake", RDFoods.PANCAKE);
     public static final RegistryObject<Item> HONEY_PANCAKE = consumable("honey_pancake", RDFoods.HONEY_PANCAKE, true);
     public static final RegistryObject<Item> CHOCOLATE_PANCAKE = consumable("chocolate_pancake", RDFoods.CHOCOLATE_PANCAKE, true);
     public static final RegistryObject<Item> CHERRY_BLOSSOM_PANCAKE = consumable("cherry_blossom_pancake", RDFoods.CHERRY_BLOSSOM_PANCAKE, true);
@@ -104,7 +105,6 @@ public final class RDItems {
     public static final RegistryObject<Item> SWEET_SALAD = bowlFood("sweet_salad", RDFoods.SWEET_SALAD);
     public static final Map<String, RegistryObject<Item>> STUFFED_PEPPERS = RDBlocks.byColour(colour ->
             food("stuffed_bell_pepper_" + colour, RDFoods.STUFFED_BELL_PEPPER));
-    public static final RegistryObject<Item> FRIED_DOUGH = food("fried_dough", RDFoods.FRIED_DOUGH);
     public static final RegistryObject<Item> FRIED_DUMPLINGS = food("fried_dumplings", RDFoods.FRIED_DUMPLINGS);
     public static final RegistryObject<Item> SPRING_ROLLS = food("spring_rolls", RDFoods.SPRING_ROLLS);
     public static final RegistryObject<Item> FRIED_FISH = food("fried_fish", RDFoods.FRIED_FISH);

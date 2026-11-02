@@ -45,9 +45,9 @@ bunch; #11 and #12 are new sections. Status per TODO.
   [fluidtags.js](../../kubejs/server_scripts/tags/fluidtags.js). JEI shows a bottle's effects on its fluid through the
   emptying recipe (patcherMod `compat/DrinkFluidEffects.java`), so a drink fluid needs a working `createBottle` pair.
 - **Kettle recipes** live in Creative Delight's
-  [farmersrespite/kettle.js](../../kubejs/data/creative_delight/kubejs/farmersrespite/kettle.js) (109 lines: section 1
+  [farmersrespite/kettle.js](../../kubejs/data/creativedelight/kubejs/farmersrespite/kettle.js) (109 lines: section 1
   the mods' recipes rewritten on a base, 2 Rustic coffees and Fruits Delight teas, 3 the `createBottle` pairs at 98-107).
-  New Kettle drinks go there (non-member file, ids `creative_delight:<type>/<suffix>`).
+  New Kettle drinks go there (non-member file, ids `creativedelight:<type>/<suffix>`).
 - **Drink items in KubeJS:** `.useAnimation('drink')`, `.containerItem(i.glass_bottle)`, `.maxStackSize(16)` like FR /
   FD drinks, `f.eaten(ev => ev.player.give(i.glass_bottle))` for the bottle back (callback form in
   [cans.js:80](../../development/creativeDelight/src/main/resources/kubejs_startup/creativeengineering/cans.js#L80)).
@@ -83,7 +83,7 @@ A lemonade fluid with pink and blue variants; their effects come from what goes 
    `f.hunger(2).saturation(0.3).alwaysEdible()` + effects (D2). Keys `i.lemonade` ... in a "Pack sweets and drinks"
    section of item_dict.js (shared with baking_sweets.md). Sprites: recolour Fruits Delight's lemon juice bottle.
 3. Recipes in a Creative Delight tree (food code routes there, memory `creative-delight-routing`; e.g.
-   `kubejs/data/creative_delight/kubejs/fruitsdelight/` for the lemon routes, Kettle ones in `farmersrespite/kettle.js`):
+   `kubejs/data/creativedelight/kubejs/fruitsdelight/` for the lemon routes, Kettle ones in `farmersrespite/kettle.js`):
    - Create: `R.createMixing(Fluid.of(f.lemonade, 500), [Fluid.of(f.lemon_juice, 250), Fluid.of(f.water, 250), i.any_sugar], e, 'lemonade')`;
      pink: `[Fluid.of(f.lemonade, 500), i.t_fruits_strawberry]` → 500 pink; blue: `[Fluid.of(f.lemonade, 500), i.t_fruits_blueberry]` → 500 blue.
    - Spout / drain per variant: `R.createBottle(i.lemonade, f.lemonade, e, 'lemonade')` (after #12 is fixed).
@@ -221,7 +221,7 @@ One item per drink or crop where two mods add the same thing; the last open part
   is still the purged Alex's Mobs id.
 
 ### Build
-1. In [neapolitan/recipes.js](../../kubejs/data/creative_delight/kubejs/neapolitan/recipes.js) (Creative Delight): `R.shapeless(Item.of(i.neapolitan_banana, 2), i.banana_bunch, e, 'banana_bunch')` and
+1. In [neapolitan/recipes.js](../../kubejs/data/creativedelight/kubejs/neapolitan/recipes.js) (Creative Delight): `R.shapeless(Item.of(i.neapolitan_banana, 2), i.banana_bunch, e, 'banana_bunch')` and
    `R.fdCutting(i.banana_bunch, i.any_knife, Item.of(i.neapolitan_banana, 3), e, 'banana_bunch')` (knife bonus).
 2. item_merges.md 2.1: add the two recipes; changelog bullet under the bananas family.
 
@@ -428,7 +428,7 @@ than the proper drinks.
 1. Take `i.cherry_cream_soda` out of removed_items.js (and its comment line).
 2. Tag: add `i.cherry` to `forge:fruits/cherry` through `global.tags` (Vinery is a Creative Brewing member; the tag call
    goes in the CB or CD tags file that holds Vinery fruit tags).
-3. Recipe in [abnormals_delight/recipes.js](../../kubejs/data/creative_delight/kubejs/abnormals_delight/recipes.js) (Creative Delight):
+3. Recipe in [abnormals_delight/recipes.js](../../kubejs/data/creativedelight/kubejs/abnormals_delight/recipes.js) (Creative Delight):
    `R.fdCooking([i.milk, i.any_sweetener_drink, i.t_fruits_cherry, i.t_fruits_cherry, i.dried_vanilla_pods], i.cherry_cream_soda, e, 'cherry_cream_soda', 1.0, 200, i.glass_bottle)`
    (`fdCooking(input, output, e, idOverride, exp, time, container)` line 1074; `i.milk` = `#forge:milk` line 1825; add
    `i.t_fruits_cherry = '#forge:fruits/cherry'` next to the other `t_fruits_*` keys, ~line 1879).
@@ -440,7 +440,7 @@ than the proper drinks.
 
 ### Ids and data
 Verified: item id, removed recipe JSON, empty cherry tag, `i.dried_vanilla_pods` (12656), `i.cherry` (11209). New:
-`i.t_fruits_cherry`, recipe id `creative_delight:farmersdelightcooking/cherry_cream_soda` (or the CD namespace NCH writes).
+`i.t_fruits_cherry`, recipe id `creativedelight:farmersdelightcooking/cherry_cream_soda` (or the CD namespace NCH writes).
 
 ### Decisions
 - Pot (the original) or Kettle: recommendation pot, as upstream, so the soda stays a cheap side drink.
@@ -466,7 +466,7 @@ Every `NCH.createBottle` pair loads, so the Spout bottles and the Item Drain emp
 
 ### Now
 - Still failing in the user's `logs/latest.log` of 2026-10-31 17:17: 12 `Error parsing recipe
-  creative_delight:createfilling/<id>` lines (`berry_matcha_latte`, the 7 Rustic coffees `cherry_blossom_coffee`,
+  creativedelight:createfilling/<id>` lines (`berry_matcha_latte`, the 7 Rustic coffees `cherry_blossom_coffee`,
   `chocolate_coffee`, `coffee`, `dark_coffee`, `honey_coffee`, `milk_coffee`, `pumpkin_coffee`, `syrup_coffee`,
   `lavender_tea`, `matcha_latte`, `water_cup`), each with the fluid ingredient written as `{"fluid":"minecraft:empty",
   "nbt":{},"amount":0}` and `Can't modify the empty stack`. `createemptying/*` raise nothing (whether they give fluid is
@@ -476,7 +476,7 @@ Every `NCH.createBottle` pair loads, so the Spout bottles and the Item Drain emp
   builds `Fluid.of(fluid, mb)` inside NCH and passes `[container, fluidStack]` to `createFilling` (line 1828), which runs
   `toId`, `_validateAny` (442; calls `_ingredientLike` 189, `_isFluidLike` 436) on it and then
   `e.recipes.create.filling(output, input)`.
-- Same symptom elsewhere: `creative_delight:createsequencedassembly/zucchini_quiche_sequenced_assembly`
+- Same symptom elsewhere: `creativedelight:createsequencedassembly/zucchini_quiche_sequenced_assembly`
   (veggiesdelight/recipes.js:65 passes a script-side `Fluid.of(f.milk, 250)` as a `fill` step through NCH's sequenced
   builder) also comes out `minecraft:empty`.
 - Loads fine: NCH's own `e.recipes.create.filling(inc, [inc, Fluid.of(global.fluid.lava, 250)])` (lines 1511-1538,
@@ -495,11 +495,11 @@ Every `NCH.createBottle` pair loads, so the Spout bottles and the Item Drain emp
    which needs no FluidStackJS at all; and make `_validateAny` / `_ingredientLike` return early for fluid-likes
    (`_isFluidLike` first) so other helpers are not hit. Apply the same to the sequenced-assembly `fill` step.
 3. patcherMod rebuild and install (the helper is in its jar), restart; grep latest.log for `Error parsing recipe
-   creative_delight:create` -> none.
+   creativedelight:create` -> none.
 4. Then run SQ-RSP-09; close the Spout half of K10 in farmers_respite.md.
 
 ### Ids and data
-Recipe ids `creative_delight:createfilling/<drink id path>` and `createemptying/...`; fluids from fluid_dict.js
+Recipe ids `creativedelight:createfilling/<drink id path>` and `createemptying/...`; fluids from fluid_dict.js
 (`f.coffee` = `create_central_kitchen:coffee`, the pack drink fluids `creativeengineering:*`, `f.water`).
 
 ### Decisions
@@ -512,7 +512,7 @@ None (row says none). Recommendation for the fix shape: JSON via `_fluidJson` (s
 
 ### Tests
 - SQ-RSP-09 (in the scratch queue): Spout and Item Drain for Milk Coffee, Lavender Tea, Matcha Latte, Coffee; cup <-> water;
-  no `Error parsing recipe creative_delight:createfilling/` line.
+  no `Error parsing recipe creativedelight:createfilling/` line.
 - RC-new3 (proposed): JEI shows a Spout recipe for each Kettle drink and the water cup; the zucchini quiche assembly
   shows its milk step.
 

@@ -28,7 +28,7 @@ villager food pool. Village corn farms are handled elsewhere. Nothing else from 
 Where it goes: the installed 1.0.3 jar stays. New items are KubeJS items in the `creativeengineering:` namespace (like
 `cornmeal`), registered in Creative Delight's startup tree `kubejs_startup/corn_delight/` and keyed once in `item_dict.js`
 (`i.corncob`, `i.corn_popsicle`, `i.cob_pipe`). Recipes go through NCH, tags through `global.tags`, in the
-`kubejs/data/creative_delight/kubejs/corn_delight/` server tree (`// requires: corn_delight`, needs `global.CD`). MIT art from the
+`kubejs/data/creativedelight/kubejs/corn_delight/` server tree (`// requires: corn_delight`, needs `global.CD`). MIT art from the
 1.2.11 jar, notice kept. Java (cob pipe, villager hook) stays in patcherMod (Corn is not a CD member, see
 [creative_delight.md](creative_delight.md) section on routing).
 
@@ -53,7 +53,8 @@ tuning pass ([food.md](food.md)). Not a one-off.
 ### 2.3 Cob Pipe
 
 `creativeengineering:cob_pipe`, shapeless: wooden rod + Corncob. Cosmetic, no stats. Wearable in the vanilla head armor slot
-(item `getEquipmentSlot` HEAD, patcherMod) and in a Curios head slot (item tag `curios:head`, with the 1.20 renderer ported).
+(`LivingEntity.getEquipmentSlotForItem` returns HEAD for it: CD `MobCobPipeSlotMixin`; until 2026-11-01 it targeted
+`Mob`, never applied, so the head slot took it only by right click) and in a Curios head slot (item tag `curios:head`, with the 1.20 renderer ported).
 If a mouth or face Curios slot exists it takes the pipe first: the item is also in the `curios:mouth` and `curios:face` tags
 (unused tags are harmless). The pack's Curios 5.1.6.4 defines no such slot today (only Curios' stock set plus Season HUD's
 calendar slot), so that part only takes effect if a mod or the pack adds one; the pack does not add a slot for it. At build
@@ -124,7 +125,7 @@ In game (client), after installing both jars and a restart. The server halves ar
 | Items | CD startup `kubejs_startup/corn_delight/corn_items.js`; keys in `item_dict.js` (`i.corncob`, `i.corn_popsicle`, `i.cob_pipe`), `food_dict.js` (`f.dessert_corn_popsicle`), `block_dict.js` (`b.corn_crop`) | KubeJS items, `creativeengineering:` namespace |
 | Art | `kubejs/assets/creativeengineering/textures/item/` (`corncob`, `corn_popsicle`, `cob_pipe`, `cob_pipe_uv`), MIT notice `corn_delight_art_notice.txt` there | The pipe model is `models/item/cob_pipe.json`: Forge `separate_transforms`, 3D (`cob_pipe_3d.json`, 1.2.11's model) in hand and on the head, flat sprite in the GUI, on the ground and in frames. 1.2.11 did this with MML's `MultiModelBakedModel`, which MML 1.2.3 lacks |
 | Compost | CD startup `corn_delight/compost.js` | 0.3 |
-| Recipes | `kubejs/data/creative_delight/kubejs/corn_delight/recipes.js` (cob cutting, popsicle, pipe, Classic Corn Dog grid); cob secondary in `creativeengineering/recipes.js` (corn and wild corn `foodGrinding`) and `immersiveengineering/recipes.js` (corn crusher) | `foodGrinding` keeps byproducts machine-only, so the mortar gives no cob. Wild corn in the IE crusher is a kernel recipe, not a cornmeal route, so it gets no cob |
+| Recipes | `kubejs/data/creativedelight/kubejs/corn_delight/recipes.js` (cob cutting, popsicle, pipe, Classic Corn Dog grid); cob secondary in `creativeengineering/recipes.js` (corn and wild corn `foodGrinding`) and `immersiveengineering/recipes.js` (corn crusher) | `foodGrinding` keeps byproducts machine-only, so the mortar gives no cob. Wild corn in the IE crusher is a kernel recipe, not a cornmeal route, so it gets no cob |
 | Tags | `corn_delight/tags.js`: `curios:head`, `curios:mouth`; `curios:face` is in `server_scripts/tags/curiostags.js` | The pack now has a Face slot ([curios_slots.md](curios_slots.md)); it is the "mouth or face" slot of 2.3 |
 | Knife loot | `corn_delight/loot.js` (LootJS, `CE/corn_knife_corncob`) | `corn_crop` at age 7, as 1.2.11's straw modifier (either half) |
 | Trades | `corn_delight/trades.js` (MoreJS) | Fixed prices: 24 corn -> 1 emerald (Novice, 16 uses); 8 emeralds -> 8 Cornbread / 8 Tortillas (Apprentice); wanderer corn 1 emerald COMMON, Popcorn Box 2 emeralds RARE |

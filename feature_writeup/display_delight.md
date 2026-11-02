@@ -128,7 +128,7 @@ prefix and rerun the tool if the mod is ever added). Whether each has a Forge 1.
 | `ctd_` | Cultural Delights (`culturaldelights`) | 31 | 6 / 18 / 7 | 29 | Eggplant Parmesan, Chicken Taco, Avocado Toast, Midori Roll, Rice Ball |
 | `acd_` | Aquaculture Delight (`aquaculturedelight`) | 18 | 15 / 1 / 2 | no | Fish and Chips, Halaszle, Bass Stew, Catfish Barbecue, Fish Fillet Roll |
 | `crd_` | Crabber's Delight (`crabbersdelight`) | 15 | 10 / 5 / 0 | no | Clam Chowder, Seafood Gumbo, Coconut Milk, Shrimp Skewer, Stuffed Nautilus Shell |
-| `lm_` | Large Meals (`largemeals`) | 13 | 13 / 0 / 0 | 13 | Omurice, Chicken Curry, Rice Pudding, Roasted Mutton Rack (port planned: [large_meals.md](large_meals.md) step 19) |
+| `lm_` | Large Meals (`largemeals`) | 13 | 13 / 0 / 0 | 13 | Omurice, Chicken Curry, Rice Pudding, Roasted Mutton Rack (ported 2026-11-01 with Large Meals: [large_meals.md](large_meals.md) step 19; jar not installed) |
 | `pd_` | Pineapple Delight (`pineapple_delight`) | 6 | 4 / 0 / 2 | 4 | Pineapple Fried Rice, Pineapple Juice, Pineapple Cake slice |
 | `fd_` | Festive Delight (`festive_delight`) | 3 | 3 / 0 / 0 | 3 | Festive Chicken, Christmas Tea, Salmon Verrines |
 | **Total** | 8 mods | **163** | | **78** | |

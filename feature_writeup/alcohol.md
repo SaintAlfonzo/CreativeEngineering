@@ -2,7 +2,7 @@
 
 > **Creative Brewing (2026-10-31):** both ports are now members of the Creative Brewing bundle: sources in
 > `development/creativeBrewing/members/vinery` and `.../members/brewin` (Gradle projects `:backportedVinery`, `:backportedBrewin`
-> unchanged), shipped only inside `creative_brewing-<v>.jar`, display names "Let's Do Vinery (Creative Brewing)" and "Brewin' &
+> unchanged), shipped only inside `creativebrewing-<v>.jar`, display names "Let's Do Vinery (Creative Brewing)" and "Brewin' &
 > Chewin' (Creative Brewing)" (`foundation`: "Creative Brewing"). Vinery `-08` and Brewin' `-05` are the first nested builds (built, not installed). Paths
 > `development/backportedVinery` / `development/backportedBrewin` below mean those folders. See [creative_brewing.md](creative_brewing.md).
 
@@ -1628,7 +1628,7 @@ Display Delight models to the coaster; add WTHIT info.
   - The tag ships in the port, written by `tools/port_resources.py` from its 96 coaster files (the other mods' ids
     optional, so 1.21-only Farmer's Delight foods don't break it).
   - The pack adds `#creativeengineering:placeable_on_coaster` into it
-    ([placeable_tags.js](../kubejs/data/creative_delight/kubejs/creativeengineering/placeable_tags.js), key `i.t_bnc_placeable_on_coaster`).
+    ([placeable_tags.js](../kubejs/data/creativedelight/kubejs/creativeengineering/placeable_tags.js), key `i.t_bnc_placeable_on_coaster`).
 - **Display Delight models (pack + port):** [tools/gen_coaster_models.py](../tools/gen_coaster_models.py) writes 56 coaster
   files to `kubejs/assets/creativeengineering/brewinandchewin/coaster/`, one per food DD links that the port has no
   model for (the other 29 keep the port's). Each points at the DD block's default model: the food on its own first,

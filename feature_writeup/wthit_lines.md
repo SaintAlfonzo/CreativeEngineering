@@ -53,7 +53,7 @@ nothing under WTHIT; 2.6 to 2.8 port the ones that matter.
 | Plugin id | Class | Side | Needs | What it adds |
 |---|---|---|---|---|
 | `creativeengineering:run_speed` | `surface/WthitRunSpeed` | client | `blockrunner` | "Run Speed: 1.50× (Asphalt)" ([blockrunner.md](blockrunner.md) 3.8) |
-| `creative_delight:crop_growth` | Creative Delight `compat/wthit/WthitCropGrowth` (QoL-6) | client | nothing | "Growth: 67%", "(Harvestable)" ([crops.md](crops.md) 2.9) |
+| `creativedelight:crop_growth` | Creative Delight `compat/wthit/WthitCropGrowth` (QoL-6) | client | nothing | "Growth: 67%", "(Harvestable)" ([crops.md](crops.md) 2.9) |
 | `creativeengineering:block_model_icon` | `compat/WthitBlockModelIcon` | client | nothing | the icon fix, 2.2 |
 | `creativeengineering:coaster` | `compat/WthitCoaster` | client | `brewinandchewin` | coaster lines ([alcohol.md](alcohol.md) 12) |
 | `creativeengineering:holder_contents` | `compat/WthitHolderContents` | client | `supplementaries` | "Contents: ...", 2.3 |

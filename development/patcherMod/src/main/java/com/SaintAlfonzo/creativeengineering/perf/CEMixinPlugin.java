@@ -11,20 +11,23 @@ import org.objectweb.asm.tree.MethodInsnNode;
 import org.objectweb.asm.tree.MethodNode;
 import org.objectweb.asm.tree.VarInsnNode;
 import org.slf4j.Logger;
-import org.spongepowered.asm.mixin.extensibility.IMixinConfigPlugin;
 import org.spongepowered.asm.mixin.extensibility.IMixinInfo;
 
+import com.SaintAlfonzo.creativeengineering.shared.GatedMixinPlugin;
+
 import java.util.List;
-import java.util.Set;
+import java.util.Map;
 
 /**
- * Mixin config plugin for creativeengineering.mixins.json. Applies every mixin as listed; its one job is perf.md 15
+ * Mixin config plugin for creativeengineering.mixins.json. A {@link GatedMixinPlugin} (creative_split.md 7.3 step 0):
+ * a mixin named in {@link #NEEDS_MOD} applies only when one of its mods is loaded; every other mixin applies as listed.
+ * Each jar carved out of patcherMod takes its mixins' rows with it into its own plugin. Its other job is perf.md 15
  * candidate C: after {@code IwServerLevelTickMixin} (priority 1500, so after Immersive Weathering's own
  * {@code ServerLevelMixin} at 1000) it rewrites IW's merged {@code callTick} handler in ServerLevel to call
  * {@link IwGrowthFast#blockTick}. Mixin will not inject into another mixin's merged method, hence the ASM.
  * Must not load game classes: it runs while ServerLevel is being transformed.
  */
-public class CEMixinPlugin implements IMixinConfigPlugin {
+public class CEMixinPlugin extends GatedMixinPlugin {
 	private static final Logger LOGGER = LogUtils.getLogger();
 
 	private static final String IW_MIXIN = "com.ordana.immersive_weathering.mixins.ServerLevelMixin";
@@ -38,29 +41,13 @@ public class CEMixinPlugin implements IMixinConfigPlugin {
 	private static final String FAST_DESC = "(Lnet/minecraft/server/level/ServerLevel;Lnet/minecraft/world/level/chunk/LevelChunkSection;"
 			+ "Lnet/minecraft/core/BlockPos;Lnet/minecraft/world/level/block/state/BlockState;III)V";
 
-	@Override
-	public void onLoad(String mixinPackage) {}
+	/** Mixin simple name -> mod ids it serves (any one loaded is enough). */
+	private static final Map<String, List<String>> NEEDS_MOD = Map.ofEntries(
+			Map.entry("IwServerLevelTickMixin", List.of("immersive_weathering")));
 
-	@Override
-	public String getRefMapperConfig() {
-		return null;
+	public CEMixinPlugin() {
+		super("[creativeengineering]", NEEDS_MOD);
 	}
-
-	@Override
-	public boolean shouldApplyMixin(String targetClassName, String mixinClassName) {
-		return true;
-	}
-
-	@Override
-	public void acceptTargets(Set<String> myTargets, Set<String> otherTargets) {}
-
-	@Override
-	public List<String> getMixins() {
-		return null;
-	}
-
-	@Override
-	public void preApply(String targetClassName, ClassNode targetClass, String mixinClassName, IMixinInfo mixinInfo) {}
 
 	@Override
 	public void postApply(String targetClassName, ClassNode targetClass, String mixinClassName, IMixinInfo mixinInfo) {

@@ -123,7 +123,7 @@ public final class WthitPotContents implements IWailaClientPlugin, IBlockCompone
             addBlock(out, pot.getContent());
         } else if (be instanceof FramedFlowerPotBlockEntity framed) {
             if (framed.hasFlowerBlock()) addBlock(out, framed.getFlowerBlock());
-        } else if (be instanceof BotanistPotBlockEntity bench) {
+        } else if (be instanceof PottedPlantHolder bench) {
             if (bench.plant() != null) addBlock(out, ForgeRegistries.BLOCKS.getValue(bench.plant()));
         } else if (id != null && "supplementaries".equals(id.getNamespace()) && be != null) {
             SuppPots.plants(be, out);

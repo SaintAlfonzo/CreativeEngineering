@@ -8,8 +8,8 @@ import net.minecraft.world.level.block.state.BlockState;
 
 /** The End plants' ground: the two soil tags (filled by the pack's scripts) and their growth tier. */
 public final class EndSoil {
-    public static final TagKey<Block> SLOW = BlockTags.create(new ResourceLocation("creative_delight", "end_plant_soil_slow"));
-    public static final TagKey<Block> FAST = BlockTags.create(new ResourceLocation("creative_delight", "end_plant_soil_fast"));
+    public static final TagKey<Block> SLOW = BlockTags.create(new ResourceLocation("creativedelight", "end_plant_soil_slow"));
+    public static final TagKey<Block> FAST = BlockTags.create(new ResourceLocation("creativedelight", "end_plant_soil_fast"));
 
     private EndSoil() {
     }

@@ -178,11 +178,11 @@ farmer villagers on rich farmland and Fertile Soil (configurable), and the feedb
 | Mixins (`farmersdelight.ce.mixins.json`, appended to `mixin_configs`) | `.../farmers/mixin/`: `FarmersDelightInitMixin` (calls `FDBackports.init()` at the end of FD's constructor, so registers, config and listeners belong to FD's container), `RopeFenceConnectionMixin`, `VillagersTargetFarmlandMixin`, `SkilletUnderwaterMixin`. SRG names, `remap = false` |
 | Assets and data at new paths (47 files from the 1.3.4 donor, MIT) | `members/farmers/src/main/resources/assets/farmersdelight/` (blockstates, models, textures incl. 1.3.4's `block/bowl.png` the salad model needs, `particles/sparkle.json`), `data/farmersdelight/loot_tables/blocks/` (rope fence, gate, salad; `random_sequence` dropped) |
 | Edited upstream files (`replaced_resources`, sha1-pinned) | `lang/en_us.json` (6 names, 2 subtitles, rice line, skillet line), `sounds.json` (2 gate sounds, lead-knot events) |
-| Recipes (CD tree, `global.CD.recipes`, ids `creative_delight:`) | `kubejs/data/creative_delight/kubejs/farmersdelight/recipes.js` |
+| Recipes (CD tree, `global.CD.recipes`, ids `creativedelight:`) | `kubejs/data/creativedelight/kubejs/farmersdelight/recipes.js` |
 | Tags | `.../farmersdelight/tags.js`: cabbage roll filling (runs without CD), `forge:fences` / `forge:fence_gates`, knife-mineable pie (with CD) |
 | Loot (LootJS; runs without CD, needs only FD) | `.../farmersdelight/loot.js` |
 | Dict keys | `item_dict.js` (end of the farmersdelight section, plus `any_hoe`, `any_shears`, `t_forge_fences`, `t_forge_fence_gates`, `t_wolf_prey`), `block_dict.js` |
-| Tooltip | `kubejs/client_scripts/tooltips.js` (`fdVillagerLine`, shown only with `creative_delight` loaded) |
+| Tooltip | `kubejs/client_scripts/tooltips.js` (`fdVillagerLine`, shown only with `creativedelight` loaded) |
 | Version | repack `1.19.2-1.2.4-ce-19.2-02`; `:creativeDelight:build` 2026-10-25 nests it |
 
 ### 4.2 Behaviour and choices
@@ -214,7 +214,7 @@ farmer villagers on rich farmland and Fertile Soil (configurable), and the feedb
   block (board and chains from 1.3.4's entity texture `entity/signs/hanging/canvas.png`, copied to `textures/block/`; 8 models,
   `attached` V chains or straight chains, 22.5 degree steps by element rotation plus blockstate y) with 1.3.4's property names. Placed
   under a block that supports the centre (or any non-air block); sneaking while placing sets `attached`, which then pops off when
-  the support above goes (unattached never pops). Recipe 6 from 2 Chains, 4 logs, 2 Canvas (1.3.4's, `creative_delight:` id
+  the support above goes (unattached never pops). Recipe 6 from 2 Chains, 4 logs, 2 Canvas (1.3.4's, `creativedelight:` id
   `crafting_shaped/hanging_canvas_sign`). Tag `minecraft:mineable/axe`; loot drops itself. Limits: no text, dyes, wall variant
   or hanging-sign tag.
 - **Feedback lines**: of 2.4's list only two changed meaning. Rice: "This seed must be planted in shallow water." (lang).

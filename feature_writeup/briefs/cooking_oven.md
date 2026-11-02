@@ -4,10 +4,10 @@ Written 2026-10-21 from [TODO.md](../todo/TODO.md) `# cooking`, Sub `oven`; swep
 [oven.md](../oven.md) (block, `creativeengineering:baking`, OV- tests),
 [food_families.md](../food_families.md) 3.1 and 4.6 (family rules), [remainder_buffer.md](../remainder_buffer.md),
 [creative_delight.md](../creative_delight.md) 30 (`global.CD.food`).
-Code: [baking.js](../../kubejs/data/creative_delight/kubejs/creativeengineering/baking.js) (181 lines: cake / pie /
+Code: [baking.js](../../kubejs/data/creativedelight/kubejs/creativeengineering/baking.js) (181 lines: cake / pie /
 cookie / muffin / tart / hand-pie tables, oven and bakeware recipes),
-[baked_goods.js](../../kubejs/data/creative_delight/kubejs/creativeengineering/baked_goods.js) (wheat -> flour swap),
-the family calls in [cd_food.js](../../development/creativeDelight/src/main/resources/kubejs_startup/creative_delight/cd_food.js)
+[baked_goods.js](../../kubejs/data/creativedelight/kubejs/creativeengineering/baked_goods.js) (wheat -> flour swap),
+the family calls in [cd_food.js](../../development/creativeDelight/src/main/resources/kubejs_startup/creativedelight/cd_food.js)
 (Creative Delight jar), `global.NCH.ceBaking` (line 1161), `fdCooking` (1074), `hammering` (1142) in
 [neoCraftHelper.js](../../development/patcherMod/src/main/resources/kubejs_startup/creativeengineering/func/neoCraftHelper.js)
 (patcherMod jar), patcherMod `oven/` (`OvenBlockEntity`, `BakingRecipe`, `jei/OvenJeiPlugin`).
@@ -67,7 +67,7 @@ Every baked good has an oven recipe on flour (not wheat), and no wheat crafting 
 ### Ids and data
 Breads from the dict (`i.banana_bread`, `i.garlic_bread`, ... check each key in `item_dict.js`), `i.flour`,
 `i.any_dough`, `F.ware.sheet` / `.cake`, `F.SWEET`, recipe type `creativeengineering:baking` (ids
-`creative_delight:baking/<suffix>` inside `global.CD.recipes`).
+`creativedelight:baking/<suffix>` inside `global.CD.recipes`).
 
 ### Decisions
 - Hand craft for breads that gain an oven recipe: **keep it** (dearer, by hand); the oven is the efficient route, as
@@ -114,11 +114,11 @@ the oven, add tools or dishes where needed, and let the oven smoke (decided 2026
 
 ### Build
 1. **Smoking in the oven, KubeJS route** (recommended): in a new CD script
-   `kubejs/data/creative_delight/kubejs/creativeengineering/oven_smoking.js`, walk every loaded `minecraft:smoking`
+   `kubejs/data/creativedelight/kubejs/creativeengineering/oven_smoking.js`, walk every loaded `minecraft:smoking`
    recipe with a food result (`e.forEachRecipe({ type: 'minecraft:smoking' }, r => ...)`, skip non-food results) and
    write `R.ceBaking([input], result, e, 'smoking/<path>', { time: <its cookingtime>, exp: <its xp> })` with no tool
    (a recipe without `tool` ignores the tool slot, oven.md 2.2). Inside `global.CD.recipes`, ids
-   `creative_delight:baking/smoking/<path>`. JEI then lists them on the Baking page.
+   `creativedelight:baking/smoking/<path>`. JEI then lists them on the Baking page.
 2. **Bake family** in `cd_food.js`: `F.dishBake(inputs, output, ware)` = the pot recipe's ingredients as an oven recipe
    on `ware`, plus removal of that output's `farmersdelight:cooking` recipes (the family is authoritative, as
    `muffinBake`). Container: keep the pot recipe's container (bowl) through `ceBaking`'s `container`.
@@ -144,7 +144,7 @@ the dishes above from the dump (verified by name, not by dict key; check each ke
 - The smoking mirror must skip non-food smoking recipes (mod sponges, dyes) and the oat dough / sourdough cases the pack
   removed (`baking/baked-goods #29`: no smoker bread from oat dough).
 - A single-input oven recipe matches a lone item in any slot; with 6 slots a stack still bakes one at a time.
-- Family sweeps skip `creativeengineering` and `creative_delight` recipes (cd_food.js header), so CD's own
+- Family sweeps skip `creativeengineering` and `creativedelight` recipes (cd_food.js header), so CD's own
   `_from_roasted` stuffed pepper copies need an explicit removal.
 
 ### Tests
@@ -163,7 +163,7 @@ A final crafting pattern for the oven that clashes with no other recipe.
 
 ### Now
 - Oven: `baking.js` line 172, `R.shaped(i.oven, ['PPP', 'B B', 'BBB'], { P: i.any_plate_iron, B: i.bricks }, e,
-  'oven')`, id `creative_delight:shaped/oven` (in the 2026-10-30 dump; it moved into the CD tree 2026-10-25, so not
+  'oven')`, id `creativedelight:shaped/oven` (in the 2026-10-30 dump; it moved into the CD tree 2026-10-25, so not
   `creativeengineering:shaped/oven` any more). Placeholder (oven.md 2.1, 4).
 - Bakeware: hammered chain `R.hammering` lines 176-179 (plate -> baking sheet -> muffin tin -> pie tin -> cake pan),
   oven.md 2.5. Done.

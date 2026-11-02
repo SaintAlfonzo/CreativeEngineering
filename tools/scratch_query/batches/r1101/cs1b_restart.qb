@@ -1,0 +1,13 @@
+# Run 2026-11-01, Creative Split wave 1, boot 2 (same world, restarted): SQ-CAL-02 restart half,
+# SQ-CDV-04 probe half (shell step set [debug.level_random] probe = true in srv before this boot).
+pace 2
+
+## SQ-CAL-02b | second boot: no moved-keys WARN
+bootexpect \[creativecalendar\] time, seasons and crop seasons loaded
+bootreject still has keys that moved to config/creativecalendar-common.toml
+shell grep -nE "^\[(seasons|time|crop_seasons)\]" config/creativeengineering-common.toml || echo "CE has no calendar sections"
+
+## SQ-CDV-04b | LevelRandom probe on
+bootexpect Done \(
+shell grep -c "LevelRandomProbe" logs/latest.log; grep "LevelRandomProbe" logs/latest.log | grep -v "off-thread" | head -5
+look only [LevelRandomProbe] off-thread WARN lines (or none)

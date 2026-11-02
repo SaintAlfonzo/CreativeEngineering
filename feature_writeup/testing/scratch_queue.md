@@ -7,12 +7,15 @@
 > recordings stay for debugging later. If disk runs short, drop the recordings of all-PASS boots first, never those
 > with a FAIL. Details: "Perf session" below and [scratch_run_2026-10-31.md](scratch_run_2026-10-31.md) section 0.
 >
+> **2026-11-01 late: added SQ-RDX, SQ-NDM, SQ-CDFW, SQ-DNR at the end (Creative Delight integration plans; one CD jar built 20:42 covers all four).** **Queue refreshed 2026-11-01 evening (after the Creative Split waves 1 to 4 run and the cat / baby mobs work): added SQ-BM / CQ-BM at the end; waves 1 to 4, cats, plantable, Curios rows were already here.**
+>
 > **Run the "Priority run" section below first.** Then the **next bulk run (built 2026-10-31, not run):** [scratch_run_2026-10-31.md](scratch_run_2026-10-31.md): every row
 > queued since the 10-28 night run, 202 rows in `tools/scratch_query/batches/r1031/` (server with fake players, then
 > worldgen, then the client, then the longest operations).
 
 ## Priority run: everything since the 1.1.05 snapshot (updated 2026-10-31, run this BEFORE the rest of the queue)
 
+> **PINNED (owner, 2026-11-01):** client rows from the creative split (waves 2 to 7) are not run until wave 8+; they run as one bulk client session. Server rows still run per carve.
 > **RUN 2026-11-01 (r1101):** server rows, bug batch, deferred W2 / W3 rows and the client block ran; per-row results in
 > [scratch_run_2026-11-01.md](scratch_run_2026-11-01.md) sections 1 to 5 (server rows all PASS apart from SQ-CDF-07's
 > without-Brewin' half, SQ-CBJ-05, SQ-TL-09; client hand steps still OPEN).
@@ -67,7 +70,7 @@ SQ-FN and the Round 0 / jar-state notes corrected. Every change a player can not
 Run results live in the Run log at the bottom, not in the entry rows. Latest: the 2026-10-31 bulk run r1031 ([scratch_run_2026-10-31.md](scratch_run_2026-10-31.md) sections 7-8; client block, L1-L4, W2 rest and W3 deferred). Before it: the 2026-10-28 night run (recent feature block, bot players, perf suite g1; [scratch_queue_run_2026-10-28.md](scratch_queue_run_2026-10-28.md)). Before it: the 2026-10-27 evening run measuring the perf fixes (wgp_* worlds, group A qa_1027; perf.md 10.9). Before it, the 2026-10-27 perf evaluation (pe1-pe3; its probe and queue fixes are listed under it, ready for a rerun). Before it, the 2026-10-26 afternoon run (group B nb2: dumps, generators, SQ-SNF, SQ-PF, SQ-INV-01 to -06; perf mixin fix). Before it, the 2026-10-26 run (group A qb1 and one group B
 boot nb1, patcherMod 1.1.03 and the 2026-10-25 23:59 jars) passed the Creative Delight boot, Abnormals, Storage, End's server half and
 Farmer's Structures placement entries; its "Not run" row lists what is still open (group B worldgen counts and all client rows).
-Jars in `mods/` now (refreshed 2026-10-30 18:35): patcherMod 1.1.04 (17:55; spawn boxes, spawner filter, DH clip Overworld-only, `/ceperf mobcap`), creative_delight 1.0.0 (10-29 18:18), backportedVintage -08 (the built -09 with the Green Grape, Red Grape and Cherry Jam Jars is NOT installed, so SQ-BJ-01 to -03 wait for it), backportedVinery -05, Incubation Additions 1.1.0, repackedStorage; copy them
+Jars in `mods/` now (refreshed 2026-10-30 18:35): patcherMod 1.1.04 (17:55; spawn boxes, spawner filter, DH clip Overworld-only, `/ceperf mobcap`), creativedelight 1.0.0 (10-29 18:18), backportedVintage -08 (the built -09 with the Green Grape, Red Grape and Cherry Jam Jars is NOT installed, so SQ-BJ-01 to -03 wait for it), backportedVinery -05, Incubation Additions 1.1.0, repackedStorage; copy them
 into the scratch `mods/` before any run.
 
 Entry fields: ID, feature, target state, world group, commands, expected log, pass / fail, if it fails.
@@ -246,6 +249,9 @@ to cover the changelog bullets of the Miner's foods, drops and potions; none has
 | SQ-MDP-11 | A | probe `PotionBrewing.POTION_MIXES` and `/brew` through a brewing stand block entity (awkward + copper carrot) | MND-22: awkward + copper carrot -> `miners_delight:haste`, + redstone -> long, + glowstone -> strong; haste + fermented spider eye -> mining fatigue, and redstone / glowstone on mining fatigue give its long / strong; exactly one mix each. These are the port's own potions (`miners_delight:haste`), separate from Rustic Delight's `rusticdelight:haste` line, which `potions.js` makes item-agnostic (memory `rustic-delight-haste-potions`): both brews work and the two do not share a mix. `potions.js` has no Miner's handling, so record whether the Create mixer, bottler, potion bucket and tipped-arrow routes exist for the Miner's potions (expected: only if the item-agnostic pass reads port potions; a gap goes to TODO `potions/potions`) | the port's `addMix`; `PotionMixDedup`; `potions.js` RD_POTION_MIXES |
 | SQ-MDP-12 | A | `/reload`, then check `latest.log` | MND-15 server half: after `/reload` and with a player later, the copper pot's cup table is on the server (the Cup conversions line appears once at boot and not again); no `Error occurred while handling event` naming `miners_delight` in server scripts | `UpstreamJars` reload hook |
 | SQ-MDP-13 | A | probe recipe manager for ids containing `miners_delight` | Arthropod, Spider Leg, Bat Cookie, Bat Rolls, Squid Sandwich, Glow Ink Pasta, Vegan Patty / Hamburger / Wrap / Steak And Potatoes / Fake Meatloaf, Cave Hamburger, Tentacles On A Stick each have a recipe (cooking pot, cutting board, smoking, campfire or crafting); no recipe outputs a dropped item; Create mixing / crafting routes exist only where the pack's `cooking.js` adds them | `cooking.js` Miner's block; translator recipe conversion (recipe ids in `miners_upstream` data) |
+| SQ-MDP-14 | A | needs port `-02` in `mods/` and `miners_upstream/` holding both donor jars (copy the folder). Boot; then `/setblock` a lit campfire and a copper pot; `/data merge block` slots 0-3 with an FD cooking recipe of up to four ingredients that has a bucket or bottle ingredient (find one by probe: a `farmersdelight:cooking` recipe whose ingredient has a crafting remainder); wait for the cook; `/data get block` | MND-04 server half: `latest.log` `upstream assets: N files (4 in the 1.1.2 look)` (client only; the server logs data) and no `miners_upstream` error. MND-18 server half: `Inventory` has `Size` 8, the empty bucket / bottle sits in slot 7, nothing on the floor; fill slot 7 with a stack of another item: the next meal does not start; a hopper under the pot empties slots 6 and 7; `/data merge block` an old-style `Inventory` with `Size:7` and items: after a reload of the chunk the items are still there | `MDConfig` not registered (`config/miners_delight-common.toml` missing), `CopperPotBlockEntity.leftoversFit` / `storeOrThrowLeftover`, the `Size` widening in `load` |
+| SQ-MDP-15 | A | boot with `miners_upstream/miners_delight-1.19.2-1.1.2.jar` moved away | MND-04: startup stops naming the 1.1.2 jar and the CurseForge link | `UpstreamJars.verifyOrFail` list |
+| SQ-MDP-16 | A | `/loottuning` (or grep the boot log for the pack list); 300 x `/loot spawn ~ ~ ~ loot miners_delight:chests/md_abandoned_mineshaft` | MND-34: the cave carrot crate pack is listed; some rolls give `miners_delight:cave_carrot_crate` instead of loose cave carrots | CD `miners_delight/loot.js` not loaded (CD jar), or the pre-roll framework does not see the Miner's table |
 
 #### SQ-PR: Pretty Rain on the server (added 2026-10-27)
 
@@ -271,7 +277,7 @@ the only server check is that they load beside everything else.
 
 Feature: [../ocean_delight.md](../ocean_delight.md) 5.1, TODO `dishes/ocean #1`. **Setup changed 2026-10-25:** the fishing net mixin
 moved from patcherMod into the Oceanic Delight repack inside Creative Delight (creative_delight.md 14.3 B7). Run with the current
-patcherMod and `creative_delight-1.0.0.jar` from `development/*/build/libs/`, `oceanic_delight-*.jar` removed (same run as SQ-CDJ-04).
+patcherMod and `creativedelight-1.0.0.jar` from `development/*/build/libs/`, `oceanic_delight-*.jar` removed (same run as SQ-CDJ-04).
 `/loot spawn` gives the table the spawn position as origin, so the biome rules can be checked without a player.
 
 | ID | Group | Commands | Pass | If it fails |
@@ -399,7 +405,7 @@ Creative Delight rebuilt 2026-10-26 in `mods/` (not installed yet). Supersedes S
 | ID | Group | Commands | Pass | If it fails |
 |---|---|---|---|---|
 | SQ-SNF-01 | A | boot + tag probe (`/kubejs dump_tags` or the pack's tag dump) | `creativeengineering:seasonable/cheese`, `/onion`, `/garlic`, `/void_pepper` each hold exactly `corn_delight:popcorn`; no `seasonable/sugar` tag; `creativeengineering:food_family/snack` holds popcorn and tortilla chip, `food_family/fruit` holds `food_family/fruit/whole`'s members; no `[food families] could not read` or `[seasoning] ... has no members` line | `seasoning_tags.js`, `generation_scripts/food/food_families.json` present |
-| SQ-SNF-02 | A | recipe probe (RecipeManager id dump) | Present, type `creativeengineering:seasoning`: `creative_delight:shapeless/season/{cheese,onion,garlic,void_pepper,garlic_onion}`; absent: any `..._on_corn_delight_popcorn`, any `sugar` season recipe | `seasoning.js` generation, `NCH.season` with a tag food |
+| SQ-SNF-02 | A | recipe probe (RecipeManager id dump) | Present, type `creativeengineering:seasoning`: `creativedelight:shapeless/season/{cheese,onion,garlic,void_pepper,garlic_onion}`; absent: any `..._on_corn_delight_popcorn`, any `sugar` season recipe | `seasoning.js` generation, `NCH.season` with a tag food |
 | SQ-SNF-03 | A | craft probe (`SeasoningRecipe.matches` on a test grid, server script) | popcorn + flaxen cheese wedge matches; tortilla chip + cheese wedge and waffle + onion don't; garlic popcorn + onion matches | `Seasonings.accepts`, tag bound on the server |
 
 #### SQ-CNS: Comfort / Nourishment split (added 2026-10-27)
@@ -481,7 +487,7 @@ an `idSuffix` of `sqks_test`.
 
 #### SQ-CDJ: Creative Delight nested jar (added 2026-10-25)
 
-Feature: [../creative_delight.md](../creative_delight.md) 14.1 to 14.3. **Built 2026-10-25:** `creative_delight-1.0.0.jar`
+Feature: [../creative_delight.md](../creative_delight.md) 14.1 to 14.3. **Built 2026-10-25:** `creativedelight-1.0.0.jar`
 (`development/creativeDelight/build/libs/`) nests the Ocean's, Oceanic and End's repacks; the four ports are not bundled yet
 (SQ-CDJ-05 waits for them). Run with patcherMod from `development/patcherMod/build/libs/` (it holds the helpers now, so the
 pack's `kubejs/startup_scripts/func/` no longer has NCH, tags or compost) and with `oceansdelight-*`, `oceanic_delight-*`,
@@ -490,17 +496,17 @@ pack's `kubejs/startup_scripts/func/` no longer has NCH, tags or compost) and wi
 | ID | Group | Commands | Pass | If it fails |
 |---|---|---|---|---|
 | SQ-CDJ-01 | A | CD jar holding only the Ocean's repack in `mods/`, boot | `server.log`: `Found mod file repackedOceans-... of type MOD with provider ...JarInJarDependencyLocator`; `oceansdelight` items exist (`/give`); a world with Ocean's blocks loads with them | `metadata.json` path or format wrong; compare with Create's |
-| SQ-CDJ-02 | A | Same, plus the stale `oceansdelight-1.0.2-1.19.2.jar` back in `mods/` (rerun 2026-10-25 rule: the top-level jar still wins, framework #10 only reports it) | Log has `[creative_delight] member oceansdelight is loaded from oceansdelight-1.0.2-1.19.2.jar (version 1.0.2-1.19.2), not from the Creative Delight jar` at ERROR, once; the SQ-CDJ-01 boot (no stale jar) has no such line for any member; `build_deploy.py` reports the duplicate id | No line: the nested-path check (`CreativeDelight.warnIfNotNested`, file system of the mod file) does not tell the two apart; a line in SQ-CDJ-01 too: nested jars are on the default file system after all |
+| SQ-CDJ-02 | A | Same, plus the stale `oceansdelight-1.0.2-1.19.2.jar` back in `mods/` (rerun 2026-10-25 rule: the top-level jar still wins, framework #10 only reports it) | Log has `[creativedelight] member oceansdelight is loaded from oceansdelight-1.0.2-1.19.2.jar (version 1.0.2-1.19.2), not from the Creative Delight jar` at ERROR, once; the SQ-CDJ-01 boot (no stale jar) has no such line for any member; `build_deploy.py` reports the duplicate id | No line: the nested-path check (`CreativeDelight.warnIfNotNested`, file system of the mod file) does not tell the two apart; a line in SQ-CDJ-01 too: nested jars are on the default file system after all |
 | SQ-CDJ-03 | A | Client: mod list | Ocean's shows "Ocean's Delight (Creative Delight)" and CD as its own entry | Repack `mods.toml` template not applied |
 | SQ-CDJ-04 | A | Add the Oceanic repack with the B7 overlay; use a fishing net in a tagged biome | Mixin config `oceanic_delight.ce.mixins.json` applied (no mixin error in the log); the net loot follows the biome tags as with the patcherMod mixin | Refmap or target name; check the overlay was reobfed |
 | SQ-CDJ-05 | B | Full CD jar (four ports and three repacks) on a world holding Veggies, Vintage, Fungi and Miner's blocks | All seven mod ids load once; no missing-registry warnings; Vintage, Fungi and Miner's mixin configs applied; suites VD-, VTD-, FGD-, MND- unchanged | Per member: compare with that member's standalone jar |
 | SQ-CDJ-06 | A | Same boot as SQ-CDJ-01 (the built jar nests End's too): `/give @p ends_delight:<any item>`; kill an enderman with a knife | End's items exist; the `add_*` / `nd_add_*` loot modifiers still drop; client mod list shows "End's Delight (Creative Delight)" | Compare with the upstream jar: the repack should be byte-identical apart from `mods.toml` and the manifest |
 | SQ-CDJ-07 | A | Same boot as SQ-CDJ-01, with `FarmersDelight-1.19.2-1.2.4.jar` also moved out of the scratch `mods/` (the built CD jar nests the FD repack, creative_delight.md 21) | Debug log `Found valid mod file repackedFarmers-...`; no `farmersdelight` missing-dependency error for any of the 24 jars that need it; `farmersdelight.mixins.json` applied (no mixin error; rich soil under a sapling stays rich soil after it grows); patcherMod's FD mixins (remainder buffer) apply; a world with FD blocks (stove, cooking pot with contents, skillet, cutting board) loads with them; `config/farmersdelight-common.toml` still read; `/give @p farmersdelight:cooking_pot` | Mixin missing: the manifest lost `MixinConfigs` (`mixin_configs` in the member's `gradle.properties`); a dependent refuses the version: re-run the range check in creative_delight.md 21.1 |
-| SQ-CDJ-08 | A | Client, same jars: mod list, config screen, a cooking pot GUI and its JEI category | FD shows "Farmer's Delight (Creative Delight)" with its logo; its config button opens; JEI cooking and cutting categories present; `creative_delight-common.toml` has no `farmersdelight` switch | Logo or config: the repack `mods.toml` template; a switch: `CDConfig.BASE_MEMBERS` |
+| SQ-CDJ-08 | A | Client, same jars: mod list, config screen, a cooking pot GUI and its JEI category | FD shows "Farmer's Delight (Creative Delight)" with its logo; its config button opens; JEI cooking and cutting categories present; `creativedelight-common.toml` has no `farmersdelight` switch | Logo or config: the repack `mods.toml` template; a switch: `CDConfig.BASE_MEMBERS` |
 
 #### SQ-CBJ: Creative Brewing nested jar (added 2026-10-31)
 
-Feature: [../creative_brewing.md](../creative_brewing.md) 1 and 2. **Built 2026-10-31:** `creative_brewing-1.0.0.jar`
+Feature: [../creative_brewing.md](../creative_brewing.md) 1 and 2. **Built 2026-10-31:** `creativebrewing-1.0.0.jar`
 (`development/creativeBrewing/build/libs/`) nests Vinery `-08` and Brewin' `-05`. `prep_srv.sh` swaps it in and drops the
 standalone `backportedVinery-*` / `backportedBrewin-*` jars; keep `vinery_upstream/` (both donor jars) and the CD jar. One boot
 for -01 to -04 on a group A world that already has Vinery and Brewin' blocks (keg with a batch, coaster, aging barrel, apple
@@ -508,9 +514,9 @@ press, wine rack). Not run yet (owner: queue only).
 
 | ID | Group | Commands | Pass | If it fails |
 |---|---|---|---|---|
-| SQ-CBJ-01 | A | Boot; `grep -E "JarInJarDependencyLocator.*backported(Vinery\|Brewin)\|\[creative_brewing\]" logs/debug.log logs/latest.log` | Both member jars found by the Jar-in-Jar locator; `[creative_brewing] members: [vinery, brewinandchewin]` with no `NOT loaded`; no `member ... is loaded from` ERROR | A standalone port jar left in `mods/` (prep_srv), or metadata.json range wrong |
-| SQ-CBJ-02 | A | Same boot: `grep "startup script packs in order\|creative_brewing\]" logs/kubejs/startup.log logs/kubejs/server.log` | Startup order lists `creative_delight` before `creative_brewing`; `[creative_brewing] core finished, members: vinery, brewinandchewin`; no `global.CD missing`; server log has `[creative_brewing] server scripts ready, members on: vinery, brewinandchewin` | `ordering="AFTER"` not honoured by the mod sort: order the loader by dependency |
-| SQ-CBJ-03 | A | Same boot: open `config/creative_brewing-common.toml`; `/give @p vinery:red_grape`, `/give @p brewinandchewin:keg`, `foundation:chair` (Foundation has no items or recipes of its own) | `[members]` has `vinery = true`, `brewinandchewin = true`, no other section; all three namespaces have items | CBConfig members file missing from the jar (`creative_brewing_members.txt`) |
+| SQ-CBJ-01 | A | Boot; `grep -E "JarInJarDependencyLocator.*backported(Vinery\|Brewin)\|\[creativebrewing\]" logs/debug.log logs/latest.log` | Both member jars found by the Jar-in-Jar locator; `[creativebrewing] members: [vinery, brewinandchewin]` with no `NOT loaded`; no `member ... is loaded from` ERROR | A standalone port jar left in `mods/` (prep_srv), or metadata.json range wrong |
+| SQ-CBJ-02 | A | Same boot: `grep "startup script packs in order\|creativebrewing\]" logs/kubejs/startup.log logs/kubejs/server.log` | Startup order lists `creativedelight` before `creativebrewing`; `[creativebrewing] core finished, members: vinery, brewinandchewin`; no `global.CD missing`; server log has `[creativebrewing] server scripts ready, members on: vinery, brewinandchewin` | `ordering="AFTER"` not honoured by the mod sort: order the loader by dependency |
+| SQ-CBJ-03 | A | Same boot: open `config/creativebrewing-common.toml`; `/give @p vinery:red_grape`, `/give @p brewinandchewin:keg`, `foundation:chair` (Foundation has no items or recipes of its own) | `[members]` has `vinery = true`, `brewinandchewin = true`, no other section; all three namespaces have items | CBConfig members file missing from the jar (`creativebrewing_members.txt`) |
 | SQ-CBJ-04 | A | Same boot, the old world: `/data get block` on the keg and the aging barrel; tick 2 minutes | Contents kept; no `Unknown block` / missing registry lines for `vinery`, `foundation`, `brewinandchewin`; Vinery donor check silent (`vinery_upstream` found) | Donor path or nested resource lookup broke: compare with the standalone `-06` jar |
 | SQ-CBJ-05 | A | **Dropped 2026-11-01:** Vinery and Brewin' are one package under Creative Brewing; the per-member switch is not tested (no reload-time log exists, the members line is logged only at server start) | | | |
 
@@ -519,21 +525,21 @@ press, wine rack). Not run yet (owner: queue only).
 Feature: [../creative_delight.md](../creative_delight.md) 10 (startup loader, helpers in patcherMod's jar, NCH namespace, CD
 script trees), tests CDT- in its section 19. Suite and how to load it: [tools/creative_delight_test/README.md](../../tools/creative_delight_test/README.md).
 Build `./gradlew :patcherMod:build :creativeDelight:build -Pcd_test_suite --offline`; scratch `mods/`: the patcherMod jar and
-`creative_delight-1.0.0-cdtest.jar`, the three upstream member jars removed. Boot once for SQ-CDT-01 to -07, then the rows say what
+`creativedelight-1.0.0-cdtest.jar`, the three upstream member jars removed. Boot once for SQ-CDT-01 to -07, then the rows say what
 changes. Not run yet (owner: queue only).
 
 | ID | Group | Commands | Pass | If it fails |
 |---|---|---|---|---|
-| SQ-CDT-01 | A | Boot; `grep "jar-startup\|creative_delight\]\|cdtest\]" logs/kubejs/startup.log` | `[jar-startup] creativeengineering: 3 of 3 files`, `[jar-startup] creative_delight: 2 of 3 files` (the `requires: cdtest_not_a_mod` file skipped), `startup script packs in order: creativeengineering, startup_scripts, ..., creative_delight`; `Neo Craft Helper finished` once; `[creative_delight] core finished, members: oceansdelight, oceanic_delight, ends_delight`; no startup script errors | No `[jar-startup]` line: mixin not applied (`KubeJSStartupJarScriptsMixin`, require = 1 should have stopped boot); folder scripts erroring on `global.NCH` / `global.compost` undefined: patcherMod's pack not at the head |
+| SQ-CDT-01 | A | Boot; `grep "jar-startup\|creativedelight\]\|cdtest\]" logs/kubejs/startup.log` | `[jar-startup] creativeengineering: 3 of 3 files`, `[jar-startup] creativedelight: 2 of 3 files` (the `requires: cdtest_not_a_mod` file skipped), `startup script packs in order: creativeengineering, startup_scripts, ..., creativedelight`; `Neo Craft Helper finished` once; `[creativedelight] core finished, members: oceansdelight, oceanic_delight, ends_delight`; no startup script errors | No `[jar-startup]` line: mixin not applied (`KubeJSStartupJarScriptsMixin`, require = 1 should have stopped boot); folder scripts erroring on `global.NCH` / `global.compost` undefined: patcherMod's pack not at the head |
 | SQ-CDT-02 | A | `/cdtest startup` | All PASS: helpers and dicts before the CD pack, ns at load `creativeengineering`, compost tiers > 0, requires honoured | Dict missing: the CD pack ran before the folder pack (order in `JarStartupScripts.addPacks`) |
 | SQ-CDT-03 | A | Same boot: the pack's own startup and server scripts | `logs/kubejs/startup.log` and `server.log` have no more errors than the last clean boot (compare counts); `/dumpcompost` still writes a table; recipes from `kubejs/server_scripts/cooking/` present (`/cdtest mirror` twins exist) | A pack script used a top-level var of a moved helper (pack scopes are separate): give it a `global` |
 | SQ-CDT-04 | A | `/cdtest ns`, `/cdtest requires`, `/cdtest tags`, `/cdtest config` | All PASS; one expected `[NCH] withNamespace failed and was skipped: cdtest deliberate error` line in `server.log` | Ids under `creativeengineering:`: `withNamespace` not used by `global.CD.recipes`; requires FAIL: header syntax in a data-pack script |
-| SQ-CDT-05 | A | `/cdtest mirror` | Every `twin of creative_delight:...` PASS (same type, result, ingredients as the pack's recipe); `twins made` PASS; NOTE lists about 30 helpers | A twin differs: that helper builds something from the namespace besides the id; a twin missing: the call threw inside the CD block (grep `[NCH] ... failed`) |
+| SQ-CDT-05 | A | `/cdtest mirror` | Every `twin of creativedelight:...` PASS (same type, result, ingredients as the pack's recipe); `twins made` PASS; NOTE lists about 30 helpers | A twin differs: that helper builds something from the namespace besides the id; a twin missing: the call threw inside the CD block (grep `[NCH] ... failed`) |
 | SQ-CDT-06 | A | `/reload`, then `/cdtest all` | Same results as before the reload (server scripts from the jar reload); the deliberate `[NCH] withNamespace failed` line logged again (`server scripts ready` is a `ServerEvents.loaded` line: start only, not on `/reload`) | Jar server scripts not reloaded: KubeJS keeps the first resource list |
-| SQ-CDT-07 | A | Client on the scratch server (Round 2, or note it for CQ): hover a fishing net; F3+T | Tooltip `[cdtest] tooltip from the Creative Delight client tree`; `logs/kubejs/client.log` has `[cdtest] client suite loaded, global.CD object` after F3+T too | Client tree not read from the jar: check `assets/creative_delight/kubejs/` in the jar |
-| SQ-CDT-08 | A | Stop; `config/creative_delight-common.toml` `[members] oceanic_delight = false`; boot; `/cdtest ns`, `/cdtest config` | `member row follows CD.on()` PASS with `CD.on(oceanic_delight) false` and no `oceanic_member_row` recipe; Oceanic items still exist | Switch ignored: `CDConfig.member` read before the config loaded at the wrong time |
-| SQ-CDT-09 | A | Stop; folder path: normal `creative_delight-1.0.0.jar` in `mods/`, copy the suite's `data` and `assets` into the scratch `kubejs/`; boot; `/cdtest ns`, `/cdtest mirror`, `/cdtest requires`, `/cdtest tags` | Same PASS results as on the jar path (`/cdtest startup` FAILs `suite ran` by design) | The `kubejs/data` dev loop (10.4) does not serve CD's namespace: compare with SQ-KS-02 |
-| SQ-CDT-10 | A | Stop; replace the patcherMod jar with the released `creativeengineering-1.1.02.jar` (no loader), keep the CD test jar; boot | `latest.log`: `[creative_delight] this patcherMod (creativeengineering) has no startup script loader`; the pack's own startup scripts fail on missing `global.NCH` (expected: that jar predates the move, so the two jars must ship together) | No CD error line: the class check in `CreativeDelight` |
+| SQ-CDT-07 | A | Client on the scratch server (Round 2, or note it for CQ): hover a fishing net; F3+T | Tooltip `[cdtest] tooltip from the Creative Delight client tree`; `logs/kubejs/client.log` has `[cdtest] client suite loaded, global.CD object` after F3+T too | Client tree not read from the jar: check `assets/creativedelight/kubejs/` in the jar |
+| SQ-CDT-08 | A | Stop; `config/creativedelight-common.toml` `[members] oceanic_delight = false`; boot; `/cdtest ns`, `/cdtest config` | `member row follows CD.on()` PASS with `CD.on(oceanic_delight) false` and no `oceanic_member_row` recipe; Oceanic items still exist | Switch ignored: `CDConfig.member` read before the config loaded at the wrong time |
+| SQ-CDT-09 | A | Stop; folder path: normal `creativedelight-1.0.0.jar` in `mods/`, copy the suite's `data` and `assets` into the scratch `kubejs/`; boot; `/cdtest ns`, `/cdtest mirror`, `/cdtest requires`, `/cdtest tags` | Same PASS results as on the jar path (`/cdtest startup` FAILs `suite ran` by design) | The `kubejs/data` dev loop (10.4) does not serve CD's namespace: compare with SQ-KS-02 |
+| SQ-CDT-10 | A | Stop; replace the patcherMod jar with the released `creativeengineering-1.1.02.jar` (no loader), keep the CD test jar; boot | `latest.log`: `[creativedelight] this patcherMod (creativeengineering) has no startup script loader`; the pack's own startup scripts fail on missing `global.NCH` (expected: that jar predates the move, so the two jars must ship together) | No CD error line: the class check in `CreativeDelight` |
 
 #### SQ-FD: food dict loads in game (added 2026-10-25)
 
@@ -565,13 +571,13 @@ scripts), Veggies `-03`.
 
 Feature: [../vintage_delight.md](../vintage_delight.md) 4.0b, [../creative_delight.md](../creative_delight.md) 19.6, [../kitchen.md](../kitchen.md) KT-18.
 Scratch `mods/`: `backportedVintage-0.1.6-ce-19.2-04.jar`, `backportedVeggies-1.9.2-ce-19.2-03.jar`, the patcherMod build
-with the startup loader and `creative_delight-1.0.0.jar` (rebuilt after this change, so it holds the new trees and
+with the startup loader and `creativedelight-1.0.0.jar` (rebuilt after this change, so it holds the new trees and
 `kubejs_startup/vintagedelight/`). Not run yet (owner: queue only).
 
 | ID | Group | Commands | Pass | If it fails |
 |---|---|---|---|---|
-| SQ-VTD4-01 | A | Boot; `grep "jar-startup" logs/kubejs/startup.log`; `grep -i "creative_delight\]\|vintage_items\|ghost" logs/kubejs/startup.log logs/kubejs/server.log` | `creative_delight: N of N files` counts the new `vintagedelight/vintage_items.js`; no errors from the CD files | Startup file skipped: `// requires: vintagedelight` header or the loader's walk |
-| SQ-VTD4-02 | A | `/kubejs recipes` probe or the dumps: recipe ids under `creative_delight:` | `pickling/berserks_brew`, `pickling/leather_from_fermenting` (both with `#forge:salt`), `createcrushing/wild_ghost_pepper`, a milling twin (2 seeds + cyan dye), `iecrushing/wild_ghost_pepper` (3 seeds), `createmixing/slime_block_from_dough_block` (heated); gone: `vintagedelight:fermenting/slime_block_from_fermenting`, `.../berserks_brew`, `.../leather_from_fermenting`, `vintagedelight:salted_cod`, `salted_salmon`, the two upstream wild ghost pepper ids (VTD-65, -66, -71, -72, KT-18) | No `creative_delight:` ids at all: the member files returned early (`global.CD` missing or `[members] vintagedelight = false`) |
+| SQ-VTD4-01 | A | Boot; `grep "jar-startup" logs/kubejs/startup.log`; `grep -i "creativedelight\]\|vintage_items\|ghost" logs/kubejs/startup.log logs/kubejs/server.log` | `creativedelight: N of N files` counts the new `vintagedelight/vintage_items.js`; no errors from the CD files | Startup file skipped: `// requires: vintagedelight` header or the loader's walk |
+| SQ-VTD4-02 | A | `/kubejs recipes` probe or the dumps: recipe ids under `creativedelight:` | `pickling/berserks_brew`, `pickling/leather_from_fermenting` (both with `#forge:salt`), `createcrushing/wild_ghost_pepper`, a milling twin (2 seeds + cyan dye), `iecrushing/wild_ghost_pepper` (3 seeds), `createmixing/slime_block_from_dough_block` (heated); gone: `vintagedelight:fermenting/slime_block_from_fermenting`, `.../berserks_brew`, `.../leather_from_fermenting`, `vintagedelight:salted_cod`, `salted_salmon`, the two upstream wild ghost pepper ids (VTD-65, -66, -71, -72, KT-18) | No `creativedelight:` ids at all: the member files returned early (`global.CD` missing or `[members] vintagedelight = false`) |
 | SQ-VTD4-03 | A | Fake player eats `vintagedelight:ghost_charcoal` (or check `getFoodProperties()` in a probe) | Food with nutrition 0, alwaysEat, Wither 100 ticks amp 0, Fire Resistance 3600 ticks (VTD-67) | Not food: `ItemEvents.modification` in the jar startup script did not run |
 | SQ-VTD4-04 | A | Place a Pickling Jar; insert garlic + honey bottle (fermented garlic honey) from the top, wait the recipe time; read slot 9 through the bottom handler; break the jar | Output in slot 7, glass bottle in slot 9, extractable from below; breaking drops it (VTD-70) | Bottle missing: `remainderOf` / config `[pickling_jar] remainderBuffer` |
 | SQ-VTD4-05 | A | Load a world saved with port `-03` that holds a filled jar | Jar keeps its 9 items, gets the 10th slot, no error in `latest.log` | Handler shrunk: the `Size` widening in `load` |
@@ -582,7 +588,7 @@ with the startup loader and `creative_delight-1.0.0.jar` (rebuilt after this cha
 
 #### SQ-FDB: Farmer's Delight 1.3.4 backports in the FD repack (added 2026-10-25)
 
-Feature: [../farmers_delight.md](../farmers_delight.md) 4. Scratch `mods/`: `creative_delight-1.0.0.jar` (rebuilt
+Feature: [../farmers_delight.md](../farmers_delight.md) 4. Scratch `mods/`: `creativedelight-1.0.0.jar` (rebuilt
 2026-10-25 after the `farmersdelight/` scripts; nests `repackedFarmers-1.19.2-1.2.4-ce-19.2-02`), the patcherMod build with the startup loader, and
 `FarmersDelight-1.19.2-1.2.4.jar` moved out (as SQ-CDJ-07). Not run yet (owner: queue only).
 
@@ -596,23 +602,23 @@ Feature: [../farmers_delight.md](../farmers_delight.md) 4. Scratch `mods/`: `cre
 | SQ-FDB-06 | A | Fake player walks on Rich Soil Farmland, then jumps on it from 3 blocks (or `FarmlandTrampleEvent` via a falling armor stand) | Still Rich Soil Farmland (was Dirt) | `onFarmlandTrample` not on the Forge bus |
 | SQ-FDB-07 | A | Superflat with a farmer villager (with composter) beside a 5x5 patch of Rich Soil Farmland and one of Fertile Soil (mulch) 4 blocks away, wheat seeds in its inventory; `/data get entity @e[type=villager,limit=1] Brain.memories` after 2 min | `minecraft:secondary_job_site` lists the rich farmland and mulch positions; seeds get planted there; with `farmlandBlocks = []` the memory is empty again (no reboot) | Empty with the defaults: `VillagersTargetFarmlandMixin` redirect missed (it is `require 1`, so a boot crash would show first) |
 | SQ-FDB-08 | A | Hold a skillet, stand underwater next to a campfire with raw beef in the other hand, use | Action bar "Can't cook underwater..."; no cooking starts; above water it cooks | |
-| SQ-FDB-09 | A | Recipe dump or JEI probe: `creative_delight:` ids `crafting_shaped/rope_fence`, `.../rope_fence_gate`, shapeless `gleaming_salad_block`, `pumpkin_pie_from_fd_slices`, `farmersdelightcutting/salvaging/<wood>_furniture` (9), `.../<wood>_chest_boat` (7), 4 minecarts; `farmersdelight:cutting/<wood>_door|sign|trapdoor` gone; Rabbit Stew takes `#forge:crops/potato`, Vegetable Noodles `#forge:mushrooms`, Dog Food `#creativeengineering:food_type/raw/meat` | All present, each furniture recipe has every part and a 0.75 plank chance | A missing wood part: its dict key (`i.<part>_<wood>`) |
+| SQ-FDB-09 | A | Recipe dump or JEI probe: `creativedelight:` ids `crafting_shaped/rope_fence`, `.../rope_fence_gate`, shapeless `gleaming_salad_block`, `pumpkin_pie_from_fd_slices`, `farmersdelightcutting/salvaging/<wood>_furniture` (9), `.../<wood>_chest_boat` (7), 4 minecarts; `farmersdelight:cutting/<wood>_door|sign|trapdoor` gone; Rabbit Stew takes `#forge:crops/potato`, Vegetable Noodles `#forge:mushrooms`, Dog Food `#creativeengineering:food_type/raw/meat` | All present, each furniture recipe has every part and a 0.75 plank chance | A missing wood part: its dict key (`i.<part>_<wood>`) |
 | SQ-FDB-10 | A | Tags: `farmersdelight:cabbage_roll_ingredients` contains `minecraft:beef` and `farmersdelight:tomato`, no `minecraft:egg`; `forge:fences` has `farmersdelight:rope_fence`; block tag `farmersdelight:mineable/knife` has `farmersdelight:pumpkin_pie` | As listed | Egg still in: another script adds it after `farmersdelight/tags.js` |
 | SQ-FDB-11 | A | Kill 300 zombies as a fake player with Looting III (or `/loot spawn ~ ~ ~ kill @e[type=zombie,limit=1]` repeatedly with a player killer); break a pumpkin with an iron knife, then with a Silk Touch knife | About 5% of zombie kills drop an Onion (2% + 3x1%); no onion from a non-player kill; knife: 4 Pumpkin Slices, no pumpkin; Silk Touch knife: the pumpkin | Runs without CD too (loot.js needs only FD and LootJS) |
 | SQ-FDB-12 | A, client | Client: Gleaming Salad sparkles; rope fence and gate models and item icons; FD pumpkin pie model; Rich Soil Farmland and Fertile Soil tooltips; rice placed on dry land | Sparkle particles near the salad (no missing-texture squares); models match the preview page; tooltips have the "Farmer villagers work it like Farmland" line; rice message "This seed must be planted in shallow water." | Purple-black: a texture not copied into the overlay |
 | SQ-FDB-13 | A | `/setblock ~ ~ ~ farmersdelight:hanging_canvas_sign[rotation=5,attached=true,waterlogged=true]` under a stone ceiling; `/setblock` all 16 rotations in a row (`rotation=0..15`, both `attached` values); hold the item and place it under stone, then under a chain, sneaking and not | States accepted with exactly `rotation`, `attached`, `waterlogged`; placed sign faces the player, 16 rotations step evenly (22.5 degrees), V chains when attached, straight chains when not; waterlogged one shows water; no missing-texture squares | Purple-black: `textures/block/hanging_canvas_sign.png`; wrong direction or skewed rotations: element angle signs in `blockstates/hanging_canvas_sign.json` models |
 | SQ-FDB-14 | A | Place an attached sign (sneak) under a stone block and break the stone; repeat with an unattached sign; mine a sign with an axe and with a hand | Attached sign pops off and drops 1 item; unattached stays; axe mines it faster; it drops itself | Nothing drops: loot table path; no pop: `canSurvive` |
-| SQ-FDB-15 | A | JEI / recipe dump: `creative_delight:crafting_shaped/hanging_canvas_sign`; craft `c c / w#w / w#w` with 2 Chains, 4 oak logs (and another wood), 2 Canvas | 6 Hanging Canvas Signs; recipe visible in JEI with the icon and name "Hanging Canvas Sign"; Farmer's Structures house template places its signs without popping | No recipe: `farmersdelight/recipes.js` load error in `logs/kubejs/server.log` |
+| SQ-FDB-15 | A | JEI / recipe dump: `creativedelight:crafting_shaped/hanging_canvas_sign`; craft `c c / w#w / w#w` with 2 Chains, 4 oak logs (and another wood), 2 Canvas | 6 Hanging Canvas Signs; recipe visible in JEI with the icon and name "Hanging Canvas Sign"; Farmer's Structures house template places its signs without popping | No recipe: `farmersdelight/recipes.js` load error in `logs/kubejs/server.log` |
 
 #### SQ-FR: Fruits Delight 0.5.11 fixes in Creative Delight (added 2026-10-25)
 
-Feature: [../fruits_delight.md](../fruits_delight.md) 5 (FR-01 to FR-06). Scratch `mods/`: a `creative_delight-1.0.0.jar`
+Feature: [../fruits_delight.md](../fruits_delight.md) 5 (FR-01 to FR-06). Scratch `mods/`: a `creativedelight-1.0.0.jar`
 built after 2026-10-25 18:30 (first CD mixin config) with `fruitsdelight-0.5.11.jar` beside it, plus the patcherMod build with
 the startup loader; restart (new item_dict keys, startup script). Not run yet (owner: queue only).
 
 | ID | Group | Commands | Pass | If it fails |
 |---|---|---|---|---|
-| SQ-FR-01 | A | Boot; `grep -i "creative_delight.mixins\|Mixin apply failed\|null guard not applied\|fix mixins are off\|fruitsdelight/" logs/latest.log logs/debug.log` | `Done (`; no mixin error, none of the two CD warnings, no `Error occurred while handling event` from `fruitsdelight/recipes.js` or `tags.js` | Manifest lost `MixinConfigs` (`mixin_configs` in CD's `gradle.properties`); warning: Fruits Delight's handler or version changed |
+| SQ-FR-01 | A | Boot; `grep -i "creativedelight.mixins\|Mixin apply failed\|null guard not applied\|fix mixins are off\|fruitsdelight/" logs/latest.log logs/debug.log` | `Done (`; no mixin error, none of the two CD warnings, no `Error occurred while handling event` from `fruitsdelight/recipes.js` or `tags.js` | Manifest lost `MixinConfigs` (`mixin_configs` in CD's `gradle.properties`); warning: Fruits Delight's handler or version changed |
 | SQ-FR-02 | A | `/setblock ~1 ~ ~ fruitsdelight:mangosteen_cake`; fake player at full hunger eats one bite (or player with `/effect clear` and hunger 10); `/data get entity @p ActiveEffects` | `farmersdelight:comfort` ~400 ticks and `fruitsdelight:sliding` ~800 ticks, amplifier 0 | Effects at 0 ticks: the redirect did not apply (grep `MangosteenCakeEffectMixin` in debug.log) |
 | SQ-FR-03 | A | Startup log line or `/kubejs hand` probe: `Item.of('fruitsdelight:bellini_cocktail').item.foodProperties.effects` | One `fruitsdelight:heal_aura` (200 ticks), Intoxication 1800, Nausea 100; no second Heal Aura | Two Heal Aura entries: `fruits_foods.js` did not run (CD startup loader) |
 | SQ-FR-04 | A | Recipe dump: `fruitsdelight:fig_pudding` inputs; tag dump: `forge:jams`, `forge:storage_blocks`, `forge:storage_blocks/peach` (item and block) | Fig Pudding `E` = `#forge:eggs`; `forge:jams` has the 22 Fruits Delight jams beside Delightful's two; the 16 crates in `forge:storage_blocks` with their `/<fruit>` tags, both registries | Unchanged recipe: the `replaceInput` id; empty tags: `global.item.t_forge_jams` key missing (item_dict not reloaded) |
@@ -620,7 +626,7 @@ the startup loader; restart (new item_dict keys, startup script). Not run yet (o
 
 #### SQ-RD: Rustic Delight 1.7.0 port in Creative Delight (added 2026-10-25)
 
-Feature: [../rustic_delight.md](../rustic_delight.md) 5 (RD-01 to RD-12). Scratch `mods/`: a `creative_delight-1.0.0.jar`
+Feature: [../rustic_delight.md](../rustic_delight.md) 5 (RD-01 to RD-12). Scratch `mods/`: a `creativedelight-1.0.0.jar`
 built after 2026-10-25 (nests `backportedRustic-1.7.0-ce-19.2-01`) with `rusticdelight-forge-1.19.2-1.3.0.jar` moved out,
 the patcherMod build with the startup loader, and `rustic_upstream/rusticdelight-forge-1.20.1-1.7.0.jar` copied into the
 scratch game dir. Group A: RD-01 to RD-08, RD-13 to RD-25; group B (new level-name): RD-09 to RD-11, RD-26 to RD-28;
@@ -637,8 +643,8 @@ needs). Not run yet (owner: queue only).
 | SQ-RD-06 | A | Recipe dump (`/dumpall` or JEI): Bell Pepper Pasta, Bell Pepper Soup, Golden Coffee Beans, Honey Coffee, Coffee-Braised Beef, Calamari Roll, brown dye; `rusticdelight:cherry_blossom_ingredients` tag | Pasta and soup take any 3 `#forge:vegetables/bell_pepper`; golden beans from raw or roasted; honey coffee without sugar; beef from any coffee food ingredient; calamari roll from `#forge:raw_fishes/calamari`; brown dye from roasted beans; the cherry tag holds `vinery:cherry_leaves` and `quark:pink_blossom_leaves` | Old recipe: a pack script overrides it (grep the output in `server_scripts/`) |
 | SQ-RD-07 | A | Recipe dump: syrup, coffee and cherry blossom cookies, the three cheesecakes, Maple Cookie, Maple Glazed Bacon, Supreme Pizza, the heatless Bell Pepper Pasta | Cookies and cheesecakes only in the oven (cookie dough + 2 flavour -> 12; pie crust + 2 flavour + 2 sweet); Maple Cookie = dough + syrup + honey; bacon = cooked bacon + syrup; pizza = bell pepper, cheese, onion, mushroom, tomato sauce, cooked meat, dough; pasta takes 3 of `#creativeengineering:roasted_bell_pepper` (9 colours) | Missing: `rusticdelight/recipes.js` returned early (CD member switch, `global.CD`) |
 | SQ-RD-08 | A | Loot: `/loot spawn ~ ~ ~ loot minecraft:chests/ancient_city` x20, same for `skyvillages:chests/sky_village_normal_house`; `/summon squid` and kill it; Wandering Trader with `/summon wandering_trader` (several) | Dark seeds in some ancient city rolls, Pale seeds in some sky village rolls, never in jungle temples; squid drops 1-2 Calamari; a trader sometimes offers Pale or Dark seeds (5 emeralds, 3 uses) | No seeds: `rusticdelight/loot.js` (lootTuning) or the table ids |
-| SQ-RD-09 | B | New world; `/locate biome` a savanna and a jungle, `/tp`, fly around; `/place feature rusticdelight:bell_pepper_block_patch_placed` | Giant peppers only red, yellow, green and only in warm dry grassy biomes; wild bell pepper patches have no Pale or Dark wild peppers | Other colours: `RusticTranslator.basePatch`; wrong biomes: the `giant_bell_pepper` row (`requires: creative_delight`) |
-| SQ-RD-10 | B | `/locate structure minecraft:village_savanna`, `/tp`; look at the farms; also a plains village | Log `[creative_delight] village farm crops added to 5 farm processor lists`; some savanna farm crops are cotton; plains farms unchanged (no rule matches) | No line: `VillageFarmCrops.onServerAboutToStart`; reflection failed: the SRG field name `f_74422_` (`farm/VillageFarmCrops.onServerAboutToStart` in the CD jar) |
+| SQ-RD-09 | B | New world; `/locate biome` a savanna and a jungle, `/tp`, fly around; `/place feature rusticdelight:bell_pepper_block_patch_placed` | Giant peppers only red, yellow, green and only in warm dry grassy biomes; wild bell pepper patches have no Pale or Dark wild peppers | Other colours: `RusticTranslator.basePatch`; wrong biomes: the `giant_bell_pepper` row (`requires: creativedelight`) |
+| SQ-RD-10 | B | `/locate structure minecraft:village_savanna`, `/tp`; look at the farms; also a plains village | Log `[creativedelight] village farm crops added to 5 farm processor lists`; some savanna farm crops are cotton; plains farms unchanged (no rule matches) | No line: `VillageFarmCrops.onServerAboutToStart`; reflection failed: the SRG field name `f_74422_` (`farm/VillageFarmCrops.onServerAboutToStart` in the CD jar) |
 | SQ-RD-11 | B | Villager trades: farmer and fisherman at novice | Farmer buys cotton, red peppers, coffee beans; fisherman swaps calamari | Missing: `RDEvents.onVillagerTrades` |
 | SQ-RD-12 | client | Creative tab, a few items (Pale Bell Pepper Seeds, Pancakes, Coffee Cheesecake, giant pepper), mod list, JEI | Textures and names from the donor; Cotton Boll shows "Cotton", its crate "Cotton Crate"; mod list "Rustic Delight (Creative Delight)"; Brewin pizza "Supreme Pizza"; no Fruit Beignet | Purple-black texture: the client pack (`rustic_upstream_assets`) not added |
 | SQ-RD-13 | A | Giant peppers: `/give` 9 `rusticdelight:bell_pepper_slice_red`, craft 3x3; recipe dump for all 9 `bell_pepper_<colour>_block_from_bell_pepper_slice_<colour>` and `cutting/bell_pepper_<colour>_block`; cut one block on a Cutting Board with a knife; place 5, break with an axe, by hand, with Silk Touch, and one by TNT | 9 slices -> 1 giant pepper for all 9 colours; cutting gives exactly 9 slices; breaking drops 1 to 9 slices and never the block (Silk Touch too); axe breaks faster than hand (melon hardness) | No craft: a pack script removes it (grep the id in `server_scripts/`) or `RusticTranslator` dropped it; block drops itself: loot table not loaded |
@@ -661,11 +667,11 @@ needs). Not run yet (owner: queue only).
 | SQ-RD-30 | client | AppleSkin and JEI: hover bell pepper, slice, golden coffee beans, a pancake serving; JEI uses of a giant pepper and a red slice | Bell pepper 2 / 0.2, slice 1 / 0.1, golden beans saturation 1.2, chocolate and vegetable servings 4 / 0.6; JEI shows the 3x3 craft, the cutting recipe and the roll | Old values: `food_values.js` or a food tuning row overrides them |
 | SQ-RD-31 | instance | Cutover (5.7), after RD-01 to RD-30 pass: `installToMods`, check `jar_archive/displaced/` has the 1.3.0 jar; drop the 1.3.0-only lines; boot the instance; `/dumpall`, then the generators | Boot clean (RD-01 grep); `fruit_beignet` nowhere in `server.log`; generators list the about 100 new items (food types, cans, compost, placeable) | 1.3.0 still loads: `replaces_jars`; generator gaps: run order in memory `dumpall-refresh-workflow` |
 | SQ-RD-32 | client | Plant coffee, bell pepper, pale and dark bell pepper seeds, bone meal each through every stage; place a bell pepper medley, dark and pale medley, take servings to leftovers | Every crop stage and every medley stage textured (no purple-black); `latest.log` has no `template_crop_cross` and no `platter.png not found` | Crops missing: translator rename not in the installed jar; medley missing: repackedFarmers without `platter.png` |
-| SQ-RD-33 | A | Recipe dump (or JEI uses) for all 9 `creative_delight:farmersdelightcooking/stuffed_bell_pepper_<colour>_from_roasted`; in a heated Cooking Pot put a roasted red pepper, rice and raw beef, then a roasted blue pepper, rice and a carrot | 9 recipes, inputs roasted pepper + `#forge:crops/rice` + `#rusticdelight:stuffed_bell_pepper_ingredients`, no container; the pot cooks a red, then a blue stuffed pepper; upstream's raw pepper recipes still listed | Missing: Rustic member off or `global.CD` absent; wrong colour: recipes collide (check no container was added) |
+| SQ-RD-33 | A | Recipe dump (or JEI uses) for all 9 `creativedelight:farmersdelightcooking/stuffed_bell_pepper_<colour>_from_roasted`; in a heated Cooking Pot put a roasted red pepper, rice and raw beef, then a roasted blue pepper, rice and a carrot | 9 recipes, inputs roasted pepper + `#forge:crops/rice` + `#rusticdelight:stuffed_bell_pepper_ingredients`, no container; the pot cooks a red, then a blue stuffed pepper; upstream's raw pepper recipes still listed | Missing: Rustic member off or `global.CD` absent; wrong colour: recipes collide (check no container was added) |
 
 #### SQ-DF: Delightful repack with the 3.8.1 items in Creative Delight (added 2026-10-25)
 
-Feature: [../delightful.md](../delightful.md) 3, 4 (DF-01 to DF-11). Scratch `mods/`: a `creative_delight-1.0.0.jar`
+Feature: [../delightful.md](../delightful.md) 3, 4 (DF-01 to DF-11). Scratch `mods/`: a `creativedelight-1.0.0.jar`
 built after 2026-10-25 20:03 (nests `repackedDelightful-3.4.1-ce-19.2-01`) with `Delightful-1.19.2-3.4.1.jar` moved out,
 Neapolitan, Blueprint, Miner's Delight port, AE2 and IE present. Group A only (server); DF-02 and DF-11 are client. Not run
 yet (owner: queue only).
@@ -674,7 +680,7 @@ yet (owner: queue only).
 |---|---|---|---|---|
 | SQ-DF-01 | A | Boot; `grep -i "delightful\|Error occurred while handling event\|Mixin apply" logs/latest.log` | `delightful` loads as `3.4.1-ce-19.2-01`; `delightful.ce.mixins.json` applied (no `InvalidInjectionException`); `Done (` | Mixin target not found: the `<init>` of `net.brnbrd.delightful.Delightful` changed; registry error: an id clashes with 3.4.1 |
 | SQ-DF-02 | A | `/give @s delightful:cantaloupe_seeds`, `delightful:baklava`, `delightful:fluix_knife`, `delightful:matcha_milkshake`, `delightful:cactus_soup_cup` | all 5 exist | the overlay registers did not run (mixin, or CD member switch off) |
-| SQ-DF-03 | A | `/kubejs errors`; grep `server.log` for `creative_delight:` recipe ids of `delightful/recipes.js` (or `/recipes` dump) | no error from `delightful/recipes.js` or `tags.js`; 24 recipes under `creative_delight:` from it | a key undefined: `item_dict.js`; the script returned early: `Item.exists(i.cantaloupe_seeds)` false |
+| SQ-DF-03 | A | `/kubejs errors`; grep `server.log` for `creativedelight:` recipe ids of `delightful/recipes.js` (or `/recipes` dump) | no error from `delightful/recipes.js` or `tags.js`; 24 recipes under `creativedelight:` from it | a key undefined: `item_dict.js`; the script returned early: `Item.exists(i.cantaloupe_seeds)` false |
 | SQ-DF-04 | A | `/setblock` sand by water, place `cantaloupe_plant` via seeds (`/fill` or a fake player), `/setblock ~ ~ ~ delightful:cantaloupe_plant[age=3]`, break it | drops seeds + Cantaloupe; age 0 drops seeds only | loot table not shipped (path) |
 | SQ-DF-05 | A | Neapolitan milk cauldron (`/setblock neapolitan:milk_cauldron[level=3]`), use Matcha Ice Cream on it (fake player or client) | becomes `delightful:matcha_milkshake_cauldron[level=3]` | `DelightfulMilkshakes.registerCauldronInteractions` not run (common setup), or Neapolitan's `milkCauldron` config off |
 | SQ-DF-06 | A | `/data get` the tag lists: `/kubejs dump_tags` or `tag list` for `forge:tools/knives`, `forge:cooked_nuts`, `delightful:hot_spices` | the 3 knives; Roasted Acorn + Roasted Peanut; blaze powder + ghost pepper | `delightful/tags.js` returned early |
@@ -704,7 +710,7 @@ its script tree) both in the scratch `mods/`; restart (new item_dict keys, 20 ne
 | ID | Group | Commands | Pass | If it fails |
 |---|---|---|---|---|
 | SQ-FF-00 | A | boot, grep `latest.log` | `Done (`; no `[NCH]` warning and no `Error occurred while handling event` from `fruitsdelight/recipes.js`, `hostiledelight/recipes.js`, `miners_delight/recipes.js`, `moredelight/recipes.js`, `abnormals_delight/recipes.js`; no `Display Delight dish ... not installed` warning; no missing-model or loot errors for `creativeengineering:placed_*` | A missing key or tag: check the item_dict line; a dish warning: the item id in `displaydelight_dishes.json` |
-| SQ-FF-01 | A | `/dumpall`, copy `recipes.json`, `placeable.json` (food export) and `tags/item_tags.json` into the instance, `python3 tools/food_families.py` | 3.2: every Rule column of `fruit`, `veggie`, `meat`, `fish`, `egg`, `dairy` reads full except `meat` recipe (Maple Glazed Bacon, no source); `egg` placeable 16/16 | A recipe row still short: the member's recipe id in the dump (`creative_delight:` namespace); placeable short: the DD link in `placeable.json` `displayDelight.placed` |
+| SQ-FF-01 | A | `/dumpall`, copy `recipes.json`, `placeable.json` (food export) and `tags/item_tags.json` into the instance, `python3 tools/food_families.py` | 3.2: every Rule column of `fruit`, `veggie`, `meat`, `fish`, `egg`, `dairy` reads full except `meat` recipe (Maple Glazed Bacon, no source); `egg` placeable 16/16 | A recipe row still short: the member's recipe id in the dump (`creativedelight:` namespace); placeable short: the DD link in `placeable.json` `displayDelight.placed` |
 | SQ-FF-02 | A | `/dumpplaceable` | Chat count of Display Delight placed links is 9 higher than the 2026-10-24 dump; the 9 `creativeengineering:placed_*` blocks are in the placed map with their foods | Links missing: `DisplayDelightDishBlocks.onLevelLoad` did not run (server level load) or the food is not in `#displaydelight:displayable` |
 
 #### SQ-FFB: baked family rules applied (added 2026-10-27)
@@ -722,20 +728,20 @@ JEI pages) is FF-11 to FF-14 in game.
 #### SQ-CDQ: Creative Delight QoL moves (added 2026-10-25)
 
 Feature: [../creative_delight.md](../creative_delight.md) 22 (CDQ-01 to CDQ-08). Jar state: patcherMod and
-`creative_delight-1.0.0.jar` both rebuilt from `development/*/build/libs/` after 2026-10-25 (the pot and kettle hooks,
+`creativedelight-1.0.0.jar` both rebuilt from `development/*/build/libs/` after 2026-10-25 (the pot and kettle hooks,
 the WTHIT line and the compost rows left patcherMod for CD); never one without the other. Config switches are in the
-scratch server's `config/creative_delight-common.toml [qol]`. Rows marked client run in Round 2.
+scratch server's `config/creativedelight-common.toml [qol]`. Rows marked client run in Round 2.
 
 | ID | Group | Commands | Pass | If it fails |
 |---|---|---|---|---|
-| SQ-CDQ-00 | A | boot, grep `latest.log` | `Done (`; mixin lines apply `creative_delight.mixins.json` with no `InvalidInjectionException` / `@Mixin target ... not found`; no `Error occurred while handling event` from `*/cooking.js`, `<mod>/compost.js` | a `require = 1` miss names the injector: compare with the javap check (22.1) |
+| SQ-CDQ-00 | A | boot, grep `latest.log` | `Done (`; mixin lines apply `creativedelight.mixins.json` with no `InvalidInjectionException` / `@Mixin target ... not found`; no `Error occurred while handling event` from `*/cooking.js`, `<mod>/compost.js` | a `require = 1` miss names the injector: compare with the javap check (22.1) |
 | SQ-CDQ-01 | A, client | remainder_buffer.md RB-01 to RB-11 on a cooking pot and a kettle (bottle, bowl, bucket leftovers, full buffer stalls, hopper pulls) | as RB- | patcherMod's old pot mixins still present (two jars mismatched) |
 | SQ-CDQ-02 | A | `[qol] remainderBuffer = false`, restart; cook a milk-bottle recipe in a pot and in an oven | pot throws the bottle, oven keeps it | the gate is `RemainderBufferQol` (pot, kettle) and patcherMod `[cooking] remainderBuffer` (oven) |
 | SQ-CDQ-03 | A | remove Farmer's Respite from the scratch `mods/`, boot | `Done (`; no mixin error for `farmersrespite.*`; pot buffer still works | `CDMixinPlugin` compartment check |
-| SQ-CDQ-04 | A, client | hover a placeable food, a plate food, a coaster drink; then `placeableTooltips = false`, F3+T | lines as before; off: no pack lines, Display Delight's own lines back | script is under `assets/creative_delight/kubejs/_qol/` |
+| SQ-CDQ-04 | A, client | hover a placeable food, a plate food, a coaster drink; then `placeableTooltips = false`, F3+T | lines as before; off: no pack lines, Display Delight's own lines back | script is under `assets/creativedelight/kubejs/_qol/` |
 | SQ-CDQ-05 | A | `/dumpcompost`; compare `kubejs/exported/compost/compost.json` with the 2026-10-25 dump for the 101 Farmer's, Fungi, Veggies and Vintage items; then `compost = false`, `/reload`, dump again | on: same chance, source `value`; off: those items `rule` or absent | rows are `values(..., { when })` in the jar startup scripts |
-| SQ-CDQ-06 | A | `/dumpall` recipes; grep `creative_delight:shapeless/.*_manual_only` for the Veggies, Vintage, Fungi meals; then `manualOnlyRoutes = false`, `/reload` | on: present, the mods' grid ids absent; off: `veggiesdelight:broccoli_salad`, `vintagedelight:pb_j`, `fungidelight:inky_cap_salad` back | file returns early: check `global.CD.on` for the port |
-| SQ-CDQ-07 | A, client | WTHIT on hemp, a salmonberry bush, a Veggies crop; `wthitCropLine = false`, restart | "Growth" lines as before; off: none (WTHIT's own CropBlock lines stay) | rules file is `assets/creative_delight/crop_growth.json` |
+| SQ-CDQ-06 | A | `/dumpall` recipes; grep `creativedelight:shapeless/.*_manual_only` for the Veggies, Vintage, Fungi meals; then `manualOnlyRoutes = false`, `/reload` | on: present, the mods' grid ids absent; off: `veggiesdelight:broccoli_salad`, `vintagedelight:pb_j`, `fungidelight:inky_cap_salad` back | file returns early: check `global.CD.on` for the port |
+| SQ-CDQ-07 | A, client | WTHIT on hemp, a salmonberry bush, a Veggies crop; `wthitCropLine = false`, restart | "Growth" lines as before; off: none (WTHIT's own CropBlock lines stay) | rules file is `assets/creativedelight/crop_growth.json` |
 | SQ-CDQ-08 | A, client | JEI: truffle, a morel, cleaned cap, info tab; `jeiInfoPages = false`, F3+T | on: the three Fungi pages; off: none | `// requires: jei` header |
 
 #### SQ-CDM: Creative Delight member row moves, members #2 to #5 (added 2026-10-25)
@@ -747,11 +753,11 @@ with a `/dumpall` from before the move to compare (`git stash` the six pack file
 | ID | Group | Commands | Pass | If it fails |
 |---|---|---|---|---|
 | SQ-CDM-00 | A | boot, `/reload`, grep `latest.log` | no `Error occurred while handling event` from `veggiesdelight/`, `vintagedelight/`, `fungidelight/` scripts | the file named in the error |
-| SQ-CDM-01 | A | `/dumpall` recipes; grep `creative_delight:` for `carrot_juice`, `dandelion_juice`, `turnip_water` (pot `_manual_only`, mixing, filling, emptying, bottling), `cauliflower_bread` (baking), `cheese_burger` / `deluxe_burger` (shaped `_manual_only`, sequenced assembly) | each present once; the old `creativeengineering:` twins and `veggiesdelight:cooking/carrot_juice`, `vintagedelight:bread_from_smelting`, `vintagedelight:cheese_burger` absent; recipe count equal to the pre-move dump | `global.CD.on` false for the member, or the file did not load |
+| SQ-CDM-01 | A | `/dumpall` recipes; grep `creativedelight:` for `carrot_juice`, `dandelion_juice`, `turnip_water` (pot `_manual_only`, mixing, filling, emptying, bottling), `cauliflower_bread` (baking), `cheese_burger` / `deluxe_burger` (shaped `_manual_only`, sequenced assembly) | each present once; the old `creativeengineering:` twins and `veggiesdelight:cooking/carrot_juice`, `vintagedelight:bread_from_smelting`, `vintagedelight:cheese_burger` absent; recipe count equal to the pre-move dump | `global.CD.on` false for the member, or the file did not load |
 | SQ-CDM-02 | A | `/dumptags`: `forge:crops/oat`, `forge:seeds/ghost_pepper`, `forge:storage_blocks/truffle`, `forge:mushrooms/inky_cap`, `forge:dough` | same members as before the move (oat dough in `forge:dough`, colonies in the mushroom tags) | tag script gate |
 | SQ-CDM-03 | A | `/loottuning`; open a fresh `village_taiga_house` chest x10 with `/loot` | Veggies crate packs and the 9 table additions listed; cauliflower and seeds turn up at the same rate as before | `veggiesdelight/loot.js` ran before `global.lootTuning` existed |
 | SQ-CDM-04 | A | `/dumptrades` | farmer level 1 has the six Veggies produce trades; the Wandering Trader common pool holds the seven Veggies items | MoreJS event in the CD tree: `// requires: morejs` |
-| SQ-CDM-05 | A | Copper Pot: cook Brewin' Creamy Onion Soup; grep `Cup conversions:` | the pot serves the Onion Soup cup; log count as before (1 + upstream rows) | `data/creative_delight/cup_conversion/` missing from the jar or folder |
+| SQ-CDM-05 | A | Copper Pot: cook Brewin' Creamy Onion Soup; grep `Cup conversions:` | the pot serves the Onion Soup cup; log count as before (1 + upstream rows) | `data/creativedelight/cup_conversion/` missing from the jar or folder |
 
 #### SQ-CDF: all pack food and cooking KubeJS moved into Creative Delight (added 2026-10-25)
 
@@ -762,14 +768,14 @@ Compare against a `/dumpall` from before the move (backup tree: `development/cre
 
 | ID | Group | Commands | Pass | If it fails |
 |---|---|---|---|---|
-| SQ-CDF-00 | A | boot; grep `logs/kubejs/startup.log` and `latest.log` | no script errors from `kubejs_startup/creativeengineering/`, `*/compost_values.js` or `data/creative_delight/kubejs/`; `[cans] registered N generated cans`, `[food values] 2 foods copied`, `[creative_delight] server scripts ready` | the file named in the error |
+| SQ-CDF-00 | A | boot; grep `logs/kubejs/startup.log` and `latest.log` | no script errors from `kubejs_startup/creativeengineering/`, `*/compost_values.js` or `data/creativedelight/kubejs/`; `[cans] registered N generated cans`, `[food values] 2 foods copied`, `[creativedelight] server scripts ready` | the file named in the error |
 | SQ-CDF-01 | A | `/dumpitems` (or JEI): bakeware, frosting, cookie dough, powdered sugar, 6 dough blocks, cornmeal, the 16 pack fluids, the generated cans | all present with their old ids; an old world keeps them in inventories and chests | a startup file did not load from the jar (`JarStartupScripts`) |
-| SQ-CDF-02 | A | `/dumpall` recipes; compare with the pre-move dump | the same recipes, `creativeengineering:` ids of the moved rows now `creative_delight:`; total count equal; no `creativeengineering:` twin left | a CD file returned early (gate, `// requires:`, `Platform.isLoaded`) |
-| SQ-CDF-03 | A | grep `latest.log` for `[itemMerges]`; JEI on Canned Coffee Berries | two lines (`pack`, `creative_delight`); the can asks for coffee beans, not Farmer's Respite coffee berries | `_core/item_merges.js` ran before `canning.js` (priority) |
+| SQ-CDF-02 | A | `/dumpall` recipes; compare with the pre-move dump | the same recipes, `creativeengineering:` ids of the moved rows now `creativedelight:`; total count equal; no `creativeengineering:` twin left | a CD file returned early (gate, `// requires:`, `Platform.isLoaded`) |
+| SQ-CDF-03 | A | grep `latest.log` for `[itemMerges]`; JEI on Canned Coffee Berries | two lines (`pack`, `creativedelight`); the can asks for coffee beans, not Farmer's Respite coffee berries | `_core/item_merges.js` ran before `canning.js` (priority) |
 | SQ-CDF-04 | A | `/dumptags`: `creativeengineering:food_type/*`, `forge:sugar`, `forge:cooked_meat`, `creativeengineering:soup_veggie_cooked`, bakeware tags, can servings, jar tags | same members as before; removed items (wheat dough, Delightful venison, chocolate coins) in none | `_core/removed_item_tags.js` did not run last |
 | SQ-CDF-05 | A | `/dumpcompost` | table equal to the pre-move `kubejs/exported/compost/compost.json` (744 values, 10 categories, 5 tiers) | a `compost_values.js` skipped by its `// requires:` |
 | SQ-CDF-06 | A | oven: bake a cake with a cake pan; mortar a catalog entry; season popcorn; Cooking for Blockheads milk jar with a bottle | each works as before | the file for that system under `creativeengineering/` or `cookingforblockheads/` |
-| SQ-CDF-07 | A | Brewin' dishes (in CD since 2026-10-31, `brewinandchewin/recipes.js`, `// requires: brewinandchewin`): craft a quiche from egg solution, cook horror lasagna; `/kubejs recipes` or JEI recipe id on the quiche assembly; Vinery and Brewin' ship together inside Creative Brewing and are never tested separately (no without-Brewin' boot) | still made, ids `creative_delight:createsequencedassembly/quiche_egg_solution_sequenced_assembly` etc.; `#brewinandchewin:cooked_horror_lasagna_meats` holds the four meats | CD `brewinandchewin/recipes.js` / `tags.js` |
+| SQ-CDF-07 | A | Brewin' dishes (in CD since 2026-10-31, `brewinandchewin/recipes.js`, `// requires: brewinandchewin`): craft a quiche from egg solution, cook horror lasagna; `/kubejs recipes` or JEI recipe id on the quiche assembly; Vinery and Brewin' ship together inside Creative Brewing and are never tested separately (no without-Brewin' boot) | still made, ids `creativedelight:createsequencedassembly/quiche_egg_solution_sequenced_assembly` etc.; `#brewinandchewin:cooked_horror_lasagna_meats` holds the four meats | CD `brewinandchewin/recipes.js` / `tags.js` |
 | SQ-CDF-08 | A | `python3 tools/gen_compost_values.py --check` and `python3 tools/creative_delight_test/gen_cdtest_mirror.py --check` after a fresh `/dumpall` | compost check exits 0; the mirror is frozen (README), its stale report is expected | generator rules |
 
 #### SQ-CN: Corn Delight 1.2.11 items and rules (added 2026-10-25)
@@ -782,7 +788,7 @@ CN-05, CN-06 in game.
 |---|---|---|---|---|
 | SQ-CN-00 | A | boot, grep `latest.log` | `Done (`; no `Error occurred while handling event` from `corn_delight/*.js`; no `[block_dict] Missing` line for `corn_crop`; `[corn-delight] corn is villager food` once; no mixin error for `MobCobPipeSlotMixin` | the script or mixin named in the error |
 | SQ-CN-01 | A | `/kubejs hand` with each, or `/give` | `creativeengineering:corncob`, `corn_popsicle`, `cob_pipe` exist; the pipe stacks to 1 | CD startup `corn_delight/corn_items.js` |
-| SQ-CN-02 | A | recipe dump grep `creative_delight:` | `cutting/corncob_kernels` (6 kernels), `crafting_shaped/corn_popsicle` (ice cubes tag), `crafting_shapeless/cob_pipe`, `crafting_shapeless/classic_corn_dog_from_corn_dog`; `createcrushing` and `createmilling` `corn_cornmeal` / `wild_corn_cornmeal` list a 0.1 corncob; IE crusher `corn_cornmeal` lists a 0.1 corncob; mortar `corn_cornmeal` gives 3 cornmeal only | `corn_delight/recipes.js`, `creativeengineering/recipes.js`, `immersiveengineering/recipes.js` |
+| SQ-CN-02 | A | recipe dump grep `creativedelight:` | `cutting/corncob_kernels` (6 kernels), `crafting_shaped/corn_popsicle` (ice cubes tag), `crafting_shapeless/cob_pipe`, `crafting_shapeless/classic_corn_dog_from_corn_dog`; `createcrushing` and `createmilling` `corn_cornmeal` / `wild_corn_cornmeal` list a 0.1 corncob; IE crusher `corn_cornmeal` lists a 0.1 corncob; mortar `corn_cornmeal` gives 3 cornmeal only | `corn_delight/recipes.js`, `creativeengineering/recipes.js`, `immersiveengineering/recipes.js` |
 | SQ-CN-03 | A | `ComposterBlock.COMPOSTABLES` probe | corncob 0.3 | CD `corn_delight/compost.js` |
 | SQ-CN-04 | A | `/loot spawn ~ ~ ~ mine <pos of age 7 corn_crop> <knife>` x40, then with an empty hand x20, then on age 3 x20 | knife: about 10 cobs in 40; hand and age 3: none | `corn_delight/loot.js` (`CE/corn_knife_corncob`) |
 | SQ-CN-05 | A | tag dump | `#curios:head`, `#curios:mouth`, `#curios:face` hold `creativeengineering:cob_pipe` | `corn_delight/tags.js`, `tags/curiostags.js` |
@@ -805,19 +811,19 @@ Feature: [../display_delight.md](../display_delight.md) (DDP-), TODO `largeconte
 #### SQ-WCD: wild crops in Creative Delight (added 2026-10-25)
 
 Feature: [../creative_delight.md](../creative_delight.md) 24 (WCD-01 to WCD-06). Jar state: patcherMod and
-`creative_delight-1.0.0.jar` both rebuilt from `development/*/build/libs/` after the move (the `wildCrops` switch left
+`creativedelight-1.0.0.jar` both rebuilt from `development/*/build/libs/` after the move (the `wildCrops` switch left
 CEConfig for CDConfig `[worldgen]`). WCD-05 runs before the CD install, on the jars in `mods/` at the time. Biome tags
 and modifiers need a new level-name per boot.
 
 | ID | Group | Commands | Pass | If it fails |
 |---|---|---|---|---|
 | SQ-WCD-01 | B | boot a new level, grep `latest.log` for `[wild-crops]` | `62 crop modifiers added, 49 mod modifiers off, 12 biome-file patches removed` (the Rhino count; mods missing on the scratch server lower it, each named in a `skipped` line); later `crop/biome pairs in 63 crop tags` with no `problems`; the 5 Terralith cave biomes warning names `biome_traits.json` | no `[wild-crops]` line at all: the datapack script tree missed the biome-tag pre-pass or `highPriorityData` (compare SQ-KS-01); move the script back to `server_scripts/` and keep the rules in CD |
-| SQ-WCD-02 | B | `/locate biome minecraft:jungle`, tp, forceload 4 chunks and look (or a `/fill ... replace` count): cocoa on jungle trees, melons; `/locate biome minecraft:beach`, same | cocoa and melons in the jungle; wild cabbages on the beach sand | features `creative_delight:wild/*` missing: `data/creative_delight/worldgen/` not in the folder pack or the jar |
-| SQ-WCD-03 | B | after WCD-01, grep `latest.log` for `[wild-crops]` lines with `no such biome`, `is not in #creative_delight:wild_crops/` or `could not read` | none | tag pre-pass ran without the rules (readConfig returned null): check the `could not read` line |
-| SQ-WCD-04 | B | `[worldgen] wildCrops = false` in `config/creative_delight-common.toml`, new level, boot | `[wild-crops] off in creative_delight-common.toml`; Farmer's wild cabbages back at their mod spawn (beaches) | the switch is read through `global.CD.worldgen` (CD startup script) |
-| SQ-WCD-05 | B | before the CD install: boot with the old `creative_delight-1.0.0.jar` in `mods/` and the pack folder trees | same as WCD-01 (rules from the folder copy, switch reads on) | `global.CD.worldgen` guard or the JsonIO path |
-| SQ-WCD-06 | B | after the install: delete `kubejs/data/creative_delight/` on the scratch server only, new level, boot | same as WCD-01: rules from the jar copy (`CDResources`), features from the jar | `CDResources.text` returned null: resource path or the build copy of `dataTrees` |
-| SQ-WCD-07 | B | `/locate structure minecraft:village_savanna` (savannas are warm dry grassy: `#creative_delight:wild_crops/cotton`), look at the farms | some farm rows are cotton (VillageFarmCrops reads the renamed tag) | the tag namespace in `VillageFarmCrops.rule` |
+| SQ-WCD-02 | B | `/locate biome minecraft:jungle`, tp, forceload 4 chunks and look (or a `/fill ... replace` count): cocoa on jungle trees, melons; `/locate biome minecraft:beach`, same | cocoa and melons in the jungle; wild cabbages on the beach sand | features `creativedelight:wild/*` missing: `data/creativedelight/worldgen/` not in the folder pack or the jar |
+| SQ-WCD-03 | B | after WCD-01, grep `latest.log` for `[wild-crops]` lines with `no such biome`, `is not in #creativedelight:wild_crops/` or `could not read` | none | tag pre-pass ran without the rules (readConfig returned null): check the `could not read` line |
+| SQ-WCD-04 | B | `[worldgen] wildCrops = false` in `config/creativedelight-common.toml`, new level, boot | `[wild-crops] off in creativedelight-common.toml`; Farmer's wild cabbages back at their mod spawn (beaches) | the switch is read through `global.CD.worldgen` (CD startup script) |
+| SQ-WCD-05 | B | before the CD install: boot with the old `creativedelight-1.0.0.jar` in `mods/` and the pack folder trees | same as WCD-01 (rules from the folder copy, switch reads on) | `global.CD.worldgen` guard or the JsonIO path |
+| SQ-WCD-06 | B | after the install: delete `kubejs/data/creativedelight/` on the scratch server only, new level, boot | same as WCD-01: rules from the jar copy (`CDResources`), features from the jar | `CDResources.text` returned null: resource path or the build copy of `dataTrees` |
+| SQ-WCD-07 | B | `/locate structure minecraft:village_savanna` (savannas are warm dry grassy: `#creativedelight:wild_crops/cotton`), look at the farms | some farm rows are cotton (VillageFarmCrops reads the renamed tag) | the tag namespace in `VillageFarmCrops.rule` |
 
 #### SQ-DW: deadwood patches and doubled stumps (added 2026-10-25)
 
@@ -838,20 +844,21 @@ server. Full restart (mixins, startup fluids, NCH).
 
 | ID | Group | Commands | Pass | If it fails |
 |---|---|---|---|---|
-| SQ-RSP-01 | A | boot, grep `latest.log` for `KettleTankMixin\|KettleBlockMixin\|KettleRecipeSerializerMixin\|Mixin apply failed\|creative_delight.*Kettle\|farmersrespite:brewing` | no mixin error; no recipe parse error for `farmersrespite:brewing` (the old `rusticdelight:brewing/coffee` may still log once before the script removes it) | the method named in the error: check the SRG name against `javap` of the 2.0 jar |
-| SQ-RSP-02 | A | `/kubejs dump_recipes` or grep the recipe dump for type `farmersrespite:brewing`; count, and grep the JSON for `needwater` | 48 recipes (Respite's 9 plain + 8 long + 9 strong, 7 from other mods, berry latte, gambler's tea, 8 Rustic coffees, 5 Fruits Delight teas), all `creative_delight:farmersrespitebrewing/` ids except gambler's tea (`creativeengineering:`), no `needwater` key, no `farmersrespite:brewing/` id left | a mod id still listed: its recipe id changed, fix the `kettle()` row |
+| SQ-RSP-01 | A | boot, grep `latest.log` for `KettleTankMixin\|KettleBlockMixin\|KettleRecipeSerializerMixin\|Mixin apply failed\|creativedelight.*Kettle\|farmersrespite:brewing` | no mixin error; no recipe parse error for `farmersrespite:brewing` (the old `rusticdelight:brewing/coffee` may still log once before the script removes it) | the method named in the error: check the SRG name against `javap` of the 2.0 jar |
+| SQ-RSP-02 | A | `/kubejs dump_recipes` or grep the recipe dump for type `farmersrespite:brewing`; count, and grep the JSON for `needwater` | 48 recipes (Respite's 9 plain + 8 long + 9 strong, 7 from other mods, berry latte, gambler's tea, 8 Rustic coffees, 5 Fruits Delight teas), all `creativedelight:farmersrespitebrewing/` ids except gambler's tea (`creativeengineering:`), no `needwater` key, no `farmersrespite:brewing/` id left | a mod id still listed: its recipe id changed, fix the `kettle()` row |
 | SQ-RSP-03 | A | place Kettle on a lit campfire, `/data get block ~ ~ ~` after: water bucket by right-click; then a Black Tea bottle by right-click | bucket: `water_level` 4 (blockstate), bucket comes back. Tea: refused (no change, GUI opens) | level 3: KettleBlockMixin `<clinit>` ModifyArg not applied |
 | SQ-RSP-04 | A | empty the Kettle with 4 glass bottles (right-click): 4 water bottles, level 0; pour 2 Black Tea bottles; `/data get block` | `CETankFluid` = create_central_kitchen:black_tea, level 2; a water bottle then refused | bottle -> drink map: Central Kitchen's `filling/black_tea` / `emptying/black_tea` |
 | SQ-RSP-05 | A | with 2 black tea in the tank: 1 honey bottle in an ingredient slot, glass bottle in the plating slot, wait 10 s | one Strong Black Tea in the output, level 1, honey's bottle in a leftover slot | Strong recipe base / matching (`getMatchingRecipe` HEAD) |
 | SQ-RSP-06 | A | water in the tank: 2 black tea leaves, wait; `/data get` | Black Tea brewed, level down by 1, `Container` glass bottle | base water check |
 | SQ-RSP-07 | A | a glass bottle in an ingredient slot (`/item replace block ~ ~ ~ container.0 with minecraft:glass_bottle 3`), wait 1 s | the 3 bottles move to the leftover slots (WTHIT "Holding: 3 Glass Bottle" or `/data get`), plating slot unchanged | `ce$stowBottles`; `[qol] remainderBuffer` off |
 | SQ-RSP-08 | A | Create pump into the Kettle from a tank of water at 16 rpm, then at 256 rpm; a Fluid Tank under the Kettle with a pump pulling | fills in whole 250 mB steps, never above 1000; drains to 0 | K6 handler: `KettleTank.Handler.fill` |
-| SQ-RSP-09 | A | Spout over a glass bottle with Milk Coffee fluid (`/fluid` via creative tank), Item Drain with a Milk Coffee bottle; same for Lavender Tea, Matcha Latte, Coffee; Spout over a Copper Cup with water, drain a Water Cup | each gives its drink / 250 mB; cup <-> water; no `Error parsing recipe creative_delight:createfilling/` line in `logs/kubejs/server.log` | NCH `createBottle` ids `createfilling/<drink>`, fluid registered (`fluids.js`) |
+| SQ-RSP-09 | A | Spout over a glass bottle with Milk Coffee fluid (`/fluid` via creative tank), Item Drain with a Milk Coffee bottle; same for Lavender Tea, Matcha Latte, Coffee; Spout over a Copper Cup with water, drain a Water Cup | each gives its drink / 250 mB; cup <-> water; no `Error parsing recipe creativedelight:createfilling/` line in `logs/kubejs/server.log` | NCH `createBottle` ids `createfilling/<drink>`, fluid registered (`fluids.js`) |
 | SQ-RSP-10 | A | dispenser facing a Kettle with tea in it: water bucket; then an empty Kettle: water bucket | first: bucket stays in the dispenser; second: level 4 | `KettleDispenseMixin` method name |
 | SQ-RSP-11 | A | break a Kettle with 3 water; place it again | item tooltip line (client, CQ-RSP-01); placed Kettle has level 3 | `writeMeal` RETURN / `setPlacedBy` |
 | SQ-RSP-12 | A | place a Flower Pot, right-click with a Wild Tea Bush; break it | pot holds the bush; breaking drops pot + bush | patcherMod `RespitePottedTeaBush` log warning |
 | SQ-RSP-13 | A | eat a Slice of Coffee Cake and a Rose Hip Pie Slice, `/effect` list | coffee: Caffeinated 0:30 only; pie: Regeneration 0:20 only | `food_values.js` modification block |
 | SQ-RSP-14 | A | a world saved with a 2.0 Kettle at `water_level=3`: load it | Kettle still at 3 water, brews normally | blockstate property range |
+| SQ-RSP-15 | A | heated Kettle with water: 2 black tea leaves + glass bottle; `/data get block ~ ~ ~ BrewTimeTotal` after 1 s, then check at 8 s and 12 s | `BrewTimeTotal` 200 (not 0); no tea at 8 s, one Black Tea by 12 s | NCH `frBrewing` `_or` default (patcherMod 1.1.06+; 1.1.04's `opts.time ?? 200` gave 0, a 1-tick brew), `KettleRecipeSerializerMixin` reading `cookingtime` |
 
 #### SQ-INV: TODO investigations a scratch server can answer (added 2026-10-25)
 
@@ -904,6 +911,21 @@ not reread the toml; `/reload` alone keeps the old switches, 2026-10-28). `tools
 | SQ-SY-05 | A | `corn`, `hemp`, `flax` true: ripe plants on Rich Farmland; break the top, then the bottom | Corn: extra only once per plant; hemp: extra fibre from the top; flax: extra flax from the lower half | Double extra on corn: `upper=false` condition dropped |
 | SQ-SY-06 | A | `bell_peppers = true`, ripe peppers on Rich Farmland | Colours still roll about 1:1:1; log has the `[crop-drops] bell peppers` line as before | Bell pepper rewrite skipped (`table shape changed`): pools mistaken |
 | SQ-SY-07 | A | Set `richFarmlandTries = 0`, restart | Log no longer lists rich farmland; Rich Farmland drops as farmland | Pool still added: soil filter |
+
+Results: not run yet.
+
+#### SQ-CAT: Cozy's Improved Cats fold-in (added 2026-11-01)
+
+Feature: [../cozy_cats.md](../cozy_cats.md) section 10 (CIC-25 to CIC-36). Jars: creativecompat-1.0.0 and
+creativedelight-1.0.0 of 2026-11-01 15:58; config `cozys_improved_cats-common.toml` from the pack. Client half: CQ-CAT.
+
+| ID | Group | Commands | Pass | If it fails |
+|---|---|---|---|---|
+| SQ-CAT-01 | A | boot, grep `latest.log` for `creativecompat`, `Mixin`, `CatCozyCommandMixin`, `DiFeatherEntityMixin`, `CozyHomeGoalFeatherMixin`, `CozyMessageGenderMixin`, `FishingHookFeatherPullMixin` | `Done (`; no mixin apply error or `Could not` / `failsoft` warning naming those five; no `Error occurred while handling event` | SRG names in the mixin (m_6071_, m_21839_, m_5603_, m_5790_, m_8119_, m_150155_, m_8036_); for a CatCozyCommandMixin locals warning, the Cat.mobInteract locals changed |
+| SQ-CAT-02 | A | grep `latest.log` for `[itemMerges] creativedelight`; recipe dump for `cozys-improved-cats:` | merge count up by 4 against the last run; no `cozys-improved-cats:ancient_cooked_*` smelting or blasting recipe; `cozys-improved-cats:training_string` reads cod, salmon, string | CD `cozys_improved_cats/item_merges.js` `requires` header; ids in `item_dict.js` |
+| SQ-CAT-03 | A | `/summon minecraft:villager ~ ~ ~ {VillagerData:{profession:"minecraft:fisherman",level:5}}`, dump its offers (`/data get entity @e[type=villager,limit=1,sort=nearest] Offers`) | no Ancient Cod or Ancient Salmon offer at level 3 (repeat with 3 villagers) | `CozyCats.onTrades` not registered, or Cozy's listener runs at LOWEST too |
+| SQ-CAT-04 | A | `/give @s cozys-improved-cats:ancient_cod 3`, then touch the inventory; `/loot spawn ~ ~ ~ kill minecraft:cod` x20 | the stack turns into 3 Cod; no ancient fish from the 20 kills | item merge inventory swap; config `ancientCodDropChance` |
+| SQ-CAT-05 | A | grep `latest.log` for `cozys_improved_cats` and `cozys-improved-cats` config lines | no Cozy config validation failure (the file sets gender off, vanilla taming on, fishing and drops 0) | a value Cozy's ConfigValidator refuses (it needs positive trade uses) |
 
 Results: not run yet.
 
@@ -975,6 +997,37 @@ Colours / WTHIT / JEI / GUI each need the client.
 | CQ-OLD-06 | AE-01 to AE-24, GR-28, FX-21 to FX-24 | Armor and tool effects in play (the on-hit half passed on the server), air brake `useDurationTicks`, Trinket Case refuses only the open case |
 | CQ-OLD-07 | MB-100 to MB-104, MT-25, SN, CP-15 to CP-26 | More Mooblooms JEI, leaf pile slow height walking and WTHIT, can crafts and effects in play |
 | CQ-OLD-08 | DP-08, OV | First join of a world with the release's `world_serverconfig` README steps for a single-player save (client half of DP-08) |
+
+#### CQ-MND: Miner's Delight port -02, client half (added 2026-11-01)
+
+Feature: [../miners_delight.md](../miners_delight.md) 4.2 (I3, I4, I8) and 5. Needs port `-02` in `mods/` and both
+donor jars in `miners_upstream/`.
+
+| ID | World | Commands | Pass | After |
+|---|---|---|---|---|
+| CQ-MND-01 | creative superflat | Look at a Sticky Basket, `/give` Baked Cave Carrot, Tentacles, Baked Tentacles, Cave Carrot, Weird Caviar, Bowl of Stuffed Squid; plant cave carrots and bonemeal them | MND-05: the first four in the 1.1.2 art, the rest (and the crop stages, wild cave carrots, gossypium) in the 1.4.5 art | |
+| CQ-MND-02 | creative superflat | Copper Pot GUI over a campfire, cook a bucket or bottle recipe; JEI R on Beef Stew Cup and on Onion Soup Cup | MND-18 client half: the leftover slot has a frame right of the output and holds the empty container; JEI opens the Copper Pot category with the cup as output and the Copper Cup as container (`jei #14`) | |
+| CQ-MND-NAMES | any | `/cedumpnames`, then `python3 tools/name_audit.py --print` | I3 names audit: no raw key and no capitalisation fix left for `miners_delight` (or the fixes land in `name_fixes.json`) | `python3 tools/name_audit.py` |
+
+#### CQ-CAT: Cozy's Improved Cats, client half (added 2026-11-01)
+
+Feature: [../cozy_cats.md](../cozy_cats.md) section 10. Needs a client (the feather is cast by a player). One tamed
+Cozy cat with a Cat Bed home is enough for most rows; a second cat for breeding.
+
+| ID | Group | Commands | Pass | If it fails |
+|---|---|---|---|---|
+| CQ-CAT-01 | A | offer Raw Cod to a wild cat until tamed | tames (about 1 in 2); no "needs Ancient Cod" hint | config `allowVanillaTaming` |
+| CQ-CAT-02 | A | sneak-use the Training String on the cat; hover a Cat Collar | no Gender line in chat or tooltip; cat name gold | CozyMessageGenderMixin, CozyCats.onTooltip |
+| CQ-CAT-03 | A | empty-hand right-click the tamed cat twice | it sits, then stands; no "following / wandering / staying" message; a tamed wolf still cycles DI's three modes | CatCozyCommandMixin applied after DI's CatMixin (priority) |
+| CQ-CAT-04 | A | set Guard mode at the Cat Bed, spawn a zombie inside the home radius | the cat patrols, the owner gets the guard warning, the zombie glows | DI command still set on the cat (CozyCats.clearDiCommand) |
+| CQ-CAT-05 | A | cat in Wander, then Guard, then Follow: cast the Feather on a Stick onto the ground nearby; repeat in Stay and sitting | follows the feather in Wander, Guard and Follow; ignores it in Stay and when sitting | CozyHomeGoalFeatherMixin, DiFeatherEntityMixin isPetAmbulatory |
+| CQ-CAT-06 | A | cast the feather at a zombie, keep it hooked | the feather sticks to the zombie; the cat attacks it; after its first hit the cat has Strength III, Resistance III, Regeneration III (10 s) | DiFeatherEntityMixin hit / hook; FeatherAttackGoal; LivingHurtEvent |
+| CQ-CAT-07 | A | reel in while hooked | the feather comes back, the zombie is not pulled; the cat stops attacking within a second | FishingHookFeatherPullMixin; CatFeather.dropStaleTarget |
+| CQ-CAT-08 | A | cast at a cow, a wolf, a villager and a second player; then set `[cats] hookNeutralAndPassive` and `hookPlayers` true, restart, repeat | defaults: the feather passes through all four; set: it sticks and the cat attacks; never sticks to your own pets | CatFeather.canHook |
+| CQ-CAT-09 | A | open the Cat Care Guide: Taming, Taming Fish, Kittens, Cooked Fish, Training String, Meet Your Cat pages | no mention of genders or Ancient Fish | Creative Compat `names.js` lang keys |
+| CQ-CAT-10 | A | breed two tamed cats (Cat Treat) of any kind | kitten born; no opposite-gender refusal | config `genderSystemEnabled` |
+
+Results: not run yet.
 
 #### CQ-NEW: client halves added 2026-10-24
 
@@ -1157,7 +1210,7 @@ client half.
 | SQ-PF-04 | Partial: pregen 5:26 with the pack events, 5:12 with them off (one run each); repeat the pair |
 | SQ-PF-01, -05 (re-check) | `/ceperf status`: recording `ce`, all hooks run, 321 handlers wrapped |
 | SQ-INV-01 to -05 (re-check on a new world) | Same as 10-26: `[time]` 16 lines, 14,913 advancements left out, no missing-registry line; `item_dict` lists 26 real missing ids (client-only and removed mods), no tag keys; `[CE potions] added 58`; "metal base event" lines are debug prints (noise); 770,959 block states |
-| SQ-SALT-01 | FAIL (one id): `vintagedelight:salt_block` still loads (9 salt dust -> salt block); `salt:salt` only in `salt:salting` and `salt:salt_unpacking` (-> 9 salt dust); `creative_delight:shaped/large_salt_lamp` present; the other removed ids absent. Check whether the merge meant to keep this recipe with a new output |
+| SQ-SALT-01 | FAIL (one id): `vintagedelight:salt_block` still loads (9 salt dust -> salt block); `salt:salt` only in `salt:salting` and `salt:salt_unpacking` (-> 9 salt dust); `creativedelight:shaped/large_salt_lamp` present; the other removed ids absent. Check whether the merge meant to keep this recipe with a new output |
 | SQ-SALT-02 | PASS (tags): `#forge:salts`, `#forge:salt`, `#forge:dusts/salt` = salt dust only |
 | SQ-SALT-05 | Log half PASS: `[salt] 30 Vintage salt blocks random tick like The Salt's`, no mixin error; block checks not run |
 | SQ-SALT-07 | Not run: forceloaded chunks get no random ticks without a player |
@@ -1212,14 +1265,14 @@ before fix 2. Client-only dumps (names, stacks, gear, food, crops, compost, pain
 Jars: `mods/` as of 2026-10-25 23:59 (patcherMod 1.1.03, CD 23:49, Vintage -06, Incubation Additions 1.1.0, repackedStorage
 -01), COPIED into the scratch `mods/`. KubeJS tree of 2026-10-26 00:06 plus the fixes below. 3 boots of qb1, 1 of nb1.
 New probe: `tools/cdb_en_probe/cdb_en_probe.js` (`/cbetest blocks|soils|growth|dragon|anvil|squid|jars|all`; needs
-`forceload add 400 400`). Probe fixes: `fdtest` resolves `creativeengineering:` ids to their `creative_delight:` twin (listed
+`forceload add 400 400`). Probe fixes: `fdtest` resolves `creativeengineering:` ids to their `creativedelight:` twin (listed
 once), `vtdtest` checks Pickled Sea Pickle instead of Brewin's pickled pickles, `/zq recipes` counts past its 80-line print cap.
 Setup slips worth knowing: `/cdjtest` takes no argument and needs `forceload add 400 400` (0 gristle otherwise); `place
 structure` needs the spot forceloaded first ("That position is not loaded").
 
 Fixes made in the run:
 
-1. **Boot stopped (datapack load):** `creative_delight:wild/chorus_succulent` used feature type
+1. **Boot stopped (datapack load):** `creativedelight:wild/chorus_succulent` used feature type
    `ends_delight:chorus_succulent_feature` (from upstream's stale json); the registered id is `ends_delight:chorus_succulent`.
    Fixed in the configured feature and `tools/gen_crop_worldgen_table.py`. Unreleased work, no changelog bullet.
 2. `sample_syringe.js#71` `redeclaration of var $WorldRows` (Rhino nested `const`, also in the user's client log): the Sample
@@ -1232,7 +1285,7 @@ Fixes made in the run:
    Sugar). 16 grid recipes, 3 Create mixes and 3 IE blueprints fixed: repeated keys for `R.shapeless` / `R.createMixing`,
    `{ id, count }` for `ieBlueprint`; the 4 auto ids that changed are pinned to the old ones. Memory `kubejs-api-notes`. Bullets added.
 5. Vintage's fermented spider eye jar recipe took plain sugar only (`replaceInput` does not reach `vintagedelight:fermenting`):
-   replaced by `creative_delight:pickling/fermented_spider_eye_from_fermenting` on the plain sweetener tag. Covered by the
+   replaced by `creativedelight:pickling/fermented_spider_eye_from_fermenting` on the plain sweetener tag. Covered by the
    existing sweetener bullet.
 
 | Entries | Result |
@@ -1277,19 +1330,19 @@ Fixes made in the run (all in unreleased 1.1.03 work, so no changelog bullet):
    passes an NBT stack, so that helper's recipes are unchanged. patcherMod rebuild + restart.
 
 Probe updates (expectations that went stale with the CD move, not pack bugs): `fungi_probe.js` grid / pot meal ids are
-`creative_delight:`, colony Serene Seasons checks dropped (FD's colonies are in neither tag; fungi_delight.md corrected);
-`vintage_probe.js` resolves a `creativeengineering:` id to its `creative_delight:` twin, jar bottom side is 3 slots (the
--04 remainder slot), roasted pepper tag holds all 9 colours, Berserker's Brew under `creative_delight:pickling/`.
+`creativedelight:`, colony Serene Seasons checks dropped (FD's colonies are in neither tag; fungi_delight.md corrected);
+`vintage_probe.js` resolves a `creativeengineering:` id to its `creativedelight:` twin, jar bottom side is 3 slots (the
+-04 remainder slot), roasted pepper tag holds all 9 colours, Berserker's Brew under `creativedelight:pickling/`.
 
 | Entries | Result |
 |---|---|
-| SQ-FGD-00, SQ-VP-00, -01, SQ-MDP-01, SQ-AD-00 (as nested CD members), SQ-FN-01, SQ-LE-00, SQ-TI-00, SQ-KT-00, SQ-VTD4-01, SQ-FDB-01, SQ-FR-01, SQ-RD-01, SQ-RD-25, SQ-CDQ-00, SQ-CDM-00, SQ-CDF-00, SQ-CDF-03, SQ-CN-00, SQ-DDP-01, SQ-RSP-01, SQ-FD-01 (log half) | PASS after fixes 1 to 3: `Done (`, no mixin / registry / `Error occurred while handling event` / NCH failure from our code except the known `truffle_pie` (`fungiport #3`). Only noise: redeco's two `Not a JSON object` tag files (also in the client log). Counts that moved since the rows were written: `[cans] registered 272`, `Cup conversions: 16`, Rustic upstream 452 files (8 dropped), `[jar-startup] creative_delight: 57 of 57`, `[CE potions] 58 item-agnostic mixes`, `[jeiRemove] 349`. FDB toml, `[moss]` keys, displaydelight `[Features]`, simplehats chef hat weight 0 all as the rows say |
+| SQ-FGD-00, SQ-VP-00, -01, SQ-MDP-01, SQ-AD-00 (as nested CD members), SQ-FN-01, SQ-LE-00, SQ-TI-00, SQ-KT-00, SQ-VTD4-01, SQ-FDB-01, SQ-FR-01, SQ-RD-01, SQ-RD-25, SQ-CDQ-00, SQ-CDM-00, SQ-CDF-00, SQ-CDF-03, SQ-CN-00, SQ-DDP-01, SQ-RSP-01, SQ-FD-01 (log half) | PASS after fixes 1 to 3: `Done (`, no mixin / registry / `Error occurred while handling event` / NCH failure from our code except the known `truffle_pie` (`fungiport #3`). Only noise: redeco's two `Not a JSON object` tag files (also in the client log). Counts that moved since the rows were written: `[cans] registered 272`, `Cup conversions: 16`, Rustic upstream 452 files (8 dropped), `[jar-startup] creativedelight: 57 of 57`, `[CE potions] 58 item-agnostic mixes`, `[jeiRemove] 349`. FDB toml, `[moss]` keys, displaydelight `[Features]`, simplehats chef hat weight 0 all as the rows say |
 | SQ-SN-00, SQ-PS-00 | PASS on `[seasoning] defined` cheese / onion / garlic / sugar; the `seasoning done` / `powdered_sugar done` lines no longer exist (the scripts moved into CD and log nothing): rows stale |
 | SQ-FGD-01 to -06, -08, -10 (`/fgdtest all`) | PASS 135 / 136; the 1 FAIL is the known truffle pie (`fungiport #3`) |
 | SQ-VP-02 to -12 (`/vtdtest all`) | PASS 370 / 375 after fix 4. Remaining FAILs are open TODO rows: ghost pepper survives on farmland (`vintageport #7`), right-click harvest resets cucumber / ghost pepper / zucchini to age 0 (`vintageport #8`) |
 | SQ-KT-01, -02 (`/kttest`) | 30 PASS, 4 FAIL: KT-15d plate over air not refused; KT-17 food plate / plated hamburger do not pop when the stone or counter under them is broken (`above` still the plate, no drops). New since the last run: check the `updateShape` mixin and `popsUnsupported` (row's failure notes) |
 | SQ-CDJ-01, -06 (`/cdjtest`) | PASS 23 / 23 |
-| SQ-SN-01, SQ-PS-01, -02, SQ-DB-01, SQ-VTD4-02, SQ-LE-02, SQ-RM-01, SQ-RM-04 | PASS, ids now `creative_delight:` (seasoning, powdered sugar routes, 12 dough block recipes, pickling brew / leather with `#forge:salt`, ghost pepper crushing 2 / milling 2 / IE 3 seeds, no Vintage slime or salted fish, no bedroll / fruit beignet / Design Decor golden apple, the 4 FD dishes and `crab_bars_manual_only`, driftwood log stripping on the board and the Create saw, no Abnormals driftwood cutting). The five removed foods: no recipe, loot table or trade. Not shown by `/zq`: fluid amounts, heat, secondary outputs (orange jam mixer, slime mixer heat, bark output) |
+| SQ-SN-01, SQ-PS-01, -02, SQ-DB-01, SQ-VTD4-02, SQ-LE-02, SQ-RM-01, SQ-RM-04 | PASS, ids now `creativedelight:` (seasoning, powdered sugar routes, 12 dough block recipes, pickling brew / leather with `#forge:salt`, ghost pepper crushing 2 / milling 2 / IE 3 seeds, no Vintage slime or salted fish, no bedroll / fruit beignet / Design Decor golden apple, the 4 FD dishes and `crab_bars_manual_only`, driftwood log stripping on the board and the Create saw, no Abnormals driftwood cutting). The five removed foods: no recipe, loot table or trade. Not shown by `/zq`: fluid amounts, heat, secondary outputs (orange jam mixer, slime mixer heat, bark output) |
 | Not run | Everything else in Round 1 (fake-player rows, loot rolls, villagers, the B worldgen groups, client rows). Odd finding for a later look: `forge:sugar` also holds `pneumaticcraft:glycerol` |
 
 The scratch `kubejs/exported/` of this run (server-safe dumps) was not copied into the instance.
@@ -1297,7 +1350,7 @@ The scratch `kubejs/exported/` of this run (server-safe dumps) was not copied in
 ### 2026-10-25 Creative Delight run (group A, CD focus)
 
 Jars: patcherMod `development/patcherMod/build/libs/creativeengineering-1.1.02.jar` built 15:41 (the startup loader; the
-`mods/` copy predates it), `creative_delight-1.0.0.jar` / `-cdtest.jar` rebuilt 16:06 with fix 1, the rest of `mods/` as
+`mods/` copy predates it), `creativedelight-1.0.0.jar` / `-cdtest.jar` rebuilt 16:06 with fix 1, the rest of `mods/` as
 found. One superflat world (cdt2), about 12 boots. Probes: `tools/creative_delight_test/cdj_probe.js` (`/cdjtest`, new),
 `bench_boot.sh` (new). Setup fix: `scratch_server.sh setup` now links every `*_upstream` folder (the Miner's port refused
 to load without `miners_upstream/`).
@@ -1309,14 +1362,14 @@ empty and counts `TIERS`.
 
 | Entries | Result |
 |---|---|
-| SQ-CDT-01 | PASS. `[jar-startup] creativeengineering: 3 of 3`, `creative_delight: 2 of 3`, order `creativeengineering, startup_scripts, creative_delight`; NCH finished once; members line. Startup errors: the pre-existing `truffle_pie` NCH line (also in the client log, `fungiport #3`) and the deliberate `withNamespace` line only |
+| SQ-CDT-01 | PASS. `[jar-startup] creativeengineering: 3 of 3`, `creativedelight: 2 of 3`, order `creativeengineering, startup_scripts, creativedelight`; NCH finished once; members line. Startup errors: the pre-existing `truffle_pie` NCH line (also in the client log, `fungiport #3`) and the deliberate `withNamespace` line only |
 | SQ-CDT-02, -04, -05 | PASS: startup 7/7, ns 11/11, requires 2/2, tags 1/1, config 5/5, mirror 57/57 (30 helpers) |
 | SQ-CDT-03 | PASS: `server.log` 0 errors; `/dumpcompost` 1171 compostable; cooking twins present |
 | SQ-CDT-06 | PASS: `/reload` then `/cdtest all` 83/83; row text corrected (`server scripts ready` is start-only) |
 | SQ-CDT-08 | PASS: `oceanic_delight = false`: `CD.on` false, member row skipped, Oceanic items still registered |
 | SQ-CDT-09 | PASS: folder path ns / mirror / requires / tags all PASS, startup FAIL by design |
 | SQ-CDT-10 | PASS, stronger than the row: the CD error line is logged, the pack's startup scripts fail, and KubeJS stops the boot ("startup script syntax errors"). The two jars must ship together; **the instance's `mods/` patcherMod is the old one, so the user's client cannot boot with the current `kubejs/` until the built jar is installed** |
-| SQ-KS-01 to -04 | PASS (01 via `/reload` discovery, not a fresh boot): a datapack script sees `global.NCH` / `global.LOOT` and makes `creativeengineering:shapeless/sqks_test`; `kubejs/data` reloads; with both copies one runs and `kubejs/data` wins over the world datapack; the folder `creative_delight/kubejs/_core/cd_server.js` wins over the jar's copy (10.4 dev loop holds); `requires: not_a_mod` skipped |
+| SQ-KS-01 to -04 | PASS (01 via `/reload` discovery, not a fresh boot): a datapack script sees `global.NCH` / `global.LOOT` and makes `creativeengineering:shapeless/sqks_test`; `kubejs/data` reloads; with both copies one runs and `kubejs/data` wins over the world datapack; the folder `creativedelight/kubejs/_core/cd_server.js` wins over the jar's copy (10.4 dev loop holds); `requires: not_a_mod` skipped |
 | SQ-CDJ-01, -06 | PASS (server half): the three repacks load from the jar (debug log `Found valid mod file repacked...`); 22 / 47 / 63 items; End's gristle 3 and 5 from 10 knife kills, 0 from 10 bare-hand kills |
 | SQ-CDJ-02 | **FAIL**: the stale `oceansdelight-1.0.2-1.19.2.jar` beside CD wins (`JarSelector ... passed in as source ... Using Mod File: mods/oceansdelight-1.0.2-1.19.2.jar`, `1.0.2-1.19.2-ce-19.2-01 -> 1.0.2-1.19.2`). A top-level jar beats a nested one regardless of version; creative_delight.md 14.1 point 4 corrected. `build_deploy.py` half PASS offline (`nested_modids` reads all three ids, `test_suite_entries` flags the cdtest jar) |
 | SQ-FN-01 | PASS: `oceanic_delight.ce.mixins.json` registered and selected, no mixin or `fishing_net` / `biome_tag` loot error |
@@ -1473,7 +1526,7 @@ Needs the patcherMod and Creative Delight jars rebuilt and installed. Details: [
 |---|---|---|---|---|
 | SQ-MRD-01 | B | `/dumpgear` knives | Wooden Knife 1.5 / 2.0, mining speed 2, level 0; Stone Knife 2.5 / 2.0, speed 4, level 1 | tuneTools |
 | SQ-MRD-02 | B | `/dumpfood` | Toast, the 5 topped toasts, Caviar Toast and Cheese Toast flagged fast; Cheese Toast 5 hunger, 0.7 | CD `moredelight/toast.js` |
-| SQ-MRD-03 | B | `/dumpall` recipe dump, `/dumptags` | `creative_delight:...cheese_toast` shapeless (Toast + Flaxen Cheese Wedge); `forge:sliced_potato` and `forge:sliced_potatoes` both hold Rustic's slices (More Delight's six potato recipes read the plural, `dishes/ingredients #26`); the four renamed pack tags filled | tags |
+| SQ-MRD-03 | B | `/dumpall` recipe dump, `/dumptags` | `creativedelight:...cheese_toast` shapeless (Toast + Flaxen Cheese Wedge); `forge:sliced_potato` and `forge:sliced_potatoes` both hold Rustic's slices (More Delight's six potato recipes read the plural, `dishes/ingredients #26`); the four renamed pack tags filled | tags |
 
 ## Food family recipe helpers (food_families.md 4.5)
 
@@ -1482,8 +1535,8 @@ Needs the Creative Delight jar rebuilt and installed (`:creativeDelight:build`, 
 | ID | Group | Action | Expect | Depends on |
 |---|---|---|---|---|
 | SQ-FFH-01 | B | Retired 2026-10-27: `global.foodFamily` is deleted (PASSED before, run log). Its dump diff is SQ-FFH-02 now | - | - |
-| SQ-FFH-02 | B | Rewritten 2026-10-27 (callers moved to `global.CD.food`, creative_delight.md 30); the 2026-10-27 CD jar is installed and in 1.1.04, so this is the dump diff only: boot, `/dumpall`, then diff the recipe dump against the 10-26 one | No `cd_food.js` or `global.CD.food` error in `logs/latest.log`. Every `creative_delight:baking/` id and the muffin `farmersdelightcooking/` ids unchanged; new: `farmersdelightcutting/<meat>_from_culture_<x>` (7, replacing `culture_*_by_fdcutting`) and `{smelting,smoking,campfirecooking}/cooked_calamari[_slice]_from_glowing_calamari[_slice]` (6, replacing `cooked_glowing_calamari*`); one Cooking Pot muffin recipe per muffin (no duplicate id error); nothing else gone | CD jar; creative_delight.md 30 |
-| SQ-FFH-03 | A | Added 2026-10-30. After the `CD.food` `assemble` fix (an array step became a filling step with fluid `minecraft:empty`, creative_delight.md 30): boot, grep `logs/kubejs/server.log`, `/dumpall` recipe dump | No `Error parsing recipe creative_delight:createsequencedassembly/zucchini_quiche_sequenced_assembly`; that id is in the recipe dump: pie crust base, 3 roasted zucchini deploys, one cooked-meat deploy (any of 5), 250 mB milk fill | SQ-FFH-02 |
+| SQ-FFH-02 | B | Rewritten 2026-10-27 (callers moved to `global.CD.food`, creative_delight.md 30); the 2026-10-27 CD jar is installed and in 1.1.04, so this is the dump diff only: boot, `/dumpall`, then diff the recipe dump against the 10-26 one | No `cd_food.js` or `global.CD.food` error in `logs/latest.log`. Every `creativedelight:baking/` id and the muffin `farmersdelightcooking/` ids unchanged; new: `farmersdelightcutting/<meat>_from_culture_<x>` (7, replacing `culture_*_by_fdcutting`) and `{smelting,smoking,campfirecooking}/cooked_calamari[_slice]_from_glowing_calamari[_slice]` (6, replacing `cooked_glowing_calamari*`); one Cooking Pot muffin recipe per muffin (no duplicate id error); nothing else gone | CD jar; creative_delight.md 30 |
+| SQ-FFH-03 | A | Added 2026-10-30. After the `CD.food` `assemble` fix (an array step became a filling step with fluid `minecraft:empty`, creative_delight.md 30): boot, grep `logs/kubejs/server.log`, `/dumpall` recipe dump | No `Error parsing recipe creativedelight:createsequencedassembly/zucchini_quiche_sequenced_assembly`; that id is in the recipe dump: pie crust base, 3 roasted zucchini deploys, one cooked-meat deploy (any of 5), 250 mB milk fill | SQ-FFH-02 |
 
 ## Storage Delight additions (storage_delight.md section 5)
 
@@ -1500,11 +1553,11 @@ Needs the Creative Delight jar rebuilt and installed (`:creativeDelight:build`, 
 
 | ID | Group | Action | Expect | Depends on |
 |---|---|---|---|---|
-| SQ-ABD-01 | B | Boot, then `/dumpall` and look up `abnormals_delight:upgrade_aquatic/cooked_perch_slice` and `.../cooked_pike_slice` | Both gone; `creative_delight:smelting/cooked_perch_slice` and `.../cooked_pike_slice` present, experience 0.35, cookingtime 200, same input and output; the smoking and campfire recipes unchanged; no error in `logs/latest.log` | CD jar |
-| SQ-ABD-02 | B | Same boot: look up the salvaging ids in the dump | `abnormals_delight:upgrade_aquatic/cutting/driftwood_door`, `_sign`, `_trapdoor` gone; `creative_delight:farmersdelightcutting/salvaging/driftwood_furniture` (10 items incl. `abnormals_delight:driftwood_cabinet`, 0.75 driftwood planks, axe), `.../driftwood_chest_boat`, `.../driftwood_furnace_boat`, `.../<wood>_furnace_boat` for the 9 vanilla woods (crimson and warped give `boatload:` boats), `.../crimson_boat`, `.../warped_boat`, `.../crimson_chest_boat`, `.../warped_chest_boat` present; no `fdCutting` warning in `logs/latest.log` | CD jar |
-| SQ-ABD-03 | B | Same boot | `abnormals_delight:neapolitan/adzuki_curry` gone; `creative_delight:shapeless/adzuki_curry_cooked_manual_only` takes roasted adzuki beans, dried banana, `#forge:crops/carrot`, pumpkin slice, bowl; `abnormals_delight:neapolitan/cooking/adzuki_curry` unchanged | CD jar |
-| SQ-ABD-04 | B | Same boot; `/dumptags` or the tag dump | `#creativeengineering:pickerelweed` = blue + purple; `abnormals_delight:pickerelweed_juice` and `pike_with_beetroot` gone; `creative_delight:farmersdelightcooking/pickerelweed_juice` and `.../pike_with_beetroot` take that tag twice, 1.0 xp, 200 ticks | CD jar |
-| SQ-ABD-05 | B | Same boot | `neapolitan:milk/milk_bottles_from_bucket` and `milk_bucket_from_bottles` gone; `creative_delight:shapeless/milk_bottles_from_bucket` (`#forge:buckets/milk` + 4 glass bottles -> 4 `farmersdelight:milk_bottle`) and `.../milk_bucket_from_bottles` (bucket + 4 `#forge:bottles/milk` -> milk bucket) present | CD jar |
+| SQ-ABD-01 | B | Boot, then `/dumpall` and look up `abnormals_delight:upgrade_aquatic/cooked_perch_slice` and `.../cooked_pike_slice` | Both gone; `creativedelight:smelting/cooked_perch_slice` and `.../cooked_pike_slice` present, experience 0.35, cookingtime 200, same input and output; the smoking and campfire recipes unchanged; no error in `logs/latest.log` | CD jar |
+| SQ-ABD-02 | B | Same boot: look up the salvaging ids in the dump | `abnormals_delight:upgrade_aquatic/cutting/driftwood_door`, `_sign`, `_trapdoor` gone; `creativedelight:farmersdelightcutting/salvaging/driftwood_furniture` (10 items incl. `abnormals_delight:driftwood_cabinet`, 0.75 driftwood planks, axe), `.../driftwood_chest_boat`, `.../driftwood_furnace_boat`, `.../<wood>_furnace_boat` for the 9 vanilla woods (crimson and warped give `boatload:` boats), `.../crimson_boat`, `.../warped_boat`, `.../crimson_chest_boat`, `.../warped_chest_boat` present; no `fdCutting` warning in `logs/latest.log` | CD jar |
+| SQ-ABD-03 | B | Same boot | `abnormals_delight:neapolitan/adzuki_curry` gone; `creativedelight:shapeless/adzuki_curry_cooked_manual_only` takes roasted adzuki beans, dried banana, `#forge:crops/carrot`, pumpkin slice, bowl; `abnormals_delight:neapolitan/cooking/adzuki_curry` unchanged | CD jar |
+| SQ-ABD-04 | B | Same boot; `/dumptags` or the tag dump | `#creativeengineering:pickerelweed` = blue + purple; `abnormals_delight:pickerelweed_juice` and `pike_with_beetroot` gone; `creativedelight:farmersdelightcooking/pickerelweed_juice` and `.../pike_with_beetroot` take that tag twice, 1.0 xp, 200 ticks | CD jar |
+| SQ-ABD-05 | B | Same boot | `neapolitan:milk/milk_bottles_from_bucket` and `milk_bucket_from_bottles` gone; `creativedelight:shapeless/milk_bottles_from_bucket` (`#forge:buckets/milk` + 4 glass bottles -> 4 `farmersdelight:milk_bottle`) and `.../milk_bucket_from_bottles` (bucket + 4 `#forge:bottles/milk` -> milk bucket) present | CD jar |
 
 ## Farmer's Structures donor (farmers_structures.md section 5)
 
@@ -1531,7 +1584,7 @@ the merge): restart. Then `/dumpfood`, `/cegen run` the can generator, restart a
 |---|---|---|---|---|
 | SQ-CDB-01 | A | Boot; `logs/latest.log` | No startup or server script error for `glow_calamari.js`, `veggies_items.js`, `vintage_items.js`, `minecraft/recipes.js`, `miners_delight/*.js`, `oceansdelight/recipes.js`; `[itemMerges]` count one higher | |
 | SQ-CDB-02 | A | `/dumpall`; look up the four `#creativeengineering:sweeteners` tags and sugar recipes | Cooking (pumpkin pie, a Fruits Delight jam) takes all five; drinks (`farmersdelight:cooking/hot_cocoa`, a Fruits Delight tea mix, a Create DD milkshake mix) sugar, powdered sugar, honey bottle; Brewin' keg recipes all but glycerol; Botania mana powder, a Pretty Pipes module, the fermented spider eye jar recipe sugar or powdered sugar; powdered sugar and the sugar cube plain sugar (RC-25) | |
-| SQ-CDB-03 | A | Same dump: `creative_delight:farmersdelightcutting/squid_to_calamari`, `glow_squid_to_calamari`, `baked_squid_to_calamari`; `miners_delight` squid cuts | The three present (calamari 1 + 50 %, ink 1 + 50 % 2); no Miner's squid-to-tentacles cut | |
+| SQ-CDB-03 | A | Same dump: `creativedelight:farmersdelightcutting/squid_to_calamari`, `glow_squid_to_calamari`, `baked_squid_to_calamari`; `miners_delight` squid cuts | The three present (calamari 1 + 50 %, ink 1 + 50 % 2); no Miner's squid-to-tentacles cut | |
 | SQ-CDB-04 | A | Summon a squid and a glow squid, kill each with a sword, then with a knife (DA-05, DA-06) | One squid item / glow squid item each kill; no ink sac, calamari or tentacles | |
 | SQ-CDB-05 | A | JEI: Glowing Calamari line | 3 items with the palette-swapped sprites (Pickled Sea Pickle too); cut, roll recipes; furnace, smoker and campfire give Cooked Calamari; fried calamari lists glowing calamari | |
 | SQ-CDB-06 | A | Fill a jar with a lava bottle, then empty it | Lava goes in and comes back out into a glass bottle | |
@@ -1613,7 +1666,7 @@ MG-29 and MG-31 in game.
 
 | ID | World | What to do and look at | Existing test |
 |---|---|---|---|
-| SQ-SALT-01 | any | latest.log: `[itemMerges]` counts include the two salt pairs, no script error; no loaded recipe takes or makes the items `salt:salt`, `vintagedelight:salt_block` or `vintagedelight:salt_bucket`. The recipe id `vintagedelight:salt_block` stays on purpose (item_merges.md 2.9: any `#forge:salt` x9 -> `salt:salt_block`; the 2026-10-27 FAIL read the id as the item); `salt:salt_packing`, `vintagedelight:salt_block_deconstruct`, `vintagedelight:salt_from_smelting`, `vintagedelight:salt_bucket_to_salt`, `salt:salt_lamp` gone; `creative_delight:shaped/large_salt_lamp` present | MG-30, MG-31 |
+| SQ-SALT-01 | any | latest.log: `[itemMerges]` counts include the two salt pairs, no script error; no loaded recipe takes or makes the items `salt:salt`, `vintagedelight:salt_block` or `vintagedelight:salt_bucket`. The recipe id `vintagedelight:salt_block` stays on purpose (item_merges.md 2.9: any `#forge:salt` x9 -> `salt:salt_block`; the 2026-10-27 FAIL read the id as the item); `salt:salt_packing`, `vintagedelight:salt_block_deconstruct`, `vintagedelight:salt_from_smelting`, `vintagedelight:salt_bucket_to_salt`, `salt:salt_lamp` gone; `creativedelight:shaped/large_salt_lamp` present | MG-30, MG-31 |
 | SQ-SALT-02 | same | `#forge:salts`, `#forge:salt`, `#forge:dusts` hold salt dust and not `salt:salt`; Salting craft accepts salt dust | MG-32 |
 | SQ-SALT-03 | same | Give `salt:salt 3`, `vintagedelight:salt_block 1`: swapped to 3 salt dust, 1 `salt:salt_block`. Evaporate a full water cauldron 20 times: only salt dust | MG-32, MG-33 |
 | SQ-SALT-04 | new world | `/place feature vintagedelight:patch_salt` on a beach 10 times: layers on `salt:raw_rock_salt_block`, no `salt:salt_block` / `vintagedelight:salt_block`; after 5 min at `randomTickSpeed 300` no rock salt next to water is gone | MG-34 |
@@ -1841,12 +1894,12 @@ startup and server files, both in the scratch `mods/`; KubeJS working tree. Grou
 
 | ID | World | Commands | Expected | If it fails |
 |---|---|---|---|---|
-| SQ-IMS-01 | A | Boot; grep latest.log for `[itemMerges]` | `1 pack merges registered` at startup (woods join after); in the recipe event `pack: 93 merges, N recipes swapped` then `creative_delight: 14 merges, N recipes swapped`, each once; no `already merged`, `already ran`, `chains with` line; no `Error occurred while handling event` from an `item_merges.js` | A group logged twice: the guard keyed on `e.hashCode()` failed; `replaceItems is not a function`: the old patcherMod jar is in `mods/` |
+| SQ-IMS-01 | A | Boot; grep latest.log for `[itemMerges]` | `1 pack merges registered` at startup (woods join after); in the recipe event `pack: 93 merges, N recipes swapped` then `creativedelight: 14 merges, N recipes swapped`, each once; no `already merged`, `already ran`, `chains with` line; no `Error occurred while handling event` from an `item_merges.js` | A group logged twice: the guard keyed on `e.hashCode()` failed; `replaceItems is not a function`: the old patcherMod jar is in `mods/` |
 | SQ-IMS-02 | A | Time the recipe event: `RecipeManager` / KubeJS `recipes` lines in latest.log, against the 2026-10-27 perf eval (12.2 s KubeJS recipe events) | Shorter by several seconds | Not shorter: JFR the recipe event (`perf.md` 3) and look for `replaceItems` |
 | SQ-IMS-03 | A | `/mgcore`; `/fdtest coffee`; `/reload`, then both again | Same PASS lines as SQ-MG-10 and SQ-CO-01 before the split (banana, milk bottle, chocolate cake, diced potatoes, rocky dirt, coffee recipes and loot); after `/reload` the same, and the two `[itemMerges]` recipe lines once each | A recipe still names a purged id: `/recipescan` and check which group the pair is in (pack recipes added after priority -100, or CD recipes naming a pack pair) |
-| SQ-IMS-04 | A | `/recipescan` (recipe_scan.js), grep `[jeiRemove]` for every purged id (banana, milk bottle, chocolate cake, diced potatoes, rocky dirt, the 7 coffee ids, pickled pickles, The Salt's salt, Vintage's salt block, a river wood id) | No recipe names a purged id; Gambler's Tea and the chocolate cake cutting recipe now under `creative_delight:` | A purged id left: the pair's group never ran (CD jar missing or member gate) |
+| SQ-IMS-04 | A | `/recipescan` (recipe_scan.js), grep `[jeiRemove]` for every purged id (banana, milk bottle, chocolate cake, diced potatoes, rocky dirt, the 7 coffee ids, pickled pickles, The Salt's salt, Vintage's salt block, a river wood id) | No recipe names a purged id; Gambler's Tea and the chocolate cake cutting recipe now under `creativedelight:` | A purged id left: the pair's group never ran (CD jar missing or member gate) |
 
-Results 2026-10-27 night (overall run, Creative Delight 17:20 then 18:43): SQ-IMS-01 PASS (`pack: 93 merges, 2 recipes swapped`, `creative_delight: 14 merges, 29 recipes swapped`, once per load, no guard lines or errors). SQ-IMS-02 PASS: recipe event 2.7 s (`wgp_new` 9.7 s), `/reload` 9-10 s (28 s). SQ-IMS-03 PASS: `/fdtest coffee` 19/0; `/mgcore` 33/0 after its stale rows were updated (merge count, 4-bottle milk recipes, cake id), the same after `/reload`. SQ-IMS-04 FAIL (salt pair only): `vintagedelight:salt_block` input of 3 Vintage froglight fermenting recipes, `vintagedelight:salt_bucket` output of `tactical_fishing:fishing_vintagedelight_salt_bucket`; no other purged id (see SQ-SALT-01).
+Results 2026-10-27 night (overall run, Creative Delight 17:20 then 18:43): SQ-IMS-01 PASS (`pack: 93 merges, 2 recipes swapped`, `creativedelight: 14 merges, 29 recipes swapped`, once per load, no guard lines or errors). SQ-IMS-02 PASS: recipe event 2.7 s (`wgp_new` 9.7 s), `/reload` 9-10 s (28 s). SQ-IMS-03 PASS: `/fdtest coffee` 19/0; `/mgcore` 33/0 after its stale rows were updated (merge count, 4-bottle milk recipes, cake id), the same after `/reload`. SQ-IMS-04 FAIL (salt pair only): `vintagedelight:salt_block` input of 3 Vintage froglight fermenting recipes, `vintagedelight:salt_bucket` output of `tactical_fishing:fishing_vintagedelight_salt_bucket`; no other purged id (see SQ-SALT-01).
 
 ## Biome tuner disk cache, 2026-10-27
 
@@ -1904,7 +1957,7 @@ Results 2026-10-27 night (overall run, perf.md 12): SQ-PERFCFG-01 PASS (ModernFi
 
 ## Pack hygiene owner batch, 2026-10-27 ([pack_hygiene.md](../pack_hygiene.md) 8, findings 9, 10, 20, 25 to 28, 36 to 49, 51)
 
-Jars installed 22:50: patcherMod 1.1.03, creative_delight 1.0.0, backportedBrewin -03, backportedVinery -04,
+Jars installed 22:50: patcherMod 1.1.03, creativedelight 1.0.0, backportedBrewin -03, backportedVinery -04,
 backportedMiners -01, creativeLabels 1.0.0, moreMooblooms 1.1.0, incubationAdditions 1.1.0 (copy them into the scratch
 `mods/`); KubeJS working tree (item dict keys dropped: restart, not `/reload`). Group A. Baseline: the committed
 `kubejs/exported/` dumps, diff with `git show HEAD:<path>`.
@@ -1920,7 +1973,7 @@ backportedMiners -01, creativeLabels 1.0.0, moreMooblooms 1.1.0, incubationAddit
 | PH-22 | A | Rename `miners_upstream/` away, boot; put it back | Stops with the same message as before, naming the folder and URL | `DonorJars.verifyOrFail` texts |
 | PH-23 | A | `/datapack list`; `/locate structure` a Farmer's Structures farm | `farmers_structures_donor` listed; the farm locates | `BuiltInPacks.addMemory` in `FarmersDonor` |
 | PH-24 | A | `/dumpall`; then `python3 tools/dump_server_mods.py --dry-run` | `/dumpall` ends with no `dumpservermods` step; the dry run lists the server jars, no warnings | `dump_all.js`, mod_sides.md |
-| PH-25 | A | `/dumprecipes` and `/dumptags`; diff against HEAD | Only the 7 `creative_delight:farmersdelightcooking/*_culture_cooking` recipes added (culture, bone meal, cooking oil to 3); no recipe or tag member lost; felsic deploying and the coil recipes unchanged | a rewritten key that resolves to a different id |
+| PH-25 | A | `/dumprecipes` and `/dumptags`; diff against HEAD | Only the 7 `creativedelight:farmersdelightcooking/*_culture_cooking` recipes added (culture, bone meal, cooking oil to 3); no recipe or tag member lost; felsic deploying and the coil recipes unchanged | a rewritten key that resolves to a different id |
 | PH-26 | A | Boot log `[crop-drops]` | `rewrote 1 of 1` (Rustic Delight bell pepper drops, now in CD) | CD `rusticdelight/crop_drops.js` member switch |
 
 In-game checks PH-27 to PH-37 are in pack_hygiene.md 8 (they need a player).
@@ -1947,7 +2000,7 @@ Results: not run yet.
 
 ## Pack hygiene 3.1 and 3.2: cleanups and version gates, 2026-10-27 ([pack_hygiene.md](../pack_hygiene.md) 8, findings 1 to 8, 19, 21, 50, 52, 54, 55)
 
-patcherMod 1.1.03 (18:44), creative_delight-1.0.0 (18:43) and backportedVinery-1.5.5-ce-19.2-04 (18:44) in the scratch
+patcherMod 1.1.03 (18:44), creativedelight-1.0.0 (18:43) and backportedVinery-1.5.5-ce-19.2-04 (18:44) in the scratch
 `mods/`; KubeJS working tree (item dict edited: restart, not `/reload`). Group B for PH-09 (worldgen staging), group A
 for the rest. Build the CD jar with `-Pcd_test_suite` for PH-11.
 
@@ -1955,7 +2008,7 @@ for the rest. Build the CD jar with `-Pcd_test_suite` for PH-11.
 |---|---|---|---|---|
 | PH-09 | B | Boot; grep latest.log for `[structure` / `structure tuning`, `bee`, `mob spawn`, `wild flowers`, `mushroom`, `wild_crops`, `Error occurred while handling event`, `older jar`, `old jar` | Each worldgen script logs its usual summary (structure tuning summary and report written, bee nests `rule/biome pairs checked; ...` with BeeNests' summary, mob spawns with SpawnTuning's summary); no `older jar` text; no event errors | A `Java.loadClass` at script top failed: the class name or package moved; a `stage(...)` threw: the json shape changed |
 | PH-10 | A | `/dumpbeenests`, `/dumpspawns`, `/dumpstructuregen` | Each reports success and writes its files; the structuregen dump has `locate_offset`, `salt`, `frequency_reduction_method` per set | The dump script's top-level `loadClass` failed (see the log) |
-| PH-11 | A | `/cdtest startup`; grep for `[creative_delight] core finished`, `[trades]`, `Wandering Winemaker pool not reachable`, `BnCHeatSources` | All PASS (no `NCH apiVersion` check any more); CD core finished with its members; no Winemaker pool warning; no `IllegalStateException` from `WineYears` | cdtest: see SQ-CDT-02; Winemaker warning: the port's class name changed; WineYears: Brewin' port lost `climate(Level, BlockPos)` |
+| PH-11 | A | `/cdtest startup`; grep for `[creativedelight] core finished`, `[trades]`, `Wandering Winemaker pool not reachable`, `BnCHeatSources` | All PASS (no `NCH apiVersion` check any more); CD core finished with its members; no Winemaker pool warning; no `IllegalStateException` from `WineYears` | cdtest: see SQ-CDT-02; Winemaker warning: the port's class name changed; WineYears: Brewin' port lost `climate(Level, BlockPos)` |
 
 In-game checks PH-12 to PH-15 are in pack_hygiene.md 8 (they need a player).
 
@@ -2022,16 +2075,16 @@ names, JEI and wild-patch looks are MG-39 to MG-44 in game.
 
 | ID | World | What to do and look at | Existing test |
 |---|---|---|---|
-| SQ-CM-01 | any | latest.log: `[itemMerges] creative_delight` count up by 3 (cantaloupe pairs), no script error from `fruitsdelight/item_merges.js`, `veggies_foods.js`, `canning.js`; no loaded recipe makes `creativeengineering:canned_hamimelon` or `fruitsdelight:hamimelon_popsicle` or takes `fruitsdelight:hamimelon_slice` | MG-39 |
-| SQ-CM-02 | same | Recipe lookups: `fruitsdelight:hamimelon_seeds` takes the cantaloupe slice; `creative_delight:shaped/mini_cantaloupe`, `shapeless/mini_cantaloupe_seeds`, `shapeless/cantaloupe_seeds_from_mini` exist; `creative_delight:shapeless/cantaloupe_seeds` is gone, Delightful's two popsicle recipes stay and `fruitsdelight:hamimelon_popsicle` makes nothing | MG-41 |
+| SQ-CM-01 | any | latest.log: `[itemMerges] creativedelight` count up by 3 (cantaloupe pairs), no script error from `fruitsdelight/item_merges.js`, `veggies_foods.js`, `canning.js`; no loaded recipe makes `creativeengineering:canned_hamimelon` or `fruitsdelight:hamimelon_popsicle` or takes `fruitsdelight:hamimelon_slice` | MG-39 |
+| SQ-CM-02 | same | Recipe lookups: `fruitsdelight:hamimelon_seeds` takes the cantaloupe slice; `creativedelight:shaped/mini_cantaloupe`, `shapeless/mini_cantaloupe_seeds`, `shapeless/cantaloupe_seeds_from_mini` exist; `creativedelight:shapeless/cantaloupe_seeds` is gone, Delightful's two popsicle recipes stay and `fruitsdelight:hamimelon_popsicle` makes nothing | MG-41 |
 | SQ-CM-03 | same | `#creativeengineering:exotic_fruit` holds `delightful:cantaloupe_slice`; `#forge:seeds` holds `fruitsdelight:hamimelon_seeds`; `#forge:pasta` holds `veggiesdelight:potato_noodle` | MG-43 |
 | SQ-CM-04 | same | Pasta: every recipe that took `farmersdelight:raw_pasta` or `#forge:pasta/raw_pasta` (FD pasta dishes, Brewin's cheesy pasta, More Delight, Alex's Delight pastas) now takes `#forge:pasta`; count the swapped recipes, none left naming raw pasta alone | none (TODO `dishes/meals #38`) |
 | SQ-CM-05 | same | Food values (the 1.1.04 check, PASSED 2026-10-28 at 11; the 12 of 2026-10-29 is SQ-CM-21): `veggiesdelight:coleslaw` nutrition 11, modifier 0.6, Comfort kept; `veggiesdelight:fermented_garlic_honey` Regeneration amplifier 1 100 ticks, Health Boost amplifier 1 600 ticks, nothing else | none (TODO `dishes/pickles-and-ferments #10`) |
-| SQ-CM-06 | same | Recipes: `endersdelight:shulker_bowl` gone, `creative_delight:shapeless/shulker_bowl` shell -> 12; `vintagedelight:bread_from_smelting` and `bread_from_smoking` absent, no campfire bread from oat dough, oven `bread_from_dough_1`, `_3`, `_6` present (oat dough bakes in each), `sourdough_bread_1/3/6` make sourdough bread and sourdough never makes plain bread; `creative_delight:shapeless/overnight_oats` present | none (TODO `recipes/cooking #4`, `baking/baked-goods #29`, `dishes/meals #22`) |
+| SQ-CM-06 | same | Recipes: `endersdelight:shulker_bowl` gone, `creativedelight:shapeless/shulker_bowl` shell -> 12; `vintagedelight:bread_from_smelting` and `bread_from_smoking` absent, no campfire bread from oat dough, oven `bread_from_dough_1`, `_3`, `_6` present (oat dough bakes in each), `sourdough_bread_1/3/6` make sourdough bread and sourdough never makes plain bread; `creativedelight:shapeless/overnight_oats` present | none (TODO `recipes/cooking #4`, `baking/baked-goods #29`, `dishes/meals #22`) |
 | SQ-CM-07 | same | `felsic_sword` max damage 2501. `creativeengineering:strong_phantom_bane` not in the potion registry, no brewing mix with glowstone on Phantom Bane, base and long present; latest.log no `[CE potions]` error | none (gear_tuning F9, armor_effects F7) |
 | SQ-CM-08 | new world | Echo set on a player (or fake player): Night Vision and Phantom Bane amplifier 0 | AE-10 (expected now 0) |
-| SQ-CM-10 | any | `creative_delight:...` oven/knife check: `zq makes minecraft:bread` shows the knife cut of `sourdough_bread` giving 3 Bread (was 2); `vintagedelight:fermenting/{ochre,verdant,pearlescent}_froglight_from_fermenting` take `salt:salt_block` and are present once; `tactical_fishing:fishing_vintagedelight_salt_bucket` and `fishing_creativeengineering_powdered_sugar_bucket` absent (retest of SQ-SALT-01 leftovers) | none |
-| SQ-CM-09 | new world | `/place feature creative_delight:wild/mini_cantaloupe` in a desert 10 times: Mini Cantaloupe blocks on sand / red sand / terracotta; biome tag `creative_delight:wild_crops/cantaloupe` lists deserts and badlands, no savanna | MG-44 |
+| SQ-CM-10 | any | `creativedelight:...` oven/knife check: `zq makes minecraft:bread` shows the knife cut of `sourdough_bread` giving 3 Bread (was 2); `vintagedelight:fermenting/{ochre,verdant,pearlescent}_froglight_from_fermenting` take `salt:salt_block` and are present once; `tactical_fishing:fishing_vintagedelight_salt_bucket` and `fishing_creativeengineering_powdered_sugar_bucket` absent (retest of SQ-SALT-01 leftovers) | none |
+| SQ-CM-09 | new world | `/place feature creativedelight:wild/mini_cantaloupe` in a desert 10 times: Mini Cantaloupe blocks on sand / red sand / terracotta; biome tag `creativedelight:wild_crops/cantaloupe` lists deserts and badlands, no savanna | MG-44 |
 
 ## Perf suite and bot players, 2026-10-28 ([perf_suite.md](../perf_suite.md), TODO `server #28`)
 
@@ -2145,7 +2198,7 @@ client (LB-01 to LB-13). Jars: patcherMod 1.1.04 and Creative Delight 1.0.0 from
 | ID | Group | Commands | Pass | If it fails |
 |---|---|---|---|---|
 | SQ-LB-01 | A | boot; console: `summon item 0 100 0 {Item:{id:"solapplepie:netherite_lunchbox",Count:1b},NoGravity:1b}`, then `execute if entity @e[type=item,nbt={Item:{id:"solapplepie:netherite_lunchbox"}}]` | the test prints `Test passed`; boot log has no `InvalidInjectionException` / `Mixin apply failed` naming `AlexsMobsSeagull`; `latest.log` has no `Unknown item 'solapplepie:netherite_lunchbox'`; the id resolves | mixin target names changed in Alex's Mobs: javap `SeagullAIStealFromPlayers.isBlacklisted`, `EntitySeagull.canTargetItem`; item: `LunchboxItems` registered only with solapplepie loaded |
-| SQ-LB-02 | A | boot; grep `server.log` for `lunchbox` after the recipe load | no `Error occurred while handling event` or `[NCH]` warning from `solapplepie/lunchboxes.js`; no `Parsing error loading recipe creative_delight:` for the 6 lunchbox recipes (`shaped/...lunchbox...`, `smithing/...`, `smithing/lunchbox_skin`, `lunchbox/lunchbox_dye`, `lunchbox/lunchbox_soap`); `solapplepie:lunchbox` / `golden_lunchbox` recipes removed | serializer id typo (`LunchboxRecipes`), or `global.CD` missing (CD jar not copied) |
+| SQ-LB-02 | A | boot; grep `server.log` for `lunchbox` after the recipe load | no `Error occurred while handling event` or `[NCH]` warning from `solapplepie/lunchboxes.js`; no `Parsing error loading recipe creativedelight:` for the 6 lunchbox recipes (`shaped/...lunchbox...`, `smithing/...`, `smithing/lunchbox_skin`, `lunchbox/lunchbox_dye`, `lunchbox/lunchbox_soap`); `solapplepie:lunchbox` / `golden_lunchbox` recipes removed | serializer id typo (`LunchboxRecipes`), or `global.CD` missing (CD jar not copied) |
 
 ## Food batch: powdered sugar, batter, meals, coasters, 2026-10-29 ([food.md](../food.md) 3.13, 3.15; [briefs/dishes_meals.md](../briefs/dishes_meals.md); [kitchen.md](../kitchen.md) 2.3)
 
@@ -2153,14 +2206,14 @@ Jars: Creative Delight and patcherMod rebuilt 2026-10-29 (see the session hand-o
 
 | ID | Group | Commands | Pass | If it fails |
 |---|---|---|---|---|
-| SQ-PS-05 | A | boot; recipe probe (RecipeManager id dump) | `creative_delight:vivacuumizing/powdered_sugar_bucket` has bucket + 4 sugar; `createcrushing/` and `createmilling/sugar_powdered_sugar` each have 2 results (second at chance 0.5); `mortar/sugar_powdered_sugar` takes 3 sugar and gives 4; `shapeless/powdered_sugar_from_bucket` gives 8; `shapeless/powdered_sugar_bucket_from_powder` exists; no `tactical_fishing:fishing_creativeengineering_powdered_sugar_bucket`; `rusticdelight:cooking/batter`, `sliceanddice:cooking/rusticdelight/cooking/batter` and `creative_delight:createmixing/batter_egg_solution` grain slots list wheat flour, cornmeal and `farmersdelight:rice`; no `[NCH]` errors | food.md 3.13, 3.15 (`dishes/ingredients #23`, `#24`) |
-| SQ-CM-20 | A | same probe | `creative_delight:shapeless/field_salad_manual_only` and `field_salad_flowers_manual_only` exist, `delightful:food/field_salad` does not; tags `#creativeengineering:field_salad/root` (5), `/nut` (acorn, peanut), `/green` (8) resolve | RC-160 |
+| SQ-PS-05 | A | boot; recipe probe (RecipeManager id dump) | `creativedelight:vivacuumizing/powdered_sugar_bucket` has bucket + 4 sugar; `createcrushing/` and `createmilling/sugar_powdered_sugar` each have 2 results (second at chance 0.5); `mortar/sugar_powdered_sugar` takes 3 sugar and gives 4; `shapeless/powdered_sugar_from_bucket` gives 8; `shapeless/powdered_sugar_bucket_from_powder` exists; no `tactical_fishing:fishing_creativeengineering_powdered_sugar_bucket`; `rusticdelight:cooking/batter`, `sliceanddice:cooking/rusticdelight/cooking/batter` and `creativedelight:createmixing/batter_egg_solution` grain slots list wheat flour, cornmeal and `farmersdelight:rice`; no `[NCH]` errors | food.md 3.13, 3.15 (`dishes/ingredients #23`, `#24`) |
+| SQ-CM-20 | A | same probe | `creativedelight:shapeless/field_salad_manual_only` and `field_salad_flowers_manual_only` exist, `delightful:food/field_salad` does not; tags `#creativeengineering:field_salad/root` (5), `/nut` (acorn, peanut), `/green` (8) resolve | RC-160 |
 | SQ-CM-21 | A | same probe | `veggiesdelight:coleslaw` nutrition 12, modifier 0.6; `alexsmobs:shrimp_fried_rice` nutrition 20, modifier 0.6, Comfort 4800 ticks | RC-161, RC-163 |
-| SQ-CM-22 | A | same probe | `creative_delight:shapeless/cucumber_dough` takes `#creativeengineering:veggie_noodle_veg` (6 items); `vintagedelight:cucumber_dough` gone | RC-162 |
-| SQ-CM-23 | A | same probe | `creative_delight:farmersdelightcooking/shrimp_fried_rice` takes Fried Rice + 2 `#forge:shrimps` | RC-163 |
+| SQ-CM-22 | A | same probe | `creativedelight:shapeless/cucumber_dough` takes `#creativeengineering:veggie_noodle_veg` (6 items); `vintagedelight:cucumber_dough` gone | RC-162 |
+| SQ-CM-23 | A | same probe | `creativedelight:farmersdelightcooking/shrimp_fried_rice` takes Fried Rice + 2 `#forge:shrimps` | RC-163 |
 | SQ-CM-24 | A | same probe | no recipe outputs `neapolitan:strawberry_banana_smoothie`; no errors from the edited CD scripts | RC-164 |
 | SQ-KT-21 | A | boot with current kubejs | latest.log has `[placeable] ... placeable_on_coaster=` with the new count and no `not item ids` warning; a Coaster accepts `vinery:red_wine`, `farmersdelight:hamburger`, `farmersrespite:long_black_tea`, refuses `fruitsdelight:apple_jelly`, `goldenfood:golden_cookie` | kitchen.md 2.3, KT-20 (client half KT-19) |
-| SQ-BJ-01 | A | boot after the CD and Vintage `-09` install; recipe dump | no `farmersdelight:cooking` output of `fruitsdelight:blueberry_muffin`, `cranberry_muffin` or `veggiesdelight:sweet_potato_cupcake`; `creative_delight:farmersdelightcooking/{green_grape,red_grape,cherry}_jam_jar` exist, count 2, container `vintagedelight:empty_mason_jar`; no recipe outputs the 6 removed jam items | RC-172 to RC-175, OV-36 |
+| SQ-BJ-01 | A | boot after the CD and Vintage `-09` install; recipe dump | no `farmersdelight:cooking` output of `fruitsdelight:blueberry_muffin`, `cranberry_muffin` or `veggiesdelight:sweet_potato_cupcake`; `creativedelight:farmersdelightcooking/{green_grape,red_grape,cherry}_jam_jar` exist, count 2, container `vintagedelight:empty_mason_jar`; no recipe outputs the 6 removed jam items | RC-172 to RC-175, OV-36 |
 | SQ-BJ-02 | A | same | `farmersdelight:chicken_sandwich` and the `moredelight` slice sandwiches list `#forge:bread`; `moredelight` bread_slice cutting and `canned_goods:canned_bread` keep their own input; no errors from `bread_recipes.js` or `jams.js` | RC-170, RC-171 |
 | SQ-BJ-03 | A | same; tag dump | `vintagedelight:relish_jar` not in `#forge:jam_jars` or `#vintagedelight:savory_jam`; the 3 new jars in `#forge:jams` | RC-174 |
 
@@ -2180,12 +2233,12 @@ Script-only except the Storage Delight name (repackedStorage jar rebuilt 2026-10
 | ID | Group | Commands | Pass | If it fails |
 |---|---|---|---|---|
 | SQ-CM-30 | A | boot with current kubejs; recipe id dump | no recipe outputs or takes `rusticdelight:fruit_beignet`; no errors from `rusticdelight/recipes.js` or `removed_items.js` | `creativedelight/members #22` |
-| SQ-CM-31 | A | same probe | `oceansdelight:seagrass_salad` recipe is `creative_delight:shapeless/seagrass_salad` with 2 `minecraft:seagrass` + bowl; no tentacle item (`miners_delight:tentacles`, `baked_tentacles`, `tentacles_on_a_stick`, `oceansdelight:tentacles`, `cut_tentacles`, `tentacle_on_a_stick`, `baked_tentacle_on_a_stick`, `oceanic_delight:squid_tentacles`, `glow_squid_tentacles`, `grilled_squid_tentacles`) is an output or input of any recipe (`/recipescan`) | `creativedelight/members #24`, `dishes/ocean #4` |
+| SQ-CM-31 | A | same probe | `oceansdelight:seagrass_salad` recipe is `creativedelight:shapeless/seagrass_salad` with 2 `minecraft:seagrass` + bowl; no tentacle item (`miners_delight:tentacles`, `baked_tentacles`, `tentacles_on_a_stick`, `oceansdelight:tentacles`, `cut_tentacles`, `tentacle_on_a_stick`, `baked_tentacle_on_a_stick`, `oceanic_delight:squid_tentacles`, `glow_squid_tentacles`, `grilled_squid_tentacles`) is an output or input of any recipe (`/recipescan`) | `creativedelight/members #24`, `dishes/ocean #4` |
 | SQ-CM-32 | A | same probe | `oceansdelight:cooking/squid_rings`, `oceanic_delight:sea_pickle_roll`, `shrimp_rice`, `squid_salad`, `takoyaki` take `#forge:raw_fishes/calamari`; `glow_squid_stew` takes `#forge:raw_fishes/calamari` (glowing and every slice included); `seafood_skewer`, `squid_and_pickles` take `#forge:cooked_fishes/calamari` (the tag replace in the four `#forge:squid_tentacles` recipes is the part most likely to miss) | replaceInput on a tag |
 | SQ-CM-33 | A | boot; JEI item list (client) | the 140 Storage Delight blocks sit together in wood order (oak, spruce, birch, jungle, acacia, dark oak, mangrove, crimson, warped, bamboo); no tag error naming `creativeengineering:jei/storage_delight` | `creativedelight/members #23` |
 | SQ-CM-34 | A | after the repackedStorage install; mod list | Storage Delight shows as "Storage Delight (Creative Delight)" | jar not installed |
 | SQ-CM-35 | A | boot with the 2026-10-31 12:32 CD jar; recipe probe + kubejs/startup.log and latest.log | `#forge:squid_tentacles` and `#forge:foods/tentacles` hold the raw calamari items; `miners_delight:cooking/takoyaki` takes calamari in both tentacle slots; `squid_rings`, `glow_squid_stew`, `seafood_skewer`, `squid_and_pickles` exist (rerun SQ-CM-32 alongside); no `[NCH]` error naming `squid_tentacles` or `truffle_pie` | `dishes/ocean #4` |
-| SQ-CM-36 | A | same boot; recipe probe, `/fgdtest all`, then a client | `create_central_kitchen:truffle_pie` is an item (Truffle Pie, chocolate pie sprite) that places CCK's truffle pie block; `creative_delight:baking/truffle_pie` exists and takes `fungidelight:truffle`; the placed pie gives truffle pie slices; `/fgdtest` oven truffle pie PASS; no `[NCH] ceBaking ... truffle_pie` error and no `truffle_pie` in the item_dict missing-id list | `ports/fungiport #3` |
+| SQ-CM-36 | A | same boot; recipe probe, `/fgdtest all`, then a client | `create_central_kitchen:truffle_pie` is an item (Truffle Pie, chocolate pie sprite) that places CCK's truffle pie block; `creativedelight:baking/truffle_pie` exists and takes `fungidelight:truffle`; the placed pie gives truffle pie slices; `/fgdtest` oven truffle pie PASS; no `[NCH] ceBaking ... truffle_pie` error and no `truffle_pie` in the item_dict missing-id list | `ports/fungiport #3` |
 
 ## Buckets (recipes/engineering #5), 2026-10-29
 
@@ -2420,7 +2473,7 @@ Needs the creativeDelight jar of 2026-10-30 installed and a full restart (mixins
 
 | Entry | Tier | Steps | Pass | Fail meaning |
 |---|---|---|---|---|
-| SQ-MG-17 | server | Boot; grep latest.log for `GorillaForageBananaMixin`, `SugarGliderForageBananaMixin`, `Mixin apply`, `[creative_delight]` | No mixin apply error; the alexsmobs compartment is on | target changed (Alex's Mobs updated) or the compartment gate is off |
+| SQ-MG-17 | server | Boot; grep latest.log for `GorillaForageBananaMixin`, `SugarGliderForageBananaMixin`, `Mixin apply`, `[creativedelight]` | No mixin apply error; the alexsmobs compartment is on | target changed (Alex's Mobs updated) or the compartment gate is off |
 | SQ-MG-18 | server | Fresh world; `/locate biome minecraft:jungle`; `/place feature neapolitan:banana_plant` 20 times around; `/kill @e[type=neapolitan:chimpanzee]` count; then summon 3 gorillas by jungle leaves, `/time add` until they forage | No chimpanzees (kill count 0); gorillas drop and eat Neapolitan bananas, never Alex's Mobs' | chimps: config not read (check the group chance line); Alex's banana: gorilla mixin not applied |
 | SQ-MG-19 | server | Summon 3 sugar gliders by jungle leaves, wait for them to forage; check dropped items with `/data get entity @e[type=item,limit=5,sort=nearest]` | Neapolitan bananas among the drops, no `alexsmobs:banana` | sugar glider mixin not applied |
 | SQ-MG-20 | client | JEI: search chimpanzee | Banner pattern only; no spawn egg, no head | removed items list not reloaded (full restart) |
@@ -2454,7 +2507,7 @@ Needs patcherMod 1.1.04 built 2026-10-30 after 21:47 (ArmorCapMixin).
 ## SQ-CS crop seasons, 2026-10-30 ([crops.md](../crops.md) §2.12.1, TODO `farming/crops #5`, CR-89 to CR-97)
 
 Needs patcherMod 1.1.04 built 2026-10-30 after 21:40 (`seasons/CropSeasons`, `CropSeasonGrowHookMixin`), backportedVinery
-`-06`, creative_delight with endersAdditions `-02`, the new `config/sereneseasons/fertility.toml` and the KubeJS files
+`-06`, creativedelight with endersAdditions `-02`, the new `config/sereneseasons/fertility.toml` and the KubeJS files
 (`crop_seasons.json`, `tags/cropseasontags.js`). Fresh normal world, plains spawn.
 
 | Entry | Tier | Steps | Pass | Fail meaning |
@@ -2466,7 +2519,7 @@ Needs patcherMod 1.1.04 built 2026-10-30 after 21:40 (`seasons/CropSeasons`, `Cr
 | SQ-CS-05 | server | Hemp, tobacco, a red grape bush, a crimson fungus colony and an Ender crop planted in the overworld in `mid_winter`, `randomTickSpeed` 100 for 1 min | all still grow (off is slower, never stopped); no exception in latest.log | hook cancels the whole tick wrongly or crashes |
 | SQ-CS-06 | server | Edit crop_seasons.json (wheat to cold), `/reload`, repeat SQ-CS-02 for wheat | wheat now in `cold`, not `temperate`; put it back | tag cache not cleared on reload |
 | SQ-CS-08 | server | `/execute if block` on placed `minecraft:glass_pane`, `immersiveengineering:insulating_glass`, `securitycraft:reinforced_red_stained_glass_pane`, `create:framed_glass_door`, `storagedelight:oak_cabinet_with_glass_doors` against `#sereneseasons:greenhouse_glass` | all but the cabinet pass | greenhouse_glass list not added (addMatching, regex) |
-| SQ-CS-09 | server | `/give @s fruitsdelight:apple_sapling`; new world, `/locate biome minecraft:flower_forest`, fly over 10 chunks; grep latest.log `[itemMerges]` | the sapling becomes Vinery's apple tree sapling; no Fruits Delight apple trees; merge count line includes the creative_delight pairs | biome modifier override not loaded, or merge group skipped by `requires: vinery` |
+| SQ-CS-09 | server | `/give @s fruitsdelight:apple_sapling`; new world, `/locate biome minecraft:flower_forest`, fly over 10 chunks; grep latest.log `[itemMerges]` | the sapling becomes Vinery's apple tree sapling; no Fruits Delight apple trees; merge count line includes the creativedelight pairs | biome modifier override not loaded, or merge group skipped by `requires: vinery` |
 | CQ-CS-07 | client | CR-89, CR-90 tooltips and WTHIT lines on the same world | lines as in CR-89 / CR-90 | client tag sync or lang keys |
 
 ## SQ-WC watering can, 2026-10-30 ([hearth_and_harvest.md](../hearth_and_harvest.md) 4.0, HNH-25 to HNH-33)
@@ -2491,7 +2544,7 @@ Group A (superflat), a bot player.
 
 | ID | Group | Commands | Expected | If it fails |
 |---|---|---|---|---|
-| SQ-WCT-01 | A | Boot; grep latest.log for `hearthandharvest`, `watering_can`, `Error occurred while handling event`, `duplicate` | six can ids registered once; recipes `creative_delight:...watering_can` and the five `smithing/..._watering_can` loaded; no error | stale patcherMod still registering the id; NCH key missing in item_dict |
+| SQ-WCT-01 | A | Boot; grep latest.log for `hearthandharvest`, `watering_can`, `Error occurred while handling event`, `duplicate` | six can ids registered once; recipes `creativedelight:...watering_can` and the five `smithing/..._watering_can` loaded; no error | stale patcherMod still registering the id; NCH key missing in item_dict |
 | SQ-WCT-02 | A | `/fill ~ ~ ~ ~ ~ ~ minecraft:water_cauldron[level=3]`; bot holds `hearthandharvest:watering_can`, uses it on the cauldron; `data get entity <bot> SelectedItem`; `/execute if block ~ ~ ~ minecraft:water_cauldron[level=2]`. Repeat with `diamond_watering_can` (level 3 -> 1), `netherite_watering_can` (-> `minecraft:cauldron`), and an empty `diamond_watering_can` on `level=1`, an empty `netherite_watering_can` on `level=2` | WaterLevel 8, cauldron level 2; diamond WaterLevel 20, level 1; netherite WaterLevel 32, empty cauldron; diamond on level 1: WaterLevel 10, empty cauldron; netherite on level 2: WaterLevel 21, empty cauldron | cauldron interaction map claimed the click; level or partial-fill math |
 | SQ-WCT-03 | A | Place a Just a Well (`well:well`), wait for it to fill (or `/data merge block` its tank); bot uses `iron_watering_can` on the lower half, then on the roof half with an emptied can; `data get block <well>` | WaterLevel 12 each time; tank down 1000 mB per fill | well did not pass the click (fluid item check); roof half not routed below |
 | SQ-WCT-04 | A | `/fill ~-3 ~-1 ~-3 ~3 ~-1 ~3 minecraft:farmland[moisture=0]`, `/fill ~-3 ~ ~-3 ~3 ~ ~3 minecraft:wheat[age=7]`; bot with `dragon_watering_can{WaterLevel:64}` uses it on the centre; `/execute if block ~3 ~-1 ~3 minecraft:farmland[moisture=7]` and the corner `~-3 ~-1 ~-3`; repeat on fresh soil with `watering_can{WaterLevel:8}`, check `~1 ~-1 ~` stays dry | 7x7 soaked, WaterLevel 63; copper soaks the centre only | area spans |
@@ -2535,7 +2588,7 @@ Jars built 2026-10-31 00:28-00:30: patcherMod 1.1.04 (`MagicResistanceEffect`, `
 `PhantomBaneRules`, `CompoundEffects`, mixins `CopperPoisoningEffectMixin`, `LivingEntityEffectRemapMixin`,
 `FruitsDelightEffectFuncMixin`, `CaffeinatedEffectMixin`, client `GuiEffectIconMixin`, `JeedEffectRendererMixin`,
 `JeedEffectInfoMixin`), backportedVinery -06 (multi-effect wines, Jellie effect gone), backportedBrewin -04 (food effect
-icons), creative_delight 1.0.0 (Baklava icon). Group A (superflat), bot player for the player checks. Client rows (HUD,
+icons), creativedelight 1.0.0 (Baklava icon). Group A (superflat), bot player for the player checks. Client rows (HUD,
 tooltips, JEI) are in-game checks EF-22 to EF-30.
 
 | ID | Group | Commands | Pass | If it fails |
@@ -2580,11 +2633,11 @@ items, worldgen). Group A (superflat) and a bot player, except SQ-HR-05 (group B
 
 | ID | Group | Commands | Expected | If it fails |
 |---|---|---|---|---|
-| SQ-HR-01 | A | Boot; grep `latest.log` for `hearthandharvest`, `raspberr`, `Error occurred while handling event` | member `hearthandharvest` loads; no missing model / texture for `hearthandharvest:raspberry_bush`; no error in `hearthandharvest/*.js`; recipe `creative_delight:...raspberry_pips_from_raspberry` loaded; watering can still registers | two registrations under one namespace clash; NCH key missing |
+| SQ-HR-01 | A | Boot; grep `latest.log` for `hearthandharvest`, `raspberr`, `Error occurred while handling event` | member `hearthandharvest` loads; no missing model / texture for `hearthandharvest:raspberry_bush`; no error in `hearthandharvest/*.js`; recipe `creativedelight:...raspberry_pips_from_raspberry` loaded; watering can still registers | two registrations under one namespace clash; NCH key missing |
 | SQ-HR-02 | A | `/setblock ~ ~-1 ~ minecraft:dirt`, bot uses `hearthandharvest:raspberry_pips` on it; also on sand; `/gamerule randomTickSpeed 300`, wait; `/execute if block ~ ~ ~ hearthandharvest:raspberry_bush[age=3]` | placed on dirt, refused on sand; reaches age 3 | soil rule |
 | SQ-HR-03 | A | Bot right-clicks the bush at age 2, then at age 3 (`/setblock ... [age=2]` / `[age=3]`); count dropped items | age 2: nothing; age 3: 2-3 raspberries, bush age 1 | `use` override |
 | SQ-HR-04 | A | `/tag` check via `/kubejs` or `/dumptags`: `forge:fruits/raspberries`, `forge:berries`, `minecraft:fox_food`, `forge:seeds/raspberry`, `forge:seeds`; `/summon fox` next to an age 3 bush, wait 60 s | tags hold the items; the fox empties the bush to age 1 and holds a raspberry | tags.js not run (member switch); fox goal not added |
-| SQ-HR-05 | B | New world, seed 8675309; `/locate biome minecraft:forest`, fly there (r1101: the `[wild-crops]` log names no rules; use `/zq biometag creative_delight:wild_crops/raspberry` and a fully loaded 256-chunk `/zq count`) | tag lists 26 biomes; ripe raspberry bush patches in forest / plains | `requires` skipped the rule; feature json invalid in 1.19.2 |
+| SQ-HR-05 | B | New world, seed 8675309; `/locate biome minecraft:forest`, fly there (r1101: the `[wild-crops]` log names no rules; use `/zq biometag creativedelight:wild_crops/raspberry` and a fully loaded 256-chunk `/zq count`) | tag lists 26 biomes; ripe raspberry bush patches in forest / plains | `requires` skipped the rule; feature json invalid in 1.19.2 |
 | CQ-HR-06 | client | Look at the bush through its four ages with WTHIT; hover the pips; walk into the bush | art matches upstream (cutout, no black faces); growth line, "Mature" at age 3; season line on the pips; slowed, no damage | render type; crop_growth.json rule |
 
 ## Cooking for Blockheads in Creative Delight, 2026-10-31 ([kitchen.md](../kitchen.md) 2.7, 9; TODO `cooking/kitchen #22`)
@@ -2595,7 +2648,7 @@ Jars: patcherMod (CfB mixins removed) and Creative Delight (nests the new `block
 | ID | Group | Commands | Pass | If it fails |
 |---|---|---|---|---|
 | SQ-KT-22 | A | boot | `Done (`; mod list has `blockheads_additions`; no mixin error naming `BlockStateCounterTopperMixin`, `CfbOven*`, `CfbCorner*`; no `Duplicate capability key` / `creativeengineering:corner_storage` error; `config/blockheads_additions-common.toml` written with `[kitchen]`; no `[blockheads_additions] could not add the wood racks` | a mixin error: SRG names; duplicate capability: the old patcherMod still in `mods/`; rack error: `BARacks.addValidBlocks` field name |
-| SQ-KT-23 | A | recipe probe (RecipeManager id dump) and `/dumptags` | 40 `creative_delight:shaped/<wood>_spice_rack` / `_tool_rack` recipes; `cookingforblockheads:spice_rack` and `tool_rack` take `#creative_delight:rack_slabs/other`, which holds no `minecraft:oak_slab` but holds `quark:blossom_planks_slab`; the 40 racks in `#minecraft:mineable/axe` | `kitchen.js` errors in `/kubejs errors`; `CD.on('blockheads_additions')` false (member switch) |
+| SQ-KT-23 | A | recipe probe (RecipeManager id dump) and `/dumptags` | 40 `creativedelight:shaped/<wood>_spice_rack` / `_tool_rack` recipes; `cookingforblockheads:spice_rack` and `tool_rack` take `#creativedelight:rack_slabs/other`, which holds no `minecraft:oak_slab` but holds `quark:blossom_planks_slab`; the 40 racks in `#minecraft:mineable/axe` | `kitchen.js` errors in `/kubejs errors`; `CD.on('blockheads_additions')` false (member switch) |
 | SQ-KT-24 | A | `/setblock` an oak wall, `/setblock ~ ~ ~ cookingforblockheads:oak_spice_rack[facing=north]`; `/data get block ~ ~ ~`; put an item in through `/item replace block ~ ~ ~ container.0 with minecraft:sugar`; break it with a bot | block entity data present (CfB's spice rack items list); the sugar drops with the rack | no block entity: the BE type's valid blocks (SQ-KT-22 rack error) |
 | SQ-KT-25 | A | copy `tools/kitchen_probe/cfb_kitchen_probe.js` and `cfb_corner_probe.js`, `/kttest`, `/kctest` | same results as the last run (kt 30 of 34 with the known KT-15d / KT-17 expectation fails, kc 9 of 9) | probe updated 2026-10-31 (`BAConfig`); a class-not-found: the member jar not nested |
 | CQ-KT-22 | client | KT-22, KT-23, KT-24 (KT-06 fridge box: textured and dyed) | as written in kitchen.md 7 | fridge box missing: `[blockheads_additions] ... did not load` in latest.log, or the model map key (FridgeTopFill.wrap) |
@@ -2609,10 +2662,10 @@ Jars: patcherMod and Creative Delight, built 2026-10-31, installed together (see
 
 | ID | Group | Commands | Pass | If it fails |
 |---|---|---|---|---|
-| SQ-SB31-01 | A | boot | `Done (`; no mixin or event errors naming `SpoutGunFarmland`, `HandcraftedNightstand*`, `HandcraftedItemHoldingSaveMixin`, `TreatedStickPlaceMixin`, `TomatoClimbTreatedStickMixin`, `SuppTomatoClimbTreatedStickMixin`, `BlockItemOwnStackFillMixin`; `/setblock ~ ~ ~ creative_delight:treated_stick` works | mixin error: SRG names in the named mixin |
+| SQ-SB31-01 | A | boot | `Done (`; no mixin or event errors naming `SpoutGunFarmland`, `HandcraftedNightstand*`, `HandcraftedItemHoldingSaveMixin`, `TreatedStickPlaceMixin`, `TomatoClimbTreatedStickMixin`, `SuppTomatoClimbTreatedStickMixin`, `BlockItemOwnStackFillMixin`; `/setblock ~ ~ ~ creativedelight:treated_stick` works | mixin error: SRG names in the named mixin |
 | SQ-NS-01 | A | `/setblock` an oak and an Every Compat nightstand; `/item replace block ~ ~ ~ container.0 with minecraft:sugar`; restart; `/data get block`; break it with a bot | `CENightstandItems` holds the sugar after the restart; the sugar drops on break; a hopper below pulls it | `HandcraftedItemHoldingSaveMixin` (save/load names), `NightstandStorage` item handler |
 | SQ-SVA-05 | A | `/place template skyvillages:letsdo_brewery/sky_village_letsdo_brewery_0` and `_1` | `fantasyfurniture:decorations/hanging_herbs` at 4 and 2 spots (SVA-08) | `brewery:dried_*` rows in `tools/skyvillage_addon_remap.json`, rerun the tool |
-| SQ-TSK-02 | A | FD tomato vine on farmland with `creative_delight:treated_stick` two above, `/gamerule randomTickSpeed 300`; repeat with `supplementaries:stick_tomatoes` under a treated stick | the vine climbs into `creative_delight:treated_stick_tomatoes`, stops at three high | `TomatoClimbTreatedStickMixin` / `SuppTomatoClimbTreatedStickMixin` |
+| SQ-TSK-02 | A | FD tomato vine on farmland with `creativedelight:treated_stick` two above, `/gamerule randomTickSpeed 300`; repeat with `supplementaries:stick_tomatoes` under a treated stick | the vine climbs into `creativedelight:treated_stick_tomatoes`, stops at three high | `TomatoClimbTreatedStickMixin` / `SuppTomatoClimbTreatedStickMixin` |
 | SQ-TSK-03 | A | break the farmland under a treated-stick vine; `/loot` on a `treated_stick` with all three axes | vines revert to `treated_stick` and drop FD tomato loot; 3 treated sticks | `TreatedStickTomatoBlock` remove path, `TreatedStickBlock.getDrops` |
 | SQ-DM-03 | A | Dandelions on Rich Soil and Fertile Soil, `/gamerule randomTickSpeed 300` | Fertile Soil matures about twice as fast as Rich Soil (`fertileSoilTicks = 10`, `richSoilTicks = 20`) | the config file still holds the old values |
 | CQ-WC-06 | client | HNH-45: Bone Meal loaded, click a sweet berry bush on grass | it grows with splash particles (also seen by a second client if one is available) | `WateringCanItem.applyBonemeal` |
@@ -2620,13 +2673,13 @@ Jars: patcherMod and Creative Delight, built 2026-10-31, installed together (see
 | CQ-SG-01 | client | HNH-47: water Spout Gun at dry farmland and at a crop on dry farmland; lava/honey gun likewise | both become moist; the other guns do not wet | `SpoutGunFarmland` entity id match |
 | CQ-NS-02 | client | NS-01 to NS-05 (chest menu, sheet and lamp unchanged) | as written in furniture_storage.md | `HandcraftedNightstandUseMixin` PASS / top-face check |
 | CQ-OAT-01 | client | VTD-78 | oats bushy at every stage; ripe oats two tall in three shapes | `kubejs/assets/vintagedelight/blockstates/oat_crop.json` |
-| CQ-TSK-01 | client | TSK-01 to TSK-05 | as written in treated_sticks.md | textures under `kubejs/assets/creative_delight/textures/block/` |
-| CQ-CSR-01 | client | restart, no F3+T; FO-59, PL-01 | `logs/kubejs/client.log` lists every `creative_delight:kubejs/...` client script once with no new errors; garlic-seasoned popcorn shows "Garlic: Speed (0:10)" | `KubeJSClientResourceScriptsMixin` |
+| CQ-TSK-01 | client | TSK-01 to TSK-05 | as written in treated_sticks.md | textures under `kubejs/assets/creativedelight/textures/block/` |
+| CQ-CSR-01 | client | restart, no F3+T; FO-59, PL-01 | `logs/kubejs/client.log` lists every `creativedelight:kubejs/...` client script once with no new errors; garlic-seasoned popcorn shows "Garlic: Speed (0:10)" | `KubeJSClientResourceScriptsMixin` |
 | CQ-JB-01 | client | JC-32 | JEI shows Sweet Berries, Glow Berries and both pips separately; no doubled pips in the Food tab | `BlockItemOwnStackFillMixin` |
 
 ## Bug batch, 2026-11-01 (TODO rows in each ID's Depends column)
 
-Needs the patcherMod jar (`creativeengineering-1.1.04.jar`, built 2026-11-01 01:35) and the Creative Delight jar (`creative_delight-1.0.0.jar`, 01:23) installed, and a full restart. Already-queued checks to rerun with these jars: SQ-RSP-09 (Spout / Item Drain drinks), SQ-FFH-03 (zucchini quiche), SQ-MRD-03 (tags half, rewritten), SQ-CM-32 and SQ-CM-35 (calamari), SQ-AC-02 (also `/attribute <bot> minecraft:generic.armor_toughness get`: armor 36, toughness 18).
+Needs the patcherMod jar (`creativeengineering-1.1.04.jar`, built 2026-11-01 01:35) and the Creative Delight jar (`creativedelight-1.0.0.jar`, 01:23) installed, and a full restart. Already-queued checks to rerun with these jars: SQ-RSP-09 (Spout / Item Drain drinks), SQ-FFH-03 (zucchini quiche), SQ-MRD-03 (tags half, rewritten), SQ-CM-32 and SQ-CM-35 (calamari), SQ-AC-02 (also `/attribute <bot> minecraft:generic.armor_toughness get`: armor 36, toughness 18).
 
 | ID | Group | Action | Expect | Depends on |
 |---|---|---|---|---|
@@ -2639,12 +2692,13 @@ Needs the patcherMod jar (`creativeengineering-1.1.04.jar`, built 2026-11-01 01:
 | SQ-META31-04b | C | `[worldgen.meta_structures] log` on, new world, `/locate structure creativeengineering:meta/meteorite_desert_pyramid` a few times, grep `meteorite_desert_pyramid` in latest.log | every placed line `1/1 minecraft:desert_pyramid` plus a meteorite; short ones `not placed, core part ...` or `no satellite fitted`; none placed with `0/1 desert_pyramid` | `structures/metas #11` |
 | SQ-WG30-C02b | C | new world, Chunky square, `/celocate census 96 <x> <z>`; read `falseNegativeAt` in `kubejs/exported/worldgen/locate_census.json` | every biome false negative has a diagnosis string (regenerated point, its biome, nearest-distance entries, start-piece centre); record which case it shows | `structures/rates-and-groups #13` |
 | SQ-TER-01b | A | boot, grep `latest.log` for the terrain adaptation load line; `/locate structure philipsruins:ancient_crypt` in new chunks | load line counts 7 sunk starts with no `ancient_crypt ... ignored` warning; the crypt places on its own terrain-matching projection | `structures/earthfill #17` |
-| SQ-SSP-01 | A | knife on a cutting board with a potato, then a sweet potato; Slice & Dice slicer with a knife over a depot, 1 potato then 1 sweet potato | board and slicer each give 3 Potato Slices and 3 Sliced Sweet Potatoes; no recipe error for `creative_delight:farmersdelightcutting/potato_slices` or `.../sliced_sweet_potato` | `dishes/ingredients #20` |
+| SQ-SSP-01 | A | knife on a cutting board with a potato, then a sweet potato; Slice & Dice slicer with a knife over a depot, 1 potato then 1 sweet potato | board and slicer each give 3 Potato Slices and 3 Sliced Sweet Potatoes; no recipe error for `creativedelight:farmersdelightcutting/potato_slices` or `.../sliced_sweet_potato` | `dishes/ingredients #20` |
 | SQ-SSP-02 | A | `/dumptags`, grep `kubejs/exported/tags/item_tags_by_item.json` for `creativeengineering:sliced_sweet_potato` | lists `forge:sliced_potato`, `forge:sliced_potatoes`, `forge:vegetables/sweet_potato`, `forge:vegetables/potato`, `forge:vegetables`, `creativeengineering:food_type/raw/veggie/sliced` | `dishes/ingredients #20` |
 | SQ-SSP-03 | A | `/dumpfood`, `/dumpcompost`; client: JEI on the item | nutrition 1, modifier 0.3, compost 0.5; JEI shows the potato slices sprite, "Sliced Sweet Potato", uses in fries, More Delight potato dishes and Canned Sweet Potato | `dishes/ingredients #20`, `dishes/meals #34` |
 
 ## SQ-CAL Creative Calendar carve, 2026-11-01 ([creative_calendar.md](../creative_calendar.md) 6, TODO `creativesplit/calendar #6`)
 
+Run 2026-11-01 (rcs1, [scratch_run_2026-11-01.md](scratch_run_2026-11-01.md) 6): SQ-CAL-01 to -07 PASS; CQ-CAL-08 OPEN.
 Needs `creativecalendar-1.0.0.jar` (`development/creativeCalendar/build/libs/`, `prep_srv.sh` adds it) with the patcherMod,
 Creative Delight and Creative Brewing jars built in the same pass (patcherMod without `time/` and `seasons/`; CD and CB
 requiring `creativecalendar`). Same behaviour as before the carve: every row checks that the moved code still runs from
@@ -2655,15 +2709,17 @@ holds the old sections in `creativeengineering-common.toml`.
 |---|---|---|---|---|
 | SQ-CAL-01 | A | Boot; `grep -E "\[creativecalendar\]\|creativecalendar.mixins.json" logs/latest.log`; `grep -E "from creativecalendar.mixins.json" logs/debug.log \| wc -l` | `[creativecalendar] time, seasons and crop seasons loaded`; on this first boot one WARN `... still has keys that moved to config/creativecalendar-common.toml: [[seasons], [time], ...]`; no mixin apply error; debug.log mixes the 10 common mixins (CropSeasonGrowHook only where IE, The Dirty Stuff or Nether's Delight is loaded) | Jar missing, patcherMod still holding `time/` (duplicate `/cetime`, mixins applied twice), or a gate id wrong in `CalendarMixinPlugin` |
 | SQ-CAL-02 | A | Same boot: open `config/creativecalendar-common.toml` and `config/creativeengineering-common.toml`; restart once and repeat the grep of SQ-CAL-01 | Calendar file has `[seasons]`, `[crop_seasons]`, `[time]` (`.day`, `.seasons`, `.wine`, `.wine.boosts`), `[perf] seasonsMeltIntervalTicks = 4`, `[wthit] cropSeasons`, `cropOutOfSeason`, the values unchanged; the CE file no longer has them; the second boot has no WARN | Forge did not correct the CE file (WARN every boot), or defaults written over edited values |
-| SQ-CAL-03 | A | Same boot: `grep -E "startup script packs in order\|creativecalendar\]" logs/kubejs/startup.log logs/kubejs/server.log` | pack order lists `creativecalendar` before `creative_delight` and `creative_brewing`; `[creativecalendar] core finished`; server.log `[creativecalendar] server scripts ready, features on: seasons, crop_seasons, time`; no `global.CAL missing` | `kubejs_startup/creativecalendar/` not in the jar, or the mods.toml AFTER order not applied |
+| SQ-CAL-03 | A | Same boot: `grep -E "startup script packs in order\|creativecalendar\]" logs/kubejs/startup.log logs/kubejs/server.log` | pack order lists `creativecalendar` before `creativedelight` and `creativebrewing`; `[creativecalendar] core finished`; server.log `[creativecalendar] server scripts ready, features on: seasons, crop_seasons, time`; no `global.CAL missing` | `kubejs_startup/creativecalendar/` not in the jar, or the mods.toml AFTER order not applied |
 | SQ-CAL-04 | A | `/cetime`; `/cetime push`; `/cetime date`; grep latest.log for `[time] Better Days from [time]` | `/cetime` prints the derived values (day 45 + night 15 min, 8 days per sub-season, preset SINGLEPLAYER); push and date answer as before (SQ-TD-01 format); the server-start push line is there | `TimeCommand` / `TimePush` not registered (CreativeCalendar constructor) |
-| SQ-CAL-05 | A | `/cetime date`; `/time add 24000`; `/cetime date`; `/season` | day +1 in both, Serene Seasons agrees (SUN clock: `SereneSeasonsClockMixin`, `SeasonClock`) | season clock back on Serene Seasons' tick counter: mixin gate or SeasonClock registration |
+| SQ-CAL-05 | A | `/cetime date`; `/time add 24000`; `/cetime date`; `/season get` | day +1 in both, Serene Seasons agrees (SUN clock: `SereneSeasonsClockMixin`, `SeasonClock`) | season clock back on Serene Seasons' tick counter: mixin gate or SeasonClock registration |
 | SQ-CAL-06 | A | `/locate biome #creativeengineering:seasons/arid`; place wheat at x y z, `/execute if block x y z #creativeengineering:crop_seasons/temperate run say temperate`; `/execute if block <glass> #sereneseasons:greenhouse_glass run say glass` | a desert or badlands found; both `say` lines print (tags filled by the moved `sereneseasons/seasontags.js` and `cropseasontags.js`) | Calendar server script tree missing from the jar, or `// requires: sereneseasons` skipped it |
 | SQ-CAL-07 | A | `/wine time`; `/cetime date add 1 month`; `/wine time`; grep latest.log for `WineTime\|NoClassDefFound` | the wine clock moves 8 days with the month (as SQ-TD-04); no class errors: the Vinery port's `PackTime` reads Calendar's `WineTime` | CB built against the old patcherMod `time.WineTime`, or Calendar missing |
 | CQ-CAL-08 | client | After SQ-CAL-05 on a client: SeasonHUD line, calendar item tooltip, Xaero time line; WTHIT on wheat in a plains biome; WTHIT plugin settings; stand in a desert while it rains elsewhere | "Mid Spring (Day n/24) 7:30 pm" style HUD; tooltip "Year 1, ..." and "Here: ..."; Xaero "Day n, HH:MM"; wheat shows "Fertile: Spring" (or its type) and a "here" line; "Crop Seasons" listed in WTHIT's plugin config; no rain particles in the desert (Pretty Rain) | client mixins (`SeasonHudCurrentSeason`, `XaeroTimeInfo`, `PrettyRainSeason`, `SeasonRainColumn`) not applied, or the lang file missing from the Calendar jar |
 
 ## SQ-CDV Creative Devtools carve, 2026-11-01 ([creative_devtools.md](../creative_devtools.md) 4, TODO `creativesplit/devtools #4`)
 
+Run 2026-11-01 (rcs1, [scratch_run_2026-11-01.md](scratch_run_2026-11-01.md) 6): SQ-CDV-01 to -04 PASS. SQ-CAL-06's locate and
+`/dumpclimatecaves` need a group B world (superflat has no arid biome and no multi_noise overworld).
 Needs `creativedevtools-1.0.0.jar` (`development/creativeDevtools/build/libs/`, `prep_srv.sh` adds it) and the patcherMod
 jar built in the same pass (no `devtools/`, with `util/BlockStateLookupHook` and `util/LevelRandomHook`). Same behaviour
 as before the carve: every row checks that the moved tools still run from the new jar. Group A.
@@ -2674,3 +2730,357 @@ as before the carve: every row checks that the moved tools still run from the ne
 | SQ-CDV-02 | A | `/cegen list`; `/ceperf status`; `/ceplace status`; `/recipescan`; `/dumpworldjei`; `/dumpspawns`; `/flowerworld` is in tab completion (do not run it in a shared world) | Each command answers (no "Unknown command"); `/recipescan` prints its summary line; `/dumpspawns` writes `kubejs/exported/spawns.json` | A script without `global.CDV`, or `SpawnDump` class name not updated in `dump_spawns.js` |
 | SQ-CDV-03 | A | `/dumpall` (about 5 min, includes dumpclimate); then `grep -E "ReferenceError\|guardThrowable\|writeExportJson" logs/kubejs/server.log` | `[dumpall] all 25 dumps done`; no ReferenceError: the Devtools wrappers reach `global.guardThrowable` / `global.writeExportJson` from the pack's `_lib` | `java_guard.js` / `export_io.js` not exporting their globals |
 | SQ-CDV-04 | A | `/dumprecipes create`, then `grep -rho "creativedevtools:[^\"]*" kubejs/exported/recipes/ \| sort -u \| head`; set `[debug.level_random] probe = true`, restart, `grep LevelRandomProbe logs/latest.log`; set it back to false | The test recipes are listed under `creativedevtools:` ids (one `*_mech_crafting` per metal and wood, netherite, one sequenced assembly); with the probe on the world loads, and only `[LevelRandomProbe] off-thread` WARN lines (or none) appear | Recipes still under `creativeengineering:` (NCH namespace not switched), or the probe factory not registered on the hook |
+
+## SQ-CS2 Creative Split wave 2: CD and CB rename, swap lists, prep, 2026-11-01 ([creative_split.md](../creative_split.md) 7.7, TODO `creativesplit/prep #3`, `creativedelight/swappers #1`)
+
+Run 2026-11-01 (rcs234 / rcs234r, [scratch_run_2026-11-01.md](scratch_run_2026-11-01.md) 7): SQ-CS2-01, -04 to -08 PASS (-07 server half); -02 / -03 FAILED on 1.1.06 (`SwapRemapper` looked in Forge's staging registry), fixed in 1.1.07, PASS on rcs234r. The old CD had no items, only the two stick blocks and the processor type: the item parts of -01 / -03 do not apply.
+
+Two boots of one group A world. Boot 1 runs the OLD jars (`creative_delight-1.0.0.jar`, `creative_brewing-1.0.0.jar`,
+patcherMod 1.1.05, from `development/*/jar_archive/` or the current `mods/`) to make the save; boot 2 swaps in
+patcherMod 1.1.06, `creativedelight-1.0.0.jar`, `creativebrewing-1.0.0.jar` (and `creativecompat`, wave 3) with the old
+underscore jars removed and the old `config/creative_delight-common.toml` / `creative_brewing-common.toml` left in place
+with one edited value each.
+
+| ID | Group | Commands | Pass | If it fails |
+|---|---|---|---|---|
+| SQ-CS2-01 | A | Boot 1 (old jars): `setblock` a `creative_delight:treated_stick` and a tomato-grown treated stick next to spawn, put 3 treated sticks in a chest and 2 in the player's (bot's) inventory, drop 1 on the ground; `/locate structure minecraft:village_plains` and teleport so a village start with an unplaced farm piece is saved (do not walk into the farm); stop | Save written; no error | Old jar set wrong |
+| SQ-CS2-02 | A | Boot 2 (new jars): `grep -E "\[swaps\]" logs/latest.log` | `[swaps] 2 list file(s): 2 namespace move(s), 0 single id(s)`; `[swaps] minecraft:block: N id(s) remapped`, the same for `minecraft:item`; no `left missing` WARN; no `Missing Registry Entries` / "missing blocks" world-load screen or log block | `SwapRemapper` not registered, lists not in the jars (`data/creativedelight/swaps/`), or a survivor id not registered |
+| SQ-CS2-03 | A | Same boot: `/data get block` on both placed sticks, `/data get block` on the chest, check the bot's inventory, and the dropped item entity (`/data get entity @e[type=item,limit=1,sort=nearest]`) | Every id reads `creativedelight:treated_stick*`, counts 3 / 2 / 1 unchanged, block states (stick shape, tomato age) kept | A registry the remapper skipped, or NBT ids not aliased |
+| SQ-CS2-04 | A | Same boot: walk into the saved village farm; `grep -E "village_farm_crops\|Failed to load structure\|Unknown processor" logs/latest.log` | Farm places with the extra crops (village_farms.json share); no decode error; after `/save-all`, the chunk's start NBT names `creativedelight:village_farm_crops` (the alias is load-only) | Legacy alias `creative_delight:village_farm_crops` not registered |
+| SQ-CS2-05 | A | Same boot: `ls config/ \| grep -i creative`; read the two new files | `creativedelight-common.toml` and `creativebrewing-common.toml` hold the edited values; the underscore files are gone; log has `[swaps] config creative_delight-common.toml carried over` (and brewing) | `ConfigRename.carryOver` ran after the config was registered (defaults written) |
+| SQ-CS2-06 | A | Same boot: `grep -E "startup script packs in order\|\[creativedelight\]\|\[creativebrewing\]" logs/kubejs/startup.log logs/kubejs/server.log`; `/recipescan` (Devtools) | Packs `creativecalendar`, `creativedelight`, `creativebrewing` load; CD and CB core lines present; no `creative_delight` anywhere in either log; no recipe names an unknown `creative_delight:` id; wild crop features place (no `Unknown feature creative_delight:wild/...` in latest.log) | A script tree or a datapack id still on the old namespace |
+| SQ-CS2-07 | A | Same boot: `grep -E "NCH.cfg\|IngredientActions\|can_serving" logs/kubejs/server.log \| head`; craft a recipe that uses part of a can (a can-serving recipe) | No `no ... section in any registered config` WARN; no `IngredientActions not available` / `no creativeengineering:can_serving` WARN; the can comes back with one serving fewer | NCH.cfg lookup or the action registry broken |
+| SQ-CS2-08 | A | Same boot: `grep -E "creativeengineering.mixins.json\|IwServerLevelTick" logs/debug.log \| head`; with Immersive Weathering in the pack | IwServerLevelTickMixin applied and the `[perf]` IW fast path log line as before; no mixin config error | `CEMixinPlugin` gate or shared plugin source missing |
+
+## SQ-CMP Creative Compat carve, 2026-11-01 ([creative_compat.md](../creative_compat.md) 4, TODO `creativesplit/compat #5`)
+
+Run 2026-11-01 (rcs234, [scratch_run_2026-11-01.md](scratch_run_2026-11-01.md) 7): SQ-CMP-01 to -06 and -08 PASS; -07 LOOK (count is a client check).
+
+Same boots as SQ-CS2 (boot 2 is the first with `creativecompat-1.0.0.jar`), instance config with the six sections still
+in `creativeengineering-common.toml` and no `creativecompat-common.toml` (delete it in the scratch copy first; edit one
+value, `[campfire] rainOutTicks`, before boot 1).
+
+| ID | Group | Commands | Pass | If it fails |
+|---|---|---|---|---|
+| SQ-CMP-01 | A | `grep -E "\[creativecompat\]\|creativecompat.mixins.json" logs/latest.log`; `grep -c "from creativecompat.mixins.json" logs/debug.log` | Compat core line; no mixin apply error; the 27 common mixins apply on the server (minus any whose mod is absent) | Jar missing, a gate id wrong in `CompatMixinPlugin`, or patcherMod still listing a moved mixin (applied twice) |
+| SQ-CMP-02 | A | Same boot: read `config/creativecompat-common.toml`, `config/creativeengineering-common.toml`; restart, grep again | `[swaps] config sections [leaf_piles, moss, vine_shearing, campfire, monster_box, trash_slot] carried over`; Compat file holds the edited `rainOutTicks`; the CE file no longer has the six sections after the boot; second boot no WARN | `carrySections` ran after config load, or Forge did not correct the CE file |
+| SQ-CMP-03 | A | Same boot: `grep -E "startup script packs in order\|creativecompat" logs/kubejs/startup.log logs/kubejs/server.log` | Pack `creativecompat` loads; no `[creativecompat] global.itemPhysics missing` error; item physics rules load (count line as before) | Startup tree not in the jar, or the ItemPhysic class names in `item_physics.js` wrong |
+| SQ-CMP-04 | A | Same boot: `/dumpphysics` (Devtools) | Runs and lists rules (it loads `com.SaintAlfonzo.creativecompat.itemphysic.ItemPhysicSplit`) | dump_physics.js class name |
+| SQ-CMP-05 | A | Same boot: throw a TNT-tagged item into fire (an item burn rule with shrapnel); throw a fireproof item into lava | Blast plus shrapnel as before; fireproof item survives | `BurnBursts` handler not registered by the shrapnel side |
+| SQ-CMP-06 | A | Same boot: `/give` a weathered cardboard box and place it; `/loot` the monster box reward table; check `#creativeengineering:...` physics tags with `/dumptags` | Block and item exist (`creativeengineering:weathered_cardboard_box`); loot table resolves; physics tags present | Startup `decor_blocks.js` or jar data paths |
+| SQ-CMP-07 | A | Same boot: `grep -ciE "paintings" logs/latest.log`; Immersive Paintings painting list count (the pack's 475 images) | Same count as before the carve; no painting load error | Paintings not loaded from a mod jar datapack (move them back to the pack folder) |
+| SQ-CMP-08 | A | Same boot: `grep -E "Error occurred while handling event\|creativecompat" logs/kubejs/server.log logs/latest.log \| head`; `/reload` | No script error from the moved server files (coin, starter kit, feature ports, flowers, misc mods, tag rows); `/reload` clean | A moved script reading a top-level name from the pack's scope |
+
+## SQ-CBJ4 Creative Brewing phases 2 and 3 (potion Java, mixins, config), 2026-11-01 ([creative_brewing.md](../creative_brewing.md) 4.2, 4.5, TODO `creativesplit/cdcb #7`)
+
+Run 2026-11-01 (rcs234, [scratch_run_2026-11-01.md](scratch_run_2026-11-01.md) 7): SQ-CBJ4-01 to -07 PASS. -05 needs a long wait: `jitterSeconds = 120` puts the first roll up to 130 s out and the poison lasts 4 s (poll every 2 s past `ce_copper_poison_roll`); -07 on iron golems (perfBot bots are invulnerable). Client rows open.
+
+Run after SQ-CS2 and SQ-CMP pass (waves 2 and 3 are the base). Jars: `creativeengineering-1.1.07.jar` and the rebuilt
+`creativebrewing-1.0.0.jar` together (CB requires `[1.1.07,)`), with the wave 4 script moves (phase 1) in the same jar.
+Scratch copy: edit one value in each moved section of `creativeengineering-common.toml` before the boot (`[alcohol]
+quarkLine = false`, `[magic_resistance] reductionPerLevel = 0.3`) and delete those four sections from the scratch
+`creativebrewing-common.toml` if present, so the merge path runs. (The instance's own config was moved by hand: CE file
+without the four sections, CB file with them.)
+
+| ID | Group | Commands | Pass | If it fails |
+|---|---|---|---|---|
+| SQ-CBJ4-01 | A | `grep -E "creativebrewing.mixins.json\|Mixin apply.*creativebrewing\|\[creativebrewing\]" logs/latest.log`; `grep -c "from creativebrewing.mixins.json" logs/debug.log` | No mixin apply error; the 14 common mixins apply on a server (the 11 client ones do not load); none listed twice | A compartment name not a mod id, or patcherMod still listing a moved mixin |
+| SQ-CBJ4-02 | A | Same boot: `grep "\[swaps\] config sections" logs/latest.log`; read `config/creativebrewing-common.toml` and `config/creativeengineering-common.toml`; restart and grep `still has sections that moved` | `merged from creativeengineering-common.toml into creativebrewing-common.toml` with the four sections; CB file has `quarkLine = false` and `reductionPerLevel = 0.3`; CE file no longer has them after the boot; second boot no WARN | `mergeSections` ran after config load, or the section names differ |
+| SQ-CBJ4-03 | A | Same boot: `/effect give @p minecraft:speed`, then `/give` a `creativeengineering:long_reach` potion (`/give @p minecraft:potion{Potion:"creativeengineering:long_reach"}`), `/give` a potion bucket and fire it from a dispenser | Potion exists (CEPotions registered from CB); dispenser places / splashes as before | `CEPotions` or `PotionBucketDispenser` not registered (CB `commonSetup`) |
+| SQ-CBJ4-04 | A | Same boot: `/effect give @p upgrade_aquatic:insomnia` and `/effect give @p neapolitan:agility` (if loaded), `/data get entity @p ActiveEffects` | Insomnia refused, Agility swapped to `vinery:climbing_effect` ([effects] read from the CB file) | `LivingEntityEffectRemapMixin` not applied, or EffectRules reading the wrong config |
+| SQ-CBJ4-05 | A | Same boot: wear one fully oxidized Everything Copper piece with `[copper_poisoning] intervalSeconds = 10`, `chancePerPiece = 1.0` in the scratch CB file; wait 30 s | Poison applied | `CopperPoisoningHandler` not registered |
+| SQ-CBJ4-06 | A | Same boot: `grep -E "DragonBreathBrewing\|Lingerification\|lingerification_list" logs/latest.log`; `/reload` | No error; the lingerification list recipe loads from the CB jar (`creativeengineering:lingerification_list`) | `data/creativeengineering/recipes/lingerification_list.json` missing from the CB jar |
+| SQ-CBJ4-07 | A | Same boot: hit a player with Magic Resistance I with `/damage`-like magic (splash Harming) | Damage cut by 30 % (scratch value) | `MagicResistanceEffect` not on the FORGE bus |
+
+In game after install (client): CBJ4-C1 JEI shows the Automated Potion Mixing and Lingerification pages (IE Mixer and
+Refinery catalysts), Tipped Arrows and Potion Buckets pages, and IE's own Mixer page has no potion rows; CBJ4-C2 a
+Brewin' drink tooltip reads "Intoxicating Drink"; a JEED page on a compound effect shows "Compound of"; a Builder's Tea
+gives its HUD icon; CBJ4-C3 a WTHIT coaster line still shows (WthitCoaster stays in patcherMod).
+
+## SQ-CBM Creative Brewing phase 1 script moves, 2026-11-01 ([creative_brewing.md](../creative_brewing.md) 4.2, 4.5, TODO `creativesplit/cdcb #7`)
+
+Run 2026-11-01 (rcs234, [scratch_run_2026-11-01.md](scratch_run_2026-11-01.md) 7): SQ-CBM-01 to -05 PASS; -06 LOOK. Client rows open.
+
+Run after SQ-CS2 and SQ-CMP pass (waves 2 and 3 are the base), in the same boot as SQ-CBJ4 (the moved startup scripts
+are in the rebuilt `creativebrewing-1.0.0.jar`; the server and client trees are copied into it from the pack folder).
+
+| ID | Group | Commands | Pass | If it fails |
+|---|---|---|---|---|
+| SQ-CBM-01 | A | `grep -E "Error\|creativebrewing\|potion_area\|Tool Effects\|\[alcohol\]\|\[food values\]\|CE potions" logs/kubejs/startup.log \| head -40` | CB pack lists `creativeengineering/potions.js` ... `vinery/winemaker_trades.js`; `[alcohol] food values set on 44 of 44 drinks` (as before the move); `[food values] 12 effect swaps`; no `could not install dispenser handler`; no `global.trades missing` | A moved startup file reads a pack top-level name at load (4.1 rule 3), or a renamed Java class (PotionBucketDispenser, DragonBreathBrewing, WinemakerTrades) is not in the CB jar |
+| SQ-CBM-02 | A | Same boot: `/give` `creativeengineering:potion_bucket`, `creativeengineering:magic_resistance` via `/effect give`, a `minecraft:potion{Potion:"creativeengineering:long_reach"}` | Items, effect and potion exist (registered from the CB startup pack) | Registry callbacks from jar packs not fired |
+| SQ-CBM-03 | A | Same boot: `grep -E "potion bottling done\|tipped arrow\|alcohol recipes\|jeed_providers.js:" logs/kubejs/server.log`; `/kubejs dump_recipes`-style check or `/recipe` count of `creativebrewing:` ids | Same recipe counts as before the move; recipe ids now `creativebrewing:<type>/...` (were `creativeengineering:`); Brewin' upstream ids (`brewinandchewin:fermenting/beer_from_water` ...) still removed | `global.CB.recipes` missing, or a removal ran after its own add |
+| SQ-CBM-04 | A | Same boot: `/reload`; `grep "wandering trades" logs/kubejs/server.log` | `[wandering trades] common 208, rare 39` from the pack and `[wandering trades] winemaker 34` from CB (the last pre-move log: 208 / 39 / 34) | Winemaker helpers not added to `global.trades` |
+| SQ-CBM-05 | A | Same boot: `/dumptags` fluid `forge:fluid/potion`, `forge:fluid/dragon_breath` | `create:potion` in the first, IE's potion fluid not; dragon's breath in the second | CB fluid tag script not loaded |
+| SQ-CBM-06 | A | Same boot: hold a dragon sword (tool effects) and wear the echo armor set (armor effects) for 5 s; `/data get entity @p ActiveEffects` | Held and set effects applied as before | `global.armorEffects` / `toolEffects` missing in the CB server pack |
+
+In game (client): CBM-C1 Vinery tooltips on a grapevine pot and the flower box (no "Can be placed" line from Vinery),
+keg heat line on a heating cask; CBM-C2 names "Hard Cider", "Short Cherry Door", villager "Winemaker"; CBM-C3 a potion
+bucket tooltip shows its scaled effects; armor and tool effect tooltips on dragon and echo gear; CBM-C4 JEI fluid list
+has one `create:potion` stack per potion.
+
+## SQ-CDS Creative Delight script moves (wave 4), 2026-11-01 ([creative_split.md](../creative_split.md) 7.6, TODO `creativesplit/cdcb #7`)
+
+Run 2026-11-01 (rcs234, [scratch_run_2026-11-01.md](scratch_run_2026-11-01.md) 7): SQ-CDS-01 (server half) to -04 PASS (tags compared with `tools/scratch_query/tag_diff.py`). Client rows open.
+
+Run after SQ-CS2 and SQ-CMP pass, in the CD boot of wave 4 (rebuilt `creativedelight-1.0.0.jar`; the sample syringe
+startup scripts are in it).
+
+| ID | Group | Commands | Pass | If it fails |
+|---|---|---|---|---|
+| SQ-CDS-01 | A | `grep -E "sample_syringe\|Error" logs/kubejs/startup.log \| head`; `/give @p creativeengineering:cow_sample_syringe`; right-click a cow with `creativeengineering:sample_syringe` | Syringe items exist; sampling fills it | `global.sampleSyringe` not set before the item callback |
+| SQ-CDS-02 | A | Same boot: `/dumptags` block `creativeengineering:oven_heat_sources`, `farmersdelight:heat_sources` (has the oven), `minecraft:mineable/shovel` (the six dough blocks), `creativeengineering:crops/farmland_soils`; item `creativeengineering:hoe_harvest/5x5`, `forge:storage_blocks/sourdough` | Same contents as before the move | CD tag script not loaded |
+| SQ-CDS-03 | A | Same boot: `/dumptags` fluid `forge:fluid/tea`, `forge:fluid/honey`; biome `creativeengineering:fishing_net/ocean`; block `creativeengineering:fishing_net/kelp` | Same contents as before | CD tag script not loaded, or Oceanic member off |
+| SQ-CDS-04 | A | Same boot: `/dumptags` block `creativeengineering:needs_copper_tool`, `minecraft:needs_iron_tool` on `creativeengineering:plate_block_iron` and the copper dust pile | One tier and one tool per listed block, as before (harvest.js now in CD) | Exclusive mineable ran before a pack add |
+
+In game (client): CDS-C1 names "Caviar Roll", "Cantaloupe", "Mini Cantaloupe", "Netherite Lunchbox", Ender's Delight
+"Amberveils"; CDS-C2 tooltips on a bowl, Rich Soil (soil line, then the farmer villager line) and Nulch.
+
+## SQ-CDJ4 Creative Delight carve: kitchen and food Java, members, 2026-11-01 ([creative_delight.md](../creative_delight.md) 34, TODO `creativesplit/cdcb #7`)
+
+Run 2026-11-01 (rcs234, [scratch_run_2026-11-01.md](scratch_run_2026-11-01.md) 7): -01 crashed the server first (`MobCobPipeSlotMixin` on the wrong class), -05 / -06 FAILED (`NCH.cfg` returned undefined for moved sections); both fixed, then -01 to -07 PASS (-07 server half); -08 PARTIAL (nest id is `incubation_additions:emu_nest`; a baby squid needs `spawn-animals=true`). Client rows open.
+
+Run after SQ-CS2, SQ-CMP and SQ-CBJ4 pass, in the same boot as SQ-CDS. Jars: `creativeengineering-1.1.07.jar`,
+`creativedelight-1.0.0.jar` (nests Baby Mobs and Incubation Additions; CD requires `[1.1.07,)`), Compat, Calendar, CB;
+no standalone `babyMobs-*` / `incubationAdditions-*` in the scratch `mods/`. Scratch copy: put the old sections back in
+the scratch `creativeengineering-common.toml` with one edited value (`[canning] emptyCanChance = 0.5`, `[perf]
+troughMissCooldownTicks = 300`) and delete them from the scratch `creativedelight-common.toml`, so the merge path runs.
+
+| ID | Group | Commands | Pass | If it fails |
+|---|---|---|---|---|
+| SQ-CDJ4-01 | A | `grep -E "creativedelight.mixins.json\|Mixin apply.*creativedelight\|\[creativedelight\]" logs/latest.log`; `grep -c "from creativedelight.mixins.json" logs/debug.log` | No mixin apply error; the 22 moved common mixins apply on a server (compartments `minecraft`, `quark`, `alexsmobs`, `immersive_weathering`, `farmersdelight`, `canned_goods`, `the_dirty_stuff`, `salt` with their mods loaded); none from `creativeengineering.mixins.json` for these names | A compartment name is not the mod id, or patcherMod still lists a moved mixin |
+| SQ-CDJ4-02 | A | Same boot: `grep "\[swaps\] config sections" logs/latest.log`; read `config/creativedelight-common.toml`; restart, `grep "still has entries that moved" logs/latest.log` | Merge line names the six sections and `perf`; CD file has `emptyCanChance = 0.5` and `[perf]` with only `troughMissCooldownTicks = 300`; CE file has none of them after the boot; second boot no WARN | `mergeSections` ran after config load, or Forge kept the other `[perf]` keys |
+| SQ-CDJ4-03 | A | Same boot: `grep "\[creativedelight\] members" logs/latest.log`; `grep -E "baby_mobs\|incubation_additions" logs/latest.log \| head` | Member list ends with `baby_mobs, incubation_additions`; no "is loaded from ... not from the Creative Delight jar" ERROR | A standalone jar left in `mods/`, or the bundle missed a member |
+| SQ-CDJ4-04 | A | Same boot: `/give @p creativeengineering:oven`, place it over a lit campfire, `/data get block ~ ~ ~` | Block and block entity exist (`creativeengineering:oven`); no missing registry lines for `oven`, `powdered_sugar_block`, `placed_*` | `OvenRegistry` / `PowderedSugarRegistry` / `DisplayDelightDishes` not registered from CD |
+| SQ-CDJ4-05 | A | Same boot: `grep -E "NCH.cfg\] (no .*COOKING\|no .*CROP_DROPS\|creativedelight:)" logs/kubejs/server.log \| head`; `grep "creativedelight config class" logs/kubejs/server.log` | No "no COOKING section" / "no CROP_DROPS section" warning; overridden values name `creativedelight:` | `cd_core.js` did not register CDConfig, or ran after the first `cfg` call |
+| SQ-CDJ4-06 | A | Same boot: `/reload`, `grep -iE "soil_yield\|crop_drops" logs/kubejs/server.log \| head` | Soil yield and bell pepper tables built as before, no "no switch in CDConfig" warnings | `soil_yield.js` still loading CEConfig |
+| SQ-CDJ4-07 | A | Same boot: `/give @p solapplepie:lunchbag`, `/give @p minecraft:smithing_table`; check the recipe list for `creativeengineering:lunchbox_*` (`/recipe give @p *` then search the log or JEI dump) | Lunchbox serializers present (`LunchboxRecipes` registered from CD when Spice of Life is loaded) | Lunchbox registration guard or class path wrong |
+| SQ-CDJ4-08 | A | Same boot: `/summon minecraft:squid ~ ~ ~ {Age:-24000}`; `/give @p incubation_additions:emu_nest` | Baby squid exists; nest item exists | Member not nested or its mixin config missing in the nested jar |
+| SQ-CDJ4-08b | A | Scratch server with `spawn-animals=true` (prep_srv.sh `spawn-animals=true`): `/summon minecraft:squid ~ ~ ~ {Age:-24000}` in water, `/data get entity @e[type=squid,limit=1,sort=nearest] Age` | Age stays negative (Baby Mobs from the CD jar); with `spawn-animals=false` vanilla discards the squid on its next tick | Baby Mobs member not nested |
+
+In game (client): CDJ4-C1 bake one oven recipe with a bowl ingredient, WTHIT shows "Holding: 1 Bowl" on the oven, a
+cooking pot and a kettle (Common reads through RemainderView); CDJ4-C2 upgrade a lunchbox to Netherite, dye it, read
+"Slots"; CDJ4-C3 season a food (tooltip line), open a can ("Servings" line), JEI Seasoning, Canning, Using Cans, Feast
+Plating and Baking pages; CDJ4-C4 Quark hoe 3x3 on wheat and an animal near a feeding trough; CDJ4-C5 seagulls ignore a
+lunchbox, a dyed canned golem keeps its colour, a cob pipe renders on the head.
+
+| SQ-LEM-01 | A | boot; harvest a ripe lemon tree (age 4, lower half), by right-click pick and by breaking, 10 times | each gives 2 to 5 lemons (more with Fortune); the tree resets to age 2 on pick | `farming/trees #3`, `data/fruitsdelight/loot_tables/blocks/lemon_tree.json` |
+| SQ-LEM-02 | A | `/dumprecipes` or JEI: `fruitsdelight:lemon_cutting` (knife) and `fruitsdelight:cutting/lemon_slice` (saw) | both give 8 Lemon Slices (knife also 1 Lemon Seeds) | `fruitsdelight/recipes.js` Lemon yield |
+
+## SQ-CSI Curios slots by IMC, 2026-11-01 ([curios_slots.md](../curios_slots.md) 0)
+
+Needs the patcherMod jar with `compat/CuriosSlots` (built 2026-11-01). The slots were datapack JSON in the 1.20 format, which
+Curios 5.1.6.4 ignores. Group A.
+
+| ID | Group | Commands | Pass | If it fails |
+|---|---|---|---|---|
+| SQ-CSI-01 | A | Boot; join a bot or player; `/curios list` | `hands`, `face`, `feet` listed alongside head, back, etc.; no IMC error naming creativeengineering in `logs/latest.log` | listener not added (check `CreativeEngineering` curios branch) or jar stale |
+| SQ-CSI-02 | A | `/curios list <bot>` on a bot that joined an existing world | the bot has 1 slot each of hands, face, feet | existing saves not getting new IMC slots (then note in curios_slots.md) |
+
+## Plantable item lines, 2026-11-01 ([plantable.md](../plantable.md))
+
+| ID | Group | Commands | Pass | If it fails |
+|---|---|---|---|---|
+| SQ-PT-01 | A | Boot; grep latest.log for `[plantable]` and `Error occurred while handling event`; `/dumptags`, then read `creativeengineering:plantable/*` in `kubejs/exported/tags/item_tags.json` | one `[plantable] seed=.., crop=.., sapling=.., fungi_sapling=.., water=.., vine=.., vertical=..` line near plantable.md 2 counts (seed about 49, crop 14, sapling 37, fungi_sapling 23, water 11, vine 23, vertical 5); no `no item_dict key` warning; no Botania petal, flower, weeds or leaves in any family | `plantabletags.js` rules; a Rhino `instanceof` on a class that failed to load |
+| CQ-PT-01 | client | PT-01 to PT-06 in plantable.md 4 | one dark green line per item as listed; none on the PT-06 items | `plantable_tooltip.js`; the tags (SQ-PT-01) |
+
+## Baby Mobs milestone 2: 26.1 remodels, 2026-11-01 ([baby_mobs.md](../baby_mobs.md) 3a and 7, TODO `ports/babymobport #1`)
+
+Needs the Creative Delight jar nesting babyMobs 1.1.0 (built 2026-11-01, not yet installed). The remodels are client
+rendering only; the server half checks that nothing client-side loads on a dedicated server. BM-03 to BM-09 of
+milestone 1 are still open in baby_mobs.md 7.
+
+| ID | Group | Commands | Pass | If it fails |
+|---|---|---|---|---|
+| SQ-BM-01 | A | Dedicated server boot with the CD jar; `grep -E "Baby Mobs\|baby_mobs\|BabyKit\|LivingEntityRendererBabyMixin" logs/latest.log logs/debug.log \| head -20`; `grep -c "Error occurred while handling event" logs/kubejs/server.log` | members line lists `baby_mobs`; no `Baby Mobs:` error, no client class (`BabyRender`, `net.minecraft.client`) named in a crash or mixin error; the client mixins (`mixin/client/*`) are not applied on the server | a client mixin not listed under `client` in `baby_mobs.mixins.json`; a common class importing `client/` |
+| SQ-BM-02 | A | `/summon minecraft:cow ~ ~ ~ {Age:-24000}` and the same for pig, sheep, chicken, wolf, cat, horse, villager, zombie (`IsBaby:1`); `/data get entity @e[type=cow,limit=1,sort=nearest] Age` | each summons and keeps its age or baby flag; server does not crash or log a mixin error on any of them | a server-side use of a remodel class |
+
+#### CQ-BM: Baby Mobs remodels, client half (added 2026-11-01)
+
+One creative flat world with `/summon ... {Age:-24000}` rows (zombie family `IsBaby:1`). Full lists in baby_mobs.md 7.
+
+| ID | Group | Commands | Pass | If it fails |
+|---|---|---|---|---|
+| CQ-BM-01 | client | BM-10 (farm babies) | baby cow, mooshroom (red, brown), pig, sheep (dyed, sheared, jeb_, grazing), chicken: 26.1 shape and texture, legs walk, sheep head drops grazing; Quark variant adults unchanged | `FarmBabies`; the kit texture choice |
+| CQ-BM-02 | client | BM-11 (pet babies) | cat (variants, collar, sit, lie down, sprint), ocelot, wolf (wild, angry, tame, collar, sitting, shaking, wet), fox (red, snow, sleeping, item in mouth), rabbit (types, Toast, killer, hop, head tilt) | `PetBabies`, `PetAnimations`, `PetFoxHeldItemMixin` |
+| CQ-BM-03 | client | BM-12 (horse babies) | horse in 7 coats with markings (not 1.1x, legs visible, rearing, grazing, tail), skeleton / zombie horse, donkey, mule, llama (4 colours), trader llama; summoned with armour: none drawn | `EquineBabies`, `EquineHorseMarkingMixin` |
+| CQ-BM-04 | client | BM-13 (other babies) | bee (hover height, angry, nectar), axolotl (5 colours, land / water / play dead), goat, panda (7 genes, sit, sneeze, eat), polar bear (not 1.2x), turtle, strider (full size, cold texture), hoglin, zoglin | `MiscBabies`, `MiscAxolotlAnimation` |
+| CQ-BM-05 | client | BM-14 (humanoid babies; villagers via `/summon minecraft:villager ~ ~ ~ {Age:-24000}` since MCA replaces most) | zombie, husk, drowned (outer layer), zombie villager, villager (7 biomes), piglin (admire, dance), zombified piglin: shape, walk, arms; vanilla armour on each slot, dyed leather, glint, turtle helmet fit; sword / gold / trident / pumpkin / skull sit right; modded armour falls back to half-size; chicken jockey | `UndeadBabies`, `UndeadArmorLayerMixin`, `UndeadItemInHandMixin`, `UndeadCustomHeadMixin` |
+| CQ-BM-06 | client | Tame a Cozy's Improved Cat (cat bed home), make it a baby (`/data merge entity @e[type=cozys-improved-cats:cat,limit=1] {Age:-24000}`), give it the yarn ball (Cozy's Training String / yarn per cozy_cats.md) | the yarn ball sits in the baby cat's mouth at the 26.1 baby head position, not floating or buried; an adult cat's ball is unchanged; Cozy cats keep the 1.19.2 baby model (own entity type) | `PetCozyYarnMixin` (`CatYarnLayer.render` baby branch and `ModelPart.m_104299_` target) |
+| CQ-BM-07 | client | BM-15 (adults and log); then `babyModels = false` in `config/baby_mobs-common.toml` (restart) | adults of every mob above unchanged, inventory and spawn egg previews fine; `latest.log` has no `Baby Mobs:` error and no `piglin default poses not reachable`; with the switch off all babies are 1.19.2 half-size adults | `BMConfig`; `LivingEntityRendererBabyMixin` restore at RETURN |
+
+## SQ-ROLL Roll Delight port, 2026-11-01 ([roll_delight.md](../roll_delight.md) 8, TODO `largecontent/mod-additions #39`)
+
+Needs the Creative Delight jar nesting `backportedRoll 1.3.1-ce-19.2-01` (built 2026-11-01, not installed) and
+`roll_upstream/roll_delight-1.3.1-forge-1.20.1.jar` next to `mods/`; full restart (new member, items, startup scripts).
+Group A (superflat) and a bot player. ROLL- ids are the in-game list in roll_delight.md 8.
+
+| ID | Group | Commands | Expected | If it fails |
+|---|---|---|---|---|
+| SQ-ROLL-01 | A | Boot; `grep -nE "roll_delight\|Roll Delight\|Error occurred while handling event" logs/latest.log \| head -30`; `grep -c "Error" logs/kubejs/server.log` | members line lists `roll_delight`; `Roll Delight upstream assets: N files`; no `Failed to parse` / loot table error naming `roll_delight`; no error in `roll_delight/*.js` (ROLL-01) | donor missing or sha1 changed; generated loot JSON rejected (state range syntax) |
+| SQ-ROLL-02 | A | `/kubejs hand`-style checks or `/dumptags`: `#creativeengineering:chopstick_foods` holds `roll_delight:rice_roll_slice`, `farmersdelight:salmon_slice`, `minecraft:pufferfish`, `minecraft:cooked_cod`; `#roll_delight:nether_roll_meat` holds porkchop, bacon, prepared flesh | all present | tag script not run / helper name |
+| SQ-ROLL-03 | A | Bot: hunger 19 (`/effect give @p minecraft:hunger 2 255` then wait), main hand `roll_delight:chopsticks`, off hand `farmersdelight:cooked_rice`, use until eaten; `/data get entity @p foodLevel`; `/data get entity @p ActiveEffects`; `/data get entity @p SelectedItem` | hunger 20 (capped), the Comfort duration is 1.5x the food's, chopsticks Damage 1 (ROLL-07) | Start/Finish hook: off-hand identity check, `getUsedItemHand` |
+| SQ-ROLL-04 | A | Same with a dirt block, then `minecraft:bread` (not listed), then a listed food at hunger 20 | no durability lost, nothing extra eaten (ROLL-08) | B5 regression |
+| SQ-ROLL-05 | A | `/setblock ~ ~ ~ roll_delight:legendary_roll_medley`; bot right-clicks with an empty hand 9 times, counting items; again with a held dirt block; then with chopsticks at hunger 10 | 3 mushroom slices, 3 Salmon Maki, 2 Tobiko in that order, then the plate stays (servings 0) and the 9th click breaks it for a bowl; held dirt places against it; chopsticks eat one serving in place, 1 damage (ROLL-10, ROLL-14, ROLL-18) | `use` override, FeastBlock super |
+| SQ-ROLL-06 | A | `/setblock ~ ~ ~ roll_delight:mythical_roll_medley[servings=5]`, break it in survival | drops the 5 servings still on the plate (2 Nether Rolls, 3 Golden Roll Slices) and 1 bowl; at `[servings=8]` the medley itself (ROLL-11) | loot table generator |
+| SQ-ROLL-07 | A | `/setblock ~ ~ ~ roll_delight:wrapped_chopsticks`; bot uses wrapped chopsticks on it 3 times, then empty hand 4 times; place again with `[chopsticks=3]` and break | 4 pairs, then 4 plain Chopsticks back and the block gone; breaking at 3 drops 3 Wrapped Chopsticks (ROLL-12) | `use`, set_count conditions |
+| SQ-ROLL-08 | A | `/setblock ~ ~ ~ minecraft:frogspawn` on water; break with shears in survival; again by hand | shears: 1 frogspawn item; hand: nothing (ROLL-05) | BreakEvent hook |
+| SQ-ROLL-09 | A | `/enchant @p minecraft:unbreaking 3` with chopsticks held; anvil: damaged chopsticks + oak planks (bot can't use anvils: check `isValidRepairItem` via JEI anvil page client side if needed) | Unbreaking applies (ROLL-16 server half) | enchant category / Apotheosis filter |
+| CQ-ROLL-10 | client | ROLL-02, 03, 13, 15, 17, 19 to 22 (JEI recipes, names Salmon Maki Roll / Salmon Maki / Rice Roll Slice, golden gild page, tooltips on chopsticks and chopstick foods, Spice of Life count, anvil plank repair), medley and wrapped chopsticks models at every serving count and facing | as roll_delight.md 8 | translator blockstate rewrite (servings = 8 - upstream blockstate; chopsticks = upstream + 1) |
+
+## SQ-LGM Large Meals port, 2026-11-01 ([large_meals.md](../large_meals.md) 8, TODO `largecontent/mod-additions #12`)
+
+Needs the Creative Delight jar nesting `backportedLargeMeals 1.3.0-ce-19.2-01` (built 2026-11-01, not installed),
+`largemeals_upstream/largemeals-1.20.1-1.3.0.jar` next to `mods/`, and the rebuilt Display Delight jar (13 `lm_` blocks); full
+restart (new member, items, startup scripts). Group A (superflat) and a bot player. LGM- ids are the in-game list in large_meals.md 8.
+
+| ID | Group | Commands | Expected | If it fails |
+|---|---|---|---|---|
+| SQ-LGM-01 | A | Boot; `grep -nE "largemeals\|Large Meals\|Item is not food\|Error occurred while handling event" logs/latest.log \| head -30`; `grep -c "Error" logs/kubejs/server.log` | members line lists `largemeals`; `Large Meals upstream assets: N files`; no `Item is not food: largemeals:`; no KubeJS recipe errors naming largemeals | missing dict key, jar missing/sha1 (LGM-01) |
+| SQ-LGM-02 | A | `/give @p largemeals:potato_soup`, `/kubejs`-style JEI-free check: `/dumpall` then count `largemeals:` in `kubejs/exported/items_by_mod/` | 18 items, 3 blocks | registry (LGM-02) |
+| SQ-LGM-03 | A | Place a Cooking Pot over a campfire, insert 2 potato, onion, milk bucket, bowl; wait 200 ticks | Potato Soup out, bowl consumed; without a bowl the pot holds the meal (LGM-03) | recipe/container |
+| SQ-LGM-04 | A | Same for Sweet Berry Custard with a glass bottle | custard; stack size per the stack-size pass (LGM-04) | |
+| SQ-LGM-05 | A | Summon 20 sheep, bot kills each with a knife in the main hand; again burning; again with a stone sword | about half drop a Raw Rack of Mutton; burning ones the Cooked Rack; none with the sword (LGM-05, 06) | loot modifier (`data/forge/loot_modifiers`) |
+| SQ-LGM-06 | A | Cutting board: raw and cooked rack with a knife; furnace, smoker, campfire with a raw rack | 4 mutton chops / 4 cooked mutton chops; cooked rack from all three (LGM-07, 08) | |
+| SQ-LGM-07 | A | `/setblock ~ ~ ~ largemeals:omurice_block`, bot right-clicks with bowls 5 times; break a full and a `[servings=2]` one | 4 Bowl of Omurice, then the plate leftover; full drops the feast item, part-eaten a bowl (LGM-09, 10) | FeastBlock property names |
+| SQ-LGM-08 | A | Roasted Rack feast: pot with raw rack + 2 cooked rice + carrot + baked potato + bowl; then cooked rack + 2 rice + carrot + 2 baked potato + bowl; hand grid craft | each gives the feast (LGM-17); grid craft listed `_manual_only` | pot ingredient limit 6 |
+| SQ-LGM-09 | A | Egg recipes: Tomato Egg Soup, Omurice and Sweet Berry Custard with a duck, goose, parrot and turtle egg; a dragon egg | the four accepted, dragon egg rejected (LGM-18) | `#forge:eggs` |
+| SQ-LGM-10 | A | `/reload`, then `/kubejs dump_recipes`-style listing (or the recipe export) filtered on `creativedelight:` ids containing `manual_only` and a largemeals output | 13 `_manual_only` shapeless (4 soups, 6 meals and desserts, 3 feasts) + 3 sequenced assemblies on a bowl, none in the mechanical crafter (LGM-13) | |
+| CQ-LGM-11 | client | LGM-11 Feast Plating tab (3 pages), LGM-12 both curries' names, LGM-14 and 20 Display Delight placement (13 blocks), LGM-15, 16 Spice of Life (Hearty Lunch complexity 6, servings counted from the placed feast and the hand), LGM-19 Knife and Machete Drops tab, tooltips on the racks | as the test list | |
+
+## SQ-MXS / SQ-VTD7 Vintage Mixed Seeds and dump-driven steps, 2026-11-01 ([vintage_delight.md](../vintage_delight.md) 2.3a and 4.0a note, TODO `creativedelight/members #32`, `ports/vintageport #2`)
+
+Needs Vintage port `backportedVintage-0.1.6-ce-19.2-10` (built 2026-11-01, not installed) and the Creative Delight jar
+built from the same tree (tags, loot and JEI scripts); the pack's `blocktags.js` and `stack_sizes.json` from this tree.
+Full restart (new item, stack sizes are startup). Group A (superflat) and a bot player.
+
+| ID | Group | Commands | Expected | If it fails |
+|---|---|---|---|---|
+| SQ-MXS-01 | A | Boot; `grep -nE "mixed_seeds\|Error occurred while handling event" logs/latest.log logs/kubejs/server.log \| head`; `/dumptags` or `/kubejs`: item tags `vintagedelight:mixed_seeds_plants`, `forge:seeds` | no error naming mixed_seeds; the plant tag holds wheat, beetroot, `farmersdelight:cabbage_seeds`, melon and pumpkin seeds; `forge:seeds` holds `vintagedelight:mixed_seeds` | Unknown item: the `-10` jar is not loaded; empty tag: CD `vintagedelight/tags.js` not loaded |
+| SQ-MXS-02 | A | Lay 20 farmland with water; give the bot 20 `vintagedelight:mixed_seeds` in survival; it uses one on each farmland; read each block id; then use one on grass and on stone | 20 crops planted, the stack empty, at least four of the five kinds (wheat, beetroots, cabbages, melon stem, pumpkin stem); grass and stone: nothing planted, seed kept (VTD-46) | All one kind: the shuffle failed; seeds kept after planting: shrink missing |
+| SQ-MXS-03 | A | `/loot give @p loot minecraft:chests/village/village_plains_house` 40 times and count Mixed Seeds; bot breaks 300 `minecraft:grass` with an empty hand, then 100 with shears; `grep CE/vintage_mixed_seeds_grass logs/latest.log` if LootJS logging is on | some Mixed Seeds from the chest rolls (share 0.04, 1-4); about 6 from the 300 grass (2 %); none with shears (VTD-79) | none from grass: the LootJS modifier did not load (CD `vintagedelight/loot.js`) |
+| SQ-VTD7-01 | A | `/data get` or the stacks dump: max stack of `vintagedelight:red_chefs_hat`, `cheese_pizza`, `meat_pizza`, `cheese_wheel` | 8 each (were 1 for the hats, 64 for the pizzas and wheel) | `stack_sizes.json` not regenerated or startup not restarted |
+| SQ-VTD7-02 | A | `/dumptags` (block): `blockrunner:surface/wood` has `vintagedelight:peanut_crate`; `natural_smooth` has `oat_bale`, `salt:salt_block`; `constructed_brick` has `vintagedelight:salt_bricks`; `constructed_smooth` has `smooth_salt_block`; `confectionery` has `cheese_pizza`; log line `BlockRunner tier overlaps` reports 0 | all present, 0 overlaps | missing: `blocktags.js` not reloaded |
+| CQ-MXS-04 | client | Mixed Seeds icon, name, tooltip "Plants a random crop", JEI info page; JEI shows it in `#forge:seeds` uses | as listed | model or lang missing from the `-10` jar |
+
+## SQ-VDF Veggies Delight merges and family folds, 2026-11-01 ([veggies_delight.md](../veggies_delight.md) 3.3, 5.1, 8; TODO `merges/dishes #1` to `#3`, `creativedelight/members #30`)
+
+Needs the Creative Delight jar rebuilt after 2026-11-01 (scripts `veggiesdelight/`, `moredelight/recipes.js`,
+`pneumaticcraft/`, `creativeengineering/recipes.js`, startup `pneumaticcraft/item_merges.js`, `pneumatic_items.js`, `veggies_items.js`,
+`compost_rules.js`; second batch 2026-11-01 evening: SQ-VDF-07 to -10) and the
+pack's `transition_items.js` (5 new incomplete items): full restart. Port `-04` is not needed for these. Group A.
+
+| ID | Group | Commands | Expected | If it fails |
+|---|---|---|---|---|
+| SQ-MG-21 | A | Boot; `grep -n "itemMerges\|cod_n_chips" logs/kubejs/server.log \| head`; `/kubejs dump recipes` or the recipe probe for outputs `veggiesdelight:fish_and_chips` and `pneumaticcraft:cod_n_chips`; `/give @p pneumaticcraft:cod_n_chips` then check the inventory | no recipe makes or uses Cod 'n' Chips; Fish and Chips has only `creativedelight:cooking/fish_and_chips` (container bowl; the Fries grid route left with the Fries 2026-11-01); no `veggiesdelight:cooking/fish_and_chips` or its More Delight compat; the given stack becomes Fish and Chips (MG-48, VD-47) | pair not loaded (startup `pneumaticcraft/item_merges.js` requires both mods); `already merged` warning |
+| SQ-VDF-01 | A | `grep -n "Error occurred while handling event\|veggiesdelight/\|moredelight/recipes\|pneumaticcraft/recipes\|creativeengineering/recipes" logs/kubejs/server.log \| head -30`; `grep -n "no incomplete item registered" logs/kubejs/*.log` | no error from the edited files; no missing incomplete item for vegan_pizza, stuffed_zucchini_boat, stuffed_zucchinis, turnip_mutton_skewer, vegetarian_burger | transition_items.js row missing (startup, needs restart) |
+| SQ-VDF-02 | A | Recipe lookup by output: `moredelight:mashed_potatoes`, `veggiesdelight:mashed_potatoes` | Mashed Potatoes: pot `creativedelight:...mashed_potatoes` (potato or potato slices x2, milk, bowl) and grid `mashed_potatoes_cooked_manual_only`; Mashed Sweet Potatoes: pot `mashed_sweet_potatoes` (sweet potato or sliced sweet potato x2, milk, bowl) and grid `mashed_sweet_potatoes_cooked_manual_only` (3 baked sweet potatoes); no `moredelight:cooking/mashed_potatoes`, `veggiesdelight:cooking/mashed_potatoes` or its Vintage version (VD-48) | ids differ: check the CD id prefix |
+| SQ-VDF-03 | A | Recipe lookup: outputs `veggiesdelight:stuffed_bellpeppers_block`, `veggiesdelight:stuffed_bellpepper`; ids `veggiesdelight:bread_from_smelting`, `_smoking`, `_campfire_cooking`; `/dumptags` on the two stuffed pepper items | no recipe for either stuffed pepper item; no tags; the three bread ids absent; `creativedelight:...bread_from_dough_*` still list sweet potato dough via `#forge:dough` (VD-49, VD-50) | removedItems push in the startup file |
+| SQ-VDF-04 | A | Recipe lookup: `veggiesdelight:zucchini_quiche`, `vegan_pizza`, `stuffed_zucchini_boat`, `stuffed_zucchinis` | quiche: one shaped `zucchini_quiche_manual_only` + one sequenced assembly; pizza: one shaped `vegan_pizza_manual_only` (row 2 dough, sauce, dough) + one assembly on `#forge:dough`; boat and bowl: one assembly each on the roasted zucchini beside their grid / pot recipes; no `veggiesdelight:zucchini_quiche`, `compat/vintagedelight/zucchini_quiche`, `vegan_pizza` ids (VD-51, VD-52) | `F.assemble` needs Create; array step |
+| SQ-VDF-05 | A | Recipe lookup: `veggiesdelight:turnip_mutton_skewer`, `vegetarian_burger`, `cooked_vegetarian_patty`, `moredelight:simple_hamburger`, `hamburger_with_egg`, `loaded_hamburger` | skewer and burger: shaped `_manual_only` + one assembly each, no shapeless; the patty from furnace, smoker and campfire (CD ids); the three More Delight burgers' shaped recipes accept the vegetarian patty; no `veggiesdelight:compat/moredelight/*hamburger*` (VD-53) | Platform check in creativeengineering/recipes.js |
+| SQ-VDF-06 | A | `/dumptags` item `creativeengineering:food_family/preserve/pickle` | holds `veggiesdelight:fermented_garlic_honey` (VD-54) | seasoning_tags.js read of food_families.json |
+| SQ-VDF-07 | A | Recipe lookup by output and input `pneumaticcraft:chips`, `creativeengineering:canned_chips`; `/give @p pneumaticcraft:chips`; JEI search "Chips" | no recipe makes or uses Chips (no `creativedelight:cooking/fries`); Canned Chips does not exist (unknown item); Chips hidden in JEI; `/dumptags` lists no tag on Chips (owner 2026-11-01, `merges/dishes #1`) | startup `pneumaticcraft/pneumatic_items.js` not loaded (requires line) |
+| SQ-VDF-08 | A | Salting craft in a crafting grid: salt + `moredelight:mashed_potatoes`, then salt + `veggiesdelight:mashed_potatoes`; `/dumptags` item `salt:can_be_salted` | both give a salted dish; the tag holds both (`merges/dishes #2`) | `i.t_can_be_salted` missing in item_dict, or `moredelight/tags.js` not loaded |
+| SQ-VDF-09 | A | Recipe lookup by output: `creativeengineering:canned_mashed_potatoes`, `canned_mashed_sweet_potatoes`, `canned_bat_soup`, `canned_cave_soup`, `canned_insect_stew`, `canned_golden_nutritional_bar`; `/give @p creativeengineering:canned_mhadjeb` | each can has its canning recipe (the soups also `_broth`; the golden bar with honey); Canned Mhadjeb is unknown; CNS-08 rides on the same boot (Canned Noodle Soup Nourishment, Canned Bone Broth none) | gen_can_types.py output not in the jar's cans.js read (restart) |
+| SQ-VDF-10 | A | Hopper into a composter, one stack each: `create:dough`, `vintagedelight:oat_dough`, `vintagedelight:cucumber_dough`, `veggiesdelight:sweet_potato_dough`, `farmersdelight:wheat_dough`; or the compost probe | each adds a layer at 85 % (owner 2026-11-01); cucumber noodles unchanged | `doughs` category order in CD `compost_rules.js` |
+
+## SQ-BBQ Barbeque's Delight port, 2026-11-01 ([barbeques_delight.md](../barbeques_delight.md) 4, 7; TODO `largecontent/mod-additions #37`)
+
+Needs the Creative Delight jar with the `backportedBarbeques` member (built 2026-11-01) and the patcherMod jar with the
+`bbqSkewering` / `bbqGrilling` / `bbqCombine` emitters (same day), plus the pack's `item_dict.js`, `block_dict.js`,
+`food_dict.js`, `food_types.json`: full restart. Group A (superflat). Client rows (BBQ-04 WTHIT, renderers, the flip
+hint) are in the in-game suite, not here.
+
+| ID | Group | Commands | Expected | If it fails |
+|---|---|---|---|---|
+| SQ-BBQ-01 | A | Boot; `grep -n "barbequesdelight" logs/latest.log \| grep -i "error\|exception\|failed to parse\|missing" \| head`; `grep -n "barbequesdelight\|bbq" logs/kubejs/server.log logs/kubejs/startup.log \| grep -i "warn\|error" \| head` | mod `barbequesdelight` loads from the CD jar (`creativedelight_members.txt`); no recipe parse errors; no NCH warning for the 26 recipes; no compost warning for the 24 rows | `CampfireRainInfo` missing (patcherMod old); an unknown item key in `recipes.js` |
+| SQ-BBQ-02 | A | Recipe lookup: types `barbequesdelight:skewering` (10), `barbequesdelight:grilling` (10), `barbequesdelight:combine` (3); ids `creativedelight:shaped/bbq_grill`, `creativedelight:stonecutting/bbq_basin_from_logs`, `bbq_tray_from_logs` | 26 recipes, all `creativedelight:` ids; none under `barbequesdelight:` (the port ships no recipe data); skewering inputs are the `forge:` tags of 3.1 (beef: 2 `#forge:raw_beef` + 2 `#forge:crops/cabbage`) | NCH emitters missing (patcherMod jar not rebuilt) |
+| SQ-BBQ-03 | A | `/dumptags` item and block: `barbequesdelight:raw_skewers`, `grilled_skewers`; block `creativeengineering:campfire/rain_douses`, `blockrunner:surface/metal`, `blockrunner:surface/wood`, `minecraft:mineable/pickaxe`, `mineable/axe`; `creativeengineering:food_type/handheld`, `/meal`, `/hazard` | 10 + 10 skewers; rain_douses holds `minecraft:campfire` and `barbequesdelight:grill`; metal holds the grill, wood the basin and tray; mineable as upstream; the 10 cooked skewers, wrap and sandwich in handheld, bibimbap in meal, burnt skewer in hazard; raw skewers in no food type; `BlockRunner tier overlaps` 0 | `tags.js` not loaded (`global.CD.on`) |
+| SQ-BBQ-04 | A | Compost probe or `/dumpcompost`: the 24 items of 3.7; a seasoning, the grill, basin, tray | raw 25 %, cooked 50 %, burnt 25 %, wrap 50 %, sandwich 75 %, bibimbap 100 %; the seasonings and blocks have no row | CD startup `barbequesdelight/compost.js` not in the jar |
+| SQ-BBQ-05 | A | Bot: place a grill on a placed campfire (`/setblock` campfire then use the grill item on it); `/data get block` / block state; `/setblock ~ ~-1 ~ minecraft:stone`, `/weather rain`, light it with flint and steel, wait 200 ticks; repeat on `minecraft:coal_block` | state `has_campfire=true,lit=false` on placing; lit by flint and steel (light 15); out in rain after `rainOutTicks` (160) on stone; still lit on the coal block; breaking drops the grill and a campfire | rain rule: grill not in `rain_douses`, or Creative Compat not filling CampfireRainInfo |
+| SQ-BBQ-06 | A | Bot: grill on a lit campfire, put `raw_beef_skewer` on a slot (use on the top), wait 160 ticks, sneak-use empty hand, wait 160, take; second skewer left 640 ticks unflipped; `/data get block` on the grill during the burnt state twice, 20 ticks apart | flip allowed at 160; Cooked Beef Skewer at 320; the unflipped one becomes Burnt Skewer at 640; the burnt entry's NBT unchanged between reads and no block update spam (B1) | tick order; entry time not saved |
+| SQ-BBQ-07 | A | Bot: `/give` a `chili_powder` and a `barbeque_sauce`; raw beef skewer on the grill, use the sauce on it, then the powder; grill it; put a cooked beef skewer on an FD cutting board and use the sauce | sauce refused on the raw skewer (O28); powder accepted (name prefix "Chili Flavored"); the cooked skewer keeps the prefix; sauce accepted on the cutting board, durability 16 -> 15 (BBQ-09, BBQ-20, BBQ-21) | cutting board event priority (FD consumed the click first) |
+| SQ-BBQ-08 | A | Bot: craft Kebab Wrap from bread, a seasoned cooked beef skewer and cabbage; `/data get entity @p SelectedItem`; eat it | result has `Skewers:[{id:"barbequesdelight:grilled_beef_skewer",...,tag:{BBQSeasoning:...}}]`; a stick returned to the grid; eating applies Nourishment chance and the skewer's Strength (BBQ-13) | combine serializer not registered |
+
+## SQ-STK Stack size policy gaps, 2026-11-01 ([briefs/food_stack-sizes.md](../briefs/food_stack-sizes.md), TODO `food/stack-sizes #1`)
+
+Needs `kubejs/generation_scripts/stacks/stack_sizes.json` from this tree (1341 entries, 2026-11-01). Startup data: full
+restart. Group A.
+
+| ID | Group | Commands | Expected | If it fails |
+|---|---|---|---|---|
+| SQ-STK-01 | A | Boot; `grep -nE "\[stack_sizes\]\|no item_dict key" logs/latest.log logs/kubejs/startup.log \| head` | `set 1341 stack sizes`, no `no item_dict key` warning | count differs: the JSON in the instance is not the regenerated one |
+| SQ-STK-02 | A | `/dumpstacks` (or `/kubejs hand` per item): `fruitsdelight:pear_with_rock_sugar`, `apple_jello`, `hamimelon_shaved_ice`, `mangosteen_cake`, `berry_good:glowgurt`, `incubation:scrambled_eggs`, `farmersdelight:dog_food`, `veggiesdelight:sweet_potato_pancakes` | 32 each | rule order in `gen_stack_sizes.py` |
+| SQ-STK-03 | A | Same: `farmersdelight:hot_cocoa`, `melon_juice`, `farmersrespite:gamblers_tea`, `strong_hot_cocoa`, `create:builders_tea`, `abnormals_delight:cherry_cream_soda`; `brewinandchewin:flaxen_cheese_wheel`, `unripe_scarlet_cheese_wheel` | 32 each | as above |
+| SQ-STK-04 | A | Same: `farmersdelight:milk_bottle`, `neapolitan:milk_bottle` (64); `alexsmobs:fish_oil` (64); `botania:brew_flask`, `potion` unchanged | as listed | milk rule must run before the drink rules |
+| SQ-STK-05 | A | After the restart: `/dumpstacks`, then `python3 tools/stack_sizes.py` (`food/stack-sizes #2`) | stack_sizes.md dated today, the items above at their new sizes | none |
+
+## SQ-RDX Rustic member items, 2026-11-01 ([rustic_delight.md](../rustic_delight.md) 5.10; TODO `creativedelight/members #11 #15 #16 #20 #25 #26`, `framework #12`)
+
+Needs the CD jar and the Creative Brewing jar built 2026-11-01 20:30 (or later), plus the pack's item_dict.js, block_dict.js and transition_items.js: full restart. Group A (superflat), except RDX-13 (an old save).
+
+| ID | Group | Commands | Expected | If it fails |
+|---|---|---|---|---|
+| SQ-RDX-01 | A | Boot; `grep -n "rusticdelight\|Rustic Delight upstream" logs/latest.log \| grep -i "error\|exception\|data:" \| head`; `grep -n "rusticdelight\|pizza\|golden_coffee" logs/kubejs/server.log \| grep -i "error\|warn" \| head` | "Rustic Delight upstream data: N files" line; no recipe parse error; no `incomplete(...) not registered`; no NCH warning | missing incomplete key in transition_items.js; translator REPLACED broke a JSON |
+| SQ-RDX-02 | A | JEI search "Pancake", "Fried Dough"; hover Supplementaries' pancake | No Rustic plain Pancake or Fried Dough; Supplementaries' item is named "Pancake" with gray "Stackable: place up to 8 ..." line; the six flavoured Rustic pancakes still listed | lang not reloaded (client scripts) |
+| SQ-RDX-03 | A | Recipe lookup `rusticdelight:pancakes_from_pancake`, `pancake_from_pancakes`, `cutting/pancakes`; give a Pancakes plate, place, right-click x2, sneak-use with `supplementaries:pancake`, break it at 4 | 6 Supplementaries Pancakes + Bowl -> plate; plate -> 6; knife -> 6 + Bowl; right-click gives `supplementaries:pancake`; sneak-use puts one back; broken plate drops Supplementaries pancakes | REPLACED not applied (recipes missing), PancakeStackBlock serving lookup |
+| SQ-RDX-04 | A | Drink Syrup, Pumpkin, Cherry Blossom Coffee; `/data get entity @s ActiveEffects` after each (`/effect clear` between) | each: only `farmersrespite:caffeinated`, 900 ticks, amplifier 0; no Speed or Haste | CB jar old (swap list) or CD jar old (RDFoods) |
+| SQ-RDX-05 | A | Recipe lookup `farmersrespite:brewing/coffee`, `create_central_kitchen:mixing/coffee`, `creativedelight:frbrewing/gamblers_tea`; JEI Farmer's Respite coffee items | first two absent; gambler's tea from coffee beans + glow berries; Respite's coffee items hidden / merged as before | coffee_merge.js not in the jar |
+| SQ-RDX-06 | A | Recipe lookup Maple Glazed Bacon, Maple Cookie | bacon: Cooked Bacon + Syrup + Honey Bottle (one recipe); cookie: one Oven recipe, Cookie Dough + Syrup + Honey Bottle -> 12, no 2-syrup recipe | baking.js row still present |
+| SQ-RDX-07 | A | JEI Supreme Pizza; craft with cooked beef, cooked cod, brown mushroom, roasted red pepper slice, onion, flaxen cheese, Create dough + tomato sauce + oat dough; try cooked cod in the meat slot; `/dumptags` `creativeengineering:roasted_bell_pepper_slice` | shaped `pizza_manual_only` + sequenced assembly on dough; the craft works with mixed doughs and a roasted slice; cooked cod is refused in the meat slot; the tag holds 9 roasted slices | tag empty (rusticdelight/tags.js), food_type tags missing |
+| SQ-RDX-08 | A | Craft 9 Glowing Calamari -> crate and back; place it; mine with an axe vs hand; `/dumptags` block `forge:storage_blocks/glowing_calamari`, `minecraft:mineable/axe` | both recipes; block shows the placeholder glowing crate texture (not missing); axe is the fast tool; drops itself; name "Glowing Calamari Crate" | assets not in the nested Rustic jar; name script |
+| SQ-RDX-09 | A | JEI Sequenced Assembly for each Bell Pepper Roll, Cherry Blossom Roll, Calamari Roll, Glowing Calamari Roll, Rice Roll Royale; run the green roll and Royale on a deployer belt | 13 assemblies, each with its own incomplete item sprite; green: cooked rice + 2 green slices -> 2 rolls; Royale on a bowl, 8 deploys; shapeless recipes still there | incomplete item textures (auto-derived path) |
+| SQ-RDX-10 | A | Recipe lookup `creativedelight:shapeless/bell_pepper_soup_cooked_manual_only`, `calamari_soup_cooked_manual_only`, `coffee_braised_beef_cooked_manual_only`; put the soup's inputs in a Create basin (unheated) | the three grid recipes as rustic_delight.md 5.10; basin does not make them | id not ending _manual_only |
+| SQ-RDX-11 | A | Recipe lookup Golden Coffee Beans; craft with roasted beans + 8 gold nuggets; mixer (heated) with 6 nuggets; Arc Furnace with 5 | ring of any gold nugget (raw or roasted bean); heated mixer and Arc Furnace routes exist; upstream's shaped recipe gone | golden.js not loaded |
+| SQ-RDX-12 | A | Cutting board: knife on Glowing Calamari | 2 Glowing Calamari Slices + 1 Bone Meal; one recipe, id `creativedelight:farmersdelightcutting/glowing_calamari_slice_from_glowing_calamari` | old fdCutting id still present (duplicate) |
+| SQ-RDX-13 | old save | Copy a save that has `rusticdelight:pancake` and `rusticdelight:fried_dough` in a chest and a placed plain Pancakes plate; boot it | items gone from the chest without a crash (Forge missing-mapping prompt accepted); the plate stays and serves Supplementaries pancakes | remap behaviour (no conversion wanted) |
+| SQ-RDX-14 | A | Recipe lookup Supreme Pizza incomplete item `kubejs:incomplete_pizza`; Vintage Cheese and Meat Pizza | incomplete pizza item renders (Brewin pizza sprite, grey); Vintage pizzas unchanged (dough, sauce, dough) | texture path `brewinandchewin:item/pizza` |
+
+## SQ-NDM Nether's Delight 4.0 member, 2026-11-01 ([nethers_delight.md](../nethers_delight.md) 4.7, 4.9; TODO `largecontent/mod-additions #16`, `creativesplit/cdfinish #11` step 2)
+
+Needs the Creative Delight jar with the `repackedNethers` member (built 2026-11-01), `NethersDelight-1.19-3.1.jar` moved out
+of `mods/` and `server_mods/`, and the pack's `item_dict.js` / `block_dict.js`: full restart. Group A (superflat), except
+NDM-08 (a copy of a save made before the install). Client rows (Potted Mimicarnation cutout render, "Hoglin Trophy" and
+"Potted Mimicarnation" names) are in the in-game suite.
+
+| ID | Group | Commands | Expected | If it fails |
+|---|---|---|---|---|
+| SQ-NDM-01 | A | Boot; `grep -n "nethersdelight" logs/latest.log \| grep -i "error\|exception\|mixin\|duplicate" \| head`; mod list / `creativedelight_members.txt` | one `nethersdelight` mod, version `1.19-3.1-ce-19.2-01`, display name "Nether's Delight (Creative Delight)"; `nethersdelight.ce.mixins.json` applies `FungusColonyRulesMixin` with no error; no duplicate-mod crash | duplicate id: the 3.1 jar still in `mods/` or `server_mods/`; mixin error: the `m_213897_` constant or the class changed |
+| SQ-NDM-02 | A | `/setblock ~ ~ ~ minecraft:flower_pot`; bot uses `nethersdelight:mimicarnation` on it; check block state; bot uses empty hand on it; plant it again, then break it | pot becomes `nethersdelight:potted_mimicarnation`; empty hand gives the Mimicarnation back and leaves `minecraft:flower_pot`; breaking drops a Flower Pot and a Mimicarnation | no block: the `RegisterEvent` subscriber did not run; planting refused: `addPlant` missing (common setup) |
+| SQ-NDM-03 | A | `/dumptags` block `minecraft:flower_pots`, item `nethersdelight:meal_item` | flower_pots holds `nethersdelight:potted_mimicarnation`; meal_item holds `farmersdelight:stuffed_potato` | CD `nethersdelight/tags.js` not in the jar, or `global.CD.on('nethersdelight')` false |
+| SQ-NDM-04 | A | Recipe lookup by id: `farmersdelight:cooking/stuffed_hoglin`, `minecraft:netherite_machete_smithing`, `nethersdelight:cooking/stuffed_hoglin`, `nethersdelight:netherite_machete_smithing`; bot cooks Stuffed Hoglin in a heated Cooking Pot (2 Nether Salad, Raw Stuffed Hoglin) | the first two exist (Cooking Pot; smithing table: Diamond Machete + Netherite Ingot), the old two do not; the pot gives Stuffed Hoglin | old ids present: `replaced_resources` not applied |
+| SQ-NDM-05 | A | `/time set noon`; `/setblock` dirt, then `nethersdelight:crimson_fungus_colony` on it under open sky, then `/setblock` a block beside it; repeat under a 3-block roof in the dark; repeat on `nethersdelight:rich_soul_soil` in daylight; bot tries to place a colony item on dirt at noon | open-sky colony on dirt breaks on the neighbour update (drops the item); the roofed one and the rich soul soil one stay; placing on dirt in daylight is refused | survive check not merged (mixin) |
+| SQ-NDM-06 | A | 50 colonies at age 0 on rich soul soil, `/gamerule randomTickSpeed 30`, wait 1200 ticks; `grep -i "fungus\|colony\|CropGrow" logs/latest.log` | colonies reach age 3; no errors; Calendar's crop-grow hook still runs (season type nether, no penalty) | growth stuck: Calendar event refused, check CropSeasons type for the colonies |
+| SQ-NDM-07 | A | Recipe `nethersdelight:hoglin_mount` inputs | accepts White Wool or Hemp Fabric (fabric.js through `i.hoglin_mount`) | dict key missing |
+| SQ-NDM-08 | B (pre-install save copy) | Load a world saved with the 3.1 jar that has a placed Hoglin Mount, a Blackstone Stove with items, a Fungus Colony on rich soul soil, an empty flower pot | all blocks still there with the same ids, the stove keeps its items, no missing-registry warning for `nethersdelight:` | id changed or save format changed: compare against 3.1 |
+
+## SQ-CDFW CD framework: juice keys, generators into CD, family rows, 2026-11-01 ([creative_delight.md](../creative_delight.md) 35; TODO `creativedelight/framework #4`, `#7`, `#12`)
+
+Needs the Creative Delight jar built 2026-11-01 20:38 or later (cd_core genPut/genMerge, startup `<mod>/can_types.js` and `can_servings.js`, cans.js) and the pack's `kubejs/data/creativedelight/kubejs` tree: full restart. Group A (superflat). Offline already PASSED: CDT-08, CDT-10, CDT-13, CDT-14, FFH-03.
+
+| ID | Group | Commands | Expected | If it fails |
+|---|---|---|---|---|
+| SQ-CDFW-01 | A | Boot; `grep -n "\[cans\]\|\[food types\]\|\[placeable\]\|\[can servings\]\|\[mortar\]\|genPut\|genMerge" logs/kubejs/startup.log logs/kubejs/server.log \| head -20`; `grep -n "Error occurred while handling event" logs/latest.log \| head` | `[cans] registered 276 generated cans`; `[food types] ... in 31 types`; `[placeable]` counts; `[can servings] 313 cans` (less any whose mod is absent); `[mortar] 6 of 6 catalog crafts`; no "no ... member scripts loaded" error | a member script did not load: check its `// requires:` mod id and that the jar loader honours `requires`; rerun `tools/test_gen_members.py` |
+| SQ-CDFW-02 | A | `/dumptags item`; compare `creativeengineering:food_type/*`, `creativeengineering:canned_source`, `creativeengineering:cans/servings/*` sizes with `python3 tools/test_gen_members.py` (46 tags, 2724 entries) | same members as before the change (sizes equal to the last dump less items of absent mods) | genMerge lost a part: compare the merged data with the JSON records |
+| SQ-CDFW-03 | A | `/dumptags item` placeable tags; hover a Farmer's Delight pie and a Vinery wine bottle | `#creativeengineering:placeable`, `/sneak`, `_on_plate`, `_on_small_plate`, `_on_coaster` as before; tooltip lines shown | placeable member scripts or reader |
+| SQ-CDFW-04 | A | Recipe lookup: `creativedelight:shapeless/*` mortar crafts (create_wheat, create_sugar_cane, farmersdelight rice x2, cocoa powder, garlic clove); craft one canned food and one Canned Goods can, check the Servings line | 6 mortar crafts; cans craft, servings bar and tooltip as before | canning.js / can_tags.js reader |
+| SQ-CDFW-05 | A | Recipe lookup for outputs Baked Durian, Baked Pear, Dried Persimmon | exactly one furnace, one smoker and one campfire recipe each, all `creativedelight:`, 0.35 xp, 200 / 100 / 600 ticks; no `fruitsdelight:*_smoking` / `*_campfire` left | the family removal does not match a tag input: add id removals or fix `_cook`'s filter |
+| SQ-CDFW-06 | A | Same lookup for Grilled Ghast, Cooked Rotten Ham, Fried Turtle Egg, Cooked Arthropod, Cooked Duck Fillet, Cooked Perch / Pike Slice, Roasted Acorn, Farmer's Delight Fried Egg | three recipes each, `creativedelight:`, 0.35 xp, 200 / 100 / 600; no `hostiledelight:cghast_*`, `cookrothamrecp*`, `fteggrecp*`, `miners_delight:cooked_arthropod`, `abnormals_delight:upgrade_aquatic/cooked_*_slice*` | family removal missed a mod recipe |
+| SQ-CDFW-07 | A | Cutting board with a knife: raw catfish, salmon, cod; `#forge:raw_duck` item | catfish 6 slices + bone meal; salmon / cod 6 + bone meal; duck 2 fillets; no `alexsdelight:cutting/raw_catfish_slice`, `farmersdelight:cutting/salmon`, `/cod` | `_board` removal |
+| SQ-CDFW-08 | A | Craft a Golden Apple from 8 rose gold ingots + apple, and a Golden Carrot; recipe lookup `creativedelight:shaped/golden_apple`, `golden_carrot`, `createmixing/golden_*_gilding`, `iearcfurnace/golden_*_arc_gilding`, `createsequencedassembly/enchanted_golden_apple_sequenced_assembly` | both craft; no `minecraft:golden_apple` / `minecraft:golden_carrot` shaped recipe; mixer 6, arc 5, assembly 4 loops | goldenGild / goldenEnchant |
+| SQ-CDFW-09 | A | Recipe lookup: Farmer's assemblies (`barbecue_stick_`, `grilled_salmon_`, `bacon_and_eggs_`, `salmon_roll_`, `cod_roll_`, `kelp_roll_`, `rice_roll_medley_block_`, `roasted_mutton_chops_`, `shepherds_pie_block_`, `stuffed_potato_`, `steak_and_potatoes_`, `mutton_wrap_`, `fruit_salad_sequenced_assembly`); heatless `*_cooked_manual_only` of Farmer's, Fruits, Alex's, Abnormals, Delightful | all present with the old steps and loops (rolls make 3, fruit salad 2); heatless rows unchanged; `logs/kubejs/server.log` no "incomplete(... not registered" | incKey picked the wrong transition item key |
+
+## SQ-DNR Oceanic and Ender's donor jars, 2026-11-01 ([creative_delight.md](../creative_delight.md) 36, [ocean_delight.md](../ocean_delight.md) 5.6, [ends_delight.md](../ends_delight.md) 5.3; TODO `creativedelight/framework #3`, `members #6`, `members #9`)
+
+Needs the CD jar built 2026-11-01 20:42 or later (nests `portedOceanic-1.0.1-ce-19.2-02`, `endersAdditions-1.1.4-ce-19.2-03`) and the donor folders `oceanic_upstream/` and `enders_upstream/` beside `mods/` (already in the instance root). Full restart.
+
+| ID | Group | Commands | Expected | If it fails |
+|---|---|---|---|---|
+| SQ-DNR-O-01 | old world | Scratch server and client with the new CD jar plus both donor folders; load a copy of a 1.1.03+ world that has a placed paella plate (part eaten), a stuffed pufferfish, a sponge cake with bites, a sea grape column with fruit, wild sea grape and both crates; `grep -iE "oceanic_upstream\|Missing\|remap\|oceanic_delight" logs/latest.log` | Boots; "Oceanic Delight upstream assets/data: N files" logged; no missing-id or remap lines; every block keeps its state and texture; creative tab "Oceanic Delight" lists the items | Missing art: check `/datapack list` and the resource pack list for `oceanic_upstream_*`; a reset state: compare the property names in `ServingPlateBlock` / `SeaGrapePlantBlock` |
+| SQ-DNR-O-02 | A | Eat Shrimp Stew, Bowl of Paella, Sea Grape, Sea Grape Juice and Nautilus Juice; use the paella and pufferfish with and without a bowl; knife the sponge cake, then eat from it; bone meal a sea grape plant; brew Awkward + Elder Guardian Eye, then + redstone, + glowstone | Bowls, bottle and shell come back; Comfort 5:00, Nourishment 5:00, Instant Breath (air full) apply, with blue tooltip lines; no bowl gives "You need a Bowl to eat this."; the empty paella pan is picked up (pan + skillet); a slice drops; bone meal adds a plant; the three Mining Fatigue potions brew and JEI shows them | Compare with ocean_delight.md 5.6; missing effect: Farmer's Delight effect id lookup in `OceanicFood.farmers` |
+| SQ-DNR-O-03 | A | Rerun DA-01, DA-02, DA-09, DA-10 and DA-11 (ocean_delight.md 6) | Same results as before; drops come from `creativedelight:gameplay/fishing_net/*`; Upgrade Aquatic kelps and pickerelweed work through the tags; no loot parse error | Nothing drops: the CD jar is missing `data/creativedelight/loot_tables`; a block ignored: the tag fill in `oceanic_delight/fishing_net_tags.js` |
+| SQ-DNR-O-04 | normal world | Kill a salmon with a knife, an elder guardian, a squid; `/loot` a shipwreck supply and a buried treasure chest; fresh warm ocean | Salmon eggs and elder eye drop as upstream (squid: one squid item, no tentacles); chests can hold salmon or ancient fish eggs; wild sea grape patches generate | Modifier error in the log: codec `oceanic_delight:oceanic_delight_loot_modifier` not registered |
+| SQ-DNR-O-05 | A | Move `oceanic_upstream/oceanic_delight-1.0.1-forge-1.19.2.jar` away and start; then put any other jar there under that name and start; restore | Startup stops with the "reads its textures, models and recipes from the original Oceanic Delight jar ... folder 'oceanic_upstream' ... missing" message and the Modrinth URL; the second run says "wrong file ... expected 91fd8842..." | Game starts: `UpstreamJars.verifyOrFail` is not the first call of the constructor |
+| SQ-DNR-E-01 | old world | Same boot; load a 1.1.03+ world that has the four End plants, a Void Pepper vine (plain and fruiting), a Chorus Crate and an End House; `grep -i "enders_upstream\|enders_additions\|Missing" logs/latest.log` | No missing-id or remap lines; every 1.1.4 block and item keeps its texture and model; 1.2.2 items look as before | Missing textures: check that `enders_upstream_assets` is listed; 1.2.2 art changed: a translator path collides with 1.2.2 |
+| SQ-DNR-E-02 | A | `/loot spawn ~ ~ ~ loot endersdelight:blocks/chorus_crate`; break `chorus_flame_block` age 2 and a fruiting `voidpepper_block`; `/locate structure endersdelight:end_house` in the End | Crate drops itself; plants drop as in EN-01 / EN-02; the End House is located and placed | Compare `EndersTranslator.DATA` with `/datapack list` (`enders_upstream_data`) |
+| SQ-DNR-E-03 | A | Move `enders_upstream/endersdelight-1.1.4.jar` away and start; restore | Startup stops with the "Ender's Delight Additions (Creative Delight) ... folder 'enders_upstream' ... missing" message | `verifyOrFail` is not running first |
+| SQ-DNR-E-04 | A | Put another jar there under the same name and start; restore | Stops with "wrong file ... expected d1541d70..." | The sha1 pin is not checked |

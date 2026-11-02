@@ -824,7 +824,7 @@ named threads in the window. Nothing was changed; status: INVESTIGATED.
    Creative Delight run repeats the data-recipe scan the pack run already swapped. Fix: the second run walks only the added
    recipes; both walk the added recipes once with an id lookup instead of 30 filtered scans. Exact. The 5 s
    estimate is a log gap that also holds Creative Delight's other late scripts. BUILT 2026-10-27 (TODO server #20):
-   the merges are split into a `pack` group (rocky dirt, the 92 removed-wood pairs) and a `creative_delight` group (the
+   the merges are split into a `pack` group (rocky dirt, the 92 removed-wood pairs) and a `creativedelight` group (the
    14 food pairs), each swapped by one run only; `NCH.replaceItems` does one filtered pass over the data recipes and
    one prefiltered walk of the added ones per run (item_merges.md 1.1). The pair count had grown to 107 since the
    measurement, so the old cost was higher than above. Tests: scratch queue SQ-IMS-01 to -04.
@@ -962,7 +962,7 @@ Reading it:
 4. Kit fixes: `client_fps_log.js` used KubeJS 5's `java()` and then the class-filtered `java.lang.Runtime` (the 10.1
    FPS column did not come from it); now FPS only, heap from JFR. `client_drive.sh` resolves its results path
    (jcmd writes relative to the client's cwd); `eval_client.py` adds `dumponexit`. `merge_core_probe.js` expectations
-   updated (107 merges, 4-bottle milk recipes, `creative_delight:` cake cutting id).
+   updated (107 merges, 4-bottle milk recipes, `creativedelight:` cake cutting id).
 
 ### 12.3 Open
 

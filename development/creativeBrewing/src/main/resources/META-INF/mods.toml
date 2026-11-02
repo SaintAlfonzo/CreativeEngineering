@@ -10,13 +10,13 @@ displayName="${mod_name}"
 authors="${mod_authors}"
 description='''${mod_description}'''
 
-[[dependencies.creative_brewing]]
+[[dependencies.creativebrewing]]
 modId="forge"
 mandatory=true
 versionRange="${forge_version_range}"
 ordering="NONE"
 side="BOTH"
-[[dependencies.creative_brewing]]
+[[dependencies.creativebrewing]]
 modId="minecraft"
 mandatory=true
 versionRange="${minecraft_version_range}"
@@ -24,15 +24,22 @@ ordering="NONE"
 side="BOTH"
 # patcherMod: supplies KubeJS (it requires it), the shared helpers (global.NCH, global.tags) and the startup script
 # loader.
-[[dependencies.creative_brewing]]
+[[dependencies.creativebrewing]]
 modId="creativeengineering"
 mandatory=true
-versionRange="[1.1.03,)"
+versionRange="[1.1.07,)"
+ordering="AFTER"
+side="BOTH"
+# Creative Compat: required by every other Creative jar (creative_split.md 7.6).
+[[dependencies.creativebrewing]]
+modId="creativecompat"
+mandatory=true
+versionRange="[1.0.0,)"
 ordering="AFTER"
 side="BOTH"
 # Creative Calendar: the [time] master; the Vinery member's PackTime calls its time.WineTime directly
 # (feature_writeup/creative_calendar.md). AFTER so its startup script pack (global.CAL) runs before CB's.
-[[dependencies.creative_brewing]]
+[[dependencies.creativebrewing]]
 modId="creativecalendar"
 mandatory=true
 versionRange="[1.0.0,)"
@@ -40,8 +47,8 @@ ordering="AFTER"
 side="BOTH"
 # Creative Delight: nests Farmer's Delight (Brewin's base) and defines global.CD. AFTER so CB's startup script pack
 # loads after CD's (patcherMod's loader runs jar packs in mod-list order).
-[[dependencies.creative_brewing]]
-modId="creative_delight"
+[[dependencies.creativebrewing]]
+modId="creativedelight"
 mandatory=true
 versionRange="[1.0.0,)"
 ordering="AFTER"

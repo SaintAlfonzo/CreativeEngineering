@@ -13,8 +13,9 @@ The rules here are the policy. Edit them, rerun, restart the game:
 Rules never look at an item's current stack size, so the output does not shift after the game has applied it.
 Source data (all under kubejs/exported/, from /dumpall):
   items_by_mod/*.json            every item id, per mod
-  food/foods.json, food/drinks.json   edible items (remainder container)
-  tags/item_tags.json            #forge:eggs
+  stacks/stack_sizes.json        /dumpstacks rows: edible, useAnim, remainder, classes (not the size)
+  food/foods.json, food/drinks.json   remainder of edible items that are already at 64 (fallback)
+  tags/item_tags.json            #forge:eggs, #forge:milk/milk_bottle
 and kubejs/generation_scripts/food/food_types.json (food type -> item_dict keys) + startup_scripts/_lib/item_dict.js.
 """
 import glob
@@ -48,6 +49,7 @@ INGREDIENT_TYPES = {'ingredient'}                                  # cooking oil
 FOOD_LEAVE_ALONE = {
     'canned_goods:soda', 'canned_goods:reef_cola', 'canned_goods:oculemonade',
     'moredelight:omelette', 'alexsmobs:shrimp_fried_rice', 'corn_delight:caramel_popcorn',
+    'alexsmobs:fish_oil',                 # a bottled `special` food at 64; the bottled-food rule would take it to 32
 }
 # Specific foods that beat their type's size.
 FOOD_OVERRIDES = {
@@ -58,9 +60,19 @@ FOOD_OVERRIDES = {
     'rusticdelight:honey_pancakes': 32,
     'rusticdelight:vegetable_pancakes': 32,
     'fruitsdelight:fig_pudding': 8,       # a placed pudding block: counts as a placeable cake
+    'fruitsdelight:pear_with_rock_sugar': 32,   # bowl food (owner 2026-11-01: must be 32)
 }
-# Sweets sized by name: ice cream, pudding and custard (the catalog's `sweet` type holds 185 items).
-SWEET_32 = re.compile(r'(ice_cream|pudding|custard)$')
+# Sweets sized by name: ice cream, pudding, custard, jello, shaved ice (the catalog's `sweet` type holds 185 items).
+SWEET_32 = re.compile(r'(ice_cream|pudding|custard|jello|shaved_ice)$')
+# Milk bottles are a bottle ingredient (64), claimed before any drink rule; plus every #forge:milk/milk_bottle member.
+MILK_BOTTLES_64 = ['farmersdelight:milk_bottle', 'neapolitan:milk_bottle']
+# Cheese wheels (not food; ageing happens on the placed block, so unripe ones match the ripe ones).
+CHEESE_WHEELS_32 = [
+    'brewinandchewin:flaxen_cheese_wheel', 'brewinandchewin:scarlet_cheese_wheel',
+    'brewinandchewin:unripe_flaxen_cheese_wheel', 'brewinandchewin:unripe_scarlet_cheese_wheel',
+]
+# Drink-animation items that are potions in all but class: left out of the no-food-value drink rule.
+DRINK_NOT = {'botania:brew_flask', 'botania:brew_vial'}
 
 # --- placeable cakes and feasts (display-delight plated versions are separate blocks and are not touched) -------
 
@@ -76,6 +88,7 @@ PLACED_FOOD_8 = [
     'farmersdelight:stuffed_pumpkin_block',
     'fruitsdelight:pineapple_fried_rice',                          # PineappleRiceBlock feast
     'brewinandchewin:pizza',
+    'vintagedelight:cheese_pizza', 'vintagedelight:meat_pizza', 'vintagedelight:cheese_wheel',   # slice blocks
     # every pie, plus the nachos and popcorn box blocks
     'minecraft:pumpkin_pie', 'delightful:salmonberry_pie', 'endersdelight:chorus_pie', 'farmersdelight:apple_pie',
     'farmersdelight:chocolate_pie', 'farmersdelight:sweet_berry_cheesecake', 'farmersrespite:rose_hip_pie',
@@ -98,6 +111,7 @@ MISC_64 = [
     'neapolitan:chimpanzee_banner_pattern',
     'createaddition:biomass', 'createaddition:straw',
 ]
+VINTAGE_HAT = re.compile(r'^vintagedelight:\w+_chefs_hat$')
 # Hat bags, scraps and display blocks are not hats.
 HAT_NOT = re.compile(r'^simplehats:(hatbag_|hatscraps_|hatdisplay$|haticon$)')
 
@@ -141,6 +155,12 @@ def main():
                 food_type[key_to_id[k]] = t
     tags = json.load(open(EXPORT / 'tags/item_tags.json'))
     eggs = set(tags.get('forge:eggs', []))
+    # /dumpstacks rows (every item not at 64): edible, useAnim, remainder, classes. Never their stack size.
+    stack_rows = {r['id']: r for r in json.load(open(EXPORT / 'stacks/stack_sizes.json'))['items']}
+    remainder = {i: r.get('remainder') for i, r in stack_rows.items()}
+    for f, key in (('food/foods.json', 'foods'), ('food/drinks.json', 'drinks')):   # fallback: foods already at 64
+        for r in json.load(open(EXPORT / f))[key]:
+            remainder.setdefault(r['id'], r.get('remainder'))
 
     assigned = OrderedDict()      # id -> (size, rule)
     missing = []
@@ -167,6 +187,7 @@ def main():
             give(i, 8, 'filled bucket')
 
     require(PLACED_FOOD_8, 8, 'placed cake / feast')
+    require(CHEESE_WHEELS_32, 32, 'cheese wheel')
     require(BOTTLES_16, 16, 'special bottle')
 
     for i, size in FOOD_OVERRIDES.items():
@@ -174,6 +195,11 @@ def main():
             give(i, size, 'food override')
         else:
             missing.append(('food override', i))
+
+    require(MILK_BOTTLES_64, 64, 'bottle ingredient (milk)')
+    for i in sorted(tags.get('forge:milk/milk_bottle', [])):
+        if i in universe:
+            give(i, 64, 'bottle ingredient (milk)')
 
     for i, t in sorted(food_type.items()):
         if i not in universe:
@@ -189,11 +215,28 @@ def main():
         elif t in INGREDIENT_TYPES:
             give(i, 64, 'cooking ingredient / jam / honey')
         elif t == 'sweet' and SWEET_32.search(i):
-            give(i, 32, 'ice cream / pudding / custard')
+            give(i, 32, 'ice cream / pudding / custard / jello / shaved ice')
+
+    # Bowl and bottle foods of any other type (sweets, eggs, dog food). give() never overwrites, so golden (16),
+    # placed cakes (8) and ingredients (64) keep their earlier claim.
+    for i, t in sorted(food_type.items()):
+        if i in universe and t not in INGREDIENT_TYPES | GOLDEN_TYPES and t != 'canned':
+            if remainder.get(i) == 'minecraft:bowl':
+                give(i, 32, 'bowl food')
+            elif remainder.get(i) == 'minecraft:glass_bottle':
+                give(i, 32, 'bottled food')
+
+    # Drinks with no food value (not in the food catalog): drink animation, not a potion, not a bucket.
+    for i, r in sorted(stack_rows.items()):
+        if (i in universe and i not in DRINK_NOT and not r.get('edible') and r.get('useAnim') == 'DRINK'
+                and not any('PotionItem' in c for c in r.get('classes') or []) and not BUCKET_RE.search(i)):
+            give(i, 32, 'drink (no food value)')
 
     for i in sorted(universe):
         if i.startswith('simplehats:') and not HAT_NOT.match(i):
             give(i, 8, 'simple hat')
+        elif VINTAGE_HAT.match(i):
+            give(i, 8, 'simple hat')                                    # Vintage's 16 chef hats replace Simple Hats' one
 
     # 64: items other mods ship at 1-16
     require(STATIONS_64, 64, 'crafting station')

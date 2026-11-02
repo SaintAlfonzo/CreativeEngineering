@@ -6,7 +6,7 @@ Sources, lowest priority first (a later source wins for the same key, like the g
   2. the upstream jars the ports read at runtime (<name>_upstream/*.jar), then every mod jar in mods/
      (assets/<ns>/lang/en_us.json) with the jars nested in it (META-INF/jarjar/, Creative Delight's members)
   3. KubeJS: kubejs/assets/<ns>/lang/en_us.json, kubejs/assets/*.zip, and the ClientEvents.lang calls
-     in kubejs/client_scripts/*.js (e.add('key', 'Name'), e.renameItem / renameBlock('ns:id' or global.item.<key>, 'Name'))
+     in kubejs/client_scripts/*.js and the jar script trees kubejs/assets/*/kubejs/ (e.add('key', 'Name'), e.renameItem / renameBlock('ns:id' or global.item.<key>, 'Name'))
   4. the resource-pack zips enabled in options.txt (they sit above the KubeJS pack, see
      memory resource-pack-lang-priority)
 
@@ -102,7 +102,11 @@ def script_langs():
     which is block.* for a block item, so both forms are recorded."""
     out = {}
     item_ids = None
-    for js in sorted((INSTANCE / 'kubejs/client_scripts').rglob('*.js')):
+    # The pack folder first, then the client script trees the Creative jars ship (kubejs/assets/<modid>/kubejs/; their
+    # packs run after the pack folder; Compat, CD and CB names moved there 2026-10-27 to 2026-11-01)
+    scripts = sorted((INSTANCE / 'kubejs/client_scripts').rglob('*.js'))
+    scripts += sorted((INSTANCE / 'kubejs/assets').glob('*/kubejs/**/*.js'))
+    for js in scripts:
         text = js.read_text(errors='replace')
         if 'ClientEvents.lang' not in text:
             continue

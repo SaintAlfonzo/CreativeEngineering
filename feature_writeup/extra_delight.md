@@ -423,7 +423,7 @@ No load errors: the jar was never loaded in the pack.
 5. **Mob and chest loot** ([loot.md](loot.md)): no mob loot. The 21 chest GLMs either go into the pack loot lists
    (D14) or are dropped; Cornfield chest tables follow D4. Evaporator loot dropped with it.
 6. **Item merges:** none for the port route. Native route (D1): every Drop row becomes a `global.addItemMerges` pair in
-   the `creative_delight` group plus a JEI hide.
+   the `creativedelight` group plus a JEI hide.
 7. **Potions** ([potions.md](potions.md)): none (ED has no potions). Pickled / Pucker Up / Sunshine potions are not
    added (scope rule).
 8. **Alcohol:** none (ED's drinks are non-alcoholic). Ginger beer stays non-alcoholic.
@@ -471,7 +471,7 @@ Order: 0 and 1 before everything; the H&H port before step 3 (sausage tags); 2 a
 
 Routing (memory `creative-delight-routing`): food recipes, tags, values and cooking rules go in a CD tree
 `development/creativeDelight/src/main/resources/kubejs_startup/extradelight/` (startup) and
-`kubejs/data/creative_delight/kubejs/extradelight/` (server). Those are pack scripts (GPLv3), not ED code. Engine code
+`kubejs/data/creativedelight/kubejs/extradelight/` (server). Those are pack scripts (GPLv3), not ED code. Engine code
 (stations, blocks, feasts) stays in the CC BY-NC-SA port jar. ED has no alcohol, so nothing goes to the alcohol scripts.
 
 ## 5. Decisions for the owner
@@ -510,9 +510,9 @@ Routing (memory `creative-delight-routing`): food recipes, tags, values and cook
 |---|---|
 | `development/backportedExtraDelight/` | the port (Java, assets, data of kept content), CC BY-NC-SA 4.0 licence file and attribution |
 | `development/creativeDelight/src/main/resources/kubejs_startup/extradelight/` | items dict glue, food values, tags (CD startup) |
-| `kubejs/data/creative_delight/kubejs/extradelight/` | recipes (NCH), oven retargets, removals (CD server) |
+| `kubejs/data/creativedelight/kubejs/extradelight/` | recipes (NCH), oven retargets, removals (CD server) |
 | `kubejs/startup_scripts/_lib/item_dict.js` | `global.item` keys for kept ids |
-| `kubejs/data/creative_delight/kubejs/_worldgen/wild_crops.json` | wild chili, ginger, mallow, soybean |
+| `kubejs/data/creativedelight/kubejs/_worldgen/wild_crops.json` | wild chili, ginger, mallow, soybean |
 | `mod_sides.md`, `configs_edited/root_config/extradelight-*.toml` | sides row, config backup |
 
 ## 7. Offline checks (once built)

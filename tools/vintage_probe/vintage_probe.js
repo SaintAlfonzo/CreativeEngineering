@@ -37,7 +37,7 @@
     const Y = -60
     const VT = 'vintagedelight:', VG = 'veggiesdelight:', C = 'creativeengineering:'
     // the pack's food recipes are under C or, since the move into Creative Delight (2026-10-25), CDN
-    const CDN = 'creative_delight:'
+    const CDN = 'creativedelight:'
     function ours(id, path) { return id.indexOf(C + path) == 0 || id.indexOf(CDN + path) == 0 }
     let pass = 0, fail = 0, part = ''
     function check(name, ok, detail) {
@@ -60,15 +60,15 @@
         if (byId) return byId
         byId = {}; aliasId = {}
         server.getRecipeManager().getRecipes().forEach(r => { byId[String(r.getId())] = r })
-        // Food recipes moved into Creative Delight's tree on 2026-10-25 (creative_delight: ids, same paths): a
-        // creativeengineering: id the checks name also finds its creative_delight: twin
+        // Food recipes moved into Creative Delight's tree on 2026-10-25 (creativedelight: ids, same paths): a
+        // creativeengineering: id the checks name also finds its creativedelight: twin
         let aliased = 0
         Object.keys(byId).forEach(id => {
-            if (id.indexOf('creative_delight:') != 0) return
-            let old = 'creativeengineering:' + id.substring('creative_delight:'.length)
+            if (id.indexOf('creativedelight:') != 0) return
+            let old = 'creativeengineering:' + id.substring('creativedelight:'.length)
             if (byId[old] == null) { aliasId[old] = byId[id]; aliased++ }
         })
-        note('recipe ids aliased from creative_delight:', aliased)
+        note('recipe ids aliased from creativedelight:', aliased)
         return byId
     }
     function ingredientsOf(r) {
@@ -355,7 +355,7 @@
             tagList(I, 'forge:seeds/' + n).join(', ')))
         note('peanut seeds', 'the peanut plants itself (no seed item); #forge:seeds/peanut = ' + (tagList(I, 'forge:seeds/peanut').join(', ') || 'empty'))
         let rp = tagList(I, 'creativeengineering:roasted_bell_pepper')
-        // all nine colours since the Rustic Delight 1.7.0 port (creative_delight rusticdelight/tags.js)
+        // all nine colours since the Rustic Delight 1.7.0 port (creativedelight rusticdelight/tags.js)
         check('#creativeengineering:roasted_bell_pepper', sameSet(rp, ['green', 'red', 'yellow', 'orange', 'white', 'pink', 'blue', 'purple', 'black']
             .map(c => 'rusticdelight:roasted_bell_pepper_' + c)), rp.join(', '))
         check('burrito takes every roasted pepper', rp.length > 0 && rp.every(x => takes(server, C + 'shapeless/stuffed_burrito_manual_only', x)), '')
@@ -873,8 +873,8 @@
         check('no port food gives Dehydrated', bad.length == 0, bad.join(', ') || 'none')
         // the 6 jar brews: vanilla effect ids
         ;['berserks_brew', 'brashing_tonic', 'dragons_belch', 'goblins_piss', 'oily_oaf', 'frost_fermenta'].forEach(n => {
-            // berserks_brew is replaced by creative_delight:pickling/berserks_brew (#forge:salt, SQ-VTD4-02)
-            let r = rget(server, VT + 'fermenting/' + n) || rget(server, 'creative_delight:pickling/' + n)
+            // berserks_brew is replaced by creativedelight:pickling/berserks_brew (#forge:salt, SQ-VTD4-02)
+            let r = rget(server, VT + 'fermenting/' + n) || rget(server, 'creativedelight:pickling/' + n)
             if (!r) { check('brew ' + n, false, 'not loaded'); return }
             let nbt = String(r.getResultItem().nbt), ids = [], m, re = /Id:(-?\d+)/g
             while ((m = re.exec(nbt)) != null) {

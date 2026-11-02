@@ -148,7 +148,7 @@ FAMILY_KEY = {
     'soup/soup': ('soup', ''), 'soup/stew': ('soup', ''),
     'meal/rice': ('dish', ''), 'meal/pasta': ('dish', ''), 'meal/fried': ('dish', ''), 'meal/plate': ('dish', ''),
     'feast/whole': ('feast', ''), 'feast/serving': ('feast', 'serving'),
-    'drink/juice': ('drink', 'juice'), 'drink/tea': ('drink', ''), 'drink/coffee': ('drink', ''), 'drink/milk': ('drink', ''),
+    'drink/juice': ('fruit', 'juice'), 'drink/tea': ('drink', ''), 'drink/coffee': ('drink', ''), 'drink/milk': ('drink', ''),
     'drink/soda': ('drink', ''), 'drink/other': ('drink', ''),
     'alcohol/wine': ('alcohol', ''), 'alcohol/brew': ('alcohol', ''), 'alcohol/spirit': ('alcohol', ''),
     'alcohol/mixed': ('alcohol', ''),
@@ -174,7 +174,7 @@ NUT_WORDS = ('acorn', 'peanut', 'walnut', 'almond', 'pecan', 'hazelnut', 'chestn
 CATEGORY_WORDS = {
     'mushroom': ('mushroom',), 'cake': ('cake',), 'pie': ('pie',), 'cookie': ('cookie', 'cookies'), 'soup': ('soup',),
     'salad': ('salad',), 'sandwich': ('sandwich',), 'ice_cream': ('ice', 'cream'), 'golden': ('golden', 'enchanted'),
-    'can': ('canned',), 'feast': ('block', 'feast'), 'dough': ('dough',), 'meat': ('meat',), 'sauce': ('sauce',), 'egg': ('egg', 'eggs'), 'fruit': ('jam', 'jelly'),
+    'can': ('canned',), 'feast': ('block', 'feast'), 'dough': ('dough',), 'meat': ('meat',), 'sauce': ('sauce',), 'egg': ('egg', 'eggs'), 'fruit': ('jam', 'jelly', 'juice'),
     'drink': ('juice',),
 }
 CONTAINER_WORDS = ('bowl', 'of', 'plate', 'glass', 'mug', 'bottle', 'serving', 'raw')

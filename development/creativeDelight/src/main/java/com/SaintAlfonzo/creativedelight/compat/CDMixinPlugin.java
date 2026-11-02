@@ -16,7 +16,7 @@ import java.util.Map;
 import java.util.function.Consumer;
 
 /**
- * Mixin config plugin for creative_delight.mixins.json: the Java compartments of creative_delight.md 12. A mixin in
+ * Mixin config plugin for creativedelight.mixins.json: the Java compartments of creative_delight.md 12. A mixin in
  * {@code mixin.<modid>.} applies only when that mod is loaded (and, for a mod in {@link #FOR_VERSION}, only at that
  * version: those mixins fix bugs of one jar and would undo the upstream fix on a newer one). Nothing outside the
  * compartment's package references the mod, so CD boots the same without it. The gate is the shared
@@ -72,7 +72,7 @@ public class CDMixinPlugin extends GatedMixinPlugin {
 			"FruitsDelightLeafCheckMixin", CDMixinPlugin::patchLeafCheckHandler);
 
 	public CDMixinPlugin() {
-		super("[creative_delight]", COMPARTMENT_PREFIX, FOR_VERSION, Map.of());
+		super("[creativedelight]", COMPARTMENT_PREFIX, FOR_VERSION, Map.of());
 	}
 
 	@Override
@@ -93,7 +93,7 @@ public class CDMixinPlugin extends GatedMixinPlugin {
 				}
 			}
 		}
-		LOGGER.warn("[creative_delight] Fruits Delight's getFoodData handler not found in {}: null guard not applied",
+		LOGGER.warn("[creativedelight] Fruits Delight's getFoodData handler not found in {}: null guard not applied",
 				targetClass.name);
 	}
 

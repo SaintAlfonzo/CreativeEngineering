@@ -18,7 +18,7 @@ public abstract class GorillaForageBananaMixin {
 
 	@Redirect(method = "breakLeaves", remap = false, at = @At(value = "FIELD", opcode = Opcodes.GETSTATIC,
 			target = "Lcom/github/alexthe666/alexsmobs/item/AMItemRegistry;BANANA:Lnet/minecraftforge/registries/RegistryObject;"))
-	private RegistryObject<Item> creative_delight$neapolitanBanana() {
+	private RegistryObject<Item> creativedelight$neapolitanBanana() {
 		return BananaMergeHooks.banana(AMItemRegistry.BANANA);
 	}
 }

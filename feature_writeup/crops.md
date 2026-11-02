@@ -83,11 +83,27 @@ the plant is caught by the area break when you break a plant with a hoe (breaks 
 | Bell Pepper, Coffee, Cotton | `rusticdelight:bell_peppers`, `coffee`, `cotton` | no | yes | no | yes | yes | Quark replant (auto-found) | replant | yes |
 | Ender Crop | `endercrop:ender_crop` | no | yes, dark only | no | yes, dark only | yes, dark only | Quark replant (auto-found) | replant | yes |
 | Tobacco | `the_dirty_stuff:tobacco_seeds` | no | yes | no | yes (pack, §2.6) | yes (pack, §2.6) | Quark replant (config list, pack) | replant | yes (pack, §2.6) |
+| Oats, Peanuts (Vintage port; plant Oat Seeds, a Peanut) | `vintagedelight:oat_crop`, `peanut_crop` | no | yes | no | yes | yes | Quark replant (auto-found) | replant | yes |
 
 - Ender Crop off end stone needs raw light 7 or less at the crop, so a roofed, unlit farm. On
   Ender Crop's Tilled End Stone it needs light 8 or more instead.
 - Adzuki (`neapolitan:adzuki_sprouts`) behaves like a bush for soil (Dirt, Farmland, Rich, RichF and Fertile all
   yes, plus Adzuki Soil) but has no right-click. Break it when grown. Hoe RC no, hoe break yes.
+
+**Picked crops (a `CropBlock` with its own ripe pick, `#creativeengineering:crops/own_pick`, §2.2)**
+
+| Crop | Block | Dirt | Farmland | Rich | RichF | Fertile | Right-click | Hoe RC | Hoe break |
+|---|---|---|---|---|---|---|---|---|---|
+| Cucumber (Vintage port) | `vintagedelight:cucumber_crop` | no | yes | no | yes | yes | own pick at stage 7: 1-2 cucumbers (back to 5) | pick | yes |
+| Zucchini (Veggies port) | `veggiesdelight:zucchini_crop` | no | yes | no | yes | yes | own pick at stage 7: 1-2 zucchini (back to 4) | pick | yes |
+| Ghost Pepper (Vintage port) | `vintagedelight:ghost_pepper_crop` | no | **no** | no | **no** | **no** | own pick at stage 7: 1 ghost pepper (back to 5) | pick | yes |
+
+- Ghost pepper seeds plant only on `#vintagedelight:ghost_pepper_soil`: Soul Soil, Rich Soul Soil, Fertile Soul Soil
+  (nulch). The port's `canSurvive` checks the tag, so no farmland or other soil holds it (vintageport #7), and it grows
+  only in the Nether (§2.12.1). Wild ghost peppers also take nylium.
+- Villagers replant these to stage 0 (Quark's path, not the pick). Breaking a ripe one gives the normal crop loot.
+- Rows written from the port classes 2026-11-01 (oats, peanuts, cucumber, ghost pepper: `vintageport #2`); in-game
+  checks are VTD-01 to VTD-03 and VTD-76 ([vintage_delight.md](vintage_delight.md) §8).
 
 **Two-high crops**
 
@@ -110,7 +126,7 @@ the plant is caught by the area break when you break a plant with a hoe (breaks 
   makes the top fail its survival check, so the top breaks and drops its own corn. Clicking the top does nothing.
 - **Tomatoes:** both resets go to stage 0, so the result is the same. Tomatoes on Supplementaries sticks and ropes
   (`supplementaries:stick_tomatoes`, `rope_tomatoes`) use the same tomato code and the same own pick.
-  So do tomatoes on placed IE treated sticks (`creative_delight:treated_stick_tomatoes`, [treated_sticks.md](treated_sticks.md)).
+  So do tomatoes on placed IE treated sticks (`creativedelight:treated_stick_tomatoes`, [treated_sticks.md](treated_sticks.md)).
 
 **Water crop**
 
@@ -143,7 +159,7 @@ the plant is caught by the area break when you break a plant with a hoe (breaks 
 | Grape bushes: red, white, savanna, taiga | `vinery:red_grape_bush` etc. | yes | **no** | yes | **no** | probably yes, CR-13 | own pick from stage 2 (back to 1) | pick | yes |
 | Flower bushes (Floral Enchantment, 17 kinds) | `floralench:*_bush` | yes | yes | yes | yes | yes | own pick: stage 2 flowers, stage 3 vine items | pick | yes |
 | Blueberries, Cranberries (plant the berry) | `fruitsdelight:blueberry_bush`, `cranberry_bush` | yes | yes | yes | yes | yes | own pick at stage 4: 1-2 berries (back to 2) | pick | yes |
-| Lemon (two-high bush, plant Lemon Seeds) | `fruitsdelight:lemon_tree` | yes | yes | yes | yes | yes | own pick at stage 4, either half: 1-2 lemons (back to 2) | pick | yes, same height only |
+| Lemon (two-high bush, plant Lemon Seeds) | `fruitsdelight:lemon_tree` | yes | yes | yes | yes | yes | own pick at stage 4, either half: 2-5 lemons (back to 2; loot table override 2026-11-01) | pick | yes, same height only |
 | Tea (plant Tea Seeds) | `farmersrespite:small_tea_bush`, then the two-high `tea_bush` | yes | **no** | yes | **no** | yes | **shears only**: leaves by age + 2-3 sticks, back to a small bush. An axe stunts it | no (needs shears) | yes, same height only |
 
 - Grape bushes need a full opaque block below plus their own light rules. See [vinery.md](vinery.md) §2.6.
@@ -543,7 +559,7 @@ Scope for the planned vegetation system, not yet broken down per biome:
 
 **Status: BUILT 2026-10-03, offline-tested (`tools/test_wild_crops.sh`), DEPLOYED with 1.0.4; rules revised
 2026-10-10 (DEPLOYED with 1.0.6) and 2026-10-22 (tea, grapes, flax; DEPLOYED 1.1.01); not looked at in game. Moved into
-Creative Delight 2026-10-25 (same rules, ids now `creative_delight:*`; [creative_delight.md](creative_delight.md) 24,
+Creative Delight 2026-10-25 (same rules, ids now `creativedelight:*`; [creative_delight.md](creative_delight.md) 24,
 SQ-WCD queued).** Your 2026-10-03 spec
 decides which biomes each wild crop and fruit tree goes to. The mods' own rates stay; only the biomes change. §2.7
 describes what the mods do on their own, which is what you get with the switch off.
@@ -558,9 +574,9 @@ describes what the mods do on their own, which is what you get with the switch o
   name biomes directly. Ocean and cave biomes never match a rule. The traits come from Terralith's `c:` and `forge:`
   climate tags, base temperature and downfall, and the trees and ground each biome file places. Judgment calls are
   listed under "Choices made" below. The crop rules are Creative Delight's
-  `kubejs/data/creative_delight/kubejs/_worldgen/wild_crops.json`.
-- `kubejs/data/creative_delight/kubejs/_worldgen/wild_crops.js` (CD; on the pack's `_biome_rules.js`) applies it at world load:
-  - fills the biome tag `creative_delight:wild_crops/<crop>`;
+  `kubejs/data/creativedelight/kubejs/_worldgen/wild_crops.json`.
+- `kubejs/data/creativedelight/kubejs/_worldgen/wild_crops.js` (CD; on the pack's `_biome_rules.js`) applies it at world load:
+  - fills the biome tag `creativedelight:wild_crops/<crop>`;
   - replaces each mod's own biome modifier for that crop with `forge:none` (44 of them);
   - adds one `forge:add_features` modifier per crop (46).
   - Vanilla patches that Terralith's biome files list (sweet berries, pumpkins, melons, sugar cane) are removed from
@@ -569,13 +585,13 @@ describes what the mods do on their own, which is what you get with the switch o
   - A feature of a mod that isn't loaded is skipped, because an unknown id stops the world loading.
   - On world load it checks the live tags against the rules and lists any overworld biome the config doesn't
     classify.
-- Switch: `creative_delight-common.toml [worldgen] wildCrops` (was CEConfig `[worldgen.systems] wildCrops` until 2026-10-25). Off means every crop spawns
+- Switch: `creativedelight-common.toml [worldgen] wildCrops` (was CEConfig `[worldgen.systems] wildCrops` until 2026-10-25). Off means every crop spawns
   where its mod puts it. Rejoin to apply. Only new chunks change.
 - `python3 tools/gen_crop_worldgen_table.py` evaluates the same rules. [crops_by_biome.md](crops_by_biome.md) §3
   has each rule's exact biome list, §1 the before/after density per crop, §5 every biome with its traits and
   crops, and §6 the coverage checks.
 
-**Pack features** (`kubejs/data/creative_delight/worldgen/{configured,placed}_feature/wild/`, ids `creative_delight:wild/*`,
+**Pack features** (`kubejs/data/creativedelight/worldgen/{configured,placed}_feature/wild/`, ids `creativedelight:wild/*`,
 copied into the CD jar; the mushroom and cave carrot ones stay under `creativeengineering:wild/`). These exist
 where a mod's ground test would block the spec:
 
@@ -714,7 +730,7 @@ WTHIT's own "Growth: 60%" / "Growth: Mature" line comes from `PlantProvider` and
 identity: melon and pumpkin stem, nether wart, cocoa, sweet berry bush. A modded stem or berry bush is a different
 block, so it gets nothing. Every other plant in the pack was silent. The pack adds the same line, same wording, same
 "Crop progress" toggle in WTHIT's config, for all of them (Creative Delight `compat/wthit/WthitCropGrowth` since 2026-10-25, QoL-6, rules in
-`assets/creative_delight/crop_growth.json`). Plants you can pick before they finish read
+`assets/creativedelight/crop_growth.json`). Plants you can pick before they finish read
 "Growth: 75% (Harvestable)" until fully grown.
 
 **How the catalog was made:** `/dumpcropgrowth` (in `/dumpall`) walks every registered block and writes every one
@@ -787,7 +803,7 @@ blueberries, cranberries, lemons.
 **Knobs:** `[crop_growth]` in `config/creativeengineering-common.toml`: `enabled`, `fallback`, `showHarvestable`;
 WTHIT's own "Crop progress" option also hides the added lines. To change which plants or stages count, edit
 `crop_growth.json`; the copy in the jar is the default, a copy at
-`kubejs/assets/creative_delight/crop_growth.json` overrides it (F3+T reloads it).
+`kubejs/assets/creativedelight/crop_growth.json` overrides it (F3+T reloads it).
 
 ### 2.10 Extra stem fruit
 
@@ -825,8 +841,8 @@ grow more fruit on its other sides. Applies to every `AttachedStemBlock`: melon,
 ### 2.11 Village farm crops (`VillageFarmCrops`, Creative Delight; owner audit 2026-10-25)
 
 Every village farm can grow more than wheat, carrots, potatoes and beetroots. The rules are one data file in the Creative
-Delight jar, [village_farms.json](../development/creativeDelight/src/main/resources/creative_delight/village_farms.json)
-(`creative_delight/village_farms.json`): `share`, `groups` (crop block ids per climate group) and `templates` (farm template
+Delight jar, [village_farms.json](../development/creativeDelight/src/main/resources/creativedelight/village_farms.json)
+(`creativedelight/village_farms.json`): `share`, `groups` (crop block ids per climate group) and `templates` (farm template
 id to group). The table below is the review copy of `groups`; after an edit here, regenerate the file (ask for it) and
 rebuild `:creativeDelight:`.
 
@@ -1085,7 +1101,7 @@ Soil yield (extra produce on better soil, built 2026-10-28, off per crop by defa
 - **Wild crop placement (built 2026-10-03, DEPLOYED with 1.0.4, rules revised for 1.0.6; not looked at in game):** §2.8. Also oak/dark oak leaves drop no apples,
   Alex's Mobs leaf bananas are off (`config/alexsmobs.toml`) and Farmer's Respite's Basalt Deltas coffee is off.
 - **Bell pepper colours (built 2026-10-21, DEPLOYED 1.1.01):** the ripe Rustic Delight roll was red 6 : green 1 : yellow 1
-  plus 15% bonus green and yellow (red 58% of peppers). [rusticdelight/crop_drops.js](../kubejs/data/creative_delight/kubejs/rusticdelight/crop_drops.js) (Creative Delight; the pack's `loot/09_crop_drops.js` until 2026-10-27)
+  plus 15% bonus green and yellow (red 58% of peppers). [rusticdelight/crop_drops.js](../kubejs/data/creativedelight/kubejs/rusticdelight/crop_drops.js) (Creative Delight; the pack's `loot/09_crop_drops.js` until 2026-10-27)
   (pre-roll, like the leaf apples) sets the roll to 1 : 1 : 1 and appends a 15% bonus red pool, so each colour averages
   0.483 per ripe harvest. Pools are matched by their items, existing positions kept. Wild bell peppers stay red-only
   (forage hint). TODO `farming/crops #9`, CR-69, CR-70.
@@ -1281,18 +1297,18 @@ Brief: [briefs/farming_crops.md](briefs/farming_crops.md). Nothing here is built
   `rusticdelight-common.toml` `wild_*_chance`, `farmersrespite-common.toml` `teaBushChance` / `coffeeBushChance`,
   `supplementaries-common.toml` `[functional.flax.wild_flax]`, `neapolitan-common.toml` (strawberry height, chimpanzees)
 - WTHIT growth line (§2.9): Creative Delight `compat/wthit/WthitCropGrowth.java` (plugin, entry in CD's `waila_plugins.json`) and patcherMod `crops/CropGrowth.java`
-  (rules and maths), [crop_growth.json](../development/creativeDelight/src/main/resources/assets/creative_delight/crop_growth.json)
+  (rules and maths), [crop_growth.json](../development/creativeDelight/src/main/resources/assets/creativedelight/crop_growth.json)
   (the file to edit), `CEConfig` `[crop_growth]`, lang key `creativeengineering.wthit.crop_harvestable`;
   [kubejs/server_scripts/_lib/dump_crop_growth.js](../kubejs/server_scripts/_lib/dump_crop_growth.js) (`/dumpcropgrowth`),
   [tools/crop_growth_coverage.py](../tools/crop_growth_coverage.py), [tools/test_crop_growth.sh](../tools/test_crop_growth.sh) +
   `tools/crop_growth_test/CropGrowthTest.java`
-- Wild crop placement (§2.8), in Creative Delight since 2026-10-25: [wild_crops.json](../kubejs/data/creative_delight/kubejs/_worldgen/wild_crops.json)
+- Wild crop placement (§2.8), in Creative Delight since 2026-10-25: [wild_crops.json](../kubejs/data/creativedelight/kubejs/_worldgen/wild_crops.json)
   (crop rules, the file to edit), [biome_traits.json](../kubejs/generation_scripts/worldgen/biome_traits.json) (the pack's biome traits),
-  [wild_crops.js](../kubejs/data/creative_delight/kubejs/_worldgen/wild_crops.js) (applier, on the pack's `worldgen/_biome_rules.js`),
-  `kubejs/data/creative_delight/worldgen/configured_feature/wild/` and `placed_feature/wild/` (CD features),
+  [wild_crops.js](../kubejs/data/creativedelight/kubejs/_worldgen/wild_crops.js) (applier, on the pack's `worldgen/_biome_rules.js`),
+  `kubejs/data/creativedelight/worldgen/configured_feature/wild/` and `placed_feature/wild/` (CD features),
   `CDConfig` `[worldgen] wildCrops`, `CDResources` (jar copy of the rules),
   [kubejs/server_scripts/loot/08_leaf_apples.js](../kubejs/server_scripts/loot/08_leaf_apples.js) (leaf apples),
-  [kubejs/data/creative_delight/kubejs/rusticdelight/crop_drops.js](../kubejs/data/creative_delight/kubejs/rusticdelight/crop_drops.js) (crop harvest table fixes: bell pepper colours),
+  [kubejs/data/creativedelight/kubejs/rusticdelight/crop_drops.js](../kubejs/data/creativedelight/kubejs/rusticdelight/crop_drops.js) (crop harvest table fixes: bell pepper colours),
   [config/alexsmobs.toml](../config/alexsmobs.toml) `bananasDropFromLeaves` (copy in `configs_edited/root_config/`),
   [tools/test_wild_crops.sh](../tools/test_wild_crops.sh) + `tools/wild_crops_test/RhinoWildCrops.java` (offline checks)
 
@@ -1387,7 +1403,7 @@ Wild generation (§2.7). Use a new world, or chunks nobody has explored. `/locat
 - [ ] **CR-45 River trees:** `river` → small river trees on the banks, some with mulberry vines hanging from the leaves.
 - [ ] **CR-46 No wild flax:** search a river or beach area → no wild flax (V6).
 
-CR-38 to CR-45 describe the mods' own spawns: since §2.8 they only hold with `creative_delight-common.toml [worldgen] wildCrops = false`.
+CR-38 to CR-45 describe the mods' own spawns: since §2.8 they only hold with `creativedelight-common.toml [worldgen] wildCrops = false`.
 
 Pack wild-crop placement (§2.8). Needs patcherMod 1.0.4 rebuilt 2026-10-03 in `mods/` for CR-58 (the scripts default to on
 without it). New world, or unexplored chunks; `/locate biome <id>`.
@@ -1414,8 +1430,8 @@ without it). New world, or unexplored chunks; `/locate biome <id>`.
 - [ ] **CR-57 Leaf drops [scratch server PASSED 2026-10-22, SQ-CD-02, 2000 rolls each / game]:** break 200 oak leaves, 200 dark oak leaves and 200 Myrtrees rubberwood leaves (or
   `/loot spawn ~ ~ ~ mine ~ ~ ~` on placed leaves) → saplings and sticks, no apples; the log has
   `[leaf-apples] apples removed from 3 of 3 leaf tables`. Break jungle leaves → no Alex's Mobs bananas. Basalt Deltas → no wild coffee bushes.
-- [ ] **CR-58 Switch off:** set `[worldgen] wildCrops = false` in `config/creative_delight-common.toml`, new world → the log has
-  `[wild-crops] off in creative_delight-common.toml`; `plains` has strawberries and corn again (mod defaults). Leaf apples stay off (that's loot,
+- [ ] **CR-58 Switch off:** set `[worldgen] wildCrops = false` in `config/creativedelight-common.toml`, new world → the log has
+  `[wild-crops] off in creativedelight-common.toml`; `plains` has strawberries and corn again (mod defaults). Leaf apples stay off (that's loot,
   not this switch).
 
 - [ ] **CR-59 Hemp:** plant hemp on farmland and look at it each stage → "Growth: 0%", 25%, 50%, 75%, then "Growth: Mature" at the
@@ -1431,7 +1447,7 @@ without it). New world, or unexplored chunks; `/locate biome <id>`.
   colonies, rice, budding tomatoes, adzuki, mulberries, pineapple, hamimelon stem and a floral bush each show one too.
 - [ ] **CR-65 Toggles:** turn WTHIT's "Crop progress" off (WTHIT config, vanilla plugin section) → the added lines go too, wheat's as well. Set
   `[crop_growth] enabled = false` → only the added lines go. `showHarvestable = false` → "(Harvestable)" disappears.
-- [ ] **CR-66 Override file:** copy `crop_growth.json` to `kubejs/assets/creative_delight/`, change salmonberry's `"harvest": 3` to 4, F3+T →
+- [ ] **CR-66 Override file:** copy `crop_growth.json` to `kubejs/assets/creativedelight/`, change salmonberry's `"harvest": 3` to 4, F3+T →
   stage 3 no longer says "(Harvestable)". Delete the copy and F3+T → it is back.
 - [ ] **CR-67 Dark Forest humus:** new chunks of a Dark Forest → humus patches have adzuki sprouts, grass, flowers and mushroom
   colonies on them like the grass around (adzuki is rare, 1 in 128 chunks; `/place feature neapolitan:patch_adzuki_sprouts` on humus works).
@@ -1478,7 +1494,7 @@ the real client (rendering, tooltips, JEI, natural random ticks with a player ne
 
 ### Crop seasons (§2.12.1, added 2026-10-30)
 
-Needs patcherMod 1.1.04 built 2026-10-30 after 21:40, backportedVinery `-06` and creative_delight with endersAdditions
+Needs patcherMod 1.1.04 built 2026-10-30 after 21:40, backportedVinery `-06` and creativedelight with endersAdditions
 `-02` in `mods/` (and the server), and a full restart. Scratch server half: SQ-CS in testing/scratch_queue.md, all
 PASSED r1031 (2026-10-31; SQ-CS-03 to -05 on a plains superflat), including the CR-91 growth comparison; CQ-CS-07
 (tooltips, WTHIT) is the client half.

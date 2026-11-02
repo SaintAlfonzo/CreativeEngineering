@@ -270,7 +270,7 @@ replant, hoe area replant, hoe area break. Follow the §2.6 checklist (crops.md 
   `development/patcherMod/src/main/resources/creativeengineering.mixins.json` next to `TobaccoPlacementMixin` (line 140)
   and the Quark mixins (148-154).
 - `libs/` compile jars are not in git: Farmer's Respite for the tea mixin; the hemp rule reads properties by name.
-- The Vinery port change ships in the Creative Brewing jar (`creative_brewing-*.jar` in `mods/`); install it with the
+- The Vinery port change ships in the Creative Brewing jar (`creativebrewing-*.jar` in `mods/`); install it with the
   patcherMod jar, never while the game runs.
 
 ### Tests
@@ -490,7 +490,7 @@ A hoe mines the Oceanic Delight sea grape plant at tool speed, as the newer Ocea
 - Dict: `i.sea_grape_plant` (item_dict.js 14679). block_dict has `b.t_mineable_axe` / `b.t_mineable_pickaxe` (lines
   150-151) but no hoe key.
 - CD has no `oceanic_delight` script folder: the Oceanic tags sit in
-  [oceansdelight/tags.js](../../kubejs/data/creative_delight/kubejs/oceansdelight/tags.js) (item tags only, gated by
+  [oceansdelight/tags.js](../../kubejs/data/creativedelight/kubejs/oceansdelight/tags.js) (item tags only, gated by
   `global.CD.on('oceanic_delight')`).
 
 ### Build
@@ -522,7 +522,7 @@ vine.
 ### Now
 - Tomato blocks: `farmersdelight:budding_tomatoes` -> `farmersdelight:tomatoes` (`b.tomatoes`, block_dict.js 110; climbs
   ropes through its `ropelogged` state), Supplementaries `supplementaries:stick_tomatoes` and `rope_tomatoes`
-  (blockstates in `supplementaries-1.19.2-2.4.20.jar`, verified 2026-10-31), CD `creative_delight:treated_stick_tomatoes`
+  (blockstates in `supplementaries-1.19.2-2.4.20.jar`, verified 2026-10-31), CD `creativedelight:treated_stick_tomatoes`
   (`b.treated_stick_tomatoes`, block_dict.js 113, `treatedstick/TreatedStickTomatoBlock`). All use FD's tomato own pick
   ([crops.md](../crops.md) 2.1 tomato row and lines 111-113).
 - Quark records only the default ripe state, so it knows the bottom vine and nothing else (crops.md 2.2 "Exact state
@@ -535,7 +535,7 @@ vine.
 
 ### Build
 1. Tag the four tomato blocks into `b.t_own_pick_crops`: FD tomatoes and the treated stick in CD
-   [farmersdelight/tags.js](../../kubejs/data/creative_delight/kubejs/farmersdelight/tags.js) block event (line 34);
+   [farmersdelight/tags.js](../../kubejs/data/creativedelight/kubejs/farmersdelight/tags.js) block event (line 34);
    the two Supplementaries blocks need new keys `b.stick_tomatoes`, `b.rope_tomatoes` in block_dict.js. `/reload`.
    The bottom vine changes from Quark replant to FD's pick: both reset to stage 0 (crops.md line 111), so the
    result is the same.
@@ -724,11 +724,11 @@ Rustic Delight crops appear in village farms only in the climates where their wi
 `farming/crops #16`).
 
 ### Now (checked 2026-10-31)
-- [village_farms.json](../../development/creativeDelight/src/main/resources/creative_delight/village_farms.json): Rustic
+- [village_farms.json](../../development/creativeDelight/src/main/resources/creativedelight/village_farms.json): Rustic
   `bell_peppers`, `cotton` and `coffee` sit in both `warm_dry` (lines 54-56) and `warm_wet` (69-71). The review copy is
   the crops.md 2.11 "Crops per group" table (Bell Peppers x / W, Cotton W / x, Coffee x / W). The roll ignores biome
   rules: group membership is the only rule.
-- Wild rules ([wild_crops.json](../../kubejs/data/creative_delight/kubejs/_worldgen/wild_crops.json)): `cotton` warm dry
+- Wild rules ([wild_crops.json](../../kubejs/data/creativedelight/kubejs/_worldgen/wild_crops.json)): `cotton` warm dry
   grassy; `bell_pepper` warm wet `!cliff`; `coffee` warm wet `!cliff` (replaces Farmer's Respite's coffee bush);
   `giant_bell_pepper` warm dry grassy (a decoration block, not a farm crop).
 - Pale and dark bell peppers (`rusticdelight:pale_bell_peppers`, `dark_bell_peppers`, CD `rustic` member
@@ -768,7 +768,7 @@ The soil yield of `farming/crops #23` for nether crops: extra produce on Nulch (
 - The outline is [crop_yields.md](../crop_yields.md) 4 (owner: outline only): nether wart, ghost pepper, propelplant,
   crimson and warped fungus colonies; a second soil list `[crop_drops.soil_yield.nether]`, crop switches all off.
 - Overworld code: CD
-  [creativeengineering/soil_yield.js](../../kubejs/data/creative_delight/kubejs/creativeengineering/soil_yield.js),
+  [creativeengineering/soil_yield.js](../../kubejs/data/creativedelight/kubejs/creativeengineering/soil_yield.js),
   CEConfig `[crop_drops.soil_yield]` (`CEConfig.java` around lines 688-743; `CROPS` table order = config keys).
 - Dict keys (checked 2026-10-31): `i.nether_wart` (642), `i.nulch` (678, `immersive_weathering:nulch_block`),
   `i.soul_sand` (1288), `i.soul_soil` (1289), `i.crimson_fungus_colony` / `i.warped_fungus_colony` (13340, 13342),
@@ -917,11 +917,11 @@ Seed bags (storage blocks: 9 seeds <-> 1 bag) for the crops that have none, from
   pips (sweet berry, glow berry, salmonberry, strawberry, raspberry); adzuki beans.
 
 ### Build
-1. Owner picks the list (decision). Ids `creative_delight:<seed>_seeds_bag` (CD core, not a member: these are not one
+1. Owner picks the list (decision). Ids `creativedelight:<seed>_seeds_bag` (CD core, not a member: these are not one
    mod's items), registered beside `treatedstick/TreatedSticks.java`'s registry, same block properties as Rustic's
    `bag()`.
 2. Art: one bag texture recoloured per seed (client, CD assets), blockstate, item model, lang names "<Seed> Bag".
-3. Recipes through `global.NCH` in the CD tree of the seed's mod (`kubejs/data/creative_delight/kubejs/<mod>/recipes.js`):
+3. Recipes through `global.NCH` in the CD tree of the seed's mod (`kubejs/data/creativedelight/kubejs/<mod>/recipes.js`):
    `R.shaped(bag, ['SSS', 'SSS', 'SSS'], { S: seed }, e, '<seed>_seeds_bag')` and `R.shapeless(Item.of(seed, 9), [bag], e,
    ...)`; loot table drops itself.
 4. Dict keys in item_dict.js; compost value (same as Rustic's bags, 1.0); `L.pack` lines where a loot table gives many
@@ -932,7 +932,7 @@ Seed bags (storage blocks: 9 seeds <-> 1 bag) for the crops that have none, from
 ### Decisions
 - Which seeds. Recommendation: the vanilla four, FD cabbage and tomato, and the CD-port seeds (Veggies, Vintage); skip
   pips and single-use seeds (lemon, cantaloupe) unless asked.
-- Namespace: `creative_delight:` (recommended) vs the seed's own mod namespace (would need one member per mod).
+- Namespace: `creativedelight:` (recommended) vs the seed's own mod namespace (would need one member per mod).
 
 ### Gotchas
 - Quark's seed pouch takes `#forge:seeds` (crops #13); the bag must not be in that tag.
@@ -965,14 +965,14 @@ melon slices, own textures.
 - Melon dict keys: `i.melon` is the **slice** (`minecraft:melon_slice`, item_dict 1741), `i.melon_seeds` (2535).
 
 ### Build
-1. CD core (namespace `creative_delight`): `mini_melon` (fruit, block item like the Mini Cantaloupe), `mini_melon_seeds`,
+1. CD core (namespace `creativedelight`): `mini_melon` (fruit, block item like the Mini Cantaloupe), `mini_melon_seeds`,
    `mini_melon_plant`. Make the plant a copy of `CantaloupePlantBlock` taking the fruit and seed suppliers (do not reach
    into the member's class from core).
 2. Recipes in CD `minecraft/recipes.js` (the melon is vanilla's) through `global.NCH`: `R.shaped(i.mini_melon, ['mm',
    'mm'], { m: i.melon }, e, 'mini_melon')`; knife: `R.fdCutting(i.mini_melon, i.any_knife, Item.of(i.melon, 4), e,
    'mini_melon_cutting')`; seeds `R.shapeless(i.mini_melon_seeds, [i.melon_seeds], ...)` and back.
 3. Data: loot tables (plant, fruit), `#forge:seeds` (pouch), crop seasons `warm_wet` (as the melon stem), WTHIT
-   [crop_growth.json](../../development/creativeDelight/src/main/resources/assets/creative_delight/crop_growth.json)
+   [crop_growth.json](../../development/creativeDelight/src/main/resources/assets/creativedelight/crop_growth.json)
    entry, compost values, food values (match the Mini Cantaloupe), dict keys.
 4. Art (resource pack, client): plant stages 0-3, fruit block and item, seeds; lang.
 5. Changelog bullet; crops.md 2.1 row.

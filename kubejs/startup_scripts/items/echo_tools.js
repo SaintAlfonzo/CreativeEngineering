@@ -39,7 +39,7 @@ StartupEvents.registry('item', event => {
 			.group('tools')
 			.displayName(pretty)
 			// On-hit Weakness II + Darkness II (tooltip + effect) registered via
-			// global.toolEffects.onHit() in startup_scripts/func/tool_effects.js — matches
+			// global.toolEffects.onHit() in CB startup creativeengineering/tool_effects.js — matches
 			// create_deep_dark:echo_sword's own tooltip/effect for consistency.
 	})
 })

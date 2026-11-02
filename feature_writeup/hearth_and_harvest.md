@@ -339,8 +339,8 @@ Owner, 2026-10-30: the watering can only, now, through patcherMod; the rest wait
   `1.4.1-ce-19.2-02`; patcherMod's `wateringcan/`, `assets/hearthandharvest/`, the `credit.txt` line and
   `META-INF/licenses/hearthandharvest-MIT.txt` are gone (the member's `NOTICE-upstream-MIT.txt` lists the texture and
   strings). Code: `item/WateringCanItem`, `item/WateringCanTier`, registered in `item/HHItems`; JEI info page per tier in
-  `compat/HHJeiPlugin` (JEI compileOnly). Recipe and fertiliser tag moved to CD `kubejs/data/creative_delight/kubejs/
-  hearthandharvest/recipes.js` and `tags.js` (recipe ids `creative_delight:...`); `server_scripts/equipment/watering_can.js`
+  `compat/HHJeiPlugin` (JEI compileOnly). Recipe and fertiliser tag moved to CD `kubejs/data/creativedelight/kubejs/
+  hearthandharvest/recipes.js` and `tags.js` (recipe ids `creativedelight:...`); `server_scripts/equipment/watering_can.js`
   deleted. patcherMod and CD must be installed together (old patcherMod + new CD registers the id twice).
 - **Tiers (pack addition, owner 2026-10-31):** one class, `WateringCanTier` holds the numbers. Capacity is for water
   and fertiliser each. Fills from a water source stay free; a well or any block entity with a water fluid handler costs
@@ -411,7 +411,7 @@ running).
 
 - **Home:** CD member `backportedHearth` (`development/creativeDelight/members/hearth/`, mod id `hearthandharvest`,
   version `1.4.1-ce-19.2-01`), nested in the CD jar (`bundle_members`, `replaces_jars` also moves any standalone
-  `hearthandharvest-*.jar` / `backportedHearth-*.jar` out of `mods/`). Member switch `creative_delight-common.toml
+  `hearthandharvest-*.jar` / `backportedHearth-*.jar` out of `mods/`). Member switch `creativedelight-common.toml
   [members] hearthandharvest` (added by CD from the members list). Later H&H pieces go in the same member; the
   watering can moved here 2026-10-31 (4.0).
 - **Route:** MIT (as 4.0). Art and data copied unchanged from the 1.4.1 jar (`NOTICE-upstream-MIT.txt` lists them);
@@ -427,7 +427,7 @@ running).
   drops 2-3 raspberries at age 3, 1-2 at age 2 (Fortune adds). Raspberry: 2 hunger, 0.4 saturation modifier, eaten fast.
   Foxes get 1.4.1's berry bush goal (priority 10): walk to a ripe bush (age 2+), take one raspberry into the mouth if
   empty, drop the rest (1-2, one more at age 3), bush to age 1; needs mob griefing.
-- **Recipe:** 1 raspberry -> 1 pips (shapeless, upstream), CD `kubejs/data/creative_delight/kubejs/hearthandharvest/recipes.js`.
+- **Recipe:** 1 raspberry -> 1 pips (shapeless, upstream), CD `kubejs/data/creativedelight/kubejs/hearthandharvest/recipes.js`.
 - **Tags** (CD `hearthandharvest/tags.js`, 1.4.1's `c:` tags as `forge:`): raspberry in `#forge:fruits/raspberries`
   (the pack's existing plural tag) and `#forge:fruits`, `#forge:crops/raspberry` and `#forge:crops`, `#forge:berries`,
   `#forge:fruits/berries`, `#minecraft:fox_food`; pips in `#forge:seeds/raspberry` and `#forge:seeds`. Food type
@@ -435,7 +435,7 @@ running).
 - **Seasons:** `temperate` in `crop_seasons.json` (1.4.1: spring and summer crop), not Serene Seasons tags.
 - **WTHIT:** growth line rule in CD `crop_growth.json`, harvestable at age 3.
 - **Worldgen:** wild crop rule `raspberry` in `wild_crops.json` ("temperate grassy", 26 biomes, crops_by_biome.md),
-  feature `creative_delight:wild/raspberry_bush` = 1.4.1's patch (Farmer's Delight wild crop: ripe bushes on dirt, with
+  feature `creativedelight:wild/raspberry_bush` = 1.4.1's patch (Farmer's Delight wild crop: ripe bushes on dirt, with
   grass and coarse dirt; 1 in 62 chunks; `short_grass` -> 1.19.2 `minecraft:grass`). Upstream's biome modifier (every
   overworld biome of temperature 0.4-0.9) is not carried. The pips have no other source.
 - **Not in this piece:** raspberry crate, juice, wine, jam, pie, scone (later H&H pieces or the jam family, 2.1);
@@ -466,7 +466,7 @@ running).
 5. **Mob loot** ([loot.md](loot.md)): none if the crow is dropped (D2). Otherwise crow feather in the crow table and
    `/dumpall` loot refresh.
 6. **Item merges:** none (nothing installed). Only if D1 goes "port everything": every Drop row of 2.1 becomes a
-   `global.addItemMerges` pair in the `creative_delight` group.
+   `global.addItemMerges` pair in the `creativedelight` group.
 7. **Potions** ([potions.md](potions.md), [potion_buckets.md](potion_buckets.md)): Pungent and Tempting potions (long /
    strong), tipped arrows, potion buckets, IE / Create mixer routes per pack rules. Bad Omen from crow feather only if
    the crow stays.
@@ -511,7 +511,7 @@ Order: 0 and 1 before everything; 2 after 1 and again after 3-4; 3 before 4, 7-1
 
 Routing (memory `creative-delight-routing`): food recipes, tags, food values and cooking rules go in a new CD tree
 `development/creativeDelight/src/main/resources/kubejs_startup/hearthandharvest/` (startup) and
-`kubejs/data/creative_delight/kubejs/hearthandharvest/` (server); engine code (blocks, entities, mixins) stays in the
+`kubejs/data/creativedelight/kubejs/hearthandharvest/` (server); engine code (blocks, entities, mixins) stays in the
 port jar; brewing and alcohol stay in the alcohol scripts (reserved for Creative Brewing).
 
 ## 5. Decisions for the owner
@@ -538,10 +538,10 @@ port jar; brewing and alcohol stay in the alcohol scripts (reserved for Creative
 | Path | What |
 |---|---|
 | `development/creativeDelight/src/main/resources/kubejs_startup/hearthandharvest/` | items dict glue, food values, tags (CD startup) |
-| `kubejs/data/creative_delight/kubejs/hearthandharvest/` | recipes (NCH), cooking rules, removals (CD server) |
+| `kubejs/data/creativedelight/kubejs/hearthandharvest/` | recipes (NCH), cooking rules, removals (CD server) |
 | `kubejs/startup_scripts/_lib/item_dict.js` | `global.item` keys for kept ids |
 | `kubejs/startup_scripts/cooking/alcohol_drinks.js` | kept drinks in `global.alcohol` |
-| `kubejs/data/creative_delight/kubejs/_worldgen/wild_crops.json`, `kubejs/generation_scripts/worldgen/wild_flowers.json` | wild hops, raspberry, mums |
+| `kubejs/data/creativedelight/kubejs/_worldgen/wild_crops.json`, `kubejs/generation_scripts/worldgen/wild_flowers.json` | wild hops, raspberry, mums |
 | `mod_sides.md`, `configs_edited/root_config/hearthandharvest-*.toml` | sides row, config backup |
 | `development/creativeDelight/members/hearth/` | the port as a CD member (`backportedHearth`): Java, assets, data of kept content; raspberries (4.1), watering cans (4.0) |
 

@@ -1,4 +1,5 @@
-// Wandering Trader and Wandering Winemaker stock.
+// Wandering Trader stock. The Wandering Winemaker's stock moved to Creative Brewing 2026-11-01
+// (kubejs/data/creativebrewing/kubejs/vinery/wandering_trades.js).
 // Pools: COMMON (25 offers drawn per trader) and RARE (5 drawn); counts and the two independent spawn
 // timers are CEConfig [wandering_trader]. The Winemaker draws 8 from its own pool.
 // Rule: nothing that skips a trip to the Nether or the End (nether wart, glowstone, basalt blocks,
@@ -41,7 +42,7 @@ MoreJSEvents.wandererTrades(e => {
 		i.minecraft_carrot, i.minecraft_potato, i.cocoa_beans, i.bamboo,
 		i.seed, i.mulberry,
 	], { emeralds: 1, maxUses: 12 })
-	// Veggies Delight's seeds: Creative Delight members #2 (kubejs/data/creative_delight/kubejs/veggiesdelight/trades.js)
+	// Veggies Delight's seeds: Creative Delight members #2 (kubejs/data/creativedelight/kubejs/veggiesdelight/trades.js)
 
 	// plants (no Nether roots, sprouts, vines or fungi)
 	t.sell(e, t.COMMON, [
@@ -73,18 +74,5 @@ MoreJSEvents.wandererTrades(e => {
 	// sponge has no renewable source; the ancient sapling only grows in ancient cities
 	t.sell(e, t.RARE, [i.sponge, i.ancient_sapling], { emeralds: 8, maxUses: 3 })
 
-	// ---------- Wandering Winemaker ----------
-	t.winemakerReset()
-	// no Fruits Delight apple sapling: Vinery's apple tree is the pack's apple tree
-	t.winemakerSell([
-		i.bayberry_sapling, i.durian_sapling, i.fig_sapling, i.hawberry_sapling,
-		i.kiwi_sapling, i.lychee_sapling, i.mango_sapling, i.mangosteen_sapling, i.orange_sapling,
-		i.peach_sapling, i.pear_sapling, i.persimmon_sapling,
-	], { emeralds: 5, maxUses: 8 })
-	t.winemakerSell([i.pineapple_sapling], { emeralds: 3, maxUses: 8 })
-	// Vinery's own list sells the white jungle grape in this slot instead of its seeds
-	t.winemakerSell([i.grape_seeds_white_jungle], { emeralds: 1, maxUses: 8 })
-
-	console.log('[wandering trades] common ' + e.getTrades(t.COMMON).size() + ', rare ' + e.getTrades(t.RARE).size()
-		+ ', winemaker ' + t.winemakerSize())
+	console.log('[wandering trades] common ' + e.getTrades(t.COMMON).size() + ', rare ' + e.getTrades(t.RARE).size())
 })

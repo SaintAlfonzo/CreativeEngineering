@@ -2,7 +2,7 @@
 // Item merges, the pack's group (startup_scripts/_lib/item_merges.js, feature_writeup/item_merges.md 1.1): the
 // purged item's functionality moves to its survivor. Runs late so the swap sees every recipe the other pack scripts
 // added. Food merges are Creative Delight's group, run by its own server script
-// (kubejs/data/creative_delight/kubejs/_core/item_merges.js); this file never swaps them.
+// (kubejs/data/creativedelight/kubejs/_core/item_merges.js); this file never swaps them.
 //
 //   recipes    every input and output naming a purged id now names the survivor; duplicates that leaves
 //              behind are removed below

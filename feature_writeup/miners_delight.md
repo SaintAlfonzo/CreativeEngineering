@@ -28,7 +28,7 @@ load time (sha1-pinned), and everything the port ships is our own GPLv3 code. Se
 | Decisions | §1 | D2, D3, D6, D9, D11 settled by the owner 2026-10-24; D12 settled by the Modrinth find (P1); the rest are the plan's, built as written |
 | Merged inventory: 69 items, 10 blocks, 4 potions | §2 | reference |
 | Overlap list | §3 | analysis; every overlap ships, review after play |
-| Port work, pack integration, cave carrot worldgen | §4 | port BUILT 2026-10-24, shipped in 1.1.03; I2 done; I1, I3, I4, I6 to I9 open; cave carrot worldgen BUILT 2026-10-24 (§4.3) |
+| Port work, pack integration, cave carrot worldgen | §4 | port BUILT 2026-10-24, shipped in 1.1.03; port `-02` BUILT 2026-11-01 (Copper Pot leftover slot I8, four textures in the 1.1.2 look §5, split confirmed by the owner, verify in game), installed 2026-11-01 16:38; I2, I4, I5, I7, I9 done; I3 partly (cans built 2026-11-01; names audit waits for a client dump); I1, I6 open; cave carrot worldgen BUILT 2026-10-24 (§4.3) |
 | Tests | §8 | MND-01 to MND-41 drafted, none run (MND-32 can run now, it only needs the 1.1.2 jar); queued in scratch_queue.md |
 
 ### 0.1 The four builds on disk
@@ -199,7 +199,7 @@ close.
   `vinery_upstream/` (`UPSTREAM_DONORS`). `tools/dump_server_mods.py` copies only `mods/`, as for Vinery; the server
   needs `miners_upstream/` copied by hand.
 - P9: the listener reads `data/<any namespace>/cup_conversion/*.json`, so the row is
-  `kubejs/data/creative_delight/cup_conversion/creamy_onion_soup.json`, shipped in the Creative Delight jar (moved from
+  `kubejs/data/creativedelight/cup_conversion/creamy_onion_soup.json`, shipped in the Creative Delight jar (moved from
   `creativeengineering` 2026-10-25, creative_delight.md 27; not the path first planned). Onion soup cup
   food = half of FD 1.21's onion soup (12, 0.8, Nourishment 3 min): 6, 0.4, Nourishment 1:30.
 
@@ -207,15 +207,15 @@ close.
 
 | Step | Work |
 |---|---|
-| I1 | `/dumpall` and the generators (memory `dumpall-refresh-workflow`) |
+| I1 | `/dumpall` and the generators (memory `dumpall-refresh-workflow`). The 2026-10-30 client dump already has the port (69 items); I3 to I9 below were checked against it 2026-11-01. A fresh `/dumpall` (with `/cedumpnames`) is still needed for the names audit |
 | I2 | **DONE 2026-10-24:** `item_dict.js` block `miners_delight (69)`; bare keys except `miners_delight_moss` (`moss` is the moss block). Until the port is installed, startup warns for the 32 ids the 1.1.2 jar lacks |
-| I3 | Food data: `food_types.json`, `can_types.json` (cups are not cans), compost values, stack sizes, names audit |
-| I4 | JEI: cup conversions shown as a recipe (TODO `jei #14`); copper pot catalyst for the cooking category |
-| I5 | Wild cave carrots: **DONE 2026-10-24** (§4.3). Still open: crops loot tables, WTHIT growth line |
-| I6 | Shared tags through `global.tags`: tentacles, spider meat, insects, cups by soup |
-| I7 | Copper pot heat sources: reads `#farmersdelight:heat_sources` like the FD pot; check the pack's extras apply |
-| I8 | Remainder buffer for the copper pot (the pot and kettle mixins do not cover it): extend, or note as not covered |
-| I9 | Mixed jars: cup soups as jar liquids if the jar soups list should include them |
+| I3 | Food data. **Checked 2026-11-01 on the 10-30 dump:** `food_types.json` types all 57 Miner's foods (`food_catalog.py --check` names none); compost needs nothing (rules cover cave carrot, baked cave carrot, bat cookie, gossypium, moss, vegan patty, wild cave carrots; the bars and spider leg stay out on purpose, `SKIP_ORIGINAL`); stack sizes need nothing (`gen_stack_sizes.py` gives every Miner's food a rule: soups, cups and plates 32, handhelds 64, golden bar 16; the file did not change). **Cans DECIDED and BUILT 2026-11-01 (owner):** Canned Bat Soup, Cave Soup, Insect Stew and Golden Nutritional Bar, as explicit rows in `gen_can_types.py` (run); Miner's stays in `UNDECIDED_MODS`, so no other Miner's food and no cup is canned (SQ-VDF-09). **Open:** Names audit: `kubejs/exported/display_names.json` is from 2026-10-20 and has no `miners_delight`, so it waits for a client `/cedumpnames` (CQ-MND-NAMES) |
+| I4 | **DONE by the port (P4), checked 2026-11-01:** the Copper Pot category (`jei/CopperPotCategory`) shows every FD cooking recipe of up to four ingredients as the pot serves it, so a soup with a cup row shows its cup (2 per bowl) as the output and the Copper Cup as container; R on a soup cup finds it. All 15 cup rows have such a recipe in the 10-30 dump (the bone broth through the pack's own `bone_to_2_bone_broth` row, the onion soup cup through Brewin' Creamy Onion Soup). The Copper Pot is the catalyst of its own category, not of FD's (FD's has recipes of five and six ingredients the pot cannot cook). TODO `jei #14`; tests MND-15, MND-18 |
+| I5 | Wild cave carrots: **DONE 2026-10-24** (§4.3). **Done 2026-11-01:** crops loot: `L.pack(cave_carrot_crate, cave_carrot)` in CD `miners_delight/loot.js` (the mineshaft cave carrots and copper carrots stay Miner's own chest loot modifier, D8); WTHIT growth line: `cave_carrots` is a `CropBlock` and WTHIT-native (10-30 crop growth audit), no rule needed; gossypium and the wild patch do not grow |
+| I6 | Shared tags through `global.tags`: tentacles, spider meat, insects, cups by soup. **2026-11-01:** tentacles moot (removed 2026-10-29, `mod-additions #5`); spider meat and insects are Miner's own `raw_insect_meat` / `cooked_insect_meat` tags; joining them with Hostile Delight's spider line or Alex's Mobs `insect_items` is an overlap merge, so it waits for `MND-40`; cups by soup: no recipe or system reads such a tag yet, so none is made until one does |
+| I7 | **DONE (checked 2026-11-01):** the pot's `isHeated` is FD's `HeatableBlockEntity` default, the same code and tags as the FD pot (`#farmersdelight:heat_sources`, tray heat sources, the lit gate), so the pack's extras (the oven in `heat_sources`, CD `kitchen_tags.js`) apply. MND-19 |
+| I8 | **BUILT 2026-11-01 (port `-02`, native, Vintage jar pattern):** leftover slot 7 right of the output (frame copied from the output's), take-only, extracted from the bottom face, dropped when the pot breaks; old 7-slot saves widened on load; config `config/miners_delight-common.toml` `[copper_pot] remainderBuffer` and `stallWhenFull` (both on): the pot waits when a meal's leftovers would not fit. Only crafting remainders (bucket, bottle, bowl), as the pot threw before. Not covered: the WTHIT "Holding" line (patcherMod `WthitRemainderBuffer` knows only the FD pot, kettle and oven). MND-18 |
+| I9 | **DONE (since 1.1.03):** `gen_soup_soft_fluids.py` gives every `food_type/soup` item a soft fluid, so the 15 cups and bat soup, cave soup, insect stew are jar liquids (`kubejs/data/creativeengineering/moonlight/soft_fluids/*_cup.json`, the cup as container, 2 per jar slot) |
 
 ### 4.3 Cave carrot worldgen (BUILT 2026-10-24, owner request)
 
@@ -249,7 +249,7 @@ rule (`forge:none`); it is skipped without the mod.
 
 - D12 is settled (Modrinth). D1, D4, D5, D7, D8, D10, D13 are the plan's proposals, built as written; D2, D3, D6, D9,
   D11 are the owner's.
-- Old art: 1.4.5 redrew 13 textures. D3 takes the new art; say if any old look should be kept instead.
+- Old art: 1.4.5 redrew 13 textures. DECIDED 2026-11-01 (owner): new art for the cave carrot, weird caviar, stuffed squid bowl and gossypium; the rest keep the 1.1.2 look (TODO `creativedelight/members #31`). BUILT 2026-11-01 (port `-02`): the 1.1.2 jar is a second donor in `miners_upstream/` (`miners_delight-1.19.2-1.1.2.jar`, sha1 `23701e0772676ff74c0290387c90fd9365987673`, CurseForge project 689630 file 4738272), pinned in `UpstreamJars.MINERS_112` and read for four files only (`MinersTranslator.OLD_LOOK`): `block/sticky_basket_side`, `item/baked_cave_carrot`, `item/tentacles`, `item/baked_tentacles`. The other nine redraws stay 1.4.5's (`cave_carrots_0` to `_3`, `wild_cave_carrots`, `item/cave_carrot`, `gossypium`, `weird_caviar`, `bowl_of_stuffed_squid`); the TODO's "other nine" counted these the other way round. `build_deploy.py` ships and sha1-checks the new jar through `UPSTREAM_DONORS` (it reads every `new Jar` of `UpstreamJars.java`); the server needs it copied into `miners_upstream/` by hand, like the 1.4.5 jar. The game stops at load when it is missing. MND-05
 - Takes in TODO `dishes/ocean #3` and `#4` change what the port's squid and tentacle items do; doing the port first
   and the ocean merge after keeps both pieces of work simple.
 
@@ -292,7 +292,11 @@ Boot and inventory
 - [ ] MND-03 A world that had 1.1.2 items (if any) keeps them after the swap.
 - [ ] MND-04 With `miners_upstream/` renamed away the game stops at load with the message naming the folder and the
   Modrinth link; with it back, `latest.log` has `Miner's Delight upstream data: 182 files` and `Cup conversions: 15
-  bowl foods`.
+  bowl foods`. Port `-02`: the same with only the 1.1.2 jar moved away (message names it and the CurseForge link);
+  `upstream assets: N files (4 in the 1.1.2 look)`.
+- [ ] MND-05 (port `-02`) Sticky Basket sides, Baked Cave Carrot, Tentacles and Baked Tentacles (`/give`; the tentacles
+  are removed items) show the 1.1.2 art; cave carrot crop stages, wild cave carrots, cave carrot item, gossypium, weird
+  caviar and the stuffed squid bowl show the 1.4.5 art.
 
 Copper pot and cups
 
@@ -309,7 +313,15 @@ Copper pot and cups
   cups) and a Copper Cup as container, so the cup table reached the client.
 - [ ] MND-16 Empty copper cup: right-click water source = water cup, a cow or goat = milk cup, a fish or axolotl does
   nothing (the fish stays, the cup stays); water cup pours a source; powder snow cup places powder snow.
-- [ ] MND-17 Cups stack to 64 (empty, water, milk, powder snow; soup cups 16). With a stack of 5 powder snow cups: place one, the other 4 stay and an empty cup lands in the inventory. A stack of water cups emptied on the ground and filled at a cauldron keeps the rest of the stack. A stack of milk cups drinks one at a time and returns empty cups. The craft: 3 copper ingots (`X X` over ` X `) makes a Copper Cup.
+- [ ] MND-18 (port `-02`, I8, `jei #14`) Leftover slot: cook a recipe with a milk or water bucket or a honey bottle
+  (any FD pot recipe of up to four ingredients) in the Copper Pot: the empty bucket or bottle lands in the slot right of
+  the output, not on the floor; it cannot take items by hand; shift-click and a hopper under the pot take it out; with
+  the slot full of another item the pot does not start the meal; breaking the pot drops it. A pot placed with `-01` and
+  holding items keeps them after the swap. With `remainderBuffer = false` leftovers fly out as before. Single player:
+  R on a soup cup in JEI opens the Copper Pot recipe that serves it.
+- [ ] MND-19 (I7) The Copper Pot cooks on the pack's heat sources the FD pot uses (campfire, lit oven below), and not
+  on an unlit oven.
+- [ ] MND-17 Cups stack to 64 (empty, water, milk, powder snow; soup cups 32 by the pack's stack policy [upstream 16]). With a stack of 5 powder snow cups: place one, the other 4 stay and an empty cup lands in the inventory. A stack of water cups emptied on the ground and filled at a cauldron keeps the rest of the stack. A stack of milk cups drinks one at a time and returns empty cups. The craft: 3 copper ingots (`X X` over ` X `) makes a Copper Cup.
 
 Food and feasts
 
@@ -331,6 +343,7 @@ Drops and worldgen
   Y histogram of `wild_cave_carrots` in a loaded area). None on the surface. The mod's own spawn (1 in 3, Y -54 to 48)
   is off: `latest.log` has no error for `miners_delight:cave_carrots`. Cave carrots plant and grow; WTHIT shows growth.
 - [ ] MND-33 Abandoned mineshaft chests can hold Miner's loot.
+- [ ] MND-34 (I5) `/loottuning` (or the log) lists the cave carrot crate pack; `/loot spawn` on a table with cave carrots (Miner's `chests/md_abandoned_mineshaft`) sometimes gives Cave Carrot Crates instead.
 
 Review (decides the drops)
 
@@ -399,6 +412,12 @@ Delight `tentacle_on_a_stick`), `glow_ink_pasta` (Farmer's Delight `squid_ink_pa
 `largecontent/mod-additions #7`: gains an investigation of the soup cup. Finding so far: the cups come from the
   data file `miners_delight/cup_conversion/default_conversions.json` (bowl -> cup pairs), not from recipes, which is why JEI
   shows none.
+
+- 2026-11-01: open items run (TODO `mod-additions #7`, `jei #14`, `creativedelight/members #31`): port `-02` built
+  (`./gradlew :backportedMiners:build --offline`, `check_donor.py` 0 problems): Copper Pot leftover slot and config
+  (I8), the 1.1.2 jar as a second sha1-pinned donor for the four textures that keep their old look (§5). Cave carrot
+  crate split in the loot framework (I5). I3, I4, I7, I9 checked against the 10-30 dump (§4.2). Not installed:
+  `-02` sits in `build/libs/`; `miners_upstream/` now also holds the 1.1.2 jar (copied from `jar_archive/displaced/`).
 
 ## 11. Before and after comparison graphic (2026-11-01)
 

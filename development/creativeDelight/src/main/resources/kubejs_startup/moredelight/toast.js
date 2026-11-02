@@ -8,7 +8,7 @@
 global.fastToasts = ['toast', 'toast_with_chocolate', 'toast_with_egg', 'toast_with_glow_berries', 'toast_with_honey',
 	'toast_with_sweet_berries', 'caviar_toast', 'cheese_toast']
 
-// Cheese Toast: toast + Flaxen Cheese Wedge (recipe in data/creative_delight/kubejs/moredelight/recipes.js). Hunger 5
+// Cheese Toast: toast + Flaxen Cheese Wedge (recipe in data/creativedelight/kubejs/moredelight/recipes.js). Hunger 5
 // like Toast with Egg, modifier 0.7 (toast 0.4, wedge 1.0).
 StartupEvents.registry('item', e => {
 	var i = global.item

@@ -7,6 +7,6 @@
 // Tag stripping
 // ============================================================
 // A global so Creative Delight's tag scripts, which run after every pack script, can strip again at their end
-// (kubejs/data/creative_delight/kubejs/_core/removed_item_tags.js).
+// (kubejs/data/creativedelight/kubejs/_core/removed_item_tags.js).
 global.stripRemovedItemTags = event => global.tags.clearAll(event, global.removedItems)
 ServerEvents.tags('item', event => global.stripRemovedItemTags(event))

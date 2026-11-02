@@ -51,7 +51,6 @@ EXCLUDED_PREFIXES = {
     'ed_': 'expandeddelight',
     'pd_': 'pineapple_delight',
     'ctd_': 'culturaldelights',
-    'lm_': 'largemeals',
     'fd_': 'festive_delight',
     'acd_': 'aquaculturedelight',
     'mnd_': 'mynethersdelight',

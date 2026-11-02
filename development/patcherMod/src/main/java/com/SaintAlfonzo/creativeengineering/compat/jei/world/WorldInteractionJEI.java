@@ -9,7 +9,6 @@ import java.util.TreeMap;
 import org.slf4j.Logger;
 
 import com.SaintAlfonzo.creativeengineering.CreativeEngineering;
-import com.SaintAlfonzo.creativeengineering.compat.jei.CanPagesJEI;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
@@ -50,10 +49,8 @@ public class WorldInteractionJEI implements IModPlugin {
     private static final ResourceLocation UID = new ResourceLocation(CreativeEngineering.MODID, "world_interactions");
     private static final String DIR = "jei_world";
 
-    static {
-        WorldRows.provider(WorldTab.BURNING, BurnRows::rows);
-        WorldRows.provider(WorldTab.CAMPFIRE, CampfireRows::rows);
-    }
+    // The Burning and Campfire rows are Creative Compat's (compat.jei.BurnRows / CampfireRows), registered through
+    // WorldRows.provider from its constructor, before JEI loads this plugin.
 
     @Override
     public ResourceLocation getPluginUid() {
@@ -135,7 +132,7 @@ public class WorldInteractionJEI implements IModPlugin {
         }
         if (tab == WorldTab.JAR_STORAGE) {
             List<ItemStack> faucet = stacks("supplementaries:faucet");
-            if (!faucet.isEmpty()) return CanPagesJEI.doubleIcon(helper, stack, faucet.get(0));
+            if (!faucet.isEmpty()) return com.SaintAlfonzo.creativeengineering.compat.jei.JeiIcons.doubleIcon(helper, stack, faucet.get(0));
         }
         return helper.createDrawableIngredient(VanillaTypes.ITEM_STACK, stack);
     }

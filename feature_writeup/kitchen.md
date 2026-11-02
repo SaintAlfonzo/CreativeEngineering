@@ -35,8 +35,8 @@ The FD-style stations' leftover slots (pot, kettle, oven; rows #1, #3, #4, #13, 
   `mixin/CuttingBoardRendererOffsetMixin`, `mixin/CoasterRendererOffsetMixin`, `kitchen/CounterToppers`,
   `mixin/CfbCornerStorageMixin`, `mixin/CfbCornerUseMixin`, `kitchen/CornerStorage`, `client/FridgeTopFill`, `rack/`;
   [tools/gen_cfb_racks.py](../tools/gen_cfb_racks.py);
-  [cookingforblockheads/kitchen.js](../kubejs/data/creative_delight/kubejs/cookingforblockheads/kitchen.js);
-  [cooking/mortar.js](../kubejs/data/creative_delight/kubejs/creativeengineering/mortar.js) and NCH `mortar` / `foodGrinding`;
+  [cookingforblockheads/kitchen.js](../kubejs/data/creativedelight/kubejs/cookingforblockheads/kitchen.js);
+  [cooking/mortar.js](../kubejs/data/creativedelight/kubejs/creativeengineering/mortar.js) and NCH `mortar` / `foodGrinding`;
   [tools/gen_mortar_catalog.py](../tools/gen_mortar_catalog.py).
 - **Knobs:** `config/blockheads_additions-common.toml` `[kitchen] cuttingBoardOffsetX / Y / Z` and `plateOffsetX / Y / Z`
   (pixels; Y default -1; in `creativeengineering-common.toml` until 2026-10-31, same keys);
@@ -206,15 +206,15 @@ water".
   planks with the rack's hooks; `tools/gen_cfb_racks.py` copies it to `textures/block/rack/` and writes the
   blockstates, models, loot tables (drop itself, keep a custom name, as CfB's) and lang. `treated_wood.png` in those
   folders is the same picture as `_horizontal` (IE has no plain treated wood planks block), so it is not used.
-- Recipes (`cookingforblockheads/kitchen.js`, ids `creative_delight:shaped/<rack>`): CfB's shapes in the wood's slab
+- Recipes (`cookingforblockheads/kitchen.js`, ids `creativedelight:shaped/<rack>`): CfB's shapes in the wood's slab
   (spice rack 2 slabs in a row; tool rack 3 slabs over 2 iron nuggets, `#balm:iron_nuggets`); rubberwood has no slab,
-  so its racks take planks. CfB's own two recipes now take `#creative_delight:rack_slabs/other` (`#minecraft:wooden_slabs`
+  so its racks take planks. CfB's own two recipes now take `#creativedelight:rack_slabs/other` (`#minecraft:wooden_slabs`
   minus the rack woods' slabs) instead of any wooden slab, so no grid matches two recipes.
 - Axe-mineable (`global.tags.mineable`).
 - Fruit baskets (added 2026-10-31): `<wood>_fruit_basket` in the same 20 woods, `WoodFruitBasketBlock extends FruitBasketBlock`,
   added to the fruit basket block entity type's valid blocks. CfB's model uses the plain planks texture, so the art is the
   plain planks png from `textureswapper/rack/` copied to `textures/block/fruit_basket/<wood>.png` by `gen_cfb_racks.py`.
-  Recipe: slab, any wooden pressure plate, slab (rubberwood: planks); CfB's own basket takes `#creative_delight:rack_slabs/other`.
+  Recipe: slab, any wooden pressure plate, slab (rubberwood: planks); CfB's own basket takes `#creativedelight:rack_slabs/other`.
 
 ## 3. What the pack changes
 
@@ -226,8 +226,8 @@ water".
   renderers (client), CfB corner block entity and use. Fridge fill by a baked-model wrapper (2.4). Wood racks (2.7).
 - Resource overrides: none since 2026-10-31 (the fridge override was removed, 2.4).
 - Recipes: bamboo bowl; mortar crafts (own and catalogue); slime block from a dough block + green dye in a heated mixer
-  (`cooking/kitchen #12`, Creative Delight script `kubejs/data/creative_delight/kubejs/create/slime.js`, id
-  `creative_delight:createmixing/slime_block_from_dough_block`; it replaces the Pickling Jar's slime block).
+  (`cooking/kitchen #12`, Creative Delight script `kubejs/data/creativedelight/kubejs/create/slime.js`, id
+  `creativedelight:createmixing/slime_block_from_dough_block`; it replaces the Pickling Jar's slime block).
 - Tooltips: CfB oven, sink.
 
 ## 4. Limits and decisions
@@ -260,9 +260,9 @@ Brief: [briefs/cooking_kitchen.md](briefs/cooking_kitchen.md). Nothing here is b
   `CfbCornerStorageMixin`, `CfbCornerUseMixin`), `kitchen/` (`CounterToppers`, `CornerStorage`), `rack/` (`RackWoods`,
   `BARacks`, `WoodSpiceRackBlock`, `WoodToolRackBlock`), `client/FridgeTopFill`, `BAConfig`.
 - KubeJS: [cooking.js](../kubejs/server_scripts/cooking/cooking.js) (bamboo bowl, `foodGrinding` calls),
-  [mortar.js](../kubejs/data/creative_delight/kubejs/creativeengineering/mortar.js), [cookingtags.js](../kubejs/server_scripts/tags/cookingtags.js),
-  [cookingforblockheads/kitchen.js](../kubejs/data/creative_delight/kubejs/cookingforblockheads/kitchen.js) (rack
-  recipes and tags, counter tags), [client.js](../kubejs/assets/creative_delight/kubejs/cookingforblockheads/client.js) (oven, sink tooltips),
+  [mortar.js](../kubejs/data/creativedelight/kubejs/creativeengineering/mortar.js), [cookingtags.js](../kubejs/server_scripts/tags/cookingtags.js),
+  [cookingforblockheads/kitchen.js](../kubejs/data/creativedelight/kubejs/cookingforblockheads/kitchen.js) (rack
+  recipes and tags, counter tags), [client.js](../kubejs/assets/creativedelight/kubejs/cookingforblockheads/client.js) (oven, sink tooltips),
   NCH in [neoCraftHelper.js](../kubejs/startup_scripts/func/neoCraftHelper.js); dict keys `i.mortar_and_pestle`, `i.powder_pestle`,
   `i.t_balm_cooking_oil`, `i.cfb_*`, `i.<wood>_spice_rack`, `i.<wood>_tool_rack`, `i.t_rack_slabs_other`,
   `i.t_balm_iron_nuggets`, `b.cfb_counter`, `b.cfb_corner`, `b.dd_food_plate`,
@@ -409,5 +409,5 @@ Not covered offline: anything drawn (board offset, fridge), the corner's GUI on 
   `:backportedBrewin`. patcherMod and Creative Delight must be installed together: an old patcherMod beside this
   member would attach the corner capability twice.
 - Still in the pack, not moved: CfB configs (`cookingforblockheads-common.toml`), milk jar bottles
-  (`cookingforblockheads/milk_jar.js`) and tooltips (`assets/creative_delight/kubejs/cookingforblockheads/client.js`)
+  (`cookingforblockheads/milk_jar.js`) and tooltips (`assets/creativedelight/kubejs/cookingforblockheads/client.js`)
   were already in the Creative Delight trees.

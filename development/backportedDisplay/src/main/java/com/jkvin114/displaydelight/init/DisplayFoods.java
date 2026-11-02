@@ -108,7 +108,6 @@ final class DisplayFoods {
         DisplayItems.food(DisplayBlocks.food("od_seagrass_salad"));
         DisplayItems.food(DisplayBlocks.food("od_squid_rings"));
         DisplayItems.food(DisplayBlocks.food("od_bowl_of_guardian_soup"));
-        DisplayItems.food(DisplayBlocks.stackable("od_plated_baked_tentacle_on_a_stick", 2));
         DisplayItems.food(DisplayBlocks.stackable("od_plated_elder_guardian_roll", 6));
         DisplayItems.food(DisplayBlocks.stackable("od_plated_fugu_roll", 6));
         DisplayItems.food(DisplayBlocks.plated("od_plated_honey_fried_kelp"));
@@ -123,6 +122,19 @@ final class DisplayFoods {
         DisplayItems.food(DisplayBlocks.plated("ad_plated_bunfungus_sandwich"));
         DisplayItems.food(DisplayBlocks.plated("ad_plated_bison_burger"));
         DisplayItems.food(DisplayBlocks.stackable("ad_plated_gongylidia_bruschetta", 2));
+        DisplayItems.food(DisplayBlocks.drink("lm_sweet_berry_custard"));
+        DisplayItems.food(DisplayBlocks.food("lm_pufferfish_broth"));
+        DisplayItems.food(DisplayBlocks.food("lm_rice_pudding"));
+        DisplayItems.food(DisplayBlocks.food("lm_potato_soup"));
+        DisplayItems.food(DisplayBlocks.food("lm_red_soup"));
+        DisplayItems.food(DisplayBlocks.food("lm_tomato_egg_soup"));
+        DisplayItems.food(DisplayBlocks.wide("lm_cod_deluxe"));
+        DisplayItems.food(DisplayBlocks.wide("lm_hearty_lunch"));
+        DisplayItems.food(DisplayBlocks.wide("lm_chicken_curry"));
+        DisplayItems.food(DisplayBlocks.wide("lm_pasta_with_mushroom_sauce"));
+        DisplayItems.food(DisplayBlocks.food("lm_omurice"));
+        DisplayItems.food(DisplayBlocks.food("lm_mushroom_pot_pie"));
+        DisplayItems.food(DisplayBlocks.food("lm_roasted_mutton_rack"));
         DisplayItems.food(DisplayBlocks.food("bnc_creamy_onion_soup"));
         DisplayItems.food(DisplayBlocks.wide("bnc_scarlet_pierogi"));
         DisplayItems.food(DisplayBlocks.wide("bnc_horror_lasagna"));

@@ -9,7 +9,7 @@ prepared food), [food.md](../food.md) (`FO-`; 3.13 powdered sugar, 3.14 sweetene
 
 **Where the code is now (2026-10-31):** `kubejs/server_scripts/cooking/cooking.js` and `tags/cookingtags.js` are empty
 stubs. Every food recipe lives in the Creative Delight server tree by the mod of the food it makes,
-`kubejs/data/creative_delight/kubejs/<mod>/recipes.js` / `tags.js` (memory `creative-delight-routing`); pack-own food
+`kubejs/data/creativedelight/kubejs/<mod>/recipes.js` / `tags.js` (memory `creative-delight-routing`); pack-own food
 items are registered in CD startup scripts (`development/creativeDelight/src/main/resources/kubejs_startup/<mod>/`, e.g.
 `moredelight/toast.js` registers `creativeengineering:cheese_toast`), with the dict key in `_lib/item_dict.js`. Recipes
 through `global.NCH` (`R`, [neoCraftHelper.js](../../development/patcherMod/src/main/resources/kubejs_startup/creativeengineering/func/neoCraftHelper.js)),
@@ -58,15 +58,15 @@ The six More Delight potato dishes show and accept Rustic Delight potato slices 
 - The diced potato merge (item_merges.md 2.4, shipped 1.1.01) purges `moredelight:diced_potatoes`
   (CD startup `moredelight/item_merges.js`), so the removed-item pass strips it from that tag, and adds Rustic's slices to
   the **singular** `#forge:sliced_potato` (`i.t_sliced_potato`,
-  [moredelight/item_merges.js:15](../../kubejs/data/creative_delight/kubejs/moredelight/item_merges.js), also
-  [rusticdelight/tags.js:21](../../kubejs/data/creative_delight/kubejs/rusticdelight/tags.js)).
+  [moredelight/item_merges.js:15](../../kubejs/data/creativedelight/kubejs/moredelight/item_merges.js), also
+  [rusticdelight/tags.js:21](../../kubejs/data/creativedelight/kubejs/rusticdelight/tags.js)).
 - Dump (`kubejs/exported/tags/item_tags.json` 26445-26448): `forge:sliced_potato` = `[rusticdelight:potato_slices]`,
   `forge:sliced_potatoes` = `[]`. item_merges.md 2.4 says More Delight reads `#forge:sliced_potato`: wrong name.
 
 ### Build
 1. Dict: `i.t_sliced_potatoes = '#forge:sliced_potatoes'` next to `i.t_sliced_potato` (item_dict.js 1955), with a comment
    that More Delight reads the plural.
-2. [moredelight/item_merges.js](../../kubejs/data/creative_delight/kubejs/moredelight/item_merges.js) tag event:
+2. [moredelight/item_merges.js](../../kubejs/data/creativedelight/kubejs/moredelight/item_merges.js) tag event:
    `global.tags.add(e, global.item.t_sliced_potatoes, global.item.potato_slices)` (keep the singular line: fries and
    cod and chips in `pneumaticcraft/recipes.js:60-61` read it). Optional: make one tag include the other.
 3. Fix item_merges.md 2.4's tag name (writeup owner) and add a changelog bullet ("Fixed: ... took no potato slices").
@@ -75,7 +75,7 @@ The six More Delight potato dishes show and accept Rustic Delight potato slices 
 - MG-12 ("diced potatoes with beef using potato slices: cooks") is listed as passed at recipe level (item_merges.md 357);
   the dump shows the slot empty, so that pass checked the recipe id, not the slot. Rerun it.
 - The `diced_potatoes_with_egg_and_tomato_cooked_manual_only` grid route
-  ([moredelight/recipes.js:18](../../kubejs/data/creative_delight/kubejs/moredelight/recipes.js)) uses baked potatoes and is unaffected.
+  ([moredelight/recipes.js:18](../../kubejs/data/creativedelight/kubejs/moredelight/recipes.js)) uses baked potatoes and is unaffected.
 
 ### Tests
 - MG-12 rerun: JEI shows Potato Slices in all six recipes' slot; a pot cooks mashed potatoes from milk + 2 slices.
@@ -95,7 +95,7 @@ Cutting a cabbage gives 4 leaves (scratchpad 2026-10-31). Supersedes row 8's "3 
 (verified). `i.cabbage` is `#forge:crops/cabbage` (1928).
 
 ### Build
-In CD [farmersdelight/recipes.js](../../kubejs/data/creative_delight/kubejs/farmersdelight/recipes.js):
+In CD [farmersdelight/recipes.js](../../kubejs/data/creativedelight/kubejs/farmersdelight/recipes.js):
 1. `R.remove({ id: 'farmersdelight:cutting/cabbage' }, e)`, then
    `R.fdCutting(i.cabbage, i.any_knife, Item.of(i.cabbage_leaf, 4), e, 'cabbage_leaves')`.
 2. `R.remove({ id: 'farmersdelight:cabbage_from_leaves' }, e)` and `R.shapeless(i.cabbage, [Item.of(i.cabbage_leaf, 4)], e, 'cabbage_from_leaves')`
@@ -148,9 +148,9 @@ The small produce changes from the cooking plan and the 2026-10-21 scratchpad.
 - Cabbage leaves: moved to row 25 (4 leaves, 2026-10-31); TODO still lists "3 leaves with a chance of a 4th" here.
 
 ### Now and Build (open sub-items)
-- **Melon pressing.** Now: [farmersdelight/recipes.js:126-140](../../kubejs/data/creative_delight/kubejs/farmersdelight/recipes.js):
+- **Melon pressing.** Now: [farmersdelight/recipes.js:126-140](../../kubejs/data/creativedelight/kubejs/farmersdelight/recipes.js):
   IE squeezer slice 125 mB / melon block 1250 mB, IE bottler, Create mixing 3 slices + drink sweetener -> 250 mB; Farmer's
-  Respite kettle melon juice ([farmersrespite/kettle.js:35](../../kubejs/data/creative_delight/kubejs/farmersrespite/kettle.js)).
+  Respite kettle melon juice ([farmersrespite/kettle.js:35](../../kubejs/data/creativedelight/kubejs/farmersrespite/kettle.js)).
   "Inefficient pressing recipe": add an early, sugar-free Create route, e.g.
   `R.createCompacting(Fluid.of(f.melon_juice, 250), Item.of(i.melon, 5), e, 'melon_juice_compacting')` in the same block
   (5 slices, worse than the squeezer's 2 and the mixer's 3 + sugar). Decision D1.
@@ -189,7 +189,7 @@ A cut sweet potato gives 3 sweet potato slices.
 - No sweet potato slice item (Veggies port and `item_dict.js`: `sweet_potato` 14284, `baked_sweet_potato` 14295, dough, pie,
   cupcake). The potato analogue is Rustic's `potato_slices` (`i.potato_slices` 12743; knife on a potato -> 2) and
   `baked_potato_slices` (12720).
-- Fries and cod and chips read `#forge:sliced_potato` (`i.t_sliced_potato`; [pneumaticcraft/recipes.js:60-61](../../kubejs/data/creative_delight/kubejs/pneumaticcraft/recipes.js));
+- Fries and cod and chips read `#forge:sliced_potato` (`i.t_sliced_potato`; [pneumaticcraft/recipes.js:60-61](../../kubejs/data/creativedelight/kubejs/pneumaticcraft/recipes.js));
   More Delight's dishes read `#forge:sliced_potatoes` (row 26).
 
 ### Build
@@ -222,7 +222,7 @@ Recipes that take a potato also take a sweet potato, and the same for the cooked
   `#forge:vegetables`, `#forge:crops` (tag dump), not in the potato tags. `i.baked_sweet_potato` is Veggies'.
 - Potato users: `#forge:sliced_potato` (fries, cod and chips), `#forge:sliced_potatoes` (More Delight, row 26),
   `#forge:vegetables/potato` (Veggies' fish and chips, Rustic potato salad), item ids in Create / Oceanic recipes; Veggies'
-  mashed potatoes already mix both ([veggiesdelight/cooking.js:59](../../kubejs/data/creative_delight/kubejs/veggiesdelight/cooking.js)).
+  mashed potatoes already mix both ([veggiesdelight/cooking.js:59](../../kubejs/data/creativedelight/kubejs/veggiesdelight/cooking.js)).
 
 ### Build
 1. Audit with `/dumprecipes` (the `exported/recipes` dump has ids only, no inputs): recipes naming `minecraft:potato`,
@@ -250,9 +250,9 @@ Honeycomb counts as sugar in heated mixing (2 sugar per honeycomb), as honey in 
 
 ### Now (checked 2026-10-31)
 - Done by row 3 (shipped 1.1.03): honeycomb is in `#creativeengineering:sweeteners` (`i.any_sweetener`, item_dict 1870;
-  [creativeengineering/tags.js:14](../../kubejs/data/creative_delight/kubejs/creativeengineering/tags.js)) and the brewing tier,
+  [creativeengineering/tags.js:14](../../kubejs/data/creativedelight/kubejs/creativeengineering/tags.js)) and the brewing tier,
   so every cooking sugar slot takes it 1 for 1; drinks do not.
-- Done: honey cake takes a honey bottle and a honeycomb ([creativeengineering/baking.js:51](../../kubejs/data/creative_delight/kubejs/creativeengineering/baking.js),
+- Done: honey cake takes a honey bottle and a honeycomb ([creativeengineering/baking.js:51](../../kubejs/data/creativedelight/kubejs/creativeengineering/baking.js),
   `baking/baked-goods #26`).
 - Open: the 2-per-comb rate, other honey uses, the toast spread. More Delight `toast_with_honey` is toast + honey bottle
   (fast-eating toast list in CD startup `moredelight/toast.js`); no honeycomb toast recipe.
@@ -283,14 +283,14 @@ cake base (scratchpad 2026-10-22).
 
 ### Now (checked 2026-10-31)
 - `rusticdelight:batter` (`i.batter`, item_dict 12721). Made in the pot (`rusticdelight:cooking/batter`) and its Slice & Dice
-  copy, grain slots wheat flour, cornmeal or rice (row 24, [creativeengineering/baked_goods.js:21-27](../../kubejs/data/creative_delight/kubejs/creativeengineering/baked_goods.js),
-  shipped 1.1.05); heated mix with egg solution ([rusticdelight/recipes.js:46-47](../../kubejs/data/creative_delight/kubejs/rusticdelight/recipes.js)).
+  copy, grain slots wheat flour, cornmeal or rice (row 24, [creativeengineering/baked_goods.js:21-27](../../kubejs/data/creativedelight/kubejs/creativeengineering/baked_goods.js),
+  shipped 1.1.05); heated mix with egg solution ([rusticdelight/recipes.js:46-47](../../kubejs/data/creativedelight/kubejs/rusticdelight/recipes.js)).
   So "batter made from wheat flour or cornmeal" is **done**.
 - Users (upstream Rustic 1.7.0 data): the seven pancakes (grid and pot), fried calamari, fried chicken, fried fish; the pack's
-  salmon tempura ([pneumaticcraft/recipes.js:57](../../kubejs/data/creative_delight/kubejs/pneumaticcraft/recipes.js)).
-- Not using batter: Supplementaries pancakes (sweetener + egg + milk + grain, [supplementaries/recipes.js:28-33](../../kubejs/data/creative_delight/kubejs/supplementaries/recipes.js)),
-  muffins (oven, flour + milk + egg + sweetener, CD startup `creative_delight/cd_food.js:160-164`), the cake base (flour or
-  dough, [creativeengineering/baking.js:99-105](../../kubejs/data/creative_delight/kubejs/creativeengineering/baking.js)).
+  salmon tempura ([pneumaticcraft/recipes.js:57](../../kubejs/data/creativedelight/kubejs/pneumaticcraft/recipes.js)).
+- Not using batter: Supplementaries pancakes (sweetener + egg + milk + grain, [supplementaries/recipes.js:28-33](../../kubejs/data/creativedelight/kubejs/supplementaries/recipes.js)),
+  muffins (oven, flour + milk + egg + sweetener, CD startup `creativedelight/cd_food.js:160-164`), the cake base (flour or
+  dough, [creativeengineering/baking.js:99-105](../../kubejs/data/creativedelight/kubejs/creativeengineering/baking.js)).
 
 ### Build
 1. Cake base: in baking.js add `R.shapeless(i.cake_base, [Item.of(i.batter, 2), i.eggs, i.any_sweetener, i.any_sweetener], e, 'cake_base_batter_manual_only')`
@@ -391,8 +391,8 @@ cooking oil, more fish into fish oil.
 - `#forge:animal_fat` = fat, tallow, animal oil ([misctags.js:61](../../kubejs/server_scripts/tags/misctags.js)); soap uses them
   ([misc_mods.js:19-21](../../kubejs/server_scripts/other/misc_mods.js)).
 - `rusticdelight:cooking_oil` (`i.cooking_oil`): pot 6 `#rusticdelight:cooking_oil_ingredients` -> 2 and heated mixing 3 -> 1
-  ([rusticdelight/recipes.js:82-87](../../kubejs/data/creative_delight/kubejs/rusticdelight/recipes.js)); the tag gets pumpkin
-  seeds in [minecraft/tags.js:13](../../kubejs/data/creative_delight/kubejs/minecraft/tags.js). `alexsmobs:fish_oil`
+  ([rusticdelight/recipes.js:82-87](../../kubejs/data/creativedelight/kubejs/rusticdelight/recipes.js)); the tag gets pumpkin
+  seeds in [minecraft/tags.js:13](../../kubejs/data/creativedelight/kubejs/minecraft/tags.js). `alexsmobs:fish_oil`
   (`i.fish_oil`). Fluids `f.plantoil`, `f.seed_oil`, `f.vegetable_oil`. No blubber or whale oil; the whale is
   `alexsmobs:cachalot_whale`.
 
@@ -435,7 +435,7 @@ Vintage Delight method; a stackable cheese ripening shelf; 9 wedges craft back t
 
 ### Now (checked 2026-10-31)
 - Brewin' cheese is now in Creative Brewing ([creativeBrewing](../../development/creativeBrewing/members/brewin), jar
-  `creative_brewing-1.0.0`; build via `:creativeBrewing:`): flaxen and scarlet, keg fermenting milk -> cheese
+  `creativebrewing-1.0.0`; build via `:creativeBrewing:`): flaxen and scarlet, keg fermenting milk -> cheese
   (`recipes/fermenting/flaxen_cheese_from_milk.json`), pouring -> unripe wheel; `UnripeCheeseWheelBlock` ripens with a
   10 % chance per random tick (`AGE` 0-1, lines 22-66); `CheeseWheelBlock` `SERVINGS` 0-3 (4 wedges), knife cutting -> 4,
   and 4 wedges -> wheel shaped (`flaxen_cheese_wheel_from_wedges.json`, scarlet too).

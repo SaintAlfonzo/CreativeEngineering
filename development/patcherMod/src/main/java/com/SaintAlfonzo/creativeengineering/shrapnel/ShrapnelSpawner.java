@@ -9,7 +9,7 @@ import net.minecraft.world.phys.Vec3;
 /**
  * Spawns one burst of {@link ShrapnelEntity} pieces, evenly spread around the full horizontal
  * circle with a random per-piece pitch and speed. Shared by both TNT-explosion triggers:
- * {@code TntShrapnelHandler} (primed TNT entity) and {@code itemphysic.ItemBurnTransform}
+ * {@code TntShrapnelHandler} (primed TNT entity) and Creative Compat's {@code itemphysic.ItemBurnTransform} (via util.BurnBursts)
  * (dropped TNT item burning). All tuning comes from {@link CEConfig.Shrapnel}.
  */
 public final class ShrapnelSpawner {

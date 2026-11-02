@@ -21,6 +21,7 @@ import net.ribs.vintagedelight.item.custom.ChefHatItem;
 import net.ribs.vintagedelight.item.custom.FuelItem;
 import net.ribs.vintagedelight.item.custom.GhostPepperPlantingItem;
 import net.ribs.vintagedelight.item.custom.MasonJarItem;
+import net.ribs.vintagedelight.item.custom.MixedSeedsItem;
 import net.ribs.vintagedelight.item.custom.OrganicMashItem;
 import net.ribs.vintagedelight.item.custom.SaltDustItem;
 import vectorwing.farmersdelight.common.item.ConsumableItem;
@@ -35,6 +36,8 @@ public class ModItems {
     public static final RegistryObject<Item> SALT_BUCKET = ITEMS.register("salt_bucket", () -> new Item(props().stacksTo(1).craftRemainder(Items.BUCKET)));
     public static final RegistryObject<Item> OAT = ITEMS.register("oat", () -> new Item(props()));
     public static final RegistryObject<Item> OAT_SEEDS = ITEMS.register("oat_seeds", () -> new ItemNameBlockItem(ModBlocks.OAT_CROP.get(), props()));
+    // Pack addition (TODO creativedelight/members #32): upstream ships only the texture (vintage_delight.md 2.3a).
+    public static final RegistryObject<Item> MIXED_SEEDS = ITEMS.register("mixed_seeds", () -> new MixedSeedsItem(props()));
     public static final RegistryObject<Item> OAT_DOUGH = ITEMS.register("oat_dough", () -> new Item(props().food(ModFoods.OAT_DOUGH)));
     public static final RegistryObject<Item> RAW_OAT = ITEMS.register("raw_oats", () -> new Item(props().food(ModFoods.OAT)));
     public static final RegistryObject<Item> PEANUT = ITEMS.register("peanut", () -> new ItemNameBlockItem(ModBlocks.PEANUT_CROP.get(), props().food(ModFoods.PEANUT)));
@@ -172,7 +175,7 @@ public class ModItems {
         l.add(ModBlocks.PINK_SALT_LAMP); l.add(ModBlocks.PURPLE_SALT_LAMP); l.add(ModBlocks.RED_SALT_LAMP); l.add(ModBlocks.WHITE_SALT_LAMP);
         l.add(ModBlocks.YELLOW_SALT_LAMP);
         l.add(SALT_DUST); l.add(SALT_BUCKET); l.add(OAT); l.add(RAW_OAT); l.add(PEANUT); l.add(GHOST_PEPPER); l.add(CUCUMBER);
-        l.add(OAT_SEEDS); l.add(GHOST_PEPPER_SEEDS); l.add(CUCUMBER_SEEDS); l.add(ModBlocks.MAGIC_PEANUT); l.add(ROASTED_PEANUT);
+        l.add(OAT_SEEDS); l.add(GHOST_PEPPER_SEEDS); l.add(CUCUMBER_SEEDS); l.add(MIXED_SEEDS); l.add(ModBlocks.MAGIC_PEANUT); l.add(ROASTED_PEANUT);
         l.add(HONEY_ROASTED_PEANUT); l.add(PICKLED_PEPPER); l.add(GHOST_CHARCOAL); l.add(PICKLE); l.add(CUCUMBER_DOUGH);
         l.add(CUCUMBER_NOODLES); l.add(KIMCHI); l.add(PICKLED_ONION); l.add(PICKLED_BEETROOT); l.add(PICKLED_EGG); l.add(CENTURY_EGG);
         l.add(SALTED_COD); l.add(SALTED_SALMON); l.add(SURSTROMMING); l.add(OAT_DOUGH); l.add(OATMEAL); l.add(OATMEAL_COOKIE);

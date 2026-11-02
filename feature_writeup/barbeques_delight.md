@@ -1,7 +1,7 @@
 # Barbeque's Delight: overlap and integration report
 
-Investigation written 2026-10-30 for TODO `largecontent/mod-additions #12` (the Barbeque's Delight part). Nothing is
-built. Jar: `devmods/toBackport/barbequesdelight-1.3.0.jar` (NeoForge 1.21.1), unpacked and decompiled in
+Investigation written 2026-10-30 for TODO `largecontent/mod-additions #12` (the Barbeque's Delight part). **Port built
+2026-11-01** (section 4.0), not installed and not tested in game yet. Jar: `devmods/toBackport/barbequesdelight-1.3.0.jar` (NeoForge 1.21.1), unpacked and decompiled in
 `DecompiledMods/barbequesdelight-1.3.0/` (`jar/`, `src/`). Licence **LGPL-2.1** (`neoforge.mods.toml`), so the fork route
 applies: a port is needed (1.21.1 NeoForge -> 1.19.2 Forge) and may reuse upstream code and assets with the notice kept.
 Short name in this file: **BBQ**. Test prefix: **BBQ-** (unused in `feature_writeup/`).
@@ -16,9 +16,9 @@ asks for it by name. Upstream bugs are fixed.
 | Inventory | 36 items (33 plus 3 block items), 3 blocks, 0 effects, 0 potions, 26 recipes, 6 butcher trades, 1 mixin | surveyed (1, 3) |
 | Upstream bugs | B1-B5 | found (3.6) |
 | Overlap | skewer family (8 pack skewers), pack seasonings framework, wrap/sandwich rules, Create basin name | surveyed (2) |
-| Fold-in | steps 0-19 | planned (4), amended 2026-10-31 |
+| Fold-in | steps 0-19 | built 2026-11-01 (4.0); jars waiting for `mods/` |
 | Decisions | O1-O9 (owner, 2026-10-31); D1-D10 | O1-O9 recorded (0.1); D1-D4, D7 answered by them, D5, D6, D8-D10 defaults stand (5) |
-| Tests | BBQ-01..BBQ-21 | drafted (8), amended 2026-10-31 |
+| Tests | BBQ-01..BBQ-21; scratch SQ-BBQ-01..08 | drafted (8); scratch rows queued 2026-11-01 |
 
 - **Jar:** `barbequesdelight-1.3.0`, mod id `barbequesdelight`, authors lcy0x1 (xkmc), package `com.mao.barbequesdelight`
   (forked from Mao's original). 60 Java classes, about 1,600 lines of logic.
@@ -29,12 +29,12 @@ asks for it by name. Upstream bugs are fixed.
 - **Pack references:** none to `barbequesdelight` in `kubejs/`, `item_dict.js` or `development/*/src`. The `barbecue`
   hits in `backportedDisplay` are FD's and End's Delight's sticks. Dumps (2026-10-20) predate nothing here: the jar is
   not installed, so `/dumpall` comes after the port (step 0).
-- **Already live:** nothing.
+- **Already live:** nothing. Built 2026-11-01: the Creative Delight member `backportedBarbeques` (4.0).
 
 ## 0.1 Owner decisions (2026-10-31)
 
 Recorded from the owner's notes. They set the scope of the port; where they differ from a recommendation in sections
-2 to 5, they win. Nothing is built.
+2 to 5, they win. Built as recorded here on 2026-11-01 (4.0).
 
 | # | Decision | Effect on this report | TODO |
 |---|---|---|---|
@@ -363,10 +363,44 @@ type `grilling` keep their names.
 
 ## 4. Fold-in, in build order
 
+### 4.0 Build record (2026-11-01)
+
+Built in one session, steps 0-19. Not installed (the game may be running): the Creative Delight jar and the patcherMod
+jar go to `mods/` together. Offline checks done: member, bundle and patcherMod compile; the bundle nests
+`backportedBarbeques-1.3.0-ce-19.2-01.jar` and carries the scripts; `recipes.js` run headless through the real NCH gives
+the 26 recipes with the inputs and times of 3.1; the item, block and food dicts load (food grammar check passes). The
+javac logic harness of 7 was not written: the grill tick needs a Level and recipe manager, so it is covered by SQ-BBQ-05
+to -08 instead.
+
+| Step | Done | Where / note |
+|---|---|---|
+| 0 Port | yes | `development/creativeDelight/members/barbeques` (project `backportedBarbeques`, mod id `barbequesdelight`, package `com.SaintAlfonzo.creativedelight.barbeques`), nested last in `bundle_members`. Not `development/backportedBarbeques` as planned: CD members live under `members/`. LGPL notice `NOTICE-upstream-LGPL.txt`. B1 fixed. Stack NBT: seasoning `BBQSeasoning` (string), combo contents `Skewers` (list), grill `Entries` |
+| 1 Ids | yes | `item_dict.js` (36 items + `t_raw_skewers`, `t_grilled_skewers`, `t_raw_cod`, `t_raw_bacon`; the blocks are `bbq_grill`, `bbq_basin`, `bbq_tray` because `i.basin` is Create's), `block_dict.js` (3 blocks), `food_dict.js` (34 keys) |
+| 2 Tags | yes | `kubejs/data/creativedelight/kubejs/barbequesdelight/tags.js`; skewer tags also in the port's data; mineable tags in the port's data; CarryOn tag dropped |
+| 3, 7 Recipes | yes | All 26 through `global.NCH` (`recipes.js`): new emitters `bbqSkewering`, `bbqGrilling`, `bbqCombine` in patcherMod's `neoCraftHelper.js`. The port ships **no** recipe data (step 3's "23 stay as data" dropped in favour of step 7) |
+| 8 Effects | none needed | |
+| 9 Food types | yes | `food_types.json`: 10 cooked skewers, wrap, sandwich `handheld` (where the pack skewers are; no skewer type yet), bibimbap `meal`, burnt skewer `hazard`; raw skewers are not food. SoL complexity: nothing to add (the tuning system of food.md 3.5 is not built, defaults apply) |
+| 10 Families | yes | `tools/food_families.py`: cooked skewers in `NO_FAMILY` (closest: skewer, waits for `dishes/meals #46`), bibimbap override `meal/rice`; wrap and sandwich by name (`sandwich/wrap`, `sandwich/roll`), burnt by type (`hazard`). `food_families.json` regenerates after `/dumpall` |
+| 11 Stack sizes | after `/dumpall` | upstream sizes now (skewers and combos 64, seasonings 1); `gen_stack_sizes.py` reads the families after the dump |
+| 13 Compost | yes | CD startup `barbequesdelight/compost.js`, 24 rows |
+| 16 Lang | yes | 3.9 names ("Cooked ...", Lamb shown as Mutton); `en_ud`, `uk_ua`, `zh_cn` carried; Jade and tab keys dropped |
+| 17 Audit | yes | BlockRunner: grill `metal`, basin and tray `wood` (`tags.js`, dict keys `t_blockrunner_metal` / `_wood`); WTHIT provider `compat/wthit` (`barbequesdelight:grill`, server data + client lines); Item Physic audit after `/dumpall` |
+| 18 JEI | yes | Grilling and Skewering categories; fixes: Skewering page has its own title (1.3.0 showed "Grilling" on both), time line shows each side (half the recipe time) |
+| 19 Release | partly | `mod_sides.md` note on the CD row, changelog family `## Barbeque's Delight`; plan row at the next release |
+
+Other port choices (no owner decision needed, recorded here):
+- **Cutting board:** a `PlayerInteractEvent.RightClickBlock` listener (priority HIGH) instead of 1.3.0's mixin.
+- **Campfire merge:** any dry plain campfire is taken in (1.3.0 needed a lit one, but the pack places campfires
+  unlit), and the grill starts unlit (3.4.1). Splash water bottles put it out through a `ProjectileImpactEvent`
+  listener; fire arrows light it; the shovel test is `ShovelItem` (1.19.2 has no douse tool action).
+- **Creative tab:** Farmer's Delight's, as every CD member; 1.3.0's own tab is not registered.
+- **Grill and storage blocks drop their contents** when broken (1.3.0 did through its library).
+- **Recipes are `isSpecial`** (kept out of the recipe book, as the pack does for custom types).
+
 Route (O10: plain Forge rewrite, part of Creative Delight): fork into `development/backportedBarbeques` (LGPL-2.1 upstream notice + GPLv3 for our code), ids under
 `barbequesdelight:` (port rule: keep upstream ids), then nest as a Creative Delight member like the other Delight ports.
 KubeJS rows go in CD trees: startup `development/creativeDelight/src/main/resources/kubejs_startup/barbequesdelight/`,
-server `kubejs/data/creative_delight/kubejs/barbequesdelight/` (memory `creative-delight-routing`).
+server `kubejs/data/creativedelight/kubejs/barbequesdelight/` (memory `creative-delight-routing`).
 
 0. **Port the code** (the large step). Replace the four bundled libraries with plain Forge 1.19.2 (D8):
    - Registrate MC1.21 -> `DeferredRegister` + hand-written models and blockstates (copy the generated JSON from the jar).
@@ -521,11 +555,12 @@ answered (tray ported for evaluation). **No decision is open** apart from the qu
 
 | Path | What |
 |---|---|
-| `development/backportedBarbeques/` | Forked port: Java (blocks, block entities, recipes, items, mixin, JEI, WTHIT grill provider), data, assets, `LICENSE` (LGPL-2.1 notice) |
-| `development/creativeDelight/` | Member nesting (build script, CD row) |
-| `development/creativeDelight/src/main/resources/kubejs_startup/barbequesdelight/` | Item dict additions, food values |
-| `kubejs/data/creative_delight/kubejs/barbequesdelight/` | NCH recipes (grill, basin, tray, family mirrors, combos), tags |
-| `development/patcherMod/.../kubejs_startup/creativeengineering/func/neoCraftHelper.js` | `bbqSkewering`, `bbqGrilling` emitters |
+| `development/creativeDelight/members/barbeques/` | The port (built 2026-11-01): Java (blocks, block entities, recipes, items, cutting board event, JEI, WTHIT grill provider), data (loot, tags), assets, `NOTICE-upstream-LGPL.txt` |
+| `development/creativeDelight/gradle.properties`, root `settings.gradle` | Member nesting (`bundle_members`, project `backportedBarbeques`) |
+| `kubejs/startup_scripts/_lib/item_dict.js`, `block_dict.js`, `food_dict.js` | Ids |
+| `kubejs/data/creativedelight/kubejs/barbequesdelight/` | `recipes.js` (all 26), `tags.js` |
+| `development/patcherMod/.../kubejs_startup/creativeengineering/func/neoCraftHelper.js` | `bbqSkewering`, `bbqGrilling`, `bbqCombine` emitters |
+| `kubejs/generation_scripts/food/food_types.json`, `tools/food_families.py` | Food types, family overrides |
 | `development/creativeDelight/src/main/resources/kubejs_startup/barbequesdelight/compost.js` | 24 compost entries (hand file) |
 | `feature_writeup/barbeques_delight.md` | this file; plus rows in `food_families.md`, `creative_delight.md`, `mod_sides.md` |
 
@@ -576,3 +611,6 @@ answered (tray ported for evaluation). **No decision is open** apart from the qu
 - 2026-10-31 (third batch): skewer fold revised (BBQ system kept, other mods' skewers added to it, raw skewers stay as worse and sometimes poisonous food); `grilled` does not count toward the cap, configurable; catalog written in [seasonings.md](seasonings.md). Questions Q1-Q3 answered, Q6-Q7 new.
 - 2026-10-31 (fourth batch): O20-O26 recorded (seasoning use, `grilled` only from the Grill, smelt note, Cooked names, raw pack skewers, +2 saturation, nasty only for bad meats). 4.2 answered, 4.3 lists 14 further decisions, 3.9 has the name table.
 - 2026-10-31 (fifth batch): O27-O30 recorded (nasty default confirmed, sauces refused on raw skewers and seasonings copied to the cooked skewer, cooked-ingredient crafts follow shaped plus one assembly, grilled and crafted skewers split by seasoning). 4.3 #4, #5, #8, #9 answered. Tests BBQ-20, BBQ-21 added; the fold-stage tests (assembly craft, stack split) come with `dishes/meals #46`.
+- 2026-11-01: port built (4.0): Creative Delight member `backportedBarbeques`, NCH emitters, 26 recipes, tags, dicts,
+  compost, food types, family overrides, BlockRunner tiers, WTHIT and JEI. Scratch rows SQ-BBQ-01 to -08 queued. Not
+  installed.

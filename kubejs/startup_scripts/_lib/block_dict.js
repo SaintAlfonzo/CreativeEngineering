@@ -37,7 +37,7 @@ b.hanging_canvas_sign = 'farmersdelight:hanging_canvas_sign';
 b.dd_small_food_plate = 'displaydelight:small_food_plate';
 b.dd_plated_foods = 'displaydelight:*plated_*';    // every plated / small_plated food block (ctd_plated_*, plated_* ...)
 b.coaster = 'brewinandchewin:coaster';               // the Brewin' port
-// Milk and cow jars: glass bottles take milk out (kubejs/data/creative_delight/kubejs/cookingforblockheads/milk_jar.js, TODO food/drinks #6)
+// Milk and cow jars: glass bottles take milk out (kubejs/data/creativedelight/kubejs/cookingforblockheads/milk_jar.js, TODO food/drinks #6)
 b.cow_jar = 'cookingforblockheads:cow_jar';
 b.milk_jar = 'cookingforblockheads:milk_jar';
 // Campfire rain (patcherMod campfire/CampfireRain.java)
@@ -83,6 +83,8 @@ b.iw_permafrost = 'immersive_weathering:permafrost';
 b.iw_cryosol = 'immersive_weathering:cryosol';
 b.soul_soil = 'minecraft:soul_soil';
 b.rich_soul_soil = 'nethersdelight:rich_soul_soil';
+b.potted_mimicarnation = 'nethersdelight:potted_mimicarnation'; // CD repackedNethers (Nether's Delight 4.0 block)
+b.t_flower_pots = '#minecraft:flower_pots';
 b.iw_nulch = 'immersive_weathering:nulch_block';
 b.polished_packed_ice = 'architects_palette:polished_packed_ice';
 b.chiseled_packed_ice = 'architects_palette:chiseled_packed_ice';
@@ -109,12 +111,13 @@ b.cabbages = 'farmersdelight:cabbages';
 b.onions = 'farmersdelight:onions';
 b.tomatoes = 'farmersdelight:tomatoes';
 // Placed treated sticks (CD treatedstick/, feature_writeup/treated_sticks.md); unresolved until CD is installed
-b.treated_stick = 'creative_delight:treated_stick';
-b.treated_stick_tomatoes = 'creative_delight:treated_stick_tomatoes'; // FD tomato vine on a treated stick
+b.treated_stick = 'creativedelight:treated_stick';
+b.treated_stick_tomatoes = 'creativedelight:treated_stick_tomatoes'; // FD tomato vine on a treated stick
 b.rice_panicles = 'farmersdelight:rice_panicles';
 b.bell_peppers = 'rusticdelight:bell_peppers';
 b.coffee_crop = 'rusticdelight:coffee';
 b.cotton_crop = 'rusticdelight:cotton';
+b.glowing_calamari_crate = 'rusticdelight:glowing_calamari_crate';   // the port's own crate (creativedelight/members #25)
 b.ender_crop = 'endercrop:ender_crop';
 b.tobacco_crop = 'the_dirty_stuff:tobacco_seeds';     // the tobacco plant (its seed item has the same id)
 b.flax_crop = 'supplementaries:flax';
@@ -129,6 +132,18 @@ b.oat_crop = 'vintagedelight:oat_crop';
 b.peanut_crop = 'vintagedelight:peanut_crop';
 b.adzuki_sprouts = 'neapolitan:adzuki_sprouts';
 b.monster_box = 'quark:monster_box';             // vault box (mob_block_tweaks.md 2.9): obsidian hardness, sneak to break
+// Barbeque's Delight port (Creative Delight member barbequesdelight, barbeques_delight.md 4)
+b.bbq_grill = 'barbequesdelight:grill';   // has_campfire / lit / waterlogged; in #creativeengineering:campfire/rain_douses
+b.bbq_basin = 'barbequesdelight:basin';   // "Ingredients Basin", 2 slots
+b.bbq_tray = 'barbequesdelight:tray';     // 3 slots, stacks on itself
+// Roll Delight port (Creative Delight member `roll`, roll_delight.md 3.2); unresolved until CD carries the member
+b.legendary_roll_medley = 'roll_delight:legendary_roll_medley';   // FeastBlock, 8 servings
+b.mythical_roll_medley = 'roll_delight:mythical_roll_medley';     // FeastBlock, 8 servings
+b.wrapped_chopsticks = 'roll_delight:wrapped_chopsticks';         // holds up to 4 chopsticks
+// Large Meals port (Creative Delight member `largemeals`, large_meals.md 3.2); unresolved until CD carries the member
+b.omurice_block = 'largemeals:omurice_block';                       // FeastBlock, 4 servings
+b.mushroom_pot_pie_block = 'largemeals:mushroom_pot_pie_block';     // FeastBlock, 4 servings
+b.roasted_mutton_rack_block = 'largemeals:roasted_mutton_rack_block'; // FeastBlock, 4 servings
 
 // Tags
 b.any_bricks = '#minecraft:bricks';
@@ -136,6 +151,9 @@ b.t_oven_heat_sources = '#creativeengineering:oven_heat_sources'; // OvenHeat.OV
 b.t_fd_heat_sources = '#farmersdelight:heat_sources';
 b.t_fd_tray_heat_sources = '#farmersdelight:tray_heat_sources';   // fire, campfires, lava
 b.t_fd_mineable_knife = '#farmersdelight:mineable/knife';
+b.t_blockrunner_confectionery = '#blockrunner:surface/confectionery';   // BlockRunner speed tier of feasts and cakes (blocktags.js)
+b.t_blockrunner_metal = '#blockrunner:surface/metal';                 // BlockRunner metal tier (blocktags.js runner.metal)
+b.t_blockrunner_wood = '#blockrunner:surface/wood';                   // BlockRunner wood tier (blocktags.js runner.wood)
 b.t_forge_fences = '#forge:fences';
 b.t_forge_fence_gates = '#forge:fence_gates';
 b.t_keg_heat_sources = '#brewinandchewin:heat_sources';     // Brewin port: keg + Vinery cold storage; holds FD heat_sources
@@ -145,8 +163,8 @@ b.t_ghost_pepper_soil = '#vintagedelight:ghost_pepper_soil'; // Vintage port: wh
 b.t_create_non_movable = '#create:non_movable';    // contraptions can't pick these up
 b.t_ice = '#minecraft:ice';                          // ice, packed, blue, frosted, rare-ice
 b.t_hammer_no_rotate = '#creativeengineering:hammer_no_rotate'; // IECompat.HAMMER_NO_ROTATE: the IE hammer won't turn these
-b.t_end_plant_soil_slow = '#creative_delight:end_plant_soil_slow'; // enders_additions: End plants survive here, grow slowly (ends_delight.md 3.1)
-b.t_end_plant_soil_fast = '#creative_delight:end_plant_soil_fast'; // same, grow fast
+b.t_end_plant_soil_slow = '#creativedelight:end_plant_soil_slow'; // enders_additions: End plants survive here, grow slowly (ends_delight.md 3.1)
+b.t_end_plant_soil_fast = '#creativedelight:end_plant_soil_fast'; // same, grow fast
 b.t_mineable_axe = '#minecraft:mineable/axe';
 b.t_mineable_pickaxe = '#minecraft:mineable/pickaxe';
 

@@ -1,9 +1,6 @@
 package com.SaintAlfonzo.creativeengineering.compat;
 
 import com.SaintAlfonzo.creativeengineering.CEConfig;
-import com.SaintAlfonzo.creativeengineering.cooking.RemainderBuffer;
-import com.SaintAlfonzo.creativeengineering.cooking.RemainderBufferHolder;
-import com.SaintAlfonzo.creativeengineering.oven.OvenBlockEntity;
 
 import mcp.mobius.waila.api.IBlockAccessor;
 import mcp.mobius.waila.api.IBlockComponentProvider;
@@ -35,6 +32,8 @@ import vectorwing.farmersdelight.common.block.entity.CookingPotBlockEntity;
  * ("Holding: 3 Glass Bottle, 1 Bucket"), and "Waiting: leftover slots full" while a craft is held back for room
  * ({@code [cooking] stallWhenFull}). The buffer is read on the server, so the line doesn't depend on the client copy.
  * Off with {@code [wthit] remainderBuffer}. feature_writeup/remainder_buffer.md 3.3, TODO cooking/kitchen #3.
+ * The buffer itself is Creative Delight's; this line reads it through {@link RemainderView} (the oven is added to
+ * {@link RemainderView#STATIONS} by CD, the pot and kettle carry the {@link RemainderView.Holder} mixin).
  */
 public final class WthitRemainderBuffer implements IWailaCommonPlugin, IWailaClientPlugin, IBlockComponentProvider,
         IDataProvider<BlockEntity> {
@@ -46,7 +45,7 @@ public final class WthitRemainderBuffer implements IWailaCommonPlugin, IWailaCli
 
     @Override
     public void register(ICommonRegistrar registrar) {
-        registrar.blockData(this, OvenBlockEntity.class);
+        RemainderView.STATIONS.forEach(station -> registrar.blockData(this, station));
         if (ModList.get().isLoaded("farmersdelight")) {
             registrar.blockData(this, CookingPotBlockEntity.class);
         }
@@ -57,7 +56,7 @@ public final class WthitRemainderBuffer implements IWailaCommonPlugin, IWailaCli
 
     @Override
     public void register(IClientRegistrar registrar) {
-        registrar.body(this, OvenBlockEntity.class);
+        RemainderView.STATIONS.forEach(station -> registrar.body(this, station));
         if (ModList.get().isLoaded("farmersdelight")) {
             registrar.body(this, CookingPotBlockEntity.class);
         }
@@ -69,8 +68,7 @@ public final class WthitRemainderBuffer implements IWailaCommonPlugin, IWailaCli
     @Override
     public void appendData(IDataWriter data, IServerAccessor<BlockEntity> accessor, IPluginConfig config) {
         BlockEntity be = accessor.getTarget();
-        RemainderBuffer buffer = be instanceof OvenBlockEntity oven ? oven.getRemainders()
-                : be instanceof RemainderBufferHolder holder ? holder.ce$getRemainderBuffer() : null;
+        RemainderView buffer = be instanceof RemainderView.Holder holder ? holder.ce$remainderView() : null;
         if (buffer == null) {
             return;
         }

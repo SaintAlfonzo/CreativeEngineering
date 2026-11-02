@@ -1,0 +1,7 @@
+{
+  "parent": "supplementaries:block/stick_y",
+  "textures": {
+    "0": "creativedelight:block/treated_stick",
+    "particle": "creativedelight:block/treated_stick"
+  }
+}

@@ -1,0 +1,8 @@
+# Run 2026-11-01, Creative Split waves 2 and 3, boot 2b: the boot 2 world and config restarted (no jar change).
+pace 2
+
+## SQ-CMP-02b | second boot: no moved-sections WARN, CE file stays without the six
+bootexpect \[creativecompat\] loaded \(config/
+bootreject still has sections that moved to config/creativecompat-common.toml
+bootreject \[swaps\] config sections .* carried over
+shell grep -nE "^\s*\[(leaf_piles|moss|vine_shearing|campfire|monster_box|trash_slot)\]" config/creativeengineering-common.toml || echo "CE has none of the six"; grep -n "rainOutTicks" config/creativecompat-common.toml

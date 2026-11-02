@@ -1,8 +1,8 @@
 #!/usr/bin/env python3
-"""Resources for patcherMod's Display Delight dishes (compat/DisplayDelightDishes) from their list.
+"""Resources for Creative Delight's Display Delight dishes (moved from patcherMod 2026-11-01) (compat/DisplayDelightDishes) from their list.
 
-The list is development/patcherMod/src/main/resources/creativeengineering/displaydelight_dishes.json. For each entry
-this writes, into patcherMod's resources:
+The list is development/creativeDelight/src/main/resources/creativeengineering/displaydelight_dishes.json. For each entry
+this writes, into Creative Delight's resources:
   assets/creativeengineering/blockstates/<block>.json     four facings, like Display Delight's own food blocks
   assets/creativeengineering/models/block/<block>.json    bowl: Display Delight's bowl (displaydelight:block/bowl)
                                                           with a food surface cut from the item sprite (crop);
@@ -14,8 +14,8 @@ this writes, into patcherMod's resources:
   assets/creativeengineering/lang/en_us.json              "Placed <food name>" per block (other keys kept)
 The item sprite comes from the food's item model (layer0) in its mod jar, or for a KubeJS item its sprite in
 kubejs/assets; names from the /dumpfood export, else the entry's "name".
-Display Delight's models and textures are referenced, not copied. Output goes into the patcherMod jar, so a change
-needs a patcherMod rebuild (not listed in generators.json for that reason).
+Display Delight's models and textures are referenced, not copied. Output goes into the Creative Delight jar, so a change
+needs a Creative Delight rebuild (not listed in generators.json for that reason).
 
     python3 tools/gen_dd_dishes.py           write the files
     python3 tools/gen_dd_dishes.py --check   exit 1 if any file is missing or stale
@@ -32,7 +32,7 @@ sys.path.insert(0, str(Path(__file__).resolve().parent))
 import display_delight_jar as ddj  # noqa: E402  (the Display Delight jar in mods/)
 
 INSTANCE = Path(__file__).resolve().parent.parent
-RES = INSTANCE / 'development/patcherMod/src/main/resources'
+RES = INSTANCE / 'development/creativeDelight/src/main/resources'
 LIST = RES / 'creativeengineering/displaydelight_dishes.json'
 LANG = RES / 'assets/creativeengineering/lang/en_us.json'
 TAG = RES / 'data/displaydelight/tags/items/displayable.json'

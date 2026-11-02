@@ -11,7 +11,7 @@
 // self) is KubeJS's block-builder default, same as the old Java family. Display names
 // ("X Grit Pile") come from client_scripts/namechanges.js.
 //
-// No mineable/tool tag here - server_scripts/other/harvest.js owns ALL tool-type (shovel)
+// No mineable/tool tag here - CD server creativeengineering/harvest.js owns ALL tool-type (shovel)
 // and tool-tier tags for every dust pile in one place, so tags don't fight between two files.
 
 const DUST_PILE_METALS = [

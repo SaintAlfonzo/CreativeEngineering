@@ -8,7 +8,10 @@ console.log('Neo Craft Helper starting')
 
 var $NCH_ForgeRegistries = Java.loadClass('net.minecraftforge.registries.ForgeRegistries')
 var $NCH_ResourceLocation = Java.loadClass('net.minecraft.resources.ResourceLocation')
-var $NCH_CEConfigClass // lazily loaded/cached by NCH.cfg() below - undefined = not tried yet, false = unavailable
+// Config classes NCH.cfg() reads, in lookup order (creative_split.md 7.3 step 0): Common's CEConfig first, then each
+// carved jar's class, added by that jar's startup script with global.NCH.registerConfig(modId, className). Classes are
+// loaded lazily on the first cfg() call that needs them; cls undefined = not tried yet, false = unavailable.
+var $NCH_configClasses = [{ id: 'creativeengineering', name: 'com.SaintAlfonzo.creativeengineering.CEConfig', cls: undefined }]
 
 global.NCH = {
 
@@ -30,8 +33,8 @@ global.NCH = {
 
 	// Runs fn with every recipe id the helpers write under ns, then restores the previous namespace
 	// (nesting works). Another mod's scripts use their own namespace this way:
-	//   global.NCH.withNamespace('creative_delight', () => { R.shapeless(..., e, 'oceans/thing') })
-	//   -> creative_delight:shapeless/oceans/thing
+	//   global.NCH.withNamespace('creativedelight', () => { R.shapeless(..., e, 'oceans/thing') })
+	//   -> creativedelight:shapeless/oceans/thing
 	withNamespace(ns, fn) {
 		if (!/^[a-z0-9_.-]+$/.test(String(ns))) throw new Error('withNamespace: invalid namespace ' + ns)
 		var previous = global.NCH._ns
@@ -196,7 +199,7 @@ global.NCH = {
     // zero items, which made _validateAny falsely flag every NBT-matched syringe ingredient
     // as "matches no items" and (with global.NCH.strict on) throw, discarding the whole
     // recipe before it ever reached the real e.shapeless(...)/e.shaped(...) call - see
-    // kubejs/data/creative_delight/kubejs/creativeengineering/cultivated_meat.js history.
+    // kubejs/data/creativedelight/kubejs/creativeengineering/cultivated_meat.js history.
     if (isIng) return v
     // InputItem: public `ingredient` + `count` fields, plus kjs$asIngredient()
     var isInputItem = (v.ingredient !== undefined && v.count !== undefined)
@@ -714,8 +717,8 @@ global.NCH = {
   // keys potionMb/hammerBlows) and a
   // dotted path to that section (e.g. 'CRAFTING.FELSIC_SWORD'), and returns a new object
   // with each field replaced by its CEConfig value where available. Falls back to the
-  // given default field-by-field if patcherMod's CEConfig isn't on the classpath or the
-  // section/field doesn't resolve. Logs whenever a resolved value differs from its
+  // given default field-by-field if no registered config class (see registerConfig) holds the
+  // section/field. Logs whenever a resolved value differs from its
   // default, so an override in config/creativeengineering-common.toml shows up in the log
   // instead of silently changing recipe output. Meant to sit right next to the recipe it
   // feeds:
@@ -729,35 +732,73 @@ global.NCH = {
   //
   // Recipes are baked at datapack-reload time (ServerEvents.recipes) - a toml edit needs
   // /reload to reach an already-generated recipe, same as any other config-driven recipe.
-  cfg(defaults, path) {
-    if ($NCH_CEConfigClass === undefined) {
-      try {
-        $NCH_CEConfigClass = Java.loadClass('com.SaintAlfonzo.creativeengineering.CEConfig')
-      } catch (err) {
-        $NCH_CEConfigClass = false
-        console.warn('[NCH.cfg] patcherMod CEConfig not on classpath - config-driven recipe values will use their hardcoded defaults: ' + err)
-      }
+  // A section is looked up in every registered config class in order, so a section that moves to a carved jar keeps
+  // working without a script change. 'modid:SECTION.FIELD' pins the lookup to one jar's class.
+  registerConfig(modId, className) {
+    if ($NCH_configClasses.some(c => c.id === modId)) {
+      console.warn('[NCH.cfg] ' + modId + ' config already registered; ' + className + ' skipped')
+      return
     }
-    if (!$NCH_CEConfigClass) return defaults
+    $NCH_configClasses.push({ id: modId, name: className, cls: undefined })
+  },
 
-    var section = path.split('.').reduce((obj, seg) => (obj == null ? null : obj[seg]), $NCH_CEConfigClass)
+  cfg(defaults, path) {
+    var only = null
+    if (path.indexOf(':') > 0) {
+      only = path.substring(0, path.indexOf(':'))
+      path = path.substring(path.indexOf(':') + 1)
+    }
+    var section = null
+    var owner = null
+    $NCH_configClasses.forEach(c => {
+      if (section || (only && c.id !== only)) return
+      if (c.cls === undefined) {
+        try {
+          c.cls = Java.loadClass(c.name)
+        } catch (err) {
+          c.cls = false
+          console.warn('[NCH.cfg] ' + c.id + ' config class ' + c.name + ' not on classpath: ' + err)
+        }
+      }
+      if (!c.cls) return
+      // Rhino THROWS on a missing static field of a Java class (InternalError "has no public instance field or method
+      // named X"), it does not return undefined: a section that moved to a carved jar must read as "not here" in
+      // CEConfig, or the error escapes and cfg() returns undefined (scratch_run_2026-11-01.md 7).
+      var found = path.split('.').reduce((obj, seg) => {
+        if (obj == null) return null
+        try {
+          return obj[seg]
+        } catch (err) {
+          return null
+        }
+      }, c.cls)
+      if (found) {
+        section = found
+        owner = c.id
+      }
+    })
     if (!section) {
-      console.warn('[NCH.cfg] no CEConfig.' + path + ' section - using hardcoded defaults')
+      console.warn('[NCH.cfg] no ' + (only ? only + ':' : '') + path + ' section in any registered config - using hardcoded defaults')
       return defaults
     }
 
     var values = {}
     Object.keys(defaults).forEach(field => {
-      var configField = section[field]
+      var configField
+      try {
+        configField = section[field]
+      } catch (err) {
+        configField = null // missing Java field: Rhino throws (see the section lookup above)
+      }
       if (!configField || typeof configField.get !== 'function') {
-        console.warn('[NCH.cfg] no CEConfig.' + path + '.' + field + ' field - using default ' + defaults[field])
+        console.warn('[NCH.cfg] no ' + owner + ':' + path + '.' + field + ' field - using default ' + defaults[field])
         values[field] = defaults[field]
         return
       }
 
       var value = configField.get()
       if (value != defaults[field]) {
-        console.log('[NCH.cfg] ' + path + '.' + field + ' overridden: default ' + defaults[field] + ' -> ' + value)
+        console.log('[NCH.cfg] ' + owner + ':' + path + '.' + field + ' overridden: default ' + defaults[field] + ' -> ' + value)
       }
       values[field] = value
     })
@@ -792,7 +833,7 @@ global.NCH = {
 
   // cans: a recipe that uses food cans (feature_writeup/can_parity.md, decision D-C: manual crafts only).
   //   true / filter / array of filters (item, '#tag', slot index): the cans lose one serving instead of
-  //     being used up (patcherMod food.CanServings; the last serving rolls empty/crushed/nothing);
+  //     being used up (Creative Delight food.CanServings; the last serving rolls empty/crushed/nothing);
   //     true = every can slot (#creativeengineering:cans).
   //   { whole: id or [ids] }: those cans are used up whole and must be full (an opened can gives no result).
   //   { servings: <as above>, whole: [...] }: both.
@@ -852,7 +893,7 @@ global.NCH = {
     // ingredient-substitution tool (e.g. a script that swaps every recipe's vanilla iron
     // ingot for a modded one), not a per-recipe "leave this behind after crafting" mechanic.
     // Passing a plain Ingredient here silently produced a recipe that could never match any
-    // input (see kubejs/data/creative_delight/kubejs/creativeengineering/cultivated_meat.js history) - it just corrupts the
+    // input (see kubejs/data/creativedelight/kubejs/creativeengineering/cultivated_meat.js history) - it just corrupts the
     // ingredient instead of throwing. For an actual crafting remainder (bucket -> empty
     // bucket, syringe -> empty syringe), set it on the ITEM at registration time instead:
     // e.create(id).containerItem('namespace:item_id') - see startup_scripts/items/sample_syringe.js.
@@ -893,8 +934,8 @@ global.NCH = {
 
   // The can guard of shaped() / shapeless(): manual only, whole cans full only, then the
   // creativeengineering:can_serving ingredient action. KubeJS empties its custom-action map at the
-  // start of every server script load, so the Java callback is put back here on each call; the
-  // action id and the logic both live in patcherMod compat.KubeJSCanAction.
+  // start of every server script load, so Common's IngredientActions puts every registered action
+  // back on each call; the can logic is registered by compat.KubeJSCanAction (CD-bound).
   _canServings(recipe, cans, ctx) {
     if (!cans) return
     var opts = (cans === true || typeof cans === 'string' || typeof cans === 'number' || Array.isArray(cans))
@@ -902,8 +943,8 @@ global.NCH = {
     var whole = opts.whole ? [].concat(opts.whole) : []
     var servings = null
     if (whole.length) {
-      try { servings = Java.loadClass('com.SaintAlfonzo.creativeengineering.food.CanServings') } catch (err) {
-        console.warn('[NCH] ' + ctx + ': patcherMod CanServings not available, opened cans are not refused: ' + err)
+      try { servings = Java.loadClass('com.SaintAlfonzo.creativedelight.food.CanServings') } catch (err) {
+        console.warn('[NCH] ' + ctx + ': Creative Delight CanServings not available, opened cans are not refused: ' + err)
       }
     }
     recipe.modifyResult((grid, result) => {
@@ -919,17 +960,21 @@ global.NCH = {
     })
     if (!opts.servings) return
     cans = opts.servings
-    var action
+    var actionId = global.NCH.modId + ':can_serving'
     try {
-      action = Java.loadClass('com.SaintAlfonzo.creativeengineering.compat.KubeJSCanAction')
-      action.register()
+      var actions = Java.loadClass('com.SaintAlfonzo.creativeengineering.compat.kubejs.IngredientActions')
+      actions.reapply()
+      if (!actions.has(actionId)) {
+        console.warn('[NCH] ' + ctx + ': no ' + actionId + ' ingredient action registered, cans are used up whole')
+        return
+      }
     } catch (err) {
-      console.warn('[NCH] ' + ctx + ': patcherMod KubeJSCanAction not available, cans are used up whole: ' + err)
+      console.warn('[NCH] ' + ctx + ': IngredientActions not available, cans are used up whole: ' + err)
       return
     }
     var filters = cans === true ? [global.item.t_cans] : (Array.isArray(cans) ? cans : [cans])
     for (var f = 0; f < filters.length; f++) {
-      recipe.customIngredientAction(filters[f], String(action.ID))
+      recipe.customIngredientAction(filters[f], actionId)
     }
   },
 
@@ -1249,6 +1294,66 @@ global.NCH = {
 			json.container = global.NCH._itemJson(opts.container, { countMode: 'none', context: ctx + ' container' })
 
 		e.custom(json).id(`${global.NCH.ns()}:pickling/${idSuffix}`)
+	},
+
+	// Barbeque's Delight (Creative Delight member barbequesdelight, barbeques_delight.md 4 step 7). The port ships no recipe
+	// data; these three types come from here.
+	// Skewering: right-click an Ingredients Basin slot holding Item.of(ingredient, n) with the tool (a stick) in the main
+	// hand and Item.of(side, m) in the off hand; side null = the off hand must be empty.
+	//   R.bbqSkewering(i.raw_beef_skewer, Item.of(i.raw_beef, 2), Item.of(i.cabbage, 2), e, 'raw_beef_skewer')
+	bbqSkewering(output, ingredient, side, e, idOverride, tool) {
+		if (!e) throw new Error('bbqSkewering called without event object!')
+		var idSuffix = idOverride ?? global.NCH.toId(output, ingredient, "skewering")
+		var ctx = 'bbqSkewering ' + idSuffix
+		var ing = global.NCH._resolveIdCount(ingredient)
+		var json = {
+			type: 'barbequesdelight:skewering',
+			tool: global.NCH._itemJson(tool ?? 'minecraft:stick', { countMode: 'none', context: ctx + ' tool' }),
+			ingredient: global.NCH._itemJson(ingredient, { countMode: 'none', context: ctx + ' ingredient' }),
+			ingredientCount: Math.max(1, ing.count || 1),
+			sideCount: 0,
+			output: global.NCH._itemJson(output, { allowTag: false, context: ctx + ' output' })
+		}
+		if (side != null) {
+			json.side = global.NCH._itemJson(side, { countMode: 'none', context: ctx + ' side' })
+			json.sideCount = Math.max(1, global.NCH._resolveIdCount(side).count || 1)
+		}
+		e.custom(json).id(`${global.NCH.ns()}:skewering/${idSuffix}`)
+	},
+
+	// Grilling: a raw skewer on the Grill; time = ticks for both sides (flip at half).
+	//   R.bbqGrilling(i.grilled_beef_skewer, i.raw_beef_skewer, 320, e)
+	bbqGrilling(output, input, time, e, idOverride) {
+		if (!e) throw new Error('bbqGrilling called without event object!')
+		var idSuffix = idOverride ?? global.NCH.toId(output, input, "grilling")
+		var ctx = 'bbqGrilling ' + idSuffix
+		e.custom({
+			type: 'barbequesdelight:grilling',
+			ingredient: global.NCH._itemJson(input, { countMode: 'none', context: ctx + ' input' }),
+			output: global.NCH._itemJson(output, { allowTag: false, context: ctx + ' output' }),
+			barbecuingTime: global.NCH._or(time, 200)
+		}).id(`${global.NCH.ns()}:grilling/${idSuffix}`)
+	},
+
+	// Combine: a shapeless craft whose result keeps every cooked skewer of the grid (seasoning included) as its contents,
+	// for Kebab Wrap, Kebab Sandwich and Bibimbap. inputs: one entry per grid slot (Item.of(x, 2) = two slots).
+	bbqCombine(output, inputs, e, idOverride) {
+		if (!e) throw new Error('bbqCombine called without event object!')
+		var idSuffix = idOverride ?? global.NCH.toId(output, inputs, "combine")
+		var ctx = 'bbqCombine ' + idSuffix
+		var slots = []
+		;(Array.isArray(inputs) ? inputs : [inputs]).forEach((v, idx) => {
+			var count = Array.isArray(v) ? 1 : global.NCH._resolveIdCount(v).count
+			var entry = global.NCH._itemJson(v, { countMode: 'none', context: ctx + ' input[' + idx + ']' })
+			for (var c = 0; c < Math.max(1, count); c++) slots.push(entry)
+		})
+		if (slots.length < 1 || slots.length > 9)
+			global.NCH._warn(ctx, 'needs 1-9 ingredient slots, got ' + slots.length)
+		e.custom({
+			type: 'barbequesdelight:combine',
+			ingredients: slots,
+			result: global.NCH._itemJson(output, { allowTag: false, context: ctx + ' result' })
+		}).id(`${global.NCH.ns()}:shapeless/${idSuffix}`)
 	},
 
 	// Brewin' and Chewin' keg (backport, alcohol.md 8.6): brewinandchewin:fermenting with 4.5.0's field names.

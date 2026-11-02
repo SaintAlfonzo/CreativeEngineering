@@ -1,0 +1,12 @@
+{
+  "creativeengineering.jei.automated_potion_mixing": "Automated Potion Mixing",
+  "creativeengineering.jei.lingerification": "Lingerification",
+  "creativeengineering.jei.tipped_arrows": "Tipped Arrows",
+  "creativeengineering.jei.potion_buckets": "Potion Buckets",
+  "tooltip.creativeengineering.intoxicating_drink": "Intoxicating Drink",
+  "effect.creativeengineering.compound.parts": "Compound of: %s.",
+  "effect.creativeengineering.part.wither_immunity": "Wither Immunity",
+  "effect.creativeengineering.part.mid_air_jump": "One Mid-Air Jump",
+  "effect.creativeengineering.part.screen_flash": "Screen Flash",
+  "effect.creativeengineering.part.elytra_lift": "Elytra Lift"
+}

@@ -250,6 +250,58 @@
       "required": false
     },
     {
+      "id": "largemeals:pufferfish_broth",
+      "required": false
+    },
+    {
+      "id": "largemeals:potato_soup",
+      "required": false
+    },
+    {
+      "id": "largemeals:red_soup",
+      "required": false
+    },
+    {
+      "id": "largemeals:tomato_egg_soup",
+      "required": false
+    },
+    {
+      "id": "largemeals:cod_deluxe",
+      "required": false
+    },
+    {
+      "id": "largemeals:hearty_lunch",
+      "required": false
+    },
+    {
+      "id": "largemeals:chicken_curry",
+      "required": false
+    },
+    {
+      "id": "largemeals:pasta_with_mushroom_sauce",
+      "required": false
+    },
+    {
+      "id": "largemeals:omurice",
+      "required": false
+    },
+    {
+      "id": "largemeals:mushroom_pot_pie",
+      "required": false
+    },
+    {
+      "id": "largemeals:roasted_mutton_rack",
+      "required": false
+    },
+    {
+      "id": "largemeals:sweet_berry_custard",
+      "required": false
+    },
+    {
+      "id": "largemeals:rice_pudding",
+      "required": false
+    },
+    {
       "id": "brewinandchewin:fiery_fondue",
       "required": false
     },

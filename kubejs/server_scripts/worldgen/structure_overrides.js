@@ -114,7 +114,7 @@
 	var WAY_SIGN_DESTINATIONS = 'supplementaries:way_sign_destinations'
 
 	// KubeJS's class filter blocks java.io, so the markdown report goes through patcherMod.
-	var WorldgenFiles = Java.loadClass('com.SaintAlfonzo.creativeengineering.worldgen.WorldgenFiles')
+	var WorldgenFiles = Java.loadClass('com.SaintAlfonzo.creativeengineering.util.WorldgenFiles')
 	// patcherMod's worldgen side: switches, and the stages the plan is handed to
 	var WorldgenConfig = Java.loadClass('com.SaintAlfonzo.creativeengineering.worldgen.WorldgenConfig')
 	var StructureFrequencies = Java.loadClass('com.SaintAlfonzo.creativeengineering.worldgen.StructureFrequencies')

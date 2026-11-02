@@ -116,6 +116,8 @@ public class CopperPotScreen extends AbstractContainerScreen<CopperPotMenu> impl
             blit(pose, leftPos + HEAT_X, topPos + HEAT_Y, 176, 0, HEAT_W, HEAT_H);
         }
         blit(pose, leftPos + ARROW_X, topPos + ARROW_Y, 176, 15, menu.getCookProgressionScaled() + 1, ARROW_H);
+        // Port: the leftover slot's frame, copied from the output slot's (miners_delight.md I8)
+        blit(pose, leftPos + CopperPotMenu.LEFTOVER_X - 1, topPos + CopperPotMenu.LEFTOVER_Y - 1, 114, 55, 18, 18);
     }
 
     @Override

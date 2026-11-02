@@ -24,11 +24,11 @@ This file has four parts:
 |---|---|---|
 | Mod inventory (7 crops, 8 wild plants, 72 items, 29 blocks, 215 recipe files, worldgen, loot, village houses, trades, mob food, config) | §2 | reference 2026-10-22, from `VeggiesDelight-1.20.1-1.9.2.jar` |
 | Overlap decisions and the overlaps that remain | §3 | decided 2026-10-22 (user); 10 remaining overlaps listed in §3.3 |
-| Port jar `backportedVeggies-1.9.2-ce-19.2-03.jar` | §4.1 | `-01` BUILT 2026-10-22, live since 1.1.01; `-03` (carrot cake cut face) live since 1.1.03. Rebuilt 2026-10-30 18:31 under the same `-03` name with the mature dandelion revert (§2.2): that build is in `build/libs/` only (`mods/` holds the 2026-10-25 `-03`); bump to `-04` before installing |
+| Port jar `backportedVeggies-1.9.2-ce-19.2-04.jar` | §4.1 | `-01` BUILT 2026-10-22, live since 1.1.01; `-03` (carrot cake cut face) live since 1.1.03. `-04` BUILT 2026-11-01 (the mature dandelion revert, §2.2, first built 2026-10-30 under the `-03` name): in `build/libs/`, not installed (`mods/` holds the 2026-10-25 `-03`) |
 | Implementation description (port, wild plants, mature dandelion, seasons, food, cooking rules, baking, drinks, jars, mob food, loot, houses, trades, compost, UI) | §4 | BUILT 2026-10-22 except the dump-driven steps (§4.0) |
-| Marked merges and pins (Fish and Chips, Mashed Potatoes, Stuffed Bell Peppers; Cultural Delight; Vintage and Cultural recipes; doughs; mob food; seasons; tea audit) | §5 | marked 2026-10-22 |
+| Marked merges and pins (Fish and Chips, Mashed Potatoes, Stuffed Bell Peppers; Cultural Delight; Vintage and Cultural recipes; doughs; mob food; seasons; tea audit) | §5 | marked 2026-10-22; M1 to M3 BUILT 2026-11-01 (§5.1); §3.3 folds R4 to R8, R10, R11 BUILT 2026-11-01, R2 closed (three flowers, no fold), R3 open (§3.3) |
 | Mature dandelion maturing on rich / fertile soil and shear / knife revert (TODO `ports/veggiesport #4`) | §2.2 | BUILT 2026-10-30: patcherMod part in 1.1.04 (installed 2026-10-31 00:44, not yet booted); port part waits for the `-04` install |
-| Tests | §8 | VD-01 to VD-43 drafted (not all numbers used) |
+| Tests | §8 | VD-01 to VD-54 drafted (not all numbers used) |
 
 - **Source to port from:** `~/.local/share/atlauncher/downloads/VeggiesDelight-1.20.1-1.9.2.jar` (Forge, closest API to
   1.19.2). `DecompiledMods/VeggiesDelight-1.21.1-1.9.3.jar` is the NeoForge build, not decompiled, same content.
@@ -182,7 +182,7 @@ The 1.21.1 build of 1.9.3 has the same content as the 1.20.1 one apart from the 
 | Models | Lasagna pan models use FD 1.3's `block/tray` texture | skip (FD 1.2.4 has only `tray_top`) |
 | Models | Carrot cake slices 1 to 6 show `carrot_cake_inner` on the cut face (1.9.2 showed the top texture). The texture is already in the port jar | **carry over** (data, `port_resources.py`): an upstream visual fix |
 | Structures | The 4 depot houses (plains and 3 Repurposed Structures variants) replace the vanilla horse-pool jigsaw with 2 or 3 placed untamed horses of fixed variants | skip: the pool jigsaw already spawns a horse |
-| Item icons (1.21.1 build only) | The 8 wild plants and the mature dandelion get their own `item/` textures (1.20.1 uses the block texture) | optional, visual only; owner's call |
+| Item icons (1.21.1 build only) | The 8 wild plants and the mature dandelion get their own `item/` textures (1.20.1 uses the block texture) | optional, visual only; owner's call. Checked 2026-11-01: all 8 `item/` PNGs in the 1.21.1 jar are byte-identical to the block textures, so nothing changes visually |
 
 Carrot cake cut face: built 2026-10-25 (`veggiesport #3`): `port_resources.py` writes `carrot_cake_inner` into slices 1 to 6,
 port `1.9.2-ce-19.2-03` (in `mods/`); VD-41.
@@ -226,8 +226,21 @@ No pack item provides broccoli, cauliflower, garlic, sweet potato, turnip, zucch
 
 ### 3.3 Overlaps that remain after the decisions
 
-Found 2026-10-22 against the item names export (`kubejs/exported/display_names.json`). None is acted on; listed for
-decision.
+Found 2026-10-22 against the item names export (`kubejs/exported/display_names.json`). DECIDED 2026-11-01 (owner): R2 to R8, R10 and R11 are all kept and folded into their food family (TODO `creativedelight/members #30`); R9 settled by M1.
+
+Folds as built 2026-11-01 (CD `veggiesdelight/recipes.js` unless named; tests VD-51 to VD-54):
+
+| # | Fold | State |
+|---|---|---|
+| R2 | Grows from a Dandelion on rich soils, shears or a knife revert it (§2.2, `ports/veggiesport #4`) | CLOSED 2026-11-01 (owner): Dandelion, Grown Dandelion and Mature Dandelion are three valid flowers with uses, no fold; all three share the flower tags and each has its own uses |
+| R3 | With Farmer's Respite's dandelion tea | open: waits for the juice and tea rule (`food/drinks #8`, decision "the rule" open) |
+| R4 | One shaped recipe on a pie crust (milk or any cheese), manual only as Brewin's quiche, plus the assembly (already there); VD's milk and Vintage cheese shaped recipes go | BUILT |
+| R5 | Pizza rule: bottom row any dough, tomato sauce, any dough; toppings bell pepper, vegetable, onion; manual only plus an assembly on dough | BUILT |
+| R6 | Stuffed rule: both keep their crafts (boat grid, bowl pot + heatless grid); each gets an assembly on a roasted zucchini | BUILT |
+| R7 | Pancake family | open: the family has no recipe rule yet (`creativedelight/members #15`, `merges/baking #1`, `dishes/meals #12` open) |
+| R8 | Already made in the Pickling Jar (fermenting); now in the `preserve/pickle` family (`tools/food_families.py`, `food_families.json`) | BUILT |
+| R10 | Skewer rule: shaped diagonal (stick, turnip, cooked mutton) plus an assembly on a stick; the shapeless goes | BUILT |
+| R11 | Burger rule for the Vegetarian Burger (shaped, assembly on the patty); the patty fills the patty slot of More Delight's simple, egg and loaded hamburgers (`creativeengineering/recipes.js`), VD's shapeless versions go; raw patty by the cooking trio (`F.veggieCook`) | BUILT |
 
 | # | VD item | Pack item | Overlap |
 |---|---|---|---|
@@ -254,7 +267,7 @@ decision.
 | 4.4 Mature dandelion | BUILT | `wild_flowers.json` entry with `follows`; the generator writes the resolved list into `flower_features.json` (`follows`), `wild_flowers.js` reads it. 61 biomes (no snowy, desert, bare badlands, swamp). New loot table in the port. `test_wild_flowers.sh` passes |
 | 4.5 Crops, seasons | seasons BUILT (VD's tags, bell pepper entries stripped); crops.md rows and coverage OPEN | WTHIT coverage (`/dumpcropgrowth`) needs the game |
 | 4.6 Food types, cans, jars, stacks | types, jars, cans BUILT; stacks, placeables OPEN | 64 foods typed by hand in `food_types.json` (checked 2026-10-23: none missing); the 5 soups have soft fluids (`gen_soup_soft_fluids.py`). 2026-10-23: `food_catalog.py` rerun from the 10-22 dump, 24 cans generated (broccoli, cauliflower with florets, sweet potato, turnip, zucchini with slices; baked sweet potato, roasted zucchini, roasted florets; 2 pastas; 3 breads, 4 salads, 5 soups by type; sweet potato pie filling, also baked into the pie). Not canned: garlic, dandelion leaf, patties, roasted garlic, handhelds, sweets, drinks, other meals ([can_parity.md](can_parity.md), CP-27 to CP-29). `gen_stack_sizes.py`, `placeable_catalog.py` still to run |
-| 4.7 Cooking rules | BUILT | (Since 2026-10-25 the grid-meal moves, heatless routes and wraps are Creative Delight QoL-5: `kubejs/data/creative_delight/kubejs/veggiesdelight/cooking.js`, ids `creative_delight:`, switch `[qol] manualOnlyRoutes`.) `cooking.js` Meals: 12 VD grid meals re-id'd `_manual_only`, 15 heatless pot-meal routes; wraps on `#forge:tortilla` (manual only) plus two sequenced assemblies; cauliflower bread in the oven (`baking.js`, on dough). Tag `#creativeengineering:roasted_bell_pepper`; baked sweet potato and roasted zucchini joined `soup_veggie_cooked`. 2026-10-23, with the Vintage port: its compat grid recipes folded in (Cesar salad garlic or cheese, zucchini boat milk or cheese, vegetarian patty in Vintage's burgers, roasted pepper in the burrito), the dough fajitas wrap removed; the pot versions stay ([vintage_delight.md](vintage_delight.md) step 9) |
+| 4.7 Cooking rules | BUILT | (Since 2026-10-25 the grid-meal moves, heatless routes and wraps are Creative Delight QoL-5: `kubejs/data/creativedelight/kubejs/veggiesdelight/cooking.js`, ids `creativedelight:`, switch `[qol] manualOnlyRoutes`.) `cooking.js` Meals: 12 VD grid meals re-id'd `_manual_only`, 15 heatless pot-meal routes; wraps on `#forge:tortilla` (manual only) plus two sequenced assemblies; cauliflower bread in the oven (`baking.js`, on dough). Tag `#creativeengineering:roasted_bell_pepper`; baked sweet potato and roasted zucchini joined `soup_veggie_cooked`. 2026-10-23, with the Vintage port: its compat grid recipes folded in (Cesar salad garlic or cheese, zucchini boat milk or cheese, vegetarian patty in Vintage's burgers, roasted pepper in the burrito), the dough fajitas wrap removed; the pot versions stay ([vintage_delight.md](vintage_delight.md) step 9) |
 | 4.8 Baking | BUILT | Carrot cake in `CAKES` (2 carrots), sweet potato pie in `PIES` (2 baked sweet potatoes, no filling can). The removal sweep takes VD's own recipes, slices-to-whole stay |
 | 4.9 Drinks | BUILT | Fluids `creativeengineering:carrot_juice`, `dandelion_juice`, `turnip_water`; pot route `_manual_only` (VD's inputs), heated mixer = the same inputs + 250 mB water, spout, drain, bottler at 250 mB. Jar soft fluids (2026-10-23) for the 3 juices (tank fluid as equivalent) and fermented garlic honey, hand-written beside `nut_milk.json` |
 | 4.10 Mob food | BUILT | In the port (`ModMobsEvents`), Rustic's 3 peppers and seeds in place of VD's |
@@ -430,16 +443,16 @@ Both items stay in the pack, unmerged, until the user decides. When decided, the
 
 | Merge | Items | Note |
 |---|---|---|
-| M1 Fish and Chips | `veggiesdelight:fish_and_chips`, `pneumaticcraft:cod_n_chips` | DECIDED 2026-11-01: keep Veggies Delight's, remove PneumaticCraft's (`merges/dishes #1`) |
-| M2 Mashed Potatoes (pinned) | `veggiesdelight:mashed_potatoes`, `moredelight:mashed_potatoes` | DECIDED 2026-11-01: split, not merged. More Delight = Mashed Potatoes (potatoes and potato slices only); Veggies = Mashed Sweet Potatoes (sweet potatoes and sweet potato slices only); one mashed-veggie family: pot 2 + 1 milk + bowl, 3 baked / cooked slices + milk + bowl; sliced potato tag holds both slice items (`merges/dishes #2`, `dishes/ingredients #20`) |
-| M3 Stuffed Bell Peppers | VD's placed feast and serving, Rustic's three stuffed peppers | DECIDED 2026-11-01: remove Veggies Delight's; only Rustic Delight's tricolor stays (`merges/dishes #3`) |
+| M1 Fish and Chips | `veggiesdelight:fish_and_chips`, `pneumaticcraft:cod_n_chips` | DECIDED 2026-11-01: keep Veggies Delight's, remove PneumaticCraft's (`merges/dishes #1`). BUILT 2026-11-01 as an item merge ([item_merges.md](item_merges.md) 2.13): one frying route, in a bowl; VD's two egg pot recipes go. 2026-11-01 (owner): PneumaticCraft's Fries removed too, with Canned Chips and the Fries + fish grid route (SQ-VDF-07) |
+| M2 Mashed Potatoes (pinned) | `veggiesdelight:mashed_potatoes`, `moredelight:mashed_potatoes` | DECIDED 2026-11-01: split, not merged. More Delight = Mashed Potatoes (potatoes and potato slices only); Veggies = Mashed Sweet Potatoes (sweet potatoes and sweet potato slices only); one mashed-veggie family: pot 2 + 1 milk + bowl, 3 baked / cooked slices + milk + bowl; sliced potato tag holds both slice items (`merges/dishes #2`, `dishes/ingredients #20`). BUILT 2026-11-01: VD pot recipe and its Vintage cheese version replaced by 2 sweet potatoes or sliced sweet potatoes + milk -> Mashed Sweet Potatoes (bowl), by hand 3 baked sweet potatoes + milk + bowl; More Delight's: 2 potatoes or Rustic potato slices + milk (bowl), by hand 3 baked potatoes or baked potato slices + milk + bowl (CD `moredelight/recipes.js`); the slice tag already holds both slices. Both canned (Canned Mashed Potatoes, Canned Mashed Sweet Potatoes, meal section) and saltable (`#salt:can_be_salted`), owner 2026-11-01 (SQ-VDF-08, -09) |
+| M3 Stuffed Bell Peppers | VD's placed feast and serving, Rustic's three stuffed peppers | DECIDED 2026-11-01: remove Veggies Delight's; only Rustic Delight's tricolor stays (`merges/dishes #3`). BUILT 2026-11-01: both in `removedItems` (CD `veggies_items.js`), their recipe removed, out of `food_types.json` and the family json |
 
 ### 5.2 Notes for later work (each has a TODO row)
 
 - **Grow season overhaul:** VD's seasons are copied, not reviewed (`farming/crops #5`).
 - **Tea audit:** the three VD juices go through the tea cleanup and the juice / tea rule with the teas
   (`food/drinks #2`, `#8`).
-- **Dough unification:** (decided 2026-11-01: sweet potato dough follows the dough-for-bread-cooking rule) sweet potato dough stays as VD has it until doughs are unified. The mhadjeb was removed
+- **Dough unification:** (decided 2026-11-01: sweet potato dough follows the dough-for-bread-cooking rule; BUILT 2026-11-01: VD's furnace, smoker and campfire bread from it are removed, it bakes to bread in the Oven like every plain dough) sweet potato dough stays as VD has it until doughs are unified. The mhadjeb was removed
   2026-10-25 (`dishes/meals #32`, 5.5).
 - **Mob food overhaul:** VD's mob food is copied as is; the whole mob food system needs an overhaul.
 
@@ -496,7 +509,7 @@ Rows added to [TODO](todo/TODO.md) on 2026-10-24; nothing is built. Plans: [dish
   `kubejs_startup/veggiesdelight/veggies_items.js`. Food as Rustic's potato slices: 1 hunger, modifier 0.3. No own art: the
   model reads `rusticdelight:item/potato_slices` in place (`.texture()`, not copied; Rustic is ARR), so it looks like the
   potato slices and needs the Rustic member for its sprite. No baked form (the potato's baked slices are not mirrored).
-- **Recipe:** knife on a sweet potato -> 3 (`creative_delight:farmersdelightcutting/sliced_sweet_potato`, CD
+- **Recipe:** knife on a sweet potato -> 3 (`creativedelight:farmersdelightcutting/sliced_sweet_potato`, CD
   `veggiesdelight/recipes.js`); Slice & Dice's slicer copies it. Same session: a potato cuts into 3 Rustic slices [2]
   (rustic_delight.md 5.2), so both have the board and the slicer at 3. No Create saw or IE route exists for either.
 - **Tags** (CD `veggiesdelight/tags.js`): `#forge:sliced_potato` (the pack's fries, cod and chips) and
@@ -571,24 +584,45 @@ Food and recipes
 - [ ] VD-12 Carrot cake and sweet potato pie use the baking families (base / crust, oven); VD's own recipes are gone.
 - [ ] VD-13 Each VD pot meal has a heatless grid route and no Slice and Dice mixer copy where the rule says so.
 - [ ] VD-14 Carrot juice, dandelion juice and turnip water come from the heated mixer, spout, drain and bottler as fluids.
-- [ ] VD-15 Fish and Chips (both), Mashed Potatoes (both) and the stuffed peppers (VD feast, Rustic's three) all exist
-  and work.
+- [ ] VD-15 Fish and Chips is Veggies Delight's only (PneumaticCraft's merged in, VD-47); Mashed Potatoes (More Delight)
+  and Mashed Sweet Potatoes (Veggies) both exist (VD-48); only Rustic's stuffed bell peppers exist, no VD feast or
+  serving in JEI (VD-49).
 - [ ] VD-16 Fermented garlic honey is made in the Pickling Jar (VTD-15); not in the cooking pot; no hand recipe.
 - [ ] VD-17 Placed VD pies, cake, tray, lasagna and stuffed peppers show the placeable tooltip and serve correctly.
 - [ ] VD-18 Stack sizes follow the policy (bowl meals 32, drinks 32, placed cakes and feasts 8).
 - [ ] VD-19 New raw and cooked veggies have cans.
 - [ ] VD-20 Both wraps need a tortilla; no dough route.
 - [ ] VD-21 Every VD soup and stew goes into a Supplementaries jar with its own colour.
-- [ ] VD-22 Sweet potato dough and uncooked mhadjeb craft as in VD.
+- [ ] VD-22 Sweet potato dough crafts as in VD (the mhadjeb is removed, 5.5).
 - [ ] VD-23 Cauliflower Bread bakes in the Oven from dough and 2 cauliflowers; no grid recipe.
 - [ ] VD-24 VD grid meals and the heatless pot-meal routes are not offered by the Create mixer or mechanical crafter.
 - [ ] VD-25 A ripe zucchini plant gives 1 or 2 zucchinis on right-click and drops back 3 ages.
 - [ ] VD-44 Knife on a sweet potato on a cutting board gives 3 Sliced Sweet Potatoes, a potato 3 Potato Slices; a Slice &
   Dice slicer with a knife does the same; JEI shows both at 3 (5.6, RD-34).
 - [ ] VD-45 Sliced Sweet Potato: shows the potato slices sprite and its name, eats for 1 hunger, composts (50%); JEI lists it
-  in fries, cod and chips, More Delight's mashed potatoes, potato salad and diced potato dishes, and the Canned Sweet Potato.
+  in fries, fish and chips, Mashed Sweet Potatoes, potato salad and diced potato dishes, and the Canned Sweet Potato; not in
+  More Delight's Mashed Potatoes (VD-48).
 - [ ] VD-46 `/dumptags`: the Sliced Sweet Potato is in `forge:sliced_potato`, `forge:sliced_potatoes`,
   `forge:vegetables/sweet_potato`, `forge:vegetables/potato` and `creativeengineering:food_type/raw/veggie/sliced`.
+- [ ] VD-47 Fish and Chips (5.1 M1, item_merges.md 2.13, MG-48): JEI shows one, Veggies Delight's, with the pot frying
+  route (cooking oil, any raw fish, 2 sliced potatoes, bowl) and Fries + cooked fish + bowl; VD's egg pot recipes gone.
+- [ ] VD-48 Mashed family (5.1 M2): Mashed Potatoes from the pot with 2 potatoes or potato slices + milk (bowl) and by
+  hand from 3 baked potatoes or baked potato slices + milk + bowl; Mashed Sweet Potatoes (renamed) the same with sweet
+  potatoes or sliced sweet potatoes, by hand 3 baked sweet potatoes; neither takes the other type.
+- [ ] VD-49 Stuffed Bell Peppers (5.1 M3): the VD feast and serving are hidden in JEI and have no recipe; Rustic's
+  stuffed bell peppers are unchanged.
+- [ ] VD-50 Sweet potato dough gives no bread in a furnace, smoker or campfire; it bakes to bread in the Oven on a
+  baking sheet (1, 3, 6).
+- [ ] VD-51 Zucchini Quiche (3.3 R4): one shaped recipe on a pie crust (roasted zucchini x3, milk or any cheese, cooked
+  meat), not in the mechanical crafter; the assembly on a pie crust still works. Vegan Pizza (R5): bottom row dough,
+  tomato sauce, dough with bell pepper, vegetable, onion above (any dough); an assembly on dough makes it.
+- [ ] VD-52 Stuffed zucchinis (R6): an assembly on a roasted zucchini makes the boat (cooked meat, 250 mB milk) and the
+  bowl (2 roasted zucchini, cooked meat, tomato sauce); the grid and pot recipes are unchanged.
+- [ ] VD-53 Turnip Mutton Skewer (R10): shaped diagonal (stick, turnip, cooked mutton), no shapeless; assembly on a
+  stick. Vegetarian Burger (R11): shaped cabbage and tomato over the patty over bread; assembly on the cooked
+  vegetarian patty. Simple, Egg and Loaded Hamburgers take the vegetarian patty in their shaped recipe; VD's shapeless
+  versions gone. Raw vegetarian patty cooks in furnace, smoker, campfire.
+- [ ] VD-54 Fermented Garlic Honey is in `#creativeengineering:food_family/preserve/pickle` (R8) after `/reload`.
 
 World and economy
 
@@ -633,3 +667,6 @@ UI
   TODO `ports/veggiesport #4` (scan 2026-10-31).
 - 2026-11-01: Sliced Sweet Potato (5.6): sweet potato -> 3 on the board and the slicer, potato -> 3 Rustic slices [2]; sliced
   potato and vegetable tags, compost, food type, family, dict, Canned Sweet Potato source; VD-44 to VD-46. CD built, not installed.
+- 2026-11-01: M1 to M3 built (5.1), the §3.3 folds R4 to R8, R10, R11 (`creativedelight/members #30`), sweet potato dough
+  bread routes removed (5.2); port `-04` built (mature dandelion revert), not installed; VD-47 to VD-54, SQ-VDF-01 to -06.
+  Needs a CD rebuild and restart.

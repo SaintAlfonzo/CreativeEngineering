@@ -101,6 +101,32 @@ global.food = {}
 	f.fruit_taiga_grapes_white                     = i.taiga_grapes_white;
 	f.fruit_white_grape                            = i.white_grape;
 	f.fruit_white_strawberries                     = i.white_strawberries;
+	f.fruit_juice_apple                            = i.apple_juice;
+	f.fruit_juice_bayberry                         = i.bayberry_soup;    // renamed Bayberry Juice (TODO food/drinks #9)
+	f.fruit_juice_carrot                           = i.carrot_juice;
+	f.fruit_juice_chorus                           = i.chorus_juice;
+	f.fruit_juice_dandelion                        = i.dandelion_juice;
+	f.fruit_juice_ender_nectar                     = i.ender_nectar;
+	f.fruit_juice_hamimelon                        = i.hamimelon_juice;
+	f.fruit_juice_jungle_red_grape                 = i.jungle_red_grapejuice_bottle;
+	f.fruit_juice_jungle_white_grape               = i.jungle_white_grapejuice_bottle;
+	f.fruit_juice_kiwi                             = i.kiwi_juice;
+	f.fruit_juice_lemon                            = i.lemon_juice;
+	f.fruit_juice_melon                            = i.melon_juice;
+	f.fruit_juice_nautilus                         = i.nautilus_juice;
+	f.fruit_juice_oculemonade                      = i.oculemonade;
+	f.fruit_juice_orange                           = i.orange_juice;
+	f.fruit_juice_pear                             = i.pear_juice;
+	f.fruit_juice_pickerelweed                     = i.pickerelweed_juice;
+	f.fruit_juice_red_grape_wine                   = i.red_grapejuice_wine_bottle;
+	f.fruit_juice_savanna_red_grape                = i.savanna_red_grapejuice_bottle;
+	f.fruit_juice_savanna_white_grape              = i.savanna_white_grapejuice_bottle;
+	f.fruit_juice_sea_grape                        = i.sea_grape_juice;
+	f.fruit_juice_strawberry_banana_smoothie       = i.strawberry_banana_smoothie;
+	f.fruit_juice_strong_melon                     = i.strong_melon_juice;
+	f.fruit_juice_taiga_red_grape                  = i.taiga_red_grapejuice_bottle;
+	f.fruit_juice_taiga_white_grape                = i.taiga_white_grapejuice_bottle;
+	f.fruit_juice_white_grape_wine                 = i.white_grapejuice_wine_bottle;
 
 	// ---- veggie
 	f.veggie_adzuki_beans                          = i.adzuki_beans;
@@ -443,6 +469,11 @@ global.food = {}
 	f.spice_sugar_cube                             = i.sugar_cube;
 	f.spice_vanilla_pods                           = i.vanilla_pods;
 
+	// Barbeque's Delight port (barbeques_delight.md 4)
+	f.spice_chili_powder                            = i.chili_powder;
+	f.spice_cumin_powder                            = i.cumin_powder;
+	f.spice_pepper_powder                           = i.pepper_powder;
+
 	// ---- sauce
 	f.sauce_animal_fat                             = i.animal_fat;
 	f.sauce_animal_oil                             = i.animal_oil_bottle;
@@ -457,6 +488,11 @@ global.food = {}
 	f.sauce_nut_butter                             = i.nut_butter_bottle;
 	f.sauce_tallow                                 = i.tallow;
 	f.sauce_tomato                                 = i.tomato_sauce;
+
+	// Barbeque's Delight port (barbeques_delight.md 4)
+	f.sauce_barbeque                                = i.barbeque_sauce;
+	f.sauce_buffalo                                 = i.buffalo_sauce;
+	f.sauce_honey_mustard                           = i.honey_mustard_sauce;
 
 	// ---- ingredient
 	f.ingredient_apple_mash                        = i.apple_mash;
@@ -781,6 +817,10 @@ global.food = {}
 	f.sandwich_wrap_vegan                          = i.vegan_wrap;
 	f.sandwich_wrap_vegetables                     = i.vegetables_wrap;
 
+	// Barbeque's Delight port (barbeques_delight.md 4)
+	f.sandwich_roll_kebab                           = i.kebab_sandwich;
+	f.sandwich_wrap_kebab                           = i.kebab_wrap;
+
 	// ---- salad
 	f.salad_assorted                               = i.assorted_salad;
 	f.salad_broccoli                               = i.broccoli_salad;
@@ -877,7 +917,6 @@ global.food = {}
 
 	// ---- snack
 	f.snack_caramel_popcorn                        = i.caramel_popcorn;
-	f.snack_chips                                  = i.chips;
 	f.snack_crunchy_bar                            = i.crunchy_bar;
 	f.snack_nachos                                 = i.nachos_bowl;
 	f.snack_nachos_block                           = i.nachos_block;
@@ -1078,6 +1117,29 @@ global.food = {}
 	f.dish_weird_caviar                            = i.weird_caviar;
 	f.dish_zucchini_quiche                         = i.zucchini_quiche;
 
+	// Barbeque's Delight port (barbeques_delight.md 4)
+	f.dish_bibimbap                                 = i.bibimbap;
+	f.dish_beef_skewer                              = i.raw_beef_skewer;
+	f.dish_chicken_skewer                           = i.raw_chicken_skewer;
+	f.dish_cod_skewer                               = i.raw_cod_skewer;
+	f.dish_mutton_skewer                            = i.raw_lamb_skewer;
+	f.dish_mushroom_skewer                          = i.raw_mushroom_skewer;
+	f.dish_pork_sausage_skewer                      = i.raw_pork_sausage_skewer;
+	f.dish_potato_skewer                            = i.raw_potato_skewer;
+	f.dish_rabbit_skewer                            = i.raw_rabbit_skewer;
+	f.dish_salmon_skewer                            = i.raw_salmon_skewer;
+	f.dish_vegetable_skewer                         = i.raw_vegetable_skewer;
+	f.dish_cooked_beef_skewer                       = i.grilled_beef_skewer;
+	f.dish_cooked_chicken_skewer                    = i.grilled_chicken_skewer;
+	f.dish_cooked_cod_skewer                        = i.grilled_cod_skewer;
+	f.dish_cooked_mutton_skewer                     = i.grilled_lamb_skewer;
+	f.dish_cooked_mushroom_skewer                   = i.grilled_mushroom_skewer;
+	f.dish_cooked_pork_sausage_skewer               = i.grilled_pork_sausage_skewer;
+	f.dish_cooked_potato_skewer                     = i.grilled_potato_skewer;
+	f.dish_cooked_rabbit_skewer                     = i.grilled_rabbit_skewer;
+	f.dish_cooked_salmon_skewer                     = i.grilled_salmon_skewer;
+	f.dish_cooked_vegetable_skewer                  = i.grilled_vegetable_skewer;
+
 	// ---- feast
 	f.feast_cheese_wheel                           = i.cheese_wheel;
 	f.feast_dragon_meat_stew                       = i.dragon_meat_stew_block;
@@ -1145,32 +1207,6 @@ global.food = {}
 	f.drink_honey_jar                              = i.honey_jar;
 	f.drink_hot_chocolate                          = i.hot_chocolate_bottle;
 	f.drink_hot_cocoa                              = i.hot_cocoa;
-	f.drink_juice_apple                            = i.apple_juice;
-	f.drink_juice_bayberry                         = i.bayberry_soup;    // renamed Bayberry Juice (TODO food/drinks #9)
-	f.drink_juice_carrot                           = i.carrot_juice;
-	f.drink_juice_chorus                           = i.chorus_juice;
-	f.drink_juice_dandelion                        = i.dandelion_juice;
-	f.drink_juice_ender_nectar                     = i.ender_nectar;
-	f.drink_juice_hamimelon                        = i.hamimelon_juice;
-	f.drink_juice_jungle_red_grape                 = i.jungle_red_grapejuice_bottle;
-	f.drink_juice_jungle_white_grape               = i.jungle_white_grapejuice_bottle;
-	f.drink_juice_kiwi                             = i.kiwi_juice;
-	f.drink_juice_lemon                            = i.lemon_juice;
-	f.drink_juice_melon                            = i.melon_juice;
-	f.drink_juice_nautilus                         = i.nautilus_juice;
-	f.drink_juice_oculemonade                      = i.oculemonade;
-	f.drink_juice_orange                           = i.orange_juice;
-	f.drink_juice_pear                             = i.pear_juice;
-	f.drink_juice_pickerelweed                     = i.pickerelweed_juice;
-	f.drink_juice_red_grape_wine                   = i.red_grapejuice_wine_bottle;
-	f.drink_juice_savanna_red_grape                = i.savanna_red_grapejuice_bottle;
-	f.drink_juice_savanna_white_grape              = i.savanna_white_grapejuice_bottle;
-	f.drink_juice_sea_grape                        = i.sea_grape_juice;
-	f.drink_juice_strawberry_banana_smoothie       = i.strawberry_banana_smoothie;
-	f.drink_juice_strong_melon                     = i.strong_melon_juice;
-	f.drink_juice_taiga_red_grape                  = i.taiga_red_grapejuice_bottle;
-	f.drink_juice_taiga_white_grape                = i.taiga_white_grapejuice_bottle;
-	f.drink_juice_white_grape_wine                 = i.white_grapejuice_wine_bottle;
 	f.drink_lavender_tea                           = i.lavender_tea;
 	f.drink_leaf_black_tea                         = i.black_tea_leaves;
 	f.drink_leaf_green_tea                         = i.green_tea_leaves;
@@ -1334,6 +1370,7 @@ global.food = {}
 	f.can_baked_sweet_potato                       = i.canned_baked_sweet_potato;
 	f.can_banana                                   = i.canned_banana;
 	f.can_banana_bread                             = i.canned_banana_bread;
+	f.can_bat_soup                                 = i.canned_bat_soup;
 	f.can_bayberry                                 = i.canned_bayberry;
 	f.can_bayberry_cookie                          = i.canned_bayberry_cookie;
 	f.can_bayberry_soup                            = i.canned_bayberry_soup;
@@ -1371,6 +1408,7 @@ global.food = {}
 	f.can_cauliflower                              = i.canned_cauliflower;
 	f.can_cauliflower_bread                        = i.canned_cauliflower_bread;
 	f.can_cauliflower_soup                         = i.canned_cauliflower_soup;
+	f.can_cave_soup                                = i.canned_cave_soup;
 	f.can_ce_beetroot_soup                         = i.canned_ce_beetroot_soup;
 	f.can_ce_golden_carrot                         = i.canned_ce_golden_carrot;
 	f.can_cesar_salad                              = i.canned_cesar_salad;
@@ -1381,7 +1419,6 @@ global.food = {}
 	f.can_chicken_canned_goods                     = i.canned_chicken;
 	f.can_chicken_salad                            = i.canned_chicken_salad;
 	f.can_chicken_soup                             = i.canned_chicken_soup;
-	f.can_chips                                    = i.canned_chips;
 	f.can_chocolate_pie_filling                    = i.canned_chocolate_pie_filling;
 	f.can_chorus_fruits                            = i.canned_chorus_fruits;
 	f.can_chorus_pie_filling                       = i.canned_chorus_pie_filling;
@@ -1485,6 +1522,7 @@ global.food = {}
 	f.can_golden_milk_bucket                       = i.canned_golden_milk_bucket;
 	f.can_golden_moss_clump                        = i.canned_golden_moss_clump;
 	f.can_golden_mushroom_stew                     = i.canned_golden_mushroom_stew;
+	f.can_golden_nutritional_bar                   = i.canned_golden_nutritional_bar;
 	f.can_golden_pumpkin_pie                       = i.canned_golden_pumpkin_pie;
 	f.can_golden_rabbit_stew                       = i.canned_golden_rabbit_stew;
 	f.can_golden_sweet_berries                     = i.canned_golden_sweet_berries;
@@ -1497,6 +1535,7 @@ global.food = {}
 	f.can_honey_bread                              = i.canned_honey_bread;
 	f.can_honey_cookie                             = i.canned_honey_cookie;
 	f.can_honey_glazed_ham                         = i.canned_honey_glazed_ham;
+	f.can_insect_stew                              = i.canned_insect_stew;
 	f.can_jerky                                    = i.canned_jerky;
 	f.can_kangaroo_pasta                           = i.canned_kangaroo_pasta;
 	f.can_kangaroo_stew                            = i.canned_kangaroo_stew;
@@ -1516,9 +1555,10 @@ global.food = {}
 	f.can_mangosteen                               = i.canned_mangosteen;
 	f.can_maple_cookie                             = i.canned_maple_cookie;
 	f.can_maple_glazed_bacon                       = i.canned_maple_glazed_bacon;
+	f.can_mashed_potatoes                          = i.canned_mashed_potatoes;
+	f.can_mashed_sweet_potatoes                    = i.canned_mashed_sweet_potatoes;
 	f.can_melon                                    = i.canned_melon;
 	f.can_melon_slice                              = i.canned_melon_slice;
-	f.can_mhadjeb                                  = i.canned_mhadjeb;
 	f.can_miso_with_bamboo_sprouts                 = i.canned_miso_with_bamboo_sprouts;
 	f.can_mixed_salad                              = i.canned_mixed_salad;
 	f.can_mulberry                                 = i.canned_mulberry;
@@ -1618,6 +1658,9 @@ global.food = {}
 	f.hazard_sinister_carrot                       = i.sinister_carrot;
 	f.hazard_soap                                  = i.soap;
 	f.hazard_spider_eye                            = i.spider_eye;
+
+	// Barbeque's Delight port (barbeques_delight.md 4)
+	f.hazard_burnt_skewer                           = i.burnt_skewer;
 
 	global.foodKey = global.subdict.check(f, 'food', global.foodGrammar)
 })(global.food, global.item)

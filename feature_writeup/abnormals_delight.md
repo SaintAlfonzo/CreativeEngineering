@@ -79,8 +79,8 @@ FD's `DrinkableItem` with an always-edible food carrying the same 15 s Slow Fall
 
 ## 3. Plans
 
-All data, in Creative Delight's non-member files (`kubejs/data/creative_delight/kubejs/`, recipe ids
-`creative_delight:<type>/<suffix>`, helpers `global.NCH`). Each needs the CD jar rebuilt and installed; never while the
+All data, in Creative Delight's non-member files (`kubejs/data/creativedelight/kubejs/`, recipe ids
+`creativedelight:<type>/<suffix>`, helpers `global.NCH`). Each needs the CD jar rebuilt and installed; never while the
 game runs. Built 2026-10-25: `:creativeDelight:build` and `installToMods` done with the game closed. New dict keys
 (`item_dict.js`, section "Abnormals Delight 6.0.3 salvaging and recipes") need a full restart.
 
@@ -147,7 +147,7 @@ bottles, as Neapolitan's took the tag) and `shapeless/milk_bucket_from_bottles`.
 
 ### 3.5 Perch and Pike slice XP (BUILT 2026-10-25)
 
-`kubejs/data/creative_delight/kubejs/abnormals_delight/upgrade_aquatic.js` (requires `abnormals_delight` and
+`kubejs/data/creativedelight/kubejs/abnormals_delight/upgrade_aquatic.js` (requires `abnormals_delight` and
 `upgrade_aquatic`): removes `abnormals_delight:upgrade_aquatic/cooked_perch_slice` and `.../cooked_pike_slice` and re-adds
 them with `NCH.smelting` at 0.35 xp, 200 ticks. Changelog bullet added (Food & Cooking). Test SQ-ABD-01 queued.
 

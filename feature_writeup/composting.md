@@ -53,6 +53,7 @@ dedicated server and its clients.
 | leaves | low | leaves tag, `*_leaves` / leaf piles / leaf carpets |
 | flowers | full | flower and petal tags, Botania floating flowers, petals, Floral Enchantments bushes / vines / baskets, flower blocks |
 | mushrooms | high | mushroom tag, mushroom and fungus blocks |
+| doughs | very_high | `#forge:dough` and ids ending in `dough` (Create, oat, cucumber, sweet potato, sourdough, cookie, ginger); owner 2026-11-01 |
 | crops | high | crops, vegetables, fruit, berries, grain, nuts, tea leaves, raw veggie and fruit food types, crop/cocoa/berry/vine/wart blocks |
 | baked | very_high | baked and cooked plant food types, `*bread*` / `*cookie*` (not molasses) |
 | cakes_pies | full | `*pie*` / `*cake*`, cake blocks (not blaze/echo/slime/powder cakes, hats, molasses, plated food) |
@@ -161,3 +162,5 @@ Use a composter and watch its level; or read `/dumpcompost`.
 - 2026-10-19: the Brewin' 4.5.0 port's four chances (kimchi, pickled pickles, quiche, quiche slice) added by hand as
   rows ([alcohol.md](alcohol.md) 10.16); 688 values. Not deployed yet.
 - 2026-10-31: scratchpad notes translated into TODO rows (`farming/composting #5`). No code changed.
+- 2026-11-01: `doughs` category (0.85, before crops) in CD `compost_rules.js`: every dough composts, Create's included
+  (owner, raised by the Vintage dump step `ports/vintageport #2`); SQ-VDF-10. Needs the CD jar.

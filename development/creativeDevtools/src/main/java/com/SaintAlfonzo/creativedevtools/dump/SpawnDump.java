@@ -2,7 +2,7 @@ package com.SaintAlfonzo.creativedevtools.dump;
 
 import com.SaintAlfonzo.creativeengineering.worldgen.SpawnConditions;
 import com.SaintAlfonzo.creativeengineering.worldgen.SpawnTuning;
-import com.SaintAlfonzo.creativeengineering.worldgen.WorldgenFiles;
+import com.SaintAlfonzo.creativeengineering.util.WorldgenFiles;
 import com.google.gson.GsonBuilder;
 import com.mojang.logging.LogUtils;
 import net.minecraft.core.Holder;

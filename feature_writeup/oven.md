@@ -30,7 +30,7 @@ Files to open first:
 - `development/patcherMod/src/main/java/com/SaintAlfonzo/creativeengineering/oven/`: `OvenBlock`, `OvenBlockEntity`,
   `OvenHeat`, `OvenItemHandler`, `OvenMenu`, `OvenResultSlot`, `BakingRecipe`, `OvenRegistry`, `client/OvenScreen`,
   `jei/OvenJeiPlugin`, `jei/BakingRecipeCategory`
-- [kubejs/data/creative_delight/kubejs/creativeengineering/baking.js](../kubejs/data/creative_delight/kubejs/creativeengineering/baking.js): baking and crafting recipes
+- [kubejs/data/creativedelight/kubejs/creativeengineering/baking.js](../kubejs/data/creativedelight/kubejs/creativeengineering/baking.js): baking and crafting recipes
 - [development/creativeDelight/src/main/resources/kubejs_startup/creativeengineering/bakeware.js](../development/creativeDelight/src/main/resources/kubejs_startup/creativeengineering/bakeware.js): bakeware items
 - [development/creativeDelight/src/main/resources/kubejs_startup/creativeengineering/baking_ingredients.js](../development/creativeDelight/src/main/resources/kubejs_startup/creativeengineering/baking_ingredients.js): frosting, cookie dough
 - `global.NCH.ceBaking` in [neoCraftHelper.js](../kubejs/startup_scripts/func/neoCraftHelper.js)
@@ -417,7 +417,7 @@ overrides the muffin recipe ids. If muffins still can't be cooked in game, the c
   Gingerbread and Gingerbread Man (COOKIES), Chorus Fruit Pie and Sponge Pie (renamed from Sponge Cake; PIES, no can),
   Rotten, Green and Chorus Flower pie (HAND_PIES, `handPieBake`), Sweet Potato Cupcake (`muffinBake`); Honey Cake takes
   honey bottle + honeycomb. Wheat swap for the rest:
-  [baked_goods.js](../kubejs/data/creative_delight/kubejs/creativeengineering/baked_goods.js) turns the wheat of bread
+  [baked_goods.js](../kubejs/data/creativedelight/kubejs/creativeengineering/baked_goods.js) turns the wheat of bread
   (and Quark's bent bread), Glow Bread, Adzuki Bun, Banana Bread, Strawberry Scones, Strange Eclair, Sweet Potato Dough
   into flour; Rustic batter (pot, Slice & Dice copy, and the egg solution mix) takes wheat flour, cornmeal or rice in
   each grain slot (2026-10-29, `dishes/ingredients #24`; was wheat flour). Left on wheat, not baked: Brewin'
@@ -445,7 +445,7 @@ overrides the muffin recipe ids. If muffins still can't be cooked in game, the c
 | `development/patcherMod/src/main/resources/data/creativeengineering/loot_tables/blocks/oven.json` | drop |
 | `development/creativeDelight/src/main/resources/kubejs_startup/creativeengineering/bakeware.js` | bakeware items |
 | `development/creativeDelight/src/main/resources/kubejs_startup/creativeengineering/baking_ingredients.js` | frosting, cookie dough (baking overhaul) |
-| `kubejs/data/creative_delight/kubejs/creativeengineering/baking.js` | baking + crafting recipes |
+| `kubejs/data/creativedelight/kubejs/creativeengineering/baking.js` | baking + crafting recipes |
 | `kubejs/server_scripts/cooking/cooking.js` "Muffins" | the dough fix |
 | `kubejs/server_scripts/tags/blocktags.js`, `cookingtags.js` | tags (2.4) |
 | `kubejs/startup_scripts/func/neoCraftHelper.js` | `ceBaking`, `hammering` |

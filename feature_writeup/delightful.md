@@ -170,7 +170,7 @@ Ids that collide with 3.4.1: none (checked against 3.4.1's registry classes and 
 ### 3.2 Pack side
 
 - Ids: `item_dict.js`, after the Rustic ids (only CD's scripts use them).
-- Recipes: Creative Delight `kubejs/data/creative_delight/kubejs/delightful/recipes.js` (NCH, ids `creative_delight:<type>/<name>`).
+- Recipes: Creative Delight `kubejs/data/creativedelight/kubejs/delightful/recipes.js` (NCH, ids `creativedelight:<type>/<name>`).
   Both scripts return early unless the repack is the loaded Delightful (`Item.exists(i.cantaloupe_seeds)`), so a stale
   3.4.1 jar beside CD cannot break them.
 

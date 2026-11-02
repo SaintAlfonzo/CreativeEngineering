@@ -79,7 +79,6 @@ public class CreativeEngineering
 				CreativeEngineeringEntities.register(modEventBus);
 				com.SaintAlfonzo.creativeengineering.fan.DragonBreathingRecipeType.register(modEventBus);
 				com.SaintAlfonzo.creativeengineering.gear.ElytraDuplicationSerializers.register(modEventBus);
-				com.SaintAlfonzo.creativeengineering.potion.CEPotions.register(modEventBus);
 				// creativeengineering:biome_tag loot condition (loot/BiomeTagCondition; the fishing net tables use it).
 				com.SaintAlfonzo.creativeengineering.loot.BiomeTagCondition.register(modEventBus);
         // Tier shields (copper..dragon, iron = the vanilla shield): the items here, the block-check
@@ -90,50 +89,30 @@ public class CreativeEngineering
         // Meta structures: the creativeengineering:meta structure type and its two piece types
         // (worldgen/MetaStructure; the structures themselves are kubejs meta_structures.json).
         com.SaintAlfonzo.creativeengineering.worldgen.MetaStructure.register(modEventBus);
-        // Oven: FD cooking-pot style baking block + the creativeengineering:baking recipe type
-        // (oven/ package; feature_writeup/oven.md). Recipes and tags are KubeJS.
-        com.SaintAlfonzo.creativeengineering.oven.OvenRegistry.register(modEventBus);
-        // Powdered sugar block + bucket (food/PowderedSugarRegistry; TODO dishes/ingredients #16). Item and recipes are KubeJS.
-        com.SaintAlfonzo.creativeengineering.food.PowderedSugarRegistry.register(modEventBus);
-        // Display Delight placed blocks for foods it has none for (compat/DisplayDelightDishes; food_families.md egg/dish).
-        com.SaintAlfonzo.creativeengineering.compat.DisplayDelightDishes.register(modEventBus);
-        // Beautify botanist workbench as a flower pot (compat/BotanistPot, mixin/BotanistWorkbenchPotMixin; flower_pots.md).
-        com.SaintAlfonzo.creativeengineering.compat.BotanistPot.register(modEventBus);
-        // Flower box plant models: glow berries / lichen, Supplementaries models in Another Furniture boxes (compat/PlantBoxModels).
-        if (net.minecraftforge.fml.loading.FMLEnvironment.dist == Dist.CLIENT) {
-            modEventBus.addListener(com.SaintAlfonzo.creativeengineering.compat.PlantBoxModelsClient::onRegisterAdditional);
-        }
+        // Oven, powdered sugar, Display Delight dishes: Creative Delight (2026-11-01, creative_delight.md 34).
+        // Botanist workbench pot and flower box plant models moved to Creative Compat (2026-11-01).
         // Backpack skins: smithing + clearing recipes, Curios equip block (backpackskin/; the looks are mixin/BackpackSkin*).
         com.SaintAlfonzo.creativeengineering.backpackskin.BackpackSkinSerializers.register(modEventBus);
         if (net.minecraftforge.fml.ModList.get().isLoaded("curios")) {
             MinecraftForge.EVENT_BUS.register(com.SaintAlfonzo.creativeengineering.backpackskin.BackpackSkinCurios.class);
+            // Hands, face, feet Curios slots by IMC (compat/CuriosSlots; feature_writeup/curios_slots.md).
+            modEventBus.addListener(com.SaintAlfonzo.creativeengineering.compat.CuriosSlots::enqueue);
         }
-        // Spice of Life lunchboxes: Netherite Lunchbox tier, upgrade/skin/dye/soap recipes that keep the contents,
-        // "Slots" tooltip (lunchbox/; looks are lunchbox/client, seagulls are mixin/AlexsMobsSeagull*; lunchboxes.md).
-        if (net.minecraftforge.fml.ModList.get().isLoaded("solapplepie")) {
-            com.SaintAlfonzo.creativeengineering.lunchbox.LunchboxItems.register(modEventBus);
-            com.SaintAlfonzo.creativeengineering.lunchbox.LunchboxRecipes.register(modEventBus);
-            MinecraftForge.EVENT_BUS.register(com.SaintAlfonzo.creativeengineering.lunchbox.LunchboxTooltip.class);
-        }
+        // Spice of Life lunchboxes: Creative Delight (2026-11-01).
         // Stepstools: stand a block higher on the stool in the Curios feet slot (stepstool/; the client half is
         // stepstool/client, the collision mixin.EntityStepstoolCollisionMixin; feature_writeup/stepstool.md).
         com.SaintAlfonzo.creativeengineering.stepstool.Stepstool.register();
         if (net.minecraftforge.fml.ModList.get().isLoaded("curios")) {
             MinecraftForge.EVENT_BUS.register(com.SaintAlfonzo.creativeengineering.stepstool.Stepstool.class);
         }
-        // Corn Delight 1.2.11 on 1.0.3: Cob Pipe right click to equip (compat/CornDelightCompat; corn_delight.md 2.3)
-        if (net.minecraftforge.fml.ModList.get().isLoaded("corn_delight")) {
-            MinecraftForge.EVENT_BUS.register(com.SaintAlfonzo.creativeengineering.compat.CornDelightCompat.class);
-        }
-        // Remainder buffer: pot/kettle/oven keep ingredient leftovers in two slots instead of throwing them
-        // (cooking/ package; the pot and kettle mixins are Creative Delight QoL-1; remainder_buffer.md). Saved as an attached cap.
-        MinecraftForge.EVENT_BUS.register(com.SaintAlfonzo.creativeengineering.cooking.RemainderBufferStorage.class);
+        // Corn Delight cob pipe: Creative Delight (2026-11-01).
+        // Swap lists (swap/, Common API): every jar's data/<modid>/swaps/*.json remaps ids it moved when a world loads.
+        MinecraftForge.EVENT_BUS.register(com.SaintAlfonzo.creativeengineering.swap.SwapRemapper.class);
+        // Remainder buffer (cooking/): Creative Delight (2026-11-01); the WTHIT line reads compat.RemainderView.
         // Cooking for Blockheads corner storage and counter toppers moved to Creative Delight's blockheadsAdditions (2026-10-31).
         // Armor Trims' item lists cached once the registry locks; the trimmable list resets on tag reload (perf.md 10.2 #1).
         com.SaintAlfonzo.creativeengineering.compat.ArmorTrimsItemCache.init();
-        // Sacks work like bundles in inventory screens (compat.SackBundle, mixin.SupplementariesSackItemMixin):
-        // the scroll-to-rotate packet. The scroll listener is compat.SackBundleScroll (client).
-        com.SaintAlfonzo.creativeengineering.compat.SackBundle.register();
+        // Sacks as bundles moved to Creative Compat (2026-11-01).
         // Emu / duck / goose nests moved to their own mod: development/incubationAdditions.
 
         // Register this class for FORGE bus events (e.g. onServerStarted, attachCaps)
@@ -142,37 +121,26 @@ public class CreativeEngineering
         // Register IECompat for FORGE bus events (e.g. onServerAboutToStart)
         MinecraftForge.EVENT_BUS.register(IECompat.class);
 
-        // Polymorph recipe selection in the Sophisticated crafting upgrade, the IE Engineer's
-        // Crafting Table and the Pretty Pipes Crafting Terminal (server half)
-        if (net.minecraftforge.fml.ModList.get().isLoaded("polymorph")) {
-            MinecraftForge.EVENT_BUS.register(com.SaintAlfonzo.creativeengineering.compat.SophisticatedPolymorphCompat.class);
-            MinecraftForge.EVENT_BUS.register(com.SaintAlfonzo.creativeengineering.compat.CraftingMenuPolymorphCompat.class);
-        }
+        // Polymorph in the Sophisticated crafting upgrade, IE and Pretty Pipes tables moved to Creative Compat (2026-11-01).
 
-        // Damage-reduction half of creativeengineering:magic_resistance (the MobEffect
-        // itself is registered in KubeJS - startup_scripts/magic/magic_resistance.js)
-        MinecraftForge.EVENT_BUS.register(com.SaintAlfonzo.creativeengineering.potion.MagicResistanceEffect.class);
+        // Potions, effects, potion machines, the alcohol tooltip and copper poisoning moved to Creative Brewing
+        // (2026-11-01, creative_brewing.md 4.2 phases 2 and 3).
 
-        // Oxidized Everything Copper gear rolls for Poison (CEConfig.CopperPoisoning; the
-        // effect-tick half is mixin/CopperPoisoningEffectMixin).
-        MinecraftForge.EVENT_BUS.register(com.SaintAlfonzo.creativeengineering.potion.CopperPoisoningHandler.class);
-
-        // Caffeinated carries Phantom Bane; Phantom Bane ending resets Time Since Rest (potions/effects #10).
-        MinecraftForge.EVENT_BUS.register(com.SaintAlfonzo.creativeengineering.potion.PhantomBaneRules.class);
 
         // Elytra air brake velocity effect (the item itself is registered in KubeJS -
         // startup_scripts/items/air_brake.js) - see CEConfig.AirBrake for the tuning knobs.
         MinecraftForge.EVENT_BUS.register(com.SaintAlfonzo.creativeengineering.gear.AirBrakeHandler.class);
 
         // TNT shrapnel on primed-TNT-entity detonation (the dropped-TNT-item side lives in
-        // itemphysic.ItemBurnTransform instead - see CEConfig.Shrapnel for the tuning knobs).
+        // Creative Compat's itemphysic.ItemBurnTransform instead - see CEConfig.Shrapnel for the tuning knobs).
         MinecraftForge.EVENT_BUS.register(TntShrapnelHandler.class);
+        // The same burst for Creative Compat's burn-explosion rule (itemphysic.ItemBurnTransform), through util.BurnBursts.
+        com.SaintAlfonzo.creativeengineering.util.BurnBursts.register(com.SaintAlfonzo.creativeengineering.shrapnel.ShrapnelSpawner::burst);
 
         // Leaf decay (CEConfig [leaf_decay]): Fast Leaf Decay's air-neighbour trigger, ported in; the range and
         // timing rules are mixin.LeavesDecayRangeMixin + block.LeafDecayRange.
         MinecraftForge.EVENT_BUS.register(com.SaintAlfonzo.creativeengineering.block.FastLeafDecayPort.class);
-        // Vine shearing (CEConfig [vine_shearing]): shears stop modded vines and growing-plant tips growing.
-        MinecraftForge.EVENT_BUS.register(com.SaintAlfonzo.creativeengineering.block.VineShearing.class);
+        // Vine shearing moved to Creative Compat (2026-11-01).
 
         // Live whistling arrows, so mixin.NeaWhistleGoalSkipMixin skips NEA's per-mob arrow query when there are none.
         MinecraftForge.EVENT_BUS.register(com.SaintAlfonzo.creativeengineering.perf.WhistleArrowTracker.class);
@@ -190,31 +158,13 @@ public class CreativeEngineering
         // TierShieldItem#appendHoverText of its own to show them from.
         MinecraftForge.EVENT_BUS.register(com.SaintAlfonzo.creativeengineering.shield.IronShieldTooltip.class);
 
-        // Multi-serving cans (food.CanServings, CEConfig [canning]): max-servings cache cleared on tag
-        // reload + the "Servings: x / y" tooltip line. Eating and the bar are mixin.ItemStackCanServingsMixin.
-        MinecraftForge.EVENT_BUS.register(com.SaintAlfonzo.creativeengineering.food.CanServings.class);
-        MinecraftForge.EVENT_BUS.register(com.SaintAlfonzo.creativeengineering.food.CanServingsTooltip.class);
-
-        // Pack seasonings (food.Seasonings, defined by KubeJS development/creativeDelight/src/main/resources/kubejs_startup/creativeengineering/seasonings.js): the
-        // creativeengineering:seasoning craft, the bonus on eating and the per-seasoning tooltip lines.
-        com.SaintAlfonzo.creativeengineering.food.SeasoningRecipe.register(modEventBus);
-        MinecraftForge.EVENT_BUS.register(com.SaintAlfonzo.creativeengineering.food.Seasonings.class);
-        MinecraftForge.EVENT_BUS.register(com.SaintAlfonzo.creativeengineering.food.SeasoningTooltip.class);
-        if (net.minecraftforge.fml.ModList.get().isLoaded("appleskin")) {
-            MinecraftForge.EVENT_BUS.register(com.SaintAlfonzo.creativeengineering.compat.AppleSkinSeasonings.class);
-        }
-
-        // Bites from placed pies and cakes count for Spice of Life (food.PlacedFoodSol; the bite itself is
-        // mixin.ServerPlayerGameModePlacedFoodMixin). This loads its cake -> slice map at server start.
-        MinecraftForge.EVENT_BUS.register(com.SaintAlfonzo.creativeengineering.food.PlacedFoodSol.class);
+        // Multi-serving cans, seasonings and placed-food Spice of Life: Creative Delight (2026-11-01).
 
         // Framed / copycat blocks: say on BlockRunner's speed tooltip line whether they walk like
         // their camo (surface.CamoSpeed, CEConfig.Surface.Camouflage).
         MinecraftForge.EVENT_BUS.register(com.SaintAlfonzo.creativeengineering.surface.CamoSpeedTooltip.class);
 
-        // Per-hoe Quark harvest area (crops.HoeHarvestArea, #creativeengineering:hoe_harvest/NxN tags): the
-        // "Harvest area: 3x3" tooltip. The area itself is mixin.QuarkHoeAreaBreakMixin / QuarkHoeAreaHarvestMixin.
-        MinecraftForge.EVENT_BUS.register(com.SaintAlfonzo.creativeengineering.crops.HoeHarvestTooltip.class);
+        // Per-hoe Quark harvest area and its tooltip: Creative Delight (2026-11-01).
 
         // BlockRunner tier speeds come from CEConfig [surface.speed] (mixin/BlockRunnerSpeedConfigMixin):
         // re-apply them when the toml is saved, and log an error if the mixin never ran.
@@ -252,8 +202,7 @@ public class CreativeEngineering
         MinecraftForge.EVENT_BUS.register(com.SaintAlfonzo.creativeengineering.mooshroom.MooshroomFamily.class);
         // Named mobs (CEConfig [named_mobs]): a rare random name on natural spawns, deaths announced in chat.
         MinecraftForge.EVENT_BUS.register(com.SaintAlfonzo.creativeengineering.mobs.NamedMobs.class);
-        // Quark monster boxes as vaults (CEConfig [monster_box]): sneak-only breaking; the tick is mixin.MonsterBoxBlockEntityMixin.
-        MinecraftForge.EVENT_BUS.register(com.SaintAlfonzo.creativeengineering.mobs.MonsterBoxVault.class);
+        // Quark monster boxes as vaults moved to Creative Compat (2026-11-01).
 
         // Bee nest tuning: biome modifier type creativeengineering:bee_nests (bee_nests.json, written by
         // kubejs/server_scripts/worldgen/bee_nests.js) + the tree/nest/chunk counters behind /dumpbeenests.
@@ -341,10 +290,6 @@ public class CreativeEngineering
 			forceLoad("com.SaintAlfonzo.creativeengineering.sawmill.duck.SawmillProcessExt");
 			forceLoad("com.SaintAlfonzo.creativeengineering.sawmill.duck.SawmillRecipeExt");
 
-			// ItemPhysicServerMixin applies when ItemPhysic first loads its server helper; pre-load
-			// the split registry it references so a late transform can resolve it.
-			forceLoad("com.SaintAlfonzo.creativeengineering.itemphysic.ItemPhysicSplit");
-
 			// The shield block handler reaches the damage-tag classes only on the first block
 			// (crash 2026-09-24: NoClassDefFoundError on DamageFlag); pre-load them too.
 			forceLoad("com.SaintAlfonzo.creativeengineering.damage.DamageFlag");
@@ -357,31 +302,13 @@ public class CreativeEngineering
 			LOGGER.info("[forgiving-void] {}", com.SaintAlfonzo.creativeengineering.forgivingvoid.ForgivingVoidBridge.summary());
 
 			event.enqueueWork(FluidBridge::logStartupDiagnostic);
-			event.enqueueWork(com.SaintAlfonzo.creativeengineering.compat.PlantBoxModels::commonSetup);
-			event.enqueueWork(com.SaintAlfonzo.creativeengineering.fluidbrewing.DragonBreathBrewing::build);
-			event.enqueueWork(com.SaintAlfonzo.creativeengineering.fluidbrewing.Lingerification::registerListGenerator);
 			event.enqueueWork(com.SaintAlfonzo.creativeengineering.fan.DragonBreathingFanProcessingType::register);
-			event.enqueueWork(com.SaintAlfonzo.creativeengineering.potion.PotionBucketDispenser::register);
 			event.enqueueWork(com.SaintAlfonzo.creativeengineering.compat.NockRecipeBookSync::register);
-			// Vintage's salt blocks melt ice and dissolve like The Salt's (item_merges.md 2.9)
-			event.enqueueWork(com.SaintAlfonzo.creativeengineering.block.SaltBlockTicks::init);
-			// Corn is villager food (corn_delight.md 2.6)
-			if (net.minecraftforge.fml.ModList.get().isLoaded("corn_delight")) {
-				event.enqueueWork(com.SaintAlfonzo.creativeengineering.compat.CornDelightCompat::addVillagerFood);
-			}
+			// Salt ticks and Corn Delight villager food: Creative Delight (2026-11-01).
 			if (net.minecraftforge.fml.ModList.get().isLoaded("immersiveengineering")) {
 				event.enqueueWork(IECompat::registerHammerNoRotate);
 			}
-			// Farmer's Respite 2.0 registers potted_wild_tea_bush but never adds it to the flower pot
-			// (feature_writeup/farmers_respite.md 2.2)
-			if (net.minecraftforge.fml.ModList.get().isLoaded("farmersrespite")) {
-				event.enqueueWork(com.SaintAlfonzo.creativeengineering.compat.RespitePottedTeaBush::register);
-			}
-			// Can-serving crafting action for KubeJS recipes (NCH re-registers it on every server
-			// script load; this covers clients of a dedicated server).
-			if (net.minecraftforge.fml.ModList.get().isLoaded("kubejs")) {
-				event.enqueueWork(com.SaintAlfonzo.creativeengineering.compat.KubeJSCanAction::register);
-			}
+			// Respite potted tea bush and the KubeJS can action: Creative Delight (2026-11-01).
 
 			LOGGER.info("CreativeEngineering setup complete");
 	}
@@ -414,26 +341,11 @@ public class CreativeEngineering
             LOGGER.info("MINECRAFT NAME >> {}", Minecraft.getInstance().getUser().getName());
 
             com.SaintAlfonzo.creativeengineering.compat.DetailArmorBarCompat.register();
-            if (net.minecraftforge.fml.ModList.get().isLoaded("trashslot")) {
-                com.SaintAlfonzo.creativeengineering.compat.TrashSlotCompat.register();
-            }
-            if (net.minecraftforge.fml.ModList.get().isLoaded("polymorph")) {
-                com.SaintAlfonzo.creativeengineering.compat.SophisticatedPolymorphClient.register();
-                com.SaintAlfonzo.creativeengineering.compat.CraftingMenuPolymorphClient.register();
-            }
             com.SaintAlfonzo.creativeengineering.shield.client.TierShieldClient.setup(event);
-            if (net.minecraftforge.fml.ModList.get().isLoaded("solapplepie")) {
-                com.SaintAlfonzo.creativeengineering.lunchbox.client.LunchboxClient.setup(event);
-            }
+            // Lunchbox looks, cob pipe renderer and the oven screen: Creative Delight (2026-11-01).
             if (net.minecraftforge.fml.ModList.get().isLoaded("curios")) {
                 MinecraftForge.EVENT_BUS.register(com.SaintAlfonzo.creativeengineering.stepstool.client.StepstoolClient.class);
             }
-            if (net.minecraftforge.fml.ModList.get().isLoaded("corn_delight") && net.minecraftforge.fml.ModList.get().isLoaded("curios")) {
-                com.SaintAlfonzo.creativeengineering.compat.CobPipeRenderer.register();
-            }
-            event.enqueueWork(() -> net.minecraft.client.gui.screens.MenuScreens.register(
-                    com.SaintAlfonzo.creativeengineering.oven.OvenRegistry.OVEN_MENU.get(),
-                    com.SaintAlfonzo.creativeengineering.oven.client.OvenScreen::new));
         }
 
         @SubscribeEvent
@@ -442,13 +354,7 @@ public class CreativeEngineering
             com.SaintAlfonzo.creativeengineering.stepstool.client.StepstoolClient.onRegisterKeys(event);
         }
 
-        @SubscribeEvent
-        public static void onItemColors(net.minecraftforge.client.event.RegisterColorHandlersEvent.Item event)
-        {
-            if (net.minecraftforge.fml.ModList.get().isLoaded("solapplepie")) {
-                com.SaintAlfonzo.creativeengineering.lunchbox.client.LunchboxClient.onItemColors(event);
-            }
-        }
+        // Lunchbox colours (onItemColors): Creative Delight (2026-11-01).
 
         @SubscribeEvent
         public static void onRegisterRenderers(EntityRenderersEvent.RegisterRenderers event)

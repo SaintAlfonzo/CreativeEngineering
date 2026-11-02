@@ -2,14 +2,14 @@
 // requires: delightful
 // requires: vinery
 // Cantaloupe merge (feature_writeup/item_merges.md 2.10), Creative Delight's group: the server half is
-// data/creative_delight/kubejs/_core/item_merges.js and fruitsdelight/item_merges.js. Restart to apply.
+// data/creativedelight/kubejs/_core/item_merges.js and fruitsdelight/item_merges.js. Restart to apply.
 // Fruits Delight's hamimelon is the Cantaloupe (block, stem, seeds, foods, wild patch); Delightful's cantaloupe is the
 // Mini Cantaloupe (sand crop, its seeds). One slice and one popsicle: Delightful's. Names: namechanges.js.
 // Apple tree removal (owner 2026-10-30, crops.md 2.12.1): Fruits Delight's apple tree goes, Vinery's stays. Its
 // worldgen is off (kubejs/data/fruitsdelight/forge/biome_modifier/apple.json); leaves and sapling merge into Vinery's.
 
 var i = global.item
-global.addItemMerges('creative_delight', [
+global.addItemMerges('creativedelight', [
 	// Fruits Delight's hamimelon slice goes, Delightful's cantaloupe slice stays
 	[i.hamimelon_slice, i.cantaloupe_slice],
 	// Fruits Delight's hamimelon popsicle goes, Delightful's cantaloupe popsicle (and its art) stays (owner 2026-10-28)

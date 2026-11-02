@@ -9,7 +9,7 @@
 //  hand     every recipe that uses up a pie filling can, except the oven's, is skipped by Create's automation
 (() => {
     const $CLForgeReg = Java.loadClass('net.minecraftforge.registries.ForgeRegistries')
-    const $CLServings = Java.loadClass('com.SaintAlfonzo.creativeengineering.food.CanServings')
+    const $CLServings = Java.loadClass('com.SaintAlfonzo.creativedelight.food.CanServings')
 
     const i = global.item
     let pass = 0, fail = 0

@@ -25,7 +25,7 @@ import net.minecraftforge.registries.ForgeRegistries;
  * {@link RowPagesCategory}, and hides the moved recipes from their old JEI pages. Create and IE classes are only
  * touched from the nested holders, so either mod can be missing.
  */
-final class RecipeRows {
+public final class RecipeRows {
 
     private RecipeRows() {}
 
@@ -34,7 +34,7 @@ final class RecipeRows {
      * outputs are the result and what the inputs leave behind in the grid (the bucket, the glass bottles). Null if it
      * doesn't fit a row.
      */
-    static Row crafting(Recipe<?> recipe, ItemStack machine) {
+    public static Row crafting(Recipe<?> recipe, ItemStack machine) {
         if (!(recipe instanceof CraftingRecipe crafting) || crafting.getResultItem().isEmpty()) {
             return null;
         }
@@ -42,7 +42,7 @@ final class RecipeRows {
     }
 
     /** A hand craft as one row (see {@link #crafting}); {@code inputs} are already merged slot contents. */
-    static Row craft(ItemStack machine, List<List<ItemStack>> inputs, ItemStack result) {
+    public static Row craft(ItemStack machine, List<List<ItemStack>> inputs, ItemStack result) {
         List<List<ItemStack>> outputs = new ArrayList<>();
         outputs.add(List.of(result.copy()));
         List<List<ItemStack>> leftovers = new ArrayList<>();
@@ -58,16 +58,16 @@ final class RecipeRows {
     }
 
     /** A Create processing recipe (filling, emptying, ...) as one row, or null. */
-    static Row create(Recipe<?> recipe, ItemStack machine) {
+    public static Row create(Recipe<?> recipe, ItemStack machine) {
         return ModList.get().isLoaded("create") ? CreateRows.row(recipe, machine) : null;
     }
 
     /** An IE Bottling Machine recipe as one row, or null. */
-    static Row bottling(Recipe<?> recipe, ItemStack machine) {
+    public static Row bottling(Recipe<?> recipe, ItemStack machine) {
         return ModList.get().isLoaded("immersiveengineering") ? IERows.row(recipe, machine) : null;
     }
 
-    static ItemStack stack(ResourceLocation id) {
+    public static ItemStack stack(ResourceLocation id) {
         return ForgeRegistries.ITEMS.containsKey(id) ? new ItemStack(ForgeRegistries.ITEMS.getValue(id)) : ItemStack.EMPTY;
     }
 
@@ -85,7 +85,7 @@ final class RecipeRows {
     }
 
     /** Ingredients as slot contents, equal ones folded into one with the summed count; empty ones dropped. */
-    static List<List<ItemStack>> merge(List<Ingredient> ingredients) {
+    public static List<List<ItemStack>> merge(List<Ingredient> ingredients) {
         List<List<ItemStack>> slots = new ArrayList<>(ingredients.size());
         for (Ingredient ingredient : ingredients) {
             slots.add(Arrays.asList(ingredient.getItems()));
@@ -124,7 +124,7 @@ final class RecipeRows {
         return merged;
     }
 
-    static ItemStack withCount(ItemStack stack, int count) {
+    public static ItemStack withCount(ItemStack stack, int count) {
         ItemStack copy = stack.copy();
         copy.setCount(count);
         return copy;
@@ -146,7 +146,7 @@ final class RecipeRows {
      * Hides the recipes with these ids from each JEI page (key: the page's recipe type id). Pages that aren't
      * registered (mod missing) are skipped. Returns how many were hidden.
      */
-    static int hide(IRecipeManager recipes, Map<ResourceLocation, Set<ResourceLocation>> idsByPage) {
+    public static int hide(IRecipeManager recipes, Map<ResourceLocation, Set<ResourceLocation>> idsByPage) {
         int hidden = 0;
         for (Map.Entry<ResourceLocation, Set<ResourceLocation>> page : idsByPage.entrySet()) {
             if (page.getValue().isEmpty()) {

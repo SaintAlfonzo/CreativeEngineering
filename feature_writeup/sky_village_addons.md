@@ -184,7 +184,7 @@ The block has no survival rule, so nothing breaks.
    `skyvillage_houses.json` and the Brewery deco to `skyvillage_deco.json` at the D2 weights.
 4. **Pack systems that list sky village templates:**
    - Village farm crops: add the 3 FD farms and the Vinery houses as `"auto"` in
-     `development/creativeDelight/src/main/resources/creative_delight/village_farms.json` only if they hold vanilla
+     `development/creativeDelight/src/main/resources/creativedelight/village_farms.json` only if they hold vanilla
      crops (the swap rolls vanilla crop fields only); needs a CD rebuild.
    - Loot: no new tables. Rerun the loot generators with `/cegen` after `/dumpall` (`template_loot` cache,
      `loot_breakdown`, `audit_loot_containers`, `lootr_fixed_containers`) so the counts include the new houses.

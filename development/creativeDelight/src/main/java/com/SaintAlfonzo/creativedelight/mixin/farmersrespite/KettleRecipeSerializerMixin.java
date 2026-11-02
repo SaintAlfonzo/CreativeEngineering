@@ -38,7 +38,7 @@ public abstract class KettleRecipeSerializerMixin {
 		if (!KettleBases.hasBaseKey(json)) return GsonHelper.getAsBoolean(json, key, fallback);
 		JsonObject probe = new JsonObject();
 		probe.add("base", json.get("base"));
-		return !KettleBases.read(new ResourceLocation("creative_delight", "probe"), probe).isEmpty();
+		return !KettleBases.read(new ResourceLocation("creativedelight", "probe"), probe).isEmpty();
 	}
 
 	@Inject(method = "fromJson(Lnet/minecraft/resources/ResourceLocation;Lcom/google/gson/JsonObject;)Lumpaz/farmersrespite/common/crafting/KettleRecipe;",

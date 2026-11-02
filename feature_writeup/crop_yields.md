@@ -100,7 +100,7 @@ soil columns of 2.1.
 
 ## 3. What the pack changes
 
-`kubejs/data/creative_delight/kubejs/creativeengineering/soil_yield.js`, on `ServerEvents.genericLootTables` (the raw
+`kubejs/data/creativedelight/kubejs/creativeengineering/soil_yield.js`, on `ServerEvents.genericLootTables` (the raw
 table JSON before the game parses it, the same method as `rusticdelight/crop_drops.js`). For each crop switched on, for
 each soil with tries above 0, one pool is appended:
 

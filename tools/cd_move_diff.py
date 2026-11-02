@@ -3,7 +3,7 @@
 
 Run `snapshot` before a move and `diff` after it. Nothing may disappear: a script move copies rows from the pack's
 script folders into the CD trees, so every code line that existed before must still exist somewhere in the scanned
-trees, and every data file's content must still exist at some path (its path may change, e.g. into creative_delight).
+trees, and every data file's content must still exist at some path (its path may change, e.g. into creativedelight).
 
 What it compares:
   lines  every code line of the scanned scripts, comments and whitespace stripped, as a multiset. Lines that are only
@@ -33,8 +33,8 @@ SCRIPT_ROOTS = [
     'kubejs/server_scripts',
     'kubejs/startup_scripts',
     'kubejs/client_scripts',
-    'kubejs/data/creative_delight/kubejs',
-    'kubejs/assets/creative_delight/kubejs',
+    'kubejs/data/creativedelight/kubejs',
+    'kubejs/assets/creativedelight/kubejs',
     'development/creativeDelight/src/main/resources/kubejs_startup',
     'development/patcherMod/src/main/resources/kubejs_startup',
 ]

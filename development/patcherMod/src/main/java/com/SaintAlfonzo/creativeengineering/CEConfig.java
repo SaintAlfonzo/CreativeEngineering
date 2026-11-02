@@ -39,8 +39,6 @@ public final class CEConfig {
     public static final AirBrake AIR_BRAKE;
     public static final Stepstool STEPSTOOL;
     public static final Crafting CRAFTING;
-    public static final Magic MAGIC;
-    public static final CopperPoisoning COPPER_POISONING;
     public static final Botania BOTANIA;
     public static final ArmorEnchant ARMOR_ENCHANT;
     public static final Shrapnel SHRAPNEL;
@@ -52,33 +50,19 @@ public final class CEConfig {
     public static final Shields SHIELDS;
     public static final DamageTagConfig DAMAGE_TAGS;
     public static final BonemealCharm BONEMEAL_CHARM;
-    public static final CropGrowth CROP_GROWTH;
-    public static final DandelionMaturing DANDELION_MATURING;
-    public static final CropDrops CROP_DROPS;
-    public static final StemFruit STEM_FRUIT;
     public static final LeafDecay LEAF_DECAY;
-    public static final LeafPiles LEAF_PILES;
-    public static final Moss MOSS;
-    public static final VineShearing VINE_SHEARING;
-    public static final Campfire CAMPFIRE;
     public static final Raids RAIDS;
-    public static final MonsterBox MONSTER_BOX;
     public static final BottledAir BOTTLED_AIR;
-    public static final Canning CANNING;
-    public static final Cooking COOKING;
     public static final Coaster COASTER;
     public static final Wthit WTHIT;
-    public static final Alcohol ALCOHOL;
     public static final Perf PERF;
     public static final Surface SURFACE;
     public static final Worldgen WORLDGEN;
     public static final VeinUndo VEIN_UNDO;
-    public static final TrashSlot TRASH_SLOT;
     public static final BackpackSkins BACKPACK_SKINS;
     public static final WanderingTrader WANDERING_TRADER;
     public static final NamedMobs NAMED_MOBS;
     public static final Advancements ADVANCEMENTS;
-    public static final Effects EFFECTS;
     public static final ModNames MOD_NAMES;
 
     static {
@@ -88,8 +72,6 @@ public final class CEConfig {
         AIR_BRAKE = new AirBrake(builder);
         STEPSTOOL = new Stepstool(builder);
         CRAFTING = new Crafting(builder);
-        MAGIC = new Magic(builder);
-        COPPER_POISONING = new CopperPoisoning(builder);
         BOTANIA = new Botania(builder);
         ARMOR_ENCHANT = new ArmorEnchant(builder);
         SHRAPNEL = new Shrapnel(builder);
@@ -101,34 +83,22 @@ public final class CEConfig {
         SHIELDS = new Shields(builder);
         DAMAGE_TAGS = new DamageTagConfig(builder);
         BONEMEAL_CHARM = new BonemealCharm(builder);
-        CROP_GROWTH = new CropGrowth(builder);
-        DANDELION_MATURING = new DandelionMaturing(builder);
-        CROP_DROPS = new CropDrops(builder);
-        STEM_FRUIT = new StemFruit(builder);
         LEAF_DECAY = new LeafDecay(builder);
-        LEAF_PILES = new LeafPiles(builder);
-        MOSS = new Moss(builder);
-        VINE_SHEARING = new VineShearing(builder);
-        CAMPFIRE = new Campfire(builder);
+        // [leaf_piles], [moss], [vine_shearing], [campfire], [monster_box], [trash_slot]: creativecompat-common.toml
+        // (Creative Compat, 2026-11-01)
         RAIDS = new Raids(builder);
-        MONSTER_BOX = new MonsterBox(builder);
         BOTTLED_AIR = new BottledAir(builder);
-        CANNING = new Canning(builder);
-        COOKING = new Cooking(builder);
         COASTER = new Coaster(builder);
         WTHIT = new Wthit(builder);
-        ALCOHOL = new Alcohol(builder);
         PERF = new Perf(builder);
         // [seasons], [crop_seasons], [time]: creativecalendar-common.toml (Creative Calendar, 2026-11-01)
         SURFACE = new Surface(builder);
         WORLDGEN = new Worldgen(builder);
         VEIN_UNDO = new VeinUndo(builder);
-        TRASH_SLOT = new TrashSlot(builder);
         BACKPACK_SKINS = new BackpackSkins(builder);
         WANDERING_TRADER = new WanderingTrader(builder);
         NAMED_MOBS = new NamedMobs(builder);
         ADVANCEMENTS = new Advancements(builder);
-        EFFECTS = new Effects(builder);
         MOD_NAMES = new ModNames(builder);
         COMMON_SPEC = builder.build();
     }
@@ -436,79 +406,6 @@ public final class CEConfig {
         }
     }
 
-    /** Dials for {@code potion/MagicResistanceEffect}'s damage-reduction curve. */
-    public static final class Magic {
-        public final ForgeConfigSpec.DoubleValue reductionPerLevel;
-        public final ForgeConfigSpec.ConfigValue<String> negatedEffectTicks;
-
-        private Magic(ForgeConfigSpec.Builder b) {
-            b.comment(
-                    "Tuning for creativeengineering:magic_resistance's damage reduction against",
-                    "the creativeengineering:magic damage tag (the same tag the shields' MAGIC column",
-                    "reads: potions, poison, evoker fangs, thorns, sonic booms, curses, life drain) and",
-                    "against the periodic damage of the effects listed in negatedEffectTicks."
-            ).push("magic_resistance");
-
-            reductionPerLevel = b.comment(
-                    "Damage reduction per effect amplifier level (amplifier 0 = level I), same",
-                    "shape as vanilla Resistance. Total reduction is capped at 1.0 (full immunity)",
-                    "regardless of amplifier."
-            ).defineInRange("reductionPerLevel", 0.2, 0.0, 1.0);
-
-            negatedEffectTicks = b.comment(
-                    "Effects whose periodic damage Magic Resistance stops outright, comma-separated",
-                    "effect ids. A tick of one of these deals no damage while its level is at most the",
-                    "Magic Resistance level (Poison I against Magic Resistance I); a higher level takes",
-                    "the per-level cut instead. These are ticks no shield can block",
-                    "([shields].unblockableEffectTicks)."
-            ).define("negatedEffectTicks", "minecraft:poison, minecraft:wither");
-
-            b.pop(); // magic_resistance
-        }
-    }
-
-    /** Copper poisoning from oxidized Everything Copper gear ({@code potion/CopperPoisoningHandler}). */
-    public static final class CopperPoisoning {
-        public final ForgeConfigSpec.BooleanValue enabled;
-        public final ForgeConfigSpec.IntValue intervalSeconds;
-        public final ForgeConfigSpec.IntValue jitterSeconds;
-        public final ForgeConfigSpec.DoubleValue chancePerPiece;
-        public final ForgeConfigSpec.IntValue baseSeconds;
-        public final ForgeConfigSpec.IntValue secondsPerExtraPiece;
-        public final ForgeConfigSpec.IntValue maxSeconds;
-        public final ForgeConfigSpec.IntValue effectPoisonSeconds;
-
-        private CopperPoisoning(ForgeConfigSpec.Builder b) {
-            b.comment(
-                    "Fully oxidized Everything Copper gear (armor worn, or any piece in the hotbar or",
-                    "offhand) poisons its holder now and then, and the Copper Poisoning effect (copper",
-                    "nuggets) gives Poison instead of dealing damage itself."
-            ).push("copper_poisoning");
-
-            enabled = b.comment("Roll for poison from oxidized gear.").define("enabled", true);
-            intervalSeconds = b.comment("Average seconds between rolls, per player.")
-                    .defineInRange("intervalSeconds", 300, 10, 86400);
-            jitterSeconds = b.comment("Random spread either side of intervalSeconds.")
-                    .defineInRange("jitterSeconds", 120, 0, 86400);
-            chancePerPiece = b.comment(
-                    "Chance per fully oxidized piece that a roll poisons; pieces roll independently, so",
-                    "n pieces give 1 - (1 - chancePerPiece)^n."
-            ).defineInRange("chancePerPiece", 0.15, 0.0, 1.0);
-            baseSeconds = b.comment("Poison I duration with one oxidized piece.")
-                    .defineInRange("baseSeconds", 4, 1, 600);
-            secondsPerExtraPiece = b.comment("Extra Poison seconds per oxidized piece after the first.")
-                    .defineInRange("secondsPerExtraPiece", 2, 0, 600);
-            maxSeconds = b.comment("Cap on the Poison duration from one roll.")
-                    .defineInRange("maxSeconds", 20, 1, 600);
-            effectPoisonSeconds = b.comment(
-                    "Poison I seconds the Copper Poisoning effect gives per effect level (a copper nugget",
-                    "gives level II, so twice this)."
-            ).defineInRange("effectPoisonSeconds", 4, 1, 600);
-
-            b.pop(); // copper_poisoning
-        }
-    }
-
     /** Botania tweaks ({@code compat/TrinketCaseRules} and the {@code TrinketCase*Mixin}s). */
     public static final class Botania {
         public final ForgeConfigSpec.BooleanValue trinketCaseAnyItem;
@@ -554,7 +451,7 @@ public final class CEConfig {
      * Dials for TNT shrapnel ({@code shrapnel.ShrapnelEntity} / {@code ShrapnelSpawner}) -
      * fired both when a primed TNT entity detonates ({@code shrapnel.TntShrapnelHandler}, a
      * plain Forge {@code ExplosionEvent.Detonate} listener) and when a dropped TNT item is
-     * consumed by {@code itemphysic.ItemBurnTransform}'s EXPLODE rule
+     * consumed by Creative Compat's {@code itemphysic.ItemBurnTransform} EXPLODE rule (through {@code util.BurnBursts})
      * ({@code global.itemPhysics.burnExplode('minecraft:tnt', ..., true)} in
      * {@code kubejs/startup_scripts/func/item_physics.js} opts a rule into shrapnel).
      */
@@ -647,182 +544,6 @@ public final class CEConfig {
     }
 
     /**
-     * Dials for Creative Delight's {@code compat.wthit.WthitCropGrowth} (client-side, display only): the "Growth" line WTHIT
-     * leaves off bushes, vines, hemp, tobacco and fruit-tree leaves.
-     */
-    public static final class CropGrowth {
-        public final ForgeConfigSpec.BooleanValue fallback;
-        public final ForgeConfigSpec.BooleanValue showHarvestable;
-
-        private CropGrowth(ForgeConfigSpec.Builder b) {
-            b.comment(
-                    "WTHIT shows 'Growth: 60%' / 'Growth: Mature' only for CropBlock subclasses plus a few vanilla",
-                    "plants. This adds the same line, with the same wording and the same 'Crop progress' toggle in",
-                    "WTHIT's own config, to every other growing plant. The blocks and their stages are in",
-                    "assets/creative_delight/crop_growth.json (override it from kubejs/assets/creative_delight/).",
-                    "Client-side only; reads the block state the client already has. The line is Creative Delight's:",
-                    "its on/off switch is creative_delight-common.toml [qol] wthitCropLine."
-            ).push("crop_growth");
-
-            fallback = b.comment(
-                    "true: a bush-type plant (BushBlock, not a sapling) with an integer 'age' that no rule in",
-                    "crop_growth.json lists still gets a line, fully grown at its top age. Catches plants from",
-                    "mods added later. false: only the plants in the file."
-            ).define("fallback", true);
-
-            showHarvestable = b.comment(
-                    "true: plants that can be picked before they are fully grown (salmonberries from stage 3,",
-                    "grapes from stage 2) read 'Growth: 75% (Harvestable)' until they finish. false: the",
-                    "percentage only."
-            ).define("showHarvestable", true);
-
-            b.pop(); // crop_growth
-        }
-    }
-
-    /**
-     * Crop harvest table values read by Creative Delight's {@code rusticdelight/crop_drops.js} and
-     * {@code creativeengineering/soil_yield.js} (server side); feature_writeup/crops.md 3. A change needs /reload.
-     */
-    public static final class CropDrops {
-        public final ForgeConfigSpec.BooleanValue bellPeppers;
-        public final ForgeConfigSpec.IntValue redWeight;
-        public final ForgeConfigSpec.IntValue greenWeight;
-        public final ForgeConfigSpec.IntValue yellowWeight;
-        public final ForgeConfigSpec.DoubleValue redBonusChance;
-        public final ForgeConfigSpec.DoubleValue greenBonusChance;
-        public final ForgeConfigSpec.DoubleValue yellowBonusChance;
-        public final SoilYield SOIL_YIELD;
-
-        private CropDrops(ForgeConfigSpec.Builder b) {
-            b.comment(
-                    "Pack changes to crop harvest drops (server side, applied on /reload)."
-            ).push("crop_drops");
-
-            b.comment(
-                    "Rustic Delight bell peppers. A ripe plant drops one pepper picked by weight, then each",
-                    "colour has its own bonus chance for one extra. Each colour's share of the picked pepper is",
-                    "weight / (sum of weights). Per harvest, colour X averages",
-                    "  weightX / (sum of weights) + bonusChanceX",
-                    "Defaults (1:1:1, 0.15 each) give 0.483 of every colour. The mod ships 6:1:1 with no red",
-                    "bonus (red about 58% of peppers). A weight of 0 takes the colour out of the main roll."
-            ).push("bell_peppers");
-
-            bellPeppers = b.comment("true: use the values below. false: the mod's own table, untouched.")
-                    .define("enabled", true);
-
-            redWeight = b.comment("Weight of red in the main roll.")
-                    .defineInRange("redWeight", 1, 0, 100);
-            greenWeight = b.comment("Weight of green in the main roll.")
-                    .defineInRange("greenWeight", 1, 0, 100);
-            yellowWeight = b.comment("Weight of yellow in the main roll.")
-                    .defineInRange("yellowWeight", 1, 0, 100);
-
-            redBonusChance = b.comment("Chance [0-1] of one extra red pepper (0.15 = 15%).")
-                    .defineInRange("redBonusChance", 0.15, 0.0, 1.0);
-            greenBonusChance = b.comment("Chance [0-1] of one extra green pepper.")
-                    .defineInRange("greenBonusChance", 0.15, 0.0, 1.0);
-            yellowBonusChance = b.comment("Chance [0-1] of one extra yellow pepper.")
-                    .defineInRange("yellowBonusChance", 0.15, 0.0, 1.0);
-
-            b.pop(); // bell_peppers
-            SOIL_YIELD = new SoilYield(b);
-            b.pop(); // crop_drops
-        }
-    }
-
-    /**
-     * Extra produce from crops grown on better soil (CD {@code creativeengineering/soil_yield.js}, applied on /reload).
-     * Each soil adds a binomial pool to a ripe crop's harvest; each crop is switched on on its own (all off by default).
-     * feature_writeup/crop_yields.md.
-     */
-    public static final class SoilYield {
-        /** Crop keys of soil_yield.js's CROPS table, in the same order. */
-        public static final String[] CROPS = {
-                "wheat", "carrots", "potatoes", "beetroots", "cabbages", "onions", "tomatoes", "rice",
-                "bell_peppers", "coffee", "cotton", "ender_crop", "tobacco", "flax", "hemp", "corn", "cave_carrots",
-                "broccoli", "cauliflower", "garlic", "sweet_potato", "turnip", "zucchini", "cucumber", "oats",
-                "peanuts", "adzuki"
-        };
-
-        public final ForgeConfigSpec.IntValue farmlandTries;
-        public final ForgeConfigSpec.DoubleValue farmlandChance;
-        public final ForgeConfigSpec.IntValue richFarmlandTries;
-        public final ForgeConfigSpec.DoubleValue richFarmlandChance;
-        public final ForgeConfigSpec.IntValue fertileSoilTries;
-        public final ForgeConfigSpec.DoubleValue fertileSoilChance;
-        public final ForgeConfigSpec.IntValue richSoilTries;
-        public final ForgeConfigSpec.DoubleValue richSoilChance;
-        public final Map<String, ForgeConfigSpec.BooleanValue> crop = new java.util.LinkedHashMap<>();
-
-        private SoilYield(ForgeConfigSpec.Builder b) {
-            b.comment(
-                    "Extra produce on better soil. A ripe crop whose block below is the soil gets 'tries' extra",
-                    "chances at one more of its produce (seeds are not included), each at 'chance'. Average extra per",
-                    "harvest = tries x chance. The crop's own drops are unchanged. 0 tries = nothing for that soil.",
-                    "Each crop is switched on in [crop_drops.soil_yield.crops]; all are off by default.",
-                    "feature_writeup/crop_yields.md lists every crop's drops."
-            ).push("soil_yield");
-
-            farmlandTries = b.comment("Vanilla farmland: extra tries.").defineInRange("farmlandTries", 0, 0, 8);
-            farmlandChance = b.comment("Vanilla farmland: chance [0-1] per try.").defineInRange("farmlandChance", 0.0, 0.0, 1.0);
-            richFarmlandTries = b.comment("Rich Soil Farmland: extra tries.").defineInRange("richFarmlandTries", 2, 0, 8);
-            richFarmlandChance = b.comment("Rich Soil Farmland: chance [0-1] per try.").defineInRange("richFarmlandChance", 0.35, 0.0, 1.0);
-            fertileSoilTries = b.comment("Fertile Soil (Immersive Weathering mulch): extra tries.").defineInRange("fertileSoilTries", 2, 0, 8);
-            fertileSoilChance = b.comment("Fertile Soil: chance [0-1] per try.").defineInRange("fertileSoilChance", 0.25, 0.0, 1.0);
-            richSoilTries = b.comment("Untilled Rich Soil (only rice and adzuki grow on it): extra tries.").defineInRange("richSoilTries", 2, 0, 8);
-            richSoilChance = b.comment("Untilled Rich Soil: chance [0-1] per try.").defineInRange("richSoilChance", 0.35, 0.0, 1.0);
-
-            b.comment("true: the crop gets the soil pools above. false: its drops are the same on every soil.").push("crops");
-            for (String key : CROPS) {
-                crop.put(key, b.define(key, false));
-            }
-            b.pop(2); // crops, soil_yield
-        }
-
-        /** The crop's switch, or null for a key the config does not have. */
-        public Boolean cropOn(String key) {
-            ForgeConfigSpec.BooleanValue v = crop.get(key);
-            return v == null ? null : v.get();
-        }
-    }
-
-    /**
-     * Extra fruit on melon, pumpkin and other stems ({@code crops.StemExtraFruit},
-     * {@code mixin/AttachedStemExtraFruitMixin}); feature_writeup/crops.md 2.10. Read on every random tick.
-     */
-    public static final class StemFruit {
-        public final ForgeConfigSpec.BooleanValue enabled;
-        public final ForgeConfigSpec.IntValue maxFruits;
-        public final ForgeConfigSpec.IntValue secondFruitMinutes;
-        public final ForgeConfigSpec.IntValue thirdFruitMinutes;
-        public final ForgeConfigSpec.IntValue fourthFruitMinutes;
-
-        private StemFruit(ForgeConfigSpec.Builder b) {
-            b.comment(
-                    "A stem that has grown its fruit (melon, pumpkin, hamimelon) can grow more on its other free",
-                    "sides, one at a time. Each extra fruit uses vanilla's stem growth roll (light, soil and",
-                    "hydration count the same) and also waits a minimum time since the stem's last fruit. The",
-                    "wait counts from the first random tick after a fruit grows. When the fruit the stem faces is",
-                    "taken, the stem turns to another of its fruits instead of back into a plain stem. Server side."
-            ).push("stem_fruit");
-
-            enabled = b.comment("Master on/off switch. Off = vanilla (one fruit per stem).")
-                    .define("enabled", true);
-            maxFruits = b.comment("Most fruits next to one stem (1 = vanilla, 4 = every side).")
-                    .defineInRange("maxFruits", 4, 1, 4);
-            secondFruitMinutes = b.comment("Minimum game minutes (1200 ticks) after the first fruit before a 2nd can grow.")
-                    .defineInRange("secondFruitMinutes", 10, 0, 1440);
-            thirdFruitMinutes = b.comment("Minimum game minutes after the 2nd fruit before a 3rd can grow.")
-                    .defineInRange("thirdFruitMinutes", 20, 0, 1440);
-            fourthFruitMinutes = b.comment("Minimum game minutes after the 3rd fruit before a 4th can grow.")
-                    .defineInRange("fourthFruitMinutes", 40, 0, 1440);
-
-            b.pop(); // stem_fruit
-        }
-    }
-
-    /**
      * Leaf life range past vanilla's 7 ({@code block.LeafDecayRange}, {@code mixin/LeavesDecayRangeMixin});
      * feature_writeup/mob_block_tweaks.md 2.5. Read on every decay check.
      */
@@ -889,156 +610,6 @@ public final class CEConfig {
         }
     }
 
-    /**
-     * Immersive Weathering leaf piles: how tall a pile must be to slow you ({@code mixin/LeafPileSlowMixin},
-     * read by the WTHIT Run Speed line in {@code surface.StuckInBlock}). Read on every entity-in-pile tick.
-     */
-    public static final class LeafPiles {
-        public final ForgeConfigSpec.IntValue slowFromLayers;
-
-        private LeafPiles(ForgeConfigSpec.Builder b) {
-            b.comment(
-                    "Immersive Weathering leaf piles (1-8 layers). Their slowdown is still IW's own (on/off: IW",
-                    "leaf_piles_slow; Depth Strider, foxes and bees walk through); this sets the height it starts at."
-            ).push("leaf_piles");
-
-            slowFromLayers = b.comment(
-                    "Layers a leaf pile needs before it slows walking, and before WTHIT shows a Run Speed line for it.",
-                    "IW's own rule is 4 (more than 3 layers). 9 = piles never slow. Movement is worked out on the",
-                    "client too, so keep this the same on the server and every client."
-            ).defineInRange("slowFromLayers", 4, 1, 9);
-
-            b.pop(); // leaf_piles
-        }
-    }
-
-    /**
-     * A plain Dandelion planted on Rich Soil, Rich Soil Farmland or Fertile Soil turns into a Mature Dandelion
-     * (Veggies Delight) on the soil's random ticks ({@code crops.DandelionMaturing}). Each value is "on average one
-     * conversion per N random ticks of the soil block"; a block gets roughly one random tick a minute at the default
-     * randomTickSpeed, so 10 is about ten minutes. 0 turns that soil off.
-     */
-    public static final class DandelionMaturing {
-        public final ForgeConfigSpec.IntValue richSoilTicks;
-        public final ForgeConfigSpec.IntValue fertileSoilTicks;
-
-        private DandelionMaturing(ForgeConfigSpec.Builder b) {
-            b.comment(
-                    "Plain Dandelions mature into Mature Dandelions when planted on Rich Soil / Rich Soil Farmland",
-                    "or Fertile Soil. Values are the average number of soil random ticks per conversion",
-                    "(about one random tick a minute per block at the default randomTickSpeed). 0 = off for that soil.",
-                    "Takes effect immediately."
-            ).push("dandelion_maturing");
-
-            richSoilTicks = b.comment("Rich Soil and Rich Soil Farmland (Farmer's Delight).")
-                    .defineInRange("richSoilTicks", 20, 0, 100000);
-            fertileSoilTicks = b.comment("Fertile Soil (Immersive Weathering's mulch block).")
-                    .defineInRange("fertileSoilTicks", 10, 0, 100000);
-
-            b.pop(); // dandelion_maturing
-        }
-    }
-
-    /** Biome-tinted moss block and moss carpet ({@code block.MossTint}). Client side only. */
-    public static final class Moss {
-        public final ForgeConfigSpec.BooleanValue biomeTint;
-        public final ForgeConfigSpec.DoubleValue tintStrength;
-
-        private Moss(ForgeConfigSpec.Builder b) {
-            b.comment("Moss block and moss carpet colour (client only; the server ignores this section).").push("moss");
-
-            biomeTint = b.comment(
-                    "On: moss block and moss carpet take the biome's grass colour, like grass blocks.",
-                    "Off: vanilla's fixed green moss. Read when models load: press F3+T or restart after changing it."
-            ).define("biomeTint", true);
-
-            tintStrength = b.comment(
-                    "How far moss follows the grass colour. 1.0 = shifts as much as grass does from Lush Caves",
-                    "grass (where moss keeps its vanilla green); 0.0 = vanilla green everywhere. Chunks pick up",
-                    "a change when they re-render (F3+A)."
-            ).defineInRange("tintStrength", 1.0, 0.0, 1.0);
-
-            b.pop(); // moss
-        }
-    }
-
-    /**
-     * Shears stop vines growing ({@code block.VineShearing}, {@code mixin/VineBlockShearMixin},
-     * {@code block.VineShearingClient}). The sheared state itself is always registered.
-     */
-    public static final class VineShearing {
-        public final ForgeConfigSpec.BooleanValue enabled;
-        public final ForgeConfigSpec.BooleanValue cutBelow;
-        public final ForgeConfigSpec.BooleanValue trimmedLook;
-
-        private VineShearing(ForgeConfigSpec.Builder b) {
-            b.comment(
-                    "Shears on a modded vine (Floral Enchantment's flower vines, Botania's solid vine) stop it growing,",
-                    "as Quark's Shear Vines does for the vanilla vine. Shears on the tip of a weeping, twisting or cave",
-                    "vine or kelp stop it growing longer (1.20's behaviour)."
-            ).push("vine_shearing");
-
-            enabled = b.comment("Shears stop vines growing. Off: shears do nothing to vines (vines already sheared stay so).")
-                    .define("enabled", true);
-            cutBelow = b.comment("Shearing a modded vine also removes the same vine hanging below it, as Quark does.")
-                    .define("cutBelow", true);
-            trimmedLook = b.comment(
-                    "Client: a sheared modded vine is drawn with its bottom trimmed, like Quark's cut vine. Read when",
-                    "models load: press F3+T or restart after changing it."
-            ).define("trimmedLook", true);
-
-            b.pop(); // vine_shearing
-        }
-    }
-
-    /**
-     * Rain puts out campfires ({@code campfire.CampfireRain}, {@code mixin/CampfireRainMixin}). Unlit Campfire
-     * still places them unlit but burns them forever with its own rain check off. Read every tick.
-     */
-    public static final class Campfire {
-        public final ForgeConfigSpec.BooleanValue rainDouses;
-        public final ForgeConfigSpec.IntValue rainOutTicks;
-        public final ForgeConfigSpec.BooleanValue comfort;
-        public final ForgeConfigSpec.BooleanValue useComfort;
-        public final ForgeConfigSpec.IntValue comfortDistance;
-        public final ForgeConfigSpec.IntValue comfortSeconds;
-        public final ForgeConfigSpec.IntValue comfortEveryTicks;
-
-        private Campfire(ForgeConfigSpec.Builder b) {
-            b.comment(
-                    "A lit campfire in #creativeengineering:campfire/rain_douses (the plain campfire; not soul or",
-                    "Tinted campfires) goes out in open rain, unless it sits on a block in",
-                    "#creativeengineering:campfire/rain_proof_fuel (coal and charcoal blocks). Otherwise campfires",
-                    "burn forever. Server side."
-            ).push("campfire");
-
-            rainDouses = b.comment("Master on/off switch. Off = rain never puts a campfire out.")
-                    .define("rainDouses", true);
-
-            rainOutTicks = b.comment(
-                    "Ticks of unbroken rain before the campfire goes out (160 = 8 s, Unlit Campfire's default).",
-                    "Leaving the rain or being on a fuel block resets the count."
-            ).defineInRange("rainOutTicks", 160, 1, 72000);
-
-            comfort = b.comment(
-                    "Comfortable Campfires port (campfire.CampfireComfort): players near a lit campfire get Farmer's",
-                    "Delight's Comfort, refreshed while under 3 s are left."
-            ).define("comfort", true);
-            useComfort = b.comment("Comfort when Farmer's Delight is present; false (or no Farmer's Delight) = Regeneration, as the mod.")
-                    .define("useComfort", true);
-            comfortDistance = b.comment("Blocks around (and above) the campfire that count as near (the mod's 3).")
-                    .defineInRange("comfortDistance", 3, 1, 16);
-            comfortSeconds = b.comment("Seconds of Comfort per application (the mod's 5).")
-                    .defineInRange("comfortSeconds", 5, 1, 600);
-            comfortEveryTicks = b.comment(
-                    "A campfire looks for players once per this many ticks (the mod checked every tick; campfires are",
-                    "spread over the period). 1 = every tick."
-            ).defineInRange("comfortEveryTicks", 20, 1, 200);
-
-            b.pop(); // campfire
-        }
-    }
-
     /** Glowing Illagers port ({@code mixin/RaidGlowingMixin}). */
     public static final class Raids {
         public final ForgeConfigSpec.BooleanValue glowingRaiders;
@@ -1053,38 +624,6 @@ public final class CEConfig {
                     .defineInRange("glowingAmplifier", 1, 0, 255);
 
             b.pop(); // raids
-        }
-    }
-
-    /** Quark monster boxes as vaults ({@code mobs.MonsterBoxVault}, feature_writeup/mob_block_tweaks.md section 2.9). */
-    public static final class MonsterBox {
-        public final ForgeConfigSpec.BooleanValue vaultMode;
-        public final ForgeConfigSpec.IntValue cooldownTicks;
-        public final ForgeConfigSpec.ConfigValue<String> rewardTable;
-        public final ForgeConfigSpec.BooleanValue rewardSingleCount;
-        public final ForgeConfigSpec.IntValue leashRange;
-        public final ForgeConfigSpec.IntValue checkIntervalTicks;
-
-        private MonsterBox(ForgeConfigSpec.Builder b) {
-            b.comment("Quark monster boxes (server side).").push("monster_box");
-
-            vaultMode = b.comment(
-                    "true: a box stays after it spawns its wave, ejects one reward when the wave is gone, then waits",
-                    "cooldownTicks before it can trigger again; it only breaks while sneaking, and Create drills skip it.",
-                    "false: Quark's own box (breaks itself after spawning)."
-            ).define("vaultMode", true);
-            cooldownTicks = b.comment("Game ticks between the reward and the box re-arming (72000 = 1 hour).")
-                    .defineInRange("cooldownTicks", 72000, 20, Integer.MAX_VALUE);
-            rewardTable = b.comment("Loot table rolled once for the reward; one stack of the result is ejected.")
-                    .define("rewardTable", "creativeengineering:misc/monster_box_reward");
-            rewardSingleCount = b.comment("true: the ejected stack is cut to 1 item; false: the stack as the table rolled it.")
-                    .define("rewardSingleCount", false);
-            leashRange = b.comment("A wave mob farther than this many blocks from its box counts as gone.")
-                    .defineInRange("leashRange", 24, 4, 256);
-            checkIntervalTicks = b.comment("Ticks between checks of an active box's wave.")
-                    .defineInRange("checkIntervalTicks", 20, 1, 200);
-
-            b.pop(); // monster_box
         }
     }
 
@@ -1121,7 +660,6 @@ public final class CEConfig {
      * the comments say what is traded away. Read live, no rejoin needed.
      */
     public static final class Perf {
-        public final ForgeConfigSpec.IntValue troughMissCooldownTicks;
         public final ForgeConfigSpec.BooleanValue gravityLimitDimensions;
         public final ForgeConfigSpec.ConfigValue<java.util.List<? extends String>> gravityDimensions;
         public final ForgeConfigSpec.IntValue mountEffectIntervalTicks;
@@ -1143,12 +681,7 @@ public final class CEConfig {
             b.comment("Performance throttles for other mods' per-tick work. See feature_writeup/perf.md section 7.")
                     .push("perf");
 
-            troughMissCooldownTicks = b.comment(
-                    "Quark feeding trough: after an animal's trough search finds nothing, it does not search again for",
-                    "this many ticks (600 = 30 s). Each search is a point-of-interest scan plus a ray cast, and a",
-                    "hungry animal with no trough nearby repeated it every few ticks. Cost: a trough placed or",
-                    "refilled next to an animal is noticed up to this long late. 0 = off (Quark's own behaviour)."
-            ).defineInRange("troughMissCooldownTicks", 600, 0, 72000);
+            // troughMissCooldownTicks: creativedelight-common.toml [perf] (Creative Delight, 2026-11-01)
 
             // seasonsMeltIntervalTicks: creativecalendar-common.toml [perf] (Creative Calendar, 2026-11-01)
 
@@ -1222,52 +755,6 @@ public final class CEConfig {
             ).defineList("spawnBandCategories", java.util.List.of("monster"), o -> o instanceof String);
 
             b.pop(); // perf
-        }
-    }
-
-    /**
-     * Remainder buffer on FD-style stations (cooking pot, Farmer's Respite kettle, oven): ingredient leftovers stay
-     * in the station. {@code cooking.RemainderBuffer}; feature_writeup/remainder_buffer.md. The pot and kettle hooks
-     * are Creative Delight's (QoL-1, switch {@code [qol] remainderBuffer}); {@code remainderBuffer} here is the oven's,
-     * the other dials are shared.
-     */
-    public static final class Cooking {
-        public final ForgeConfigSpec.BooleanValue remainderBuffer;
-        public final ForgeConfigSpec.BooleanValue stallWhenFull;
-        public final ForgeConfigSpec.BooleanValue ovenIngredientCounts;
-        public final ForgeConfigSpec.IntValue recycleShowTicks;
-
-        private Cooking(ForgeConfigSpec.Builder b) {
-            b.comment(
-                    "Leftover containers from ingredients (glass bottles, bowls, buckets) on the FD cooking pot, the",
-                    "Farmer's Respite kettle and the oven. A leftover the waiting meal is served in goes to the",
-                    "container slot; the rest goes to two leftover slots right of the output, which hoppers and",
-                    "funnels on the output faces can empty."
-            ).push("cooking");
-
-            remainderBuffer = b.comment("Oven only. Off = its leftovers are thrown out of the front. The pot and kettle",
-                    "switch is creative_delight-common.toml [qol] remainderBuffer.")
-                    .define("remainderBuffer", true);
-
-            stallWhenFull = b.comment(
-                    "On = a station whose leftover slots can't take a craft's leftovers waits (like a full output).",
-                    "Off = it crafts anyway and throws what doesn't fit."
-            ).define("stallWhenFull", true);
-
-            ovenIngredientCounts = b.comment(
-                    "On = an oven recipe ingredient with a count takes that many from one slot (3 wheat from a wheat",
-                    "stack), so oven copies of 9-item crafting recipes cost the same as the craft. Off = every",
-                    "ingredient takes one item from its own slot, and recipes that don't fit the 6 slots drop some of",
-                    "their repeated items (feature_writeup/oven.md 2.6). Recipes are built at /reload."
-            ).define("ovenIngredientCounts", false);
-
-            recycleShowTicks = b.comment(
-                    "Ticks a leftover recycled into the container slot (a bowl-food ingredient's bowl, a milk bottle's",
-                    "bottle) stays visible there before the meal is plated with it, so the step can be seen.",
-                    "0 = plate at once. Containers a player or hopper puts in plate at once either way."
-            ).defineInRange("recycleShowTicks", 10, 0, 100);
-
-            b.pop(); // cooking
         }
     }
 
@@ -1464,62 +951,6 @@ public final class CEConfig {
             ).defineInRange("operatorBlockLevel", 2, 0, 4);
 
             b.pop(); // wthit
-        }
-    }
-
-    /** Alcoholic drinks (alcohol.md 11): the pack side lives in KubeJS {@code global.alcohol}; this is the client tooltip. */
-    public static final class Alcohol {
-        public final ForgeConfigSpec.BooleanValue quarkLine;
-
-        private Alcohol(ForgeConfigSpec.Builder b) {
-            b.comment("Alcoholic drinks (client side).").push("alcohol");
-
-            quarkLine = b.comment(
-                    "Replace Quark's saturation word ('Disgusting Snack') with 'Intoxicating Drink' on every food whose",
-                    "effects include Brewin' and Chewin's Intoxication (food.IntoxicatingDrinkTooltip)."
-            ).define("quarkLine", true);
-
-            b.pop(); // alcohol
-        }
-    }
-
-    /**
-     * Dials for multi-serving cans ({@code food.CanServings}). How many servings a can holds is
-     * NOT here: it comes from the {@code #creativeengineering:cans/servings/<n>} item tags, set in
-     * KubeJS from {@code kubejs/generation_scripts/food/can_servings.json}.
-     */
-    public static final class Canning {
-        public final ForgeConfigSpec.BooleanValue enabled;
-        public final ForgeConfigSpec.DoubleValue emptyCanChance;
-        public final ForgeConfigSpec.DoubleValue crushedCanChance;
-        public final ForgeConfigSpec.ConfigValue<String> emptyCanItem;
-        public final ForgeConfigSpec.ConfigValue<String> crushedCanItem;
-
-        private Canning(ForgeConfigSpec.Builder b) {
-            b.comment(
-                    "Cans in #creativeengineering:cans/servings/<n> hold n servings. Eating or crafting with",
-                    "one takes a serving; the servings left show as a durability bar and a tooltip line. The",
-                    "last serving leaves an empty can, a crushed can or nothing, rolled with the chances below."
-            ).push("canning");
-
-            enabled = b.comment("Off = every can behaves like the Canned Goods original (one serving, always an empty can).")
-                    .define("enabled", true);
-
-            emptyCanChance = b.comment("Chance [0-1] that an emptied can comes back as an empty can.")
-                    .defineInRange("emptyCanChance", 0.7, 0.0, 1.0);
-
-            crushedCanChance = b.comment(
-                    "Chance [0-1] that it comes back as a crushed can instead. Whatever is left after both",
-                    "chances gives nothing; if the two add up past 1, the crushed chance is cut to fit."
-            ).defineInRange("crushedCanChance", 0.25, 0.0, 1.0);
-
-            emptyCanItem = b.comment("Item id handed back as the empty can.")
-                    .define("emptyCanItem", "canned_goods:empty_can");
-
-            crushedCanItem = b.comment("Item id handed back as the crushed can.")
-                    .define("crushedCanItem", "canned_goods:crushed_empty_can");
-
-            b.pop(); // canning
         }
     }
 
@@ -2898,13 +2329,6 @@ public final class CEConfig {
         }
     }
 
-    /**
-     * Which screens show TrashSlot's trash slot by default, read on the client by
-     * {@code compat.TrashSlotCompat}. TrashSlot itself only turns the slot on for the player
-     * inventory, crafting table and chests; everything else starts hidden until the player presses
-     * the toggle key. A screen listed here is switched on once per client (the first time it opens
-     * after being listed), so a player's later toggle still sticks.
-     */
     /** Rules on Ore Excavation's {@code /undo_excavation} ([[excavation.VeinUndo]]). */
     public static final class VeinUndo {
         public final ForgeConfigSpec.IntValue cooldownSeconds;
@@ -2926,81 +2350,6 @@ public final class CEConfig {
             ).define("denyBlockEntities", true);
 
             b.pop();
-        }
-    }
-
-    public static final class TrashSlot {
-        /** Vanilla workstations, both inventories, chests and Sophisticated Backpacks. */
-        public static final List<String> DEFAULT_SCREENS = List.of(
-                "net.minecraft.client.gui.screens.inventory.InventoryScreen",
-                "net.minecraft.client.gui.screens.inventory.CreativeModeInventoryScreen",
-                "net.minecraft.client.gui.screens.inventory.ContainerScreen",
-                "net.minecraft.client.gui.screens.inventory.CraftingScreen",
-                "net.minecraft.client.gui.screens.inventory.FurnaceScreen",
-                "net.minecraft.client.gui.screens.inventory.BlastFurnaceScreen",
-                "net.minecraft.client.gui.screens.inventory.SmokerScreen",
-                "net.minecraft.client.gui.screens.inventory.AnvilScreen",
-                "net.minecraft.client.gui.screens.inventory.SmithingScreen",
-                "net.minecraft.client.gui.screens.inventory.GrindstoneScreen",
-                "net.minecraft.client.gui.screens.inventory.StonecutterScreen",
-                "net.minecraft.client.gui.screens.inventory.LoomScreen",
-                "net.minecraft.client.gui.screens.inventory.CartographyTableScreen",
-                "net.minecraft.client.gui.screens.inventory.EnchantmentScreen",
-                "net.minecraft.client.gui.screens.inventory.BrewingStandScreen",
-                "net.p3pp3rf1y.sophisticatedbackpacks.client.gui.BackpackScreen"
-        );
-
-        /**
-         * Starting spots that differ from TrashSlot's (under the panel's bottom-right corner).
-         * Creative: right edge, bottom, because the bottom-right spot is the Survival Inventory tab.
-         * Backpacks: anchored to the bottom-right corner itself, so the spot follows the panel at
-         * every backpack size.
-         */
-        public static final List<String> DEFAULT_POSITIONS = List.of(
-                "net.minecraft.client.gui.screens.inventory.CreativeModeInventoryScreen|1.0|1.0|0|-28",
-                "net.p3pp3rf1y.sophisticatedbackpacks.client.gui.BackpackScreen|1.0|1.0|-28|0"
-        );
-
-        public final ForgeConfigSpec.ConfigValue<List<? extends String>> enabledScreens;
-        public final ForgeConfigSpec.BooleanValue allContainers;
-        public final ForgeConfigSpec.ConfigValue<List<? extends String>> excludedScreens;
-        public final ForgeConfigSpec.ConfigValue<List<? extends String>> positions;
-        public final ForgeConfigSpec.BooleanValue splitBackpacksByTier;
-
-        private TrashSlot(ForgeConfigSpec.Builder b) {
-            b.comment(
-                    "TrashSlot defaults (client side). Screens are full Java class names; F3 can't show them,",
-                    "but TrashSlotSaveState.json in the game folder lists every screen opened so far."
-            ).push("trash_slot");
-
-            enabledScreens = b.comment(
-                    "Screens that show the trash slot by default. Each one is switched on once per client, the",
-                    "first time it opens after being added here; pressing the toggle key afterwards still sticks."
-            ).defineList("enabledScreens", DEFAULT_SCREENS, o -> o instanceof String);
-
-            allContainers = b.comment(
-                    "true: every other container screen (modded machines, storage, ...) also shows it by default,",
-                    "except the ones in excludedScreens. false: only enabledScreens do."
-            ).define("allContainers", false);
-
-            excludedScreens = b.comment("Never switched on by allContainers.")
-                    .defineList("excludedScreens", List.of(
-                            "net.p3pp3rf1y.sophisticatedbackpacks.client.gui.BackpackSettingsScreen"
-                    ), o -> o instanceof String);
-
-            positions = b.comment(
-                    "Starting position for a screen the player hasn't opened yet: 'class|anchorX|anchorY|x|y'.",
-                    "The anchor is a fraction of the panel (0.5 = centre, 1.0 = right/bottom edge) and x/y are",
-                    "pixels from it to the slot's top-left; the slot is 28x28. Screens not listed start under the",
-                    "panel's bottom-right corner. Dragging the slot in game overrides this."
-            ).defineList("positions", DEFAULT_POSITIONS, o -> o instanceof String);
-
-            splitBackpacksByTier = b.comment(
-                    "true: each Sophisticated Backpacks tier (leather, copper, iron, gold, diamond, netherite)",
-                    "remembers its own trash slot position and on/off state. false: all backpacks share one."
-            ).define("splitBackpacksByTier", true);
-
-            b.pop(); // trash_slot
         }
     }
 
@@ -3234,68 +2583,4 @@ public final class CEConfig {
         }
     }
 
-    /** Mob effect category overrides ({@code potion.EffectCategories}, {@code mixin/MobEffectCategoryMixin}). */
-    public static final class Effects {
-        public final ForgeConfigSpec.ConfigValue<List<? extends String>> categoryOverrides;
-        public final ForgeConfigSpec.ConfigValue<List<? extends String>> forceHudIcon;
-        public final ForgeConfigSpec.ConfigValue<List<? extends String>> forceHudIconItems;
-        public final ForgeConfigSpec.ConfigValue<List<? extends String>> remap;
-        public final ForgeConfigSpec.ConfigValue<List<? extends String>> removed;
-
-        private Effects(ForgeConfigSpec.Builder b) {
-            b.comment("Mob effects (client and server).").push("effects");
-            categoryOverrides = b.comment(
-                    "Category overrides, \"namespace:effect=CATEGORY\" with CATEGORY one of BENEFICIAL, HARMFUL, NEUTRAL.",
-                    "The category colours the effect's name in potion, food and gear tooltips (HARMFUL red, the other",
-                    "two blue), and AppleSkin, Quark's saturation word and isBeneficial() go by it. The defaults are the",
-                    "effects whose own category showed the wrong colour (feature_writeup/effects.md 2.4). Read live."
-            ).defineList("categoryOverrides", List.of(
-                    "create_confectionery:rest=BENEFICIAL",
-                    "alexsmobs:debilitating_sting=HARMFUL",
-                    "alexsmobs:fear=HARMFUL",
-                    "alexsmobs:power_down=HARMFUL",
-                    "neapolitan:slipping=HARMFUL",
-                    "vinery:trippy=HARMFUL"
-            ), o -> o instanceof String s && s.matches("[a-z0-9_.-]+:[a-z0-9_/.-]+=(BENEFICIAL|HARMFUL|NEUTRAL)"));
-            forceHudIcon = b.comment(
-                    "Effects that always get their HUD icon (top right), even when the mod that gave them hid it",
-                    "(showIcon false, mostly to drop particles). The inventory list shows them either way. Armor, held",
-                    "tool and aura effects are left hidden on purpose (feature_writeup/effects.md 2.6). Client, read live."
-            ).defineList("forceHudIcon", List.of(
-                    "brewinandchewin:intoxication",
-                    "via_romana:travellers_fatigue",
-                    "monobank:thief"
-            ), o -> o instanceof String s && s.matches("[a-z0-9_.-]+:[a-z0-9_/.-]+"));
-            forceHudIconItems = b.comment(
-                    "Items whose effects always get their HUD icon: every effect added while an entity finishes using",
-                    "one (eating, drinking, the item's own code). \"namespace\" for a whole mod or \"namespace:item\". Effect",
-                    "ids in forceHudIcon show from any source; this list only for these items, so the same effect from",
-                    "armor stays hidden. Server side, read live."
-            ).defineList("forceHudIconItems", List.of(
-                    "create:builders_tea",
-                    "canned_goods:canned_pufferfishs",
-                    "farmersrespite",
-                    "immersive_weathering"
-            ), o -> o instanceof String s && s.matches("[a-z0-9_.-]+(:[a-z0-9_/.-]+)?"));
-            remap = b.comment(
-                    "Effects swapped for another wherever they are applied, \"from=to\". Same duration, level and",
-                    "visibility. Covers foods, potions, blocks, commands and mob code (LivingEntity#addEffect), and",
-                    "Fruits Delight's jam / jelly effect lines. Food tooltips are swapped by KubeJS",
-                    "(global.foodEffectSwaps). Server side, read live."
-            ).defineList("remap", List.of(
-                    "neapolitan:agility=vinery:climbing_effect",
-                    "fruitsdelight:chorus=vinery:teleport",
-                    "quark:resilience=alexsmobs:knockback_resistance"
-            ), o -> o instanceof String s && s.matches("[a-z0-9_.-]+:[a-z0-9_/.-]+=[a-z0-9_.-]+:[a-z0-9_/.-]+"));
-            removed = b.comment(
-                    "Effects that are never applied (LivingEntity#addEffect refuses them). Their brews are removed",
-                    "by KubeJS (startup_scripts/cooking/potions.js). Server side, read live."
-            ).defineList("removed", List.of(
-                    "upgrade_aquatic:restfulness",
-                    "upgrade_aquatic:insomnia",
-                    "alexsmobs:power_down"
-            ), o -> o instanceof String s && s.matches("[a-z0-9_.-]+:[a-z0-9_/.-]+"));
-            b.pop();
-        }
-    }
 }

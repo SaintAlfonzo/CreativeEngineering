@@ -127,7 +127,7 @@ with no step for the skin, and Supplementaries' recipe would compete with the pa
 | [lunchbox/client/LunchboxClient.java](../development/patcherMod/src/main/java/com/SaintAlfonzo/creativeengineering/lunchbox/client/LunchboxClient.java) | item properties, dye tint |
 | [mixin/AlexsMobsSeagullStealMixin.java](../development/patcherMod/src/main/java/com/SaintAlfonzo/creativeengineering/mixin/AlexsMobsSeagullStealMixin.java), [AlexsMobsSeagullItemMixin.java](../development/patcherMod/src/main/java/com/SaintAlfonzo/creativeengineering/mixin/AlexsMobsSeagullItemMixin.java) | seagulls |
 | [neoCraftHelper.js](../development/patcherMod/src/main/resources/kubejs_startup/creativeengineering/func/neoCraftHelper.js) | `lunchboxShaped`, `lunchboxSmithing`, `lunchboxSkin`, `lunchboxDye`, `lunchboxSoap` |
-| [solapplepie/lunchboxes.js](../kubejs/data/creative_delight/kubejs/solapplepie/lunchboxes.js) | the recipes (Creative Delight tree; in the CD jar) |
+| [solapplepie/lunchboxes.js](../kubejs/data/creativedelight/kubejs/solapplepie/lunchboxes.js) | the recipes (Creative Delight tree; in the CD jar) |
 | [namechanges.js](../kubejs/client_scripts/namechanges.js) | names and screen titles |
 | `kubejs/assets/solapplepie/textures/items/` | source art (copper, iron, netherite + outline masks); `lunchbox_dye/` generated |
 | `kubejs/assets/solapplepie/models/item/` | generated item and look models |

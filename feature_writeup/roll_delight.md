@@ -1,6 +1,8 @@
 # Roll Delight: overlap and integration report
 
-Investigation written 2026-10-30 for TODO `largecontent/mod-additions #12` (the Roll Delight part); **nothing built**.
+Investigation written 2026-10-30 for TODO `largecontent/mod-additions #12` (the Roll Delight part). **BUILT 2026-11-01** (TODO
+`largecontent/mod-additions #39`, build notes in section 4.2): member `backportedRoll 1.3.1-ce-19.2-01` nested in the CD jar, not
+installed, nothing run in game.
 Jar: `devmods/toBackport/[1.20.1] Roll Delight-1.3.1-forge-.jar` (file 1.3.1, `mods.toml` version 1.3.0), unpacked to
 `DecompiledMods/roll_delight-1.3.1/`, code in `DecompiledMods/roll_delight-1.3.1-src/` (31 classes, MCreator). Forge
 1.20.1 only, so a **port is needed**. Licence **All Rights Reserved**: the Vinery / Miner's / Rustic donor-jar route (jar
@@ -52,8 +54,9 @@ asks for it by name. Upstream bugs are fixed (3.5).
 | Upstream bugs | 3.5 | B1-B9, all with a fix planned (B2 closed by the Ancient Fruit / Chorus Flower recipe) |
 | Overlap | 2 | Salmon Maki Roll (upstream "Amazing Salmon Roll") vs FD Salmon Roll (committed, D12); medleys vs FD Rice Roll Medley; Tobiko vs Oceanic Delight Fish Egg Roll. Rice Roll and slice are **not** an overlap (owner, 2026-10-31) |
 | Fold-in | 4 | 19 steps planned |
-| Decisions | 5 | D1-D17, all settled; D6 values provisional pending one question (5) |
-| Tests | 8 | ROLL-01..22 drafted, none run |
+| Decisions | 5 | D1-D17, all settled, D6 values confirmed (2026-11-01) |
+| Build | 4.2 | BUILT 2026-11-01 (member + CD scripts); CD jar not installed; `/dumpall`, can generator and `/cegen` wait on the game |
+| Tests | 8 | ROLL-01..22 drafted, none run; scratch SQ-ROLL-01..09, CQ-ROLL-10 queued |
 
 - **Jar:** 178 files; bundles `mixinextras-forge-0.5.0` (jarjar), unused by the code.
 - **Licence:** ARR (`mods.toml`). No fork; donor jar for art and models, Java written from behaviour.
@@ -187,17 +190,19 @@ craft of already-cooked food, output total = input total (ratio 1.0), not the 1.
 | Salmon Maki Roll (4 salmon slice 4 + 2 rice 12 + 3 kelp 3) | 19 | 15 / 0.6, slices 9 | **13 / 0.6**, slices **6 / 0.5** |
 | Mushroom Roll (cabbage 2 + 2 rice 12 + colony 0 + 3 kelp 3) | 17 | 14 / 0.6, slices 8 | **11 / 0.6**, slices **6 / 0.5** |
 | Ancient Roll (ancient fruit 4 + 2 rice 12 + chorus flower 0 + 3 kelp 3) | 19 | 16 / 0.6, slices 10 | **13 / 0.6**, slices **6 / 0.5** |
-| Golden Roll | golden tier ([food.md](food.md)), base Rice Roll | 12 / 1.2, slices 6 | golden-tier values, slices by the same 1/3 |
+| Golden Roll | golden tier ([food.md](food.md)), base Rice Roll | 12 / 1.2, slices 6 | golden tier copied from Golden Dried Kelp: **4 / 1.2**, always edible, Regeneration II 5 s, Absorption I 120 s, Nourishment 120 s, stack 16; slice **2 / 1.2**, always edible, **no effects** (built 2026-11-01; owner check: effects on the slice would be handed out 3 times per roll) |
 | Tobiko Roll (3 Rice Roll Slice 21 + frogspawn 0 -> 3) | 21 | 7 / 0.6 | **7 / 0.6** (ratio 1.0: unchanged) |
 | Nether Roll (2 porkchop 6 + cooked nether wart 6 -> 2) | 12 | 7 / 0.7 | **6 / 0.7** (bacon or Prepared Flesh inputs give less raw hunger; the roll stays 6) |
 | Cooked Nether Wart | wart 0 + bowl | 6 / 0.3 | 6 / 0.3 (as Cooked Rice 6 / 0.4; saturation kept) |
 
 Two consequences to know: the Rice Roll goes **up** (3 cooked rice is a heavy input), and the Ancient Roll comes out level with
 the Salmon Maki Roll (its chorus flower adds no hunger). Both follow from the rule as stated; a rarity bonus for the Ancient
-Roll would be a separate decision. The ratio **cannot be checked against "Vintage Delight rolls"**: Vintage Delight (the 56
-foods in the dump) has no roll or sushi item. If you meant another mod's rolls (Oceanic: Caviar, Sea Pickle, Shrimp; Rustic:
-Calamari, bell pepper), tell me which and I will add their input / output ratios and re-check the table; the FD-based values
-above stand until then.
+Roll would be a separate decision. The ratio check against the "Veggie Delight" rolls (owner, 2026-11-01) means Rustic Delight's bell pepper and cherry blossom
+rolls (the Veggies port has no rolls). They are 2 slices + 1 Cooked Rice -> 2 rolls, the same craft as the FD Salmon and Cod
+Rolls: bell pepper (slice 1) input 8, output 2 x 7 = 14 (1.75, same as FD); cherry blossom (petals, leaves and sapling carry no
+hunger) input 6, output 2 x 6 = 12. So they already sit on the FD ratio and add no new rule: they are cheap-raw-slice rolls
+like the fish rolls, while the Roll Delight rolls are cooked-food rolls, so the rule above (whole = 2/3 input, standalone
+cooked = 1.0) stands unchanged.
 
 ### 3.2 Blocks
 
@@ -323,7 +328,7 @@ Notes and flags:
 - **Still excluded:** `ends_delight` Shulker Meat and its cuts (the mod is going), the other shulker dishes, Squid Salad, Sea Salad, Caviar Toast, plated fish (Black Cod, Grilled Salmon, Garlic Baked Cod, the Stuffed Cods, Guardian Tartar, Cabbage-Wrapped Elder Guardian), cured fish (salted cod / salmon, surstromming, kippers), the other stews and Guardian Soups, the remaining candidates of 3.3.2.
 - **Two gaps, settled (owner, round seven):** (1) **cooked whole fish** is in, through the tag `#creativeengineering:food_family/fish/cooked` (13 items today: Cooked Cod, Salmon, Perch, Pike, Catfish, Lionfish, Guardian Tail, Lobster Tail, Crab Leg, Calamari, Baked Squid, plus Kippers and Surstromming, which the rule brings in although 3.3.2 had listed cured fish as out; say if those two should be excluded); (2) **`minecraft:pufferfish`** is in by id (typed `hazard`, so no fish tag holds it). It keeps its poison; chopsticks only lengthen the effects it gives (Poison, Hunger, Nausea), which is a downside for the player and is noted in ROLL-19's checks.
 
-**Lengthening.** Duration x 1.5 (config key in the CD config; the factor itself is still open) on each qualifying effect.
+**Lengthening.** Duration x 1.5 (built as `roll_delight-common.toml` `[chopsticks] lengthenFactor`, the member's own config, as the other CD members; D17) on each qualifying effect.
 Instant effects (Saturation, Instant Health) and effects the player already had longer are left alone. The amplifier never
 changes. Only 1 of ~36 roll and sashimi foods carries an effect today (2.2; Cooked Rice has Comfort, Glowing Calamari Roll has
 Glowing), so chopsticks matter little until seafood has effects. **D11 (owner): no effects are added in this port.** A note is
@@ -378,7 +383,7 @@ Not seen in `logs/latest.log` (the jar is not installed); found in data and code
 Code goes into a Creative Delight member (memory `creative-delight-routing`, Rustic precedent in
 [rustic_delight.md](rustic_delight.md) section 5): `development/creativeDelight/members/roll` (Gradle `:backportedRoll`,
 `bundled_in=creativeDelight`, mod id `roll_delight`), donor `roll_upstream/<jar>` read as hidden built-in packs
-(`UpstreamJars` pin, `DonorJars`). KubeJS rows in `kubejs/data/creative_delight/kubejs/roll_delight/` (server) and
+(`UpstreamJars` pin, `DonorJars`). KubeJS rows in `kubejs/data/creativedelight/kubejs/roll_delight/` (server) and
 `development/creativeDelight/src/main/resources/kubejs_startup/roll_delight/` (startup).
 
 0. **Port (Java):** register the ids kept by D3 (the Ancient Roll ids are back); foods as plain items with the values D6 fixes; Cooked Nether Wart
@@ -432,6 +437,31 @@ already in that family. "Different" below means a pattern the family does not ye
 
 Ordering: 0 before everything; 1 before 2-4 (ids must exist in the dump); 2 before 3, 4, 8, 10; 6 before 8; 10 before 11.
 
+### 4.2 Build notes (2026-11-01)
+
+- **Java** (`development/creativeDelight/members/roll`, package `com.SaintAlfonzo.creativedelight.roll`): `RollItems` (17 ids, D6 values),
+  `RollBlocks`, `RollMedleyBlock` (FeastBlock, `servings` 0-8, main hand only: empty takes, chopsticks eat in place, anything else
+  `PASS`), `WrappedChopsticksBlock` (`chopsticks` 1-4), `ChopsticksItem` (64, enchantment value 15, planks repair, two-line tooltip),
+  `logic/Chopsticks` (Start snapshot of effect durations when the off-hand item is a chopstick food and the main hand chopsticks;
+  Finish lengthens every effect that is new or longer, skips instant, ambient and Health Boost, 1 damage; FD Rice Roll Medley
+  through `RightClickBlock`), `logic/FrogspawnShears`, `client/RollClient` (per-food tooltip), `RollConfig`.
+- **Translator** (`upstream/RollTranslator`): upstream assets only; lang patched (B1, D4, tab name, our tooltip keys, upstream
+  description dropped); blockstates re-keyed (`servings = 8 - blockstate`, `chopsticks = blockstate + 1`). Upstream data is not
+  loaded at all; the data pack holds our three loot tables (medley: itself when full, else the bowl plus every serving left;
+  wrapped chopsticks: one per pair).
+- **Donor:** `roll_upstream/roll_delight-1.3.1-forge-1.20.1.jar` (upstream file renamed, bytes unchanged, sha1 `e23d4837...`);
+  `build_deploy.py` ships the folder (`UPSTREAM_DONORS`, `roll_upstream`).
+- **Scripts** (CD): `kubejs/data/creativedelight/kubejs/roll_delight/recipes.js` (all recipes via NCH: shaped / shapeless as upstream
+  with the port inputs, one assembly per roll and medley, five cuttings, pot recipe, `goldenGild`; the Slice & Dice pot copy covers
+  the Mixer), `tags.js` (`chopstick_foods` = 4 fish family tags + 122 ids, missing ids filtered and logged once;
+  `nether_roll_meat`; medleys knife-mineable and BlockRunner confectionery as FD feasts; wrapped chopsticks axe), startup
+  `roll_delight/food_values.js` (golden tier onto the Golden Roll), `compost.js` (rice / mushroom / ancient rolls 0.85, slices 0.5,
+  as the FD Kelp Roll), client `roll_delight/jei_info.js` (frogspawn shears page). Dicts, `transition_items.js`, `food_types.json`,
+  `gen_can_types.py` (Cooked Nether Wart can, waits on `/dumpall`), [names.md](names.md) 3.3, [can_parity.md](can_parity.md) 2.6.
+- **Not built (open):** Display Delight plates and the Cooked Nether Wart placed / coaster look (need art and `display_blocks.json`
+  rows in `backportedDisplay`); Item Physic and BlockRunner rows for the wrapped chopsticks. Waits on the game: `/dumpall`, then
+  `python3 tools/gen_can_types.py` (empty its `AWAIT_DUMP`), then `/cegen` (stack sizes, placeables, food families).
+
 ## 5. Decisions for the owner
 
 | # | Question | Recommendation | Default if not answered |
@@ -441,7 +471,7 @@ Ordering: 0 before everything; 1 before 2-4 (ids must exist in the dump); 2 befo
 | D3 | ~~Rice Roll duplicates FD Kelp Roll~~ | **Settled 2026-10-31: not an overlap, register Rice Roll / slice** (fix B1 name) | keep |
 | D4 | ~~"Amazing Salmon Roll" next to FD "Salmon Roll"~~ | **Settled 2026-10-31: renamed. Display names "Salmon Maki Roll" (whole) and "Salmon Maki" (slice); ids unchanged** | build |
 | D5 | ~~Chopsticks~~ | **Settled 2026-10-31: redesigned (3.3)**: normal eating, durability 64, no own effects, lengthen the food's, two-line tooltip, Unbreaking and Mending | build |
-| D6 | ~~Food values~~ | **Settled 2026-10-31: scale to the FD rolls by input hunger vs output hunger (3.1.1)**; "Vintage Delight rolls" could not be used, the mod has none (3.1.1) | build |
+| D6 | ~~Food values~~ | **Settled 2026-10-31: scale to the FD rolls by input hunger vs output hunger (3.1.1)**; checked against the Rustic bell pepper / cherry blossom rolls, which already match the FD ratio, no change (3.1.1) | build |
 | D7 | ~~Golden Roll eats 3 gold + 2 iron ingots~~ | **Settled 2026-10-31: treated like Golden Food's added foods (soup, steak), via `goldenGild` (2.3)**, iron dropped | golden food |
 | D8 | ~~Medleys hand out servings with no bowl~~ | **Settled 2026-10-31: built as the FD Rice Roll Medley (`FeastBlock` subclass), empty hand takes (3.2)** | build |
 | D9 | Frogspawn from shears (Carnivore's Frog Roe cut on the board is a second source; **Settled 2026-10-31: keep the shears source; a Carnivore source is valid if added, nothing to do (2.4)**) | Keep the shears drop and add a JEI info page; if Carnivore is ported too, keep both (different routes: placed block vs frog kill) and let Tobiko take vanilla frogspawn only | keep |
@@ -454,16 +484,17 @@ Ordering: 0 before everything; 1 before 2-4 (ids must exist in the dump); 2 befo
 | D16 | ~~Chopsticks anvil repair material~~ | **Settled 2026-10-31: any planks (`#minecraft:planks`)** | build |
 | D17 | ~~Lengthening factor~~ | **Settled 2026-10-31: x1.5, configurable** | build |
 
-Blocking a build: none. All of D1 to D17 are settled. One question remains on the value rule (3.1.1: which mod the "Vintage Delight rolls" are).
+Blocking a build: none. All of D1 to D17 are settled. No question remains on the value rule.
 
 ## 6. File map (planned)
 
 | Path | What |
 |---|---|
-| `roll_upstream/[1.20.1] Roll Delight-1.3.1-forge-.jar` | donor, unmodified, sha1-pinned |
+| `roll_upstream/roll_delight-1.3.1-forge-1.20.1.jar` | donor, unmodified (renamed), sha1-pinned |
 | `development/creativeDelight/members/roll/` | Java (items, blocks, chopsticks, events), translator, NOTICE |
-| `development/creativeDelight/src/main/resources/kubejs_startup/roll_delight/` | dict rows, food types, compost |
-| `kubejs/data/creative_delight/kubejs/roll_delight/recipes.js` | NCH recipes, assemblies, removals |
+| `development/creativeDelight/src/main/resources/kubejs_startup/roll_delight/` | golden food values, compost |
+| `kubejs/data/creativedelight/kubejs/roll_delight/tags.js`, `kubejs/assets/creativedelight/kubejs/roll_delight/jei_info.js` | tags, JEI info page |
+| `kubejs/data/creativedelight/kubejs/roll_delight/recipes.js` | NCH recipes, assemblies, removals |
 | `kubejs/startup_scripts/` `item_dict.js` | ids |
 | `feature_writeup/roll_delight.md` | this file |
 
@@ -511,3 +542,4 @@ Blocking a build: none. All of D1 to D17 are settled. One question remains on th
 - 2026-11-01 (fifth round): chopstick whitelist resolved to an explicit id list (3.3.1, 86 ids checked against the dump): 18 Rustic Delight foods, the Oceanic list, Miner's squid line, the pack's glowing calamari line, the noodle and pasta sweep (minus lasagna, gnocchi, acacia soup), rice dishes, dragon and shulker cuts; roll-family tag no longer used.
 - 2026-11-01 (sixth round): chopstick tag now takes the fish family tags (raw, raw_cut, cooked_cut) plus 22 ids (3.3.3); `_wood` Ender Paella / Pearl Pasta ids dropped (the pack removes them); End's Delight removal flagged for 7 listed ids.
 - 2026-11-01 (seventh round): cooked whole fish (family tag `fish/cooked`) and Pufferfish added to the chopstick tag (3.3.3); Kippers and Surstromming come in through the cooked tag.
+- 2026-11-01: BUILT (4.2): `backportedRoll` member nested in CD, CD scripts, donor folder in build_deploy; Golden Roll on the golden tier, slice 2 / 1.2 without effects; lengthen factor in `roll_delight-common.toml`. Not installed; SQ-ROLL queued. Open: Display Delight plates, wrapped chopsticks Item Physic / BlockRunner, dump-driven generators.

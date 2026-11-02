@@ -10,9 +10,9 @@ lines 54-66 and 157-201). Test ids marked "proposed" are free on 2026-10-31 in t
 (RC-19 to RC-39, RC-100 to RC-107, PL-10) were taken by other tests since and are renumbered below.
 
 Where the code lives now (moved 2026-10-25, [creative_delight.md](../creative_delight.md)): server scripts in
-`kubejs/data/creative_delight/kubejs/<mod>/` (oven tables in
-[creativeengineering/baking.js](../../kubejs/data/creative_delight/kubejs/creativeengineering/baking.js)), the family helper
-`global.CD.food(e)` in [cd_food.js](../../development/creativeDelight/src/main/resources/kubejs_startup/creative_delight/cd_food.js)
+`kubejs/data/creativedelight/kubejs/<mod>/` (oven tables in
+[creativeengineering/baking.js](../../kubejs/data/creativedelight/kubejs/creativeengineering/baking.js)), the family helper
+`global.CD.food(e)` in [cd_food.js](../../development/creativeDelight/src/main/resources/kubejs_startup/creativedelight/cd_food.js)
 (Creative Delight jar: an edit needs `:creativeDelight:build`, install, restart), CD startup items under
 `development/creativeDelight/src/main/resources/kubejs_startup/<mod>/`. Every cake, pie and cookie recipe of every mod is
 swept by its family call (`F._sweep`, cd_food.js 135) and rebuilt on shared bases (oven.md 2.6).
@@ -77,11 +77,11 @@ The zucchini quiche assembly the 1.1.04 changelog announced loads: pie crust -> 
 250 mB milk -> Zucchini Quiche.
 
 ### Now
-- Caller: [veggiesdelight/recipes.js](../../kubejs/data/creative_delight/kubejs/veggiesdelight/recipes.js) 61-66,
+- Caller: [veggiesdelight/recipes.js](../../kubejs/data/creativedelight/kubejs/veggiesdelight/recipes.js) 61-66,
   `global.CD.food(e).assemble(i.pie_crust, [zucchini x3, [cooked_mutton, cooked_chicken, cooked_beef, cooked_pork,
   cooked_bacon], { fill: Fluid.of(f.milk, 250) }], i.zucchini_quiche)`. Transition row `['zucchini_quiche']` exists
   (`transition_items.js` 46).
-- Cause: `F.assemble` in [cd_food.js](../../development/creativeDelight/src/main/resources/kubejs_startup/creative_delight/cd_food.js)
+- Cause: `F.assemble` in [cd_food.js](../../development/creativeDelight/src/main/resources/kubejs_startup/creativedelight/cd_food.js)
   187-190 tests `s.press`, then `s.fill`; every JS array has `Array.prototype.fill`, so the meat array becomes a
   `create:filling` step with an empty fluid (`Can't modify the empty stack` in the owner's `logs/kubejs/server.log`,
   2026-10-29). Not fixed: cd_food.js last edited 2026-10-29 20:07, lines 188-189 unchanged on 2026-10-31.
@@ -121,10 +121,10 @@ Every baked recipe takes flour (or cornmeal), every pie sits on a pie crust, eve
 
 ### Done (evidence 2026-10-31)
 - Cookies, pies, cakes: the baking overhaul 2026-10-22 (oven.md 2.6, OV-25 to OV-31): bases, crust and frosting in
-  [baking.js](../../kubejs/data/creative_delight/kubejs/creativeengineering/baking.js) 94-118 (cake base raw 99-101, baked
+  [baking.js](../../kubejs/data/creativedelight/kubejs/creativeengineering/baking.js) 94-118 (cake base raw 99-101, baked
   102-107; crust `3 flour/cornmeal + egg + milk` or `3 dough + milk` -> 3, 110-111; frosting 113). Every mod's recipe for
   a cake, pie, cookie, base or crust is swept (94-95 and each family call).
-- Strange eclair wheat -> flour: [baked_goods.js](../../kubejs/data/creative_delight/kubejs/creativeengineering/baked_goods.js)
+- Strange eclair wheat -> flour: [baked_goods.js](../../kubejs/data/creativedelight/kubejs/creativeengineering/baked_goods.js)
   16-19 (with bread, adzuki bun, banana bread, scones).
 - Frosting fluid and plain cake spout: baking.js 116-117 and 131 (baked base + 750 mB frosting; `dishes/ingredients #2`).
 - Sequenced assembly with spouting for every cake: moved to row #34 (same work; see TODO discrepancies in the report).
@@ -165,11 +165,11 @@ Muffins worth eating: more variants including two-fruit muffins with mixed, shor
 poppy), "fruit, milk, egg, sugar, flour", served on paper, a sequenced assembly, and cornmeal accepted wherever flour is.
 
 ### Now
-- `F.muffinBake(fruit, output)` ([cd_food.js](../../development/creativeDelight/src/main/resources/kubejs_startup/creative_delight/cd_food.js)
+- `F.muffinBake(fruit, output)` ([cd_food.js](../../development/creativeDelight/src/main/resources/kubejs_startup/creativedelight/cd_food.js)
   160-164): oven only, muffin tin, plated on paper, `[2 fruit, i.flour, i.t_milk_bottle, i.eggs, i.any_sweetener]` -> 4
   (`V.muffinsOven`, line 53). It removes the mods' Cooking Pot recipes (owner 2026-10-29, shipped in 1.1.05; Slice &
   Dice's mixer copies go with them). Takes **wheat flour only** (`i.flour`, line 163): the cornmeal ask is not built.
-- Three muffins ([baking.js](../../kubejs/data/creative_delight/kubejs/creativeengineering/baking.js) 143-145): Fruits
+- Three muffins ([baking.js](../../kubejs/data/creativedelight/kubejs/creativeengineering/baking.js) 143-145): Fruits
   Delight blueberry (5 / 0.4, night vision + brightening 20 s) and cranberry (5 / 0.4, shrinking 80 s), Veggies Delight's
   sweet potato cupcake, named Sweet Potato Muffin (row #32; its own sweet potato dough craft stays).
 - No new muffin item, no muffin assembly. No poppy seed item; `i.poppy` is the flower.
@@ -220,7 +220,7 @@ juice.
   `sequenced_assembly/{apple,mulberry,pumpkin}_pie` and `sweet_berry_cheesecake` and FD's chocolate pie filling (dump
   2026-10-30: no pie assembly id; only quiche, shepherd's pie and horror lasagna assemblies). The family rule R5 "no other
   recipe" and the planned R6 "assembly for every pie" (food_families.md `pie/whole`) are this row.
-- `PIES` ([baking.js](../../kubejs/data/creative_delight/kubejs/creativeengineering/baking.js) 57-71): apple, chocolate,
+- `PIES` ([baking.js](../../kubejs/data/creativedelight/kubejs/creativeengineering/baking.js) 57-71): apple, chocolate,
   chorus, mulberry, pumpkin, rose hip, salmonberry, durian, pineapple, sweet berry cheesecake (Sweet Berry Pie), sweet
   potato, truffle, End's chorus fruit pie; oven: crust + 2 flavour + 2 sugar. Sponge Pie is a one-off (154-155).
 - Chorus juice is a fluid now (`f.chorus_juice` `creativeengineering:chorus_juice`, fluid_dict 89; mixing, spout,
@@ -273,7 +273,7 @@ MG-10; CA's sprite, `neapolitan:chocolate_cake` merged by `kubejs/startup_script
 the spout 129).
 
 ### Now
-- Cakes: `CAKES` ([baking.js](../../kubejs/data/creative_delight/kubejs/creativeengineering/baking.js) 48-56) through
+- Cakes: `CAKES` ([baking.js](../../kubejs/data/creativedelight/kubejs/creativeengineering/baking.js) 48-56) through
   `F.cakeBake` (cd_food.js 136-143): baked base + frosting + 2 flavour by hand, raw base in the oven (cake pan).
 - (b) `fruitsdelight:mangosteen_cake` (`i.mangosteen_cake` 12461) is a sneak-placed bowl food, now a `CAKES` row (54);
   no rename in any lang file (grep 2026-10-31).
@@ -290,7 +290,7 @@ the spout 129).
 ### Build
 1. (c) Add the five CCK cake slices to `global.removedItems` (restart): hidden in JEI, tags stripped. The `cake/slice`
    family table then drops them on the next `/cegen`.
-2. (b) Rename in `kubejs/assets/creative_delight/kubejs/fruitsdelight/client.js` (new, the CD client pattern of
+2. (b) Rename in `kubejs/assets/creativedelight/kubejs/fruitsdelight/client.js` (new, the CD client pattern of
    `veggiesdelight/client.js`): `e.renameItem(i.mangosteen_cake, '<name>')`. If it stops being a cake, move it from
    `CAKES` to its own oven line (bowl as the plating container) and out of `cake/whole`.
 3. (d) Placement: the cheap route is a coaster model per slice (format of
@@ -332,7 +332,7 @@ retextured, owner 2026-10-21), with more variants.
 - `create_factory:cake_paste` (`i.cake_paste` 5348): only Create Factory's heated mixing (sugar, `create:dough`, egg,
   250 mB milk) **(jar)**; nothing in the pack touches it (grep 2026-10-31). `uncooked_waffle` presses from paste
   (`create_factory:uncooked_waffle`, dump), `waffle` smokes, flavoured waffles spout 250 mB onto a waffle.
-- Tarts: `F.tartBake` ([baking.js](../../kubejs/data/creative_delight/kubejs/creativeengineering/baking.js) 149-150,
+- Tarts: `F.tartBake` ([baking.js](../../kubejs/data/creativedelight/kubejs/creativeengineering/baking.js) 149-150,
   cd_food.js 170-173): fruit + crust + egg + sugar + milk bottle -> 2 on the baking sheet; the Fruits Delight pot
   recipes stay. No rename yet (no lang entry). The filling cans are already Canned Fig / Lemon Pie Filling.
 - food_families.md `pie/small` R4 "Planned: every tart becomes a pie".
@@ -341,7 +341,7 @@ retextured, owner 2026-10-21), with more variants.
 1. Pot cake paste: `R.fdCooking([i.any_sweetener, i.any_dough, i.eggs, i.t_milk_bottle], i.cake_paste, e,
    'cake_paste_manual_only', 0.1, 200)` (the suffix keeps Slice & Dice from adding a mixer twin of Create Factory's);
    swap the mixer's egg and dough to `i.eggs` / `i.any_dough` with `R.replaceInput({ id: 'create_factory:cake_paste' },
-   ...)`. File: a new `kubejs/data/creative_delight/kubejs/create_factory/recipes.js` (`// requires: create_factory`).
+   ...)`. File: a new `kubejs/data/creativedelight/kubejs/create_factory/recipes.js` (`// requires: create_factory`).
 2. Waffles: oven `R.ceBaking([i.uncooked_waffle], Item.of(i.waffle, 1), e, 'waffle', F.ware.sheet)` and
    `R.ceBaking([i.cake_paste], ...)` from paste in one bake; keep the smoker (dessert/waffle rule: "Oven for the plain
    bake; toppings by Spout"). Same work as #36's waffle line: build once.
@@ -373,7 +373,7 @@ milling or the mortar turns sourdough back into starter; a starter keeps its sta
 sourdough made from it. Sourdough counts as any dough in recipes (scratchpad 2026-10-22).
 
 ### Now
-- [pneumaticcraft/recipes.js](../../kubejs/data/creative_delight/kubejs/pneumaticcraft/recipes.js) 25-46: PNC's
+- [pneumaticcraft/recipes.js](../../kubejs/data/creativedelight/kubejs/pneumaticcraft/recipes.js) 25-46: PNC's
   `sourdough` replaced by a shapeless yeast bucket + 8 dough -> **1** (line 26; PNC's own gave 8 from 8 flour, so likely a
   bug); smoking -> sourdough bread (29); oven `sourdough_bread_1/3/6` (30-35, baking sheet, row #31); knife on sourdough
   bread -> 3 bread (38); heated mixing 500 mB yeast + 8 dough -> 8 (42); IE bottler 50 mB + dough -> 1 (46).
@@ -432,7 +432,7 @@ the sourdough chain (#7).
 
 ### Build
 1. In game first: culture bucket in a 1-deep pool, drop sugar in, place water next to it; note what fails.
-2. Recipes (`kubejs/data/creative_delight/kubejs/pneumaticcraft/recipes.js`): `R.shapeless(i.yeast_culture_bucket,
+2. Recipes (`kubejs/data/creativedelight/kubejs/pneumaticcraft/recipes.js`): `R.shapeless(i.yeast_culture_bucket,
    [i.water_bucket, [i.brown_mushroom_colony, i.red_mushroom_colony], i.any_sweetener], e, 'yeast_culture_bucket')` with
    `.consumeIngredient(i.water_bucket)` (no spare empty bucket); `R.createMixing(Fluid.of(f.yeast_culture, 500),
    [Fluid.of(f.water, 500), [colonies, mushroom blocks], i.any_sweetener], e, 'yeast_culture_mixing', 'heated')`.
@@ -456,7 +456,7 @@ join), `i.water_bucket` 201.
 Status In Progress / Work KubeJS / TODO `baking/baked-goods #9` (cooking plan baked/sliced bread, scratchpad 2026-10-21)
 
 Superseded by row #28 (owner 2026-10-29, built, shipped in 1.1.05): any bread works in any bread recipe, no burger, bun or
-square-slice restrictions. [bread_recipes.js](../../kubejs/data/creative_delight/kubejs/creativeengineering/bread_recipes.js)
+square-slice restrictions. [bread_recipes.js](../../kubejs/data/creativedelight/kubejs/creativeengineering/bread_recipes.js)
 swaps every vanilla-bread / bread-slice slot for `#forge:bread` (loaves, flavoured breads, slice, toast); toast-only slots
 stay toast; RC-170, RC-171 ([recipes_cooking.md](../recipes_cooking.md)). The 2026-10-21 per-sandwich audit (slices vs
 rolls vs buns) is dropped. What could remain: a burger bun item (oven, dough + egg -> 4 on the baking sheet, in
@@ -472,7 +472,7 @@ Status In Progress / Work KubeJS / TODO `baking/baked-goods #10` (cooking plan m
 The crustless bread block comes from cutting a bread block with a knife; the bread slab has the standard 3 -> 6 craft.
 
 ### Now
-[architects_palette/recipes.js](../../kubejs/data/creative_delight/kubejs/architects_palette/recipes.js) 15-29: removes
+[architects_palette/recipes.js](../../kubejs/data/creativedelight/kubejs/architects_palette/recipes.js) 15-29: removes
 Architect's Palette's `bread_block`, `bread_slab` and `stonecutting/bread_nub`; smokes Create Compressed's dough block into
 a bread block (19); Create saw bread block -> 16 bread (22); **knife on a bread block -> 16 bread** (25); stonecutter bread
 block -> slab (27), -> crustless block (28), slab -> nub (29).
@@ -504,7 +504,7 @@ Fruits Delight's durian and pineapple "pies" (hand-held items, no placed block o
 
 ### Now
 - `fruitsdelight:durian_pie`, `pineapple_pie` (item_dict 12422, 12486): item sprites only, no block textures **(jar)**;
-  5 hunger each. In `PIES` ([baking.js](../../kubejs/data/creative_delight/kubejs/creativeengineering/baking.js) 65-66):
+  5 hunger each. In `PIES` ([baking.js](../../kubejs/data/creativedelight/kubejs/creativeengineering/baking.js) 65-66):
   crust + 2 durian flesh / pineapple slice + 2 sugar -> 1 in the pie tin (a whole pie's cost); Fruits Delight's pot
   recipes (2 per batch) are swept.
 - Cans: `canned_durian_pie_filling`, `canned_pineapple_pie_filling` (`kubejs/generation_scripts/food/can_types.json`,
@@ -545,7 +545,7 @@ cherry jelly / jam share the cherry route (jam: `dishes/jams #4`).
 - The truffle pie is the same case, built 2026-10-31: [truffle_pie_item.js](../../development/creativeDelight/src/main/resources/kubejs_startup/create_central_kitchen/truffle_pie_item.js)
   registers a `BlockItem` under CCK's id for CCK's block (`e.createCustom`), item model
   `development/creativeDelight/src/main/resources/assets/create_central_kitchen/models/item/truffle_pie.json`, name in
-  `kubejs/assets/creative_delight/kubejs/create_central_kitchen/names.js`, `PIES` row with no can (baking.js 69).
+  `kubejs/assets/creativedelight/kubejs/create_central_kitchen/names.js`, `PIES` row with no can (baking.js 69).
 - `i.cherry` = `vinery:cherry` (item_dict 11209). No `canned_cherry_pie_filling`.
 
 ### Build
@@ -768,7 +768,7 @@ The chorus cookie is made from an uncanny cookie.
 ### Now
 - End's Delight is integrated (CD member): `i.chorus_cookie` `ends_delight:chorus_cookie` (item_dict 12324),
   `i.chorus_fruit_grain` (12327). The baking audit 2026-10-27 put it in `COOKIES`
-  ([baking.js](../../kubejs/data/creative_delight/kubejs/creativeengineering/baking.js) 81): cookie dough + 2 chorus fruit
+  ([baking.js](../../kubejs/data/creativedelight/kubejs/creativeengineering/baking.js) 81): cookie dough + 2 chorus fruit
   grain -> 12, End's own recipe swept. Not from the uncanny cookie (food_families.md 4.6 says so).
 - Uncanny cookie `endersdelight:uncanny_cookies` (12049): cookie dough + 2 mite crust -> 12 (baking.js 76).
 
@@ -794,7 +794,7 @@ The oatmeal cookie uses oat dough. Oatmeal raisin cookie: oat dough + 1 raw oat 
 cookie.
 
 ### Now
-- `['oatmeal_cookie', i.raw_oats]` in `COOKIES` ([baking.js](../../kubejs/data/creative_delight/kubejs/creativeengineering/baking.js)
+- `['oatmeal_cookie', i.raw_oats]` in `COOKIES` ([baking.js](../../kubejs/data/creativedelight/kubejs/creativeengineering/baking.js)
   78): cookie dough (any dough + 2 sugar; oat dough counts, it is in `#forge:dough`) + 2 raw oats -> 12. Unchanged
   2026-10-31.
 - `i.oat_dough` (14463), `i.raw_oats` (14484), `i.oatmeal_cookie` (14466). No raisin item; grapes `i.red_grape` 11273,
@@ -825,7 +825,7 @@ Remove the shapeless recipes that turn a pie into a crust.
 
 ### Now (checked 2026-10-31)
 The 2026-10-30 crafting dump (`kubejs/exported/recipes/crafting_audit.json`) has exactly two recipes with a pie crust
-result: `creative_delight:shapeless/pie_crust_flour_manual_only` and `pie_crust_dough_manual_only`; `all.csv` has no other
+result: `creativedelight:shapeless/pie_crust_flour_manual_only` and `pie_crust_dough_manual_only`; `all.csv` has no other
 crust recipe of any type. baking.js 94-95 sweeps every crust-making recipe but the pack's. Nothing to remove.
 
 ### Build
@@ -841,7 +841,7 @@ scratch queue ask the same scan and can be marked answered.
 Status In Progress / Work KubeJS / lang / resource pack / TODO `baking/baked-goods #32` (decided 2026-10-29: merge into muffins)
 
 ### Done
-- Sweet Potato Cupcake named Sweet Potato Muffin (`kubejs/assets/creative_delight/kubejs/veggiesdelight/client.js` 6-7,
+- Sweet Potato Cupcake named Sweet Potato Muffin (`kubejs/assets/creativedelight/kubejs/veggiesdelight/client.js` 6-7,
   id `veggiesdelight:sweet_potato_cupcake` kept) and muffins out of the Cooking Pot (`F.muffinBake`, cd_food.js 160-164):
   both shipped in 1.1.05 (changelog 1.1.05.md 95-96). OV-36, OV-37 ([oven.md](../oven.md)).
 
@@ -869,7 +869,7 @@ A glass baking dish next to the baking sheet, muffin tin, pie tin and cake pan, 
 ### Now
 - Bakeware items: CD [bakeware.js](../../development/creativeDelight/src/main/resources/kubejs_startup/creativeengineering/bakeware.js)
   13-18; dict keys item_dict 38-46 (`i.t_bakeware_<kind>`, `i.t_bakeware` the tool-slot filter); tags in CD
-  [creativeengineering/tags.js](../../kubejs/data/creative_delight/kubejs/creativeengineering/tags.js) 23-29; `ware` keys in
+  [creativeengineering/tags.js](../../kubejs/data/creativedelight/kubejs/creativeengineering/tags.js) 23-29; `ware` keys in
   cd_food.js 63-68; hammered chain in baking.js 176-179 (iron plate -> sheet -> muffin tin -> pie tin -> cake pan).
 
 ### Build

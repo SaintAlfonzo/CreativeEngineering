@@ -2,7 +2,7 @@
 
 Written 2026-10-25, scope revised 2026-10-25 (owner). **Status: framework built, scratch test queued (2026-10-25, section 19):**
 startup loader and helpers in patcherMod, NCH namespace option, repack and bundle build, the Farmer's Delight / Ocean's /
-Oceanic / End's repacks nested in `creative_delight-1.0.0.jar`, Oceanic fishing net overlay; FD staged for the 1.3.4
+Oceanic / End's repacks nested in `creativedelight-1.0.0.jar`, Oceanic fishing net overlay; FD staged for the 1.3.4
 backports (section 21). Live since 1.1.03 (deployed 2026-10-26); the latest build (Delightful HUD effect icons, Kettle bar, banana forage mixins, Ender's chorus flame seasons) installed in `mods/` 2026-10-31 00:29, not yet booted (scan 2026-10-31). The four ports, the QoL moves, the
 member script rows, the tool and misc dicts and swappers are not done (section 19.3); the food dict is built (13.5, 2026-10-25). Goal (owner):
 fold the Delight add-ons the pack owns into a single Forge 1.19.2 jar, **Creative Delight**, "multiple jars in a trenchcoat".
@@ -43,9 +43,10 @@ engine" now means these scripts.
 | Mod | Jar in `mods/` | Mod id | Licence (from `mods.toml`) | Writeup | Integration so far |
 |---|---|---|---|---|---|
 | End's Delight | `ends_delight-1.19.2-2.1.jar` | `ends_delight` | MIT (FoggyHillside) | [ends_delight.md](ends_delight.md) | CD member `repackedEnds` -02 (overlay: dragon loot, tooth tier mixin, 13 textures) and rows in CD `ends_delight/`, BUILT 2026-10-25 (ends_delight.md 5) |
+| Nether's Delight | `NethersDelight-1.19-3.1.jar` (until the CD install moves it out) | `nethersdelight` | MIT (Umpaz) | [nethers_delight.md](nethers_delight.md) | CD member `repackedNethers` -01 (overlay: Potted Mimicarnation, Fungus Colony 4.0 rules mixin, 4.0 recipe paths) and rows in CD `nethersdelight/`, BUILT 2026-11-01, not installed (nethers_delight.md 4.9) |
 | Ender's Delight | `endersdelight-1.19-1.2.2.jar` | `endersdelight` | **All rights reserved** (Ax3dgaming, Furti Two) | [ends_delight.md](ends_delight.md) | dict, cooking, potions, `end.js`, shield and damage tags |
-| Ender's Delight Additions | in `creative_delight` (member `endersAdditions`) | `enders_additions` (registers `endersdelight:` ids) | MIT art and data from Ender's 1.1.4 (Axedgaming); code GPL3 | [ends_delight.md](ends_delight.md) 5.3 | BUILT 2026-10-25: 4 End plants, 6 items, End House, Chorus Crate and Endstone Stove loot tables |
-| Cooking for Blockheads Additions | in `creative_delight` (member `blockheadsAdditions`); Cooking for Blockheads itself stays `cookingforblockheads-forge-1.19.2-13.3.4.jar` | `blockheads_additions` (registers `cookingforblockheads:` ids) | Cooking for Blockheads **All rights reserved** (BlayTheNinth; modpack use only, no rehosting or published modified files), so not repacked; member code, art and data ours, GPL3 | [kitchen.md](kitchen.md) 9 | BUILT 2026-10-31: 40 wood racks, the CfB mixins, corner storage and counter toppers from patcherMod, fridge fill in code |
+| Ender's Delight Additions | in `creativedelight` (member `endersAdditions`) | `enders_additions` (registers `endersdelight:` ids) | MIT art and data from Ender's 1.1.4 (Axedgaming); code GPL3 | [ends_delight.md](ends_delight.md) 5.3 | BUILT 2026-10-25: 4 End plants, 6 items, End House, Chorus Crate and Endstone Stove loot tables |
+| Cooking for Blockheads Additions | in `creativedelight` (member `blockheadsAdditions`); Cooking for Blockheads itself stays `cookingforblockheads-forge-1.19.2-13.3.4.jar` | `blockheads_additions` (registers `cookingforblockheads:` ids) | Cooking for Blockheads **All rights reserved** (BlayTheNinth; modpack use only, no rehosting or published modified files), so not repacked; member code, art and data ours, GPL3 | [kitchen.md](kitchen.md) 9 | BUILT 2026-10-31: 40 wood racks, the CfB mixins, corner storage and counter toppers from patcherMod, fridge fill in code |
 | Ocean's Delight | `oceansdelight-1.0.2-1.19.2.jar` | `oceansdelight` | MIT (Scouter456) | [ocean_delight.md](ocean_delight.md) | names (caviar) only |
 | Oceanic Delight | `oceanic_delight-1.0.1-forge-1.19.2.jar` | `oceanic_delight` | MIT (DariusZeBaguette, MCreator build) | [ocean_delight.md](ocean_delight.md) | dict block, fishing net mixin and loot tables |
 
@@ -60,10 +61,10 @@ Consequences to check at build time: the Forge mod list, JEI's mod-name line and
 so tooltips show the suffix; pack lang overrides that spell a mod name (`namechanges.js`, `jeed_providers`, tooltip
 scripts) must be grepped for the old names; `config/jei/ingredient-list-mod-sort-order.ini` is keyed by mod id and is
 unaffected; `mod_sides.md` keeps one row for the jar and lists the member ids in its notes. The jar's own top-level mod id
-for the manifest is `creative_delight` (no registry content under it).
+for the manifest is `creativedelight` (no registry content under it).
 
 Not in this jar (native builds with no pack Java, or hooks that belong elsewhere): Hostile Delight ([hostile_delight.md](hostile_delight.md)),
-Nether's Delight ([nethers_delight.md](nethers_delight.md); stays the installed third-party jar), the goose golden egg
+the goose golden egg
 (`incubationAdditions`). Decision for the pack Java that touches these: section 3.
 
 ## 1. What changed in each port
@@ -244,7 +245,7 @@ the Creative Delight jar or to patcherMod. Counts below are literal `namespace:`
 | Licences | Veggies, Fungi MIT; Vintage MIT 0.1.6 / GPL-3.0 KOTS; End's, Ocean's, Oceanic MIT; Miner's all rights reserved (code too); Ender's all rights reserved | Merged jar is GPLv3 with the MIT notices kept (per-source `NOTICE-upstream-MIT.txt`); it **may not contain** Miner's or Ender's upstream assets, data or code |
 | Donors | `miners_upstream/` (one jar), outside `mods/`, sha1-pinned, own deploy category (Ender's would need one under route 2.1 b) | Unchanged by a merge; `UPSTREAM_DONORS` in `tools/build_deploy.py` keys donors to the port name `backportedMiners` |
 | Build | `ce.forge-mod` assumes one `mod_id` per project; mixin configs, refmaps and ATs are per project | Flat shape: a multi-mod variant with merged refmaps and ATs. **Nested shape (14.1 to 14.3): not needed**, each member keeps its own; new work is the repack and bundle plugins |
-| Scripts | CD's KubeJS scripts live in the jar (section 10.3) and are authored in the pack's `kubejs/data/creative_delight/kubejs/` and `kubejs/assets/creative_delight/kubejs/` (10.4) | The build copies those two trees into the jar at the same paths; a script error is a KubeJS error in `server.log` / `client.log`, never a crash |
+| Scripts | CD's KubeJS scripts live in the jar (section 10.3) and are authored in the pack's `kubejs/data/creativedelight/kubejs/` and `kubejs/assets/creativedelight/kubejs/` (10.4) | The build copies those two trees into the jar at the same paths; a script error is a KubeJS error in `server.log` / `client.log`, never a crash |
 | Mixins | `vintagedelight`, `fungidelight`, `miners_delight` each have a `*.mixins.json` (Veggies has one, 10 lines); Oceanic gains one if the fishing net mixin moves | One config per mod id keeps class paths and refmap names stable |
 | Dependencies | All need `farmersdelight`; compile libs differ (JEI for Vintage, Miner's; Oceanic lists AppleSkin, JEED, JEI) | Union of compile deps; runtime requirements unchanged, soft stays soft |
 | Deploy | `IN_TREE_MODS` lists the ports; `replaces_jars` differs per project; `mod_sides.md` has one row per jar | One project entry, one row, `replaces_jars` is the union of the members' globs, including `ends_delight-*`, `oceansdelight-*`, `oceanic_delight-*` once imported |
@@ -256,7 +257,7 @@ the Creative Delight jar or to patcherMod. Counts below are literal `namespace:`
 1. **Freeze.** Land or park each member's open work first (Fungi scratch test SQ-FGD, Miner's SQ-MDP/SQ-MD-01; the unwritten
    End's and Ocean's integration passes in the TODO rows). A merge on top of unfinished members makes regressions hard to
    attribute.
-2. **New project `development/creativeDelight`** (jar and manifest mod id `creative_delight`; the member ids stay as
+2. **New project `development/creativeDelight`** (jar and manifest mod id `creativedelight`; the member ids stay as
    `[[mods]]` entries, each with the " (Creative Delight)" display name). Source layout keeps each member's package intact
    (`net.mehdinoui.*`, `net.ribs.*`, `com.sammy.*`, the End's / Ocean's / Oceanic packages): `git mv` per port with history
    kept; the native jars (MIT) are brought in as decompiled-and-verified source or, simpler, as a repack of their classes
@@ -341,7 +342,7 @@ classes, lives in a compartment that loads only when that mod is present (sectio
 | ID | Feature | Writeup | Today | Becomes |
 |---|---|---|---|---|
 | QoL-1 | Remainder buffer: bottles, bowls, buckets stay in the Farmer's Delight pot and kettle (take-only leftover slots, stall when full, automation) | [remainder_buffer.md](remainder_buffer.md) | patcherMod mixins on FD; the oven half is native pack code for the Cooking for Blockheads oven | CD compartment `farmersdelight`; the oven half is a compartment `cooking_for_blockheads` (loaded only when that mod is). Keg is parked with Brewin' |
-| QoL-2 | Placeable-food tooltip lines | [placeable_food.md](placeable_food.md) | KubeJS + `/dumpplaceable` | CD client scripts (`assets/creative_delight/kubejs/`); lines for non-member mods are files with `// requires:` |
+| QoL-2 | Placeable-food tooltip lines | [placeable_food.md](placeable_food.md) | KubeJS + `/dumpplaceable` | CD client scripts (`assets/creativedelight/kubejs/`); lines for non-member mods are files with `// requires:` |
 | QoL-3 | Food types and the Quark saturation word (rules in development) | [food_families.md](food_families.md) | KubeJS tables | CD scripts, tables keyed by the food dict (section 13); startup tables need the startup loader (10.5) |
 | QoL-4 | Compost rows for member foods | compost framework (README index) | KubeJS | CD startup script calling the pack's compost helper (needs 10.5; until then the rows stay in `compost_rules.js`) |
 | QoL-5 | Heatless pot routes and grid-meal moves (`_manual_only`) | member writeups | KubeJS cooking rules | CD server scripts through `global.NCH`, as today |
@@ -435,15 +436,15 @@ What goes where in the CD jar:
 | Kind | Path in the jar | Notes |
 |---|---|---|
 | A member's own recipes, loot, worldgen, tags under its namespace | `data/<member ns>/...` | Plain data, as the ports already ship it; unchanged |
-| Pack integration for members: cooking rules, `_manual_only` moves, heatless routes, cans, tags, loot `L.add` rows, trades, item merges | `data/creative_delight/kubejs/<member>/*.js` (server) | Calls `global.NCH`, `global.tags`, `global.LOOT`; one folder per member so a member's rows move as a unit |
+| Pack integration for members: cooking rules, `_manual_only` moves, heatless routes, cans, tags, loot `L.add` rows, trades, item merges | `data/creativedelight/kubejs/<member>/*.js` (server) | Calls `global.NCH`, `global.tags`, `global.LOOT`; one folder per member so a member's rows move as a unit |
 | Rows for non-member mods (Create, IE, Display Delight, Rustic Delight, ...) | same tree, files headed `// requires: <mod>` | Skipped when the mod is absent (section 12) |
-| Tooltips, JEI info pages, name changes | `assets/creative_delight/kubejs/<member>/*.js` (client) | Same helpers the pack's client scripts use |
+| Tooltips, JEI info pages, name changes | `assets/creativedelight/kubejs/<member>/*.js` (client) | Same helpers the pack's client scripts use |
 | Startup parts: dict keys of member items, food dict masks, compost rows, food types | `kubejs_startup/<member>/*.js` at the jar root (not a resource path, so no pack sees it) | Needs the loader (10.5); until it exists these stay in the pack's `startup_scripts` |
 
 - **Recipe ids.** NCH names recipes `${global.NCH.modId}:<type>/<suffix>` with `modId` `creativeengineering`. CD
   recipes would then sit in the pack namespace. Extend the helper (CLAUDE.md: extend, do not bypass) with a namespace
-  option, for example a per-call `ns` or a scoped `NCH.withNamespace('creative_delight', () => ...)`, so CD recipe ids are
-  `creative_delight:<type>/<suffix>` (decided, Q24). Existing ids that players or JEI bookmarks know keep their old names until the
+  option, for example a per-call `ns` or a scoped `NCH.withNamespace('creativedelight', () => ...)`, so CD recipe ids are
+  `creativedelight:<type>/<suffix>` (decided, Q24). Existing ids that players or JEI bookmarks know keep their old names until the
   move; a move changes the id, not the recipe.
 - **Ids in scripts.** CD scripts use dict keys (`i.x`, `f.x`), never literal `ns:id`, the same rule as the pack.
 - **Config values.** `NCH.cfg()` already reads `CEConfig` from patcherMod; CD scripts get pack-wide values the same way.
@@ -454,14 +455,14 @@ What goes where in the CD jar:
 
 ### 10.4 Development loop: one path in the pack folder and in the jar
 
-- **Authoring location:** CD server scripts live in `kubejs/data/creative_delight/kubejs/`, client scripts in
-  `kubejs/assets/creative_delight/kubejs/`. KubeJS serves `kubejs/data` and `kubejs/assets` as packs, so the scripts load
+- **Authoring location:** CD server scripts live in `kubejs/data/creativedelight/kubejs/`, client scripts in
+  `kubejs/assets/creativedelight/kubejs/`. KubeJS serves `kubejs/data` and `kubejs/assets` as packs, so the scripts load
   from there with `/reload` or F3+T, without a jar rebuild. The CD build copies both trees into the jar at the **same
   resource paths**.
 - **No double load:** the resource manager returns one file per path (the highest pack wins), so a script present in both
   the folder and the jar runs once. Which copy wins (expected: the `kubejs/` folder pack, above mod resources) is SQ-KS-03.
-- **Deploy:** ship the jar copy only, and exclude `kubejs/data/creative_delight/kubejs/` and
-  `kubejs/assets/creative_delight/kubejs/` from the pack's deploy, so a CD update is a jar update (decided, Q25).
+- **Deploy:** ship the jar copy only, and exclude `kubejs/data/creativedelight/kubejs/` and
+  `kubejs/assets/creativedelight/kubejs/` from the pack's deploy, so a CD update is a jar update (decided, Q25).
 - **Startup scripts** need a restart anyway; they are authored in the CD project (`src/main/resources/kubejs_startup/`)
   and loaded from the jar in dev too (`installToMods`, restart).
 - **Offline tests:** the headless Rhino harness (memory `kubejs-headless-rhino-harness`) loads NCH, the dicts and a CD
@@ -501,7 +502,7 @@ Any mod (CD, or another in-tree mod) needs no Java for this: a `mods.toml` depen
 ```
 
 ```js
-// data/creative_delight/kubejs/veggies/cooking.js
+// data/creativedelight/kubejs/veggies/cooking.js
 // requires: veggiesdelight
 const i = global.item
 
@@ -519,10 +520,19 @@ relies on patcherMod's pack loading first. CD and patcherMod ship together; the 
 
 Unlike patcherMod, Creative Delight runs **swappers** on removed or replaced items. No notes yet on when they run.
 
+**Built 2026-11-01 (registry half):** the lists and their world half live in Common, not CD: `swap/SwapLists` reads
+`data/<modid>/swaps/*.json` from every loaded jar and `swap/SwapRemapper` remaps them on Forge's `MissingMappingsEvent`
+(creative_split.md 7.7). Format as proposed below plus a `namespaces` table. First use: the `creative_delight` ->
+`creativedelight` id move. The script half (row 2) and live-item merges are still open.
+Survivors are resolved in Forge's ACTIVE registry: on a world load the event comes from the STAGING copy, which holds
+only the save's ids (1.1.06 looked there and left every renamed block missing; fixed in 1.1.07, scratch run
+2026-11-01 7). Blocks in chunks are saved by name, so a world opened once without the remap keeps unresolved names
+with no snapshot entry, and no later boot remaps them.
+
 - **Replacement list.** Every merge or swap records, for the surviving item, the old items it replaced as
   `namespace:path` strings (namespace kept, since the old mod may be gone): `new_id -> [old_id, ...]`. The list is retained
   in the jar as data and never pruned, so a world that still holds an old version can be fixed whenever the list is read.
-- **Format (proposal):** `data/creative_delight/swaps/<name>.json` with `{ "replaces": { "creative_delight:thing": ["oldmod:thing", ...] } }`
+- **Format (proposal):** `data/creativedelight/swaps/<name>.json` with `{ "replaces": { "creativedelight:thing": ["oldmod:thing", ...] } }`
   (one list per survivor), plus optional `block` and `entity` sections later.
 - **Swapper (third round):** the lists stay JSON data; the recipe, loot and tag half is a CD server script that reads them
   and feeds the existing item-merge path (`global.itemMerges`, `server_scripts/other/item_merges.js`), so the pack's merge
@@ -547,7 +557,7 @@ Delight, ...) are **applied if those mods are loaded and skipped if not**, never
   that only changes someone else's mod carries no name change and is simply inactive when that mod is absent.
 - Pack-wide effects (config-driven values from `NCH.cfg`) stay in patcherMod's config and are read through it.
 
-**Built 2026-10-25 (first Java compartment):** `creative_delight.mixins.json` with `compat/CDMixinPlugin`. A mixin in
+**Built 2026-10-25 (first Java compartment):** `creativedelight.mixins.json` with `compat/CDMixinPlugin`. A mixin in
 `com.SaintAlfonzo.creativedelight.mixin.<modid>.` applies only when `<modid>` is loaded (`LoadingModList`), and only at
 the version in `FOR_VERSION` when the compartment fixes one jar's bugs. First user: `mixin/fruitsdelight/` (Fruits Delight
 0.5.11 fixes, [fruits_delight.md](fruits_delight.md) 5). Compile-only jars for compartments go in CD's own `libs/`
@@ -652,8 +662,8 @@ Final lists (the open part of Q15, settled while building; change them in `food_
 
 Decisions for the owner (defaults taken; renaming is a find-and-replace while nothing reads `f`):
 
-- Juices are `drink_juice_<name>`, so all drinks sit together for drink rules. Jams are `fruit_jam_<name>`. The other
-  reading of the owner's form list would be `fruit_juice_apple`.
+- Juices are `fruit_juice_<name>` (owner 2026-11-01; were `drink_juice_<name>`), beside the jams (`fruit_jam_<name>`).
+  All 26 juice keys, carrot, dandelion and the grape wines included, are under `fruit` as the jams are.
 - `f` names items only. Tag values (`i.milk = '#forge:milk'`, `i.flour`) stay in `i` / `global.tags`.
 - Exotic mob ingredients from End's and Hostile Delight stay under their meat or fish family names (`meat_ghasttentacle`);
   fused ids keep their spelling.
@@ -738,7 +748,7 @@ decompiling (End's and Ocean's: none; Oceanic's fishing net is a mixin, an overl
 ### 14.2 The jar
 
 ```
-creative_delight-<v>.jar                  mod id creative_delight: CD's code, scripts (10.3), swaps (11), QoL compartments (8)
+creativedelight-<v>.jar                  mod id creativedelight: CD's code, scripts (10.3), swaps (11), QoL compartments (8)
   META-INF/mods.toml                      mandatory creativeengineering, farmersdelight
   META-INF/jarjar/metadata.json           one entry per member: group, artifact, version range [v], path, isObfuscated false
   META-INF/jarjar/backportedVeggies-1.9.2-ce-19.2-NN.jar    in-tree ports, built as today
@@ -762,8 +772,8 @@ step 3) is not needed. A port project stays a separate Gradle project (no `git m
 | B5 | `ce.forge-mod` changes | `build-logic` | A "shipped jar" indirection (default `jar`, `bundleJar` for CD) used by `archiveJar` and `installToMods`; `bundled_in=creativeDelight` makes a member's `installToMods` refuse and name CD's task. CD's `replaces_jars` is the union: the four `backported*-*.jar`, `ends_delight-*`, `oceansdelight-*`, `oceanic_delight-*`, `miners_delight-*` |
 | B6 | `development/creativeDelight` | new project | `ce.forge-mod-refmap` + `ce.forge-bundle`; `@Mod` class, the script trees (10.4), swaps, QoL code. Member ports: `mod_name` gets " (Creative Delight)" instead of " (Backport)", version bump |
 | B7 | Oceanic overlay | `members/oceanic/src` | `OceanicDelightFishingNetMixin` moves from patcherMod as a normal mixin (no `@Pseudo`; target on the compile classpath), own config `oceanic_delight.ce.mixins.json`; patcherMod's copy and its mixin-json entry removed in the same release. `loot/BiomeTagCondition` stays in patcherMod (CD depends on it) |
-| B8 | `tools/build_deploy.py` | | `IN_TREE_MODS`: the member rows become one `('creativeDelight', 'creative_delight', True)` (note: `backportedMiners` is missing from the list today). Mod id reading looks into `metadata.json` too, so the duplicate-id check catches a stale upstream jar beside CD (the trap in 14.1.4) and the release diff shows member versions, not seven removed mods. Freshness check also covers the members' `src/` |
-| B9 | `mod_sides.md` | | One `creative_delight` row (both) naming the members; the seven member rows removed; nested ids take the outer jar's side |
+| B8 | `tools/build_deploy.py` | | `IN_TREE_MODS`: the member rows become one `('creativeDelight', 'creativedelight', True)` (note: `backportedMiners` is missing from the list today). Mod id reading looks into `metadata.json` too, so the duplicate-id check catches a stale upstream jar beside CD (the trap in 14.1.4) and the release diff shows member versions, not seven removed mods. Freshness check also covers the members' `src/` |
+| B9 | `mod_sides.md` | | One `creativedelight` row (both) naming the members; the seven member rows removed; nested ids take the outer jar's side |
 | B10 | Checks | `creativeDelight/tools/` + scratch queue | Offline: every `metadata.json` path exists, each nested jar's `mods.toml` has the expected id and version, each repack version newer than its upstream. Live: SQ-CDJ ([testing/scratch_queue.md](testing/scratch_queue.md)) |
 
 Not planned: dev `runClient` for CD (would need every member as a `mods {}` source set and the repacks as runtime jars); the
@@ -829,7 +839,7 @@ Answered (third pass, 2026-10-25):
   open, on command, and once when the swap list was updated.
 - Q21 yes, CD gets its own config; defined in 8.1.
 - Q22 hard cut at the CD release; no deprecation step and no duplicate patcherMod copy.
-- Q24 recipe id namespace is CD's own (`creative_delight:`), not each member's.
+- Q24 recipe id namespace is CD's own (`creativedelight:`), not each member's.
 - Q25 CD scripts ship only in the jar.
 - Q27 dicts stay in the pack folder; NCH reads them lazily.
 - Q28 repack jar names `repacked<Name>`.
@@ -880,13 +890,13 @@ Open:
 | Build (14.3 B1, B3, B4, B5) | `build-logic`: `ce.forge-repack`, `ce.forge-bundle`; `ce.forge-mod` gains `shipped_jar_task`, `bundled_in`, `mixin_configs=none` | A repack refuses another upstream sha1 and any path the overlay and upstream both hold; `replaced_classes` is the B3 guard (no class replaced today). A member's `installToMods` refuses and names CD's task |
 | Repacks (B2) | `development/creativeDelight/members/{oceans,oceanic,ends}`, projects `repackedOceans`, `repackedOceanic`, `repackedEnds` | Versions `1.0.2-1.19.2-ce-19.2-01`, `1.0.1-ce-19.2-01`, `1.19.2-2.1-ce-19.2-01` (14.1.4). Upstream entries checked byte-identical (CRC) apart from `mods.toml` and the manifest. Upstream jars in `development/creativeDelight/upstream/` (git-ignored, copied from `mods/`). MIT notices written from the `mods.toml` data, since the jars ship none; years and sources checked against upstream 2026-10-25 (28.1) |
 | Oceanic overlay (B7) | `members/oceanic/src`, package `com.SaintAlfonzo.creativedelight.oceanic.mixin`, config `oceanic_delight.ce.mixins.json` | Moved from patcherMod: normal mixin, `@Mixin(FishingNetExtractingProcedure.class)`, SRG names with `remap = false` (checked reobfed). Tag ids stay `creativeengineering:fishing_net/*` (filled by `loottags.js`, not moved). `loot/BiomeTagCondition` stays in patcherMod |
-| CD jar (B6) | `development/creativeDelight`: `@Mod creative_delight`, `CDConfig`, `kubejs_startup/creative_delight/cd_core.js` (`global.CD`) | `creative_delight-1.0.0.jar` (Q17), reproducible. Dependencies: patcherMod `[1.1.02,)` and Farmer's Delight; at boot it logs an error when the installed patcherMod has no loader. `replaces_jars` = the three upstream jars and stray repacks |
-| CD config (8.1, Q21) | `config/creative_delight-common.toml` | Only `[members]` (one switch per member, default on); `qol`, `integrations`, `swappers` keys come with the first feature that moves. Scripts: `global.CD.on(id)` inside callbacks (COMMON config loads after startup scripts) |
-| CD script trees (10.4) | `kubejs/data/creative_delight/kubejs/`, `kubejs/assets/creative_delight/kubejs/` | Only `_core/` checks so far (warn when `global.CD` is missing). The jar build copies both trees and fails if a tree has no script. `build_deploy.py` classes both trees `dev` (Q25) |
-| Deploy (B8) | `tools/build_deploy.py` | `('creativeDelight', 'creative_delight', True)` in `IN_TREE_MODS`; freshness covers the members and the script trees; nested mod ids join the duplicate-id check (a stale upstream jar beside CD is an error); a jar holding `_cdtest/` is refused. The port rows stay until the ports join |
+| CD jar (B6) | `development/creativeDelight`: `@Mod creativedelight`, `CDConfig`, `kubejs_startup/creativedelight/cd_core.js` (`global.CD`) | `creativedelight-1.0.0.jar` (Q17), reproducible. Dependencies: patcherMod `[1.1.02,)` and Farmer's Delight; at boot it logs an error when the installed patcherMod has no loader. `replaces_jars` = the three upstream jars and stray repacks |
+| CD config (8.1, Q21) | `config/creativedelight-common.toml` | Only `[members]` (one switch per member, default on); `qol`, `integrations`, `swappers` keys come with the first feature that moves. Scripts: `global.CD.on(id)` inside callbacks (COMMON config loads after startup scripts) |
+| CD script trees (10.4) | `kubejs/data/creativedelight/kubejs/`, `kubejs/assets/creativedelight/kubejs/` | Only `_core/` checks so far (warn when `global.CD` is missing). The jar build copies both trees and fails if a tree has no script. `build_deploy.py` classes both trees `dev` (Q25) |
+| Deploy (B8) | `tools/build_deploy.py` | `('creativeDelight', 'creativedelight', True)` in `IN_TREE_MODS`; freshness covers the members and the script trees; nested mod ids join the duplicate-id check (a stale upstream jar beside CD is an error); a jar holding `_cdtest/` is refused. The port rows stay until the ports join |
 | Test suite | `tools/creative_delight_test/` | See its README. The cooking mirror is generated (`gen_cdtest_mirror.py`): 49 single-line calls of 30 helpers from `server_scripts/cooking/`, run unchanged from the CD tree |
 
-Not changed: `mod_sides.md` gets the `creative_delight` row now; the three member rows stay until the jar is installed (B9).
+Not changed: `mod_sides.md` gets the `creativedelight` row now; the three member rows stay until the jar is installed (B9).
 
 ### 19.2 Tests (CDT-)
 
@@ -924,9 +934,9 @@ Fungi and Miner's moved into the CD trees 2026-10-25 (section 27; Ocean's, Ocean
 
 New changes for members are written in the CD trees, one folder per mod (owner, 2026-10-25): `vintagedelight/recipes.js`,
 `vintagedelight/loot.js`, `veggiesdelight/loot.js` (`// requires: rusticdelight` too) and `create/slime.js` (a non-member
-row, `// requires: create`, `create_compressed`) in `kubejs/data/creative_delight/kubejs/`, and the jar startup script
+row, `// requires: create`, `create_compressed`) in `kubejs/data/creativedelight/kubejs/`, and the jar startup script
 `kubejs_startup/vintagedelight/vintage_items.js`. Recipe files run inside `global.CD.recipes` (ids
-`creative_delight:<type>/<suffix>`) and return early without `global.CD` or with the member switched off; the loot files
+`creativedelight:<type>/<suffix>`) and return early without `global.CD` or with the member switched off; the loot files
 only need `global.lootTuning`. Until CD and its patcherMod are installed none of this runs (startup half) or the recipe
 files return early, and the deploy ships the trees only in the jar (Q25). Contents: [vintage_delight.md](vintage_delight.md)
 4.0b, [kitchen.md](kitchen.md) 3. The Java parts of the same rows went into the port projects (`backportedVintage -04`,
@@ -978,7 +988,7 @@ Owner: repack Farmer's Delight (MIT) into Creative Delight so the few 1.3.4 feat
   The repack version is newer than the upstream one.
 - **Builds unaffected.** The ports and patcherMod compile against their own `libs/` copies of FD, not `mods/`, so the
   install moving FD out of `mods/` breaks no build. `:repackedOceans`, `:repackedOceanic`, `:repackedEnds` and
-  `:creativeDelight` build with the plugin change; `metadata.json` lists the four members, `creative_delight_members.txt`
+  `:creativeDelight` build with the plugin change; `metadata.json` lists the four members, `creativedelight_members.txt`
   starts with `farmersdelight`.
 - **Deploy.** `build_deploy.py` reads `mods/`, so the standalone FD jar drops out of the payload once CD is installed (removal by
   file name); a stale FD jar beside CD is caught by the nested duplicate-id check (and would win at runtime, 14.1 point 4).
@@ -988,7 +998,7 @@ Live checks: SQ-CDJ-07 (server: loads, FD and patcherMod mixins, dependents, old
 
 **First features in (2026-10-25):** repack `-02`, [farmers_delight.md](farmers_delight.md) 4. The overlay registers through
 `FarmersDelightInitMixin` (end of FD's constructor), owns its own config `farmersdelight-ce-common.toml`, and replaces
-FD's `lang/en_us.json` and `sounds.json` (`replaced_resources`). Member scripts: `kubejs/data/creative_delight/kubejs/farmersdelight/`.
+FD's `lang/en_us.json` and `sounds.json` (`replaced_resources`). Member scripts: `kubejs/data/creativedelight/kubejs/farmersdelight/`.
 
 ### 21.2 How a 1.3.4 feature goes in (when picked up)
 
@@ -1010,7 +1020,7 @@ every switch on; nothing here is installed (19.5: patcherMod and CD go in togeth
 
 ### 22.1 Config (framework #5) and compartments (framework #8)
 
-- `creative_delight-common.toml [qol]`: `remainderBuffer`, `placeableTooltips`, `compost`, `manualOnlyRoutes`,
+- `creativedelight-common.toml [qol]`: `remainderBuffer`, `placeableTooltips`, `compost`, `manualOnlyRoutes`,
   `wthitCropLine`, `jeiInfoPages`, all default on (`CDConfig.qol(id)`, constants `CDConfig.REMAINDER_BUFFER` ...).
   `foodTypes` comes with QoL-3. Scripts: `global.CD.qol(id)` (cd_core.js), read inside callbacks like `on()`.
 - `global.CD.on(id)` fixed: a loaded mod that is not a nested member has no `[members]` switch and now counts as on.
@@ -1030,11 +1040,11 @@ every switch on; nothing here is installed (19.5: patcherMod and CD go in togeth
 |---|---|---|---|
 | 1 Remainder buffer, pot + kettle | patcherMod `mixin/{CookingPot,Kettle}{,Menu,Screen}RemainderMixin` | `mixin/farmersdelight/`, `mixin/farmersrespite/` (git mv), gate `qol/RemainderBufferQol` | new leftovers are thrown as upstream; held ones still show, drop and can be pulled |
 | 1 Remainder buffer, oven | stays | patcherMod (see below) | patcherMod `[cooking] remainderBuffer` (now oven only) |
-| 2 Placeable tooltips | `kubejs/client_scripts/placeable_tooltip.js` | `kubejs/assets/creative_delight/kubejs/_qol/placeable_tooltip.js` | no lines; the mods' own lines are not stripped |
+| 2 Placeable tooltips | `kubejs/client_scripts/placeable_tooltip.js` | `kubejs/assets/creativedelight/kubejs/_qol/placeable_tooltip.js` | no lines; the mods' own lines are not stripped |
 | 4 Compost rows | 101 Farmer's, Fungi, Veggies and Vintage Delight rows of `startup_scripts/compost/compost_values.js` | jar startup scripts `kubejs_startup/{farmersdelight,fungidelight,veggiesdelight,vintagedelight}/compost.js` (48 + 19 + 12 + 22) | rows skipped, the foods fall to the pack's rules |
-| 5 Grid-meal moves, heatless routes, wraps | Veggies, Vintage, Fungi blocks of `server_scripts/cooking/cooking.js` | `kubejs/data/creative_delight/kubejs/{veggiesdelight,vintagedelight,fungidelight}/cooking.js` | file skipped: the mods' own recipes stay |
-| 6 WTHIT crop line | patcherMod `crops/WthitCropGrowth`, `assets/creativeengineering/crop_growth.json`, lang key | `compat/wthit/WthitCropGrowth`, `assets/creative_delight/crop_growth.json`, `creative_delight.wthit.crop_harvestable` | no line |
-| 6 JEI info pages | `kubejs/client_scripts/jei_info.js` (Fungi's) | `kubejs/assets/creative_delight/kubejs/fungidelight/jei_info.js` (`// requires: jei`, `fungidelight`) | no pages |
+| 5 Grid-meal moves, heatless routes, wraps | Veggies, Vintage, Fungi blocks of `server_scripts/cooking/cooking.js` | `kubejs/data/creativedelight/kubejs/{veggiesdelight,vintagedelight,fungidelight}/cooking.js` | file skipped: the mods' own recipes stay |
+| 6 WTHIT crop line | patcherMod `crops/WthitCropGrowth`, `assets/creativeengineering/crop_growth.json`, lang key | `compat/wthit/WthitCropGrowth`, `assets/creativedelight/crop_growth.json`, `creativedelight.wthit.crop_harvestable` | no line |
+| 6 JEI info pages | `kubejs/client_scripts/jei_info.js` (Fungi's) | `kubejs/assets/creativedelight/kubejs/fungidelight/jei_info.js` (`// requires: jei`, `fungidelight`) | no pages |
 
 Notes:
 - **Oven stays in patcherMod.** The plan had an oven compartment `cooking_for_blockheads`, but the oven is patcherMod's
@@ -1048,7 +1058,7 @@ Notes:
 - Compost: patcherMod's engine gained `values(category, rows, { when })`; `when` is checked at every table rebuild, so
   the CD rows follow the switch without the config being loaded at script time. `sandy_shrub` (a Farmer's Delight item)
   was filed under the Fungi rows; it is in the FD file now. The pack file's header said 745 items, it held 744; 643 now.
-- QoL-5 recipe ids change namespace (`creativeengineering:` to `creative_delight:`, Q24); outputs and inputs unchanged.
+- QoL-5 recipe ids change namespace (`creativeengineering:` to `creativedelight:`, Q24); outputs and inputs unchanged.
   The rules they follow and the shared helper recipes (bone broth, cooked forms, the cauliflower bread oven route) stay
   in the pack's cooking and baking files; the rest of each member's rows still move with members #2 to #4.
 - Backups of every moved or edited file at their old paths: `development/creativeDelight/moved_code_backup/2026-10-25/`
@@ -1066,7 +1076,7 @@ Install both together (19.5). An old patcherMod jar beside the new CD would appl
 ### 22.4 Tests (CDQ-)
 
 Offline 2026-10-25: patcherMod and CD build; CD's own jar holds the six mixins, `waila_plugins.json`, the rules file, the
-lang file, the four compost scripts and the five moved scripts, manifest `MixinConfigs: creative_delight.mixins.json`;
+lang file, the four compost scripts and the five moved scripts, manifest `MixinConfigs: creativedelight.mixins.json`;
 patcherMod's jar has none of them; every moved or edited script compiles in KubeJS's Rhino; the compost `when` gate
 tested in node (on, off, throwing). Live checks are queued (scratch_queue.md SQ-CDQ).
 
@@ -1077,7 +1087,7 @@ tested in node (on, off, throwing). Live checks are queued (scratch_queue.md SQ-
 | CDQ-03 | CD boots without Farmer's Respite (kettle compartment skipped, no mixin error) | SQ-CDQ-03 |
 | CDQ-04 | Placeable lines unchanged; off: none, mods' own lines back | SQ-CDQ-04 (client) |
 | CDQ-05 | `/dumpcompost`: every moved food keeps its chance and source `value`; off: they fall to rules | SQ-CDQ-05 |
-| CDQ-06 | QoL-5 recipes present under `creative_delight:`; off: the Veggies, Vintage and Fungi grid recipes are back | SQ-CDQ-06 |
+| CDQ-06 | QoL-5 recipes present under `creativedelight:`; off: the Veggies, Vintage and Fungi grid recipes are back | SQ-CDQ-06 |
 | CDQ-07 | WTHIT growth line on hemp, a bush and a Delight crop; off: none | SQ-CDQ-07 (client) |
 | CDQ-08 | JEI info pages for the Fungi items; off: none | SQ-CDQ-08 (client) |
 
@@ -1087,8 +1097,8 @@ Owner: execute the Rustic Delight fold-in and backport. Rustic Delight is all ri
 `backportedRustic` (`members/rustic`) is a fresh port of 1.7.0 that reads art and data from the unmodified donor in
 `rustic_upstream/` (the Miner's route), built as a member from the start (`bundled_in=creativeDelight`, fifth in
 `bundle_members`; `rusticdelight-*.jar` in `replaces_jars`). Member switch `rusticdelight` comes from the generated member
-list. Its pack rows are in `kubejs/data/creative_delight/kubejs/rusticdelight/` (`loot.js`, `recipes.js`, `tags.js`,
-`trades.js`). The village farm crop processor (`farm/VillageFarmCrops`, `creative_delight:village_farm_crops`) lives in the CD
+list. Its pack rows are in `kubejs/data/creativedelight/kubejs/rusticdelight/` (`loot.js`, `recipes.js`, `tags.js`,
+`trades.js`). The village farm crop processor (`farm/VillageFarmCrops`, `creativedelight:village_farm_crops`) lives in the CD
 jar itself, not in the member (2026-10-25): it adds Rustic's crops to the vanilla `farm_*` processor lists by block id and is
 the village farm audit (`farming/crops #16`, section 25). Everything else, tests (SQ-RD) and the cutover: [rustic_delight.md](rustic_delight.md) 5.
 
@@ -1098,19 +1108,19 @@ the village farm audit (`farming/crops #16`, section 25). Everything else, tests
 Owner: fold the wild crop spawning system into Creative Delight. Decisions (2026-10-25): **all 63 rules** move, vanilla,
 Neapolitan, Vinery and rubber included (CD owns wild crops; without the CD jar no crop is re-placed); the switch moves
 to **CDConfig `[worldgen] wildCrops`** (CEConfig `[worldgen.systems] wildCrops` and `WorldgenConfig.wildCropsEnabled()`
-removed); ids **renamed to `creative_delight`**. Same rules and rates as before: no player-visible change, so no
+removed); ids **renamed to `creativedelight`**. Same rules and rates as before: no player-visible change, so no
 changelog bullet. Player-side reference stays [crops.md](crops.md) 2.8.
 
 ### 24.1 What moved, what stays
 
 | Piece | Now | Was |
 |---|---|---|
-| Crop rules | `kubejs/data/creative_delight/kubejs/_worldgen/wild_crops.json` (63 rules) | `kubejs/generation_scripts/worldgen/wild_crops.json` "crops" |
-| Applier | `kubejs/data/creative_delight/kubejs/_worldgen/wild_crops.js` (returns without `global.CD`) | `kubejs/server_scripts/worldgen/wild_crops.js` |
-| Biome tags, modifiers | `creative_delight:wild_crops/<key>`, `creative_delight:forge/biome_modifier/wild_crops/<key>` | `creativeengineering:...` |
-| CD features (11 placed, 4 configured) | `kubejs/data/creative_delight/worldgen/{placed,configured}_feature/wild/`, ids `creative_delight:wild/*` | `creativeengineering:wild/*` |
-| Switch | `creative_delight-common.toml [worldgen] wildCrops`, `global.CD.worldgen(id)`, `CDConfig.worldgen(id)` | CEConfig `[worldgen.systems] wildCrops` |
-| `VillageFarmCrops` tags | `#creative_delight:wild_crops/<key>` | `#creativeengineering:wild_crops/<key>` |
+| Crop rules | `kubejs/data/creativedelight/kubejs/_worldgen/wild_crops.json` (63 rules) | `kubejs/generation_scripts/worldgen/wild_crops.json` "crops" |
+| Applier | `kubejs/data/creativedelight/kubejs/_worldgen/wild_crops.js` (returns without `global.CD`) | `kubejs/server_scripts/worldgen/wild_crops.js` |
+| Biome tags, modifiers | `creativedelight:wild_crops/<key>`, `creativedelight:forge/biome_modifier/wild_crops/<key>` | `creativeengineering:...` |
+| CD features (11 placed, 4 configured) | `kubejs/data/creativedelight/worldgen/{placed,configured}_feature/wild/`, ids `creativedelight:wild/*` | `creativeengineering:wild/*` |
+| Switch | `creativedelight-common.toml [worldgen] wildCrops`, `global.CD.worldgen(id)`, `CDConfig.worldgen(id)` | CEConfig `[worldgen.systems] wildCrops` |
+| `VillageFarmCrops` tags | `#creativedelight:wild_crops/<key>` | `#creativeengineering:wild_crops/<key>` |
 | **Stays in the pack:** biome traits | `kubejs/generation_scripts/worldgen/biome_traits.json` (split out of the old file; also read by `mushroom_spawns`, `wild_flowers`, `bee_nests`, `mob_spawns` and their generators) | `wild_crops.json` "biomes" |
 | **Stays:** machinery | `kubejs/server_scripts/worldgen/_biome_rules.js` (`global.biomeRules`, shared with mushroom spawns; 3.1 rule 3), new optional `readConfig` hook | |
 | **Stays:** mushroom and cave carrot features | `creativeengineering:wild/{*_mushroom_colonies,cave_carrots/*,mushrooms/*}` (mushroom_spawns.json) | |
@@ -1119,9 +1129,9 @@ The hamimelon feature keeps reading the pack's block tag `#creativeengineering:w
 
 ### 24.2 How it loads
 
-- Script and rules are authored in the pack folder and copied into the jar at the same paths; `kubejs/data/creative_delight/worldgen/`
+- Script and rules are authored in the pack folder and copied into the jar at the same paths; `kubejs/data/creativedelight/worldgen/`
   is a new `dataTrees` entry in CD's `build.gradle`, and `build_deploy.py` classes it `dev` like the script trees (Q25).
-- KubeJS's `JsonIO` reads files only, so the script reads `kubejs/data/creative_delight/kubejs/_worldgen/wild_crops.json` while
+- KubeJS's `JsonIO` reads files only, so the script reads `kubejs/data/creativedelight/kubejs/_worldgen/wild_crops.json` while
   it exists (dev) and otherwise the jar copy through `CDResources.text(path)` (new class). Same precedence as the scripts (10.4).
 - The switch is read with `global.CD.worldgen('wildCrops')` (no older-jar fallback since 2026-10-27).
 - Stale ids dropped on the way: Rustic's `add_wild_cotton`, `add_wild_bell_peppers`, `add_wild_coffee` and Miner's `cave_carrots`
@@ -1155,7 +1165,7 @@ Rustic crops in village farms until the new CD jar is in.
 Owner audit of village farms, built as the rewrite of `farm/VillageFarmCrops`. Reference, crop table, climate groups and
 the planned ruins/pillager/remote structure rules: [crops.md](crops.md) 2.11.
 
-- Data: `creative_delight/village_farms.json` in the jar (`share` 0.35, `groups`, `templates`); read through `CDResources`.
+- Data: `creativedelight/village_farms.json` in the jar (`share` 0.35, `groups`, `templates`); read through `CDResources`.
   No pack-folder override yet; edit, rebuild `:creativeDelight:`, restart.
 - Hook: at `ServerAboutToStartEvent` the processor is appended to the processor list of every `SinglePoolElement` whose
   template id is listed (reflection on `SinglePoolElement.processors`, SRG `f_210412_`, template `f_210411_`). The old hook
@@ -1177,17 +1187,17 @@ and its overlay registers the Delightful 3.8.1 items the pack takes in the `deli
 the record-only donor (`upstream/donors/`), its art and data copied by `members/delightful/tools/port_resources.py`; the
 edited `en_us.json` is in `replaced_resources`. Sixth in `bundle_members`; `Delightful-*.jar` and
 `repackedDelightful-*.jar` in `replaces_jars`. Member switch `delightful` comes from the generated member list. Pack rows:
-`kubejs/data/creative_delight/kubejs/delightful/` (`loot.js`, `recipes.js`, `tags.js`), startup values in
+`kubejs/data/creativedelight/kubejs/delightful/` (`loot.js`, `recipes.js`, `tags.js`), startup values in
 `src/main/resources/kubejs_startup/delightful/delightful_foods.js`. Neapolitan compartment (milkshake cauldrons) in the
 member itself (`DelightfulMilkshakes`), loaded only with Neapolitan. Tests DF-01 to DF-11 and SQ-DF.
 
 ## 27. Member rows moved: Veggies, Vintage, Fungi, Miner's (members #2 to #5, 2026-10-25)
 
 Rows that concern one member left the pack's scripts for the member's folder in the CD tree, unchanged (3.1 rule 1).
-Recipe ids change namespace to `creative_delight:` (Q24, as QoL-5); inputs, outputs and values are the same, so no
+Recipe ids change namespace to `creativedelight:` (Q24, as QoL-5); inputs, outputs and values are the same, so no
 changelog bullet. Every file returns early without `global.CD` or with the member switched off.
 
-| Member | Moved rows | To (`kubejs/data/creative_delight/kubejs/` unless noted) | From |
+| Member | Moved rows | To (`kubejs/data/creativedelight/kubejs/` unless noted) | From |
 |---|---|---|---|
 | Veggies (#2) | 3 juices (pot, mixer, spout, drain, bottling) and the cauliflower bread oven route | `veggiesdelight/recipes.js` (new) | `cooking/cooking.js`, `cooking/baking.js` |
 | Veggies (#2) | 6 crop crate packs, 9 chest table additions | `veggiesdelight/loot.js` | `loot/07_rules.js` |
@@ -1195,7 +1205,7 @@ changelog bullet. Every file returns early without `global.CD` or with the membe
 | Vintage (#3) | furnace bread removals, the cheese and deluxe burgers (with Veggies' compat burger removals) | `vintagedelight/recipes.js` | `cooking/cooking.js` |
 | Vintage (#3) | oat dough in `#forge:dough`, crop, seed and crate tags | `vintagedelight/tags.js` (new) | `tags/cookingtags.js` |
 | Fungi (#4) | mushroom type tags, crate tags | `fungidelight/tags.js` (new) | `tags/cookingtags.js` |
-| Miner's (#5) | Creamy Onion Soup cup conversion | `kubejs/data/creative_delight/cup_conversion/` (new `dataTrees` entry, `build_deploy.py` classes it `dev`) | `kubejs/data/creativeengineering/cup_conversion/` |
+| Miner's (#5) | Creamy Onion Soup cup conversion | `kubejs/data/creativedelight/cup_conversion/` (new `dataTrees` entry, `build_deploy.py` classes it `dev`) | `kubejs/data/creativeengineering/cup_conversion/` |
 
 **Stays in the pack (decided while moving; the script rows of this list moved later, section 29):**
 - Soft fluids (9 Veggies, 4 Vintage, `data/creativeengineering/moonlight/soft_fluids/`): Moonlight reads any namespace,
@@ -1251,12 +1261,15 @@ goes back to a `@Pseudo` mixin in patcherMod or CD). Recorded in TODO `creatived
 ### 28.2 Generator output roots (framework #7)
 
 `tools/gen_out.py`: a generator entry in `tools/generators.json` may carry `outRoot`, a folder inside one of the trees the
-CD jar build copies (`kubejs/data/creative_delight/kubejs`, `kubejs/assets/creative_delight/kubejs`,
-`kubejs/data/creative_delight/worldgen`, `.../cup_conversion`). The script calls `out_root(id, default)`; missing means the
+CD jar build copies (`kubejs/data/creativedelight/kubejs`, `kubejs/assets/creativedelight/kubejs`,
+`kubejs/data/creativedelight/worldgen`, `.../cup_conversion`). The script calls `out_root(id, default)`; missing means the
 default (pack folder, unchanged). `header(id)` is the first line of a generated file in a tree. `/cegen` is unchanged (the
 runner ignores the field); `outputs` stay instance-relative and must lie under `outRoot` (`python3 tools/gen_out.py
 --check`). A run after a jar build makes the jar stale, which `build_deploy.py`'s freshness check already refuses.
 Test: `python3 tools/test_gen_out.py` (CDT-13, PASSED 2026-10-25).
+
+**Superseded 2026-11-01 (section 35.2):** cans, food types, placeable and mortar now write member scripts into the CD
+trees; the paragraph below is the state before.
 
 **No generator uses it yet, on purpose.** Every candidate writes JSON that scripts read by instance path with
 `JsonIO.readString` (`can_types.json` by CD's startup `cans.js` and server `canning.js`, `food_types.json`,
@@ -1271,7 +1284,7 @@ is the owner's decision in the row.
 nested jar from the root of its own `jij:` file system (`JarInJarDependencyLocator`, `FileSystems.newFileSystem`, checked
 in fmlloader 43.3.9 bytecode) and a `mods/` jar from the default one, so a member on the default file system is a jar
 beside CD that beat the nested copy (14.1 point 4). It logs one ERROR naming the jar and version. Loading is unchanged
-(the top-level jar still wins). Built into `creative_delight-1.0.0.jar`, not installed; SQ-CDJ-02 rewritten to check it.
+(the top-level jar still wins). Built into `creativedelight-1.0.0.jar`, not installed; SQ-CDJ-02 rewritten to check it.
 
 
 ## 29. All pack food and cooking KubeJS moved into Creative Delight (2026-10-25)
@@ -1282,12 +1295,12 @@ not only member rows, so section 27's "Stays in the pack" list and 3.1 rule 1's 
 are superseded. Folders follow the mod each row touches (the food's mod; vanilla food `minecraft/`; machine-only routes
 the machine's mod; pack-native systems `creativeengineering/`). Potion brewing, alcohol, Vinery and effect content stay
 in the pack, marked for a future Creative Brewing mod (29.3). Rows are unchanged; recipe ids move from `creativeengineering:`
-to `creative_delight:` (Q24), so no changelog bullet. TODO `creativedelight/members #13`; backups of every source and of
+to `creativedelight:` (Q24), so no changelog bullet. TODO `creativedelight/members #13`; backups of every source and of
 both CD trees before the move: `development/creativeDelight/moved_code_backup/2026-10-25b/`.
 
 ### 29.1 Where things went
 
-Server scripts under `kubejs/data/creative_delight/kubejs/`, startup scripts under
+Server scripts under `kubejs/data/creativedelight/kubejs/`, startup scripts under
 `development/creativeDelight/src/main/resources/kubejs_startup/`.
 
 | Old pack file | Now |
@@ -1303,6 +1316,20 @@ Server scripts under `kubejs/data/creative_delight/kubejs/`, startup scripts und
 | `startup_scripts/cooking/food_values.js` | value copies: applier `creativeengineering/food_value_copies.js`, rows in `minecraft/food_values.js` and `delightful/delightful_foods.js` (each `Object.assign`s into `global.foodValueCopies`). Left: the effect swaps and Farmer's Respite slice effects (29.3) |
 | `startup_scripts/compost/compost_rules.js` | `kubejs_startup/creativeengineering/compost_rules.js` (`priority: 900`) |
 | `startup_scripts/compost/compost_values.js` | 35 generated `kubejs_startup/<mod>/compost_values.js` (643 rows, `priority: 10`, so the hand-written QoL-4 `compost.js` files win); `tools/gen_compost_values.py` now writes them (`--check`, `--add-new` replaces `--merge`) and skips items in hand-written files |
+
+Creative Split wave 4 (2026-11-01, creative_split.md 7.6) moved the remaining CD rows of the pack folder, rows unchanged:
+
+| Old pack file | Now |
+|---|---|
+| `server_scripts/tags/blocktags.js` oven heat and bakeware hammering rows, `storageblocktags.js` dough blocks | `creativeengineering/kitchen_tags.js` |
+| `blocktags.js` crop parity rows, `equipmenttags.js` hoe harvest area tags | `creativeengineering/crop_tags.js` |
+| `fluidtags.js` food and drink fluid subtags | `creativeengineering/fluid_tags.js` |
+| `loottags.js` Oceanic Delight fishing net tags | `oceanic_delight/fishing_net_tags.js` (member switch guard) |
+| `server_scripts/other/harvest.js` (metal and ore block mining tiers; 7.6 owner row) | `creativeengineering/harvest.js` |
+| `server_scripts/engineering/sample_syringe.js`, startup `func/` and `items/sample_syringe.js` | `creativeengineering/sample_syringe.js`; startup `creativeengineering/sample_syringe.js`, `sample_syringe_items.js` |
+| `client_scripts/namechanges.js` Delight dish, crop and fluid names, lunchbox tier names | client `creativeengineering/names.js` |
+| `client_scripts/tooltips.js` bowl, basket and soil lines | client `farmersdelight/client.js` (before the villager line, as before) |
+| CD `kubejs_startup/brewinandchewin/` and `vinery/compost_values.js` | moved out to Creative Brewing (creative_brewing.md 4.5) |
 
 Kept in the pack folder: the dicts, `kubejs/generation_scripts/food/*.json` (the CD scripts read them with `JsonIO` from
 the pack folder; `build_deploy.py` ships them as runtime files).
@@ -1327,7 +1354,7 @@ pass; `// priority:` and `// requires:` work as in the folder).
   value > rule) is in code. Headless run: the table from the new tree equals the old one (744 values, 10 categories, 5 tiers).
 - **Startup registration** now happens after the pack folder's own KubeJS items: saved worlds keep their id map; the
   creative-tab order may shift.
-- **Mortar catalog:** `tools/gen_mortar_catalog.py` skips `creative_delight:` recipes too (they get their mortar craft from
+- **Mortar catalog:** `tools/gen_mortar_catalog.py` skips `creativedelight:` recipes too (they get their mortar craft from
   `R.foodGrinding`), so a regenerate does not duplicate the moved grinding rows.
 - **Test mirror** (`cdtest_cooking_mirror.js`) is frozen: its pack twins are gone (see the suite README).
 
@@ -1338,8 +1365,8 @@ world on a CD jar built before this move.
 ### 29.3 Left for Creative Brewing (TODO `creativebrewing/move #1`)
 
 **2026-10-31 (owner):** the Brewin' and Chewin' food rows and tags below stay in CD after all: moved to
-`kubejs/data/creative_delight/kubejs/brewinandchewin/recipes.js` and `tags.js` (`// requires: brewinandchewin`, ids
-`creative_delight:`). The rest goes to Creative Brewing ([creative_brewing.md](creative_brewing.md) 4).
+`kubejs/data/creativedelight/kubejs/brewinandchewin/recipes.js` and `tags.js` (`// requires: brewinandchewin`, ids
+`creativedelight:`). The rest goes to Creative Brewing ([creative_brewing.md](creative_brewing.md) 4).
 
 `startup_scripts/cooking/potions.js`, `alcohol_drinks.js`, `server_scripts/cooking/alcohol.js`; the effect swaps and
 Farmer's Respite cake-slice effects (`startup_scripts/cooking/food_values.js`); the Brewin' and Chewin' food rows in
@@ -1361,29 +1388,30 @@ refactored global lines, the `foodValueCopies` opener and tag list lines split a
 
 All cultivated-meat code is marked for a future own mod, Creative Cultivation, the way brewing and alcohol are marked
 for Creative Brewing (29.3). Unlike the brewing rows it is not held back in the pack: the cultures and their recipes
-and tags live in CD's `creativeengineering/` trees, and the sample syringe (it exists only to start cultures) stays in
-the pack folder. Every script carries the header "Reserved for Creative Cultivation":
+and tags live in CD's `creativeengineering/` trees, and so does the sample syringe (it exists only to start cultures;
+in the pack folder until 2026-11-01, moved with Creative Split wave 4). Every script carries the header "Reserved for Creative Cultivation":
 
 - CD startup `kubejs_startup/creativeengineering/cultures.js` (7 cultures, 7 culture blocks; moved from the pack's
   `startup_scripts/items/cultures.js`, ids unchanged, registered from the dict keys);
 - CD server `creativeengineering/cultivated_meat.js` (syringe, samples, mixer and cooking pot growth, cutting, culture
   blocks) and `creativeengineering/cultivated_meat_tags.js` (`#creativeengineering:culture_base` from the pack's
   `engineeringtags.js`, the 7 culture storage block tags from `storageblocktags.js`);
-- pack `startup_scripts/items/sample_syringe.js`, `startup_scripts/func/sample_syringe.js`,
-  `server_scripts/engineering/sample_syringe.js`;
+- CD startup `kubejs_startup/creativeengineering/sample_syringe_items.js` and `sample_syringe.js` (were the pack's
+  `startup_scripts/items/` and `func/sample_syringe.js`), CD server `creativeengineering/sample_syringe.js` (was
+  `server_scripts/engineering/sample_syringe.js`), all moved 2026-11-01;
 - comment only (data files take no header): the culture and syringe textures and models under
   `kubejs/assets/creativeengineering/`, the BlockRunner "spongy" row for `*_culture_block` in the pack's `blocktags.js`,
   the culture keys in `item_dict.js`.
 
 Cooking pot growth (2026-10-27): one `R.fdCooking` row per mixer row, culture + bone meal + Rustic Delight cooking oil
-→ 3 cultures, 0.35 xp, 200 ticks, ids `creative_delight:farmersdelightcooking/<animal>_culture_cooking` (beef, pork,
+→ 3 cultures, 0.35 xp, 200 ticks, ids `creativedelight:farmersdelightcooking/<animal>_culture_cooking` (beef, pork,
 poultry, mutton, rabbit, cod, salmon); only with `global.CD.on('rusticdelight')`. Bone meal stands in for diluted
 bonemeal, cooking oil for plant oil. Test RC-82 ([recipes_cooking.md](recipes_cooking.md)).
 
 ### 29.6 Food code moved 2026-10-27 (pack_hygiene findings 25 to 27)
 
 Backups of every source file: `development/creativeDelight/moved_code_backup/2026-10-27/`. Rows unchanged unless noted.
-Client scripts are in `kubejs/assets/creative_delight/kubejs/<mod>/` (bundled by the CD build like the server tree);
+Client scripts are in `kubejs/assets/creativedelight/kubejs/<mod>/` (bundled by the CD build like the server tree);
 they use KubeJS's own `e.add(id, Text.<colour>(...))` and `e.renameItem` because the pack's `tooltips.js` helpers
 (`addTooltips`, `col`) are top-level functions CD cannot see (finding 33); colours kept (`uncm` green, `norm` gray,
 `rare` dark blue, `epic` dark purple, `warn` dark red).
@@ -1418,8 +1446,8 @@ Read from this file, `todo/TODO.md`, `mod_sides.md` and `mods/` on 2026-10-25. T
 
 ### 30.1 Creative Delight
 
-- **Installed and deployed with 1.1.03 (2026-10-26); played since 2026-10-27** (TODO `creativedelight/framework #2` done). `creative_delight-1.0.0.jar` (rebuilt and reinstalled 2026-10-27 after the compost, `cd_food` and Rustic translator edits) is in `mods/` and is byte-identical to
-  `development/creativeDelight/build/libs/creative_delight-1.0.0.jar`, beside `creativeengineering-1.1.03.jar`
+- **Installed and deployed with 1.1.03 (2026-10-26); played since 2026-10-27** (TODO `creativedelight/framework #2` done). `creativedelight-1.0.0.jar` (rebuilt and reinstalled 2026-10-27 after the compost, `cd_food` and Rustic translator edits) is in `mods/` and is byte-identical to
+  `development/creativeDelight/build/libs/creativedelight-1.0.0.jar`, beside `creativeengineering-1.1.03.jar`
   (patcherMod). The standalone Farmer's, Ocean's, Oceanic, End's, Rustic and Delightful jars are gone from `mods/`
   (nested). Older text in this file, `mod_sides.md` and TODO framework #2 still says "not installed": out of date.
 - **Scratch server (2026-10-25):** server halves PASSED; SQ-CDJ-02 (stale jar) FAILED, rewritten, needs a re-run; client
@@ -1468,10 +1496,10 @@ Rows for the smaller mods come from folder names, `mod_sides.md` and each mod's 
 
 ## 30. Food family crafts: `global.CD.food` (2026-10-25; the one helper since 2026-10-27)
 
-`kubejs_startup/creative_delight/cd_food.js` (`// priority: 999`, `development/creativeDelight`) is the food family helper
+`kubejs_startup/creativedelight/cd_food.js` (`// priority: 999`, `development/creativeDelight`) is the food family helper
 ([food_families.md](food_families.md) 4.5). It replaced `global.foodFamily` (`creativeengineering/food_family_recipes.js`,
 deleted 2026-10-27, TODO `creativedelight/framework #11`).
-`var F = global.CD.food(e)` is called inside `global.CD.recipes`, so ids are `creative_delight:<type>/<suffix>`; the rule
+`var F = global.CD.food(e)` is called inside `global.CD.recipes`, so ids are `creativedelight:<type>/<suffix>`; the rule
 values (slice counts, cook xp and ticks, bake xp and time, cookies 12, muffins 4 oven / 2 pot, tarts 2, gold 6 mixer / 5 arc)
 are in `global.CD.FOOD` at the top of the file.
 
@@ -1480,7 +1508,7 @@ are in `global.CD.FOOD` at the top of the file.
   (furnace, smoker, campfire), `cakeBake`, `pieBake` (with an optional filling can key), `cookieBake`, `muffinBake`, `tartBake`.
 - **Authoritative per food.** A call removes the recipes of the same stations that make the output from that input (cooking
   trio, board), or every other recipe of the output (cakes, pies, cookies; muffins their pot recipes; tarts keep theirs),
-  except recipes of `creativeengineering` and `creative_delight`. Calling it on another mod's food therefore replaces that
+  except recipes of `creativeengineering` and `creativedelight`. Calling it on another mod's food therefore replaces that
   mod's version. A second food with the same path gets its namespace in the id suffix.
 - **New families beyond 4.5:** heatless grid meals (`mealCraft`, `soupCraft` with bone broth, `saladCraft` with a bowl;
   `_cooked_manual_only` / `_manual_only` keep Create's basin and crafter off them); hand food (`burgerAssemble`,
@@ -1500,10 +1528,11 @@ are in `global.CD.FOOD` at the top of the file.
   `<culture>_to_<n>_<meat>_by_fdcutting`) and the 6 glowing calamari cooks (`cooked_calamari[_slice]_from_glowing_calamari[_slice]`,
   were `cooked_glowing_calamari[_slice]`); every oven id is unchanged. Results unchanged, so no changelog bullet. Offline:
   `tools/test_cd_food.sh` (FFH-03). The hand-written cut, cook and bake rows in the member files and the heatless, hand food and
-  golden rows are not moved: TODO `creativedelight/framework #12`.
+  golden rows are not moved: TODO `creativedelight/framework #12`. **Done 2026-11-01 for the rows the TODO names (keep-or-convert
+  list and value changes: section 35.3).**
 - **Fixed 2026-11-01 (`baking/baked-goods #37`): an array in `assemble`'s step list became a filling step with fluid `minecraft:empty`.** The
   zucchini quiche assembly (`veggiesdelight/recipes.js`, cooked meat as an array) fails to load (`Error parsing recipe
-  creative_delight:createsequencedassembly/zucchini_quiche_sequenced_assembly` in `logs/kubejs/server.log`). Cause (scan 2026-10-31): `assemble` tests `s.fill`, and every
+  creativedelight:createsequencedassembly/zucchini_quiche_sequenced_assembly` in `logs/kubejs/server.log`). Cause (scan 2026-10-31): `assemble` tests `s.fill`, and every
   array has `Array.prototype.fill`, so an array step takes the filling branch with a function as its fluid. Fix: test
   `Array.isArray(s)` first (deploying with `Ingredient.of(s)`), or check `s.fill` only on plain objects. The quiche is the
   only `assemble` caller with an array step (grep 2026-10-31). Fix: `cd_food.js` `assemble` now tests `Array.isArray(s)`
@@ -1570,3 +1599,214 @@ Recorded in the Decisions column of each TODO row; this is the index. Nothing he
 | Ocean's | Calamari swaps run before the tentacle recipes are removed: already so in `oceansdelight/recipes.js`; retest SQ-CM-32 | `members #29` |
 
 Durian and pineapple pie (`baking/baked-goods #12`): retextured, block texture, rebuilt as pie block items. Pepper blocks stay unconnected and the medley plate renders correctly today (`members #27` closed).
+
+## 34. Creative Split CD carve: kitchen and food Java out of patcherMod (2026-11-01)
+
+Creative Split wave 4 ([creative_split.md](creative_split.md) 7.6 step 4, TODO `creativesplit/cdcb #7`). **Status: built
+2026-11-01 (patcherMod 1.1.07, CD 1.0.0); not installed, nothing booted, waves 2 and 3 untested.** Same behaviour as
+before: no gameplay change, so no changelog bullet.
+
+### 34.1 What moved (patcherMod -> CD, `com.SaintAlfonzo.creativedelight`)
+
+- **Java (59 classes)**, same subpackages: `oven/` (with `client/`, `jei/`), `lunchbox/` (with `client/`), `cooking/`
+  (remainder buffer, with `client/`), `food/` (cans, seasonings, placed-food Spice of Life, powdered sugar), `crops/`
+  (crop parity, stem fruit, dandelion maturing, hoe area, CropGrowth); `compat/` AppleSkinSeasonings, CobPipeRenderer,
+  CornDelightCompat, CornDelightCurios, DisplayDelightDishBlocks, DisplayDelightDishes, DyeableCannedGolem,
+  KubeJSCanAction, RespitePottedTeaBush, TroughRetryAccess; `compat/jei/` CanCraftingCategory, CanPagesJEI,
+  FeastPlatingCategory, FeastPlatingJEI, SeasoningCategory, SeasoningJEI; `salt/SaltBlockTicks` (was `block/`).
+- **Mixins (24: 22 common, 2 client)** into gated compartments of `creativedelight.mixins.json` (CDMixinPlugin):
+  `minecraft` 9 (placed food, can servings, farmland under crops, stem fruit, trough tempt retry, cob pipe slot, salt
+  block and salt layer ticks, seasoned item model), `quark` 5 (hoe harvest, hoe area x2, own pick, feeding trough),
+  `alexsmobs` 2 (seagulls), `immersive_weathering` 2, `farmersdelight` 2 (dandelions on rich soil), `canned_goods` 2,
+  `the_dirty_stuff` 1 (tobacco), `salt` 1 (rock salt no-dissolve). Member prefixes unchanged, SRG names, `remap = false`.
+- **Registrations** from `CreativeEngineering` to `CreativeDelight.registerKitchen` / `commonSetup` /
+  `ClientModEvents`, with the same `ModList` guards. Ids keep the `creativeengineering` namespace (`CreativeDelight.NS`);
+  the Netherite Lunchbox keeps `solapplepie:`. `SeasonedItemModel`'s subscriber now uses `modid = creativedelight`.
+- **Resources (45 files + 41 lang keys)**: `creativeengineering/displaydelight_dishes.json`, the oven, powdered sugar and
+  10 placed-dish blockstates, models, textures and block loot tables, `data/displaydelight/tags/items/displayable.json`,
+  `data/tmted/recipes/crusher/` (2, Engineer's Delight flour), and the lang keys of JEI pages (seasoning, canning, can
+  uses, feast plating, baking), cans, lunchbox, seasonings, hoe harvest, oven and the placed dishes (CD's
+  `assets/creativeengineering/lang/en_us.json`; packs merge lang per key). `tools/gen_dd_dishes.py` now writes into CD.
+- **Config**: `[crop_growth]`, `[dandelion_maturing]`, `[crop_drops]` (with `.bell_peppers`, `.soil_yield`),
+  `[stem_fruit]`, `[canning]`, `[cooking]` and `[perf] troughMissCooldownTicks` moved from `CEConfig` to `CDConfig`
+  (`config/creativedelight-common.toml`), same keys, comments and defaults. First boot: `ConfigRename.carrySections` /
+  `mergeSections` copy the player's sections in (`[perf]` is copied whole and Forge drops its other keys), and
+  `CDConfig.warnOldKeys` WARNs if old entries are left with nothing carried. The instance's values were moved by hand
+  (config/ and `configs_edited/root_config/`, CD's file now backed up there).
+  - Scripts: `cd_core.js` registers CDConfig with `global.NCH.registerConfig`, so `NCH.cfg(..., 'COOKING')` (oven
+    ingredient counts) and `'CROP_DROPS'` resolve unchanged; `soil_yield.js` loads `CDConfig` directly.
+- **Members**: Baby Mobs (`baby_mobs`) and Incubation Additions (`incubation_additions`) are nested
+  (`development/creativeDelight/members/babymobs`, `.../incubation`; Gradle projects `:babyMobs`, `:incubationAdditions`
+  unchanged, `bundled_in=creativeDelight`). `replaces_jars` moves their standalone jars out of `mods/` at install; their
+  `IN_TREE_MODS` rows and `mod_sides.md` rows are gone. Both get a `[members]` switch in CD's config (CD scripts have no
+  rows for them yet, so the switch does nothing today). Their mod ids keep the underscore (a rename needs swap lists).
+
+### 34.2 Common hooks (patcherMod never imports CD)
+
+| Common reader | Hook |
+|---|---|
+| `compat/WthitRemainderBuffer` | new `compat/RemainderView` (slots, stack, stalled) and `RemainderView.Holder`; CD's `RemainderBuffer` implements it, `OvenBlockEntity` is a Holder and is added with `RemainderView.addStation`, the pot and kettle mixins get it through `RemainderBufferHolder extends RemainderView.Holder` |
+| NCH oven recipes (`[cooking] ovenIngredientCounts`) | `NCH.registerConfig('creativedelight', CDConfig)` from `cd_core.js` |
+| NCH can crafts | `Java.loadClass('...creativedelight.food.CanServings')` in its existing try/catch (soft) |
+| KubeJS can action | `compat/kubejs/IngredientActions` (wave 2) |
+
+Left in Common: `WthitKitchenStation` (reads no CD class), `MealSlotTooltip`, `PotionRows`, `JeiIcons`, `RecipeRows`,
+the `[jei] canCategories` / `seasoningCategory` and `[wthit] remainderBuffer` keys (CD reads them from CEConfig,
+downward). `mooshroom/` and More Mooblooms are Worldgen's (wave 5). The campfire went to Compat in wave 3.
+
+### 34.3 Install and tests
+
+Install with the game closed, all together: `./gradlew :patcherMod:installToMods :creativeCompat:installToMods
+:creativeCalendar:installToMods :creativeDelight:installToMods :creativeBrewing:installToMods --offline` (patcherMod
+1.1.07 with CB phases 2 and 3 and this carve; CD requires `[1.1.07,)`). Scratch SQ-CDJ4-01 to -08
+([scratch_queue.md](testing/scratch_queue.md)), after SQ-CS2, SQ-CMP and SQ-CBJ4 pass. In game: CDJ4-C1 oven (bake,
+leftover slot, WTHIT "Holding" line), CDJ4-C2 lunchbox (Netherite upgrade, dye, Slots line), CDJ4-C3 seasoning and an
+opened can (Servings line, JEI Seasoning / Canning pages), CDJ4-C4 Quark hoe 3x3 on crops and a feeding trough, CDJ4-C5
+a baby squid and an emu nest still appear.
+
+Known: `tools/gen_dd_dishes.py --check` stops at `ends_delight:shulker_omelette` (its model is inside the CD jar, not a
+top-level jar in `mods/`; older than this carve). The `tools/remainder_buffer_test` and `crop_growth_test` harnesses
+were repointed to the new class names but not rerun.
+
+### 33.1 Owner decisions, second batch (2026-11-01)
+
+Recorded from the owner's notes; none of it is built yet. TODO rows carry the same text.
+
+- **Oceanic Delight** becomes a donor jar (Miner's route, section 15): the upstream jar is read at runtime, nothing of it in the CD jar. Removes the licence conflict of 28.1 (`framework #3`). The fishing net overlay is redone as our own code.
+- **Food dict:** fruit juice keys are `fruit_juice_` (`framework #4`).
+- **Generators:** cans, food types, placeable and mortar all move into the CD tree, can startup data included (`framework #7`).
+- **Rustic:** every pepper colour and pepper medley stays; the Veggies Delight peppers and stuffed peppers are dropped (`members #14`, `#30`). Fried foods and calamari have no overlap now (`members #18`). The Rustic pancake block and Supplementaries' pancake stay; only Rustic's single pancake item is removed (`members #15`).
+- **Vintage Mixed Seeds** are built as written in vintage_delight.md 2.3a (`members #32`).
+- **Floral enchantment pot** is hosted in Creative Compat ([creative_compat.md](creative_compat.md); `potions/enchanting #7`).
+- **Just a Well tank** (`farming/crops #30`) waits for the Hearth and Harvest port.
+- **Planned to be implemented (owner, 2026-11-01):** the hand-written family rows onto `global.CD.food` (`framework #12`) and the cutover release (`members #10`). The pack release number for the cutover is still open.
+
+## 35. Framework #4, #7, #12 built (2026-11-01)
+
+Owner decisions of 33.1. Offline checks only; live checks are SQ-CDFW (scratch queue).
+
+### 35.1 Fruit juice keys (framework #4)
+
+The 26 `drink_juice_<name>` keys of `_lib/food_dict.js` are `fruit_juice_<name>` and sit in the fruit section after the
+jams (carrot, dandelion, nautilus, pickerelweed and the grape wines included, as `fruit_jam_pepper` is). Lint
+(`tools/food_dict.py`): family `drink/juice` maps to `('fruit', 'juice')`, `juice` is a word the fruit category drops.
+No script read a juice key (grep 2026-11-01), so only the dict, the lint, the index
+(`generation_scripts/food/food_dict_index.json`, rerun) and the docs changed. Tag values stay out of `f`.
+`tools/test_food_dict.sh`: lint 0 problems, Rhino load 1576 keys, bad-key run throws (CDT-08, CDT-10). `tool_dict.js` and
+`misc_dict.js` stay open (not part of this decision).
+
+### 35.2 Generators write member scripts (framework #7)
+
+Each generator keeps its JSON in `kubejs/generation_scripts/food/` as its **record** (tools read it; `food_types.json`
+and `can_servings.json` also take hand edits), and also writes one member script per item namespace into a CD tree. The
+game reads only the member scripts; nothing reads the JSONs by instance path any more.
+
+| Generator | Member script (one per namespace) | `global.CD` name | Reader |
+|---|---|---|---|
+| `food_catalog.py` (and `gen_can_types.py` through it) | `kubejs/data/creativedelight/kubejs/<ns>/food_types.js` (51) | `food_types` | `creativeengineering/food_type_tags.js` |
+| `placeable_catalog.py` | `.../<ns>/placeable.js` (24) | `placeable` | `creativeengineering/placeable_tags.js` |
+| `gen_mortar_catalog.py` | `.../<ns>/mortar_catalog.js` (4; by the source recipe's mod) | `mortar_catalog` | `creativeengineering/mortar.js` |
+| `gen_can_types.py` (hand run) | `development/creativeDelight/src/main/resources/kubejs_startup/<ns>/can_types.js` (29) and `can_servings.js` (30), by each can's first source food | `can_types`, `can_servings` | startup `creativeengineering/cans.js`; server `canning.js`, `can_tags.js` |
+
+- **Shape of a member script:** first line the `gen_out.header` line, `// priority: 900`, `// requires: <ns>` (none for
+  `minecraft`, `creativeengineering`, `creativedelight`, `forge`), then `global.CD.genPut(name, ns, {...})`. Tags, missing
+  keys and empty values go to `creativeengineering`; that part of food types and placeable names every type or tag (empty
+  lists too), so a reader still sees each one when only it loads. A namespace whose mod is absent is skipped by KubeJS
+  (server tree) or the jar loader (startup tree): its foods get no tags, its cans no item. With every mod present the
+  merged data is the record.
+- **`cd_core.js`:** `genPut(name, member, data)`, `genMerge(name)` (parts in member order; arrays joined, objects merged one
+  level down with arrays joined) and `genMembers(name)`. Startup parts stay in `global` for the server scripts.
+- **`tools/gen_out.py`:** CD trees now include the jar's `kubejs_startup` source folder; `write_member_scripts` (writes,
+  rewrites unchanged files never, deletes this generator's stale `<name>.js` in folders with no part), `split_lists`,
+  `namespace_of`, `report_member_scripts`. `--check` rule changed: an output inside a CD tree must lie under the entry's
+  `outRoot` (pack files beside it are fine). Manifest: `outRoot` `kubejs/data/creativedelight/kubejs` on `food_catalog`,
+  `placeable_catalog`, `mortar_catalog`; a new top-level `handRun` list (not read by `/cegen`) holds `can_types` with the
+  startup root.
+- **Each generator:** `--members` rewrites only the member scripts from the current JSON (the step after a hand edit of
+  `food_types.json`); `--check` also reports member scripts that differ (mortar gained a `--check`). `gen_mortar_catalog.py`
+  also skips `creative_delight:` recipes (CD's own, the namespace before the rename in older dumps).
+- **`build_deploy.py`:** the five JSONs are `dev` (not shipped); the member scripts ship in the CD jar.
+- **Equivalence:** member scripts were written from the records with `--members` (mortar by a full run, whose recipes equal
+  the old file; 1 skip reason fewer). `tools/test_gen_members.py` (CDT-14, new, harness `tools/gen_members_test/RhinoRun.java`)
+  loads item_dict, cd_core and all 138 member scripts and the five readers in the pack's Rhino, fires the events with
+  stubs and compares with the records: merged data equal; 46 tags with 2724 entries equal to what the records give; 276
+  cans created, 34 Canned Goods cans modified; 6 mortar crafts. PASSED; with `minecraft/placeable.js` moved away it fails
+  (3 tags short). `tools/test_gen_out.py` (CDT-13) extended (handRun, the new check rule, member script write / rewrite /
+  stale delete): PASSED.
+- **Full reruns not done:** the dumps predate several ports. `food_catalog.py --check` finds 93 untyped foods and 35 without
+  keys, `placeable_catalog.py --check` about 100 more placeable items and 4 new keys, `gen_can_types.py --check` stops on
+  4 Large Meals soups missing from the catalog. Each needs a fresh `/dumpall`, then a full run and a review.
+  `food/types-and-tuning #15` (cans follow comfort / nourishment) is therefore still open: `gen_can_types.py` already
+  applies `comfort_nourishment.json`, it needs the fresh `/dumpfood`.
+- **Dev loop change:** cans now need a CD jar build and a restart after `gen_can_types.py` (before: edit JSON, restart);
+  food types, placeable and mortar load from the pack's `kubejs/data/creativedelight/kubejs` on `/reload` as before.
+- Not moved (other generators reading by instance path, not in the decision): `comfort_nourishment.json`
+  (CD startup `comfort_nourishment.js`), `food_families.json` (`seasoning_tags.js`), `placed_food_slices.json` (Java).
+
+### 35.3 Family rows onto `global.CD.food` (framework #12)
+
+Keep-or-convert list (files under `kubejs/data/creativedelight/kubejs/`; `rusticdelight/` is the Rustic stream's):
+
+| File | Converted | Kept, and why |
+|---|---|---|
+| `fruitsdelight/recipes.js` | Baked Durian, Baked Pear, Dried Persimmon: `fruitCook` (was furnace only); Fig Chicken Stew: `soupCraft` | lemon 8 slices (owner yield, also edits the Create saw recipe); Fig Pudding egg tag; egg solution custard, orange jam (no family) |
+| `hostiledelight/recipes.js` | Grilled Ghast, Cooked Rotten Ham: `meatCook`; Fried Turtle Egg: `eggCook` (were campfire only, the mod's two kept) | Prepared Sea Pickle cut (1:1 upstream bug fix), bread tag |
+| `miners_delight/recipes.js` | Cooked Arthropod: `meatCook` (was smoker and campfire) | squid -> calamari cuts (chances, ink extras, Rustic gate) |
+| `abnormals_delight/recipes.js` | duck fillet: `meatCut`, `meatCook`; Duck Noodles grid: `mealCraft` | Duck Noodles pot |
+| `abnormals_delight/upgrade_aquatic.js` | perch and pike slices: `fishCook` (was furnace only plus the mod's two) | Pickerelweed Juice, Pike with Beetroot pot |
+| `delightful/recipes.js` | Roasted Acorn: `fruitCook` (nuts are in the raw/fruit type); Sinigang grid: `mealCraft` | Baklava (owner: not a family row), milkshakes, nut dough, knives |
+| `alexsdelight/recipes.js` | catfish: `fishSlice`; acacia blossom soup, kangaroo stew: `soupCraft`; kangaroo and lobster pasta: `mealCraft` | none |
+| `farmersdelight/recipes.js` | fried egg: `eggCook`; salmon, cod: `fishSlice`; 6 broth soups and stews: `soupCraft`; 10 meals (fried rice, mushroom rice, fish stew, pasta with mutton, vegetable noodles, ratatouille, pasta with meatballs, dumplings, squid ink pasta, dog food): `mealCraft`; fruit salad: `saladCraft` + `assemble`; mutton wrap: `wrapAssemble`; 11 assemblies (barbecue stick, grilled salmon, bacon and eggs, salmon, cod and kelp rolls, rice medley, roasted mutton chops, shepherd's pie, stuffed potato, steak and potatoes): `assemble` | bread from dough (bread is not a family), salvaging cuts (owner), bone broth and cooked rice from broth (ingredients), cabbage rolls (raw, no bowl), barbecue stick shapeless (the skewer family is shaped: a recipe change), shepherd's pie shapeless and steak and potatoes shaped (no hand call for a bowl meal), gleaming salad feast, pumpkin pie from FD slices, machine and fluid rows |
+| `minecraft/golden.js` | golden carrot, golden apple: `goldenGild` (grid ring, heated mixer 6, Arc Furnace 5); enchanted golden apple: `goldenEnchant` | none; `create/golden.js` and `immersiveengineering/golden.js` folded in and deleted (copies in `development/creativeDelight/moved_code_backup/2026-11-01-framework12/`) |
+
+Not converted, not named in the row: heatless and wrap rows of `veggiesdelight/cooking.js` and `fungidelight/cooking.js`
+(QoL-5 files), `corn_delight/recipes.js` corn soup, `endersdelight/` (being reworked by the Ender's stream the same day),
+the burger table in `creativeengineering/recipes.js`. Alex's Delight's own catfish slice cooking (1 xp, 200 ticks in all
+three) is a mod recipe, not a hand row; a `fishCook` call would make it 0.35 / 100 / 600 (owner call).
+
+Value changes (CD.FOOD, owner 2026-10-27 rule): Fruits' three cooked fruits 0.35 xp in furnace, smoker and campfire (were
+0.1); Hostile's three 0.35 xp (were 1); Cooked Arthropod furnace 0.35 xp (Miner's 0.25); catfish cutting adds a bone meal;
+the Golden Apple grid recipe takes `#forge:ingots/gold` (rose gold too; vanilla's took gold ingots only). Everything else
+keeps its inputs, outputs, counts, xp and times (checked by the call diff below).
+
+Ids that changed (`creativedelight:<type>/...`): cooks `<output path>_from_<input path>` (`grilledghast_from_ghasttentacle`,
+`baked_pear_from_fruits/pear`, `roasted_acorn_from_nuts/acorn`, `fried_egg_from_egg`, `cooked_duck_fillet_from_duck_fillet`,
+...), cuts `duck_fillet_from_raw_duck`, `raw_catfish_slice_from_raw_catfish`, `salmon_slice_from_salmon`,
+`cod_slice_from_cod`; assemblies `barbecue_stick_`, `bacon_and_eggs_`, `rice_roll_medley_block_`, `roasted_mutton_chops_`,
+`shepherds_pie_block_`, `enchanted_golden_apple_sequenced_assembly`; grid `pasta_with_mutton_chop_cooked_manual_only`,
+`golden_carrot`, `golden_apple`. The other heatless ids are unchanged.
+
+Offline: `tools/test_cd_food.sh` on the nine files (prelude now stubs `replaceInput`, `replaceOutput`, `incomplete`, the
+IE and bottle helpers, `Item.exists` and Create's deploying / filling / pressing, and prints shaped, assembly, mixing and
+arc rows too): all load; the before / after call diff is the list above (plus the family's type + input + output
+removals). The default run (baking, rusticdelight, cultivated meat) and veggiesdelight / roll_delight still load.
+Live: SQ-CDFW-05 to -08 (a removal by tag input, as for pear and persimmon, is the open point).
+
+## 36. Oceanic and Ender's Delight on the donor route (2026-11-01)
+
+Owner decisions of 33.1 (Oceanic, `framework #3`) and `members #9` (Ender's, "in case of licence issues"), built the same day.
+Both follow section 15 and the Miner's method: the unmodified upstream jar sits in a donor folder of the game directory,
+sha1-pinned in the member's `upstream/UpstreamJars`, read at load into two bottom built-in packs (`DonorJars`, `BuiltInPacks`,
+`MemoryPackResources` from `development/shared/`); nothing of it is in our jar (`checkNoUpstreamResources` on the build,
+`check_donor.py` / the harness on the built jar). Both folders are in `UPSTREAM_DONORS` (`tools/build_deploy.py`).
+
+| Member | Donor folder and file | sha1 | Source |
+|---|---|---|---|
+| `portedOceanic` (was `repackedOceanic`), mod id `oceanic_delight`, `1.0.1-ce-19.2-02` | `oceanic_upstream/oceanic_delight-1.0.1-forge-1.19.2.jar` | `91fd8842...` | Modrinth O1qboAbB / 9JkMCuAa |
+| `endersAdditions`, mod id `enders_additions`, `1.1.4-ce-19.2-03` | `enders_upstream/endersdelight-1.1.4.jar` | `d1541d70...` | Modrinth 2uEhdGKt / Jaf9wxnO |
+
+- **Oceanic** (ocean_delight.md 5.6): the repack is replaced by our own code (47 items, 8 blocks, Instant Breath, three
+  potions, the loot modifier type, all upstream ids). The licence conflict of 28.1 no longer matters: no upstream class or
+  file ships, and the MIT notice is dropped with them. The fishing net is our own item reading the pack's tags; its five loot
+  tables moved to `kubejs/data/creativedelight/loot_tables/gameplay/fishing_net/` (a new CD `dataTrees` entry), ids
+  `creativedelight:gameplay/fishing_net/*`. Project renamed in root `settings.gradle` and `bundle_members`.
+- **Ender's** (ends_delight.md 5.3): the member already had its own code; its 48 files from the 1.1.4 jar (art, loot,
+  End House) are now read from the donor, with the old edits redone in memory (`upstream/EndersTranslator`). Only those 48
+  paths are read, none of which the installed 1.2.2 jar has, so 1.2.2 keeps its own look and data.
+- Old worlds: every id and block state property is unchanged (offline comparison); no conversion.
+- Deploy: `oceanic_upstream/` and `enders_upstream/` go next to `mods/` on the server and every client; the game stops with a
+  message naming the file and URL otherwise. Tests: scratch queue SQ-DNR.
+
+## 37. Drink rules (owner, 2026-11-01)
+
+Juice, tea and coffee recipe rules, exceptions and the missed-drink audit are in [creative_delight_drinks.md](creative_delight_drinks.md). Not built.
