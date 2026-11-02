@@ -178,6 +178,26 @@
 - **Changed:** A Stuffed Potato can be offered to a Mimicarnation on Rich Soul Soil, like the other meals
 - **Changed:** The Hoglin Mount is now called Hoglin Trophy; placed ones stay
 
+## Drinks <!-- icon: farmersrespite:green_tea -->
+
+- **New:** Kiwi, Turnip, Bayberry, Cantaloupe, Carrot, Lemon, Melon, Orange and Pear Teas, brewed in the Kettle from 250 mB of the matching juice, any tea leaf and one more of the fruit
+- **New:** Lychee, Hawberry, Mango, Mangosteen and Peach Juices
+- **Changed:** Fruit juices are cooked in the Cooking Pot from 4 fruit, 1 sugar, honey or powdered sugar and a bottle, and brewed in the Kettle from 2 fruit on water; whole or sliced fruit both count
+- **Changed:** Dandelion Juice takes 2 dandelion leaves and 2 sugar cane in the Cooking Pot, 1 of each in the Kettle; Pickerelweed and Sea Grape Juice take 2 of the plant and 2 sugar in the Cooking Pot, 1 of each in the Kettle; Nautilus Juice also brews in the Kettle
+- **Changed:** Hawberry, Mango, Mangosteen, Peach, Lychee Cherry and Dandelion Tea are brewed in the Kettle from their juice, any tea leaf and one more fruit (Lychee Cherry Tea: a spore blossom; Dandelion Tea: a dandelion)
+- **Changed:** Every tea and coffee also mixes in a heated Mechanical Mixer; a tea takes one more tea leaf and one sugar there
+- **New:** Azalea Tea recipes: 2 flowering azaleas and 2 azalea flowers in the Cooking Pot, 1 of each on Green Tea in the Kettle
+- **Changed:** Lavender Tea is made from pink flowers and amethyst shards or lavender blossom leaves, on Green Tea in the Kettle
+- **Changed:** Sea Cucumber Tea is now Sea Pickle Tea: 3 sea pickles in the Cooking Pot, 2 on Sea Grape or Pickerelweed Juice in the Kettle
+- **Changed:** Ender Nectar is now Chorus Tea: chorus juice ingredients and an Eye of Ender in the Cooking Pot, or Chorus Juice, any tea leaf and an Eye of Ender in the Kettle
+- **Changed:** Bubble Tea is now Chorus Fruit Bubble Tea; Chorus Fruit Milk Tea also takes a dried chorus flower, and one more in the Cooking Pot
+- **Changed:** Berry Matcha Latte is now Ice Berry Matcha: Matcha Latte, 2 ice and 2 berries [1 ice, 1 berry]
+- **Changed:** Matcha Latte takes any sugar [honey] and, in the Cooking Pot, 2 matcha; Cloud Latte takes 2 bottled clouds and 1 cocoa bean [1 bottled cloud, 2 cocoa beans, sugar]
+- **Changed:** Builder's Tea can be cooked in the Cooking Pot from a water bottle, 2 tea leaves and milk
+- **Changed:** Coffees in the Cooking Pot take roasted coffee beans only; Chocolate Coffee takes cocoa beans or a chocolate bar, Pumpkin Coffee a pumpkin or a pumpkin slice
+- **Changed:** Flavoured coffees brew in the Kettle straight from plain Coffee with milk and the flavour
+- **Changed:** Turnip Water is now Turnip Juice
+
 ## Food Families
 
 - **Changed:** Baked Durian, Baked Pear and Dried Persimmon cook in a furnace, smoker or campfire for 0.35 xp [0.1]
