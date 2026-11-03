@@ -134,6 +134,8 @@ item keeps layers). Rendering, tooltip and WTHIT need a client (section 7).
 
 ## 7. In-game test suite
 
+- **r1102b 2026-11-02** (scratch server; verdicts in `perf/runs/r1102b/` HANDOVER.md and the slice judged.md): PASS SQ-JFP-03, -04, -05; rerun pending (batch fault) SQ-JFP-01, -02.
+
 - [ ] **MJ-01 Cookies mix:** right-click an empty jar with a cookie, a lemon cookie, a golden cookie → three layers,
   each its own cookie, in that order.
 - [ ] **MJ-02 Other family refused:** jar with cookies, right-click with an apple → nothing goes in.

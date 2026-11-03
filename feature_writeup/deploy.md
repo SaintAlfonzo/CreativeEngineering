@@ -178,6 +178,12 @@ From 1.1.01 every payload carries the players' notes for its version ([changelog
   still match the sha1 in that version's history json (edited or deleted = error).
 - `CONFIG_CLASSES`: `creativeengineering/changelog_seen.txt` (the read marker) is `player`; it is git-ignored too.
 
+### New world pregen
+
+When the final server world is created (not on updates): Chunky around spawn, then Distant Horizons `dh pregen`, with
+nobody online. Steps in `deploy/RUNBOOK.md` section 7 (shipped in every payload); background and decisions in
+[briefs/worldgen_locate.md](briefs/worldgen_locate.md) `locate #3`. Test LO-21.
+
 ### Mod updates (version-pinned fixes)
 
 Some patcherMod fixes target one exact third-party jar. Before an updated jar of one of these mods goes into `mods/`,

@@ -345,6 +345,8 @@ Read from the installed `mods/endersdelight-1.19-1.2.2.jar` (ARR, mod id `enders
 
 ### 5.6 Tests
 
+- **r1102b 2026-11-02** (scratch server; verdicts in `perf/runs/r1102b/` HANDOVER.md and the slice judged.md): PASS SQ-EN-04, -06; OPEN (no verdict, rerun row written) SQ-EN-03.
+
 | ID | Check |
 |---|---|
 | EN-01 | A broken Chorus Crate and Endstone Stove drop themselves; axe / pickaxe mine them faster |

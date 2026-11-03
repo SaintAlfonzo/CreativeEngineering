@@ -75,6 +75,8 @@ Rows are TODO ids; briefs are in `feature_writeup/briefs/`.
 - Jam jars (decided 2026-11-02, covers `dishes/jams #1`, `items/jars #8` and `#9`): jam bottles convert to mason jars, jam jars dropped.
 
 ## Phase 5: close-out
+- **r1102b 2026-11-02** (scratch server; verdicts in `perf/runs/r1102b/` HANDOVER.md and the slice judged.md): PASS SQ-PSD-02, -03, -04, -05, -06d, -06e, -06f, SQ-PSF-01, -03, -05, -06, -07b, -08a, SQ-PSM-01, -03, -04, -06a, -08, SQ-PST-01, -02, -06, -07, SQ-PSU-01, -02, -05, -08; FAIL SQ-PSU-06: lemon and orange jam-from-slices pot recipes return a glass bottle, not the mason jar (CD `fruitsdelight/recipes.js` 50, 59); OPEN (no verdict, rerun row written) SQ-PSD-01, -06, -06b, -06c, SQ-PSF-07, -08b, SQ-PSM-09, SQ-PSU-04, -09; rerun pending (batch fault) SQ-PSD-07, SQ-PSF-02, -04, -08, -09, SQ-PSM-02, -05, SQ-PST-03, -08, -09, -10, -11, -11b, SQ-PSU-03, -07; not run SQ-PSM-06, -06b, -07.
+
 - Queue rows in `scratch_queue.md` for each change; no scratch server booted.
 - Update writeups, TODO statuses, `unreleased.md` bullets, `python3 tools/changelog_lint.py`.
 - Hand over with test ids and jars waiting for `mods/`.

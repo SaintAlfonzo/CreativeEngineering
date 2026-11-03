@@ -9,7 +9,7 @@
 // creativedelight:wild_crops/<key> at the crop's step ("step", default vegetal_decoration; the truffle ground
 // rules use underground_ores), the mods' own modifiers in disable_modifiers replaced by forge:none, and
 // remove_features in one forge:remove_features modifier. The CD features it adds (creativedelight:wild/*) are in
-// kubejs/data/creativedelight/worldgen/. The machinery is the pack's _biome_rules.js (global.biomeRules, shared
+// kubejs/data/creativedelight/worldgen/. The machinery is Creative Worldgen's _biome_rules.js (global.biomeRules, shared
 // with mushroom_spawns.js); the biome traits are the pack's biome_traits.json. Biomes marked ocean or cave never
 // match a wild crop rule. ServerEvents.loaded compares the live tags with the rules and lists overworld biomes the
 // trait table doesn't classify.
@@ -27,9 +27,17 @@
 	var RULES = 'data/creativedelight/kubejs/_worldgen/wild_crops.json'
 	var sys = null
 
-	// built on first use, so the load order against _biome_rules.js does not matter
+	// built on first use, so the load order against _biome_rules.js does not matter. The machinery is Creative
+	// Worldgen's (worldgen/_biome_rules.js); without that jar there are no wild crop rules (warned once per reload).
+	var warned = false
 	function S() {
-		return sys || (sys = global.biomeRules.system({
+		if (sys) return sys
+		if (!global.biomeRules) {
+			if (!warned) console.warn('[creativedelight] wild crops off: global.biomeRules missing (no creativeworldgen jar)')
+			warned = true
+			return null
+		}
+		return (sys = global.biomeRules.system({
 			name: 'wild-crops',
 			configPath: RULES,
 			biomesPath: 'kubejs/generation_scripts/worldgen/biome_traits.json',
@@ -53,7 +61,7 @@
 		return jar == null ? null : String(jar)
 	}
 
-	ServerEvents.tags('worldgen/biome', function (event) { S().tags(event) })
-	ServerEvents.highPriorityData(function (event) { S().data(event) })
-	ServerEvents.loaded(function (event) { S().loaded(event) })
+	ServerEvents.tags('worldgen/biome', function (event) { if (S()) S().tags(event) })
+	ServerEvents.highPriorityData(function (event) { if (S()) S().data(event) })
+	ServerEvents.loaded(function (event) { if (S()) S().loaded(event) })
 })()

@@ -19,7 +19,7 @@ How it works:
   Config-driven chances are read from config/*.toml.
 
 - The pack's own placement, Creative Delight's kubejs/data/creativedelight/kubejs/_worldgen/wild_crops.json and the
-  pack's mushroom_spawns.json (applied in game by the wild_crops.js next to it and kubejs/server_scripts/worldgen/
+  pack's mushroom_spawns.json (applied in game by the wild_crops.js next to it and kubejs/data/creativeworldgen/kubejs/worldgen/
   mushroom_spawns.js), with the biome traits of biome_traits.json, is evaluated with the same rules:
   the mods' modifiers they switch off are dropped, remove_features run after every add (Forge's order), and each
   rule's features go to the biomes it matches (mushroom rules in cave mode also match ocean and cave biomes). The

@@ -180,6 +180,8 @@ decompiled with Vineflower (models, renderers, `LayerDefinitions`).
 
 ## 7. Tests
 
+- **r1102b 2026-11-02** (scratch server; verdicts in `perf/runs/r1102b/` HANDOVER.md and the slice judged.md): PASS SQ-BM-01; rerun pending (batch fault) SQ-BM-02.
+
 - [x] **BM-01 Summon babies [scratch]:** `/summon minecraft:squid ~ ~ ~ {Age:-24000}` (and glow_squid, dolphin) in
   water -> `/data get entity` shows `Age: -24000` rising by 20 every second; a plain `/summon` gives `Age: 0`. *PASSED
   scratch 2026-10-20 (nw4): all three read -24000, the plain squid 0; 66 s later squid and dolphin read -22687 (1313

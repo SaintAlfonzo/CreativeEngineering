@@ -141,6 +141,8 @@ All in [tools/gen_stack_sizes.py](../../tools/gen_stack_sizes.py):
 - Stacks that don't merge because of NBT (`cooking/kitchen #5`, returned bowls and paper) are a separate bug.
 
 ### Tests
+- **r1102b 2026-11-02** (scratch server; verdicts in `perf/runs/r1102b/` HANDOVER.md and the slice judged.md): PASS SQ-STK-01, -02, -03, -04.
+
 stack_sizes.md has no test prefix. Add to [food.md](../food.md) section 7 (FO-29 to FO-32 were proposed here on
 2026-10-21; those numbers have since gone to other tests, so renumber when queued):
 - **FO-new1 Bowl and bottle foods:** in survival, stack Apple Jello, Scrambled Eggs, Dog Food and Cantaloupe Shaved

@@ -1,13 +1,13 @@
 // requires: vintagedelight
 // requires: lootjs
 // Vintage Delight chest loot (vintageport #5, vintage_delight.md S11). Rules for the pre-roll loot framework
-// (server_scripts/loot/05_tuning.js, global.lootTuning); the pack's rules are in loot/07_rules.js.
+// (Creative Worldgen loot/05_tuning.js, global.lootTuning); the pack's rules are in Worldgen's loot/07_rules.js.
 //
-// Wrapped in an IIFE: all server scripts share one top-level scope.
+// The rules sit in a callback, so nothing leaks into the top-level scope all server scripts share.
 
-(function () {
-    if (!global.lootTuning) return
-    var L = global.lootTuning
+// Queued with global.CWG.lootRules (Creative Worldgen's loot engine, loot/05_tuning.js): its script pack can load
+// after this one, so the rules run when the engine of the current reload exists. No Worldgen jar: no rules.
+if (global.CWG) global.CWG.lootRules(function (L) {
     var i = global.item
 
     // ── crates and bags split out of their loose crop's entry, like the Farmer's Delight crates ──
@@ -40,7 +40,7 @@
         'minecraft:chests/village/village_desert_house', 'minecraft:chests/pillager_outpost',
     ]
     MIXED_SEEDS_CHESTS.forEach(function (table) { L.add(table, i.mixed_seeds, { share: 0.04, count: [1, 4] }) })
-})()
+})
 
 // Mixed Seeds from grass (creativedelight/members #32): 2 % per grass or tall grass broken without shears, beside the
 // vanilla wheat seed drop (12.5 %).

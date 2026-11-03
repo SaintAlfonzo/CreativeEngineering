@@ -346,6 +346,8 @@ CfB's three recipes removed (`cookingforblockheads/kitchen.js`); woods with no r
 
 ## 4. Tests
 
+- **r1102b 2026-11-02** (scratch server; verdicts in `perf/runs/r1102b/` HANDOVER.md and the slice judged.md): rerun pending (batch fault) SQ-SALT-06, -08.
+
 After a full restart, `logs/latest.log` first: `[itemMerges] 1 pack merges registered` and the two
 recipe-event lines of 1.1 (SQ-IMS-01), `[food values] 5 effect swaps` with no
 `effect swap:` warning, no `Error occurred while handling event`

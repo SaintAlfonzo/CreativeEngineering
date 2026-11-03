@@ -134,7 +134,6 @@ DEVELOPMENT = os.path.join(ROOT, 'development')
 IN_TREE_MODS = [
     ('patcherMod', 'creativeengineering', True),
     ('exposureBackport', 'exposureBackport', True),
-    ('moreMooblooms', 'moreMooblooms', True),
     ('creativeLabels', 'creativeLabels', True),
     # Creative Delight: the bundle jar; its members (development/creativeDelight/members/, Baby Mobs and Incubation
     # Additions included since 2026-11-01; the Veggies, Vintage, Fungi, Miner's and Display ports since 2026-11-02,
@@ -146,6 +145,9 @@ IN_TREE_MODS = [
     ('creativeCalendar', 'creativecalendar', True),
     # Creative Compat: tweaks to third-party mods (feature_writeup/creative_compat.md); every other Creative jar requires it.
     ('creativeCompat', 'creativecompat', True),
+    # Creative Worldgen: world generation and fauna (feature_writeup/creative_worldgen.md); nests More Mooblooms and Baby
+    # Mobs (development/creativeWorldgen/members/; More Mooblooms shipped on its own before 2026-11-02).
+    ('creativeWorldgen', 'creativeworldgen', True),
 ]
 # Extra source trees per in-tree project for the "src newer than the jar" check (paths from the instance root).
 IN_TREE_EXTRA_SRC = {
@@ -157,6 +159,8 @@ IN_TREE_EXTRA_SRC = {
                         'kubejs/assets/creativebrewing/kubejs'],
     'creativeCalendar': ['kubejs/data/creativecalendar/kubejs'],
     'creativeCompat': ['kubejs/data/creativecompat/kubejs', 'kubejs/assets/creativecompat/kubejs'],
+    'creativeWorldgen': ['development/creativeWorldgen/members', 'kubejs/data/creativeworldgen/kubejs',
+                         'kubejs/data/more_mooblooms/moobloom_spawns', 'development/shared'],
 }
 # Third-party jars that patcherMod fixes target by version (deploy.md "Mod updates"): (jar file prefix, the file the
 # fixes were written against). A different file under the same prefix means the mod was updated: rerun the checklist.
@@ -243,8 +247,12 @@ KUBEJS_CLASSES = [
     # Creative Compat's script trees: the same, shipped only inside the creativecompat jar
     ('data/creativecompat/kubejs/*', 'dev'),
     ('assets/creativecompat/kubejs/*', 'dev'),
+    # Creative Worldgen's server script tree (with the loot framework's loot_config.json / loot_index.json) and the
+    # moobloom spawn rules it ships as a data tree: the same, shipped only inside the creativeworldgen jar
+    ('data/creativeworldgen/kubejs/*', 'dev'),
+    ('data/more_mooblooms/*', 'dev'),
     ('startup_scripts/*', 'runtime'),
-    ('server_scripts/*', 'runtime'),       # incl. loot/loot_config.json + loot_index.json (05_tuning.js)
+    ('server_scripts/*', 'runtime'),
     ('data/*', 'runtime'),
     ('config/*', 'runtime'),
     ('client_scripts/*', 'client'),
@@ -536,8 +544,9 @@ UPSTREAM_DONORS = {
     # nested in the Creative Delight jar, so the CD jar in mods/ is what needs the donor
     'miners_upstream': ('creativedelight', "Miner's Delight (Creative Delight)",
                         ('creativeDelight/members/miners', 'com', 'sammy', 'minersdelight', 'upstream')),
-    'farmers_upstream': ('creativeengineering', "Farmer's Structures donor (patcherMod)",
-                         ('patcherMod', 'com', 'SaintAlfonzo', 'creativeengineering', 'worldgen', 'donor')),
+    # in the Creative Worldgen jar since the wave 5 carve (2026-11-02; patcherMod before)
+    'farmers_upstream': ('creativeworldgen', "Farmer's Structures donor (Creative Worldgen)",
+                         ('creativeWorldgen', 'com', 'SaintAlfonzo', 'creativeworldgen', 'worldgen', 'donor')),
     'rustic_upstream': ('creativedelight', 'Rustic Delight (Creative Delight)',
                         ('creativeDelight/members/rustic', 'com', 'SaintAlfonzo', 'creativedelight', 'rustic', 'upstream')),
     'roll_upstream': ('creativedelight', 'Roll Delight (Creative Delight)',
@@ -676,7 +685,7 @@ def check_climate_reader(pre, files):
     for jar, src in files['mods'].items():
         if re.match(r'creativeengineering-.*\.jar$', jar):
             with zipfile.ZipFile(src) as z:
-                cls = z.read('com/SaintAlfonzo/creativeengineering/worldgen/WorldgenFiles.class')
+                cls = z.read('com/SaintAlfonzo/creativeengineering/util/WorldgenFiles.class')  # util/ since wave 2
             if b'readGzipText' not in cls:
                 pre.error(f'mods/{jar} predates the gzipped climate samples (no WorldgenFiles.readGzipText): '
                           'copy the current development/patcherMod/build/libs jar into mods/ first')

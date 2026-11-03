@@ -660,6 +660,11 @@
           "weight": 100,
           "frequency": 1.0,
           "fit_keep": false
+        },
+        "creativeengineering:meta/waystone_ruins": {
+          "weight": 1,
+          "frequency": 1.0,
+          "note": "Meta structure with an anchor: never picked by this weight; it takes \"share\" (meta_structures.json) of the slots its anchors win here, so no member's rate changes. Keep the weight at 1."
         }
       }
     },

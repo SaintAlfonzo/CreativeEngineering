@@ -48,7 +48,6 @@ import java.util.List;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
-
 @Mod(CreativeEngineering.MODID)
 public class CreativeEngineering
 {
@@ -67,7 +66,6 @@ public class CreativeEngineering
     public CreativeEngineering() {
         IEventBus modEventBus = FMLJavaModLoadingContext.get().getModEventBus();
         modEventBus.addListener(this::commonSetup);
-        modEventBus.addListener(com.SaintAlfonzo.creativeengineering.worldgen.donor.FarmersDonor::onAddPackFinders);
 
         // Must be registered here, during construction - Forge loads every mod's COMMON/CLIENT
         // config immediately after every mod's constructor has run, so anything later (even
@@ -79,16 +77,11 @@ public class CreativeEngineering
 				CreativeEngineeringEntities.register(modEventBus);
 				com.SaintAlfonzo.creativeengineering.fan.DragonBreathingRecipeType.register(modEventBus);
 				com.SaintAlfonzo.creativeengineering.gear.ElytraDuplicationSerializers.register(modEventBus);
-				// creativeengineering:biome_tag loot condition (loot/BiomeTagCondition; the fishing net tables use it).
-				com.SaintAlfonzo.creativeengineering.loot.BiomeTagCondition.register(modEventBus);
         // Tier shields (copper..dragon, iron = the vanilla shield): the items here, the block-check
         // widening in mixin/LivingEntityShieldMixin, everything tunable in CEConfig.SHIELDS.
         com.SaintAlfonzo.creativeengineering.shield.ShieldItems.register(modEventBus);
         // Wooden bucket: water-only early bucket (bucket/WoodenBucketItems).
         com.SaintAlfonzo.creativeengineering.bucket.WoodenBucketItems.register(modEventBus);
-        // Meta structures: the creativeengineering:meta structure type and its two piece types
-        // (worldgen/MetaStructure; the structures themselves are kubejs meta_structures.json).
-        com.SaintAlfonzo.creativeengineering.worldgen.MetaStructure.register(modEventBus);
         // Oven, powdered sugar, Display Delight dishes: Creative Delight (2026-11-01, creative_delight.md 34).
         // Botanist workbench pot and flower box plant models moved to Creative Compat (2026-11-01).
         // Backpack skins: smithing + clearing recipes, Curios equip block (backpackskin/; the looks are mixin/BackpackSkin*).
@@ -126,7 +119,6 @@ public class CreativeEngineering
         // Potions, effects, potion machines, the alcohol tooltip and copper poisoning moved to Creative Brewing
         // (2026-11-01, creative_brewing.md 4.2 phases 2 and 3).
 
-
         // Elytra air brake velocity effect (the item itself is registered in KubeJS -
         // startup_scripts/items/air_brake.js) - see CEConfig.AirBrake for the tuning knobs.
         MinecraftForge.EVENT_BUS.register(com.SaintAlfonzo.creativeengineering.gear.AirBrakeHandler.class);
@@ -137,9 +129,6 @@ public class CreativeEngineering
         // The same burst for Creative Compat's burn-explosion rule (itemphysic.ItemBurnTransform), through util.BurnBursts.
         com.SaintAlfonzo.creativeengineering.util.BurnBursts.register(com.SaintAlfonzo.creativeengineering.shrapnel.ShrapnelSpawner::burst);
 
-        // Leaf decay (CEConfig [leaf_decay]): Fast Leaf Decay's air-neighbour trigger, ported in; the range and
-        // timing rules are mixin.LeavesDecayRangeMixin + block.LeafDecayRange.
-        MinecraftForge.EVENT_BUS.register(com.SaintAlfonzo.creativeengineering.block.FastLeafDecayPort.class);
         // Vine shearing moved to Creative Compat (2026-11-01).
 
         // Live whistling arrows, so mixin.NeaWhistleGoalSkipMixin skips NEA's per-mob arrow query when there are none.
@@ -179,78 +168,12 @@ public class CreativeEngineering
         MinecraftForge.EVENT_BUS.register(com.SaintAlfonzo.creativeengineering.damage.DamageTagLoader.class);
         MinecraftForge.EVENT_BUS.register(com.SaintAlfonzo.creativeengineering.damage.DamageTagLogger.class);
 
-        // Jigsaw pool tuning (village houses etc.: pool_config.json / pool_tags.json) + the loot
-        // container swaps that let Lootr convert modded structure chests. ServerAboutToStartEvent,
-        // LOWEST priority, so every mod has injected its village pieces first.
-        MinecraftForge.EVENT_BUS.register(com.SaintAlfonzo.creativeengineering.worldgen.PoolTuner.class);
-
-        // Structure groups: per-structure frequency inside a structure_set, staged by
-        // kubejs/server_scripts/worldgen/structure_overrides.js and frozen at ServerAboutToStartEvent.
-        MinecraftForge.EVENT_BUS.register(com.SaintAlfonzo.creativeengineering.worldgen.StructureFrequencies.class);
-        // Meta structures with an anchor take over slots their anchors won (worldgen/MetaSlots); its index is per world.
-        MinecraftForge.EVENT_BUS.register(com.SaintAlfonzo.creativeengineering.worldgen.MetaSlots.class);
-        MinecraftForge.EVENT_BUS.register(com.SaintAlfonzo.creativeengineering.worldgen.PlacementPriority.class);
-        MinecraftForge.EVENT_BUS.register(com.SaintAlfonzo.creativeengineering.worldgen.TemplateBlockSwaps.class);
-        // Spawn boxes on pillager and witch structures and their meta parts (spawn_boxes.json); box evokers drop no totem.
-        MinecraftForge.EVENT_BUS.register(com.SaintAlfonzo.creativeengineering.worldgen.StructureSpawnBoxes.class);
-
-        // Mob spawn tuning: biome modifier type creativeengineering:tune_spawns (mob_spawns.json, written by
-        // kubejs/server_scripts/worldgen/mob_spawns.js); its change record feeds /dumpspawns and is cleared on stop.
-        com.SaintAlfonzo.creativeengineering.worldgen.SpawnTuning.register(modEventBus);
-        MinecraftForge.EVENT_BUS.register(com.SaintAlfonzo.creativeengineering.worldgen.SpawnTuning.class);
-        // Brown mooshrooms on natural spawns (mob_spawns.json brown_chance); the family's breeding is in mixins.
-        MinecraftForge.EVENT_BUS.register(com.SaintAlfonzo.creativeengineering.mooshroom.MooshroomFamily.class);
-        // Named mobs (CEConfig [named_mobs]): a rare random name on natural spawns, deaths announced in chat.
-        MinecraftForge.EVENT_BUS.register(com.SaintAlfonzo.creativeengineering.mobs.NamedMobs.class);
+        // World generation and fauna (structures, locate, earth and water fill, terrain adaptation, meta structures,
+        // sky islands, bee nests, mob spawns, mooshrooms, named mobs, leaf decay, the biome_tag loot condition, the
+        // Farmer's Structures donor, Forgiving Void) moved to Creative Worldgen (2026-11-02, creative_split.md 7.6).
         // Quark monster boxes as vaults moved to Creative Compat (2026-11-01).
 
-        // Bee nest tuning: biome modifier type creativeengineering:bee_nests (bee_nests.json, written by
-        // kubejs/server_scripts/worldgen/bee_nests.js) + the tree/nest/chunk counters behind /dumpbeenests.
-        com.SaintAlfonzo.creativeengineering.worldgen.BeeNests.register(modEventBus);
-        MinecraftForge.EVENT_BUS.register(com.SaintAlfonzo.creativeengineering.worldgen.BeeNests.class);
-
-        // Structure biome rules (biome_rules in structure_groups.json): only allowed structures start in
-        // the water biomes. Staged by structure_overrides.js, frozen at ServerAboutToStartEvent.
-        MinecraftForge.EVENT_BUS.register(com.SaintAlfonzo.creativeengineering.worldgen.StructureBiomeRules.class);
-
-        // Biome fits (biome_fits.json + the tower/* structure tags): a structure's own biome list replaced by the
-        // fit's biome tags (mixin/StructureBiomesMixin). Staged by structure_overrides.js, frozen at
-        // ServerAboutToStartEvent (HIGHEST, before the biome rules read the lists).
-        MinecraftForge.EVENT_BUS.register(com.SaintAlfonzo.creativeengineering.worldgen.StructureBiomeFits.class);
-
-        // Structure bases that don't match the ground (grass pads on volcanic peaks...): swapped for the
-        // sampled local ground as templates place (mixin/StructureTemplateGroundMatchMixin). Registered for
-        // its per-world sample cache reset; knobs in CEConfig [worldgen.ground_match].
-        MinecraftForge.EVENT_BUS.register(com.SaintAlfonzo.creativeengineering.worldgen.GroundMatch.class);
-
-        // Earth fill: cancels a structure start whose template foundations would sit over too much water or
-        // air, and a water structure whose water would replace too much dry ground or air
-        // (mixin/ChunkGeneratorEarthFillMixin). Registered to clear its template caches; knobs in
-        // CEConfig [worldgen.earth_fill] and [worldgen.water_fill].
-        MinecraftForge.EVENT_BUS.register(com.SaintAlfonzo.creativeengineering.worldgen.EarthFill.class);
-
-        // Structures no biome of a dimension can hold are not tried there (ChunkGeneratorStructureFrequencyMixin);
-        // registered to clear its cache. On/off: [worldgen.systems] dimensionFilter.
-        MinecraftForge.EVENT_BUS.register(com.SaintAlfonzo.creativeengineering.worldgen.DimensionFilter.class);
-
-        // Underground structures tagged creativeengineering:seabed_clearance never start with their box near a
-        // water-covered floor (mixin/ChunkGeneratorSeabedClearanceMixin). Sky Structures' islands are placed by
-        // worldgen/SkyIslands (mixin/ConfiguredFeatureSkyIslandsMixin). Both registered for their load / stop log lines.
-        MinecraftForge.EVENT_BUS.register(com.SaintAlfonzo.creativeengineering.worldgen.SeabedClearance.class);
-        MinecraftForge.EVENT_BUS.register(com.SaintAlfonzo.creativeengineering.worldgen.SkyIslands.class);
-
-        // Terrain adaptation by structure tag (none / bury / beard_thin / beard_box / the soft beard) and template trim
-        // (air and bare pad around the built columns not placed): mixin/StructureTerrainAdaptationMixin,
-        // BeardifierSoftMixin and StructureTemplateGroundMatchMixin. Registered for the tag table and the template
-        // caches; knobs in CEConfig [worldgen.terrain_adaptation].
-        MinecraftForge.EVENT_BUS.register(com.SaintAlfonzo.creativeengineering.worldgen.TerrainAdaptation.class);
-        MinecraftForge.EVENT_BUS.register(com.SaintAlfonzo.creativeengineering.worldgen.TemplateTrim.class);
-
         // /ceplace (MassPlacer) moved to Creative Devtools (feature_writeup/creative_devtools.md 2).
-
-        // /celocate batch | census | stats: structure-search measurements on Async Locator's thread pool;
-        // the search prediction folds, miss logging and non-blocking loads are mixins. CEConfig [worldgen.locate].
-        MinecraftForge.EVENT_BUS.register(com.SaintAlfonzo.creativeengineering.worldgen.LocateCommand.class);
 
         // Python generators (/cegen) and the other dev tools moved to Creative Devtools
         // (feature_writeup/creative_devtools.md).
@@ -267,7 +190,6 @@ public class CreativeEngineering
 					  List.of(Tiers.IRON)     // and before iron
 				);
     }
-
 
     // -------------------------------------------------------------------------
     // commonSetup — runs during mod loading, calls IECompat.register()
@@ -296,11 +218,6 @@ public class CreativeEngineering
 			forceLoad("com.SaintAlfonzo.creativeengineering.damage.DamageTags");
 			forceLoad("com.SaintAlfonzo.creativeengineering.damage.DamageTagSnapshot");
 
-			// ForgivingVoidMixin applies lazily on the first void-fall bounce; pre-load the
-			// config bridge it references so a late transform can resolve it.
-			forceLoad("com.SaintAlfonzo.creativeengineering.forgivingvoid.ForgivingVoidBridge");
-			LOGGER.info("[forgiving-void] {}", com.SaintAlfonzo.creativeengineering.forgivingvoid.ForgivingVoidBridge.summary());
-
 			event.enqueueWork(FluidBridge::logStartupDiagnostic);
 			event.enqueueWork(com.SaintAlfonzo.creativeengineering.fan.DragonBreathingFanProcessingType::register);
 			event.enqueueWork(com.SaintAlfonzo.creativeengineering.compat.NockRecipeBookSync::register);
@@ -321,7 +238,6 @@ public class CreativeEngineering
 			LOGGER.error("Failed to pre-load {} - sawmill blade routing may crash on use", className, t);
 		}
 	}
-
 
     // -------------------------------------------------------------------------
     // The IE recycling diagnostics that ran here on ServerStartedEvent moved to Creative Devtools

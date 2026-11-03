@@ -201,6 +201,8 @@ saturation [0.8], Chocolate and Vegetable pancake servings 4 / 0.6 [3 / 0.6], ho
 
 ### 5.6 Tests (RD-)
 
+- **r1102b 2026-11-02** (scratch server; verdicts in `perf/runs/r1102b/` HANDOVER.md and the slice judged.md): PASS SQ-RD-02, -04, -05, -06, -07, -13, -14, -15, -16, -17, -18, -19, -20, -21, -23, -27, -28, -33, SQ-RDX-03, -03b, -06, -07, -08, -08b, -09, -10, -11, -12, -14; FAIL SQ-RD-22: every Rustic food lost Nourishment: `comfort_nourishment.json` (10-27) had no `rusticdelight:` entries; owner regenerated 19:50, rerun pending; OPEN (no verdict, rerun row written) SQ-RD-24; rerun pending (batch fault) SQ-RD-08, -10, -11, -26, SQ-RDX-12b; not run SQ-RD-03, -03a.
+
 Offline 2026-10-25: `:backportedRustic:build`; `tools/check_donor.py` 0 problems (162 ids both ways, every data
 reference resolves, no 1.20-only loot type left, no recipe item missing from the last `/dumpall`); `gen_crop_worldgen_table.py`
 resolves the new row; `build_deploy.py` reads the donor pin. 2026-10-26: all 30 donor models naming `template_crop_cross`

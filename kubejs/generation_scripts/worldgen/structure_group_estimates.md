@@ -61,7 +61,7 @@ Pillager outposts: vanilla, and every Towns & Towers tower, fort and camp outpos
 
 Grid: spacing 32, separation 8 (members never start closer than 9 chunks = 144 blocks apart). At most 1 structure per 32 x 32 chunks anywhere. Excluded within 4 chunks of `creativeengineering:group/settlements` grid slots.
 
-Capped (old combined density above the group grid): 70 biome(s), 30% of the group's area. Largest: `terralith:yellowstone` 1 per 27 -> 28, `minecraft:plains` 1 per 26 -> 28, `terralith:highlands` 1 per 26 -> 28, `terralith:brushland` 1 per 30 -> 27, `terralith:lush_desert` 1 per 30 -> 28, `terralith:rocky_mountains` 1 per 26 -> 28.
+Capped (old combined density above the group grid): 70 biome(s), 30% of the group's area. Largest: `terralith:yellowstone` 1 per 27 -> 28, `minecraft:plains` 1 per 26 -> 27, `terralith:highlands` 1 per 26 -> 27, `terralith:brushland` 1 per 30 -> 27, `terralith:lush_desert` 1 per 30 -> 27, `terralith:rocky_mountains` 1 per 26 -> 27.
 
 | Structure | Weight | Frequency | Mod default 1 per | New 1 per | Ratio | Note |
 |---|---|---|---|---|---|---|
@@ -102,10 +102,10 @@ Capped (old combined density above the group grid): 70 biome(s), 30% of the grou
 | `mysticrift_pillagers_towers_aris:jungle_pillager_tower` | 30 | 0.973476 | 128 | 91 | 1.96 |  |
 | `mysticrift_pillagers_towers_aris:mangrove_pillager_tower` | 15 | 0.038089 | 160 | 765 | 0.04 |  |
 | `mysticrift_pillagers_towers_aris:oak_wood_pillager_tower` | 15 | 0.467934 | 127 | 190 | 0.45 |  |
-| `creativeengineering:meta/pillager_camp_ruin` | 1 | 1.0 | - | 166 | new |  |
-| `creativeengineering:meta/pillager_camp_ruins` | 1 | 1.0 | - | 160 | new |  |
+| `creativeengineering:meta/pillager_camp_ruin` | 1 | 1.0 | - | 128 | new |  |
+| `creativeengineering:meta/pillager_camp_ruins` | 1 | 1.0 | - | 124 | new |  |
 | `creativeengineering:meta/pillager_camp_siege` | 1 | 1.0 | - | 138 | new |  |
-| `creativeengineering:meta/pillager_great_tower_siege` | 1 | 1.0 | - | 214 | new |  |
+| `creativeengineering:meta/pillager_great_tower_siege` | 1 | 1.0 | - | 276 | new |  |
 | `creativeengineering:meta/pillager_stronghold_siege` | 1 | 1.0 | - | 105 | new |  |
 | `creativeengineering:meta/pillager_tower_siege` | 1 | 1.0 | - | 88 | new |  |
 | `takesapillage:bastille` | 34 | 1.0 | 55 | 124 | 0.20 |  |
@@ -153,6 +153,7 @@ Capped (old combined density above the group grid): 62 biome(s), 62% of the grou
 | `small_cat_statues:cat_2` | 19 | 1.0 | 30 | 119 | 0.06 |  |
 | `small_cat_statues:cat_3` | 19 | 1.0 | 30 | 119 | 0.06 |  |
 | `eugene:ruined_drum_tower` | 100 | 1.0 | 101 | 70 | 2.09 |  |
+| `creativeengineering:meta/waystone_ruins` | 1 | 1.0 | - | - | - | empty biome tag: never spawns unless a mod fills it at runtime |
 
 ### `surface_dungeons` -> `creativeengineering:group/surface_dungeons`
 

@@ -2,8 +2,6 @@
 
 Written by `python3 tools/gen_nether_swaps.py` from `kubejs/generation_scripts/worldgen/nether_swap_rules.json`. Do not edit. Per rule: every template it changes, with block counts. Applied by patcherMod `TemplateBlockSwaps` when a template loads.
 
-Exempt from every rule (`plan/move_to_nether`, to be moved to the Nether later): none.
-
 ## 1. Philip's underground structures: soul sand and soil to basalt (204 blocks)
 
 | Template | Structures | From | To | Blocks |
@@ -273,7 +271,60 @@ Skipped, holding `@sculk`: `minecraft:ancient_city`, `philipsruins:bone_dungeon`
 
 Nothing matched.
 
+## 26. Crimson trapdoors to mangrove trapdoors, state kept (K28) (39 blocks)
+
+| Template | Structures | From | To | Blocks |
+|---|---|---|---|---:|
+| `betterwitchhuts:witch_hut_sm` | `betterwitchhuts:witch_hut` | `crimson_trapdoor` | `minecraft:mangrove_trapdoor` | 2 |
+| `simply_houses:taiga_forge/taiga_forge` | `simply_houses:taiga_forge` | `crimson_trapdoor` | `minecraft:mangrove_trapdoor` | 1 |
+| `terralith:village/desert/houses/cartographer2` | `terralith:fortified_desert_village` | `crimson_trapdoor` | `minecraft:mangrove_trapdoor` | 36 |
+
+## 27. Crimson buttons to mangrove buttons, state kept (K29) (28 blocks)
+
+| Template | Structures | From | To | Blocks |
+|---|---|---|---|---:|
+| `betterdeserttemples:statues/statue_2` | `betterdeserttemples:desert_temple` | `crimson_button` | `minecraft:mangrove_button` | 2 |
+| `betterstrongholds:rooms/junction_md` | `betterstrongholds:stronghold` | `crimson_button` | `minecraft:mangrove_button` | 2 |
+| `betterstrongholds:rooms/mess` | `betterstrongholds:stronghold` | `crimson_button` | `minecraft:mangrove_button` | 2 |
+| `betterstrongholds:starts/junction_lg` | `betterstrongholds:stronghold` | `crimson_button` | `minecraft:mangrove_button` | 20 |
+| `kaisyn:outpost/forts/jungle/base_plate` | `towns_and_towers:pillager_outpost_jungle` | `crimson_button` | `minecraft:mangrove_button` | 2 |
+
+## 28. Crimson slabs to mangrove slabs, state kept (K33) (6 blocks)
+
+| Template | Structures | From | To | Blocks |
+|---|---|---|---|---:|
+| `betterdeserttemples:main_entrance_doorway/main_entrance_doorway_0` | `betterdeserttemples:desert_temple` | `crimson_slab` | `minecraft:mangrove_slab` | 6 |
+
+## 29. Warped pressure plates to dark oak pressure plates (K30) (24 blocks)
+
+| Template | Structures | From | To | Blocks |
+|---|---|---|---|---:|
+| `betterdeserttemples:puzzle_big/puzzle_big_4_0` | `betterdeserttemples:desert_temple` | `warped_pressure_plate` | `minecraft:dark_oak_pressure_plate` | 4 |
+| `betterdeserttemples:puzzle_big/puzzle_big_4_1` | `betterdeserttemples:desert_temple` | `warped_pressure_plate` | `minecraft:dark_oak_pressure_plate` | 4 |
+| `betterdeserttemples:puzzle_big/puzzle_big_4_2` | `betterdeserttemples:desert_temple` | `warped_pressure_plate` | `minecraft:dark_oak_pressure_plate` | 4 |
+| `betterdeserttemples:puzzle_big/puzzle_big_4_3` | `betterdeserttemples:desert_temple` | `warped_pressure_plate` | `minecraft:dark_oak_pressure_plate` | 4 |
+| `betterdeserttemples:puzzle_big/puzzle_big_4_4` | `betterdeserttemples:desert_temple` | `warped_pressure_plate` | `minecraft:dark_oak_pressure_plate` | 4 |
+| `betterdeserttemples:puzzle_big/puzzle_big_4_5` | `betterdeserttemples:desert_temple` | `warped_pressure_plate` | `minecraft:dark_oak_pressure_plate` | 4 |
+
+## 30. Warped trapdoors to dark oak trapdoors, state kept (K31) (8 blocks)
+
+| Template | Structures | From | To | Blocks |
+|---|---|---|---|---:|
+| `terralith:spire/base_l` | `terralith:spire` | `warped_trapdoor` | `minecraft:dark_oak_trapdoor` | 8 |
+
+## 31. Warped stairs to dark oak stairs, state kept (K35) (1 blocks)
+
+| Template | Structures | From | To | Blocks |
+|---|---|---|---|---:|
+| `betterdungeons:zombie_dungeon/zombie_start` | `betterdungeons:zombie_dungeon` | `warped_stairs` | `minecraft:dark_oak_stairs` | 1 |
+
+## 32. Stripped warped hyphae to stripped dark oak wood, axis kept (K36) (1 blocks)
+
+| Template | Structures | From | To | Blocks |
+|---|---|---|---|---:|
+| `philipsruins:ocean_ruin6` | `philipsruins:ocean_ruins` | `stripped_warped_hyphae` | `minecraft:stripped_dark_oak_wood` | 1 |
+
 ## Left alone (templates a Nether or End structure also places)
 
-`soul_lantern` 7
+`crimson_slab` 80, `warped_stairs` 25, `soul_lantern` 7, `crimson_trapdoor` 5, `warped_trapdoor` 5
 

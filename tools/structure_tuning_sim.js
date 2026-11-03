@@ -45,13 +45,13 @@ const logs = []
 const log = level => (...a) => logs.push(level + a.join(' '))
 const classes = {
   'com.SaintAlfonzo.creativeengineering.util.WorldgenFiles': { writeText: (p, text) => { if (p === REAL_REPORT) report = text } },
-  'com.SaintAlfonzo.creativeengineering.worldgen.StructureFrequencies': { stage: json => { staged = JSON.parse(json) }, stageBiomeFactors: json => { biomeFactors = JSON.parse(json) } },
-  'com.SaintAlfonzo.creativeengineering.worldgen.StructureBiomeRules': { stage: json => { rules = JSON.parse(json) } },
-  'com.SaintAlfonzo.creativeengineering.worldgen.StructureBiomeFits': { stage: json => { fits = JSON.parse(json) } },
-  'com.SaintAlfonzo.creativeengineering.worldgen.WorldgenConfig': { structureDensity: () => density, structureGroupsEnabled: () => !groupsOff, metaStructuresEnabled: () => true, structureReplacementsEnabled: () => true, testOverrides: () => !!testArg },
-  'com.SaintAlfonzo.creativeengineering.worldgen.MetaStructure': {},
-  'com.SaintAlfonzo.creativeengineering.worldgen.PlacementPriority': { stage: json => { priority = JSON.parse(json) } },
-  'com.SaintAlfonzo.creativeengineering.worldgen.MetaSlots': { stageReplacements: json => { replacements = JSON.parse(json) } },
+  'com.SaintAlfonzo.creativeworldgen.worldgen.StructureFrequencies': { stage: json => { staged = JSON.parse(json) }, stageBiomeFactors: json => { biomeFactors = JSON.parse(json) } },
+  'com.SaintAlfonzo.creativeworldgen.worldgen.StructureBiomeRules': { stage: json => { rules = JSON.parse(json) } },
+  'com.SaintAlfonzo.creativeworldgen.worldgen.StructureBiomeFits': { stage: json => { fits = JSON.parse(json) } },
+  'com.SaintAlfonzo.creativeworldgen.worldgen.WorldgenConfig': { structureDensity: () => density, structureGroupsEnabled: () => !groupsOff, metaStructuresEnabled: () => true, structureReplacementsEnabled: () => true, testOverrides: () => !!testArg },
+  'com.SaintAlfonzo.creativeworldgen.worldgen.MetaStructure': {},
+  'com.SaintAlfonzo.creativeworldgen.worldgen.PlacementPriority': { stage: json => { priority = JSON.parse(json) } },
+  'com.SaintAlfonzo.creativeworldgen.worldgen.MetaSlots': { stageReplacements: json => { replacements = JSON.parse(json) } },
 }
 const addedTags = {}
 const addedBiomeTags = {}

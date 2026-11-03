@@ -129,6 +129,8 @@ with no behaviour change. 1.20 loot condition syntax: not applicable to 1.19.2.
 
 ### 4.7 Tests (to write when built)
 
+- **r1102b 2026-11-02** (scratch server; verdicts in `perf/runs/r1102b/` HANDOVER.md and the slice judged.md): PASS SQ-NDM-01, -02, -03, -04, -06, -07; OPEN (no verdict, rerun row written) SQ-NDM-05.
+
 `ND-` prefix: pot a Mimicarnation (place, break drops pot + flower, cutout render); `meal_item` tag on Stuffed Potato;
 JEI shows Stuffed Hoglin and the netherite machete under the new ids; colony on dirt in daylight breaks, under light < 13
 stays; colony on rich soul soil grows; Hoglin Mount reads "Hoglin Trophy" and existing ones stay in the world.
@@ -189,5 +191,5 @@ the 3.1 jar), `/dumpall` and the generators.
 
 Tests: SQ-NDM in testing/scratch_queue.md (the 4.7 rows plus the load check of creative_split.md 7.9 step 2). r1102b
 2026-11-02 (`perf/runs/r1102b/s3/judged.md`): SQ-NDM-01, -02, -03, -04 (real PASS), -06, -07 PASS; -05 OPEN (the broken
-open-sky colony's drop not proven; hand or probe addition); -08 (3.1 save) not run. The mod-list name is a client check.
+open-sky colony's drop not proven; hand or probe addition); -08 (3.1 save) not run. The mod-list name is a client check: CQ-NDM-01 (names, potted render, JEI; deep scan 2026-11-02).
 

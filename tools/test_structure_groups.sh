@@ -62,5 +62,5 @@ echo "== 4. StructureFrequencies logic"
 source "$ROOT/tools/java_test_cp.sh"
 mkdir -p "$T/stub" "$T/test"
 javac -proc:none -nowarn -cp "$CP" -d "$T/stub" tools/structure_groups_test/net/minecraftforge/fml/loading/FMLEnvironment.java
-javac -proc:none -nowarn -cp "$T/stub:$CP" -d "$T/test" tools/structure_groups_test/com/SaintAlfonzo/creativeengineering/worldgen/FreqTest.java 2>&1 | grep -v 'warning\|EventPriority' || true
-java -cp "$T/stub:$T/test:$CP" com.SaintAlfonzo.creativeengineering.worldgen.FreqTest 2>&1 | grep -E '^(ok|FAIL|ALL|[0-9]+ FAILED)'
+javac -proc:none -nowarn -cp "$T/stub:$CP" -d "$T/test" tools/structure_groups_test/com/SaintAlfonzo/creativeworldgen/worldgen/FreqTest.java 2>&1 | grep -v 'warning\|EventPriority' || true
+java -cp "$T/stub:$T/test:$CP" com.SaintAlfonzo.creativeworldgen.worldgen.FreqTest 2>&1 | grep -E '^(ok|FAIL|ALL|[0-9]+ FAILED)'

@@ -2,8 +2,8 @@ package com.SaintAlfonzo.creativedevtools.ceplace;
 
 import com.SaintAlfonzo.creativedevtools.DevtoolsConfig;
 import com.SaintAlfonzo.creativedevtools.DevtoolsConfig.VerticalAlign;
-import com.SaintAlfonzo.creativeengineering.worldgen.BiomeLayoutTuner;
-import com.SaintAlfonzo.creativeengineering.worldgen.PoolTuner;
+import com.SaintAlfonzo.creativeworldgen.worldgen.BiomeLayoutTuner;
+import com.SaintAlfonzo.creativeworldgen.worldgen.PoolTuner;
 import com.SaintAlfonzo.creativeengineering.util.WorldgenFiles;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;

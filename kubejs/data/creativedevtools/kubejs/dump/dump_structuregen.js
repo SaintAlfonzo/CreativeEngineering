@@ -24,7 +24,7 @@
 (() => {
 
 	const $Registry = Java.loadClass('net.minecraft.core.Registry')
-	const $PlacementInfo = Java.loadClass('com.SaintAlfonzo.creativeengineering.worldgen.PlacementInfo')
+	const $PlacementInfo = Java.loadClass('com.SaintAlfonzo.creativeworldgen.worldgen.PlacementInfo')
 
 	function safe(fn, onError) {
 		try { return fn() } catch (e) { onError && onError(e); return undefined }

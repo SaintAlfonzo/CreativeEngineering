@@ -299,6 +299,76 @@
     "minecraft:soul_torch"
    ],
    "to": "minecraft:torch"
+  },
+  {
+   "note": "Crimson trapdoors to mangrove trapdoors, state kept (K28)",
+   "structures": [
+    "*"
+   ],
+   "blocks": [
+    "minecraft:crimson_trapdoor"
+   ],
+   "to": "minecraft:mangrove_trapdoor"
+  },
+  {
+   "note": "Crimson buttons to mangrove buttons, state kept (K29)",
+   "structures": [
+    "*"
+   ],
+   "blocks": [
+    "minecraft:crimson_button"
+   ],
+   "to": "minecraft:mangrove_button"
+  },
+  {
+   "note": "Crimson slabs to mangrove slabs, state kept (K33)",
+   "structures": [
+    "*"
+   ],
+   "blocks": [
+    "minecraft:crimson_slab"
+   ],
+   "to": "minecraft:mangrove_slab"
+  },
+  {
+   "note": "Warped pressure plates to dark oak pressure plates (K30)",
+   "structures": [
+    "*"
+   ],
+   "blocks": [
+    "minecraft:warped_pressure_plate"
+   ],
+   "to": "minecraft:dark_oak_pressure_plate"
+  },
+  {
+   "note": "Warped trapdoors to dark oak trapdoors, state kept (K31)",
+   "structures": [
+    "*"
+   ],
+   "blocks": [
+    "minecraft:warped_trapdoor"
+   ],
+   "to": "minecraft:dark_oak_trapdoor"
+  },
+  {
+   "note": "Warped stairs to dark oak stairs, state kept (K35)",
+   "structures": [
+    "*"
+   ],
+   "blocks": [
+    "minecraft:warped_stairs"
+   ],
+   "to": "minecraft:dark_oak_stairs"
+  },
+  {
+   "note": "Stripped warped hyphae to stripped dark oak wood, axis kept (K36)",
+   "structures": [
+    "*"
+   ],
+   "blocks": [
+    "minecraft:stripped_warped_hyphae"
+   ],
+   "to": "minecraft:stripped_dark_oak_wood"
   }
  ]
 }

@@ -313,6 +313,8 @@ be installed (it is). The pack's dedicated server (CreEngServer) needs the same 
 
 ## 6. Tests
 
+- **r1102b 2026-11-02** (scratch server; verdicts in `perf/runs/r1102b/` HANDOVER.md and the slice judged.md): PASS SQ-CBJ-04.
+
 Scratch server: SQ-CBJ-01 to -05 in [scratch_queue.md](testing/scratch_queue.md). In game (after install):
 
 - [ ] **CBR-01 Mod list:** "Creative Brewing" is listed twice (the bundle, and Vinery's `foundation` id); Vinery shows

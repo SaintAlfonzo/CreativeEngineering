@@ -315,6 +315,8 @@ SRG-named jar in game, Create Central Kitchen alongside.
 
 ## 7. In-game test suite
 
+- **r1102b 2026-11-02** (scratch server; verdicts in `perf/runs/r1102b/` HANDOVER.md and the slice judged.md): rerun pending (batch fault) SQ-RB-21, -21b, -22.
+
 In patcherMod 1.0.7 and later (pack 1.0.7, DEPLOYED 2026-10-18).
 
 - [ ] **RB-01 Pot recycle:** hot cocoa with a milk bottle. Nothing on the ground; the cocoa comes out plated.

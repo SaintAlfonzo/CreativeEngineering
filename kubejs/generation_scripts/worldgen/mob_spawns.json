@@ -270,6 +270,154 @@
       ],
       "label": "Plan 9.6",
       "notes": "Geese on lakes and ponds, as duck_ponds."
+    },
+    {
+      "id": "am_gazelle_savanna",
+      "mob": "alexsmobs:gazelle",
+      "action": "scale",
+      "factor": 0.4,
+      "where": [
+        "savanna"
+      ],
+      "label": "spawns #3",
+      "notes": "Gazelle 40 -> 16 in savannas and shrublands: it was 17-25 % of creature picks there, three times the biggest farm animal."
+    },
+    {
+      "id": "am_elephant_savanna",
+      "mob": "alexsmobs:elephant",
+      "action": "scale",
+      "factor": 0.5,
+      "where": [
+        "savanna"
+      ],
+      "label": "spawns #3",
+      "notes": "Elephant 30 -> 15 in savannas and shrublands (13 % of picks)."
+    },
+    {
+      "id": "am_rhinoceros_savanna",
+      "mob": "alexsmobs:rhinoceros",
+      "action": "scale",
+      "factor": 0.5,
+      "where": [
+        "savanna"
+      ],
+      "label": "spawns #3",
+      "notes": "Rhinoceros 24 -> 12 in savannas and shrublands (10 % of picks)."
+    },
+    {
+      "id": "am_kangaroo_savanna",
+      "mob": "alexsmobs:kangaroo",
+      "action": "scale",
+      "factor": 0.5,
+      "where": [
+        "savanna"
+      ],
+      "label": "spawns #3",
+      "notes": "Kangaroo 25 -> 13 in savannas only; badlands keep 25 (no farm animals there, it is their fauna)."
+    },
+    {
+      "id": "am_emu_savanna",
+      "mob": "alexsmobs:emu",
+      "action": "scale",
+      "factor": 0.5,
+      "where": [
+        "savanna"
+      ],
+      "label": "spawns #3",
+      "notes": "Emu 20 -> 10 in savannas only; badlands keep 20."
+    },
+    {
+      "id": "am_capuchin_jungle",
+      "mob": "alexsmobs:capuchin_monkey",
+      "action": "scale",
+      "factor": 0.6,
+      "where": [
+        "jungle"
+      ],
+      "label": "spawns #3",
+      "notes": "Capuchin monkey 28 -> 17 in jungles (12 % of picks). Mangrove swamps keep 28 (no farm animals there)."
+    },
+    {
+      "id": "am_gorilla_jungle",
+      "mob": "alexsmobs:gorilla",
+      "action": "scale",
+      "factor": 0.6,
+      "where": [
+        "jungle"
+      ],
+      "label": "spawns #3",
+      "notes": "Gorilla 25 -> 15 in jungles (10 % of picks)."
+    },
+    {
+      "id": "am_crocodile_rivers",
+      "mob": "alexsmobs:crocodile",
+      "action": "scale",
+      "factor": 0.5,
+      "where": [
+        "river"
+      ],
+      "label": "spawns #3",
+      "notes": "Crocodile 20 -> 10 on rivers: it was a third of river creature picks, twice the ducks and geese together. Swamps keep 20."
+    },
+    {
+      "id": "am_platypus_rivers",
+      "mob": "alexsmobs:platypus",
+      "action": "scale",
+      "factor": 0.5,
+      "where": [
+        "river"
+      ],
+      "label": "spawns #3",
+      "notes": "Platypus 20 -> 10 on rivers (a third of river picks)."
+    },
+    {
+      "id": "am_snow_leopard_shores",
+      "mob": "alexsmobs:snow_leopard",
+      "action": "scale",
+      "factor": 0.5,
+      "where": [
+        "river",
+        "beach"
+      ],
+      "label": "spawns #3",
+      "notes": "Snow leopard 18 -> 9 on frozen rivers and snowy beaches: it was 47 % of frozen river picks. Mountains and snowy land keep 18."
+    },
+    {
+      "id": "lone_villagers",
+      "mob": "minecraft:villager",
+      "action": "set",
+      "weight": 1,
+      "min": 1,
+      "max": 1,
+      "category": "creature",
+      "where": [
+        "temperate grassy plains"
+      ],
+      "add": [
+        "terralith:highlands"
+      ],
+      "label": "spawns #4",
+      "notes": "Now and then one villager alone in plains, sunflower plains, steppe, valley clearing, meadow, blooming plateau and the highlands (MCA turns it into an MCA villager). Creature category: misc never spawns. The lone_villagers_daylight condition keeps it out of caves."
+    },
+    {
+      "id": "allay_mystical",
+      "mob": "minecraft:allay",
+      "action": "set",
+      "weight": 3,
+      "min": 1,
+      "max": 2,
+      "category": "creature",
+      "add": [
+        "terralith:moonlight_grove",
+        "terralith:moonlight_valley",
+        "terralith:mirage_isles",
+        "terralith:amethyst_rainforest",
+        "terralith:amethyst_canyon",
+        "terralith:lavender_forest",
+        "terralith:lavender_valley"
+      ],
+      "label": "spawns #5",
+      "notes": "Allays in the magical Terralith biomes (moonlight, lavender, amethyst, mirage isles). The allay_daylight condition keeps them out of dark cave pockets."
     }
   ],
   "conditions": [
@@ -315,6 +463,30 @@
       ],
       "label": "Plan 9.6",
       "notes": "In grassy land biomes ducks and geese spawn only on water, so they turn up on lakes and ponds. Rivers, swamps and beaches are not in it."
+    },
+    {
+      "id": "lone_villagers_daylight",
+      "condition": "light_only",
+      "mobs": [
+        "minecraft:villager"
+      ],
+      "rules": [
+        "lone_villagers"
+      ],
+      "label": "spawns #4",
+      "notes": "Lone villagers only where it is light (the villager rule allows any light)."
+    },
+    {
+      "id": "allay_daylight",
+      "condition": "light_only",
+      "mobs": [
+        "minecraft:allay"
+      ],
+      "rules": [
+        "allay_mystical"
+      ],
+      "label": "spawns #5",
+      "notes": "Allays have no placement rule (they could appear in any air pocket); in their biomes they need light above 8."
     }
   ],
   "spawn_ground": {

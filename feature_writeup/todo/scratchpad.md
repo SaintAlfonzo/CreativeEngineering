@@ -32,14 +32,43 @@ Canned Goods
 SoL: Apple Pie
 Salt and Create Salt}
 
+Planned rows, ready vs. needing a decision
+"Ready" means the Decisions cell says "none". That is about 168 of the 421 Planned rows (my count of the table, not a documented figure).
+
+Category	Ready to build	Waiting on a decision
+Items and Blocks	34	22
+Food Rules	19	11
+Interface and JEI	19	10
+Farming	14	21
+Mods and Ports	10	30
+Tech	10	14
+Mobs	9	12
+Loot and Trade	7	9
+Tooling	7	7
+Structures	6	18
+Dishes and Ingredients	5	12
+Alcohol	5	5
+Worldgen	4	8
+Kitchen and Cooking	3	5
+Gear and Combat	3	16
+Potions and Effects	3	15
+Mechanics	3	12
+Drinks and Drugs	2	4
+Recipes and Materials	2	14
+Creative Delight	2	3
+Baking and Sweets	1	3
+Creative Mods	1	5
 
 
 ## Idea, Notes, Changes (Human scratchpad, don't write up or add to plans unless directed)
 
 
-
+- place kettle/cooking pot on bottom of block for handle tooltip, remove other lmb mechanic 
 - merge redundant tools, combine into single tools with many functions
+- can only shift click bowls into copper pot, expand to all containers
+    - only allow plating items in plate slot and all plating items in the plateslot w/ shiftclick on all fd stations
 - review 2 block deep structure cancel, lower to 1?
+- allow pillagers to use guns
 - new chopped
     - beetroot
     - carrot
@@ -52,6 +81,8 @@ Salt and Create Salt}
 - pickles
     - zucchini or cucumber
 - vintage delight jams should only output 1 per craft
+- 3 rich soil in fertile soil?
+- pickled eggs
 - sophisticated storage upgrades/slots for cooking for blockheads storage
 - overflow slot/bottle plating routing in fermenting jar? any bottle/bowl input? 
 - bales are soft, salt blocks (rocksalt) is natural rough, salt dust block is soft (verifying issue from a changelog inconsitancy)

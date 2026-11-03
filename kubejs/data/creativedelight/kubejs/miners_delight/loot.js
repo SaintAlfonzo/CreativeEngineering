@@ -23,10 +23,11 @@ LootJS.modifiers(event => {
 })
 
 // Cave carrot crate split out of the loose cave carrot's entry, like the Farmer's Delight crates (pre-roll loot
-// framework, server_scripts/loot/05_tuning.js). The cave carrots and copper carrots of abandoned mineshafts come from
+// framework, Creative Worldgen loot/05_tuning.js). The cave carrots and copper carrots of abandoned mineshafts come from
 // Miner's own chest loot modifier (D8), which stays. miners_delight.md I5.
-;(function () {
-	if (!global.lootTuning) return
+// Queued with global.CWG.lootRules (Creative Worldgen's loot engine, loot/05_tuning.js): its script pack can load
+// after this one, so the rules run when the engine of the current reload exists. No Worldgen jar: no rules.
+if (global.CWG) global.CWG.lootRules(function (L) {
 	var i = global.item
-	global.lootTuning.pack(i.cave_carrot_crate, i.cave_carrot)
-})()
+	L.pack(i.cave_carrot_crate, i.cave_carrot)
+})

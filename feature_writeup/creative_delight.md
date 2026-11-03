@@ -906,6 +906,8 @@ Not changed: `mod_sides.md` gets the `creativedelight` row now; the three member
 
 ### 19.2 Tests (CDT-)
 
+- **r1102b 2026-11-02** (scratch server; verdicts in `perf/runs/r1102b/` HANDOVER.md and the slice judged.md): PASS SQ-CDF-01, -02, -04, -05, SQ-CDFW-01, -02, -03, -04, -05, -08, -09, SQ-CDJ-07, -12, SQ-CDJ4-08b, SQ-CDQ-01, -02, -03, -05, -05b, -06, -06b, SQ-FFH-02, SQ-WCD-01, -03, -06; FAIL SQ-CDF-08: `gen_compost_values.py --check` found 21 compostables without a row; owner ran `--add-new` 19:50, rerun pending (waits for rebuilt CD / CB jars); FAIL SQ-LEM-01: right-click pick gives about 1.4 lemons, not 2 to 5 (the pick path ignores `lemon_tree.json`); FAIL SQ-LEM-02: knife and saw give 4 slices, not 8 (`fruitsdelight/recipes.js` 16-17 `replaceOutput` is a no-op); OPEN (no verdict, rerun row written) SQ-CDF-06, SQ-CDFW-07, SQ-WCD-02, -04; rerun pending (batch fault) SQ-CDFW-06, SQ-WCD-07.
+
 Offline, run 2026-10-25: every new or moved script compiles in KubeJS's Rhino; NCH loads with no dicts and `ns()` /
 `withNamespace` scope, nest, restore after an error and reject a bad name (headless Rhino); patcherMod, the three repacks and
 CD build; repack bytes match upstream; overlay reobfed; normal CD jar unchanged by a test-suite build; `build_deploy.py` reads
@@ -1642,6 +1644,7 @@ before: no gameplay change, so no changelog bullet.
   (config/ and `configs_edited/root_config/`, CD's file now backed up there).
   - Scripts: `cd_core.js` registers CDConfig with `global.NCH.registerConfig`, so `NCH.cfg(..., 'COOKING')` (oven
     ingredient counts) and `'CROP_DROPS'` resolve unchanged; `soil_yield.js` loads `CDConfig` directly.
+- **Since 2026-11-02 (Creative Split wave 5, [creative_worldgen.md](creative_worldgen.md)): Baby Mobs left CD for Creative Worldgen** (`development/creativeWorldgen/members/babymobs`); the row below is the wave 4 record. Incubation Additions stays.
 - **Members**: Baby Mobs (`baby_mobs`) and Incubation Additions (`incubation_additions`) are nested
   (`development/creativeDelight/members/babymobs`, `.../incubation`; Gradle projects `:babyMobs`, `:incubationAdditions`
   unchanged, `bundled_in=creativeDelight`). `replaces_jars` moves their standalone jars out of `mods/` at install; their

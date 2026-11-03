@@ -178,6 +178,13 @@ since the last restart), a WARNING says so.
 | `rabbit_snowy` | rabbit x2 in snowy biomes that have them | 9.3 |
 | `duck_wetlands`, `goose_wetlands` | duck 6 / goose 4 (2-4) in swamps and on beaches, spawning anywhere as on rivers | 9.6 |
 | `duck_ponds`, `goose_ponds` | duck 4 / goose 3 (2-4) in grassy land biomes (not swamp, river, beach, sky); water only, see 3.1 | 9.6 |
+| `am_gazelle_savanna`, `am_elephant_savanna`, `am_rhinoceros_savanna` | gazelle x0.4, elephant x0.5, rhinoceros x0.5 in savannas and shrublands | spawns #3 |
+| `am_kangaroo_savanna`, `am_emu_savanna` | kangaroo, emu x0.5 in savannas only (badlands keep 25 / 20) | spawns #3 |
+| `am_capuchin_jungle`, `am_gorilla_jungle` | capuchin, gorilla x0.6 in jungles (mangrove keeps the capuchin 28) | spawns #3 |
+| `am_crocodile_rivers`, `am_platypus_rivers` | crocodile, platypus x0.5 on rivers (swamps keep the crocodile 20) | spawns #3 |
+| `am_snow_leopard_shores` | snow leopard x0.5 on frozen rivers and snowy beaches | spawns #3 |
+| `lone_villagers` | villager 1 (1-1), creature, in plains, sunflower plains, steppe, valley clearing, meadow, blooming plateau, highlands; condition `lone_villagers_daylight` (light_only) | spawns #4 |
+| `allay_mystical` | allay 3 (1-2), creature, in Terralith moonlight, lavender and amethyst biomes and the Mirage Isles; condition `allay_daylight` (light_only) | spawns #5 |
 
 Shiba (9.4) is off at the source: Quark's `Shiba` module is `false` in `config/quark-common.toml` (and `configs_edited/`).
 
@@ -351,6 +358,7 @@ has cow (More Mooblooms' set switches Buzzier Bees' removal off).
   (spawn lists are read live), unlike the worldgen systems. MS-01 to MS-12 still pending.
 - 2026-10-14: pack 1.0.5 was never deployed; everything above that was staged for it ships in pack **1.0.6** (STAGED
   2026-10-14, update from 1.0.4, [plan_1.0.6.md](plan_1.0.6.md)), unchanged.
+- 2026-11-02 (plan_worldgen_edit N4 to N9): `spawns #3` to `#5`, `pillagers #2`, `mooblooms #4`. 10 Alex's Mobs scale rules (target: no non-farm creature over 1.5 times the biome's biggest farm animal, except biomes with no farm animals; still over: beaches, jungle parrot), lone villagers, allays in mystical biomes, outpost allay cage weight 3 [1], spawn boxes `allay_temples` (category creature) and `end_tower`, `server_scripts/mobs/end_divers.js` (End illagers and witches in the copper diving set, drop 0; not drawn: illager renderers have no armour layer). The "leave predators" premise was false: every Alex's Mobs roll is 1 except the sunbird. One box per structure: pillager structures (monster box) cannot take an allay box until boxes resolve per category. Skylands: spring to autumn 100 % mooblooms (even per variant), winter plain cows. Preview: 29 rules, 375 biome changes. Tests SQ-MOB-N4 to -N8, SQ-WGE-16.
 
 ## 9. Plans
 

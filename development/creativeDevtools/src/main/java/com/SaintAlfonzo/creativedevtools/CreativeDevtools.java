@@ -42,8 +42,8 @@ public class CreativeDevtools {
         modBus.addListener(GeneratorCommand::onLoadComplete);
 
         // /ceplace: every structure or template matching a filter, laid out in rows (flat-world testing);
-        // knobs in [worldgen.mass_place].
-        MinecraftForge.EVENT_BUS.register(MassPlacer.class);
+        // knobs in [worldgen.mass_place]. Built on Creative Worldgen's placement code (an optional dependency).
+        if (ModList.get().isLoaded("creativeworldgen")) MinecraftForge.EVENT_BUS.register(MassPlacer.class);
 
         // Probes on patcherMod's hooks (util/BlockStateLookupHook, util/LevelRandomHook); inert while their
         // [debug.*] switch is off.

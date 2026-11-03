@@ -1,7 +1,7 @@
 package com.SaintAlfonzo.creativedevtools.perf;
 
 import com.SaintAlfonzo.creativedevtools.CreativeDevtools;
-import com.SaintAlfonzo.creativeengineering.perf.MobCapLevels;
+import com.SaintAlfonzo.creativeworldgen.perf.MobCapLevels;
 import com.SaintAlfonzo.creativeengineering.perf.PerfEvents;
 import com.mojang.brigadier.arguments.StringArgumentType;
 import com.mojang.logging.LogUtils;
@@ -65,6 +65,11 @@ public final class PerfCommand {
 
 	/** Per dimension: spawnable chunks and mob cap level (perf.md 17). */
 	private static int mobcap(CommandSourceStack source) {
+		// The mob cap levels are Creative Worldgen's (an optional dependency of Devtools).
+		if (!net.minecraftforge.fml.ModList.get().isLoaded("creativeworldgen")) {
+			say(source, "Creative Worldgen is not loaded", ChatFormatting.YELLOW);
+			return 0;
+		}
 		if (MobCapLevels.states().isEmpty()) say(source, "no dimension has run natural spawning yet", ChatFormatting.YELLOW);
 		MobCapLevels.states().forEach((level, s) -> say(source, level.dimension().location() + ": " + s.chunks
 				+ " spawnable chunks, level " + s.level, ChatFormatting.WHITE));

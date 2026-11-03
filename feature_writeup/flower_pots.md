@@ -76,7 +76,7 @@ gossypium. `/dumppots` replaces this count with the live map.
 
 | # | Finding | Kind | Where |
 |---|---|---|---|
-| F1 | Right-click on an AF planter box with `fungidelight:cleaned_cap`, `cooked_cleaned_cap`, `truffle` or `truffle_slice` throws `ClassCastException` on the server (`PlanterBoxBlockEntity.placeFlower` casts to `BlockItem`; the four are plain items in `#forge:mushrooms`, which the planter tag includes) | bug, server exception | SQ-POT-03 confirms |
+| F1 | ~~Right-click on an AF planter box with `fungidelight:cleaned_cap`, `cooked_cleaned_cap`, `truffle` or `truffle_slice` throws `ClassCastException` on the server (`PlanterBoxBlockEntity.placeFlower` casts to `BlockItem`; the four are plain items in `#forge:mushrooms`, which the planter tag includes)~~ Struck 2026-11-02: not reproduced in r1102b SQ-POT-03 | ~~bug, server exception~~ not reproduced | SQ-POT-03 (r1102b: no `ClassCastException`) |
 | F2 | `vinery:potted_apple_tree_sapling` and `potted_cherry_tree_sapling` are registered but nothing calls `addPlant`: the saplings do nothing on a pot | bug, in-tree (backportedVinery) | SQ-POT-02 |
 | F3 | No Botania flower (mystical, shiny, double, floating, special, chibi, mushrooms: 170 items) goes in any one-block pot; only the flower box, planter box, Vinery box and pot, and silt pot take some | gap | D1 |
 | F4 | `supplementaries:planter_rich_soul` is never registered: Supplementaries checks the mod id `nethers_delight`, the installed Nether's Delight is `nethersdelight` | gap (mod compat) | D5 |
@@ -200,6 +200,8 @@ adds `EntityBlock`, `use` and `onRemove`; the block entity `creativeengineering:
 - `python3 tools/flower_pot_audit.py`: prints plant count, per-holder totals, probe mismatches and exceptions.
 
 ## 7. In-game test suite
+
+- **r1102b 2026-11-02** (scratch server; verdicts in `perf/runs/r1102b/` HANDOVER.md and the slice judged.md): FAIL SQ-POT-03: `minecraft:hanging_roots` on 6 holders throws `Cannot set property DirectionProperty` (needs a stack trace in game; old F1 not reproduced); FAIL SQ-POT-04: `beautify:hanging_pot` loses its plant when broken (item loss).
 
 Scratch server entries: SQ-POT-01 to SQ-POT-05 in [testing/scratch_queue.md](testing/scratch_queue.md). In game:
 

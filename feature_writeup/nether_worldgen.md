@@ -173,15 +173,15 @@ stone or polished blackstone kept.
 | K25 | `soul_lantern` | 3 | 22 | 441 | spire 221, ancient_city 128, frosted_dungeon 20 ... | lantern / keep | DONE 2026-10-30 (decided 2026-10-29): lantern (state kept) in every Overworld structure except ancient cities and sculk structures (rule 23): 311 swapped. Kept: ancient city 128, Philip's bone dungeon 2 (sculk in its start room), Nether-shared ship layout 7, `plan/move_to_nether` 29 |
 | K26 | `magma_block` | 3 | 19 | 274 | jungle_temple 177 (34 swapped in), desert_temple 48, underground_bunker 10 ... | keep (the 2026-10-12 netherrack target) / scorchia | keep (2026-10-19: blackstone, basalt and magma are fine in the Overworld) |
 | K27 | `soul_fire` | 3 | 2 | 177 | ancient_city 173, sculk_dungeon 4 | keep (on kept soul sand) / fire / drop | DONE 2026-10-19 (round 2): fire (rule 20); the frosted dungeon's stays put out (rule 6). Fire on the ancient city's kept soul sand turns back into soul fire on any block update next to it (vanilla `BaseFireBlock.getState`) |
-| K28 | `crimson_trapdoor` | 3 | 3 | 39 | fortified_desert_village 36, witch_hut 2, taiga_forge 1 | mangrove trapdoor | |
-| K29 | `crimson_button` | 3 | 3 | 28 | stronghold 24, desert_temple 2, pillager_outpost_jungle 2 | mangrove button | |
-| K30 | `warped_pressure_plate` | 3 | 1 | 24 | desert_temple 24 (puzzle) | azalea / dark oak pressure plate | |
-| K31 | `warped_trapdoor` | 3 | 1 | 8 | spire 8 | azalea / dark oak trapdoor | |
+| K28 | `crimson_trapdoor` | 3 | 3 | 39 | fortified_desert_village 36, witch_hut 2, taiga_forge 1 | mangrove trapdoor || DONE 2026-11-02 (`netherblockswap #4`): mangrove, state kept (rules 26 to 32) |
+| K29 | `crimson_button` | 3 | 3 | 28 | stronghold 24, desert_temple 2, pillager_outpost_jungle 2 | mangrove button || DONE 2026-11-02 (`netherblockswap #4`): mangrove, state kept (rules 26 to 32) |
+| K30 | `warped_pressure_plate` | 3 | 1 | 24 | desert_temple 24 (puzzle) | azalea / dark oak pressure plate || DONE 2026-11-02 (`netherblockswap #4`): dark oak, state kept (rules 26 to 32) |
+| K31 | `warped_trapdoor` | 3 | 1 | 8 | spire 8 | azalea / dark oak trapdoor || DONE 2026-11-02 (`netherblockswap #4`): dark oak, state kept (rules 26 to 32) |
 | K32 | `soul_wall_torch` | 3 | 2 | 8 | jungle_temple 7, spire 1 | wall torch | DONE 2026-10-30 (decided 2026-10-29): wall torch, facing kept, same exceptions as K25 (rule 24): 12 swapped, incl. 4 in Creative Delight's snowy depot house (Veggies Delight village piece, added after the scan); standing soul torch -> torch (rule 25, none in templates) |
-| K33 | `crimson_slab` | 3 | 1 | 6 | desert_temple 6 | mangrove slab | |
+| K33 | `crimson_slab` | 3 | 1 | 6 | desert_temple 6 | mangrove slab || DONE 2026-11-02 (`netherblockswap #4`): mangrove, state kept (rules 26 to 32) |
 | K34 | `glowstone` | 3 | 2 | 5 | church 4, big_villager_tent 1 | yellow corundum (the sky village choice) / keep | DONE 2026-10-19 (round 2): yellow corundum (rule 21); the Mysticrift mangrove tower's stays gold ore (rule 14) |
-| K35 | `warped_stairs` | 3 | 1 | 1 | zombie_dungeon 1 | azalea / dark oak stairs | |
-| K36 | `stripped_warped_hyphae` | 3 | 1 | 1 | ocean_ruins 1 | stripped azalea / dark oak wood | |
+| K35 | `warped_stairs` | 3 | 1 | 1 | zombie_dungeon 1 | azalea / dark oak stairs || DONE 2026-11-02 (`netherblockswap #4`): dark oak, state kept (rules 26 to 32) |
+| K36 | `stripped_warped_hyphae` | 3 | 1 | 1 | ocean_ruins 1 | stripped azalea / dark oak wood || DONE 2026-11-02 (`netherblockswap #4`): dark oak, state kept (rules 26 to 32) |
 
 ### 2.4 Structures one by one (S)
 

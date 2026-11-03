@@ -162,7 +162,9 @@ this FD reads, so nothing carries over. (`farmersdelight:pumpkin_slice` also app
 
 ## 4. Tests (once built)
 
-Prefix `ABD-`. SQ-ABD-01 to 05 PASSED by `/zq` in the 2026-10-26 scratch run ([scratch_queue.md](testing/scratch_queue.md)); the in-game ABD rows stay pending.
+- **r1102b 2026-11-02** (scratch server; verdicts in `perf/runs/r1102b/` HANDOVER.md and the slice judged.md): PASS SQ-ABD-02, -03, -04, -05.
+
+Prefix `ABD-`. SQ-ABD-01 to 05 PASSED by `/zq` in the 2026-10-26 scratch run ([scratch_queue.md](testing/scratch_queue.md)), -02 to -05 again r1102b 2026-11-02; the in-game ABD rows stay pending. Client half: CQ-ABD-01 (JEI pages, deep scan 2026-11-02).
 
 - [ ] **ABD-01 Slice XP:** smelt a Perch Slice and a Pike Slice in a furnace -> 0.35 xp each; smoker and campfire unchanged.
 - [ ] **ABD-02 Salvaging (3.1):** driftwood door / sign / trapdoor / fence / gate / plate / button /

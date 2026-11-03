@@ -1402,6 +1402,8 @@ Everything in §2 was read from decompiled classes (2026-10-02). To re-check aft
 
 ## 7. In-game test suite
 
+- **r1102b 2026-11-02** (scratch server; verdicts in `perf/runs/r1102b/` HANDOVER.md and the slice judged.md): PASS SQ-PSF-01, -03, -05, -06, -07b, -08a; OPEN (no verdict, rerun row written) SQ-PSF-07, -08b; rerun pending (batch fault) SQ-PSF-02, -04, -08, -09.
+
 - [ ] **CR-01 Tobacco soils:** tobacco seeds plant on Farmland, Rich Farmland and Fertile Soil. On Rich Soil and dirt they're refused.
 - [ ] **CR-02 Tobacco replant:** right-click a stage-7 tobacco with an empty hand → 4+ leaves and 0-1 seeds drop, and the plant is back at stage 0. Right-click an unripe one → nothing.
 - [ ] **CR-03 Wheat replant:** right-click ripe wheat with an empty hand → wheat and seeds drop (one seed fewer than breaking), and the wheat is back at stage 0.

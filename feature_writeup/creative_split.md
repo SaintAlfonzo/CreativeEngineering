@@ -565,6 +565,17 @@ rides the Worldgen carve. Game closed for every install: `./gradlew :creativeCom
 **Changelog.** Steps 1, 3, 4 are same-behaviour moves: no bullet. Step 2 brings Nether's 4.0 changes (Potted
 Mimicarnation, colony rule, renames) to players: bullets under a `## Nether's Delight` family when built.
 
+### 7.10 Wave 5 as built (2026-11-02; built, NOT installed, not tested)
+
+Creative Worldgen carved: [creative_worldgen.md](creative_worldgen.md) holds the detail (what moved, edges, what stayed
+in the pack folder and why). In short: 59 classes plus 4 new, 60 mixins, 6 config tables (`[perf]` mob cap keys only),
+the dimension and noise settings data, the worldgen, loot, removed-mob and Worldgen tag scripts, More Mooblooms and Baby
+Mobs as members (7.9 step 4 done). patcherMod 1.1.08. Placed differently from the sweeps: `BubbleColumnImmunityMixin` to
+Worldgen (its tag moved with `entitytags.js`); `QuarkSpiralSpiresTeleportMixin` stays Common (perf). Structure datapacks
+stay in the pack folder (the structure generators tell jar sets from kubejs/data sets). Found on the way: namespace
+script packs load in no fixed order, so CD's loot rules now queue through `global.CWG.lootRules`; `build_deploy.py`
+`check_climate_reader` read a class path stale since wave 2 (fixed). Scratch SQ-CWG-01 to -10.
+
 ## 8. History
 
 - 2026-11-02, owner: Creative Split deploys as 1.2.00; the Creative Delight cutover goes in the next deployment before it.
@@ -596,3 +607,4 @@ Mimicarnation, colony rule, renames) to players: bullets under a `## Nether's De
 - 2026-11-01, scratch run of waves 2 to 4 ([scratch_run_2026-11-01.md](testing/scratch_run_2026-11-01.md) 7): one save
   taken from the 1.1.05 jars through 1.1.06 to 1.1.07; three bugs fixed (7.8). Next: install wave 4, client rows.
 - 2026-11-01, wave 4 close: `harvest.js` goes to Equipment; wave 4 jars installed to the dev instance; client tests pinned until wave 8+.
+- 2026-11-02, wave 5 (7.10): Creative Worldgen carved with fauna, More Mooblooms and Baby Mobs; built, not installed. Next: SQ-CWG, then wave 6 (Magic).

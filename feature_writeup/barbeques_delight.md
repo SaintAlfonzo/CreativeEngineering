@@ -597,6 +597,8 @@ answered (tray ported for evaluation). **No decision is open** apart from the qu
 
 ## 8. In-game test suite (drafted)
 
+- **r1102b 2026-11-02** (scratch server; verdicts in `perf/runs/r1102b/` HANDOVER.md and the slice judged.md): PASS SQ-BBQ-01, -03, -04, -05; rerun pending (batch fault) SQ-BBQ-02, -06, -07.
+
 Scratch r1102b (2026-11-02, `perf/runs/r1102b/s3/judged.md`): SQ-BBQ-01 (boot), -03 (tags), -04 (24 compost rows by
 tier), -05 (grill on a campfire, rain on stone / coal, drops grill + campfire: server half of BBQ-07, BBQ-18) PASS.
 OPEN, batch faults: SQ-BBQ-02 (skewering 10 and grilling 10 present; the combine recipes are `creativedelight:shapeless/*`,

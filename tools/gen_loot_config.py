@@ -1,11 +1,11 @@
 #!/usr/bin/env python3
 """
-Builds the chest-loot tuning catalog + index read by kubejs/server_scripts/loot/05_tuning.js:
+Builds the chest-loot tuning catalog + index read by kubejs/data/creativeworldgen/kubejs/loot/05_tuning.js:
 
-  kubejs/server_scripts/loot/loot_config.json  - EDITABLE. Every item that can show up in chest
+  kubejs/data/creativeworldgen/kubejs/loot/loot_config.json  - EDITABLE. Every item that can show up in chest
                                                  loot, with its "remove" / "frequency" knobs and a
                                                  read-only "where" view (chance per chest, %).
-  kubejs/server_scripts/loot/loot_index.json   - GENERATED, don't edit. Which tables hold a direct
+  kubejs/data/creativeworldgen/kubejs/loot/loot_index.json   - GENERATED, don't edit. Which tables hold a direct
                                                  entry for each item (what the runtime rewrites
                                                  pre-roll), and each table's declared type.
 
@@ -62,7 +62,7 @@ TAGS_EXPORT = INSTANCE / 'kubejs/exported/tags/item_tags.json'
 RUNTIME_ADDITIONS = INSTANCE / 'kubejs/exported/loot_runtime_additions.json'
 TEMPLATE_CACHE = INSTANCE / 'tools/.cache/template_loot.json'
 STALE_EXPORT_SECONDS = 600  # a /dumploot rewrites every live namespace within seconds of each other
-OUT_DIR = INSTANCE / 'kubejs/server_scripts/loot'
+OUT_DIR = INSTANCE / 'kubejs/data/creativeworldgen/kubejs/loot'
 CONFIG_PATH = OUT_DIR / 'loot_config.json'
 INDEX_PATH = OUT_DIR / 'loot_index.json'
 
@@ -84,7 +84,7 @@ DEFAULT_SETTINGS = OrderedDict([
 ])
 
 # Seeded on first generation only. Bans (PneumaticCraft, Lightman's coins), '#tag' groups and
-# packed food live in kubejs/server_scripts/loot/07_rules.js as global.lootTuning calls.
+# packed food live in kubejs/data/creativeworldgen/kubejs/loot/07_rules.js as global.lootTuning calls.
 DEFAULT_PATTERNS = OrderedDict()
 
 README = OrderedDict([
@@ -121,7 +121,7 @@ README = OrderedDict([
     ('how', 'Where the item is a normal entry in a loot table JSON (almost always), its weight is rewritten '
             'before the roll. Items that mods inject in code (global loot modifiers, tag entries, pools added '
             'in code) are thinned or removed after the roll by LootJS instead: removed stacks leave an empty slot there. '
-            'Full details: kubejs/server_scripts/loot/README.md.'),
+            'Full details: kubejs/data/creativeworldgen/kubejs/loot/README.md.'),
     ('regenerate', 'python3 tools/gen_loot_config.py (after mod updates / a fresh /dumploot). Keeps your edits.'),
 ])
 

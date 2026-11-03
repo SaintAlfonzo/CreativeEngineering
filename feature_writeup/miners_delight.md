@@ -284,6 +284,8 @@ no stray namespace, 18 loot modifier entries, 14 cup rows (onion row dropped).
 
 ## 8. In-game test suite (drafted)
 
+- **r1102b 2026-11-02** (scratch server; verdicts in `perf/runs/r1102b/` HANDOVER.md and the slice judged.md): PASS SQ-MDP-18, -18b.
+
 Boot and inventory
 
 - [ ] MND-01 The game boots with the port and without the 1.1.2 jar; no registry, mixin or recipe error naming

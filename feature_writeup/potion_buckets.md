@@ -186,6 +186,8 @@ recipes)` with N > 0.
 
 ## 7. In-game test suite
 
+- **r1102b 2026-11-02** (scratch server; verdicts in `perf/runs/r1102b/` HANDOVER.md and the slice judged.md): PASS SQ-LE-01, -03, -03b, -03c, -04, -05.
+
 - [ ] **PB-01 Looks:** `/give` each bucket with `{Potion:"minecraft:swiftness"}` → light-blue liquid, bucket body
   untinted; a blank bucket's liquid is white.
 - [ ] **PB-02 Tooltip:** hover a strong regeneration lingering bucket → "Regeneration II (0:22)" in blue (vanilla

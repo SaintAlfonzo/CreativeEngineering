@@ -8,7 +8,7 @@ Forge 1.19.2 modpack (KubeJS + in-tree Java mods). Repo root is the ATLauncher i
   commands), `client_scripts/`. `generation_scripts/` = generated data, `exported/` = game dumps
   (large; grep, never read whole). `data/` = datapack files.
 - `development/` = in-tree mods: `patcherMod` (main mixin/coremod, mod id `creativeengineering`),
-  `creativeLabels`, `incubationAdditions`, `moreMooblooms`, `babyMobs`, `exposureBackport`, and two bundles:
+  `creativeLabels`, `exposureBackport`, the carved Creative jars (`creativeCompat`, `creativeCalendar`, `creativeDevtools`), and three bundles: `creativeWorldgen` (worldgen and fauna; members More Mooblooms and Baby Mobs),
   `creativeDelight` (food; its ports and repacks, Veggies, Vintage, Fungi, Miner's and Display included, are members in `members/`) and `creativeBrewing` (brewing, alcohol, potions; nests the Vinery and Brewin' ports,
   `members/vinery`, `members/brewin`). Root `settings.gradle` + `build-logic/` build them all.
 - `tools/*.py` = generators, listed in `tools/generators.json` and run in game with `/cegen`.

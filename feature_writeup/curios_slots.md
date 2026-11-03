@@ -58,6 +58,8 @@ Owner idea (scratchpad 2026-10-29, TODO `largecontent/mod-additions #32`): Terra
 
 ## 2. Tests
 
+- **r1102b 2026-11-02** (scratch server; verdicts in `perf/runs/r1102b/` HANDOVER.md and the slice judged.md): rerun pending (batch fault) SQ-CSI-01.
+
 - CS-01 The Curios screen shows a Hands and a Face slot (Face has the mask icon) on a player in an existing world.
 - CS-02 Falconry Glove goes in Hands and nowhere else; nothing else is accepted in Hands.
 - CS-03 Chalk stick, the six Simple Hats masks and the three Botania cosmetic masks go in Face; a Simple Hats mask also still goes in Head.

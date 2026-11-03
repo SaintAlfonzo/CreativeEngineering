@@ -15,6 +15,6 @@ cd "$ROOT"
 source "$ROOT/tools/java_test_cp.sh"
 mkdir -p "$T/stub" "$T/test"
 javac -proc:none -nowarn -cp "$CP" -d "$T/stub" tools/structure_groups_test/net/minecraftforge/fml/loading/FMLEnvironment.java
-javac -proc:none -nowarn -cp "$T/stub:$CP" -d "$T/test" tools/worldgen_test/com/SaintAlfonzo/creativeengineering/worldgen/EarthFillSim.java 2>&1 | grep -E 'error' -A3 || true
-java -Xmx1200m -Dgrid="${GRID:-4}" -cp "$T/stub:$T/test:$CP:$V/client-extra.jar" com.SaintAlfonzo.creativeengineering.worldgen.EarthFillSim "${1:-4242}" "${2:-60}" ${3:-} 2>&1 \
+javac -proc:none -nowarn -cp "$T/stub:$CP" -d "$T/test" tools/worldgen_test/com/SaintAlfonzo/creativeworldgen/worldgen/EarthFillSim.java 2>&1 | grep -E 'error' -A3 || true
+java -Xmx1200m -Dgrid="${GRID:-4}" -cp "$T/stub:$T/test:$CP:$V/client-extra.jar" com.SaintAlfonzo.creativeworldgen.worldgen.EarthFillSim "${1:-4242}" "${2:-60}" ${3:-} 2>&1 \
   | grep -v '^\[\|SLF4J\|StatusLogger'

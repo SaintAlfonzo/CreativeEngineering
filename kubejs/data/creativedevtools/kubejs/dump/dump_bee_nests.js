@@ -11,7 +11,7 @@
 ServerEvents.commandRegistry(event => {
 	const { commands: Commands } = event
 
-	const $BeeNests = Java.loadClass('com.SaintAlfonzo.creativeengineering.worldgen.BeeNests')
+	const $BeeNests = Java.loadClass('com.SaintAlfonzo.creativeworldgen.worldgen.BeeNests')
 
 	event.register(
 		Commands.literal('dumpbeenests')

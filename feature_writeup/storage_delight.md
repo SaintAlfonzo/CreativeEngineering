@@ -81,6 +81,8 @@ poplar are in 26.10.05 only.
 
 ## 4. Tests
 
+- **r1102b 2026-11-02** (scratch server; verdicts in `perf/runs/r1102b/` HANDOVER.md and the slice judged.md): PASS SQ-STD-02.
+
 Prefix `STD-`. Needs `repackedStorage-25.12.09-1.19-forge-ce-19.2-01.jar` in `mods/` (and `server_mods/`); install with
 `./gradlew :repackedStorage:installToMods` once no game is running (it moves `storagedelight-25.12.09-1.19-forge.jar`
 to `development/repackedStorage/jar_archive/displaced/`).
@@ -94,6 +96,8 @@ to `development/repackedStorage/jar_archive/displaced/`).
 | STD-05 | Tuff countertops show Quark's polished tuff on top; blackstone, diorite and stone bricks show the vanilla texture; no missing-texture purple on any of the 50 |
 | STD-06 | A world saved before the jar: the original 90 blocks and their contents are intact after loading with it |
 | STD-07 | Wood, bamboo and Oak blocks burn 300 ticks in a furnace; Crimson / Warped ones do not |
+
+Queue: SQ-STD-01, -02 (passed), SQ-STD-03 (STD-07 fuel) and CQ-STD-01 (STD-04, STD-05), the last two added by the deep scan 2026-11-02.
 
 
 ## 5. Owner decisions and build plan (2026-10-25)

@@ -3245,6 +3245,8 @@ Briefs: [briefs/structures_earthfill.md](briefs/structures_earthfill.md), [brief
 
 ## 8. In-game test suite
 
+- **r1102b 2026-11-02** (scratch server; verdicts in `perf/runs/r1102b/` HANDOVER.md and the slice judged.md): PASS SQ-DW-01, -02, -03; rerun pending (batch fault) SQ-LE-06.
+
 ### 8.0 Scratch-server run order, easiest to hardest (2026-10-12)
 
 Every pending structure-generation test, ST- (below) and LO- ([locate.md](locate.md) 7), in the order to run them:
@@ -3751,6 +3753,7 @@ estimates, the harsh/ordinary ratio in ST-185 skipped). Every correctness part s
 
 ## 9. History
 
+- **2026-11-02 late: worldgen edit plan steps 3 to 5 ([plan_worldgen_edit.md](plan_worldgen_edit.md)).** Meta part flag `punch` (3.16): an AE2 meteorite part gets crater type NONE plus a `MetaPunchPiece` shaft up through the pieces placed before; the struck desert pyramid uses it at distance [0, 4] (`metas #12`). Free-standing `ae2:meteorite` starts: 40 % surface, 30 % underground, 30 % 16 to 96 blocks up, moved ones without a crater (`AeMeteoriteHeightMixin`, `MeteoriteHeights`; metas keep the surface). Meta `meta/waystone_ruins` (share 0.2 on small ruins) with part `creativeengineering:waystone_ruin_part` (no structure set). Shares: camp ruin metas 0.25 [0.15], great tower siege 0.30 [0.50], meteor shower 0.33 [0.50]. Spawn box `end_tower`; probes: the lone birch tower and every siege part already resolve to the right box (`contents #6`, `pillagers #6`). This code moved to Creative Worldgen in the wave 5 carve the same evening. Tests SQ-WGE-09 to -15.
 - **2026-10-19:** the 3.23 fixes went out in pack 1.0.7 (DEPLOYED 2026-10-18 19:43; [plan_1.0.7.md](plan_1.0.7.md) SF):
   status lines updated. Nothing in this area changed for 1.0.8. ST-191 to ST-198 still pending.
 - **2026-10-18: six bugs from the scratch run fixed in source (3.23), for patcherMod 1.0.7, not built.** User: "tackle

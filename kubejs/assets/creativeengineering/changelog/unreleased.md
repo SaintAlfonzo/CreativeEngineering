@@ -276,7 +276,6 @@
 - **Fixed:** Farmer's Delight chest loot (village houses, shipwrecks, mineshafts and others) had no crates or bags; cabbages, tomatoes, onions and rice there can come packed again
 - **Removed:** The Display Delight plate for Baked Tentacle on a Stick; placed ones disappear from old worlds
 - **Fixed:** Librarians and cashiers offered Stockpile, Recovery and Cycle books
-- **Fixed:** Struck desert pyramids could generate as a meteorite crater with no pyramid
 - **Changed:** Dragon Chestplate 12 armor [10], Dragon Leggings 10 [9], each dragon armor piece 4.5 toughness [5]; full set 36 armor [33]
 - **Changed:** Amethyst Shards no longer give Glowstone Dust in the Millstone, Crushing Wheels or Crusher; the Millstone gives Amethyst Dust (75 %) [Glowstone Dust]
 - **Changed:** Dandelions mature into Mature Dandelions faster on Fertile Soil than on Rich Soil: about 10 minutes on Fertile Soil [20], 20 on Rich Soil and Rich Soil Farmland [10]
@@ -293,8 +292,6 @@
 - **Changed:** Undead Castles no longer generate in highland biomes; they still generate in plains and taiga
 - **Fixed:** Undead Castles over deep dips in the ground were cancelled
 - **Changed:** Mysticrift Pillager Towers generate about 1.7 times as often; End Pillager Towers unchanged
-- **Changed:** Lone Waystones generate about 60 chunks apart [25]
-- **Changed:** Nearly every village has a Waystone, near its centre [some villages]
 - **Fixed:** Pieces of 27 structures generated at another piece's rate, among them Subterrestrial cabins, YUNG's Better Nether Fortresses bridges, Nullscape dragon skeletons, Unwrecked ship sails and witch village houses
 - **Fixed:** Cool Rain played rain sounds in deserts and in snowy seasons
 - **Changed:** Structures whose foundation would fill water more than 2 blocks deep are cancelled or lose those pieces [6]
@@ -302,11 +299,42 @@
 - **Changed:** Rooted Dirt patches with Truffle Dirt also generate in birch forests [dark forests and cold forests]
 - **Changed:** Desert and badlands villages, outposts and ruins no longer generate with sandstone or terracotta floors over deep water or cliffs
 - **Fixed:** Illagers almost never spawned in tall pillager towers; half of the monster spawn attempts over a pillager or witch structure now start within its height
-- **Fixed:** Ocean Monuments struck by a meteorite could generate hollow, with no rooms and no Elder Guardians
 - **Changed:** Philip's Ruins Lost Soul Dungeon and Lost Soul City generate in Soul Sand Valleys in the Nether [deep underground in the Overworld]. New chunks only.
 - **Changed:** Philip's Ruins Rare Ruin generates in Crimson and Warped Forests in the Nether [Overworld jungles and swamps]; the blackstone Nether Ruin generates in Nether Wastes and Basalt Deltas [Overworld]
 - **Fixed:** Quark Spiral Spires in the End generated with their base hanging over the void; those spires no longer generate
 - **Changed:** Village farms grow Cotton only in desert and savanna villages, and Bell Peppers and Coffee only in jungle villages [both]. New villages only.
+- **Changed:** Crimson and warped trapdoors, buttons and slabs in Overworld structures are mangrove; warped pressure plates, trapdoors, stairs and stripped hyphae are dark oak [crimson and warped]
+- **Changed:** Pillager camps with a ruin beside them generate more often: a quarter of camps [15 %]
+- **Changed:** Great pillager towers under siege are rarer: 30 % of great towers [50 %]
+
+## Meteorites
+
+- **Fixed:** Struck desert pyramids could generate as a meteorite crater with no pyramid
+- **Fixed:** Ocean Monuments struck by a meteorite could generate hollow, with no rooms and no Elder Guardians
+- **Fixed:** Struck desert pyramids lost their walls above ground to the crater; the meteorite now lands in the pyramid and punches a shaft through it
+- **Changed:** Meteor showers are rarer: a third of meteorites in deserts [half]
+- **New:** Meteorites that are not part of a village, camp, ruin or monument can generate underground or in the air (about 3 in 10 each), without a crater. New chunks only.
+
+## Waystones
+
+- **Changed:** Lone Waystones generate about 60 chunks apart [25]
+- **Changed:** Nearly every village has a Waystone, near its centre [some villages]
+- **New:** Some small ruins have a Waystone standing beside them
+
+## Mob Spawns
+
+- **Changed:** Gazelles, elephants and rhinoceroses spawn less often in savannas and shrublands: weights 16, 15 and 12 [40, 30, 24]
+- **Changed:** Kangaroos and emus spawn half as often in savannas: weights 13 and 10 [25, 20]; badlands unchanged
+- **Changed:** Capuchin monkeys and gorillas spawn less often in jungles: weights 17 and 15 [28, 25]
+- **Changed:** Crocodiles and platypuses spawn half as often on rivers: weight 10 [20]
+- **Changed:** Snow leopards spawn half as often on frozen rivers and snowy beaches: weight 9 [18]
+- **New:** A lone villager now and then spawns in plains, sunflower plains, steppes, valley clearings, meadows, blooming plateaus and highlands, in the light only
+- **New:** Allays spawn in moonlight, lavender and amethyst biomes and the Mirage Isles, in the light only, and inside the Ancient Enchantment Temple and the sky temple
+- **Changed:** Pillager outposts place the allay cage more often: 3 in 16 feature picks [1 in 14]
+- **New:** The End pillager tower spawns pillagers, vindicators, evokers, illusioners and witches
+- **New:** Illagers and witches in the End wear a copper diving helmet, backtank and boots, which they never drop
+- **Changed:** Every cow that spawns in spring, summer and autumn skylands is a moobloom, split evenly over the variants whose flowers grow there [a half to three quarters]
+- **New:** Cows spawn in winter skylands
 
 ## Interface & Tooltips <!-- icon: minecraft:written_book -->
 

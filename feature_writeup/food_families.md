@@ -2922,6 +2922,8 @@ model per slice), pizza recipes, lasagna dish, brownie / pudding / pastry oven r
 
 ## 7. In-game test suite
 
+- **r1102b 2026-11-02** (scratch server; verdicts in `perf/runs/r1102b/` HANDOVER.md and the slice judged.md): PASS SQ-FF-00, -02, SQ-FFB-00, SQ-RM-02, -03.
+
 Needs the patcherMod and Creative Delight jars from this change installed and a restart. Then `/dumpall` and
 `python3 tools/food_families.py`: the produce rows of 3.2 read full, except Maple Glazed Bacon (4.4).
 

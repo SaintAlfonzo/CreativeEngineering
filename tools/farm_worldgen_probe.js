@@ -56,7 +56,7 @@ function zfwCf(server, id) {
 	return server.registryAccess().registryOrThrow(ZFW_Registry.CONFIGURED_FEATURE_REGISTRY).get(new ZFW_RL(id))
 }
 function zfwStemCfg() { return Java.loadClass('com.SaintAlfonzo.creativedelight.CDConfig').STEM_FRUIT }
-function zfwWgCfg() { return Java.loadClass('com.SaintAlfonzo.creativeengineering.CEConfig').WORLDGEN }
+function zfwWgCfg() { return Java.loadClass('com.SaintAlfonzo.creativeworldgen.CWGConfig').WORLDGEN }
 
 // Stone at y-2, dirt (grass if asked) at y-1, air above, flags 2 | 16 (no updates).
 function zfwPad(level, x0, x1, z0, z1, top, grass) {

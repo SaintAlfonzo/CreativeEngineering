@@ -506,6 +506,8 @@ Blocking a build: none. All of D1 to D17 are settled. No question remains on the
 
 ## 8. In-game test suite (drafted)
 
+- **r1102b 2026-11-02** (scratch server; verdicts in `perf/runs/r1102b/` HANDOVER.md and the slice judged.md): PASS SQ-ROLL-01, -02, -05, -06, -07, -08, -09; rerun pending (batch fault) SQ-ROLL-03, -04.
+
 Scratch r1102b (2026-11-02, `perf/runs/r1102b/s3/judged.md`): SQ-ROLL-01 (real PASS: the asset line is client-only,
 the server loads `roll_upstream_data` clean), -02, -05 to -09 PASS: server half of ROLL-01, 05, 10, 11, 12, 16, 18, 22.
 SQ-ROLL-03 and -04 (ROLL-07, 08, 09) OPEN: `zq useitem` tries the main hand only, chopsticks have no use of their own,

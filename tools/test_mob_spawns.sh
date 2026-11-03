@@ -23,8 +23,8 @@ echo "== 1. Java/Python parity"
 source "$ROOT/tools/java_test_cp.sh"
 mkdir -p "$T/stub" "$T/test"
 javac -proc:none -nowarn -cp "$CP" -d "$T/stub" tools/structure_groups_test/net/minecraftforge/fml/loading/FMLEnvironment.java
-javac -proc:none -nowarn -cp "$T/stub:$CP" -d "$T/test" "$D"/com/SaintAlfonzo/creativeengineering/worldgen/SpawnTuningParity.java 2>&1 | grep -v 'warning\|unchecked\|deprecat' || true
-java -cp "$T/stub:$T/test:$CP" com.SaintAlfonzo.creativeengineering.worldgen.SpawnTuningParity "$D/cases.json" "$T/parity.json" 2>&1 \
+javac -proc:none -nowarn -cp "$T/stub:$CP" -d "$T/test" "$D"/com/SaintAlfonzo/creativeworldgen/worldgen/SpawnTuningParity.java 2>&1 | grep -v 'warning\|unchecked\|deprecat' || true
+java -cp "$T/stub:$T/test:$CP" com.SaintAlfonzo.creativeworldgen.worldgen.SpawnTuningParity "$D/cases.json" "$T/parity.json" 2>&1 \
   | grep -E 'cases run|Exception|Error' || status=1
 python3 - "$T/parity.json" "$D/cases.json" <<'PY' || status=1
 import json, sys

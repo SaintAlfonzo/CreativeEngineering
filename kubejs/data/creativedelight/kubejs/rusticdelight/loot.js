@@ -4,11 +4,12 @@
 // Wandering Trader (economy/wandering_trades.js), so the wild and giant pepper patches stay base colours.
 // Very rare (owner 2026-11-02, 95th to 99th percentile): one seed, share 0.03. Marked for the loot overhaul (TODO loot).
 //
-// Wrapped in an IIFE: all server scripts share one top-level scope.
+// The rules sit in a callback, so nothing leaks into the top-level scope all server scripts share.
 
-(function () {
-    if (!global.lootTuning || !global.CD || !global.CD.on('rusticdelight')) return
-    var L = global.lootTuning
+// Queued with global.CWG.lootRules (Creative Worldgen's loot engine, loot/05_tuning.js): its script pack can load
+// after this one, so the rules run when the engine of the current reload exists. No Worldgen jar: no rules.
+if (global.CWG) global.CWG.lootRules(function (L) {
+    if (!global.CD || !global.CD.on('rusticdelight')) return
     var i = global.item
 
     // crates and bags of the new colours, like the three base crates (veggiesdelight/loot.js)
@@ -30,4 +31,4 @@
     SKY.concat(['cloudstorage:chests/loot_balloon']).forEach(function (table) {
         L.add(table, i.pale_bell_pepper_seeds, { share: 0.03, count: 1 })
     })
-})()
+})

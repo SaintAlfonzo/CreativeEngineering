@@ -172,6 +172,8 @@ code goes in CD), then `gen_can_types.py` so cans copy the new effects, and a ch
 
 ## 7. Tests
 
+- **r1102b 2026-11-02** (scratch server; verdicts in `perf/runs/r1102b/` HANDOVER.md and the slice judged.md): PASS SQ-CNS-01; rerun pending (batch fault) SQ-CNS-02.
+
 IDs are `CNS-` (`CN-` is taken by Corn Delight and the can tests). Restart with the 2026-10-27 CD jar first. Hover the
 food (effect line and length in the tooltip), eat it, check the inventory screen.
 

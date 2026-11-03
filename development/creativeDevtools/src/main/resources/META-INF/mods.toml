@@ -37,6 +37,14 @@ mandatory=true
 versionRange="[1.0.0,)"
 ordering="AFTER"
 side="BOTH"
+# Creative Worldgen: /ceplace (MassPlacer), the /dumpspawns tuning record and /ceperf mobcap read its classes; each is
+# skipped when it is not loaded (creative_split.md 7.6: Devtools has an optional dependency on Worldgen).
+[[dependencies.creativedevtools]]
+modId="creativeworldgen"
+mandatory=false
+versionRange="[1.0.0,)"
+ordering="AFTER"
+side="BOTH"
 # Immersive Engineering: only for the recycling log (ie/IeRecyclingDiagnostics), registered when IE is loaded.
 [[dependencies.creativedevtools]]
 modId="immersiveengineering"

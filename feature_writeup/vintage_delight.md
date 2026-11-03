@@ -704,6 +704,8 @@ Briefs: [dishes_jams](briefs/dishes_jams.md), [dishes_pickles-and-ferments](brie
 
 ## 8. In-game test suite (drafted)
 
+- **r1102b 2026-11-02** (scratch server; verdicts in `perf/runs/r1102b/` HANDOVER.md and the slice judged.md): PASS SQ-VP-03, -05, -05b, -09, -10, -11, -16, SQ-VTD4-03, -05, -05o, -07, -08, SQ-VTD6-02a, SQ-VTD7-01; FAIL SQ-VP-06: pepper jam and relish lose the `_bottle` container: stale `kubejs/data/vintagedelight/moonlight/soft_fluids/pepper_jam.json`, `relish.json` shadow the member files; FAIL SQ-VTD6-01: wild ghost peppers stay on grass: `GhostPepperWildCropBlock.mayPlaceOn` takes `#minecraft:nylium`, which Terralith fills with grass, mycelium, moss; FAIL SQ-VTD7-02: bales and Salt Blocks are in `blockrunner:surface/soft` 0.88x (`blocktags.js` 341-346), the changelog says 1.05x (owner decides); OPEN (no verdict, rerun row written) SQ-VP-15, SQ-VTD8-02c; rerun pending (batch fault) SQ-VP-04, -07, SQ-VTD6-02, SQ-VTD8-02, -02b.
+
 Crops and worldgen
 
 - [ ] VTD-01 Oats and peanuts plant on farmland, Rich Farmland and Fertile Soil, grow to age 7 and drop produce (and

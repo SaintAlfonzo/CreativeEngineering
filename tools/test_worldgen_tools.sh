@@ -22,34 +22,34 @@ cd "$ROOT"
 source "$ROOT/tools/java_test_cp.sh"
 mkdir -p "$T/stub" "$T/test"
 javac -proc:none -nowarn -cp "$CP" -d "$T/stub" tools/structure_groups_test/net/minecraftforge/fml/loading/FMLEnvironment.java
-javac -proc:none -nowarn -cp "$T/stub:$CP" -d "$T/test" tools/worldgen_test/com/SaintAlfonzo/creativeengineering/worldgen/*.java 2>&1 | grep -v 'warning\|unchecked\|deprecat' || true
+javac -proc:none -nowarn -cp "$T/stub:$CP" -d "$T/test" tools/worldgen_test/com/SaintAlfonzo/creativeworldgen/worldgen/*.java 2>&1 | grep -v 'warning\|unchecked\|deprecat' || true
 # /ceplace is Creative Devtools' (feature_writeup/creative_devtools.md 2): its test compiles against the Devtools classes too
 DT="$ROOT/development/creativeDevtools/build/classes/java/main"
 javac -proc:none -nowarn -cp "$T/stub:$DT:$CP" -d "$T/test" tools/worldgen_test/com/SaintAlfonzo/creativedevtools/ceplace/*.java 2>&1 | grep -v 'warning\|unchecked\|deprecat' || true
 status=0
 echo "== 1. ground matching"
-java -cp "$T/stub:$T/test:$CP" com.SaintAlfonzo.creativeengineering.worldgen.GroundMatchTest 2>&1 | grep -E '^(ok|FAIL|ALL|[0-9]+ FAILED)|Exception|Error' || status=1
+java -cp "$T/stub:$T/test:$CP" com.SaintAlfonzo.creativeworldgen.worldgen.GroundMatchTest 2>&1 | grep -E '^(ok|FAIL|ALL|[0-9]+ FAILED)|Exception|Error' || status=1
 echo "== 2. /ceplace + WorldgenConfig"
 java -cp "$T/stub:$T/test:$DT:$CP" com.SaintAlfonzo.creativedevtools.ceplace.MassPlacerTest "$ROOT" 2>&1 | grep -E '^(ok|FAIL|ALL|[0-9]+ FAILED| +T&T)|Exception|Error' || status=1
 echo "== 3. earth fill"
-java -cp "$T/stub:$T/test:$CP" com.SaintAlfonzo.creativeengineering.worldgen.EarthFillTest 2>&1 | grep -E '^(ok|FAIL|ALL|[0-9]+ FAILED)|Exception|Error' || status=1
+java -cp "$T/stub:$T/test:$CP" com.SaintAlfonzo.creativeworldgen.worldgen.EarthFillTest 2>&1 | grep -E '^(ok|FAIL|ALL|[0-9]+ FAILED)|Exception|Error' || status=1
 echo "== 4. debug structure density"
 node tools/structure_density_check.js || status=1
 echo "== 5. terrain adaptation + template trim"
-java -cp "$T/stub:$T/test:$CP" com.SaintAlfonzo.creativeengineering.worldgen.TerrainAdaptationTest "$ROOT" 2>&1 | grep -E '^(ok|FAIL|ALL|[0-9]+ FAILED)|Exception|Error' || status=1
+java -cp "$T/stub:$T/test:$CP" com.SaintAlfonzo.creativeworldgen.worldgen.TerrainAdaptationTest "$ROOT" 2>&1 | grep -E '^(ok|FAIL|ALL|[0-9]+ FAILED)|Exception|Error' || status=1
 echo "== 6. meta structures"
-java -cp "$T/stub:$T/test:$CP" com.SaintAlfonzo.creativeengineering.worldgen.MetaTest "$ROOT" 2>&1 | grep -E '^(ok|FAIL|ALL|[0-9]+ FAILED)|Exception|Error' || status=1
+java -cp "$T/stub:$T/test:$CP" com.SaintAlfonzo.creativeworldgen.worldgen.MetaTest "$ROOT" 2>&1 | grep -E '^(ok|FAIL|ALL|[0-9]+ FAILED)|Exception|Error' || status=1
 echo "== 7. biome fits"
 node tools/structure_tuning_sim.js "$T/fits_report.md" "$T/fits" > /dev/null
-java -cp "$T/stub:$T/test:$CP" com.SaintAlfonzo.creativeengineering.worldgen.FitTest "$T/fits/fits.json" 2>&1 | grep -E '^(ok|FAIL|ALL|[0-9]+ FAILED)|Exception|Error' || status=1
+java -cp "$T/stub:$T/test:$CP" com.SaintAlfonzo.creativeworldgen.worldgen.FitTest "$T/fits/fits.json" 2>&1 | grep -E '^(ok|FAIL|ALL|[0-9]+ FAILED)|Exception|Error' || status=1
 echo "== 8. locate"
-java -cp "$T/stub:$T/test:$CP" com.SaintAlfonzo.creativeengineering.worldgen.LocateTest 2>&1 | grep -E '^(ok|FAIL|ALL|[0-9]+ FAILED)|Exception|Error' || status=1
+java -cp "$T/stub:$T/test:$CP" com.SaintAlfonzo.creativeworldgen.worldgen.LocateTest 2>&1 | grep -E '^(ok|FAIL|ALL|[0-9]+ FAILED)|Exception|Error' || status=1
 echo "== 9. worldgen JSON shape (1.19.2 codecs)"
 python3 tools/check_worldgen_json.py || status=1
 echo "== 10. pool order + processor rebind"
-java -cp "$T/stub:$T/test:$CP" com.SaintAlfonzo.creativeengineering.worldgen.PoolTunerTest 2>&1 | grep -E '^(ok|FAIL|ALL|[0-9]+ FAILED)|Exception|Error' || status=1
+java -cp "$T/stub:$T/test:$CP" com.SaintAlfonzo.creativeworldgen.worldgen.PoolTunerTest 2>&1 | grep -E '^(ok|FAIL|ALL|[0-9]+ FAILED)|Exception|Error' || status=1
 echo "== 11. biome tuner disk cache"
-java -cp "$T/stub:$T/test:$CP" com.SaintAlfonzo.creativeengineering.worldgen.BiomeLayoutCacheTest "$ROOT" 2>&1 | grep -E '^(ok|FAIL|ALL|[0-9]+ FAILED)|Exception|Error' || status=1
+java -cp "$T/stub:$T/test:$CP" com.SaintAlfonzo.creativeworldgen.worldgen.BiomeLayoutCacheTest "$ROOT" 2>&1 | grep -E '^(ok|FAIL|ALL|[0-9]+ FAILED)|Exception|Error' || status=1
 echo "== 12. ocean geode floor patch"
-java -cp "$T/stub:$T/test:$CP" com.SaintAlfonzo.creativeengineering.worldgen.OceanGeodesTest 2>&1 | grep -E '^(ok|FAIL|ALL|[0-9]+ FAILED)|Exception|Error' || status=1
+java -cp "$T/stub:$T/test:$CP" com.SaintAlfonzo.creativeworldgen.worldgen.OceanGeodesTest 2>&1 | grep -E '^(ok|FAIL|ALL|[0-9]+ FAILED)|Exception|Error' || status=1
 exit $status

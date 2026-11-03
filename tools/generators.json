@@ -162,8 +162,8 @@
       "groups": ["core", "loot"],
       "dumps": ["dumploot", "dumptags item"],
       "outputs": [
-        "kubejs/server_scripts/loot/loot_config.json",
-        "kubejs/server_scripts/loot/loot_index.json"
+        "kubejs/data/creativeworldgen/kubejs/loot/loot_config.json",
+        "kubejs/data/creativeworldgen/kubejs/loot/loot_index.json"
       ],
       "apply": "/reload"
     },
@@ -213,7 +213,7 @@
         "feature_writeup/terrain_adaptation_scan.md",
         "kubejs/generation_scripts/worldgen/terrain_adaptation_scan.json"
       ],
-      "apply": "report only: tag candidates in kubejs/server_scripts/worldgen/terrain_adaptation.js"
+      "apply": "report only: tag candidates in kubejs/data/creativeworldgen/kubejs/worldgen/terrain_adaptation.js"
     },
     {
       "id": "nether_blocks_scan",
@@ -248,7 +248,7 @@
       "script": "tools/loot_census.py",
       "groups": ["reports", "loot", "slow"],
       "dumps": ["dumploot"],
-      "outputs": ["kubejs/server_scripts/loot/loot_census.md"],
+      "outputs": ["kubejs/data/creativeworldgen/kubejs/loot/loot_census.md"],
       "apply": "report only"
     },
     {

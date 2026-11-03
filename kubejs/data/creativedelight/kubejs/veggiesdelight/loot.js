@@ -5,11 +5,11 @@
 // is Rustic's, whose crates and seed bag had no pack rule. Rules are collected here and applied by the pack's loot
 // engine in its fixed phase order (loot/05_tuning.js), so file order does not matter.
 //
-// Wrapped in an IIFE: all server scripts share one top-level scope.
+// The rules sit in a callback, so nothing leaks into the top-level scope all server scripts share.
 
-(function () {
-    if (!global.lootTuning) return
-    var L = global.lootTuning
+// Queued with global.CWG.lootRules (Creative Worldgen's loot engine, loot/05_tuning.js): its script pack can load
+// after this one, so the rules run when the engine of the current reload exists. No Worldgen jar: no rules.
+if (global.CWG) global.CWG.lootRules(function (L) {
     var i = global.item
 
     L.pack(i.broccoli_crate,                i.broccoli)
@@ -42,4 +42,4 @@
     VD_LOOT.forEach(function (row) {
         row[1].forEach(function (item) { L.add(row[0], item, { share: row[2], count: row[3] }) })
     })
-})()
+})

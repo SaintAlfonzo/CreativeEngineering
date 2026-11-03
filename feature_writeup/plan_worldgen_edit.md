@@ -1,6 +1,6 @@
 # Worldgen edit plan (2026-11-01)
 
-Status: IN PROGRESS. Built 2026-11-02: A1 to A5 (A5 parts a and b), B1, B5 (patcherMod and Creative Calendar installed). Next: step 3 (A7, B2 to B4 probes, A6, B6). Owner calls of 2026-11-01 are folded in. Row ids refer to
+Status: BUILT, awaiting scratch tests (2026-11-02 late). Steps 1 to 5 done except the owner calls below. Step 3 to 5 results: A7 was already built in the pre-scratch pass (only the generator's move-tag handling removed, output unchanged); B2 built (part flag `punch`); B3 and B4 probes found no code fault (box resolves, siege parts use the meta box; the B4 mix was generated grunts); B6 audit: no source gives illagers guns, Old Guns AI is skeleton-only, so no rule was added (owner picks the mechanism in `mobs/pillagers #7`); A6 built, but Waystones' BIOME style does not apply to templates (plain stone waystones); C3 to C6 built (C6: 40/30/30 surface/underground/air); C1 runs in the scratch session; N1, N4 to N6, N8 to N10 built; N2, N3 were already built; N7, N11 queued. The B2/C6 Java now lives in Creative Worldgen (wave 5 carve, same evening). Open owner calls: B6 mechanism; N8 illager armour render layer (gear invisible); N6 per-category spawn boxes for allays in pillager structures; B4 boxes over ground between siege parts. Owner calls of 2026-11-01 are folded in. Row ids refer to
 [todo/TODO.md](todo/TODO.md). Every change that touches game data adds its live checks to
 [testing/scratch_queue.md](testing/scratch_queue.md) (no scratch boot until the owner says so) and a bullet to
 `kubejs/assets/creativeengineering/changelog/unreleased.md` where a player can notice it. Hand-edited configs are
@@ -69,7 +69,7 @@ copied to `configs_edited/root_config/`.
 5. N4 to N7, N9 to N11 (spawn rules, investigations, notes).
 6. TODO updates, writeups, scratch queue, changelog, `python3 tools/changelog_lint.py`.
 
-## E. Tests to queue (built part: SQ-WGE-00 to 08 and CQ-WGE-07a to c in scratch_queue.md, 2026-11-02; the rest below are still to write)
+## E. Tests to queue (all written 2026-11-02: SQ-WGE-00 to 18, CQ-WGE-07a to c, 17, 18, SQ-MOB-N4 to -N8; ids below map to them: NETHER-MOVE = 09, SQ-NBS-4 = 10, SQ-META-SHARES = 11, SQ-META31-04b = 12, SQ-METEOR-HEIGHT = 13, SQ-WAYSTONE-1 ruins = 14, SQ-SB-03b/04b = 15 (SQ-PSM-02/-03); SQ-TER-05 stays in the scratch session)
 
 SQ-TER-05 (beardFootprint calibration, then enable), SQ-NBS-4 (K28 to K36 swaps), SQ-META-SHARES (camp ruins, great tower, meteor shower), SQ-METEOR-HEIGHT, SQ-MOB-N4 to N8, SQ-WG-BIOME-SHADOW (End census), SQ-WG30-C05 (120 s), SQ-EF-06b (castle, new air limit), SQ-STRUCT-MYST3X (estimates and census),
 SQ-WAYSTONE-1 (lone spacing, village share, ruin waystones), SQ-POOL-1 (weights after B1), SQ-META31-04b (pyramid punch),

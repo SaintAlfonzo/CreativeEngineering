@@ -116,6 +116,8 @@ bundle did not build at the time: the in-progress `:backportedRustic` member did
 
 ## 6. Tests
 
+- **r1102b 2026-11-02** (scratch server; verdicts in `perf/runs/r1102b/` HANDOVER.md and the slice judged.md): PASS SQ-FR-02, -03, -04, -05, -05a.
+
 | ID | Test | Where |
 |---|---|---|
 | FR-01 | Boot with Fruits Delight: no mixin error for `creativedelight.mixins.json`; no `null guard not applied` warning | SQ-FR-01 |
@@ -125,7 +127,7 @@ bundle did not build at the time: the in-progress `:backportedRustic` member did
 | FR-05 | `#forge:jams` holds the 22 jams; `#forge:storage_blocks` and `/peach` hold the Peach Crate (item and block) | SQ-FR-04 |
 | FR-06 | Boot without Fruits Delight: CD loads, no mixin error, the Fruits Delight scripts (5 in r1102b) skipped | SQ-FR-05 |
 
-Scratch results: FR-01 PASS (r1101 boot), FR-02 to FR-06 PASS r1102b 2026-11-02 (`perf/runs/r1102b/s2/judged.md`; FR-02 and FR-04 batch regexes were stale, real PASS). Open: the FR-03 tooltip (client) and play.
+Scratch results: FR-01 PASS (r1101 boot), FR-02 to FR-06 PASS r1102b 2026-11-02 (`perf/runs/r1102b/s2/judged.md`; FR-02 and FR-04 batch regexes were stale, real PASS). Open: the FR-03 tooltip (client) and play. Deep scan 2026-11-02: new queue rows CQ-FR-01 (FR-02, FR-03 on a client).
 
 ## Bayberry Juice (2026-10-25, TODO `food/drinks #9`)
 

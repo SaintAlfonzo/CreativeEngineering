@@ -1,4 +1,4 @@
-package com.SaintAlfonzo.creativeengineering.worldgen;
+package com.SaintAlfonzo.creativeworldgen.worldgen;
 import java.util.*;
 public class MergeTest {
   static int fails=0;

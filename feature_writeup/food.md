@@ -869,6 +869,8 @@ Answered by the owner 2026-11-02 except D3 (pinned) and D4 (open).
 
 ## 7. In-game test suite
 
+- **r1102b 2026-11-02** (scratch server; verdicts in `perf/runs/r1102b/` HANDOVER.md and the slice judged.md): PASS SQ-PS-03, -04.
+
 Restart the game first (item_dict gained keys), then load WorldC.
 
 Scratch halves (deep scan 2026-11-02): FO-02 to FO-08 type tags SQ-FO-01, -02; FO-09 to FO-13 empty-can recipes SQ-FO-03;

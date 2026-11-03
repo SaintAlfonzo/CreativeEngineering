@@ -204,7 +204,9 @@ Ids that collide with 3.4.1: none (checked against 3.4.1's registry classes and 
 
 ## 4. Tests
 
-Live tests are queued as SQ-DF in [testing/scratch_queue.md](testing/scratch_queue.md). Scratch (deep scan 2026-11-02): SQ-DF-01 to -06 and -03b PASS r1102b s2 (`perf/runs/r1102b/s2/`); SQ-DF-07 (3.4.1 old world) not run: the old jar does not boot beside CD. In game after the install:
+- **r1102b 2026-11-02** (scratch server; verdicts in `perf/runs/r1102b/` HANDOVER.md and the slice judged.md): PASS SQ-DF-01, -02, -03, -03b, -04, -05, -06; not run SQ-DF-07.
+
+Live tests are queued as SQ-DF in [testing/scratch_queue.md](testing/scratch_queue.md). Scratch (deep scan 2026-11-02): SQ-DF-01 to -06 and -03b PASS r1102b s2 (`perf/runs/r1102b/s2/`); SQ-DF-07 (3.4.1 old world) not run: the old jar does not boot beside CD. Client half: CQ-DF-01 (DF-02, DF-03, DF-05 to DF-07, DF-09, DF-11 looks; deep scan 2026-11-02). In game after the install:
 
 | ID | Check | Pass |
 |---|---|---|

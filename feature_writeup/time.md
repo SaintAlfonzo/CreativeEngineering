@@ -617,6 +617,8 @@ it starts after Early Spring. Worlds whose date was already off (migrated, `/sea
 
 ## 7. In-game test suite
 
+- **r1102b 2026-11-02** (scratch server; verdicts in `perf/runs/r1102b/` HANDOVER.md and the slice judged.md): PASS SQ-PST-01, -02, -06, -07, SQ-TI-01; rerun pending (batch fault) SQ-PST-03, -08, -09, -10, -11, -11b.
+
 Everything is built (2026-10-18), so all of these can run. TI-15 and TI-22 test the same calendar tooltip; TI-25 to
 TI-27 cover what the build added (3.8).
 

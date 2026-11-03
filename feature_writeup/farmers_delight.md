@@ -165,6 +165,8 @@ Onion Soup is left out (owner 2026-11-02). Build detail in section 4.
 
 ## 4. Built 2026-10-25 (shipped in 1.1.03, not tested in game)
 
+- **r1102b 2026-11-02** (scratch server; verdicts in `perf/runs/r1102b/` HANDOVER.md and the slice judged.md): PASS SQ-FDB-02, -03, -10, -13, -14, -15; FAIL SQ-FDB-04: Gleaming Salad loses Nourishment: no rule in `tools/gen_comfort_nourishment.py` (check after the 19:50 regeneration); OPEN (no verdict, rerun row written) SQ-FDB-05, -06; rerun pending (batch fault) SQ-FDB-07, -09, -11.
+
 Owner request 2026-10-25: execute the backport; keep Onion Soup for evaluation; add Gleaming Salad, the third placeable
 pumpkin pie with a way to compare all three in game, Rope Fence and Gate, the Rabbit Stew / Vegetable Noodles / Cabbage
 Rolls / Dog Food changes, salvaging, onion drops, knife pumpkin slicing, untramplable rich soil (tooltip updated),
@@ -259,5 +261,5 @@ Ten 1.3.4 item textures are copied into `kubejs/assets/farmersdelight/textures/i
 notice in `farmers_delight_art_notice.txt`): chicken soup, honey glazed ham and its block item, stuffed pumpkin and its block item,
 pumpkin soup, vegetable soup, bone broth, fried rice, rice roll medley (block item). The other 45 retextures (blocks, canvas signs,
 rice crops, cutting board, tray, shepherd's pie, stuffed pumpkin block faces) are not adopted. Client only, resource reload (F3+T) or restart;
-check in game: the ten icons in the inventory and JEI, and any can or Display Delight plate that borrows them.
+check in game: the ten icons in the inventory and JEI, and any can or Display Delight plate that borrows them. Queue row CQ-FDB-01 (deep scan 2026-11-02).
 

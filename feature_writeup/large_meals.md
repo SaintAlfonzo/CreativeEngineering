@@ -294,6 +294,8 @@ rice, 2 carrot, 2 baked potato, bowl) with the raw rack.
 
 ## 8. In-game test suite (drafted)
 
+- **r1102b 2026-11-02** (scratch server; verdicts in `perf/runs/r1102b/` HANDOVER.md and the slice judged.md): PASS SQ-LGM-01, -02, -03, -04, -04b, -05, -06, -06b, -07, -08, -09; FAIL SQ-LGM-10: Large Meals Chicken Curry has no recipe: duplicate `chicken_curry` recipe ids with `endersdelight/additions.js`.
+
 Scratch r1102b (2026-11-02, `perf/runs/r1102b/s3/judged.md`): SQ-LGM-01 to -09 PASS (01, 03, 04b, 08 proven from the
 log after batch faults); covers the server half of LGM-01 to LGM-10, LGM-18. **SQ-LGM-10 FAIL:** 12 of 13 heatless
 crafts; Large Meals Chicken Curry has no recipe at all: `creativedelight:farmersdelightcooking/chicken_curry` and

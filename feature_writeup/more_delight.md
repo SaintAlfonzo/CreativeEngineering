@@ -79,7 +79,9 @@ change them in `moredelight/toast.js` if wanted.
 
 ## 4. Tests
 
-Prefix `MRD-`. Restart needed (startup scripts and a CD jar change).
+- **r1102b 2026-11-02** (scratch server; verdicts in `perf/runs/r1102b/` HANDOVER.md and the slice judged.md): PASS SQ-MRD-02; FAIL SQ-MRD-01: Wooden and Stone Knives mine at 8, not 2 and 4 (`tune_tools.js` 134-135).
+
+Prefix `MRD-`. Restart needed (startup scripts and a CD jar change). Queue: SQ-MRD-01 to -03, plus (deep scan 2026-11-02) SQ-MRD-04 (MRD-06 Carrot Soup Comfort) and CQ-MRD-01 (MRD-01 to MRD-03 on a client).
 
 | ID | Check |
 |---|---|

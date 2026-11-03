@@ -1,7 +1,7 @@
 package com.SaintAlfonzo.creativedevtools.dump;
 
-import com.SaintAlfonzo.creativeengineering.worldgen.SpawnConditions;
-import com.SaintAlfonzo.creativeengineering.worldgen.SpawnTuning;
+import com.SaintAlfonzo.creativeworldgen.worldgen.SpawnConditions;
+import com.SaintAlfonzo.creativeworldgen.worldgen.SpawnTuning;
 import com.SaintAlfonzo.creativeengineering.util.WorldgenFiles;
 import com.google.gson.GsonBuilder;
 import com.mojang.logging.LogUtils;
@@ -69,7 +69,8 @@ public final class SpawnDump {
 		root.put("biomes", biomes);
 		Map<String, Object> entities = entities(server, biomes);
 		root.put("entities", entities);
-		root.put("tuning", tuning());
+		// The spawn tuning record is Creative Worldgen's (an optional dependency of Devtools).
+		if (net.minecraftforge.fml.ModList.get().isLoaded("creativeworldgen")) root.put("tuning", tuning());
 		String json = new GsonBuilder().setPrettyPrinting().disableHtmlEscaping().create().toJson(root) + "\n";
 		WorldgenFiles.writeText(OUT, json);
 		String line = biomes.size() + " biomes, " + entities.size() + " mobs -> " + OUT;

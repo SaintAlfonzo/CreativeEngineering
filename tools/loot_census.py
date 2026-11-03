@@ -4,14 +4,14 @@ Loot table census: every loot table in the pack, per namespace and category, whe
 shipped from, what the game actually loaded (/dumploot), and how it maps onto the chest-loot
 tuning catalog. Read-only: it never touches loot_config.json / loot_index.json.
 
-Writes kubejs/server_scripts/loot/loot_census.md (KubeJS only loads .js, so it's inert there).
+Writes kubejs/data/creativeworldgen/kubejs/loot/loot_census.md (KubeJS only loads .js, so it's inert there).
 
 Sources, in datapack priority order (lowest first, same as the game and gen_loot_config.py):
 the vanilla -extra jar, mods/*.jar sorted by file name, kubejs/data. Optional extras:
   kubejs/exported/loot_tables/*.json   /dumploot export = what the server really loaded. Files
                                         older than the newest one by > 10 min are leftovers from
                                         removed mods (the dump never deletes a namespace file).
-  kubejs/server_scripts/loot/loot_index.json + loot_config.json   the tuning scope and catalog.
+  kubejs/data/creativeworldgen/kubejs/loot/loot_index.json + loot_config.json   the tuning scope and catalog.
   Structure templates (audit_loot_containers.py's scan of every .nbt in mods/*.jar + vanilla): which
   tables containers really roll, from which structures. Takes ~30 s.
 
@@ -35,7 +35,7 @@ from gen_loot_config import (CHEST_PATH, CHEST_TYPE, CONFIG_PATH, EXPORT_DIR, IN
                              NON_CHEST_PREFIX, glm_targets, iter_data_sources, norm_id, norm_type,
                              table_refs, walk_entries)
 
-OUT = INSTANCE / 'kubejs/server_scripts/loot/loot_census.md'
+OUT = INSTANCE / 'kubejs/data/creativeworldgen/kubejs/loot/loot_census.md'
 STALE_SECONDS = 600
 
 CATEGORIES = ['chest', 'chest_sub', 'block', 'entity', 'gameplay', 'config_driven', 'other']

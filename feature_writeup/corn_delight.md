@@ -95,10 +95,12 @@ Village corn farms: handled elsewhere (not in this plan).
 
 ## 4. Tests
 
+- **r1102b 2026-11-02** (scratch server; verdicts in `perf/runs/r1102b/` HANDOVER.md and the slice judged.md): PASS SQ-CN-01, -02, -03, -05, -06, -07; rerun pending (batch fault) SQ-CN-04.
+
 In game (client), after installing both jars and a restart. The server halves are queued as SQ-CN in
 [scratch_queue.md](testing/scratch_queue.md): SQ-CN-00 PASS (r1101 boot), -01 to -03, -05 to -07 PASS r1102b 2026-11-02
 (`perf/runs/r1102b/s2/`; -05 now checks Face + Head only, the mouth tag was dropped), -04 open (rerun with a fake player
-breaking the corn with a knife).
+breaking the corn with a knife: SQ-CN-04b). Client half: CQ-CN-01 (CN-01, CN-05, CN-06). Both added by the deep scan 2026-11-02.
 
 - [ ] CN-01 Corncob in JEI; cutting board + knife gives 6 kernels.
 - [ ] CN-02 Mill, Millstone, IE crusher on corn: cornmeal as before, Corncob about 1 in 10 over 50 runs; wild corn in the mill

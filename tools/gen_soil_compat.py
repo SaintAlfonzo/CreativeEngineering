@@ -12,7 +12,7 @@ For every placed/configured feature in the mod jars with a block predicate that 
 (offset [0,-1,0]) against a block list containing minecraft:grass_block, this writes an override to
 kubejs/data/<ns>/worldgen/<kind>/<path>.json in which that predicate becomes
     any_of(<the original list>, matching_block_tag #creativeengineering:worldgen/grass_like_soils)
-(the tag is filled in kubejs/server_scripts/tags/blocktags.js). The only other change is STATE_SWAPS (merged blocks).
+(the tag is filled in kubejs/data/creativeworldgen/kubejs/tags/blocktags.js). The only other change is STATE_SWAPS (merged blocks).
 Features registered in Java (no JSON in the jar) are rebuilt from the decompiled source in JAVA_BASES.
 
 Snow-layer, lake and snow-removal features also test grass, but they shape terrain rather than place

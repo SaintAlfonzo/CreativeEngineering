@@ -261,6 +261,8 @@ CIC-10; 16 before any player-side test.
 
 ## 8. In-game test suite (drafted)
 
+- **r1102b 2026-11-02** (scratch server; verdicts in `perf/runs/r1102b/` HANDOVER.md and the slice judged.md): PASS SQ-CAT-01, -02, -03, -04, -05.
+
 | ID | Test | Pass |
 |---|---|---|
 | CIC-01 | Boot with an existing world | no Cozy parse errors; no B1 exception; world opens |

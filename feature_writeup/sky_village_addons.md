@@ -196,7 +196,7 @@ The block has no survival rule, so nothing breaks.
 ## 4. Tests
 
 SVA-01 PASSED offline 2026-10-30 (3.1). Scratch server r1031 (2026-10-31): SQ-SVA-01 (SVA-02) and SQ-SVA-02 (all 17
-templates place, block entities present) PASSED; SQ-SVA-03 (SVA-06) and SQ-SVA-04 (SVA-07) not run (deferred). r1101 (2026-11-01, deep scan 2026-11-02): SQ-SVA-05 (SVA-08) PASS; SQ-SVA-03 ran to LOOK (the first village counted no addon blocks; the night fly-through could not make the houses out), SQ-SVA-04 and CQ-SVA were batch faults (the client fell and faced away): all three open, rerun by daylight at the r1101 positions (scratch_run_2026-11-01.md 3). Queue:
+templates place, block entities present) PASSED; SQ-SVA-03 (SVA-06) and SQ-SVA-04 (SVA-07) not run (deferred). r1101 (2026-11-01, deep scan 2026-11-02): SQ-SVA-05 (SVA-08) PASS; SQ-SVA-03 ran to LOOK (the first village counted no addon blocks; the night fly-through could not make the houses out), SQ-SVA-04 and CQ-SVA were batch faults (the client fell and faced away): all three open, rerun by daylight at the r1101 positions (scratch_run_2026-11-01.md 3); the client half is queue row CQ-SVA-01 (deep scan 2026-11-02; was a batch block only). Queue:
 [scratch_queue.md](testing/scratch_queue.md); the looks need the user in game.
 
 | ID | Check |

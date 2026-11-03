@@ -478,6 +478,8 @@ The test sources are scratch-only (not in the repo).
 
 ## 7. In-game test suite
 
+- **r1102b 2026-11-02** (scratch server; verdicts in `perf/runs/r1102b/` HANDOVER.md and the slice judged.md): PASS SQ-DB-00, -02.
+
 Needs a patcherMod build in `mods/`.
 
 - [ ] **OV-01 Boot:** no registry, recipe or tag errors for `creativeengineering:oven`, `creativeengineering:baking/*`,

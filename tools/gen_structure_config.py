@@ -35,7 +35,7 @@ enhanced_exclusion_zone / ring fields) all have to survive into an override, or 
 silently changes behaviour (or fails to load, for required fields).
 
 Run: python3 tools/gen_structure_config.py, then python3 tools/gen_structure_groups.py.
-kubejs/server_scripts/worldgen/structure_overrides.js reads this baseline + structure_groups.json at
+kubejs/data/creativeworldgen/kubejs/worldgen/structure_overrides.js reads this baseline + structure_groups.json at
 every world load.
 """
 import io
@@ -391,7 +391,7 @@ def build_readme():
             'Read-only baseline: every structure_set exactly as the mods (or vanilla) define it, with '
             'no override. Rebuilt by python3 tools/gen_structure_config.py; do not edit. Spawn rates live '
             'in structure_groups.json (groups + standalone sets), membership in the group/* tags of '
-            'structure_tags.json. kubejs/server_scripts/worldgen/structure_overrides.js reads all three '
+            'structure_tags.json. kubejs/data/creativeworldgen/kubejs/worldgen/structure_overrides.js reads all three '
             'at every world load.'
         )),
         ('top_level_fields', OrderedDict([

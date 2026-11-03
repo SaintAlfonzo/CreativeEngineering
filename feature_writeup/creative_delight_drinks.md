@@ -161,6 +161,8 @@ mixer) teas reuse the same item ids; no separate item.
 
 ## 8. Build (2026-11-02, TODO `food/drinks #15`)
 
+- **r1102b 2026-11-02** (scratch server; verdicts in `perf/runs/r1102b/` HANDOVER.md and the slice judged.md): PASS SQ-DRK-01, -02, -03, -05; rerun pending (batch fault) SQ-DRK-04, -06.
+
 Status **Testing**: in the `mods/` Creative Delight jar of 2026-11-02 14:01; scratch r1102b SQ-DRK-01, -02, -03, -05 PASS, SQ-DRK-04 (Spout half) and -06 batch faults (the drain line and every other -06 check passed; -06 queries `drink_fruits/kiwi`, which does not exist by design) (deep scan 2026-11-02). Not played.
 
 | Part | Where |
