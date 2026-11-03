@@ -62,18 +62,15 @@ ServerEvents.recipes(e => {
 
 		var F = global.CD.food(e)
 		var VD_COOKED_MEAT = [i.cooked_beef, i.cooked_chicken, i.cooked_mutton]
-		var VD_QUICHE_MEAT = [i.cooked_mutton, i.cooked_chicken, i.cooked_beef, i.cooked_pork, fd.meat_cooked_bacon]
 
 		//######################### Zucchini quiche #########################
-		// Quiche family rule (food_families.md `quiche/whole`; creativedelight/members #30 R4): one quiche variant beside
-		// Brewin's, so one shaped recipe on a pie crust (manual only, as Brewin's) in place of VD's two (milk; Vintage compat:
-		// cheese), plus one assembly on the crust. 3 roasted zucchini, the cooked meat, milk or any cheese.
+		// Quiche (merges/dishes #8, owner 2026-11-02): baking type, oven only with a pie tin, no plating, as Brewin's quiche
+		// (brewinandchewin/recipes.js): pie crust + cheese wedge + milk + egg + 2 roasted zucchini. VD's two recipes go.
+		// Was: 3 roasted zucchini + a cooked meat + milk or any cheese on a crust in the grid, or the assembly.
 		R.remove({ id: 'veggiesdelight:zucchini_quiche' }, e)
 		R.remove({ id: 'veggiesdelight:compat/vintagedelight/zucchini_quiche' }, e)
-		R.shaped(fd.dish_zucchini_quiche, ['zzz', 'aOm'], { z: fd.veggie_cooked_zucchini, a: [i.milk, i.any_cheese], O: fd.dough_pie_crust, m: VD_QUICHE_MEAT },
-			e, 'zucchini_quiche_manual_only')
-		F.assemble(fd.dough_pie_crust, [fd.veggie_cooked_zucchini, fd.veggie_cooked_zucchini, fd.veggie_cooked_zucchini, VD_QUICHE_MEAT,
-			{ fill: Fluid.of(f.milk, 250) }], fd.dish_zucchini_quiche)
+		R.ceBaking([fd.dough_pie_crust, i.t_cheese_wedge, i.milk, i.eggs, n(fd.veggie_cooked_zucchini, 2)], fd.dish_zucchini_quiche, e,
+			'zucchini_quiche', { exp: 0.1, time: 200, tool: i.t_bakeware_pie_tin })
 
 		//######################### Vegan pizza #########################
 		// Pizza family rule (food_families.md `pizza/whole`; owner 2026-11-01, creativedelight/members #20, #30 R5): base

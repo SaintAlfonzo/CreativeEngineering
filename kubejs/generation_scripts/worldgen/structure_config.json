@@ -1,6 +1,6 @@
 {
   "_readme": {
-    "what": "Read-only baseline: every structure_set exactly as the mods (or vanilla) define it, with no override. Rebuilt by python3 tools/gen_structure_config.py; do not edit. Spawn rates live in structure_groups.json (groups + standalone sets), membership in the group/* tags of structure_tags.json. kubejs/server_scripts/worldgen/structure_overrides.js reads all three at every world load.",
+    "what": "Read-only baseline: every structure_set exactly as the mods (or vanilla) define it, with no override. Rebuilt by python3 tools/gen_structure_config.py; do not edit. Spawn rates live in structure_groups.json (groups + standalone sets), membership in the group/* tags of structure_tags.json. kubejs/data/creativeworldgen/kubejs/worldgen/structure_overrides.js reads all three at every world load.",
     "top_level_fields": {
       "source": "Where this structure_set's definition came from: a mod jar filename, \"kubejs/data\", or \"vanilla_known_defaults\" (see caveat below).",
       "structures": "The structure(s) this set places: \"structure\" (id), \"weight\", \"biomes\" (read-only reference) and, when another mod stops it in code, \"blocked\".",
@@ -934,7 +934,7 @@
       }
     },
     "endersdelight:end_house": {
-      "source": "creativedelight-1.0.0.jar!endersAdditions-1.1.4-ce-19.2-02.jar",
+      "source": "endersdelight-1.1.4.jar (donor, End's Delight member)",
       "structures": [
         {
           "structure": "endersdelight:end_house",

@@ -22,6 +22,7 @@ needs a Creative Delight rebuild (not listed in generators.json for that reason)
 """
 import argparse
 import glob
+import io
 import json
 import sys
 import zipfile
@@ -50,12 +51,25 @@ def item_sprite(item_id):
     """layer0 of the item's model, read from whichever mod jar ships it."""
     ns, path = item_id.split(':', 1)
     entry = f'assets/{ns}/models/item/{path}.json'
+    def layer0(z):
+        if entry in z.namelist():
+            tex = json.loads(z.read(entry)).get('textures', {}).get('layer0')
+            if tex:
+                return tex if ':' in tex else 'minecraft:' + tex
+        return None
+
     for jar in sorted(glob.glob(str(INSTANCE / 'mods' / '*.jar'))) + sorted(glob.glob(str(INSTANCE / 'server_mods' / '*.jar'))):
         with zipfile.ZipFile(jar) as z:
-            if entry in z.namelist():
-                tex = json.loads(z.read(entry)).get('textures', {}).get('layer0')
-                if tex:
-                    return tex if ':' in tex else 'minecraft:' + tex
+            tex = layer0(z)
+            if tex:
+                return tex
+            # members nested in a bundle jar (Creative Delight's META-INF/jarjar/*.jar since 2026-11-02)
+            for n in z.namelist():
+                if n.startswith('META-INF/jarjar/') and n.endswith('.jar'):
+                    with zipfile.ZipFile(io.BytesIO(z.read(n))) as inner:
+                        tex = layer0(inner)
+                        if tex:
+                            return tex
     # A KubeJS item has no model in a jar: its generated model's layer0 is <ns>:item/<path>, the sprite in kubejs/assets
     if (INSTANCE / 'kubejs/assets' / ns / 'textures/item' / f'{path}.png').exists():
         return f'{ns}:item/{path}'

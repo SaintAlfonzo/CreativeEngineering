@@ -29,8 +29,8 @@ import java.util.Set;
  * chances apply). All of {@link #MELTERS} melt; {@link #DISSOLVERS} also dissolve. Vintage's blocks mostly do not
  * random tick, so {@link #init} turns it on (the final field BlockBehaviour.isRandomlyTicking, f_60445_, set by
  * reflection; BlockStateBase reads it through on every call, never caching it per state). Hooks: {@code mixin.SaltBlockRandomTickMixin} (blocks that keep BlockBehaviour.randomTick),
- * {@code mixin.SaltLayerRandomTickMixin} (the layer is a SnowLayerBlock), {@code mixin.SaltRockNoDissolveMixin}
- * ({@link #NO_DISSOLVE}). Vintage's leftover Salt Block (merged away, may sit in old worlds) dissolves like The
+ * {@code mixin.SaltLayerRandomTickMixin} (the layer is a SnowLayerBlock). The raw rock salt block never dissolves:
+ * that is an edit in the Salt member's own Dissolving (members/salt, feature_writeup/salt.md). Vintage's leftover Salt Block (merged away, may sit in old worlds) dissolves like The
  * Salt's and no longer grows salt layers; the Evaporator keeps growing them.
  */
 public final class SaltBlockTicks {
@@ -49,15 +49,12 @@ public final class SaltBlockTicks {
         "vintagedelight:salt_lamp_white", "vintagedelight:salt_lamp_yellow",
     };
     private static final String[] DISSOLVERS = {"vintagedelight:salt", "vintagedelight:salt_block"};
-    /** Rock salt stays: beach patches are built on it (owner, 2026-10-26). */
-    private static final String[] NO_DISSOLVE = {"salt:raw_rock_salt_block"};
     private static final String LEFTOVER_SALT_BLOCK = "vintagedelight:salt_block";
     private static final Direction[] DIRECTIONS = Direction.values();
     private static final Logger LOGGER = LogUtils.getLogger();
 
     private static Set<Block> melters = Set.of();
     private static Set<Block> dissolvers = Set.of();
-    private static Set<Block> noDissolve = Set.of();
     private static Block leftoverSaltBlock = Blocks.AIR;
 
     private SaltBlockTicks() {}
@@ -67,7 +64,6 @@ public final class SaltBlockTicks {
         if (!ModList.get().isLoaded("salt")) return;
         melters = resolve(MELTERS);
         dissolvers = resolve(DISSOLVERS);
-        noDissolve = resolve(NO_DISSOLVE);
         Block leftover = ForgeRegistries.BLOCKS.getValue(new ResourceLocation(LEFTOVER_SALT_BLOCK));
         if (leftover != null && leftover != Blocks.AIR) leftoverSaltBlock = leftover;
         try {
@@ -91,10 +87,6 @@ public final class SaltBlockTicks {
 
     public static boolean isSalt(BlockState state) {
         return melters.contains(state.getBlock());
-    }
-
-    public static boolean noDissolve(BlockState state) {
-        return noDissolve.contains(state.getBlock());
     }
 
     /**

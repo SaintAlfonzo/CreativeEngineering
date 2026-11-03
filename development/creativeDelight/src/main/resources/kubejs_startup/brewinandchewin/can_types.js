@@ -4,56 +4,6 @@
 // Generated cans (values, effects, recipes), brewinandchewin part. Readers merge every part with global.CD.genMerge('can_types') (creative_delight.md 28.2).
 if (global.CD) global.CD.genPut('can_types', 'brewinandchewin', {
  "cans": {
-  "canned_kimchi": {
-   "section": "cooked_veggie",
-   "existing": false,
-   "name": "Canned Kimchi",
-   "servings": 4,
-   "hunger": 4,
-   "modifier": 0.6,
-   "meat": false,
-   "fast": false,
-   "always": false,
-   "glow": false,
-   "effects": [],
-   "sources": [
-    "kimchi",
-    "vintagedelight_kimchi"
-   ],
-   "recipes": [
-    {
-     "suffix": "",
-     "inputs": [
-      {
-       "any": [
-        "kimchi",
-        "vintagedelight_kimchi"
-       ],
-       "n": 6
-      }
-     ]
-    },
-    {
-     "suffix": "_salt",
-     "inputs": [
-      {
-       "any": [
-        "kimchi",
-        "vintagedelight_kimchi"
-       ],
-       "n": 5
-      },
-      {
-       "any": [
-        "salt"
-       ],
-       "n": 1
-      }
-     ]
-    }
-   ],
-   "texture": "canned_goods:items/canned_baked_potato"
-  },
   "canned_jerky": {
    "section": "cooked_meat",
    "existing": false,

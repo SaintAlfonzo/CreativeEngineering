@@ -181,6 +181,53 @@ if (global.CD) global.CD.genPut('can_types', 'vintagedelight', {
    ],
    "texture": "canned_goods:items/canned_cookies"
   },
+  "canned_kimchi": {
+   "section": "cooked_veggie",
+   "existing": false,
+   "name": "Canned Kimchi",
+   "servings": 4,
+   "hunger": 8,
+   "modifier": 0.3,
+   "meat": false,
+   "fast": true,
+   "always": false,
+   "glow": false,
+   "effects": [],
+   "sources": [
+    "vintagedelight_kimchi"
+   ],
+   "recipes": [
+    {
+     "suffix": "",
+     "inputs": [
+      {
+       "any": [
+        "vintagedelight_kimchi"
+       ],
+       "n": 6
+      }
+     ]
+    },
+    {
+     "suffix": "_salt",
+     "inputs": [
+      {
+       "any": [
+        "vintagedelight_kimchi"
+       ],
+       "n": 5
+      },
+      {
+       "any": [
+        "salt"
+       ],
+       "n": 1
+      }
+     ]
+    }
+   ],
+   "texture": "canned_goods:items/canned_baked_potato"
+  },
   "canned_pickled_pickles": {
    "section": "cooked_veggie",
    "existing": false,

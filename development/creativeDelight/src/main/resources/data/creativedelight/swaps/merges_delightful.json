@@ -1,0 +1,15 @@
+{
+  "_comment": "Item merge list (swap lists 'merges', SwapLists.java; feature_writeup/item_merges.md 6). One nut butter (merges/dishes #7, owner 2026-11-02): Delightful's nut butter goes into Vintage Delight's nut mash jar, its Nut Butter and Jelly Sandwich into Vintage's sandwich (renamed Nut Mash and Jam Sandwich, Vintage's texture). Their own recipes are removed first (delightful/recipes.js), so none is carried over. Never prune.",
+  "requires": [
+    "delightful",
+    "vintagedelight"
+  ],
+  "merges": {
+    "vintagedelight:nut_mash_jar": [
+      "delightful:nut_butter_bottle"
+    ],
+    "vintagedelight:pb_j": [
+      "delightful:nut_butter_and_jelly_sandwich"
+    ]
+  }
+}

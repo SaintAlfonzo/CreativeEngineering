@@ -42,13 +42,29 @@ ServerEvents.recipes(e => {
 
 		// The rows below moved from the pack's kubejs/server_scripts/cooking/cooking.js 2026-10-25, rows unchanged.
 
+		//######################### Potato Salad #########################
+		// One Potato Salad (TODO merges/dishes #4, owner 2026-11-02; item_merges.md 2.17): Rustic Delight's stays, with its
+		// texture; More Delight's and Oceanic Delight's merge into it (CD swap lists merges_moredelight.json,
+		// merges_oceanic_delight_potato.json). Their recipes go (Oceanic's pickle and cabbage input with them). Cooking
+		// Pot: 2 potatoes of any kind (potato, sweet potato, or their slices), 1 egg, 1 milk, 1 onion or garlic, in a bowl;
+		// by hand the same plus 1 more potato.
+		var POTATO_ANY = [i.any_potato, i.t_vegetables_sweet_potato]
+		var ONION_OR_GARLIC = [i.onion, i.t_crops_garlic]
+		;['rusticdelight:potato_salad', 'moredelight:cooking/potato_salad', 'oceanic_delight:potato_salad']
+			.forEach(id => R.remove({ id: id }, e))
+		R.fdCooking([POTATO_ANY, POTATO_ANY, i.eggs, i.milk, ONION_OR_GARLIC], i.potato_salad, e, 'potato_salad', 1.0, 200, i.bowl)
+		R.shapeless(i.potato_salad, [POTATO_ANY, POTATO_ANY, POTATO_ANY, i.eggs, i.milk, ONION_OR_GARLIC, i.bowl], e,
+			'potato_salad_manual_only')
+
 		//######################### Egg solution #########################
 		// The pack's egg solution fluid: 250 mB stands in for one egg and its milk (create/recipes.js)
 		if (Platform.isLoaded('create')) {
 			// Batter: wheat flour, cornmeal or rice in each grain slot (TODO dishes/ingredients #24; was 2 wheat flour)
 			R.createMixing(Item.of(i.batter, 2), [[i.t_flour_or_cornmeal, i.rice], [i.t_flour_or_cornmeal, i.rice], Item.of(i.bowl, 2),
 				Fluid.of(f.egg_solution, 250)], e, 'batter_egg_solution', 'heated')
-			R.createMixing(i.potato_salad, [i.potato, i.onion, i.bowl, Fluid.of(f.egg_solution, 250)], e, 'potato_salad_egg_solution', 'n/a')
+			// Potato Salad: the pot recipe's 2 potatoes of any kind and onion or garlic (merges/dishes #4; was 1 potato, onion)
+			R.createMixing(i.potato_salad, [POTATO_ANY, POTATO_ANY, ONION_OR_GARLIC, i.bowl, Fluid.of(f.egg_solution, 250)], e,
+				'potato_salad_egg_solution', 'n/a')
 		}
 
 		//######################### Glowing calamari #########################

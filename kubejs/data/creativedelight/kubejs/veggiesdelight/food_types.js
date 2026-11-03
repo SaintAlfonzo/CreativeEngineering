@@ -35,8 +35,10 @@ if (global.CD) global.CD.genPut('food_types', 'veggiesdelight', {
    "beetroot_brownie",
    "carrot_cake_slice",
    "sweet_potato_cupcake",
-   "sweet_potato_pancakes",
    "sweet_potato_pie_slice"
+  ],
+  "sweet/pancake": [
+   "sweet_potato_pancakes"
   ],
   "handheld": [
    "chicken_fajitas_wrap",

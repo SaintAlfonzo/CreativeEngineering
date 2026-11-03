@@ -1,0 +1,6 @@
+{
+  "type": "forge:add_features",
+  "biomes": "#incubation_additions:has_feature/duck_nest",
+  "features": "incubation_additions:nest_duck",
+  "step": "vegetal_decoration"
+}

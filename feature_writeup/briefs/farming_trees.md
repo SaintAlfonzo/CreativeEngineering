@@ -9,7 +9,7 @@ test prefix `MT-`), [structure_tuning.md](../structure_tuning.md) 3.25 (deadwood
 
 | Step | Row | Work | Notes |
 |---|---|---|---|
-| 1 | `trees #3` Lemon tree yield | CD KubeJS recipes + patcherMod mixin | The only open row. The pick count is hard-coded in Fruits Delight's Java, so the yield half is a mixin, not KubeJS |
+| 1 | `trees #3` Lemon tree yield | CD KubeJS recipes + patcherMod mixin | The only open row. The pick count is hard-coded in Fruits Delight's Java, so the yield half is a mixin, not KubeJS. BUILT 2026-11-02: the mixin is in Creative Delight (`mixin/fruitsdelight/LemonTreePickYieldMixin`), the cutting recipes remade with 8 slices |
 | - | `trees #1` Leaf decay | Testing | Needs play, see below |
 | - | `trees #2` Acacia stumps and fallen logs | Testing | Needs play; the bush fix is an open decision |
 

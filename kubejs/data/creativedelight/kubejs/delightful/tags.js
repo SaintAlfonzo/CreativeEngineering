@@ -9,7 +9,7 @@ ServerEvents.tags('item', e => {
 	t.add(e, i.t_seeds, i.cantaloupe_seeds)
 	t.add(e, i.t_matcha, i.matcha)
 	t.add(e, i.t_cooked_nuts, [i.roasted_acorn, i.roasted_peanut])
-	t.add(e, i.t_nut_butter, [i.nut_butter_bottle, i.nut_mash_bottle])
+	t.add(e, i.t_nut_butter, i.nut_mash_jar)   // nut mash is the one nut butter (merges/dishes #7)
 	t.add(e, i.t_crops_cactus, i.cactus_flesh)
 	// 3.8.1: blaze powder and #forge:vegetables/spicy (empty here); the pack's spicy vegetable is the ghost pepper
 	t.add(e, i.t_hot_spices, [i.blaze_powder, i.t_chilipepper])

@@ -1,5 +1,6 @@
 package com.SaintAlfonzo.creativedelight.barbeques.recipe;
 
+import com.SaintAlfonzo.creativedelight.barbeques.compat.PackSeasonings;
 import com.SaintAlfonzo.creativedelight.barbeques.item.BBQSandwichItem;
 import com.SaintAlfonzo.creativedelight.barbeques.registry.BBQItems;
 import com.SaintAlfonzo.creativedelight.barbeques.registry.BBQRecipes;
@@ -36,7 +37,8 @@ public class CombineItemRecipe extends ShapelessRecipe {
             if (s.is(BBQItems.GRILLED_SKEWERS)) {
                 ItemStack one = s.copy();
                 one.setCount(1);
-                skewers.add(one);
+                // O35: a skewer used as an ingredient carries no grilled (accepted grilled or not)
+                skewers.add(PackSeasonings.withoutGrilled(one));
             }
         }
         BBQSandwichItem.setSkewers(ans, skewers);

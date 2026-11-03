@@ -16,6 +16,8 @@ public enum BBQLang {
     HONEY("seasoning.honey_mustard", ChatFormatting.YELLOW),
     BUFFALO("seasoning.buffalo", ChatFormatting.YELLOW),
     BBQ("seasoning.barbeque", ChatFormatting.YELLOW),
+    SALTED("seasoning.salted", ChatFormatting.YELLOW),
+    GARLIC("seasoning.garlic", ChatFormatting.YELLOW),
     CHILI_INFO("tooltip.chili", ChatFormatting.GRAY),
     CUMIN_INFO("tooltip.cumin", ChatFormatting.GRAY),
     PEPPER_INFO("tooltip.pepper", ChatFormatting.GRAY),

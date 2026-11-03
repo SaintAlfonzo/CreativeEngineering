@@ -14,11 +14,8 @@ ServerEvents.tags('item', e => {
 
 	// meals (TODO dishes/meals #1, #2)
 	// cooked veggies for heatless soups and stews: the rule and the other entries are in Creative Delight
-	// (minecraft/tags.js and each mod's tags.js); Brewin's kimchi stays here (its Pickled Pickles merged into Creative
-	// Delight's Pickled Sea Pickle, vintagedelight/tags.js).
-	t.add(e, i.t_soup_veggie_cooked, [
-		i.kimchi,
-	])
+	// (minecraft/tags.js and each mod's tags.js). Brewin's kimchi is removed (merges/dishes #9) and its Pickled Pickles
+	// merged into Creative Delight's Pickled Sea Pickle; both survivors are added in vintagedelight/tags.js.
 	// bell peppers top a pizza (Rustic Delight 1.7.0 adds them to Brewin's tag; our Brewin port reads foods/pizza_topping)
 	t.add(e, i.t_pizza_topping, i.any_bell_pepper)
 })

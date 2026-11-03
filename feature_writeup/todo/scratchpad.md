@@ -59,17 +59,22 @@ Creative Delight	2	3
 Baking and Sweets	1	3
 Creative Mods	1	5
 
-
 ## Idea, Notes, Changes (Human scratchpad, don't write up or add to plans unless directed)
 
-
+- shrimp trap
 - place kettle/cooking pot on bottom of block for handle tooltip, remove other lmb mechanic 
 - merge redundant tools, combine into single tools with many functions
+- merge vegitarian/vegan patty, vegitarian/vegan burgers, or split with including cheese, miners cave hamburger vs vegan hamburger? (drop vegan), rename vegan patty to cave carrot
 - can only shift click bowls into copper pot, expand to all containers
     - only allow plating items in plate slot and all plating items in the plateslot w/ shiftclick on all fd stations
 - review 2 block deep structure cancel, lower to 1?
 - allow pillagers to use guns
-- new chopped
+- pickled egg used for century egg
+- nut milk usable in most milk recipes (no cheese)
+- bone broth not in copper pot?
+- bone broth as a fluid
+- all glass drops color shards
+- new chopped items
     - beetroot
     - carrot
     - tomato
@@ -101,5 +106,8 @@ Creative Mods	1	5
 - wine in pasta, meals
     - additive for extra effects? build off seasoning system, similar to grilled
 - raise blockhead stove surface to top of block, keep backsplash as visual overlap into upper block. extend it by duplicating the bottom row of the sides downward, and keep the bottom face at the bottom. add blockhead stove to heat sources for delight cooking blocks. 
-
 - pickling jar kimchi finished instantly
+
+
+- jars
+    - need to merge vintage mason jar placement w/ fruits delight items

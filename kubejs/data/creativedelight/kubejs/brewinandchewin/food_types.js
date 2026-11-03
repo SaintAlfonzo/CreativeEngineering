@@ -67,10 +67,6 @@ if (global.CD) global.CD.genPut('food_types', 'brewinandchewin', {
   "canned_jerky": [
    "jerky"
   ],
-  "canned_kimchi": [
-   "kimchi",
-   "vintagedelight_kimchi"
-  ],
   "canned_scarlet_cheese": [
    "scarlet_cheese_wedge"
   ]

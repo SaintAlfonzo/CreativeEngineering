@@ -59,6 +59,32 @@ public final class SeasoningTooltip {
                     ? Component.translatable("creativeengineering.seasoning.heal_one")
                     : Component.translatable("creativeengineering.seasoning.heal", number(hearts)));
         }
+        Seasonings.Kinds k = def.kinds();
+        if (k.fast()) {
+            first = append(bonus, first, Component.translatable("creativeengineering.seasoning.fast"));
+        }
+        if (k.alwaysEdible()) {
+            first = append(bonus, first, Component.translatable("creativeengineering.seasoning.always_edible"));
+        }
+        if (k.damage() > 0) {
+            float hearts = k.damage() / 2f;
+            String dmgKey = "fire".equals(k.damageType()) ? "creativeengineering.seasoning.damage" : "creativeengineering.seasoning.hurt";
+            first = append(bonus, first, hearts == 1f
+                    ? Component.translatable(dmgKey + "_one")
+                    : Component.translatable(dmgKey, number(hearts)));
+        }
+        Seasonings.Transform t = k.transform();
+        if (t.chance() != 1f) {
+            first = append(bonus, first, Component.translatable("creativeengineering.seasoning.effect_chance", number(t.chance())));
+        }
+        if (t.duration() != 1f) {
+            first = append(bonus, first, t.duration() < 1f && t.duration() > 0f
+                    ? Component.translatable("creativeengineering.seasoning.effect_duration_div", number(1f / t.duration()))
+                    : Component.translatable("creativeengineering.seasoning.effect_duration", number(t.duration())));
+        }
+        if (t.amplifier() != 0) {
+            first = append(bonus, first, Component.translatable("creativeengineering.seasoning.effect_level", t.amplifier()));
+        }
         for (Seasonings.Effect e : def.effects()) {
             MobEffect effect = ForgeRegistries.MOB_EFFECTS.getValue(e.effect());
             if (effect == null) continue;

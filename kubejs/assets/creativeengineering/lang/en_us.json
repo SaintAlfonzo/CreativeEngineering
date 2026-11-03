@@ -15,7 +15,7 @@
   "effect.farmersdelight.comfort.description": "Heals half a heart every 4 seconds while your saturation is empty and you don't have Regeneration.",
   "effect.farmersrespite.caffeinated.description": "Increases walk speed by 10% and attack speed by 20%, and keeps resetting the time since you last slept, so phantoms don't come.",
   "effect.fungidelight.burrowing.description": "+50% Mining Speed on soil (level I), +100% (level II): blocks a shovel mines.",
-  "effect.fungidelight.weak_stomach.description": "From eating inky caps or durian. Drinking alcohol or any potion other than water while it lasts gives Nausea II, Poison II and Weakness II for 10 seconds.",
+  "effect.fungidelight.weak_stomach.description": "Drinking alcohol or any potion other than water while it lasts gives Nausea II, Poison II and Weakness II for 10 seconds.",
   "effect.hostiledelight.collapsing.description": "TODO: write a description for Collapsing.",
   "effect.hostiledelight.dioxide.description": "TODO: write a description for Dioxide.",
   "effect.immersiveengineering.flashed.description": "Players affected by it will have their screen flash white, rendering them temporarily blind, and walk 15% slower.",

@@ -11,8 +11,10 @@
 // from the group's own server script:
 //   pack              general merges, here and in removed_woods.js (later split out by mod);
 //                     server half in server_scripts/other/item_merges.js
-//   creativedelight  food merges, in Creative Delight's startup scripts; server half in
-//                     kubejs/data/creativedelight/kubejs/_core/item_merges.js
+//   creativedelight  food merges, in Creative Delight's swap lists (data/creativedelight/swaps/merges_*.json in the
+//                     CD jar, fed in by its startup script creativedelight/swap_merges.js); server half in
+//                     kubejs/data/creativedelight/kubejs/_core/item_merges.js. Stacks already in the world are
+//                     rewritten by Common's swap/ItemMerges from the same lists (item_merges.md 6)
 // A purged id belongs to one group only: global.addItemMerges refuses it a second time, so no item is swapped twice.
 
 global.itemMerges = []      // every pair, all groups (probes and tools read this)

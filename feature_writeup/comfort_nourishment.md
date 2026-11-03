@@ -192,6 +192,14 @@ Scratch server: SQ-CNS in [testing/scratch_queue.md](testing/scratch_queue.md): 
 
 ## 8. History
 
+- 2026-11-03 (CD members run): `creativedelight/members #43` rechecked: the JSON does carry the Rustic foods, keyed by
+  item_dict keys (`calamari_soup`, `potato_salad`, `fried_chicken`, ...), so a grep for `rusticdelight:` finds only
+  `sweet_salad` (no key). The rule gives 9 of the 10 Rustic bowls Comfort (Calamari Soup Comfort 240 s; Batter and Bell
+  Pepper Soup neither) and none Nourishment: their inputs are under the Nourishment line (input hunger 8). So SQ-RD-22's
+  expectation (Nourishment) is wrong under the rule; rerun it expecting Comfort. Oceanic Delight was outside the rule
+  (code-applied effects, container in code): generator `CODE_CONTAINERS` / `CODE_FEASTS`, port bonuses removed
+  (ocean_delight.md 8). Regenerated: 285 set (was 264): +13 Oceanic, +8 Miner's copper cups at the kept-Comfort 60 s (the
+  cups are removed from the pack, so the rows do nothing), 0 other foods lose Nourishment.
 - 2026-11-02 (deep scan): status set to BROKEN from the r1102b results (SQ-RD-22, SQ-FDB-04 FAIL); cans follow the rule since the 2026-11-01 can rerun.
 - 2026-11-02: owner answered CN-D1 to CN-D5 (section 5): form rule with bars and salads to Comfort, rice and meat stews Comfort with a nutrition cutoff to Nourishment, vanilla soups get Comfort, Relish effect dropped, cake slices and jams Comfort only, Moss neither. Not built.
 

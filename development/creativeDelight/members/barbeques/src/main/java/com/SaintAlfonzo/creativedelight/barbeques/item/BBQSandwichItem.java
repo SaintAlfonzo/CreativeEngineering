@@ -1,5 +1,6 @@
 package com.SaintAlfonzo.creativedelight.barbeques.item;
 
+import com.SaintAlfonzo.creativedelight.barbeques.compat.PackSeasonings;
 import com.mojang.datafixers.util.Pair;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.ListTag;
@@ -8,6 +9,7 @@ import net.minecraft.network.chat.Component;
 import net.minecraft.world.effect.MobEffect;
 import net.minecraft.world.effect.MobEffectInstance;
 import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.food.FoodProperties;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.TooltipFlag;
@@ -22,7 +24,8 @@ import java.util.Set;
 /**
  * Kebab Wrap, Kebab Sandwich, Bibimbap (1.3.0 BBQSandwichItem). The combine recipe stores the cooked skewers in the
  * {@value #KEY} list (1.3.0's {@code content} component); the food takes each distinct effect once, from itself first, then
- * from each skewer (seasoning included), and the skewers' seasoning on-eat actions run too.
+ * from each skewer (seasoning included), and the skewers' seasoning on-eat bonuses run too (pack seasonings since the
+ * fold, food/seasoning #11). The stored skewers carry no {@code grilled} (O35: the combine recipe drops it).
  */
 public class BBQSandwichItem extends FoodItem {
     public static final String KEY = "Skewers";
@@ -58,7 +61,7 @@ public class BBQSandwichItem extends FoodItem {
     @Nullable
     @Override
     public FoodProperties getFoodProperties(ItemStack stack, @Nullable LivingEntity entity) {
-        FoodProperties old = super.getFoodProperties(stack, entity);
+        FoodProperties old = PackSeasonings.foodProperties(stack, super.getFoodProperties(stack, entity));
         List<ItemStack> skewers = getSkewers(stack);
         if (old == null || skewers.isEmpty()) {
             return old;
@@ -98,9 +101,9 @@ public class BBQSandwichItem extends FoodItem {
 
     @Override
     public ItemStack finishUsingItem(ItemStack stack, Level level, LivingEntity entity) {
-        for (ItemStack e : getSkewers(stack)) {
-            if (e.getItem() instanceof BBQSkewerItem item) {
-                item.applyEffects(e, entity);
+        if (!level.isClientSide && entity instanceof Player player) {
+            for (ItemStack e : getSkewers(stack)) {
+                PackSeasonings.applyEaten(player, e);
             }
         }
         return super.finishUsingItem(stack, level, entity);

@@ -1,6 +1,5 @@
 package com.SaintAlfonzo.creativedelight.barbeques.block;
 
-import com.SaintAlfonzo.creativedelight.barbeques.item.SeasoningItem;
 import com.SaintAlfonzo.creativedelight.barbeques.registry.BBQBlocks;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
@@ -289,13 +288,7 @@ public class GrillBlock extends BaseEntityBlock implements SimpleWaterloggedBloc
         if (item.isEmpty()) {
             return grill.addItem(i, held) ? InteractionResult.sidedSuccess(level.isClientSide) : InteractionResult.FAIL;
         }
-        if (held.getItem() instanceof SeasoningItem seasoning && seasoning.canSprinkle(item)) {
-            seasoning.sprinkle(held, hit.getLocation(), item, player, hand);
-            if (!level.isClientSide) {
-                grill.inventoryChanged();
-            }
-            return InteractionResult.sidedSuccess(level.isClientSide);
-        }
+        // 1.3.0 seasoned a skewer on the grill by right-click here; retired at the seasoning fold (food/seasoning #11)
         return InteractionResult.PASS;
     }
 

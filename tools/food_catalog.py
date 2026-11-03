@@ -58,6 +58,7 @@ TYPES = OrderedDict([
     ('baked', 'Bread and buns'),
     ('dairy', 'Cheese'),
     ('sweet', 'Desserts and confectionery: cake/pie slices, cookies, candy, chocolate, ice cream'),
+    ('sweet/pancake', 'Pancakes eaten as items: single pancakes and pancake dishes (food_families.md dessert/pancake)'),
     ('handheld', 'Sandwiches, burgers, wraps, rolls, skewers, stuffed vegetables, pizza/quiche slices'),
     ('salad', 'Salads'),
     ('soup', 'Soups, stews and broths'),
@@ -322,6 +323,8 @@ def classify(f, cooked_from, cut_from, feast_servings):
         return 'drink'
     if 'salad' in p:
         return 'salad'
+    if 'pancake' in p:   # the pancake family, every mod (food_families.md 4.7)
+        return 'sweet/pancake'
     if R_SWEET.search(p):
         return 'sweet'
     if R_HANDHELD.search(p) and f.get('remainder') not in BOWLS:

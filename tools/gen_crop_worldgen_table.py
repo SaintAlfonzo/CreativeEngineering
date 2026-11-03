@@ -236,6 +236,7 @@ CROP_BLOCKS = {
     'minecraft:sugar_cane': 'Sugar Cane', 'minecraft:cave_vines': 'Glow Berries', 'minecraft:bamboo': 'Bamboo',
     'minecraft:cactus': 'Cactus', 'minecraft:chorus_flower': 'Chorus Fruit',
     'myrtrees:rubberwood_log': 'Rubber tree',
+    'oceanic_delight:wild_sea_grape': 'Sea Grape',
     'supplementaries:wild_flax': 'Flax',
     'endersdelight:amberveil_mushroom': 'Amberveils', 'endersdelight:chorus_flame_block': 'Chorusflame',
     'endersdelight:ethereal_saffron_bush': 'Ethereal Saffron', 'endersdelight:voidpepper_block': 'Void Pepper',
@@ -272,6 +273,8 @@ def iter_sources():
     """(label, {path: bytes-reader}) in load order: vanilla, forge, mods, kubejs/data."""
     # the Vinery port ships code only and reads its data from the upstream jars at runtime (1.5.5 wins over 1.3.10)
     upstream = [INSTANCE / 'vinery_upstream' / n for n in ('letsdo-vinery-forge-1.3.10.jar', 'letsdo-vinery-fabric-1.5.5.jar')]
+    # so does the Oceanic Delight rebuild (Creative Delight member, ocean_delight.md 5.6): its worldgen data and modifier
+    upstream.append(INSTANCE / 'oceanic_upstream' / 'oceanic_delight-1.0.1-forge-1.19.2.jar')
     fungi = False
     for jar in BASE_JARS + sorted(MODS.glob('*.jar')) + upstream:
         try:
@@ -591,7 +594,8 @@ def build_rows(fb, world, crop_set, area, oceans, dim_of, notes_by_feature):
         dims = defaultdict(float)
         for b in bmap:
             d, layer, pct = area.get(b, (dim_of(b), '?', 0.0))
-            if layer == 'surface' and b not in oceans:
+            # a sea-floor feature (OCEAN_FLOOR_WG heightmap, e.g. wild sea grape, farming/wild-crops #6) counts ocean area
+            if layer == 'surface' and (b not in oceans or 'sea floor' in where):
                 dims[d] += pct
         for crop in sorted(crop_set(fid)):
             n = ([extra] if extra else []) + notes + ([notes_by_feature[fid]] if fid in notes_by_feature else [])

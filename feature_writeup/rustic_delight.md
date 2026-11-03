@@ -305,3 +305,19 @@ rows, 3 golden routes, no missing incomplete item; every touched startup and cli
 | Syrup recipe / sap change | Pinned until Dreams & Desires sap, rubber and Myrtwood rubber are integrated |
 
 Still open (not decisions): final Glowing Calamari Crate art (`members #25`), SQ-RD-08 trader half, loot share re-placement in the loot overhaul (`loot/tables #1`).
+
+### 5.12 Built 2026-11-03 (Creative Delight members run)
+
+- **One Potato Salad** (`merges/dishes #4`, owner 2026-11-02): survivor `rusticdelight:potato_salad` (its texture; item_merges.md
+  2.17). More Delight's and Oceanic Delight's merge into it (CD swap lists). Recipes in CD `rusticdelight/recipes.js`: Rustic's,
+  More Delight's and Oceanic's removed; Cooking Pot 2 potatoes of any kind (`#forge:vegetables/potato` or
+  `#forge:vegetables/sweet_potato`, so the slices too), egg, milk, onion or garlic, bowl (1.0 xp, 200 ticks); by hand the same plus
+  1 more potato (`_manual_only`); the egg solution mixing now takes 2 potatoes of any kind and onion or garlic (was 1 potato, onion).
+- **Comfort / Nourishment** (`members #43`): the rule file has the Rustic foods under item_dict keys; under the rule they get
+  Comfort, not Nourishment (comfort_nourishment.md 8, 2026-11-03). SQ-RD-22's expectation changes to Comfort (Calamari Soup 4:00).
+- **Compost** (`members #44`): `tools/gen_compost_values.py --add-new --check` exits 0 (the 21 rows are on disk); the plain
+  `--check` still exits 1 because `kubejs/exported/compost/compost.json` (10-30) predates those rows. It needs a fresh
+  `/dumpcompost` (or `/dumpall`) taken with the current Creative Delight and Creative Brewing jars loaded; nothing to regenerate.
+- **Install and tests:** in the CD jar installed 2026-11-03 00:08, not booted. Queue section SQ-CDJ7: SQ-CDM2-04 (potato salad),
+  SQ-RD-22 (rerun, Comfort), SQ-CDF-08 (rerun, after `/dumpcompost`).
+

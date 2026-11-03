@@ -79,6 +79,7 @@ public final class CDConfig {
 	public static final Cooking COOKING;
 	public static final Canning CANNING;
 	public static final Perf PERF;
+	public static final Food FOOD;
 	private static final Map<String, ForgeConfigSpec.BooleanValue> MEMBER_SWITCHES = new LinkedHashMap<>();
 	private static final Map<String, ForgeConfigSpec.BooleanValue> QOL = new LinkedHashMap<>();
 	private static final Map<String, ForgeConfigSpec.BooleanValue> WORLDGEN = new LinkedHashMap<>();
@@ -127,6 +128,7 @@ public final class CDConfig {
 		CANNING = new Canning(b);
 		COOKING = new Cooking(b);
 		PERF = new Perf(b);
+		FOOD = new Food(b);
 		SPEC = b.build();
 	}
 
@@ -579,6 +581,40 @@ public final class CDConfig {
             ).defineInRange("troughMissCooldownTicks", 600, 0, 72000);
 
             b.pop(); // perf
+        }
+    }
+
+    /**
+     * The pack seasoning cap ({@code food.Seasonings}, feature_writeup/seasonings.md 2): how many seasonings one food may
+     * carry, and whether station seasonings ({@code grilled}, put on by the Barbeque's Delight Grill) count. Salt's
+     * {@code Salted} is separate and never counts. Read live.
+     */
+    public static final class Food {
+        private final ForgeConfigSpec.IntValue maxSeasonings;
+        private final ForgeConfigSpec.BooleanValue grilledCountsTowardMax;
+
+        private Food(ForgeConfigSpec.Builder b) {
+            b.comment("Pack seasonings (crafted onto food, feature_writeup/seasonings.md).").push("food");
+
+            maxSeasonings = b.comment(
+                    "Most seasonings one food may carry. A seasoning craft that would go past it does not match.",
+                    "Which pairs may share a food is still each seasoning's combines list. Salt does not count."
+            ).defineInRange("maxSeasonings", 2, 1, 16);
+
+            grilledCountsTowardMax = b.comment(
+                    "On = Grilled (put on by the Barbeque's Delight Grill) counts toward maxSeasonings, and the Grill",
+                    "does not add it to a skewer that is already full. Off = it never counts."
+            ).define("grilledCountsTowardMax", false);
+
+            b.pop(); // food
+        }
+
+        public int maxSeasonings() {
+            return SPEC.isLoaded() ? maxSeasonings.get() : 2;
+        }
+
+        public boolean grilledCountsTowardMax() {
+            return SPEC.isLoaded() && grilledCountsTowardMax.get();
         }
     }
 }

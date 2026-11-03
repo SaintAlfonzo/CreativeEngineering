@@ -202,6 +202,12 @@ CATEGORIES = {
     # the unmodified Farmer's Structures 1.0.6 jar the patcherMod worldgen donor reads (farmers_structures.md 5).
     # Never in mods/: it is a NeoForge jar.
     'farmers_upstream': (('server', 'client'), 'farmers_upstream'),
+    # the unmodified donor jars of the Creative Delight members Oceanic Delight (creative_delight.md 36), Ender's
+    # additions in the End's member (ends_delight.md 5.9) and Golden Food (golden_food.md), as for Miner's Delight.
+    # Never in mods/. (Oceanic and Ender's were missing here, so files[folder] raised KeyError; fixed 2026-11-02.)
+    'oceanic_upstream': (('server', 'client'), 'oceanic_upstream'),
+    'enders_upstream': (('server', 'client'), 'enders_upstream'),
+    'goldenfood_upstream': (('server', 'client'), 'goldenfood_upstream'),
     'server': (('server',), ''),
 }
 TREES = ('kubejs', 'config', 'defaultconfigs', 'server')
@@ -301,6 +307,7 @@ KUBEJS_CLASSES = [
     ('generation_scripts/food/placed_food_slices.json', 'runtime'),    # PlacedFoodSol (Spice of Life bites of placed cakes)
     ('generation_scripts/food/food_families.json', 'runtime'),         # CD seasoning_tags.js (food family item tags)
     ('generation_scripts/food/comfort_nourishment.json', 'runtime'),   # CD creativeengineering/comfort_nourishment.js (tools/gen_comfort_nourishment.py)
+    ('generation_scripts/food/food_tuning.json', 'runtime'),           # CD goldenfood/golden_values.js (golden and gilded multipliers)
     ('generation_scripts/food/food_dict_index.json', 'dev'),           # tools/food_dict.py lookup only
     ('generation_scripts/stacks/stack_sizes.json', 'runtime'),          # changes/stack_sizes.js
     ('generation_scripts/names/name_fixes.json', 'client'),             # client_scripts/name_fixes.js (tools/name_audit.py)
@@ -556,7 +563,9 @@ UPSTREAM_DONORS = {
     'oceanic_upstream': ('creativedelight', 'Oceanic Delight (Creative Delight)',
                          ('creativeDelight/members/oceanic', 'com', 'SaintAlfonzo', 'creativedelight', 'oceanic', 'upstream')),
     'enders_upstream': ('creativedelight', "Ender's Delight Additions (Creative Delight)",
-                        ('creativeDelight/members/enders', 'com', 'SaintAlfonzo', 'creativedelight', 'enders', 'upstream')),
+                        ('creativeDelight/members/ends', 'com', 'SaintAlfonzo', 'creativedelight', 'enders', 'upstream')),
+    'goldenfood_upstream': ('creativedelight', 'Golden Food (Creative Delight)',
+                            ('creativeDelight/members/golden', 'com', 'SaintAlfonzo', 'creativedelight', 'golden', 'upstream')),
 }
 
 
@@ -1533,8 +1542,8 @@ def render_readme(cur, prev, d, dpay, base, payload):
         rm('server'),
         ("Copy `mods/` into the server's `mods/`" + only_changed + '. Do not copy `client_mods/`.') if has('mods') else
         'No server jars changed.',
-        f"Copy {folders(('kubejs', 'config', 'defaultconfigs', 'vinery_upstream', 'miners_upstream', 'rustic_upstream', 'roll_upstream', 'largemeals_upstream', 'farmers_upstream'))} over the server's folders{only_changed}."
-        if folders(('kubejs', 'config', 'defaultconfigs', 'vinery_upstream', 'miners_upstream', 'rustic_upstream', 'roll_upstream', 'largemeals_upstream', 'farmers_upstream')) else None,
+        f"Copy {folders(('kubejs', 'config', 'defaultconfigs', 'vinery_upstream', 'miners_upstream', 'rustic_upstream', 'roll_upstream', 'largemeals_upstream', 'farmers_upstream', 'oceanic_upstream', 'enders_upstream', 'goldenfood_upstream'))} over the server's folders{only_changed}."
+        if folders(('kubejs', 'config', 'defaultconfigs', 'vinery_upstream', 'miners_upstream', 'rustic_upstream', 'roll_upstream', 'largemeals_upstream', 'farmers_upstream', 'oceanic_upstream', 'enders_upstream', 'goldenfood_upstream')) else None,
         ('`vinery_upstream/` goes next to `mods/`, never inside it: the Vinery backport reads those two jars and '
          'stops the game with a message if they are missing.') if has('vinery_upstream') else None,
         ("`miners_upstream/` goes next to `mods/`, never inside it: the Miner's Delight backport reads that jar and "
@@ -1547,13 +1556,17 @@ def render_readme(cur, prev, d, dpay, base, payload):
          'and stops the game with a message if it is missing.') if has('largemeals_upstream') else None,
         ("`farmers_upstream/` goes next to `mods/`, never inside it: patcherMod reads Farmer's Structures 1.0.6 from it for the "
          'new farm structures and house pieces. Without it the old 1.0.0 structures run alone.') if has('farmers_upstream') else None,
+        *[(f"`{d}/` goes next to `mods/`, never inside it: Creative Delight's {n} member reads that jar "
+           'and stops the game with a message if it is missing.') if has(d) else None
+          for d, n in (('oceanic_upstream', 'Oceanic Delight'), ('enders_upstream', "End's Delight (Ender's additions)"),
+                       ('goldenfood_upstream', 'Golden Food'))],
         ('Copy the *contents* of `server/` into the server folder itself (`LaunchServer.sh`/`.bat`, `perf/`); if you '
          "changed MEMORY or JAVAPATH in the server's LaunchServer script, set them again.") if has('server') else None,
         world_step('the server world (`world/`, or the `level-name` folder)'),
     ])
     rp_order = [p[len('file/'):] for p in cur['resourcePackOrder'] if p.startswith('file/')]
     show_order = rp_order and (not update or (base or {}).get('resourcePackOrder') != cur['resourcePackOrder'])
-    client_trees = folders(('kubejs', 'config', 'defaultconfigs', 'resourcepacks', 'shaderpacks', 'vinery_upstream', 'miners_upstream', 'rustic_upstream', 'roll_upstream', 'largemeals_upstream', 'farmers_upstream'))
+    client_trees = folders(('kubejs', 'config', 'defaultconfigs', 'resourcepacks', 'shaderpacks', 'vinery_upstream', 'miners_upstream', 'rustic_upstream', 'roll_upstream', 'largemeals_upstream', 'farmers_upstream', 'oceanic_upstream', 'enders_upstream', 'goldenfood_upstream'))
     lines += ['', '## Client', ''] + numbered([
         'Close the game.',
         rm('client'),

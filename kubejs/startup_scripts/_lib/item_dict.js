@@ -2132,6 +2132,22 @@ i.roasted_bell_pepper_slice_pink   = 'rusticdelight:roasted_bell_pepper_slice_pi
 i.roasted_bell_pepper_slice_blue   = 'rusticdelight:roasted_bell_pepper_slice_blue';
 i.roasted_bell_pepper_slice_purple = 'rusticdelight:roasted_bell_pepper_slice_purple';
 i.roasted_bell_pepper_slice_black  = 'rusticdelight:roasted_bell_pepper_slice_black';
+// Rustic Delight pancakes, 2026-11-02 (pancake family, food_families.md 4.7, TODO dishes/meals #12): the six flavoured
+// single pancakes (food type sweet/pancake) and the seven placed plates (block items, PancakeStackBlock). The plain
+// plate serves Supplementaries' pancake (i.pancakes); Rustic's plain single is not registered.
+i.honey_pancake                = 'rusticdelight:honey_pancake';
+i.chocolate_pancake            = 'rusticdelight:chocolate_pancake';
+i.cherry_blossom_pancake       = 'rusticdelight:cherry_blossom_pancake';
+i.vegetable_pancake            = 'rusticdelight:vegetable_pancake';
+i.pumpkin_pancake              = 'rusticdelight:pumpkin_pancake';
+i.coffee_pancake               = 'rusticdelight:coffee_pancake';
+i.pancake_plate                = 'rusticdelight:pancakes';
+i.honey_pancake_plate          = 'rusticdelight:honey_pancakes';
+i.chocolate_pancake_plate      = 'rusticdelight:chocolate_pancakes';
+i.cherry_blossom_pancake_plate = 'rusticdelight:cherry_blossom_pancakes';
+i.vegetable_pancake_plate      = 'rusticdelight:vegetable_pancakes';
+i.pumpkin_pancake_plate        = 'rusticdelight:pumpkin_pancakes';
+i.coffee_pancake_plate         = 'rusticdelight:coffee_pancakes';
 // Roll Delight 1.3.1 port (Creative Delight member `roll`, feature_writeup/roll_delight.md 4): only registered once the
 // Creative Delight jar carries the member, so only Creative Delight's scripts use them. Display names: Salmon Maki Roll
 // and Salmon Maki for the amazing_salmon_roll ids (D4).
@@ -12992,6 +13008,7 @@ i.t_food_egg                  = '#creativeengineering:food_type/egg';
 i.t_food_baked                = '#creativeengineering:food_type/baked';
 i.t_food_dairy                = '#creativeengineering:food_type/dairy';
 i.t_food_sweet                = '#creativeengineering:food_type/sweet';
+i.t_food_sweet_pancake        = '#creativeengineering:food_type/sweet/pancake';
 i.t_food_handheld             = '#creativeengineering:food_type/handheld';
 i.t_food_salad                = '#creativeengineering:food_type/salad';
 i.t_food_soup                 = '#creativeengineering:food_type/soup';
@@ -14679,6 +14696,7 @@ i.green_chefs_hat                = 'vintagedelight:green_chefs_hat';
 i.honey_jar                      = 'vintagedelight:honey_jar';
 i.honey_roasted_peanut           = 'vintagedelight:honey_roasted_peanut';
 i.vintagedelight_kimchi          = 'vintagedelight:kimchi';
+i.t_whole_raw_fish               = '#creativeengineering:whole_raw_fish';  // kimchi pickleables: whole raw fish only (merges/dishes #9)
 i.light_blue_chefs_hat           = 'vintagedelight:light_blue_chefs_hat';
 i.light_gray_chefs_hat           = 'vintagedelight:light_gray_chefs_hat';
 i.lime_chefs_hat                 = 'vintagedelight:lime_chefs_hat';
@@ -14818,6 +14836,7 @@ i.truffle_pie                    = 'create_central_kitchen:truffle_pie';  // CCK
 i.t_mushrooms_inky_cap           = '#forge:mushrooms/inky_cap';
 i.t_mushrooms_morel              = '#forge:mushrooms/morel';
 i.t_mushrooms_truffle            = '#forge:mushrooms/truffle';
+i.t_fungi_alcohol_reaction       = '#fungidelight:alcohol_reaction';  // foods that give Weak Stomach (inky caps, durian)
 
 // ===== miners_delight (69) - development/creativeDelight/members/miners, feature_writeup/miners_delight.md; 2026-10-24 =====
 // Merged 1.4.5 + 1.1.2 port (the 1.1.2 jar has 37 of these). Prefixed where the bare key was taken: moss

@@ -14,11 +14,15 @@ ServerEvents.tags('item', e => {
 	t.add(e, i.t_veggie_noodle_veg, [i.cucumber, i.broccoli, i.zucchini, i.zucchini_slice, i.cactus_flesh, i.dandelion_leaf])
 	// One salt (food/seasoning #6): salt dust takes The Salt's salt's tags. #forge:salts is the Salting craft's input.
 	t.add(e, ['forge:salts', 'forge:dusts', 'supplementaries:hourglass_dusts'], i.salt_dust)
-	// Pickled veggies: pickle soup's pickle slot (dishes/pickles-and-ferments #3). Brewin's kimchi is added only beside Brewin'.
+	// Pickled veggies: pickle soup's pickle slot (dishes/pickles-and-ferments #3). Brewin's kimchi is removed (merges/dishes #9).
 	t.add(e, i.t_pickled_veg, [i.pickle, i.pickled_sea_pickle, i.pickled_beetroot, i.pickled_onion, i.pickled_pepper, i.vintagedelight_kimchi])
-	if (Platform.isLoaded('brewinandchewin')) t.add(e, i.t_pickled_veg, i.kimchi)
-	// the Pickled Sea Pickle takes the Pickled Pickles' place as a cooked soup veggie (heatless soups)
-	t.add(e, i.t_soup_veggie_cooked, i.pickled_sea_pickle)
+	// cooked soup veggies (heatless soups): the Pickled Sea Pickle takes the Pickled Pickles' place, Vintage's kimchi takes
+	// Brewin's kimchi's (merges/dishes #9)
+	t.add(e, i.t_soup_veggie_cooked, [i.pickled_sea_pickle, i.vintagedelight_kimchi])
+	// Kimchi pickleables (merges/dishes #9, owner 2026-11-02): every whole raw fish, not slices, squid or shellfish
+	// (recipes.js). Pufferfish is left out (poisonous).
+	t.add(e, i.t_whole_raw_fish, [i.cod, i.salmon, i.tropical_fish, i.lionfish, i.perch, i.pike, i.blobfish, i.flying_fish,
+		i.catfish])
 	// Crop, seed and crate tags for the Vintage crops, the Veggies port's pattern (vintage_delight.md 4 step 2)
 	t.add(e, 'forge:crops/oat', i.oat)
 	t.add(e, 'forge:crops/peanut', i.peanut)

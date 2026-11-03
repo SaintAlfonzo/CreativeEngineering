@@ -1,0 +1,6 @@
+{
+  "type": "forge:add_features",
+  "biomes": "#incubation_additions:has_feature/emu_nest",
+  "features": "incubation_additions:nest_emu",
+  "step": "vegetal_decoration"
+}

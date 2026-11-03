@@ -1,13 +1,11 @@
 package com.SaintAlfonzo.creativedelight.barbeques;
 
 import com.SaintAlfonzo.creativedelight.barbeques.block.GrillBlock;
-import com.SaintAlfonzo.creativedelight.barbeques.item.SeasoningItem;
 import com.SaintAlfonzo.creativedelight.barbeques.registry.BBQBlocks;
 import com.SaintAlfonzo.creativedelight.barbeques.registry.BBQItems;
 import com.SaintAlfonzo.creativedelight.barbeques.registry.BBQRecipes;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraftforge.common.MinecraftForge;
-import net.minecraftforge.eventbus.api.EventPriority;
 import net.minecraftforge.eventbus.api.IEventBus;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.javafmlmod.FMLJavaModLoadingContext;
@@ -34,8 +32,8 @@ public class BarbequesDelight {
         BBQItems.ITEMS.register(bus);
         BBQRecipes.SERIALIZERS.register(bus);
         BBQRecipes.TYPES.register(bus);
-        // Before FD's own cutting board use (the 1.3.0 mixin injected at the head of CuttingBoardBlock#useItemOn)
-        MinecraftForge.EVENT_BUS.addListener(EventPriority.HIGH, SeasoningItem::onCuttingBoardUse);
+        // 1.3.0's cutting board seasoning use (a mixin, then a RightClickBlock listener) is retired at the seasoning fold
+        // (food/seasoning #11): seasonings are crafted on
         MinecraftForge.EVENT_BUS.addListener(GrillBlock::onSplashWater);
     }
 

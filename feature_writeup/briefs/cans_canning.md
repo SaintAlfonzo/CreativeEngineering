@@ -261,8 +261,8 @@ Generated files are never hand-edited. `canned_hoglin_feast` shares one can acro
 feast with several plate items.
 
 ### Tests
-- CN-07 (proposed) JEI shows a can recipe for each feast listed in the generator section.
-- CN-08 (proposed) Eat a canned pizza and a canned stuffed pepper can: serving values match the serving item.
+- CN-10 (proposed; was CN-07) JEI shows a can recipe for each feast listed in the generator section.
+- CN-11 (proposed; was CN-08) Eat a canned pizza and a canned stuffed pepper can: serving values match the serving item.
 
 ---
 

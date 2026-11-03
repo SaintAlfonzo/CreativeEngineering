@@ -99,13 +99,16 @@ public final class BBQItems {
             () -> new BBQSandwichItem(ModItems.basicItem().food(new FoodProperties.Builder().nutrition(16).saturationMod(0.7F)
                     .effect(() -> new MobEffectInstance(ModEffects.NOURISHMENT.get(), 2400, 0), 1.0F).build())));
 
-    /** The six seasonings: powders 64 uses, sauces 16 (durability, so they stack to 1). */
+    /**
+     * The six seasonings: single-use pack seasonings since the fold (food/seasoning #11), stack 64. 1.3.0 gave them
+     * durability (64 uses for a powder, 16 for a sauce); trades now give that many items (O31).
+     */
     public static final Map<BBQSeasoning, RegistryObject<Item>> SEASONINGS = new EnumMap<>(BBQSeasoning.class);
 
     static {
         for (BBQSeasoning s : BBQSeasoning.values()) {
             SEASONINGS.put(s, ITEMS.register(s.itemId(),
-                    () -> new SeasoningItem(ModItems.basicItem().durability(s.powder ? 64 : 16), s)));
+                    () -> new SeasoningItem(ModItems.basicItem(), s)));
         }
     }
 

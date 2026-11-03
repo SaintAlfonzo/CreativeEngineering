@@ -32,7 +32,7 @@
 //                   assemble (base, steps, food, loops): the sequenced assembly alone. A step is an ingredient
 //                   or an array of choices (deploy), { fill: Fluid.of(...) } (spout) or { press: true } (press)
 //   golden          goldenGild (food, golden, gold)   food in a ring of 8 gold; heated mixer + 6; Arc Furnace + 5
-//                   goldenEnchant (golden, enchanted) assembly: gold block, 250 mB liquid XP, press, 4 loops
+//                   goldenEnchant (golden, gilded) assembly: gold ingot, 125 mB liquid XP, press, 8 loops
 //   oven parts      F.slot(id, count), F.ware.sheet / pie / cake / muffin, F.SWEET for one-off oven recipes
 
 global.CD.FOOD = {
@@ -53,6 +53,9 @@ global.CD.FOOD = {
 	cookies: 12, muffinsOven: 4, tarts: 2,
 	// Golden food: gold in the heated mixer and the Arc Furnace (the grid is a ring of 8)
 	gold: { mixer: 6, arc: 5 },
+	// Gilded (enchanted golden) food: sequenced assembly loops, each 1 gold ingot + this much liquid XP and a press
+	// (owner 2026-11-03, food.md 3.16; was a gold block + 250 mB, 4 loops)
+	gilded: { loops: 8, xp: 125 },
 }
 
 global.CD.food = function (e) {
@@ -220,7 +223,7 @@ global.CD.food = function (e) {
 			}
 		},
 		goldenEnchant(input, output) {
-			F.assemble(input, [i.any_block_gold, { fill: Fluid.of(global.fluid.xp, 250) }, { press: true }], output, 4)
+			F.assemble(input, [i.any_ingot_gold, { fill: Fluid.of(global.fluid.xp, V.gilded.xp) }, { press: true }], output, V.gilded.loops)
 		},
 	}
 	return F

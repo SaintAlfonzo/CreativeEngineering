@@ -107,7 +107,9 @@ FAMILIES = OrderedDict([
                             'catchall for any sweet or baked food with no other family.')),
     ('dessert/brownie', ('Brownie', 'A brownie, or the tray of brownies it is cut from.')),
     ('dessert/pudding', ('Pudding', 'Soft set desserts in a bowl (custard, pudding, yogurt desserts) and steamed puddings cut in slices.')),
-    ('dessert/pastry', ('Pastry', 'Pancakes, scones, eclairs, beignets and sweet buns.')),
+    ('dessert/pancake', ('Pancake', 'Pancakes from every mod: single pancakes, pancake dishes and the pancake stack blocks. '
+                                    'No base item: each pancake keeps its own recipes (owner 2026-11-02).')),
+    ('dessert/pastry', ('Pastry', 'Scones, eclairs, beignets and sweet buns.')),
     ('dessert/waffle', ('Waffle', 'A waffle, plain or topped.')),
     ('dessert/roll', ('Sweet roll', 'A rolled sweet dough (sweet roll, chocolate roll).')),
     ('dessert/other', ('Other dessert', 'A sweet or baked food that fits no other family.')),
@@ -189,10 +191,8 @@ SKIP = None
 NO_FAMILY = {
     'endersdelight:twisted_cereal': 'meal/plate', 'endersdelight:twisted_cereal_wood': 'meal/plate',
     'quarkdelight:crab_bars': 'snack', 'berry_good:sweet_berry_meatballs': 'skewer',
-    # Barbeque's Delight cooked skewers: kept out of the skewer family until the skewer fold (barbeques_delight.md O1,
-    # TODO dishes/meals #46); the burnt skewer is in hazard by its type
-    **{'barbequesdelight:grilled_%s_skewer' % k: 'skewer (dishes/meals #46)' for k in (
-        'beef', 'chicken', 'cod', 'lamb', 'mushroom', 'pork_sausage', 'potato', 'rabbit', 'salmon', 'vegetable')},
+    # Barbeque's Delight cooked skewers joined the skewer family at the skewer fold (2026-11-03, dishes/meals #46:
+    # handheld + "skewer" in the name); the burnt skewer is in hazard by its type
 }
 
 # Recipe type -> station label. Types not listed are shown by their id.
@@ -273,6 +273,8 @@ def classify(r):
             return 'dessert/brownie'
         if has(n, 'pudding'):
             return 'dessert/pudding'
+        if has(n, 'pancake'):   # Rustic's pancake plates (stack blocks)
+            return 'dessert/pancake'
         if has(n, 'cake') and not has(n, 'turnip'):
             return 'cake/whole'
         if has(n, 'pie') and not has(n, 'shepherd'):
@@ -323,6 +325,9 @@ def classify(r):
     if t == 'salad':
         return 'salad'
 
+    # Pancakes, every mod (food type sweet/pancake; food_families.md 4.7)
+    if t == 'sweet/pancake' or has(n, 'pancake'):
+        return 'dessert/pancake'
     # Forms that cut across sweet / handheld / meal / baked / ingredient.
     if has(n, 'jello', 'gelatine', 'magma jelly'):
         return 'jello'
@@ -370,7 +375,7 @@ def classify(r):
             return 'dessert/waffle'
         if has(n, ' roll') and not has(n, 'hawberry'):
             return 'dessert/roll'
-        if has(n, 'pancake', 'eclair', 'beignet', 'scone'):
+        if has(n, 'eclair', 'beignet', 'scone'):
             return 'dessert/pastry'
         if has(n, 'toast with'):
             return 'sandwich/toast'
@@ -379,7 +384,7 @@ def classify(r):
         if has(n, 'apple', 'berries', 'strawberries', 'walnut', 'pear with'):
             return 'candy/coated'
         return 'candy/piece'
-    if has(n, 'scone', 'pancake', 'eclair', 'beignet', 'adzuki bun'):
+    if has(n, 'scone', 'eclair', 'beignet', 'adzuki bun'):
         return 'dessert/pastry'
     if has(n, 'toast with', 'bruschetta', 'jelly bread', 'caviar toast'):
         return 'sandwich/toast'
@@ -709,6 +714,7 @@ OV = '[oven.md](oven.md) 2.6'
 RCK = '[recipes_cooking.md](recipes_cooking.md)'
 PF = '[placeable_food.md](placeable_food.md) 1'
 TD = '[TODO](todo/TODO.md)'
+PANCAKE_SRC = 'owner 2026-11-02 ([TODO](todo/TODO.md) merges/baking #2, dishes/meals #12; 4.7)'
 
 
 def T(*rows):
@@ -935,8 +941,6 @@ RULES = {
         can=[R('Per item, can parity 2.24 (sweets)', CP, CAN)],
         place=[D('Food Plate', placed_on('plate'))],
         recipe=[D('Oven for the plain bake; toppings by Spout', lambda m: m.at('Spout') or m.at('Oven')),
-                P('Pancakes become their own food type (sweet potato pancakes placeable); coverings recoloured to the jam',
-                  T('dishes/meals #12', 'dishes/meals #37')),
                 P('More waffle recipes and uses', T('baking/baked-goods #6')),
                 D('A dessert can get its own cookware or recipe treatment (a mould, a griddle, a press), not the cookie, cake or '
                   'pie shape; Gingerbread is the first (Create Confectionery\'s gingerdough: furnace, smoker); the Gingerbread Man stays a cookie')]),
@@ -955,6 +959,16 @@ RULES = {
                 P('Ice cream: unified recipes, a fluid per flavour with mixing recipes, bowl spouting, an ice cream block per '
                   'flavour (BlockRunner: sticky, sinks in); Truffle Ice Cream joins as a flavour', T('baking/sweets #4')),
                 P('More custard, shaved ice and popsicle variants', T('baking/sweets #3'))]),
+    'dessert/pancake': dict(
+        place=[R('Every pancake can be put down: Rustic\'s plates and Supplementaries\' Pancake are their own stack blocks '
+                 '(a single Rustic pancake goes back on its plate with sneak-use), Sweet Potato Pancakes a Display Delight '
+                 'placed dish', PANCAKE_SRC,
+                 only_if(lambda m: not m.id.startswith('rusticdelight:'), placed_on('placed', 'block')))],
+        recipe=[R('No base item: every pancake keeps its own recipes (Rustic plates: Cooking Pot, cut into single pancakes; '
+                  'Supplementaries\' Pancake: by hand and the heated Mixer; Sweet Potato Pancakes: Cooking Pot)', PANCAKE_SRC),
+                R('Food type `sweet/pancake` for every pancake eaten as an item (food.md 2.1)', PANCAKE_SRC),
+                P('Cooking Pot for the Supplementaries Pancake (3 batter + 2 sugar + 1 egg -> 4)', T('merges/baking #1')),
+                P('Coverings recoloured to the jam colour', T('dishes/meals #37'))]),
     'dessert/brownie': dict(
         place=[D('Tray: own block (cut into brownies)', only_if(lambda m: m.row['whole'], placed_on('block', 'sneak')))],
         recipe=[D('Oven: the tray (cake pan); Cutting Board: tray -> brownies',
@@ -1153,19 +1167,25 @@ RULES = {
     'golden': dict(
         can=[R('2 golden + honey -> 10 servings at x0.25 (effects x0.333 decided, not built; can parity 2.17)', CP, CAN)],
         place=[D('none required')],
-        recipe=[R('Crafting: the food in 8 gold (real gold only, rose gold counts)', RCK + ' 2.4',
+        recipe=[R('Crafting: the food in 8 gold (real gold only, rose gold counts); every golden food but the apple takes '
+                  '8 gold nuggets (owner 2026-11-02, [food.md](food.md) 3.16; was 8 gold ingots)', RCK + ' 2.4',
                   lambda m: m.at('Crafting', ['gold'])),
                 D('Heated Mixer: the food + 6 gold, and Arc Furnace: the food + 5 gold, for every golden food (stated '
                   'only for carrot and apple, ' + RCK + ' 2.4; TODO dishes/meals #9 built it on every gold tag)',
                   lambda m: m.at('Mixer', ['gold']) and m.at('Arc Furnace'))],
-        values=[P('Golden carrot 4 hunger (vanilla 6); enchanted golden foods 8 hunger / 8 saturation (vanilla 4 / 1.2)',
-                  T('food/types-and-tuning #3'))]),
+        values=[R('Hunger and saturation are the input food\'s times 2 (golden) or 4 (gilded), hunger capped at 20; '
+                  'effects kept; the cakes keep their own slices', 'owner 2026-11-02 ([food.md](food.md) 3.16, '
+                  '[golden_food.md](golden_food.md) 3.6)')]),
     'golden/enchanted': dict(
-        recipe=[R('Enchanted golden apple: sequenced assembly on a golden apple, 4 loops of a gold block, 250 mB liquid '
-                  'XP, pressing', RCK + ' 2.4', only_if(lambda m: m.id == 'minecraft:enchanted_golden_apple',
+        recipe=[R('Gilded (enchanted golden) apple: sequenced assembly on a golden apple, 8 loops of 1 gold ingot, 125 mB '
+                  'liquid XP, pressing (owner 2026-11-03; was 4 loops of a gold block and 250 mB)', RCK + ' 2.4', only_if(lambda m: m.id == 'minecraft:enchanted_golden_apple',
                                                        lambda m: m.at('Sequenced assembly'))),
-                D('The same assembly on every other golden food', only_if(
-                    lambda m: m.id != 'minecraft:enchanted_golden_apple', lambda m: m.at('Sequenced assembly')))]),
+                R('Every other enchanted golden food but the cake: the same assembly on its golden form; the anvil and '
+                  'the Golden Food Enchantment are removed', 'owner 2026-11-02 ([golden_food.md](golden_food.md) 3.4)', only_if(
+                    lambda m: m.id not in ('minecraft:enchanted_golden_apple', 'goldenfood:enchanted_golden_cake'),
+                    lambda m: m.at('Sequenced assembly'))),
+                R('Enchanted golden cake: no recipe (upstream had none)', '[golden_food.md](golden_food.md) 3.4', only_if(
+                    lambda m: m.id == 'goldenfood:enchanted_golden_cake', lambda m: True))]),
     'can': dict(
         can=[R('n/a: these are the cans')],
         place=[D('none required')],
@@ -1459,14 +1479,20 @@ def main():
     removed = (INSTANCE / 'kubejs/startup_scripts/_lib/removed_items.js').read_text()
     removed = removed[removed.index('global.removedItems'):]
     removed = re.findall(r'i\.(\w+)', removed[:removed.index(']')])
-    # merged items (the old id of each [old, new] pair): the pack's list and Creative Delight's <mod>/item_merges.js
-    cd = INSTANCE / 'development/creativeDelight/src/main/resources/kubejs_startup'
-    for f in [INSTANCE / 'kubejs/startup_scripts/_lib/item_merges.js', *sorted(cd.glob('*/item_merges.js'))]:
-        if f.exists():
-            removed += re.findall(r'\[\s*i\.(\w+)\s*,\s*i\.\w+\s*\]', f.read_text())
+    # merged items (the old id of each [old, new] pair): the pack's list (dict keys) and Creative Delight's swap
+    # lists (ids, data/creativedelight/swaps/merges_*.json; item_merges.md 6)
+    f = INSTANCE / 'kubejs/startup_scripts/_lib/item_merges.js'
+    if f.exists():
+        removed += re.findall(r'\[\s*i\.(\w+)\s*,\s*i\.\w+\s*\]', f.read_text())
+    swaps = INSTANCE / 'development/creativeDelight/src/main/resources/data/creativedelight/swaps'
+    merged_ids = {old for f in sorted(swaps.glob('merges_*.json'))
+                  for olds in json.loads(f.read_text()).get('merges', {}).values() for old in olds}
     for k in [*types['excluded'], *removed]:
         if key_val.get(k) in rows:
             rows[key_val[k]]['excluded'] = True
+    for i in merged_ids:
+        if i in rows:
+            rows[i]['excluded'] = True
     fam_of, skipped = OrderedDict(), []
     for i, r in rows.items():
         f = classify(r)

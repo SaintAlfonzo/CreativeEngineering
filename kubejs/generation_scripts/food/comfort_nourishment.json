@@ -713,6 +713,10 @@
 			"effect": "none",
 			"seconds": 0
 		},
+		"miners_delight:beef_stew_cup": {
+			"effect": "comfort",
+			"seconds": 60
+		},
 		"bowl_of_stuffed_squid": {
 			"effect": "nourishment",
 			"seconds": 240
@@ -720,6 +724,14 @@
 		"cave_soup": {
 			"effect": "comfort",
 			"seconds": 240
+		},
+		"miners_delight:chicken_soup_cup": {
+			"effect": "comfort",
+			"seconds": 60
+		},
+		"miners_delight:fish_stew_cup": {
+			"effect": "comfort",
+			"seconds": 60
 		},
 		"glow_ink_pasta": {
 			"effect": "comfort",
@@ -733,6 +745,14 @@
 			"effect": "none",
 			"seconds": 0
 		},
+		"miners_delight:noodle_soup_cup": {
+			"effect": "comfort",
+			"seconds": 60
+		},
+		"miners_delight:onion_soup_cup": {
+			"effect": "comfort",
+			"seconds": 60
+		},
 		"pasta_with_veggieballs": {
 			"effect": "comfort",
 			"seconds": 240
@@ -745,6 +765,14 @@
 			"effect": "nourishment",
 			"seconds": 240
 		},
+		"miners_delight:pumpkin_soup_cup": {
+			"effect": "comfort",
+			"seconds": 60
+		},
+		"miners_delight:rabbit_stew_cup": {
+			"effect": "comfort",
+			"seconds": 60
+		},
 		"seasoned_arthropods": {
 			"effect": "comfort",
 			"seconds": 240
@@ -756,6 +784,10 @@
 		"vegan_steak_and_potatoes": {
 			"effect": "nourishment",
 			"seconds": 240
+		},
+		"miners_delight:vegetable_soup_cup": {
+			"effect": "comfort",
+			"seconds": 60
 		},
 		"weird_caviar": {
 			"effect": "none",
@@ -864,6 +896,58 @@
 		"warped_moldy_meat": {
 			"effect": "comfort",
 			"seconds": 120
+		},
+		"bowl_of_paella": {
+			"effect": "comfort",
+			"seconds": 240
+		},
+		"caesar_salad": {
+			"effect": "comfort",
+			"seconds": 120
+		},
+		"fish_egg_noodle_soup": {
+			"effect": "comfort",
+			"seconds": 240
+		},
+		"globular_rice": {
+			"effect": "nourishment",
+			"seconds": 240
+		},
+		"glow_squid_stew": {
+			"effect": "comfort",
+			"seconds": 120
+		},
+		"pasta_with_eyeball": {
+			"effect": "nourishment",
+			"seconds": 240
+		},
+		"plate_of_stuffed_pufferfish": {
+			"effect": "comfort",
+			"seconds": 240
+		},
+		"oceanic_potato_salad": {
+			"effect": "comfort",
+			"seconds": 120
+		},
+		"sea_salad": {
+			"effect": "none",
+			"seconds": 0
+		},
+		"shrimp_rice": {
+			"effect": "nourishment",
+			"seconds": 240
+		},
+		"shrimp_stew": {
+			"effect": "nourishment",
+			"seconds": 240
+		},
+		"squid_and_pickles": {
+			"effect": "nourishment",
+			"seconds": 240
+		},
+		"squid_salad": {
+			"effect": "comfort",
+			"seconds": 60
 		},
 		"bowl_of_guardian_soup": {
 			"effect": "comfort",

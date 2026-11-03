@@ -1,0 +1,28 @@
+Salt 1.19.2-1.2.4.1 by mortuusars, repacked in repackedSalt (Creative Delight).
+Source: https://github.com/mortuusars/Salt (release jar salt-1.19.2-1.2.4.1; the jar ships no LICENSE file, its
+mods.toml declares "MIT"; the copyright year was not checked against the repository, 2026-11-02)
+The classes and resources of the upstream jar are distributed under the MIT License below. The overlay added for
+Creative Delight (mods.toml, and io/github/mortuusars/salt/Dissolving, a modified copy of the upstream class) is
+GNU GPL3, like the rest of the pack's code; the modified Dissolving also stays under the upstream MIT terms.
+
+MIT License
+
+Copyright (c) mortuusars
+
+Permission is hereby granted, free of charge, to any person obtaining a copy
+of this software and associated documentation files (the "Software"), to deal
+in the Software without restriction, including without limitation the rights
+to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+copies of the Software, and to permit persons to whom the Software is
+furnished to do so, subject to the following conditions:
+
+The above copyright notice and this permission notice shall be included in all
+copies or substantial portions of the Software.
+
+THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+SOFTWARE.

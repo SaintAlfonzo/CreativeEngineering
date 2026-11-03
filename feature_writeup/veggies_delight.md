@@ -237,7 +237,7 @@ Folds as built 2026-11-01 (CD `veggiesdelight/recipes.js` unless named; tests VD
 | R4 | One shaped recipe on a pie crust (milk or any cheese), manual only as Brewin's quiche, plus the assembly (already there); VD's milk and Vintage cheese shaped recipes go | BUILT |
 | R5 | Pizza rule: bottom row any dough, tomato sauce, any dough; toppings bell pepper, vegetable, onion; manual only plus an assembly on dough | BUILT |
 | R6 | Stuffed rule: both keep their crafts (boat grid, bowl pot + heatless grid); each gets an assembly on a roasted zucchini | BUILT |
-| R7 | Pancake family | MOVED 2026-11-02 (owner) to the food family rules (`dishes/meals #12`, `food/types-and-tuning #13`); no longer a Veggies item |
+| R7 | Pancake family `dessert/pancake` ([food_families.md](food_families.md) 4.7), no base item: Sweet Potato Pancakes keep their pot recipe, take the new food type `sweet/pancake` (was `sweet`) and become placeable as a Display Delight placed dish (`creativeengineering:placed_sweet_potato_pancakes`); no merge (item_merges.md: no duplicate, the owner keeps every Veggies item) | BUILT 2026-11-02 (moved 2026-11-02 to the food family rules, `dishes/meals #12`); Creative Delight jar not built; FF-15 to FF-17, SQ-PCK, CQ-PCK |
 | R8 | Already made in the Pickling Jar (fermenting); now in the `preserve/pickle` family (`tools/food_families.py`, `food_families.json`) | BUILT |
 | R10 | Skewer rule: shaped diagonal (stick, turnip, cooked mutton) plus an assembly on a stick; the shapeless goes | BUILT |
 | R11 | Burger rule for the Vegetarian Burger (shaped, assembly on the patty); the patty fills the patty slot of More Delight's simple, egg and loaded hamburgers (`creativeengineering/recipes.js`), VD's shapeless versions go; raw patty by the cooking trio (`F.veggieCook`) | BUILT |
@@ -673,6 +673,7 @@ UI
   bread routes removed (5.2); port `-04` built (mature dandelion revert), not installed; VD-47 to VD-54, SQ-VDF-01 to -06.
   Needs a CD rebuild and restart.
 - **2026-11-02:** nested in Creative Delight (`creativedelight/members #1`): `bundled_in=creativeDelight`, jar `backportedVeggies-1.9.2-ce-19.2-05` inside the CD jar, "Veggies Delight (Creative Delight)"; the folder stays `development/creativeDelight/members/veggies`; build and install through `:creativeDelight:` only. Veggies pilot of the food dict: `veggiesdelight/recipes.js` and `cooking.js` read food items as `fd.<food key>` (`global.food`), recipe calls identical offline (`tools/test_cd_food.sh`, CDT-09).
+- 2026-11-02: R7 built as the pancake family ([food_families.md](food_families.md) 4.7): food type `sweet/pancake`, Display Delight placed dish; FF-15 to FF-17, SQ-PCK-01 to -05, CQ-PCK-01, -02. In the CD jar installed 2026-11-02 23:16, not booted.
 
 ### Owner decisions 2026-11-02
 

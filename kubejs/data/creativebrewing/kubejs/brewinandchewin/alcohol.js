@@ -17,8 +17,9 @@ var R = global.NCH
 //######################### Pickling moves to the Pickling Jar #########################
 // The keg is for beer fluids, the cask for wine, the Vintage Pickling Jar for all pickling (vintage_delight.md S7, 3.2).
 // Same inputs as the keg; the 250 mB of honey becomes a honey bottle; the jar's pickle time.
+// Brewin's kimchi is removed (merges/dishes #9, owner 2026-11-02): Vintage Delight's kimchi wins and this recipe is not
+// carried over; Creative Delight's vintagedelight/recipes.js has the kimchi recipes.
 R.remove({ id: 'brewinandchewin:fermenting/kimchi' }, e)
-R.vdPickling(Item.of(i.kimchi, 2), [i.cabbage, i.vegetables, i.kelp], e, 'brewin_kimchi')
 // Pickled Pickles are merged into Creative Delight's Pickled Sea Pickle (sea pickles + salt, no honey; TODO
 // dishes/pickles-and-ferments #1), so the honey recipe is not rebuilt.
 R.remove({ id: 'brewinandchewin:fermenting/pickled_pickles_from_honey' }, e)

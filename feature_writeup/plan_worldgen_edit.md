@@ -1,6 +1,6 @@
 # Worldgen edit plan (2026-11-01)
 
-Status: BUILT, awaiting scratch tests (2026-11-02 late). Steps 1 to 5 done except the owner calls below. Step 3 to 5 results: A7 was already built in the pre-scratch pass (only the generator's move-tag handling removed, output unchanged); B2 built (part flag `punch`); B3 and B4 probes found no code fault (box resolves, siege parts use the meta box; the B4 mix was generated grunts); B6 audit: no source gives illagers guns, Old Guns AI is skeleton-only, so no rule was added (owner picks the mechanism in `mobs/pillagers #7`); A6 built, but Waystones' BIOME style does not apply to templates (plain stone waystones); C3 to C6 built (C6: 40/30/30 surface/underground/air); C1 runs in the scratch session; N1, N4 to N6, N8 to N10 built; N2, N3 were already built; N7, N11 queued. The B2/C6 Java now lives in Creative Worldgen (wave 5 carve, same evening). Open owner calls: B6 mechanism; N8 illager armour render layer (gear invisible); N6 per-category spawn boxes for allays in pillager structures; B4 boxes over ground between siege parts. Owner calls of 2026-11-01 are folded in. Row ids refer to
+Status: BUILT, awaiting scratch tests (2026-11-02 late). Steps 1 to 5 done except the owner calls below. Step 3 to 5 results: A7 was already built in the pre-scratch pass (only the generator's move-tag handling removed, output unchanged); B2 built (part flag `punch`); B3 and B4 probes found no code fault (box resolves, siege parts use the meta box; the B4 mix was generated grunts); B6 audit: no source gives illagers guns, Old Guns AI is skeleton-only, so no rule was added (owner picks the mechanism in `mobs/pillagers #7`); A6 built, but Waystones' BIOME style does not apply to templates (plain stone waystones); C3 to C6 built (C6: 40/30/30 surface/underground/air); C1 runs in the scratch session; N1, N5, N6, N8 to N10 built; N2, N3 were already built; N7, N11 queued. The B2/C6 Java now lives in Creative Worldgen (wave 5 carve, same evening). Open owner calls: B6 mechanism; N8 illager armour render layer (gear invisible); N6 per-category spawn boxes for allays in pillager structures; B4 boxes over ground between siege parts. Owner calls of 2026-11-01 are folded in. Row ids refer to
 [todo/TODO.md](todo/TODO.md). Every change that touches game data adds its live checks to
 [testing/scratch_queue.md](testing/scratch_queue.md) (no scratch boot until the owner says so) and a bullet to
 `kubejs/assets/creativeengineering/changelog/unreleased.md` where a player can notice it. Hand-edited configs are
@@ -47,7 +47,6 @@ copied to `configs_edited/root_config/`.
 | N1 | `biomes/netherblocks #3` | Rerun `gen_wild_flowers.py` after the Nether flower changes of this plan and commit the output |
 | N2 | `biomes/netherblocks #4` | Scan the pack for Overworld glowstone: D&D glowstone geodes (`engineering/dreams-and-desires #5`), structures (rule 21 already swaps them), features, ores. Fix hits with a feature removal or a block swap; record the scan in nether_worldgen.md |
 | N3 | `structures/contents #5` | Quark End spires: air under the spike's base footprint cancels the spike (owner 2026-11-02; built in patcherMod `QuarkSpiralSpireFootprintMixin`, Quark had no check of its own) |
-| N4 | `mobs/spawns #3` | Alex's Mobs and duck / goose parity: biome and frequency comparison from the analysis base in mob_spawns.md 10.1; output is a table and a fix list, then apply the obvious fixes |
 | N5 | `mobs/spawns #4` | Lone villagers in plains, temperate hills, fields and meadows (spawn rule in the mob spawn config) |
 | N6 | `mobs/spawns #5` | Allay spawns in pillager cages, mystical biomes and more structures (spawn boxes and biome rules) |
 | N7 | `mobs/spawns #6` | Fireflies: verify the Firefly Bush port in a swamp at night (tick cost of the per-tick block reschedule), jar catching, jarring near a bush at night; fix the cost if it shows |
@@ -66,12 +65,12 @@ copied to `configs_edited/root_config/`.
 2. B1 and B5 (patcherMod / Creative Calendar rebuild, one install and one restart for both).
 3. A7 (data, large) then B2, B3, B4 (probes first), then A6 and B6.
 4. C3, C4, C5, C6, N1 to N3, N8 (data and small patcherMod); C1 runs inside the scratch session (calibration needs the world).
-5. N4 to N7, N9 to N11 (spawn rules, investigations, notes).
+5. N5 to N7, N9 to N11 (spawn rules, investigations, notes).
 6. TODO updates, writeups, scratch queue, changelog, `python3 tools/changelog_lint.py`.
 
-## E. Tests to queue (all written 2026-11-02: SQ-WGE-00 to 18, CQ-WGE-07a to c, 17, 18, SQ-MOB-N4 to -N8; ids below map to them: NETHER-MOVE = 09, SQ-NBS-4 = 10, SQ-META-SHARES = 11, SQ-META31-04b = 12, SQ-METEOR-HEIGHT = 13, SQ-WAYSTONE-1 ruins = 14, SQ-SB-03b/04b = 15 (SQ-PSM-02/-03); SQ-TER-05 stays in the scratch session)
+## E. Tests to queue (all written 2026-11-02: SQ-WGE-00 to 18, CQ-WGE-07a to c, 17, 18, SQ-MOB-N5 to -N8; ids below map to them: NETHER-MOVE = 09, SQ-NBS-4 = 10, SQ-META-SHARES = 11, SQ-META31-04b = 12, SQ-METEOR-HEIGHT = 13, SQ-WAYSTONE-1 ruins = 14, SQ-SB-03b/04b = 15 (SQ-PSM-02/-03); SQ-TER-05 stays in the scratch session)
 
-SQ-TER-05 (beardFootprint calibration, then enable), SQ-NBS-4 (K28 to K36 swaps), SQ-META-SHARES (camp ruins, great tower, meteor shower), SQ-METEOR-HEIGHT, SQ-MOB-N4 to N8, SQ-WG-BIOME-SHADOW (End census), SQ-WG30-C05 (120 s), SQ-EF-06b (castle, new air limit), SQ-STRUCT-MYST3X (estimates and census),
+SQ-TER-05 (beardFootprint calibration, then enable), SQ-NBS-4 (K28 to K36 swaps), SQ-META-SHARES (camp ruins, great tower, meteor shower), SQ-METEOR-HEIGHT, SQ-MOB-N5 to N8, SQ-WG-BIOME-SHADOW (End census), SQ-WG30-C05 (120 s), SQ-EF-06b (castle, new air limit), SQ-STRUCT-MYST3X (estimates and census),
 SQ-WAYSTONE-1 (lone spacing, village share, ruin waystones), SQ-POOL-1 (weights after B1), SQ-META31-04b (pyramid punch),
 SQ-SB-03b/04b (birch tower, siege box), CQ-WE-25 (Cool Rain), NETHER-MOVE (four structures in the Nether, census).
 

@@ -28,8 +28,14 @@
 - **New:** Skewers with an empty off hand: Mutton (4 raw mutton), Mushroom (4 brown mushrooms), Pork Sausage (4 raw pork)
 - **New:** Grill (iron trapdoor and 7 iron ingots): 2 slots, heated by a heat source below or a campfire built into it; sneak-right-click with an empty hand to flip a skewer at half time, it cooks at full time; left on twice as long it becomes a Burnt Skewer
 - **New:** A Grill used on a campfire (or a campfire used on a Grill's side) takes it in, unlit; it lights, goes out in water, under a shovel or a splash water bottle, and in rain as a campfire does, and drops the campfire when broken
-- **New:** Powders, right-clicked on a skewer on the Grill or a Cutting Board, one seasoning per skewer, 64 uses: Cumin Powder (heals 1 heart), Pepper Powder (eaten fast), Chili Powder (always edible, 1 heart of fire damage); a powder on a raw skewer stays after grilling
-- **New:** Sauces, the same way on cooked skewers only, 16 uses: Honey Mustard Sauce (effects twice as likely, half as long), Buffalo Sauce (effects one level stronger, half as long, 1 heart of fire damage), Barbeque Sauce (effects twice as long)
+- **New:** Powders, put on a skewer by crafting, one powder per craft, stack to 64: Cumin Powder (heals 1 heart), Pepper Powder (eaten fast), Chili Powder (always edible, 1 heart of fire damage); they go on raw or cooked skewers, and a powder on a raw skewer stays after grilling
+- **New:** Sauces, the same way on cooked skewers only, stack to 64: Honey Mustard Sauce (effects twice as likely, half as long), Buffalo Sauce (effects one level stronger, half as long, 1 heart of fire damage), Barbeque Sauce (effects twice as long)
+- **New:** A food holds at most 2 seasonings (configurable); Grilled does not count
+- **New:** Novice Butchers sell the six seasonings: 12 emeralds for 64 powders or 16 sauces
+- **New:** A skewer finished on the Grill is Grilled: +2 saturation. Skewers inside a Kebab Wrap, Kebab Sandwich or Bibimbap lose Grilled
+- **New:** Raw skewers also cook in a Furnace, Smoker or Campfire, without Grilled and without their seasonings
+- **New:** Cooked skewers by hand from cooked ingredients plus one extra of the main ingredient
+- **New:** Skewer names: raw ones "Raw Beef Skewer", cooked ones "Beef Skewer"; seasoned ones Salted, Peppered, Garlic, or Cumin, Chili, Honey Mustard, Buffalo or Barbeque Flavored
 - **New:** Kebab Wrap (Tortilla, a cooked skewer, cabbage), Kebab Sandwich (bread, 2 cooked skewers, cabbage, onion) and Bibimbap (Cooked Rice, onion, carrot, 3 cooked skewers): they list the skewers inside and give their effects and seasonings
 - **New:** Tray (a log in the Stonecutter makes 4): 3-slot display, stacks on itself
 - **New:** WTHIT shows each skewer on a Grill with its time to flip or done, Ready to Flip, Cooked or Burnt
@@ -43,7 +49,8 @@
 
 - **Changed:** Green Grape, Red Grape and Cherry Jam Jars: the Cooking Pot makes 1 jar [2]
 - **New:** Salmonberry and Raspberry Jam Jars: 4 berries, sugar and a Lemon Slice in the Cooking Pot, in an Empty Mason Jar
-- **New:** Lemon Jam from 5 Lemon Slices and a sweetener in the Cooking Pot, or in a heated Mixer with 100 mB water
+- **Changed:** Orange and Lemon Jam take an Orange or Lemon Slice in place of each whole fruit, in the Cooking Pot and the heated Mixer
+- **Removed:** Orange Jam from 4 Orange Slices, in the Cooking Pot and the heated Mixer
 - **Changed:** Vinegar ferments from any jam in the Pickling Jar: Vintage Delight's jam jars, the new jam jars and Fruits Delight's jams [Vintage Delight's jam jars only]
 - **Removed:** The Pickling Jar recipe for a Vinegar Bottle from a jam bottle
 - **Changed:** Fruits Delight's jams and Upgrade Aquatic's Mulberry Jam come in an Empty Mason Jar: eating or crafting with one leaves the jar, and making one takes a jar [Glass Bottle]
@@ -53,7 +60,7 @@
 
 ## Lemons
 
-- **Changed:** A lemon tree drops 2 to 5 Lemons [1 to 2]
+- **Changed:** A ripe lemon tree gives 2 to 5 Lemons when picked or broken [1 to 2]
 - **Changed:** A Lemon cuts into 8 Lemon Slices [4], by knife and by Create saw
 
 ## Powdered Sugar <!-- icon: creativeengineering:powdered_sugar -->
@@ -150,6 +157,8 @@
 - **New:** Cave Carrot Crates can turn up in chests where Cave Carrots do
 - **Fixed:** Cave Hamburger had no recipe; Calamari or a Brown Mushroom fills the two slots that took Baked Tentacles
 - **Fixed:** A Spider killed with a Knife while burning also dropped raw Arthropod
+- **New:** Bats and Silverfish killed while burning drop Smoked Bat Wings and Cooked Arthropods instead of the raw ones
+- **Fixed:** A Cave Spider killed while burning also dropped raw Arthropods
 
 ## Vintage Delight <!-- icon: vintagedelight:mixed_seeds -->
 
@@ -158,19 +167,22 @@
 - **Fixed:** The Pickling Jar stopped after one batch when a recipe's ingredients were spread over several slots; it takes one item from each slot the recipe uses
 - **Changed:** Leftovers the Pickling Jar throws out (leftover slot off or full) leave it 1 second after the batch [at once]
 - **New:** A Pickling Jar leftover that is the recipe's container goes back into the emptied container slot for the next batch
-- **Changed:** Walking speed on Vintage Delight blocks: crates 1.1x, oat bags and bales and Salt Blocks 1.05x, salt bricks, Smooth Salt Blocks and Salt Pillars 1.25x, whole pizzas 0.85x [1x]
+- **Fixed:** Wild ghost peppers could stay on grass, mycelium and moss
+- **Fixed:** Pepper jam and relish could not be bottled from a jar
+- **Changed:** Adding a salt layer while standing in it no longer pushes you up
+- **New:** JEI pages for the Salt Layer, the Cheese Mold and jar stacking
+- **Changed:** Walking speed on Vintage Delight blocks: crates 1.1x, oat bags, oat bales and Salt Blocks 0.88x (soft, like hay bales), salt bricks, Smooth Salt Blocks and Salt Pillars 1.25x, whole pizzas 0.85x [1x]
 
 ## Veggies Delight <!-- icon: veggiesdelight:fish_and_chips -->
 
+- **New:** Sweet Potato Pancakes can be put down: sneak + right click the top of a block; an empty hand picks them up
 - **Changed:** PneumaticCraft's Fish and Chips is merged into Veggies Delight's Fish and Chips; old ones in inventories become it. Fried in the Cooking Pot, served in a bowl [on paper]
 - **Removed:** PneumaticCraft's Fries and Canned Chips, with their recipes
 - **Removed:** Veggies Delight's two Cooking Pot recipes for Fish and Chips with an egg
 - **Changed:** Veggies Delight's Mashed Potatoes is renamed Mashed Sweet Potatoes: Cooking Pot 2 sweet potatoes or Sliced Sweet Potatoes and milk [sweet potato, potato and milk]; by hand 3 Baked Sweet Potatoes, milk and a bowl [Baked Sweet Potato, 2 Baked Potatoes]
 - **Changed:** More Delight Mashed Potatoes: Cooking Pot 2 potatoes or Potato Slices and milk, in a bowl [2 Potato Slices and milk]; new hand recipe: 3 Baked Potatoes or Baked Potato Slices, milk and a bowl
-- **Changed:** Mashed Potatoes and Mashed Sweet Potatoes can be salted
 - **Removed:** Veggies Delight's Stuffed Bell Peppers and their serving; Rustic Delight's Stuffed Bell Peppers stay
 - **Removed:** Sweet Potato Dough no longer bakes into bread in a furnace, smoker or campfire; it bakes in the Oven like other dough
-- **Changed:** Zucchini Quiche has one crafting recipe, with milk or any cheese, by hand only
 - **Changed:** Vegan Pizza takes any dough; new sequenced assembly on dough
 - **New:** Sequenced assemblies on a Roasted Zucchini for the Stuffed Zucchini Boat and Stuffed Zucchinis
 - **Changed:** Turnip Mutton Skewer is a shaped diagonal recipe; new sequenced assembly on a stick
@@ -226,7 +238,6 @@
 - **Changed:** Grilled Ghast, Cooked Rotten Ham and Fried Turtle Egg cook in a furnace, smoker or campfire for 0.35 xp [1]
 - **Changed:** Cooked Arthropod gives 0.35 xp in a furnace [0.25]
 - **Changed:** Cutting a Catfish on the Cutting Board also gives a Bone Meal
-- **Changed:** The Golden Apple crafting recipe takes any gold ingot, rose gold included [gold ingots only]
 
 ## Cans
 
@@ -235,6 +246,46 @@
 - **New:** Canned Ratatouille
 - **Changed:** Canned Shulker Flesh is filled with End's Delight Shulker Meat or Slices
 - **Changed:** Canned soups, stews and meals give the same Comfort or Nourishment as the food they hold
+
+## Golden Food <!-- icon: goldenfood:golden_cake -->
+
+- **Removed:** The Golden Food Enchantment, its enchanted book and the book in village chests
+- **Changed:** Enchanted golden foods are called Gilded, and are made by Create sequenced assembly on the golden food: 8 loops of a gold ingot, 125 mB liquid experience, pressing [enchanted book on an anvil]
+- **Changed:** Golden foods other than the golden apple are crafted from the food and 8 gold nuggets [8 gold ingots]; new heated Mixer (6 nuggets) and Arc Furnace (5 nuggets) recipes
+- **Changed:** Golden foods fill twice the hunger and saturation of their base food, gilded foods four times, up to 20 hunger [golden 4 hunger, 1.2 saturation; enchanted 8, 8.0]
+- **Changed:** The Golden Apple crafting recipe takes any gold ingot, rose gold included [gold ingots only]
+
+## Item Merges
+
+- **Changed:** Merged items already in the world turn into the item that replaced them in chests, other containers, the ender chest and dropped stacks, keeping their name, enchantments and contents [player inventory only, names and other data lost]
+- **New:** Operator command `/ceswap items` converts merged items for online players and in loaded chunks at once
+- **Removed:** Brewin' and Chewin' Kimchi; Vintage Delight's Kimchi is the only one, and Canned Kimchi holds it
+- **New:** Kimchi Pickling Jar recipes with cucumber or zucchini, onion, egg, sea pickle, beetroot or any whole raw fish in place of the ghost pepper
+- **Removed:** Nut Butter, the Nut Mash Bottle and Nut Dough; Nut Mash (was Nut Mash Jar) is the only one: 5 acorns or peanuts and sugar in the Cooking Pot make 3 jars [5 roasted peanuts make 1]
+- **Changed:** PB & J is renamed Nut Mash and Jam Sandwich and takes Nut Mash; Delightful's sandwich is merged into it
+- **Changed:** More Delight's and Oceanic Delight's Potato Salads are merged into Rustic Delight's; old ones become it. Cooking Pot: 2 potatoes of any kind, egg, milk, onion or garlic. By hand: 3 potatoes of any kind, egg, milk, onion or garlic, bowl
+
+## Quiche
+
+- **Changed:** Quiche and Zucchini Quiche bake only in the Oven with a pie tin [crafting grid, sequenced assembly]
+- **Changed:** Quiche: pie crust, cheese wedge, milk, egg and a cooked meat, a mushroom or a salad green; Zucchini Quiche: pie crust, cheese wedge, milk, egg, 2 Roasted Zucchini
+
+## Oceanic Delight
+
+- **Changed:** The Sea Grape Plant breaks faster with a hoe
+- **Changed:** Wild Sea Grapes grow in larger patches on the floor of warm, lukewarm and deep lukewarm oceans [smaller patches]
+- **Changed:** Oceanic Delight dishes follow the pack's Comfort and Nourishment rule. Globular Rice, Shrimp Stew: Nourishment 4:00 [Comfort 5:00]; Pasta with Eyeball: Nourishment 4:00 [5:00]; Squid and Pickles, Shrimp Rice: Nourishment 4:00 [3:00]
+- **Changed:** Caviar Noodle Soup: Comfort 4:00 [5:00]; Glow Squid Stew: Comfort 2:00 [3:00]; Bowl of Paella, Plate of Stuffed Pufferfish: Comfort 4:00 [Nourishment 5:00]; Squid Salad: Comfort 1:00 [none]
+
+## Salt
+
+- **Changed:** More meat and fish dishes can be salted, including the Calamari Roll and Crab Rangoon
+- **Changed:** Bone Broth, Cooked Rice and Tomato Sauce can no longer be salted
+- **Changed:** Mashed Potatoes and Mashed Sweet Potatoes can be salted
+
+## Nests
+
+- **New:** Duck and goose nests appear on river banks, in swamps and on beaches; emu nests appear in savannas
 
 ## Stack Sizes
 
@@ -268,7 +319,6 @@
 - **New:** Create pumps and fluid pipes fill and drain Supplementaries Jars and Goblets, 250 mB per bottle; liquids with no fluid form (soups) stay hand-filled only
 - **Changed:** Brewery sky village houses have Fantasy Furniture Hanging Herbs where the dried barley and corn hung [empty]
 - **New:** The water Spout Gun wets the farmland it hits
-- **Fixed:** The Zucchini Quiche sequenced assembly on a Pie Crust was missing
 - **Fixed:** Four calamari dishes were missing and others had an empty tentacle slot
 - **Fixed:** More Delight Mashed Potatoes, Potato Salad and the four Diced Potatoes dishes had an empty sliced potato slot
 - **Fixed:** Spout and Item Drain recipes for the coffees, Lavender Tea, and the matcha lattes were missing
@@ -323,11 +373,6 @@
 
 ## Mob Spawns
 
-- **Changed:** Gazelles, elephants and rhinoceroses spawn less often in savannas and shrublands: weights 16, 15 and 12 [40, 30, 24]
-- **Changed:** Kangaroos and emus spawn half as often in savannas: weights 13 and 10 [25, 20]; badlands unchanged
-- **Changed:** Capuchin monkeys and gorillas spawn less often in jungles: weights 17 and 15 [28, 25]
-- **Changed:** Crocodiles and platypuses spawn half as often on rivers: weight 10 [20]
-- **Changed:** Snow leopards spawn half as often on frozen rivers and snowy beaches: weight 9 [18]
 - **New:** A lone villager now and then spawns in plains, sunflower plains, steppes, valley clearings, meadows, blooming plateaus and highlands, in the light only
 - **New:** Allays spawn in moonlight, lavender and amethyst biomes and the Mirage Isles, in the light only, and inside the Ancient Enchantment Temple and the sky temple
 - **Changed:** Pillager outposts place the allay cage more often: 3 in 16 feature picks [1 in 14]
@@ -343,6 +388,7 @@
 - **Changed:** Let's Do Vinery and Brewin' & Chewin' are listed as "Let's Do Vinery (Creative Brewing)" and "Brewin' & Chewin' (Creative Brewing)" in the mod list, JEI and WTHIT ["Let's Do Vinery Backport (Alfonzo)", "Brewin' & Chewin' Backport (Alfonzo)"]
 - **Changed:** Foundation is listed as "Creative Brewing" ["Foundation Vinery Backport (Alfonzo)"]
 - **Changed:** Veggies Delight, Vintage Delight, Fungi Delight, Miner's Delight and Display Delight come inside Creative Delight and are listed as "(Creative Delight)" in the mod list ["(Backport)"]
+- **Changed:** Salt, Create: The Salt, Canned Goods and Golden Food come inside Creative Delight and are listed with "(Creative Delight)" after their names in the mod list, JEI and WTHIT [no suffix]
 - **Changed:** The pack's own mods no longer end in "(Alfonzo)": Creative Engineering, Baby Mobs, Incubation Additions, More Mooblooms and the Exposure backports
 - **New:** Every item that plants something names its type in the tooltip: "Seed Item", "Plantable Crop", "Sapling", "Fungi Sapling", "Water Plant", "Vine" or "Vertical Crop"
 - **New:** "Plantable Crop" is a food that plants (carrots, berries); "Fungi Sapling" is a mushroom or nether fungus; "Vertical Crop" is sugar cane, cactus, bamboo or a chorus flower
@@ -353,6 +399,9 @@
 - **Changed:** Stepstools no longer say "Worn in the Feet slot"; the "Slot: Feet" line shows it
 - **Removed:** The "Speed Multiplier" tooltip line on blocks; walk speed shows in What The Hell Is That (WTHIT)
 - **Fixed:** Tobacco Package was not renamed to Tobacco Bundle
+- **Fixed:** Inky Cap Cows and Morel Cows had no name
+- **Fixed:** The Mini Cantaloupe Plant and Cantaloupe Stem could show their old names
+- **Changed:** Weak Stomach's description no longer names its causes; its JEI page lists the foods that give it
 
 ## Seasons
 

@@ -137,7 +137,7 @@ FAMILY_KEY = {
     'pie/whole': ('pie', ''), 'pie/slice': ('pie', 'slice'), 'pie/small': ('pie', ''),
     'cake/whole': ('cake', ''), 'cake/slice': ('cake', 'slice'), 'cake/muffin': ('cake', ''), 'dessert/brownie': ('cake', ''),
     'cookie': ('cookie', ''),
-    'dessert/waffle': ('pastry', ''), 'dessert/roll': ('pastry', ''), 'dessert/pastry': ('pastry', ''),
+    'dessert/waffle': ('pastry', ''), 'dessert/roll': ('pastry', ''), 'dessert/pastry': ('pastry', ''), 'dessert/pancake': ('pastry', ''),
     'candy/bar': ('candy', ''), 'candy/piece': ('candy', ''), 'candy/coated': ('candy', ''), 'candy/marshmallow': ('candy', ''),
     'sandwich/square': ('sandwich', 'square'), 'sandwich/roll': ('sandwich', 'roll'), 'sandwich/burger': ('sandwich', 'burger'),
     'sandwich/wrap': ('sandwich', 'wrap'), 'sandwich/toast': ('sandwich', 'toast'),
@@ -240,10 +240,12 @@ def excluded_ids(key_val):
     body = removed[removed.index('global.removedItems'):]
     body = body[:body.index(']')]
     out |= {key_val.get(k) for k in re.findall(r'i\.(\w+)', body)}
-    # merge pairs: the pack's list, and Creative Delight's food lists (<mod>/item_merges.js, item_merges.md 1.1)
-    cd = INSTANCE / 'development/creativeDelight/src/main/resources/kubejs_startup'
-    for p in [LIB / 'item_merges.js', *sorted(cd.glob('*/item_merges.js'))]:
-        out |= {key_val.get(k) for k in re.findall(r'\[\s*i\.(\w+)\s*,\s*i\.\w+\s*\]', p.read_text())}
+    # merge pairs: the pack's list (dict keys), and Creative Delight's swap lists (ids; item_merges.md 1.1, 6)
+    p = LIB / 'item_merges.js'
+    out |= {key_val.get(k) for k in re.findall(r'\[\s*i\.(\w+)\s*,\s*i\.\w+\s*\]', p.read_text())}
+    swaps = INSTANCE / 'development/creativeDelight/src/main/resources/data/creativedelight/swaps'
+    for f in sorted(swaps.glob('merges_*.json')):
+        out |= {old for olds in json.loads(f.read_text()).get('merges', {}).values() for old in olds}
     return out - {None}
 
 

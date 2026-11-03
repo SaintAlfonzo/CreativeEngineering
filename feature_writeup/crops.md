@@ -162,7 +162,7 @@ the plant is caught by the area break when you break a plant with a hoe (breaks 
 | Grape bushes: red, white, savanna, taiga | `vinery:red_grape_bush` etc. | yes | **no** | yes | **no** | probably yes, CR-13 | own pick from stage 2 (back to 1) | pick | yes |
 | Flower bushes (Floral Enchantment, 17 kinds) | `floralench:*_bush` | yes | yes | yes | yes | yes | own pick: stage 2 flowers, stage 3 vine items | pick | yes |
 | Blueberries, Cranberries (plant the berry) | `fruitsdelight:blueberry_bush`, `cranberry_bush` | yes | yes | yes | yes | yes | own pick at stage 4: 1-2 berries (back to 2) | pick | yes |
-| Lemon (two-high bush, plant Lemon Seeds) | `fruitsdelight:lemon_tree` | yes | yes | yes | yes | yes | own pick at stage 4, either half: 2-5 lemons (back to 2; loot table override 2026-11-01) | pick | yes, same height only |
+| Lemon (two-high bush, plant Lemon Seeds) | `fruitsdelight:lemon_tree` | yes | yes | yes | yes | yes | own pick at stage 4, either half: 2-5 lemons (Fruits Delight hard-codes 1-2; CD `LemonTreePickYieldMixin` 2026-11-02), back to age 2; breaking: 2-5 by loot table override 2026-11-01 | pick | yes, same height only |
 | Tea (plant Tea Seeds) | `farmersrespite:small_tea_bush`, then the two-high `tea_bush` | yes | **no** | yes | **no** | yes | **shears only**: leaves by age + 2-3 sticks, back to a small bush. An axe stunts it | no (needs shears) | yes, same height only |
 
 - Grape bushes need a full opaque block below plus their own light rules. See [vinery.md](vinery.md) §2.6.

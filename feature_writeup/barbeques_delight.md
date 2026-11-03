@@ -18,7 +18,8 @@ asks for it by name. Upstream bugs are fixed.
 | Overlap | skewer family (8 pack skewers), pack seasonings framework, wrap/sandwich rules, Create basin name | surveyed (2) |
 | Fold-in | steps 0-19 | built 2026-11-01 (4.0); in `mods/` (CD jar 11-02 14:01), not played |
 | Decisions | O1-O9 (owner, 2026-10-31); D1-D10 | O1-O9 recorded (0.1); D1-D4, D7 answered by them, D5, D6, D8-D10 defaults stand (5) |
-| Tests | BBQ-01..BBQ-21; scratch SQ-BBQ-01..08 | in game: none run. Scratch r1102b (2026-11-02): SQ-BBQ-01, -03, -04, -05 PASS; -02, -06, -07 OPEN (batch faults); -08 not run (needs a player) |
+| Fold (4.5) | seasoning fold, `grilled`, trades, furnace routes, cooked-ingredient craft, names | BUILT 2026-11-03, installed in the CD jar 2026-11-03 00:08, not booted; SQ-BBQF-01 to -07 queued (SQ-CDJ7) |
+| Tests | BBQ-01..BBQ-29; scratch SQ-BBQ-01..08, SQ-BBQF-01..07 | in game: none run. Scratch r1102b (2026-11-02): SQ-BBQ-01, -03, -04, -05 PASS; -02, -06, -07 OPEN (batch faults); -08 not run (needs a player) |
 
 - **Jar:** `barbequesdelight-1.3.0`, mod id `barbequesdelight`, authors lcy0x1 (xkmc), package `com.mao.barbequesdelight`
   (forked from Mao's original). 60 Java classes, about 1,600 lines of logic.
@@ -214,6 +215,8 @@ upstream source of all six is the butcher trade, which the port drops (O6), so u
 are creative or command only.
 
 All six are ported as upstream and marked for folding into the pack framework (O4, `food/seasoning #11`).
+**Folded 2026-11-03 (4.5):** they are pack seasonings now (crafted on, single use, stack 64); the table above is the
+upstream mechanic.
 
 #### 3.3.1 How the pack seasoning system works (for the fold)
 
@@ -273,7 +276,11 @@ Soul campfire merging: only if upstream supports it; otherwise plain campfire on
 
 ### 3.5 Recipes, loot, trades
 
-26 recipes as in 1 (Facts), all ported. No mob or chest loot. The six level-1 butcher trades are **not ported** (O6, which also removes B2). Seasoning trades come back in a comprehensive pass (`food/seasoning #12`) that covers every seasoning, not BBQ's alone.
+26 recipes as in 1 (Facts), all ported. No mob or chest loot. The six level-1 butcher trades were not ported at first
+(O6); **restored 2026-11-03** as upstream sold them (O38, `food/seasoning #18`): butcher level 1, 12 emeralds, 4 uses,
+4 XP, price multiplier 0.05, now giving 64 of a powder or 16 of a sauce (O31). B2 (the novice pool flood) is kept by
+that decision. CD server script `barbequesdelight/trades.js`. The comprehensive pass for every seasoning stays
+`food/seasoning #12`.
 
 ### 3.6 Upstream bugs
 
@@ -347,6 +354,11 @@ skewer burns (B5).
 | Salt | Salt mod | own `Salted` tag, +2 nutrition (separate system) | any | every valid food |
 
 ### 3.9 Skewer names (O23, REVISED by O34 2026-11-02)
+
+**Built 2026-11-03 (4.5):** cooked skewers read plain "Beef Skewer", "Mutton Skewer" and so on (en_us only; the other
+three lang files keep upstream text); raw ones keep "Raw ...". Name prefixes on a skewer: Salted, Garlic, Cumin Flavored,
+Peppered (was Pepper Flavored), Chili Flavored, Honey Mustard Flavored, Buffalo Flavored, Barbeque Flavored. Grilled is
+a tooltip line only.
 
 **Superseded:** cooked skewers get no "Cooked" prefix, uncooked ones say "Raw", seasoned items take the prefixes Chili Flavored, Salted, Peppered and Garlic. The table below is the 2026-10-31 "Cooked" plan and is not to be built; redo it from O34: cooked skewers drop "Grilled" and "Cooked" and read plain "Beef Skewer" and so on; raw ones read "Raw Beef Skewer"; mutton stays (D5).
 
@@ -549,6 +561,36 @@ Each has a default that applies if unanswered.
 - Kebab Sandwich and Bibimbap recipes: defaults (`dishes/meals #48`). Tray: still in evaluation (`largecontent/mod-additions #38`).
 - Pinned: raw pack skewers (`dishes/meals #50`, waits on textures) and seasoning crafts (`food/seasoning #17`).
 
+### 4.5 Fold build (2026-11-03)
+
+Built in one session for `food/seasoning #11`, `#13`, `#18`, `dishes/meals #46` (part) and `#49`. Compiled
+(`:backportedBarbeques:compileJava`, `:creativeDelight:compileJava`), then `:creativeDelight:build`; installed with the CD jar
+2026-11-03 00:08 (member `backportedBarbeques-1.3.0-ce-19.2-01` nested; framework Java, `seasonings.js` and lang are in
+the CD jar), not run in game (last boot 2026-10-31). Scratch rows SQ-BBQF-01 to -07 (queue section SQ-CDJ7); client
+tests BBQ-17, BBQ-22 to -29.
+
+| Part | Built | Where |
+|---|---|---|
+| New seasoning kinds | `fast`, `alwaysEdible`, `damage` (+ `damageType` fire / magic / generic), `transform` {chance, duration, amplifier}, `station`, `combinesAll` | CD `food/Seasonings` (`Kinds`, `Transform`, `foodProperties`, `addFromStation`, `without`, `applyEaten`), parsed from `seasonings.js` |
+| Cap | `[food] maxSeasonings` (default 2, 1-16) and `[food] grilledCountsTowardMax` (default false) in **creativedelight-common.toml** (CD's `CDConfig.Food`, not CEConfig: the framework moved to CD at the carve). `Seasonings.canAdd` refuses a craft past the cap | `CDConfig`, `Seasonings` |
+| Six seasonings | defined once in `seasonings.js` as `barbequesdelight:cumin` (heal 2), `pepper` (fast), `chili` (always edible, 2 fire damage), `honey_mustard` (chance x2, duration x0.5), `buffalo` (2 fire damage, duration x0.5, amplifier +1), `barbeque` (duration x2). Powders on `#barbequesdelight:raw_skewers` + `grilled_skewers`, sauces on `grilled_skewers` only (O28 by tag). No pairs among them (not decided) | `seasonings.js` |
+| Crafts | the existing `seasoning.js` loop emits one `NCH.season` craft per seasoning; one item consumed | no change needed |
+| Click use retired | grill and cutting board seasoning removed; seasoning items lose durability, stack 64; old `BBQSeasoning` NBT is not converted (no conversions) | member `GrillBlock`, `BarbequesDelight`, `SeasoningItem`, `BBQItems` |
+| Fast / always edible / transform on the food | the skewers and combos ask `Seasonings.foodProperties` (member `compat/PackSeasonings`, reflection: members do not compile against CD). Other foods do not get these three kinds until their item asks too | member `BBQSkewerItem`, `BBQSandwichItem` |
+| `grilled` | station seasoning `barbequesdelight:grilled`, +2 saturation points (capped at the food level), no craft, combines with any. The Grill adds it when a flipped skewer finishes; furnace, smoker, campfire and shaped crafts do not. Tooltip "Grilled: +2 saturation" and AppleSkin by the existing seasoning code | `seasonings.js`, member `GrillBlockEntity` |
+| Raw to cooked | the Grill copies the raw skewer's NBT (seasonings included) as before | unchanged |
+| Combos | the combine recipe drops `grilled` from the skewers it stores (O35); eating runs each stored skewer's seasoning bonuses | member `CombineItemRecipe`, `BBQSandwichItem` |
+| Trades | six butcher level-1 trades (3.5) | `barbequesdelight/trades.js` |
+| Furnace routes (O33) | smelting (200 ticks), smoking (100), campfire (600), 0.35 XP, for all 10 lines. Vanilla cooking keeps no NBT: seasonings on a raw skewer are lost on these routes | `recipes.js` |
+| Cooked-ingredient craft (O38, 4.4) | shaped, `_manual_only`, 10 lines: `[' AB', 'ABA', 'S  ']` with 3 A + 2 B (A = the larger: cooked beef / chicken / cod / salmon, baked potato over cooked bacon, cooked rabbit, vegetables over fruits) or `[' AA', 'AAA', 'S  ']` with 5 cooked mutton / brown mushroom / cooked pork. Mushroom and vegetable lines have no cooked form, so raw inputs. The family's sequenced assembly is not built (family recipes later) | `recipes.js` |
+| Family | cooked skewers leave `NO_FAMILY` in `tools/food_families.py` and classify as `skewer` (handheld, "skewer" in the name) at the next `/dumpall` + `food_families` run; that also makes them saltable | `tools/food_families.py` |
+| Names (O34) | 3.9 | member `en_us.json`, `BBQSkewerItem`, `BBQLang` |
+| WTHIT (`ui/wthit #13`) | already built 2026-11-01 (step 17): per-slot countdown, Ready to Flip at half time, Cooked, Burnt | member `compat/wthit` |
+
+Not built: raw pack skewers (`dishes/meals #50`, pinned), seasoning crafting recipes (`food/seasoning #17`, pinned),
+seasoned-icon overlays for the seven new seasonings (no textures; the model lookup finds nothing and draws none, the
+model loader may log a missing-model line per id), the 8 pack skewers as seasonable foods (with `#50`).
+
 ## 5. Decisions for the owner
 
 All answered 2026-11-02 (O38 in 0.1).
@@ -617,17 +659,25 @@ grill). SQ-BBQ-08 not run (bots cannot craft).
 | BBQ-18 | Lit grill-campfire: water, splash water potion, shovel, rain (on stone, then on a coal block) | extinguished by the first three; out in rain on stone, stays lit on a coal block; relit by flint and steel |
 | BBQ-19 | Tray: place, fill 3 slots, stack trays, break the support | storage works, unsupported tray breaks (for the evaluation row) |
 | BBQ-08 | Grill with no heat after half cooking | progress falls back |
-| BBQ-09 | Each powder on a skewer on the grill and on a cutting board | name prefix; durability -1 |
+| BBQ-09 | (retired 2026-11-03 by the fold, see BBQ-22, BBQ-28) | - |
 | BBQ-10 | Eat chili, buffalo, cumin, pepper seasoned skewers | 2 fire damage; 2 fire damage + amplifier +1; heal 2; fast eat |
 | BBQ-11 | Barbeque sauce on beef skewer | Strength 3:00 |
 | BBQ-12 | Eat a cooked skewer | stick returned |
 | BBQ-13 | Kebab wrap (on bread), sandwich, bibimbap by the upstream combine recipes | contents tooltip; skewer effects applied on eating; sticks returned from crafting |
 | BBQ-14 | JEI: Skewering and Grilling categories | pages present with times "each side"; no family mirror recipes |
-| BBQ-15 | Open 12 butcher offers across levels | no BBQ seasoning offered at any level |
+| BBQ-15 | (replaced 2026-11-03 by BBQ-27: trades restored) | - |
 | BBQ-16 | Compost a raw skewer, a cooked skewer, the sandwich, bibimbap; seasoning and tray | 25%, 50%, 75%, 100% chance; seasoning and tray not accepted; JEI/`/dumpcompost` lists 24 rows |
-| BBQ-20 | Sauce on a raw skewer on the grill and on a cutting board; powder on a raw skewer | sauce refused, powder accepted (port rule, O28) |
+| BBQ-20 | Sauce on a raw skewer by craft; powder on a raw skewer | sauce refused, powder accepted (O28, by seasonable tag since 4.5) |
 | BBQ-21 | Season a raw skewer with a powder, grill it | the cooked skewer keeps the seasoning and name prefix |
 | BBQ-17 | WTHIT on the grill with a skewer on each slot | countdown per slot, Ready to Flip at half time; no Jade needed |
+| BBQ-22 | Craft a cooked beef skewer with chili powder, then with honey mustard sauce; try a sauce on a raw skewer | one powder consumed, "Chili Flavored Beef Skewer", tooltip "Chili: edible when full, 1 heart of burn damage"; sauce craft on raw refused (4.5) |
+| BBQ-23 | Chili skewer + pepper craft; set `[food] maxSeasonings = 1` and retry | refused (no pair defined); with onion + garlic popcorn at cap 1 the pair craft is refused |
+| BBQ-24 | Grill a raw skewer seasoned with cumin | cooked skewer has Cumin and Grilled lines, AppleSkin +2 saturation; eating heals 1 heart |
+| BBQ-25 | Smelt, smoke and campfire-cook a raw beef skewer; craft one from 3 cooked beef, 2 cabbage, stick | Beef Skewer without a Grilled line; does not stack with a grilled one |
+| BBQ-26 | Kebab wrap from a grilled skewer | wrap's stored skewer has no Grilled line; a crafted (not grilled) skewer is accepted too |
+| BBQ-27 | Butcher level 1 offers | BBQ seasonings at 12 emeralds, 64 powders or 16 sauces, 4 uses |
+| BBQ-28 | Right-click a skewer on the grill or a cutting board with a seasoning | nothing happens (use retired); seasonings stack to 64 |
+| BBQ-29 | Eat pepper, buffalo, barbeque sauce beef skewers | eaten fast; Strength II 0:45 and 1 heart burn; Strength 3:00 |
 
 ## 9. History
 
@@ -646,3 +696,4 @@ grill). SQ-BBQ-08 not run (bots cannot craft).
   installed.
 - 2026-11-02: owner decisions O31-O38 recorded (0.1): 64 / 16 seasoning conversion, raw meat follows raw chicken with no nasty type, raw skewers smeltable or smokable, new naming rule, skewers as ingredients carry no `grilled`, 4.3 and section 5 answered. Nothing built.
 - 2026-11-02 (deep scan): member in `mods/` since the CD jar of 11-02 14:01; scratch r1102b: SQ-BBQ-01, -03 to -05 PASS, -02, -06, -07 OPEN (batch faults), -08 not run.
+- 2026-11-03: fold built (4.5): BBQ seasonings in the pack framework (new kinds, cap config, crafts, click use retired), `grilled`, butcher trades restored, furnace / smoker / campfire routes, shaped cooked-ingredient craft, O34 names, skewer family membership. Compiled; installed in the CD jar 2026-11-03 00:08, not booted. Tests BBQ-22 to BBQ-29, scratch SQ-BBQF-01 to -07.

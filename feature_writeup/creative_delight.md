@@ -1,5 +1,12 @@
 # Creative Delight: Delight add-on backports and native builds in one jar
 
+**Install state 2026-11-03:** `mods/creativedelight-1.0.0.jar` (2026-11-03 00:08) nests 22 members: Farmer's `-03`,
+Ocean's `-01`, Oceanic `-02`, End's `-03` (with `enders_additions`, section 39), Nether's `-01`, Rustic `-01`, Delightful `-01`,
+Hearth and Harvest `-02`, Cooking for Blockheads Additions `-01`, Incubation Additions 1.1.0, Roll `-01`, Large Meals `-01`,
+Barbeque's `-01`, Veggies `-05`, Vintage `-14`, Fungi `-02`, Miner's `-05`, Display `-03`, Salt `-01`, Create: The Salt `-01`,
+Canned Goods `-01`, Golden Food `-01`. Not booted (last boot 2026-10-31). Run records: plan_creative_delight.md K and L;
+queue sections SQ-CDJ6, SQ-CDJ7. Displaced 2026-11-02: the Salt, Create: The Salt, Canned Goods and Golden Food jars.
+
 **Deep scan 2026-11-02:** the five ports (Veggies `-05`, Vintage `-13`, Fungi `-02`, Miner's `-05`, Display `-03`) are nested members (`development/creativeDelight/members/`), in the installed `mods/creativedelight-1.0.0.jar` (2026-11-02 14:01; the 21:10 build with the copper cup removal is not installed); `server_mods/` and the deployed 1.1.05 / 1.1.06 still hold the standalone jars. Scratch r1102 and r1102b (sections 19.3, 22, 35 tests): see TODO `creativedelight/*` rows. The paragraph below is the 2026-10-31 state.
 
 Written 2026-10-25, scope revised 2026-10-25 (owner). **Status: framework built, scratch test queued (2026-10-25, section 19):**
@@ -36,7 +43,7 @@ engine" now means these scripts.
 | Port | Project | Mod id | Upstream, ported version | Writeup | Test prefix | State (deep scan 2026-11-02) |
 |---|---|---|---|---|---|---|
 | Veggies Delight | `backportedVeggies` | `veggiesdelight` | mehdinoui 1.9.2 (Forge 1.20.1) | [veggies_delight.md](veggies_delight.md) | `VD-` | `-05` nested in the installed CD jar (2026-11-02, `members/veggies`); live since 1.1.01 (deployed `-03`) |
-| Vintage Delight | `backportedVintage` | `vintagedelight` | Ribs 0.1.6 (Forge 1.20.1) + KOTS 0.3.1 ids | [vintage_delight.md](vintage_delight.md) | `VTD-` | `-13` nested in the installed CD jar (2026-11-02, `members/vintage`); live since 1.1.02 (deployed `-07`) |
+| Vintage Delight | `backportedVintage` | `vintagedelight` | Ribs 0.1.6 (Forge 1.20.1) + KOTS 0.3.1 ids | [vintage_delight.md](vintage_delight.md) | `VTD-` | `-14` nested in the installed CD jar (2026-11-03 00:08, `members/vintage`; `-13` on 2026-11-02); live since 1.1.02 (deployed `-07`) |
 | Fungi Delight | `backportedFungi` | `fungidelight` | Eggmain 1.3 (Forge 1.20.1) | [fungi_delight.md](fungi_delight.md) | `FGD-` | `-02` nested in the installed CD jar (2026-11-02, `members/fungi`); live since 1.1.02 (deployed `-01`) |
 | Miner's Delight | `backportedMiners` | `miners_delight` | Sammy Semicolon 1.4.5 + the live 1.1.2 merged | [miners_delight.md](miners_delight.md) | `MND-` | `-05` nested in the installed CD jar (2026-11-02, `members/miners`; the 21:10 copper cup build reuses the `-05` name, not installed); live since 1.1.03 (deployed `-01`) |
 
@@ -44,10 +51,10 @@ engine" now means these scripts.
 
 | Mod | Jar in `mods/` | Mod id | Licence (from `mods.toml`) | Writeup | Integration so far |
 |---|---|---|---|---|---|
-| End's Delight | `ends_delight-1.19.2-2.1.jar` | `ends_delight` | MIT (FoggyHillside) | [ends_delight.md](ends_delight.md) | CD member `repackedEnds` -02 (overlay: dragon loot, tooth tier mixin, 13 textures) and rows in CD `ends_delight/`, BUILT 2026-10-25 (ends_delight.md 5) |
+| End's Delight | `ends_delight-1.19.2-2.1.jar` | `ends_delight` | MIT (FoggyHillside) | [ends_delight.md](ends_delight.md) | CD member `repackedEnds` -03 (overlay: dragon loot, tooth tier mixin, 13 textures; since 2026-11-02 also the `enders_additions` code, ends_delight.md 5.9) and rows in CD `ends_delight/`, BUILT 2026-10-25, -03 installed 2026-11-02 23:16, not booted |
 | Nether's Delight | `NethersDelight-1.19-3.1.jar` (until the CD install moves it out) | `nethersdelight` | MIT (Umpaz) | [nethers_delight.md](nethers_delight.md) | CD member `repackedNethers` -01 (overlay: Potted Mimicarnation, Fungus Colony 4.0 rules mixin, 4.0 recipe paths) and rows in CD `nethersdelight/`, BUILT 2026-11-01, nested in the installed CD jar (2026-11-02; the standalone jar is out of `mods/`) (nethers_delight.md 4.9) |
 | Ender's Delight | `endersdelight-1.19-1.2.2.jar` (to leave `mods/`; donor `enders_upstream/endersdelight-1.2.2.jar`) | `endersdelight` | **All rights reserved** (Ax3dgaming, Furti Two) | [ends_delight.md](ends_delight.md) | dict, cooking, potions, `end.js`, shield and damage tags. **Owner 2026-11-02: becomes a donor-route member nested in CD (section 38.1, `members #33`), not built**; later 2026-11-02 the donor route was DROPPED (section 38.5): Ender's stays its own jar in `mods/`, pack changes fold into the End's member |
-| Ender's Delight Additions | in `creativedelight` (member `endersAdditions`) | `enders_additions` (registers `endersdelight:` ids) | MIT art and data from Ender's 1.1.4 (Axedgaming); code GPL3 | [ends_delight.md](ends_delight.md) 5.3 | BUILT 2026-10-25: 4 End plants, 6 items, End House, Chorus Crate and Endstone Stove loot tables |
+| Ender's Delight Additions | in `creativedelight` (inside member `repackedEnds` since 2026-11-02; was `endersAdditions`) | `enders_additions` (registers `endersdelight:` ids) | MIT art and data from Ender's 1.1.4 (Axedgaming); code GPL3 | [ends_delight.md](ends_delight.md) 5.3, 5.9 | BUILT 2026-10-25: 4 End plants, 6 items, End House, Chorus Crate and Endstone Stove loot tables. Since 2026-11-02 overlay code of `repackedEnds` (second `[[mods]]` entry); member `endersAdditions` deleted |
 | Cooking for Blockheads Additions | in `creativedelight` (member `blockheadsAdditions`); Cooking for Blockheads itself stays `cookingforblockheads-forge-1.19.2-13.3.4.jar` | `blockheads_additions` (registers `cookingforblockheads:` ids) | Cooking for Blockheads **All rights reserved** (BlayTheNinth; modpack use only, no rehosting or published modified files), so not repacked; member code, art and data ours, GPL3 | [kitchen.md](kitchen.md) 9 | BUILT 2026-10-31: 40 wood racks, the CfB mixins, corner storage and counter toppers from patcherMod, fridge fill in code |
 | Ocean's Delight | `oceansdelight-1.0.2-1.19.2.jar` | `oceansdelight` | MIT (Scouter456) | [ocean_delight.md](ocean_delight.md) | names (caviar) only |
 | Oceanic Delight | donor `oceanic_upstream/oceanic_delight-1.0.1-forge-1.19.2.jar` (not in `mods/`) | `oceanic_delight` | MIT upstream; our code GPL3 | [ocean_delight.md](ocean_delight.md) 5.6 | CD member `portedOceanic` `-02` on the donor route (section 36): own code for every upstream id, art and data read from the donor jar; fishing net, dict block, loot tables |
@@ -1150,6 +1157,11 @@ The hamimelon feature keeps reading the pack's block tag `#creativeengineering:w
 
 ### 24.3 Tests (WCD-)
 
+2026-11-03: rule `sea_grape` added (wild sea grape on the sea floor of the warm, lukewarm and deep lukewarm oceans, pack feature
+`creativedelight:wild/sea_grape`, the Oceanic modifier off; ocean_delight.md 8, `farming/wild-crops #6`). `test_wild_crops.sh`
+passes again (69 crop tags match; 68 add modifiers, 51 `forge:none`); its Rhino harness now loads `_biome_rules.js` and the
+mushroom script from `kubejs/data/creativeworldgen/kubejs/worldgen/` (it still pointed at the old server_scripts path).
+
 Offline 2026-10-25: `tools/test_wild_crops.sh` passes (63 crop tags match the generator; 62 add modifiers, 49 `forge:none`,
 1 remove modifier; switch off: nothing; Neapolitan missing: its rows skipped); `test_mushroom_spawns.sh`, `test_wild_flowers.sh`,
 `test_bee_nests.sh` pass on `biome_traits.json`; patcherMod and CD build; the CD jar holds the script, the rules, the 15 features and
@@ -1620,7 +1632,7 @@ before: no gameplay change, so no changelog bullet.
 - **Java (59 classes)**, same subpackages: `oven/` (with `client/`, `jei/`), `lunchbox/` (with `client/`), `cooking/`
   (remainder buffer, with `client/`), `food/` (cans, seasonings, placed-food Spice of Life, powdered sugar), `crops/`
   (crop parity, stem fruit, dandelion maturing, hoe area, CropGrowth); `compat/` AppleSkinSeasonings, CobPipeRenderer,
-  CornDelightCompat, CornDelightCurios, DisplayDelightDishBlocks, DisplayDelightDishes, DyeableCannedGolem,
+  CornDelightCompat, CornDelightCurios, DisplayDelightDishBlocks, DisplayDelightDishes, DyeableCannedGolem (removed 2026-11-02, cans.md 9),
   KubeJSCanAction, RespitePottedTeaBush, TroughRetryAccess; `compat/jei/` CanCraftingCategory, CanPagesJEI,
   FeastPlatingCategory, FeastPlatingJEI, SeasoningCategory, SeasoningJEI; `salt/SaltBlockTicks` (was `block/`).
 - **Mixins (24: 22 common, 2 client)** into gated compartments of `creativedelight.mixins.json` (CDMixinPlugin):
@@ -1628,6 +1640,9 @@ before: no gameplay change, so no changelog bullet.
   block and salt layer ticks, seasoned item model), `quark` 5 (hoe harvest, hoe area x2, own pick, feeding trough),
   `alexsmobs` 2 (seagulls), `immersive_weathering` 2, `farmersdelight` 2 (dandelions on rich soil), `canned_goods` 2,
   `the_dirty_stuff` 1 (tobacco), `salt` 1 (rock salt no-dissolve). Member prefixes unchanged, SRG names, `remap = false`.
+  2026-11-02 (section 39): the two `canned_goods` mixins and the `salt` rock salt mixin are gone, replaced by direct code
+  in the repacked members (`replaced_classes`: Canned Goods `CannedGolemEntity` / `CannedGolemRenderer` with
+  `CannedGolemDye`, cans.md 9; Salt `Dissolving`, salt.md); the two vanilla salt block mixins stay. (The file has grown since the carve: 39 common and 8 client entries on 2026-11-03.)
 - **Registrations** from `CreativeEngineering` to `CreativeDelight.registerKitchen` / `commonSetup` /
   `ClientModEvents`, with the same `ModList` guards. Ids keep the `creativeengineering` namespace (`CreativeDelight.NS`);
   the Netherite Lunchbox keeps `solapplepie:`. `SeasonedItemModel`'s subscriber now uses `modid = creativedelight`.
@@ -1803,7 +1818,7 @@ sha1-pinned in the member's `upstream/UpstreamJars`, read at load into two botto
 | Member | Donor folder and file | sha1 | Source |
 |---|---|---|---|
 | `portedOceanic` (was `repackedOceanic`), mod id `oceanic_delight`, `1.0.1-ce-19.2-02` | `oceanic_upstream/oceanic_delight-1.0.1-forge-1.19.2.jar` | `91fd8842...` | Modrinth O1qboAbB / 9JkMCuAa |
-| `endersAdditions`, mod id `enders_additions`, `1.1.4-ce-19.2-03` | `enders_upstream/endersdelight-1.1.4.jar` | `d1541d70...` | Modrinth 2uEhdGKt / Jaf9wxnO |
+| `endersAdditions`, mod id `enders_additions`, `1.1.4-ce-19.2-03` (since 2026-11-02 inside `repackedEnds` -03, `1.1.4-ce-19.2-04`; section 39) | `enders_upstream/endersdelight-1.1.4.jar` | `d1541d70...` | Modrinth 2uEhdGKt / Jaf9wxnO |
 
 - **Oceanic** (ocean_delight.md 5.6): the repack is replaced by our own code (47 items, 8 blocks, Instant Breath, three
   potions, the loot modifier type, all upstream ids). The licence conflict of 28.1 no longer matters: no upstream class or
@@ -1846,7 +1861,7 @@ MIT grant cover shared content) becomes moot for the new member.
 
 ### 38.2 Cooking and food mods not in Creative Delight
 
-Read from `mods/`, `mod_sides.md` and `development/creativeDelight/members/` on 2026-11-02. Nested members today:
+Read from `mods/`, `mod_sides.md` and `development/creativeDelight/members/` on 2026-11-02. Nested members on that date (2026-11-03 list: top of this file):
 Farmer's, Ocean's, End's, Nether's (built, not installed), Oceanic and Ender's Additions (donor), Rustic, Delightful, Hearth and
 Harvest, Roll, Large Meals, Barbeque's, Cooking for Blockheads Additions, Baby Mobs, Incubation.
 
@@ -1858,7 +1873,7 @@ Harvest, Roll, Large Meals, Barbeque's, Cooking for Blockheads Additions, Baby M
 | Chefs Delight, Engineers Delight, KubeJSDelight | Standalone | No CD folder and no integration found |
 | Storage Delight | `repackedStorage` own jar, not a member | Built but not nested |
 | Cooking for Blockheads | Standalone, ARR | Stays; `blockheads_additions` is the member |
-| Applied Cooking, Golden Food, Create Central Kitchen, Farmer's Structures, Canned Goods, SoL: Apple Pie, The Salt / Salt | Standalone | Cooking or food adjacent, not Delight add-ons; Farmer's Structures has its own donor handling |
+| Applied Cooking, Golden Food, Create Central Kitchen, Farmer's Structures, Canned Goods, SoL: Apple Pie, The Salt / Salt | Standalone (Golden Food, Canned Goods, Salt and Create: The Salt became members 2026-11-02, section 39) | Cooking or food adjacent, not Delight add-ons; Farmer's Structures has its own donor handling |
 | Brewin' and Vinery | Creative Brewing | Not CD |
 
 Decision needed per row (`members #34`): member, donor, or stays separate. Hostile, Display and the three no-folder mods are
@@ -1923,5 +1938,12 @@ Mod ids and registry namespaces stay (old worlds), display names "<Name> (Creati
 `mod_sides.md`, old jars displaced by `:creativeDelight:installToMods`, same `members #10` cutover. Golden Food is the one
 place the donor route earns its cost: folding an ARR mod in leaves no other route. The Salt references were checked (plan_creative_delight.md J2): Creative Brewing and the surface code do not use Salt (that grep hit was
 `basalt`); users are CD, the Vintage member, pack KubeJS, patcherMod's JEI world tab and `salt-common.toml`. Golden Food is a donor member
-(owner: yes). Rows `members #47` to `#50`; plan J2 to J4. Nothing built.
+(owner: yes). Rows `members #47` to `#50`; plan J2 to J4. Built and installed 2026-11-02 night (section 39).
 
+## 39. Built 2026-11-02 night: Salt, Create: The Salt, Canned Goods, Golden Food, the Ender's fold
+
+Salt and Create: The Salt ([salt.md](salt.md)) and Canned Goods ([cans.md](cans.md) 9) are repack members, Golden Food is a donor member
+([golden_food.md](golden_food.md)), Ender's additions live in the End's member ([ends_delight.md](ends_delight.md) 5.9). The
+repack plugin's `replaced_classes` is now used for direct edits of upstream classes (Salt `Dissolving`, Canned Goods golem
+entity and renderer). Swap lists carry CD's item merges (`merges`, `requires`; [item_merges.md](item_merges.md) 6). Run
+record, install state and follow-ups: [plan_creative_delight.md](plan_creative_delight.md) section K.

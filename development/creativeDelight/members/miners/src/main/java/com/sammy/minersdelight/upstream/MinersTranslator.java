@@ -45,9 +45,6 @@ public final class MinersTranslator {
     };
     /** Per-file data edits for later pack decisions, keyed by the translated path; applied before the removed-id check. */
     private static final Map<String, UnaryOperator<JsonObject>> PATCH_DATA = Map.of(
-            // Upstream bug (creativedelight members #41, plan_creative_delight.md I7): the arthropod drop lacks the
-            // not-on-fire check its spider leg sibling has, so a spider killed while burning still dropped raw arthropod.
-            "data/miners_delight/loot_modifiers/scavenging_spider.json", MinersTranslator::notOnFire,
             // The Copper Pot takes a water bucket or a water cup; without cups only the bucket is left (dishes/meals #53).
             "data/miners_delight/recipes/copper_pot.json", MinersTranslator::withoutRemovedAlternatives);
 
@@ -80,6 +77,11 @@ public final class MinersTranslator {
         return assets;
     }
 
+    /**
+     * Upstream data as served. Its loot modifiers (data/forge and data/miners_delight loot_modifiers, the global list
+     * included) are left out: the pack's loot rules give those drops (creativedelight members #51, miners_delight.md D8;
+     * kubejs/data/creativedelight/kubejs/miners_delight/loot.js).
+     */
     public static synchronized Map<String, byte[]> data() {
         if (data == null) {
             data = new HashMap<>();
@@ -91,7 +93,7 @@ public final class MinersTranslator {
                 if (path.startsWith("data/minersdelight/")) {
                     path = "data/miners_delight/" + path.substring("data/minersdelight/".length());
                 }
-                if (namesRemoved(path)) {
+                if (namesRemoved(path) || path.contains("/loot_modifiers/")) {
                     return;
                 }
                 byte[] translated = translateData(path, bytes);
@@ -99,32 +101,9 @@ public final class MinersTranslator {
                     data.put(path, translated);
                 }
             });
-            dropDanglingLootModifiers(data);
             MinersDelightMod.LOGGER.info("Miner's Delight upstream data: {} files", data.size());
         }
         return data;
-    }
-
-    /**
-     * Upstream's global list names five modifiers it never ships (cooked bat wing, squid, tentacles, arthropods and raw
-     * arthropods): Forge would log a parse error for each. Keep only the listed modifiers that have a file.
-     */
-    private static void dropDanglingLootModifiers(Map<String, byte[]> files) {
-        String listPath = "data/forge/loot_modifiers/global_loot_modifiers.json";
-        byte[] bytes = files.get(listPath);
-        if (bytes == null) {
-            return;
-        }
-        JsonObject list = JsonParser.parseString(new String(bytes, StandardCharsets.UTF_8)).getAsJsonObject();
-        JsonArray kept = new JsonArray();
-        for (JsonElement entry : list.getAsJsonArray("entries")) {
-            String[] id = entry.getAsString().split(":", 2);
-            if (files.containsKey("data/" + id[0] + "/loot_modifiers/" + id[1] + ".json")) {
-                kept.add(entry);
-            }
-        }
-        list.add("entries", kept);
-        files.put(listPath, GSON.toJson(list).getBytes(StandardCharsets.UTF_8));
     }
 
     /** Null drops the file. */
@@ -145,7 +124,7 @@ public final class MinersTranslator {
         if (mentionsRemoved(text) && !path.contains("/tags/")) {
             return null;
         }
-        if (path.contains("/loot_modifiers/") || path.contains("/loot_tables/")) {
+        if (path.contains("/loot_tables/")) {
             text = text.replace(ANY_OF, ALTERNATIVE);
             json = null;
         }
@@ -169,31 +148,6 @@ public final class MinersTranslator {
                 }
             }
         }
-        return json;
-    }
-
-    /** Adds the "this entity is not on fire" condition (as in scavenging_spider_leg.json) after the killer condition. */
-    private static JsonObject notOnFire(JsonObject json) {
-        JsonObject flags = new JsonObject();
-        flags.addProperty("is_on_fire", false);
-        JsonObject predicate = new JsonObject();
-        predicate.add("flags", flags);
-        JsonObject condition = new JsonObject();
-        condition.addProperty("condition", "minecraft:entity_properties");
-        condition.addProperty("entity", "this");
-        condition.add("predicate", predicate);
-        JsonArray old = json.getAsJsonArray("conditions");
-        JsonArray conditions = new JsonArray();
-        for (int i = 0; i < old.size(); i++) {
-            conditions.add(old.get(i));
-            if (i == 0) {
-                conditions.add(condition);
-            }
-        }
-        if (old.size() == 0) {
-            conditions.add(condition);
-        }
-        json.add("conditions", conditions);
         return json;
     }
 

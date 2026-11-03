@@ -16,14 +16,7 @@ ServerEvents.recipes(e => {
 		// The pack's egg solution fluid (create/recipes.js in Creative Delight): 250 mB stands in for one egg and its milk.
 		R.createMixing(i.vegetable_omelet, [i.t_cheese_wedge, i.onion, i.carrot, i.bowl, Fluid.of(f.egg_solution, 500)], e,
 			'vegetable_omelet_egg_solution', 'heated')
-		// Quiche: one 500 mB spout in place of the milk and the two eggs of the assembly below
-		var incQuicheEgg = R.incomplete('quiche')
-		R.createSequencedAssembly(i.quiche, i.pie_crust, [
-			e.recipes.create.deploying(incQuicheEgg, [incQuicheEgg, Ingredient.of([i.cooked_bacon, i.brown_mushroom])]),
-			e.recipes.create.filling(incQuicheEgg, [incQuicheEgg, Fluid.of(f.egg_solution, 500)]),
-			e.recipes.create.deploying(incQuicheEgg, [incQuicheEgg, i.t_cheese_wedge]),
-			e.recipes.create.deploying(incQuicheEgg, [incQuicheEgg, Ingredient.of([i.cabbage, i.cabbage_leaf])])
-		], ['quiche'], e, 'quiche_egg_solution_sequenced_assembly', 1)
+		// (quiche: oven only since merges/dishes #8, no egg solution assembly; see Quiche below)
 
 		//######################### Prepared #########################
 		// Scarlet Pierogi: beetroot in place of nether wart
@@ -60,23 +53,16 @@ ServerEvents.recipes(e => {
 			e.recipes.create.deploying(incSandwich, [incSandwich, i.t_bread])
 		], ['ham_and_cheese_sandwich'], e, 'ham_and_cheese_sandwich_smoked_ham_sequenced_assembly', 1)
 
-		// Quiche: one recipe for bacon and mushroom (JEI cycles them), a cabbage leaf or a whole cabbage. TODO dishes/meals #2
+		// Quiche (merges/dishes #8, owner 2026-11-02): baking type, oven only with a pie tin, no plating (the grid recipe and
+		// both sequenced assemblies are gone). Pie crust + cheese wedge + milk + any egg + one filling, one recipe each:
+		// any cooked meat, any fungus, or a leafy green (#forge:salad_ingredients: cabbage, cabbage leaf, dandelion leaf).
+		// Was: bacon or brown mushroom + cabbage + 2 milk + 2 eggs + 2 cheese on a crust in the grid, or the assemblies.
 		R.remove({ id: 'brewinandchewin:quiche_from_bacon' }, e)
 		R.remove({ id: 'brewinandchewin:quiche_from_mushroom' }, e)
-		var quicheFilling = [i.cooked_bacon, i.brown_mushroom]
-		R.shaped(i.quiche, ['blb', 'mcm', 'eCe'], {
-			b: quicheFilling, l: [i.cabbage_leaf, i.cabbage], m: i.milk, c: i.t_cheese_wedge, e: i.minecraft_egg, C: i.pie_crust
-		}, e, 'quiche_manual_only')
-		// Sequenced assembly, one for both fillings
-		var incQuiche = R.incomplete('quiche')
-		R.createSequencedAssembly(i.quiche, i.pie_crust, [
-			e.recipes.create.deploying(incQuiche, [incQuiche, Ingredient.of(quicheFilling)]),
-			e.recipes.create.filling(incQuiche, [incQuiche, Fluid.of(f.milk, 250)]),
-			e.recipes.create.deploying(incQuiche, [incQuiche, i.eggs]),
-			e.recipes.create.deploying(incQuiche, [incQuiche, i.eggs]),
-			e.recipes.create.deploying(incQuiche, [incQuiche, i.t_cheese_wedge]),
-			e.recipes.create.deploying(incQuiche, [incQuiche, Ingredient.of([i.cabbage, i.cabbage_leaf])])
-		], ['quiche'], e, 'quiche_sequenced_assembly', 1)
+		var QUICHE = { exp: 0.1, time: 200, tool: i.t_bakeware_pie_tin }
+		;[['meat', i.t_food_cooked_meat], ['fungus', i.mushrooms], ['greens', i.salad_ingredients]].forEach(q => {
+			R.ceBaking([i.pie_crust, i.t_cheese_wedge, i.milk, i.eggs, q[1]], i.quiche, e, 'quiche_' + q[0], QUICHE)
+		})
 
 		//Horror Lasagna
 		//Make cooked shapeless

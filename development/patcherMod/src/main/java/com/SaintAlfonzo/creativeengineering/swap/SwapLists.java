@@ -12,9 +12,11 @@ import org.slf4j.Logger;
 import java.io.Reader;
 import java.nio.file.Files;
 import java.nio.file.Path;
+import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.HashSet;
+import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
@@ -27,12 +29,18 @@ import java.util.stream.Stream;
  * {
  *   "namespaces": { "old_namespace": "newnamespace" },
  *   "replaces":   { "newmod:thing": ["oldmod:thing", "oldmod:other_thing"] },
- *   "removed":    ["oldmod:dropped_thing"]
+ *   "removed":    ["oldmod:dropped_thing"],
+ *   "merges":     { "mod:survivor": ["othermod:purged"] },
+ *   "requires":   ["othermod", "mod"]
  * }
  * </pre>
  * {@code namespaces} moves every id of the old namespace to the same path in the new one; {@code replaces} names single
  * ids and wins over a namespace rule. {@code removed} names ids dropped with no replacement: an old world loads without the
- * missing-registry warning and those blocks and items are left out (Forge's ignore action), never converted. The lists are never pruned, so a world last saved on any older version can still be
+ * missing-registry warning and those blocks and items are left out (Forge's ignore action), never converted. {@code merges}
+ * (item merges, item_merges.md 6) name two items that are both still registered: the purged one gives way to the survivor in
+ * recipes, loot and tags ({@link #scriptMerges}, read by a jar's startup script) and in every stack in the world
+ * ({@link ItemMerges}); like {@code replaces} they also remap the purged id once it is no longer registered. A file's
+ * {@code requires} (mod ids) gates its merges: they apply only while every listed mod is loaded. The lists are never pruned, so a world last saved on any older version can still be
  * read. Read once, from the jars (not from datapacks: {@link SwapRemapper} needs them before any datapack loads).
  */
 public final class SwapLists {
@@ -43,11 +51,21 @@ public final class SwapLists {
 	private final Map<String, String> namespaces;
 	private final Map<ResourceLocation, ResourceLocation> ids;
 	private final Set<ResourceLocation> removed;
+	private final List<Merge> merges;
 
-	private SwapLists(Map<String, String> namespaces, Map<ResourceLocation, ResourceLocation> ids, Set<ResourceLocation> removed) {
+	/** One item merge: {@code old} gives way to {@code survivor}; listed by {@code modId}, applied while {@code requires} are loaded. */
+	public record Merge(String modId, ResourceLocation old, ResourceLocation survivor, List<String> requires) {
+		public boolean active() {
+			for (String id : requires) if (!ModList.get().isLoaded(id)) return false;
+			return true;
+		}
+	}
+
+	private SwapLists(Map<String, String> namespaces, Map<ResourceLocation, ResourceLocation> ids, Set<ResourceLocation> removed, List<Merge> merges) {
 		this.namespaces = Collections.unmodifiableMap(namespaces);
 		this.ids = Collections.unmodifiableMap(ids);
 		this.removed = Collections.unmodifiableSet(removed);
+		this.merges = Collections.unmodifiableList(merges);
 	}
 
 	public static SwapLists get() {
@@ -74,6 +92,22 @@ public final class SwapLists {
 		return removed.contains(old);
 	}
 
+	/** Every item merge of every jar, in load order (mods, then file names, then list order). */
+	public List<Merge> merges() {
+		return merges;
+	}
+
+	/**
+	 * The active merges of one jar's lists as old id -> survivor id strings, list order: what that jar's startup script hands
+	 * to {@code global.addItemMerges}. Called from KubeJS startup scripts, before the registries fill, so it checks only
+	 * {@code requires}, not whether the items exist.
+	 */
+	public Map<String, String> scriptMerges(String modId) {
+		Map<String, String> out = new LinkedHashMap<>();
+		for (Merge m : merges) if (m.modId().equals(modId) && m.active()) out.put(m.old().toString(), m.survivor().toString());
+		return out;
+	}
+
 	public boolean isEmpty() {
 		return namespaces.isEmpty() && ids.isEmpty() && removed.isEmpty();
 	}
@@ -82,6 +116,8 @@ public final class SwapLists {
 		Map<String, String> namespaces = new HashMap<>();
 		Map<ResourceLocation, ResourceLocation> ids = new HashMap<>();
 		Set<ResourceLocation> removed = new HashSet<>();
+		List<Merge> merges = new ArrayList<>();
+		Set<ResourceLocation> merged = new HashSet<>();
 		int files = 0;
 		for (IModInfo mod : ModList.get().getMods()) {
 			Path dir = mod.getOwningFile().getFile().findResource("data", mod.getModId(), "swaps");
@@ -112,6 +148,22 @@ public final class SwapLists {
 					if (root.has("removed")) {
 						for (JsonElement old : root.getAsJsonArray("removed")) removed.add(new ResourceLocation(old.getAsString()));
 					}
+					if (root.has("merges")) {
+						List<String> requires = new ArrayList<>();
+						if (root.has("requires")) for (JsonElement req : root.getAsJsonArray("requires")) requires.add(req.getAsString());
+						for (Map.Entry<String, JsonElement> e : root.getAsJsonObject("merges").entrySet()) {
+							ResourceLocation survivor = new ResourceLocation(e.getKey());
+							for (JsonElement o : e.getValue().getAsJsonArray()) {
+								ResourceLocation old = new ResourceLocation(o.getAsString());
+								if (!merged.add(old)) {
+									LOGGER.warn("[swaps] {} is merged twice; {}:{} entry skipped", old, mod.getModId(), file.getFileName());
+									continue;
+								}
+								merges.add(new Merge(mod.getModId(), old, survivor, List.copyOf(requires)));
+								ids.putIfAbsent(old, survivor);
+							}
+						}
+					}
 					files++;
 				} catch (Exception e) {
 					LOGGER.error("[swaps] skipped {}:{}: {}", mod.getModId(), file.getFileName(), e.toString());
@@ -119,7 +171,7 @@ public final class SwapLists {
 			}
 		}
 		removed.removeAll(ids.keySet());
-		LOGGER.info("[swaps] {} list file(s): {} namespace move(s), {} single id(s), {} removed id(s)", files, namespaces.size(), ids.size(), removed.size());
-		return new SwapLists(namespaces, ids, removed);
+		LOGGER.info("[swaps] {} list file(s): {} namespace move(s), {} single id(s), {} removed id(s), {} item merge(s)", files, namespaces.size(), ids.size(), removed.size(), merges.size());
+		return new SwapLists(namespaces, ids, removed, merges);
 	}
 }

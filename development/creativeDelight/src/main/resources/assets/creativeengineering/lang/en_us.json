@@ -18,6 +18,16 @@
   "creativeengineering.seasoning.saturation": "+%s saturation",
   "creativeengineering.seasoning.heal": "heals %s hearts",
   "creativeengineering.seasoning.heal_one": "heals 1 heart",
+  "creativeengineering.seasoning.fast": "eaten fast",
+  "creativeengineering.seasoning.always_edible": "edible when full",
+  "creativeengineering.seasoning.damage": "%s hearts of burn damage",
+  "creativeengineering.seasoning.damage_one": "1 heart of burn damage",
+  "creativeengineering.seasoning.hurt": "%s hearts of damage",
+  "creativeengineering.seasoning.hurt_one": "1 heart of damage",
+  "creativeengineering.seasoning.effect_chance": "effect chance x%s",
+  "creativeengineering.seasoning.effect_duration": "effect duration x%s",
+  "creativeengineering.seasoning.effect_duration_div": "effect duration /%s",
+  "creativeengineering.seasoning.effect_level": "effect level +%s",
   "creativeengineering.hoe_harvest.area": "Harvest area: %s",
   "creativeengineering.hoe_harvest.area_even": "Harvest area: %s, toward where you look",
   "creativeengineering.hoe_harvest.how": "Right-click ripe crops to harvest and replant, break plants to clear",
@@ -39,5 +49,6 @@
   "block.creativeengineering.placed_cauliflower_kuku": "Placed Cauliflower Kuku",
   "block.creativeengineering.placed_dandelion_and_eggs": "Placed Dandelion Greens And Eggs",
   "block.creativeengineering.placed_shakshouka": "Placed Shakshouka",
-  "block.creativeengineering.placed_corn_popsicle": "Placed Corn Popsicle"
+  "block.creativeengineering.placed_corn_popsicle": "Placed Corn Popsicle",
+  "block.creativeengineering.placed_sweet_potato_pancakes": "Placed Sweet Potato Pancakes"
 }

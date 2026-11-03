@@ -6,6 +6,17 @@
 // data/creativedelight/kubejs/vintagedelight/recipes.js. Surstromming stays.
 global.removedItems.push(global.item.salted_cod, global.item.salted_salmon)
 
+// One kimchi (merges/dishes #9, owner 2026-11-02): Vintage's kimchi wins. Brewin's kimchi is removed, not merged: hidden
+// in JEI, tags stripped, its recipes not carried over (Creative Brewing's alcohol.js drops the pack's jar recipe). The new
+// kimchi recipes are in data/creativedelight/kubejs/vintagedelight/recipes.js; the id is in Creative Brewing's
+// swaps/removed.json.
+if (Platform.isLoaded('brewinandchewin')) global.removedItems.push(global.item.kimchi)
+
+// One nut butter (merges/dishes #7, owner 2026-11-02): Vintage's nut mash jar is the only one. The nut mash bottle,
+// Delightful's nut butter and its Nut Butter and Jelly Sandwich merge (swaps merges_vintagedelight.json,
+// merges_delightful.json); Delightful's nut dough is removed with its recipe (delightful/recipes.js).
+if (Platform.isLoaded('delightful')) global.removedItems.push(global.item.nut_dough)
+
 // Ghost charcoal is edible (vintageport #13): no hunger, eaten at any time, Wither I 5 s and Fire Resistance 3 min.
 // Still a furnace fuel.
 ItemEvents.modification(e => {

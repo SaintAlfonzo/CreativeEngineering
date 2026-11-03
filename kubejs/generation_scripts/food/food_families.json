@@ -45,7 +45,6 @@
    "delightful:cantaloupe_slice",
    "farmersdelight:pumpkin_slice",
    "fruitsdelight:durian_flesh",
-   "fruitsdelight:hamimelon_slice",
    "fruitsdelight:lemon_slice",
    "fruitsdelight:orange_slice",
    "fruitsdelight:pineapple_slice",
@@ -99,7 +98,6 @@
    "hostiledelight:preparedseapickle",
    "oceanic_delight:sea_pickle_slices",
    "rusticdelight:potato_slices",
-   "creativeengineering:sliced_sweet_potato",
    "veggiesdelight:cauliflower_floret",
    "veggiesdelight:zucchini_slice"
   ],
@@ -224,7 +222,6 @@
    "alexsmobs:flying_fish",
    "alexsmobs:lobster_tail",
    "alexsmobs:raw_catfish",
-   "endersdelight:shulker_mollusk",
    "minecraft:cod",
    "minecraft:salmon",
    "minecraft:tropical_fish",
@@ -236,7 +233,6 @@
    "oceanic_delight:shrimp",
    "oceansdelight:elder_guardian_slab",
    "oceansdelight:guardian_tail",
-   "oceansdelight:tentacles",
    "quark:crab_leg",
    "rusticdelight:calamari",
    "upgrade_aquatic:lionfish",
@@ -247,16 +243,11 @@
    "abnormals_delight:perch_slice",
    "abnormals_delight:pike_slice",
    "alexsdelight:raw_catfish_slice",
-   "endersdelight:shulker_filet",
    "farmersdelight:cod_slice",
    "farmersdelight:salmon_slice",
    "hostiledelight:guardianfillet",
    "hostiledelight:guardianpatty",
-   "miners_delight:tentacles",
-   "oceanic_delight:glow_squid_tentacles",
    "oceanic_delight:shrimp_slices",
-   "oceanic_delight:squid_tentacles",
-   "oceansdelight:cut_tentacles",
    "oceansdelight:elder_guardian_slice",
    "oceansdelight:fugu_slice",
    "rusticdelight:calamari_slice"
@@ -283,8 +274,6 @@
    "farmersdelight:cooked_cod_slice",
    "farmersdelight:cooked_salmon_slice",
    "hostiledelight:cookedguardianfillet",
-   "miners_delight:baked_tentacles",
-   "oceanic_delight:grilled_squid_tentacles",
    "oceansdelight:cooked_elder_guardian_slice",
    "rusticdelight:cooked_calamari_slice"
   ],
@@ -348,7 +337,6 @@
    "hostiledelight:ardentsauce",
    "hostiledelight:glowingsauce",
    "rusticdelight:cooking_oil",
-   "vintagedelight:apple_sauce_bottle",
    "vintagedelight:apple_sauce_jar"
   ],
   "ingredient/other": [
@@ -372,9 +360,7 @@
    "vintagedelight:cucumber_noodles",
    "vintagedelight:nut_mash_bottle",
    "vintagedelight:nut_mash_jar",
-   "vintagedelight:relish_bottle",
    "vintagedelight:relish_jar",
-   "vintagedelight:vinegar_bottle",
    "vintagedelight:vinegar_jar"
   ],
   "preserve": [],
@@ -402,25 +388,24 @@
    "fruitsdelight:pineapple_jelly",
    "fruitsdelight:sweetberry_jelly",
    "upgrade_aquatic:mulberry_jam_bottle",
-   "vintagedelight:glow_berry_jam_bottle",
-   "vintagedelight:glow_berry_jam_jar",
-   "vintagedelight:pepper_jam_bottle",
-   "vintagedelight:pepper_jam_jar",
-   "vintagedelight:sweet_berry_jam_bottle",
-   "vintagedelight:sweet_berry_jam_jar"
+   "vintagedelight:pepper_jam_jar"
   ],
   "preserve/spread": [
    "delightful:nut_butter_bottle"
   ],
   "preserve/pickle": [
    "brewinandchewin:kimchi",
+   "creativeengineering:canned_pickled_beetroot",
+   "creativeengineering:canned_pickled_onion",
+   "creativeengineering:canned_pickled_pepper",
+   "creativeengineering:pickled_sea_pickle",
+   "veggiesdelight:fermented_garlic_honey",
    "vintagedelight:kimchi",
    "vintagedelight:pickle",
    "vintagedelight:pickled_beetroot",
    "vintagedelight:pickled_egg",
    "vintagedelight:pickled_onion",
-   "vintagedelight:pickled_pepper",
-   "veggiesdelight:fermented_garlic_honey"
+   "vintagedelight:pickled_pepper"
   ],
   "jello": [
    "fruitsdelight:apple_jello",
@@ -466,7 +451,7 @@
    "ends_delight:chorus_fruit_pie_slice",
    "farmersdelight:apple_pie_slice",
    "farmersdelight:chocolate_pie_slice",
-   "farmersdelight:sweet_berry_cheesecake_slice",
+   "farmersdelight:pumpkin_pie_slice",
    "farmersrespite:rose_hip_pie_slice",
    "oceanic_delight:sponge_cake_slice",
    "veggiesdelight:sweet_potato_pie_slice"
@@ -499,7 +484,11 @@
    "create_central_kitchen:sweet_berry_cake_slice",
    "create_central_kitchen:yucca_cake_slice",
    "farmersdelight:cake_slice",
+   "farmersdelight:sweet_berry_cheesecake_slice",
    "farmersrespite:coffee_cake_slice",
+   "rusticdelight:cherry_blossom_cheesecake_slice",
+   "rusticdelight:coffee_cheesecake_slice",
+   "rusticdelight:syrup_cheesecake_slice",
    "veggiesdelight:carrot_cake_slice"
   ],
   "cake/muffin": [
@@ -512,6 +501,7 @@
    "abnormals_delight:maple_cookie",
    "abnormals_delight:mulberry_cookie",
    "create_confectionery:gingerbread_man",
+   "creativeengineering:canned_oatmeal_cookie",
    "endersdelight:uncanny_cookies",
    "ends_delight:chorus_cookie",
    "farmersdelight:honey_cookie",
@@ -530,6 +520,9 @@
    "hostiledelight:pearlcookie",
    "minecraft:cookie",
    "miners_delight:bat_cookie",
+   "rusticdelight:cherry_blossom_cookie",
+   "rusticdelight:coffee_cookie",
+   "rusticdelight:syrup_cookie",
    "vintagedelight:oatmeal_cookie"
   ],
   "dessert": [],
@@ -546,11 +539,20 @@
    "hostiledelight:ghastpudding",
    "neapolitan:vanilla_pudding"
   ],
+  "dessert/pancake": [
+   "rusticdelight:cherry_blossom_pancake",
+   "rusticdelight:chocolate_pancake",
+   "rusticdelight:coffee_pancake",
+   "rusticdelight:honey_pancake",
+   "rusticdelight:pancake",
+   "rusticdelight:pumpkin_pancake",
+   "rusticdelight:vegetable_pancake",
+   "veggiesdelight:sweet_potato_pancakes"
+  ],
   "dessert/pastry": [
    "endersdelight:strange_eclair",
    "neapolitan:adzuki_bun",
-   "neapolitan:strawberry_scones",
-   "veggiesdelight:sweet_potato_pancakes"
+   "neapolitan:strawberry_scones"
   ],
   "dessert/waffle": [
    "create_factory:caramel_waffle",
@@ -617,6 +619,7 @@
    "hostiledelight:candiedslime",
    "hostiledelight:glowgummy",
    "hostiledelight:glowwaxshuffle",
+   "neapolitan:chocolate_spider_eye",
    "neapolitan:mint_candies",
    "neapolitan:strawberry_bean_bonbons",
    "neapolitan:vanilla_fudge",
@@ -640,7 +643,6 @@
    "create_factory:ruby_chocolate_apple",
    "create_factory:white_chocolate_apple",
    "fruitsdelight:pear_with_rock_sugar",
-   "neapolitan:chocolate_spider_eye",
    "neapolitan:chocolate_strawberries"
   ],
   "candy/marshmallow": [
@@ -703,7 +705,8 @@
    "miners_delight:squid_sandwich",
    "moredelight:chicken_sandwich_with_egg_and_tomato",
    "moredelight:porkchop_sandwich",
-   "moredelight:steak_sandwich"
+   "moredelight:steak_sandwich",
+   "rusticdelight:syrup_sandwich"
   ],
   "sandwich/burger": [
    "alexsdelight:bison_burger",
@@ -723,6 +726,7 @@
   ],
   "sandwich/wrap": [
    "corn_delight:taco",
+   "delightful:wrapped_cantaloupe",
    "farmersdelight:mutton_wrap",
    "miners_delight:insect_wrap",
    "miners_delight:vegan_wrap",
@@ -745,11 +749,8 @@
    "endersdelight:crispy_skewer",
    "farmersdelight:barbecue_stick",
    "hostiledelight:caveskewer",
-   "miners_delight:tentacles_on_a_stick",
    "nethersdelight:nether_skewer",
    "oceanic_delight:seafood_skewer",
-   "oceansdelight:baked_tentacle_on_a_stick",
-   "oceansdelight:tentacle_on_a_stick",
    "veggiesdelight:turnip_mutton_skewer"
   ],
   "roll": [
@@ -817,10 +818,10 @@
    "corn_delight:nachos_bowl",
    "corn_delight:popcorn",
    "corn_delight:tortilla_chip",
+   "endersdelight:steak_fries",
    "miners_delight:crunchy_bar",
    "miners_delight:nutritional_bar",
-   "oceanic_delight:shrimp_chips",
-   "pneumaticcraft:chips"
+   "oceanic_delight:shrimp_chips"
   ],
   "salad": [
    "alexsdelight:maggot_salad",
@@ -835,7 +836,6 @@
    "hostiledelight:candiedsalad",
    "moredelight:chicken_salad",
    "moredelight:potato_salad",
-   "oceanic_delight:caesar_salad",
    "oceanic_delight:potato_salad",
    "oceanic_delight:sea_salad",
    "oceanic_delight:squid_salad",
@@ -869,7 +869,16 @@
    "hostiledelight:guardiansoup",
    "minecraft:beetroot_soup",
    "miners_delight:bat_soup",
+   "miners_delight:bat_soup_cup",
+   "miners_delight:beetroot_soup_cup",
+   "miners_delight:bone_broth_cup",
    "miners_delight:cave_soup",
+   "miners_delight:cave_soup_cup",
+   "miners_delight:chicken_soup_cup",
+   "miners_delight:noodle_soup_cup",
+   "miners_delight:onion_soup_cup",
+   "miners_delight:pumpkin_soup_cup",
+   "miners_delight:vegetable_soup_cup",
    "moredelight:carrot_soup",
    "oceanic_delight:fish_egg_noodle_soup",
    "quarkdelight:miso_with_bamboo_sprouts",
@@ -894,7 +903,13 @@
    "minecraft:mushroom_stew",
    "minecraft:rabbit_stew",
    "minecraft:suspicious_stew",
+   "miners_delight:baked_cod_stew_cup",
+   "miners_delight:beef_stew_cup",
+   "miners_delight:fish_stew_cup",
    "miners_delight:insect_stew",
+   "miners_delight:insect_stew_cup",
+   "miners_delight:mushroom_stew_cup",
+   "miners_delight:rabbit_stew_cup",
    "neapolitan:adzuki_stew",
    "nethersdelight:strider_moss_stew",
    "oceanic_delight:glow_squid_stew",
@@ -943,7 +958,6 @@
    "quarkdelight:crab_pasta",
    "rusticdelight:bell_pepper_pasta",
    "veggiesdelight:pasta_with_broccoli",
-   "veggiesdelight:potato_noodles",
    "vintagedelight:cheese_pasta"
   ],
   "meal/fried": [
@@ -1010,6 +1024,7 @@
    "rusticdelight:coffee_braised_beef",
    "veggiesdelight:garlic_baked_cod",
    "veggiesdelight:mashed_potatoes",
+   "veggiesdelight:potato_noodles",
    "veggiesdelight:roasted_vegetables",
    "veggiesdelight:steak_and_broccoli",
    "veggiesdelight:turnip_cake",
@@ -1046,7 +1061,6 @@
    "fruitsdelight:lemon_juice",
    "fruitsdelight:orange_juice",
    "fruitsdelight:pear_juice",
-   "neapolitan:strawberry_banana_smoothie",
    "oceanic_delight:nautilus_juice",
    "oceanic_delight:sea_grape_juice",
    "veggiesdelight:carrot_juice",
@@ -1414,7 +1428,6 @@
    "creativeengineering:canned_gongylidia",
    "creativeengineering:canned_green_tea_cookie",
    "creativeengineering:canned_grilled_corn",
-   "creativeengineering:canned_hamimelon",
    "creativeengineering:canned_hawberry",
    "creativeengineering:canned_hoglin_feast",
    "creativeengineering:canned_honey_bread",

@@ -112,6 +112,9 @@ if (global.CD) global.CD.genPut('food_types', 'vintagedelight', {
   "canned_ghostly_chili": [
    "ghostly_chili"
   ],
+  "canned_kimchi": [
+   "vintagedelight_kimchi"
+  ],
   "canned_oatmeal": [
    "oatmeal"
   ],

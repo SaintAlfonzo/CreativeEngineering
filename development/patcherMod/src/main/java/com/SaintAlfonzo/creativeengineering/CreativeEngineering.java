@@ -101,6 +101,10 @@ public class CreativeEngineering
         // Corn Delight cob pipe: Creative Delight (2026-11-01).
         // Swap lists (swap/, Common API): every jar's data/<modid>/swaps/*.json remaps ids it moved when a world loads.
         MinecraftForge.EVENT_BUS.register(com.SaintAlfonzo.creativeengineering.swap.SwapRemapper.class);
+        // Item merges in the lists ("merges", both items still registered): stacks in the world become the survivor
+        // (swap/ItemMerges, triggers in creativeengineering-swaps.toml; feature_writeup/item_merges.md 6).
+        ModLoadingContext.get().registerConfig(ModConfig.Type.COMMON, com.SaintAlfonzo.creativeengineering.swap.SwapConfig.SPEC, "creativeengineering-swaps.toml");
+        MinecraftForge.EVENT_BUS.register(com.SaintAlfonzo.creativeengineering.swap.ItemMerges.class);
         // Remainder buffer (cooking/): Creative Delight (2026-11-01); the WTHIT line reads compat.RemainderView.
         // Cooking for Blockheads corner storage and counter toppers moved to Creative Delight's blockheadsAdditions (2026-10-31).
         // Armor Trims' item lists cached once the registry locks; the trimmable list resets on tag reload (perf.md 10.2 #1).

@@ -9,6 +9,7 @@
     "upgrade_aquatic.MulberryJamMasonJarMixin",
     "fruitsdelight.FruitsDelightLeafCheckMixin",
     "fruitsdelight.MangosteenCakeEffectMixin",
+    "fruitsdelight.LemonTreePickYieldMixin",
     "farmersdelight.CookingPotRemainderMixin",
     "farmersdelight.CookingPotMenuRemainderMixin",
     "farmersrespite.KettleRemainderMixin",
@@ -25,7 +26,6 @@
     "supplementaries.SuppTomatoClimbTreatedStickMixin",
     "alexsmobs.AlexsMobsSeagullItemMixin",
     "alexsmobs.AlexsMobsSeagullStealMixin",
-    "canned_goods.CannedGolemColorMixin",
     "farmersdelight.DandelionRichFarmlandMixin",
     "farmersdelight.DandelionRichSoilMixin",
     "immersive_weathering.DandelionFertileSoilMixin",
@@ -43,7 +43,6 @@
     "quark.QuarkHoeAreaHarvestMixin",
     "quark.QuarkHoeHarvestMixin",
     "quark.QuarkOwnPickMixin",
-    "salt.SaltRockNoDissolveMixin",
     "the_dirty_stuff.TobaccoPlacementMixin"
   ],
   "client": [
@@ -54,7 +53,6 @@
     "farmersrespite.KettleJeiBaseMixin",
     "farmersdelight.CookingPotMealTooltipMixin",
     "farmersrespite.KettleMealTooltipMixin",
-    "canned_goods.CannedGolemRendererMixin",
     "minecraft.SeasonedItemModelMixin"
   ],
   "server": [],

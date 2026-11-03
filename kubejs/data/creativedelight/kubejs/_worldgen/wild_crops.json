@@ -343,6 +343,15 @@
       "notes": "Myrtrees adds its tree from Java (Architectury biome modification, id minecraft:rubber_tree_placement; 1% of chunks x 5 trees, any forest/taiga/jungle). Removed everywhere, pack copy in 1 chunk of 4 in jungles."
     },
     "fig": { "label": "Fig (tree)", "where": ["cold forest !snowy"], "features": ["fruitsdelight:tree/fig_tree"], "disable_modifiers": ["fruitsdelight:fig"] },
+    "sea_grape": {
+      "label": "Sea Grape",
+      "where": [],
+      "add": ["minecraft:warm_ocean", "minecraft:lukewarm_ocean", "minecraft:deep_lukewarm_ocean"],
+      "features": ["creativedelight:wild/sea_grape"],
+      "disable_modifiers": ["oceanic_delight:patch_wild_sea_grape_biome_modifier"],
+      "requires": "oceanic_delight",
+      "notes": "Oceanic Delight (Creative Delight member); the sea floor of the mod's three warm oceans. Pack feature wild/sea_grape: the newer Oceanic jar's patch (64 tries, spread 6; was 32 / 5), 1 in 30 chunks as the mod's (starting density, farming/wild-crops #6); the mod's own modifier off. 'add' because ocean biomes never match a where clause."
+    },
     "hawberry": { "label": "Hawberry (tree)", "where": ["cold forest !snowy"], "features": ["fruitsdelight:tree/hawberry_tree"], "disable_modifiers": ["fruitsdelight:hawberry"] },
     "persimmon": { "label": "Persimmon (tree)", "where": ["snowy forest"], "features": ["fruitsdelight:tree/persimmon_tree"], "disable_modifiers": ["fruitsdelight:persimmon"] },
     "rooted_dirt": {

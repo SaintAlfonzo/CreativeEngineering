@@ -14,6 +14,17 @@
 //   saturation saturation points added, capped at food (optional)
 //   heal       health points healed, 2 = one heart     (optional)
 //   effects    [{ effect, duration (ticks), amplifier }] (optional)
+//   Kinds from the Barbeque's Delight fold (food/seasoning #11), all optional:
+//   fast         true: eaten fast (16 ticks)
+//   alwaysEdible true: edible when full
+//   damage       health points of damage on eating; damageType 'fire' (default), 'magic' or 'generic'
+//   transform    { chance, duration, amplifier }: each of the food's own effects gets chance x chance, duration x
+//                duration, amplifier + amplifier. fast, alwaysEdible and transform reach a food only if its item asks
+//                food/Seasonings.foodProperties (the Barbeque's Delight skewers and combos do)
+//   station      true: put on by a station only (the Grill's grilled), never crafted; counts toward the cap only
+//                with creativedelight-common.toml [food] grilledCountsTowardMax
+//   combinesAll  true: shares a food with any seasoning
+//   The cap on seasonings per food is creativedelight-common.toml [food] maxSeasonings (default 2).
 //   combines   keys of seasonings that may share a food with this one; either side listing the other is enough.
 //              Unlisted pairs don't combine.
 //   Which foods take it (the tag #<ns>:seasonable/<path>, built by kubejs/data/creativedelight/kubejs/creativeengineering/seasoning_tags.js):
@@ -47,6 +58,29 @@ global.seasoning = {
 	// (config/salt-common.toml SaltingNutrition / SaltingSaturationModifier; absolute saturation = nutrition * modifier * 2).
 	void_pepper: { id: 'creativeengineering:void_pepper', name: 'Void Pepper', item: i.crushed_voidpepper,
 		nutrition: 2, saturation: 0.4, needs: 'enders_additions', families: [], add: [i.popcorn] },
+
+	// Barbeque's Delight (food/seasoning #11, barbeques_delight.md 4.1, seasonings.md): the six upstream seasonings,
+	// values as 1.3.0. Powders go on raw and cooked BBQ skewers (a raw skewer's seasonings carry over when it is
+	// grilled); sauces on cooked ones only (O28). One item per craft: a trade gives 64 powders or 16 sauces (O31).
+	// No pairs among the six (upstream allowed one per skewer); the proposed pairs of seasonings.md 4 are not decided.
+	// Foods by tag for now; the 8 pack skewers join with their raw versions (dishes/meals #50).
+	cumin: { id: 'barbequesdelight:cumin', name: 'Cumin', item: i.cumin_powder, heal: 2,
+		needs: 'barbequesdelight', families: [], add: [i.t_raw_skewers, i.t_grilled_skewers] },
+	pepper: { id: 'barbequesdelight:pepper', name: 'Pepper', item: i.pepper_powder, fast: true,
+		needs: 'barbequesdelight', families: [], add: [i.t_raw_skewers, i.t_grilled_skewers] },
+	chili: { id: 'barbequesdelight:chili', name: 'Chili', item: i.chili_powder, alwaysEdible: true, damage: 2,
+		needs: 'barbequesdelight', families: [], add: [i.t_raw_skewers, i.t_grilled_skewers] },
+	honey_mustard: { id: 'barbequesdelight:honey_mustard', name: 'Honey Mustard', item: i.honey_mustard_sauce,
+		transform: { chance: 2, duration: 0.5 }, needs: 'barbequesdelight', families: [], add: [i.t_grilled_skewers] },
+	buffalo: { id: 'barbequesdelight:buffalo', name: 'Buffalo', item: i.buffalo_sauce, damage: 2,
+		transform: { duration: 0.5, amplifier: 1 }, needs: 'barbequesdelight', families: [], add: [i.t_grilled_skewers] },
+	barbeque: { id: 'barbequesdelight:barbeque', name: 'Barbeque', item: i.barbeque_sauce,
+		transform: { duration: 2 }, needs: 'barbequesdelight', families: [], add: [i.t_grilled_skewers] },
+	// Grilled (food/seasoning #13): put on only by the Grill when a flipped raw skewer finishes (station: no craft,
+	// no foods). +2 saturation points; does not count toward [food] maxSeasonings unless grilledCountsTowardMax.
+	// Combines with any seasoning. Combos (wrap, sandwich, bibimbap) drop it from the skewers they hold (O35).
+	grilled: { id: 'barbequesdelight:grilled', name: 'Grilled', saturation: 2, station: true, combinesAll: true,
+		needs: 'barbequesdelight', families: [], add: [] },
 }
 
 ;(function () {
@@ -71,6 +105,13 @@ global.seasoning = {
 			heal: s.heal || 0,
 			effects: s.effects || [],
 			combines: combines,
+			fast: !!s.fast,
+			alwaysEdible: !!s.alwaysEdible,
+			damage: s.damage || 0,
+			damageType: s.damageType || 'fire',
+			transform: s.transform || {},
+			station: !!s.station,
+			combinesAll: !!s.combinesAll,
 		}))
 	})
 })()

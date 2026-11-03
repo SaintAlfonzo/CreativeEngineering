@@ -113,6 +113,7 @@ One type per food. A `/` nests a type under its parent, and the tag of a nested 
 | `baked` | bread and buns | 12 | 5 / 0.4 | bread, sourdough bread, banana bread, adzuki bun |
 | `dairy` | cheese | 2 | 4 / 1 | flaxen and scarlet cheese wedges |
 | `sweet` | cake/pie slices, cookies, candy, chocolate, ice cream | 185 | 4 / 0.35 | cake slice, cookie, candies, waffles, ice cream |
+| `sweet/pancake` | pancakes eaten as items (added 2026-11-02, pancake family, [food_families.md](food_families.md) 4.7) | 7 | 4 / 0.6 | Rustic's six flavoured pancakes, Sweet Potato Pancakes |
 | `handheld` | sandwiches, burgers, wraps, rolls, skewers, stuffed veg | 52 | 10 / 0.8 | hamburger, kelp roll, barbecue stick, pizza slice |
 | `salad` | salads | 11 | 6 / 0.6 | mixed salad, fruit salad, potato salad |
 | `soup` | soups, stews, broths | 31 | 10 / 0.7 | beef stew, chicken soup, bone broth, rabbit stew |
@@ -576,6 +577,19 @@ for `Salted` (hunger + Salt's nutrition, modifier + Salt's modifier, as its eati
 pack handler runs at `LOWEST` priority, after Salt's, so a salted and seasoned food shows salt's total plus the pack
 bonus; before, the order was undefined and Salt's modifier could be added on top of the pack's recomputed one. FO-54.
 
+**Barbeque's Delight fold (2026-11-03, `food/seasoning #11`, `#13`; [barbeques_delight.md](barbeques_delight.md) 4.5):**
+built, installed in the CD jar 2026-11-03 00:08, not booted (SQ-BBQF-01 to -07). New definition kinds: `fast`, `alwaysEdible`, `damage` (+ `damageType`), `transform`
+{chance, duration, amplifier} rewriting the food's own effects, `station` (no craft; `grilled`) and `combinesAll`.
+`damage` and the bonuses run in `onEaten` (damage before heal) for any food; `fast`, `alwaysEdible` and `transform` need
+the item to call `Seasonings.foodProperties(stack, base)` from its `getFoodProperties(stack, entity)`, which only the
+Barbeque's Delight skewers and combos do now (Forge 43 eating reads the stack's food properties). Cap: `canAdd` refuses
+past `creativedelight-common.toml [food] maxSeasonings` (default 2); station seasonings count only with
+`grilledCountsTowardMax` (default false). Crafts never put a station seasoning on (`SeasoningRecipe`). The tooltip line
+gains "eaten fast", "edible when full", "1 heart of burn damage", "effect chance x2", "effect duration /2", "effect level
++1". Seven new definitions in `seasonings.js`: the six BBQ seasonings and `grilled` (+2 saturation, put on by the Grill).
+Members reach the framework by reflection (`backportedBarbeques` `compat/PackSeasonings`). No seasoned-icon overlays for
+the seven yet.
+
 **Seasoned icons (2026-10-26):** patcherMod `food/SeasonedItemModel` (client) draws one overlay per seasoning over a
 seasoned food's own model, salt first (Salt's `salt:item/salted_overlay`), then each pack seasoning in NBT order
 (`creativeengineering:item/seasoned/<path>`, a missing model draws nothing). Hooked by `mixin/SeasonedItemModelMixin`
@@ -674,7 +688,7 @@ also reaches Slice & Dice's heated-mixer copy; was wheat flour since the oven au
 ([rusticdelight/recipes.js](../kubejs/data/creativedelight/kubejs/rusticdelight/recipes.js); was 2 wheat flour). Cornbread
 batter (Corn Delight, cornmeal) is a different item and unchanged. FO-58.
 
-### 3.16 Golden and gilded food (DECIDED 2026-11-02, not built)
+### 3.16 Golden and gilded food (DECIDED 2026-11-02; values, names and recipes BUILT 2026-11-03, [golden_food.md](golden_food.md) 3.4 to 3.7)
 
 Owner decisions. Replaces the "enchanted golden foods 8 / 8" values (TODO `food/types-and-tuning #3`) and the old D2.
 
@@ -700,7 +714,8 @@ Vanilla ratios: hunger x1 (apple to golden apple) and x2 (carrot to golden carro
 
 **Recipes (new rule).**
 - **Golden food:** shaped, the input food plus **8 gold nuggets** (replaces whatever the goldenfood recipes use today).
-- **Gilded food:** a **sequenced assembly** (Create) on the golden food: 8 loops, each adding 1 gold ingot and 125 mB of experience fluid (8 ingots and 1000 mB in total). The result is the gilded food.
+- **Gilded food:** a **sequenced assembly** (Create) on the golden food: 8 loops, each adding 1 gold ingot and 125 mB of experience fluid (8 ingots and 1000 mB in total). The result is the gilded food. Confirmed by the owner 2026-11-03 for every gilded food, the gilded apple included; built in the `goldenEnchant` helper (press step kept).
+- **Built 2026-11-03 (golden_food.md 3.4a, 3.6, 3.7):** multipliers in `kubejs/generation_scripts/food/food_tuning.json` `golden`, applied by CD `goldenfood/golden_values.js` to the apple, carrot and Golden Food's 21 food pairs (the saturation modifier stays the input's, so a capped food's saturation is capped with it); gilded names by client lang. Open: the golden apple recipe (still 8 ingots), the two cakes' values, the pack's other golden foods (glistering melon, moss clump, nutritional bar, roll).
 - Rows `food/types-and-tuning #22` (recipes) and `#23` (gilded names).
 
 ### 3.17 Raw meat, cans and Spice of Life (DECIDED 2026-11-02, not built)

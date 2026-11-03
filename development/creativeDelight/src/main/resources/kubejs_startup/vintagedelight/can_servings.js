@@ -4,6 +4,7 @@
 // Servings per can, vintagedelight part. Readers merge every part with global.CD.genMerge('can_servings') (creative_delight.md 28.2).
 if (global.CD) global.CD.genPut('can_servings', 'vintagedelight', {
  "servings": {
+  "canned_kimchi": 4,
   "canned_pickled_pickles": 4,
   "canned_cucumber": 2,
   "canned_ghost_pepper": 2,

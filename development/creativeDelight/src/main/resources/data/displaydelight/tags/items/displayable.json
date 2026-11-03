@@ -38,6 +38,10 @@
       "required": false
     },
     {
+      "id": "veggiesdelight:sweet_potato_pancakes",
+      "required": false
+    },
+    {
       "id": "creativeengineering:corn_popsicle",
       "required": false
     }

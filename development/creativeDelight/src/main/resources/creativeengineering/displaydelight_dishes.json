@@ -17,6 +17,7 @@
     {"block": "placed_cauliflower_kuku", "item": "veggiesdelight:cauliflower_kuku", "dish": "bowl", "crop": [4, 5, 12, 10]},
     {"block": "placed_dandelion_and_eggs", "item": "veggiesdelight:dandelion_and_eggs", "dish": "bowl", "crop": [4, 5, 12, 10]},
     {"block": "placed_shakshouka", "item": "veggiesdelight:shakshouka", "dish": "bowl", "crop": [4, 5, 12, 10]},
+    {"block": "placed_sweet_potato_pancakes", "item": "veggiesdelight:sweet_potato_pancakes", "dish": "bowl", "crop": [4, 3, 12, 8]},
     {"block": "placed_corn_popsicle", "item": "creativeengineering:corn_popsicle", "dish": "plate", "name": "Corn Popsicle"}
   ]
 }

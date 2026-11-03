@@ -267,9 +267,8 @@ EXPLICIT = [
     ('cooked_veggie', 'canned_boiled_corn', 'Canned Boiled Corn', ['boiled_corn'], False),
     ('cooked_veggie', 'canned_dried_banana', 'Canned Dried Banana', ['dried_banana'], False),
     ('cooked_veggie', 'canned_dried_persimmon', 'Canned Dried Persimmon', ['dried_persimmon'], False),
-    # Vintage Delight's kimchi and pickle are the same foods as Brewin's (vintage_delight.md 3.1, both ship until VTD-40):
-    # they fill the same can; the value source stays Brewin's
-    ('cooked_veggie', 'canned_kimchi', 'Canned Kimchi', ['kimchi', 'vintagedelight_kimchi'], False),
+    # Kimchi merged (merges/dishes #9, owner 2026-11-02): Brewin's kimchi is removed, Vintage Delight's fills the can
+    ('cooked_veggie', 'canned_kimchi', 'Canned Kimchi', ['vintagedelight_kimchi'], False),
     ('cooked_veggie', 'canned_pickled_pickles', 'Canned Pickles', ['pickle', 'pickled_sea_pickle'], False),   # pickled pickles merged (dishes/pickles-and-ferments #1)
     ('cooked_veggie', 'canned_roasted_adzuki_beans', 'Canned Roasted Adzuki Beans', ['roasted_adzuki_beans'], False),
     ('cooked_veggie', 'canned_grilled_corn', 'Canned Grilled Corn', ['grilled_corn'], False),

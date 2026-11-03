@@ -1,7 +1,7 @@
 # Creative Worldgen
 
 Written 2026-11-02 (Creative Split wave 5, [creative_split.md](creative_split.md) 7.6 and 7.10; TODO `creativesplit/worldgen #8`).
-Status: **carved 2026-11-02, built, NOT installed; scratch SQ-CWG queued, nothing booted.**
+Status: **carved 2026-11-02, built, installed 2026-11-02 23:16 (`mods/creativeworldgen-1.0.0.jar`, with patcherMod 1.1.08 and the CD jar; moreMooblooms 1.1.0 displaced); scratch SQ-CWG queued, nothing booted.** Creative Delight's Miner's drops need this jar (`loot/09_drops.js`, miners_delight.md 8.1).
 
 Written for: the owner and agents working on the split. Own mod `creativeworldgen` (development/creativeWorldgen,
 `creativeworldgen-1.0.0.jar`, side both): the pack's world generation and fauna. A bundle like Creative Delight: its

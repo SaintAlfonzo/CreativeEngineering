@@ -575,6 +575,13 @@ filter value against the live cave biomes, and the starting rates above (FGD-28)
 
 ## 9. History
 
+- 2026-11-03 (CD members run): the two cows had no entity name (`entity.fungidelight.inky_cap_cow` / `morel_cow` missing
+  from the member lang): added as Inky Cap Cow and Morel Cow (`ui/names #13`). Weak Stomach's description drops "From eating
+  inky caps or durian." and the effect gets a JEED provider: the `#fungidelight:alcohol_reaction` foods (Creative Brewing
+  `jeed_providers.js`, `ui/effects #12`). Burrowing's description had no "from" wording; it comes only from its potions,
+  which JEED lists by itself, so it needs no provider row. In the CD and Creative Brewing jars installed 2026-11-03
+  00:08, not booted; client row CQ-CDM2-01 (queue section SQ-CDJ7).
+
 - 2026-10-23: investigation written from the Forge 1.20.1 1.3 jar (downloaded from Modrinth, decompiled, 53 classes)
   and the NeoForge 1.21.1 1.3 jar already in `DecompiledMods/` (same content), checked against the pack's
   display-name, tag, biome and recipe exports, the FD 1.19.2-1.2.4 classes and the Forge 1.19.2 source. Found: no

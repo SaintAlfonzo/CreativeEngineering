@@ -15,6 +15,8 @@
 //   L.add(tables, item, { share | weight, count, pool, nbt, except })
 //   L.addPool(tables, poolJson)  L.restoreInjection(tables, poolJson, { mod })
 //   L.useVanilla(tables, { winner })  L.alias(missingTable, sourceTable | [poolJson])
+//   L.drop(tables, item, { count, chance, looting, knife, burning, cooked, tool })  L.dropShare(table, item, share)
+//                                                 mob, block and fishing tables (09_drops.js)
 // target: 'ns:id' | '@modid' | '/regex/' | '#ns:tag' (a global.item key), or a list of those.
 // tables: 'ns:table' | '@mod' | '/regex/' | a JS regex | a list.
 //

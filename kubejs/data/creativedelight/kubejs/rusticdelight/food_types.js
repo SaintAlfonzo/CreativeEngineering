@@ -32,6 +32,14 @@ if (global.CD) global.CD.genPut('food_types', 'rusticdelight', {
   "cooked/fish/sliced": [
    "cooked_calamari_slice"
   ],
+  "sweet/pancake": [
+   "cherry_blossom_pancake",
+   "chocolate_pancake",
+   "coffee_pancake",
+   "honey_pancake",
+   "pumpkin_pancake",
+   "vegetable_pancake"
+  ],
   "handheld": [
    "calamari_roll",
    "spring_rolls",

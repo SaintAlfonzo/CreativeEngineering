@@ -1,6 +1,7 @@
 package com.SaintAlfonzo.creativedelight.barbeques.block;
 
 import com.SaintAlfonzo.creativedelight.barbeques.BBQLang;
+import com.SaintAlfonzo.creativedelight.barbeques.compat.PackSeasonings;
 import com.SaintAlfonzo.creativedelight.barbeques.recipe.GrillingRecipe;
 import com.SaintAlfonzo.creativedelight.barbeques.registry.BBQBlocks;
 import com.SaintAlfonzo.creativedelight.barbeques.registry.BBQItems;
@@ -35,8 +36,8 @@ import javax.annotation.Nullable;
 
 /**
  * The Grill's two slots (1.3.0 GrillBlockEntity). Per slot, progress counts up while heated and down by 2 per tick while
- * cold (B5, kept). Flip from half time; a flipped skewer turns into its grilled form at full time, keeping its NBT (so a
- * seasoning carries over); at twice the time it becomes a Burnt Skewer (seasoning lost, B5). Unflipped skewers only burn.
+ * cold (B5, kept). Flip from half time; a flipped skewer turns into its grilled form at full time, keeping its NBT (so
+ * its seasonings carry over) and gaining the pack seasoning {@code grilled} (food/seasoning #13); at twice the time it becomes a Burnt Skewer (seasoning lost, B5). Unflipped skewers only burn.
  * Heat: a Farmer's Delight heat source below, or the grill's own lit campfire.
  *
  * Port changes: B1 (a burnt entry no longer re-syncs every tick); the campfire goes out in rain by the pack rule
@@ -240,6 +241,8 @@ public class GrillBlockEntity extends BlockEntity implements HeatableBlockEntity
                     if (tag != null) {
                         stack.getOrCreateTag().merge(tag.copy());
                     }
+                    // food/seasoning #13: grilling on the Grill (only here) adds the grilled seasoning
+                    PackSeasonings.addGrilled(stack);
                     be.inventoryChanged();
                 }
             }

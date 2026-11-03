@@ -494,7 +494,7 @@ End's Delight and Ender's Delight CD members. These decisions override the 7.6 r
 | `oven/` (11), `lunchbox/` (10), `food/` (9; `IntoxicatingDrinkTooltip` went to CB), `cooking/` (6), `crops/` (7) | `development/creativeDelight/src/main/java/com/SaintAlfonzo/creativedelight/`; nothing left in patcherMod |
 | incubationAdditions | CD member `members/incubation` (mod id unchanged) |
 | End's Delight | CD member `repackedEnds` (repack of the MIT 2.1 jar) |
-| Ender's Delight | ARR, so the jar stays in `mods/`; MIT 1.1.4 content is CD member `endersAdditions` |
+| Ender's Delight | ARR, so the jar stays in `mods/`; MIT 1.1.4 content is CD member `endersAdditions` (inside the End's member `repackedEnds` since 2026-11-02) |
 | Cooking for Blockheads | ARR, so the jar stays in `mods/`; CD member `blockheadsAdditions` |
 
 Owner, 2026-11-01: Ender's and Cooking for Blockheads stay additions members ("member" = the additions member plus every
@@ -565,7 +565,7 @@ rides the Worldgen carve. Game closed for every install: `./gradlew :creativeCom
 **Changelog.** Steps 1, 3, 4 are same-behaviour moves: no bullet. Step 2 brings Nether's 4.0 changes (Potted
 Mimicarnation, colony rule, renames) to players: bullets under a `## Nether's Delight` family when built.
 
-### 7.10 Wave 5 as built (2026-11-02; built, NOT installed, not tested)
+### 7.10 Wave 5 as built (2026-11-02; built, installed 2026-11-02 23:16, not booted, not tested)
 
 Creative Worldgen carved: [creative_worldgen.md](creative_worldgen.md) holds the detail (what moved, edges, what stayed
 in the pack folder and why). In short: 59 classes plus 4 new, 60 mixins, 6 config tables (`[perf]` mob cap keys only),
@@ -608,3 +608,4 @@ script packs load in no fixed order, so CD's loot rules now queue through `globa
   taken from the 1.1.05 jars through 1.1.06 to 1.1.07; three bugs fixed (7.8). Next: install wave 4, client rows.
 - 2026-11-01, wave 4 close: `harvest.js` goes to Equipment; wave 4 jars installed to the dev instance; client tests pinned until wave 8+.
 - 2026-11-02, wave 5 (7.10): Creative Worldgen carved with fauna, More Mooblooms and Baby Mobs; built, not installed. Next: SQ-CWG, then wave 6 (Magic).
+- 2026-11-02 23:16, wave 5 installed by the Creative Delight plan-K session (plan_creative_delight.md K): `creativeworldgen-1.0.0.jar` and patcherMod 1.1.08 went into `mods/` with the new CD jar, because 1.1.08 (swappers) is built from the wave-5 tree and the Miner's loot rules use Worldgen's new `loot/09_drops.js`. moreMooblooms-1.1.0.jar displaced. Not booted; SQ-CWG still open. Revert: put back patcherMod 1.1.07 and moreMooblooms from the `jar_archive/displaced/` folders and remove the Worldgen jar (then CD's Miner's drops log an error).

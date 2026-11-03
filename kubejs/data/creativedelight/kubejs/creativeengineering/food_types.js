@@ -31,6 +31,7 @@ if (global.CD) global.CD.genPut('food_types', 'creativeengineering', {
   "sweet": [
    "corn_popsicle"
   ],
+  "sweet/pancake": [],
   "handheld": [
    "cheese_toast",
    "glowing_calamari_roll"

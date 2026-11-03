@@ -73,7 +73,7 @@ against the 1.21.1 jar. Because of the licence (D2) neither is a code or asset s
 | D5 | Plain `DeferredRegister`, no Registrate; recipes, loot, tags and worldgen come from the donor (D12), not from JSON in our jar | The 1.20 Registrate repack does not run on 1.19.2, and shipping the generated JSON would redistribute data |
 | D6 | **Cave carrot worldgen (owner, SETTLED, BUILT 2026-10-24, §4.3):** a pack rule in the underground block of `mushroom_spawns.json`, three Y bands: very common around Y 0 (core, Y -24 to 24, 1 in 2 chunks), less common but not rare at Y 25 to 44 (1 in 8) and Y -64 to -25 (1 in 5), nothing above Y 48. The mod's own biome modifier is switched off | Same system as the cave mushroom colonies |
 | D7 | **Haste potions ship** (`miners_delight:haste`, `long_haste`, `strong_haste` from awkward + Copper Carrot; `mining_fatigue` from fermented spider eye) | *overlaps w/ Rustic Delight* `rusticdelight:haste` / `long_haste` / `strong_haste` (memory `rustic-delight-haste-potions`). Two potion ids with the same effect; review in `MND-40` **CONFIRMED then CHANGED 2026-11-02 (owner): every haste potion, Rustic's and Miner's, runs through the Creative Engineering common effect system; neither mod keeps its own haste potion lines (TODO `potions/effects #17`). `mining_fatigue` (fermented spider eye) not yet ruled on.** |
-| D8 | **All loot modifiers ship** (built: the donor has 18 modifier files; its global list names 5 more that have no file, cooked bat wing / squid / tentacles / arthropods and raw arthropods, and the translator drops those 5 entries, so no fire-aspect cooked drops for those mobs) (bat wing, squid, glow squid, tentacles, spider, cave spider, spider leg, spider web, silverfish, silverfish eggs, arthropods, their cooked variants, infested blocks, fishing squid / glow squid, mineshaft chest) | They are the only source of most 1.4.5 ingredients. Squid ones overlap the ocean mods (§3) **CHANGED 2026-11-02 (owner): not shipped as the donor has them. All Miner's loot drops are rebuilt on the pack's own loot system (`kubejs/server_scripts/loot/`, tuning and rules), so rates are tunable and fire aspect cooked drops are done there (also covers the 5 donor entries with no file). Squid, glow squid and tentacles stay under the squid chain (TODO `dishes/ocean #3`, `#4`); check fished squid.** |
+| D8 | **All loot modifiers ship** (built: the donor has 18 modifier files; its global list names 5 more that have no file, cooked bat wing / squid / tentacles / arthropods and raw arthropods, and the translator drops those 5 entries, so no fire-aspect cooked drops for those mobs) (bat wing, squid, glow squid, tentacles, spider, cave spider, spider leg, spider web, silverfish, silverfish eggs, arthropods, their cooked variants, infested blocks, fishing squid / glow squid, mineshaft chest) | They are the only source of most 1.4.5 ingredients. Squid ones overlap the ocean mods (§3) **CHANGED 2026-11-02 (owner): not shipped as the donor has them. All Miner's loot drops are rebuilt on the pack's own loot system (`kubejs/server_scripts/loot/`, tuning and rules), so rates are tunable and fire aspect cooked drops are done there (also covers the 5 donor entries with no file). Squid, glow squid and tentacles stay under the squid chain (TODO `dishes/ocean #3`, `#4`); check fished squid.** **BUILT 2026-11-02 (`creativedelight/members #51`, §8.1): `MinersTranslator` serves no loot modifier (no file, no global list); the drops are `L.drop` / `L.dropShare` / `L.addPool` rules in CD `miners_delight/loot.js`, a new engine helper `loot/09_drops.js` (Creative Worldgen) writes them as pools into the vanilla tables. Rates as upstream; cooked on fire for every raw drop.** |
 | D9 | **Onion soup cup (owner asked for the equivalent, SETTLED):** the equivalent is Brewin' and Chewin's **Creamy Onion Soup** (`brewinandchewin:creamy_onion_soup`, a bowl food from the port; its canned version is `creativeengineering:canned_creamy_onion_soup`). It is the only onion soup in the pack (checked by id and by display name over `kubejs/exported/display_names.json` and every jar). 1.4.5's cup conversion row is `farmersdelight:onion_soup` -> `onion_soup_cup`, and FD 1.19.2-1.2.4 has no such item, so the port adds a pack data file with the row `brewinandchewin:creamy_onion_soup` -> `miners_delight:onion_soup_cup` (§4.1 P9) | Noted for the review `MND-40`: a cup of creamy soup is the only way to get the cup |
 | D10 | **Advancements** stay in the jar and are dropped at load with every other mod's | Pack rule |
 | D11 | **1.1.02 is deployed (owner, SETTLED): the port replaces the live 1.1.2 jar in a later pack version.** The old jar leaves through the normal removal diff; the port's `-01` jar and the donor jar arrive in the same payload (the donor in its own category, `vinery_upstream` style, D12). Players get a changelog line for the hot cocoa cup loss | The earlier proposal (pull 1.1.2 out of 1.1.02) is moot |
@@ -115,7 +115,7 @@ against the 1.21.1 jar. Because of the licence (D2) neither is a code or asset s
 - **Sticky basket:** an FD-basket-like collector; CCK hooks its transfer cooldown (D1).
 - **Food mixin:** `FoodPropertiesMixin` (the only mixin, same in both versions).
 - **Feasts:** stuffed squid, fake meatloaf, glazed arachnid limbs (FD `FeastBlock`).
-- **Potions:** 4 (D7). **Loot:** 21 modifiers (D8). **Worldgen:** wild cave carrots (D6). **Tags:** 44 data tag files
+- **Potions:** 4 (D7). **Loot:** 21 modifiers upstream (D8; pack loot rules since 2026-11-02, §8.1). **Worldgen:** wild cave carrots (D6). **Tags:** 44 data tag files
   (forge, farmersdelight, minecraft, brewinandchewin).
 
 ## 3. Overlaps with the pack
@@ -260,6 +260,7 @@ rule (`forge:none`); it is skipped without the mod.
 | `development/creativeDelight/members/miners/` | The port (new) |
 | `development/creativeDelight/members/miners/.../upstream/` | Donor view: sha1 pin (`UpstreamJars`), translator (nothing upstream in the jar); the jar reading and the in-memory packs are the shared `DonorJars` / `BuiltInPacks` / `MemoryPackResources` ([pack_tooling.md](pack_tooling.md) 2.8), registered in `MinersDelightMod` |
 | `miners_upstream/` | The donor jar (server and client), like `vinery_upstream/` |
+| CD `kubejs/data/creativedelight/kubejs/miners_delight/loot.js`, Creative Worldgen `loot/09_drops.js` | Miner's drops as pack loot rules (D8, §8.1) |
 | `settings.gradle` | Include |
 | `kubejs/startup_scripts/_lib/item_dict.js` | Keys |
 | `kubejs/server_scripts/` (via `global.NCH`, `global.tags`) | Recipes and tags the integration needs |
@@ -335,16 +336,22 @@ Food and feasts
 
 Drops and worldgen
 
-- [ ] MND-30 With a knife: bat (bat wing), squid and glow squid (squid items, tentacles), spider and cave spider (spider
-  legs), silverfish (eggs, arthropods); fire-aspect kills give the cooked versions; without a knife, only the
-  knifeless modifiers fire. Infested blocks drop silverfish eggs.
-- [ ] MND-31 Fishing can catch a squid and a glow squid item.
+- [ ] MND-30 (D8 rebuilt, §8.1) With a knife: bat (2 bat wings), spider and cave spider (1-3 arthropods, sometimes a
+  cobweb; spiders also spider legs), silverfish (1 arthropod, eggs half the time); kills with Fire Aspect give Smoked
+  Bat Wing, Cooked Arthropod and Baked Spider Leg instead of the raw ones and no cobweb; without a knife a bat gives a
+  wing half the time and a silverfish rarely an egg, nothing else. Squid and glow squid: one squid item each (squid
+  chain, not D8). Infested blocks broken with a pickaxe drop 1-3 silverfish eggs most of the time.
+- [ ] MND-31 Fishing can catch a squid (about 1 in 20) and a glow squid (about 1 in 200) item.
 - [ ] MND-32 Wild cave carrots (cave rule, §4.3; runs with the 1.1.2 jar now): in new chunks only, carrots appear in caves
   of every overworld biome, **very common around Y 0**, clearly less common but still easy to find at Y 25 to 48 and at
   Y -64 to -25, and **never above Y 48** (check with `F3` at the highest patches, and `/ceplace`-style counting or a
   Y histogram of `wild_cave_carrots` in a loaded area). None on the surface. The mod's own spawn (1 in 3, Y -54 to 48)
   is off: `latest.log` has no error for `miners_delight:cave_carrots`. Cave carrots plant and grow; WTHIT shows growth.
-- [ ] MND-33 Abandoned mineshaft chests can hold Miner's loot.
+- [ ] MND-33 Abandoned mineshaft chests can hold Miner's loot (now a pool the loot engine adds, `L.addPool`).
+- [ ] MND-42 (members #51) `latest.log` / `logs/kubejs/server.log` after a `/reload`: `[loot-drops] 17 drop pools and 2
+  shared entries in 11 tables`, no `[loot-drops]` warning, no `miners_delight` loot modifier error; `/loot spawn ~ ~ ~
+  loot minecraft:entities/bat` and `.../entities/spider` give nothing Miner's (no killer, no knife), and
+  `/loot spawn ~ ~ ~ kill @e[type=spider,limit=1]` while holding a knife gives arthropods.
 - [ ] MND-34 (I5) `/loottuning` (or the log) lists the cave carrot crate pack; `/loot spawn` on a table with cave carrots (Miner's `chests/md_abandoned_mineshaft`) sometimes gives Cave Carrot Crates instead.
 
 Review (decides the drops)
@@ -353,6 +360,51 @@ Review (decides the drops)
   D7 (haste potions), D9 (onion soup cup) and the 13 redrawn textures.
 - [ ] MND-41 After the drops are built: the dropped ids are gone from JEI, loot and worldgen; nothing in `latest.log`
   names them.
+
+### 8.1 Loot rules that replace the loot modifiers (D8, `creativedelight/members #51`, 2026-11-02)
+
+The donor's 18 modifier files and its global list are not served (`MinersTranslator.data()` skips every
+`/loot_modifiers/` path; the `scavenging_spider` patch, the dangling-entry pass and the `add_items` / `replace_items` /
+`block_tag` loot types are gone with them). The same drops are pack loot rules in CD `miners_delight/loot.js`,
+queued with `global.CWG.lootRules`. Mob, block and fishing tables were outside the chest engine, so a helper was added
+in its own file, Creative Worldgen `loot/09_drops.js`: `L.drop(tables, item, { count, chance, looting, knife, burning,
+cooked, tool })` adds one pool per call to the vanilla table before it is parsed (conditions: killer main hand in
+`#forge:tools/knives`, `is_on_fire`, `random_chance(_with_looting)`, `forge:can_tool_perform_action`; `cooked` is an
+`alternatives` entry, cooked item when the mob died burning, else the raw one), and `L.dropShare(table, item, share)`
+puts a share of a pool's rolls on an item (fishing). The mineshaft table is the engine's own `L.addPool`. Rates are the
+numbers in `loot.js`; `/reload` applies them. Knife: upstream named `#farmersdelight:tools/knives`, the rules use the
+pack's `#forge:tools/knives` (FD's knives are in both).
+
+| Donor modifier | Upstream | Rule now |
+|---|---|---|
+| `scavenging_bat_wing` | bat, knife: 2 bat wings | same; on fire 2 Smoked Bat Wings |
+| `scavenging_bat_wing_knifeless` | bat, no knife: 50% 1 bat wing (Fortune bonus, never applies to a kill) | 50% 1; on fire Smoked Bat Wing |
+| `scavenging_cooked_bat_wing` (no file) | nothing | the on-fire half of the two rows above |
+| `scavenging_spider` | spider, knife: 1-3 arthropod (not on fire since I7) | same, on fire 1-3 Cooked Arthropod |
+| `scavenging_cave_spider` | cave spider, knife: 1-3 arthropod, **also when burning** | 1-3, not burning; on fire 1-3 Cooked Arthropod (the I7 fix carried over) |
+| `scavenging_cooked_spider` | spider or cave spider on fire, knife: 1-3 cooked arthropod | the on-fire half of the two rows above |
+| `scavenging_spider_leg` | spider, knife, not on fire: 40% + 10%/Looting, 0-4 spider legs | same |
+| `scavenging_cooked_spider_leg` | spider or cave spider on fire, knife: 40% + 10%/Looting, 1 baked spider leg | same (spider: on-fire half of the row above; cave spider: own row) |
+| `scavenging_spider_web` | spider or cave spider, knife, not on fire: 20% 1 cobweb | same |
+| `scavenging_silverfish` | silverfish, knife: 1 arthropod | same, not burning; on fire 1 Cooked Arthropod |
+| `scavenging_arthropods`, `scavenging_cooked_arthropods` (no file) | nothing | read as the silverfish arthropod and its cooked half (the spider pair has its own files) |
+| `scavenging_silverfish_eggs` | silverfish, knife: 50% 1 egg | same |
+| `scavenging_silverfish_eggs_knifeless` | silverfish, no knife: 5% 1 egg | same |
+| `breaking_infested_blocks` | `#miners_delight:infested_blocks` (6 vanilla blocks), pickaxe tool action: 75% 1-3 eggs | the 6 `blocks/infested_*` tables, same |
+| `fishing_squid` | replaces the whole catch 5% | squid entry with 5.0% of the fishing pool (weights scaled; exact with no Luck of the Sea, Luck shifts it slightly) |
+| `fishing_glow_squid` | replaces the catch 0.5%, then overridden by the squid roll: 0.475% | glow squid entry 0.475% |
+| `scavenging_squid`, `scavenging_glow_squid`, `scavenging_tentacles`, `scavenging_cooked_squid`, `scavenging_cooked_tentacles` (last two no file) | knife squid items, knifeless 1-3 tentacles | none: the squid chain (LootJS, same file) already gives exactly one squid item per kill and strips the rest |
+| `add_loot_abandoned_mineshaft` | rolls `miners_delight:chests/md_abandoned_mineshaft` into every abandoned mineshaft chest | `L.addPool` of that table (one roll), same |
+
+Player-visible: Fire Aspect (or any burning death) now gives cooked bat wings and cooked arthropods, and cave spiders on
+fire no longer give raw arthropods too. Everything else drops as before. `tools/gen_loot_config.py` no longer reads the
+donor's modifiers (the index lost the mineshaft GLM edge; at runtime the `addPool` links it), and
+`members/miners/tools/check_donor.py` mirrors the translator. Needs: Creative Worldgen built with `09_drops.js` and the
+Creative Delight jar with this Miner's member together (`loot.js` logs an error and skips the drops on an older
+Worldgen). Offline: member build, a translator harness (156 data files served, 0 under `loot_modifiers/`) and a node
+run of `09_drops.js` + `loot.js` against the vanilla tables (every row above lands; fishing shares 4.997% / 0.476%).
+Installed together 2026-11-02 23:16 (`mods/creativeworldgen-1.0.0.jar`, first install, and the CD jar with Miner's `-05`;
+CD jar again 2026-11-03 00:08); not booted. Live rows SQ-MDL-01 to -05 (queue section SQ-CDJ6); MND-30, -31, -33, -42.
 
 ## 9. History
 
@@ -436,6 +488,10 @@ Haste: one Creative Engineering effect shared by all sources (`potions/effects #
   the meal slot is empty (I4, `canCook`); the cave carrot crate rule now reaches `md_abandoned_mineshaft` because
   `tools/gen_loot_config.py` reads the 1.4.5 donor jar (I5); `scavenging_spider` gets the upstream-missing `is_on_fire:false`
   through `MinersTranslator.PATCH_DATA` (I7). Reruns: SQ-MDP-13, -14, -16 / -09, new SQ-MDP-18.
+- **2026-11-02 (loot, `creativedelight/members #51`):** D8 built: the donor's loot modifiers are no longer served;
+  the drops are pack loot rules (§8.1) through the new `L.drop` / `L.dropShare` helper (Creative Worldgen
+  `loot/09_drops.js`), rates as upstream, cooked drops for every burning death. New test MND-42; MND-30, -31, -33
+  rewritten. Queue: SQ-MDL-01 to -05. Haste potions (D7, `potions/effects #17`) not part of it.
 
 ## Copper cup family removed (2026-11-02, TODO `dishes/meals #53`; SQ-CUP-01 to -05, CQ-CUP-01)
 

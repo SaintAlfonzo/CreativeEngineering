@@ -249,7 +249,7 @@ data are read at load from the unmodified upstream jar:
   modifier type `oceanic_delight:oceanic_delight_loot_modifier` keep upstream's ids, so old worlds and upstream's data load
   unchanged. `tools/check_donor.py` (in the member) compares them with the last dump and the donor (0 problems 2026-11-01).
 - **Behaviour kept:** food values, stack sizes, rarities and eating times; containers (bowl, glass bottle, stick, nautilus
-  shell); Comfort / Nourishment 3:00 or 5:00 on the eight dishes, Instant Breath on Sea Grape, Sea Grape Juice and Squid Salad,
+  shell); Comfort / Nourishment 3:00 or 5:00 on the eight dishes (dropped from the code 2026-11-02, section 8: the pack's Comfort / Nourishment rule sets them now), Instant Breath on Sea Grape, Sea Grape Juice and Squid Salad,
   and their blue tooltip lines; the sea grape crop (grows 1 tick in 10 into still water above, the third plant tops out with a
   fruit, bone meal adds a plant), wild sea grape, the two placed dishes (bowl needed, four servings; the paella pan stays empty
   and is picked up by using it), the sponge cake (knife cuts a slice, else eat a slice: 3 hunger, 1 saturation, Water Breathing
@@ -315,3 +315,45 @@ Tests: SQ-DNR-O-01 to -05 (scratch queue). Old-world check: a 1.1.03+ world with
 - Squid drops (TODO `dishes/ocean #9`): CD `miners_delight/loot.js` now removes every drop of a squid or glow squid and
   adds one squid item, whatever the weapon; no longer only while Rustic Delight is on. SQ-FCB-04.
 - Scratch r1102b (2026-11-02): SQ-FCB-00, -01 and -04 (50 kills each of squid and glow squid, knife and bare) PASSED; CQ-FCB-02 (cod sprite, JEI) waits for the client round. Not played.
+
+## 8. Built 2026-11-03 (Creative Delight members run, plan_creative_delight.md L: `farming/crops #27`, `farming/wild-crops #6`, `dishes/ocean #8`)
+
+- **Sea grape plant and the hoe** (`farming/crops #27`, DA-15): CD `oceanic_delight/tags.js` puts `oceanic_delight:sea_grape_plant`
+  in `#minecraft:mineable/hoe` through `global.tags.mineable` (block tag; the fruit already was). `/reload`.
+- **Wild sea grape under the pack's placement** (`farming/wild-crops #6`, DA-14): rule `sea_grape` in `wild_crops.json` (`add` the
+  mod's three oceans: warm, lukewarm, deep lukewarm; `requires` oceanic_delight), pack features
+  `creativedelight:wild/sea_grape` (configured: the 1.0.1 patch rewritten with the newer jar's 64 tries, spread 6, was 32 / 5;
+  placed: 1 in 30 chunks as the mod's, OCEAN_FLOOR_WG, no count), the mod's `patch_wild_sea_grape_biome_modifier` replaced by
+  `forge:none`. Starting density 4.2 patch attempts per 1000 overworld chunks (the mod's own rate; the bigger patch makes each
+  attempt denser); a tuning value for `farming/wild-crops #1`. `tools/gen_crop_worldgen_table.py` now reads the Oceanic donor
+  jar and counts ocean area for sea-floor features; `tools/test_wild_crops.sh` passes (its Rhino harness pointed at the moved
+  `_biome_rules.js`). New chunks only, rejoin.
+- **Comfort / Nourishment on the Oceanic dishes** (`dishes/ocean #8`, DA-13): rechecked against the rule (comfort_nourishment.md 5,
+  11). The port applied Comfort / Nourishment in code (`OceanicFood` bonus), outside the rule, and its bowls hand back the bowl
+  in code, so the dump showed no container and the rule never ruled them. Built: the nine Comfort / Nourishment bonuses removed
+  from `OceanicItems` (Instant Breath kept); `tools/gen_comfort_nourishment.py` treats the 13 Oceanic bowl foods as bowls
+  (`CODE_CONTAINERS`) and the paella and stuffed pufferfish servings as feast servings (`CODE_FEASTS`). The effects are now
+  FoodProperties, so JEED lists them by itself (no `jeed_providers.js` row needed). Result (dump of 10-30):
+
+| Food | Was (code) | Now (rule) |
+|---|---|---|
+| Fish Egg (Caviar) Noodle Soup | Comfort 5:00 | Comfort 4:00 |
+| Globular Rice | Comfort 5:00 | Nourishment 4:00 |
+| Glow Squid Stew | Comfort 3:00 | Comfort 2:00 |
+| Shrimp Stew | Comfort 5:00 | Nourishment 4:00 |
+| Pasta with Eyeball | Nourishment 5:00 | Nourishment 4:00 |
+| Squid and Pickles | Nourishment 3:00 | Nourishment 4:00 |
+| Shrimp Rice | Nourishment 3:00 | Nourishment 4:00 |
+| Bowl of Paella | Nourishment 5:00 | Comfort 4:00 |
+| Plate of Stuffed Pufferfish | Nourishment 5:00 | Comfort 4:00 |
+| Squid Salad | none | Comfort 1:00 |
+| Sea Salad | none | none |
+| Potato Salad, Caesar Salad | none | merged away (item_merges.md 2.15, 2.17) |
+
+  The newer jar's 11 tooltip lines are not adopted (the pack's tooltips show the food's real effects). Restart (startup data and
+  the member jar).
+
+Install: `portedOceanic-1.0.1-ce-19.2-02` and the CD scripts are in the CD jar installed 2026-11-03 00:08; not booted (last boot
+2026-10-31). Scratch rows (queue section SQ-CDJ7): SQ-CDM2-01 (DA-15), SQ-CDM2-02 (DA-14), SQ-CDM2-03 (DA-13), SQ-CDM2-04
+(potato salad merge, item_merges.md 2.17); client row CQ-CDM2-01 (Oceanic dish tooltip).
+

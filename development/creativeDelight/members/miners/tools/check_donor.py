@@ -6,7 +6,7 @@
 Reads the upstream jar in miners_upstream/ (as MinersTranslator does: the stray minersdelight namespace moved to
 miners_delight, files naming a REMOVED id dropped), the port's ids from MDItems / MDBlocks / MDPotions, and
 kubejs/exported/ (items_by_mod, fluids.json, tags/*_tags.json, the last /dumpall). Reports every item, block, tag,
-loot type or condition that a recipe, loot table, loot modifier, or tag names but nothing provides, and
+loot type or condition that a recipe, loot table or tag names but nothing provides, and
 any 1.20-only loot condition name left after translation. Recipes guarded by forge:mod_loaded for a mod the pack
 doesn't have are skipped, as Forge skips them. The miners_delight ids come from the port's source, since the dumps were
 made with the 1.1.2 jar.
@@ -37,9 +37,8 @@ KNOWN_CONDITIONS = {
     'minecraft:entity_properties', 'minecraft:killed_by_player', 'minecraft:entity_scores', 'minecraft:block_state_property',
     'minecraft:match_tool', 'minecraft:table_bonus', 'minecraft:survives_explosion', 'minecraft:damage_source_properties',
     'minecraft:location_check', 'minecraft:weather_check', 'minecraft:reference', 'minecraft:time_check',
-    'minecraft:value_check', 'forge:loot_table_id', 'forge:can_tool_perform_action', NS + ':block_tag',
+    'minecraft:value_check', 'forge:loot_table_id', 'forge:can_tool_perform_action',
 }
-KNOWN_MODIFIERS = {'farmersdelight:add_item', 'farmersdelight:add_loot_table', NS + ':add_items', NS + ':replace_items'}
 KNOWN_FUNCTIONS_PREFIX = ('minecraft:', NS + ':copy_meal')
 
 
@@ -65,8 +64,8 @@ def donor_data():
             if not name.startswith('data/') or not name.endswith('.json'):
                 continue
             path = name.replace('data/minersdelight/', 'data/miners_delight/', 1)
-            if '/cup_conversion/' in path:
-                continue
+            if '/cup_conversion/' in path or '/loot_modifiers/' in path:
+                continue  # not read / not served (the pack's loot rules give the drops, creativedelight members #51)
             text = jar.read(name).decode('utf-8')
             if path == 'data/miners_delight/recipes/copper_pot.json':
                 # MinersTranslator.withoutRemovedAlternatives: the water cup alternative goes, the bucket stays
@@ -77,7 +76,7 @@ def donor_data():
                 text = json.dumps(recipe)
             if any(f'"{NS}:{r}"' in text for r in REMOVED) and '/tags/' not in path:
                 continue
-            if '/loot_modifiers/' in path or '/loot_tables/' in path:
+            if '/loot_tables/' in path:
                 text = text.replace('"minecraft:any_of"', '"minecraft:alternative"')
             out[path] = json.loads(text)
     return out
@@ -163,20 +162,6 @@ def main():
         elif '/loot_tables/' in path:
             counts['loot tables'] = counts.get('loot tables', 0) + 1
             walk(js, where, 'loot')
-        elif '/loot_modifiers/' in path and not path.endswith('global_loot_modifiers.json'):
-            counts['loot modifiers'] = counts.get('loot modifiers', 0) + 1
-            if js.get('type') not in KNOWN_MODIFIERS:
-                problems.append(f'{where}: unknown loot modifier type {js.get("type")}')
-            walk(js, where, 'loot')
-            if 'lootTable' in js:
-                table = js['lootTable'].split(':')
-                if f'data/{table[0]}/loot_tables/{table[1]}.json' not in data:
-                    problems.append(f'{where}: loot table {js["lootTable"]} is not in the donor')
-        elif path.endswith('global_loot_modifiers.json'):
-            # MinersTranslator drops entries without a file; report how many.
-            dangling = [e for e in js['entries'] if f'data/{e.split(":")[0]}/loot_modifiers/{e.split(":")[1]}.json' not in data]
-            print(f'global_loot_modifiers: {len(js["entries"]) - len(dangling)} listed with a file, {len(dangling)} without (dropped): '
-                  + ', '.join(dangling))
         elif '/tags/' in path:
             counts['tags'] = counts.get('tags', 0) + 1
             kind = path.split('/')[3]

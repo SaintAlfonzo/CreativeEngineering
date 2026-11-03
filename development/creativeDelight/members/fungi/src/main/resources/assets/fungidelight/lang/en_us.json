@@ -27,6 +27,8 @@
   "item.minecraft.tipped_arrow.effect.strong_burrowing": "Arrow of Burrowing",
   "item.fungidelight.inky_cap_cow_spawn_egg": "Inky Cap Cow Spawn Egg",
   "item.fungidelight.morel_cow_spawn_egg": "Morel Cow Spawn Egg",
+  "entity.fungidelight.inky_cap_cow": "Inky Cap Cow",
+  "entity.fungidelight.morel_cow": "Morel Cow",
   "block.fungidelight.inky_cap_mushroom": "Inky Cap Mushroom",
   "block.fungidelight.morel_mushroom": "Morel Mushroom",
   "block.fungidelight.inky_cap_mushroom_block": "Inky Cap Mushroom Block",

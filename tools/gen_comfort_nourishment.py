@@ -60,6 +60,15 @@ CRAFT_DEPTH = 2         # crafted non-food inputs: cheapest recipe, two levels d
 BOWL = 'minecraft:bowl'
 RULED_CONTAINERS = {BOWL, 'vintagedelight:empty_mason_jar', 'endersdelight:shulker_bowl'}
 BOTTLE = 'minecraft:glass_bottle'
+# foods that hand back their container in code (no crafting remainder, so the dump shows none): Oceanic Delight's
+# OceanicFood bowls (creativeDelight members/oceanic OceanicItems, `container(BOWL)`), dishes/ocean #8
+CODE_CONTAINERS = {'oceanic_delight:' + n: BOWL for n in (
+    'bowl_of_paella', 'caesar_salad', 'fish_egg_noodle_soup', 'globular_rice', 'glow_squid_stew', 'pasta_with_eyeball',
+    'plate_of_stuffed_pufferfish', 'potato_salad', 'sea_salad', 'shrimp_rice', 'shrimp_stew', 'squid_and_pickles',
+    'squid_salad')}
+# feast servings the food_blocks dump does not link (Oceanic's own plate blocks): serving -> feast block item
+CODE_FEASTS = {'oceanic_delight:bowl_of_paella': 'oceanic_delight:paella_plate',
+               'oceanic_delight:plate_of_stuffed_pufferfish': 'oceanic_delight:stuffed_pufferfish'}
 CAN_NAMESPACES = ('creativeengineering', 'canned_goods')
 RECIPE_ORDER = ('farmersdelight:cooking', 'minecraft:crafting_shapeless', 'minecraft:crafting_shaped')
 # recipes a crafted non-food input is valued through
@@ -179,7 +188,8 @@ def build():
     for r in recipes:
         for o in r['out']:
             by_out.setdefault(o['id'], []).append(r)
-    feast_of = {b['serving']: b['id'] for b in blocks if b.get('serving')}
+    feast_of = dict(CODE_FEASTS)
+    feast_of.update({b['serving']: b['id'] for b in blocks if b.get('serving')})
     by_id = {f['id']: f for f in foods}
 
     def inputs_of(fid, container):
@@ -196,7 +206,7 @@ def build():
     golden = golden_foods()
     ruled, keep, bottles = OrderedDict(), [], []
     for f in sorted(foods, key=lambda f: f['id']):
-        fid, rem = f['id'], f.get('remainder')
+        fid, rem = f['id'], f.get('remainder') or CODE_CONTAINERS.get(f['id'])
         if fid.split(':')[0] in CAN_NAMESPACES:
             continue
         if fid in golden:

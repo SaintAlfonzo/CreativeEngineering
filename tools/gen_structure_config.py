@@ -336,6 +336,25 @@ def scan_mod_jars():
                 source[sid] = jar.name + ' (donor)'
         for sid in DONOR_EMPTIED_SETS:
             structure_sets.pop(sid, None)
+    # Ender's additions (End's Delight member, ends_delight.md 5.9): the End House set and structure come from the
+    # 1.1.4 donor in enders_upstream/, served in memory by EndersTranslator, which gives biome ids their minecraft:
+    # namespace (the structure type change does not matter here). Added 2026-11-02 after the member stopped shipping
+    # the files (it read them from the donor since 2026-11-01, so the regenerated config had dropped the set).
+    for jar in sorted((MODS_DIR.parent / 'enders_upstream').glob('*.jar')):
+        z = zipfile.ZipFile(jar)
+        for kind in ('structure_set', 'structure'):
+            name = f'data/endersdelight/worldgen/{kind}/end_house.json'
+            if name not in z.namelist():
+                continue
+            data = loads_lenient(z.read(name))
+            if kind == 'structure':
+                biomes = data.get('biomes')
+                if isinstance(biomes, list):
+                    biomes = [b if ':' in b or b.startswith('#') else f'minecraft:{b}' for b in biomes]
+                structure_biomes['endersdelight:end_house'] = biomes
+            else:
+                structure_sets['endersdelight:end_house'] = data
+                source['endersdelight:end_house'] = jar.name + ' (donor, End\'s Delight member)'
     # Structures shipped as plain datapack data in kubejs/data (e.g. MCreator house mods whose
     # jars can't load on Forge 43.3.9). Only ids no jar provides, so a kubejs/data override of a
     # mod's set can never become that set's baseline.

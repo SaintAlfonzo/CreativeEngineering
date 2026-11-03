@@ -42,8 +42,6 @@ public class MinersDelightMod {
         MDBlockEntities.BLOCK_ENTITIES.register(bus);
         MDMenuTypes.MENU_TYPES.register(bus);
         MDPotions.POTIONS.register(bus);
-        MDLoot.MODIFIERS.register(bus);
-        MDLoot.CONDITIONS.register(bus);
         MDLoot.FUNCTIONS.register(bus);
         // Upstream art and data as built-in packs, always on and at the bottom: resource packs, KubeJS and datapacks
         // still override them (miners_delight.md D12).

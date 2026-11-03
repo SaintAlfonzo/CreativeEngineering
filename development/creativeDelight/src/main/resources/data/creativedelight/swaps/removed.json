@@ -1,6 +1,8 @@
 {
-  "_comment": "Ids dropped with no replacement (swap lists 'removed', SwapLists.java). Old worlds load them as missing without the warning; never converted. Never prune. Display baked tentacle plate: tentacle foods removed (creativedelight members #36, plan_creative_delight.md I1, 2026-11-02).",
+  "_comment": "Ids dropped with no replacement (swap lists 'removed', SwapLists.java). Old worlds load them as missing without the warning; never converted. Never prune. Display baked tentacle plate: tentacle foods removed (creativedelight members #36, plan_creative_delight.md I1, 2026-11-02). Golden Food enchantment goldenfood:gf_enchantment removed with its anvil recipe; enchanted golden foods come from sequenced assembly (creativedelight members #50, golden_food.md 3.4, 2026-11-02). Delightful's nut dough removed (merges/dishes #7, owner 2026-11-02; still registered by the repack, hidden through the removed items).",
   "removed": [
-    "displaydelight:od_plated_baked_tentacle_on_a_stick"
+    "displaydelight:od_plated_baked_tentacle_on_a_stick",
+    "goldenfood:gf_enchantment",
+    "delightful:nut_dough"
   ]
 }

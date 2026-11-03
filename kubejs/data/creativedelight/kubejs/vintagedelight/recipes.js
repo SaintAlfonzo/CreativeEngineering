@@ -34,6 +34,32 @@ ServerEvents.recipes(e => {
 		// honey. It replaces Brewin's Pickled Pickles (merged, vintage_items.js); their honey recipe is gone from alcohol.js.
 		R.vdPickling(Item.of(i.pickled_sea_pickle, 5), [Item.of(i.sea_pickle, 5), i.salt], e, 'pickled_sea_pickle')
 
+		//######################### Kimchi #########################
+		// One kimchi (merges/dishes #9, owner 2026-11-02): Vintage's kimchi wins, Brewin's is removed (vintage_items.js). Beside
+		// upstream's ghost pepper recipe (kept), one recipe per pickleable in the pepper's slot: 4 cabbage leaves + salt + it
+		// -> 4 kimchi, upstream's time; no pickled pepper on the side (no pepper goes in).
+		var kimchiBases = [
+			['cucumber', Platform.isLoaded('veggiesdelight') ? [i.cucumber, i.zucchini] : i.cucumber],
+			['onion', i.onion],
+			['egg', i.eggs],
+			['sea_pickle', i.sea_pickle],
+			['beetroot', i.beetroot],
+			['fish', i.t_whole_raw_fish]
+		]
+		kimchiBases.forEach(b => {
+			R.vdPickling(Item.of(i.vintagedelight_kimchi, 4), [Item.of(i.cabbage_leaf, 4), i.salt, b[1]], e, 'kimchi_from_' + b[0])
+		})
+
+		//######################### Nut mash #########################
+		// One nut butter (merges/dishes #7, owner 2026-11-02): Vintage's nut mash, mason jar only. The bottle and Delightful's
+		// nut butter merge into the jar (swaps); the bottle <-> jar crafts go first, or the merge's swap would turn them into
+		// jar -> 3 jars. Pot: 5 nuts (acorn or peanut, raw or roasted) + sugar -> 3 jars, each in an empty mason jar
+		// (was 5 roasted peanuts -> 1).
+		;['vintagedelight:cooking/nut_mash_jar', 'vintagedelight:jam/nut_mash_jar', 'vintagedelight:jam/nut_mash_jar_deconstruct']
+			.forEach(id => R.remove({ id: id }, e))
+		var NUT = [i.t_nuts_acorn, i.roasted_acorn, i.peanut, i.roasted_peanut].filter(n => String(n).charAt(0) === '#' || Item.exists(n))
+		R.fdCooking([NUT, NUT, NUT, NUT, NUT, i.any_sugar], Item.of(i.nut_mash_jar, 3), e, 'nut_mash_jar', 2.0, 400, i.empty_mason_jar)
+
 		//######################### Pickle soup #########################
 		// Pickle soup (dishes/pickles-and-ferments #3): the pickle slot takes any pickled veggie (#creativeengineering:pickled_veg,
 		// tags.js), and the carrot and potato slots any vegetable (the veggie variant). Beetroot, salad ingredient, time and

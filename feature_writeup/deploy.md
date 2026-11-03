@@ -352,3 +352,12 @@ just stops working (at most a log warning) or breaks later in play. The pack's m
   `mods/`; they belong to the next version.
 
 - 2026-11-02, owner: the Creative Delight cutover goes in the next deployment (unless a fix has to be pushed first); the Creative Split deployment is **1.2.00**. Release numbers are not yet staged.
+- 2026-11-02 night (plan_creative_delight.md K): `build_deploy.py` `CATEGORIES` gained `oceanic_upstream` and `enders_upstream`
+  (missing, so every deploy build raised a KeyError) and `goldenfood_upstream`, each with server and client copy steps;
+  `UPSTREAM_DONORS` gained the Golden Food pin and points `enders_upstream` at `creativeDelight/members/ends`. Dry run:
+  the only preflight error left is three FTB jars with no `mod_sides.md` row. Next deployment (Creative Delight cutover,
+  then 1.2.00), server by hand: copy `goldenfood_upstream/` (and `oceanic_upstream/`, `enders_upstream/`) beside `mods/`;
+  remove `salt-1.19.2-1.2.4.1.jar`, `create_salt 1.19.2-1.1.0.jar`, `CannedGoods-1.19.2-3.jar`, `goldenfood-1.19.2-2.0.0.jar`
+  (now Creative Delight members) and `moreMooblooms-1.1.0.jar` (now in Creative Worldgen); install
+  `creativedelight-1.0.0.jar`, `creativeengineering-1.1.08.jar`, `creativeworldgen-1.0.0.jar` (and `creativebrewing-1.0.0.jar`
+  of 2026-11-03). None of these has booted in the dev instance yet (last boot 2026-10-31).

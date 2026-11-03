@@ -1,0 +1,75 @@
+  1 (  1 srv) SQ-PR: Pretty Rain on the server (added 2026-10-27)  SQ-PR-01
+  1 (  1 srv) SQ-SK: starter kit join (added 2026-10-25, needs a real player)  SQ-SK-03
+  1 (  1 srv) SQ-SNF: seasonings by food family (added 2026-10-26)  SQ-SNF-02
+  1 (  1 srv) SQ-PS: powdered sugar (added 2026-10-25)  SQ-PS-02
+  4 (  4 srv) SQ-KS: KubeJS scripts from packs and jars, calling the pack helpers (added 2026-10-25)  SQ-KS-02 SQ-KS-03 SQ-KS-04 SQ-KS-05
+  1 (  1 srv) SQ-CDJ: Creative Delight nested jar (added 2026-10-25)  SQ-CDJ-06
+  2 (  2 srv) SQ-CDT: Creative Delight framework suite (added 2026-10-25)  SQ-CDT-04 SQ-CDT-05
+  1 (  1 srv) SQ-VTD4: Vintage port -04, Veggies -03 and the first Creative Delight member scripts (adde  SQ-VTD4-09
+  2 (  2 srv) SQ-FDB: Farmer's Delight 1.3.4 backports in the FD repack (added 2026-10-25)  SQ-FDB-08 SQ-FDB-12
+  5 (  5 srv) SQ-RD: Rustic Delight 1.7.0 port in Creative Delight (added 2026-10-25)  SQ-RD-12 SQ-RD-29 SQ-RD-30 SQ-RD-31 SQ-RD-32
+  1 (  1 srv) SQ-FFB: baked family rules applied (added 2026-10-27)  SQ-FFB-01
+  3 (  3 srv) SQ-CDQ: Creative Delight QoL moves (added 2026-10-25)  SQ-CDQ-04 SQ-CDQ-07 SQ-CDQ-08
+  1 (  1 srv) SQ-WCD: wild crops in Creative Delight (added 2026-10-25)  SQ-WCD-05
+  1 (  1 srv) SQ-RSP: Farmer's Respite Kettle tank (added 2026-10-25)  SQ-RSP-08
+  5 (  5 srv) SQ-INV: TODO investigations a scratch server can answer (added 2026-10-25)  SQ-INV-09 SQ-INV-13 SQ-INV-15 SQ-INV-16 SQ-INV-18
+  4 (  0 srv) CQ-DUMP: client-only dumps (unblocks the Vintage rows and the UI generators)  CQ-DUMP-02 CQ-DUMP-04 CQ-DUMP-05 CQ-DUMP-06
+ 13 (  0 srv) CQ-VP: Vintage and Veggies, visual and machine runs  CQ-VP-01 CQ-VP-02 CQ-VP-03 CQ-VP-04 CQ-VP-05 CQ-VP-06 CQ-VP-08 CQ-VP-09 CQ-VP-10 CQ-VP-11 CQ-VP-12 CQ-VP-13 CQ-VP-14
+  4 (  0 srv) CQ-WT: WTHIT Silk Touch, crop seasons, operator blocks (added 2026-10-28)  CQ-WT-01 CQ-WT-02 CQ-WT-03 CQ-WT-04
+  8 (  0 srv) CQ-OLD: client halves left open by earlier runs  CQ-OLD-01 CQ-OLD-02 CQ-OLD-03 CQ-OLD-04 CQ-OLD-05 CQ-OLD-06 CQ-OLD-07 CQ-OLD-08
+ 10 (  0 srv) CQ-CAT: Cozy's Improved Cats, client half (added 2026-11-01)  CQ-CAT-01 CQ-CAT-02 CQ-CAT-03 CQ-CAT-04 CQ-CAT-05 CQ-CAT-06 CQ-CAT-07 CQ-CAT-08 CQ-CAT-09 CQ-CAT-10
+  8 (  0 srv) CQ-NEW: client halves added 2026-10-24  CQ-NEW-01 CQ-NEW-02 CQ-NEW-03 CQ-NEW-04 CQ-NEW-05 CQ-NEW-06 CQ-DDP-02 CQ-JO-01
+  2 (  2 srv) Farmer's Structures donor (farmers_structures.md section 5)  SQ-FSD-04 SQ-FSD-06
+  2 (  2 srv) Creative Delight food batch, 2026-10-25 (TODO rows in each ID's writeup column)  SQ-CDB-11 SQ-CDB-14
+  3 (  3 srv) End's and Ender's Delight, 2026-10-25 ([ends_delight.md](../ends_delight.md) 5.6)  SQ-EN-05 SQ-EN-08 SQ-LR-01
+  1 (  1 srv) Server fixes, 2026-10-26 (TODO `server #3`, `server #6`)  SQ-SV-02
+ 10 (  0 srv) JEI tab tweaks, 2026-10-26 ([plan_jei_tab_tweaks.md](../plan_jei_tab_tweaks.md))  CQ-JT-01 CQ-JT-02 CQ-JT-03 CQ-JT-04 CQ-JT-05 CQ-JT-06 CQ-JT-07 CQ-JT-08 CQ-JT-10 CQ-JT-09
+  4 (  0 srv) Texture fixes, 2026-10-27 (unreleased.md: Farming & Nature, Food & Cooking, Mobs & Animals  CQ-TX-01 CQ-TX-02 CQ-TX-03 CQ-TX-04
+  2 (  1 srv) Changelog bubble hides on hover, 2026-10-27 ([changelog.md](../changelog.md) CL-13)  CQ-CL-13 SQ-MG-16
+  1 (  0 srv) Falling block water splash, 2026-10-28 ([fixes_compat.md](../fixes_compat.md) 2.32, test F  CQ-FBS-03
+  2 (  0 srv) Resource pack bench, 2026-10-29 ([perf_rpack.md](../perf_rpack.md) 8, TODO `server #32`)  CQ-RP-02 CQ-RP-03
+  1 (  1 srv) CD members 22 to 24, 2026-10-29 ([creative_delight.md](../creative_delight.md) 31)  SQ-CM-33
+  1 (  1 srv) Monkey merge, 2026-10-30 ([item_merges.md](../item_merges.md) 2.1, TODO `merges/mobs #1`)  SQ-MG-20
+  1 (  1 srv) Armor cap 50 (gear/tuning #2), 2026-10-30 ([gear_tuning.md](../gear_tuning.md) F13)  SQ-AC-04
+  2 (  2 srv) SQ-CDJ4 Creative Delight carve: kitchen and food Java, members, 2026-11-01 ([creative_deli  SQ-JSL-01 SQ-JSL-02
+  1 (  1 srv) SQ-CSI Curios slots by IMC, 2026-11-01 ([curios_slots.md](../curios_slots.md) 0)  SQ-CSI-02
+  7 (  0 srv) CQ-BM: Baby Mobs remodels, client half (added 2026-11-01)  CQ-BM-01 CQ-BM-02 CQ-BM-03 CQ-BM-04 CQ-BM-05 CQ-BM-06 CQ-BM-07
+  1 (  0 srv) SQ-LGM Large Meals port, 2026-11-01 ([large_meals.md](../large_meals.md) 8, TODO `largecon  CQ-LGM-11
+  1 (  0 srv) SQ-MXS / SQ-VTD7 Vintage Mixed Seeds and dump-driven steps, 2026-11-01 ([vintage_delight.m  CQ-MXS-04
+  1 (  1 srv) SQ-BBQ Barbeque's Delight port, 2026-11-01 ([barbeques_delight.md](../barbeques_delight.md  SQ-BBQ-08
+  1 (  1 srv) SQ-STK Stack size policy gaps, 2026-11-01 ([briefs/food_stack-sizes.md](../briefs/food_sta  SQ-STK-05
+  2 (  2 srv) SQ-RDX Rustic member items, 2026-11-01 ([rustic_delight.md](../rustic_delight.md) 5.10; TO  SQ-RDX-02 SQ-RDX-13
+  1 (  1 srv) SQ-NDM Nether's Delight 4.0 member, 2026-11-01 ([nethers_delight.md](../nethers_delight.md  SQ-NDM-08
+  3 (  0 srv) CQ-TTP Tall tooltips, Curios slot line, PneumaticCraft text, 2026-11-02 ([tooltips.md](../  CQ-TTP-01 CQ-TTP-02 CQ-TTP-03
+ 14 (  9 srv) SQ-WGE Worldgen edit plan, built part, 2026-11-02 ([plan_worldgen_edit.md](../plan_worldge  CQ-WGE-07a CQ-WGE-07b CQ-WGE-07c SQ-WGE-00b SQ-WGE-09 SQ-WGE-10 SQ-WGE-11 SQ-WGE-12 SQ-WGE-13 SQ-WGE-14 SQ-WGE-15 SQ-WGE-16 CQ-WGE-17 CQ-WGE-18
+  1 (  0 srv) CQ-DRK Drink rules client half, 2026-11-02 (same section)  CQ-DRK-01
+  2 (  0 srv) SQ-PST: pre-scratch fixes, time and seasons (added 2026-11-02; time.md 3.11, crops.md 2.12  CQ-PST-04 CQ-PST-05
+  2 (  0 srv) SQ-PSD: pre-scratch fixes, farming data (added 2026-11-02; TODO farming/crops #19 #37, wil  CQ-PSD-08 CQ-PSD-09
+  1 (  0 srv) SQ-PSF: pre-scratch crop pass (added 2026-11-02)  CQ-PSF-01
+  5 (  0 srv) SQ-PSU: pre-scratch fixes, UI, gear, items (added 2026-11-02)  CQ-PSU-01 CQ-PSU-02 CQ-PSU-03 CQ-PSU-04 CQ-PSU-05
+  5 (  5 srv) SQ-CUP Copper cup family removed, 2026-11-02 ([miners_delight.md](../miners_delight.md) "C  SQ-CUP-01 SQ-CUP-02 SQ-CUP-03 SQ-CUP-04 SQ-CUP-05
+  7 (  6 srv) SQ-LBS Creative Labels: labels by surface, centred notes, 2026-11-02 ([sticky_notes.md](..  SQ-LBS-00 SQ-LBS-01 SQ-LBS-02 SQ-LBS-03 SQ-LBS-04 SQ-LBS-05 CQ-LBS-01
+  3 (  3 srv) Baked family follow-ups, 2026-11-02 ([oven.md](../oven.md) section 4, TODO `baking/baked-g  SQ-FFB-02 SQ-FFB-03 SQ-FFB-04
+  2 (  2 srv) SQ-RCO cooking removals, 2026-11-02 ([recipes_cooking.md](../recipes_cooking.md) section 7  SQ-RCO-01 SQ-RCO-02
+  2 (  1 srv) SQ-CNP can grid guard, 2026-11-02 ([can_parity.md](../can_parity.md) section 7, TODO `cans  SQ-CNP-01 CQ-CNP-01
+  2 (  2 srv) SQ-VNG vinegar can additive after the bottle-to-jar merge, 2026-11-02 ([can_parity.md](../  SQ-VNG-01 SQ-VNG-02
+  1 (  1 srv) SQ-PS powdered sugar second result, 2026-11-02 ([food.md](../food.md) 3.13, TODO `dishes/i  SQ-PS-06
+  5 (  5 srv) SQ-FO food types, empty cans, fried egg, egg stacks (FO-02 to FO-28 server halves), 2026-1  SQ-FO-01 SQ-FO-02 SQ-FO-03 SQ-FO-04 SQ-FO-05
+  1 (  1 srv) SQ-CF Spice of Life milestone speed fix, 2026-11-02 ([food.md](../food.md) section 7 FO-32  SQ-CF-02
+  1 (  1 srv) SQ-CNS Comfort / Nourishment on cans, 2026-11-02 ([comfort_nourishment.md](../comfort_nour  SQ-CNS-03
+  2 (  1 srv) SQ-DRK Bayberry Juice, 2026-11-02 ([creative_delight_drinks.md](../creative_delight_drinks  SQ-DRK-07 CQ-DRK-02
+  2 (  0 srv) CQ-FO seasoned icon corner and powdered sugar in WTHIT, 2026-11-02 ([food.md](../food.md)   CQ-FO-60 CQ-FO-61
+  3 (  3 srv) SQ-WCT watering can extras, 2026-11-02 ([hearth_and_harvest.md](../hearth_and_harvest.md)   SQ-WCT-06 SQ-WCT-07 SQ-WCT-08
+  2 (  2 srv) SQ-SGF spout gun farmland, 2026-11-02 ([hearth_and_harvest.md](../hearth_and_harvest.md) s  SQ-SGF-01 SQ-SGF-02
+  1 (  1 srv) SQ-VTD9 Vintage Magic Peanut tree without the golden egg, 2026-11-02 ([vintage_delight.md]  SQ-VTD9-01
+ 13 (  3 srv) Food mod reports: client halves and reruns, 2026-11-02 (TODO `largecontent/mod-additions #  SQ-CN-04b SQ-MRD-04 SQ-STD-03 CQ-FR-01 CQ-FDB-01 CQ-DF-01 CQ-CN-01 CQ-MRD-01 CQ-STD-01 CQ-NDM-01 CQ-FSD-01 CQ-ABD-01 CQ-SVA-01
+ 11 ( 10 srv) SQ-CWG Creative Worldgen carve, 2026-11-02 ([creative_worldgen.md](../creative_worldgen.md  SQ-CWG-01 SQ-CWG-02 SQ-CWG-03 SQ-CWG-04 SQ-CWG-05 SQ-CWG-06 SQ-CWG-07 SQ-CWG-08 SQ-CWG-09 SQ-CWG-10 CQ-CWG-11
+  7 (  5 srv) Salt and Create: The Salt as Creative Delight members (added 2026-11-02, plan_creative_del  SQ-SLT-01 SQ-SLT-02 SQ-SLT-03 SQ-SLT-04 SQ-SLT-05 CQ-SLT-01 CQ-SLT-02
+  6 (  4 srv) SQ-CNG Canned Goods repacked in Creative Delight, 2026-11-02 ([cans.md](../cans.md) 9, TOD  SQ-CNG-01 SQ-CNG-02 SQ-CNG-03 SQ-CNG-04 CQ-CNG-01 CQ-CNG-02
+  5 (  5 srv) End's member with Ender's 1.1.4 content, 2026-11-02 ([ends_delight.md](../ends_delight.md)  SQ-ENM-01 SQ-ENM-02 SQ-ENM-03 SQ-ENM-04 SQ-ENM-05
+ 17 ( 14 srv) SQ-GLD Golden Food donor rebuild, 2026-11-02 ([golden_food.md](../golden_food.md) sections  SQ-GLD-01 SQ-GLD-02 SQ-GLD-03 SQ-GLD-04 SQ-GLD-05 SQ-GLD-06 SQ-GLD-07 SQ-GLD-08 SQ-GLD-09 SQ-GLD-10 CQ-GLD-01 CQ-GLD-02 SQ-GLD-11 SQ-GLD-12 SQ-GLD-13 SQ-GLD-14 CQ-GLD-03
+  5 (  5 srv) SQ-MDL Miner's loot on the pack loot system (creativedelight members #51)  SQ-MDL-01 SQ-MDL-02 SQ-MDL-03 SQ-MDL-04 SQ-MDL-05
+  7 (  5 srv) Pancake family, 2026-11-02 ([writeup](../food_families.md) section 4.7, TODO `dishes/meals  SQ-PCK-01 SQ-PCK-02 SQ-PCK-03 SQ-PCK-04 SQ-PCK-05 CQ-PCK-01 CQ-PCK-02
+  8 (  8 srv) Swappers: merges from swap lists and the world half, 2026-11-02 ([item_merges.md](../item_  SQ-SWP-01 SQ-SWP-02 SQ-SWP-03 SQ-SWP-04 SQ-SWP-05 SQ-SWP-06 SQ-SWP-07 SQ-SWP-08
+ 27 ( 22 srv) SQ-CDJ7 Creative Delight member open rows, 2026-11-03 (CD and Creative Brewing jars instal  SQ-BBQF-01 SQ-BBQF-02 SQ-BBQF-03 SQ-BBQF-04 SQ-BBQF-05 SQ-BBQF-06 SQ-BBQF-07 SQ-VTDA-10 SQ-VTDA-11 SQ-VTDA-12 SQ-VTDA-13 SQ-CDM2-01 SQ-CDM2-02 SQ-CDM2-03 SQ-CDM2-04 SQ-GLD2-01 SQ-GLD2-02 SQ-GLD2-03 SQ-GLD2-05 SQ-SALT2-01 SQ-NEST-01 SQ-NEST-02 CQ-VTDA-01 CQ-CDM2-01 CQ-GLD2-04 CQ-MRGT-01 CQ-BBQF-01
+total 297

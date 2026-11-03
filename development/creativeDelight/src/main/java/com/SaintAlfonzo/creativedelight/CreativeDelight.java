@@ -32,7 +32,7 @@ import java.util.List;
  * Since the Creative Split CD carve (2026-11-01, creative_delight.md 34) it also holds the kitchen and food Java that
  * was patcherMod's: the oven, lunchboxes, the remainder buffer, cans, seasonings, placed food, crops (stem fruit, crop
  * parity, dandelions, hoe area), salt ticks, troughs and the food mod compat (Corn Delight, Display Delight dishes,
- * Canned Goods golem dye, Respite potted tea bush, AppleSkin). Their ids keep the {@code creativeengineering}
+ * Respite potted tea bush, AppleSkin; the Canned Goods golem dye moved into the repackedCannedGoods member). Their ids keep the {@code creativeengineering}
  * namespace ({@link #NS}).
  */
 @Mod(CreativeDelight.MOD_ID)

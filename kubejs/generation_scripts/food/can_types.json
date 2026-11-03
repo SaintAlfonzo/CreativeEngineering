@@ -5938,15 +5938,14 @@
    "existing": false,
    "name": "Canned Kimchi",
    "servings": 4,
-   "hunger": 4,
-   "modifier": 0.6,
+   "hunger": 8,
+   "modifier": 0.3,
    "meat": false,
-   "fast": false,
+   "fast": true,
    "always": false,
    "glow": false,
    "effects": [],
    "sources": [
-    "kimchi",
     "vintagedelight_kimchi"
    ],
    "recipes": [
@@ -5955,7 +5954,6 @@
      "inputs": [
       {
        "any": [
-        "kimchi",
         "vintagedelight_kimchi"
        ],
        "n": 6
@@ -5967,7 +5965,6 @@
      "inputs": [
       {
        "any": [
-        "kimchi",
         "vintagedelight_kimchi"
        ],
        "n": 5

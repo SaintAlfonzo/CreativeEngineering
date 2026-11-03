@@ -1,6 +1,6 @@
 # Creative Delight execution plan (2026-11-02)
 
-Status: G steps 1 to 3 BUILT 2026-11-02 (see section H); fix plan I built 2026-11-02 afternoon (I progress), rerun queued; steps 4 to 6 open. **Deep scan 2026-11-02:** the installed CD jar (11-02 14:01) nests Veggies `-05`, Vintage `-13`, Fungi `-02`, Miner's `-05`, Display `-03` (later than the H and I progress lists); the 21:10 build (copper cup removal) is not installed. Rerun status (r1102b, judged): SQ-CDJ-12 (I8) and SQ-MDP-18 (I7) PASS, SQ-VTD8-02 (b) PASS; the other I reruns (SQ-CDJ-05 / SQ-DDP-01, SQ-MDP-13, -14, -16 / -09, SQ-LOOT-FD1, SQ-VTD8-01 rewrite) were not in the r1102b scope, and SQ-FGD-14 / SQ-FGDC sit in its postponed worldgen slice. Only owner decisions already on record are listed as work; open questions are listed in
+Status: G steps 1 to 3 BUILT 2026-11-02 (see section H); fix plan I built 2026-11-02 afternoon (I progress), rerun queued; plan J and the remaining open rows built 2026-11-02 night (section K), not booted. **Deep scan 2026-11-02:** the installed CD jar (11-02 14:01) nests Veggies `-05`, Vintage `-13`, Fungi `-02`, Miner's `-05`, Display `-03` (later than the H and I progress lists); the 21:10 build (copper cup removal) is not installed. Rerun status (r1102b, judged): SQ-CDJ-12 (I8) and SQ-MDP-18 (I7) PASS, SQ-VTD8-02 (b) PASS; the other I reruns (SQ-CDJ-05 / SQ-DDP-01, SQ-MDP-13, -14, -16 / -09, SQ-LOOT-FD1, SQ-VTD8-01 rewrite) were not in the r1102b scope, and SQ-FGD-14 / SQ-FGDC sit in its postponed worldgen slice. Only owner decisions already on record are listed as work; open questions are listed in
 section F and not resolved here. Row ids refer to [todo/TODO.md](todo/TODO.md); background is
 [creative_delight.md](creative_delight.md) (sections 35 to 38). Every change that touches game data adds its live checks to
 [testing/scratch_queue.md](testing/scratch_queue.md) (no scratch boot until the owner says so) and a bullet to
@@ -269,3 +269,67 @@ Member `portedGolden` (mod id `goldenfood`, ids and block states unchanged): our
 2. Each adds its checks to `testing/scratch_queue.md`; no scratch boot until the owner says so.
 3. All ride the `members #10` cutover.
 
+
+## K. Progress (2026-11-02 night, implementation run: J1 to J4 and the remaining open rows)
+
+Owner asked to execute every open Creative Delight change, Golden Food included. Built by seven parallel agents, merged
+and bundled by the main session. Installed 23:16 to 23:20 with this instance's game closed: `mods/creativedelight-1.0.0.jar`
+(23 members as written; the jar reinstalled 2026-11-03 00:08 nests 22, Ender's additions being inside End's), `mods/creativeengineering-1.1.08.jar`, `mods/creativeworldgen-1.0.0.jar` (first install of Creative
+Worldgen, wave 5, see creative_split.md history). Displaced: `salt-1.19.2-1.2.4.1.jar`, `create_salt 1.19.2-1.1.0.jar`,
+`CannedGoods-1.19.2-3.jar`, `goldenfood-1.19.2-2.0.0.jar`, patcherMod 1.1.07, `moreMooblooms-1.1.0.jar`. Nothing booted,
+nothing committed. Queue: SQ-CDJ6 in testing/scratch_queue.md.
+
+| # | Row | Status | Result |
+|---|---|---|---|
+| J1 | `members #46` | Built | `enders_additions` is overlay code of `members/ends` (repackedEnds `-03`, two `[[mods]]`, Ender's dependency optional); `members/enders` deleted (backup in `moved_code_backup/2026-11-02-j1-enders/`); settings.gradle, bundle_members, `build_deploy.py` donor path changed together. ends_delight.md 5.9 |
+| J2 | `members #47`, `#48` | Built | `repackedSalt`, `repackedCreateSalt` (Create optional). Rock salt no-dissolve moved from a mixin into Salt's `Dissolving` (`replaced_classes`); the two vanilla-block mixins stay. **Config not moved** (Salt's `Configuration` feeds about 20 classes; R3 left open). Mod-name overrides for `create__the_salt` and `canned_goods` now carry "(Creative Delight)" (CEConfig default, live config, configs_edited). salt.md |
+| J3 | `members #49` | Built | `repackedCannedGoods`; golem dye as direct code in two replaced classes plus GPL3 `CannedGolemDye`; CD mixins removed. cans.md 9 |
+| J4 | `members #50` | Built | `portedGolden`, own code, donor `goldenfood_upstream/` (sha1-pinned, `UPSTREAM_DONORS`, `check_donor.py` 0 problems on the nested jar). Owner questions Q1, Q2 in golden_food.md 7 |
+| E5 | `swappers #3` | Built | Live-item merges in Common `swap/ItemMerges`, `/ceswap items`, triggers in `config/creativeengineering-swaps.toml` (owner: confirm defaults and file) |
+| E6 | `swappers #2` | Built | CD merge pairs moved into `data/creativedelight/swaps/merges_<mod>.json`, fed by CD `swap_merges.js` |
+| - | `members #51` | Built | Miner's loot modifiers replaced by pack loot rules (new Worldgen helpers `L.drop`, `L.dropShare`); haste half (`potions/effects #17`) not done, Pinned |
+| - | `members #30` R7, `dishes/meals #12` | Built | Pancake food type `sweet/pancake`, family `dessert/pancake` without a base, Sweet Potato Pancakes placeable |
+
+Not done in this run, and why: `framework #4` (37 foods) and `#6` (baseline), `members #43`, `#44` need fresh dumps from the
+game (`/dumpall`, `/dumpfood`, `/cedumpnames`); `members #34` (other cooking mods), `#6` (guardian food), `#25` (crate art),
+F5, F7 wait on owner decisions; `qol #3`, `framework #9` are Pinned; `members #10` is the release.
+
+Follow-ups: after the first boot, `/dumpall`, then `python3 tools/gen_loot_config.py` (SQ-GLD-09); `tools/creative_delight_test/move_diff_snapshot.json` lists the
+deleted merge scripts (retake the baseline with `framework #6`); `tools/loot_tuning_sim.js` still points at the old loot
+paths; `split/A_java.md`, `split/B_mixins.md` and section 34.1 of creative_delight.md still name the removed golem and rock
+salt mixins; `gen_dd_dishes.py` full runs rewrite 9 older dish models onto the newer bowl (reverted; review). Server by
+hand: copy `goldenfood_upstream/` beside mods/, remove the four displaced jars, install the three jars.
+
+Deploy tooling fixed in the same run: `build_deploy.py` `CATEGORIES` lacked `oceanic_upstream` and `enders_upstream`
+(KeyError on any deploy build) and now carries them plus `goldenfood_upstream`, with server and client copy steps;
+`gen_structure_config.py` reads the End House from `enders_upstream/` (it had dropped the set since the member began
+reading the donor on 11-01); `structure_config.json` regenerated, identical apart from that source line. The dry run's
+only remaining preflight error is three FTB jars with no `mod_sides.md` row (not from this run).
+
+Later the same night (owner): Golden Food Q2, the enchantment, its anvil route and the village books removed; 23 enchanted
+golden foods by sequenced assembly (CD `goldenfood/golden.js`, incomplete items in `transition_items.js`, restart needed);
+CD jar reinstalled. Q1: quirk kept, candle integration with every cake is TODO `baking/baked-goods #38`. Swapper triggers
+kept as built (owner). After the first boot also `/cegen food_families`.
+
+## L. Progress (2026-11-03, implementation run: decided open rows of the members)
+
+Owner asked to execute every decided open item of the direct Creative Delight members. Scope: open TODO rows (Bug,
+Planned, In Progress) whose work lands in one of the 22 members and whose decision is on record; mods with only a CD
+script folder (Fruits, Respite, Hostile and others) were left out. Built by four parallel agents (Barbeque's; Vintage;
+Oceanic, Fungi, Delightful, Veggies, Rustic; Golden, Salt, Incubation). `:creativeDelight:build` and `:creativeBrewing:build`
+passed; both jars installed 2026-11-03 00:08 with the game closed. Nothing booted, nothing committed. Queue: SQ-CDJ7.
+Owner decision 2026-11-03: gilded foods take 8 loops of 1 gold ingot + 125 mB (replaces 4 gold-block loops), apple included.
+
+Built (Testing): `food/seasoning #18`, `#11`, `#13`, `#7`, `#4`, `dishes/meals #49`, `ports/vintageport #7`, `jei-coverage #15`,
+`merges/dishes #4`, `#7`, `#9`, `textures/merges #2`, `#3`, `#4`, `farming/crops #27`, `farming/wild-crops #6`, `dishes/ocean #8`,
+`ui/names #13`, `#14`, `ui/effects #12`, `food/types-and-tuning #22`, `#23`, `creativedelight/members #43` (rule, not a gap).
+Already built: `ui/wthit #13`. Partly: `dishes/meals #46` (assembly, pack skewers #50 and pairs open), `food/types-and-tuning #3`
+(cakes, other golden foods, can rerun), `merges/dishes #8` (quiche built; lettuce-tag reading to confirm), `mobs/nests #3`
+(textures), `ports/vintageport #1` (SQ-VP-06 fix only). Not built: `food/types-and-tuning #17` (food set, form, art),
+`mobs/nests #2` (art), `creativedelight/members #44` (needs `/dumpcompost`).
+
+Left out on purpose: `members #10` (release), `#45` (scratch reruns), `#6`, `#25`, `#34` (owner decisions), `ports/vintageport #2`
+(SQ-VTD7-02 owner call), `cooking/kitchen #23` (art for an ARR mod's blocks), `creativesplit/cdfinish #11` (split row).
+Watch: a full `gen_can_types.py` run picks up pending can changes from this run (four unrelated can scripts were reset to HEAD
+by the Vintage agent); `food_families.py` reports 94 unsorted; item_merges.md 2.17 to 2.20 and the merge count (SWP-01) need
+one recount after boot.

@@ -170,7 +170,7 @@ Columns: mixin class | side | target mod | gate | target jar | reason | config k
 | `VineBlockShearMixin` | common | minecraft | none | Compat ? | sheared modded vines (block/VineShearing); a cross-mod block tweak, Sweep A decides block/ | - | `block.VineShearing` |
 | `SaltBlockRandomTickMixin` | common | minecraft | none | Compat ? | Vintage salt family random ticks and Salt mod dissolving (block/SaltBlockTicks); third-party block tweak | - | `block.SaltBlockTicks` |
 | `SaltLayerRandomTickMixin` | common | minecraft | none | Compat ? | Vintage salt family random ticks and Salt mod dissolving (block/SaltBlockTicks); third-party block tweak | - | `block.SaltBlockTicks` |
-| `SaltRockNoDissolveMixin` | common | salt | hard salt | Compat ? | Vintage salt family random ticks and Salt mod dissolving (block/SaltBlockTicks); third-party block tweak | - | `block.SaltBlockTicks` |
+| `SaltRockNoDissolveMixin` (removed 2026-11-02: direct code in the Salt member's `Dissolving`, [salt.md](../salt.md)) | common | salt | hard salt | Compat ? | Vintage salt family random ticks and Salt mod dissolving (block/SaltBlockTicks); third-party block tweak | - | `block.SaltBlockTicks` |
 | `LeafPileSlowMixin` | common | immersive_weathering | hard immersive_weathering; config | Compat | Immersive Weathering leaf pile slow | `LEAF_PILES.slowFromLayers` | - |
 | `TrinketCaseInventoryMixin` | common | botania | hard botania | Compat | Botania trinket case rules (storage tweak) | - | `compat.TrinketCaseRules` |
 | `TrinketCaseSlotMixin` | common | botania | hard botania | Compat | Botania trinket case rules (storage tweak) | - | `compat.TrinketCaseRules` |
@@ -231,12 +231,12 @@ Columns: mixin class | side | target mod | gate | target jar | reason | config k
 | `QuarkHoeAreaBreakMixin` | common | quark | hard quark | CD | crops/ (CropParity, StemExtraFruit, DandelionMaturing, HoeHarvestArea) | - | `crops.HoeHarvestArea` |
 | `QuarkHoeAreaHarvestMixin` | common | quark | hard quark | CD | crops/ (CropParity, StemExtraFruit, DandelionMaturing, HoeHarvestArea) | - | `crops.HoeHarvestArea` |
 | `QuarkOwnPickMixin` | common | quark | hard quark | CD | crops/ (CropParity, StemExtraFruit, DandelionMaturing, HoeHarvestArea) | - | `crops.CropParity` |
-| `CannedGolemColorMixin` | common | cannedgoods | hard cannedgoods | CD | canned golem dye (cans) | - | `compat.DyeableCannedGolem` |
+| `CannedGolemColorMixin` (removed 2026-11-02: direct code in the Canned Goods member, [cans.md](../cans.md) 9) | common | cannedgoods | hard cannedgoods | CD | canned golem dye (cans) | - | `compat.DyeableCannedGolem` |
 | `TemptGoalTroughRetryMixin` | common | minecraft | none | CD | troughs (owner: trough code to CD) | - | `compat.TroughRetryAccess` |
 | `FeedingTroughModuleMixin` | common | quark | hard quark; config | CD | troughs (owner: trough code to CD) | `PERF.troughMissCooldownTicks` | `compat.TroughRetryAccess` |
 | `MushroomCowBreedingMixin` | common | minecraft | none | CD ? | mooshroom breeding (husbandry, pairs with More Mooblooms member); plan 2.2 leaves mooshroom/ to the audit | - | `mooshroom.MooshroomFamily`, `mooshroom.MushroomTypeSetter` |
 | `AnimalCanMateMooshroomMixin` | common | minecraft | none | CD ? | mooshroom breeding (husbandry, pairs with More Mooblooms member); plan 2.2 leaves mooshroom/ to the audit | - | `mooshroom.MooshroomFamily` |
-| `CannedGolemRendererMixin` | client | cannedgoods | hard cannedgoods | CD | canned golem dye (cans) | - | `compat.DyeableCannedGolem` |
+| `CannedGolemRendererMixin` (removed 2026-11-02: direct code in the Canned Goods member, [cans.md](../cans.md) 9) | client | cannedgoods | hard cannedgoods | CD | canned golem dye (cans) | - | `compat.DyeableCannedGolem` |
 | `SeasonedItemModelMixin` | client | minecraft | none | CD | seasoned item model (food/) | - | `food.SeasonedItemModel` |
 
 ## CB (25: 14 common, 11 client)
@@ -381,7 +381,7 @@ Devtools: 0 mixins. The block-state probe (`devtools.BlockStateSyncDebug`) is re
 | `VineBlockShearMixin` | Compat ? | sheared modded vines (block/VineShearing); a cross-mod block tweak, Sweep A decides block/ |
 | `SaltBlockRandomTickMixin` | Compat ? | Vintage salt family random ticks and Salt mod dissolving (block/SaltBlockTicks); third-party block tweak |
 | `SaltLayerRandomTickMixin` | Compat ? | Vintage salt family random ticks and Salt mod dissolving (block/SaltBlockTicks); third-party block tweak |
-| `SaltRockNoDissolveMixin` | Compat ? | Vintage salt family random ticks and Salt mod dissolving (block/SaltBlockTicks); third-party block tweak |
+| `SaltRockNoDissolveMixin` (removed 2026-11-02: direct code in the Salt member's `Dissolving`, [salt.md](../salt.md)) | Compat ? | Vintage salt family random ticks and Salt mod dissolving (block/SaltBlockTicks); third-party block tweak |
 | `NeaWhistleGoalSkipMixin` | Common ? | perf: skips Nock Enough Arrows whistle tempt goal (perf/WhistleArrowTracker); Equipment if read as an arrows row |
 | `JetpackItemTooltipMixin` | Engineering ? | Dreams and Desires jetpack tooltip null-level crash fix; Common if read as an engine fix |
 
@@ -410,14 +410,14 @@ These are not dependency edges once Sweep A moves the helper with its feature; t
 | `ArmorTrimsLargeItemListsMixin` | Common ? | `compat.ArmorTrimsItemCache` | Compat |
 | `MobCobPipeSlotMixin` | CD | `compat.CornDelightCompat` | Compat |
 | `MobEffectTickContextMixin` | Common | `shield.EffectTickContext` | Equipment |
-| `CannedGolemColorMixin` | CD | `compat.DyeableCannedGolem` | Compat |
+| `CannedGolemColorMixin` (removed 2026-11-02: direct code in the Canned Goods member, [cans.md](../cans.md) 9) | CD | `compat.DyeableCannedGolem` | Compat |
 | `TemptGoalTroughRetryMixin` | CD | `compat.TroughRetryAccess` | Compat |
 | `FeedingTroughModuleMixin` | CD | `compat.TroughRetryAccess` | Compat |
 | `LeavesDecayRangeMixin` | Worldgen | `block.LeafDecayRange` | Engineering |
 | `VineBlockShearMixin` | Compat ? | `block.VineShearing` | Engineering |
 | `SaltBlockRandomTickMixin` | Compat ? | `block.SaltBlockTicks` | Engineering |
 | `SaltLayerRandomTickMixin` | Compat ? | `block.SaltBlockTicks` | Engineering |
-| `SaltRockNoDissolveMixin` | Compat ? | `block.SaltBlockTicks` | Engineering |
+| `SaltRockNoDissolveMixin` (removed 2026-11-02: direct code in the Salt member's `Dissolving`, [salt.md](../salt.md)) | Compat ? | `block.SaltBlockTicks` | Engineering |
 | `KubeJSStartupJarScriptsMixin` | Common | `compat.kubejs.JarStartupScripts` | Compat |
 | `MobCapLevelTickMixin` | Worldgen | `perf.MobCapLevels` | Common |
 | `MobCapMixin` | Worldgen | `perf.MobCapLevels` | Common |
@@ -439,7 +439,7 @@ These are not dependency edges once Sweep A moves the helper with its feature; t
 | `LCEasyScreenHelperMixin` | Common | `compat.LightmansTooltipStacks` | Compat |
 | `LCEasyGuiGraphicsMixin` | Common | `compat.LightmansTooltipStacks` | Compat |
 | `SubMenuConfigScreenMixin` | Common | `compat.StringEntry` | Compat |
-| `CannedGolemRendererMixin` | CD | `compat.DyeableCannedGolem` | Compat |
+| `CannedGolemRendererMixin` (removed 2026-11-02: direct code in the Canned Goods member, [cans.md](../cans.md) 9) | CD | `compat.DyeableCannedGolem` | Compat |
 | `SectionUpdateNullStateMixin` | Common | `devtools.BlockStateSyncDebug` | Devtools |
 | `BlockUpdateNullStateMixin` | Common | `devtools.BlockStateSyncDebug` | Devtools |
 | `ContainerTitlePlaqueMixin` | Common | `compat.guititle.TitlePlaques` | Compat |

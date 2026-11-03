@@ -1,8 +1,9 @@
-// requires: endersdelight
 // requires: enders_additions
-// Recipes for Ender's Delight 1.1.4's content, rebuilt in the Creative Delight member enders_additions (ids stay
-// endersdelight:*; ends_delight.md 3.1, 3.2; TODO largecontent/mod-additions #28). Pot recipes as 1.1.4, plus the
-// pack's heatless grid routes and the void pepper grinding routes. Recipe ids are creativedelight:<type>/<suffix>.
+// Recipes and tags for Ender's Delight 1.1.4's content, rebuilt as enders_additions inside the End's Delight member (ids
+// stay endersdelight:*; ends_delight.md 3.1, 3.2, 5.9; TODO largecontent/mod-additions #28). It registers whether or not
+// the installed Ender's Delight 1.2.2 is loaded, so this file needs only enders_additions; the five dishes come in
+// 1.2.2's Shulker Bowl, so their rows also need endersdelight. Pot recipes as 1.1.4, plus the pack's heatless grid routes
+// and the void pepper grinding routes. Recipe ids are creativedelight:<type>/<suffix>.
 ServerEvents.recipes(e => {
 	if (!global.CD || !global.CD.on('enders_additions')) return
 
@@ -19,6 +20,8 @@ ServerEvents.recipes(e => {
 			'voidpepper_crushed_voidpepper', { crushing: false })
 
 		//######################### Meals #########################
+		// Served in Ender's Delight 1.2.2's Shulker Bowl: only with that mod
+		if (!global.CD.on('endersdelight')) return
 		// Cooking pot, as 1.1.4: served in the Shulker Bowl, 1.0 xp, 200 ticks
 		R.fdCooking([i.amberveil, i.crushed_voidpepper, i.ethereal_saffron, i.chorus_flower], i.amberveil_stew, e, 'amberveil_stew', 1.0, 200, i.shulker_bowl)
 		R.fdCooking([i.amberveil, i.crushed_voidpepper, i.chorus_flower], i.amberveiled_curry, e, 'amberveiled_curry', 1.0, 200, i.shulker_bowl)
@@ -41,4 +44,24 @@ ServerEvents.recipes(e => {
 		R.shapeless(i.steak_fries, [i.crushed_voidpepper, i.cooked_beef, i.cooked_beef, i.milk, i.baked_potato, i.shulker_bowl],
 			e, 'steak_fries_cooked_manual_only')
 	})
+})
+
+ServerEvents.tags('item', e => {
+	if (!global.CD || !global.CD.on('enders_additions')) return
+	var t = global.tags
+	var i = global.item
+
+	// Void Pepper is the first spice (briefs/food_seasoning.md); saffron is not (owner, 2026-10-25)
+	t.add(e, i.t_spices, [i.voidpepper, i.crushed_voidpepper])
+})
+
+ServerEvents.tags('block', e => {
+	if (!global.CD || !global.CD.on('enders_additions')) return
+	var t = global.tags
+	var b = global.blocks
+
+	// Soils of the End plants: survive on both, grow slowly on end stone, faster when tilled.
+	// Rates: config/enders_additions-common.toml [growth].
+	t.add(e, b.t_end_plant_soil_slow, b.end_stone)
+	if (Platform.isLoaded('endercrop')) t.add(e, b.t_end_plant_soil_fast, b.tilled_end_stone)
 })

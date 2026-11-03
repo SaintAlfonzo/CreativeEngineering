@@ -14,6 +14,7 @@ Written 2026-10-05. Test prefix `NE-`.
 | Duck and goose nests (`WaterfowlNests`, Untitled Duck Mod) | moved to Incubation Additions (`incubation_additions:duck_nest` / `goose_nest`); DEPLOYED with pack 1.0.6 (2026-10-14) (the 2026-10-05 staging that had them under the old patcherMod ids was rebuilt before it went out, so the old duck/goose ids never reached a player); scratch-server verified 2026-10-05 |
 | Foreign-nest NPE guard (`LayEggInNestGoalMixin`) | DEPLOYED with the emu nest (1.0.2) |
 | Goose golden egg (`goldenegg/`, 3.11; [vintage_delight.md](vintage_delight.md) §2.5) | BUILT 2026-10-23 in 1.1.0 (`DropSpot` logic test 9/9 in plain Java), `incubationAdditions-1.1.0.jar` in `mods/`, DEPLOYED with 1.1.02 (1.1.02 changelog Mobs & Animals); scratch SQ-VP-13 PASSED (NE-15, NE-16 logic); NE-15 to NE-17 in game |
+| Wild nests (2.4, TODO `mobs/nests #3` habitat half) | BUILT 2026-11-03 (data in the member's bird packs + CD `incubation_additions/bird_nests.js`); installed in the CD jar 2026-11-03 00:08, not booted. Tests SQ-NEST-01, -02 (queue section SQ-CDJ7) |
 | Textures | emu, duck and goose eggs have their own sheets (but the duck and goose sheets are byte-identical copies of Incubation's `duck_eggs.png` / `turkey_eggs.png` and the emu sheet is a recolour of `turkey_eggs.png`, checked 2026-10-21: see 4); duck/goose nest base + item textures are swappable copies of the hay nest; the emu nest base + item still use Incubation's twig nest. All in the Incubation Additions jar; override from `kubejs/assets/incubation_additions/`. See 2.3 |
 
 **Files to open first:** [EmuNests.java](../development/creativeDelight/members/incubation/src/main/java/com/SaintAlfonzo/incubation_additions/nest/EmuNests.java),
@@ -165,6 +166,24 @@ PNG at the same path there replaces the jar's copy and reloads with F3+T. No mod
 4. Resource-pack zips in `resourcepacks/` beat `kubejs/assets/` (see the lang-priority note in
    memory); none touch these paths as of 2026-10-05.
 
+### 2.4 Where nests generate (built 2026-11-03)
+
+Incubation's own feature type `incubation:bird_nest` (config `state`, `entity_id`; places the filled nest with 2 to 4
+eggs on air above a grass block and tries to spawn 4 of the bird nearby), one set per bird in that bird's pack:
+
+| Nest | Placed feature | Bird spawned | Mod default biomes (`#incubation_additions:has_feature/<bird>_nest`) | Pack adds (CD `incubation_additions/bird_nests.js`) |
+|---|---|---|---|---|
+| Duck nest (`duck_egg_nest`) | `incubation_additions:nest_duck` | `untitledduckmod:duck` | `#untitledduckmod:duck_spawn` (rivers) | `#creativeengineering:mob_spawns/duck_wetlands` (swamps, beaches) |
+| Goose nest (`goose_egg_nest`) | `incubation_additions:nest_goose` | `untitledduckmod:goose` | `#untitledduckmod:goose_spawn` (rivers) | `#creativeengineering:mob_spawns/goose_wetlands` |
+| Emu nest (`emu_egg_nest`) | `incubation_additions:nest_emu` | `alexsmobs:emu` | `#minecraft:is_savanna` | `#creativeengineering:mob_spawns/am_emu_savanna` (savanna trait, Terralith's included) |
+
+Placement as Incubation's chicken nests: rarity 1 in 32 chunks, in square, heightmap, biome filter; biome modifiers
+`forge:add_features`, step `vegetal_decoration`. Files: `packs/<mod>/data/incubation_additions/worldgen/
+{configured_feature,placed_feature}/nest_<bird>.json`, `tags/worldgen/biome/has_feature/<bird>_nest.json`,
+`forge/biome_modifier/add_feature/<bird>_nest.json`. Brief recommendations taken (TODO decisions "none"): birds spawn
+with the nest, 1 in 32, the `*_ponds` rules left out (they match every grassy land biome). Grass only: badlands, sand
+and snow get none. New chunks only. Quick look: `/place feature incubation_additions:nest_duck` on grass.
+
 ## 3. What the pack changes
 
 1. **Emus lay in nests.** [EntityEmuEggLayerMixin](../development/creativeDelight/members/incubation/src/main/java/com/SaintAlfonzo/incubation_additions/mixin/EntityEmuEggLayerMixin.java)
@@ -239,8 +258,8 @@ PNG at the same path there replaces the jar's copy and reloads with F3+T. No mod
 - **Placeholder nest looks.** The duck and goose nest textures are still copies of the hay nest, and
   the emu nest uses the twig nest, so the bases look alike until those PNGs are repainted. The
   eggs are distinct: emu, duck and goose each have their own sheet.
-- **Nest variety in spawning (planned, scratchpad 2026-10-21).** New textures for the duplicated nests (above), and
-  nests generating in goose, duck and emu habitats. TODO `mobs/nests #3`.
+- **Nest variety in spawning (scratchpad 2026-10-21).** Nests in goose, duck and emu habitats BUILT 2026-11-03 (2.4).
+  New textures for the duplicated nests still need art (the 4 nest PNGs of the license bullet above). TODO `mobs/nests #3`.
 - **Egg geometry follows the painted layout.** The duck sheet is painted to Incubation's duck-egg
   UVs, so duck nests use the `*_duck_eggs` models; the goose sheet fits the turkey UVs, so geese get
   the larger turkey eggs (same as emus).
@@ -283,6 +302,8 @@ PNG at the same path there replaces the jar's copy and reloads with F3+T. No mod
 | [mods.toml](../development/creativeDelight/members/incubation/src/main/resources/META-INF/mods.toml), [gradle.properties](../development/creativeDelight/members/incubation/gradle.properties), [README.md](../development/creativeDelight/members/incubation/README.md) | mod metadata and dependencies, version, build notes |
 | [packs/alexsmobs/](../development/creativeDelight/members/incubation/src/main/resources/packs/alexsmobs/) | emu pack: assets, recipe, loot tables, `bird_nests` tag, `emu_nest_drops` item tag |
 | [packs/untitledduckmod/](../development/creativeDelight/members/incubation/src/main/resources/packs/untitledduckmod/) | duck/goose pack: assets (nests, crates, egg item sprites), recipes, loot tables, `bird_nests` + `mineable/axe` tags |
+| `packs/*/data/incubation_additions/worldgen/`, `forge/biome_modifier/`, `tags/worldgen/biome/` | wild nests (2.4) |
+| [kubejs/data/creativedelight/kubejs/incubation_additions/bird_nests.js](../kubejs/data/creativedelight/kubejs/incubation_additions/bird_nests.js) | pack habitats for the wild nests (biome tags) |
 | [kubejs/server_scripts/other/misc_mods.js](../kubejs/server_scripts/other/misc_mods.js) | twig nest recipe (the others moved to the mod) |
 | [kubejs/startup_scripts/compost/compost_values.js](../kubejs/startup_scripts/compost/compost_values.js) | 0.65 for all nests |
 | [item_dict.js](../kubejs/startup_scripts/_lib/item_dict.js), [block_dict.js](../kubejs/startup_scripts/_lib/block_dict.js) | ids |
@@ -364,3 +385,4 @@ PNG at the same path there replaces the jar's copy and reloads with F3+T. No mod
   in a closed 1x1 pen. Built (`:incubationAdditions:build` passes, `pickBlock` checked in plain Java: open ground
   gives the next block over); not in `mods/`, not run in game. NE-15, NE-16 updated, NE-17 added.
 - 2026-11-02 (deep scan): the mod is a Creative Delight member since 2026-11-01 (`development/creativeDelight/members/incubation`); file links in this writeup repointed, build through `:creativeDelight:`.
+- 2026-11-03: wild duck, goose and emu nests (2.4, TODO `mobs/nests #3` habitat half): worldgen data in the two bird packs, pack habitats in CD `incubation_additions/bird_nests.js`. In the CD jar installed 2026-11-03 00:08, not booted. SQ-NEST-01, -02.

@@ -121,7 +121,7 @@ README = OrderedDict([
     ('how', 'Where the item is a normal entry in a loot table JSON (almost always), its weight is rewritten '
             'before the roll. Items that mods inject in code (global loot modifiers, tag entries, pools added '
             'in code) are thinned or removed after the roll by LootJS instead: removed stacks leave an empty slot there. '
-            'Full details: kubejs/data/creativeworldgen/kubejs/loot/README.md.'),
+            'Full details: kubejs/data/creativeworldgen/kubejs/loot/readme.md.'),
     ('regenerate', 'python3 tools/gen_loot_config.py (after mod updates / a fresh /dumploot). Keeps your edits.'),
 ])
 
@@ -161,7 +161,8 @@ def iter_data_sources():
                 nested_names.append(n.rsplit('/', 1)[-1])
                 yield f'{jar.name}!{n.rsplit("/", 1)[-1]}', nz.read, nz.namelist()
     # Donor jars a port serves its data from at runtime (no data/ of its own in the port jar): Miner's Delight reads
-    # the 1.4.5 jar in miners_upstream/ (MinersTranslator; creativedelight members #40). Tables only, as served.
+    # the 1.4.5 jar in miners_upstream/ (MinersTranslator; creativedelight members #40). Tables only, as served: the
+    # translator leaves the donor's loot modifiers out (members #51), the pack's loot rules give those drops.
     for port_prefix, donor in DONOR_DATA_JARS:
         if not any(name.startswith(port_prefix) for name in nested_names) and not list(MODS_DIR.glob(port_prefix + '*.jar')):
             continue
@@ -169,7 +170,7 @@ def iter_data_sources():
             print(f'WARNING: donor jar {donor.relative_to(INSTANCE)} missing; its loot tables will be missing')
             continue
         z = zipfile.ZipFile(donor)
-        names = [n for n in z.namelist() if n.startswith('data/')]
+        names = [n for n in z.namelist() if n.startswith('data/') and '/loot_modifiers/' not in n]
         yield donor.name, z.read, names
     if KUBEJS_DATA.exists():
         files = [p for p in KUBEJS_DATA.rglob('*.json')]

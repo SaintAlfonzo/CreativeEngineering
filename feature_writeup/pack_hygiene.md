@@ -347,7 +347,7 @@ effects reserved for Creative Brewing). The Brewin' / alcohol rows in `cooking/c
     driven by a `refmap_name` property.
 42. **Upstream-resource checks copied.** **FIXED 2026-10-27** (section 9). Reinvent. `checkNoUpstreamResources` in `backportedMiners/build.gradle:42`,
     `backportedVinery/build.gradle:51`, `creativeDelight/members/rustic/build.gradle:23`, and `checkNoArrResources` in
-    `members/enders/build.gradle:25`. Fix: a convention with `upstream_jar` and `own_files` properties.
+    `members/enders/build.gradle:25` (that member was deleted 2026-11-02; the End's member now sets the check up through its `gradle.properties` keys). Fix: a convention with `upstream_jar` and `own_files` properties.
 43. **Compiler flag and repo block per mod.** **FIXED 2026-10-27** (section 9). Judgement. `-AdisableTargetValidator=true` in 6 mods (already central in
     `ce.forge-repack`) and the same `flatDir 'libs'` block in about 13. Fix: a property in `ce.forge-mod`.
 

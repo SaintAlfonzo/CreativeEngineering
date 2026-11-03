@@ -602,7 +602,10 @@ Slower blocks show red. Frames add "from camo"; a sticky piston that isn't facin
   item_dict keys (173 added for the new mods), so a restart is needed. Sim: 6355 ids, 0 overlaps, no dead patterns.
   BR-52 added.
 - 2026-11-01: Vintage Delight port tiered (`vintageport #2`, [vintage_delight.md](vintage_delight.md) 4.0 step 21): crates
-  wood, oat bag and bale natural smooth, salt bricks and mixed salt bricks constructed brick, Smooth Salt Block and Salt
+  wood, oat bag and bale soft (changed 2026-11-02, see below), salt bricks and mixed salt bricks constructed brick, Smooth Salt Block and Salt
   Pillar constructed smooth, the salt blocks (The Salt's Salt Block and raw rock salt block, Vintage's Salt Block)
-  natural smooth, Cheese and Meat Pizza confectionery. Sim: 6453 ids, 0 overlaps; jars, machines and wild plants left
+  soft (changed 2026-11-02, see below), Cheese and Meat Pizza confectionery. Sim: 6453 ids, 0 overlaps; jars, machines and wild plants left
   untiered. Test SQ-VTD7-02.
+- 2026-11-02: owner decision on the r1102b SQ-VTD7-02 fail: Vintage oat bags and bales, Farmer's Delight straw/rice bales, hay
+  bales and the Salt Blocks (The Salt's Salt Block and raw rock salt block, Vintage's Salt Block) stay in `soft` (0.88x,
+  `blocktags.js` lines 327 and 341-346); the changelog bullet now says 0.88x. SQ-VTD7-02 rewritten to expect `soft`.

@@ -36,7 +36,7 @@ This file has three parts:
 | Overlap list, all marked `*overlaps w/` | §3 | analysis; every duplicate ships, review after play |
 | Integration list in build order | §4 | BUILT 2026-10-23 except the dump-driven steps (§4.0, TODO `ports/vintageport #2`); food types, cans (configured), jar fluids, compost and cooking rules built the same day; deployed with 1.1.02 (port `-03`), 1.1.03 shipped `-07` (still in `server_mods/`), `-08` in the 1.1.04 client. **Deep scan 2026-11-02:** `-13` is a nested Creative Delight member (`development/creativeDelight/members/vintage`), in the installed `mods/creativedelight-1.0.0.jar` (2026-11-02 14:01); not deployed |
 | Open questions | §5 | vine tree set is on test (S1); Mixed Seeds BUILT 2026-11-01 (§2.3a) |
-| Tests | §8 | VTD-01 to VTD-76 drafted, none ticked; server side by `/vtdtest all` 373+ PASS (2026-10-26); group B (SQ-VP-14 / -15) and the CQ-VP client rows open. Deep scan 2026-11-02: r1102 SQ-VTD4-04, -06, SQ-MXS-01, -02 PASS, SQ-VTD8-01 FAIL (jar stall, fixed in `-12`), SQ-VTD5-01 blast drops closed as built; r1102b s1 SQ-VTD4-03, -05, -07, -08 PASS, **SQ-VTD6-01 FAIL** (wild ghost peppers stay on grass: Terralith puts grass in `#minecraft:nylium`; TODO `ports/vintageport #7`), s3 SQ-VTD7-01 PASS, **SQ-VTD7-02 FAIL** (bales and salt blocks soft 0.88x, not 1.05x), s5 SQ-VTD8-02 (b) PASS; VTD-68 server check queued as SQ-VTD9-01 |
+| Tests | §8 | VTD-01 to VTD-76 drafted, none ticked; server side by `/vtdtest all` 373+ PASS (2026-10-26); group B (SQ-VP-14 / -15) and the CQ-VP client rows open. Deep scan 2026-11-02: r1102 SQ-VTD4-04, -06, SQ-MXS-01, -02 PASS, SQ-VTD8-01 FAIL (jar stall, fixed in `-12`), SQ-VTD5-01 blast drops closed as built; r1102b s1 SQ-VTD4-03, -05, -07, -08 PASS, **SQ-VTD6-01 FAIL** (the planted crop on farmland is fixed by the `canSurvive` override, installed in `-13` and still to be re-seen in game; wild ghost peppers stay on grass: Terralith puts grass in `#minecraft:nylium`; TODO `ports/vintageport #7`), s3 SQ-VTD7-01 PASS, **SQ-VTD7-02 FAIL** (bales and salt blocks soft 0.88x, not 1.05x; resolved 2026-11-02: soft is intended, changelog and test now say 0.88x), s5 SQ-VTD8-02 (b) PASS; VTD-68 server check queued as SQ-VTD9-01; 2026-11-03 run: VTD-80 to VTD-86, SQ-VTDA-10 to -13, CQ-VTDA-01 (SQ-CDJ7), port `-14` installed 2026-11-03 00:08, not booted |
 
 - **Source to port from:** `~/.local/share/atlauncher/downloads/vintagedelight-0.1.6.jar` (Forge 1.20.1, closest API,
   109 classes). Decompile with `python3 tools/decompile_mod.py <jar> <out dir>` (94 sources). The KOTS jar
@@ -632,7 +632,7 @@ Briefs: [dishes_jams](briefs/dishes_jams.md), [dishes_pickles-and-ferments](brie
   Hearth and Harvest (survey 2026-10-30, [hearth_and_harvest.md](hearth_and_harvest.md) 2.1) adds raspberry, cherry and
   grape jams and pickled cabbage, carrots and potatoes to these families; its jar, five other jams, two pickles,
   peanut butter, PB & J and roasted peanuts duplicate Vintage's and are not ported.
-- **Nut mash** (`merges/dishes #7`): merged with Delightful's nut butter. Open: which survives (recommend Vintage's nut mash).
+- **Nut mash** (`merges/dishes #7`): merged with Delightful's nut butter. Decided 2026-11-02 (owner): nut mash survives (acorn or peanut, mason jar only), nut butter dropped; the sandwich becomes Nut Mash and Jam Sandwich.
 - **Pickled sea pickle** (`dishes/pickles-and-ferments #1`): Brewin's Pickled Pickles is removed; a recoloured pickle is the
   new Pickled Sea Pickle, crafted without honey. Open: the craft (recommend 5 sea pickles + salt).
 - **Real pickles only** (`pickles-and-ferments #2`): pickle recipes (squid and pickles, sea pickle roll, others) take
@@ -646,6 +646,8 @@ Briefs: [dishes_jams](briefs/dishes_jams.md), [dishes_pickles-and-ferments](brie
   exists yet) and the foods.
 - **Kimchi** (`pickles-and-ferments #8`): Vintage's kimchi wins over Brewin's (the jar copy of the Brewin' craft goes), and any
   pickleable veggie works as the base. Replaces the "keep both, `VTD-40`" state for kimchi.
+  2026-11-02 (owner): Brewin's recipes are not migrated; new Vintage kimchi recipes, one per pickleable in place of the ghost
+  pepper: cucumber or zucchini, onion, egg, sea pickle, beetroot, surstromming input fish (all whole raw fish).
 - **Century egg** (`pickles-and-ferments #9`): takes a pickled egg instead of any egg (changes §2.7 and VTD-35).
 - **Fermented garlic honey** (`pickles-and-ferments #10`): Regeneration II 5 s and Health Boost 30 s. Open: "3 hearts" is not
   a Health Boost level (I = 2 hearts, II = 4).
@@ -841,6 +843,29 @@ Pickles (2026-10-25)
   loot, and an old stack turns into Pickled Sea Pickles.
 - [ ] VTD-57 Cooking pot: each pickled veggie in the pickle slot makes pickle soup, with any 2 vegetables.
 
+Vintage work run (2026-11-03)
+
+Port `-14` and the CD scripts are in the CD jar installed 2026-11-03 00:08 (Creative Brewing jar the same time, kimchi removal); not booted. Scratch rows SQ-VTDA-10 to -13 and client row CQ-VTDA-01 (queue section SQ-CDJ7) cover VTD-80 to VTD-86 server-side.
+
+- [ ] VTD-80 **Wild ghost pepper soil** (port `-14`, `vintageport #7`): with Terralith, a wild ghost pepper does not stay on
+  grass, mycelium or moss (it breaks on the next neighbour update); it places on crimson and warped nylium, Soul Soil,
+  Rich Soul Soil and Nulch.
+- [ ] VTD-81 **Salt layer from inside** (`food/seasoning #7`): stand in a 2-layer salt patch and use Salt Dust on it up to 8
+  layers: the layer grows, you are not pushed up. Walk onto a 6-layer salt block from the side: you still step up.
+- [ ] VTD-82 **JEI pages** (`jei/jei-coverage #15`): Organic Mash's page reads "Fermented organic mash, used as an enhanced
+  fertilizer or to make compost."; Salt Layer, Cheese Mold and every mason jar (empty and filled) have an information page.
+- [ ] VTD-83 **Kimchi** (`merges/dishes #9`): JEI shows one kimchi (Vintage's); Pickling Jar: 4 cabbage leaves + salt +
+  one of cucumber or zucchini, onion, any egg, sea pickle, beetroot, any whole raw fish (cod, salmon, tropical fish,
+  lionfish, perch, pike, blobfish, flying fish, catfish) -> 4 kimchi; the ghost pepper recipe stays. No Brewin' kimchi recipe.
+- [ ] VTD-84 **Nut mash** (`merges/dishes #7`): Cooking Pot: 5 acorns, roasted acorns, peanuts or roasted peanuts (mixed is
+  fine) + sugar -> 3 Nut Mash, each served into an empty mason jar; no nut mash bottle, nut butter or nut dough in JEI; a
+  Nut Butter bottle in an old chest turns into Nut Mash.
+- [ ] VTD-85 **Sandwich** (`merges/dishes #7`): "Nut Mash and Jam Sandwich" (Vintage's art) from any bread + a Nut Mash +
+  any jam in the grid, both jars come back empty; Delightful's sandwich is gone from JEI. Pad Thai takes a Nut Mash.
+- [ ] VTD-86 **Quiche** (`merges/dishes #8`): the Oven with a pie tin bakes Quiche from pie crust + cheese wedge + milk +
+  any egg + any cooked meat, or any mushroom, or a salad green (cabbage, cabbage leaf, dandelion leaf); Zucchini Quiche
+  from pie crust + cheese wedge + milk + egg + 2 roasted zucchini. No grid or Create assembly recipe for either.
+
 ## 9. History
 
 - 2026-10-22: plan written from the 0.1.6 Forge 1.20.1 jar (decompiled, 94 sources, 237 recipe files) and the KOTS
@@ -907,8 +932,24 @@ Pickles (2026-10-25)
   batch. Thrown leftovers (buffer off or full) wait CD `[vintage.pickling_jar] overflowEjectDelayTicks` ticks (default 20)
   in a queue saved with the jar and dropped if it breaks. Rows SQ-VTD8-01 (rewritten), SQ-VTD8-02.
 
+- **2026-11-03 (Vintage work run):** port `-14` (nested in the CD jar installed 2026-11-03 00:08, not booted): `GhostPepperWildCropBlock.mayPlaceOn` names
+  crimson and warped nylium instead of `#minecraft:nylium` (Terralith fills that tag with grass, mycelium, moss;
+  `vintageport #7`). `SaltLayerBlock.getCollisionShape` cuts the collision at the feet of an entity whose box overlaps the
+  block and whose feet are below the layer's top, so a layer grown under you does not push you up; outside the block the
+  full snow-like shape stays (`food/seasoning #7`; side effect: while already standing in salt you can walk into a thicker
+  neighbouring layer instead of stepping up). JEI (`jei-coverage #15`): Organic Mash text fixed, new pages on the Salt
+  Layer (grown by the Evaporator; Salt Blocks no longer grow salt since the salt merge), the Cheese Mold and jar stacking
+  (every `MasonJarBlock`); keys in `src/own` lang. The stale pack overrides `kubejs/data/vintagedelight/moonlight/
+  soft_fluids/pepper_jam.json`, `relish.json` (they dropped the `_bottle` container, SQ-VP-06) moved to
+  `development/creativeDelight/moved_code_backup/2026-11-02-vintage/`; the member's own files apply. Kimchi merge
+  (`merges/dishes #9`): Brewin's kimchi is a removed item (CD `vintage_items.js`; Creative Brewing `swaps/removed.json`),
+  the pack's `brewin_kimchi` jar recipe is gone (Creative Brewing `alcohol.js`), six new jar recipes in CD
+  `vintagedelight/recipes.js` (`kimchi_from_*`), new tag `#creativeengineering:whole_raw_fish`; Vintage kimchi takes
+  Brewin's place in `#creativeengineering:soup_veggie_cooked` and alone fills Canned Kimchi (`gen_can_types.py`; the can
+  now takes Vintage's values). Kimchi, nut mash (`merges/dishes #7`) and quiche (`merges/dishes #8`): item_merges.md 2.18 to 2.20.
+
 ### Owner decisions 2026-11-02
 
 - VTD-47: keep the magic vine tree set. Magic Peanut: very rare peanut drop (replaces ~1 %) and very rare wandering trader trade, as rare as the pale/dark seeds.
-- Kimchi: Vintage's wins; Brewin's kimchi removed and its recipes carried over (see TODO `merges/dishes #9`).
+- Kimchi: Vintage's wins; Brewin's kimchi removed, its recipes NOT carried over (owner later 2026-11-02, replaces "carried over"); new Vintage kimchi recipes per pickleable (see TODO `merges/dishes #9`; built 2026-11-03, History).
 - Pickles craftable with cucumbers or zucchini. Fermented garlic honey: 4 hearts already, no change. Golden egg placement observed OK. Both lasagnas kept.

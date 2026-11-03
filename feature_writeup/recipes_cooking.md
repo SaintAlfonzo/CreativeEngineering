@@ -139,7 +139,7 @@ loops of its own: gilding food with gold in machines, and growing meat from mob 
 |---|---|
 | Bone broth | pot: bone or bone meal + glow berries / mushrooms / hanging roots / glow lichen → 2; shapeless 1 |
 | Beef stew, baked cod stew, noodle soup, chicken soup, cooked rice | shapeless with bone broth; since 2026-10-21 baked cod stew takes a fried egg, baked potato and tomato sauce, chicken soup two cooked veggies (`#creativeengineering:soup_veggie_cooked`) in place of the raw veggie and carrot |
-| Orange jam | Fruits Delight's 2-orange pot and heated mixing recipes kept; since 2026-10-23 also pot: 4 orange slices + sugar + lemon slice + bottle; heated mixing: 4 slices + lemon slice + sugar + 100 mB water → 125 mB jam (TODO `baking/sweets #6`) |
+| Orange and lemon jam | Fruits Delight's pot (2 fruit + sugar + lemon slice, mason jar) and heated mixing (+ 100 mB water → 125 mB) recipes; since 2026-11-02 each whole-fruit slot also takes that fruit's slice, one for one (orange or orange slice; lemon or lemon slice). The separate from-slices recipes (orange 4 slices 2026-10-23, lemon 5 slices) are removed (TODO `baking/sweets #6`, `dishes/jams #6`) |
 | Fruit beignet | removed item since 2026-10-23 (TODO `dishes/meals #19`): every recipe with it as output removed |
 | Fried rice, mushroom rice, sinigang | shapeless with cooked rice; fried rice takes 2 fried eggs, mushroom rice a baked potato and a second brown mushroom, sinigang a second cooked fish, so each costs one more than the pot (2026-10-21) |
 | Vegetable soup, vegetable noodles, ratatouille, corn soup | heatless shapeless from cooked ingredients (2026-10-21) |
@@ -210,7 +210,7 @@ Fish on the cutting board give more: salmon and cod → 6 slices + bone meal, ca
 |---|---|---|---|
 | Golden carrot | carrot in 8 gold nuggets | carrot + 6 nuggets | carrot + 5 nuggets |
 | Golden apple | vanilla's 8 ingots | apple + 6 gold ingots | apple + 5 ingots |
-| Enchanted golden apple | | assembly on a golden apple, 4 loops of a gold block, 250 mB liquid XP and pressing | |
+| Enchanted golden (gilded) apple | | assembly on a golden apple, 8 loops of 1 gold ingot, 125 mB liquid XP and pressing (owner 2026-11-03; was 4 loops of a gold block and 250 mB) | |
 
 Since 2026-10-21 (TODO `dishes/meals #9`) the machine discount went from 3 and 5 (of 8) to 2 and 3; revisit with food
 tuning (`food/types-and-tuning #1`, #3). Rose gold counts as gold in every golden food recipe (decided 2026-10-22: the
@@ -475,9 +475,10 @@ None.
 - [ ] **RC-82 Culture in the cooking pot:** JEI beef culture → U: a cooking pot recipe beef culture + bone meal +
   cooking oil → 3 beef cultures (`creativedelight:farmersdelightcooking/beef_culture_cooking`); same for the other 6
   cultures. Cook one on a lit stove → 3 cultures.
-- [ ] **RC-79 Orange jam from slices:** JEI orange jam → R: the 2-orange pot recipe and a pot recipe with 4 orange
-  slices + sugar + lemon slice (bottle); a heated basin with 4 slices + lemon slice + sugar + 100 mB water gives 125 mB
-  orange jam. Both 2-orange recipes still there.
+- [ ] **RC-79 Orange and lemon jam from slices (reworked 2026-11-02):** JEI orange jam → R: the pot recipe cycles
+  Orange / Orange Slice in both fruit slots (mason jar container), no separate 4-slice recipe; the heated mixing recipe
+  the same. Lemon jam: both lemon slots cycle Lemon / Lemon Slice, the extra Lemon Slice slot stays; no 5-slice recipe.
+  Cook 2 Orange Slices + Sugar + Lemon Slice in the pot: Orange Jam.
 - [ ] **RC-80 FD ids and crab bars:** JEI grilled salmon, bacon and eggs, salmon roll, cod roll → one shapeless recipe
   each under `farmersdelight:` (F3 + advanced tooltips show the id), plus the sequenced assembly; crab bars: shapeless
   `creativeengineering:shapeless/crab_bars_manual_only` (2), not offered by a Create mixer.
@@ -503,7 +504,7 @@ None.
   not in `#forge:jam_jars` or `#vintagedelight:savory_jam`; the Pickling Jar's jam -> vinegar recipe does not accept it.
 - [ ] **RC-175 PB and J takes any jam:** grid bread + nut mash bottle + a Fruits Delight jam, or a grape / cherry jam
   jar -> PB and J; the jar comes back as an empty mason jar.
-- [ ] **RC-176 Bottle jams in mason jars:** (recipe level: scratch FAILED r1102b, SQ-PSU-06: the lemon and orange jam-from-slices pot recipes, CD `fruitsdelight/recipes.js`, still take a glass bottle; every other jam pot recipe takes the mason jar) eat a Fruits Delight jam and Upgrade Aquatic's mulberry jam: an empty mason
+- [ ] **RC-176 Bottle jams in mason jars:** (recipe level: scratch FAILED r1102b, SQ-PSU-06: the lemon and orange jam-from-slices pot recipes still took a glass bottle; FIXED 2026-11-02 by removing them, slices now go in Fruits Delight's own recipes, RC-79; rerun SQ-PSU-06) eat a Fruits Delight jam and Upgrade Aquatic's mulberry jam: an empty mason
   jar comes back. JEI: the jam's pot recipe shows the mason jar as container; Spout filling takes a mason jar; Item Drain
   gives one back. A jam block crafted back to jams takes mason jars.
 - [ ] **RC-177 Old bottles convert:** (inventory swap: scratch server PASSED r1102b, SQ-PSU-08; JEI: in game) in an old world with a vinegar bottle, an apple sauce bottle, a pepper jam bottle and

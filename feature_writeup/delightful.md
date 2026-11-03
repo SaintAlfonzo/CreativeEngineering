@@ -221,3 +221,12 @@ Live tests are queued as SQ-DF in [testing/scratch_queue.md](testing/scratch_que
 | DF-09 | Fluix Knife on a mob | tooltip "Always has at least Looting I"; kills drop as with Looting I |
 | DF-10 | The 3 knives on a cutting board | they cut (in `forge:tools/knives`) |
 | DF-11 | Names | Iced Berry Matcha Latte, Nut Butter, Rose Rock Candy |
+
+## 5. Names (2026-11-03, `ui/names #14`)
+
+The Mini Cantaloupe Plant, Sliced Mini Cantaloupe, the cantaloupe JEI and description texts and Fruits Delight's Cantaloupe Stem,
+Attached Cantaloupe Stem, cauldrons and fluids (cantaloupe merge, item_merges.md 2.10) are now set in each mod's own lang
+namespace (3-argument `e.add` in CD `assets/creativedelight/kubejs/creativeengineering/names.js`). The 2-argument form wrote them
+into the minecraft lang, which the mod's own file can beat (the `ui/names #12` cause). Client restart (or F3+T).
+In the CD jar installed 2026-11-03 00:08, not booted; client row CQ-CDM2-01 (queue section SQ-CDJ7).
+

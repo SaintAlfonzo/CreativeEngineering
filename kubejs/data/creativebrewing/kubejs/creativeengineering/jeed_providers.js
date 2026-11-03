@@ -112,6 +112,9 @@ global.CB.recipes(() => {
 	add('minecraft:night_vision', gamblersTea)
 	add('minecraft:wither', gamblersTea)
 	add('alexsmobs:oiled', i.fish_oil)
+	// Fungi Delight (Creative Delight member) gives Weak Stomach from code when a food in its alcohol_reaction tag is
+	// eaten (ModEffectEvents; ui/effects #12). Burrowing comes only from its potions, which JEED lists by itself.
+	add('fungidelight:weak_stomach', i.t_fungi_alcohol_reaction)
 	add('create_confectionery:rest', [i.bar_of_white_chocolate, i.full_white_chocolate_bar, i.black_chocolate_candy_2,
 		i.ruby_chocolate_candy_2])
 	add('create_confectionery:stimulation', [i.bar_of_black_chocolate, i.full_black_chocolate_bar,

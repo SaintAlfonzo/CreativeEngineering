@@ -52,9 +52,9 @@ public class RhinoWildCrops {
 			"  highPriorityData: function (fn) { __data = fn }, loaded: function (fn) {} };");
 		cx.evaluateString(scope, prelude, "prelude", 1, null);
 		cx.evaluateString(scope, Files.readString(root.resolve("development/patcherMod/src/main/resources/kubejs_startup/creativeengineering/func/tag_helper.js")), "tag_helper.js", 1, null);
-		cx.evaluateString(scope, Files.readString(root.resolve("kubejs/server_scripts/worldgen/_biome_rules.js")), "_biome_rules.js", 1, null);
+		cx.evaluateString(scope, Files.readString(root.resolve("kubejs/data/creativeworldgen/kubejs/worldgen/_biome_rules.js")), "_biome_rules.js", 1, null);
 		String path = script.equals("wild_crops") ? "kubejs/data/creativedelight/kubejs/_worldgen/wild_crops.js"
-				: "kubejs/server_scripts/worldgen/" + script + ".js";
+				: "kubejs/data/creativeworldgen/kubejs/worldgen/" + script + ".js";
 		cx.evaluateString(scope, Files.readString(root.resolve(path)), script + ".js", 1, null);
 		cx.evaluateString(scope, "__tags({ add: function (t, id) { __HOST.tag(String(t), String(id)) } });", "fire_tags", 1, null);
 		cx.evaluateString(scope, "__data({ add: function (p, t) { __HOST.add(String(p), String(t)) } });", "fire_data", 1, null);

@@ -66,7 +66,12 @@ ServerEvents.recipes(e => {
 		//######################### Nuts #########################
 		// Nuts cook in the fruit family's trio (food type raw/fruit holds nuts; CD.FOOD values)
 		F.fruitCook(i.t_nuts_acorn, i.roasted_acorn)
-		R.shapeless(Item.of(i.nut_dough, 3), [i.t_nut_butter, i.eggs], e, 'nut_dough')
+		// Nut mash (merges/dishes #7, owner 2026-11-02): nut dough is removed (vintage_items.js) and has no recipe; nut
+		// butter and the Nut Butter and Jelly Sandwich merge into Vintage's nut mash jar and sandwich (swaps
+		// merges_delightful.json). Their own recipes go first, so the merge does not carry them over; the nut mash and
+		// sandwich recipes are in vintagedelight/recipes.js and cooking.js.
+		;['delightful:food/cooking/nut_butter_bottle', 'delightful:food/nut_butter_and_jelly_sandwich',
+			'delightful:food/nut_butter_and_jelly_sandwich_from_bread_slice'].forEach(id => R.remove({ id: id }, e))
 
 		//######################### Knives #########################
 		R.shaped(i.aluminum_knife, ['m', 's'], { m: i.ingot_aluminum, s: i.any_stick }, e, 'aluminum_knife')
