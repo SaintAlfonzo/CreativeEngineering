@@ -54,6 +54,7 @@ public final class CDConfig {
 	public static final String MANUAL_ONLY_ROUTES = "manualOnlyRoutes";
 	public static final String WTHIT_CROP_LINE = "wthitCropLine";
 	public static final String JEI_INFO_PAGES = "jeiInfoPages";
+	public static final String COOKWARE_PICKUP = "cookwarePickup";
 
 	/** Worldgen switch ids (creative_delight.md 24). */
 	public static final String WILD_CROPS = "wildCrops";
@@ -106,6 +107,9 @@ public final class CDConfig {
 		qolSwitch(b, WTHIT_CROP_LINE, "QoL-6: the WTHIT 'Growth' line for plants WTHIT doesn't cover (only with WTHIT).",
 				"Dials: [crop_growth] below.");
 		qolSwitch(b, JEI_INFO_PAGES, "QoL-6: JEI information pages for member mechanics (only with JEI).");
+		qolSwitch(b, COOKWARE_PICKUP, "QoL-7: sneak right-click with an empty hand picks up a cooking pot, copper pot, kettle or",
+				"skillet (#creativedelight:cookware_pickup) into the hand, as if broken; sneak left-click toggles the handle.",
+				"Off: sneak right-click toggles the handle as in the original mods.");
 		b.pop();
 
 		b.comment("One switch per Creative Delight worldgen system (feature_writeup/creative_delight.md 24). Rejoin the world",
@@ -412,6 +416,7 @@ public final class CDConfig {
         public final ForgeConfigSpec.IntValue secondFruitMinutes;
         public final ForgeConfigSpec.IntValue thirdFruitMinutes;
         public final ForgeConfigSpec.IntValue fourthFruitMinutes;
+        public final ForgeConfigSpec.BooleanValue fertileSoilBoost;
 
         private StemFruit(ForgeConfigSpec.Builder b) {
             b.comment(
@@ -432,6 +437,11 @@ public final class CDConfig {
                     .defineInRange("thirdFruitMinutes", 20, 0, 1440);
             fourthFruitMinutes = b.comment("Minimum game minutes after the 3rd fruit before a 4th can grow.")
                     .defineInRange("fourthFruitMinutes", 40, 0, 1440);
+            fertileSoilBoost = b.comment(
+                    "true: a stem on soaked Fertile Soil gets Immersive Weathering's extra random ticks",
+                    "(mulch_growth_random_ticks, 10 per soil tick). false: no extra ticks; Fertile Soil still counts",
+                    "as moist farmland for the stem's own growth roll. Melon, pumpkin and cantaloupe stems alike."
+            ).define("fertileSoilBoost", false);
 
             b.pop(); // stem_fruit
         }

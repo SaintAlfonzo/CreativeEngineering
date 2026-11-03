@@ -1,7 +1,9 @@
 // Scratch-only query command for bulk queue runs (feature_writeup/testing/scratch_queue.md). Copy into a scratch
 // server's kubejs/server_scripts as zz_zq_probe.js, never into the pack.
 //   /zq recipes <text>       recipe ids containing text, with their result
-//   /zq rdetail <text>       same ids with serializer, result and inputs (first 3 items of each)
+//   /zq rdetail <text>       same ids with serializer, result and inputs (first 3 items of each); "rdetail+" lines add
+//                            rolled results with counts and chances, a sequenced assembly's start ingredient and steps
+//   /zq bytype <serializer>  every recipe of that serializer id (e.g. barbequesdelight:combine), then the count
 //   /zq uses <item id>       every recipe with an ingredient accepting the item ("alone" = nothing else accepted)
 //   /zq makes <item id>      every recipe whose result is the item (no ':' = result id contains the text)
 //   /zq food <item id>       nutrition, saturation modifier, effects (amplifier, ticks, chance)
@@ -19,7 +21,8 @@
 //   /zq blocktag <tag id>    blocks in a block tag
 //   /zq tagsof <item id>     item tags of an item (and block tags of its block)
 //   /zq nbt <item id>        how scripts see an ItemStack's NBT (getTag vs .nbt)
-//   /zq useitem <player>     air use of the main-hand item (the client's follow-up when a block use PASSes)
+//   /zq useitem <player>     air use of the main-hand item (the client's follow-up when a block use PASSes), then of
+//                            the off-hand item if the main hand did not consume the action
 //   /zq states all           block-state id count (Block.BLOCK_STATE_REGISTRY) against the 2^20 ceiling
 // Output: "[zq] ..." lines in logs/latest.log, then "[zq] done".
 (() => {
@@ -35,6 +38,23 @@
     const $ZQHand = Java.loadClass('net.minecraft.world.InteractionHand')
     const $ZQSeason = Java.loadClass('com.SaintAlfonzo.creativecalendar.seasons.SeasonTypes')
     function out(s) { console.info('[zq] ' + s) }
+    function zqIng(g) {
+        let s = g.getStacks(), ids = []
+        for (let k = 0; k < Math.min(3, s.size()); k++) ids.push(String(s.toList().get(k).getId()))
+        return ids.join('/') + (s.size() > 3 ? '/+' + (s.size() - 3) : '')
+    }
+    function zqRolls(r) {
+        // "N id @chance" per rolled result; null when the recipe has no getRollableResults (Rhino throws on a missing method)
+        try {
+            let o = []
+            r.getRollableResults().forEach(c => {
+                let st = c.getStack(), ch = 1
+                try { ch = c.getChance() } catch (err) { }
+                o.push(st.getCount() + ' ' + String(st.getId()) + ' @' + ch)
+            })
+            return o.join(', ')
+        } catch (err) { return null }
+    }
     function run(server, what, arg) {
         try {
             if (what == 'recipes') {
@@ -252,6 +272,19 @@
                 let tk = $ZQTagKey.create($ZQReg.BIOME_REGISTRY, new $ZQRL(arg)), ids = []
                 reg.getTagOrEmpty(tk).forEach(h => ids.push(String(h.unwrapKey().get().location())))
                 out('biometag ' + arg + ' (' + ids.length + '): ' + ids.join(' '))
+            } else if (what == 'bytype') {
+                // every recipe whose serializer id is arg: "bytype <serializer> <id> -> <result>", then the count
+                let n = 0
+                server.getRecipeManager().getRecipes().forEach(r => {
+                    let type = '?'
+                    try { type = String($ZQReg.RECIPE_SERIALIZER.getKey(r.getSerializer())) } catch (err) { }
+                    if (type != arg) return
+                    n++
+                    let res = '?'
+                    try { res = String(r.getResultItem()) } catch (err) { }
+                    out('bytype ' + arg + ' ' + String(r.getId()) + ' -> ' + res)
+                })
+                out('bytype ' + arg + ': ' + n)
             } else if (what == 'rdetail') {
                 // id contains arg: serializer, result, and each ingredient's first 3 items
                 let n = 0
@@ -270,6 +303,35 @@
                         })
                     } catch (err) { ins.push('ingredients: ' + err) }
                     out(id + ' {' + type + '} -> ' + res + ' <- ' + ins.join(', '))
+                    // extra lines (never "<id> {", so counts on the main line stay valid): every rolled result with
+                    // count and chance (FD cutting ChanceResult, Create ProcessingOutput: both getRollableResults),
+                    // and a sequenced assembly's starting ingredient and steps
+                    let rolls = zqRolls(r)
+                    if (rolls) out('rdetail+ ' + id + ' results: ' + rolls)
+                    let start = null
+                    try { start = zqIng(r.getIngredient()) } catch (err) { }
+                    if (start != null) out('rdetail+ ' + id + ' start: ' + start)
+                    // public Ingredient fields of recipes whose getIngredients is empty (CD Barbeque's skewering)
+                    let fields = []
+                    ;['tool', 'ingredient', 'side'].forEach(f => {
+                        try {
+                            let g = r[f]
+                            if (g != null && g.getStacks) {
+                                let c = r[f + 'Count']
+                                fields.push(f + ' ' + (c != null ? c + 'x ' : '') + zqIng(g))
+                            }
+                        } catch (err) { }
+                    })
+                    if (fields.length) out('rdetail+ ' + id + ' fields: ' + fields.join(', '))
+                    try {
+                        let k = 0
+                        r.getSequence().forEach(sr => {
+                            let pr = sr.getRecipe(), st = '?', gs = []
+                            try { st = String($ZQReg.RECIPE_SERIALIZER.getKey(pr.getSerializer())) } catch (err) { }
+                            try { pr.getIngredients().forEach(g => gs.push(zqIng(g))) } catch (err) { }
+                            out('rdetail+ ' + id + ' step ' + (k++) + ' {' + st + '} <- ' + gs.join(', '))
+                        })
+                    } catch (err) { }
                 })
                 out('rdetail matching ' + arg + ': ' + n)
             } else if (what == 'itemtag' || what == 'blocktag') {
@@ -299,8 +361,14 @@
                 // perfBot's `pbot use` only does the block use)
                 let p = server.getPlayerList().getPlayerByName(arg)
                 if (p == null) { out('no player ' + arg) } else {
+                    // main hand first, then the off hand when the main hand does not consume the action (the
+                    // client's order: Minecraft.startUseItem tries each hand until one consumesAction)
                     let r = p.gameMode.useItem(p, p.getLevel(), p.getMainHandItem(), $ZQHand.MAIN_HAND)
                     out('useitem ' + arg + ' ' + r)
+                    if (!r.consumesAction() && !p.getOffhandItem().isEmpty()) {
+                        let r2 = p.gameMode.useItem(p, p.getLevel(), p.getOffhandItem(), $ZQHand.OFF_HAND)
+                        out('useitem ' + arg + ' offhand ' + r2)
+                    }
                 }
             } else out('unknown query ' + what)
         } catch (err) { out('error: ' + err) }

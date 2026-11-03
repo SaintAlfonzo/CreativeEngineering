@@ -2101,6 +2101,16 @@ in `struck_monument`, `witch_coven` and `witch_cart_caravan` put guardians acros
 witches and cats on the wagons; removed). Before that date a boxed part also lost its own overrides of other categories
 (the witch hut's cats).
 
+**Monument rooms after a reload (fixed 2026-11-02, `structures/contents #8`).** Vanilla saves an ocean monument as
+its building piece only; the rooms (and the three elder guardians, two in the wing rooms and one in the penthouse) are
+rebuilt from the seed whenever a start is read back from disk (`OceanMonumentStructure.regeneratePiecesAfterLoad`),
+but only for a start whose structure is the monument. A `meta/struck_monument` start saved before all its chunks were
+decorated (a `/locate`, a server stop, chunks unloading mid-generation) came back with the outer walls only: no rooms,
+no elder guardians. patcherMod `StructureStartMetaMonumentMixin` (`StructureStart.loadStaticStart` RETURN) calls
+`MetaStructure.repairMonumentsAfterLoad`, which rebuilds a roomless monument part the vanilla way from the chunk it was
+generated at and swaps it in when box and facing match (else one warning per start). Lone monuments were never
+affected; guardian respawns (SQ-META31-09) were not either.
+
 **Meteor shower biomes.** The meta's own `biomes` is the fit biome tag `#creativeengineering:land/desert` (sand deserts;
 filled at load by `structure_overrides.js`), so a meteorite slot outside a desert stays a plain meteorite.
 
@@ -2204,13 +2214,57 @@ attempt). Box mobs count toward the monster cap and despawn like any monster. 6%
 Omen). Takes a Pillage's own illagers (archer, legioner, skirmisher) are not in any pool. Structures already generated
 keep their spawners.
 
+**Box spawn height** (added 2026-11-02, TODO `structures/contents #6`; patcherMod `StructureSpawnBoxes.boxHeight`,
+`NaturalSpawnerBoxHeightMixin` at the return of `NaturalSpawner#getRandomPosWithin`). Vanilla starts each spawn attempt
+at a random height from the world bottom (y -64) to the column top, so over a 22-high Mysticrift tower about 1 attempt
+in 8 lands in the tower's height range and fewer than 1 in 20 on one of its floors; the rest fall in the ground and
+caves under it, where the biome's monsters spawn. In a column a box of that category covers (the piece boxes over the
+column for `piece`, the box around all pieces for `full`, a meta's box parts as in 3.31), half the attempts now start
+at a random height between the box's bottom and the column top. The other half, every unboxed column and every
+category without a box keep vanilla's height. Caps (no budget of their own, owner 2026-11-02), light and placement
+rules, the 24-block player distance and the box lookup are unchanged: the attempt only starts where the box mobs can
+stand. Applies to every box, the vanilla outpost included (`towers`).
+
+**Probe: `/cespawnbox [pos] [category]`** (added 2026-11-02, op level 2; default: the executor's block, `monster`).
+Prints and logs one `[spawn-boxes]` line: the box that answers a natural spawn there (`box <id> of <structure>`, inside
+a meta `box <meta box> (part box <part's box>) of <meta>, part <part>`, or `spawn_overrides` of a meta part) with its
+pool as `type weight (min-max)`, or `no box (structures referenced here: ...) -> vanilla [...]` with the list vanilla
+would use (a structure's own `spawn_overrides`, else the biome's). It asks the same lookup the spawner does, so a row can
+check the box resolution without waiting on random spawns. Code: `StructureSpawnBoxes.lookup` / `probe`.
+
+**Pre-scratch findings (2026-11-02, `mobs/pillagers #6`, `structures/contents #6`).** Static check of
+`spawn_boxes.json` against the tags: every siege, camp, ship and witch structure resolves to the box in the table above,
+no overlap (no `first wins` warning in the r1031 or r1101 logs; 67 structures boxed); inside `meta/pillager_tower_siege`
+the anchor tower (`towers`), the camps (`camps`) and the weapons (`vehicles`) all take the meta's `large_tower` pool in
+`inMeta`. Code reading finds no path that hands a part its own pool while the meta has a box. The r1101 SQ-SB-04 counts
+(2 pillagers, 3 vindicators, no evoker by the anchor of the meta at chunk [-24, 2], whose parts were the T&T forest
+tower at -375 91 44, a C.C.C. camp at -333 101 36 and a catapult at -375 72 20) are unlikely under `large_tower` (about
+2% for 3 dark-spawned picks with no evoker, illusioner or witch) but come from one 240 s window with qa within 24 blocks
+of the camp, and the SQ-SB-03 lone birch tower spawned no illager while zombies did. Not settled; the next run probes
+first (`/cespawnbox` inside each part) and counts mobs only after that, with patrols off and the area cleared. Spawn
+facts that thin box mobs: the spawner picks a height from the world bottom to the column top, so most attempts over a
+tower land below it in caves (biome mobs); every box monster but the pillager needs block light 0, so lit tower
+interiors only spawn pillagers; box mobs share the monster cap with cave mobs; nothing spawns within 24 blocks of a
+player. Owner 2026-11-02: no cap change and no budget outside the cap;
+make the attempts reach the box instead.
+
+**Cause found (2026-11-02, `structures/contents #6`).** Not the box lookup and not the spawn rules: the birch tower
+(`birch_pillager_tower_new`, 15 x 22 x 15, `full` box, base y 81 at [-2016, 6672]) has standing room on most of its levels
+(ground yard 92 spots, floors at +4..+6, +10, the balcony at +14 with 95, the roof at +20/+21), dark except 2 lanterns
+at +7 (pillagers need block light 8 or less there, the others 0); `PatrollingMonster.checkPatrollingMonsterSpawnRules`
+(1.19.2 bytecode: block light > 8 refuses, then `checkAnyLightMonsterSpawnRules`) passes on every floor away from the
+lanterns. What starves it is the attempt height: y uniform over -64..103 gives about 1 in 20 of the tower-column
+attempts a floor level, and with the monster cap full of cave mobs only freed slots spawn anything, shared by about
+289 chunks: a few hundred spawns in 300 s, of which the tower's 1-2 chunks win well under 1 on a floor. Template
+pillagers (8 in the NBT) despawn at random beyond 32 blocks (qa stood 31-45 off). Fix: box spawn height (above).
+
 **Tests** (scratch queue SQ-SB; r1031 2026-10-31 ran SB-01 to -03, SB-04 to -08 not run):
 - **ST-320 Spawners gone:** *r1031 (SQ-SB-02): the log shows the spawners removed from the catapult, the Mysticrift oak and End towers and the Blocky Siege ship; the row's check was wrong, fixed row not rerun.* new world; `/ceplace` a catapult, a Mysticrift oak tower, the Blocky Siege ship and the End
   tower -> no spawner where the templates had them; `[spawner-filter]` lines for each; `removeSpawners = []` brings
   them back in new chunks.
 - **ST-321 Boxes load:** *PASS r1031 (2026-10-31, SQ-SB-01, -01b).* boot log `[spawn-boxes] 15 box(es)`, then `N structure(s) boxed` on the first spawn check, no
   `is in box ... and in box` warning.
-- **ST-322 Large tower mix:** *FAIL r1031 (2026-10-31, SQ-SB-03), cause not settled: no illager at a lone birch tower by night or day while zombies and a creeper spawned; monster cap or player distance suspected.* a Mysticrift tower at night on Normal -> pillagers, vindicators, evokers, illusioners,
+- **ST-322 Large tower mix:** *FAIL r1031 (2026-10-31, SQ-SB-03): no illager at a lone birch tower by night or day while zombies and a creeper spawned. Cause: attempt heights from the world bottom (see Cause found); box spawn height built 2026-11-02, rerun SQ-PSM-03.* a Mysticrift tower at night on Normal -> pillagers, vindicators, evokers, illusioners,
   witches; no ravager, no zombie inside the box. By day only pillagers.
 - **ST-323 Box inside a meta:** `/locate` a `meta/pillager_tower_siege`; by the anchor tower and by a siege weapon ->
   both spawn the large-tower mix (no ravagers); a lone T&T tower spawns the camp mix.
@@ -2221,6 +2275,24 @@ keep their spawners.
 - **ST-326 Unwrecked crew:** an Unwrecked ship with the pillager layout spawns the boat mix on deck; a villager-crew
   ship spawns biome mobs.
 - **ST-327 Witch boxes:** a witch wagon and a Terralith underground witch hut at night -> witches only.
+
+### 3.34 Quark spiral spires: no base over the void (added 2026-11-02, TODO `structures/contents #5`)
+
+Quark's Spiral Spires (End outer islands past 1050 blocks, `[world.spiral_spires]` rarity 200, radius 15) are a
+`MultiChunkFeatureGenerator`, not a structure: every chunk within the radius of a source rolls a column, walks down
+from y 256 to the first end stone and builds a spike there (`SpiralSpireGenerator.makeSpike`, decompiled 3.4-418).
+Quark only checks that the spike's own column is clear of other blocks; it never looks at the ground around it, so at
+an island edge the base (a disc of radius 7 at the surface, plus up to 5 layers below where the centre is solid)
+hangs over the void. Quark has no config switch for it.
+
+patcherMod `QuarkSpiralSpireFootprintMixin` (`makeSpike` HEAD) cancels a spike when any block under its base disc
+(i * i + j * j <= 49, one block below the surface) is air. The disc radius is 7 for every height and composition
+Quark rolls, so the check draws no random and the other spikes of the cluster are unchanged; only spikes on solid
+ground remain. No toggle. Test: ST-335.
+
+- [ ] **ST-335 Spires on solid ground [scratch]:** End, fly the outer islands past 1050 blocks until a spire cluster
+  (myalite crystal spirals on dusky myalite spikes); look under every spike from the side → each base sits on end
+  stone all round, none hangs over the void; spikes still generate inland (a cluster has several).
 
 ## 4. Limits and decisions
 
@@ -2450,10 +2522,7 @@ built and in the payload, not fully tested. Fixes from the rest of the 8.0 run g
   BUILT 2026-10-30: `tuned` field + `--strip-weights`, weights stripped, frequencies kept (3.27).
 
 **Structure contents**
-- **Move to the Nether** (marked 2026-10-12, not built): Philip's soul dungeons (lost soul dungeon, lost soul city),
-  rare ruin and blackstone Nether ruin, tag `plan/move_to_nether`. They spawn as now until then, and the Nether block
-  swaps leave them untouched. Philip's lost soul city is underground (`type/underground`); the Nether pass in the
-  grouping Todo above is the natural place.
+- **Move to the Nether**: BUILT 2026-11-02, see Done (`structures/contents #1`).
 - advanced periph structures are disabled by config, disable warning/remove structure directly 
 - ~~swap river tree to oak log, remove river log/wood~~ (done 2026-10-22, [recipes_wood.md](recipes_wood.md) 2.6), swap driftwood craft to oak planks, remove driftwood/logs
 
@@ -2486,6 +2555,31 @@ built and in the payload, not fully tested. Fixes from the rest of the 8.0 run g
 - increase minimum distance for jungle temples. if it makes sense to split every surface dungeon out by biome to have finer control, do this
 
 ### Done
+
+**2026-11-02: Philip's four Nether-built structures moved to the Nether** (`structures/contents #1`, data only; brief
+[structures_contents.md](briefs/structures_contents.md) #1; ST-294, ST-295). Biome fits `nether/soul` (soul sand valley:
+lost soul dungeon, lost soul city), `nether/forest` (crimson and warped forests: rare ruin) and `nether/wastes` (Nether
+wastes, basalt deltas: blackstone Nether ruin), all `inherit: false`, in `biome_fits.json` with same-named structure
+tags. Out of `type/ruin`, `type/underground`, `dungeon/underground_modded`, `land/any/deep`, `land/jungle`,
+`land/swamp` and `meta/large_ruins` (the ruin metas lose one anchor: level-three ruins, ancient towers and the forgotten
+church remain); into `type/nether_constructed`. Lost soul dungeon, rare ruin and blackstone ruin joined
+`group/nether_ruins` (out of `ruins` and Philip's `underground_structures` set); the lost soul city keeps its own set
+(spacing 37, separation 30). Rates by hand after the sync (its fit to their Overworld rates gave weights 148 and 214):
+dungeon and blackstone ruin weight 100, frequency 0.5993 like Philip's other Nether ruins (about 1 per 36 to 39
+chunks in their biomes), rare ruin weight 6, frequency 0.3759 (1 per 181); the four old members went from 1 per 34 to
+1 per 38 chunks (obelisk 28 to 30). Start heights in `kubejs/data/philipsruins/worldgen/structure/` (jar copies,
+only the height changed): rare ruin and blackstone ruin `absolute -95` on `WORLD_SURFACE_WG` (y 33 above the lava
+sea, Philip's own Nether convention), lost soul dungeon fixed y 12, lost soul city fixed y 5 (31 tall, to y 36; if
+lava floods it, ST-294 says move it to y 33). Wither skeleton spawn overrides kept. `plan/move_to_nether` removed:
+swap file unchanged (1407), `nether_swaps.md` lists no exempt structure. Existing worlds keep the Overworld copies
+already generated.
+
+- [ ] **ST-294 Soul builds in the Nether [scratch]:** new world; in the Nether `/locate structure` each of
+  `philipsruins:lost_soul_city`, `lost_soul_dungeon`, `rare_ruin`, `start_nether_ruin` → found, in its fit's biomes
+  (soul sand valley; crimson or warped forest; wastes or deltas), at y 5 / 12 / 33 / 33 (F3), not flooded by lava;
+  in the Overworld `/locate` finds none of the four.
+- [ ] **ST-295 Ruin metas without the rare ruin [scratch]:** Overworld `/locate structure
+  creativeengineering:meta/ruin_cluster` → found, anchored on a level-three ruin, ancient towers or forgotten church.
 
 **2026-10-14: 7.4, new structure mods + `vehicles` group + fortified-town shares 0.20 / 0.20 / 0.40** (patcherMod
 1.0.6 rebuilt in `build/libs` 01:28, not in `mods/`; offline checks pass; ST-170 to ST-190 next, on a scratch
@@ -2558,7 +2652,7 @@ In order, first match wins:
 | every Overworld structure | soul campfire left | campfire (2) |
 | every Overworld structure | potted crimson/warped fungus and roots | potted dead bush (4) |
 
-Exempt from every rule: `plan/move_to_nether` (Todo). A template a Nether or End structure can also place is never
+Exempt from every rule: none since 2026-11-02 (the four `plan/move_to_nether` structures moved to the Nether, 7 Done). A template a Nether or End structure can also place is never
 swapped (none was hit). The Unwrecked Ships **Nether ship** is disabled (`enabled: false`): it is the only crimson/warped
 ship; Overworld ships never take those pieces (the pool walk overcounted them, their jigsaw names don't match, so the
 nether_blocks_scan report lists crimson/warped for `unwrecked_ships:ship` wrongly). Read for "ancient crypt and lv2

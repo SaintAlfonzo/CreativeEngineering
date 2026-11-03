@@ -4,7 +4,7 @@ import com.SaintAlfonzo.creativeengineering.CEConfig.GroundMode;
 import com.SaintAlfonzo.creativedevtools.DevtoolsConfig;
 import com.SaintAlfonzo.creativedevtools.DevtoolsConfig.VerticalAlign;
 import com.SaintAlfonzo.creativeengineering.worldgen.WorldgenConfig;
-import com.SaintAlfonzo.creativeengineering.worldgen.WorldgenFiles;
+import com.SaintAlfonzo.creativeengineering.util.WorldgenFiles;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;

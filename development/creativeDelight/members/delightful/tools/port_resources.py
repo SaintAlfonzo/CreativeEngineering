@@ -7,8 +7,8 @@ src/main/resources/:
     (only files the donor has and 3.4.1 does not; parents from Farmer's Delight or vanilla stay where they are)
   - block loot tables, without 1.20's random_sequence field
   - assets/delightful/lang/en_us.json: 3.4.1's file plus the new names (listed in replaced_resources)
-  - data/delightful/cup_conversion/cactus_soup.json: the Copper Pot serves Cactus Soup as the Cactus Soup Cup (Miner's
-    Delight port's table; 3.8.1's file also has the Sinigang and Venison Stew cups, not taken)
+No cup items: the pack has no Copper Cup (TODO dishes/meals #53), so 3.8.1's Cactus Soup Cup and its cup_conversion
+row are not taken.
 Run from anywhere: python3 tools/port_resources.py
 """
 import json
@@ -24,7 +24,7 @@ OUT = MEMBER / 'src/main/resources'
 
 ITEMS = [
     'cantaloupe_seeds', 'cantaloupe_bread', 'wrapped_cantaloupe', 'cantaloupe_popsicle', 'stuffed_cantaloupe_block',
-    'stuffed_cantaloupe', 'cantaloupe_gummy', 'cactus_chili', 'cactus_soup', 'cactus_soup_cup', 'baklava',
+    'stuffed_cantaloupe', 'cantaloupe_gummy', 'cactus_chili', 'cactus_soup', 'baklava',
     'baklava_slice', 'matcha_milkshake', 'salmonberry_milkshake', 'matcha_gummy', 'roasted_acorn', 'nut_dough',
     'aluminum_knife', 'certus_quartz_knife', 'fluix_knife',
 ]
@@ -92,9 +92,5 @@ for key, value in donor_lang.items():
 lang['jei.delightful.info.cantaloupe_seeds'] = donor_lang['jei.delightful.info.cantaloupe_seeds']
 lang.update(EXTRA_LANG)
 put('assets/delightful/lang/en_us.json', (json.dumps(lang, indent=2, ensure_ascii=False) + '\n').encode())
-
-conversions = json.loads(DONOR.read('data/miners_delight/cup_conversion/delightful_conversions.json'))
-rows = [r for r in conversions['entries'] if r['cup'].split(':')[1] in ITEMS]
-put('data/delightful/cup_conversion/cactus_soup.json', (json.dumps({'entries': rows}, indent=2) + '\n').encode())
 
 print(f'{len(written)} files written under {OUT.relative_to(MEMBER)}')

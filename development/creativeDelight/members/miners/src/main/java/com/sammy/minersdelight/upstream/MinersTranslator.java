@@ -20,10 +20,15 @@ import java.util.function.UnaryOperator;
  * to upstream data goes through this class, never through a file at an upstream path.
  */
 public final class MinersTranslator {
-    /** Upstream ids the port does not register (D3: the hot cocoa cup; later drops from MND-40 go here too). */
-    public static final Set<String> REMOVED = Set.of("hot_cocoa_cup");
-    /** Cup conversion rows whose bowl does not exist on 1.19.2 (FD 1.19.2-1.2.4 has no onion soup; D9 adds its own row). */
-    private static final Set<String> MISSING_BOWLS = Set.of("farmersdelight:onion_soup");
+    /**
+     * Upstream ids the port does not register: the hot cocoa cup (D3) and, since TODO dishes/meals #53 (2026-11-02), the
+     * Copper Cup and every cup (water, milk, powder snow, the 15 soup and stew cups). Files named after them are left out,
+     * files naming them are dropped (tags lose the entry instead), the cup conversion data is not read at all.
+     */
+    public static final Set<String> REMOVED = Set.of("hot_cocoa_cup", "copper_cup", "water_cup", "milk_cup", "powder_snow_cup",
+            "beetroot_soup_cup", "mushroom_stew_cup", "rabbit_stew_cup", "baked_cod_stew_cup", "noodle_soup_cup", "beef_stew_cup",
+            "chicken_soup_cup", "fish_stew_cup", "pumpkin_soup_cup", "vegetable_soup_cup", "bone_broth_cup", "cave_soup_cup",
+            "bat_soup_cup", "insect_stew_cup", "onion_soup_cup");
     /** 1.20 renamed the loot condition {@code alternative} to {@code any_of}; 1.19.2 only knows the old name. */
     private static final String ANY_OF = "\"minecraft:any_of\"";
     private static final String ALTERNATIVE = "\"minecraft:alternative\"";
@@ -38,11 +43,13 @@ public final class MinersTranslator {
             "assets/miners_delight/textures/item/tentacles.png",
             "assets/miners_delight/textures/item/baked_tentacles.png",
     };
-    /** Per-file data edits for later pack decisions, keyed by the translated path. */
+    /** Per-file data edits for later pack decisions, keyed by the translated path; applied before the removed-id check. */
     private static final Map<String, UnaryOperator<JsonObject>> PATCH_DATA = Map.of(
             // Upstream bug (creativedelight members #41, plan_creative_delight.md I7): the arthropod drop lacks the
             // not-on-fire check its spider leg sibling has, so a spider killed while burning still dropped raw arthropod.
-            "data/miners_delight/loot_modifiers/scavenging_spider.json", MinersTranslator::notOnFire);
+            "data/miners_delight/loot_modifiers/scavenging_spider.json", MinersTranslator::notOnFire,
+            // The Copper Pot takes a water bucket or a water cup; without cups only the bucket is left (dishes/meals #53).
+            "data/miners_delight/recipes/copper_pot.json", MinersTranslator::withoutRemovedAlternatives);
 
     private static final Gson GSON = new GsonBuilder().setPrettyPrinting().disableHtmlEscaping().create();
     private static Map<String, byte[]> assets;
@@ -125,34 +132,44 @@ public final class MinersTranslator {
         if (!path.endsWith(".json")) {
             return bytes;
         }
+        if (path.contains("/cup_conversion/")) {
+            return null;
+        }
         String text = new String(bytes, StandardCharsets.UTF_8);
-        if (mentionsRemoved(text) && !path.contains("/tags/") && !path.contains("/cup_conversion/")) {
+        JsonObject json = null;
+        UnaryOperator<JsonObject> patch = PATCH_DATA.get(path);
+        if (patch != null) {
+            json = patch.apply(JsonParser.parseString(text).getAsJsonObject());
+            text = GSON.toJson(json);
+        }
+        if (mentionsRemoved(text) && !path.contains("/tags/")) {
             return null;
         }
         if (path.contains("/loot_modifiers/") || path.contains("/loot_tables/")) {
             text = text.replace(ANY_OF, ALTERNATIVE);
+            json = null;
         }
-        JsonObject json = null;
         if (path.contains("/tags/")) {
             json = JsonParser.parseString(text).getAsJsonObject();
             removeValues(json.getAsJsonArray("values"));
-        } else if (path.contains("/cup_conversion/")) {
-            json = JsonParser.parseString(text).getAsJsonObject();
-            JsonArray kept = new JsonArray();
-            for (JsonElement entry : json.getAsJsonArray("entries")) {
-                JsonObject row = entry.getAsJsonObject();
-                String bowl = row.get("bowl").getAsString();
-                if (!MISSING_BOWLS.contains(bowl) && !isRemoved(bowl) && !isRemoved(row.get("cup").getAsString())) {
-                    kept.add(row);
-                }
-            }
-            json.add("entries", kept);
-        }
-        UnaryOperator<JsonObject> patch = PATCH_DATA.get(path);
-        if (patch != null) {
-            json = patch.apply(json != null ? json : JsonParser.parseString(text).getAsJsonObject());
         }
         return (json != null ? GSON.toJson(json) : text).getBytes(StandardCharsets.UTF_8);
+    }
+
+    /** A shaped recipe whose key entries are lists of alternatives: the alternatives naming a removed item are left out. */
+    private static JsonObject withoutRemovedAlternatives(JsonObject json) {
+        for (Map.Entry<String, JsonElement> key : json.getAsJsonObject("key").entrySet()) {
+            if (key.getValue().isJsonArray()) {
+                JsonArray options = key.getValue().getAsJsonArray();
+                for (int i = options.size() - 1; i >= 0; i--) {
+                    JsonObject option = options.get(i).getAsJsonObject();
+                    if (option.has("item") && isRemoved(option.get("item").getAsString())) {
+                        options.remove(i);
+                    }
+                }
+            }
+        }
+        return json;
     }
 
     /** Adds the "this entity is not on fire" condition (as in scavenging_spider_leg.json) after the killer condition. */

@@ -39,4 +39,6 @@ ServerEvents.tags('block', e => {
 	t.add(e, b.t_forge_fence_gates, b.rope_fence_gate)
 	t.add(e, b.t_fd_mineable_knife, b.fd_pumpkin_pie)
 	t.add(e, 'minecraft:mineable/axe', b.hanging_canvas_sign)
+	// Tomato vines pick with their own right-click; Quark's hoe area clicks each, up ropes and sticks (farming/crops #29)
+	t.add(e, b.t_own_pick_crops, [b.tomatoes, b.stick_tomatoes, b.rope_tomatoes, b.treated_stick_tomatoes])
 })

@@ -1,6 +1,6 @@
 # Curios slots
 
-Test prefix **CS-** · Last updated **2026-11-02** · Overall status **BUILT (IMC fix 2026-11-01; slot line 2026-11-02), in patcherMod 1.1.07 installed 2026-11-02, not booted, untested in game**
+Test prefix **CS-** · Last updated **2026-11-02** · Overall status **BUILT (IMC fix 2026-11-01; slot line 2026-11-02; mouth tag dropped and Face render 2026-11-02), in patcherMod 1.1.07 installed 2026-11-02, Creative Compat / Creative Delight changes not built into mods/, untested in game**
 
 ## 0. At a glance
 
@@ -19,15 +19,25 @@ Nothing registered **hands**, and no mod offers a mouth or face slot. The pack n
 | Feet items: the 16 stepstools ([stepstool.md](stepstool.md)) | tag `curios:feet` = `#creativeengineering:stepstools`, [curiostags.js](../kubejs/server_scripts/tags/curiostags.js) |
 | Player gets all three slots | IMC slots go to every player by default (no entities file in 5.1.x) |
 | Hands items: Falconry Glove (the only glove in the pack) | tag `curios:hands`, [curiostags.js](../kubejs/server_scripts/tags/curiostags.js) |
-| Face items: Simple Hats chalk stick and six masks (tribal, cucumber eye, ghost, hockey, horse, sleep eye), Botania cosmetic masks (ancient, eerie, tiny potato), Cob Pipe | tag `curios:face`, same script |
+| Face items: Simple Hats chalk stick and six masks (tribal, cucumber eye, ghost, hockey, horse, sleep eye), Botania cosmetic masks (ancient, eerie, tiny potato) | tag `curios:face`, same script (Simple Hats rows in Creative Compat's `tags/curiostags.js`) |
+| Cob Pipe in Face | tag `curios:face` in Creative Delight's `corn_delight/tags.js` (the pipe's owner), 2026-11-02 |
+| Hats worn in Face drawn on the player | Creative Compat `mixin/SimpleHatsFaceSlotMixin` (client, gated on Simple Hats), 2026-11-02 |
 
 Notes:
 
 - Simple Hats adds every hat to `curios:head` through a mixin, so its face items also stay valid in a head slot. Removing them from
   head would need a patcherMod mixin; not done.
-- The Cob Pipe (`creativeengineering:cob_pipe`, [corn_delight.md](corn_delight.md) 2.3, built 2026-10-25) is in this face tag and,
-  from its own tags, in `curios:head` and `curios:mouth`. Its plan said "mouth slot first": the face slot is that slot now
-  (`curios:mouth` stays unused). A right click puts it in Face first, then the head slot, then a Curios head slot.
+- The Cob Pipe (`creativeengineering:cob_pipe`, [corn_delight.md](corn_delight.md) 2.3, built 2026-10-25) is in `curios:face`
+  and `curios:head`. A right click puts it in Face first, then the head slot, then a Curios head slot. Its old
+  `curios:mouth` tag was dropped 2026-11-02 (`gameplay/misc #19`): Curios builds the "Slot:" tooltip line from every
+  `curios:*` item tag, registered or not, so the pipe listed a Mouth slot that does not exist.
+- Rendering (`gameplay/misc #20`, 2026-11-02): Curios draws an item in any slot only through a renderer registered for
+  the item. Botania's masks and the Cob Pipe have one and draw from Face. Simple Hats instead draws hats from its own
+  layer and only for the slot named `head`, so a mask in Face was invisible; Creative Compat's
+  `SimpleHatsFaceSlotMixin` makes that check accept `face` too (cosmetic stack and the slot's render toggle as for head).
+- Feet slot not showing (scratchpad 2026-11-02, `gameplay/misc #19`): the last played session (`logs/latest.log`, 10-31)
+  predates the IMC registration (2026-11-01, patcherMod 1.1.07 installed 2026-11-02 00:18), so the old datapack files
+  were in use and no pack slot existed. No code change: CS-07 on the 1.1.07 jar is the check.
 - Wardrobe and Portable Wardrobe tag only `minecraft:air` under hands, so no other item landed there.
 - IMC slots need the patcherMod jar on both sides and a full restart; an existing save picks them up on next join (CS-01).
   A world's `serverconfig/curios-server.toml` `curiosSettings` can also define slots; the pack leaves it empty.
@@ -57,3 +67,6 @@ Owner idea (scratchpad 2026-10-29, TODO `largecontent/mod-additions #32`): Terra
 - CS-07 The Curios screen shows a Feet slot (boots icon, "Feet"); only stepstools go in it; `/curios list` shows `feet` from `creativeengineering`.
 - CS-08 Hover a stepstool, a Simple Hats mask, the Falconry Glove and the Cob Pipe: one gold "Slot: ..." line each
   (Feet; Face, Head; Hands; the Cob Pipe's registered slots), never two (same check as TT-40).
+- CS-09 Hover the Cob Pipe: the slot line reads Face, Head (no Mouth). Right click it with an empty Face slot: it goes in Face.
+- CS-10 Wear a Simple Hats mask (hockey mask) in Face: drawn on the head in third person; toggle the slot's render
+  button off: hidden. A Botania cosmetic mask and the Cob Pipe in Face are drawn too.

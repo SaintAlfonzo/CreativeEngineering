@@ -91,7 +91,7 @@ public class ModFoods {
        .saturationMod(0.65F)
        .effect(() -> new MobEffectInstance(ModEffects.COMFORT.get(), 6000, 0), 1.0F)
        .build();
-    // Pack addition: the grape and cherry jam jars (sweet berry jam jar values)
+    // Pack addition: the grape, cherry, salmonberry and raspberry jam jars (sweet berry jam jar values)
     public static final FoodProperties FRUIT_JAM = new Builder()
        .nutrition(7)
        .saturationMod(0.65F)

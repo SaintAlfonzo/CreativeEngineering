@@ -19,7 +19,9 @@ Delight (CD); test prefix `TSK-`.
     or a treated-stick vine.
   - A vine on a treated stick climbs on into a treated stick, a Supplementaries stick or rope, or any other
     `farmersdelight:ropes` block above.
-  - The vine is FD's: same growth, right-click picking, Quark replant and loot (FD's tomato loot table). Breaking the
+  - The vine is FD's: same growth, right-click picking and loot (FD's tomato loot table). Since 2026-11-02 it is an
+    own-pick crop like every tomato vine: Quark no longer replants it, an area hoe picks it and climbs the column
+    ([crops.md](crops.md) 2.3, `farming/crops #29`, CR-101, CR-102). Breaking the
     vine, or the vine dying (no vine or soil below, too dark), leaves the treated stick. A treated-stick vine takes
     crossing sticks on x and z like Supplementaries' stick vines.
 

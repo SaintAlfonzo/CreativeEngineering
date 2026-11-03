@@ -11,7 +11,8 @@ seasonings, its three sauces are sauces.
 
 ## 1. Catalog (current state)
 
-"Now" = what the pack does today for pack and Salt rows, and what the upstream jar does for BBQ rows (not installed yet).
+"Now" = what the pack does today for pack and Salt rows, and what the upstream jar does for BBQ rows (the port is nested in the
+Creative Delight jar in `mods/` as `backportedBarbeques-1.3.0-ce-19.2-01`, upstream behaviour unchanged; the fold of section 4 is not built; deep scan 2026-11-02).
 Mutex = may not share a food with. Complementary: **live** = defined in the pack's `combines`; **proposed** = pairing
 suggested for the fold (4), not decided.
 

@@ -1,8 +1,8 @@
 # Hostile Delight: inventory, overlaps and integration plan
 
-Investigation written 2026-10-23; **nothing built** from this plan. Pack-wide rules already touch Hostile items: soups and
+Investigation written 2026-10-23; **the plan (section 4) is not built** (deep scan 2026-11-02). Pack-wide rules already touch Hostile items: soups and
 stews in jars (1.1.03), the seven cookies in the Oven (1.1.04), JEED `TODO` placeholders for Dioxide and Collapsing
-([effects.md](effects.md) F2); the D-list below is not untouched ground. Hostile Delight 0.2.2 (`hostiledelight`, MCreator, author
+([effects.md](effects.md) F2); CD `hostiledelight/` scripts: sandwiches and burger on any bread (1.1.04), Grilled Ghast / Cooked Rotten Ham / Fried Turtle Egg in furnace, smoker and campfire (cooking trio, unreleased), B2 recipe removed, food types; since 2026-11-02 Prepared Sea Pickle is a removed item (TODO `dishes/pickles-and-ferments #12`, scratch PASSED r1102b SQ-FCB-01); the D-list below is not untouched ground. Hostile Delight 0.2.2 (`hostiledelight`, MCreator, author
 "SAMSUNG") is a native 1.19.2 build and is already in `mods/` (added 2026-10-23, `mod_sides.md` row, TODO
 `mod-additions #6`), so no port is needed: the work is integration only. "Hostile" in this file is Hostile Delight.
 Test prefix `HTD-` (`HD` is too short to grep).
@@ -39,7 +39,7 @@ This file has three parts, as asked:
 - **Dependencies:** Minecraft 1.19.2 and Farmer's Delight (mandatory; the other two FD entries in `mods.toml` are
   duplicate optional rows). Recipes use FD's `cooking` and `cutting` types, `farmersdelight:raw_pasta`,
   `cooked_rice`, `cabbage`.
-- **Nothing in the pack references it today.** No KubeJS script, tag or dict names `hostiledelight`. No Display
+- **Pack references (2026-11-02):** CD `kubejs_startup/hostiledelight/hostile_items.js`, `data/creativedelight/kubejs/hostiledelight/` (`recipes.js`, `food_types.js`), item and food dict keys. Earlier (2026-10-23): no KubeJS script, tag or dict named `hostiledelight`. No Display
   Delight compat (Display Delight has Ocean's Delight placeables, not Hostile's). The dumps in `kubejs/exported/`
   (2026-10-20 to 10-22) predate the jar, so `/dumpall` is step 0.
 - **Already live in play:** the game has run with it (`logs/latest.log`). Its three loot table overrides are active

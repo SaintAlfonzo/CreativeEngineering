@@ -5,7 +5,7 @@ below into kubejs/generation_scripts/food/comfort_nourishment.json.
 Creative Delight's creativeengineering/comfort_nourishment.js reads that file on ItemEvents.modification (startup)
 and sets Farmer's Delight's Comfort / Nourishment on every food. Other effects, hunger and flags are not touched.
 
-Ruled forms: foods that hand back a bowl, a mason jar or a shulker bowl, and copper cup meals. First match wins:
+Ruled forms: foods that hand back a bowl, a mason jar or a shulker bowl. First match wins:
   4+ inputs, input hunger 8+, output hunger 10+   Nourishment
   3+ inputs, input hunger 5+                      Comfort
   output hunger 10+                               Comfort
@@ -14,7 +14,7 @@ Length: output hunger under 10 -> 120 s, 10 and up -> 240 s; Comfort at output h
   Inputs = ingredient slots of the food's recipe, the container left out. Recipe: the cooking pot recipe, else
   shapeless, else shaped crafting (first id); a feast serving uses its feast block's recipe. A slot counts its lowest
   hunger food member; a slot with no food member takes the cheapest recipe value of its items (two levels deep),
-  else 0 (CN-D9: base value 0). A copper cup takes its bowl's inputs (Miner's cup_conversion data) and its own hunger.
+  else 0 (CN-D9: base value 0). (Copper cup meals were ruled too until the pack dropped the cups, dishes/meals #53.)
   A ruled food with no recipe found keeps its effects (listed under `keep`, hand check: appendix B.2).
 Golden foods (food types golden / golden/enchanted) override every rule: Nourishment only, 120 s (enchanted 240 s).
 Bottles (glass bottle remainder): both effects removed. Every other food: Nourishment removed, Comfort kept (the
@@ -29,13 +29,11 @@ applied it. Restart the game after a run.
     python3 tools/gen_comfort_nourishment.py --list     also print every ruled food with its inputs
 
 Source data (all under kubejs/exported/, from /dumpall): food/foods.json, food/recipes.json, food/food_blocks.json,
-tags/item_tags.json; kubejs/generation_scripts/food/food_types.json (golden types); Miner's Delight's cup_conversion from the donor jar in miners_upstream/.
+tags/item_tags.json; kubejs/generation_scripts/food/food_types.json (golden types).
 """
 import argparse
-import glob
 import json
 import sys
-import zipfile
 from collections import OrderedDict
 from pathlib import Path
 
@@ -60,10 +58,7 @@ BASE_VALUE = 0          # CN-D9: a non-food input with no recipe value
 CRAFT_DEPTH = 2         # crafted non-food inputs: cheapest recipe, two levels deep
 
 BOWL = 'minecraft:bowl'
-RULED_CONTAINERS = {BOWL, 'vintagedelight:empty_mason_jar', 'endersdelight:shulker_bowl', 'miners_delight:copper_cup'}
-CUP = 'miners_delight:copper_cup'
-# cup_conversion bowls this pack has under another id (Farmer's Delight 1.19.2 has no Onion Soup)
-CUP_BOWL_IN_PACK = {'farmersdelight:onion_soup': 'brewinandchewin:creamy_onion_soup'}
+RULED_CONTAINERS = {BOWL, 'vintagedelight:empty_mason_jar', 'endersdelight:shulker_bowl'}
 BOTTLE = 'minecraft:glass_bottle'
 CAN_NAMESPACES = ('creativeengineering', 'canned_goods')
 RECIPE_ORDER = ('farmersdelight:cooking', 'minecraft:crafting_shapeless', 'minecraft:crafting_shaped')
@@ -74,18 +69,6 @@ VALUE_TYPES = set(RECIPE_ORDER)
 def load(rel):
     with open(EXPORT / rel, encoding='utf-8') as fh:
         return json.load(fh)
-
-
-def cup_conversions():
-    """cup id -> bowl id, from Miner's Delight's own data (the donor jar the backport reads)."""
-    out = {}
-    for jar in sorted(glob.glob(str(INSTANCE / 'miners_upstream/*.jar'))):
-        with zipfile.ZipFile(jar) as z:
-            for name in z.namelist():
-                if '/cup_conversion/' in name and name.endswith('.json'):
-                    for e in json.loads(z.read(name)).get('entries', []):
-                        out[e['cup']] = e['bowl']
-    return out
 
 
 class Values:
@@ -197,7 +180,6 @@ def build():
         for o in r['out']:
             by_out.setdefault(o['id'], []).append(r)
     feast_of = {b['serving']: b['id'] for b in blocks if b.get('serving')}
-    cups = cup_conversions()
     by_id = {f['id']: f for f in foods}
 
     def inputs_of(fid, container):
@@ -231,12 +213,7 @@ def build():
                                   output=f['nutrition'], now=current(f), recipe='kept Comfort', feast=False,
                                   name=f.get('name'))
             continue
-        if rem == CUP:
-            bowl = cups.get(fid)
-            bowl = CUP_BOWL_IN_PACK.get(bowl, bowl)
-            got = inputs_of(bowl, BOWL) if bowl in by_id else None
-        else:
-            got = inputs_of(fid, rem)
+        got = inputs_of(fid, rem)
         if got is None:
             keep.append(fid)
             continue

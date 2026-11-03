@@ -55,24 +55,9 @@ if (global.CD) global.CD.genPut('food_types', 'miners_delight', {
    "vegan_wrap"
   ],
   "soup": [
-   "baked_cod_stew_cup",
    "bat_soup",
-   "bat_soup_cup",
-   "beef_stew_cup",
-   "beetroot_soup_cup",
-   "bone_broth_cup",
    "cave_soup",
-   "cave_soup_cup",
-   "chicken_soup_cup",
-   "fish_stew_cup",
-   "insect_stew",
-   "insect_stew_cup",
-   "mushroom_stew_cup",
-   "noodle_soup_cup",
-   "onion_soup_cup",
-   "pumpkin_soup_cup",
-   "rabbit_stew_cup",
-   "vegetable_soup_cup"
+   "insect_stew"
   ],
   "meal": [
    "glow_ink_pasta",

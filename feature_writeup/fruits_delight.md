@@ -1,6 +1,6 @@
 # Fruits Delight 1.1.3 against the installed 0.5.11
 
-**Built 2026-10-25 in Creative Delight, Shipped in 1.1.03 (deployed to server and players 2026-10-26); boot check SQ-FR-01 PASSED 2026-10-25; not run in game** (section 5; tests FR-01 to FR-06). Installed: `fruitsdelight-0.5.11.jar` (`mods/`, `server_mods/`, `development/patcherMod/libs/`), 1.19.2.
+**Built 2026-10-25 in Creative Delight, Shipped in 1.1.03 (deployed to server and players 2026-10-26); scratch rows SQ-FR-01 to -05 all PASSED (r1101 boot, r1102b 2026-11-02); client tooltip (FR-03) and play open** (section 5; tests FR-01 to FR-06). Installed: `fruitsdelight-0.5.11.jar` (`mods/`, `server_mods/`, `development/patcherMod/libs/`), 1.19.2.
 Evaluated 2026-10-25 against `devmods/checkNewerVersionForContent/fruitsdelight-1.1.3.jar` (1.20.1 / Forge), method in
 [devmods_evaluation.md](devmods_evaluation.md) section 1. Both jars unpacked in `DecompiledMods/`. Plan row:
 `largecontent/mod-additions #20` in [todo/TODO.md](todo/TODO.md).
@@ -95,7 +95,7 @@ All of it ships in the Creative Delight jar and is inactive without Fruits Delig
 
 | Fix (section) | Where | How |
 |---|---|---|
-| Mangosteen Cake bites (2.1) | CD `mixin/fruitsdelight/MangosteenCakeEffectMixin` | `@Pseudo` `@Redirect` on the `MobEffectInstance` constructor in `MangosteenCakeBlock.eat`, swapping duration and amplifier back. A bite: Comfort 400 ticks, Sliding 800 ticks (a third of the item's) |
+| Mangosteen Cake bites (2.1) | CD `mixin/fruitsdelight/MangosteenCakeEffectMixin` | `@Pseudo` `@Redirect` on the `MobEffectInstance` constructor in `MangosteenCakeBlock.eat`, swapping duration and amplifier back. A bite gets a third of the item's durations: in the pack (Comfort 120 s from `foods.json`) Comfort and Sliding 800 ticks each (r1102b read 759 t 2 s after the bite; deep scan 2026-11-02, was 400 / 800) |
 | `getFoodData` null guard (2.5) | CD `compat/CDMixinPlugin` + empty `mixin/fruitsdelight/FruitsDelightFoodDataAnchorMixin` (Player, priority 5000) + `compat/FruitsDelightHooks` | Same pattern as the leaf check (next row): `postApply` swaps the handler's `FoodDataAccessor.fruitsdelight$setPlayer` call for `FruitsDelightHooks.setPlayer(Object, Player)`, which skips a null FoodData. Same stack effect, no frames change; a warning if the call is not found |
 | Leaf collision check (perf.md; in patcherMod until 2026-10-27) | CD `compat/CDMixinPlugin` + empty `mixin/fruitsdelight/FruitsDelightLeafCheckMixin` (BlockStateBase, priority 5000) + `FruitsDelightHooks.isLeafForProjectile` | `postApply` turns the merged `passableLeave` handler's leading `is(BlockTags.LEAVES)` into a projectile-first test; same result. Like every compartment mixin it is now off on a Fruits Delight other than 0.5.11 |
 | Bellini Cocktail Heal Aura once (2.3) | CD `kubejs_startup/fruitsdelight/fruits_foods.js` | 0.5.11 lists Heal Aura 10 s (its own) and 5 s (peach at level 10: `FoodType.build` compares suppliers, so the fruit's effect is never skipped). The script keeps the longest entry per effect. It runs after the pack's `alcohol_drinks.js` (jar scripts load after the pack folder), so Intoxication and Nausea stay |
@@ -119,11 +119,13 @@ bundle did not build at the time: the in-progress `:backportedRustic` member did
 | ID | Test | Where |
 |---|---|---|
 | FR-01 | Boot with Fruits Delight: no mixin error for `creativedelight.mixins.json`; no `null guard not applied` warning | SQ-FR-01 |
-| FR-02 | Place a Mangosteen Cake, eat a slice: Comfort 0:20 and Sliding 0:40 | SQ-FR-02 |
+| FR-02 | Place a Mangosteen Cake, eat a slice: Comfort 0:40 and Sliding 0:40 (pack values) | SQ-FR-02 |
 | FR-03 | Bellini Cocktail tooltip: one Heal Aura (0:10), Intoxication, Nausea 0:05; drinking gives Heal Aura 0:10 | SQ-FR-03, game |
 | FR-04 | Fig Pudding in JEI / crafting accepts a duck egg | SQ-FR-04 |
 | FR-05 | `#forge:jams` holds the 22 jams; `#forge:storage_blocks` and `/peach` hold the Peach Crate (item and block) | SQ-FR-04 |
-| FR-06 | Boot without Fruits Delight: CD loads, no mixin error, the three scripts skipped | SQ-FR-05 |
+| FR-06 | Boot without Fruits Delight: CD loads, no mixin error, the Fruits Delight scripts (5 in r1102b) skipped | SQ-FR-05 |
+
+Scratch results: FR-01 PASS (r1101 boot), FR-02 to FR-06 PASS r1102b 2026-11-02 (`perf/runs/r1102b/s2/judged.md`; FR-02 and FR-04 batch regexes were stale, real PASS). Open: the FR-03 tooltip (client) and play.
 
 ## Bayberry Juice (2026-10-25, TODO `food/drinks #9`)
 

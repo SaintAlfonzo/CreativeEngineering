@@ -1,18 +1,12 @@
 package com.sammy.minersdelight.registry;
 
-import com.mojang.datafixers.util.Pair;
 import com.sammy.minersdelight.mixin.FoodPropertiesAccessor;
 import net.minecraft.world.effect.MobEffectInstance;
 import net.minecraft.world.effect.MobEffects;
 import net.minecraft.world.food.FoodProperties;
 import vectorwing.farmersdelight.common.registry.ModEffects;
 
-import java.util.function.Supplier;
-
-/**
- * Food values, equal to Miner's Delight 1.4.5 (1.1.2's shared values are the same). A cup holds half a bowl:
- * {@link #cup(FoodProperties)}.
- */
+/** Food values, equal to Miner's Delight 1.4.5 (1.1.2's shared values are the same). */
 public final class MDFoods {
     private static final int POOR = 200;
     private static final int BRIEF = 600;
@@ -63,12 +57,6 @@ public final class MDFoods {
     public static final FoodProperties BOWL_OF_STUFFED_SQUID = nourishing(10, 0.8F, LONG);
     public static final FoodProperties GLOW_INK_PASTA = food(14, 1.1F).effect(() -> nourishment(LONG), 1.0F)
             .effect(() -> new MobEffectInstance(MobEffects.GLOWING, SHORT), 1.0F).build();
-    /** The vanilla soups as Miner's Delight serves them (with Nourishment), the base of their cups. */
-    public static final FoodProperties BEETROOT_SOUP = nourishing(6, 0.6F, MEDIUM);
-    public static final FoodProperties MUSHROOM_STEW = nourishing(6, 0.6F, MEDIUM);
-    public static final FoodProperties RABBIT_STEW = nourishing(10, 0.6F, LONG);
-    /** Farmer's Delight's onion soup (newer FD versions; 1.19.2-1.2.4 has none), the base of the onion soup cup. */
-    public static final FoodProperties ONION_SOUP = nourishing(12, 0.8F, MEDIUM);
 
     private MDFoods() {
     }
@@ -88,24 +76,5 @@ public final class MDFoods {
     /** Without resolving the effects (safe while items register). */
     public static boolean hasEffects(FoodProperties food) {
         return !((FoodPropertiesAccessor) food).minersdelight$effects().isEmpty();
-    }
-
-    /** Half the nutrition (rounded down), saturation and effect durations of the bowl; always fast to drink. */
-    public static FoodProperties cup(FoodProperties bowl) {
-        FoodProperties.Builder builder = food(bowl.getNutrition() / 2, bowl.getSaturationModifier() / 2.0F);
-        for (Pair<Supplier<MobEffectInstance>, Float> pair : ((FoodPropertiesAccessor) bowl).minersdelight$effects()) {
-            Supplier<MobEffectInstance> effect = pair.getFirst();
-            builder.effect(() -> {
-                MobEffectInstance full = effect.get();
-                return new MobEffectInstance(full.getEffect(), full.getDuration() / 2, full.getAmplifier());
-            }, pair.getSecond());
-        }
-        if (bowl.canAlwaysEat()) {
-            builder.alwaysEat();
-        }
-        if (bowl.isMeat()) {
-            builder.meat();
-        }
-        return builder.fast().build();
     }
 }

@@ -122,8 +122,9 @@ console.log('potion_area func loading')
     // this wiring only covers the dispenser path.
     try {
         // no const/let here: Rhino throws "redeclaration of var" for a block-scoped decl in this try
-        Java.loadClass('com.SaintAlfonzo.creativebrewing.potion.PotionBucketDispenser').setHandler((level, x, y, z, itemId, stack) => {
-            global.potionArea.spawn(level, x, y, z, itemId, stack, null)
+        // owner: the player who placed the dispenser, when online in that level, else null (potions/potion-buckets #3)
+        Java.loadClass('com.SaintAlfonzo.creativebrewing.potion.PotionBucketDispenser').setHandler((level, x, y, z, itemId, stack, owner) => {
+            global.potionArea.spawn(level, x, y, z, itemId, stack, owner)
         })
         console.log('[potion_area] dispenser handler installed')
     } catch (err) {

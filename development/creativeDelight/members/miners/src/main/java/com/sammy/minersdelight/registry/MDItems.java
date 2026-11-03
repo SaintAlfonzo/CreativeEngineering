@@ -1,32 +1,24 @@
 package com.sammy.minersdelight.registry;
 
 import com.sammy.minersdelight.MinersDelightMod;
-import com.sammy.minersdelight.content.item.CopperCupItem;
 import com.sammy.minersdelight.content.item.HoneyBarItem;
-import com.sammy.minersdelight.content.item.MilkCupItem;
 import com.sammy.minersdelight.content.item.SilverfishEggsItem;
-import com.sammy.minersdelight.content.item.SolidCupItem;
-import net.minecraft.sounds.SoundEvents;
 import net.minecraft.world.food.FoodProperties;
 import net.minecraft.world.item.BlockItem;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemNameBlockItem;
 import net.minecraft.world.item.Items;
 import net.minecraft.world.level.block.Block;
-import net.minecraft.world.level.block.Blocks;
-import net.minecraft.world.level.material.Fluids;
 import net.minecraftforge.registries.DeferredRegister;
 import net.minecraftforge.registries.ForgeRegistries;
 import net.minecraftforge.registries.RegistryObject;
-import vectorwing.farmersdelight.common.FoodValues;
 import vectorwing.farmersdelight.common.item.ConsumableItem;
 
 import java.util.function.Function;
-import java.util.function.Supplier;
 
 /**
- * The 69 items of Miner's Delight 1.4.5, in its creative tab order. 1.1.2's hot cocoa cup is not ported (D3).
- * Bowl foods stack to 16 and return a bowl; cup foods stack to 16 and return a Copper Cup.
+ * The items of Miner's Delight 1.4.5, in its creative tab order, without the Copper Cup and every cup (TODO dishes/meals
+ * #53, 2026-11-02; 1.1.2's hot cocoa cup was never ported, D3). Bowl foods stack to 16 and return a bowl.
  */
 public final class MDItems {
     public static final DeferredRegister<Item> ITEMS = DeferredRegister.create(ForgeRegistries.ITEMS, MinersDelightMod.MODID);
@@ -40,13 +32,6 @@ public final class MDItems {
     public static final RegistryObject<Item> WILD_CAVE_CARROTS = block(MDBlocks.WILD_CAVE_CARROTS, props());
     public static final RegistryObject<Item> GOSSYPIUM = block(MDBlocks.GOSSYPIUM, props());
     public static final RegistryObject<Item> CAVE_CARROT_CRATE = block(MDBlocks.CAVE_CARROT_CRATE, props());
-
-    // Cups
-    public static final RegistryObject<Item> COPPER_CUP = ITEMS.register("copper_cup", () -> new CopperCupItem(Fluids.EMPTY, props().stacksTo(64)));
-    public static final RegistryObject<Item> WATER_CUP = ITEMS.register("water_cup", () -> new CopperCupItem(Fluids.WATER, cupProps().stacksTo(64)));
-    public static final RegistryObject<Item> MILK_CUP = ITEMS.register("milk_cup", () -> new MilkCupItem(cupProps().stacksTo(64)));
-    public static final RegistryObject<Item> POWDER_SNOW_CUP = ITEMS.register("powder_snow_cup",
-            () -> new SolidCupItem(Blocks.POWDER_SNOW, SoundEvents.BUCKET_EMPTY_POWDER_SNOW, cupProps().stacksTo(64)));
 
     // Food
     public static final RegistryObject<Item> CAVE_CARROT = ITEMS.register("cave_carrot",
@@ -93,33 +78,11 @@ public final class MDItems {
     public static final RegistryObject<Item> BOWL_OF_STUFFED_SQUID = bowlFood("bowl_of_stuffed_squid", MDFoods.BOWL_OF_STUFFED_SQUID);
     public static final RegistryObject<Item> GLOW_INK_PASTA = bowlFood("glow_ink_pasta", MDFoods.GLOW_INK_PASTA);
 
-    // Cup foods: half a bowl of each soup
-    public static final RegistryObject<Item> BEETROOT_SOUP_CUP = cupFood("beetroot_soup_cup", MDFoods.BEETROOT_SOUP);
-    public static final RegistryObject<Item> MUSHROOM_STEW_CUP = cupFood("mushroom_stew_cup", MDFoods.MUSHROOM_STEW);
-    public static final RegistryObject<Item> RABBIT_STEW_CUP = cupFood("rabbit_stew_cup", MDFoods.RABBIT_STEW);
-    public static final RegistryObject<Item> BAKED_COD_STEW_CUP = cupFood("baked_cod_stew_cup", FoodValues.BAKED_COD_STEW);
-    public static final RegistryObject<Item> NOODLE_SOUP_CUP = cupFood("noodle_soup_cup", FoodValues.NOODLE_SOUP);
-    public static final RegistryObject<Item> BEEF_STEW_CUP = cupFood("beef_stew_cup", FoodValues.BEEF_STEW);
-    public static final RegistryObject<Item> CHICKEN_SOUP_CUP = cupFood("chicken_soup_cup", FoodValues.CHICKEN_SOUP);
-    public static final RegistryObject<Item> FISH_STEW_CUP = cupFood("fish_stew_cup", FoodValues.FISH_STEW);
-    public static final RegistryObject<Item> PUMPKIN_SOUP_CUP = cupFood("pumpkin_soup_cup", FoodValues.PUMPKIN_SOUP);
-    public static final RegistryObject<Item> VEGETABLE_SOUP_CUP = cupFood("vegetable_soup_cup", FoodValues.VEGETABLE_SOUP);
-    public static final RegistryObject<Item> BONE_BROTH_CUP = cupFood("bone_broth_cup", FoodValues.BONE_BROTH);
-    public static final RegistryObject<Item> CAVE_SOUP_CUP = cupFood("cave_soup_cup", MDFoods.CAVE_SOUP);
-    public static final RegistryObject<Item> BAT_SOUP_CUP = cupFood("bat_soup_cup", MDFoods.BAT_SOUP);
-    public static final RegistryObject<Item> INSECT_STEW_CUP = cupFood("insect_stew_cup", MDFoods.INSECT_STEW);
-    public static final RegistryObject<Item> ONION_SOUP_CUP = cupFood("onion_soup_cup", MDFoods.ONION_SOUP);
-
     private MDItems() {
     }
 
     private static Item.Properties props() {
         return new Item.Properties().tab(MDTab.TAB);
-    }
-
-    /** Filled cups give the Copper Cup back when used up in crafting. */
-    private static Item.Properties cupProps() {
-        return props().craftRemainder(COPPER_CUP.get());
     }
 
     private static RegistryObject<Item> block(RegistryObject<? extends Block> block, Item.Properties properties) {
@@ -136,10 +99,5 @@ public final class MDItems {
 
     private static RegistryObject<Item> bowlFood(String name, FoodProperties food) {
         return ITEMS.register(name, () -> new ConsumableItem(props().food(food).craftRemainder(Items.BOWL).stacksTo(16), MDFoods.hasEffects(food)));
-    }
-
-    private static RegistryObject<Item> cupFood(String name, FoodProperties bowl) {
-        Supplier<Item> item = () -> new ConsumableItem(cupProps().food(MDFoods.cup(bowl)).stacksTo(16), MDFoods.hasEffects(bowl));
-        return ITEMS.register(name, item);
     }
 }

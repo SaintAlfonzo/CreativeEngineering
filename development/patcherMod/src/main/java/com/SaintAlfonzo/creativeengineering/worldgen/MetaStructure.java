@@ -646,6 +646,51 @@ public final class MetaStructure extends Structure {
 		return out;
 	}
 
+	/**
+	 * StructureStart.loadStaticStart RETURN (StructureStartMetaMonumentMixin): an ocean monument part rebuilt after a
+	 * meta start is read back from disk. The monument building saves none of its rooms (their room definitions are
+	 * not in its NBT), so vanilla regenerates a lone monument's pieces from the seed on every load
+	 * ({@code OceanMonumentStructure.regeneratePiecesAfterLoad}); it only does that when the start's structure is the
+	 * monument, so inside a meta a start saved mid-generation lost every room, the three elder guardians with them
+	 * (two in the wing rooms, one in the penthouse). Here a building with no rooms is regenerated the vanilla way,
+	 * from the chunk its part was generated at (box corner + 29, as in OceanMonumentStructure.generatePieces), and
+	 * swapped in only when the result has the same box and facing (a moved part is left as it is, logged once).
+	 */
+	public static StructureStart repairMonumentsAfterLoad(StructureStart start, long seed) {
+		if (start == null || !(start.getStructure() instanceof MetaStructure)) return start;
+		List<StructurePiece> pieces = start.getPieces();
+		List<StructurePiece> out = null;
+		for (int i = 0; i < pieces.size(); i++) {
+			if (!(pieces.get(i) instanceof net.minecraft.world.level.levelgen.structure.structures.OceanMonumentPieces.MonumentBuilding building)) continue;
+			List<?> rooms = net.minecraftforge.fml.util.ObfuscationReflectionHelper.getPrivateValue(
+					net.minecraft.world.level.levelgen.structure.structures.OceanMonumentPieces.MonumentBuilding.class, building, "f_228645_");
+			if (rooms != null && !rooms.isEmpty()) continue;
+			BoundingBox box = building.getBoundingBox();
+			int ox = box.minX() + 29, oz = box.minZ() + 29;
+			StructurePiece rebuilt = null;
+			if ((ox & 15) == 0 && (oz & 15) == 0) {
+				var regen = net.minecraft.world.level.levelgen.structure.structures.OceanMonumentStructure.regeneratePiecesAfterLoad(
+						new ChunkPos(ox >> 4, oz >> 4), seed, new net.minecraft.world.level.levelgen.structure.pieces.PiecesContainer(List.of(building)));
+				StructurePiece p = regen.pieces().isEmpty() ? null : regen.pieces().get(0);
+				if (p != null && p != building && p.getBoundingBox().equals(box) && p.getOrientation() == building.getOrientation()) rebuilt = p;
+			}
+			if (rebuilt == null) {
+				if (MONUMENT_SKIPS.add(start.getChunkPos().toLong())) {
+					LOG.warn("[meta-structures] monument part of the meta at chunk [{}, {}] could not be rebuilt after load (moved or facing differs); its rooms stay missing",
+							start.getChunkPos().x, start.getChunkPos().z);
+				}
+				continue;
+			}
+			if (out == null) out = new ArrayList<>(pieces);
+			out.set(i, rebuilt);
+		}
+		if (out == null) return start;
+		return new StructureStart(start.getStructure(), start.getChunkPos(), start.getReferences(),
+				new net.minecraft.world.level.levelgen.structure.pieces.PiecesContainer(out));
+	}
+
+	private static final Set<Long> MONUMENT_SKIPS = ConcurrentHashMap.newKeySet();
+
 	/** A part of a meta start: its structure and the box around its pieces. */
 	public record Found(Structure structure, BoundingBox box) {}
 

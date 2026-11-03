@@ -50,12 +50,16 @@ public class CompatMixinPlugin extends GatedMixinPlugin {
             Map.entry("TrashSlotComponentMixin", TRASHSLOT),
             Map.entry("TrashSlotSaveStateAccessor", TRASHSLOT),
             Map.entry("DhCloudHeightMixin", List.of("distanthorizons")),
+            // Hats worn in the pack's Curios Face slot drawn like the head slot (curios_slots.md)
+            Map.entry("SimpleHatsFaceSlotMixin", List.of("simplehats")),
             // Feather on a Stick as a cat command (cats.CatFeather); the FishingHook ones check FeatherEntity
             Map.entry("DiFeatherEntityMixin", DOMESTICATION),
             Map.entry("FishingHookFeatherPullMixin", DOMESTICATION),
             // Cozy's Improved Cats (cats.CozyCats)
             Map.entry("CozyHomeGoalFeatherMixin", COZY),
-            Map.entry("CozyMessageGenderMixin", COZY));
+            Map.entry("CozyMessageGenderMixin", COZY),
+            // Alex's Mobs giant squid flee radius from cachalot whales (CompatConfig.GiantSquid)
+            Map.entry("AmGiantSquidAvoidWhalesMixin", List.of("alexsmobs")));
 
     private static final List<String> POLYMORPH_SOPHISTICATED = List.of("polymorph", "sophisticatedcore");
 

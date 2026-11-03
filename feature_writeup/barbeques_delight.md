@@ -1,7 +1,7 @@
 # Barbeque's Delight: overlap and integration report
 
 Investigation written 2026-10-30 for TODO `largecontent/mod-additions #12` (the Barbeque's Delight part). **Port built
-2026-11-01** (section 4.0), not installed and not tested in game yet. Jar: `devmods/toBackport/barbequesdelight-1.3.0.jar` (NeoForge 1.21.1), unpacked and decompiled in
+2026-11-01** (section 4.0); in `mods/` since the Creative Delight jar of 11-02 14:01, scratch run r1102b (8), not played yet. Jar: `devmods/toBackport/barbequesdelight-1.3.0.jar` (NeoForge 1.21.1), unpacked and decompiled in
 `DecompiledMods/barbequesdelight-1.3.0/` (`jar/`, `src/`). Licence **LGPL-2.1** (`neoforge.mods.toml`), so the fork route
 applies: a port is needed (1.21.1 NeoForge -> 1.19.2 Forge) and may reuse upstream code and assets with the notice kept.
 Short name in this file: **BBQ**. Test prefix: **BBQ-** (unused in `feature_writeup/`).
@@ -16,9 +16,9 @@ asks for it by name. Upstream bugs are fixed.
 | Inventory | 36 items (33 plus 3 block items), 3 blocks, 0 effects, 0 potions, 26 recipes, 6 butcher trades, 1 mixin | surveyed (1, 3) |
 | Upstream bugs | B1-B5 | found (3.6) |
 | Overlap | skewer family (8 pack skewers), pack seasonings framework, wrap/sandwich rules, Create basin name | surveyed (2) |
-| Fold-in | steps 0-19 | built 2026-11-01 (4.0); jars waiting for `mods/` |
+| Fold-in | steps 0-19 | built 2026-11-01 (4.0); in `mods/` (CD jar 11-02 14:01), not played |
 | Decisions | O1-O9 (owner, 2026-10-31); D1-D10 | O1-O9 recorded (0.1); D1-D4, D7 answered by them, D5, D6, D8-D10 defaults stand (5) |
-| Tests | BBQ-01..BBQ-21; scratch SQ-BBQ-01..08 | drafted (8); scratch rows queued 2026-11-01 |
+| Tests | BBQ-01..BBQ-21; scratch SQ-BBQ-01..08 | in game: none run. Scratch r1102b (2026-11-02): SQ-BBQ-01, -03, -04, -05 PASS; -02, -06, -07 OPEN (batch faults); -08 not run (needs a player) |
 
 - **Jar:** `barbequesdelight-1.3.0`, mod id `barbequesdelight`, authors lcy0x1 (xkmc), package `com.mao.barbequesdelight`
   (forked from Mao's original). 60 Java classes, about 1,600 lines of logic.
@@ -29,7 +29,7 @@ asks for it by name. Upstream bugs are fixed.
 - **Pack references:** none to `barbequesdelight` in `kubejs/`, `item_dict.js` or `development/*/src`. The `barbecue`
   hits in `backportedDisplay` are FD's and End's Delight's sticks. Dumps (2026-10-20) predate nothing here: the jar is
   not installed, so `/dumpall` comes after the port (step 0).
-- **Already live:** nothing. Built 2026-11-01: the Creative Delight member `backportedBarbeques` (4.0).
+- **Already live:** nothing played. Built 2026-11-01: the Creative Delight member `backportedBarbeques` (4.0), in `mods/` since 11-02 14:01.
 
 ## 0.1 Owner decisions (2026-10-31)
 
@@ -68,6 +68,14 @@ Recorded from the owner's notes. They set the scope of the port; where they diff
 | O28 | **Raw skewers take seasonings, not sauces.** Seasonings on a raw skewer **copy over to the cooked skewer** when it is grilled | 4.3 #5 answered. The port refuses the three sauces on raw skewers (a change from upstream, which allows any seasoning on any BBQ skewer) | `largecontent/mod-additions #37`, `food/seasoning #11` |
 | O29 | **Cooked-ingredient skewers follow the skewer family rule: shaped plus one sequenced assembly** | Replaces the "shapeless" wording of O19. Not an exception: the same rule as Crispy Skewer ([recipes_cooking.md](recipes_cooking.md) 2.1). 4.3 #8 answered | `dishes/meals #46` |
 | O30 | **A grilled and a crafted cooked skewer of the same line are the same item but do not stack**, because their seasonings differ (`grilled` present or absent) | Pack framework behaviour: seasonings are NBT, sorted, and stacks split on NBT. 4.3 #9 answered, no special code | none |
+| O31 | **Seasoning conversion (4.3 #1): 64 powders and 16 sauces.** One old durable powder becomes 64 single-use items and one sauce 16. When default crafting recipes for the seasonings are added, one craft gives 64 powders or 16 sauces | 4.3 #1 answered | `food/seasoning #11`, `#17` |
+| O32 | **Raw meat and raw skewers follow raw chicken** for the Hunger chance and the AppleSkin shank colour. **Chicken alone has the extra poison chance.** **No new "nasty" food type**: the downside is folded into the vanilla raw-chicken system | Supersedes O26 and O27 and 4.3 #4. Raw skewers carry the chance of their meat | `food/types-and-tuning #19`, [food.md](food.md) 3.17 |
+| O33 | **Raw skewers can be smelted, smoked or campfire-cooked** (cooked skewer, no `grilled`, so no +2 saturation); the campfire counts (owner 2026-11-02) | 4.3 #6 answered, O22 settled | `dishes/meals #49` |
+| O34 | **Names.** A skewer is named **"Raw TYPE"** when uncooked and plain **"TYPE"** when cooked (no "Cooked" and no "Grilled" in the name). Seasoned items take the prefixes **Chili Flavored, Salted, Peppered, Garlic**. **"Grilled" appears only as a seasoning tooltip line, and only on a skewer that was grilled** | Supersedes O23 and the 3.9 "Cooked" column: the "Grilled X" names become plain "X". 4.3 #7 answered | `dishes/meals #50`, `#46` |
+| O35 | **Skewers as ingredients** (wrap, sandwich, bibimbap, other recipes) **do not carry `grilled`**, and are accepted grilled or not | Supersedes the 4.3 #10 default (combos no longer carry `grilled` saturation) | `dishes/meals #46`, `#48` |
+| O36 | **The `grilled` tooltip is shown exactly like the salt and other seasoning tooltips**: the same system, same line style and AppleSkin entry | 4.3 #12 answered | `food/seasoning #13` |
+| O37 | **4.3 #2, #3, #5, #8, #9, #11, #13, #14 follow their defaults** | Raw pack skewers: CD member under the original namespace, one basin recipe per skewer, stack 64. `grilled` +2 saturation points, capped. Sauces refused on raw skewers. `[food]` config section. Grilling JEI category name kept, raw pack skewers added. Tests BBQ-20 to BBQ-24 to be added | `dishes/meals #50`, `food/seasoning #13` |
+| O38 | **Section 5 answers.** D1: basin + grill, basin + furnace or smoker (no `grilled`), and an **expensive** shaped cooked-ingredient craft. D2: **re-add the six butcher seasoning trades** (reverses O6, 2026-11-02 second pass) and **mark an item for a crafting recipe for each seasoning**. D3: recommended (wrap on tortilla, shaped sandwich + one assembly, bibimbap takes and returns a bowl). D4: **map the six seasonings onto the pack seasoning framework**. D5: Mutton, Ingredients Basin kept. D6: the pack campfire rules (3.4.1: rain does not put out a signal fire; coal and charcoal blocks make one; no item fuelling). D7: **no placeables until models exist; pinned as a Display Delight item, not a Barbeque's Delight one**. D8: plain Forge rewrite. D9: upstream values until the skewer type lands. D10: tray marked for evaluation | O6 is reversed: the trades come back (row `food/seasoning #18`), so the source gap closes | `food/seasoning #12`, `#17`, `#18`, `food/placeable #5` |
 
 ## 1. Overview
 
@@ -255,7 +263,7 @@ as the pack's campfires do:
 | State | `lit` and `waterlogged` as a vanilla campfire; heat and light only while lit (light 15) |
 | Placed / merged | Unlit when placed, as the pack's campfires (Unlit Campfire default, kept); lit by flint and steel, fire charge or a fire arrow |
 | Extinguish | Water (waterlogged), a splash water potion, a shovel, as vanilla |
-| Weather | The pack rain rule (patcherMod `campfire/CampfireRain`, tag `creativeengineering:campfire/rain_douses`): lit grill-campfire goes out in rain unless the block under it is in `campfire/rain_proof_fuel` (coal block, charcoal blocks); burns forever otherwise |
+| Weather (rule revised 2026-11-02: rain does not douse a campfire in the signal-fire state; coal and charcoal blocks are signal-fire sources; see briefs/gameplay_misc.md) | The pack rain rule (patcherMod `campfire/CampfireRain`, tag `creativeengineering:campfire/rain_douses`): lit grill-campfire goes out in rain unless the block under it is in `campfire/rain_proof_fuel` (coal block, charcoal blocks); burns forever otherwise |
 | Break | Drops the grill and the campfire (upstream) |
 | Cold grill | Unchanged: progress falls by 2 per tick (B5 kept) |
 
@@ -338,7 +346,9 @@ skewer burns (B5).
 | Void Pepper | Crushed Void Pepper (Ender's) | +2 nutrition, +0.4 saturation | nothing | popcorn |
 | Salt | Salt mod | own `Salted` tag, +2 nutrition (separate system) | any | every valid food |
 
-### 3.9 Skewer names (O23)
+### 3.9 Skewer names (O23, REVISED by O34 2026-11-02)
+
+**Superseded:** cooked skewers get no "Cooked" prefix, uncooked ones say "Raw", seasoned items take the prefixes Chili Flavored, Salted, Peppered and Garlic. The table below is the 2026-10-31 "Cooked" plan and is not to be built; redo it from O34: cooked skewers drop "Grilled" and "Cooked" and read plain "Beef Skewer" and so on; raw ones read "Raw Beef Skewer"; mutton stays (D5).
 
 Lang only; ids stay `grilled_*` and `raw_*` (port rule: keep upstream ids). Items cooked by any route say "Cooked".
 
@@ -510,6 +520,8 @@ Full seasoning catalog, cap and pairs: [seasonings.md](seasonings.md).
 
 ### 4.3 Further open decisions (found 2026-10-31)
 
+**All answered 2026-11-02** (owner decisions O31 to O38 in 0.1); the table below keeps the original wording. Answers: #1 64 and 16; #2 default; #3 default; #4 no nasty type, folded into raw chicken (O32); #5 default; #6 yes, no `grilled` (O33); #7 O34; #8 default; #9 default; #10 O35; #11 default; #12 O36; #13 default; #14 default.
+
 Each has a default that applies if unanswered.
 
 | # | Decision | Size | Default |
@@ -529,7 +541,17 @@ Each has a default that applies if unanswered.
 | 13 | JEI: the Grilling category keeps its name though the item is "Cooked"; add the 8 raw pack skewers to it | small | Keep "Grilling" (the station) |
 | 14 | Tests: names, raw skewer food and poison, `grilled` saturation, crafted skewer without `grilled`, sauce on a raw skewer | small | Added as BBQ-20 to BBQ-24 when 4.3 is answered |
 
+### 4.4 Third batch (2026-11-02)
+
+- Shaped cooked-ingredient skewer craft: cooked ingredients, plus one extra input of the largest-value ingredient on the line.
+- Lamb (Mutton) 9 / 0.8 and rabbit 8 / 0.8 accepted (`food/types-and-tuning #19`); the rest tuned later.
+- Butcher trades restored as upstream sold them: six, level 1, 12 emeralds, 4 uses, 4 XP (`food/seasoning #18`).
+- Kebab Sandwich and Bibimbap recipes: defaults (`dishes/meals #48`). Tray: still in evaluation (`largecontent/mod-additions #38`).
+- Pinned: raw pack skewers (`dishes/meals #50`, waits on textures) and seasoning crafts (`food/seasoning #17`).
+
 ## 5. Decisions for the owner
+
+All answered 2026-11-02 (O38 in 0.1).
 
 | # | Question | Recommendation | Default if not answered |
 |---|---|---|---|
@@ -575,6 +597,12 @@ answered (tray ported for evaluation). **No decision is open** apart from the qu
 
 ## 8. In-game test suite (drafted)
 
+Scratch r1102b (2026-11-02, `perf/runs/r1102b/s3/judged.md`): SQ-BBQ-01 (boot), -03 (tags), -04 (24 compost rows by
+tier), -05 (grill on a campfire, rain on stone / coal, drops grill + campfire: server half of BBQ-07, BBQ-18) PASS.
+OPEN, batch faults: SQ-BBQ-02 (skewering 10 and grilling 10 present; the combine recipes are `creativedelight:shapeless/*`,
+the row's id pattern is stale), SQ-BBQ-06 and -07 (the bot's click lands outside the grill slot, nothing reached the
+grill). SQ-BBQ-08 not run (bots cannot craft).
+
 | ID | Test | Pass |
 |---|---|---|
 | BBQ-01 | Craft grill; stonecut a log into 2 basins and 4 trays | items appear |
@@ -614,3 +642,5 @@ answered (tray ported for evaluation). **No decision is open** apart from the qu
 - 2026-11-01: port built (4.0): Creative Delight member `backportedBarbeques`, NCH emitters, 26 recipes, tags, dicts,
   compost, food types, family overrides, BlockRunner tiers, WTHIT and JEI. Scratch rows SQ-BBQ-01 to -08 queued. Not
   installed.
+- 2026-11-02: owner decisions O31-O38 recorded (0.1): 64 / 16 seasoning conversion, raw meat follows raw chicken with no nasty type, raw skewers smeltable or smokable, new naming rule, skewers as ingredients carry no `grilled`, 4.3 and section 5 answered. Nothing built.
+- 2026-11-02 (deep scan): member in `mods/` since the CD jar of 11-02 14:01; scratch r1102b: SQ-BBQ-01, -03 to -05 PASS, -02, -06, -07 OPEN (batch faults), -08 not run.

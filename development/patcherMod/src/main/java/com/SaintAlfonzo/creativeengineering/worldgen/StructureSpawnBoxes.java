@@ -210,8 +210,17 @@ public final class StructureSpawnBoxes {
 
 	// ── the lookup ───────────────────────────────────────────────────────────
 
+	/** What answered a spawn lookup: the pool, the box id (or "spawn_overrides" of a meta part), the structure and the meta part (null: not in a meta). */
+	public record Hit(WeightedRandomList<MobSpawnSettings.SpawnerData> spawns, String source, Structure structure, Structure part) {}
+
 	/** ChunkGenerator#getMobsAt HEAD: the box pool at pos, or null to let vanilla's lookup run. */
 	public static WeightedRandomList<MobSpawnSettings.SpawnerData> mobsAt(StructureManager structures, MobCategory category, BlockPos pos) {
+		Hit hit = lookup(structures, category, pos);
+		return hit == null ? null : hit.spawns();
+	}
+
+	/** The box (or meta part override) answering at pos, or null when vanilla's lookup runs. Also used by /cespawnbox. */
+	public static Hit lookup(StructureManager structures, MobCategory category, BlockPos pos) {
 		Config cfg = config;
 		boolean boxed = !cfg.boxes().isEmpty() && WorldgenConfig.spawnBoxesEnabled();
 		Map<Structure, LongSet> all = structures.getAllStructuresAt(pos);
@@ -222,11 +231,11 @@ public final class StructureSpawnBoxes {
 			boolean meta = s instanceof MetaStructure;
 			Box own = boxes.get(s);
 			if (!meta && (own == null || own.category() != category)) continue;
-			List<WeightedRandomList<MobSpawnSettings.SpawnerData>> found = new ArrayList<>(1);
+			List<Hit> found = new ArrayList<>(1);
 			structures.fillStartsForStructure(s, e.getValue(), start -> {
 				if (!found.isEmpty() || !start.getBoundingBox().isInside(pos)) return;
-				WeightedRandomList<MobSpawnSettings.SpawnerData> r = meta ? inMeta(start, own, boxes, category, pos)
-						: covers(own.piece(), start.getPieces(), pos) && hasRequired(own, start, start.getPieces()) ? own.spawns() : null;
+				Hit r = meta ? inMeta(start, own, boxes, category, pos)
+						: covers(own.piece(), start.getPieces(), pos) && hasRequired(own, start, start.getPieces()) ? new Hit(own.spawns(), own.id(), s, null) : null;
 				if (r != null) found.add(r);
 			});
 			if (!found.isEmpty()) return found.get(0);
@@ -235,8 +244,7 @@ public final class StructureSpawnBoxes {
 	}
 
 	/** The part of a meta start whose pieces hold pos: its box (with the meta's pool if the meta has one) or its own overrides (null: none answers). */
-	private static WeightedRandomList<MobSpawnSettings.SpawnerData> inMeta(StructureStart start, Box metaBox, Map<Structure, Box> boxes,
-			MobCategory category, BlockPos pos) {
+	private static Hit inMeta(StructureStart start, Box metaBox, Map<Structure, Box> boxes, MobCategory category, BlockPos pos) {
 		List<MetaStructure.PartPieces> parts = MetaStructure.parts(start);
 		if (parts == null) return null;
 		for (MetaStructure.PartPieces part : parts) {
@@ -244,13 +252,153 @@ public final class StructureSpawnBoxes {
 			Box own = boxes.get(member);
 			Box pool = own == null ? null : metaBox != null ? metaBox : own;
 			if (pool != null && pool.category() == category) {
-				if (covers(own.piece(), part.pieces(), pos) && hasRequired(own, null, part.pieces())) return pool.spawns();
+				if (covers(own.piece(), part.pieces(), pos) && hasRequired(own, null, part.pieces())) {
+					return new Hit(pool.spawns(), pool == own ? own.id() : metaBox.id() + " (part box " + own.id() + ")", start.getStructure(), member);
+				}
 			} else {
 				StructureSpawnOverride o = member.spawnOverrides().get(category);
-				if (o != null && covers(o.boundingBox() == StructureSpawnOverride.BoundingBoxType.PIECE, part.pieces(), pos)) return o.spawns();
+				if (o != null && covers(o.boundingBox() == StructureSpawnOverride.BoundingBoxType.PIECE, part.pieces(), pos)) {
+					return new Hit(o.spawns(), "spawn_overrides", start.getStructure(), member);
+				}
 			}
 		}
 		return null;
+	}
+
+	// ── spawn height in a boxed column ───────────────────────────────────────
+
+	/**
+	 * NaturalSpawner#getRandomPosWithin RETURN (NaturalSpawnerBoxHeightMixin): vanilla picks the attempt's height
+	 * uniformly from the world bottom to the column top, so over a 22-high tower nearly every attempt lands in the
+	 * ground or caves below it and the box pool is almost never asked on the tower's floors. In a column that a box of
+	 * this category covers, half the attempts instead take a height between the box's bottom and the column top. The
+	 * other half, every column without a box and every category without one keep vanilla's height. Only the attempt's
+	 * start height moves: caps, light and placement rules, the 24-block player rule and the box lookup run as before.
+	 */
+	public static BlockPos boxHeight(ServerLevel level, MobCategory category, net.minecraft.world.level.chunk.LevelChunk chunk, BlockPos pos) {
+		Config cfg = config;
+		if (cfg.boxes().isEmpty() || !hasCategory(cfg, category) || chunk.getAllReferences().isEmpty()
+				|| !WorldgenConfig.spawnBoxesEnabled() || level.random.nextBoolean()) return pos;
+		StructureManager sm = level.structureManager();
+		Map<Structure, Box> boxes = resolved(sm.registryAccess());
+		int x = pos.getX(), z = pos.getZ();
+		int[] span = null;
+		for (Map.Entry<Structure, LongSet> e : sm.getAllStructuresAt(pos).entrySet()) {
+			Structure s = e.getKey();
+			boolean meta = s instanceof MetaStructure;
+			Box own = boxes.get(s);
+			if (!meta && (own == null || own.category() != category)) continue;
+			int[][] found = new int[1][];
+			sm.fillStartsForStructure(s, e.getValue(), start -> {
+				if (found[0] != null || !inColumn(start.getBoundingBox(), x, z)) return;
+				found[0] = meta ? metaSpan(start, own, boxes, category, x, z)
+						: hasRequired(own, start, start.getPieces()) ? span(own.piece(), start.getPieces(), x, z) : null;
+			});
+			if (found[0] != null) {
+				span = found[0];
+				break;
+			}
+		}
+		if (span == null) return pos;
+		int lo = Math.max(span[0], level.getMinBuildHeight() + 1);
+		int hi = Math.min(span[1], chunk.getHeight(net.minecraft.world.level.levelgen.Heightmap.Types.WORLD_SURFACE, x, z) + 1);
+		if (lo > hi) return pos;
+		return new BlockPos(x, net.minecraft.util.Mth.randomBetweenInclusive(level.random, lo, hi), z);
+	}
+
+	private static boolean hasCategory(Config cfg, MobCategory category) {
+		for (Box b : cfg.boxes()) if (b.category() == category) return true;
+		return false;
+	}
+
+	private static boolean inColumn(BoundingBox box, int x, int z) {
+		return x >= box.minX() && x <= box.maxX() && z >= box.minZ() && z <= box.maxZ();
+	}
+
+	/** The box part of a meta start whose pieces cover the column (same choice of pool as inMeta): its y span, or null. */
+	private static int[] metaSpan(StructureStart start, Box metaBox, Map<Structure, Box> boxes, MobCategory category, int x, int z) {
+		List<MetaStructure.PartPieces> parts = MetaStructure.parts(start);
+		if (parts == null) return null;
+		for (MetaStructure.PartPieces part : parts) {
+			Box own = boxes.get(part.structure().value());
+			Box pool = own == null ? null : metaBox != null ? metaBox : own;
+			if (pool == null || pool.category() != category || !hasRequired(own, null, part.pieces())) continue;
+			int[] span = span(own.piece(), part.pieces(), x, z);
+			if (span != null) return span;
+		}
+		return null;
+	}
+
+	/** The y span of the box over the column: "piece" = the pieces whose boxes cover it, "full" = the box around all pieces. */
+	private static int[] span(boolean piece, List<StructurePiece> pieces, int x, int z) {
+		if (pieces.isEmpty()) return null;
+		if (!piece) {
+			BoundingBox box = StructurePiece.createBoundingBox(pieces.stream());
+			return inColumn(box, x, z) ? new int[] {box.minY(), box.maxY()} : null;
+		}
+		int lo = Integer.MAX_VALUE, hi = Integer.MIN_VALUE;
+		for (StructurePiece p : pieces) {
+			BoundingBox b = p.getBoundingBox();
+			if (!inColumn(b, x, z)) continue;
+			lo = Math.min(lo, b.minY());
+			hi = Math.max(hi, b.maxY());
+		}
+		return lo > hi ? null : new int[] {lo, hi};
+	}
+
+	// ── /cespawnbox: what answers a natural spawn here (scratch tests; feature_writeup/structure_tuning.md) ──
+
+	@SubscribeEvent
+	public static void onRegisterCommands(net.minecraftforge.event.RegisterCommandsEvent event) {
+		event.getDispatcher().register(net.minecraft.commands.Commands.literal("cespawnbox").requires(src -> src.hasPermission(2))
+				.executes(ctx -> probe(ctx.getSource(), new BlockPos(ctx.getSource().getPosition()), MobCategory.MONSTER))
+				.then(net.minecraft.commands.Commands.argument("pos", net.minecraft.commands.arguments.coordinates.BlockPosArgument.blockPos())
+						.executes(ctx -> probe(ctx.getSource(), net.minecraft.commands.arguments.coordinates.BlockPosArgument.getLoadedBlockPos(ctx, "pos"), MobCategory.MONSTER))
+						.then(net.minecraft.commands.Commands.argument("category", com.mojang.brigadier.arguments.StringArgumentType.word())
+								.executes(ctx -> {
+									String name = com.mojang.brigadier.arguments.StringArgumentType.getString(ctx, "category");
+									MobCategory cat = MobCategory.byName(name);
+									if (cat == null) {
+										ctx.getSource().sendFailure(net.minecraft.network.chat.Component.literal("[spawn-boxes] no mob category " + name));
+										return 0;
+									}
+									return probe(ctx.getSource(), net.minecraft.commands.arguments.coordinates.BlockPosArgument.getLoadedBlockPos(ctx, "pos"), cat);
+								}))));
+	}
+
+	/**
+	 * One line to chat and the log: the box (or part override) that answers a natural spawn of the category at pos with
+	 * its pool, or "vanilla" and the list vanilla would use (the structures' own spawn_overrides, else the biome's).
+	 */
+	static int probe(net.minecraft.commands.CommandSourceStack source, BlockPos pos, MobCategory category) {
+		ServerLevel level = source.getLevel();
+		StructureManager sm = level.structureManager();
+		Registry<Structure> reg = sm.registryAccess().registryOrThrow(Registry.STRUCTURE_REGISTRY);
+		Hit hit = lookup(sm, category, pos);
+		String where = "[spawn-boxes] " + category.getName() + " at " + pos.getX() + " " + pos.getY() + " " + pos.getZ() + ": ";
+		String line;
+		if (hit != null) {
+			line = where + "box " + hit.source() + " of " + reg.getKey(hit.structure())
+					+ (hit.part() != null ? ", part " + reg.getKey(hit.part()) : "") + " -> " + poolText(hit.spawns());
+		} else {
+			List<String> here = new ArrayList<>();
+			for (Structure s : sm.getAllStructuresAt(pos).keySet()) here.add(String.valueOf(reg.getKey(s)));
+			WeightedRandomList<MobSpawnSettings.SpawnerData> vanilla = level.getChunkSource().getGenerator()
+					.getMobsAt(level.getBiome(pos), sm, category, pos);
+			line = where + "no box (" + (WorldgenConfig.spawnBoxesEnabled() ? "" : "switch off, ")
+					+ "structures referenced here: " + (here.isEmpty() ? "none" : String.join(", ", here)) + ") -> vanilla " + poolText(vanilla);
+		}
+		LOG.info(line);
+		source.sendSuccess(net.minecraft.network.chat.Component.literal(line), false);
+		return hit != null ? 1 : 0;
+	}
+
+	private static String poolText(WeightedRandomList<MobSpawnSettings.SpawnerData> pool) {
+		List<String> out = new ArrayList<>();
+		for (MobSpawnSettings.SpawnerData d : pool.unwrap()) {
+			out.add(Registry.ENTITY_TYPE.getKey(d.type) + " " + d.getWeight().asInt() + " (" + d.minCount + "-" + d.maxCount + ")");
+		}
+		return out.isEmpty() ? "[]" : "[" + String.join(", ", out) + "]";
 	}
 
 	/** "piece": a piece's box holds pos; "full": the box around all the pieces does. */

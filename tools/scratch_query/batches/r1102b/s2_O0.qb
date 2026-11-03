@@ -1,0 +1,69 @@
+# Run r1102b, slice 2, boot O0: the OLD world for SQ-RD-03, SQ-DF-07 and SQ-RSP-14. Group A (superflat), level s2a.
+# Pre-boot (s2_setup.md, O0): prep_srv.sh OUT s2a A; copy rusticdelight-forge-1.19.2-1.3.0.jar and
+# Delightful-1.19.2-3.4.1.jar from development/creativeDelight/jar_archive/displaced/ into OUT/srv/mods/ (a jar in mods/
+# always beats the nested member, CreativeDelight.warnIfNotNested). This boot leaves the marker tagged s2home and the
+# old blocks; s2_A.qb boots the same world without the two jars and checks them.
+# Offsets from H (y = H2, the air layer above the superflat grass): Rustic 1.3.0 lane z+0 (x+2..+20), Delightful 3.4.1
+# lane z+3, Kettle lane z+6. Everything else s2_A.qb builds sits at z >= +10.
+pace 2
+
+## SQ-RD-03a | old world: Rustic 1.3.0 and Delightful 3.4.1 standalone, blocks placed
+bootexpect Done \(
+bootexpect member rusticdelight is loaded from rusticdelight-forge-1\.19\.2-1\.3\.0\.jar
+bootexpect member delightful is loaded from Delightful-1\.19\.2-3\.4\.1\.jar
+> execute unless entity @e[type=minecraft:marker,tag=s2home] run summon minecraft:marker ~ ~ ~ {Tags:["s2home"]}
+sleep 2
+> data get entity @e[type=minecraft:marker,tag=s2home,limit=1] Pos
+capture H entity data: \[(-?\d+)\.\d+d, (-?\d+)\.\d+d, (-?\d+)\.\d+d\]
+> forceload add {H1-16} {H3-16} {H1+80} {H3+176}
+sleep 5
+> gamerule doDaylightCycle false
+> weather clear 100000
+> fill {H1} {H2} {H3} {H1+22} {H2+3} {H3+8} minecraft:air
+> fill {H1} {H2-1} {H3} {H1+22} {H2-1} {H3+8} minecraft:grass_block
+# honey pancakes eaten to 3 (1.3.0 servings = bites eaten: 3 eaten = 3 left), chocolate untouched
+> setblock {H1+2} {H2} {H3} rusticdelight:honey_pancakes[servings=3]
+> setblock {H1+3} {H2} {H3} rusticdelight:chocolate_pancakes
+> setblock {H1+4} {H2} {H3} rusticdelight:bell_pepper_red_crate
+> setblock {H1+5} {H2} {H3} rusticdelight:cotton_boll_crate
+> setblock {H1+6} {H2} {H3} rusticdelight:coffee_beans_bag
+> setblock {H1+8} {H2-1} {H3} minecraft:farmland[moisture=7]
+> setblock {H1+8} {H2} {H3} rusticdelight:bell_peppers[age=4]
+> setblock {H1+9} {H2-1} {H3} minecraft:farmland[moisture=7]
+> setblock {H1+9} {H2} {H3} rusticdelight:cotton[age=2]
+> setblock {H1+10} {H2-1} {H3} minecraft:farmland[moisture=7]
+> setblock {H1+10} {H2} {H3} rusticdelight:coffee[age=3]
+> setblock {H1+12} {H2} {H3} rusticdelight:wild_bell_peppers
+> setblock {H1+13} {H2} {H3} rusticdelight:wild_coffee
+> setblock {H1+14} {H2} {H3} rusticdelight:wild_cotton
+> setblock {H1+16} {H2} {H3} rusticdelight:potted_wild_coffee
+> setblock {H1+17} {H2} {H3} rusticdelight:cherry_blossom_cheesecake
+reject Could not set the block|Unknown block|Invalid block state|Unknown block property
+> execute if block {H1+2} {H2} {H3} rusticdelight:honey_pancakes[servings=3] run say RD03a pancakes servings 3
+> execute if block {H1+16} {H2} {H3} rusticdelight:potted_wild_coffee run say RD03a potted coffee
+expect RD03a pancakes servings 3
+expect RD03a potted coffee
+# the crop ages are written down for s2_A.qb (crops do not random-tick without a player, so they stay)
+> execute if block {H1+8} {H2} {H3} rusticdelight:bell_peppers[age=4] run say RD03a pepper crop age 4
+expect RD03a pepper crop age 4
+
+## SQ-DF-07a | old world: Delightful 3.4.1 blocks placed
+> setblock {H1+2} {H2} {H3+3} delightful:salmonberry_bush[age=2]
+> setblock {H1+4} {H2} {H3+3} delightful:cantaloupe
+> setblock {H1+6} {H2} {H3+3} delightful:basalt_cabinet
+> setblock {H1+8} {H2} {H3+3} delightful:quartz_cabinet
+> setblock {H1+10} {H2} {H3+3} delightful:green_apple_pie
+> setblock {H1+12} {H2} {H3+3} delightful:acorn_sack
+> setblock {H1+14} {H2} {H3+3} delightful:matcha_ice_cream_block
+reject Could not set the block|Unknown block|Invalid block state|Unknown block property
+> item replace block {H1+6} {H2} {H3+3} container.0 with minecraft:apple 5
+> data get block {H1+6} {H2} {H3+3}
+expect has the following block data: .*Items: \[\{.*minecraft:apple
+
+## SQ-RSP-14a | old world: a Kettle saved at water_level=3
+> setblock {H1+2} {H2} {H3+6} minecraft:campfire[lit=true]
+> setblock {H1+2} {H2+1} {H3+6} farmersrespite:kettle[water_level=3]
+> execute if block {H1+2} {H2+1} {H3+6} farmersrespite:kettle[water_level=3] run say RSP14a kettle 3
+expect RSP14a kettle 3
+> save-all flush
+waitlog Saved the game 120

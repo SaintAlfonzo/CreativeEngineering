@@ -59,7 +59,7 @@ public class FitTest {
 		String real = Files.readString(Path.of(args[0]));
 		StructureBiomeFits.stage(real);
 		var st = StructureBiomeFits.stagedForTest();
-		check(st.structures().size() == 187 && st.fits().size() == 31, "real fits staged: " + st.structures().size() + " structures, " + st.fits().size() + " fits");
+		check(st.structures().size() == 189 && st.fits().size() == 34, "real fits staged: " + st.structures().size() + " structures, " + st.fits().size() + " fits");
 		check(st.structures().get("towns_and_towers:village_mushroom_fields").equals(List.of("land/mushroom", "land")),
 				"mushroom village -> land/mushroom + land (was biome_merges.json)");
 		check(st.fits().get("land").isEmpty(), "land lists no biome (parent of the land/* families)");
@@ -83,7 +83,9 @@ public class FitTest {
 				&& st.fits().get("land/sky").contains("#minecraft:is_ocean"), "sky village -> land/sky (land + the oceans)");
 		check(!st.structures().get("mysticrift_pillagers_towers_aris:oak_wood_pillager_tower").contains("land/spruce"),
 				"no structure gets a sibling fit it isn't tagged with (oak tower has no land/spruce)");
-		check(!st.structures().containsKey("philipsruins:start_nether_ruin"), "Philip's nether ruin is held at its own list");
+		// 2026-11-02 (structures/contents #1): Philip's Nether ruin moved to the Nether, on its own fit (no land parent)
+		check(List.of("nether/wastes").equals(st.structures().get("philipsruins:start_nether_ruin")),
+				"Philip's nether ruin -> nether/wastes only");
 
 		// 2. bad input stages nothing; "{}" clears
 		StructureBiomeFits.stage("{\"fits\":{\"a\":[\"minecraft:plains\"]},\"structures\":{\"x:y\":[\"b\"]}}");

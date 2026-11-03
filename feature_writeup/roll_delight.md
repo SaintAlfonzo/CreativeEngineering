@@ -55,8 +55,8 @@ asks for it by name. Upstream bugs are fixed (3.5).
 | Overlap | 2 | Salmon Maki Roll (upstream "Amazing Salmon Roll") vs FD Salmon Roll (committed, D12); medleys vs FD Rice Roll Medley; Tobiko vs Oceanic Delight Fish Egg Roll. Rice Roll and slice are **not** an overlap (owner, 2026-10-31) |
 | Fold-in | 4 | 19 steps planned |
 | Decisions | 5 | D1-D17, all settled, D6 values confirmed (2026-11-01) |
-| Build | 4.2 | BUILT 2026-11-01 (member + CD scripts); CD jar not installed; `/dumpall`, can generator and `/cegen` wait on the game |
-| Tests | 8 | ROLL-01..22 drafted, none run; scratch SQ-ROLL-01..09, CQ-ROLL-10 queued |
+| Build | 4.2 | BUILT 2026-11-01 (member + CD scripts); in `mods/` since the CD jar of 11-02 14:01, not played; `/dumpall`, can generator and `/cegen` wait on the game |
+| Tests | 8 | ROLL-01..22 in game: none run. Scratch r1102b (2026-11-02): SQ-ROLL-01, -02, -05 to -09 PASS; SQ-ROLL-03, -04 OPEN (probe eats from the main hand only); CQ-ROLL-10 waits for the client round |
 
 - **Jar:** 178 files; bundles `mixinextras-forge-0.5.0` (jarjar), unused by the code.
 - **Licence:** ARR (`mods.toml`). No fork; donor jar for art and models, Java written from behaviour.
@@ -364,7 +364,7 @@ entry in that config, not a tag.
 
 ### 3.5 Upstream bugs
 
-Not seen in `logs/latest.log` (the jar is not installed); found in data and code.
+Not seen in `logs/latest.log` (the owner has not played since the member went in); found in data and code.
 
 | # | Bug | Evidence | Fix in port |
 |---|---|---|---|
@@ -506,6 +506,11 @@ Blocking a build: none. All of D1 to D17 are settled. No question remains on the
 
 ## 8. In-game test suite (drafted)
 
+Scratch r1102b (2026-11-02, `perf/runs/r1102b/s3/judged.md`): SQ-ROLL-01 (real PASS: the asset line is client-only,
+the server loads `roll_upstream_data` clean), -02, -05 to -09 PASS: server half of ROLL-01, 05, 10, 11, 12, 16, 18, 22.
+SQ-ROLL-03 and -04 (ROLL-07, 08, 09) OPEN: `zq useitem` tries the main hand only, chopsticks have no use of their own,
+so nothing was eaten; rerun after the off-hand fallback in the probe.
+
 | ID | Test | Pass |
 |---|---|---|
 | ROLL-01 | Boot with the CD jar | no `Failed to parse` naming `roll_delight` in `latest.log` |
@@ -543,3 +548,4 @@ Blocking a build: none. All of D1 to D17 are settled. No question remains on the
 - 2026-11-01 (sixth round): chopstick tag now takes the fish family tags (raw, raw_cut, cooked_cut) plus 22 ids (3.3.3); `_wood` Ender Paella / Pearl Pasta ids dropped (the pack removes them); End's Delight removal flagged for 7 listed ids.
 - 2026-11-01 (seventh round): cooked whole fish (family tag `fish/cooked`) and Pufferfish added to the chopstick tag (3.3.3); Kippers and Surstromming come in through the cooked tag.
 - 2026-11-01: BUILT (4.2): `backportedRoll` member nested in CD, CD scripts, donor folder in build_deploy; Golden Roll on the golden tier, slice 2 / 1.2 without effects; lengthen factor in `roll_delight-common.toml`. Not installed; SQ-ROLL queued. Open: Display Delight plates, wrapped chopsticks Item Physic / BlockRunner, dump-driven generators.
+- 2026-11-02 (deep scan): CD jar with the member in `mods/` since 11-02 14:01; scratch r1102b: SQ-ROLL-01, -02, -05 to -09 PASS, -03 / -04 OPEN (probe fault).

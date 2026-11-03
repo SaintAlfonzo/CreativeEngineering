@@ -252,16 +252,17 @@ Examples:
 
 ## 7. In-game test suite
 
-Hover items in JEI or the inventory. BlockRunner's line needs `block_speed_multiplier_tooltip = true` (the pack default).
+Hover items in JEI or the inventory. BlockRunner's Speed Multiplier line is off since 2026-11-02 (`block_speed_multiplier_tooltip = false`,
+`gameplay/blockrunner #6`: walk speed shows in WTHIT only), so TT-03 to TT-05 are retired and TT-42 checks the line is gone.
 
 **Removals**
-- [ ] **TT-01 IP asphalt:** hover Asphalt Concrete, its slab and its stairs. → No "Increases walking speed" line on any; each still shows "Speed Multiplier: 1.5".
+- [ ] **TT-01 IP asphalt:** hover Asphalt Concrete, its slab and its stairs. → No "Increases walking speed" line on any; no Speed Multiplier line either (2026-11-02).
 - [ ] **TT-02 Crushed piles:** hover a Create Compressed crushed aluminium pile. → Name only.
 
 **BlockRunner line** (moved here from the BlockRunner suite)
-- [ ] **TT-03 Speed values:** asphalt (IP and D&D) → "Speed Multiplier: 1.5"; glass → "Speed Multiplier: 1.0"; stone → "Speed Multiplier: 1.05". *(was BR-06)*
-- [ ] **TT-04 Camo lines** (needs the rebuilt patcherMod jar): framed cube → "Speed Multiplier: matches its camo"; framed slab, framed panel, any framed double item, Copycats+ copycat slab or byte panel → "…matches its camo (newest camo sets walk behaviors for hybrid blocks)". Needs `[surface.camouflage] copyCamo = true`. *(was BR-20)*
-- [ ] **TT-05 Camo off** (needs the rebuilt patcherMod jar): set `[surface.camouflage] copyCamo = false` and save. Hover a framed cube → "Speed Multiplier: 1.0, no matter its camo". Set it back to `true`. *(was the tooltip half of BR-21)*
+- ~~**TT-03 Speed values:**~~ retired 2026-11-02 (line off). asphalt (IP and D&D) → "Speed Multiplier: 1.5"; glass → "Speed Multiplier: 1.0"; stone → "Speed Multiplier: 1.05". *(was BR-06)*
+- ~~**TT-04 Camo lines**~~ retired 2026-11-02 (line off). (needs the rebuilt patcherMod jar): framed cube → "Speed Multiplier: matches its camo"; framed slab, framed panel, any framed double item, Copycats+ copycat slab or byte panel → "…matches its camo (newest camo sets walk behaviors for hybrid blocks)". Needs `[surface.camouflage] copyCamo = true`. *(was BR-20)*
+- ~~**TT-05 Camo off**~~ retired 2026-11-02 (line off). (needs the rebuilt patcherMod jar): set `[surface.camouflage] copyCamo = false` and save. Hover a framed cube → "Speed Multiplier: 1.0, no matter its camo". Set it back to `true`. *(was the tooltip half of BR-21)*
 
 **Pack lines (samples)**
 - [ ] **TT-06 Patterns:** a Quark hollow log → "Can be crawled through"; any Create/Quark ladder → the ladder line.
@@ -303,6 +304,8 @@ Hover items in JEI or the inventory. BlockRunner's line needs `block_speed_multi
 - [ ] **TT-41 PneumaticCraft:** without Shift, hover the Air Canister → its description in gray, wrapped, no "Hold
   Shift" line; the Pressure Gauge Module → the formula and text in gray (no blue or aqua), paragraphs on their own
   lines; Glycerol → "Tastes sweet!" in gray. Holding Shift → PNC's own aqua text.
+- [ ] **TT-42 No Speed Multiplier line:** hover asphalt, stone and a framed cube. → No "Speed Multiplier" line; look at the
+  placed blocks with WTHIT → the walk speed line is still there (`gameplay/blockrunner #6`).
 
 - [ ] **TT-09 No dead patterns:** search `logs/latest.log` for `[addTooltipPattern]`. → Every line reports more than 0 matches.
 

@@ -1,7 +1,6 @@
 package com.sammy.minersdelight;
 
 import com.sammy.minersdelight.client.MDClient;
-import com.sammy.minersdelight.logic.CupConversions;
 import com.sammy.minersdelight.logic.MDSetup;
 import com.sammy.minersdelight.registry.MDBlockEntities;
 import com.sammy.minersdelight.registry.MDBlocks;
@@ -15,7 +14,6 @@ import com.sammy.minersdelight.upstream.MinersTranslator;
 import net.minecraftforge.event.AddPackFindersEvent;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraftforge.api.distmarker.Dist;
-import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.eventbus.api.IEventBus;
 import net.minecraftforge.fml.DistExecutor;
 import net.minecraftforge.fml.ModLoadingContext;
@@ -52,9 +50,6 @@ public class MinersDelightMod {
         bus.addListener((AddPackFindersEvent event) -> BuiltInPacks.addUpstream(event, "miners_upstream",
                 "Miner's Delight: art and data read from the upstream jar", MinersTranslator::assets, MinersTranslator::data));
         bus.addListener(MDSetup::onCommonSetup);
-        MinecraftForge.EVENT_BUS.addListener(CupConversions::onAddReloadListeners);
-        MinecraftForge.EVENT_BUS.addListener(CupConversions::onDatapackSync);
-        CupConversions.registerNetwork();
         DistExecutor.unsafeRunWhenOn(Dist.CLIENT, () -> () -> MDClient.register(bus));
     }
 

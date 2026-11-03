@@ -20,7 +20,7 @@ The ask, from cooking.md:
 | Baking overhaul: all cake, pie, cookie, crust and cake base recipes removed and rebuilt on shared bases (cake base, pie crust, frosting, cookie dough) + 2 flavour; pies and cookies oven only; pot pie fillings; crust + filling bakes (2.6) | built, scratch server PASSED 2026-10-22 (probe `tools/baking_probe/baking_probe.js`, 19 of 19: items, no other mod's recipe left, every expected id, no Create / IE base recipe, oven matching, spout recipe). Needs a restart (new items). In game: OV-25 to OV-32 |
 | Opened cans refused as oven ingredients (`BakingRecipe`) | built, scratch server PASSED 2026-10-22 (opened can refused, full can and plain fillings bake); patcherMod 1.1.01, deployed 2026-10-22; OV-29 in game |
 | Ingredient `count` in `creativeengineering:baking` (one slot gives up n items), behind `[cooking] ovenIngredientCounts`, off by default. Off: repeats take one slot each and 9 recipes over 6 slots drop items (2.6.1) | BUILT 2026-10-18, in patcherMod 1.0.8: DEPLOYED with 1.0.8 |
-| Muffin pot recipes on `#forge:dough` | SUPERSEDED 2026-10-29: muffins have no Cooking Pot recipe (3.8, OV-13 dropped, OV-36); the change is in the Creative Delight jar installed 2026-10-31 00:29, not yet booted. TODO `cooking/oven #3` closed by it |
+| Muffin pot recipes on `#forge:dough` | SUPERSEDED 2026-10-29: muffins have no Cooking Pot recipe (3.8, OV-13 dropped, OV-36); scratch server PASSED r1031 (SQ-BJ-01: no pot muffin recipe; deep scan 2026-11-02), OV-36 in game. TODO `cooking/oven #3` closed by it |
 | Crafting recipes: oven (placeholder pattern, 2.1); bakeware by hammering, iron plate -> baking sheet -> muffin tin -> pie tin -> cake pan, on the cutting board or in the grid (2.5) | BUILT 2026-10-18, DEPLOYED with 1.0.8; loaded in single player 2026-10-19 (no script errors), not tested |
 | IE hammer doesn't rotate the cutting board (`#creativeengineering:hammer_no_rotate`, patcherMod `IECompat`) | BUILT 2026-10-18, DEPLOYED with 1.0.8; loaded in single player 2026-10-19 (no errors), not tested |
 | Dummy baking recipes (one per bakeware piece) | REMOVED 2026-10-18 (2.7) |
@@ -411,7 +411,7 @@ overrides the muffin recipe ids. If muffins still can't be cooked in game, the c
   for `[cooking] recycleShowTicks` (10 ticks) before the result is plated with it ([remainder_buffer.md](remainder_buffer.md)
   3.1, TODO `cooking/kitchen #13`; GameTest RB-T15, RB-14 in game). WTHIT shows the leftover slots ("Holding: ...",
   [wthit_lines.md](wthit_lines.md) 2.9).
-- **Baking audit (2026-10-27, from the 2026-10-24 recipe dump; BUILT, not run in game):** 156 baked foods. Families
+- **Baking audit (2026-10-27, from the 2026-10-24 recipe dump; BUILT, not run in game; boot scratch PASSED r1102b SQ-FFB-00, the family check SQ-FFB-01 and the recipe probe SQ-FFB-02 to -04 open):** 156 baked foods. Families
   restructured the same day ([food_families.md](food_families.md) 4.6: pizza, quiche, lasagna and dessert families,
   `cake/muffin`). New oven members, each sweeping its mod's recipes: Bat, Chorus, Maple and Hostile's seven cookies,
   Gingerbread and Gingerbread Man (COOKIES), Chorus Fruit Pie and Sponge Pie (renamed from Sponge Cake; PIES, no can),
@@ -551,7 +551,7 @@ Needs a patcherMod build in `mods/`.
 - [ ] **OV-35 Dough blocks:** JEI shows Gingerdough, Cookie Dough, Sweet Potato Dough, Oat Dough, Cucumber Dough and
   Sourdough Blocks, each in its dough's colour (inventory, placed, held, breaking particles). 9 of a dough in the grid
   gives its block; the block alone gives 9 back. A shovel breaks them fast, they drop themselves, they sound like slime.
-- [ ] **OV-36 No pot muffins:** JEI blueberry, cranberry and sweet potato muffin -> R: no Cooking Pot and no Create
+- [ ] **OV-36 No pot muffins** (recipe half: scratch server PASSED r1031, SQ-BJ-01; JEI: in game): JEI blueberry, cranberry and sweet potato muffin -> R: no Cooking Pot and no Create
   mixing recipe; the oven (muffin tin, paper) recipe is there for each. Sweet potato muffin also shows its grid craft.
 - [ ] **OV-37 Sweet Potato Muffin name:** the item formerly Sweet Potato Cupcake reads Sweet Potato Muffin in the
   inventory, JEI and the WTHIT line; no item is named Cupcake. (Texture still the cupcake sprite, retexture open.)

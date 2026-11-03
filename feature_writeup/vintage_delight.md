@@ -34,9 +34,9 @@ This file has three parts:
 | Decisions taken 2026-10-23 (purges, keep-all duplicates, wild placement, soils, pickling, no Dehydrated, vinegar, loot unwired, geese) | §1 | SETTLED |
 | Mod inventory after the purges (3 crops: oats, peanuts, cucumbers; ghost peppers; 4 wild plants; pickling jar, salt line, cheese mold, mason jars, about 127 items, about 232 recipe files) | §2 | reference, from `vintagedelight-0.1.6.jar` and `vintagedelight-kots-0.3.1.jar` |
 | Overlap list, all marked `*overlaps w/` | §3 | analysis; every duplicate ships, review after play |
-| Integration list in build order | §4 | BUILT 2026-10-23 except the dump-driven steps (§4.0, TODO `ports/vintageport #2`); food types, cans (configured), jar fluids, compost and cooking rules built the same day; deployed with 1.1.02 (port `-03`), 1.1.03 shipped `-07`, `-08` in `mods/` and the 1.1.04 client, `-09` built 2026-10-29 and not installed |
+| Integration list in build order | §4 | BUILT 2026-10-23 except the dump-driven steps (§4.0, TODO `ports/vintageport #2`); food types, cans (configured), jar fluids, compost and cooking rules built the same day; deployed with 1.1.02 (port `-03`), 1.1.03 shipped `-07` (still in `server_mods/`), `-08` in the 1.1.04 client. **Deep scan 2026-11-02:** `-13` is a nested Creative Delight member (`development/creativeDelight/members/vintage`), in the installed `mods/creativedelight-1.0.0.jar` (2026-11-02 14:01); not deployed |
 | Open questions | §5 | vine tree set is on test (S1); Mixed Seeds BUILT 2026-11-01 (§2.3a) |
-| Tests | §8 | VTD-01 to VTD-76 drafted, none ticked; server side by `/vtdtest all` 373+ PASS (2026-10-26); group B (SQ-VP-14 / -15) and the CQ-VP client rows open |
+| Tests | §8 | VTD-01 to VTD-76 drafted, none ticked; server side by `/vtdtest all` 373+ PASS (2026-10-26); group B (SQ-VP-14 / -15) and the CQ-VP client rows open. Deep scan 2026-11-02: r1102 SQ-VTD4-04, -06, SQ-MXS-01, -02 PASS, SQ-VTD8-01 FAIL (jar stall, fixed in `-12`), SQ-VTD5-01 blast drops closed as built; r1102b s1 SQ-VTD4-03, -05, -07, -08 PASS, **SQ-VTD6-01 FAIL** (wild ghost peppers stay on grass: Terralith puts grass in `#minecraft:nylium`; TODO `ports/vintageport #7`), s3 SQ-VTD7-01 PASS, **SQ-VTD7-02 FAIL** (bales and salt blocks soft 0.88x, not 1.05x), s5 SQ-VTD8-02 (b) PASS; VTD-68 server check queued as SQ-VTD9-01 |
 
 - **Source to port from:** `~/.local/share/atlauncher/downloads/vintagedelight-0.1.6.jar` (Forge 1.20.1, closest API,
   109 classes). Decompile with `python3 tools/decompile_mod.py <jar> <out dir>` (94 sources). The KOTS jar
@@ -803,7 +803,7 @@ Overlap review and UI
 - [ ] VTD-67 **Ghost charcoal:** eat it at full hunger: Wither I 0:05 and Fire Resistance 3:00, no hunger restored; it
   still burns in a furnace.
 - [ ] VTD-68 **No golden egg on the tree:** grow a Magic Peanut tree: nothing on top of the trunk; a goose can still lay
-  a golden egg.
+  a golden egg. Scratch: SQ-VTD9-01 (server).
 - [ ] VTD-69 **Jar time:** JEI Pickling Jar page: Berserker's Brew (400 ticks) shows 20s, a pickle (2400) 2min, leather
   (4800) 4min.
 - [ ] VTD-70 **Jar leftover slot:** fermented garlic honey (garlic + honey bottle) leaves the glass bottle in the new slot
@@ -904,3 +904,9 @@ Pickles (2026-10-25)
   consuming and the leftover check all use it, so split ingredients no longer drain the first slot and stall the next
   batch. Thrown leftovers (buffer off or full) wait CD `[vintage.pickling_jar] overflowEjectDelayTicks` ticks (default 20)
   in a queue saved with the jar and dropped if it breaks. Rows SQ-VTD8-01 (rewritten), SQ-VTD8-02.
+
+### Owner decisions 2026-11-02
+
+- VTD-47: keep the magic vine tree set. Magic Peanut: very rare peanut drop (replaces ~1 %) and very rare wandering trader trade, as rare as the pale/dark seeds.
+- Kimchi: Vintage's wins; Brewin's kimchi removed and its recipes carried over (see TODO `merges/dishes #9`).
+- Pickles craftable with cucumbers or zucchini. Fermented garlic honey: 4 hearts already, no change. Golden egg placement observed OK. Both lasagnas kept.

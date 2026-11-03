@@ -1,4 +1,4 @@
-// Curios slot membership for the pack's own slots (data: kubejs/data/creativeengineering/curios/; feature_writeup/curios_slots.md).
+// Curios slot membership for the pack's own slots (registered by IMC in patcherMod compat/CuriosSlots; feature_writeup/curios_slots.md).
 // Curios takes an item into a slot when it is in the item tag curios:<slot>.
 
 ServerEvents.tags('item', e => {
@@ -7,10 +7,9 @@ ServerEvents.tags('item', e => {
 
 	// Hands (Falconry Glove) and the Simple Hats face rows: Creative Compat (creativecompat/kubejs/tags/curiostags.js).
 
-	// Face: Botania's cosmetic masks, the Cob Pipe (corn_delight.md 2.3).
+	// Face: Botania's cosmetic masks. The Cob Pipe's face tag is Creative Delight's (corn_delight/tags.js).
 	t.add(e, i.t_curios_face, [
 		i.cosmetic_ancient_mask, i.cosmetic_eerie_mask, i.cosmetic_tiny_potato_mask,
-		i.cob_pipe,
 	])
 
 	// Feet: the stepstools (patcherMod stepstool/ reads #creativeengineering:stepstools; feature_writeup/stepstool.md).

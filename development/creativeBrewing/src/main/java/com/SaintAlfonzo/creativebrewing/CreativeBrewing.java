@@ -77,6 +77,8 @@ public class CreativeBrewing {
 		MinecraftForge.EVENT_BUS.register(CopperPoisoningHandler.class);
 		// Caffeinated carries Phantom Bane; Phantom Bane ending resets Time Since Rest (potions/effects #10).
 		MinecraftForge.EVENT_BUS.register(PhantomBaneRules.class);
+		// Dispensed potion buckets credit the dispenser's placer (PotionBucketDispenser, potions/potion-buckets #3)
+		MinecraftForge.EVENT_BUS.register(PotionBucketDispenser.class);
 
 		List<String> members = CBConfig.MEMBERS;
 		List<String> missing = members.stream().filter(id -> !ModList.get().isLoaded(id)).toList();

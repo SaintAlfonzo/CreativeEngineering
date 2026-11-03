@@ -12,7 +12,7 @@ public final class RackWoods {
     public static final List<String> WOODS = List.of(
             "oak", "spruce", "birch", "jungle", "acacia", "dark_oak", "mangrove", "crimson", "warped",
             "twisted", "dreamwood", "livingwood", "smoked", "treated_wood", "vertical_treated_wood", "rubberwood",
-            "ancient", "azalea", "bamboo", "driftwood");
+            "ancient", "bamboo", "driftwood");
 
     private RackWoods() {
     }

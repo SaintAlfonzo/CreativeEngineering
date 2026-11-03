@@ -34,7 +34,7 @@ per type, with per-item exceptions, and gives every can the value of what went i
 | Glistering Melon Slice edible (Golden Melon Slice values, no effects) | [food_values.js](../kubejs/startup_scripts/cooking/food_values.js), `golden` type in food_types.json | built, scratch server PASSED 2026-10-22 (SQ-OF-12), not run in game (3.10). FO-29 |
 | Seasoning JEI page (salting off the Crafting and Mixing pages) | patcherMod `compat/jei/SeasoningJEI` + `SeasoningCategory`, CEConfig `[jei] seasoningCategory` | BUILT 2026-10-21, deployed with 1.1.01 (3.11). FO-30, FO-31 |
 | Pack seasonings framework (NBT seasonings, combine rules, bonus on eating; test set cheese / onion / garlic on popcorn) | patcherMod `food/Seasonings`, `SeasoningRecipe`, `SeasoningTooltip`; [seasonings.js](../development/creativeDelight/src/main/resources/kubejs_startup/creativeengineering/seasonings.js), [seasoning.js](../kubejs/data/creativedelight/kubejs/creativeengineering/seasoning.js), NCH `season` | BUILT 2026-10-23, deployed with 1.1.03 (2026-10-26); logic harness 11/11; scratch server PASSED 2026-10-25 (SQ-SN-00, -01) and 2026-10-26 (SQ-SNF-01 to -03, by food family) (3.12). FO-45 to FO-48, FO-56 |
-| Spice of Life pack config (10 foods to activate, reset on death, queue 256; tier bonuses still WIP) | `defaultconfigs/solapplepie-server.toml` = `configs_edited/server_config/solapplepie-server.toml` | Shipped with 1.1.01 through the deploy's `defaultconfigs`; the instance copy added 2026-10-22. New-world values: scratch server PASSED 2026-10-22 (SQ-CF-01). FO-32 |
+| Spice of Life pack config (10 foods to activate, reset on death, queue 256; tier bonuses still WIP) | `defaultconfigs/solapplepie-server.toml` = `configs_edited/server_config/solapplepie-server.toml` | Shipped with 1.1.01 through the deploy's `defaultconfigs`; the instance copy added 2026-10-22. New-world values: scratch server PASSED 2026-10-22 (SQ-CF-01). Last milestone `generic.movement_speed` fix shipped with 1.1.05, not run (SQ-CF-02). FO-32 |
 | Bites from placed pies and cakes count for Spice of Life | patcherMod `food/PlacedFoodSol` + `mixin/ServerPlayerGameModePlacedFoodMixin`, [placed_food_slices.json](../kubejs/generation_scripts/food/placed_food_slices.json) | BUILT 2026-10-22, deployed with 1.1.01 (4.2 finding 5); scratch server PASSED 2026-10-22 (SQ-SOL-01: load, 14 map entries, mixin); the bite: FO-43 in game |
 
 **Open first:** [food_catalog.md](food_catalog.md) (every food), [food_types.json](../kubejs/generation_scripts/food/food_types.json)
@@ -637,7 +637,7 @@ from row 3: pepper, dill, cream and onion, ice cubes, popcorn variants. FO-45 to
   Forge maps the block to it: pick-block, WTHIT and any JEI slot that shows the block show the Powdered Sugar Bucket.
   No code path found that shows snow or powder snow for it; which JEI view showed snow is not known yet (FO-52).
 
-FO-50 to FO-53.
+FO-50 to FO-53. Scratch: SQ-PS-06 (milling / crushing second-result chance by recipe probe, no JEI needed; added deep scan 2026-11-02).
 
 ### 3.14 Sweeteners (BUILT 2026-10-25, not run; TODO `dishes/ingredients #3`)
 
@@ -673,6 +673,63 @@ also reaches Slice & Dice's heated-mixer copy; was wheat flour since the oven au
 2 grain + 2 bowls + 250 mB egg solution -> 2 batter
 ([rusticdelight/recipes.js](../kubejs/data/creativedelight/kubejs/rusticdelight/recipes.js); was 2 wheat flour). Cornbread
 batter (Corn Delight, cornmeal) is a different item and unchanged. FO-58.
+
+### 3.16 Golden and gilded food (DECIDED 2026-11-02, not built)
+
+Owner decisions. Replaces the "enchanted golden foods 8 / 8" values (TODO `food/types-and-tuning #3`) and the old D2.
+
+**Names.** The enchanted golden foods are called **gilded** everywhere in language (lang only; ids stay `enchanted_golden_*`). "Golden" is the plain tier.
+
+**Values: multipliers of the input food.** A golden food's hunger and saturation are its input food's hunger and saturation times a golden multiplier; a gilded food's are the input's times a gilded multiplier. The two tiers have different multipliers. Both multipliers are derived from the vanilla ratios: golden apple, golden carrot and enchanted golden apple against apple and carrot.
+
+Vanilla 1.19.2 for reference (nutrition / saturation points = nutrition x 2 x modifier):
+
+| Food | Nutrition | Modifier | Saturation points |
+|---|---:|---:|---:|
+| Apple | 4 | 0.3 | 2.4 |
+| Carrot | 3 | 0.6 | 3.6 |
+| Golden apple | 4 | 1.2 | 9.6 |
+| Golden carrot | 6 | 1.2 | 14.4 |
+| Enchanted golden apple | 4 | 1.2 | 9.6 |
+
+Vanilla ratios: hunger x1 (apple to golden apple) and x2 (carrot to golden carrot); saturation points x4 for both, and the enchanted golden apple equals the golden apple, so vanilla alone cannot separate the tiers.
+
+**Set by the owner 2026-11-02: golden = x2, gilded = x4, hunger capped at 20 per food** (golden and gilded alike; the cap applies after the multiplier), applied to both hunger and saturation points (so the saturation modifier is unchanged from the input food). The multipliers are config values in `food_tuning.json`, not constants.
+
+**Effects.** Keep today's effects on every golden and gilded food for now. Later (row `food/types-and-tuning #24`): golden foods get a buff by food family (sweets speed, fruit regeneration, veggie strength, and so on; the table is a later decision).
+
+**Recipes (new rule).**
+- **Golden food:** shaped, the input food plus **8 gold nuggets** (replaces whatever the goldenfood recipes use today).
+- **Gilded food:** a **sequenced assembly** (Create) on the golden food: 8 loops, each adding 1 gold ingot and 125 mB of experience fluid (8 ingots and 1000 mB in total). The result is the gilded food.
+- Rows `food/types-and-tuning #22` (recipes) and `#23` (gilded names).
+
+### 3.17 Raw meat, cans and Spice of Life (DECIDED 2026-11-02, not built)
+
+- **Raw meat Hunger chance.** All raw meat and fish (and raw skewers) use raw chicken's Hunger chance and show it the same way in AppleSkin (the shank colour of a food that can give Hunger). **Raw chicken alone** keeps an additional poison chance. No new "nasty" food type: the downside is folded into the vanilla raw-chicken behaviour. Supersedes the "nasty food type" wording of the Barbeque's Delight owner decisions O26 and O27.
+- **Cans in Spice of Life.** A can is not a unique food. It counts as the food that went into it (the `canned` parity rule's "source's Spice of Life value" stays; the separate-food reading is rejected).
+- **Out-of-band values** are reviewed and exempted, not snapped (D1).
+
+### 3.18 Canned effects and canned golden food (DECIDED 2026-11-02, not built)
+
+**General rule.** A canned food gains the effects of its input food, and the length and strength of each effect roughly match the total of the input (a can of N servings is worth N of the food, per serving). This replaces the "one level stronger than the source" behaviour of Canned Goods' own code for foods that have a source.
+
+**Canned golden food.** Golden and gilded cans follow one value rule: a can's hunger and saturation come from the canned parity rule applied to the golden or gilded food's own (multiplied, capped, 3.16) values. Canned golden apples and canned gilded (enchanted) apples follow it like every other golden can. Their effects follow the general rule from the golden and gilded apple.
+
+**Per can** (Canned Goods code effects, `CANNED_CODE_EFFECTS` in `tools/food_catalog.py`):
+
+| Can | Decision |
+|---|---|
+| Pufferfish, rotten flesh, spider eyes, poisonous potatoes | **Keep** today's effects (Hunger IV, Nausea II, Poison III; Hunger II always; Poison II; Poison II always) |
+| Honey bottles | Same effect as the vanilla honey bottle (clears poison); already so |
+| Glow berries | Glowing (today Glowing II 3 s) |
+| Chorus fruit | Random teleport as the vanilla fruit (already so) |
+| Golden and enchanted apples | The general rule from the golden and gilded apple (3.16) |
+| Suspicious stew | DECIDED 2026-11-02: each serving applies 3 random brewable effects, 5 s, level II (below) |
+| Hot hot hotpot, soda, oculemonade, reef cola | Not discussed; unchanged |
+
+**Suspicious stew, read from the Canned Goods bytecode 2026-11-02.** Eating one serving applies **nine effects at once, not a random few**, each level II for 11 s (220 ticks): night vision, fire resistance, blindness, saturation, wither, weakness, poison, jump boost and regeneration (the effects are named in the code by SRG id, mapped by hand). Those nine are exactly the effects of vanilla's flower-stew recipes, so the can folds all flower stews into one item. It is not random today.
+
+**NOTE (marked 2026-11-02, revisit before building):** **Owner decision 2026-11-02 (replaces the nine fixed effects and the four-random idea):** each serving applies **3 effects chosen at random from the brewable effects, each for 5 seconds at level II**. Defaults until corrected: the three are distinct; "brewable" means an effect that a potion in the pack can carry, as one list (a tag or generated list, so new potions join on their own); the instant effects (instant health and damage) are left out because 5 seconds means nothing to them. Open: whether harmful effects (wither, poison, blindness, levitation and so on) stay in the pool, which they do by default; whether an effect that has no level II in brewing (night vision) still gets level II here.
 
 ## 4. Limits and decisions
 
@@ -730,14 +787,14 @@ batter (Corn Delight, cornmeal) is a different item and unchanged. FO-58.
 
 ### 4.3 Decisions for you before the tuning build
 
-- **D1** Bands: review-and-exempt (recommended) or snap every food into its band?
-- **D2** Golden Food: put the enchanted foods and the notch apple back to vanilla 4 / 1.2, and the golden carrot to 6?
-- **D3** Spice of Life: take the per-type complexities and the rescaled ladder? The benefits themselves (+8 hearts,
-  Strength III, full knockback resistance at the top) are generous; trim them?
-- **D4** Canned code effects: match the source (needs a `foodEaten` correction or a mixin), or keep the stronger ones
-  as the reason to can golden food?
-- **D5** Spice of Life and cans: accept that a can counts as a separate food from its source?
-- **D6** Raw meat: give every raw meat and fish Farmer's Delight's 30% Hunger chance, or leave each mod's choice?
+Answered by the owner 2026-11-02 except D3 (pinned) and D4 (open).
+
+- **D1** (answered) Bands: **review and exempt**. The `--report` lists foods outside their band; the ones kept get `exempt: true`. Nothing is snapped.
+- **D2** (answered, replaces the "back to vanilla" idea) Golden and gilded food follow the multiplier rule in 3.16.
+- **D3** (PINNED 2026-11-02) Spice of Life complexities, ladder and benefit trim wait until the majority of food effects are determined. Golden buffs by family are a later row (3.16).
+- **D4** (answered 2026-11-02, suspicious stew still to confirm) Canned effects follow the input food (3.18, row `cans/canning #20`).
+- **D5** (answered) A can is not a separate food in Spice of Life: it counts as the food inside it (3.17).
+- **D6** (answered) Every raw meat and fish takes the raw chicken Hunger chance, shown the same way in AppleSkin. Chicken alone has the extra poison chance. No new "nasty" food type (3.17).
 
 ### 4.4 Rejected
 - **Types as hand-written tag lists in a script:** 615 foods would make the script the place to edit, and the tool
@@ -814,6 +871,9 @@ batter (Corn Delight, cornmeal) is a different item and unchanged. FO-58.
 
 Restart the game first (item_dict gained keys), then load WorldC.
 
+Scratch halves (deep scan 2026-11-02): FO-02 to FO-08 type tags SQ-FO-01, -02; FO-09 to FO-13 empty-can recipes SQ-FO-03;
+FO-14 to FO-22 cans ran as SQ-OF-00 to -03 (PASS 2026-10-22); FO-23 to FO-27 fried egg and oil SQ-FO-04; FO-28 egg stacks SQ-FO-05.
+
 - [x] **FO-01 dump:** `/dumpfood` -> chat `Dumped 629 foods, 132 food blocks, 21 drinks, 26533 recipes`; four files
   in `kubejs/exported/food/`. PASSED 2026-09-28 19:24.
 - [ ] **FO-02 tags load:** after the restart, `logs/kubejs/server.log` has
@@ -888,7 +948,7 @@ Cooking oil and fried eggs (3.7), after a restart:
   under a mixer still salts it. Set `[jei] seasoningCategory = false` in `config/creativeengineering-common.toml`,
   rejoin: no Seasoning tab, salting back on the Crafting and Mixing tabs.
 - [ ] **FO-32 Spice of Life defaults in a new world** (scratch server PASSED 2026-10-22, SQ-CF-01, with the same
-  file through the deploy's `defaultconfigs`; left: one single-player world, client): create a new world: its
+  file through the deploy's `defaultconfigs`; the 2026-10-27 movement speed milestone fix (1.1.05) is SQ-CF-02, not run; left: one single-player world, client): create a new world: its
   `serverconfig/solapplepie-server.toml` has `minFoodsToActivate = 10`, `resetOnDeath = true`, `queueSize = 256`
   (copied from `defaultconfigs/`, added 2026-10-22).
 - [ ] **FO-43 Placed pies and cakes count for Spice of Life** (client: needs a real player, fake players are skipped
@@ -960,15 +1020,17 @@ Cooking oil and fried eggs (3.7), after a restart:
   names too. `logs/kubejs/client.log` lists `Loaded script creativedelight:kubejs/creativeengineering/seasoning_lang.js`
   (and the other `creativedelight:kubejs/...` client scripts) once, before any F3+T. Placeable food lines (PL-01) show
   without F3+T.
-- [ ] **FO-60 Seasoned icons top right** (client, Creative Delight jar of 2026-11-02 13:19 and the pack's `kubejs/assets`):
+- [ ] **FO-60 Seasoned icons top right** (client, CQ-FO-60; Creative Delight jar of 2026-11-02 13:19 or later, in `mods/` since 14:01, and the pack's `kubejs/assets`):
   Popcorn + Cheese, + Onion, + Garlic, + Crushed Void Pepper, salted popcorn and salted cooked beef show their sparkle in
   the top-right corner of the item (hotbar, hand, dropped, JEI Seasoning page), nothing left in the top-left corner;
   F3+T keeps it there; no missing-texture squares.
-- [ ] **FO-61 Powdered sugar in WTHIT** (client): place powdered sugar from its bucket and look at it: WTHIT reads
+- [ ] **FO-61 Powdered sugar in WTHIT** (client, CQ-FO-61; fix in the `mods/` Creative Delight jar of 2026-11-02 14:01): place powdered sugar from its bucket and look at it: WTHIT reads
   "Powdered Sugar" with the mod Creative Engineering (or Creative Delight), not "Snow Block" / Minecraft. Real powder
   snow still reads as WTHIT shows it by default (Snow Block unless `override_powder_snow` is off).
 
 ## 8. History
+
+- **2026-11-02** Owner decisions recorded: D1 review and exempt, D2 golden multiplier rule (golden x2, gilded x4) with gilded tier and new recipes (3.16), D5 cans count as their contents, D6 raw meat follows raw chicken (3.17). D3 pinned until most food effects are set, D4 answered (3.18).
 
 - **2026-09-28** First writeup for 1.0.2. `/dumpfood` built and run in WorldC. 31 food types, food_types.json,
   foodtypetags.js, 216 item_dict keys + 32 tag keys, `tools/food_catalog.py` and the generated catalog. Spice of

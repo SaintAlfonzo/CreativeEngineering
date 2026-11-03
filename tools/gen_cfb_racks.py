@@ -47,7 +47,6 @@ WOODS = {
     'vertical_treated_wood': ('Vertical Treated Wood', 'immersiveengineering__treated_wood_vertical'),
     'rubberwood': ('Rubberwood', 'myrtrees__rubberwood_planks'),
     'ancient': ('Ancient', 'quark__ancient_planks'),
-    'azalea': ('Azalea', 'quark__azalea_planks'),
     'bamboo': ('Bamboo', 'quark__bamboo_planks'),
     'driftwood': ('Driftwood', 'upgrade_aquatic__driftwood_planks'),
 }

@@ -19,10 +19,11 @@ public final class CompatConfig {
     public static final MonsterBox MONSTER_BOX;
     public static final TrashSlot TRASH_SLOT;
     public static final Cats CATS;
+    public static final GiantSquid GIANT_SQUID;
 
     /**
      * The toml tables carried over from creativeengineering-common.toml, in order. {@code [cats]} (added 2026-11-01,
-     * after the carve) is new in this file and is not carried.
+     * after the carve) and {@code [giant_squid]} (2026-11-02) are new in this file and are not carried.
      */
     public static final List<String> SECTIONS =
             List.of("leaf_piles", "moss", "vine_shearing", "campfire", "monster_box", "trash_slot");
@@ -36,6 +37,7 @@ public final class CompatConfig {
         MONSTER_BOX = new MonsterBox(builder);
         TRASH_SLOT = new TrashSlot(builder);
         CATS = new Cats(builder);
+        GIANT_SQUID = new GiantSquid(builder);
         SPEC = builder.build();
     }
 
@@ -317,6 +319,40 @@ public final class CompatConfig {
                     .defineInRange("buffLevel", 3, 1, 10);
 
             b.pop(); // cats
+        }
+    }
+
+    /**
+     * Alex's Mobs giant squid fleeing cachalot whales ({@code mixin/AmGiantSquidAvoidWhalesMixin}, feature_writeup/
+     * mob_block_tweaks.md section 2.10). Alex's Mobs flees from any whale within 50 blocks and keeps fleeing while
+     * one is within 60. Server side; read each time the goal checks.
+     */
+    public static final class GiantSquid {
+        public final ForgeConfigSpec.IntValue whaleFleeStart;
+        public final ForgeConfigSpec.IntValue whaleFleeStop;
+
+        private GiantSquid(ForgeConfigSpec.Builder b) {
+            b.comment("Alex's Mobs giant squid (server side).").push("giant_squid");
+
+            whaleFleeStart = b.comment(
+                    "A giant squid starts fleeing a cachalot whale within this many blocks (Alex's Mobs: 50)."
+            ).defineInRange("whaleFleeStart", 16, 1, 64);
+            whaleFleeStop = b.comment(
+                    "It keeps fleeing while that whale is within this many blocks (Alex's Mobs: 60). Kept at least",
+                    "whaleFleeStart."
+            ).defineInRange("whaleFleeStop", 24, 1, 96);
+
+            b.pop(); // giant_squid
+        }
+
+        /** The start radius, or Alex's Mobs' 50 before the config loads. */
+        public static float start() {
+            return SPEC.isLoaded() ? GIANT_SQUID.whaleFleeStart.get() : 50.0F;
+        }
+
+        /** The stop radius (never below the start), or Alex's Mobs' 60 before the config loads. */
+        public static float stop() {
+            return SPEC.isLoaded() ? Math.max(GIANT_SQUID.whaleFleeStop.get(), GIANT_SQUID.whaleFleeStart.get()) : 60.0F;
         }
     }
 }

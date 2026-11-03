@@ -36,7 +36,8 @@
     "FishingHookFeatherPullMixin",
     "CatCozyCommandMixin",
     "CozyHomeGoalFeatherMixin",
-    "CozyMessageGenderMixin"
+    "CozyMessageGenderMixin",
+    "AmGiantSquidAvoidWhalesMixin"
   ],
   "client": [
     "AnotherFurniturePlanterRenderMixin",
@@ -48,7 +49,8 @@
     "TrashSlotGuiHandlerMixin",
     "TrashSlotComponentMixin",
     "TrashSlotSaveStateAccessor",
-    "DhCloudHeightMixin"
+    "DhCloudHeightMixin",
+    "SimpleHatsFaceSlotMixin"
   ],
   "server": []
 }

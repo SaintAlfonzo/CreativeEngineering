@@ -23,6 +23,14 @@ import net.minecraftforge.eventbus.api.IEventBus;
 import net.minecraftforge.registries.DeferredRegister;
 import net.minecraftforge.registries.ForgeRegistries;
 import net.minecraftforge.registries.RegistryObject;
+import net.minecraftforge.fml.util.ObfuscationReflectionHelper;
+import net.minecraft.world.level.block.entity.BlockEntityType;
+import vectorwing.farmersdelight.common.block.CuttingBoardBlock;
+import vectorwing.farmersdelight.common.registry.ModBlockEntityTypes;
+import java.lang.reflect.Field;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Set;
 import vectorwing.farmersdelight.FarmersDelight;
 import vectorwing.farmersdelight.common.FoodValues;
 import vectorwing.farmersdelight.common.item.ConsumableItem;
@@ -81,6 +89,37 @@ public final class FDBackportRegistry {
 			() -> new BlockItem(GLEAMING_SALAD_BLOCK.get(), ModItems.basicItem().stacksTo(1)));
 	public static final RegistryObject<Item> GLEAMING_SALAD = ITEMS.register("gleaming_salad",
 			() -> new ConsumableItem(ModItems.bowlFoodItem(GLEAMING_SALAD_FOOD), true));
+
+	/**
+	 * Stone cutting boards (TODO cooking/kitchen #25, pack addition): Farmer's Delight's cutting board block in granite,
+	 * andesite and diorite. Same block class and block entity as the wooden board ({@link #allowStoneBoards} adds them to
+	 * the cutting board block entity type), stone sound and hardness, pickaxe-mineable (pack tag).
+	 */
+	public static final List<RegistryObject<Block>> STONE_CUTTING_BOARDS = List.of(
+			stoneBoard("granite", MaterialColor.DIRT), stoneBoard("andesite", MaterialColor.STONE),
+			stoneBoard("diorite", MaterialColor.QUARTZ));
+
+	private static RegistryObject<Block> stoneBoard(String stone, MaterialColor color) {
+		String name = stone + "_cutting_board";
+		RegistryObject<Block> block = BLOCKS.register(name, () -> new CuttingBoardBlock(
+				BlockBehaviour.Properties.of(Material.STONE, color).strength(1.5F, 6.0F).sound(SoundType.STONE)));
+		ITEMS.register(name, () -> new BlockItem(block.get(), ModItems.basicItem()));
+		return block;
+	}
+
+	/** Common setup: the stone boards keep a cutting board block entity (BlockEntityType.validBlocks, SRG f_58915_). */
+	@SuppressWarnings("unchecked")
+	static void allowStoneBoards() {
+		BlockEntityType<?> type = ModBlockEntityTypes.CUTTING_BOARD.get();
+		try {
+			Field field = ObfuscationReflectionHelper.findField(BlockEntityType.class, "f_58915_");
+			Set<Block> valid = new HashSet<>((Set<Block>) field.get(type));
+			STONE_CUTTING_BOARDS.forEach(b -> valid.add(b.get()));
+			field.set(type, valid);
+		} catch (ReflectiveOperationException | RuntimeException e) {
+			FarmersDelight.LOGGER.error("[creativedelight] could not add the stone cutting boards to the cutting board block entity", e);
+		}
+	}
 
 	private FDBackportRegistry() {}
 

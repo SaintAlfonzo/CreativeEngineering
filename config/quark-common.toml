@@ -793,7 +793,7 @@
 	"Blossom Trees" = true
 	"Glimmering Weald" = true
 	"Monster Box" = true
-	"Azalea Wood" = true
+	"Azalea Wood" = false
 	"No More Lava Pockets" = true
 	Corundum = true
 	"Chorus Vegetation" = true

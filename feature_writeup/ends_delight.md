@@ -1,6 +1,6 @@
 # End's Delight and Ender's Delight
 
-**Built 2026-10-25, Shipped in 1.1.03 (deployed to server and players 2026-10-26)** (section 5); scratch SQ-EN-01 to -04, -06 PASSED 2026-10-26, SQ-EN-07 partial; EN- rows not run in game. End's Delight 2.1 is a Creative Delight member
+**Built 2026-10-25, Shipped in 1.1.03 (deployed to server and players 2026-10-26)** (section 5); scratch SQ-EN-01 to -04, -06 PASSED 2026-10-26 (SQ-EN-04, -06 again r1102b; SQ-EN-03 OPEN in r1102b: void pepper spread not probed), SQ-EN-07 partial; EN- rows not run in game. Shulker meat merge (Ender's into End's) BUILT 2026-11-02, scratch PASSED r1102b (5.8). End's Delight 2.1 is a Creative Delight member
 (`repackedEnds`, now `-ce-19.2-02`); Ender's Delight 1.2.2 stays its own ARR jar, and its 1.1.4 content is rebuilt in the
 new CD member `enders_additions` (`development/creativeDelight/members/enders/`). Decision rows: `largecontent/mod-additions
 #4`, `#15`, `#28`, `#29` and `creativedelight/members #7` in [todo/TODO.md](todo/TODO.md). Test prefix `EN-` (section 5.6).
@@ -221,10 +221,10 @@ author FoggyHillside. TODO: `largecontent/mod-additions #29`.
 |---|---|
 | Newer-jar review (sections 3.1, 3.2, 3.3) | Written 2026-10-25 |
 | Overlap survey (section 1) | Written 2026-10-23 |
-| End's 2.6.1 changes, Ender's 1.1.4 content, End House, integration rows (section 5) | BUILT 2026-10-25 in the CD jar (`creativedelight-1.0.0.jar` with `repackedEnds-1.19.2-2.1-ce-19.2-02`, `endersAdditions-1.1.4-ce-19.2-01`); not installed; EN-01 to EN-16 queued |
+| End's 2.6.1 changes, Ender's 1.1.4 content, End House, integration rows (section 5) | BUILT 2026-10-25 in the CD jar (`creativedelight-1.0.0.jar` with `repackedEnds-1.19.2-2.1-ce-19.2-02`, `endersAdditions-1.1.4-ce-19.2-01`); shipped 1.1.03; scratch per 5.6; EN- rows not run in game (deep scan 2026-11-02) |
 | Food tuning, cans, names audit for the new items | Open: needs `/dumpall` after install (section 5.5) |
 | Tower spacing / End grouping pass; strict y 50 House check | Open decisions (section 5.5) |
-| Ender's 1.1.4 art and data via donor jar (`members #9`, section 5.3) | BUILT 2026-11-01 (`endersAdditions-1.1.4-ce-19.2-03` in the CD jar), not installed; needs `enders_upstream/endersdelight-1.1.4.jar` on server and clients; SQ-DNR-E queued |
+| Ender's 1.1.4 art and data via donor jar (`members #9`, section 5.3) | BUILT 2026-11-01 (`endersAdditions-1.1.4-ce-19.2-03` in the CD jar; in `mods/` since the CD jar of 11-02 14:01, not played); needs `enders_upstream/endersdelight-1.1.4.jar` on server and clients; SQ-DNR-E queued, not run (not in r1102b's scope); route superseded 2026-11-02 (5.3) |
 
 ## 5. Built 2026-10-25
 
@@ -257,7 +257,7 @@ Mysticrift End tower in `type/end_constructed`; mortar route for Crushed Void Pe
 
 ### 5.3 Ender's 1.1.4 content (member `enders_additions`)
 
-**Owner decision 2026-11-02: Ender's Delight 1.2.2 itself is also nested in Creative Delight on the Oceanic donor route** (our own code for every upstream id, art and data read from the unmodified `enders_upstream/endersdelight-1.2.2.jar`, nothing of it shipped, the installed jar leaves `mods/`), absorbing this member. TODO `creativedelight/members #33`; plan in creative_delight.md 38.1. Not built.
+**Owner decision 2026-11-02 (superseding): the 1.2.2 donor route is dropped (creative_delight.md 38.5). Ender's 1.2.2 stays its own jar; this member's content folds into the End's member and loads only when `endersdelight` is present.** Earlier decision, void: Owner decision 2026-11-02: Ender's Delight 1.2.2 itself is also nested in Creative Delight on the Oceanic donor route** (our own code for every upstream id, art and data read from the unmodified `enders_upstream/endersdelight-1.2.2.jar`, nothing of it shipped, the installed jar leaves `mods/`), absorbing this member. TODO `creativedelight/members #33`; plan in creative_delight.md 38.1. Not built.
 
 
 Mod id `enders_additions`, registers under `endersdelight:` (Forge may log an "alternative prefix" warning); hard
@@ -370,3 +370,14 @@ feature (type `ends_delight:chorus_succulent_feature`; registered id `ends_delig
 located, ground check not run); EN-02, EN-05, EN-08, EN-10 to EN-15 open.
 
 Changelog: bullets added 2026-10-25 (Farming, Food, World Generation, Loot, Gear, Interface families).
+
+Scratch r1102b (2026-11-02, `perf/runs/r1102b/s3/`): SQ-EN-04 (dragon drops) and SQ-EN-06 (knife repair) PASS again;
+SQ-EN-03 OPEN (soils and growth PASS; void pepper spreading, fruiting and the 3 / 1 drops not probed).
+
+### 5.8 Shulker meat from End's Delight only (2026-11-02, TODO `dishes/ingredients #32`)
+
+BUILT 2026-11-02 (food and cooking batch, [plan_food_cooking_batch.md](plan_food_cooking_batch.md)): Ender's
+`shulker_mollusk` merges into End's `shulker_meat`, `shulker_filet` into `shulker_meat_slice` (CD startup
+`endersdelight/item_merges.js`); Ender's knife loot modifier off, the filet cut removed, Canned Shulker Flesh on End's
+meat. End's own textures kept; the owner updates them later. Scratch r1102b: SQ-FCB-04e (knife kills: End's meat in 46
+of 50 rolls, never 2, no mollusk) and SQ-FCB-05 (old items in an inventory turn into the survivors) PASS. Not played.

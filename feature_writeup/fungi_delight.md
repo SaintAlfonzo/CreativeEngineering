@@ -31,9 +31,9 @@ This file has three parts:
 |---|---|---|
 | Mod inventory (2 mushrooms, 2 colonies, truffle and truffle dirt, 2 huge mushrooms, inky goo veil, 32 items, 17 blocks, 2 cow entities, 2 effects, 3 potions, 34 recipe files, pig / wolf / hoglin / sniffer hooks) | §2 | reference, from `FungiDelight-1.20.1-1.3.jar` |
 | Overlap list | §3 | analysis; small (no other truffle, morel or inky cap in the pack) |
-| Integration list in build order | §4, build record §4.0 | built 2026-10-23, deployed with 1.1.02; dump-driven steps open (TODO `ports/fungiport #2`) |
+| Integration list in build order | §4, build record §4.0 | built 2026-10-23, deployed with 1.1.02; dump-driven steps open (TODO `ports/fungiport #2`). Deep scan 2026-11-02: port `-02` is a nested Creative Delight member (`members/fungi`), in the installed CD jar (2026-11-02 14:01); `server_mods/` still `-01` |
 | Decisions for the owner | §5, answered in §5.1 | D1 to D12, each with a recommendation; owner plan 2026-10-23 |
-| Tests | §8 | FGD-01 to FGD-40 not ticked; server side by `/fgdtest all` 135 / 136 (2026-10-26); open: SQ-FGD-12 to -15 (group B), CQ-FGD client rows in [testing/scratch_queue.md](testing/scratch_queue.md) |
+| Tests | §8 | FGD-01 to FGD-40 not ticked; server side by `/fgdtest all` 135 / 136 (2026-10-26); open: SQ-FGD-12 to -15 (group B), CQ-FGD client rows in [testing/scratch_queue.md](testing/scratch_queue.md). Deep scan 2026-11-02: r1102 on the nested `-02`: SQ-FGD-00 to -11 (with -03b, -07a, -07b) PASS, SQ-FGD-13 PASS, -12 LOOK (mushroom-fields half: SQ-FGD-12m), **-14 FAIL** (no truffle dirt; fixed in `wild_crops.json`, TODO `creativedelight/members #42`, rerun queued), -15 not judged (SQ-FGD-15c); the SQ-FGDC rows are in the postponed worldgen slice of r1102b |
 
 - **Source to port from:** `~/.local/share/atlauncher/downloads/FungiDelight-1.20.1-1.3.jar` (Forge 1.20.1, closest
   API; downloaded 2026-10-23 from Modrinth, sha1 checked). 53 classes; decompile with
@@ -594,3 +594,8 @@ filter value against the live cave biomes, and the starting rates above (FGD-28)
 - **2026-11-02 (afternoon):** folder moved to `development/creativeDelight/members/fungi` (plan_creative_delight.md I8).
   Truffle dirt fix (I6): the blob and truffle ore rules merged into one, birch forests added (5.1.3); crops_by_biome.md
   regenerated. Rerun SQ-FGD-14 in the SQ-FGDC world.
+
+### 5.1.8 Owner decisions 2026-11-02
+
+- Lightning swaps mooshroom types both ways: red <-> brown, and Inky Cap Cow <-> Morel Cow (replaces "Fungi cows ignore lightning", FGD-27 expectation changes; `FDMCow` loses its lightning immunity and swaps instead).
+- New mushrooms (inky cap, morel): light levels and valid spawn locations match the vanilla mushrooms (FGD-28 cave filter follows vanilla; the "light at most 7" value is replaced). Rates stay lower than vanilla (new ones rarer).

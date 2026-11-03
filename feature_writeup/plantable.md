@@ -1,6 +1,6 @@
 # Plantable items
 
-Test prefix **PT-** · Last updated **2026-11-01** · Overall status **BUILT 2026-11-01, scratch test queued (SQ-PT-01, CQ-PT-01); not run in game**
+Test prefix **PT-** · Last updated **2026-11-02** · Overall status **BUILT 2026-11-01, unreleased (Interface & Tooltips bullets); SQ-PT-01 PASSED r1102b (tags: seed 48, crop 14, sapling 36, fungi 23, water 11, vine 23, vertical 5; the `[plantable]` log line says 49 / 37); CQ-PT-01 (the tooltip lines) open; not run in game**
 
 ## 0. At a glance
 
@@ -91,3 +91,4 @@ The live counts print in `logs/latest.log` as `[plantable] seed=.., crop=.., ...
 
 - 2026-11-01: built. Families and labels set by the owner (flowers no line; mushrooms that grow huge are "Fungi Sapling";
   "Vertical Crop" for cane, cactus, bamboo and chorus).
+- 2026-11-02 (deep scan): SQ-PT-01 PASSED in r1102b; CQ-PT-01 waits for the client round.

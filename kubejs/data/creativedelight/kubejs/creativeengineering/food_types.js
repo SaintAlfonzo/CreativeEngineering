@@ -37,7 +37,9 @@ if (global.CD) global.CD.genPut('food_types', 'creativeengineering', {
   ],
   "salad": [],
   "soup": [],
-  "meal": [],
+  "meal": [
+   "kelp_encrusted_cod"
+  ],
   "meal/feast": [],
   "drink": [
    "bayberry_tea",

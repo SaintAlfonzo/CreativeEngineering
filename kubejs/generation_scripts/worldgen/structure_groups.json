@@ -566,16 +566,6 @@
           "frequency": 1.0,
           "fit_keep": false
         },
-        "philipsruins:rare_ruin": {
-          "weight": 100,
-          "frequency": 0.007794,
-          "fit_keep": false
-        },
-        "philipsruins:start_nether_ruin": {
-          "weight": 100,
-          "frequency": 0.8688,
-          "fit_keep": false
-        },
         "terralith:glacial_hut": {
           "weight": 100,
           "frequency": 0.686437,
@@ -1500,7 +1490,7 @@
       }
     },
     "nether_ruins": {
-      "note": "Nether ruins: Twigs' bloodstone obelisk and Philip's three Nether ruins (Nether dungeon, sealed ghast statue, lava ruins). Grid from their crowding (spacing 14, separation 7). Added 2026-10-12.",
+      "note": "Nether ruins: Twigs' bloodstone obelisk and Philip's three Nether ruins (Nether dungeon, sealed ghast statue, lava ruins). Grid from their crowding (spacing 14, separation 7). Added 2026-10-12. 2026-11-02 (structures/contents #1): Philip's lost soul dungeon, rare ruin and blackstone Nether ruin moved in from the Overworld; the dungeon and the blackstone ruin set by hand to the other Philip Nether ruins' weight and frequency (the fit to their Overworld rates gave weights 148 and 214), the rare ruin kept rare as fitted.",
       "placement": {
         "spacing": 14,
         "separation": 7,
@@ -1526,6 +1516,18 @@
           "weight": 100,
           "frequency": 1.0,
           "fit_keep": false
+        },
+        "philipsruins:lost_soul_dungeon": {
+          "weight": 100,
+          "frequency": 0.5993
+        },
+        "philipsruins:rare_ruin": {
+          "weight": 6,
+          "frequency": 0.3759
+        },
+        "philipsruins:start_nether_ruin": {
+          "weight": 100,
+          "frequency": 0.5993
         }
       }
     },
@@ -2146,10 +2148,6 @@
         "separation": 13
       },
       "structures": {
-        "philipsruins:lost_soul_dungeon": {
-          "frequency": 0.991,
-          "fit_keep": false
-        },
         "philipsruins:bone_dungeon": {
           "frequency": 0.29382,
           "fit_keep": false

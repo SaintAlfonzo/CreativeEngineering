@@ -3,6 +3,8 @@
 Test prefix **DDP-** · Last updated **2026-10-25** · Status **BUILT 2026-10-25, installed in `mods/`, Shipped in 1.1.03 (deployed to server and players 2026-10-26);
 boot check SQ-DDP-01 PASSED 2026-10-25, SQ-DDP-02 to 05 and CQ-DDP queued; not run in game**
 
+**Deep scan 2026-11-02:** now the nested member `backportedDisplay-1.7.0-ce-19.2-03` in the installed `mods/creativedelight-1.0.0.jar` (2026-11-02 14:01); `server_mods/` still `-01`. Scratch r1102: SQ-DDP-02, -03, -05, -06, SQ-CDJ-09 to -11 PASS; SQ-DDP-01 / SQ-CDJ-05 FAIL (tentacle plate id lost in old worlds; `-03` drops it through the swap-list `removed` key, TODO `creativedelight/members #36`; the rerun is queued but was not in the r1102b scope); SQ-DDP-04 LOOK (7 tag items with no Display block); SQ-DDP-07 not proven (sneak halves are CQ-DDP-01). CQ-DDP client rows open.
+
 The pack's 1.19.2 port of Display Delight 1.7.0 (`development/creativeDelight/members/display` since 2026-11-02, was
 `development/backportedDisplay`; jar `backportedDisplay-1.7.0-ce-19.2-02.jar` nested in the Creative Delight jar, was the
 standalone `-01`; mod id `displaydelight`, display name "Display Delight (Creative Delight)", was "(Backport)"; section 3.1) replaces

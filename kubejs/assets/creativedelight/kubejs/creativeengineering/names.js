@@ -65,11 +65,14 @@ ClientEvents.lang('en_us', e => {
   e.renameItem(global.item.jelly_bread, 'Bread with Jam')  // dishes/jams #3
   e.renameItem(global.item.coffee_cheesecake, 'Coffee Pie')  // creativedelight/members #25
   e.add('item.rusticdelight.coffee_cheesecake_slice', 'Slice of Coffee Pie')
-  // The Dirty Stuff: the leaf package and the tobacco package both read "Tobacco Package" (food/drugs #2)
-  e.add('item.the_dirty_stuff.tobacco_leafs_package', 'Bundle of Tobacco Leaves')
-  e.add('item.the_dirty_stuff.dried_tobacco_leafs_package', 'Bundle of Dried Tobacco Leaves')
-  e.add('item.the_dirty_stuff.dried_tobacco_leaf_package', 'Bundle of Dried Tobacco Leaves')
-  e.add('item.the_dirty_stuff.tobacco_package', 'Tobacco Bundle')
+  // The Dirty Stuff: the leaf package and the tobacco package both read "Tobacco Package" (food/drugs #2).
+  // renameItem, not e.add(key, value): the 2-arg add writes the key into the minecraft namespace's lang file, and the
+  // client merges lang files namespace by namespace in hash order, so the_dirty_stuff's own file could load later and
+  // win (r1101 CQ-UI-01: tobacco_package stayed "Tobacco Package"; ui/names #12).
+  e.renameItem(global.item.tobacco_leafs_package, 'Bundle of Tobacco Leaves')
+  e.renameItem(global.item.dried_tobacco_leafs_package, 'Bundle of Dried Tobacco Leaves')
+  e.add('the_dirty_stuff', 'item.the_dirty_stuff.dried_tobacco_leaf_package', 'Bundle of Dried Tobacco Leaves')  // lang-only key, no item
+  e.renameItem(global.item.tobacco_package, 'Tobacco Bundle')
   // Cantaloupe merge (item_merges.md 2.10): Fruits Delight's hamimelon line is the Cantaloupe, Delightful's cantaloupe
   // (sand crop) the Mini Cantaloupe. Ids unchanged.
   e.renameItem(global.item.hamimelon, 'Cantaloupe')

@@ -13,6 +13,11 @@
     "  warm_dry      summer fertile, spring and autumn neutral, winter off; dry fertile, wet neutral.",
     "  warm_wet      summer fertile, spring and autumn neutral, winter off; wet fertile, dry neutral.",
     "  autumn_fruit  autumn fertile, spring and summer neutral, winter off; wet neutral, dry off (Vinery apple trees).",
+    "  grass         winter off, every other season neutral, wet and dry neutral. Grass spread runs no crop-grow event:",
+    "                Creative Calendar hooks vanilla grass-block spread and Immersive Weathering growths that place the",
+    "                owner's own type (grass sprouting, growing tall, ferns growing large); off skips the same share.",
+    "                Modded grass blocks (IW rooted grass and IW's extra spread over mycelium and rooted dirt, Botania",
+    "                grasses, Vinery grass slab, Vintage lush grass) are hooked on their own random tick.",
     "  nether        fertile in the Nether, off everywhere else.",
     "  end           fertile in the End, off everywhere else.",
     "  cave          by height, not season: fertile below y 0, off above y 128 (CEConfig [crop_seasons]).",
@@ -68,6 +73,12 @@
     ],
     "autumn_fruit": [
       "vinery:apple_leaves", "fruitsdelight:apple_leaves"
+    ],
+    "grass": [
+      "minecraft:grass_block", "minecraft:grass", "minecraft:tall_grass", "minecraft:fern", "minecraft:large_fern",
+      "immersive_weathering:rooted_grass_block", "vinery:grass_slab", "vintagedelight:lush_grass_block",
+      "botania:dry_grass", "botania:golden_grass", "botania:vivid_grass", "botania:scorched_grass",
+      "botania:infused_grass", "botania:mutated_grass"
     ],
     "nether": [
       "minecraft:nether_wart", "minecraft:twisting_vines", "minecraft:weeping_vines",

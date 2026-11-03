@@ -56,6 +56,7 @@ FOOD_OVERRIDES = {
     'farmersdelight:bone_broth': 64,      # an ingredient, not a bowl meal
     'farmersdelight:cooked_rice': 64,     # cooking ingredient
     'minecraft:honey_bottle': 64,         # honey bottles are 64 even though the catalog calls them drinks
+    'rusticdelight:syrup': 64,            # syrup is a cooking ingredient like honey (owner 2026-11-02)
     'rusticdelight:chocolate_pancakes': 32,
     'rusticdelight:honey_pancakes': 32,
     'rusticdelight:vegetable_pancakes': 32,

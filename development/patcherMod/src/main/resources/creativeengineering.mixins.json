@@ -90,6 +90,7 @@
     "JigsawPlacementPriorityMixin",
     "StructureTemplateManagerSwapMixin",
     "ChunkGeneratorSpawnBoxesMixin",
+    "StructureStartMetaMonumentMixin",
     "StructureTerrainAdaptationMixin",
     "BeardifierSoftMixin",
     "LevelThreadSafeRandomMixin",
@@ -98,6 +99,7 @@
     "WorldEditSkipStateIdInitMixin",
     "WorldEditBlockStateIdAccessMixin",
     "QuarkPermafrostStyleMixin",
+    "QuarkSpiralSpireFootprintMixin",
     "QuarkSpiralSpiresTeleportMixin",
     "WanderingTraderSpawnerMixin",
     "WanderingTraderTradesMixin",
@@ -142,6 +144,7 @@
     "MobCapLevelTickMixin",
     "MobCapMixin",
     "MobCapSpawnAreaMixin",
+    "NaturalSpawnerBoxHeightMixin",
     "KubeJSEventHandlerListenMixin",
     "KubeJSEventHandlerContainerMixin"
   ],

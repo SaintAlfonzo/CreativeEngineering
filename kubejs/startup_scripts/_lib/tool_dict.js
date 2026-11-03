@@ -1,5 +1,5 @@
 // priority: 979
-// Tool dict: global.tool (alias t), a mask over global.item (creative_delight.md 13.3): bowls, cups, jars, cookware,
+// Tool dict: global.tool (alias t), a mask over global.item (creative_delight.md 13.3): bowls, jars, cookware,
 // knives and stations of the Creative Delight members. The value is always i.<key>, so items stay defined once in
 // item_dict.js. Key: <category>_<name>, category from global.toolGrammar (food_grammar.js), e.g. t.pot_copper.
 //
@@ -116,11 +116,6 @@ global.tool = {}
 
 	// ---- bowl
 	t.bowl_shulker                      = i.shulker_bowl;
-
-	// ---- cup
-	t.cup_copper                        = i.copper_cup;
-	t.cup_powder_snow                   = i.powder_snow_cup;
-	t.cup_water                         = i.water_cup;
 
 	// ---- jar
 	t.jar_empty_mason                   = i.empty_mason_jar;

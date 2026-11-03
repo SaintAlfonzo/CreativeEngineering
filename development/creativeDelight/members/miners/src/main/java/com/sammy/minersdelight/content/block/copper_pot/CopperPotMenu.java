@@ -2,7 +2,6 @@ package com.sammy.minersdelight.content.block.copper_pot;
 
 import com.mojang.datafixers.util.Pair;
 import com.sammy.minersdelight.registry.MDBlocks;
-import com.sammy.minersdelight.registry.MDItems;
 import com.sammy.minersdelight.registry.MDMenuTypes;
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.resources.ResourceLocation;
@@ -122,7 +121,7 @@ public class CopperPotMenu extends RecipeBookMenu<RecipeWrapper> {
                 return ItemStack.EMPTY;
             }
         } else {
-            boolean container = moving.is(Items.BOWL) || moving.is(MDItems.COPPER_CUP.get());
+            boolean container = moving.is(Items.BOWL);
             if (container && !moveItemStackTo(moving, CONTAINER_SLOT, CONTAINER_SLOT + 1, false)) {
                 return ItemStack.EMPTY;
             }

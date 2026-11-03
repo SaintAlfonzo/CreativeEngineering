@@ -540,6 +540,15 @@ Early Spring, day 1, 6:00 am is 0. `TimeDate.apply` sets:
   So wines age or un-age with the calendar. A wine put away after the target date reads age 0 until the clock passes
   its storage time again. PLAYTIME wine is not moved.
 - **Better Days, SeasonHUD, calendar tooltip, minimap:** read `dayTime` and Serene Seasons, nothing of their own to move.
+- **Client season after a date set (fixed 2026-11-02, TODO `gameplay/time #7`).** Scratch r1101 (CQ-TD-06) showed
+  SeasonHUD on "Summer, Day 1/24" after `/cetime date set 3 mid_autumn 5 7:30 pm`, with the right server message, Xaero
+  line and re-tint. Not sync lag: the client counter (`SereneSeasonsClientClockMixin`) added every forward step of the
+  client's dayTime on top of the synced value, so the jump that came with its sync counted twice (sync 1453500, plus
+  the 6,031,031-unit jump, plus Better Days' glide of the time of day up to 7:30 pm, mod one year = 579562 = Summer
+  day 1, exactly the shot). The run had `doDaylightCycle false`, so no later sync corrected it; with the sun running it
+  fixed itself within a second, after a wrong extra re-tint. Now each sync anchors the client: shown value = synced
+  value plus how far the client's dayTime has moved past its value when the sync arrived, never less. The run's
+  expected text was also wrong: the pack HUD has `enable_show_sub_season = false`, so it reads "Autumn, Day 13/24 7:30 pm".
 
 **Year fix (same build).** The year used to count from the sunrise after dayTime 0 (22300) and round down. On a fresh
 world the world day ran one behind the season day, so year 1 lasted until the second Early Spring (almost two years).
@@ -711,3 +720,7 @@ TI-27 cover what the build added (3.8).
 - 2026-11-01: moved to Creative Calendar ([creative_calendar.md](creative_calendar.md)): the `time/` package, `[time]`
   (now in `config/creativecalendar-common.toml`, same keys and comments) and the time mixins, same behaviour. The Vinery
   port's `PackTime` calls Calendar's `time/WineTime` directly. Compiles; SQ-CAL rows queued.
+- 2026-11-02: client season counter anchored on each server sync (`SereneSeasonsClientClockMixin`, TODO
+  `gameplay/time #7`): a `/cetime date` jump was counted twice on the client and stuck with `doDaylightCycle false`
+  (3.11). Compiles (`:creativeCalendar:compileJava`); SQ-PST row queued. `gameplay/time #4` (bed clock) rechecked: still
+  no in-game evidence (TI-31 / CQ-NEW-01 not run yet), no change.

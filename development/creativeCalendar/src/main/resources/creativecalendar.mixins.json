@@ -14,7 +14,10 @@
     "ServerLevelTimePauseMixin",
     "SeasonBiomeConfigMixin",
     "SeasonHooksTypesMixin",
-    "SeasonFertilityMixin"
+    "SeasonFertilityMixin",
+    "GrassSpreadSeasonMixin",
+    "IWGrowthSeasonMixin",
+    "ModdedGrassSpreadSeasonMixin"
   ],
   "client": [
     "SereneSeasonsClientClockMixin",

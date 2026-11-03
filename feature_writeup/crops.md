@@ -1,6 +1,6 @@
 # Crops: soils, right-click harvest, hoe harvesting
 
-Test prefix **CR-** · Last updated **2026-10-22** · Overall status **reference from the decompiled jars; tobacco parity, hoe areas and wild-crop placement (§2.8) DEPLOYED with 1.0.4; WTHIT growth line (§2.9) and Immersive Weathering soils (§2.8.1) DEPLOYED with 1.0.6 (2026-10-14); in-game checks pending**
+Test prefix **CR-** · Last updated **2026-11-02** · Overall status **reference from the decompiled jars; tobacco parity, hoe areas and wild-crop placement (§2.8) DEPLOYED with 1.0.4; WTHIT growth line (§2.9) and Immersive Weathering soils (§2.8.1) DEPLOYED with 1.0.6 (2026-10-14); in-game checks pending**
 
 ## 0. At a glance
 
@@ -21,8 +21,8 @@ Test prefix **CR-** · Last updated **2026-10-22** · Overall status **reference
 | Extra stem fruit: melon, pumpkin and hamimelon stems grow up to 4 fruits, each later one after a longer minimum wait | §2.10 | BUILT 2026-10-22 (patcherMod 1.1.01, in `mods/` since the 2026-10-22 scratch run, md5 a4d48336 with the fix below); built, scratch server PASSED 2026-10-22 (SQ-SF-00 to SQ-SF-05, 17 of 17, `tools/farm_worldgen_probe.js`); CR-71 to CR-75 in game; F-SS1 (extra fruit ignores seasons) open |
 | Wild-crops batch 2026-10-22: tea in 20 biomes, Vinery grapes under the system, wild flax off, Rustic Delight patches out of bone meal, white strawberries from Y 192 | §2.8, §4 V1, V6, V7, V20 | BUILT 2026-10-22 (data + KubeJS), DEPLOYED 1.1.01; `tools/test_wild_crops.sh` passes (53 crop tags, 52 add modifiers); built, scratch server PASSED 2026-10-22 (SQ-WC-00 to SQ-WC-05); CR-83, CR-86 to CR-88 in game |
 | Wild plants, bushes and trees on Immersive Weathering soils (humus, fluvisol, silt, vertisol, cryosol, rooted grass; not permafrost) | §2.8.1 | BUILT 2026-10-05, scratch-server tested (12 features x 9 grounds, before/after); the 65 `kubejs/data` overrides are DEPLOYED with 1.0.6 (2026-10-14); only new chunks change; CR-67, CR-68 |
-| Village farm crops: farm fields grow crops of the village's climate (`VillageFarmCrops`, `village_farms.json`) | §2.11 | BUILT 2026-10-25, DEPLOYED 1.1.03 (new villages only); SQ-VF-01 to -05 (group B) not run; TODO `farming/crops #16`; `#19` (Rustic crops by wild rule) BUILT 2026-11-02, SQ-PSD rows |
-| Growing seasons: every crop has a type (temperate, cold, warm dry, warm wet, Nether, End, cave, mushroom); each season is fertile (+25 %), neutral or off (-25 %) by the biome's calendar | §2.12.1 + generated [crop_seasons_audit.md](crop_seasons_audit.md) | BUILT 2026-10-30 (patcherMod 1.1.04, Vinery `-06`, CD Ender's `-02`; installed 2026-10-31 00:29 to 00:44); scratch server PASSED r1031 (2026-10-31, SQ-CS-01 to -06, -08, -09); CR-89 to CR-99 in game pending; F-SS1, F-SS2 resolved |
+| Village farm crops: farm fields grow crops of the village's climate (`VillageFarmCrops`, `village_farms.json`) | §2.11 | BUILT 2026-10-25, DEPLOYED 1.1.03 (new villages only); SQ-VF-01 to -05 (group B) never run (not in r1102b's scope either, deep scan 2026-11-02); TODO `farming/crops #16`; `#19` (Rustic crops by wild rule) BUILT 2026-11-02, unreleased, SQ-PSD-06 LOOK in r1102b (not judged yet) |
+| Growing seasons: every crop has a type (temperate, cold, warm dry, warm wet, Nether, End, cave, mushroom); each season is fertile (+25 %), neutral or off (-25 %) by the biome's calendar | §2.12.1 + generated [crop_seasons_audit.md](crop_seasons_audit.md) | BUILT 2026-10-30 (patcherMod 1.1.04, Vinery `-06`, CD Ender's `-02`; installed 2026-10-31 00:29 to 00:44); scratch server PASSED r1031 (2026-10-31, SQ-CS-01 to -06, -08, -09); shipped 1.1.05; client CQ-CS-07 PASSED r1101 (tooltips, WTHIT here line); CR-89 to CR-99 in game pending; F-SS1, F-SS2 resolved. Since the Creative Split the season code lives in Creative Calendar (`development/creativeCalendar`, `seasons/CropSeasons`). Grasses typed (winter offseason, `farming/crops #28`) 2026-11-02, unreleased: r1102b SQ-PST-01, -02, -06, -07 PASS, the spread-rate rows batch faults (rerun) |
 
 - **Open first:** §2.1 for "can I plant X on Y" or "does X replant on right-click". §2.2 and §2.3 explain why.
 - **Knobs:** `config/quark-common.toml` sections `[tweaks.simple_harvest]` and `[tweaks.hoe_harvesting]`.
@@ -110,8 +110,8 @@ the plant is caught by the area break when you break a plant with a hoe (breaks 
 | Crop | Block | Dirt | Farmland | Rich | RichF | Fertile | Right-click | Hoe RC | Hoe break |
 |---|---|---|---|---|---|---|---|---|---|
 | Flax | `supplementaries:flax` | no | yes | no | yes | yes | Quark replant, **lower half only** | replant | yes, same height only |
-| Hemp | `immersiveengineering:hemp` | no | yes | no | yes | yes | none (break the top, the bottom regrows it) | no | yes, same height only |
-| Tomatoes (climb ropes) | `farmersdelight:budding_tomatoes` then `farmersdelight:tomatoes` | no | yes | no | yes | yes | bottom vine: Quark replant. Vine on a rope: own pick | bottom vines only | yes |
+| Hemp | `immersiveengineering:hemp` | no | yes | no | yes | yes | right-click a ripe plant (either half, empty hand or hoe): the top breaks for its loot, the bottom regrows it (2026-11-02) | hoe area: every ripe top | yes, same height only |
+| Tomatoes (climb ropes) | `farmersdelight:budding_tomatoes` then `farmersdelight:tomatoes` | no | yes | no | yes | yes | own pick at every height (bottom vine, rope, stick, treated stick; since 2026-11-02, was Quark replant on the bottom vine) | hoe area: every ripe vine, up the column to 6 levels above the second (2026-11-02, was bottom vines only) | yes |
 | Corn | `corn_delight:corn_crop` (both halves) | no | yes | no | yes | yes | Quark replant (auto-found), **lower half only** | lower halves | yes, same height only |
 
 - **Flax:** the top half appears from stage 4. Right-click the lower half, or the farmland under it.
@@ -124,7 +124,10 @@ the plant is caught by the area break when you break a plant with a hoe (breaks 
   `upper=true`. It appears once the lower half reaches stage 4 and needs light 8+ or open sky, then ages on its own.
   Both halves drop corn at stage 7, else a seed. Quark only matches the lower half (G13): replanting it to stage 0
   makes the top fail its survival check, so the top breaks and drops its own corn. Clicking the top does nothing.
-- **Tomatoes:** both resets go to stage 0, so the result is the same. Tomatoes on Supplementaries sticks and ropes
+- **Tomatoes:** both resets go to stage 0, so the result is the same. Since 2026-11-02 (`farming/crops #29`) all four
+  tomato blocks are in `#creativeengineering:crops/own_pick` (CD `farmersdelight/tags.js`), so Quark leaves every vine
+  to FD's own pick (1-2 tomatoes, 5 % rotten tomato, back to stage 0, the vine stays), and an area hoe clicks every
+  ripe vine in reach, climbing the column (§2.3). Tomatoes on Supplementaries sticks and ropes
   (`supplementaries:stick_tomatoes`, `rope_tomatoes`) use the same tomato code and the same own pick.
   So do tomatoes on placed IE treated sticks (`creativedelight:treated_stick_tomatoes`, [treated_sticks.md](treated_sticks.md)).
 
@@ -271,6 +274,10 @@ includes the pack's echo hoe, Dragon Hoe and Felsic Hoe.
   looking toward, on each axis. A 2x2 is the target block plus the blocks ahead of it. Looking straight
   along an axis, the sideways half flips with tiny head turns.
 - **Odd sizes** are centred, same as Quark.
+- **Climbing own-pick columns** (2026-11-02, `farming/crops #29`): Quark reaches the clicked height and one above. For
+  crops in `#creativeengineering:crops/own_pick` (tomatoes on ropes, sticks and treated sticks) an area hoe goes on up
+  the column, clicking each level, while the block and the one below it are own-pick crops, at most 6 levels
+  (`HoeHarvestArea.MAX_CLIMB`). Area hoes only: a 1x1 hoe or an empty hand clicks just the vine it targets.
 - **How:** `mixin/QuarkHoeAreaHarvestMixin` (right-click, `SimpleHarvestModule.click`) and
   `mixin/QuarkHoeAreaBreakMixin` (area break, `HoeHarvestingModule.onBlockBroken`) take over where Quark
   asks for the range, after all of Quark's own checks, and run Quark's loop over the new area. The
@@ -310,7 +317,7 @@ height in the hoe's area breaks too:
 | Farmland | `minecraft:farmland` | farmland crops, bushes | moist farmland speeds crop growth; dries and reverts to dirt; can be trampled |
 | Rich Soil | `farmersdelight:rich_soil` | anything that **isn't** a farmland crop, Nether plant or water plant. So bushes, saplings, flowers, rice and sugar cane, but **not** wheat, cabbage, flax, hemp or tobacco | 20% chance per random tick to bone-meal the plant above (`richSoilBoostChance = 0.2`); turns a mushroom above into a colony |
 | Rich Farmland | `farmersdelight:rich_soil_farmland` | farmland crops and plains plants. Grape bushes refuse it because they check the block below directly. Tobacco accepts it through the pack's soil tag (§2.6) | same 20% boost, but only while fully moist; never reverts to dirt; can't be trampled |
-| Fertile Soil | `immersive_weathering:mulch_block` | everything except Nether plants, with no tilling. Grape bushes check the block below directly, so the soil's rule doesn't apply to them. Tobacco accepts it through the pack's soil tag (§2.6) | always counts as fertile (moist-farmland speed). While soaked (water bucket, rain, touching water) and light 9+: farmland crops get a bone-meal step per soil random tick (`CropBlock`s from IW, tobacco from the pack, §2.6), stems get 10 extra random ticks, other plants nothing extra. Never dries out to dirt; can't be trampled |
+| Fertile Soil | `immersive_weathering:mulch_block` | everything except Nether plants, with no tilling. Grape bushes check the block below directly, so the soil's rule doesn't apply to them. Tobacco accepts it through the pack's soil tag (§2.6) | always counts as fertile (moist-farmland speed). While soaked (water bucket, rain, touching water) and light 9+: farmland crops get a bone-meal step per soil random tick (`CropBlock`s from IW, tobacco from the pack, §2.6); stems (melon, pumpkin, cantaloupe) nothing extra since 2026-11-02 (`farming/crops #21`; IW gave them 10 extra random ticks, back with `[stem_fruit] fertileSoilBoost = true`), other plants nothing extra. Never dries out to dirt; can't be trampled |
 | Fertile Soul Soil (Nulch; renamed 2026-10-23) | `immersive_weathering:nulch_block` | Nether Wart (and other Nether-type plants), Ghost Pepper seeds | none for crops |
 
 Rich Soil and Fertile Soil are both in `#minecraft:dirt`. That's why plain bushes accept them through
@@ -822,16 +829,28 @@ grow more fruit on its other sides. Applies to every `AttachedStemBlock`: melon,
   attached stem's first random tick, so the first wait starts about a minute after the first fruit grows (random ticks
   come every 68 seconds on average at `randomTickSpeed` 3). Without the wait a 2nd fruit would come about as fast as the
   first (a few minutes on hydrated farmland).
-- **Harvesting:** when the fruit the stem points at is taken and another of its fruits is still next to it, the stem
-  points at that one instead of turning back into a plain stem. The wait keeps counting from the last fruit, so after
+- **Connections** (2026-11-02, `farming/crops #20`): an attached stem shows a bent stem toward every fruit it grew
+  itself, not only the one it points at. The attached stems carry four extra booleans `north/east/south/west`
+  ("a fruit this stem grew is on that side", besides `facing`); an extra fruit sets its side. Blockstate overrides
+  (multipart, vanilla's attached model per side) in `kubejs/assets/minecraft/blockstates/attached_melon_stem.json`,
+  `attached_pumpkin_stem.json` and `kubejs/assets/fruitsdelight/blockstates/attached_hamimelon_stem.json`. A fruit
+  placed by hand next to a stem gets no connection, but it still counts toward the cap (growth stays slowed by the
+  fruits around). Stems from before the change load with all sides off: they keep pointing at their first fruit and
+  their older extra fruits show unconnected; a mirrored or rotated structure keeps the sides as saved (only `facing`
+  turns).
+- **Harvesting:** when the fruit the stem points at is taken and another fruit it grew is still next to it, the stem
+  points at that one instead of turning back into a plain stem (a hand-placed fruit is never taken over, since
+  2026-11-02; before, any same-kind fruit beside it was). The wait keeps counting from the last fruit, so after
   harvesting one of four the next one comes after the 40 minute wait. With all fruits taken the stem turns back into a
   plain stem (vanilla), its clock is forgotten, and the next first fruit follows vanilla.
 - **Saved state:** the last-fruit game time per attached stem, in each dimension's
   `data/creativeengineering_stem_fruit.dat`. A stem's entry goes when the stem is broken or turns back into a plain stem.
-- **Knobs:** `[stem_fruit]` in `config/creativeengineering-common.toml`: `enabled`, `maxFruits` (1-4, default 4),
-  `secondFruitMinutes` (10), `thirdFruitMinutes` (20), `fourthFruitMinutes` (40). Read on every tick; no restart needed.
-- **Code:** patcherMod `crops/StemExtraFruit.java` (logic, saved data) and `mixin/AttachedStemExtraFruitMixin` (adds
-  the random tick and the removal hook to `AttachedStemBlock` under their SRG names, and the re-point on `updateShape`).
+- **Knobs:** `[stem_fruit]` in `config/creativedelight-common.toml` (moved from `creativeengineering-common.toml` with
+  the Creative Delight carve): `enabled`, `maxFruits` (1-4, default 4), `secondFruitMinutes` (10), `thirdFruitMinutes`
+  (20), `fourthFruitMinutes` (40), `fertileSoilBoost` (false, §2.4). Read on every tick; no restart needed.
+- **Code:** Creative Delight `crops/StemExtraFruit.java` (logic, saved data), `crops/StemSides.java` (the side
+  booleans, default state) and `mixin/minecraft/AttachedStemExtraFruitMixin` (adds the random tick and the removal hook
+  to `AttachedStemBlock` under their SRG names, the side booleans, and the re-point on `updateShape`).
   The attached stem always counts as random ticking, even with `enabled = false`, since chunk sections cache the
   count of ticking blocks; a ticking stem that does nothing costs next to nothing.
 - **Own fruit only** (fixed 2026-10-22, scratch run SQ-SF): an attached stem grows and re-points only at its own
@@ -1024,6 +1043,34 @@ Findings (2026-10-30):
   Nether's Delight fungus colonies (a refused check skips that tick); in source: the Vinery grape bushes, jungle vines,
   grapevine stem and lattice, Vinery apple and cherry leaves (`backportedVinery` `-06`), Ender's Delight chorus flame
   (CD member `endersAdditions` `-02`). Chorus succulent and sea pickle grow by bone meal only (tooltip only).
+- **Grasses** (`grass` type, BUILT 2026-11-02, TODO `farming/crops #28`): grass block, short grass, tall grass, fern,
+  large fern; winter off, every other season and wet/dry neutral, so the tooltip and WTHIT read "Offseason: Winter".
+  Grass spreads without the crop-grow event, so Creative Calendar hooks it directly: `GrassSpreadSeasonMixin` on the
+  vanilla grass-block random tick (spread onto dirt; a covered grass block still turns to dirt at full speed; mycelium
+  and nylium share the class but are untyped) and `IWGrowthSeasonMixin` on Immersive Weathering's block growths (a
+  growth whose owner is typed and that places a block of the owner's type: grass sprouting on grass blocks, grass
+  growing tall, ferns growing large; frost, soot and moss growths untouched). Off skips `offPenalty` (25 %) of those
+  tries; spreading has no fertile bonus. Greenhouse glass makes grass under it neutral like any crop.
+  Modded grasses (owner 2026-11-02: slowed too) are typed `grass` as well: Immersive Weathering rooted grass block,
+  Vinery grass slab, Vintage Delight lush grass block, Botania's six grasses (dry, golden, vivid, scorched, infused,
+  mutated). Their spread does not all run through the vanilla tick, so `ModdedGrassSpreadSeasonMixin` (Pseudo, gated
+  on any of IW, Botania, Vinery, Vintage Delight; Serene Seasons checked at runtime) hooks each one's random tick at the
+  light check that opens its spread (`getMaxLocalRawBrightness`, first call), so what the tick does before it (covered
+  slab turning back to dirt slab, IW path wear recovering) keeps full speed. Targets: IW `ModGrassBlock` (IW registers
+  it as `minecraft:grass_block`; after the vanilla spread, already rolled once, it spreads over mycelium and rooted
+  dirt, which gets its own roll so each kind of spread is slowed by the same share; rooted grass extends it),
+  Botania `BotaniaGrassBlock.tick` (its random tick), Vinery `SpreadableGrassSlabBlock` and Vintage `LushGrassBlock`
+  (own random ticks that never call the vanilla one). IW's `rooted_grass_block_*` growths (grass and ferns sprouting)
+  follow through `IWGrowthSeasonMixin` once rooted grass is typed. Left untyped: IW frosty grass and frosty fern (frost
+  forms that thaw back to grass through an IW growth; typing them would slow the thaw and show a winter offseason on a
+  winter-only block), Upgrade Aquatic beachgrass and tall beachgrass (no random growth or spread, bone meal only; the
+  tooltip would promise a slowdown that has nothing to act on), SecurityCraft reinforced grass block and path (plain
+  `SnowyDirtBlock`, never spread), potted grass and terrarium blocks (decor).
+- **Spreading plants** (`farming/crops #28` check): every typed plant that spreads (vines, mulberry vine, mint, bamboo,
+  cactus, sugar cane, cave vines, chorus, the Nether vines) fires the crop-grow event from its random tick
+  ([crop_seasons_audit.md](crop_seasons_audit.md) "event" column, read from the class bytecode), so its spread follows
+  its type; the audit checks that the class fires the event, not that every spread branch passes through it. Grass
+  was the only spreading plant outside the event.
 - **Assignments** (all 123 audited plants typed; the audit lists them): the owner's lists below, then the wild-biome
   rule. Owner 2026-10-30: potatoes temperate. Rule calls made 2026-10-30: sweet berries and blueberries cold (wild in
   taigas and snowy biomes); rice, tea, melon, cocoa, bamboo and the jungle and swamp fruit trees (lychee, mango, peach,
@@ -1136,6 +1183,8 @@ G1 to G3 are fixed (§2.6). The rest are open, each with a suggested fix for you
   `crops/farmland_crops` tag.
 - **G4 Hemp has no right-click.** That's IE's design: break the top and the bottom regrows it. The
   hoe area break on the top row already works as a harvester. No change suggested.
+  BUILT 2026-11-02 (`farming/crops #37`): CD server script `immersiveengineering/hemp_harvest.js` breaks the ripe top on
+  right-click (empty hand, or a hoe over `HoeHarvestArea`'s square, 1 durability per click like Quark). `/reload`. CR-100.
 - **G5 Pack hoes are 3x3.** FIXED 2026-10-02: per-hoe sizes through the `hoe_harvest/NxN` tags (§2.3);
   echo, felsic and dragon hoes are 5x5.
 - **G6 Untilled Rich Soil never takes farmland crops.** That's Farmer's Delight's design: till it into Rich
@@ -1363,6 +1412,21 @@ Everything in §2 was read from decompiled classes (2026-10-02). To re-check aft
 - [ ] **CR-08 Rich Soil vs crops:** cabbage seeds on Rich Soil are refused. On Rich Farmland and Fertile Soil they plant.
 - [ ] **CR-09 Flax halves:** right-click a ripe flax's top half → nothing. Its lower half → harvested, replanted, and the top half gone.
 - [ ] **CR-10 Hemp hoe break:** with a row of grown hemp, break one top with a hoe → the neighbouring tops break and the bottoms stay and regrow.
+- [ ] **CR-100 Hemp right-click [hoe area: scratch PASSED r1102b, SQ-PSD-02; empty-hand bottom click OPEN, SQ-PSD-01 / game]:** right-click a ripe hemp top (or its full-grown bottom) with an empty hand -> the top breaks and drops Hemp Fiber, the bottom stays at full growth and grows a new top. An unripe plant: nothing. An iron hoe on a ripe row: every ripe top in the hoe's area harvested, the hoe loses 1 durability. A stick in hand: nothing.
+- [ ] **CR-101 Tomato hoe area (`farming/crops #29`) [scratch SQ-PSF-02, -04 batch faults in r1102b, rerun / game]:** iron hoe right-click on a 3x3 of ripe tomatoes on farmland, one
+  column each on a Supplementaries rope, a Supplementaries stick and a treated stick: every ripe vine in reach drops 1-2
+  tomatoes and goes back to stage 0, no vine broken, 1 durability. Empty hand or a wooden hoe on one ripe vine: only that
+  vine picked.
+- [ ] **CR-102 Tomato column climb [scratch PASSED r1102b, SQ-PSF-03 / game]:** a 5-high rope of ripe tomatoes, iron hoe right-click on the bottom vine: all five
+  levels picked. A 9-high column: the bottom 8 levels picked (the clicked one, the one above and 6 more), the top one
+  left.
+- [ ] **CR-103 Stem connections (`farming/crops #20`) [melon, cantaloupe: scratch PASSED r1102b, SQ-PSF-05, -06, -07b; pumpkin OPEN, SQ-PSF-07 / client CQ-PSF-01 / game]:** `[stem_fruit]` waits at 1 / 2 / 3, `randomTickSpeed 100`; a
+  melon stem grows 3 melons: the stem shows three bent stems, one per melon. Place a melon by hand on the 4th side: no
+  connection to it. Break the melon the stem faces: it keeps the other two and points at one of them, never the
+  hand-placed one; break all three grown ones: plain stem. Same for a pumpkin and a cantaloupe stem.
+- [ ] **CR-104 Stems on Fertile Soil (`farming/crops #21`) [scratch SQ-PSF-08 batch fault, -08b OPEN in r1102b / game]:** a melon stem on soaked Fertile Soil and one on hydrated
+  Farmland, light 15, `randomTickSpeed 3`: they grow at about the same pace (the Fertile Soil one no longer races
+  ahead). `fertileSoilBoost = true`: the Fertile Soil stem grows far faster again.
 - [ ] **CR-11 Rice:** right-click ripe panicles → rice drops and the panicles go back to stage 0.
 - [ ] **CR-12 Berry pips on soils:** Sweet Berry Pips plant on Rich Soil, Rich Farmland and Fertile Soil. Iron hoe right-click on a ripe bush patch picks 3x3 bushes.
 - [ ] **CR-13 Grape bush on Fertile Soil:** red grape seeds on Fertile Soil in full light → record whether they plant (unknown, see §2.1). On Farmland → refused.
@@ -1499,7 +1563,7 @@ the real client (rendering, tooltips, JEI, natural random ticks with a player ne
 Needs patcherMod 1.1.04 built 2026-10-30 after 21:40, backportedVinery `-06` and creativedelight with endersAdditions
 `-02` in `mods/` (and the server), and a full restart. Scratch server half: SQ-CS in testing/scratch_queue.md, all
 PASSED r1031 (2026-10-31; SQ-CS-03 to -05 on a plains superflat), including the CR-91 growth comparison; CQ-CS-07
-(tooltips, WTHIT) is the client half.
+(tooltips, WTHIT) is the client half: PASSED r1101 (2026-11-01).
 
 - [ ] **CR-89 Tooltips [game]:** wheat seeds "Fertile: Spring" / "Offseason: Winter, Dry"; potato "Fertile: Winter" /
   "Offseason: Summer, Wet, Dry" on fig sapling, fig and hawberry; potato as wheat; tobacco seeds "Fertile: Summer, Dry" /
@@ -1633,3 +1697,5 @@ PASSED r1031 (2026-10-31; SQ-CS-03 to -05 on a plains superflat), including the 
 
 - 2026-10-28: planned from the scratchpad: a mini melon crop like the Mini Cantaloupe (TODO `farming/crops #25`); a third, most common cantaloupe wild patch in normal and mini (`farming/wild-crops #5`). The seed rename to Mini Cantaloupe (Seeds) is already built (`merges/fruit #1`). No code changed.
 - 2026-10-31: scratchpad notes translated into TODO rows (`farming/trees #3`, `farming/crops #28`, `#29`). No code changed.
+- 2026-11-02: pre-scratch pass (plan_prescratch_fixes.md): tomatoes on ropes, sticks and treated sticks are own-pick crops and the hoe area climbs their columns (`farming/crops #29`); attached stems connect to every fruit they grew and re-point only at those (`#20`); stems get no Immersive Weathering extra ticks on Fertile Soil (`#21`, `[stem_fruit] fertileSoilBoost`). Creative Delight Java + `kubejs/assets` blockstates. CR-101 to CR-104.
+- 2026-11-02 (deep scan): status lines matched to the runs: crop seasons shipped 1.1.05 and CQ-CS-07 passed; village farm rows SQ-VF never run; CR-100 to CR-104 annotated with the r1102b pre-scratch results (s5 boot A judged; boot B and the s5_R reruns still running).

@@ -68,7 +68,7 @@ and black are the tea leaf kinds; green tea is the base and is untouched.
 | Drink | Pot | Other |
 |---|---|---|
 | Cloud latte | 250 mb milk, cloud in a bottle, cocoa beans + 1 extra cloud in a bottle | Review effect and duration |
-| Matcha (plain) | the existing matcha craft + 1 extra matcha powder (confirmed 2026-11-02: powder) | |
+| Matcha (plain) | the existing matcha craft + 1 extra matcha powder (confirmed 2026-11-02: powder). Owner 2026-11-02: this is the Matcha Latte, the input drink of Ice Berry Matcha (row below); same item | |
 | Matcha latte | honey becomes sugar-like, folded into the pot craft + 1 extra matcha powder | |
 | Ice berry matcha (was Berry Matcha Latte) | - | unheated mixing / shapeless: 250 mb matcha, 1 ice or ice cube, 1 of any berry + 1 extra ice and berry |
 
@@ -161,7 +161,7 @@ mixer) teas reuse the same item ids; no separate item.
 
 ## 8. Build (2026-11-02, TODO `food/drinks #15`)
 
-Status **Testing**: written, not booted. Needs a Creative Delight rebuild and a restart (new items and fluids).
+Status **Testing**: in the `mods/` Creative Delight jar of 2026-11-02 14:01; scratch r1102b SQ-DRK-01, -02, -03, -05 PASS, SQ-DRK-04 (Spout half) and -06 batch faults (the drain line and every other -06 check passed; -06 queries `drink_fruits/kiwi`, which does not exist by design) (deep scan 2026-11-02). Not played.
 
 | Part | Where |
 |---|---|
@@ -190,7 +190,7 @@ Build choices (not decided by the owner; change freely):
 
 Not built:
 
-- **Plain matcha**: there is no matcha drink; `delightful:matcha` is the powder. Matcha latte got the +1 powder.
+- **Plain matcha**: settled 2026-11-02 (owner): plain matcha is the input drink of Ice Berry Matcha, i.e. the Matcha Latte (`delightful:matcha_latte`), which already has the +1 powder. No new item.
 - **Kettle "straight from beans" flavours** (beans + water + milk + additive): the Kettle takes two ingredients.
 - **Serene blossom leaves** for lavender tea: no such item found; lavender takes amethyst shards and `#forge:lavender` (Quark
   lavender blossom leaves).
@@ -199,5 +199,5 @@ Not built:
 - Display Delight's placed-drink names ("Placed Ender Nectar", "Placed Iced Berry Matcha Latte") are generated: rerun
   `tools/gen_display_delight_names.py` after a `/dumpnames`.
 
-Tests: SQ-DRK-01 to -06, CQ-DRK-01 ([scratch_queue.md](testing/scratch_queue.md)).
+Tests: SQ-DRK-01 to -06, CQ-DRK-01 ([scratch_queue.md](testing/scratch_queue.md)); Bayberry Juice (the renamed `fruitsdelight:bayberry_soup`, TODO `food/drinks #9`): SQ-DRK-07, CQ-DRK-02.
 

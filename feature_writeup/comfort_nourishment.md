@@ -8,9 +8,9 @@ saturation value decides between them. Written so the owner can set pack rules (
 | Part | Status |
 |---|---|
 | Audit (upstream 1.19.2 values, before the delight backports) | DONE 2026-10-26 |
-| Pack rule for Comfort / Nourishment | OPEN: decisions CN-D1 to CN-D5 (section 5) |
+| Pack rule for Comfort / Nourishment | DECIDED 2026-11-02 (section 5, answers below the decision list); meat rice and stew cutoff 10; not built |
 | Ingredient rule R5 (inputs' hunger and count decide the effect; bowls, mason jars, shulker bowls, copper cups) | RULES SET by owner 2026-10-27 (section 9): Comfort input hunger 5+ / 3+ inputs, Nourishment input hunger 8+ / 4+ inputs and output hunger 10+, an effect-less bowl at 10 or more output hunger gets Comfort, two lengths by output hunger (120 s / 240 s); non-bowl forms settled (appendix C); decisions CN-D6, CN-D9 still open |
-| Applying the rule | BUILT 2026-10-27 (section 10): generator + Creative Delight startup script, CD jar in `mods/`; CN-D6 and CN-D9 taken as recommended; owner rules 4 and 5 (golden, 60 s light Comfort) added; tests CNS-01 to CNS-08, SQ-CNS (not run, checked 2026-10-30); in the 1.1.04 client payload (2026-10-29). Cans: `/dumpfood` refreshed 2026-10-30 00:42 by `/dumpall`, `gen_can_types.py` rerun 2026-11-01 (120 cans moved to the rule; CNS-08 ready). TODO `food/types-and-tuning #15` |
+| Applying the rule | BUILT 2026-10-27 (section 10): generator + Creative Delight startup script, CD jar in `mods/`; CN-D6 and CN-D9 taken as recommended; owner rules 4 and 5 (golden, 60 s light Comfort) added; tests CNS-01 to CNS-08; in the 1.1.04 client payload (2026-10-29), server 1.1.05. **BROKEN (deep scan 2026-11-02):** scratch r1102b SQ-CNS-01 PASS, SQ-CNS-02 batch fault (wrong beef stew id; the other 7 match), SQ-RD-22 FAIL (no Rustic Delight food in `comfort_nourishment.json`, so Rustic meals lose their Nourishment) and SQ-FDB-04 FAIL (no rule for Gleaming Salad); SQ-PSU-09 open (vinegar jar set to none). The 2026-11-02 21:09 regeneration (copper cup rule dropped, 264 set) fixes neither. Cans: `/dumpfood` refreshed 2026-10-30 00:42 by `/dumpall`, `gen_can_types.py` rerun 2026-11-01 (120 cans moved to the rule; CNS-08 ready). TODO `food/types-and-tuning #15` |
 
 **Answer:** there is **no hunger or saturation cutoff**. In Farmer's Delight 1.2.4 the two effects use the same value
 tiers (Chicken Soup and Roast Chicken are both 14 / 0.75 for 300 s). The values pick the **duration**; the **dish form**
@@ -148,6 +148,14 @@ Decisions:
 - **CN-D5** Foods that give both (Vintage Relish bottle and jar) and non-meal items (cake slices, jams, Moss): keep, pick
   one, or drop the effect?
 
+**Owner answers 2026-11-02:**
+
+- **CN-D1** R1 form rule, with **bars and salads moved to Comfort** (the R1 Nourishment list loses them).
+- **CN-D2 and CN-D3** (rice, meat stews) default to **Comfort**, with a **nutrition cutoff** above which they become **Nourishment** (applies to meat rices and stews). **The cutoff is 10** (the food's own hunger): 9 or less Comfort, 10 or more Nourishment, for meat rices and meat stews only.
+- **CN-D4** Vanilla Mushroom Stew, Beetroot Soup and Rabbit Stew **get the short Comfort**. Miner's Delight cups are being removed, so nothing is added for them.
+- **CN-D5** The effect is **dropped from Vintage Relish** (bottle and jar), **cake slices and jams give Comfort only**, **Moss gives neither**.
+- Applying this is TODO `textures/food #5`; the R5 numbers (CN-D6 to CN-D9) stay as built.
+
 Applying any option: one `food_values.js`-style list in Creative Delight's tree (all food
 code goes in CD), then `gen_can_types.py` so cans copy the new effects, and a changelog bullet.
 
@@ -178,9 +186,12 @@ food (effect line and length in the tooltip), eat it, check the inventory screen
 | CNS-07 | Chunkwich, Pickle; Azalea Tea, Relish Bottle | no Nourishment (other effects kept); no Comfort or Nourishment |
 | CNS-08 | after `/dumpfood` + `python3 tools/gen_can_types.py` + restart: Canned Noodle Soup, Canned Bone Broth | Nourishment; neither |
 
-Scratch server: SQ-CNS in [testing/scratch_queue.md](testing/scratch_queue.md).
+Scratch server: SQ-CNS in [testing/scratch_queue.md](testing/scratch_queue.md): SQ-CNS-01 PASS r1102b, SQ-CNS-02 batch fault (rerun with `farmersdelight:beef_stew`), SQ-CNS-03 (cans, CNS-08 server half) not run. Related FAILs r1102b: SQ-RD-22, SQ-FDB-04.
 
 ## 8. History
+
+- 2026-11-02 (deep scan): status set to BROKEN from the r1102b results (SQ-RD-22, SQ-FDB-04 FAIL); cans follow the rule since the 2026-11-01 can rerun.
+- 2026-11-02: owner answered CN-D1 to CN-D5 (section 5): form rule with bars and salads to Comfort, rice and meat stews Comfort with a nutrition cutoff to Nourishment, vanilla soups get Comfort, Relish effect dropped, cake slices and jams Comfort only, Moss neither. Not built.
 
 - 2026-10-27 (build): R5 built (section 10) with CN-D6 / CN-D9 as recommended; owner rules 4 (golden foods
   Nourishment 120 s / 240 s) and 5 (Comfort 60 s at output hunger 7 or less) added to 9.0 during the build.
@@ -333,9 +344,9 @@ needed). New bowls then get their effect from the next `/dumpall` + `/cegen`.
   other CD food rebuilds): sets `set`, strips `strip`, and removes Nourishment from every other food in the registry
   (new foods too) except cans and `keep`. Restart to apply; shipped through build_deploy's runtime list.
 - **Cans**: [gen_can_types.py](../tools/gen_can_types.py) applies the same file to the source food before copying
-  effects (70 cans change). It is blocked until the next `/dumpfood` by an unrelated problem (Pickled Sea Pickle is not
-  in the food catalog yet); until then cans keep their old effects.
-- **Copper cups** take their bowl from Miner's own `cup_conversion` data in the donor jar; the Onion Soup Cup's bowl
+  effects (70 cans change). Was blocked until the next `/dumpfood` (Pickled Sea Pickle not in the food catalog); rerun
+  2026-11-01 (120 cans on the rule, CD member `can_types.js`), so cans follow (deep scan 2026-11-02; CNS-08, SQ-CNS-03).
+- (2026-11-02: the copper cups are removed from the pack, `dishes/meals #53`; the cup rule left the generator.) **Copper cups** took their bowl from Miner's own `cup_conversion` data in the donor jar; the Onion Soup Cup's bowl
   is Brewin's Creamy Onion Soup (FD 1.19.2 has no Onion Soup).
 - **Check against appendix B / C**: 215 of 216 listed foods match. Glow Ink Pasta differs: the doc lists input hunger
   8 (Nourishment), but the stated rule (lowest food per slot: raw fish 1, pasta 2, glow berries 2, ink sac 0) gives 5,
@@ -345,7 +356,7 @@ needed). New bowls then get their effect from the next `/dumpall` + `/cegen`.
 - **Output (2026-10-24 dump)**: 269 set (118 unchanged), 19 kept for the B.2 hand check (the three enchanted golden
   soups left B.2 through rule 4), 105 bottles, 22 other foods lose Nourishment, 28 Comfort foods at 60 s, 52 golden
   foods. Rerun after the next `/dumpall` (the dump predates the Miner's 1.4.5 and Rustic 1.7.0 ports).
-- **Open**: the B.2 hand check (19 bowls keep today's effect), and cans after `/dumpfood`.
+- **Open**: the B.2 hand check (19 bowls keep today's effect); the missing Rustic Delight and Gleaming Salad rules (SQ-RD-22, SQ-FDB-04 FAIL r1102b).
 
 ## Appendix: every food in the audit
 
@@ -913,3 +924,101 @@ from the pack.
 drinks). The two Comfort foods (Slice of Yucca Cake, Cabbage Wrapped Elder Guardian) keep Comfort. Slice of Yucca Cake restores 1, so its Comfort lasts 60 s (rule 5); the Elder Guardian wrap keeps its own length.
 
 - 2026-10-28: planned from the scratchpad: other effects on high-value meals, Nourishment being on bowls only (TODO `food/types-and-tuning #18`). No code changed.
+
+## 11. Complete outline of the split (2026-11-02, for the build of `textures/food #5`)
+
+Puts the owner's 2026-11-02 answers (section 5) and the rules built on 2026-10-27 (sections 9, 10) in one ordered list. Nothing is
+built from this section yet. Questions A to D are answered (11.4).
+
+### 11.1 Effect choice, first match wins (the form rule is the fallback)
+
+| # | Test | Result | Source |
+|---|---|---|---|
+| 1 | Bottle (any food in a bottle) | no effect | R5 C.4 |
+| 2 | Moss; Vintage Relish (bottle and jar) | no effect | CN-D5 |
+| 3 | Golden food / enchanted golden food | Nourishment only, 120 s / 240 s | R5 rule 4 |
+| 4 | **Input test (R5, as built):** bowl, mason jar, shulker bowl or copper cup with a recipe: 4+ inputs, input hunger 8+, output 10+ Nourishment; 3+ inputs, input hunger 5+ Comfort; output 10+ Comfort | Nourishment / Comfort, 120 s or 240 s | R5 9.0; any result other than "neither" counts as set |
+| 5 | **Form rule, fallback:** nothing above set an effect (R5 said "neither", or the food has no recipe, or it is not a bowl form) -> by food type, 11.6 | Comfort or Nourishment | owner 2026-11-02 (R1, CN-D1 to CN-D5) |
+| 6 | Still nothing: formless | no effect, marked `needs_effect` (11.7) | owner 2026-11-02 |
+
+Cans copy their source food (`gen_can_types.py`). Copper cup meals take their bowl's result.
+
+### 11.2 Durations
+
+| Case | Length | Source |
+|---|---|---|
+| Output hunger under 10 | 120 s | R5 rule 3 |
+| Output hunger 10 or more | 240 s | R5 rule 3 |
+| Comfort left on a food restoring 7 or less | 60 s | R5 rule 5 |
+| Golden / enchanted golden | 120 s / 240 s | R5 rule 4 |
+| Short Comfort of row 9 (vanilla soups) | 30 s | CN-D4, owner 2026-11-02 |
+
+### 11.3 What the owner's answers change against what is built
+
+| Built 2026-10-27 | After the answers |
+|---|---|
+| Nourishment only on bowls, jars, shulker bowls, cups by the input test; 23 other Nourishment effects dropped (C.5: cakes, sandwiches, burgers, bars, pickles, pizza, Century Egg, Moss, tankards) | the form rule decides those foods instead: sandwiches, burgers, pizza slices Nourishment; bars, cake slices, jams Comfort; pickles, Century Egg, tankards, Moss, Relish none (11.7) |
+| Bowl effect from recipe inputs (Comfort 5+ hunger / 3+ inputs, Nourishment 8+ / 4+ and output 10+, fallback Comfort at output 10+) | **unchanged**; the form rule only fills in where the input test sets nothing |
+| Vanilla soups: no effect (one input) | short Comfort |
+| Relish bottle / jar: effect kept | dropped |
+
+### 11.4 Owner answers (2026-11-02, later)
+
+- **A. The form rule is a fallback, not a replacement (owner, 2026-11-02, correcting the first answer).** The input test (R5, as built)
+  and the explicit rules come first; the form rule sets the effect type only where none of them did. R5's durations, the golden rule and the
+  60 s light-Comfort rule stay. Consequence: a salad or meat stew that the input test already gives Nourishment keeps it; the form rows
+  of section 5 (bars and salads Comfort, meat rice and stew cutoff 10) apply only to foods the input test leaves bare.
+- **B. Vanilla soups (Mushroom Stew, Beetroot Soup, Rabbit Stew, and their cans and cups) get Comfort 30 s.** The 30 s is for those
+  three only; the 60 s rule (Comfort on a food restoring 7 or less) still applies to every other light Comfort food.
+- **C. A new food is classified by its food type tag** (`#creativeengineering:food_type/...`, `food_types.json`), no named list for the
+  type itself. Only the exceptions that a type cannot express (meat rice and stew, plain rice, bars) are a small named list.
+- **D. Formless foods lose Comfort and Nourishment** and are all marked to get another effect later (11.7).
+
+### 11.6 Where the form rule acts as the fallback
+
+Dry run over the 226 ruled foods of the 2026-10-24 dump (input test as built; the dump predates the newest ports, the meat test for
+rice and stews is by name). The input test sets 163 of them; the form rule fires on the other 63, plus the 21 bowls with no recipe
+(B.2, which the input test cannot read), plus foods that are not a bowl form at all.
+
+| Food type / form | Form rule (fallback) | Fires on (of the 63) |
+|---|---|---:|
+| `sweet` in a bowl or jar (puddings, custards, jam jars) | Comfort | 22 |
+| `soup`: soups, broths, porridge, oats, curry, chili | Comfort; vanilla Mushroom Stew, Beetroot Soup, Rabbit Stew 30 s | 14 |
+| Rice or stew without meat | Comfort | 10 |
+| `salad` | Comfort | 5 |
+| `meal` and `meal/feast`: pasta, plated dishes | Nourishment | 4 |
+| Rice or stew with meat | own hunger 9 or less Comfort, 10 or more Nourishment | 1 |
+| Ingredient jars, sauces, batter, eggs, dog food | none (formless, 11.7) | 7 |
+| The 21 bowls with no recipe | by type, as above | 21 |
+| Foods that are not a bowl form | by type: `handheld` (sandwich, burger, burrito, pizza slice) Nourishment; bars and `sweet` slices Comfort | see scope below |
+
+Where the input test already set an effect nothing changes: the 56 Nourishment and 107 Comfort bowls it assigns stay. Durations follow
+output hunger as in 11.2.
+
+**Scope of the fallback (assumption, 2026-11-02):** it applies to bowl forms and to foods that carry Comfort or Nourishment today. It does not
+add an effect to every food of a type: the dump has 178 non-bowl `sweet`, 99 `handheld`, 29 `meal` and 15 `baked` foods that have none, and
+a blanket rule would give them all one. A new food gets an effect by its type only if its type is in the table above and it is a bowl form;
+widening it to every `handheld` or `meal` food is one more decision.
+
+### 11.7 Formless foods: no Comfort, no Nourishment, marked for a new effect
+
+A food that fits no row of 11.1 loses both effects. Every one is marked `needs_effect` (a list in the generator output, to be read when
+the new-effect pass runs; TODO `food/types-and-tuning #25`). Marked as of 2026-11-02:
+
+| Group | Foods |
+|---|---|
+| Pickles and preserves | Pickle, Pickled Beetroot, Pickled Egg, Pickled Onion, Pickled Pepper (Vintage Delight), Century Egg |
+| Sauces, batter and ingredient jars | Tomato Sauce, Chorus Sauce, Batter, Apple Sauce Jar, Nut Mash Jar, Vinegar Jar, Honey Jar |
+| Drinks without a form | Pale Jane, Rice Wine (tankards, 1 hunger) |
+| Already stripped by owner rule | Moss (neither), Vintage Relish bottle and jar (effect dropped) |
+| Not for players | Dog Food |
+
+Foods that the fallback does place (sandwiches, burgers, burritos, pizza slices: Nourishment; bars, cake slices, jams, S'more: Comfort) are
+not formless. The new effect for each marked food is a later decision; until then they have no effect.
+
+### 11.5 Build once answered
+
+Extend `tools/gen_comfort_nourishment.py` with the rows above, then `gen_can_types.py` after a fresh `/dumpall` (4 Large Meals soups are
+missing from `/dumpfood`); startup applier `comfort_nourishment.js` unchanged in shape; tests CNS-09 and following; changelog bullet;
+README and TODO `textures/food #5` / `food/types-and-tuning #15` updated.
+

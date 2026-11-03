@@ -2,7 +2,7 @@
 
 **Nothing integrated except the fishing net, the caviar names and the Oceanic item dictionary block** (section 5; `item_dict.js`
 section "oceanic_delight (47)", TODO `dishes/ocean #1` and `#5`). Since 2026-10-29 all tentacles are removed and dishes take
-calamari (BUILT, not deployed; TODO `creativedelight/members #24`; SQ-CM-32 FAILED in scratch r1031 2026-10-31 and fixed the same day, section 5.5; rerun SQ-CM-32, SQ-CM-35), so the one-tentacle-tag decision (`mod-additions #5`) is moot.
+calamari (shipped 1.1.05; TODO `creativedelight/members #24`; SQ-CM-32 FAILED in scratch r1031 2026-10-31, the fix PASSED r1101 with SQ-CM-35 and is unreleased, section 5.5), so the one-tentacle-tag decision (`mod-additions #5`) is moot.
 Ocean's Delight (`oceansdelight-1.0.2-1.19.2.jar`, 22 items) and Oceanic Delight (`oceanic_delight-1.0.1-forge-1.19.2.jar`,
 47 items) were dropped into `mods/` on 2026-10-23. Both are native 1.19.2 builds (no port). Decision rows:
 `largecontent/mod-additions #5` and the `dishes/ocean` rows in [todo/TODO.md](todo/TODO.md); plans:
@@ -136,12 +136,12 @@ Changelog: no bullet yet (plans only). The bullets come with the build.
 
 | Item | Status |
 |---|---|
-| Newer-jar review (section 3.1) | Written 2026-10-25; four changes decided, none built; TODO rows proposed 2026-10-30: `dishes/ocean #7` (Kelp Encrusted Cod), `#8` (JEED Nourishment list), `farming/wild-crops #6` (sea grape placement), `farming/crops #27` (sea grape plant hoe-mineable) |
+| Newer-jar review (section 3.1) | Written 2026-10-25; four changes decided; Kelp Encrusted Cod BUILT 2026-11-02 (section 7, SQ-FCB-00 / -01 PASSED r1102b), the other three not built; TODO rows proposed 2026-10-30: `dishes/ocean #7` (Kelp Encrusted Cod), `#8` (JEED Nourishment list), `farming/wild-crops #6` (sea grape placement), `farming/crops #27` (sea grape plant hoe-mineable) |
 | Overlap survey (section 1) | Written 2026-10-23 |
 | Integration | Partly started (fishing net, item dictionary); rest is `largecontent/mod-additions #5` and `dishes/ocean` |
-| Fishing net, caviar names, squid chain (section 5) | DEPLOYED 1.1.03 (server and players, 2026-10-26); SQ-FN-01, SQ-FN-04 and the squid half SQ-CDB-03, -04 PASSED 2026-10-25; SQ-FN-02, -03 (ocean and river biomes, group B) not run |
-| Oceanic donor route (section 5.6) | BUILT 2026-11-01 (`portedOceanic` -02 in the CD jar, not installed); needs `oceanic_upstream/` on server and clients; SQ-DNR-O-01 to -05 queued |
-| Tentacles removed, seagrass salad (section 5.5) | Built 2026-10-29, unreleased; SQ-CM-31 PASSED, SQ-CM-32 FAILED r1031, fixed 2026-10-31 (5.5), CD jar in `mods/`; SQ-CM-32, SQ-CM-35 to rerun |
+| Fishing net, caviar names, squid chain (section 5) | DEPLOYED 1.1.03 (server and players, 2026-10-26); SQ-FN-01, SQ-FN-04 and the squid half SQ-CDB-03, -04 PASSED 2026-10-25; SQ-CDB-05 (glowing calamari recipes, server half) PASSED r1102b; SQ-FN-03 LOOK in r1102b (junk share to judge), SQ-FN-02 (biome loot, group B) not run (deep scan 2026-11-02) |
+| Oceanic donor route (section 5.6) | BUILT 2026-11-01 (`portedOceanic` -02 in the CD jar; in `mods/` since the CD jar of 11-02 14:01, not played); needs `oceanic_upstream/` on server and clients; SQ-DNR-O-01 to -05 queued, not run (not in r1102b's scope) |
+| Tentacles removed, seagrass salad (section 5.5) | Shipped 1.1.05; SQ-CM-31 PASSED r1031; SQ-CM-32 FAILED r1031 (calamari dishes missing), fix PASSED r1101 (SQ-CM-32, SQ-CM-35), unreleased |
 | Test list | Section 6 (DA-01 to DA-03, DA-08 to DA-11); `DA-04` to `DA-07` stay proposed in the dishes_ocean brief; boot check `SQ-AD-00` |
 
 ## 5. Built
@@ -304,3 +304,12 @@ Tests: SQ-DNR-O-01 to -05 (scratch queue). Old-world check: a 1.1.03+ world with
   `oceansdelight/tags.js`. Rebuilt and installed 2026-10-31 12:32; recheck SQ-CM-32 and SQ-CM-35.
 - Seagrass Salad: 2 seagrass + bowl.
 - Not done: generated files still list the removed items (`food_types.json`, the can and compost outputs); the generators drop them on the next `/dumpall` and `/cegen` run.
+
+## 7. Built 2026-11-02 (food and cooking batch, [plan_food_cooking_batch.md](plan_food_cooking_batch.md))
+
+- Kelp Encrusted Cod (3.1, TODO `dishes/ocean #7`): `creativeengineering:kelp_encrusted_cod`, CD startup
+  `farmersdelight/ocean_dishes.js`, 5 / 0.6, pot cod slice + any egg + kelp, 0.35 xp, 200 ticks; sprite from the 1.0.4
+  jar (MIT, notice beside it), food type meal. DA-12; SQ-FCB-00, -01.
+- Squid drops (TODO `dishes/ocean #9`): CD `miners_delight/loot.js` now removes every drop of a squid or glow squid and
+  adds one squid item, whatever the weapon; no longer only while Rustic Delight is on. SQ-FCB-04.
+- Scratch r1102b (2026-11-02): SQ-FCB-00, -01 and -04 (50 kills each of squid and glow squid, knife and bare) PASSED; CQ-FCB-02 (cod sprite, JEI) waits for the client round. Not played.

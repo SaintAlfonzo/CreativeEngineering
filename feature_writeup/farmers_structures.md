@@ -1,6 +1,6 @@
 # Farmer's Structures 1.0.6 against the installed 1.0.0
 
-**BUILT 2026-10-25, Shipped in 1.1.03 (deployed to server and players 2026-10-26); scratch SQ-FSD-01, -03, -04, -06 PASSED 2026-10-26; not run in game.** Installed: `FarmersStructures-1.0.0-1.19.2.jar` (`mods/`, `server_mods/`), mod id
+**BUILT 2026-10-25, Shipped in 1.1.03 (deployed to server and players 2026-10-26); scratch SQ-FSD-01, -03, -04, -06 PASSED 2026-10-26, -07, -08 PASSED r1102b 2026-11-02, **SQ-FSD-02 FAILED r1102b** (without the donor the world does not load; section 4); not run in game.** Installed: `FarmersStructures-1.0.0-1.19.2.jar` (`mods/`, `server_mods/`), mod id
 `farmers_structures`, data only (one class). The 1.0.6 NeoForge jar is a resource donor (section 5): all 6 new Overworld
 structures, the cod pond and the grown cook house pools are served from it, converted in memory. Evaluated against
 `devmods/checkNewerVersionForContent/FarmersStructures-1.0.6-1.21.1_neoforge.jar` (1.21.1 / NeoForge), method in
@@ -119,7 +119,7 @@ and override the jar's pools by id.
 
 ## 4. Tests
 
-Section "Farmer's Structures donor" of [testing/scratch_queue.md](testing/scratch_queue.md) (SQ-FSD-01 to 08). 2026-10-26 scratch run: SQ-FSD-01, -03, -04 (placement) and -06 PASSED (donor 177 files, all 7 kinds place, carp not locatable, squids at 552 blocks). SQ-FSD-05 and -08 found that 4 cook house expansion connectors and the back-connectors name `minecraft:cook_*_pool` (no namespace): `Empty or non-existent pool`, those 4 never expand (same upstream on 1.21); TODO `largecontent/mod-additions #30` (owner decision). Still open: SQ-FSD-02, -07 and the client checks (chest / frame / pot contents, cook variety).
+Section "Farmer's Structures donor" of [testing/scratch_queue.md](testing/scratch_queue.md) (SQ-FSD-01 to 08). 2026-10-26 scratch run: SQ-FSD-01, -03, -04 (placement) and -06 PASSED (donor 177 files, all 7 kinds place, carp not locatable, squids at 552 blocks). SQ-FSD-05 and -08 found that 4 cook house expansion connectors and the back-connectors name `minecraft:cook_*_pool` (no namespace): `Empty or non-existent pool`, those 4 never expand (same upstream on 1.21); TODO `largecontent/mod-additions #30` (owner decision). r1102b 2026-11-02 (`perf/runs/r1102b/s3/judged.md`, deep scan): SQ-FSD-07 (sets in the dump) and -08 (hanging canvas sign) PASS. **SQ-FSD-02 FAIL:** with the donor jar renamed the one warning is logged, but the world does not load (`Unbound values in registry worldgen/structure: [farmers_structures:aquacultures_cod, cacaos, fishs_stew, ratatouilles, shepherd_farms, squids]`): something outside the donor pack still names the six 1.0.6-only structures (candidates: `structure_tags.json`, `structure_groups.json`, `structure_config.json` and the patcherMod readers), so the "runs on 1.0.0 data" fallback does not hold. The test world was made with the donor: confirm on a fresh world before fixing. Still open: that, and the client checks (chest / frame / pot contents, cook variety).
 Needs `farmers_upstream/` in the game folder (and on the server) and the Creative Delight jar for the sign; both jars shipped in 1.1.03.
 
 ## 5. How it is built

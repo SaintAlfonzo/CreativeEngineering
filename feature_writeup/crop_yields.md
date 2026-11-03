@@ -11,7 +11,7 @@ Soils and harvesting mechanics: [crops.md](crops.md). Bell pepper colour weights
 | Soil yield, overworld crops (27) | BUILT 2026-10-28, off for every crop by default; scratch server PASSED 2026-10-28 (SQ-SY-01 to -07) | section 3, `creativeengineering/soil_yield.js` |
 | Soil yield, nether crops | Planned, outline only (TODO `farming/crops #24`) | section 4 |
 
-Config: `config/creativeengineering-common.toml` `[crop_drops.soil_yield]` (tries and chance per soil) and
+Config: `config/creativedelight-common.toml` `[crop_drops.soil_yield]` (moved from `creativeengineering-common.toml` in the Creative Split) (tries and chance per soil) and
 `[crop_drops.soil_yield.crops]` (one `true`/`false` per crop, all `false`). A change needs a restart: on the 2026-10-28 scratch run an edited toml
 was not reread by the running server, and `/reload` kept the old switches.
 
@@ -121,7 +121,7 @@ The crop's own pools are not changed and pools are only appended (Forge names po
 | Oats | Oat, Raw Oats with a knife | as the table's own knife rule |
 
 Key lists: crop blocks in `global.blocks` (block_dict.js "Crop blocks with a soil yield row"), produce and soils in
-`global.item`. CEConfig `CropDrops.SoilYield` holds the soil values and one `BooleanValue` per crop
+`global.item`. CDConfig (Creative Delight; was CEConfig) `CropDrops.SoilYield` holds the soil values and one `BooleanValue` per crop
 (`SoilYield.CROPS`, same keys as the script's table); the script reads them through `NCH.cfg` and `SoilYield.cropOn`.
 A crop the script lists but the config lacks is logged and stays off.
 

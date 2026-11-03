@@ -18,6 +18,8 @@ import net.minecraftforge.registries.ForgeRegistries;
  *       Time Since Rest to -24000 every tick and kept phantoms away for days after it ended, is cancelled by
  *       {@code mixin/CaffeinatedEffectMixin}.</li>
  *   <li>When Phantom Bane ends (runs out or is removed) on a player, Time Since Rest goes back to 0, as after sleeping.</li>
+ *   <li>Only the players with Phantom Bane are skipped by the phantom spawner, not everyone after them in the player list
+ *       ({@code mixin/better_beacons/PhantomSpawnerBaneSkipMixin}, {@code potions/effects #13}).</li>
  * </ul>
  * Effects are looked up lazily: both are registered by other mods.
  */
@@ -37,6 +39,19 @@ public final class PhantomBaneRules {
         caffeinated = ForgeRegistries.MOB_EFFECTS.getValue(CAFFEINATED_ID);
         phantomBane = ForgeRegistries.MOB_EFFECTS.getValue(PHANTOM_BANE_ID);
         lookedUp = true;
+    }
+
+    /** True when the player has Better Beacons' Phantom Bane (the phantom spawner skips them, mixin.better_beacons). */
+    public static boolean hasPhantomBane(net.minecraft.world.entity.player.Player player) {
+        lookUp();
+        return phantomBane != null && player.hasEffect(phantomBane);
+    }
+
+    public static boolean anyHasPhantomBane(java.util.List<? extends net.minecraft.world.entity.player.Player> players) {
+        for (net.minecraft.world.entity.player.Player p : players) {
+            if (hasPhantomBane(p)) return true;
+        }
+        return false;
     }
 
     @SubscribeEvent

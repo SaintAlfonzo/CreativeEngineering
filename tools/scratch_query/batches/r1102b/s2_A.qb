@@ -1,0 +1,1207 @@
+# Run r1102b, slice 2, boot A: group A superflat, the s2a world that s2_O0.qb built (old Rustic / Delightful / Kettle
+# blocks), now with the two standalone jars removed (s2_setup.md, A). Probes in srv/kubejs/server_scripts: zz_zq_probe.js
+# (prep_srv.sh), zz_zp_probe.js (tools/scratch_query/zp_probe.js: sneak, eat, hunger, effects, inv), zz_count.js and
+# zz_trades.js (tools/fungi_probe/zcount.js, ztrades.js).
+# Home: the marker tagged s2home (capture H). y = H2 is the air layer above the superflat grass (H2-1). Lanes (z offset):
+# O0 blocks 0..6; FR-02 10; RD-04 14; RD-05 18; RD-13 22; RD-14 26; RD-15 30; RD-16 34..39; RD-17 44; RD-18 48; RD-23 56;
+# RD-24 60..90 (x 0..30); RD-33 94; DF-04 98; DF-05 102; RSP 106..130; CN-04 134; CDQ-01 138; CDF-06 142.
+# Loot rolls land in the pit at x+60..+62 (killed before each row). Bots: one name per row.
+# Order: old-world checks, boot greps, recipes / tags / foods, block use, loot,
+# trades, then /dumpall + offline scans. No /reload in this file (SQ-RD-25 was run earlier).
+pace 2
+
+## SQ-RD-03 | old world: Rustic 1.3.0 blocks keep their state under the 1.7.0 port
+bootexpect Done \(
+bootreject member rusticdelight is loaded from|member delightful is loaded from
+bootreject (?i)(missing registry|unidentified mapping).*rusticdelight
+bootreject Failed to set block association
+> data get entity @e[type=minecraft:marker,tag=s2home,limit=1] Pos
+capture H entity data: \[(-?\d+)\.\d+d, (-?\d+)\.\d+d, (-?\d+)\.\d+d\]
+> forceload add {H1-16} {H3-16} {H1+80} {H3+176}
+sleep 5
+> gamerule doDaylightCycle false
+> weather clear 100000
+> difficulty easy
+> zcount {H1+2} {H2} {H3} {H1+17} {H2} {H3}
+waitlog \[zcount\] entities 30
+expect \[zcount\] blocks .*rusticdelight:honey_pancakes=1
+expect \[zcount\] blocks .*rusticdelight:bell_pepper_red_crate=1
+expect \[zcount\] blocks .*rusticdelight:cotton_boll_crate=1
+expect \[zcount\] blocks .*rusticdelight:bell_peppers=1
+expect \[zcount\] blocks .*rusticdelight:potted_wild_coffee=1
+expect \[zcount\] blocks .*rusticdelight:cherry_blossom_cheesecake=1
+> execute if block {H1+2} {H2} {H3} rusticdelight:honey_pancakes[servings=3] run say RD03 pancakes still 3
+> execute if block {H1+8} {H2} {H3} rusticdelight:bell_peppers[age=4] run say RD03 pepper crop age 4
+> execute if block {H1+9} {H2} {H3} rusticdelight:cotton[age=2] run say RD03 cotton age 2
+> execute if block {H1+10} {H2} {H3} rusticdelight:coffee[age=3] run say RD03 coffee age 3
+expect RD03 pancakes still 3
+expect RD03 pepper crop age 4
+expect RD03 cotton age 2
+expect RD03 coffee age 3
+look zcount line: wild bell peppers, wild coffee, wild cotton, coffee beans bag and chocolate pancakes also present (one each)
+
+## SQ-DF-07 | old world: Delightful 3.4.1 blocks intact under the repack
+bootreject (?i)(missing registry|unidentified mapping).*delightful
+> zcount {H1+2} {H2} {H3+3} {H1+14} {H2} {H3+3}
+waitlog \[zcount\] entities 30
+expect \[zcount\] blocks .*delightful:salmonberry_bush=1
+expect \[zcount\] blocks .*delightful:cantaloupe=1
+expect \[zcount\] blocks .*delightful:basalt_cabinet=1
+expect \[zcount\] blocks .*delightful:quartz_cabinet=1
+expect \[zcount\] blocks .*delightful:green_apple_pie=1
+expect \[zcount\] blocks .*delightful:acorn_sack=1
+expect \[zcount\] blocks .*delightful:matcha_ice_cream_block=1
+> execute if block {H1+2} {H2} {H3+3} delightful:salmonberry_bush[age=2] run say DF07 bush age 2
+expect DF07 bush age 2
+> data get block {H1+6} {H2} {H3+3}
+expect has the following block data: .*minecraft:apple
+
+## SQ-RSP-14 | a Kettle saved at water_level=3 loads at 3 and brews
+> execute if block {H1+2} {H2+1} {H3+6} farmersrespite:kettle[water_level=3] run say RSP14 kettle still 3
+expect RSP14 kettle still 3
+> item replace block {H1+2} {H2+1} {H3+6} container.0 with farmersrespite:green_tea_leaves 1
+> item replace block {H1+2} {H2+1} {H3+6} container.3 with minecraft:glass_bottle 1
+sleep 15
+> data get block {H1+2} {H2+1} {H3+6}
+> execute if block {H1+2} {H2+1} {H3+6} farmersrespite:kettle[water_level=2] run say RSP14 brewed one
+expect farmersrespite:green_tea
+expect RSP14 brewed one
+look the data get line shows the brewed Green Tea in slot 4 (or 2 waiting); if Green Tea needs 2 leaves the level stays 3: judge from the recipe line of SQ-RSP-02
+
+## SQ-FR-05a | (reference) Fruits Delight present in this boot: its three scripts ran
+# SQ-FR-05 proper is in s2_N.qb (Fruits Delight jar out); this row is the "with" baseline for the same greps.
+kjsreject (?i)error.*fruitsdelight/(recipes|tags|placeable)\.js
+shell grep -m3 -E "MangosteenCakeEffectMixin|creativedelight\.mixins\.json" logs/debug.log logs/latest.log; true
+bootreject null guard not applied|fix mixins are off
+look baseline only (SQ-FR-05 is judged in s2_N.qb)
+
+## SQ-FR-02 | Mangosteen Cake bite: Comfort ~400 and Sliding ~800 ticks
+> setblock {H1+2} {H2} {H3+10} fruitsdelight:mangosteen_cake
+> pbot spawn fr2 {H1+2} {H2} {H3+8} minecraft:overworld survival
+sleep 2
+> item replace entity fr2 weapon.mainhand with minecraft:air
+> effect clear fr2
+> zp hunger fr2 10
+> pbot use fr2 {H1+2} {H2} {H3+10} up
+> zp effects fr2
+> zp food fr2
+expect \[zp\] effects fr2: .*farmersdelight:comfort amp 0 (7[4-9]\d|80\d)t
+expect \[zp\] effects fr2: .*fruitsdelight:sliding amp 0 (7[4-9]\d|80\d)t
+expect \[zp\] food fr2: level 1[1-9]
+reject \[zp\] effects fr2: .* 0t
+
+## SQ-FR-03 | Bellini Cocktail: one Heal Aura
+> zq food fruitsdelight:bellini_cocktail
+expect food fruitsdelight:bellini_cocktail: .*fruitsdelight:heal_aura amp \d+ 200t
+reject food fruitsdelight:bellini_cocktail: .*heal_aura.*heal_aura
+expect food fruitsdelight:bellini_cocktail: .*brewinandchewin:intoxication amp \d+ 1800t
+expect food fruitsdelight:bellini_cocktail: .*minecraft:nausea amp \d+ 100t
+
+## SQ-FR-04 | Fig Pudding eggs tag; jams and crate storage tags
+> zq rdetail fruitsdelight:fig_pudding
+> zq itemtag forge:jams
+> zq itemtag forge:storage_blocks
+> zq itemtag forge:storage_blocks/peach
+> zq blocktag forge:storage_blocks/peach
+> zq blocktag forge:storage_blocks
+expect fruitsdelight:fig_pudding \{.*_egg/[a-z_:]+/[a-z_:]+/\+\d+
+count itemtag forge:jams \((2[4-9]|[3-9]\d)\) >= 1
+expect itemtag forge:storage_blocks/peach \(\d+\): .*fruitsdelight:peach_crate
+expect blocktag forge:storage_blocks/peach \(\d+\): .*fruitsdelight:peach_crate
+look fig_pudding egg ingredient lists several eggs (the #forge:eggs tag, not minecraft:egg alone); forge:jams holds the 22 Fruits Delight jams plus Delightful's two; forge:storage_blocks (items and blocks) hold the 16 fruitsdelight crates
+
+## SQ-DF-01 | (boot) Delightful repack loads with its mixin
+bootexpect Done \(
+bootreject InvalidInjectionException.*delightful|delightful\.ce\.mixins\.json.*(failed|error)
+bootreject Error occurred while handling event.*delightful
+shell grep -m3 -iE "delightful.*3\.4\.1-ce-19\.2|delightful\.ce\.mixins" logs/latest.log logs/debug.log; true
+look rows/SQ-DF-01.shell.txt names delightful 3.4.1-ce-19.2-01 (or the version line in the mod list)
+
+## SQ-DF-02 | the five 3.8.1 Delightful items exist
+> pbot spawn df2 {H1} {H2} {H3+96} minecraft:overworld survival
+sleep 2
+> give df2 delightful:cantaloupe_seeds
+> give df2 delightful:baklava
+> give df2 delightful:fluix_knife
+> give df2 delightful:matcha_milkshake
+> give df2 delightful:cactus_soup_cup
+count Gave 1 +\[ >= 5
+reject Unknown item
+
+## SQ-DF-03 | delightful/recipes.js ran: creativedelight recipes, no script error
+kjsreject (?i)error.*delightful/(recipes|tags)\.js
+> zq recipes creativedelight:
+> zq rdetail cantaloupe
+> zq rdetail baklava
+> zq rdetail matcha
+expect creativedelight:[a-z_/]*cantaloupe
+look rdetail lines under creativedelight: for the cantaloupe, baklava and matcha items (the queue counts 24 from delightful/recipes.js; count the ids that script makes in rows/SQ-DF-03.log)
+
+## SQ-DF-06 | Delightful tags: knives, cooked nuts, hot spices
+> zq itemtag forge:tools/knives
+> zq itemtag forge:cooked_nuts
+> zq itemtag delightful:hot_spices
+expect itemtag forge:tools/knives \(\d+\): .*delightful:fluix_knife
+expect itemtag forge:cooked_nuts \(2\)
+expect itemtag delightful:hot_spices \(\d+\): .*minecraft:blaze_powder
+look cooked_nuts = Roasted Acorn + Roasted Peanut; hot_spices = blaze powder + the chili/ghost peppers (#chilipepper); the three new knives (fluix and the two others of 3.8.1) are in forge:tools/knives
+
+## SQ-DF-04 | Cantaloupe plant drops; seeds plant on sand by water
+> fill {H1} {H2-1} {H3+98} {H1+6} {H2-1} {H3+98} minecraft:sand
+> setblock {H1} {H2-1} {H3+99} minecraft:water
+> setblock {H1+1} {H2} {H3+98} delightful:cantaloupe_plant[age=3]
+> setblock {H1+3} {H2} {H3+98} delightful:cantaloupe_plant[age=0]
+> kill @e[type=minecraft:item]
+> loot spawn {H1+60} {H2} {H3} mine {H1+1} {H2} {H3+98}
+> loot spawn {H1+60} {H2} {H3} mine {H1+3} {H2} {H3+98}
+> pbot spawn df4 {H1+5} {H2} {H3+96} minecraft:overworld survival
+sleep 2
+> item replace entity df4 weapon.mainhand with delightful:cantaloupe_seeds 4
+> pbot use df4 {H1+5} {H2-1} {H3+98} up
+> execute if block {H1+5} {H2} {H3+98} delightful:cantaloupe_plant run say DF04 seeds planted by water
+expect DF04 seeds planted by water
+look the two "Dropped" lines: age 3 = seeds + Cantaloupe, age 0 = seeds only
+
+## SQ-DF-05 | Matcha Ice Cream on a Neapolitan milk cauldron
+> setblock {H1+2} {H2} {H3+102} neapolitan:milk_cauldron[level=3]
+> pbot spawn df5 {H1+2} {H2} {H3+100} minecraft:overworld survival
+sleep 2
+> item replace entity df5 weapon.mainhand with delightful:matcha_ice_cream 1
+> pbot use df5 {H1+2} {H2} {H3+102} up
+> execute if block {H1+2} {H2} {H3+102} delightful:matcha_milkshake_cauldron[level=3] run say DF05 matcha milkshake cauldron
+expect DF05 matcha milkshake cauldron
+reject Unknown block
+
+## SQ-RD-04 | Honey pancakes: take 6, sneak-put back to 12, 13th refused, comparator
+> setblock {H1+4} {H2} {H3+14} rusticdelight:honey_pancakes
+> pbot spawn rd4 {H1+4} {H2} {H3+12} minecraft:overworld survival
+sleep 2
+> item replace entity rd4 weapon.mainhand with minecraft:air
+repeat 5
+> pbot use rd4 {H1+4} {H2} {H3+14} up
+end
+> execute if block {H1+4} {H2} {H3+14} rusticdelight:honey_pancakes[servings=5] run say RD04 one left after 5
+> pbot use rd4 {H1+4} {H2} {H3+14} up
+> execute if block {H1+4} {H2} {H3+14} minecraft:air run say RD04 plate gone after 6
+> zp inv rd4
+expect RD04 one left after 5
+expect RD04 plate gone after 6
+expect \[zp\] inv rd4: .*6 rusticdelight:honey_pancake
+> setblock {H1+4} {H2} {H3+14} rusticdelight:honey_pancakes
+> setblock {H1+5} {H2} {H3+14} minecraft:comparator[facing=west]
+> setblock {H1+3} {H2} {H3+14} minecraft:comparator[facing=east]
+> clear rd4
+> item replace entity rd4 weapon.mainhand with rusticdelight:honey_pancake 7
+> zp sneak rd4 on
+repeat 7
+> pbot use rd4 {H1+4} {H2} {H3+14} up
+end
+> zp sneak rd4 off
+> execute if block {H1+4} {H2} {H3+14} rusticdelight:honey_pancakes[servings=11] run say RD04 stack of 12
+> zp inv rd4
+> data get block {H1+5} {H2} {H3+14} OutputSignal
+> data get block {H1+3} {H2} {H3+14} OutputSignal
+expect \[zp\] sneak rd4 true
+expect RD04 stack of 12
+expect \[zp\] inv rd4: 0:1 rusticdelight:honey_pancake
+look one comparator OutputSignal reads the 12-pancake level (non-zero); the 7th sneak use was refused (1 pancake left in hand)
+
+## SQ-RD-05 | Bell Pepper Medley and Rice Roll Royale servings
+> setblock {H1+2} {H2} {H3+18} rusticdelight:bell_pepper_medley
+> setblock {H1+6} {H2} {H3+18} rusticdelight:rice_roll_royale
+> pbot spawn rd5 {H1+4} {H2} {H3+16} minecraft:overworld survival
+sleep 2
+> item replace entity rd5 weapon.mainhand with minecraft:bowl 16
+> kill @e[type=minecraft:item]
+repeat 4
+> pbot use rd5 {H1+2} {H2} {H3+18} up
+end
+> zp inv rd5
+> execute if block {H1+2} {H2} {H3+18} minecraft:air run say RD05 medley bowl gone
+expect RD05 medley bowl gone
+expect \[zp\] inv rd5: .*rusticdelight:stuffed_bell_pepper_red
+expect \[zp\] inv rd5: .*rusticdelight:stuffed_bell_pepper_yellow
+expect \[zp\] inv rd5: .*rusticdelight:stuffed_bell_pepper_green
+> clear rd5
+> item replace entity rd5 weapon.mainhand with minecraft:bowl 16
+repeat 9
+> pbot use rd5 {H1+6} {H2} {H3+18} up
+end
+> zp inv rd5
+> execute if block {H1+6} {H2} {H3+18} minecraft:air run say RD05 royale plate gone
+> zcount {H1} {H2-1} {H3+16} {H1+8} {H2+2} {H3+20}
+waitlog \[zcount\] entities 30
+expect RD05 royale plate gone
+expect \[zp\] inv rd5: .*rusticdelight:calamari_roll
+expect \[zp\] inv rd5: .*rusticdelight:cherry_blossom_roll
+look Royale inventory: 3 kelp roll slices (farmersdelight:kelp_roll_slice), green, red, yellow pepper rolls, calamari roll, cherry blossom roll; zcount entities show the medley leftovers (bowl and the broken-block drops)
+
+## SQ-RD-06 | Rustic recipes: pasta, soup, golden beans, honey coffee, braised beef, calamari roll, brown dye; cherry tag
+> zq rdetail bell_pepper_pasta
+> zq rdetail bell_pepper_soup
+> zq rdetail golden_coffee_beans
+> zq rdetail honey_coffee
+> zq rdetail coffee_braised_beef
+> zq rdetail calamari_roll
+> zq makes minecraft:brown_dye
+> zq itemtag rusticdelight:cherry_blossom_ingredients
+expect itemtag rusticdelight:cherry_blossom_ingredients \(\d+\): .*vinery:cherry_leaves
+expect itemtag rusticdelight:cherry_blossom_ingredients \(\d+\): .*quark:pink_blossom_leaves
+expect makes minecraft:brown_dye: [1-9]
+reject honey_coffee \{[^}]*\} -> .*minecraft:sugar
+look pasta and soup take 3 of #forge:vegetables/bell_pepper (several peppers listed); golden beans from raw or roasted; honey coffee without sugar; braised beef from any coffee food ingredient; calamari roll from #forge:raw_fishes/calamari
+
+## SQ-RD-07 | oven-only cookies and cheesecakes; maple cookie, glazed bacon, supreme pizza, roasted pepper pasta
+> zq rdetail syrup_cookie
+> zq rdetail coffee_cookie
+> zq rdetail cherry_blossom_cookie
+> zq rdetail cheesecake
+> zq rdetail maple_cookie
+> zq rdetail maple_glazed_bacon
+> zq rdetail brewinandchewin:pizza
+> zq rdetail bell_pepper_pasta
+> zq itemtag creativeengineering:roasted_bell_pepper
+expect itemtag creativeengineering:roasted_bell_pepper \(9\)
+reject (syrup|coffee|cherry_blossom)_cookie \{minecraft:crafting
+reject _cheesecake \{minecraft:crafting_sha
+look cookies: dough + 2 flavour -> 12 in the oven only; cheesecakes: pie crust + 2 flavour + 2 sweet, oven only; maple cookie = dough + syrup + honey; bacon = cooked bacon + syrup; pizza = bell pepper, cheese, onion, mushroom, tomato sauce, cooked meat, dough; heatless pasta takes 3 of #creativeengineering:roasted_bell_pepper
+
+## SQ-RD-13 | giant peppers: 9 slices -> block, cutting -> 9, drops slices never the block
+> zq rdetail bell_pepper_slice
+> zq rdetail cutting/bell_pepper_
+count rusticdelight:[a-z_/]*bell_pepper_[a-z]+_block_from_bell_pepper_slice_[a-z]+ \{ == 9
+count rusticdelight:cutting/bell_pepper_[a-z]+_block \{ == 9
+> kill @e[type=minecraft:item]
+> setblock {H1+2} {H2} {H3+22} rusticdelight:bell_pepper_red_block
+> loot spawn {H1+60} {H2} {H3} mine {H1+2} {H2} {H3+22}
+> loot spawn {H1+60} {H2} {H3} mine {H1+2} {H2} {H3+22} minecraft:diamond_axe
+> loot spawn {H1+60} {H2} {H3} mine {H1+2} {H2} {H3+22} minecraft:diamond_axe{Enchantments:[{id:"minecraft:silk_touch",lvl:1s}]}
+> zcount {H1+59} {H2-1} {H3-1} {H1+61} {H2+2} {H3+1}
+waitlog \[zcount\] entities 30
+reject item:rusticdelight:bell_pepper_red_block
+expect item:rusticdelight:bell_pepper_slice_red
+# cutting board: place the block on it, cut with a knife
+> kill @e[type=minecraft:item]
+> setblock {H1+4} {H2} {H3+22} farmersdelight:cutting_board
+> pbot spawn rd13 {H1+4} {H2} {H3+20} minecraft:overworld survival
+sleep 2
+> item replace entity rd13 weapon.mainhand with rusticdelight:bell_pepper_red_block 1
+> pbot use rd13 {H1+4} {H2} {H3+22} up
+> item replace entity rd13 weapon.mainhand with farmersdelight:iron_knife 1
+> pbot use rd13 {H1+4} {H2} {H3+22} up
+sleep 2
+> zcount {H1+2} {H2-1} {H3+20} {H1+6} {H2+2} {H3+24}
+waitlog \[zcount\] entities 30
+expect item:rusticdelight:bell_pepper_slice_red x\d+
+look the board cut gave 9 slices in total (zcount entity counts, merged or not); the three loot drops give 1 to 9 slices each and never the block (Silk Touch too); TNT and the axe-speed half are not run here (explosion drops and dig speed need a player in game)
+
+## SQ-RD-14 | peppers -> slices + seed, roasting, slice -> seed, slices + rice -> rolls
+> zq rdetail cutting/bell_pepper
+> zq rdetail roasted_bell_pepper_slice
+> zq rdetail bell_pepper_roll
+> zq makes rusticdelight:bell_pepper_seeds
+> zq makes rusticdelight:pale_bell_pepper_seeds
+> zq makes rusticdelight:dark_bell_pepper_seeds
+look cutting each of the 9 peppers gives 2 slices (+ seed chance, not shown by rdetail); each slice roasts in smelting, smoking and campfire_cooking; 1 slice alone -> 1 seed of its family (red/yellow/green Bell Pepper Seeds, white/pink/orange Pale, blue/purple/black Dark); 2 slices + cooked rice -> 2 rolls
+# seed chance: 20 red peppers cut on a board
+> kill @e[type=minecraft:item]
+> setblock {H1+2} {H2} {H3+26} farmersdelight:cutting_board
+> pbot spawn rd14 {H1+2} {H2} {H3+24} minecraft:overworld survival
+sleep 2
+repeat 20
+> item replace entity rd14 weapon.mainhand with rusticdelight:bell_pepper_red 1
+> pbot use rd14 {H1+2} {H2} {H3+26} up
+> item replace entity rd14 weapon.mainhand with farmersdelight:iron_knife 1
+> pbot use rd14 {H1+2} {H2} {H3+26} up
+end
+sleep 2
+> zcount {H1} {H2-1} {H3+24} {H1+4} {H2+2} {H3+28}
+waitlog \[zcount\] entities 30
+expect item:rusticdelight:bell_pepper_slice_red
+look 40 red slices in total and about 2 Bell Pepper Seeds (10%) in the zcount entities line
+
+## SQ-RD-15 | Rustic crops: max ages and harvest drops
+> setblock {H1+2} {H2-1} {H3+30} minecraft:farmland[moisture=7]
+> setblock {H1+3} {H2-1} {H3+30} minecraft:farmland[moisture=7]
+> setblock {H1+4} {H2-1} {H3+30} minecraft:farmland[moisture=7]
+> setblock {H1+5} {H2-1} {H3+30} minecraft:farmland[moisture=7]
+> setblock {H1+6} {H2-1} {H3+30} minecraft:farmland[moisture=7]
+> setblock {H1+2} {H2} {H3+30} rusticdelight:bell_peppers[age=7]
+> setblock {H1+3} {H2} {H3+30} rusticdelight:pale_bell_peppers[age=7]
+> setblock {H1+4} {H2} {H3+30} rusticdelight:dark_bell_peppers[age=7]
+> setblock {H1+5} {H2} {H3+30} rusticdelight:coffee[age=5]
+> setblock {H1+6} {H2} {H3+30} rusticdelight:cotton[age=3]
+reject Could not set the block|Invalid block state|Unknown block property
+> setblock {H1+8} {H2} {H3+30} rusticdelight:coffee[age=6]
+> setblock {H1+9} {H2} {H3+30} rusticdelight:cotton[age=4]
+> setblock {H1+10} {H2} {H3+30} rusticdelight:bell_peppers[age=8]
+count does not accept .* for age property >= 3
+# drops: 10 base, 10 Pale, 10 Dark, 10 coffee, 10 cotton (loot rolls on the ripe blocks; the block stays)
+> kill @e[type=minecraft:item]
+repeat 10
+> loot spawn {H1+60} {H2} {H3} mine {H1+2} {H2} {H3+30}
+end
+> zcount {H1+59} {H2-1} {H3-1} {H1+61} {H2+2} {H3+1}
+waitlog \[zcount\] entities 30
+> kill @e[type=minecraft:item]
+repeat 10
+> loot spawn {H1+60} {H2} {H3} mine {H1+3} {H2} {H3+30}
+end
+> zcount {H1+59} {H2-1} {H3-1} {H1+61} {H2+2} {H3+1}
+waitlog \[zcount\] entities 30
+> kill @e[type=minecraft:item]
+repeat 10
+> loot spawn {H1+60} {H2} {H3} mine {H1+4} {H2} {H3+30}
+end
+> zcount {H1+59} {H2-1} {H3-1} {H1+61} {H2+2} {H3+1}
+waitlog \[zcount\] entities 30
+> kill @e[type=minecraft:item]
+repeat 10
+> loot spawn {H1+60} {H2} {H3} mine {H1+5} {H2} {H3+30}
+end
+repeat 10
+> loot spawn {H1+60} {H2} {H3} mine {H1+6} {H2} {H3+30}
+end
+> zcount {H1+59} {H2-1} {H3-1} {H1+61} {H2+2} {H3+1}
+waitlog \[zcount\] entities 30
+expect item:rusticdelight:bell_pepper_(red|yellow|green)
+expect item:rusticdelight:bell_pepper_(white|pink|orange)
+expect item:rusticdelight:bell_pepper_(blue|purple|black)
+expect item:rusticdelight:coffee_beans
+expect item:rusticdelight:cotton_boll
+look the three over-max setblocks failed (ages 0-7 / 0-5 / 0-3); zcount lines in order: base peppers about even red/yellow/green (+ about 15% bonus red), Pale white/pink/orange + Pale seeds, Dark blue/purple/black + Dark seeds, then coffee beans and cotton
+
+## SQ-RD-16 | wild plants: survive on dirt-family blocks, not on sand; drops; potted forms
+> fill {H1} {H2-1} {H3+34} {H1+10} {H2-1} {H3+34} minecraft:grass_block
+> fill {H1} {H2-1} {H3+35} {H1+10} {H2-1} {H3+35} minecraft:dirt
+> fill {H1} {H2-1} {H3+36} {H1+10} {H2-1} {H3+36} minecraft:coarse_dirt
+> fill {H1} {H2-1} {H3+37} {H1+10} {H2-1} {H3+37} minecraft:rooted_dirt
+> fill {H1} {H2-1} {H3+38} {H1+10} {H2-1} {H3+38} minecraft:podzol
+> fill {H1} {H2-1} {H3+39} {H1+10} {H2-1} {H3+39} minecraft:sand
+> pbot spawn rd16 {H1+5} {H2} {H3+32} minecraft:overworld survival
+sleep 2
+# one wild per x column (2 bell, 4 pale, 6 dark, 8 coffee, 10 cotton), one soil per z row; placed from the item
+> item replace entity rd16 weapon.mainhand with rusticdelight:wild_bell_peppers 6
+> pbot use rd16 {H1+2} {H2-1} {H3+34} up
+> pbot use rd16 {H1+2} {H2-1} {H3+35} up
+> pbot use rd16 {H1+2} {H2-1} {H3+36} up
+> pbot use rd16 {H1+2} {H2-1} {H3+37} up
+> pbot use rd16 {H1+2} {H2-1} {H3+38} up
+> pbot use rd16 {H1+2} {H2-1} {H3+39} up
+> item replace entity rd16 weapon.mainhand with rusticdelight:wild_pale_bell_peppers 6
+> pbot use rd16 {H1+4} {H2-1} {H3+34} up
+> pbot use rd16 {H1+4} {H2-1} {H3+35} up
+> pbot use rd16 {H1+4} {H2-1} {H3+36} up
+> pbot use rd16 {H1+4} {H2-1} {H3+37} up
+> pbot use rd16 {H1+4} {H2-1} {H3+38} up
+> pbot use rd16 {H1+4} {H2-1} {H3+39} up
+> item replace entity rd16 weapon.mainhand with rusticdelight:wild_dark_bell_peppers 6
+> pbot use rd16 {H1+6} {H2-1} {H3+34} up
+> pbot use rd16 {H1+6} {H2-1} {H3+35} up
+> pbot use rd16 {H1+6} {H2-1} {H3+36} up
+> pbot use rd16 {H1+6} {H2-1} {H3+37} up
+> pbot use rd16 {H1+6} {H2-1} {H3+38} up
+> pbot use rd16 {H1+6} {H2-1} {H3+39} up
+> item replace entity rd16 weapon.mainhand with rusticdelight:wild_coffee 6
+> pbot use rd16 {H1+8} {H2-1} {H3+34} up
+> pbot use rd16 {H1+8} {H2-1} {H3+35} up
+> pbot use rd16 {H1+8} {H2-1} {H3+36} up
+> pbot use rd16 {H1+8} {H2-1} {H3+37} up
+> pbot use rd16 {H1+8} {H2-1} {H3+38} up
+> pbot use rd16 {H1+8} {H2-1} {H3+39} up
+> item replace entity rd16 weapon.mainhand with rusticdelight:wild_cotton 6
+> pbot use rd16 {H1+10} {H2-1} {H3+34} up
+> pbot use rd16 {H1+10} {H2-1} {H3+35} up
+> pbot use rd16 {H1+10} {H2-1} {H3+36} up
+> pbot use rd16 {H1+10} {H2-1} {H3+37} up
+> pbot use rd16 {H1+10} {H2-1} {H3+38} up
+> pbot use rd16 {H1+10} {H2-1} {H3+39} up
+> zcount {H1} {H2} {H3+34} {H1+10} {H2} {H3+38}
+waitlog \[zcount\] entities 30
+> zcount {H1} {H2} {H3+39} {H1+10} {H2} {H3+39}
+waitlog \[zcount\] blocks .*minecraft:air=11
+expect \[zcount\] blocks .*rusticdelight:wild_bell_peppers=5
+expect \[zcount\] blocks .*rusticdelight:wild_pale_bell_peppers=5
+expect \[zcount\] blocks .*rusticdelight:wild_dark_bell_peppers=5
+expect \[zcount\] blocks .*rusticdelight:wild_coffee=5
+expect \[zcount\] blocks .*rusticdelight:wild_cotton=5
+# drops by hand x10 and with shears
+> kill @e[type=minecraft:item]
+repeat 10
+> loot spawn {H1+60} {H2} {H3} mine {H1+2} {H2} {H3+34}
+end
+> loot spawn {H1+60} {H2} {H3} mine {H1+4} {H2} {H3+34}
+> loot spawn {H1+60} {H2} {H3} mine {H1+8} {H2} {H3+34}
+> loot spawn {H1+60} {H2} {H3} mine {H1+10} {H2} {H3+34}
+> zcount {H1+59} {H2-1} {H3-1} {H1+61} {H2+2} {H3+1}
+waitlog \[zcount\] entities 30
+> kill @e[type=minecraft:item]
+> loot spawn {H1+60} {H2} {H3} mine {H1+2} {H2} {H3+34} minecraft:shears
+> loot spawn {H1+60} {H2} {H3} mine {H1+8} {H2} {H3+34} minecraft:shears
+> loot spawn {H1+60} {H2} {H3} mine {H1+10} {H2} {H3+34} minecraft:shears
+> zcount {H1+59} {H2-1} {H3-1} {H1+61} {H2+2} {H3+1}
+waitlog \[zcount\] entities 30
+expect item:rusticdelight:wild_bell_peppers
+expect item:rusticdelight:wild_coffee
+expect item:rusticdelight:wild_cotton
+> setblock {H1+12} {H2} {H3+34} rusticdelight:potted_wild_bell_peppers
+> setblock {H1+13} {H2} {H3+34} rusticdelight:potted_wild_pale_bell_peppers
+> setblock {H1+14} {H2} {H3+34} rusticdelight:potted_wild_dark_bell_peppers
+> setblock {H1+15} {H2} {H3+34} rusticdelight:potted_wild_coffee
+> setblock {H1+16} {H2} {H3+34} rusticdelight:potted_wild_cotton
+count Changed the block >= 5
+look the sand row (second zcount) has no wild plant; hand drops are seeds (wild bell peppers sometimes a red pepper), shears give the plant itself
+
+## SQ-RD-17 | pancake stacks: pot recipes, servings, drops, serving effects
+> zq rdetail pancakes
+> zq food rusticdelight:honey_pancake
+> zq food rusticdelight:chocolate_pancake
+> zq food rusticdelight:vegetable_pancake
+expect food rusticdelight:honey_pancake: .*minecraft:speed amp 0 900t
+expect food rusticdelight:chocolate_pancake: .*minecraft:speed amp 0 900t
+expect food rusticdelight:vegetable_pancake: .*minecraft:haste amp 0 600t
+> pbot spawn rd17 {H1+8} {H2} {H3+42} minecraft:overworld survival
+sleep 2
+> item replace entity rd17 weapon.mainhand with minecraft:air
+> setblock {H1+2} {H2} {H3+44} rusticdelight:pancakes
+> setblock {H1+4} {H2} {H3+44} rusticdelight:honey_pancakes
+> setblock {H1+6} {H2} {H3+44} rusticdelight:chocolate_pancakes
+> setblock {H1+8} {H2} {H3+44} rusticdelight:cherry_blossom_pancakes
+> setblock {H1+10} {H2} {H3+44} rusticdelight:vegetable_pancakes
+> setblock {H1+12} {H2} {H3+44} rusticdelight:pumpkin_pancakes
+> setblock {H1+14} {H2} {H3+44} rusticdelight:coffee_pancakes
+> pbot use rd17 {H1+2} {H2} {H3+44} up
+> pbot use rd17 {H1+4} {H2} {H3+44} up
+> pbot use rd17 {H1+6} {H2} {H3+44} up
+> pbot use rd17 {H1+8} {H2} {H3+44} up
+> pbot use rd17 {H1+10} {H2} {H3+44} up
+> pbot use rd17 {H1+12} {H2} {H3+44} up
+> pbot use rd17 {H1+14} {H2} {H3+44} up
+> zp inv rd17
+expect \[zp\] inv rd17: .*supplementaries:pancake\b
+expect \[zp\] inv rd17: .*rusticdelight:honey_pancake\b
+expect \[zp\] inv rd17: .*rusticdelight:chocolate_pancake\b
+expect \[zp\] inv rd17: .*rusticdelight:cherry_blossom_pancake\b
+expect \[zp\] inv rd17: .*rusticdelight:vegetable_pancake\b
+expect \[zp\] inv rd17: .*rusticdelight:pumpkin_pancake\b
+expect \[zp\] inv rd17: .*rusticdelight:coffee_pancake\b
+# break a taken-from stack and an untouched one
+> kill @e[type=minecraft:item]
+> setblock {H1+16} {H2} {H3+44} rusticdelight:honey_pancakes
+> setblock {H1+4} {H2} {H3+44} minecraft:air destroy
+> zcount {H1+3} {H2-1} {H3+43} {H1+5} {H2+2} {H3+45}
+waitlog \[zcount\] entities 30
+> setblock {H1+16} {H2} {H3+44} minecraft:air destroy
+> zcount {H1+15} {H2-1} {H3+43} {H1+17} {H2+2} {H3+45}
+waitlog \[zcount\] entities 30
+expect item:rusticdelight:honey_pancakes x1
+# eat one serving
+> item replace entity rd17 weapon.mainhand with rusticdelight:honey_pancake 1
+> zp hunger rd17 10
+> zp eat rd17
+expect \[zp\] eat rd17 1 rusticdelight:honey_pancake: .*minecraft:speed amp 0 900t
+look first zcount (stack with a serving taken, broken) shows no pancake item; the pot recipes for all 7 stacks are listed
+
+## SQ-RD-18 | Pale and Dark Bell Pepper Medleys
+> zq rdetail medley
+> zq rdetail stuffed_bell_pepper
+> setblock {H1+2} {H2} {H3+48} rusticdelight:pale_bell_pepper_medley
+> setblock {H1+6} {H2} {H3+48} rusticdelight:dark_bell_pepper_medley
+> setblock {H1+10} {H2} {H3+48} rusticdelight:dark_bell_pepper_medley
+> pbot spawn rd18 {H1+6} {H2} {H3+46} minecraft:overworld survival
+sleep 2
+> item replace entity rd18 weapon.mainhand with minecraft:bowl 16
+repeat 4
+> pbot use rd18 {H1+2} {H2} {H3+48} up
+end
+repeat 4
+> pbot use rd18 {H1+6} {H2} {H3+48} up
+end
+> pbot use rd18 {H1+10} {H2} {H3+48} up
+> kill @e[type=minecraft:item]
+> setblock {H1+10} {H2} {H3+48} minecraft:air destroy
+> zcount {H1+9} {H2-1} {H3+47} {H1+11} {H2+2} {H3+49}
+waitlog \[zcount\] entities 30
+> zp inv rd18
+expect \[zp\] inv rd18: .*rusticdelight:stuffed_bell_pepper_white
+expect \[zp\] inv rd18: .*rusticdelight:stuffed_bell_pepper_pink
+expect \[zp\] inv rd18: .*rusticdelight:stuffed_bell_pepper_orange
+expect \[zp\] inv rd18: .*rusticdelight:stuffed_bell_pepper_blue
+expect \[zp\] inv rd18: .*rusticdelight:stuffed_bell_pepper_purple
+expect \[zp\] inv rd18: .*rusticdelight:stuffed_bell_pepper_black
+look 3 feast recipes listed; all 9 stuffed peppers have a pot recipe from their colour; the half-eaten Dark medley broke into its drops (zcount entities)
+
+## SQ-RD-19 | syrup line and syrup ingredients
+> zq rdetail syrup
+> zq itemtag rusticdelight:syrup_ingredients
+> zq uses rusticdelight:syrup
+> zq rdetail sweet_salad
+expect itemtag rusticdelight:syrup_ingredients \(\d+\): .*minecraft:apple
+expect itemtag rusticdelight:syrup_ingredients \(\d+\): .*minecraft:beetroot
+expect sugar_from_syrup \{.*\} -> 3 (minecraft:)?sugar\b
+look syrup = bottle + #syrup_ingredients + sugar; Syrup Coffee from Coffee and from Milk Coffee; Sweet Salad takes honey or syrup; the pack's maple foods are in the uses list; syrup cookie only in the oven
+
+## SQ-RD-20 | coffees: Caffeinated and one-effect clearing
+> pbot spawn rd20 {H1+20} {H2} {H3+52} minecraft:overworld survival
+sleep 2
+> zq rdetail coffee
+> zq food rusticdelight:coffee
+> zq food rusticdelight:dark_coffee
+> zq food rusticdelight:milk_coffee
+> zq food rusticdelight:honey_coffee
+> zq food rusticdelight:chocolate_coffee
+> zq food rusticdelight:syrup_coffee
+> zq food rusticdelight:pumpkin_coffee
+> zq food rusticdelight:cherry_blossom_coffee
+> zp hunger rd20 4
+> effect clear rd20
+> effect give rd20 minecraft:poison 120 0
+> effect give rd20 minecraft:slowness 120 0
+> effect give rd20 minecraft:weakness 120 0
+> item replace entity rd20 weapon.mainhand with rusticdelight:coffee
+> zp eat rd20
+> effect clear rd20
+> effect give rd20 minecraft:poison 120 0
+> effect give rd20 minecraft:slowness 120 0
+> effect give rd20 minecraft:weakness 120 0
+> item replace entity rd20 weapon.mainhand with rusticdelight:dark_coffee
+> zp eat rd20
+> effect clear rd20
+> effect give rd20 minecraft:poison 120 0
+> effect give rd20 minecraft:slowness 120 0
+> effect give rd20 minecraft:weakness 120 0
+> item replace entity rd20 weapon.mainhand with rusticdelight:milk_coffee
+> zp eat rd20
+> effect clear rd20
+> effect give rd20 minecraft:poison 120 0
+> effect give rd20 minecraft:slowness 120 0
+> effect give rd20 minecraft:weakness 120 0
+> item replace entity rd20 weapon.mainhand with rusticdelight:honey_coffee
+> zp eat rd20
+> effect clear rd20
+> effect give rd20 minecraft:poison 120 0
+> effect give rd20 minecraft:slowness 120 0
+> effect give rd20 minecraft:weakness 120 0
+> item replace entity rd20 weapon.mainhand with rusticdelight:chocolate_coffee
+> zp eat rd20
+> effect clear rd20
+> effect give rd20 minecraft:poison 120 0
+> effect give rd20 minecraft:slowness 120 0
+> effect give rd20 minecraft:weakness 120 0
+> item replace entity rd20 weapon.mainhand with rusticdelight:syrup_coffee
+> zp eat rd20
+> effect clear rd20
+> effect give rd20 minecraft:poison 120 0
+> effect give rd20 minecraft:slowness 120 0
+> effect give rd20 minecraft:weakness 120 0
+> item replace entity rd20 weapon.mainhand with rusticdelight:pumpkin_coffee
+> zp eat rd20
+> effect clear rd20
+> effect give rd20 minecraft:poison 120 0
+> effect give rd20 minecraft:slowness 120 0
+> effect give rd20 minecraft:weakness 120 0
+> item replace entity rd20 weapon.mainhand with rusticdelight:cherry_blossom_coffee
+> zp eat rd20
+count \[zp\] eat rd20 1 rusticdelight:[a-z_]*coffee: == 8
+expect food rusticdelight:coffee: .*farmersrespite:caffeinated
+expect food rusticdelight:dark_coffee: .*farmersrespite:caffeinated
+look each "[zp] eat rd20" line: plain and Dark keep poison, slowness, weakness (3 left) and add Caffeinated; Milk, Honey, Chocolate, Syrup, Pumpkin, Cherry Blossom have exactly 2 of the 3 left; Syrup, Pumpkin, Cherry Blossom also add Speed / Haste (expected today, creativedelight/members #11); every Rustic coffee recipe is in the rdetail list (pot coffees from 3 raw or roasted beans, grid ones from Coffee and Milk Coffee)
+
+## SQ-RD-21 | coffee foods and golden beans
+> zq rdetail coffee_cookie
+> zq rdetail coffee_cheesecake
+> zq rdetail coffee_pancakes
+> zq rdetail golden_coffee_beans
+> zq rdetail coffee_braised_beef
+> zq rdetail roasted_coffee_beans_bag
+> zq makes minecraft:yellow_dye
+> zq makes minecraft:brown_dye
+> zq food rusticdelight:golden_coffee_beans
+expect food rusticdelight:golden_coffee_beans: nutrition \d+, modifier 1\.2
+expect roasted_coffee_beans_bag
+look recipes present for each (bag both ways); values per rustic_delight.md 5.3
+
+## SQ-RD-22 | fried foods read #rusticdelight:cooking_oil; Calamari Soup
+> zq rdetail fried_dough
+> zq rdetail fried_dumplings
+> zq rdetail fried_fish
+> zq rdetail calamari_soup
+> zq itemtag rusticdelight:cooking_oil
+> zq makes rusticdelight:cooking_oil
+> zq food rusticdelight:calamari_soup
+expect food rusticdelight:calamari_soup: .*farmersdelight:nourishment amp 0 3600t
+expect itemtag rusticdelight:cooking_oil \([1-9]\d*\)
+reject cooking_oil \{farmersdelight:cooking\}
+look the oil tag holds the pack oil; fried recipes list the oil tag items; soup = calamari tag, potato, onion, milk; no Rustic oil pot recipe in the makes list
+
+## SQ-RD-23 | cheesecakes: slices with a knife, slices back to whole; cherry recipes take both leaves
+> setblock {H1+2} {H2} {H3+56} rusticdelight:syrup_cheesecake
+> setblock {H1+4} {H2} {H3+56} rusticdelight:cherry_blossom_cheesecake
+> setblock {H1+6} {H2} {H3+56} rusticdelight:coffee_cheesecake
+> pbot spawn rd23 {H1+4} {H2} {H3+54} minecraft:overworld survival
+sleep 2
+> item replace entity rd23 weapon.mainhand with farmersdelight:iron_knife 1
+> kill @e[type=minecraft:item]
+repeat 5
+> pbot use rd23 {H1+2} {H2} {H3+56} up
+> pbot use rd23 {H1+4} {H2} {H3+56} up
+end
+repeat 5
+> pbot use rd23 {H1+6} {H2} {H3+56} up
+end
+> zcount {H1} {H2-1} {H3+54} {H1+8} {H2+2} {H3+58}
+waitlog \[zcount\] entities 30
+> zp inv rd23
+> zq rdetail cheesecake
+> zq rdetail cherry_blossom
+expect (syrup|coffee|cherry_blossom)_cheesecake_slice
+look the three plates are gone (zcount blocks: no cheesecake left) and the slices are in the inventory or on the ground; a slices -> whole recipe for each; cherry blossom coffee, pancakes, cookie and cheesecake list vinery:cherry_leaves / quark:pink_blossom_leaves (via the tag)
+
+## SQ-RD-24 | /place feature: giant pepper patch and the wild patches
+# 1.19.2's /place feature takes a CONFIGURED feature id: the queue's *_placed ids are placed features (stale text)
+> fill {H1} {H2} {H3+60} {H1+30} {H2+6} {H3+90} minecraft:air
+> fill {H1} {H2-1} {H3+60} {H1+30} {H2-1} {H3+90} minecraft:grass_block
+> fill {H1} {H2-1} {H3+60} {H1+4} {H2-1} {H3+90} minecraft:dirt
+> fill {H1+26} {H2-1} {H3+60} {H1+30} {H2-1} {H3+90} minecraft:sand
+> place feature rusticdelight:bell_pepper_block_patch {H1+15} {H2} {H3+64}
+> place feature rusticdelight:bell_pepper_block_patch {H1+15} {H2} {H3+70}
+> place feature rusticdelight:bell_pepper_block_patch {H1+15} {H2} {H3+76}
+> place feature rusticdelight:bell_pepper_block_patch {H1+15} {H2} {H3+82}
+> place feature rusticdelight:bell_pepper_block_patch {H1+15} {H2} {H3+88}
+> zcount {H1} {H2} {H3+60} {H1+30} {H2+2} {H3+90}
+waitlog \[zcount\] entities 60
+reject \[zcount\] blocks .*rusticdelight:bell_pepper_(white|pink|orange|blue|purple|black)_block
+expect \[zcount\] blocks .*rusticdelight:bell_pepper_(red|yellow|green)_block
+> fill {H1} {H2} {H3+60} {H1+30} {H2+6} {H3+90} minecraft:air
+> place feature rusticdelight:wild_bell_peppers {H1+15} {H2} {H3+66}
+> place feature rusticdelight:wild_coffee {H1+15} {H2} {H3+75}
+> place feature rusticdelight:wild_cotton {H1+15} {H2} {H3+84}
+> zcount {H1} {H2} {H3+60} {H1+30} {H2+2} {H3+90}
+waitlog \[zcount\] entities 60
+expect \[zcount\] blocks .*rusticdelight:wild_bell_peppers=
+expect \[zcount\] blocks .*rusticdelight:wild_coffee=
+expect \[zcount\] blocks .*rusticdelight:wild_cotton=
+reject \[zcount\] blocks .*rusticdelight:wild_(pale|dark)_bell_peppers
+reject Failed to place feature|Unknown|ERROR
+look giant blocks sit on grass only (x 5..25), none on the dirt strip (x 0..4) or the sand strip (x 26..30): judge from a second look with /zq count if the first line is ambiguous
+
+## SQ-RD-33 | roasted stuffed peppers: 9 pot recipes; the pot cooks red and blue
+> zq rdetail stuffed_bell_pepper_
+count creativedelight:farmersdelightcooking/stuffed_bell_pepper_[a-z]+_from_roasted \{ == 9
+> setblock {H1+2} {H2} {H3+94} minecraft:campfire[lit=true]
+> setblock {H1+4} {H2} {H3+94} minecraft:campfire[lit=true]
+> setblock {H1+2} {H2+1} {H3+94} farmersdelight:cooking_pot{Inventory:{Size:9,Items:[{Slot:0b,id:"rusticdelight:roasted_bell_pepper_red",Count:1b},{Slot:1b,id:"farmersdelight:rice",Count:1b},{Slot:2b,id:"minecraft:beef",Count:1b}]}}
+> setblock {H1+4} {H2+1} {H3+94} farmersdelight:cooking_pot{Inventory:{Size:9,Items:[{Slot:0b,id:"rusticdelight:roasted_bell_pepper_blue",Count:1b},{Slot:1b,id:"farmersdelight:rice",Count:1b},{Slot:2b,id:"minecraft:carrot",Count:1b}]}}
+sleep 25
+> data get block {H1+2} {H2+1} {H3+94} Inventory
+> data get block {H1+4} {H2+1} {H3+94} Inventory
+expect rusticdelight:stuffed_bell_pepper_red
+expect rusticdelight:stuffed_bell_pepper_blue
+look inputs of the 9 recipes: roasted pepper + #forge:crops/rice + #rusticdelight:stuffed_bell_pepper_ingredients, no container; upstream's raw pepper recipes still listed
+
+## SQ-RSP-02 | Kettle recipes: 48 farmersrespite:brewing, CD ids, no needwater
+> zq rdetail farmersrespitebrewing/
+> zq rdetail farmersrespite:brewing/
+> zq rdetail gamblers_tea
+expect rdetail matching farmersrespitebrewing/: (4[0-9])
+expect rdetail matching farmersrespite:brewing/: 0
+look the count is 48 (rdetail prints at most 40 lines: the "rdetail matching" line has the full count only up to 40, so check /zq recipes farmersrespitebrewing/ below); all creativedelight:farmersrespitebrewing/ except gambler's tea (creativeengineering:); needwater is checked by the brews working in SQ-RSP-05/06/15
+> zq recipes farmersrespitebrewing/
+expect recipes matching farmersrespitebrewing/: [4-9]\d
+
+## SQ-RSP-03 | Kettle: water bucket to level 4, tea bottle refused
+> setblock {H1+2} {H2} {H3+106} minecraft:campfire[lit=true]
+> setblock {H1+2} {H2+1} {H3+106} farmersrespite:kettle
+> pbot spawn rsp3 {H1+2} {H2+1} {H3+104} minecraft:overworld survival
+sleep 2
+> item replace entity rsp3 weapon.mainhand with minecraft:water_bucket 1
+> pbot use rsp3 {H1+2} {H2+1} {H3+106} north
+> execute if block {H1+2} {H2+1} {H3+106} farmersrespite:kettle[water_level=4] run say RSP03 water level 4
+> zp inv rsp3
+expect RSP03 water level 4
+expect \[zp\] inv rsp3: 0:1 minecraft:bucket
+> item replace entity rsp3 weapon.mainhand with farmersrespite:black_tea 1
+> pbot use rsp3 {H1+2} {H2+1} {H3+106} north
+> execute if block {H1+2} {H2+1} {H3+106} farmersrespite:kettle[water_level=4] run say RSP03 still 4 after tea
+> zp inv rsp3
+expect RSP03 still 4 after tea
+expect \[zp\] inv rsp3: 0:1 farmersrespite:black_tea
+look the tea use result line (use SUCCESS/CONSUME = the GUI opened; the bottle stays)
+
+## SQ-RSP-04 | empty with 4 bottles; pour 2 Black Tea; water then refused
+> pbot spawn rsp4 {H1+2} {H2+1} {H3+104} minecraft:overworld survival
+sleep 2
+> item replace entity rsp4 weapon.mainhand with minecraft:glass_bottle 4
+repeat 4
+> pbot use rsp4 {H1+2} {H2+1} {H3+106} north
+end
+> execute if block {H1+2} {H2+1} {H3+106} farmersrespite:kettle[water_level=0] run say RSP04 empty
+> zp inv rsp4
+expect RSP04 empty
+expect \[zp\] inv rsp4: .*4 minecraft:potion|1 minecraft:potion.*1 minecraft:potion.*1 minecraft:potion.*1 minecraft:potion
+> clear rsp4
+> item replace entity rsp4 weapon.mainhand with farmersrespite:black_tea 2
+repeat 2
+> pbot use rsp4 {H1+2} {H2+1} {H3+106} north
+end
+> execute if block {H1+2} {H2+1} {H3+106} farmersrespite:kettle[water_level=2] run say RSP04 tea level 2
+> data get block {H1+2} {H2+1} {H3+106}
+expect RSP04 tea level 2
+expect CETankFluid: \{.*create_central_kitchen:black_tea
+> item replace entity rsp4 weapon.mainhand with minecraft:potion{Potion:"minecraft:water"} 1
+> pbot use rsp4 {H1+2} {H2+1} {H3+106} north
+> execute if block {H1+2} {H2+1} {H3+106} farmersrespite:kettle[water_level=2] run say RSP04 water refused
+expect RSP04 water refused
+
+## SQ-RSP-05 | 2 black tea + honey + bottle -> Strong Black Tea
+> item replace block {H1+2} {H2+1} {H3+106} container.0 with minecraft:honey_bottle 1
+> item replace block {H1+2} {H2+1} {H3+106} container.3 with minecraft:glass_bottle 1
+sleep 12
+> data get block {H1+2} {H2+1} {H3+106}
+> execute if block {H1+2} {H2+1} {H3+106} farmersrespite:kettle[water_level=1] run say RSP05 level 1
+expect farmersrespite:strong_black_tea
+expect RSP05 level 1
+look honey's glass bottle sits in a leftover slot (block data), not thrown out
+
+## SQ-RSP-06 | water + 2 black tea leaves -> Black Tea
+> setblock {H1+6} {H2} {H3+106} minecraft:campfire[lit=true]
+> setblock {H1+6} {H2+1} {H3+106} farmersrespite:kettle[water_level=4]
+> item replace block {H1+6} {H2+1} {H3+106} container.0 with farmersrespite:black_tea_leaves 2
+> item replace block {H1+6} {H2+1} {H3+106} container.3 with minecraft:glass_bottle 1
+sleep 15
+> data get block {H1+6} {H2+1} {H3+106}
+> execute if block {H1+6} {H2+1} {H3+106} farmersrespite:kettle[water_level=3] run say RSP06 level 3
+expect farmersrespite:black_tea
+expect RSP06 level 3
+
+## SQ-RSP-15 | BrewTimeTotal 200; no tea at 8 s, one by 12 s
+> setblock {H1+10} {H2} {H3+106} minecraft:campfire[lit=true]
+> setblock {H1+10} {H2+1} {H3+106} farmersrespite:kettle[water_level=4]
+> item replace block {H1+10} {H2+1} {H3+106} container.3 with minecraft:glass_bottle 1
+> item replace block {H1+10} {H2+1} {H3+106} container.0 with farmersrespite:black_tea_leaves 2
+sleep 1
+> data get block {H1+10} {H2+1} {H3+106} BrewTimeTotal
+expect has the following block data: 200
+sleep 6
+> execute if block {H1+10} {H2+1} {H3+106} farmersrespite:kettle[water_level=4] run say RSP15 not yet at 8 s
+expect RSP15 not yet at 8 s
+sleep 5
+> data get block {H1+10} {H2+1} {H3+106} Inventory
+expect farmersrespite:black_tea"
+
+## SQ-RSP-07 | bottles in an ingredient slot move to the leftover slots
+> setblock {H1+14} {H2} {H3+106} minecraft:campfire[lit=true]
+> setblock {H1+14} {H2+1} {H3+106} farmersrespite:kettle[water_level=4]
+> item replace block {H1+14} {H2+1} {H3+106} container.0 with minecraft:glass_bottle 3
+sleep 2
+> data get block {H1+14} {H2+1} {H3+106}
+reject Slot: 0b, id: "minecraft:glass_bottle"
+expect minecraft:glass_bottle
+look the 3 bottles are in the buffer / leftover slots, the plating slot (3) is empty
+
+## SQ-RSP-10 | dispenser: water bucket on a tea kettle stays; on an empty kettle fills to 4
+> setblock {H1+2} {H2} {H3+112} minecraft:campfire[lit=true]
+> setblock {H1+2} {H2+1} {H3+112} farmersrespite:kettle
+> setblock {H1+6} {H2} {H3+112} minecraft:campfire[lit=true]
+> setblock {H1+6} {H2+1} {H3+112} farmersrespite:kettle
+# tea in the first: pour 1 Black Tea by bot
+> pbot spawn rsp10 {H1+2} {H2+1} {H3+110} minecraft:overworld survival
+sleep 2
+> item replace entity rsp10 weapon.mainhand with farmersrespite:black_tea 1
+> pbot use rsp10 {H1+2} {H2+1} {H3+112} north
+> setblock {H1+2} {H2+1} {H3+113} minecraft:dispenser[facing=north]{Items:[{Slot:0b,id:"minecraft:water_bucket",Count:1b}]}
+> setblock {H1+6} {H2+1} {H3+113} minecraft:dispenser[facing=north]{Items:[{Slot:0b,id:"minecraft:water_bucket",Count:1b}]}
+> setblock {H1+2} {H2+1} {H3+114} minecraft:redstone_block
+> setblock {H1+6} {H2+1} {H3+114} minecraft:redstone_block
+sleep 2
+> data get block {H1+2} {H2+1} {H3+113} Items
+> data get block {H1+6} {H2+1} {H3+113} Items
+> execute if block {H1+6} {H2+1} {H3+112} farmersrespite:kettle[water_level=4] run say RSP10 empty kettle filled
+> execute if block {H1+2} {H2+1} {H3+112} farmersrespite:kettle[water_level=1] run say RSP10 tea kettle unchanged
+expect RSP10 empty kettle filled
+expect RSP10 tea kettle unchanged
+expect \[\{Slot: 0b, id: "minecraft:water_bucket", Count: 1b\}\]
+expect \[\{Slot: 0b, id: "minecraft:bucket", Count: 1b\}\]
+
+## SQ-RSP-11 | break a Kettle with 3 water, place again: level 3
+> setblock {H1+10} {H2} {H3+112} minecraft:campfire[lit=true]
+> setblock {H1+10} {H2+1} {H3+112} farmersrespite:kettle[water_level=3]
+> kill @e[type=minecraft:item]
+> setblock {H1+10} {H2+1} {H3+112} minecraft:air destroy
+sleep 1
+> data get entity @e[type=minecraft:item,limit=1,sort=nearest,x={H1+10},y={H2+1},z={H3+112}] Item
+> pbot spawn rsp11 {H1+10} {H2+1} {H3+110} minecraft:overworld survival
+sleep 2
+> clear rsp11
+> tp @e[type=minecraft:item,x={H1+10},y={H2+1},z={H3+112},distance=..3] rsp11
+sleep 2
+> zp inv rsp11
+> pbot use rsp11 {H1+10} {H2} {H3+112} up
+> execute if block {H1+10} {H2+1} {H3+112} farmersrespite:kettle[water_level=3] run say RSP11 placed at 3
+expect farmersrespite:kettle
+expect RSP11 placed at 3
+look the dropped Kettle item NBT carries the tank (BlockEntityTag / CETank*); if the pickup did not land in slot 0, the bot's inv line shows where it is (tooltip half is CQ-RSP-01)
+
+## SQ-RSP-12 | flower pot + Wild Tea Bush; break drops pot + bush
+> setblock {H1+14} {H2} {H3+112} minecraft:flower_pot
+> pbot spawn rsp12 {H1+14} {H2} {H3+110} minecraft:overworld survival
+sleep 2
+> item replace entity rsp12 weapon.mainhand with farmersrespite:wild_tea_bush 1
+> pbot use rsp12 {H1+14} {H2} {H3+112} up
+> data get block {H1+14} {H2} {H3+112}
+> zcount {H1+14} {H2} {H3+112} {H1+14} {H2} {H3+112}
+waitlog \[zcount\] entities 30
+expect \[zcount\] blocks [a-z_]+:potted_[a-z_]*tea[a-z_]*=1
+> kill @e[type=minecraft:item]
+> setblock {H1+14} {H2} {H3+112} minecraft:air destroy
+> zcount {H1+13} {H2-1} {H3+111} {H1+15} {H2+2} {H3+113}
+waitlog \[zcount\] entities 30
+expect item:minecraft:flower_pot
+expect item:farmersrespite:wild_tea_bush
+bootreject RespitePottedTeaBush.*(WARN|could not|failed)
+
+## SQ-RSP-13 | Coffee Cake slice and Rose Hip Pie slice effects
+> zq food farmersrespite:coffee_cake_slice
+> zq food farmersrespite:rose_hip_pie_slice
+expect food farmersrespite:coffee_cake_slice: nutrition \d+, modifier [\d.]+, effects \[farmersrespite:caffeinated amp 0 600t x1(\.0)?\]
+expect food farmersrespite:rose_hip_pie_slice: nutrition \d+, modifier [\d.]+, effects \[minecraft:regeneration amp 0 400t x1(\.0)?\]
+
+## SQ-CN-01 | corncob, corn popsicle, cob pipe exist; pipe stacks to 1
+> zq item creativeengineering:corncob
+> zq item creativeengineering:corn_popsicle
+> zq item creativeengineering:cob_pipe
+expect item creativeengineering:corncob: class
+expect item creativeengineering:corn_popsicle: class
+expect item creativeengineering:cob_pipe: class .*max stack 1$
+
+## SQ-CN-02 | corn recipes and the 0.1 corncob byproducts
+> zq rdetail corncob
+> zq rdetail corn_popsicle
+> zq rdetail cob_pipe
+> zq rdetail classic_corn_dog_from_corn_dog
+> zq rdetail corn_cornmeal
+expect creativedelight:farmersdelightcutting/corncob_kernels
+expect creativedelight:shaped/corn_popsicle
+expect creativedelight:shapeless/cob_pipe
+expect creativedelight:shapeless/classic_corn_dog_from_corn_dog
+expect createcrushing/(wild_)?corn_cornmeal
+expect createmilling/(wild_)?corn_cornmeal
+look cutting gives 6 kernels; popsicle uses the ice cubes tag; Create crushing / milling and the IE crusher list a 0.1 corncob (second results are not shown by rdetail: check JEI or the recipe JSON if needed); the mortar corn_cornmeal gives 3 cornmeal only
+
+## SQ-CN-03 | corncob compost chance 0.3
+> dumpcompost
+sleep 5
+shell python3 -I -c "import json;d=json.load(open('kubejs/exported/compost/compost.json'));print('corncob', d['now'].get('creativeengineering:corncob'))"
+shell python3 -I -c "import json,sys;d=json.load(open('kubejs/exported/compost/compost.json'));sys.exit(0 if (d['now'].get('creativeengineering:corncob') or {}).get('chance')==0.3 else 1)"
+
+## SQ-CN-04 | knife on mature corn: about 10 cobs in 40; hand and age 3 none
+> setblock {H1+2} {H2-1} {H3+134} minecraft:farmland[moisture=7]
+> setblock {H1+2} {H2} {H3+134} corn_delight:corn_crop[age=7,upper=false]
+> setblock {H1+2} {H2+1} {H3+134} corn_delight:corn_crop[age=7,upper=true]
+> setblock {H1+4} {H2-1} {H3+134} minecraft:farmland[moisture=7]
+> setblock {H1+4} {H2} {H3+134} corn_delight:corn_crop[age=3,upper=false]
+> kill @e[type=minecraft:item]
+repeat 40
+> loot spawn {H1+60} {H2} {H3} mine {H1+2} {H2} {H3+134} farmersdelight:iron_knife
+end
+> zcount {H1+59} {H2-1} {H3-1} {H1+61} {H2+2} {H3+1}
+waitlog \[zcount\] entities 30
+expect item:creativeengineering:corncob
+> kill @e[type=minecraft:item]
+repeat 20
+> loot spawn {H1+60} {H2} {H3} mine {H1+2} {H2} {H3+134}
+end
+repeat 20
+> loot spawn {H1+60} {H2} {H3} mine {H1+4} {H2} {H3+134} farmersdelight:iron_knife
+end
+> zcount {H1+59} {H2-1} {H3-1} {H1+61} {H2+2} {H3+1}
+waitlog \[zcount\] entities 30
+look first zcount: about 10 corncobs from the 40 knife rolls (merged stacks: add the counts); second zcount (hand on age 7, knife on age 3) has no corncob
+
+## SQ-CN-05 | cob pipe in the curios tags
+> zq tagsof creativeengineering:cob_pipe
+expect item tags of creativeengineering:cob_pipe: .*curios:head
+reject item tags of creativeengineering:cob_pipe: .*curios:mouth
+expect item tags of creativeengineering:cob_pipe: .*curios:face
+
+## SQ-CN-07 | corn trades: farmer L1 and L2, wandering trader
+> ztrades farmer 1 3
+> ztrades farmer 2 3
+> ztrades wandering 0 5
+expect \[ztrades\] farmer L1 .*24 corn_delight:corn -> 1 minecraft:emerald
+expect \[ztrades\] farmer L2 .*8 minecraft:emerald -> 8 corn_delight:cornbread
+expect \[ztrades\] farmer L2 .*8 minecraft:emerald -> 8 corn_delight:tortilla
+look wanderer COMMON has corn, RARE the popcorn box (a few of the 5 rolls show them)
+
+## SQ-RD-11 | farmer and fisherman novice trades
+> ztrades farmer 1 5
+> ztrades fisherman 1 5
+expect \[ztrades\] farmer L1 .*rusticdelight:cotton_boll
+expect \[ztrades\] farmer L1 .*rusticdelight:bell_pepper_red
+expect \[ztrades\] farmer L1 .*rusticdelight:coffee_beans
+expect \[ztrades\] fisherman L1 .*rusticdelight:calamari
+look farmer buys cotton, red peppers, coffee beans (some of the 5 rolls); fisherman swaps calamari
+
+## SQ-RD-08 | seeds in ancient city and sky village loot; squid calamari; trader seeds
+> kill @e[type=minecraft:item]
+repeat 20
+> loot spawn {H1+60} {H2} {H3} loot minecraft:chests/ancient_city
+end
+> zcount {H1+59} {H2-1} {H3-1} {H1+61} {H2+2} {H3+1}
+waitlog \[zcount\] entities 30
+expect item:rusticdelight:dark_bell_pepper_seeds
+> kill @e[type=minecraft:item]
+repeat 20
+> loot spawn {H1+60} {H2} {H3} loot skyvillages:chests/sky_village_normal_house
+end
+> zcount {H1+59} {H2-1} {H3-1} {H1+61} {H2+2} {H3+1}
+waitlog \[zcount\] entities 30
+expect item:rusticdelight:pale_bell_pepper_seeds
+> kill @e[type=minecraft:item]
+repeat 10
+> loot spawn {H1+60} {H2} {H3} kill minecraft:squid
+end
+> zcount {H1+59} {H2-1} {H3-1} {H1+61} {H2+2} {H3+1}
+waitlog \[zcount\] entities 30
+expect item:rusticdelight:calamari
+> ztrades wandering 0 10
+expect \[ztrades\] wandering .*5 minecraft:emerald -> \d+ rusticdelight:(pale|dark)_bell_pepper_seeds
+look squid: 1-2 Calamari per kill (10 kills); the (pale|dark) seed trade appears in some of the 10 traders, 3 uses (uses are not printed)
+
+## SQ-RD-28 | no Rustic seeds or bean swap in jungle temple chests
+> kill @e[type=minecraft:item]
+repeat 40
+> loot spawn {H1+60} {H2} {H3} loot minecraft:chests/jungle_temple
+end
+> zcount {H1+59} {H2-1} {H3-1} {H1+61} {H2+2} {H3+1}
+waitlog \[zcount\] entities 30
+reject item:rusticdelight:
+look 40 jungle temple rolls with no rusticdelight item (the in-world half, ancient cities and sky villages found by /locate, is covered by the same tables in SQ-RD-08)
+
+## SQ-CAT-01 | Cozy's Improved Cats mixins apply
+bootexpect Done \(
+bootreject (?i)(CatCozyCommandMixin|DiFeatherEntityMixin|CozyHomeGoalFeatherMixin|CozyMessageGenderMixin|FishingHookFeatherPullMixin).*(error|could not|failsoft|failed)
+bootreject (?i)mixin apply failed.*creativecompat
+bootreject Error occurred while handling event
+shell grep -c -E "CatCozyCommandMixin|DiFeatherEntityMixin|CozyHomeGoalFeatherMixin|CozyMessageGenderMixin|FishingHookFeatherPullMixin" logs/debug.log; true
+look "Error occurred while handling event" is rejected for the whole boot: if it FAILs on a line from another feature, judge it as not this row's
+
+## SQ-CAT-02 | item merges up by 4; no ancient smelting; Training String recipe
+bootexpect \[itemMerges\] creativedelight: \d+ merges
+shell grep -oE "\[itemMerges\] creativedelight: [0-9]+ merges, [0-9]+ recipes swapped" logs/latest.log | tail -1
+> zq recipes cozys-improved-cats:
+> zq rdetail training_string
+reject cozys-improved-cats:ancient_cooked_[a-z_]* ->
+expect training_string \{.*minecraft:cod.*minecraft:salmon.*minecraft:string|training_string \{.*minecraft:string.*minecraft:cod
+look the merge count in rows/SQ-CAT-02.shell.txt is 4 above the last run that had Cozy's (r1101 server log)
+
+## SQ-CAT-03 | no Ancient Cod / Salmon fisherman trades
+> ztrades fisherman 3 3
+> ztrades fisherman 5 3
+reject \[ztrades\] fisherman .*cozys-improved-cats:ancient_
+
+## SQ-CAT-04 | ancient cod turns into cod; no ancient fish from cod kills
+> pbot spawn cat4 {H1+20} {H2} {H3+150} minecraft:overworld survival
+sleep 2
+> give cat4 cozys-improved-cats:ancient_cod 3
+sleep 3
+> zp inv cat4
+expect \[zp\] inv cat4: .*3 minecraft:cod
+reject \[zp\] inv cat4: .*ancient_cod
+> kill @e[type=minecraft:item]
+repeat 20
+> loot spawn {H1+60} {H2} {H3} kill minecraft:cod
+end
+> zcount {H1+59} {H2-1} {H3-1} {H1+61} {H2+2} {H3+1}
+waitlog \[zcount\] entities 30
+reject item:cozys-improved-cats:ancient
+
+## SQ-CAT-05 | Cozy's config validates
+bootreject (?i)cozys?.?improved.?cats.*(invalid|incorrect|correct(ing|ed)|validation)
+shell grep -iE "cozys[-_]improved[-_]cats" logs/latest.log | grep -iE "config|toml" | head -5; true
+look rows/SQ-CAT-05.shell.txt: no line saying a value was corrected or refused
+
+## SQ-CDQ-01 | remainder buffer (server half): pot keeps a milk bottle's glass bottle; kettle keeps honey's
+# pot: glow berry custard (glow berries, milk, egg, sugar) with a milk bottle as the milk, no bowl / bottle as container
+> zq rdetail glow_berry_custard
+> setblock {H1+2} {H2} {H3+138} minecraft:campfire[lit=true]
+> setblock {H1+2} {H2+1} {H3+138} farmersdelight:cooking_pot{Inventory:{Size:9,Items:[{Slot:0b,id:"minecraft:glow_berries",Count:1b},{Slot:1b,id:"farmersdelight:milk_bottle",Count:1b},{Slot:2b,id:"minecraft:egg",Count:1b},{Slot:3b,id:"minecraft:sugar",Count:1b}]}}
+> kill @e[type=minecraft:item]
+sleep 25
+> data get block {H1+2} {H2+1} {H3+138}
+> zcount {H1} {H2-1} {H3+136} {H1+4} {H2+3} {H3+140}
+waitlog \[zcount\] entities 30
+expect farmersdelight:glow_berry_custard
+reject item:minecraft:glass_bottle
+expect minecraft:glass_bottle
+look the glass bottle is in the pot's block data (container slot 7 or the buffer), never an item entity; the kettle half is SQ-RSP-05 (honey bottle kept); RB-01 to RB-11 in full (stall, hopper pulls, bowls, buckets) stay with the client run
+
+## SQ-CDF-01 | moved startup items exist with their old ids
+> zq item creativeengineering:baking_sheet
+> zq item creativeengineering:cake_pan
+> zq item creativeengineering:pie_tin
+> zq item creativeengineering:muffin_tin
+> zq item creativeengineering:frosting
+> zq item creativeengineering:cookie_dough
+> zq item creativeengineering:powdered_sugar
+> zq item creativeengineering:cornmeal
+> zq item creativeengineering:cookie_dough_block
+> zq item creativeengineering:cucumber_dough_block
+> zq item creativeengineering:gingerdough_block
+> zq item creativeengineering:oat_dough_block
+> zq item creativeengineering:sourdough_block
+> zq item creativeengineering:sweet_potato_dough_block
+> zq item creativeengineering:carrot_juice_bucket
+> zq item creativeengineering:canned_corn
+count \[zq\] item creativeengineering:[a-z_]+: class >= 15
+bootexpect \[cans\] registered \d+ generated cans
+look carrot_juice_bucket is the guessed id of one of the 16 pack fluids' buckets: a missing one only fails if the fluid list (/dumpfluids in SQ-INV-17b) lacks it too
+
+## SQ-CDF-02 | recipe ids moved to creativedelight:, no creativeengineering twin
+> zq recipes creativedelight:
+> zq recipes creativeengineering:
+shell grep -oE "\[zq\] recipes matching creative(delight|engineering):: [0-9]+" logs/latest.log | tail -2
+look counts in rows/SQ-CDF-02.shell.txt against the pre-move dump (development/creativeDelight/moved_code_backup/2026-10-25b/); spot-check that a moved row (e.g. a cake pan or mortar recipe) is under creativedelight: only
+
+## SQ-CDF-04 | moved tags: food types, sugar, cooked meat, soup veg, bakeware; removed items in none
+> zq itemtag forge:sugar
+> zq itemtag forge:cooked_meat
+> zq itemtag creativeengineering:soup_veggie_cooked
+> zq tagsof creativeengineering:cake_pan
+> zq tagsof creativeengineering:canned_corn
+reject itemtag [^ ]+ \(\d+\): .*(delightful:venison|chocolate_coin)
+expect itemtag forge:sugar \([1-9]
+expect itemtag forge:cooked_meat \([1-9]
+expect itemtag creativeengineering:soup_veggie_cooked \([1-9]
+look member counts against kubejs/exported/tags/item_tags.json (the pre-move dump); bakeware and can-serving tags appear in the tagsof lines
+
+## SQ-CDF-05 | compost table: 744 values, 10 categories, 5 tiers
+> dumpcompost
+sleep 5
+shell python3 -I -c "import json,collections;d=json.load(open('kubejs/exported/compost/compost.json'));print(collections.Counter(v.get('source') for v in d['now'].values()), len(d['categories']), len(d['tiers']))"
+shell python3 -I -c "import json,sys;d=json.load(open('kubejs/exported/compost/compost.json'));n=sum(1 for v in d['now'].values() if v.get('source')=='value');sys.exit(0 if n>=744 and len(d['categories'])==11 and len(d['tiers'])==5 else 1)"
+look value count against the instance dump (744 on 2026-10-25; newer members may add rows)
+
+## SQ-CDF-06 | oven, mortar, seasoning, milk jar recipes still there
+> zq rdetail cake_pan
+> zq rdetail mortar/
+> zq rdetail popcorn
+> zq rdetail milk_jar
+expect mortar/
+look an oven cake recipe asks for the cake pan; mortar catalog entries present; a seasoned popcorn recipe; the Cooking for Blockheads milk jar bottle recipe; the live uses (bake, grind, fill) are the client run's
+
+## SQ-CDF-08 | compost values check and the frozen cdtest mirror
+shell python3 -I $INST/tools/gen_compost_values.py --dump kubejs/exported/compost/compost.json --check
+shell python3 -I $INST/tools/creative_delight_test/gen_cdtest_mirror.py --check; true
+look compost check exits 0 (shell step PASS); the mirror's stale report is expected (frozen, README)
+
+## SQ-FF-00 | (boot) family scripts load clean
+bootexpect Done \(
+bootreject Error occurred while handling event.*(fruitsdelight|hostiledelight|miners_delight|moredelight|abnormals_delight)/recipes\.js
+bootreject Display Delight dish .* not installed
+bootreject (?i)(missing model|loot).*creativeengineering:placed_
+kjsreject (?i)\[NCH\].*(warn|error)
+
+## SQ-FFB-00 | (boot) baked family scripts load clean
+bootreject Error occurred while handling event.*(baking|baked_goods|veggiesdelight/recipes|rusticdelight/recipes)\.js
+bootreject handPieBake is not a function
+kjsreject (?i)\[NCH\].*error
+
+## SQ-CN-06 | corn in villager wanted / food items
+bootexpect \[corn-delight\] corn is villager food \(\d+ wanted items, \d+ food items\)
+look the counts in the log line include corn (CornDelightCompat now lives in Creative Delight, compat/CornDelightCompat); Veggies items: compare the counts with the last run's line
+
+## SQ-INV-02 | item_dict tag check lines
+shell grep -iE "item_dict|TL-01" logs/latest.log logs/kubejs/startup.log logs/kubejs/server.log | head -20; true
+look every tag key reported missing = the check runs before tags load (move to ServerEvents.tags); only real gaps = close TODO tooling/dictionaries #1
+
+## SQ-INV-03 | [CE potions] added N
+bootexpect \[CE potions\] added \d+ item-agnostic potion mixes
+shell grep -oE "\[CE potions\] added [0-9]+ item-agnostic potion mixes" logs/latest.log logs/kubejs/startup.log | head -2; grep -c "removeByPotion" logs/latest.log; true
+look N against PO-27 / PO-28's recorded count (TODO potions/potions #5)
+
+## SQ-INV-04 | metal base event lines
+shell grep -c "metal base event" logs/latest.log logs/kubejs/server.log; grep -m4 "metal base event" logs/kubejs/server.log; true
+look the lines are the two "Hello! The metal base event has started!" console.log calls in metal_base_materials.js and misc_metal_crafts.js plus one "finished": noise (TODO recipes/metal #4)
+
+## SQ-INV-05 | block-state count against 2^20
+> zq states all
+expect \[zq\] block states \d+ of 1048576
+
+## SQ-INV-10 | Brewin' heat and freeze sources
+> zq blocktag brewinandchewin:heat_sources
+> zq blocktag brewinandchewin:freeze_sources
+expect blocktag brewinandchewin:heat_sources \([1-9]
+expect blocktag brewinandchewin:freeze_sources \([1-9]
+look heat sources hold fire, campfires, magma, lava, stoves; freeze sources ice, packed / blue ice, snow (AL-41)
+
+## SQ-INV-11 | recipe scans: pie crust, vanilla egg, polished iron bars, amethyst crushing
+> zq makes farmersdelight:pie_crust
+> zq uses minecraft:egg
+> zq uses createdeco:polished_iron_bars
+> zq rdetail amethyst
+look write the hit lists into the TODO rows: shapeless pie crust outputs (baking #24), recipes still taking minecraft:egg alone (food #6), polished iron bars users (metal #5), amethyst crushing per machine (engineering #2; IE recipes are not in the recipe manager list if they come from IE's own registry: grep NCH sources for IE)
+
+## SQ-INV-12 | tag scans: rose gold in gold tags; flowers vs bee tags
+> zq tagsof mca:rose_gold_ingot
+> zq itemtag forge:ingots/gold
+> zq itemtag minecraft:flowers
+> zq itemtag minecraft:small_flowers
+look rose gold absent from gold tags (metal #3); flowers list for the bee-breeding comparison (bees #1). Potted-plant coverage, BlockRunner tiers, bottled items without a jar fluid and crops without harvest rows need the offline tools on a full dump (SQ-INV-17b output): not judged here
+
+## SQ-INV-14 | gear upgrade recipes
+> zq rdetail smithing
+> zq rdetail sequenced_assembly
+look list the upgrade paths (smithing, sequenced assembly, crafting) and which go through SequencedAssemblyRecipeMixin (gear/tuning #4)
+
+## SQ-INV-17 | coins / PneumaticCraft in loot; the three books; librarian offers
+> ztrades librarian 1 5
+> ztrades librarian 2 5
+> ztrades librarian 3 5
+> ztrades librarian 4 5
+> ztrades librarian 5 5
+look offers: stockpile / recovery / cycle books are printed as minecraft:enchanted_book without the enchantment (count only); the table half is SQ-INV-17b (after /dumpall)
+
+## SQ-INV-17b | /dumpall: loot tables for the coin / PneumaticCraft / book scan
+> dumpall
+waitlog \[dumpall\] \d+/\d+ ok in 900
+> dumptags
+sleep 20
+> dumpplaceable
+sleep 10
+> dumppotions
+sleep 10
+> dumpworldjei
+sleep 20
+reject (?i)dump[a-z]* failed|Error occurred while handling event
+shell ls -la kubejs/exported | head -40
+shell grep -rlE "lightmanscurrency:coin|pneumaticcraft:" kubejs/exported/loot_tables | head -20; grep -rlE "stockpile|recovery|cycle" kubejs/exported/loot_tables | head -20; true
+look rows/SQ-INV-17b.shell.txt: tables holding coins or PneumaticCraft items (should be none, TODO loot/tables #7) and the tables that still hold the stockpile / recovery / cycle books (#10)
+
+## SQ-FF-02 | Display Delight placed links include the 9 creativeengineering:placed_* blocks (dump from SQ-INV-17b)
+shell grep -oE "\[dumpplaceable\] [0-9]+ candidates, [0-9]+ Display Delight links" logs/latest.log | tail -1
+shell python3 -I -c "import json,re,sys;a=json.load(open('kubejs/exported/food/placeable.json'))['displayDelight']['placed'];ids=sorted(set(re.findall(r'creativeengineering:placed_[a-z_]+',json.dumps(a))));print(len(ids),ids);sys.exit(len(ids)<9)"
+look the link count in rows/SQ-FF-02.shell.txt against the 2026-10-24 dump (+9 expected then; the CDJ5 run's count is the newer baseline), each placed_* block mapped to its food
+
+## SQ-CDQ-05 | compost [qol] on: Farmer's, Fungi, Veggies, Vintage rows have source value (off half: s2_Coff.qb SQ-CDQ-05b)
+> dumpcompost
+sleep 5
+shell python3 -I -c "import json,collections;n=json.load(open('kubejs/exported/compost/compost.json'))['now'];c=collections.Counter((k.split(':')[0],v.get('source')) for k,v in n.items() if k.split(':')[0] in ('farmersdelight','fungidelight','veggiesdelight','vintagedelight'));print(sorted(c.items()))"
+shell python3 -I -c "import json,sys;n=json.load(open('kubejs/exported/compost/compost.json'))['now'];v=[k for k,x in n.items() if k.split(':')[0] in ('farmersdelight','fungidelight','veggiesdelight','vintagedelight') and x.get('source')=='value'];print(len(v));sys.exit(len(v)<101)"
+shell cp kubejs/exported/compost/compost.json ../cdq05_on.json
+look per-namespace value counts in rows/SQ-CDQ-05.shell.txt (101 Farmer's, Fungi, Veggies and Vintage items with source value on 2026-10-25); s2_Coff.qb repeats the dump with [qol] compost = false and copies this file as ../cdq05_on.json for the diff
+
+## SQ-CDQ-06 | manualOnlyRoutes on: _manual_only routes present, the mods' grid ids absent (off half: SQ-CDQ-06b)
+> zq recipes _manual_only
+> zq recipes veggiesdelight:broccoli_salad
+> zq recipes vintagedelight:pb_j
+> zq recipes fungidelight:inky_cap_salad
+expect creativedelight:shapeless/[a-z_]*_manual_only
+expect recipes matching veggiesdelight:broccoli_salad: 0
+expect recipes matching vintagedelight:pb_j: 0
+expect recipes matching fungidelight:inky_cap_salad: 0
+
+## SQ-DF-03b | /kubejs errors after the boot
+> kubejs errors
+look the reply lists no error from delightful/recipes.js or tags.js
+

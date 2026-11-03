@@ -111,6 +111,8 @@ public class ModBlocks {
     public static final RegistryObject<Block> GREEN_GRAPE_JAM_JAR = BLOCKS.register("green_grape_jam_jar", () -> jar(ModItems.GREEN_GRAPE_JAM_JAR));
     public static final RegistryObject<Block> RED_GRAPE_JAM_JAR = BLOCKS.register("red_grape_jam_jar", () -> jar(ModItems.RED_GRAPE_JAM_JAR));
     public static final RegistryObject<Block> CHERRY_JAM_JAR = BLOCKS.register("cherry_jam_jar", () -> jar(ModItems.CHERRY_JAM_JAR));
+    public static final RegistryObject<Block> SALMONBERRY_JAM_JAR = BLOCKS.register("salmonberry_jam_jar", () -> jar(ModItems.SALMONBERRY_JAM_JAR));
+    public static final RegistryObject<Block> RASPBERRY_JAM_JAR = BLOCKS.register("raspberry_jam_jar", () -> jar(ModItems.RASPBERRY_JAM_JAR));
 
     public static final RegistryObject<Block> CHEESE_WHEEL = BLOCKS.register("cheese_wheel", () -> new PieBlock(Properties.copy(Blocks.CAKE), ModItems.CHEESE_SLICE));
 

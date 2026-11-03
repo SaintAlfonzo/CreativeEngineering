@@ -1,6 +1,6 @@
 # Creative Delight execution plan (2026-11-02)
 
-Status: G steps 1 to 3 BUILT 2026-11-02 (see section H); fix plan I built 2026-11-02 afternoon (I progress), rerun queued; steps 4 to 6 open. Only owner decisions already on record are listed as work; open questions are listed in
+Status: G steps 1 to 3 BUILT 2026-11-02 (see section H); fix plan I built 2026-11-02 afternoon (I progress), rerun queued; steps 4 to 6 open. **Deep scan 2026-11-02:** the installed CD jar (11-02 14:01) nests Veggies `-05`, Vintage `-13`, Fungi `-02`, Miner's `-05`, Display `-03` (later than the H and I progress lists); the 21:10 build (copper cup removal) is not installed. Rerun status (r1102b, judged): SQ-CDJ-12 (I8) and SQ-MDP-18 (I7) PASS, SQ-VTD8-02 (b) PASS; the other I reruns (SQ-CDJ-05 / SQ-DDP-01, SQ-MDP-13, -14, -16 / -09, SQ-LOOT-FD1, SQ-VTD8-01 rewrite) were not in the r1102b scope, and SQ-FGD-14 / SQ-FGDC sit in its postponed worldgen slice. Only owner decisions already on record are listed as work; open questions are listed in
 section F and not resolved here. Row ids refer to [todo/TODO.md](todo/TODO.md); background is
 [creative_delight.md](creative_delight.md) (sections 35 to 38). Every change that touches game data adds its live checks to
 [testing/scratch_queue.md](testing/scratch_queue.md) (no scratch boot until the owner says so) and a bullet to
@@ -164,7 +164,7 @@ only, never while the game runs. Player changelog bullet for each player-visible
 | I4 | `members #39` | Stop the Copper Pot cooking when the leftover slot is full | `CopperPotBlockEntity.canCook`: check `leftoversFit()` before returning true when the meal slot is empty, so `stallWhenFull` holds in both cases. File: `development/backportedMiners/.../copper_pot/CopperPotBlockEntity.java` (around line 327) | SQ-MDP-14 (the "slot 7 full" pot must not cook and must keep its milk bucket) |
 | I5 | `members #40` | Add the cave carrot crate loot rule | Make the rule apply: `kubejs/server_scripts/loot/loot_index.json` has no miners_delight tables because Miner's data comes from the donor jar. Have `tools/gen_loot_config.py` read the donor jar (`miners_upstream/`) or the `/dumploot` tables, regenerate the index, then confirm `L.pack` in CD `miners_delight/loot.js` rewrites the table | SQ-MDP-16 (300 rolls, crates appear), SQ-MDP-09 |
 | I6 | `members #42` | Truffle dirt and rooted dirt patches in forests | Worldgen features: rooted dirt patches and `fungidelight:truffle_dirt` generate in forest biomes (dark forest, taiga/cold forest, birch). Order the modifiers so the truffle ore runs inside the rooted dirt blob (`wild/truffle_dirt_ore`, `wild_crops.json`, or merge the two rules). r1102 scan: rooted dirt present everywhere, truffle dirt 0 in all four squares. Worldgen registry change: fresh world needed | SQ-FGD-14 on a fresh group B world (radius 300 is enough for DF/TA/BI/SW; mushroom fields needs a located square, not centred radius), SQ-FGD-13 |
-| I7 | `members #41` (spider half) | Patch the spider burning-kill bug | Upstream `scavenging_spider` lacks `is_on_fire:false` that `scavenging_spider_leg` has: add it in `MinersTranslator.PATCH_DATA`. Cheese blast drop (SQ-VTD5-01) is not covered by this decision: still open (reword VTD-54 to "survives_explosion, 1 in 4 for TNT", or change the three tables) | SQ-MDP-08c |
+| I7 | `members #41` (spider half) | Patch the spider burning-kill bug | Upstream `scavenging_spider` lacks `is_on_fire:false` that `scavenging_spider_leg` has: add it in `MinersTranslator.PATCH_DATA`. Cheese blast drop closed 2026-11-02: tables keep `survives_explosion`, VTD-54 reworded | SQ-MDP-08c |
 | I8 | (folders) | Fold the four port folders into the member setup | Move `development/backportedVeggies`, `backportedVintage`, `backportedFungi`, `backportedMiners` to `development/creativeDelight/members/{veggies,vintage,fungi,miners}/` as was done for Display (`ce.forge-mod` shape of `members/rustic`, `bundled_in=creativeDelight`). Update root `settings.gradle` and the member map in `creativeDelight/build.gradle`, `tools/` that name the old paths (`build_deploy.py`, `port_resources.py`, `check_donor.py`, `check_vintage*`, `prep_srv.sh` drop list names stay), CLAUDE.md layout line (ports are members), memory notes naming `development/backported*`. Run `:creativeDelight:build --offline` and the ports' resource guards; clean-build after deleting overlay files (memory repack-stale-resources). Do this first so the fixes below land in the final paths | SQ-CDJ-09 (members line, item counts), SQ-CDJ-05 |
 | I9 | decisions | Dictionary category names, Display config key names | Confirmed as built: tool and misc dict category names and the `item_` catch-all (`tool_dict.js`, `misc_dict.js`), Display `[display]` keys with inverted "Disable..." keys. Record in creative_delight.md 13.4 / 38.4 and display_delight.md; nothing to change | none |
 
@@ -222,3 +222,50 @@ slot 9 at +0 and at +delay); with `remainderBuffer` false: 3 bottles ejected, no
 Decided 2026-11-02: cheese wheel and pizza blast drops stay as built (survives_explosion); SQ-VTD5-01 pass text and VTD-54
 reworded. The Fungi census (mushroom-fields half of SQ-FGD-12, SQ-FGD-15) is queued as SQ-FGD-12m and SQ-FGD-15c in SQ-FGDC.
 Still open: F5 and F7 (see section F: both recommended closed).
+
+## J. More Creative Delight plans (owner decisions 2026-11-02, after the Ender's donor review)
+
+Plans only; nothing built, no jar touched. Rules R2 (recipe namespace `creativedelight`), R3 (CD config) and R5 apply. Every member keeps
+its old ids and mod id. Rows: `members #46` to `#50`. Same cutover as `members #10`.
+
+### J1. Ender's content into End's Delight (`members #46`)
+
+| # | Step |
+|---|---|
+| J1.1 | Ender's Delight 1.2.2 stays `endersdelight-1.19-1.2.2.jar` in `mods/` (ARR, no donor member, `members #33` dropped). |
+| J1.2 | Move `members/enders` (`enders_additions`: 14 registrations, End House, shulker bowl dish, translator) into the End's member (`members/ends`). The `endersdelight:` ids register always, whether or not the external Ender's mod is present. Old worlds without Ender's may lose them; accepted by the owner. |
+| J1.3 | The upstream reader (`upstream/UpstreamJars`, `EndersTranslator`, bottom packs) moves with it and keeps reading `enders_upstream/`; a future Ender's version is also taken from that folder, not from `mods/`. |
+| J1.4 | CD script rows that name Ender's 1.2.2 content keep the `// requires: endersdelight` header; rows for the moved 1.1.4 items need no header. Display name stays "End's Delight (Creative Delight)". |
+| J1.5 | Docs: ends_delight.md 5.3, `mod_sides.md` (drop the `enders_additions` mention), SQ-DNR-E and SQ-EN rows rerun against the merged member; no player-visible change, so no changelog bullet. |
+
+### J2. Salt and Create: The Salt repacked (`members #47`, `#48`)
+
+Shape of `members/oceans` (`ce.forge-repack`, `bundled_in=creativeDelight`, "Salt (Creative Delight)" and "Create: The Salt (Creative Delight)"); MIT notices kept beside the code. Globs go into CD `replaces_jars`; `mod_sides.md` rows merged into the CD row; `installToMods` displaces the old jars. Salt keeps its access transformer.
+
+References to `salt` and `create__the_salt` found 2026-11-02 (these must keep working after the move):
+
+| Where | Reference | Action |
+|---|---|---|
+| CD Java | `salt/SaltBlockTicks`, mixins `SaltBlockRandomTickMixin`, `SaltLayerRandomTickMixin`, `SaltRockNoDissolveMixin` (hook `ISaltBlock`; `salt:raw_rock_salt_block` exempt) | Keep working first; once Salt is a member, replace the three mixins by direct edits |
+| CD scripts | `creativeengineering/salt.js` (removes `salt:salt_from_raw_rock_salt` and three `create__the_salt:` recipes by id, rebuilds 4 salt per raw rock salt), `seasoning_tags.js`, `vintagedelight/recipes.js`, startup `vintagedelight/item_merges.js` | Recipe ids unchanged; rows under `creativedelight:` (R2) |
+| Vintage member | its own `salt`, `salt_block`, `evaporator`, `SaltBlock`, `SaltLayerBlock` (not Salt's `ISaltBlock`); salt merge (food/seasoning #6) makes Vintage's salt dust the one salt | No change; both stay members of one jar, so the "only if Vintage is off" fallback in `salt.js` stays |
+| Pack KubeJS | `item_dict.js` (`t_can_be_salted` = `#salt:can_be_salted`), `server_scripts/tags/blocktags.js` (`salt:salt_block`, `salt:raw_rock_salt_block`), `assets/creativeengineering/jei_world/salt/manual.json` | Stay; ids unchanged |
+| patcherMod | `WorldTab.SALT` (JEI world tab names `salt:salt_block`, `salt:salt`), `CEConfig` mod-name override `create__the_salt` and the seasoning JEI text | Stay; mod-name override changes to the "(Creative Delight)" name |
+| Config | `config/salt-common.toml` (salting nutrition, saturation, food values) | Move into `creativedelight-common.toml` `[salt]` with `ConfigRename.mergeSections` (R3), old file read once and renamed; copy to `configs_edited/` |
+| Creative Brewing, Calendar, Compat | none found (an earlier grep hit was `basalt`) | none |
+| Recipe ids and tag | `salt:salting` recipe type, `#salt:can_be_salted`, `salt:` loot and worldgen | Kept by id; a move-diff harness run (framework #6) must show them unchanged |
+
+### J3. Canned Goods repacked (`members #49`)
+
+`members/cannedgoods`, AFL 3.0: notice file kept, every changed file marked as modified, display name "Canned Goods (Creative Delight)", mod id `canned_goods`. CD already holds `CannedGolemColorMixin`, `CannedGolemRendererMixin`, `CanPagesJEI` and the generated per-type cans; after the move the mixins become direct code. Same jar bookkeeping as J2.
+
+### J4. Golden Food as a donor jar (`members #50`)
+
+Member `portedGolden` (mod id `goldenfood`, ids and block states unchanged): our own code for the 17 upstream classes (golden and enchanted cakes, enchanted foods, enchantment, anvil update event, creative tab); art, data and lang read from the unmodified, sha1-pinned `goldenfood_upstream/goldenfood-1.19.2-2.0.0.jar`, which goes to server and clients like `miners_upstream/`; `UPSTREAM_DONORS` and `check_donor.py` gain the row; the standalone jar leaves `mods/`. Pack code already in CD: `goldenfood/placeable.js`, `food_types.js`; pack files naming it: loot tags, trade tags, block tags, `05_tuning.js`, `07_rules.js`. Step 1 is a class and registry inventory, as for Oceanic.
+
+### J5. Order
+
+1. J2 and J3 (plain repacks, the Ocean's pattern), then J1 (member map change), then J4 (needs the donor tooling and an inventory).
+2. Each adds its checks to `testing/scratch_queue.md`; no scratch boot until the owner says so.
+3. All ride the `members #10` cutover.
+

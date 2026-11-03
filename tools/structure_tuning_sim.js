@@ -44,7 +44,7 @@ let priority = null
 const logs = []
 const log = level => (...a) => logs.push(level + a.join(' '))
 const classes = {
-  'com.SaintAlfonzo.creativeengineering.worldgen.WorldgenFiles': { writeText: (p, text) => { if (p === REAL_REPORT) report = text } },
+  'com.SaintAlfonzo.creativeengineering.util.WorldgenFiles': { writeText: (p, text) => { if (p === REAL_REPORT) report = text } },
   'com.SaintAlfonzo.creativeengineering.worldgen.StructureFrequencies': { stage: json => { staged = JSON.parse(json) }, stageBiomeFactors: json => { biomeFactors = JSON.parse(json) } },
   'com.SaintAlfonzo.creativeengineering.worldgen.StructureBiomeRules': { stage: json => { rules = JSON.parse(json) } },
   'com.SaintAlfonzo.creativeengineering.worldgen.StructureBiomeFits': { stage: json => { fits = JSON.parse(json) } },

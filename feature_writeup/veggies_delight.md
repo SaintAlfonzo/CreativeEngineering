@@ -24,11 +24,11 @@ This file has four parts:
 |---|---|---|
 | Mod inventory (7 crops, 8 wild plants, 72 items, 29 blocks, 215 recipe files, worldgen, loot, village houses, trades, mob food, config) | §2 | reference 2026-10-22, from `VeggiesDelight-1.20.1-1.9.2.jar` |
 | Overlap decisions and the overlaps that remain | §3 | decided 2026-10-22 (user); 10 remaining overlaps listed in §3.3 |
-| Port jar `backportedVeggies-1.9.2-ce-19.2-04.jar` | §4.1 | `-01` BUILT 2026-10-22, live since 1.1.01; `-03` (carrot cake cut face) live since 1.1.03. `-04` BUILT 2026-11-01 (the mature dandelion revert, §2.2, first built 2026-10-30 under the `-03` name): in `build/libs/`, not installed (`mods/` holds the 2026-10-25 `-03`) |
+| Port jar `backportedVeggies-1.9.2-ce-19.2-05.jar` | §4.1 | `-01` BUILT 2026-10-22, live since 1.1.01; `-03` (carrot cake cut face) live since 1.1.03 (still in `server_mods/`). `-04` BUILT 2026-11-01 (the mature dandelion revert, §2.2). **Deep scan 2026-11-02:** `-05` is a nested Creative Delight member (`development/creativeDelight/members/veggies`), in the installed `mods/creativedelight-1.0.0.jar` (2026-11-02 14:01); not deployed |
 | Implementation description (port, wild plants, mature dandelion, seasons, food, cooking rules, baking, drinks, jars, mob food, loot, houses, trades, compost, UI) | §4 | BUILT 2026-10-22 except the dump-driven steps (§4.0) |
 | Marked merges and pins (Fish and Chips, Mashed Potatoes, Stuffed Bell Peppers; Cultural Delight; Vintage and Cultural recipes; doughs; mob food; seasons; tea audit) | §5 | marked 2026-10-22; M1 to M3 BUILT 2026-11-01 (§5.1); §3.3 folds R4 to R8, R10, R11 BUILT 2026-11-01, R2 closed (three flowers, no fold), R3 open (§3.3) |
-| Mature dandelion maturing on rich / fertile soil and shear / knife revert (TODO `ports/veggiesport #4`) | §2.2 | BUILT 2026-10-30: patcherMod part in 1.1.04 (installed 2026-10-31 00:44, not yet booted); port part waits for the `-04` install |
-| Tests | §8 | VD-01 to VD-54 drafted (not all numbers used) |
+| Mature dandelion maturing on rich / fertile soil and shear / knife revert (TODO `ports/veggiesport #4`) | §2.2 | BUILT 2026-10-30: patcherMod part in 1.1.04 (installed 2026-10-31 00:44, not yet booted); port part in `-05`, nested in the installed CD jar (deep scan 2026-11-02); SQ-DM-01 to -03 PASS r1031 |
+| Tests | §8 | VD-01 to VD-54 drafted (not all numbers used). Deep scan 2026-11-02: SQ-VP-00 to -12 PASS (10-23 / 10-25); r1102b s1 (judged) SQ-VP-03, -05, -05b, -09, -10, -11, -16 PASS, SQ-VP-06 FAIL (pepper jam and relish soft fluids in `kubejs/data/vintagedelight/`), -04, -07 batch faults, -15 LOOK; SQ-DM-01 to -03 PASS r1031; SQ-VDF r1102b s3 mostly PASS (-04 open); SQ-VP-14 and the CQ-VP client rows not run |
 
 - **Source to port from:** `~/.local/share/atlauncher/downloads/VeggiesDelight-1.20.1-1.9.2.jar` (Forge, closest API to
   1.19.2). `DecompiledMods/VeggiesDelight-1.21.1-1.9.3.jar` is the NeoForge build, not decompiled, same content.
@@ -237,7 +237,7 @@ Folds as built 2026-11-01 (CD `veggiesdelight/recipes.js` unless named; tests VD
 | R4 | One shaped recipe on a pie crust (milk or any cheese), manual only as Brewin's quiche, plus the assembly (already there); VD's milk and Vintage cheese shaped recipes go | BUILT |
 | R5 | Pizza rule: bottom row any dough, tomato sauce, any dough; toppings bell pepper, vegetable, onion; manual only plus an assembly on dough | BUILT |
 | R6 | Stuffed rule: both keep their crafts (boat grid, bowl pot + heatless grid); each gets an assembly on a roasted zucchini | BUILT |
-| R7 | Pancake family | open: the family has no recipe rule yet; the Stackable Pancake as the family base is under review (2026-11-02, `merges/baking #2`) before the rule is written |
+| R7 | Pancake family | MOVED 2026-11-02 (owner) to the food family rules (`dishes/meals #12`, `food/types-and-tuning #13`); no longer a Veggies item |
 | R8 | Already made in the Pickling Jar (fermenting); now in the `preserve/pickle` family (`tools/food_families.py`, `food_families.json`) | BUILT |
 | R10 | Skewer rule: shaped diagonal (stick, turnip, cooked mutton) plus an assembly on a stick; the shapeless goes | BUILT |
 | R11 | Burger rule for the Vegetarian Burger (shaped, assembly on the patty); the patty fills the patty slot of More Delight's simple, egg and loaded hamburgers (`creativeengineering/recipes.js`), VD's shapeless versions go; raw patty by the cooking trio (`F.veggieCook`) | BUILT |
@@ -671,3 +671,8 @@ UI
   bread routes removed (5.2); port `-04` built (mature dandelion revert), not installed; VD-47 to VD-54, SQ-VDF-01 to -06.
   Needs a CD rebuild and restart.
 - **2026-11-02:** nested in Creative Delight (`creativedelight/members #1`): `bundled_in=creativeDelight`, jar `backportedVeggies-1.9.2-ce-19.2-05` inside the CD jar, "Veggies Delight (Creative Delight)"; the folder stays `development/creativeDelight/members/veggies`; build and install through `:creativeDelight:` only. Veggies pilot of the food dict: `veggiesdelight/recipes.js` and `cooking.js` read food items as `fd.<food key>` (`global.food`), recipe calls identical offline (`tools/test_cd_food.sh`, CDT-09).
+
+### Owner decisions 2026-11-02
+
+- R7 pancake family moves out of Veggies to the food family rules (TODO `dishes/meals #12`, `food/types-and-tuning #13`); no base item.
+- Cucumber dough becomes veggie dough, recoloured to the veggie noodles palette (`dishes/ingredients #33`).

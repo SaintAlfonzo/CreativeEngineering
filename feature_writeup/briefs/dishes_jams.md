@@ -51,6 +51,9 @@ Every jam is a mason jar (mason jars take glass panes; a new empty mason jar tex
 Done 2026-10-29 (shipped 1.1.05, changelog "Jams"): Vintage's bottles and duplicate berry jars removed, Delightful's jellies
 removed, relish out of the jam tags. Open: Fruits Delight's 22 jams and Upgrade Aquatic's mulberry jam are still glass
 bottle items (eating returns the bottle; set in their Java); the mason jar craft still takes glass; no recolour.
+2026-11-02 (decided: jam bottles convert to mason jars): Build step 1 done without a repack, see
+[recipes_cooking.md](../recipes_cooking.md) "Mason jars only" (KubeJS remainder + recipe swap, one CD mixin for the
+mulberry jam's eat-return), tests RC-176 to RC-179. Left: steps 2 and 3 (panes, sprites, recolour), the jelly cauldrons.
 
 ### Build
 1. Container swap for the 23 bottle jams (decision D1). Repack route: Fruits Delight and Upgrade Aquatic are not CD
@@ -189,3 +192,11 @@ butter sandwich: Vintage's texture, Delightful's name; any bread + any jam + a n
 | Row | What | Writeup | Open tiers |
 |---|---|---|---|
 | `jams #4` | Green Grape, Red Grape, Cherry Jam Jars (Vintage port `-09`, installed in `mods/` 2026-10-31), pot 4 fruit + sugar + lemon slice -> 2, shipped 1.1.05; recipe ids scratch PASS r1031 (SQ-BJ-01) | [recipes_cooking.md](../recipes_cooking.md) RC-173, RC-175 | C P (cooking, placing, eating in game); coaster entries after `/dumpall` + `gen_coaster_models.py` |
+
+## 2026-11-02 batch (plan_food_cooking_batch.md)
+
+- `jams #5`: grape and cherry pot recipes give 1 jar (was 2); the 4 fruit + sugar + lemon slice pattern now gives 1.
+- `jams #6`: lemon jam from 5 lemon slices + sweetener (pot, bottle; heated mixer 125 mB).
+- `jams #7`: Salmonberry and Raspberry Jam Jars (Vintage port -13, placeholder recolours of the cherry jar), same pattern.
+- `pickles-and-ferments #11`: the vinegar jar ferments from any jam (`#forge:jam_jars` or `#forge:jams`); the bottle recipe is gone.
+Tests SQ-FCB-01, -03, CQ-FCB-02.

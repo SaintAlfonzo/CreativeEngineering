@@ -11,7 +11,7 @@ import java.util.function.Supplier;
 
 /**
  * The raw effect suppliers of a food. {@link FoodProperties#getEffects()} resolves them, which fails while items are
- * registered (Farmer's Delight's effects are not registered yet); the cup foods need them lazily.
+ * registered (Farmer's Delight's effects are not registered yet).
  */
 @Mixin(FoodProperties.class)
 public interface FoodPropertiesAccessor {

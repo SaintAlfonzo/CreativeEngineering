@@ -1,0 +1,62 @@
+# Run r1102b slice 5, group B boot 2: same level as s5_B.qb after a stop and boot. SQ-PSM-06 (struck monument repaired
+# after a restart; control lone monument) and SQ-PSM-07 (lone monument guardians). Vars S5SM, S5LM from s5_B.qb.
+pace 2
+
+## S5B2-00 | setup (not a queue row)
+bootexpect Done \(
+> time set noon
+> difficulty normal
+> scoreboard objectives add s5n dummy
+reject (Unknown (item|block|block type|entity)|does not (have|accept)|Incorrect argument for command|Unknown or incomplete command|That position is not loaded|No player was found|no such bot|no such item|Invalid (block state|tag)|\[(zq|s5)\] (error|no player))
+
+## SQ-PSM-06 | struck monument after a restart: 3 elder guardians, rooms, spawn_overrides box
+> forceload add {S5SM1-48} {S5SM3-48} {S5SM1+48} {S5SM3+48}
+> pbot spawn s5mstruck {S5SM1} 60 {S5SM3} minecraft:overworld survival
+sleep 20
+> execute store result score #struck_elders s5n positioned {S5SM1} 50 {S5SM3} if entity @e[type=minecraft:elder_guardian,distance=..48]
+> scoreboard players get #struck_elders s5n
+> cespawnbox {S5SM1} 50 {S5SM3}
+> cespawnbox {S5SM1} 45 {S5SM3+8}
+sleep 2
+> zq count {S5SM1-20} 39 {S5SM3-20} {S5SM1+20} 62 {S5SM3+20} minecraft:prismarine_bricks
+> say PSM06 struck counted
+waitlog PSM06 struck counted 180
+expect #struck_elders has 3 \[s5n\]
+reject could not be rebuilt
+reject (Unknown (item|block|block type|entity)|does not (have|accept)|Incorrect argument for command|Unknown or incomplete command|That position is not loaded|No player was found|no such bot|no such item|Invalid (block state|tag)|\[(zq|s5)\] (error|no player))
+expect \[spawn-boxes\] .*box spawn_overrides of creativeengineering:meta/struck_monument, part minecraft:monument -> \[minecraft:guardian 1 \(2-4\)\]
+look prismarine brick count well above 0 = interior rooms present (compare with the lone monument's count in SQ-PSM-06b)
+> pbot remove s5mstruck
+
+## SQ-PSM-06b | control: lone monument after a restart
+> forceload add {S5LM1-48} {S5LM3-48} {S5LM1+48} {S5LM3+48}
+> pbot spawn s5mlone {S5LM1} 60 {S5LM3} minecraft:overworld survival
+sleep 20
+> execute store result score #lone_elders s5n positioned {S5LM1} 50 {S5LM3} if entity @e[type=minecraft:elder_guardian,distance=..48]
+> scoreboard players get #lone_elders s5n
+> cespawnbox {S5LM1} 50 {S5LM3}
+> cespawnbox {S5LM1} 45 {S5LM3+8}
+sleep 2
+> zq count {S5LM1-20} 39 {S5LM3-20} {S5LM1+20} 62 {S5LM3+20} minecraft:prismarine_bricks
+> say PSM06 lone counted
+waitlog PSM06 lone counted 180
+expect #lone_elders has 3 \[s5n\]
+reject could not be rebuilt
+reject (Unknown (item|block|block type|entity)|does not (have|accept)|Incorrect argument for command|Unknown or incomplete command|That position is not loaded|No player was found|no such bot|no such item|Invalid (block state|tag)|\[(zq|s5)\] (error|no player))
+expect \[spawn-boxes\] .*no box .*-> vanilla \[minecraft:guardian 1 \(2-4\)\]
+> pbot remove s5mlone
+
+## SQ-PSM-07 | lone monument: guardians respawn within 240 s
+> forceload add {S5LM1-48} {S5LM3-48} {S5LM1+48} {S5LM3+48}
+> execute positioned {S5LM1} 50 {S5LM3} run kill @e[type=minecraft:guardian,distance=..64]
+> setblock {S5LM1} 66 {S5LM3} minecraft:glass
+> pbot spawn s5gd {S5LM1} 67 {S5LM3} minecraft:overworld survival
+sleep 240
+> execute store result score #guardians s5n positioned {S5LM1} 50 {S5LM3} if entity @e[type=minecraft:guardian,distance=..30]
+> scoreboard players get #guardians s5n
+> ceperf mobcap
+sleep 2
+> pbot remove s5gd
+expect #guardians has [1-9]\d* \[s5n\]
+reject (Unknown (item|block|block type|entity)|does not (have|accept)|Incorrect argument for command|Unknown or incomplete command|That position is not loaded|No player was found|no such bot|no such item|Invalid (block state|tag)|\[(zq|s5)\] (error|no player))
+look none with the probe right: record the mobcap line (monster cap full?)

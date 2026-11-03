@@ -1,7 +1,7 @@
 # Large Meals: overlap and integration report
 
 Investigation written 2026-10-30 for TODO `largecontent/mod-additions #12` (the Large Meals part). **BUILT 2026-11-01** (build notes in
-section 4.2): member `backportedLargeMeals 1.3.0-ce-19.2-01` nested in the Creative Delight jar, not installed, nothing run in game.
+section 4.2): member `backportedLargeMeals 1.3.0-ce-19.2-01` nested in the Creative Delight jar; installed in `mods/` (CD jar 11-02 14:01), scratch run r1102b (8), not played (deep scan 2026-11-02).
 **Owner decisions D1-D9 answered 2026-11-01** (section 5); the sections below are updated to match.
 Jar: `devmods/toBackport/largemeals-1.20.1-1.3.0.jar`, unpacked to `DecompiledMods/largemeals-1.3.0/`, code in
 `DecompiledMods/largemeals-1.3.0-src/` (7 classes). Forge 1.20.1 only, so a **port is needed**. Licence **All Rights
@@ -24,8 +24,8 @@ asks for it by name. Upstream bugs are fixed (3.5).
 | Already wired in the pack | 2.2 | 13 Display Delight `lm_` blocks (excluded prefix), 4 Spice of Life complexity entries (dead today) |
 | Fold-in | 4 | 21 steps planned |
 | Decisions | 5 | D1-D9 answered 2026-11-01 |
-| Build | 4.2 | BUILT 2026-11-01 (member + CD scripts + Display Delight `lm_`); jars not installed; `/dumpall`, can generator, compost and `/cegen` wait on the game |
-| Tests | 8 | LGM-01..20 drafted, none run; scratch SQ-LGM-01..10 queued |
+| Build | 4.2 | BUILT 2026-11-01 (member + CD scripts + Display Delight `lm_`); in `mods/` since the CD jar of 11-02 14:01, not played; `/dumpall`, can generator, compost and `/cegen` wait on the game |
+| Tests | 8 | LGM-01..20 in game: none run. Scratch r1102b (2026-11-02): SQ-LGM-01 to -09 PASS; SQ-LGM-10 FAIL (Chicken Curry recipe ids clash with Ender's, 8); CQ-LGM-11 waits for the client round |
 
 - **Jar:** 156 files, no jarjar. `mods.toml` authors FoundWiz, jamb.
 - **Dependencies:** Forge 47+, Minecraft 1.20.1, Farmer's Delight 1.2.4+ (mandatory). Every recipe tag it uses exists
@@ -242,10 +242,10 @@ build classpath only for ids (it resolves by name at runtime), so it can go in t
   racks raw / cooked meat). Display Delight: `lm_` removed from `EXCLUDED_PREFIXES`, `port_resources.py` rerun (13 blocks, 0
   missing models), "Placed ..." names in `kubejs/assets/displaydelight/lang/en_us.json`. Names: `item.endersdelight.chicken_curry`
   and `block.displaydelight.erd_chicken_curry` now read End Chicken Curry (D2).
-- **Deviation from Q2 / Q3 (needs owner nod):** the Cooking Pot has 6 ingredient slots, and the accepted recipes (raw rack + 3
-  cooked rice + 2 carrot + 2 baked potato = 8; the dearer one 10) cannot exist. Built instead: base = raw rack, 2 cooked rice, 1
-  carrot, 1 baked potato (5); dearer = cooked rack, 2 cooked rice, 1 carrot, 2 baked potato (6). The upstream grid craft is
-  unchanged as the heatless route.
+- **Deviation from Q2 / Q3 (owner decided 2026-11-02):** the Cooking Pot has 6 ingredient slots, so the accepted recipes (8 and
+  10 ingredients) cannot exist. Final: base = raw rack, 2 cooked rice, 2 carrot, 1 baked potato (6); dearer = cooked rack, 1
+  cooked rice, 2 carrot, 2 baked potato (6; a carrot was added to each, so the dearer one gave up a rice to stay at 6). The
+  upstream grid craft is unchanged as the heatless route.
 - **Not done here (waits on the game or owner):** `/dumpall`, then `python3 tools/gen_can_types.py` (soups and meals get generated
   cans; feasts wait for `cans/canning #17`), `python3 tools/gen_compost_values.py --add-new` after `/dumpcompost` (racks are not
   compostable), then `/cegen` (stack sizes, placeables, food families: `python3 tools/food_families.py --check`). Item Physic and
@@ -294,6 +294,13 @@ rice, 2 carrot, 2 baked potato, bowl) with the raw rack.
 
 ## 8. In-game test suite (drafted)
 
+Scratch r1102b (2026-11-02, `perf/runs/r1102b/s3/judged.md`): SQ-LGM-01 to -09 PASS (01, 03, 04b, 08 proven from the
+log after batch faults); covers the server half of LGM-01 to LGM-10, LGM-18. **SQ-LGM-10 FAIL:** 12 of 13 heatless
+crafts; Large Meals Chicken Curry has no recipe at all: `creativedelight:farmersdelightcooking/chicken_curry` and
+`shapeless/chicken_curry_cooked_manual_only` are emitted by both CD `largemeals/recipes.js` and
+`endersdelight/additions.js`, KubeJS keeps the last (`Duplicate recipe for id`). Needs a distinct id (for example
+`lm_chicken_curry`); LGM-12 and LGM-13 wait on it.
+
 | ID | Test | Pass |
 |---|---|---|
 | LGM-01 | Boot with the CD jar | no `Failed to parse` naming `largemeals`; no `Item is not food: largemeals` from Spice of Life |
@@ -319,6 +326,8 @@ rice, 2 carrot, 2 baked potato, bowl) with the raw rack.
 
 ## 9. History
 
+- 2026-11-02 (deep scan): CD jar with the member in `mods/` since 11-02 14:01; scratch r1102b: SQ-LGM-01 to -09 PASS, SQ-LGM-10 FAIL (curry recipe id clash with Ender's).
+- 2026-11-02: Roasted Rack pot recipes: a carrot added to each, both at 6 ingredients (dearer one loses a rice); deviation accepted.
 - 2026-11-01: BUILT (4.2): member, scripts, Display Delight `lm_`, names, changelog family, scratch SQ-LGM-01..10; Roasted Rack pot recipes shrunk to the 6-slot limit.
 - 2026-11-01: owner decisions D1-D9 answered and folded into sections 2-5 and 8 (LGM-16..20 added); nothing built.
 - 2026-11-01: dragon eggs kept out of `#forge:eggs`; Q2 and Q3 accepted.

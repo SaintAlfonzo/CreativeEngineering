@@ -1,5 +1,9 @@
 package com.SaintAlfonzo.creativebrewing.potion;
 
+import java.util.UUID;
+
+import javax.annotation.Nullable;
+
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.BlockSource;
 import net.minecraft.core.Direction;
@@ -8,8 +12,14 @@ import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.Items;
 import net.minecraft.world.level.block.DispenserBlock;
+import net.minecraft.world.level.block.entity.BlockEntity;
+import net.minecraft.world.level.block.entity.DispenserBlockEntity;
+import net.minecraftforge.event.level.BlockEvent;
+import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.registries.ForgeRegistries;
 
 import org.slf4j.Logger;
@@ -29,6 +39,11 @@ import com.mojang.logging.LogUtils;
  * via {@link #setHandler(SpawnHandler)}, so global.potionArea.spawn stays the single source of
  * truth for ring counts / radii / colours / effects. potion_area.js calls setHandler(...) once
  * at startup, passing a JS lambda that just calls back into global.potionArea.spawn.
+ *
+ * Owner (potion_buckets.md F6, {@code potions/potion-buckets #3}, decided 2026-11-02): a dispenser placed by a player
+ * keeps that player's UUID in its block entity's Forge persistent data ({@link #onPlace}); a bucket it fires spawns its
+ * clouds owned by that player while they are online in the same level, so kills credit them as for a thrown bucket.
+ * Dispensers placed before this, or by no player, and owners who are offline fire owner-less clouds (vanilla).
  */
 public final class PotionBucketDispenser {
 
@@ -43,7 +58,30 @@ public final class PotionBucketDispenser {
 
     /** Installed by potion_area.js at startup - forwards into global.potionArea.spawn. */
     public interface SpawnHandler {
-        void spawn(ServerLevel level, double x, double y, double z, String itemId, ItemStack stack);
+        void spawn(ServerLevel level, double x, double y, double z, String itemId, ItemStack stack, @Nullable LivingEntity owner);
+    }
+
+    /** Forge persistent-data key on the dispenser block entity: the UUID of the player who placed it. */
+    static final String OWNER_KEY = "creativeengineering:DispenserOwner";
+
+    /** Forge bus: remember who placed a dispenser (droppers too, harmless: they never use dispense behaviours). */
+    @SubscribeEvent
+    public static void onPlace(BlockEvent.EntityPlaceEvent event) {
+        if (!(event.getEntity() instanceof Player player) || event.getLevel().isClientSide()) return;
+        if (!(event.getPlacedBlock().getBlock() instanceof DispenserBlock)) return;
+        BlockEntity be = event.getLevel().getBlockEntity(event.getPos());
+        if (!(be instanceof DispenserBlockEntity)) return;
+        be.getPersistentData().putUUID(OWNER_KEY, player.getUUID());
+        be.setChanged();
+    }
+
+    /** The placing player if they are in this level now, else null. */
+    @Nullable
+    static Player owner(BlockSource source) {
+        BlockEntity be = source.getEntity();
+        if (be == null || !be.getPersistentData().hasUUID(OWNER_KEY)) return null;
+        UUID id = be.getPersistentData().getUUID(OWNER_KEY);
+        return source.getLevel().getPlayerByUUID(id);
     }
 
     private static volatile SpawnHandler HANDLER;
@@ -94,7 +132,7 @@ public final class PotionBucketDispenser {
             // buckets are .unstackable() in KubeJS (max stack size 1), so `stack` here is
             // always exactly the one bucket being dispensed - pass a copy for NBT (potion
             // contents), then hand back a plain empty bucket to replace it in the dispenser.
-            HANDLER.spawn(level, x, y, z, itemId, stack.copy());
+            HANDLER.spawn(level, x, y, z, itemId, stack.copy(), owner(source));
             return new ItemStack(Items.BUCKET);
         }
     }

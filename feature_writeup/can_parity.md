@@ -1849,9 +1849,9 @@ at Canned Goods' beetroot can any more (it was the fallback until 2026-10-21).
   + can, or 4 slices + sugar -> 4 fast servings.
 - [ ] **CP-22 removed** (values and recipes: scratch server PASSED 2026-10-22, SQ-OF-03, after the trade fix in 8, 0 of 240 level 2 butcher offers; JEI: in game): Canned Food and the Hot Hot Hotpot are hidden in JEI; a butcher (any level) never offers Canned
   Food; the butcher's other trades are still there.
-- [ ] **CP-23 opened filling:** an opened Canned Apple Pie Filling (2 / 4) + Pie Crust gives no result; a full one gives
+- [ ] **CP-23 opened filling** (CQ-CNP-01): an opened Canned Apple Pie Filling (2 / 4) + Pie Crust gives no result; a full one gives
   an Apple Pie.
-- [ ] **CP-24 manual only:** JEI's Create "Shapeless Mixing" / "Automated Crafting" categories list no `*_pie_manual_only`
+- [ ] **CP-24 manual only** (server half: SQ-CNP-01): JEI's Create "Shapeless Mixing" / "Automated Crafting" categories list no `*_pie_manual_only`
   recipe; filling + crust in a basin under a mixer, in a mechanical crafter, or in an IE Assembler makes nothing. In a
   crafting terminal with the player's inventory (AE2) the recipe works. Canning recipes (empty can + food) still run in
   the mixer.
@@ -1868,7 +1868,7 @@ at Canned Goods' beetroot can any more (it was the fallback until 2026-10-21).
   Sweet Potato + 2 sugar + can in the Cooking Pot -> the filling; full filling + Pie Crust -> Sweet Potato Pie by hand
   and in the oven.
 - [ ] **CP-30 vinegar additive:** JEI on Vinegar Bottle shows a `_vinegar` can recipe for Canned Carrot, Canned Apple,
-  Canned Raw Beef, Canned Raw Cod and Canned Mixed Salad.
+  Canned Raw Beef, Canned Raw Cod and Canned Mixed Salad. Since 2026-11-02 the Vinegar Bottle is merged into the Vinegar Jar: the recipes take the jar (scratch SQ-VNG-01, -02, deep scan 2026-11-02).
 - [ ] **CP-31 Vintage cans (after `/dumpfood` with Vintage loaded, `gen_can_types.py`, restart):** the 16 Vintage cans
   exist; Vintage Kimchi fills Canned Kimchi, Pickle fills Canned Pickled Pickles, Salted Cod and Salted Salmon fill
   Canned Fish and Canned Cooked Salmon.

@@ -10,6 +10,20 @@ var t = global.tags
 // all; EasyElytraTakeoffGroundCheckMixin = allowed even mid-fall / on thin blocks).
 global.tags.add(e, 'creativeengineering:elytra_chestplates', [i.upgraded_dragon_chestplate])
 
+// Armor Trims allowlist (gear/tuning #14, gear_tuning.md Armor Trims): only standard armor drawn on the vanilla armor
+// model can be trimmed. patcherMod compat/ArmorTrimsItemCache keeps only these in Armor Trims' trimmable list (smithing
+// table, JEI trim pages, the trimmed-item decorator, untrimming); an empty tag means no filter. Out: hats, mob heads,
+// diving gear, backtanks, goggles, Immersive Armors, Wardrobe, Botania and other custom models (audit: gear/tuning #16).
+var trimPieces = ['helmet', 'chestplate', 'leggings', 'boots']
+var trimSets = ['leather', 'chainmail', 'iron', 'golden', 'diamond', 'netherite',  // vanilla
+	'copper', 'echo', 'felsic', 'dragon']                                             // Everything Copper, D&D echo, Felsic, Dragon Loot
+var trimmable = []
+trimSets.forEach(m => trimPieces.forEach(p => trimmable.push(i[m + '_' + p])))
+trimmable.push(i.turtle_helmet, i.upgraded_dragon_chestplate,
+	i.armor_steel_head, i.armor_steel_chest, i.armor_steel_legs, i.armor_steel_feet,  // Immersive Engineering steel
+	i.compressed_iron_helmet, i.compressed_iron_chestplate, i.compressed_iron_leggings, i.compressed_iron_boots)  // PneumaticCraft
+t.add(e, i.t_trimmable_armor, trimmable)
+
 // Dragon-tier gear (every output of end_gear.js's dragonAssembly, dragonloot's own
 // items and our custom ones alike) - drives the passive autorepair in
 // server_scripts/equipment/dragon_autorepair.js. Includes upgraded_dragon_chestplate

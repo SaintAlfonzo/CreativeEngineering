@@ -1,6 +1,7 @@
 package com.SaintAlfonzo.creativeengineering.worldgen;
 
 import java.lang.reflect.Field;
+import com.SaintAlfonzo.creativeengineering.util.WorldgenFiles;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Path;
@@ -23,6 +24,13 @@ public class BiomeLayoutCacheTest {
 	}
 
 	/** What a fresh JVM sees: no in-memory cache. */
+	// WorldgenFiles moved to the util package (2026-11-01): its package-private root override is set by reflection.
+	static void setRootOverride(Path root) throws Exception {
+		Field f = WorldgenFiles.class.getDeclaredField("rootOverride");
+		f.setAccessible(true);
+		f.set(null, root);
+	}
+
 	static void clearMemory() throws Exception {
 		for (String name : new String[] {"cacheKey", "cached"}) {
 			Field f = BiomeLayoutTuner.class.getDeclaredField(name);
@@ -50,11 +58,15 @@ public class BiomeLayoutCacheTest {
 			Files.copy(instance.resolve(BiomeLayoutTuner.CONFIG), root.resolve(BiomeLayoutTuner.CONFIG));
 			copyTree(instance.resolve(wg + "biome_baselines"), root.resolve(wg + "biome_baselines"));
 			copyTree(instance.resolve(BiomeLayoutTuner.SAMPLE_DIR), root.resolve(BiomeLayoutTuner.SAMPLE_DIR));
-			WorldgenFiles.rootOverride = root;
+			setRootOverride(root);
 			Path cache = root.resolve(BiomeLayoutTuner.DISK_CACHE);
 			Path cfg = root.resolve(BiomeLayoutTuner.CONFIG);
 
-			// First solve may rewrite the config's stats; the second solve settles on the stable config.
+			// A solve may rewrite the config's stats (and logs "updated stats" into the cache's messages): settle the
+			// copied config with one throwaway solve, then start from no cache so later re-solves compare like for like.
+			clearMemory();
+			BiomeLayoutTuner.run();
+			Files.deleteIfExists(cache);
 			clearMemory();
 			BiomeLayoutTuner.Result first = BiomeLayoutTuner.run();
 			check(first.getErrors().isEmpty(), "real inputs solve without errors " + first.getErrors());
@@ -105,7 +117,7 @@ public class BiomeLayoutCacheTest {
 			BiomeLayoutTuner.Result edited = BiomeLayoutTuner.run();
 			check(!edited.isFromCache(), "edited sample: solves again");
 		} finally {
-			WorldgenFiles.rootOverride = null;
+			setRootOverride(null);
 			try (Stream<Path> s = Files.walk(root)) {
 				s.sorted(Comparator.reverseOrder()).forEach(p -> p.toFile().delete());
 			}

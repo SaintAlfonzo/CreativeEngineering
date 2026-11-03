@@ -340,7 +340,13 @@ def main():
     if os.path.exists(vp):
         VARS.update(json.load(open(vp)))
     started = start is None
+    crashdir = os.path.join(target, "srv", "crash-reports") if a[0] == "run" else None
+    crashes0 = set(os.listdir(crashdir)) if crashdir and os.path.isdir(crashdir) else set()
     for row in parse(batch):
+        if crashdir and os.path.isdir(crashdir) and set(os.listdir(crashdir)) - crashes0:
+            # the server died: later rows would only time out (r1102b 19:03, a probe crashed the tick loop)
+            print(f"ABORT: server crash report {sorted(set(os.listdir(crashdir)) - crashes0)} before {row['id']}")
+            break
         if not started:
             started = row["id"] == start
             if not started:

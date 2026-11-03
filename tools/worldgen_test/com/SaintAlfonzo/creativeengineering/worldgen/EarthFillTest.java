@@ -157,18 +157,18 @@ public class EarthFillTest {
 				"brief case: bottom 60, sink 4, earth at y 60 over a 4-block gap counts over air (before the fix: not)");
 
 		// waterReach (2026-11-02): a basin, water from y 60 - x up to 60, so a pad at y 61 has x water blocks under its bottom
-		EarthFill.Terrain basin = (x, y, z) -> y <= 60 - x ? EarthFill.Kind.SOLID : y <= 60 ? EarthFill.Kind.WATER : EarthFill.Kind.AIR;
+		EarthFill.Terrain waterBasin = (x, y, z) -> y <= 60 - x ? EarthFill.Kind.SOLID : y <= 60 ? EarthFill.Kind.WATER : EarthFill.Kind.AIR;
 		long[] wetRow = longs(java.util.stream.IntStream.rangeClosed(0, 12).mapToObj(x -> new int[]{x, 60, 0}).toArray(int[][]::new));
 		EarthFill.Reach wreach = new EarthFill.Reach(6, 10, 8, 2);
-		er = EarthFill.countEarth(List.of(new EarthFill.EarthPiece(wetRow, 61, EarthFill.Beard.BEARD)), basin, open, wreach, false);
+		er = EarthFill.countEarth(List.of(new EarthFill.EarthPiece(wetRow, 61, EarthFill.Beard.BEARD)), waterBasin, open, wreach, false);
 		check(er.water() == 10, "water reach 2: earth over water deeper than 2 under the piece counts (x 3..12 = 10)");
-		check(EarthFill.countEarth(List.of(new EarthFill.EarthPiece(wetRow, 61, EarthFill.Beard.BEARD)), basin, open, reach, false).water() == 6,
+		check(EarthFill.countEarth(List.of(new EarthFill.EarthPiece(wetRow, 61, EarthFill.Beard.BEARD)), waterBasin, open, reach, false).water() == 6,
 				"no water reach: water uses the beard's reach 6 as before (x 7..12 = 6)");
 		check(EarthFill.countEarth(List.of(new EarthFill.EarthPiece(padRow, 61, EarthFill.Beard.BEARD)), slope, open, wreach, false).air() == 6,
 				"water reach leaves air at the beard's reach (x 7..12 = 6)");
-		check(EarthFill.countEarth(List.of(new EarthFill.EarthPiece(wetRow, 61, EarthFill.Beard.BURY)), basin, open, wreach, false).water() == 10,
+		check(EarthFill.countEarth(List.of(new EarthFill.EarthPiece(wetRow, 61, EarthFill.Beard.BURY)), waterBasin, open, wreach, false).water() == 10,
 				"bury: water reach 2 too (min of 10 and 2)");
-		check(EarthFill.countEarth(List.of(new EarthFill.EarthPiece(wetRow, 61, EarthFill.Beard.BEARD)), basin, open, new EarthFill.Reach(6, 10, 8, 9), false).water() == 6,
+		check(EarthFill.countEarth(List.of(new EarthFill.EarthPiece(wetRow, 61, EarthFill.Beard.BEARD)), waterBasin, open, new EarthFill.Reach(6, 10, 8, 9), false).water() == 6,
 				"water reach above the beard's reach is capped at it (6)");
 		// sand_base (2026-11-02): the base tags combine per structure
 		List<TagKey<Block>> both = EarthFill.withBases(earth, true, true);

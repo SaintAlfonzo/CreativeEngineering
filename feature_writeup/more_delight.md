@@ -1,6 +1,6 @@
 # More Delight 26.05.20 against the installed 25.07.28
 
-**Decided and BUILT 2026-10-25 (owner); Shipped in 1.1.03 (deployed to server and players 2026-10-26); SQ-MRD-03 recipe half PASSED 2026-10-26; MRD- rows not run in game.** Installed: `moredelight-25.07.28-1.19-forge.jar` (`mods/`, `server_mods/`), 1.19.2. Evaluated 2026-10-25
+**Decided and BUILT 2026-10-25 (owner); Shipped in 1.1.03 (deployed to server and players 2026-10-26); SQ-MRD-02, -03 PASSED (r1101, r1102b); **SQ-MRD-01 FAILED r1102b 2026-11-02: the knives still mine at speed 8** (5.1); MRD- rows not run in game.** Installed: `moredelight-25.07.28-1.19-forge.jar` (`mods/`, `server_mods/`), 1.19.2. Evaluated 2026-10-25
 against `devmods/checkNewerVersionForContent/moredelight-26.05.20-1.20-forge.jar` (1.20.1 / Forge), method in
 [devmods_evaluation.md](devmods_evaluation.md) section 1. Both jars unpacked in `DecompiledMods/`. Plan row:
 `largecontent/mod-additions #25` in [todo/TODO.md](todo/TODO.md). No config file.
@@ -94,7 +94,9 @@ Prefix `MRD-`. Restart needed (startup scripts and a CD jar change).
 
 ### 5.1 Knives and toasts
 
-Knives: `kubejs/startup_scripts/func/tune_tools.js` (More Delight block). Fast toasts and the Cheese Toast item: Creative
+Knives: `kubejs/startup_scripts/func/tune_tools.js` (More Delight block). **Bug (r1102b SQ-MRD-01, deep scan 2026-11-02):** attack
+damage and speed apply, but `miningSpeed` (lines 134-135) does not reach the knives' tier: both still mine at 8 (the instance
+`/dumpgear` agrees). Fast toasts and the Cheese Toast item: Creative
 Delight startup script `kubejs_startup/moredelight/toast.js` (list `global.fastToasts`). Item
 `creativeengineering:cheese_toast` (`i.cheese_toast`, food type `handheld`), art from More Delight's Toast with Cheese
 (`kubejs/assets/creativeengineering/textures/item/cheese_toast.png`, notice in `more_delight_art_notice.txt`). Recipe in

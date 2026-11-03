@@ -197,6 +197,31 @@ while gliding. Every tick held, on both the client and the server:
 
 From a typical 1.5 blocks/tick glide, the default brake reaches the stall speed in about 20 ticks (1 s).
 
+### 2.10 Armor trims: standard armor only (`gear/tuning #14`, built 2026-11-02)
+
+Armor Trims Backport 1.3.3 makes every `ArmorItem` trimmable (226 items, `kubejs/exported/gear/armor.csv`), including
+hats, goggles, backtanks, diving gear and custom-model sets where a trim is invisible or a "mystery belt". The pack keeps
+only standard armor drawn on the vanilla armor model:
+
+| Kept (item tag `creativeengineering:trimmable_armor`, `server_scripts/tags/equipmenttags.js`) |
+|---|
+| Vanilla leather, chainmail, iron, gold, diamond, netherite (4 pieces each) and the turtle shell |
+| Everything Copper copper, Create: Dreams & Desires echo, Felsic, Dragon Loot dragon (plus the upgraded dragon chestplate) |
+| Immersive Engineering steel, PneumaticCraft compressed iron |
+
+Out: Immersive Armors, Wardrobe, Botania, Alex's Mobs, Railways caps, Create Goggles, backtanks and diving gear, hats,
+PneumaticCraft pneumatic armor, IE faraday, cardboard. The list is the brief's recommendation; the render audit
+(`gear/tuning #16`) can move sets in or out with one tag line.
+
+How: patcherMod `compat/ArmorTrimsItemCache` already caches Armor Trims' `LargeItemLists.getAllTrimmable` (perf.md
+10.3). When the tag has members, the cached list keeps only them. That one list is what `TrimmableItem.applyTrim`
+checks (smithing table result), and what the JEI trim and untrimming pages, the untrimming recipe and the trimmed-item
+decorator read, so all of them narrow together and follow `/reload` (the cache resets on every tag load). An empty tag
+means Armor Trims' full list. Trim materials were already cut to 8 (`gear/tuning #18`).
+
+Limits: a piece trimmed before the change keeps its `trim` NBT; whether it still draws the trim or the decorator is
+unknown until checked (GR-44). Appearance of the kept sets was not checked in a client (GR-43).
+
 ## 3. What the pack changes
 
 - **Stats at startup:** `tune_tools.js` / `tune_armor.js` (`func/`, `// priority: -100` so `global.item` exists)
@@ -402,6 +427,12 @@ Survival unless noted. `/dumpgear` after a restart gives every stat for GR-01 to
 - [ ] **GR-31 Felsic Long Reach fill (F2):** JEI on the felsic helmet assembly: 500 mB Long Reach, then 500 mB Magic
   Resistance. Set `[crafting.felsic_helmet] reachPotionMb = 100`, `/reload` → log `CRAFTING.FELSIC_HELMET.reachMb
   overridden: default 500 -> 100`; JEI shows 100 mB Long Reach, 500 mB Magic Resistance. Put it back.
+- [ ] **GR-43 Trims on standard armor only (2.10):** smithing table with a trim template and a material: an iron
+  chestplate takes the trim; an Immersive Armors chestplate, a Wardrobe hat and a Create backtank give no result. JEI
+  trim pages list only the kept sets. One trimmed piece per kept set on an armor stand: the trim draws on the model
+  (note any set where it does not).
+- [ ] **GR-44 Old trims (2.10):** a piece outside the list trimmed before the change: it still loads; note whether the
+  trim draws and whether the untrimming recipe takes it.
 
 ## 8. History
 
@@ -419,6 +450,8 @@ Survival unless noted. `/dumpgear` after a restart gives every stat for GR-01 to
 - 2026-11-01: F13 toml fix (`dragonloot-common.toml` 12 chest, 10 legs, toughness 4.5; `gear/tuning #20`). F2 built: `reachPotionMb`
   key per felsic piece (`gear/tuning #6`, patcherMod built, not installed); GR-31 added. NCH numeric defaults (`?? N` returned 0
   in this Rhino) now go through `NCH._or`, incl. `felsicAssembly` hammerBlows.
+- 2026-11-02: armor trims limited to standard armor (2.10, `gear/tuning #14`): tag `creativeengineering:trimmable_armor`,
+  filter in patcherMod `ArmorTrimsItemCache` (built, not installed). GR-43, GR-44.
 
 ## Owner ideas (scratchpad 2026-10-26)
 

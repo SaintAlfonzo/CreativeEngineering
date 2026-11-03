@@ -71,7 +71,6 @@ INGREDIENTS = {
     'brewinandchewin:scarlet_cheese_wheel': 'dairy_wheel_scarlet_cheese',
     'brewinandchewin:unripe_scarlet_cheese_wheel': 'dairy_wheel_unripe_scarlet_cheese',
     'minecraft:milk_bucket': 'dairy_milk_bucket', 'farmersdelight:milk_bottle': 'dairy_milk_bottle',
-    'miners_delight:milk_cup': 'dairy_milk_cup',
     # salt, sugar, spice
     'salt:salt': 'spice_salt', 'vintagedelight:salt_dust': 'spice_salt_dust', 'vintagedelight:salt': 'spice_salt_vintagedelight',
     'minecraft:sugar': 'spice_sugar', 'creativeengineering:powdered_sugar': 'spice_powdered_sugar',

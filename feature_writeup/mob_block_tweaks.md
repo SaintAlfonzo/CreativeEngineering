@@ -271,6 +271,16 @@ dead.
   `BreakEvent` (not checked beyond Create) could still break a box. `vaultMode = false` returns Quark's behaviour,
   except that the hardness and tags stay (KubeJS).
 
+### 2.10 Giant squid flee distance (added 2026-11-02, TODO `mobs/tweaks #18`)
+
+Alex's Mobs' giant squid runs from cachalot whales: its `AIAvoidWhales` goal starts when any whale is within 50 blocks
+and keeps running while that whale is within 60, so squid scatter from whales far out of sight. Owner decision
+2026-11-02: squid are the fleeing mob (the whales are not changed). Creative Compat `AmGiantSquidAvoidWhalesMixin`
+(ModifyConstant on the goal's `canUse` 50 and `canContinueToUse` 60, gated on `alexsmobs`) reads
+`config/creativecompat-common.toml` `[giant_squid]`: `whaleFleeStart` 16 (1 to 64), `whaleFleeStop` 24 (1 to 96, kept
+at least the start). Read live each time the goal checks. Vanilla squid have no whale goal (they only flee what hurt
+them); orcas and other whales are untouched.
+
 ## 3. What the pack changes
 
 - **Bubble columns:** `BubbleColumnImmunityMixin` cancels `BubbleColumnBlock#entityInside` (SRG `m_7892_`) at the head
@@ -376,6 +386,7 @@ dead.
 - Villager gates and doors: [McaVillagerPathGatesMixin](../development/patcherMod/src/main/java/com/SaintAlfonzo/creativeengineering/mixin/McaVillagerPathGatesMixin.java), [WalkNodeEvaluatorVillagerGateMixin](../development/patcherMod/src/main/java/com/SaintAlfonzo/creativeengineering/mixin/WalkNodeEvaluatorVillagerGateMixin.java).
 - Villager ladders: [McaVillagerPathLaddersMixin](../development/patcherMod/src/main/java/com/SaintAlfonzo/creativeengineering/mixin/McaVillagerPathLaddersMixin.java), [GroundPathNavigationClimbMixin](../development/patcherMod/src/main/java/com/SaintAlfonzo/creativeengineering/mixin/GroundPathNavigationClimbMixin.java), [MoveControlVillagerLadderMixin](../development/patcherMod/src/main/java/com/SaintAlfonzo/creativeengineering/mixin/MoveControlVillagerLadderMixin.java); tag in [blocktags.js](../kubejs/server_scripts/tags/blocktags.js), key `t_villager_ladders` in `block_dict.js`.
 - Monster box vaults: [mobs/MonsterBoxVault.java](../development/patcherMod/src/main/java/com/SaintAlfonzo/creativeengineering/mobs/MonsterBoxVault.java) (registered in `CreativeEngineering`), [MonsterBoxBlockEntityMixin](../development/patcherMod/src/main/java/com/SaintAlfonzo/creativeengineering/mixin/MonsterBoxBlockEntityMixin.java), [CreateBreakerMonsterBoxMixin](../development/patcherMod/src/main/java/com/SaintAlfonzo/creativeengineering/mixin/CreateBreakerMonsterBoxMixin.java), `CEConfig.MonsterBox`, lang `chat.creativeengineering.monster_box.sneak`, [monster_box_reward.json](../kubejs/data/creativeengineering/loot_tables/misc/monster_box_reward.json), `quark-common.toml` (`Enable Extra Loot Table`, both copies).
+- Giant squid flee distance: Creative Compat [AmGiantSquidAvoidWhalesMixin](../development/creativeCompat/src/main/java/com/SaintAlfonzo/creativecompat/mixin/AmGiantSquidAvoidWhalesMixin.java), `CompatConfig.GiantSquid` (`[giant_squid]`), gate in `CompatMixinPlugin`.
 - KubeJS: [entitytags.js](../kubejs/server_scripts/tags/entitytags.js), [flowers.js](../kubejs/server_scripts/other/flowers.js), [block_properties.js](../kubejs/startup_scripts/changes/block_properties.js), `kubejs/data/bushierflowers/forge/biome_modifier/` (5 files).
 
 ## 6. Offline checks
@@ -490,6 +501,9 @@ dead.
   client side); mine it sneaking → it breaks, nothing drops. Same in creative.
 - [ ] **MT-50 Create:** a powered drill against a box, and a drill on a moving contraption → the box doesn't break;
   a contraption doesn't pick the box up.
+- [ ] **MT-51 Giant squid flee distance [scratch]:** a giant squid and a cachalot whale summoned 30 blocks apart in deep
+  open water → the squid does not flee; whale moved to 12 blocks → it swims away and stops once more than 24 off. With
+  `whaleFleeStart = 50`, `whaleFleeStop = 60` it flees at 30 again (Alex's Mobs' own).
 
 ## 8. History
 

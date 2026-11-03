@@ -1,5 +1,21 @@
 # Pre-scratch fix pass (planned 2026-11-02)
 
+**Status 2026-11-02 evening: executed.** Every row is fixed, built, or investigated with a probe/test row; TODO rows moved
+to Testing (except `gameplay/time #4`, still Bug pending CQ-NEW-01, and `biomes/netherblocks #3`, not needed: no flower
+edit). Queue: "Pre-scratch fix pass" at the end of [scratch_queue.md](testing/scratch_queue.md) (SQ-PST, SQ-PSD, SQ-PSM,
+SQ-PSF, SQ-PSW, SQ-PSU, 52 rows), not run. Jars built and installed 2026-11-02: patcherMod, Creative Compat, Creative
+Calendar, Creative Delight, Creative Brewing. After the first boot: `/cegen` for the item physics and WTHIT silk-touch
+generators (azalea wood ids).
+Premises that were wrong: crops #31, #32, #34, #38 and item-physics #4 were already built (10-28 / 10-31); oats #35 shipped
+in 1.1.06; baby squid (#21) is not a missing rule but a low chance by design; there are no D&D glowstone geodes; the time
+and season code is in Creative Calendar, crops in Creative Delight, potions in Creative Brewing.
+Owner decisions 2026-11-02, applied the same day: oats #35 kept open for a visual sign-off (CQ-PSD-09); azalea logs
+become oak logs, leaves and trees stay (as built); azalea racks pulled from Creative Delight; modded grasses slowed in
+winter too (SQ-PST-06 to -11); no cap change for the birch tower, box spawn attempts now start within the box height
+instead (`NaturalSpawnerBoxHeightMixin`, SQ-PSM-03); baby rates unchanged; air under a spire cancels it (as built);
+Vintage sweet berry and glow berry jams removed (as built); the vinegar and apple sauce jar food values reverted.
+Jars reinstalled 14:08: patcherMod, Creative Calendar, Creative Delight.
+
 Goal: fix or build the rows below before the next scratch run. Each row gets a scratch queue row (not run), a writeup
 update, a changelog bullet where a player can notice it, and a TODO status change to Testing.
 Rows are TODO ids; briefs are in `feature_writeup/briefs/`.

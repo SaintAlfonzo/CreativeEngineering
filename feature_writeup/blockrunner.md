@@ -76,8 +76,9 @@ BlockRunner 4.2.2 (Fuzs) maps blocks to walk-speed multipliers. `config/blockrun
   tagged tiers gets a random one on every reload. A `"block_id"` key in the json always beats tags.
 - **Stock tags:** six basic tiers, `blockrunner:{very_quick, quick, slightly_quick, slightly_slow, slow, very_slow}_blocks`.
   The jar seeds `dirt_path` → quick and `#minecraft:stone_bricks` → slightly_quick. This pack wipes those seeds.
-- **Client options** (`blockrunner-client.toml`): `block_speed_multiplier_tooltip = true` adds a gray
-  "Speed Multiplier: X" line to block items; `disable_field_of_view_changes = true` stops the speed
+- **Client options** (`blockrunner-client.toml`): `block_speed_multiplier_tooltip` adds a gray
+  "Speed Multiplier: X" line to block items; the pack turns it off (2026-11-02, `gameplay/blockrunner #6`: walk speed
+  shows in WTHIT only, 3.8); `disable_field_of_view_changes = true` stops the speed
   change from zooming your FOV.
 
 ## 2. Reference: speed tiers
@@ -234,7 +235,8 @@ disguised as: framed concrete runs like concrete, framed honey drags like honey.
   - "Speed Multiplier: matches its camo"
   - "Speed Multiplier: matches its camo (newest camo sets walk behaviors for hybrid blocks)" on hybrid-capable items: framed slab and panel (they merge), every framed double item, and Copycats+ multi-material copycats (your wording, 2026-09-27)
   - "Speed Multiplier: 1.0, no matter its camo" when `copyCamo = false`
-  - Turning BlockRunner's tooltip off hides this too.
+  - Turning BlockRunner's tooltip off hides this too; the pack has it off since 2026-11-02 (`gameplay/blockrunner #6`), so this line
+    is dormant and WTHIT is the place to read camo walk speed.
 - **Config:** `copyCamo` must be the same on server and client, or movement stutters on these blocks.
 
 ### 3.4 Visual sinking, like soul sand (patcherMod)
@@ -284,7 +286,7 @@ resets them with `BlockEvents.modification` (startup, so it needs a game restart
 |---|---|---|
 | `config/creativeengineering-common.toml` | `[surface]`: tier speeds, sticky, camouflage, sinking, wthit (3.7, 3.8) | `configs_edited/root_config/` once a value differs from its default (all defaults on 2026-09-27) |
 | `config/blockrunner.json` | basic tiers + one-off block overrides only | `configs_edited/root_config/blockrunner.json` |
-| `config/blockrunner-client.toml` | tooltip on, FOV change off | `configs_edited/root_config/blockrunner-client.toml` |
+| `config/blockrunner-client.toml` | tooltip off (2026-11-02, was on), FOV change off | `configs_edited/root_config/blockrunner-client.toml` |
 
 ### 3.7 One `[surface]` config section (patcherMod)
 
@@ -515,7 +517,7 @@ Slower blocks show red. Frames add "from camo"; a sticky piston that isn't facin
 **Surface config (3.7, in game since 14:49; the trimmed json needs a restart)**
 - [ ] **BR-39 Section is there:** open Create's Configs screen for Creative Engineering, Common → a **surface** folder holding speed, sticky, camouflage and sinking. `speed` lists all 26 tiers, each showing its description. No `block_sinking` or `camouflage_speed` left at the top level.
 - [ ] **BR-40 Speeds come from the toml:** `latest.log` has `[surface] 26 tier speeds applied to BlockRunner from [surface.speed]` and no `without BlockRunnerSpeedConfigMixin` error (log half seen 2026-09-27 15:21, with the old json still listing the tiers). After a restart with the trimmed json: `M` on asphalt → **+0.05**, on sand → **−0.015**.
-- [ ] **BR-41 Live edit:** in the Configs screen set `surface.speed.asphalt` to 2.0 and save. Step off and back onto asphalt → `M` **+0.1**, and the asphalt item's tooltip reads "Speed Multiplier: 2.0". Set it back to 1.5.
+- [ ] **BR-41 Live edit:** in the Configs screen set `surface.speed.asphalt` to 2.0 and save. Step off and back onto asphalt → `M` **+0.1**, and WTHIT on placed asphalt reads the 2.0 speed. Set it back to 1.5.
 - [ ] **BR-42 Sticky switch:** set `[surface.sticky] faceUpOnly = false`. Step onto a sideways sticky piston → **−0.035**. Set it back to `true` → "no modifier" after stepping off and on.
 - [ ] **BR-43 Hybrid wording:** framed slab, framed panel, a framed double slab, a Copycats+ copycat slab → "Speed Multiplier: matches its camo (newest camo sets walk behaviors for hybrid blocks)". Framed cube → "…matches its camo". (Needs `[surface.camouflage] copyCamo = true`; with false every frame reads "1.0, no matter its camo".)
 

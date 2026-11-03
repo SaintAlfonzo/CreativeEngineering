@@ -60,15 +60,17 @@
         if (byId) return byId
         byId = {}; aliasId = {}
         server.getRecipeManager().getRecipes().forEach(r => { byId[String(r.getId())] = r })
-        // Food recipes moved into Creative Delight's tree on 2026-10-25 (creativedelight: ids, same paths): a
-        // creativeengineering: id the checks name also finds its creativedelight: twin
+        // Food recipes moved into Creative Delight's tree on 2026-10-25 and brewing into Creative Brewing's on 10-31
+        // (creativedelight: / creativebrewing: ids, same paths): a creativeengineering: id the checks name also finds
+        // its twin under either namespace
         let aliased = 0
         Object.keys(byId).forEach(id => {
-            if (id.indexOf('creativedelight:') != 0) return
-            let old = 'creativeengineering:' + id.substring('creativedelight:'.length)
-            if (byId[old] == null) { aliasId[old] = byId[id]; aliased++ }
+            let ns = ['creativedelight:', 'creativebrewing:'].filter(n => id.indexOf(n) == 0)[0]
+            if (ns == null) return
+            let old = 'creativeengineering:' + id.substring(ns.length)
+            if (byId[old] == null && aliasId[old] == null) { aliasId[old] = byId[id]; aliased++ }
         })
-        note('recipe ids aliased from creativedelight:', aliased)
+        note('recipe ids aliased from creativedelight: / creativebrewing:', aliased)
         return byId
     }
     function ingredientsOf(r) {
@@ -528,7 +530,8 @@
             check('fluid ' + n, key == C + n, key)
             check('tag forge:fluid/' + n, tagHas($VReg.FLUIDS, 'forge:fluid/' + n, C + n), tagList($VReg.FLUIDS, 'forge:fluid/' + n).join(', '))
             expectGone(server, [VG + 'cooking/' + n])
-            let pot = C + 'farmersdelightcooking/' + n + '_manual_only'
+            // Turnip Water's pot recipe follows the juice rule's name (drinks.js JUICES: turnip_juice_manual_only)
+            let pot = C + 'farmersdelightcooking/' + (n == 'turnip_water' ? 'turnip_juice' : n) + '_manual_only'
             check('pot ' + n, has(server, pot) && takes(server, pot, POT_IN[n]), has(server, pot) ? resultOf(rget(server, pot)) +
                 ', takes ' + POT_IN[n] + ' ' + takes(server, pot, POT_IN[n]) : 'not loaded')
             // Create mixer (heated): 250 mB out

@@ -94,6 +94,8 @@ public class CreativeDelight {
 		}
 		// Remainder buffer: pot/kettle/oven keep ingredient leftovers (remainder_buffer.md). Saved as an attached cap.
 		MinecraftForge.EVENT_BUS.register(com.SaintAlfonzo.creativedelight.cooking.RemainderBufferStorage.class);
+		// Cookware: sneak right-click picks up, sneak left-click toggles the handle (QoL-7, cooking/kitchen #27).
+		MinecraftForge.EVENT_BUS.register(com.SaintAlfonzo.creativedelight.cooking.CookwareHandling.class);
 		// Multi-serving cans ([canning]): max-servings cache cleared on tag reload + the "Servings" tooltip line.
 		MinecraftForge.EVENT_BUS.register(com.SaintAlfonzo.creativedelight.food.CanServings.class);
 		MinecraftForge.EVENT_BUS.register(com.SaintAlfonzo.creativedelight.food.CanServingsTooltip.class);

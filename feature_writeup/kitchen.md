@@ -15,17 +15,17 @@ The FD-style stations' leftover slots (pot, kettle, oven; rows #1, #3, #4, #13, 
 | CfB oven: any furnace fuel plus cooking oil; every fuel container comes back | BUILT 2026-10-21 (patcherMod 1.1.01 + config), scratch server PASSED, not in game | `cooking/kitchen #8` |
 | CfB sink: infinite water | BUILT 2026-10-21 (config), scratch server PASSED | `#8` |
 | FD cutting board on a CfB counter or corner, drawn on the worktop, config offset | BUILT 2026-10-21 (patcherMod), placement and cutting PASSED on a scratch server; the drawing not seen | `#8` |
-| Display Delight plates and plated foods, Brewin' coaster on a CfB counter or corner, drawn on the worktop, own offset | BUILT 2026-10-24 (patcherMod 1.1.02 + KubeJS tags), deployed with 1.1.03 (2026-10-26); `/kttest` 30 of 34 on 2026-10-25 / 26 / 27 (KT-15d, KT-17 fail on Display Delight 1.7.0's leg; probe rewritten 2026-10-27, not rerun) | `#20` |
+| Display Delight plates and plated foods, Brewin' coaster on a CfB counter or corner, drawn on the worktop, own offset | BUILT 2026-10-24 (patcherMod 1.1.02 + KubeJS tags), deployed with 1.1.03 (2026-10-26); `/kttest` 30 of 34 on 2026-10-25 / 26 / 27 (KT-15d, KT-17 fail on Display Delight 1.7.0's leg; probe rewritten 2026-10-27); rewritten probe scratch PASSED 2026-11-01 (SQ-KT-25, 34 of 34) and r1102b (SQ-KT-02, KT-17 x4) (deep scan 2026-11-02) | `#20` |
 | CfB 2-tall fridge filled to a full block with a white box on top (the 2026-10-21 stretch reverted) | BUILT 2026-10-25 (resource override); top box rendered missing in a client, texture fixed 2026-10-26; since 2026-10-31 drawn by blockheadsAdditions code instead of the override (2.4), not seen in game | `#6`, `#19` |
-| CfB spice rack and tool rack in 20 woods (2.7) | BUILT 2026-10-31 (Creative Delight member blockheadsAdditions + KubeJS), Creative Delight installed 2026-10-31 16:29, not booted | `#22` |
-| CfB code moved out of patcherMod into the Creative Delight member blockheadsAdditions (section 9) | BUILT 2026-10-31, patcherMod and Creative Delight installed together 2026-10-31, not booted | `#22` |
-| Display Delight blocks, toppers and the coaster break with drops when the block below goes | BUILT 2026-10-25 (patcherMod 1.1.03, deployed 2026-10-26); since Display Delight 1.7.0 only the toppers and the coaster rely on it (2026-10-27); SQ-KT rerun queued | `#20` |
+| CfB spice rack and tool rack in 20 woods (2.7) | BUILT 2026-10-31 (Creative Delight member blockheadsAdditions + KubeJS); scratch server PASSED 2026-11-01 (SQ-KT-22 to -24: 40 recipes, rack holds and drops items); not in game | `#22` |
+| CfB code moved out of patcherMod into the Creative Delight member blockheadsAdditions (section 9) | BUILT 2026-10-31; scratch server PASSED 2026-11-01 (SQ-KT-22 boot, SQ-KT-25 `/kttest` 34 of 34, `/kctest` 9 of 9); not in game | `#22` |
+| Display Delight blocks, toppers and the coaster break with drops when the block below goes | BUILT 2026-10-25 (patcherMod 1.1.03, deployed 2026-10-26); since Display Delight 1.7.0 only the toppers and the coaster rely on it (2026-10-27); rerun scratch PASSED 2026-11-01 (SQ-KT-25) and r1102b (SQ-KT-02) | `#20` |
 | CfB kitchen corner storage (27 slots, chest GUI, hoppers, cooking table) | BUILT 2026-10-21 (patcherMod), scratch server PASSED | `#15` |
 | Bamboo bowl | BUILT 2026-10-21 (KubeJS), scratch server PASSED | `#10` |
 | Mortar and pestle food grinding (own recipes through `foodGrinding`, other mods' through a catalogue) | BUILT 2026-10-21 (KubeJS + generator), scratch server PASSED | `#10` |
 | Returned bowls that wouldn't stack | cause found elsewhere: Sticky It!'s tooltip handler, fixed by Creative Labels ([sticky_notes.md](sticky_notes.md) 3.13, SN-48) | `#5` |
 | Coaster contents: only items with a coaster model (tag 304, 208 pack models from `gen_coaster_models.py`), 2.3 | BUILT 2026-10-29 (KubeJS assets + tag), scratch server PASSED r1031 (2026-10-31, SQ-KT-21: tag count logged, coaster accepts and refuses as listed); KT-19, KT-20 in game pending | `#21` |
-| Stepstool | BUILT 2026-10-29 as a worn stool that lifts the player one block ([stepstool.md](stepstool.md)); patcherMod 1.1.04 installed 2026-10-31 00:44, not yet booted | `#17` |
+| Stepstool | BUILT 2026-10-29 as a worn stool that lifts the player one block ([stepstool.md](stepstool.md)); scratch server PASSED r1031 (SQ-STL-01, -02); client and play open | `#17` |
 | Scythe | Planned | `#16` |
 
 - **Pending:** the 1.1.01 parts (oven fuel, sink, board, corner) deployed 2026-10-22, the counter toppers with 1.1.03,
@@ -216,6 +216,31 @@ water".
   plain planks png from `textureswapper/rack/` copied to `textures/block/fruit_basket/<wood>.png` by `gen_cfb_racks.py`.
   Recipe: slab, any wooden pressure plate, slab (rubberwood: planks); CfB's own basket takes `#creativedelight:rack_slabs/other`.
 
+### 2.8 Stone cutting boards (built 2026-11-02; r1102b SQ-FCB-07 partial: block entity, placing, reload PASS, drops and knife cut unproven (batch fault); CQ-FCB-02; TODO `cooking/kitchen #25`)
+
+- `farmersdelight:granite_cutting_board`, `andesite_cutting_board`, `diorite_cutting_board`: Farmer's Delight's
+  `CuttingBoardBlock` registered by the repackedFarmers member (`FDBackportRegistry.STONE_CUTTING_BOARDS`, -03), stone
+  material and sound, hardness 1.5. Common setup adds them to the cutting board block entity type's valid blocks
+  (`allowStoneBoards`, as the CfB wood racks do), so they cut, render and hammer bakeware like the wooden board.
+- Model: FD's `cutting_board` model as parent with the texture swapped. Art: `members/farmers/tools/stone_cutting_boards.py`
+  paints the polished stone's inside (its 1 px block edge left out) onto FD's board texture, keeping the board's seams,
+  rim and handle slot.
+- Recipe (CD `farmersdelight/stone_cutting_boards.js`): FD's shape, 2 sticks and 4 of the polished stone. Block tags:
+  pickaxe, counter toppers (blockheads_additions), hammer no-rotate.
+- 2.7 update 2026-11-02: CfB's own Spice Rack, Tool Rack and Fruit Basket are merged into the oak versions
+  ([item_merges.md](item_merges.md) 2.16); their recipes are gone. Scratch PASSED r1102b (SQ-FCB-05: each turns into its oak survivor).
+
+### 2.9 Cookware pickup and handle toggle (built 2026-11-02; scratch PASSED r1102b SQ-FCB-08 (the kettle's toggle is its `lid`), SQ-FCB-08b no pickup with the switch off; CQ-FCB-04; TODO `cooking/kitchen #27`)
+
+- Blocks: `#creativedelight:cookware_pickup` (Farmer's Delight cooking pot and skillet, Miner's copper pot, Farmer's
+  Respite kettle; CD `creativeengineering/kitchen_tags.js`). Code: CD Java `cooking/CookwareHandling`, switch
+  `[qol] cookwarePickup` (QoL-7).
+- Sneak right-click, empty main hand: the block is removed and its loot goes into the hand (the pot item keeps its
+  meal, as on breaking); what the block throws out on removal (ingredients) drops as on breaking. A `BreakEvent` is
+  posted first, so claims and spawn protection stop it. Upstream's sneak right-click handle toggle is no longer reached.
+- Sneak left-click, empty main hand, blocks with a `support` property (pot, copper pot, kettle): the first hit toggles
+  the handle (the block's own toggle is called) and the break is cancelled on both sides, also in creative.
+
 ## 3. What the pack changes
 
 - Config: `cookingforblockheads-common.toml` (`ovenRequiresCookingOil`, `sinkRequiresWater`); `creativeengineering-common.toml`
@@ -291,7 +316,7 @@ Scratch dedicated server (`tools/creative_labels_test/scratch_server.sh`, the pr
 - 2026-10-31: `:blockheadsAdditions:build` passes `checkNoArrResources` (no path of the CfB jar in ours); the SRG
   field `BlockEntityType.f_58915_` checked against the 1.19.2 srg client jar.
 
-Queued (SQ-KT, not run): `/kttest` now also places a plate, a small plate and a coaster on a counter and a plate on a
+Run 2026-11-01 (SQ-KT-25, 34 of 34) and r1102b (SQ-KT-02 PASS); was queued: `/kttest` now also places a plate, a small plate and a coaster on a counter and a plate on a
 corner (KT-15a/b, KT-16a), sets a plated hamburger on a counter (KT-15c), moves it with `plateOffsetY` (KT-16b) and
 checks a plate over air stays with its wooden leg (KT-15d); and breaks the block under a plate and a plated hamburger
 on stone and a plate and a coaster on a counter: the coaster pops, the Display Delight blocks keep a leg (KT-17;
@@ -382,6 +407,8 @@ Not covered offline: anything drawn (board offset, fridge), the corner's GUI on 
 - 2026-10-31: Cooking for Blockheads folded into Creative Delight as the member blockheadsAdditions (section 9): the CfB
   mixins, corner storage and counter toppers moved out of patcherMod (`[kitchen]` config with them), the fridge
   override replaced by code (2.4), 40 wood racks from the owner's art (2.7, `cooking/kitchen #22`). KT-22 to KT-24.
+- 2026-11-02: deep scan 2026-11-02: At a glance and 2.7 to 2.9 updated from the scratch runs (SQ-KT-21 r1031;
+  SQ-KT-22 to -25 2026-11-01; SQ-KT-02, SQ-FCB-05, -07, -08 r1102b). No KT- test run in game yet.
 
 ## 9. Creative Delight member blockheadsAdditions
 

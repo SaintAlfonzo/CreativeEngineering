@@ -29,9 +29,10 @@ import org.slf4j.Logger;
  * ({@code creativeengineering:cob_pipe}, Creative Delight startup corn_delight/corn_items.js); this is the code they
  * need.
  * <ul>
- * <li>Cob Pipe: goes in the vanilla head slot ({@code mixin.MobCobPipeSlotMixin}). A right click puts it in a Curios
- * mouth or face slot if the player has one, else the empty head slot, else a free Curios head slot (1.2.11: the head
- * curio only while a helmet is worn). Curios part: {@link CornDelightCurios}.</li>
+ * <li>Cob Pipe: goes in the vanilla head slot ({@code mixin.MobCobPipeSlotMixin}). A right click puts it in the pack's
+ * Curios Face slot (curios_slots.md; the mouth slot of 1.2.11's plan, dropped 2026-11-02, gameplay/misc #19), else the
+ * empty head slot, else a free Curios head slot (1.2.11: the head curio only while a helmet is worn). Curios part:
+ * {@link CornDelightCurios}.</li>
  * <li>Villagers: corn joins the items they pick up and share, and counts as breeding food (1 point, the carrot's),
  * combined with the current {@code Villager.WANTED_ITEMS} / {@code FOOD_POINTS} the way the Vintage and Veggies ports
  * add theirs.</li>
@@ -65,7 +66,7 @@ public final class CornDelightCompat {
         if (!isCobPipe(stack)) return;
         Player player = event.getEntity();
         boolean curios = ModList.get().isLoaded("curios");
-        boolean equipped = (curios && (CornDelightCurios.equip(player, "mouth", stack) || CornDelightCurios.equip(player, "face", stack)))
+        boolean equipped = (curios && CornDelightCurios.equip(player, "face", stack))
                 || equipHead(player, stack)
                 || (curios && CornDelightCurios.equip(player, "head", stack));
         if (!equipped) return;

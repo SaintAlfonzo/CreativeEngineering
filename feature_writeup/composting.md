@@ -13,7 +13,7 @@ Test prefix `CM-` (the backlog proposed `CP-`, which [can_parity.md](can_parity.
 | `/dumpcompost` (before / after / why) and `tools/gen_compost_values.py` (`--add-new` after adding mods, `--check`) | in use |
 | Compost and fertile soil crafting from mulch (in `sawdust.js`) | DEPLOYED; belongs to recipe progression (backlog row 20) |
 
-- **Pending:** seed milling to bone meal (built 2026-10-30, unreleased, TODO `farming/composting #4`, SQ-CP-01 scratch server PASSED r1031 2026-10-31). CM-01 to CM-08 have never been run. Findings F1 to F4 (section 4); none
+- **Pending:** seed milling to bone meal (built 2026-10-30, shipped 1.1.05, TODO `farming/composting #4`, SQ-CP-01 scratch server PASSED r1031 2026-10-31). CM-01 to CM-08 have never been run. Findings F1 to F4 (section 4); none
   needs a decision.
 - **Files to open:** [compost_rules.js](../development/creativeDelight/src/main/resources/kubejs_startup/creativeengineering/compost_rules.js) (categories, exclusions),
   [compost_values.js](../kubejs/startup_scripts/compost/compost_values.js) (per-item chances),
@@ -90,7 +90,7 @@ the first rebuild), `now` (each item's chance, whether a value or a rule put it 
 - **Seed milling (2026-10-30, TODO `farming/composting #4`):** `server_scripts/wood/compost.js` mills any seed in
   `#creativeengineering:millable_seeds` into bone meal at 15 % (Create millstone and crushing wheels; the tag is built in
   `tags/wood_tags.js` from `#forge:seeds` and `#c:seeds` minus corn kernels, which mill into cornmeal, and rice). The
-  composter needs about 21 seeds per bone meal; the mill about 7. Test CP-01 (scratch queue SQ-CP-01): PASSED r1031 (2026-10-31). Unreleased (player changelog bullet in `unreleased.md`).
+  composter needs about 21 seeds per bone meal; the mill about 7. Test CP-01 (scratch queue SQ-CP-01): PASSED r1031 (2026-10-31). Shipped 1.1.05 (Gameplay bullet).
 - **Generator:** since 2026-10-25 (creative_delight.md 29) the rows are 35 generated `<mod>/compost_values.js` files in
   Creative Delight's startup tree (`development/creativeDelight/src/main/resources/kubejs_startup/`), and
   `tools/gen_compost_values.py` regenerates them exactly from a `/dumpcompost` (its `value` rows); hand rows go in a

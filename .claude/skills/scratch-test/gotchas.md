@@ -112,3 +112,15 @@ Sorted by topic. Add new ones under their topic with the date (skill step B5.4).
   Mechanical Extruder recipes with an abstract `getType()` in `dumprecipes`.
 - Dedicated-server dumps: recipes, tags, loot, structures, biomes, spawns, trades are good; names, stacks, effects,
   gear, food, crops, compost, paintings need the client.
+
+## Probe crashes the server mid-batch (r1102b, 2026-11-02)
+
+- A probe that calls `r.getType()` on every recipe crashed the server tick (`AbstractMethodError`,
+  create_mechanical_extruder `ExtrudingRecipe.getType`): use `getAllRecipesFor(RECIPE_TYPE.get(rl))`. qrun.py does
+  not notice a dead server: every later row FAILs on timeouts. When a batch shows a run of timeouts, check
+  `srv/crash-reports/` first. A leftover crash report also makes `wait_boot.sh` report CRASH on the next boot: move
+  old reports out before booting.
+- A parallel `installToMods` rewrites hard-linked srv jars (the old inode stays with srv only if the install moves the
+  file): copy the jars into srv (`drive.sh` decouple) for long runs.
+- Background `run_in_background` shells and Monitor here do not see the game's pids (`kill -0` / `pgrep` fail): wait
+  on files (results `totals:` line, drive logs) with a foreground `timeout 590 tail -f | grep -m1`.

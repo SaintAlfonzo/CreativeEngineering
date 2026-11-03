@@ -1,8 +1,9 @@
 # Nether's Delight 4.0 update and My Nether's Delight
 
-**BUILT 2026-11-01, not installed, not tested** (section 4.9): Nether's Delight 3.1 repacked as Creative Delight member
-`repackedNethers` with the 4.0 carry-overs. Until the CD jar is installed, the live jar is still `NethersDelight-1.19-3.1.jar`
-(`mods/`, `server_mods/`); the CD install moves it out. Two jars were dropped into
+**BUILT 2026-11-01, installed in `mods/` with the CD jar (2026-11-02 14:01; `NethersDelight-1.19-3.1.jar` gone from `mods/`, still in
+`server_mods/`), not deployed; scratch r1102b 2026-11-02: SQ-NDM-01 to -04, -06, -07 PASSED, -05 open (colony drop), -08 (3.1
+save) not run; not played** (section 4.9; deep scan 2026-11-02): Nether's Delight 3.1 repacked as Creative Delight member
+`repackedNethers` with the 4.0 carry-overs. Two jars were dropped into
 `DecompiledMods/` on 2026-10-25: `nethersdelight-1.20.1-4.0.jar` (the next Nether's Delight, 1.20.1 / Forge 47) and
 `MyNethersDelight-1.20.1-1.10.4-backport.1.jar` (a separate, larger mod, mod id `mynethersdelight`). Neither runs on 1.19.2
 as is. Plan row: `largecontent/mod-additions #16`, `#17` in [todo/TODO.md](todo/TODO.md).
@@ -157,7 +158,7 @@ Checked against the repo 2026-11-01: the pack's FD 1.2.4 jar contains `MushroomC
 Open items for the build session: the member name and gradle wiring (`:creativeDelight:` nests it), the rich soul soil
 question above, and the seasonal tag check.
 
-### 4.9 As built (2026-11-01; built, not installed, not tested)
+### 4.9 As built (2026-11-01; installed 2026-11-02, scratch tested r1102b)
 
 Route: the 2026-11-01 repack decision (section 1, creative_split.md 7.9 step 2), which supersedes the additions overlay of
 4.8; the "patcherMod" of 4.1 to 4.4 is the repack overlay. Ids are 3.1's throughout; renames are display names only.
@@ -182,5 +183,11 @@ Install (game closed): `./gradlew :creativeDelight:installToMods --offline` move
 `config/jei/ingredient-list-mod-sort-order.ini` (and its `configs_edited/root_config/jei/` copy) so JEI keeps the sort
 position. Then `/dumpall` and the generators (new block).
 
-Tests: SQ-NDM in testing/scratch_queue.md (the 4.7 rows plus the load check of creative_split.md 7.9 step 2).
+Install status (deep scan 2026-11-02): the CD jar in `mods/` nests `repackedNethers-1.19-3.1-ce-19.2-01`; still to do: remove the 3.1
+jar from `server_mods/`, the JEI sort-order rename (the ini still says `Nether's Delight`), the `mod_sides.md` row (still names
+the 3.1 jar), `/dumpall` and the generators.
+
+Tests: SQ-NDM in testing/scratch_queue.md (the 4.7 rows plus the load check of creative_split.md 7.9 step 2). r1102b
+2026-11-02 (`perf/runs/r1102b/s3/judged.md`): SQ-NDM-01, -02, -03, -04 (real PASS), -06, -07 PASS; -05 OPEN (the broken
+open-sky colony's drop not proven; hand or probe addition); -08 (3.1 save) not run. The mod-list name is a client check.
 

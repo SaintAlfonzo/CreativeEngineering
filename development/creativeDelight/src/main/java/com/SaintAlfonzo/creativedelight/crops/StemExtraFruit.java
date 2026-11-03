@@ -20,6 +20,8 @@ import net.minecraft.world.level.block.CropBlock;
 import net.minecraft.world.level.block.StemBlock;
 import net.minecraft.world.level.block.StemGrownBlock;
 import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.level.block.state.properties.BlockStateProperties;
+import net.minecraft.world.level.block.state.properties.BooleanProperty;
 import net.minecraft.world.level.saveddata.SavedData;
 import net.minecraftforge.common.ForgeHooks;
 import net.minecraftforge.fml.util.ObfuscationReflectionHelper;
@@ -38,6 +40,11 @@ import java.util.List;
  * CEConfig [stem_fruit]). The last-fruit time per stem lives in the dimension's saved data; it starts on
  * the attached stem's first random tick, and is dropped when the stem is broken or turns back into a
  * plain stem. feature_writeup/crops.md 2.10.
+ *
+ * <p>Own fruit only (farming/crops #20): the mixin adds {@code north/east/south/west} booleans to every attached
+ * stem ("a fruit this stem grew is on that side", besides the one {@code facing} points at). An extra fruit sets its
+ * side; the blockstate overrides draw a bent stem toward {@code facing} and every set side. A fruit that goes clears
+ * its side; when the faced fruit goes the stem turns to a set side, never to a fruit it did not grow (hand-placed).
  */
 public final class StemExtraFruit {
     private static final Logger LOG = LogUtils.getLogger();
@@ -85,28 +92,50 @@ public final class StemExtraFruit {
         float speed = growthSpeed(stem, level, pos);
         boolean grow = random.nextInt((int) (25.0F / speed) + 1) == 0;
         if (!ForgeHooks.onCropsGrowPre(level, pos, state, grow)) return;
-        BlockPos target = pos.relative(free.get(random.nextInt(free.size())));
-        level.setBlockAndUpdate(target, fruit.defaultBlockState());
+        Direction side = free.get(random.nextInt(free.size()));
+        level.setBlockAndUpdate(pos.relative(side), fruit.defaultBlockState());
+        BlockState stemNow = level.getBlockState(pos);
+        BooleanProperty bit = StemSides.grown(side);
+        if (stemNow.is(attached) && stemNow.hasProperty(bit) && stemNow.getValue(AttachedStemBlock.FACING) != side) {
+            level.setBlock(pos, stemNow.setValue(bit, true), Block.UPDATE_CLIENTS);
+        }
         data.lastFruit.put(key, now);
         data.setDirty();
         ForgeHooks.onCropsGrowPost(level, pos, state);
     }
 
     /**
-     * Attached stem's updateShape result: vanilla turns it back into a plain stem when its fruit goes.
-     * If another of its fruits is still next to it, point at that one instead. Null = keep vanilla's.
+     * Attached stem's updateShape result ({@code direction} / {@code neighbor}: the side that changed). A grown-here
+     * side whose fruit went is cleared. When the faced fruit goes (vanilla turns the stem back into a plain stem),
+     * point at another side this stem grew a fruit on instead; none left = vanilla's. Null = keep vanilla's.
      */
-    public static BlockState reattach(BlockState state, BlockState result, LevelAccessor level, BlockPos pos) {
-        if (!CDConfig.STEM_FRUIT.enabled.get() || result.is(state.getBlock())) return null;
-        if (!(result.getBlock() instanceof StemBlock stem)) return null;
+    public static BlockState reattach(BlockState state, BlockState result, Direction direction, BlockState neighbor,
+                                      LevelAccessor level, BlockPos pos) {
+        Block attached = state.getBlock();
+        if (!state.hasProperty(BlockStateProperties.NORTH)) return null;
+        if (result.is(attached)) {
+            if (!direction.getAxis().isHorizontal()) return null;
+            BooleanProperty bit = StemSides.grown(direction);
+            boolean stillFruit = neighbor.getBlock() instanceof StemGrownBlock f && f.getAttachedStem() == attached
+                    && f.getStem().getFruit() == f;
+            return result.getValue(bit) && !stillFruit ? result.setValue(bit, false) : null;
+        }
+        if (!CDConfig.STEM_FRUIT.enabled.get() || !(result.getBlock() instanceof StemBlock stem)) return null;
         StemGrownBlock fruit = stem.getFruit();
-        if (fruit.getAttachedStem() != state.getBlock()) return null;
+        if (fruit.getAttachedStem() != attached) return null;
+        BlockState kept = state;
+        Direction next = null;
         for (Direction d : Direction.Plane.HORIZONTAL) {
+            BooleanProperty bit = StemSides.grown(d);
+            if (!kept.getValue(bit)) continue;
             if (level.getBlockState(pos.relative(d)).is(fruit)) {
-                return state.setValue(AttachedStemBlock.FACING, d);
+                if (next == null) next = d;
+            } else {
+                kept = kept.setValue(bit, false);
             }
         }
-        return null;
+        if (next == null) return null;
+        return kept.setValue(AttachedStemBlock.FACING, next).setValue(StemSides.grown(next), false);
     }
 
     /** Attached stem removed or turned into something else: forget its last-fruit time. */

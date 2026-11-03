@@ -139,8 +139,11 @@ Lingering `create:potion` only; one recipe pair per potion.
 - **F5.** FIXED 2026-10-23 (TODO `potions/potion-buckets #5`, with the Night Vision fallback bug). **Recipes for potions no machine holds.** 15 bucket recipes and 2 arrow recipes per registered potion, water,
   awkward, thick and mundane included. Water never exists as `create:potion` (Create uses plain water), so those
   never run; the arrow ones give vanilla's Arrow of Splashing / uncraftable arrows. Harmless JEI noise.
-- **F6. Dispensed clouds have no owner.** Kills from a dispensed harming or poison bucket credit nobody, and
-  owner-checking mods treat it as ambient.
+- **F6. Dispensed clouds have no owner.** FIXED 2026-11-02 (`potions/potion-buckets #3`, decided 2026-11-02: credit
+  the dispenser's owner; Creative Brewing, not yet in `mods/`). A dispenser placed by a player stores that player's UUID
+  in its block entity (Forge persistent data, `creativeengineering:DispenserOwner`, `PotionBucketDispenser.onPlace`);
+  a bucket it fires spawns clouds owned by that player while they are online in the same dimension, so a harming
+  bucket's kill credits them. Dispensers placed before the change, or the owner offline: no owner, as before. Test PB-24.
 - **F7. The dome and the textures were never checked in game** ([todo.txt](todo/todo.txt): shape and feel of the ring
   stack, and the liquid layer's brightness, `lum * 1.6` in the texture tool).
 
@@ -221,6 +224,9 @@ recipes)` with N > 0.
   a block: nothing happens, bucket kept. A bucket with no NBT still bursts Night Vision.
 - [ ] **PB-23 Survival cooldown:** survival, two Swiftness buckets in the hotbar, burst one and switch to the other
   within a second: the second is on cooldown (white sweep on the slot).
+- [ ] **PB-24 Dispenser owner:** place a new dispenser, load a Harming potion bucket (II), power it with a pig in front
+  (not undead: Harming heals them): the pig dies and drops XP, and `/scoreboard objectives add k minecraft.killed:minecraft.pig`
+  then a second kill shows 1 for you. An old dispenser, or the placer logged out: no XP, no credit.
 
 ## 8. History
 
@@ -232,3 +238,4 @@ recipes)` with N > 0.
 - 2026-10-23: survival cooldown fixed (`potions/potion-buckets #4`); no-effect potion buckets no longer burst Night
   Vision and are kept, and no bucket / tipped arrow recipes are made for no-effect potions (`#5`, F5). Tests PB-21 to
   PB-23. Dispensed no-effect buckets are still emptied (the dispenser path ignores the empty result). Not run in game.
+- 2026-11-02: dispensed clouds credit the dispenser's placer (F6, `#3`). Test PB-24. Not run in game.

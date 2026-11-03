@@ -1,6 +1,6 @@
 # Food families
 
-Test prefix **FF-** · Last updated **2026-10-27** · Overall status **Produce families (fruit to dairy) DECIDED and applied 2026-10-25; baked families (cookie, cake, pie, muffin, quiche) restructured and applied 2026-10-27 (4.6); both BUILT, not run in game; every other family: DESIGN draft, decisions open**
+Test prefix **FF-** · Last updated **2026-10-27** · Overall status **Produce families (fruit to dairy) DECIDED and applied 2026-10-25; baked families (cookie, cake, pie, muffin, quiche) restructured and applied 2026-10-27 (4.6); both BUILT and shipped (1.1.03, 1.1.04), scratch server PASSED except SQ-FFB-01 (deep scan 2026-11-02), not run in game; every other family: DESIGN draft, decisions open**
 
 ## 0. At a glance
 
@@ -15,8 +15,8 @@ put down, and what recipe shape it takes at each station. Families nest like foo
 | 3.2 Compliance (members in line, per field) | section 3.2 (generated) | from the 2026-10-24 dumps |
 | 3.3 Foods without a family | section 3.3 (generated) | 24 foods, 36 skipped items |
 | 3.4 Members by family (every member, every checked row) | section 3.4 (generated) | from the 2026-10-24 dumps |
-| Applying the produce rules (4.4): recipes, coaster tag, Display Delight dish blocks, cans | BUILT 2026-10-25, not run in game: needs the patcherMod and Creative Delight jars installed, a restart and `/dumpall` | FF-01 to FF-08 (7), scratch queue SQ-FF |
-| Baked families (4.6): pizza, quiche, lasagna and dessert families; cookie, cake, pie, muffin and quiche members on their rules | BUILT 2026-10-27, not run in game: needs the Creative Delight jar, a restart and `/dumpall` | FF-11 to FF-14, scratch queue SQ-FF |
+| Applying the produce rules (4.4): recipes, coaster tag, Display Delight dish blocks, cans | BUILT 2026-10-25, shipped with 1.1.03 (2026-10-26); scratch server PASSED (SQ-FF-01 r1031, SQ-FF-00 and -02 r1102b; deep scan 2026-11-02); not run in game | FF-01 to FF-08 (7), scratch queue SQ-FF |
+| Baked families (4.6): pizza, quiche, lasagna and dessert families; cookie, cake, pie, muffin and quiche members on their rules | BUILT 2026-10-27, in the Creative Delight jar since 1.1.04; scratch SQ-FFB-00 PASS r1102b, SQ-FFB-01 no verdict yet (deep scan 2026-11-02); not run in game | FF-11 to FF-14, scratch queue SQ-FFB |
 | Applying the rules of the other families | not started | after the decisions |
 
 **Counts (2026-10-24 dumps, 2026-10-27 tree):** 1416 items in 33 families and 76 subfamilies, 22 without a family, 64

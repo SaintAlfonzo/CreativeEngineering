@@ -13,7 +13,7 @@
 (function () {
 
 	var CONFIG_PATH = 'kubejs/generation_scripts/worldgen/crop_seasons.json'
-	var TYPES = ['temperate', 'cold', 'warm_dry', 'warm_wet', 'autumn_fruit', 'nether', 'end', 'cave', 'mushroom',
+	var TYPES = ['temperate', 'cold', 'warm_dry', 'warm_wet', 'autumn_fruit', 'grass', 'nether', 'end', 'cave', 'mushroom',
 		'grape_temperate', 'grape_cold', 'grape_warm_dry', 'grape_warm_wet', 'grape', 'none']
 	var ForgeRegistries = Java.loadClass('net.minecraftforge.registries.ForgeRegistries')
 	var ResourceLocation = Java.loadClass('net.minecraft.resources.ResourceLocation')

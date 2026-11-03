@@ -11,7 +11,7 @@
 | Update 2026-10-22: Rustic Delight's five coffees (Coffee, Milk, Honey, Chocolate, Dark) give Farmer's Respite's Caffeinated instead of Speed + Haste (food_values.js, [item_merges.md](item_merges.md) 2.8); the Speed, Haste and Caffeinated food-source cells in 2.1 predate this | reference note |
 | Description fixes (3): 16 wrong, partial or misspelt JEED texts replaced, Travel Fatigue ported from Effect Insights, 7 stale placeholders gone | BUILT 2026-10-20, not seen in game (EF-17) |
 | Category audit (2.4): all 140 effects checked for red / blue; 6 overridden in CEConfig `[effects]` | BUILT 2026-10-20 (patcherMod 1.1.01, rebuilt and installed), not seen in game (EF-18) |
-| HUD icons (2.5), swaps and removals (2.6), compound effects and Jellie Wine (2.7), copper poisoning (2.8), Double Jump with Jump Boost (2.7) | BUILT 2026-10-31 (patcherMod 1.1.04 installed 00:44, backportedVinery -06, backportedBrewin -04, Creative Delight 1.0.0, all in `mods/`); scratch server PASSED r1031 (2026-10-31, SQ-EFX-01 to -11: mixins, Magic Resistance, swaps and removals, Caffeinated, copper poisoning, Jellie Wine, crab shell brew); SQ-EFX-12 to -14 not run (client block); EF-22 to EF-31 in game. Open: Phantom Bane cancels phantoms for every player (2.7, TODO `potions/effects #13`), pipe tea Haste and more pipe fluids (2.5, `#15`, `#16`) |
+| HUD icons (2.5), swaps and removals (2.6), compound effects and Jellie Wine (2.7), copper poisoning (2.8), Double Jump with Jump Boost (2.7) | BUILT 2026-10-31 (patcherMod 1.1.04 installed 00:44, backportedVinery -06, backportedBrewin -04, Creative Delight 1.0.0, all in `mods/`); scratch server PASSED r1031 (2026-10-31, SQ-EFX-01 to -11: mixins, Magic Resistance, swaps and removals, Caffeinated, copper poisoning, Jellie Wine, crab shell brew); SQ-EFX-12 to -14 not run (client block); EF-22 to EF-31 in game. Phantom Bane one-player skip fixed 2026-11-02 (CB, not in `mods/`, EF-32, TODO `potions/effects #13`). Open: pipe tea Haste and more pipe fluids (2.5, `#15`, `#16`) |
 
 - **Pending:** EF-01 to EF-20 have never been run. The 2026-10-20 work (providers, description fixes, category
   overrides) is built but not seen in game. The exports were refreshed by the client `/dumpall` of 2026-10-30 00:40 (with the ports); left from F10:
@@ -488,7 +488,10 @@ effects to others), Frosty Armor, Armor, Berserking, Brightening (no existing pa
 
 **Phantom Bane ending** (any source) resets the player's Time Since Rest to 0, as after sleeping (decided 2026-10-31).
 Finding: Better Beacons' spawner check returns from the whole phantom spawn pass, so one player with Phantom Bane skips
-phantom spawns for every player after them in the list (TODO `potions/effects #13`).
+phantom spawns for every player after them in the list (TODO `potions/effects #13`). FIXED 2026-11-02 (Creative Brewing,
+not yet in `mods/`): `mixin/better_beacons/PhantomSpawnerBaneSkipMixin` hands the spawner's player loop
+(`level.players()` in `PhantomSpawner.tick`) a list without the Phantom Bane players, so Better Beacons' check never
+meets one and only those players are skipped. Test EF-32.
 
 **Golden apple wine:** Jellie Wine gives Regeneration + Absorption + Resistance + Fire Resistance at the wine's level (the
 enchanted golden apple set); the "Better than Golden Apples!" effect (`vinery:jellie`) is unregistered (decided
@@ -819,6 +822,9 @@ ingredient type.
   as high as Jump Boost II alone, and the mid-air jump still works.
 - [ ] **EF-30 Oxidized copper:** wear four oxidized copper pieces for 20 min → poisoned at least once; tooltip-free, Poison
   icon only.
+- [ ] **EF-32 Phantom Bane skips one player only:** two players (or a bot) awake 4+ days at night in the open, the first
+  in the player list with `/effect give <p1> better_beacons:phantom_bane 600`; within a few spawn passes phantoms come
+  for the second player, none for the first.
 
 ## 9. History
 

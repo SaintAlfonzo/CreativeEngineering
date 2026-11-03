@@ -30,6 +30,9 @@ public final class HoeHarvestArea {
 
     public static final int MAX_SIZE = 9;
 
+    /** Most extra levels a hoe area click climbs up a column of own-pick crops (tomatoes on ropes). */
+    public static final int MAX_CLIMB = 6;
+
     /** TAGS[n] = {@code creativeengineering:hoe_harvest/nxn}; index 0 unused. */
     private static final TagKey<Item>[] TAGS = makeTags();
 

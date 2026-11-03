@@ -13,7 +13,7 @@ var CD_RACK_WOODS = {
 	twisted: 'slab_twisted', dreamwood: 'dreamwood_planks_slab', livingwood: 'livingwood_planks_slab',
 	smoked: 'smoked_slab', treated_wood: 'slab_treated_wood_horizontal',
 	vertical_treated_wood: 'slab_treated_wood_vertical', rubberwood: 'planks_rubberwood', ancient: 'slab_ancient',
-	azalea: 'slab_azalea', bamboo: 'bamboo_planks_slab', driftwood: 'slab_driftwood'
+	bamboo: 'bamboo_planks_slab', driftwood: 'slab_driftwood'
 }
 
 ServerEvents.tags('item', e => {

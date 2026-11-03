@@ -25,11 +25,11 @@ load time (sha1-pinned), and everything the port ships is our own GPLv3 code. Se
 | Part | Where | Status |
 |---|---|---|
 | Source builds and why the base is the Forge 1.20.1 build | §0.1 | reference, checked 2026-10-24 |
-| Decisions | §1 | D2, D3, D6, D9, D11 settled by the owner 2026-10-24; D12 settled by the Modrinth find (P1); the rest are the plan's, built as written |
+| Decisions | §1 | D2, D3, D6, D9, D11 settled by the owner 2026-10-24; D12 settled by the Modrinth find (P1); D1, D4, D5, D10, D13 confirmed 2026-11-02; D7 and D8 changed 2026-11-02 (below); D3's cup and D9 closed by the cup removal |
 | Merged inventory: 69 items, 10 blocks, 4 potions | §2 | reference |
 | Overlap list | §3 | analysis; every overlap ships, review after play |
-| Port work, pack integration, cave carrot worldgen | §4 | port BUILT 2026-10-24, shipped in 1.1.03; port `-02` BUILT 2026-11-01 (Copper Pot leftover slot I8, four textures in the 1.1.2 look §5, split confirmed by the owner, verify in game), installed 2026-11-01 16:38; I2, I4, I5, I7, I9 done; I3 partly (cans built 2026-11-01; names audit waits for a client dump); I1, I6 open; cave carrot worldgen BUILT 2026-10-24 (§4.3) |
-| Tests | §8 | MND-01 to MND-41 drafted, none run (MND-32 can run now, it only needs the 1.1.2 jar); queued in scratch_queue.md |
+| Port work, pack integration, cave carrot worldgen | §4 | port BUILT 2026-10-24, shipped in 1.1.03; port `-02` BUILT 2026-11-01 (Copper Pot leftover slot I8, four textures in the 1.1.2 look §5, split confirmed by the owner, verify in game), installed 2026-11-01 16:38; I2, I4, I5, I7, I9 done; I3 partly (cans built 2026-11-01; names audit waits for a client dump); I1, I6 open; cave carrot worldgen BUILT 2026-10-24 (§4.3). **Deep scan 2026-11-02:** port `-05` is a nested Creative Delight member (`members/miners`), in the installed `mods/creativedelight-1.0.0.jar` (2026-11-02 14:01); the 21:10 build (copper cup family removed) reuses the `-05` name and is not installed; `server_mods/` still `-01` |
+| Tests | §8 | MND-01 to MND-41 drafted, none ticked; queued in scratch_queue.md. Deep scan 2026-11-02: r1102 (nested `-02` / `-03`) SQ-MDP-01, -03, -04a/b, -05, -08a/b/d to h, -09, -11, -12, -15, -17 PASS, SQ-MD-01 PASS (4412 wild cave carrots, max Y 45: MND-32 server half), FAIL SQ-MDP-08c, -13, -14, -16 (fixed 11-02, TODO `creativedelight/members #38` to `#41`; reruns queued in "SQ-CDJ5 fix rerun", not in the r1102b scope), r1102b SQ-MDP-18 PASS; CQ-MND client rows open |
 
 ### 0.1 The four builds on disk
 
@@ -62,7 +62,7 @@ Checked facts:
 So the behaviour reference is the Forge 1.20.1 1.4.5 build (closest API, same mod id, full 1.4.5 content), cross-checked
 against the 1.21.1 jar. Because of the licence (D2) neither is a code or asset source for the port, only for reading.
 
-## 1. Decisions (proposed 2026-10-24, owner to confirm)
+## 1. Decisions (proposed 2026-10-24; all confirmed or changed by the owner 2026-11-02)
 
 | # | Proposal | Why |
 |---|---|---|
@@ -72,8 +72,8 @@ against the 1.21.1 jar. Because of the licence (D2) neither is a code or asset s
 | D4 | **Nothing is dropped before play.** Every overlap ships marked (§3); drops are decided in `MND-40` and done as a separate change | Owner: "some things will be dropped, but they need to be tested in game first" |
 | D5 | Plain `DeferredRegister`, no Registrate; recipes, loot, tags and worldgen come from the donor (D12), not from JSON in our jar | The 1.20 Registrate repack does not run on 1.19.2, and shipping the generated JSON would redistribute data |
 | D6 | **Cave carrot worldgen (owner, SETTLED, BUILT 2026-10-24, §4.3):** a pack rule in the underground block of `mushroom_spawns.json`, three Y bands: very common around Y 0 (core, Y -24 to 24, 1 in 2 chunks), less common but not rare at Y 25 to 44 (1 in 8) and Y -64 to -25 (1 in 5), nothing above Y 48. The mod's own biome modifier is switched off | Same system as the cave mushroom colonies |
-| D7 | **Haste potions ship** (`miners_delight:haste`, `long_haste`, `strong_haste` from awkward + Copper Carrot; `mining_fatigue` from fermented spider eye) | *overlaps w/ Rustic Delight* `rusticdelight:haste` / `long_haste` / `strong_haste` (memory `rustic-delight-haste-potions`). Two potion ids with the same effect; review in `MND-40` |
-| D8 | **All loot modifiers ship** (built: the donor has 18 modifier files; its global list names 5 more that have no file, cooked bat wing / squid / tentacles / arthropods and raw arthropods, and the translator drops those 5 entries, so no fire-aspect cooked drops for those mobs) (bat wing, squid, glow squid, tentacles, spider, cave spider, spider leg, spider web, silverfish, silverfish eggs, arthropods, their cooked variants, infested blocks, fishing squid / glow squid, mineshaft chest) | They are the only source of most 1.4.5 ingredients. Squid ones overlap the ocean mods (§3) |
+| D7 | **Haste potions ship** (`miners_delight:haste`, `long_haste`, `strong_haste` from awkward + Copper Carrot; `mining_fatigue` from fermented spider eye) | *overlaps w/ Rustic Delight* `rusticdelight:haste` / `long_haste` / `strong_haste` (memory `rustic-delight-haste-potions`). Two potion ids with the same effect; review in `MND-40` **CONFIRMED then CHANGED 2026-11-02 (owner): every haste potion, Rustic's and Miner's, runs through the Creative Engineering common effect system; neither mod keeps its own haste potion lines (TODO `potions/effects #17`). `mining_fatigue` (fermented spider eye) not yet ruled on.** |
+| D8 | **All loot modifiers ship** (built: the donor has 18 modifier files; its global list names 5 more that have no file, cooked bat wing / squid / tentacles / arthropods and raw arthropods, and the translator drops those 5 entries, so no fire-aspect cooked drops for those mobs) (bat wing, squid, glow squid, tentacles, spider, cave spider, spider leg, spider web, silverfish, silverfish eggs, arthropods, their cooked variants, infested blocks, fishing squid / glow squid, mineshaft chest) | They are the only source of most 1.4.5 ingredients. Squid ones overlap the ocean mods (§3) **CHANGED 2026-11-02 (owner): not shipped as the donor has them. All Miner's loot drops are rebuilt on the pack's own loot system (`kubejs/server_scripts/loot/`, tuning and rules), so rates are tunable and fire aspect cooked drops are done there (also covers the 5 donor entries with no file). Squid, glow squid and tentacles stay under the squid chain (TODO `dishes/ocean #3`, `#4`); check fished squid.** |
 | D9 | **Onion soup cup (owner asked for the equivalent, SETTLED):** the equivalent is Brewin' and Chewin's **Creamy Onion Soup** (`brewinandchewin:creamy_onion_soup`, a bowl food from the port; its canned version is `creativeengineering:canned_creamy_onion_soup`). It is the only onion soup in the pack (checked by id and by display name over `kubejs/exported/display_names.json` and every jar). 1.4.5's cup conversion row is `farmersdelight:onion_soup` -> `onion_soup_cup`, and FD 1.19.2-1.2.4 has no such item, so the port adds a pack data file with the row `brewinandchewin:creamy_onion_soup` -> `miners_delight:onion_soup_cup` (§4.1 P9) | Noted for the review `MND-40`: a cup of creamy soup is the only way to get the cup |
 | D10 | **Advancements** stay in the jar and are dropped at load with every other mod's | Pack rule |
 | D11 | **1.1.02 is deployed (owner, SETTLED): the port replaces the live 1.1.2 jar in a later pack version.** The old jar leaves through the normal removal diff; the port's `-01` jar and the donor jar arrive in the same payload (the donor in its own category, `vinery_upstream` style, D12). Players get a changelog line for the hot cocoa cup loss | The earlier proposal (pull 1.1.2 out of 1.1.02) is moot |
@@ -434,3 +434,27 @@ Haste: one Creative Engineering effect shared by all sources (`potions/effects #
   the meal slot is empty (I4, `canCook`); the cave carrot crate rule now reaches `md_abandoned_mineshaft` because
   `tools/gen_loot_config.py` reads the 1.4.5 donor jar (I5); `scavenging_spider` gets the upstream-missing `is_on_fire:false`
   through `MinersTranslator.PATCH_DATA` (I7). Reruns: SQ-MDP-13, -14, -16 / -09, new SQ-MDP-18.
+
+## Copper cup family removed (2026-11-02, TODO `dishes/meals #53`; SQ-CUP-01 to -05, CQ-CUP-01)
+
+First pass the same day hid the 15 soup and stew cups in KubeJS and emptied the cup table; the owner then asked for the
+whole cup to go. Now:
+- The port registers no cup: `copper_cup`, `water_cup`, `milk_cup`, `powder_snow_cup` and the 15 soup and stew cups are
+  gone from `MDItems` (50 items left), with `CopperCupItem`, `SolidCupItem`, `MilkCupItem`, `CupConversions` (reload
+  listener, client sync channel) and the cauldron rules in `MDSetup`. `MDFoods.cup()` and the four cup-only food values
+  are gone. No conversion: cups in old worlds drop on load (as the hot cocoa cup, D3).
+- `MinersTranslator.REMOVED` lists all 20 cup ids (hot cocoa included): their models, textures, lang keys, the cup
+  recipe and advancement, the Create fill/empty cup recipes drop; `#forge:milk` loses the milk cup; `cup_conversion/`
+  is not read. The Copper Pot recipe keeps its Water Bucket and loses the Water Cup alternative (`PATCH_DATA`, applied
+  before the removed-id check). `tools/check_donor.py` mirrors this.
+- The Copper Pot serves every meal in its recipe's container (`servedResult` / `servedContainer` are the recipe's own);
+  shift-click sends only bowls to the container slot.
+- Delightful's Cactus Soup Cup (served by the pot from Cactus Soup) is gone too: item, `CupItem`, food value, art, lang,
+  its cup conversion row; `port_resources.py` no longer copies it.
+- Pack side: the KubeJS hide script (CD `miners_delight/miners_items.js`), the empty `kubejs/data/miners_delight/
+  cup_conversion/` override and the Spout/Drain water cup recipe are deleted; cup keys left `item_dict`, `food_dict`,
+  `tool_dict`, the food types, stack sizes, comfort/nourishment, physics and food family data; the 15 cup jar fluids
+  and their JEI jar rows are gone; `gen_comfort_nourishment.py` drops its copper cup rule.
+
+D9 (onion soup cup from Creamy Onion Soup) and P9 are retired. MND-12, MND-13, MND-15, MND-17 and the cup half of
+MND-02 / MND-10 no longer apply.

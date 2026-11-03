@@ -5,6 +5,7 @@
   "compatibilityLevel": "JAVA_17",
   "plugin": "com.SaintAlfonzo.creativebrewing.compat.CBMixinPlugin",
   "mixins": [
+    "better_beacons.PhantomSpawnerBaneSkipMixin",
     "create.CreateTeaPipeIconMixin",
     "create.MechanicalMixerBlockEntityMixin",
     "create.PotionFluidHandlerMixin",

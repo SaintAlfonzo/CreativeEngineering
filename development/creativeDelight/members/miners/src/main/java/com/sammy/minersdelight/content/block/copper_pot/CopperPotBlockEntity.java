@@ -1,7 +1,6 @@
 package com.sammy.minersdelight.content.block.copper_pot;
 
 import com.sammy.minersdelight.MDConfig;
-import com.sammy.minersdelight.logic.CupConversions;
 import com.sammy.minersdelight.registry.MDBlockEntities;
 import com.sammy.minersdelight.registry.MDItems;
 import it.unimi.dsi.fastutil.objects.Object2IntOpenHashMap;
@@ -24,7 +23,6 @@ import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.inventory.AbstractContainerMenu;
 import net.minecraft.world.inventory.ContainerData;
 import net.minecraft.world.inventory.RecipeHolder;
-import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.crafting.Recipe;
 import net.minecraft.world.level.Level;
@@ -52,8 +50,8 @@ import java.util.Optional;
 
 /**
  * The Copper Pot: a small Farmer's Delight cooking pot. Four ingredient slots (FD recipes with up to four ingredients),
- * cooks in 80% of the recipe's time, and serves a soup that has a cup ({@link CupConversions}) as two cups per bowl
- * into Copper Cups.
+ * cooks in 80% of the recipe's time. Upstream also served soups into Copper Cups; the pack has no cups (TODO dishes/meals
+ * #53), so every meal is served in its recipe's container.
  * <p>
  * Create Central Kitchen injects at the {@link #setRecipeUsed} call inside {@link #processCooking} (blaze stove signal):
  * keep that method's name, descriptor and the call in it.
@@ -289,21 +287,14 @@ public class CopperPotBlockEntity extends SyncedBlockEntity implements MenuProvi
         return Optional.empty();
     }
 
-    /** The recipe's result as this pot serves it: two cups per bowl (up to a stack) when the bowl has a cup. */
+    /** The recipe's result as this pot serves it (the pack has no cups: always the recipe's own, TODO dishes/meals #53). */
     public static ItemStack servedResult(CookingPotRecipe recipe) {
-        ItemStack result = recipe.getResultItem();
-        Item cup = CupConversions.cupFor(result.getItem());
-        if (cup == null) {
-            return result;
-        }
-        ItemStack cups = new ItemStack(cup, Math.min(result.getCount() * 2, new ItemStack(cup).getMaxStackSize()));
-        cups.setTag(result.getTag() == null ? null : result.getTag().copy());
-        return cups;
+        return recipe.getResultItem();
     }
 
-    /** The container the served result needs: a Copper Cup for cup soups, else the recipe's own. */
+    /** The container the served result needs: the recipe's own. */
     public static ItemStack servedContainer(CookingPotRecipe recipe) {
-        return CupConversions.cupFor(recipe.getResultItem().getItem()) != null ? new ItemStack(MDItems.COPPER_CUP.get()) : recipe.getOutputContainer();
+        return recipe.getOutputContainer();
     }
 
     private boolean hasInput() {

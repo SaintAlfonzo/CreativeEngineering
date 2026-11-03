@@ -43,11 +43,11 @@ ServerEvents.recipes(e => {
 		R.fdCooking([i.brown_mushroom_colony, i.raw_chicken, i.carrot, i.cabbage, i.milk, i.pie_crust], i.mushroom_pot_pie_block, e,
 			'mushroom_pot_pie_block', 1.5, 250, i.bowl)
 		// Roasted Rack of Mutton (D7, Q2, Q3): the pot takes 6 ingredients, so the base recipe is the raw rack with 2 cooked
-		// rice, a carrot and a baked potato (5), the dearer one the cooked rack with 2 cooked rice, a carrot and 2 baked
+		// rice, 2 carrots and a baked potato (6), the dearer one the cooked rack with a cooked rice, 2 carrots and 2 baked
 		// potatoes (6). Both give the same feast; the grid craft below is the heatless route.
-		R.fdCooking([i.raw_mutton_rack, i.cooked_rice, i.cooked_rice, i.carrot, i.baked_potato], i.roasted_mutton_rack_block, e,
+		R.fdCooking([i.raw_mutton_rack, i.cooked_rice, i.cooked_rice, i.carrot, i.carrot, i.baked_potato], i.roasted_mutton_rack_block, e,
 			'roasted_mutton_rack_block', 1.5, 250, i.bowl)
-		R.fdCooking([i.cooked_mutton_rack, i.cooked_rice, i.cooked_rice, i.carrot, i.baked_potato, i.baked_potato],
+		R.fdCooking([i.cooked_mutton_rack, i.cooked_rice, i.carrot, i.carrot, i.baked_potato, i.baked_potato],
 			i.roasted_mutton_rack_block, e, 'roasted_mutton_rack_block_cooked', 1.5, 250, i.bowl)
 
 		//######################### Heatless routes (_manual_only: Create's basin and crafters skip them) #########################

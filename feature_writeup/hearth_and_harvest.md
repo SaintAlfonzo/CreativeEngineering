@@ -1,6 +1,6 @@
 # Hearth and Harvest: overlap and integration report
 
-Survey for TODO `largecontent/mod-additions #10`. Written 2026-10-30, **nothing built, nothing installed**. Jar:
+Survey for TODO `largecontent/mod-additions #10`. Written 2026-10-30 as a survey; since then the watering can (4.0) and raspberries (4.1) are built in the CD member `backportedHearth` and shipped (1.1.05 can, 1.1.06 tiers and raspberries; deep scan 2026-11-02); the rest of the port is not built. Jar:
 `devmods/toBackport/later_large_content_overlap/hearthandharvest-1.21.1-1.4.1.jar`, unpacked to
 `DecompiledMods/hearthandharvest-1.21.1-1.4.1/`, decompiled to `DecompiledMods/hearthandharvest-1.21.1-1.4.1-src/`.
 Licence MIT (GPL-compatible: a fork or port is allowed). NeoForge 1.21.1 only, so it needs a **port** to Forge
@@ -27,7 +27,9 @@ asks by name; upstream bugs are fixed.
 | Upstream issues | 3.4 | B1-B5 (no load errors: never installed) |
 | Fold-in | 4 | 24 steps, port first |
 | Decisions | 5 | D1-D14 |
-| Tests | 8 | HNH-01..HNH-24 drafted |
+| Watering can (six tiers) | 4.0 | shipped 1.1.05 (base), 1.1.06 (tiers, well / cauldron, particles); scratch PASSED (SQ-WC r1031 / r1101, SQ-WCT-01 to -05 r1101, SQ-PSF-09 well drain r1102b); CQ-WC-04, -06, -07 open |
+| Raspberries | 4.1 | shipped 1.1.06; scratch PASSED r1101 (SQ-HR-01 to -05) and CQ-HR-06 client PASSED; wild bushes in cold snowy biomes added 2026-11-02 (unreleased, SQ-PSD-07 r1102b raw FAIL, not judged) |
+| Tests | 8 | HNH-01..HNH-24 drafted; HNH-25 to HNH-47 for 4.0 / 4.1 |
 
 - **Jar:** `hearthandharvest` 1.4.1, author AlabasterLeking, "A homesteading addon for Farmer's Delight".
 - **Licence:** MIT. Port route: in-tree mod under `development/` (like `backportedVinery`), our pack-side food code in
@@ -401,13 +403,15 @@ Owner, 2026-10-30: the watering can only, now, through patcherMod; the rest wait
   textures), so ours is a plain generated model.
 - **Full port:** done 2026-10-31 (see "Moved and tiered" above).
 - Tests HNH-25 to HNH-33, HNH-38 to HNH-47 (section 8; HNH-25 to -33 were written for the 16 / 3x3 can, now the Golden tier). Scratch server r1031 (2026-10-31) PASSED SQ-WC-01 (boot, recipe), -01b, -02,
-  -03 (off-hand bone meal load), -05 (soil watering on farmland and mulch); CQ-WC-04 in game pending.
+  -03 (off-hand bone meal load), -05 (soil watering on farmland and mulch); -03 and -05 again on the moved can r1101; tiers
+  SQ-WCT-01 to -05 PASSED r1101 (SQ-WCT-03 well note: see SQ-PSF-09, r1102b, the drain does reach the well tank).
+  CQ-WC-04, -06, -07 open (hand steps).
 
 ### 4.1 Raspberries, first piece of the port (built 2026-10-31)
 
 Owner, 2026-10-31: the raspberry crop (behaviour and textures) only, the way the watering can was done, into the
-H&H port as a Creative Delight member. Settles D3 (raspberry pips kept). Jar built, **not installed** (the game was
-running).
+H&H port as a Creative Delight member. Settles D3 (raspberry pips kept). Built 2026-10-31, shipped 1.1.06 (Raspberries
+bullets); scratch PASSED r1101 (SQ-HR-01 to -05, CQ-HR-06).
 
 - **Home:** CD member `backportedHearth` (`development/creativeDelight/members/hearth/`, mod id `hearthandharvest`,
   version `1.4.1-ce-19.2-01`), nested in the CD jar (`bundle_members`, `replaces_jars` also moves any standalone
@@ -434,14 +438,15 @@ running).
   `raw/fruit` (`food_types.json`), jar family `berries` (`creativeengineering/jar_tags.js`).
 - **Seasons:** `temperate` in `crop_seasons.json` (1.4.1: spring and summer crop), not Serene Seasons tags.
 - **WTHIT:** growth line rule in CD `crop_growth.json`, harvestable at age 3.
-- **Worldgen:** wild crop rule `raspberry` in `wild_crops.json` ("temperate grassy", 26 biomes, crops_by_biome.md),
+- **Worldgen:** wild crop rule `raspberry` in `wild_crops.json` ("temperate grassy" or "cold grassy snowy", 44 biomes, crops_by_biome.md; the blueberry biomes added 2026-11-02, `farming/wild-crops #7`),
   feature `creativedelight:wild/raspberry_bush` = 1.4.1's patch (Farmer's Delight wild crop: ripe bushes on dirt, with
   grass and coarse dirt; 1 in 62 chunks; `short_grass` -> 1.19.2 `minecraft:grass`). Upstream's biome modifier (every
   overworld biome of temperature 0.4-0.9) is not carried. The pips have no other source.
 - **Not in this piece:** raspberry crate, juice, wine, jam, pie, scone (later H&H pieces or the jam family, 2.1);
   compost uses the pack rules (seeds and fruit categories), no own row. Cans, food families, names, JEI coverage and
   stack sizes come from `/dumpall` + `/cegen` after install.
-- Tests HNH-03, HNH-04 (raspberry half), HNH-34 to HNH-37; scratch SQ-HR-01 to SQ-HR-05, CQ-HR-06.
+- Tests HNH-03, HNH-04 (raspberry half), HNH-34 to HNH-37; scratch SQ-HR-01 to SQ-HR-05, CQ-HR-06: all PASSED r1101
+  (SQ-HR-04: the item id is `hearthandharvest:raspberry`; SQ-HR-05: 26 biomes in `wild_crops/raspberry`).
 
 0. **Decide D1 first** (port all vs port the new content only). The steps below assume the recommendation: an in-tree
    port that registers only the kept content (sections 2 and 3), so nothing needs an item merge.
@@ -559,8 +564,8 @@ port jar; brewing and alcohol stay in the alcohol scripts (reserved for Creative
 |---|---|---|
 | HNH-01 | Boot with the port: no H&H errors in `latest.log`, JEI shows only kept items | |
 | HNH-02 | None of the 2.1 Drop ids exists (`/give` fails) | |
-| HNH-03 | Raspberry bush (4.1): pips plant it on dirt, farmland, rich soil (not on sand or stone); it grows; picked by hand at age 3 only (2-3 raspberries, back to age 1); hoe area harvest breaks it | |
-| HNH-04 | Wild raspberry and wild hops appear in their biomes (crop table) | |
+| HNH-03 | Raspberry bush (4.1): pips plant it on dirt, farmland, rich soil (not on sand or stone); it grows; picked by hand at age 3 only (2-3 raspberries, back to age 1); hoe area harvest breaks it | server half PASSED r1101 (SQ-HR-01 to -03) |
+| HNH-04 | Wild raspberry and wild hops appear in their biomes (crop table) | raspberry half: server PASSED r1101 (SQ-HR-05, 26 biomes) |
 | HNH-05 | Hops climb the trellis and ripen; harvested by hand | |
 | HNH-06 | Mums generate as wild flowers and go in flower pots | |
 | HNH-07 | Kept wines ferment in the Brewin' keg; each shows "Intoxicating Drink", half a rotten shank, Nausea | |
@@ -585,25 +590,25 @@ port jar; brewing and alcohol stay in the alcohol scripts (reserved for Creative
 | HNH-26 | Use on a water source: water 16 / 16, bucket fill sound; tooltip shows both levels | |
 | HNH-27 | Bone meal in the off hand, use in the air: one bone meal taken per use up to 16; full can takes no more | server half PASSED r1031 (SQ-WC-03) |
 | HNH-28 | Charged can on a wheat patch: one use spends exactly 1 water and 1 fertiliser and grows the 3x3; grown crops spend nothing | |
-| HNH-29 | Lit campfire and fire: one use each puts it out for 1 water; empty can does nothing | |
+| HNH-29 | Lit campfire and fire: one use each puts it out for 1 water; empty can does nothing | server half: SQ-WCT-08 (to queue, deep scan 2026-11-02); CQ-WC-04 |
 | HNH-30 | Use the can until water and fertiliser are both 0: bar gone, fertiliser kind cleared (another fertiliser loads again) | |
 | HNH-31 | Can with water, no fertiliser, on young wheat over dry farmland (3x3): farmland in the 3x3 turns wet, splash, water -1; again at once spends nothing | server half PASSED r1031 (SQ-WC-05: 3x3 farmland and mulch soaked, water -1 once) |
 | HNH-32 | Same on dry Fertile Soil under a crop and on the soil block itself: soaked texture in the 3x3, water -1; stays soaked after a few minutes away from heat | |
 | HNH-33 | Charged can on young wheat over dry farmland: crops grow and soil soaks for 1 water and 1 fertiliser total; on grown wheat over dry soil: soaks for 1 water, no fertiliser spent | |
 | HNH-34 | Raspberry Pips from 1 raspberry (crafting grid); pick block on the bush gives the pips; both in Farmer's Delight's tab | |
-| HNH-35 | Walking through the bush slows, never hurts; a fox walks through freely and picks a ripe bush (raspberry in its mouth, bush to age 1) | |
-| HNH-36 | WTHIT on the bush shows the growth line, "Mature" at age 3; the pips tooltip shows the temperate season line | |
-| HNH-37 | Raspberry: 2 hunger, eaten fast; in `#forge:fruits/raspberries`, `#forge:berries`, `#minecraft:fox_food`; pips in `#forge:seeds` | |
-| HNH-38 | Watering can tiers (4.0): every tier in the Tools tab with its name, tooltip "Area: NxN" and its capacity; JEI info page shows that tier's numbers | |
-| HNH-39 | Smithing: Copper + Iron Block -> Iron, then Gold Block, Diamond, Netherite Ingot, Dragon Scale up the chain; a can with water and bone meal keeps both | |
-| HNH-40 | Area: Copper grows / soaks 1 block, Iron 2x2 (extra row toward the aimed side), Golden 3x3, Diamond 4x4, Netherite 5x5, Dragon 7x7; still 1 water and 1 fertiliser per use | |
-| HNH-41 | Water cauldron, 3 levels: Copper / Iron / Golden fill to full for 1 level, Diamond for 2, Netherite and Dragon empty it; an empty Diamond can on a 1-level cauldron empties it for 10 water, an empty Netherite can on 2 levels for 21 | |
-| HNH-42 | Well (Just a Well) with water: any tier fills to full and the well loses 1 bucket; clicking the roof half works too; an empty well does nothing | |
-| HNH-43 | An old can holding 16 / 16 (pre-tier) shows 8 / 8 as Copper and works | |
-| HNH-44 | Netherite and Dragon cans survive lava and fire as items | |
+| HNH-35 | Walking through the bush slows, never hurts; a fox walks through freely and picks a ripe bush (raspberry in its mouth, bush to age 1) | fox half: server PASSED r1101 (SQ-HR-04) |
+| HNH-36 | WTHIT on the bush shows the growth line, "Mature" at age 3; the pips tooltip shows the temperate season line | client PASSED r1101 (CQ-HR-06) |
+| HNH-37 | Raspberry: 2 hunger, eaten fast; in `#forge:fruits/raspberries`, `#forge:berries`, `#minecraft:fox_food`; pips in `#forge:seeds` | tags: server PASSED r1101 (SQ-HR-04) |
+| HNH-38 | Watering can tiers (4.0): every tier in the Tools tab with its name, tooltip "Area: NxN" and its capacity; JEI info page shows that tier's numbers | server half PASSED r1101 (SQ-WCT-01: six ids) |
+| HNH-39 | Smithing: Copper + Iron Block -> Iron, then Gold Block, Diamond, Netherite Ingot, Dragon Scale up the chain; a can with water and bone meal keeps both | server half PASSED r1101 (SQ-WCT-05) |
+| HNH-40 | Area: Copper grows / soaks 1 block, Iron 2x2 (extra row toward the aimed side), Golden 3x3, Diamond 4x4, Netherite 5x5, Dragon 7x7; still 1 water and 1 fertiliser per use | server half PASSED r1101 (SQ-WCT-04: dragon 7x7, copper centre only) |
+| HNH-41 | Water cauldron, 3 levels: Copper / Iron / Golden fill to full for 1 level, Diamond for 2, Netherite and Dragon empty it; an empty Diamond can on a 1-level cauldron empties it for 10 water, an empty Netherite can on 2 levels for 21 | server half PASSED r1101 (SQ-WCT-02) |
+| HNH-42 | Well (Just a Well) with water: any tier fills to full and the well loses 1 bucket; clicking the roof half works too; an empty well does nothing | server half PASSED r1101 (SQ-WCT-03); well drain r1102b SQ-PSF-09 (real PASS) |
+| HNH-43 | An old can holding 16 / 16 (pre-tier) shows 8 / 8 as Copper and works | server half PASSED r1101 (SQ-WCT-05: 16 clamps to 7 after a use) |
+| HNH-44 | Netherite and Dragon cans survive lava and fire as items | server: SQ-WCT-06 (to queue, deep scan 2026-11-02) |
 | HNH-45 | Fertilised can on a sweet berry bush on grass: bush grows, water splash particles show on it (also seen by a second player) | |
-| HNH-46 | Fertilised can on an oak sapling, a modded sapling (Vinery / Fruits Delight), a mangrove propagule, a crimson fungus on nylium, an azalea and a red mushroom: nothing happens, no water or fertiliser spent; a sapling inside the area of a click on a crop does not grow | |
-| HNH-47 | Water Spout Gun (Create: Misc and Things) shot at dry farmland, or at a crop on dry farmland: the farmland turns wet with a splash; the lava / honey guns do not wet it | |
+| HNH-46 | Fertilised can on an oak sapling, a modded sapling (Vinery / Fruits Delight), a mangrove propagule, a crimson fungus on nylium, an azalea and a red mushroom: nothing happens, no water or fertiliser spent; a sapling inside the area of a click on a crop does not grow | server half: SQ-WCT-07 (to queue, deep scan 2026-11-02); CQ-WC-07 |
+| HNH-47 | Water Spout Gun (Create: Misc and Things) shot at dry farmland, or at a crop on dry farmland: the farmland turns wet with a splash; the lava / honey guns do not wet it | server half: SQ-SGF-01, -02 (to queue, deep scan 2026-11-02); CQ-SG-01 |
 
 ## 9. History
 

@@ -24,6 +24,12 @@ b.blaze_burner = 'create:blaze_burner';             // counts only with blaze !=
 b.lit_blaze_burner = 'create:lit_blaze_burner';
 b.blaze_lantern = 'quark:blaze_lantern';
 b.cutting_board = 'farmersdelight:cutting_board';  // bakeware hammering (feature_writeup/oven.md 2.5)
+b.cooking_pot = 'farmersdelight:cooking_pot';      // cookware pickup (cooking/kitchen #27)
+b.skillet = 'farmersdelight:skillet';
+b.copper_pot = 'miners_delight:copper_pot';
+b.kettle = 'farmersrespite:kettle';
+b.t_cookware_pickup = '#creativedelight:cookware_pickup';   // CD CookwareHandling: sneak right-click picks up, sneak left-click toggles the handle
+b.stone_cutting_boards = ['farmersdelight:granite_cutting_board', 'farmersdelight:andesite_cutting_board', 'farmersdelight:diorite_cutting_board'];  // cooking/kitchen #25
 b.cfb_counter = 'cookingforblockheads:counter';   // 15 px worktops: cutting board support (TODO cooking/kitchen #8)
 b.cfb_corner = 'cookingforblockheads:corner';
 // Counter toppers (patcherMod CounterToppers, TODO cooking/kitchen #20): plates, plated foods, coaster on a counter
@@ -110,6 +116,8 @@ b.beetroots = 'minecraft:beetroots';
 b.cabbages = 'farmersdelight:cabbages';
 b.onions = 'farmersdelight:onions';
 b.tomatoes = 'farmersdelight:tomatoes';
+b.stick_tomatoes = 'supplementaries:stick_tomatoes'; // FD tomato vine on a Supplementaries stick
+b.rope_tomatoes = 'supplementaries:rope_tomatoes'; // FD tomato vine on a Supplementaries rope
 // Placed treated sticks (CD treatedstick/, feature_writeup/treated_sticks.md); unresolved until CD is installed
 b.treated_stick = 'creativedelight:treated_stick';
 b.treated_stick_tomatoes = 'creativedelight:treated_stick_tomatoes'; // FD tomato vine on a treated stick

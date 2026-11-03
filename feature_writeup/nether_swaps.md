@@ -2,7 +2,7 @@
 
 Written by `python3 tools/gen_nether_swaps.py` from `kubejs/generation_scripts/worldgen/nether_swap_rules.json`. Do not edit. Per rule: every template it changes, with block counts. Applied by patcherMod `TemplateBlockSwaps` when a template loads.
 
-Exempt from every rule (`plan/move_to_nether`, to be moved to the Nether later): `philipsruins:lost_soul_city`, `philipsruins:lost_soul_dungeon`, `philipsruins:rare_ruin`, `philipsruins:start_nether_ruin`.
+Exempt from every rule (`plan/move_to_nether`, to be moved to the Nether later): none.
 
 ## 1. Philip's underground structures: soul sand and soil to basalt (204 blocks)
 

@@ -7,6 +7,8 @@ import java.util.Map;
 import java.util.Set;
 import java.util.concurrent.ConcurrentHashMap;
 
+import net.minecraft.resources.ResourceLocation;
+import net.minecraft.tags.TagKey;
 import net.minecraft.world.item.Item;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.event.TagsUpdatedEvent;
@@ -25,8 +27,16 @@ import net.minecraftforge.registries.ForgeRegistry;
  * next tag load (it adds tagged items), or until Armor Trims' trimmable class or tag lists change size.
  * The lists handed out are read-only, as Armor Trims' own {@code getAllItemsOfType} lists already are; its callers
  * only read and call {@code contains}, which the trimmable list answers from a set.
+ *
+ * <p>Allowlist ({@code gear/tuning #14}, gear_tuning.md Armor Trims): when the item tag
+ * {@code creativeengineering:trimmable_armor} (KubeJS equipmenttags.js) has members, the cached trimmable list keeps
+ * only them, so the smithing table ({@code TrimmableItem.applyTrim} checks the list), the JEI trim and untrimming pages
+ * and the trimmed-item decorator all see the standard armor sets only. An empty or missing tag keeps Armor Trims' list.
  */
 public final class ArmorTrimsItemCache {
+
+    private static final TagKey<Item> TRIMMABLE_ARMOR = TagKey.create(net.minecraft.core.Registry.ITEM_REGISTRY,
+            new ResourceLocation("creativeengineering", "trimmable_armor"));
 
     private static final Map<Class<?>, List<Item>> BY_TYPE = new ConcurrentHashMap<>();
     /** Bumped on every tag (re)load; the trimmable list is valid for one generation. */
@@ -66,9 +76,24 @@ public final class ArmorTrimsItemCache {
         if (!ready()) {
             return items;
         }
-        Trimmable t = new Trimmable(generation, classes, tags, items.toArray(new Item[0]));
+        Trimmable t = new Trimmable(generation, classes, tags, allowed(items));
         trimmable = t;
         return t;
+    }
+
+    /** Armor Trims' list cut to the allowlist tag when the tag has members; else unchanged. */
+    private static Item[] allowed(List<Item> items) {
+        boolean anyTagged = false;
+        for (Item item : items) {
+            if (item.builtInRegistryHolder().is(TRIMMABLE_ARMOR)) {
+                anyTagged = true;
+                break;
+            }
+        }
+        if (!anyTagged) {
+            return items.toArray(new Item[0]);
+        }
+        return items.stream().filter(item -> item.builtInRegistryHolder().is(TRIMMABLE_ARMOR)).toArray(Item[]::new);
     }
 
     /** Read-only list in Armor Trims' order (duplicates kept), with a set for {@code contains}. */

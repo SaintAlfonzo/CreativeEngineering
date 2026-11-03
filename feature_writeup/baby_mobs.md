@@ -64,6 +64,15 @@ world that loses the jar keeps every squid and dolphin, grown up (their `Age` ta
 - **Spawning in the pack:** nothing to wire beyond the chances: babies are part of the adult spawn groups, and the
   adult lists stay with [mob_spawns.md](mob_spawns.md) (`mob_spawns.json`). Spawn eggs and `/summon` give adults
   unless `Age:-24000` is set, as vanilla.
+- **"Babies never spawn" (TODO `mobs/tweaks #21`, checked 2026-11-02, no code change).** The roll is wired into the
+  real natural spawner: the installed class dump shows `MobBabyMixin` in `Mob.finalizeSpawn` (group data swapped at
+  HEAD, roll at RETURN), and Forge 1.19.2's `NaturalSpawner.spawnCategoryForPosition` passes the returned group to every
+  later member of the pack. Squid, glow squid and dolphins are all handled (`BabyAges.handles`), their spawn lists are
+  vanilla (squid 1-4, glow squid 4-6, dolphin 1-2; `mob_spawns.json` has no rule for them). Babies are rare by design:
+  only members after the first roll, so at full pack sizes about 1 squid in 33, 1 dolphin in 30 and 1 glow squid in 25 is a baby, and the
+  `water_creature` cap (5 per player) is shared with Alex's Mobs' orcas, whales and sharks, so few squid packs spawn
+  at all. SQ-OM-13 / -14 only fed packs through `finalizeSpawn` by command; a natural-spawn count is queued (SQ-PSM).
+  Raising the chances or letting the first of a pack roll too is an owner decision (the 1.21.2 values are vanilla).
 - **Spawn egg on an adult (fixed 2026-11-01):** vanilla's `spawnOffspringFromSpawnEgg` creates the mob, calls
   `Mob.setBaby(true)` and drops it unless `isBaby()` is then true. `Mob.setBaby` is empty in 1.19.2 and squid /
   dolphins don't override it, so the egg did nothing on an adult. `MobBabyMixin` now hooks `m_6863_` setBaby:

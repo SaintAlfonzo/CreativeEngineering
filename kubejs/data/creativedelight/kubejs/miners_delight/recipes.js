@@ -45,9 +45,5 @@ ServerEvents.recipes(e => {
 		var caveFilling = global.CD.on('rusticdelight') ? Ingredient.of([i.calamari, i.brown_mushroom]) : i.brown_mushroom
 		R.shapeless(i.cave_hamburger, [i.t_bread, Ingredient.of([i.crunchy_bar, i.vegan_patty]), i.smoked_bat_wing,
 			caveFilling, caveFilling], e, 'cave_hamburger')
-
-		//######################### Water cup #########################
-		// Spout and Item Drain: copper cup + 250 mB water <-> water cup (farmers_respite.md K12)
-		R.createBottle(i.water_cup, global.fluid.water, e, 'water_cup', { container: i.copper_cup })
 	})
 })

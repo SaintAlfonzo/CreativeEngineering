@@ -84,6 +84,8 @@ public class ModItems {
     public static final RegistryObject<Item> GREEN_GRAPE_JAM_JAR = ITEMS.register("green_grape_jam_jar", () -> new MasonJarItem(ModBlocks.GREEN_GRAPE_JAM_JAR.get(), jarItem(ModFoods.FRUIT_JAM)));
     public static final RegistryObject<Item> RED_GRAPE_JAM_JAR = ITEMS.register("red_grape_jam_jar", () -> new MasonJarItem(ModBlocks.RED_GRAPE_JAM_JAR.get(), jarItem(ModFoods.FRUIT_JAM)));
     public static final RegistryObject<Item> CHERRY_JAM_JAR = ITEMS.register("cherry_jam_jar", () -> new MasonJarItem(ModBlocks.CHERRY_JAM_JAR.get(), jarItem(ModFoods.FRUIT_JAM)));
+    public static final RegistryObject<Item> SALMONBERRY_JAM_JAR = ITEMS.register("salmonberry_jam_jar", () -> new MasonJarItem(ModBlocks.SALMONBERRY_JAM_JAR.get(), jarItem(ModFoods.FRUIT_JAM)));
+    public static final RegistryObject<Item> RASPBERRY_JAM_JAR = ITEMS.register("raspberry_jam_jar", () -> new MasonJarItem(ModBlocks.RASPBERRY_JAM_JAR.get(), jarItem(ModFoods.FRUIT_JAM)));
     public static final RegistryObject<Item> VINEGAR_JAR = ITEMS.register("vinegar_jar", () -> new MasonJarItem(ModBlocks.VINEGAR_JAR.get(), jarItem(ModFoods.VINEGAR_JAR)));
     public static final RegistryObject<Item> VINEGAR_BOTTLE = ITEMS.register("vinegar_bottle", () -> new ConsumableItem(bottleItem(ModFoods.VINEGAR), true));
     public static final RegistryObject<Item> ORGANIC_MASH = ITEMS.register("organic_mash", () -> new OrganicMashItem(props()));
@@ -182,6 +184,7 @@ public class ModItems {
         l.add(OVERNIGHT_OATS); l.add(CHOCOLATE_NUT_GRANOLA_BAR); l.add(FRUITY_GRANOLA_BAR); l.add(DELUXE_GRANOLA_BAR);
         l.add(EMPTY_MASON_JAR); l.add(APPLE_SAUCE_JAR); l.add(SWEET_BERRY_JAM_JAR); l.add(GLOW_BERRY_JAM_JAR); l.add(PEPPER_JAM_JAR);
         l.add(GREEN_GRAPE_JAM_JAR); l.add(RED_GRAPE_JAM_JAR); l.add(CHERRY_JAM_JAR);
+        l.add(SALMONBERRY_JAM_JAR); l.add(RASPBERRY_JAM_JAR);
         l.add(RELISH_JAR); l.add(NUT_MASH_JAR); l.add(HONEY_JAR); l.add(VINEGAR_JAR); l.add(NUT_MILK); l.add(APPLE_SAUCE_BOTTLE);
         l.add(SWEET_BERRY_JAM_BOTTLE); l.add(GLOW_BERRY_JAM_BOTTLE); l.add(PEPPER_JAM_BOTTLE); l.add(RELISH_BOTTLE);
         l.add(NUT_MASH_BOTTLE); l.add(VINEGAR_BOTTLE); l.add(ORGANIC_MASH); l.add(CHEESE_CURDS); l.add(CHEESE_WHEEL);

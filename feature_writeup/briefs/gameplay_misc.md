@@ -28,6 +28,12 @@ patcherMod rows (#9, #14) in one build; #16 last, after its tool art is found (o
 ## misc #2: Campfire fuel blocks and rain
 Status **In Progress** / Work patcherMod (+ KubeJS tags, tooltip) / TODO `gameplay/misc #2`
 
+### Owner decision 2026-11-02 (one system, no new tag)
+- **Rain does not douse a campfire in the vanilla `SIGNAL_FIRE` state.** `CampfireRain` checks that state instead of looking at the block below; no new system.
+- **The signal-fire source list gets coal and charcoal blocks** (hay bale stays, vanilla). The existing `campfire/rain_proof_fuel` tag is that list: the `isSmokeSource` mixin (Build 2) reads it, so one list drives both smoke height and rain. Item fuelling of a campfire stays off (the old unwanted system).
+- The wider block list in Build 1 (coke, petcoke, blaze, magma, other bales, kelp) is not added unless asked; Build 1 shrinks to coal and charcoal blocks.
+- A hay-bale signal fire is therefore also rain-proof (follows from the state rule).
+
 ### Goal
 A campfire on a "fuel block" never goes out in rain and sends up tall smoke; the fuel tag holds every concentrated
 fuel block in the pack; the fuel block says so in its tooltip; nothing else puts such a fire out in rain.

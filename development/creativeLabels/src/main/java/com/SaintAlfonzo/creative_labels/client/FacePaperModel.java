@@ -49,7 +49,7 @@ public class FacePaperModel implements IDynamicBakedModel {
     private final Map<Key, List<BakedQuad>> cache = new ConcurrentHashMap<>();
 
     /** Cache key of one placed piece; {@code spot} -1 = the label. */
-    private record Key(Direction face, @Nullable Direction rotation, int spot, int insetBits, @Nullable ResourceLocation sprite,
+    private record Key(Direction face, @Nullable Direction rotation, int spot, Spots.Place place, @Nullable ResourceLocation sprite,
                        boolean tinted) {}
 
     /**
@@ -79,41 +79,40 @@ public class FacePaperModel implements IDynamicBakedModel {
             FaceSnapshot snap = faces[face.ordinal()];
             if (snap == null || snap.isEmpty()) continue;
             if (snap.kind() == FaceContent.Kind.LABEL) {
-                out.addAll(labelQuads(face, snap.rotation(), snap.inset()));
+                out.addAll(labelQuads(face, snap.rotation(), snap.place()));
                 continue;
             }
             for (int spot = 0; spot < Spots.COUNT; spot++) {
                 FaceSnapshot.NoteLook look = snap.note(spot);
                 if (look == null) continue;
-                out.addAll(noteQuads(face, snap.rotation(), spot, snap.inset(), look));
+                out.addAll(noteQuads(face, snap.rotation(), spot, snap.place(), look));
             }
         }
         return out;
     }
 
-    private List<BakedQuad> noteQuads(Direction face, @Nullable Direction rotation, int spot, float inset, FaceSnapshot.NoteLook look) {
+    private List<BakedQuad> noteQuads(Direction face, @Nullable Direction rotation, int spot, Spots.Place place, FaceSnapshot.NoteLook look) {
         ResourceLocation sprite = DonorArt.noteSprite(look.color(), look.special(), look.written());
         boolean tinted = DonorArt.tinted(look.color(), look.special());
-        Key key = new Key(face, rotation, spot, Float.floatToIntBits(inset), sprite, tinted);
+        Key key = new Key(face, rotation, spot, place, sprite, tinted);
         return cache.computeIfAbsent(key, k -> buildNote(k, sprite, tinted));
     }
 
     private List<BakedQuad> buildNote(Key k, ResourceLocation spriteId, boolean tinted) {
         TextureAtlasSprite sprite = sprites.get(spriteId);
         if (sprite == null) sprite = particle;
-        float inset = Float.intBitsToFloat(k.insetBits);
         List<BakedQuad> quads = new ArrayList<>();
         QuadBakingVertexConsumer baker = new QuadBakingVertexConsumer(quads::add);
         int tint = tinted ? tintIndex(k.face, k.spot) : -1;
-        for (NoteShape.PlacedQuad q : NoteShape.place(NoteShape.get(), k.face, k.rotation, k.spot, inset)) {
+        for (NoteShape.PlacedQuad q : NoteShape.place(NoteShape.get(), k.face, k.rotation, k.place.noteRect(k.spot), k.place.inset())) {
             LabelQuads.bake(baker, q, sprite, tint, true);
         }
         return List.copyOf(quads);
     }
 
-    private List<BakedQuad> labelQuads(Direction face, @Nullable Direction rotation, float inset) {
-        Key key = new Key(face, rotation, -1, Float.floatToIntBits(inset), null, false);
-        return cache.computeIfAbsent(key, k -> List.copyOf(LabelQuads.place(labelModel, k.face, k.rotation, Float.intBitsToFloat(k.insetBits))));
+    private List<BakedQuad> labelQuads(Direction face, @Nullable Direction rotation, Spots.Place place) {
+        Key key = new Key(face, rotation, -1, place, null, false);
+        return cache.computeIfAbsent(key, k -> List.copyOf(LabelQuads.place(labelModel, k.face, k.rotation, k.place)));
     }
 
     @Override

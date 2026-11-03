@@ -46,3 +46,22 @@ global.removedItems.push(global.item.salt_bucket)
 // jar is an ingredient, not a jam. The grape and cherry jam jars are pack additions to the Vintage port.
 global.removedItems.push(global.item.sweet_berry_jam_bottle, global.item.glow_berry_jam_bottle, global.item.pepper_jam_bottle,
 	global.item.relish_bottle, global.item.sweet_berry_jam_jar, global.item.glow_berry_jam_jar)
+
+// Mason jars only (decided 2026-11-02, TODO dishes/jams #1, items/jars #9): the vinegar and apple sauce bottles go too;
+// their jars stay with their own food values (the owner reverted the jam-value change, 2026-11-02). The bottles merge into the jars (item_merges.js here: recipes, loot and inventories swap; the merge also lists
+// them as removed items); their bottle <-> jar crafts are removed in data/creativedelight/kubejs/vintagedelight/jams.js.
+
+// Bottle jams become mason jar jams (dishes/jams #1): Fruits Delight's 22 jams and Upgrade Aquatic's mulberry jam leave
+// an empty mason jar, eaten (Fruits Delight's FDFoodItem returns its crafting remainder) or used in a craft. Upgrade
+// Aquatic's eat-return is hard-coded: CD mixin upgrade_aquatic/MulberryJamMasonJarMixin. Their recipes take the jar
+// instead of the glass bottle (jams.js). The Fruits Delight jam ids come from the item dict (every fruitsdelight:*_jelly).
+ItemEvents.modification(e => {
+	var i = global.item
+	var jar = Item.of(i.empty_mason_jar).getItem()
+	var jams = Object.keys(i).filter(k => /_jelly$/.test(k) && String(i[k]).indexOf('fruitsdelight:') === 0).map(k => i[k])
+	if (Platform.isLoaded('upgrade_aquatic')) jams.push(i.mulberry_jam_bottle)
+	jams.forEach(id => {
+		if (!Platform.isLoaded(String(id).split(':')[0])) return
+		e.modify(id, item => item.setCraftingRemainder(jar))
+	})
+})

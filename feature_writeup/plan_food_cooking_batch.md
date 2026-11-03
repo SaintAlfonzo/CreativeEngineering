@@ -67,3 +67,60 @@ Row corrections: `dishes/ingredients #26` is already Testing (fixed 2026-11-01, 
 2. Wave B after A (jam #7 depends on the jam unification A8).
 3. Wave C as one build. Test IDs and scratch rows added per row in the same session.
 4. After each wave: `python3 tools/changelog_lint.py`, update the feature writeups, set rows to Testing.
+
+## Built (2026-11-02)
+
+Waves A and B built in one session (Wave C and `food/drinks #15` by two forks of it: SQ-RB2, SQ-DRK). Nothing booted.
+Scratch rows: [scratch_queue.md](testing/scratch_queue.md) "SQ-FCB" (SQ-FCB-00 to -07, CQ-FCB-01 to -03). Changelog: families
+Jams, Gameplay, Cans, Cooking for Blockheads, Miner's Delight, Veggies Delight, Barbeque's Delight. Needs the Creative
+Delight jar rebuilt (members repackedFarmers -03, backportedVintage -13, backportedMiners -05) and a full restart: pack
+startup dicts changed (`item_dict.js`, `fluid_dict.js`, `block_dict.js`).
+
+Scratch (r1102b, 2026-11-02 evening, on the 14:01 Creative Delight jar; deep scan 2026-11-02): SQ-FCB-00 to -06 and
+-08 PASS (s5 judged.md), SQ-FCB-07 and -08b batch faults (-08b real PASS; -07: block entity, placing, reload PASS, drops
+and knife cut unproven). SQ-PSU-06 FAIL: the lemon (A9) and orange jam-from-slices pot recipes take a glass bottle, not
+the mason jar (`dishes/jams #1`). The 21:10 Creative Delight build (copper cup removal, Miner's -05, Delightful -01) is not
+in `mods/`.
+
+| Row | Status | Where |
+|---|---|---|
+| A1 cabbage | Testing | CD `farmersdelight/recipes.js`: 4 leaves by board and mixer; the 2-leaf grid craft back to a cabbage now takes 4 (else a dupe) |
+| A2 glycerol | Testing | CD `pneumaticcraft/tags.js` (`t.remove` from `#forge:sugar`); lang override deleted from `kubejs/assets/pneumaticcraft/lang/en_us.json` |
+| A3 shulker meat | Testing | CD startup `endersdelight/item_merges.js`; `endersdelight/recipes.js`; GLM override `kubejs/data/endersdelight/loot_modifiers/scavenging_shulker_mollusk_from_shulker.json` (chance 0); `gen_can_types.py` shulker can on End's meat. End's own art kept; the owner updates the shulker textures later (2026-11-02) |
+| A4 taco | Testing | CD `corn_delight/recipes.js`. No roasted onion exists, so the slot is onion or any roasted bell pepper |
+| A5 patty | Testing | CD `creativeengineering/patties.js` (priority -90), `i.t_patty` |
+| A6 kebab wrap | Testing | CD `barbequesdelight/recipes.js` |
+| A7 squid | Testing | CD `miners_delight/loot.js`: `removeLoot(Ingredient.all)` then one squid; no Rustic gate |
+| A8, A9 jams | Testing | CD `vintagedelight/jams.js` (1 jar), `fruitsdelight/recipes.js` (lemon slices; `f.lemon_jam` added) |
+| A10 vinegar | Testing | CD `vintagedelight/jams.js`: jar recipe re-made through `R.vdPickling` on jam jars or `#forge:jams` |
+| A11 prepared sea pickle | Testing | CD startup `hostiledelight/hostile_items.js`, `hostiledelight/recipes.js` |
+| A12 copper cups | Testing | Superseded 2026-11-02 by the full removal (owner: the Copper Cup and every cup go): Miner's port and Delightful register no cup, details in [miners_delight.md](miners_delight.md) last section; SQ-CUP-01 to -05, CQ-CUP-01. |
+| A13 Caesar | Testing | CD startup `oceanic_delight/item_merges.js` (survivor Veggies' `cesar_salad`), `veggiesdelight/cooking.js`, `oceansdelight/recipes.js` |
+| A14 tempura | Testing | CD startup `pneumaticcraft/pneumatic_items.js`, `pneumaticcraft/recipes.js`, client renames dropped |
+| A15 cornbread stuffing | Testing | CD `corn_delight/recipes.js` |
+| A16, A17 pancakes | Testing | Already built 2026-11-01 (`creativedelight/members #15`); no change |
+| A18 CfB racks | Testing | CD startup `cookingforblockheads/item_merges.js` (oak survivors), `cookingforblockheads/kitchen.js` |
+| A19 seasoning names | Testing | CD Java `food/Seasonings` (name field), `food/SeasoningTooltip` (literal name when the lang key is missing), startup `seasonings.js` passes `name`. Root cause of the missing key not reproduced offline: check CQ-FCB-01 |
+| A20 canned ratatouille | Testing | `gen_can_types.py` soup row; Large Meals added to `AWAIT_DUMP` (its 4 cans blocked every run: foods not in the 10-30 dump) |
+| `dishes/jams #7` | Testing | Vintage port -13 `src/own/` (two jars, placeholder recolours of the cherry jar, tags, lang, soft fluids), Java `ModItems`/`ModBlocks`/`ClientSetup`, `port_resources.py` rerun; CD `vintagedelight/jams.js` |
+| `cooking/kitchen #25` | Testing | repackedFarmers -03 `FDBackportRegistry` (three `CuttingBoardBlock`s, added to the cutting board BE type in common setup), assets/loot/lang; art `members/farmers/tools/stone_cutting_boards.py`; CD `farmersdelight/stone_cutting_boards.js` |
+| `dishes/ocean #7` | Testing | CD startup `farmersdelight/ocean_dishes.js`, `farmersdelight/recipes.js`, sprite + notice in `kubejs/assets/creativeengineering/textures/item/` |
+| `dishes/meals #40` | Pinned | Owner 2026-11-02: no sushi medleys for now |
+| `food/stack-sizes #2` | Planned | Not run: needs a fresh `/dumpstacks` (the 10-30 dump predates the 11-01 stack rules) |
+
+**`dishes/meals #40` proposal (pinned 2026-11-02, owner: no medleys for now; kept for later).** Four feast blocks in the Rustic member, built like Rice Roll Royale
+(FD feast, 8 servings, FD's rice roll medley models with a recoloured `food` texture):
+Hostile Roll Medley (Hostile Delight's guardian rolls and sashimi, Elder Guardian Roll), Egg Roll Medley (Oceanic's egg
+roll x 8), Bell Pepper Roll Medley (Rustic's pepper rolls, 8 of the 9 colours or 9 servings), Shrimp and Sea Pickle Roll
+Medley (Oceanic's shrimp roll and sea pickle roll slices; the sea pickle roll recipe takes raw or sliced sea pickle).
+Needed: the roll list and serving count per medley, and whether placeholder recolours are fine for the art.
+
+### Follow-up 2026-11-02 (owner answers)
+
+- `cooking/kitchen #27` BUILT: sneak right-click with an empty main hand picks up the cooking pot, copper pot, kettle or
+  skillet into the hand (block loot to the hand, the meal kept in the item, ingredients drop as on breaking, break
+  protection respected); the handle toggles on sneak left-click with an empty hand, on the first hit, without breaking.
+  CD Java `cooking/CookwareHandling` (QoL-7 `[qol] cookwarePickup`), tag `#creativedelight:cookware_pickup` (CD
+  `creativeengineering/kitchen_tags.js`). SQ-FCB-08, CQ-FCB-04. Jar built 13:52, not installed (a game was running).
+- Plain matcha = the Matcha Latte (input of Ice Berry Matcha); nothing to build (creative_delight_drinks.md 8).
+- `dishes/meals #40` pinned; shulker textures left to the owner.

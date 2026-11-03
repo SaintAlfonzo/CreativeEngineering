@@ -13,6 +13,7 @@ per thing that can be changed, with a **Decision** column (blank = still open).
 | Soul lanterns and torches (K25, K32) | BUILT 2026-10-30, not deployed: rules 23 to 25 in `nether_swap_rules.json` (new `except_holding: ["@sculk"]`), generator keeps lantern `hanging` and wall torch `facing` (family carry-over), 323 swaps added (1407 in 101 templates); YUNG's `Enable Nether Blocks in Dungeons` off. Not run in game (NW-13 to NW-17, SQ-WG30-B1 to B4) |
 | Biome changes (B1, B8, B9, F7) | BUILT 2026-10-19, DEPLOYED with 1.0.9 (2026-10-19 15:54): `nether_worldgen_rules.json` -> `tools/gen_nether_worldgen.py` -> 7 `kubejs/data` files, then `gen_wild_flowers.py` (flower snapshot). Round 2 scratch world: moonlight grove has blue orchids and cornflowers with no sprouts or roots; no breccia or glowstone deep down. Scratch server: loads clean; a new world's Scarlet Mountains has jasper + 9.9 % crimsite and no netherrack, nylium or roots; Mirage Isles trunks are stripped acacia. Not run in the user's game (NW-01 to NW-05) |
 | Structure changes (S4, S7, K27, K34) | BUILT 2026-10-19, DEPLOYED with 1.0.9: rules 3, 20 and 21 in `nether_swap_rules.json`, swap file regenerated (1084 swaps). Not run in game (NW-06, NW-07, NW-10, NW-11) |
+| No glowstone in the Overworld (`biomes/netherblocks #4`) | CHECKED 2026-11-02, no change needed: the static scan finds no glowstone in any source (surface rules, biome features, code-added layers, live structures after the swaps, and the new processor pass over 150 processor lists). Census tool `tools/block_census.py` built; the real-world count waits for a fresh world (NW-21) |
 | Rarest biomes more common, never-spawning biomes spawning | DEPLOYED with 1.0.9 (built 2026-10-19) in [biome_tuning.md](biome_tuning.md) (rarity floor, `target_pct`, 20,000-column samples, `/dumpclimatecaves`) |
 
 - **Files to open:** this file, [nether_worldgen_scan.md](nether_worldgen_scan.md) (raw scan), [nether_swaps.md](nether_swaps.md) (structure swaps in place), [nether_worldgen_rules.json](../kubejs/generation_scripts/worldgen/nether_worldgen_rules.json) (biome rules).
@@ -88,6 +89,14 @@ Findings of the first scan (2026-10-19, before the changes; shares then were fro
   was generated (2026-10-12). Regenerated 2026-10-19: its 3 netherrack are magma now (rule 16).
 - **Found later the same day: D&D glowstone** (F7). Create: Dreams & Desires' deep layered blob puts glowstone
   layers between Y -64 and 0 under every Overworld biome. A new scratch world had 493 glowstone in 25 chunks.
+- **Glowstone (2026-11-02, `biomes/netherblocks #4`):** none left in Overworld generation. D&D has no glowstone
+  geode (the "D&D geodes" were its F7 layer, granite since 1.0.9); Geode+'s three glowstone geode tags list Nether
+  biomes only; Quark's obsidian spikes are Nether-only (config); structure glowstone is yellow corundum (rule 21) or
+  gold ore (rule 14); no processor list in any jar or `kubejs/data` puts out glowstone (scan section 4). Every class
+  in every jar that names glowstone was read: blocks, recipes, datagen, the D&D layer, Quark's Nether spike, YUNG's
+  Nether fortress item frames. The processor pass also lists Overworld processors that put out other Nether blocks
+  (basalt on Terralith desert and fortified village roads and a Towns mushroom street, gilded blackstone and stripped
+  crimson / warped stem masts on Unwrecked ships): not glowstone, left for the netherblockswap rows.
 - **Clean:** Geode+'s Nether geodes are tagged to Nether biomes only. Quark's Nether generators stay in the Nether.
   Twigs, Farmer's Respite and Upgrade Aquatic's prismarine coral only test for Nether blocks, they never place them.
   None of the 13 mods with json-less Overworld features places one: 11 reference no Nether block, and 2 only test
@@ -354,6 +363,12 @@ How each remaining kind of decision would be built:
 
 - `python3 tools/nether_worldgen_scan.py [--json OUT] [--no-structures]`: rewrites the scan. Check that its
   "Json-less mod features" table has no CHECK BY HAND row after adding mods.
+- `python3 tools/nether_worldgen_scan.py` section 4 (2026-11-02): structure processor lists, the Nether blocks each
+  puts out (input and location predicates and YUNG's `target_block` skipped).
+- `python3 tools/block_census.py <world> <block>... [--dim overworld|nether|end] [--max-files N]`: counts blocks in
+  a save's region files from the section palettes (no dependencies; 3,500 chunks in about 5 s). 2026-11-02: no
+  local world has chunks generated after 1.0.9 (`WorldG`, 2026-10-12, holds 32,204 glowstone in 191 chunks, 157 of
+  them at Y 0 and below: the old D&D layer), so NW-21 needs a fresh world.
 - `python3 tools/nether_blocks_scan.py`: the before-swaps report. It was unchanged by the 2026-10-19 refactor
   (identical output).
 - `python3 tools/gen_nether_worldgen.py --dry-run`: every rule must match something (it stops with ERROR when a rule
@@ -400,6 +415,10 @@ All in a world created after these changes (new chunks only).
 - [x] **NW-16 YUNG dungeons:** a few zombie and small dungeons (`/locate structure betterdungeons:zombie_dungeon`,
   `betterdungeons:small_dungeon`) → no soul lantern, soul campfire or soul sand. (Scratch PASSED 2026-10-30, SQ-WG30-B04.)
 - [ ] **NW-17 Snowy depot house:** a snowy village with Veggies Delight's depot house → plain wall torches.
+- [ ] **NW-21 Glowstone census:** fresh world, Chunky radius 1000 around spawn plus one deep cave region, stop the
+  server, `python3 tools/block_census.py <save> minecraft:glowstone minecraft:soul_fire minecraft:soul_lantern` →
+  0 glowstone in the Overworld (any hit: read its chunk and y, then find the source; player-placed blocks excluded);
+  a gothic church found in that area (NW-11) shows yellow corundum.
 - Scratch 2026-10-30 (SQ-WG30-B01, B02 PASSED): load line `1412 block swap(s) in 105 template(s)`; `/place template`
   of the spire layer1 / base_l, the water parkour room and the snowy depot house gave 0 soul blocks, lantern `hanging`
   and wall torch `facing` counts equal to the template's soul ones (4 standing spire lanterns on the template's bottom
@@ -428,3 +447,9 @@ All in a world created after these changes (new chunks only).
 - 2026-10-30: K25, K32 built (decided 2026-10-29, K19 kept): rules 23 to 25, generator `except_holding` / `@sculk` /
   `FAMILY_KEEP`, 1407 swaps (323 new), YUNG's dungeon nether blocks off. Offline: old swaps byte-identical, every
   unswapped soul light accounted for (ancient city, bone dungeon, move-to-Nether, Nether-shared ship). NW-13 to NW-17.
+- 2026-11-02 (`biomes/netherblocks #4`): glowstone check. Scan gained the processor pass (section 4 of the scan);
+  `tools/block_census.py` built. No glowstone source found, no data change. NW-21 pending (fresh world).
+- 2026-11-02 (`structures/contents #1`): Philip's lost soul dungeon, lost soul city, rare ruin and blackstone
+  Nether ruin moved to the Nether ([structure_tuning.md](structure_tuning.md) 7); `plan/move_to_nether` removed, so
+  nothing is exempt from the swaps any more. Swap file unchanged (1407 swaps); the scan's structure table lost the
+  four (47 live Overworld structures).

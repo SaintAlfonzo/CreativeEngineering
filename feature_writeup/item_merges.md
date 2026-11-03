@@ -1,6 +1,6 @@
 # Item merges (total replacements)
 
-Status: BUILT 2026-10-22, scratch server PASSED 2026-10-22 (section 4.1), not tested in game, not deployed. Cantaloupe (2.10) built 2026-10-28, scratch test queued (SQ-CM). KubeJS,
+Status: BUILT 2026-10-22, scratch server PASSED 2026-10-22 (section 4.1), shipped 1.1.01, not tested in game. Cantaloupe (2.10) built 2026-10-28, scratch PASSED (SQ-CM), shipped 1.1.04 / 1.1.05. Food merges 2.13 to 2.15 (2026-11-01 / 11-02): scratch PASSED r1102b, unreleased (deep scan 2026-11-02). KubeJS,
 plus patcherMod for 2.6 (fluid tooltips) and 2.7 (worldgen): a full restart is needed.
 Still in game: MG-01, MG-02, MG-04, MG-05, MG-07, MG-13 (2.1 to 2.5), MG-16, MG-17, MG-20 (JEI tooltips), the MG-21
 names, and the machine runs of MG-18 / MG-19. Coffee (2.8, built, scratch server PASSED 2026-10-22 for the recipe and effect parts: SQ-CO-01, SQ-CO-02, `tools/food_drinks_probe/food_drinks_probe.js` `/fdtest coffee`, after two fixes in 2.8); in game MG-23 (JEI), MG-24 (drinking), MG-25 (inventory swap, real player only), MG-26 (JEI), MG-27 (JEI), MG-28 (an old bush).
@@ -206,7 +206,7 @@ bricks and the 17 lamps stay.
     A big salt build in a snowy biome clears its touching snow once, then has nothing left to melt.
   - Rain does not dissolve salt (config off), so an outdoor Evaporator keeps its layers in rain.
 
-### 2.10 Cantaloupe (built 2026-10-28, scratch server PASSED 2026-10-28: SQ-CM-01 to -03, -09; shipped to the client in 1.1.04, server still 1.1.03; MG-39 to MG-44 in game; TODO `merges/fruit #1`)
+### 2.10 Cantaloupe (built 2026-10-28, scratch server PASSED 2026-10-28: SQ-CM-01 to -03, -09; shipped to the client in 1.1.04, server in 1.1.05; MG-39 to MG-44 in game; TODO `merges/fruit #1`)
 
 Owner plan 5.4 plus answers of 2026-10-28. Fruits Delight's hamimelon line is the **Cantaloupe** (melon block on a stem,
 seeds, jam, jello, juice, shaved ice, wild patch); Delightful's cantaloupe (the repack's sand crop, a small
@@ -273,7 +273,7 @@ the swap would turn into copies of vanilla's. The Training String recipe goes th
 string). Sources are off at the mod too: fishing swap and mob drops by config, fisherman trades by Creative Compat
 (`cats.CozyCats.onTrades`). The cooked fish's random effect on eating is lost with them.
 
-### 2.13 Fish and chips (built 2026-11-01, not run; SQ-MG-21; TODO `merges/dishes #1`, Veggies Delight M1)
+### 2.13 Fish and chips (built 2026-11-01, scratch PASSED r1102b: SQ-MG-21, SQ-VDF-07; not played; TODO `merges/dishes #1`, Veggies Delight M1)
 
 Owner 2026-11-01: Veggies Delight's Fish and Chips stays, PneumaticCraft's goes.
 
@@ -291,6 +291,31 @@ removed outright (owner 2026-11-01, not a merge: no survivor): CD startup `pneum
 
 Tests: SQ-MG-21, SQ-VDF-07 (scratch); MG-48 (in game: JEI shows one Fish and Chips with the frying route, an old Cod 'n' Chips in an
 inventory turns into Fish and Chips).
+
+### 2.14 Shulker meat (built 2026-11-02, scratch PASSED r1102b: SQ-FCB-04e, -05; not played; TODO `dishes/ingredients #32`)
+
+| Purged | Survivor |
+|---|---|
+| `endersdelight:shulker_mollusk` | `ends_delight:shulker_meat` |
+| `endersdelight:shulker_filet` | `ends_delight:shulker_meat_slice` |
+
+Pairs: CD startup `endersdelight/item_merges.js`. Server half: Ender's mollusk-to-filet cut removed
+(`endersdelight/recipes.js`, it duplicated End's meat-to-slice cut); Ender's knife loot modifier switched off by a pack
+datapack override (`kubejs/data/endersdelight/loot_modifiers/scavenging_shulker_mollusk_from_shulker.json`, chance 0),
+so a shulker killed with a knife drops End's meat once. Canned Shulker Flesh is filled from End's meat and slice. End's
+textures unchanged; the owner updates them later (2026-11-02).
+
+### 2.15 Caesar salad (built 2026-11-02, scratch PASSED r1102b: SQ-FCB-01, -05; not played; TODO `merges/dishes #6`)
+
+`oceanic_delight:caesar_salad` -> `veggiesdelight:cesar_salad` (Veggies' texture, shown as "Caesar Salad"). Pair: CD
+startup `oceanic_delight/item_merges.js`. Oceanic's recipe removed; the one recipe (CD `veggiesdelight/cooking.js`):
+cabbage, tomato, any cheese, any bread, bowl (by hand, `_manual_only`).
+
+### 2.16 Cooking for Blockheads racks and basket (built 2026-11-02, not run; SQ-FCB-05; TODO `cooking/kitchen #24`)
+
+CfB's own `spice_rack`, `tool_rack`, `fruit_basket` -> the blockheads_additions `oak_` versions (same CfB blocks and block
+entities, so kitchens use them). Pairs: CD startup `cookingforblockheads/item_merges.js` (only while the member is on).
+CfB's three recipes removed (`cookingforblockheads/kitchen.js`); woods with no rack of their own no longer make one.
 
 ## 3. Known limits
 
@@ -421,17 +446,17 @@ the chef's hat (Wardrobe / Simple Hats hat removed) confirmed working in game 20
 
 ### 5.1 Dishes (`merges/dishes`)
 
-- Fish and chips: keep Veggies Delight's. Merge VD's duplicate recipes. Remove PC's fish and chips, fries and every
+- Fish and chips (BUILT 2026-11-01, 2.13): keep Veggies Delight's. Merge VD's duplicate recipes. Remove PC's fish and chips, fries and every
   recipe or item tied to them. (Also: merge fish and cod and chips, from the 2026-10-24 note.)
-- Mashed potatoes: split instead of merge. More Delight's is Mashed Potatoes, VD's is Mashed Sweet Potatoes.
+- Mashed potatoes (BUILT 2026-11-01, `merges/dishes #2`; scratch PASSED r1102b): split instead of merge. More Delight's is Mashed Potatoes, VD's is Mashed Sweet Potatoes.
   Cooking pot: 2 potatoes or potato slices + 250 mB milk -> mashed potatoes (sweet potato input -> mashed sweet
   potatoes). Manual craft: 3 cooked potatoes. Both cannable and saltable (with salt).
-- Stuffed peppers: remove VD's stuffed peppers (item and feast); Rustic's stay. Also removed from the veggie tweaks.
+- Stuffed peppers (BUILT 2026-11-01, `merges/dishes #3`; scratch PASSED r1102b): remove VD's stuffed peppers (item and feast); Rustic's stay. Also removed from the veggie tweaks.
 - Potato salad: one item. Inputs: sliced potatoes (or sweet potatoes, doubled for the manual cooked recipe), any egg,
   onion or garlic, pickle or pickled sea pickle. Texture: More Delight's.
 - Cheesy pasta: rename Brewin's to Cheesy Fish Pasta (BUILT 2026-10-30: `namechanges.js`, with its can and placed
-  block; unreleased). Add bone broth to the cheesy pasta heatless craft.
-- Caesar salad: use the correct spelling; Veggies Delight's texture; lettuce, tomato, cheese, bread.
+  block; shipped 1.1.05). Add bone broth to the cheesy pasta heatless craft.
+- Caesar salad (BUILT 2026-11-02, 2.15): use the correct spelling; Veggies Delight's texture; lettuce, tomato, cheese, bread.
 - Nut butter: remove nut dough. Only the nut mash jar remains: 5 nuts (acorn or peanut) + sugar -> 3 nut mash, needs
   a mason jar. Nut butter sandwich: Vintage's texture, Delightful's name; any bread + any jam + a nut mash jar.
 - Pizza and quiche: no overlap. Rename Brewin's pizza to Supreme Pizza and rebuild its craft as dough, sauce, dough on
@@ -440,10 +465,10 @@ the chef's hat (Wardrobe / Simple Hats hat removed) confirmed working in game 20
 - Skewers: fold into the skewer family with consistent rules (`dishes/meals #13`). Patties: every patty type is always
   interchangeable (`dishes/meals #14`).
 - Burgers: mark all burgers for an ingredient-variant audit and balancing. Drop More Delight's loaded burger in favour
-  of "The Burger", renamed Loaded Burger, accepting any cheese. (Rename BUILT 2026-10-30, `namechanges.js`, unreleased;
+  of "The Burger", renamed Loaded Burger, accepting any cheese. (Rename BUILT 2026-10-30, `namechanges.js`, shipped 1.1.05;
   the drop and the any-cheese recipe are open.)
 - Kimchi: Vintage Delight's texture.
-- Fish tempura: drop Fish Tempura and Raw Fish Tempura, keep fried fish. The fish and chips that used tempura go too.
+- Fish tempura (BUILT 2026-11-02 as removed items, `merges/dishes #11`; scratch PASSED r1102b SQ-FCB-01): drop Fish Tempura and Raw Fish Tempura, keep fried fish. The fish and chips that used tempura go too.
 
 ### 5.2 Baking (`merges/baking`)
 
@@ -485,8 +510,15 @@ the chef's hat (Wardrobe / Simple Hats hat removed) confirmed working in game 20
     to extend rope lower. Requires support like scaffolding"; recipe 3 Farmer's Delight ropes vertically.
   - Beautify: rename to Twine; tooltip "Climbable, acts like chain"; rope extension behaviour (like Create shafts);
     keep the existing recipe.
-- Rotten flesh: Architect's Palette's block becomes the pack's own prepared block with a prepared flesh item. Open
-  question: why is JRFTL active on the server, and why is no custom prepared flesh texture visible?
+- Rotten flesh: Architect's Palette's block becomes the pack's own prepared block with a prepared flesh item. BUILT
+  (`merges/materials #3`): the block is `creativeengineering:prepared_flesh_block` (KubeJS `misc_items.js`, hand-authored
+  cube_all model, texture `kubejs/assets/creativeengineering/textures/block/prepared_flesh_block.png`); the item keeps
+  the id `jrftl:prepared_flesh`, registered by `misc_items.js` since JRFTL was removed 2026-10-31. Recipes in
+  `server_scripts/engineering/mob_resources.js` (creosote filling and bottling of rotten flesh and Architect's Palette's
+  rotten flesh block, smoking to leather, 9 to 1 block). Why no custom texture showed: the pack sprite sat at
+  `kubejs/assets/prepared_flesh.png` (no namespace, never loaded) while JRFTL's own model drew its own sprite; since
+  10-31 it is at `kubejs/assets/jrftl/textures/item/prepared_flesh.png` (`textures/merges #9`), and the stray root copy
+  was deleted 2026-11-02. JRFTL question closed (jar removed). Unchecked in game: both textures after a full restart.
 
 ### 5.6 Mobs (`merges/mobs`)
 

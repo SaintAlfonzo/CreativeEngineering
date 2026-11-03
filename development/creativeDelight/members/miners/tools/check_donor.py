@@ -6,7 +6,7 @@
 Reads the upstream jar in miners_upstream/ (as MinersTranslator does: the stray minersdelight namespace moved to
 miners_delight, files naming a REMOVED id dropped), the port's ids from MDItems / MDBlocks / MDPotions, and
 kubejs/exported/ (items_by_mod, fluids.json, tags/*_tags.json, the last /dumpall). Reports every item, block, tag,
-loot type or condition that a recipe, loot table, loot modifier, tag or cup conversion names but nothing provides, and
+loot type or condition that a recipe, loot table, loot modifier, or tag names but nothing provides, and
 any 1.20-only loot condition name left after translation. Recipes guarded by forge:mod_loaded for a mod the pack
 doesn't have are skipped, as Forge skips them. The miners_delight ids come from the port's source, since the dumps were
 made with the 1.1.2 jar.
@@ -25,8 +25,11 @@ EXPORTED = os.path.join(INSTANCE, 'kubejs', 'exported')
 DONOR = os.path.join(INSTANCE, 'miners_upstream', 'miners_delight-1.20.1-1.4.5-backport.jar')
 JAVA = os.path.join(MOD, 'src', 'main', 'java', 'com', 'sammy', 'minersdelight')
 NS = 'miners_delight'
-REMOVED = {'hot_cocoa_cup'}
-MISSING_BOWLS = {'farmersdelight:onion_soup'}
+# Same set as MinersTranslator.REMOVED (the hot cocoa cup, D3; the Copper Cup and every cup, dishes/meals #53)
+REMOVED = {'hot_cocoa_cup', 'copper_cup', 'water_cup', 'milk_cup', 'powder_snow_cup', 'beetroot_soup_cup',
+           'mushroom_stew_cup', 'rabbit_stew_cup', 'baked_cod_stew_cup', 'noodle_soup_cup', 'beef_stew_cup',
+           'chicken_soup_cup', 'fish_stew_cup', 'pumpkin_soup_cup', 'vegetable_soup_cup', 'bone_broth_cup',
+           'cave_soup_cup', 'bat_soup_cup', 'insect_stew_cup', 'onion_soup_cup'}
 
 # Loot types a 1.19.2 pack with Forge, Farmer's Delight and this port knows.
 KNOWN_CONDITIONS = {
@@ -62,8 +65,17 @@ def donor_data():
             if not name.startswith('data/') or not name.endswith('.json'):
                 continue
             path = name.replace('data/minersdelight/', 'data/miners_delight/', 1)
+            if '/cup_conversion/' in path:
+                continue
             text = jar.read(name).decode('utf-8')
-            if any(f'"{NS}:{r}"' in text for r in REMOVED) and '/tags/' not in path and '/cup_conversion/' not in path:
+            if path == 'data/miners_delight/recipes/copper_pot.json':
+                # MinersTranslator.withoutRemovedAlternatives: the water cup alternative goes, the bucket stays
+                recipe = json.loads(text)
+                for key in recipe['key'].values():
+                    if isinstance(key, list):
+                        key[:] = [o for o in key if o.get('item', '').split(':', 1)[-1] not in REMOVED or not o.get('item', '').startswith(NS + ':')]
+                text = json.dumps(recipe)
+            if any(f'"{NS}:{r}"' in text for r in REMOVED) and '/tags/' not in path:
                 continue
             if '/loot_modifiers/' in path or '/loot_tables/' in path:
                 text = text.replace('"minecraft:any_of"', '"minecraft:alternative"')
@@ -72,7 +84,7 @@ def donor_data():
 
 
 def main():
-    items = pack_items() | own_ids(os.path.join(JAVA, 'registry', 'MDItems.java'), r'(?:food|bowlFood|cupFood)\("([a-z_]+)"|ITEMS\.register\("([a-z_]+)"')
+    items = pack_items() | own_ids(os.path.join(JAVA, 'registry', 'MDItems.java'), r'(?:food|bowlFood)\("([a-z_]+)"|ITEMS\.register\("([a-z_]+)"')
     # block(MDBlocks.X, ...) items take the block's name.
     items |= {NS + ':' + m.lower() for m in re.findall(r'block\(MDBlocks\.([A-Z_]+)', open(os.path.join(JAVA, 'registry', 'MDItems.java')).read())}
     blocks = own_ids(os.path.join(JAVA, 'registry', 'MDBlocks.java'), r'BLOCKS\.register\("([a-z_]+)"')
@@ -170,6 +182,8 @@ def main():
             kind = path.split('/')[3]
             for v in js.get('values', []):
                 vid = v['id'] if isinstance(v, dict) else v
+                if vid.lstrip('#').split(':', 1)[0] == NS and vid.lstrip('#').split(':', 1)[1] in REMOVED:
+                    continue  # MinersTranslator.removeValues drops it
                 required = not (isinstance(v, dict) and v.get('required') is False)
                 if not required:
                     continue
@@ -181,12 +195,6 @@ def main():
                             problems.append(f'{where}: unknown block tag {vid}')
                     elif vid not in blocks and vid not in pack_blocks:
                         problems.append(f'{where}: unknown block {vid}')
-        elif '/cup_conversion/' in path:
-            for row in js['entries']:
-                if row['bowl'] in MISSING_BOWLS or any(f'{NS}:{r}' in (row['bowl'], row['cup']) for r in REMOVED):
-                    continue
-                check_item(row['bowl'], where)
-                check_item(row['cup'], where)
     print('checked: ' + ', '.join(f'{v} {k}' for k, v in sorted(counts.items())))
     for p in problems:
         print('  ' + p)

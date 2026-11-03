@@ -30,7 +30,7 @@
 - **New:** A Grill used on a campfire (or a campfire used on a Grill's side) takes it in, unlit; it lights, goes out in water, under a shovel or a splash water bottle, and in rain as a campfire does, and drops the campfire when broken
 - **New:** Powders, right-clicked on a skewer on the Grill or a Cutting Board, one seasoning per skewer, 64 uses: Cumin Powder (heals 1 heart), Pepper Powder (eaten fast), Chili Powder (always edible, 1 heart of fire damage); a powder on a raw skewer stays after grilling
 - **New:** Sauces, the same way on cooked skewers only, 16 uses: Honey Mustard Sauce (effects twice as likely, half as long), Buffalo Sauce (effects one level stronger, half as long, 1 heart of fire damage), Barbeque Sauce (effects twice as long)
-- **New:** Kebab Wrap (bread, a cooked skewer, cabbage), Kebab Sandwich (bread, 2 cooked skewers, cabbage, onion) and Bibimbap (Cooked Rice, onion, carrot, 3 cooked skewers): they list the skewers inside and give their effects and seasonings
+- **New:** Kebab Wrap (Tortilla, a cooked skewer, cabbage), Kebab Sandwich (bread, 2 cooked skewers, cabbage, onion) and Bibimbap (Cooked Rice, onion, carrot, 3 cooked skewers): they list the skewers inside and give their effects and seasonings
 - **New:** Tray (a log in the Stonecutter makes 4): 3-slot display, stacks on itself
 - **New:** WTHIT shows each skewer on a Grill with its time to flip or done, Ready to Flip, Cooked or Burnt
 
@@ -38,6 +38,18 @@
 
 - **Changed:** Silk Touch line reads "Silk Touch Required: True" (green, nothing drops without it) or "Drops Differently" (yellow); the book icon and "Needs Silk Touch" text are gone [book icon + "Needs Silk Touch"]
 - **New:** New option to also show "Silk Touch Required: False" (red) on every other block, off by default
+
+## Jams
+
+- **Changed:** Green Grape, Red Grape and Cherry Jam Jars: the Cooking Pot makes 1 jar [2]
+- **New:** Salmonberry and Raspberry Jam Jars: 4 berries, sugar and a Lemon Slice in the Cooking Pot, in an Empty Mason Jar
+- **New:** Lemon Jam from 5 Lemon Slices and a sweetener in the Cooking Pot, or in a heated Mixer with 100 mB water
+- **Changed:** Vinegar ferments from any jam in the Pickling Jar: Vintage Delight's jam jars, the new jam jars and Fruits Delight's jams [Vintage Delight's jam jars only]
+- **Removed:** The Pickling Jar recipe for a Vinegar Bottle from a jam bottle
+- **Changed:** Fruits Delight's jams and Upgrade Aquatic's Mulberry Jam come in an Empty Mason Jar: eating or crafting with one leaves the jar, and making one takes a jar [Glass Bottle]
+- **Removed:** Vintage Delight's Vinegar and Apple Sauce Bottles; old ones become jars
+- **Removed:** Vintage Delight's Pepper Jam and Relish Bottles and its Sweet Berry and Glow Berry Jams; old ones become the jar versions and Fruits Delight's Sweet Berry and Glow Berry Jams
+- **Changed:** A Honey Bottle and a Honey Jar craft into each other 1 to 1 [3 bottles a jar]
 
 ## Lemons
 
@@ -51,7 +63,7 @@
 
 ## Raspberries <!-- icon: hearthandharvest:raspberry -->
 
-- **New:** Raspberries (from Hearth and Harvest): wild Raspberry Bushes grow in temperate grassy biomes. Craft a Raspberry into Raspberry Pips to plant a bush on dirt or farmland.
+- **New:** Raspberries (from Hearth and Harvest): wild Raspberry Bushes grow in temperate grassy biomes and in cold snowy grassy biomes. Craft a Raspberry into Raspberry Pips to plant a bush on dirt or farmland.
 - **New:** A Raspberry Bush is picked by hand only when fully grown, for 2-3 Raspberries. It slows anything walking through but never hurts. Foxes pick ripe bushes.
 - **New:** Raspberry: 2 hunger, eaten fast. Grows best in spring.
 
@@ -66,12 +78,11 @@
 
 ## Cooking for Blockheads <!-- icon: cookingforblockheads:oak_spice_rack -->
 
-- **New:** Spice Racks and Tool Racks in 20 woods: Oak, Spruce, Birch, Jungle, Acacia, Dark Oak, Mangrove, Crimson, Warped, Twisted, Dreamwood, Livingwood, Smoked, Treated Wood, Vertical Treated Wood, Rubberwood, Ancient, Azalea, Bamboo and Driftwood
+- **New:** Spice Racks and Tool Racks in 19 woods: Oak, Spruce, Birch, Jungle, Acacia, Dark Oak, Mangrove, Crimson, Warped, Twisted, Dreamwood, Livingwood, Smoked, Treated Wood, Vertical Treated Wood, Rubberwood, Ancient, Bamboo and Driftwood
 - **New:** Each wood rack is crafted like the plain rack from that wood's slabs (Rubberwood: planks)
-- **Changed:** The plain Spice Rack and Tool Rack are crafted from the wooden slabs that have no rack of their own [any wooden slab]
-- **New:** Fruit Baskets in the same 20 woods, drawn in that wood's planks
+- **Removed:** The plain Spice Rack, Tool Rack and Fruit Basket; old ones become the Oak versions. Woods with no rack of their own make none
+- **New:** Fruit Baskets in the same 19 woods, drawn in that wood's planks
 - **New:** Each wood Fruit Basket is crafted like the plain one from that wood's slabs and any wooden pressure plate (Rubberwood: planks)
-- **Changed:** The plain Fruit Basket is crafted from the wooden slabs that have no basket of their own [any wooden slab]
 
 ## Flower Pots <!-- icon: minecraft:flower_pot -->
 
@@ -91,6 +102,11 @@
 - **Removed:** Floral Enchantment's Large Pot can no longer be crafted and is hidden; placed ones still work
 - **Removed:** The "Flower Test" world type
 
+## Sticky Notes and Labels <!-- icon: creative_labels:label -->
+
+- **Changed:** Labels go on Jars, Sacks, Trash Cans, Pickling Jars, Botany Pots, Cauldrons, Composters and other blocks that are not full cubes [full faces only]; on small faces the label is drawn smaller
+- **New:** Supplementaries' Jars and Sacks, Trash Cans, Pickling Jars and Botany Pots take one Sticky Note in the middle of each side
+
 ## Treated Sticks
 
 - **New:** Treated Sticks can be placed like sticks, up to three per block
@@ -109,6 +125,8 @@
 
 - **Fixed:** The Hands, Face and Feet Curios slots were missing, so Stepstools, the Falconry Glove, face masks and the Cob Pipe could not be worn in them
 - **Fixed:** The Cob Pipe could not be put in the helmet slot by hand or shift click, and dispensers did not put it on
+- **Changed:** The Cob Pipe no longer lists a Mouth slot; it goes in the Face slot
+- **Fixed:** Simple Hats masks worn in the Face slot were invisible
 
 ## Baby Mobs
 
@@ -125,7 +143,9 @@
 ## Miner's Delight <!-- icon: miners_delight:copper_pot -->
 
 - **New:** The Copper Pot keeps its ingredients' empty buckets, bottles and bowls in a take-only slot right of the output; it waits when that slot is full. Hoppers below take them out.
-- **New:** An empty bowl, bottle or cup from the Copper Pot's ingredients that the waiting meal is served in goes into its container slot and serves the meal
+- **New:** An empty bowl or bottle from the Copper Pot's ingredients that the waiting meal is served in goes into its container slot and serves the meal
+- **Removed:** The Copper Cup and every cup: Water, Milk and Powder Snow Cups, the 15 soup and stew cups and the Cactus Soup Cup; the Copper Pot serves every meal in its bowl
+- **Changed:** The Copper Pot recipe takes a Water Bucket [Water Bucket or Water Cup]
 - **Changed:** The Sticky Basket side, Baked Cave Carrot, Tentacles and Baked Tentacles have their older look back
 - **New:** Cave Carrot Crates can turn up in chests where Cave Carrots do
 - **Fixed:** Cave Hamburger had no recipe; Calamari or a Brown Mushroom fills the two slots that took Baked Tentacles
@@ -155,7 +175,8 @@
 - **New:** Sequenced assemblies on a Roasted Zucchini for the Stuffed Zucchini Boat and Stuffed Zucchinis
 - **Changed:** Turnip Mutton Skewer is a shaped diagonal recipe; new sequenced assembly on a stick
 - **Changed:** Vegetarian Burger is shaped: cabbage and tomato over the patty over bread; new sequenced assembly on the Cooked Vegetarian Patty
-- **Changed:** Simple Hamburger, Hamburger with Egg and Loaded Hamburger take a Cooked Vegetarian Patty in place of the beef patty [separate recipes]
+- **Changed:** Every recipe that takes a Beef Patty also takes a Cooked Vegetarian Patty or a Vegan Patty
+- **Changed:** Oceanic Delight's Caesar Salad is merged into Veggies Delight's; old ones in inventories become it. One recipe: cabbage, tomato, any cheese, any bread and a bowl [garlic or cheese]
 
 ## Rustic Delight <!-- icon: rusticdelight:bell_pepper_red -->
 
@@ -163,6 +184,7 @@
 - **Removed:** Rustic Delight's plain Pancake. The Pancakes plate takes 6 Supplementaries Pancakes and a Bowl, and gives Supplementaries Pancakes back by hand, by knife and when broken
 - **Changed:** Stackable Pancake renamed Pancake; its tooltip says it stacks up to 8
 - **Removed:** Fried Dough
+- **Changed:** Pale and Dark Bell Pepper Seeds: the Wandering Trader sells 1 for 48 emeralds [5 emeralds]; ancient city, sky village and cloud balloon chests hold 1 seed at a lower chance [1 to 3]
 - **New:** Glowing Calamari Crate: 9 Glowing Calamari, and back
 - **Changed:** Maple Glazed Bacon takes Cooked Bacon, Syrup and a Honey Bottle [Cooked Bacon and Syrup]
 - **Changed:** Supreme Pizza: Cheese, cooked meat, cooked fish, a mushroom, a bell pepper (raw, sliced or roasted) and Onion over Dough, Tomato Sauce, Dough, any dough [Bell Pepper, Cheese, Onion, mushroom, Tomato Sauce, cooked meat or fish on one Dough]. New sequenced assembly
@@ -210,6 +232,8 @@
 
 - **New:** Canned Bat Soup, Canned Cave Soup, Canned Insect Stew, Canned Golden Nutritional Bar, Canned Mashed Potatoes and Canned Mashed Sweet Potatoes
 - **Removed:** Canned Mhadjeb
+- **New:** Canned Ratatouille
+- **Changed:** Canned Shulker Flesh is filled with End's Delight Shulker Meat or Slices
 - **Changed:** Canned soups, stews and meals give the same Comfort or Nourishment as the food they hold
 
 ## Stack Sizes
@@ -217,16 +241,29 @@
 - **Changed:** Jellos, Hamimelon Shaved Ice, Pear with Rock Sugar, Mangosteen Cake, Dog Food and Sweet Potato Pancakes stack to 32 [16]; Glowgurt and Scrambled Eggs stack to 32 [1]
 - **Changed:** Hot Cocoa, Melon Juice, Gambler's Teas, Builder's Tea, Cherry Cream Soda, Passion Aloe Nectar and Pickerelweed Juice stack to 32 [16]
 - **Changed:** Milk Bottles stack to 64 [16]
+- **Changed:** Syrup stacks to 64 [16]
 - **Changed:** Flaxen and Scarlet Cheese Wheels, ripe and unripe, stack to 32 [16]
 
 ## Gameplay
+
+- **Changed:** A Cabbage cuts into 4 Cabbage Leaves [2], by knife and in the Mixer; 4 Cabbage Leaves craft back into a Cabbage [2]
+- **Changed:** Glycerol no longer counts as sugar in any recipe; its "Tastes sweet!" tooltip is gone
+- **Changed:** Ender's Delight Shulker Mollusk and Shulker Filet are merged into End's Delight Shulker Meat and Shulker Meat Slice; old ones in inventories become them. A Shulker killed with a knife drops one Shulker Meat [also a Mollusk]
+- **Changed:** Taco: one recipe, with an onion or any roasted bell pepper [2 recipes: onion; red, green or yellow roasted pepper]
+- **Changed:** Cornbread Stuffing: one Cooking Pot recipe, with a Baked Potato or Baked Sweet Potato [2 recipes]
+- **Fixed:** Squids and Glow Squids could drop extra items; each drops exactly one Squid or Glow Squid
+- **Removed:** Fish Tempura and Raw Fish Tempura, with their recipes; Fish and Chips stays
+- **Removed:** Prepared Sea Pickle, with its recipe
+- **New:** Sneak right-click with an empty hand picks up a Cooking Pot, Copper Pot, Kettle or Skillet into the hand; the meal stays inside, ingredients drop
+- **Changed:** A Cooking Pot, Copper Pot or Kettle's handle is toggled by sneak left-click with an empty hand [sneak right-click]
+- **New:** Granite, Andesite and Diorite Cutting Boards: work like the Cutting Board; crafted from 2 sticks and 4 of the polished stone
+- **New:** Kelp Encrusted Cod: Cod Slice, an egg and kelp in the Cooking Pot. 5 hunger
 
 - **Changed:** Every dough composts at 85 %: Create Dough, Oat Dough, Cucumber Dough, Sweet Potato Dough, Sourdough and the other doughs [Farmer's Delight Wheat Dough only]
 - **Fixed:** Seasoned food tooltips showed a raw key instead of the seasoning's name
 - **Fixed:** Creative Delight food tooltips, placeable food lines, names and JEI info pages appeared only after a resource reload
 - **Fixed:** Sweet Berries and Glow Berries were missing from JEI and the creative tabs
 - **Fixed:** JEI listed test recipes: Mechanical Crafting grids that turned every form of a metal or wood into one ingot or plank, and a Nether Star to Nether Star Sequenced Assembly
-- **Changed:** Oats are bushier like wheat; ripe Oats are two blocks tall in three shapes [one block, one shape]
 - **New:** Handcrafted Nightstands hold 27 slots, opened like a chest; hoppers and pipes reach them
 - **New:** Create pumps and fluid pipes fill and drain Supplementaries Jars and Goblets, 250 mB per bottle; liquids with no fluid form (soups) stay hand-filled only
 - **Changed:** Brewery sky village houses have Fantasy Furniture Hanging Herbs where the dried barley and corn hung [empty]
@@ -234,7 +271,7 @@
 - **Fixed:** The Zucchini Quiche sequenced assembly on a Pie Crust was missing
 - **Fixed:** Four calamari dishes were missing and others had an empty tentacle slot
 - **Fixed:** More Delight Mashed Potatoes, Potato Salad and the four Diced Potatoes dishes had an empty sliced potato slot
-- **Fixed:** Spout and Item Drain recipes for the coffees, Lavender Tea, the matcha lattes and the Water Cup were missing
+- **Fixed:** Spout and Item Drain recipes for the coffees, Lavender Tea, and the matcha lattes were missing
 - **Fixed:** Farmer's Respite Kettle brews finished instantly; they take 10 seconds
 - **Fixed:** Farmer's Delight chest loot (village houses, shipwrecks, mineshafts and others) had no crates or bags; cabbages, tomatoes, onions and rice there can come packed again
 - **Removed:** The Display Delight plate for Baked Tentacle on a Stick; placed ones disappear from old worlds
@@ -243,6 +280,11 @@
 - **Changed:** Dragon Chestplate 12 armor [10], Dragon Leggings 10 [9], each dragon armor piece 4.5 toughness [5]; full set 36 armor [33]
 - **Changed:** Amethyst Shards no longer give Glowstone Dust in the Millstone, Crushing Wheels or Crusher; the Millstone gives Amethyst Dust (75 %) [Glowstone Dust]
 - **Changed:** Dandelions mature into Mature Dandelions faster on Fertile Soil than on Rich Soil: about 10 minutes on Fertile Soil [20], 20 on Rich Soil and Rich Soil Farmland [10]
+- **Changed:** Giant Squids flee Cachalot Whales within 16 blocks [50] and stop fleeing beyond 24 [60]
+- **Fixed:** Mulberry Leaves decayed on Mulberry trees' oak trunks
+- **Changed:** Armor trims only fit standard armor sets: vanilla, copper, echo, felsic, dragon, Immersive Engineering steel and PneumaticCraft compressed iron
+- **Fixed:** One player with Phantom Bane stopped phantoms spawning for every other player
+- **Changed:** Potion Buckets fired from a dispenser credit the player who placed the dispenser
 
 ## World Generation <!-- icon: minecraft:grass_block -->
 
@@ -259,6 +301,12 @@
 - **Fixed:** Truffle Dirt did not generate; it generates inside Rooted Dirt patches again. New chunks only.
 - **Changed:** Rooted Dirt patches with Truffle Dirt also generate in birch forests [dark forests and cold forests]
 - **Changed:** Desert and badlands villages, outposts and ruins no longer generate with sandstone or terracotta floors over deep water or cliffs
+- **Fixed:** Illagers almost never spawned in tall pillager towers; half of the monster spawn attempts over a pillager or witch structure now start within its height
+- **Fixed:** Ocean Monuments struck by a meteorite could generate hollow, with no rooms and no Elder Guardians
+- **Changed:** Philip's Ruins Lost Soul Dungeon and Lost Soul City generate in Soul Sand Valleys in the Nether [deep underground in the Overworld]. New chunks only.
+- **Changed:** Philip's Ruins Rare Ruin generates in Crimson and Warped Forests in the Nether [Overworld jungles and swamps]; the blackstone Nether Ruin generates in Nether Wastes and Basalt Deltas [Overworld]
+- **Fixed:** Quark Spiral Spires in the End generated with their base hanging over the void; those spires no longer generate
+- **Changed:** Village farms grow Cotton only in desert and savanna villages, and Bell Peppers and Coffee only in jungle villages [both]. New villages only.
 
 ## Interface & Tooltips <!-- icon: minecraft:written_book -->
 
@@ -270,7 +318,28 @@
 - **Changed:** The pack's own mods no longer end in "(Alfonzo)": Creative Engineering, Baby Mobs, Incubation Additions, More Mooblooms and the Exposure backports
 - **New:** Every item that plants something names its type in the tooltip: "Seed Item", "Plantable Crop", "Sapling", "Fungi Sapling", "Water Plant", "Vine" or "Vertical Crop"
 - **New:** "Plantable Crop" is a food that plants (carrots, berries); "Fungi Sapling" is a mushroom or nether fungus; "Vertical Crop" is sugar cane, cactus, bamboo or a chorus flower
+- **Changed:** Chicken Soup, Honey Glazed Ham (and its block), Stuffed Pumpkin (and its block), Pumpkin Soup, Vegetable Soup, Bone Broth, Fried Rice and Rice Roll Medley (block) have new icons
 - **Changed:** A tooltip taller than the screen starts at the top and runs off the bottom [the name was cut off at the top]
 - **Changed:** Every item that fits a Curios slot shows the "Slot:" line, including items whose mod hid it
 - **Changed:** PneumaticCraft item descriptions show without holding Shift, in gray
 - **Changed:** Stepstools no longer say "Worn in the Feet slot"; the "Slot: Feet" line shows it
+- **Removed:** The "Speed Multiplier" tooltip line on blocks; walk speed shows in What The Hell Is That (WTHIT)
+- **Fixed:** Tobacco Package was not renamed to Tobacco Bundle
+
+## Seasons
+
+- **Changed:** Grass spreads 25 % slower in winter: grass blocks spreading onto dirt, mycelium and rooted dirt, grass sprouting on grass blocks, grass growing tall and ferns growing large.
+- **Changed:** Rooted grass blocks, grass slabs, lush grass blocks and Botania's grasses spread 25 % slower in winter too. Every winter-slowed grass shows "Offseason: Winter" in its tooltip
+- **Fixed:** The season HUD showed the wrong season and day after a date change, and kept it while the daylight cycle was off
+
+## Crops
+
+- **Changed:** Tomatoes on Farmer's Delight vines, ropes, sticks and Treated Sticks are picked at any height with an empty hand or a hoe; a hoe with an area picks every ripe tomato in reach, up to 8 vines up a column [bottom vine only, replanted]
+- **Changed:** Melon, pumpkin and cantaloupe stems show a connection to every fruit they grew, and turn only to those when one is taken, never to a fruit placed beside them by hand
+- **Changed:** Melon, pumpkin and cantaloupe stems on soaked Fertile Soil grow at the speed of moist Farmland [about 11 times as fast]
+- **New:** Right-click ripe Hemp with an empty hand or a hoe to harvest the top; the bottom regrows it. A hoe harvests every ripe plant in its area.
+
+## Azalea Wood
+
+- **Removed:** Azalea wood and every block made from it; old ones become their Oak versions
+- **Changed:** Azalea trees grow an Oak Log trunk [Azalea Log]

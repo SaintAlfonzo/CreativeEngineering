@@ -64,6 +64,8 @@ fast-forwarding night.
 - Investigated offline 2026-10-23 and written up in [time.md](../time.md) 3.10 "Bed clock (open, TI-31)"; no log
   errors. Rechecked 2026-10-31: the configs above unchanged, `enableSleepFeature = true` (common 99), jars the same
   versions. TI-31 is in time.md 7 (655) and queued with TI-30 as client row CQ-NEW-01 (scratch_queue.md 979).
+  Rechecked 2026-11-02 (pre-scratch pass): CQ-NEW-01 still not run (no r1031 / r1101 result), no log evidence; the
+  code now lives in Creative Calendar (`development/creativeCalendar`), not patcherMod. No change until TI-31 is run.
 - So no cause is visible offline. Ranked hypotheses:
   1. **The night isn't fast-forwarding** (`enableSleepFeature` off in a profile, or the sleep ratio not reached;
      `betterdays-common.toml` `[sleep] ratioPlayersForSleep = 0.0` (134) means any one sleeper is enough), so the face moves at the normal night pace: 9,300 units in 15 min, one of the clock's 64

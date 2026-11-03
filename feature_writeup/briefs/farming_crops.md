@@ -28,7 +28,7 @@ is marked unverified.
 | crops #21 | Melon stems and fertile soil (question first) | data / patcherMod | D: owner answers first |
 | crops #15 | Other plants in random growth? | KubeJS / data | D |
 | crops #14 | Bone meal in planters | patcherMod / none | D |
-| crops #28 | Grasses: winter offseason only | patcherMod + data | E: seasons follow-up |
+| crops #28 | Grasses: winter offseason only (Built 2026-11-02) | Creative Calendar + data | E: seasons follow-up |
 | crops #19 | Village farms: Rustic crops by the wild-crop rules | CD data | E |
 | crops #24 | Better soils raise nether crop yield | CD KubeJS + CEConfig | E: soil yield follow-up |
 | crops #26 | Soul soil upgrade chain | KubeJS + texture | E (with `farming/composting #2`) |
@@ -224,7 +224,8 @@ replant, hoe area replant, hoe area break. Follow the §2.6 checklist (crops.md 
 | Coffee (FR) | basalt / magma | own pick | reject (G14) |
 
 ### Build
-1. **Hemp right-click:** a `Harvestable Blocks` line cannot express "break the top": the replant state must be a
+1. **Hemp right-click** (DONE 2026-11-02 another way, `farming/crops #37`: CD server script
+   `kubejs/data/creativedelight/kubejs/immersiveengineering/hemp_harvest.js`, no mixin; the plan below is superseded): a `Harvestable Blocks` line cannot express "break the top": the replant state must be a
    real state, and `minecraft:air` as the replant state puts AIR into `cropBlocks` (every air block then passes
    Quark's first check) while the hemp block itself stays out of `cropBlocks`. Instead add a second rule to the
    crops #1 mixin class: tag `creativeengineering:crops/harvest_top_break` (hemp); in `handle` HEAD (`@Inject`,
@@ -515,6 +516,13 @@ A hoe mines the Oceanic Delight sea grape plant at tool speed, as the newer Ocea
 ## crops #29: Tomato ropes and sticks harvestable with the hoe harvest area
 Status **Planned** · Work patcherMod (tag first) · id `farming/crops #29`
 
+**BUILT 2026-11-02** (pre-scratch pass): steps 1-3 done in Creative Delight (crop code moved there with the split):
+four tomato blocks tagged own-pick (`farmersdelight/tags.js`, new keys `b.stick_tomatoes`, `b.rope_tomatoes`),
+`QuarkHoeAreaHarvestMixin` climbs own-pick columns (`HoeHarvestArea.MAX_CLIMB = 6` above the second level). FD's
+`TomatoVineBlock.use` picks with any held item when ripe (checked), and the Supplementaries and treated-stick vines
+inherit it. crops.md CR-101, CR-102. `farming/crops #38` (treated sticks placeable, tomatoes on them) was already
+built 2026-10-31 ([treated_sticks.md](../treated_sticks.md)).
+
 ### Goal
 A hoe area right-click also picks ripe tomatoes on ropes, Supplementaries sticks and treated sticks, not only the bottom
 vine.
@@ -615,6 +623,12 @@ A water bucket or a water bottle used on Farmland, Rich Farmland or Fertile Soil
 ## crops #21: Melon stems not on fertile soil; check other melon-like crops
 Status **Planned** · Work KubeJS / data (or patcherMod) · id `farming/crops #21`
 
+**BUILT 2026-11-02, reading 2** (plan_prescratch_fixes.md: "drop the fertile-soil rule"): stems no longer get IW's
+10 extra random ticks on soaked Fertile Soil (CD `MulchBlockCropGrowthMixin` redirect, `[stem_fruit] fertileSoilBoost`,
+default false). Audit: the rule was IW's `instanceof StemBlock` branch, so it covered melon, pumpkin and cantaloupe
+stems alike; all three drop it. The Mini Cantaloupe (sand by water) never had it. Reading 1 (stems on plain soil) not
+built. crops.md CR-104.
+
 ### Goal
 Settle the rule the scratchpad note means ("Melon stems do not need fertile soil; check melon-like crops", scratchpad.md
 line 121) and apply it to every melon-like crop.
@@ -665,7 +679,7 @@ Recommendation: reading 1 is the most literal ("do not need" a special soil). As
 ---
 
 ## crops #28: Grasses: winter offseason only
-Status **Planned** · Work patcherMod / config · id `farming/crops #28`
+Status **Built 2026-11-02** (Creative Calendar: `GRASS` type, `GrassSpreadSeasonMixin`, `IWGrowthSeasonMixin`; json list; crops.md 2.12.1 "Grasses" and "Spreading plants"; modded grasses typed and hooked 2026-11-02 by owner decision: `ModdedGrassSpreadSeasonMixin`) · Work Creative Calendar / data · id `farming/crops #28`
 
 ### Goal
 Grass gets a season type with only a winter offseason (off = 25 % slower spreading, other seasons neutral), and the
@@ -702,6 +716,11 @@ crop season types are checked for every plant that spreads.
   (the note says "spreading").
 - Tropical dry season: off or neutral? Recommendation: neutral (the note says winter only).
 - Mycelium and nylium spread through the same vanilla class: leave them out (recommended; the hook checks the type).
+- Modded grasses (owner 2026-11-02): slowed by winter too. Typed: IW rooted grass block, Vinery grass slab, Vintage
+  lush grass block, Botania dry / golden / vivid / scorched / infused / mutated grass; hooked by
+  `ModdedGrassSpreadSeasonMixin` (IW `ModGrassBlock` extra spread, Botania `BotaniaGrassBlock.tick`, Vinery
+  `SpreadableGrassSlabBlock`, Vintage `LushGrassBlock`). Left out: IW frosty grass / fern, Upgrade Aquatic beachgrass,
+  SecurityCraft reinforced grass (reasons in crops.md 2.12.1 "Grasses").
 
 ### Gotchas
 - `SpreadingSnowyDirtBlock` also handles grass turning back to dirt under a block; skip only the spread part, or the
@@ -843,6 +862,11 @@ Soul Soil (Nulch), with Rich Soul Soil an input of the Nulch recipe. Maybe recol
 
 ## crops #20: Melon and pumpkin stems connect to their own fruit
 Status **Planned** · Work patcherMod · id `farming/crops #20`
+
+**BUILT 2026-11-02** (pre-scratch pass, Creative Delight): steps 1-4 and 6 as written (vanilla block properties, not
+a new block); `<init>` re-registers the default with all sides false (a boolean's first value is true). Step 5: no
+per-neighbour chance (the waits stay; all same-kind neighbours still count toward the cap). Blockstates in
+`kubejs/assets/` (above every mod jar). crops.md CR-103. `#10` (growth stages) not built.
 
 ### Goal
 An attached stem shows a connection to every fruit it grew (the first and the extra ones, `farming/crops #11`), never to

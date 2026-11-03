@@ -6,6 +6,7 @@
   "plugin": "com.SaintAlfonzo.creativedelight.compat.CDMixinPlugin",
   "mixins": [
     "fruitsdelight.FruitsDelightFoodDataAnchorMixin",
+    "upgrade_aquatic.MulberryJamMasonJarMixin",
     "fruitsdelight.FruitsDelightLeafCheckMixin",
     "fruitsdelight.MangosteenCakeEffectMixin",
     "farmersdelight.CookingPotRemainderMixin",

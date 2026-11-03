@@ -29,21 +29,21 @@ https://mediafilez.forgecdn.net/files/4738/272/miners_delight-1.19.2-1.1.2.jar (
 
 ## What the translator changes (upstream/MinersTranslator)
 
-- Drops everything naming a `REMOVED` id (the hot cocoa cup, which only 1.1.2 had).
+- Drops everything naming a `REMOVED` id: the hot cocoa cup (only 1.1.2 had it) and, since 2026-11-02 (TODO
+  `dishes/meals #53`), the Copper Cup and the 18 filled cups. Tags lose the entry; the Copper Pot recipe loses its water
+  cup alternative and keeps the water bucket.
 - Moves the ten cooking recipes under the stray `minersdelight` namespace to `miners_delight`.
 - Renames the 1.20 loot condition `minecraft:any_of` to 1.19.2's `minecraft:alternative`.
-- Drops the cup conversion row for `farmersdelight:onion_soup` (not in FD 1.19.2; the pack adds a Creamy Onion Soup
-  row in `kubejs/data/creativedelight/cup_conversion/`, shipped in the Creative Delight jar).
+- Drops the cup conversion data (`data/*/cup_conversion/`); nothing reads it.
 - Drops the five entries of `global_loot_modifiers.json` that have no file upstream.
 
 ## What differs from upstream behaviour
 
-- The empty Copper Cup milks only cows and goats (upstream lends a bucket to any mob, which ate fish and the cup).
-- No Forge fluid capability on the cups (upstream's bucket wrapper would have turned a cup into a bucket).
+- No Copper Cup and no cups: the Copper Pot serves every meal in its recipe's container (bowl, bottle), no cauldron
+  or Spout cup rules.
 - The two no-op brewing steps (long and strong haste + fermented spider eye giving the same potion) are left out.
 - The "Served on" tooltip sits on the meal display slot (upstream pointed it at the output slot).
 - Feast items are plain block items (FD 1.19.2 has no PlaceableItem; the pack shows placeable tooltips itself).
-- Cup conversions are sent to clients, so the recipe book ghost and JEI show cups on a dedicated server too.
 - The Copper Pot has a take-only leftover slot (slot 7) right of the output for the ingredients' crafting remainders
   (buckets, bottles, bowls); the bottom face extracts it and the pot waits when it is full. Upstream throws them out.
   `config/miners_delight-common.toml` `[copper_pot] remainderBuffer`, `stallWhenFull` (the port's own config).

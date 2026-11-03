@@ -124,37 +124,35 @@ Capped (old combined density above the group grid): 62 biome(s), 62% of the grou
 
 | Structure | Weight | Frequency | Mod default 1 per | New 1 per | Ratio | Note |
 |---|---|---|---|---|---|---|
-| `philipsruins:ancient_ruins` | 100 | 0.860538 | 50 | 46 | 1.18 |  |
-| `philipsruins:ancient_towers` | 100 | 0.862964 | 50 | 46 | 1.18 |  |
+| `philipsruins:ancient_ruins` | 100 | 0.860538 | 50 | 46 | 1.20 |  |
+| `philipsruins:ancient_towers` | 100 | 0.862964 | 50 | 46 | 1.20 |  |
 | `philipsruins:badlands_structures` | 100 | 0.266459 | 58 | 35 | 2.73 |  |
 | `philipsruins:desert_structures` | 100 | 0.250975 | 44 | 35 | 1.59 |  |
-| `philipsruins:field_stone_ruins` | 100 | 1.0 | 75 | 64 | 1.37 |  |
-| `philipsruins:field_stone_ruins_rocks` | 100 | 0.513101 | 68 | 68 | 1.00 |  |
-| `philipsruins:level_one_ruins` | 100 | 1.0 | 75 | 64 | 1.37 |  |
-| `philipsruins:level_three_ruins` | 100 | 1.0 | 85 | 64 | 1.76 |  |
-| `philipsruins:level_two_ruins` | 100 | 1.0 | 113 | 64 | 3.11 |  |
-| `philipsruins:level_two_ruins_pool` | 100 | 1.0 | 113 | 64 | 3.11 |  |
-| `philipsruins:pumpkin_ruins` | 100 | 1.0 | 50 | 55 | 0.82 |  |
-| `philipsruins:rare_ruin` | 100 | 0.007794 | 360 | 546 | 0.43 |  |
-| `philipsruins:start_nether_ruin` | 100 | 0.8688 | 310 | 49 | 40.59 |  |
-| `terralith:glacial_hut` | 100 | 0.686437 | 27 | 41 | 0.44 |  |
-| `forest_ruins:ruin_1` | 100 | 0.904155 | 45 | 73 | 0.38 |  |
-| `forest_ruins:ruin_2` | 100 | 0.904155 | 45 | 73 | 0.38 |  |
-| `forest_ruins:ruin_3` | 100 | 0.904155 | 45 | 73 | 0.38 |  |
-| `forest_ruins:ruin_4` | 100 | 0.904155 | 45 | 73 | 0.38 |  |
-| `forest_ruins:ruin_5` | 100 | 0.904155 | 45 | 73 | 0.38 |  |
-| `forest_ruins:ruin_6` | 100 | 0.904155 | 45 | 73 | 0.38 |  |
-| `forest_ruins:ruin_7` | 100 | 0.904155 | 45 | 73 | 0.38 |  |
+| `philipsruins:field_stone_ruins` | 100 | 1.0 | 75 | 63 | 1.44 |  |
+| `philipsruins:field_stone_ruins_rocks` | 100 | 0.513101 | 68 | 67 | 1.02 |  |
+| `philipsruins:level_one_ruins` | 100 | 1.0 | 75 | 63 | 1.44 |  |
+| `philipsruins:level_three_ruins` | 100 | 1.0 | 85 | 63 | 1.85 |  |
+| `philipsruins:level_two_ruins` | 100 | 1.0 | 113 | 63 | 3.27 |  |
+| `philipsruins:level_two_ruins_pool` | 100 | 1.0 | 113 | 63 | 3.27 |  |
+| `philipsruins:pumpkin_ruins` | 100 | 1.0 | 50 | 55 | 0.84 |  |
+| `terralith:glacial_hut` | 100 | 0.686437 | 27 | 39 | 0.47 |  |
+| `forest_ruins:ruin_1` | 100 | 0.904155 | 45 | 72 | 0.39 |  |
+| `forest_ruins:ruin_2` | 100 | 0.904155 | 45 | 72 | 0.39 |  |
+| `forest_ruins:ruin_3` | 100 | 0.904155 | 45 | 72 | 0.39 |  |
+| `forest_ruins:ruin_4` | 100 | 0.904155 | 45 | 72 | 0.39 |  |
+| `forest_ruins:ruin_5` | 100 | 0.904155 | 45 | 72 | 0.39 |  |
+| `forest_ruins:ruin_6` | 100 | 0.904155 | 45 | 72 | 0.39 |  |
+| `forest_ruins:ruin_7` | 100 | 0.904155 | 45 | 72 | 0.39 |  |
 | `forgotten_church:forgotten_church` | 100 | 1.0 | 55 | 69 | 0.64 |  |
 | `watchtower_building:abandoned_watchtower` | 21 | 0.194882 | 48 | 115 | 0.17 |  |
 | `creativeengineering:meta/ruin_cluster` | 1 | 1.0 | - | 52 | new |  |
-| `creativeengineering:meta/ruin_scatter` | 1 | 1.0 | - | 41 | new |  |
+| `creativeengineering:meta/ruin_scatter` | 1 | 1.0 | - | 40 | new |  |
 | `old_illager_statue:old_illager_statue` | 26 | 1.0 | 42 | 104 | 0.16 |  |
 | `oldvillagerstatue:old_villager_statue` | 26 | 1.0 | 40 | 104 | 0.15 |  |
-| `small_cat_statues:cat_1` | 19 | 1.0 | 30 | 120 | 0.06 |  |
-| `small_cat_statues:cat_2` | 19 | 1.0 | 30 | 120 | 0.06 |  |
-| `small_cat_statues:cat_3` | 19 | 1.0 | 30 | 120 | 0.06 |  |
-| `eugene:ruined_drum_tower` | 100 | 1.0 | 101 | 71 | 2.05 |  |
+| `small_cat_statues:cat_1` | 19 | 1.0 | 30 | 119 | 0.06 |  |
+| `small_cat_statues:cat_2` | 19 | 1.0 | 30 | 119 | 0.06 |  |
+| `small_cat_statues:cat_3` | 19 | 1.0 | 30 | 119 | 0.06 |  |
+| `eugene:ruined_drum_tower` | 100 | 1.0 | 101 | 70 | 2.09 |  |
 
 ### `surface_dungeons` -> `creativeengineering:group/surface_dungeons`
 
@@ -393,16 +391,19 @@ Capped (old combined density above the group grid): 145 biome(s), 100% of the gr
 
 ### `nether_ruins` -> `creativeengineering:group/nether_ruins`
 
-Nether ruins: Twigs' bloodstone obelisk and Philip's three Nether ruins (Nether dungeon, sealed ghast statue, lava ruins). Grid from their crowding (spacing 14, separation 7). Added 2026-10-12.
+Nether ruins: Twigs' bloodstone obelisk and Philip's three Nether ruins (Nether dungeon, sealed ghast statue, lava ruins). Grid from their crowding (spacing 14, separation 7). Added 2026-10-12. 2026-11-02 (structures/contents #1): Philip's lost soul dungeon, rare ruin and blackstone Nether ruin moved in from the Overworld; the dungeon and the blackstone ruin set by hand to the other Philip Nether ruins' weight and frequency (the fit to their Overworld rates gave weights 148 and 214), the rare ruin kept rare as fitted.
 
 Grid: spacing 14, separation 7 (members never start closer than 8 chunks = 128 blocks apart). At most 1 structure per 14 x 14 chunks anywhere.
 
 | Structure | Weight | Frequency | Mod default 1 per | New 1 per | Ratio | Note |
 |---|---|---|---|---|---|---|
-| `philipsruins:nether_lava_ruins` | 100 | 0.5993 | 52 | 34 | 2.31 |  |
-| `philipsruins:sealedruinedghaststatue1` | 100 | 0.5993 | 52 | 34 | 2.31 |  |
-| `philipsruins:start_nether_dungeon` | 100 | 0.5993 | 52 | 34 | 2.31 |  |
-| `twigs:bloodstone_obelisk` | 100 | 1.0 | 20 | 28 | 0.51 |  |
+| `philipsruins:nether_lava_ruins` | 100 | 0.5993 | 52 | 38 | 1.91 |  |
+| `philipsruins:sealedruinedghaststatue1` | 100 | 0.5993 | 52 | 38 | 1.91 |  |
+| `philipsruins:start_nether_dungeon` | 100 | 0.5993 | 52 | 38 | 1.91 |  |
+| `twigs:bloodstone_obelisk` | 100 | 1.0 | 20 | 30 | 0.43 |  |
+| `philipsruins:lost_soul_dungeon` | 100 | 0.5993 | 60 | 36 | 2.75 |  |
+| `philipsruins:rare_ruin` | 6 | 0.3759 | 360 | 181 | 3.98 |  |
+| `philipsruins:start_nether_ruin` | 100 | 0.5993 | 310 | 39 | 61.64 |  |
 
 ### `way_signs` -> `creativeengineering:group/way_signs`
 
@@ -478,10 +479,9 @@ Capped (old combined density above the group grid): 9 biome(s), 100% of the grou
 | `philipsruins:end_ruins` | 1 | 1.0 | 49 | 35 | 2.00 |  |
 | `philipsruins:end_gate_fortress` | 1 | 1.0 | 49 | 35 | 2.00 |  |
 | `philipsruins:lost_soul_city` | 1 | 1.0 | 80 | 38 | 4.50 |  |
-| `philipsruins:lost_soul_dungeon` | 1 | 0.991 | 120 | 46 | 6.74 |  |
 | `philipsruins:bone_dungeon` | 1 | 0.29382 | 61 | 43 | 2.00 |  |
-| `philipsruins:underground_structures` | 1 | 0.9885 | 120 | 46 | 6.73 |  |
-| `philipsruins:sculk_dungeon` | 1 | 0.991 | 120 | 46 | 6.74 |  |
+| `philipsruins:underground_structures` | 1 | 0.9885 | 104 | 40 | 6.73 |  |
+| `philipsruins:sculk_dungeon` | 1 | 0.991 | 104 | 40 | 6.74 |  |
 | `terralith:underground/oak_cabin` | 11 | 1.0 | 16 | 4 | 13.44 |  |
 | `terralith:underground/giant_bee_hive` | 2 | 0.4261 | 34 | 14 | 5.73 |  |
 | `terralith:underground/mining_outpost` | 13 | 0.1097 | 13 | 11 | 1.47 |  |

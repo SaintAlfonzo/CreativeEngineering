@@ -1,5 +1,7 @@
 # Rustic Delight 1.7.0 against the installed 1.3.0
 
+**Deep scan 2026-11-02:** the 5.10 owner-list rows (built 2026-11-01) are in the installed `mods/creativedelight-1.0.0.jar` (2026-11-02 14:01, member `backportedRustic-1.7.0-ce-19.2-01`), not deployed. Scratch: r1102 SQ-RDX-01 and the server halves of -04, -05 PASS; r1102b s3 (judged) SQ-RDX-03, -06 to -12, -14 PASS (some batch faults, real PASS), -02 client, -13 needs an old save; r1102b s2 (judged) SQ-RD-02, -04 to -07, -13 to -21, -23, -27, -28, -33 PASS, **SQ-RD-22 FAIL** (Rustic foods lose Nourishment: `comfort_nourishment.json` has no Rustic rows, TODO `creativedelight/members #43`), SQ-CDF-08 FAIL (21 compostables without a row, `members #44`), -08, -10, -11, -24, -26 open and -03 not run (`members #45`).
+
 **Status (2026-10-25): built; shipped in 1.1.03 (2026-10-26); SQ-RD-01 and SQ-RD-25 PASSED 2026-10-25; coffee tooltip fix
 (TODO `ui/tooltips #10`) shipped in 1.1.04.** Owner chose option B (section 3) and the list in section 5: a
 donor-jar backport, folded into Creative Delight as member `backportedRustic` (section 5). Not installed: it ships
@@ -111,7 +113,7 @@ config conditions on every recipe, biome tags in place of `#minecraft:is_jungle`
 Recommendation: A now in every case. Choose B if the six colours and pancakes are wanted (that is most of the gap);
 choose C only for a small subset.
 
-## 4. Open questions for the owner
+## 4. Open questions for the owner (all answered 2026-10-25 to 2026-11-02; kept for the record, see 5.11 for the last ones)
 
 1. Delivery: A only, A + B, or A + C (which groups)?
 2. Bell Pepper Soup at 3 peppers; Honey Coffee without sugar; Cotton renames?
@@ -177,7 +179,7 @@ saturation [0.8], Chocolate and Vegetable pancake servings 4 / 0.6 [3 / 0.6], ho
 - Dark seeds: `minecraft:chests/ancient_city` and `ancient_city_ice_box`, share 0.04, 1-3. Pale seeds: the 11
   `skyvillages:chests/sky_village_*` tables and `cloudstorage:chests/loot_balloon`, same share (`rusticdelight/loot.js`;
   marked for the loot overhaul, TODO). Crates and bags of the new colours unpack like the base ones.
-- Rare Wandering Trader offer: Pale or Dark seeds, 5 emeralds, 3 uses (`rusticdelight/trades.js`). The port keeps
+- Rare Wandering Trader offer: Pale or Dark seeds, 1 seed for 48 emeralds (5 until 2026-11-02, 5.11), 3 uses (`rusticdelight/trades.js`). The port keeps
   1.3.0's farmer, fisherman and common trader offers.
 - Giant peppers: 1 in 64 chunks (2026-10-25, owner: fairly rare; upstream 1 in 16). `wild_crops.json` row `giant_bell_pepper`, `warm dry grassy`, with the new `requires: creativedelight`
   key (`_biome_rules.js`), so the 1.3.0 jar never sees the feature. Wild bell pepper patches lose upstream's 5% Pale and
@@ -289,3 +291,15 @@ known to it); every Rustic, golden and pizza call run in the pack's Rhino with t
 assembly stubs (incomplete items read from `transition_items.js`): 13 roll assemblies, the pizza assembly, 3 heatless
 rows, 3 golden routes, no missing incomplete item; every touched startup and client script compiles in Rhino;
 `:creativeDelight:build` and `:creativeBrewing:build` pass.
+
+### 5.11 Owner decisions, 2026-11-02
+
+| Decision | Result |
+|---|---|
+| Stackable Pancake as the pancake family base (`merges/baking #2`) | No. Every pancake keeps its own recipes; the family rule is written without a base item |
+| Pale / Dark seed rarity | Very rare, 95th to 99th percentile. Chests (ancient city, ice box, sky villages, cloud balloon): 1 seed, share 0.03 [0.04, 1-3] in `rusticdelight/loot.js`. Wandering Trader: 1 seed, 48 emeralds [5], rare pool, 3 uses, `rusticdelight/trades.js` |
+| Pancake recolours (`merges/baking #1`) | Accepted as they look |
+| Syrup stack size | 64 [16]: `rusticdelight:syrup` in `FOOD_OVERRIDES` of `tools/gen_stack_sizes.py`, `stack_sizes.json` regenerated (startup script, full restart) |
+| Syrup recipe / sap change | Pinned until Dreams & Desires sap, rubber and Myrtwood rubber are integrated |
+
+Still open (not decisions): final Glowing Calamari Crate art (`members #25`), SQ-RD-08 trader half, loot share re-placement in the loot overhaul (`loot/tables #1`).

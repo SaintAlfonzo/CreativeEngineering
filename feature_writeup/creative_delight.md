@@ -1,5 +1,7 @@
 # Creative Delight: Delight add-on backports and native builds in one jar
 
+**Deep scan 2026-11-02:** the five ports (Veggies `-05`, Vintage `-13`, Fungi `-02`, Miner's `-05`, Display `-03`) are nested members (`development/creativeDelight/members/`), in the installed `mods/creativedelight-1.0.0.jar` (2026-11-02 14:01; the 21:10 build with the copper cup removal is not installed); `server_mods/` and the deployed 1.1.05 / 1.1.06 still hold the standalone jars. Scratch r1102 and r1102b (sections 19.3, 22, 35 tests): see TODO `creativedelight/*` rows. The paragraph below is the 2026-10-31 state.
+
 Written 2026-10-25, scope revised 2026-10-25 (owner). **Status: framework built, scratch test queued (2026-10-25, section 19):**
 startup loader and helpers in patcherMod, NCH namespace option, repack and bundle build, the Farmer's Delight / Ocean's /
 Oceanic / End's repacks nested in `creativedelight-1.0.0.jar`, Oceanic fishing net overlay; FD staged for the 1.3.4
@@ -31,20 +33,20 @@ engine" now means these scripts.
 
 ### 0.1 Ports (own projects under `development/`)
 
-| Port | Project | Mod id | Upstream, ported version | Writeup | Test prefix | State (2026-10-30) |
+| Port | Project | Mod id | Upstream, ported version | Writeup | Test prefix | State (deep scan 2026-11-02) |
 |---|---|---|---|---|---|---|
-| Veggies Delight | `backportedVeggies` | `veggiesdelight` | mehdinoui 1.9.2 (Forge 1.20.1) | [veggies_delight.md](veggies_delight.md) | `VD-` | `-03` in `mods/`, live since 1.1.01 (a 2026-10-30 rebuild under the same `-03` name, mature dandelion revert, waits in `build/libs/`: bump to `-04`) |
-| Vintage Delight | `backportedVintage` | `vintagedelight` | Ribs 0.1.6 (Forge 1.20.1) + KOTS 0.3.1 ids | [vintage_delight.md](vintage_delight.md) | `VTD-` | `-08` in `mods/` (`-09` built, not installed), live since 1.1.02 |
-| Fungi Delight | `backportedFungi` | `fungidelight` | Eggmain 1.3 (Forge 1.20.1) | [fungi_delight.md](fungi_delight.md) | `FGD-` | `-01` in `mods/`, live since 1.1.02 |
-| Miner's Delight | `backportedMiners` | `miners_delight` | Sammy Semicolon 1.4.5 + the live 1.1.2 merged | [miners_delight.md](miners_delight.md) | `MND-` | `-01` in `mods/`, live since 1.1.03 |
+| Veggies Delight | `backportedVeggies` | `veggiesdelight` | mehdinoui 1.9.2 (Forge 1.20.1) | [veggies_delight.md](veggies_delight.md) | `VD-` | `-05` nested in the installed CD jar (2026-11-02, `members/veggies`); live since 1.1.01 (deployed `-03`) |
+| Vintage Delight | `backportedVintage` | `vintagedelight` | Ribs 0.1.6 (Forge 1.20.1) + KOTS 0.3.1 ids | [vintage_delight.md](vintage_delight.md) | `VTD-` | `-13` nested in the installed CD jar (2026-11-02, `members/vintage`); live since 1.1.02 (deployed `-07`) |
+| Fungi Delight | `backportedFungi` | `fungidelight` | Eggmain 1.3 (Forge 1.20.1) | [fungi_delight.md](fungi_delight.md) | `FGD-` | `-02` nested in the installed CD jar (2026-11-02, `members/fungi`); live since 1.1.02 (deployed `-01`) |
+| Miner's Delight | `backportedMiners` | `miners_delight` | Sammy Semicolon 1.4.5 + the live 1.1.2 merged | [miners_delight.md](miners_delight.md) | `MND-` | `-05` nested in the installed CD jar (2026-11-02, `members/miners`; the 21:10 copper cup build reuses the `-05` name, not installed); live since 1.1.03 (deployed `-01`) |
 
 ### 0.2 Third-party native 1.19.2 jars (no port; today only pack integration)
 
 | Mod | Jar in `mods/` | Mod id | Licence (from `mods.toml`) | Writeup | Integration so far |
 |---|---|---|---|---|---|
 | End's Delight | `ends_delight-1.19.2-2.1.jar` | `ends_delight` | MIT (FoggyHillside) | [ends_delight.md](ends_delight.md) | CD member `repackedEnds` -02 (overlay: dragon loot, tooth tier mixin, 13 textures) and rows in CD `ends_delight/`, BUILT 2026-10-25 (ends_delight.md 5) |
-| Nether's Delight | `NethersDelight-1.19-3.1.jar` (until the CD install moves it out) | `nethersdelight` | MIT (Umpaz) | [nethers_delight.md](nethers_delight.md) | CD member `repackedNethers` -01 (overlay: Potted Mimicarnation, Fungus Colony 4.0 rules mixin, 4.0 recipe paths) and rows in CD `nethersdelight/`, BUILT 2026-11-01, not installed (nethers_delight.md 4.9) |
-| Ender's Delight | `endersdelight-1.19-1.2.2.jar` (to leave `mods/`; donor `enders_upstream/endersdelight-1.2.2.jar`) | `endersdelight` | **All rights reserved** (Ax3dgaming, Furti Two) | [ends_delight.md](ends_delight.md) | dict, cooking, potions, `end.js`, shield and damage tags. **Owner 2026-11-02: becomes a donor-route member nested in CD (section 38.1, `members #33`), not built** |
+| Nether's Delight | `NethersDelight-1.19-3.1.jar` (until the CD install moves it out) | `nethersdelight` | MIT (Umpaz) | [nethers_delight.md](nethers_delight.md) | CD member `repackedNethers` -01 (overlay: Potted Mimicarnation, Fungus Colony 4.0 rules mixin, 4.0 recipe paths) and rows in CD `nethersdelight/`, BUILT 2026-11-01, nested in the installed CD jar (2026-11-02; the standalone jar is out of `mods/`) (nethers_delight.md 4.9) |
+| Ender's Delight | `endersdelight-1.19-1.2.2.jar` (to leave `mods/`; donor `enders_upstream/endersdelight-1.2.2.jar`) | `endersdelight` | **All rights reserved** (Ax3dgaming, Furti Two) | [ends_delight.md](ends_delight.md) | dict, cooking, potions, `end.js`, shield and damage tags. **Owner 2026-11-02: becomes a donor-route member nested in CD (section 38.1, `members #33`), not built**; later 2026-11-02 the donor route was DROPPED (section 38.5): Ender's stays its own jar in `mods/`, pack changes fold into the End's member |
 | Ender's Delight Additions | in `creativedelight` (member `endersAdditions`) | `enders_additions` (registers `endersdelight:` ids) | MIT art and data from Ender's 1.1.4 (Axedgaming); code GPL3 | [ends_delight.md](ends_delight.md) 5.3 | BUILT 2026-10-25: 4 End plants, 6 items, End House, Chorus Crate and Endstone Stove loot tables |
 | Cooking for Blockheads Additions | in `creativedelight` (member `blockheadsAdditions`); Cooking for Blockheads itself stays `cookingforblockheads-forge-1.19.2-13.3.4.jar` | `blockheads_additions` (registers `cookingforblockheads:` ids) | Cooking for Blockheads **All rights reserved** (BlayTheNinth; modpack use only, no rehosting or published modified files), so not repacked; member code, art and data ours, GPL3 | [kitchen.md](kitchen.md) 9 | BUILT 2026-10-31: 40 wood racks, the CfB mixins, corner storage and counter toppers from patcherMod, fridge fill in code |
 | Ocean's Delight | `oceansdelight-1.0.2-1.19.2.jar` | `oceansdelight` | MIT (Scouter456) | [ocean_delight.md](ocean_delight.md) | names (caviar) only |
@@ -347,6 +349,7 @@ classes, lives in a compartment that loads only when that mod is present (sectio
 | QoL-4 | Compost rows for member foods | compost framework (README index) | KubeJS | CD startup script calling the pack's compost helper (needs 10.5; until then the rows stay in `compost_rules.js`) |
 | QoL-5 | Heatless pot routes and grid-meal moves (`_manual_only`) | member writeups | KubeJS cooking rules | CD server scripts through `global.NCH`, as today |
 | QoL-6 | Crop-growth WTHIT line, JEI info pages | member writeups | patcherMod / KubeJS | WTHIT line: CD Java, soft dependency; JEI info pages: CD client scripts with `// requires: jei` |
+| QoL-7 | Cookware pickup (sneak right-click) and handle toggle (sneak left-click), 2026-11-02, TODO `cooking/kitchen #27` | [kitchen.md](kitchen.md) 2.9 | CD Java | `cooking/CookwareHandling`, tag `#creativedelight:cookware_pickup`, `[qol] cookwarePickup` |
 
 ### 8.1 Creative Delight config (Q21, proposal)
 
@@ -918,7 +921,7 @@ the nested ids. Two offline sims that load `tag_helper.js` from its new path ran
 | CDT-06 | CD with an old patcherMod reports it | SQ-CDT-10 |
 | CDT-07 | Nested members load, names, stale jar, Oceanic overlay, End's | SQ-CDJ-01 to -04, -06; SQ-FN (setup changed) |
 | CDT-08 | Food dict load check passes; three bad lines (missing general key, key outside the grammar, item named twice) make it throw | `tools/test_food_dict.sh` (PASSED offline 2026-10-25); SQ-FD-01 |
-| CDT-09 | Veggies pilot recipes identical through `f` | not built (13.4 point 2) |
+| CDT-09 | Veggies pilot recipes identical through `f` | PASSED offline 2026-11-02 (119 refs as `fd.<key>`, recipe calls byte-identical; plan_creative_delight.md H E1) |
 | CDT-10 | Coverage: no food without a key | `python3 tools/food_dict.py` (PASSED 2026-10-25: 1542 keys, 0 missing) |
 
 Scratch run 2026-10-25 (scratch_queue.md run log): CDT-01 to CDT-04 and CDT-06 PASSED; CDT-05 PASSED apart from the
@@ -926,6 +929,7 @@ client tree (SQ-CDT-07, Round 2); CDT-07 server halves of SQ-CDJ-01, -06, SQ-FN-
 stale top-level upstream jar beats the nested repack, 14.1 point 4); client names, Oceanic net loot by biome and the
 bundled ports still open. Fixed in the run: `cd_core.js` `members()` (`Array.from` on a Java List stopped boot). Boot
 cost of the CD jar against the three upstream jars: none measurable (mean 108.0 s against 104.7 s, inside the spread).
+**Deep scan 2026-11-02:** CDT-09 (Veggies pilot) passed offline 2026-11-02 (plan_creative_delight.md H, E1); the nested ports load (r1102 SQ-CDJ-09, -11, r1102b SQ-CDJ-12 PASS); SQ-CDJ-02, -03, -04, SQ-CDT-07, SQ-FN-02 still not run (SQ-FN-03 LOOK in r1102b s1).
 
 ### 19.3 Not done (owner: no ongoing backport or merge features)
 
@@ -1081,7 +1085,7 @@ Install both together (19.5). An old patcherMod jar beside the new CD would appl
 Offline 2026-10-25: patcherMod and CD build; CD's own jar holds the six mixins, `waila_plugins.json`, the rules file, the
 lang file, the four compost scripts and the five moved scripts, manifest `MixinConfigs: creativedelight.mixins.json`;
 patcherMod's jar has none of them; every moved or edited script compiles in KubeJS's Rhino; the compost `when` gate
-tested in node (on, off, throwing). Live checks are queued (scratch_queue.md SQ-CDQ).
+tested in node (on, off, throwing). Live checks are queued (scratch_queue.md SQ-CDQ). **Deep scan 2026-11-02:** r1102b s2 (perf/runs/r1102b/s2/judged.md) PASSED the server rows: CDQ-02 (pot half; oven half not run), CDQ-03, CDQ-05 (SQ-CDQ-05, -05b), CDQ-06 (SQ-CDQ-06, -06b), and SQ-CDQ-01's server half; CDQ-01 look, CDQ-04, CDQ-07, CDQ-08 wait for the client round.
 
 | ID | Test | Where |
 |---|---|---|
@@ -1818,7 +1822,7 @@ Juice, tea and coffee recipe rules, exceptions and the missed-drink audit are in
 
 Recorded in the TODO rows named below. Only the Oceanic wording, docs and TODO rows changed; nothing here is built.
 
-### 38.1 Ender's Delight 1.2.2 as a donor-route member (`members #33`)
+### 38.1 Ender's Delight 1.2.2 as a donor-route member (`members #33`) -- DROPPED, see 38.5
 
 Owner: Ender's Delight should also reference its upstream jar and be nested in Creative Delight, as Oceanic is (section 36).
 Plan, nothing built:
@@ -1882,4 +1886,39 @@ the first to decide.
   as built (I9, owner): the tool and misc dictionary category names with the `item_` catch-all (`tool_dict.js`,
   `misc_dict.js`), and Display's `[display]` keys with the old "Disable..." keys inverted. Swap lists gained a
   `removed` key for ids dropped with no replacement (section 11; first entry the Display tentacle plate).
+
+### 38.5 Ender's Delight donor route reviewed and dropped (owner, 2026-11-02)
+
+Question: does a `portedEnders` donor member help the mod or make changes easier? Findings (ends_delight.md 5.7, jar inspected):
+
+- Ender's 1.2.2 has 30 classes, **no mixins, no entities**. Every pack change to it today is data: dict rows, recipes, tags,
+  loot, merges, cans, compost (CD `kubejs_startup/endersdelight/`, `endersdelight/*.js`), plus damage tags and the
+  `ShieldConfig` default naming `endersdelight:phasing` in patcherMod. None edits its code.
+- The donor route would rewrite those 30 classes (stove block entity and renderer, Phasing effect, `wasWatered`,
+  JEI plugin) with old-world risk, and the unmodified jar would still have to be on every client and server as the
+  `enders_upstream/` file. The jar leaves `mods/` but nothing leaves the install.
+- The only gain is freedom to change Java. A mixin does that without a licence problem (the pack already mixes into
+  ARR Cooking for Blockheads), and nothing planned needs it.
+
+Decision (final, owner 2026-11-02): no donor member. Ender's stays its own ARR jar in `mods/`. The `enders_additions` content (1.1.4:
+14 registrations, End House) is folded into the End's member (`repackedEnds`, "End's Delight (Creative Delight)") and its
+`endersdelight:` ids register always, with or without the external Ender's mod; old-world loss without it is accepted. The upstream
+read stays: art and data of Ender's (1.1.4 now, a future version later) still come from `enders_upstream/`. CD pack rows for
+Ender's 1.2.2 content keep the `// requires: endersdelight` header. Old ids kept. Plan: plan_creative_delight.md J1,
+TODO `members #46`. Nothing built.
+
+### 38.6 Salt, Create: The Salt, Canned Goods and Golden Food into CD (owner, 2026-11-02)
+
+| Mod | Jar | Licence | Size | Route | Pack code already in CD |
+|---|---|---|---|---|---|
+| Salt | `salt-1.19.2-1.2.4.1.jar` (`salt`) | MIT | 76 classes, access transformer | repack member (references checked: plan J2) | `salt/SaltBlockTicks`, 3 salt mixins |
+| Create: The Salt | `create_salt 1.19.2-1.1.0.jar` (`create__the_salt`) | MIT | 1 class, data | repack member, loads only with Create | none found |
+| Canned Goods | `CannedGoods-1.19.2-3.jar` (`canned_goods`) | AFL 3.0 (keep notice, mark changes) | 87 classes | repack member | golem colour and renderer mixins, `CanPagesJEI`, can types |
+| Golden Food | `goldenfood-1.19.2-2.0.0.jar` (`goldenfood`) | **All rights reserved** | 17 classes (cakes, enchanted foods, anvil event) | donor route (Miner's method) or own rewrite; cannot be repacked | `goldenfood/` scripts only (placeable, food types) |
+
+Mod ids and registry namespaces stay (old worlds), display names "<Name> (Creative Delight)", rows merged into the CD row of
+`mod_sides.md`, old jars displaced by `:creativeDelight:installToMods`, same `members #10` cutover. Golden Food is the one
+place the donor route earns its cost: folding an ARR mod in leaves no other route. The Salt references were checked (plan_creative_delight.md J2): Creative Brewing and the surface code do not use Salt (that grep hit was
+`basalt`); users are CD, the Vintage member, pack KubeJS, patcherMod's JEI world tab and `salt-common.toml`. Golden Food is a donor member
+(owner: yes). Rows `members #47` to `#50`; plan J2 to J4. Nothing built.
 

@@ -36,6 +36,11 @@ ServerEvents.recipes(e => {
 		// Slices from the placed Farmer's Delight pumpkin pie ([pumpkin_pie] placeAs) go back into a pie
 		R.shaped(i.pumpkin_pie, ['##', '##'], { '#': i.fd_pumpkin_pie_slice }, e, 'pumpkin_pie_from_fd_slices')
 
+		//######################### Kelp Encrusted Cod #########################
+		// Ocean's Delight 1.0.4's dish in the pack namespace (TODO dishes/ocean #7; item: CD startup farmersdelight/ocean_dishes.js):
+		// cod slice, any egg, kelp in the pot, 0.35 xp, 200 ticks as upstream
+		R.fdCooking([i.cod_slice, i.eggs, i.kelp], i.kelp_encrusted_cod, e, 'kelp_encrusted_cod', 0.35, 200)
+
 		//######################### Cabbage leaves #########################
 		// A cabbage cuts into 4 leaves (TODO dishes/ingredients #25; upstream 2), on the board and in the Create mixer
 		// (Slice & Dice copies the board recipe). The leaves-back-to-cabbage grid craft takes 4 to match (upstream 2).

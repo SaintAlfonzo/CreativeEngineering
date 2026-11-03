@@ -3,6 +3,7 @@ package com.SaintAlfonzo.creative_labels.client;
 import com.SaintAlfonzo.creative_labels.CLConfig;
 import com.SaintAlfonzo.creative_labels.CreativeLabels;
 import com.SaintAlfonzo.creative_labels.block.FaceContent;
+import com.SaintAlfonzo.creative_labels.block.Spots;
 import com.SaintAlfonzo.creative_labels.block.FacePaperBlockEntity;
 import com.SaintAlfonzo.creative_labels.block.LabelData;
 import com.mojang.blaze3d.vertex.PoseStack;
@@ -103,9 +104,9 @@ public class FacePaperRenderer implements BlockEntityRenderer<FacePaperBlockEnti
             if (!tex.isInitialized()) continue; // drawn on the render thread shortly; nothing to show yet
             int packedLight = label.glow ? LightTexture.FULL_BRIGHT : light;
             drawIcon(poseStack, buffer.getBuffer(RenderType.entityCutoutNoCull(tex.getTextureLocation())),
-                    face, c.rotation, c.inset, label.showName, packedLight, overlay);
+                    face, c.rotation, c.place(), label.showName, packedLight, overlay);
             if (label.showName && nameNear) {
-                drawName(poseStack, buffer, face, c.rotation, c.inset, label.picture.getHoverName(), packedLight);
+                drawName(poseStack, buffer, face, c.rotation, c.place(), label.picture.getHoverName(), packedLight);
             }
         }
     }
@@ -149,12 +150,12 @@ public class FacePaperRenderer implements BlockEntityRenderer<FacePaperBlockEnti
     }
 
     /** One quad with the picture, in front of the label paper, counter-clockwise toward the viewer. */
-    static void drawIcon(PoseStack poseStack, VertexConsumer consumer, Direction face, @Nullable Direction rotation, float inset,
+    static void drawIcon(PoseStack poseStack, VertexConsumer consumer, Direction face, @Nullable Direction rotation, Spots.Place place,
                          boolean showName, int light, int overlay) {
         Matrix4f pose = poseStack.last().pose();
         Matrix3f normal = poseStack.last().normal();
         Vec3 n = LabelLayout.toward(face);
-        Vec3[] p = LabelLayout.iconCorners(face, rotation, inset, showName);
+        Vec3[] p = LabelLayout.iconCorners(face, rotation, place, showName);
         float[] u = {0f, 1f, 1f, 0f}, v = {0f, 0f, 1f, 1f}; // bottom-left, bottom-right, top-right, top-left
         for (int i = 0; i < 4; i++) {
             consumer.vertex(pose, (float) p[i].x, (float) p[i].y, (float) p[i].z)
@@ -168,12 +169,12 @@ public class FacePaperRenderer implements BlockEntityRenderer<FacePaperBlockEnti
     }
 
     /** The item's name under the picture, scaled into the text box, centred. */
-    private void drawName(PoseStack poseStack, MultiBufferSource buffer, Direction face, @Nullable Direction rotation, float inset,
+    private void drawName(PoseStack poseStack, MultiBufferSource buffer, Direction face, @Nullable Direction rotation, Spots.Place place,
                           Component name, int light) {
         int width = font.width(name);
         if (width <= 0) return;
-        float scale = LabelLayout.textScale(width) / 16f; // blocks per font unit
-        Vec3 anchor = LabelLayout.textAnchor(face, rotation, inset);
+        float scale = LabelLayout.textScale(width) * place.labelScale() / 16f; // blocks per font unit
+        Vec3 anchor = LabelLayout.textAnchor(face, rotation, place);
         poseStack.pushPose();
         poseStack.translate(anchor.x, anchor.y, anchor.z);
         poseStack.mulPose(LabelLayout.textRotation(face, rotation));
