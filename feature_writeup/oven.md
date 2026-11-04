@@ -352,10 +352,12 @@ Every baking recipe asks for bakeware (2.6). The tool is never used up. Filter: 
 
 ### 3.5 Automation (`OvenItemHandler`), the same on every face
 
-- Insert: bakeware to the tool slot; the plating item (what the waiting result needs, or the last recipe's
-  container) to slot 8; anything else to the ingredient slots.
+- Insert: bakeware to the tool slot; a plating container (what the waiting result needs, or what any baking recipe
+  is served in; since 2026-11-03 was only the last recipe's) to slot 8; anything else to the ingredient slots.
 - Extract: output slot, then the two leftover slots (handler slots 10-11).
-- Limit: an item that is the last recipe's plating item can't be inserted as an ingredient by automation.
+- Containers only in slot 8 (2026-11-03, [remainder_buffer.md](remainder_buffer.md) 3.8): the oven's inventory refuses a
+  container in an ingredient slot by hand, shift-click and automation alike, unless a baking recipe also takes it as
+  an ingredient (logged at load).
 
 ### 3.6 Changes from FD's pot
 
@@ -479,6 +481,7 @@ The test sources are scratch-only (not in the repo).
 ## 7. In-game test suite
 
 - **r1102b 2026-11-02** (scratch server; verdicts in `perf/runs/r1102b/` HANDOVER.md and the slice judged.md): PASS SQ-DB-00, -02.
+- **r1103 2026-11-03** (scratch server; verdicts in `perf/runs/r1103/` FINAL.md and the slice judged.md): PASS SQ-FFB-02, -03, -04.
 
 Needs a patcherMod build in `mods/`.
 

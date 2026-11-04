@@ -47,7 +47,9 @@ for st in $STEPS; do
         tools/fungi_probe/zcount.js:zz_count.js tools/fungi_probe/ztrades.js:zz_trades.js tools/scratch_query/zloot_probe.js:zz_zloot_probe.js \
         tools/scratch_query/zti_probe.js:zz_zti_probe.js tools/scratch_query/zact_probe.js:zz_zact_probe.js tools/scratch_query/zp_probe.js:zz_zp_probe.js \
         tools/salt_probe/salt_probe.js:zz_salt_probe.js tools/worldedit_probe/we_probe.js:zz_we_probe.js
-      must boot "$O"; run "$O" s1_R.qb "$R/s1R"; run "$O" r_A.qb "$R/r"; stopsrv "$O" "$R/r" bootrA; rm -rf "$O" ;;
+      must boot "$O"; run "$O" s1_R.qb "$R/s1R"; run "$O" r_A.qb "$R/r"
+      run "$O" s1_A.qb "$R/vp06" --rows SQ-VP-06   # SQ-CDJ7 rerun of SQ-VP-06 (first half; the jar fill is judged by look)
+      stopsrv "$O" "$R/r" bootrA; rm -rf "$O" ;;
   rB) O=$SCR/rb; prep "$O" rb B spawn-animals=true
       must boot "$O"; run "$O" r_B.qb "$R/r"; stopsrv "$O" "$R/r" bootrB ;;
   rB2) O=$SCR/rb; $Q toml "$O/srv/config/creativedelight-common.toml" worldgen wildCrops false

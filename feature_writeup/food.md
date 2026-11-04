@@ -885,6 +885,7 @@ Answered by the owner 2026-11-02 except D3 (pinned) and D4 (open).
 ## 7. In-game test suite
 
 - **r1102b 2026-11-02** (scratch server; verdicts in `perf/runs/r1102b/` HANDOVER.md and the slice judged.md): PASS SQ-PS-03, -04.
+- **r1103 2026-11-03** (scratch server; verdicts in `perf/runs/r1103/` FINAL.md and the slice judged.md): PASS SQ-CF-02, SQ-FO-01, -05, -02, -03, -04, SQ-PS-06.
 
 Restart the game first (item_dict gained keys), then load WorldC.
 
@@ -900,7 +901,7 @@ FO-14 to FO-22 cans ran as SQ-OF-00 to -03 (PASS 2026-10-22); FO-23 to FO-27 fri
 - [ ] **FO-03 nested tags:** hold Raw Bacon (`farmersdelight:bacon`), `/kubejs hand` -> tags include
   `creativeengineering:food_type/raw/meat/sliced`, `.../raw/meat`, `.../raw` and `creativeengineering:food_type`.
 - [ ] **FO-04 canned source:** hold a Cooked Porkchop, `/kubejs hand` -> `creativeengineering:food_type/cooked/meat` and
-  `creativeengineering:canned_source`. A Carrot shows no `canned_source`.
+  `creativeengineering:canned_source`. A Carrot also has `canned_source` (its generated raw veggie can, accepted 2026-11-03).
 - [ ] **FO-05 new keys:** hold Neapolitan Strawberries (a food whose key is new) -> `creativeengineering:food_type/raw/fruit`.
 - [ ] **FO-06 JEI:** search `$creativeengineering:food_type/meal/feast` -> the 10 feast servings;
   `$creativeengineering:food_type/meal` -> 75 items.

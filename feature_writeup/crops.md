@@ -293,7 +293,9 @@ includes the pack's echo hoe, Dragon Hoe and Felsic Hoe.
 - Every **bush-type** block in the area gets a simulated click, which picks berry bushes. "Bush-type"
   means a non-vanilla bush or growing plant that takes bone meal, plus `minecraft:sweet_berry_bush` and
   `minecraft:cave_vines` from the config.
-- It costs no durability (`Harvesting Costs Durability = false`).
+- With an area hoe (more than 1x1) it costs 1 durability per click that harvested anything, however many crops
+  (since 2026-11-03, SQ-PSF-02; CD `QuarkHoeAreaHarvestMixin`). A 1x1 hoe and the empty hand keep Quark's
+  `Harvesting Costs Durability = false` (no cost).
 - Clicking grass or dirt **tills it** instead. The till check runs first.
 - With a hoe, nothing happens unless the clicked block or the one above is a known crop or bush.
 
@@ -608,7 +610,7 @@ where a mod's ground test would block the spec:
 | `wild/brown_mushroom_colonies`, `wild/red_mushroom_colonies` | FD's own need mycelium; dark forests have podzol and grass | `#minecraft:mushroom_grow_block` or `#minecraft:dirt`. The colony block itself still needs light below 13 off mycelium/podzol, and the heightmap ignores leaves so the attempt lands under the canopy |
 | `wild/hamimelon` | Fruits Delight's own wants plain sand; badlands are red sand and terracotta | `#minecraft:sand` or `#minecraft:terracotta` |
 | `wild/cocoa_jungle_tree` | cocoa only grows on vanilla jungle trees (CocoaDecorator 0.2) | a vanilla jungle tree in 1 chunk of 3, dry land, where a jungle sapling survives |
-| `wild/sweet_berries`, `wild/pumpkin`, `wild/melon`, `wild/sugar_cane` | copies of the vanilla patches (see above) | vanilla's: grass for berries, pumpkins and melons; dirt/sand next to water for cane |
+| `wild/sweet_berries`, `wild/pumpkin`, `wild/melon`, `wild/sugar_cane` | copies of the vanilla patches (see above); `wild/melon` uses heightmap `OCEAN_FLOOR_WG` since 2026-11-03 (was `MOTION_BLOCKING`, which lands on the jungle canopy: 0 melons in 98 jungle chunks, SQ-WCD-02) | vanilla's: grass for berries, pumpkins and melons; dirt/sand next to water for cane |
 
 Same rarities as the mods: FD's config chances as the pack sets them (30, 15), Fruits Delight's 64, vanilla's 32, 300
 and 6. A change to `farmersdelight-common.toml` `[world.wild_cabbages]` or `[world.wild_beetroots]` no longer
@@ -1044,19 +1046,25 @@ Findings (2026-10-30):
   grapevine stem and lattice, Vinery apple and cherry leaves (`backportedVinery` `-06`), Ender's Delight chorus flame
   (CD member `endersAdditions` `-02`). Chorus succulent and sea pickle grow by bone meal only (tooltip only).
 - **Grasses** (`grass` type, BUILT 2026-11-02, TODO `farming/crops #28`): grass block, short grass, tall grass, fern,
-  large fern; winter off, every other season and wet/dry neutral, so the tooltip and WTHIT read "Offseason: Winter".
+  large fern; owner rule 2026-11-03 (replaces winter off): summer off and both tropical seasons (wet and dry, arid
+  biomes too, which use the same wet/dry calendar) off, spring, autumn and winter neutral, so the tooltip and WTHIT
+  read "Offseason: Summer, Wet, Dry".
   Grass spreads without the crop-grow event, so Creative Calendar hooks it directly: `GrassSpreadSeasonMixin` on the
   vanilla grass-block random tick (spread onto dirt; a covered grass block still turns to dirt at full speed; mycelium
   and nylium share the class but are untyped) and `IWGrowthSeasonMixin` on Immersive Weathering's block growths (a
   growth whose owner is typed and that places a block of the owner's type: grass sprouting on grass blocks, grass
-  growing tall, ferns growing large; frost, soot and moss growths untouched). Off skips `offPenalty` (25 %) of those
-  tries; spreading has no fertile bonus. Greenhouse glass makes grass under it neutral like any crop.
+  growing tall, ferns growing large; frost, soot and moss growths untouched). Off skips `grassOffPenalty` (50 %, Creative
+  Calendar `[crop_seasons]`; other types keep `offPenalty` 25 %) of those tries; spreading has no fertile bonus. Greenhouse glass makes grass under it neutral like any crop.
   Modded grasses (owner 2026-11-02: slowed too) are typed `grass` as well: Immersive Weathering rooted grass block,
   Vinery grass slab, Vintage Delight lush grass block, Botania's six grasses (dry, golden, vivid, scorched, infused,
-  mutated). Their spread does not all run through the vanilla tick, so `ModdedGrassSpreadSeasonMixin` (Pseudo, gated
-  on any of IW, Botania, Vinery, Vintage Delight; Serene Seasons checked at runtime) hooks each one's random tick at the
-  light check that opens its spread (`getMaxLocalRawBrightness`, first call), so what the tick does before it (covered
-  slab turning back to dirt slab, IW path wear recovering) keeps full speed. Targets: IW `ModGrassBlock` (IW registers
+  mutated). Their spread does not all run through the vanilla tick, so one Pseudo mixin per target (2026-11-03, was one
+  four-target `ModdedGrassSpreadSeasonMixin` with `require = 0` that r1103 showed live on the Vinery slab only:
+  SQ-PST-08, -10, -11, -11b ratios 0.97 to 1.04) hooks each, each gated on its own mod and `require = 1`, through
+  `seasons/GrassSeasonHook` (Serene Seasons checked there; the first call per target logs `[creativecalendar] grass
+  season hook live: <target>`). `IWGrassSpreadSeasonMixin` and `VineryGrassSlabSeasonMixin` sit on the light check that
+  opens the spread (`getMaxLocalRawBrightness`, first call), so what the tick does before it (covered slab turning back
+  to dirt slab, IW path wear recovering) keeps full speed; `BotaniaGrassSeasonMixin` (`tick`) and
+  `VintageLushGrassSeasonMixin` (`randomTick`) hook HEAD, since those methods are only the spread. Targets: IW `ModGrassBlock` (IW registers
   it as `minecraft:grass_block`; after the vanilla spread, already rolled once, it spreads over mycelium and rooted
   dirt, which gets its own roll so each kind of spread is slowed by the same share; rooted grass extends it),
   Botania `BotaniaGrassBlock.tick` (its random tick), Vinery `SpreadableGrassSlabBlock` and Vintage `LushGrassBlock`
@@ -1403,6 +1411,7 @@ Everything in §2 was read from decompiled classes (2026-10-02). To re-check aft
 ## 7. In-game test suite
 
 - **r1102b 2026-11-02** (scratch server; verdicts in `perf/runs/r1102b/` HANDOVER.md and the slice judged.md): PASS SQ-PSF-01, -03, -05, -06, -07b, -08a; OPEN (no verdict, rerun row written) SQ-PSF-07, -08b; rerun pending (batch fault) SQ-PSF-02, -04, -08, -09.
+- **r1103 2026-11-03** (scratch server; verdicts in `perf/runs/r1103/` FINAL.md and the slice judged.md): PASS SQ-PSF-08a, -08, -08b, SQ-PSD-01, SQ-PSF-02, -04, -07.
 
 - [ ] **CR-01 Tobacco soils:** tobacco seeds plant on Farmland, Rich Farmland and Fertile Soil. On Rich Soil and dirt they're refused.
 - [ ] **CR-02 Tobacco replant:** right-click a stage-7 tobacco with an empty hand → 4+ leaves and 0-1 seeds drop, and the plant is back at stage 0. Right-click an unripe one → nothing.

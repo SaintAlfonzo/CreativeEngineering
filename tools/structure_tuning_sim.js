@@ -1,4 +1,4 @@
-// Offline check for structure tuning: runs the real kubejs/server_scripts/worldgen/structure_overrides.js
+// Offline check for structure tuning: runs the real kubejs/data/creativeworldgen/kubejs/worldgen/structure_overrides.js
 // in node with the KubeJS globals stubbed, against the current structure_config.json + structure_tags.json
 // + structure_groups.json. Prints the same [structure-tuning] summary / errors the game logs. No game needed.
 //   node tools/structure_tuning_sim.js                  summary + warnings + coverage
@@ -18,7 +18,7 @@
 const fs = require('fs')
 const path = require('path')
 const ROOT = path.resolve(__dirname, '..') + '/'
-const SCRIPT = ROOT + 'kubejs/server_scripts/worldgen/structure_overrides.js'
+const SCRIPT = ROOT + 'kubejs/data/creativeworldgen/kubejs/worldgen/structure_overrides.js'
 const REAL_REPORT = 'kubejs/generation_scripts/worldgen/structure_tag_report.md'
 const argv = process.argv.slice(2)
 const noPatcher = argv.includes('--no-patchermod')

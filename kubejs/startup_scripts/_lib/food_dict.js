@@ -517,7 +517,6 @@ global.food = {}
 	f.ingredient_relish_jar                        = i.relish_jar;
 	f.ingredient_shulker_omelette_mixture          = i.shulker_omelette_mixture;
 	f.ingredient_silmesyrup                        = i.silmesyrup;
-	f.ingredient_vinegar                           = i.vinegar;
 	f.ingredient_vinegar_jar                       = i.vinegar_jar;
 
 	// ---- cake

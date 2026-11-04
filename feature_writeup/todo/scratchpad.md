@@ -61,53 +61,10 @@ Creative Mods	1	5
 
 ## Idea, Notes, Changes (Human scratchpad, don't write up or add to plans unless directed)
 
-- shrimp trap
-- place kettle/cooking pot on bottom of block for handle tooltip, remove other lmb mechanic 
-- merge redundant tools, combine into single tools with many functions
-- merge vegitarian/vegan patty, vegitarian/vegan burgers, or split with including cheese, miners cave hamburger vs vegan hamburger? (drop vegan), rename vegan patty to cave carrot
-- can only shift click bowls into copper pot, expand to all containers
-    - only allow plating items in plate slot and all plating items in the plateslot w/ shiftclick on all fd stations
-- review 2 block deep structure cancel, lower to 1?
-- allow pillagers to use guns
-- pickled egg used for century egg
-- nut milk usable in most milk recipes (no cheese)
-- bone broth not in copper pot?
-- bone broth as a fluid
-- all glass drops color shards
-- new chopped items
-    - beetroot
-    - carrot
-    - tomato
-    - apple
-    - onion? prepared onion?
-- syrup
-    - should stack to 64
-    - sap recipe
-- pickles
-    - zucchini or cucumber
-- vintage delight jams should only output 1 per craft
-- 3 rich soil in fertile soil?
-- pickled eggs
-- sophisticated storage upgrades/slots for cooking for blockheads storage
-- overflow slot/bottle plating routing in fermenting jar? any bottle/bowl input? 
-- bales are soft, salt blocks (rocksalt) is natural rough, salt dust block is soft (verifying issue from a changelog inconsitancy)
-- mature dandelion crate
-- make seasoned popcorns their own item
-    - recolored popcorns
-    - new popcorn buckets for each popcorn, icon
-- lables not on sacks, supps jars, pickling jar, botany pots, cauldrons, trashcan, 
-    - move in to line up with surface
-- knife disappears on pickup from cutting board
-- lemon tree cuts off in botany pot
-- cooking for blockheads double fridges visually connect like double doors, remove seal in block between (seperated inventory, door opening)
-- drink crates?
-- add tooltip about copper poisoning w/ oxidized gear, configurable to disable
-- sophisticated backpack compost module?
-- wine in pasta, meals
-    - additive for extra effects? build off seasoning system, similar to grilled
-- raise blockhead stove surface to top of block, keep backsplash as visual overlap into upper block. extend it by duplicating the bottom row of the sides downward, and keep the bottom face at the bottom. add blockhead stove to heat sources for delight cooking blocks. 
-- pickling jar kimchi finished instantly
-
-
-- jars
-    - need to merge vintage mason jar placement w/ fruits delight items
+- lower corncob cutting recipe (2 kernels), add mortar recipe (3 kernels), and grinding (create mill, crush, ie crush, 4 kernels + 0.5 cornmeal)
+- curios face slot
+    - missing texture, use standard helmet icon
+    - allow smoking pipe in slot
+- no strawberry storage block
+- all berries take bag/sacks, other fruits/veggies take crates?
+- book writing animation? not enough animations?

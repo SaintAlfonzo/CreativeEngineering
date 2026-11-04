@@ -3,23 +3,16 @@
   "containers": [
     {
       "filled": [
-        "vintagedelight:relish_bottle"
-      ],
-      "empty": "minecraft:glass_bottle",
-      "capacity": 1
-    },
-    {
-      "filled": [
         "vintagedelight:relish_jar"
       ],
       "empty": "vintagedelight:empty_mason_jar",
-      "capacity": 3
+      "capacity": 1
     }
   ],
   "flowing_texture": "moonlight:soft_fluids/potion_flow",
   "food": {
     "divider": 1,
-    "item": "vintagedelight:relish_bottle"
+    "item": "vintagedelight:relish_jar"
   },
   "from_mod": "vintagedelight",
   "still_texture": "moonlight:soft_fluids/soup_liquid",

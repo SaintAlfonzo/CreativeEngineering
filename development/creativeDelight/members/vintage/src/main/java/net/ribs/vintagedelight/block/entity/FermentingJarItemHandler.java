@@ -6,11 +6,22 @@ import net.minecraft.world.item.ItemStack;
 import net.minecraftforge.items.IItemHandler;
 
 /**
- * KOTS 0.3.1's sided view of the Pickling Jar's slots: the top face feeds the 6 ingredient slots (spreading one item
- * per empty slot first, then topping up the smallest matching stack), the sides feed the container slot, the bottom
- * extracts the two outputs and (port) the leftover slot. A null side (the screen) sees every slot.
+ * Sided view of the Pickling Jar's slots, the Farmer's Delight stations' layout (remainder_buffer.md 3.8): every face
+ * inserts, a container (what the container slot takes, FermentingJarBlockEntity.isJarContainer) into the container slot
+ * and anything else into the 6 ingredient slots (KOTS 0.3.1's spread: one item per empty slot first, then the smallest
+ * matching stack); the top extracts the ingredients, the sides and the bottom the two outputs and then the leftover
+ * slot. The container slot is never extracted, so automation cannot pull a batch's container. A null side (the
+ * screen) sees every slot. Was (KOTS): only the top fed ingredients, the sides fed and drained the container slot,
+ * only the bottom drained the outputs.
  */
 public class FermentingJarItemHandler {
+    private static final int CONTAINER_SLOT = 6;
+    private static final int[] INGREDIENTS = {0, 1, 2, 3, 4, 5};
+    private static final int[] OUTPUTS = {7, 8, 9};
+    /** What a face shows: the top its ingredients and the container slot, the other faces everything, outputs first. */
+    private static final int[] TOP_VIEW = {0, 1, 2, 3, 4, 5, 6};
+    private static final int[] SIDE_VIEW = {7, 8, 9, 6, 0, 1, 2, 3, 4, 5};
+
     private final IItemHandler itemHandler;
 
     public FermentingJarItemHandler(IItemHandler itemHandler) {
@@ -21,53 +32,64 @@ public class FermentingJarItemHandler {
         if (side == null) {
             return this.itemHandler;
         }
-        final int[] exposed = exposedSlots(side);
-        final boolean inputView = side == Direction.UP;
+        final int[] view = side == Direction.UP ? TOP_VIEW : SIDE_VIEW;
+        final int[] pull = side == Direction.UP ? INGREDIENTS : OUTPUTS;
         return new IItemHandler() {
             @Override
             public int getSlots() {
-                return exposed.length;
+                return view.length;
             }
 
             @Override
             public ItemStack getStackInSlot(int slot) {
-                return itemHandler.getStackInSlot(map(slot, exposed));
+                return itemHandler.getStackInSlot(map(slot, view));
             }
 
             @Override
             public ItemStack insertItem(int slot, ItemStack stack, boolean simulate) {
-                return inputView ? insertSpread(stack, exposed, simulate) : itemHandler.insertItem(map(slot, exposed), stack, simulate);
+                map(slot, view);
+                return insertRouted(stack, simulate);
             }
 
             @Override
             public ItemStack extractItem(int slot, int amount, boolean simulate) {
-                return itemHandler.extractItem(map(slot, exposed), amount, simulate);
+                int real = map(slot, view);
+                for (int p : pull) {
+                    if (p == real) {
+                        return itemHandler.extractItem(real, amount, simulate);
+                    }
+                }
+                return ItemStack.EMPTY;
             }
 
             @Override
             public int getSlotLimit(int slot) {
-                return itemHandler.getSlotLimit(map(slot, exposed));
+                return itemHandler.getSlotLimit(map(slot, view));
             }
 
             @Override
             public boolean isItemValid(int slot, ItemStack stack) {
-                return itemHandler.isItemValid(map(slot, exposed), stack);
+                return itemHandler.isItemValid(map(slot, view), stack);
             }
         };
     }
 
-    private static int[] exposedSlots(Direction side) {
-        if (side == Direction.UP) {
-            return new int[]{0, 1, 2, 3, 4, 5};
+    private static int map(int slot, int[] view) {
+        if (slot < 0 || slot >= view.length) {
+            throw new RuntimeException("Slot " + slot + " not in valid range - [0," + view.length + ")");
         }
-        return side == Direction.DOWN ? new int[]{7, 8, 9} : new int[]{6};
+        return view[slot];
     }
 
-    private static int map(int slot, int[] exposed) {
-        if (slot < 0 || slot >= exposed.length) {
-            throw new RuntimeException("Slot " + slot + " not in valid range - [0," + exposed.length + ")");
+    /** A container into the container slot, anything else spread over the ingredient slots. */
+    private ItemStack insertRouted(ItemStack stack, boolean simulate) {
+        if (stack.isEmpty()) {
+            return stack;
         }
-        return exposed[slot];
+        if (this.itemHandler.isItemValid(CONTAINER_SLOT, stack)) {
+            return this.itemHandler.insertItem(CONTAINER_SLOT, stack, simulate);
+        }
+        return insertSpread(stack, INGREDIENTS, simulate);
     }
 
     private ItemStack insertSpread(ItemStack stack, int[] exposed, boolean simulate) {

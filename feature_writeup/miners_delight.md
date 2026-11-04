@@ -286,6 +286,7 @@ no stray namespace, 18 loot modifier entries, 14 cup rows (onion row dropped).
 ## 8. In-game test suite (drafted)
 
 - **r1102b 2026-11-02** (scratch server; verdicts in `perf/runs/r1102b/` HANDOVER.md and the slice judged.md): PASS SQ-MDP-18, -18b.
+- **r1103 2026-11-03** (scratch server; verdicts in `perf/runs/r1103/` FINAL.md and the slice judged.md): PASS SQ-CUP-01, -02, -03, -04, SQ-MDL-01, -01b, -02, -03, -04, -05.
 
 Boot and inventory
 
@@ -488,6 +489,11 @@ Haste: one Creative Engineering effect shared by all sources (`potions/effects #
   the meal slot is empty (I4, `canCook`); the cave carrot crate rule now reaches `md_abandoned_mineshaft` because
   `tools/gen_loot_config.py` reads the 1.4.5 donor jar (I5); `scavenging_spider` gets the upstream-missing `is_on_fire:false`
   through `MinersTranslator.PATCH_DATA` (I7). Reruns: SQ-MDP-13, -14, -16 / -09, new SQ-MDP-18.
+- **2026-11-03 (stations, port `-06`, in the CD jar built 19:13, not installed):** Copper Pot on the five-station rule
+  ([remainder_buffer.md](remainder_buffer.md) 3.8, TODO `creativedelight/members #39`, `cooking/kitchen #29`): a served-in
+  leftover stacks in the container slot up to a stack (no meals-waiting cap; fixes SQ-RB-21b, bowl in slot 5 plus a bottle
+  leftover), others to slot 7; containers only in slot 5 and shift-click sends any of them there (was: bowls only);
+  every face inserts, routed by the slot rule. RB-15, RB-17, RB-18, SQ-RB-21b, SQ-STN-01, -02.
 - **2026-11-02 (loot, `creativedelight/members #51`):** D8 built: the donor's loot modifiers are no longer served;
   the drops are pack loot rules (§8.1) through the new `L.drop` / `L.dropShare` helper (Creative Worldgen
   `loot/09_drops.js`), rates as upstream, cooked drops for every burning death. New test MND-42; MND-30, -31, -33

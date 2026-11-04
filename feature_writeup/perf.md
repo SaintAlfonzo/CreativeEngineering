@@ -340,6 +340,7 @@ Notes:
 ## 8. In-game test suite
 
 - **r1102b 2026-11-02** (scratch server; verdicts in `perf/runs/r1102b/` HANDOVER.md and the slice judged.md): PASS SQ-ATC-02, -03, -04, SQ-PF-02, -05, SQ-WE-03, -04; not run SQ-WE-04b.
+- **r1103 2026-11-03** (scratch server; verdicts in `perf/runs/r1103/` FINAL.md and the slice judged.md): PASS SQ-WE-04b.
 
 - [ ] **PF-01 recording starts:** deploy the build that includes `server/` and start the server with
   `LaunchServer.sh`/`.bat` -> the console shows `Started recording 1`, `perf/jfr-repo/<date>_<pid>/` exists,
@@ -585,6 +586,9 @@ Fix (patcherMod `worldgen/FirstTickWater`, `LevelChunkFirstTickWaterMixin`, `Flo
   spawns nothing. That covers the blocks the water replaces and the plants that lose their support in the same tick
   (cave vines, carpets on a washed block, torches). Lava drops nothing in vanilla anyway;
 - nothing runs during generation (no startup or pregen cost); outside a window a fluid tick costs one map lookup.
+- 2026-11-03 (now in Creative Worldgen): the settling flag is cleared at the end of every level tick and the drop hook
+  checks the thread that set it. RETURN of `FlowingFluid.tick` does not run when the tick throws or another mod cancels
+  it after the HEAD hook; a flag left set skipped every block drop in the world (suspected cause of SQ-LBS-04, r1103).
 - Config: `[worldgen.systems] firstTickWater` (default on; off = vanilla drops) and `[worldgen.first_tick_water]
   windowTicks` (default 600 = 30 s, 0 to 72000; 0 = no window). Both apply at once.
 

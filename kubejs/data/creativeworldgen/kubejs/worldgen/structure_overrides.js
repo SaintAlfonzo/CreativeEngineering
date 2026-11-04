@@ -107,7 +107,7 @@
 	var META_TYPE = 'creativeengineering:meta'
 	var META_KEYS = ['note', 'tuned', 'type', 'biomes', 'step', 'terrain_adaptation', 'spawn_overrides', 'anchor', 'share', 'parts', 'companions']
 	var COMPANION_KEYS = ['structures', 'count', 'distance']
-	var META_PART_KEYS = ['structures', 'features', 'count', 'chance', 'distance', 'spacing', 'margin', 'tries', 'water_depth', 'radius', 'overlap', 'cluster']
+	var META_PART_KEYS = ['structures', 'features', 'count', 'chance', 'distance', 'spacing', 'margin', 'tries', 'water_depth', 'radius', 'overlap', 'cluster', 'punch']
 	var META_MAX_DISTANCE = 112   // MetaStructure.REACH chunks
 	var META_TAG_PREFIX = 'meta/'
 	var TYPE_TAG_PREFIX = 'type/'
@@ -670,6 +670,8 @@
 			if ('overlap' in part && typeof part.overlap !== 'boolean') errs.push(where + '.overlap must be true or false')
 			if ('cluster' in part && !(isInt(part.cluster) && part.cluster >= 0 && part.cluster <= META_MAX_DISTANCE)) errs.push(where + '.cluster must be a whole number 0..' + META_MAX_DISTANCE)
 			if ('cluster' in part && 'features' in part) errs.push(where + ': cluster is for structure parts')
+			if ('punch' in part && typeof part.punch !== 'boolean') errs.push(where + '.punch must be true or false')
+			if (part.punch === true && ('features' in part || part.overlap !== true)) errs.push(where + ': punch is for structure parts with overlap')
 			;[['spacing', 0, 256], ['margin', 0, 64], ['tries', 1, 64], ['water_depth', 0, 64], ['radius', 0, 16]].forEach(function (f) {
 				if (f[0] in part && !(isInt(part[f[0]]) && part[f[0]] >= f[1] && part[f[0]] <= f[2])) errs.push(where + '.' + f[0] + ' must be a whole number ' + f[1] + '..' + f[2])
 			})
@@ -1289,7 +1291,7 @@
 			;((mp.def && mp.def.parts) || []).forEach(function (part, n) {
 				var what = 'structures' in part ? members(part.structures) : 'features ' + members(part.features)
 				var bits = ['count ' + toJson('count' in part ? part.count : 1), 'distance ' + toJson(part.distance || [0, 64])]
-				;['chance', 'spacing', 'margin', 'tries', 'water_depth', 'radius', 'overlap', 'cluster'].forEach(function (k) { if (k in part) bits.push(k + ' ' + part[k]) })
+				;['chance', 'spacing', 'margin', 'tries', 'water_depth', 'radius', 'overlap', 'cluster', 'punch'].forEach(function (k) { if (k in part) bits.push(k + ' ' + part[k]) })
 				out('- part ' + (n + 1) + ': ' + what + '; ' + bits.join(', '))
 			})
 			out('')

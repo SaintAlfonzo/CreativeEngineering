@@ -348,6 +348,13 @@ Read from the installed `mods/endersdelight-1.19-1.2.2.jar` (ARR, mod id `enders
 ### 5.6 Tests
 
 - **r1102b 2026-11-02** (scratch server; verdicts in `perf/runs/r1102b/` HANDOVER.md and the slice judged.md): PASS SQ-EN-04, -06; OPEN (no verdict, rerun row written) SQ-EN-03.
+- **plan_scratch_bugfix_1103 2026-11-03 (built, CD jar 19:43 and Creative Brewing jar 19:45, not installed):** the switch is back:
+  `members/ends/gradle.properties` `bundle_extra_mods=enders_additions`, and `writeMembersList` (CD and Creative Brewing
+  `build.gradle`) writes every member's extra mod ids, so `creativedelight_members.txt` lists `enders_additions` and
+  `CDConfig` gives it a `[members]` switch. Levitation: the reagent is `ends_delight:shulker_meat_slice` (shulker shell if
+  the slice is missing), and `mix()` skips an unknown or empty reagent with a warning, so no boot stops without Ender's 1.2.2.
+  Rerun SQ-ENM-03, -04b, -05b.
+- **r1103 2026-11-03** (scratch server; verdicts in `perf/runs/r1103/` FINAL.md and the slice judged.md): PASS SQ-ENM-02o, -01, -02, -04, -05, SQ-EN-03; FAIL SQ-ENM-04b: the `[members] enders_additions` switch is gone: no row in `creativedelight_members.txt`, so always on (`CDConfig.readMembers`; build-logic members task); FAIL SQ-ENM-03: without endersdelight-1.19-1.2.2.jar, `MoreJSEvents.registerPotionBrewing` throws "Ingredient must have at least one item" and startup stops (Creative Brewing `potions.js` line 47, levitation reagent `endersdelight:shulker_filet`, no mod-loaded guard); SQ-ENM-05b OPEN: unrun, needs the boot without Ender's 1.2.2, blocked by SQ-ENM-03.
 
 | ID | Check |
 |---|---|

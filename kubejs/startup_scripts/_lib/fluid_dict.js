@@ -149,6 +149,27 @@ f.hot_chocolate = 'create_confectionery:hot_chocolate';
 f.ruby_chocolate = 'create_confectionery:ruby_chocolate';
 f.orange_jam = 'fruitsdelight:orange_jam';
 f.lemon_jam = 'fruitsdelight:lemon_jam';
+// Pack jam line (dishes/jams #8, Vintage port): jam and melted jello, 125 mB a jar or bowl, 1000 a block. Mulberry jam is Create Central Kitchen's
+f.ancient_fruit_jam = 'vintagedelight:ancient_fruit_jam';
+f.ancient_fruit_jello = 'vintagedelight:ancient_fruit_jello';
+f.banana_jam = 'vintagedelight:banana_jam';
+f.banana_jello = 'vintagedelight:banana_jello';
+f.cherry_jam = 'vintagedelight:cherry_jam';
+f.cherry_jello = 'vintagedelight:cherry_jello';
+f.green_grape_jam = 'vintagedelight:green_grape_jam';
+f.green_grape_jello = 'vintagedelight:green_grape_jello';
+f.mulberry_jello = 'vintagedelight:mulberry_jello';
+f.pepper_jam = 'vintagedelight:pepper_jam';
+f.pepper_jello = 'vintagedelight:pepper_jello';
+f.raspberry_jam = 'vintagedelight:raspberry_jam';
+f.raspberry_jello = 'vintagedelight:raspberry_jello';
+f.red_grape_jam = 'vintagedelight:red_grape_jam';
+f.red_grape_jello = 'vintagedelight:red_grape_jello';
+f.salmonberry_jam = 'vintagedelight:salmonberry_jam';
+f.salmonberry_jello = 'vintagedelight:salmonberry_jello';
+f.strawberry_jam = 'vintagedelight:strawberry_jam';
+f.strawberry_jello = 'vintagedelight:strawberry_jello';
+f.mulberry_jam = 'create_central_kitchen:mulberry_jam';
 f.white_chocolate = 'create_confectionery:white_chocolate';
 
 //Create: Enchantment Industry

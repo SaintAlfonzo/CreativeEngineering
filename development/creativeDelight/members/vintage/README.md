@@ -29,6 +29,11 @@ from the upstream jar (and three KOTS 0.3.1 files), then lays `src/own/` (pack-o
   pack fills it). Its model, lang and the empty tag are written by `tools/port_resources.py`. The `-09` grape and
   cherry jam jars are pack-owned files in `src/own/`, which the script lays over its output last (new files copied, tag
   values and lang keys merged), so a rerun keeps them.
+- Pack addition (`-15`, TODO `dishes/jams #8`, own GPLv3 code in `jam/`): the pack jam line (jam and jello blocks, bowls
+  of jello, jam and melted jello fluids, fruit / jam / jello cauldrons extending Fruits Delight's cauldron block, compile
+  only against `libs/fruitsdelight-0.5.11.jar`), four new jam jars and the Nut Milk Jar, and `fd_<fruit>_jam_jar` blocks
+  so Fruits Delight's jams place as mason jars. Resources: `tools/gen_pack_jams.py` writes them into `src/own/` from
+  `kubejs/assets/mason_jar_new/`; `port_resources.py` sets every mason jar soft fluid to 1 bottle and drops removed bottles.
 - The fermenting jar keeps its id and is named Pickling Jar. Recipe type and serializer `vintagedelight:fermenting`.
 - 1.19.2 API: Materials, a CreativeModeTab subclass, Recipe without RegistryAccess, JEI 11, PoseStack screens,
   trunk placer on the vanilla registry key.

@@ -166,6 +166,7 @@ Onion Soup is left out (owner 2026-11-02). Build detail in section 4.
 ## 4. Built 2026-10-25 (shipped in 1.1.03, not tested in game)
 
 - **r1102b 2026-11-02** (scratch server; verdicts in `perf/runs/r1102b/` HANDOVER.md and the slice judged.md): PASS SQ-FDB-02, -03, -10, -13, -14, -15; FAIL SQ-FDB-04: Gleaming Salad loses Nourishment: no rule in `tools/gen_comfort_nourishment.py` (check after the 19:50 regeneration); OPEN (no verdict, rerun row written) SQ-FDB-05, -06; rerun pending (batch fault) SQ-FDB-07, -09, -11.
+- **r1103 2026-11-03** (scratch server; verdicts in `perf/runs/r1103/` FINAL.md and the slice judged.md): PASS SQ-FDB-09, -11; FAIL SQ-FDB-05: live `placeAs` toml edits never reload (no file-watcher reload; `FDBackportConfig.java`, `FDBackportEvents.java`); check by hand first; SQ-FDB-06 OPEN: the vanilla control farmland was not trampled either, so the row proves nothing; SQ-FDB-07 OPEN: MCA replaces summoned villagers and FD's farmland hook does not reach MCA brains; owner decision.
 
 Owner request 2026-10-25: execute the backport; keep Onion Soup for evaluation; add Gleaming Salad, the third placeable
 pumpkin pie with a way to compare all three in game, Rope Fence and Gate, the Rabbit Stew / Vegetable Noodles / Cabbage
@@ -189,7 +190,8 @@ farmer villagers on rich farmland and Fertile Soil (configurable), and the feedb
 
 ### 4.2 Behaviour and choices
 
-- **Config** `config/farmersdelight-ce-common.toml` (registered by the repack, FD's container). Forge re-reads it on save.
+- **Config** `config/farmersdelight-ce-common.toml` (registered by the repack, FD's container). A change needs a restart:
+  r1103 (SQ-FDB-05) showed a live edit is not picked up; the config comment says so since 2026-11-03.
   - `[pumpkin_pie] placeAs = FARMERSDELIGHT | DELIGHTFUL | CREATE_CENTRAL_KITCHEN | OFF`: the "see all three" switch.
     A `RightClickBlock` handler at HIGHEST (Delightful's runs at NORMAL) places `<mod>:pumpkin_pie` with Delightful's
     rules (not on a Cutting Board, solid block below, room). `OFF` leaves it to the two mods as before (which one won was
@@ -199,6 +201,10 @@ farmer villagers on rich farmland and Fertile Soil (configurable), and the feedb
     with a warning (vanilla `HarvestFarmland` plants only on `FarmBlock`, and already harvests/plants on both soils when
     a villager stands next to them; the sensor is what makes them walk there). Resolved lazily after load/reload. 1.20's
     `villager_plantable_seeds` tag has no 1.19.2 reader, so not added.
+  - MCA villagers (the pack replaces vanilla villagers with MCA's) never pass the sensor above: their harvesting chore
+    scans for `minecraft:farmland` only. Since 2026-11-03 (SQ-FDB-07) the CD mixin `mca/McaHarvestAnyFarmlandMixin`
+    lets that scan take any `FarmBlock` in the Overworld (Rich Soil Farmland, Fertile farmland, modded farmland); other
+    dimensions keep MCA's rule. The list above stays for vanilla villagers.
 - **Rich soil trample**: a `FarmlandTrampleEvent` cancel for `RichSoilFarmlandBlock` instead of 1.3.4's `turnToDirt`
   mixin; 1.2.4's rich farmland inherits vanilla `fallOn`, so trampling turned it into plain Dirt. Not configurable.
   Tooltip: Rich Soil no longer claims "can't be trampled" (untilled soil is not farmland); Rich Soil Farmland does.

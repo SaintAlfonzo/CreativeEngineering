@@ -71,6 +71,7 @@ Row corrections: `dishes/ingredients #26` is already Testing (fixed 2026-11-01, 
 ## Built (2026-11-02)
 
 - **r1102b 2026-11-02** (scratch server; verdicts in `perf/runs/r1102b/` HANDOVER.md and the slice judged.md): PASS SQ-FCB-00, -01, -02, -03, -04, -04b, -04c, -04d, -04e, -05, -06, -08; rerun pending (batch fault) SQ-FCB-07, -08b.
+- **r1103 2026-11-03** (scratch server; verdicts in `perf/runs/r1103/` FINAL.md and the slice judged.md): PASS SQ-FCB-07, -08b.
 
 Waves A and B built in one session (Wave C and `food/drinks #15` by two forks of it: SQ-RB2, SQ-DRK). Nothing booted.
 Scratch rows: [scratch_queue.md](testing/scratch_queue.md) "SQ-FCB" (SQ-FCB-00 to -07, CQ-FCB-01 to -03). Changelog: families

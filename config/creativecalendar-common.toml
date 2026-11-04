@@ -1,3 +1,4 @@
+
 #Season types on top of Serene Seasons. The biome lists are the tags creativeengineering:seasons/
 #arid, frozen, tropical and adaptive (kubejs/generation_scripts/worldgen/season_types.json).
 #Arid: no rain all year. Frozen: snow all year. Tropical: wet and dry seasons, savannas included.
@@ -33,6 +34,10 @@
 	#Off: this share of growth checks is refused (0.25 = 25 % slower).
 	#Range: 0.0 ~ 1.0
 	offPenalty = 0.25
+	#Grass spread (the grass type: vanilla, Immersive Weathering, Botania, Vinery slab, Vintage lush grass) in its off
+	#seasons, summer and the tropical wet and dry seasons: this share of spread tries is refused (0.5 = half speed).
+	#Range: 0.0 ~ 1.0
+	grassOffPenalty = 0.5
 	#Greenhouse glass: any block in #sereneseasons:greenhouse_glass (filled from crop_seasons.json
 	#greenhouse_glass: glass blocks, panes, doors and trapdoors) in the 16 blocks straight above a seasonal
 	#crop makes every season neutral (no fertile bonus, no off penalty). Only that column counts.

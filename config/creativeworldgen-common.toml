@@ -1,3 +1,4 @@
+
 #Forgiving Void catches players who fall out of the world; these dials control
 #how the landing spot is nudged each bounce so a void-fall loop can't run forever.
 [forgiving_void]

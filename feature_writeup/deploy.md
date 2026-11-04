@@ -361,3 +361,10 @@ just stops working (at most a log warning) or breaks later in play. The pack's m
   (now Creative Delight members) and `moreMooblooms-1.1.0.jar` (now in Creative Worldgen); install
   `creativedelight-1.0.0.jar`, `creativeengineering-1.1.08.jar`, `creativeworldgen-1.0.0.jar` (and `creativebrewing-1.0.0.jar`
   of 2026-11-03). None of these has booted in the dev instance yet (last boot 2026-10-31).
+- 2026-11-03: 1.2.00 staged as a full install payload (`--version 1.2.00 --mode install`, config functional): 2870 files,
+  549.2 MB; removals 1102 per side. Every in-tree mod (patcherMod, exposureBackport, creativeLabels, the five Creative
+  bundles, creativeDevtools) rebuilt from source and installed first (Vinery and Brewin' members clean-built for the
+  missing refmap). Preflight warnings left: Display Delight dump older than the CD jar (model check passes), 67 uncommitted
+  changes. Applied 2026-11-03 20:40 to CreativeEngineeringClient (`apply.sh client --no-world`: old jars to
+  `mods_before_1.2.00/`, 1085 removals, verify --installed OK, 407 jars); snapshot client 1.2.00, server still 1.1.05. The dev
+  instance is the build source (already 1.2.00). Not booted on these jars yet.

@@ -96,6 +96,7 @@ Village corn farms: handled elsewhere (not in this plan).
 ## 4. Tests
 
 - **r1102b 2026-11-02** (scratch server; verdicts in `perf/runs/r1102b/` HANDOVER.md and the slice judged.md): PASS SQ-CN-01, -02, -03, -05, -06, -07; rerun pending (batch fault) SQ-CN-04.
+- **r1103 2026-11-03** (scratch server; verdicts in `perf/runs/r1103/` FINAL.md and the slice judged.md): PASS SQ-CN-04b, -04, -07.
 
 In game (client), after installing both jars and a restart. The server halves are queued as SQ-CN in
 [scratch_queue.md](testing/scratch_queue.md): SQ-CN-00 PASS (r1101 boot), -01 to -03, -05 to -07 PASS r1102b 2026-11-02

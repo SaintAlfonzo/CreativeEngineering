@@ -1,17 +1,20 @@
 {
-  "color": "#6f8a24",
+  "color": "#617a20",
   "containers": [
     {
       "filled": [
         "vintagedelight:green_grape_jam_jar"
       ],
       "empty": "vintagedelight:empty_mason_jar",
-      "capacity": 3
+      "capacity": 1
     }
+  ],
+  "equivalent_fluids": [
+    "vintagedelight:green_grape_jam"
   ],
   "flowing_texture": "moonlight:soft_fluids/potion_flow",
   "food": {
-    "divider": 3,
+    "divider": 1,
     "item": "vintagedelight:green_grape_jam_jar"
   },
   "from_mod": "vintagedelight",

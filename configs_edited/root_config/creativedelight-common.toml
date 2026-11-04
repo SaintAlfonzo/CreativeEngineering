@@ -105,60 +105,47 @@
 	#Each crop is switched on in [crop_drops.soil_yield.crops]; all are off by default.
 	#feature_writeup/crop_yields.md lists every crop's drops.
 	[crop_drops.soil_yield]
-		#Vanilla farmland: extra tries.
-		#Range: 0 ~ 8
-		farmlandTries = 0
-		#Vanilla farmland: chance [0-1] per try.
-		#Range: 0.0 ~ 1.0
-		farmlandChance = 0.0
-		#Rich Soil Farmland: extra tries.
-		#Range: 0 ~ 8
-		richFarmlandTries = 2
-		#Rich Soil Farmland: chance [0-1] per try.
-		#Range: 0.0 ~ 1.0
-		richFarmlandChance = 0.35
-		#Fertile Soil (Immersive Weathering mulch): extra tries.
-		#Range: 0 ~ 8
-		fertileSoilTries = 2
-		#Fertile Soil: chance [0-1] per try.
-		#Range: 0.0 ~ 1.0
-		fertileSoilChance = 0.25
-		#Untilled Rich Soil (only rice and adzuki grow on it): extra tries.
-		#Range: 0 ~ 8
-		richSoilTries = 2
-		#Untilled Rich Soil: chance [0-1] per try.
-		#Range: 0.0 ~ 1.0
-		richSoilChance = 0.35
+		#Vanilla farmland: share of extra produce.
+		#Range: 0.0 ~ 4.0
+		farmlandBonus = 0.0
+		#Rich Soil Farmland: share of extra produce.
+		#Range: 0.0 ~ 4.0
+		richFarmlandBonus = 0.33
+		#Fertile Soil (Immersive Weathering mulch): share of extra produce.
+		#Range: 0.0 ~ 4.0
+		fertileSoilBonus = 0.66
+		#Untilled Rich Soil (only rice and adzuki grow on it): share of extra produce.
+		#Range: 0.0 ~ 4.0
+		richSoilBonus = 0.33
 
 		#true: the crop gets the soil pools above. false: its drops are the same on every soil.
 		[crop_drops.soil_yield.crops]
-			wheat = false
-			carrots = false
-			potatoes = false
-			beetroots = false
-			cabbages = false
-			onions = false
-			tomatoes = false
-			rice = false
-			bell_peppers = false
-			coffee = false
-			cotton = false
-			ender_crop = false
-			tobacco = false
-			flax = false
-			hemp = false
-			corn = false
-			cave_carrots = false
-			broccoli = false
-			cauliflower = false
-			garlic = false
-			sweet_potato = false
-			turnip = false
-			zucchini = false
-			cucumber = false
-			oats = false
-			peanuts = false
-			adzuki = false
+			wheat = true
+			carrots = true
+			potatoes = true
+			beetroots = true
+			cabbages = true
+			onions = true
+			tomatoes = true
+			rice = true
+			bell_peppers = true
+			coffee = true
+			cotton = true
+			tobacco = true
+			flax = true
+			hemp = true
+			corn = true
+			cave_carrots = true
+			broccoli = true
+			cauliflower = true
+			garlic = true
+			sweet_potato = true
+			turnip = true
+			zucchini = true
+			cucumber = true
+			oats = true
+			peanuts = true
+			adzuki = true
 
 #A stem that has grown its fruit (melon, pumpkin, hamimelon) can grow more on its other free
 #sides, one at a time. Each extra fruit uses vanilla's stem growth roll (light, soil and

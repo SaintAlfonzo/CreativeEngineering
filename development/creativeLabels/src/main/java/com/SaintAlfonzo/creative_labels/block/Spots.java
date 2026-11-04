@@ -104,8 +104,10 @@ public final class Spots {
     public static final ResourceLocation DENY_TAG_ID = new ResourceLocation("creative_labels", "paper/deny");
     public static final ResourceLocation POSTS_TAG_ID = new ResourceLocation("creative_labels", "paper/posts");
     public static final ResourceLocation CENTRE_NOTE_TAG_ID = new ResourceLocation("creative_labels", "paper/centre_note");
+    /** Centre-note hosts whose top takes one note too (Supplementaries jar, Pickling Jar; owner 2026-11-03). */
+    public static final ResourceLocation NOTE_ON_TOP_TAG_ID = new ResourceLocation("creative_labels", "paper/note_on_top");
     @Nullable
-    private static volatile TagKey<Block> denyTag, postsTag, centreNoteTag;
+    private static volatile TagKey<Block> denyTag, postsTag, centreNoteTag, noteOnTopTag;
 
     private Spots() {}
 
@@ -119,6 +121,11 @@ public final class Spots {
 
         /** One note centred on each side face (jars, sacks, trash cans, botany pots). */
         default boolean centreNote(BlockState host) {
+            return false;
+        }
+
+        /** A centre-note host whose top takes one centred note (the jar lid); other centre-note tops take none. */
+        default boolean noteOnTop(BlockState host) {
             return false;
         }
     }
@@ -138,6 +145,11 @@ public final class Spots {
         public boolean centreNote(BlockState host) {
             return host.is(centreNoteTag());
         }
+
+        @Override
+        public boolean noteOnTop(BlockState host) {
+            return host.is(noteOnTopTag());
+        }
     };
 
     public static TagKey<Block> denyTag() {
@@ -149,6 +161,12 @@ public final class Spots {
     public static TagKey<Block> postsTag() {
         TagKey<Block> t = postsTag;
         if (t == null) postsTag = t = TagKey.create(Registry.BLOCK_REGISTRY, POSTS_TAG_ID);
+        return t;
+    }
+
+    public static TagKey<Block> noteOnTopTag() {
+        TagKey<Block> t = noteOnTopTag;
+        if (t == null) noteOnTopTag = t = TagKey.create(Registry.BLOCK_REGISTRY, NOTE_ON_TOP_TAG_ID);
         return t;
     }
 
@@ -295,9 +313,15 @@ public final class Spots {
         VoxelShape shape = host.getShape(level, hostPos, CollisionContext.empty());
         if (block instanceof StairBlock || block instanceof SlabBlock) return shapeFit(shape, face, rotation);
 
-        // Centre-note hosts (tag): one note centred on each side face; their tops and bottoms use the shape test.
-        Fit notes = rules.centreNote(host) && face.getAxis().isHorizontal()
-                ? centreNoteFit(shape, face, rotation) : shapeFit(shape, face, rotation);
+        // Centre-note hosts (tag): one note centred on each side face. Tops: only hosts in the note-on-top tag (the
+        // jar and the Pickling Jar, whose lid sits 2.5 px down, too deep for the shape test), one note centred on the
+        // lid; every other centre-note top (sack neck, trash can rim, botany pot soil) and every bottom takes none
+        // (owner 2026-11-03, SQ-LBS-03; the shape test let the jar lid and the sack neck carry spot C).
+        Fit notes;
+        if (!rules.centreNote(host)) notes = shapeFit(shape, face, rotation);
+        else if (face.getAxis().isHorizontal()) notes = centreNoteFit(shape, face, rotation);
+        else if (hostFace == Direction.UP && rules.noteOnTop(host)) notes = centreNoteFit(shape, face, rotation);
+        else notes = Fit.NONE;
 
         // Labels: the surface test; doors and trapdoors (they swing) and hosts without collision (plants) take none.
         Place label = null;

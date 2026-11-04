@@ -147,6 +147,7 @@ Changelog: no bullet yet (plans only). The bullets come with the build.
 ## 5. Built
 
 - **r1102b 2026-11-02** (scratch server; verdicts in `perf/runs/r1102b/` HANDOVER.md and the slice judged.md): rerun pending (batch fault) SQ-FN-03.
+- **r1103 2026-11-03** (scratch server; verdicts in `perf/runs/r1103/` FINAL.md and the slice judged.md): PASS SQ-CDM2-01, -03, -04; SQ-CDM2-02 OPEN: no loaded-ground check (91 sand blocks in the box), not a valid sample; hand-check.
 
 ### 5.1 Fishing net (2026-10-25, TODO `dishes/ocean #1`)
 

@@ -32,7 +32,7 @@ ServerEvents.tags('block', e => {
 	// BnCHeatSources: lit/active/on must be true, blaze heaters (burner, liquid burner, enchanter) need fuel. Skipped
 	// for now: machines whose running state lives only in the block entity (IE arc furnace, advanced blast furnace,
 	// preheater; PneumaticCraft heat blocks; Create steam engines/boilers; Compressed Creativity heater, D&D furnace
-	// engine, Cooking for Blockheads oven, which has no block state and would count while idle).
+	// engine). The Cooking for Blockheads oven gets a `lit` state from Creative Delight and comes in through FD heat_sources.
 	t.add(e, b.t_keg_heat_sources, [
 		b.furnace, b.blast_furnace, b.smoker, b.quark_deepslate_furnace, b.quark_blackstone_furnace,
 		b.keypad_furnace, b.keypad_blast_furnace, b.keypad_smoker,
@@ -308,6 +308,7 @@ ServerEvents.tags('block', e => {
 	])
 
 	t.addMatching(e, runner.natural_rough, [
+		'salt:raw_rock_salt_block',   // raw salt crystals, like raw stone (salt.md 6 S3)
 		'minecraft:podzol', 'minecraft:mycelium', 'minecraft:crimson_nylium', 'minecraft:warped_nylium',
 		'minecraft:netherrack', 'minecraft:basalt', 'minecraft:nether_*_ore', 'supplementaries:ashen_basalt',
 		'minecraft:*coral_block', 'minecraft:mangrove_roots',
@@ -340,8 +341,8 @@ ServerEvents.tags('block', e => {
 		'suppsquared:sack_*', 'delightful:*_sack', 'rusticdelight:*_bag', 'vinery:*_bag', 'farmersrespite:*_sack', item.corn_kernel_bag,
 		'/^farmersdelight:(rice_bag|rice_bale|straw_bale|tatami)$/',
 		'/^vintagedelight:oat_(bag|bale)$/',
-		// the one salt block (food/seasoning #6) and Vintage's own: raw salt, like raw stone
-		'salt:salt_block', 'salt:raw_rock_salt_block', 'vintagedelight:salt_block',
+		// the one salt block (packed salt dust, food/seasoning #6) and Vintage's own; Raw Rock Salt Block is natural_rough
+		'salt:salt_block', 'vintagedelight:salt_block',
 	])
 
 	t.addMatching(e, runner.dust, [

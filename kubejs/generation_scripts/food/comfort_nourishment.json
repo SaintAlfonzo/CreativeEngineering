@@ -239,7 +239,7 @@
 		},
 		"gleaming_salad": {
 			"effect": "nourishment",
-			"seconds": 240
+			"seconds": 120
 		},
 		"grilled_salmon": {
 			"effect": "nourishment",
@@ -1275,6 +1275,6 @@
 		"pepper_jam_bottle",
 		"relish_bottle",
 		"sweet_berry_jam_bottle",
-		"vinegar"
+		"vinegar_bottle"
 	]
 }

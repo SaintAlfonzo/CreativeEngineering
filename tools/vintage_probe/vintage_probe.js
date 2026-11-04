@@ -367,12 +367,10 @@
             let keg = idsWhere(server, id => id.indexOf('brewinandchewin:fermenting/') == 0 || id.indexOf(C + 'fermenting/') == 0, out)
             check('no keg recipe for ' + out, keg.length == 0, keg.join(', ') || 'none')
         })
-        expectIds(server, [C + 'pickling/brewin_kimchi', C + 'pickling/pickled_sea_pickle'])
-        // VTD-55: Brewin's pickled pickles merged into Pickled Sea Pickle (2026-10-25); its honey jar recipe is gone
-        expectGone(server, [C + 'pickling/brewin_pickled_pickles'])
-        check('jar kimchi -> Brewin kimchi x2', has(server, C + 'pickling/brewin_kimchi') &&
-            resultOf(rget(server, C + 'pickling/brewin_kimchi')) == 'brewinandchewin:kimchi x2', has(server, C + 'pickling/brewin_kimchi') ?
-            resultOf(rget(server, C + 'pickling/brewin_kimchi')) : '-')
+        expectIds(server, [C + 'pickling/pickled_sea_pickle'])
+        // VTD-55: Brewin's pickled pickles merged into Pickled Sea Pickle (2026-10-25); its honey jar recipe is gone.
+        // merges/dishes #9 (item_merges.md 2.19, owner 2026-11-02): Brewin's kimchi is removed, its jar recipe too.
+        expectGone(server, [C + 'pickling/brewin_pickled_pickles', C + 'pickling/brewin_kimchi'])
         check('jar pickled sea pickle: 5 sea pickles + salt -> 5', has(server, C + 'pickling/pickled_sea_pickle') &&
             takes(server, C + 'pickling/pickled_sea_pickle', 'minecraft:sea_pickle') &&
             resultOf(rget(server, C + 'pickling/pickled_sea_pickle')) == 'creativeengineering:pickled_sea_pickle x5',
@@ -467,14 +465,14 @@
         check(soups.length + ' soups in and out', bad.length == 0, bad.map(id => id + ' (' + inOut(id)[1] + ')').join('; ') || 'all')
         NEW_SOUPS.forEach(id => { let r = inOut(id); check('soup ' + id, r[0], r[1]) })
         DRINKS.forEach(id => { let r = inOut(id); check('drink ' + id, r[0], r[1]) })
-        JAR_CONTENTS.forEach(n => {
-            ;[VT + n + '_bottle', VT + n + '_jar'].forEach(id => { let r = inOut(id); check('jar content ' + id, r[0], r[1]) })
-        })
+        // mason jars only since dishes/jams #1: the content bottles are merged into their jars (CD swaps
+        // merges_vintagedelight.json), so only the jars are checked
+        JAR_CONTENTS.forEach(n => { let id = VT + n + '_jar', r = inOut(id); check('jar content ' + id, r[0], r[1]) })
         // the 8th jar content: honey (upstream honey_vd.json lists the apple sauce items, not the honey jar)
         let h = inOut(VT + 'honey_jar')
         check('jar content ' + VT + 'honey_jar', h[0], h[1])
         try {
-            let hv = softFluids().get(VT + 'honey_vd')
+            let hv = softFluids().get(rl(VT + 'honey_vd'))
             note('soft fluid vintagedelight:honey_vd', hv == null || hv.isEmpty() ? 'not loaded' :
                 'mason jar fills ' + hv.getFilledContainer(item(VT + 'empty_mason_jar')).map(x => String($VReg.ITEMS.getKey(x))).orElse('nothing') +
                 ', bottle fills ' + hv.getFilledContainer(item('minecraft:glass_bottle')).map(x => String($VReg.ITEMS.getKey(x))).orElse('nothing'))
@@ -494,7 +492,7 @@
         })
         // real jar round trip for the drinks and jar contents (fdtest MJ-12 pattern)
         let rt = []
-        DRINKS.concat(JAR_CONTENTS.map(n => VT + n + '_bottle'), JAR_CONTENTS.map(n => VT + n + '_jar'), NEW_SOUPS).forEach(id => {
+        DRINKS.concat(JAR_CONTENTS.map(n => VT + n + '_jar'), NEW_SOUPS).forEach(id => {
             if (!itemExists(id)) { rt.push(id + ' (no item)'); return }
             let pos = place(level, 'supplementaries:jar', 22), tank = level.getBlockEntity(pos).getSoftFluidTank()
             let p = fake(level)

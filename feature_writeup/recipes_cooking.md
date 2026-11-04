@@ -322,6 +322,20 @@ until a row is built.
   bottle -> honey bottle (1 to 1; were 3 bottles a jar). Not done: jar sprites for the Fruits Delight and mulberry jams
   (they still draw a bottle), the mason jar from panes, the jelly cauldrons (still filled and emptied with glass bottles).
   Tests RC-176 to RC-179.
+- Pack jam line (`dishes/jams #8`, owner 2026-11-03; BUILT, Vintage port `-15` in the Creative Delight jar, not in
+  `mods/`): for Ancient Fruit, Banana, Cherry, Green Grape, Mulberry, Pepper, Raspberry, Red Grape, Salmonberry and
+  Strawberry jam, Fruits Delight's family under `vintagedelight:` ids: the jar (new: ancient fruit, banana, mulberry,
+  strawberry), `<n>_jam_block` (honey-like), `<n>_jello_block` (slime-like), `<n>_jello` (bowl food, Fruits Delight's
+  values), fluids `<n>_jam` (mulberry: Create Central Kitchen's) and `<n>_jello`, and the cauldron chain (`<n>_cauldron`,
+  `_jam_cauldron`, `_jello_cauldron`; Java `jam/JamCauldrons`, extends Fruits Delight's cauldron and adds to its JEI
+  list). Recipes: CD `vintagedelight/jams.js` "Pack jam line" (8 <-> 1 blocks; Spout / Drain 125 mB; compacting
+  1000 mB; heated mixing). Upgrade Aquatic's mulberry jam bottle and block merge into the new ones (swaps
+  `merges_upgrade_aquatic_jams.json`); its and Central Kitchen's bottle recipes go. Nut Milk Jar (1 to 1 with the bottle,
+  pot copy of the bottle's). Fruits Delight's 22 jams place as Vintage mason jars (`fd_<fruit>_jam_jar`, Java
+  `jam/FdJamJars`) and their jam cauldrons fill an empty mason jar. Every jar soft fluid holds one bottle (was 3). Art:
+  owner's `kubejs/assets/mason_jar_new/`, copied by `members/vintage/tools/gen_pack_jams.py` into `src/own`. Tests
+  RC-180 to RC-185. Not done: jar item sprites for Fruits Delight's 22 jams (still a bottle in hand), brine (no bottle in
+  the pack; owner: later), Bread with Jam by Spout for the new jams (Fruits Delight's effect tag is per its own fruits).
 - [TODO](todo/TODO.md) `dishes/jams #4`: grape and cherry jelly / jam (cherry pie is `baking/baked-goods #13`). BUILT 2026-10-29, unreleased: Green Grape,
   Red Grape and Cherry Jam Jars (Vintage port -09, not yet in `mods/`), pot 4 fruit + sugar + lemon slice -> 2.
 
@@ -377,6 +391,8 @@ until a row is built.
 None.
 
 ## 7. In-game test suite
+
+- **r1103 2026-11-03** (scratch server; verdicts in `perf/runs/r1103/` FINAL.md and the slice judged.md): PASS SQ-RCO-01, -02.
 
 - [ ] **RC-01 Smoker (F1):** (recipe level: SQ-RCO-01) JEI `minecraft:smoker` → Quark's deepslate and blackstone smoker (furnace in a plus of 4
   logs) and Nether's Delight's nether brick smoker; no vanilla cobblestone recipe.
@@ -514,6 +530,25 @@ None.
   by the pack; their effects (Nourishment, Comfort) unchanged. Cheese curds and fermented leather take a vinegar jar.
 - [ ] **RC-179 Honey 1 to 1:** (recipe ids: scratch server PASSED r1102b, SQ-PSU-07 half; the no-jar-to-jar check is a batch fault, rerun) grid honey bottle + empty mason jar -> honey jar and a glass bottle left; honey jar + glass
   bottle -> honey bottle and an empty mason jar left; the honey jar still places as a block.
+- [ ] **RC-180 New jam jars:** (SQ-PJL-02) pot 4 Ancient Fruit / bananas / mulberries / strawberries + sugar + a Lemon Slice in
+  an Empty Mason Jar -> 1 jar each; JEI shows no Upgrade Aquatic Mulberry Jam Bottle or Mulberry Jam Block, and an old one
+  in a chest becomes the Mulberry Jam Jar / the new Mulberry Jam Block.
+- [ ] **RC-181 Jam and jello blocks:** (SQ-PJL-03) 8 jars -> a jam block; a jam block + 8 empty jars -> 8 jars; the same for
+  jello with bowls. A jam block slows you and you slide down its side; a jello block bounces; a piston moves a jam block with
+  a jello block of the same jam stuck to it, not one of another jam.
+- [ ] **RC-182 Jam cauldrons:** (in game) a water cauldron + a Lemon Slice -> Lemonade Cauldron; over a lit campfire, 12
+  cherries -> a full Cherry Cauldron (water in the jam colour); sugar -> Cherry Jam Cauldron; 3 Empty Mason Jars take 3
+  Cherry Jam Jars and leave a cauldron. Again with a Slime Ball before emptying: Cherry Jello Cauldron, 3 bowls -> 3 Cherry
+  Jello. Fruits Delight's Apple Jam Cauldron fills an Empty Mason Jar, not a glass bottle; JEI's cauldron pages show both.
+- [ ] **RC-183 Create jams:** (SQ-PJL-04) Spout an Empty Mason Jar with 125 mB cherry jam -> Cherry Jam Jar, drain it back;
+  compact 1000 mB -> jam block; heated Mixer: 4 cherries, sugar, Lemon Slice, 100 mB water -> 125 mB jam; slime ball + 125 mB
+  jam -> 125 mB melted jello; bowl + 125 mB melted jello -> Cherry Jello. Mulberry uses Create Central Kitchen's jam fluid.
+- [ ] **RC-184 Placed jams are mason jars:** (in game) sneak-place a Fruits Delight Apple Jam: a Vintage mason jar with the
+  apple interior; use more Apple Jam on it up to 4; break it: the Apple Jams drop; a plain click still eats the jam.
+  The new jars, apple sauce, nut mash, relish, vinegar and pepper jam jars show the new art in hand and placed.
+- [ ] **RC-185 Nut milk jar and one-bottle jars:** (SQ-PJL-05) pot 2 peanuts + sugar in an Empty Mason Jar -> Nut Milk Jar;
+  bottle + empty jar <-> jar + glass bottle 1 to 1; drinking it removes one curable effect and leaves the jar.
+  Supplementaries jar: one Cherry Jam Jar fills one unit of the jar's contents [3].
 
 ## 8. History
 
@@ -585,6 +620,8 @@ None.
 - 2026-10-31: scratchpad notes translated into TODO rows (`dishes/ingredients #25`). No code changed.
 - 2026-11-02: mason jars only (bottle jams to mason jars, Vintage bottles merged, vinegar and apple sauce bottles removed,
   honey 1 to 1; `dishes/jams #1`, `items/jars #8`, `#9`). Tests RC-176 to RC-179. Not run in game.
+- 2026-11-03: pack jam line, nut milk jar, placed Fruits Delight jams as mason jars, one-bottle jars (`dishes/jams #1`,
+  `#8`). Tests RC-180 to RC-185, scratch SQ-PJL-01 to -05. Not run.
 - 2026-11-02: deep scan 2026-11-02: RC-176 to RC-179 annotated with the r1102b results (SQ-PSU-06 FAIL: lemon and
   orange jam from slices still bottle; SQ-PSU-07, -08 PASS; SQ-PSU-09 open); RC-01, RC-02 given scratch rows
   SQ-RCO-01, -02.

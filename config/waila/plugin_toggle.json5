@@ -31,5 +31,8 @@
   "creativeengineering:silk_touch": true,
   "creativeengineering:crop_seasons": true,
   "creativeengineering:operator_blocks": true,
-  "creativeengineering:pot_contents": true
+  "creativeengineering:pot_contents": true,
+  "barbequesdelight:grill": true,
+  "creativedelight:powdered_sugar_name": true,
+  "creativedelight:cookware_toggle": true
 }

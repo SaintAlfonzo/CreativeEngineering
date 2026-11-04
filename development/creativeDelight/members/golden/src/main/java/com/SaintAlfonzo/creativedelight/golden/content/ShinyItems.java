@@ -4,7 +4,10 @@ import net.minecraft.world.item.BlockItem;
 import net.minecraft.world.item.BowlFoodItem;
 import net.minecraft.world.item.HoneyBottleItem;
 import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.Items;
 import net.minecraft.world.item.MilkBucketItem;
+import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.level.Level;
 
 /** The enchanted forms that keep a vanilla item class's use (cake block, stew, milk, honey) and always show the glint. */
 public final class ShinyItems {
@@ -33,7 +36,24 @@ public final class ShinyItems {
         }
     }
 
-    public static class Milk extends MilkBucketItem {
+    /**
+     * The golden milk bucket. MilkBucketItem cures with its own stack, and Forge cures only effects whose curative items
+     * hold that stack (a vanilla milk bucket by default), so a golden milk cleared nothing (SQ-GLD-03, r1103 sAR: Speed
+     * stayed). It cures as a vanilla milk bucket first; as upstream, no food values.
+     */
+    public static class GoldenMilk extends MilkBucketItem {
+        public GoldenMilk(Properties properties) {
+            super(properties);
+        }
+
+        @Override
+        public ItemStack finishUsingItem(ItemStack stack, Level level, LivingEntity entity) {
+            if (!level.isClientSide) entity.curePotionEffects(new ItemStack(Items.MILK_BUCKET));
+            return super.finishUsingItem(stack, level, entity);
+        }
+    }
+
+    public static class Milk extends GoldenMilk {
         public Milk(Properties properties) {
             super(properties);
         }

@@ -410,6 +410,7 @@ chopped clover); the zucchini quiche's "egg" is read as any egg.
 ## 4. Tests
 
 - **r1102b 2026-11-02** (scratch server; verdicts in `perf/runs/r1102b/` HANDOVER.md and the slice judged.md): rerun pending (batch fault) SQ-SALT-06, -08.
+- **r1103 2026-11-03** (scratch server; verdicts in `perf/runs/r1103/` FINAL.md and the slice judged.md): PASS SQ-SWP-06o, -01, -02, -03, -04, -05, -06, -07, -08, SQ-VTDA-12, SQ-SALT-06, -08.
 
 After a full restart, `logs/latest.log` first: `[itemMerges] 1 pack merges registered` and the two
 recipe-event lines of 1.1 (SQ-IMS-01), `[food values] 5 effect swaps` with no

@@ -89,6 +89,7 @@ OVERRIDES = {
     'farmersdelight:dog_food': 'special',
     'farmersdelight:apple_cider': 'drink',
     'farmersdelight:kelp_roll_slice': 'handheld',
+    'farmersdelight:gleaming_salad': 'salad',   # golden, ruled by GOLDEN_EXTRA in gen_comfort_nourishment.py (plan_scratch_bugfix_1103 5.4)
     'quarkdelight:bowl_of_exotic_fruits': 'salad',
     'quarkdelight:cooked_whole_crab': 'meal',
     'quarkdelight:miso_with_bamboo_sprouts': 'soup',

@@ -2,7 +2,7 @@
 # Offline checks for the wild flower system (feature_writeup/flowers.md section 6):
 #   1. generator: tools/gen_wild_flowers.py runs with no config problems, every Botania color generates, and the
 #      snapshot (flower_features.json) was already up to date
-#   2. Rhino: kubejs/server_scripts/worldgen/wild_flowers.js in the pack's Rhino fork; every biome tag must equal
+#   2. Rhino: kubejs/data/creativeworldgen/kubejs/worldgen/wild_flowers.js in the pack's Rhino fork; every biome tag must equal
 #      the generator's plan, every file must be valid JSON, every modifier must point at a filled tag and a
 #      feature that exists, and each Flower Patch rewrite must equal the generator's conversion
 #   3. Rhino with CEConfig wildFlowers off: no tags, no files

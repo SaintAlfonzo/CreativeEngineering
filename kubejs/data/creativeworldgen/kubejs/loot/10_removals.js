@@ -18,6 +18,14 @@
 LootJS.modifiers(event => {
   const L = global.LOOT
 
+  // Botania and CC:Tweaked stay out of village chests (owner 2026-11-03, plan_scratch_bugfix_1103 7.3, SQ-GLD-09). Both
+  // inject a nested table in code (Botania LootHandler: temple, toolsmith, weaponsmith; CC:Tweaked CommonHooks:
+  // cartographer), which the pre-roll framework cannot edit, so their items are taken out after the roll.
+  L.tables(event, /^minecraft:chests\/village\//)
+    .removeLoot('@botania')
+    .removeLoot('@computercraft')
+    .logName('CE/loot/removals/village_botania_cc')
+
   // ── context-scoped removals (examples — uncomment & edit) ─────────────────
 
   // no rotten flesh in any chest inside a village, whatever table it rolled

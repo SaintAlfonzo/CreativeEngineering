@@ -559,6 +559,7 @@ Rows added to [TODO](todo/TODO.md) on 2026-10-24; nothing is built. Plans: [dish
 ## 8. In-game test suite (drafted)
 
 - **r1102b 2026-11-02** (scratch server; verdicts in `perf/runs/r1102b/` HANDOVER.md and the slice judged.md): PASS SQ-VDF-01, -02, -03, -05, -06, -07, -08, -09, -10; OPEN (no verdict, rerun row written) SQ-VDF-04.
+- **r1103 2026-11-03** (scratch server; verdicts in `perf/runs/r1103/` FINAL.md and the slice judged.md): PASS SQ-VDF-04.
 
 Crops and worldgen
 

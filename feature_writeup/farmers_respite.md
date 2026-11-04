@@ -124,9 +124,12 @@ All of section 2 is built. Where each piece lives:
 
 Decisions taken during the build (correct them if wrong):
 
-1. **Brew time stays 10 s** (owner, 2026-11-01). 2.0 reads `brewingtime`; every recipe (Respite's, NCH's) writes
-   `cookingtime`, so every brew took the 200-tick default. The serializer now reads `cookingtime` (2.1's key), and
-   every rewritten recipe says 200 (2.1's 2400 would make one bottle take 2 minutes). **Bug, fixed 2026-11-01:** the
+1. **Brew time 30 s, configurable** (owner 2026-11-03, `food/drinks #16`; was "stays 10 s", owner 2026-11-01). 2.0 reads
+   `brewingtime`; every recipe (Respite's, NCH's) writes `cookingtime`, so every brew took the 200-tick default. The
+   serializer reads `cookingtime` (2.1's key); a recipe with neither key takes Creative Delight `[cooking]
+   kettleBrewTicks` (default 600), and NCH `frBrewing` writes a time only when `opts.time` is given, so every
+   rewritten Kettle recipe uses the setting (`/reload` applies a change). Until 2026-11-03 every rewritten recipe said
+   200 (10 s), which played as near-instant. **Bug, fixed 2026-11-01:** the
    1.1.04 jar played on 10-31 wrote `opts.time ?? 200`, which this Rhino evaluates to 0 (the `??` bug of K10), so
    every recipe had `cookingtime: 0` and brewed in 1 tick. `NCH._or` (in patcherMod 1.1.06 and later) fixes it.
 2. **Recipes that took milk** (hot cocoa's milk-bottle container, Delightful's matcha latte and builder's tea, End's
@@ -144,6 +147,7 @@ Decisions taken during the build (correct them if wrong):
 ## 6. Tests
 
 - **r1102b 2026-11-02** (scratch server; verdicts in `perf/runs/r1102b/` HANDOVER.md and the slice judged.md): PASS SQ-RSP-02, -03, -04, -10, -11, -13; OPEN (no verdict, rerun row written) SQ-RSP-12; rerun pending (batch fault) SQ-RSP-05, -06, -07, -15; not run SQ-RSP-14.
+- **r1103 2026-11-03** (scratch server; verdicts in `perf/runs/r1103/` FINAL.md and the slice judged.md): PASS SQ-RSP-05, -07, -12; FAIL SQ-RSP-06: a water kettle with 2 black tea leaves and a bottle never starts brewing (`KettleTankMixin` water base match; `farmersrespite/kettle.js` 29); FAIL SQ-RSP-15: same cause as SQ-RSP-06 (no brew on a water tank; the default 200 t unread).
 
 Scratch (deep scan 2026-11-02): SQ-RSP-01 PASS (r1101 boot), -09 PASS (r1101), -02, -03, -04, -10, -11, -13 PASS r1102b (`perf/runs/r1102b/s2/judged.md`; -02 now 84 recipes, not 48). Open: -05, -06, -07, -15 (`item replace block` cannot load the Kettle: probe fault, rerun with a bot), -12 (flower pot drop not seen; bot too close), -08 (needs a player), -14 (old-jar boot failed beside CD). CQ-RSP-01 (client) not run. In game:
 

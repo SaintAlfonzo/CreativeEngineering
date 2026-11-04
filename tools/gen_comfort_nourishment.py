@@ -16,7 +16,7 @@ Length: output hunger under 10 -> 120 s, 10 and up -> 240 s; Comfort at output h
   hunger food member; a slot with no food member takes the cheapest recipe value of its items (two levels deep),
   else 0 (CN-D9: base value 0). (Copper cup meals were ruled too until the pack dropped the cups, dishes/meals #53.)
   A ruled food with no recipe found keeps its effects (listed under `keep`, hand check: appendix B.2).
-Golden foods (food types golden / golden/enchanted) override every rule: Nourishment only, 120 s (enchanted 240 s).
+Golden foods (food types golden / golden/enchanted, plus GOLDEN_EXTRA) override every rule: Nourishment only, 120 s (enchanted 240 s).
 Bottles (glass bottle remainder): both effects removed. Every other food: Nourishment removed, Comfort kept (the
 applier does that at runtime for every food not listed here); a kept Comfort at output hunger 7 or less is set to
 60 s. Cans are skipped: they copy their source food through
@@ -54,6 +54,8 @@ FALLBACK_OUTPUT = 10
 LONG_FROM, SHORT_SECONDS, LONG_SECONDS = 10, 120, 240
 SHORT_COMFORT_UP_TO, SHORT_COMFORT_SECONDS = 7, 60     # Comfort on a food restoring 7 or less
 GOLDEN_TYPES = {'golden': 120, 'golden/enchanted': 240}   # food type -> Nourishment seconds, overrides everything
+# Golden foods outside the golden food types, ruled as golden (plan_scratch_bugfix_1103 5.4): food id -> Nourishment seconds
+GOLDEN_EXTRA = {'farmersdelight:gleaming_salad': 120}
 BASE_VALUE = 0          # CN-D9: a non-food input with no recipe value
 CRAFT_DEPTH = 2         # crafted non-food inputs: cheapest recipe, two levels deep
 
@@ -169,6 +171,7 @@ def golden_foods():
             fid = k if ':' in k else key_val.get(k)
             if fid:
                 out[fid] = seconds
+    out.update(GOLDEN_EXTRA)
     return out
 
 

@@ -1,10 +1,16 @@
 {
   "replace": false,
   "values": [
-    "vintagedelight:green_grape_jam_jar",
-    "vintagedelight:red_grape_jam_jar",
+    "vintagedelight:ancient_fruit_jam_jar",
+    "vintagedelight:banana_jam_jar",
     "vintagedelight:cherry_jam_jar",
+    "vintagedelight:green_grape_jam_jar",
+    "vintagedelight:mulberry_jam_jar",
+    "vintagedelight:pepper_jam_jar",
+    "vintagedelight:raspberry_jam_jar",
+    "vintagedelight:red_grape_jam_jar",
     "vintagedelight:salmonberry_jam_jar",
-    "vintagedelight:raspberry_jam_jar"
+    "vintagedelight:strawberry_jam_jar",
+    "vintagedelight:nut_milk_jar"
   ]
 }

@@ -57,6 +57,13 @@ public class CreativeDelight {
 		// The Display and Vintage ports' own files, read once into [display] / [vintage] (plan_creative_delight.md A6).
 		com.SaintAlfonzo.creativedelight.compat.MemberConfigMove.run();
 		ModLoadingContext.get().registerConfig(ModConfig.Type.COMMON, CDConfig.SPEC, CDConfig.FILE);
+		// [salt] lives in this file, so its load events reach this bus, not Salt's: Salt rereads its food list here.
+		FMLJavaModLoadingContext.get().getModEventBus().addListener((net.minecraftforge.fml.event.config.ModConfigEvent.Loading e) -> {
+			if (e.getConfig().getSpec() == CDConfig.SPEC) com.SaintAlfonzo.creativedelight.compat.SaltConfigBridge.refresh();
+		});
+		FMLJavaModLoadingContext.get().getModEventBus().addListener((net.minecraftforge.fml.event.config.ModConfigEvent.Reloading e) -> {
+			if (e.getConfig().getSpec() == CDConfig.SPEC) com.SaintAlfonzo.creativedelight.compat.SaltConfigBridge.refresh();
+		});
 		if (!carried) CDConfig.warnOldKeys();
 		VillageFarmCrops.PROCESSORS.register(FMLJavaModLoadingContext.get().getModEventBus());
 		VillageFarmCrops.LEGACY_PROCESSORS.register(FMLJavaModLoadingContext.get().getModEventBus());

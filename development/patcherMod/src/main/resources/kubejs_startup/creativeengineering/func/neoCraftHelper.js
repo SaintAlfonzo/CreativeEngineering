@@ -1158,8 +1158,8 @@ global.NCH = {
 
 	// Farmer's Respite Kettle (farmersrespite:brewing) in the pack's format: Creative Delight's Kettle tank
 	// (feature_writeup/farmers_respite.md K8). input: 1-2 ingredients. opts: { base (the tank fluid one brew uses, one
-	// 250 mB unit; default water; 'none' for a brew that uses no fluid), container (default glass bottle), time (200
-	// ticks, the time every 2.0 brew really took), exp (0.35), tab ('drinks') }. One brew makes one result. A drink
+	// 250 mB unit; default water; 'none' for a brew that uses no fluid), container (default glass bottle), time (ticks;
+	// left out = Creative Delight's [cooking] kettleBrewTicks, default 600 = 30 s), exp (0.35), tab ('drinks') }. One brew makes one result. A drink
 	// tier like Respite's long / strong teas is the tea's fluid as base plus one ingredient.
 	//   R.frBrewing([i.t_fruits_berries], i.berry_matcha_latte, e, 'berry_matcha_latte', { base: f.matcha_latte })
 	frBrewing(input, output, e, idOverride, opts) {
@@ -1173,16 +1173,18 @@ global.NCH = {
 		var base = opts.base ?? global.fluid.water
 		if (base !== 'none') global.NCH._checkFluid(base, ctx + ' base')
 
-		e.custom({
+		var json = {
 			type: 'farmersrespite:brewing',
 			recipe_book_tab: opts.tab ?? 'drinks',
 			base: base === 'none' ? 'none' : { fluid: base, count: 250 },
 			ingredients: inputs.map((v, n) => global.NCH._itemJson(v, { countMode: 'none', context: ctx + ' input[' + n + ']' })),
 			result: global.NCH._itemJson(output, { allowTag: false, context: ctx + ' result' }),
 			container: global.NCH._itemJson(opts.container ?? global.item.glass_bottle, { allowTag: false, countMode: 'none', context: ctx + ' container' }),
-			experience: global.NCH._or(opts.exp, 0.35),
-			cookingtime: global.NCH._or(opts.time, 200)
-		}).id(`${global.NCH.ns()}:farmersrespitebrewing/${idSuffix}`)
+			experience: global.NCH._or(opts.exp, 0.35)
+		}
+		// no time given: the Kettle's configured default applies (Creative Delight KettleRecipeSerializerMixin)
+		if (opts.time != null) json.cookingtime = opts.time
+		e.custom(json).id(`${global.NCH.ns()}:farmersrespitebrewing/${idSuffix}`)
 	},
 
 	// Hammering by hand with the Engineer's Hammer, two ways to the same result: on a Farmer's Delight cutting

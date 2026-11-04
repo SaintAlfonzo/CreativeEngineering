@@ -96,6 +96,7 @@ public final class CalendarConfig {
         public final ForgeConfigSpec.BooleanValue enabled;
         public final ForgeConfigSpec.DoubleValue fertileBonus;
         public final ForgeConfigSpec.DoubleValue offPenalty;
+        public final ForgeConfigSpec.DoubleValue grassOffPenalty;
         public final ForgeConfigSpec.BooleanValue greenhouse;
         public final ForgeConfigSpec.IntValue caveFertileBelowY;
         public final ForgeConfigSpec.IntValue caveOffAboveY;
@@ -116,6 +117,10 @@ public final class CalendarConfig {
             ).defineInRange("fertileBonus", 0.25, 0.0, 1.0);
             offPenalty = b.comment("Off: this share of growth checks is refused (0.25 = 25 % slower).")
                     .defineInRange("offPenalty", 0.25, 0.0, 1.0);
+            grassOffPenalty = b.comment(
+                    "Grass spread (the grass type: vanilla, Immersive Weathering, Botania, Vinery slab, Vintage lush grass) in its off",
+                    "seasons, summer and the tropical wet and dry seasons: this share of spread tries is refused (0.5 = half speed)."
+            ).defineInRange("grassOffPenalty", 0.5, 0.0, 1.0);
             greenhouse = b.comment(
                     "Greenhouse glass: any block in #sereneseasons:greenhouse_glass (filled from crop_seasons.json",
                     "greenhouse_glass: glass blocks, panes, doors and trapdoors) in the 16 blocks straight above a seasonal",

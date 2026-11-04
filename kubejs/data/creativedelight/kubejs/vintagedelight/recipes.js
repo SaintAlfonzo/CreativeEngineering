@@ -23,8 +23,8 @@ ServerEvents.recipes(e => {
 			[i.blaze_powder, i.salt, i.crimson_fungus, i.fermented_spider_eye, i.ghast_tear], e, 'berserks_brew',
 			{ time: 400, container: i.glass_bottle })
 		R.remove({ id: 'vintagedelight:fermenting/leather_from_fermenting' }, e)
-		R.vdPickling(Item.of(i.leather, 2), [Item.of(i.rotten_flesh, 2), Item.of(i.tree_bark, 2), i.salt, i.vinegar], e,
-			'leather_from_fermenting', { time: 4800, secondary: i.glass_bottle })
+		R.vdPickling(Item.of(i.leather, 2), [Item.of(i.rotten_flesh, 2), Item.of(i.tree_bark, 2), i.salt, i.vinegar_jar], e,
+			'leather_from_fermenting', { time: 4800 }) // the jar's leftover (empty mason jar) comes back through the leftover slots
 		// Fermented spider eye: the sugar slot takes the plain sweetener tag like the crafting recipe (minecraft/recipes.js;
 		// replaceInput does not reach this recipe type). Rest as upstream.
 		R.remove({ id: 'vintagedelight:fermenting/fermented_spider_eye_from_fermenting' }, e)
@@ -33,6 +33,13 @@ ServerEvents.recipes(e => {
 		// Pickled Sea Pickle (dishes/pickles-and-ferments #1): the Pickle recipe's pattern, 5 sea pickles + salt -> 5, no
 		// honey. It replaces Brewin's Pickled Pickles (merged, vintage_items.js); their honey recipe is gone from alcohol.js.
 		R.vdPickling(Item.of(i.pickled_sea_pickle, 5), [Item.of(i.sea_pickle, 5), i.salt], e, 'pickled_sea_pickle')
+
+		// Pickle: upstream's 5 cucumbers + salt -> 5 pickles, each cucumber slot also takes a zucchini (the zucchini pickles into
+		// the standard pickle; Veggies Delight only).
+		R.remove({ id: 'vintagedelight:fermenting/pickle_from_fermenting' }, e)
+		var PICKLE_VEG = Platform.isLoaded('veggiesdelight') ? [i.cucumber, i.zucchini] : i.cucumber
+		R.vdPickling(Item.of(i.pickle, 5), [PICKLE_VEG, PICKLE_VEG, PICKLE_VEG, PICKLE_VEG, PICKLE_VEG, i.salt], e,
+			'pickle_from_fermenting', { time: 2400 })
 
 		//######################### Kimchi #########################
 		// One kimchi (merges/dishes #9, owner 2026-11-02): Vintage's kimchi wins, Brewin's is removed (vintage_items.js). Beside
@@ -87,8 +94,8 @@ ServerEvents.recipes(e => {
 		froglights.forEach(f => {
 			var id = f[0] + '_froglight_from_fermenting'
 			R.remove({ id: 'vintagedelight:fermenting/' + id }, e)
-			R.vdPickling(Item.of(f[1], 3), [Item.of(i.slime_block, 2), f[2], f[3], i.salt_salt_block, i.vinegar], e, id,
-				{ time: 2400, secondary: i.glass_bottle })
+			R.vdPickling(Item.of(f[1], 3), [Item.of(i.slime_block, 2), f[2], f[3], i.salt_salt_block, i.vinegar_jar], e, id,
+				{ time: 2400 }) // vinegar jar: its empty mason jar returns as the leftover
 		})
 
 		// Tactical Fishing writes a catch recipe for every bucket item. No salt bucket (removed) and no powdered sugar

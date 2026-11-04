@@ -76,3 +76,10 @@ ItemEvents.modification(e => {
 		e.modify(id, item => item.setCraftingRemainder(jar))
 	})
 })
+
+// Vinegar (plan_scratch_bugfix_1103 5.5, owner 2026-11-03): drinking the vinegar jar gives Nausea 10 s. Its Nourishment is
+// removed by the comfort rule (comfort_nourishment.json `vinegar_jar: none`, which touches only Comfort / Nourishment, so
+// this effect stays). Vinegar used as an ingredient or can additive adds nothing to the dish; no Foul Taste effect.
+ItemEvents.modification(e => {
+	e.modify(global.item.vinegar_jar, item => item.setFoodProperties(fb => fb.effect(global.effect.nausea, 200, 0, 1.0)))
+})

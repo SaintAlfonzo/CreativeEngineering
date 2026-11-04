@@ -560,6 +560,8 @@ port jar; brewing and alcohol stay in the alcohol scripts (reserved for Creative
 
 ## 8. In-game test suite (drafted)
 
+- **r1103 2026-11-03** (scratch server; verdicts in `perf/runs/r1103/` FINAL.md and the slice judged.md): PASS SQ-SGF-01, -02, SQ-WCT-06, -07, -08.
+
 | ID | Test | Pass |
 |---|---|---|
 | HNH-01 | Boot with the port: no H&H errors in `latest.log`, JEI shows only kept items | |

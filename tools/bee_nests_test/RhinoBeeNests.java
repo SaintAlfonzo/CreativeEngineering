@@ -3,7 +3,7 @@ import java.nio.file.*;
 import java.util.*;
 
 /**
- * Runs kubejs/server_scripts/worldgen/bee_nests.js in the pack's own Rhino fork with the KubeJS globals stubbed
+ * Runs kubejs/data/creativeworldgen/kubejs/worldgen/bee_nests.js in the pack's own Rhino fork with the KubeJS globals stubbed
  * (tag_helper.js loaded first for global.tags). Fires the worldgen/biome tags handler and highPriorityData, and
  * writes tags.json (tag -> biomes) and every data file the script adds under <out>/data/. ServerEvents.loaded
  * needs the live registry and is not fired.
@@ -56,7 +56,7 @@ public class RhinoBeeNests {
 			"  highPriorityData: function (fn) { __data = fn }, loaded: function (fn) {} };");
 		cx.evaluateString(scope, prelude, "prelude", 1, null);
 		cx.evaluateString(scope, Files.readString(root.resolve("development/patcherMod/src/main/resources/kubejs_startup/creativeengineering/func/tag_helper.js")), "tag_helper.js", 1, null);
-		cx.evaluateString(scope, Files.readString(root.resolve("kubejs/server_scripts/worldgen/bee_nests.js")), "bee_nests.js", 1, null);
+		cx.evaluateString(scope, Files.readString(root.resolve("kubejs/data/creativeworldgen/kubejs/worldgen/bee_nests.js")), "bee_nests.js", 1, null);
 		cx.evaluateString(scope, "__tags({ add: function (t, id) { __HOST.tag(String(t), String(id)) } });", "fire_tags", 1, null);
 		cx.evaluateString(scope, "__data({ add: function (p, t) { __HOST.add(String(p), String(t)) } });", "fire_data", 1, null);
 		Path out = Paths.get(a[1]);

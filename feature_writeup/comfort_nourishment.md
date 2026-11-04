@@ -173,6 +173,7 @@ code goes in CD), then `gen_can_types.py` so cans copy the new effects, and a ch
 ## 7. Tests
 
 - **r1102b 2026-11-02** (scratch server; verdicts in `perf/runs/r1102b/` HANDOVER.md and the slice judged.md): PASS SQ-CNS-01; rerun pending (batch fault) SQ-CNS-02.
+- **r1103 2026-11-03** (scratch server; verdicts in `perf/runs/r1103/` FINAL.md and the slice judged.md): PASS SQ-CNS-03, -02.
 
 IDs are `CNS-` (`CN-` is taken by Corn Delight and the can tests). Restart with the 2026-10-27 CD jar first. Hover the
 food (effect line and length in the tooltip), eat it, check the inventory screen.
@@ -191,6 +192,11 @@ food (effect line and length in the tooltip), eat it, check the inventory screen
 Scratch server: SQ-CNS in [testing/scratch_queue.md](testing/scratch_queue.md): SQ-CNS-01 PASS r1102b, SQ-CNS-02 batch fault (rerun with `farmersdelight:beef_stew`), SQ-CNS-03 (cans, CNS-08 server half) not run. Related FAILs r1102b: SQ-RD-22, SQ-FDB-04.
 
 ## 8. History
+
+- 2026-11-03 (plan_scratch_bugfix_1103 5.4): `GOLDEN_EXTRA` in the generator rules golden foods outside the golden food
+  types; Gleaming Salad is the first (Nourishment 120 s [240 s by hand]); the json regenerated (2 lines: the salad and the strip key
+  `vinegar` -> `vinegar_bottle`, since `i.vinegar` now names the jar). The vinegar jar keeps `none` and gets Nausea 10 s from
+  CD `vintagedelight/vintage_items.js` (5.5).
 
 - 2026-11-03 (CD members run): `creativedelight/members #43` rechecked: the JSON does carry the Rustic foods, keyed by
   item_dict keys (`calamari_soup`, `potato_salad`, `fried_chicken`, ...), so a grep for `rusticdelight:` finds only

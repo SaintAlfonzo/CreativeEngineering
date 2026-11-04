@@ -26,6 +26,7 @@ The FD-style stations' leftover slots (pot, kettle, oven; rows #1, #3, #4, #13, 
 | Returned bowls that wouldn't stack | cause found elsewhere: Sticky It!'s tooltip handler, fixed by Creative Labels ([sticky_notes.md](sticky_notes.md) 3.13, SN-48) | `#5` |
 | Coaster contents: only items with a coaster model (tag 304, 208 pack models from `gen_coaster_models.py`), 2.3 | BUILT 2026-10-29 (KubeJS assets + tag), scratch server PASSED r1031 (2026-10-31, SQ-KT-21: tag count logged, coaster accepts and refuses as listed); KT-19, KT-20 in game pending | `#21` |
 | Stepstool | BUILT 2026-10-29 as a worn stool that lifts the player one block ([stepstool.md](stepstool.md)); scratch server PASSED r1031 (SQ-STL-01, -02); client and play open | `#17` |
+| CfB oven as a stove: Farmer's Delight heat source while it burns fuel; cook surface raised to the block top (2.10) | BUILT 2026-11-03 (blockheadsAdditions; member compiles, Creative Delight jar not rebuilt: the Vintage member does not compile at the moment); scratch SQ-CFS queued, CQ-CFS-01 in game | `#28` |
 | Scythe | Planned | `#16` |
 
 - **Pending:** the 1.1.01 parts (oven fuel, sink, board, corner) deployed 2026-10-22, the counter toppers with 1.1.03,
@@ -230,16 +231,28 @@ water".
 - 2.7 update 2026-11-02: CfB's own Spice Rack, Tool Rack and Fruit Basket are merged into the oak versions
   ([item_merges.md](item_merges.md) 2.16); their recipes are gone. Scratch PASSED r1102b (SQ-FCB-05: each turns into its oak survivor).
 
-### 2.9 Cookware pickup and handle toggle (built 2026-11-02; scratch PASSED r1102b SQ-FCB-08 (the kettle's toggle is its `lid`), SQ-FCB-08b no pickup with the switch off; CQ-FCB-04; TODO `cooking/kitchen #27`)
+### 2.9 Cookware pickup and punch toggle (built 2026-11-02, reworked 2026-11-03; r1102b PASS covers the 11-02 version only; tests SQ-FCB-08, -08b, CQ-FCB-04, -04b; TODO `cooking/kitchen #27`)
 
 - Blocks: `#creativedelight:cookware_pickup` (Farmer's Delight cooking pot and skillet, Miner's copper pot, Farmer's
   Respite kettle; CD `creativeengineering/kitchen_tags.js`). Code: CD Java `cooking/CookwareHandling`, switch
-  `[qol] cookwarePickup` (QoL-7).
-- Sneak right-click, empty main hand: the block is removed and its loot goes into the hand (the pot item keeps its
-  meal, as on breaking); what the block throws out on removal (ingredients) drops as on breaking. A `BreakEvent` is
-  posted first, so claims and spawn protection stop it. Upstream's sneak right-click handle toggle is no longer reached.
-- Sneak left-click, empty main hand, blocks with a `support` property (pot, copper pot, kettle): the first hit toggles
-  the handle (the block's own toggle is called) and the break is cancelled on both sides, also in creative.
+  `[qol] cookwarePickup` (QoL-7); WTHIT line `compat/wthit/WthitCookwareToggle`.
+- Sneak right-click, empty main hand: every slot of the block's inventory (ingredients, stored meal, containers,
+  output) goes into the player's inventory, overflow drops at the player (owner 2026-11-03). The hand gets the station
+  as a plain item: the loot drop with `BlockEntityTag` removed, so no meal or kettle tank rides along, but the
+  skillet keeps its own enchantments and a renamed station its name. The kettle's water / tank is lost. A
+  `BreakEvent` is posted first, so claims and spawn protection stop it. Upstream's sneak right-click toggles are no
+  longer reached.
+- Punch (left-click, empty main hand, sneaking or not): toggles the state instead of breaking, also in creative.
+  Kettle: `lid`. Cooking pot and copper pot: `support` handle against the tray state upstream gives (tray on a
+  `#farmersdelight:tray_heat_sources` block, else none). The kettle also has a handle, only from placement (the punch
+  is its lid). Skillet: no toggle, breaks as normal. A held button re-sends the click every tick (survival) or 6 ticks
+  (creative); clicks under 7 ticks apart at the same block count as one punch, so holding toggles once.
+- Placement: placed against the bottom face of a block, the pots and the kettle get the handle (upstream
+  `getStateForPlacement`), and keep it after.
+- WTHIT: "Punch to toggle lid" / "Punch to toggle handle" in the body, hidden with the switch off.
+- Kettle handle: placement only (under a block), confirmed by owner 2026-11-03; a punch on the kettle toggles the lid.
+- History: 11-02 the handle toggle was sneak left-click; on 11-03 it was briefly placement-only, then the punch toggle
+  replaced it (owner).
 
 ## 3. What the pack changes
 
@@ -248,7 +261,8 @@ water".
 - Tags: `#balm:cooking_oil` + Rustic Delight oil; `#creativeengineering:counter_supports`, `#creativeengineering:counter_toppers`.
 - Creative Delight member blockheadsAdditions (section 9) mixins (all `remap = false`, SRG names): CfB oven fuel and
   smoking, `BlockStateBase#canSurvive` / `#updateShape` / `#getOffset` (counter toppers), FD board and Brewin' coaster
-  renderers (client), CfB corner block entity and use. Fridge fill by a baked-model wrapper (2.4). Wood racks (2.7).
+  renderers (client), CfB corner block entity and use, CfB oven `lit` state, sync, shape and renderer (2.10). Fridge
+  fill and raised oven by baked-model wrappers (2.4, 2.10). Wood racks (2.7).
 - Resource overrides: none since 2026-10-31 (the fridge override was removed, 2.4).
 - Recipes: bamboo bowl; mortar crafts (own and catalogue); slime block from a dough block + green dye in a heated mixer
   (`cooking/kitchen #12`, Creative Delight script `kubejs/data/creativedelight/kubejs/create/slime.js`, id
@@ -282,12 +296,13 @@ Brief: [briefs/cooking_kitchen.md](briefs/cooking_kitchen.md). Nothing here is b
 - Creative Delight member [blockheads/](../development/creativeDelight/members/blockheads/) (section 9), package
   `com.SaintAlfonzo.creativedelight.blockheads`: `mixin/` (`CfbOvenFuelMixin`, `CfbOvenSmokingMixin`,
   `BlockStateCounterTopperMixin`, `CuttingBoardRendererOffsetMixin`, `CoasterRendererOffsetMixin`,
-  `CfbCornerStorageMixin`, `CfbCornerUseMixin`), `kitchen/` (`CounterToppers`, `CornerStorage`), `rack/` (`RackWoods`,
-  `BARacks`, `WoodSpiceRackBlock`, `WoodToolRackBlock`), `client/FridgeTopFill`, `BAConfig`.
+  `CfbCornerStorageMixin`, `CfbCornerUseMixin`, `CfbOvenLitMixin`, `CfbOvenLitSyncMixin`, `CfbOvenShapeMixin`,
+  `CfbOvenRendererMixin`), `kitchen/` (`CounterToppers`, `CornerStorage`), `rack/` (`RackWoods`,
+  `BARacks`, `WoodSpiceRackBlock`, `WoodToolRackBlock`), `client/FridgeTopFill`, `client/OvenRaise`, `BAConfig`.
 - KubeJS: [cooking.js](../kubejs/server_scripts/cooking/cooking.js) (bamboo bowl, `foodGrinding` calls),
   [mortar.js](../kubejs/data/creativedelight/kubejs/creativeengineering/mortar.js), [cookingtags.js](../kubejs/server_scripts/tags/cookingtags.js),
   [cookingforblockheads/kitchen.js](../kubejs/data/creativedelight/kubejs/cookingforblockheads/kitchen.js) (rack
-  recipes and tags, counter tags), [client.js](../kubejs/assets/creativedelight/kubejs/cookingforblockheads/client.js) (oven, sink tooltips),
+  recipes and tags, counter tags, oven heat source tag), [client.js](../kubejs/assets/creativedelight/kubejs/cookingforblockheads/client.js) (oven, sink tooltips),
   NCH in [neoCraftHelper.js](../kubejs/startup_scripts/func/neoCraftHelper.js); dict keys `i.mortar_and_pestle`, `i.powder_pestle`,
   `i.t_balm_cooking_oil`, `i.cfb_*`, `i.<wood>_spice_rack`, `i.<wood>_tool_rack`, `i.t_rack_slabs_other`,
   `i.t_balm_iron_nuggets`, `b.cfb_counter`, `b.cfb_corner`, `b.dd_food_plate`,
@@ -327,6 +342,7 @@ Not covered offline: anything drawn (board offset, fridge), the corner's GUI on 
 ## 7. In-game test suite
 
 - **r1102b 2026-11-02** (scratch server; verdicts in `perf/runs/r1102b/` HANDOVER.md and the slice judged.md): PASS SQ-KT-02.
+- **r1103 2026-11-03** (scratch server; verdicts in `perf/runs/r1103/` FINAL.md and the slice judged.md): PASS SQ-FCB-07, -08b.
 
 - [ ] **KT-01 CfB oven fuel:** coal starts a Cooking for Blockheads Oven, and so does Cooking Oil.
 - [ ] **KT-02 Sink:** right-click the Sink with an empty bucket → a water bucket, with nothing piped in.
@@ -432,7 +448,7 @@ Not covered offline: anything drawn (board offset, fridge), the corner's GUI on 
   `creativeengineering:corner_storage` and the tags `#creativeengineering:counter_supports` / `counter_toppers`. The
   pack's own Display Delight dishes are now recognised by their Display Delight block class instead of patcherMod's
   dish list. The counter tags moved from the pack's `blocktags.js` to `cookingforblockheads/kitchen.js`.
-- **New:** wood racks (2.7), fridge fill in code (2.4).
+- **New:** wood racks (2.7), fridge fill in code (2.4), oven as a stove (2.10).
 - **Build:** `./gradlew :blockheadsAdditions:build --offline`, ships through `:creativeDelight:installToMods`. Compiles
   against `libs/` (CfB 13.3.4, Balm 4.6.0, Farmer's Delight 1.2.4; git-ignored, copied from `patcherMod/libs/`) and
   `:backportedBrewin`. patcherMod and Creative Delight must be installed together: an old patcherMod beside this

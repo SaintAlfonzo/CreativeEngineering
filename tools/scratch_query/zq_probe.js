@@ -31,6 +31,8 @@
     const $ZQRL = Java.loadClass('net.minecraft.resources.ResourceLocation')
     const $ZQTagKey = Java.loadClass('net.minecraft.tags.TagKey')
     const $ZQCollectors = Java.loadClass('java.util.stream.Collectors')
+    const $ZQHashMap = Java.loadClass('java.util.HashMap')
+    const $ZQArrayList = Java.loadClass('java.util.ArrayList')
     const $ZQBlock = Java.loadClass('net.minecraft.world.level.block.Block')
     const $ZQPU = Java.loadClass('net.minecraft.world.item.alchemy.PotionUtils')
     const $ZQBR = Java.loadClass('net.minecraftforge.common.brewing.BrewingRecipeRegistry')
@@ -196,23 +198,28 @@
                 let earth = {}
                 $ZQReg.BLOCK.getTagOrEmpty($ZQTagKey.create($ZQReg.BLOCK_REGISTRY, new $ZQRL('creativeengineering:earth_fill/earth')))
                     .forEach(h => { earth[String($ZQReg.BLOCK.getKey(h.value()))] = 1 })
-                function idAt(x, y, z) { return String($ZQReg.BLOCK.getKey(lv.getBlockState(new $P(x, y, z)).getBlock())) }
-                function kind(x, y, z) {
+                // let + function expressions: a block-level function declaration is not visible to the forEach closures
+                // below in the pack's Rhino ("kind is not a function", r1103w)
+                let idAt = function (x, y, z) { return String($ZQReg.BLOCK.getKey(lv.getBlockState(new $P(x, y, z)).getBlock())) }
+                let kind = function (x, y, z) {
                     let st = lv.getBlockState(new $P(x, y, z))
                     let fl = String($ZQReg.FLUID.getKey(st.getFluidState().getType()))
                     if (fl.indexOf('water') >= 0) return 'water'
                     if (st.isAir() || !st.getMaterial().isSolid()) return 'air'
                     return 'solid'
                 }
-                function top(m) { return Object.keys(m).sort((p, q) => m[q] - m[p]).slice(0, 6).map(k => k + ' ' + m[k]).join(', ') }
+                let top = function (m) { return Object.keys(m).sort((p, q) => m[q] - m[p]).slice(0, 6).map(k => k + ' ' + m[k]).join(', ') }
                 let shown = 0, skipped = 0
                 for (let cx = cx0 - r; cx <= cx0 + r && shown < 30; cx++) for (let cz = cz0 - r; cz <= cz0 + r && shown < 30; cz++) {
                     if (!lv.hasChunk(cx, cz)) { skipped++; continue }
-                    lv.getChunk(cx, cz).getAllStarts().entrySet().forEach(en => {
+                    // copies: Rhino cannot call members of the JDK's private unmodifiable map / entry-set classes
+                    // (IllegalAccessException in r1103w), so read the starts through a public HashMap / ArrayList
+                    let starts = new $ZQHashMap(lv.getChunk(cx, cz).getAllStarts())
+                    new $ZQArrayList(starts.keySet()).forEach(key => {
                         if (shown >= 30) return
-                        let st = en.getValue()
+                        let st = starts.get(key)
                         if (!st.isValid()) return
-                        let id = String(sreg.getKey(en.getKey()))
+                        let id = String(sreg.getKey(key))
                         if (filt && id.indexOf(filt) < 0) return
                         let cols = {}
                         st.getPieces().forEach(pc => {

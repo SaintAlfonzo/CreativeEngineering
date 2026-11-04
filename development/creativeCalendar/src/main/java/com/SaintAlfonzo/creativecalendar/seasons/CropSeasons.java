@@ -87,8 +87,9 @@ public final class CropSeasons {
         WARM_WET("warm_wet", new Fertility[]{N, F, N, O}, new Fertility[]{F, N}),
         /** Vinery apple trees: fertile autumn, neutral spring and summer, off winter; wet/dry as temperate. */
         AUTUMN_FRUIT("autumn_fruit", new Fertility[]{N, N, F, O}, new Fertility[]{N, O}),
-        /** Grasses (farming/crops #28): off in winter only, neutral otherwise; their spread, see {@link #refuseSpread}. */
-        GRASS("grass", new Fertility[]{N, N, N, O}, new Fertility[]{N, N}),
+        /** Grasses (farming/crops #28; owner rule 2026-11-03): off in summer and in both tropical seasons (wet/dry
+         *  biomes, arid ones included), neutral in spring, autumn and winter; their spread, see {@link #refuseSpread}. */
+        GRASS("grass", new Fertility[]{N, O, N, N}, new Fertility[]{O, O}),
         NETHER("nether", null, null),
         END("end", null, null),
         CAVE("cave", null, null),
@@ -342,11 +343,12 @@ public final class CropSeasons {
      * Spreading that fires no crop-grow event (farming/crops #28): vanilla grass-block spread
      * ({@code GrassSpreadSeasonMixin}) and Immersive Weathering's block growths ({@code IWGrowthSeasonMixin}) ask here
      * before each try. True = skip it: a seasonal type that is off where the block stands refuses {@code offPenalty}
-     * of its spreads, like the crop-grow rule. Fertile seasons add nothing here (the grass type has none).
+     * ({@code grassOffPenalty} for the grass type) of its spreads, like the crop-grow rule. Fertile seasons add nothing here (the grass type has none).
      */
     public static boolean refuseSpread(ServerLevel level, BlockPos pos, @Nullable Type type) {
         if (type == null || !type.seasonal() || !enabled()) return false;
-        return level.random.nextDouble() < CalendarConfig.CROP_SEASONS.offPenalty.get() && fertility(level, pos, type) == O;
+        double penalty = type == Type.GRASS ? CalendarConfig.CROP_SEASONS.grassOffPenalty.get() : CalendarConfig.CROP_SEASONS.offPenalty.get();
+        return level.random.nextDouble() < penalty && fertility(level, pos, type) == O;
     }
 
     @SubscribeEvent

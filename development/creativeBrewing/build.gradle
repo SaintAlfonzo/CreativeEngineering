@@ -27,7 +27,12 @@ def membersFile = layout.buildDirectory.file('generated/cb_members/creativebrewi
 def writeMembers = tasks.register('writeMembersList') {
     def ids = providers.provider {
         (findProperty('bundle_members') ?: '').toString().split(',')*.trim().findAll { it }
-                .collect { project(it).findProperty('mod_id').toString() }
+                .collectMany { m ->
+                    // a member jar that holds a second mod lists it in bundle_extra_mods (End's: enders_additions), so
+                    // that mod gets its own [members] switch too
+                    def extra = (project(m).findProperty('bundle_extra_mods') ?: '').toString().split(',')*.trim().findAll { it }
+                    [project(m).findProperty('mod_id').toString()] + extra
+                }
     }
     inputs.property('ids', ids)
     outputs.file(membersFile)

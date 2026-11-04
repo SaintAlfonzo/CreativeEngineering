@@ -2,36 +2,36 @@
 
 Rewritten by patcherMod `worldgen/PoolTuner` at every world load from `pool_config.json` + `pool_tags.json`. Don't edit.
 
-- 1425 pools, 7272 pieces
-- 39 pool(s) retuned
+- 1426 pools, 7273 pieces
+- 13 pool(s) retuned
 - 1 pool(s) restored to first-seen weights (a mod re-added its pieces on this world load, or a previous edit was reverted)
 
 ## Warnings
 
+- minecraft:village/desert/streets / beautify:botanist_house_desert: the mod changed this edited piece's weight (stored original 2, live 1); current 1 kept: check it
+- minecraft:village/plains/streets / beautify:botanist_house_plains: the mod changed this edited piece's weight (stored original 2, live 1); current 1 kept: check it
+- minecraft:village/savanna/streets / beautify:botanist_house_savanna: the mod changed this edited piece's weight (stored original 2, live 1); current 1 kept: check it
+- minecraft:village/snowy/streets / beautify:botanist_house_snowy: the mod changed this edited piece's weight (stored original 2, live 1); current 1 kept: check it
+- minecraft:village/taiga/streets / beautify:botanist_house_taiga: the mod changed this edited piece's weight (stored original 2, live 1); current 1 kept: check it
 - mod/advancedperipherals: "advancedperipherals:*" matches no pool piece
 
 ## Retuned pools
 
 Chance = share of the pool's total weight (each draw).
 
-### `betterfortresses:bridge`
+### `minecraft:pillager_outpost/features`
 
 | piece | original | chance | final | chance | why |
 |---|---:|---:|---:|---:|---|
-| `betterfortresses:bridge/blaze_stairs` | 5 | 3.8% | 5 | 3.8% |  |
-| `betterfortresses:bridge/blaze_stairs #2` | 5 | 3.8% | 5 | 3.8% |  |
-| `betterfortresses:bridge/bridge_end` | 9 | 6.8% | 9 | 6.8% |  |
-| `betterfortresses:bridge/bridge_junction_2` | 10 | 7.6% | 10 | 7.6% |  |
-| `betterfortresses:bridge/bridge_junction_3` | 6 | 4.5% | 6 | 4.5% |  |
-| `betterfortresses:bridge/bridge_junction_4` | 3 | 2.3% | 3 | 2.3% |  |
-| `betterfortresses:bridge/bridge_pillar` | 10 | 7.6% | 20 | 15.2% | current 20 |
-| `betterfortresses:bridge/bridge_pillar #2` | 15 | 11.4% | 10 | 7.6% | current 10 |
-| `betterfortresses:bridge/bridge_pillar #3` | 20 | 15.2% | 15 | 11.4% | current 15 |
-| `betterfortresses:bridge/bridge_stairs_l` | 1 | 0.8% | 1 | 0.8% |  |
-| `betterfortresses:bridge/bridge_stairs_l #2` | 1 | 0.8% | 1 | 0.8% |  |
-| `betterfortresses:bridge/bridge_stairs_r` | 1 | 0.8% | 1 | 0.8% |  |
-| `betterfortresses:bridge/bridge_stairs_r #2` | 1 | 0.8% | 1 | 0.8% |  |
-| `betterfortresses:bridge/bridge_start` | 45 | 34.1% | 45 | 34.1% |  |
+| `minecraft:empty` | 6 | 42.9% | 6 | 37.5% |  |
+| `minecraft:pillager_outpost/feature_cage1` | 1 | 7.1% | 1 | 6.3% |  |
+| `minecraft:pillager_outpost/feature_cage2` | 1 | 7.1% | 1 | 6.3% |  |
+| `minecraft:pillager_outpost/feature_cage3` | 1 | 7.1% | 1 | 6.3% |  |
+| `minecraft:pillager_outpost/feature_cage_with_allays` | 1 | 7.1% | 3 | 18.8% | current 3 |
+| `minecraft:pillager_outpost/feature_logs` | 1 | 7.1% | 1 | 6.3% |  |
+| `minecraft:pillager_outpost/feature_targets` | 1 | 7.1% | 1 | 6.3% |  |
+| `minecraft:pillager_outpost/feature_tent1` | 1 | 7.1% | 1 | 6.3% |  |
+| `minecraft:pillager_outpost/feature_tent2` | 1 | 7.1% | 1 | 6.3% |  |
 
 ### `minecraft:village/desert/houses`
 
@@ -95,20 +95,20 @@ Pool scaled x2 to hold fractional weights.
 
 | piece | original | chance | final | chance | why |
 |---|---:|---:|---:|---:|---|
-| `beautify:botanist_house_desert` | 2 | 3.7% | 2 | 2.6% | current 1 |
-| `minecraft:village/desert/streets/corner_01` | 3 | 5.6% | 6 | 7.8% |  |
-| `minecraft:village/desert/streets/corner_02` | 3 | 5.6% | 6 | 7.8% |  |
-| `minecraft:village/desert/streets/crossroad_01` | 3 | 5.6% | 6 | 7.8% |  |
-| `minecraft:village/desert/streets/crossroad_02` | 3 | 5.6% | 6 | 7.8% |  |
-| `minecraft:village/desert/streets/crossroad_03` | 3 | 5.6% | 6 | 7.8% |  |
-| `minecraft:village/desert/streets/square_01` | 3 | 5.6% | 6 | 7.8% |  |
-| `minecraft:village/desert/streets/square_02` | 3 | 5.6% | 6 | 7.8% |  |
-| `minecraft:village/desert/streets/straight_01` | 4 | 7.4% | 8 | 10.4% |  |
-| `minecraft:village/desert/streets/straight_02` | 4 | 7.4% | 8 | 10.4% |  |
-| `minecraft:village/desert/streets/straight_03` | 3 | 5.6% | 6 | 7.8% |  |
-| `minecraft:village/desert/streets/turn_01` | 3 | 5.6% | 6 | 7.8% |  |
-| `monobank:village/streets/desert_straight_fix_01` | 15 | 27.8% | 5 | 6.5% | monobank/vault_streets x0.16 |
-| `pneumaticcraft:villages/custom_street_desert` | 2 | 3.7% | **removed** | 0.0% | mod/pneumaticcraft x0, tech x0 |
+| `beautify:botanist_house_desert` | 1 | 1.9% | 2 | 2.6% |  |
+| `minecraft:village/desert/streets/corner_01` | 3 | 5.7% | 6 | 7.8% |  |
+| `minecraft:village/desert/streets/corner_02` | 3 | 5.7% | 6 | 7.8% |  |
+| `minecraft:village/desert/streets/crossroad_01` | 3 | 5.7% | 6 | 7.8% |  |
+| `minecraft:village/desert/streets/crossroad_02` | 3 | 5.7% | 6 | 7.8% |  |
+| `minecraft:village/desert/streets/crossroad_03` | 3 | 5.7% | 6 | 7.8% |  |
+| `minecraft:village/desert/streets/square_01` | 3 | 5.7% | 6 | 7.8% |  |
+| `minecraft:village/desert/streets/square_02` | 3 | 5.7% | 6 | 7.8% |  |
+| `minecraft:village/desert/streets/straight_01` | 4 | 7.5% | 8 | 10.4% |  |
+| `minecraft:village/desert/streets/straight_02` | 4 | 7.5% | 8 | 10.4% |  |
+| `minecraft:village/desert/streets/straight_03` | 3 | 5.7% | 6 | 7.8% |  |
+| `minecraft:village/desert/streets/turn_01` | 3 | 5.7% | 6 | 7.8% |  |
+| `monobank:village/streets/desert_straight_fix_01` | 15 | 28.3% | 5 | 6.5% | monobank/vault_streets x0.16 |
+| `pneumaticcraft:villages/custom_street_desert` | 2 | 3.8% | **removed** | 0.0% | mod/pneumaticcraft x0, tech x0 |
 
 ### `minecraft:village/plains/houses`
 
@@ -181,24 +181,24 @@ Pool scaled x2 to hold fractional weights.
 
 | piece | original | chance | final | chance | why |
 |---|---:|---:|---:|---:|---|
-| `beautify:botanist_house_plains` | 2 | 3.0% | 2 | 1.9% | current 1 |
-| `minecraft:village/plains/streets/corner_01` | 2 | 3.0% | 4 | 3.8% |  |
-| `minecraft:village/plains/streets/corner_02` | 2 | 3.0% | 4 | 3.8% |  |
-| `minecraft:village/plains/streets/corner_03` | 2 | 3.0% | 4 | 3.8% |  |
-| `minecraft:village/plains/streets/crossroad_01` | 2 | 3.0% | 4 | 3.8% |  |
+| `beautify:botanist_house_plains` | 1 | 1.5% | 2 | 1.9% |  |
+| `minecraft:village/plains/streets/corner_01` | 2 | 3.1% | 4 | 3.8% |  |
+| `minecraft:village/plains/streets/corner_02` | 2 | 3.1% | 4 | 3.8% |  |
+| `minecraft:village/plains/streets/corner_03` | 2 | 3.1% | 4 | 3.8% |  |
+| `minecraft:village/plains/streets/crossroad_01` | 2 | 3.1% | 4 | 3.8% |  |
 | `minecraft:village/plains/streets/crossroad_02` | 1 | 1.5% | 2 | 1.9% |  |
-| `minecraft:village/plains/streets/crossroad_03` | 2 | 3.0% | 4 | 3.8% |  |
-| `minecraft:village/plains/streets/crossroad_04` | 2 | 3.0% | 4 | 3.8% |  |
-| `minecraft:village/plains/streets/crossroad_05` | 2 | 3.0% | 4 | 3.8% |  |
-| `minecraft:village/plains/streets/crossroad_06` | 2 | 3.0% | 4 | 3.8% |  |
-| `minecraft:village/plains/streets/straight_01` | 4 | 6.1% | 8 | 7.6% |  |
-| `minecraft:village/plains/streets/straight_02` | 4 | 6.1% | 8 | 7.6% |  |
-| `minecraft:village/plains/streets/straight_03` | 7 | 10.6% | 14 | 13.3% |  |
-| `minecraft:village/plains/streets/straight_04` | 7 | 10.6% | 14 | 13.3% |  |
-| `minecraft:village/plains/streets/straight_05` | 3 | 4.5% | 6 | 5.7% |  |
-| `minecraft:village/plains/streets/straight_06` | 4 | 6.1% | 8 | 7.6% |  |
-| `minecraft:village/plains/streets/turn_01` | 3 | 4.5% | 6 | 5.7% |  |
-| `monobank:village/streets/plains_straight_fix_01` | 15 | 22.7% | 5 | 4.8% | monobank/vault_streets x0.16 |
+| `minecraft:village/plains/streets/crossroad_03` | 2 | 3.1% | 4 | 3.8% |  |
+| `minecraft:village/plains/streets/crossroad_04` | 2 | 3.1% | 4 | 3.8% |  |
+| `minecraft:village/plains/streets/crossroad_05` | 2 | 3.1% | 4 | 3.8% |  |
+| `minecraft:village/plains/streets/crossroad_06` | 2 | 3.1% | 4 | 3.8% |  |
+| `minecraft:village/plains/streets/straight_01` | 4 | 6.2% | 8 | 7.6% |  |
+| `minecraft:village/plains/streets/straight_02` | 4 | 6.2% | 8 | 7.6% |  |
+| `minecraft:village/plains/streets/straight_03` | 7 | 10.8% | 14 | 13.3% |  |
+| `minecraft:village/plains/streets/straight_04` | 7 | 10.8% | 14 | 13.3% |  |
+| `minecraft:village/plains/streets/straight_05` | 3 | 4.6% | 6 | 5.7% |  |
+| `minecraft:village/plains/streets/straight_06` | 4 | 6.2% | 8 | 7.6% |  |
+| `minecraft:village/plains/streets/turn_01` | 3 | 4.6% | 6 | 5.7% |  |
+| `monobank:village/streets/plains_straight_fix_01` | 15 | 23.1% | 5 | 4.8% | monobank/vault_streets x0.16 |
 
 ### `minecraft:village/savanna/houses`
 
@@ -266,27 +266,27 @@ Pool scaled x2 to hold fractional weights.
 
 | piece | original | chance | final | chance | why |
 |---|---:|---:|---:|---:|---|
-| `beautify:botanist_house_savanna` | 2 | 2.7% | 2 | 1.7% | current 1 |
-| `minecraft:village/savanna/streets/corner_01` | 2 | 2.7% | 4 | 3.4% |  |
-| `minecraft:village/savanna/streets/corner_03` | 2 | 2.7% | 4 | 3.4% |  |
+| `beautify:botanist_house_savanna` | 1 | 1.4% | 2 | 1.7% |  |
+| `minecraft:village/savanna/streets/corner_01` | 2 | 2.8% | 4 | 3.4% |  |
+| `minecraft:village/savanna/streets/corner_03` | 2 | 2.8% | 4 | 3.4% |  |
 | `minecraft:village/savanna/streets/crossroad_02` | 1 | 1.4% | 2 | 1.7% |  |
-| `minecraft:village/savanna/streets/crossroad_03` | 2 | 2.7% | 4 | 3.4% |  |
-| `minecraft:village/savanna/streets/crossroad_04` | 2 | 2.7% | 4 | 3.4% |  |
-| `minecraft:village/savanna/streets/crossroad_05` | 2 | 2.7% | 4 | 3.4% |  |
-| `minecraft:village/savanna/streets/crossroad_06` | 2 | 2.7% | 4 | 3.4% |  |
-| `minecraft:village/savanna/streets/crossroad_07` | 2 | 2.7% | 4 | 3.4% |  |
-| `minecraft:village/savanna/streets/split_01` | 2 | 2.7% | 4 | 3.4% |  |
-| `minecraft:village/savanna/streets/split_02` | 2 | 2.7% | 4 | 3.4% |  |
-| `minecraft:village/savanna/streets/straight_02` | 4 | 5.5% | 8 | 6.7% |  |
-| `minecraft:village/savanna/streets/straight_04` | 7 | 9.6% | 14 | 11.8% |  |
-| `minecraft:village/savanna/streets/straight_05` | 3 | 4.1% | 6 | 5.0% |  |
-| `minecraft:village/savanna/streets/straight_06` | 4 | 5.5% | 8 | 6.7% |  |
-| `minecraft:village/savanna/streets/straight_08` | 4 | 5.5% | 8 | 6.7% |  |
-| `minecraft:village/savanna/streets/straight_09` | 4 | 5.5% | 8 | 6.7% |  |
-| `minecraft:village/savanna/streets/straight_10` | 4 | 5.5% | 8 | 6.7% |  |
-| `minecraft:village/savanna/streets/straight_11` | 4 | 5.5% | 8 | 6.7% |  |
-| `minecraft:village/savanna/streets/turn_01` | 3 | 4.1% | 6 | 5.0% |  |
-| `monobank:village/streets/savanna_straight_fix_01` | 15 | 20.5% | 5 | 4.2% | monobank/vault_streets x0.16 |
+| `minecraft:village/savanna/streets/crossroad_03` | 2 | 2.8% | 4 | 3.4% |  |
+| `minecraft:village/savanna/streets/crossroad_04` | 2 | 2.8% | 4 | 3.4% |  |
+| `minecraft:village/savanna/streets/crossroad_05` | 2 | 2.8% | 4 | 3.4% |  |
+| `minecraft:village/savanna/streets/crossroad_06` | 2 | 2.8% | 4 | 3.4% |  |
+| `minecraft:village/savanna/streets/crossroad_07` | 2 | 2.8% | 4 | 3.4% |  |
+| `minecraft:village/savanna/streets/split_01` | 2 | 2.8% | 4 | 3.4% |  |
+| `minecraft:village/savanna/streets/split_02` | 2 | 2.8% | 4 | 3.4% |  |
+| `minecraft:village/savanna/streets/straight_02` | 4 | 5.6% | 8 | 6.7% |  |
+| `minecraft:village/savanna/streets/straight_04` | 7 | 9.7% | 14 | 11.8% |  |
+| `minecraft:village/savanna/streets/straight_05` | 3 | 4.2% | 6 | 5.0% |  |
+| `minecraft:village/savanna/streets/straight_06` | 4 | 5.6% | 8 | 6.7% |  |
+| `minecraft:village/savanna/streets/straight_08` | 4 | 5.6% | 8 | 6.7% |  |
+| `minecraft:village/savanna/streets/straight_09` | 4 | 5.6% | 8 | 6.7% |  |
+| `minecraft:village/savanna/streets/straight_10` | 4 | 5.6% | 8 | 6.7% |  |
+| `minecraft:village/savanna/streets/straight_11` | 4 | 5.6% | 8 | 6.7% |  |
+| `minecraft:village/savanna/streets/turn_01` | 3 | 4.2% | 6 | 5.0% |  |
+| `monobank:village/streets/savanna_straight_fix_01` | 15 | 20.8% | 5 | 4.2% | monobank/vault_streets x0.16 |
 
 ### `minecraft:village/snowy/houses`
 
@@ -351,25 +351,25 @@ Pool scaled x2 to hold fractional weights.
 
 | piece | original | chance | final | chance | why |
 |---|---:|---:|---:|---:|---|
-| `beautify:botanist_house_snowy` | 2 | 3.0% | 2 | 2.0% | current 1 |
-| `minecraft:village/snowy/streets/corner_01` | 2 | 3.0% | 4 | 4.0% |  |
-| `minecraft:village/snowy/streets/corner_02` | 2 | 3.0% | 4 | 4.0% |  |
-| `minecraft:village/snowy/streets/corner_03` | 2 | 3.0% | 4 | 4.0% |  |
+| `beautify:botanist_house_snowy` | 1 | 1.5% | 2 | 2.0% |  |
+| `minecraft:village/snowy/streets/corner_01` | 2 | 3.1% | 4 | 4.0% |  |
+| `minecraft:village/snowy/streets/corner_02` | 2 | 3.1% | 4 | 4.0% |  |
+| `minecraft:village/snowy/streets/corner_03` | 2 | 3.1% | 4 | 4.0% |  |
 | `minecraft:village/snowy/streets/crossroad_02` | 1 | 1.5% | 2 | 2.0% |  |
-| `minecraft:village/snowy/streets/crossroad_03` | 2 | 3.0% | 4 | 4.0% |  |
-| `minecraft:village/snowy/streets/crossroad_04` | 2 | 3.0% | 4 | 4.0% |  |
-| `minecraft:village/snowy/streets/crossroad_05` | 2 | 3.0% | 4 | 4.0% |  |
-| `minecraft:village/snowy/streets/crossroad_06` | 2 | 3.0% | 4 | 4.0% |  |
-| `minecraft:village/snowy/streets/square_01` | 2 | 3.0% | 4 | 4.0% |  |
-| `minecraft:village/snowy/streets/straight_01` | 4 | 6.1% | 8 | 7.9% |  |
-| `minecraft:village/snowy/streets/straight_02` | 4 | 6.1% | 8 | 7.9% |  |
-| `minecraft:village/snowy/streets/straight_03` | 4 | 6.1% | 8 | 7.9% |  |
-| `minecraft:village/snowy/streets/straight_04` | 7 | 10.6% | 14 | 13.9% |  |
-| `minecraft:village/snowy/streets/straight_06` | 4 | 6.1% | 8 | 7.9% |  |
-| `minecraft:village/snowy/streets/straight_08` | 4 | 6.1% | 8 | 7.9% |  |
-| `minecraft:village/snowy/streets/turn_01` | 3 | 4.5% | 6 | 5.9% |  |
-| `monobank:village/streets/snowy_straight_fix_01` | 15 | 22.7% | 5 | 5.0% | monobank/vault_streets x0.16 |
-| `pneumaticcraft:villages/custom_street_snowy` | 2 | 3.0% | **removed** | 0.0% | mod/pneumaticcraft x0, tech x0 |
+| `minecraft:village/snowy/streets/crossroad_03` | 2 | 3.1% | 4 | 4.0% |  |
+| `minecraft:village/snowy/streets/crossroad_04` | 2 | 3.1% | 4 | 4.0% |  |
+| `minecraft:village/snowy/streets/crossroad_05` | 2 | 3.1% | 4 | 4.0% |  |
+| `minecraft:village/snowy/streets/crossroad_06` | 2 | 3.1% | 4 | 4.0% |  |
+| `minecraft:village/snowy/streets/square_01` | 2 | 3.1% | 4 | 4.0% |  |
+| `minecraft:village/snowy/streets/straight_01` | 4 | 6.2% | 8 | 7.9% |  |
+| `minecraft:village/snowy/streets/straight_02` | 4 | 6.2% | 8 | 7.9% |  |
+| `minecraft:village/snowy/streets/straight_03` | 4 | 6.2% | 8 | 7.9% |  |
+| `minecraft:village/snowy/streets/straight_04` | 7 | 10.8% | 14 | 13.9% |  |
+| `minecraft:village/snowy/streets/straight_06` | 4 | 6.2% | 8 | 7.9% |  |
+| `minecraft:village/snowy/streets/straight_08` | 4 | 6.2% | 8 | 7.9% |  |
+| `minecraft:village/snowy/streets/turn_01` | 3 | 4.6% | 6 | 5.9% |  |
+| `monobank:village/streets/snowy_straight_fix_01` | 15 | 23.1% | 5 | 5.0% | monobank/vault_streets x0.16 |
+| `pneumaticcraft:villages/custom_street_snowy` | 2 | 3.1% | **removed** | 0.0% | mod/pneumaticcraft x0, tech x0 |
 
 ### `minecraft:village/taiga/houses`
 
@@ -433,98 +433,24 @@ Pool scaled x2 to hold fractional weights.
 
 | piece | original | chance | final | chance | why |
 |---|---:|---:|---:|---:|---|
-| `beautify:botanist_house_taiga` | 2 | 3.0% | 2 | 1.9% | current 1 |
-| `minecraft:village/taiga/streets/corner_01` | 2 | 3.0% | 4 | 3.8% |  |
-| `minecraft:village/taiga/streets/corner_02` | 2 | 3.0% | 4 | 3.8% |  |
-| `minecraft:village/taiga/streets/corner_03` | 2 | 3.0% | 4 | 3.8% |  |
+| `beautify:botanist_house_taiga` | 1 | 1.5% | 2 | 1.9% |  |
+| `minecraft:village/taiga/streets/corner_01` | 2 | 3.1% | 4 | 3.8% |  |
+| `minecraft:village/taiga/streets/corner_02` | 2 | 3.1% | 4 | 3.8% |  |
+| `minecraft:village/taiga/streets/corner_03` | 2 | 3.1% | 4 | 3.8% |  |
 | `minecraft:village/taiga/streets/crossroad_01` | 1 | 1.5% | 2 | 1.9% |  |
 | `minecraft:village/taiga/streets/crossroad_02` | 1 | 1.5% | 2 | 1.9% |  |
-| `minecraft:village/taiga/streets/crossroad_03` | 2 | 3.0% | 4 | 3.8% |  |
-| `minecraft:village/taiga/streets/crossroad_04` | 2 | 3.0% | 4 | 3.8% |  |
-| `minecraft:village/taiga/streets/crossroad_05` | 2 | 3.0% | 4 | 3.8% |  |
-| `minecraft:village/taiga/streets/crossroad_06` | 2 | 3.0% | 4 | 3.8% |  |
-| `minecraft:village/taiga/streets/straight_01` | 4 | 6.1% | 8 | 7.6% |  |
-| `minecraft:village/taiga/streets/straight_02` | 4 | 6.1% | 8 | 7.6% |  |
-| `minecraft:village/taiga/streets/straight_03` | 4 | 6.1% | 8 | 7.6% |  |
-| `minecraft:village/taiga/streets/straight_04` | 7 | 10.6% | 14 | 13.3% |  |
-| `minecraft:village/taiga/streets/straight_05` | 7 | 10.6% | 14 | 13.3% |  |
-| `minecraft:village/taiga/streets/straight_06` | 4 | 6.1% | 8 | 7.6% |  |
-| `minecraft:village/taiga/streets/turn_01` | 3 | 4.5% | 6 | 5.7% |  |
-| `monobank:village/streets/taiga_straight_fix_01` | 15 | 22.7% | 5 | 4.8% | monobank/vault_streets x0.16 |
-
-### `nullscape:dragon_skeleton`
-
-| piece | original | chance | final | chance | why |
-|---|---:|---:|---:|---:|---|
-| `nullscape:skeleton/1` | 2 | 1.8% | 2 | 1.8% |  |
-| `nullscape:skeleton/1 #2` | 3 | 2.7% | 3 | 2.7% |  |
-| `nullscape:skeleton/1 #3` | 4 | 3.6% | 5 | 4.5% | current 5 |
-| `nullscape:skeleton/1 #4` | 5 | 4.5% | 4 | 3.6% | current 4 |
-| `nullscape:skeleton/2` | 2 | 1.8% | 2 | 1.8% |  |
-| `nullscape:skeleton/2 #2` | 3 | 2.7% | 3 | 2.7% |  |
-| `nullscape:skeleton/2 #3` | 4 | 3.6% | 5 | 4.5% | current 5 |
-| `nullscape:skeleton/2 #4` | 5 | 4.5% | 4 | 3.6% | current 4 |
-| `nullscape:skeleton/3` | 2 | 1.8% | 2 | 1.8% |  |
-| `nullscape:skeleton/3 #2` | 3 | 2.7% | 3 | 2.7% |  |
-| `nullscape:skeleton/3 #3` | 4 | 3.6% | 5 | 4.5% | current 5 |
-| `nullscape:skeleton/3 #4` | 5 | 4.5% | 4 | 3.6% | current 4 |
-| `nullscape:skeleton/4` | 2 | 1.8% | 2 | 1.8% |  |
-| `nullscape:skeleton/4 #2` | 3 | 2.7% | 3 | 2.7% |  |
-| `nullscape:skeleton/4 #3` | 4 | 3.6% | 5 | 4.5% | current 5 |
-| `nullscape:skeleton/4 #4` | 5 | 4.5% | 4 | 3.6% | current 4 |
-| `nullscape:skeleton/5` | 2 | 1.8% | 2 | 1.8% |  |
-| `nullscape:skeleton/5 #2` | 3 | 2.7% | 3 | 2.7% |  |
-| `nullscape:skeleton/5 #3` | 4 | 3.6% | 5 | 4.5% | current 5 |
-| `nullscape:skeleton/5 #4` | 5 | 4.5% | 4 | 3.6% | current 4 |
-| `nullscape:skeleton/6` | 2 | 1.8% | 2 | 1.8% |  |
-| `nullscape:skeleton/6 #2` | 3 | 2.7% | 3 | 2.7% |  |
-| `nullscape:skeleton/6 #3` | 4 | 3.6% | 5 | 4.5% | current 5 |
-| `nullscape:skeleton/6 #4` | 5 | 4.5% | 4 | 3.6% | current 4 |
-| `nullscape:skeleton/7` | 2 | 1.8% | 2 | 1.8% |  |
-| `nullscape:skeleton/7 #2` | 3 | 2.7% | 3 | 2.7% |  |
-| `nullscape:skeleton/7 #3` | 4 | 3.6% | 5 | 4.5% | current 5 |
-| `nullscape:skeleton/7 #4` | 5 | 4.5% | 4 | 3.6% | current 4 |
-| `nullscape:skeleton/8` | 2 | 1.8% | 2 | 1.8% |  |
-| `nullscape:skeleton/8 #2` | 3 | 2.7% | 3 | 2.7% |  |
-| `nullscape:skeleton/8 #3` | 4 | 3.6% | 5 | 4.5% | current 5 |
-| `nullscape:skeleton/8 #4` | 5 | 4.5% | 4 | 3.6% | current 4 |
-
-### `nullscape:dragon_skeleton_boneyard`
-
-| piece | original | chance | final | chance | why |
-|---|---:|---:|---:|---:|---|
-| `nullscape:skeleton/1` | 2 | 1.8% | 2 | 1.8% |  |
-| `nullscape:skeleton/1 #2` | 3 | 2.7% | 3 | 2.7% |  |
-| `nullscape:skeleton/1 #3` | 4 | 3.6% | 5 | 4.5% | current 5 |
-| `nullscape:skeleton/1 #4` | 5 | 4.5% | 4 | 3.6% | current 4 |
-| `nullscape:skeleton/2` | 2 | 1.8% | 2 | 1.8% |  |
-| `nullscape:skeleton/2 #2` | 3 | 2.7% | 3 | 2.7% |  |
-| `nullscape:skeleton/2 #3` | 4 | 3.6% | 5 | 4.5% | current 5 |
-| `nullscape:skeleton/2 #4` | 5 | 4.5% | 4 | 3.6% | current 4 |
-| `nullscape:skeleton/3` | 2 | 1.8% | 2 | 1.8% |  |
-| `nullscape:skeleton/3 #2` | 3 | 2.7% | 3 | 2.7% |  |
-| `nullscape:skeleton/3 #3` | 4 | 3.6% | 5 | 4.5% | current 5 |
-| `nullscape:skeleton/3 #4` | 5 | 4.5% | 4 | 3.6% | current 4 |
-| `nullscape:skeleton/4` | 2 | 1.8% | 2 | 1.8% |  |
-| `nullscape:skeleton/4 #2` | 3 | 2.7% | 3 | 2.7% |  |
-| `nullscape:skeleton/4 #3` | 4 | 3.6% | 5 | 4.5% | current 5 |
-| `nullscape:skeleton/4 #4` | 5 | 4.5% | 4 | 3.6% | current 4 |
-| `nullscape:skeleton/5` | 2 | 1.8% | 2 | 1.8% |  |
-| `nullscape:skeleton/5 #2` | 3 | 2.7% | 3 | 2.7% |  |
-| `nullscape:skeleton/5 #3` | 4 | 3.6% | 5 | 4.5% | current 5 |
-| `nullscape:skeleton/5 #4` | 5 | 4.5% | 4 | 3.6% | current 4 |
-| `nullscape:skeleton/6` | 2 | 1.8% | 2 | 1.8% |  |
-| `nullscape:skeleton/6 #2` | 3 | 2.7% | 3 | 2.7% |  |
-| `nullscape:skeleton/6 #3` | 4 | 3.6% | 5 | 4.5% | current 5 |
-| `nullscape:skeleton/6 #4` | 5 | 4.5% | 4 | 3.6% | current 4 |
-| `nullscape:skeleton/7` | 2 | 1.8% | 2 | 1.8% |  |
-| `nullscape:skeleton/7 #2` | 3 | 2.7% | 3 | 2.7% |  |
-| `nullscape:skeleton/7 #3` | 4 | 3.6% | 5 | 4.5% | current 5 |
-| `nullscape:skeleton/7 #4` | 5 | 4.5% | 4 | 3.6% | current 4 |
-| `nullscape:skeleton/8` | 2 | 1.8% | 2 | 1.8% |  |
-| `nullscape:skeleton/8 #2` | 3 | 2.7% | 3 | 2.7% |  |
-| `nullscape:skeleton/8 #3` | 4 | 3.6% | 5 | 4.5% | current 5 |
-| `nullscape:skeleton/8 #4` | 5 | 4.5% | 4 | 3.6% | current 4 |
+| `minecraft:village/taiga/streets/crossroad_03` | 2 | 3.1% | 4 | 3.8% |  |
+| `minecraft:village/taiga/streets/crossroad_04` | 2 | 3.1% | 4 | 3.8% |  |
+| `minecraft:village/taiga/streets/crossroad_05` | 2 | 3.1% | 4 | 3.8% |  |
+| `minecraft:village/taiga/streets/crossroad_06` | 2 | 3.1% | 4 | 3.8% |  |
+| `minecraft:village/taiga/streets/straight_01` | 4 | 6.2% | 8 | 7.6% |  |
+| `minecraft:village/taiga/streets/straight_02` | 4 | 6.2% | 8 | 7.6% |  |
+| `minecraft:village/taiga/streets/straight_03` | 4 | 6.2% | 8 | 7.6% |  |
+| `minecraft:village/taiga/streets/straight_04` | 7 | 10.8% | 14 | 13.3% |  |
+| `minecraft:village/taiga/streets/straight_05` | 7 | 10.8% | 14 | 13.3% |  |
+| `minecraft:village/taiga/streets/straight_06` | 4 | 6.2% | 8 | 7.6% |  |
+| `minecraft:village/taiga/streets/turn_01` | 3 | 4.6% | 6 | 5.7% |  |
+| `monobank:village/streets/taiga_straight_fix_01` | 15 | 23.1% | 5 | 4.8% | monobank/vault_streets x0.16 |
 
 ### `pneumaticcraft:village/desert/houses`
 
@@ -542,446 +468,17 @@ Pool scaled x2 to hold fractional weights.
 |---|---:|---:|---:|---:|---|
 | `pneumaticcraft:villages/mechanic_house_snowy` | 1 | 100.0% | **removed** | - | mod/pneumaticcraft x0, tech x0 |
 
-### `subterrestrial:cabin/deepslate/base`
-
-| piece | original | chance | final | chance | why |
-|---|---:|---:|---:|---:|---|
-| `subterrestrial:cabin/deepslate/base_0` | 5 | 0.8% | 100 | 15.9% | current 100 |
-| `subterrestrial:cabin/deepslate/base_0 #2` | 100 | 15.9% | 5 | 0.8% | current 5 |
-| `subterrestrial:cabin/deepslate/base_1` | 5 | 0.8% | 100 | 15.9% | current 100 |
-| `subterrestrial:cabin/deepslate/base_1 #2` | 100 | 15.9% | 5 | 0.8% | current 5 |
-| `subterrestrial:cabin/deepslate/base_lower_0` | 5 | 0.8% | 100 | 15.9% | current 100 |
-| `subterrestrial:cabin/deepslate/base_lower_0 #2` | 100 | 15.9% | 5 | 0.8% | current 5 |
-| `subterrestrial:cabin/deepslate/base_lower_1` | 5 | 0.8% | 100 | 15.9% | current 100 |
-| `subterrestrial:cabin/deepslate/base_lower_1 #2` | 100 | 15.9% | 5 | 0.8% | current 5 |
-| `subterrestrial:cabin/deepslate/base_upper_0` | 5 | 0.8% | 100 | 15.9% | current 100 |
-| `subterrestrial:cabin/deepslate/base_upper_0 #2` | 100 | 15.9% | 5 | 0.8% | current 5 |
-| `subterrestrial:cabin/deepslate/base_upper_1` | 5 | 0.8% | 100 | 15.9% | current 100 |
-| `subterrestrial:cabin/deepslate/base_upper_1 #2` | 100 | 15.9% | 5 | 0.8% | current 5 |
-
-### `subterrestrial:cabin/deepslate/bottom`
-
-| piece | original | chance | final | chance | why |
-|---|---:|---:|---:|---:|---|
-| `subterrestrial:cabin/default/bottom_0` | 5 | 1.2% | 100 | 23.8% | current 100 |
-| `subterrestrial:cabin/default/bottom_0 #2` | 100 | 23.8% | 5 | 1.2% | current 5 |
-| `subterrestrial:cabin/default/bottom_1` | 5 | 1.2% | 100 | 23.8% | current 100 |
-| `subterrestrial:cabin/default/bottom_1 #2` | 100 | 23.8% | 5 | 1.2% | current 5 |
-| `subterrestrial:cabin/default/bottom_2` | 5 | 1.2% | 100 | 23.8% | current 100 |
-| `subterrestrial:cabin/default/bottom_2 #2` | 100 | 23.8% | 5 | 1.2% | current 5 |
-| `subterrestrial:cabin/default/bottom_3` | 5 | 1.2% | 100 | 23.8% | current 100 |
-| `subterrestrial:cabin/default/bottom_3 #2` | 100 | 23.8% | 5 | 1.2% | current 5 |
-
-### `subterrestrial:cabin/deepslate/top`
-
-| piece | original | chance | final | chance | why |
-|---|---:|---:|---:|---:|---|
-| `subterrestrial:cabin/default/top_0` | 5 | 1.2% | 100 | 23.8% | current 100 |
-| `subterrestrial:cabin/default/top_0 #2` | 100 | 23.8% | 5 | 1.2% | current 5 |
-| `subterrestrial:cabin/default/top_1` | 5 | 1.2% | 100 | 23.8% | current 100 |
-| `subterrestrial:cabin/default/top_1 #2` | 100 | 23.8% | 5 | 1.2% | current 5 |
-| `subterrestrial:cabin/default/top_2` | 5 | 1.2% | 100 | 23.8% | current 100 |
-| `subterrestrial:cabin/default/top_2 #2` | 100 | 23.8% | 5 | 1.2% | current 5 |
-| `subterrestrial:cabin/default/top_3` | 5 | 1.2% | 100 | 23.8% | current 100 |
-| `subterrestrial:cabin/default/top_3 #2` | 100 | 23.8% | 5 | 1.2% | current 5 |
-
-### `subterrestrial:cabin/default/base`
-
-| piece | original | chance | final | chance | why |
-|---|---:|---:|---:|---:|---|
-| `subterrestrial:cabin/default/base_0` | 5 | 0.8% | 100 | 15.9% | current 100 |
-| `subterrestrial:cabin/default/base_0 #2` | 100 | 15.9% | 5 | 0.8% | current 5 |
-| `subterrestrial:cabin/default/base_1` | 5 | 0.8% | 100 | 15.9% | current 100 |
-| `subterrestrial:cabin/default/base_1 #2` | 100 | 15.9% | 5 | 0.8% | current 5 |
-| `subterrestrial:cabin/default/base_lower_0` | 5 | 0.8% | 100 | 15.9% | current 100 |
-| `subterrestrial:cabin/default/base_lower_0 #2` | 100 | 15.9% | 5 | 0.8% | current 5 |
-| `subterrestrial:cabin/default/base_lower_1` | 5 | 0.8% | 100 | 15.9% | current 100 |
-| `subterrestrial:cabin/default/base_lower_1 #2` | 100 | 15.9% | 5 | 0.8% | current 5 |
-| `subterrestrial:cabin/default/base_upper_0` | 5 | 0.8% | 100 | 15.9% | current 100 |
-| `subterrestrial:cabin/default/base_upper_0 #2` | 100 | 15.9% | 5 | 0.8% | current 5 |
-| `subterrestrial:cabin/default/base_upper_1` | 5 | 0.8% | 100 | 15.9% | current 100 |
-| `subterrestrial:cabin/default/base_upper_1 #2` | 100 | 15.9% | 5 | 0.8% | current 5 |
-
-### `subterrestrial:cabin/default/bottom`
-
-| piece | original | chance | final | chance | why |
-|---|---:|---:|---:|---:|---|
-| `subterrestrial:cabin/default/bottom_0` | 5 | 1.2% | 100 | 23.8% | current 100 |
-| `subterrestrial:cabin/default/bottom_0 #2` | 100 | 23.8% | 5 | 1.2% | current 5 |
-| `subterrestrial:cabin/default/bottom_1` | 5 | 1.2% | 100 | 23.8% | current 100 |
-| `subterrestrial:cabin/default/bottom_1 #2` | 100 | 23.8% | 5 | 1.2% | current 5 |
-| `subterrestrial:cabin/default/bottom_2` | 5 | 1.2% | 100 | 23.8% | current 100 |
-| `subterrestrial:cabin/default/bottom_2 #2` | 100 | 23.8% | 5 | 1.2% | current 5 |
-| `subterrestrial:cabin/default/bottom_3` | 5 | 1.2% | 100 | 23.8% | current 100 |
-| `subterrestrial:cabin/default/bottom_3 #2` | 100 | 23.8% | 5 | 1.2% | current 5 |
-
-### `subterrestrial:cabin/default/top`
-
-| piece | original | chance | final | chance | why |
-|---|---:|---:|---:|---:|---|
-| `subterrestrial:cabin/default/top_0` | 5 | 1.2% | 100 | 23.8% | current 100 |
-| `subterrestrial:cabin/default/top_0 #2` | 100 | 23.8% | 5 | 1.2% | current 5 |
-| `subterrestrial:cabin/default/top_1` | 5 | 1.2% | 100 | 23.8% | current 100 |
-| `subterrestrial:cabin/default/top_1 #2` | 100 | 23.8% | 5 | 1.2% | current 5 |
-| `subterrestrial:cabin/default/top_2` | 5 | 1.2% | 100 | 23.8% | current 100 |
-| `subterrestrial:cabin/default/top_2 #2` | 100 | 23.8% | 5 | 1.2% | current 5 |
-| `subterrestrial:cabin/default/top_3` | 5 | 1.2% | 100 | 23.8% | current 100 |
-| `subterrestrial:cabin/default/top_3 #2` | 100 | 23.8% | 5 | 1.2% | current 5 |
-
-### `subterrestrial:cabin/desert/base`
-
-| piece | original | chance | final | chance | why |
-|---|---:|---:|---:|---:|---|
-| `subterrestrial:cabin/desert/base_0` | 5 | 1.6% | 100 | 31.7% | current 100 |
-| `subterrestrial:cabin/desert/base_0 #2` | 100 | 31.7% | 5 | 1.6% | current 5 |
-| `subterrestrial:cabin/desert/base_lower_0` | 5 | 1.6% | 100 | 31.7% | current 100 |
-| `subterrestrial:cabin/desert/base_lower_0 #2` | 100 | 31.7% | 5 | 1.6% | current 5 |
-| `subterrestrial:cabin/desert/base_upper_0` | 5 | 1.6% | 100 | 31.7% | current 100 |
-| `subterrestrial:cabin/desert/base_upper_0 #2` | 100 | 31.7% | 5 | 1.6% | current 5 |
-
-### `subterrestrial:cabin/desert/bottom`
-
-| piece | original | chance | final | chance | why |
-|---|---:|---:|---:|---:|---|
-| `subterrestrial:cabin/desert/bottom_0` | 5 | 1.2% | 100 | 23.8% | current 100 |
-| `subterrestrial:cabin/desert/bottom_0 #2` | 100 | 23.8% | 5 | 1.2% | current 5 |
-| `subterrestrial:cabin/desert/bottom_1` | 100 | 23.8% | 100 | 23.8% |  |
-| `subterrestrial:cabin/desert/bottom_2` | 5 | 1.2% | 100 | 23.8% | current 100 |
-| `subterrestrial:cabin/desert/bottom_2 #2` | 5 | 1.2% | 5 | 1.2% |  |
-| `subterrestrial:cabin/desert/bottom_2 #3` | 100 | 23.8% | 5 | 1.2% | current 5 |
-| `subterrestrial:cabin/desert/bottom_3` | 5 | 1.2% | 100 | 23.8% | current 100 |
-| `subterrestrial:cabin/desert/bottom_3 #2` | 100 | 23.8% | 5 | 1.2% | current 5 |
-
-### `subterrestrial:cabin/desert/top`
-
-| piece | original | chance | final | chance | why |
-|---|---:|---:|---:|---:|---|
-| `subterrestrial:cabin/desert/top_0` | 5 | 1.2% | 100 | 23.8% | current 100 |
-| `subterrestrial:cabin/desert/top_0 #2` | 100 | 23.8% | 5 | 1.2% | current 5 |
-| `subterrestrial:cabin/desert/top_1` | 5 | 1.2% | 100 | 23.8% | current 100 |
-| `subterrestrial:cabin/desert/top_1 #2` | 100 | 23.8% | 5 | 1.2% | current 5 |
-| `subterrestrial:cabin/desert/top_2` | 5 | 1.2% | 100 | 23.8% | current 100 |
-| `subterrestrial:cabin/desert/top_2 #2` | 100 | 23.8% | 5 | 1.2% | current 5 |
-| `subterrestrial:cabin/desert/top_3` | 5 | 1.2% | 100 | 23.8% | current 100 |
-| `subterrestrial:cabin/desert/top_3 #2` | 100 | 23.8% | 5 | 1.2% | current 5 |
-
-### `subterrestrial:cabin/ice/base`
-
-| piece | original | chance | final | chance | why |
-|---|---:|---:|---:|---:|---|
-| `subterrestrial:cabin/ice/base_0` | 5 | 1.6% | 100 | 31.7% | current 100 |
-| `subterrestrial:cabin/ice/base_0 #2` | 100 | 31.7% | 5 | 1.6% | current 5 |
-| `subterrestrial:cabin/ice/base_lower_0` | 5 | 1.6% | 100 | 31.7% | current 100 |
-| `subterrestrial:cabin/ice/base_lower_0 #2` | 100 | 31.7% | 5 | 1.6% | current 5 |
-| `subterrestrial:cabin/ice/base_upper_0` | 5 | 1.6% | 100 | 31.7% | current 100 |
-| `subterrestrial:cabin/ice/base_upper_0 #2` | 100 | 31.7% | 5 | 1.6% | current 5 |
-
-### `subterrestrial:cabin/ice/bottom`
-
-| piece | original | chance | final | chance | why |
-|---|---:|---:|---:|---:|---|
-| `subterrestrial:cabin/taiga/bottom_0` | 5 | 1.2% | 100 | 23.8% | current 100 |
-| `subterrestrial:cabin/taiga/bottom_0 #2` | 100 | 23.8% | 5 | 1.2% | current 5 |
-| `subterrestrial:cabin/taiga/bottom_1` | 5 | 1.2% | 100 | 23.8% | current 100 |
-| `subterrestrial:cabin/taiga/bottom_1 #2` | 100 | 23.8% | 5 | 1.2% | current 5 |
-| `subterrestrial:cabin/taiga/bottom_2` | 5 | 1.2% | 100 | 23.8% | current 100 |
-| `subterrestrial:cabin/taiga/bottom_2 #2` | 100 | 23.8% | 5 | 1.2% | current 5 |
-| `subterrestrial:cabin/taiga/bottom_3` | 5 | 1.2% | 100 | 23.8% | current 100 |
-| `subterrestrial:cabin/taiga/bottom_3 #2` | 100 | 23.8% | 5 | 1.2% | current 5 |
-
-### `subterrestrial:cabin/ice/top`
-
-| piece | original | chance | final | chance | why |
-|---|---:|---:|---:|---:|---|
-| `subterrestrial:cabin/taiga/top_0` | 5 | 1.2% | 100 | 23.8% | current 100 |
-| `subterrestrial:cabin/taiga/top_0 #2` | 100 | 23.8% | 5 | 1.2% | current 5 |
-| `subterrestrial:cabin/taiga/top_1` | 5 | 1.2% | 100 | 23.8% | current 100 |
-| `subterrestrial:cabin/taiga/top_1 #2` | 100 | 23.8% | 5 | 1.2% | current 5 |
-| `subterrestrial:cabin/taiga/top_2` | 5 | 1.2% | 100 | 23.8% | current 100 |
-| `subterrestrial:cabin/taiga/top_2 #2` | 100 | 23.8% | 5 | 1.2% | current 5 |
-| `subterrestrial:cabin/taiga/top_3` | 5 | 1.2% | 100 | 23.8% | current 100 |
-| `subterrestrial:cabin/taiga/top_3 #2` | 100 | 23.8% | 5 | 1.2% | current 5 |
-
-### `subterrestrial:cabin/jungle/base`
-
-| piece | original | chance | final | chance | why |
-|---|---:|---:|---:|---:|---|
-| `subterrestrial:cabin/jungle/base_0` | 5 | 1.6% | 100 | 31.7% | current 100 |
-| `subterrestrial:cabin/jungle/base_0 #2` | 100 | 31.7% | 5 | 1.6% | current 5 |
-| `subterrestrial:cabin/jungle/base_lower_0` | 5 | 1.6% | 100 | 31.7% | current 100 |
-| `subterrestrial:cabin/jungle/base_lower_0 #2` | 100 | 31.7% | 5 | 1.6% | current 5 |
-| `subterrestrial:cabin/jungle/base_upper_0` | 5 | 1.6% | 100 | 31.7% | current 100 |
-| `subterrestrial:cabin/jungle/base_upper_0 #2` | 100 | 31.7% | 5 | 1.6% | current 5 |
-
-### `subterrestrial:cabin/jungle/bottom`
-
-| piece | original | chance | final | chance | why |
-|---|---:|---:|---:|---:|---|
-| `subterrestrial:cabin/jungle/bottom_0` | 5 | 1.2% | 100 | 23.8% | current 100 |
-| `subterrestrial:cabin/jungle/bottom_0 #2` | 100 | 23.8% | 5 | 1.2% | current 5 |
-| `subterrestrial:cabin/jungle/bottom_1` | 5 | 1.2% | 100 | 23.8% | current 100 |
-| `subterrestrial:cabin/jungle/bottom_1 #2` | 100 | 23.8% | 5 | 1.2% | current 5 |
-| `subterrestrial:cabin/jungle/bottom_2` | 5 | 1.2% | 100 | 23.8% | current 100 |
-| `subterrestrial:cabin/jungle/bottom_2 #2` | 100 | 23.8% | 5 | 1.2% | current 5 |
-| `subterrestrial:cabin/jungle/bottom_3` | 5 | 1.2% | 100 | 23.8% | current 100 |
-| `subterrestrial:cabin/jungle/bottom_3 #2` | 100 | 23.8% | 5 | 1.2% | current 5 |
-
-### `subterrestrial:cabin/jungle/top`
-
-| piece | original | chance | final | chance | why |
-|---|---:|---:|---:|---:|---|
-| `subterrestrial:cabin/jungle/top_0` | 5 | 1.2% | 100 | 23.8% | current 100 |
-| `subterrestrial:cabin/jungle/top_0 #2` | 100 | 23.8% | 5 | 1.2% | current 5 |
-| `subterrestrial:cabin/jungle/top_1` | 5 | 1.2% | 100 | 23.8% | current 100 |
-| `subterrestrial:cabin/jungle/top_1 #2` | 100 | 23.8% | 5 | 1.2% | current 5 |
-| `subterrestrial:cabin/jungle/top_2` | 5 | 1.2% | 100 | 23.8% | current 100 |
-| `subterrestrial:cabin/jungle/top_2 #2` | 100 | 23.8% | 5 | 1.2% | current 5 |
-| `subterrestrial:cabin/jungle/top_3` | 5 | 1.2% | 100 | 23.8% | current 100 |
-| `subterrestrial:cabin/jungle/top_3 #2` | 100 | 23.8% | 5 | 1.2% | current 5 |
-
-### `subterrestrial:cabin/mesa/base`
-
-| piece | original | chance | final | chance | why |
-|---|---:|---:|---:|---:|---|
-| `subterrestrial:cabin/mesa/base_0` | 5 | 1.6% | 100 | 31.7% | current 100 |
-| `subterrestrial:cabin/mesa/base_0 #2` | 100 | 31.7% | 5 | 1.6% | current 5 |
-| `subterrestrial:cabin/mesa/base_lower_0` | 5 | 1.6% | 100 | 31.7% | current 100 |
-| `subterrestrial:cabin/mesa/base_lower_0 #2` | 100 | 31.7% | 5 | 1.6% | current 5 |
-| `subterrestrial:cabin/mesa/base_upper_0` | 5 | 1.6% | 100 | 31.7% | current 100 |
-| `subterrestrial:cabin/mesa/base_upper_0 #2` | 100 | 31.7% | 5 | 1.6% | current 5 |
-
-### `subterrestrial:cabin/mesa/bottom`
-
-| piece | original | chance | final | chance | why |
-|---|---:|---:|---:|---:|---|
-| `subterrestrial:cabin/desert/bottom_0` | 5 | 1.2% | 100 | 23.8% | current 100 |
-| `subterrestrial:cabin/desert/bottom_0 #2` | 100 | 23.8% | 5 | 1.2% | current 5 |
-| `subterrestrial:cabin/desert/bottom_1` | 100 | 23.8% | 100 | 23.8% |  |
-| `subterrestrial:cabin/desert/bottom_2` | 5 | 1.2% | 100 | 23.8% | current 100 |
-| `subterrestrial:cabin/desert/bottom_2 #2` | 5 | 1.2% | 5 | 1.2% |  |
-| `subterrestrial:cabin/desert/bottom_2 #3` | 100 | 23.8% | 5 | 1.2% | current 5 |
-| `subterrestrial:cabin/desert/bottom_3` | 5 | 1.2% | 100 | 23.8% | current 100 |
-| `subterrestrial:cabin/desert/bottom_3 #2` | 100 | 23.8% | 5 | 1.2% | current 5 |
-
-### `subterrestrial:cabin/mesa/top`
-
-| piece | original | chance | final | chance | why |
-|---|---:|---:|---:|---:|---|
-| `subterrestrial:cabin/desert/top_0` | 5 | 1.2% | 100 | 23.8% | current 100 |
-| `subterrestrial:cabin/desert/top_0 #2` | 100 | 23.8% | 5 | 1.2% | current 5 |
-| `subterrestrial:cabin/desert/top_1` | 5 | 1.2% | 100 | 23.8% | current 100 |
-| `subterrestrial:cabin/desert/top_1 #2` | 100 | 23.8% | 5 | 1.2% | current 5 |
-| `subterrestrial:cabin/desert/top_2` | 5 | 1.2% | 100 | 23.8% | current 100 |
-| `subterrestrial:cabin/desert/top_2 #2` | 100 | 23.8% | 5 | 1.2% | current 5 |
-| `subterrestrial:cabin/desert/top_3` | 5 | 1.2% | 100 | 23.8% | current 100 |
-| `subterrestrial:cabin/desert/top_3 #2` | 100 | 23.8% | 5 | 1.2% | current 5 |
-
-### `subterrestrial:cabin/taiga/base`
-
-| piece | original | chance | final | chance | why |
-|---|---:|---:|---:|---:|---|
-| `subterrestrial:cabin/taiga/base_0` | 5 | 1.6% | 100 | 31.7% | current 100 |
-| `subterrestrial:cabin/taiga/base_0 #2` | 100 | 31.7% | 5 | 1.6% | current 5 |
-| `subterrestrial:cabin/taiga/base_lower_0` | 5 | 1.6% | 100 | 31.7% | current 100 |
-| `subterrestrial:cabin/taiga/base_lower_0 #2` | 100 | 31.7% | 5 | 1.6% | current 5 |
-| `subterrestrial:cabin/taiga/base_upper_0` | 5 | 1.6% | 100 | 31.7% | current 100 |
-| `subterrestrial:cabin/taiga/base_upper_0 #2` | 100 | 31.7% | 5 | 1.6% | current 5 |
-
-### `subterrestrial:cabin/taiga/bottom`
-
-| piece | original | chance | final | chance | why |
-|---|---:|---:|---:|---:|---|
-| `subterrestrial:cabin/taiga/bottom_0` | 5 | 1.2% | 100 | 23.8% | current 100 |
-| `subterrestrial:cabin/taiga/bottom_0 #2` | 100 | 23.8% | 5 | 1.2% | current 5 |
-| `subterrestrial:cabin/taiga/bottom_1` | 5 | 1.2% | 100 | 23.8% | current 100 |
-| `subterrestrial:cabin/taiga/bottom_1 #2` | 100 | 23.8% | 5 | 1.2% | current 5 |
-| `subterrestrial:cabin/taiga/bottom_2` | 5 | 1.2% | 100 | 23.8% | current 100 |
-| `subterrestrial:cabin/taiga/bottom_2 #2` | 100 | 23.8% | 5 | 1.2% | current 5 |
-| `subterrestrial:cabin/taiga/bottom_3` | 5 | 1.2% | 100 | 23.8% | current 100 |
-| `subterrestrial:cabin/taiga/bottom_3 #2` | 100 | 23.8% | 5 | 1.2% | current 5 |
-
-### `subterrestrial:cabin/taiga/top`
-
-| piece | original | chance | final | chance | why |
-|---|---:|---:|---:|---:|---|
-| `subterrestrial:cabin/taiga/top_0` | 5 | 1.2% | 100 | 23.8% | current 100 |
-| `subterrestrial:cabin/taiga/top_0 #2` | 100 | 23.8% | 5 | 1.2% | current 5 |
-| `subterrestrial:cabin/taiga/top_1` | 5 | 1.2% | 100 | 23.8% | current 100 |
-| `subterrestrial:cabin/taiga/top_1 #2` | 100 | 23.8% | 5 | 1.2% | current 5 |
-| `subterrestrial:cabin/taiga/top_2` | 5 | 1.2% | 100 | 23.8% | current 100 |
-| `subterrestrial:cabin/taiga/top_2 #2` | 100 | 23.8% | 5 | 1.2% | current 5 |
-| `subterrestrial:cabin/taiga/top_3` | 5 | 1.2% | 100 | 23.8% | current 100 |
-| `subterrestrial:cabin/taiga/top_3 #2` | 100 | 23.8% | 5 | 1.2% | current 5 |
-
-### `unwrecked_ships:ship/pirate_sails`
-
-| piece | original | chance | final | chance | why |
-|---|---:|---:|---:|---:|---|
-| `unwrecked_ships:ship/sails/horizontal_white_sails_primary` | 1 | 0.7% | 1 | 0.7% |  |
-| `unwrecked_ships:ship/sails/horizontal_white_sails_primary #2` | 1 | 0.7% | 1 | 0.7% |  |
-| `unwrecked_ships:ship/sails/horizontal_white_sails_primary #3` | 1 | 0.7% | 1 | 0.7% |  |
-| `unwrecked_ships:ship/sails/horizontal_white_sails_primary #4` | 1 | 0.7% | 30 | 20.8% | current 30 |
-| `unwrecked_ships:ship/sails/horizontal_white_sails_primary #5` | 1 | 0.7% | 1 | 0.7% |  |
-| `unwrecked_ships:ship/sails/horizontal_white_sails_primary #6` | 1 | 0.7% | 1 | 0.7% |  |
-| `unwrecked_ships:ship/sails/horizontal_white_sails_primary #7` | 1 | 0.7% | 1 | 0.7% |  |
-| `unwrecked_ships:ship/sails/horizontal_white_sails_primary #8` | 1 | 0.7% | 1 | 0.7% |  |
-| `unwrecked_ships:ship/sails/horizontal_white_sails_primary #9` | 1 | 0.7% | 1 | 0.7% |  |
-| `unwrecked_ships:ship/sails/horizontal_white_sails_primary #10` | 1 | 0.7% | 1 | 0.7% |  |
-| `unwrecked_ships:ship/sails/horizontal_white_sails_primary #11` | 1 | 0.7% | 1 | 0.7% |  |
-| `unwrecked_ships:ship/sails/horizontal_white_sails_primary #12` | 1 | 0.7% | 1 | 0.7% |  |
-| `unwrecked_ships:ship/sails/horizontal_white_sails_primary #13` | 1 | 0.7% | 1 | 0.7% |  |
-| `unwrecked_ships:ship/sails/horizontal_white_sails_primary #14` | 1 | 0.7% | 1 | 0.7% |  |
-| `unwrecked_ships:ship/sails/horizontal_white_sails_primary #15` | 1 | 0.7% | 1 | 0.7% |  |
-| `unwrecked_ships:ship/sails/horizontal_white_sails_primary #16` | 30 | 20.8% | 1 | 0.7% | current 1 |
-| `unwrecked_ships:ship/sails/vertical_white_sails_primary` | 1 | 0.7% | 1 | 0.7% |  |
-| `unwrecked_ships:ship/sails/vertical_white_sails_primary #2` | 1 | 0.7% | 1 | 0.7% |  |
-| `unwrecked_ships:ship/sails/vertical_white_sails_primary #3` | 1 | 0.7% | 1 | 0.7% |  |
-| `unwrecked_ships:ship/sails/vertical_white_sails_primary #4` | 1 | 0.7% | 30 | 20.8% | current 30 |
-| `unwrecked_ships:ship/sails/vertical_white_sails_primary #5` | 1 | 0.7% | 1 | 0.7% |  |
-| `unwrecked_ships:ship/sails/vertical_white_sails_primary #6` | 1 | 0.7% | 1 | 0.7% |  |
-| `unwrecked_ships:ship/sails/vertical_white_sails_primary #7` | 1 | 0.7% | 1 | 0.7% |  |
-| `unwrecked_ships:ship/sails/vertical_white_sails_primary #8` | 1 | 0.7% | 1 | 0.7% |  |
-| `unwrecked_ships:ship/sails/vertical_white_sails_primary #9` | 1 | 0.7% | 1 | 0.7% |  |
-| `unwrecked_ships:ship/sails/vertical_white_sails_primary #10` | 1 | 0.7% | 1 | 0.7% |  |
-| `unwrecked_ships:ship/sails/vertical_white_sails_primary #11` | 1 | 0.7% | 1 | 0.7% |  |
-| `unwrecked_ships:ship/sails/vertical_white_sails_primary #12` | 1 | 0.7% | 1 | 0.7% |  |
-| `unwrecked_ships:ship/sails/vertical_white_sails_primary #13` | 1 | 0.7% | 1 | 0.7% |  |
-| `unwrecked_ships:ship/sails/vertical_white_sails_primary #14` | 1 | 0.7% | 1 | 0.7% |  |
-| `unwrecked_ships:ship/sails/vertical_white_sails_primary #15` | 1 | 0.7% | 1 | 0.7% |  |
-| `unwrecked_ships:ship/sails/vertical_white_sails_primary #16` | 30 | 20.8% | 1 | 0.7% | current 1 |
-| `unwrecked_ships:ship/sails/white_sails` | 1 | 0.7% | 1 | 0.7% |  |
-| `unwrecked_ships:ship/sails/white_sails #2` | 1 | 0.7% | 1 | 0.7% |  |
-| `unwrecked_ships:ship/sails/white_sails #3` | 1 | 0.7% | 1 | 0.7% |  |
-| `unwrecked_ships:ship/sails/white_sails #4` | 1 | 0.7% | 30 | 20.8% | current 30 |
-| `unwrecked_ships:ship/sails/white_sails #5` | 1 | 0.7% | 1 | 0.7% |  |
-| `unwrecked_ships:ship/sails/white_sails #6` | 1 | 0.7% | 10 | 6.9% | current 10 |
-| `unwrecked_ships:ship/sails/white_sails #7` | 1 | 0.7% | 1 | 0.7% |  |
-| `unwrecked_ships:ship/sails/white_sails #8` | 1 | 0.7% | 1 | 0.7% |  |
-| `unwrecked_ships:ship/sails/white_sails #9` | 1 | 0.7% | 1 | 0.7% |  |
-| `unwrecked_ships:ship/sails/white_sails #10` | 1 | 0.7% | 1 | 0.7% |  |
-| `unwrecked_ships:ship/sails/white_sails #11` | 1 | 0.7% | 1 | 0.7% |  |
-| `unwrecked_ships:ship/sails/white_sails #12` | 1 | 0.7% | 1 | 0.7% |  |
-| `unwrecked_ships:ship/sails/white_sails #13` | 1 | 0.7% | 1 | 0.7% |  |
-| `unwrecked_ships:ship/sails/white_sails #14` | 1 | 0.7% | 1 | 0.7% |  |
-| `unwrecked_ships:ship/sails/white_sails #15` | 10 | 6.9% | 1 | 0.7% | current 1 |
-| `unwrecked_ships:ship/sails/white_sails #16` | 30 | 20.8% | 1 | 0.7% | current 1 |
-
-### `unwrecked_ships:ship/sails`
-
-| piece | original | chance | final | chance | why |
-|---|---:|---:|---:|---:|---|
-| `unwrecked_ships:ship/sails/horizontal_white_sails_primary` | 1 | 0.5% | 1 | 0.5% |  |
-| `unwrecked_ships:ship/sails/horizontal_white_sails_primary #2` | 1 | 0.5% | 1 | 0.5% |  |
-| `unwrecked_ships:ship/sails/horizontal_white_sails_primary #3` | 1 | 0.5% | 1 | 0.5% |  |
-| `unwrecked_ships:ship/sails/horizontal_white_sails_primary #4` | 1 | 0.5% | 1 | 0.5% |  |
-| `unwrecked_ships:ship/sails/horizontal_white_sails_primary #5` | 1 | 0.5% | 1 | 0.5% |  |
-| `unwrecked_ships:ship/sails/horizontal_white_sails_primary #6` | 1 | 0.5% | 1 | 0.5% |  |
-| `unwrecked_ships:ship/sails/horizontal_white_sails_primary #7` | 1 | 0.5% | 1 | 0.5% |  |
-| `unwrecked_ships:ship/sails/horizontal_white_sails_primary #8` | 1 | 0.5% | 1 | 0.5% |  |
-| `unwrecked_ships:ship/sails/horizontal_white_sails_primary #9` | 1 | 0.5% | 1 | 0.5% |  |
-| `unwrecked_ships:ship/sails/horizontal_white_sails_primary #10` | 1 | 0.5% | 1 | 0.5% |  |
-| `unwrecked_ships:ship/sails/horizontal_white_sails_primary #11` | 1 | 0.5% | 1 | 0.5% |  |
-| `unwrecked_ships:ship/sails/horizontal_white_sails_primary #12` | 1 | 0.5% | 1 | 0.5% |  |
-| `unwrecked_ships:ship/sails/horizontal_white_sails_primary #13` | 1 | 0.5% | 1 | 0.5% |  |
-| `unwrecked_ships:ship/sails/horizontal_white_sails_primary #14` | 1 | 0.5% | 1 | 0.5% |  |
-| `unwrecked_ships:ship/sails/horizontal_white_sails_primary #15` | 1 | 0.5% | 1 | 0.5% |  |
-| `unwrecked_ships:ship/sails/horizontal_white_sails_primary #16` | 1 | 0.5% | 1 | 0.5% |  |
-| `unwrecked_ships:ship/sails/nether/crimson_sails` | 4 | 2.1% | 4 | 2.1% |  |
-| `unwrecked_ships:ship/sails/nether/horizontal_crimson_sails_primary` | 1 | 0.5% | 1 | 0.5% |  |
-| `unwrecked_ships:ship/sails/nether/horizontal_warped_sails_primary` | 1 | 0.5% | 1 | 0.5% |  |
-| `unwrecked_ships:ship/sails/nether/vertical_crimson_sails_primary` | 1 | 0.5% | 1 | 0.5% |  |
-| `unwrecked_ships:ship/sails/nether/vertical_warped_sails_primary` | 1 | 0.5% | 1 | 0.5% |  |
-| `unwrecked_ships:ship/sails/nether/warped_sails` | 4 | 2.1% | 4 | 2.1% |  |
-| `unwrecked_ships:ship/sails/vertical_white_sails_primary` | 1 | 0.5% | 1 | 0.5% |  |
-| `unwrecked_ships:ship/sails/vertical_white_sails_primary #2` | 1 | 0.5% | 1 | 0.5% |  |
-| `unwrecked_ships:ship/sails/vertical_white_sails_primary #3` | 1 | 0.5% | 1 | 0.5% |  |
-| `unwrecked_ships:ship/sails/vertical_white_sails_primary #4` | 1 | 0.5% | 1 | 0.5% |  |
-| `unwrecked_ships:ship/sails/vertical_white_sails_primary #5` | 1 | 0.5% | 1 | 0.5% |  |
-| `unwrecked_ships:ship/sails/vertical_white_sails_primary #6` | 1 | 0.5% | 1 | 0.5% |  |
-| `unwrecked_ships:ship/sails/vertical_white_sails_primary #7` | 1 | 0.5% | 1 | 0.5% |  |
-| `unwrecked_ships:ship/sails/vertical_white_sails_primary #8` | 1 | 0.5% | 1 | 0.5% |  |
-| `unwrecked_ships:ship/sails/vertical_white_sails_primary #9` | 1 | 0.5% | 1 | 0.5% |  |
-| `unwrecked_ships:ship/sails/vertical_white_sails_primary #10` | 1 | 0.5% | 1 | 0.5% |  |
-| `unwrecked_ships:ship/sails/vertical_white_sails_primary #11` | 1 | 0.5% | 1 | 0.5% |  |
-| `unwrecked_ships:ship/sails/vertical_white_sails_primary #12` | 1 | 0.5% | 1 | 0.5% |  |
-| `unwrecked_ships:ship/sails/vertical_white_sails_primary #13` | 1 | 0.5% | 1 | 0.5% |  |
-| `unwrecked_ships:ship/sails/vertical_white_sails_primary #14` | 1 | 0.5% | 1 | 0.5% |  |
-| `unwrecked_ships:ship/sails/vertical_white_sails_primary #15` | 1 | 0.5% | 1 | 0.5% |  |
-| `unwrecked_ships:ship/sails/vertical_white_sails_primary #16` | 1 | 0.5% | 1 | 0.5% |  |
-| `unwrecked_ships:ship/sails/white_sails` | 3 | 1.6% | 40 | 20.8% | current 40 |
-| `unwrecked_ships:ship/sails/white_sails #2` | 3 | 1.6% | 40 | 20.8% | current 40 |
-| `unwrecked_ships:ship/sails/white_sails #3` | 3 | 1.6% | 5 | 2.6% | current 5 |
-| `unwrecked_ships:ship/sails/white_sails #4` | 3 | 1.6% | 3 | 1.6% |  |
-| `unwrecked_ships:ship/sails/white_sails #5` | 3 | 1.6% | 20 | 10.4% | current 20 |
-| `unwrecked_ships:ship/sails/white_sails #6` | 3 | 1.6% | 3 | 1.6% |  |
-| `unwrecked_ships:ship/sails/white_sails #7` | 3 | 1.6% | 3 | 1.6% |  |
-| `unwrecked_ships:ship/sails/white_sails #8` | 3 | 1.6% | 10 | 5.2% | current 10 |
-| `unwrecked_ships:ship/sails/white_sails #9` | 3 | 1.6% | 3 | 1.6% |  |
-| `unwrecked_ships:ship/sails/white_sails #10` | 3 | 1.6% | 3 | 1.6% |  |
-| `unwrecked_ships:ship/sails/white_sails #11` | 3 | 1.6% | 3 | 1.6% |  |
-| `unwrecked_ships:ship/sails/white_sails #12` | 5 | 2.6% | 3 | 1.6% | current 3 |
-| `unwrecked_ships:ship/sails/white_sails #13` | 10 | 5.2% | 3 | 1.6% | current 3 |
-| `unwrecked_ships:ship/sails/white_sails #14` | 20 | 10.4% | 3 | 1.6% | current 3 |
-| `unwrecked_ships:ship/sails/white_sails #15` | 40 | 20.8% | 3 | 1.6% | current 3 |
-| `unwrecked_ships:ship/sails/white_sails #16` | 40 | 20.8% | 3 | 1.6% | current 3 |
-
-### `villagesandpillages:village_witch/road_and_house`
-
-| piece | original | chance | final | chance | why |
-|---|---:|---:|---:|---:|---|
-| `villagesandpillages:village_witch/house/medium/medium_house_01` | 1 | 1.7% | 3 | 5.0% | current 3 |
-| `villagesandpillages:village_witch/house/medium/medium_house_01 #2` | 1 | 1.7% | 1 | 1.7% |  |
-| `villagesandpillages:village_witch/house/medium/medium_house_01 #3` | 1 | 1.7% | 1 | 1.7% |  |
-| `villagesandpillages:village_witch/house/medium/medium_house_01 #4` | 2 | 3.3% | 2 | 3.3% |  |
-| `villagesandpillages:village_witch/house/medium/medium_house_01 #5` | 3 | 5.0% | 1 | 1.7% | current 1 |
-| `villagesandpillages:village_witch/house/medium/medium_house_02` | 1 | 1.7% | 3 | 5.0% | current 3 |
-| `villagesandpillages:village_witch/house/medium/medium_house_02 #2` | 1 | 1.7% | 1 | 1.7% |  |
-| `villagesandpillages:village_witch/house/medium/medium_house_02 #3` | 1 | 1.7% | 1 | 1.7% |  |
-| `villagesandpillages:village_witch/house/medium/medium_house_02 #4` | 2 | 3.3% | 2 | 3.3% |  |
-| `villagesandpillages:village_witch/house/medium/medium_house_02 #5` | 3 | 5.0% | 1 | 1.7% | current 1 |
-| `villagesandpillages:village_witch/house/small/small_house_01` | 1 | 1.7% | 1 | 1.7% |  |
-| `villagesandpillages:village_witch/house/small/small_house_01 #2` | 1 | 1.7% | 1 | 1.7% |  |
-| `villagesandpillages:village_witch/house/small/small_house_01 #3` | 1 | 1.7% | 2 | 3.3% | current 2 |
-| `villagesandpillages:village_witch/house/small/small_house_01 #4` | 2 | 3.3% | 1 | 1.7% | current 1 |
-| `villagesandpillages:village_witch/house/small/small_house_01 #5` | 2 | 3.3% | 2 | 3.3% |  |
-| `villagesandpillages:village_witch/house/small/small_house_02` | 1 | 1.7% | 1 | 1.7% |  |
-| `villagesandpillages:village_witch/house/small/small_house_02 #2` | 1 | 1.7% | 2 | 3.3% | current 2 |
-| `villagesandpillages:village_witch/house/small/small_house_02 #3` | 1 | 1.7% | 1 | 1.7% |  |
-| `villagesandpillages:village_witch/house/small/small_house_02 #4` | 1 | 1.7% | 1 | 1.7% |  |
-| `villagesandpillages:village_witch/house/small/small_house_02 #5` | 1 | 1.7% | 1 | 1.7% |  |
-| `villagesandpillages:village_witch/house/small/small_house_02 #6` | 2 | 3.3% | 1 | 1.7% | current 1 |
-| `villagesandpillages:village_witch/house/small/small_house_03` | 1 | 1.7% | 1 | 1.7% |  |
-| `villagesandpillages:village_witch/house/small/small_house_03 #2` | 1 | 1.7% | 1 | 1.7% |  |
-| `villagesandpillages:village_witch/house/small/small_house_03 #3` | 2 | 3.3% | 2 | 3.3% |  |
-| `villagesandpillages:village_witch/house/small/small_house_03 #4` | 2 | 3.3% | 2 | 3.3% |  |
-| `villagesandpillages:village_witch/road/crossroad/crossroad_four_way` | 2 | 3.3% | 2 | 3.3% |  |
-| `villagesandpillages:village_witch/road/crossroad/crossroad_one_way` | 1 | 1.7% | 1 | 1.7% |  |
-| `villagesandpillages:village_witch/road/crossroad/crossroad_one_way_broken` | 1 | 1.7% | 1 | 1.7% |  |
-| `villagesandpillages:village_witch/road/crossroad/crossroad_one_way_broken #2` | 2 | 3.3% | 2 | 3.3% |  |
-| `villagesandpillages:village_witch/road/crossroad/crossroad_one_way_damaged` | 1 | 1.7% | 1 | 1.7% |  |
-| `villagesandpillages:village_witch/road/crossroad/crossroad_one_way_damaged #2` | 2 | 3.3% | 2 | 3.3% |  |
-| `villagesandpillages:village_witch/road/crossroad/crossroad_three_way` | 1 | 1.7% | 1 | 1.7% |  |
-| `villagesandpillages:village_witch/road/crossroad/crossroad_three_way #2` | 1 | 1.7% | 1 | 1.7% |  |
-| `villagesandpillages:village_witch/road/crossroad/crossroad_three_way #3` | 2 | 3.3% | 2 | 3.3% |  |
-| `villagesandpillages:village_witch/road/crossroad/crossroad_two_way` | 1 | 1.7% | 1 | 1.7% |  |
-| `villagesandpillages:village_witch/road/crossroad/crossroad_two_way #2` | 2 | 3.3% | 2 | 3.3% |  |
-| `villagesandpillages:village_witch/road/road_long` | 1 | 1.7% | 1 | 1.7% |  |
-| `villagesandpillages:village_witch/road/road_long #2` | 1 | 1.7% | 1 | 1.7% |  |
-| `villagesandpillages:village_witch/road/road_medium` | 1 | 1.7% | 1 | 1.7% |  |
-| `villagesandpillages:village_witch/road/road_medium #2` | 2 | 3.3% | 2 | 3.3% |  |
-| `villagesandpillages:village_witch/road/road_short` | 3 | 5.0% | 3 | 5.0% |  |
-
 ## Pieces injected by other mods
 
 Pieces whose namespace differs from their pool's, per pool. This is where mod village houses show up.
 
 ### beautify
 
-- `minecraft:village/desert/streets` (pool total weight 54): `beautify:botanist_house_desert` 2
-- `minecraft:village/plains/streets` (pool total weight 66): `beautify:botanist_house_plains` 2
-- `minecraft:village/savanna/streets` (pool total weight 73): `beautify:botanist_house_savanna` 2
-- `minecraft:village/snowy/streets` (pool total weight 66): `beautify:botanist_house_snowy` 2
-- `minecraft:village/taiga/streets` (pool total weight 66): `beautify:botanist_house_taiga` 2
+- `minecraft:village/desert/streets` (pool total weight 53): `beautify:botanist_house_desert` 1 -> 2
+- `minecraft:village/plains/streets` (pool total weight 65): `beautify:botanist_house_plains` 1 -> 2
+- `minecraft:village/savanna/streets` (pool total weight 72): `beautify:botanist_house_savanna` 1 -> 2
+- `minecraft:village/snowy/streets` (pool total weight 65): `beautify:botanist_house_snowy` 1 -> 2
+- `minecraft:village/taiga/streets` (pool total weight 65): `beautify:botanist_house_taiga` 1 -> 2
 
 ### chefsdelight
 
@@ -1125,22 +622,22 @@ Pieces whose namespace differs from their pool's, per pool. This is where mod vi
 ### monobank
 
 - `minecraft:village/desert/houses` (pool total weight 222): `monobank:village/houses/desert_vault` 15 -> 8
-- `minecraft:village/desert/streets` (pool total weight 54): `monobank:village/streets/desert_straight_fix_01` 15 -> 5
+- `minecraft:village/desert/streets` (pool total weight 53): `monobank:village/streets/desert_straight_fix_01` 15 -> 5
 - `minecraft:village/plains/houses` (pool total weight 246): `monobank:village/houses/plains_vault` 15 -> 8
-- `minecraft:village/plains/streets` (pool total weight 66): `monobank:village/streets/plains_straight_fix_01` 15 -> 5
+- `minecraft:village/plains/streets` (pool total weight 65): `monobank:village/streets/plains_straight_fix_01` 15 -> 5
 - `minecraft:village/savanna/houses` (pool total weight 242): `monobank:village/houses/savanna_vault` 15 -> 8
-- `minecraft:village/savanna/streets` (pool total weight 73): `monobank:village/streets/savanna_straight_fix_01` 15 -> 5
+- `minecraft:village/savanna/streets` (pool total weight 72): `monobank:village/streets/savanna_straight_fix_01` 15 -> 5
 - `minecraft:village/snowy/houses` (pool total weight 217): `monobank:village/houses/snowy_vault` 15 -> 8
-- `minecraft:village/snowy/streets` (pool total weight 66): `monobank:village/streets/snowy_straight_fix_01` 15 -> 5
+- `minecraft:village/snowy/streets` (pool total weight 65): `monobank:village/streets/snowy_straight_fix_01` 15 -> 5
 - `minecraft:village/taiga/houses` (pool total weight 236): `monobank:village/houses/taiga_vault` 15 -> 8
-- `minecraft:village/taiga/streets` (pool total weight 66): `monobank:village/streets/taiga_straight_fix_01` 15 -> 5
+- `minecraft:village/taiga/streets` (pool total weight 65): `monobank:village/streets/taiga_straight_fix_01` 15 -> 5
 
 ### pneumaticcraft
 
-- `minecraft:village/desert/streets` (pool total weight 54): `pneumaticcraft:villages/custom_street_desert` 2 -> 0
+- `minecraft:village/desert/streets` (pool total weight 53): `pneumaticcraft:villages/custom_street_desert` 2 -> 0
 - `minecraft:village/plains/houses` (pool total weight 246): `pneumaticcraft:villages/mechanic_house_plains` 8 -> 0
 - `minecraft:village/savanna/houses` (pool total weight 242): `pneumaticcraft:villages/mechanic_house_savanna` 8 -> 0
-- `minecraft:village/snowy/streets` (pool total weight 66): `pneumaticcraft:villages/custom_street_snowy` 2 -> 0
+- `minecraft:village/snowy/streets` (pool total weight 65): `pneumaticcraft:villages/custom_street_snowy` 2 -> 0
 - `minecraft:village/taiga/houses` (pool total weight 236): `pneumaticcraft:villages/mechanic_house_taiga` 8 -> 0
 
 ### sky_structures
@@ -1169,6 +666,10 @@ Pieces whose namespace differs from their pool's, per pool. This is where mod vi
 - `minecraft:village/savanna/houses` (pool total weight 242): `wares:village/houses/savanna_warehouse` 10 -> 30
 - `minecraft:village/snowy/houses` (pool total weight 217): `wares:village/houses/snowy_warehouse` 10 -> 30
 - `minecraft:village/taiga/houses` (pool total weight 236): `wares:village/houses/taiga_warehouse` 10 -> 30
+
+### waystones
+
+- `creativeengineering:waystone_ruin_part` (pool total weight 1): `waystones:village/common/waystone` 1
 
 ## Tags
 

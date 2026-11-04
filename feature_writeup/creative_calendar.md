@@ -75,7 +75,7 @@ copies the server script tree into the jar, and fails the jar task when `kubejs_
   `TimePresets::onConfigLoading`, and on the Forge bus `TimePush`, `SeasonClock`, `TimeCommand` (the registrations that
   were at `CreativeEngineering.java` 225-231). `SeasonTypes`, `CropSeasons`, `CropSeasonTooltip` (client) and `TimeClient`
   (client) subscribe themselves (`@Mod.EventBusSubscriber(modid = creativecalendar)`). Logs
-  `[creativecalendar] time, seasons and crop seasons loaded` and the old-key WARN (4.3).
+  `[creativecalendar] time, seasons and crop seasons loaded`; `CalendarConfigMigration` moves the old keys once (4.3).
 - `compat/CalendarMixinPlugin`: the table form of `GatedMixinPlugin`. Each mixin applies only when one of its mods is
   loaded: Serene Seasons for the 10 Serene Seasons mixins and `SeasonRainColumnMixin` (vanilla target, reads
   `SeasonTypes`), `betterdays`, `seasonhud`, `xaerominimap`, `particlerain`; `CropSeasonGrowHookMixin` on any of
@@ -104,7 +104,7 @@ stays in the pack folder; the dependency is load order and the crop-season growt
 | Section | Keys | From |
 |---|---|---|
 | `[seasons]` | `enabled`, `adaptiveRadius`, `snowLineY` | `CEConfig.Seasons` |
-| `[crop_seasons]` | `enabled`, `fertileBonus`, `offPenalty`, `greenhouse`, `caveFertileBelowY`, `caveOffAboveY` | `CEConfig.CropSeasons` |
+| `[crop_seasons]` | `enabled`, `fertileBonus`, `offPenalty`, `grassOffPenalty` (new 2026-11-03, 0.5: grass spread in summer and tropical seasons), `greenhouse`, `caveFertileBelowY`, `caveOffAboveY` | `CEConfig.CropSeasons` |
 | `[time]`, `.day`, `.seasons`, `.wine`, `.wine.boosts` | the 16 `[time]` keys | `CEConfig.Time` |
 | `[perf]` | `seasonsMeltIntervalTicks` (read by `SereneSeasonsMeltThrottleMixin`) | `CEConfig.Perf` |
 | `[wthit]` | `cropSeasons`, `cropOutOfSeason` (read by `WthitCropSeasons`) | `CEConfig.Wthit` |
@@ -113,10 +113,7 @@ The feature switches are the three `enabled` keys: `CalendarConfig.feature("seas
 scripts `global.CAL.feature(id)`. Every edited value in `config/creativeengineering-common.toml` equalled the default on
 2026-11-01; the new file was written by hand with Forge's comments (`config/` and
 `configs_edited/root_config/creativecalendar-common.toml`). The moved sections were deleted from
-`configs_edited/root_config/creativeengineering-common.toml`; the live `config/creativeengineering-common.toml` still has
-them until the first boot with the new patcherMod, when Forge's correction drops them. At construction, before configs
-load, `CreativeCalendar` reads the CE file and logs one WARN listing any moved key still there (so it shows on that first
-boot only).
+`configs_edited/root_config/creativeengineering-common.toml`. Forge's correction never dropped them from the live file (r1103 still had them), so 2026-11-03 (plan_scratch_bugfix_1103 7.7): the 29 values were diffed against the new file (all equal), and the three sections plus the three strays were deleted from `config/creativeengineering-common.toml` by hand. `CalendarConfigMigration` does the same on any other install (the server): at construction, before configs load, it reads the moved keys from the CE file and strips them (with their comments) from it; when `creativecalendar-common.toml` first loads, each kept value whose new key still holds the default is written in and saved, logged as `[creativecalendar] moved edited values into ...`. A value already edited in the new file wins.
 
 ### 4.4 Scripts
 
@@ -170,7 +167,9 @@ The moved features keep their own suites: TI- ([time.md](time.md)), WE- ([weathe
 - [ ] **CAL-01 Mod list:** "Creative Calendar" is listed; Creative Delight and Creative Brewing name it as a dependency.
 - [ ] **CAL-02 Old world:** the season, day and wine ages of an existing world are where they were; `/cetime date` agrees
   with SeasonHUD.
-- [ ] **CAL-03 Config:** `config/creativecalendar-common.toml` holds the sections of 4.3 with the values from before;
+- [ ] **CAL-03 Config:** `config/creativecalendar-common.toml` holds the sections of 4.3 with the values from before; no
+  `[time]`, `[seasons]` or `[crop_seasons]` left in `creativeengineering-common.toml`, and on a copy of the server's old CE file an edited
+  `[time.day] dayMinutes` lands in the new file (`moved edited values` line);
   editing `[time.day] dayMinutes` in Create's Configs screen pushes again (`[time]` lines in latest.log).
 - [ ] **CAL-04 Log:** latest.log has `[creativecalendar] time, seasons and crop seasons loaded`; startup.log lists
   `creativecalendar` before `creativedelight` and `creativebrewing`.

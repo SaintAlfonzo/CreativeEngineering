@@ -17,7 +17,6 @@ import net.minecraftforge.items.IItemHandler;
 import net.minecraftforge.items.SlotItemHandler;
 import net.ribs.vintagedelight.block.ModBlocks;
 import net.ribs.vintagedelight.block.entity.FermentingJarBlockEntity;
-import net.ribs.vintagedelight.item.ModTags;
 
 public class FermentingJarMenu extends AbstractContainerMenu {
    public final FermentingJarBlockEntity blockEntity;
@@ -65,7 +64,7 @@ public class FermentingJarMenu extends AbstractContainerMenu {
          int containerSlotX = inputBaseX + 3 * inputSpacing + 2;
          this.addSlot(new SlotItemHandler(iItemHandler, 6, containerSlotX, firstRowY) {
             public boolean mayPlace(ItemStack stack) {
-               return stack.is(ModTags.CONTAINER_ITEMS);
+               return FermentingJarMenu.this.blockEntity.isJarContainer(stack);
             }
          });
          this.addSlot(new SlotItemHandler(iItemHandler, 7, inputBaseX + outputOffsetX, secondRowY));
@@ -93,7 +92,8 @@ public class FermentingJarMenu extends AbstractContainerMenu {
          ItemStack stack = slot.getItem();
          ItemStack originalStack = stack.copy();
          if (index < 36) {
-            if (stack.is(ModTags.CONTAINER_ITEMS)) {
+            // any of the jar's containers to the container slot only, the rest to the ingredients only (remainder_buffer.md 3.8)
+            if (this.blockEntity.isJarContainer(stack)) {
                if (!this.moveItemStackTo(stack, 42, 43, false)) {
                   return ItemStack.EMPTY;
                }

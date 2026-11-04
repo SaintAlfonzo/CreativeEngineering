@@ -112,8 +112,9 @@
                 out('remitem ' + a[1] + ' => ' + (rm.isEmpty() ? 'nothing' : sid(rm)))
             } else if (what == 'items') {
                 let c = a.slice(1, 7).map(Number), sums = {}
-                let level = null
-                server.getAllLevels().forEach(l => { if (String(l.dimension.location()) == 'minecraft:overworld') level = l })
+                // server.overworld(): KubeJS makes level.dimension a property (a ResourceLocation), so the old
+                // l.dimension.location() threw "Cannot find function location" (r1103 sB, SQ-CN-04b)
+                let level = server.overworld()
                 let box = new $ZSBAABB(Math.min(c[0], c[3]), Math.min(c[1], c[4]), Math.min(c[2], c[5]),
                     Math.max(c[0], c[3]) + 1, Math.max(c[1], c[4]) + 1, Math.max(c[2], c[5]) + 1)
                 let list = level.getEntitiesOfClass($ZSBItemEntity, box)

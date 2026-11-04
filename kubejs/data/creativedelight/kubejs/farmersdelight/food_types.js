@@ -72,6 +72,7 @@ if (global.CD) global.CD.genPut('food_types', 'farmersdelight', {
   ],
   "salad": [
    "fruit_salad",
+   "gleaming_salad",
    "mixed_salad",
    "nether_salad"
   ],

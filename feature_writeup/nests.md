@@ -333,6 +333,8 @@ and snow get none. New chunks only. Quick look: `/place feature incubation_addit
 
 ## 7. In-game test suite
 
+- **r1103 2026-11-03** (scratch server; verdicts in `perf/runs/r1103/` FINAL.md and the slice judged.md): PASS SQ-NEST-01; SQ-NEST-02 OPEN: 0 nests in swamp and savanna, but no loaded-ground check; hand-check.
+
 - [ ] **NE-01 emu nest recipe:** 5 bark in a U in a crafting table -> 1 Emu Nest, twig-nest sprite.
 - [ ] **NE-02 duck/goose recipes:** `T T`/`GGG` -> Duck Nest; `G G`/`TTT` -> Goose Nest (G grass, T tall grass).
 - [ ] **NE-03 emu lays in nest:** fence an adult emu with an emu nest, wait up to 10 min -> nest shows 1 emu egg (our recoloured texture), no egg on the ground.

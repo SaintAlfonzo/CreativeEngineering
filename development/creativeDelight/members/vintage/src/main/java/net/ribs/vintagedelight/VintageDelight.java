@@ -37,6 +37,8 @@ public class VintageDelight {
         // No config file of its own: the settings are Creative Delight's [vintage] section (config/VintageDelightCommonConfig).
         ModBlocks.register(modEventBus);
         ModItems.register(modEventBus);
+        // Pack jam line, nut milk jar, Fruits Delight jams as placed mason jars (jam/PackJams; pack addition)
+        net.ribs.vintagedelight.jam.PackJams.register(modEventBus);
         ModBlockEntities.register(modEventBus);
         ModMenuTypes.register(modEventBus);
         ModRecipes.register(modEventBus);

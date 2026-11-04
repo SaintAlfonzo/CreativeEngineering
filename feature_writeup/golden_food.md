@@ -41,6 +41,12 @@ config, no access transformer, no block entities.
 | Cakes (1 + 1) | `golden_cake`, `enchanted_golden_cake` | block item (enchanted: glint); **not in the creative tab** | 1 | rare / epic |
 | Vanilla replacements (3) | `minecraft:golden_apple`, `minecraft:enchanted_golden_apple`, `minecraft:golden_carrot` | registered in the `minecraft` namespace, replacing vanilla | 64 / **1** / 64 | rare / epic / rare |
 
+Stack is the upstream value. In the pack (`tools/gen_stack_sizes.py`, `stack_sizes.json`; plan_scratch_bugfix_1103 7.1, checked
+2026-11-03, already so): every golden and gilded food, stew and honey, the golden apple, the enchanted golden apple and the golden
+carrot stack to 16; the golden and gilded milk buckets and cakes stay 8 (bucket and placed-cake rules win). The 6 stews are vanilla
+`BowlFoodItem`s, which hand back one bowl for the whole stack, so they are in Farmer's Delight's `soupItemList`
+(`farmersdelight-common.toml`, FD `SoupItemMixin`) like the vanilla stews (SQ-GLD-15).
+
 Food: every golden food (and the replaced golden apple and golden carrot) is 4 hunger, 1.2 saturation modifier,
 Regeneration II 5 s, Absorption I 2 min, always edible. Every enchanted food (and the replaced enchanted golden apple)
 is 8 hunger, **8.0** saturation modifier, Regeneration II 20 s, Resistance I 5 min, Fire Resistance 5 min, Absorption IV
@@ -89,14 +95,21 @@ NBT and shows no enchantment line.
 
 ### 3.1 Foods
 As section 1. Upstream quirks kept: golden and enchanted milk buckets are milk (clear all effects); their food values
-and effects never apply (milk's use never "eats"). Honey bottles also clear Poison.
+and effects never apply (milk's use never "eats"). Honey bottles also clear Poison. Fix 2026-11-03 (SQ-GLD-03): the milk
+buckets cleared nothing before: `MilkBucketItem` cures with its own stack and Forge cures only effects whose curative
+items hold that stack (a vanilla milk bucket). `ShinyItems.GoldenMilk` (golden) and `Milk` (enchanted, glint) cure as a
+vanilla milk bucket first. The 280 t Haste / Speed II / Strength / Luck / Regeneration I bundle seen in r1103 is not from
+these items (golden milk has no food effects yet showed it freshly applied; it refreshed at 279 t across drinks 8 s
+apart): something near that bot; SQ-GLD-03 reruns on a fresh bot.
 
 ### 3.2 Cakes
 Right-click eats a slice even when not hungry (no hunger check, unlike vanilla cake). Golden slice: 4 hunger, 1.2
 saturation, Regeneration II 5 s, **Absorption II** 2 min (the item foods give Absorption I). Enchanted slice: 8 hunger,
 8.0 saturation, Regeneration II 20 s, Resistance I and Fire Resistance 5 min, Absorption IV 2 min. Seven slices.
-Upstream quirk kept: a candle on an uneaten golden cake turns it into a **vanilla** candle cake (the golden cake is
-lost; breaking it gives the candle only). Kept for now; candle integration with every cake is TODO `baking/baked-goods #38` (Q1).
+Candles: since 2026-11-03 (plan_scratch_bugfix_1103 7.2) a candle does nothing on a golden or enchanted golden cake
+(`GoldenCakeBlock.use` passes; candle kept, cake unchanged). Upstream turned an uneaten golden cake into a **vanilla**
+candle cake (the golden cake lost). The golden cakes join the candle integration with every cake, TODO
+`baking/baked-goods #38` (Q1).
 
 ### 3.3 Chorus fruit
 Eating first does the vanilla chorus teleport (16 blocks), then a second one: up to `reach` tries, each up to `reach`
@@ -138,7 +151,9 @@ and datapacks override). The pack's recipe scripts replace the golden carrot rec
 tables load, so Forge runs other mods' injections natively. The `DONOR_DATA_JARS` row for Golden Food in
 `tools/gen_loot_config.py` is gone again and the loot index was regenerated offline (no village table is listed as
 overridden any more), so creativeworldgen loot `07_rules.js` `useVanilla(..., { winner: /goldenfood/ })` and the three
-`restoreInjection` calls (they act only on overridden tables) are now no-ops, kept for safety.
+`restoreInjection` calls (they act only on overridden tables) are now no-ops, kept for safety. 2026-11-03
+(plan_scratch_bugfix_1103 7.3): only Chalk's restore is kept; Botania's and CC:Tweaked's are gone, and their native
+injections are removed after the roll (`10_removals.js`, LootJS `@botania` / `@computercraft` in `minecraft:chests/village/*`).
 
 ### 3.6 Values: multipliers of the input food (owner 2026-11-02, built 2026-11-03)
 CD startup `kubejs_startup/goldenfood/golden_values.js` (priority -50, `ItemEvents.modification`): a golden food's
@@ -197,10 +212,12 @@ unchanged. No pack code names an upstream class.
 - Not booted (another game instance was running). Live checks: section 8.
 
 ## 7. Open questions for the owner
-- Q1: answered 2026-11-02: keep the quirk for now; full candle integration with every cake is TODO `baking/baked-goods #38`.
+- Q1: answered 2026-11-02, changed 2026-11-03: no candle on the golden cakes until the full candle integration with every cake, TODO `baking/baked-goods #38`.
 - Q2: answered 2026-11-02: the enchantment is removed; enchanted golden foods by sequenced assembly (3.4).
 
 ## 8. Tests
+
+- **r1103 2026-11-03** (scratch server; verdicts in `perf/runs/r1103/` FINAL.md and the slice judged.md): PASS SQ-GLD-01o, SQ-GLD2-03, SQ-GLD-01, -02, -04, -05, -06, -07, -08, -11, -12, -13, -10a, -10b, SQ-GLD2-01, -02, SQ-GLD-14, -09; FAIL SQ-GLD-03: golden honey / milk add an unknown 280 t Haste, Speed II, Strength, Luck, Regeneration bundle that golden milk does not clear; it comes from a use-finish event handler, not the item (`GoldenItems.java`; any `LivingEntityUseItemEvent.Finish` handler).
 Scratch queue section "SQ-GLD Golden Food donor rebuild": SQ-GLD-01 to -05, -07, -09, -10, CQ-GLD-01, -02; SQ-GLD-06
 and SQ-GLD-08 rewritten for the removal; SQ-GLD-11 to -14 the assemblies and the removed id.
 Scratch queue section SQ-CDJ7 (2026-11-03): SQ-GLD2-01 (nugget recipes), -02 (gilded assembly), -03 (values), -05

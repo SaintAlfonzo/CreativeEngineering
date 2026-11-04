@@ -33,11 +33,21 @@ if (global.CD) global.CD.genPut('food_types', 'vintagedelight', {
    "cheese_slice"
   ],
   "sweet": [
+   "ancient_fruit_jello",
+   "banana_jello",
+   "cherry_jello",
    "chocolate_nut_granola_bar",
    "deluxe_granola_bar",
    "fruity_granola_bar",
+   "green_grape_jello",
    "honey_roasted_peanut",
-   "oatmeal_cookie"
+   "mulberry_jello",
+   "oatmeal_cookie",
+   "pepper_jello",
+   "raspberry_jello",
+   "red_grape_jello",
+   "salmonberry_jello",
+   "strawberry_jello"
   ],
   "handheld": [
    "cheese_burger",
@@ -62,11 +72,14 @@ if (global.CD) global.CD.genPut('food_types', 'vintagedelight', {
   ],
   "drink": [
    "honey_jar",
-   "nut_milk_bottle"
+   "nut_milk_bottle",
+   "nut_milk_jar"
   ],
   "ingredient": [
+   "ancient_fruit_jam_jar",
    "apple_sauce_bottle",
    "apple_sauce_jar",
+   "banana_jam_jar",
    "cheese_curds",
    "cherry_jam_jar",
    "cucumber_dough",
@@ -74,6 +87,7 @@ if (global.CD) global.CD.genPut('food_types', 'vintagedelight', {
    "glow_berry_jam_bottle",
    "glow_berry_jam_jar",
    "green_grape_jam_jar",
+   "mulberry_jam_jar",
    "nut_mash_bottle",
    "nut_mash_jar",
    "oat_dough",
@@ -84,6 +98,7 @@ if (global.CD) global.CD.genPut('food_types', 'vintagedelight', {
    "relish_bottle",
    "relish_jar",
    "salmonberry_jam_jar",
+   "strawberry_jam_jar",
    "sweet_berry_jam_bottle",
    "sweet_berry_jam_jar",
    "vinegar",

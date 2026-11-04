@@ -3,6 +3,10 @@ package com.sammy.minersdelight.content.block.copper_pot;
 import com.sammy.minersdelight.MDConfig;
 import com.sammy.minersdelight.registry.MDBlockEntities;
 import com.sammy.minersdelight.registry.MDItems;
+import com.sammy.minersdelight.shared.CdSettings;
+import com.sammy.minersdelight.shared.LeftoverPlan;
+import com.sammy.minersdelight.shared.OverflowPull;
+import com.sammy.minersdelight.shared.StationContainers;
 import it.unimi.dsi.fastutil.objects.Object2IntOpenHashMap;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
@@ -42,6 +46,7 @@ import vectorwing.farmersdelight.common.crafting.CookingPotRecipe;
 import vectorwing.farmersdelight.common.mixin.accessor.RecipeManagerAccessor;
 import vectorwing.farmersdelight.common.registry.ModParticleTypes;
 import vectorwing.farmersdelight.common.registry.ModRecipeTypes;
+import vectorwing.farmersdelight.common.tag.ModTags;
 import vectorwing.farmersdelight.common.utility.ItemUtils;
 
 import java.util.ArrayList;
@@ -70,6 +75,14 @@ public class CopperPotBlockEntity extends SyncedBlockEntity implements MenuProvi
     private static final int FD_INVENTORY_SIZE = 9;
 
     private final ItemStackHandler inventory = new ItemStackHandler(INVENTORY_SIZE) {
+        /** Containers only in the container slot, never in an ingredient slot (remainder_buffer.md 3.8). */
+        @Override
+        public boolean isItemValid(int slot, @NotNull ItemStack stack) {
+            if (slot < INPUT_SLOTS) return !isPotContainer(stack);
+            if (slot == CONTAINER_SLOT) return isPotContainer(stack) || isContainerValid(stack);
+            return true;
+        }
+
         @Override
         protected void onContentsChanged(int slot) {
             if (slot < INPUT_SLOTS) {
@@ -89,6 +102,9 @@ public class CopperPotBlockEntity extends SyncedBlockEntity implements MenuProvi
     @Nullable
     private ResourceLocation lastRecipeID;
     private boolean checkNewRecipe = true;
+    /** Leftover slot to container slot moves (not saved), and the plating ticks still to skip after one. */
+    private final OverflowPull overflowPull = new OverflowPull();
+    private int plateHold;
     protected final ContainerData cookingData = new ContainerData() {
         @Override
         public int get(int index) {
@@ -113,6 +129,18 @@ public class CopperPotBlockEntity extends SyncedBlockEntity implements MenuProvi
             return 2;
         }
     };
+
+    /** The pot's containers: every FD cooking recipe's container, and #farmersdelight:serving_containers. */
+    private static final class Containers {
+        static final StationContainers POT = new StationContainers("miners_delight:copper_pot", ModRecipeTypes.COOKING.get(),
+                r -> r instanceof CookingPotRecipe c ? List.of(platedIn(c)) : List.of(),
+                List.of(ModTags.SERVING_CONTAINERS));
+    }
+
+    /** Whether {@code stack} is one of the pot's plating containers. */
+    public boolean isPotContainer(ItemStack stack) {
+        return Containers.POT.isContainer(level, stack);
+    }
 
     public CopperPotBlockEntity(BlockPos pos, BlockState state) {
         super(MDBlockEntities.COPPER_POT.get(), pos, state);
@@ -221,11 +249,14 @@ public class CopperPotBlockEntity extends SyncedBlockEntity implements MenuProvi
             pot.cookTime = Mth.clamp(pot.cookTime - 2, 0, pot.cookTimeTotal);
         }
         ItemStack meal = pot.getMeal();
+        if (pot.pullForPlating(meal)) {
+            changed = true;
+        }
         if (!meal.isEmpty()) {
             if (!pot.doesMealHaveContainer(meal)) {
                 pot.moveMealToOutput();
                 changed = true;
-            } else if (!pot.inventory.getStackInSlot(CONTAINER_SLOT).isEmpty()) {
+            } else if (!pot.inventory.getStackInSlot(CONTAINER_SLOT).isEmpty() && !pot.holdPlating()) {
                 pot.useStoredContainersOnMeal();
                 changed = true;
             }
@@ -297,6 +328,12 @@ public class CopperPotBlockEntity extends SyncedBlockEntity implements MenuProvi
         return recipe.getOutputContainer();
     }
 
+    /** What the recipe's meal is plated with: its container, else its result's crafting remainder (as getContainer). */
+    private static ItemStack platedIn(CookingPotRecipe recipe) {
+        ItemStack container = servedContainer(recipe);
+        return container.isEmpty() ? servedResult(recipe).getCraftingRemainingItem() : container;
+    }
+
     private boolean hasInput() {
         for (int slot = 0; slot < INPUT_SLOTS; slot++) {
             if (!inventory.getStackInSlot(slot).isEmpty()) {
@@ -317,105 +354,113 @@ public class CopperPotBlockEntity extends SyncedBlockEntity implements MenuProvi
         ItemStack stored = getMeal();
         if (stored.isEmpty()) {
             // stallWhenFull holds with an empty meal slot too (creativedelight members #39)
-            return leftoversFit(recipe, result.getCount());
+            return leftoversFit(recipe);
         }
         if (!ItemStack.isSame(stored, result)) {
             return false;
         }
         int total = stored.getCount() + result.getCount();
-        return (total <= inventory.getSlotLimit(MEAL_DISPLAY_SLOT) || total <= result.getMaxStackSize()) && leftoversFit(recipe, total);
+        return (total <= inventory.getSlotLimit(MEAL_DISPLAY_SLOT) || total <= result.getMaxStackSize()) && leftoversFit(recipe);
     }
 
     /**
-     * With stallWhenFull, true only when every leftover of one meal fits: first the containers the waiting meals still
-     * need (recycled into the container slot, {@link #recycleRoom}), then the leftover slot. {@code mealsAfter} is the
-     * meal count once this meal is cooked.
+     * With stallWhenFull, true only when every leftover of one meal fits, by the shared rule ({@link LeftoverPlan},
+     * remainder_buffer.md 3.8): into the container slot when it already holds the same item, else the leftover slot,
+     * else an empty container slot when the recipe is served in it.
      */
-    private boolean leftoversFit(CookingPotRecipe recipe, int mealsAfter) {
+    private boolean leftoversFit(CookingPotRecipe recipe) {
         if (!MDConfig.remainderBuffer() || !MDConfig.stallWhenFull()) {
             return true;
         }
-        ItemStack slot = inventory.getStackInSlot(LEFTOVER_SLOT).copy();
-        ItemStack served = servedContainer(recipe);
-        int recycle = recycleRoom(served, mealsAfter);
+        List<ItemStack> leftovers = new ArrayList<>();
         for (int i = 0; i < INPUT_SLOTS; i++) {
             ItemStack input = inventory.getStackInSlot(i);
-            if (input.isEmpty() || !input.hasCraftingRemainingItem()) {
-                continue;
-            }
-            ItemStack leftover = input.getCraftingRemainingItem().copy();
-            if (recycle > 0 && ItemStack.isSame(served, leftover)) {
-                int n = Math.min(recycle, leftover.getCount());
-                recycle -= n;
-                leftover.shrink(n);
-                if (leftover.isEmpty()) {
-                    continue;
-                }
-            }
-            if (slot.isEmpty()) {
-                slot = leftover.copy();
-            } else if (ItemStack.isSameItemSameTags(slot, leftover) && slot.getCount() + leftover.getCount() <= slot.getMaxStackSize()) {
-                slot.grow(leftover.getCount());
-            } else {
-                return false;
+            if (!input.isEmpty() && input.hasCraftingRemainingItem()) {
+                leftovers.add(input.getCraftingRemainingItem());
             }
         }
-        return true;
+        ItemStack served = platedIn(recipe);
+        return LeftoverPlan.place(leftovers, leftoverSlots(), leftoverLimits(),
+                stack -> !served.isEmpty() && ItemStack.isSame(served, stack)).isEmpty();
+    }
+
+    /** Copies of [container slot, leftover slot], for {@link LeftoverPlan}. */
+    private ItemStack[] leftoverSlots() {
+        return LeftoverPlan.copies(inventory.getStackInSlot(CONTAINER_SLOT), inventory.getStackInSlot(LEFTOVER_SLOT));
+    }
+
+    private int[] leftoverLimits() {
+        return new int[]{inventory.getSlotLimit(CONTAINER_SLOT), inventory.getSlotLimit(LEFTOVER_SLOT)};
     }
 
     /**
-     * How many containers the container slot can still take for the waiting meals: {@code meals} minus the containers
-     * already there, 0 when the slot holds another item. Spares never go there (automation cannot empty that slot).
-     * TODO food/drinks #17 (remainder_buffer.md 3.1 step 1, the cooking pot's recycle rule).
-     */
-    private int recycleRoom(ItemStack served, int meals) {
-        if (served.isEmpty()) {
-            return 0;
-        }
-        ItemStack inSlot = inventory.getStackInSlot(CONTAINER_SLOT);
-        if (!inSlot.isEmpty() && !ItemStack.isSame(inSlot, served)) {
-            return 0;
-        }
-        int room = Math.min(meals - inSlot.getCount(), served.getMaxStackSize() - inSlot.getCount());
-        return Math.max(0, room);
-    }
-
-    /**
-     * Recycled into the container slot when the waiting meal is served in it and still needs it (the next tick plates
-     * the meal with it), then the leftover slot (config remainderBuffer); else, or when it does not fit, thrown out of
-     * the pot's side.
+     * By the shared rule ({@link LeftoverPlan}; config remainderBuffer): into the container slot when it already holds
+     * the same item, else the leftover slot, else an empty container slot when the waiting meal is served in it; what
+     * does not fit, or all of it with the buffer off, is thrown out of the pot's side. A leftover-slot item the meal can
+     * be plated with moves over later ({@link #pullForPlating}).
      */
     private void storeOrThrowLeftover(ItemStack leftover) {
-        leftover = leftover.copy();
+        List<ItemStack> rest = List.of(leftover.copy());
         if (MDConfig.remainderBuffer()) {
-            ItemStack served = getContainer();
-            int recycle = ItemStack.isSame(served, leftover) ? recycleRoom(served, getMeal().getCount()) : 0;
-            if (recycle > 0) {
-                int n = Math.min(recycle, leftover.getCount());
-                ItemStack inSlot = inventory.getStackInSlot(CONTAINER_SLOT);
-                ItemStack put = (inSlot.isEmpty() ? leftover : inSlot).copy();
-                put.setCount(inSlot.getCount() + n);
-                inventory.setStackInSlot(CONTAINER_SLOT, put);
-                leftover.shrink(n);
-                if (leftover.isEmpty()) {
-                    return;
-                }
+            ItemStack[] slots = leftoverSlots();
+            rest = LeftoverPlan.place(rest, slots, leftoverLimits(), this::isContainerValid);
+            if (!ItemStack.matches(slots[0], inventory.getStackInSlot(CONTAINER_SLOT))) {
+                inventory.setStackInSlot(CONTAINER_SLOT, slots[0]);
             }
-            ItemStack existing = inventory.getStackInSlot(LEFTOVER_SLOT);
-            if (existing.isEmpty()) {
-                inventory.setStackInSlot(LEFTOVER_SLOT, leftover.copy());
-                return;
-            }
-            if (ItemStack.isSameItemSameTags(existing, leftover) && existing.getCount() + leftover.getCount() <= existing.getMaxStackSize()) {
-                existing.grow(leftover.getCount());
-                inventory.setStackInSlot(LEFTOVER_SLOT, existing);
-                return;
+            if (!ItemStack.matches(slots[1], inventory.getStackInSlot(LEFTOVER_SLOT))) {
+                inventory.setStackInSlot(LEFTOVER_SLOT, slots[1]);
             }
         }
         Direction side = getBlockState().getValue(CopperPotBlock.FACING).getCounterClockWise();
-        ItemUtils.spawnItemEntity(level, leftover.copy(),
-                worldPosition.getX() + 0.5 + side.getStepX() * 0.25, worldPosition.getY() + 0.7, worldPosition.getZ() + 0.5 + side.getStepZ() * 0.25,
-                side.getStepX() * 0.08F, 0.25, side.getStepZ() * 0.08F);
+        for (ItemStack thrown : rest) {
+            ItemUtils.spawnItemEntity(level, thrown,
+                    worldPosition.getX() + 0.5 + side.getStepX() * 0.25, worldPosition.getY() + 0.7, worldPosition.getZ() + 0.5 + side.getStepZ() * 0.25,
+                    side.getStepX() * 0.08F, 0.25, side.getStepZ() * 0.08F);
+        }
+    }
+
+    /**
+     * A leftover in the leftover slot that plates the waiting meal moves to the container slot after CD
+     * {@code [cooking] recycleShowTicks}, as many as the waiting meals need; plating then waits the same ticks
+     * (remainder_buffer.md 3.8, shared {@link OverflowPull}). True when it moved something.
+     */
+    private boolean pullForPlating(ItemStack meal) {
+        int mealsWaiting = MDConfig.remainderBuffer() && !meal.isEmpty() && doesMealHaveContainer(meal) ? meal.getCount() : 0;
+        int delay = recycleShowTicks();
+        boolean moved = overflowPull.tick(new OverflowPull.Slots() {
+            @Override
+            public ItemStack get(int slot) {
+                return inventory.getStackInSlot(slot);
+            }
+
+            @Override
+            public void set(int slot, ItemStack stack) {
+                inventory.setStackInSlot(slot, stack);
+            }
+
+            @Override
+            public int limit(int slot) {
+                return inventory.getSlotLimit(slot);
+            }
+        }, CONTAINER_SLOT, new int[]{LEFTOVER_SLOT}, mealsWaiting, this::isContainerValid, delay);
+        if (moved) {
+            plateHold = delay;
+        }
+        return moved;
+    }
+
+    /** true = skip plating this tick (a container pulled from the leftover slot is still on show). */
+    private boolean holdPlating() {
+        if (plateHold <= 0) {
+            return false;
+        }
+        --plateHold;
+        return true;
+    }
+
+    /** Creative Delight's {@code [cooking] recycleShowTicks} (default 10), the stations' shared show delay. */
+    private static int recycleShowTicks() {
+        return Math.max(0, CdSettings.number("cooking.recycleShowTicks", 10));
     }
 
     /** One tick of cooking; true when a meal was finished. CCK injects at the setRecipeUsed call. */

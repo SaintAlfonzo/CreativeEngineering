@@ -1,6 +1,7 @@
 package com.SaintAlfonzo.creativedelight.blockheads;
 
 import com.SaintAlfonzo.creativedelight.blockheads.client.FridgeTopFill;
+import com.SaintAlfonzo.creativedelight.blockheads.client.OvenRaise;
 import com.SaintAlfonzo.creativedelight.blockheads.kitchen.CornerStorage;
 import com.SaintAlfonzo.creativedelight.blockheads.kitchen.CounterToppers;
 import com.SaintAlfonzo.creativedelight.blockheads.rack.BARacks;
@@ -21,8 +22,8 @@ import net.minecraftforge.fml.javafmlmod.FMLJavaModLoadingContext;
  * <ul>
  * <li>{@code rack}: spice racks and tool racks in 20 woods.</li>
  * <li>{@code kitchen}: corner storage, counter toppers (cutting board, plates, coaster on a counter); the oven fuel and
- * smoking mixins.</li>
- * <li>{@code client}: the 2-tall fridge filled to a full block.</li>
+ * smoking mixins; the oven lit state (Farmer's Delight heat source).</li>
+ * <li>{@code client}: the 2-tall fridge filled to a full block; the oven cook surface raised to the block top.</li>
  * </ul>
  * The kitchen code lived in patcherMod until 2026-10-31; its saved data and tag ids keep their creativeengineering names.
  */
@@ -42,5 +43,6 @@ public class BlockheadsAdditionsMod {
         // The per-state topper cache resets on tag reload.
         CounterToppers.init();
         DistExecutor.unsafeRunWhenOn(Dist.CLIENT, () -> () -> FridgeTopFill.register(bus));
+        DistExecutor.unsafeRunWhenOn(Dist.CLIENT, () -> () -> OvenRaise.register(bus));
     }
 }

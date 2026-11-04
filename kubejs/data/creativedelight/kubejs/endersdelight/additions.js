@@ -27,7 +27,7 @@ ServerEvents.recipes(e => {
 		R.fdCooking([i.amberveil, i.crushed_voidpepper, i.chorus_flower], i.amberveiled_curry, e, 'amberveiled_curry', 1.0, 200, i.shulker_bowl)
 		R.fdCooking([i.amberveil, i.ethereal_saffron, i.chorus_flower], i.veil_of_flames_risotto, e, 'veil_of_flames_risotto', 1.0, 200, i.shulker_bowl)
 		R.fdCooking([i.amberveil, i.ethereal_saffron, i.crushed_voidpepper, i.chicken, i.chicken_cuts, i.rice], i.chicken_curry, e,
-			'chicken_curry', 1.0, 200, i.shulker_bowl)
+			'ender_chicken_curry', 1.0, 200, i.shulker_bowl) // ender_ ids: Large Meals' curry owns chicken_curry (SQ-LGM-10)
 		R.fdCooking([i.crushed_voidpepper, i.beef, i.milk, i.potato], i.steak_fries, e, 'steak_fries', 1.0, 200, i.shulker_bowl)
 
 		// Heatless meal rule (farmersdelight/recipes.js "Meals"); like Ender's other stews (recipes.js) they come in the
@@ -40,7 +40,7 @@ ServerEvents.recipes(e => {
 		R.shapeless(i.veil_of_flames_risotto, [i.amberveil, i.amberveil, i.ethereal_saffron, i.chorus_flower, i.shulker_bowl],
 			e, 'veil_of_flames_risotto_cooked_manual_only')
 		R.shapeless(i.chicken_curry, [i.amberveil, i.ethereal_saffron, i.crushed_voidpepper, i.cooked_chicken, i.cooked_chicken, i.cooked_chicken,
-			i.cooked_rice, i.shulker_bowl], e, 'chicken_curry_cooked_manual_only')
+			i.cooked_rice, i.shulker_bowl], e, 'ender_chicken_curry_cooked_manual_only')
 		R.shapeless(i.steak_fries, [i.crushed_voidpepper, i.cooked_beef, i.cooked_beef, i.milk, i.baked_potato, i.shulker_bowl],
 			e, 'steak_fries_cooked_manual_only')
 	})

@@ -7,25 +7,8 @@ sessions read this file for status instead of messaging every session.
 Format while running:
 
 ```
-State: running
-Runner: <session / task that holds the claim>
-Run: <run id>, <run doc link>
-Phase: slice B (drive_sB.sh, 2 boots, level sb1), then r1102b reruns, then slice A
-ETA: 2026-11-03 about 10:00
-JVM pids: scratch servers under scratchpad r1102b/ only (cwd check via game_jvms.sh)
-Updated: 2026-11-03 01:01
-```
+State: idle
+Runner: none (r1103w stopped by the owner 2026-11-03 18:00; no JVM up)
+Updated: 2026-11-03 18:05
 
-When done: `State: idle` and one `Last run:` line.
-
----
-
-State: running
-Runner: session 51e0db54 (owner request 2026-11-03: execute the scratch queue, plan approved)
-Run: r1103, [scratch_run_2026-11-03.md](scratch_run_2026-11-03.md)
-Phase: slice B (drive_sB.sh, 2 boots, level sb1), then r1102b reruns, then slice A
-ETA: 2026-11-03 about 10:00
-JVM pids: scratch servers under scratchpad 51e0db54.../r1103/ only (cwd check via game_jvms.sh)
-Updated: 2026-11-03 01:01
-
-Last run: 2026-11-02 r1102b (every unrun server row: s1, s2, s3, s5 run; worldgen postponed; reruns not run), [scratch_run_2026-11-02b.md](scratch_run_2026-11-02b.md) section 8.
+Last run: 2026-11-03 r1103w (worldgen slice, STOPPED by the owner 18:00 after W1c SQ-WGE-14; W1 judged PASS 73 FAIL 10), [scratch_run_2026-11-03.md](scratch_run_2026-11-03.md) section 9. Before it: 2026-11-03 r1103 (every never-run server row + r1102b reruns; 204 judged: PASS 171, FAIL 19), [scratch_run_2026-11-03.md](scratch_run_2026-11-03.md), FAILs in perf/runs/r1103/FINAL.md.

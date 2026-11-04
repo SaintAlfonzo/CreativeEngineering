@@ -1,3 +1,4 @@
+
 #Immersive Weathering leaf piles (1-8 layers). Their slowdown is still IW's own (on/off: IW
 #leaf_piles_slow; Depth Strider, foxes and bees walk through); this sets the height it starts at.
 [leaf_piles]
@@ -96,3 +97,37 @@
 	#true: each Sophisticated Backpacks tier (leather, copper, iron, gold, diamond, netherite)
 	#remembers its own trash slot position and on/off state. false: all backpacks share one.
 	splitBackpacksByTier = true
+
+#Pet cats and the Feather on a Stick (server side).
+[cats]
+	#true: a cast Feather on a Stick sticks to a mob it hits, like a fishing hook (reeling in lets go, no
+	#pull), and the caster's tamed cats nearby attack the hooked mob while it stays hooked. Sitting cats and
+	#Cozy's Improved Cats cats in Stay mode do not join. false: the feather passes through mobs (Domestication
+	#Innovation's own behaviour).
+	featherHooksMobs = true
+	#Hostile mobs (monsters that are not neutral) can be hooked.
+	hookHostile = true
+	#Peaceful and neutral mobs (animals, villagers, iron golems, wolves, endermen, zombified piglins, ...) can
+	#be hooked. The caster's own pets never can.
+	hookNeutralAndPassive = false
+	#Players other than the caster can be hooked, and the caster's cats attack them. Independent of the
+	#server's pvp setting.
+	hookPlayers = false
+	#A cat that lands an attack on a mob hooked by its owner's feather gets Strength, Resistance and
+	#Regeneration for this many seconds (0: no effects).
+	#Range: 0 ~ 600
+	buffSeconds = 10
+	#Level of those three effects (3 = III).
+	#Range: 1 ~ 10
+	buffLevel = 3
+
+#Alex's Mobs giant squid (server side).
+[giant_squid]
+	#A giant squid starts fleeing a cachalot whale within this many blocks (Alex's Mobs: 50).
+	#Range: 1 ~ 64
+	whaleFleeStart = 16
+	#It keeps fleeing while that whale is within this many blocks (Alex's Mobs: 60). Kept at least
+	#whaleFleeStart.
+	#Range: 1 ~ 96
+	whaleFleeStop = 24
+

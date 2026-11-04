@@ -8,8 +8,11 @@
 //                   plate top, poppy: no face_paper in the cell and the held label count unchanged (SQ-LBS-02)
 //   /zlbs centre    a written sticky note on the north side of each centre-note host (spot C only, offY per the
 //                   SQ-LBS-03 table), then a second note on the same side and a note on top, both refused
-//   /zlbs refit     after labels and centre: each host set to air; the blank label / written note drop at the cell
-//                   and the cell is air (SQ-LBS-04)
+//   /zlbs refit     after labels and centre: each host set to air (setBlockAndUpdate = flag 3, as a survival break); the
+//                   blank label / written note drop at the cell and the cell is air (SQ-LBS-04). First a control: a wall
+//                   torch on a stone host that goes to air must drop a torch, else every block drop is being skipped
+//                   (r1103: 20 of 20 dropped nothing). Then a piston pushes a noted stone host away; 10 ticks later the
+//                   note has dropped and its cell is air.
 //   /zlbs dump x0 z0 x1 z1   every face_paper block entity in the box (y -62..-50): "[zlbs] be x y z <saved NBT>"
 //                   (SQ-LBS-05: compare the lines of the 1.0.0 boot with the 1.0.1 boot)
 // Output: "[zlbs] PASS|FAIL|INFO <part> <host>: <detail>", then "[zlbs] DONE <part>: N pass, M fail".
@@ -48,6 +51,8 @@
         ['trashcans:liquid_trash_can', -1.25], ['trashcans:energy_trash_can', -1.25], ['trashcans:ultimate_trash_can', -1.25],
         ['vintagedelight:fermenting_jar', -1.25], ['botanypots:terracotta_botany_pot', -4]
     ]
+    // centre-note hosts whose top takes one note (creative_labels:paper/note_on_top, plan_scratch_bugfix_1103 4.4)
+    const TOP_OK = ['supplementaries:jar', 'vintagedelight:fermenting_jar']
     const TOL = 0.002
     let results = { pass: 0, fail: 0 }
 
@@ -97,7 +102,8 @@
     }
     function be(level, cell) {
         let b = level.getBlockEntity(cell)
-        if (b == null || String(b.getClass().getSimpleName()) != 'FacePaperBlockEntity') return null
+        // by block id, not b.getClass() (KubeJS's class filter can refuse getClass)
+        if (b == null || blockId(level, cell).indexOf('face_paper') < 0) return null
         return b
     }
     function faceOf(level, h, D) { let b = be(level, cellOf(h, D)); return b == null ? null : b.face(dir(OPP[D])) }
@@ -190,7 +196,8 @@
             let r3 = click(p, level, hp, 'up', note('top ' + i), true)
             let ft = faceOf(level, hp, 'up')
             let n3 = ft == null ? 0 : ft.noteCount()
-            check('centre', h[0] + ' top', n3 == 0, 'click ' + r3 + ', top cell ' + blockId(level, cellOf(hp, 'up')) + ', notes ' + n3)
+            let topWant = TOP_OK.indexOf(h[0]) >= 0 ? 1 : 0
+            check('centre', h[0] + ' top', n3 == topWant, 'click ' + r3 + ', top cell ' + blockId(level, cellOf(hp, 'up')) + ', notes ' + n3 + ' (want ' + topWant + ')')
         })
         p.discard()
     }
@@ -207,8 +214,39 @@
             check('refit', host, had.indexOf('face_paper') >= 0 && hit.length == 1 && blank && cid == 'minecraft:air',
                 'cell before ' + had + ', after ' + cid + ', drops ' + (d.join(' | ') || 'none'))
         }
+        // control: a vanilla attached block (wall torch facing north hangs on the block south of it)
+        let ch = pos(300, Y, 44), ct = cellOf(ch, 'north')
+        setSpec(level, ch, 'minecraft:stone')
+        setSpec(level, ct, 'minecraft:wall_torch[facing=north]')
+        killDrops(level, ct)
+        air(level, ch)
+        let cd = drops(level, ct)
+        check('refit', 'control wall torch', cd.some(s => s.indexOf('minecraft:torch') >= 0),
+            'torch cell after ' + blockId(level, ct) + ', drops ' + (cd.join(' | ') || 'none') + ' (none = every block drop skipped)')
         LABEL_HOSTS.forEach((h, i) => one(labelHost(i), 'label on ' + h[0], 'creative_labels:label'))
         CENTRE_HOSTS.forEach((h, i) => one(centreHost(i), 'note on ' + h[0], 'creative_labels:sticky_note'))
+        pistonCase(level)
+    }
+
+    // A piston (west of the host, facing east) pushes a stone host with a note on its north face one block east; the
+    // push is a block event, so the check runs 10 ticks later.
+    function pistonCase(level) {
+        let hp = pos(310, Y, 44), cell = cellOf(hp, 'north'), pp = pos(309, Y, 44), rp = pos(308, Y, 44)
+        ;[hp, cell, pp, rp, pos(311, Y, 44)].forEach(q => air(level, q))
+        setSpec(level, hp, 'minecraft:stone')
+        setSpec(level, pp, 'minecraft:piston[facing=east]')
+        let p = fake(level)
+        click(p, level, hp, 'north', note('piston'), true)
+        p.discard()
+        let had = blockId(level, cell)
+        killDrops(level, cell)
+        setSpec(level, rp, 'minecraft:redstone_block')
+        level.getServer().scheduleInTicks(10, () => {
+            let d = drops(level, cell), cid = blockId(level, cell)
+            let ok = had.indexOf('face_paper') >= 0 && d.some(s => s.indexOf('creative_labels:sticky_note') >= 0 && s.indexOf('Text') >= 0) && cid == 'minecraft:air'
+            console.info('[zlbs] ' + (ok ? 'PASS' : 'FAIL') + ' refit piston push: cell before ' + had + ', after ' + cid + ', host now ' +
+                blockId(level, pos(311, Y, 44)) + ', drops ' + (d.join(' | ') || 'none'))
+        })
     }
 
     function dump(level, a) {
@@ -226,8 +264,10 @@
     function run(server, a) {
         results = { pass: 0, fail: 0 }
         let level = null
-        server.getAllLevels().forEach(l => { if (String(l.dimension.location()) == 'minecraft:overworld') level = l })
         try {
+            // server.overworld(): KubeJS makes level.dimension a property (a ResourceLocation), so .location() threw
+            // outside this try and every /zlbs call failed with "An unexpected error" (r1103 sB, 01:03 to 01:11)
+            level = server.overworld()
             if (a[0] == 'labels') partLabels(level)
             else if (a[0] == 'refused') partRefused(level)
             else if (a[0] == 'centre') partCentre(level)

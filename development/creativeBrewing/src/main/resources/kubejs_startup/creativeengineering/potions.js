@@ -44,7 +44,7 @@ const CUSTOM_POTIONS = {
 	glowing:        { effect: 'minecraft:glowing',        dur: 90 * S,  long: 240 * S,                       base: 'awkward', reagent: 'minecraft:glow_ink_sac' },
 	saturation:     { effect: 'minecraft:saturation',     dur: 5,                                             base: 'thick',   reagent: 'minecraft:golden_carrot' },
 	wither:         { effect: 'minecraft:wither',         dur: 40 * S,  long: 90 * S,  strong: [20 * S, 1],   base: 'mundane', reagent: 'minecraft:wither_rose' },
-	levitation:     { effect: 'minecraft:levitation',     dur: 40 * S,  long: 90 * S,  strong: [20 * S, 1],   base: 'awkward', reagent: 'endersdelight:shulker_filet' },
+	levitation:     { effect: 'minecraft:levitation',     dur: 40 * S,  long: 90 * S,  strong: [20 * S, 1],   base: 'awkward', reagent: ['ends_delight:shulker_meat_slice', 'minecraft:shulker_shell'] },
 	mining_fatigue: { effect: 'minecraft:mining_fatigue', dur: 90 * S,  long: 240 * S, strong: [30 * S, 1],   base: 'awkward', reagent: 'minecraft:prismarine_crystals' },
 	hunger:         { effect: 'minecraft:hunger',         dur: 30 * S,  long: 60 * S,  strong: [15 * S, 1],   base: 'thick',   reagent: 'minecraft:rotten_flesh' },
 	nausea:         { effect: 'minecraft:nausea',         dur: 30 * S,  long: 60 * S,                         base: 'thick',   reagent: 'minecraft:pufferfish' },
@@ -181,6 +181,11 @@ MoreJSEvents.registerPotionBrewing(event => {
 		return POTIONS.containsKey(rl) ? POTIONS.get(rl) : null
 	}
 
+	// A reagent is an id, a #tag, or a list of item ids: the first registered one is used (the levitation reagent is
+	// End's Delight's shulker meat slice, the merge target of Ender's filet; shulker shell if the slice is missing).
+	// An unknown item or an empty ingredient skips that one mix with a warning instead of failing the whole event.
+	const ITEMS = Registry.ITEM
+	const known = id => String(id).startsWith('#') || ITEMS.containsKey(new ResourceLocation(id))
 	let added = 0
 	const mix = (reagent, fromId, toId) => {
 		const from = potion(fromId)
@@ -189,8 +194,15 @@ MoreJSEvents.registerPotionBrewing(event => {
 			console.warn(`[CE potions] mix skipped: ${fromId} + ${reagent} -> ${toId} (potion not registered)`)
 			return
 		}
+		const pick = Array.isArray(reagent) ? reagent.filter(known)[0] : (known(reagent) ? reagent : undefined)
+		let ing = null
+		try { ing = pick === undefined ? null : Ingredient.of(pick) } catch (e) { ing = null }
+		if (ing === null || ing.isEmpty()) {
+			console.warn(`[CE potions] mix skipped: ${fromId} + ${reagent} -> ${toId} (reagent not registered or empty)`)
+			return
+		}
 		// addPotionBrewing(reagentIngredient, fromPotion, toPotion) -> real PotionBrewing.Mix
-		event.addPotionBrewing(Ingredient.of(reagent), from, to)
+		event.addPotionBrewing(ing, from, to)
 		added++
 	}
 

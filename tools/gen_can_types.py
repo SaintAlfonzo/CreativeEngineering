@@ -76,7 +76,7 @@ ANCHOR = "i.any_bell_pepper               = '#forge:crops/bell_pepper';       //
 # pot       the recipes are Cooking Pot recipes (the empty can goes in the container slot, at most 6 inputs)
 SALT = ['salt', 'bone_broth']
 SWEET = ['sugar', 'honey_bottle']
-VINEGAR = ['vinegar']   # Vintage Delight's vinegar bottle, the pack vinegar (vintage_delight.md S9, dishes/ingredients #6)
+VINEGAR = ['vinegar']   # i.vinegar = the vinegar jar (mason jar, plan_scratch_bugfix_1103 1.1), the pack vinegar (vintage_delight.md S9, dishes/ingredients #6)
 SECTIONS = OrderedDict([
     ('raw_veggie',   dict(meal=(5, 6), servings=2, target=0.8, adv=0.7, dur=1.0, fast=False, extra=[('_salt', SALT, 0, 1), ('_vinegar', VINEGAR, 0, 1)])),
     ('raw_fruit',    dict(meal=(5, 3), servings=3, target=0.8, adv=0.7, dur=1.0, fast=False, extra=[('_sugar', SWEET, 0, 1), ('_vinegar', VINEGAR, 0, 1)])),

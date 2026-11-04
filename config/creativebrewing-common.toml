@@ -8,7 +8,7 @@
 #Alcoholic drinks (client side).
 [alcohol]
 	#Replace Quark's saturation word ('Disgusting Snack') with 'Intoxicating Drink' on every food whose
-	#effects include Brewin' and Chewin's Intoxication (food.IntoxicatingDrinkTooltip).
+	#effects include Brewin' and Chewin's Intoxication (alcohol.IntoxicatingDrinkTooltip).
 	quarkLine = true
 
 #Mob effects (client and server).

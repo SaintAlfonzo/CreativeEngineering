@@ -208,6 +208,8 @@ and `development/creativeDelight/src/main/resources/kubejs_startup/largemeals/` 
     ("Placed Chicken Curry") in `kubejs/assets/displaydelight/lang/en_us.json` becomes "Placed End Chicken Curry"; the new
     `lm_` curry block is "Placed Chicken Curry". Also fix the names in `ends_delight.md`, `names.md`, `extra_delight.md`, `display_delight.md`
     and the 1.1.03 changelog mention stays (deployed, never edited). The rename is a player-visible change: changelog bullet.
+    Recipe ids (plan_scratch_bugfix_1103 5.2, SQ-LGM-10): Ender's curry recipes are `ender_chicken_curry` and
+    `ender_chicken_curry_cooked_manual_only`; `chicken_curry` and `chicken_curry_cooked_manual_only` are Large Meals'.
 17. **Mob and block audit:** feasts: mineable tag as FD feasts, BlockRunner tier, Item Physic, WTHIT servings line
     (FD feasts are covered by the existing crop/feast plugin).
 18. **Tooltips and JEI** ([tooltips.md](tooltips.md), [jei_coverage.md](jei_coverage.md)): the rack drop as a JEI info

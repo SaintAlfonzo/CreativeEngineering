@@ -46,6 +46,7 @@ import net.minecraftforge.items.wrapper.RecipeWrapper;
 
 import com.SaintAlfonzo.creativedelight.cooking.RemainderBuffer;
 import com.SaintAlfonzo.creativedelight.cooking.RemainderOutputHandler;
+import com.SaintAlfonzo.creativedelight.shared.StationContainers;
 
 /**
  * Farmer's Delight's CookingPotBlockEntity (1.19.2-1.2.4, MIT) adapted for baking: a tool slot the recipe can ask
@@ -61,6 +62,21 @@ public class OvenBlockEntity extends BlockEntity implements MenuProvider, Remain
     public static final int CONTAINER_SLOT = 8;
     public static final int OUTPUT_SLOT = 9;
     public static final int INVENTORY_SIZE = OUTPUT_SLOT + 1;
+
+    /** The oven's plating containers: every baking recipe's container, or its result's crafting remainder. */
+    private static final class Containers {
+        static final StationContainers OVEN = new StationContainers("creativeengineering:oven",
+                OvenRegistry.BAKING_TYPE.get(),
+                r -> r instanceof BakingRecipe b
+                        ? List.of(b.getOutputContainer().isEmpty() ? b.getResultItem().getCraftingRemainingItem() : b.getOutputContainer())
+                        : List.of(),
+                List.of());
+    }
+
+    /** Whether {@code stack} is one of the oven's containers (remainder_buffer.md 3.8). */
+    public boolean isOvenContainer(ItemStack stack) {
+        return Containers.OVEN.isContainer(level, stack);
+    }
 
     // FD's list: ingredients whose leftover isn't their crafting remainder.
     private static final Map<Item, Item> INGREDIENT_REMAINDER_OVERRIDES = Map.ofEntries(
@@ -122,6 +138,11 @@ public class OvenBlockEntity extends BlockEntity implements MenuProvider, Remain
         }
 
         ItemStack mealStack = oven.getMeal();
+        // a leftover in the buffer that plates the waiting result moves to the container slot (remainder_buffer.md 3.8)
+        int mealsWaiting = !mealStack.isEmpty() && oven.doesMealHaveContainer(mealStack) ? mealStack.getCount() : 0;
+        if (oven.remainders.pullForPlating(oven.inventory, CONTAINER_SLOT, mealsWaiting, oven::isContainerValid)) {
+            didInventoryChange = true;
+        }
         if (!mealStack.isEmpty()) {
             if (!oven.doesMealHaveContainer(mealStack)) {
                 oven.moveMealToOutput();
@@ -184,8 +205,7 @@ public class OvenBlockEntity extends BlockEntity implements MenuProvider, Remain
         boolean fits = remainders.fits(
                 RemainderBuffer.leftovers(inventory, 0, BakingRecipe.INPUT_SLOTS, INGREDIENT_REMAINDER_OVERRIDES,
                         recipe.slotCounts(new RecipeWrapper(inventory))),
-                inventory, CONTAINER_SLOT, RemainderBuffer.servedIn(recipe.getOutputContainer(), recipe.getResultItem()),
-                getMeal().getCount() + recipe.getResultItem().getCount());
+                inventory, CONTAINER_SLOT, RemainderBuffer.servedIn(recipe.getOutputContainer(), recipe.getResultItem()));
         if (!fits && level != null) {
             remainders.markStalled(level.getGameTime());
         }
@@ -252,7 +272,7 @@ public class OvenBlockEntity extends BlockEntity implements MenuProvider, Remain
     private void ejectIngredientRemainder(ItemStack remainderStack) {
         if (level == null) return;
         if (RemainderBuffer.enabled()) {
-            remainderStack = remainders.store(remainderStack, inventory, CONTAINER_SLOT, this::isContainerValid, getMeal().getCount());
+            remainderStack = remainders.store(remainderStack, inventory, CONTAINER_SLOT, this::isContainerValid);
             if (remainderStack.isEmpty()) return;
         }
         // Out of the front, where the door is (the pot uses its left side; the oven's top is often taken).
@@ -331,17 +351,12 @@ public class OvenBlockEntity extends BlockEntity implements MenuProvider, Remain
     }
 
     /**
-     * Automation routing for the container slot: the item the waiting result needs, or the plating item of the
-     * last recipe baked here (so a hopper keeps feeding paper between bakes without it clogging an ingredient slot).
+     * Whether {@code stack} belongs in the container slot (remainder_buffer.md 3.8): one of the oven's containers (what
+     * any baking recipe is served in, {@link Containers}), or what the waiting result needs. Containers go nowhere
+     * else (hand, shift-click and automation), and nothing else goes there.
      */
     boolean isPlatingItem(ItemStack stack) {
-        if (isContainerValid(stack)) return true;
-        if (level == null || lastRecipeID == null) return false;
-        return level.getRecipeManager().byKey(lastRecipeID)
-                .filter(r -> r instanceof BakingRecipe)
-                .map(r -> ((BakingRecipe) r).getOutputContainer())
-                .filter(c -> !c.isEmpty() && c.sameItem(stack))
-                .isPresent();
+        return isContainerValid(stack) || isOvenContainer(stack);
     }
 
     // ------------------------------------------------------------------ experience
@@ -497,6 +512,13 @@ public class OvenBlockEntity extends BlockEntity implements MenuProvider, Remain
 
     private ItemStackHandler createHandler() {
         return new ItemStackHandler(INVENTORY_SIZE) {
+            @Override
+            public boolean isItemValid(int slot, @Nonnull ItemStack stack) {
+                if (slot < BakingRecipe.INPUT_SLOTS) return !isOvenContainer(stack);
+                if (slot == CONTAINER_SLOT) return isPlatingItem(stack);
+                return true;
+            }
+
             @Override
             public int getSlotLimit(int slot) {
                 return slot == TOOL_SLOT ? 1 : super.getSlotLimit(slot);

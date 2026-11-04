@@ -14,7 +14,7 @@ can be potted, a tooltip label on every flower pot, every pot distinct, pots hol
 | Matrix generator `tools/flower_pot_audit.py` -> [flower_pots_matrix.md](flower_pots_matrix.md) | BUILT 2026-10-27; regenerated from both dumps 2026-10-27 evening | stale since the 3.2 tweaks (2026-10-31, 1.1.06 changed planter box, Vinery box / pot and silt pot lists): rerun `/dumppots`, `/pottest all`, the audit (deep scan 2026-11-02) |
 | Botanist workbench as a flower pot (section 3.1, TODO `#5`) | BUILT 2026-10-29, installed 2026-10-29 (patcherMod 1.1.04), shipped 1.1.05; r1031 (2026-10-31): mixins and own block entity PASSED (SQ-POT-06b), a placed bench holds no plant; the flower in the house benches not read, SQ-POT-06 open (client check pending) | POT-08, SQ-POT-06, CQ-POT-02 |
 | Flower pot tweaks (section 3.2: framed pot before framing, Rich Hanging Pot, Large Flower Box, wall tooltips, WTHIT "Contains", box plant lists and models, silt pot and Vinery pot as planters, Vinery box centred on floors) | BUILT 2026-10-31 (patcherMod 1.1.04, backportedVinery `-07`), shipped 1.1.06 (Flower Pots bullets, with the Flower Test world type: SQ-POT-07 PASS); SQ-POT-08 PASSED r1101 (tags, recipe); in game not seen (deep scan 2026-11-02) | POT-10 to POT-16, SQ-POT-08; Floral pot rebuild planned (3.2.8) |
-| Bugs found (section 3) | open, none fixed. r1102b (2026-11-02): SQ-POT-03 did not reproduce F1 (no `ClassCastException` on the planter box; `minecraft:hanging_roots` still throws `Cannot set property DirectionProperty` in 6 holders); SQ-POT-04 new finding: the Beautify (Rich) Hanging Pot loses its plant when broken (item loss) | decisions D1 to D6; F1 recheck by hand (POT-04); hanging pot plant loss not yet a finding row |
+| Bugs found (section 3) | F12 and F13 fixed 2026-11-03 (plan_scratch_bugfix_1103 2.4, 2.5; CD jar 19:43 and pack loot tables, not installed); F14 was a probe fault, not a bug; F1 struck (did not reproduce in r1102b) | rerun SQ-POT-03, -04, -04v; decisions D1 to D5 |
 | Tooltip labels, "every pot distinct", "pots hold every flower" | not started | decisions D1, D2, D6 |
 
 - **Regenerate:** `/dumppots` (and `/pottest all` on a scratch server), then `python3 tools/flower_pot_audit.py`.
@@ -87,6 +87,9 @@ gossypium. `/dumppots` replaces this count with the live map.
 | F9 | Vinery pot renderer forces `HALF=UPPER` on whatever tall flower it holds; every live `#minecraft:tall_flowers` entry should be a double plant (wild rice, flowering rush, Botania double flowers): a client check | risk | CQ-POT-01 |
 | F10 | Supplementaries' hanging pot can only be made from an empty vanilla pot: a framed pot hangs by itself, no other pot hangs | note | none |
 | F11 | Glow lichen, mangrove roots, beachgrass, kelp variants, mushroom colonies, rubberwood sapling, magic peanut (Vintage) have no pot | gap | D1 |
+| F12 | ~~`minecraft:hanging_roots` used on 6 holders threw `Cannot set property DirectionProperty facing to up on immersive_weathering:hanging_roots_wall`~~ FIXED 2026-11-03: Immersive Weathering's `WallRootsBlock.getStateForPlacement` sets `facing` to the clicked face (only N/S/W/E exist), so placing hanging roots against any top or bottom face threw, for players too. CD mixin `immersive_weathering/WallRootsVerticalFaceMixin` returns no wall state for a vertical face (the item then does nothing there) | bug, fixed (CD) | SQ-POT-03 |
+| F13 | ~~Breaking a potted gossypium (Miner's) or potted hemp (IE) dropped nothing~~ FIXED 2026-11-03: Miner's has no loot table for `potted_gossypium`, IE's `potted_hemp` table drops air. Pack tables in `kubejs/data/<ns>/loot_tables/blocks/` drop the pot and the plant (the IE hemp seed). The 2026-10-27 probe data shows no other potted block in the vanilla pot that loses its plant | bug, fixed (data) | SQ-POT-04v |
+| F14 | Not a bug: r1102b/r1103 saw the Beautify hanging pot drop only the pot. The probe clicked 4 times (plant, take back, plant, take back: Beautify's pot hands the plant back on a second click) and broke an empty pot; its loot table drops the pot and the plant by `potflower`. `pot_probe.js` now replants once and stops on such a toggle (`toggle: true` in the row) and records the first stack frames of an error (`stack`) | note (probe) | SQ-POT-04 |
 
 ### 3.1 Botanist workbench as a flower pot (pack)
 
@@ -202,6 +205,7 @@ adds `EntityBlock`, `use` and `onRemove`; the block entity `creativeengineering:
 ## 7. In-game test suite
 
 - **r1102b 2026-11-02** (scratch server; verdicts in `perf/runs/r1102b/` HANDOVER.md and the slice judged.md): FAIL SQ-POT-03: `minecraft:hanging_roots` on 6 holders throws `Cannot set property DirectionProperty` (needs a stack trace in game; old F1 not reproduced); FAIL SQ-POT-04: `beautify:hanging_pot` loses its plant when broken (item loss).
+- **r1103 2026-11-03** (scratch server; verdicts in `perf/runs/r1103/` FINAL.md and the slice judged.md): FAIL SQ-POT-04v: breaking potted gossypium / potted hemp drops nothing (Miner's `MDBlocks.java` 39 has no loot table; IE `potted_hemp` loot drops air).
 
 Scratch server entries: SQ-POT-01 to SQ-POT-05 in [testing/scratch_queue.md](testing/scratch_queue.md). In game:
 

@@ -87,13 +87,13 @@ What `nether_block_swaps.json` leaves in each live Overworld structure, plus the
 | `towns_and_towers:exclusives/pillager_outpost_swedish` | pillager_settlements |  | 312 |  | polished_blackstone_bricks 141, polished_blackstone_brick_stairs 41, polished_blackstone_brick_slab 40, polished_blackstone_brick_wall 36, cracked_polished_blackstone_bricks 30, polished_blackstone 24 | - | - |
 | `terralith:underground/frosted_dungeon` | standalone |  | 233 |  | polished_basalt 233 | - | - |
 | `minecraft:pillager_outpost` | pillager_settlements |  | 174 |  | polished_blackstone_button 96, polished_blackstone_wall 54, polished_blackstone 24 | - | - |
-| `simply_houses:taiga_forge` | remote |  | 168 | 5 | basalt 74, polished_basalt 71, blackstone 8, polished_blackstone_brick_slab 5, magma_block 4, polished_blackstone_brick_wall 3, blackstone_slab 3, gilded_blackstone 2, polished_blackstone_brick_stairs 2, crimson_trapdoor 1 | - | - |
-| `betterstrongholds:stronghold` | standalone |  | 154 | 24 | polished_blackstone_slab 64, polished_blackstone_stairs 48, polished_blackstone 31, crimson_button 24, crying_obsidian 10, chiseled_polished_blackstone 1 | - | - |
-| `betterdeserttemples:desert_temple` | desert_temples |  | 130 | 80 | magma_block 48, polished_blackstone 44, blackstone_wall 32, polished_blackstone_stairs 29, warped_pressure_plate 24, blackstone 10, blackstone_slab 8, crimson_slab 6, gilded_blackstone 4, polished_blackstone_button 3, crimson_button 2 | - | - |
+| `simply_houses:taiga_forge` | remote |  | 168 | 4 | basalt 74, polished_basalt 71, blackstone 8, polished_blackstone_brick_slab 5, magma_block 4, polished_blackstone_brick_wall 3, blackstone_slab 3, gilded_blackstone 2, polished_blackstone_brick_stairs 2 | - | - |
+| `betterstrongholds:stronghold` | standalone |  | 154 |  | polished_blackstone_slab 64, polished_blackstone_stairs 48, polished_blackstone 31, crying_obsidian 10, chiseled_polished_blackstone 1 | - | - |
+| `betterdeserttemples:desert_temple` | desert_temples |  | 130 | 48 | magma_block 48, polished_blackstone 44, blackstone_wall 32, polished_blackstone_stairs 29, blackstone 10, blackstone_slab 8, gilded_blackstone 4, polished_blackstone_button 3 | - | - |
 | `simply_houses:plains_house` | remote |  | 97 |  | basalt 50, polished_basalt 47 | - | - |
 | `underground_bunkers:underground_bunker` | standalone |  | 59 | 10 | basalt 52, magma_block 10, polished_basalt 7 | basalt 30 | - |
 | `philipsruins:level_two_ruins_pool` | ruins |  | 37 |  | polished_basalt 34, basalt 3 | basalt 3 | - |
-| `terralith:spire` | surface_dungeons |  | 30 | 8 | blackstone 26, warped_trapdoor 8, polished_blackstone_brick_wall 4 | - | - |
+| `terralith:spire` | surface_dungeons |  | 30 |  | blackstone 26, polished_blackstone_brick_wall 4 | - | - |
 | `towns_and_towers:pillager_outpost_ocean` | boats |  | 20 |  | basalt 20 | - | - |
 | `towns_and_towers:village_mushroom_fields` | settlements |  | 13 |  | basalt 11, polished_basalt 2 | - | - |
 | `villager_gold_washing_facility:villager_gold_washing_facility` | remote |  | 10 |  | blackstone_stairs 6, polished_blackstone_slab 4 | - | - |
@@ -104,23 +104,19 @@ What `nether_block_swaps.json` leaves in each live Overworld structure, plus the
 | `antiquetradingship:antique_trading_ship` | boats |  | 2 |  | polished_blackstone_button 2 | - | - |
 | `towns_and_towers:village_forest` | settlements |  | 2 |  | blackstone 2 | - | - |
 | `betterjungletemples:jungle_temple` | surface_dungeons |  |  | 177 | magma_block 177 | magma_block 34 | - |
-| `terralith:fortified_desert_village` | settlements |  |  | 44 | crimson_trapdoor 36, magma_block 8 | magma_block 8 | - |
+| `terralith:fortified_desert_village` | settlements |  |  | 8 | magma_block 8 | magma_block 8 | - |
 | `hopo:underwater_ruins` | ocean_ruins |  |  | 5 | magma_block 5 | - | - |
 | `eugene:red_roof_castle` | settlements |  |  | 3 | magma_block 3 | magma_block 3 | - |
-| `betterwitchhuts:witch_hut` | witch_huts |  |  | 2 | crimson_trapdoor 2 | - | - |
 | `minecraft:village_savanna` | settlements |  |  | 2 | magma_block 2 | - | - |
 | `minecraft:village_taiga` | settlements |  |  | 2 | magma_block 2 | - | - |
 | `philipsruins:bone_dungeon` | standalone |  |  | 2 | soul_lantern 2 | - | - |
 | `simply_houses:taiga_house` | remote |  |  | 2 | magma_block 2 | - | - |
-| `towns_and_towers:pillager_outpost_jungle` | pillager_settlements |  |  | 2 | crimson_button 2 | - | - |
 | `villager_forge:villager_forge` | remote |  |  | 2 | magma_block 2 | - | - |
-| `betterdungeons:zombie_dungeon` | entrance_dungeons |  |  | 1 | warped_stairs 1 | - | - |
 | `farmers_structures:cooks` | remote |  |  | 1 | magma_block 1 | - | - |
 | `illager_siege_weapons:catapult` | vehicles |  |  | 1 | magma_block 1 | - | - |
 | `illager_siege_weapons:trebuchet` | vehicles |  |  | 1 | magma_block 1 | - | - |
 | `minecraft:village_desert` | settlements |  |  | 1 | magma_block 1 | - | - |
 | `minecraft:village_plains` | settlements |  |  | 1 | magma_block 1 | - | - |
-| `philipsruins:ocean_ruins` | ocean_ruins |  |  | 1 | stripped_warped_hyphae 1 | - | - |
 | `towns_and_towers:village_old_growth_taiga` | settlements |  |  | 1 | magma_block 1 | - | - |
 | `towns_and_towers:village_swamp` | settlements |  |  | 1 | magma_block 1 | - | - |
 | `unwrecked_ships:ship` | boats |  |  |  | - | - | warped_wart_block 303, nether_wart_block 303, crimson_planks 110, warped_planks 110, crimson_slab 80, warped_slab 80, crimson_fence 47, warped_fence 47, crimson_stairs 25, warped_stairs 25, blackstone 21, magma_block 16, nether_gold_ore 7, soul_lantern 7, crimson_trapdoor 5, warped_trapdoor 5, polished_blackstone_pressure_plate 4 |

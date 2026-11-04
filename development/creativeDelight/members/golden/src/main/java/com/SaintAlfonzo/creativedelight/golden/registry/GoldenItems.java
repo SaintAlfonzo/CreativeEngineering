@@ -12,7 +12,6 @@ import net.minecraft.world.item.EnchantedGoldenAppleItem;
 import net.minecraft.world.item.HoneyBottleItem;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.Items;
-import net.minecraft.world.item.MilkBucketItem;
 import net.minecraft.world.item.Rarity;
 import net.minecraftforge.registries.DeferredRegister;
 import net.minecraftforge.registries.ForgeRegistries;
@@ -62,7 +61,7 @@ public final class GoldenItems {
         for (String stew : new String[]{"mushroom_stew", "beetroot_soup", "rabbit_stew"}) {
             pair(stew, p -> new BowlFoodItem(p.craftRemainder(Items.BOWL)), p -> new ShinyItems.Bowl(p.craftRemainder(Items.BOWL)), 1, 1);
         }
-        pair("milk_bucket", p -> new MilkBucketItem(p.craftRemainder(Items.BUCKET)), p -> new ShinyItems.Milk(p.craftRemainder(Items.BUCKET)), 1, 1);
+        pair("milk_bucket", p -> new ShinyItems.GoldenMilk(p.craftRemainder(Items.BUCKET)), p -> new ShinyItems.Milk(p.craftRemainder(Items.BUCKET)), 1, 1);
         pair("honey_bottle", p -> new HoneyBottleItem(p.craftRemainder(Items.GLASS_BOTTLE)),
                 p -> new ShinyItems.Honey(p.craftRemainder(Items.GLASS_BOTTLE)), 8, 4);
     }

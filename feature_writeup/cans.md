@@ -65,7 +65,7 @@ registers the items, `canning.js` (`canSection()`) the recipes. 202 cans in 16 s
 | cookies | 12 | drink | 2 |
 | meal | 11 | raw meat | 1 |
 
-A meal is the food it holds times a multiplier, effects copied with scaled durations; a sliced form shares the whole
+A meal is the food it holds times a multiplier, effects copied with scaled durations (ticks = source x the section's `dur`: 1.0 for most, 0.75 salad / soup / meal, 0.25 golden; kept as is 2026-11-03, plan_scratch_bugfix_1103 7.9); a sliced form shares the whole
 item's slots and count, and no recipe makes a partly full can ([can_parity.md](can_parity.md) 4.2). Sprites per section or per can
 (`textureswapper/canned/newcan`). Values for meal, pie, feast and drink cans are placeholders until the food tuning
 system is built ([food.md](food.md) 3.5).
@@ -154,6 +154,8 @@ directly eat a whole can; a dedicated-server client guesses nothing for a last-s
 `python3 tools/food_catalog.py --check` (exit 1 on problems).
 
 ## 7. In-game test suite
+
+- **r1103 2026-11-03** (scratch server; verdicts in `perf/runs/r1103/` FINAL.md and the slice judged.md): PASS SQ-CNG-03o, -01, -03, -04, -04b, -02.
 
 Servings: FO-14 to FO-22 ([food.md](food.md)). Can recipes and removals: CP-01 to CP-14 ([can_parity.md](can_parity.md)).
 Golem: R4-07 ([plan_1.0.4.md](plan_1.0.4.md)). Repack: CN-07 to CN-09 (section 9).

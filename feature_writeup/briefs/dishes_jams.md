@@ -200,3 +200,11 @@ butter sandwich: Vintage's texture, Delightful's name; any bread + any jam + a n
 - `jams #7`: Salmonberry and Raspberry Jam Jars (Vintage port -13, placeholder recolours of the cherry jar), same pattern.
 - `pickles-and-ferments #11`: the vinegar jar ferments from any jam (`#forge:jam_jars` or `#forge:jams`); the bottle recipe is gone.
 Tests SQ-FCB-01, -03, CQ-FCB-02.
+
+## 2026-11-03: pack jam line (`jams #8`)
+
+Built (Vintage port `-15`, Creative Delight jar not in `mods/`): jam and jello blocks, bowls of jello, fluids and cauldrons
+for the ten mason jar jams; Ancient Fruit, Banana, Mulberry, Strawberry and Nut Milk Jars; Upgrade Aquatic's mulberry jam
+merged in; Fruits Delight jams placed as Vintage mason jars; Fruits Delight jam cauldrons fill a mason jar; every jar holds
+1 bottle in Supplementaries jars. Details: [recipes_cooking.md](../recipes_cooking.md) "Pack jam line", RC-180 to RC-185,
+SQ-PJL-01 to -05. Still open from `jams #1`: jar item sprites for Fruits Delight's 22 jams, mason jar from panes.

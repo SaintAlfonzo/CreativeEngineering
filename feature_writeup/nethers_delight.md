@@ -130,6 +130,7 @@ with no behaviour change. 1.20 loot condition syntax: not applicable to 1.19.2.
 ### 4.7 Tests (to write when built)
 
 - **r1102b 2026-11-02** (scratch server; verdicts in `perf/runs/r1102b/` HANDOVER.md and the slice judged.md): PASS SQ-NDM-01, -02, -03, -04, -06, -07; OPEN (no verdict, rerun row written) SQ-NDM-05.
+- **r1103 2026-11-03** (scratch server; verdicts in `perf/runs/r1103/` FINAL.md and the slice judged.md): PASS SQ-NDM-05.
 
 `ND-` prefix: pot a Mimicarnation (place, break drops pot + flower, cutout render); `meal_item` tag on Stuffed Potato;
 JEI shows Stuffed Hoglin and the netherite machete under the new ids; colony on dirt in daylight breaks, under light < 13

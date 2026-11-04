@@ -3,23 +3,16 @@
   "containers": [
     {
       "filled": [
-        "vintagedelight:apple_sauce_bottle"
-      ],
-      "empty": "minecraft:glass_bottle",
-      "capacity": 1
-    },
-    {
-      "filled": [
         "vintagedelight:apple_sauce_jar"
       ],
       "empty": "vintagedelight:empty_mason_jar",
-      "capacity": 3
+      "capacity": 1
     }
   ],
   "flowing_texture": "moonlight:soft_fluids/potion_flow",
   "food": {
     "divider": 1,
-    "item": "vintagedelight:apple_sauce_bottle"
+    "item": "vintagedelight:apple_sauce_jar"
   },
   "from_mod": "vintagedelight",
   "still_texture": "moonlight:soft_fluids/soup_liquid",

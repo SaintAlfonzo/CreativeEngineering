@@ -3,23 +3,16 @@
   "containers": [
     {
       "filled": [
-        "vintagedelight:glow_berry_jam_bottle"
-      ],
-      "empty": "minecraft:glass_bottle",
-      "capacity": 1
-    },
-    {
-      "filled": [
         "vintagedelight:glow_berry_jam_jar"
       ],
       "empty": "vintagedelight:empty_mason_jar",
-      "capacity": 3
+      "capacity": 1
     }
   ],
   "flowing_texture": "moonlight:soft_fluids/potion_flow",
   "food": {
     "divider": 1,
-    "item": "vintagedelight:glow_berry_jam_bottle"
+    "item": "vintagedelight:glow_berry_jam_jar"
   },
   "luminosity": 7,
   "from_mod": "vintagedelight",

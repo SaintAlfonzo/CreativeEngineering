@@ -80,6 +80,7 @@ change them in `moredelight/toast.js` if wanted.
 ## 4. Tests
 
 - **r1102b 2026-11-02** (scratch server; verdicts in `perf/runs/r1102b/` HANDOVER.md and the slice judged.md): PASS SQ-MRD-02; FAIL SQ-MRD-01: Wooden and Stone Knives mine at 8, not 2 and 4 (`tune_tools.js` 134-135).
+- **r1103 2026-11-03** (scratch server; verdicts in `perf/runs/r1103/` FINAL.md and the slice judged.md): PASS SQ-MRD-04.
 
 Prefix `MRD-`. Restart needed (startup scripts and a CD jar change). Queue: SQ-MRD-01 to -03, plus (deep scan 2026-11-02) SQ-MRD-04 (MRD-06 Carrot Soup Comfort) and CQ-MRD-01 (MRD-01 to MRD-03 on a client).
 
@@ -98,7 +99,9 @@ Prefix `MRD-`. Restart needed (startup scripts and a CD jar change). Queue: SQ-M
 
 Knives: `kubejs/startup_scripts/func/tune_tools.js` (More Delight block). **Bug (r1102b SQ-MRD-01, deep scan 2026-11-02):** attack
 damage and speed apply, but `miningSpeed` (lines 134-135) does not reach the knives' tier: both still mine at 8 (the instance
-`/dumpgear` agrees). Fast toasts and the Cheese Toast item: Creative
+`/dumpgear` agrees). **Fixed 2026-11-03:** the dump already showed levels 0 / 1 and enchantability on the per-item tier copy; its
+speed column is that tier's speed, which `tuneTools` never set (only the item's dig speed). `applySpec` now sets the tier
+copy's speed with the dig speed, so both say 2 / 4 (SQ-MRD-01). Fast toasts and the Cheese Toast item: Creative
 Delight startup script `kubejs_startup/moredelight/toast.js` (list `global.fastToasts`). Item
 `creativeengineering:cheese_toast` (`i.cheese_toast`, food type `handheld`), art from More Delight's Toast with Cheese
 (`kubejs/assets/creativeengineering/textures/item/cheese_toast.png`, notice in `more_delight_art_notice.txt`). Recipe in

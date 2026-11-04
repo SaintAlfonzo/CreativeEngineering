@@ -19,7 +19,7 @@ import vazkii.quark.content.tweaks.module.SimpleHarvestModule;
  * Quark's hoe right-click (harvest and replant every ripe crop, click every berry bush) over the
  * per-hoe {@link HoeHarvestArea} instead of Quark's centred radius. Takes over where Quark asks for
  * the range, after its claim, till and "is there a crop here" checks; only for hoes, so the empty
- * hand path stays Quark's. The loop and the durability cost are Quark 3.4-418's, unchanged. Runs on
+ * hand path stays Quark's. The loop is Quark 3.4-418's; an area hoe always costs 1 durability per use (crops.md 2.3). Runs on
  * both sides like Quark's, and both compute the same area from the player's look.
  *
  * <p>Climbing own-pick crops (farming/crops #29): Quark reaches the clicked height and one above. A column of
@@ -61,8 +61,10 @@ public abstract class QuarkHoeAreaHarvestMixin {
                 }
             }
         }
-        if (hasHarvested && !player.level.isClientSide && SimpleHarvestModule.harvestingCostsDurability) {
-            inHand.hurtAndBreak(1, player, p -> p.broadcastBreakEvent(InteractionHand.MAIN_HAND));
+        // An area hoe (more than 1x1) costs 1 durability per use that harvested anything, however many crops, whatever
+        // Quark's harvestingCostsDurability (off in the pack, so area use was free: SQ-PSF-02). A 1x1 hoe keeps Quark's rule.
+        if (hasHarvested && !player.level.isClientSide && (doRightClick || SimpleHarvestModule.harvestingCostsDurability)) {
+            inHand.hurtAndBreak(1, player, p -> p.broadcastBreakEvent(hand));
         }
         cir.setReturnValue(hasHarvested);
     }

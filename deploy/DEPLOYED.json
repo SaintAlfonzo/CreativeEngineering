@@ -6,9 +6,10 @@
   "snapshotSha1": "2d6806f7d47c565363a3c258bd9bc98fdef7ba67"
  },
  "client": {
-  "version": "1.1.06",
-  "date": "2026-10-31T17:58",
-  "snapshotSha1": "8d9f57ef022d26f837eaf24afc1bbe29a65b3fee"
+  "version": "1.2.00",
+  "date": "2026-11-03T20:40",
+  "snapshotSha1": "14330895ef1392157e6c6baae4080639c46a5d65",
+  "notes": "full install applied to CreativeEngineeringClient; dev instance is the build source"
  },
  "log": [
   {
@@ -138,6 +139,14 @@
    "targets": [
     "client"
    ]
+  },
+  {
+   "version": "1.2.00",
+   "date": "2026-11-03T20:40",
+   "targets": [
+    "client"
+   ],
+   "notes": "full install applied to CreativeEngineeringClient; dev instance is the build source"
   }
  ]
 }

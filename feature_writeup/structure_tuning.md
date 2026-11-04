@@ -1942,6 +1942,9 @@ after pruning (satellite dropped, anchor cancels the meta).
   `beardReach` over air or water, no flooded base, no foreign template earth (ground match), ponds and `wet_ok` stilts keep
   their water, the logged counts match the world, cancelled and pruned pieces are absent. SQ-EFB-00 to SQ-EFB-16
   (`/zq under` probe). TODO `structures/earthfill #18`.
+  Scratch r1103w 2026-11-03 (first run, [judged](../perf/runs/r1103w/w/judged_w1.md)): FAIL SQ-EFB-02, -03, -04, -11,
+  -21 (overhangs logged as 0 over air; a villages-size limit question), PASS -00, -01, -05, -09, -12, -17 to -20, -22;
+  OPEN -06, -07, -14; batch faults -08, -10, -15; -13 client look; -16, -19 (W2), -22 (W3 half) not run.
 
 ### 3.30 Terrain batch 4, beard footprint, ocean geode floor (added 2026-10-30, TODO `structures/terrain #1`, `#2`, `#6`)
 

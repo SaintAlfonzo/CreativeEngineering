@@ -3117,6 +3117,7 @@ models onto the Display Delight 1.7.0 port's bowl (`salad_bowl` texture, new geo
 ## 7. In-game test suite
 
 - **r1102b 2026-11-02** (scratch server; verdicts in `perf/runs/r1102b/` HANDOVER.md and the slice judged.md): PASS SQ-FF-00, -02, SQ-FFB-00, SQ-RM-02, -03.
+- **r1103 2026-11-03** (scratch server; verdicts in `perf/runs/r1103/` FINAL.md and the slice judged.md): PASS SQ-PCK-01, -02, -03, -04, -05.
 
 Needs the patcherMod and Creative Delight jars from this change installed and a restart. Then `/dumpall` and
 `python3 tools/food_families.py`: the produce rows of 3.2 read full, except Maple Glazed Bacon (4.4).

@@ -34,6 +34,8 @@ At the end it lists every item id and tag a recipe, loot table or tag names that
 """
 import json
 import os
+import sys
+sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
 import re
 import shutil
 import sys
@@ -223,6 +225,24 @@ def convert_soft_fluid(name, d):
             'tint_method': 'no_tint',
             'translation_key': 'fluid.supplementaries.honey',
         }
+    # Mason jars only (dishes/jams #1, owner 2026-11-03): a jar holds one bottle's worth (was 3), and the jam, relish,
+    # nut mash, vinegar and apple sauce bottles are removed or merged items, so their bottle containers go and the jar
+    # is the food item
+    gone = {f'{NS}:{b}' for b in ('sweet_berry_jam_bottle', 'glow_berry_jam_bottle', 'pepper_jam_bottle',
+                                  'relish_bottle', 'nut_mash_bottle', 'vinegar_bottle', 'apple_sauce_bottle')}
+    jar = None
+    kept = []
+    for c in d.get('containers', []):
+        if any(f in gone for f in c.get('filled', [])):
+            continue
+        if c.get('empty') == f'{NS}:empty_mason_jar':
+            c['capacity'] = 1
+            jar = c['filled'][0]
+        kept.append(c)
+    d['containers'] = kept
+    food = d.get('food')
+    if food and jar and (food.get('item') in gone or food.get('item') == jar):
+        d['food'] = {'divider': 1, 'item': jar}
     return d
 
 
@@ -317,6 +337,20 @@ def own_ids():
             blocks.add(f'{NS}:' + m.group(2))
             if m.group(1) == 'registerBlock':
                 items.add(f'{NS}:' + m.group(2))
+    # The pack jam line (jam/PackJams.java, resources from tools/gen_pack_jams.py)
+    import gen_pack_jams as g
+    for name, _, _, new_jar, _ in g.JAMS:
+        ids = [f'{name}_jam_block', f'{name}_jello_block', f'{name}_jello']
+        if new_jar:
+            ids.append(f'{name}_jam_jar')
+        items.update(f'{NS}:{i}' for i in ids)
+        blocks.update(f'{NS}:{i}' for i in ids if not i.endswith('_jello'))
+        for c in (f'{name}_cauldron', f'{name}_jam_cauldron', f'{name}_jello_cauldron'):
+            items.add(f'{NS}:{c}')
+            blocks.add(f'{NS}:{c}')
+    items.add(f'{NS}:nut_milk_jar')
+    blocks.add(f'{NS}:nut_milk_jar')
+    blocks.update(f'{NS}:fd_{f}_jam_jar' for f in g.FD_JAMS)
     return items, blocks
 
 

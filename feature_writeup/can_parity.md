@@ -1800,6 +1800,8 @@ at Canned Goods' beetroot can any more (it was the fallback until 2026-10-21).
 
 ## 7. In-game tests
 
+- **r1103 2026-11-03** (scratch server; verdicts in `perf/runs/r1103/` FINAL.md and the slice judged.md): PASS SQ-CNP-01, SQ-VNG-02; FAIL SQ-VNG-01: four Vintage pickling recipes (3 froglights, leather) still take the merged-away `vinegar_bottle` (`kubejs/data/creativedelight/kubejs/vintagedelight/recipes.js` 26, 90; `i.vinegar` in item_dict.js).
+
 - [ ] **CP-01 removed cans gone:** JEI search "Canned Mint", "Canned Acorns", "Canned Grapes", "Canned Mite Crust",
   "Canned Raw Ham" (and chevon, hoglin, kangaroo, moose, bison, bunfungus) -> no results.
 - [ ] **CP-02 white strawberry can:** JEI on White Strawberries -> Canned White Strawberries (3 berries, or 2 + sugar/honey);

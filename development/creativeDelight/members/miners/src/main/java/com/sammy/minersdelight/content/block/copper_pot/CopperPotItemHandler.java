@@ -11,7 +11,11 @@ import static com.sammy.minersdelight.content.block.copper_pot.CopperPotBlockEnt
 import static com.sammy.minersdelight.content.block.copper_pot.CopperPotBlockEntity.LEFTOVER_SLOT;
 import static com.sammy.minersdelight.content.block.copper_pot.CopperPotBlockEntity.OUTPUT_SLOT;
 
-/** Automation view of the pot: from above, the four inputs; from the sides and below, containers in and meals out. */
+/**
+ * Automation view of the pot (remainder_buffer.md 3.8): every face inserts into the four inputs and the container slot
+ * (the inventory's slot rule sends containers only to the container slot); from above, the inputs come out; from the
+ * sides and below, the meals and the leftover slot.
+ */
 public class CopperPotItemHandler implements IItemHandler {
     private final IItemHandler inventory;
     private final boolean top;
@@ -35,7 +39,8 @@ public class CopperPotItemHandler implements IItemHandler {
     @Override
     @NotNull
     public ItemStack insertItem(int slot, @NotNull ItemStack stack, boolean simulate) {
-        boolean allowed = top ? slot < INPUT_SLOTS : slot == CONTAINER_SLOT;
+        // every face fills both; the inventory's slot rule sends containers only to the container slot (remainder_buffer.md 3.8)
+        boolean allowed = slot < INPUT_SLOTS || slot == CONTAINER_SLOT;
         return allowed ? inventory.insertItem(slot, stack, simulate) : stack;
     }
 

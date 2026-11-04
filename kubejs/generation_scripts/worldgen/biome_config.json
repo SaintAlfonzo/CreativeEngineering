@@ -1234,7 +1234,7 @@
           "entries": 1,
           "layer": "surface",
           "share_pct": 65.125,
-          "result_pct": 70.365
+          "result_pct": 65.185
         },
         "minecraft:small_end_islands": {
           "multiplier": 1,
@@ -1266,7 +1266,7 @@
           "entries": 1,
           "layer": "surface",
           "share_pct": 21.3,
-          "result_pct": 10.735
+          "result_pct": 15.915
         },
         "nullscape:void_barrens": {
           "multiplier": 2,

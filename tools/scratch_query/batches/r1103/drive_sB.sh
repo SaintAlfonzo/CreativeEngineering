@@ -1,14 +1,15 @@
 #!/bin/bash
 # r1103 slice B driver: sB_1 (Creative Labels 1.0.0) then sB_2 (1.0.1) on one level sb1 (sB_setup.md).
 #   nohup bash tools/scratch_query/batches/r1103/drive_sB.sh [FROM_STEP] > perf/runs/r1103/sB/drive.log 2>&1 &
+#   rerun of chosen rows: LEVEL=sbr R=$INST/perf/runs/r1103/sBR ROWS2=SQ-LBS-01,... bash drive_sB.sh (boot 1 runs whole sB_1)
 # Steps: b1 b2. Logs "STEP <name> <phase> <time>"; stops at the first boot that does not reach "Done (".
 set -u
 INST=/home/liam/.local/share/atlauncher/instances/CreativeEngineering2
 SCR=${SCR:-/tmp/claude-1000/-home-liam--local-share-atlauncher-instances-CreativeEngineering2/51e0db54-43f7-4a69-b393-9d5ee1c5b98d/scratchpad/r1103}
 B=$INST/tools/scratch_query/batches/r1103
 Q="python3 $INST/tools/scratch_query/qrun.py"
-R=$INST/perf/runs/r1103/sB
-O=$SCR/sb1
+R=${R:-$INST/perf/runs/r1103/sB}
+O=$SCR/${LEVEL:-sb1}
 export JFR_MAX=200m
 cd "$INST" || exit 1
 mkdir -p "$R"
@@ -31,7 +32,7 @@ for st in b1 b2; do
   [ "$st" = "$FROM" ] && go=1; [ $go = 1 ] || continue
   log "$st" start; df -h / | tail -1 | awk '{print "disk free " $4}'
   case $st in
-  b1) rm -rf "$O"; bash tools/scratch_query/prep_srv.sh "$O" sb1 A 2>&1 | tail -1; decouple "$O"
+  b1) rm -rf "$O"; bash tools/scratch_query/prep_srv.sh "$O" ${LEVEL:-sb1} A 2>&1 | tail -1; decouple "$O"
       rm -f "$O"/srv/mods/creativeLabels-*.jar && cp "$INST/mods/creativeLabels-1.0.0.jar" "$O/srv/mods/"
       mkdir -p "$O/srv/defaultconfigs" && cp "$INST/configs_edited/server_config/solapplepie-server.toml" "$O/srv/defaultconfigs/"
       cp "$INST/tools/scratch_query/zlbs_probe.js" "$O/srv/kubejs/server_scripts/zz_zlbs_probe.js"
@@ -41,7 +42,8 @@ for st in b1 b2; do
       cp "$(ls -t $INST/development/creativeLabels/build/libs/creativeLabels-1.0.1*.jar | grep -v sources | head -1)" "$O/srv/mods/"
       cp "$INST/tools/scratch_query/zsb_probe.js" "$O/srv/kubejs/server_scripts/zz_zsb_probe.js"
       r=$(boot "$O"); log b2 "boot $r"; case $r in DONE*) ;; *) log ABORT b2; exit 1;; esac
-      run sB_2.qb; stopsrv "$O" boot2 ;;
+      if [ -n "${ROWS2:-}" ]; then $Q run "$O" "$B/sB_2.qb" "$R" --rows "$ROWS2" > "$R/qrun_sB_2.txt" 2>&1; log sB_2 "$(grep "^totals" "$R/qrun_sB_2.txt")"; else run sB_2.qb; fi
+      stopsrv "$O" boot2 ;;
   esac
   log "$st" end
 done

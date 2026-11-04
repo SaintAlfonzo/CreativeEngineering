@@ -1,8 +1,6 @@
 package com.SaintAlfonzo.creativedelight.golden.content;
 
 import net.minecraft.core.BlockPos;
-import net.minecraft.sounds.SoundEvents;
-import net.minecraft.sounds.SoundSource;
 import net.minecraft.stats.Stats;
 import net.minecraft.tags.ItemTags;
 import net.minecraft.world.InteractionHand;
@@ -15,8 +13,6 @@ import net.minecraft.world.level.Level;
 import net.minecraft.world.level.LevelAccessor;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.CakeBlock;
-import net.minecraft.world.level.block.CandleBlock;
-import net.minecraft.world.level.block.CandleCakeBlock;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.gameevent.GameEvent;
 import net.minecraft.world.phys.BlockHitResult;
@@ -61,14 +57,9 @@ public class GoldenCakeBlock extends CakeBlock {
     @Override
     public InteractionResult use(BlockState state, Level level, BlockPos pos, Player player, InteractionHand hand, BlockHitResult hit) {
         ItemStack held = player.getItemInHand(hand);
-        if (held.is(ItemTags.CANDLES) && state.getValue(BITES) == 0 && Block.byItem(held.getItem()) instanceof CandleBlock candle) {
-            if (!player.isCreative()) held.shrink(1);
-            level.playSound(null, pos, SoundEvents.CAKE_ADD_CANDLE, SoundSource.BLOCKS, 1.0F, 1.0F);
-            level.setBlockAndUpdate(pos, CandleCakeBlock.byCandle(candle));
-            level.gameEvent(player, GameEvent.BLOCK_CHANGE, pos);
-            player.awardStat(Stats.ITEM_USED.get(held.getItem()));
-            return InteractionResult.SUCCESS;
-        }
+        // No candle cake for the golden cakes until the pack's cake candle feature (TODO baking/baked-goods #38): a candle
+        // did turn it into a plain vanilla candle cake (SQ-GLD-05). The candle is kept and the cake is left as it is.
+        if (held.is(ItemTags.CANDLES)) return InteractionResult.PASS;
         if (level.isClientSide) {
             if (takeSlice(level, pos, state, player).consumesAction()) return InteractionResult.SUCCESS;
             if (held.isEmpty()) return InteractionResult.CONSUME;

@@ -1,5 +1,9 @@
 package com.SaintAlfonzo.creativeworldgen.worldgen;
 
+import net.minecraftforge.event.TickEvent;
+import net.minecraftforge.eventbus.api.SubscribeEvent;
+import net.minecraftforge.fml.common.Mod;
+
 import it.unimi.dsi.fastutil.longs.Long2LongMap;
 import it.unimi.dsi.fastutil.longs.Long2LongOpenHashMap;
 import it.unimi.dsi.fastutil.shorts.ShortList;
@@ -32,6 +36,7 @@ import java.util.WeakHashMap;
  * {@link #settlingTick} to keep sand and gravel next to settling water in place. Drops are skipped only with
  * {@code firstTickWater} on.
  */
+@Mod.EventBusSubscriber(modid = "creativeworldgen")
 public final class FirstTickWater {
 
 	private FirstTickWater() {}
@@ -47,6 +52,8 @@ public final class FirstTickWater {
 	private static final Map<Level, State> STATES = new WeakHashMap<>();
 	/** True while a settling fluid tick runs; read by the popResource hook. */
 	private static boolean ticking;
+	/** The thread that set {@link #ticking}; drops on any other thread are never skipped. */
+	private static Thread tickingThread;
 
 	/** {@code LevelChunk.postProcessGeneration} HEAD: a chunk with generation leftovers starts ticking. */
 	public static void onFirstTicking(LevelChunk chunk) {
@@ -71,11 +78,24 @@ public final class FirstTickWater {
 	/** {@code FlowingFluid.tick} HEAD. */
 	public static void beginTick(Level level, BlockPos pos) {
 		ticking = level instanceof ServerLevel && isSettling(level, pos);
+		tickingThread = ticking ? Thread.currentThread() : null;
 	}
 
 	/** {@code FlowingFluid.tick} RETURN. */
 	public static void endTick() {
 		ticking = false;
+		tickingThread = null;
+	}
+
+	/**
+	 * End of every level tick: the flag never outlives the tick that set it. RETURN of {@code FlowingFluid.tick} does not
+	 * run when the tick throws or another mod cancels it after our HEAD hook; a flag left set skipped every block drop
+	 * in the world until the next fluid tick ended (suspected cause of SQ-LBS-04, r1103: labels and notes vanished when
+	 * their host went to air, plan_scratch_bugfix_1103 4.5).
+	 */
+	@SubscribeEvent
+	public static void onLevelTick(TickEvent.LevelTickEvent event) {
+		if (event.phase == TickEvent.Phase.END) endTick();
 	}
 
 	/** {@code FlowingFluid.spreadTo} HEAD: the target settles too, so the flood keeps the rule across chunk edges. */
@@ -87,12 +107,12 @@ public final class FirstTickWater {
 
 	/** {@code Block.popResource} HEAD: true while a settling fluid tick runs, so the drop is skipped. */
 	public static boolean suppressDrops() {
-		return ticking && WorldgenConfig.firstTickWaterEnabled();
+		return ticking && tickingThread == Thread.currentThread() && WorldgenConfig.firstTickWaterEnabled();
 	}
 
 	/** True while a settling fluid tick runs; {@link GeneratedFallingBlocks} holds falling blocks it disturbs. */
 	public static boolean settlingTick() {
-		return ticking;
+		return ticking && tickingThread == Thread.currentThread();
 	}
 
 	private static boolean isSettling(Level level, BlockPos pos) {

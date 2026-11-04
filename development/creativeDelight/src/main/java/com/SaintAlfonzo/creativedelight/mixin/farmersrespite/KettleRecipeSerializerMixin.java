@@ -1,5 +1,6 @@
 package com.SaintAlfonzo.creativedelight.mixin.farmersrespite;
 
+import com.SaintAlfonzo.creativedelight.CDConfig;
 import com.SaintAlfonzo.creativedelight.compat.farmersrespite.KettleBases;
 import com.google.gson.JsonObject;
 
@@ -17,8 +18,9 @@ import umpaz.farmersrespite.common.crafting.KettleRecipe;
 /**
  * {@code farmersrespite:brewing} in the pack's format (farmers_respite.md K8): 2.1's shape with one item result, a
  * {@code base} tank fluid ({@link KettleBases}) in place of {@code needwater}, and the brew time read from
- * {@code cookingtime}, the key every recipe writes (2.0 reads {@code brewingtime}, which no recipe has, so every brew
- * took its 200-tick default). The base also travels to clients after the 2.0 fields.
+ * {@code cookingtime} (2.0 reads {@code brewingtime}, which no recipe has, so every brew took its 200-tick default). A
+ * recipe with neither key takes {@code [cooking] kettleBrewTicks} (default 600 = 30 s; the pack's NCH frBrewing writes
+ * no time unless one is given). The base also travels to clients after the 2.0 fields.
  */
 @Mixin(value = KettleRecipe.Serializer.class, remap = false)
 public abstract class KettleRecipeSerializerMixin {
@@ -27,7 +29,7 @@ public abstract class KettleRecipeSerializerMixin {
 			require = 1, at = @At(value = "INVOKE",
 			target = "Lnet/minecraft/util/GsonHelper;m_13824_(Lcom/google/gson/JsonObject;Ljava/lang/String;I)I"))
 	private int ce$cookingTime(JsonObject json, String key, int fallback) {
-		return GsonHelper.getAsInt(json, "cookingtime", GsonHelper.getAsInt(json, key, fallback));
+		return GsonHelper.getAsInt(json, "cookingtime", GsonHelper.getAsInt(json, key, CDConfig.COOKING.kettleBrewTicks.get()));
 	}
 
 	/** needWater (does a brew use a unit) follows the base; a 2.0 recipe without base keeps its needwater. */

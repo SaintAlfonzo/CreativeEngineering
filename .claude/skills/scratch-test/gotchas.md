@@ -34,6 +34,10 @@ Sorted by topic. Add new ones under their topic with the date (skill step B5.4).
 - Mixins: a patcherMod mixin with a wrong target applies silently (no defaultRequire); Creative Delight / Creative
   Brewing set `defaultRequire: 1`, so the same mixin crashes them. Compartment names have `_`: match
   `Mixing [A-Za-z_.]*`.
+- A boot crash on our own files blocks the dev client too (r1103 Boot 0): a `@ModifyArg` handler may take only the
+  invoked method's arguments, not the enclosing method's params ("targets a method with an invalid signature"); and
+  KubeJS refuses an upper-case file name anywhere under `kubejs/data/*/kubejs/` ("Invalid file name: Uppercase",
+  reported as "startup script syntax errors"). Report both to the owner as found in the installed jars / pack.
 
 ## Driving the server
 
@@ -86,6 +90,18 @@ Sorted by topic. Add new ones under their topic with the date (skill step B5.4).
 - Ready probes: `/zq` (recipes, tags, foods: `zq_probe.js`, `zq_batch.sh`), `tools/creative_labels_test/server_probe.js`,
   `tools/leaf_path_probe.js` (place a ConfiguredFeature). The /dumpall recipe dump has only id + type: use `/zq`.
 - Tick stalls: a srv-only tick timer script + `jstack <scratch pid>` shows what the server thread waits on.
+- `level.dimension` is a ResourceLocation property in KubeJS: `l.dimension.location()` throws. Outside a JS try in a
+  command handler it surfaces only as "An unexpected error occurred trying to execute that command" (no stack trace),
+  and every call of that command fails (r1103 zlbs / zsb). Use `server.overworld()`. Avoid `getClass()` in probes.
+
+- JDK private collection classes: calling a member on what `Collections.unmodifiableMap(...).entrySet()` (or any
+  `Collections$Unmodifiable*`, `HashMap$KeySet`, ...) returns throws `IllegalAccessException ... cannot access a member
+  of class java.util.Collections$UnmodifiableMap$UnmodifiableEntrySet` in the pack's Rhino. Copy into public classes
+  first: `new HashMap(map)`, then `new ArrayList(hm.keySet()).forEach(k => hm.get(k))` (`/zq under`, r1103w 11-03).
+  A `/reload` to load a fixed probe drops Chunky's commands: fix it in tools/ and rerun its rows at the next boot.
+- A `function f() {}` declared inside an `if` / `else if` block of a probe command is undefined inside the
+  `forEach` closures of that block ("f is not a function, it is undefined"). Use `let f = function () {}` (`/zq under`
+  `kind`, `idAt`, `top`, r1103w). A new probe command gets one live call before its batch relies on it.
 
 ## Worldgen tests
 
@@ -103,6 +119,11 @@ Sorted by topic. Add new ones under their topic with the date (skill step B5.4).
 - Perf numbers: per-stage ChunkGeneration means are wall time on contended threads; compare pregen wall time and
   time-to-N-chunks. A run with high idle MSPT = busy machine: discard it.
 
+- Earth fill judges (`efb_judge.py --except`): a bare `mine` in the regex matches every `minecraft:` id and hides all
+  vanilla structures; write `:mines?\b|_mine\b` (r1103w). `[zq] under` lines carry no dimension: keep Nether and End
+  probes out of an Overworld judge's log window. `/place structure` stores no start and runs no earth fill, so a
+  placed structure is invisible to `/zq under`; earth fill rows need natural starts.
+
 ## Logs and results
 
 - The system grep is ugrep: long `{0,300}` regexes fail ("exceeds complexity limits"); parse big logs in python.
@@ -112,6 +133,12 @@ Sorted by topic. Add new ones under their topic with the date (skill step B5.4).
   Mechanical Extruder recipes with an abstract `getType()` in `dumprecipes`.
 - Dedicated-server dumps: recipes, tags, loot, structures, biomes, spawns, trades are good; names, stacks, effects,
   gear, food, crops, compost, paintings need the client.
+- `qrun.py --from ID` skips the setup rows before ID, so their captures (`{SBH}`, markers) are missing: every command
+  using them fails with "Expected integer" (r1103 boot 4 retry). Use `--rows SETUP,ID,...` instead.
+- A driver that deletes a crashed srv dir must copy `logs/kubejs/startup.log`, `logs/latest.log` and `crash-reports/`
+  out first (r1103 lost the SQ-ENM-03 startup log and needed a repro boot).
+- Reruns of rows written for an older run's world (markers like `s1home`, `rhome` made by earlier boots) need their
+  marker setup rows on a fresh world; summon a marker only after its chunk is forceloaded (r1103 phase 2: 13 faults).
 
 ## Probe crashes the server mid-batch (r1102b, 2026-11-02)
 

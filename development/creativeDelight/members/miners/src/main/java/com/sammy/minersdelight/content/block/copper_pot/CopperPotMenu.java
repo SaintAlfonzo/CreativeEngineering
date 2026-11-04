@@ -16,7 +16,6 @@ import net.minecraft.world.inventory.RecipeBookType;
 import net.minecraft.world.inventory.SimpleContainerData;
 import net.minecraft.world.inventory.Slot;
 import net.minecraft.world.item.ItemStack;
-import net.minecraft.world.item.Items;
 import net.minecraft.world.item.crafting.Recipe;
 import net.minecraft.world.level.Level;
 import net.minecraftforge.items.ItemStackHandler;
@@ -121,14 +120,10 @@ public class CopperPotMenu extends RecipeBookMenu<RecipeWrapper> {
                 return ItemStack.EMPTY;
             }
         } else {
-            boolean container = moving.is(Items.BOWL);
-            if (container && !moveItemStackTo(moving, CONTAINER_SLOT, CONTAINER_SLOT + 1, false)) {
-                return ItemStack.EMPTY;
-            }
-            if (!moveItemStackTo(moving, 0, MEAL_DISPLAY_SLOT, false)) {
-                return ItemStack.EMPTY;
-            }
-            if (!moveItemStackTo(moving, CONTAINER_SLOT, OUTPUT_SLOT, false)) {
+            // any of the pot's containers to the container slot only, the rest to the inputs only (remainder_buffer.md 3.8)
+            boolean container = blockEntity.isPotContainer(moving) || blockEntity.isContainerValid(moving);
+            if (!(container ? moveItemStackTo(moving, CONTAINER_SLOT, CONTAINER_SLOT + 1, false)
+                    : moveItemStackTo(moving, 0, MEAL_DISPLAY_SLOT, false))) {
                 return ItemStack.EMPTY;
             }
         }

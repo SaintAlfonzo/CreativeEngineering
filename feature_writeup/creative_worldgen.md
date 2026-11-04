@@ -79,6 +79,9 @@ own Java plus two nested members. Same behaviour as before the carve; every regi
 
 ## 5. Tests
 
+- **r1103 2026-11-03** (scratch server; verdicts in `perf/runs/r1103/` FINAL.md and the slice judged.md): PASS SQ-CWG-01, -02, -02b, -03, -04, -05, -09, -10, -08b, -07; FAIL SQ-CWG-06: the punch meta `meteorite_desert_pyramid` is dropped: `META_PART_KEYS` lacks `punch` (`structure_overrides.js` line 110); SQ-CWG-08o BATCH-FAULT: the forceload does not cover a plains village; rerun sA_R.qb part 2 (old 1.1.06 world); SQ-CWG-08 OPEN: mobs, breeding, leaf decay, mobcap, dumpspawns pass; the village read-back waits for SQ-CWG-08o.
+- r1103 boot fix (runner, 2026-11-03): `kubejs/data/creativeworldgen/kubejs/loot/README.md` renamed `readme.md`; KubeJS refused the upper-case file name and stopped startup. Also found: the jar ships older `loot_config.json` / `loot_index.json` than `kubejs/data`, so rebuild creativeworldgen before a release.
+
 Scratch SQ-CWG-01 to -10 ([scratch_queue.md](testing/scratch_queue.md)). In game (client rows pinned until wave 8+,
 7.8): CWG-01 More Mooblooms and baby squid render with models; CWG-02 `/celocate` and a map trade from a cartographer.
 
@@ -87,3 +90,9 @@ Scratch SQ-CWG-01 to -10 ([scratch_queue.md](testing/scratch_queue.md)). In game
 - 2026-11-02: carved (wave 5). patcherMod 1.1.08 loses the classes, 60 mixins, 6 sections and the resources; More
   Mooblooms and Baby Mobs nested; Devtools gains the optional dependency. Edits that the worldgen edit pass
   ([plan_worldgen_edit.md](plan_worldgen_edit.md), same day) made to `MetaStructure` and its new classes moved with it.
+- 2026-11-03 (plan_scratch_bugfix_1103 4.1, 4.5, 7.3): `structure_overrides.js` accepts and checks the meta part key
+  `punch` (boolean, structure parts with `overlap` only, as `MetaStructure.Part`), so `meta/meteorite_desert_pyramid`
+  loads (SQ-CWG-06, SQ-WGE-12). `FirstTickWater`: the settling flag is cleared every level tick and checked per thread
+  (perf.md 10.6). Loot: Botania and CC:Tweaked out of village chests (`07_rules.js` restores only Chalk, `10_removals.js`
+  removes their native injections). Rebuilt `creativeworldgen-1.0.0.jar` 2026-11-03, which also carries the current
+  `loot_config.json` / `loot_index.json`; not installed.

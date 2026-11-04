@@ -25,13 +25,17 @@ ServerEvents.recipes(e => {
 		R.remove({ id: 'create__the_salt:salt_create_milling' }, e)
 		R.remove({ id: 'create__the_salt:salt_create_recipe' }, e)
 
+		// Hand, hammer (cutting board and grid, NCH.hammering) and mortar give 4; crushing and milling 4 plus 1 at 50 %
+		// (salt.md 6 S6).
+		var MACHINE_SALT = [Item.of(SALT, SALT_PER_RAW), Item.of(SALT, 1).withChance(0.5)]
 		R.shapeless(Item.of(SALT, SALT_PER_RAW), [i.raw_rock_salt], e, 'raw_rock_salt_salt')
-		R.createCrushing(Item.of(SALT, SALT_PER_RAW), i.raw_rock_salt, e, 'raw_rock_salt_salt')
-		R.createMilling(Item.of(SALT, SALT_PER_RAW), i.raw_rock_salt, e, 'raw_rock_salt_salt')
+		R.hammering(Item.of(SALT, SALT_PER_RAW), i.raw_rock_salt, e, 'raw_rock_salt_salt')
+		R.createCrushing(MACHINE_SALT, i.raw_rock_salt, e, 'raw_rock_salt_salt')
+		R.createMilling(MACHINE_SALT, i.raw_rock_salt, e, 'raw_rock_salt_salt')
 
-		// Water -> salt, heated basin: 60 % (was 20 %). Cauldron evaporation is a loot table override,
-		// kubejs/data/salt/loot_tables/cauldron_evaporation/salt_full.json (bonus salt 50 %, was 25 %).
-		R.createMixing(Item.of(SALT, 1).withChance(0.6), Fluid.of(f.water, 200), e, 'water_salt', 'heated')
+		// Water -> salt, heated basin: 1000 mB -> 2 (was 200 mB -> 60 %; salt.md 6 S2). Cauldron evaporation is a loot
+		// table override, kubejs/data/salt/loot_tables/cauldron_evaporation/: full 8, two thirds 5, one third 3.
+		R.createMixing(Item.of(SALT, 2), Fluid.of(f.water, 1000), e, 'water_salt', 'heated')
 
 		// ============================================================
 		// Large Salt Lamp (The Salt's lamp, renamed in namechanges.js)

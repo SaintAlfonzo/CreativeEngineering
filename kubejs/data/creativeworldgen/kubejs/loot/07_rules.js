@@ -83,13 +83,13 @@
     // ── Golden Food: its village overrides out, its loot folded into golden food pools ───────
     // goldenfood ships copies of all 16 vanilla village chest tables that only add its enchanted book.
     // Because they replace the vanilla files, Forge stops running other mods' injections into them
-    // (Chalk, Botania, CC:Tweaked below). So: vanilla's own pools back (no book), those injections
-    // restored, and golden food made twice as common.
+    // (Chalk, Botania, CC:Tweaked). So: vanilla's own pools back (no book), Chalk's injection
+    // restored (Botania and CC:Tweaked left out), and golden food made twice as common.
 
     L.useVanilla(/^minecraft:chests\/village\//, { winner: /goldenfood/ })
 
-    // The pools those mods add in code, from their bytecode (Chalk LootTableModification, Botania
-    // LootHandler, CC:Tweaked CommonHooks). Only re-added where the vanilla table is overridden.
+    // The pool Chalk adds in code, from its bytecode (LootTableModification). Only re-added where the
+    // vanilla table is overridden.
     L.restoreInjection([
         'minecraft:chests/village/village_cartographer', 'minecraft:chests/village/village_mason',
         'minecraft:chests/village/village_plains_house', 'minecraft:chests/village/village_savanna_house',
@@ -97,17 +97,10 @@
         rolls: 1,
         entries: [{ type: 'minecraft:loot_table', name: 'chalk:chests/village_chalk_loot' }],
     }, { mod: 'chalk' })
-    L.restoreInjection([
-        'minecraft:chests/village/village_temple', 'minecraft:chests/village/village_toolsmith',
-        'minecraft:chests/village/village_weaponsmith',
-    ], {
-        rolls: { type: 'minecraft:uniform', min: 0, max: 1 },
-        entries: [{ type: 'minecraft:loot_table', name: 'botania:inject/village_chest', weight: 1 }],
-    }, { mod: 'botania' })
-    L.restoreInjection('minecraft:chests/village/village_cartographer', {
-        name: 'computercraft_treasure', rolls: 1,
-        entries: [{ type: 'minecraft:loot_table', name: 'computercraft:treasure_disk' }],
-    }, { mod: 'computercraft' })
+    // Botania (botania:inject/village_chest: temple, toolsmith, weaponsmith) and CC:Tweaked (computercraft:treasure_disk:
+    // cartographer) are not restored: owner 2026-11-03 keeps them out of village chests (plan_scratch_bugfix_1103 7.3).
+    // Since the golden copies stopped being served, Forge injects them natively, so they are removed after the roll in
+    // 10_removals.js.
 
     // The Golden Food enchantment book is not placed in any loot table (goldenfood's copies are reverted
     // above, which is what removed it from villages).

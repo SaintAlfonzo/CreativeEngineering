@@ -2,7 +2,7 @@
 // Farmer's Respite Kettle recipes in the tank format (feature_writeup/farmers_respite.md 2.1, K8 to K10). Non-member
 // file: recipe ids are creativedelight:<type>/<suffix> (global.CD.recipes). Needs Creative Delight's Kettle patch
 // (mixin.farmersrespite): every brew names its base fluid, uses one 250 mB unit of it from the tank and makes one
-// result. Brew time 200 ticks (10 s, NCH frBrewing's default); 2.0 read `brewingtime`, the recipes wrote
+// result. Brew time: Creative Delight [cooking] kettleBrewTicks (default 600 = 30 s; frBrewing writes no time); 2.0 read `brewingtime`, the recipes wrote
 // `cookingtime`, so 2.0 also fell back to 200.
 //
 // 1. Every live Kettle recipe from the mods is rewritten: plain teas and juices on water; long and strong tiers on

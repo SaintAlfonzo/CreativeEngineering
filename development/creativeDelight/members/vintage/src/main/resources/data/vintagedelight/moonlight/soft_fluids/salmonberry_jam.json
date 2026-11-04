@@ -1,17 +1,20 @@
 {
-  "color": "#e8743a",
+  "color": "#b7552b",
   "containers": [
     {
       "filled": [
         "vintagedelight:salmonberry_jam_jar"
       ],
       "empty": "vintagedelight:empty_mason_jar",
-      "capacity": 3
+      "capacity": 1
     }
+  ],
+  "equivalent_fluids": [
+    "vintagedelight:salmonberry_jam"
   ],
   "flowing_texture": "moonlight:soft_fluids/potion_flow",
   "food": {
-    "divider": 3,
+    "divider": 1,
     "item": "vintagedelight:salmonberry_jam_jar"
   },
   "from_mod": "vintagedelight",

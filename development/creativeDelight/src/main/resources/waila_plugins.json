@@ -19,5 +19,11 @@
       "client": "com.SaintAlfonzo.creativedelight.compat.wthit.WthitPowderedSugar"
     },
     "side": "client"
+  },
+  "creativedelight:cookware_toggle": {
+    "entrypoints": {
+      "client": "com.SaintAlfonzo.creativedelight.compat.wthit.WthitCookwareToggle"
+    },
+    "side": "client"
   }
 }

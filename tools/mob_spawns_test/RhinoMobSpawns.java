@@ -3,7 +3,7 @@ import java.nio.file.*;
 import java.util.*;
 
 /**
- * Runs kubejs/server_scripts/worldgen/mob_spawns.js in the pack's own Rhino fork with the KubeJS globals stubbed
+ * Runs kubejs/data/creativeworldgen/kubejs/worldgen/mob_spawns.js in the pack's own Rhino fork with the KubeJS globals stubbed
  * (tag_helper.js loaded first for global.tags). Fires the worldgen/biome and block tags handlers and
  * highPriorityData, and writes tags.json (tag -> entries; block tags as "block:<tag>") and every data file the script adds under <out>/data/. ServerEvents.loaded
  * needs the live registry and is not fired.
@@ -58,7 +58,7 @@ public class RhinoMobSpawns {
 			"  highPriorityData: function (fn) { __data = fn }, loaded: function (fn) {} };");
 		cx.evaluateString(scope, prelude, "prelude", 1, null);
 		cx.evaluateString(scope, Files.readString(root.resolve("development/patcherMod/src/main/resources/kubejs_startup/creativeengineering/func/tag_helper.js")), "tag_helper.js", 1, null);
-		cx.evaluateString(scope, Files.readString(root.resolve("kubejs/server_scripts/worldgen/mob_spawns.js")), "mob_spawns.js", 1, null);
+		cx.evaluateString(scope, Files.readString(root.resolve("kubejs/data/creativeworldgen/kubejs/worldgen/mob_spawns.js")), "mob_spawns.js", 1, null);
 		cx.evaluateString(scope, "__tags({ add: function (t, id) { __HOST.tag(String(t), String(id)) } });", "fire_tags", 1, null);
 		cx.evaluateString(scope, "if (__btags) __btags({ add: function (t, id) { __HOST.tag('block:' + String(t), String(id)) } });", "fire_block_tags", 1, null);
 		cx.evaluateString(scope, "__data({ add: function (p, t) { __HOST.add(String(p), String(t)) } });", "fire_data", 1, null);

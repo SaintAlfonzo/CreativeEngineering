@@ -61,7 +61,7 @@ Lengthen is always redstone, amplify always glowstone dust. Times are base / lon
 | Glowing | awkward | glow ink sac | 1:30 | 4:00 | |
 | Saturation | thick | golden carrot | 5 ticks | | |
 | Wither | mundane | wither rose | 0:40 | 1:30 | 0:20 II |
-| Levitation | awkward | shulker filet (Ender's Delight) | 0:40 | 1:30 | 0:20 II |
+| Levitation | awkward | shulker meat slice (End's Delight, CD member; shulker shell if missing; was Ender's shulker filet, merged into the slice, and a boot without Ender's 1.2.2 stopped: SQ-ENM-03, 2026-11-03) | 0:40 | 1:30 | 0:20 II |
 | Mining Fatigue | awkward | prismarine crystals | 1:30 | 4:00 | 0:30 II |
 | Hunger | thick | rotten flesh | 0:30 | 1:00 | 0:15 II |
 | Nausea | thick | pufferfish | 0:30 | 1:00 | |

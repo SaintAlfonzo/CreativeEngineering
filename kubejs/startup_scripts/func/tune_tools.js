@@ -67,8 +67,12 @@ var i = global.item;
 
 		if (s.miningSpeed    != null) set('miningSpeed', () => item.setDigSpeed(s.miningSpeed))
 
-		if (s.enchantability != null || s.miningLevel != null || s.repairWith != null) {
+		// The tier copy gets the speed too: DiggerItem copies the tier speed into its own field at construction, and
+		// anything that reads tier.getSpeed() (the /dumpgear miningSpeed column among them) saw the old value
+		// (SQ-MRD-01: More Delight knives dumped 8 with miningSpeed 2 and 4 set)
+		if (s.enchantability != null || s.miningLevel != null || s.repairWith != null || s.miningSpeed != null) {
 			set('tier', () => item.setTier(t => {
+				if (s.miningSpeed    != null) t.setSpeed(s.miningSpeed)
 				if (s.enchantability != null) t.setEnchantmentValue(Math.round(s.enchantability))
 				if (s.miningLevel    != null) t.setLevel(Math.round(s.miningLevel))
 				if (s.repairWith     != null) t.setRepairIngredient(Ingredient.of(s.repairWith))

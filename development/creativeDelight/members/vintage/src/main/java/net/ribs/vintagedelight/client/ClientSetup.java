@@ -33,6 +33,10 @@ public class ClientSetup {
             ModBlocks.SALMONBERRY_JAM_JAR, ModBlocks.RASPBERRY_JAM_JAR)) {
             ItemBlockRenderTypes.setRenderLayer(cutout.get(), RenderType.cutout());
         }
+        // Pack jam line: the new jars and the placed Fruits Delight jams (jam blocks set translucent in their models)
+        for (Block jar : net.ribs.vintagedelight.jam.PackJams.cutoutBlocks()) {
+            ItemBlockRenderTypes.setRenderLayer(jar, RenderType.cutout());
+        }
     }
 
     @SubscribeEvent

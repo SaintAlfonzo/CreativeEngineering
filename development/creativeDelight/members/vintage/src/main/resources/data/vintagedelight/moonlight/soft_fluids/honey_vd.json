@@ -5,7 +5,7 @@
         "vintagedelight:honey_jar"
       ],
       "empty": "vintagedelight:empty_mason_jar",
-      "capacity": 3
+      "capacity": 1
     }
   ],
   "flowing_texture": "moonlight:soft_fluids/honey_liquid",

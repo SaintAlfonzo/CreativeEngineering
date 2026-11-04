@@ -246,8 +246,11 @@ under 6 px nothing fits. Full faces, chests and barrels get the standard label e
 Jar and Sack, the four trash cans, Vintage Delight's Pickling Jar (`vintagedelight:fermenting_jar`) and
 `#botanypots:all_botany_pots`. Each side face takes one note, the centre spot moved to the middle of the host's
 visible side (the bounding box of the usable samples, same 1 px window), at that surface's depth. The note's 9
-sample points must lie on that surface. Tops and bottoms of these hosts use the normal shape test (nothing). Shifts:
-jar 1 px down, sack 2, trash can and Pickling Jar 1.25, botany pot 4.
+sample points must lie on that surface. Shifts: jar 1 px down, sack 2, trash can and Pickling Jar 1.25, botany pot 4.
+Tops (owner 2026-11-03, plan_scratch_bugfix_1103 4.4, SQ-LBS-03): only hosts in `creative_labels:paper/note_on_top` (the
+jar and the Pickling Jar) take one note on top, centred on the lid by the same centre-note test (the Pickling Jar's lid
+is 2.5 px down, too deep for the shape test's 2 px). Every other centre-note top (sack neck, trash can rim, botany pot
+soil) and every bottom takes none; before, tops used the shape test, which let the jar lid and the sack neck carry spot C.
 
 **Stored placement:** `FaceContent` keeps a shift (px) and the label edge beside the inset (`Spots.Place`); NBT
 `OffX`, `OffY`, `Size` are written only when they differ from 0, 0, 10, so labels and notes placed earlier load
@@ -670,6 +673,8 @@ Bugs found and fixed on the way (jar rebuilt and reinstalled each time; the head
 
 ## 7. In-game test suite
 
+- **r1103 2026-11-03** (scratch server; verdicts in `perf/runs/r1103/` FINAL.md and the slice judged.md): PASS SQ-LBS-05a, -00, -01, -02, -05; FAIL SQ-LBS-03: a sticky note is accepted on the top of the Supplementaries jar and sack, against 3.3a (`Spots.fit` 298-300; owner decides which is right); FAIL SQ-LBS-04: host set to air: the face paper cell clears but no label or note item drops, 20 of 20 (`FacePaperInteractions.hostChanged` / `refit`, `FacePaperBlock.updateShape` / `neighborChanged`); confirm by hand first.
+
 Rewritten for the full spec before anything was built (earlier drafts were never run). Boxes are ticked from real
 play only; "server half PASSED" notes are from the scratch server (6.1).
 
@@ -761,10 +766,13 @@ Labels by surface and centred notes (3.3a, `creativeLabels-1.0.1`):
   a cauldron's top, a pressure plate, a flower → nothing placed, label not used up. Full blocks, chests and barrels
   take a label as before.
 - [ ] **SN-58 centred note:** a sticky note on the side of each centre-note host (Jar, Sack, trash cans, Pickling Jar,
-  botany pot) → one note in the middle of that side; a second note on the same side → refused; their tops → refused.
+  botany pot) → one note in the middle of that side; a second note on the same side → refused; their tops → refused,
+  except the jar and the Pickling Jar (one note centred on the lid).
 - [ ] **SN-59 old placements:** a world with labels and notes placed under 1.0.0 → all still in place after updating.
 - [ ] **SN-60 re-fit:** a label on a botany pot side, then break the pot → the label drops; a note on a jar side, then
   break the jar → the note drops with its text.
+- [ ] **SN-61 jar tops and pushed hosts:** a note on top of a Jar and of a Pickling Jar → accepted, centred on the lid;
+  on top of a Sack → refused. A piston pushes a stone host with a note on its side → the note drops with its text.
 
 Labels:
 
@@ -832,3 +840,9 @@ Donor jars and performance:
   cauldrons; the original mod allowed them). Cause: the five-spot rule plus the 2 px inset limit and the per-box 4 px
   thickness. Built 3.3a: label surface test, stairs and slabs keep the old label rule, doors and trapdoors none,
   centred notes by tag; `creativeLabels-1.0.1`, not installed. SN-56 to SN-60 added.
+- 2026-11-03 (plan_scratch_bugfix_1103 4.4, 4.5): jar and Pickling Jar tops take one centred note (tag
+  `creative_labels:paper/note_on_top`), other centre-note tops none (SQ-LBS-03 found the jar and sack tops open). SQ-LBS-04
+  (no drops when a host went to air) was not a probe fault (the probe already used flag 3) and the Labels code path
+  drops; suspected cause is Creative Worldgen's FirstTickWater drop flag left set after a cancelled or failed fluid
+  tick, now cleared every level tick and checked per thread. The probe gained a wall-torch control and a piston case.
+  Rebuilt into `creativeLabels-1.0.1` (still not installed). SN-61 added.

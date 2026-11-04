@@ -29,7 +29,7 @@ import java.util.Map;
  * {@code global.CD.qol(id)}, Java through {@link #qol}.</li>
  * <li>{@code [worldgen]}: one switch per worldgen system CD owns ({@link #WORLDGEN}, creative_delight.md 24), default on;
  * scripts read it through {@code global.CD.worldgen(id)}, Java through {@link #worldgen}.</li>
- * <li>{@code [display]}, {@code [vintage]}: the settings of the Display Delight and Vintage Delight ports, one section per
+ * <li>{@code [display]}, {@code [vintage]}, {@code [salt]}: the settings of the Display Delight and Vintage Delight ports and of Salt, one section per
  * member (plan_creative_delight.md R3, B1; 2026-11-02). Defined here, read by the member through its shared
  * {@code CdSettings} by path; the ports' old files are read once ({@link #MEMBER_FILES}) and renamed.</li>
  * </ul>
@@ -130,6 +130,7 @@ public final class CDConfig {
 		PERF = new Perf(b);
 		FOOD = new Food(b);
 		SPEC = b.build();
+		com.SaintAlfonzo.creativedelight.compat.SaltConfigBridge.bind(SPEC);
 	}
 
 	private CDConfig() {}
@@ -181,7 +182,26 @@ public final class CDConfig {
 			"vintagedelight-common.toml", Map.of(
 					"worldgen.magicVineConvertsDirtToLushGrass", "vintage.worldgen.magicVineConvertsDirtToLushGrass",
 					"pickling_jar.remainderBuffer", "vintage.pickling_jar.remainderBuffer",
-					"pickling_jar.stallWhenFull", "vintage.pickling_jar.stallWhenFull"));
+					"pickling_jar.stallWhenFull", "vintage.pickling_jar.stallWhenFull"),
+			// Salt's COMMON file (salt.md 6 S10): every key, same section and name under [salt] (compat.SaltConfigBridge).
+			"salt-common.toml", under("salt",
+					"Salting.SaltingNutrition", "Salting.SaltingSaturationModifier", "Salting.SaltingFoodValues",
+					"Dissolving.SaltDissolvingEnabled", "Dissolving.SaltDissolvingChance",
+					"Dissolving.SaltDissolvesIntoSourceBlocks", "Dissolving.SaltDissolvingInRain",
+					"Dissolving.SaltDissolvingInRainChance",
+					"Melting.SaltItemMeltingEnabled", "Melting.SaltBlockMeltingEnabled", "Melting.SaltBlockMeltingChance",
+					"Melting.SaltMeltingPlaceWater",
+					"Evaporation.EvaporationEnabled", "Evaporation.EvaporationChance",
+					"GrowingSaltClusters.SaltClusterGrowingEnabled", "GrowingSaltClusters.SaltClusterGrowingChance",
+					"RockSalt.RockSaltSize", "RockSalt.RockSaltClusterChance",
+					"VillagerTrades.ButcherSaltTradesEnabled"));
+
+	/** {old path -> section.old path} for a file moved whole into one section. */
+	private static Map<String, String> under(String section, String... paths) {
+		Map<String, String> m = new java.util.LinkedHashMap<>();
+		for (String p : paths) m.put(p, section + "." + p);
+		return java.util.Collections.unmodifiableMap(m);
+	}
 
 	/** The member sections (R3): keys the ports read by path (their CdSettings); names must match those reads. */
 	private static void defineMemberSettings(ForgeConfigSpec.Builder b) {
@@ -215,6 +235,9 @@ public final class CDConfig {
 				"0 throws it on the same tick as the batch.").defineInRange("overflowEjectDelayTicks", 20, 0, 1200);
 		b.pop();
 		b.pop();
+
+		// [salt]: Salt's own keys, defined by the Salt member's Configuration (salt.md 6 S10).
+		com.SaintAlfonzo.creativedelight.compat.SaltConfigBridge.define(b);
 	}
 
 	private static void qolSwitch(ForgeConfigSpec.Builder b, String id, String... comment) {
@@ -354,49 +377,43 @@ public final class CDConfig {
 
     /**
      * Extra produce from crops grown on better soil (CD {@code creativeengineering/soil_yield.js}, applied on /reload).
-     * Each soil adds a binomial pool to a ripe crop's harvest; each crop is switched on on its own (all off by default).
+     * Each soil adds a pool of bonus x the crop's average produce to a ripe crop's harvest; each crop has its own switch
+     * (all on by default). Ender Crop is out (it only grows on tilled End Stone).
      * feature_writeup/crop_yields.md.
      */
     public static final class SoilYield {
         /** Crop keys of soil_yield.js's CROPS table, in the same order. */
         public static final String[] CROPS = {
                 "wheat", "carrots", "potatoes", "beetroots", "cabbages", "onions", "tomatoes", "rice",
-                "bell_peppers", "coffee", "cotton", "ender_crop", "tobacco", "flax", "hemp", "corn", "cave_carrots",
+                "bell_peppers", "coffee", "cotton", "tobacco", "flax", "hemp", "corn", "cave_carrots",
                 "broccoli", "cauliflower", "garlic", "sweet_potato", "turnip", "zucchini", "cucumber", "oats",
                 "peanuts", "adzuki"
         };
 
-        public final ForgeConfigSpec.IntValue farmlandTries;
-        public final ForgeConfigSpec.DoubleValue farmlandChance;
-        public final ForgeConfigSpec.IntValue richFarmlandTries;
-        public final ForgeConfigSpec.DoubleValue richFarmlandChance;
-        public final ForgeConfigSpec.IntValue fertileSoilTries;
-        public final ForgeConfigSpec.DoubleValue fertileSoilChance;
-        public final ForgeConfigSpec.IntValue richSoilTries;
-        public final ForgeConfigSpec.DoubleValue richSoilChance;
+        public final ForgeConfigSpec.DoubleValue farmlandBonus;
+        public final ForgeConfigSpec.DoubleValue richFarmlandBonus;
+        public final ForgeConfigSpec.DoubleValue fertileSoilBonus;
+        public final ForgeConfigSpec.DoubleValue richSoilBonus;
         public final Map<String, ForgeConfigSpec.BooleanValue> crop = new java.util.LinkedHashMap<>();
 
         private SoilYield(ForgeConfigSpec.Builder b) {
             b.comment(
-                    "Extra produce on better soil. A ripe crop whose block below is the soil gets 'tries' extra",
-                    "chances at one more of its produce (seeds are not included), each at 'chance'. Average extra per",
-                    "harvest = tries x chance. The crop's own drops are unchanged. 0 tries = nothing for that soil.",
-                    "Each crop is switched on in [crop_drops.soil_yield.crops]; all are off by default.",
+                    "Extra produce on better soil. A ripe crop whose block below is the soil gets one extra pool sized",
+                    "to 'bonus' x the crop's average produce (seeds are not included): 0.33 = about a third more.",
+                    "A crop that drops one item gets a 'bonus' chance of one more; a crop with a variable count gets",
+                    "its average raised by the same share. The crop's own drops are unchanged. 0 = nothing for that soil.",
+                    "Each crop is switched on in [crop_drops.soil_yield.crops].",
                     "feature_writeup/crop_yields.md lists every crop's drops."
             ).push("soil_yield");
 
-            farmlandTries = b.comment("Vanilla farmland: extra tries.").defineInRange("farmlandTries", 0, 0, 8);
-            farmlandChance = b.comment("Vanilla farmland: chance [0-1] per try.").defineInRange("farmlandChance", 0.0, 0.0, 1.0);
-            richFarmlandTries = b.comment("Rich Soil Farmland: extra tries.").defineInRange("richFarmlandTries", 2, 0, 8);
-            richFarmlandChance = b.comment("Rich Soil Farmland: chance [0-1] per try.").defineInRange("richFarmlandChance", 0.35, 0.0, 1.0);
-            fertileSoilTries = b.comment("Fertile Soil (Immersive Weathering mulch): extra tries.").defineInRange("fertileSoilTries", 2, 0, 8);
-            fertileSoilChance = b.comment("Fertile Soil: chance [0-1] per try.").defineInRange("fertileSoilChance", 0.25, 0.0, 1.0);
-            richSoilTries = b.comment("Untilled Rich Soil (only rice and adzuki grow on it): extra tries.").defineInRange("richSoilTries", 2, 0, 8);
-            richSoilChance = b.comment("Untilled Rich Soil: chance [0-1] per try.").defineInRange("richSoilChance", 0.35, 0.0, 1.0);
+            farmlandBonus = b.comment("Vanilla farmland: share of extra produce.").defineInRange("farmlandBonus", 0.0, 0.0, 4.0);
+            richFarmlandBonus = b.comment("Rich Soil Farmland: share of extra produce.").defineInRange("richFarmlandBonus", 0.33, 0.0, 4.0);
+            fertileSoilBonus = b.comment("Fertile Soil (Immersive Weathering mulch): share of extra produce.").defineInRange("fertileSoilBonus", 0.66, 0.0, 4.0);
+            richSoilBonus = b.comment("Untilled Rich Soil (only rice and adzuki grow on it): share of extra produce.").defineInRange("richSoilBonus", 0.33, 0.0, 4.0);
 
             b.comment("true: the crop gets the soil pools above. false: its drops are the same on every soil.").push("crops");
             for (String key : CROPS) {
-                crop.put(key, b.define(key, false));
+                crop.put(key, b.define(key, true));
             }
             b.pop(2); // crops, soil_yield
         }
@@ -487,6 +504,7 @@ public final class CDConfig {
         public final ForgeConfigSpec.BooleanValue stallWhenFull;
         public final ForgeConfigSpec.BooleanValue ovenIngredientCounts;
         public final ForgeConfigSpec.IntValue recycleShowTicks;
+        public final ForgeConfigSpec.IntValue kettleBrewTicks;
 
         private Cooking(ForgeConfigSpec.Builder b) {
             b.comment(
@@ -517,6 +535,11 @@ public final class CDConfig {
                     "bottle) stays visible there before the meal is plated with it, so the step can be seen.",
                     "0 = plate at once. Containers a player or hopper puts in plate at once either way."
             ).defineInRange("recycleShowTicks", 10, 0, 100);
+
+            kettleBrewTicks = b.comment(
+                    "Ticks one Farmer's Respite Kettle brew takes (20 = 1 s) for every recipe that names no time of its",
+                    "own (all of the pack's Kettle recipes). Read when recipes load: /reload to apply."
+            ).defineInRange("kettleBrewTicks", 600, 1, 72000);
 
             b.pop(); // cooking
         }

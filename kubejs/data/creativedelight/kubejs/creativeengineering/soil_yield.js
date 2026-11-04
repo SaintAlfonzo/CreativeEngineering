@@ -1,9 +1,11 @@
 // Soil yield: extra produce from a ripe crop grown on better soil (feature_writeup/crop_yields.md, TODO farming/crops #23).
-// Each switched-on crop gets one pool per soil, appended to its harvest table: rolls = binomial(tries, chance), each roll
+// Each switched-on crop gets one pool per soil, appended to its harvest table: rolls = binomial sized to bonus x the
+// crop's average produce (Rich +33%, Fertile Soil +66% by default), each roll
 // one of the crop's produce, only when the crop is ripe and the block below it (offset rows below for two-high and water
-// crops) is that soil. The crop's own pools are untouched, so a crop that is off, or on plain farmland at 0 tries, drops
-// exactly what its mod ships. Values: CDConfig [crop_drops.soil_yield] (soil tries and chances; one switch per crop in
-// [crop_drops.soil_yield.crops], all off by default). A crop whose key the config lacks stays off.
+// crops) is that soil. The crop's own pools are untouched, so a crop that is off, or on plain farmland at 0 bonus, drops
+// exactly what its mod ships. Values: CDConfig [crop_drops.soil_yield] (one bonus per soil; one switch per crop in
+// [crop_drops.soil_yield.crops], all on by default). A crop whose key the config lacks stays off. Ender Crop is out: it
+// only grows on tilled End Stone.
 //
 // Same pre-roll mechanism as rusticdelight/crop_drops.js: ServerEvents.genericLootTables rewrites the raw table JSON
 // before the game parses it. New pools are only appended (Forge names pools by position), and modify() resets the table
@@ -21,63 +23,62 @@
     var TAG = '[soil-yield] '
 
     var DEFAULTS = {
-        farmlandTries: 0, farmlandChance: 0.0,
-        richFarmlandTries: 2, richFarmlandChance: 0.35,
-        fertileSoilTries: 2, fertileSoilChance: 0.25,
-        richSoilTries: 2, richSoilChance: 0.35,
+        farmlandBonus: 0.0,
+        richFarmlandBonus: 0.33,
+        fertileSoilBonus: 0.66,
+        richSoilBonus: 0.33,
     }
 
-    // key: CDConfig crop switch (SoilYield.CROPS, same order). block: the table's block. ripe: block state properties of
+    // key: CDConfig crop switch (SoilYield.CROPS, same order). base: the table's average produce per ripe harvest, no
+    // Fortune (crop_yields.md 2.1, loot dump 2026-10-26); the soil pool adds bonus x base. block: the table's block. ripe: block state properties of
     // a ripe harvest. produce: item keys, one picked per roll. knife: what a roll gives instead when the crop is cut with a
     // knife, as the crop's own table does. below: rows from the crop down to its soil (default 1).
     function crops(i, b) {
         return [
-            { key: 'wheat', block: b.wheat_crop, ripe: { age: '7' }, produce: [i.wheat] },
-            { key: 'carrots', block: b.carrots, ripe: { age: '7' }, produce: [i.minecraft_carrot] },
-            { key: 'potatoes', block: b.potatoes, ripe: { age: '7' }, produce: [i.minecraft_potato] },
-            { key: 'beetroots', block: b.beetroots, ripe: { age: '3' }, produce: [i.minecraft_beetroot] },
-            { key: 'cabbages', block: b.cabbages, ripe: { age: '7' }, produce: [i.farmersdelight_cabbage] },
-            { key: 'onions', block: b.onions, ripe: { age: '7' }, produce: [i.onion_farmersdelight] },
+            { key: 'wheat', base: 1.00, block: b.wheat_crop, ripe: { age: '7' }, produce: [i.wheat] },
+            { key: 'carrots', base: 3.71, block: b.carrots, ripe: { age: '7' }, produce: [i.minecraft_carrot] },
+            { key: 'potatoes', base: 3.71, block: b.potatoes, ripe: { age: '7' }, produce: [i.minecraft_potato] },
+            { key: 'beetroots', base: 1.00, block: b.beetroots, ripe: { age: '3' }, produce: [i.minecraft_beetroot] },
+            { key: 'cabbages', base: 1.00, block: b.cabbages, ripe: { age: '7' }, produce: [i.farmersdelight_cabbage] },
+            { key: 'onions', base: 3.71, block: b.onions, ripe: { age: '7' }, produce: [i.onion_farmersdelight] },
             // The bottom vine only: a vine on a rope has no soil below.
-            { key: 'tomatoes', block: b.tomatoes, ripe: { age: '3' }, produce: [i.farmersdelight_tomato] },
+            { key: 'tomatoes', base: 1.50, block: b.tomatoes, ripe: { age: '3' }, produce: [i.farmersdelight_tomato] },
             // Panicles sit on the rice, which stands in water on the soil.
-            { key: 'rice', block: b.rice_panicles, ripe: { age: '3' }, produce: [i.rice_panicle], knife: i.farmersdelight_rice, below: 2 },
-            { key: 'bell_peppers', block: b.bell_peppers, ripe: { age: '7' },
+            { key: 'rice', base: 1.00, block: b.rice_panicles, ripe: { age: '3' }, produce: [i.rice_panicle], knife: i.farmersdelight_rice, below: 2 },
+            { key: 'bell_peppers', base: 1.45, block: b.bell_peppers, ripe: { age: '7' },
                 produce: [i.bell_pepper_red, i.bell_pepper_green, i.bell_pepper_yellow] },
-            { key: 'coffee', block: b.coffee_crop, ripe: { age: '5' }, produce: [i.coffee_beans] },
-            { key: 'cotton', block: b.cotton_crop, ripe: { age: '3' }, produce: [i.cotton_boll] },
-            { key: 'ender_crop', block: b.ender_crop, ripe: { age: '7' }, produce: [i.ender_pearl] },
-            { key: 'tobacco', block: b.tobacco_crop, ripe: { blockstate: '7' }, produce: [i.tobacco_leafs] },
-            { key: 'flax', block: b.flax_crop, ripe: { age: '7', half: 'lower' }, produce: [i.flax] },
+            { key: 'coffee', base: 3.50, block: b.coffee_crop, ripe: { age: '5' }, produce: [i.coffee_beans] },
+            { key: 'cotton', base: 2.00, block: b.cotton_crop, ripe: { age: '3' }, produce: [i.cotton_boll] },
+            { key: 'tobacco', base: 6.71, block: b.tobacco_crop, ripe: { blockstate: '7' }, produce: [i.tobacco_leafs] },
+            { key: 'flax', base: 1.00, block: b.flax_crop, ripe: { age: '7', half: 'lower' }, produce: [i.flax] },
             // Fibre drops from the grown bottom and from the top; the pool goes on the top (the part players cut).
-            { key: 'hemp', block: b.hemp, ripe: { growth: 'top0' }, produce: [i.hemp_fiber], below: 2 },
+            { key: 'hemp', base: 2.88, block: b.hemp, ripe: { growth: 'top0' }, produce: [i.hemp_fiber], below: 2 },
             // Both halves drop corn; the pool goes on the lower half only.
-            { key: 'corn', block: b.corn_crop, ripe: { age: '7', upper: 'false' }, produce: [i.corn] },
-            { key: 'cave_carrots', block: b.cave_carrots, ripe: { age: '3' }, produce: [i.cave_carrot] },
-            { key: 'broccoli', block: b.broccoli_crop, ripe: { age: '5' }, produce: [i.broccoli] },
-            { key: 'cauliflower', block: b.cauliflower_crop, ripe: { age: '7' }, produce: [i.cauliflower] },
-            { key: 'garlic', block: b.garlic_crop, ripe: { age: '5' }, produce: [i.garlic] },
-            { key: 'sweet_potato', block: b.sweet_potato_crop, ripe: { age: '5' }, produce: [i.sweet_potato] },
-            { key: 'turnip', block: b.turnip_crop, ripe: { age: '5' }, produce: [i.turnip] },
-            { key: 'zucchini', block: b.zucchini_crop, ripe: { age: '7' }, produce: [i.zucchini] },
-            { key: 'cucumber', block: b.cucumber_crop, ripe: { age: '7' }, produce: [i.cucumber] },
-            { key: 'oats', block: b.oat_crop, ripe: { age: '7' }, produce: [i.oat], knife: i.raw_oats },
-            { key: 'peanuts', block: b.peanut_crop, ripe: { age: '7' }, produce: [i.peanut] },
-            { key: 'adzuki', block: b.adzuki_sprouts, ripe: { age: '6', flowering: 'true' }, produce: [i.adzuki_beans] },
+            { key: 'corn', base: 1.00, block: b.corn_crop, ripe: { age: '7', upper: 'false' }, produce: [i.corn] },
+            { key: 'cave_carrots', base: 3.00, block: b.cave_carrots, ripe: { age: '3' }, produce: [i.cave_carrot] },
+            { key: 'broccoli', base: 1.00, block: b.broccoli_crop, ripe: { age: '5' }, produce: [i.broccoli] },
+            { key: 'cauliflower', base: 1.00, block: b.cauliflower_crop, ripe: { age: '7' }, produce: [i.cauliflower] },
+            { key: 'garlic', base: 2.14, block: b.garlic_crop, ripe: { age: '5' }, produce: [i.garlic] },
+            { key: 'sweet_potato', base: 2.71, block: b.sweet_potato_crop, ripe: { age: '5' }, produce: [i.sweet_potato] },
+            { key: 'turnip', base: 1.00, block: b.turnip_crop, ripe: { age: '5' }, produce: [i.turnip] },
+            { key: 'zucchini', base: 2.71, block: b.zucchini_crop, ripe: { age: '7' }, produce: [i.zucchini] },
+            { key: 'cucumber', base: 1.00, block: b.cucumber_crop, ripe: { age: '7' }, produce: [i.cucumber] },
+            { key: 'oats', base: 1.00, block: b.oat_crop, ripe: { age: '7' }, produce: [i.oat], knife: i.raw_oats },
+            { key: 'peanuts', base: 3.71, block: b.peanut_crop, ripe: { age: '7' }, produce: [i.peanut] },
+            { key: 'adzuki', base: 2.50, block: b.adzuki_sprouts, ripe: { age: '6', flowering: 'true' }, produce: [i.adzuki_beans] },
         ]
     }
 
     function soils(i, cfg) {
         return [
-            { name: 'farmland', block: i.farmland, tries: cfg.farmlandTries, chance: cfg.farmlandChance },
-            { name: 'rich farmland', block: i.rich_farmland, tries: cfg.richFarmlandTries, chance: cfg.richFarmlandChance },
-            { name: 'fertile soil', block: i.fertile_soil, tries: cfg.fertileSoilTries, chance: cfg.fertileSoilChance },
-            { name: 'rich soil', block: i.rich_soil, tries: cfg.richSoilTries, chance: cfg.richSoilChance },
+            { name: 'farmland', block: i.farmland, bonus: cfg.farmlandBonus },
+            { name: 'rich farmland', block: i.rich_farmland, bonus: cfg.richFarmlandBonus },
+            { name: 'fertile soil', block: i.fertile_soil, bonus: cfg.fertileSoilBonus },
+            { name: 'rich soil', block: i.rich_soil, bonus: cfg.richSoilBonus },
         ].map(function (s) {
-            s.tries = Math.round(Number(s.tries))
-            s.chance = Number(s.chance)
+            s.bonus = Number(s.bonus)
             return s
-        }).filter(function (s) { return s.tries > 0 && s.chance > 0 })
+        }).filter(function (s) { return s.bonus > 0 })
     }
 
     var $SoilYield = (function () {
@@ -107,9 +108,18 @@
         ] }
     }
 
+    // Extra mean = bonus x base, as binomial(n, p) with n = ceil(extra) and p = extra / n. A one-item crop (base 1) at
+    // 0.33 gets binomial(1, 0.33): a 33% chance of one more harvest. A variable crop gets its count raised by the same
+    // share of its mean (carrots 3.71 at 0.66: binomial(3, 0.816), +2.45).
+    function rolls(crop, soil) {
+        var extra = crop.base * soil.bonus
+        var n = Math.max(1, Math.ceil(extra - 1e-9))
+        return { type: 'minecraft:binomial', n: n, p: Math.min(1, Math.round(extra / n * 10000) / 10000) }
+    }
+
     function pool(crop, soil, i) {
         return {
-            rolls: { type: 'minecraft:binomial', n: soil.tries, p: soil.chance },
+            rolls: rolls(crop, soil),
             bonus_rolls: 0.0,
             entries: crop.produce.map(function (item) { return entry(crop, item, i) }),
             conditions: [
@@ -126,7 +136,7 @@
         var soilList = soils(i, cfg)
         var on = crops(i, global.blocks).filter(function (c) { return cropOn(c.key) })
         if (!on.length || !soilList.length) {
-            console.info(TAG + (on.length ? 'every soil at 0 tries' : 'no crop switched on') + ': crop drops as their mods ship them')
+            console.info(TAG + (on.length ? 'every soil at 0 bonus' : 'no crop switched on') + ': crop drops as their mods ship them')
             return
         }
         var done = []
@@ -147,7 +157,7 @@
             }
         })
         console.info(TAG + done.length + ' crops (' + done.join(', ') + '), soils: ' + soilList.map(function (s) {
-            return s.name + ' ' + s.tries + ' x ' + s.chance
+            return s.name + ' +' + Math.round(s.bonus * 100) + '%'
         }).join(', '))
     })
 

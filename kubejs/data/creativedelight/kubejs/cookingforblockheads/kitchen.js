@@ -38,6 +38,10 @@ ServerEvents.tags('block', e => {
 	// BlockStateCounterTopperMixin, TODO cooking/kitchen #8, #20).
 	t.add(e, b.t_counter_supports, [b.cfb_counter, b.cfb_corner])
 	t.addMatching(e, b.t_counter_toppers, [b.cutting_board, b.dd_food_plate, b.dd_small_food_plate, b.dd_plated_foods, b.coaster])
+
+	// CfB oven as a stove: blockheads_additions gives it a `lit` state that follows its burn time (CfbOvenLitMixin), and
+	// FD's heat check reads `lit`, so a pot or skillet on it cooks only while it burns fuel. The keg tag nests this one.
+	t.add(e, b.t_fd_heat_sources, i.cfb_oven)
 })
 
 ServerEvents.recipes(e => {

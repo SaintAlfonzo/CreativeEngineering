@@ -8,11 +8,15 @@
     "CfbOvenFuelMixin",
     "CfbOvenSmokingMixin",
     "CfbCornerStorageMixin",
-    "CfbCornerUseMixin"
+    "CfbCornerUseMixin",
+    "CfbOvenLitMixin",
+    "CfbOvenLitSyncMixin",
+    "CfbOvenShapeMixin"
   ],
   "client": [
     "CuttingBoardRendererOffsetMixin",
-    "CoasterRendererOffsetMixin"
+    "CoasterRendererOffsetMixin",
+    "CfbOvenRendererMixin"
   ],
   "server": []
 }

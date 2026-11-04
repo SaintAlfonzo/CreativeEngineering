@@ -15,7 +15,7 @@ import java.util.Map;
 
 /**
  * Carries a member's old config file into Creative Delight's (plan_creative_delight.md A6, R3): the ports registered
- * their own file before they were nested (displaydelight-common.toml, vintagedelight-common.toml); their settings are
+ * their own file before they were nested (displaydelight-common.toml, vintagedelight-common.toml, salt-common.toml); their settings are
  * now keys of creativedelight-common.toml ({@link CDConfig#MEMBER_FILES}). At construction, before Forge reads the COMMON
  * configs: each old value is written to its new key (inverted where the map says so) unless CD's file already has that
  * key, then the old file is renamed to {@code <file>.moved}, so it is read once and never again. The same job as
@@ -39,8 +39,13 @@ public final class MemberConfigMove {
 					Object v = src.get(key.getKey());
 					boolean invert = key.getValue().startsWith("!");
 					String target = invert ? key.getValue().substring(1) : key.getValue();
-					if (!(v instanceof Boolean b) || dst.contains(target)) continue;
-					dst.set(target, invert != b);
+					if (v == null || dst.contains(target)) continue;
+					if (invert) {
+						if (!(v instanceof Boolean b)) continue;
+						dst.set(target, !b);
+					} else {
+						dst.set(target, v);   // any type: Salt's numbers and food list as well as switches
+					}
 					moved.add(key.getKey() + " -> " + target);
 				}
 				if (!moved.isEmpty()) dst.save();

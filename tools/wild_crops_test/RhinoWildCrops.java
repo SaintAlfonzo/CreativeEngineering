@@ -4,7 +4,7 @@ import java.util.*;
 
 /**
  * Runs Creative Delight's kubejs/data/creativedelight/kubejs/_worldgen/wild_crops.js (or the pack's
- * kubejs/server_scripts/worldgen/mushroom_spawns.js with script=mushroom_spawns) in the pack's own Rhino fork with the
+ * kubejs/data/creativeworldgen/kubejs/worldgen/mushroom_spawns.js with script=mushroom_spawns) in the pack's own Rhino fork with the
  * KubeJS globals and global.CD stubbed (tag_helper.js and _biome_rules.js loaded first). Fires the worldgen/biome tags handler and highPriorityData, and
  * writes tags.json (tag -> biomes) and every data file the script adds under <out>/data/. ServerEvents.loaded
  * needs the live registry and is not fired.
