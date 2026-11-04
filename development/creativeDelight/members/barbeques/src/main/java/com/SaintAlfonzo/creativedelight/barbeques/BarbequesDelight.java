@@ -1,5 +1,6 @@
 package com.SaintAlfonzo.creativedelight.barbeques;
 
+import com.SaintAlfonzo.creativedelight.barbeques.block.BasinBlock;
 import com.SaintAlfonzo.creativedelight.barbeques.block.GrillBlock;
 import com.SaintAlfonzo.creativedelight.barbeques.registry.BBQBlocks;
 import com.SaintAlfonzo.creativedelight.barbeques.registry.BBQItems;
@@ -35,6 +36,7 @@ public class BarbequesDelight {
         // 1.3.0's cutting board seasoning use (a mixin, then a RightClickBlock listener) is retired at the seasoning fold
         // (food/seasoning #11): seasonings are crafted on
         MinecraftForge.EVENT_BUS.addListener(GrillBlock::onSplashWater);
+        MinecraftForge.EVENT_BUS.addListener(BasinBlock::onSneakGrab);
     }
 
     public static ResourceLocation loc(String path) {

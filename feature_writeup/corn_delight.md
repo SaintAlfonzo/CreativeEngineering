@@ -37,7 +37,7 @@ Where it goes: the installed 1.0.3 jar stays. New items are KubeJS items in the 
 | Part | Plan |
 |---|---|
 | Item | `creativeengineering:corncob`, stack 64 |
-| Best kernel route | Cutting board with a knife: 1 Corncob -> 6 corn kernels. Corn itself stays 1 -> 4 ([cooking.js](../kubejs/server_scripts/cooking/cooking.js) "Cornmeal"), so the cob is the most efficient route per item. **6 is a placeholder**, confirm |
+| Kernel routes | 1 Corncob -> 2 corn kernels on the cutting board (knife), 3 from the mortar and pestle, 4 + 0.5 cornmeal from Create crushing, the Millstone and the IE crusher (owner change 2026-11-04 [6 on the board, no other route]). Board: `corn_delight/recipes.js`; Create and mortar: `creativeengineering/recipes.js` (`foodGrinding` `corncob_kernels`, mortar fixed at 3); IE: `immersiveengineering/recipes.js` |
 | Cornmeal routes | Corn and wild corn through Create milling, the Millstone and the IE crusher: existing cornmeal outputs plus a 10% Corncob secondary (`foodGrinding` and `ieCrushing` secondaries in the Cornmeal block). The mortar mirror is the machine average rounded down, so it gives no cob. Crates, kernel bags, kernels and PneumaticCraft get none |
 | Compost | Same chance as Straw (0.3 in the Farmer's Delight compost rows), as a row in CD's `corn_delight/compost.js` beside the existing one |
 | Other 1.2.11 uses (Paper, Organic Compost, fuel, IE ethanol, pig food) | not taken |
@@ -103,7 +103,7 @@ In game (client), after installing both jars and a restart. The server halves ar
 (`perf/runs/r1102b/s2/`; -05 now checks Face + Head only, the mouth tag was dropped), -04 open (rerun with a fake player
 breaking the corn with a knife: SQ-CN-04b). Client half: CQ-CN-01 (CN-01, CN-05, CN-06). Both added by the deep scan 2026-11-02.
 
-- [ ] CN-01 Corncob in JEI; cutting board + knife gives 6 kernels.
+- [ ] CN-01 Corncob in JEI; cutting board + knife gives 2 kernels; mortar gives 3; Create mill, Millstone and IE crusher give 4 + a 50% cornmeal (2026-11-04).
 - [ ] CN-02 Mill, Millstone, IE crusher on corn: cornmeal as before, Corncob about 1 in 10 over 50 runs; wild corn in the mill
   and Millstone the same; mortar gives no cob. (Wild corn in the IE crusher gives kernels only, as before: no cob.)
 - [ ] CN-03 Composter accepts a Corncob at the Straw chance (0.3).

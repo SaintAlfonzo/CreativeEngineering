@@ -4,13 +4,145 @@ Every version staged by `tools/build_deploy.py`, newest first. Each entry lists 
 version before it and which files the other machines must delete. The full file list of a version is in
 `history/<version>.json`.
 
+<!-- deploy:1.2.01 -->
+## 1.2.01 - 2026-11-04 00:48
+
+- Minecraft 1.19.2, Forge 43.3.9
+- Commit: 6b4c6b85 + 47 uncommitted file(s)
+- Since: 1.2.00
+- Contents: 364 server+client mods, 43 client-only mods, 29 resource pack files, 16 shader pack files
+- Payload: update from 1.2.00, config functional: 65 files, 15.9 MB (mods 6, kubejs 48, world_serverconfig 11)
+- Notes: Barbeque's Delight wood variants and skewering fixes, new jam art, Corn, Cutting Boards, JEI fixes
+- Built with warnings:
+  - kubejs/exported/items_by_mod/displaydelight.json is older than mods/creativedelight-1.0.0.jar: run `/dumpitemsbymod displaydelight`, then tools/gen_display_delight_models.py
+  - 47 uncommitted change(s) in shipped folders (commit 6b4c6b85 + working tree)
+  - changelog lint, kubejs/assets/creativeengineering/changelog/1.0.0.md: line 9: bullet is 1128 characters (over 300: split it or use a sub-bullet)
+  - changelog lint, kubejs/assets/creativeengineering/changelog/1.0.0.md: line 20: bullet is 360 characters (over 300: split it or use a sub-bullet)
+  - changelog lint, kubejs/assets/creativeengineering/changelog/1.0.0.md: line 27: bullet is 301 characters (over 300: split it or use a sub-bullet)
+  - changelog lint, kubejs/assets/creativeengineering/changelog/1.0.0.md: line 29: bullet is 326 characters (over 300: split it or use a sub-bullet)
+  - changelog lint, kubejs/assets/creativeengineering/changelog/1.0.0.md: line 38: bullet is 567 characters (over 300: split it or use a sub-bullet)
+  - changelog lint, kubejs/assets/creativeengineering/changelog/1.0.0.md: line 46: bullet is 956 characters (over 300: split it or use a sub-bullet)
+  - changelog lint, kubejs/assets/creativeengineering/changelog/1.0.0.md: line 55: bullet is 951 characters (over 300: split it or use a sub-bullet)
+  - changelog lint, kubejs/assets/creativeengineering/changelog/1.0.0.md: line 61: bullet is 327 characters (over 300: split it or use a sub-bullet)
+  - changelog lint, kubejs/assets/creativeengineering/changelog/1.0.0.md: line 66: bullet is 859 characters (over 300: split it or use a sub-bullet)
+  - changelog lint, kubejs/assets/creativeengineering/changelog/1.0.0.md: line 73: bullet is 345 characters (over 300: split it or use a sub-bullet)
+  - changelog lint, kubejs/assets/creativeengineering/changelog/1.0.0.md: line 81: bullet is 367 characters (over 300: split it or use a sub-bullet)
+  - changelog lint, kubejs/assets/creativeengineering/changelog/1.0.0.md: line 105: bullet is 371 characters (over 300: split it or use a sub-bullet)
+  - changelog lint, kubejs/assets/creativeengineering/changelog/1.0.0.md: line 115: bullet is 640 characters (over 300: split it or use a sub-bullet)
+  - changelog lint, kubejs/assets/creativeengineering/changelog/1.0.0.md: line 123: bullet is 700 characters (over 300: split it or use a sub-bullet)
+  - changelog lint, kubejs/assets/creativeengineering/changelog/1.0.0.md: line 181: bullet is 396 characters (over 300: split it or use a sub-bullet)
+  - changelog lint, kubejs/assets/creativeengineering/changelog/1.0.0.md: line 213: bullet is 1090 characters (over 300: split it or use a sub-bullet)
+  - changelog lint, kubejs/assets/creativeengineering/changelog/1.0.0.md: line 226: bullet is 501 characters (over 300: split it or use a sub-bullet)
+  - changelog lint, kubejs/assets/creativeengineering/changelog/1.0.0.md: line 240: bullet is 399 characters (over 300: split it or use a sub-bullet)
+  - changelog lint, kubejs/assets/creativeengineering/changelog/1.0.0.md: line 281: bullet is 839 characters (over 300: split it or use a sub-bullet)
+  - changelog lint, kubejs/assets/creativeengineering/changelog/1.0.0.md: line 305: bullet is 390 characters (over 300: split it or use a sub-bullet)
+  - changelog lint, kubejs/assets/creativeengineering/changelog/1.0.0.md: line 317: bullet is 465 characters (over 300: split it or use a sub-bullet)
+  - changelog lint, kubejs/assets/creativeengineering/changelog/1.0.0.md: line 501: bullet is 426 characters (over 300: split it or use a sub-bullet)
+  - changelog lint, kubejs/assets/creativeengineering/changelog/1.0.0.md: line 542: bullet is 451 characters (over 300: split it or use a sub-bullet)
+  - changelog lint, kubejs/assets/creativeengineering/changelog/1.0.0.md: line 547: bullet is 452 characters (over 300: split it or use a sub-bullet)
+  - changelog lint, kubejs/assets/creativeengineering/changelog/1.0.0.md: line 633: bullet is 430 characters (over 300: split it or use a sub-bullet)
+  - changelog lint, kubejs/assets/creativeengineering/changelog/1.1.01.md: line 21: bullet is 484 characters (over 300: split it or use a sub-bullet)
+  - changelog lint, kubejs/assets/creativeengineering/changelog/1.1.01.md: line 30: bullet is 306 characters (over 300: split it or use a sub-bullet)
+  - changelog lint, kubejs/assets/creativeengineering/changelog/1.1.01.md: line 33: bullet is 404 characters (over 300: split it or use a sub-bullet)
+  - changelog lint, kubejs/assets/creativeengineering/changelog/1.1.01.md: line 63: bullet is 425 characters (over 300: split it or use a sub-bullet)
+  - changelog lint, kubejs/assets/creativeengineering/changelog/1.1.01.md: line 76: bullet is 437 characters (over 300: split it or use a sub-bullet)
+  - changelog lint, kubejs/assets/creativeengineering/changelog/1.1.01.md: line 95: bullet is 358 characters (over 300: split it or use a sub-bullet)
+  - changelog lint, kubejs/assets/creativeengineering/changelog/1.1.01.md: line 110: bullet is 593 characters (over 300: split it or use a sub-bullet)
+  - changelog lint, kubejs/assets/creativeengineering/changelog/1.1.01.md: line 116: bullet is 453 characters (over 300: split it or use a sub-bullet)
+  - changelog lint, kubejs/assets/creativeengineering/changelog/1.1.01.md: line 124: bullet is 386 characters (over 300: split it or use a sub-bullet)
+  - changelog lint, kubejs/assets/creativeengineering/changelog/1.1.01.md: line 132: bullet is 427 characters (over 300: split it or use a sub-bullet)
+  - changelog lint, kubejs/assets/creativeengineering/changelog/1.1.01.md: line 139: bullet is 360 characters (over 300: split it or use a sub-bullet)
+  - changelog lint, kubejs/assets/creativeengineering/changelog/1.1.01.md: line 146: bullet is 497 characters (over 300: split it or use a sub-bullet)
+  - changelog lint, kubejs/assets/creativeengineering/changelog/1.1.01.md: line 198: bullet is 458 characters (over 300: split it or use a sub-bullet)
+  - changelog lint, kubejs/assets/creativeengineering/changelog/1.1.01.md: line 201: bullet is 331 characters (over 300: split it or use a sub-bullet)
+  - changelog lint, kubejs/assets/creativeengineering/changelog/1.1.01.md: line 203: bullet is 484 characters (over 300: split it or use a sub-bullet)
+  - changelog lint, kubejs/assets/creativeengineering/changelog/1.1.01.md: line 206: bullet is 412 characters (over 300: split it or use a sub-bullet)
+  - changelog lint, kubejs/assets/creativeengineering/changelog/1.1.01.md: line 214: bullet is 362 characters (over 300: split it or use a sub-bullet)
+  - changelog lint, kubejs/assets/creativeengineering/changelog/1.1.01.md: line 230: bullet is 316 characters (over 300: split it or use a sub-bullet)
+  - changelog lint, kubejs/assets/creativeengineering/changelog/1.1.01.md: line 273: bullet is 726 characters (over 300: split it or use a sub-bullet)
+  - changelog lint, kubejs/assets/creativeengineering/changelog/1.1.01.md: line 291: bullet is 483 characters (over 300: split it or use a sub-bullet)
+  - changelog lint, kubejs/assets/creativeengineering/changelog/1.1.01.md: line 304: bullet is 325 characters (over 300: split it or use a sub-bullet)
+  - changelog lint, kubejs/assets/creativeengineering/changelog/1.1.01.md: line 305: bullet is 491 characters (over 300: split it or use a sub-bullet)
+  - changelog lint, kubejs/assets/creativeengineering/changelog/1.1.01.md: line 349: bullet is 320 characters (over 300: split it or use a sub-bullet)
+  - changelog lint, kubejs/assets/creativeengineering/changelog/1.1.01.md: line 384: bullet is 447 characters (over 300: split it or use a sub-bullet)
+  - changelog lint, kubejs/assets/creativeengineering/changelog/1.1.03.md: line 49: bullet is 437 characters (over 300: split it or use a sub-bullet)
+  - changelog lint, kubejs/assets/creativeengineering/changelog/1.1.03.md: line 58: bullet is 317 characters (over 300: split it or use a sub-bullet)
+  - changelog lint, kubejs/assets/creativeengineering/changelog/1.1.03.md: line 64: bullet is 542 characters (over 300: split it or use a sub-bullet)
+  - changelog lint, kubejs/assets/creativeengineering/changelog/1.1.03.md: line 264: bullet is 614 characters (over 300: split it or use a sub-bullet)
+  - changelog lint, kubejs/assets/creativeengineering/changelog/1.1.04.md: line 66: bullet is 394 characters (over 300: split it or use a sub-bullet)
+
+### Changes
+
+Mods updated (6):
+
+- creativebrewing: `creativebrewing-1.0.0.jar` -> `creativebrewing-1.0.0.jar`
+- creativecalendar: `creativecalendar-1.0.0.jar` -> `creativecalendar-1.0.0.jar`
+- creativecompat: `creativecompat-1.0.0.jar` -> `creativecompat-1.0.0.jar`
+- creativedelight: `creativedelight-1.0.0.jar` -> `creativedelight-1.0.0.jar`
+- creativeengineering: `creativeengineering-1.1.08.jar` -> `creativeengineering-1.1.08.jar`
+- creativeworldgen: `creativeworldgen-1.0.0.jar` -> `creativeworldgen-1.0.0.jar`
+
+<details><summary>kubejs/: 13 added, 35 changed, 1 removed</summary>
+
+*added (13)*
+
+- `assets/creativeengineering/changelog/1.2.01.md`
+- `assets/mason_jar_new/new_jar/honey_jar.png`
+- `assets/mason_jar_new/new_jello_block/` (10 files)
+- `assets/mason_jar_new/new_mason_jar_interior/honey_jar_interior_texture.png`
+
+*changed (35)*
+
+- `assets/mason_jar_new/new_jam_block/` (10 files)
+- `assets/mason_jar_new/new_jar/banana_jam.png`
+- `assets/mason_jar_new/new_jar/cherry_jam.png`
+- `assets/mason_jar_new/new_jar/green_grape_jam.png`
+- `assets/mason_jar_new/new_jar/mulberry_jam.png`
+- `assets/mason_jar_new/new_jar/pepper_jam.png`
+- `assets/mason_jar_new/new_jar/raspberry_jam.png`
+- `assets/mason_jar_new/new_jar/red_grape_jam.png`
+- `assets/mason_jar_new/new_jar/salmonberry_jam.png`
+- `assets/mason_jar_new/new_jello_bowl/banana_jello_bowl.png`
+- `assets/mason_jar_new/new_jello_bowl/cherry_jello_bowl.png`
+- `assets/mason_jar_new/new_jello_bowl/green_grape_jello_bowl.png`
+- `assets/mason_jar_new/new_jello_bowl/mulberry_jello_bowl.png`
+- `assets/mason_jar_new/new_jello_bowl/raspberry_jello_bowl.png`
+- `assets/mason_jar_new/new_jello_bowl/red_grape_jello_bowl.png`
+- `assets/mason_jar_new/new_jello_bowl/salmonberry_jello_bowl.png`
+- `assets/mason_jar_new/new_jello_bowl/strawberries_jello_bowl.png`
+- `assets/mason_jar_new/new_mason_jar_interior/banana_jam_interior_texture.png`
+- `assets/mason_jar_new/new_mason_jar_interior/cherry_jam_interior_texture.png`
+- `assets/mason_jar_new/new_mason_jar_interior/green_grape_jam_interior_texture.png`
+- `assets/mason_jar_new/new_mason_jar_interior/mulberry_jam_interior_texture.png`
+- `assets/mason_jar_new/new_mason_jar_interior/raspberry_jam_interior_texture.png`
+- `assets/mason_jar_new/new_mason_jar_interior/red_grape_jam_interior_texture.png`
+- `assets/mason_jar_new/new_mason_jar_interior/salmonberry_jam_interior_texture.png`
+- `startup_scripts/_lib/block_dict.js`
+- `startup_scripts/_lib/item_dict.js`
+
+*removed (1)*
+
+- `assets/creativeengineering/textures/slot/empty_face_slot.png`
+
+</details>
+
+### Removals (from 1.2.00)
+
+Delete on the server (1, also in removals_server.txt):
+
+- `kubejs/assets/creativeengineering/textures/slot/empty_face_slot.png`
+
+Delete on the client (1, also in removals_client.txt):
+
+- `kubejs/assets/creativeengineering/textures/slot/empty_face_slot.png`
+
 <!-- deploy:1.2.00 -->
 ## 1.2.00 - 2026-11-03 20:38
 
 - Minecraft 1.19.2, Forge 43.3.9
 - Commit: 9848e5cb + 67 uncommitted file(s)
 - Since: 1.1.06
-- Deployed: client 2026-11-03 20:40
+- Deployed: client 2026-11-03 20:40; server 2026-11-03 20:55; client 2026-11-03 20:55
 - Contents: 364 server+client mods, 43 client-only mods, 29 resource pack files, 16 shader pack files
 - Payload: install, config functional: 2870 files, 549.2 MB (mods 364, client_mods 43, kubejs 2015, config 362, defaultconfigs 11, resourcepacks 29, shaderpacks 16, vinery_upstream 2, miners_upstream 2, rustic_upstream 1, roll_upstream 1, largemeals_upstream 1, farmers_upstream 1, oceanic_upstream 1, enders_upstream 1, goldenfood_upstream 1, server 8, world_serverconfig 11)
 - Notes: 1.2.00 full install payload (Creative Split): all in-tree mods rebuilt from source 2026-11-03

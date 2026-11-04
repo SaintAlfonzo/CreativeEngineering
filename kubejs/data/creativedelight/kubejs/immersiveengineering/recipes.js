@@ -23,6 +23,8 @@ ServerEvents.recipes(e => {
 				[{ chance: 1, output: Item.of(i.corn_seeds, 4) }, { chance: 0.5, output: i.corn_seeds }], 3200)
 			R.ieCrushing(Item.of(i.cornmeal, 4), i.corn_kernel_bag, e, 'corn_kernel_bag_cornmeal',
 				[{ chance: 0.5, output: i.cornmeal }], 3200)
+			// Corncob: 4 kernels + 0.5 cornmeal, as the Create machines (creativeengineering/recipes.js)
+			R.ieCrushing(Item.of(i.corn_seeds, 4), i.corncob, e, 'corncob_kernels', [{ chance: 0.5, output: i.cornmeal }], 3200)
 		}
 	})
 })

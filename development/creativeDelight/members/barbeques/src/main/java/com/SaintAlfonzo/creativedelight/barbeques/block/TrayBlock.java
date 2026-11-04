@@ -19,7 +19,7 @@ import net.minecraft.world.phys.shapes.VoxelShape;
 
 /**
  * Tray (1.3.0 TrayBlock): stacks on itself ({@code support=true} is the model with legs, used when resting on a tray),
- * breaks when nothing holds it up. Ported for evaluation (O12, largecontent/mod-additions #38).
+ * any wood on any wood, breaks when nothing holds it up. Ported for evaluation (O12, largecontent/mod-additions #38).
  */
 public class TrayBlock extends StorageBlock {
     public static final VoxelShape OUTER = Block.box(0.0, 0.0, 0.0, 16.0, 3.0, 16.0);
@@ -49,7 +49,7 @@ public class TrayBlock extends StorageBlock {
     @Override
     @SuppressWarnings("deprecation")
     public boolean canSurvive(BlockState state, LevelReader level, BlockPos pos) {
-        return supported(level, pos) || level.getBlockState(pos.below()).is(this);
+        return supported(level, pos) || level.getBlockState(pos.below()).getBlock() instanceof TrayBlock;
     }
 
     @Override
@@ -61,7 +61,7 @@ public class TrayBlock extends StorageBlock {
         if (supported(level, pos)) {
             return state.setValue(SUPPORT, false);
         }
-        return level.getBlockState(pos.below()).is(this) ? state.setValue(SUPPORT, true) : Blocks.AIR.defaultBlockState();
+        return level.getBlockState(pos.below()).getBlock() instanceof TrayBlock ? state.setValue(SUPPORT, true) : Blocks.AIR.defaultBlockState();
     }
 
     @Override

@@ -14,12 +14,12 @@ Nothing registered **hands**, and no mod offers a mouth or face slot. The pack n
 |---|---|
 | Registration of all three (IMC `register_type`, only when Curios is loaded) | patcherMod `compat/CuriosSlots.java`, hooked in `CreativeEngineering` next to `BackpackSkinCurios` |
 | Hands slot (1, Curios `HANDS` preset: priority 140, Curios hands icon) | `CuriosSlots` |
-| Face slot (1, priority 50 between head and necklace, own icon, lang "Face") | `CuriosSlots`, texture `kubejs/assets/creativeengineering/textures/slot/empty_face_slot.png` (Curios stitches every `textures/slot/*.png`), `curios.identifier.face` in `lang/en_us.json` |
+| Face slot (1, priority 50 between head and necklace, vanilla empty helmet icon, lang "Face"; own `empty_face_slot.png` dropped 2026-11-04, it rendered as the missing texture) | `CuriosSlots` (`minecraft:item/empty_armor_slot_helmet`), `curios.identifier.face` in `lang/en_us.json` |
 | Feet slot (1, priority 190 between belt and charm, vanilla empty boots icon, lang "Feet"), 2026-10-29 | `CuriosSlots`, `curios.identifier.feet` in `lang/en_us.json` |
 | Feet items: the 16 stepstools ([stepstool.md](stepstool.md)) | tag `curios:feet` = `#creativeengineering:stepstools`, [curiostags.js](../kubejs/server_scripts/tags/curiostags.js) |
 | Player gets all three slots | IMC slots go to every player by default (no entities file in 5.1.x) |
 | Hands items: Falconry Glove (the only glove in the pack) | tag `curios:hands`, [curiostags.js](../kubejs/server_scripts/tags/curiostags.js) |
-| Face items: Simple Hats chalk stick and six masks (tribal, cucumber eye, ghost, hockey, horse, sleep eye), Botania cosmetic masks (ancient, eerie, tiny potato) | tag `curios:face`, same script (Simple Hats rows in Creative Compat's `tags/curiostags.js`) |
+| Face items: Simple Hats chalk stick, smoking pipe (2026-11-04) and six masks (tribal, cucumber eye, ghost, hockey, horse, sleep eye), Botania cosmetic masks (ancient, eerie, tiny potato) | tag `curios:face`, same script (Simple Hats rows in Creative Compat's `tags/curiostags.js`) |
 | Cob Pipe in Face | tag `curios:face` in Creative Delight's `corn_delight/tags.js` (the pipe's owner), 2026-11-02 |
 | Hats worn in Face drawn on the player | Creative Compat `mixin/SimpleHatsFaceSlotMixin` (client, gated on Simple Hats), 2026-11-02 |
 
@@ -61,9 +61,9 @@ Owner idea (scratchpad 2026-10-29, TODO `largecontent/mod-additions #32`): Terra
 - **r1102b 2026-11-02** (scratch server; verdicts in `perf/runs/r1102b/` HANDOVER.md and the slice judged.md): rerun pending (batch fault) SQ-CSI-01.
 - **r1103 2026-11-03** (scratch server; verdicts in `perf/runs/r1103/` FINAL.md and the slice judged.md): PASS SQ-CSI-01.
 
-- CS-01 The Curios screen shows a Hands and a Face slot (Face has the mask icon) on a player in an existing world.
+- CS-01 The Curios screen shows a Hands and a Face slot (Face has the helmet icon, not the missing texture) on a player in an existing world.
 - CS-02 Falconry Glove goes in Hands and nowhere else; nothing else is accepted in Hands.
-- CS-03 Chalk stick, the six Simple Hats masks and the three Botania cosmetic masks go in Face; a Simple Hats mask also still goes in Head.
+- CS-03 Chalk stick, smoking pipe, the six Simple Hats masks and the three Botania cosmetic masks go in Face; a Simple Hats mask also still goes in Head.
 - CS-04 `/curios list` shows `hands`, `face` and `feet`.
 - CS-05 Slot names read "Hands" and "Face" (no raw `curios.identifier` key).
 - CS-06 Once the Cob Pipe exists: it goes in Face.

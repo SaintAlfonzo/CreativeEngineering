@@ -10,10 +10,10 @@ ServerEvents.tags('item', e => {
 	// Hands: the Falconry Glove (no mod registered a hands slot, so it had nowhere to go).
 	t.add(e, i.t_curios_hands, i.falconry_glove)
 
-	// Face: Simple Hats' masks and chalk stick. Simple Hats adds every hat to curios:head through a mixin, so these stay
+	// Face: Simple Hats' masks, chalk stick and smoking pipe. Simple Hats adds every hat to curios:head through a mixin, so these stay
 	// valid in a head slot too.
 	t.add(e, i.t_curios_face, [
-		i.simplehats_chalk_stick,
+		i.simplehats_chalk_stick, i.simplehats_smokingpipe,
 		i.simplehats_angrymask, i.simplehats_cucumbereyemask, i.simplehats_ghostmask,
 		i.simplehats_hockeymask, i.simplehats_horsemask, i.simplehats_sleepeyemask,
 	])

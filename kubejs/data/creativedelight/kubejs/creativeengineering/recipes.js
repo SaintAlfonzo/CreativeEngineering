@@ -49,6 +49,9 @@ ServerEvents.recipes(e => {
 				Item.of(i.corn_seeds, 1).withChance(0.25)], i.corn_crate, e, 'corn_crate_cornmeal', { mortar: false })
 			R.foodGrinding([Item.of(i.cornmeal, 1).withChance(0.333)], i.t_seeds_corn, e, 'corn_kernels_cornmeal')
 			R.foodGrinding([Item.of(i.cornmeal, 3)], i.corn_kernel_bag, e, 'corn_kernel_bag_cornmeal', { mortar: false })
+			// Corncob: 4 kernels + 0.5 cornmeal on the machines, 3 kernels from the mortar (cutting board 2: corn_delight/recipes.js)
+			R.foodGrinding([Item.of(i.corn_seeds, 4), Item.of(i.cornmeal, 1).withChance(0.5)], i.corncob, e, 'corncob_kernels',
+				{ mortar: { count: 3, inputs: 1 } })
 		}
 
 		//######################### Burgers #########################

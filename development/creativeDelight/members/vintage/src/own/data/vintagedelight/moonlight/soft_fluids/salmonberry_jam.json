@@ -1,5 +1,5 @@
 {
-  "color": "#b7552b",
+  "color": "#e98f31",
   "containers": [
     {
       "filled": [
@@ -9,9 +9,6 @@
       "capacity": 1
     }
   ],
-  "equivalent_fluids": [
-    "vintagedelight:salmonberry_jam"
-  ],
   "flowing_texture": "moonlight:soft_fluids/potion_flow",
   "food": {
     "divider": 1,
@@ -19,5 +16,8 @@
   },
   "from_mod": "vintagedelight",
   "still_texture": "moonlight:soft_fluids/soup_liquid",
-  "translation_key": "block.vintagedelight.salmonberry_jam_jar"
+  "translation_key": "block.vintagedelight.salmonberry_jam_jar",
+  "equivalent_fluids": [
+    "vintagedelight:salmonberry_jam"
+  ]
 }

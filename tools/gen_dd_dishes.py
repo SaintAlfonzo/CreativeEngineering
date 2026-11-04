@@ -11,7 +11,7 @@ this writes, into Creative Delight's resources:
   data/creativeengineering/loot_tables/blocks/<block>.json  drops the food (survives explosion), as Display Delight's
   data/displaydelight/tags/items/displayable.json         every dish food (optional entries), so Display Delight
                                                           lets it be put down
-  assets/creativeengineering/lang/en_us.json              "Placed <food name>" per block (other keys kept)
+  assets/creativedelight/lang/en_us.json                   "Placed <food name>" per block (other keys kept)
 The item sprite comes from the food's item model (layer0) in its mod jar, or for a KubeJS item its sprite in
 kubejs/assets; names from the /dumpfood export, else the entry's "name".
 Display Delight's models and textures are referenced, not copied. Output goes into the Creative Delight jar, so a change
@@ -35,7 +35,7 @@ import display_delight_jar as ddj  # noqa: E402  (the Display Delight jar in mod
 INSTANCE = Path(__file__).resolve().parent.parent
 RES = INSTANCE / 'development/creativeDelight/src/main/resources'
 LIST = RES / 'creativeengineering/displaydelight_dishes.json'
-LANG = RES / 'assets/creativeengineering/lang/en_us.json'
+LANG = RES / 'assets/creativedelight/lang/en_us.json'  # own namespace: Forge serves one jar's copy of a shared path
 TAG = RES / 'data/displaydelight/tags/items/displayable.json'
 FOODS = INSTANCE / 'kubejs/exported/food/foods.json'
 

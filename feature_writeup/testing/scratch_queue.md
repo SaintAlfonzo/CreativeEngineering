@@ -10,7 +10,7 @@
 > recordings stay for debugging later. If disk runs short, drop the recordings of all-PASS boots first, never those
 > with a FAIL. Details: "Perf session" below and [scratch_run_2026-10-31.md](scratch_run_2026-10-31.md) section 0.
 >
-> **2026-11-03: added "SQ-CDJ7 Creative Delight member open rows" at the end (plan_creative_delight.md L: SQ-BBQF-01 to -07, SQ-VTDA-10 to -13, SQ-CDM2-01 to -04, SQ-GLD2-01 to -03, -05, SQ-SALT2-01, SQ-NEST-01, -02, reruns SQ-RD-22, SQ-CDF-08, SQ-VP-06; CQ-VTDA-01, CQ-CDM2-01, CQ-GLD2-04, CQ-MRGT-01, CQ-BBQF-01); SQ-GLD-08 now expects the 8-nugget recipes.** **2026-11-02 night: added "SQ-CDJ6 Creative Delight plan J and open rows" at the end (plan_creative_delight.md K: SQ-SLT-01 to -05, CQ-SLT-01, -02; SQ-CNG-01 to -04, CQ-CNG-01, -02; SQ-ENM-01 to -05; SQ-GLD-01 to -14, CQ-GLD-01 to -03; SQ-MDL-01 to -05; SQ-PCK-01 to -05, CQ-PCK-01, -02; SQ-SWP-01 to -08). SQ-DNR-E-01 to -04 and SQ-EN-01, -03, -05, -07 carry a rerun note for the merged End's member; SQ-MDP-04, -08, -09 superseded by SQ-MDL. Run SQ-CWG in the same session (Creative Worldgen first installed with it).**
+> **2026-11-04 later: added "SQ-BBQW Barbeque's Delight wood basins and trays" at the end (SQ-BBQW-01 to -03, CQ-BBQW-01).** **2026-11-04: added "SQ-BBQS Barbeque's Delight skewer inputs, basin sneak grab, JEI" at the end (SQ-BBQS-01 to -03, CQ-BBQS-01).** **2026-11-03 late: added "SQ-TSY Trade sync, split-jar lang, Barbeque's Delight icons" at the end (SQ-TSY-01, -02; CQ-TSY-01, CQ-LNG-01, CQ-BBQF-02; needs a dedicated scratch server).** **2026-11-03: added "SQ-CDJ7 Creative Delight member open rows" at the end (plan_creative_delight.md L: SQ-BBQF-01 to -07, SQ-VTDA-10 to -13, SQ-CDM2-01 to -04, SQ-GLD2-01 to -03, -05, SQ-SALT2-01, SQ-NEST-01, -02, reruns SQ-RD-22, SQ-CDF-08, SQ-VP-06; CQ-VTDA-01, CQ-CDM2-01, CQ-GLD2-04, CQ-MRGT-01, CQ-BBQF-01); SQ-GLD-08 now expects the 8-nugget recipes.** **2026-11-02 night: added "SQ-CDJ6 Creative Delight plan J and open rows" at the end (plan_creative_delight.md K: SQ-SLT-01 to -05, CQ-SLT-01, -02; SQ-CNG-01 to -04, CQ-CNG-01, -02; SQ-ENM-01 to -05; SQ-GLD-01 to -14, CQ-GLD-01 to -03; SQ-MDL-01 to -05; SQ-PCK-01 to -05, CQ-PCK-01, -02; SQ-SWP-01 to -08). SQ-DNR-E-01 to -04 and SQ-EN-01, -03, -05, -07 carry a rerun note for the merged End's member; SQ-MDP-04, -08, -09 superseded by SQ-MDL. Run SQ-CWG in the same session (Creative Worldgen first installed with it).**
 >
 > **2026-11-02 night (deep scan): added "Deep scan 2026-11-02: food, cooking and farming rows with no test" at the end (41 rows: SQ-FFB-02 to -04, SQ-RCO-01, -02, SQ-CNP-01, SQ-VNG-01, -02, SQ-PS-06, SQ-FO-01 to -05, SQ-CF-02, SQ-CNS-03, SQ-DRK-07, SQ-WCT-06 to -08, SQ-SGF-01, -02, SQ-VTD9-01, SQ-CN-04b, SQ-MRD-04, SQ-STD-03, and 15 CQ- rows). Not in r1102b's frozen scope; also missing from that scope although never run: SQ-DNR-O-01 to -05, SQ-DNR-E-01 to -04, SQ-VF-01 to -05, most SQ-CDJ5 fix reruns (SQ-CDJ-05, SQ-DDP-01 rerun, SQ-MDP-13, -14, -16, SQ-LOOT-FD1, SQ-VTD8-01).**
 >
@@ -807,7 +807,7 @@ CN-05, CN-06 in game.
 |---|---|---|---|---|
 | SQ-CN-00 | A | boot, grep `latest.log` | `Done (`; no `Error occurred while handling event` from `corn_delight/*.js`; no `[block_dict] Missing` line for `corn_crop`; `[corn-delight] corn is villager food` once; no mixin error for `MobCobPipeSlotMixin` | the script or mixin named in the error |
 | SQ-CN-01 | A | `/kubejs hand` with each, or `/give` | `creativeengineering:corncob`, `corn_popsicle`, `cob_pipe` exist; the pipe stacks to 1 | CD startup `corn_delight/corn_items.js` |
-| SQ-CN-02 | A | recipe dump grep `creativedelight:` | `cutting/corncob_kernels` (6 kernels), `crafting_shaped/corn_popsicle` (ice cubes tag), `crafting_shapeless/cob_pipe`, `crafting_shapeless/classic_corn_dog_from_corn_dog`; `createcrushing` and `createmilling` `corn_cornmeal` / `wild_corn_cornmeal` list a 0.1 corncob; IE crusher `corn_cornmeal` lists a 0.1 corncob; mortar `corn_cornmeal` gives 3 cornmeal only | `corn_delight/recipes.js`, `creativeengineering/recipes.js`, `immersiveengineering/recipes.js` |
+| SQ-CN-02 | A | recipe dump grep `creativedelight:` | `cutting/corncob_kernels` (2 kernels), `createcrushing`/`createmilling`/IE crusher `corncob_kernels` (4 kernels + 0.5 cornmeal), `mortar/corncob_kernels` (3 kernels), `crafting_shaped/corn_popsicle` (ice cubes tag), `crafting_shapeless/cob_pipe`, `crafting_shapeless/classic_corn_dog_from_corn_dog`; `createcrushing` and `createmilling` `corn_cornmeal` / `wild_corn_cornmeal` list a 0.1 corncob; IE crusher `corn_cornmeal` lists a 0.1 corncob; mortar `corn_cornmeal` gives 3 cornmeal only | `corn_delight/recipes.js`, `creativeengineering/recipes.js`, `immersiveengineering/recipes.js` |
 | SQ-CN-03 | A | `ComposterBlock.COMPOSTABLES` probe | corncob 0.3 | CD `corn_delight/compost.js` |
 | SQ-CN-04 | A | `/loot spawn ~ ~ ~ mine <pos of age 7 corn_crop> <knife>` x40, then with an empty hand x20, then on age 3 x20 | knife: about 10 cobs in 40; hand and age 3: none | `corn_delight/loot.js` (`CE/corn_knife_corncob`) |
 | SQ-CN-05 | A | tag dump | `#curios:head`, `#curios:mouth`, `#curios:face` hold `creativeengineering:cob_pipe` | `corn_delight/tags.js`, `tags/curiostags.js` |
@@ -3959,6 +3959,8 @@ full restart. Group A: any world. After boot `/dumpall`, then `/cegen` (food fam
 | SQ-PJL-03 | A | Recipe dump | Per jam `shapeless/<n>_jam_block`, `_jam_jar_from_block`, `_jello_block`, `_jello_from_block` (40) | `jams.js` `packJams()` `ok` flags (mod not loaded) |
 | SQ-PJL-04 | A | Recipe dump | `createfilling/` and `createemptying/` `<n>_jam_jar` (9, no mulberry jam fluid without Central Kitchen) and `<n>_jello` (10); `createcompacting/<n>_jam_block` (9), `_jello_block` (10); `createmixing/<n>_jam`, `<n>_jello` heated | `jams.js`; fluid ids in `fluid_dict.js` |
 | SQ-PJL-05 | A | Recipe dump; tag check; read `data/vintagedelight/moonlight/soft_fluids/*.json` in the jar | `fdcooking/nut_milk_jar`, `nut_milk_jar_from_bottle`, `nut_milk_bottle_from_jar`; nut milk jar in `#forge:milk`; new jars in `#forge:jams`, new jellos in `#fruitsdelight:jello`; every soft fluid container `capacity` 1 | `jams.js`, `port_resources.py` `convert_soft_fluid` |
+| CQ-PJL-06 | client | 2026-11-03 art pass (needs the CD jar built 2026-11-03 or later). JEI: look up `vintagedelight:cherry_jam_block`, `cherry_jello_block` and the `cherry_jam` / `cherry_jello` fluids (Create filling page); place a 2x2 wall of each block; hold `vintagedelight:empty_mason_jar`, `honey_jar`; place 4 honey jars; fill a cherry fruit cauldron | Jam block and jam fluid show a seamless swirl, jello block and jello fluid the framed-square pattern, both in the fruit's colour (cherry dark red, red grape deep purple, salmonberry orange); empty jar is Fruits Delight's jar sprite; honey jar item and placed interior are the new orange-gold mason jar art; cauldron water tint close to the jam colour | `gen_jam_art.py` (art), `gen_pack_jams.py` (`new_jello_block` path, RETEXTURE honey, empty jar model), `JamCauldronColors` |
+| CQ-PJL-07 | client | 2026-11-04 approved art (`textureswapper/mason_jar/approved_2026-11-03/`, needs the CD jar built 2026-11-04 00:13 or later). Hold and place (4 each) the ten jam jars, `honey_jar`, `apple_sauce_jar`, `nut_mash_jar`, `nut_milk_jar`, `relish_jar`, `vinegar_jar`; place a few `fd_*_jam_jar` (apple, glowberry, sweetberry, orange); place pepper jam block, jello block, hold a bowl of pepper jello | Items and placed interiors match the approved PNGs; pepper interior, jello block and bowl are the new even-gradient art, not the old hand-edited ones; Fruits Delight placed jars show their jam colour inside, no purple-black | `gen_pack_jams.py` (RETEXTURE, FD_JAMS), art in `kubejs/assets/mason_jar_new/` |
 
 
 ## SQ-CFS Cooking for Blockheads oven as a stove, 2026-11-03 ([kitchen.md](../kitchen.md) 2.10, TODO `cooking/kitchen #28`)
@@ -4000,3 +4002,85 @@ goes to the container slot, and with that slot full it stays in the inventory (n
 container onto an ingredient slot is refused; a carrot cannot be placed in the container slot; on the copper pot a glass
 bottle (an FD serving container) also shift-clicks into the container slot.
 
+
+## SQ-TSY Trade sync, split-jar lang, Barbeque's Delight icons, 2026-11-03 ([trade_sync.md](../trade_sync.md), [barbeques_delight.md](../barbeques_delight.md) 4.6)
+
+Target: `creativeengineering-1.1.08.jar` (new `trader/TradeSync`), `creativedelight`, `creativebrewing`, `creativecalendar`,
+`creativecompat`, `creativeworldgen` 1.0.0, all built and installed in this instance's `mods/` 2026-11-03 (each Creative
+jar's lang moved from `assets/creativeengineering/lang/` to `assets/<modid>/lang/`). The trade rows need a **dedicated**
+scratch server and a client joined to it (singleplayer shares the tables and is skipped on purpose).
+
+| ID | Group | Commands | Pass | If it fails |
+|---|---|---|---|---|
+| SQ-TSY-01 | A | boot the dedicated scratch server; join with the scratch client; grep the server log | `[trade sync] built N trade list(s), M listing(s) sampled` once (N = professions + 1), then `[trade sync] sent N trade list(s) to 1 player(s)`; no exception naming `TradeSync`; no hang at login (sampling skips map listings) | a hang: a listing's `getOffer(null, ...)` locates; add its class to the skip test in `TradeSync.sample` |
+| SQ-TSY-02 | A | `/reload` with the client joined | the `sent` line again, no second `built` line; client log shows `applied` again before JEI's reload lines | `OnDatapackSyncEvent` player-list branch |
+
+Client:
+- CQ-TSY-01 (on the dedicated scratch server): client `latest.log` has `[trade sync] applied the server's villager and
+  wandering trader trades` **before** `[jei] Seasoning page`. JER villager pages: Butcher level 1 lists the six Barbeque's
+  Delight seasonings (64 cumin / pepper / chili powder, 16 of each sauce, 12 emeralds) and 64 salt; the Mechanical Engineer
+  and Chef pages show the pack trades; the Cleric shows only the pack's trades; the Wandering Trader page shows the pack
+  wandering list; vanilla rows (Farmer, Librarian books) still show. Pressing U on cumin powder opens the Butcher page.
+  Then leave and open a singleplayer world: same pages, no duplicates. Fails with `applied` after the JEI line: the
+  packet came too late; move the send earlier (login-phase packet).
+- CQ-LNG-01: JEI tabs Seasoning, Canning, Using Cans, Feast Plating show their titles; a Creative Brewing, Calendar, Compat
+  and Worldgen string shows text, not a key (pick one key from each `assets/<modid>/lang/en_us.json`).
+- CQ-BBQF-02: a skewer seasoned with each of cumin, pepper, chili and each sauce, and a skewer grilled on the Grill, show the
+  salt sparkle overlay; client log has no `Unable to load model: 'barbequesdelight:item/seasoned/`. WTHIT on a burnt
+  skewer on a Grill reads "Burnt".
+- SQ-CS-F1 (2026-11-04, curios_slots.md, corn_delight.md 2.1; needs patcherMod rebuilt for the icon only): tag dump
+  `#curios:face` holds `simplehats:smokingpipe`; recipe dump: `creativedelight:cutting/corncob_kernels` gives 2
+  `corn_delight:corn_seeds`, `createcrushing/corncob_kernels`, `createmilling/corncob_kernels` and the IE crusher
+  `corncob_kernels` give 4 kernels + 0.5 cornmeal, `mortar/corncob_kernels` gives 3 kernels. Fails: script error in
+  `curiostags.js`, `corn_delight/recipes.js`, `creativeengineering/recipes.js`, `immersiveengineering/recipes.js`.
+- CQ-CS-F1 (2026-11-04, patcherMod rebuilt): Curios screen, empty Face slot shows the helmet outline (no purple-black
+  square); the Smoking Pipe goes in Face and draws on the face in F5.
+
+## SQ-BBQS Barbeque's Delight skewer inputs, basin sneak grab, JEI, 2026-11-04 ([barbeques_delight.md](../barbeques_delight.md) 3.10)
+
+Target: `creativedelight-1.0.0.jar` built and installed 2026-11-04 (member `backportedBarbeques`, scripts
+`barbequesdelight/tags.js`, `recipes.js`), `item_dict.js` (`i.t_skewering_*`): full restart. Group A. Supersedes the
+SQ-BBQ-02 input expectation: skewering inputs are now `creativedelight:skewering/*` tags.
+
+| ID | Group | Commands | Pass | If it fails |
+|---|---|---|---|---|
+| SQ-BBQS-01 | A | Boot; grep `logs/kubejs/server.log` for `bbqSkewering\|bbqCombine\|skewering/` warnings; recipe dump `creativedelight:skewering/raw_potato_skewer`, `raw_beef_skewer`, `creativedelight:shapeless/kebab_sandwich` | potato ingredient `{"tag":"creativedelight:skewering/potato"}` count 2, side `{"tag":"creativedelight:skewering/bacon"}`; beef `skewering/beef` + `skewering/cabbage`; sandwich has 2 `{"tag":"barbequesdelight:grilled_skewers"}` slots; tag dump `#creativedelight:skewering/potato` = potato, sweet potato | an `{"item":...}` input = `Item.of(tag, n)` still in `recipes.js`; unknown dict key `t_skewering_*` (startup scripts not reloaded) |
+| SQ-BBQS-02 | A | Fake player: basin well with 2 `veggiesdelight:sweet_potato`, main hand stick, off hand 2 bacon, right click the well | Raw Potato Skewer given; well empty; one stick and the bacon used | no recipe match: tag empty or ingredient JSON |
+| SQ-BBQS-03 | A | Fake player sneaking, main hand stick, well holding 4 cabbage: use on the well | 3 cabbage left; cabbage in the inventory; stick still in hand | `onSneakGrab` not registered (BarbequesDelight ctor) |
+
+Client:
+- CQ-BBQS-01: JEI Skewering page shows the off-hand shield icon left of the lower input, slots on their frames; JEI
+  Grilling result tooltip has the Grilled line; sneak right click on a basin well with full hands takes one item.
+
+## SQ-CBW Wood cutting boards, 2026-11-04 ([kitchen.md](../kitchen.md) 2.11, TODO `cooking/kitchen #38`; Creative Delight jar installed 2026-11-04)
+
+| ID | Group | Commands | Pass | If it fails |
+|---|---|---|---|---|
+| SQ-CBW-01 | A | Boot; grep `latest.log` for `could not add the stone and wood cutting boards` and `invalid for block`; recipe dump `creativedelight:shaped/oak_cutting_board` (and the other 7), `creativedelight:shaped/cutting_board`; check `farmersdelight:cutting_board` recipe id is gone; tag probe `#creativedelight:cutting_board_planks`, `#minecraft:mineable/axe`, `#creativeengineering:counter_toppers`, `#creativeengineering:hammer_no_rotate` | No log line; 8 wood recipes (2 sticks + 4 of that wood's planks) plus the spruce board's on `#creativedelight:cutting_board_planks`; that tag holds spruce and modded / vertical / polished planks but none of the 8 vanilla planks; the 8 boards in the three block tags | `allowExtraBoards` not run; `addMatching` except not applied (the tag then still has oak planks: two recipes match oak) |
+| SQ-CBW-02 | A | Place `farmersdelight:oak_cutting_board` and `crimson_cutting_board`; `/data get block`; fake player right-clicks a carrot then a knife; break each with and without an axe; reload the chunk | Each has a `farmersdelight:cutting_board` block entity, cuts the carrot, drops itself both ways, keeps its item over the reload | as SQ-FCB-07 |
+| SQ-CBW-03 | A | `/setblock` a CfB counter, a `birch_cutting_board` and a `granite_cutting_board` on two counters; fake player places a vanilla pumpkin pie on the birch board | Pie not placed on the board (it stays in hand or goes on top as FD's board allows); no error in the log | `FDBackportEvents` check |
+
+Client:
+- CQ-CBW-01: the 8 wood boards render with their wood colours (item, placed, all four facings); FD's board reads
+  "Spruce Cutting Board"; a wood and a stone board on a CfB counter sit on the worktop like FD's board, not at the
+  plate height; JEI shows the 8 recipes and the spruce board's planks list without the 8 vanilla planks.
+
+Results: not run yet.
+
+## SQ-BBQW Barbeque's Delight wood basins and trays, 2026-11-04 ([barbeques_delight.md](../barbeques_delight.md) 3.11, O39; Creative Delight jar built 2026-11-04, not installed)
+
+Needs the Creative Delight jar from `development/creativeDelight/build/libs` and the pack's `item_dict.js` /
+`block_dict.js`: full restart. Group A (superflat).
+
+| ID | Group | Commands | Pass | If it fails |
+|---|---|---|---|---|
+| SQ-BBQW-01 | A | Boot; `grep -n "barbequesdelight" logs/latest.log \| grep -i "error\|exception\|missing\|invalid for block" \| head`; recipe dump `creativedelight:stonecutting/bbq_*_from_logs`; tag probe `#creativedelight:bbq_oak_logs`, `#minecraft:mineable/axe`, `#blockrunner:surface/wood` | No log line; 18 stonecutter recipes (9 basin x2, 9 tray x4), each wood's on its own log tag, oak's on `#creativedelight:bbq_oak_logs`; that tag holds oak logs and modded logs, no spruce/birch/jungle/acacia/dark oak/mangrove logs or crimson/warped stems; the 18 blocks in both block tags; no `bbq_basin_from_logs` / `bbq_tray_from_logs` | unknown dict key in `recipes.js` / `tags.js`; `addMatching` warning |
+| SQ-BBQW-02 | A | Place `barbequesdelight:basin`, `warped_basin`, `tray`, `crimson_tray`; `/data get block` each; fake player puts a raw beef in the warped basin and skewers with a stick; break each with and without an axe | One `barbequesdelight:basin` / `tray` block entity type on every wood; skewering works on the warped basin; each drops itself both ways | block entity type built with the oak block only |
+| SQ-BBQW-03 | A | `/setblock` an air gap, then a `spruce_tray` hanging, an `oak_tray` on it, a `birch_tray` on that; break the spruce tray's support | Mixed trays stack (`support=true` on the upper two); removing the base drops the whole stack | `TrayBlock` still checks `is(this)` |
+
+Client:
+- CQ-BBQW-01: the 9 basins show their stripped log, the 9 trays their palette-swapped crate (item, placed, all four
+  facings, the stacked `support` model with legs); names "<Wood> Ingredients Basin" / "<Wood> Tray", oak's "Oak ..."; the
+  JEI Skewering page lists the 9 basins as catalysts; the stonecutter on a spruce log offers only the spruce pair.
+
+Results: not run yet.

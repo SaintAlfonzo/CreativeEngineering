@@ -68,3 +68,40 @@ Creative Mods	1	5
 - no strawberry storage block
 - all berries take bag/sacks, other fruits/veggies take crates?
 - book writing animation? not enough animations?
+
+- new jam fluids and blocks displays incorrectly in jei, both square textures and doesnt fold around, register like other jams
+    - swap new jams to fruit colors. 
+- allow animals to eat thatch, apply gravity, implement w/ layers and thatch drawing on top?
+- missed honey jar retexture
+- swap empty mason jar texture to fruit delight icon
+
+- grass crop seasons missing language
+- 'Can be eaten w/ chopsticks' to foods that are eligible
+- rename redeco jar to empty terrarium
+- restore azalea wood? hasty removal
+- expand wood coverage to all woods automatically? (creative delight basket, rack, etc) investigate everycompat
+- paint polished stone textures on stone cutting boards, not palette swap (overlay texture w/o changing shape)
+- cosmetic curios back slot
+- change grass offseason to only winter (currently has cold grasses)
+
+- seasoning/bbq
+    - season icon location by item, family? overlap is consistant problem
+    - make offhand slot clearer 
+        - adjust
+    - allow grilling raw meat for grilled effect
+    - allow grabbing 1 item from ingredient basin with full hand
+    - allow multiple ingredient types for skewer (3 cabbage leaf type, 2 potato type)
+    - allow any item in offhand/in basin
+    - jei tab needs name
+    - retexture cumin, pepper, and chili powder to dusts
+    - seasonings not in trade jei
+    - sauced icon missing, add new shape
+        - fall back to salt icon
+    - allow sauce on more meat like foods, whitelist
+    - keep tray, new wood variants?
+    - ingredient basin wood variants
+    - change 'Burnt!!' wthit tooltip to 'Burnt'
+    - show grilled icon in jei grilling
+    - use effect chance more in skewers
+    - grilled icon/line missing
+        - fall back to salt icon

@@ -26,7 +26,8 @@ The FD-style stations' leftover slots (pot, kettle, oven; rows #1, #3, #4, #13, 
 | Returned bowls that wouldn't stack | cause found elsewhere: Sticky It!'s tooltip handler, fixed by Creative Labels ([sticky_notes.md](sticky_notes.md) 3.13, SN-48) | `#5` |
 | Coaster contents: only items with a coaster model (tag 304, 208 pack models from `gen_coaster_models.py`), 2.3 | BUILT 2026-10-29 (KubeJS assets + tag), scratch server PASSED r1031 (2026-10-31, SQ-KT-21: tag count logged, coaster accepts and refuses as listed); KT-19, KT-20 in game pending | `#21` |
 | Stepstool | BUILT 2026-10-29 as a worn stool that lifts the player one block ([stepstool.md](stepstool.md)); scratch server PASSED r1031 (SQ-STL-01, -02); client and play open | `#17` |
-| CfB oven as a stove: Farmer's Delight heat source while it burns fuel; cook surface raised to the block top (2.10) | BUILT 2026-11-03 (blockheadsAdditions; member compiles, Creative Delight jar not rebuilt: the Vintage member does not compile at the moment); scratch SQ-CFS queued, CQ-CFS-01 in game | `#28` |
+| CfB oven as a stove: Farmer's Delight heat source while it burns fuel; cook surface raised to the block top (2.10) | BUILT 2026-11-03 (blockheadsAdditions; Creative Delight jar built and installed 2026-11-04 with the wood cutting boards); scratch SQ-CFS queued, CQ-CFS-01 in game | `#28` |
+| Wood cutting boards: oak, birch, jungle, acacia, dark oak, mangrove, crimson, warped; FD's board is the spruce one (2.11) | BUILT 2026-11-04 (repackedFarmers, KubeJS; Creative Delight jar installed); scratch SQ-CBW-01 to -03 queued, CQ-CBW-01 in game | `#38` |
 | Scythe | Planned | `#16` |
 
 - **Pending:** the 1.1.01 parts (oven fuel, sink, board, corner) deployed 2026-10-22, the counter toppers with 1.1.03,
@@ -254,6 +255,27 @@ water".
 - History: 11-02 the handle toggle was sneak left-click; on 11-03 it was briefly placement-only, then the punch toggle
   replaced it (owner).
 
+### 2.11 Wood cutting boards (built 2026-11-04; scratch SQ-CBW-01 to -03, CQ-CBW-01; TODO `cooking/kitchen #38`)
+
+- `farmersdelight:{oak,birch,jungle,acacia,dark_oak,mangrove,crimson,warped}_cutting_board`: FD's `CuttingBoardBlock`
+  registered by the repackedFarmers member (`FDBackportRegistry.WOOD_CUTTING_BOARDS`), properties copied from the
+  wood's planks (map colour; crimson and warped not flammable) with FD's strength 2.0 and wood sound. Common setup
+  (`allowExtraBoards`, was `allowStoneBoards`) adds them and the stone boards to the cutting board block entity type.
+- FD's own `farmersdelight:cutting_board` is the spruce board (its art is spruce): renamed "Spruce Cutting Board" in
+  the member's lang, id unchanged.
+- Art: `members/farmers/tools/wood_cutting_boards.py` swaps the board texture's 5 shades for the wood's plank palette
+  sorted by brightness (sampled at 0.2 / 0.42 / 0.6 / 0.8 / 1.0 of the ramp), so seams, rim and handle slot stay.
+  Models: FD's `cutting_board` as parent with the texture swapped, as 2.8.
+- Recipes (CD `farmersdelight/cutting_boards.js`, the stone script renamed): 2 sticks + 4 of the wood's planks. FD's
+  `farmersdelight:cutting_board` recipe is removed and re-added as `shaped/cutting_board` on
+  `#creativedelight:cutting_board_planks` = `#minecraft:planks` minus the 8 woods' planks (modded, vertical and
+  polished planks stay, so no plank loses its board). Block tags: axe, counter toppers, hammer no-rotate.
+- Counter offset: `CounterToppers.isBoard` now matches FD's board class by name instead of the `cutting_board` id, so
+  the stone and wood boards take the `cuttingBoardOffset*` shift on a counter (the stone boards took the plate offset
+  before).
+- Other board checks: the vanilla pumpkin pie placement (`FDBackportEvents`) refuses any `CuttingBoardBlock`, not
+  only FD's board. The renderer offset mixin already applies to every cutting board block entity.
+
 ## 3. What the pack changes
 
 - Config: `cookingforblockheads-common.toml` (`ovenRequiresCookingOil`, `sinkRequiresWater`); `creativeengineering-common.toml`
@@ -427,6 +449,7 @@ Not covered offline: anything drawn (board offset, fridge), the corner's GUI on 
   override replaced by code (2.4), 40 wood racks from the owner's art (2.7, `cooking/kitchen #22`). KT-22 to KT-24.
 - 2026-11-02: deep scan 2026-11-02: At a glance and 2.7 to 2.9 updated from the scratch runs (SQ-KT-21 r1031;
   SQ-KT-22 to -25 2026-11-01; SQ-KT-02, SQ-FCB-05, -07, -08 r1102b). No KT- test run in game yet.
+- 2026-11-04: wood cutting boards built (2.11, `cooking/kitchen #38`); counter offset now covers the stone boards too.
 
 ## 9. Creative Delight member blockheadsAdditions
 

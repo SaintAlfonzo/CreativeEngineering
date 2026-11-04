@@ -17,9 +17,9 @@ import net.ribs.vintagedelight.VintageDelight;
 public final class JamCauldronColors {
     private JamCauldronColors() {}
 
-    static final Map<String, Integer> COLOURS = Map.of("ancient_fruit", 0xd2d044, "banana", 0xeecd5c, "cherry", 0xa32c26,
-        "green_grape", 0x617a20, "mulberry", 0xef6170, "pepper", 0x99500a, "raspberry", 0xa22754, "red_grape", 0x862fa8,
-        "salmonberry", 0xb7552b, "strawberry", 0xe74e4e);
+    static final Map<String, Integer> COLOURS = Map.of("ancient_fruit", 0xdad547, "banana", 0xfaea7d, "cherry", 0xab3944,
+        "green_grape", 0x72832e, "mulberry", 0xa3497a, "pepper", 0x983e11, "raspberry", 0x9f4a6c, "red_grape", 0x732abb,
+        "salmonberry", 0xe98f31, "strawberry", 0xef504f);
 
     @SubscribeEvent
     public static void blocks(RegisterColorHandlersEvent.Block e) {

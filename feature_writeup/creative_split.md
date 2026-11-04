@@ -135,6 +135,11 @@ Taken from creative_brewing.md 4.1 and creative_calendar.md 3, extended to sever
    - Recipes are written inside `global.<X>.recipes(...)`, so NCH writes `<modid>:<type>/<suffix>` ids. Recipe ids
      change with the move, as they did for CD; item ids do not.
 10. **No underscore** in any new mod id, package, config file name or script-pack folder.
+11. **Each jar's lang lives under its own namespace** (`assets/<modid>/lang/en_us.json`), keys unchanged. Forge 1.19.2
+    serves all mod jars as one resource pack that returns only the first jar holding a path, so six jars each shipping
+    `assets/creativeengineering/lang/en_us.json` meant five were ignored (the Seasoning, Canning and Feast Plating JEI
+    titles went missing). Moved 2026-11-03 for Creative Delight (merged into its existing file), Brewing, Calendar,
+    Compat and Worldgen. The same applies to any other asset path two of our jars share.
 
 ## 4. Audit method
 

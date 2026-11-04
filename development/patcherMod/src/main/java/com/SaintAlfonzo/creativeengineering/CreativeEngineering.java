@@ -98,6 +98,10 @@ public class CreativeEngineering
         if (net.minecraftforge.fml.ModList.get().isLoaded("curios")) {
             MinecraftForge.EVENT_BUS.register(com.SaintAlfonzo.creativeengineering.stepstool.Stepstool.class);
         }
+        // Trade sync: the server's villager and wandering trader lists go to dedicated-server clients, so JER's
+        // villager pages show the pack's trades (trader/TradeSync; feature_writeup/trade_sync.md).
+        com.SaintAlfonzo.creativeengineering.trader.TradeSync.register();
+        MinecraftForge.EVENT_BUS.register(com.SaintAlfonzo.creativeengineering.trader.TradeSync.class);
         // Corn Delight cob pipe: Creative Delight (2026-11-01).
         // Swap lists (swap/, Common API): every jar's data/<modid>/swaps/*.json remaps ids it moved when a world loads.
         MinecraftForge.EVENT_BUS.register(com.SaintAlfonzo.creativeengineering.swap.SwapRemapper.class);
@@ -263,6 +267,7 @@ public class CreativeEngineering
             com.SaintAlfonzo.creativeengineering.compat.DetailArmorBarCompat.register();
             com.SaintAlfonzo.creativeengineering.shield.client.TierShieldClient.setup(event);
             // Lunchbox looks, cob pipe renderer and the oven screen: Creative Delight (2026-11-01).
+            MinecraftForge.EVENT_BUS.register(com.SaintAlfonzo.creativeengineering.trader.client.TradeSyncClient.class);
             if (net.minecraftforge.fml.ModList.get().isLoaded("curios")) {
                 MinecraftForge.EVENT_BUS.register(com.SaintAlfonzo.creativeengineering.stepstool.client.StepstoolClient.class);
                 // "Slot:" line on every Curios item, also where the item's mod hides it (ui/tooltips #8).

@@ -20,7 +20,7 @@ public final class CuriosSlots {
     public static void enqueue(InterModEnqueueEvent event) {
         InterModComms.sendTo("curios", SlotTypeMessage.REGISTER_TYPE, () -> SlotTypePreset.HANDS.getMessageBuilder().build());
         InterModComms.sendTo("curios", SlotTypeMessage.REGISTER_TYPE, () -> new SlotTypeMessage.Builder("face")
-                .priority(50).size(1).icon(new ResourceLocation("creativeengineering", "slot/empty_face_slot")).build());
+                .priority(50).size(1).icon(new ResourceLocation("minecraft", "item/empty_armor_slot_helmet")).build());
         InterModComms.sendTo("curios", SlotTypeMessage.REGISTER_TYPE, () -> new SlotTypeMessage.Builder("feet")
                 .priority(190).size(1).icon(new ResourceLocation("minecraft", "item/empty_armor_slot_boots")).build());
     }

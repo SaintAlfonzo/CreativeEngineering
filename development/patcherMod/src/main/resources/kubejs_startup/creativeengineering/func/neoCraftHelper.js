@@ -1302,7 +1302,8 @@ global.NCH = {
 	// data; these three types come from here.
 	// Skewering: right-click an Ingredients Basin slot holding Item.of(ingredient, n) with the tool (a stick) in the main
 	// hand and Item.of(side, m) in the off hand; side null = the off hand must be empty.
-	//   R.bbqSkewering(i.raw_beef_skewer, Item.of(i.raw_beef, 2), Item.of(i.cabbage, 2), e, 'raw_beef_skewer')
+	//   R.bbqSkewering(i.raw_beef_skewer, { id: i.t_skewering_beef, count: 2 }, { id: i.t_skewering_cabbage, count: 2 }, e, 'raw_beef_skewer')
+	// Tag inputs take { id, count }: Item.of('#tag', n) is the tag's first item
 	bbqSkewering(output, ingredient, side, e, idOverride, tool) {
 		if (!e) throw new Error('bbqSkewering called without event object!')
 		var idSuffix = idOverride ?? global.NCH.toId(output, ingredient, "skewering")

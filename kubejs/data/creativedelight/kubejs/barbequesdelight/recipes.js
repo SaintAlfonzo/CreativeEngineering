@@ -10,22 +10,36 @@ ServerEvents.recipes(e => {
 	var R = global.NCH
 
 	global.CD.recipes(() => {
-		// Stations (1.3.0): grill from an iron trapdoor and 7 iron ingots; basin and tray stonecut from any log
+		// Stations (1.3.0): grill from an iron trapdoor and 7 iron ingots; basin and tray stonecut from logs, one of each
+		// per vanilla wood from that wood's logs (oak is the plain bbq_basin / bbq_tray, from every log without a pair of its
+		// own: #creativedelight:bbq_oak_logs, tags.js, so modded logs make the oak pair)
 		R.shaped(Item.of(i.bbq_grill), ['ICI', 'I I', 'I I'], {C: i.iron_trapdoor, I: i.ingot_iron}, e, 'bbq_grill')
-		R.stonecutting(Item.of(i.bbq_basin, 2), i.any_log, e, 'bbq_basin_from_logs')
-		R.stonecutting(Item.of(i.bbq_tray, 4), i.any_log, e, 'bbq_tray_from_logs')
+		var woods = [
+			[i.bbq_basin, i.bbq_tray, i.t_bbq_oak_logs, 'oak'], [i.bbq_spruce_basin, i.bbq_spruce_tray, i.t_spruce_logs, 'spruce'],
+			[i.bbq_birch_basin, i.bbq_birch_tray, i.t_birch_logs, 'birch'], [i.bbq_jungle_basin, i.bbq_jungle_tray, i.t_jungle_logs, 'jungle'],
+			[i.bbq_acacia_basin, i.bbq_acacia_tray, i.t_acacia_logs, 'acacia'],
+			[i.bbq_dark_oak_basin, i.bbq_dark_oak_tray, i.t_dark_oak_logs, 'dark_oak'],
+			[i.bbq_mangrove_basin, i.bbq_mangrove_tray, i.t_mangrove_logs, 'mangrove'],
+			[i.bbq_crimson_basin, i.bbq_crimson_tray, i.t_crimson_logs, 'crimson'],
+			[i.bbq_warped_basin, i.bbq_warped_tray, i.t_warped_logs, 'warped'],
+		]
+		woods.forEach(w => {
+			R.stonecutting(Item.of(w[0], 2), w[2], e, 'bbq_' + w[3] + '_basin_from_logs')
+			R.stonecutting(Item.of(w[1], 4), w[2], e, 'bbq_' + w[3] + '_tray_from_logs')
+		})
 
-		// Skewering: basin slot x n, stick in the main hand, side x m in the off hand (null = off hand empty)
-		R.bbqSkewering(i.raw_beef_skewer, Item.of(i.raw_beef, 2), Item.of(i.cabbage, 2), e, 'raw_beef_skewer')
-		R.bbqSkewering(i.raw_chicken_skewer, Item.of(i.raw_chicken, 2), Item.of(i.onion, 2), e, 'raw_chicken_skewer')
-		R.bbqSkewering(i.raw_cod_skewer, Item.of(i.t_raw_cod, 2), Item.of(i.tomato, 2), e, 'raw_cod_skewer')
-		R.bbqSkewering(i.raw_salmon_skewer, Item.of(i.raw_salmon, 2), Item.of(i.tomato, 2), e, 'raw_salmon_skewer')
-		R.bbqSkewering(i.raw_lamb_skewer, Item.of(i.raw_mutton, 4), null, e, 'raw_lamb_skewer')
-		R.bbqSkewering(i.raw_mushroom_skewer, Item.of(i.brown_mushroom, 4), null, e, 'raw_mushroom_skewer')
-		R.bbqSkewering(i.raw_pork_sausage_skewer, Item.of(i.raw_pork, 4), null, e, 'raw_pork_sausage_skewer')
-		R.bbqSkewering(i.raw_potato_skewer, Item.of(i.potato, 2), Item.of(i.t_raw_bacon, 2), e, 'raw_potato_skewer')
-		R.bbqSkewering(i.raw_rabbit_skewer, Item.of(i.rabbit, 2), Item.of(i.cabbage, 2), e, 'raw_rabbit_skewer')
-		R.bbqSkewering(i.raw_vegetable_skewer, Item.of(i.vegetables, 2), Item.of(i.fruit, 2), e, 'raw_vegetable_skewer')
+		// Skewering: basin slot x n, stick in the main hand, side x m in the off hand (null = off hand empty). Inputs are the
+		// creativedelight:skewering/* tags (tags.js, barbeques_delight.md 3.10)
+		R.bbqSkewering(i.raw_beef_skewer, { id: i.t_skewering_beef, count: 2 }, { id: i.t_skewering_cabbage, count: 2 }, e, 'raw_beef_skewer')
+		R.bbqSkewering(i.raw_chicken_skewer, { id: i.t_skewering_chicken, count: 2 }, { id: i.t_skewering_onion, count: 2 }, e, 'raw_chicken_skewer')
+		R.bbqSkewering(i.raw_cod_skewer, { id: i.t_skewering_cod, count: 2 }, { id: i.t_skewering_tomato, count: 2 }, e, 'raw_cod_skewer')
+		R.bbqSkewering(i.raw_salmon_skewer, { id: i.t_skewering_salmon, count: 2 }, { id: i.t_skewering_tomato, count: 2 }, e, 'raw_salmon_skewer')
+		R.bbqSkewering(i.raw_lamb_skewer, { id: i.t_skewering_mutton, count: 4 }, null, e, 'raw_lamb_skewer')
+		R.bbqSkewering(i.raw_mushroom_skewer, { id: i.t_skewering_mushroom, count: 4 }, null, e, 'raw_mushroom_skewer')
+		R.bbqSkewering(i.raw_pork_sausage_skewer, { id: i.t_skewering_pork, count: 4 }, null, e, 'raw_pork_sausage_skewer')
+		R.bbqSkewering(i.raw_potato_skewer, { id: i.t_skewering_potato, count: 2 }, { id: i.t_skewering_bacon, count: 2 }, e, 'raw_potato_skewer')
+		R.bbqSkewering(i.raw_rabbit_skewer, { id: i.t_skewering_rabbit, count: 2 }, { id: i.t_skewering_cabbage, count: 2 }, e, 'raw_rabbit_skewer')
+		R.bbqSkewering(i.raw_vegetable_skewer, { id: i.t_skewering_vegetables, count: 2 }, { id: i.t_skewering_fruit, count: 2 }, e, 'raw_vegetable_skewer')
 
 		// Grilling: ticks for both sides (flip at half; burnt at twice)
 		R.bbqGrilling(i.grilled_beef_skewer, i.raw_beef_skewer, 320, e, 'grilled_beef_skewer')
@@ -82,7 +96,7 @@ ServerEvents.recipes(e => {
 		// Combos (combine: the result keeps the skewers, seasoning included; sticks come back)
 		// The wrap is on a tortilla, like every wrap (TODO dishes/meals #47, #15); upstream took bread
 		R.bbqCombine(i.kebab_wrap, [i.t_tortilla, i.t_grilled_skewers, i.cabbage], e, 'kebab_wrap')
-		R.bbqCombine(i.kebab_sandwich, [i.t_bread, Item.of(i.t_grilled_skewers, 2), i.cabbage, i.onion], e, 'kebab_sandwich')
-		R.bbqCombine(i.bibimbap, [i.cooked_rice, i.onion, i.carrot, Item.of(i.t_grilled_skewers, 3)], e, 'bibimbap')
+		R.bbqCombine(i.kebab_sandwich, [i.t_bread, { id: i.t_grilled_skewers, count: 2 }, i.cabbage, i.onion], e, 'kebab_sandwich')
+		R.bbqCombine(i.bibimbap, [i.cooked_rice, i.onion, i.carrot, { id: i.t_grilled_skewers, count: 3 }], e, 'bibimbap')
 	})
 })

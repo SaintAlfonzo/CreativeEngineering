@@ -92,7 +92,7 @@ public final class FDBackportRegistry {
 
 	/**
 	 * Stone cutting boards (TODO cooking/kitchen #25, pack addition): Farmer's Delight's cutting board block in granite,
-	 * andesite and diorite. Same block class and block entity as the wooden board ({@link #allowStoneBoards} adds them to
+	 * andesite and diorite. Same block class and block entity as the wooden board ({@link #allowExtraBoards} adds them to
 	 * the cutting board block entity type), stone sound and hardness, pickaxe-mineable (pack tag).
 	 */
 	public static final List<RegistryObject<Block>> STONE_CUTTING_BOARDS = List.of(
@@ -107,17 +107,40 @@ public final class FDBackportRegistry {
 		return block;
 	}
 
-	/** Common setup: the stone boards keep a cutting board block entity (BlockEntityType.validBlocks, SRG f_58915_). */
+	/**
+	 * Wood cutting boards (TODO cooking/kitchen #38, pack addition): FD's board in the other vanilla woods (FD's own board
+	 * is the spruce one). Same block class and block entity as FD's; properties copied from the wood's planks (map colour,
+	 * nether woods not flammable) with FD's board strength 2.0. Axe-mineable through the pack tag.
+	 */
+	public static final List<RegistryObject<Block>> WOOD_CUTTING_BOARDS = List.of(
+			woodBoard("oak", Blocks.OAK_PLANKS), woodBoard("birch", Blocks.BIRCH_PLANKS),
+			woodBoard("jungle", Blocks.JUNGLE_PLANKS), woodBoard("acacia", Blocks.ACACIA_PLANKS),
+			woodBoard("dark_oak", Blocks.DARK_OAK_PLANKS), woodBoard("mangrove", Blocks.MANGROVE_PLANKS),
+			woodBoard("crimson", Blocks.CRIMSON_PLANKS), woodBoard("warped", Blocks.WARPED_PLANKS));
+
+	private static RegistryObject<Block> woodBoard(String wood, Block planks) {
+		String name = wood + "_cutting_board";
+		RegistryObject<Block> block = BLOCKS.register(name, () -> new CuttingBoardBlock(
+				BlockBehaviour.Properties.copy(planks).strength(2.0F).sound(SoundType.WOOD)));
+		ITEMS.register(name, () -> new BlockItem(block.get(), ModItems.basicItem()));
+		return block;
+	}
+
+	/**
+	 * Common setup: the stone and wood boards keep a cutting board block entity (BlockEntityType.validBlocks, SRG
+	 * f_58915_).
+	 */
 	@SuppressWarnings("unchecked")
-	static void allowStoneBoards() {
+	static void allowExtraBoards() {
 		BlockEntityType<?> type = ModBlockEntityTypes.CUTTING_BOARD.get();
 		try {
 			Field field = ObfuscationReflectionHelper.findField(BlockEntityType.class, "f_58915_");
 			Set<Block> valid = new HashSet<>((Set<Block>) field.get(type));
 			STONE_CUTTING_BOARDS.forEach(b -> valid.add(b.get()));
+			WOOD_CUTTING_BOARDS.forEach(b -> valid.add(b.get()));
 			field.set(type, valid);
 		} catch (ReflectiveOperationException | RuntimeException e) {
-			FarmersDelight.LOGGER.error("[creativedelight] could not add the stone cutting boards to the cutting board block entity", e);
+			FarmersDelight.LOGGER.error("[creativedelight] could not add the stone and wood cutting boards to the cutting board block entity", e);
 		}
 	}
 

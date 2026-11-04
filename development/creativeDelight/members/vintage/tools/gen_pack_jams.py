@@ -3,7 +3,7 @@
 #
 # Writes pack-owned files into src/own/ (tools/port_resources.py lays them over its output, so a rerun keeps them),
 # from the owner's art in kubejs/assets/mason_jar_new/ (new_jar, new_mason_jar_interior, new_jam_block,
-# new_jelly_block, new_jello_bowl). Java side: src/main/java/net/ribs/vintagedelight/jam/.
+# new_jello_block, new_jello_bowl; tools/gen_jam_art.py makes them from colour samples). Java side: src/main/java/net/ribs/vintagedelight/jam/.
 #
 #   python3 development/creativeDelight/members/vintage/tools/gen_pack_jams.py
 # then python3 development/creativeDelight/members/vintage/tools/port_resources.py, then build :creativeDelight:.
@@ -49,6 +49,7 @@ RETEXTURE = [
     ('relish_jar', 'relish_interior_texture', 'relish_jar', 'relish_jar_interior_texture'),
     ('vinegar_jar', 'vinegar_interior_texture', 'vinegar_jar', 'vinegar_jar_interior_texture'),
     ('pepper_jam_jar', 'pepper_jam_interior_texture', 'pepper_jam', 'pepper_jam_interior_texture'),
+    ('honey_jar', 'honey_interior_texture', 'honey_jar', 'honey_jar_interior_texture'),
 ]
 COUNTS = ['one', 'two', 'three', 'four']
 lang = {}
@@ -153,7 +154,7 @@ def main():
         art('new_jar', f'{stem}_jam', f'item/{jar}')
         art('new_mason_jar_interior', f'{stem}_jam_interior_texture', f'block/{name}_jam_interior_texture')
         jam_png = art('new_jam_block', f'{stem}_jam', f'block/{name}_jam_block')
-        art('new_jelly_block', f'{stem}_jam', f'block/{name}_jello_block')
+        art('new_jello_block', f'{stem}_jello', f'block/{name}_jello_block')
         art('new_jello_bowl', f'{stem}_jello_bowl', f'item/{name}_jello')
         hexc, rgb = colour(jam_png)
         colours[name] = rgb
@@ -211,6 +212,11 @@ def main():
     for item_tex, interior_tex, jar_art, interior_art in RETEXTURE:
         art('new_jar', jar_art, f'item/{item_tex}')
         art('new_mason_jar_interior', interior_art, f'block/{interior_tex}')
+
+    # Empty mason jar: Fruits Delight's empty jam jar sprite (the shape every new jar is drawn on). Fruits Delight is
+    # All Rights Reserved, so the model points at its texture instead of copying it
+    write(f'assets/{NS}/models/item/empty_mason_jar.json',
+          {'parent': 'minecraft:item/generated', 'textures': {'layer0': 'fruitsdelight:item/jam_bottle'}})
 
     # Fruits Delight's jams as placed mason jars (block only; the item is Fruits Delight's)
     for f in FD_JAMS:

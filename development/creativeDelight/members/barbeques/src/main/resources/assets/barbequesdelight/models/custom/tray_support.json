@@ -1,9 +1,9 @@
 {
   	"parent": "block/block",
 	"textures": {
-		"1": "farmersdelight:block/crate_bottom",
-		"2": "farmersdelight:block/crate_bottom",
-		"particle": "farmersdelight:block/crate_bottom"
+		"1": "barbequesdelight:block/oak_tray",
+		"2": "barbequesdelight:block/oak_tray",
+		"particle": "barbequesdelight:block/oak_tray"
 	},
 	"elements": [
 		{

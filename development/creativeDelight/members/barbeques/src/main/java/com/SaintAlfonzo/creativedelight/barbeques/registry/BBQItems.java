@@ -16,12 +16,14 @@ import net.minecraft.world.food.FoodProperties;
 import net.minecraft.world.item.BlockItem;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.Items;
+import net.minecraft.world.level.block.Block;
 import net.minecraftforge.registries.DeferredRegister;
 import net.minecraftforge.registries.ForgeRegistries;
 import net.minecraftforge.registries.RegistryObject;
 import vectorwing.farmersdelight.common.registry.ModEffects;
 import vectorwing.farmersdelight.common.registry.ModItems;
 
+import java.util.Collections;
 import java.util.EnumMap;
 import java.util.Locale;
 import java.util.Map;
@@ -39,10 +41,17 @@ public final class BBQItems {
 
     public static final RegistryObject<Item> GRILL = ITEMS.register("grill",
             () -> new GrillBlockItem(BBQBlocks.GRILL.get(), ModItems.basicItem()));
-    public static final RegistryObject<Item> BASIN = ITEMS.register("basin",
-            () -> new BlockItem(BBQBlocks.BASIN.get(), ModItems.basicItem()));
-    public static final RegistryObject<Item> TRAY = ITEMS.register("tray",
-            () -> new BlockItem(BBQBlocks.TRAY.get(), ModItems.basicItem()));
+    public static final Map<BBQBlocks.Wood, RegistryObject<Item>> BASINS = blockItems(BBQBlocks.BASINS);
+    public static final Map<BBQBlocks.Wood, RegistryObject<Item>> TRAYS = blockItems(BBQBlocks.TRAYS);
+    public static final RegistryObject<Item> BASIN = BASINS.get(BBQBlocks.Wood.OAK);
+    public static final RegistryObject<Item> TRAY = TRAYS.get(BBQBlocks.Wood.OAK);
+
+    private static Map<BBQBlocks.Wood, RegistryObject<Item>> blockItems(Map<BBQBlocks.Wood, ? extends RegistryObject<? extends Block>> blocks) {
+        Map<BBQBlocks.Wood, RegistryObject<Item>> map = new EnumMap<>(BBQBlocks.Wood.class);
+        blocks.forEach((wood, block) -> map.put(wood, ITEMS.register(block.getId().getPath(),
+                () -> new BlockItem(block.get(), ModItems.basicItem()))));
+        return Collections.unmodifiableMap(map);
+    }
 
     /** 10 raw (not edible) and 10 cooked skewers; both return the stick when crafted with or eaten. */
     public enum Skewer {

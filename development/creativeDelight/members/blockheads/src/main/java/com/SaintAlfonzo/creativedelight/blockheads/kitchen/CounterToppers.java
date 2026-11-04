@@ -33,14 +33,11 @@ public final class CounterToppers {
             BlockTags.create(new ResourceLocation("creativeengineering", "counter_supports"));
     public static final TagKey<Block> TOPPERS =
             BlockTags.create(new ResourceLocation("creativeengineering", "counter_toppers"));
-    private static final ResourceLocation BOARD_ID = new ResourceLocation("farmersdelight", "cutting_board");
+    private static final String BOARD_CLASS = "vectorwing.farmersdelight.common.block.CuttingBoardBlock";
     private static final String DISPLAY_DELIGHT = "displaydelight";
     /** Display Delight's (and its port's) block classes; patcherMod's own dish blocks are of these too. */
     private static final String DISPLAY_DELIGHT_PACKAGE = "com.jkvin114.displaydelight.";
 
-    private static final Object NO_BOARD = new Object();
-
-    private static volatile Object board;
     /** Bumped on every tag (re)load; the per-state topper cache in the mixin is valid for one generation. Starts at 1. */
     private static volatile int generation = 1;
 
@@ -55,16 +52,11 @@ public final class CounterToppers {
     }
 
     /**
-     * FD's cutting board block, compared by reference (looked up once; no FD class is referenced). Without FD it is a
-     * sentinel no block equals: the registry's getValue would answer air for a missing id.
+     * Whether {@code block} is a Farmer's Delight cutting board: FD's own and the CD stone and wood boards, which all use
+     * FD's block class (compared by name, so no FD class is referenced).
      */
-    public static Object board() {
-        Object b = board;
-        if (b == null) {
-            b = ForgeRegistries.BLOCKS.containsKey(BOARD_ID) ? ForgeRegistries.BLOCKS.getValue(BOARD_ID) : NO_BOARD;
-            board = b;
-        }
-        return b;
+    public static boolean isBoard(Block block) {
+        return BOARD_CLASS.equals(block.getClass().getName());
     }
 
     /**
@@ -90,7 +82,7 @@ public final class CounterToppers {
         if (!below.is(SUPPORTS)) {
             return Vec3.ZERO;
         }
-                boolean isBoard = block == board();
+        boolean isBoard = isBoard(block);
         double x = (isBoard ? BAConfig.CUTTING_BOARD_OFFSET_X : BAConfig.PLATE_OFFSET_X).get() / 16.0;
         double y = (isBoard ? BAConfig.CUTTING_BOARD_OFFSET_Y : BAConfig.PLATE_OFFSET_Y).get() / 16.0;
         double z = (isBoard ? BAConfig.CUTTING_BOARD_OFFSET_Z : BAConfig.PLATE_OFFSET_Z).get() / 16.0;

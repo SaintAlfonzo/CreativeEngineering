@@ -15,7 +15,7 @@ import net.minecraft.world.item.ItemStack;
 
 /**
  * WTHIT plugin, client half: one line per filled grill slot, "skewer: Cooking: 12s", "Ready to Flip!", "Cooked!" or
- * "Burnt!!" (1.3.0's Jade text and keys). Data from {@link BBQWthit}.
+ * "Burnt" (1.3.0's Jade text and keys; 1.3.0 said "Burnt!!"). Data from {@link BBQWthit}.
  */
 public final class BBQWthitClient implements IWailaClientPlugin, IBlockComponentProvider {
 

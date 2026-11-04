@@ -77,8 +77,9 @@ ServerEvents.recipes(e => {
 		//######################### 1.2.11 items #########################
 		// Corncob, Corn Popsicle, Cob Pipe (CD startup corn_delight/corn_items.js; corn_delight.md 2). The cob's 10% from
 		// corn milling and crushing: creativeengineering/recipes.js, immersiveengineering/recipes.js.
-		// Cob on the cutting board: 6 kernels, more than the 4 from a whole corn (placeholder count, 2.1)
-		R.fdCutting(i.corncob, i.any_knife, Item.of(i.corn_seeds, 6), e, 'corncob_kernels')
+		// Cob on the cutting board: 2 kernels; the mortar gives 3 and the machines 4 (+0.5 cornmeal): creativeengineering/
+		// recipes.js (Create, mortar), immersiveengineering/recipes.js (crusher). corn_delight.md 2.1
+		R.fdCutting(i.corncob, i.any_knife, Item.of(i.corn_seeds, 2), e, 'corncob_kernels')
 		// Corn Popsicle: upstream's shape, the family's ice cubes (frozen/popsicle, food_families.md)
 		R.shaped(i.corn_popsicle, ['  m', 'im ', 'si '], { m: i.t_crops_corn, i: i.t_ice_cubes, s: i.any_stick }, e, 'corn_popsicle')
 		R.shapeless(i.cob_pipe, [i.any_stick, i.corncob], e, 'cob_pipe')

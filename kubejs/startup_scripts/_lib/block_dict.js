@@ -30,6 +30,7 @@ b.copper_pot = 'miners_delight:copper_pot';
 b.kettle = 'farmersrespite:kettle';
 b.t_cookware_pickup = '#creativedelight:cookware_pickup';   // CD CookwareHandling: sneak right-click picks up, sneak left-click toggles the handle
 b.stone_cutting_boards = ['farmersdelight:granite_cutting_board', 'farmersdelight:andesite_cutting_board', 'farmersdelight:diorite_cutting_board'];  // cooking/kitchen #25
+b.wood_cutting_boards = ['farmersdelight:oak_cutting_board', 'farmersdelight:birch_cutting_board', 'farmersdelight:jungle_cutting_board', 'farmersdelight:acacia_cutting_board', 'farmersdelight:dark_oak_cutting_board', 'farmersdelight:mangrove_cutting_board', 'farmersdelight:crimson_cutting_board', 'farmersdelight:warped_cutting_board'];  // cooking/kitchen #38
 b.cfb_counter = 'cookingforblockheads:counter';   // 15 px worktops: cutting board support (TODO cooking/kitchen #8)
 b.cfb_corner = 'cookingforblockheads:corner';
 // Counter toppers (patcherMod CounterToppers, TODO cooking/kitchen #20): plates, plated foods, coaster on a counter
@@ -143,7 +144,23 @@ b.monster_box = 'quark:monster_box';             // vault box (mob_block_tweaks.
 // Barbeque's Delight port (Creative Delight member barbequesdelight, barbeques_delight.md 4)
 b.bbq_grill = 'barbequesdelight:grill';   // has_campfire / lit / waterlogged; in #creativeengineering:campfire/rain_douses
 b.bbq_basin = 'barbequesdelight:basin';   // "Ingredients Basin", 2 slots
-b.bbq_tray = 'barbequesdelight:tray';     // 3 slots, stacks on itself
+b.bbq_tray = 'barbequesdelight:tray';     // 3 slots, stacks on any tray; basin and tray are oak, other woods bbq_<wood>_*
+b.bbq_spruce_basin = 'barbequesdelight:spruce_basin';
+b.bbq_birch_basin = 'barbequesdelight:birch_basin';
+b.bbq_jungle_basin = 'barbequesdelight:jungle_basin';
+b.bbq_acacia_basin = 'barbequesdelight:acacia_basin';
+b.bbq_dark_oak_basin = 'barbequesdelight:dark_oak_basin';
+b.bbq_mangrove_basin = 'barbequesdelight:mangrove_basin';
+b.bbq_crimson_basin = 'barbequesdelight:crimson_basin';
+b.bbq_warped_basin = 'barbequesdelight:warped_basin';
+b.bbq_spruce_tray = 'barbequesdelight:spruce_tray';
+b.bbq_birch_tray = 'barbequesdelight:birch_tray';
+b.bbq_jungle_tray = 'barbequesdelight:jungle_tray';
+b.bbq_acacia_tray = 'barbequesdelight:acacia_tray';
+b.bbq_dark_oak_tray = 'barbequesdelight:dark_oak_tray';
+b.bbq_mangrove_tray = 'barbequesdelight:mangrove_tray';
+b.bbq_crimson_tray = 'barbequesdelight:crimson_tray';
+b.bbq_warped_tray = 'barbequesdelight:warped_tray';
 // Roll Delight port (Creative Delight member `roll`, roll_delight.md 3.2); unresolved until CD carries the member
 b.legendary_roll_medley = 'roll_delight:legendary_roll_medley';   // FeastBlock, 8 servings
 b.mythical_roll_medley = 'roll_delight:mythical_roll_medley';     // FeastBlock, 8 servings

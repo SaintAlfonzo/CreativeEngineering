@@ -110,8 +110,25 @@ i.t_fox_food = '#minecraft:fox_food';
 // kubejs/data/creativedelight/kubejs/barbequesdelight/ | compost: CD startup barbequesdelight/compost.js
 // Stations (i.basin is Create's Basin; the BBQ one is the "Ingredients Basin")
 i.bbq_grill = 'barbequesdelight:grill';
-i.bbq_basin = 'barbequesdelight:basin';
+i.bbq_basin = 'barbequesdelight:basin';   // oak; the other woods are bbq_<wood>_basin / bbq_<wood>_tray
 i.bbq_tray = 'barbequesdelight:tray';
+i.t_bbq_oak_logs = '#creativedelight:bbq_oak_logs';   // logs for the oak basin and tray: #minecraft:logs minus the 8 other vanilla woods
+i.bbq_spruce_basin = 'barbequesdelight:spruce_basin';
+i.bbq_birch_basin = 'barbequesdelight:birch_basin';
+i.bbq_jungle_basin = 'barbequesdelight:jungle_basin';
+i.bbq_acacia_basin = 'barbequesdelight:acacia_basin';
+i.bbq_dark_oak_basin = 'barbequesdelight:dark_oak_basin';
+i.bbq_mangrove_basin = 'barbequesdelight:mangrove_basin';
+i.bbq_crimson_basin = 'barbequesdelight:crimson_basin';
+i.bbq_warped_basin = 'barbequesdelight:warped_basin';
+i.bbq_spruce_tray = 'barbequesdelight:spruce_tray';
+i.bbq_birch_tray = 'barbequesdelight:birch_tray';
+i.bbq_jungle_tray = 'barbequesdelight:jungle_tray';
+i.bbq_acacia_tray = 'barbequesdelight:acacia_tray';
+i.bbq_dark_oak_tray = 'barbequesdelight:dark_oak_tray';
+i.bbq_mangrove_tray = 'barbequesdelight:mangrove_tray';
+i.bbq_crimson_tray = 'barbequesdelight:crimson_tray';
+i.bbq_warped_tray = 'barbequesdelight:warped_tray';
 // Skewers: raw (not edible) and cooked (ids grilled_*, named "Cooked ..."; lamb is named Mutton)
 i.raw_beef_skewer = 'barbequesdelight:raw_beef_skewer';
 i.raw_chicken_skewer = 'barbequesdelight:raw_chicken_skewer';
@@ -150,6 +167,23 @@ i.t_grilled_skewers = '#barbequesdelight:grilled_skewers';
 // skewering inputs the dict lacked
 i.t_raw_cod = '#forge:raw_fishes/cod';
 i.t_raw_bacon = '#forge:raw_bacon';
+// Skewer inputs (barbeques_delight.md 3.10): every basin and off-hand input of a skewering recipe reads one of these;
+// seeded in barbequesdelight/tags.js. A new variant of an input = one more entry in its tag
+i.t_skewering_beef = '#creativedelight:skewering/beef';
+i.t_skewering_chicken = '#creativedelight:skewering/chicken';
+i.t_skewering_cod = '#creativedelight:skewering/cod';
+i.t_skewering_salmon = '#creativedelight:skewering/salmon';
+i.t_skewering_mutton = '#creativedelight:skewering/mutton';
+i.t_skewering_mushroom = '#creativedelight:skewering/mushroom';
+i.t_skewering_pork = '#creativedelight:skewering/pork';
+i.t_skewering_potato = '#creativedelight:skewering/potato';
+i.t_skewering_rabbit = '#creativedelight:skewering/rabbit';
+i.t_skewering_vegetables = '#creativedelight:skewering/vegetables';
+i.t_skewering_cabbage = '#creativedelight:skewering/cabbage';
+i.t_skewering_onion = '#creativedelight:skewering/onion';
+i.t_skewering_tomato = '#creativedelight:skewering/tomato';
+i.t_skewering_bacon = '#creativedelight:skewering/bacon';
+i.t_skewering_fruit = '#creativedelight:skewering/fruit';
 // Camera bags - item inventory for Exposure gear (#exposure_extras:camera_equipment only).
 // Java items: exposureBackport src/extras (mod exposure_extras) | slot counts: exposure_extras-common.toml
 // [camera_bag] | recipes: server_scripts/equipment/camera_bag.js (smithing upgrades keep the contents)
@@ -686,6 +720,14 @@ i.any_scale = '#immersive_weathering:scales';
 i.magma_cream = 'minecraft:magma_cream';
 i.nether_wart = 'minecraft:nether_wart';
 i.any_log = '#minecraft:logs';
+i.t_spruce_logs = '#minecraft:spruce_logs';
+i.t_birch_logs = '#minecraft:birch_logs';
+i.t_jungle_logs = '#minecraft:jungle_logs';
+i.t_acacia_logs = '#minecraft:acacia_logs';
+i.t_dark_oak_logs = '#minecraft:dark_oak_logs';
+i.t_mangrove_logs = '#minecraft:mangrove_logs';
+i.t_crimson_logs = '#minecraft:crimson_stems';
+i.t_warped_logs = '#minecraft:warped_stems';
 i.any_wooden_fences = '#minecraft:wooden_fences';
 i.any_wooden_buttons = '#minecraft:wooden_buttons';
 i.any_wooden_doors = '#minecraft:wooden_doors';
@@ -11797,6 +11839,15 @@ i.cutting_board                 = 'farmersdelight:cutting_board';
 i.granite_cutting_board         = 'farmersdelight:granite_cutting_board';    // stone boards: CD repackedFarmers (cooking/kitchen #25)
 i.andesite_cutting_board        = 'farmersdelight:andesite_cutting_board';
 i.diorite_cutting_board         = 'farmersdelight:diorite_cutting_board';
+i.oak_cutting_board             = 'farmersdelight:oak_cutting_board';    // wood boards: CD repackedFarmers (cooking/kitchen #38)
+i.birch_cutting_board           = 'farmersdelight:birch_cutting_board';
+i.jungle_cutting_board          = 'farmersdelight:jungle_cutting_board';
+i.acacia_cutting_board          = 'farmersdelight:acacia_cutting_board';
+i.dark_oak_cutting_board        = 'farmersdelight:dark_oak_cutting_board';
+i.mangrove_cutting_board        = 'farmersdelight:mangrove_cutting_board';
+i.crimson_cutting_board         = 'farmersdelight:crimson_cutting_board';
+i.warped_cutting_board          = 'farmersdelight:warped_cutting_board';
+i.t_cutting_board_planks       = '#creativedelight:cutting_board_planks';    // planks for FD's (spruce) board: #minecraft:planks minus the woods above
 i.cyan_canvas_sign              = 'farmersdelight:cyan_canvas_sign';
 i.dark_oak_cabinet              = 'farmersdelight:dark_oak_cabinet';
 i.diamond_knife                 = 'farmersdelight:diamond_knife';
@@ -14648,6 +14699,7 @@ StartupEvents.postInit(() => {
 // ===== simplehats  -  1 new (removed: Vintage Delight's 16 chef hats replace it, vintage_delight.md S15) =====
 i.simplehats_chefshat            = 'simplehats:chefshat';
 i.simplehats_chalk_stick         = 'simplehats:chalk_stick';
+i.simplehats_smokingpipe         = 'simplehats:smokingpipe';
 i.simplehats_angrymask           = 'simplehats:angrymask';
 i.simplehats_cucumbereyemask     = 'simplehats:cucumbereyemask';
 i.simplehats_ghostmask           = 'simplehats:ghostmask';

@@ -1,6 +1,22 @@
 {
   "values": [
     "barbequesdelight:basin",
-    "barbequesdelight:tray"
+    "barbequesdelight:spruce_basin",
+    "barbequesdelight:birch_basin",
+    "barbequesdelight:jungle_basin",
+    "barbequesdelight:acacia_basin",
+    "barbequesdelight:dark_oak_basin",
+    "barbequesdelight:mangrove_basin",
+    "barbequesdelight:crimson_basin",
+    "barbequesdelight:warped_basin",
+    "barbequesdelight:tray",
+    "barbequesdelight:spruce_tray",
+    "barbequesdelight:birch_tray",
+    "barbequesdelight:jungle_tray",
+    "barbequesdelight:acacia_tray",
+    "barbequesdelight:dark_oak_tray",
+    "barbequesdelight:mangrove_tray",
+    "barbequesdelight:crimson_tray",
+    "barbequesdelight:warped_tray"
   ]
 }

@@ -3,6 +3,7 @@
 A catalogue of the warnings and errors that appear in every client startup, from any mod: what each message is,
 which mods produce it, whether it matters, and how to acknowledge it. Written 2026-10-24 from a real client startup
 (`logs/latest.log`, 18071 lines, about 5700 WARN/ERROR lines; the two earlier 24 Oct launches match within a handful of lines).
+Section 10 adds a dedicated server startup on 1.2.00 (2026-11-03), split into pack-side and mod-side.
 
 Three files work together:
 
@@ -353,3 +354,85 @@ were compared; the WARN/ERROR line counts were 5722, 5722 and 5728 for the three
 | `.DS_Store` in `resourcepacks/Lower Shield.zip` (item 25) | `zip -d "resourcepacks/Lower Shield.zip" .DS_Store` (a user file, not done) |
 | K2 dead `item_dict` keys | Prune the 35 ids |
 | vinery_backport `block/wine_box/*` `#missing` | Our own port; fix the model textures |
+
+## 10. Dedicated server startup, 1.2.00 (2026-11-03)
+
+Source: `debug/11_03/latest.log` (3922 lines, 1149 WARN/ERROR/FATAL lines) and `debug/11_03/debug.log`, a successful
+`CreEngServer` start on 1.2.00 loading the existing world (`winecraft`, made on 1.1.x). Load time 110.8 s (ModernFix line);
+one `Can't keep up! ... 47 ticks behind` on the first tick (normal after a world load). No `Error occurred while handling
+event`, no `Exception in thread`.
+
+A server log has none of the resource classes A to F (no models or textures on a server). In their place are the
+world-upgrade lines (10.1), the client-class lines (10.3) and Every Compat (10.4).
+
+**Owner** column: **Pack** = our scripts, data or in-tree mods, or a change we made; **Pack-triggered** = the message
+comes from another mod or Forge, but our change or script causes it; **Mod** = another mod alone, or Forge.
+
+### 10.1 At a glance
+
+| # | Message (shortened) | Lines | Owner | Source | Verdict |
+|---|---|---|---|---|---|
+| S1 | `Registry minecraft:<item/block/fluid>: Object did not get ID it asked for. Name: <id> Expected: N Got: N` | 433 | Pack-triggered | 1.2.00 added and reordered ids (vintagedelight 185, kubejs 53, creativeengineering 58, barbequesdelight 36, cookingforblockheads 38, largemeals 21, roll_delight 20, displaydelight 13, a few FD / Rustic / Nether's) against the world's saved id map | Ignore. Forge remaps by name; numeric ids are only internal. Appears once, on the first load after an update |
+| S2 | `Forge Mod Loader detected missing registry entries` / `Missing minecraft:item:` / `There are unidentified mappings in this world` | 1 block (26 items, 2 blocks) | Pack | Ids that 1.2.00 removed (10.2) | Intended. Those items are deleted from the world on load. All are in the 1.2.00 changelog |
+| S3 | `Missing data pack mod:creative_delight`, `mod:creative_brewing`, `mod:enders_additions` | 3 | Pack | The world's `level.dat` lists the 1.1.x pack ids; the mods were renamed (no underscore: `creativedelight`, `creativebrewing`) and Ender's additions moved. The new `*_upstream_data` packs (enders, goldenfood, largemeals, oceanic, roll) are "Found new data pack ... loading it automatically" on the next line | Ignore; one time per old world. Gone once the world saves |
+| S4 | `Adding duplicate value 'net.minecraftforge.common.world.NoneBiomeModifier@...' to registry` (ERROR) | 69 | Pack + Mod | Every `forge:none` biome modifier after the first. Forge registers the same `NoneBiomeModifier` object once per file and vanilla logs each repeat. 15 are ours (`kubejs/data/campsite_structures` 6, `bushierflowers` 5, `fruitsdelight` 1, the 3 Mooblooms `buzzier_bees` packs); the other 54 are not in any mod jar's data as plain JSON, so they come from mods that return `forge:none` in code when a feature is turned off | Ignore. Harmless: a `forge:none` modifier does nothing by design. The level is wrong |
+| S5 | `RuntimeDistCleaner: Attempted to load class <client class> for invalid dist DEDICATED_SERVER` (ERROR): `PoseStack` 36, `AbstractClientPlayer` 15, `HumanoidModel` 6, `RenderType` 4, `ItemTransforms$TransformType` 3, `ClientLevel` 1 | 66 | Pack-triggered | Nearly all fire while KubeJS startup and server scripts run (next to `potions.js`, `golden_values.js`, `toast.js`, `vintage_items.js`, `tags/plantabletags.js`): Rhino reflects every method of a Java class a script touches, and some mod classes have client types in method signatures without `@OnlyIn`. Forge refuses the load, Rhino skips that method | Ignore. Nothing a script calls is lost (the client-only methods cannot run on a server anyway). Only follow up if a script on the server reports a missing method |
+| S6 | `EventSubclassTransformer: Could not find parent net/minecraft/client/particle/TextureSheetParticle for class uwu/lopyluna/create_dd/...` + `An error occurred building event handler` + trace | 2 + trace | Mod | Create: Dreams & Desires has a client particle class in common code | Ignore |
+| S7 | `EveryCompat: Failed to generate recipe for <module>/<mod>/<block>: recipe template returned null` (ERROR) | 53 (26 ids) | Mod | Every Compat has no template recipe for: myrtrees rubberwood (af, db, dd, fd, sd, tw modules), botania livingwood / dreamwood (dd doors, q posts), upgrade_aquatic driftwood posts, quark bamboo beam | Ignore. Those Every Compat blocks have no crafting recipe; check one in JEI if anyone asks for them |
+| S8 | KubeJS `Failed to parse recipe '<id>'! Falling back to vanilla: ...` | 14 | Mod | `dramaticdoors:short_{copper,andesite,brass}_casing_door`, `short_stripped_bamboo_door`, `short_quark_blossom_door` (ingredient empty); `fulleng:part_requester_terminal_from_block`, `create_things_and_misc:schematic_chair`, `copper_scaffolding_craft`, `creategoggles:module_goggle_unit`, `design_decor:stonecutting/metals/iron/{bolt,screw}` (result empty); `hostiledelight:grollrecp`, `grolllrecp` (shapeless recipe written with the wrong key); `create_netherless:soul_sand_from_sequenced_assembly` (transitional item empty) | Ignore: KubeJS falls back to vanilla parsing, which drops them the same way. Updates K4/K5: the 1.2.00 server shows none of ours (no `kjs_*` deploying, no `fermenting/*`, no rusticdelight) |
+| S9 | `TagLoader: Couldn't read tag list minecraft:mineable/{hoe,shovel} ... in data pack redeco-1.5.0-1.19.2.jar` + `Not a JSON object: null` trace | 2 + traces | Mod | Redeco ships two malformed tag files | Ignore. Redeco blocks in those two lists mine at hand speed with a hoe/shovel; the rest of the tag loads from other packs |
+| S10 | `Couldn't load tag [mekanism:mekasuit_helmet (from creategoggles-...)] as it is missing following references` | 1 | Mod | Create Goggles references Mekanism, not installed | Ignore |
+| S11 | `Error setting up the JDA` + `InvalidTokenException: The provided token is invalid!` (ERROR) | 1 + trace | Server config | Lightman's Discord has no valid bot token in the server's config | Ignore, or set the token / remove the server-side jar if the Discord link is not wanted |
+| S12 | `Configuration file ./winecraft/serverconfig/oldguns-server.toml is not correct. Correcting` + 4 `Incorrect key ... was corrected from [X] to its default, [X]` | 5 | Mod | Old Guns list values fail Forge's list validation and are rewritten to the same values each start (same pattern as Philip's Ruins, item 26, also present here) | Ignore; self-heals every start |
+| S13 | `quark: Non-existant flag elder_prismarine_underground_biome being used` | 1 | Mod | A Quark recipe condition names a flag Quark no longer has; not in our data | Ignore |
+| S14 | `@Redirect conflict. Skipping securitycraft.mixins.json:camera.ChunkMapMixin ... already redirected by railways-common` | 1 | Mod | Second SecurityCraft camera redirect lost to Railways (server side of the 4.4 case) | Same as 4.4: only matters if SecurityCraft cameras misbehave near Railways conductors |
+| S15 | `[mod names] <modid> is not loaded; '<name>' not applied` (WARN) | 13 | Pack | patcherMod `ModDisplayNames`: display names for client-only mods (xaerolib, xaerozoomout, transition, notenoughanimations, just_enough_beacons, immediatelyfast, entityculling, enchdesc, ctm, create_questing, conditional_mixin, boatview360, betterf3) | Expected on a server. Fixable: log at INFO when the mod is client-only (10.3) |
+| S16 | `[golden values] minecraft:pumpkin_pie is not a food` (KubeJS startup WARN) | 2 | Pack | `creativedelight` `goldenfood/golden_values.js#41`: the golden and enchanted golden pumpkin pie copy vanilla Pumpkin Pie's food values, but in the pack Pumpkin Pie has no food properties at that point, so those two keep their own values | Real, low priority (10.3) |
+| S17 | `[item_dict] Missing/invalid item IDs:` (23 entries) | 1 block | Pack | Dead keys in `item_dict.js`. Same as K2, now 23 [35]: IE `jei_bucket_{bioethanol,ethanol,memory_essence,yeast_culture}`, `tmted:{melon_juice,tomato_sauce}`, `more_immersive_wires:rs_{coil,connector,relay}`, `everycomp:{af,fd,hc}/vinery/cherry_*`, `dramaticdoors:{short,tall}_vinery_cherry_door`, `vinery:king_danis_wine`, `vinery:mead`, `physics_gun_mod:*` (4), `ricksportalgun:*` (3), and `create_questing:blueprint` (client-only mod, so expected on a server) | Real, low priority: prune (10.3) |
+| S18 | `[fluid_dict]` / `[block_dict] Tag entry ... is not validated` | 53 | Pack | Same as K1 | Ignore |
+| S19 | `defineId called for: ... Squid / Dolphin from class com.SaintAlfonzo.baby_mobs.age.BabyAges` | 2 | Pack | Baby Mobs (Creative Worldgen member); same as item 8 | Ignore |
+| S20 | `defineId called for: ... VillagerEntityMCA / GrimReaperEntity` | 38 | Mod | MCA; same as item 8 | Ignore |
+| S21 | Already in section 0 and unchanged: refmaps (31, item 7), mixin optional-mod probes (`Error loading class` 9 and `@Mixin target ... was not found` 4: multimine, backpacked, aquaculture, botarium, sodium, overweightfarming, plus two client classes), `Shift.BY` / overwrite conflicts (11), `mods.toml` (4, item 15), trust worthiness (3 FATAL, item 14), `Assets URL` (2, item 16), update check (3, item 13), ATM icons (3, item 17), registered twice (2, item 18), Advanced Peripherals integrations (4, item 20), GameStages plugin (item 21), Forgiving Void list types (2, item 30), Philip's Ruins config (item 26) | about 80 | Mod | as listed there | Ignore |
+| S22 | `KubeJS: Plugin ...BuiltinKubeJSForgeClientPlugin does not load on server side`; `oldguns` banner lines and `Random UUID`; `Distant Horizons: G1 Garbage collector detected` | 5 | Mod | Informational at WARN level | Ignore |
+
+Count by owner (WARN/ERROR/FATAL lines, traces excluded): **Pack** about 90 (S2, S3, S15 to S19 and our 15 of S4);
+**Pack-triggered** about 500 (S1 433, S5 66), all harmless; **Mod** about 560. Nothing in this log is a crash risk.
+
+### 10.2 Items the 1.2.00 upgrade deleted from the world (S2)
+
+The world's saved id map had these; 1.2.00 does not register them, so any in chests, inventories or placed are gone.
+Every one is a deliberate 1.2.00 removal with a changelog bullet:
+
+| Ids | 1.2.00 changelog bullet |
+|---|---|
+| `miners_delight:copper_cup` and its 18 `*_cup` items, `delightful:cactus_soup_cup` | "The Copper Cup and every cup ... and the Cactus Soup Cup" |
+| `cookingforblockheads:azalea_spice_rack`, `azalea_tool_rack` (item and block) | "The plain Spice Rack, Tool Rack and Fruit Basket ... Woods with no rack of their own make none" |
+| `creativeengineering:canned_chips` | "PneumaticCraft's Fries and Canned Chips, with their recipes" |
+| `creativeengineering:canned_mhadjeb` | "Canned Mhadjeb" |
+| `rusticdelight:pancake`, `rusticdelight:fried_dough` | "Rustic Delight's plain Pancake"; "Fried Dough" |
+
+Unlike the jams, bottles and Fish and Chips (which have Forge remaps to their replacements and do not show here), these have
+no replacement, so Forge drops them. If a future release removes items players may be holding, a remap to a near item
+(memory `forge-missing-mappings-staging`) avoids the loss.
+
+### 10.3 Pack-side follow-ups (all low priority, none player-visible except the pie values)
+
+| Item | Fix |
+|---|---|
+| S16 golden pumpkin pie values | `golden_values.js` reads Pumpkin Pie's food after the pack has taken it away. Read a fixed base (or the pie slice) for `pumpkin_pie`, or drop that pair from the table |
+| S17 dead `item_dict` keys | Prune the 22 ids for mods not in the pack; keep `create_questing:blueprint` but skip it on a dedicated server |
+| S15 `[mod names]` on a server | Skip, or log at INFO, when `FMLEnvironment.dist` is the dedicated server and the mod is client-only in `mod_sides.md` |
+| S4 our 15 `forge:none` files | Nothing to fix; the lines are Forge's. Could be removed only by disabling those features another way (config or mixin, as Bushier Flowers already does) |
+
+### 10.4 How this was gathered
+
+```
+grep -E "/(WARN|ERROR|FATAL)\]" debug/11_03/latest.log | sed -E 's/^\[[^]]*\] //' \
+  | sed -E "s/'[^']*'/'X'/g; s/[0-9]+/N/g" | cut -c1-170 | sort | uniq -c | sort -rn
+```
+
+The S4 sources: our files by `grep -rl '"forge:none"'` over `kubejs/data` and `development/`; the mod jars were scanned
+for `forge/biome_modifier/*.json` containing `forge:none` (none found). The S5 context: the lines before each
+`RuntimeDistCleaner` line in `latest.log`. The S2 list: the `Missing minecraft:item:` block, checked against
+`kubejs/assets/creativeengineering/changelog/1.2.00.md`. The server's own `logs/kubejs/*.log` were not included in
+`debug/11_03/`, so section 5 (K-rows) is only re-checked through the KubeJS lines that reach `latest.log`.
