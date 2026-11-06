@@ -1,0 +1,123 @@
+# Run r1103 slice A, boot 1: OLD PACK world (deploy/latest = release 1.1.06 full install: patcherMod 1.1.04, standalone
+# More Mooblooms, Baby Mobs, Canned Goods, Golden Food, Salt, Create: The Salt; Creative Delight under its old id).
+# Group A superflat, level sAo; setup in sA_setup.md "Boot 1". The world carries into boots 2 and 3 (new jars).
+# Only setup halves here (row ids end in "o"): what the queue's "boot 1 on the old jars" / "old world" rows need saved.
+# No /zq (the current probe loads Creative Calendar classes, absent in 1.1.06): vanilla commands, clone counts and
+# perfBot only. Home: marker tagged sahome at world spawn, capture SAH (y = SAH2 = air above the superflat grass).
+# Sites (offsets from SAH): golems x+10..+12 z+10; cakes x+20..+22 z+10; Golden chests x+20 / x+23 z+14; End plants
+# x+30..+36 z+10, dishes chest x+30 z+14; mooshroom pen x+40..+46 z+8..+14; cows x+50 z+10; village x+160;
+# End House at -30 ~ 30 in the End.
+pace 2
+
+## SA1-00 | setup: home marker, clock, weather (not a queue row)
+bootexpect Done \(
+> execute unless entity @e[type=minecraft:marker,tag=sahome] run summon minecraft:marker ~ ~ ~ {Tags:["sahome"]}
+sleep 2
+> data get entity @e[type=minecraft:marker,tag=sahome,limit=1] Pos
+capture SAH entity data: \[(-?\d+)\.\d+d, (-?\d+)\.\d+d, (-?\d+)\.\d+d\]
+> gamerule doDaylightCycle false
+> time set noon
+> gamerule doWeatherCycle false
+> weather clear 1000000
+> gamerule doPatrolSpawning false
+> gamerule doTraderSpawning false
+> gamerule doInsomnia false
+> say SA1 setup done
+expect SA1 setup done
+shell grep -m1 -oE "creativeengineering-1\.1\.[0-9]+\.jar" logs/latest.log logs/debug.log | head -1; ls mods | grep -iE "^(creativeengineering|creative_delight|CannedGoods|goldenfood|salt-|create_salt|moreMooblooms|babyMobs|creativeworldgen)"
+look shell lists the 1.1.06 set: creativeengineering-1.1.04, creative_delight, CannedGoods, goldenfood, salt, create_salt, moreMooblooms, babyMobs; no creativeworldgen
+reject (Unknown (item|block|block type|entity)|does not (have|accept)|Incorrect argument for command|Unknown or incomplete command|That position is not loaded|No player was found|no such bot|no such item|Invalid (block state|tag))
+
+## SQ-CNG-03o | old jars: two canned golems, one dyed blue (11b), saved
+> summon canned_goods:canned_golem {SAH1+10} {SAH2} {SAH3+10} {NoAI:1b,PersistenceRequired:1b,Tags:["sacng","sacngblue"]}
+> summon canned_goods:canned_golem {SAH1+12} {SAH2} {SAH3+10} {NoAI:1b,PersistenceRequired:1b,Tags:["sacng","sacngred"]}
+sleep 2
+> data merge entity @e[type=canned_goods:canned_golem,tag=sacngblue,limit=1] {Color:11b}
+> data get entity @e[type=canned_goods:canned_golem,tag=sacngblue,limit=1] Color
+> data get entity @e[type=canned_goods:canned_golem,tag=sacngred,limit=1] Color
+expect has the following entity data: 11b
+expect has the following entity data: 14b
+reject (Unknown (item|block|block type|entity)|does not (have|accept)|Incorrect argument for command|Unknown or incomplete command|That position is not loaded|No player was found|no such bot|no such item|Invalid (block state|tag))
+
+## SQ-GLD-01o | old jars: golden cake (2 bites eaten), enchanted golden cake (uneaten), two chests of every goldenfood item
+> setblock {SAH1+20} {SAH2} {SAH3+10} goldenfood:golden_cake[bites=2]
+> setblock {SAH1+22} {SAH2} {SAH3+10} goldenfood:enchanted_golden_cake[bites=0]
+> setblock {SAH1+20} {SAH2} {SAH3+14} minecraft:chest[facing=north]
+> setblock {SAH1+23} {SAH2} {SAH3+14} minecraft:chest[facing=north]
+> data merge block {SAH1+20} {SAH2} {SAH3+14} {Items:[{Slot:0b,id:"goldenfood:golden_melon_slice",Count:1b},{Slot:1b,id:"goldenfood:enchanted_golden_melon_slice",Count:1b},{Slot:2b,id:"goldenfood:golden_sweet_berries",Count:1b},{Slot:3b,id:"goldenfood:enchanted_golden_sweet_berries",Count:1b},{Slot:4b,id:"goldenfood:golden_glow_berries",Count:1b},{Slot:5b,id:"goldenfood:enchanted_golden_glow_berries",Count:1b},{Slot:6b,id:"goldenfood:golden_chorus_fruit",Count:1b},{Slot:7b,id:"goldenfood:enchanted_golden_chorus_fruit",Count:1b},{Slot:8b,id:"goldenfood:enchanted_golden_carrot",Count:1b},{Slot:9b,id:"goldenfood:golden_baked_potato",Count:1b},{Slot:10b,id:"goldenfood:enchanted_golden_baked_potato",Count:1b},{Slot:11b,id:"goldenfood:golden_beetroot",Count:1b},{Slot:12b,id:"goldenfood:enchanted_golden_beetroot",Count:1b},{Slot:13b,id:"goldenfood:golden_dried_kelp",Count:1b},{Slot:14b,id:"goldenfood:enchanted_golden_dried_kelp",Count:1b},{Slot:15b,id:"goldenfood:golden_cooked_beef",Count:1b},{Slot:16b,id:"goldenfood:enchanted_golden_cooked_beef",Count:1b},{Slot:17b,id:"goldenfood:golden_cooked_porkchop",Count:1b},{Slot:18b,id:"goldenfood:enchanted_golden_cooked_porkchop",Count:1b},{Slot:19b,id:"goldenfood:golden_cooked_mutton",Count:1b},{Slot:20b,id:"goldenfood:enchanted_golden_cooked_mutton",Count:1b},{Slot:21b,id:"goldenfood:golden_cooked_chicken",Count:1b},{Slot:22b,id:"goldenfood:enchanted_golden_cooked_chicken",Count:1b},{Slot:23b,id:"goldenfood:golden_cooked_rabbit",Count:1b},{Slot:24b,id:"goldenfood:enchanted_golden_cooked_rabbit",Count:1b},{Slot:25b,id:"goldenfood:golden_cooked_cod",Count:1b},{Slot:26b,id:"goldenfood:enchanted_golden_cooked_cod",Count:1b}]}
+> data merge block {SAH1+23} {SAH2} {SAH3+14} {Items:[{Slot:0b,id:"goldenfood:golden_cooked_salmon",Count:1b},{Slot:1b,id:"goldenfood:enchanted_golden_cooked_salmon",Count:1b},{Slot:2b,id:"goldenfood:golden_bread",Count:1b},{Slot:3b,id:"goldenfood:enchanted_golden_bread",Count:1b},{Slot:4b,id:"goldenfood:golden_cookie",Count:1b},{Slot:5b,id:"goldenfood:enchanted_golden_cookie",Count:1b},{Slot:6b,id:"goldenfood:golden_pumpkin_pie",Count:1b},{Slot:7b,id:"goldenfood:enchanted_golden_pumpkin_pie",Count:1b},{Slot:8b,id:"goldenfood:golden_cake",Count:1b},{Slot:9b,id:"goldenfood:enchanted_golden_cake",Count:1b},{Slot:10b,id:"goldenfood:golden_mushroom_stew",Count:1b},{Slot:11b,id:"goldenfood:enchanted_golden_mushroom_stew",Count:1b},{Slot:12b,id:"goldenfood:golden_beetroot_soup",Count:1b},{Slot:13b,id:"goldenfood:enchanted_golden_beetroot_soup",Count:1b},{Slot:14b,id:"goldenfood:golden_rabbit_stew",Count:1b},{Slot:15b,id:"goldenfood:enchanted_golden_rabbit_stew",Count:1b},{Slot:16b,id:"goldenfood:golden_milk_bucket",Count:1b},{Slot:17b,id:"goldenfood:enchanted_golden_milk_bucket",Count:1b},{Slot:18b,id:"goldenfood:golden_honey_bottle",Count:1b},{Slot:19b,id:"goldenfood:enchanted_golden_honey_bottle",Count:1b},{Slot:20b,id:"minecraft:golden_carrot",Count:64b},{Slot:21b,id:"minecraft:enchanted_golden_apple",Count:1b},{Slot:22b,id:"minecraft:enchanted_book",Count:1b,tag:{StoredEnchantments:[{id:"goldenfood:gf_enchantment",lvl:1s}]}}]}
+> execute if block {SAH1+20} {SAH2} {SAH3+10} goldenfood:golden_cake[bites=2] run say SA1 cake2 ok
+> execute if block {SAH1+22} {SAH2} {SAH3+10} goldenfood:enchanted_golden_cake[bites=0] run say SA1 ecake0 ok
+> data get block {SAH1+20} {SAH2} {SAH3+14} Items
+> data get block {SAH1+23} {SAH2} {SAH3+14} Items
+expect SA1 cake2 ok
+expect SA1 ecake0 ok
+expect goldenfood:enchanted_golden_cooked_cod
+expect StoredEnchantments:\[\{id:"goldenfood:gf_enchantment"
+reject (Unknown (item|block|block type|entity)|does not (have|accept)|Incorrect argument for command|Unknown or incomplete command|That position is not loaded|No player was found|no such bot|no such item|Invalid (block state|tag))
+
+## SQ-ENM-02o | old jars: the 4 End plants on end stone (one fruiting void pepper), the 5 dishes in a chest, an End House
+> fill {SAH1+30} {SAH2-1} {SAH3+10} {SAH1+36} {SAH2-1} {SAH3+10} minecraft:end_stone
+> setblock {SAH1+30} {SAH2} {SAH3+10} endersdelight:amberveil_mushroom
+> setblock {SAH1+32} {SAH2} {SAH3+10} endersdelight:ethereal_saffron_bush
+> setblock {SAH1+34} {SAH2} {SAH3+10} endersdelight:chorus_flame_block[age=1]
+> setblock {SAH1+36} {SAH2} {SAH3+10} endersdelight:voidpepper_block[down=true,pepper=true]
+> setblock {SAH1+30} {SAH2} {SAH3+14} minecraft:chest[facing=north]
+> data merge block {SAH1+30} {SAH2} {SAH3+14} {Items:[{Slot:0b,id:"endersdelight:amberveil_stew",Count:1b},{Slot:1b,id:"endersdelight:amberveiled_curry",Count:1b},{Slot:2b,id:"endersdelight:veil_of_flames_risotto",Count:1b},{Slot:3b,id:"endersdelight:chicken_curry",Count:1b},{Slot:4b,id:"endersdelight:steak_fries",Count:1b},{Slot:5b,id:"endersdelight:voidpepper",Count:8b},{Slot:6b,id:"endersdelight:crushed_voidpepper",Count:8b}]}
+sleep 2
+> execute if block {SAH1+30} {SAH2} {SAH3+10} endersdelight:amberveil_mushroom run say SA1 plant1 ok
+> execute if block {SAH1+32} {SAH2} {SAH3+10} endersdelight:ethereal_saffron_bush run say SA1 plant2 ok
+> execute if block {SAH1+34} {SAH2} {SAH3+10} endersdelight:chorus_flame_block run say SA1 plant3 ok
+> execute if block {SAH1+36} {SAH2} {SAH3+10} endersdelight:voidpepper_block[pepper=true] run say SA1 plant4 ok
+> data get block {SAH1+30} {SAH2} {SAH3+14} Items
+expect SA1 plant1 ok
+expect SA1 plant2 ok
+expect SA1 plant3 ok
+expect SA1 plant4 ok
+expect endersdelight:steak_fries
+> execute in minecraft:the_end run forceload add -48 12 -12 48
+sleep 15
+> execute in minecraft:the_end run place structure endersdelight:end_house -30 70 30
+sleep 5
+# block counts of the house region (clone filtered counts the matching blocks; copies land at y 200+, harmless)
+> execute in minecraft:the_end run clone -46 40 14 -14 69 46 -46 200 14 filtered #minecraft:planks
+> execute in minecraft:the_end run clone -46 70 14 -14 99 46 -46 230 14 filtered #minecraft:planks
+> execute in minecraft:the_end run clone -46 40 14 -14 69 46 -46 200 14 filtered endersdelight:chorus_flame_block
+> execute in minecraft:the_end run clone -46 70 14 -14 99 46 -46 230 14 filtered endersdelight:chorus_flame_block
+look End House placed (place structure line) and the clone counts (planks, chorus flame) noted for boot 2 (SQ-ENM-02 reads the same regions); a "Failed to place" or 0 counts = setup gap, judge -02 on plants and dishes only
+reject (Unknown (item|block|block type|entity)|does not (have|accept)|Incorrect argument for command|Unknown or incomplete command|That position is not loaded|No player was found|no such bot|no such item|Invalid (block state|tag))
+
+## SQ-CWG-08o | old jars: generated chunks with a placed village, a mooshroom pair (brown, red) in a pen, two cows
+> fill {SAH1+40} {SAH2} {SAH3+8} {SAH1+46} {SAH2+2} {SAH3+14} minecraft:glass hollow
+> fill {SAH1+41} {SAH2+2} {SAH3+9} {SAH1+45} {SAH2+2} {SAH3+13} minecraft:air
+> summon minecraft:mooshroom {SAH1+42} {SAH2} {SAH3+11} {Type:"brown",PersistenceRequired:1b,Tags:["sacwgm","sacwgbrown"]}
+> summon minecraft:mooshroom {SAH1+44} {SAH2} {SAH3+11} {Type:"red",PersistenceRequired:1b,Tags:["sacwgm","sacwgred"]}
+> summon minecraft:cow {SAH1+50} {SAH2} {SAH3+10} {NoAI:1b,PersistenceRequired:1b,Tags:["sacwgc"]}
+> summon minecraft:cow {SAH1+52} {SAH2} {SAH3+10} {NoAI:1b,PersistenceRequired:1b,Tags:["sacwgc"]}
+> forceload add {SAH1+112} {SAH3-48} {SAH1+208} {SAH3+48}
+sleep 30
+> place structure minecraft:village_plains {SAH1+160} {SAH2} {SAH3}
+sleep 10
+> execute if entity @e[type=minecraft:mooshroom,tag=sacwgbrown] run say SA1 brown ok
+> execute if entity @e[type=minecraft:mooshroom,tag=sacwgred] run say SA1 red ok
+> clone {SAH1+128} {SAH2-4} {SAH3-32} {SAH1+191} {SAH2+3} {SAH3+31} {SAH1+128} {SAH2+60} {SAH3-32} filtered minecraft:bell
+> clone {SAH1+128} {SAH2-4} {SAH3-32} {SAH1+191} {SAH2+3} {SAH3+31} {SAH1+128} {SAH2+80} {SAH3-32} filtered #minecraft:beds
+expect SA1 brown ok
+expect SA1 red ok
+look village placed ("Generated structure" or similar); bell / bed clone counts noted for boot 2; the pen keeps both mooshrooms; forceload stays (boot 2 reads the same chunks)
+reject (Unknown (item|block|block type|entity)|does not (have|accept)|Incorrect argument for command|Unknown or incomplete command|That position is not loaded|No player was found|no such bot|no such item|Invalid (block state|tag))
+
+## SQ-SWP-06o | old jars: a bot whose ender chest holds 4 alexsmobs:banana, logged out before the merge lists exist
+> pbot spawn saswp6 {SAH1+5} {SAH2} {SAH3+5} minecraft:overworld survival
+sleep 3
+> item replace entity saswp6 enderchest.0 with alexsmobs:banana 4
+> data get entity saswp6 EnderItems
+expect alexsmobs:banana
+> pbot remove saswp6
+sleep 2
+look EnderItems shows 4 alexsmobs:banana before the logout (if perfBot does not load in the 1.1.06 pack, SQ-SWP-06 is setup-blocked: sA_skip.md)
+reject (Unknown (item|block|block type|entity)|does not (have|accept)|Incorrect argument for command|Unknown or incomplete command|That position is not loaded|No player was found|no such bot|no such item|Invalid (block state|tag))
+
+## SA1-99 | save the old world (not a queue row)
+> save-all flush
+waitlog Saved the game 60

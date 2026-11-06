@@ -33,7 +33,7 @@ sys.path.insert(0, str(Path(__file__).resolve().parent))
 from food_catalog import INSTANCE, parse_dict  # noqa: E402
 import pack_paths  # noqa: E402
 
-REMOVED_JS = INSTANCE / 'kubejs/startup_scripts/_lib/removed_items.js'
+REMOVED_JS = pack_paths.STARTUP_LIB / 'removed_items.js'
 TYPES = INSTANCE / 'kubejs/generation_scripts/food/food_types.json'
 FOODS = INSTANCE / 'kubejs/exported/food/foods.json'
 OUT = INSTANCE / 'kubejs/data/creativeengineering/moonlight/soft_fluids'

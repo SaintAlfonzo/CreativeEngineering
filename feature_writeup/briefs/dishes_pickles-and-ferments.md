@@ -8,7 +8,7 @@ and "Built 2026-10-25" in section 5, tests in 8; prefix VTD-), [ocean_delight.md
 and are not in the writeup yet (VTD-65 to VTD-74 there are other checks).
 
 **Where the code goes** (memory `creative-delight-routing`): food code lives in the Creative Delight trees by mod: server
-`kubejs/data/creative_delight/kubejs/vintagedelight/` (`recipes.js`, `cooking.js`, `tags.js`, `jams.js`), Ocean's / Oceanic
+`kubejs/data/creativedelight/kubejs/vintagedelight/` (`recipes.js`, `cooking.js`, `tags.js`, `jams.js`), Ocean's / Oceanic
 `.../oceansdelight/`, startup `development/creativeDelight/src/main/resources/kubejs_startup/vintagedelight/`
 (`vintage_items.js`, `item_merges.js`, `compost.js`). Pickling jar recipes through `R.vdPickling(output, inputs, e, id, opts)`
 (neoCraftHelper.js line 1217; opts `time`, `secondary`, `container`), pot through `R.fdCooking` (1074), grinding through

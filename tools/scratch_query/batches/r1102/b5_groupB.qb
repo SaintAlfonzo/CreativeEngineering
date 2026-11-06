@@ -1,0 +1,114 @@
+# Run r1102, SQ-CDJ5 Boot 5: group B, fresh normal world cdj5b (README Boot 5: prep_srv.sh OUT cdj5b B spawn-animals=true;
+# the Fungi cow / mooshroom counts need live animals). Worldgen counts are offline from the region files with
+# tools/scratch_query/region_blocks.py (written for this run; it only reads). Shell steps run in OUT/srv.
+# Order: SQ-MD-01 (Chunky 400 at spawn), then SQ-FGD-12 to -15 if time allows: five Chunky squares of radius 600
+# (dark forest, swamp, mushroom fields, taiga, birch forest; about 5600 chunks each). Short on time: lower the radius
+# in the SQ-FGD-12a..e rows to 300 and the 600s of the --box arithmetic in SQ-FGD-12 to -15 with it; say so in the run notes.
+# r1102 run: radius lowered to 300 (disk 14 GB free); the --box arithmetic follows.
+pace 2
+
+## SQ-MD-01 | wild cave carrots: below Y 48, banded, never near the surface
+bootexpect Done \(
+bootexpect \[mushroom-spawns\] .*3 mod modifiers off
+bootreject (?i)\b(error|exception)\b.*cave_carrots
+> execute unless entity @e[type=minecraft:marker,tag=cdj5bhome] run summon minecraft:marker ~ ~ ~ {Tags:["cdj5bhome"]}
+sleep 2
+> data get entity @e[type=minecraft:marker,tag=cdj5bhome,limit=1] Pos
+capture S entity data: \[(-?\d+)\.\d+d, (-?\d+)\.\d+d, (-?\d+)\.\d+d\]
+> chunky world minecraft:overworld
+> chunky center {S1} {S3}
+> chunky radius 400
+> chunky start
+waitlog Task finished 3600
+> save-all flush
+waitlog Saved the game 300
+shell python3 -I $INST/tools/scratch_query/region_blocks.py blocks cdj5b 'miners_delight:wild_cave_carrots$' --box {S1-400} {S3-400} {S1+400} {S3+400} --fail-above 48 --fail-depth-below 13 --json ../md01.json
+look rows/SQ-MD-01.shell.txt: Y bands -24..23 about twice 24..47 and -64..-25, all non-zero; biomes spread; noise and carver caves both (judge a few spots with /zq count, or leave to the client tour). The 2026-11-01 instance log said "2 mod modifiers off": a 3 here means the Miner's cave_carrots modifier is the third
+
+## SQ-FGD-12a | dark forest square
+> execute positioned {S1} 70 {S3} run locate biome minecraft:dark_forest
+waitlog (nearest minecraft:dark_forest|Could not find) 600
+capture DF is at \[(-?\d+), (~|-?\d+), (-?\d+)\]
+> chunky center {DF1} {DF3}
+> chunky radius 300
+> chunky start
+waitlog Task finished 5400
+
+## SQ-FGD-12b | swamp square
+> execute positioned {S1} 70 {S3} run locate biome minecraft:swamp
+waitlog (nearest minecraft:swamp|Could not find) 600
+capture SW is at \[(-?\d+), (~|-?\d+), (-?\d+)\]
+> chunky center {SW1} {SW3}
+> chunky radius 300
+> chunky start
+waitlog Task finished 5400
+
+## SQ-FGD-12c | mushroom fields square
+> execute positioned {S1} 70 {S3} run locate biome minecraft:mushroom_fields
+waitlog (nearest minecraft:mushroom_fields|Could not find) 900
+capture MF is at \[(-?\d+), (~|-?\d+), (-?\d+)\]
+> chunky center {MF1} {MF3}
+> chunky radius 300
+> chunky start
+waitlog Task finished 5400
+
+## SQ-FGD-12d | taiga square
+> execute positioned {S1} 70 {S3} run locate biome minecraft:taiga
+waitlog (nearest minecraft:taiga|Could not find) 600
+capture TA is at \[(-?\d+), (~|-?\d+), (-?\d+)\]
+> chunky center {TA1} {TA3}
+> chunky radius 300
+> chunky start
+waitlog Task finished 5400
+
+## SQ-FGD-12e | birch forest square
+> execute positioned {S1} 70 {S3} run locate biome minecraft:birch_forest
+waitlog (nearest minecraft:birch_forest|Could not find) 600
+capture BI is at \[(-?\d+), (~|-?\d+), (-?\d+)\]
+> chunky center {BI1} {BI3}
+> chunky radius 300
+> chunky start
+waitlog Task finished 5400
+> save-all flush
+waitlog Saved the game 300
+
+## SQ-FGD-12 | surface Fungi mushrooms by biome (offline)
+shell for b in "DF {DF1} {DF3}" "SW {SW1} {SW3}" "MF {MF1} {MF3}" "TA {TA1} {TA3}" "BI {BI1} {BI3}"; do set -- $b; echo "== $1 square"; python3 -I $INST/tools/scratch_query/region_blocks.py blocks cdj5b '(fungidelight:(inky_cap|morel)_mushroom|minecraft:(brown|red)_mushroom)$' --box $(($2-300)) $(($3-300)) $(($2+300)) $(($3+300)) --json ../fgd12_$1_singles.json; python3 -I $INST/tools/scratch_query/region_blocks.py blocks cdj5b 'fungidelight:(inky_cap|morel)_mushroom_block$' --box $(($2-300)) $(($3-300)) $(($2+300)) $(($3+300)); python3 -I $INST/tools/scratch_query/region_blocks.py blocks cdj5b 'fungidelight:[a-z_]+_colony$' --near 'minecraft:(dirt|coarse_dirt|podzol|rooted_dirt|grass_block|mycelium|moss_block)$' --box $(($2-300)) $(($3-300)) $(($2+300)) $(($3+300)); done
+look rows/SQ-FGD-12.shell.txt (depth 0..1 = surface): inky cap only in dark forest and mushroom fields at the surface, morel also in the swamp; none at the surface in taiga or birch; dark-forest Fungi singles clearly rarer than brown / red; mushroom fields: huge inky in about 1 of 3 chunks, huge morel 1 of 4 ("chunks with a match by surface biome"); colonies next to dirt / podzol
+
+## SQ-FGD-13 | underground Fungi mushrooms (offline, same squares)
+shell for b in "DF {DF1} {DF3}" "SW {SW1} {SW3}" "MF {MF1} {MF3}" "TA {TA1} {TA3}" "BI {BI1} {BI3}"; do set -- $b; echo "== $1 square"; python3 -I $INST/tools/scratch_query/region_blocks.py blocks cdj5b 'fungidelight:(inky_cap|morel)_mushroom$' --near 'minecraft:(stone|deepslate|tuff|sculk|dirt|rooted_dirt|moss_block)$' --box $(($2-300)) $(($3-300)) $(($2+300)) $(($3+300)); python3 -I $INST/tools/scratch_query/region_blocks.py blocks cdj5b '(fungidelight:[a-z_]+_colony|farmersdelight:(brown|red)_mushroom_colony)$' --near 'minecraft:(stone|deepslate|tuff|andesite|diorite|granite)$' --box $(($2-300)) $(($3-300)) $(($2+300)) $(($3+300)); done
+look below Y 50 and depth 13+: inky and morel singles rare, on stone / sculk / dirt floors; colonies of all four only over dirt-type blocks (a stone neighbour count near the colony total = colonies on bare stone: FAIL); none under open sky. A load error naming environment_scan or surface_relative_threshold_filter: grep latest.log
+
+## SQ-FGD-14 | rooted dirt and truffle dirt (offline)
+bootreject (?i)\b(error|exception)\b.*(truffle_dirt|rooted_dirt|wild_crops)
+shell for b in "DF {DF1} {DF3}" "TA {TA1} {TA3}" "BI {BI1} {BI3}" "SW {SW1} {SW3}"; do set -- $b; echo "== $1 square"; python3 -I $INST/tools/scratch_query/region_blocks.py blocks cdj5b 'minecraft:rooted_dirt$' --box $(($2-300)) $(($3-300)) $(($2+300)) $(($3+300)); python3 -I $INST/tools/scratch_query/region_blocks.py blocks cdj5b 'fungidelight:truffle_dirt$' --near 'minecraft:rooted_dirt$' --box $(($2-300)) $(($3-300)) $(($2+300)) $(($3+300)); done
+look both near the surface in dark forest and cold forest (taiga, grove) biomes, none in a conifer biome that is neither (read the by_biome lines; the four squares hold several biomes each, e.g. old growth or windswept forests); truffle dirt mostly with a rooted dirt neighbour. Rooted dirt but no truffle dirt: the two rules ran in the wrong order (merge them, row text)
+
+## SQ-FGD-15 | mooshroom colours and Fungi cows by biome; summoned and egg mooshrooms red
+shell for b in "DF {DF1} {DF3}" "SW {SW1} {SW3}" "MF {MF1} {MF3}" "TA {TA1} {TA3}" "BI {BI1} {BI3}"; do set -- $b; echo "== $1 square"; python3 -I $INST/tools/scratch_query/region_blocks.py entities cdj5b '^(minecraft:mooshroom|fungidelight:[a-z_]+_cow)$' --field Type --box $(($2-300)) $(($3-300)) $(($2+300)) $(($3+300)); done
+pace 0.2
+repeat 20
+> summon minecraft:mooshroom {S1} {S2} {S3} {Tags:["fgd15s"]}
+end
+pace 2
+sleep 2
+> execute as @e[type=minecraft:mooshroom,tag=fgd15s,nbt={Type:"red"}] run say FGD15 summoned red
+> execute as @e[type=minecraft:mooshroom,tag=fgd15s,nbt={Type:"brown"}] run say FGD15 summoned brown
+count FGD15 summoned red == 20
+reject FGD15 summoned brown
+> fill {S1+5} {S2-1} {S3-1} {S1+7} {S2-1} {S3+1} minecraft:stone
+> fill {S1+5} {S2} {S3-1} {S1+7} {S2+3} {S3+1} minecraft:air
+> pbot spawn egg {S1+3} {S2} {S3} minecraft:overworld survival
+> pbot hold egg minecraft:mooshroom_spawn_egg 20
+pace 0.5
+repeat 20
+> pbot use egg {S1+6} {S2-1} {S3} up
+end
+pace 2
+sleep 2
+> execute positioned {S1+6} {S2} {S3} as @e[type=minecraft:mooshroom,distance=..8,tag=!fgd15s,nbt={Type:"red"}] run say FGD15 egg red
+> execute positioned {S1+6} {S2} {S3} as @e[type=minecraft:mooshroom,distance=..8,tag=!fgd15s,nbt={Type:"brown"}] run say FGD15 egg brown
+count FGD15 egg red == 20
+reject FGD15 egg brown
+look entity census (rows/SQ-FGD-15.shell.txt): dark forest about 50 % brown, mushroom fields about 25 %, at least 20 mooshrooms per sample; Fungi cows rare in dark forest, morel cows in swamps, both common in mushroom fields. Too few mooshrooms per square: record (chunk-generation spawns are sparse in this pack, gotchas.md)

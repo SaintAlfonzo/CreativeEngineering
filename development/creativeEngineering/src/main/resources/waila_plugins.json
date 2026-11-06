@@ -1,0 +1,11 @@
+{
+  "creativeengineering:run_speed": {
+    "entrypoints": {
+      "client": "com.SaintAlfonzo.creativeengineering.surface.WthitRunSpeed"
+    },
+    "side": "client",
+    "required": [
+      "blockrunner"
+    ]
+  }
+}

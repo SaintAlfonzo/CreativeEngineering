@@ -1,7 +1,7 @@
 {
   "_readme": [
     "Biome trait table shared by the biome-rule worldgen systems: Creative Delight's wild crops",
-    "(kubejs/data/creative_delight/kubejs/_worldgen/wild_crops.json), mushroom_spawns.json, wild_flowers.json, bee_nests.json and",
+    "(kubejs/data/creativedelight/kubejs/_worldgen/wild_crops.json), mushroom_spawns.json, wild_flowers.json, bee_nests.json and",
     "mob_spawns.json, and their generators in tools/. A rule's 'where' clause means the same thing in every file.",
     "",
     "biomes: every overworld biome -> its traits, space separated. Biomes marked 'ocean' or 'cave' never match a surface rule:",

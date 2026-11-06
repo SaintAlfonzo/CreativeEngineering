@@ -1,0 +1,6 @@
+{
+  "type": "forge:add_features",
+  "biomes": "#creativedelight:has_feature/duck_nest",
+  "features": "creativedelight:nest_duck",
+  "step": "vegetal_decoration"
+}

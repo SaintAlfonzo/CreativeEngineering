@@ -18,6 +18,10 @@ Four sources:
   (nether_fields() over all jars) after adding worldgen mods.
 - Structures: nether_blocks_scan.scan() with nether_block_swaps.json applied (what TemplateBlockSwaps leaves, plus
   the Nether blocks the swaps themselves put in, such as magma and basalt).
+- Structure processors: every worldgen/processor_list json (jars, then kubejs/data wins). A processor can place a
+  block its templates don't hold, so the template scan can't see it: the Nether blocks a processor puts out
+  (output_state of minecraft:rule, any other Name outside predicate keys), per list. Mod processor classes that
+  hardcode blocks are restated in PROCESSOR_CLASSES (decompiled).
 
 "Nether block" is nether_blocks_scan.classify (minecraft: blocks only, tiers 1 to 3). Smooth basalt is not one.
 Writes feature_writeup/nether_worldgen_scan.md.
@@ -86,6 +90,12 @@ CODE_ADDED = {
                                             'granite, glowstone 1-2 thick: 1 layer weight in 5; DesiresLayerPatterns.'
                                             'SPACE_ROCK, Create: Dreams & Desires 1.2c). Create\'s own Overworld '
                                             'layers hold no Nether block (its soul sand/basalt layers are Nether only)'),
+}
+# Mod structure processor classes that place or touch Nether blocks in code (no json to read). id: note
+PROCESSOR_CLASSES = {
+    'betterdungeons:nether_block_processor': 'only removes Nether blocks from YUNG\'s Better Dungeons pieces',
+    'betterfortresses:item_frame_processor': 'Better Nether Fortresses item frames (glowstone dust and the like as '
+                                             'frame items, not blocks); Nether only',
 }
 MAPPING_GLOB = '~/.gradle/caches/forge_gradle/minecraft_user_repo/de/oceanlabs/mcp/mcp_config/1.19.2-*/srg_to_official_1.19.2.tsrg'
 
@@ -232,6 +242,54 @@ def jar_nether_refs(ns, fields):
                 if refs:
                     hits[n.rsplit('/', 1)[-1]] = sorted(refs)
     return hits
+
+
+# ── processors ───────────────────────────────────────────────────────────────
+
+# processor keys naming the block a processor looks for, not what it places (YUNG's block_replace_processor target)
+PROC_INPUT_KEYS = {'target_block', 'input_block', 'input_state', 'input', 'targets'}
+PROC_PREFIX = re.compile(r'^data/([^/]+)/worldgen/processor_list/(.+)\.json$')
+
+
+def processor_rows():
+    """[(list id, source, {nether block: processor types})] for processor lists that output a Nether block, and
+    the number of lists read. kubejs/data overrides a jar's list of the same id."""
+    lists = {}
+    for jar, z, _ in jars():
+        for n in z.namelist():
+            m = PROC_PREFIX.match(n)
+            if m:
+                lists[f'{m[1]}:{m[2]}'] = (jar.name, z.read(n))
+    for f in sorted((ROOT / 'kubejs/data').glob('*/worldgen/processor_list/**/*.json')):
+        m = PROC_PREFIX.match('data/' + f.relative_to(ROOT / 'kubejs/data').as_posix())
+        if m:
+            lists[f'{m[1]}:{m[2]}'] = ('kubejs/data', f.read_bytes())
+    rows = []
+    for lid, (src, raw) in sorted(lists.items()):
+        try:
+            d = loads_lenient(raw.decode('utf-8', 'ignore'))
+        except ValueError:
+            continue
+        procs = d.get('processors', d) if isinstance(d, dict) else d
+        found = defaultdict(set)
+
+        def walk(v, ptype):
+            if isinstance(v, dict):
+                if isinstance(v.get('Name'), str) and N.classify(v['Name']):
+                    found[v['Name']].add(ptype)
+                for k, x in v.items():
+                    if k not in PREDICATE_KEYS and k not in PROC_INPUT_KEYS and not k.endswith('_predicate'):
+                        walk(x, ptype)
+            elif isinstance(v, list):
+                for x in v:
+                    walk(x, ptype)
+
+        for pr in procs if isinstance(procs, list) else []:
+            if isinstance(pr, dict):
+                walk(pr, pr.get('processor_type', '?').removeprefix('minecraft:'))
+        if found:
+            rows.append((lid, src, {b: sorted(t) for b, t in found.items()}))
+    return rows, len(lists)
 
 
 # ── features ─────────────────────────────────────────────────────────────────
@@ -387,7 +445,7 @@ def biome_list(bs, area, limit=8):
     return txt + (f' (+{len(bs) - limit} more)' if len(bs) > limit else '')
 
 
-def write(surface, feats, unresolved, structs, area, overworld):
+def write(surface, feats, unresolved, structs, area, overworld, procs=None):
     L = ['# Nether blocks in Overworld generation (scan)', '',
          'Written by `python3 tools/nether_worldgen_scan.py`. Do not edit. The decision table built from it is '
          '[nether_worldgen.md](nether_worldgen.md). Biome shares are `result_pct` from `biome_config.json` (share of the '
@@ -436,6 +494,20 @@ def write(surface, feats, unresolved, structs, area, overworld):
                      f"{r['tiers'].get(3, '')} | {bl} | {sw} | {sh} |")
         off = [r['id'] for r in structs if r['off'] or r['blocked']]
         L += ['', f"Not live (off or blocked): {', '.join(f'`{s}`' for s in off) or 'none'}."]
+    if procs is not None:
+        rows, n = procs
+        L += ['', '## 4. Structure processors', '',
+              f'{n} processor lists read (jars, kubejs/data wins). Nether blocks a processor puts out (input and '
+              'location predicates skipped): it can place them where the template has none. The lists are not '
+              'tied to a dimension here; check which structures use a hit.', '',
+              '| Processor list | Source | Nether blocks out (processor type) |', '|---|---|---|']
+        for lid, src, found in rows:
+            L.append(f"| `{lid}` | {src.split('-')[0].split('_')[0]} | "
+                     f"{', '.join(f'{short(b)} ({chr(47).join(t)})' for b, t in sorted(found.items()))} |")
+        if not rows:
+            L.append('| none | | |')
+        L += ['', 'Mod processor classes (decompiled, no json): ' +
+              '; '.join(f'`{k}` {v}' for k, v in PROCESSOR_CLASSES.items()) + '.']
     OUT_MD.write_text('\n'.join(L) + '\n')
 
 
@@ -449,12 +521,14 @@ def main():
     feats, unresolved = feature_rows(world, overworld)
     unresolved = check_unresolved(unresolved)
     structs = None if '--no-structures' in sys.argv else N.scan(N.load_swaps())
+    procs = processor_rows()
     if out_json:
         Path(out_json).write_text(json.dumps({'surface': surface, 'features': feats, 'unresolved': unresolved,
                                               'structures': structs}, indent=1, default=sorted))
-    write(surface, feats, unresolved, structs, area, overworld)
+    write(surface, feats, unresolved, structs, area, overworld, procs)
     print(f'{len(surface)} surface rule hits, {len(feats)} features ({len(unresolved)} json-less unchecked)'
-          f'{"" if structs is None else f", {len(structs)} structures"} -> {OUT_MD.relative_to(ROOT)}')
+          f'{"" if structs is None else f", {len(structs)} structures"}, {len(procs[0])} of {procs[1]} processor '
+          f'lists put out Nether blocks -> {OUT_MD.relative_to(ROOT)}')
 
 
 if __name__ == '__main__':

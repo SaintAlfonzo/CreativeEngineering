@@ -1,7 +1,0 @@
-{
-	"parent": "minecraft:item/generated",
-	"textures": {
-		"layer0": "creativeengineering:item/potion_bucket",
-		"layer1": "creativeengineering:item/potion_bucket_liquid"
-	}
-}

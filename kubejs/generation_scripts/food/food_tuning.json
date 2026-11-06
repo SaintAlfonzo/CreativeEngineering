@@ -1,0 +1,8 @@
+{
+	"_readme": "Food tuning config (food.md 3.5, TODO food/types-and-tuning #1; only the golden section is built so far). golden: golden and gilded (enchanted golden) food values are their input food's hunger and saturation times these multipliers, hunger capped at maxHunger; the saturation modifier stays the input's (food.md 3.16, owner 2026-11-02). Read by Creative Delight kubejs_startup/goldenfood/golden_values.js; restart to apply.",
+	"golden": {
+		"golden": 2,
+		"gilded": 4,
+		"maxHunger": 20
+	}
+}

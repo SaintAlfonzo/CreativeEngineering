@@ -1,0 +1,57 @@
+# Run r1102b, slice 2, boot Coff: Creative Delight switches OFF at boot, fresh normal world (prep_srv.sh OUT_C s2c B).
+# Pre-boot (s2_setup.md, Coff): in srv/config/creativedelight-common.toml [qol] remainderBuffer, compost and
+# manualOnlyRoutes = false, [worldgen] wildCrops = false; copy OUT_A/cdq05_on.json (written by s2_A.qb SQ-CDQ-05) to
+# OUT_C/. A restart instead of the queue's "/reload after the switch": the toml is not reread by a running server.
+# Probes: zz_zq_probe.js, zz_count.js. Work area: a stone platform at y 200 above world spawn (marker s2chome).
+pace 2
+
+## SQ-WCD-04 | wildCrops = false: nothing applied, Farmer's wild cabbages back on beaches
+bootexpect Done \(
+bootexpect \[wild-crops\] off in creativedelight-common.toml \[worldgen\] wildCrops
+bootreject \[wild-crops\] \d+ crop modifiers added
+> locate biome minecraft:beach
+waitlog The nearest minecraft:beach 600
+capture BC The nearest minecraft:beach is at \[(-?\d+), (~|-?\d+), (-?\d+)\]
+> forceload add {BC1-48} {BC3-48} {BC1+48} {BC3+48}
+sleep 40
+> zq count {BC1-56} 50 {BC3-56} {BC1+56} 100 {BC3+56} farmersdelight:wild_cabbages
+waitlog \[zq\] count farmersdelight:wild_cabbages 300
+expect \[zq\] count farmersdelight:wild_cabbages: [1-9]
+look a 0 on a small beach strip: retry another beach before calling it a fail (Farmer's own modifier puts wild cabbages on beaches)
+
+## SQ-CDQ-02 | [qol] remainderBuffer = false: the pot throws the milk bottle's glass bottle
+> execute unless entity @e[type=minecraft:marker,tag=s2chome] run summon minecraft:marker ~ 201 ~ {Tags:["s2chome"]}
+sleep 2
+> data get entity @e[type=minecraft:marker,tag=s2chome,limit=1] Pos
+capture C entity data: \[(-?\d+)\.\d+d, (-?\d+)\.\d+d, (-?\d+)\.\d+d\]
+> forceload add {C1-8} {C3-8} {C1+24} {C3+24}
+sleep 5
+> fill {C1-2} {C2-1} {C3-2} {C1+20} {C2-1} {C3+20} minecraft:stone
+> fill {C1-2} {C2} {C3-2} {C1+20} {C2+4} {C3+20} minecraft:air
+> setblock {C1+2} {C2} {C3+2} minecraft:campfire[lit=true]
+> kill @e[type=minecraft:item]
+> setblock {C1+2} {C2+1} {C3+2} farmersdelight:cooking_pot{Inventory:{Size:9,Items:[{Slot:0b,id:"minecraft:glow_berries",Count:1b},{Slot:1b,id:"farmersdelight:milk_bottle",Count:1b},{Slot:2b,id:"minecraft:egg",Count:1b},{Slot:3b,id:"minecraft:sugar",Count:1b}]}}
+sleep 25
+> data get block {C1+2} {C2+1} {C3+2}
+> zcount {C1-1} {C2-1} {C3-1} {C1+5} {C2+3} {C3+5}
+waitlog \[zcount\] entities 30
+expect farmersdelight:glow_berry_custard
+expect item:minecraft:glass_bottle
+look the glass bottle came out as an item entity beside the pot (thrown); the oven half (keeps its leftover, gate CD [cooking] remainderBuffer) is not run: no oven milk-bottle recipe is pinned down for a scripted bake
+
+## SQ-CDQ-05b | [qol] compost = false: the 101 rows fall back to a rule or drop out
+> dumpcompost
+sleep 5
+shell python3 -I -c "import json,collections;on=json.load(open('../cdq05_on.json'))['now'];off=json.load(open('kubejs/exported/compost/compost.json'))['now'];ns=('farmersdelight','fungidelight','veggiesdelight','vintagedelight');k=[x for x,v in on.items() if x.split(':')[0] in ns and v.get('source')=='value'];c=collections.Counter((off.get(x) or {}).get('source','absent') for x in k);print(len(k),'on-value rows; off:',dict(c))"
+shell python3 -I -c "import json,sys;on=json.load(open('../cdq05_on.json'))['now'];off=json.load(open('kubejs/exported/compost/compost.json'))['now'];ns=('farmersdelight','fungidelight','veggiesdelight','vintagedelight');k=[x for x,v in on.items() if x.split(':')[0] in ns and v.get('source')=='value'];sys.exit(any((off.get(x) or {}).get('source')=='value' for x in k))"
+look rows/SQ-CDQ-05b.shell.txt: none of the on-value rows keeps source value (rule or absent)
+
+## SQ-CDQ-06b | manualOnlyRoutes = false: the mods' grid recipes are back
+> zq recipes _manual_only
+> zq recipes veggiesdelight:broccoli_salad
+> zq recipes vintagedelight:pb_j
+> zq recipes fungidelight:inky_cap_salad
+expect recipes matching veggiesdelight:broccoli_salad: [1-9]
+expect recipes matching vintagedelight:pb_j: [1-9]
+expect recipes matching fungidelight:inky_cap_salad: [1-9]
+look the _manual_only list is empty or only holds routes outside the switch (endersdelight, delightful, corn_delight files also use the suffix: judge those as not this switch's)

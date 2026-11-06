@@ -1,0 +1,25 @@
+# Run r1102b, A2: the group A world restarted after w_5_A.qb. Before boot: [worldgen.first_tick_water] windowTicks = 0
+# (w_setup.md A2). The pool_config.json edit (bridge_pillar #2 current 7) was made by SQ-WGE-06c-0.
+pace 2
+
+## SQ-WGE-06c | edited duplicate keeps 7 with no warning (original unchanged)
+bootexpect Done \(
+bootreject piece order changed
+shell python3 -c "import json;e=json.load(open('kubejs/generation_scripts/worldgen/pool_config.json'))['pools']['betterfortresses:bridge']['elements']['betterfortresses:bridge/bridge_pillar #2'];print(e);exit(0 if e['current']==7 else 1)"; r=$?; ! grep -q 'bridge_pillar #2' kubejs/generation_scripts/worldgen/pool_tag_report.md || grep -n 'bridge_pillar #2' kubejs/generation_scripts/worldgen/pool_tag_report.md | grep -v 'piece order changed'; exit $r
+
+## SQ-FTW-06 | windowTicks 0: the torch item drops (no window)
+shell grep -nE '^\s*windowTicks = 0' config/creativeengineering-common.toml
+> pbot spawn ftw 0 -60 0 minecraft:overworld creative
+sleep 3
+pace 1
+> tp ftw -2000 -60 -2000
+sleep 4
+> kill @e[type=minecraft:item]
+> setblock -1997 -60 -2000 minecraft:torch
+> setblock -1998 -60 -2000 minecraft:water
+sleep 3
+> execute positioned -1997 -60 -2000 if entity @e[type=minecraft:item,nbt={Item:{id:"minecraft:torch"}},distance=..8] run say FTW06 torch item
+> execute positioned -1997 -60 -2000 unless entity @e[type=minecraft:item,distance=..8] run say FTW06 no item
+pace 2
+expect FTW06 torch item
+reject FTW06 no item

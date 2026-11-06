@@ -20,17 +20,17 @@ The ask, from cooking.md:
 | Baking overhaul: all cake, pie, cookie, crust and cake base recipes removed and rebuilt on shared bases (cake base, pie crust, frosting, cookie dough) + 2 flavour; pies and cookies oven only; pot pie fillings; crust + filling bakes (2.6) | built, scratch server PASSED 2026-10-22 (probe `tools/baking_probe/baking_probe.js`, 19 of 19: items, no other mod's recipe left, every expected id, no Create / IE base recipe, oven matching, spout recipe). Needs a restart (new items). In game: OV-25 to OV-32 |
 | Opened cans refused as oven ingredients (`BakingRecipe`) | built, scratch server PASSED 2026-10-22 (opened can refused, full can and plain fillings bake); patcherMod 1.1.01, deployed 2026-10-22; OV-29 in game |
 | Ingredient `count` in `creativeengineering:baking` (one slot gives up n items), behind `[cooking] ovenIngredientCounts`, off by default. Off: repeats take one slot each and 9 recipes over 6 slots drop items (2.6.1) | BUILT 2026-10-18, in patcherMod 1.0.8: DEPLOYED with 1.0.8 |
-| Muffin pot recipes on `#forge:dough` | SUPERSEDED 2026-10-29: muffins have no Cooking Pot recipe (3.8, OV-13 dropped, OV-36); the change is in the Creative Delight jar installed 2026-10-31 00:29, not yet booted. TODO `cooking/oven #3` closed by it |
+| Muffin pot recipes on `#forge:dough` | SUPERSEDED 2026-10-29: muffins have no Cooking Pot recipe (3.8, OV-13 dropped, OV-36); scratch server PASSED r1031 (SQ-BJ-01: no pot muffin recipe; deep scan 2026-11-02), OV-36 in game. TODO `cooking/oven #3` closed by it |
 | Crafting recipes: oven (placeholder pattern, 2.1); bakeware by hammering, iron plate -> baking sheet -> muffin tin -> pie tin -> cake pan, on the cutting board or in the grid (2.5) | BUILT 2026-10-18, DEPLOYED with 1.0.8; loaded in single player 2026-10-19 (no script errors), not tested |
 | IE hammer doesn't rotate the cutting board (`#creativeengineering:hammer_no_rotate`, patcherMod `IECompat`) | BUILT 2026-10-18, DEPLOYED with 1.0.8; loaded in single player 2026-10-19 (no errors), not tested |
 | Dummy baking recipes (one per bakeware piece) | REMOVED 2026-10-18 (2.7) |
 
 Files to open first:
 
-- `development/patcherMod/src/main/java/com/SaintAlfonzo/creativeengineering/oven/`: `OvenBlock`, `OvenBlockEntity`,
+- `development/creativeCommon/src/main/java/com/SaintAlfonzo/creativecommon/oven/`: `OvenBlock`, `OvenBlockEntity`,
   `OvenHeat`, `OvenItemHandler`, `OvenMenu`, `OvenResultSlot`, `BakingRecipe`, `OvenRegistry`, `client/OvenScreen`,
   `jei/OvenJeiPlugin`, `jei/BakingRecipeCategory`
-- [kubejs/data/creative_delight/kubejs/creativeengineering/baking.js](../kubejs/data/creative_delight/kubejs/creativeengineering/baking.js): baking and crafting recipes
+- [kubejs/data/creativedelight/kubejs/creativeengineering/baking.js](../kubejs/data/creativedelight/kubejs/creativeengineering/baking.js): baking and crafting recipes
 - [development/creativeDelight/src/main/resources/kubejs_startup/creativeengineering/bakeware.js](../development/creativeDelight/src/main/resources/kubejs_startup/creativeengineering/bakeware.js): bakeware items
 - [development/creativeDelight/src/main/resources/kubejs_startup/creativeengineering/baking_ingredients.js](../development/creativeDelight/src/main/resources/kubejs_startup/creativeengineering/baking_ingredients.js): frosting, cookie dough
 - `global.NCH.ceBaking` in [neoCraftHelper.js](../kubejs/startup_scripts/func/neoCraftHelper.js)
@@ -352,10 +352,12 @@ Every baking recipe asks for bakeware (2.6). The tool is never used up. Filter: 
 
 ### 3.5 Automation (`OvenItemHandler`), the same on every face
 
-- Insert: bakeware to the tool slot; the plating item (what the waiting result needs, or the last recipe's
-  container) to slot 8; anything else to the ingredient slots.
+- Insert: bakeware to the tool slot; a plating container (what the waiting result needs, or what any baking recipe
+  is served in; since 2026-11-03 was only the last recipe's) to slot 8; anything else to the ingredient slots.
 - Extract: output slot, then the two leftover slots (handler slots 10-11).
-- Limit: an item that is the last recipe's plating item can't be inserted as an ingredient by automation.
+- Containers only in slot 8 (2026-11-03, [remainder_buffer.md](remainder_buffer.md) 3.8): the oven's inventory refuses a
+  container in an ingredient slot by hand, shift-click and automation alike, unless a baking recipe also takes it as
+  an ingredient (logged at load).
 
 ### 3.6 Changes from FD's pot
 
@@ -411,13 +413,13 @@ overrides the muffin recipe ids. If muffins still can't be cooked in game, the c
   for `[cooking] recycleShowTicks` (10 ticks) before the result is plated with it ([remainder_buffer.md](remainder_buffer.md)
   3.1, TODO `cooking/kitchen #13`; GameTest RB-T15, RB-14 in game). WTHIT shows the leftover slots ("Holding: ...",
   [wthit_lines.md](wthit_lines.md) 2.9).
-- **Baking audit (2026-10-27, from the 2026-10-24 recipe dump; BUILT, not run in game):** 156 baked foods. Families
+- **Baking audit (2026-10-27, from the 2026-10-24 recipe dump; BUILT, not run in game; boot scratch PASSED r1102b SQ-FFB-00, the family check SQ-FFB-01 and the recipe probe SQ-FFB-02 to -04 open):** 156 baked foods. Families
   restructured the same day ([food_families.md](food_families.md) 4.6: pizza, quiche, lasagna and dessert families,
   `cake/muffin`). New oven members, each sweeping its mod's recipes: Bat, Chorus, Maple and Hostile's seven cookies,
   Gingerbread and Gingerbread Man (COOKIES), Chorus Fruit Pie and Sponge Pie (renamed from Sponge Cake; PIES, no can),
   Rotten, Green and Chorus Flower pie (HAND_PIES, `handPieBake`), Sweet Potato Cupcake (`muffinBake`); Honey Cake takes
   honey bottle + honeycomb. Wheat swap for the rest:
-  [baked_goods.js](../kubejs/data/creative_delight/kubejs/creativeengineering/baked_goods.js) turns the wheat of bread
+  [baked_goods.js](../kubejs/data/creativedelight/kubejs/creativeengineering/baked_goods.js) turns the wheat of bread
   (and Quark's bent bread), Glow Bread, Adzuki Bun, Banana Bread, Strawberry Scones, Strange Eclair, Sweet Potato Dough
   into flour; Rustic batter (pot, Slice & Dice copy, and the egg solution mix) takes wheat flour, cornmeal or rice in
   each grain slot (2026-10-29, `dishes/ingredients #24`; was wheat flour). Left on wheat, not baked: Brewin'
@@ -431,7 +433,7 @@ overrides the muffin recipe ids. If muffins still can't be cooked in game, the c
 
 | File | What |
 |---|---|
-| `development/patcherMod/.../oven/OvenRegistry.java` | block, item, block entity, menu, recipe type + serializer |
+| `development/creativeCommon/.../oven/OvenRegistry.java` | block, item, block entity, menu, recipe type + serializer |
 | `.../oven/OvenBlock.java` | states, use (plate or open), drops, burn on step, particles, comparator |
 | `.../oven/OvenBlockEntity.java` | inventory, tick (heat, bake, plate), xp, save/sync, capability |
 | `.../oven/OvenHeat.java` | heat rule and tags |
@@ -441,23 +443,23 @@ overrides the muffin recipe ids. If muffins still can't be cooked in game, the c
 | `.../oven/client/OvenScreen.java` | GUI on FD's texture |
 | `.../oven/jei/OvenJeiPlugin.java`, `BakingRecipeCategory.java` | JEI page, catalyst, click area, transfer |
 | `.../CreativeEngineering.java` | `OvenRegistry.register`, `MenuScreens.register` |
-| `development/patcherMod/src/main/resources/assets/creativeengineering/{blockstates,models/block,models/item}/oven*.json`, `lang/en_us.json` | models, names |
-| `development/patcherMod/src/main/resources/data/creativeengineering/loot_tables/blocks/oven.json` | drop |
+| `development/creativeCommon/src/main/resources/assets/creativeengineering/{blockstates,models/block,models/item}/oven*.json`, `lang/en_us.json` | models, names |
+| `development/creativeCommon/src/main/resources/data/creativeengineering/loot_tables/blocks/oven.json` | drop |
 | `development/creativeDelight/src/main/resources/kubejs_startup/creativeengineering/bakeware.js` | bakeware items |
 | `development/creativeDelight/src/main/resources/kubejs_startup/creativeengineering/baking_ingredients.js` | frosting, cookie dough (baking overhaul) |
-| `kubejs/data/creative_delight/kubejs/creativeengineering/baking.js` | baking + crafting recipes |
+| `kubejs/data/creativedelight/kubejs/creativeengineering/baking.js` | baking + crafting recipes |
 | `kubejs/server_scripts/cooking/cooking.js` "Muffins" | the dough fix |
 | `kubejs/server_scripts/tags/blocktags.js`, `cookingtags.js` | tags (2.4) |
 | `kubejs/startup_scripts/func/neoCraftHelper.js` | `ceBaking`, `hammering` |
-| `development/patcherMod/.../cooking/RemainderBuffer.java` | `leftovers(..., counts)`: n leftovers for n items taken |
-| `development/patcherMod/.../compat/IECompat.java`, `CreativeEngineering.java` | `registerHammerNoRotate` (cutting board vs IE hammer) |
+| `development/creativeCommon/.../cooking/RemainderBuffer.java` | `leftovers(..., counts)`: n leftovers for n items taken |
+| `development/creativeCommon/.../compat/IECompat.java`, `CreativeEngineering.java` | `registerHammerNoRotate` (cutting board vs IE hammer) |
 | `kubejs/startup_scripts/_lib/item_dict.js`, `block_dict.js` | ids and tag keys |
 
 ## 6. Offline checks
 
 Done 2026-10-18 in a scratch ForgeGradle project (Forge 43.3.9, official mappings, JEI 11.8.1.1034 compile-only,
 FD 1.2.4 at runtime) holding the `oven/` package and a stand-in main class. The patcherMod jar itself wasn't built: it
-needs the ~50 third-party jars in `development/patcherMod/libs/`.
+needs the ~50 third-party jars in `development/creativeCommon/libs/`.
 
 - `compileJava`: clean (the two deprecation warnings are suppressed as in FD).
 - `runGameTestServer`, test datapack (magma/campfire/lava heat tag, iron ingot as bakeware, three test recipes):
@@ -477,6 +479,9 @@ needs the ~50 third-party jars in `development/patcherMod/libs/`.
 The test sources are scratch-only (not in the repo).
 
 ## 7. In-game test suite
+
+- **r1102b 2026-11-02** (scratch server; verdicts in `perf/runs/r1102b/` HANDOVER.md and the slice judged.md): PASS SQ-DB-00, -02.
+- **r1103 2026-11-03** (scratch server; verdicts in `perf/runs/r1103/` FINAL.md and the slice judged.md): PASS SQ-FFB-02, -03, -04.
 
 Needs a patcherMod build in `mods/`.
 
@@ -551,7 +556,7 @@ Needs a patcherMod build in `mods/`.
 - [ ] **OV-35 Dough blocks:** JEI shows Gingerdough, Cookie Dough, Sweet Potato Dough, Oat Dough, Cucumber Dough and
   Sourdough Blocks, each in its dough's colour (inventory, placed, held, breaking particles). 9 of a dough in the grid
   gives its block; the block alone gives 9 back. A shovel breaks them fast, they drop themselves, they sound like slime.
-- [ ] **OV-36 No pot muffins:** JEI blueberry, cranberry and sweet potato muffin -> R: no Cooking Pot and no Create
+- [ ] **OV-36 No pot muffins** (recipe half: scratch server PASSED r1031, SQ-BJ-01; JEI: in game): JEI blueberry, cranberry and sweet potato muffin -> R: no Cooking Pot and no Create
   mixing recipe; the oven (muffin tin, paper) recipe is there for each. Sweet potato muffin also shows its grid craft.
 - [ ] **OV-37 Sweet Potato Muffin name:** the item formerly Sweet Potato Cupcake reads Sweet Potato Muffin in the
   inventory, JEI and the WTHIT line; no item is named Cupcake. (Texture still the cupcake sprite, retexture open.)

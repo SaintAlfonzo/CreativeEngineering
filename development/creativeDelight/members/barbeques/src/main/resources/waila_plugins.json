@@ -1,0 +1,9 @@
+{
+  "barbequesdelight:grill": {
+    "entrypoints": {
+      "common": "com.SaintAlfonzo.creativedelight.barbeques.compat.wthit.BBQWthit",
+      "client": "com.SaintAlfonzo.creativedelight.barbeques.compat.wthit.BBQWthitClient"
+    },
+    "side": "*"
+  }
+}

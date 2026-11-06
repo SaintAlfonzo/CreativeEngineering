@@ -1,0 +1,21 @@
+# Run r1102b, rerun boot B2: the r_B.qb world restarted with only `[worldgen] wildCrops = false` in
+# srv/config/creativedelight-common.toml (r_setup.md, boot 2b). The beach is located far from every chunk r_B.qb
+# generated, so its chunks are new and generate with the switch off. Probes: zz_zq_probe.js.
+pace 2
+
+## SQ-WCD-04 | wildCrops = false: nothing applied, Farmer's wild cabbages back on beaches (beach away from spawn)
+bootexpect Done \(
+bootexpect \[wild-crops\] off in creativedelight-common.toml \[worldgen\] wildCrops
+bootreject \[wild-crops\] \d+ crop modifiers added
+shell grep -n "wildCrops" config/creativedelight-common.toml
+> execute positioned -2500 70 -2500 run locate biome minecraft:beach
+waitlog The nearest minecraft:beach 600
+capture BC The nearest minecraft:beach is at \[(-?\d+), (~|-?\d+), (-?\d+)\]
+> forceload add {BC1-48} {BC3-48} {BC1+48} {BC3+48}
+sleep 40
+> zq count {BC1-56} 50 {BC3-56} {BC1+56} 100 {BC3+56} minecraft:sand
+waitlog \[zq\] count minecraft:sand 300
+> zq count {BC1-56} 50 {BC3-56} {BC1+56} 100 {BC3+56} farmersdelight:wild_cabbages
+waitlog \[zq\] count farmersdelight:wild_cabbages 300
+expect \[zq\] count farmersdelight:wild_cabbages: [1-9]
+look the beach (near -2500 -2500) is new ground (not within 400 blocks of r_B.qb's forceloads); the sand count says how much beach the box holds; 0 cabbages on thousands of sand blocks is a fail

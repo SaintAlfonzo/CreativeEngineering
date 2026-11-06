@@ -1,0 +1,280 @@
+# Run r1102b slice 1, rerun R: the slice-1 rows that failed on batch faults (perf/runs/r1102b/s1/judged.md, "Batch
+# fixes" and "Rerun"), fixed. Same world and srv as Boot A (s1_setup.md: group A superflat, level s1a, probes of Boot A
+# in srv/kubejs/server_scripts). Re-copy tools/vintage_probe/vintage_probe.js to srv/kubejs/server_scripts/zz_vtd_probe.js
+# before the boot (alias of creativebrewing: ids, Turnip Juice pot id).
+# Every world row re-captures H from the s1home marker (forceloaded chunks persist in s1a). Bots of run 1 keep their
+# starter-kit marker, so no kit arrives; each row still removes and clears its bot.
+# Rows SQ-FDB-05 / -07 edit config/farmersdelight-ce-common.toml and wait for Forge's watcher line
+# "Config file farmersdelight-ce-common.toml changed" in logs/debug.log (run 1 has none: the watcher never fired, so
+# the shell step FAILs the row if it stays silent for 20 s). Order: data rows, probes, world rows, toml rows last.
+pace 2
+
+## SQ-CNS-02 | Comfort / Nourishment on eight foods
+> zq food farmersdelight:noodle_soup
+> zq food farmersdelight:beef_stew
+> zq food farmersdelight:bone_broth
+> zq food farmersdelight:dog_food
+> zq food minecraft:golden_carrot
+> zq food minecraft:enchanted_golden_apple
+> zq food delightful:chunkwich
+> zq food delightful:azalea_tea
+expect food farmersdelight:noodle_soup: .*farmersdelight:nourishment amp 0 4800t
+expect food farmersdelight:beef_stew: .*farmersdelight:comfort amp 0 4800t
+reject food farmersdelight:bone_broth: .*(comfort|nourishment)
+expect food farmersdelight:dog_food: .*farmersdelight:comfort amp 0 1200t
+expect food minecraft:golden_carrot: .*farmersdelight:nourishment amp 0 2400t
+expect food minecraft:enchanted_golden_apple: .*farmersdelight:nourishment amp 0 4800t
+expect food minecraft:enchanted_golden_apple: .*minecraft:absorption
+reject food delightful:chunkwich: .*nourishment
+reject food delightful:azalea_tea: .*(comfort|nourishment)
+reject not a food|\[zq\] error
+
+## SQ-FDB-09 | FD backport recipes and the three replaced inputs
+# one query lists every salvaging recipe (20 creativedelight: + 20 sliceanddice: twins, under the 80-line cap); the
+# per-id salvaging queries of run 1 are gone so the counts below see each recipe once
+> zq recipes rope_fence
+> zq recipes gleaming_salad_block
+> zq recipes pumpkin_pie_from_fd_slices
+> zq recipes farmersdelightcutting/salvaging/
+> zq recipes cutting/oak_door
+> zq recipes cutting/oak_sign
+> zq recipes cutting/oak_trapdoor
+> zq rdetail farmersdelight:cooking/rabbit_stew
+> zq rdetail farmersdelight:cooking/vegetable_noodles
+> zq rdetail farmersdelight:cooking/dog_food
+expect creativedelight:[a-z_/]*shaped/rope_fence -> 3 (farmersdelight:)?rope_fence
+expect creativedelight:[a-z_/]*shaped/rope_fence_gate ->
+expect creativedelight:[a-z_/]*gleaming_salad_block ->
+expect creativedelight:[a-z_/]*pumpkin_pie_from_fd_slices ->
+reject recipes matching farmersdelightcutting/salvaging/: \d+ \(first 80 shown\)
+count \] creativedelight:farmersdelightcutting/salvaging/[a-z_]+_furniture -> >= 9
+count \] creativedelight:farmersdelightcutting/salvaging/[a-z_]+_chest_boat -> >= 7
+count \] creativedelight:farmersdelightcutting/salvaging/[a-z_]+_minecart -> == 4
+reject farmersdelight:cutting/oak_(door|sign|trapdoor) ->
+expect farmersdelight:cooking/rabbit_stew \{.*minecraft:potato
+reject farmersdelight:cooking/rabbit_stew \{.*minecraft:baked_potato
+look vegetable noodles take a mushroom tag (several mushroom ids), dog food a raw meat tag (food_type/raw/meat ids); furniture recipes list every part of the wood (0.75 plank chance is in the result, not printed)
+
+## SQ-VP-04 | /vtdtest tags
+> vtdtest tags
+waitlog \[vtdtest\] done tags 120
+expect \[vtdtest\] done tags: \d+ pass, 0 fail
+reject \[vtdtest\] FAIL
+
+## SQ-VP-07 | /vtdtest fluidsrun
+> vtdtest fluidsrun
+waitlog \[vtdtest\] done fluidsrun 120
+expect \[vtdtest\] done fluidsrun: \d+ pass, 0 fail
+reject \[vtdtest\] FAIL
+
+## SQ-VTD6-02 | empty-hand right-click on ripe own-pick crops: fruit only, ages 5 / 5 / 4
+# run 1 left the H2-1 layer open beside the soils, so two fruits fell out of the count box: stone floor now
+> data get entity @e[type=minecraft:marker,tag=s1home,limit=1] Pos
+capture H entity data: \[(-?\d+)\.\d+d, (-?\d+)\.\d+d, (-?\d+)\.\d+d\]
+> fill {H1+9} {H2} {H3-27} {H1+15} {H2+1} {H3-24} minecraft:air
+> fill {H1+9} {H2-1} {H3-27} {H1+15} {H2-1} {H3-24} minecraft:stone
+> setblock {H1+10} {H2-1} {H3-25} minecraft:farmland
+> setblock {H1+12} {H2-1} {H3-25} minecraft:soul_soil
+> setblock {H1+14} {H2-1} {H3-25} minecraft:farmland
+> setblock {H1+10} {H2} {H3-25} vintagedelight:cucumber_crop[age=7]
+> setblock {H1+12} {H2} {H3-25} vintagedelight:ghost_pepper_crop[age=7]
+> setblock {H1+14} {H2} {H3-25} veggiesdelight:zucchini_crop[age=7]
+> kill @e[type=minecraft:item]
+> pbot remove vtd62
+sleep 1
+> pbot spawn vtd62 {H1+12} {H2} {H3-27} minecraft:overworld survival
+sleep 2
+> clear vtd62
+> item replace entity vtd62 weapon.mainhand with minecraft:air
+> pbot use vtd62 {H1+10} {H2} {H3-25}
+> pbot use vtd62 {H1+12} {H2} {H3-25}
+> pbot use vtd62 {H1+14} {H2} {H3-25}
+sleep 2
+> execute if block {H1+10} {H2} {H3-25} vintagedelight:cucumber_crop[age=5] run say VTD602 cucumber age 5
+> execute if block {H1+12} {H2} {H3-25} vintagedelight:ghost_pepper_crop[age=5] run say VTD602 ghost pepper age 5
+> execute if block {H1+14} {H2} {H3-25} veggiesdelight:zucchini_crop[age=4] run say VTD602 zucchini age 4
+> zcount {H1+9} {H2-1} {H3-27} {H1+15} {H2+1} {H3-24}
+waitlog \[zcount\] entities 30
+> data get entity vtd62 Inventory
+expect VTD602 cucumber age 5
+expect VTD602 ghost pepper age 5
+expect VTD602 zucchini age 4
+expect item:vintagedelight:cucumber x|id: "vintagedelight:cucumber"
+expect item:vintagedelight:ghost_pepper x|id: "vintagedelight:ghost_pepper"
+expect item:veggiesdelight:zucchini x|id: "veggiesdelight:zucchini"
+reject (?i)\[zcount\] entities .*item:[a-z_]+:[a-z_]*seeds
+reject (?i)has the following entity data: .*_seeds
+> pbot remove vtd62
+look fruit counts: one use each, so about 1 to 3 of each fruit; "use" replies PASS/SUCCESS logged
+
+## SQ-FDB-06 | Rich Soil Farmland is not trampled (vanilla Farmland is, as a control)
+# run 1: stone-free H2-1 layer let the golems land beside the soils, and the kill found no tagged golem; now a stone
+# floor at the soil level, a 6-block drop, golem positions and an entity count before the kill
+> data get entity @e[type=minecraft:marker,tag=s1home,limit=1] Pos
+capture H entity data: \[(-?\d+)\.\d+d, (-?\d+)\.\d+d, (-?\d+)\.\d+d\]
+> execute positioned {H1+55}.5 {H2} {H3-16}.5 run kill @e[type=minecraft:iron_golem,distance=..12]
+> fill {H1+53} {H2} {H3-17} {H1+58} {H2+8} {H3-15} minecraft:air
+> fill {H1+53} {H2-1} {H3-17} {H1+58} {H2-1} {H3-15} minecraft:stone
+> setblock {H1+54} {H2-1} {H3-16} farmersdelight:rich_soil_farmland
+> setblock {H1+57} {H2-1} {H3-16} minecraft:farmland
+> summon minecraft:iron_golem {H1+54}.5 {H2+6} {H3-16}.5 {Tags:["fdb6"]}
+> summon minecraft:iron_golem {H1+57}.5 {H2+6} {H3-16}.5 {Tags:["fdb6"]}
+sleep 4
+> execute if block {H1+54} {H2-1} {H3-16} farmersdelight:rich_soil_farmland run say FDB06 rich soil farmland kept
+> execute if block {H1+57} {H2-1} {H3-16} minecraft:dirt run say FDB06 control farmland trampled
+> execute positioned {H1+54}.5 {H2} {H3-16}.5 run data get entity @e[type=minecraft:iron_golem,distance=..6,sort=nearest,limit=1] Pos
+> execute positioned {H1+57}.5 {H2} {H3-16}.5 run data get entity @e[type=minecraft:iron_golem,distance=..6,sort=nearest,limit=1] Pos
+> zcount {H1+53} {H2-1} {H3-17} {H1+58} {H2+2} {H3-15}
+> execute positioned {H1+55}.5 {H2} {H3-16}.5 run kill @e[type=minecraft:iron_golem,distance=..12]
+expect FDB06 rich soil farmland kept
+expect FDB06 control farmland trampled
+look golem Pos lines: one golem over each soil (x .5, y = H2); if the control is not trampled, the pack stops all trampling and the row proves nothing
+
+## SQ-FDB-11 | onion from zombie kills with Looting III, knife on pumpkins
+# /loot kill gave no onion in 300 tries in run 1 (the LootJS modifier needs a real kill), so the bot kills real
+# zombies: 1-health zombies under a leather helmet (no sun burn), an arrow owned by the bot dropped on each one.
+# Then 100 kills by ownerless arrows (no player) as the control, then the knife through execute as the bot.
+> data get entity @e[type=minecraft:marker,tag=s1home,limit=1] Pos
+capture H entity data: \[(-?\d+)\.\d+d, (-?\d+)\.\d+d, (-?\d+)\.\d+d\]
+> kill @e[type=minecraft:zombie,tag=fdb11]
+> fill {H1+42} {H2} {H3-32} {H1+52} {H2+4} {H3-26} minecraft:air
+> pbot remove fdb11
+sleep 1
+> pbot spawn fdb11 {H1+47} {H2} {H3-27} minecraft:overworld survival
+sleep 2
+> clear fdb11
+> item replace entity fdb11 weapon.mainhand with minecraft:iron_sword{Enchantments:[{id:"minecraft:looting",lvl:3s}]}
+> data get entity fdb11 UUID
+capture U \[I; ?(-?\d+), ?(-?\d+), ?(-?\d+), ?(-?\d+)\]
+> kill @e[type=minecraft:item]
+> kill @e[type=minecraft:arrow]
+pace 0.1
+repeat 200
+> summon minecraft:zombie {H1+44}.5 {H2} {H3-30}.5 {NoAI:1b,Silent:1b,Health:1.0f,PersistenceRequired:1b,CanPickUpLoot:0b,Tags:["fdb11k"],ArmorItems:[{},{},{},{id:"minecraft:leather_helmet",Count:1b}],ArmorDropChances:[0.0f,0.0f,0.0f,0.0f]}
+> summon minecraft:arrow {H1+44}.5 {H2+3} {H3-30}.5 {Motion:[0.0d,-3.0d,0.0d],damage:4.0d,pickup:0b,Owner:[I;{U1},{U2},{U3},{U4}]}
+end
+pace 2
+sleep 3
+> execute if entity @e[type=minecraft:zombie,tag=fdb11k] run say FDB11 zombies left alive
+> say FDB11 player kills counted
+> zcount {H1+42} {H2-1} {H3-32} {H1+46} {H2+2} {H3-28}
+waitlog \[zcount\] entities 30
+expect \[zcount\] entities .*item:minecraft:rotten_flesh x
+expect \[zcount\] entities .*item:farmersdelight:onion x
+reject FDB11 zombies left alive
+> kill @e[type=minecraft:zombie,tag=fdb11k]
+> kill @e[type=minecraft:item]
+> kill @e[type=minecraft:arrow]
+pace 0.1
+repeat 100
+> summon minecraft:zombie {H1+44}.5 {H2} {H3-30}.5 {NoAI:1b,Silent:1b,Health:1.0f,PersistenceRequired:1b,CanPickUpLoot:0b,Tags:["fdb11k"],ArmorItems:[{},{},{},{id:"minecraft:leather_helmet",Count:1b}],ArmorDropChances:[0.0f,0.0f,0.0f,0.0f]}
+> summon minecraft:arrow {H1+44}.5 {H2+3} {H3-30}.5 {Motion:[0.0d,-3.0d,0.0d],damage:4.0d,pickup:0b}
+end
+pace 2
+sleep 3
+> say FDB11 control (no player) counted
+> zcount {H1+42} {H2-1} {H3-32} {H1+46} {H2+2} {H3-28}
+sleep 2
+> kill @e[type=minecraft:zombie,tag=fdb11k]
+> kill @e[type=minecraft:item]
+> kill @e[type=minecraft:arrow]
+> setblock {H1+51} {H2} {H3-30} minecraft:pumpkin
+> item replace entity fdb11 weapon.mainhand with farmersdelight:iron_knife
+> execute as fdb11 run loot spawn {H1+51} {H2+1} {H3-30} mine {H1+51} {H2} {H3-30} mainhand
+> item replace entity fdb11 weapon.mainhand with farmersdelight:iron_knife{Enchantments:[{id:"minecraft:silk_touch",lvl:1s}]}
+> execute as fdb11 run loot spawn {H1+51} {H2+1} {H3-28} mine {H1+51} {H2} {H3-30} mainhand
+sleep 2
+> zcount {H1+50} {H2} {H3-31} {H1+52} {H2+2} {H3-30}
+> zcount {H1+50} {H2} {H3-29} {H1+52} {H2+2} {H3-27}
+expect \[zcount\] entities .*item:farmersdelight:pumpkin_slice x4
+expect \[zcount\] entities .*item:minecraft:pumpkin x1
+> kill @e[type=minecraft:item]
+> pbot remove fdb11
+look after "player kills counted": onions about 10 of 200 (2 % + 3 x 1 %); after "control (no player)": no onion; first knife zcount: 4 pumpkin_slice, no pumpkin; second (Silk Touch): minecraft:pumpkin
+
+## SQ-FDB-05 | vanilla Pumpkin Pie placed as FD / Delightful / Central Kitchen pie by config, live (edits the toml)
+> data get entity @e[type=minecraft:marker,tag=s1home,limit=1] Pos
+capture H entity data: \[(-?\d+)\.\d+d, (-?\d+)\.\d+d, (-?\d+)\.\d+d\]
+> fill {H1+53} {H2-1} {H3-12} {H1+64} {H2+2} {H3-6} minecraft:air
+> fill {H1+53} {H2-1} {H3-12} {H1+64} {H2-1} {H3-8} minecraft:stone
+> kill @e[type=minecraft:item]
+> setblock {H1+62} {H2} {H3-10} farmersdelight:cutting_board
+shell grep -n "placeAs" config/farmersdelight-ce-common.toml
+> pbot remove fdb5
+sleep 1
+> pbot spawn fdb5 {H1+58} {H2} {H3-7} minecraft:overworld survival
+sleep 2
+> clear fdb5
+> pbot hold fdb5 minecraft:pumpkin_pie 8
+> pbot use fdb5 {H1+54} {H2-1} {H3-10}
+> pbot use fdb5 {H1+62} {H2} {H3-10}
+shell [ -f logs/debug.log ] || { echo "no logs/debug.log"; exit 1; }; p='Config file farmersdelight-ce-common.toml changed'; n=$(grep -c "$p" logs/debug.log); python3 $INST/tools/scratch_query/qrun.py toml config/farmersdelight-ce-common.toml pumpkin_pie placeAs '"DELIGHTFUL"'; for i in $(seq 40); do [ "$(grep -c "$p" logs/debug.log)" -gt "$n" ] && { echo "reloaded after $i half-seconds"; exit 0; }; sleep 0.5; done; echo "DELIGHTFUL: no reload in 20 s"; exit 1
+sleep 1
+> pbot use fdb5 {H1+56} {H2-1} {H3-10}
+shell p='Config file farmersdelight-ce-common.toml changed'; n=$(grep -c "$p" logs/debug.log); python3 $INST/tools/scratch_query/qrun.py toml config/farmersdelight-ce-common.toml pumpkin_pie placeAs '"CREATE_CENTRAL_KITCHEN"'; for i in $(seq 40); do [ "$(grep -c "$p" logs/debug.log)" -gt "$n" ] && { echo "reloaded after $i half-seconds"; exit 0; }; sleep 0.5; done; echo "CREATE_CENTRAL_KITCHEN: no reload in 20 s"; exit 1
+sleep 1
+> pbot use fdb5 {H1+58} {H2-1} {H3-10}
+shell p='Config file farmersdelight-ce-common.toml changed'; n=$(grep -c "$p" logs/debug.log); python3 $INST/tools/scratch_query/qrun.py toml config/farmersdelight-ce-common.toml pumpkin_pie placeAs '"OFF"'; for i in $(seq 40); do [ "$(grep -c "$p" logs/debug.log)" -gt "$n" ] && { echo "reloaded after $i half-seconds"; exit 0; }; sleep 0.5; done; echo "OFF: no reload in 20 s"; exit 1
+sleep 1
+> pbot use fdb5 {H1+60} {H2-1} {H3-10}
+shell p='Config file farmersdelight-ce-common.toml changed'; n=$(grep -c "$p" logs/debug.log); python3 $INST/tools/scratch_query/qrun.py toml config/farmersdelight-ce-common.toml pumpkin_pie placeAs '"FARMERSDELIGHT"'; for i in $(seq 40); do [ "$(grep -c "$p" logs/debug.log)" -gt "$n" ] && { echo "reloaded after $i half-seconds"; exit 0; }; sleep 0.5; done; echo "FARMERSDELIGHT: no reload in 20 s"; exit 1
+> execute if block {H1+54} {H2} {H3-10} farmersdelight:pumpkin_pie run say FDB05 FD pie
+> execute if block {H1+56} {H2} {H3-10} delightful:pumpkin_pie run say FDB05 Delightful pie
+> execute if block {H1+58} {H2} {H3-10} create_central_kitchen:pumpkin_pie run say FDB05 Central Kitchen pie
+> execute if block {H1+62} {H2+1} {H3-10} minecraft:air run say FDB05 nothing on the cutting board
+> say FDB05 lane +56
+> zcount {H1+56} {H2} {H3-10} {H1+56} {H2} {H3-10}
+> say FDB05 lane +58
+> zcount {H1+58} {H2} {H3-10} {H1+58} {H2} {H3-10}
+> say FDB05 lane +60
+> zcount {H1+60} {H2} {H3-10} {H1+60} {H2} {H3-10}
+> data get block {H1+62} {H2} {H3-10}
+> pbot hold fdb5 farmersdelight:iron_knife
+> pbot use fdb5 {H1+54} {H2} {H3-10}
+sleep 1
+> data get entity fdb5 Inventory
+> zcount {H1+53} {H2} {H3-11} {H1+55} {H2+1} {H3-9}
+expect FDB05 FD pie
+expect FDB05 Delightful pie
+expect FDB05 Central Kitchen pie
+expect FDB05 nothing on the cutting board
+expect (?i)farmersdelight:pumpkin_pie_slice
+> pbot remove fdb5
+look lane zcounts after "lane +56/+58/+60": which pie block each lane got (+60 = OFF: whichever mod acts first, or nothing); the cutting board data shows whether the pie went onto the board as an item (allowed), never a pie block above it; shell lines: each edit "reloaded after N"
+
+## SQ-FDB-07 | farmer villager works Rich Soil Farmland and Fertile Soil (secondary job site); empty list clears it (edits the toml)
+# MCA replaces the summoned villager (run 1: mca:female_villager, tag lost), so the villager is selected by tag or
+# else by MCA type near the lane; run 1's villager is killed first
+> data get entity @e[type=minecraft:marker,tag=s1home,limit=1] Pos
+capture H entity data: \[(-?\d+)\.\d+d, (-?\d+)\.\d+d, (-?\d+)\.\d+d\]
+> execute positioned {H1+76} {H2} {H3-18} run kill @e[type=minecraft:villager,distance=..30]
+> execute positioned {H1+76} {H2} {H3-18} run kill @e[type=mca:female_villager,distance=..30]
+> execute positioned {H1+76} {H2} {H3-18} run kill @e[type=mca:male_villager,distance=..30]
+> fill {H1+68} {H2-1} {H3-28} {H1+84} {H2+3} {H3-8} minecraft:air
+> fill {H1+68} {H2-1} {H3-28} {H1+84} {H2-1} {H3-8} minecraft:grass_block
+> fill {H1+76} {H2-1} {H3-16} {H1+80} {H2-1} {H3-12} farmersdelight:rich_soil_farmland
+> fill {H1+76} {H2-1} {H3-26} {H1+80} {H2-1} {H3-22} immersive_weathering:mulch_block
+> setblock {H1+72} {H2} {H3-14} minecraft:composter
+> kill @e[type=minecraft:item]
+shell grep -n "farmlandBlocks" config/farmersdelight-ce-common.toml
+> summon minecraft:villager {H1+73}.5 {H2} {H3-14}.5 {PersistenceRequired:1b,Tags:["fdb7"],VillagerData:{profession:"minecraft:farmer",level:1,type:"minecraft:plains"},Inventory:[{id:"minecraft:wheat_seeds",Count:16b}]}
+> time set 2000
+sleep 2
+> zcount {H1+68} {H2} {H3-28} {H1+84} {H2+2} {H3-8}
+sleep 118
+> say FDB07 memories, list on
+> data get entity @e[tag=fdb7,limit=1] Brain.memories
+> execute positioned {H1+76} {H2} {H3-18} run data get entity @e[type=mca:female_villager,distance=..30,sort=nearest,limit=1] Brain.memories
+> execute positioned {H1+76} {H2} {H3-18} run data get entity @e[type=mca:male_villager,distance=..30,sort=nearest,limit=1] Brain.memories
+> execute positioned {H1+76} {H2} {H3-18} run data get entity @e[type=mca:female_villager,distance=..30,sort=nearest,limit=1] VillagerData
+> execute positioned {H1+76} {H2} {H3-18} run data get entity @e[type=mca:male_villager,distance=..30,sort=nearest,limit=1] VillagerData
+> zcount {H1+76} {H2} {H3-26} {H1+80} {H2} {H3-12}
+expect (?i)minecraft:secondary_job_site
+shell p='Config file farmersdelight-ce-common.toml changed'; n=$(grep -c "$p" logs/debug.log); python3 $INST/tools/scratch_query/qrun.py toml config/farmersdelight-ce-common.toml villagers farmlandBlocks '[]'; for i in $(seq 40); do [ "$(grep -c "$p" logs/debug.log)" -gt "$n" ] && { echo "reloaded after $i half-seconds"; exit 0; }; sleep 0.5; done; echo "empty list: no reload in 20 s"; exit 1
+sleep 60
+> say FDB07 memories, list empty
+> data get entity @e[tag=fdb7,limit=1] Brain.memories
+> execute positioned {H1+76} {H2} {H3-18} run data get entity @e[type=mca:female_villager,distance=..30,sort=nearest,limit=1] Brain.memories
+> execute positioned {H1+76} {H2} {H3-18} run data get entity @e[type=mca:male_villager,distance=..30,sort=nearest,limit=1] Brain.memories
+shell p='Config file farmersdelight-ce-common.toml changed'; n=$(grep -c "$p" logs/debug.log); python3 $INST/tools/scratch_query/qrun.py toml config/farmersdelight-ce-common.toml villagers farmlandBlocks '["farmersdelight:rich_soil_farmland", "immersive_weathering:mulch_block"]'; for i in $(seq 40); do [ "$(grep -c "$p" logs/debug.log)" -gt "$n" ] && { echo "reloaded after $i half-seconds"; exit 0; }; sleep 0.5; done; echo "restore: no reload in 20 s"; exit 1
+look first zcount: which entity type the summon became; memories after "list on": secondary_job_site lists rich farmland / mulch positions (x 76..80), VillagerData still farmer; second zcount: wheat planted there; after "list empty": secondary_job_site empty or absent. No secondary_job_site at all on an MCA villager = FD's villager hook does not reach MCA brains (memory mca-villager-pathing): needs a boot with MCA overwriteOriginalVillagers false

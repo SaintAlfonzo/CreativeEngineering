@@ -13,15 +13,15 @@ owner said swappers come later, with no notes on timing. Plan only. Feature writ
 | 3 | World half and triggers | Pinned | after row 2; Java |
 
 **Changed since 2026-10-25 (checked 2026-10-31):** item merges are split by group. `kubejs/startup_scripts/_lib/item_merges.js`
-defines `global.addItemMerges(group, pairs)` (groups `pack`, `creative_delight`; a purged id may belong to one group only)
+defines `global.addItemMerges(group, pairs)` (groups `pack`, `creativedelight`; a purged id may belong to one group only)
 and `global.itemMergeRun.recipes / loot / inventory`. The CD group's pairs come from CD startup scripts
 (`kubejs_startup/<mod>/item_merges.js`, e.g. moredelight), and its server half is
-[_core/item_merges.js](../../kubejs/data/creative_delight/kubejs/_core/item_merges.js) (recipes, LootJS, and
+[_core/item_merges.js](../../kubejs/data/creativedelight/kubejs/_core/item_merges.js) (recipes, LootJS, and
 `PlayerEvents.inventoryChanged`). The pack's merge rows for CD foods already moved there (2026-10-27).
 
 ## swappers #1: Swap list format and reader
-`data/creative_delight/swaps/<name>.json`: `{"replaces": {"creative_delight:thing": ["oldmod:thing"]}}`, namespace kept
-since the old mod may be gone, never pruned. Seed from the CD merge pairs (`global.itemMergeGroups.creative_delight`)
+`data/creativedelight/swaps/<name>.json`: `{"replaces": {"creativedelight:thing": ["oldmod:thing"]}}`, namespace kept
+since the old mod may be gone, never pruned. Seed from the CD merge pairs (`global.itemMergeGroups.creativedelight`)
 and members' `removed_items` entries that have a survivor. `addItemMerges` runs at **startup**, so the reader must deliver
 the lists before CD's startup merge scripts: a Java reader in patcherMod (its jar startup loader already reads
 CD's `kubejs_startup/`) exposed as a global, or the lists written as a CD startup script. Decision (Q19): recommend the CD startup script form (no Java,
@@ -29,7 +29,7 @@ same place as today's pairs), with the JSON generated from it for row 3's Java s
 list; malformed file logs and is skipped.
 
 ## swappers #2: Script half
-Feed the lists into `global.addItemMerges('creative_delight', ...)`; the existing `_core/item_merges.js` run then swaps
+Feed the lists into `global.addItemMerges('creativedelight', ...)`; the existing `_core/item_merges.js` run then swaps
 recipes, loot and tags (no new server script). The CD `<mod>/item_merges.js` startup pairs become list entries.
 Test CDS-02: harness (framework #6) shows recipes using the old id now use the survivor.
 

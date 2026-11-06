@@ -31,7 +31,7 @@ about 20 mod configs with their own loot knobs.
 | Post-roll pass + `/loottuning` | LootJS `LootType.CHEST` modifier in `05_tuning.js` | DEPLOYED; nothing logged or tested yet |
 | PneumaticCraft / Lightman chest loot off at the source | `pneumaticcraft-common.toml`, `lightmanscurrency-common.lcconfig` | DEPLOYED 2026-09-27, guarded by bans |
 | LootJS-only scripts + `global.LOOT` | `00_lib.js`, `10`-`40`, `99_debug.js` | DEPLOYED as scaffolding (commented examples of LootJS-only edits) |
-| `/dumploot` | `_lib/loot_dump.js` | Works; last run 2026-10-02 21:54 via `/dumpall` (12,326 live tables). Three tables can't be serialised and are skipped with a warning: `brewinandchewin:blocks/keg`, `farmersrespite:blocks/kettle` (custom copy functions), `myrtrees:blocks/wooden_bucket` |
+| `/dumploot` | `_lib/loot_dump.js` | Works; last run 2026-11-05 22:44 via `/dumpall` (12,931 live tables). Two tables can't be serialised and are skipped with a warning: `farmersrespite:blocks/kettle` (custom copy function with no serializer), `myrtrees:blocks/wooden_bucket` (block-state condition on a missing property). The Brewin' port's keg serialises since the port |
 | Census (this writeup's numbers) | `tools/loot_census.py` -> `loot_census.md` | BUILT; re-run 2026-10-26 (TODO `loot/lootjs-layer #3`, done): 12,342 distinct tables, 472 chest tables; the section 2 numbers below are still the 2026-10-02 run. It lists 1 "unindexed" table, `botania:inject/village_chest`: the pool the pack's own `restoreInjection` puts back, which the generator ignores on purpose |
 | Lootr container swaps | patcherMod | See [structure_tuning.md](structure_tuning.md) 3.6 / ST-14 |
 | Loot catalog (every container table entry by entry, structures, hand-placed containers) | `tools/loot_breakdown.py` -> [loot_catalog/](loot_catalog/README.md) | BUILT 2026-10-03: 383 tables in 47 namespaces, 963 hand-placed containers; read-only reference for writing replacement tables |
@@ -128,7 +128,7 @@ The only chest one is the_dirty_stuff's tobacco chest; that mod didn't load in t
 | Mod jars | `mods/<jar>` -> `data/<ns>/loot_tables/` | everything else; a jar may ship other namespaces (goldenfood ships `minecraft:chests/village/*`) |
 | Pack datapack | `kubejs/data/<ns>/loot_tables/` | 10 files: Lightman's 9 entity/boss coin tiers (overrides), `felsic_gear:blocks/felsic_block` (new, an ore-style drop) |
 | Code only | none | 180 live-only: everycomp 87, creativeengineering 39 (KubeJS blocks), suppsquared 21, supplementaries 13, immersive_weathering 12, tobacconistmod 6 |
-| patcherMod | `development/patcherMod/src/main/resources/data/creativeengineering/loot_tables/` | empty folder |
+| patcherMod | `development/creativeCommon/src/main/resources/data/creativeengineering/loot_tables/` | empty folder |
 
 Folder layout is not a reliable signal. About half the container tables aren't under `chests/`: Terralith
 `village/<type>/`, The Missing Villages `village/<biome>/`, Towns & Towers `village/` + `outpost/`, Wares

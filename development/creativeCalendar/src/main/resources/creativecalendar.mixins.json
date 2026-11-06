@@ -1,0 +1,37 @@
+{
+  "required": true,
+  "minVersion": "0.8",
+  "package": "com.SaintAlfonzo.creativecalendar.mixin",
+  "compatibilityLevel": "JAVA_17",
+  "plugin": "com.SaintAlfonzo.creativecalendar.compat.CalendarMixinPlugin",
+  "mixins": [
+    "CropSeasonGrowHookMixin",
+    "SereneSeasonsMeltThrottleMixin",
+    "SereneSeasonsClockMixin",
+    "SereneSeasonsTimeSkipMixin",
+    "BetterDaysConfigMixin",
+    "BetterDaysTimePauseMixin",
+    "ServerLevelTimePauseMixin",
+    "SeasonBiomeConfigMixin",
+    "SeasonHooksTypesMixin",
+    "SeasonFertilityMixin",
+    "GrassSpreadSeasonMixin",
+    "IWGrowthSeasonMixin",
+    "IWGrassSpreadSeasonMixin",
+    "BotaniaGrassSeasonMixin",
+    "VineryGrassSlabSeasonMixin",
+    "VintageLushGrassSeasonMixin"
+  ],
+  "client": [
+    "SereneSeasonsClientClockMixin",
+    "XaeroTimeInfoMixin",
+    "SeasonHooksClientMixin",
+    "SeasonRainColumnMixin",
+    "SeasonColorUtilMixin",
+    "SeasonHudHelperMixin",
+    "SeasonHudCurrentSeasonMixin",
+    "PrettyRainSeasonMixin",
+    "CoolRainSeasonMixin"
+  ],
+  "server": []
+}

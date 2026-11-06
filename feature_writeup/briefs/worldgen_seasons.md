@@ -1,7 +1,7 @@
 # Brief: worldgen / seasons
 
 Written 2026-10-21 from [todo/TODO.md](../todo/TODO.md) `# worldgen`, Sub `seasons`. Feature writeup:
-[weather.md](../weather.md) (prefix `WE-`). Code: `development/patcherMod/src/main/java/com/SaintAlfonzo/creativeengineering/`
+[weather.md](../weather.md) (prefix `WE-`). Code: `development/creativeCommon/src/main/java/com/SaintAlfonzo/creativecommon/`
 (paths below are relative to it). Both rows are client-side patcherMod work, so test them in a client, not on a
 scratch server.
 

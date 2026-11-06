@@ -1,0 +1,75 @@
+# Creative Equipment (feature_writeup/creative_equipment.md): the pack's gear. Registers the tier shield items, the
+# elytra duplication and backpack skin recipe serializers, the copper tool tier and the stepstool network channel; every
+# id keeps the creativeengineering namespace. Its items made in KubeJS (stepstools, air brake, echo tools, felsic scrap)
+# come from its startup scripts.
+modLoader="javafml"
+loaderVersion="${loader_version_range}"
+license="${mod_license}"
+[[mods]]
+modId="${mod_id}"
+version="${mod_version}"
+displayName="${mod_name}"
+authors="${mod_authors}"
+description='''${mod_description}'''
+
+[[dependencies.creativeequipment]]
+modId="forge"
+mandatory=true
+versionRange="${forge_version_range}"
+ordering="NONE"
+side="BOTH"
+[[dependencies.creativeequipment]]
+modId="minecraft"
+mandatory=true
+versionRange="${minecraft_version_range}"
+ordering="NONE"
+side="BOTH"
+# patcherMod: KubeJS, the shared helpers, the startup script loader and the Common APIs this jar calls
+# (swap/ConfigRename, the damage tag framework, shield/EffectTickContext). Becomes creativecommon at the final swap
+# (creative_split.md 7.6 Q1). The range must exclude every patcherMod that still carries the Equipment classes and mixins
+# (1.1.08 and older: they would register twice).
+[[dependencies.creativeequipment]]
+modId="creativecommon"
+mandatory=true
+versionRange="[1.1.0,)"
+ordering="AFTER"
+side="BOTH"
+# Creative Compat: required by every other Creative jar (creative_split.md 7.6).
+[[dependencies.creativeequipment]]
+modId="creativecompat"
+mandatory=true
+versionRange="[1.0.0,)"
+ordering="AFTER"
+side="BOTH"
+# The mods the gated mixins and listeners target: optional, each mixin is gated on its mod (EquipmentMixinPlugin) and
+# each listener on ModList. No ordering: patcherMod never declared them either, so the load order stays as it was.
+[[dependencies.creativeequipment]]
+modId="sophisticatedbackpacks"
+mandatory=false
+versionRange="*"
+ordering="NONE"
+side="BOTH"
+[[dependencies.creativeequipment]]
+modId="easyelytratakeoff"
+mandatory=false
+versionRange="*"
+ordering="NONE"
+side="BOTH"
+[[dependencies.creativeequipment]]
+modId="everythingcopper"
+mandatory=false
+versionRange="*"
+ordering="NONE"
+side="BOTH"
+[[dependencies.creativeequipment]]
+modId="curios"
+mandatory=false
+versionRange="*"
+ordering="NONE"
+side="BOTH"
+[[dependencies.creativeequipment]]
+modId="nock_enough_arrows"
+mandatory=false
+versionRange="*"
+ordering="NONE"
+side="BOTH"

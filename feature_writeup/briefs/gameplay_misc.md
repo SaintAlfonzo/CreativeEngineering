@@ -28,6 +28,12 @@ patcherMod rows (#9, #14) in one build; #16 last, after its tool art is found (o
 ## misc #2: Campfire fuel blocks and rain
 Status **In Progress** / Work patcherMod (+ KubeJS tags, tooltip) / TODO `gameplay/misc #2`
 
+### Owner decision 2026-11-02 (one system, no new tag)
+- **Rain does not douse a campfire in the vanilla `SIGNAL_FIRE` state.** `CampfireRain` checks that state instead of looking at the block below; no new system.
+- **The signal-fire source list gets coal and charcoal blocks** (hay bale stays, vanilla). The existing `campfire/rain_proof_fuel` tag is that list: the `isSmokeSource` mixin (Build 2) reads it, so one list drives both smoke height and rain. Item fuelling of a campfire stays off (the old unwanted system).
+- The wider block list in Build 1 (coke, petcoke, blaze, magma, other bales, kelp) is not added unless asked; Build 1 shrinks to coal and charcoal blocks.
+- A hay-bale signal fire is therefore also rain-proof (follows from the state rule).
+
 ### Goal
 A campfire on a "fuel block" never goes out in rain and sends up tall smoke; the fuel tag holds every concentrated
 fuel block in the pack; the fuel block says so in its tooltip; nothing else puts such a fire out in rain.
@@ -35,14 +41,14 @@ fuel block in the pack; the fuel block says so in its tooltip; nothing else puts
 ### Now
 - **Built and shipped** (changelog 1.1.01 "Campfires"; the TODO's "patcherMod 1.0.9 in `mods/`, untested" is stale:
   `mods/creativeengineering-1.1.04.jar` today). Scratch PASSED 2026-10-22 (SQ-OM-05, SQ-OM-06).
-  - [campfire/CampfireRain.java](../../development/patcherMod/src/main/java/com/SaintAlfonzo/creativeengineering/campfire/CampfireRain.java)
+  - [campfire/CampfireRain.java](../../development/creativeCommon/src/main/java/com/SaintAlfonzo/creativecommon/campfire/CampfireRain.java)
     (56 lines): lit campfire in `#creativeengineering:campfire/rain_douses`, `isRainingAt(pos.above())`, block below
     not in `#creativeengineering:campfire/rain_proof_fuel` -> out after `[campfire] rainOutTicks` (160; CEConfig.java
     1001-1024, also `rainDouses`). Driven by `mixin/CampfireRainMixin` (RETURN of `cookTick`).
   - Tags filled in [blocktags.js](../../kubejs/server_scripts/tags/blocktags.js) 69-73: `rain_douses` =
     `b.campfire`; `rain_proof_fuel` = `b.coal_block`, `b.quark_charcoal_block`, `b.architects_palette_charcoal_block`
     (block_dict.js 44-47, 161-162). Live dump agrees (3 members).
-  - WTHIT rain line "Rain: Safe (fuel block below)" ([compat/WthitCampfire.java](../../development/patcherMod/src/main/java/com/SaintAlfonzo/creativeengineering/compat/WthitCampfire.java),
+  - WTHIT rain line "Rain: Safe (fuel block below)" ([compat/WthitCampfire.java](../../development/creativeCommon/src/main/java/com/SaintAlfonzo/creativecommon/compat/WthitCampfire.java),
     wthit_lines.md 2.6); JEI Campfire Rules tab reads the same tags (jei_world_tabs.md).
   - Unlit Campfire: `campfireLitTime 0` (burns forever, its own rain check off), `campfireRainUnlitTime = -1`
     (defaultconfigs/unlitcampfire-server.toml 8).
@@ -113,7 +119,7 @@ A cheap block, available before the anvil, that only renames items: costs no lev
 ### Now
 - Renaming is anvil-only today. No mod in `mods/` adds a renaming station (checked jar names 2026-10-31: no anvil,
   rename or name-tag mods). Source of the row: scratchpad 2026-10-21 (the text is only in the TODO now).
-- patcherMod already registers blocks with menus: [oven/OvenRegistry.java](../../development/patcherMod/src/main/java/com/SaintAlfonzo/creativeengineering/oven/OvenRegistry.java)
+- patcherMod already registers blocks with menus: [oven/OvenRegistry.java](../../development/creativeCommon/src/main/java/com/SaintAlfonzo/creativecommon/oven/OvenRegistry.java)
   and `oven/OvenMenu.java` are the pattern (block, block item, menu type, client screen).
 
 ### Build

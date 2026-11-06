@@ -15,8 +15,8 @@ dependencies {
     compileOnly fg.deobf('local:jei-1.19.2-forge:11.8.1.1034')
     // Moonlight (required): rendered item textures for label pictures.
     compileOnly fg.deobf('local:moonlight-1.19.2:2.3.7-forge')
-    // WTHIT lines; the pack's jar, shared with patcherMod
-    compileOnly files('../patcherMod/libs/wthit-1.19.2-forge-5.36.1.jar')
+    // WTHIT lines; the pack's jar, shared with Creative Common
+    compileOnly files('../creativeCommon/libs/wthit-1.19.2-forge-5.36.1.jar')
     // No compile dependency on sticky_it, labels or Create: they are referred to by resource location / mixin
     // target name only (their art is read from the installed jars at runtime).
 }

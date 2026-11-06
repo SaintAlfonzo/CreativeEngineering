@@ -1,0 +1,14 @@
+# Run r1102b, slice 2, boot RDstop: no srv/rustic_upstream (s2_setup.md: rm the srv symlink only, never the instance
+# folder). The boot is EXPECTED TO STOP in mod construction: no console command here, only log and crash-report reads.
+# Runner: as r1102/b3_nodonor.qb (wait for 'reads its textures' in logs/latest.log, a new crash-reports/*.txt, or
+# 'Done (' = FAIL; about 240 s timeout; kill your recorded pid after the FML stop; game_jvms.sh empty), then qrun.py run.
+pace 2
+
+## SQ-RD-02 | Rustic member stops startup naming the missing donor jar
+bootexpect Rustic Delight \(Creative Delight\) reads its textures, models and recipes from the original Rustic Delight jar, which must be in the folder 'rustic_upstream' of the game directory
+bootexpect missing: .*rustic_upstream/rusticdelight-forge-1\.20\.1-1\.7\.0\.jar
+bootexpect https://cdn\.modrinth\.com/data/foa4fGIH/versions/z29Gd3ec/rusticdelight-forge-1\.20\.1-1\.7\.0\.jar \(Modrinth
+bootreject Done \(
+shell grep -n -A6 "reads its textures" logs/latest.log | head -20
+shell f=$(ls -t crash-reports/*.txt 2>/dev/null | head -1); [ -n "$f" ] && { echo "$f"; grep -n -m12 -iE "Description|reads its textures|Suspected Mod|Mod File|Failure message|Caused by" "$f"; }; true
+look the stop blames only Rustic Delight (Creative Delight); the message wording may differ slightly from the Miner's one (DonorJars.verifyOrFail): if a bootexpect misses on wording only, judge from rows/SQ-RD-02.shell.txt

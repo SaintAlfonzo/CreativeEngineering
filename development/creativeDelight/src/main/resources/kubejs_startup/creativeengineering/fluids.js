@@ -5,7 +5,7 @@
 // Pack drink and cooking fluids. Like Central Kitchen's drink fluids they are "virtual": no placed block and no bucket, they live
 // in tanks, basins and pipes only. Ids in _lib/fluid_dict.js ("Pack fluids"), forge:fluid/<name> tags in
 // server_scripts/tags/fluidtags.js, recipes in server_scripts/cooking/cooking.js ("Fluids"). JEI lists every
-// registered fluid (client_scripts/fluid_jei.js) and shows the bottle's effects on the fluid through its Create
+// registered fluid (creativecommon client _lib/fluid_jei.js) and shows the bottle's effects on the fluid through its Create
 // emptying recipe (patcherMod DrinkFluidEffects).
 
 StartupEvents.registry('fluid', e => {
@@ -15,7 +15,7 @@ StartupEvents.registry('fluid', e => {
     // Veggies Delight's juices (feature_writeup/veggies_delight.md 4.9)
     e.create(f.carrot_juice).displayName('Carrot Juice').thinTexture(0xF08A24).bucketColor(0xF08A24).noBucket().noBlock()
     e.create(f.dandelion_juice).displayName('Dandelion Juice').thinTexture(0xEFCF3A).bucketColor(0xEFCF3A).noBucket().noBlock()
-    e.create(f.turnip_water).displayName('Turnip Water').thinTexture(0xE3D5E6).bucketColor(0xE3D5E6).noBucket().noBlock()
+    e.create(f.turnip_water).displayName('Turnip Juice').thinTexture(0xE3D5E6).bucketColor(0xE3D5E6).noBucket().noBlock()
     // Cooking fluids (TODO dishes/ingredients #2): egg solution stands in for egg + milk, frosting for the frosting item
     e.create(f.egg_solution).displayName('Egg Solution').thinTexture(0xF3D97A).bucketColor(0xF3D97A).noBucket().noBlock()
     e.create(f.frosting).displayName('Frosting').thinTexture(0xFFF4F0).bucketColor(0xFFF4F0).noBucket().noBlock()
@@ -32,5 +32,5 @@ StartupEvents.registry('fluid', e => {
     drink(f.cherry_blossom_coffee, 'Cherry Blossom Coffee', 0xD39AA4)
     drink(f.lavender_tea, 'Lavender Tea', 0xA98CCB)
     drink(f.matcha_latte, 'Matcha Latte', 0x9DBE78)
-    drink(f.berry_matcha_latte, 'Berry Matcha Latte', 0xBF6E8C)
+    drink(f.berry_matcha_latte, 'Ice Berry Matcha', 0xBF6E8C)   // renamed (food/drinks #15)
 })

@@ -24,8 +24,8 @@ dependencies {
     // MixinExtras (WrapOperation, ModifyExpressionValue, Local, ...) as upstream uses it. Not bundled: the pack
     // already loads MixinExtras 0.5.4 through other mods. The annotation processor writes the refmap entries.
     compileOnly 'io.github.llamalad7:mixinextras-common:0.4.1'
-    // WTHIT keg lines (wthit_lines.md 2.8); the pack's jar, shared with patcherMod
-    compileOnly files(rootProject.file('development/patcherMod/libs/wthit-1.19.2-forge-5.36.1.jar'))
+    // WTHIT keg lines (wthit_lines.md 2.8); the pack's jar, shared with Creative Common
+    compileOnly files(rootProject.file('development/creativeCommon/libs/wthit-1.19.2-forge-5.36.1.jar'))
     annotationProcessor 'io.github.llamalad7:mixinextras-common:0.4.1'
 }
 

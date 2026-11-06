@@ -4,9 +4,9 @@ tests CDT-; scratch queue SQ-CDT).
 
 Copies real single-line helper calls (`R.<helper>(...)`) from the pack's cooking scripts
 (kubejs/server_scripts/cooking/*.js), unchanged, into
-suite/data/creative_delight/kubejs/_cdtest/cdtest_cooking_mirror.js, inside `global.CD.recipes(() => { ... })`.
+suite/data/creativedelight/kubejs/_cdtest/cdtest_cooking_mirror.js, inside `global.CD.recipes(() => { ... })`.
 The pack keeps its own copy of each line, so every mirrored recipe has a twin: the same path under
-`creativeengineering:` (the pack's line) and under `creative_delight:` (the CD copy). `/cdtest mirror` compares the
+`creativeengineering:` (the pack's line) and under `creativedelight:` (the CD copy). `/cdtest mirror` compares the
 two (type, result, ingredients). That is the test of "existing cooking KubeJS on the new system": the same calls,
 run from a CD script tree through the moved helpers, give the same recipes with only the namespace changed.
 
@@ -26,7 +26,7 @@ import sys
 HERE = os.path.dirname(os.path.abspath(__file__))
 ROOT = os.path.dirname(os.path.dirname(HERE))
 COOKING = os.path.join(ROOT, 'kubejs', 'server_scripts', 'cooking')
-OUT = os.path.join(HERE, 'suite', 'data', 'creative_delight', 'kubejs', '_cdtest', 'cdtest_cooking_mirror.js')
+OUT = os.path.join(HERE, 'suite', 'data', 'creativedelight', 'kubejs', '_cdtest', 'cdtest_cooking_mirror.js')
 
 NEVER = {'remove', 'replaceInput', 'replaceOutput', 'bulk', 'cfg', 'toId', 'withNamespace', 'ns'}
 KNOWN = {'R', 'i', 'f', 'e', 'Item', 'Fluid', 'Ingredient', 'global', 'undefined', 'null', 'true', 'false'}
@@ -87,7 +87,7 @@ def render(picked):
         '// release jar.',
         '//',
         '// Real helper calls from kubejs/server_scripts/cooking/, unchanged, run from Creative Delight\'s script tree',
-        '// inside global.CD.recipes(): each recipe they make is creative_delight:<path>, the twin of the pack\'s',
+        '// inside global.CD.recipes(): each recipe they make is creativedelight:<path>, the twin of the pack\'s',
         '// creativeengineering:<path>. /cdtest mirror compares every twin.',
         '',
         '// One row per mirrored call: the probe reports them and counts the twins.',

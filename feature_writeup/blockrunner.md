@@ -25,7 +25,7 @@ the block you're looking at.
 
 **Open first:** `config/creativeengineering-common.toml` `[surface.speed]` (values),
 [blocktags.js L76-435](../kubejs/server_scripts/tags/blocktags.js#L76-L435) (tier contents),
-[patcherMod surface/](../development/patcherMod/src/main/java/com/SaintAlfonzo/creativeengineering/surface/) (Java behaviour).
+[patcherMod surface/](../development/creativeEngineering/src/main/java/com/SaintAlfonzo/creativeengineering/surface/) (Java behaviour).
 
 **Knobs:** everything is under `[surface]` in `creativeengineering-common.toml`, which shows as one
 "surface" folder in Create's Configs screen (3.7):
@@ -41,7 +41,7 @@ The two `copyCamo`s are independent, and the whole section reloads live when sav
 **Deploy state (2026-09-27 16:45, game closed):** everything is in place:
 - `mods/creativeengineering-1.0.1.jar` matches the build (`md5sum` compared).
 - `config/blockrunner.json` now holds only the basic tiers; it's backed up in `configs_edited/root_config/`.
-- `development/patcherMod/deploy_pending/` is deleted.
+- `development/creativeCommon/deploy_pending/` is deleted.
 - `pack/` manifest is regenerated.
 
 Forge adds the new `[surface.wthit] hideUntyped` key to the toml on the next launch. The
@@ -76,8 +76,9 @@ BlockRunner 4.2.2 (Fuzs) maps blocks to walk-speed multipliers. `config/blockrun
   tagged tiers gets a random one on every reload. A `"block_id"` key in the json always beats tags.
 - **Stock tags:** six basic tiers, `blockrunner:{very_quick, quick, slightly_quick, slightly_slow, slow, very_slow}_blocks`.
   The jar seeds `dirt_path` → quick and `#minecraft:stone_bricks` → slightly_quick. This pack wipes those seeds.
-- **Client options** (`blockrunner-client.toml`): `block_speed_multiplier_tooltip = true` adds a gray
-  "Speed Multiplier: X" line to block items; `disable_field_of_view_changes = true` stops the speed
+- **Client options** (`blockrunner-client.toml`): `block_speed_multiplier_tooltip` adds a gray
+  "Speed Multiplier: X" line to block items; the pack turns it off (2026-11-02, `gameplay/blockrunner #6`: walk speed
+  shows in WTHIT only, 3.8); `disable_field_of_view_changes = true` stops the speed
   change from zooming your FOV.
 
 ## 2. Reference: speed tiers
@@ -181,12 +182,12 @@ in speed order:
 BlockRunner looks speeds up per *block*, not per blockstate, so on its own a sideways sticky piston
 would slow you too.
 
-- **Hook:** [BlockRunnerBlockStateMixin](../development/patcherMod/src/main/java/com/SaintAlfonzo/creativeengineering/mixin/BlockRunnerBlockStateMixin.java)
+- **Hook:** [BlockRunnerBlockStateMixin](../development/creativeEngineering/src/main/java/com/SaintAlfonzo/creativeengineering/mixin/BlockRunnerBlockStateMixin.java)
   injects at every return of BlockRunner's own `blockrunner$tryAddBlockSpeed`. That method is merged
   into `LivingEntity` by BlockRunner's mixin, so ours has priority 1500 (Mixin only allows targeting
   another mixin's method from a higher priority) and `require = 0`: if a BlockRunner update renames
   the method, this silently stops instead of crashing the game.
-- **Rule:** [StickyFacing](../development/patcherMod/src/main/java/com/SaintAlfonzo/creativeengineering/surface/StickyFacing.java)
+- **Rule:** [StickyFacing](../development/creativeEngineering/src/main/java/com/SaintAlfonzo/creativeengineering/surface/StickyFacing.java)
   applies to blocks in `#creativeengineering:blockrunner_face_up`. If the block has a `facing`
   property it must be `up`. If it has a piston `type` property it must be `sticky`, since vanilla and
   Create piston heads are shared by plain and sticky pistons. Otherwise BlockRunner's modifier is removed.
@@ -202,22 +203,22 @@ would slow you too.
 With `[surface.camouflage] copyCamo = true`, a framed or copycat block walks like the block it's
 disguised as: framed concrete runs like concrete, framed honey drags like honey.
 
-- **Speed:** [CamoSpeed](../development/patcherMod/src/main/java/com/SaintAlfonzo/creativeengineering/surface/CamoSpeed.java)
+- **Speed:** [CamoSpeed](../development/creativeEngineering/src/main/java/com/SaintAlfonzo/creativeengineering/surface/CamoSpeed.java)
   runs from the same hook as 3.2. On a `#creativeengineering:camo_speed` block it reads the camo and
   swaps BlockRunner's modifier for the one the camo block's own tier gives (same UUID, same formula).
   It keeps the flat tier for an empty frame, a frame disguised as another frame, or while flying.
 - **Reading the camo:** FramedBlocks via `FramedBlockEntity#getCamo()` (double blocks: `getCamo()` /
   `getCamoTwo()`). Copycats+ via `ICopycatBlockEntity#getMaterial()`, or its multi-material storage.
   Create's own copycat panel/step via `CopycatBlockEntity#getMaterial()`. The mod-specific code sits in
-  [FramedCamo](../development/patcherMod/src/main/java/com/SaintAlfonzo/creativeengineering/surface/FramedCamo.java) and
-  [CopycatsPlusCamo](../development/patcherMod/src/main/java/com/SaintAlfonzo/creativeengineering/surface/CopycatsPlusCamo.java),
+  [FramedCamo](../development/creativeEngineering/src/main/java/com/SaintAlfonzo/creativeengineering/surface/FramedCamo.java) and
+  [CopycatsPlusCamo](../development/creativeEngineering/src/main/java/com/SaintAlfonzo/creativeengineering/surface/CopycatsPlusCamo.java),
   loaded only when that mod is present.
 - **Multi-material blocks use the newest camo:**
   - Which blocks: FramedBlocks double blocks (double slab/panel/stairs…) and Copycats+ board, byte,
     byte panel, cogwheel, slab and the half-layer variants.
-  - [FramedDoubleCamoOrderMixin](../development/patcherMod/src/main/java/com/SaintAlfonzo/creativeengineering/mixin/FramedDoubleCamoOrderMixin.java)
+  - [FramedDoubleCamoOrderMixin](../development/creativeEngineering/src/main/java/com/SaintAlfonzo/creativeengineering/mixin/FramedDoubleCamoOrderMixin.java)
     records which half last received a non-empty camo.
-  - [CopycatMaterialOrderMixin](../development/patcherMod/src/main/java/com/SaintAlfonzo/creativeengineering/mixin/CopycatMaterialOrderMixin.java)
+  - [CopycatMaterialOrderMixin](../development/creativeEngineering/src/main/java/com/SaintAlfonzo/creativeengineering/mixin/CopycatMaterialOrderMixin.java)
     records which part last received a real material, and follows parts renamed when a contraption
     rotates the block.
   - Removing a camo doesn't count as inserting one.
@@ -229,12 +230,13 @@ disguised as: framed concrete runs like concrete, framed honey drags like honey.
 - **Fallback when the newest part has been emptied:** framed → the other half. Copycats+ → what's
   left, if it's all one material. Otherwise the flat tier. Blocks filled before this feature have no
   record until a part is re-filled; until then framed doubles use their first half.
-- **Tooltip:** [CamoSpeedTooltip](../development/patcherMod/src/main/java/com/SaintAlfonzo/creativeengineering/surface/CamoSpeedTooltip.java)
+- **Tooltip:** [CamoSpeedTooltip](../development/creativeEngineering/src/main/java/com/SaintAlfonzo/creativeengineering/surface/CamoSpeedTooltip.java)
   replaces BlockRunner's line, same gray style:
   - "Speed Multiplier: matches its camo"
   - "Speed Multiplier: matches its camo (newest camo sets walk behaviors for hybrid blocks)" on hybrid-capable items: framed slab and panel (they merge), every framed double item, and Copycats+ multi-material copycats (your wording, 2026-09-27)
   - "Speed Multiplier: 1.0, no matter its camo" when `copyCamo = false`
-  - Turning BlockRunner's tooltip off hides this too.
+  - Turning BlockRunner's tooltip off hides this too; the pack has it off since 2026-11-02 (`gameplay/blockrunner #6`), so this line
+    is dormant and WTHIT is the place to read camo walk speed.
 - **Config:** `copyCamo` must be the same on server and client, or movement stutters on these blocks.
 
 ### 3.4 Visual sinking, like soul sand (patcherMod)
@@ -245,14 +247,14 @@ only: collision, hitboxes, movement, mob AI and spawning are untouched.
 - **Where:** entities standing on the top face of a *full* block in `#creativeengineering:sinking`
   (soft, dust, spongy, very_sticky). Slabs, sensors, carpets on top and layer blocks don't sink.
   Honey (15/16) and mud (14/16) already sink for real.
-- **Blending:** [SinkingRender](../development/patcherMod/src/main/java/com/SaintAlfonzo/creativeengineering/surface/SinkingRender.java)
+- **Blending:** [SinkingRender](../development/creativeEngineering/src/main/java/com/SaintAlfonzo/creativeengineering/surface/SinkingRender.java)
   works the depth out at the entity's previous-tick and current-tick positions and blends by partial
   tick, exactly like a real position change. Stepping on, off, landing and jumping all ease over one
   tick. Riders sink with their mount.
-- **Camera:** [CameraSinkMixin](../development/patcherMod/src/main/java/com/SaintAlfonzo/creativeengineering/mixin/CameraSinkMixin.java)
+- **Camera:** [CameraSinkMixin](../development/creativeEngineering/src/main/java/com/SaintAlfonzo/creativeengineering/mixin/CameraSinkMixin.java)
   lowers the eye Y in `Camera#setup` *before* the third-person pull-back, so first person, third
   person and fog/underwater checks all match a real sink.
-- **Models:** [EntitySinkRenderMixin](../development/patcherMod/src/main/java/com/SaintAlfonzo/creativeengineering/mixin/EntitySinkRenderMixin.java)
+- **Models:** [EntitySinkRenderMixin](../development/creativeEngineering/src/main/java/com/SaintAlfonzo/creativeengineering/mixin/EntitySinkRenderMixin.java)
   lowers the renderer offset in `EntityRenderDispatcher#render`. Model and name tag move; the shadow
   stays on the block top and the F3+B hitbox stays true.
 - **Framed / copycat blocks:** with `[surface.sinking] copyCamo = true` (default), a framed or
@@ -284,7 +286,7 @@ resets them with `BlockEvents.modification` (startup, so it needs a game restart
 |---|---|---|
 | `config/creativeengineering-common.toml` | `[surface]`: tier speeds, sticky, camouflage, sinking, wthit (3.7, 3.8) | `configs_edited/root_config/` once a value differs from its default (all defaults on 2026-09-27) |
 | `config/blockrunner.json` | basic tiers + one-off block overrides only | `configs_edited/root_config/blockrunner.json` |
-| `config/blockrunner-client.toml` | tooltip on, FOV change off | `configs_edited/root_config/blockrunner-client.toml` |
+| `config/blockrunner-client.toml` | tooltip off (2026-11-02, was on), FOV change off | `configs_edited/root_config/blockrunner-client.toml` |
 
 ### 3.7 One `[surface]` config section (patcherMod)
 
@@ -293,11 +295,11 @@ Create's Configs screen only shows one common file per mod, so a section (shown 
 folder) keeps it all editable in game.
 
 - **`[surface.speed]`:** one entry per tier, each with a comment listing what the tier holds, range
-  0.05 to 4.0. The list comes from [SurfaceTier](../development/patcherMod/src/main/java/com/SaintAlfonzo/creativeengineering/surface/SurfaceTier.java),
+  0.05 to 4.0. The list comes from [SurfaceTier](../development/creativeEngineering/src/main/java/com/SaintAlfonzo/creativeengineering/surface/SurfaceTier.java),
   whose defaults are the values `blockrunner.json` had on 2026-09-27. A new tier needs an entry there as well as in blocktags.js.
-- **How the speeds reach BlockRunner:** [BlockRunnerSpeedConfigMixin](../development/patcherMod/src/main/java/com/SaintAlfonzo/creativeengineering/mixin/BlockRunnerSpeedConfigMixin.java)
+- **How the speeds reach BlockRunner:** [BlockRunnerSpeedConfigMixin](../development/creativeEngineering/src/main/java/com/SaintAlfonzo/creativeengineering/mixin/BlockRunnerSpeedConfigMixin.java)
   edits the JsonObject BlockRunner reads from `blockrunner.json` just before BlockRunner parses it
-  ([SurfaceSpeeds](../development/patcherMod/src/main/java/com/SaintAlfonzo/creativeengineering/surface/SurfaceSpeeds.java)).
+  ([SurfaceSpeeds](../development/creativeEngineering/src/main/java/com/SaintAlfonzo/creativeengineering/surface/SurfaceSpeeds.java)).
   From there BlockRunner treats the values as its own: they're synced to players on join and on
   `/reload`, and its Speed Multiplier tooltip shows them.
   - A `#blockrunner:surface/*` key left in the json is overridden, with a warning in the log if its
@@ -318,7 +320,7 @@ Looking at a block with WTHIT shows e.g. **Run Speed: 1.50×** (green), with **(
 Slower blocks show red. Frames add "from camo"; a sticky piston that isn't facing up reads 1.00× with
 "sticky face not up".
 
-- **Where the number comes from:** [RunSpeed](../development/patcherMod/src/main/java/com/SaintAlfonzo/creativeengineering/surface/RunSpeed.java)
+- **Where the number comes from:** [RunSpeed](../development/creativeEngineering/src/main/java/com/SaintAlfonzo/creativeengineering/surface/RunSpeed.java)
   reads BlockRunner's own Block-to-speed map, the one movement uses. It then applies the same camo
   and sticky rules as movement: `CamoSpeed.speedCamo` and `StickyFacing.cancels`, shared helpers that
   both paths call. The line always shows what you'd walk at, and a `[surface.speed]` edit shows up
@@ -334,7 +336,7 @@ Slower blocks show red. Frames add "from camo"; a sticky piston that isn't facin
     block slows you from inside (next point).
   - The shape is read with a "standing on top" context, so scaffolding shows its solid top and
     powder snow counts as a surface (Snow tier) only while you wear leather boots.
-- **Blocks that slow you from inside** ([StuckInBlock](../development/patcherMod/src/main/java/com/SaintAlfonzo/creativeengineering/surface/StuckInBlock.java)):
+- **Blocks that slow you from inside** ([StuckInBlock](../development/creativeEngineering/src/main/java/com/SaintAlfonzo/creativeengineering/surface/StuckInBlock.java)):
   their `entityInside` calls `makeStuckInBlock`, which multiplies your move and zeroes your momentum
   every tick. The line shows the real walking speed, `multiplier × (1 − 0.91 × friction)` of normal
   (about 0.45 × the multiplier on a normal floor), times the speed of the block beneath. Noted
@@ -362,8 +364,8 @@ Slower blocks show red. Frames add "from camo"; a sticky piston that isn't facin
 - **Cost:** per WTHIT refresh, one or two collision shapes, one hash lookup for the speed, one cached
   lookup for the tier, and a block-entity read for framed/copycat blocks only. It's client-side only
   with no server traffic, since frames already sync their camo.
-- **Plugin wiring:** [WthitRunSpeed](../development/patcherMod/src/main/java/com/SaintAlfonzo/creativeengineering/surface/WthitRunSpeed.java)
-  is a client-only WTHIT plugin declared in `development/patcherMod/src/main/resources/waila_plugins.json`, which
+- **Plugin wiring:** [WthitRunSpeed](../development/creativeEngineering/src/main/java/com/SaintAlfonzo/creativeengineering/surface/WthitRunSpeed.java)
+  is a client-only WTHIT plugin declared in `development/creativeCommon/src/main/resources/waila_plugins.json`, which
   requires `blockrunner`. It fills the WTHIT line `creativeengineering:run_speed`.
 - **Config `[surface.wthit]`:**
   - `enabled` (true): master switch.
@@ -425,12 +427,12 @@ Slower blocks show red. Frames add "from camo"; a sticky piston that isn't facin
 - Values: `config/creativeengineering-common.toml` `[surface]`; one-offs in [config/blockrunner.json](../config/blockrunner.json); client options in [config/blockrunner-client.toml](../config/blockrunner-client.toml)
 - Tier contents: [kubejs/server_scripts/tags/blocktags.js](../kubejs/server_scripts/tags/blocktags.js#L76-L435)
 - Helpers: [kubejs/startup_scripts/func/tag_helper.js](../kubejs/startup_scripts/func/tag_helper.js) (`addMatching` L36, `_glob` L57, `wipeTag` L102, `overlaps` L188, `mirror` L212)
-- patcherMod behaviour: [surface/](../development/patcherMod/src/main/java/com/SaintAlfonzo/creativeengineering/surface/): SurfaceTier, SurfaceSpeeds, RunSpeed, StuckInBlock, WthitRunSpeed, StickyFacing, CamoSpeed, FramedCamo, CopycatsPlusCamo, CamoSpeedTooltip, SinkingRender, LastInsertedCamo, LastInsertedMaterial
-- patcherMod mixins: BlockRunnerBlockStateMixin, BlockRunnerSpeedConfigMixin, FramedDoubleCamoOrderMixin, CopycatMaterialOrderMixin (common); CameraSinkMixin, EntitySinkRenderMixin (client). All in [mixin/](../development/patcherMod/src/main/java/com/SaintAlfonzo/creativeengineering/mixin/)
-- patcherMod config: [CEConfig.java](../development/patcherMod/src/main/java/com/SaintAlfonzo/creativeengineering/CEConfig.java#L1144) `Surface` (`speed`, `Sticky`, `Camouflage`, `Sinking`, `Wthit`); tooltip and SurfaceSpeeds listeners registered in [CreativeEngineering.java L143, L159-161](../development/patcherMod/src/main/java/com/SaintAlfonzo/creativeengineering/CreativeEngineering.java#L143)
-- Text: [patcherMod lang en_us.json](../development/patcherMod/src/main/resources/assets/creativeengineering/lang/en_us.json) `creativeengineering.tooltip.walk_speed.*` (item tooltip), `creativeengineering.wthit.run_speed*` and `creativeengineering.surface.tier.*` (WTHIT line)
-- Compile-only jars in `development/patcherMod/libs/`: BlockRunner, FramedBlocks, Copycats+, WTHIT
-- WTHIT plugin declaration: [waila_plugins.json](../development/patcherMod/src/main/resources/waila_plugins.json)
+- patcherMod behaviour: [surface/](../development/creativeEngineering/src/main/java/com/SaintAlfonzo/creativeengineering/surface/): SurfaceTier, SurfaceSpeeds, RunSpeed, StuckInBlock, WthitRunSpeed, StickyFacing, CamoSpeed, FramedCamo, CopycatsPlusCamo, CamoSpeedTooltip, SinkingRender, LastInsertedCamo, LastInsertedMaterial
+- patcherMod mixins: BlockRunnerBlockStateMixin, BlockRunnerSpeedConfigMixin, FramedDoubleCamoOrderMixin, CopycatMaterialOrderMixin (common); CameraSinkMixin, EntitySinkRenderMixin (client). All in [mixin/](../development/creativeCommon/src/main/java/com/SaintAlfonzo/creativecommon/mixin/)
+- patcherMod config: [CEConfig.java](../development/creativeCommon/src/main/java/com/SaintAlfonzo/creativecommon/CEConfig.java#L1144) `Surface` (`speed`, `Sticky`, `Camouflage`, `Sinking`, `Wthit`); tooltip and SurfaceSpeeds listeners registered in [CreativeEngineering.java L143, L159-161](../development/creativeCommon/src/main/java/com/SaintAlfonzo/creativecommon/CreativeEngineering.java#L143)
+- Text: [patcherMod lang en_us.json](../development/creativeCommon/src/main/resources/assets/creativecommon/lang/en_us.json) `creativeengineering.tooltip.walk_speed.*` (item tooltip), `creativeengineering.wthit.run_speed*` and `creativeengineering.surface.tier.*` (WTHIT line)
+- Compile-only jars in `development/creativeCommon/libs/`: BlockRunner, FramedBlocks, Copycats+, WTHIT
+- WTHIT plugin declaration: [waila_plugins.json](../development/creativeCommon/src/main/resources/waila_plugins.json)
 - Native property resets: [kubejs/startup_scripts/changes/block_properties.js](../kubejs/startup_scripts/changes/block_properties.js); D&D asphalt keys in [item_dict.js](../kubejs/startup_scripts/_lib/item_dict.js) ("Dreams & Desires" under Create)
 - Tooltip side: [tooltips.md](tooltips.md)
 - Offline tier check: [tools/blockrunner_tag_sim.js](../tools/blockrunner_tag_sim.js)
@@ -515,7 +517,7 @@ Slower blocks show red. Frames add "from camo"; a sticky piston that isn't facin
 **Surface config (3.7, in game since 14:49; the trimmed json needs a restart)**
 - [ ] **BR-39 Section is there:** open Create's Configs screen for Creative Engineering, Common → a **surface** folder holding speed, sticky, camouflage and sinking. `speed` lists all 26 tiers, each showing its description. No `block_sinking` or `camouflage_speed` left at the top level.
 - [ ] **BR-40 Speeds come from the toml:** `latest.log` has `[surface] 26 tier speeds applied to BlockRunner from [surface.speed]` and no `without BlockRunnerSpeedConfigMixin` error (log half seen 2026-09-27 15:21, with the old json still listing the tiers). After a restart with the trimmed json: `M` on asphalt → **+0.05**, on sand → **−0.015**.
-- [ ] **BR-41 Live edit:** in the Configs screen set `surface.speed.asphalt` to 2.0 and save. Step off and back onto asphalt → `M` **+0.1**, and the asphalt item's tooltip reads "Speed Multiplier: 2.0". Set it back to 1.5.
+- [ ] **BR-41 Live edit:** in the Configs screen set `surface.speed.asphalt` to 2.0 and save. Step off and back onto asphalt → `M` **+0.1**, and WTHIT on placed asphalt reads the 2.0 speed. Set it back to 1.5.
 - [ ] **BR-42 Sticky switch:** set `[surface.sticky] faceUpOnly = false`. Step onto a sideways sticky piston → **−0.035**. Set it back to `true` → "no modifier" after stepping off and on.
 - [ ] **BR-43 Hybrid wording:** framed slab, framed panel, a framed double slab, a Copycats+ copycat slab → "Speed Multiplier: matches its camo (newest camo sets walk behaviors for hybrid blocks)". Framed cube → "…matches its camo". (Needs `[surface.camouflage] copyCamo = true`; with false every frame reads "1.0, no matter its camo".)
 
@@ -599,3 +601,11 @@ Slower blocks show red. Frames add "from camo"; a sticky piston that isn't facin
   like before: cauldrons, jelly bottles, plants, the kettle and the wells (furniture). New single ids come from new
   item_dict keys (173 added for the new mods), so a restart is needed. Sim: 6355 ids, 0 overlaps, no dead patterns.
   BR-52 added.
+- 2026-11-01: Vintage Delight port tiered (`vintageport #2`, [vintage_delight.md](vintage_delight.md) 4.0 step 21): crates
+  wood, oat bag and bale soft (changed 2026-11-02, see below), salt bricks and mixed salt bricks constructed brick, Smooth Salt Block and Salt
+  Pillar constructed smooth, the salt blocks (The Salt's Salt Block and raw rock salt block, Vintage's Salt Block)
+  soft (changed 2026-11-02, see below), Cheese and Meat Pizza confectionery. Sim: 6453 ids, 0 overlaps; jars, machines and wild plants left
+  untiered. Test SQ-VTD7-02.
+- 2026-11-02: owner decision on the r1102b SQ-VTD7-02 fail: Vintage oat bags and bales, Farmer's Delight straw/rice bales, hay
+  bales and the Salt Blocks (The Salt's Salt Block and raw rock salt block, Vintage's Salt Block) stay in `soft` (0.88x,
+  `blocktags.js` lines 327 and 341-346); the changelog bullet now says 0.88x. SQ-VTD7-02 rewritten to expect `soft`.

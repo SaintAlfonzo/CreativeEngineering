@@ -47,8 +47,8 @@ public final class FDBackportConfig {
 		PIE_PLACEMENT = b.comment("Which placed pie a vanilla Pumpkin Pie becomes when used on a block. Three mods have one:",
 						"FARMERSDELIGHT (Farmer's Delight 1.3.4, slices into Slice of Pumpkin Pie), DELIGHTFUL (Delightful's),",
 						"CREATE_CENTRAL_KITCHEN (Central Kitchen's). OFF leaves it to whichever of those mods acts first.",
-						"Read live: edit and save the file, then place a pie to compare the three in game. A choice whose mod is",
-						"missing falls back to OFF.")
+						"A change needs a restart (an edit of the file while the game runs is not picked up). A choice whose mod",
+						"is missing falls back to OFF.")
 				.defineEnum("placeAs", PiePlacement.FARMERSDELIGHT);
 		PIE_SNEAK_TO_PLACE = b.comment("Only place the pie while sneaking (Farmer's Delight 1.3.4 enablePumpkinPieSneakToPlace).")
 				.define("sneakToPlace", false);

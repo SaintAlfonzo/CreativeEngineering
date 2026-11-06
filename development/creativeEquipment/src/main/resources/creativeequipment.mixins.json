@@ -1,0 +1,31 @@
+{
+  "required": true,
+  "minVersion": "0.8",
+  "package": "com.SaintAlfonzo.creativeequipment.mixin",
+  "compatibilityLevel": "JAVA_17",
+  "plugin": "com.SaintAlfonzo.creativeequipment.EquipmentMixinPlugin",
+  "mixins": [
+    "EntityStepstoolCollisionMixin",
+    "ServerGamePacketListenerStepstoolMixin",
+    "CopperPickaxeItemMixin",
+    "BackpackSkinItemRendererMixin",
+    "BackpackSkinBakedModelMixin",
+    "BackpackSkinBlockEntityMixin",
+    "BackpackSkinBlockShapeMixin",
+    "BackpackSkinWornMixin",
+    "BackpackSkinEquipMixin",
+    "EasyElytraTakeoffHelperMixin",
+    "EasyElytraTakeoffGroundCheckMixin",
+    "ArmorMaterialEnchantabilityMixin",
+    "LivingEntityShieldMixin",
+    "VanillaShieldDurabilityMixin",
+    "VanillaShieldRepairMixin",
+    "ShieldDisableCooldownMixin",
+    "MobShieldDisableMixin",
+    "ShieldDecorationRecipeMixin",
+    "BonemealCharmMixin",
+    "ArmorCapMixin"
+  ],
+  "client": [],
+  "server": []
+}

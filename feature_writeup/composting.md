@@ -13,13 +13,13 @@ Test prefix `CM-` (the backlog proposed `CP-`, which [can_parity.md](can_parity.
 | `/dumpcompost` (before / after / why) and `tools/gen_compost_values.py` (`--add-new` after adding mods, `--check`) | in use |
 | Compost and fertile soil crafting from mulch (in `sawdust.js`) | DEPLOYED; belongs to recipe progression (backlog row 20) |
 
-- **Pending:** seed milling to bone meal (built 2026-10-30, unreleased, TODO `farming/composting #4`, SQ-CP-01 scratch server PASSED r1031 2026-10-31). CM-01 to CM-08 have never been run. Findings F1 to F4 (section 4); none
+- **Pending:** seed milling to bone meal (built 2026-10-30, shipped 1.1.05, TODO `farming/composting #4`, SQ-CP-01 scratch server PASSED r1031 2026-10-31). CM-01 to CM-08 have never been run. Findings F1 to F4 (section 4); none
   needs a decision.
 - **Files to open:** [compost_rules.js](../development/creativeDelight/src/main/resources/kubejs_startup/creativeengineering/compost_rules.js) (categories, exclusions),
   [compost_values.js](../kubejs/startup_scripts/compost/compost_values.js) (per-item chances),
   Creative Delight's `kubejs_startup/<mod>/compost.js` (the Farmer's, Fungi, Veggies and Vintage Delight rows, QoL-4
   since 2026-10-25, switch `[qol] compost`; `values(..., { when })`), patcherMod
-  [func/compost.js](../development/patcherMod/src/main/resources/kubejs_startup/creativeengineering/func/compost.js) (engine).
+  [func/compost.js](../development/creativeCommon/src/main/resources/kubejs_startup/creativecommon/func/compost.js) (engine).
 - **Knobs:** the two data files. After editing: `/kubejs reload startup_scripts`, then `/reload`.
 
 ## 1. Overview
@@ -53,6 +53,7 @@ dedicated server and its clients.
 | leaves | low | leaves tag, `*_leaves` / leaf piles / leaf carpets |
 | flowers | full | flower and petal tags, Botania floating flowers, petals, Floral Enchantments bushes / vines / baskets, flower blocks |
 | mushrooms | high | mushroom tag, mushroom and fungus blocks |
+| doughs | very_high | `#forge:dough` and ids ending in `dough` (Create, oat, cucumber, sweet potato, sourdough, cookie, ginger); owner 2026-11-01 |
 | crops | high | crops, vegetables, fruit, berries, grain, nuts, tea leaves, raw veggie and fruit food types, crop/cocoa/berry/vine/wart blocks |
 | baked | very_high | baked and cooked plant food types, `*bread*` / `*cookie*` (not molasses) |
 | cakes_pies | full | `*pie*` / `*cake*`, cake blocks (not blaze/echo/slime/powder cakes, hats, molasses, plated food) |
@@ -89,7 +90,7 @@ the first rebuild), `now` (each item's chance, whether a value or a rule put it 
 - **Seed milling (2026-10-30, TODO `farming/composting #4`):** `server_scripts/wood/compost.js` mills any seed in
   `#creativeengineering:millable_seeds` into bone meal at 15 % (Create millstone and crushing wheels; the tag is built in
   `tags/wood_tags.js` from `#forge:seeds` and `#c:seeds` minus corn kernels, which mill into cornmeal, and rice). The
-  composter needs about 21 seeds per bone meal; the mill about 7. Test CP-01 (scratch queue SQ-CP-01): PASSED r1031 (2026-10-31). Unreleased (player changelog bullet in `unreleased.md`).
+  composter needs about 21 seeds per bone meal; the mill about 7. Test CP-01 (scratch queue SQ-CP-01): PASSED r1031 (2026-10-31). Shipped 1.1.05 (Gameplay bullet).
 - **Generator:** since 2026-10-25 (creative_delight.md 29) the rows are 35 generated `<mod>/compost_values.js` files in
   Creative Delight's startup tree (`development/creativeDelight/src/main/resources/kubejs_startup/`), and
   `tools/gen_compost_values.py` regenerates them exactly from a `/dumpcompost` (its `value` rows); hand rows go in a
@@ -129,7 +130,7 @@ the first rebuild), `now` (each item's chance, whether a value or a rule put it 
 - [startup_scripts/func/compost.js](../kubejs/startup_scripts/func/compost.js), [development/creativeDelight/src/main/resources/kubejs_startup/creativeengineering/compost_rules.js](../development/creativeDelight/src/main/resources/kubejs_startup/creativeengineering/compost_rules.js), [startup_scripts/compost/compost_values.js](../kubejs/startup_scripts/compost/compost_values.js).
 - [server_scripts/_lib/dump_compost.js](../kubejs/server_scripts/_lib/dump_compost.js) (`/dumpcompost`).
 - [tools/gen_compost_values.py](../tools/gen_compost_values.py).
-- Related recipes: [wood/sawdust.js](../kubejs/server_scripts/wood/sawdust.js) (compost, fertile soil, mulch).
+- Related recipes: [wood/sawdust.js](../kubejs/data/creativeengineering/kubejs/wood/sawdust.js) (compost, fertile soil, mulch).
 
 ## 6. Offline checks
 
@@ -161,3 +162,5 @@ Use a composter and watch its level; or read `/dumpcompost`.
 - 2026-10-19: the Brewin' 4.5.0 port's four chances (kimchi, pickled pickles, quiche, quiche slice) added by hand as
   rows ([alcohol.md](alcohol.md) 10.16); 688 values. Not deployed yet.
 - 2026-10-31: scratchpad notes translated into TODO rows (`farming/composting #5`). No code changed.
+- 2026-11-01: `doughs` category (0.85, before crops) in CD `compost_rules.js`: every dough composts, Create's included
+  (owner, raised by the Vintage dump step `ports/vintageport #2`); SQ-VDF-10. Needs the CD jar.

@@ -35,7 +35,7 @@ def main():
 
 
 def run(s):
-    folder = os.path.join(s, 'kubejs', 'assets', 'creativeengineering', 'changelog')
+    folder = os.path.join(s, 'kubejs', 'assets', 'creativecommon', 'changelog')
     os.makedirs(folder)
     for d in ('history', 'latest'):
         os.makedirs(os.path.join(s, 'deploy', d))

@@ -206,13 +206,13 @@ Status **Planned** · Work: patcherMod · id `potions/effects #3`
 Magic Resistance cuts the same set of sources the shields' MAGIC column blocks.
 
 ### Now
-- [MagicResistanceEffect.java:56](../../development/patcherMod/src/main/java/com/SaintAlfonzo/creativeengineering/potion/MagicResistanceEffect.java):
+- [MagicResistanceEffect.java:56](../../development/creativeCommon/src/main/java/com/SaintAlfonzo/creativecommon/potion/MagicResistanceEffect.java):
   `if (me == null || !event.getSource().isMagic()) return;` (Forge `LivingHurtEvent`, registered at `CreativeEngineering.java:109`).
-- The pack tag `creativeengineering:magic` ([damage_tags/magic.json](../../development/patcherMod/src/main/resources/data/creativeengineering/damage_tags/magic.json))
+- The pack tag `creativeengineering:magic` ([damage_tags/magic.json](../../development/creativeCommon/src/main/resources/data/creativeengineering/damage_tags/magic.json))
   is the live `isMagic()` flag (`DamageFlag.MAGIC`, a built-in flag tag computed per hit) **plus** the ids `magic`,
   `indirectMagic`, `thorns`, `sonic_boom`, `farseer`, plus `#psychic` (`farseer`, `botania-relic`) and `#life_drain`
   (`health_siphon`, `supplementaries.xp_extracting`). It is a strict superset of `isMagic()`.
-- `DamageTags.is(source, tag)` ([damage/DamageTags.java:47](../../development/patcherMod/src/main/java/com/SaintAlfonzo/creativeengineering/damage/DamageTags.java))
+- `DamageTags.is(source, tag)` ([damage/DamageTags.java:47](../../development/creativeCommon/src/main/java/com/SaintAlfonzo/creativecommon/damage/DamageTags.java))
   is thread-safe and cached per (msgId, flag mask). It is preloaded in `commonSetup` (`CreativeEngineering.java:278`)
   against the old `NoClassDefFoundError`.
 
@@ -241,7 +241,7 @@ Tag `creativeengineering:magic` (data, reloadable). Config `[magic_resistance] r
 ### Gotchas
 - Poison ticks are `magic` and stay cut, as today. Shields never block them (`unblockableEffectTicks`); Magic Resistance
   still does. Intended.
-- Before the first data load only the flag tags exist ([DamageTags.java](../../development/patcherMod/src/main/java/com/SaintAlfonzo/creativeengineering/damage/DamageTags.java) javadoc),
+- Before the first data load only the flag tags exist ([DamageTags.java](../../development/creativeCommon/src/main/java/com/SaintAlfonzo/creativecommon/damage/DamageTags.java) javadoc),
   so a hit during world load counts flag-only. Harmless.
 - `/reload` with a datapack that edits `magic.json` changes Magic Resistance too. Worth a sentence in shields.md 2.9.
 
@@ -368,7 +368,7 @@ Know whether the IE Faraday suit protects against shock and electric damage in t
   - Tesla coil (`ieTesla`, `causeTeslaDamage`): low power 0.25 (blocked), high power 2.0 (x1.2 and wear).
 - **Not covered by the suit:** `ieRazorShock` (a plain `IEDamageSource`), lightning (`lightningBolt`), Create Additions'
   `tesla_coil`, SecurityCraft `securitycraft.electricity` / `.taser`, Alex's Mobs and other modded shocks. All of them are
-  in the pack's `electric` damage tag ([electric.json](../../development/patcherMod/src/main/resources/data/creativeengineering/damage_tags/electric.json)),
+  in the pack's `electric` damage tag ([electric.json](../../development/creativeCommon/src/main/resources/data/creativeengineering/damage_tags/electric.json)),
   which only the shields read.
 - The pack doesn't touch the suit: no script references `i.armor_faraday_*` (item_dict 3805-3808).
 - Unverified: how IE's Conductive effect (the pack's copper / iron / gold set drawback) scales electric damage. It is

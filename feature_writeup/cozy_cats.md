@@ -1,6 +1,8 @@
 # Cozy's Improved Cats and Domestication Innovation: overlap and integration report
 
-Investigation written 2026-10-30; **nothing built**. Cozy's Improved Cats 2.1.0 (`cozys_improved_cats`, registry
+Investigation written 2026-10-30. **Built 2026-11-01 (section 10): owner's cat changes (no gender, no ancient fish,
+vanilla fish taming, Cozy owns cat modes, Feather on a Stick lure and hook); not run in game.** The rest of the
+fold-in (section 4) is still planned. Cozy's Improved Cats 2.1.0 (`cozys_improved_cats`, registry
 namespace `cozys-improved-cats`, author Cozy) is a native Forge 1.19.2 build, put in `mods/` on 2026-10-30
 (`cozys-improved-cats-2.1.0-forge-1.19.2.jar`); the game has not booted with it yet. Domestication Innovation 1.6.1
 (`domesticationinnovation`, Alex's) has been in the pack since 2024 and had no report; it is covered here because both
@@ -22,8 +24,9 @@ owner asks for it by name. Upstream bugs are fixed (3.6).
 | Upstream bugs | 3.6 | 4 in Cozy (B1 to B4); none in DI (no `latest.log` errors, all 36 recipes load) |
 | Overlap list | section 2 | the main conflicts are pet revival (DI pet bed vs Cozy collar) and pet commands (DI three-mode vs Cozy four-mode); three pet-bed sets |
 | Fold-in list in build order | section 4 | planned, 17 steps |
-| Decisions for the owner | section 5 | D1 to D10 |
-| Tests | section 8 | CIC-01 to CIC-24 drafted, none run |
+| Decisions for the owner | section 5 | D1 to D10; D2, D5, D9 settled by the owner 2026-11-01 |
+| Owner's cat changes | section 10 | built 2026-11-01 (Creative Compat `cats/`, Creative Delight merge, config); not run |
+| Tests | sections 8, 10.6 | CIC-01 to CIC-36 drafted, none run; scratch SQ-CAT, client CQ-CAT queued |
 
 - **Jars:** `mods/cozys-improved-cats-2.1.0-forge-1.19.2.jar` (jar-in-jar MixinExtras 0.5.4),
   `mods/domesticationinnovation-1.6.1-1.19.2.jar` (needs Citadel, installed). Both unpacked and decompiled under
@@ -224,14 +227,14 @@ CIC-10; 16 before any player-side test.
 | # | Question | Recommendation | Default if not answered |
 |---|---|---|---|
 | D1 | Which revival system for cats? | Cozy's collar for cats (it keeps stats); DI pet beds for every other pet; patcherMod skips DI's respawn request for `improved_cat` | as recommended |
-| D2 | Which command system for cats? | Cozy's four modes; DI's three-mode right-click cancelled on Cozy cats only | as recommended |
+| D2 | Which command system for cats? | Cozy's four modes; DI's three-mode right-click cancelled on Cozy cats only | **built 2026-11-01** (10.3) |
 | D3 | Three pet-bed sets (DI, Redeco, Cozy) | keep all three: DI = respawn, Cozy = cat home, Redeco = decor | keep |
 | D4 | Cats eat only vanilla raw meat and fish | add `food_type/raw/fish` and `/raw/meat` to `cat_food` | add |
-| D5 | Ancient fish as a cod / salmon variant | separate items (taming item); raw and cooked join the fish tags so recipes accept them | separate, tagged |
+| D5 | Ancient fish as a cod / salmon variant | separate items (taming item); raw and cooked join the fish tags so recipes accept them | **owner 2026-11-01: removed, merged into vanilla cod / salmon** (10.2); D6, D8 moot |
 | D6 | 50% ancient fish from every cod / salmon kill | lower to 0.1 (fishing stays 0.05) | 0.1 |
 | D7 | Cat spawns in the crimson forest and the outer End | keep (they give the Nether / End cat lines) | keep |
 | D8 | Cooked ancient fish in cans | treated as cod / salmon in cans (the random effect is lost when canned) | as cod / salmon |
-| D9 | `allowVanillaTaming` | keep off (ancient fish is Cozy's design) | off |
+| D9 | `allowVanillaTaming` | keep off (ancient fish is Cozy's design) | **owner 2026-11-01: on** (10.2) |
 | D10 | Bed revival (`bedRevivalEnabled`, revival at the Cat Bed when the collar is destroyed) | turn on: a lost collar should not end a cat | on |
 
 ## 6. File map (planned)
@@ -242,7 +245,7 @@ CIC-10; 16 before any player-side test.
 | `kubejs/server_scripts/tags/*.js` (through `global.tags`), `blocktags.js` | steps 2, 15 |
 | `development/creativeDelight/src/main/resources/kubejs_startup/cozys-improved-cats/` (recipes, compost) | steps 4, 11 |
 | `kubejs/generation_scripts/food/food_types.json`, `tools/food_families.py`, `tools/gen_stack_sizes.py`, `gen_can_types.py` | steps 8 to 10 |
-| `development/patcherMod`: DI respawn skip, DI cat interact cancel, Dreamer bottles (plus B1 guard if needed) | step 12 |
+| `development/creativeCommon`: DI respawn skip, DI cat interact cancel, Dreamer bottles (plus B1 guard if needed) | step 12 |
 | `kubejs/client_scripts/tooltips.js`, `jei_info.js` | step 13 |
 | `config/cozys_improved_cats-common.toml` + `configs_edited/root_config/` copy | step 16 |
 | `mod_sides.md`; docs: this file, loot.md, mob_spawns.md, food.md, stack_sizes.md, cans.md, TODO, README, changelog | each step |
@@ -257,6 +260,8 @@ CIC-10; 16 before any player-side test.
 - `python3 tools/changelog_lint.py`.
 
 ## 8. In-game test suite (drafted)
+
+- **r1102b 2026-11-02** (scratch server; verdicts in `perf/runs/r1102b/` HANDOVER.md and the slice judged.md): PASS SQ-CAT-01, -02, -03, -04, -05.
 
 | ID | Test | Pass |
 |---|---|---|
@@ -289,3 +294,99 @@ CIC-10; 16 before any player-side test.
 
 - 2026-10-30: investigation written (Cozy jar and decompiled code, DI code and the pack's DI fold-in, overlap search
   against the 2026-10-20 name dump), B1 to B4, D1 to D10. Nothing built.
+- 2026-11-01: owner's changes built (section 10): gender off, ancient fish merged into vanilla fish and their sources
+  off, vanilla fish tame, D2 (Cozy owns cat modes), feather lure on Cozy cats in Wander / Guard, feather hooks mobs for
+  cats to attack with buffs (`[cats]`). Pickup / petting item skipped by the owner. Not run.
+
+## 10. Owner's cat changes (built 2026-11-01)
+
+Asked by the owner 2026-11-01 (scratchpad "improved cats"). Jars `creativecompat-1.0.0.jar` and
+`creativedelight-1.0.0.jar` built and installed 2026-11-01 15:58; not run. The owner skipped the petting / shoulder
+pickup item: in Carry Cats 2.5 pickup is the `B` key while looking at the cat and Cozy's petting is sneak + empty-hand
+use, so they share no input (note: `B` is also Portable Wardrobe "quick swap 5" in the owner's `options.txt`, and
+Carry Cats refuses a sitting cat).
+
+### 10.1 No gender
+
+Config `[toggles] genderSystemEnabled = false`: breeding needs no opposite pair, names are gold, class rolls use the
+neutral table. Cozy still prints "Gender: Unknown" in the stats chat and the Cat Collar tooltip:
+`mixin/CozyMessageGenderMixin` (MessageUtil.send) and `cats/CozyCats.onTooltip` (lowest priority) drop that line.
+Three guide pages that mention genders are rewritten in Creative Compat `assets/creativecompat/kubejs/names.js`.
+Breeding stays (owner).
+
+### 10.2 No ancient fish
+
+- Item merge (Creative Delight group, [item_merges.md](item_merges.md) 2.12): Raw / Cooked Ancient Cod and Salmon ->
+  Cod, Salmon, Cooked Cod, Cooked Salmon (`kubejs_startup/cozys_improved_cats/item_merges.js`); hidden in JEI, tags
+  stripped, recipes, loot and inventories swapped. The Training String recipe becomes cod + salmon + string. The 8
+  smelting / blasting recipes are removed (CD `data/creativedelight/kubejs/cozys_improved_cats/item_merges.js`).
+- Config: `allowVanillaTaming = true` (raw cod and salmon tame, 1 in `tameChance` = 2), `fishingEnabled = false`,
+  fishing and drop chances 0.0. Trade uses stay 10: Cozy's validator refuses 0.
+- Fisherman trades: no Cozy switch, so `CozyCats.onTrades` (VillagerTradesEvent, lowest priority) removes the
+  listings declared in `ModVillagerTrades`.
+- Guide pages on taming, ancient fish, cooked fish, kittens, foods and the Training String rewritten (names.js).
+- Config backed up to `configs_edited/root_config/cozys_improved_cats-common.toml`.
+
+### 10.3 Cozy owns cat modes (D2), guard
+
+DI's `CatMixin` replaces the owner's sit toggle in `Cat.mobInteract` with its follow / wander / stay cycle. A DI
+"stay" sits the cat, which turns Cozy's home goal off (Guard and Wander stop), and DI "wander" fights Cozy's Follow.
+`mixin/CatCozyCommandMixin` injects at the same call (first `setOrderedToSit`, m_21839_) with priority 900, so it is
+applied before DI's (1000) and runs first: on a Cozy cat it does the vanilla toggle and returns vanilla's result;
+other cats keep DI's cycle. A DI command already saved on a Cozy cat is reset to 0 when the cat joins a level
+(`CozyCats.clearDiCommand`). Guard itself is Cozy's (Cat Bed GUI: patrol the home radius, warn the owner, glow the
+first monster inside); nothing is added to it.
+
+### 10.4 Feather on a Stick lure on Cozy cats
+
+DI's feather lands, picks the nearest ambulatory pet (not sitting, not on DI stay) and paths it to the feather every
+tick. On a vanilla cat that works when it is not sitting. On a Cozy cat with a home, Cozy's `CatHomeGoal` (priority 2,
+every tick in Stay, Wander and Guard) stopped it or walked it back to the bed. Now:
+
+| Cozy mode | Vanilla equivalent | Lure |
+|---|---|---|
+| Follow | standing | works (worked before) |
+| Wander, Guard | DI wander | works: `mixin/CozyHomeGoalFeatherMixin` makes the home goal give way while the lure pulls this cat (`CatFeather.chasing`, refreshed by the feather's tick) |
+| Stay | sitting / DI stay | ignored: `DiFeatherEntityMixin` adds Stay to DI's `isPetAmbulatory` |
+| sitting | sitting | ignored (DI) |
+
+### 10.5 Feather on a Stick hooks mobs (`cats/CatFeather`, `[cats]` in `creativecompat-common.toml`)
+
+- `DiFeatherEntityMixin`: DI's feather hits nothing (`canHitEntity` false, empty `onHitEntity`). It now hits the
+  mobs `CatFeather.canHook` allows and sticks to them through the fishing hook's own hooked state
+  (`FishingHook.setHookedEntity`, via ObfuscationReflectionHelper), so it rides the mob like a hooked bobber.
+- Allowed: hostile mobs (`Enemy` and not `NeutralMob`, `hookHostile`, default true); peaceful and neutral mobs
+  (`hookNeutralAndPassive`, default false); players other than the caster (`hookPlayers`, default false, independent of
+  pvp). Never the caster, the caster's own pets (OwnableEntity owner), armour stands or other non-mobs.
+- While hooked, every 10 ticks the caster's tamed cats within 21 blocks of the caster that DI counts as ambulatory
+  (plus the Stay rule) take the mob as target. `FeatherAttackGoal` (MeleeAttackGoal, speed 1.3, priority 1, added to
+  every cat on the server) chases and claws it while the feather holds it, outranking Cozy's home goal and every
+  vanilla cat goal. Unhooked (reeled in, feather gone, mob dead), the goal stops and the cat drops the target.
+- A cat's melee hit on a mob held by its owner's feather (LivingHurtEvent, direct entity the cat) gives the cat
+  Strength, Resistance and Regeneration at `buffLevel` (default 3 = III) for `buffSeconds` (default 10).
+- Reeling in a hooked feather lets go without pulling the mob (`FishingHookFeatherPullMixin`, both sides); it costs 5
+  durability as a fishing rod does.
+- All cats, not only Cozy's. `featherHooksMobs = false` restores DI's pass-through feather.
+- Tooltip line on the feather (Creative Compat `tooltips.js`).
+
+### 10.6 Tests
+
+Scratch server: SQ-CAT-01 to -05; client: CQ-CAT-01 to -10 ([scratch_queue.md](testing/scratch_queue.md)).
+
+| ID | Test | Pass |
+|---|---|---|
+| CIC-25 | Raw Cod / Salmon on a wild cat | tames (about 1 in 2), no ancient fish hint |
+| CIC-26 | Stats chat (Training String) and Cat Collar tooltip | no Gender line |
+| CIC-27 | Breed two tamed cats | any pair breeds |
+| CIC-28 | `/give` Ancient Cod; JEI search "ancient" | turns into Cod; nothing in JEI |
+| CIC-29 | Fisherman level 3 | no ancient fish trades |
+| CIC-30 | Empty-hand click a Cozy cat; a wolf | cat sits / stands, no DI message; wolf cycles DI modes |
+| CIC-31 | Guard mode with a zombie in the home radius | warning, glow, patrol |
+| CIC-32 | Feather on the ground: Follow, Wander, Guard, Stay, sitting | follows in the first three only |
+| CIC-33 | Feather cast at a zombie | sticks; cats attack; buffs after the first hit |
+| CIC-34 | Reel in while hooked | no pull; cats stop |
+| CIC-35 | Feather at cow, wolf, villager, player, own pet | passes through by default; sticks with the two settings on; never own pets |
+| CIC-36 | Cat Care Guide pages | no genders, no ancient fish |
+
+CIC-05, CIC-14 to CIC-18 and CIC-24 (ancient fish taming, fishing, drops, trades, cooked effects) are superseded by
+CIC-25, CIC-28 and CIC-29. CIC-10 is CIC-30.

@@ -286,7 +286,7 @@ public class FacePaperBlock extends Block implements EntityBlock, SimpleWaterlog
             for (int spot = 0; spot < Spots.COUNT; spot++) {
                 NoteData n = c.notes[spot];
                 if (n == null || !NoteColours.GOLD.name().equals(n.special)) continue;
-                Vec3 p = Spots.noteBox(d, c.rotation, spot, c.inset).getCenter();
+                Vec3 p = Spots.noteBox(d, c.rotation, c.place(), spot).getCenter();
                 level.addParticle(ParticleTypes.FIREWORK, pos.getX() + p.x, pos.getY() + p.y, pos.getZ() + p.z,
                         random.nextGaussian() * 0.03, random.nextGaussian() * 0.03, random.nextGaussian() * 0.03);
             }

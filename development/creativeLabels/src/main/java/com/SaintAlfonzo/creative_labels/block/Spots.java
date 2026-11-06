@@ -8,6 +8,8 @@ import net.minecraft.tags.TagKey;
 import net.minecraft.world.level.BlockGetter;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.ChainBlock;
+import net.minecraft.world.level.block.DoorBlock;
+import net.minecraft.world.level.block.TrapDoorBlock;
 import net.minecraft.world.level.block.CrossCollisionBlock;
 import net.minecraft.world.level.block.DirectionalBlock;
 import net.minecraft.world.level.block.AbstractSkullBlock;
@@ -40,7 +42,13 @@ import java.util.List;
  *
  * <p><b>Spots.</b> Five rectangles in that frame: TL, TR, C, BL, BR ({@link #RECTS}). A spot is allowed when the host
  * fills its footprint at the face: class rules first (stairs and slabs through the shape test, posts by class or
- * tag), then the deny tag, then the shape test ({@link #fit}).
+ * tag), then the deny tag, then the shape test ({@link #fit}). Hosts in the centre-note tag take one note centred on
+ * their visible side instead ({@link #centreNoteFit}).
+ *
+ * <p><b>Labels</b> have their own test ({@link #labelSurface}): the host's outline seen from the face, the outermost
+ * surface and everything within {@link #SURFACE_WINDOW} of it, and the largest square there (10 px, or shrunk down to
+ * {@link #MIN_LABEL}). Stairs and slabs keep the five-spot rule (no label on an inset face); doors and trapdoors and
+ * hosts without collision take no label.
  */
 public final class Spots {
 
@@ -82,12 +90,24 @@ public final class Spots {
      */
     public static final float MIN_THICKNESS = 4f / 16f;
 
+    /** Label and centre-note test: half-pixel samples per face edge. */
+    public static final int GRID = 32;
+    /** Label and centre-note test: surfaces up to this far behind the outermost one still count (blocks). */
+    public static final float SURFACE_WINDOW = 1f / 16f;
+    /** Label and centre-note test: the outermost surface may sit at most this deep (blocks; FaceContent's range). */
+    public static final float MAX_SURFACE_INSET = 0.5f;
+    /** Smallest label edge (px); a label shrinks to fit faces smaller than {@link #LABEL_SIZE}. */
+    public static final float MIN_LABEL = 6f;
+
     private static final double EPS = 1e-4;
 
     public static final ResourceLocation DENY_TAG_ID = new ResourceLocation("creative_labels", "paper/deny");
     public static final ResourceLocation POSTS_TAG_ID = new ResourceLocation("creative_labels", "paper/posts");
+    public static final ResourceLocation CENTRE_NOTE_TAG_ID = new ResourceLocation("creative_labels", "paper/centre_note");
+    /** Centre-note hosts whose top takes one note too (Supplementaries jar, Pickling Jar; owner 2026-11-03). */
+    public static final ResourceLocation NOTE_ON_TOP_TAG_ID = new ResourceLocation("creative_labels", "paper/note_on_top");
     @Nullable
-    private static volatile TagKey<Block> denyTag, postsTag;
+    private static volatile TagKey<Block> denyTag, postsTag, centreNoteTag, noteOnTopTag;
 
     private Spots() {}
 
@@ -98,6 +118,16 @@ public final class Spots {
         boolean deny(BlockState host);
 
         boolean post(BlockState host);
+
+        /** One note centred on each side face (jars, sacks, trash cans, botany pots). */
+        default boolean centreNote(BlockState host) {
+            return false;
+        }
+
+        /** A centre-note host whose top takes one centred note (the jar lid); other centre-note tops take none. */
+        default boolean noteOnTop(BlockState host) {
+            return false;
+        }
     }
 
     public static final HostRules TAG_RULES = new HostRules() {
@@ -109,6 +139,16 @@ public final class Spots {
         @Override
         public boolean post(BlockState host) {
             return host.is(postsTag());
+        }
+
+        @Override
+        public boolean centreNote(BlockState host) {
+            return host.is(centreNoteTag());
+        }
+
+        @Override
+        public boolean noteOnTop(BlockState host) {
+            return host.is(noteOnTopTag());
         }
     };
 
@@ -124,9 +164,82 @@ public final class Spots {
         return t;
     }
 
-    /** Result of {@link #fit}: allowed spots (bit i = spot i) and the paper surface depth into the host. */
-    public record Fit(int mask, float inset) {
-        public static final Fit NONE = new Fit(0, 0f);
+    public static TagKey<Block> noteOnTopTag() {
+        TagKey<Block> t = noteOnTopTag;
+        if (t == null) noteOnTopTag = t = TagKey.create(Registry.BLOCK_REGISTRY, NOTE_ON_TOP_TAG_ID);
+        return t;
+    }
+
+    public static TagKey<Block> centreNoteTag() {
+        TagKey<Block> t = centreNoteTag;
+        if (t == null) centreNoteTag = t = TagKey.create(Registry.BLOCK_REGISTRY, CENTRE_NOTE_TAG_ID);
+        return t;
+    }
+
+    /**
+     * Where a face's pieces sit: the paper surface depth into the host (blocks), a shift of the pieces in the face
+     * frame (px; notes: every spot rectangle moves by it, labels: the label's centre moves off (8, 8)) and the label's
+     * edge (px). The default ({@link #at}) is the unshifted layout every face had before centred notes and fitted
+     * labels.
+     */
+    public record Place(float inset, float offX, float offY, float size) {
+        public static final Place ZERO = new Place(0f, 0f, 0f, LABEL_SIZE);
+
+        public static Place at(float inset) {
+            return new Place(inset, 0f, 0f, LABEL_SIZE);
+        }
+
+        public boolean isDefaultLayout() {
+            return offX == 0f && offY == 0f && size == LABEL_SIZE;
+        }
+
+        /** A spot's rectangle moved by the shift. */
+        public float[] noteRect(int spot) {
+            float[] r = RECTS[spot];
+            return new float[]{r[0] + offX, r[1] + offY, r[2] + offX, r[3] + offY};
+        }
+
+        /** The label's square in the face frame. */
+        public float[] labelRect() {
+            float h = size / 2f, cx = 8f + offX, cy = 8f + offY;
+            return new float[]{cx - h, cy - h, cx + h, cy + h};
+        }
+
+        /** Label size relative to the standard 10 px label. */
+        public float labelScale() {
+            return size / LABEL_SIZE;
+        }
+
+        /** A frame x laid out for the standard label (square 3..13) moved onto this label's square. */
+        public double labelX(double fx) {
+            return 8.0 + offX + (fx - 8.0) * labelScale();
+        }
+
+        public double labelY(double fy) {
+            return 8.0 + offY + (fy - 8.0) * labelScale();
+        }
+    }
+
+    /**
+     * Result of {@link #fit}: allowed spots (bit i = spot i), the notes' surface depth into the host and their shift
+     * (px, centred notes only), and where a label would go (null = no label on this face).
+     */
+    public record Fit(int mask, float inset, float noteOffX, float noteOffY, @Nullable Place label) {
+        public static final Fit NONE = new Fit(0, 0f, 0f, 0f, null);
+
+        /** Unshifted notes; a label by the five-spot rule (all five spots, inset within {@link #MAX_INSET}). */
+        public Fit(int mask, float inset) {
+            this(mask, inset, 0f, 0f, mask == ALL && inset <= MAX_INSET + EPS ? Place.at(inset) : null);
+        }
+
+        public Fit withLabel(@Nullable Place l) {
+            return new Fit(mask, inset, noteOffX, noteOffY, l);
+        }
+
+        /** Where the notes sit. */
+        public Place notePlace() {
+            return new Place(inset, noteOffX, noteOffY, LABEL_SIZE);
+        }
 
         public boolean allows(int spot) {
             return (mask & (1 << spot)) != 0;
@@ -145,9 +258,9 @@ public final class Spots {
             return mask == ALL;
         }
 
-        /** A label needs a five-spot face at the boundary or within {@link #MAX_INSET}. */
+        /** A label fits this face ({@link #label} says where). */
         public boolean labelFits() {
-            return fiveSpot() && inset <= MAX_INSET + EPS;
+            return label != null;
         }
 
         /** Spots that fit and are not yet taken. */
@@ -179,7 +292,7 @@ public final class Spots {
         if (block instanceof AbstractSkullBlock) return Fit.NONE;
 
         // Posts: fences, walls, iron bars, glass panes (CrossCollisionBlock, WallBlock), end rods and lightning rods
-        // (RodBlock), chains, or the posts tag: the centre spot on the two end faces of the post's axis.
+        // (RodBlock), chains, or the posts tag: the centre spot on the two end faces of the post's axis. No label.
         if (block instanceof CrossCollisionBlock || block instanceof WallBlock || block instanceof RodBlock
                 || block instanceof ChainBlock || rules.post(host)) {
             Direction.Axis axis = postAxis(host);
@@ -195,8 +308,155 @@ public final class Spots {
         }
 
         // Stairs (StairBlock, any shape) and everything else: the shape test. For straight stairs it yields the
-        // 3.3 table exactly: bottom/back 5, sides 3, front 2, top 2 (verified by SpotsTest).
-        return shapeFit(host.getShape(level, hostPos, CollisionContext.empty()), face, rotation);
+        // 3.3 table exactly: bottom/back 5, sides 3, front 2, top 2 (verified by SpotsTest). Stairs and slabs keep
+        // the five-spot label rule (a label only on a full face at the boundary, never on an inset face).
+        VoxelShape shape = host.getShape(level, hostPos, CollisionContext.empty());
+        if (block instanceof StairBlock || block instanceof SlabBlock) return shapeFit(shape, face, rotation);
+
+        // Centre-note hosts (tag): one note centred on each side face. Tops: only hosts in the note-on-top tag (the
+        // jar and the Pickling Jar, whose lid sits 2.5 px down, too deep for the shape test), one note centred on the
+        // lid; every other centre-note top (sack neck, trash can rim, botany pot soil) and every bottom takes none
+        // (owner 2026-11-03, SQ-LBS-03; the shape test let the jar lid and the sack neck carry spot C).
+        Fit notes;
+        if (!rules.centreNote(host)) notes = shapeFit(shape, face, rotation);
+        else if (face.getAxis().isHorizontal()) notes = centreNoteFit(shape, face, rotation);
+        else if (hostFace == Direction.UP && rules.noteOnTop(host)) notes = centreNoteFit(shape, face, rotation);
+        else notes = Fit.NONE;
+
+        // Labels: the surface test; doors and trapdoors (they swing) and hosts without collision (plants) take none.
+        Place label = null;
+        if (!(block instanceof DoorBlock) && !(block instanceof TrapDoorBlock)
+                && !host.getCollisionShape(level, hostPos, CollisionContext.empty()).isEmpty()) {
+            label = labelSurface(shape, face, rotation);
+        }
+        return notes.withLabel(label);
+    }
+
+    // ------------------------------------------------------------------------------------------ surface test
+
+    /**
+     * Depth (blocks behind the host face's plane) of the first host surface behind each half-pixel sample of the
+     * face, index [x][y] in the face frame; +infinity = nothing behind. Uses the merged outline, so how a shape is
+     * split into boxes (a cauldron's 2 px walls) does not matter, and no thickness limit applies.
+     */
+    public static float[][] surface(VoxelShape hostShape, Direction face, @Nullable Direction rotation) {
+        Direction hostFace = face.getOpposite();
+        List<AABB> boxes = hostShape.toAabbs();
+        float[][] d = new float[GRID][GRID];
+        for (int i = 0; i < GRID; i++) {
+            for (int j = 0; j < GRID; j++) {
+                Vec3 p = hostLocal(face, rotation, (i + 0.5) * 16.0 / GRID, (j + 0.5) * 16.0 / GRID, 0);
+                float best = Float.POSITIVE_INFINITY;
+                for (AABB box : boxes) {
+                    double depth = depthOf(box, hostFace);
+                    if (depth < -EPS || !coversInPlane(box, hostFace, p)) continue;
+                    if (depth < best) best = (float) Math.max(0, depth);
+                }
+                d[i][j] = best;
+            }
+        }
+        return d;
+    }
+
+    /** The outermost surface depth of a surface map, or +infinity when nothing is behind the face. */
+    static float outermost(float[][] d) {
+        float min = Float.POSITIVE_INFINITY;
+        for (float[] col : d) for (float v : col) min = Math.min(min, v);
+        return min;
+    }
+
+    /** Samples whose surface lies within {@link #SURFACE_WINDOW} of the outermost one ({@code d0}). */
+    static boolean[][] usable(float[][] d, float d0) {
+        boolean[][] u = new boolean[GRID][GRID];
+        for (int i = 0; i < GRID; i++) for (int j = 0; j < GRID; j++) u[i][j] = d[i][j] <= d0 + SURFACE_WINDOW + EPS;
+        return u;
+    }
+
+    private static int sample(double px) {
+        return Math.max(0, Math.min(GRID - 1, (int) Math.floor(px * GRID / 16.0)));
+    }
+
+    /**
+     * Where a label goes on this face, or null: the outermost surface (at most {@link #MAX_SURFACE_INSET} deep),
+     * every sample within {@link #SURFACE_WINDOW} of it, and the largest square of such samples nearest the face
+     * centre, capped at {@link #LABEL_SIZE}; under {@link #MIN_LABEL} -> null. Full faces give the standard label.
+     */
+    @Nullable
+    public static Place labelSurface(VoxelShape hostShape, Direction face, @Nullable Direction rotation) {
+        if (hostShape.isEmpty()) return null;
+        float[][] d = surface(hostShape, face, rotation);
+        float d0 = outermost(d);
+        if (d0 > MAX_SURFACE_INSET + EPS) return null;
+        boolean[][] u = usable(d, d0);
+        // s[i][j]: edge (samples) of the largest usable square whose top-right sample is (i, j).
+        int[][] s = new int[GRID][GRID];
+        int maxEdge = 0;
+        for (int i = 0; i < GRID; i++) {
+            for (int j = 0; j < GRID; j++) {
+                if (!u[i][j]) continue;
+                s[i][j] = (i == 0 || j == 0) ? 1 : 1 + Math.min(s[i - 1][j], Math.min(s[i][j - 1], s[i - 1][j - 1]));
+                maxEdge = Math.max(maxEdge, s[i][j]);
+            }
+        }
+        int n = Math.min(maxEdge, Math.round(LABEL_SIZE * GRID / 16f));
+        float size = n * 16f / GRID;
+        if (size < MIN_LABEL - EPS) return null;
+        float bestCx = 8f, bestCy = 8f;
+        double bestDist = Double.MAX_VALUE;
+        for (int i = n - 1; i < GRID; i++) {
+            for (int j = n - 1; j < GRID; j++) {
+                if (s[i][j] < n) continue;
+                float cx = (2 * i - n + 2) * 8f / GRID, cy = (2 * j - n + 2) * 8f / GRID;
+                double dist = (cx - 8.0) * (cx - 8.0) + (cy - 8.0) * (cy - 8.0);
+                if (dist < bestDist - EPS) {
+                    bestDist = dist;
+                    bestCx = cx;
+                    bestCy = cy;
+                }
+            }
+        }
+        return new Place(d0, bestCx - 8f, bestCy - 8f, size);
+    }
+
+    /**
+     * Centre-note hosts (jars, sacks, trash cans, botany pots): only the centre spot, moved to the middle of the
+     * host's visible side (the bounding box of the samples within {@link #SURFACE_WINDOW} of the outermost surface),
+     * at that surface's depth (at most {@link #MAX_SURFACE_INSET}). The note's sample points (as in {@link #shapeFit})
+     * must all lie on that surface.
+     */
+    public static Fit centreNoteFit(VoxelShape hostShape, Direction face, @Nullable Direction rotation) {
+        if (hostShape.isEmpty()) return Fit.NONE;
+        float[][] d = surface(hostShape, face, rotation);
+        float d0 = outermost(d);
+        if (d0 > MAX_SURFACE_INSET + EPS) return Fit.NONE;
+        boolean[][] u = usable(d, d0);
+        int minI = GRID, maxI = -1, minJ = GRID, maxJ = -1;
+        for (int i = 0; i < GRID; i++) {
+            for (int j = 0; j < GRID; j++) {
+                if (!u[i][j]) continue;
+                minI = Math.min(minI, i);
+                maxI = Math.max(maxI, i);
+                minJ = Math.min(minJ, j);
+                maxJ = Math.max(maxJ, j);
+            }
+        }
+        if (maxI < 0) return Fit.NONE;
+        float[] c = RECTS[C];
+        float cx = (minI + maxI + 1) * 8f / GRID, cy = (minJ + maxJ + 1) * 8f / GRID;
+        float offX = clamp(cx - (c[0] + c[2]) / 2f, -c[0], 16f - c[2]);
+        float offY = clamp(cy - (c[1] + c[3]) / 2f, -c[1], 16f - c[3]);
+        for (int sy = 0; sy <= 2; sy++) {
+            for (int sx = 0; sx <= 2; sx++) {
+                float fx = c[0] + offX + EDGE_TOLERANCE + (c[2] - c[0] - 2 * EDGE_TOLERANCE) * sx / 2f;
+                float fy = c[1] + offY + EDGE_TOLERANCE + (c[3] - c[1] - 2 * EDGE_TOLERANCE) * sy / 2f;
+                if (!u[sample(fx)][sample(fy)]) return Fit.NONE;
+            }
+        }
+        return new Fit(CENTRE_ONLY, d0, offX, offY, null);
+    }
+
+    private static float clamp(float v, float lo, float hi) {
+        return Math.max(lo, Math.min(hi, v));
     }
 
     /** Axis of a post-like host: its FACING or AXIS property when it has one, else vertical. */
@@ -344,11 +604,21 @@ public final class Spots {
 
     /** A note's box on a spot: the spot rectangle, from the paper surface out by {@link #NOTE_DEPTH}. */
     public static AABB noteBox(Direction face, @Nullable Direction rotation, int spot, float inset) {
-        return box(face, rotation, RECTS[spot], inset - NOTE_DEPTH / 16.0, inset);
+        return noteBox(face, rotation, Place.at(inset), spot);
+    }
+
+    /** A note's box on a spot of a face laid out by {@code place} (shifted for centred notes). */
+    public static AABB noteBox(Direction face, @Nullable Direction rotation, Place place, int spot) {
+        return box(face, rotation, place.noteRect(spot), place.inset() - NOTE_DEPTH / 16.0, place.inset());
     }
 
     public static AABB labelBox(Direction face, @Nullable Direction rotation, float inset) {
-        return box(face, rotation, LABEL_RECT, inset - LABEL_DEPTH / 16.0, inset);
+        return labelBox(face, rotation, Place.at(inset));
+    }
+
+    /** A label's box: its square from {@code place}, label-thick. */
+    public static AABB labelBox(Direction face, @Nullable Direction rotation, Place place) {
+        return box(face, rotation, place.labelRect(), place.inset() - LABEL_DEPTH / 16.0, place.inset());
     }
 
     /** Covered face (3.3): the whole 16 x 16 panel, note-thick. */
@@ -359,11 +629,11 @@ public final class Spots {
     /** Hit shape of one face: the panel when covered, else every piece's box. Empty for an empty face. */
     public static VoxelShape faceShape(Direction face, FaceContent c) {
         if (c.isEmpty()) return Shapes.empty();
-        if (c.kind == FaceContent.Kind.LABEL) return Shapes.create(labelBox(face, c.rotation, c.inset));
+        if (c.kind == FaceContent.Kind.LABEL) return Shapes.create(labelBox(face, c.rotation, c.place()));
         if (c.isCovered()) return Shapes.create(panelBox(face, c.rotation, c.inset));
         VoxelShape shape = Shapes.empty();
         for (int spot = 0; spot < COUNT; spot++) {
-            if (c.notes[spot] != null) shape = Shapes.or(shape, Shapes.create(noteBox(face, c.rotation, spot, c.inset)));
+            if (c.notes[spot] != null) shape = Shapes.or(shape, Shapes.create(noteBox(face, c.rotation, c.place(), spot)));
         }
         return shape;
     }

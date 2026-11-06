@@ -41,39 +41,12 @@ ServerEvents.tags('item', e => {
 		i.limestone_cut_stairs, i.limestone_cut_wall,
 	])
 
-	
-	// Flower boxes (feature_writeup/flower_pots.md 3.2). Azalea bushes go in no box; Another Furniture's planter box
-	// also takes these plants, drawn with Supplementaries' flower box models (patcherMod PlantBoxModels).
-	t.add(e, 'creativeengineering:not_in_flower_boxes', [i.azalea, i.flowering_azalea])
-	t.add(e, 'another_furniture:planter_box_banned', '#creativeengineering:not_in_flower_boxes')
-	t.add(e, 'another_furniture:planter_box_placeables', [
-		i.beetroot_seeds, i.cactus, i.minecraft_carrot, i.chorus_flower, i.cocoa_beans, i.crimson_roots, i.warped_roots,
-		i.dead_bush, i.grass, i.fern, i.lilac, i.melon_seeds, i.peony, i.minecraft_potato, i.pumpkin_seeds, i.rose_bush, i.sunflower,
-		i.nether_sprouts, i.nether_wart, i.glow_berries, i.glow_lichen,
-	])
-	// The Vinery flower box takes the planter box list (backportedVinery LegacyFlowerBoxBlock)
-	t.addMatching(e, 'creativeengineering:flower_box_plants', '#another_furniture:planter_box_placeables',
-		{ except: '#creativeengineering:not_in_flower_boxes' })
+	// Flower box, planter box, chalk dye and cbmicroblock tags: Creative Compat (creativecompat/kubejs/tags/misctags.js).
 
 	// Seeds missing from forge:seeds (so also from Quark's pouch tag, which nests it)
 	t.add(e, 'forge:seeds', [i.tobacco_seeds, i.hamimelon_seeds, i.lemon_seeds])
 
 	t.add(e, '#forge:animal_fat', [i.animal_fat, i.tallow, i.animal_oil_bottle])
-
-	// Remove dye tags from chalk (no accidental crafts)
-	;['red','orange','yellow','green','lime','blue','light_blue','cyan','purple',
-	  'magenta','pink','brown','white','light_gray','gray','black'].forEach(c =>
-		t.removeTags(e, `forge:dyes/${c}`, i['chalk_' + c], { parents: true }))
-
-	// Only white chalk used for blackboard
-	t.remove(e, 'supplementaries:blackboard_white', [i.dye_white, i.quartz])
-
-	// Remove cbmicroblock tags
-	t.clearAll(e, [
-		i.microblock_stone_rod, i.microblock_stone_saw,
-		i.microblock_iron_saw, i.microblock_diamond_saw,
-	])
-
 })
 
 console.log('misc tags finished')

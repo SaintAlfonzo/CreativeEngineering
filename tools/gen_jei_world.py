@@ -2,7 +2,7 @@
 """Write the generated rows of the world-interaction JEI tabs (feature_writeup/jei_coverage.md 4).
 
 Every tools/jei_world/tab_*.py module returns rows per tab; this writes them, merged per tab, to
-kubejs/assets/creativeengineering/jei_world/<tab>/generated.json. Hand-written rows sit next to it in manual.json
+kubejs/assets/creativecommon/jei_world/<tab>/generated.json. Hand-written rows sit next to it in manual.json
 and are never touched here. patcherMod's WorldInteractionJEI reads both on the client (row format in
 compat/jei/world/WorldRow.java). A generated.json whose tab got no rows is deleted.
 

@@ -36,8 +36,8 @@
     function itemId(st) { return String($GReg.ITEMS.getKey(st.getItem())) }
     function block(id) { return $GReg.BLOCKS.getValue(rl(id)) }
     function blockId(state) { return String($GReg.BLOCKS.getKey(state.getBlock())) }
-    // Grid and pot meals moved into Creative Delight's tree (creative_delight: ids) on 2026-10-25; the oven pie is still C
-    const FG = 'fungidelight:', C = 'creativeengineering:', CDN = 'creative_delight:'
+    // Grid and pot meals moved into Creative Delight's tree (creativedelight: ids) on 2026-10-25; the oven pie is still C
+    const FG = 'fungidelight:', C = 'creativeengineering:', CDN = 'creativedelight:'
 
     let byId = null
     function recipes(server) {
@@ -121,7 +121,7 @@
         // TODO fungiport #3: the pack registers CCK's truffle_pie item (2026-10-31), so the oven recipe must load
         check('oven truffle pie', pie.length >= 1 && takes(server, pie[0], FG + 'truffle'), pie.join(', ') || 'none')
         if (pie.length) {
-            let ins = ingredientsOf(recipes(server)[pie[0]]).map(g => { let s = g.getStacks(); return s.size() ? itemId(s.get(0)) + 'x' + s.get(0).getCount() : '-' })
+            let ins = ingredientsOf(recipes(server)[pie[0]]).map(g => { let s = g.getStacks(); if (s.toList) s = s.toList(); return s.size() ? itemId(s.get(0)) + 'x' + s.get(0).getCount() : '-' })
             note('truffle pie inputs', ins.join(', '))
         }
         expectIds(server, ['cleaned_cap', 'inky_cap_mushroom_colony', 'morel_mushroom_colony', 'truffle_slice'].map(n => FG + 'cutting/' + n))

@@ -73,6 +73,11 @@ public class CoasterBlockEntityRenderer implements BlockEntityRenderer<CoasterBl
          try (Reader reader = entry.getValue().openAsReader()) {
             JsonObject json = GsonHelper.convertToJsonObject(JsonParser.parseReader(reader), "coaster model");
             ResourceLocation itemId = new ResourceLocation(GsonHelper.getAsString(json, "item"));
+            // Creative Brewing ships coaster models for other mods' foods: skip one whose item is not registered, so
+            // an absent mod adds no missing-model warnings (plan_cb_publish.md M3, rule G5).
+            if (!net.minecraftforge.registries.ForgeRegistries.ITEMS.containsKey(itemId)) {
+               continue;
+            }
             List<ModelEntry> entries = parseModels(json.get("models"), GsonHelper.getAsFloat(json, "scale", 1.0F));
             ITEM_TO_MODELS.put(itemId, entries);
             entries.forEach(modelEntry -> models.add(modelEntry.model()));

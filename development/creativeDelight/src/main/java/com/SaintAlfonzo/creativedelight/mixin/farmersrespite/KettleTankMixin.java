@@ -11,7 +11,7 @@ import com.SaintAlfonzo.creativedelight.compat.farmersrespite.KettleBoxes;
 import com.SaintAlfonzo.creativedelight.compat.farmersrespite.KettleTank;
 import com.SaintAlfonzo.creativedelight.compat.farmersrespite.KettleTankHolder;
 import com.SaintAlfonzo.creativedelight.qol.RemainderBufferQol;
-import com.SaintAlfonzo.creativeengineering.cooking.RemainderBufferHolder;
+import com.SaintAlfonzo.creativedelight.cooking.RemainderBufferHolder;
 
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;

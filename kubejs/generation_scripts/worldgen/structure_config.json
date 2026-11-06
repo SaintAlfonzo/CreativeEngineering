@@ -1,6 +1,6 @@
 {
   "_readme": {
-    "what": "Read-only baseline: every structure_set exactly as the mods (or vanilla) define it, with no override. Rebuilt by python3 tools/gen_structure_config.py; do not edit. Spawn rates live in structure_groups.json (groups + standalone sets), membership in the group/* tags of structure_tags.json. kubejs/server_scripts/worldgen/structure_overrides.js reads all three at every world load.",
+    "what": "Read-only baseline: every structure_set exactly as the mods (or vanilla) define it, with no override. Rebuilt by python3 tools/gen_structure_config.py; do not edit. Spawn rates live in structure_groups.json (groups + standalone sets), membership in the group/* tags of structure_tags.json. kubejs/data/creativeworldgen/kubejs/worldgen/structure_overrides.js reads all three at every world load.",
     "top_level_fields": {
       "source": "Where this structure_set's definition came from: a mod jar filename, \"kubejs/data\", or \"vanilla_known_defaults\" (see caveat below).",
       "structures": "The structure(s) this set places: \"structure\" (id), \"weight\", \"biomes\" (read-only reference) and, when another mod stops it in code, \"blocked\".",
@@ -934,7 +934,7 @@
       }
     },
     "endersdelight:end_house": {
-      "source": "creative_delight-1.0.0.jar!endersAdditions-1.1.4-ce-19.2-02.jar",
+      "source": "endersdelight-1.1.4.jar (donor, End's Delight member)",
       "structures": [
         {
           "structure": "endersdelight:end_house",
@@ -5741,6 +5741,18 @@
         ]
       ]
     },
+    "creativeengineering:meta/waystone_ruins": {
+      "biomes": "#minecraft:is_overworld",
+      "anchor": [
+        "#creativeengineering:meta/small_ruins"
+      ],
+      "share": 0.2,
+      "required_parts": [
+        [
+          "creativeengineering:waystone_ruin_part"
+        ]
+      ]
+    },
     "creativeengineering:meta/sunken_ruin_cluster": {
       "biomes": "#minecraft:is_overworld",
       "anchor": [
@@ -5806,7 +5818,7 @@
       "anchor": [
         "#creativeengineering:meta/pillager_large_towers"
       ],
-      "share": 0.5,
+      "share": 0.3,
       "required_parts": [
         [
           "#creativeengineering:meta/pillager_outworks"
@@ -5845,7 +5857,7 @@
       "anchor": [
         "#creativeengineering:meta/pillager_camps"
       ],
-      "share": 0.15,
+      "share": 0.25,
       "required_parts": [
         [
           "#creativeengineering:meta/large_ruins"
@@ -5857,7 +5869,7 @@
       "anchor": [
         "#creativeengineering:meta/pillager_camps"
       ],
-      "share": 0.15,
+      "share": 0.25,
       "required_parts": [
         [
           "#creativeengineering:meta/small_ruins"
@@ -6127,7 +6139,7 @@
       "anchor": [
         "#creativeengineering:meta/meteorites"
       ],
-      "share": 0.5,
+      "share": 0.33,
       "required_parts": [
         [
           "#creativeengineering:meta/meteorites"

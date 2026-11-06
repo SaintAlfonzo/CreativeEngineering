@@ -1,13 +1,12 @@
 package com.SaintAlfonzo.creativedelight.qol;
 
 import com.SaintAlfonzo.creativedelight.CDConfig;
-import com.SaintAlfonzo.creativeengineering.CEConfig;
 
 /**
  * QoL-1 switch for the cooking pot and kettle compartments (mixin.farmersdelight, mixin.farmersrespite;
  * creative_delight.md 8, feature_writeup/remainder_buffer.md). The buffer itself (storage, slots, output handler) is
  * patcherMod's {@code cooking} API, shared with patcherMod's own oven, whose switch stays
- * {@code creativeengineering-common.toml [cooking] remainderBuffer}. The stall dial is shared: {@code [cooking]
+ * {@code creativedelight-common.toml [cooking] remainderBuffer}. The stall dial is shared: {@code [cooking]
  * stallWhenFull}.
  *
  * The switch only stops new leftovers going in; what a station already holds still shows, drops and can be pulled.
@@ -21,6 +20,6 @@ public final class RemainderBufferQol {
 	}
 
 	public static boolean stalls() {
-		return enabled() && CEConfig.COOKING.stallWhenFull.get();
+		return enabled() && CDConfig.COOKING.stallWhenFull.get();
 	}
 }

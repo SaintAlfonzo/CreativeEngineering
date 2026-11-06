@@ -42,15 +42,15 @@ Curtains that hang three blocks tall (top with the rod, middle, bottom), opening
   is the one that drops the item, loot table condition), the lower one `up`. Models `curtain/<colour>_{closed,left,right}_{top,bottom}`
   and `<colour>_middle`; `toggleVertical` / `toggleHorizontal` open the pair and side neighbours. Recipe: 2 sticks +
   4 wool -> 3 curtains; tags `another_furniture:curtains` (block and item).
-- `kubejs/server_scripts/engineering/fabric.js` line 11 lets hemp fabric stand in for white wool in the white curtain.
+- `kubejs/data/creativeengineering/kubejs/engineering/fabric.js` line 11 lets hemp fabric stand in for white wool in the white curtain.
   Line 17 targets `handcrafted:white_curtain`, which does not exist (Handcrafted 2.0.6 has no curtains): dead line.
 - Not in item_dict: no `i.*_curtain` keys for Another Furniture (only `i.strip_curtain`, IE's strip curtain, a
   different block).
-- The Another Furniture jar is not in `development/patcherMod/libs/` (patcherMod's `AnotherFurniturePlanterRenderMixin`
+- The Another Furniture jar is not in `development/creativeCommon/libs/` (patcherMod's `AnotherFurniturePlanterRenderMixin`
   targets it by name only).
 
 ### Build
-1. Copy the jar to `development/patcherMod/libs/` (compileOnly `fileTree`, build.gradle line 22).
+1. Copy the jar to `development/creativeCommon/libs/` (compileOnly `fileTree`, build.gradle line 22).
 2. patcherMod `block/curtain/LongCurtainBlock extends CurtainBlock`: an own `EnumProperty<Part>` `part` = top /
    middle / bottom (keep `facing_vertical` fixed, it is shared through Another Furniture's `ModBlockStateProperties`).
    Override placement (needs two free blocks below), `setPlacedBy` (place middle and bottom), `updateShape` (survive
@@ -347,7 +347,7 @@ More seashell variety: recoloured shells beside Twigs' four.
   619-622), class `SeashellBlock` (waterloggable), item tag `twigs:seashells`, bone meal recipe from the tag, worldgen
   `twigs:patch_seashell` (weights opaline 20, tangerine 20, roseate 15, bronzed 8) placed by
   `data/twigs/forge/biome_modifier/add_land_sea_shells.json`.
-- Pack use: Create vibrating sand -> shells (`kubejs/server_scripts/engineering/vibrating.js` lines 10-13, 0.225
+- Pack use: Create vibrating sand -> shells (`kubejs/data/creativeengineering/kubejs/engineering/vibrating.js` lines 10-13, 0.225
   each).
 
 ### Build

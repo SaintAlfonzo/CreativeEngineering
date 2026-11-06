@@ -5,9 +5,9 @@ pace 1
 
 ## SQ-R31-BOOT | boot clean of CE / CD mixin and registry errors
 bootexpect Done \(
-bootreject (Mixin apply failed|InvalidInjectionException|Critical injection failure).*(creativeengineering|creative_delight|creativedelight)
+bootreject (Mixin apply failed|InvalidInjectionException|Critical injection failure).*(creativeengineering|creativedelight|creativedelight)
 bootreject Registry Object not present
-bootreject Unknown (item|block) '(creativeengineering|creative_delight|hearthandharvest|solapplepie):
+bootreject Unknown (item|block) '(creativeengineering|creativedelight|hearthandharvest|solapplepie):
 look kubejs log: kubejs/server.log errors are listed by the next row; judge new ones against the 10-28 run
 
 ## SQ-R31-KJS | KubeJS server scripts load without new errors
@@ -20,7 +20,7 @@ bootreject (InvalidInjectionException|Mixin apply failed).*Seagull
 bootreject Unknown item 'solapplepie:netherite_lunchbox'
 
 ## SQ-LB-02 | lunchbox recipes parse
-bootreject Parsing error loading recipe creative_delight:.*lunchbox
+bootreject Parsing error loading recipe creativedelight:.*lunchbox
 kjsreject (lunchboxes\.js|lunchbox).*(Error|error)
 
 ## SQ-STL-01 | stepstool mixins and scripts

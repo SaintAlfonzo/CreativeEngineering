@@ -20,7 +20,7 @@ public abstract class MangosteenCakeEffectMixin {
 	@Redirect(method = "eat", remap = false, require = 1,
 			at = @At(value = "NEW", remap = false,
 					target = "(Lnet/minecraft/world/effect/MobEffect;II)Lnet/minecraft/world/effect/MobEffectInstance;"))
-	private MobEffectInstance creative_delight$biteEffect(MobEffect effect, int amplifier, int duration) {
+	private MobEffectInstance creativedelight$biteEffect(MobEffect effect, int amplifier, int duration) {
 		return new MobEffectInstance(effect, duration, amplifier);
 	}
 }

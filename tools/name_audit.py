@@ -7,7 +7,7 @@
     python3 tools/name_audit.py --check    exit 1 when name_fixes.json is out of date
 
 Input: kubejs/exported/display_names.json from the client dump (/cedumpnames in game, or
-[debug.names] dumpAtTitle on a scratch client; patcherMod devtools/DisplayNameDump). Every entry
+[debug.names] dumpAtTitle on a scratch client; Creative Devtools dump/DisplayNameDump). Every entry
 carries the name the game shows and the pack + namespace whose lang file set its key.
 
 Rules: kubejs/generation_scripts/names/name_rules.json (hand-written):

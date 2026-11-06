@@ -1,0 +1,54 @@
+# Creative Magic (feature_writeup/creative_magic.md): the pack's enchanting and magic content. Registers the Dark Fire
+# block and the Flint and Terrasteel item; both keep the creativeengineering namespace.
+modLoader="javafml"
+loaderVersion="${loader_version_range}"
+license="${mod_license}"
+[[mods]]
+modId="${mod_id}"
+version="${mod_version}"
+displayName="${mod_name}"
+authors="${mod_authors}"
+description='''${mod_description}'''
+
+[[dependencies.creativemagic]]
+modId="forge"
+mandatory=true
+versionRange="${forge_version_range}"
+ordering="NONE"
+side="BOTH"
+[[dependencies.creativemagic]]
+modId="minecraft"
+mandatory=true
+versionRange="${minecraft_version_range}"
+ordering="NONE"
+side="BOTH"
+# patcherMod: KubeJS, the shared helpers, the startup script loader and the Common API this jar calls
+# (swap/ConfigRename). Becomes creativecommon at the final swap (creative_split.md 7.6 Q1). The range must exclude every
+# patcherMod that still carries the Magic classes and mixins (1.1.08 and older: they would register twice).
+[[dependencies.creativemagic]]
+modId="creativecommon"
+mandatory=true
+versionRange="[1.1.0,)"
+ordering="AFTER"
+side="BOTH"
+# Creative Compat: required by every other Creative jar (creative_split.md 7.6).
+[[dependencies.creativemagic]]
+modId="creativecompat"
+mandatory=true
+versionRange="[1.0.0,)"
+ordering="AFTER"
+side="BOTH"
+# The mods the gated mixins target: optional, each mixin is gated on its mod (MagicMixinPlugin). No ordering:
+# patcherMod never declared them either, so the load order stays as it was before the carve.
+[[dependencies.creativemagic]]
+modId="nock_enough_arrows"
+mandatory=false
+versionRange="*"
+ordering="NONE"
+side="BOTH"
+[[dependencies.creativemagic]]
+modId="botania"
+mandatory=false
+versionRange="*"
+ordering="NONE"
+side="BOTH"

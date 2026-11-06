@@ -9,7 +9,7 @@ test prefix `MT-`), [structure_tuning.md](../structure_tuning.md) 3.25 (deadwood
 
 | Step | Row | Work | Notes |
 |---|---|---|---|
-| 1 | `trees #3` Lemon tree yield | CD KubeJS recipes + patcherMod mixin | The only open row. The pick count is hard-coded in Fruits Delight's Java, so the yield half is a mixin, not KubeJS |
+| 1 | `trees #3` Lemon tree yield | CD KubeJS recipes + patcherMod mixin | The only open row. The pick count is hard-coded in Fruits Delight's Java, so the yield half is a mixin, not KubeJS. BUILT 2026-11-02: the mixin is in Creative Delight (`mixin/fruitsdelight/LemonTreePickYieldMixin`), the cutting recipes remade with 8 slices |
 | - | `trees #1` Leaf decay | Testing | Needs play, see below |
 | - | `trees #2` Acacia stumps and fallen logs | Testing | Needs play; the bush fix is an open decision |
 
@@ -36,9 +36,9 @@ Picking a ripe lemon bush gives 2 to 5 lemons, and cutting a lemon gives 8 slice
   `sliceanddice:cutting/fruitsdelight/lemon_cutting`.
 - Dict: `i.lemon` (13241), `i.lemon_slice` (12450), `i.lemon_seeds` (13242), `i.t_fruits_lemon` (1879), `i.any_knife`
   (246). Lemon recipes in the pack: CD
-  [fruitsdelight/recipes.js](../../kubejs/data/creative_delight/kubejs/fruitsdelight/recipes.js) (orange jam takes one
+  [fruitsdelight/recipes.js](../../kubejs/data/creativedelight/kubejs/fruitsdelight/recipes.js) (orange jam takes one
   lemon slice, lines 42-45); nothing touches the cutting recipes yet.
-- The compile jar `fruitsdelight-0.5.11.jar` is already in `development/patcherMod/libs/`.
+- The compile jar `fruitsdelight-0.5.11.jar` is already in `development/creativeCommon/libs/`.
 
 ### Build
 1. **Pick count (patcherMod).** The TODO says KubeJS, but the count is in Java. Mixin on

@@ -61,7 +61,7 @@ while :; do
         echo "JARS=$(ls -l --time-style=+%s "$c/mods/" 2>/dev/null | awk '{print $5, $6, $7}' | sha1sum | cut -c1-12)"
         echo "JVMARGS='$(tr '\n' ' ' < "$c/user_jvm_args.txt" 2>/dev/null)'"
       } > "$b/meta.env"
-      ls -l --time-style=+%m-%d_%H:%M "$c/mods/" 2>/dev/null | grep -E 'creativeengineering|creative_delight|modernfix' > "$b/key_jars.txt"
+      ls -l --time-style=+%m-%d_%H:%M "$c/mods/" 2>/dev/null | grep -E 'creativeengineering|creativedelight|modernfix' > "$b/key_jars.txt"
       printf 'time\tcpu_s\trss_mb\tthreads\n' > "$b/proc.tsv"
       BOOT[$p]=$b; CWD[$p]=$c
       tl seen "$c" "$(basename "$b") pid $p"

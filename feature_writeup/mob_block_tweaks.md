@@ -22,12 +22,12 @@ listed here in the backlog, are in [gear_tuning.md](gear_tuning.md).
 - **Pending:** the leaf decay changes are built and unshipped (next deploy; the release also drops FastLeafDecay-30.jar,
   now in `disabledmods/`). MT-01 to MT-25 untested in game (BR-28 stays in its writeup). Findings F1 to F7 (section 4);
   F6 (diagonal-only leaves) is a possible follow-up.
-- **Files to open:** [BubbleColumnImmunityMixin](../development/patcherMod/src/main/java/com/SaintAlfonzo/creativeengineering/mixin/BubbleColumnImmunityMixin.java),
-  [BushierFlowersDisableMixin](../development/patcherMod/src/main/java/com/SaintAlfonzo/creativeengineering/mixin/BushierFlowersDisableMixin.java),
-  [FeedingTroughModuleMixin](../development/patcherMod/src/main/java/com/SaintAlfonzo/creativeengineering/mixin/FeedingTroughModuleMixin.java),
+- **Files to open:** [BubbleColumnImmunityMixin](../development/creativeCommon/src/main/java/com/SaintAlfonzo/creativecommon/mixin/BubbleColumnImmunityMixin.java),
+  [BushierFlowersDisableMixin](../development/creativeCommon/src/main/java/com/SaintAlfonzo/creativecommon/mixin/BushierFlowersDisableMixin.java),
+  [FeedingTroughModuleMixin](../development/creativeCommon/src/main/java/com/SaintAlfonzo/creativecommon/mixin/FeedingTroughModuleMixin.java),
   [block_properties.js](../kubejs/startup_scripts/changes/block_properties.js),
-  [LeafDecayRange](../development/patcherMod/src/main/java/com/SaintAlfonzo/creativeengineering/block/LeafDecayRange.java),
-  [FastLeafDecayPort](../development/patcherMod/src/main/java/com/SaintAlfonzo/creativeengineering/block/FastLeafDecayPort.java).
+  [LeafDecayRange](../development/creativeCommon/src/main/java/com/SaintAlfonzo/creativecommon/block/LeafDecayRange.java),
+  [FastLeafDecayPort](../development/creativeCommon/src/main/java/com/SaintAlfonzo/creativecommon/block/FastLeafDecayPort.java).
 - **Knobs:**
   - `#creativeengineering:bubble_column_immune` entity tag ([entitytags.js](../kubejs/server_scripts/tags/entitytags.js); `/reload`).
   - `[perf] troughMissCooldownTicks` in `config/creativeengineering-common.toml` (600; 0 = off; live).
@@ -271,6 +271,16 @@ dead.
   `BreakEvent` (not checked beyond Create) could still break a box. `vaultMode = false` returns Quark's behaviour,
   except that the hardness and tags stay (KubeJS).
 
+### 2.10 Giant squid flee distance (added 2026-11-02, TODO `mobs/tweaks #18`)
+
+Alex's Mobs' giant squid runs from cachalot whales: its `AIAvoidWhales` goal starts when any whale is within 50 blocks
+and keeps running while that whale is within 60, so squid scatter from whales far out of sight. Owner decision
+2026-11-02: squid are the fleeing mob (the whales are not changed). Creative Compat `AmGiantSquidAvoidWhalesMixin`
+(ModifyConstant on the goal's `canUse` 50 and `canContinueToUse` 60, gated on `alexsmobs`) reads
+`config/creativecompat-common.toml` `[giant_squid]`: `whaleFleeStart` 16 (1 to 64), `whaleFleeStop` 24 (1 to 96, kept
+at least the start). Read live each time the goal checks. Vanilla squid have no whale goal (they only flee what hurt
+them); orcas and other whales are untouched.
+
 ## 3. What the pack changes
 
 - **Bubble columns:** `BubbleColumnImmunityMixin` cancels `BubbleColumnBlock#entityInside` (SRG `m_7892_`) at the head
@@ -369,13 +379,14 @@ dead.
 
 ## 5. File map
 
-- patcherMod mixins: [BubbleColumnImmunityMixin](../development/patcherMod/src/main/java/com/SaintAlfonzo/creativeengineering/mixin/BubbleColumnImmunityMixin.java), [BushierFlowersDisableMixin](../development/patcherMod/src/main/java/com/SaintAlfonzo/creativeengineering/mixin/BushierFlowersDisableMixin.java), [FeedingTroughModuleMixin](../development/patcherMod/src/main/java/com/SaintAlfonzo/creativeengineering/mixin/FeedingTroughModuleMixin.java), [TemptGoalTroughRetryMixin](../development/patcherMod/src/main/java/com/SaintAlfonzo/creativeengineering/mixin/TemptGoalTroughRetryMixin.java); [compat/TroughRetryAccess.java](../development/patcherMod/src/main/java/com/SaintAlfonzo/creativeengineering/compat/TroughRetryAccess.java); `CEConfig.Perf.troughMissCooldownTicks`.
-- Leaf decay: [LeavesDecayRangeMixin](../development/patcherMod/src/main/java/com/SaintAlfonzo/creativeengineering/mixin/LeavesDecayRangeMixin.java), [block/LeafDecayRange.java](../development/patcherMod/src/main/java/com/SaintAlfonzo/creativeengineering/block/LeafDecayRange.java), [block/FastLeafDecayPort.java](../development/patcherMod/src/main/java/com/SaintAlfonzo/creativeengineering/block/FastLeafDecayPort.java) (registered in `CreativeEngineering`), `CEConfig.LeafDecay`; tools [leaf_path_scan.py](../tools/leaf_path_scan.py), [leaf_path_probe.js](../tools/leaf_path_probe.js), [leaf_decay_probe.js](../tools/leaf_decay_probe.js). `disabledmods/FastLeafDecay-30.jar` (removed, row gone from [mod_sides.md](../mod_sides.md)).
-- MCA eyes: [McaCombEyeColourMixin](../development/patcherMod/src/main/java/com/SaintAlfonzo/creativeengineering/mixin/McaCombEyeColourMixin.java) (client), lang `creativeengineering.mca_eyes.*`; how MCA picks eyes: [briefs/mobs_tweaks.md](briefs/mobs_tweaks.md) tweaks #12.
-- Named mobs: [mobs/NamedMobs.java](../development/patcherMod/src/main/java/com/SaintAlfonzo/creativeengineering/mobs/NamedMobs.java) (registered in `CreativeEngineering`), `CEConfig.NamedMobs`, patcherMod lang `chat.creativeengineering.named_mob.title`.
-- Villager gates and doors: [McaVillagerPathGatesMixin](../development/patcherMod/src/main/java/com/SaintAlfonzo/creativeengineering/mixin/McaVillagerPathGatesMixin.java), [WalkNodeEvaluatorVillagerGateMixin](../development/patcherMod/src/main/java/com/SaintAlfonzo/creativeengineering/mixin/WalkNodeEvaluatorVillagerGateMixin.java).
-- Villager ladders: [McaVillagerPathLaddersMixin](../development/patcherMod/src/main/java/com/SaintAlfonzo/creativeengineering/mixin/McaVillagerPathLaddersMixin.java), [GroundPathNavigationClimbMixin](../development/patcherMod/src/main/java/com/SaintAlfonzo/creativeengineering/mixin/GroundPathNavigationClimbMixin.java), [MoveControlVillagerLadderMixin](../development/patcherMod/src/main/java/com/SaintAlfonzo/creativeengineering/mixin/MoveControlVillagerLadderMixin.java); tag in [blocktags.js](../kubejs/server_scripts/tags/blocktags.js), key `t_villager_ladders` in `block_dict.js`.
-- Monster box vaults: [mobs/MonsterBoxVault.java](../development/patcherMod/src/main/java/com/SaintAlfonzo/creativeengineering/mobs/MonsterBoxVault.java) (registered in `CreativeEngineering`), [MonsterBoxBlockEntityMixin](../development/patcherMod/src/main/java/com/SaintAlfonzo/creativeengineering/mixin/MonsterBoxBlockEntityMixin.java), [CreateBreakerMonsterBoxMixin](../development/patcherMod/src/main/java/com/SaintAlfonzo/creativeengineering/mixin/CreateBreakerMonsterBoxMixin.java), `CEConfig.MonsterBox`, lang `chat.creativeengineering.monster_box.sneak`, [monster_box_reward.json](../kubejs/data/creativeengineering/loot_tables/misc/monster_box_reward.json), `quark-common.toml` (`Enable Extra Loot Table`, both copies).
+- patcherMod mixins: [BubbleColumnImmunityMixin](../development/creativeCommon/src/main/java/com/SaintAlfonzo/creativecommon/mixin/BubbleColumnImmunityMixin.java), [BushierFlowersDisableMixin](../development/creativeCommon/src/main/java/com/SaintAlfonzo/creativecommon/mixin/BushierFlowersDisableMixin.java), [FeedingTroughModuleMixin](../development/creativeCommon/src/main/java/com/SaintAlfonzo/creativecommon/mixin/FeedingTroughModuleMixin.java), [TemptGoalTroughRetryMixin](../development/creativeCommon/src/main/java/com/SaintAlfonzo/creativecommon/mixin/TemptGoalTroughRetryMixin.java); [compat/TroughRetryAccess.java](../development/creativeCommon/src/main/java/com/SaintAlfonzo/creativecommon/compat/TroughRetryAccess.java); `CEConfig.Perf.troughMissCooldownTicks`.
+- Leaf decay: [LeavesDecayRangeMixin](../development/creativeCommon/src/main/java/com/SaintAlfonzo/creativecommon/mixin/LeavesDecayRangeMixin.java), [block/LeafDecayRange.java](../development/creativeCommon/src/main/java/com/SaintAlfonzo/creativecommon/block/LeafDecayRange.java), [block/FastLeafDecayPort.java](../development/creativeCommon/src/main/java/com/SaintAlfonzo/creativecommon/block/FastLeafDecayPort.java) (registered in `CreativeEngineering`), `CEConfig.LeafDecay`; tools [leaf_path_scan.py](../tools/leaf_path_scan.py), [leaf_path_probe.js](../tools/leaf_path_probe.js), [leaf_decay_probe.js](../tools/leaf_decay_probe.js). `disabledmods/FastLeafDecay-30.jar` (removed, row gone from [mod_sides.md](../mod_sides.md)).
+- MCA eyes: [McaCombEyeColourMixin](../development/creativeCommon/src/main/java/com/SaintAlfonzo/creativecommon/mixin/McaCombEyeColourMixin.java) (client), lang `creativeengineering.mca_eyes.*`; how MCA picks eyes: [briefs/mobs_tweaks.md](briefs/mobs_tweaks.md) tweaks #12.
+- Named mobs: [mobs/NamedMobs.java](../development/creativeCommon/src/main/java/com/SaintAlfonzo/creativecommon/mobs/NamedMobs.java) (registered in `CreativeEngineering`), `CEConfig.NamedMobs`, patcherMod lang `chat.creativeengineering.named_mob.title`.
+- Villager gates and doors: [McaVillagerPathGatesMixin](../development/creativeCommon/src/main/java/com/SaintAlfonzo/creativecommon/mixin/McaVillagerPathGatesMixin.java), [WalkNodeEvaluatorVillagerGateMixin](../development/creativeCommon/src/main/java/com/SaintAlfonzo/creativecommon/mixin/WalkNodeEvaluatorVillagerGateMixin.java).
+- Villager ladders: [McaVillagerPathLaddersMixin](../development/creativeCommon/src/main/java/com/SaintAlfonzo/creativecommon/mixin/McaVillagerPathLaddersMixin.java), [GroundPathNavigationClimbMixin](../development/creativeCommon/src/main/java/com/SaintAlfonzo/creativecommon/mixin/GroundPathNavigationClimbMixin.java), [MoveControlVillagerLadderMixin](../development/creativeCommon/src/main/java/com/SaintAlfonzo/creativecommon/mixin/MoveControlVillagerLadderMixin.java); tag in [blocktags.js](../kubejs/server_scripts/tags/blocktags.js), key `t_villager_ladders` in `block_dict.js`.
+- Monster box vaults: [mobs/MonsterBoxVault.java](../development/creativeCommon/src/main/java/com/SaintAlfonzo/creativecommon/mobs/MonsterBoxVault.java) (registered in `CreativeEngineering`), [MonsterBoxBlockEntityMixin](../development/creativeCommon/src/main/java/com/SaintAlfonzo/creativecommon/mixin/MonsterBoxBlockEntityMixin.java), [CreateBreakerMonsterBoxMixin](../development/creativeCommon/src/main/java/com/SaintAlfonzo/creativecommon/mixin/CreateBreakerMonsterBoxMixin.java), `CEConfig.MonsterBox`, lang `chat.creativeengineering.monster_box.sneak`, [monster_box_reward.json](../kubejs/data/creativeengineering/loot_tables/misc/monster_box_reward.json), `quark-common.toml` (`Enable Extra Loot Table`, both copies).
+- Giant squid flee distance: Creative Compat [AmGiantSquidAvoidWhalesMixin](../development/creativeCompat/src/main/java/com/SaintAlfonzo/creativecompat/mixin/AmGiantSquidAvoidWhalesMixin.java), `CompatConfig.GiantSquid` (`[giant_squid]`), gate in `CompatMixinPlugin`.
 - KubeJS: [entitytags.js](../kubejs/server_scripts/tags/entitytags.js), [flowers.js](../kubejs/server_scripts/other/flowers.js), [block_properties.js](../kubejs/startup_scripts/changes/block_properties.js), `kubejs/data/bushierflowers/forge/biome_modifier/` (5 files).
 
 ## 6. Offline checks
@@ -490,6 +501,9 @@ dead.
   client side); mine it sneaking → it breaks, nothing drops. Same in creative.
 - [ ] **MT-50 Create:** a powered drill against a box, and a drill on a moving contraption → the box doesn't break;
   a contraption doesn't pick the box up.
+- [ ] **MT-51 Giant squid flee distance [scratch]:** a giant squid and a cachalot whale summoned 30 blocks apart in deep
+  open water → the squid does not flee; whale moved to 12 blocks → it swims away and stops once more than 24 off. With
+  `whaleFleeStart = 50`, `whaleFleeStop = 60` it flees at 30 again (Alex's Mobs' own).
 
 ## 8. History
 

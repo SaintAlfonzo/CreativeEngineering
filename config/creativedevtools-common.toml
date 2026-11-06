@@ -1,0 +1,110 @@
+
+#Developer tools. Only meaningful in the dev instance (the one with tools/ and mods/ source).
+[debug]
+
+	#The pack's generator scripts (tools/*.py: structure/biome/loot configs, effect descriptions,
+	#pack manifest, reports) listed in tools/generators.json. /cegen run [target] runs them in game;
+	#these knobs also let them run by themselves every time the game starts.
+	[debug.generators]
+		#Debug mode. When true, the generators run in the background as the game starts (from common
+		#setup), and loading waits for them before finishing, so the first world load already reads
+		#fresh files. Results go to latest.log, logs/cegen/<id>.log and /cegen status. Off by default.
+		runAtStartup = false
+		#What the startup run and a bare /cegen run execute: 'all', a group or one generator id
+		#from tools/generators.json.
+		target = "core"
+		#Python interpreter to run the scripts with (a name on PATH or a full path).
+		python = "python3"
+		#A script still running after this long is killed and reported as TIMEOUT.
+		#Range: 10 ~ 3600
+		timeoutSeconds = 300
+		#How long the end of loading waits for the startup run. The core generators take about 10 s and
+		#run alongside the rest of loading, so this rarely waits at all. 0 = never wait (files may then
+		#change after the first world has loaded).
+		#Range: 0 ~ 3600
+		startupWaitSeconds = 120
+
+	#Block-state sync diagnostics, for ghost blocks that only appear on a dedicated server (the client
+	#throws 'Error executing task on Client' because a block-update packet names a block state it does
+	#not have, and drops the rest of that packet). Turn it on on the CLIENT, and on the SERVER to get its
+	#half of the comparison.
+	[debug.block_state_sync]
+		#Debug mode. Client: logs every block-update packet containing a state id the client cannot resolve
+		#(the raw id, the block position, the client's state count) and writes
+		#logs/ce_block_state_ranges_client.txt. Dedicated server: writes logs/ce_block_state_ranges_server.txt
+		#when it starts. tools/diff_block_state_ranges.py compares the two files and names the block.
+		enabled = false
+		#Per-packet detail lines to log before falling back to one summary line every 500 bad packets.
+		#Each distinct bad id is always logged the first time it is seen.
+		#Range: 0 ~ 100000
+		maxDetailLines = 200
+
+	#The names audit (feature_writeup/names.md, tools/name_audit.py).
+	[debug.names]
+		#Client: write kubejs/exported/display_names.json (every block, item, effect... name and the pack
+		#that set it) and names.json the first time the title screen opens, as /cedumpnames does in game.
+		#For a scratch client that never joins a world. Off by default.
+		dumpAtTitle = false
+
+	#The WTHIT icon audit (feature_writeup/wthit_lines.md, tools/wthit_icon_audit.py).
+	[debug.wthit]
+		#Client: write kubejs/exported/wthit_icons.json (every block's WTHIT icon verdict and every item
+		#with a missing model) the first time the title screen opens, as /cedumpicons does in game.
+		#For a scratch client that never joins a world. Off by default.
+		dumpIconsAtTitle = false
+
+	#The removed-item recipe scan (kubejs/data/creativedevtools/kubejs/dump/recipe_scan.js, /recipescan).
+	[debug.recipe_scan]
+		#Server: once per session, when the server has loaded (after every recipe change is applied), log
+		#each recipe that still uses or makes a removed item ([jeiRemove] lines). /recipescan runs it on
+		#demand whatever this says. Off by default.
+		runAtLoad = false
+
+	#Finds the off-thread caller of Level.random (feature_writeup/fixes_compat.md F4).
+	[debug.level_random]
+		#Debug mode. When true, a Level's shared random logs the stack trace of every access from a thread other
+		#than the one that created the Level ([LevelRandomProbe] lines in latest.log, at most 20 distinct
+		#callers per session). Read when the world loads: restart to apply. Off by default.
+		probe = false
+
+#Worldgen test tools.
+[worldgen]
+
+	#/ceplace structures <filter> and /ceplace templates <glob>: place every match in rows (one row per
+	#type tag, group, mod or template folder), starting at your position and going +X, rows stacked +Z.
+	#Meant for a flat world with Generate Structures off. /ceplace preview ... lists without placing.
+	[worldgen.mass_place]
+		#Blocks between two structures in a row.
+		#Range: 0 ~ 512
+		gap = 12
+		#Blocks between rows (the aisle the labels stand in).
+		#Range: 4 ~ 512
+		rowGap = 16
+		#Put a sign with the id in front of each structure and at the start of each row.
+		labels = true
+		#KEEP: each structure at the height it generated at here. GROUND: its bottom layer at ground level.
+		#AUTO: GROUND only for structures that generated more than autoAlignBand blocks above or below the
+		#ground (underground and sky structures); surface ones keep their height.
+		#Allowed Values: AUTO, KEEP, GROUND
+		verticalAlign = "AUTO"
+		#AUTO's tolerance, in blocks.
+		#Range: 0 ~ 256
+		autoAlignBand = 8
+		#Refuse a run with more matches than this (preview first, or narrow the filter).
+		#Range: 1 ~ 100000
+		maxItems = 1000
+		#Milliseconds of work per server tick. Each structure is laid out, then its chunks are generated and
+		#built one at a time until the budget is used, so a big village takes several ticks instead of one
+		#long one (a dedicated server kills a tick over 60 s). Higher = faster runs, choppier server.
+		#Range: 5 ~ 1000
+		tickBudgetMs = 40
+
+#Creative Devtools script features. Off: that feature's scripts do nothing.
+[features]
+	#The Create test and showcase recipes (create/: a mechanical-crafting grid per metal and per
+	#wood, and one sequenced-assembly chain with every legal step). Server scripts re-read it on /reload.
+	testRecipes = true
+	#The Flower Test world builder (flowerworld/flower_world.js): builds the table on the first start
+	#of a Flower Test world, and /flowerworld.
+	flowerWorld = true
+

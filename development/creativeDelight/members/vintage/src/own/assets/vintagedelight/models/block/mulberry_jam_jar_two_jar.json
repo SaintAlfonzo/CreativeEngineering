@@ -1,0 +1,6 @@
+{
+  "parent": "vintagedelight:block/template_mason_jar_two",
+  "textures": {
+    "2": "vintagedelight:block/mulberry_jam_interior_texture"
+  }
+}

@@ -5,7 +5,7 @@ Build plan for every open row: "Build plan (2026-10-30)" below.
 Written 2026-10-21 from [todo/TODO.md](../todo/TODO.md) `# structures`, rows `structures/earthfill` #2, #3, #4, #6, #7
 (open) and #1, #5, #8 (Testing). Reference for how earth fill works today: [structure_tuning.md](../structure_tuning.md)
 3.13 (earth fill), 3.14 (water fill), 3.15 (terrain adaptation, sunk starts), 7.5 (the 1.0.9 changes). Code:
-`development/patcherMod/src/main/java/com/SaintAlfonzo/creativeengineering/worldgen/EarthFill.java` (870 lines, below
+`development/creativeCommon/src/main/java/com/SaintAlfonzo/creativecommon/worldgen/EarthFill.java` (870 lines, below
 `EarthFill.java:<line>`), `worldgen/TerrainAdaptation.java`, `worldgen/WorldgenConfig.java`, `CEConfig.java` (class
 `EarthFill` at 1929), `mixin/ChunkGeneratorEarthFillMixin.java`. Tags: `kubejs/server_scripts/worldgen/earth_fill.js`,
 `terrain_adaptation.js`, `water_fill.js` (all through `global.tags.add`). Instance config:

@@ -254,7 +254,6 @@
   "canned_corn": 2,
   "canned_coffee_berries": 3,
   "canned_maggots": 4,
-  "canned_chips": 4,
   "canned_grilled_corn": 4,
   "canned_tortilla_chip": 4,
   "canned_sweet_roll": 4,
@@ -283,7 +282,6 @@
   "canned_potato_noodles": 4,
   "canned_cauliflower_bread": 4,
   "canned_garlic_bread": 4,
-  "canned_mhadjeb": 4,
   "canned_broccoli_salad": 8,
   "canned_cesar_salad": 8,
   "canned_coleslaw": 8,
@@ -314,6 +312,13 @@
   "canned_creamy_morel_soup": 8,
   "canned_ghostly_chili": 8,
   "canned_oatmeal": 8,
-  "canned_pickle_soup": 8
+  "canned_pickle_soup": 8,
+  "canned_bat_soup": 8,
+  "canned_cave_soup": 8,
+  "canned_insect_stew": 8,
+  "canned_golden_nutritional_bar": 10,
+  "canned_mashed_potatoes": 4,
+  "canned_mashed_sweet_potatoes": 4,
+  "canned_ratatouille": 8
  }
 }

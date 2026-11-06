@@ -8,6 +8,7 @@ import com.SaintAlfonzo.creativedelight.rustic.content.PepperMedleyBlock;
 import com.SaintAlfonzo.creativedelight.rustic.content.RiceRollRoyaleBlock;
 import com.SaintAlfonzo.creativedelight.rustic.content.RusticCropBlock;
 import com.SaintAlfonzo.creativedelight.rustic.content.RusticWildCropBlock;
+import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.effect.MobEffect;
 import net.minecraft.world.effect.MobEffects;
 import net.minecraft.world.item.Item;
@@ -47,6 +48,8 @@ public final class RDBlocks {
     /** {@code bell_pepper_<colour>_crate}, in {@link #COLOURS} order. */
     public static final Map<String, RegistryObject<Block>> PEPPER_CRATES = byColour(colour -> crate("bell_pepper_" + colour + "_crate"));
     public static final RegistryObject<Block> CALAMARI_CRATE = crate("calamari_crate");
+    /** The pack's own crate for its glowing calamari (TODO creativedelight/members #25); not in upstream. */
+    public static final RegistryObject<Block> GLOWING_CALAMARI_CRATE = crate("glowing_calamari_crate");
     /** The giant peppers, {@code bell_pepper_<colour>_block}. */
     public static final Map<String, RegistryObject<Block>> GIANT_PEPPERS = byColour(colour -> BLOCKS.register("bell_pepper_" + colour + "_block",
             () -> new Block(Properties.copy(Blocks.MELON))));
@@ -55,7 +58,12 @@ public final class RDBlocks {
     public static final RegistryObject<Block> CHERRY_BLOSSOM_CHEESECAKE = cheesecake("cherry_blossom_cheesecake", () -> RDItems.CHERRY_BLOSSOM_CHEESECAKE_SLICE.get());
     public static final RegistryObject<Block> COFFEE_CHEESECAKE = cheesecake("coffee_cheesecake", () -> RDItems.COFFEE_CHEESECAKE_SLICE.get());
 
-    public static final RegistryObject<Block> PANCAKES = pancakes("pancakes", () -> RDItems.PANCAKE.get());
+    /**
+     * The plain plate serves Supplementaries' pancake: Rustic's own plain single is not registered (owner 2026-11-01,
+     * TODO creativedelight/members #15). Air when Supplementaries is absent, then the plate gives nothing back.
+     */
+    public static final RegistryObject<Block> PANCAKES = pancakes("pancakes",
+            () -> ForgeRegistries.ITEMS.getValue(new ResourceLocation("supplementaries", "pancake")));
     public static final RegistryObject<Block> HONEY_PANCAKES = pancakes("honey_pancakes", () -> RDItems.HONEY_PANCAKE.get());
     public static final RegistryObject<Block> CHOCOLATE_PANCAKES = pancakes("chocolate_pancakes", () -> RDItems.CHOCOLATE_PANCAKE.get());
     public static final RegistryObject<Block> CHERRY_BLOSSOM_PANCAKES = pancakes("cherry_blossom_pancakes", () -> RDItems.CHERRY_BLOSSOM_PANCAKE.get());

@@ -4,7 +4,7 @@ Written 2026-10-21 from [todo/TODO.md](../todo/TODO.md) `# structures`, rows `st
 Planned). Reference: [structure_tuning.md](../structure_tuning.md) 3.13 (earth fill), 3.15 (terrain adaptation by tag,
 soft beard, template trim, sunk starts), [terrain_adaptation_scan.md](../terrain_adaptation_scan.md) (the scan),
 [locate.md](../locate.md) 3.7 (the bottom band). Code: patcherMod
-`development/patcherMod/src/main/java/com/SaintAlfonzo/creativeengineering/worldgen/TerrainAdaptation.java`,
+`development/creativeCommon/src/main/java/com/SaintAlfonzo/creativecommon/worldgen/TerrainAdaptation.java`,
 `TemplateTrim.java`, `EarthFill.java`, `DistantClip.java`; tags `kubejs/server_scripts/worldgen/terrain_adaptation.js`
 (through `global.tags.add`); scan `tools/terrain_adaptation_scan.py`.
 

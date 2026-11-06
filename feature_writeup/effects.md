@@ -11,7 +11,7 @@
 | Update 2026-10-22: Rustic Delight's five coffees (Coffee, Milk, Honey, Chocolate, Dark) give Farmer's Respite's Caffeinated instead of Speed + Haste (food_values.js, [item_merges.md](item_merges.md) 2.8); the Speed, Haste and Caffeinated food-source cells in 2.1 predate this | reference note |
 | Description fixes (3): 16 wrong, partial or misspelt JEED texts replaced, Travel Fatigue ported from Effect Insights, 7 stale placeholders gone | BUILT 2026-10-20, not seen in game (EF-17) |
 | Category audit (2.4): all 140 effects checked for red / blue; 6 overridden in CEConfig `[effects]` | BUILT 2026-10-20 (patcherMod 1.1.01, rebuilt and installed), not seen in game (EF-18) |
-| HUD icons (2.5), swaps and removals (2.6), compound effects and Jellie Wine (2.7), copper poisoning (2.8), Double Jump with Jump Boost (2.7) | BUILT 2026-10-31 (patcherMod 1.1.04 installed 00:44, backportedVinery -06, backportedBrewin -04, Creative Delight 1.0.0, all in `mods/`); scratch server PASSED r1031 (2026-10-31, SQ-EFX-01 to -11: mixins, Magic Resistance, swaps and removals, Caffeinated, copper poisoning, Jellie Wine, crab shell brew); SQ-EFX-12 to -14 not run (client block); EF-22 to EF-31 in game. Open: Phantom Bane cancels phantoms for every player (2.7, TODO `potions/effects #13`), pipe tea Haste and more pipe fluids (2.5, `#15`, `#16`) |
+| HUD icons (2.5), swaps and removals (2.6), compound effects and Jellie Wine (2.7), copper poisoning (2.8), Double Jump with Jump Boost (2.7) | BUILT 2026-10-31 (patcherMod 1.1.04 installed 00:44, backportedVinery -06, backportedBrewin -04, Creative Delight 1.0.0, all in `mods/`); scratch server PASSED r1031 (2026-10-31, SQ-EFX-01 to -11: mixins, Magic Resistance, swaps and removals, Caffeinated, copper poisoning, Jellie Wine, crab shell brew); SQ-EFX-12 to -14 not run (client block); EF-22 to EF-31 in game. Phantom Bane one-player skip fixed 2026-11-02 (CB, not in `mods/`, EF-32, TODO `potions/effects #13`). Open: pipe tea Haste and more pipe fluids (2.5, `#15`, `#16`) |
 
 - **Pending:** EF-01 to EF-20 have never been run. The 2026-10-20 work (providers, description fixes, category
   overrides) is built but not seen in game. The exports were refreshed by the client `/dumpall` of 2026-10-30 00:40 (with the ports); left from F10:
@@ -488,7 +488,10 @@ effects to others), Frosty Armor, Armor, Berserking, Brightening (no existing pa
 
 **Phantom Bane ending** (any source) resets the player's Time Since Rest to 0, as after sleeping (decided 2026-10-31).
 Finding: Better Beacons' spawner check returns from the whole phantom spawn pass, so one player with Phantom Bane skips
-phantom spawns for every player after them in the list (TODO `potions/effects #13`).
+phantom spawns for every player after them in the list (TODO `potions/effects #13`). FIXED 2026-11-02 (Creative Brewing,
+not yet in `mods/`): `mixin/better_beacons/PhantomSpawnerBaneSkipMixin` hands the spawner's player loop
+(`level.players()` in `PhantomSpawner.tick`) a list without the Phantom Bane players, so Better Beacons' check never
+meets one and only those players are skipped. Test EF-32.
 
 **Golden apple wine:** Jellie Wine gives Regeneration + Absorption + Resistance + Fire Resistance at the wine's level (the
 enchanted golden apple set); the "Better than Golden Apples!" effect (`vinery:jellie`) is unregistered (decided
@@ -684,6 +687,25 @@ Brief: [briefs/ui_effects.md](briefs/ui_effects.md). Nothing here is built.
 - [TODO](todo/TODO.md) `ui/effects #11`: Weak Stomach (`fungidelight:weak_stomach`) gets a provider listing the cap foods; the cause (foods in
   `fungidelight:alcohol_reaction`) and the trigger (alcohol or any non-water potion) are worded separately.
 
+### One Haste effect (2026-11-01, `potions/effects #17`): finding, nothing built
+
+Checked what registers Haste and who gives it. The effect is vanilla `minecraft:haste` (`MobEffects.DIG_SPEED`); no
+mod in the pack registers a second Haste effect, and every source already gives the vanilla one:
+
+| Source | Where | Effect |
+|---|---|---|
+| Rustic Delight haste potions (`rusticdelight:haste`, `long_haste`, `strong_haste`) | CD member `rustic`, `RDPotions` | vanilla Haste |
+| Rustic haste foods and coffees | CD member `rustic`, `RDFoods` (coffees then swap to Caffeinated in `food_values.js`, 2.1) | vanilla Haste |
+| Miner's Delight haste potions (`miners_delight:haste`, `long_haste`, `strong_haste`) | `backportedMiners` `MDPotions` | vanilla Haste |
+| Builder's Tea (open-ended pipe) | Create; icon from CB `CreateTeaPipeIconMixin` | vanilla Haste |
+
+So there is nothing to unify at the effect level, and no new effect was made. The real overlap is two **potion**
+lines with the same effect (Miner's D7, `MND-40`): one of them would have to stop registering, which leaves stacks in
+old worlds without a potion (no conversions) and, by Miner's D4, is decided only after an in-game test. Also, potion
+registration left patcherMod in wave 4: the pack's own potions are CB's `CEPotions` (creative_split.md 7.8), so a
+pack-owned Haste potion line would be CB's, not patcherMod's. Owner choice needed: keep both lines, or drop one
+(which, and whether its brewing ingredient then brews the survivor).
+
 ## 5. File map
 
 - [tools/effect_audit.py](../tools/effect_audit.py): names, descriptions, placeholders, potion and arrow names, JEI sources.
@@ -691,7 +713,7 @@ Brief: [briefs/ui_effects.md](briefs/ui_effects.md). Nothing here is built.
 - [kubejs/assets/creativeengineering/lang/en_us.json](../kubejs/assets/creativeengineering/lang/en_us.json): description overlay (placeholders, ported and fixed text).
 - [kubejs/server_scripts/other/jeed_providers.js](../kubejs/server_scripts/other/jeed_providers.js): every `jeed:effect_provider` / `jeed:potion_provider` recipe.
 - [neoCraftHelper.js](../kubejs/startup_scripts/func/neoCraftHelper.js) `jeedProvider`, `jeedPotionProvider`: the recipe helpers.
-- [EffectCategories.java](../development/patcherMod/src/main/java/com/SaintAlfonzo/creativeengineering/potion/EffectCategories.java), [MobEffectCategoryMixin.java](../development/patcherMod/src/main/java/com/SaintAlfonzo/creativeengineering/mixin/MobEffectCategoryMixin.java), CEConfig `[effects]`: category overrides.
+- [EffectCategories.java](../development/creativeCommon/src/main/java/com/SaintAlfonzo/creativecommon/potion/EffectCategories.java), [MobEffectCategoryMixin.java](../development/creativeCommon/src/main/java/com/SaintAlfonzo/creativecommon/mixin/MobEffectCategoryMixin.java), CEConfig `[effects]`: category overrides.
 - [kubejs/assets/kubejs/lang/en_us.json](../kubejs/assets/kubejs/lang/en_us.json): potion and arrow names for the `kubejs:*` and `creativeengineering:*` potions.
 - [kubejs/startup_scripts/cooking/potions.js](../kubejs/startup_scripts/cooking/potions.js): pack potions and brewing mixes.
 - [kubejs/startup_scripts/magic/magic_resistance.js](../kubejs/startup_scripts/magic/magic_resistance.js): the pack's effect.
@@ -800,6 +822,9 @@ ingredient type.
   as high as Jump Boost II alone, and the mid-air jump still works.
 - [ ] **EF-30 Oxidized copper:** wear four oxidized copper pieces for 20 min → poisoned at least once; tooltip-free, Poison
   icon only.
+- [ ] **EF-32 Phantom Bane skips one player only:** two players (or a bot) awake 4+ days at night in the open, the first
+  in the player list with `/effect give <p1> better_beacons:phantom_bane 600`; within a few spawn passes phantoms come
+  for the second player, none for the first.
 
 ## 9. History
 
@@ -827,3 +852,5 @@ ingredient type.
   to EF-30, scratch SQ-EFX-01 to -11.
 - 2026-10-31: `forceHudIconItems` (Builder's Tea, Canned Pufferfish, Farmer's Respite, Immersive Weathering); Double Jump
   and Jump Boost together (`potions/effects #14`).
+- 2026-11-01: `potions/effects #17` checked (4, One Haste effect): every Haste source already gives vanilla
+  `minecraft:haste`; the open question is the duplicate Rustic and Miner's potion lines (MND-40). Nothing built.

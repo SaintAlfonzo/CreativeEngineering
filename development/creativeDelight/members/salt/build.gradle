@@ -1,0 +1,7 @@
+// repackedSalt: Salt 1.19.2-1.2.4.1 repacked for Creative Delight. Everything is in
+// build-logic/src/main/groovy/ce.forge-repack.gradle and gradle.properties; the overlay is src/ (mods.toml and
+// one edited class, Dissolving: feature_writeup/salt.md).
+// Build: ./gradlew :repackedSalt:build --offline (ships only inside :creativeDelight:bundleJar).
+plugins {
+    id 'ce.forge-repack'
+}

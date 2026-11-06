@@ -11,10 +11,10 @@ can be potted, a tooltip label on every flower pot, every pot distinct, pots hol
 | Audit: every holder's accept rule, read from bytecode (section 2) | DONE 2026-10-27 (static); live run 2026-10-27 evening | SQ-POT-05 analysis, CQ-POT-01 |
 | `/dumppots` (`kubejs/server_scripts/_lib/dump_flower_pots.js`, in `/dumpall`) | BUILT 2026-10-27; SQ-POT-01 PASS 2026-10-27 evening (after two fixes: 121 potted, 101 pot-like, 543 plants) | none |
 | Probe `/pottest` (`tools/flower_pot_test/pot_probe.js`, scratch-only) | BUILT 2026-10-27; SQ-POT-02 to -04 ran 2026-10-27 evening (427 probe mismatches, 6 probe exceptions: `minecraft:hanging_roots` in 6 holders; the F1 `ClassCastException` did not show) | read the mismatches (SQ-POT-05) |
-| Matrix generator `tools/flower_pot_audit.py` -> [flower_pots_matrix.md](flower_pots_matrix.md) | BUILT 2026-10-27; regenerated from both dumps 2026-10-27 evening | none |
-| Botanist workbench as a flower pot (section 3.1, TODO `#5`) | BUILT 2026-10-29, installed 2026-10-29 (patcherMod 1.1.04); r1031 (2026-10-31): mixins and own block entity PASSED (SQ-POT-06b), a placed bench holds no plant; the flower in the house benches not read, SQ-POT-06 open (client check pending) | POT-08, SQ-POT-06, CQ-POT-02 |
-| Flower pot tweaks (section 3.2: framed pot before framing, Rich Hanging Pot, Large Flower Box, wall tooltips, WTHIT "Contains", box plant lists and models, silt pot and Vinery pot as planters, Vinery box centred on floors) | BUILT 2026-10-31 (patcherMod 1.1.04, backportedVinery `-07`), not installed, not tested | POT-10 to POT-16, SQ-POT-08; Floral pot rebuild planned (3.2.8) |
-| Bugs found (section 3) | open, none fixed | decisions D1 to D6 |
+| Matrix generator `tools/flower_pot_audit.py` -> [flower_pots_matrix.md](flower_pots_matrix.md) | BUILT 2026-10-27; regenerated from both dumps 2026-10-27 evening | stale since the 3.2 tweaks (2026-10-31, 1.1.06 changed planter box, Vinery box / pot and silt pot lists): rerun `/dumppots`, `/pottest all`, the audit (deep scan 2026-11-02) |
+| Botanist workbench as a flower pot (section 3.1, TODO `#5`) | BUILT 2026-10-29, installed 2026-10-29 (patcherMod 1.1.04), shipped 1.1.05; r1031 (2026-10-31): mixins and own block entity PASSED (SQ-POT-06b), a placed bench holds no plant; the flower in the house benches not read, SQ-POT-06 open (client check pending) | POT-08, SQ-POT-06, CQ-POT-02 |
+| Flower pot tweaks (section 3.2: framed pot before framing, Rich Hanging Pot, Large Flower Box, wall tooltips, WTHIT "Contains", box plant lists and models, silt pot and Vinery pot as planters, Vinery box centred on floors) | BUILT 2026-10-31 (patcherMod 1.1.04, backportedVinery `-07`), shipped 1.1.06 (Flower Pots bullets, with the Flower Test world type: SQ-POT-07 PASS); SQ-POT-08 PASSED r1101 (tags, recipe); in game not seen (deep scan 2026-11-02) | POT-10 to POT-16, SQ-POT-08; Floral pot rebuild planned (3.2.8) |
+| Bugs found (section 3) | F12 and F13 fixed 2026-11-03 (plan_scratch_bugfix_1103 2.4, 2.5; CD jar 19:43 and pack loot tables, not installed); F14 was a probe fault, not a bug; F1 struck (did not reproduce in r1102b) | rerun SQ-POT-03, -04, -04v; decisions D1 to D5 |
 | Tooltip labels, "every pot distinct", "pots hold every flower" | not started | decisions D1, D2, D6 |
 
 - **Regenerate:** `/dumppots` (and `/pottest all` on a scratch server), then `python3 tools/flower_pot_audit.py`.
@@ -76,7 +76,7 @@ gossypium. `/dumppots` replaces this count with the live map.
 
 | # | Finding | Kind | Where |
 |---|---|---|---|
-| F1 | Right-click on an AF planter box with `fungidelight:cleaned_cap`, `cooked_cleaned_cap`, `truffle` or `truffle_slice` throws `ClassCastException` on the server (`PlanterBoxBlockEntity.placeFlower` casts to `BlockItem`; the four are plain items in `#forge:mushrooms`, which the planter tag includes) | bug, server exception | SQ-POT-03 confirms |
+| F1 | ~~Right-click on an AF planter box with `fungidelight:cleaned_cap`, `cooked_cleaned_cap`, `truffle` or `truffle_slice` throws `ClassCastException` on the server (`PlanterBoxBlockEntity.placeFlower` casts to `BlockItem`; the four are plain items in `#forge:mushrooms`, which the planter tag includes)~~ Struck 2026-11-02: not reproduced in r1102b SQ-POT-03 | ~~bug, server exception~~ not reproduced | SQ-POT-03 (r1102b: no `ClassCastException`) |
 | F2 | `vinery:potted_apple_tree_sapling` and `potted_cherry_tree_sapling` are registered but nothing calls `addPlant`: the saplings do nothing on a pot | bug, in-tree (backportedVinery) | SQ-POT-02 |
 | F3 | No Botania flower (mystical, shiny, double, floating, special, chibi, mushrooms: 170 items) goes in any one-block pot; only the flower box, planter box, Vinery box and pot, and silt pot take some | gap | D1 |
 | F4 | `supplementaries:planter_rich_soul` is never registered: Supplementaries checks the mod id `nethers_delight`, the installed Nether's Delight is `nethersdelight` | gap (mod compat) | D5 |
@@ -87,6 +87,9 @@ gossypium. `/dumppots` replaces this count with the live map.
 | F9 | Vinery pot renderer forces `HALF=UPPER` on whatever tall flower it holds; every live `#minecraft:tall_flowers` entry should be a double plant (wild rice, flowering rush, Botania double flowers): a client check | risk | CQ-POT-01 |
 | F10 | Supplementaries' hanging pot can only be made from an empty vanilla pot: a framed pot hangs by itself, no other pot hangs | note | none |
 | F11 | Glow lichen, mangrove roots, beachgrass, kelp variants, mushroom colonies, rubberwood sapling, magic peanut (Vintage) have no pot | gap | D1 |
+| F12 | ~~`minecraft:hanging_roots` used on 6 holders threw `Cannot set property DirectionProperty facing to up on immersive_weathering:hanging_roots_wall`~~ FIXED 2026-11-03: Immersive Weathering's `WallRootsBlock.getStateForPlacement` sets `facing` to the clicked face (only N/S/W/E exist), so placing hanging roots against any top or bottom face threw, for players too. CD mixin `immersive_weathering/WallRootsVerticalFaceMixin` returns no wall state for a vertical face (the item then does nothing there) | bug, fixed (CD) | SQ-POT-03 |
+| F13 | ~~Breaking a potted gossypium (Miner's) or potted hemp (IE) dropped nothing~~ FIXED 2026-11-03: Miner's has no loot table for `potted_gossypium`, IE's `potted_hemp` table drops air. Pack tables in `kubejs/data/<ns>/loot_tables/blocks/` drop the pot and the plant (the IE hemp seed). The 2026-10-27 probe data shows no other potted block in the vanilla pot that loses its plant | bug, fixed (data) | SQ-POT-04v |
+| F14 | Not a bug: r1102b/r1103 saw the Beautify hanging pot drop only the pot. The probe clicked 4 times (plant, take back, plant, take back: Beautify's pot hands the plant back on a second click) and broke an empty pot; its loot table drops the pot and the plant by `potflower`. `pot_probe.js` now replants once and stops on such a toggle (`toggle: true` in the row) and records the first stack frames of an error (`stack`) | note (probe) | SQ-POT-04 |
 
 ### 3.1 Botanist workbench as a flower pot (pack)
 
@@ -172,7 +175,7 @@ adds `EntityBlock`, `use` and `onRemove`; the block entity `creativeengineering:
 
 - [../kubejs/server_scripts/_lib/dump_flower_pots.js](../kubejs/server_scripts/_lib/dump_flower_pots.js): `/dumppots`
 - [../tools/flower_pot_test/pot_probe.js](../tools/flower_pot_test/pot_probe.js): `/pottest` scratch probe
-- [../kubejs/server_scripts/_lib/flower_world.js](../kubejs/server_scripts/_lib/flower_world.js): the Flower Test
+- [../kubejs/data/creativedevtools/kubejs/flowerworld/flower_world.js](../kubejs/data/creativedevtools/kubejs/flowerworld/flower_world.js) (Creative Devtools since 2026-11-01, dev only): the Flower Test
   world builder (every plant some holder takes x one block per holder type, one table along +z, axis of plants on
   grass, hanging holders one block up under glass). Runs by itself on the first start of a world made with the
   "Flower Test" world type; `/flowerworld` (op) rebuilds it in any world
@@ -185,7 +188,7 @@ adds `EntityBlock`, `use` and `onRemove`; the block entity `creativeengineering:
   [../kubejs/client_scripts/tooltips.js](../kubejs/client_scripts/tooltips.js) Flower Pots;
   [../kubejs/client_scripts/namechanges.js](../kubejs/client_scripts/namechanges.js); Rich Hanging Pot recipe in
   [../kubejs/server_scripts/other/flowers.js](../kubejs/server_scripts/other/flowers.js)
-- [../development/patcherMod/src/main/resources/data/creativeengineering/worldgen/world_preset/flower_test.json](../development/patcherMod/src/main/resources/data/creativeengineering/worldgen/world_preset/flower_test.json):
+- [../development/creativeDevtools/src/main/resources/data/creativeengineering/worldgen/world_preset/flower_test.json](../development/creativeDevtools/src/main/resources/data/creativeengineering/worldgen/world_preset/flower_test.json) (Creative Devtools):
   the "Flower Test" world type (flat plains, no features or structures, bedrock / stone / dirt / grass, the stack
   the builder checks for), listed in the World Type button through `#minecraft:normal`
 - [../tools/flower_pot_audit.py](../tools/flower_pot_audit.py): matrix generator, holder rules as data
@@ -201,9 +204,12 @@ adds `EntityBlock`, `use` and `onRemove`; the block entity `creativeengineering:
 
 ## 7. In-game test suite
 
+- **r1102b 2026-11-02** (scratch server; verdicts in `perf/runs/r1102b/` HANDOVER.md and the slice judged.md): FAIL SQ-POT-03: `minecraft:hanging_roots` on 6 holders throws `Cannot set property DirectionProperty` (needs a stack trace in game; old F1 not reproduced); FAIL SQ-POT-04: `beautify:hanging_pot` loses its plant when broken (item loss).
+- **r1103 2026-11-03** (scratch server; verdicts in `perf/runs/r1103/` FINAL.md and the slice judged.md): FAIL SQ-POT-04v: breaking potted gossypium / potted hemp drops nothing (Miner's `MDBlocks.java` 39 has no loot table; IE `potted_hemp` loot drops air).
+
 Scratch server entries: SQ-POT-01 to SQ-POT-05 in [testing/scratch_queue.md](testing/scratch_queue.md). In game:
 
-- [ ] **POT-09 Flower Test world type:** Create New World, More World Options, World Type cycles to "Flower Test";
+- [ ] **POT-09 Flower Test world type (dev instance with Creative Devtools):** Create New World, More World Options, World Type cycles to "Flower Test";
   on entering, chat says "Flower Test: N plants x 12 holders built" within ~30 s; you stand at -5 -5 in front of one
   unbroken table (header signs at z = -2, rows every 2 blocks along +z, no second section); the Supplementaries and
   Beautify hanging pots hang one block above the grass under glass; no Handcrafted pot column; no melon, pumpkin or
@@ -284,3 +290,5 @@ Scratch server entries: SQ-POT-01 to SQ-POT-05 in [testing/scratch_queue.md](tes
 - 2026-10-31 (later): Flower Test silt pot filled by a rooted dirt click before planting; Floral large pots hidden and
   out of the Flower Test world (12 holders); sunflower in the planter box list; silt pot tooltip and WTHIT
   "Rooted Dirt" line. patcherMod 1.1.04 rebuilt, not installed. POT-17 added.
+- 2026-11-01: the Flower Test world builder, its preset and lang key moved to Creative Devtools (dev only,
+  creative_devtools.md 2); players no longer get the world type.

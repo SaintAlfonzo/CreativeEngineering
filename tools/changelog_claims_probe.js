@@ -1,4 +1,4 @@
-// Changelog claims probe (scratch queue SQ-CL-01: bullets of kubejs/assets/creativeengineering/changelog/unreleased.md
+// Changelog claims probe (scratch queue SQ-CL-01: bullets of kubejs/assets/creativecommon/changelog/unreleased.md
 // fixed in the 2026-10-22 audit). Scratch-only: copy into a scratch server's kubejs/server_scripts
 // (tools/creative_labels_test/scratch_server.sh), never into the pack. Run /cltest; results are "[cltest] ..." lines
 // in logs/latest.log, ending in "[cltest] done: N PASS, M FAIL".
@@ -9,7 +9,7 @@
 //  hand     every recipe that uses up a pie filling can, except the oven's, is skipped by Create's automation
 (() => {
     const $CLForgeReg = Java.loadClass('net.minecraftforge.registries.ForgeRegistries')
-    const $CLServings = Java.loadClass('com.SaintAlfonzo.creativeengineering.food.CanServings')
+    const $CLServings = Java.loadClass('com.SaintAlfonzo.creativedelight.food.CanServings')
 
     const i = global.item
     let pass = 0, fail = 0

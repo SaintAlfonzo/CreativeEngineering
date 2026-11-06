@@ -1,0 +1,7 @@
+// repackedNethers: Nether's Delight 1.19-3.1 repacked for Creative Delight, with the 4.0 carry-overs
+// (feature_writeup/nethers_delight.md 4.9). Everything is in build-logic/src/main/groovy/ce.forge-repack.gradle
+// and gradle.properties; the overlay is src/.
+// Build: ./gradlew :creativeDelight:build --offline (ships only inside :creativeDelight:bundleJar).
+plugins {
+    id 'ce.forge-repack'
+}

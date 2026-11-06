@@ -29,10 +29,10 @@ and gear effects lives in Creative Brewing, so patcherMod and the pack folder ke
 
 ### Now
 - Framework built 2026-10-31 and installed (16:55), not booted: `global.CB` (`on`, `feature`, `members`, `recipes`) in
-  [cb_core.js](../../development/creativeBrewing/src/main/resources/kubejs_startup/creative_brewing/cb_core.js);
+  [cb_core.js](../../development/creativeBrewing/src/main/resources/kubejs_startup/creativebrewing/cb_core.js);
   server and client trees hold only `_core/cb_server.js` and `_core/cb_client.js`
-  (`kubejs/data/creative_brewing/kubejs/`, `kubejs/assets/creative_brewing/kubejs/`); `CBConfig.FEATURE_ROWS` empty;
-  `creative_brewing.mixins.json` empty (creative_brewing.md 2).
+  (`kubejs/data/creativebrewing/kubejs/`, `kubejs/assets/creativebrewing/kubejs/`); `CBConfig.FEATURE_ROWS` empty;
+  `creativebrewing.mixins.json` empty (creative_brewing.md 2).
 - **Moved so far (2026-10-31), to Creative Delight, not CB** (owner Q1): the Brewin' dishes from
   `server_scripts/cooking/cooking.js` and the Brewin' tags from `server_scripts/tags/cookingtags.js` (both pack files
   now 4 lines) into CD `brewinandchewin/recipes.js` and `tags.js` (creative_brewing.md 4.5). The TODO row's Details
@@ -47,17 +47,17 @@ and gear effects lives in Creative Brewing, so patcherMod and the pack folder ke
   creative_brewing.md 7.
 
 ### Build
-1. **Prerequisite:** SQ-CBJ-01 to -05 pass (bundle boots, pack order `creative_delight` before `creative_brewing` in
+1. **Prerequisite:** SQ-CBJ-01 to -05 pass (bundle boots, pack order `creativedelight` before `creativebrewing` in
    `logs/kubejs/startup.log`).
 2. **Phase 1, one group per session** (each: move the file whole, no copy left, a 4.5 log line; mixed files split):
    a. Startup: `potions.js`, `potion_area.js`, `potion_buckets.js`, `magic_resistance.js`, `alcohol_drinks.js`,
       `food_values.js` into `development/creativeBrewing/src/main/resources/kubejs_startup/<modid>/` (`minecraft/`,
       `creativeengineering/`, `farmersrespite/` ...). Grep each file's top-level `var` names first: only `global`
       crosses packs (`global.alcohol`, `global.potionArea`, `global.foodEffectSwaps`, `global.effect` are already global).
-   b. Server: the server files into `kubejs/data/creative_brewing/kubejs/<modid>/`, each headed `// requires: <modid>`,
+   b. Server: the server files into `kubejs/data/creativebrewing/kubejs/<modid>/`, each headed `// requires: <modid>`,
       member rows behind `if (!global.CB || !global.CB.on('<id>')) return`, recipes inside `global.CB.recipes(...)`.
    c. Client: `potion_buckets.js`, the effect tooltips, then the splits (`tooltips.js` Brewin' / Vinery lines,
-      `namechanges.js`, `fluid_jei.js` 42-63) into `kubejs/assets/creative_brewing/kubejs/<modid>/`.
+      `namechanges.js`, `fluid_jei.js` 42-63) into `kubejs/assets/creativebrewing/kubejs/<modid>/`.
    d. Gear effects (`armor_effects.js`, `tool_effects.js`, both sides) and the Winemaker trade split
       (`economy/wandering_trades.js` 76-89, `func/trade_helper.js` 93-114).
    e. Generators `gen_effect_descriptions.py`, `gen_coaster_models.py`: an `outRoot` in `tools/generators.json`
@@ -75,7 +75,7 @@ and gear effects lives in Creative Brewing, so patcherMod and the pack folder ke
 ### Ids and data
 No id changes (rule 4.1.1): potions `creativeengineering:long_reach`, `phantom_bane`, `magic_resistance`, the
 magic_resistance effect, the potion buckets. **Recipe ids do change** for moved server scripts:
-`creativeengineering:<type>/<suffix>` -> `creative_brewing:<type>/<suffix>` (`global.CB.recipes`), as the CD moves did.
+`creativeengineering:<type>/<suffix>` -> `creativebrewing:<type>/<suffix>` (`global.CB.recipes`), as the CD moves did.
 Dict keys stay in the pack dicts (rule 4.1.2). Lang keys keep their names (rule 4.1.5).
 
 ### Decisions
@@ -102,6 +102,6 @@ Dict keys stay in the pack dicts (rule 4.1.2). Lang keys keep their names (rule 
   the moved features' writeups).
 - CBR-new2 (proposed, numbered when queued): after phase 2, the JEI potion categories, WTHIT coaster lines and effect HUD icons show as before;
   `latest.log` has no mixin apply errors from CB.
-- CBR-new3 (proposed, numbered when queued): after phase 3, edited values in `creative_brewing-common.toml` match the old CE file; no WARN.
+- CBR-new3 (proposed, numbered when queued): after phase 3, edited values in `creativebrewing-common.toml` match the old CE file; no WARN.
 - Scratch: an SQ-CB row per group (boot clean, recipe count per type unchanged apart from the namespace, using the
   move-diff harness of `creativedelight/framework #6`).

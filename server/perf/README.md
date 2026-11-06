@@ -15,7 +15,7 @@ When it lags, save the last minutes to a file and turn that file into a per-mod 
   temp folder.
 
 `ce-server.jfc` lists what is recorded: CPU stack samples every 10 ms, allocation samples, GC, lock waits
-over 20 ms, Minecraft's own tick-time and chunk-generation events, and the pack's own `creativeengineering.*`
+over 20 ms, Minecraft's own tick-time and chunk-generation events, and the pack's own `creativecommon.*`
 events: every tick, each dimension's tick, chunk waits, KubeJS handlers by script and line, entity and block
 entity time by type. Its header comment has the details.
 

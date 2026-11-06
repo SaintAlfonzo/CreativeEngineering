@@ -1,0 +1,157 @@
+# Run r1102b, rerun boot B: fresh group B world (prep_srv.sh OUT_RB rb B spawn-animals=true: seed 8675309, structures
+# on), default config (wildCrops on). Probes: zz_zq_probe.js (prep_srv.sh copies the current one), zz_count.js.
+# Rows: s2_B.qb rows that were batch faults or OPEN (SQ-RD-10, SQ-WCD-07, SQ-WCD-02, SQ-RD-26), with more villages,
+# every warm_dry farm crop counted, second jungle / beach / savanna located away from spawn, fixed biometag names.
+# Same seed as s2b, so the spawn-nearest hits repeat r1102b s2's (savanna village -1459 826, jungle -1616 -302, beach
+# -80 50); the new hits come from `execute positioned X 70 Z run locate ...` far from them.
+# Locates may be async (Async Locator): every capture waits for its "is at [" line first. Setup: r_setup.md, boot 2.
+pace 2
+
+## SQ-RD-10 | village farm crops: log line; savanna farms get warm_dry crops (three villages, every group crop counted)
+# village_farms.json: a field is replaced with chance 0.35 by one of 11 warm_dry crops, so cotton alone is about 3% of
+# fields (the queue's "about 25%" is stale). Pass = some warm_dry crop in a savanna village farm.
+bootexpect Done \(
+bootexpect \[creativedelight\] village farm crops added to [1-9]\d* pool elements of \d+ listed farm templates$
+bootreject village farm crops .*failed
+> gamerule doDaylightCycle false
+> weather clear 100000
+> locate structure minecraft:village_savanna
+waitlog is at \[ 600
+capture VS is at \[(-?\d+), (~|-?\d+), (-?\d+)\]
+# the later locates print the same text: each waitlog skips the hits already captured (variables are substituted in
+# waitlog patterns), and capture takes the last matching line, i.e. the new one
+> execute positioned 3000 70 3000 run locate structure minecraft:village_savanna
+waitlog The nearest minecraft:village_savanna is at \[(?!{VS1}, ~, {VS3}\])-?\d+, 600
+capture VT The nearest minecraft:village_savanna is at \[(-?\d+), (~|-?\d+), (-?\d+)\]
+> execute positioned -3000 70 3000 run locate structure minecraft:village_savanna
+waitlog The nearest minecraft:village_savanna is at \[(?!{VS1}, ~, {VS3}\])(?!{VT1}, ~, {VT3}\])-?\d+, 600
+capture VU The nearest minecraft:village_savanna is at \[(-?\d+), (~|-?\d+), (-?\d+)\]
+> forceload add {VS1-48} {VS3-48} {VS1+48} {VS3+48}
+> forceload add {VT1-48} {VT3-48} {VT1+48} {VT3+48}
+> forceload add {VU1-48} {VU3-48} {VU1+48} {VU3+48}
+sleep 120
+> zq count {VS1-56} 40 {VS3-56} {VS1+56} 160 {VS3+56} minecraft:wheat
+waitlog \[zq\] count minecraft:wheat 300
+> zq count {VS1-56} 40 {VS3-56} {VS1+56} 160 {VS3+56} farmersdelight:cabbages
+> zq count {VS1-56} 40 {VS3-56} {VS1+56} 160 {VS3+56} farmersdelight:onions
+> zq count {VS1-56} 40 {VS3-56} {VS1+56} 160 {VS3+56} farmersdelight:tomatoes
+> zq count {VS1-56} 40 {VS3-56} {VS1+56} 160 {VS3+56} veggiesdelight:sweet_potato_crop
+> zq count {VS1-56} 40 {VS3-56} {VS1+56} 160 {VS3+56} veggiesdelight:zucchini_crop
+> zq count {VS1-56} 40 {VS3-56} {VS1+56} 160 {VS3+56} vintagedelight:peanut_crop
+> zq count {VS1-56} 40 {VS3-56} {VS1+56} 160 {VS3+56} rusticdelight:cotton
+> zq count {VS1-56} 40 {VS3-56} {VS1+56} 160 {VS3+56} corn_delight:corn_crop
+> zq count {VS1-56} 40 {VS3-56} {VS1+56} 160 {VS3+56} immersiveengineering:hemp
+> zq count {VS1-56} 40 {VS3-56} {VS1+56} 160 {VS3+56} minecraft:melon_stem
+> zq count {VS1-56} 40 {VS3-56} {VS1+56} 160 {VS3+56} farmersrespite:tea_bush
+> zq count {VT1-56} 40 {VT3-56} {VT1+56} 160 {VT3+56} minecraft:wheat
+> zq count {VT1-56} 40 {VT3-56} {VT1+56} 160 {VT3+56} farmersdelight:cabbages
+> zq count {VT1-56} 40 {VT3-56} {VT1+56} 160 {VT3+56} farmersdelight:onions
+> zq count {VT1-56} 40 {VT3-56} {VT1+56} 160 {VT3+56} farmersdelight:tomatoes
+> zq count {VT1-56} 40 {VT3-56} {VT1+56} 160 {VT3+56} veggiesdelight:sweet_potato_crop
+> zq count {VT1-56} 40 {VT3-56} {VT1+56} 160 {VT3+56} veggiesdelight:zucchini_crop
+> zq count {VT1-56} 40 {VT3-56} {VT1+56} 160 {VT3+56} vintagedelight:peanut_crop
+> zq count {VT1-56} 40 {VT3-56} {VT1+56} 160 {VT3+56} rusticdelight:cotton
+> zq count {VT1-56} 40 {VT3-56} {VT1+56} 160 {VT3+56} corn_delight:corn_crop
+> zq count {VT1-56} 40 {VT3-56} {VT1+56} 160 {VT3+56} immersiveengineering:hemp
+> zq count {VT1-56} 40 {VT3-56} {VT1+56} 160 {VT3+56} minecraft:melon_stem
+> zq count {VT1-56} 40 {VT3-56} {VT1+56} 160 {VT3+56} farmersrespite:tea_bush
+> zq count {VU1-56} 40 {VU3-56} {VU1+56} 160 {VU3+56} minecraft:wheat
+> zq count {VU1-56} 40 {VU3-56} {VU1+56} 160 {VU3+56} farmersdelight:cabbages
+> zq count {VU1-56} 40 {VU3-56} {VU1+56} 160 {VU3+56} farmersdelight:onions
+> zq count {VU1-56} 40 {VU3-56} {VU1+56} 160 {VU3+56} farmersdelight:tomatoes
+> zq count {VU1-56} 40 {VU3-56} {VU1+56} 160 {VU3+56} veggiesdelight:sweet_potato_crop
+> zq count {VU1-56} 40 {VU3-56} {VU1+56} 160 {VU3+56} veggiesdelight:zucchini_crop
+> zq count {VU1-56} 40 {VU3-56} {VU1+56} 160 {VU3+56} vintagedelight:peanut_crop
+> zq count {VU1-56} 40 {VU3-56} {VU1+56} 160 {VU3+56} rusticdelight:cotton
+> zq count {VU1-56} 40 {VU3-56} {VU1+56} 160 {VU3+56} corn_delight:corn_crop
+> zq count {VU1-56} 40 {VU3-56} {VU1+56} 160 {VU3+56} immersiveengineering:hemp
+> zq count {VU1-56} 40 {VU3-56} {VU1+56} 160 {VU3+56} minecraft:melon_stem
+> zq count {VU1-56} 40 {VU3-56} {VU1+56} 160 {VU3+56} farmersrespite:tea_bush
+sleep 30
+count \[zq\] count minecraft:wheat: [1-9] >= 2
+expect \[zq\] count (farmersdelight:(cabbages|onions|tomatoes)|veggiesdelight:(sweet_potato|zucchini)_crop|vintagedelight:peanut_crop|rusticdelight:cotton|corn_delight:corn_crop|immersiveengineering:hemp|minecraft:melon_stem|farmersrespite:tea_bush): [1-9]
+look per village (VS, VT, VU in order): wheat plus some of the 11 warm_dry crops, each standing on farmland ("on:" list); a village with wheat 0 means the box missed it
+
+## SQ-RD-10b | plains village farms unchanged by the warm_dry rule: no cotton (plains half of SQ-RD-10)
+> locate structure minecraft:village_plains
+waitlog The nearest minecraft:village_plains 600
+capture VP The nearest minecraft:village_plains is at \[(-?\d+), (~|-?\d+), (-?\d+)\]
+> forceload add {VP1-48} {VP3-48} {VP1+48} {VP3+48}
+sleep 40
+> zq count {VP1-56} 40 {VP3-56} {VP1+56} 160 {VP3+56} minecraft:wheat
+waitlog \[zq\] count minecraft:wheat 300
+> zq count {VP1-56} 40 {VP3-56} {VP1+56} 160 {VP3+56} minecraft:carrots
+> zq count {VP1-56} 40 {VP3-56} {VP1+56} 160 {VP3+56} minecraft:potatoes
+> zq count {VP1-56} 40 {VP3-56} {VP1+56} 160 {VP3+56} minecraft:beetroots
+> zq count {VP1-56} 40 {VP3-56} {VP1+56} 160 {VP3+56} rusticdelight:cotton
+waitlog \[zq\] count rusticdelight:cotton 300
+expect \[zq\] count minecraft:(wheat|carrots|potatoes|beetroots): [1-9]
+expect \[zq\] count rusticdelight:cotton: 0;
+look plains crops present (the box hit the village); temperate crops (cabbage, onion, tomato...) may replace some fields, cotton never
+
+## SQ-WCD-07 | savanna village farms: cotton among the warm_dry replacements; the cotton biome tag
+> zq biometag creativedelight:wild_crops/cotton
+expect biometag creativedelight:wild_crops/cotton \(\d+\): .*minecraft:savanna
+look the three savanna cotton counts are in rows/SQ-RD-10.log; cotton is about 3% of fields, so 0 in three villages is not a fail when SQ-RD-10 shows other warm_dry crops (farm crops are chosen by template group, village_farms.json, not by this tag: the row text is stale)
+
+## SQ-WCD-02 | jungle: cocoa and melons; beach: wild cabbages on sand (second jungle and beach away from spawn)
+> zq biometag creativedelight:wild_crops/melon
+> zq biometag creativedelight:wild_crops/cabbage
+expect biometag creativedelight:wild_crops/melon \(\d+\): .*minecraft:jungle
+expect biometag creativedelight:wild_crops/cabbage \(\d+\): .*minecraft:beach
+> execute positioned 2500 70 -2500 run locate biome minecraft:jungle
+waitlog The nearest minecraft:jungle 600
+capture JG The nearest minecraft:jungle is at \[(-?\d+), (~|-?\d+), (-?\d+)\]
+> forceload add {JG1-48} {JG3-48} {JG1+48} {JG3+48}
+sleep 40
+> zq count {JG1-56} 40 {JG3-56} {JG1+56} 200 {JG3+56} minecraft:cocoa
+waitlog \[zq\] count minecraft:cocoa 300
+> zq count {JG1-56} 40 {JG3-56} {JG1+56} 200 {JG3+56} minecraft:melon
+waitlog \[zq\] count minecraft:melon 300
+expect \[zq\] count minecraft:cocoa: [1-9]
+expect \[zq\] count minecraft:melon: [1-9]
+> execute positioned 2500 70 2500 run locate biome minecraft:beach
+waitlog The nearest minecraft:beach 600
+capture BC The nearest minecraft:beach is at \[(-?\d+), (~|-?\d+), (-?\d+)\]
+> forceload add {BC1-48} {BC3-48} {BC1+48} {BC3+48}
+sleep 40
+> zq count {BC1-56} 50 {BC3-56} {BC1+56} 100 {BC3+56} minecraft:sand
+waitlog \[zq\] count minecraft:sand 300
+> zq count {BC1-56} 50 {BC3-56} {BC1+56} 100 {BC3+56} farmersdelight:wild_cabbages
+waitlog \[zq\] count farmersdelight:wild_cabbages 300
+expect \[zq\] count farmersdelight:wild_cabbages: [1-9]\d*; on: .*minecraft:sand
+look 7 x 7 chunks per biome (jungle near 2500 -2500, beach near 2500 2500); the sand count shows how much beach the box holds: a 0 cabbage count on a few hundred sand blocks is weak evidence, on thousands a fail
+
+## SQ-RD-26 | Rustic wilds by climate; giant peppers rare, warm dry grassy only; none in the jungle
+> zq count {JG1-56} 40 {JG3-56} {JG1+56} 200 {JG3+56} rusticdelight:wild_bell_peppers
+waitlog \[zq\] count rusticdelight:wild_bell_peppers 300
+> zq count {JG1-56} 40 {JG3-56} {JG1+56} 200 {JG3+56} rusticdelight:wild_coffee
+waitlog \[zq\] count rusticdelight:wild_coffee 300
+> zq count {JG1-56} 40 {JG3-56} {JG1+56} 200 {JG3+56} rusticdelight:bell_pepper_red_block
+waitlog \[zq\] count rusticdelight:bell_pepper_red_block 300
+expect \[zq\] count rusticdelight:bell_pepper_red_block: 0
+> execute positioned -2500 70 2500 run locate biome minecraft:savanna
+waitlog The nearest minecraft:savanna 600
+capture SV The nearest minecraft:savanna is at \[(-?\d+), (~|-?\d+), (-?\d+)\]
+> forceload add {SV1-64} {SV3-64} {SV1+64} {SV3+64}
+sleep 60
+> zq count {SV1-72} 40 {SV3-72} {SV1+72} 160 {SV3+72} rusticdelight:wild_cotton
+waitlog \[zq\] count rusticdelight:wild_cotton 300
+> zq count {SV1-72} 40 {SV3-72} {SV1+72} 160 {SV3+72} rusticdelight:bell_pepper_red_block
+> zq count {SV1-72} 40 {SV3-72} {SV1+72} 160 {SV3+72} rusticdelight:wild_coffee
+> zq count {SV1-72} 40 {SV3-72} {SV1+72} 160 {SV3+72} rusticdelight:wild_bell_peppers
+sleep 60
+> zq biometag creativedelight:wild_crops/bell_pepper
+> zq biometag creativedelight:wild_crops/coffee
+> zq biometag creativedelight:wild_crops/giant_bell_pepper
+expect \[zq\] count rusticdelight:wild_coffee: [1-9]
+expect \[zq\] count rusticdelight:wild_cotton: [1-9]
+expect biometag creativedelight:wild_crops/bell_pepper \([1-9]\d*\): .*jungle
+reject biometag creativedelight:wild_crops/giant_bell_pepper \(\d+\): .*jungle
+look jungle box (near 2500 -2500): wild bell peppers and wild coffee, no giant pepper; savanna box (9 x 9 chunks): wild cotton, giant peppers rare (0 or 1 patch is normal); r1102b s2's spawn jungle had wild_bell_peppers 0: a second 0 here with the bell_pepper tag naming jungle biomes is a finding
+
+## SQ-RD-22 | rerun after gen_comfort_nourishment.py (19:50): Calamari Soup keeps Nourishment (fresh kubejs copy)
+> zq food rusticdelight:calamari_soup
+> zq food rusticdelight:fried_dough
+expect food rusticdelight:calamari_soup: .*farmersdelight:nourishment amp 0 \d+t
+look duration against kubejs/generation_scripts/food/comfort_nourishment.json (generator says 240 s = 4800t; Rustic's own value 3600t)

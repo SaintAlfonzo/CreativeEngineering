@@ -1,0 +1,12 @@
+# Run r1102b, worldgen slice, boot F2: group B fresh world "ftw_off", eval seed, [worldgen.systems] firstTickWater = false.
+# SQ-FTW-02 second half. Setup: w_setup.md F2.
+pace 2
+
+## SQ-FTW-02-off | ftw_off: item entities after 120 s, about the eval's 672
+bootexpect Done \(
+shell grep -nE '^\s*firstTickWater = false' config/creativeengineering-common.toml
+sleep 120
+> save-all flush
+waitlog Saved the game 300
+shell mkdir -p $INST/perf/runs/r1102b/w; rm -rf ../ftw_off_snap; mkdir ../ftw_off_snap && cp -r ftw_off/entities ../ftw_off_snap/ && python3 -I $INST/tools/perf/eval/entity_census.py ../ftw_off_snap > $INST/perf/runs/r1102b/w/ftw_off_census.txt 2>&1; head -12 $INST/perf/runs/r1102b/w/ftw_off_census.txt; echo; echo "== ftw_on"; head -12 $INST/perf/runs/r1102b/w/ftw_on_census.txt
+look ftw_off about 672 item entities (299 moss carpet, 65 wheat seeds, 53 azalea ...); ftw_on near 0 (SQ-FTW-02); falling blocks may stay in both

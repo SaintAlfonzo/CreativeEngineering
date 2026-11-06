@@ -1,0 +1,7 @@
+{
+  "parent": "incubation:block/one_turkey_egg",
+  "textures": {
+    "eggs": "creativedelight:block/emu_eggs",
+    "particle": "#eggs"
+  }
+}

@@ -3,28 +3,36 @@
 // specific to CB, the same way creativeDelight/build.gradle does for CD:
 //   - the CB script trees, authored in the pack folder so /reload and F3+T pick them up without a rebuild, copied into
 //     the jar at the same resource paths:
-//       kubejs/data/creative_brewing/kubejs/    -> data/creative_brewing/kubejs/    (server scripts)
-//       kubejs/assets/creative_brewing/kubejs/  -> assets/creative_brewing/kubejs/  (client scripts)
-//     Startup scripts live in this project (src/main/resources/kubejs_startup/creative_brewing/ and one folder per mod),
-//     loaded from the jar by patcherMod's startup loader.
-//   - creative_brewing_members.txt: the mod ids of bundle_members, read by CBConfig (one list).
+//       kubejs/data/creativebrewing/kubejs/    -> data/creativebrewing/kubejs/    (server scripts)
+//       kubejs/assets/creativebrewing/kubejs/  -> assets/creativebrewing/kubejs/  (client scripts)
+//     Startup scripts live in this project (src/main/resources/kubejs_startup/creativebrewing/ and one folder per mod),
+//     loaded from the jar by Creative Common's startup loader.
+//   - creativebrewing_members.txt: the mod ids of bundle_members, read by CBConfig (one list).
 // Build: ./gradlew :creativeBrewing:build --offline   Install: ./gradlew :creativeBrewing:installToMods
 plugins {
     id 'ce.forge-bundle'
 }
 
 dependencies {
-    // CEConfig, the remainder buffer API and the other pack Java CB's compartments call; patcherMod is a hard dependency.
-    compileOnly project(':patcherMod')
+    // CEConfig, the remainder buffer API and the other pack Java CB's compartments call; Creative Common is a hard dependency.
+    compileOnly project(':creativeCommon')
+    // The mods the potion, effect and machine code targets (Create, IE, JEI, JEED, Farmer's Respite, ...): the pack's
+    // jars, shared with Creative Common (git-ignored libs/, SRG-named), as creativeCompat does.
+    compileOnly fileTree(dir: rootProject.file('development/creativeCommon/libs'), include: '*.jar')
 }
 
-def scriptTrees = ['data/creative_brewing/kubejs', 'assets/creative_brewing/kubejs']
+def scriptTrees = ['data/creativebrewing/kubejs', 'assets/creativebrewing/kubejs']
 
-def membersFile = layout.buildDirectory.file('generated/cb_members/creative_brewing_members.txt')
+def membersFile = layout.buildDirectory.file('generated/cb_members/creativebrewing_members.txt')
 def writeMembers = tasks.register('writeMembersList') {
     def ids = providers.provider {
         (findProperty('bundle_members') ?: '').toString().split(',')*.trim().findAll { it }
-                .collect { project(it).findProperty('mod_id').toString() }
+                .collectMany { m ->
+                    // a member jar that holds a second mod lists it in bundle_extra_mods (End's: enders_additions), so
+                    // that mod gets its own [members] switch too
+                    def extra = (project(m).findProperty('bundle_extra_mods') ?: '').toString().split(',')*.trim().findAll { it }
+                    [project(m).findProperty('mod_id').toString()] + extra
+                }
     }
     inputs.property('ids', ids)
     outputs.file(membersFile)
@@ -50,9 +58,9 @@ tasks.named('processResources', ProcessResources).configure {
 tasks.named('jar', Jar).configure {
     doLast {
         def entries = new java.util.zip.ZipFile(archiveFile.get().asFile).withCloseable { z -> z.entries().collect { it.name } }
-        ['kubejs_startup/creative_brewing/', 'data/creative_brewing/kubejs/', 'assets/creative_brewing/kubejs/'].each { dir ->
+        ['kubejs_startup/creativebrewing/', 'data/creativebrewing/kubejs/', 'assets/creativebrewing/kubejs/'].each { dir ->
             if (!entries.any { it.startsWith(dir) && it.endsWith('.js') }) {
-                throw new GradleException("creative_brewing jar has no scripts under ${dir}")
+                throw new GradleException("creativebrewing jar has no scripts under ${dir}")
             }
         }
     }

@@ -3,8 +3,8 @@
 Written 2026-10-24 from [todo/TODO.md](../todo/TODO.md) `# dishes`, Sub `ocean` (rows 1 to 5, all scratchpad
 2026-10-24); rows 6 to 8 added and the built rows condensed 2026-10-31. Layout per [README.md](README.md). Feature
 writeup: [ocean_delight.md](../ocean_delight.md) (sections 3.1 newer jars, 5 built, 6 tests; prefix DA-). Ocean's Delight
-and Oceanic Delight are Creative Delight members since 2026-10-27 (nested in `creative_delight-1.0.0.jar`, donor jars in
-`development/creativeDelight/upstream/`); their pack code is CD `kubejs/data/creative_delight/kubejs/oceansdelight/`
+and Oceanic Delight are Creative Delight members since 2026-10-27 (nested in `creativedelight-1.0.0.jar`, donor jars in
+`development/creativeDelight/upstream/`); their pack code is CD `kubejs/data/creativedelight/kubejs/oceansdelight/`
 (`recipes.js`, `tags.js`, both `// requires: oceansdelight`, Oceanic parts behind `global.CD.on('oceanic_delight')`). Recipes
 through `global.NCH` (`R`), tags through `global.tags`, ids from `item_dict.js` (Oceanic block "oceanic_delight (47)",
 around line 14653).
@@ -80,7 +80,7 @@ deferred from row 5), and decide which recipes take any fish egg (row 2).
    and rebuild it with `R.shaped` in CD `oceansdelight/recipes.js` (pattern `RXR / #A# / ' C '`, `C` = `i.caviar` or the row 2
    tag), same output count.
 2. For each other recipe the owner picks: a second recipe with caviar (keep the original) through `R.shaped` /
-   `R.shapeless`, ids `creative_delight:<type>/<name>_with_caviar`. Do not replace the base recipes.
+   `R.shapeless`, ids `creativedelight:<type>/<name>_with_caviar`. Do not replace the base recipes.
 3. Row 2's tag: decide here whether toast, roll and soup all take `#forge:fish_eggs`.
 4. Changelog bullet per recipe change.
 

@@ -1,0 +1,978 @@
+
+[dragon_gear]
+	#Most armor points an entity can have (mixin.ArmorCapMixin). Vanilla is 30; a full dragon set is 36.
+	#Damage reduction still tops out at 20 effective armor (80 %); armor past 20 holds that
+	#cap against bigger hits.
+	#Range: 30.0 ~ 1024.0
+	armorCap = 50.0
+
+	[dragon_gear.autorepair]
+		#Passive slow self-repair for dragon-tier gear while worn/held.
+		enabled = true
+		#Ticks between repair pulses (20 ticks = 1 second).
+		#Range: > 1
+		intervalTicks = 200
+		#Durability restored per pulse.
+		#Range: > 0
+		amountPerInterval = 50
+
+#Held-item elytra air brake: right-click and hold the air brake item (like drawing
+#a bow) while gliding to bleed off speed. Horizontal and upward motion decelerate
+#at a steady rate; downward motion is only slowed slightly, so it brakes forward
+#speed/climbs without turning your dive into a hover.
+[air_brake]
+	#Master on/off switch for the air brake's flight effect.
+	enabled = true
+	#How many ticks the item reports as its max use duration (bow-style hold-to-use).
+	#The default is the same huge value vanilla's bow uses - effectively unlimited, so
+	#the player releasing the mouse button is what actually ends the hold, not a timeout.
+	#Read each time the item is used, so a config reload applies it.
+	#Range: > 1
+	useDurationTicks = 72000
+	#true (default): the brake only slows the player while actually gliding (isFallFlying()).
+	#false: it slows the player any time it's held and drawn, gliding or not.
+	requireFallFlying = true
+	#Blocks/tick removed from horizontal speed (X/Z combined) each tick the brake is held.
+	#Applied as a steady subtraction, not a percentage, so it brakes hard, fast flight
+	#exactly as fast (in blocks/tick^2) as slow flight.
+	#Range: 0.0 ~ 10.0
+	horizontalDecelerationPerTick = 0.05
+	#Horizontal speed the brake will never decelerate below.
+	#Range: 0.0 ~ 10.0
+	minHorizontalSpeed = 0.0
+	#Blocks/tick removed from upward (climbing) speed each tick the brake is held.
+	#Only applies while vertical speed is positive - see downwardSlowFactorPerTick
+	#for the (much gentler) falling case.
+	#Range: 0.0 ~ 10.0
+	upwardDecelerationPerTick = 0.05
+	#Upward speed the brake will never decelerate below (0 = can fully stop a climb).
+	#Range: 0.0 ~ 10.0
+	minUpwardSpeed = 0.0
+	#Fraction of downward (falling) speed removed each tick the brake is held - e.g. 0.02
+	#removes 2% of the current fall speed per tick. Deliberately gentle and multiplicative
+	#(not the flat per-tick subtraction used above) so the brake trims a dive instead of
+	#cancelling it outright.
+	#Range: 0.0 ~ 1.0
+	downwardSlowFactorPerTick = 0.02
+	#Hard cap on fall speed (blocks/tick, positive number) while the brake is held and
+	#the player is falling - applied before downwardSlowFactorPerTick each tick. 0 disables
+	#the cap entirely (downwardSlowFactorPerTick is then the only thing slowing a dive).
+	#Range: 0.0 ~ 10.0
+	terminalDownwardSpeed = 3.0
+	#Master on/off switch for the brake's stall effect: brake hard enough, for long enough,
+	#and it drops you out of elytra flight entirely (a real air brake can't hold you in the
+	#air below minimum glide speed). Independent of the deceleration knobs above - those
+	#keep working even with this off.
+	stallEnabled = true
+	#Horizontal speed (blocks/tick, X/Z combined), AFTER this tick's deceleration, at or
+	#below which the brake drops the player out of fall-flying. Checked every tick the brake
+	#is held and decelerating, same as everything else above - only reachable at all if
+	#minHorizontalSpeed is below this value.
+	#Range: 0.0 ~ 10.0
+	stallSpeedThreshold = 0.5
+
+#Stepstools: a stool in the Curios feet slot. Standing still and holding the step-up keys stands the
+#player on it, a block higher; moving, crouching or jumping steps off.
+[stepstool]
+	enabled = true
+	#Client: holding Sprint + Jump steps up. The "Step Up (Stepstool)" key in Controls works too
+	#(unbound by default); set this false to use only that key. While false, Sprint + Jump jumps as usual.
+	sprintJump = true
+	#Client: ticks the step-up keys must be held before stepping up (20 = 1 second).
+	#Range: 0 ~ 100
+	holdTicks = 5
+	#Blocks the player may drift sideways from the stool's centre (knockback, pistons) before stepping off.
+	#Range: 0.05 ~ 0.5
+	maxDrift = 0.3
+	#Taking damage knocks the player off the stool.
+	stepOffWhenHurt = true
+
+[crafting]
+
+	[crafting.felsic_sword]
+		#Potion effect id filled in during assembly.
+		potion = "creativebrewing:magic_resistance"
+		#mB of potion fluid (the potion above) used in the last filling step.
+		#Range: 1 ~ 10000
+		potionMb = 250
+		#mB of Long Reach potion fluid used in the first filling step.
+		#Range: 1 ~ 10000
+		reachPotionMb = 250
+		#Number of times the sequenced assembly repeats.
+		#Range: 1 ~ 64
+		loops = 1
+		#Hammer blows required by the hammering step.
+		#Range: 0 ~ 64
+		hammerBlows = 3
+
+	[crafting.felsic_helmet]
+		#Potion effect id filled in during assembly.
+		potion = "creativebrewing:magic_resistance"
+		#mB of potion fluid (the potion above) used in the last filling step.
+		#Range: 1 ~ 10000
+		potionMb = 500
+		#mB of Long Reach potion fluid used in the first filling step.
+		#Range: 1 ~ 10000
+		reachPotionMb = 500
+		#Number of times the sequenced assembly repeats.
+		#Range: 1 ~ 64
+		loops = 1
+		#Hammer blows required by the hammering step.
+		#Range: 0 ~ 64
+		hammerBlows = 5
+
+	[crafting.felsic_chestplate]
+		#Potion effect id filled in during assembly.
+		potion = "creativebrewing:magic_resistance"
+		#mB of potion fluid (the potion above) used in the last filling step.
+		#Range: 1 ~ 10000
+		potionMb = 500
+		#mB of Long Reach potion fluid used in the first filling step.
+		#Range: 1 ~ 10000
+		reachPotionMb = 500
+		#Number of times the sequenced assembly repeats.
+		#Range: 1 ~ 64
+		loops = 1
+		#Hammer blows required by the hammering step.
+		#Range: 0 ~ 64
+		hammerBlows = 5
+
+	[crafting.felsic_leggings]
+		#Potion effect id filled in during assembly.
+		potion = "creativebrewing:magic_resistance"
+		#mB of potion fluid (the potion above) used in the last filling step.
+		#Range: 1 ~ 10000
+		potionMb = 500
+		#mB of Long Reach potion fluid used in the first filling step.
+		#Range: 1 ~ 10000
+		reachPotionMb = 500
+		#Number of times the sequenced assembly repeats.
+		#Range: 1 ~ 64
+		loops = 1
+		#Hammer blows required by the hammering step.
+		#Range: 0 ~ 64
+		hammerBlows = 5
+
+	[crafting.felsic_boots]
+		#Potion effect id filled in during assembly.
+		potion = "creativebrewing:magic_resistance"
+		#mB of potion fluid (the potion above) used in the last filling step.
+		#Range: 1 ~ 10000
+		potionMb = 500
+		#mB of Long Reach potion fluid used in the first filling step.
+		#Range: 1 ~ 10000
+		reachPotionMb = 500
+		#Number of times the sequenced assembly repeats.
+		#Range: 1 ~ 64
+		loops = 1
+		#Hammer blows required by the hammering step.
+		#Range: 0 ~ 64
+		hammerBlows = 5
+
+	[crafting.felsic_pickaxe]
+		#Potion effect id filled in during assembly.
+		potion = "creativebrewing:magic_resistance"
+		#mB of potion fluid (the potion above) used in the last filling step.
+		#Range: 1 ~ 10000
+		potionMb = 250
+		#mB of Long Reach potion fluid used in the first filling step.
+		#Range: 1 ~ 10000
+		reachPotionMb = 250
+		#Number of times the sequenced assembly repeats.
+		#Range: 1 ~ 64
+		loops = 1
+		#Hammer blows required by the hammering step.
+		#Range: 0 ~ 64
+		hammerBlows = 3
+
+	[crafting.felsic_axe]
+		#Potion effect id filled in during assembly.
+		potion = "creativebrewing:magic_resistance"
+		#mB of potion fluid (the potion above) used in the last filling step.
+		#Range: 1 ~ 10000
+		potionMb = 250
+		#mB of Long Reach potion fluid used in the first filling step.
+		#Range: 1 ~ 10000
+		reachPotionMb = 250
+		#Number of times the sequenced assembly repeats.
+		#Range: 1 ~ 64
+		loops = 1
+		#Hammer blows required by the hammering step.
+		#Range: 0 ~ 64
+		hammerBlows = 3
+
+	[crafting.felsic_shovel]
+		#Potion effect id filled in during assembly.
+		potion = "creativebrewing:magic_resistance"
+		#mB of potion fluid (the potion above) used in the last filling step.
+		#Range: 1 ~ 10000
+		potionMb = 250
+		#mB of Long Reach potion fluid used in the first filling step.
+		#Range: 1 ~ 10000
+		reachPotionMb = 250
+		#Number of times the sequenced assembly repeats.
+		#Range: 1 ~ 64
+		loops = 1
+		#Hammer blows required by the hammering step.
+		#Range: 0 ~ 64
+		hammerBlows = 3
+
+	[crafting.felsic_hoe]
+		#Potion effect id filled in during assembly.
+		potion = "creativebrewing:magic_resistance"
+		#mB of potion fluid (the potion above) used in the last filling step.
+		#Range: 1 ~ 10000
+		potionMb = 250
+		#mB of Long Reach potion fluid used in the first filling step.
+		#Range: 1 ~ 10000
+		reachPotionMb = 250
+		#Number of times the sequenced assembly repeats.
+		#Range: 1 ~ 64
+		loops = 1
+		#Hammer blows required by the hammering step.
+		#Range: 0 ~ 64
+		hammerBlows = 3
+
+	[crafting.felsic_shield]
+		#Potion effect id filled in during assembly.
+		potion = "creativebrewing:magic_resistance"
+		#mB of potion fluid (the potion above) used in the last filling step.
+		#Range: 1 ~ 10000
+		potionMb = 250
+		#mB of Long Reach potion fluid used in the first filling step.
+		#Range: 1 ~ 10000
+		reachPotionMb = 250
+		#Number of times the sequenced assembly repeats.
+		#Range: 1 ~ 64
+		loops = 1
+		#Hammer blows required by the hammering step.
+		#Range: 0 ~ 64
+		hammerBlows = 8
+
+#Enchantment-value (enchantability) overrides for whole armor materials that
+#KubeJS's tune_armor.js can't reach (ArmorMaterial#getEnchantmentValue() has no
+#kjs$ accessor). Entries are "materialName:value" - materialName matches
+#ArmorMaterial#getName(), e.g. Felsic Gear and Create: Deep Dark's echo armor
+#each hand ArmorItem an anonymous material named "felsic" / "echo_armor".
+#Add a row here for more materials - no rebuild needed.
+[armor_enchantability]
+	overrides = ["echo_armor:18", "felsic:21"]
+
+#Tier shields: copper / gold / iron / diamond / netherite / echo / felsic / dragon. 'iron' is
+#the vanilla minecraft:shield itself, tuned like the others. Immersive Engineering's shield
+#and Alex's Mobs' Shield of the Deep are NOT tier shields; only disableCooldownTicks below
+#applies to them.
+#
+#A raised tier shield sorts each incoming hit into one of three kinds and looks that
+#kind up under its own tier, each tuned independently:
+#  physical   melee, blunt/cutting machinery, piercing, firearms, explosions,
+#             projectiles and anything unclassified. (A blaze fireball counts as a
+#             projectile, so physical, not elemental; thorns counts as magic.)
+#  elemental  fire, cold, electric and chemical (acid/poison) damage - none of which
+#             a vanilla shield can block at all.
+#  magic      vanilla magic (poison / instant damage, potions, evoker fangs, thorns,
+#             warden boom) plus the pack's own psychic and life-drain damage.
+#Every one of those is a damage tag under data/creativeengineering/damage_tags/, most
+#of them explicit lists of message ids (so 'I don't see a magic.json' is fixed - every
+#vanilla-flagged kind now has its own visible, editable file, not just a hidden flag
+#check), 'elemental' and 'magic' being pure meta tags that only #include finer ones.
+#Reclassify a source by editing its finer tag; widen a whole shield column by editing
+#elemental.json or magic.json's #includes. See [damage_tags] below.
+#
+#'elemental' can also be tuned as four separate numbers (fire/electric/cold/chemical)
+#instead of one blanket percentage - see each tier's [shields.<tier>.elemental_breakdown].
+#For each kind, per tier:
+#  reduction        0-100. Percent of the hit the shield absorbs. 0 = the shield does not
+#                   block that kind at all (normal damage, no shield sound/knockback).
+#                   Anything under 100 lets the remainder through as ordinary damage.
+#  durabilityCost   percent of vanilla's shield wear (1 + floor(damage), on hits at or
+#                   above wearThreshold) taken for that kind. Fractions are rolled
+#                   randomly, so e.g. 50% halves the wear on average.
+[shields]
+	#Master switch. When false the tier shields fall back to plain vanilla-shield blocking
+	#(100% of everything vanilla blocks, wear like a vanilla shield) - only their own durability
+	#and repair item still apply.
+	enabled = true
+	#Hits below this much damage never wear a shield. 3.0 is vanilla's value. Continuous
+	#sources (burning, poison ticks) are usually under it; lava and big hits are not.
+	#Range: 0.0 ~ 1000.0
+	wearThreshold = 3.0
+	#Ticks a raised shield is unusable after an attacker disables it: a player's axe, a mob's
+	#axe (vindicators, piglin brutes; 25% chance per hit, more with Efficiency), Immersive
+	#Engineering's shock upgrade and Alex's Mobs' void worm shot. Not tier-specific - it covers
+	#every shield, tier or not. Vanilla hardcodes 100 (5 seconds); the pack uses 20 (1 second).
+	#0 disables the cooldown outright.
+	#Range: 0 ~ 12000
+	disableCooldownTicks = 20
+	#Potion effects whose periodic damage no shield may block, comma-separated effect ids.
+	#Matched by the effect that is ticking on the shield holder, not by damage tag: poison
+	#ticks use the same 'magic' damage source as Instant Damage, so a tag can't tell them
+	#apart. The shield doesn't attempt the block (no shield sound, full damage). Instant
+	#Damage and other one-off magic hits are unaffected. The default is every effect in the
+	#pack that deals tick damage.
+	unblockableEffectTicks = "minecraft:poison, minecraft:wither, everythingcopper:copper_poisoning, alexsmobs:debilitating_sting, alexsmobs:exsanguination, alexsmobs:ender_flu, endersdelight:phasing"
+
+	#Per damage kind (physical / elemental / magic): how the raised shield's direction is checked.
+	#  REQUIRED       vanilla: the source needs a position and must be in front of you.
+	#  IF_POSITIONED  the front-arc test only applies when the source has a position;
+	#                 positionless sources (lava, poison) are blocked from any direction.
+	#  NONE           never checked - blocked from every direction.
+	[shields.facing]
+		#Allowed Values: REQUIRED, IF_POSITIONED, NONE
+		magic = "IF_POSITIONED"
+		#Allowed Values: REQUIRED, IF_POSITIONED, NONE
+		physical = "REQUIRED"
+		#Allowed Values: REQUIRED, IF_POSITIONED, NONE
+		elemental = "IF_POSITIONED"
+
+	[shields.copper]
+		#Max durability. Live: changing it takes effect on existing shields immediately
+		#(a shield already worn past the new maximum breaks on its next hit).
+		#Range: 1 ~ 1000000
+		durability = 242
+		#Item id that repairs this shield on an anvil. Empty = not anvil-repairable.
+		repairItem = "minecraft:copper_ingot"
+		#Potion effects given to whoever is HOLDING the shield each time it blocks a hit.
+		#Comma-separated entries of  effectId;durationTicks[;amplifier[;categories]]
+		#  amplifier   0 = level I (default 0)
+		#  categories  optional, '|'-separated: physical|elemental|magic, or the finer
+		#              melee|explosion|projectile|other. The effect only fires for those
+		#              kinds of hit. Omit = every kind.
+		#Example: minecraft:resistance;100;0;physical, minecraft:fire_resistance;200
+		#Unknown effect ids are skipped with one warning in the log.
+		shielderEffects = ""
+		#Same format, but given to the ATTACKER of the blocked hit (the entity behind the
+		#damage - a skeleton for its arrow). Skipped when the hit has no attacker (lava,
+		#poison) or the attacker is the shield holder.
+		attackerEffects = ""
+		#Damage amount, AFTER this tier's own reduction, below which a blocked hit no longer
+		#knocks YOU (the holder) back. The attacker's own recoil off the shield stays vanilla.
+		#This only ever removes knockback, never adds it. 0 = never suppress (vanilla).
+		#Range: 0 ~ 1000
+		knockbackThreshold = 1
+		#Whether this tier may block burning and hot-block ticks at all: the
+		#creativecommon:burn_tick damage tag (on fire, in fire, campfires, braziers, bonfires,
+		#magma blocks, stoves). Default: netherite and above. Lava and fan fire are not in it.
+		#false = the shield doesn't attempt the block (no shield sound, full damage). true = it
+		#blocks from any direction at the hit's normal percentage (a 1-damage tick is fully blocked).
+		blocksBurnTicks = false
+		#Whether this tier may block thorn ticks at all: the creativecommon:contact_tick
+		#damage tag (cactus, berry bushes, leaf piles, weeds, wither roots, beanstalk thorns,
+		#barbed panes). Default: diamond and above.
+		#false = the shield doesn't attempt the block (no shield sound, full damage). true = it
+		#blocks from any direction at the hit's normal percentage (a 1-damage tick is fully blocked).
+		blocksContactTicks = false
+
+		#Percent (0-100) of the hit absorbed, per damage kind. 0 = not blocked. See the [shields] header.
+		[shields.copper.reduction]
+			#Range: 0 ~ 100
+			magic = 0
+			#Range: 0 ~ 100
+			physical = 20
+			#Range: 0 ~ 100
+			elemental = 0
+
+		#Percent of vanilla's shield wear taken per damage kind (100 = vanilla, 0 = free, 200 = double).
+		[shields.copper.durabilityCost]
+			#Range: 0 ~ 1000
+			magic = 100
+			#Range: 0 ~ 1000
+			physical = 100
+			#Range: 0 ~ 1000
+			elemental = 100
+
+		#Optional per-element override of 'reduction.elemental' above. Leave every one of these
+		#four at -1 (default) and this tier keeps using that single blanket percentage for every
+		#fire/electric/cold/chemical hit alike (and the tooltip shows one 'Elemental: X%' line).
+		#Set ANY ONE of these four to 0-100 and this tier switches to the breakdown instead:
+		#'reduction.elemental' is then ignored ENTIRELY for this tier, each of the four blocks
+		#only what it's set to here (a -1 or explicit 0 blocks nothing for that element), and the
+		#tooltip shows one line per element THAT IS NON-ZERO ('Fire: 50%', say, with no Cold/
+		#Electric/Chemical line at all if those are still -1 or 0). It's one or the other, not both.
+		#Wear still comes from durabilityCost.elemental below either way - there's no per-element
+		#wear split.
+		[shields.copper.elemental_breakdown]
+			#Range: -1 ~ 100
+			fire = 0
+			#Range: -1 ~ 100
+			electric = 50
+			#Range: -1 ~ 100
+			cold = 0
+			#Range: -1 ~ 100
+			chemical = 0
+
+	[shields.gold]
+		#Max durability. Live: changing it takes effect on existing shields immediately
+		#(a shield already worn past the new maximum breaks on its next hit).
+		#Range: 1 ~ 1000000
+		durability = 168
+		#Item id that repairs this shield on an anvil. Empty = not anvil-repairable.
+		repairItem = "minecraft:gold_ingot"
+		#Potion effects given to whoever is HOLDING the shield each time it blocks a hit.
+		#Comma-separated entries of  effectId;durationTicks[;amplifier[;categories]]
+		#  amplifier   0 = level I (default 0)
+		#  categories  optional, '|'-separated: physical|elemental|magic, or the finer
+		#              melee|explosion|projectile|other. The effect only fires for those
+		#              kinds of hit. Omit = every kind.
+		#Example: minecraft:resistance;100;0;physical, minecraft:fire_resistance;200
+		#Unknown effect ids are skipped with one warning in the log.
+		shielderEffects = ""
+		#Same format, but given to the ATTACKER of the blocked hit (the entity behind the
+		#damage - a skeleton for its arrow). Skipped when the hit has no attacker (lava,
+		#poison) or the attacker is the shield holder.
+		attackerEffects = ""
+		#Damage amount, AFTER this tier's own reduction, below which a blocked hit no longer
+		#knocks YOU (the holder) back. The attacker's own recoil off the shield stays vanilla.
+		#This only ever removes knockback, never adds it. 0 = never suppress (vanilla).
+		#Range: 0 ~ 1000
+		knockbackThreshold = 2
+		#Whether this tier may block burning and hot-block ticks at all: the
+		#creativecommon:burn_tick damage tag (on fire, in fire, campfires, braziers, bonfires,
+		#magma blocks, stoves). Default: netherite and above. Lava and fan fire are not in it.
+		#false = the shield doesn't attempt the block (no shield sound, full damage). true = it
+		#blocks from any direction at the hit's normal percentage (a 1-damage tick is fully blocked).
+		blocksBurnTicks = false
+		#Whether this tier may block thorn ticks at all: the creativecommon:contact_tick
+		#damage tag (cactus, berry bushes, leaf piles, weeds, wither roots, beanstalk thorns,
+		#barbed panes). Default: diamond and above.
+		#false = the shield doesn't attempt the block (no shield sound, full damage). true = it
+		#blocks from any direction at the hit's normal percentage (a 1-damage tick is fully blocked).
+		blocksContactTicks = false
+
+		#Percent (0-100) of the hit absorbed, per damage kind. 0 = not blocked. See the [shields] header.
+		[shields.gold.reduction]
+			#Range: 0 ~ 100
+			magic = 30
+			#Range: 0 ~ 100
+			physical = 30
+			#Range: 0 ~ 100
+			elemental = 30
+
+		#Percent of vanilla's shield wear taken per damage kind (100 = vanilla, 0 = free, 200 = double).
+		[shields.gold.durabilityCost]
+			#Range: 0 ~ 1000
+			magic = 100
+			#Range: 0 ~ 1000
+			physical = 100
+			#Range: 0 ~ 1000
+			elemental = 100
+
+		#Optional per-element override of 'reduction.elemental' above. Leave every one of these
+		#four at -1 (default) and this tier keeps using that single blanket percentage for every
+		#fire/electric/cold/chemical hit alike (and the tooltip shows one 'Elemental: X%' line).
+		#Set ANY ONE of these four to 0-100 and this tier switches to the breakdown instead:
+		#'reduction.elemental' is then ignored ENTIRELY for this tier, each of the four blocks
+		#only what it's set to here (a -1 or explicit 0 blocks nothing for that element), and the
+		#tooltip shows one line per element THAT IS NON-ZERO ('Fire: 50%', say, with no Cold/
+		#Electric/Chemical line at all if those are still -1 or 0). It's one or the other, not both.
+		#Wear still comes from durabilityCost.elemental below either way - there's no per-element
+		#wear split.
+		[shields.gold.elemental_breakdown]
+			#Range: -1 ~ 100
+			fire = -1
+			#Range: -1 ~ 100
+			electric = -1
+			#Range: -1 ~ 100
+			cold = -1
+			#Range: -1 ~ 100
+			chemical = -1
+
+	[shields.diamond]
+		#Max durability. Live: changing it takes effect on existing shields immediately
+		#(a shield already worn past the new maximum breaks on its next hit).
+		#Range: 1 ~ 1000000
+		durability = 1561
+		#Item id that repairs this shield on an anvil. Empty = not anvil-repairable.
+		repairItem = "minecraft:diamond"
+		#Potion effects given to whoever is HOLDING the shield each time it blocks a hit.
+		#Comma-separated entries of  effectId;durationTicks[;amplifier[;categories]]
+		#  amplifier   0 = level I (default 0)
+		#  categories  optional, '|'-separated: physical|elemental|magic, or the finer
+		#              melee|explosion|projectile|other. The effect only fires for those
+		#              kinds of hit. Omit = every kind.
+		#Example: minecraft:resistance;100;0;physical, minecraft:fire_resistance;200
+		#Unknown effect ids are skipped with one warning in the log.
+		shielderEffects = ""
+		#Same format, but given to the ATTACKER of the blocked hit (the entity behind the
+		#damage - a skeleton for its arrow). Skipped when the hit has no attacker (lava,
+		#poison) or the attacker is the shield holder.
+		attackerEffects = ""
+		#Damage amount, AFTER this tier's own reduction, below which a blocked hit no longer
+		#knocks YOU (the holder) back. The attacker's own recoil off the shield stays vanilla.
+		#This only ever removes knockback, never adds it. 0 = never suppress (vanilla).
+		#Range: 0 ~ 1000
+		knockbackThreshold = 4
+		#Whether this tier may block burning and hot-block ticks at all: the
+		#creativecommon:burn_tick damage tag (on fire, in fire, campfires, braziers, bonfires,
+		#magma blocks, stoves). Default: netherite and above. Lava and fan fire are not in it.
+		#false = the shield doesn't attempt the block (no shield sound, full damage). true = it
+		#blocks from any direction at the hit's normal percentage (a 1-damage tick is fully blocked).
+		blocksBurnTicks = false
+		#Whether this tier may block thorn ticks at all: the creativecommon:contact_tick
+		#damage tag (cactus, berry bushes, leaf piles, weeds, wither roots, beanstalk thorns,
+		#barbed panes). Default: diamond and above.
+		#false = the shield doesn't attempt the block (no shield sound, full damage). true = it
+		#blocks from any direction at the hit's normal percentage (a 1-damage tick is fully blocked).
+		blocksContactTicks = true
+
+		#Percent (0-100) of the hit absorbed, per damage kind. 0 = not blocked. See the [shields] header.
+		[shields.diamond.reduction]
+			#Range: 0 ~ 100
+			magic = 25
+			#Range: 0 ~ 100
+			physical = 50
+			#Range: 0 ~ 100
+			elemental = 0
+
+		#Percent of vanilla's shield wear taken per damage kind (100 = vanilla, 0 = free, 200 = double).
+		[shields.diamond.durabilityCost]
+			#Range: 0 ~ 1000
+			magic = 100
+			#Range: 0 ~ 1000
+			physical = 100
+			#Range: 0 ~ 1000
+			elemental = 100
+
+		#Optional per-element override of 'reduction.elemental' above. Leave every one of these
+		#four at -1 (default) and this tier keeps using that single blanket percentage for every
+		#fire/electric/cold/chemical hit alike (and the tooltip shows one 'Elemental: X%' line).
+		#Set ANY ONE of these four to 0-100 and this tier switches to the breakdown instead:
+		#'reduction.elemental' is then ignored ENTIRELY for this tier, each of the four blocks
+		#only what it's set to here (a -1 or explicit 0 blocks nothing for that element), and the
+		#tooltip shows one line per element THAT IS NON-ZERO ('Fire: 50%', say, with no Cold/
+		#Electric/Chemical line at all if those are still -1 or 0). It's one or the other, not both.
+		#Wear still comes from durabilityCost.elemental below either way - there's no per-element
+		#wear split.
+		[shields.diamond.elemental_breakdown]
+			#Range: -1 ~ 100
+			fire = 50
+			#Range: -1 ~ 100
+			electric = 0
+			#Range: -1 ~ 100
+			cold = 0
+			#Range: -1 ~ 100
+			chemical = 0
+
+	[shields.netherite]
+		#Max durability. Live: changing it takes effect on existing shields immediately
+		#(a shield already worn past the new maximum breaks on its next hit).
+		#Range: 1 ~ 1000000
+		durability = 2031
+		#Item id that repairs this shield on an anvil. Empty = not anvil-repairable.
+		repairItem = "minecraft:netherite_ingot"
+		#Potion effects given to whoever is HOLDING the shield each time it blocks a hit.
+		#Comma-separated entries of  effectId;durationTicks[;amplifier[;categories]]
+		#  amplifier   0 = level I (default 0)
+		#  categories  optional, '|'-separated: physical|elemental|magic, or the finer
+		#              melee|explosion|projectile|other. The effect only fires for those
+		#              kinds of hit. Omit = every kind.
+		#Example: minecraft:resistance;100;0;physical, minecraft:fire_resistance;200
+		#Unknown effect ids are skipped with one warning in the log.
+		shielderEffects = ""
+		#Same format, but given to the ATTACKER of the blocked hit (the entity behind the
+		#damage - a skeleton for its arrow). Skipped when the hit has no attacker (lava,
+		#poison) or the attacker is the shield holder.
+		attackerEffects = ""
+		#Damage amount, AFTER this tier's own reduction, below which a blocked hit no longer
+		#knocks YOU (the holder) back. The attacker's own recoil off the shield stays vanilla.
+		#This only ever removes knockback, never adds it. 0 = never suppress (vanilla).
+		#Range: 0 ~ 1000
+		knockbackThreshold = 5
+		#Whether this tier may block burning and hot-block ticks at all: the
+		#creativecommon:burn_tick damage tag (on fire, in fire, campfires, braziers, bonfires,
+		#magma blocks, stoves). Default: netherite and above. Lava and fan fire are not in it.
+		#false = the shield doesn't attempt the block (no shield sound, full damage). true = it
+		#blocks from any direction at the hit's normal percentage (a 1-damage tick is fully blocked).
+		blocksBurnTicks = true
+		#Whether this tier may block thorn ticks at all: the creativecommon:contact_tick
+		#damage tag (cactus, berry bushes, leaf piles, weeds, wither roots, beanstalk thorns,
+		#barbed panes). Default: diamond and above.
+		#false = the shield doesn't attempt the block (no shield sound, full damage). true = it
+		#blocks from any direction at the hit's normal percentage (a 1-damage tick is fully blocked).
+		blocksContactTicks = true
+
+		#Percent (0-100) of the hit absorbed, per damage kind. 0 = not blocked. See the [shields] header.
+		[shields.netherite.reduction]
+			#Range: 0 ~ 100
+			magic = 50
+			#Range: 0 ~ 100
+			physical = 60
+			#Range: 0 ~ 100
+			elemental = 0
+
+		#Percent of vanilla's shield wear taken per damage kind (100 = vanilla, 0 = free, 200 = double).
+		[shields.netherite.durabilityCost]
+			#Range: 0 ~ 1000
+			magic = 100
+			#Range: 0 ~ 1000
+			physical = 100
+			#Range: 0 ~ 1000
+			elemental = 100
+
+		#Optional per-element override of 'reduction.elemental' above. Leave every one of these
+		#four at -1 (default) and this tier keeps using that single blanket percentage for every
+		#fire/electric/cold/chemical hit alike (and the tooltip shows one 'Elemental: X%' line).
+		#Set ANY ONE of these four to 0-100 and this tier switches to the breakdown instead:
+		#'reduction.elemental' is then ignored ENTIRELY for this tier, each of the four blocks
+		#only what it's set to here (a -1 or explicit 0 blocks nothing for that element), and the
+		#tooltip shows one line per element THAT IS NON-ZERO ('Fire: 50%', say, with no Cold/
+		#Electric/Chemical line at all if those are still -1 or 0). It's one or the other, not both.
+		#Wear still comes from durabilityCost.elemental below either way - there's no per-element
+		#wear split.
+		[shields.netherite.elemental_breakdown]
+			#Range: -1 ~ 100
+			fire = 100
+			#Range: -1 ~ 100
+			electric = 0
+			#Range: -1 ~ 100
+			cold = 0
+			#Range: -1 ~ 100
+			chemical = 0
+
+	[shields.echo]
+		#Max durability. Live: changing it takes effect on existing shields immediately
+		#(a shield already worn past the new maximum breaks on its next hit).
+		#Range: 1 ~ 1000000
+		durability = 2124
+		#Item id that repairs this shield on an anvil. Empty = not anvil-repairable.
+		repairItem = "create_deep_dark:echo_ingot"
+		#Potion effects given to whoever is HOLDING the shield each time it blocks a hit.
+		#Comma-separated entries of  effectId;durationTicks[;amplifier[;categories]]
+		#  amplifier   0 = level I (default 0)
+		#  categories  optional, '|'-separated: physical|elemental|magic, or the finer
+		#              melee|explosion|projectile|other. The effect only fires for those
+		#              kinds of hit. Omit = every kind.
+		#Example: minecraft:resistance;100;0;physical, minecraft:fire_resistance;200
+		#Unknown effect ids are skipped with one warning in the log.
+		shielderEffects = "minecraft:resistance;40;0"
+		#Same format, but given to the ATTACKER of the blocked hit (the entity behind the
+		#damage - a skeleton for its arrow). Skipped when the hit has no attacker (lava,
+		#poison) or the attacker is the shield holder.
+		attackerEffects = ""
+		#Damage amount, AFTER this tier's own reduction, below which a blocked hit no longer
+		#knocks YOU (the holder) back. The attacker's own recoil off the shield stays vanilla.
+		#This only ever removes knockback, never adds it. 0 = never suppress (vanilla).
+		#Range: 0 ~ 1000
+		knockbackThreshold = 6
+		#Whether this tier may block burning and hot-block ticks at all: the
+		#creativecommon:burn_tick damage tag (on fire, in fire, campfires, braziers, bonfires,
+		#magma blocks, stoves). Default: netherite and above. Lava and fan fire are not in it.
+		#false = the shield doesn't attempt the block (no shield sound, full damage). true = it
+		#blocks from any direction at the hit's normal percentage (a 1-damage tick is fully blocked).
+		blocksBurnTicks = true
+		#Whether this tier may block thorn ticks at all: the creativecommon:contact_tick
+		#damage tag (cactus, berry bushes, leaf piles, weeds, wither roots, beanstalk thorns,
+		#barbed panes). Default: diamond and above.
+		#false = the shield doesn't attempt the block (no shield sound, full damage). true = it
+		#blocks from any direction at the hit's normal percentage (a 1-damage tick is fully blocked).
+		blocksContactTicks = true
+
+		#Percent (0-100) of the hit absorbed, per damage kind. 0 = not blocked. See the [shields] header.
+		[shields.echo.reduction]
+			#Range: 0 ~ 100
+			magic = 60
+			#Range: 0 ~ 100
+			physical = 70
+			#Range: 0 ~ 100
+			elemental = 50
+
+		#Percent of vanilla's shield wear taken per damage kind (100 = vanilla, 0 = free, 200 = double).
+		[shields.echo.durabilityCost]
+			#Range: 0 ~ 1000
+			magic = 100
+			#Range: 0 ~ 1000
+			physical = 100
+			#Range: 0 ~ 1000
+			elemental = 100
+
+		#Optional per-element override of 'reduction.elemental' above. Leave every one of these
+		#four at -1 (default) and this tier keeps using that single blanket percentage for every
+		#fire/electric/cold/chemical hit alike (and the tooltip shows one 'Elemental: X%' line).
+		#Set ANY ONE of these four to 0-100 and this tier switches to the breakdown instead:
+		#'reduction.elemental' is then ignored ENTIRELY for this tier, each of the four blocks
+		#only what it's set to here (a -1 or explicit 0 blocks nothing for that element), and the
+		#tooltip shows one line per element THAT IS NON-ZERO ('Fire: 50%', say, with no Cold/
+		#Electric/Chemical line at all if those are still -1 or 0). It's one or the other, not both.
+		#Wear still comes from durabilityCost.elemental below either way - there's no per-element
+		#wear split.
+		[shields.echo.elemental_breakdown]
+			#Range: -1 ~ 100
+			fire = -1
+			#Range: -1 ~ 100
+			electric = -1
+			#Range: -1 ~ 100
+			cold = -1
+			#Range: -1 ~ 100
+			chemical = -1
+
+	[shields.felsic]
+		#Max durability. Live: changing it takes effect on existing shields immediately
+		#(a shield already worn past the new maximum breaks on its next hit).
+		#Range: 1 ~ 1000000
+		durability = 2501
+		#Item id that repairs this shield on an anvil. Empty = not anvil-repairable.
+		repairItem = "felsic_gear:felsic_ingot"
+		#Potion effects given to whoever is HOLDING the shield each time it blocks a hit.
+		#Comma-separated entries of  effectId;durationTicks[;amplifier[;categories]]
+		#  amplifier   0 = level I (default 0)
+		#  categories  optional, '|'-separated: physical|elemental|magic, or the finer
+		#              melee|explosion|projectile|other. The effect only fires for those
+		#              kinds of hit. Omit = every kind.
+		#Example: minecraft:resistance;100;0;physical, minecraft:fire_resistance;200
+		#Unknown effect ids are skipped with one warning in the log.
+		shielderEffects = "minecraft:resistance;40;1"
+		#Same format, but given to the ATTACKER of the blocked hit (the entity behind the
+		#damage - a skeleton for its arrow). Skipped when the hit has no attacker (lava,
+		#poison) or the attacker is the shield holder.
+		attackerEffects = ""
+		#Damage amount, AFTER this tier's own reduction, below which a blocked hit no longer
+		#knocks YOU (the holder) back. The attacker's own recoil off the shield stays vanilla.
+		#This only ever removes knockback, never adds it. 0 = never suppress (vanilla).
+		#Range: 0 ~ 1000
+		knockbackThreshold = 7
+		#Whether this tier may block burning and hot-block ticks at all: the
+		#creativecommon:burn_tick damage tag (on fire, in fire, campfires, braziers, bonfires,
+		#magma blocks, stoves). Default: netherite and above. Lava and fan fire are not in it.
+		#false = the shield doesn't attempt the block (no shield sound, full damage). true = it
+		#blocks from any direction at the hit's normal percentage (a 1-damage tick is fully blocked).
+		blocksBurnTicks = true
+		#Whether this tier may block thorn ticks at all: the creativecommon:contact_tick
+		#damage tag (cactus, berry bushes, leaf piles, weeds, wither roots, beanstalk thorns,
+		#barbed panes). Default: diamond and above.
+		#false = the shield doesn't attempt the block (no shield sound, full damage). true = it
+		#blocks from any direction at the hit's normal percentage (a 1-damage tick is fully blocked).
+		blocksContactTicks = true
+
+		#Percent (0-100) of the hit absorbed, per damage kind. 0 = not blocked. See the [shields] header.
+		[shields.felsic.reduction]
+			#Range: 0 ~ 100
+			magic = 75
+			#Range: 0 ~ 100
+			physical = 80
+			#Range: 0 ~ 100
+			elemental = 75
+
+		#Percent of vanilla's shield wear taken per damage kind (100 = vanilla, 0 = free, 200 = double).
+		[shields.felsic.durabilityCost]
+			#Range: 0 ~ 1000
+			magic = 100
+			#Range: 0 ~ 1000
+			physical = 100
+			#Range: 0 ~ 1000
+			elemental = 100
+
+		#Optional per-element override of 'reduction.elemental' above. Leave every one of these
+		#four at -1 (default) and this tier keeps using that single blanket percentage for every
+		#fire/electric/cold/chemical hit alike (and the tooltip shows one 'Elemental: X%' line).
+		#Set ANY ONE of these four to 0-100 and this tier switches to the breakdown instead:
+		#'reduction.elemental' is then ignored ENTIRELY for this tier, each of the four blocks
+		#only what it's set to here (a -1 or explicit 0 blocks nothing for that element), and the
+		#tooltip shows one line per element THAT IS NON-ZERO ('Fire: 50%', say, with no Cold/
+		#Electric/Chemical line at all if those are still -1 or 0). It's one or the other, not both.
+		#Wear still comes from durabilityCost.elemental below either way - there's no per-element
+		#wear split.
+		[shields.felsic.elemental_breakdown]
+			#Range: -1 ~ 100
+			fire = -1
+			#Range: -1 ~ 100
+			electric = -1
+			#Range: -1 ~ 100
+			cold = -1
+			#Range: -1 ~ 100
+			chemical = -1
+
+	[shields.dragon]
+		#Max durability. Live: changing it takes effect on existing shields immediately
+		#(a shield already worn past the new maximum breaks on its next hit).
+		#Range: 1 ~ 1000000
+		durability = 3350
+		#Item id that repairs this shield on an anvil. Empty = not anvil-repairable.
+		repairItem = "dragonloot:dragon_scale"
+		#Potion effects given to whoever is HOLDING the shield each time it blocks a hit.
+		#Comma-separated entries of  effectId;durationTicks[;amplifier[;categories]]
+		#  amplifier   0 = level I (default 0)
+		#  categories  optional, '|'-separated: physical|elemental|magic, or the finer
+		#              melee|explosion|projectile|other. The effect only fires for those
+		#              kinds of hit. Omit = every kind.
+		#Example: minecraft:resistance;100;0;physical, minecraft:fire_resistance;200
+		#Unknown effect ids are skipped with one warning in the log.
+		shielderEffects = "minecraft:regeneration;100;0, minecraft:resistance;40;1"
+		#Same format, but given to the ATTACKER of the blocked hit (the entity behind the
+		#damage - a skeleton for its arrow). Skipped when the hit has no attacker (lava,
+		#poison) or the attacker is the shield holder.
+		attackerEffects = "minecraft:poison;100;0"
+		#Damage amount, AFTER this tier's own reduction, below which a blocked hit no longer
+		#knocks YOU (the holder) back. The attacker's own recoil off the shield stays vanilla.
+		#This only ever removes knockback, never adds it. 0 = never suppress (vanilla).
+		#Range: 0 ~ 1000
+		knockbackThreshold = 8
+		#Whether this tier may block burning and hot-block ticks at all: the
+		#creativecommon:burn_tick damage tag (on fire, in fire, campfires, braziers, bonfires,
+		#magma blocks, stoves). Default: netherite and above. Lava and fan fire are not in it.
+		#false = the shield doesn't attempt the block (no shield sound, full damage). true = it
+		#blocks from any direction at the hit's normal percentage (a 1-damage tick is fully blocked).
+		blocksBurnTicks = true
+		#Whether this tier may block thorn ticks at all: the creativecommon:contact_tick
+		#damage tag (cactus, berry bushes, leaf piles, weeds, wither roots, beanstalk thorns,
+		#barbed panes). Default: diamond and above.
+		#false = the shield doesn't attempt the block (no shield sound, full damage). true = it
+		#blocks from any direction at the hit's normal percentage (a 1-damage tick is fully blocked).
+		blocksContactTicks = true
+
+		#Percent (0-100) of the hit absorbed, per damage kind. 0 = not blocked. See the [shields] header.
+		[shields.dragon.reduction]
+			#Range: 0 ~ 100
+			magic = 100
+			#Range: 0 ~ 100
+			physical = 100
+			#Range: 0 ~ 100
+			elemental = 100
+
+		#Percent of vanilla's shield wear taken per damage kind (100 = vanilla, 0 = free, 200 = double).
+		[shields.dragon.durabilityCost]
+			#Range: 0 ~ 1000
+			magic = 100
+			#Range: 0 ~ 1000
+			physical = 100
+			#Range: 0 ~ 1000
+			elemental = 100
+
+		#Optional per-element override of 'reduction.elemental' above. Leave every one of these
+		#four at -1 (default) and this tier keeps using that single blanket percentage for every
+		#fire/electric/cold/chemical hit alike (and the tooltip shows one 'Elemental: X%' line).
+		#Set ANY ONE of these four to 0-100 and this tier switches to the breakdown instead:
+		#'reduction.elemental' is then ignored ENTIRELY for this tier, each of the four blocks
+		#only what it's set to here (a -1 or explicit 0 blocks nothing for that element), and the
+		#tooltip shows one line per element THAT IS NON-ZERO ('Fire: 50%', say, with no Cold/
+		#Electric/Chemical line at all if those are still -1 or 0). It's one or the other, not both.
+		#Wear still comes from durabilityCost.elemental below either way - there's no per-element
+		#wear split.
+		[shields.dragon.elemental_breakdown]
+			#Range: -1 ~ 100
+			fire = -1
+			#Range: -1 ~ 100
+			electric = -1
+			#Range: -1 ~ 100
+			cold = -1
+			#Range: -1 ~ 100
+			chemical = -1
+
+	[shields.iron]
+		#Max durability. Live: changing it takes effect on existing shields immediately
+		#(a shield already worn past the new maximum breaks on its next hit).
+		#Range: 1 ~ 1000000
+		durability = 336
+		#Item id that repairs this shield on an anvil. Empty = not anvil-repairable.
+		repairItem = "minecraft:iron_ingot"
+		#Potion effects given to whoever is HOLDING the shield each time it blocks a hit.
+		#Comma-separated entries of  effectId;durationTicks[;amplifier[;categories]]
+		#  amplifier   0 = level I (default 0)
+		#  categories  optional, '|'-separated: physical|elemental|magic, or the finer
+		#              melee|explosion|projectile|other. The effect only fires for those
+		#              kinds of hit. Omit = every kind.
+		#Example: minecraft:resistance;100;0;physical, minecraft:fire_resistance;200
+		#Unknown effect ids are skipped with one warning in the log.
+		shielderEffects = ""
+		#Same format, but given to the ATTACKER of the blocked hit (the entity behind the
+		#damage - a skeleton for its arrow). Skipped when the hit has no attacker (lava,
+		#poison) or the attacker is the shield holder.
+		attackerEffects = ""
+		#Damage amount, AFTER this tier's own reduction, below which a blocked hit no longer
+		#knocks YOU (the holder) back. The attacker's own recoil off the shield stays vanilla.
+		#This only ever removes knockback, never adds it. 0 = never suppress (vanilla).
+		#Range: 0 ~ 1000
+		knockbackThreshold = 3
+		#Whether this tier may block burning and hot-block ticks at all: the
+		#creativecommon:burn_tick damage tag (on fire, in fire, campfires, braziers, bonfires,
+		#magma blocks, stoves). Default: netherite and above. Lava and fan fire are not in it.
+		#false = the shield doesn't attempt the block (no shield sound, full damage). true = it
+		#blocks from any direction at the hit's normal percentage (a 1-damage tick is fully blocked).
+		blocksBurnTicks = false
+		#Whether this tier may block thorn ticks at all: the creativecommon:contact_tick
+		#damage tag (cactus, berry bushes, leaf piles, weeds, wither roots, beanstalk thorns,
+		#barbed panes). Default: diamond and above.
+		#false = the shield doesn't attempt the block (no shield sound, full damage). true = it
+		#blocks from any direction at the hit's normal percentage (a 1-damage tick is fully blocked).
+		blocksContactTicks = false
+
+		#Percent (0-100) of the hit absorbed, per damage kind. 0 = not blocked. See the [shields] header.
+		[shields.iron.reduction]
+			#Range: 0 ~ 100
+			physical = 40
+			#Range: 0 ~ 100
+			elemental = 0
+			#Range: 0 ~ 100
+			magic = 0
+
+		#Optional per-element override of 'reduction.elemental' above. Leave every one of these
+		#four at -1 (default) and this tier keeps using that single blanket percentage for every
+		#fire/electric/cold/chemical hit alike (and the tooltip shows one 'Elemental: X%' line).
+		#Set ANY ONE of these four to 0-100 and this tier switches to the breakdown instead:
+		#'reduction.elemental' is then ignored ENTIRELY for this tier, each of the four blocks
+		#only what it's set to here (a -1 or explicit 0 blocks nothing for that element), and the
+		#tooltip shows one line per element THAT IS NON-ZERO ('Fire: 50%', say, with no Cold/
+		#Electric/Chemical line at all if those are still -1 or 0). It's one or the other, not both.
+		#Wear still comes from durabilityCost.elemental below either way - there's no per-element
+		#wear split.
+		[shields.iron.elemental_breakdown]
+			#Range: -1 ~ 100
+			fire = 25
+			#Range: -1 ~ 100
+			electric = 0
+			#Range: -1 ~ 100
+			cold = 0
+			#Range: -1 ~ 100
+			chemical = 0
+
+		#Percent of vanilla's shield wear taken per damage kind (100 = vanilla, 0 = free, 200 = double).
+		[shields.iron.durabilityCost]
+			#Range: 0 ~ 1000
+			physical = 100
+			#Range: 0 ~ 1000
+			elemental = 100
+			#Range: 0 ~ 1000
+			magic = 100
+
+#A charm item (see #creativeengineering:bonemeal_charms) held in the OTHER hand
+#from bone meal gives a chance to refund the bone meal that was just used, at
+#the cost of a chance to damage the charm itself.
+[bonemeal_charm]
+	#Master on/off switch.
+	enabled = true
+	#Chance [0-1] to refund the bone meal used while a charm is held.
+	#Range: 0.0 ~ 1.0
+	chance = 0.5
+	#Chance [0-1] the charm takes durability damage per use (rolled independently of chance).
+	#Range: 0.0 ~ 1.0
+	damageChance = 0.1
+	#Durability damage dealt to the charm when damageChance hits.
+	#Range: 0 ~ 100
+	damagePerUse = 1
+
+#Bottled Air port: right-click a glass bottle in water to breathe from it. The fire sources that
+#evaporate the filled bottle in the other hand are #creativeengineering:bottled_air/fire_sources.
+[bottled_air]
+	enabled = true
+	#Air a bottle gives (vanilla's full supply is 300).
+	#Range: 0 ~ 1000
+	airPerBottle = 150
+	#A water bottle can't be drunk while under water (else it is endless air).
+	noDrinkingUnderwater = true
+	#A fire source in the other hand evaporates the water bottle the fill made, giving the glass bottle back.
+	fireEvaporates = true
+	#Chance the glass bottle breaks when the water is evaporated.
+	#Range: 0.0 ~ 1.0
+	bottleBreakChance = 0.5
+
+#Sophisticated Backpacks skins: a block smithed onto a backpack changes how it looks.
+[backpackSkins]
+	#Off: a skinned backpack cannot go in the chest slot or a Curios slot (so it is never worn).
+	#On: it can, and the skin block is drawn on the back.
+	allowEquip = false
+
+#Item tooltips (client side).
+[tooltips]
+	#Every item that fits a Curios slot shows Curios' "Slot:" line, also when the item's own mod
+	#hides or replaces it. Off: only the lines Curios and the item's mod add.
+	curiosSlotLine = true
+

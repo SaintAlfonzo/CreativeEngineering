@@ -10,6 +10,7 @@ import net.minecraft.core.Direction;
 import net.minecraft.core.Registry;
 import net.minecraft.server.Bootstrap;
 import net.minecraft.world.level.BlockGetter;
+import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.ChainBlock;
 import net.minecraft.world.level.block.EndRodBlock;
@@ -24,6 +25,7 @@ import net.minecraft.world.level.material.FluidState;
 import net.minecraft.world.level.material.Fluids;
 import net.minecraft.world.phys.AABB;
 import net.minecraft.world.phys.Vec3;
+import net.minecraft.world.phys.shapes.Shapes;
 import net.minecraft.world.phys.shapes.VoxelShape;
 
 /**
@@ -403,12 +405,140 @@ public class SpotsTest {
         NoteData sp = new NoteData(NoteData.NO_COLOR, "creeper", "", 0, "");
         check(FacePaperInteractions.erase(sp) && sp.isPlain(), "eraser on a blank special: plain");
 
+        surfaceTests(stone, chest, carpet);
+
         System.out.println(fails == 0 ? "ALL " + checks + " CHECKS PASSED" : fails + " FAILED of " + checks);
         System.exit(fails == 0 ? 0 : 1);
     }
 
     static boolean near(double a, double b) {
         return Math.abs(a - b) < 1e-6;
+    }
+
+    static boolean placeIs(Spots.Place p, float inset, float offX, float offY, float size) {
+        return p != null && Math.abs(p.inset() - inset) < 1e-4 && Math.abs(p.offX() - offX) < 1e-4
+                && Math.abs(p.offY() - offY) < 1e-4 && Math.abs(p.size() - size) < 1e-4;
+    }
+
+    static void expectLabel(Spots.Place p, float inset, float offX, float offY, float size, String what) {
+        check(placeIs(p, inset, offX, offY, size), what + ": got " + p + ", want " + inset + " / " + offX + "," + offY + " / " + size);
+    }
+
+    static void expectCentreNote(Spots.Fit f, float inset, float offY, String what) {
+        boolean ok = f.mask() == Spots.CENTRE_ONLY && Math.abs(f.inset() - inset) < 1e-4 && Math.abs(f.noteOffX()) < 1e-4
+                && Math.abs(f.noteOffY() - offY) < 1e-4;
+        check(ok, what + ": got " + mask(f.mask()) + " @ " + f.inset() + " off " + f.noteOffX() + "," + f.noteOffY()
+                + (ok ? "" : ", want C @ " + inset + " off 0," + offY));
+    }
+
+    /**
+     * Label surface test and centred notes (sticky_notes.md 3.3a), on the real shapes of the modded hosts (read from
+     * their jars 2026-11-02) and on vanilla blocks.
+     */
+    static void surfaceTests(BlockState stone, BlockState chest, BlockState carpet) {
+        VoxelShape jar = Shapes.or(Block.box(3, 0, 3, 13, 14, 13), Block.box(5, 14, 5, 11, 16, 11));
+        VoxelShape sack = Shapes.or(Block.box(2, 0, 2, 14, 12, 14), Block.box(6, 12, 6, 10, 13, 10), Block.box(5, 13, 5, 11, 16, 11));
+        VoxelShape trashCan = Shapes.or(Shapes.box(0.1875, 0, 0.1875, 0.8125, 0.75, 0.8125),
+                Shapes.box(0.125, 0.75, 0.125, 0.875, 0.8125, 0.875), Shapes.box(0.1875, 0.78125, 0.1875, 0.8125, 0.84375, 0.8125));
+        VoxelShape fermentingJar = Block.box(3.25, 0, 3.25, 12.75, 13.5, 12.75);
+        VoxelShape botanyPot = Block.box(2, 0, 2, 14, 8, 14);
+        Direction N = Direction.NORTH;
+
+        System.out.println("== labels: surface test, modded shapes");
+        for (Direction side : Direction.Plane.HORIZONTAL) {
+            expectLabel(Spots.labelSurface(jar, side, null), 3f / 16, 0, 0, 10, "Supplementaries jar side " + side);
+            expectLabel(Spots.labelSurface(sack, side, null), 2f / 16, 0, -1, 10, "sack side " + side + " (sits low, below the neck)");
+            expectLabel(Spots.labelSurface(trashCan, side, null), 2f / 16, 0, 0, 10, "trash can side " + side + " (rim and body together)");
+            expectLabel(Spots.labelSurface(fermentingJar, side, null), 3.25f / 16, 0, 0, 10, "fermenting jar side " + side);
+            expectLabel(Spots.labelSurface(botanyPot, side, null), 2f / 16, 0, -4, 8, "botany pot side " + side + " (8 px, shrunk)");
+        }
+        expectLabel(Spots.labelSurface(jar, Direction.DOWN, N), 0, 0, 0, 6, "jar top: 6 px label on the lid (body 2 px lower is left out)");
+        expectLabel(Spots.labelSurface(botanyPot, Direction.DOWN, N), 0.5f, 0, 0, 10, "botany pot top (8 px in): label on the soil");
+
+        System.out.println("== labels: surface test, vanilla");
+        expectLabel(fit(stone, N, null).label(), 0, 0, 0, 10, "stone: the standard label");
+        expectLabel(fit(chest, N, null).label(), 1f / 16, 0, 0, 10, "chest side: standard label at 1/16");
+        expectLabel(fit(chest, Direction.DOWN, N).label(), 2f / 16, 0, 0, 10, "chest lid: standard label at 2/16");
+        BlockState cauldron = Blocks.CAULDRON.defaultBlockState();
+        for (Direction side : Direction.Plane.HORIZONTAL)
+            expectLabel(fit(cauldron, side, null).label(), 0, 0, 0, 10, "cauldron side " + side + " (2 px walls count)");
+        check(fit(cauldron, Direction.DOWN, N).label() == null, "cauldron top (rim only): no label");
+        expectLabel(fit(Blocks.COMPOSTER.defaultBlockState(), N, null).label(), 0, 0, 0, 10, "composter side");
+        expectLabel(fit(Blocks.FLOWER_POT.defaultBlockState(), N, null).label(), 5f / 16, 0, -5, 6, "flower pot side: 6 px label");
+        check(fit(carpet, Direction.DOWN, N).label() == null, "carpet top (15 px in): no label");
+        check(fit(Blocks.OAK_PRESSURE_PLATE.defaultBlockState(), Direction.DOWN, N).label() == null, "pressure plate: no label");
+        check(fit(Blocks.STONE_BUTTON.defaultBlockState(), N, null).label() == null, "button: no label");
+        check(fit(Blocks.GRASS.defaultBlockState(), N, null).label() == null, "grass (no collision): no label");
+        check(fit(Blocks.LADDER.defaultBlockState(), Direction.SOUTH, null).label() == null, "ladder front (13 px in): no label");
+        for (Direction d : Direction.values()) {
+            check(fit(Blocks.OAK_DOOR.defaultBlockState(), d, Direction.NORTH).label() == null, "door face " + d + ": no label");
+            check(fit(Blocks.OAK_TRAPDOOR.defaultBlockState(), d, Direction.NORTH).label() == null, "trapdoor face " + d + ": no label");
+        }
+        check(fit(slab(SlabType.BOTTOM), Direction.DOWN, N).label() == null, "bottom slab top (inset face): no label");
+        check(fit(slab(SlabType.TOP), Direction.UP, N).label() == null, "top slab bottom (inset face): no label");
+        check(fit(slab(SlabType.BOTTOM), N, null).label() == null, "bottom slab side: no label");
+        expectLabel(fit(slab(SlabType.DOUBLE), N, null).label(), 0, 0, 0, 10, "double slab: standard label");
+        BlockState st = stairs(Direction.NORTH, Half.BOTTOM);
+        check(fit(st, Direction.EAST, null).label() == null && fit(st, Direction.WEST, null).label() == null, "stair sides: no label");
+        check(fit(st, Direction.NORTH, null).label() == null, "stair front: no label");
+        check(fit(st, Direction.DOWN, N).label() == null, "stair top: no label");
+        expectLabel(fit(st, Direction.SOUTH, null).label(), 0, 0, 0, 10, "stair back: standard label");
+
+        System.out.println("== centred notes");
+        for (Direction side : Direction.Plane.HORIZONTAL) {
+            expectCentreNote(Spots.centreNoteFit(jar, side, null), 3f / 16, -1, "jar side " + side + " (body, not the lid)");
+            expectCentreNote(Spots.centreNoteFit(sack, side, null), 2f / 16, -2, "sack side " + side);
+            expectCentreNote(Spots.centreNoteFit(trashCan, side, null), 2f / 16, -1.25f, "trash can side " + side);
+            expectCentreNote(Spots.centreNoteFit(fermentingJar, side, null), 3.25f / 16, -1.25f, "fermenting jar side " + side);
+            expectCentreNote(Spots.centreNoteFit(botanyPot, side, null), 2f / 16, -4, "botany pot side " + side);
+        }
+        check(!Spots.shapeFit(jar, N, null).any(), "jar side without the tag: no notes (shape test)");
+        Spots.HostRules centre = new Spots.HostRules() {
+            @Override public boolean deny(BlockState host) { return false; }
+            @Override public boolean post(BlockState host) { return false; }
+            @Override public boolean centreNote(BlockState host) { return host.is(Blocks.CAULDRON); }
+        };
+        BlockState cauldronState = Blocks.CAULDRON.defaultBlockState();
+        Spots.Fit tagged = Spots.fit(cauldronState, LEVEL, POS, N, null, centre);
+        check(tagged.mask() == Spots.CENTRE_ONLY && tagged.label() != null, "centre-note rule via fit: side = C only, label still fits: " + tagged);
+        check(!Spots.fit(cauldronState, LEVEL, POS, Direction.DOWN, N, centre).any(), "centre-note rule: top uses the shape test (nothing)");
+        check(!Spots.fit(cauldronState, LEVEL, POS, N, null, NO_TAGS).any(), "cauldron side untagged: no notes");
+
+        System.out.println("== placement: boxes, hits, re-fit, NBT");
+        Spots.Fit potFit = Spots.centreNoteFit(botanyPot, N, null);
+        AABB nb = Spots.noteBox(N, null, potFit.notePlace(), Spots.C);
+        check(near(nb.minY, (5.33 - 4) / 16) && near(nb.maxY, (10.67 - 4) / 16) && near(nb.minX, 5.0 / 16) && near(nb.maxX, 11.0 / 16),
+                "centred note box on a botany pot moved down 4 px: " + nb);
+        FaceContent[] faces = new FaceContent[6];
+        for (int i = 0; i < 6; i++) faces[i] = new FaceContent();
+        FaceContent potFace = faces[N.ordinal()];
+        potFace.putNote(Spots.C, new NoteData(NoteData.NO_COLOR, null, "seeds", 0, ""));
+        potFace.setPlace(potFit.notePlace());
+        PieceHit h = PieceHit.resolve(faces, nb.getCenter());
+        check(h != null && h.isNote() && h.spot() == Spots.C && near(h.box(faces).minY, nb.minY), "hit on the moved note: " + h);
+        FaceContent loaded = FaceContent.load(potFace.save());
+        check(placeIs(loaded.place(), 2f / 16, 0, -4, 10), "shift survives save and load: " + loaded.place());
+        check(!new FaceContent().save().contains(FaceContent.KEY_OFF_Y) && FaceContent.load(stoneLabelFace().save()).labelSize == 10f,
+                "default layout writes no new keys and loads at 10 px");
+        FaceContent gone = FacePaperInteractions.refit(potFace, Spots.centreNoteFit(sack, N, null));
+        check(gone.isEmpty() && placeIs(potFace.place(), 2f / 16, 0, -2, 10), "pot -> sack: the note stays, re-centred: " + potFace.place());
+        gone = FacePaperInteractions.refit(potFace, fit(stone, N, null));
+        check(gone.isEmpty() && placeIs(potFace.place(), 0, 0, 0, 10), "-> stone (C allowed): back to the standard spot");
+        FaceContent lf = new FaceContent();
+        lf.setLabel(new LabelData());
+        lf.setPlace(Spots.labelSurface(botanyPot, N, null));
+        AABB lb = Spots.labelBox(N, null, lf.place());
+        check(near(lb.minY, 0) && near(lb.maxY, 8.0 / 16) && near(lb.minX, 4.0 / 16) && near(lb.maxX, 12.0 / 16), "8 px label box on a botany pot: " + lb);
+        gone = FacePaperInteractions.refit(lf, fit(stone, N, null));
+        check(gone.isEmpty() && lf.hasLabel() && placeIs(lf.place(), 0, 0, 0, 10), "pot -> stone: label grows back to 10 px");
+        gone = FacePaperInteractions.refit(lf, fit(Blocks.OAK_DOOR.defaultBlockState(), N, null));
+        check(gone.hasLabel() && lf.isEmpty(), "stone -> door: label dropped");
+    }
+
+    static FaceContent stoneLabelFace() {
+        FaceContent c = new FaceContent();
+        c.setLabel(new LabelData());
+        return c;
     }
 
     static boolean near(Vec3 p, double x, double y, double z) {

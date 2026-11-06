@@ -1,0 +1,52 @@
+// creativeEngineering: Creative Engineering (mod id creativeengineering, feature_writeup/creative_engineering.md), carved
+// out of patcherMod on 2026-11-04 (creative_split.md 7.6 and 7.13, wave 8). Shared Forge setup comes from
+// build-logic/src/main/groovy/ce.forge-mod.gradle. This file adds what is specific to Engineering, the same way
+// creativeEquipment/build.gradle does:
+//   - the Engineering script trees, authored in the pack folder so /reload (server) and F3+T (client) pick them up
+//     without a rebuild, copied into the jar at the same resource path:
+//       kubejs/data/creativeengineering/kubejs/    -> data/creativeengineering/kubejs/    (server scripts)
+//       kubejs/assets/creativeengineering/kubejs/  -> assets/creativeengineering/kubejs/  (client scripts)
+//     The startup scripts live in this project (src/main/resources/kubejs_startup/creativeengineering/), loaded from
+//     the jar by Creative Common's startup loader.
+//   - the 211 generated sawmill recipes (src/main/resources/data/creativeengineering/recipes/sawmill/, written by
+//     tools/gen_sawmill_recipes.py through /cegen).
+// Build: ./gradlew :creativeEngineering:build --offline   Install: ./gradlew :creativeEngineering:installToMods
+plugins {
+    id 'ce.forge-mod'
+}
+
+dependencies {
+    // Creative Common: a hard dependency (KubeJS, the shared helpers, the startup loader) and the Common APIs this
+    // jar calls (util/BurnBursts).
+    compileOnly project(':creativeCommon')
+    // Creative Compat: required by every Creative jar (creative_split.md 7.6); its [leaf_piles] value feeds
+    // surface/LeafPileSlow.
+    compileOnly project(':creativeCompat')
+    // The mods the mixins target (Create, IE, Immersive Posts, PneumaticCraft, Sophisticated Core, Dreams and Desires,
+    // Ore Excavation, BlockRunner, Framed Blocks, Copycats+, JEI, WTHIT): the pack's jars, shared with Creative Common
+    // (git-ignored libs/, SRG-named).
+    compileOnly fileTree(dir: rootProject.file('development/creativeCommon/libs'), include: '*.jar')
+}
+
+def scriptTrees = ['data/creativeengineering/kubejs']
+
+tasks.named('processResources', ProcessResources).configure {
+    scriptTrees.each { tree ->
+        from(rootProject.file("kubejs/${tree}")) {
+            into tree
+            exclude '**/*.md'
+        }
+    }
+}
+
+// The scripts in the jar run only through KubeJS; a missing tree means the pack-folder path moved.
+tasks.named('jar', Jar).configure {
+    doLast {
+        def entries = new java.util.zip.ZipFile(archiveFile.get().asFile).withCloseable { z -> z.entries().collect { it.name } }
+        ['kubejs_startup/creativeengineering/', 'data/creativeengineering/kubejs/'].each { dir ->
+            if (!entries.any { it.startsWith(dir) && it.endsWith('.js') }) {
+                throw new GradleException("creativeengineering jar has no scripts under ${dir}")
+            }
+        }
+    }
+}

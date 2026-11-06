@@ -1,0 +1,546 @@
+# Run r1103 phase 2 rerun (p2_R): the BATCH-FAULT rows of perf/runs/r1103/p2/judged.md, fixed. NOT RUN.
+# World: FRESH group A superflat, level p2r:
+#   bash tools/scratch_query/prep_srv.sh $SCR/p2r p2r A spawn-animals=true
+# Probes copied into $SCR/p2r/srv/kubejs/server_scripts before the boot (as drive_p2.sh step rA):
+#   tools/vintage_probe/vintage_probe.js:zz_vtd_probe.js (fixed in r1103 p2 judging: brewin_kimchi gone, jars only)
+#   tools/kitchen_probe/cfb_kitchen_probe.js:zz_kt_probe.js  tools/fungi_probe/zcount.js:zz_count.js
+#   tools/fungi_probe/ztrades.js:zz_trades.js  tools/scratch_query/zloot_probe.js:zz_zloot_probe.js
+#   tools/scratch_query/zti_probe.js:zz_zti_probe.js  tools/scratch_query/zact_probe.js:zz_zact_probe.js
+#   tools/scratch_query/zp_probe.js:zz_zp_probe.js  (zz_zq_probe.js comes from prep_srv.sh)
+# Toml: none before the boot. SQ-FDB-05 / -07 (last) edit config/farmersdelight-ce-common.toml live and restore it.
+# Run: qrun.py run $SCR/p2r tools/scratch_query/batches/r1103/p2_R.qb perf/runs/r1103/p2R   (a NEW results dir: the
+# markers are captured again in the first row, so no stale vars.json)
+# Order: setup + data rows, world rows, toml rows last. Bots get the starter kit 10 ticks after joining: every bot row
+# waits 2 s and clears the bot first. Time: about 30 min after "Done (" (FDB-07 waits 3 min, FDB-11 300 kills).
+# Not here (need a group B world or the old s1a world): see judged.md "Not in p2_R".
+pace 2
+
+
+## SQ-VP-04 | /vtdtest tags
+# setup (this row): the s1home marker at the world spawn and the rhome marker at 1000 -60 1000 (its chunk is
+# forceloaded BEFORE the summon: r1103 p2 summoned into an unloaded chunk and every R row lost its capture)
+bootexpect Done \(
+> execute unless entity @e[type=minecraft:marker,tag=s1home] run summon minecraft:marker ~ ~ ~ {Tags:["s1home"]}
+sleep 2
+> data get entity @e[type=minecraft:marker,tag=s1home,limit=1] Pos
+capture H entity data: \[(-?\d+)\.\d+d, (-?\d+)\.\d+d, (-?\d+)\.\d+d\]
+> forceload add {H1-32} {H3-56} {H1+96} {H3+48}
+> forceload add 192 16 304 48
+> forceload add 1000 1000
+sleep 3
+> execute unless entity @e[type=minecraft:marker,tag=rhome] run summon minecraft:marker 1000 -60 1000 {Tags:["rhome"]}
+sleep 2
+> data get entity @e[type=minecraft:marker,tag=rhome,limit=1] Pos
+capture R entity data: \[(-?\d+)\.\d+d, (-?\d+)\.\d+d, (-?\d+)\.\d+d\]
+> forceload add {R1-16} {R3-16} {R1+80} {R3+150}
+> forceload add 96 496 340 560
+sleep 5
+> gamerule doDaylightCycle false
+> weather clear 100000
+> difficulty easy
+> vtdtest tags
+waitlog \[vtdtest\] done tags 120
+expect \[vtdtest\] done tags: \d+ pass, 0 fail
+reject \[vtdtest\] FAIL
+
+## SQ-CDF-06 | cake pan half: the oven's cake recipes name the pan in their tool field (not an ingredient)
+# r1103 p2: `zq uses` reads getIngredients only, and BakingRecipe keeps the bakeware in getTool(), so "0 uses" was the
+# probe's blind spot. rdetail+ prints the tool field. Mortar, seasoning and the milk jar halves passed in r1103 p2.
+> zq bytype creativeengineering:baking
+> zq rdetail baking/carrot_cake
+> zq rdetail cake
+expect bytype creativeengineering:baking: [1-9]\d*
+expect rdetail\+ \S*baking/\S* fields: tool .*cake_pan
+look the cake-pan tool lines name oven cake recipes (carrot cake and the pack cakes)
+
+## SQ-VTD6-02 | empty-hand right-click on ripe own-pick crops: fruit only, ages 5 / 5 / 4
+# run 1 left the H2-1 layer open beside the soils, so two fruits fell out of the count box: stone floor now
+> data get entity @e[type=minecraft:marker,tag=s1home,limit=1] Pos
+capture H entity data: \[(-?\d+)\.\d+d, (-?\d+)\.\d+d, (-?\d+)\.\d+d\]
+> fill {H1+9} {H2} {H3-27} {H1+15} {H2+1} {H3-24} minecraft:air
+> fill {H1+9} {H2-1} {H3-27} {H1+15} {H2-1} {H3-24} minecraft:stone
+> setblock {H1+10} {H2-1} {H3-25} minecraft:farmland
+> setblock {H1+12} {H2-1} {H3-25} minecraft:soul_soil
+> setblock {H1+14} {H2-1} {H3-25} minecraft:farmland
+> setblock {H1+10} {H2} {H3-25} vintagedelight:cucumber_crop[age=7]
+> setblock {H1+12} {H2} {H3-25} vintagedelight:ghost_pepper_crop[age=7]
+> setblock {H1+14} {H2} {H3-25} veggiesdelight:zucchini_crop[age=7]
+> kill @e[type=minecraft:item]
+> pbot remove vtd62
+sleep 1
+> pbot spawn vtd62 {H1+12} {H2} {H3-27} minecraft:overworld survival
+sleep 2
+> clear vtd62
+> item replace entity vtd62 weapon.mainhand with minecraft:air
+> pbot use vtd62 {H1+10} {H2} {H3-25}
+> pbot use vtd62 {H1+12} {H2} {H3-25}
+> pbot use vtd62 {H1+14} {H2} {H3-25}
+sleep 2
+> execute if block {H1+10} {H2} {H3-25} vintagedelight:cucumber_crop[age=5] run say VTD602 cucumber age 5
+> execute if block {H1+12} {H2} {H3-25} vintagedelight:ghost_pepper_crop[age=5] run say VTD602 ghost pepper age 5
+> execute if block {H1+14} {H2} {H3-25} veggiesdelight:zucchini_crop[age=4] run say VTD602 zucchini age 4
+> zcount {H1+9} {H2-1} {H3-27} {H1+15} {H2+1} {H3-24}
+waitlog \[zcount\] entities 30
+> data get entity vtd62 Inventory
+expect VTD602 cucumber age 5
+expect VTD602 ghost pepper age 5
+expect VTD602 zucchini age 4
+expect item:vintagedelight:cucumber x|id: "vintagedelight:cucumber"
+expect item:vintagedelight:ghost_pepper x|id: "vintagedelight:ghost_pepper"
+expect item:veggiesdelight:zucchini x|id: "veggiesdelight:zucchini"
+reject (?i)\[zcount\] entities .*item:[a-z_]+:[a-z_]*seeds
+reject (?i)has the following entity data: .*_seeds
+> pbot remove vtd62
+look fruit counts: one use each, so about 1 to 3 of each fruit; "use" replies PASS/SUCCESS logged
+
+## SQ-FDB-06 | Rich Soil Farmland is not trampled (vanilla Farmland is, as a control)
+# run 1: stone-free H2-1 layer let the golems land beside the soils, and the kill found no tagged golem; now a stone
+# floor at the soil level, a 6-block drop, golem positions and an entity count before the kill
+> data get entity @e[type=minecraft:marker,tag=s1home,limit=1] Pos
+capture H entity data: \[(-?\d+)\.\d+d, (-?\d+)\.\d+d, (-?\d+)\.\d+d\]
+> execute positioned {H1+55}.5 {H2} {H3-16}.5 run kill @e[type=minecraft:iron_golem,distance=..12]
+> fill {H1+53} {H2} {H3-17} {H1+58} {H2+8} {H3-15} minecraft:air
+> fill {H1+53} {H2-1} {H3-17} {H1+58} {H2-1} {H3-15} minecraft:stone
+> setblock {H1+54} {H2-1} {H3-16} farmersdelight:rich_soil_farmland
+> setblock {H1+57} {H2-1} {H3-16} minecraft:farmland
+> summon minecraft:iron_golem {H1+54}.5 {H2+6} {H3-16}.5 {Tags:["fdb6"]}
+> summon minecraft:iron_golem {H1+57}.5 {H2+6} {H3-16}.5 {Tags:["fdb6"]}
+sleep 4
+> execute if block {H1+54} {H2-1} {H3-16} farmersdelight:rich_soil_farmland run say FDB06 rich soil farmland kept
+> execute if block {H1+57} {H2-1} {H3-16} minecraft:dirt run say FDB06 control farmland trampled
+> execute positioned {H1+54}.5 {H2} {H3-16}.5 run data get entity @e[type=minecraft:iron_golem,distance=..6,sort=nearest,limit=1] Pos
+> execute positioned {H1+57}.5 {H2} {H3-16}.5 run data get entity @e[type=minecraft:iron_golem,distance=..6,sort=nearest,limit=1] Pos
+> zcount {H1+53} {H2-1} {H3-17} {H1+58} {H2+2} {H3-15}
+> execute positioned {H1+55}.5 {H2} {H3-16}.5 run kill @e[type=minecraft:iron_golem,distance=..12]
+expect FDB06 rich soil farmland kept
+expect FDB06 control farmland trampled
+look golem Pos lines: one golem over each soil (x .5, y = H2); if the control is not trampled, the pack stops all trampling and the row proves nothing
+
+## SQ-FDB-11 | onion from zombie kills with Looting III, knife on pumpkins
+# /loot kill gave no onion in 300 tries in run 1 (the LootJS modifier needs a real kill), so the bot kills real
+# zombies: 1-health zombies under a leather helmet (no sun burn), an arrow owned by the bot dropped on each one.
+# Then 100 kills by ownerless arrows (no player) as the control, then the knife through execute as the bot.
+> data get entity @e[type=minecraft:marker,tag=s1home,limit=1] Pos
+capture H entity data: \[(-?\d+)\.\d+d, (-?\d+)\.\d+d, (-?\d+)\.\d+d\]
+> kill @e[type=minecraft:zombie,tag=fdb11]
+> fill {H1+42} {H2} {H3-32} {H1+52} {H2+4} {H3-26} minecraft:air
+> pbot remove fdb11
+sleep 1
+> pbot spawn fdb11 {H1+47} {H2} {H3-27} minecraft:overworld survival
+sleep 2
+> clear fdb11
+> item replace entity fdb11 weapon.mainhand with minecraft:iron_sword{Enchantments:[{id:"minecraft:looting",lvl:3s}]}
+> data get entity fdb11 UUID
+capture U \[I; ?(-?\d+), ?(-?\d+), ?(-?\d+), ?(-?\d+)\]
+> kill @e[type=minecraft:item]
+> kill @e[type=minecraft:arrow]
+pace 0.1
+repeat 200
+> summon minecraft:zombie {H1+44}.5 {H2} {H3-30}.5 {NoAI:1b,Silent:1b,Health:1.0f,PersistenceRequired:1b,CanPickUpLoot:0b,Tags:["fdb11k"],ArmorItems:[{},{},{},{id:"minecraft:leather_helmet",Count:1b}],ArmorDropChances:[0.0f,0.0f,0.0f,0.0f]}
+> summon minecraft:arrow {H1+44}.5 {H2+3} {H3-30}.5 {Motion:[0.0d,-3.0d,0.0d],damage:4.0d,pickup:0b,Owner:[I;{U1},{U2},{U3},{U4}]}
+end
+pace 2
+sleep 3
+> execute if entity @e[type=minecraft:zombie,tag=fdb11k] run say FDB11 zombies left alive
+> say FDB11 player kills counted
+> zcount {H1+42} {H2-1} {H3-32} {H1+46} {H2+2} {H3-28}
+waitlog \[zcount\] entities 30
+expect \[zcount\] entities .*item:minecraft:rotten_flesh x
+expect \[zcount\] entities .*item:farmersdelight:onion x
+reject FDB11 zombies left alive
+> kill @e[type=minecraft:zombie,tag=fdb11k]
+> kill @e[type=minecraft:item]
+> kill @e[type=minecraft:arrow]
+pace 0.1
+repeat 100
+> summon minecraft:zombie {H1+44}.5 {H2} {H3-30}.5 {NoAI:1b,Silent:1b,Health:1.0f,PersistenceRequired:1b,CanPickUpLoot:0b,Tags:["fdb11k"],ArmorItems:[{},{},{},{id:"minecraft:leather_helmet",Count:1b}],ArmorDropChances:[0.0f,0.0f,0.0f,0.0f]}
+> summon minecraft:arrow {H1+44}.5 {H2+3} {H3-30}.5 {Motion:[0.0d,-3.0d,0.0d],damage:4.0d,pickup:0b}
+end
+pace 2
+sleep 3
+> say FDB11 control (no player) counted
+> zcount {H1+42} {H2-1} {H3-32} {H1+46} {H2+2} {H3-28}
+sleep 2
+> kill @e[type=minecraft:zombie,tag=fdb11k]
+> kill @e[type=minecraft:item]
+> kill @e[type=minecraft:arrow]
+> setblock {H1+51} {H2} {H3-30} minecraft:pumpkin
+> item replace entity fdb11 weapon.mainhand with farmersdelight:iron_knife
+> execute as fdb11 run loot spawn {H1+51} {H2+1} {H3-30} mine {H1+51} {H2} {H3-30} mainhand
+> item replace entity fdb11 weapon.mainhand with farmersdelight:iron_knife{Enchantments:[{id:"minecraft:silk_touch",lvl:1s}]}
+> execute as fdb11 run loot spawn {H1+51} {H2+1} {H3-28} mine {H1+51} {H2} {H3-30} mainhand
+sleep 2
+> zcount {H1+50} {H2} {H3-31} {H1+52} {H2+2} {H3-30}
+> zcount {H1+50} {H2} {H3-29} {H1+52} {H2+2} {H3-27}
+expect \[zcount\] entities .*item:farmersdelight:pumpkin_slice x4
+expect \[zcount\] entities .*item:minecraft:pumpkin x1
+> kill @e[type=minecraft:item]
+> pbot remove fdb11
+look after "player kills counted": onions about 10 of 200 (2 % + 3 x 1 %); after "control (no player)": no onion; first knife zcount: 4 pumpkin_slice, no pumpkin; second (Silk Touch): minecraft:pumpkin
+
+## SQ-RSP-05 | 2 black tea + honey + bottle -> Strong Black Tea (kettle filled by NBT, not item replace)
+> data get entity @e[type=minecraft:marker,tag=rhome,limit=1] Pos
+capture R entity data: \[(-?\d+)\.\d+d, (-?\d+)\.\d+d, (-?\d+)\.\d+d\]
+> setblock {R1+2} {R2} {R3+106} minecraft:campfire[lit=true]
+> setblock {R1+2} {R2+1} {R3+106} farmersrespite:kettle
+> pbot spawn rsp5 {R1+2} {R2+1} {R3+103} minecraft:overworld survival
+sleep 2
+> clear rsp5
+> item replace entity rsp5 weapon.mainhand with farmersrespite:black_tea 2
+repeat 2
+> pbot use rsp5 {R1+2} {R2+1} {R3+106} north
+end
+> execute if block {R1+2} {R2+1} {R3+106} farmersrespite:kettle[water_level=2] run say RSP05 tea level 2
+expect RSP05 tea level 2
+> data merge block {R1+2} {R2+1} {R3+106} {Inventory:{Size:5,Items:[{Slot:0,id:"minecraft:honey_bottle",Count:1b},{Slot:3,id:"minecraft:glass_bottle",Count:1b}]}}
+> data get block {R1+2} {R2+1} {R3+106} Inventory
+expect has the following block data: \{.*minecraft:honey_bottle
+sleep 12
+> data get block {R1+2} {R2+1} {R3+106}
+> execute if block {R1+2} {R2+1} {R3+106} farmersrespite:kettle[water_level=1] run say RSP05 level 1
+> pbot remove rsp5
+expect farmersrespite:strong_black_tea
+expect RSP05 level 1
+look honey's glass bottle sits in a leftover slot or the remainder buffer (block data), not thrown out
+
+## SQ-RSP-06 | water + 2 black tea leaves -> Black Tea
+> setblock {R1+6} {R2} {R3+106} minecraft:campfire[lit=true]
+> setblock {R1+6} {R2+1} {R3+106} farmersrespite:kettle[water_level=4]
+> data merge block {R1+6} {R2+1} {R3+106} {Inventory:{Size:5,Items:[{Slot:0,id:"farmersrespite:black_tea_leaves",Count:2b},{Slot:3,id:"minecraft:glass_bottle",Count:1b}]}}
+sleep 15
+> data get block {R1+6} {R2+1} {R3+106}
+> execute if block {R1+6} {R2+1} {R3+106} farmersrespite:kettle[water_level=3] run say RSP06 level 3
+expect farmersrespite:black_tea"
+expect RSP06 level 3
+
+## SQ-RSP-15 | BrewTimeTotal 200; no tea at 8 s, one by 12 s
+> setblock {R1+10} {R2} {R3+106} minecraft:campfire[lit=true]
+> setblock {R1+10} {R2+1} {R3+106} farmersrespite:kettle[water_level=4]
+> data merge block {R1+10} {R2+1} {R3+106} {Inventory:{Size:5,Items:[{Slot:0,id:"farmersrespite:black_tea_leaves",Count:2b},{Slot:3,id:"minecraft:glass_bottle",Count:1b}]}}
+sleep 1
+> data get block {R1+10} {R2+1} {R3+106} BrewTimeTotal
+expect has the following block data: 200
+sleep 6
+> execute if block {R1+10} {R2+1} {R3+106} farmersrespite:kettle[water_level=4] run say RSP15 not yet at 8 s
+expect RSP15 not yet at 8 s
+sleep 5
+> data get block {R1+10} {R2+1} {R3+106} Inventory
+expect farmersrespite:black_tea"
+
+## SQ-RSP-07 | bottles in an ingredient slot move to the leftover slots
+> setblock {R1+14} {R2} {R3+106} minecraft:campfire[lit=true]
+> setblock {R1+14} {R2+1} {R3+106} farmersrespite:kettle[water_level=4]
+> data merge block {R1+14} {R2+1} {R3+106} {Inventory:{Size:5,Items:[{Slot:0,id:"minecraft:glass_bottle",Count:3b}]}}
+sleep 2
+> data get block {R1+14} {R2+1} {R3+106}
+reject Slot: 0, id: "minecraft:glass_bottle"
+expect minecraft:glass_bottle
+look the 3 bottles are in the buffer / leftover slots, the plating slot (3) is empty
+
+## SQ-RSP-12 | flower pot + Wild Tea Bush; break drops pot + bush (bot removed before the break)
+> setblock {R1+14} {R2} {R3+112} minecraft:flower_pot
+> pbot spawn rsp12 {R1+14} {R2} {R3+107} minecraft:overworld survival
+sleep 2
+> clear rsp12
+> item replace entity rsp12 weapon.mainhand with farmersrespite:wild_tea_bush 1
+> pbot use rsp12 {R1+14} {R2} {R3+112} up
+> zcount {R1+14} {R2} {R3+112} {R1+14} {R2} {R3+112}
+waitlog \[zcount\] entities 30
+expect \[zcount\] blocks [a-z_]+:potted_[a-z_]*tea[a-z_]*=1
+> zp inv rsp12
+> pbot remove rsp12
+sleep 1
+> kill @e[type=minecraft:item]
+> setblock {R1+14} {R2} {R3+112} minecraft:air destroy
+> zcount {R1+13} {R2-1} {R3+111} {R1+15} {R2+2} {R3+113}
+waitlog \[zcount\] entities 30
+expect item:minecraft:flower_pot
+expect item:farmersrespite:wild_tea_bush
+bootreject RespitePottedTeaBush.*(WARN|could not|failed)
+
+## SQ-CN-04 | knife on mature corn: about 10 cobs in 40; hand and age 3 none (loot run as a bot: LootJS matchMainHand)
+> setblock {R1+2} {R2-1} {R3+134} minecraft:farmland[moisture=7]
+> setblock {R1+2} {R2} {R3+134} corn_delight:corn_crop[age=7,upper=false]
+> setblock {R1+2} {R2+1} {R3+134} corn_delight:corn_crop[age=7,upper=true]
+> setblock {R1+4} {R2-1} {R3+134} minecraft:farmland[moisture=7]
+> setblock {R1+4} {R2} {R3+134} corn_delight:corn_crop[age=3,upper=false]
+> pbot spawn cn4 {R1+8} {R2} {R3+130} minecraft:overworld survival
+sleep 2
+> clear cn4
+> item replace entity cn4 weapon.mainhand with farmersdelight:iron_knife
+> kill @e[type=minecraft:item]
+pace 0.05
+repeat 40
+> execute as cn4 run loot spawn {R1+60} {R2} {R3} mine {R1+2} {R2} {R3+134} mainhand
+end
+pace 2
+> zcount {R1+59} {R2-1} {R3-1} {R1+61} {R2+2} {R3+1}
+waitlog \[zcount\] entities 30
+expect \[zcount\] entities .*item:creativeengineering:corncob
+> kill @e[type=minecraft:item]
+> item replace entity cn4 weapon.mainhand with minecraft:air
+pace 0.05
+repeat 20
+> execute as cn4 run loot spawn {R1+60} {R2} {R3} mine {R1+2} {R2} {R3+134} mainhand
+end
+pace 2
+> item replace entity cn4 weapon.mainhand with farmersdelight:iron_knife
+pace 0.05
+repeat 20
+> execute as cn4 run loot spawn {R1+60} {R2} {R3} mine {R1+4} {R2} {R3+134} mainhand
+end
+pace 2
+> zcount {R1+59} {R2-1} {R3-1} {R1+61} {R2+2} {R3+1}
+waitlog \[zcount\] entities 30
+> execute unless entity @e[type=minecraft:item,nbt={Item:{id:"creativeengineering:corncob"}}] run say CN04 no cob by hand or on age 3
+expect CN04 no cob by hand or on age 3
+> pbot remove cn4
+look first zcount: about 10 corncobs from the 40 knife rolls (merged stacks: add the counts); second zcount (hand on age 7, knife on age 3) has corn / seeds only
+
+## SQ-RD-08 | squid half: Calamari from a named squid (ancient city, sky village and trader halves passed in r1102b s2)
+> summon minecraft:squid {R1+60} {R2} {R3+8} {NoAI:1b,PersistenceRequired:1b,Tags:["rd8sq"]}
+> pbot spawn rd8 {R1+56} {R2} {R3+8} minecraft:overworld survival
+sleep 2
+> clear rd8
+> kill @e[type=minecraft:item]
+pace 0.05
+repeat 10
+> execute as rd8 run loot spawn {R1+60} {R2} {R3} kill @e[type=minecraft:squid,tag=rd8sq,limit=1]
+end
+pace 2
+> zcount {R1+59} {R2-1} {R3-1} {R1+61} {R2+2} {R3+1}
+waitlog \[zcount\] entities 30
+reject No entity was found
+expect item:rusticdelight:calamari
+> kill @e[tag=rd8sq]
+> pbot remove rd8
+look 1-2 Calamari per kill (10 kills): about 10 to 20 in the merged zcount stacks, ink sacs beside them
+
+## SQ-RD-24 | /place feature: giant pepper patch and the wild patches; giant blocks only on grass (patches also on the strips)
+# 1.19.2's /place feature takes a CONFIGURED feature id. Patches sit on the grass middle (x 15) and on the dirt (x 2)
+# and sand (x 28) strips; /zq count per giant block id prints what each stands on.
+> fill {R1} {R2} {R3+60} {R1+30} {R2+6} {R3+90} minecraft:air
+> fill {R1} {R2-1} {R3+60} {R1+30} {R2-1} {R3+90} minecraft:grass_block
+> fill {R1} {R2-1} {R3+60} {R1+4} {R2-1} {R3+90} minecraft:dirt
+> fill {R1+26} {R2-1} {R3+60} {R1+30} {R2-1} {R3+90} minecraft:sand
+> place feature rusticdelight:bell_pepper_block_patch {R1+15} {R2} {R3+64}
+> place feature rusticdelight:bell_pepper_block_patch {R1+15} {R2} {R3+70}
+> place feature rusticdelight:bell_pepper_block_patch {R1+15} {R2} {R3+76}
+> place feature rusticdelight:bell_pepper_block_patch {R1+15} {R2} {R3+82}
+> place feature rusticdelight:bell_pepper_block_patch {R1+15} {R2} {R3+88}
+> place feature rusticdelight:bell_pepper_block_patch {R1+2} {R2} {R3+66}
+> place feature rusticdelight:bell_pepper_block_patch {R1+2} {R2} {R3+76}
+> place feature rusticdelight:bell_pepper_block_patch {R1+2} {R2} {R3+86}
+> place feature rusticdelight:bell_pepper_block_patch {R1+28} {R2} {R3+66}
+> place feature rusticdelight:bell_pepper_block_patch {R1+28} {R2} {R3+76}
+> place feature rusticdelight:bell_pepper_block_patch {R1+28} {R2} {R3+86}
+> zcount {R1} {R2} {R3+60} {R1+30} {R2+2} {R3+90}
+waitlog \[zcount\] entities 60
+reject \[zcount\] blocks .*rusticdelight:bell_pepper_(white|pink|orange|blue|purple|black)_block
+expect \[zcount\] blocks .*rusticdelight:bell_pepper_(red|yellow|green)_block
+> zq count {R1} {R2} {R3+60} {R1+30} {R2+2} {R3+90} rusticdelight:bell_pepper_red_block
+waitlog \[zq\] count rusticdelight:bell_pepper_red_block 120
+> zq count {R1} {R2} {R3+60} {R1+30} {R2+2} {R3+90} rusticdelight:bell_pepper_yellow_block
+waitlog \[zq\] count rusticdelight:bell_pepper_yellow_block 120
+> zq count {R1} {R2} {R3+60} {R1+30} {R2+2} {R3+90} rusticdelight:bell_pepper_green_block
+waitlog \[zq\] count rusticdelight:bell_pepper_green_block 120
+reject \[zq\] count rusticdelight:bell_pepper_\w+_block: \d+; on: .*minecraft:(dirt|sand)\b
+> fill {R1} {R2} {R3+60} {R1+30} {R2+6} {R3+90} minecraft:air
+> place feature rusticdelight:wild_bell_peppers {R1+15} {R2} {R3+66}
+> place feature rusticdelight:wild_coffee {R1+15} {R2} {R3+75}
+> place feature rusticdelight:wild_cotton {R1+15} {R2} {R3+84}
+> zcount {R1} {R2} {R3+60} {R1+30} {R2+2} {R3+90}
+waitlog \[zcount\] blocks .*wild 60
+expect \[zcount\] blocks .*rusticdelight:wild_bell_peppers=
+expect \[zcount\] blocks .*rusticdelight:wild_coffee=
+expect \[zcount\] blocks .*rusticdelight:wild_cotton=
+reject \[zcount\] blocks .*rusticdelight:wild_(pale|dark)_bell_peppers
+reject Failed to place feature|Unknown|ERROR
+look the "on:" lists of the three giant-block counts name grass_block (or a giant block) only; the strip patches placed nothing (or only on grass at the strip edge)
+
+## SQ-BM-02 | baby animals and a baby zombie keep their age (x 145); villager by #zq:villagers (MCA), cat rechecked
+# r1103 p2: at pace 2 the "5 s" reads came about 25 s after the summons, and the baby zombie burned to death in the
+# sun (onFire from 02:53:24, gone by 02:53:46): now night, a helmet on the zombie, pace 0.2 for the summons. The cat
+# vanished within 1 s twice (r1102b, r1103): a zcount right after its summon shows what took its place
+> time set 18000
+> kill @e[x=140,y=-61,z=495,dx=10,dy=5,dz=18]
+pace 0.2
+> summon minecraft:cow 145 -60 500 {Age:-24000,NoAI:1b,Tags:["bm02"]}
+> summon minecraft:pig 145 -60 501 {Age:-24000,NoAI:1b,Tags:["bm02"]}
+> summon minecraft:sheep 145 -60 502 {Age:-24000,NoAI:1b,Tags:["bm02"]}
+> summon minecraft:chicken 145 -60 503 {Age:-24000,NoAI:1b,Tags:["bm02"]}
+> summon minecraft:wolf 145 -60 504 {Age:-24000,NoAI:1b,Tags:["bm02"]}
+> summon minecraft:cat 145 -60 505 {Age:-24000,NoAI:1b,PersistenceRequired:1b,Tags:["bm02","bm02c"]}
+> summon minecraft:horse 145 -60 506 {Age:-24000,NoAI:1b,Tags:["bm02"]}
+> summon minecraft:villager 145 -60 507 {Age:-24000,NoAI:1b,Tags:["bm02"]}
+> summon minecraft:zombie 145 -60 508 {IsBaby:1b,NoAI:1b,PersistenceRequired:1b,Tags:["bm02"],ArmorItems:[{},{},{},{id:"minecraft:leather_helmet",Count:1b}],ArmorDropChances:[0.0f,0.0f,0.0f,0.0f]}
+> zcount 144 -60 504 146 -58 506
+pace 2
+sleep 1
+> execute if entity @e[tag=bm02c] run say BM02 cat present at 1 s
+> zcount 143 -61 503 147 -57 507
+sleep 4
+> data get entity @e[type=minecraft:cow,tag=bm02,limit=1] Age
+> data get entity @e[type=minecraft:pig,tag=bm02,limit=1] Age
+> data get entity @e[type=minecraft:sheep,tag=bm02,limit=1] Age
+> data get entity @e[type=minecraft:chicken,tag=bm02,limit=1] Age
+> data get entity @e[type=minecraft:wolf,tag=bm02,limit=1] Age
+> data get entity @e[type=minecraft:horse,tag=bm02,limit=1] Age
+> data get entity @e[type=#zq:villagers,tag=bm02,limit=1] Age
+> data get entity @e[type=minecraft:zombie,tag=bm02,limit=1] IsBaby
+> execute unless entity @e[tag=bm02c] run say BM02 cat gone at 5 s
+> data get entity @e[tag=bm02c,limit=1] Age
+> execute as @e[tag=bm02] run say BM02 alive
+count has the following entity data: -2\d{4}$ == 8
+expect has the following entity data: 1b$
+reject No entity was found
+reject BM02 cat gone
+reject (?i)mixin.*(baby|remodel).*(error|exception)
+look the two zcounts at x 145 z 505: the cat (minecraft:cat) right after its summon, and what stands there at 1 s if it is gone (another mod's cat type = replaced, not lost); the "BM02 alive" lines name the 9 mobs (the villager as an MCA villager); if the cat is gone, grep the row log for what removed it
+> kill @e[tag=bm02]
+> time set 6000
+
+## SQ-EN-03 | void pepper half: spreads then fruits; fruiting sprout drops 3, plain sprout 1 (soils / growth passed in r1102b s3)
+> fill 320 -61 520 334 -61 534 minecraft:end_stone
+> fill 320 -60 520 334 -57 534 minecraft:air
+> setblock 327 -60 527 endersdelight:voidpepper_block[down=true,spreading=true,pepper=false]
+# r1103 p2: no player near, so the forceloaded chunk got no random ticks (1.19 ticks blocks only within 128 blocks of
+# a player) and the sprout never spread: a bot stands beside the lane for the 20 s
+> pbot spawn en3 327 -60 538 minecraft:overworld survival
+sleep 2
+> gamerule randomTickSpeed 300
+sleep 20
+> gamerule randomTickSpeed 3
+> pbot remove en3
+> zcount 320 -60 520 334 -57 534
+waitlog \[zcount\] entities 30
+expect \[zcount\] blocks .*endersdelight:voidpepper_block=([2-9]|\d\d)
+> execute if block 327 -60 527 endersdelight:voidpepper_block[spreading=false,pepper=true] run say EN03 origin fruited
+> execute if block 327 -60 527 endersdelight:voidpepper_block[spreading=true] run say EN03 origin still spreading
+> fill 320 -60 520 334 -57 534 minecraft:air
+> setblock 322 -60 522 endersdelight:voidpepper_block[down=true,spreading=false,pepper=true]
+> zact break 322 -60 522 none
+> setblock 324 -60 522 endersdelight:voidpepper_block[down=true,spreading=false,pepper=false]
+> zact break 324 -60 522 none
+expect \[zact\] break 322 -60 522 endersdelight:voidpepper_block held none: true, now minecraft:air, drops endersdelight:voidpepper x3
+expect \[zact\] break 324 -60 522 endersdelight:voidpepper_block held none: true, now minecraft:air, drops endersdelight:voidpepper x1
+look the spread count (more than one sprout after 20 s at tick speed 300) and the origin line ("fruited" once spreading ends; "still spreading" is not a fail by itself)
+
+## SQ-ROLL-03 | chopsticks lengthen the off-hand food's effects 1.5x (Glowing Calamari Roll; bot at 150)
+# r1103 p2: cooked rice has had no Comfort since the 2026-11-02 Comfort / Nourishment rules (comfort_nourishment.json
+# "none"), so its read could not show the lengthening; hunger 19 -> 20 and chopsticks Damage 1 passed there
+> zq food creativeengineering:glowing_calamari_roll
+> pbot spawn rl3 150 -60 503 minecraft:overworld survival
+sleep 2
+> clear rl3
+> effect give rl3 minecraft:hunger 1 255
+sleep 3
+> data get entity rl3 foodLevel
+> pbot hold rl3 roll_delight:chopsticks
+> item replace entity rl3 weapon.offhand with creativeengineering:glowing_calamari_roll
+> zq useitem rl3
+sleep 5
+> data get entity rl3 foodLevel
+> data get entity rl3 ActiveEffects
+expect has the following entity data: \[\{.*Duration
+> data get entity rl3 SelectedItem
+> data get entity rl3 Inventory
+expect useitem rl3 offhand (CONSUME|SUCCESS)
+expect has the following entity data: \{.*id: "roll_delight:chopsticks".*Damage: 1\b
+> pbot remove rl3
+look each ActiveEffects Duration is 1.5x the roll's own (the zq food line above; less the 5 s already ticked); off-hand roll gone
+
+## SQ-VP-06 | /vtdtest fluids (bots joined above, so Moonlight's soft-fluid map is filled)
+# r1103 p2 probe fix: jar contents are checked as jars only (the content bottles are merged into their jars). Expected
+# to FAIL on vintagedelight:pepper_jam_jar until the duplicate soft fluid registration is fixed (judged.md)
+> vtdtest fluids
+waitlog \[vtdtest\] done fluids 120
+expect \[vtdtest\] done fluids: \d+ pass, 0 fail
+reject \[vtdtest\] FAIL
+
+## SQ-FDB-05 | vanilla Pumpkin Pie placed as FD / Delightful / Central Kitchen pie by config, live (edits the toml)
+> data get entity @e[type=minecraft:marker,tag=s1home,limit=1] Pos
+capture H entity data: \[(-?\d+)\.\d+d, (-?\d+)\.\d+d, (-?\d+)\.\d+d\]
+> fill {H1+53} {H2-1} {H3-12} {H1+64} {H2+2} {H3-6} minecraft:air
+> fill {H1+53} {H2-1} {H3-12} {H1+64} {H2-1} {H3-8} minecraft:stone
+> kill @e[type=minecraft:item]
+> setblock {H1+62} {H2} {H3-10} farmersdelight:cutting_board
+shell grep -n "placeAs" config/farmersdelight-ce-common.toml
+> pbot remove fdb5
+sleep 1
+> pbot spawn fdb5 {H1+58} {H2} {H3-7} minecraft:overworld survival
+sleep 2
+> clear fdb5
+> pbot hold fdb5 minecraft:pumpkin_pie 8
+> pbot use fdb5 {H1+54} {H2-1} {H3-10}
+> pbot use fdb5 {H1+62} {H2} {H3-10}
+shell python3 $INST/tools/scratch_query/qrun.py toml config/farmersdelight-ce-common.toml pumpkin_pie placeAs '"DELIGHTFUL"'; sleep 4; grep -c "farmersdelight-ce-common.toml" logs/debug.log; true
+sleep 1
+> pbot use fdb5 {H1+56} {H2-1} {H3-10}
+shell python3 $INST/tools/scratch_query/qrun.py toml config/farmersdelight-ce-common.toml pumpkin_pie placeAs '"CREATE_CENTRAL_KITCHEN"'; sleep 4; grep -c "farmersdelight-ce-common.toml" logs/debug.log; true
+sleep 1
+> pbot use fdb5 {H1+58} {H2-1} {H3-10}
+shell python3 $INST/tools/scratch_query/qrun.py toml config/farmersdelight-ce-common.toml pumpkin_pie placeAs '"OFF"'; sleep 4; grep -c "farmersdelight-ce-common.toml" logs/debug.log; true
+sleep 1
+> pbot use fdb5 {H1+60} {H2-1} {H3-10}
+shell python3 $INST/tools/scratch_query/qrun.py toml config/farmersdelight-ce-common.toml pumpkin_pie placeAs '"FARMERSDELIGHT"'; sleep 4; grep -c "farmersdelight-ce-common.toml" logs/debug.log; true
+> execute if block {H1+54} {H2} {H3-10} farmersdelight:pumpkin_pie run say FDB05 FD pie
+> execute if block {H1+56} {H2} {H3-10} delightful:pumpkin_pie run say FDB05 Delightful pie
+> execute if block {H1+58} {H2} {H3-10} create_central_kitchen:pumpkin_pie run say FDB05 Central Kitchen pie
+> execute if block {H1+62} {H2+1} {H3-10} minecraft:air run say FDB05 nothing on the cutting board
+> say FDB05 lane +56
+> zcount {H1+56} {H2} {H3-10} {H1+56} {H2} {H3-10}
+> say FDB05 lane +58
+> zcount {H1+58} {H2} {H3-10} {H1+58} {H2} {H3-10}
+> say FDB05 lane +60
+> zcount {H1+60} {H2} {H3-10} {H1+60} {H2} {H3-10}
+> data get block {H1+62} {H2} {H3-10}
+> pbot hold fdb5 farmersdelight:iron_knife
+> pbot use fdb5 {H1+54} {H2} {H3-10}
+sleep 1
+> data get entity fdb5 Inventory
+> zcount {H1+53} {H2} {H3-11} {H1+55} {H2+1} {H3-9}
+expect FDB05 FD pie
+expect FDB05 Delightful pie
+expect FDB05 Central Kitchen pie
+expect FDB05 nothing on the cutting board
+expect (?i)farmersdelight:pumpkin_pie_slice
+> pbot remove fdb5
+look the lanes decide the live reload (debug.log never logged the watcher line in r1102b or r1103: the grep count is a note only); lane zcounts after "lane +56/+58/+60": which pie block each lane got (+60 = OFF: whichever mod acts first, or nothing); the cutting board data shows whether the pie went onto the board as an item (allowed), never a pie block above it; shell lines: each edit "reloaded after N"
+
+## SQ-FDB-07 | farmer villager works Rich Soil Farmland and Fertile Soil (secondary job site); empty list clears it (edits the toml)
+# MCA replaces the summoned villager (run 1: mca:female_villager, tag lost), so the villager is selected by tag or
+# else by MCA type near the lane; run 1's villager is killed first
+> data get entity @e[type=minecraft:marker,tag=s1home,limit=1] Pos
+capture H entity data: \[(-?\d+)\.\d+d, (-?\d+)\.\d+d, (-?\d+)\.\d+d\]
+> execute positioned {H1+76} {H2} {H3-18} run kill @e[type=minecraft:villager,distance=..30]
+> execute positioned {H1+76} {H2} {H3-18} run kill @e[type=mca:female_villager,distance=..30]
+> execute positioned {H1+76} {H2} {H3-18} run kill @e[type=mca:male_villager,distance=..30]
+> fill {H1+68} {H2-1} {H3-28} {H1+84} {H2+3} {H3-8} minecraft:air
+> fill {H1+68} {H2-1} {H3-28} {H1+84} {H2-1} {H3-8} minecraft:grass_block
+> fill {H1+76} {H2-1} {H3-16} {H1+80} {H2-1} {H3-12} farmersdelight:rich_soil_farmland
+> fill {H1+76} {H2-1} {H3-26} {H1+80} {H2-1} {H3-22} immersive_weathering:mulch_block
+> setblock {H1+72} {H2} {H3-14} minecraft:composter
+> kill @e[type=minecraft:item]
+shell grep -n "farmlandBlocks" config/farmersdelight-ce-common.toml
+> summon minecraft:villager {H1+73}.5 {H2} {H3-14}.5 {PersistenceRequired:1b,Tags:["fdb7"],VillagerData:{profession:"minecraft:farmer",level:1,type:"minecraft:plains"},Inventory:[{id:"minecraft:wheat_seeds",Count:16b}]}
+> time set 2000
+sleep 2
+> zcount {H1+68} {H2} {H3-28} {H1+84} {H2+2} {H3-8}
+sleep 118
+> say FDB07 memories, list on
+> data get entity @e[tag=fdb7,limit=1] Brain.memories
+> execute positioned {H1+76} {H2} {H3-18} run data get entity @e[type=mca:female_villager,distance=..30,sort=nearest,limit=1] Brain.memories
+> execute positioned {H1+76} {H2} {H3-18} run data get entity @e[type=mca:male_villager,distance=..30,sort=nearest,limit=1] Brain.memories
+> execute positioned {H1+76} {H2} {H3-18} run data get entity @e[type=mca:female_villager,distance=..30,sort=nearest,limit=1] VillagerData
+> execute positioned {H1+76} {H2} {H3-18} run data get entity @e[type=mca:male_villager,distance=..30,sort=nearest,limit=1] VillagerData
+> zcount {H1+76} {H2} {H3-26} {H1+80} {H2} {H3-12}
+expect (?i)minecraft:secondary_job_site
+shell python3 $INST/tools/scratch_query/qrun.py toml config/farmersdelight-ce-common.toml villagers farmlandBlocks '[]'; sleep 4; grep -c "farmersdelight-ce-common.toml" logs/debug.log; true
+sleep 60
+> say FDB07 memories, list empty
+> data get entity @e[tag=fdb7,limit=1] Brain.memories
+> execute positioned {H1+76} {H2} {H3-18} run data get entity @e[type=mca:female_villager,distance=..30,sort=nearest,limit=1] Brain.memories
+> execute positioned {H1+76} {H2} {H3-18} run data get entity @e[type=mca:male_villager,distance=..30,sort=nearest,limit=1] Brain.memories
+shell python3 $INST/tools/scratch_query/qrun.py toml config/farmersdelight-ce-common.toml villagers farmlandBlocks '["farmersdelight:rich_soil_farmland", "immersive_weathering:mulch_block"]'; sleep 4; grep -c "farmersdelight-ce-common.toml" logs/debug.log; true
+look first zcount: which entity type the summon became; memories after "list on": secondary_job_site lists rich farmland / mulch positions (x 76..80), VillagerData still farmer; second zcount: wheat planted there; after "list empty": secondary_job_site empty or absent. No secondary_job_site at all on an MCA villager = FD's villager hook does not reach MCA brains (memory mca-villager-pathing): needs a boot with MCA overwriteOriginalVillagers false

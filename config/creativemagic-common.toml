@@ -1,0 +1,8 @@
+
+#Botania tweaks.
+[botania]
+	#Let the Trinket Case hold any item, not just trinkets, rods and mana items.
+	#Other trinket cases and items that can't go inside container items (shulker
+	#boxes) are still refused. Only real trinkets equip from the case. Restart to apply.
+	trinketCaseAnyItem = true
+

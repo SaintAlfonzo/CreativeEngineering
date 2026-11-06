@@ -1,0 +1,32 @@
+{
+  "_comment": "Item merge list (swap lists 'merges', SwapLists.java; feature_writeup/item_merges.md 6): both items stay registered; the old one is purged and the survivor takes over its recipes, loot and tags (CD startup script creativedelight/swap_merges.js) and every stack of it in the world (Common swap/ItemMerges). Applied only while every 'requires' mod is loaded. Never prune: an old world whose old item is later unregistered is remapped from this list. Brewin' and Chewin's Pickled Pickles go into the Pickled Sea Pickle; one salt (The Salt's salt into Vintage's pink salt dust, Vintage's Salt Block into The Salt's, 2.9); mason jars only: the removed bottles go into their jars (dishes/jams #1; the nut mash bottle, merges/dishes #7).",
+  "requires": [
+    "vintagedelight"
+  ],
+  "merges": {
+    "creativeengineering:pickled_sea_pickle": [
+      "brewinandchewin:pickled_pickles"
+    ],
+    "vintagedelight:salt_dust": [
+      "salt:salt"
+    ],
+    "salt:salt_block": [
+      "vintagedelight:salt_block"
+    ],
+    "vintagedelight:vinegar_jar": [
+      "vintagedelight:vinegar_bottle"
+    ],
+    "vintagedelight:apple_sauce_jar": [
+      "vintagedelight:apple_sauce_bottle"
+    ],
+    "vintagedelight:pepper_jam_jar": [
+      "vintagedelight:pepper_jam_bottle"
+    ],
+    "vintagedelight:relish_jar": [
+      "vintagedelight:relish_bottle"
+    ],
+    "vintagedelight:nut_mash_jar": [
+      "vintagedelight:nut_mash_bottle"
+    ]
+  }
+}

@@ -11,7 +11,7 @@
 
 - **Pending:** nothing built and unshipped. TN-01 to TN-10 have never been run. Findings F1 to F4 (section 4); F1
   needs your call.
-- **Files to open:** [shrapnel/](../development/patcherMod/src/main/java/com/SaintAlfonzo/creativeengineering/shrapnel/)
+- **Files to open:** [shrapnel/](../development/creativeEngineering/src/main/java/com/SaintAlfonzo/creativeengineering/shrapnel/)
   (`ShrapnelSpawner`, `ShrapnelEntity`, `TntShrapnelHandler`), `CEConfig.Shrapnel`.
 - **Knobs:** `config/creativeengineering-common.toml` `[shrapnel]`: `enabled` true, `count` 24 (0-512), `speed` 1.4
   blocks/tick, `speedVariance` 0.25, `verticalAngle` 15°, `maxDistance` 12 blocks, `damage` 3, `item`
@@ -83,7 +83,7 @@ With the defaults: 24 pieces, about 12 blocks, 3 damage each; a mob standing clo
 
 ## 5. File map
 
-- patcherMod [shrapnel/](../development/patcherMod/src/main/java/com/SaintAlfonzo/creativeengineering/shrapnel/): `CreativeEngineeringEntities` (registration), `ShrapnelEntity`, `ShrapnelSpawner`, `TntShrapnelHandler`; `CEConfig.Shrapnel`; listener and renderer registration in `CreativeEngineering.java`.
+- patcherMod [shrapnel/](../development/creativeEngineering/src/main/java/com/SaintAlfonzo/creativeengineering/shrapnel/): `CreativeEngineeringEntities` (registration), `ShrapnelEntity`, `ShrapnelSpawner`, `TntShrapnelHandler`; `CEConfig.Shrapnel`; listener and renderer registration in `CreativeEngineering.java`.
 - Item trigger: `itemphysic/ItemBurnTransform`, [func/item_physics.js](../kubejs/startup_scripts/func/item_physics.js).
 
 ## 6. Offline checks

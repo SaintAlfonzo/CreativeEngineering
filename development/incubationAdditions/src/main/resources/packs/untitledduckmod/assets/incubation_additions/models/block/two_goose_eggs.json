@@ -1,7 +1,0 @@
-{
-  "parent": "incubation:block/two_turkey_eggs",
-  "textures": {
-    "eggs": "incubation_additions:block/goose_eggs",
-    "particle": "#eggs"
-  }
-}

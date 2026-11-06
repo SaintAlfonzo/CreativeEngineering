@@ -1,7 +1,0 @@
-{
-  "parent": "cookingforblockheads:block/fruit_basket",
-  "textures": {
-    "particle": "cookingforblockheads:block/fruit_basket/warped",
-    "texture": "cookingforblockheads:block/fruit_basket/warped"
-  }
-}

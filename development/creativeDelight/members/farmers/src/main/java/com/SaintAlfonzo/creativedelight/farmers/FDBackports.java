@@ -25,6 +25,7 @@ public final class FDBackports {
 		modBus.addListener(FDBackportConfig::onConfigChange);
 		modBus.addListener(FDBackportConfig::onConfigLoad);
 		MinecraftForge.EVENT_BUS.register(FDBackportEvents.class);
+		modBus.addListener((net.minecraftforge.fml.event.lifecycle.FMLCommonSetupEvent e) -> e.enqueueWork(FDBackportRegistry::allowExtraBoards));
 		if (FMLEnvironment.dist == Dist.CLIENT) FDBackportsClient.init(modBus);
 	}
 }

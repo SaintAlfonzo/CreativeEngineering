@@ -1,0 +1,17 @@
+{
+  "_comment": "Item merge list (swap lists 'merges', SwapLists.java; feature_writeup/item_merges.md 6): both items stay registered; the old one is purged and the survivor takes over its recipes, loot and tags (CD startup script creativedelight/swap_merges.js) and every stack of it in the world (Common swap/ItemMerges). Applied only while every 'requires' mod is loaded. Never prune: an old world whose old item is later unregistered is remapped from this list. Vintage's removed sweet berry and glow berry jams (bottle and jar) go into Fruits Delight's jellies.",
+  "requires": [
+    "vintagedelight",
+    "fruitsdelight"
+  ],
+  "merges": {
+    "fruitsdelight:sweetberry_jelly": [
+      "vintagedelight:sweet_berry_jam_bottle",
+      "vintagedelight:sweet_berry_jam_jar"
+    ],
+    "fruitsdelight:glowberry_jelly": [
+      "vintagedelight:glow_berry_jam_bottle",
+      "vintagedelight:glow_berry_jam_jar"
+    ]
+  }
+}

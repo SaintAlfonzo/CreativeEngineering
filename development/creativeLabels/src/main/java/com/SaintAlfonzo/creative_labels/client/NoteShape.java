@@ -297,7 +297,11 @@ public final class NoteShape {
      * the curl hanging toward the frame's y = 0.
      */
     public static List<PlacedQuad> place(Shape s, Direction face, @Nullable Direction rotation, int spot, float inset) {
-        float[] rect = Spots.RECTS[spot];
+        return place(s, face, rotation, Spots.RECTS[spot], inset);
+    }
+
+    /** As above on any note rectangle in the face frame (a shifted spot, {@link Spots.Place#noteRect}). */
+    public static List<PlacedQuad> place(Shape s, Direction face, @Nullable Direction rotation, float[] rect, float inset) {
         // Scale into the spot's own rectangle (6 x 5.35 px, the centre spot 5.34): the note fills it exactly, so it
         // always sits inside Spots.noteBox; depth keeps the width's scale (1:1 for a true capture).
         float sx = (rect[2] - rect[0]) / Math.max(EPS, s.width());

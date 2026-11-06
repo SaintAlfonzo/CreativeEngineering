@@ -1,7 +1,7 @@
 # Run 2026-10-31, boot A1 (superflat): SQ-EFX effect changes (queue section "SQ-EFX effect changes, 2026-10-31",
 # added by the effects session at 00:44) and the D&D wood removal (SQ-RW-28). Runs after a1_data, before a1_world.
 # Toml set before the A1 boot: [copper_poisoning] intervalSeconds = 10, jitterSeconds = 0, chancePerPiece = 1.0.
-# Jars: patcherMod 1.1.04 of 10-31 00:44, creative_delight 00:29, backportedVinery -06 of 00:41, backportedBrewin -04.
+# Jars: patcherMod 1.1.04 of 10-31 00:44, creativedelight 00:29, backportedVinery -06 of 00:41, backportedBrewin -04.
 # Needs spawn-animals=true (vanilla discards animals every tick otherwise): SQ-EFX-04 runs at A2.
 # Bot "qe" (survival) takes the effects; ActiveEffects lists modded effects by "forge:id", vanilla ones by Id
 # (Poison 19, Wither 20, Regeneration 10, Resistance 11, Fire Resistance 12, Absorption 22, Health Boost 21).

@@ -30,9 +30,9 @@ No CD member (`members/*/build.gradle`) depends on patcherMod; `members/blockhea
 
 | from (file) | to | target | fix |
 |---|---|---|---|
-| `development/creativeDelight/src/main/resources/META-INF/mods.toml:28-33` `[[dependencies.creative_delight]] modId="creativeengineering"` mandatory `[1.1.03,)` AFTER BOTH | patcherMod as KubeJS supplier, NCH/tags/compost, startup loader (`compat/kubejs/JarStartupScripts`, `KubeJSStartupJarScriptsMixin`) | Common | stays; at the Q1 swap the modId becomes `creativecommon` (version range reset). Add a non-mandatory `creativecalendar` AFTER dependency if CD takes any Calendar row (none today, 1.5). |
+| `development/creativeDelight/src/main/resources/META-INF/mods.toml:28-33` `[[dependencies.creativedelight]] modId="creativeengineering"` mandatory `[1.1.03,)` AFTER BOTH | patcherMod as KubeJS supplier, NCH/tags/compost, startup loader (`compat/kubejs/JarStartupScripts`, `KubeJSStartupJarScriptsMixin`) | Common | stays; at the Q1 swap the modId becomes `creativecommon` (version range reset). Add a non-mandatory `creativecalendar` AFTER dependency if CD takes any Calendar row (none today, 1.5). |
 | `development/creativeBrewing/src/main/resources/META-INF/mods.toml:27-33` `modId="creativeengineering"` mandatory `[1.1.03,)` AFTER BOTH | same | Common | stays; same swap. Add `creativecalendar` mandatory=false AFTER for `PackTime` (1.6), replacing the `ModList.isLoaded("creativeengineering")` check. |
-| `.../creativeBrewing/.../mods.toml:35-41` `modId="creative_delight"` mandatory AFTER | CD's `global.CD` | CD | unchanged by the split. |
+| `.../creativeBrewing/.../mods.toml:35-41` `modId="creativedelight"` mandatory AFTER | CD's `global.CD` | CD | unchanged by the split. |
 | member `mods.toml` files (farmers, oceans, oceanic, ends, delightful, rustic, enders, hearth, blockheads, vinery, brewin) | none name `creativeengineering` (only a comment line citing creative_delight.md) | - | nothing. |
 
 ### 1.3 Java (CD and CB sources, `import com.SaintAlfonzo.creativeengineering.*`)
@@ -77,11 +77,11 @@ Reads of the Common globals, aggregated (382 read sites in all; one row per tree
 
 | from (tree) | to (global) | target | fix |
 |---|---|---|---|
-| `CDS/<mod>/*.js`, 42 mod folders (every folder except `creative_delight` reads `global.item` and `global.compost`; `creative_delight/` and `creativeengineering/` also read `global.NCH`, `global.tags`, `global.fluid`) | `global.item` (234 sites over CD), `global.compost` (80), `global.NCH` (67), `global.tags` (52), `global.fluid` (27), `global.blocks` (10) | Common (helpers rule 4; `_lib` dicts Q4) | stays |
-| `kubejs/data/creative_delight/kubejs/<mod>/*.js`, 45 mod folders | `global.item`, `global.NCH`, `global.tags`, `global.fluid`, `global.blocks` | Common | stays |
-| `kubejs/assets/creative_delight/kubejs/<mod>/*.js`, 16 folders | `global.item` | Common | stays |
-| `CBS/creative_brewing/cb_core.js` | `global.NCH`, `global.tags` | Common | stays |
-| `kubejs/data/creative_brewing/kubejs/**`, `kubejs/assets/creative_brewing/kubejs/**` | `global.CB` (16), `global.CD` (3) only | CB, CD | stays |
+| `CDS/<mod>/*.js`, 42 mod folders (every folder except `creativedelight` reads `global.item` and `global.compost`; `creativedelight/` and `creativeengineering/` also read `global.NCH`, `global.tags`, `global.fluid`) | `global.item` (234 sites over CD), `global.compost` (80), `global.NCH` (67), `global.tags` (52), `global.fluid` (27), `global.blocks` (10) | Common (helpers rule 4; `_lib` dicts Q4) | stays |
+| `kubejs/data/creativedelight/kubejs/<mod>/*.js`, 45 mod folders | `global.item`, `global.NCH`, `global.tags`, `global.fluid`, `global.blocks` | Common | stays |
+| `kubejs/assets/creativedelight/kubejs/<mod>/*.js`, 16 folders | `global.item` | Common | stays |
+| `CBS/creativebrewing/cb_core.js` | `global.NCH`, `global.tags` | Common | stays |
+| `kubejs/data/creativebrewing/kubejs/**`, `kubejs/assets/creativebrewing/kubejs/**` | `global.CB` (16), `global.CD` (3) only | CB, CD | stays |
 
 Reads of every other pack global, one row per file:
 
@@ -93,22 +93,22 @@ Reads of every other pack global, one row per file:
 | `CDS/moredelight/item_merges.js` | `global.addItemMerges` | Common? | as above |
 | `CDS/neapolitan/item_merges.js` | `global.addItemMerges` | Common? | as above |
 | `CDS/vintagedelight/item_merges.js` | `global.addItemMerges` | Common? | as above |
-| `kubejs/data/creative_delight/kubejs/_core/item_merges.js` | `global.itemMergeRun` (`recipes`, `loot`, `inventory`, 3 sites) | Common? | as above |
+| `kubejs/data/creativedelight/kubejs/_core/item_merges.js` | `global.itemMergeRun` (`recipes`, `loot`, `inventory`, 3 sites) | Common? | as above |
 | `CDS/botania/botania_items.js` | `global.removedItems` (2) | Common (`_lib`) | stays |
 | `CDS/veggiesdelight/veggies_items.js` | `global.removedItems` (2) | Common | stays |
 | `CDS/vintagedelight/vintage_items.js` | `global.removedItems` (4) | Common | stays |
-| `kubejs/data/creative_delight/kubejs/creativeengineering/canning.js` | `global.removedItems` | Common | stays |
-| `kubejs/data/creative_delight/kubejs/creativeengineering/mortar.js` | `global.removedItems` | Common | stays |
-| `kubejs/data/creative_delight/kubejs/neapolitan/recipes.js` | `global.removedItems` | Common | stays |
-| `kubejs/data/creative_delight/kubejs/_core/removed_item_tags.js` | `global.stripRemovedItemTags` (guarded `if (!global.CD \|\| !global.stripRemovedItemTags) return`) | Devtools? (`server_scripts/_lib` is Devtools per 2.1, but `recipe_scan.js` is a runtime tag strip CD relies on, not a dump) | Common API: keep `stripRemovedItemTags` in a Common server script, or accept the guard as a soft dependency on Devtools (then the strip is dev-only: flag for sweep F) |
+| `kubejs/data/creativedelight/kubejs/creativeengineering/canning.js` | `global.removedItems` | Common | stays |
+| `kubejs/data/creativedelight/kubejs/creativeengineering/mortar.js` | `global.removedItems` | Common | stays |
+| `kubejs/data/creativedelight/kubejs/neapolitan/recipes.js` | `global.removedItems` | Common | stays |
+| `kubejs/data/creativedelight/kubejs/_core/removed_item_tags.js` | `global.stripRemovedItemTags` (guarded `if (!global.CD \|\| !global.stripRemovedItemTags) return`) | Devtools? (`server_scripts/_lib` is Devtools per 2.1, but `recipe_scan.js` is a runtime tag strip CD relies on, not a dump) | Common API: keep `stripRemovedItemTags` in a Common server script, or accept the guard as a soft dependency on Devtools (then the strip is dev-only: flag for sweep F) |
 | `CDS/creativeengineering/seasonings.js` | `global.effect` (`var ef = global.effect`) | Common (`_lib/effect_dict.js`, Q4) | stays. Note: effects content is CB's (creative_brewing.md), the dict is Common. |
-| `kubejs/data/creative_delight/kubejs/corn_delight/trades.js` | `global.trades` | Common? (`startup_scripts/func/trade_helper.js`; `trader/TradeListings` is a Common API per 2.4) | stays if Common; sweep F confirms |
-| `kubejs/data/creative_delight/kubejs/rusticdelight/trades.js` | `global.trades` | Common? | as above |
-| `kubejs/data/creative_delight/kubejs/veggiesdelight/trades.js` | `global.trades` | Common? | as above |
-| `kubejs/data/creative_delight/kubejs/rusticdelight/loot.js` | `global.lootTuning` (guarded `if (!global.lootTuning ...) return`) | Worldgen (`server_scripts/loot`) | soft dependency: already guarded; CD's loot rows silently do nothing without Worldgen. Alternative: `lootTuning` helper to Common API, rules stay Worldgen. |
-| `kubejs/data/creative_delight/kubejs/veggiesdelight/loot.js` | `global.lootTuning` (guarded) | Worldgen | soft dependency, as above |
-| `kubejs/data/creative_delight/kubejs/vintagedelight/loot.js` | `global.lootTuning` (guarded) | Worldgen | soft dependency, as above |
-| `kubejs/data/creative_delight/kubejs/_worldgen/wild_crops.js` | `global.biomeRules.system(...)` (2 sites, unguarded) | Worldgen (`server_scripts/worldgen/_biome_rules.js`) | soft dependency needs a guard added, or `_biome_rules.js` (the rule engine, not the rules) becomes Common API. CD's wild crops are a worldgen feature living in CD (creative_delight.md 24): the owner may prefer `biomeRules` in Common. |
+| `kubejs/data/creativedelight/kubejs/corn_delight/trades.js` | `global.trades` | Common? (`startup_scripts/func/trade_helper.js`; `trader/TradeListings` is a Common API per 2.4) | stays if Common; sweep F confirms |
+| `kubejs/data/creativedelight/kubejs/rusticdelight/trades.js` | `global.trades` | Common? | as above |
+| `kubejs/data/creativedelight/kubejs/veggiesdelight/trades.js` | `global.trades` | Common? | as above |
+| `kubejs/data/creativedelight/kubejs/rusticdelight/loot.js` | `global.lootTuning` (guarded `if (!global.lootTuning ...) return`) | Worldgen (`server_scripts/loot`) | soft dependency: already guarded; CD's loot rows silently do nothing without Worldgen. Alternative: `lootTuning` helper to Common API, rules stay Worldgen. |
+| `kubejs/data/creativedelight/kubejs/veggiesdelight/loot.js` | `global.lootTuning` (guarded) | Worldgen | soft dependency, as above |
+| `kubejs/data/creativedelight/kubejs/vintagedelight/loot.js` | `global.lootTuning` (guarded) | Worldgen | soft dependency, as above |
+| `kubejs/data/creativedelight/kubejs/_worldgen/wild_crops.js` | `global.biomeRules.system(...)` (2 sites, unguarded) | Worldgen (`server_scripts/worldgen/_biome_rules.js`) | soft dependency needs a guard added, or `_biome_rules.js` (the rule engine, not the rules) becomes Common API. CD's wild crops are a worldgen feature living in CD (creative_delight.md 24): the owner may prefer `biomeRules` in Common. |
 
 KubeJS load order (`PM/compat/kubejs/JarStartupScripts.java` javadoc): 1. patcherMod's own jar pack (NCH, tags,
 compost); 2. the pack folder `kubejs/startup_scripts/` (dicts, items, rules); 3. every other mod jar's pack in
@@ -122,9 +122,9 @@ only if that jar sorts before them in the mod list (CB already relies on an AFTE
 
 | from (file) | to (file) | target | fix |
 |---|---|---|---|
-| `CDS/creativeengineering/cans.js`, `comfort_nourishment.js`; `kubejs/data/creative_delight/kubejs/creativeengineering/{canning,can_tags,food_type_tags,mortar,placeable_tags,seasoning_tags}.js` | `kubejs/generation_scripts/food/{can_types,can_servings,food_types,comfort_nourishment,mortar_catalog,placeable,food_families}.json` | pack (generators `food_catalog`, `placeable_catalog`, `comfort_nourishment`, `mortar_catalog`, `food_families`; see 3) | pack; `can_servings.json` is already a runtime payload file in build_deploy.py (line 266) |
-| `kubejs/data/creative_delight/kubejs/hearthandharvest/tags.js` | `kubejs/generation_scripts/worldgen/crop_seasons.json` | pack (Calendar data: PM `seasons/CropSeasons` reads the same file) | pack; CD reads a Calendar-owned file without a mod dependency: acceptable (file read), note in Calendar's doc |
-| `kubejs/data/creative_delight/kubejs/_worldgen/wild_crops.js`, `wild_crops.json` | `kubejs/generation_scripts/worldgen/biome_traits.json` | pack (Worldgen data) | pack |
+| `CDS/creativeengineering/cans.js`, `comfort_nourishment.js`; `kubejs/data/creativedelight/kubejs/creativeengineering/{canning,can_tags,food_type_tags,mortar,placeable_tags,seasoning_tags}.js` | `kubejs/generation_scripts/food/{can_types,can_servings,food_types,comfort_nourishment,mortar_catalog,placeable,food_families}.json` | pack (generators `food_catalog`, `placeable_catalog`, `comfort_nourishment`, `mortar_catalog`, `food_families`; see 3) | pack; `can_servings.json` is already a runtime payload file in build_deploy.py (line 266) |
+| `kubejs/data/creativedelight/kubejs/hearthandharvest/tags.js` | `kubejs/generation_scripts/worldgen/crop_seasons.json` | pack (Calendar data: PM `seasons/CropSeasons` reads the same file) | pack; CD reads a Calendar-owned file without a mod dependency: acceptable (file read), note in Calendar's doc |
+| `kubejs/data/creativedelight/kubejs/_worldgen/wild_crops.js`, `wild_crops.json` | `kubejs/generation_scripts/worldgen/biome_traits.json` | pack (Worldgen data) | pack |
 
 The CD folders named `creativeengineering/` (10 startup, 20 server, 1 client file: cans, baking, seasonings, salt,
 cultivated meat, mortar, soil yield) are rows that touch patcherMod's own items. Rule 3.9 names a folder per mod the
@@ -171,7 +171,7 @@ Nesting each as a CD member (compare `development/creativeDelight/members/rustic
 3. `gradle.properties`: add `bundled_in=creativeDelight` (ce.forge-bundle refuses a member without it;
    `installToMods` of the member then refuses and names `:creativeDelight:installToMods`); `mod_group_id` and
    `mod_version` must be set (they are). The mod ids keep their underscores: they are existing ids (as Q2 for
-   `creative_delight`), not new ones.
+   `creativedelight`), not new ones.
 4. `development/creativeDelight/gradle.properties`: append the project path to `bundle_members`, and the old
    standalone jar glob (`babyMobs-*.jar`, `moreMooblooms-*.jar`, `incubationAdditions-*.jar`) to `replaces_jars`.
 5. `build-logic`: nothing; `ce.forge-mod` members are supported as-is (rustic, enders, hearth, blockheads are
@@ -182,12 +182,12 @@ Nesting each as a CD member (compare `development/creativeDelight/members/rustic
 7. `mod_sides.md`: fold their rows into the Creative Delight row's member list (`dump_server_mods.py` matches by mod
    id, and nested mod ids are still reported by Forge; keep a row per nested id only if the dump tool needs it: check
    how the existing nested members such as `farmersdelight` are listed; row 436 lists them in the notes column).
-8. `CDConfig`/`creative_delight_members.txt` is generated from `bundle_members`, so the member-gated mixin plugin
+8. `CDConfig`/`creativedelight_members.txt` is generated from `bundle_members`, so the member-gated mixin plugin
    (`compat/CDMixinPlugin`, `development/shared/mixinplugin`) needs no edit; their own mixin jsons stay theirs.
 9. The CD `kubejs_startup` already has `incubation_additions/`; `baby_mobs/` and `more_mooblooms/` folders only if
    rows exist for them (none today in CD; the pack dicts hold their ids).
 10. The trough code (`PM/mixin/FeedingTroughModuleMixin`, `TemptGoalTroughRetryMixin`, `compat/TroughRetryAccess`,
-    3 entries in `creativeengineering.mixins.json`) moves into CD's own Java with a `creative_delight.mixins.json`
+    3 entries in `creativeengineering.mixins.json`) moves into CD's own Java with a `creativedelight.mixins.json`
     entry each (sweep B lists the side and config keys).
 
 ### 2.2 Not touched by the split
@@ -236,8 +236,8 @@ Rows today (matched by mod id; `tools/dump_server_mods.py` refuses to run if a j
 | 183 | both | Incubation Additions | `incubation_additions` | `incubationAdditions-1.1.0.jar` |
 | 211 | both | More Mooblooms | `more_mooblooms` | `moreMooblooms-1.1.0.jar` |
 | 212 | both | Baby Mobs | `baby_mobs` | `babyMobs-1.0.0.jar` |
-| 436 | both | Creative Delight | `creative_delight` | `creative_delight-1.0.0.jar` |
-| 437 | both | Creative Brewing | `creative_brewing` | `creative_brewing-1.0.0.jar` |
+| 436 | both | Creative Delight | `creativedelight` | `creativedelight-1.0.0.jar` |
+| 437 | both | Creative Brewing | `creativebrewing` | `creativebrewing-1.0.0.jar` |
 
 perfBot (`ceperfbot`) and clientCapture (`cecapture`) have no row: neither jar is ever in `mods/`.
 

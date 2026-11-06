@@ -13,7 +13,7 @@ Writes feature_writeup/loot_catalog/:
                        conditions), where it is placed, what code / GLMs add to it afterwards
 
 Sources (same priority order as the game): vanilla -extra jar, mods/*.jar, kubejs/data. Tables are shown
-AS SHIPPED, i.e. before the pack's own pre-roll rules (kubejs/server_scripts/loot/05_tuning.js,
+AS SHIPPED, i.e. before the pack's own pre-roll rules (kubejs/data/creativeworldgen/kubejs/loot/05_tuning.js,
 loot_config.json, 07_rules.js) rewrite them. Pools mods add in code come from the /dumploot export
 (kubejs/exported/loot_tables) and are marked.
 

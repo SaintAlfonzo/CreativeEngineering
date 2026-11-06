@@ -1,24 +1,27 @@
 #!/usr/bin/env python3
-"""Every painting variant -> Immersive Paintings' Datapacks page.
+"""Vanilla's paintings -> Immersive Paintings' Datapacks page (a pack-folder datapack).
 
 Immersive Paintings loads extra built-in paintings from data/<ns>/paintings/**/<name>.png plus a
 sibling <name>.json ({name, author, width, height, resolution}; width/height in blocks, resolution in
-pixels per block). This copies every registered painting variant there - vanilla (including the
-unplaceable earth/wind/fire/water), the painting packs, and the odd painting other mods add - so all of
-them can be picked in the Immersive Paintings screen.
+pixels per block). Since 2026-11-05 (TODO licence/compat #1) this writes only the 30 vanilla
+variants (including the unplaceable earth/wind/fire/water): every modded painting is built at load
+from the installed jars by Creative Compat (paintings/PaintingArt, same rules as below), so no other
+mod's art ships with the pack. The vanilla ones stay pack-side because the dedicated server has no
+vanilla textures to build them from; they are never put in a published jar.
 
 Variant ids and sizes come from /dumppaintings (kubejs/exported/paintings.json). Textures are read
-from assets/<ns>/textures/painting/<id>.png, lowest priority first: the vanilla client jar, mods/*.jar,
-kubejs/assets, then the resource-pack zips enabled in options.txt - so a pack that retextures a
-painting is what Immersive shows too.
+from assets/minecraft/textures/painting/<id>.png, lowest priority first: the vanilla client jar,
+mods/*.jar, kubejs/assets, then the resource-pack zips enabled in options.txt - so a pack that
+retextures a vanilla painting is what Immersive shows too.
 
 Paintings smaller than 32 px per block are scaled up (nearest neighbour, whole-number factor) to 32:
 the Datapacks page opens filtered to resolution 32, and a 16 px painting would be hidden until the
 player changes the filter. Pixel art stays sharp. Larger ones keep their own resolution.
 
-Output: kubejs/data/creativeengineering/paintings/<ns>/<id>.png + .json. The folder is generated only
-and is rebuilt from scratch on every run. In game a painting's id is
-creativeengineering:paintings/<ns>/<id>.png, so the screen's search box matches mod ids and names.
+Output: kubejs/data/creativeengineering/paintings/minecraft/<id>.png + .json, generated only and
+rebuilt from scratch on every run. In game a painting's id is
+creativeengineering:paintings/minecraft/<id>.png (the modded ones Compat builds use
+creativeengineering:paintings/<ns>/<id>.png, the ids the old all-mods datapack had).
 Writeup and tests: feature_writeup/immersive_paintings.md.
 
     python3 tools/gen_immersive_paintings.py
@@ -35,7 +38,8 @@ from PIL import Image
 import lang_index
 
 DUMP = lang_index.INSTANCE / 'kubejs/exported/paintings.json'
-OUT = lang_index.INSTANCE / 'kubejs/data/creativeengineering/paintings'
+OUT = lang_index.INSTANCE / 'kubejs/data/creativeengineering/paintings/minecraft'
+NAMESPACE = 'minecraft'
 KUBEJS_ASSETS = lang_index.INSTANCE / 'kubejs/assets'
 TEXTURE_RE = re.compile(r'^assets/([^/]+)/textures/painting/(.+)\.png$')
 TARGET_RES = 32
@@ -130,7 +134,7 @@ def title_case(path):
 def main():
     if not DUMP.exists():
         sys.exit('%s missing: run /dumppaintings in game first' % DUMP.relative_to(lang_index.INSTANCE))
-    variants = json.loads(DUMP.read_text())['paintings']
+    variants = {k: v for k, v in json.loads(DUMP.read_text())['paintings'].items() if k.split(':', 1)[0] == NAMESPACE}
     textures, owners = collect_textures()
     names, _ = lang_index.build()
     sections = section_authors()
@@ -177,7 +181,7 @@ def main():
                 author = display[ns] or ns
         name = names.get('painting.%s.%s.title' % (ns, path)) or title_case(path)
 
-        dest = OUT / ns / path
+        dest = OUT / path
         dest.parent.mkdir(parents=True, exist_ok=True)
         img.save(dest.with_suffix('.png'), optimize=True)
         meta = {'name': name, 'author': author, 'width': bw, 'height': bh, 'resolution': res}
