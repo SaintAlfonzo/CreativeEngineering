@@ -1,6 +1,6 @@
 """The Display Delight jar in mods/ and how its blocks link to foods (shared by the DD generators).
 
-The pack runs its port of Display Delight 1.7.0 (backportedDisplay-*.jar, development/backportedDisplay); a 1.2.0
+The pack runs its port of Display Delight 1.7.0 (backportedDisplay-*.jar, development/creativeDelight/members/display); a 1.2.0
 jar (displaydelight-*.jar) is still read if that is what mods/ has.
 
   * 1.2.0 links a display block to the food its loot table drops.
@@ -32,7 +32,8 @@ LEGACY_BLOCK_CLASSES = ('DisplayBlocks', 'PlatedBlocks', 'SmallPlatedBlocks')
 
 def jar_path():
     for pattern in JAR_GLOBS:
-        jars = sorted(lang_index.MODS.glob(pattern))
+        # nested in the Creative Delight jar since the member move (plan_creative_delight.md A2)
+        jars = lang_index.pack_paths.mod_jars(pattern)
         if jars:
             return jars[-1]
     raise SystemExit('no %s in mods/' % ' or '.join(JAR_GLOBS))

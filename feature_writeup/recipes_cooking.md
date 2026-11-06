@@ -33,7 +33,7 @@ fixes in [food.md](food.md); the sample syringe in [engineering.md](engineering.
   closed 2026-10-22 (removals kept).
 - **Files to open:** [cooking.js](../kubejs/server_scripts/cooking/cooking.js) (lines 1-594; 597-1013 is the old
   `global.CE` copy, deleted 2026-10-22), [golden.js](../kubejs/server_scripts/cooking/golden.js),
-  [cultivated_meat.js](../kubejs/data/creative_delight/kubejs/creativeengineering/cultivated_meat.js).
+  [cultivated_meat.js](../kubejs/data/creativedelight/kubejs/creativeengineering/cultivated_meat.js).
 - **Knobs:** none. Server scripts (`/reload`); the meal assemblies' incomplete items and the new tag keys are
   startup (`transition_items.js`, `item_dict.js`): restart.
 
@@ -125,7 +125,7 @@ loops of its own: gilding food with gold in machines, and growing meat from mob 
   `#forge:fruits/berries`, no water, glass bottle container, like FR's long / strong teas; the latte's bottle goes
   through the remainder buffer) and grid `shapeless/berry_matcha_latte` (latte + berries + `#forge:ice_cubes`, the
   latte's bottle comes back). New NCH helper `frBrewing(input, output, e, id, opts)` for kettle recipes.
-- **Milk from jars** (TODO `food/drinks #6`, [milk_jar.js](../kubejs/data/creative_delight/kubejs/cookingforblockheads/milk_jar.js)): a glass
+- **Milk from jars** (TODO `food/drinks #6`, [milk_jar.js](../kubejs/data/creativedelight/kubejs/cookingforblockheads/milk_jar.js)): a glass
   bottle on a CfB Milk Jar or Cow in a Jar takes 250 mB out as FD's milk bottle; a milk bottle puts 250 mB back
   (refused when it would overflow). CfB itself only handles buckets. The Cow in a Jar refills at 1 mB/tick (a bottle
   every 12.5 s). The item check uses `Ingredient.of(id).test(stack)`: the first version called `stack.is(id)`, which
@@ -139,7 +139,7 @@ loops of its own: gilding food with gold in machines, and growing meat from mob 
 |---|---|
 | Bone broth | pot: bone or bone meal + glow berries / mushrooms / hanging roots / glow lichen → 2; shapeless 1 |
 | Beef stew, baked cod stew, noodle soup, chicken soup, cooked rice | shapeless with bone broth; since 2026-10-21 baked cod stew takes a fried egg, baked potato and tomato sauce, chicken soup two cooked veggies (`#creativeengineering:soup_veggie_cooked`) in place of the raw veggie and carrot |
-| Orange jam | Fruits Delight's 2-orange pot and heated mixing recipes kept; since 2026-10-23 also pot: 4 orange slices + sugar + lemon slice + bottle; heated mixing: 4 slices + lemon slice + sugar + 100 mB water → 125 mB jam (TODO `baking/sweets #6`) |
+| Orange and lemon jam | Fruits Delight's pot (2 fruit + sugar + lemon slice, mason jar) and heated mixing (+ 100 mB water → 125 mB) recipes; since 2026-11-02 each whole-fruit slot also takes that fruit's slice, one for one (orange or orange slice; lemon or lemon slice). The separate from-slices recipes (orange 4 slices 2026-10-23, lemon 5 slices) are removed (TODO `baking/sweets #6`, `dishes/jams #6`) |
 | Fruit beignet | removed item since 2026-10-23 (TODO `dishes/meals #19`): every recipe with it as output removed |
 | Fried rice, mushroom rice, sinigang | shapeless with cooked rice; fried rice takes 2 fried eggs, mushroom rice a baked potato and a second brown mushroom, sinigang a second cooked fish, so each costs one more than the pot (2026-10-21) |
 | Vegetable soup, vegetable noodles, ratatouille, corn soup | heatless shapeless from cooked ingredients (2026-10-21) |
@@ -210,7 +210,7 @@ Fish on the cutting board give more: salmon and cod → 6 slices + bone meal, ca
 |---|---|---|---|
 | Golden carrot | carrot in 8 gold nuggets | carrot + 6 nuggets | carrot + 5 nuggets |
 | Golden apple | vanilla's 8 ingots | apple + 6 gold ingots | apple + 5 ingots |
-| Enchanted golden apple | | assembly on a golden apple, 4 loops of a gold block, 250 mB liquid XP and pressing | |
+| Enchanted golden (gilded) apple | | assembly on a golden apple, 8 loops of 1 gold ingot, 125 mB liquid XP and pressing (owner 2026-11-03; was 4 loops of a gold block and 250 mB) | |
 
 Since 2026-10-21 (TODO `dishes/meals #9`) the machine discount went from 3 and 5 (of 8) to 2 and 3; revisit with food
 tuning (`food/types-and-tuning #1`, #3). Rose gold counts as gold in every golden food recipe (decided 2026-10-22: the
@@ -225,7 +225,7 @@ reverted.
   + slime ball → a culture (beef, pork, poultry, mutton, rabbit, cod, salmon); heated mixing culture + 250 mB diluted
   bone meal + 250 mB plant oil → 3; knife on the cutting board → 4 raw beef / pork / mutton, 3 chicken / rabbit, 8 cod or
   salmon slices. Culture blocks 9 ↔ 1. Since 2026-10-27 the cooking pot grows them too: culture + bone meal + Rustic
-  Delight cooking oil → 3 (0.35 xp, 200 ticks; `creative_delight:farmersdelightcooking/<animal>_culture_cooking`, only
+  Delight cooking oil → 3 (0.35 xp, 200 ticks; `creativedelight:farmersdelightcooking/<animal>_culture_cooking`, only
   with Rustic Delight on).
 - **Creative Cultivation reservation (2026-10-27):** all cultivated-meat code (sample syringe, cultures, culture blocks,
   recipes, tags, lang, textures) is marked for a future own mod, Creative Cultivation, the way brewing and alcohol are
@@ -310,6 +310,32 @@ until a row is built.
 - [TODO](todo/TODO.md) `dishes/jams #3`: recipes use jam, never bottled jam or jelly (mason-jarred jam is the same item in recipes);
   mulberry bread merges into bread with jam (open); jelly bread is renamed Bread with Jam (BUILT 2026-10-30, `namechanges.js`,
   unreleased). Vintage bottled jams removed 2026-10-29; PB and J takes `#forge:jams`.
+- Mason jars only (decided 2026-11-02, `dishes/jams #1`, `items/jars #8`, `#9`; BUILT, Creative Delight jar and scripts,
+  not in `mods/`): Fruits Delight's 22 jams and Upgrade Aquatic's mulberry jam keep their items but use the empty mason
+  jar: crafting and eat remainder (CD startup `vintagedelight/vintage_items.js`; mulberry eat-return: CD mixin
+  `upgrade_aquatic/MulberryJamMasonJarMixin`), and every recipe making one takes the jar where it took a glass bottle,
+  every recipe emptying one returns it (`vintagedelight/jams.js`, pot containers included). Vintage's removed jam and relish
+  bottles and its sweet berry / glow berry jams merge into their survivors (pepper jam jar, relish jar, Fruits Delight's
+  sweet berry and glow berry jams; CD `vintagedelight/item_merges.js`, recipes, loot and inventories swap). The vinegar and
+  apple sauce bottles are removed and merge into their jars, which keep their own food values (a jam-value change was reverted by the
+  owner 2026-11-02); their bottle-jar crafts are gone. Honey: bottle + empty mason jar -> honey jar, honey jar + glass
+  bottle -> honey bottle (1 to 1; were 3 bottles a jar). Not done: jar sprites for the Fruits Delight and mulberry jams
+  (they still draw a bottle), the mason jar from panes, the jelly cauldrons (still filled and emptied with glass bottles).
+  Tests RC-176 to RC-179.
+- Pack jam line (`dishes/jams #8`, owner 2026-11-03; BUILT, Vintage port `-15` in the Creative Delight jar, not in
+  `mods/`): for Ancient Fruit, Banana, Cherry, Green Grape, Mulberry, Pepper, Raspberry, Red Grape, Salmonberry and
+  Strawberry jam, Fruits Delight's family under `vintagedelight:` ids: the jar (new: ancient fruit, banana, mulberry,
+  strawberry), `<n>_jam_block` (honey-like), `<n>_jello_block` (slime-like), `<n>_jello` (bowl food, Fruits Delight's
+  values), fluids `<n>_jam` (mulberry: Create Central Kitchen's) and `<n>_jello`, and the cauldron chain (`<n>_cauldron`,
+  `_jam_cauldron`, `_jello_cauldron`; Java `jam/JamCauldrons`, extends Fruits Delight's cauldron and adds to its JEI
+  list). Recipes: CD `vintagedelight/jams.js` "Pack jam line" (8 <-> 1 blocks; Spout / Drain 125 mB; compacting
+  1000 mB; heated mixing). Upgrade Aquatic's mulberry jam bottle and block merge into the new ones (swaps
+  `merges_upgrade_aquatic_jams.json`); its and Central Kitchen's bottle recipes go. Nut Milk Jar (1 to 1 with the bottle,
+  pot copy of the bottle's). Fruits Delight's 22 jams place as Vintage mason jars (`fd_<fruit>_jam_jar`, Java
+  `jam/FdJamJars`) and their jam cauldrons fill an empty mason jar. Every jar soft fluid holds one bottle (was 3). Art:
+  owner's `kubejs/assets/mason_jar_new/`, copied by `members/vintage/tools/gen_pack_jams.py` into `src/own`. Tests
+  RC-180 to RC-185. Not done: jar item sprites for Fruits Delight's 22 jams (still a bottle in hand), brine (no bottle in
+  the pack; owner: later), Bread with Jam by Spout for the new jams (Fruits Delight's effect tag is per its own fruits).
 - [TODO](todo/TODO.md) `dishes/jams #4`: grape and cherry jelly / jam (cherry pie is `baking/baked-goods #13`). BUILT 2026-10-29, unreleased: Green Grape,
   Red Grape and Cherry Jam Jars (Vintage port -09, not yet in `mods/`), pot 4 fruit + sugar + lemon slice -> 2.
 
@@ -366,9 +392,11 @@ None.
 
 ## 7. In-game test suite
 
-- [ ] **RC-01 Smoker (F1):** JEI `minecraft:smoker` → Quark's deepslate and blackstone smoker (furnace in a plus of 4
+- **r1103 2026-11-03** (scratch server; verdicts in `perf/runs/r1103/` FINAL.md and the slice judged.md): PASS SQ-RCO-01, -02.
+
+- [ ] **RC-01 Smoker (F1):** (recipe level: SQ-RCO-01) JEI `minecraft:smoker` → Quark's deepslate and blackstone smoker (furnace in a plus of 4
   logs) and Nether's Delight's nether brick smoker; no vanilla cobblestone recipe.
-- [ ] **RC-02 Cake (F2):** JEI `minecraft:cake` → oven (cake base + 3 frosting, or + 2 frosting + red berry), the same
+- [ ] **RC-02 Cake (F2):** (recipe level: SQ-RCO-02) JEI `minecraft:cake` → oven (cake base + 3 frosting, or + 2 frosting + red berry), the same
   two by hand from a baked cake base, and 7 cake slices → cake; no vanilla, FD milk-bottle, Neapolitan or Create grid cake.
 - [ ] **RC-03 One flour:** JEI wheat flour → only Create's; tmted's flour absent from recipes.
 - [ ] **RC-04 Flour machines:** IE crusher on a hay bale → 18 flour; crushing wheels → 13-15.
@@ -461,11 +489,12 @@ None.
 - [ ] **RC-14 Cultivated beef:** cow sample syringe + culture base + slime ball → beef culture; heated mixer with diluted
   bone meal and plant oil → 3; knife → 4 raw beef.
 - [ ] **RC-82 Culture in the cooking pot:** JEI beef culture → U: a cooking pot recipe beef culture + bone meal +
-  cooking oil → 3 beef cultures (`creative_delight:farmersdelightcooking/beef_culture_cooking`); same for the other 6
+  cooking oil → 3 beef cultures (`creativedelight:farmersdelightcooking/beef_culture_cooking`); same for the other 6
   cultures. Cook one on a lit stove → 3 cultures.
-- [ ] **RC-79 Orange jam from slices:** JEI orange jam → R: the 2-orange pot recipe and a pot recipe with 4 orange
-  slices + sugar + lemon slice (bottle); a heated basin with 4 slices + lemon slice + sugar + 100 mB water gives 125 mB
-  orange jam. Both 2-orange recipes still there.
+- [ ] **RC-79 Orange and lemon jam from slices (reworked 2026-11-02):** JEI orange jam → R: the pot recipe cycles
+  Orange / Orange Slice in both fruit slots (mason jar container), no separate 4-slice recipe; the heated mixing recipe
+  the same. Lemon jam: both lemon slots cycle Lemon / Lemon Slice, the extra Lemon Slice slot stays; no 5-slice recipe.
+  Cook 2 Orange Slices + Sugar + Lemon Slice in the pot: Orange Jam.
 - [ ] **RC-80 FD ids and crab bars:** JEI grilled salmon, bacon and eggs, salmon roll, cod roll → one shapeless recipe
   each under `farmersdelight:` (F3 + advanced tooltips show the id), plus the sequenced assembly; crab bars: shapeless
   `creativeengineering:shapeless/crab_bars_manual_only` (2), not offered by a Create mixer.
@@ -491,6 +520,35 @@ None.
   not in `#forge:jam_jars` or `#vintagedelight:savory_jam`; the Pickling Jar's jam -> vinegar recipe does not accept it.
 - [ ] **RC-175 PB and J takes any jam:** grid bread + nut mash bottle + a Fruits Delight jam, or a grape / cherry jam
   jar -> PB and J; the jar comes back as an empty mason jar.
+- [ ] **RC-176 Bottle jams in mason jars:** (recipe level: scratch FAILED r1102b, SQ-PSU-06: the lemon and orange jam-from-slices pot recipes still took a glass bottle; FIXED 2026-11-02 by removing them, slices now go in Fruits Delight's own recipes, RC-79; rerun SQ-PSU-06) eat a Fruits Delight jam and Upgrade Aquatic's mulberry jam: an empty mason
+  jar comes back. JEI: the jam's pot recipe shows the mason jar as container; Spout filling takes a mason jar; Item Drain
+  gives one back. A jam block crafted back to jams takes mason jars.
+- [ ] **RC-177 Old bottles convert:** (inventory swap: scratch server PASSED r1102b, SQ-PSU-08; JEI: in game) in an old world with a vinegar bottle, an apple sauce bottle, a pepper jam bottle and
+  Vintage's sweet berry jam jar in a chest: after loading they are a vinegar jar, apple sauce jar, pepper jam jar and
+  Fruits Delight's Sweet Berry Jam. JEI shows no vinegar or apple sauce bottle, and no recipe turns a jar into 3 jars.
+- [ ] **RC-178 Jar values:** (r1102b SQ-PSU-09 OPEN: the mason jar remainder PASS; the vinegar jar has Vintage's values but no Nourishment, `comfort_nourishment.json` sets none: owner call whether the row or the data is wrong) hover the vinegar jar and apple sauce jar (AppleSkin): Vintage Delight's own values, unchanged
+  by the pack; their effects (Nourishment, Comfort) unchanged. Cheese curds and fermented leather take a vinegar jar.
+- [ ] **RC-179 Honey 1 to 1:** (recipe ids: scratch server PASSED r1102b, SQ-PSU-07 half; the no-jar-to-jar check is a batch fault, rerun) grid honey bottle + empty mason jar -> honey jar and a glass bottle left; honey jar + glass
+  bottle -> honey bottle and an empty mason jar left; the honey jar still places as a block.
+- [ ] **RC-180 New jam jars:** (SQ-PJL-02) pot 4 Ancient Fruit / bananas / mulberries / strawberries + sugar + a Lemon Slice in
+  an Empty Mason Jar -> 1 jar each; JEI shows no Upgrade Aquatic Mulberry Jam Bottle or Mulberry Jam Block, and an old one
+  in a chest becomes the Mulberry Jam Jar / the new Mulberry Jam Block.
+- [ ] **RC-181 Jam and jello blocks:** (SQ-PJL-03) 8 jars -> a jam block; a jam block + 8 empty jars -> 8 jars; the same for
+  jello with bowls. A jam block slows you and you slide down its side; a jello block bounces; a piston moves a jam block with
+  a jello block of the same jam stuck to it, not one of another jam.
+- [ ] **RC-182 Jam cauldrons:** (in game) a water cauldron + a Lemon Slice -> Lemonade Cauldron; over a lit campfire, 12
+  cherries -> a full Cherry Cauldron (water in the jam colour); sugar -> Cherry Jam Cauldron; 3 Empty Mason Jars take 3
+  Cherry Jam Jars and leave a cauldron. Again with a Slime Ball before emptying: Cherry Jello Cauldron, 3 bowls -> 3 Cherry
+  Jello. Fruits Delight's Apple Jam Cauldron fills an Empty Mason Jar, not a glass bottle; JEI's cauldron pages show both.
+- [ ] **RC-183 Create jams:** (SQ-PJL-04) Spout an Empty Mason Jar with 125 mB cherry jam -> Cherry Jam Jar, drain it back;
+  compact 1000 mB -> jam block; heated Mixer: 4 cherries, sugar, Lemon Slice, 100 mB water -> 125 mB jam; slime ball + 125 mB
+  jam -> 125 mB melted jello; bowl + 125 mB melted jello -> Cherry Jello. Mulberry uses Create Central Kitchen's jam fluid.
+- [ ] **RC-184 Placed jams are mason jars:** (in game) sneak-place a Fruits Delight Apple Jam: a Vintage mason jar with the
+  apple interior; use more Apple Jam on it up to 4; break it: the Apple Jams drop; a plain click still eats the jam.
+  The new jars, apple sauce, nut mash, relish, vinegar and pepper jam jars show the new art in hand and placed.
+- [ ] **RC-185 Nut milk jar and one-bottle jars:** (SQ-PJL-05) pot 2 peanuts + sugar in an Empty Mason Jar -> Nut Milk Jar;
+  bottle + empty jar <-> jar + glass bottle 1 to 1; drinking it removes one curable effect and leaves the jar.
+  Supplementaries jar: one Cherry Jam Jar fills one unit of the jar's contents [3].
 
 ## 8. History
 
@@ -560,3 +618,10 @@ None.
   `vintagedelight/jams.js`), PB and J takes any jam. Tests RC-170 to RC-175. Not run in game.
 - 2026-10-31: deep scan: F1 points at the smoker removal's current file (Creative Delight `minecraft/recipes.js`); `recipes/cooking #4` marked built (shell -> 12, SQ-CM-06 PASS). No code changed.
 - 2026-10-31: scratchpad notes translated into TODO rows (`dishes/ingredients #25`). No code changed.
+- 2026-11-02: mason jars only (bottle jams to mason jars, Vintage bottles merged, vinegar and apple sauce bottles removed,
+  honey 1 to 1; `dishes/jams #1`, `items/jars #8`, `#9`). Tests RC-176 to RC-179. Not run in game.
+- 2026-11-03: pack jam line, nut milk jar, placed Fruits Delight jams as mason jars, one-bottle jars (`dishes/jams #1`,
+  `#8`). Tests RC-180 to RC-185, scratch SQ-PJL-01 to -05. Not run.
+- 2026-11-02: deep scan 2026-11-02: RC-176 to RC-179 annotated with the r1102b results (SQ-PSU-06 FAIL: lemon and
+  orange jam from slices still bottle; SQ-PSU-07, -08 PASS; SQ-PSU-09 open); RC-01, RC-02 given scratch rows
+  SQ-RCO-01, -02.

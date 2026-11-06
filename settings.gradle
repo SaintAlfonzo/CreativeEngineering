@@ -29,16 +29,18 @@ plugins {
 rootProject.name = 'CreativeEngineering'
 
 // The mod folders live under development/; project names (and :task paths) stay the bare mod names.
-['patcherMod', 'exposureBackport', 'incubationAdditions', 'moreMooblooms', 'babyMobs', 'creativeLabels', 'backportedVeggies', 'backportedVintage', 'backportedFungi', 'clientCapture', 'backportedMiners', 'backportedDisplay', 'repackedStorage', 'perfBot'].each { name ->
+['creativeCommon', 'exposureBackport', 'creativeLabels', 'repackedStorage', 'creativeCalendar', 'creativeCompat', 'creativeMagic', 'creativeEquipment', 'creativeEngineering'].each { name ->
     include name
     project(":${name}").projectDir = file("development/${name}")
 }
 
 // Creative Delight (feature_writeup/creative_delight.md 14.3): the bundle, and its repacked members (ce.forge-repack)
-// under development/creativeDelight/members/. Project name = the member's jar_name.
+// under development/creativeDelight/members/. Project name = the member's jar_name. The Veggies, Vintage, Fungi,
+// Miner's and Display ports are members too (bundle_members, 2026-11-02; folders moved here the same day). Salt, Create:
+// The Salt, Canned Goods (repacks) and Golden Food (donor port) joined 2026-11-02 (plan_creative_delight.md J2 to J4).
 include 'creativeDelight'
 project(':creativeDelight').projectDir = file('development/creativeDelight')
-['repackedFarmers': 'farmers', 'repackedOceans': 'oceans', 'repackedOceanic': 'oceanic', 'repackedEnds': 'ends', 'backportedRustic': 'rustic', 'repackedDelightful': 'delightful', 'endersAdditions': 'enders', 'backportedHearth': 'hearth', 'blockheadsAdditions': 'blockheads'].each { name, dir ->
+['repackedFarmers': 'farmers', 'repackedOceans': 'oceans', 'portedOceanic': 'oceanic', 'repackedEnds': 'ends', 'repackedNethers': 'nethers', 'backportedRustic': 'rustic', 'backportedRoll': 'roll', 'backportedLargeMeals': 'largemeals', 'repackedDelightful': 'delightful', 'backportedHearth': 'hearth', 'backportedBarbeques': 'barbeques', 'backportedDisplay': 'display', 'backportedVeggies': 'veggies', 'backportedVintage': 'vintage', 'backportedFungi': 'fungi', 'backportedMiners': 'miners', 'repackedSalt': 'salt', 'repackedCreateSalt': 'createsalt', 'repackedCannedGoods': 'cannedgoods', 'portedGolden': 'golden'].each { name, dir ->
     include name
     project(":${name}").projectDir = file("development/creativeDelight/members/${dir}")
 }
@@ -50,4 +52,22 @@ project(':creativeBrewing').projectDir = file('development/creativeBrewing')
 ['backportedVinery': 'vinery', 'backportedBrewin': 'brewin'].each { name, dir ->
     include name
     project(":${name}").projectDir = file("development/creativeBrewing/members/${dir}")
+}
+
+// Creative Devtools (feature_writeup/creative_devtools.md): the dev-only bundle, and its members under
+// development/creativeDevtools/members/ (the perf bot and the client capture driver; project names unchanged).
+include 'creativeDevtools'
+project(':creativeDevtools').projectDir = file('development/creativeDevtools')
+['perfBot': 'perfbot', 'clientCapture': 'capture'].each { name, dir ->
+    include name
+    project(":${name}").projectDir = file("development/creativeDevtools/members/${dir}")
+}
+
+// Creative Worldgen (feature_writeup/creative_worldgen.md): world generation and fauna, and its members under
+// development/creativeWorldgen/members/ (More Mooblooms and Baby Mobs; project names and mod ids unchanged).
+include 'creativeWorldgen'
+project(':creativeWorldgen').projectDir = file('development/creativeWorldgen')
+['moreMooblooms': 'mooblooms', 'babyMobs': 'babymobs'].each { name, dir ->
+    include name
+    project(":${name}").projectDir = file("development/creativeWorldgen/members/${dir}")
 }

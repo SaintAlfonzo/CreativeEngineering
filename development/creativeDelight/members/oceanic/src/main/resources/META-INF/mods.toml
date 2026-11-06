@@ -1,50 +1,41 @@
-# Oceanic Delight (Creative Delight repack): upstream mods.toml with the display name suffix, our version and
-# cleaned dependencies (creative_delight.md 0.3, 14.1.6). Expanded by ce.forge-mod's processResources.
+# Oceanic Delight 1.0.1 rebuilt for Creative Delight (feature_writeup/ocean_delight.md 5.6). Keeps the upstream mod id so
+# every resource location, loot table and old world matches; art and data are read from oceanic_upstream/ at runtime.
 modLoader="javafml"
-loaderVersion="[43,)"
+loaderVersion="${loader_version_range}"
 license="${mod_license}"
+issueTrackerURL="https://github.com/SaintAlfonzo/CreativeEngineering/issues"
+
 [[mods]]
-modId="${mod_id}"
+modId="oceanic_delight"
 version="${mod_version}"
 displayName="${mod_name}"
-displayURL="https://legacy.curseforge.com/members/dariuszebaguette/projects"
-logoFile="logo.png"
-credits="Made With Love (and a bit of MCreator)"
 authors="${mod_authors}"
 description='''${mod_description}'''
+
 [[dependencies.oceanic_delight]]
-    modId="minecraft"
-    mandatory=true
-    versionRange="[1.19.2]"
-    ordering="NONE"
-    side="BOTH"
+modId="forge"
+mandatory=true
+versionRange="${forge_version_range}"
+ordering="NONE"
+side="BOTH"
+
 [[dependencies.oceanic_delight]]
-    modId="farmersdelight"
-    mandatory=true
-    versionRange="[0,)"
-    ordering="NONE"
-    side="BOTH"
+modId="minecraft"
+mandatory=true
+versionRange="${minecraft_version_range}"
+ordering="NONE"
+side="BOTH"
+
 [[dependencies.oceanic_delight]]
-    modId="appleskin"
-    mandatory=false
-    versionRange="[0,)"
-    ordering="NONE"
-    side="BOTH"
+modId="farmersdelight"
+mandatory=true
+versionRange="[0,)"
+ordering="NONE"
+side="BOTH"
+
 [[dependencies.oceanic_delight]]
-    modId="jeed"
-    mandatory=false
-    versionRange="[0,)"
-    ordering="NONE"
-    side="BOTH"
-[[dependencies.oceanic_delight]]
-    modId="delight"
-    mandatory=false
-    versionRange="[0,)"
-    ordering="NONE"
-    side="BOTH"
-[[dependencies.oceanic_delight]]
-    modId="jei"
-    mandatory=false
-    versionRange="[0,)"
-    ordering="NONE"
-    side="BOTH"
+modId="jei"
+mandatory=false
+versionRange="[0,)"
+ordering="NONE"
+side="BOTH"

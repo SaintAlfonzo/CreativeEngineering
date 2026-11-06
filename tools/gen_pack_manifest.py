@@ -118,6 +118,8 @@ def main():
         side = by_modid.get(modid) if modid else by_jar.get(jar)
         if side is None:
             unsided.append(jar)
+        if side == 'dev':
+            continue  # dev mods/ only (Creative Devtools), not part of the pack
         mods.append(build('mods', 'mods', jar, {'modId': modid, 'side': side}))
 
     disabled = [build('mods', folder, jar, {'modId': jar_modid(os.path.join(ROOT, folder, jar))})

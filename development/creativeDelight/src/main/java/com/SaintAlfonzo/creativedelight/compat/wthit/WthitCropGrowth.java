@@ -11,8 +11,7 @@ import java.util.concurrent.ConcurrentHashMap;
 
 import com.SaintAlfonzo.creativedelight.CDConfig;
 import com.SaintAlfonzo.creativedelight.CreativeDelight;
-import com.SaintAlfonzo.creativeengineering.CEConfig;
-import com.SaintAlfonzo.creativeengineering.crops.CropGrowth;
+import com.SaintAlfonzo.creativedelight.crops.CropGrowth;
 import com.google.gson.JsonParser;
 import com.mojang.logging.LogUtils;
 
@@ -52,9 +51,9 @@ import net.minecraftforge.registries.ForgeRegistries;
  * hemp field reads like a wheat field. Plants that can be picked before they are fully grown add
  * "(Harvestable)". Client-side only, display only: the blockstate already reaches the client.
  *
- * <p>Which blocks and how to read them is {@code assets/creative_delight/crop_growth.json}
- * ({@link CropGrowth}, patcherMod's format); copy it to {@code kubejs/assets/creative_delight/} to change it without
- * rebuilding. {@code creativeengineering-common.toml [crop_growth] fallback} adds any other {@code BushBlock} with an integer
+ * <p>Which blocks and how to read them is {@code assets/creativedelight/crop_growth.json}
+ * ({@link CropGrowth}, patcherMod's format); copy it to {@code kubejs/assets/creativedelight/} to change it without
+ * rebuilding. {@code creativedelight-common.toml [crop_growth] fallback} adds any other {@code BushBlock} with an integer
  * {@code age}, so a plant from a new mod isn't silently missing.
  * {@code /dumpcropgrowth} lists every growing block and which ones WTHIT leaves out.
  *
@@ -152,8 +151,8 @@ public final class WthitCropGrowth implements IWailaClientPlugin, IBlockComponen
         MutableComponent text = d.stage() == CropGrowth.Stage.MATURE
                 ? Component.translatable("tooltip.waila.crop_mature")
                 : Component.literal(d.percent() + "%");
-        if (d.stage() == CropGrowth.Stage.HARVESTABLE && CEConfig.CROP_GROWTH.showHarvestable.get()) {
-            text.append(" ").append(Component.translatable("creative_delight.wthit.crop_harvestable"));
+        if (d.stage() == CropGrowth.Stage.HARVESTABLE && CDConfig.CROP_GROWTH.showHarvestable.get()) {
+            text.append(" ").append(Component.translatable("creativedelight.wthit.crop_harvestable"));
         }
         tooltip.setLine(LINE, new PairComponent(Component.translatable("tooltip.waila.crop_growth"), text));
     }
@@ -185,7 +184,7 @@ public final class WthitCropGrowth implements IWailaClientPlugin, IBlockComponen
                 return NONE;
             }
         }
-        if (CEConfig.CROP_GROWTH.fallback.get() && block instanceof BushBlock && !(block instanceof SaplingBlock)
+        if (CDConfig.CROP_GROWTH.fallback.get() && block instanceof BushBlock && !(block instanceof SaplingBlock)
                 && block.getStateDefinition().getProperty(CropGrowth.FALLBACK_PROPERTY) instanceof IntegerProperty age) {
             return new Resolved(null, List.of(age), Collections.max(age.getPossibleValues()),
                     Collections.max(age.getPossibleValues()), -1, null);

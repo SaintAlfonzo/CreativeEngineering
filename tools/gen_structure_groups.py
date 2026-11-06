@@ -13,7 +13,7 @@ THE MODEL
   Where a member is the only one that fits the biome, it takes every slot there x its frequency.
   Every structure not in a group keeps its own set ("standalone") and is tuned in the same file,
   with the same per-structure frequency.
-  kubejs/server_scripts/worldgen/structure_overrides.js applies the file at every world load.
+  kubejs/data/creativeworldgen/kubejs/worldgen/structure_overrides.js applies the file at every world load.
 
 MODES
   python3 tools/gen_structure_groups.py             sync: adds groups, members and standalone sets that

@@ -11,7 +11,7 @@ Reads:
 Prints:
   1. live structure_sets missing from structure_config.json (not tunable: re-run
      tools/gen_structure_config.py, or add a code-registered set to its CODE_REGISTERED_SETS table);
-     the creativeengineering:group/* sets are expected and not listed
+     the creativeengineering:group/* sets are expected and not listed, and sets with no members are skipped
   2. config sets that aren't live (a mod was removed: re-run the scanner)
   3. live structures that belong to no set (never generate on their own)
   4. every set the script would write, checked against the live spacing / separation / count and
@@ -38,8 +38,13 @@ cfg_sets = json.load(open(CONFIG))['structure_sets']
 print('dump %s (%s)' % (live.get('generated', '?'), stamp(DUMP)))
 bad = 0
 
-missing = sorted(s for s in live_sets if s not in cfg_sets and not s.startswith(GROUP))
+untuned = sorted(s for s in live_sets if s not in cfg_sets and not s.startswith(GROUP))
+# A set with no members places nothing (e.g. gen_structure_config DONOR_EMPTIED_SETS), so it needs no tuning row.
+empty = [s for s in untuned if not live_sets[s].get('structures')]
+missing = [s for s in untuned if s not in empty]
 print('\n1. live sets not in structure_config.json: %d' % len(missing))
+if empty:
+    print('    (%d empty set(s) skipped, they place nothing: %s)' % (len(empty), ', '.join(empty)))
 for s in missing:
     print('   ', s, [e['structure'] for e in live_sets[s].get('structures') or []])
 bad += len(missing)

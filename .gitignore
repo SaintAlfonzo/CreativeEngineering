@@ -81,7 +81,7 @@
 /config/worldedit/.archive-unpack/
 /config/worldedit/sessions/
 # Player changelog read marker (patcherMod changelog/ChangelogStore): each player's own, never shipped
-/config/creativeengineering/changelog_seen.txt
+/config/creativecommon/changelog_seen.txt
 # Claude Code per-machine settings
 /.claude/settings.local.json
 
@@ -89,3 +89,5 @@ __pycache__/
 *.pyc
 *.class
 /tools/creative_delight_test/move_diff_snapshot.json
+/tools/creative_delight_test/move_diff_dump_snapshot.json
+/tools/.nested_jars/

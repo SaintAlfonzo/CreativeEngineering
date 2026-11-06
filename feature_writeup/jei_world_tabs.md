@@ -49,7 +49,7 @@ the fixture rows are replaced. The generator exits 1 and prints a WARNING while 
   entities (shown as spawn eggs, a named name tag when there is none). Rows for missing mods drop out (`requires`, or
   ids that don't resolve).
 - **Where rows come from**, merged per tab (`WorldInteractionJEI`):
-  1. `kubejs/assets/creativeengineering/jei_world/<tab>/generated.json`, written by `tools/gen_jei_world.py` from the
+  1. `kubejs/assets/creativecommon/jei_world/<tab>/generated.json`, written by `tools/gen_jei_world.py` from the
      mod jars' data (kubejs/data on top), the loot dump and `/dumpworldjei`. One module per group in `tools/jei_world/`.
   2. `.../<tab>/manual.json`, hand-written, for hardcoded mod behaviour (each row checked in the mod jar).
   3. `WorldRows`: `add` from KubeJS startup (the sample syringe, from `global.sampleSyringe` in

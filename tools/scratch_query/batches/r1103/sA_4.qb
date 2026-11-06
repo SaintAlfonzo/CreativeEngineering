@@ -1,0 +1,235 @@
+# Run r1103 slice A, boot 4: FRESH group B world (normal, structures on, seed 8675309), level sAb, current jars WITHOUT
+# mods/endersdelight-1.19-1.2.2.jar (removed from srv/mods only; SQ-ENM-03 and -05b need that boot; sA_setup.md "Boot 4").
+# Rows: SQ-ENM-05b, SQ-ENM-03, SQ-VTDA-10, SQ-GLD-14, SQ-GLD-09, SQ-CWG-07, SQ-CWG-06, SQ-CDM2-02, SQ-NEST-02.
+# Home: marker sbhome at the console position (world spawn), capture SBH. Block rows build at y 200 above spawn (open
+# sky in any terrain, inside the spawn chunks). Locates last (Async Locator; a rare one cannot be cancelled: gotchas.md).
+# No /reload. If the boot does not reach Done without Ender's 1.2.2: SQ-ENM-03 FAILs (missing dependency); put the jar
+# back, use a new level name, and run this file with --from SQ-VTDA-10.
+pace 2
+
+## SA4-00 | setup: home marker, clock, weather, forceload spawn (not a queue row)
+bootexpect Done \(
+> execute unless entity @e[type=minecraft:marker,tag=sbhome] run summon minecraft:marker ~ ~ ~ {Tags:["sbhome"]}
+sleep 2
+> data get entity @e[type=minecraft:marker,tag=sbhome,limit=1] Pos
+capture SBH entity data: \[(-?\d+)\.\d+d, (-?\d+)\.\d+d, (-?\d+)\.\d+d\]
+> gamerule doDaylightCycle false
+> time set noon
+> gamerule doWeatherCycle false
+> weather clear 1000000
+> gamerule doPatrolSpawning false
+> gamerule doTraderSpawning false
+> forceload add {SBH1-16} {SBH3-16} {SBH1+48} {SBH3+48}
+sleep 30
+> say SA4 setup done
+expect SA4 setup done
+shell ! ls mods | grep -q "^endersdelight-"
+reject (Unknown (item|block|block type|entity)|does not (have|accept)|Incorrect argument for command|Unknown or incomplete command|That position is not loaded|No player was found|no such bot|no such item|Invalid (block state|tag)|\[(zq|sa|zp)\] (error|no player))
+
+## SQ-ENM-05b | spice and End soil tags without Ender's Delight 1.2.2
+> zq itemtag creativeengineering:spices
+> zq blocktag creativedelight:end_plant_soil_slow
+> zq blocktag creativedelight:end_plant_soil_fast
+waitlog \[zq\] blocktag creativedelight:end_plant_soil_fast 30
+expect itemtag creativeengineering:spices .*endersdelight:voidpepper( |$)
+expect itemtag creativeengineering:spices .*endersdelight:crushed_voidpepper( |$)
+expect blocktag creativedelight:end_plant_soil_slow .*minecraft:end_stone( |$)
+expect blocktag creativedelight:end_plant_soil_fast .*endercrop:tilled_end_stone( |$)
+reject (Unknown or incomplete command|\[zq\] error)
+
+## SQ-ENM-03 | without Ender's 1.2.2: boot, gives, plants grow on end stone, stew eaten, no script errors, pepper recipes
+shell grep -nE "Error occurred while handling event|additions\.js|endersdelight" logs/latest.log | grep -iE "error|exception|missing" | head -10 || true
+shell ! grep -hE "(additions\.js|endersdelight/).*(rror|xception)" logs/kubejs/server.log logs/kubejs/startup.log
+> pbot spawn saend {SBH1+8} 202 {SBH3+8} minecraft:overworld survival
+sleep 2
+> clear saend
+> give saend endersdelight:voidpepper 4
+> give saend endersdelight:amberveil_stew 1
+> zp inv saend
+> fill {SBH1} 199 {SBH3} {SBH1+12} 199 {SBH3+4} minecraft:glass
+> fill {SBH1} 200 {SBH3} {SBH1+8} 200 {SBH3} minecraft:end_stone
+> setblock {SBH1} 201 {SBH3} endersdelight:amberveil_mushroom
+> setblock {SBH1+2} 201 {SBH3} endersdelight:ethereal_saffron_bush
+> setblock {SBH1+4} 201 {SBH3} endersdelight:chorus_flame_block[age=0]
+> setblock {SBH1+6} 201 {SBH3} endersdelight:chorus_flame_block[age=0]
+> setblock {SBH1+8} 201 {SBH3} endersdelight:voidpepper_block[down=true]
+> gamerule randomTickSpeed 100
+sleep 40
+> gamerule randomTickSpeed 3
+> execute if block {SBH1} 201 {SBH3} endersdelight:amberveil_mushroom run say SA4 p1 ok
+> execute if block {SBH1+2} 201 {SBH3} endersdelight:ethereal_saffron_bush run say SA4 p2 ok
+> execute if block {SBH1+4} 201 {SBH3} endersdelight:chorus_flame_block run say SA4 p3 ok
+> execute if block {SBH1+8} 201 {SBH3} endersdelight:voidpepper_block run say SA4 p4 ok
+> zq ages {SBH1+4} 201 {SBH3} {SBH1+6} 201 {SBH3} endersdelight:chorus_flame_block
+> data get block {SBH1+8} 201 {SBH3}
+> zq count {SBH1-2} 199 {SBH3-2} {SBH1+12} 203 {SBH3+4} endersdelight:voidpepper_block
+> pbot hold saend endersdelight:amberveil_stew
+> zp eat saend
+> zq makes endersdelight:crushed_voidpepper
+> zq rdetail crushed_voidpepper
+waitlog \[zq\] makes endersdelight:crushed_voidpepper: \d+ 30
+sleep 3
+expect inv saend: .*endersdelight:voidpepper
+expect inv saend: .*endersdelight:amberveil_stew
+expect SA4 p1 ok
+expect SA4 p2 ok
+expect SA4 p3 ok
+expect SA4 p4 ok
+expect \[zq\] makes endersdelight:crushed_voidpepper: [2-9]
+> pbot remove saend
+look chorusflame ages above 0 (40 s at randomTickSpeed 100, bot in range), void pepper count above 1 or spreading; eat line: hand now empty or the Shulker Bowl per the dish (the row says nothing returned: judge against ends_delight.md 5.9); crushed void pepper: a knife (cutting) and a millstone / milling recipe
+reject (Unknown (item|block|block type|entity)|Incorrect argument for command|Unknown or incomplete command|No player was found|no such bot|no such item|Invalid (block state|tag)|\[(zq|zp)\] (error|no player))
+
+## SQ-VTDA-10 | wild ghost peppers: only the crimson nylium one survives a neighbour update
+> setblock {SBH1+20} 200 {SBH3} minecraft:grass_block
+> setblock {SBH1+22} 200 {SBH3} minecraft:moss_block
+> setblock {SBH1+24} 200 {SBH3} minecraft:mycelium
+> setblock {SBH1+26} 200 {SBH3} minecraft:crimson_nylium
+> setblock {SBH1+20} 201 {SBH3} vintagedelight:wild_ghost_peppers
+> setblock {SBH1+22} 201 {SBH3} vintagedelight:wild_ghost_peppers
+> setblock {SBH1+24} 201 {SBH3} vintagedelight:wild_ghost_peppers
+> setblock {SBH1+26} 201 {SBH3} vintagedelight:wild_ghost_peppers
+sleep 1
+> setblock {SBH1+20} 201 {SBH3+1} minecraft:stone
+> setblock {SBH1+22} 201 {SBH3+1} minecraft:stone
+> setblock {SBH1+24} 201 {SBH3+1} minecraft:stone
+> setblock {SBH1+26} 201 {SBH3+1} minecraft:stone
+> fill {SBH1+20} 201 {SBH3+1} {SBH1+26} 201 {SBH3+1} minecraft:air
+sleep 2
+> execute if block {SBH1+20} 201 {SBH3} vintagedelight:wild_ghost_peppers run say SA4 pepper grass survived
+> execute if block {SBH1+22} 201 {SBH3} vintagedelight:wild_ghost_peppers run say SA4 pepper moss survived
+> execute if block {SBH1+24} 201 {SBH3} vintagedelight:wild_ghost_peppers run say SA4 pepper mycelium survived
+> execute if block {SBH1+26} 201 {SBH3} vintagedelight:wild_ghost_peppers run say SA4 pepper nylium survived
+expect SA4 pepper nylium survived
+reject SA4 pepper (grass|moss|mycelium) survived
+reject (Unknown (item|block|block type|entity)|Incorrect argument for command|Unknown or incomplete command|Invalid (block state|tag))
+
+## SQ-GLD-14 | fresh world: no Golden Food Enchantment from /enchant, the table or librarians
+> sa enchreg goldenfood:gf_enchantment
+> sa enchtable minecraft:diamond_sword 30 20
+> sa enchtable minecraft:book 30 20
+waitlog \[sa\] enchtable minecraft:book L30: 20 rolls 60
+expect \[sa\] enchreg goldenfood:gf_enchantment: false
+expect \[sa\] enchtable minecraft:diamond_sword L30: 20 rolls, goldenfood 0
+expect \[sa\] enchtable minecraft:book L30: 20 rolls, goldenfood 0
+pace 0.3
+repeat 20
+> summon minecraft:villager {SBH1+30} 201 {SBH3+4} {NoAI:1b,PersistenceRequired:1b,Tags:["salib"],VillagerData:{profession:"minecraft:librarian",level:1,type:"minecraft:plains"}}
+end
+> fill {SBH1+28} 200 {SBH3+2} {SBH1+32} 200 {SBH3+6} minecraft:glass
+pace 1
+> execute as @e[type=minecraft:villager,tag=salib] run data get entity @s Offers
+sleep 3
+pace 2
+reject goldenfood:gf_enchantment
+expect minecraft:enchanted_book
+> kill @e[type=minecraft:villager,tag=salib]
+look 20 table rolls on a sword and a book and the L1 librarians' book offers name no goldenfood enchantment (/enchant: SQ-GLD-06)
+reject (Unknown (item|block|block type|entity)|Incorrect argument for command|Unknown or incomplete command|\[sa\] error)
+
+## SQ-GLD-09 | village chests: no Golden Food book; Chalk / Botania / CC loot injected once; no reverted tables
+> fill {SBH1+36} 199 {SBH3} {SBH1+44} 199 {SBH3+8} minecraft:glass
+> kill @e[type=minecraft:item]
+pace 0.1
+repeat 20
+> loot spawn {SBH1+38} 201 {SBH3+2} loot minecraft:chests/village/village_plains_house
+> loot spawn {SBH1+42} 201 {SBH3+6} loot minecraft:chests/village/village_cartographer
+end
+pace 2
+sleep 3
+> zcount {SBH1+36} 200 {SBH3} {SBH1+40} 203 {SBH3+4}
+> zcount {SBH1+40} 200 {SBH3+4} {SBH1+44} 203 {SBH3+8}
+> execute as @e[type=minecraft:item,nbt={Item:{id:"minecraft:enchanted_book"}}] run data get entity @s Item
+waitlog \[zcount\] entities 30
+sleep 2
+reject goldenfood:gf_enchantment
+shell grep -nhiE "reverted|restored|goldenfood" logs/latest.log logs/kubejs/server.log | head -20 || true
+look zcount: chalk / botania / computercraft items appear (one injected pool each); the loot-tuning line counts 0 tables reverted and 0 injections restored for the village tables
+> kill @e[type=minecraft:item]
+reject (Unknown (item|block|block type|entity)|Incorrect argument for command|Unknown or incomplete command)
+
+## SQ-CWG-07 | no wild-crops-off warning; earth fill, ground match, soils and bubble-column tags filled
+shell ! grep -hE "wild crops off" logs/kubejs/server.log logs/kubejs/startup.log logs/latest.log
+shell grep -hE "biomeRules" logs/kubejs/server.log | head -5 || true
+> dumptags
+waitlog (Dumped|dumptags|tags/) 300
+sleep 10
+shell python3 -c "import json;b=json.load(open('kubejs/exported/tags/block_tags.json'));e=json.load(open('kubejs/exported/tags/entity_type_tags.json'));i=json.load(open('kubejs/exported/tags/item_tags.json'));want=[(k,len(v)) for d in (b,i) for k,v in d.items() if k.startswith(('creativeengineering:earth_fill/','creativeengineering:ground_match/')) or k=='creativeengineering:worldgen/grass_like_soils'];want+=[(k,len(v)) for k,v in e.items() if k.endswith('bubble_column_immune')];[print(k,n) for k,n in sorted(want)];empty=[k for k,n in want if n==0];print('empty:',empty);import sys;sys.exit(1 if empty or not want else 0)"
+look every listed tag has members; the bubble_column_immune entity tag present
+
+## SQ-CWG-06 | fresh world: locates resolve, /celocate status, a punch meta structure places, earth fill logs, dimensions
+> locate structure minecraft:pillager_outpost
+waitlog The nearest minecraft:pillager_outpost 600
+> locate structure minecraft:village_plains
+waitlog The nearest minecraft:village_plains 600
+capture SVP The nearest minecraft:village_plains is at \[(-?\d+), (~|-?\d+), (-?\d+)\]
+> locate structure creativeengineering:meta/pillager_camp_ruin
+waitlog (The nearest creativeengineering:meta/pillager_camp_ruin|Could not find) 900
+> celocate status
+> forceload add {SVP1-48} {SVP3-48} {SVP1+48} {SVP3+48}
+sleep 45
+> forceload remove {SVP1-48} {SVP3-48} {SVP1+48} {SVP3+48}
+> forceload add 3008 3008 3135 3135
+sleep 60
+> place structure creativeengineering:meta/meteorite_desert_pyramid 3072 100 3072
+sleep 10
+> forceload remove 3008 3008 3135 3135
+> execute in creativeengineering:autumnsky run say SA4 dim autumnsky
+> execute in creativeengineering:desert run say SA4 dim desert
+> execute in creativeengineering:flowergrove run say SA4 dim flowergrove
+> execute in creativeengineering:flowerhills run say SA4 dim flowerhills
+> execute in creativeengineering:flowerridge run say SA4 dim flowerridge
+> execute in creativeengineering:hub run say SA4 dim hub
+> execute in creativeengineering:shield run say SA4 dim shield
+> execute in creativeengineering:springsky run say SA4 dim springsky
+> execute in creativeengineering:summersky run say SA4 dim summersky
+> execute in creativeengineering:wintersky run say SA4 dim wintersky
+> execute in creativeengineering:yellowstone run say SA4 dim yellowstone
+count SA4 dim [a-z]+$ == 11
+expect The nearest minecraft:pillager_outpost
+expect The nearest minecraft:village_plains
+shell grep -nhiE "earth.?fill|ground.?match|meta_punch|punch" logs/latest.log | tail -20 || true
+look pillager camp ruin meta located (or "Could not find" within 900 s = note); /celocate status answered; the place line succeeded and the log shows the punch part (meteorite rebuilt with crater NONE) or meta piece lines; earth fill and ground match lines for the village chunks as before
+reject (Unknown (item|block|block type|entity)|Incorrect argument for command|Unknown or incomplete command|Unknown dimension|Invalid (block state|tag))
+
+## SQ-CDM2-02 | warm ocean: sea grape patches from the wild crops config, no [wild-crops] errors
+> zq biometag creativedelight:wild_crops/sea_grape
+> locate biome minecraft:warm_ocean
+waitlog The nearest minecraft:warm_ocean 600
+capture SWO The nearest minecraft:warm_ocean is at \[(-?\d+), (~|-?\d+), (-?\d+)\]
+> forceload add {SWO1-64} {SWO3-64} {SWO1+63} {SWO3+63}
+sleep 90
+> zq count {SWO1-64} 20 {SWO3-64} {SWO1+63} 64 {SWO3+63} oceanic_delight:wild_sea_grape
+> zq count {SWO1-64} 20 {SWO3-64} {SWO1+63} 64 {SWO3+63} oceanic_delight:sea_grape_plant
+waitlog \[zq\] count oceanic_delight:sea_grape_plant 120
+> forceload remove {SWO1-64} {SWO3-64} {SWO1+63} {SWO3+63}
+shell ! grep -hE "\[wild-crops\].*(rror|xception|unknown|missing)" logs/latest.log logs/kubejs/server.log
+look biometag lists the 3 oceans; one of the counts above 0 (sea grape patches in 64 chunks); no [wild-crops] errors
+reject (Unknown (item|block|block type|entity)|Incorrect argument for command|Unknown or incomplete command|\[zq\] error)
+
+## SQ-NEST-02 | swamp, river, savanna: nests here and there, no worldgen or biome-tag errors
+> locate biome minecraft:swamp
+waitlog The nearest minecraft:swamp 600
+capture SSW The nearest minecraft:swamp is at \[(-?\d+), (~|-?\d+), (-?\d+)\]
+> locate biome minecraft:river
+waitlog The nearest minecraft:river 600
+capture SRV The nearest minecraft:river is at \[(-?\d+), (~|-?\d+), (-?\d+)\]
+> locate biome minecraft:savanna
+waitlog The nearest minecraft:savanna 600
+capture SSV The nearest minecraft:savanna is at \[(-?\d+), (~|-?\d+), (-?\d+)\]
+> forceload add {SSW1-56} {SSW3-56} {SSW1+55} {SSW3+55}
+> forceload add {SRV1-56} {SRV3-56} {SRV1+55} {SRV3+55}
+> forceload add {SSV1-56} {SSV3-56} {SSV1+55} {SSV3+55}
+sleep 120
+> zq count {SSW1-56} 55 {SSW3-56} {SSW1+55} 110 {SSW3+55} incubation_additions:duck_egg_nest
+> zq count {SSW1-56} 55 {SSW3-56} {SSW1+55} 110 {SSW3+55} incubation_additions:goose_egg_nest
+> zq count {SRV1-56} 55 {SRV3-56} {SRV1+55} 110 {SRV3+55} incubation_additions:duck_egg_nest
+> zq count {SRV1-56} 55 {SRV3-56} {SRV1+55} 110 {SRV3+55} incubation_additions:goose_egg_nest
+> zq count {SSV1-56} 55 {SSV3-56} {SSV1+55} 110 {SSV3+55} incubation_additions:emu_egg_nest
+waitlog \[zq\] count incubation_additions:emu_egg_nest 180
+> forceload remove {SSW1-56} {SSW3-56} {SSW1+55} {SSW3+55}
+> forceload remove {SRV1-56} {SRV3-56} {SRV1+55} {SRV3+55}
+> forceload remove {SSV1-56} {SSV3-56} {SSV1+55} {SSV3+55}
+shell ! grep -hiE "(incubation|nest).*(rror|xception|unknown|missing|invalid)" logs/latest.log | grep -v "Error loading class" | grep -q .
+look at least one nest across the five counts (sparse: "here and there"); none at all over 147 chunks = LOOK against the placed feature rarity in the member's placed_feature json
+reject (Unknown (item|block|block type|entity)|Incorrect argument for command|Unknown or incomplete command|\[zq\] error)

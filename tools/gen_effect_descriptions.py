@@ -14,12 +14,13 @@
 #   2. Leaves out this script's own output (kubejs/assets/creativeengineering/lang), so its placeholders never
 #      count as "found".
 #   3. Adds any pack-original MobEffects that skip a lang name entirely (e.g.
-#      creativeengineering:magic_resistance uses a hardcoded Text.of(...) display name) —
+#      creativebrewing:magic_resistance uses a hardcoded Text.of(...) display name) —
 #      see EXTRA_EFFECTS below. Grep for new ones with:
 #        grep -rn "StartupEvents.registry('mob_effect'" kubejs/startup_scripts/
 #   4. For every registered effect (kubejs/exported/mob_effects.json from /dumppotions, when present) with a name
 #      but no description anywhere, writes the PORTED text below if there is one, else a placeholder, into
-#      kubejs/assets/creativeengineering/lang/en_us.json (created if missing). Names that some jar still carries
+#      kubejs/assets/creativeengineering/lang/en_us.json (created if missing; other mods' effects only: keys of
+#      Creative Brewing's own effects live in its jar's assets/creativebrewing/lang). Names that some jar still carries
 #      for an effect nobody registers (essence:wet, Xaero's old *_beneficial switches) get nothing.
 #
 # PORTED: descriptions taken from other effect-description mods (newer JEED, MEED, Effect Insights, Effect
@@ -57,7 +58,9 @@ PLACEHOLDER_MARKER = "TODO: write a description"
 # (display name set directly via .displayName(Text.of(...)) or a Java Component).
 # key: "mod:path" -> display name to use when generating the placeholder text.
 EXTRA_EFFECTS = {
-    "creativeengineering:magic_resistance": "Magic Resistance",
+    # Creative Brewing's own effect: name and description ship in the CB jar (assets/creativebrewing/lang, plan_cb_publish
+    # M3), which lang_index reads from mods/, so this row only matters before that jar is installed.
+    "creativebrewing:magic_resistance": "Magic Resistance",
     # Everything Copper ships no name for it (effects.md F1); the placeholder still needs a key to sit on.
     "everythingcopper:copper_poisoning": "Copper Poisoning",
 }

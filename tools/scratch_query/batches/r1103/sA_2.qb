@@ -1,0 +1,1069 @@
+# Run r1103 slice A, boot 2: CURRENT jars (patcherMod 1.1.08, creativeworldgen-1.0.0, creativedelight 11-03 00:08,
+# creativebrewing 11-03 00:08) on boot 1's old-pack world (level sAo, group A superflat). Setup: sA_setup.md "Boot 2"
+# (config: creativeworldgen-common.toml deleted, CE [named_mobs] chance edited to 0.02; probes zq, zp, zact, zcount,
+# zloot, salt_probe, sA_probe; spawn-animals=true, difficulty=normal, monsters on).
+# Order: boot-log rows (kjsexpect rows here, no /reload anywhere in this file), old-world read-backs, item and recipe
+# rows, block rows, the long loot rows (SQ-MDL), the raid (SQ-CWG-08b) last.
+# Home: marker sahome from boot 1 (capture SAH again). Work area x+0..+96, z+0..+96 forceloaded by SA2-00.
+# Bots (perfBot, invulnerable, starter kit 10 ticks after the first join: every row clears its bot first).
+pace 2
+
+## SA2-00 | setup: home marker, clock, weather, forceload the work area (not a queue row)
+bootexpect Done \(
+> data get entity @e[type=minecraft:marker,tag=sahome,limit=1] Pos
+capture SAH entity data: \[(-?\d+)\.\d+d, (-?\d+)\.\d+d, (-?\d+)\.\d+d\]
+> gamerule doDaylightCycle false
+> time set noon
+> gamerule doWeatherCycle false
+> weather clear 1000000
+> gamerule doPatrolSpawning false
+> gamerule doTraderSpawning false
+> gamerule randomTickSpeed 3
+> forceload add {SAH1} {SAH3} {SAH1+96} {SAH3+96}
+sleep 30
+> say SA2 setup done
+expect SA2 setup done
+reject (Unknown (item|block|block type|entity)|does not (have|accept)|Incorrect argument for command|Unknown or incomplete command|That position is not loaded|No player was found|no such bot|no such item|Invalid (block state|tag)|\[(zq|sa|zp)\] (error|no player))
+
+## SQ-CWG-01 | Creative Worldgen mixins apply once, More Mooblooms and Baby Mobs nested once
+bootreject (Mixin apply failed|InvalidMixinException|MixinApplyError).*(creativeworldgen|creativeengineering)
+bootreject DuplicateModsFound|Found duplicate mods
+shell grep -E "creativeworldgen.mixins.json|creativeengineering.mixins.json" logs/latest.log | head -20
+shell echo "mixing lines from creativeworldgen.mixins.json: $(grep -c 'from creativeworldgen.mixins.json' logs/debug.log || true)"
+shell echo "worldgen mixins still applied from patcherMod json (should be none of the moved ones):"; grep -oE "Mixing [A-Za-z_.]+ from creativeengineering.mixins.json" logs/debug.log | grep -iE "worldgen|structure|locate|leaf|raid|named|forgiving|mobcap|spawn" | sort -u | head -20 || true
+shell grep -oiE "(moreMooblooms|babyMobs)-[0-9.]+[^ ]*\.jar" logs/debug.log | sort | uniq -c
+shell ! ls mods | grep -iE "^(moreMooblooms|babyMobs)"
+look mixing count = 60 minus the gated ones whose mod is absent (AE2, Quark, MCA, LC, Cloud Storage, Forgiving Void, Bushier Flowers: those mods are installed, so expect about 60); no moved worldgen mixin from creativeengineering.mixins.json; each of moreMooblooms / babyMobs found once, from jarjar of creativeworldgen
+
+## SQ-CWG-02 | config sections carried from creativeengineering-common.toml into creativeworldgen-common.toml (first boot)
+bootexpect config sections .*carried over
+shell grep -nE "config sections .*carried" logs/latest.log | head -5
+shell ls -l config/creativeworldgen-common.toml && grep -nE "^\[" config/creativeworldgen-common.toml | head -40
+shell awk '/^\[named_mobs\]/{s=1;next} /^\[/{s=0} s && /chance/' config/creativeworldgen-common.toml | grep -E "chance = 0\.02"
+shell awk '/^\[perf\]/{s=1;next} /^\[/{s=0} s && /=/' config/creativeworldgen-common.toml | grep -vE "^\s*#" | wc -l
+shell ! grep -nE "^\[(worldgen|forgiving_void|leaf_decay|raids|named_mobs)\]" config/creativeengineering-common.toml
+shell grep -nE "(WARN|ERROR).*(creativeworldgen-common|creativeengineering-common)" logs/latest.log | head -5 || true
+look named_mobs chance 0.02 carried (edited before this boot); [perf] in the Worldgen file has the 13 mob cap keys only (count above); the CE file lost the six sections. Second-boot half: SQ-CWG-02b in sA_3.qb
+
+## SQ-CWG-03 | Creative Worldgen script pack loads, no missing-name errors, reports rewritten
+shell grep -hE "startup script packs in order" logs/kubejs/startup.log logs/latest.log | head -3
+shell grep -hE "startup script packs in order" logs/kubejs/startup.log logs/latest.log | grep -q creativeworldgen
+shell ! grep -hE "global\.CWG missing|section in any registered config|\[loot-tuning\] could not read" logs/kubejs/startup.log logs/kubejs/server.log logs/latest.log
+shell grep -hE "creativeworldgen|NCH\.cfg|loot-tuning" logs/kubejs/startup.log logs/kubejs/server.log | head -30
+shell find kubejs -path kubejs/exported -prune -o -type f -newer eula.txt -print | grep -vE "\.log$" | head -30
+look reports written this boot (structure, bee nest, wild flower, mushroom, mob spawn) appear in the find list
+
+## SQ-CNG-01 | Canned Goods repack nested in Creative Delight, no golem mixins
+bootexpect repackedCannedGoods-1\.19\.2-3-ce-19\.2-01
+bootreject CannedGolemColorMixin|CannedGolemRendererMixin
+bootreject member canned_goods is loaded from CannedGoods
+shell grep -hE "canned_goods|repackedCannedGoods|creativedelight.mixins.json" logs/latest.log logs/debug.log | head -20
+shell grep -hiE "canned_golem|CannedGolem" logs/latest.log | head -10 || true
+shell ! ls mods | grep -i "^CannedGoods-"
+look canned_goods version 1.19.2-3-ce-19.2-01 in the debug.log mod list, found by JarInJarDependencyLocator
+
+## SQ-ENM-01 | End's member: ends_delight and enders_additions once, from repackedEnds
+bootreject DuplicateModsFound|Found duplicate mods
+shell grep -nhE "enders_additions|ends_delight|Duplicate|endersAdditions" logs/latest.log logs/debug.log | head -20
+shell unzip -l mods/creativedelight-1.0.0.jar | grep -oE "jarjar/[A-Za-z]+-[^ ]+\.jar" | grep -iE "ends|enders"
+shell ! unzip -l mods/creativedelight-1.0.0.jar | grep -q "jarjar/endersAdditions-"
+shell grep -hoE "enders_upstream_(assets|data)" logs/latest.log logs/debug.log | sort -u
+look both mod ids from repackedEnds-...-03 only; both enders_upstream packs listed
+
+## SQ-SLT-01 | Salt and Create: The Salt nested in Creative Delight
+bootreject (Mixin apply failed|InvalidMixinException).*(salt|create__the_salt)
+bootreject SaltRockNoDissolveMixin
+bootreject DuplicateModsFound|Found duplicate mods
+shell grep -nE "salt|create__the_salt" logs/latest.log | grep -iE "error|exception|mixin" | head -10 || true
+shell grep -hoE "(salt|create__the_salt)[^a-z_][^ ]*(1\.2\.4\.1-ce-19\.2-01|1\.19\.2-1\.1\.0-ce-19\.2-01)" logs/debug.log logs/latest.log | sort -u | head
+shell ! ls mods | grep -iE "^salt-|create_salt"
+look mod salt 1.2.4.1-ce-19.2-01 and create__the_salt 1.19.2-1.1.0-ce-19.2-01 listed (Jar-in-Jar); the error grep above shows nothing from Salt
+
+## SQ-SLT-02 | Salt's access transformer reaches the nested jar
+bootreject IllegalAccessError
+shell grep -hnE "IllegalAccessError|f_60445_|isRandomlyTicking|m_182450_|accesstransformer" logs/latest.log | head -10 || true
+shell grep -hE "Vintage salt blocks random tick like The Salt" logs/latest.log logs/kubejs/*.log | head -3
+shell grep -qhE "\[salt\] 30 Vintage salt blocks random tick like The Salt" logs/latest.log logs/kubejs/startup.log logs/kubejs/server.log
+
+## SQ-SWP-01 | swap lists: merge count, live in the world, swaps toml created
+bootreject merged twice|already merged
+bootreject Error occurred while handling event
+shell grep -hE "\[swaps\]|item merge" logs/latest.log logs/kubejs/startup.log | head -20
+shell grep -hE "\[itemMerges\] creativedelight" logs/kubejs/server.log logs/latest.log | head -3
+shell ls config/creativeengineering-swaps.toml && grep -nE "^\[swappers\]|^\s*(onWorldLoad|onPlayerDataLoad|onContainerOpen|onCommand|onceWhenUpdated) =" config/creativeengineering-swaps.toml
+look record the logged merge count (43 pairs in the 11-03 swap lists; the row text says 38 / 40 / 43: take the number and put it in item_merges.md 6.1); the four counts agree; five keys under [swappers]
+
+## SQ-MDL-01 | Miner's drops on the pack loot engine (boot load; the /reload half is SQ-MDL-01b in sA_3.qb)
+kjsexpect \[loot-drops\] 17 drop pools and 2 shared entries in 11 tables
+kjsreject \[miners_delight\] the loot engine has no drop rules
+bootreject Error occurred while handling event.*miners_delight
+shell grep -hcE "\[loot-drops\] [0-9]+ drop pools" logs/kubejs/server.log
+shell grep -hE "\[loot-drops\]" logs/kubejs/server.log | head -10
+look one "[loot-drops] 17 drop pools ..." line per load (count 1 above); no [loot-drops] warning line
+
+## SQ-PCK-01 | Pancake family: no food types or Display Delight dish warnings
+shell grep -nE "Error occurred while handling event|\[food types\]|\[food families\]|Display Delight dish|placed_sweet_potato_pancakes" logs/latest.log logs/kubejs/server.log logs/kubejs/startup.log | head -30 || true
+shell ! grep -hE "no item_dict key i\.t_food_sweet_pancake|Display Delight dish placed_sweet_potato_pancakes: item .* not installed" logs/latest.log logs/kubejs/server.log logs/kubejs/startup.log
+shell ! grep -hiE "(missing model|loot).*placed_sweet_potato_pancakes" logs/latest.log
+shell ! grep -hE "(food_type_tags|seasoning_tags)\.js.*(rror|xception)" logs/kubejs/server.log logs/kubejs/startup.log
+
+## SQ-BBQF-01 | six BBQ seasonings and grilled defined
+shell grep -hE "\[seasoning\]" logs/kubejs/startup.log | head -20
+shell echo "defined lines: $(grep -hcE '\[seasoning\].*defined' logs/kubejs/startup.log || true)"
+shell grep -qhE "\[seasoning\].*defined.*barbequesdelight:grilled" logs/kubejs/startup.log
+shell ! grep -hE "\[seasoning\].*bad definition" logs/kubejs/startup.log
+look defined lines for the 6 BBQ seasonings (barbeque_sauce, buffalo_sauce, chili, cumin, honey_mustard, pepper) and barbequesdelight:grilled
+
+## SQ-BBQF-05 | Creative Delight [food] seasoning keys
+shell awk '/^\[food\]/{s=1;next} /^\[/{s=0} s && /(maxSeasonings|grilledCountsTowardMax)/' config/creativedelight-common.toml
+shell awk '/^\[food\]/{s=1;next} /^\[/{s=0} s' config/creativedelight-common.toml | grep -qE "maxSeasonings = 2"
+shell awk '/^\[food\]/{s=1;next} /^\[/{s=0} s' config/creativedelight-common.toml | grep -qE "grilledCountsTowardMax = false"
+
+## SQ-GLD2-03 | golden values: 46 set, golden and gilded beef hunger
+shell grep -hE "\[golden values\]" logs/kubejs/startup.log logs/latest.log | head -3
+shell grep -qhE "\[golden values\] 46" logs/kubejs/startup.log logs/latest.log
+> zq food goldenfood:golden_cooked_beef
+> zq food goldenfood:enchanted_golden_cooked_beef
+waitlog \[zq\] food goldenfood:enchanted_golden_cooked_beef
+look golden beef nutrition 16 (at the input modifier: modifier as cooked beef), gilded (enchanted) beef 20; /dumpfood half: Boot 0's kubejs/exported/food (sA_setup.md)
+
+## SQ-CWG-08 | old world on the new jars: chunks, mobs and blocks intact; mooshroom breeding; leaf decay; Devtools commands
+> execute if entity @e[type=minecraft:mooshroom,tag=sacwgbrown] run say SA2 brown ok
+> execute if entity @e[type=minecraft:mooshroom,tag=sacwgred] run say SA2 red ok
+> scoreboard objectives add sacwg dummy
+> execute store result score #sacows sacwg if entity @e[type=minecraft:cow,tag=sacwgc]
+> scoreboard players get #sacows sacwg
+expect SA2 brown ok
+expect SA2 red ok
+expect #sacows has 2 \[sacwg\]
+> forceload add {SAH1+112} {SAH3-48} {SAH1+208} {SAH3+48}
+sleep 30
+> clone {SAH1+128} {SAH2-4} {SAH3-32} {SAH1+191} {SAH2+3} {SAH3+31} {SAH1+128} {SAH2+60} {SAH3-32} filtered minecraft:bell
+> clone {SAH1+128} {SAH2-4} {SAH3-32} {SAH1+191} {SAH2+3} {SAH3+31} {SAH1+128} {SAH2+80} {SAH3-32} filtered #minecraft:beds
+# mooshroom pair bred (pen x+41..+45 z+9..+13, a bot nearby so the pen chunks get entity ticks)
+> pbot spawn sacwg {SAH1+43} {SAH2+3} {SAH3+11} minecraft:overworld creative
+> data merge entity @e[type=minecraft:mooshroom,tag=sacwgbrown,limit=1] {InLove:600}
+> data merge entity @e[type=minecraft:mooshroom,tag=sacwgred,limit=1] {InLove:600}
+sleep 40
+> zcount {SAH1+41} {SAH2} {SAH3+9} {SAH1+45} {SAH2+2} {SAH3+13}
+waitlog \[zcount\] entities 30
+> execute as @e[type=minecraft:mooshroom,tag=!sacwgm,x={SAH1+40},y={SAH2},z={SAH3+8},dx=6,dy=3,dz=6] run data get entity @s Type
+# leaf decay cascade: log + leaves, log removed, bot within 128 blocks for random ticks
+> fill {SAH1+68} {SAH2+2} {SAH3+18} {SAH1+72} {SAH2+4} {SAH3+22} minecraft:oak_leaves[persistent=false]
+> fill {SAH1+70} {SAH2} {SAH3+20} {SAH1+70} {SAH2+4} {SAH3+20} minecraft:oak_log
+sleep 3
+> setblock {SAH1+70} {SAH2} {SAH3+20} minecraft:air destroy
+> fill {SAH1+70} {SAH2+1} {SAH3+20} {SAH1+70} {SAH2+4} {SAH3+20} minecraft:air destroy
+> gamerule randomTickSpeed 200
+sleep 25
+> gamerule randomTickSpeed 3
+> zq count {SAH1+66} {SAH2} {SAH3+16} {SAH1+74} {SAH2+6} {SAH3+24} minecraft:oak_leaves
+waitlog \[zq\] count minecraft:oak_leaves
+> ceperf mobcap
+> dumpspawns
+> ceplace status
+sleep 5
+> pbot remove sacwg
+look bell / bed clone counts equal boot 1's (SQ-CWG-08o); the mooshroom pair bred (a calf, Type as the pack's rule for brown x red); oak_leaves count 0 or far below 75 after 25 s at randomTickSpeed 200; ceperf mobcap, dumpspawns and ceplace status each answered (no "Unknown command"). Cow beside a flower biome: n/a in superflat (moobloom conversion: CQ-CWG-11)
+reject (Unknown (item|block|block type|entity)|does not (have|accept)|Incorrect argument for command|Unknown or incomplete command|That position is not loaded|No player was found|no such bot|no such item|Invalid (block state|tag)|\[(zq|sa|zp)\] (error|no player))
+
+## SQ-CNG-03 | old world: the dyed golem keeps 11b, the other 14b
+> data get entity @e[type=canned_goods:canned_golem,tag=sacngblue,limit=1] Color
+> data get entity @e[type=canned_goods:canned_golem,tag=sacngred,limit=1] Color
+expect has the following entity data: 11b
+expect has the following entity data: 14b
+reject (Unknown (item|block|block type|entity)|does not (have|accept)|Incorrect argument for command|Unknown or incomplete command|That position is not loaded|No player was found|no such bot|no such item|Invalid (block state|tag))
+
+## SQ-GLD-01 | old world: Golden Food upstream data, removed enchantment dropped, cakes and chests intact
+bootexpect Golden Food upstream assets: \d+ files
+bootexpect data: 24 files
+bootexpect \[swaps\] minecraft:enchantment: 1 removed id\(s\) dropped
+shell grep -nhiE "goldenfood_upstream|Golden Food upstream|Missing|remap|swaps|goldenfood" logs/latest.log | head -30
+shell ! grep -hiE "(missing|remap).*goldenfood:" logs/latest.log | grep -v gf_enchantment | grep -q .
+> execute if block {SAH1+20} {SAH2} {SAH3+10} goldenfood:golden_cake[bites=2] run say SA2 cake2 ok
+> execute if block {SAH1+22} {SAH2} {SAH3+10} goldenfood:enchanted_golden_cake[bites=0] run say SA2 ecake0 ok
+> data get block {SAH1+20} {SAH2} {SAH3+14} Items
+> data get block {SAH1+23} {SAH2} {SAH3+14} Items
+expect SA2 cake2 ok
+expect SA2 ecake0 ok
+expect goldenfood:enchanted_golden_cooked_cod
+expect goldenfood:enchanted_golden_honey_bottle
+expect StoredEnchantments:\[\{id:"goldenfood:gf_enchantment"
+look both chests list all 27 + 23 stacks as in SQ-GLD-01o (64 golden carrots, enchanted golden apple, the book with its unknown StoredEnchantments id kept)
+reject (Unknown (item|block|block type|entity)|does not (have|accept)|Incorrect argument for command|Unknown or incomplete command|That position is not loaded|No player was found|no such bot|no such item|Invalid (block state|tag))
+
+## SQ-ENM-02 | old world: End plants, dishes and the End House keep their ids
+shell ! grep -hiE "(missing|remap).*endersdelight:(amberveil|ethereal_saffron|chorus_flame|chorusflame|voidpepper|crushed_voidpepper|chicken_curry|steak_fries|veil_of_flames)" logs/latest.log
+shell grep -hiE "Missing|remap|endersdelight:" logs/latest.log | head -15 || true
+> execute if block {SAH1+30} {SAH2} {SAH3+10} endersdelight:amberveil_mushroom run say SA2 plant1 ok
+> execute if block {SAH1+32} {SAH2} {SAH3+10} endersdelight:ethereal_saffron_bush run say SA2 plant2 ok
+> execute if block {SAH1+34} {SAH2} {SAH3+10} endersdelight:chorus_flame_block run say SA2 plant3 ok
+> execute if block {SAH1+36} {SAH2} {SAH3+10} endersdelight:voidpepper_block[pepper=true] run say SA2 plant4 ok
+> data get block {SAH1+30} {SAH2} {SAH3+14} Items
+expect SA2 plant1 ok
+expect SA2 plant2 ok
+expect SA2 plant3 ok
+expect SA2 plant4 ok
+expect endersdelight:steak_fries
+expect endersdelight:veil_of_flames_risotto
+> execute in minecraft:the_end run forceload add -48 12 -12 48
+sleep 20
+> execute in minecraft:the_end run clone -46 40 14 -14 69 46 -46 200 14 filtered #minecraft:planks
+> execute in minecraft:the_end run clone -46 70 14 -14 99 46 -46 230 14 filtered #minecraft:planks
+> execute in minecraft:the_end run clone -46 40 14 -14 69 46 -46 200 14 filtered endersdelight:chorus_flame_block
+> execute in minecraft:the_end run clone -46 70 14 -14 99 46 -46 230 14 filtered endersdelight:chorus_flame_block
+look clone counts equal SQ-ENM-02o's (End House blocks kept); LOOK only if -02o failed to place the house
+reject (Unknown (item|block|block type|entity)|does not (have|accept)|Incorrect argument for command|Unknown or incomplete command|That position is not loaded|No player was found|no such bot|no such item|Invalid (block state|tag))
+
+## SQ-CWG-04 | loot tuning lists the Creative Delight crate rules
+> loottuning
+sleep 2
+> zloot packs crate
+waitlog \[zloot\] (packs|pack[s]?) crate: \d+ 30
+expect Loot tuning: active
+expect \[zloot\] pack .*crate
+shell grep -hiE "lootRules|crate" logs/kubejs/server.log | head -15
+look veggie, vintage, rustic and cave carrot crate pairs listed (the CD rules ran after 05_tuning.js); same rule count as /loottuning on SQ-CWG-05 (sA_3.qb)
+reject (Unknown (item|block|block type|entity)|Incorrect argument for command|Unknown or incomplete command|\[zloot\] error)
+
+## SQ-CWG-09 | Forgiving Void in the End, End illager divers, Farmer's donor pack order
+> execute in minecraft:the_end run forceload add 192 0 239 31
+sleep 10
+> pbot spawn safv 210 5 16 minecraft:the_end survival
+sleep 20
+> data get entity safv Pos
+> data get entity safv Dimension
+> execute in minecraft:the_end run summon minecraft:pillager -30 75 30 {PersistenceRequired:1b,Tags:["saendp"]}
+> execute in minecraft:the_end run summon minecraft:witch -28 75 30 {PersistenceRequired:1b,Tags:["saendp"]}
+sleep 4
+> execute in minecraft:the_end run data get entity @e[type=minecraft:pillager,tag=saendp,limit=1] ArmorItems
+> execute in minecraft:the_end run data get entity @e[type=minecraft:witch,tag=saendp,limit=1] ArmorItems
+expect create:copper_diving_helmet
+shell grep -nhE "Farmer's Structures donor|FarmersDonor" logs/latest.log | head -5
+shell grep -qhE "Farmer's Structures donor|FarmersDonor" logs/latest.log
+> pbot remove safv
+look safv still in minecraft:the_end, caught by Forgiving Void (y well above 0, x pulled toward 0 from 210, not dead); pillager and witch wear copper diving helmet, backtank, boots; donor line says the donor pack sorts above Farmer's Structures. "upgrade_aquatic flares refused": no server-side command decides it (LOOK in the log for a refused flare line if any)
+reject (Unknown (item|block|block type|entity)|does not (have|accept)|Incorrect argument for command|Unknown or incomplete command|That position is not loaded|No player was found|no such bot|no such item|Invalid (block state|tag))
+
+## SQ-CWG-10 | build_deploy.py dry run with the Creative Worldgen jar in mods/
+shell cd "$INST" && python3 tools/build_deploy.py --dry-run 2>&1 | tail -40; exit ${PIPESTATUS[0]}
+look no error on the Farmer's donor pin or check_climate_reader; the Worldgen script tree and data/more_mooblooms reported dev-only (not in the payload)
+
+## SQ-SLT-03 | /salttest: raw rock salt stays, Salt Block dissolves
+> salttest
+waitlog \[salttest\] done 400
+expect \[salttest\] PASS raw rock salt beside water stays
+expect \[salttest\] PASS salt:salt_block beside water dissolves
+expect \[salttest\] PASS leftover vintagedelight:salt_block by water dissolves
+reject \[salttest\] FAIL
+look every other line as in SQ-SALT-05 / -06 (perf/runs/r1102b/r rows SQ-SALT-06, -08)
+
+## SQ-SLT-04 | Salt recipes and tags after the move (pre-move baseline: batches/r1103/sA_baseline, 10-30 dump)
+> zq bytype salt:salting
+waitlog \[zq\] bytype salt:salting: \d+ 60
+> zq itemtag salt:can_be_salted
+> zq recipes create__the_salt:
+waitlog \[zq\] recipes matching create__the_salt:: \d+ 60
+> zq recipes create__the_salt:bread
+> zq recipes create__the_salt:cooked_beef_salted
+> zq recipes create__the_salt:salt_create_
+> zq recipes salt:salt_from_raw_rock_salt
+> zq makes vintagedelight:salt_dust
+waitlog \[zq\] makes vintagedelight:salt_dust: \d+ 60
+expect \[zq\] recipes matching create__the_salt:bread: [1-9]
+expect \[zq\] recipes matching create__the_salt:cooked_beef_salted: [1-9]
+expect \[zq\] recipes matching create__the_salt:salt_create_: 0
+expect \[zq\] recipes matching salt:salt_from_raw_rock_salt: 0
+shell B="$INST/tools/scratch_query/batches/r1103/sA_baseline"; echo "baseline salting: $(grep -c ',salt:salting,' $B/salt_recipes_1030.csv)"; echo "baseline create__the_salt / create_salt ids: $(grep -cE '^(create__the_salt|create_salt):' $B/salt_recipes_1030.csv)"; python3 -c "import json;d=json.load(open('$B/salt_item_tags_1030.json'));print('baseline #salt:can_be_salted', len(d.get('salt:can_be_salted',[])))"
+shell D="${B0:-/tmp/claude-1000/-home-liam--local-share-atlauncher-instances-CreativeEngineering2/51e0db54-43f7-4a69-b393-9d5ee1c5b98d/scratchpad/r1103/b0}/srv/kubejs/exported"; echo "Boot 0 salting: $(grep -c ',salt:salting,' $D/recipes/all.csv)  create__the_salt ids: $(grep -cE '^create__the_salt:' $D/recipes/all.csv)"; python3 -c "import json;d=json.load(open('$D/tags/item_tags.json'));print('Boot 0 #salt:can_be_salted', len(d.get('salt:can_be_salted',[])))"
+look salting count and Create: The Salt recipe count match the baseline (ids unchanged); #salt:can_be_salted = baseline 148 plus the SQ-SALT2-01 additions (Calamari Roll, Crab Rangoon, kangaroo burger) minus the refused three; the raw rock salt to 4 salt dust recipe present among the salt_dust makers
+reject (Unknown or incomplete command|\[zq\] error)
+
+## SQ-SALT2-01 | #salt:can_be_salted accepts the three, refuses the three
+> zq itemtag salt:can_be_salted
+waitlog \[zq\] itemtag salt:can_be_salted 30
+expect itemtag salt:can_be_salted .*rusticdelight:calamari_roll( |$)
+expect itemtag salt:can_be_salted .*delightful:crab_rangoon( |$)
+expect itemtag salt:can_be_salted .*alexsmobs:kangaroo_burger( |$)
+reject itemtag salt:can_be_salted .*farmersdelight:bone_broth( |$)
+reject itemtag salt:can_be_salted .*farmersdelight:cooked_rice( |$)
+reject itemtag salt:can_be_salted .*farmersdelight:tomato_sauce( |$)
+reject (Unknown or incomplete command|\[zq\] error)
+
+## SQ-CNG-02 | Canned Goods items exist, generated cans registered with servings
+> pbot spawn sacng {SAH1+8} {SAH2} {SAH3+30} minecraft:overworld survival
+sleep 2
+> clear sacng
+> give sacng canned_goods:canned_beef
+> give sacng canned_goods:empty_can
+> give sacng canned_goods:crushed_empty_can
+> give sacng creativeengineering:canned_beetroot
+> zp inv sacng
+> data get entity sacng Inventory
+> zq tagsof creativeengineering:canned_beetroot
+> zq tagsof canned_goods:canned_beef
+waitlog \[zq\] item tags of canned_goods:canned_beef 30
+expect inv sacng: .*canned_goods:canned_beef
+expect inv sacng: .*creativeengineering:canned_beetroot
+expect item tags of creativeengineering:canned_beetroot: .*creativeengineering:cans/servings/
+shell grep -hE "\[cans\] registered" logs/kubejs/startup.log | head -3
+> pbot remove sacng
+look "[cans] registered N" (228 in r1102b, or the current count); servings NBT on the held cans in the Inventory line
+reject (Unknown (item|block|block type|entity)|Incorrect argument for command|Unknown or incomplete command|No player was found|no such bot|no such item|\[(zq|zp)\] (error|no player))
+
+## SQ-CNG-04 | a new golem: red default, dyed 5b (the restart, lightning and kill half: SQ-CNG-04b in sA_3.qb)
+> summon canned_goods:canned_golem {SAH1+14} {SAH2} {SAH3+10} {PersistenceRequired:1b,NoAI:1b,Tags:["sacng4"]}
+sleep 2
+> data get entity @e[type=canned_goods:canned_golem,tag=sacng4,limit=1] Color
+expect has the following entity data: 14b
+> data merge entity @e[type=canned_goods:canned_golem,tag=sacng4,limit=1] {Color:5b}
+> data get entity @e[type=canned_goods:canned_golem,tag=sacng4,limit=1] Color
+expect has the following entity data: 5b
+reject (Unknown (item|block|block type|entity)|Incorrect argument for command|Unknown or incomplete command|Exception)
+
+## SQ-ENM-05 | spice and End soil tags, with Ender's Delight 1.2.2 (the without half: SQ-ENM-05b in sA_4.qb)
+> zq itemtag creativeengineering:spices
+> zq blocktag creativedelight:end_plant_soil_slow
+> zq blocktag creativedelight:end_plant_soil_fast
+waitlog \[zq\] blocktag creativedelight:end_plant_soil_fast 30
+expect itemtag creativeengineering:spices .*endersdelight:voidpepper( |$)
+expect itemtag creativeengineering:spices .*endersdelight:crushed_voidpepper( |$)
+expect blocktag creativedelight:end_plant_soil_slow .*minecraft:end_stone( |$)
+expect blocktag creativedelight:end_plant_soil_fast .*endercrop:tilled_end_stone( |$)
+reject (Unknown or incomplete command|\[zq\] error)
+
+## SQ-SWP-02 | purged ids not hidden as JEI removals; long coffee becomes coffee
+shell echo "jeiRemove lines: $(grep -c '\[jeiRemove\]' logs/kubejs/server.log || true)"
+shell grep -hE "\[jeiRemove\]" logs/kubejs/server.log | grep -E "farmersrespite:(coffee|long_coffee|strong_coffee|coffee_beans|coffee_berries)|alexsmobs:banana|delightful:nut_butter|moredelight:potato_salad|vintagedelight:(vinegar|nut_mash)_bottle" | head || true
+shell ! grep -hE "\[jeiRemove\].*(farmersrespite:(coffee|long_coffee|strong_coffee)|alexsmobs:banana|vintagedelight:vinegar_bottle)( |,|$)" logs/kubejs/server.log
+> pbot spawn saswp2 {SAH1+8} {SAH2} {SAH3+34} minecraft:overworld survival
+sleep 2
+> clear saswp2
+> give saswp2 farmersrespite:long_coffee 2
+sleep 2
+> zp inv saswp2
+> pbot remove saswp2
+sleep 1
+> pbot spawn saswp2 {SAH1+8} {SAH2} {SAH3+34} minecraft:overworld survival
+sleep 2
+> zp inv saswp2
+waitlog \[zp\] inv saswp2 30
+expect inv saswp2: .*2 rusticdelight:coffee
+> pbot remove saswp2
+look first inv line (before the relog) shows whether the give alone converted; the relog line must show 2 rusticdelight:coffee
+reject (Unknown (item|block|block type|entity)|Incorrect argument for command|Unknown or incomplete command|No player was found|no such bot|no such item|\[(zq|zp)\] (error|no player))
+
+## SQ-SWP-03 | /ceswap items rewrites a chest stack, keeps its name
+> setblock {SAH1+22} {SAH2} {SAH3+50} minecraft:chest
+> data merge block {SAH1+22} {SAH2} {SAH3+50} {Items:[{Slot:0b,id:"alexsmobs:banana",Count:5b,tag:{display:{Name:'{"text":"Kept"}'}}}]}
+> ceswap items
+sleep 2
+> data get block {SAH1+22} {SAH2} {SAH3+50} Items
+expect Slot: 0b, id: "neapolitan:banana"|Slot:0b,id:"neapolitan:banana"
+expect neapolitan:banana.*Count: 5b|neapolitan:banana.*Count:5b
+expect Kept
+look /ceswap reports >= 1 stack rewritten
+reject (Unknown (item|block|block type|entity)|Incorrect argument for command|Unknown or incomplete command)
+
+## SQ-SWP-04 | 64 vinegar bottles become jar stacks within the stack size
+> setblock {SAH1+22} {SAH2} {SAH3+52} minecraft:chest
+> data merge block {SAH1+22} {SAH2} {SAH3+52} {Items:[{Slot:0b,id:"vintagedelight:vinegar_bottle",Count:64b}]}
+> zq item vintagedelight:vinegar_jar
+> ceswap items
+sleep 2
+> data get block {SAH1+22} {SAH2} {SAH3+52} Items
+> zcount {SAH1+20} {SAH2} {SAH3+50} {SAH1+24} {SAH2+2} {SAH3+54}
+waitlog \[zcount\] entities 30
+expect vintagedelight:vinegar_jar
+reject vintagedelight:vinegar_bottle
+look only vinegar_jar stacks, each at most the max stack in the zq item line, counts summing to 64; no item entities in zcount
+reject (Unknown (item|block|block type|entity)|Incorrect argument for command|Unknown or incomplete command)
+
+## SQ-SWP-05 | nested shulker box contents rewritten
+> data merge block {SAH1+22} {SAH2} {SAH3+50} {Items:[{Slot:1b,id:"minecraft:shulker_box",Count:1b,tag:{BlockEntityTag:{Items:[{Slot:0b,id:"farmersrespite:coffee",Count:3b}]}}}]}
+> ceswap items
+sleep 2
+> data get block {SAH1+22} {SAH2} {SAH3+50} Items[1]
+expect rusticdelight:coffee
+expect minecraft:shulker_box
+reject farmersrespite:coffee"
+reject (Unknown (item|block|block type|entity)|Incorrect argument for command|Unknown or incomplete command)
+
+## SQ-SWP-07 | a dropped old item becomes the survivor as it enters the world
+> summon minecraft:item {SAH1+26} {SAH2+1} {SAH3+50} {Item:{id:"alexsmobs:banana",Count:3b},PickupDelay:32767s,Tags:["saswp7"]}
+sleep 1
+> data get entity @e[type=minecraft:item,tag=saswp7,limit=1] Item
+expect neapolitan:banana
+reject alexsmobs:banana"
+> kill @e[type=minecraft:item,tag=saswp7]
+reject (Unknown (item|block|block type|entity)|Incorrect argument for command|Unknown or incomplete command)
+
+## SQ-GLD-02 | golden and enchanted bread, golden carrot, enchanted golden apple: edible full, effects, stack 1
+> pbot spawn sagld {SAH1+10} {SAH2} {SAH3+40} minecraft:overworld survival
+sleep 2
+> clear sagld
+> zp hunger sagld 20
+> zq item goldenfood:enchanted_golden_bread
+> zq item minecraft:enchanted_golden_apple
+> zq item goldenfood:golden_bread
+> effect clear sagld
+> pbot hold sagld goldenfood:golden_bread
+> zp hunger sagld 20
+> sa canuse sagld
+> zp eat sagld
+> zp effects sagld
+> effect clear sagld
+> pbot hold sagld goldenfood:enchanted_golden_bread
+> zp hunger sagld 20
+> sa canuse sagld
+> zp eat sagld
+> zp effects sagld
+> effect clear sagld
+> pbot hold sagld minecraft:golden_carrot
+> zp hunger sagld 20
+> sa canuse sagld
+> zp eat sagld
+> zp effects sagld
+> effect clear sagld
+> pbot hold sagld minecraft:enchanted_golden_apple
+> zp hunger sagld 20
+> sa canuse sagld
+> zp eat sagld
+> zp effects sagld
+> effect clear sagld
+waitlog \[zp\] effects sagld 30
+expect item goldenfood:enchanted_golden_bread: .*max stack 1$
+expect item minecraft:enchanted_golden_apple: .*max stack 1$
+count \[sa\] canuse sagld .* food 20: (CONSUME|SUCCESS) using=true >= 4
+look golden bread: Regeneration amp 1 100t, Absorption amp 0 2400t; enchanted bread and enchanted apple: Regeneration amp 1 400t, Resistance amp 0 6000t, Fire Resistance 6000t, Absorption amp 3 2400t; golden carrot as golden bread. Glint: client
+reject (Unknown (item|block|block type|entity)|Incorrect argument for command|Unknown or incomplete command|No player was found|no such bot|no such item|\[(zq|zp|sa)\] (error|no player))
+
+## SQ-GLD-03 | golden stews, honey (cures Poison), milk (clears effects, no food effects); containers and stack sizes
+> zq item goldenfood:golden_honey_bottle
+> zq item goldenfood:enchanted_golden_honey_bottle
+> pbot hold sagld goldenfood:golden_mushroom_stew
+> zp eat sagld
+> zp effects sagld
+> effect clear sagld
+> pbot hold sagld goldenfood:enchanted_golden_mushroom_stew
+> zp eat sagld
+> effect clear sagld
+> pbot hold sagld goldenfood:golden_beetroot_soup
+> zp eat sagld
+> effect clear sagld
+> pbot hold sagld goldenfood:enchanted_golden_beetroot_soup
+> zp eat sagld
+> effect clear sagld
+> pbot hold sagld goldenfood:golden_rabbit_stew
+> zp eat sagld
+> effect clear sagld
+> pbot hold sagld goldenfood:enchanted_golden_rabbit_stew
+> zp eat sagld
+> effect clear sagld
+> effect give sagld minecraft:poison 30
+> pbot hold sagld goldenfood:golden_honey_bottle
+> zp eat sagld
+> effect clear sagld
+> effect give sagld minecraft:poison 30
+> pbot hold sagld goldenfood:enchanted_golden_honey_bottle
+> zp eat sagld
+> effect clear sagld
+> effect give sagld minecraft:speed 60
+> pbot hold sagld goldenfood:golden_milk_bucket
+> zp eat sagld
+> effect give sagld minecraft:speed 60
+> pbot hold sagld goldenfood:enchanted_golden_milk_bucket
+> zp eat sagld
+> zp effects sagld
+waitlog \[zp\] effects sagld 30
+expect item goldenfood:golden_honey_bottle: .*max stack 8$
+expect item goldenfood:enchanted_golden_honey_bottle: .*max stack 4$
+count \[zp\] eat sagld .*: hand now 1 minecraft:bowl >= 6
+count \[zp\] eat sagld .*honey_bottle: hand now 1 minecraft:glass_bottle == 2
+count \[zp\] eat sagld .*milk_bucket: hand now 1 minecraft:bucket == 2
+reject \[zp\] eat sagld .*honey_bottle: .*effects .*minecraft:poison
+reject \[zp\] eat sagld .*milk_bucket: .*effects .*(minecraft:speed|minecraft:regeneration|minecraft:absorption)
+look stews give their effects; honey gives its effects with Poison gone; milk leaves no effect at all
+reject (Unknown (item|block|block type|entity)|Incorrect argument for command|Unknown or incomplete command|No player was found|no such bot|no such item|\[(zq|zp|sa)\] (error|no player))
+
+## SQ-GLD-04 | golden cake slices at full hunger, 7 slices, no drop
+> setblock {SAH1+20} {SAH2} {SAH3+44} goldenfood:golden_cake
+> setblock {SAH1+24} {SAH2} {SAH3+44} goldenfood:enchanted_golden_cake
+> pbot spawn sagldc {SAH1+22} {SAH2} {SAH3+42} minecraft:overworld survival
+sleep 2
+> clear sagldc
+> effect clear sagldc
+> zp hunger sagldc 20
+> pbot use sagldc {SAH1+20} {SAH2} {SAH3+44}
+> zp effects sagldc
+> effect clear sagldc
+repeat 6
+> pbot use sagldc {SAH1+20} {SAH2} {SAH3+44}
+end
+> zp hunger sagldc 20
+> pbot use sagldc {SAH1+24} {SAH2} {SAH3+44}
+> zp effects sagldc
+> effect clear sagldc
+repeat 6
+> pbot use sagldc {SAH1+24} {SAH2} {SAH3+44}
+end
+sleep 1
+> execute if block {SAH1+20} {SAH2} {SAH3+44} minecraft:air run say SA2 cake gone
+> execute if block {SAH1+24} {SAH2} {SAH3+44} minecraft:air run say SA2 ecake gone
+> zcount {SAH1+18} {SAH2} {SAH3+42} {SAH1+26} {SAH2+2} {SAH3+46}
+waitlog \[zcount\] entities 30
+expect SA2 cake gone
+expect SA2 ecake gone
+reject \[zcount\] entities .*item:goldenfood
+look first golden slice: Regeneration amp 1 100t, Absorption amp 1 2400t; first enchanted slice: Regeneration amp 1 400t, Resistance and Fire Resistance 6000t, Absorption amp 3 2400t (each eaten at food 20)
+reject (Unknown (item|block|block type|entity)|Incorrect argument for command|No player was found|no such bot|no such item|\[(zq|zp|sa)\] (error|no player))
+
+## SQ-GLD-05 | golden cake + white candle becomes a vanilla candle cake (upstream quirk)
+> setblock {SAH1+28} {SAH2} {SAH3+44} goldenfood:golden_cake
+> clear sagldc
+> pbot hold sagldc minecraft:white_candle
+> pbot use sagldc {SAH1+28} {SAH2} {SAH3+44}
+sleep 1
+> execute if block {SAH1+28} {SAH2} {SAH3+44} minecraft:white_candle_cake run say SA2 candle cake
+> execute if block {SAH1+28} {SAH2} {SAH3+44} #minecraft:candle_cakes run say SA2 some candle cake
+> zp inv sagldc
+expect SA2 (some )?candle cake
+look documents the quirk (owner question Q1): golden cake replaced by a vanilla candle cake, one candle used
+> pbot remove sagldc
+reject (Unknown (item|block|block type|entity)|Incorrect argument for command|Unknown or incomplete command|No player was found|no such bot|no such item|\[(zq|zp|sa)\] (error|no player))
+
+## SQ-GLD-06 | no Golden Food enchantment: anvil gives nothing, /enchant refuses, not registered
+> clear sagld
+> item replace entity sagld weapon.mainhand with minecraft:enchanted_book{StoredEnchantments:[{id:"goldenfood:gf_enchantment",lvl:1s}]}
+> item replace entity sagld weapon.offhand with goldenfood:golden_bread
+> sa anvil sagld
+> item replace entity sagld weapon.mainhand with goldenfood:golden_bread
+> item replace entity sagld weapon.offhand with minecraft:enchanted_book{StoredEnchantments:[{id:"goldenfood:gf_enchantment",lvl:1s}]}
+> sa anvil sagld
+> item replace entity sagld weapon.mainhand with minecraft:enchanted_book{StoredEnchantments:[{id:"goldenfood:gf_enchantment",lvl:1s}]}
+> item replace entity sagld weapon.offhand with minecraft:golden_apple
+> sa anvil sagld
+> sa enchreg goldenfood:gf_enchantment
+> item replace entity sagld weapon.mainhand with minecraft:iron_sword
+> item replace entity sagld weapon.offhand with minecraft:air
+> enchant sagld goldenfood:gf_enchantment
+waitlog \[sa\] enchreg 30
+count \[sa\] anvil sagld .* -> empty == 3
+expect \[sa\] enchreg goldenfood:gf_enchantment: false
+expect (Unknown enchantment|Can't find element|Invalid ID|not found)
+look book hover: client (CQ row); /enchant refused as unknown
+reject \[sa\] (error|no player)
+
+## SQ-GLD-07 | golden and enchanted chorus fruit teleport, short cooldowns
+> pbot spawn sachor {SAH1+60} {SAH2} {SAH3+70} minecraft:overworld survival
+sleep 2
+> clear sachor
+> pbot hold sachor goldenfood:golden_chorus_fruit 4
+> data get entity sachor Pos
+> zp eat sachor
+> sa cd sachor goldenfood:golden_chorus_fruit
+pace 0.2
+> sa cd sachor goldenfood:golden_chorus_fruit
+> sa cd sachor goldenfood:golden_chorus_fruit
+pace 2
+> data get entity sachor Pos
+sleep 2
+> tp sachor {SAH1+60} {SAH2} {SAH3+70}
+> pbot hold sachor goldenfood:enchanted_golden_chorus_fruit 4
+> data get entity sachor Pos
+> zp eat sachor
+> sa cd sachor goldenfood:enchanted_golden_chorus_fruit
+pace 0.2
+> sa cd sachor goldenfood:enchanted_golden_chorus_fruit
+> sa cd sachor goldenfood:enchanted_golden_chorus_fruit
+pace 2
+> data get entity sachor Pos
+> pbot remove sachor
+look both teleport (Pos before/after differ; golden can exceed 16 blocks, enchanted up to 32 sideways); cooldown length from the cd lines = dt / dpct: about 10 ticks golden, 5 enchanted (chorus fruit 20)
+reject (Unknown (item|block|block type|entity)|Incorrect argument for command|Unknown or incomplete command|No player was found|no such bot|no such item|\[(zq|zp|sa)\] (error|no player))
+
+## SQ-GLD-08 | golden recipes (8 nuggets), no donor carrot recipe, donor data pack, no enchantment book
+> zq makes goldenfood:golden_cake
+> zq makes goldenfood:golden_honey_bottle
+> zq rdetail goldenfood:golden_cake
+> zq makes minecraft:golden_carrot
+> zq recipes goldenfood:
+> datapack list
+> sa enchreg goldenfood:gf_enchantment
+waitlog \[sa\] enchreg 30
+expect goldenfood_upstream_data
+expect \[zq\] makes goldenfood:golden_cake: [1-9]
+expect \[zq\] makes goldenfood:golden_honey_bottle: [1-9]
+reject \[zq\] goldenfood:[a-z_/]+ -> 1 minecraft:golden_carrot
+expect \[sa\] enchreg goldenfood:gf_enchantment: false
+look "recipes matching goldenfood:" = the 23 golden recipes (food + 8 gold nuggets; the golden apple keeps 8 ingots); JEI book: client
+reject (Unknown or incomplete command|\[(zq|sa)\] error)
+
+## SQ-GLD-11 | enchanted golden bread, milk and carrot by sequenced assembly (recipe half; the physical Create line: sA_skip.md)
+> zq rdetail enchanted_golden_bread
+> zq rdetail enchanted_golden_milk_bucket
+> zq rdetail enchanted_golden_carrot
+waitlog \[zq\] rdetail.*enchanted_golden_carrot|recipes matching enchanted_golden_carrot 60
+sleep 3
+expect sequenced_assembly
+expect kubejs:incomplete_enchanted_golden_
+look bread and milk: 4 loops of gold block + liquid experience (1000 mB total) + press; the carrot follows SQ-GLD2-02 (8 loops, gold ingot + 125 mB); outputs goldenfood:enchanted_golden_*
+reject (Unknown or incomplete command|\[zq\] error)
+
+## SQ-GLD-12 | 24 enchanted golden assemblies, no golden.js errors
+> zq recipes enchanted_golden_
+waitlog \[zq\] recipes matching enchanted_golden_: \d+ 60
+count enchanted_golden_[a-z_]+_sequenced_assembly -> == 24
+shell ! grep -hiE "(goldenEnchant|incomplete_enchanted_golden|golden\.js).*(rror|xception|not registered)" logs/latest.log logs/kubejs/server.log
+shell D="${B0:-/tmp/claude-1000/-home-liam--local-share-atlauncher-instances-CreativeEngineering2/51e0db54-43f7-4a69-b393-9d5ee1c5b98d/scratchpad/r1103/b0}/srv/kubejs/exported/recipes/all.csv"; echo "Boot 0 dump (00:54): $(grep -cE 'enchanted_golden_[a-z_]+_sequenced_assembly' "$D")"
+look if the zq list is cut at 80 lines, judge on the Boot 0 dump count (24)
+reject (Unknown or incomplete command|\[zq\] error)
+
+## SQ-GLD-13 | no recipe for the enchanted golden cake
+> zq makes goldenfood:enchanted_golden_cake
+waitlog \[zq\] makes goldenfood:enchanted_golden_cake: 30
+expect \[zq\] makes goldenfood:enchanted_golden_cake: 0
+look places and eats as in SQ-GLD-04 (that row)
+
+## SQ-GLD2-01 | golden food grid recipes: food + 8 gold nuggets; golden apple 8 ingots
+> zq rdetail golden_cooked_beef
+> zq rdetail goldenfood:golden_cake
+> zq makes minecraft:golden_apple
+> zq rdetail minecraft:golden_apple
+waitlog \[zq\] (rdetail|recipes matching) minecraft:golden_apple 60
+sleep 2
+expect gold_nugget
+look golden beef = cooked beef + 8 gold nuggets; golden cake also nuggets; golden apple still 8 gold ingots
+reject (Unknown or incomplete command|\[zq\] error)
+
+## SQ-GLD2-02 | gilded carrot and apple: 8 loops of gold ingot + 125 mB + press
+> zq rdetail enchanted_golden_apple
+> zq rdetail goldenfood:enchanted_golden_carrot
+waitlog \[zq\] (rdetail|recipes matching) goldenfood:enchanted_golden_carrot 60
+sleep 2
+expect rdetail\+ .*enchanted_golden_(apple|carrot).* step
+look steps: deploy gold ingot, spout 125 mB, press; loops 8 (the rdetail+ start / step lines)
+reject (Unknown or incomplete command|\[zq\] error)
+
+## SQ-BBQF-02 | BBQ seasoning crafts and cooking routes
+> zq recipes season/
+> zq recipes _from_smelting
+> zq recipes _from_smoking
+> zq recipes _from_campfire
+> zq recipes _from_cooked_manual_only
+waitlog \[zq\] recipes matching _from_cooked_manual_only: \d+ 60
+count barbequesdelight:[a-z_/]*season/[a-z_]+ -> == 6
+count barbequesdelight:[a-z_/]*_from_smelting -> == 10
+count barbequesdelight:[a-z_/]*_from_smoking -> == 10
+count barbequesdelight:[a-z_/]*_from_campfire -> == 10
+count barbequesdelight:[a-z_/]*_from_cooked_manual_only -> == 10
+look if a list is cut at 80 lines the counts can fall short: rerun that query with a barbequesdelight: prefix
+reject (Unknown or incomplete command|\[zq\] error)
+
+## SQ-BBQF-03 | seasonable tags: cumin takes raw and cooked skewers, honey mustard no raw skewer
+> zq itemtag barbequesdelight:seasonable/cumin
+> zq itemtag barbequesdelight:seasonable/honey_mustard
+waitlog \[zq\] itemtag barbequesdelight:seasonable/honey_mustard 30
+expect itemtag barbequesdelight:seasonable/cumin .*barbequesdelight:raw_beef_skewer
+expect itemtag barbequesdelight:seasonable/cumin .*barbequesdelight:grilled_beef_skewer
+reject itemtag barbequesdelight:seasonable/honey_mustard .*barbequesdelight:raw_[a-z_]+_skewer
+reject (Unknown or incomplete command|\[zq\] error)
+
+## SQ-BBQF-04 | level-1 butchers sell the six seasonings (12 emeralds, 64 powders / 16 sauces, maxUses 4, 4 XP)
+pace 0.3
+repeat 20
+> summon minecraft:villager {SAH1+80} {SAH2} {SAH3+80} {NoAI:1b,PersistenceRequired:1b,Tags:["sabbq"],VillagerData:{profession:"minecraft:butcher",level:1,type:"minecraft:plains"}}
+end
+pace 1
+> execute as @e[type=minecraft:villager,tag=sabbq] run data get entity @s Offers
+sleep 3
+expect barbequesdelight:(cumin_powder|chili_powder|pepper_powder|barbeque_sauce|buffalo_sauce|honey_mustard_sauce)
+look each seasoning offer: buy 12 emerald, sell 64 (powder) or 16 (sauce), maxUses: 4, xp: 4
+> kill @e[type=minecraft:villager,tag=sabbq]
+pace 2
+reject (Unknown (item|block|block type|entity)|Incorrect argument for command|Unknown or incomplete command)
+
+## SQ-BBQF-06 | Grill adds the grilled seasoning to a seasoned skewer
+> setblock {SAH1+10} {SAH2} {SAH3+50} barbequesdelight:grill[has_campfire=true,lit=true]
+> data merge block {SAH1+10} {SAH2} {SAH3+50} {Entries:[{Item:{id:"barbequesdelight:raw_beef_skewer",Count:1b,tag:{Seasonings:["barbequesdelight:cumin"]}},Time:180,Duration:200,Flipped:1b,Burnt:0b},{}]}
+sleep 3
+> data get block {SAH1+10} {SAH2} {SAH3+50} Entries[0].Item
+expect barbequesdelight:grilled_beef_skewer
+expect barbequesdelight:cumin
+expect barbequesdelight:grilled
+look Seasonings [cumin, grilled] on the grilled skewer (read before Time reaches 2 x Duration = burnt)
+reject (Unknown (item|block|block type|entity)|Incorrect argument for command|Unknown or incomplete command|Invalid (block state|tag))
+
+## SQ-BBQF-07 | raw skewer through a fuelled furnace by hopper: plain Beef Skewer
+> setblock {SAH1+14} {SAH2} {SAH3+50} minecraft:furnace
+> data merge block {SAH1+14} {SAH2} {SAH3+50} {Items:[{Slot:1b,id:"minecraft:coal",Count:8b}]}
+> setblock {SAH1+14} {SAH2+1} {SAH3+50} minecraft:hopper[facing=down]
+> data merge block {SAH1+14} {SAH2+1} {SAH3+50} {Items:[{Slot:0b,id:"barbequesdelight:raw_beef_skewer",Count:1b}]}
+sleep 16
+> data get block {SAH1+14} {SAH2} {SAH3+50} Items
+expect Slot: 2b, id: "barbequesdelight:grilled_beef_skewer"|Slot:2b,id:"barbequesdelight:grilled_beef_skewer"
+reject Seasonings
+reject (Unknown (item|block|block type|entity)|Incorrect argument for command|Unknown or incomplete command|Invalid (block state|tag))
+
+## SQ-VTDA-11 | one kimchi, one nut butter: no recipe makes or takes the removed items; the new ones exist
+> zq makes brewinandchewin:kimchi
+> zq uses brewinandchewin:kimchi
+> zq makes delightful:nut_butter_bottle
+> zq uses delightful:nut_butter_bottle
+> zq makes delightful:nut_dough
+> zq uses delightful:nut_dough
+> zq makes vintagedelight:nut_mash_bottle
+> zq uses vintagedelight:nut_mash_bottle
+> zq recipes kimchi_from_
+> zq recipes nut_mash_jar
+> zq recipes quiche_meat
+> zq recipes quiche_fungus
+> zq recipes quiche_greens
+> zq recipes zucchini_quiche
+waitlog \[zq\] recipes matching zucchini_quiche: \d+ 60
+expect \[zq\] makes brewinandchewin:kimchi: 0
+expect \[zq\] uses brewinandchewin:kimchi: 0 alone, 0 with
+expect \[zq\] makes delightful:nut_butter_bottle: 0
+expect \[zq\] uses delightful:nut_butter_bottle: 0 alone, 0 with
+expect \[zq\] makes delightful:nut_dough: 0
+expect \[zq\] uses delightful:nut_dough: 0 alone, 0 with
+expect \[zq\] makes vintagedelight:nut_mash_bottle: 0
+expect \[zq\] uses vintagedelight:nut_mash_bottle: 0 alone, 0 with
+expect \[zq\] recipes matching kimchi_from_: 6
+expect \[zq\] recipes matching nut_mash_jar: [1-9]
+expect \[zq\] recipes matching quiche_meat: [1-9]
+expect \[zq\] recipes matching quiche_fungus: [1-9]
+expect \[zq\] recipes matching quiche_greens: [1-9]
+expect \[zq\] recipes matching zucchini_quiche: [1-9]
+reject (Unknown or incomplete command|\[zq\] error)
+
+## SQ-VTDA-12 | nut butter bottle and Delightful sandwich become Nut Mash and pb_j on relog
+> pbot spawn savtd {SAH1+8} {SAH2} {SAH3+38} minecraft:overworld survival
+sleep 2
+> clear savtd
+> give savtd delightful:nut_butter_bottle 1
+> give savtd delightful:nut_butter_and_jelly_sandwich 1
+> zp inv savtd
+> pbot remove savtd
+sleep 1
+> pbot spawn savtd {SAH1+8} {SAH2} {SAH3+38} minecraft:overworld survival
+sleep 2
+> zp inv savtd
+waitlog \[zp\] inv savtd 30
+expect inv savtd: .*vintagedelight:nut_mash_jar
+expect inv savtd: .*vintagedelight:pb_j
+expect \[swaps\] savtd: \d+ merged stack\(s\) rewritten
+shell grep -hE "\[swaps\].*item merge" logs/latest.log | head -3
+bootreject merged twice
+> pbot remove savtd
+look the merge count line (43 with the potato salad pairs)
+reject (Unknown (item|block|block type|entity)|Incorrect argument for command|Unknown or incomplete command|No player was found|no such bot|no such item|\[(zq|zp)\] (error|no player))
+
+## SQ-VTDA-13 | quiches: oven with a pie tin only, no grid recipe (recipe half; the physical oven bake: sA_skip.md)
+> zq rdetail quiche
+waitlog \[zq\] recipes matching quiche|\[zq\] rdetail 30
+sleep 3
+reject \{minecraft:crafting_shape(d|less)\} -> [^<]*quiche
+look each quiche set (quiche_meat, _fungus, _greens, zucchini_quiche, brewinandchewin quiche) is a baking recipe with the pie tin as the tool
+reject (Unknown or incomplete command|\[zq\] error)
+
+## SQ-CDM2-01 | sea grape plant mineable with a hoe
+> zq blocktag minecraft:mineable/hoe
+waitlog \[zq\] blocktag minecraft:mineable/hoe 30
+expect blocktag minecraft:mineable/hoe .*oceanic_delight:sea_grape_plant( |$)
+reject (Unknown or incomplete command|\[zq\] error)
+
+## SQ-CDM2-03 | Globular Rice and Bowl of Paella: Nourishment and Comfort 4:00
+> pbot spawn sacdm {SAH1+8} {SAH2} {SAH3+42} minecraft:overworld survival
+sleep 2
+> clear sacdm
+> effect clear sacdm
+> pbot hold sacdm oceanic_delight:globular_rice
+> zp eat sacdm
+> zp effects sacdm
+> effect clear sacdm
+> pbot hold sacdm oceanic_delight:bowl_of_paella
+> zp eat sacdm
+> zp effects sacdm
+waitlog \[zp\] effects sacdm 30
+count \[zp\] effects sacdm: .*farmersdelight:nourishment amp 0 4[78]\d\dt == 2
+count \[zp\] effects sacdm: .*farmersdelight:comfort amp 0 4[78]\d\dt == 2
+shell grep -hE "ruled foods set" logs/latest.log logs/kubejs/*.log | head -3
+shell grep -qhE "285 ruled foods set" logs/latest.log logs/kubejs/startup.log logs/kubejs/server.log
+> pbot remove sacdm
+reject (Unknown (item|block|block type|entity)|Incorrect argument for command|Unknown or incomplete command|No player was found|no such bot|no such item|\[(zq|zp)\] (error|no player))
+
+## SQ-CDM2-04 | one Potato Salad: Rustic's recipes only; More Delight's becomes Rustic's
+> zq makes rusticdelight:potato_salad
+> zq rdetail potato_salad
+> zq makes moredelight:potato_salad
+> zq makes oceanic_delight:potato_salad
+> pbot spawn sapot {SAH1+8} {SAH2} {SAH3+46} minecraft:overworld survival
+sleep 2
+> clear sapot
+> give sapot moredelight:potato_salad 1
+> pbot remove sapot
+sleep 1
+> pbot spawn sapot {SAH1+8} {SAH2} {SAH3+46} minecraft:overworld survival
+sleep 2
+> zp inv sapot
+waitlog \[zp\] inv sapot 30
+expect inv sapot: .*rusticdelight:potato_salad
+reject inv sapot: .*moredelight:potato_salad
+expect \[zq\] makes moredelight:potato_salad: 0
+expect \[zq\] makes oceanic_delight:potato_salad: 0
+look rusticdelight:potato_salad makers: the Cooking Pot recipe, its _manual_only copy and the egg-solution mixing only
+> pbot remove sapot
+reject (Unknown (item|block|block type|entity)|Incorrect argument for command|Unknown or incomplete command|No player was found|no such bot|no such item|\[(zq|zp)\] (error|no player))
+
+## SQ-PCK-02 | pancake food type and family tags (runtime tags by /zq; the /dumptags file is written for the record)
+> zq itemtag creativeengineering:food_type/sweet/pancake
+> zq itemtag creativeengineering:food_family/dessert/pancake
+> zq itemtag creativeengineering:food_type/sweet
+> zq itemtag creativeengineering:food_family/dessert/pastry
+> dumptags item
+waitlog \[zq\] itemtag creativeengineering:food_family/dessert/pastry 30
+expect itemtag creativeengineering:food_type/sweet/pancake \(7\):
+expect itemtag creativeengineering:food_family/dessert/pancake \(7\):
+expect itemtag creativeengineering:food_type/sweet/pancake .*veggiesdelight:sweet_potato_pancakes
+expect itemtag creativeengineering:food_type/sweet \(.*rusticdelight:coffee_pancake
+expect itemtag creativeengineering:food_type/sweet \(.*veggiesdelight:sweet_potato_pancakes
+reject itemtag creativeengineering:food_family/dessert/pastry .*veggiesdelight:sweet_potato_pancakes
+look the 7: veggiesdelight:sweet_potato_pancakes and rusticdelight:{honey,chocolate,cherry_blossom,vegetable,pumpkin,coffee}_pancake
+reject (Unknown or incomplete command|\[zq\] error)
+
+## SQ-PCK-03 | Sweet Potato Pancakes displayable; placed block registered, drops exactly one
+> zq itemtag displaydelight:displayable
+> kill @e[type=minecraft:item]
+> setblock {SAH1+18} {SAH2} {SAH3+56} creativeengineering:placed_sweet_potato_pancakes
+> execute if block {SAH1+18} {SAH2} {SAH3+56} creativeengineering:placed_sweet_potato_pancakes run say SA2 pancakes placed
+> setblock {SAH1+18} {SAH2} {SAH3+56} minecraft:air destroy
+sleep 2
+> zcount {SAH1+16} {SAH2} {SAH3+54} {SAH1+20} {SAH2+2} {SAH3+58}
+waitlog \[zcount\] entities 30
+expect itemtag displaydelight:displayable .*veggiesdelight:sweet_potato_pancakes( |$)
+expect SA2 pancakes placed
+expect \[zcount\] entities .*item:veggiesdelight:sweet_potato_pancakes x1( |,|$)
+reject \[zcount\] entities .*item:minecraft:bowl
+reject (Unknown (item|block|block type|entity)|Incorrect argument for command|Unknown or incomplete command|Invalid (block state|tag)|\[zq\] error)
+
+## SQ-PCK-04 | /dumpplaceable links Sweet Potato Pancakes to the placed block
+> dumpplaceable
+waitlog Display Delight links 120
+shell python3 -c "import json;d=json.load(open('kubejs/exported/food/placeable.json'))['displayDelight'];print('placed', len(d['placed']), 'link', d['placed'].get('veggiesdelight:sweet_potato_pancakes'))"
+shell python3 -c "import json,sys;d=json.load(open('kubejs/exported/food/placeable.json'))['displayDelight'];sys.exit(0 if d['placed'].get('veggiesdelight:sweet_potato_pancakes')=='creativeengineering:placed_sweet_potato_pancakes' else 1)"
+shell cat "$INST/tools/scratch_query/batches/r1103/sA_baseline/placeable_dd_1030.txt"
+shell python3 -c "import json;d=json.load(open('${B0:-/tmp/claude-1000/-home-liam--local-share-atlauncher-instances-CreativeEngineering2/51e0db54-43f7-4a69-b393-9d5ee1c5b98d/scratchpad/r1103/b0}/srv/kubejs/exported/food/placeable.json'))['displayDelight'];print('Boot 0 placed', len(d['placed']), d['placed'].get('veggiesdelight:sweet_potato_pancakes'))"
+look placed-link count one higher than the 10-30 baseline 135 (other links changed since: Boot 0 had 149 with the link present, so this row PASSes on the link and an equal count to Boot 0)
+
+## SQ-PCK-05 | pancake recipes unchanged
+> zq makes supplementaries:pancake
+> zq makes rusticdelight:pancakes
+> zq makes rusticdelight:honey_pancakes
+> zq makes rusticdelight:honey_pancake
+> zq makes veggiesdelight:sweet_potato_pancakes
+waitlog \[zq\] makes veggiesdelight:sweet_potato_pancakes: \d+ 30
+expect veggiesdelight:cooking/sweet_potato_pancakes ->
+look Supplementaries pancake: grid 3 and heated Mixer 5 (milk, egg solution); the plates' Cooking Pot recipes and plate/single conversions; Sweet Potato Pancakes pot recipe and its Mixer copy
+reject (Unknown or incomplete command|\[zq\] error)
+
+## SQ-NEST-01 | placed nest features: duck, goose, emu nests with eggs and birds
+> place feature incubation_additions:nest_duck {SAH1+70} {SAH2} {SAH3+40}
+> place feature incubation_additions:nest_goose {SAH1+76} {SAH2} {SAH3+40}
+> place feature incubation_additions:nest_emu {SAH1+82} {SAH2} {SAH3+40}
+sleep 3
+> zq count {SAH1+64} {SAH2-2} {SAH3+34} {SAH1+88} {SAH2+3} {SAH3+46} incubation_additions:duck_egg_nest
+> zq count {SAH1+64} {SAH2-2} {SAH3+34} {SAH1+88} {SAH2+3} {SAH3+46} incubation_additions:goose_egg_nest
+> zq count {SAH1+64} {SAH2-2} {SAH3+34} {SAH1+88} {SAH2+3} {SAH3+46} incubation_additions:emu_egg_nest
+> zcount {SAH1+62} {SAH2-1} {SAH3+32} {SAH1+90} {SAH2+4} {SAH3+48}
+waitlog \[zcount\] entities 30
+expect \[zq\] count incubation_additions:duck_egg_nest: [1-9]
+expect \[zq\] count incubation_additions:goose_egg_nest: [1-9]
+expect \[zq\] count incubation_additions:emu_egg_nest: [1-9]
+expect \[zcount\] entities .*untitledduckmod:duck
+expect \[zcount\] entities .*untitledduckmod:goose
+expect \[zcount\] entities .*alexsmobs:emu
+look eggs 2 to 4 per nest: the zq count lines name the blocks; read the eggs state with "data get block" or "execute if block ...[eggs=N]" at the found spot if the row needs it
+reject (Unknown (item|block|block type|entity)|Incorrect argument for command|Unknown or incomplete command|\[zq\] error)
+
+## SQ-MDL-02 | Miner's drops by knife and by hand: bat, spider, cave spider, silverfish (300 rolls each)
+> summon minecraft:bat {SAH1+30} {SAH2} {SAH3+84} {NoAI:1b,Invulnerable:1b,PersistenceRequired:1b,Tags:["sambat"]}
+> summon minecraft:spider {SAH1+34} {SAH2} {SAH3+84} {NoAI:1b,Invulnerable:1b,PersistenceRequired:1b,Tags:["samspi"]}
+> summon minecraft:cave_spider {SAH1+38} {SAH2} {SAH3+84} {NoAI:1b,Invulnerable:1b,PersistenceRequired:1b,Tags:["samcsp"]}
+> summon minecraft:silverfish {SAH1+42} {SAH2} {SAH3+84} {NoAI:1b,Invulnerable:1b,PersistenceRequired:1b,Tags:["samsil"]}
+> pbot spawn samk {SAH1+30} {SAH2} {SAH3+92} minecraft:overworld survival
+> pbot spawn same {SAH1+34} {SAH2} {SAH3+92} minecraft:overworld survival
+sleep 2
+> clear samk
+> clear same
+> pbot hold samk farmersdelight:iron_knife
+> kill @e[type=minecraft:item]
+pace 0.05
+repeat 300
+> execute as samk run loot spawn {SAH1+30} {SAH2} {SAH3+62} kill @e[tag=sambat,limit=1]
+end
+repeat 300
+> execute as samk run loot spawn {SAH1+34} {SAH2} {SAH3+62} kill @e[tag=samspi,limit=1]
+end
+repeat 300
+> execute as samk run loot spawn {SAH1+38} {SAH2} {SAH3+62} kill @e[tag=samcsp,limit=1]
+end
+repeat 300
+> execute as samk run loot spawn {SAH1+42} {SAH2} {SAH3+62} kill @e[tag=samsil,limit=1]
+end
+repeat 300
+> execute as same run loot spawn {SAH1+30} {SAH2} {SAH3+66} kill @e[tag=sambat,limit=1]
+end
+repeat 300
+> execute as same run loot spawn {SAH1+34} {SAH2} {SAH3+66} kill @e[tag=samspi,limit=1]
+end
+repeat 300
+> execute as same run loot spawn {SAH1+38} {SAH2} {SAH3+66} kill @e[tag=samcsp,limit=1]
+end
+repeat 300
+> execute as same run loot spawn {SAH1+42} {SAH2} {SAH3+66} kill @e[tag=samsil,limit=1]
+end
+pace 2
+sleep 3
+> zcount {SAH1+29} {SAH2} {SAH3+61} {SAH1+31} {SAH2+2} {SAH3+63}
+> zcount {SAH1+33} {SAH2} {SAH3+61} {SAH1+35} {SAH2+2} {SAH3+63}
+> zcount {SAH1+37} {SAH2} {SAH3+61} {SAH1+39} {SAH2+2} {SAH3+63}
+> zcount {SAH1+41} {SAH2} {SAH3+61} {SAH1+43} {SAH2+2} {SAH3+63}
+> zcount {SAH1+29} {SAH2} {SAH3+65} {SAH1+31} {SAH2+2} {SAH3+67}
+> zcount {SAH1+33} {SAH2} {SAH3+65} {SAH1+35} {SAH2+2} {SAH3+67}
+> zcount {SAH1+37} {SAH2} {SAH3+65} {SAH1+39} {SAH2+2} {SAH3+67}
+> zcount {SAH1+41} {SAH2} {SAH3+65} {SAH1+43} {SAH2+2} {SAH3+67}
+waitlog \[zcount\] entities 60
+sleep 5
+count \[zcount\] entities >= 8
+look zcount lines in order: knife bat / spider / cave spider / silverfish, then empty hand. Knife: bat bat_wing x600; spider arthropod 300..900, spider_leg about 0.4 x 300 x 2 avg, cobweb about 60; cave spider arthropod 300..900, cobweb about 60, no spider_leg; silverfish arthropod x300, silverfish_eggs about 150. Hand: bat_wing about 150; silverfish_eggs about 15; spiders no Miner's item
+reject (Unknown (item|block|block type|entity)|Incorrect argument for command|Unknown or incomplete command|No player was found|no such bot|no such item)
+
+## SQ-MDL-03 | the same targets burning: cooked drops only; one real Fire knife kill
+> summon minecraft:bat {SAH1+30} {SAH2} {SAH3+88} {NoAI:1b,Invulnerable:1b,PersistenceRequired:1b,Fire:30000s,Tags:["samfbat"]}
+> summon minecraft:spider {SAH1+34} {SAH2} {SAH3+88} {NoAI:1b,Invulnerable:1b,PersistenceRequired:1b,Fire:30000s,Tags:["samfspi"]}
+> summon minecraft:cave_spider {SAH1+38} {SAH2} {SAH3+88} {NoAI:1b,Invulnerable:1b,PersistenceRequired:1b,Fire:30000s,Tags:["samfcsp"]}
+> summon minecraft:silverfish {SAH1+42} {SAH2} {SAH3+88} {NoAI:1b,Invulnerable:1b,PersistenceRequired:1b,Fire:30000s,Tags:["samfsil"]}
+> kill @e[type=minecraft:item]
+pace 0.05
+repeat 300
+> execute as samk run loot spawn {SAH1+30} {SAH2} {SAH3+70} kill @e[tag=samfbat,limit=1]
+end
+repeat 300
+> execute as samk run loot spawn {SAH1+34} {SAH2} {SAH3+70} kill @e[tag=samfspi,limit=1]
+end
+repeat 300
+> execute as samk run loot spawn {SAH1+38} {SAH2} {SAH3+70} kill @e[tag=samfcsp,limit=1]
+end
+repeat 300
+> execute as samk run loot spawn {SAH1+42} {SAH2} {SAH3+70} kill @e[tag=samfsil,limit=1]
+end
+repeat 300
+> execute as same run loot spawn {SAH1+30} {SAH2} {SAH3+74} kill @e[tag=samfbat,limit=1]
+end
+pace 2
+sleep 3
+> zcount {SAH1+29} {SAH2} {SAH3+69} {SAH1+31} {SAH2+2} {SAH3+71}
+> zcount {SAH1+33} {SAH2} {SAH3+69} {SAH1+35} {SAH2+2} {SAH3+71}
+> zcount {SAH1+37} {SAH2} {SAH3+69} {SAH1+39} {SAH2+2} {SAH3+71}
+> zcount {SAH1+41} {SAH2} {SAH3+69} {SAH1+43} {SAH2+2} {SAH3+71}
+> zcount {SAH1+29} {SAH2} {SAH3+73} {SAH1+31} {SAH2+2} {SAH3+75}
+waitlog \[zcount\] entities 60
+sleep 5
+reject \[zcount\] entities .*item:miners_delight:arthropod x
+reject \[zcount\] entities .*item:miners_delight:bat_wing x
+reject \[zcount\] entities .*item:minecraft:cobweb x
+expect \[zcount\] entities .*item:miners_delight:cooked_arthropod x
+expect \[zcount\] entities .*item:miners_delight:smoked_bat_wing x
+expect \[zcount\] entities .*item:miners_delight:baked_spider_leg x
+> kill @e[type=minecraft:item]
+> zact kill {SAH1+50} {SAH2} {SAH3+88} minecraft:spider 5 farmersdelight:iron_knife fire
+waitlog \[zact\] (kill|done) 60
+expect \[zact\] kill .*miners_delight:cooked_arthropod
+reject \[zact\] kill .*miners_delight:arthropod x
+> pbot remove samk
+> pbot remove same
+look knife: bat smoked_bat_wing x600; spider and cave spider cooked_arthropod 300..900, baked_spider_leg about 40 % of rolls from both, no cobweb; silverfish cooked_arthropod x300. Hand bat: smoked_bat_wing about 150. MND-30: the real burning kill drops cooked items
+reject (Unknown (item|block|block type|entity)|Incorrect argument for command|Unknown or incomplete command|No player was found|no such bot|no such item|\[zact\] error)
+
+## SQ-MDL-04 | infested blocks: silverfish eggs by pickaxe, none by shovel, block + eggs by silk touch
+> setblock {SAH1+50} {SAH2} {SAH3+58} minecraft:infested_stone
+> setblock {SAH1+54} {SAH2} {SAH3+58} minecraft:infested_stone_bricks
+> setblock {SAH1+58} {SAH2} {SAH3+58} minecraft:infested_cracked_stone_bricks
+> setblock {SAH1+62} {SAH2} {SAH3+58} minecraft:infested_mossy_stone_bricks
+> setblock {SAH1+66} {SAH2} {SAH3+58} minecraft:infested_chiseled_stone_bricks
+> setblock {SAH1+70} {SAH2} {SAH3+58} minecraft:infested_deepslate
+> kill @e[type=minecraft:item]
+pace 0.05
+repeat 200
+> loot spawn {SAH1+50} {SAH2} {SAH3+62} mine {SAH1+50} {SAH2} {SAH3+58} minecraft:iron_pickaxe
+> loot spawn {SAH1+54} {SAH2} {SAH3+62} mine {SAH1+54} {SAH2} {SAH3+58} minecraft:iron_pickaxe
+> loot spawn {SAH1+58} {SAH2} {SAH3+62} mine {SAH1+58} {SAH2} {SAH3+58} minecraft:iron_pickaxe
+> loot spawn {SAH1+62} {SAH2} {SAH3+62} mine {SAH1+62} {SAH2} {SAH3+58} minecraft:iron_pickaxe
+> loot spawn {SAH1+66} {SAH2} {SAH3+62} mine {SAH1+66} {SAH2} {SAH3+58} minecraft:iron_pickaxe
+> loot spawn {SAH1+70} {SAH2} {SAH3+62} mine {SAH1+70} {SAH2} {SAH3+58} minecraft:iron_pickaxe
+end
+repeat 100
+> loot spawn {SAH1+50} {SAH2} {SAH3+66} mine {SAH1+50} {SAH2} {SAH3+58} minecraft:iron_shovel
+> loot spawn {SAH1+70} {SAH2} {SAH3+66} mine {SAH1+70} {SAH2} {SAH3+58} minecraft:iron_shovel
+> loot spawn {SAH1+50} {SAH2} {SAH3+70} mine {SAH1+50} {SAH2} {SAH3+58} minecraft:iron_pickaxe{Enchantments:[{id:"minecraft:silk_touch",lvl:1s}]}
+> loot spawn {SAH1+70} {SAH2} {SAH3+70} mine {SAH1+70} {SAH2} {SAH3+58} minecraft:iron_pickaxe{Enchantments:[{id:"minecraft:silk_touch",lvl:1s}]}
+end
+pace 2
+sleep 3
+> zcount {SAH1+49} {SAH2} {SAH3+61} {SAH1+51} {SAH2+2} {SAH3+63}
+> zcount {SAH1+53} {SAH2} {SAH3+61} {SAH1+55} {SAH2+2} {SAH3+63}
+> zcount {SAH1+57} {SAH2} {SAH3+61} {SAH1+59} {SAH2+2} {SAH3+63}
+> zcount {SAH1+61} {SAH2} {SAH3+61} {SAH1+63} {SAH2+2} {SAH3+63}
+> zcount {SAH1+65} {SAH2} {SAH3+61} {SAH1+67} {SAH2+2} {SAH3+63}
+> zcount {SAH1+69} {SAH2} {SAH3+61} {SAH1+71} {SAH2+2} {SAH3+63}
+> zcount {SAH1+49} {SAH2} {SAH3+65} {SAH1+71} {SAH2+2} {SAH3+67}
+> zcount {SAH1+49} {SAH2} {SAH3+69} {SAH1+51} {SAH2+2} {SAH3+71}
+> zcount {SAH1+69} {SAH2} {SAH3+69} {SAH1+71} {SAH2+2} {SAH3+71}
+waitlog \[zcount\] entities 60
+sleep 5
+count \[zcount\] entities .*item:miners_delight:silverfish_eggs x >= 8
+look pickaxe boxes (6): silverfish_eggs total about 0.75 x 200 x 2 avg = 300 each (1-3 per hit roll); the shovel box (7th line): no eggs; silk touch boxes: the infested block x100 and eggs about 150 each. Shovel line with eggs = FAIL
+reject (Unknown (item|block|block type|entity)|Incorrect argument for command|Unknown or incomplete command|Invalid (block state|tag))
+
+## SQ-MDL-05 | fishing: Miner's squid about 5 %, glow squid about 0.5 %; mineshaft carrots
+> fill {SAH1+78} {SAH2-3} {SAH3+78} {SAH1+80} {SAH2-1} {SAH3+80} minecraft:water
+> kill @e[type=minecraft:item]
+pace 0.05
+repeat 4000
+> loot spawn {SAH1+84} {SAH2} {SAH3+62} fish minecraft:gameplay/fishing {SAH1+79} {SAH2-1} {SAH3+79} minecraft:fishing_rod
+end
+repeat 1000
+> loot spawn {SAH1+84} {SAH2} {SAH3+70} loot minecraft:chests/abandoned_mineshaft
+end
+pace 2
+sleep 5
+> zcount {SAH1+82} {SAH2} {SAH3+60} {SAH1+86} {SAH2+3} {SAH3+64}
+> zcount {SAH1+82} {SAH2} {SAH3+68} {SAH1+86} {SAH2+3} {SAH3+72}
+waitlog \[zcount\] entities 120
+sleep 5
+expect \[zcount\] entities .*item:miners_delight:squid x
+expect \[zcount\] entities .*item:miners_delight:copper_carrot x
+expect \[zcount\] entities .*item:miners_delight:cave_carrot x
+look fishing box: squid 170..230, glow_squid 10..35 of 4000, the rest fish / junk; mineshaft box: copper_carrot and cave_carrot a few per 100 rolls (MND-33)
+> kill @e[type=minecraft:item]
+reject (Unknown (item|block|block type|entity)|Incorrect argument for command|Unknown or incomplete command)
+
+## SQ-CWG-08b | raid at boot 1's village: raiders glow
+> pbot spawn saraid {SAH1+160} {SAH2+1} {SAH3} minecraft:overworld survival
+sleep 2
+> clear saraid
+> effect give saraid minecraft:bad_omen 6000 0
+sleep 45
+> execute store result score #saraiders sacwg if entity @e[type=#minecraft:raiders,x={SAH1+96},y={SAH2-20},z={SAH3-64},dx=128,dy=60,dz=128]
+> scoreboard players get #saraiders sacwg
+> execute as @e[type=#minecraft:raiders,limit=3,sort=nearest] at @s run data get entity @s Glowing
+> execute as @e[type=#minecraft:raiders,limit=3,sort=nearest] at @s run data get entity @s ActiveEffects
+> pbot remove saraid
+look raid started (raiders counted above 0); raiders glow (Glowing 1b or a glowing effect)
+reject (Unknown (item|block|block type|entity)|Incorrect argument for command|Unknown or incomplete command|No player was found|no such bot)
+
+## SA2-99 | save (boot 3 reads this world) (not a queue row)
+> kill @e[type=#minecraft:raiders]
+> save-all flush
+waitlog Saved the game 60

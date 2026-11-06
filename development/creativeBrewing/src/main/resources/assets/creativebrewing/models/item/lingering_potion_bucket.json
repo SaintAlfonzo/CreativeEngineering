@@ -1,0 +1,7 @@
+{
+	"parent": "minecraft:item/generated",
+	"textures": {
+		"layer0": "creativebrewing:item/lingering_potion_bucket",
+		"layer1": "creativebrewing:item/lingering_potion_bucket_liquid"
+	}
+}

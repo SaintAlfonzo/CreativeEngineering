@@ -47,7 +47,7 @@ the wrench, (f) lunchbox slot count.
 - **(b) Food types.** 31 types in [food_types.json](../../kubejs/generation_scripts/food/food_types.json) (`types`:
   type -> item_dict keys, one type per food, `excluded` list, `canned` map), turned into
   `#creativeengineering:food_type/<type>` (nested types also land in their parents) by
-  [foodtypetags.js](../../kubejs/data/creative_delight/kubejs/creativeengineering/food_type_tags.js). Type list and meaning: [food.md](../food.md) 2.1.
+  [foodtypetags.js](../../kubejs/data/creativedelight/kubejs/creativeengineering/food_type_tags.js). Type list and meaning: [food.md](../food.md) 2.1.
   Spice of Life: Apple Pie Edition 2.2.0 already adds its own diversity line (`tooltip.solapplepie.*`).
 - **(c) Cans.** Each serving is the full food value, so AppleSkin already draws one serving's bars. patcherMod
   `food/CanServingsTooltip` inserts "Servings: x / y" at line 1; `food/CanServings.servingsLeft(stack)` /
@@ -250,7 +250,7 @@ lang and Lexicon (general knowledge, unverified against 440.2 code for the Pure 
 ---
 
 ## tooltips #5: Large tooltips run off the bottom
-Status **Planned** · Work: patcherMod · id `ui/tooltips #5`
+Status **Testing** (BUILT 2026-11-02 as below with `index = 9`, the javap check: int locals x 3, y 4, width 6, height 7, tooltipX 8, tooltipY 9; [tooltips.md](../tooltips.md) 3 "Fixed") · Work: patcherMod · id `ui/tooltips #5`
 
 ### Goal
 A tooltip taller than the screen keeps its top (name and first lines) on screen and runs off the bottom, instead of the

@@ -16,8 +16,9 @@ Source data:
   feature_writeup/effects.md                        for EFFECT_OVERRIDES below: effects the ports add or drop
   kubejs/exported/food/foods.json                   /dumpfood: FoodProperties effects, which JEED lists by itself
   mods/jeed-*.jar data/jeed/recipes                 JEED's own effect_provider recipes
-  kubejs/server_scripts/other/jeed_providers.js     the pack's provider recipes (effect ids as string literals),
-  kubejs/startup_scripts/func/{armor,tool}_effects.js   plus the gear registries and the Vinery [wine] effects
+  kubejs/data/creativebrewing/kubejs/creativeengineering/jeed_providers.js   the provider recipes (CB; effect ids as
+                                                    string literals),
+  CB kubejs_startup/creativeengineering/{armor,tool}_effects.js   plus the gear registries and the Vinery [wine] effects
   config/vinery-common.toml, config/jeed-client.toml    config it reads; hidden_effects need no source
 
 Vanilla potions are skipped in the name check (the game names them itself).
@@ -46,7 +47,7 @@ EFFECT_OVERRIDES = {
     'vinery:resistance_effect': None,
 }
 # Pack-original effects named in code rather than by a lang key (same list as gen_effect_descriptions.py).
-CODE_NAMES = {'creativeengineering:magic_resistance': 'Magic Resistance'}
+CODE_NAMES = {'creativebrewing:magic_resistance': 'Magic Resistance'}
 POTION_KINDS = ('potion', 'splash_potion', 'lingering_potion', 'tipped_arrow')
 # Vanilla beacon effects: JEED lists the beacon for these by itself (BeaconBlockEntity.BEACON_EFFECTS)
 BEACON_EFFECTS = {'minecraft:speed', 'minecraft:haste', 'minecraft:resistance', 'minecraft:jump_boost',
@@ -83,11 +84,11 @@ def jei_sources(potions):
                     eff = json.loads(z.read(n)).get('effect')
                     if isinstance(eff, str):
                         add(eff, 'jeed')
-    providers = (INSTANCE / 'kubejs/server_scripts/other/jeed_providers.js').read_text()
+    providers = (INSTANCE / 'kubejs/data/creativebrewing/kubejs/creativeengineering/jeed_providers.js').read_text()
     for eid in EFFECT_ID.findall(providers):
         add(eid, 'provider')
     for f in ('armor_effects.js', 'tool_effects.js'):
-        text = (INSTANCE / 'kubejs/startup_scripts/func' / f).read_text()
+        text = (INSTANCE / 'development/creativeBrewing/src/main/resources/kubejs_startup/creativeengineering' / f).read_text()
         for eid in re.findall(r"effect:\s*'([a-z0-9_]+:[a-z0-9_]+)'", text):
             add(eid, 'gear')
     vinery = (INSTANCE / 'config/vinery-common.toml').read_text()

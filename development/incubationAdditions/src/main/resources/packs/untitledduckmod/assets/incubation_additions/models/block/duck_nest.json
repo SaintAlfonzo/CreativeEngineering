@@ -1,6 +1,0 @@
-{
-  "parent": "incubation:block/twig_nest",
-  "textures": {
-    "nest": "incubation_additions:block/duck_nest"
-  }
-}

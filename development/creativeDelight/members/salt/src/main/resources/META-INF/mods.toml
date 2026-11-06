@@ -1,0 +1,27 @@
+# Salt (Creative Delight repack): upstream mods.toml with the display name suffix, our version and cleaned
+# dependencies (creative_delight.md 0.3, 14.1.6). Expanded by ce.forge-mod's processResources.
+# The access transformer is the upstream META-INF/accesstransformer.cfg, copied unchanged: FML 1.19.2 reads that
+# fixed path from every mod jar, nested ones included; no manifest entry exists or is needed.
+modLoader="javafml"
+loaderVersion="[43,)"
+license="${mod_license}"
+issueTrackerURL="https://github.com/mortuusars/Salt/issues"
+[[mods]]
+modId="${mod_id}"
+version="${mod_version}"
+displayName="${mod_name}"
+credits=""
+authors="${mod_authors}"
+description='''${mod_description}'''
+[[dependencies.salt]]
+    modId="forge"
+    mandatory=true
+    versionRange="[43,)"
+    ordering="NONE"
+    side="BOTH"
+[[dependencies.salt]]
+    modId="minecraft"
+    mandatory=true
+    versionRange="[1.19.2,1.20)"
+    ordering="NONE"
+    side="BOTH"

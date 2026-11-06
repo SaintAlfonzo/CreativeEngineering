@@ -4,6 +4,2716 @@ Every version staged by `tools/build_deploy.py`, newest first. Each entry lists 
 version before it and which files the other machines must delete. The full file list of a version is in
 `history/<version>.json`.
 
+<!-- deploy:1.2.01 -->
+## 1.2.01 - 2026-11-04 00:48
+
+- Minecraft 1.19.2, Forge 43.3.9
+- Commit: 6b4c6b85 + 47 uncommitted file(s)
+- Since: 1.2.00
+- Deployed: client 2026-11-04 22:15; server 2026-11-04 22:15
+- Contents: 364 server+client mods, 43 client-only mods, 29 resource pack files, 16 shader pack files
+- Payload: update from 1.2.00, config functional: 65 files, 15.9 MB (mods 6, kubejs 48, world_serverconfig 11)
+- Notes: Barbeque's Delight wood variants and skewering fixes, new jam art, Corn, Cutting Boards, JEI fixes
+- Built with warnings:
+  - kubejs/exported/items_by_mod/displaydelight.json is older than mods/creativedelight-1.0.0.jar: run `/dumpitemsbymod displaydelight`, then tools/gen_display_delight_models.py
+  - 47 uncommitted change(s) in shipped folders (commit 6b4c6b85 + working tree)
+  - changelog lint, kubejs/assets/creativeengineering/changelog/1.0.0.md: line 9: bullet is 1128 characters (over 300: split it or use a sub-bullet)
+  - changelog lint, kubejs/assets/creativeengineering/changelog/1.0.0.md: line 20: bullet is 360 characters (over 300: split it or use a sub-bullet)
+  - changelog lint, kubejs/assets/creativeengineering/changelog/1.0.0.md: line 27: bullet is 301 characters (over 300: split it or use a sub-bullet)
+  - changelog lint, kubejs/assets/creativeengineering/changelog/1.0.0.md: line 29: bullet is 326 characters (over 300: split it or use a sub-bullet)
+  - changelog lint, kubejs/assets/creativeengineering/changelog/1.0.0.md: line 38: bullet is 567 characters (over 300: split it or use a sub-bullet)
+  - changelog lint, kubejs/assets/creativeengineering/changelog/1.0.0.md: line 46: bullet is 956 characters (over 300: split it or use a sub-bullet)
+  - changelog lint, kubejs/assets/creativeengineering/changelog/1.0.0.md: line 55: bullet is 951 characters (over 300: split it or use a sub-bullet)
+  - changelog lint, kubejs/assets/creativeengineering/changelog/1.0.0.md: line 61: bullet is 327 characters (over 300: split it or use a sub-bullet)
+  - changelog lint, kubejs/assets/creativeengineering/changelog/1.0.0.md: line 66: bullet is 859 characters (over 300: split it or use a sub-bullet)
+  - changelog lint, kubejs/assets/creativeengineering/changelog/1.0.0.md: line 73: bullet is 345 characters (over 300: split it or use a sub-bullet)
+  - changelog lint, kubejs/assets/creativeengineering/changelog/1.0.0.md: line 81: bullet is 367 characters (over 300: split it or use a sub-bullet)
+  - changelog lint, kubejs/assets/creativeengineering/changelog/1.0.0.md: line 105: bullet is 371 characters (over 300: split it or use a sub-bullet)
+  - changelog lint, kubejs/assets/creativeengineering/changelog/1.0.0.md: line 115: bullet is 640 characters (over 300: split it or use a sub-bullet)
+  - changelog lint, kubejs/assets/creativeengineering/changelog/1.0.0.md: line 123: bullet is 700 characters (over 300: split it or use a sub-bullet)
+  - changelog lint, kubejs/assets/creativeengineering/changelog/1.0.0.md: line 181: bullet is 396 characters (over 300: split it or use a sub-bullet)
+  - changelog lint, kubejs/assets/creativeengineering/changelog/1.0.0.md: line 213: bullet is 1090 characters (over 300: split it or use a sub-bullet)
+  - changelog lint, kubejs/assets/creativeengineering/changelog/1.0.0.md: line 226: bullet is 501 characters (over 300: split it or use a sub-bullet)
+  - changelog lint, kubejs/assets/creativeengineering/changelog/1.0.0.md: line 240: bullet is 399 characters (over 300: split it or use a sub-bullet)
+  - changelog lint, kubejs/assets/creativeengineering/changelog/1.0.0.md: line 281: bullet is 839 characters (over 300: split it or use a sub-bullet)
+  - changelog lint, kubejs/assets/creativeengineering/changelog/1.0.0.md: line 305: bullet is 390 characters (over 300: split it or use a sub-bullet)
+  - changelog lint, kubejs/assets/creativeengineering/changelog/1.0.0.md: line 317: bullet is 465 characters (over 300: split it or use a sub-bullet)
+  - changelog lint, kubejs/assets/creativeengineering/changelog/1.0.0.md: line 501: bullet is 426 characters (over 300: split it or use a sub-bullet)
+  - changelog lint, kubejs/assets/creativeengineering/changelog/1.0.0.md: line 542: bullet is 451 characters (over 300: split it or use a sub-bullet)
+  - changelog lint, kubejs/assets/creativeengineering/changelog/1.0.0.md: line 547: bullet is 452 characters (over 300: split it or use a sub-bullet)
+  - changelog lint, kubejs/assets/creativeengineering/changelog/1.0.0.md: line 633: bullet is 430 characters (over 300: split it or use a sub-bullet)
+  - changelog lint, kubejs/assets/creativeengineering/changelog/1.1.01.md: line 21: bullet is 484 characters (over 300: split it or use a sub-bullet)
+  - changelog lint, kubejs/assets/creativeengineering/changelog/1.1.01.md: line 30: bullet is 306 characters (over 300: split it or use a sub-bullet)
+  - changelog lint, kubejs/assets/creativeengineering/changelog/1.1.01.md: line 33: bullet is 404 characters (over 300: split it or use a sub-bullet)
+  - changelog lint, kubejs/assets/creativeengineering/changelog/1.1.01.md: line 63: bullet is 425 characters (over 300: split it or use a sub-bullet)
+  - changelog lint, kubejs/assets/creativeengineering/changelog/1.1.01.md: line 76: bullet is 437 characters (over 300: split it or use a sub-bullet)
+  - changelog lint, kubejs/assets/creativeengineering/changelog/1.1.01.md: line 95: bullet is 358 characters (over 300: split it or use a sub-bullet)
+  - changelog lint, kubejs/assets/creativeengineering/changelog/1.1.01.md: line 110: bullet is 593 characters (over 300: split it or use a sub-bullet)
+  - changelog lint, kubejs/assets/creativeengineering/changelog/1.1.01.md: line 116: bullet is 453 characters (over 300: split it or use a sub-bullet)
+  - changelog lint, kubejs/assets/creativeengineering/changelog/1.1.01.md: line 124: bullet is 386 characters (over 300: split it or use a sub-bullet)
+  - changelog lint, kubejs/assets/creativeengineering/changelog/1.1.01.md: line 132: bullet is 427 characters (over 300: split it or use a sub-bullet)
+  - changelog lint, kubejs/assets/creativeengineering/changelog/1.1.01.md: line 139: bullet is 360 characters (over 300: split it or use a sub-bullet)
+  - changelog lint, kubejs/assets/creativeengineering/changelog/1.1.01.md: line 146: bullet is 497 characters (over 300: split it or use a sub-bullet)
+  - changelog lint, kubejs/assets/creativeengineering/changelog/1.1.01.md: line 198: bullet is 458 characters (over 300: split it or use a sub-bullet)
+  - changelog lint, kubejs/assets/creativeengineering/changelog/1.1.01.md: line 201: bullet is 331 characters (over 300: split it or use a sub-bullet)
+  - changelog lint, kubejs/assets/creativeengineering/changelog/1.1.01.md: line 203: bullet is 484 characters (over 300: split it or use a sub-bullet)
+  - changelog lint, kubejs/assets/creativeengineering/changelog/1.1.01.md: line 206: bullet is 412 characters (over 300: split it or use a sub-bullet)
+  - changelog lint, kubejs/assets/creativeengineering/changelog/1.1.01.md: line 214: bullet is 362 characters (over 300: split it or use a sub-bullet)
+  - changelog lint, kubejs/assets/creativeengineering/changelog/1.1.01.md: line 230: bullet is 316 characters (over 300: split it or use a sub-bullet)
+  - changelog lint, kubejs/assets/creativeengineering/changelog/1.1.01.md: line 273: bullet is 726 characters (over 300: split it or use a sub-bullet)
+  - changelog lint, kubejs/assets/creativeengineering/changelog/1.1.01.md: line 291: bullet is 483 characters (over 300: split it or use a sub-bullet)
+  - changelog lint, kubejs/assets/creativeengineering/changelog/1.1.01.md: line 304: bullet is 325 characters (over 300: split it or use a sub-bullet)
+  - changelog lint, kubejs/assets/creativeengineering/changelog/1.1.01.md: line 305: bullet is 491 characters (over 300: split it or use a sub-bullet)
+  - changelog lint, kubejs/assets/creativeengineering/changelog/1.1.01.md: line 349: bullet is 320 characters (over 300: split it or use a sub-bullet)
+  - changelog lint, kubejs/assets/creativeengineering/changelog/1.1.01.md: line 384: bullet is 447 characters (over 300: split it or use a sub-bullet)
+  - changelog lint, kubejs/assets/creativeengineering/changelog/1.1.03.md: line 49: bullet is 437 characters (over 300: split it or use a sub-bullet)
+  - changelog lint, kubejs/assets/creativeengineering/changelog/1.1.03.md: line 58: bullet is 317 characters (over 300: split it or use a sub-bullet)
+  - changelog lint, kubejs/assets/creativeengineering/changelog/1.1.03.md: line 64: bullet is 542 characters (over 300: split it or use a sub-bullet)
+  - changelog lint, kubejs/assets/creativeengineering/changelog/1.1.03.md: line 264: bullet is 614 characters (over 300: split it or use a sub-bullet)
+  - changelog lint, kubejs/assets/creativeengineering/changelog/1.1.04.md: line 66: bullet is 394 characters (over 300: split it or use a sub-bullet)
+
+### Changes
+
+Mods updated (6):
+
+- creativebrewing: `creativebrewing-1.0.0.jar` -> `creativebrewing-1.0.0.jar`
+- creativecalendar: `creativecalendar-1.0.0.jar` -> `creativecalendar-1.0.0.jar`
+- creativecompat: `creativecompat-1.0.0.jar` -> `creativecompat-1.0.0.jar`
+- creativedelight: `creativedelight-1.0.0.jar` -> `creativedelight-1.0.0.jar`
+- creativeengineering: `creativeengineering-1.1.08.jar` -> `creativeengineering-1.1.08.jar`
+- creativeworldgen: `creativeworldgen-1.0.0.jar` -> `creativeworldgen-1.0.0.jar`
+
+<details><summary>kubejs/: 13 added, 35 changed, 1 removed</summary>
+
+*added (13)*
+
+- `assets/creativeengineering/changelog/1.2.01.md`
+- `assets/mason_jar_new/new_jar/honey_jar.png`
+- `assets/mason_jar_new/new_jello_block/` (10 files)
+- `assets/mason_jar_new/new_mason_jar_interior/honey_jar_interior_texture.png`
+
+*changed (35)*
+
+- `assets/mason_jar_new/new_jam_block/` (10 files)
+- `assets/mason_jar_new/new_jar/banana_jam.png`
+- `assets/mason_jar_new/new_jar/cherry_jam.png`
+- `assets/mason_jar_new/new_jar/green_grape_jam.png`
+- `assets/mason_jar_new/new_jar/mulberry_jam.png`
+- `assets/mason_jar_new/new_jar/pepper_jam.png`
+- `assets/mason_jar_new/new_jar/raspberry_jam.png`
+- `assets/mason_jar_new/new_jar/red_grape_jam.png`
+- `assets/mason_jar_new/new_jar/salmonberry_jam.png`
+- `assets/mason_jar_new/new_jello_bowl/banana_jello_bowl.png`
+- `assets/mason_jar_new/new_jello_bowl/cherry_jello_bowl.png`
+- `assets/mason_jar_new/new_jello_bowl/green_grape_jello_bowl.png`
+- `assets/mason_jar_new/new_jello_bowl/mulberry_jello_bowl.png`
+- `assets/mason_jar_new/new_jello_bowl/raspberry_jello_bowl.png`
+- `assets/mason_jar_new/new_jello_bowl/red_grape_jello_bowl.png`
+- `assets/mason_jar_new/new_jello_bowl/salmonberry_jello_bowl.png`
+- `assets/mason_jar_new/new_jello_bowl/strawberries_jello_bowl.png`
+- `assets/mason_jar_new/new_mason_jar_interior/banana_jam_interior_texture.png`
+- `assets/mason_jar_new/new_mason_jar_interior/cherry_jam_interior_texture.png`
+- `assets/mason_jar_new/new_mason_jar_interior/green_grape_jam_interior_texture.png`
+- `assets/mason_jar_new/new_mason_jar_interior/mulberry_jam_interior_texture.png`
+- `assets/mason_jar_new/new_mason_jar_interior/raspberry_jam_interior_texture.png`
+- `assets/mason_jar_new/new_mason_jar_interior/red_grape_jam_interior_texture.png`
+- `assets/mason_jar_new/new_mason_jar_interior/salmonberry_jam_interior_texture.png`
+- `startup_scripts/_lib/block_dict.js`
+- `startup_scripts/_lib/item_dict.js`
+
+*removed (1)*
+
+- `assets/creativeengineering/textures/slot/empty_face_slot.png`
+
+</details>
+
+### Removals (from 1.2.00)
+
+Delete on the server (1, also in removals_server.txt):
+
+- `kubejs/assets/creativeengineering/textures/slot/empty_face_slot.png`
+
+Delete on the client (1, also in removals_client.txt):
+
+- `kubejs/assets/creativeengineering/textures/slot/empty_face_slot.png`
+
+<!-- deploy:1.2.00 -->
+## 1.2.00 - 2026-11-03 20:38
+
+- Minecraft 1.19.2, Forge 43.3.9
+- Commit: 9848e5cb + 67 uncommitted file(s)
+- Since: 1.1.06
+- Deployed: client 2026-11-03 20:40; server 2026-11-03 20:55; client 2026-11-03 20:55
+- Contents: 364 server+client mods, 43 client-only mods, 29 resource pack files, 16 shader pack files
+- Payload: install, config functional: 2870 files, 549.2 MB (mods 364, client_mods 43, kubejs 2015, config 362, defaultconfigs 11, resourcepacks 29, shaderpacks 16, vinery_upstream 2, miners_upstream 2, rustic_upstream 1, roll_upstream 1, largemeals_upstream 1, farmers_upstream 1, oceanic_upstream 1, enders_upstream 1, goldenfood_upstream 1, server 8, world_serverconfig 11)
+- Notes: 1.2.00 full install payload (Creative Split): all in-tree mods rebuilt from source 2026-11-03
+- Built with warnings:
+  - kubejs/exported/items_by_mod/displaydelight.json is older than mods/creativedelight-1.0.0.jar: run `/dumpitemsbymod displaydelight`, then tools/gen_display_delight_models.py
+  - 67 uncommitted change(s) in shipped folders (commit 9848e5cb + working tree)
+  - changelog lint, kubejs/assets/creativeengineering/changelog/1.0.0.md: line 9: bullet is 1128 characters (over 300: split it or use a sub-bullet)
+  - changelog lint, kubejs/assets/creativeengineering/changelog/1.0.0.md: line 20: bullet is 360 characters (over 300: split it or use a sub-bullet)
+  - changelog lint, kubejs/assets/creativeengineering/changelog/1.0.0.md: line 27: bullet is 301 characters (over 300: split it or use a sub-bullet)
+  - changelog lint, kubejs/assets/creativeengineering/changelog/1.0.0.md: line 29: bullet is 326 characters (over 300: split it or use a sub-bullet)
+  - changelog lint, kubejs/assets/creativeengineering/changelog/1.0.0.md: line 38: bullet is 567 characters (over 300: split it or use a sub-bullet)
+  - changelog lint, kubejs/assets/creativeengineering/changelog/1.0.0.md: line 46: bullet is 956 characters (over 300: split it or use a sub-bullet)
+  - changelog lint, kubejs/assets/creativeengineering/changelog/1.0.0.md: line 55: bullet is 951 characters (over 300: split it or use a sub-bullet)
+  - changelog lint, kubejs/assets/creativeengineering/changelog/1.0.0.md: line 61: bullet is 327 characters (over 300: split it or use a sub-bullet)
+  - changelog lint, kubejs/assets/creativeengineering/changelog/1.0.0.md: line 66: bullet is 859 characters (over 300: split it or use a sub-bullet)
+  - changelog lint, kubejs/assets/creativeengineering/changelog/1.0.0.md: line 73: bullet is 345 characters (over 300: split it or use a sub-bullet)
+  - changelog lint, kubejs/assets/creativeengineering/changelog/1.0.0.md: line 81: bullet is 367 characters (over 300: split it or use a sub-bullet)
+  - changelog lint, kubejs/assets/creativeengineering/changelog/1.0.0.md: line 105: bullet is 371 characters (over 300: split it or use a sub-bullet)
+  - changelog lint, kubejs/assets/creativeengineering/changelog/1.0.0.md: line 115: bullet is 640 characters (over 300: split it or use a sub-bullet)
+  - changelog lint, kubejs/assets/creativeengineering/changelog/1.0.0.md: line 123: bullet is 700 characters (over 300: split it or use a sub-bullet)
+  - changelog lint, kubejs/assets/creativeengineering/changelog/1.0.0.md: line 181: bullet is 396 characters (over 300: split it or use a sub-bullet)
+  - changelog lint, kubejs/assets/creativeengineering/changelog/1.0.0.md: line 213: bullet is 1090 characters (over 300: split it or use a sub-bullet)
+  - changelog lint, kubejs/assets/creativeengineering/changelog/1.0.0.md: line 226: bullet is 501 characters (over 300: split it or use a sub-bullet)
+  - changelog lint, kubejs/assets/creativeengineering/changelog/1.0.0.md: line 240: bullet is 399 characters (over 300: split it or use a sub-bullet)
+  - changelog lint, kubejs/assets/creativeengineering/changelog/1.0.0.md: line 281: bullet is 839 characters (over 300: split it or use a sub-bullet)
+  - changelog lint, kubejs/assets/creativeengineering/changelog/1.0.0.md: line 305: bullet is 390 characters (over 300: split it or use a sub-bullet)
+  - changelog lint, kubejs/assets/creativeengineering/changelog/1.0.0.md: line 317: bullet is 465 characters (over 300: split it or use a sub-bullet)
+  - changelog lint, kubejs/assets/creativeengineering/changelog/1.0.0.md: line 501: bullet is 426 characters (over 300: split it or use a sub-bullet)
+  - changelog lint, kubejs/assets/creativeengineering/changelog/1.0.0.md: line 542: bullet is 451 characters (over 300: split it or use a sub-bullet)
+  - changelog lint, kubejs/assets/creativeengineering/changelog/1.0.0.md: line 547: bullet is 452 characters (over 300: split it or use a sub-bullet)
+  - changelog lint, kubejs/assets/creativeengineering/changelog/1.0.0.md: line 633: bullet is 430 characters (over 300: split it or use a sub-bullet)
+  - changelog lint, kubejs/assets/creativeengineering/changelog/1.1.01.md: line 21: bullet is 484 characters (over 300: split it or use a sub-bullet)
+  - changelog lint, kubejs/assets/creativeengineering/changelog/1.1.01.md: line 30: bullet is 306 characters (over 300: split it or use a sub-bullet)
+  - changelog lint, kubejs/assets/creativeengineering/changelog/1.1.01.md: line 33: bullet is 404 characters (over 300: split it or use a sub-bullet)
+  - changelog lint, kubejs/assets/creativeengineering/changelog/1.1.01.md: line 63: bullet is 425 characters (over 300: split it or use a sub-bullet)
+  - changelog lint, kubejs/assets/creativeengineering/changelog/1.1.01.md: line 76: bullet is 437 characters (over 300: split it or use a sub-bullet)
+  - changelog lint, kubejs/assets/creativeengineering/changelog/1.1.01.md: line 95: bullet is 358 characters (over 300: split it or use a sub-bullet)
+  - changelog lint, kubejs/assets/creativeengineering/changelog/1.1.01.md: line 110: bullet is 593 characters (over 300: split it or use a sub-bullet)
+  - changelog lint, kubejs/assets/creativeengineering/changelog/1.1.01.md: line 116: bullet is 453 characters (over 300: split it or use a sub-bullet)
+  - changelog lint, kubejs/assets/creativeengineering/changelog/1.1.01.md: line 124: bullet is 386 characters (over 300: split it or use a sub-bullet)
+  - changelog lint, kubejs/assets/creativeengineering/changelog/1.1.01.md: line 132: bullet is 427 characters (over 300: split it or use a sub-bullet)
+  - changelog lint, kubejs/assets/creativeengineering/changelog/1.1.01.md: line 139: bullet is 360 characters (over 300: split it or use a sub-bullet)
+  - changelog lint, kubejs/assets/creativeengineering/changelog/1.1.01.md: line 146: bullet is 497 characters (over 300: split it or use a sub-bullet)
+  - changelog lint, kubejs/assets/creativeengineering/changelog/1.1.01.md: line 198: bullet is 458 characters (over 300: split it or use a sub-bullet)
+  - changelog lint, kubejs/assets/creativeengineering/changelog/1.1.01.md: line 201: bullet is 331 characters (over 300: split it or use a sub-bullet)
+  - changelog lint, kubejs/assets/creativeengineering/changelog/1.1.01.md: line 203: bullet is 484 characters (over 300: split it or use a sub-bullet)
+  - changelog lint, kubejs/assets/creativeengineering/changelog/1.1.01.md: line 206: bullet is 412 characters (over 300: split it or use a sub-bullet)
+  - changelog lint, kubejs/assets/creativeengineering/changelog/1.1.01.md: line 214: bullet is 362 characters (over 300: split it or use a sub-bullet)
+  - changelog lint, kubejs/assets/creativeengineering/changelog/1.1.01.md: line 230: bullet is 316 characters (over 300: split it or use a sub-bullet)
+  - changelog lint, kubejs/assets/creativeengineering/changelog/1.1.01.md: line 273: bullet is 726 characters (over 300: split it or use a sub-bullet)
+  - changelog lint, kubejs/assets/creativeengineering/changelog/1.1.01.md: line 291: bullet is 483 characters (over 300: split it or use a sub-bullet)
+  - changelog lint, kubejs/assets/creativeengineering/changelog/1.1.01.md: line 304: bullet is 325 characters (over 300: split it or use a sub-bullet)
+  - changelog lint, kubejs/assets/creativeengineering/changelog/1.1.01.md: line 305: bullet is 491 characters (over 300: split it or use a sub-bullet)
+  - changelog lint, kubejs/assets/creativeengineering/changelog/1.1.01.md: line 349: bullet is 320 characters (over 300: split it or use a sub-bullet)
+  - changelog lint, kubejs/assets/creativeengineering/changelog/1.1.01.md: line 384: bullet is 447 characters (over 300: split it or use a sub-bullet)
+  - changelog lint, kubejs/assets/creativeengineering/changelog/1.1.03.md: line 49: bullet is 437 characters (over 300: split it or use a sub-bullet)
+  - changelog lint, kubejs/assets/creativeengineering/changelog/1.1.03.md: line 58: bullet is 317 characters (over 300: split it or use a sub-bullet)
+  - changelog lint, kubejs/assets/creativeengineering/changelog/1.1.03.md: line 64: bullet is 542 characters (over 300: split it or use a sub-bullet)
+  - changelog lint, kubejs/assets/creativeengineering/changelog/1.1.03.md: line 264: bullet is 614 characters (over 300: split it or use a sub-bullet)
+  - changelog lint, kubejs/assets/creativeengineering/changelog/1.1.04.md: line 66: bullet is 394 characters (over 300: split it or use a sub-bullet)
+
+### Changes
+
+Mods added (8):
+
+- creativebrewing `creativebrewing-1.0.0.jar` (both)
+- creativecalendar `creativecalendar-1.0.0.jar` (both)
+- creativecompat `creativecompat-1.0.0.jar` (both)
+- creativedelight `creativedelight-1.0.0.jar` (both)
+- creativeworldgen `creativeworldgen-1.0.0.jar` (both)
+- FTB Chunks (NeoForge) `ftb-chunks-forge-1902.4.7-build.420.jar` (both)
+- FTB Essentials (Forge & Fabric) `ftb-essentials-forge-1902.3.5-build.120.jar` (both)
+- FTB Quests Optimizer 1.2.1-1.19.2 `FTBQuestsOptimizer-forge-1.2.1-1.19.2.jar` (both)
+
+Mods updated (2):
+
+- creative_labels: `creativeLabels-1.0.0.jar` -> `creativeLabels-1.0.1.jar`
+- creativeengineering: `creativeengineering-1.1.04.jar` -> `creativeengineering-1.1.08.jar`
+
+Mods removed (15):
+
+- baby_mobs `babyMobs-1.0.0.jar` (was both)
+- Canned Goods :| 1.0.3 `CannedGoods-1.19.2-3.jar` (was both)
+- Create : The Salt 1.1.0 `create_salt 1.19.2-1.1.0.jar` (was both)
+- creative_brewing `creative_brewing-1.0.0.jar` (was both)
+- creative_delight `creative_delight-1.0.0.jar` (was both)
+- displaydelight `backportedDisplay-1.7.0-ce-19.2-01.jar` (was both)
+- fungidelight `backportedFungi-1.3-ce-19.2-01.jar` (was both)
+- Golden Foods! 1.19.2-2.0.0 `goldenfood-1.19.2-2.0.0.jar` (was both)
+- incubation_additions `incubationAdditions-1.1.0.jar` (was both)
+- miners_delight `backportedMiners-1.4.5-ce-19.2-01.jar` (was both)
+- more_mooblooms `moreMooblooms-1.1.0.jar` (was both)
+- Nether's Delight 1.19-3.1 `NethersDelight-1.19-3.1.jar` (was both)
+- The Salt 1.2.4.1 `salt-1.19.2-1.2.4.1.jar` (was both)
+- veggiesdelight `backportedVeggies-1.9.2-ce-19.2-03.jar` (was both)
+- vintagedelight `backportedVintage-0.1.6-ce-19.2-09.jar` (was both)
+
+<details><summary>kubejs/: 140 added, 77 changed, 1080 removed</summary>
+
+*added (140)*
+
+- `assets/creativedelight/textures/block/treated_stick.png`
+- `assets/creativedelight/textures/block/treated_stick_cross.png`
+- `assets/creativeengineering/changelog/1.0.0.md`
+- `assets/creativeengineering/changelog/1.2.00.md`
+- `assets/creativeengineering/textures/item/` (17 files)
+- `assets/farmersdelight/textures/item/` (11 files)
+- `assets/fruitsdelight/blockstates/attached_hamimelon_stem.json`
+- `assets/mason_jar_new/new_jam_block/` (10 files)
+- `assets/mason_jar_new/new_jar/` (16 files)
+- `assets/mason_jar_new/new_jello_bowl/` (10 files)
+- `assets/mason_jar_new/new_jelly_block/` (10 files)
+- `assets/mason_jar_new/new_mason_jar_interior/` (41 files)
+- `assets/minecraft/blockstates/attached_melon_stem.json`
+- `assets/minecraft/blockstates/attached_pumpkin_stem.json`
+- `assets/vintagedelight/textures/item/cucumber_dough.png`
+- `client_scripts/plantable_tooltip.js`
+- `data/creativeengineering/worldgen/structure/waystone_ruin_part.json`
+- `data/creativeengineering/worldgen/template_pool/waystone_ruin_part.json`
+- `data/endersdelight/loot_modifiers/scavenging_shulker_mollusk_from_shulker.json`
+- `data/fruitsdelight/loot_tables/blocks/lemon_tree.json`
+- `data/immersiveengineering/loot_tables/blocks/potted_hemp.json`
+- `data/miners_delight/loot_tables/blocks/potted_gossypium.json`
+- `data/philipsruins/worldgen/structure/lost_soul_city.json`
+- `data/philipsruins/worldgen/structure/lost_soul_dungeon.json`
+- `data/philipsruins/worldgen/structure/rare_ruin.json`
+- `data/philipsruins/worldgen/structure/start_nether_ruin.json`
+- `data/upgrade_aquatic/separated_leaves/river.json`
+- `generation_scripts/food/food_tuning.json`
+- `server_scripts/_lib/removed_item_tags.js`
+- `server_scripts/tags/plantabletags.js`
+- `startup_scripts/_lib/misc_dict.js`
+- `startup_scripts/_lib/tool_dict.js`
+
+*changed (77)*
+
+- `assets/creativeengineering/jei_world/jar_interaction/generated.json`
+- `assets/creativeengineering/jei_world/jar_storage/generated.json`
+- `assets/creativeengineering/lang/en_us.json`
+- `assets/creativeengineering/textures/block/dough_block/cucumber_dough_block.png`
+- `assets/creativeengineering/textures/item/seasoned/cheese.png`
+- `assets/creativeengineering/textures/item/seasoned/garlic.png`
+- `assets/creativeengineering/textures/item/seasoned/onion.png`
+- `assets/creativeengineering/textures/item/seasoned/sugar.png`
+- `assets/creativeengineering/textures/item/seasoned/void_pepper.png`
+- `assets/displaydelight/lang/en_us.json`
+- `assets/pneumaticcraft/lang/en_us.json`
+- `assets/salt/textures/item/salted_overlay.png`
+- `client_scripts/fluid_jei.js`
+- `client_scripts/namechanges.js`
+- `client_scripts/tooltips.js`
+- `data/creativeengineering/forge/biome_modifier/moobloom_cows.json`
+- `data/creativeengineering/moonlight/soft_fluids/nut_milk.json`
+- `data/salt/loot_tables/cauldron_evaporation/salt_full.json`
+- `data/salt/loot_tables/cauldron_evaporation/salt_level_1.json`
+- `data/salt/loot_tables/cauldron_evaporation/salt_level_2.json`
+- `generation_scripts/food/comfort_nourishment.json`
+- `generation_scripts/food/food_families.json`
+- `generation_scripts/stacks/stack_sizes.json`
+- `generation_scripts/worldgen/` (14 files)
+- `server_scripts/_lib/export_io.js`
+- `server_scripts/_lib/java_guard.js`
+- `server_scripts/cooking/cooking.js`
+- `server_scripts/economy/trades.js`
+- `server_scripts/economy/wandering_trades.js`
+- `server_scripts/engineering/dust.js`
+- `server_scripts/engineering/fabric.js`
+- `server_scripts/equipment/end_gear.js`
+- `server_scripts/magic/enchants.js`
+- `server_scripts/other/item_merges.js`
+- `server_scripts/tags/` (12 files)
+- `server_scripts/wood/bark.js`
+- `server_scripts/wood/wood_types.js`
+- `startup_scripts/_lib/block_dict.js`
+- `startup_scripts/_lib/fluid_dict.js`
+- `startup_scripts/_lib/food_dict.js`
+- `startup_scripts/_lib/food_grammar.js`
+- `startup_scripts/_lib/item_dict.js`
+- `startup_scripts/_lib/item_merges.js`
+- `startup_scripts/_lib/removed_items.js`
+- `startup_scripts/_lib/removed_woods.js`
+- `startup_scripts/changes/pnc_tooltips.js`
+- `startup_scripts/changes/transition_items.js`
+- `startup_scripts/func/trade_helper.js`
+- `startup_scripts/func/tune_tools.js`
+- `startup_scripts/items/decor_blocks.js`
+- `startup_scripts/items/dust_piles.js`
+- `startup_scripts/items/echo_tools.js`
+- `startup_scripts/items/plate_blocks.js`
+
+*removed (1080)*
+
+- `assets/prepared_flesh.png`
+- `assets/creative_delight/textures/block/treated_stick.png`
+- `assets/creative_delight/textures/block/treated_stick_cross.png`
+- `assets/creativeengineering/blockstates/weathered_cardboard_box.json`
+- `assets/creativeengineering/models/block/weathered_cardboard_box.json`
+- `assets/creativeengineering/models/item/weathered_cardboard_box.json`
+- `assets/creativeengineering/textures/block/weathered_cardboard_box.png`
+- `client_scripts/armor_effects_tooltip.js`
+- `client_scripts/potion_buckets.js`
+- `client_scripts/texture_tool.js`
+- `client_scripts/tool_effects_tooltip.js`
+- `data/creativeengineering/curios/entities/player_hands_face.json`
+- `data/creativeengineering/curios/slots/face.json`
+- `data/creativeengineering/curios/slots/feet.json`
+- `data/creativeengineering/curios/slots/hands.json`
+- `data/creativeengineering/loot_tables/gameplay/fishing_net/coral.json`
+- `data/creativeengineering/loot_tables/gameplay/fishing_net/junk.json`
+- `data/creativeengineering/loot_tables/gameplay/fishing_net/ocean_treasure.json`
+- `data/creativeengineering/loot_tables/misc/monster_box_reward.json`
+- `data/creativeengineering/moonlight/soft_fluids/` (15 files)
+- `data/creativeengineering/paintings/alexsmobs/dog_poker.json`
+- `data/creativeengineering/paintings/alexsmobs/dog_poker.png`
+- `data/creativeengineering/paintings/alexsmobs/nft.json`
+- `data/creativeengineering/paintings/alexsmobs/nft.png`
+- `data/creativeengineering/paintings/buzzier_bees/candle.json`
+- `data/creativeengineering/paintings/buzzier_bees/candle.png`
+- `data/creativeengineering/paintings/cccbridge/funny_redrouters.json`
+- `data/creativeengineering/paintings/cccbridge/funny_redrouters.png`
+- `data/creativeengineering/paintings/clayworks/baked.json`
+- `data/creativeengineering/paintings/clayworks/baked.png`
+- `data/creativeengineering/paintings/create_things_and_misc/create_2022.json`
+- `data/creativeengineering/paintings/create_things_and_misc/create_2022.png`
+- `data/creativeengineering/paintings/darkpaintings/` (60 files)
+- `data/creativeengineering/paintings/handcrafted/` (56 files)
+- `data/creativeengineering/paintings/minecraft/` (60 files)
+- `data/creativeengineering/paintings/minecraft_style_paintings/` (24 files)
+- `data/creativeengineering/paintings/neapolitan/cone.json`
+- `data/creativeengineering/paintings/neapolitan/cone.png`
+- `data/creativeengineering/paintings/neapolitan/dawn.json`
+- `data/creativeengineering/paintings/neapolitan/dawn.png`
+- `data/creativeengineering/paintings/neapolitan/scream.json`
+- `data/creativeengineering/paintings/neapolitan/scream.png`
+- `data/creativeengineering/paintings/paintings_pack1/` (98 files)
+- `data/creativeengineering/paintings/rebirth_paintings/` (500 files)
+- `data/creativeengineering/paintings/supplementaries/bombs.json`
+- `data/creativeengineering/paintings/supplementaries/bombs.png`
+- `data/creativeengineering/paintings/toomanypaintings/` (130 files)
+- `data/creativeengineering/paintings/upgrade_aquatic/sightless.json`
+- `data/creativeengineering/paintings/upgrade_aquatic/sightless.png`
+- `data/more_mooblooms/moobloom_spawns/creativeengineering.json`
+- `data/oceanic_delight/loot_tables/gameplay/fishing_net_on_kelp.json`
+- `data/oceanic_delight/loot_tables/gameplay/fishing_net_on_sea_grass.json`
+- `data/vintagedelight/moonlight/soft_fluids/pepper_jam.json`
+- `data/vintagedelight/moonlight/soft_fluids/relish.json`
+- `data/watchtower_building/advancements/watchtower_found.json`
+- `generation_scripts/food/can_servings.json`
+- `generation_scripts/food/can_types.json`
+- `generation_scripts/food/food_types.json`
+- `generation_scripts/food/mortar_catalog.json`
+- `generation_scripts/food/placeable.json`
+- `server_scripts/_lib/` (30 files)
+- `server_scripts/cooking/alcohol.js`
+- `server_scripts/economy/coin.js`
+- `server_scripts/engineering/potion_bottling.js`
+- `server_scripts/engineering/potion_buckets.js`
+- `server_scripts/engineering/sample_syringe.js`
+- `server_scripts/equipment/tipped_arrows.js`
+- `server_scripts/loot/` (13 files)
+- `server_scripts/magic/armor_effects.js`
+- `server_scripts/magic/lava_vision.js`
+- `server_scripts/magic/tool_effects.js`
+- `server_scripts/other/dead_recipe_removal.js`
+- `server_scripts/other/feature_ports.js`
+- `server_scripts/other/flowers.js`
+- `server_scripts/other/harvest.js`
+- `server_scripts/other/jeed_providers.js`
+- `server_scripts/other/misc_mods.js`
+- `server_scripts/other/removed_mobs.js`
+- `server_scripts/other/starter_kit.js`
+- `server_scripts/tags/entitytags.js`
+- `server_scripts/tags/item_physics_tags.js`
+- `server_scripts/tags/loottags.js`
+- `server_scripts/worldgen/` (11 files)
+- `startup_scripts/cooking/alcohol_drinks.js`
+- `startup_scripts/cooking/food_values.js`
+- `startup_scripts/cooking/potions.js`
+- `startup_scripts/func/armor_effects.js`
+- `startup_scripts/func/item_physics.js`
+- `startup_scripts/func/potion_area.js`
+- `startup_scripts/func/sample_syringe.js`
+- `startup_scripts/func/tool_effects.js`
+- `startup_scripts/items/potion_buckets.js`
+- `startup_scripts/items/sample_syringe.js`
+- `startup_scripts/magic/magic_resistance.js`
+
+</details>
+
+config/: 12 added, 13 changed, 5 removed:
+
+*added (12)*
+
+- `/` (12 files)
+
+*changed (13)*
+
+- `/` (10 files)
+- `jei/ingredient-list-mod-sort-order.ini`
+- `jei/recipe-category-sort-order.ini`
+- `worldedit/worldedit.properties`
+
+*removed (5)*
+
+- `creative_brewing-common.toml`
+- `creative_delight-common.toml`
+- `displaydelight-common.toml`
+- `salt-common.toml`
+- `vintagedelight-common.toml`
+
+defaultconfigs/: 3 added, 0 changed, 0 removed:
+
+*added (3)*
+
+- `ftbessentials-server.snbt`
+- `ftbchunks/client-config.snbt`
+- `ftbchunks/ftbchunks-world.snbt`
+
+miners_upstream/: 1 added, 0 changed, 0 removed:
+
+*added (1)*
+
+- `miners_delight-1.19.2-1.1.2.jar`
+
+roll_upstream/: 1 added, 0 changed, 0 removed:
+
+*added (1)*
+
+- `roll_delight-1.3.1-forge-1.20.1.jar`
+
+largemeals_upstream/: 1 added, 0 changed, 0 removed:
+
+*added (1)*
+
+- `largemeals-1.20.1-1.3.0.jar`
+
+oceanic_upstream/: 1 added, 0 changed, 0 removed:
+
+*added (1)*
+
+- `oceanic_delight-1.0.1-forge-1.19.2.jar`
+
+enders_upstream/: 1 added, 0 changed, 0 removed:
+
+*added (1)*
+
+- `endersdelight-1.1.4.jar`
+
+goldenfood_upstream/: 1 added, 0 changed, 0 removed:
+
+*added (1)*
+
+- `goldenfood-1.19.2-2.0.0.jar`
+
+### Removals
+
+<details><summary>Delete on the server (1102, also in removals_server.txt)</summary>
+
+- `config/creative_brewing-common.toml`
+- `config/creative_delight-common.toml`
+- `config/displaydelight-common.toml`
+- `config/salt-common.toml`
+- `config/vintagedelight-common.toml`
+- `kubejs/assets/creative_delight/textures/block/treated_stick.png`
+- `kubejs/assets/creative_delight/textures/block/treated_stick_cross.png`
+- `kubejs/assets/creativeengineering/blockstates/weathered_cardboard_box.json`
+- `kubejs/assets/creativeengineering/models/block/weathered_cardboard_box.json`
+- `kubejs/assets/creativeengineering/models/item/weathered_cardboard_box.json`
+- `kubejs/assets/creativeengineering/textures/block/weathered_cardboard_box.png`
+- `kubejs/assets/prepared_flesh.png`
+- `kubejs/client_scripts/armor_effects_tooltip.js`
+- `kubejs/client_scripts/potion_buckets.js`
+- `kubejs/client_scripts/texture_tool.js`
+- `kubejs/client_scripts/tool_effects_tooltip.js`
+- `kubejs/data/creativeengineering/curios/entities/player_hands_face.json`
+- `kubejs/data/creativeengineering/curios/slots/face.json`
+- `kubejs/data/creativeengineering/curios/slots/feet.json`
+- `kubejs/data/creativeengineering/curios/slots/hands.json`
+- `kubejs/data/creativeengineering/loot_tables/gameplay/fishing_net/coral.json`
+- `kubejs/data/creativeengineering/loot_tables/gameplay/fishing_net/junk.json`
+- `kubejs/data/creativeengineering/loot_tables/gameplay/fishing_net/ocean_treasure.json`
+- `kubejs/data/creativeengineering/loot_tables/misc/monster_box_reward.json`
+- `kubejs/data/creativeengineering/moonlight/soft_fluids/baked_cod_stew_cup.json`
+- `kubejs/data/creativeengineering/moonlight/soft_fluids/bat_soup_cup.json`
+- `kubejs/data/creativeengineering/moonlight/soft_fluids/beef_stew_cup.json`
+- `kubejs/data/creativeengineering/moonlight/soft_fluids/beetroot_soup_cup.json`
+- `kubejs/data/creativeengineering/moonlight/soft_fluids/bone_broth_cup.json`
+- `kubejs/data/creativeengineering/moonlight/soft_fluids/cave_soup_cup.json`
+- `kubejs/data/creativeengineering/moonlight/soft_fluids/chicken_soup_cup.json`
+- `kubejs/data/creativeengineering/moonlight/soft_fluids/fish_stew_cup.json`
+- `kubejs/data/creativeengineering/moonlight/soft_fluids/insect_stew_cup.json`
+- `kubejs/data/creativeengineering/moonlight/soft_fluids/mushroom_stew_cup.json`
+- `kubejs/data/creativeengineering/moonlight/soft_fluids/noodle_soup_cup.json`
+- `kubejs/data/creativeengineering/moonlight/soft_fluids/onion_soup_cup.json`
+- `kubejs/data/creativeengineering/moonlight/soft_fluids/pumpkin_soup_cup.json`
+- `kubejs/data/creativeengineering/moonlight/soft_fluids/rabbit_stew_cup.json`
+- `kubejs/data/creativeengineering/moonlight/soft_fluids/vegetable_soup_cup.json`
+- `kubejs/data/creativeengineering/paintings/alexsmobs/dog_poker.json`
+- `kubejs/data/creativeengineering/paintings/alexsmobs/dog_poker.png`
+- `kubejs/data/creativeengineering/paintings/alexsmobs/nft.json`
+- `kubejs/data/creativeengineering/paintings/alexsmobs/nft.png`
+- `kubejs/data/creativeengineering/paintings/buzzier_bees/candle.json`
+- `kubejs/data/creativeengineering/paintings/buzzier_bees/candle.png`
+- `kubejs/data/creativeengineering/paintings/cccbridge/funny_redrouters.json`
+- `kubejs/data/creativeengineering/paintings/cccbridge/funny_redrouters.png`
+- `kubejs/data/creativeengineering/paintings/clayworks/baked.json`
+- `kubejs/data/creativeengineering/paintings/clayworks/baked.png`
+- `kubejs/data/creativeengineering/paintings/create_things_and_misc/create_2022.json`
+- `kubejs/data/creativeengineering/paintings/create_things_and_misc/create_2022.png`
+- `kubejs/data/creativeengineering/paintings/darkpaintings/a_distant_light.json`
+- `kubejs/data/creativeengineering/paintings/darkpaintings/a_distant_light.png`
+- `kubejs/data/creativeengineering/paintings/darkpaintings/afternoon_volcano.json`
+- `kubejs/data/creativeengineering/paintings/darkpaintings/afternoon_volcano.png`
+- `kubejs/data/creativeengineering/paintings/darkpaintings/antler_maze.json`
+- `kubejs/data/creativeengineering/paintings/darkpaintings/antler_maze.png`
+- `kubejs/data/creativeengineering/paintings/darkpaintings/bubbles.json`
+- `kubejs/data/creativeengineering/paintings/darkpaintings/bubbles.png`
+- `kubejs/data/creativeengineering/paintings/darkpaintings/cottage_by_the_river.json`
+- `kubejs/data/creativeengineering/paintings/darkpaintings/cottage_by_the_river.png`
+- `kubejs/data/creativeengineering/paintings/darkpaintings/crimson_taiga.json`
+- `kubejs/data/creativeengineering/paintings/darkpaintings/crimson_taiga.png`
+- `kubejs/data/creativeengineering/paintings/darkpaintings/daybreak.json`
+- `kubejs/data/creativeengineering/paintings/darkpaintings/daybreak.png`
+- `kubejs/data/creativeengineering/paintings/darkpaintings/enderman.json`
+- `kubejs/data/creativeengineering/paintings/darkpaintings/enderman.png`
+- `kubejs/data/creativeengineering/paintings/darkpaintings/in_the_air.json`
+- `kubejs/data/creativeengineering/paintings/darkpaintings/in_the_air.png`
+- `kubejs/data/creativeengineering/paintings/darkpaintings/kerstball.json`
+- `kubejs/data/creativeengineering/paintings/darkpaintings/kerstball.png`
+- `kubejs/data/creativeengineering/paintings/darkpaintings/last_dreams_at_candyland.json`
+- `kubejs/data/creativeengineering/paintings/darkpaintings/last_dreams_at_candyland.png`
+- `kubejs/data/creativeengineering/paintings/darkpaintings/lumberjack.json`
+- `kubejs/data/creativeengineering/paintings/darkpaintings/lumberjack.png`
+- `kubejs/data/creativeengineering/paintings/darkpaintings/mr_moon.json`
+- `kubejs/data/creativeengineering/paintings/darkpaintings/mr_moon.png`
+- `kubejs/data/creativeengineering/paintings/darkpaintings/oceanic_view.json`
+- `kubejs/data/creativeengineering/paintings/darkpaintings/oceanic_view.png`
+- `kubejs/data/creativeengineering/paintings/darkpaintings/planets.json`
+- `kubejs/data/creativeengineering/paintings/darkpaintings/planets.png`
+- `kubejs/data/creativeengineering/paintings/darkpaintings/santa_moon.json`
+- `kubejs/data/creativeengineering/paintings/darkpaintings/santa_moon.png`
+- `kubejs/data/creativeengineering/paintings/darkpaintings/seavibe.json`
+- `kubejs/data/creativeengineering/paintings/darkpaintings/seavibe.png`
+- `kubejs/data/creativeengineering/paintings/darkpaintings/sir_ramfrez_yarn_paradise.json`
+- `kubejs/data/creativeengineering/paintings/darkpaintings/sir_ramfrez_yarn_paradise.png`
+- `kubejs/data/creativeengineering/paintings/darkpaintings/skyblock.json`
+- `kubejs/data/creativeengineering/paintings/darkpaintings/skyblock.png`
+- `kubejs/data/creativeengineering/paintings/darkpaintings/snowman_scenery.json`
+- `kubejs/data/creativeengineering/paintings/darkpaintings/snowman_scenery.png`
+- `kubejs/data/creativeengineering/paintings/darkpaintings/summer_heat.json`
+- `kubejs/data/creativeengineering/paintings/darkpaintings/summer_heat.png`
+- `kubejs/data/creativeengineering/paintings/darkpaintings/tetromino.json`
+- `kubejs/data/creativeengineering/paintings/darkpaintings/tetromino.png`
+- `kubejs/data/creativeengineering/paintings/darkpaintings/the_most_sweet_candy.json`
+- `kubejs/data/creativeengineering/paintings/darkpaintings/the_most_sweet_candy.png`
+- `kubejs/data/creativeengineering/paintings/darkpaintings/the_secret_neighborhood.json`
+- `kubejs/data/creativeengineering/paintings/darkpaintings/the_secret_neighborhood.png`
+- `kubejs/data/creativeengineering/paintings/darkpaintings/the_tower.json`
+- `kubejs/data/creativeengineering/paintings/darkpaintings/the_tower.png`
+- `kubejs/data/creativeengineering/paintings/darkpaintings/the_wheel.json`
+- `kubejs/data/creativeengineering/paintings/darkpaintings/the_wheel.png`
+- `kubejs/data/creativeengineering/paintings/darkpaintings/turkey.json`
+- `kubejs/data/creativeengineering/paintings/darkpaintings/turkey.png`
+- `kubejs/data/creativeengineering/paintings/darkpaintings/village.json`
+- `kubejs/data/creativeengineering/paintings/darkpaintings/village.png`
+- `kubejs/data/creativeengineering/paintings/darkpaintings/watching_the_sunset.json`
+- `kubejs/data/creativeengineering/paintings/darkpaintings/watching_the_sunset.png`
+- `kubejs/data/creativeengineering/paintings/darkpaintings/whale_dream.json`
+- `kubejs/data/creativeengineering/paintings/darkpaintings/whale_dream.png`
+- `kubejs/data/creativeengineering/paintings/handcrafted/ad_astra.json`
+- `kubejs/data/creativeengineering/paintings/handcrafted/ad_astra.png`
+- `kubejs/data/creativeengineering/paintings/handcrafted/apple.json`
+- `kubejs/data/creativeengineering/paintings/handcrafted/apple.png`
+- `kubejs/data/creativeengineering/paintings/handcrafted/beach_sunrise_left.json`
+- `kubejs/data/creativeengineering/paintings/handcrafted/beach_sunrise_left.png`
+- `kubejs/data/creativeengineering/paintings/handcrafted/beach_sunrise_mid.json`
+- `kubejs/data/creativeengineering/paintings/handcrafted/beach_sunrise_mid.png`
+- `kubejs/data/creativeengineering/paintings/handcrafted/beach_sunrise_right.json`
+- `kubejs/data/creativeengineering/paintings/handcrafted/beach_sunrise_right.png`
+- `kubejs/data/creativeengineering/paintings/handcrafted/broken_birches.json`
+- `kubejs/data/creativeengineering/paintings/handcrafted/broken_birches.png`
+- `kubejs/data/creativeengineering/paintings/handcrafted/broken_birches_left_sidepanel.json`
+- `kubejs/data/creativeengineering/paintings/handcrafted/broken_birches_left_sidepanel.png`
+- `kubejs/data/creativeengineering/paintings/handcrafted/broken_birches_right_sidepanel.json`
+- `kubejs/data/creativeengineering/paintings/handcrafted/broken_birches_right_sidepanel.png`
+- `kubejs/data/creativeengineering/paintings/handcrafted/cookies_on_a_plate.json`
+- `kubejs/data/creativeengineering/paintings/handcrafted/cookies_on_a_plate.png`
+- `kubejs/data/creativeengineering/paintings/handcrafted/coral_depths.json`
+- `kubejs/data/creativeengineering/paintings/handcrafted/coral_depths.png`
+- `kubejs/data/creativeengineering/paintings/handcrafted/desert_plateau.json`
+- `kubejs/data/creativeengineering/paintings/handcrafted/desert_plateau.png`
+- `kubejs/data/creativeengineering/paintings/handcrafted/flower_in_the_darkness.json`
+- `kubejs/data/creativeengineering/paintings/handcrafted/flower_in_the_darkness.png`
+- `kubejs/data/creativeengineering/paintings/handcrafted/green_woods.json`
+- `kubejs/data/creativeengineering/paintings/handcrafted/green_woods.png`
+- `kubejs/data/creativeengineering/paintings/handcrafted/lava_puddles.json`
+- `kubejs/data/creativeengineering/paintings/handcrafted/lava_puddles.png`
+- `kubejs/data/creativeengineering/paintings/handcrafted/love_flowers.json`
+- `kubejs/data/creativeengineering/paintings/handcrafted/love_flowers.png`
+- `kubejs/data/creativeengineering/paintings/handcrafted/marigold_meadows.json`
+- `kubejs/data/creativeengineering/paintings/handcrafted/marigold_meadows.png`
+- `kubejs/data/creativeengineering/paintings/handcrafted/misty_mountain_left_sidepanel.json`
+- `kubejs/data/creativeengineering/paintings/handcrafted/misty_mountain_left_sidepanel.png`
+- `kubejs/data/creativeengineering/paintings/handcrafted/misty_mountain_right_sidepanel.json`
+- `kubejs/data/creativeengineering/paintings/handcrafted/misty_mountain_right_sidepanel.png`
+- `kubejs/data/creativeengineering/paintings/handcrafted/misty_mountains.json`
+- `kubejs/data/creativeengineering/paintings/handcrafted/misty_mountains.png`
+- `kubejs/data/creativeengineering/paintings/handcrafted/my_man_diorite.json`
+- `kubejs/data/creativeengineering/paintings/handcrafted/my_man_diorite.png`
+- `kubejs/data/creativeengineering/paintings/handcrafted/mysterious_mangroves.json`
+- `kubejs/data/creativeengineering/paintings/handcrafted/mysterious_mangroves.png`
+- `kubejs/data/creativeengineering/paintings/handcrafted/nian_cat.json`
+- `kubejs/data/creativeengineering/paintings/handcrafted/nian_cat.png`
+- `kubejs/data/creativeengineering/paintings/handcrafted/pride_steve.json`
+- `kubejs/data/creativeengineering/paintings/handcrafted/pride_steve.png`
+- `kubejs/data/creativeengineering/paintings/handcrafted/rocky_beach.json`
+- `kubejs/data/creativeengineering/paintings/handcrafted/rocky_beach.png`
+- `kubejs/data/creativeengineering/paintings/handcrafted/safari_sunset.json`
+- `kubejs/data/creativeengineering/paintings/handcrafted/safari_sunset.png`
+- `kubejs/data/creativeengineering/paintings/handcrafted/small_safari_sunset.json`
+- `kubejs/data/creativeengineering/paintings/handcrafted/small_safari_sunset.png`
+- `kubejs/data/creativeengineering/paintings/handcrafted/terrarium.json`
+- `kubejs/data/creativeengineering/paintings/handcrafted/terrarium.png`
+- `kubejs/data/creativeengineering/paintings/handcrafted/the_cat_and_the_cup.json`
+- `kubejs/data/creativeengineering/paintings/handcrafted/the_cat_and_the_cup.png`
+- `kubejs/data/creativeengineering/paintings/minecraft/alban.json`
+- `kubejs/data/creativeengineering/paintings/minecraft/alban.png`
+- `kubejs/data/creativeengineering/paintings/minecraft/aztec.json`
+- `kubejs/data/creativeengineering/paintings/minecraft/aztec.png`
+- `kubejs/data/creativeengineering/paintings/minecraft/aztec2.json`
+- `kubejs/data/creativeengineering/paintings/minecraft/aztec2.png`
+- `kubejs/data/creativeengineering/paintings/minecraft/bomb.json`
+- `kubejs/data/creativeengineering/paintings/minecraft/bomb.png`
+- `kubejs/data/creativeengineering/paintings/minecraft/burning_skull.json`
+- `kubejs/data/creativeengineering/paintings/minecraft/burning_skull.png`
+- `kubejs/data/creativeengineering/paintings/minecraft/bust.json`
+- `kubejs/data/creativeengineering/paintings/minecraft/bust.png`
+- `kubejs/data/creativeengineering/paintings/minecraft/courbet.json`
+- `kubejs/data/creativeengineering/paintings/minecraft/courbet.png`
+- `kubejs/data/creativeengineering/paintings/minecraft/creebet.json`
+- `kubejs/data/creativeengineering/paintings/minecraft/creebet.png`
+- `kubejs/data/creativeengineering/paintings/minecraft/donkey_kong.json`
+- `kubejs/data/creativeengineering/paintings/minecraft/donkey_kong.png`
+- `kubejs/data/creativeengineering/paintings/minecraft/earth.json`
+- `kubejs/data/creativeengineering/paintings/minecraft/earth.png`
+- `kubejs/data/creativeengineering/paintings/minecraft/fighters.json`
+- `kubejs/data/creativeengineering/paintings/minecraft/fighters.png`
+- `kubejs/data/creativeengineering/paintings/minecraft/fire.json`
+- `kubejs/data/creativeengineering/paintings/minecraft/fire.png`
+- `kubejs/data/creativeengineering/paintings/minecraft/graham.json`
+- `kubejs/data/creativeengineering/paintings/minecraft/graham.png`
+- `kubejs/data/creativeengineering/paintings/minecraft/kebab.json`
+- `kubejs/data/creativeengineering/paintings/minecraft/kebab.png`
+- `kubejs/data/creativeengineering/paintings/minecraft/match.json`
+- `kubejs/data/creativeengineering/paintings/minecraft/match.png`
+- `kubejs/data/creativeengineering/paintings/minecraft/pigscene.json`
+- `kubejs/data/creativeengineering/paintings/minecraft/pigscene.png`
+- `kubejs/data/creativeengineering/paintings/minecraft/plant.json`
+- `kubejs/data/creativeengineering/paintings/minecraft/plant.png`
+- `kubejs/data/creativeengineering/paintings/minecraft/pointer.json`
+- `kubejs/data/creativeengineering/paintings/minecraft/pointer.png`
+- `kubejs/data/creativeengineering/paintings/minecraft/pool.json`
+- `kubejs/data/creativeengineering/paintings/minecraft/pool.png`
+- `kubejs/data/creativeengineering/paintings/minecraft/sea.json`
+- `kubejs/data/creativeengineering/paintings/minecraft/sea.png`
+- `kubejs/data/creativeengineering/paintings/minecraft/skeleton.json`
+- `kubejs/data/creativeengineering/paintings/minecraft/skeleton.png`
+- `kubejs/data/creativeengineering/paintings/minecraft/skull_and_roses.json`
+- `kubejs/data/creativeengineering/paintings/minecraft/skull_and_roses.png`
+- `kubejs/data/creativeengineering/paintings/minecraft/stage.json`
+- `kubejs/data/creativeengineering/paintings/minecraft/stage.png`
+- `kubejs/data/creativeengineering/paintings/minecraft/sunset.json`
+- `kubejs/data/creativeengineering/paintings/minecraft/sunset.png`
+- `kubejs/data/creativeengineering/paintings/minecraft/void.json`
+- `kubejs/data/creativeengineering/paintings/minecraft/void.png`
+- `kubejs/data/creativeengineering/paintings/minecraft/wanderer.json`
+- `kubejs/data/creativeengineering/paintings/minecraft/wanderer.png`
+- `kubejs/data/creativeengineering/paintings/minecraft/wasteland.json`
+- `kubejs/data/creativeengineering/paintings/minecraft/wasteland.png`
+- `kubejs/data/creativeengineering/paintings/minecraft/water.json`
+- `kubejs/data/creativeengineering/paintings/minecraft/water.png`
+- `kubejs/data/creativeengineering/paintings/minecraft/wind.json`
+- `kubejs/data/creativeengineering/paintings/minecraft/wind.png`
+- `kubejs/data/creativeengineering/paintings/minecraft/wither.json`
+- `kubejs/data/creativeengineering/paintings/minecraft/wither.png`
+- `kubejs/data/creativeengineering/paintings/minecraft_style_paintings/american_gothic.json`
+- `kubejs/data/creativeengineering/paintings/minecraft_style_paintings/american_gothic.png`
+- `kubejs/data/creativeengineering/paintings/minecraft_style_paintings/creatione_di_adamo.json`
+- `kubejs/data/creativeengineering/paintings/minecraft_style_paintings/creatione_di_adamo.png`
+- `kubejs/data/creativeengineering/paintings/minecraft_style_paintings/de_sterrennacht.json`
+- `kubejs/data/creativeengineering/paintings/minecraft_style_paintings/de_sterrennacht.png`
+- `kubejs/data/creativeengineering/paintings/minecraft_style_paintings/gioconda.json`
+- `kubejs/data/creativeengineering/paintings/minecraft_style_paintings/gioconda.png`
+- `kubejs/data/creativeengineering/paintings/minecraft_style_paintings/la_jovendelaperla.json`
+- `kubejs/data/creativeengineering/paintings/minecraft_style_paintings/la_jovendelaperla.png`
+- `kubejs/data/creativeengineering/paintings/minecraft_style_paintings/la_ultima_cena.json`
+- `kubejs/data/creativeengineering/paintings/minecraft_style_paintings/la_ultima_cena.png`
+- `kubejs/data/creativeengineering/paintings/minecraft_style_paintings/lefillsdelhomme.json`
+- `kubejs/data/creativeengineering/paintings/minecraft_style_paintings/lefillsdelhomme.png`
+- `kubejs/data/creativeengineering/paintings/minecraft_style_paintings/olas.json`
+- `kubejs/data/creativeengineering/paintings/minecraft_style_paintings/olas.png`
+- `kubejs/data/creativeengineering/paintings/minecraft_style_paintings/persistenciadelamemoria.json`
+- `kubejs/data/creativeengineering/paintings/minecraft_style_paintings/persistenciadelamemoria.png`
+- `kubejs/data/creativeengineering/paintings/minecraft_style_paintings/sunflowers.json`
+- `kubejs/data/creativeengineering/paintings/minecraft_style_paintings/sunflowers.png`
+- `kubejs/data/creativeengineering/paintings/minecraft_style_paintings/the_scream.json`
+- `kubejs/data/creativeengineering/paintings/minecraft_style_paintings/the_scream.png`
+- `kubejs/data/creativeengineering/paintings/minecraft_style_paintings/van_goh.json`
+- `kubejs/data/creativeengineering/paintings/minecraft_style_paintings/van_goh.png`
+- `kubejs/data/creativeengineering/paintings/neapolitan/cone.json`
+- `kubejs/data/creativeengineering/paintings/neapolitan/cone.png`
+- `kubejs/data/creativeengineering/paintings/neapolitan/dawn.json`
+- `kubejs/data/creativeengineering/paintings/neapolitan/dawn.png`
+- `kubejs/data/creativeengineering/paintings/neapolitan/scream.json`
+- `kubejs/data/creativeengineering/paintings/neapolitan/scream.png`
+- `kubejs/data/creativeengineering/paintings/paintings_pack1/s_1x_1banksy_1.json`
+- `kubejs/data/creativeengineering/paintings/paintings_pack1/s_1x_1banksy_1.png`
+- `kubejs/data/creativeengineering/paintings/paintings_pack1/s_1x_1bek_12.json`
+- `kubejs/data/creativeengineering/paintings/paintings_pack1/s_1x_1bek_12.png`
+- `kubejs/data/creativeengineering/paintings/paintings_pack1/s_1x_1bek_13.json`
+- `kubejs/data/creativeengineering/paintings/paintings_pack1/s_1x_1bek_13.png`
+- `kubejs/data/creativeengineering/paintings/paintings_pack1/s_1x_1bek_15.json`
+- `kubejs/data/creativeengineering/paintings/paintings_pack1/s_1x_1bek_15.png`
+- `kubejs/data/creativeengineering/paintings/paintings_pack1/s_1x_1bek_16.json`
+- `kubejs/data/creativeengineering/paintings/paintings_pack1/s_1x_1bek_16.png`
+- `kubejs/data/creativeengineering/paintings/paintings_pack1/s_1x_1bek_17.json`
+- `kubejs/data/creativeengineering/paintings/paintings_pack1/s_1x_1bek_17.png`
+- `kubejs/data/creativeengineering/paintings/paintings_pack1/s_1x_1bek_25.json`
+- `kubejs/data/creativeengineering/paintings/paintings_pack1/s_1x_1bek_25.png`
+- `kubejs/data/creativeengineering/paintings/paintings_pack1/s_1x_1bek_27.json`
+- `kubejs/data/creativeengineering/paintings/paintings_pack1/s_1x_1bek_27.png`
+- `kubejs/data/creativeengineering/paintings/paintings_pack1/s_1x_1bek_28.json`
+- `kubejs/data/creativeengineering/paintings/paintings_pack1/s_1x_1bek_28.png`
+- `kubejs/data/creativeengineering/paintings/paintings_pack1/s_1x_1bek_3.json`
+- `kubejs/data/creativeengineering/paintings/paintings_pack1/s_1x_1bek_3.png`
+- `kubejs/data/creativeengineering/paintings/paintings_pack1/s_1x_1bek_30.json`
+- `kubejs/data/creativeengineering/paintings/paintings_pack1/s_1x_1bek_30.png`
+- `kubejs/data/creativeengineering/paintings/paintings_pack1/s_1x_1bek_33.json`
+- `kubejs/data/creativeengineering/paintings/paintings_pack1/s_1x_1bek_33.png`
+- `kubejs/data/creativeengineering/paintings/paintings_pack1/s_1x_1bek_4.json`
+- `kubejs/data/creativeengineering/paintings/paintings_pack1/s_1x_1bek_4.png`
+- `kubejs/data/creativeengineering/paintings/paintings_pack1/s_1x_1bek_5.json`
+- `kubejs/data/creativeengineering/paintings/paintings_pack1/s_1x_1bek_5.png`
+- `kubejs/data/creativeengineering/paintings/paintings_pack1/s_1x_1vinci_1.json`
+- `kubejs/data/creativeengineering/paintings/paintings_pack1/s_1x_1vinci_1.png`
+- `kubejs/data/creativeengineering/paintings/paintings_pack1/s_1x_2bek_10.json`
+- `kubejs/data/creativeengineering/paintings/paintings_pack1/s_1x_2bek_10.png`
+- `kubejs/data/creativeengineering/paintings/paintings_pack1/s_1x_2bek_14.json`
+- `kubejs/data/creativeengineering/paintings/paintings_pack1/s_1x_2bek_14.png`
+- `kubejs/data/creativeengineering/paintings/paintings_pack1/s_1x_2bek_18.json`
+- `kubejs/data/creativeengineering/paintings/paintings_pack1/s_1x_2bek_18.png`
+- `kubejs/data/creativeengineering/paintings/paintings_pack1/s_1x_2bek_22.json`
+- `kubejs/data/creativeengineering/paintings/paintings_pack1/s_1x_2bek_22.png`
+- `kubejs/data/creativeengineering/paintings/paintings_pack1/s_1x_2bek_23.json`
+- `kubejs/data/creativeengineering/paintings/paintings_pack1/s_1x_2bek_23.png`
+- `kubejs/data/creativeengineering/paintings/paintings_pack1/s_1x_2bek_26.json`
+- `kubejs/data/creativeengineering/paintings/paintings_pack1/s_1x_2bek_26.png`
+- `kubejs/data/creativeengineering/paintings/paintings_pack1/s_1x_2bek_29.json`
+- `kubejs/data/creativeengineering/paintings/paintings_pack1/s_1x_2bek_29.png`
+- `kubejs/data/creativeengineering/paintings/paintings_pack1/s_1x_2bek_32.json`
+- `kubejs/data/creativeengineering/paintings/paintings_pack1/s_1x_2bek_32.png`
+- `kubejs/data/creativeengineering/paintings/paintings_pack1/s_1x_2bek_6.json`
+- `kubejs/data/creativeengineering/paintings/paintings_pack1/s_1x_2bek_6.png`
+- `kubejs/data/creativeengineering/paintings/paintings_pack1/s_1x_2garden_1.json`
+- `kubejs/data/creativeengineering/paintings/paintings_pack1/s_1x_2garden_1.png`
+- `kubejs/data/creativeengineering/paintings/paintings_pack1/s_1x_3salvador_2.json`
+- `kubejs/data/creativeengineering/paintings/paintings_pack1/s_1x_3salvador_2.png`
+- `kubejs/data/creativeengineering/paintings/paintings_pack1/s_2x_1garden_2.json`
+- `kubejs/data/creativeengineering/paintings/paintings_pack1/s_2x_1garden_2.png`
+- `kubejs/data/creativeengineering/paintings/paintings_pack1/s_2x_1monet_1.json`
+- `kubejs/data/creativeengineering/paintings/paintings_pack1/s_2x_1monet_1.png`
+- `kubejs/data/creativeengineering/paintings/paintings_pack1/s_2x_1vinci_3.json`
+- `kubejs/data/creativeengineering/paintings/paintings_pack1/s_2x_1vinci_3.png`
+- `kubejs/data/creativeengineering/paintings/paintings_pack1/s_2x_2bek_1.json`
+- `kubejs/data/creativeengineering/paintings/paintings_pack1/s_2x_2bek_1.png`
+- `kubejs/data/creativeengineering/paintings/paintings_pack1/s_2x_2bek_19.json`
+- `kubejs/data/creativeengineering/paintings/paintings_pack1/s_2x_2bek_19.png`
+- `kubejs/data/creativeengineering/paintings/paintings_pack1/s_2x_2bek_2.json`
+- `kubejs/data/creativeengineering/paintings/paintings_pack1/s_2x_2bek_2.png`
+- `kubejs/data/creativeengineering/paintings/paintings_pack1/s_2x_2bek_20.json`
+- `kubejs/data/creativeengineering/paintings/paintings_pack1/s_2x_2bek_20.png`
+- `kubejs/data/creativeengineering/paintings/paintings_pack1/s_2x_2bek_21.json`
+- `kubejs/data/creativeengineering/paintings/paintings_pack1/s_2x_2bek_21.png`
+- `kubejs/data/creativeengineering/paintings/paintings_pack1/s_2x_2salvador_1.json`
+- `kubejs/data/creativeengineering/paintings/paintings_pack1/s_2x_2salvador_1.png`
+- `kubejs/data/creativeengineering/paintings/paintings_pack1/s_2x_3bek_7.json`
+- `kubejs/data/creativeengineering/paintings/paintings_pack1/s_2x_3bek_7.png`
+- `kubejs/data/creativeengineering/paintings/paintings_pack1/s_2x_3vici_2.json`
+- `kubejs/data/creativeengineering/paintings/paintings_pack1/s_2x_3vici_2.png`
+- `kubejs/data/creativeengineering/paintings/paintings_pack1/s_2x_4bek_34.json`
+- `kubejs/data/creativeengineering/paintings/paintings_pack1/s_2x_4bek_34.png`
+- `kubejs/data/creativeengineering/paintings/paintings_pack1/s_3x_2gogh_1.json`
+- `kubejs/data/creativeengineering/paintings/paintings_pack1/s_3x_2gogh_1.png`
+- `kubejs/data/creativeengineering/paintings/paintings_pack1/s_3x_3bek_31.json`
+- `kubejs/data/creativeengineering/paintings/paintings_pack1/s_3x_3bek_31.png`
+- `kubejs/data/creativeengineering/paintings/paintings_pack1/s_3x_3bek_9.json`
+- `kubejs/data/creativeengineering/paintings/paintings_pack1/s_3x_3bek_9.png`
+- `kubejs/data/creativeengineering/paintings/paintings_pack1/s_3x_3garden_3.json`
+- `kubejs/data/creativeengineering/paintings/paintings_pack1/s_3x_3garden_3.png`
+- `kubejs/data/creativeengineering/paintings/paintings_pack1/s_3x_3rothko_2.json`
+- `kubejs/data/creativeengineering/paintings/paintings_pack1/s_3x_3rothko_2.png`
+- `kubejs/data/creativeengineering/paintings/paintings_pack1/s_4x_2bek_24.json`
+- `kubejs/data/creativeengineering/paintings/paintings_pack1/s_4x_2bek_24.png`
+- `kubejs/data/creativeengineering/paintings/paintings_pack1/s_4x_2ryb_3.json`
+- `kubejs/data/creativeengineering/paintings/paintings_pack1/s_4x_2ryb_3.png`
+- `kubejs/data/creativeengineering/paintings/paintings_pack1/s_4x_3matejko_1.json`
+- `kubejs/data/creativeengineering/paintings/paintings_pack1/s_4x_3matejko_1.png`
+- `kubejs/data/creativeengineering/paintings/paintings_pack1/s_4x_4bek_11.json`
+- `kubejs/data/creativeengineering/paintings/paintings_pack1/s_4x_4bek_11.png`
+- `kubejs/data/creativeengineering/paintings/paintings_pack1/s_4x_4bek_8.json`
+- `kubejs/data/creativeengineering/paintings/paintings_pack1/s_4x_4bek_8.png`
+- `kubejs/data/creativeengineering/paintings/paintings_pack1/s_4x_4munch_1.json`
+- `kubejs/data/creativeengineering/paintings/paintings_pack1/s_4x_4munch_1.png`
+- `kubejs/data/creativeengineering/paintings/rebirth_paintings/abandon_all_hope.json`
+- `kubejs/data/creativeengineering/paintings/rebirth_paintings/abandon_all_hope.png`
+- `kubejs/data/creativeengineering/paintings/rebirth_paintings/abandoned.json`
+- `kubejs/data/creativeengineering/paintings/rebirth_paintings/abandoned.png`
+- `kubejs/data/creativeengineering/paintings/rebirth_paintings/abyss.json`
+- `kubejs/data/creativeengineering/paintings/rebirth_paintings/abyss.png`
+- `kubejs/data/creativeengineering/paintings/rebirth_paintings/amber.json`
+- `kubejs/data/creativeengineering/paintings/rebirth_paintings/amber.png`
+- `kubejs/data/creativeengineering/paintings/rebirth_paintings/amethyst.json`
+- `kubejs/data/creativeengineering/paintings/rebirth_paintings/amethyst.png`
+- `kubejs/data/creativeengineering/paintings/rebirth_paintings/amythest_mountains.json`
+- `kubejs/data/creativeengineering/paintings/rebirth_paintings/amythest_mountains.png`
+- `kubejs/data/creativeengineering/paintings/rebirth_paintings/ancient_building.json`
+- `kubejs/data/creativeengineering/paintings/rebirth_paintings/ancient_building.png`
+- `kubejs/data/creativeengineering/paintings/rebirth_paintings/ancient_ruins.json`
+- `kubejs/data/creativeengineering/paintings/rebirth_paintings/ancient_ruins.png`
+- `kubejs/data/creativeengineering/paintings/rebirth_paintings/ancient_sculpture.json`
+- `kubejs/data/creativeengineering/paintings/rebirth_paintings/ancient_sculpture.png`
+- `kubejs/data/creativeengineering/paintings/rebirth_paintings/angels.json`
+- `kubejs/data/creativeengineering/paintings/rebirth_paintings/angels.png`
+- `kubejs/data/creativeengineering/paintings/rebirth_paintings/apollyon.json`
+- `kubejs/data/creativeengineering/paintings/rebirth_paintings/apollyon.png`
+- `kubejs/data/creativeengineering/paintings/rebirth_paintings/apple_enjoyer.json`
+- `kubejs/data/creativeengineering/paintings/rebirth_paintings/apple_enjoyer.png`
+- `kubejs/data/creativeengineering/paintings/rebirth_paintings/arid_desert.json`
+- `kubejs/data/creativeengineering/paintings/rebirth_paintings/arid_desert.png`
+- `kubejs/data/creativeengineering/paintings/rebirth_paintings/aura.json`
+- `kubejs/data/creativeengineering/paintings/rebirth_paintings/aura.png`
+- `kubejs/data/creativeengineering/paintings/rebirth_paintings/banana_crab.json`
+- `kubejs/data/creativeengineering/paintings/rebirth_paintings/banana_crab.png`
+- `kubejs/data/creativeengineering/paintings/rebirth_paintings/bananas.json`
+- `kubejs/data/creativeengineering/paintings/rebirth_paintings/bananas.png`
+- `kubejs/data/creativeengineering/paintings/rebirth_paintings/bartending.json`
+- `kubejs/data/creativeengineering/paintings/rebirth_paintings/bartending.png`
+- `kubejs/data/creativeengineering/paintings/rebirth_paintings/beautiful_spot.json`
+- `kubejs/data/creativeengineering/paintings/rebirth_paintings/beautiful_spot.png`
+- `kubejs/data/creativeengineering/paintings/rebirth_paintings/beheaded.json`
+- `kubejs/data/creativeengineering/paintings/rebirth_paintings/beheaded.png`
+- `kubejs/data/creativeengineering/paintings/rebirth_paintings/birth.json`
+- `kubejs/data/creativeengineering/paintings/rebirth_paintings/birth.png`
+- `kubejs/data/creativeengineering/paintings/rebirth_paintings/blue_hue.json`
+- `kubejs/data/creativeengineering/paintings/rebirth_paintings/blue_hue.png`
+- `kubejs/data/creativeengineering/paintings/rebirth_paintings/broken.json`
+- `kubejs/data/creativeengineering/paintings/rebirth_paintings/broken.png`
+- `kubejs/data/creativeengineering/paintings/rebirth_paintings/builder.json`
+- `kubejs/data/creativeengineering/paintings/rebirth_paintings/builder.png`
+- `kubejs/data/creativeengineering/paintings/rebirth_paintings/calm.json`
+- `kubejs/data/creativeengineering/paintings/rebirth_paintings/calm.png`
+- `kubejs/data/creativeengineering/paintings/rebirth_paintings/calm_day.json`
+- `kubejs/data/creativeengineering/paintings/rebirth_paintings/calm_day.png`
+- `kubejs/data/creativeengineering/paintings/rebirth_paintings/calming.json`
+- `kubejs/data/creativeengineering/paintings/rebirth_paintings/calming.png`
+- `kubejs/data/creativeengineering/paintings/rebirth_paintings/canine.json`
+- `kubejs/data/creativeengineering/paintings/rebirth_paintings/canine.png`
+- `kubejs/data/creativeengineering/paintings/rebirth_paintings/caramel_milkyway.json`
+- `kubejs/data/creativeengineering/paintings/rebirth_paintings/caramel_milkyway.png`
+- `kubejs/data/creativeengineering/paintings/rebirth_paintings/cascade.json`
+- `kubejs/data/creativeengineering/paintings/rebirth_paintings/cascade.png`
+- `kubejs/data/creativeengineering/paintings/rebirth_paintings/cast_away.json`
+- `kubejs/data/creativeengineering/paintings/rebirth_paintings/cast_away.png`
+- `kubejs/data/creativeengineering/paintings/rebirth_paintings/castle.json`
+- `kubejs/data/creativeengineering/paintings/rebirth_paintings/castle.png`
+- `kubejs/data/creativeengineering/paintings/rebirth_paintings/cavanna.json`
+- `kubejs/data/creativeengineering/paintings/rebirth_paintings/cavanna.png`
+- `kubejs/data/creativeengineering/paintings/rebirth_paintings/cellar.json`
+- `kubejs/data/creativeengineering/paintings/rebirth_paintings/cellar.png`
+- `kubejs/data/creativeengineering/paintings/rebirth_paintings/clip.json`
+- `kubejs/data/creativeengineering/paintings/rebirth_paintings/clip.png`
+- `kubejs/data/creativeengineering/paintings/rebirth_paintings/collage.json`
+- `kubejs/data/creativeengineering/paintings/rebirth_paintings/collage.png`
+- `kubejs/data/creativeengineering/paintings/rebirth_paintings/collection.json`
+- `kubejs/data/creativeengineering/paintings/rebirth_paintings/collection.png`
+- `kubejs/data/creativeengineering/paintings/rebirth_paintings/colosseum.json`
+- `kubejs/data/creativeengineering/paintings/rebirth_paintings/colosseum.png`
+- `kubejs/data/creativeengineering/paintings/rebirth_paintings/columns.json`
+- `kubejs/data/creativeengineering/paintings/rebirth_paintings/columns.png`
+- `kubejs/data/creativeengineering/paintings/rebirth_paintings/composition.json`
+- `kubejs/data/creativeengineering/paintings/rebirth_paintings/composition.png`
+- `kubejs/data/creativeengineering/paintings/rebirth_paintings/cotton_candy.json`
+- `kubejs/data/creativeengineering/paintings/rebirth_paintings/cotton_candy.png`
+- `kubejs/data/creativeengineering/paintings/rebirth_paintings/courage.json`
+- `kubejs/data/creativeengineering/paintings/rebirth_paintings/courage.png`
+- `kubejs/data/creativeengineering/paintings/rebirth_paintings/cove.json`
+- `kubejs/data/creativeengineering/paintings/rebirth_paintings/cove.png`
+- `kubejs/data/creativeengineering/paintings/rebirth_paintings/creek.json`
+- `kubejs/data/creativeengineering/paintings/rebirth_paintings/creek.png`
+- `kubejs/data/creativeengineering/paintings/rebirth_paintings/cropped.json`
+- `kubejs/data/creativeengineering/paintings/rebirth_paintings/cropped.png`
+- `kubejs/data/creativeengineering/paintings/rebirth_paintings/curious_felines.json`
+- `kubejs/data/creativeengineering/paintings/rebirth_paintings/curious_felines.png`
+- `kubejs/data/creativeengineering/paintings/rebirth_paintings/cursed_forest.json`
+- `kubejs/data/creativeengineering/paintings/rebirth_paintings/cursed_forest.png`
+- `kubejs/data/creativeengineering/paintings/rebirth_paintings/dancing_bears.json`
+- `kubejs/data/creativeengineering/paintings/rebirth_paintings/dancing_bears.png`
+- `kubejs/data/creativeengineering/paintings/rebirth_paintings/danger.json`
+- `kubejs/data/creativeengineering/paintings/rebirth_paintings/danger.png`
+- `kubejs/data/creativeengineering/paintings/rebirth_paintings/death_follows.json`
+- `kubejs/data/creativeengineering/paintings/rebirth_paintings/death_follows.png`
+- `kubejs/data/creativeengineering/paintings/rebirth_paintings/deaths_requiem.json`
+- `kubejs/data/creativeengineering/paintings/rebirth_paintings/deaths_requiem.png`
+- `kubejs/data/creativeengineering/paintings/rebirth_paintings/decay.json`
+- `kubejs/data/creativeengineering/paintings/rebirth_paintings/decay.png`
+- `kubejs/data/creativeengineering/paintings/rebirth_paintings/deity.json`
+- `kubejs/data/creativeengineering/paintings/rebirth_paintings/deity.png`
+- `kubejs/data/creativeengineering/paintings/rebirth_paintings/demons.json`
+- `kubejs/data/creativeengineering/paintings/rebirth_paintings/demons.png`
+- `kubejs/data/creativeengineering/paintings/rebirth_paintings/dense_forest.json`
+- `kubejs/data/creativeengineering/paintings/rebirth_paintings/dense_forest.png`
+- `kubejs/data/creativeengineering/paintings/rebirth_paintings/dense_woods.json`
+- `kubejs/data/creativeengineering/paintings/rebirth_paintings/dense_woods.png`
+- `kubejs/data/creativeengineering/paintings/rebirth_paintings/desert.json`
+- `kubejs/data/creativeengineering/paintings/rebirth_paintings/desert.png`
+- `kubejs/data/creativeengineering/paintings/rebirth_paintings/deserted.json`
+- `kubejs/data/creativeengineering/paintings/rebirth_paintings/deserted.png`
+- `kubejs/data/creativeengineering/paintings/rebirth_paintings/devil_incarnate.json`
+- `kubejs/data/creativeengineering/paintings/rebirth_paintings/devil_incarnate.png`
+- `kubejs/data/creativeengineering/paintings/rebirth_paintings/devouring_man.json`
+- `kubejs/data/creativeengineering/paintings/rebirth_paintings/devouring_man.png`
+- `kubejs/data/creativeengineering/paintings/rebirth_paintings/divine_clam.json`
+- `kubejs/data/creativeengineering/paintings/rebirth_paintings/divine_clam.png`
+- `kubejs/data/creativeengineering/paintings/rebirth_paintings/divine_touch.json`
+- `kubejs/data/creativeengineering/paintings/rebirth_paintings/divine_touch.png`
+- `kubejs/data/creativeengineering/paintings/rebirth_paintings/down_under.json`
+- `kubejs/data/creativeengineering/paintings/rebirth_paintings/down_under.png`
+- `kubejs/data/creativeengineering/paintings/rebirth_paintings/dramatic_snow.json`
+- `kubejs/data/creativeengineering/paintings/rebirth_paintings/dramatic_snow.png`
+- `kubejs/data/creativeengineering/paintings/rebirth_paintings/dream_land.json`
+- `kubejs/data/creativeengineering/paintings/rebirth_paintings/dream_land.png`
+- `kubejs/data/creativeengineering/paintings/rebirth_paintings/dressed.json`
+- `kubejs/data/creativeengineering/paintings/rebirth_paintings/dressed.png`
+- `kubejs/data/creativeengineering/paintings/rebirth_paintings/drowning.json`
+- `kubejs/data/creativeengineering/paintings/rebirth_paintings/drowning.png`
+- `kubejs/data/creativeengineering/paintings/rebirth_paintings/dry_lands.json`
+- `kubejs/data/creativeengineering/paintings/rebirth_paintings/dry_lands.png`
+- `kubejs/data/creativeengineering/paintings/rebirth_paintings/dry_mountains.json`
+- `kubejs/data/creativeengineering/paintings/rebirth_paintings/dry_mountains.png`
+- `kubejs/data/creativeengineering/paintings/rebirth_paintings/dunes.json`
+- `kubejs/data/creativeengineering/paintings/rebirth_paintings/dunes.png`
+- `kubejs/data/creativeengineering/paintings/rebirth_paintings/dust_2.json`
+- `kubejs/data/creativeengineering/paintings/rebirth_paintings/dust_2.png`
+- `kubejs/data/creativeengineering/paintings/rebirth_paintings/dwarf.json`
+- `kubejs/data/creativeengineering/paintings/rebirth_paintings/dwarf.png`
+- `kubejs/data/creativeengineering/paintings/rebirth_paintings/dystopia.json`
+- `kubejs/data/creativeengineering/paintings/rebirth_paintings/dystopia.png`
+- `kubejs/data/creativeengineering/paintings/rebirth_paintings/empty_forest.json`
+- `kubejs/data/creativeengineering/paintings/rebirth_paintings/empty_forest.png`
+- `kubejs/data/creativeengineering/paintings/rebirth_paintings/endless_desert.json`
+- `kubejs/data/creativeengineering/paintings/rebirth_paintings/endless_desert.png`
+- `kubejs/data/creativeengineering/paintings/rebirth_paintings/endless_forest.json`
+- `kubejs/data/creativeengineering/paintings/rebirth_paintings/endless_forest.png`
+- `kubejs/data/creativeengineering/paintings/rebirth_paintings/entering_danger.json`
+- `kubejs/data/creativeengineering/paintings/rebirth_paintings/entering_danger.png`
+- `kubejs/data/creativeengineering/paintings/rebirth_paintings/eruption.json`
+- `kubejs/data/creativeengineering/paintings/rebirth_paintings/eruption.png`
+- `kubejs/data/creativeengineering/paintings/rebirth_paintings/euphoria.json`
+- `kubejs/data/creativeengineering/paintings/rebirth_paintings/euphoria.png`
+- `kubejs/data/creativeengineering/paintings/rebirth_paintings/explosive_sight.json`
+- `kubejs/data/creativeengineering/paintings/rebirth_paintings/explosive_sight.png`
+- `kubejs/data/creativeengineering/paintings/rebirth_paintings/extinction.json`
+- `kubejs/data/creativeengineering/paintings/rebirth_paintings/extinction.png`
+- `kubejs/data/creativeengineering/paintings/rebirth_paintings/extravagance.json`
+- `kubejs/data/creativeengineering/paintings/rebirth_paintings/extravagance.png`
+- `kubejs/data/creativeengineering/paintings/rebirth_paintings/fall.json`
+- `kubejs/data/creativeengineering/paintings/rebirth_paintings/fall.png`
+- `kubejs/data/creativeengineering/paintings/rebirth_paintings/fallen_angel.json`
+- `kubejs/data/creativeengineering/paintings/rebirth_paintings/fallen_angel.png`
+- `kubejs/data/creativeengineering/paintings/rebirth_paintings/false_hike.json`
+- `kubejs/data/creativeengineering/paintings/rebirth_paintings/false_hike.png`
+- `kubejs/data/creativeengineering/paintings/rebirth_paintings/familiar_island.json`
+- `kubejs/data/creativeengineering/paintings/rebirth_paintings/familiar_island.png`
+- `kubejs/data/creativeengineering/paintings/rebirth_paintings/family.json`
+- `kubejs/data/creativeengineering/paintings/rebirth_paintings/family.png`
+- `kubejs/data/creativeengineering/paintings/rebirth_paintings/famous_painting.json`
+- `kubejs/data/creativeengineering/paintings/rebirth_paintings/famous_painting.png`
+- `kubejs/data/creativeengineering/paintings/rebirth_paintings/fauna_basket.json`
+- `kubejs/data/creativeengineering/paintings/rebirth_paintings/fauna_basket.png`
+- `kubejs/data/creativeengineering/paintings/rebirth_paintings/field.json`
+- `kubejs/data/creativeengineering/paintings/rebirth_paintings/field.png`
+- `kubejs/data/creativeengineering/paintings/rebirth_paintings/field_landscape.json`
+- `kubejs/data/creativeengineering/paintings/rebirth_paintings/field_landscape.png`
+- `kubejs/data/creativeengineering/paintings/rebirth_paintings/fiery_sunset.json`
+- `kubejs/data/creativeengineering/paintings/rebirth_paintings/fiery_sunset.png`
+- `kubejs/data/creativeengineering/paintings/rebirth_paintings/fiji_water.json`
+- `kubejs/data/creativeengineering/paintings/rebirth_paintings/fiji_water.png`
+- `kubejs/data/creativeengineering/paintings/rebirth_paintings/flesh_cavern.json`
+- `kubejs/data/creativeengineering/paintings/rebirth_paintings/flesh_cavern.png`
+- `kubejs/data/creativeengineering/paintings/rebirth_paintings/flower_head.json`
+- `kubejs/data/creativeengineering/paintings/rebirth_paintings/flower_head.png`
+- `kubejs/data/creativeengineering/paintings/rebirth_paintings/flowers.json`
+- `kubejs/data/creativeengineering/paintings/rebirth_paintings/flowers.png`
+- `kubejs/data/creativeengineering/paintings/rebirth_paintings/flute.json`
+- `kubejs/data/creativeengineering/paintings/rebirth_paintings/flute.png`
+- `kubejs/data/creativeengineering/paintings/rebirth_paintings/flying_woman.json`
+- `kubejs/data/creativeengineering/paintings/rebirth_paintings/flying_woman.png`
+- `kubejs/data/creativeengineering/paintings/rebirth_paintings/forest.json`
+- `kubejs/data/creativeengineering/paintings/rebirth_paintings/forest.png`
+- `kubejs/data/creativeengineering/paintings/rebirth_paintings/forested_mountains.json`
+- `kubejs/data/creativeengineering/paintings/rebirth_paintings/forested_mountains.png`
+- `kubejs/data/creativeengineering/paintings/rebirth_paintings/foresty_hill.json`
+- `kubejs/data/creativeengineering/paintings/rebirth_paintings/foresty_hill.png`
+- `kubejs/data/creativeengineering/paintings/rebirth_paintings/foresty_hills.json`
+- `kubejs/data/creativeengineering/paintings/rebirth_paintings/foresty_hills.png`
+- `kubejs/data/creativeengineering/paintings/rebirth_paintings/foresty_plateau.json`
+- `kubejs/data/creativeengineering/paintings/rebirth_paintings/foresty_plateau.png`
+- `kubejs/data/creativeengineering/paintings/rebirth_paintings/freezing_horse.json`
+- `kubejs/data/creativeengineering/paintings/rebirth_paintings/freezing_horse.png`
+- `kubejs/data/creativeengineering/paintings/rebirth_paintings/friend.json`
+- `kubejs/data/creativeengineering/paintings/rebirth_paintings/friend.png`
+- `kubejs/data/creativeengineering/paintings/rebirth_paintings/fruit_man.json`
+- `kubejs/data/creativeengineering/paintings/rebirth_paintings/fruit_man.png`
+- `kubejs/data/creativeengineering/paintings/rebirth_paintings/funny_monkey.json`
+- `kubejs/data/creativeengineering/paintings/rebirth_paintings/funny_monkey.png`
+- `kubejs/data/creativeengineering/paintings/rebirth_paintings/gambling_canines.json`
+- `kubejs/data/creativeengineering/paintings/rebirth_paintings/gambling_canines.png`
+- `kubejs/data/creativeengineering/paintings/rebirth_paintings/gentleman.json`
+- `kubejs/data/creativeengineering/paintings/rebirth_paintings/gentleman.png`
+- `kubejs/data/creativeengineering/paintings/rebirth_paintings/ghost_and_witches.json`
+- `kubejs/data/creativeengineering/paintings/rebirth_paintings/ghost_and_witches.png`
+- `kubejs/data/creativeengineering/paintings/rebirth_paintings/gingerbread_home.json`
+- `kubejs/data/creativeengineering/paintings/rebirth_paintings/gingerbread_home.png`
+- `kubejs/data/creativeengineering/paintings/rebirth_paintings/glaciers.json`
+- `kubejs/data/creativeengineering/paintings/rebirth_paintings/glaciers.png`
+- `kubejs/data/creativeengineering/paintings/rebirth_paintings/golden_arches.json`
+- `kubejs/data/creativeengineering/paintings/rebirth_paintings/golden_arches.png`
+- `kubejs/data/creativeengineering/paintings/rebirth_paintings/grapes.json`
+- `kubejs/data/creativeengineering/paintings/rebirth_paintings/grapes.png`
+- `kubejs/data/creativeengineering/paintings/rebirth_paintings/graveyard.json`
+- `kubejs/data/creativeengineering/paintings/rebirth_paintings/graveyard.png`
+- `kubejs/data/creativeengineering/paintings/rebirth_paintings/great_waves.json`
+- `kubejs/data/creativeengineering/paintings/rebirth_paintings/great_waves.png`
+- `kubejs/data/creativeengineering/paintings/rebirth_paintings/green_dungeon.json`
+- `kubejs/data/creativeengineering/paintings/rebirth_paintings/green_dungeon.png`
+- `kubejs/data/creativeengineering/paintings/rebirth_paintings/ground_control.json`
+- `kubejs/data/creativeengineering/paintings/rebirth_paintings/ground_control.png`
+- `kubejs/data/creativeengineering/paintings/rebirth_paintings/hallows_eve.json`
+- `kubejs/data/creativeengineering/paintings/rebirth_paintings/hallows_eve.png`
+- `kubejs/data/creativeengineering/paintings/rebirth_paintings/hard_headed.json`
+- `kubejs/data/creativeengineering/paintings/rebirth_paintings/hard_headed.png`
+- `kubejs/data/creativeengineering/paintings/rebirth_paintings/haunted_mansion.json`
+- `kubejs/data/creativeengineering/paintings/rebirth_paintings/haunted_mansion.png`
+- `kubejs/data/creativeengineering/paintings/rebirth_paintings/have_you_seen_chef.json`
+- `kubejs/data/creativeengineering/paintings/rebirth_paintings/have_you_seen_chef.png`
+- `kubejs/data/creativeengineering/paintings/rebirth_paintings/heartbroken.json`
+- `kubejs/data/creativeengineering/paintings/rebirth_paintings/heartbroken.png`
+- `kubejs/data/creativeengineering/paintings/rebirth_paintings/hell.json`
+- `kubejs/data/creativeengineering/paintings/rebirth_paintings/hell.png`
+- `kubejs/data/creativeengineering/paintings/rebirth_paintings/hells_fire.json`
+- `kubejs/data/creativeengineering/paintings/rebirth_paintings/hells_fire.png`
+- `kubejs/data/creativeengineering/paintings/rebirth_paintings/hells_pit.json`
+- `kubejs/data/creativeengineering/paintings/rebirth_paintings/hells_pit.png`
+- `kubejs/data/creativeengineering/paintings/rebirth_paintings/hells_tennents.json`
+- `kubejs/data/creativeengineering/paintings/rebirth_paintings/hells_tennents.png`
+- `kubejs/data/creativeengineering/paintings/rebirth_paintings/hole.json`
+- `kubejs/data/creativeengineering/paintings/rebirth_paintings/hole.png`
+- `kubejs/data/creativeengineering/paintings/rebirth_paintings/horse.json`
+- `kubejs/data/creativeengineering/paintings/rebirth_paintings/horse.png`
+- `kubejs/data/creativeengineering/paintings/rebirth_paintings/hunter_gatherer.json`
+- `kubejs/data/creativeengineering/paintings/rebirth_paintings/hunter_gatherer.png`
+- `kubejs/data/creativeengineering/paintings/rebirth_paintings/ice_cape.json`
+- `kubejs/data/creativeengineering/paintings/rebirth_paintings/ice_cape.png`
+- `kubejs/data/creativeengineering/paintings/rebirth_paintings/icy_peaks.json`
+- `kubejs/data/creativeengineering/paintings/rebirth_paintings/icy_peaks.png`
+- `kubejs/data/creativeengineering/paintings/rebirth_paintings/incoming_danger.json`
+- `kubejs/data/creativeengineering/paintings/rebirth_paintings/incoming_danger.png`
+- `kubejs/data/creativeengineering/paintings/rebirth_paintings/incoming_fog.json`
+- `kubejs/data/creativeengineering/paintings/rebirth_paintings/incoming_fog.png`
+- `kubejs/data/creativeengineering/paintings/rebirth_paintings/intestine_worms.json`
+- `kubejs/data/creativeengineering/paintings/rebirth_paintings/intestine_worms.png`
+- `kubejs/data/creativeengineering/paintings/rebirth_paintings/isle_of_demise.json`
+- `kubejs/data/creativeengineering/paintings/rebirth_paintings/isle_of_demise.png`
+- `kubejs/data/creativeengineering/paintings/rebirth_paintings/ivory.json`
+- `kubejs/data/creativeengineering/paintings/rebirth_paintings/ivory.png`
+- `kubejs/data/creativeengineering/paintings/rebirth_paintings/lady.json`
+- `kubejs/data/creativeengineering/paintings/rebirth_paintings/lady.png`
+- `kubejs/data/creativeengineering/paintings/rebirth_paintings/leafs.json`
+- `kubejs/data/creativeengineering/paintings/rebirth_paintings/leafs.png`
+- `kubejs/data/creativeengineering/paintings/rebirth_paintings/liminal.json`
+- `kubejs/data/creativeengineering/paintings/rebirth_paintings/liminal.png`
+- `kubejs/data/creativeengineering/paintings/rebirth_paintings/lions_might.json`
+- `kubejs/data/creativeengineering/paintings/rebirth_paintings/lions_might.png`
+- `kubejs/data/creativeengineering/paintings/rebirth_paintings/madness.json`
+- `kubejs/data/creativeengineering/paintings/rebirth_paintings/madness.png`
+- `kubejs/data/creativeengineering/paintings/rebirth_paintings/masks.json`
+- `kubejs/data/creativeengineering/paintings/rebirth_paintings/masks.png`
+- `kubejs/data/creativeengineering/paintings/rebirth_paintings/meat_man.json`
+- `kubejs/data/creativeengineering/paintings/rebirth_paintings/meat_man.png`
+- `kubejs/data/creativeengineering/paintings/rebirth_paintings/meeting_place.json`
+- `kubejs/data/creativeengineering/paintings/rebirth_paintings/meeting_place.png`
+- `kubejs/data/creativeengineering/paintings/rebirth_paintings/metropolitan.json`
+- `kubejs/data/creativeengineering/paintings/rebirth_paintings/metropolitan.png`
+- `kubejs/data/creativeengineering/paintings/rebirth_paintings/misfortune.json`
+- `kubejs/data/creativeengineering/paintings/rebirth_paintings/misfortune.png`
+- `kubejs/data/creativeengineering/paintings/rebirth_paintings/modern_artist.json`
+- `kubejs/data/creativeengineering/paintings/rebirth_paintings/modern_artist.png`
+- `kubejs/data/creativeengineering/paintings/rebirth_paintings/moors.json`
+- `kubejs/data/creativeengineering/paintings/rebirth_paintings/moors.png`
+- `kubejs/data/creativeengineering/paintings/rebirth_paintings/mortice.json`
+- `kubejs/data/creativeengineering/paintings/rebirth_paintings/mortice.png`
+- `kubejs/data/creativeengineering/paintings/rebirth_paintings/mount_snow.json`
+- `kubejs/data/creativeengineering/paintings/rebirth_paintings/mount_snow.png`
+- `kubejs/data/creativeengineering/paintings/rebirth_paintings/mountain_top.json`
+- `kubejs/data/creativeengineering/paintings/rebirth_paintings/mountain_top.png`
+- `kubejs/data/creativeengineering/paintings/rebirth_paintings/mountains.json`
+- `kubejs/data/creativeengineering/paintings/rebirth_paintings/mountains.png`
+- `kubejs/data/creativeengineering/paintings/rebirth_paintings/mushrooms.json`
+- `kubejs/data/creativeengineering/paintings/rebirth_paintings/mushrooms.png`
+- `kubejs/data/creativeengineering/paintings/rebirth_paintings/musician.json`
+- `kubejs/data/creativeengineering/paintings/rebirth_paintings/musician.png`
+- `kubejs/data/creativeengineering/paintings/rebirth_paintings/mysterious_rocks.json`
+- `kubejs/data/creativeengineering/paintings/rebirth_paintings/mysterious_rocks.png`
+- `kubejs/data/creativeengineering/paintings/rebirth_paintings/mythology.json`
+- `kubejs/data/creativeengineering/paintings/rebirth_paintings/mythology.png`
+- `kubejs/data/creativeengineering/paintings/rebirth_paintings/nature.json`
+- `kubejs/data/creativeengineering/paintings/rebirth_paintings/nature.png`
+- `kubejs/data/creativeengineering/paintings/rebirth_paintings/oasis.json`
+- `kubejs/data/creativeengineering/paintings/rebirth_paintings/oasis.png`
+- `kubejs/data/creativeengineering/paintings/rebirth_paintings/observing.json`
+- `kubejs/data/creativeengineering/paintings/rebirth_paintings/observing.png`
+- `kubejs/data/creativeengineering/paintings/rebirth_paintings/ocean_breeze.json`
+- `kubejs/data/creativeengineering/paintings/rebirth_paintings/ocean_breeze.png`
+- `kubejs/data/creativeengineering/paintings/rebirth_paintings/ocean_surface.json`
+- `kubejs/data/creativeengineering/paintings/rebirth_paintings/ocean_surface.png`
+- `kubejs/data/creativeengineering/paintings/rebirth_paintings/old_bay.json`
+- `kubejs/data/creativeengineering/paintings/rebirth_paintings/old_bay.png`
+- `kubejs/data/creativeengineering/paintings/rebirth_paintings/old_structure.json`
+- `kubejs/data/creativeengineering/paintings/rebirth_paintings/old_structure.png`
+- `kubejs/data/creativeengineering/paintings/rebirth_paintings/ominous_clouds.json`
+- `kubejs/data/creativeengineering/paintings/rebirth_paintings/ominous_clouds.png`
+- `kubejs/data/creativeengineering/paintings/rebirth_paintings/ominous_stones.json`
+- `kubejs/data/creativeengineering/paintings/rebirth_paintings/ominous_stones.png`
+- `kubejs/data/creativeengineering/paintings/rebirth_paintings/orange_feline.json`
+- `kubejs/data/creativeengineering/paintings/rebirth_paintings/orange_feline.png`
+- `kubejs/data/creativeengineering/paintings/rebirth_paintings/oranges.json`
+- `kubejs/data/creativeengineering/paintings/rebirth_paintings/oranges.png`
+- `kubejs/data/creativeengineering/paintings/rebirth_paintings/out_of_place_painting.json`
+- `kubejs/data/creativeengineering/paintings/rebirth_paintings/out_of_place_painting.png`
+- `kubejs/data/creativeengineering/paintings/rebirth_paintings/outdoors.json`
+- `kubejs/data/creativeengineering/paintings/rebirth_paintings/outdoors.png`
+- `kubejs/data/creativeengineering/paintings/rebirth_paintings/painted_stars.json`
+- `kubejs/data/creativeengineering/paintings/rebirth_paintings/painted_stars.png`
+- `kubejs/data/creativeengineering/paintings/rebirth_paintings/painter.json`
+- `kubejs/data/creativeengineering/paintings/rebirth_paintings/painter.png`
+- `kubejs/data/creativeengineering/paintings/rebirth_paintings/pancakes.json`
+- `kubejs/data/creativeengineering/paintings/rebirth_paintings/pancakes.png`
+- `kubejs/data/creativeengineering/paintings/rebirth_paintings/passing_storm.json`
+- `kubejs/data/creativeengineering/paintings/rebirth_paintings/passing_storm.png`
+- `kubejs/data/creativeengineering/paintings/rebirth_paintings/peak.json`
+- `kubejs/data/creativeengineering/paintings/rebirth_paintings/peak.png`
+- `kubejs/data/creativeengineering/paintings/rebirth_paintings/plains.json`
+- `kubejs/data/creativeengineering/paintings/rebirth_paintings/plains.png`
+- `kubejs/data/creativeengineering/paintings/rebirth_paintings/planktons.json`
+- `kubejs/data/creativeengineering/paintings/rebirth_paintings/planktons.png`
+- `kubejs/data/creativeengineering/paintings/rebirth_paintings/plateau.json`
+- `kubejs/data/creativeengineering/paintings/rebirth_paintings/plateau.png`
+- `kubejs/data/creativeengineering/paintings/rebirth_paintings/portrait.json`
+- `kubejs/data/creativeengineering/paintings/rebirth_paintings/portrait.png`
+- `kubejs/data/creativeengineering/paintings/rebirth_paintings/princess.json`
+- `kubejs/data/creativeengineering/paintings/rebirth_paintings/princess.png`
+- `kubejs/data/creativeengineering/paintings/rebirth_paintings/produce.json`
+- `kubejs/data/creativeengineering/paintings/rebirth_paintings/produce.png`
+- `kubejs/data/creativeengineering/paintings/rebirth_paintings/puffer_fish.json`
+- `kubejs/data/creativeengineering/paintings/rebirth_paintings/puffer_fish.png`
+- `kubejs/data/creativeengineering/paintings/rebirth_paintings/pyramids.json`
+- `kubejs/data/creativeengineering/paintings/rebirth_paintings/pyramids.png`
+- `kubejs/data/creativeengineering/paintings/rebirth_paintings/reef.json`
+- `kubejs/data/creativeengineering/paintings/rebirth_paintings/reef.png`
+- `kubejs/data/creativeengineering/paintings/rebirth_paintings/remains.json`
+- `kubejs/data/creativeengineering/paintings/rebirth_paintings/remains.png`
+- `kubejs/data/creativeengineering/paintings/rebirth_paintings/river.json`
+- `kubejs/data/creativeengineering/paintings/rebirth_paintings/river.png`
+- `kubejs/data/creativeengineering/paintings/rebirth_paintings/rocky_desert.json`
+- `kubejs/data/creativeengineering/paintings/rebirth_paintings/rocky_desert.png`
+- `kubejs/data/creativeengineering/paintings/rebirth_paintings/rocky_storm.json`
+- `kubejs/data/creativeengineering/paintings/rebirth_paintings/rocky_storm.png`
+- `kubejs/data/creativeengineering/paintings/rebirth_paintings/royalty.json`
+- `kubejs/data/creativeengineering/paintings/rebirth_paintings/royalty.png`
+- `kubejs/data/creativeengineering/paintings/rebirth_paintings/ruined.json`
+- `kubejs/data/creativeengineering/paintings/rebirth_paintings/ruined.png`
+- `kubejs/data/creativeengineering/paintings/rebirth_paintings/ruins.json`
+- `kubejs/data/creativeengineering/paintings/rebirth_paintings/ruins.png`
+- `kubejs/data/creativeengineering/paintings/rebirth_paintings/sacred_angel_from_above.json`
+- `kubejs/data/creativeengineering/paintings/rebirth_paintings/sacred_angel_from_above.png`
+- `kubejs/data/creativeengineering/paintings/rebirth_paintings/sakura.json`
+- `kubejs/data/creativeengineering/paintings/rebirth_paintings/sakura.png`
+- `kubejs/data/creativeengineering/paintings/rebirth_paintings/sakura_mountain.json`
+- `kubejs/data/creativeengineering/paintings/rebirth_paintings/sakura_mountain.png`
+- `kubejs/data/creativeengineering/paintings/rebirth_paintings/sand_castle.json`
+- `kubejs/data/creativeengineering/paintings/rebirth_paintings/sand_castle.png`
+- `kubejs/data/creativeengineering/paintings/rebirth_paintings/scarecrow.json`
+- `kubejs/data/creativeengineering/paintings/rebirth_paintings/scarecrow.png`
+- `kubejs/data/creativeengineering/paintings/rebirth_paintings/scattering.json`
+- `kubejs/data/creativeengineering/paintings/rebirth_paintings/scattering.png`
+- `kubejs/data/creativeengineering/paintings/rebirth_paintings/scholars_death.json`
+- `kubejs/data/creativeengineering/paintings/rebirth_paintings/scholars_death.png`
+- `kubejs/data/creativeengineering/paintings/rebirth_paintings/sculpture.json`
+- `kubejs/data/creativeengineering/paintings/rebirth_paintings/sculpture.png`
+- `kubejs/data/creativeengineering/paintings/rebirth_paintings/sea_rocks.json`
+- `kubejs/data/creativeengineering/paintings/rebirth_paintings/sea_rocks.png`
+- `kubejs/data/creativeengineering/paintings/rebirth_paintings/sea_salt.json`
+- `kubejs/data/creativeengineering/paintings/rebirth_paintings/sea_salt.png`
+- `kubejs/data/creativeengineering/paintings/rebirth_paintings/shepards.json`
+- `kubejs/data/creativeengineering/paintings/rebirth_paintings/shepards.png`
+- `kubejs/data/creativeengineering/paintings/rebirth_paintings/shiny_earing.json`
+- `kubejs/data/creativeengineering/paintings/rebirth_paintings/shiny_earing.png`
+- `kubejs/data/creativeengineering/paintings/rebirth_paintings/sight.json`
+- `kubejs/data/creativeengineering/paintings/rebirth_paintings/sight.png`
+- `kubejs/data/creativeengineering/paintings/rebirth_paintings/skeleton.json`
+- `kubejs/data/creativeengineering/paintings/rebirth_paintings/skeleton.png`
+- `kubejs/data/creativeengineering/paintings/rebirth_paintings/smile.json`
+- `kubejs/data/creativeengineering/paintings/rebirth_paintings/smile.png`
+- `kubejs/data/creativeengineering/paintings/rebirth_paintings/snoot.json`
+- `kubejs/data/creativeengineering/paintings/rebirth_paintings/snoot.png`
+- `kubejs/data/creativeengineering/paintings/rebirth_paintings/snowed_in.json`
+- `kubejs/data/creativeengineering/paintings/rebirth_paintings/snowed_in.png`
+- `kubejs/data/creativeengineering/paintings/rebirth_paintings/snowscape.json`
+- `kubejs/data/creativeengineering/paintings/rebirth_paintings/snowscape.png`
+- `kubejs/data/creativeengineering/paintings/rebirth_paintings/snowy_forest.json`
+- `kubejs/data/creativeengineering/paintings/rebirth_paintings/snowy_forest.png`
+- `kubejs/data/creativeengineering/paintings/rebirth_paintings/snowy_mountain.json`
+- `kubejs/data/creativeengineering/paintings/rebirth_paintings/snowy_mountain.png`
+- `kubejs/data/creativeengineering/paintings/rebirth_paintings/snowy_mountain_peak.json`
+- `kubejs/data/creativeengineering/paintings/rebirth_paintings/snowy_mountain_peak.png`
+- `kubejs/data/creativeengineering/paintings/rebirth_paintings/sour_joke.json`
+- `kubejs/data/creativeengineering/paintings/rebirth_paintings/sour_joke.png`
+- `kubejs/data/creativeengineering/paintings/rebirth_paintings/space.json`
+- `kubejs/data/creativeengineering/paintings/rebirth_paintings/space.png`
+- `kubejs/data/creativeengineering/paintings/rebirth_paintings/starved.json`
+- `kubejs/data/creativeengineering/paintings/rebirth_paintings/starved.png`
+- `kubejs/data/creativeengineering/paintings/rebirth_paintings/still_life.json`
+- `kubejs/data/creativeengineering/paintings/rebirth_paintings/still_life.png`
+- `kubejs/data/creativeengineering/paintings/rebirth_paintings/strange_room.json`
+- `kubejs/data/creativeengineering/paintings/rebirth_paintings/strange_room.png`
+- `kubejs/data/creativeengineering/paintings/rebirth_paintings/stripes.json`
+- `kubejs/data/creativeengineering/paintings/rebirth_paintings/stripes.png`
+- `kubejs/data/creativeengineering/paintings/rebirth_paintings/summit.json`
+- `kubejs/data/creativeengineering/paintings/rebirth_paintings/summit.png`
+- `kubejs/data/creativeengineering/paintings/rebirth_paintings/sunset_valley.json`
+- `kubejs/data/creativeengineering/paintings/rebirth_paintings/sunset_valley.png`
+- `kubejs/data/creativeengineering/paintings/rebirth_paintings/sunsetting.json`
+- `kubejs/data/creativeengineering/paintings/rebirth_paintings/sunsetting.png`
+- `kubejs/data/creativeengineering/paintings/rebirth_paintings/sunsetting_alps.json`
+- `kubejs/data/creativeengineering/paintings/rebirth_paintings/sunsetting_alps.png`
+- `kubejs/data/creativeengineering/paintings/rebirth_paintings/supper_time.json`
+- `kubejs/data/creativeengineering/paintings/rebirth_paintings/supper_time.png`
+- `kubejs/data/creativeengineering/paintings/rebirth_paintings/taiga.json`
+- `kubejs/data/creativeengineering/paintings/rebirth_paintings/taiga.png`
+- `kubejs/data/creativeengineering/paintings/rebirth_paintings/thalassophobia.json`
+- `kubejs/data/creativeengineering/paintings/rebirth_paintings/thalassophobia.png`
+- `kubejs/data/creativeengineering/paintings/rebirth_paintings/the_fog.json`
+- `kubejs/data/creativeengineering/paintings/rebirth_paintings/the_fog.png`
+- `kubejs/data/creativeengineering/paintings/rebirth_paintings/three_heads_are_better_than_two.json`
+- `kubejs/data/creativeengineering/paintings/rebirth_paintings/three_heads_are_better_than_two.png`
+- `kubejs/data/creativeengineering/paintings/rebirth_paintings/tides.json`
+- `kubejs/data/creativeengineering/paintings/rebirth_paintings/tides.png`
+- `kubejs/data/creativeengineering/paintings/rebirth_paintings/timeline.json`
+- `kubejs/data/creativeengineering/paintings/rebirth_paintings/timeline.png`
+- `kubejs/data/creativeengineering/paintings/rebirth_paintings/tropics.json`
+- `kubejs/data/creativeengineering/paintings/rebirth_paintings/tropics.png`
+- `kubejs/data/creativeengineering/paintings/rebirth_paintings/twigs.json`
+- `kubejs/data/creativeengineering/paintings/rebirth_paintings/twigs.png`
+- `kubejs/data/creativeengineering/paintings/rebirth_paintings/twins.json`
+- `kubejs/data/creativeengineering/paintings/rebirth_paintings/twins.png`
+- `kubejs/data/creativeengineering/paintings/rebirth_paintings/underwater.json`
+- `kubejs/data/creativeengineering/paintings/rebirth_paintings/underwater.png`
+- `kubejs/data/creativeengineering/paintings/rebirth_paintings/unidentified_object.json`
+- `kubejs/data/creativeengineering/paintings/rebirth_paintings/unidentified_object.png`
+- `kubejs/data/creativeengineering/paintings/rebirth_paintings/uranium.json`
+- `kubejs/data/creativeengineering/paintings/rebirth_paintings/uranium.png`
+- `kubejs/data/creativeengineering/paintings/rebirth_paintings/vase.json`
+- `kubejs/data/creativeengineering/paintings/rebirth_paintings/vase.png`
+- `kubejs/data/creativeengineering/paintings/rebirth_paintings/volcano.json`
+- `kubejs/data/creativeengineering/paintings/rebirth_paintings/volcano.png`
+- `kubejs/data/creativeengineering/paintings/rebirth_paintings/war_face.json`
+- `kubejs/data/creativeengineering/paintings/rebirth_paintings/war_face.png`
+- `kubejs/data/creativeengineering/paintings/rebirth_paintings/war_horse.json`
+- `kubejs/data/creativeengineering/paintings/rebirth_paintings/war_horse.png`
+- `kubejs/data/creativeengineering/paintings/rebirth_paintings/warming.json`
+- `kubejs/data/creativeengineering/paintings/rebirth_paintings/warming.png`
+- `kubejs/data/creativeengineering/paintings/rebirth_paintings/warning.json`
+- `kubejs/data/creativeengineering/paintings/rebirth_paintings/warning.png`
+- `kubejs/data/creativeengineering/paintings/rebirth_paintings/waves.json`
+- `kubejs/data/creativeengineering/paintings/rebirth_paintings/waves.png`
+- `kubejs/data/creativeengineering/paintings/rebirth_paintings/west_spring.json`
+- `kubejs/data/creativeengineering/paintings/rebirth_paintings/west_spring.png`
+- `kubejs/data/creativeengineering/paintings/rebirth_paintings/western_forest.json`
+- `kubejs/data/creativeengineering/paintings/rebirth_paintings/western_forest.png`
+- `kubejs/data/creativeengineering/paintings/rebirth_paintings/wheat_field.json`
+- `kubejs/data/creativeengineering/paintings/rebirth_paintings/wheat_field.png`
+- `kubejs/data/creativeengineering/paintings/rebirth_paintings/winder_wonderland.json`
+- `kubejs/data/creativeengineering/paintings/rebirth_paintings/winder_wonderland.png`
+- `kubejs/data/creativeengineering/paintings/rebirth_paintings/windmill.json`
+- `kubejs/data/creativeengineering/paintings/rebirth_paintings/windmill.png`
+- `kubejs/data/creativeengineering/paintings/rebirth_paintings/winter_night.json`
+- `kubejs/data/creativeengineering/paintings/rebirth_paintings/winter_night.png`
+- `kubejs/data/creativeengineering/paintings/rebirth_paintings/woodlands.json`
+- `kubejs/data/creativeengineering/paintings/rebirth_paintings/woodlands.png`
+- `kubejs/data/creativeengineering/paintings/rebirth_paintings/wrangler.json`
+- `kubejs/data/creativeengineering/paintings/rebirth_paintings/wrangler.png`
+- `kubejs/data/creativeengineering/paintings/rebirth_paintings/zone.json`
+- `kubejs/data/creativeengineering/paintings/rebirth_paintings/zone.png`
+- `kubejs/data/creativeengineering/paintings/supplementaries/bombs.json`
+- `kubejs/data/creativeengineering/paintings/supplementaries/bombs.png`
+- `kubejs/data/creativeengineering/paintings/toomanypaintings/afternoon.json`
+- `kubejs/data/creativeengineering/paintings/toomanypaintings/afternoon.png`
+- `kubejs/data/creativeengineering/paintings/toomanypaintings/allay.json`
+- `kubejs/data/creativeengineering/paintings/toomanypaintings/allay.png`
+- `kubejs/data/creativeengineering/paintings/toomanypaintings/american.json`
+- `kubejs/data/creativeengineering/paintings/toomanypaintings/american.png`
+- `kubejs/data/creativeengineering/paintings/toomanypaintings/ancient_days.json`
+- `kubejs/data/creativeengineering/paintings/toomanypaintings/ancient_days.png`
+- `kubejs/data/creativeengineering/paintings/toomanypaintings/arthemis.json`
+- `kubejs/data/creativeengineering/paintings/toomanypaintings/arthemis.png`
+- `kubejs/data/creativeengineering/paintings/toomanypaintings/ateneah.json`
+- `kubejs/data/creativeengineering/paintings/toomanypaintings/ateneah.png`
+- `kubejs/data/creativeengineering/paintings/toomanypaintings/automat.json`
+- `kubejs/data/creativeengineering/paintings/toomanypaintings/automat.png`
+- `kubejs/data/creativeengineering/paintings/toomanypaintings/axperty.json`
+- `kubejs/data/creativeengineering/paintings/toomanypaintings/axperty.png`
+- `kubejs/data/creativeengineering/paintings/toomanypaintings/balcony.json`
+- `kubejs/data/creativeengineering/paintings/toomanypaintings/balcony.png`
+- `kubejs/data/creativeengineering/paintings/toomanypaintings/bee.json`
+- `kubejs/data/creativeengineering/paintings/toomanypaintings/bee.png`
+- `kubejs/data/creativeengineering/paintings/toomanypaintings/benda.json`
+- `kubejs/data/creativeengineering/paintings/toomanypaintings/benda.png`
+- `kubejs/data/creativeengineering/paintings/toomanypaintings/cafe.json`
+- `kubejs/data/creativeengineering/paintings/toomanypaintings/cafe.png`
+- `kubejs/data/creativeengineering/paintings/toomanypaintings/clocks.json`
+- `kubejs/data/creativeengineering/paintings/toomanypaintings/clocks.png`
+- `kubejs/data/creativeengineering/paintings/toomanypaintings/cow.json`
+- `kubejs/data/creativeengineering/paintings/toomanypaintings/cow.png`
+- `kubejs/data/creativeengineering/paintings/toomanypaintings/creation.json`
+- `kubejs/data/creativeengineering/paintings/toomanypaintings/creation.png`
+- `kubejs/data/creativeengineering/paintings/toomanypaintings/desperate.json`
+- `kubejs/data/creativeengineering/paintings/toomanypaintings/desperate.png`
+- `kubejs/data/creativeengineering/paintings/toomanypaintings/drowned.json`
+- `kubejs/data/creativeengineering/paintings/toomanypaintings/drowned.png`
+- `kubejs/data/creativeengineering/paintings/toomanypaintings/earth_far_away.json`
+- `kubejs/data/creativeengineering/paintings/toomanypaintings/earth_far_away.png`
+- `kubejs/data/creativeengineering/paintings/toomanypaintings/earth_rise.json`
+- `kubejs/data/creativeengineering/paintings/toomanypaintings/earth_rise.png`
+- `kubejs/data/creativeengineering/paintings/toomanypaintings/enderman.json`
+- `kubejs/data/creativeengineering/paintings/toomanypaintings/enderman.png`
+- `kubejs/data/creativeengineering/paintings/toomanypaintings/false_mirror.json`
+- `kubejs/data/creativeengineering/paintings/toomanypaintings/false_mirror.png`
+- `kubejs/data/creativeengineering/paintings/toomanypaintings/federico.json`
+- `kubejs/data/creativeengineering/paintings/toomanypaintings/federico.png`
+- `kubejs/data/creativeengineering/paintings/toomanypaintings/french.json`
+- `kubejs/data/creativeengineering/paintings/toomanypaintings/french.png`
+- `kubejs/data/creativeengineering/paintings/toomanypaintings/frida.json`
+- `kubejs/data/creativeengineering/paintings/toomanypaintings/frida.png`
+- `kubejs/data/creativeengineering/paintings/toomanypaintings/garden.json`
+- `kubejs/data/creativeengineering/paintings/toomanypaintings/garden.png`
+- `kubejs/data/creativeengineering/paintings/toomanypaintings/ghast.json`
+- `kubejs/data/creativeengineering/paintings/toomanypaintings/ghast.png`
+- `kubejs/data/creativeengineering/paintings/toomanypaintings/giorgio.json`
+- `kubejs/data/creativeengineering/paintings/toomanypaintings/giorgio.png`
+- `kubejs/data/creativeengineering/paintings/toomanypaintings/karma.json`
+- `kubejs/data/creativeengineering/paintings/toomanypaintings/karma.png`
+- `kubejs/data/creativeengineering/paintings/toomanypaintings/lady.json`
+- `kubejs/data/creativeengineering/paintings/toomanypaintings/lady.png`
+- `kubejs/data/creativeengineering/paintings/toomanypaintings/lisa.json`
+- `kubejs/data/creativeengineering/paintings/toomanypaintings/lisa.png`
+- `kubejs/data/creativeengineering/paintings/toomanypaintings/lovers.json`
+- `kubejs/data/creativeengineering/paintings/toomanypaintings/lovers.png`
+- `kubejs/data/creativeengineering/paintings/toomanypaintings/meninas.json`
+- `kubejs/data/creativeengineering/paintings/toomanypaintings/meninas.png`
+- `kubejs/data/creativeengineering/paintings/toomanypaintings/milkmaid.json`
+- `kubejs/data/creativeengineering/paintings/toomanypaintings/milkmaid.png`
+- `kubejs/data/creativeengineering/paintings/toomanypaintings/morning.json`
+- `kubejs/data/creativeengineering/paintings/toomanypaintings/morning.png`
+- `kubejs/data/creativeengineering/paintings/toomanypaintings/narcissus.json`
+- `kubejs/data/creativeengineering/paintings/toomanypaintings/narcissus.png`
+- `kubejs/data/creativeengineering/paintings/toomanypaintings/night.json`
+- `kubejs/data/creativeengineering/paintings/toomanypaintings/night.png`
+- `kubejs/data/creativeengineering/paintings/toomanypaintings/not_reproduced.json`
+- `kubejs/data/creativeengineering/paintings/toomanypaintings/not_reproduced.png`
+- `kubejs/data/creativeengineering/paintings/toomanypaintings/piazza.json`
+- `kubejs/data/creativeengineering/paintings/toomanypaintings/piazza.png`
+- `kubejs/data/creativeengineering/paintings/toomanypaintings/pig.json`
+- `kubejs/data/creativeengineering/paintings/toomanypaintings/pig.png`
+- `kubejs/data/creativeengineering/paintings/toomanypaintings/pillars.json`
+- `kubejs/data/creativeengineering/paintings/toomanypaintings/pillars.png`
+- `kubejs/data/creativeengineering/paintings/toomanypaintings/rain.json`
+- `kubejs/data/creativeengineering/paintings/toomanypaintings/rain.png`
+- `kubejs/data/creativeengineering/paintings/toomanypaintings/renibond.json`
+- `kubejs/data/creativeengineering/paintings/toomanypaintings/renibond.png`
+- `kubejs/data/creativeengineering/paintings/toomanypaintings/rider.json`
+- `kubejs/data/creativeengineering/paintings/toomanypaintings/rider.png`
+- `kubejs/data/creativeengineering/paintings/toomanypaintings/ring.json`
+- `kubejs/data/creativeengineering/paintings/toomanypaintings/ring.png`
+- `kubejs/data/creativeengineering/paintings/toomanypaintings/school.json`
+- `kubejs/data/creativeengineering/paintings/toomanypaintings/school.png`
+- `kubejs/data/creativeengineering/paintings/toomanypaintings/scream.json`
+- `kubejs/data/creativeengineering/paintings/toomanypaintings/scream.png`
+- `kubejs/data/creativeengineering/paintings/toomanypaintings/self_portrait.json`
+- `kubejs/data/creativeengineering/paintings/toomanypaintings/self_portrait.png`
+- `kubejs/data/creativeengineering/paintings/toomanypaintings/sheep.json`
+- `kubejs/data/creativeengineering/paintings/toomanypaintings/sheep.png`
+- `kubejs/data/creativeengineering/paintings/toomanypaintings/skeleton.json`
+- `kubejs/data/creativeengineering/paintings/toomanypaintings/skeleton.png`
+- `kubejs/data/creativeengineering/paintings/toomanypaintings/slime.json`
+- `kubejs/data/creativeengineering/paintings/toomanypaintings/slime.png`
+- `kubejs/data/creativeengineering/paintings/toomanypaintings/snow_golem.json`
+- `kubejs/data/creativeengineering/paintings/toomanypaintings/snow_golem.png`
+- `kubejs/data/creativeengineering/paintings/toomanypaintings/son.json`
+- `kubejs/data/creativeengineering/paintings/toomanypaintings/son.png`
+- `kubejs/data/creativeengineering/paintings/toomanypaintings/spider.json`
+- `kubejs/data/creativeengineering/paintings/toomanypaintings/spider.png`
+- `kubejs/data/creativeengineering/paintings/toomanypaintings/squares.json`
+- `kubejs/data/creativeengineering/paintings/toomanypaintings/squares.png`
+- `kubejs/data/creativeengineering/paintings/toomanypaintings/starry_night.json`
+- `kubejs/data/creativeengineering/paintings/toomanypaintings/starry_night.png`
+- `kubejs/data/creativeengineering/paintings/toomanypaintings/steve.json`
+- `kubejs/data/creativeengineering/paintings/toomanypaintings/steve.png`
+- `kubejs/data/creativeengineering/paintings/toomanypaintings/stray.json`
+- `kubejs/data/creativeengineering/paintings/toomanypaintings/stray.png`
+- `kubejs/data/creativeengineering/paintings/toomanypaintings/swing.json`
+- `kubejs/data/creativeengineering/paintings/toomanypaintings/swing.png`
+- `kubejs/data/creativeengineering/paintings/toomanypaintings/takeamuke.json`
+- `kubejs/data/creativeengineering/paintings/toomanypaintings/takeamuke.png`
+- `kubejs/data/creativeengineering/paintings/toomanypaintings/villager.json`
+- `kubejs/data/creativeengineering/paintings/toomanypaintings/villager.png`
+- `kubejs/data/creativeengineering/paintings/toomanypaintings/wave.json`
+- `kubejs/data/creativeengineering/paintings/toomanypaintings/wave.png`
+- `kubejs/data/creativeengineering/paintings/toomanypaintings/wheat_field.json`
+- `kubejs/data/creativeengineering/paintings/toomanypaintings/wheat_field.png`
+- `kubejs/data/creativeengineering/paintings/toomanypaintings/wither_skeleton.json`
+- `kubejs/data/creativeengineering/paintings/toomanypaintings/wither_skeleton.png`
+- `kubejs/data/creativeengineering/paintings/toomanypaintings/zombie.json`
+- `kubejs/data/creativeengineering/paintings/toomanypaintings/zombie.png`
+- `kubejs/data/creativeengineering/paintings/toomanypaintings/zombie_pigman.json`
+- `kubejs/data/creativeengineering/paintings/toomanypaintings/zombie_pigman.png`
+- `kubejs/data/creativeengineering/paintings/upgrade_aquatic/sightless.json`
+- `kubejs/data/creativeengineering/paintings/upgrade_aquatic/sightless.png`
+- `kubejs/data/more_mooblooms/moobloom_spawns/creativeengineering.json`
+- `kubejs/data/oceanic_delight/loot_tables/gameplay/fishing_net_on_kelp.json`
+- `kubejs/data/oceanic_delight/loot_tables/gameplay/fishing_net_on_sea_grass.json`
+- `kubejs/data/vintagedelight/moonlight/soft_fluids/pepper_jam.json`
+- `kubejs/data/vintagedelight/moonlight/soft_fluids/relish.json`
+- `kubejs/data/watchtower_building/advancements/watchtower_found.json`
+- `kubejs/generation_scripts/food/can_servings.json`
+- `kubejs/generation_scripts/food/can_types.json`
+- `kubejs/generation_scripts/food/food_types.json`
+- `kubejs/generation_scripts/food/mortar_catalog.json`
+- `kubejs/generation_scripts/food/placeable.json`
+- `kubejs/server_scripts/_lib/dump_all.js`
+- `kubejs/server_scripts/_lib/dump_bee_nests.js`
+- `kubejs/server_scripts/_lib/dump_biome.js`
+- `kubejs/server_scripts/_lib/dump_climate.js`
+- `kubejs/server_scripts/_lib/dump_compost.js`
+- `kubejs/server_scripts/_lib/dump_crafting_audit.js`
+- `kubejs/server_scripts/_lib/dump_crop_growth.js`
+- `kubejs/server_scripts/_lib/dump_flower_pots.js`
+- `kubejs/server_scripts/_lib/dump_fluid.js`
+- `kubejs/server_scripts/_lib/dump_food.js`
+- `kubejs/server_scripts/_lib/dump_gear.js`
+- `kubejs/server_scripts/_lib/dump_items.js`
+- `kubejs/server_scripts/_lib/dump_names.js`
+- `kubejs/server_scripts/_lib/dump_paintings.js`
+- `kubejs/server_scripts/_lib/dump_physics.js`
+- `kubejs/server_scripts/_lib/dump_placeable.js`
+- `kubejs/server_scripts/_lib/dump_potions.js`
+- `kubejs/server_scripts/_lib/dump_recipes.js`
+- `kubejs/server_scripts/_lib/dump_spawns.js`
+- `kubejs/server_scripts/_lib/dump_stacks.js`
+- `kubejs/server_scripts/_lib/dump_structuregen.js`
+- `kubejs/server_scripts/_lib/dump_tags.js`
+- `kubejs/server_scripts/_lib/flower_world.js`
+- `kubejs/server_scripts/_lib/loot_dump.js`
+- `kubejs/server_scripts/_lib/metal_test_recipes.js`
+- `kubejs/server_scripts/_lib/recipe_scan.js`
+- `kubejs/server_scripts/_lib/sequence_assembly_processes.js`
+- `kubejs/server_scripts/_lib/structure_dump.js`
+- `kubejs/server_scripts/_lib/villager_trades_dump.js`
+- `kubejs/server_scripts/_lib/wood_test_recipes.js`
+- `kubejs/server_scripts/cooking/alcohol.js`
+- `kubejs/server_scripts/economy/coin.js`
+- `kubejs/server_scripts/engineering/potion_bottling.js`
+- `kubejs/server_scripts/engineering/potion_buckets.js`
+- `kubejs/server_scripts/engineering/sample_syringe.js`
+- `kubejs/server_scripts/equipment/tipped_arrows.js`
+- `kubejs/server_scripts/loot/00_lib.js`
+- `kubejs/server_scripts/loot/05_tuning.js`
+- `kubejs/server_scripts/loot/06_dead_maps.js`
+- `kubejs/server_scripts/loot/07_rules.js`
+- `kubejs/server_scripts/loot/08_leaf_apples.js`
+- `kubejs/server_scripts/loot/10_removals.js`
+- `kubejs/server_scripts/loot/20_frequency.js`
+- `kubejs/server_scripts/loot/30_redistribute.js`
+- `kubejs/server_scripts/loot/40_targeted.js`
+- `kubejs/server_scripts/loot/95_tag_capture.js`
+- `kubejs/server_scripts/loot/99_debug.js`
+- `kubejs/server_scripts/loot/loot_config.json`
+- `kubejs/server_scripts/loot/loot_index.json`
+- `kubejs/server_scripts/magic/armor_effects.js`
+- `kubejs/server_scripts/magic/lava_vision.js`
+- `kubejs/server_scripts/magic/tool_effects.js`
+- `kubejs/server_scripts/other/dead_recipe_removal.js`
+- `kubejs/server_scripts/other/feature_ports.js`
+- `kubejs/server_scripts/other/flowers.js`
+- `kubejs/server_scripts/other/harvest.js`
+- `kubejs/server_scripts/other/jeed_providers.js`
+- `kubejs/server_scripts/other/misc_mods.js`
+- `kubejs/server_scripts/other/removed_mobs.js`
+- `kubejs/server_scripts/other/starter_kit.js`
+- `kubejs/server_scripts/tags/entitytags.js`
+- `kubejs/server_scripts/tags/item_physics_tags.js`
+- `kubejs/server_scripts/tags/loottags.js`
+- `kubejs/server_scripts/worldgen/_biome_rules.js`
+- `kubejs/server_scripts/worldgen/bee_nests.js`
+- `kubejs/server_scripts/worldgen/biome_overrides.js`
+- `kubejs/server_scripts/worldgen/earth_fill.js`
+- `kubejs/server_scripts/worldgen/ground_match.js`
+- `kubejs/server_scripts/worldgen/mob_spawns.js`
+- `kubejs/server_scripts/worldgen/mushroom_spawns.js`
+- `kubejs/server_scripts/worldgen/structure_overrides.js`
+- `kubejs/server_scripts/worldgen/terrain_adaptation.js`
+- `kubejs/server_scripts/worldgen/water_fill.js`
+- `kubejs/server_scripts/worldgen/wild_flowers.js`
+- `kubejs/startup_scripts/cooking/alcohol_drinks.js`
+- `kubejs/startup_scripts/cooking/food_values.js`
+- `kubejs/startup_scripts/cooking/potions.js`
+- `kubejs/startup_scripts/func/armor_effects.js`
+- `kubejs/startup_scripts/func/item_physics.js`
+- `kubejs/startup_scripts/func/potion_area.js`
+- `kubejs/startup_scripts/func/sample_syringe.js`
+- `kubejs/startup_scripts/func/tool_effects.js`
+- `kubejs/startup_scripts/items/potion_buckets.js`
+- `kubejs/startup_scripts/items/sample_syringe.js`
+- `kubejs/startup_scripts/magic/magic_resistance.js`
+- `mods/CannedGoods-1.19.2-3.jar`
+- `mods/NethersDelight-1.19-3.1.jar`
+- `mods/babyMobs-1.0.0.jar`
+- `mods/backportedDisplay-1.7.0-ce-19.2-01.jar`
+- `mods/backportedFungi-1.3-ce-19.2-01.jar`
+- `mods/backportedMiners-1.4.5-ce-19.2-01.jar`
+- `mods/backportedVeggies-1.9.2-ce-19.2-03.jar`
+- `mods/backportedVintage-0.1.6-ce-19.2-09.jar`
+- `mods/create_salt 1.19.2-1.1.0.jar`
+- `mods/creativeLabels-1.0.0.jar`
+- `mods/creative_brewing-1.0.0.jar`
+- `mods/creative_delight-1.0.0.jar`
+- `mods/creativeengineering-1.1.04.jar`
+- `mods/goldenfood-1.19.2-2.0.0.jar`
+- `mods/incubationAdditions-1.1.0.jar`
+- `mods/moreMooblooms-1.1.0.jar`
+- `mods/salt-1.19.2-1.2.4.1.jar`
+
+</details>
+
+<details><summary>Delete on the client (1102, also in removals_client.txt)</summary>
+
+- `config/creative_brewing-common.toml`
+- `config/creative_delight-common.toml`
+- `config/displaydelight-common.toml`
+- `config/salt-common.toml`
+- `config/vintagedelight-common.toml`
+- `kubejs/assets/creative_delight/textures/block/treated_stick.png`
+- `kubejs/assets/creative_delight/textures/block/treated_stick_cross.png`
+- `kubejs/assets/creativeengineering/blockstates/weathered_cardboard_box.json`
+- `kubejs/assets/creativeengineering/models/block/weathered_cardboard_box.json`
+- `kubejs/assets/creativeengineering/models/item/weathered_cardboard_box.json`
+- `kubejs/assets/creativeengineering/textures/block/weathered_cardboard_box.png`
+- `kubejs/assets/prepared_flesh.png`
+- `kubejs/client_scripts/armor_effects_tooltip.js`
+- `kubejs/client_scripts/potion_buckets.js`
+- `kubejs/client_scripts/texture_tool.js`
+- `kubejs/client_scripts/tool_effects_tooltip.js`
+- `kubejs/data/creativeengineering/curios/entities/player_hands_face.json`
+- `kubejs/data/creativeengineering/curios/slots/face.json`
+- `kubejs/data/creativeengineering/curios/slots/feet.json`
+- `kubejs/data/creativeengineering/curios/slots/hands.json`
+- `kubejs/data/creativeengineering/loot_tables/gameplay/fishing_net/coral.json`
+- `kubejs/data/creativeengineering/loot_tables/gameplay/fishing_net/junk.json`
+- `kubejs/data/creativeengineering/loot_tables/gameplay/fishing_net/ocean_treasure.json`
+- `kubejs/data/creativeengineering/loot_tables/misc/monster_box_reward.json`
+- `kubejs/data/creativeengineering/moonlight/soft_fluids/baked_cod_stew_cup.json`
+- `kubejs/data/creativeengineering/moonlight/soft_fluids/bat_soup_cup.json`
+- `kubejs/data/creativeengineering/moonlight/soft_fluids/beef_stew_cup.json`
+- `kubejs/data/creativeengineering/moonlight/soft_fluids/beetroot_soup_cup.json`
+- `kubejs/data/creativeengineering/moonlight/soft_fluids/bone_broth_cup.json`
+- `kubejs/data/creativeengineering/moonlight/soft_fluids/cave_soup_cup.json`
+- `kubejs/data/creativeengineering/moonlight/soft_fluids/chicken_soup_cup.json`
+- `kubejs/data/creativeengineering/moonlight/soft_fluids/fish_stew_cup.json`
+- `kubejs/data/creativeengineering/moonlight/soft_fluids/insect_stew_cup.json`
+- `kubejs/data/creativeengineering/moonlight/soft_fluids/mushroom_stew_cup.json`
+- `kubejs/data/creativeengineering/moonlight/soft_fluids/noodle_soup_cup.json`
+- `kubejs/data/creativeengineering/moonlight/soft_fluids/onion_soup_cup.json`
+- `kubejs/data/creativeengineering/moonlight/soft_fluids/pumpkin_soup_cup.json`
+- `kubejs/data/creativeengineering/moonlight/soft_fluids/rabbit_stew_cup.json`
+- `kubejs/data/creativeengineering/moonlight/soft_fluids/vegetable_soup_cup.json`
+- `kubejs/data/creativeengineering/paintings/alexsmobs/dog_poker.json`
+- `kubejs/data/creativeengineering/paintings/alexsmobs/dog_poker.png`
+- `kubejs/data/creativeengineering/paintings/alexsmobs/nft.json`
+- `kubejs/data/creativeengineering/paintings/alexsmobs/nft.png`
+- `kubejs/data/creativeengineering/paintings/buzzier_bees/candle.json`
+- `kubejs/data/creativeengineering/paintings/buzzier_bees/candle.png`
+- `kubejs/data/creativeengineering/paintings/cccbridge/funny_redrouters.json`
+- `kubejs/data/creativeengineering/paintings/cccbridge/funny_redrouters.png`
+- `kubejs/data/creativeengineering/paintings/clayworks/baked.json`
+- `kubejs/data/creativeengineering/paintings/clayworks/baked.png`
+- `kubejs/data/creativeengineering/paintings/create_things_and_misc/create_2022.json`
+- `kubejs/data/creativeengineering/paintings/create_things_and_misc/create_2022.png`
+- `kubejs/data/creativeengineering/paintings/darkpaintings/a_distant_light.json`
+- `kubejs/data/creativeengineering/paintings/darkpaintings/a_distant_light.png`
+- `kubejs/data/creativeengineering/paintings/darkpaintings/afternoon_volcano.json`
+- `kubejs/data/creativeengineering/paintings/darkpaintings/afternoon_volcano.png`
+- `kubejs/data/creativeengineering/paintings/darkpaintings/antler_maze.json`
+- `kubejs/data/creativeengineering/paintings/darkpaintings/antler_maze.png`
+- `kubejs/data/creativeengineering/paintings/darkpaintings/bubbles.json`
+- `kubejs/data/creativeengineering/paintings/darkpaintings/bubbles.png`
+- `kubejs/data/creativeengineering/paintings/darkpaintings/cottage_by_the_river.json`
+- `kubejs/data/creativeengineering/paintings/darkpaintings/cottage_by_the_river.png`
+- `kubejs/data/creativeengineering/paintings/darkpaintings/crimson_taiga.json`
+- `kubejs/data/creativeengineering/paintings/darkpaintings/crimson_taiga.png`
+- `kubejs/data/creativeengineering/paintings/darkpaintings/daybreak.json`
+- `kubejs/data/creativeengineering/paintings/darkpaintings/daybreak.png`
+- `kubejs/data/creativeengineering/paintings/darkpaintings/enderman.json`
+- `kubejs/data/creativeengineering/paintings/darkpaintings/enderman.png`
+- `kubejs/data/creativeengineering/paintings/darkpaintings/in_the_air.json`
+- `kubejs/data/creativeengineering/paintings/darkpaintings/in_the_air.png`
+- `kubejs/data/creativeengineering/paintings/darkpaintings/kerstball.json`
+- `kubejs/data/creativeengineering/paintings/darkpaintings/kerstball.png`
+- `kubejs/data/creativeengineering/paintings/darkpaintings/last_dreams_at_candyland.json`
+- `kubejs/data/creativeengineering/paintings/darkpaintings/last_dreams_at_candyland.png`
+- `kubejs/data/creativeengineering/paintings/darkpaintings/lumberjack.json`
+- `kubejs/data/creativeengineering/paintings/darkpaintings/lumberjack.png`
+- `kubejs/data/creativeengineering/paintings/darkpaintings/mr_moon.json`
+- `kubejs/data/creativeengineering/paintings/darkpaintings/mr_moon.png`
+- `kubejs/data/creativeengineering/paintings/darkpaintings/oceanic_view.json`
+- `kubejs/data/creativeengineering/paintings/darkpaintings/oceanic_view.png`
+- `kubejs/data/creativeengineering/paintings/darkpaintings/planets.json`
+- `kubejs/data/creativeengineering/paintings/darkpaintings/planets.png`
+- `kubejs/data/creativeengineering/paintings/darkpaintings/santa_moon.json`
+- `kubejs/data/creativeengineering/paintings/darkpaintings/santa_moon.png`
+- `kubejs/data/creativeengineering/paintings/darkpaintings/seavibe.json`
+- `kubejs/data/creativeengineering/paintings/darkpaintings/seavibe.png`
+- `kubejs/data/creativeengineering/paintings/darkpaintings/sir_ramfrez_yarn_paradise.json`
+- `kubejs/data/creativeengineering/paintings/darkpaintings/sir_ramfrez_yarn_paradise.png`
+- `kubejs/data/creativeengineering/paintings/darkpaintings/skyblock.json`
+- `kubejs/data/creativeengineering/paintings/darkpaintings/skyblock.png`
+- `kubejs/data/creativeengineering/paintings/darkpaintings/snowman_scenery.json`
+- `kubejs/data/creativeengineering/paintings/darkpaintings/snowman_scenery.png`
+- `kubejs/data/creativeengineering/paintings/darkpaintings/summer_heat.json`
+- `kubejs/data/creativeengineering/paintings/darkpaintings/summer_heat.png`
+- `kubejs/data/creativeengineering/paintings/darkpaintings/tetromino.json`
+- `kubejs/data/creativeengineering/paintings/darkpaintings/tetromino.png`
+- `kubejs/data/creativeengineering/paintings/darkpaintings/the_most_sweet_candy.json`
+- `kubejs/data/creativeengineering/paintings/darkpaintings/the_most_sweet_candy.png`
+- `kubejs/data/creativeengineering/paintings/darkpaintings/the_secret_neighborhood.json`
+- `kubejs/data/creativeengineering/paintings/darkpaintings/the_secret_neighborhood.png`
+- `kubejs/data/creativeengineering/paintings/darkpaintings/the_tower.json`
+- `kubejs/data/creativeengineering/paintings/darkpaintings/the_tower.png`
+- `kubejs/data/creativeengineering/paintings/darkpaintings/the_wheel.json`
+- `kubejs/data/creativeengineering/paintings/darkpaintings/the_wheel.png`
+- `kubejs/data/creativeengineering/paintings/darkpaintings/turkey.json`
+- `kubejs/data/creativeengineering/paintings/darkpaintings/turkey.png`
+- `kubejs/data/creativeengineering/paintings/darkpaintings/village.json`
+- `kubejs/data/creativeengineering/paintings/darkpaintings/village.png`
+- `kubejs/data/creativeengineering/paintings/darkpaintings/watching_the_sunset.json`
+- `kubejs/data/creativeengineering/paintings/darkpaintings/watching_the_sunset.png`
+- `kubejs/data/creativeengineering/paintings/darkpaintings/whale_dream.json`
+- `kubejs/data/creativeengineering/paintings/darkpaintings/whale_dream.png`
+- `kubejs/data/creativeengineering/paintings/handcrafted/ad_astra.json`
+- `kubejs/data/creativeengineering/paintings/handcrafted/ad_astra.png`
+- `kubejs/data/creativeengineering/paintings/handcrafted/apple.json`
+- `kubejs/data/creativeengineering/paintings/handcrafted/apple.png`
+- `kubejs/data/creativeengineering/paintings/handcrafted/beach_sunrise_left.json`
+- `kubejs/data/creativeengineering/paintings/handcrafted/beach_sunrise_left.png`
+- `kubejs/data/creativeengineering/paintings/handcrafted/beach_sunrise_mid.json`
+- `kubejs/data/creativeengineering/paintings/handcrafted/beach_sunrise_mid.png`
+- `kubejs/data/creativeengineering/paintings/handcrafted/beach_sunrise_right.json`
+- `kubejs/data/creativeengineering/paintings/handcrafted/beach_sunrise_right.png`
+- `kubejs/data/creativeengineering/paintings/handcrafted/broken_birches.json`
+- `kubejs/data/creativeengineering/paintings/handcrafted/broken_birches.png`
+- `kubejs/data/creativeengineering/paintings/handcrafted/broken_birches_left_sidepanel.json`
+- `kubejs/data/creativeengineering/paintings/handcrafted/broken_birches_left_sidepanel.png`
+- `kubejs/data/creativeengineering/paintings/handcrafted/broken_birches_right_sidepanel.json`
+- `kubejs/data/creativeengineering/paintings/handcrafted/broken_birches_right_sidepanel.png`
+- `kubejs/data/creativeengineering/paintings/handcrafted/cookies_on_a_plate.json`
+- `kubejs/data/creativeengineering/paintings/handcrafted/cookies_on_a_plate.png`
+- `kubejs/data/creativeengineering/paintings/handcrafted/coral_depths.json`
+- `kubejs/data/creativeengineering/paintings/handcrafted/coral_depths.png`
+- `kubejs/data/creativeengineering/paintings/handcrafted/desert_plateau.json`
+- `kubejs/data/creativeengineering/paintings/handcrafted/desert_plateau.png`
+- `kubejs/data/creativeengineering/paintings/handcrafted/flower_in_the_darkness.json`
+- `kubejs/data/creativeengineering/paintings/handcrafted/flower_in_the_darkness.png`
+- `kubejs/data/creativeengineering/paintings/handcrafted/green_woods.json`
+- `kubejs/data/creativeengineering/paintings/handcrafted/green_woods.png`
+- `kubejs/data/creativeengineering/paintings/handcrafted/lava_puddles.json`
+- `kubejs/data/creativeengineering/paintings/handcrafted/lava_puddles.png`
+- `kubejs/data/creativeengineering/paintings/handcrafted/love_flowers.json`
+- `kubejs/data/creativeengineering/paintings/handcrafted/love_flowers.png`
+- `kubejs/data/creativeengineering/paintings/handcrafted/marigold_meadows.json`
+- `kubejs/data/creativeengineering/paintings/handcrafted/marigold_meadows.png`
+- `kubejs/data/creativeengineering/paintings/handcrafted/misty_mountain_left_sidepanel.json`
+- `kubejs/data/creativeengineering/paintings/handcrafted/misty_mountain_left_sidepanel.png`
+- `kubejs/data/creativeengineering/paintings/handcrafted/misty_mountain_right_sidepanel.json`
+- `kubejs/data/creativeengineering/paintings/handcrafted/misty_mountain_right_sidepanel.png`
+- `kubejs/data/creativeengineering/paintings/handcrafted/misty_mountains.json`
+- `kubejs/data/creativeengineering/paintings/handcrafted/misty_mountains.png`
+- `kubejs/data/creativeengineering/paintings/handcrafted/my_man_diorite.json`
+- `kubejs/data/creativeengineering/paintings/handcrafted/my_man_diorite.png`
+- `kubejs/data/creativeengineering/paintings/handcrafted/mysterious_mangroves.json`
+- `kubejs/data/creativeengineering/paintings/handcrafted/mysterious_mangroves.png`
+- `kubejs/data/creativeengineering/paintings/handcrafted/nian_cat.json`
+- `kubejs/data/creativeengineering/paintings/handcrafted/nian_cat.png`
+- `kubejs/data/creativeengineering/paintings/handcrafted/pride_steve.json`
+- `kubejs/data/creativeengineering/paintings/handcrafted/pride_steve.png`
+- `kubejs/data/creativeengineering/paintings/handcrafted/rocky_beach.json`
+- `kubejs/data/creativeengineering/paintings/handcrafted/rocky_beach.png`
+- `kubejs/data/creativeengineering/paintings/handcrafted/safari_sunset.json`
+- `kubejs/data/creativeengineering/paintings/handcrafted/safari_sunset.png`
+- `kubejs/data/creativeengineering/paintings/handcrafted/small_safari_sunset.json`
+- `kubejs/data/creativeengineering/paintings/handcrafted/small_safari_sunset.png`
+- `kubejs/data/creativeengineering/paintings/handcrafted/terrarium.json`
+- `kubejs/data/creativeengineering/paintings/handcrafted/terrarium.png`
+- `kubejs/data/creativeengineering/paintings/handcrafted/the_cat_and_the_cup.json`
+- `kubejs/data/creativeengineering/paintings/handcrafted/the_cat_and_the_cup.png`
+- `kubejs/data/creativeengineering/paintings/minecraft/alban.json`
+- `kubejs/data/creativeengineering/paintings/minecraft/alban.png`
+- `kubejs/data/creativeengineering/paintings/minecraft/aztec.json`
+- `kubejs/data/creativeengineering/paintings/minecraft/aztec.png`
+- `kubejs/data/creativeengineering/paintings/minecraft/aztec2.json`
+- `kubejs/data/creativeengineering/paintings/minecraft/aztec2.png`
+- `kubejs/data/creativeengineering/paintings/minecraft/bomb.json`
+- `kubejs/data/creativeengineering/paintings/minecraft/bomb.png`
+- `kubejs/data/creativeengineering/paintings/minecraft/burning_skull.json`
+- `kubejs/data/creativeengineering/paintings/minecraft/burning_skull.png`
+- `kubejs/data/creativeengineering/paintings/minecraft/bust.json`
+- `kubejs/data/creativeengineering/paintings/minecraft/bust.png`
+- `kubejs/data/creativeengineering/paintings/minecraft/courbet.json`
+- `kubejs/data/creativeengineering/paintings/minecraft/courbet.png`
+- `kubejs/data/creativeengineering/paintings/minecraft/creebet.json`
+- `kubejs/data/creativeengineering/paintings/minecraft/creebet.png`
+- `kubejs/data/creativeengineering/paintings/minecraft/donkey_kong.json`
+- `kubejs/data/creativeengineering/paintings/minecraft/donkey_kong.png`
+- `kubejs/data/creativeengineering/paintings/minecraft/earth.json`
+- `kubejs/data/creativeengineering/paintings/minecraft/earth.png`
+- `kubejs/data/creativeengineering/paintings/minecraft/fighters.json`
+- `kubejs/data/creativeengineering/paintings/minecraft/fighters.png`
+- `kubejs/data/creativeengineering/paintings/minecraft/fire.json`
+- `kubejs/data/creativeengineering/paintings/minecraft/fire.png`
+- `kubejs/data/creativeengineering/paintings/minecraft/graham.json`
+- `kubejs/data/creativeengineering/paintings/minecraft/graham.png`
+- `kubejs/data/creativeengineering/paintings/minecraft/kebab.json`
+- `kubejs/data/creativeengineering/paintings/minecraft/kebab.png`
+- `kubejs/data/creativeengineering/paintings/minecraft/match.json`
+- `kubejs/data/creativeengineering/paintings/minecraft/match.png`
+- `kubejs/data/creativeengineering/paintings/minecraft/pigscene.json`
+- `kubejs/data/creativeengineering/paintings/minecraft/pigscene.png`
+- `kubejs/data/creativeengineering/paintings/minecraft/plant.json`
+- `kubejs/data/creativeengineering/paintings/minecraft/plant.png`
+- `kubejs/data/creativeengineering/paintings/minecraft/pointer.json`
+- `kubejs/data/creativeengineering/paintings/minecraft/pointer.png`
+- `kubejs/data/creativeengineering/paintings/minecraft/pool.json`
+- `kubejs/data/creativeengineering/paintings/minecraft/pool.png`
+- `kubejs/data/creativeengineering/paintings/minecraft/sea.json`
+- `kubejs/data/creativeengineering/paintings/minecraft/sea.png`
+- `kubejs/data/creativeengineering/paintings/minecraft/skeleton.json`
+- `kubejs/data/creativeengineering/paintings/minecraft/skeleton.png`
+- `kubejs/data/creativeengineering/paintings/minecraft/skull_and_roses.json`
+- `kubejs/data/creativeengineering/paintings/minecraft/skull_and_roses.png`
+- `kubejs/data/creativeengineering/paintings/minecraft/stage.json`
+- `kubejs/data/creativeengineering/paintings/minecraft/stage.png`
+- `kubejs/data/creativeengineering/paintings/minecraft/sunset.json`
+- `kubejs/data/creativeengineering/paintings/minecraft/sunset.png`
+- `kubejs/data/creativeengineering/paintings/minecraft/void.json`
+- `kubejs/data/creativeengineering/paintings/minecraft/void.png`
+- `kubejs/data/creativeengineering/paintings/minecraft/wanderer.json`
+- `kubejs/data/creativeengineering/paintings/minecraft/wanderer.png`
+- `kubejs/data/creativeengineering/paintings/minecraft/wasteland.json`
+- `kubejs/data/creativeengineering/paintings/minecraft/wasteland.png`
+- `kubejs/data/creativeengineering/paintings/minecraft/water.json`
+- `kubejs/data/creativeengineering/paintings/minecraft/water.png`
+- `kubejs/data/creativeengineering/paintings/minecraft/wind.json`
+- `kubejs/data/creativeengineering/paintings/minecraft/wind.png`
+- `kubejs/data/creativeengineering/paintings/minecraft/wither.json`
+- `kubejs/data/creativeengineering/paintings/minecraft/wither.png`
+- `kubejs/data/creativeengineering/paintings/minecraft_style_paintings/american_gothic.json`
+- `kubejs/data/creativeengineering/paintings/minecraft_style_paintings/american_gothic.png`
+- `kubejs/data/creativeengineering/paintings/minecraft_style_paintings/creatione_di_adamo.json`
+- `kubejs/data/creativeengineering/paintings/minecraft_style_paintings/creatione_di_adamo.png`
+- `kubejs/data/creativeengineering/paintings/minecraft_style_paintings/de_sterrennacht.json`
+- `kubejs/data/creativeengineering/paintings/minecraft_style_paintings/de_sterrennacht.png`
+- `kubejs/data/creativeengineering/paintings/minecraft_style_paintings/gioconda.json`
+- `kubejs/data/creativeengineering/paintings/minecraft_style_paintings/gioconda.png`
+- `kubejs/data/creativeengineering/paintings/minecraft_style_paintings/la_jovendelaperla.json`
+- `kubejs/data/creativeengineering/paintings/minecraft_style_paintings/la_jovendelaperla.png`
+- `kubejs/data/creativeengineering/paintings/minecraft_style_paintings/la_ultima_cena.json`
+- `kubejs/data/creativeengineering/paintings/minecraft_style_paintings/la_ultima_cena.png`
+- `kubejs/data/creativeengineering/paintings/minecraft_style_paintings/lefillsdelhomme.json`
+- `kubejs/data/creativeengineering/paintings/minecraft_style_paintings/lefillsdelhomme.png`
+- `kubejs/data/creativeengineering/paintings/minecraft_style_paintings/olas.json`
+- `kubejs/data/creativeengineering/paintings/minecraft_style_paintings/olas.png`
+- `kubejs/data/creativeengineering/paintings/minecraft_style_paintings/persistenciadelamemoria.json`
+- `kubejs/data/creativeengineering/paintings/minecraft_style_paintings/persistenciadelamemoria.png`
+- `kubejs/data/creativeengineering/paintings/minecraft_style_paintings/sunflowers.json`
+- `kubejs/data/creativeengineering/paintings/minecraft_style_paintings/sunflowers.png`
+- `kubejs/data/creativeengineering/paintings/minecraft_style_paintings/the_scream.json`
+- `kubejs/data/creativeengineering/paintings/minecraft_style_paintings/the_scream.png`
+- `kubejs/data/creativeengineering/paintings/minecraft_style_paintings/van_goh.json`
+- `kubejs/data/creativeengineering/paintings/minecraft_style_paintings/van_goh.png`
+- `kubejs/data/creativeengineering/paintings/neapolitan/cone.json`
+- `kubejs/data/creativeengineering/paintings/neapolitan/cone.png`
+- `kubejs/data/creativeengineering/paintings/neapolitan/dawn.json`
+- `kubejs/data/creativeengineering/paintings/neapolitan/dawn.png`
+- `kubejs/data/creativeengineering/paintings/neapolitan/scream.json`
+- `kubejs/data/creativeengineering/paintings/neapolitan/scream.png`
+- `kubejs/data/creativeengineering/paintings/paintings_pack1/s_1x_1banksy_1.json`
+- `kubejs/data/creativeengineering/paintings/paintings_pack1/s_1x_1banksy_1.png`
+- `kubejs/data/creativeengineering/paintings/paintings_pack1/s_1x_1bek_12.json`
+- `kubejs/data/creativeengineering/paintings/paintings_pack1/s_1x_1bek_12.png`
+- `kubejs/data/creativeengineering/paintings/paintings_pack1/s_1x_1bek_13.json`
+- `kubejs/data/creativeengineering/paintings/paintings_pack1/s_1x_1bek_13.png`
+- `kubejs/data/creativeengineering/paintings/paintings_pack1/s_1x_1bek_15.json`
+- `kubejs/data/creativeengineering/paintings/paintings_pack1/s_1x_1bek_15.png`
+- `kubejs/data/creativeengineering/paintings/paintings_pack1/s_1x_1bek_16.json`
+- `kubejs/data/creativeengineering/paintings/paintings_pack1/s_1x_1bek_16.png`
+- `kubejs/data/creativeengineering/paintings/paintings_pack1/s_1x_1bek_17.json`
+- `kubejs/data/creativeengineering/paintings/paintings_pack1/s_1x_1bek_17.png`
+- `kubejs/data/creativeengineering/paintings/paintings_pack1/s_1x_1bek_25.json`
+- `kubejs/data/creativeengineering/paintings/paintings_pack1/s_1x_1bek_25.png`
+- `kubejs/data/creativeengineering/paintings/paintings_pack1/s_1x_1bek_27.json`
+- `kubejs/data/creativeengineering/paintings/paintings_pack1/s_1x_1bek_27.png`
+- `kubejs/data/creativeengineering/paintings/paintings_pack1/s_1x_1bek_28.json`
+- `kubejs/data/creativeengineering/paintings/paintings_pack1/s_1x_1bek_28.png`
+- `kubejs/data/creativeengineering/paintings/paintings_pack1/s_1x_1bek_3.json`
+- `kubejs/data/creativeengineering/paintings/paintings_pack1/s_1x_1bek_3.png`
+- `kubejs/data/creativeengineering/paintings/paintings_pack1/s_1x_1bek_30.json`
+- `kubejs/data/creativeengineering/paintings/paintings_pack1/s_1x_1bek_30.png`
+- `kubejs/data/creativeengineering/paintings/paintings_pack1/s_1x_1bek_33.json`
+- `kubejs/data/creativeengineering/paintings/paintings_pack1/s_1x_1bek_33.png`
+- `kubejs/data/creativeengineering/paintings/paintings_pack1/s_1x_1bek_4.json`
+- `kubejs/data/creativeengineering/paintings/paintings_pack1/s_1x_1bek_4.png`
+- `kubejs/data/creativeengineering/paintings/paintings_pack1/s_1x_1bek_5.json`
+- `kubejs/data/creativeengineering/paintings/paintings_pack1/s_1x_1bek_5.png`
+- `kubejs/data/creativeengineering/paintings/paintings_pack1/s_1x_1vinci_1.json`
+- `kubejs/data/creativeengineering/paintings/paintings_pack1/s_1x_1vinci_1.png`
+- `kubejs/data/creativeengineering/paintings/paintings_pack1/s_1x_2bek_10.json`
+- `kubejs/data/creativeengineering/paintings/paintings_pack1/s_1x_2bek_10.png`
+- `kubejs/data/creativeengineering/paintings/paintings_pack1/s_1x_2bek_14.json`
+- `kubejs/data/creativeengineering/paintings/paintings_pack1/s_1x_2bek_14.png`
+- `kubejs/data/creativeengineering/paintings/paintings_pack1/s_1x_2bek_18.json`
+- `kubejs/data/creativeengineering/paintings/paintings_pack1/s_1x_2bek_18.png`
+- `kubejs/data/creativeengineering/paintings/paintings_pack1/s_1x_2bek_22.json`
+- `kubejs/data/creativeengineering/paintings/paintings_pack1/s_1x_2bek_22.png`
+- `kubejs/data/creativeengineering/paintings/paintings_pack1/s_1x_2bek_23.json`
+- `kubejs/data/creativeengineering/paintings/paintings_pack1/s_1x_2bek_23.png`
+- `kubejs/data/creativeengineering/paintings/paintings_pack1/s_1x_2bek_26.json`
+- `kubejs/data/creativeengineering/paintings/paintings_pack1/s_1x_2bek_26.png`
+- `kubejs/data/creativeengineering/paintings/paintings_pack1/s_1x_2bek_29.json`
+- `kubejs/data/creativeengineering/paintings/paintings_pack1/s_1x_2bek_29.png`
+- `kubejs/data/creativeengineering/paintings/paintings_pack1/s_1x_2bek_32.json`
+- `kubejs/data/creativeengineering/paintings/paintings_pack1/s_1x_2bek_32.png`
+- `kubejs/data/creativeengineering/paintings/paintings_pack1/s_1x_2bek_6.json`
+- `kubejs/data/creativeengineering/paintings/paintings_pack1/s_1x_2bek_6.png`
+- `kubejs/data/creativeengineering/paintings/paintings_pack1/s_1x_2garden_1.json`
+- `kubejs/data/creativeengineering/paintings/paintings_pack1/s_1x_2garden_1.png`
+- `kubejs/data/creativeengineering/paintings/paintings_pack1/s_1x_3salvador_2.json`
+- `kubejs/data/creativeengineering/paintings/paintings_pack1/s_1x_3salvador_2.png`
+- `kubejs/data/creativeengineering/paintings/paintings_pack1/s_2x_1garden_2.json`
+- `kubejs/data/creativeengineering/paintings/paintings_pack1/s_2x_1garden_2.png`
+- `kubejs/data/creativeengineering/paintings/paintings_pack1/s_2x_1monet_1.json`
+- `kubejs/data/creativeengineering/paintings/paintings_pack1/s_2x_1monet_1.png`
+- `kubejs/data/creativeengineering/paintings/paintings_pack1/s_2x_1vinci_3.json`
+- `kubejs/data/creativeengineering/paintings/paintings_pack1/s_2x_1vinci_3.png`
+- `kubejs/data/creativeengineering/paintings/paintings_pack1/s_2x_2bek_1.json`
+- `kubejs/data/creativeengineering/paintings/paintings_pack1/s_2x_2bek_1.png`
+- `kubejs/data/creativeengineering/paintings/paintings_pack1/s_2x_2bek_19.json`
+- `kubejs/data/creativeengineering/paintings/paintings_pack1/s_2x_2bek_19.png`
+- `kubejs/data/creativeengineering/paintings/paintings_pack1/s_2x_2bek_2.json`
+- `kubejs/data/creativeengineering/paintings/paintings_pack1/s_2x_2bek_2.png`
+- `kubejs/data/creativeengineering/paintings/paintings_pack1/s_2x_2bek_20.json`
+- `kubejs/data/creativeengineering/paintings/paintings_pack1/s_2x_2bek_20.png`
+- `kubejs/data/creativeengineering/paintings/paintings_pack1/s_2x_2bek_21.json`
+- `kubejs/data/creativeengineering/paintings/paintings_pack1/s_2x_2bek_21.png`
+- `kubejs/data/creativeengineering/paintings/paintings_pack1/s_2x_2salvador_1.json`
+- `kubejs/data/creativeengineering/paintings/paintings_pack1/s_2x_2salvador_1.png`
+- `kubejs/data/creativeengineering/paintings/paintings_pack1/s_2x_3bek_7.json`
+- `kubejs/data/creativeengineering/paintings/paintings_pack1/s_2x_3bek_7.png`
+- `kubejs/data/creativeengineering/paintings/paintings_pack1/s_2x_3vici_2.json`
+- `kubejs/data/creativeengineering/paintings/paintings_pack1/s_2x_3vici_2.png`
+- `kubejs/data/creativeengineering/paintings/paintings_pack1/s_2x_4bek_34.json`
+- `kubejs/data/creativeengineering/paintings/paintings_pack1/s_2x_4bek_34.png`
+- `kubejs/data/creativeengineering/paintings/paintings_pack1/s_3x_2gogh_1.json`
+- `kubejs/data/creativeengineering/paintings/paintings_pack1/s_3x_2gogh_1.png`
+- `kubejs/data/creativeengineering/paintings/paintings_pack1/s_3x_3bek_31.json`
+- `kubejs/data/creativeengineering/paintings/paintings_pack1/s_3x_3bek_31.png`
+- `kubejs/data/creativeengineering/paintings/paintings_pack1/s_3x_3bek_9.json`
+- `kubejs/data/creativeengineering/paintings/paintings_pack1/s_3x_3bek_9.png`
+- `kubejs/data/creativeengineering/paintings/paintings_pack1/s_3x_3garden_3.json`
+- `kubejs/data/creativeengineering/paintings/paintings_pack1/s_3x_3garden_3.png`
+- `kubejs/data/creativeengineering/paintings/paintings_pack1/s_3x_3rothko_2.json`
+- `kubejs/data/creativeengineering/paintings/paintings_pack1/s_3x_3rothko_2.png`
+- `kubejs/data/creativeengineering/paintings/paintings_pack1/s_4x_2bek_24.json`
+- `kubejs/data/creativeengineering/paintings/paintings_pack1/s_4x_2bek_24.png`
+- `kubejs/data/creativeengineering/paintings/paintings_pack1/s_4x_2ryb_3.json`
+- `kubejs/data/creativeengineering/paintings/paintings_pack1/s_4x_2ryb_3.png`
+- `kubejs/data/creativeengineering/paintings/paintings_pack1/s_4x_3matejko_1.json`
+- `kubejs/data/creativeengineering/paintings/paintings_pack1/s_4x_3matejko_1.png`
+- `kubejs/data/creativeengineering/paintings/paintings_pack1/s_4x_4bek_11.json`
+- `kubejs/data/creativeengineering/paintings/paintings_pack1/s_4x_4bek_11.png`
+- `kubejs/data/creativeengineering/paintings/paintings_pack1/s_4x_4bek_8.json`
+- `kubejs/data/creativeengineering/paintings/paintings_pack1/s_4x_4bek_8.png`
+- `kubejs/data/creativeengineering/paintings/paintings_pack1/s_4x_4munch_1.json`
+- `kubejs/data/creativeengineering/paintings/paintings_pack1/s_4x_4munch_1.png`
+- `kubejs/data/creativeengineering/paintings/rebirth_paintings/abandon_all_hope.json`
+- `kubejs/data/creativeengineering/paintings/rebirth_paintings/abandon_all_hope.png`
+- `kubejs/data/creativeengineering/paintings/rebirth_paintings/abandoned.json`
+- `kubejs/data/creativeengineering/paintings/rebirth_paintings/abandoned.png`
+- `kubejs/data/creativeengineering/paintings/rebirth_paintings/abyss.json`
+- `kubejs/data/creativeengineering/paintings/rebirth_paintings/abyss.png`
+- `kubejs/data/creativeengineering/paintings/rebirth_paintings/amber.json`
+- `kubejs/data/creativeengineering/paintings/rebirth_paintings/amber.png`
+- `kubejs/data/creativeengineering/paintings/rebirth_paintings/amethyst.json`
+- `kubejs/data/creativeengineering/paintings/rebirth_paintings/amethyst.png`
+- `kubejs/data/creativeengineering/paintings/rebirth_paintings/amythest_mountains.json`
+- `kubejs/data/creativeengineering/paintings/rebirth_paintings/amythest_mountains.png`
+- `kubejs/data/creativeengineering/paintings/rebirth_paintings/ancient_building.json`
+- `kubejs/data/creativeengineering/paintings/rebirth_paintings/ancient_building.png`
+- `kubejs/data/creativeengineering/paintings/rebirth_paintings/ancient_ruins.json`
+- `kubejs/data/creativeengineering/paintings/rebirth_paintings/ancient_ruins.png`
+- `kubejs/data/creativeengineering/paintings/rebirth_paintings/ancient_sculpture.json`
+- `kubejs/data/creativeengineering/paintings/rebirth_paintings/ancient_sculpture.png`
+- `kubejs/data/creativeengineering/paintings/rebirth_paintings/angels.json`
+- `kubejs/data/creativeengineering/paintings/rebirth_paintings/angels.png`
+- `kubejs/data/creativeengineering/paintings/rebirth_paintings/apollyon.json`
+- `kubejs/data/creativeengineering/paintings/rebirth_paintings/apollyon.png`
+- `kubejs/data/creativeengineering/paintings/rebirth_paintings/apple_enjoyer.json`
+- `kubejs/data/creativeengineering/paintings/rebirth_paintings/apple_enjoyer.png`
+- `kubejs/data/creativeengineering/paintings/rebirth_paintings/arid_desert.json`
+- `kubejs/data/creativeengineering/paintings/rebirth_paintings/arid_desert.png`
+- `kubejs/data/creativeengineering/paintings/rebirth_paintings/aura.json`
+- `kubejs/data/creativeengineering/paintings/rebirth_paintings/aura.png`
+- `kubejs/data/creativeengineering/paintings/rebirth_paintings/banana_crab.json`
+- `kubejs/data/creativeengineering/paintings/rebirth_paintings/banana_crab.png`
+- `kubejs/data/creativeengineering/paintings/rebirth_paintings/bananas.json`
+- `kubejs/data/creativeengineering/paintings/rebirth_paintings/bananas.png`
+- `kubejs/data/creativeengineering/paintings/rebirth_paintings/bartending.json`
+- `kubejs/data/creativeengineering/paintings/rebirth_paintings/bartending.png`
+- `kubejs/data/creativeengineering/paintings/rebirth_paintings/beautiful_spot.json`
+- `kubejs/data/creativeengineering/paintings/rebirth_paintings/beautiful_spot.png`
+- `kubejs/data/creativeengineering/paintings/rebirth_paintings/beheaded.json`
+- `kubejs/data/creativeengineering/paintings/rebirth_paintings/beheaded.png`
+- `kubejs/data/creativeengineering/paintings/rebirth_paintings/birth.json`
+- `kubejs/data/creativeengineering/paintings/rebirth_paintings/birth.png`
+- `kubejs/data/creativeengineering/paintings/rebirth_paintings/blue_hue.json`
+- `kubejs/data/creativeengineering/paintings/rebirth_paintings/blue_hue.png`
+- `kubejs/data/creativeengineering/paintings/rebirth_paintings/broken.json`
+- `kubejs/data/creativeengineering/paintings/rebirth_paintings/broken.png`
+- `kubejs/data/creativeengineering/paintings/rebirth_paintings/builder.json`
+- `kubejs/data/creativeengineering/paintings/rebirth_paintings/builder.png`
+- `kubejs/data/creativeengineering/paintings/rebirth_paintings/calm.json`
+- `kubejs/data/creativeengineering/paintings/rebirth_paintings/calm.png`
+- `kubejs/data/creativeengineering/paintings/rebirth_paintings/calm_day.json`
+- `kubejs/data/creativeengineering/paintings/rebirth_paintings/calm_day.png`
+- `kubejs/data/creativeengineering/paintings/rebirth_paintings/calming.json`
+- `kubejs/data/creativeengineering/paintings/rebirth_paintings/calming.png`
+- `kubejs/data/creativeengineering/paintings/rebirth_paintings/canine.json`
+- `kubejs/data/creativeengineering/paintings/rebirth_paintings/canine.png`
+- `kubejs/data/creativeengineering/paintings/rebirth_paintings/caramel_milkyway.json`
+- `kubejs/data/creativeengineering/paintings/rebirth_paintings/caramel_milkyway.png`
+- `kubejs/data/creativeengineering/paintings/rebirth_paintings/cascade.json`
+- `kubejs/data/creativeengineering/paintings/rebirth_paintings/cascade.png`
+- `kubejs/data/creativeengineering/paintings/rebirth_paintings/cast_away.json`
+- `kubejs/data/creativeengineering/paintings/rebirth_paintings/cast_away.png`
+- `kubejs/data/creativeengineering/paintings/rebirth_paintings/castle.json`
+- `kubejs/data/creativeengineering/paintings/rebirth_paintings/castle.png`
+- `kubejs/data/creativeengineering/paintings/rebirth_paintings/cavanna.json`
+- `kubejs/data/creativeengineering/paintings/rebirth_paintings/cavanna.png`
+- `kubejs/data/creativeengineering/paintings/rebirth_paintings/cellar.json`
+- `kubejs/data/creativeengineering/paintings/rebirth_paintings/cellar.png`
+- `kubejs/data/creativeengineering/paintings/rebirth_paintings/clip.json`
+- `kubejs/data/creativeengineering/paintings/rebirth_paintings/clip.png`
+- `kubejs/data/creativeengineering/paintings/rebirth_paintings/collage.json`
+- `kubejs/data/creativeengineering/paintings/rebirth_paintings/collage.png`
+- `kubejs/data/creativeengineering/paintings/rebirth_paintings/collection.json`
+- `kubejs/data/creativeengineering/paintings/rebirth_paintings/collection.png`
+- `kubejs/data/creativeengineering/paintings/rebirth_paintings/colosseum.json`
+- `kubejs/data/creativeengineering/paintings/rebirth_paintings/colosseum.png`
+- `kubejs/data/creativeengineering/paintings/rebirth_paintings/columns.json`
+- `kubejs/data/creativeengineering/paintings/rebirth_paintings/columns.png`
+- `kubejs/data/creativeengineering/paintings/rebirth_paintings/composition.json`
+- `kubejs/data/creativeengineering/paintings/rebirth_paintings/composition.png`
+- `kubejs/data/creativeengineering/paintings/rebirth_paintings/cotton_candy.json`
+- `kubejs/data/creativeengineering/paintings/rebirth_paintings/cotton_candy.png`
+- `kubejs/data/creativeengineering/paintings/rebirth_paintings/courage.json`
+- `kubejs/data/creativeengineering/paintings/rebirth_paintings/courage.png`
+- `kubejs/data/creativeengineering/paintings/rebirth_paintings/cove.json`
+- `kubejs/data/creativeengineering/paintings/rebirth_paintings/cove.png`
+- `kubejs/data/creativeengineering/paintings/rebirth_paintings/creek.json`
+- `kubejs/data/creativeengineering/paintings/rebirth_paintings/creek.png`
+- `kubejs/data/creativeengineering/paintings/rebirth_paintings/cropped.json`
+- `kubejs/data/creativeengineering/paintings/rebirth_paintings/cropped.png`
+- `kubejs/data/creativeengineering/paintings/rebirth_paintings/curious_felines.json`
+- `kubejs/data/creativeengineering/paintings/rebirth_paintings/curious_felines.png`
+- `kubejs/data/creativeengineering/paintings/rebirth_paintings/cursed_forest.json`
+- `kubejs/data/creativeengineering/paintings/rebirth_paintings/cursed_forest.png`
+- `kubejs/data/creativeengineering/paintings/rebirth_paintings/dancing_bears.json`
+- `kubejs/data/creativeengineering/paintings/rebirth_paintings/dancing_bears.png`
+- `kubejs/data/creativeengineering/paintings/rebirth_paintings/danger.json`
+- `kubejs/data/creativeengineering/paintings/rebirth_paintings/danger.png`
+- `kubejs/data/creativeengineering/paintings/rebirth_paintings/death_follows.json`
+- `kubejs/data/creativeengineering/paintings/rebirth_paintings/death_follows.png`
+- `kubejs/data/creativeengineering/paintings/rebirth_paintings/deaths_requiem.json`
+- `kubejs/data/creativeengineering/paintings/rebirth_paintings/deaths_requiem.png`
+- `kubejs/data/creativeengineering/paintings/rebirth_paintings/decay.json`
+- `kubejs/data/creativeengineering/paintings/rebirth_paintings/decay.png`
+- `kubejs/data/creativeengineering/paintings/rebirth_paintings/deity.json`
+- `kubejs/data/creativeengineering/paintings/rebirth_paintings/deity.png`
+- `kubejs/data/creativeengineering/paintings/rebirth_paintings/demons.json`
+- `kubejs/data/creativeengineering/paintings/rebirth_paintings/demons.png`
+- `kubejs/data/creativeengineering/paintings/rebirth_paintings/dense_forest.json`
+- `kubejs/data/creativeengineering/paintings/rebirth_paintings/dense_forest.png`
+- `kubejs/data/creativeengineering/paintings/rebirth_paintings/dense_woods.json`
+- `kubejs/data/creativeengineering/paintings/rebirth_paintings/dense_woods.png`
+- `kubejs/data/creativeengineering/paintings/rebirth_paintings/desert.json`
+- `kubejs/data/creativeengineering/paintings/rebirth_paintings/desert.png`
+- `kubejs/data/creativeengineering/paintings/rebirth_paintings/deserted.json`
+- `kubejs/data/creativeengineering/paintings/rebirth_paintings/deserted.png`
+- `kubejs/data/creativeengineering/paintings/rebirth_paintings/devil_incarnate.json`
+- `kubejs/data/creativeengineering/paintings/rebirth_paintings/devil_incarnate.png`
+- `kubejs/data/creativeengineering/paintings/rebirth_paintings/devouring_man.json`
+- `kubejs/data/creativeengineering/paintings/rebirth_paintings/devouring_man.png`
+- `kubejs/data/creativeengineering/paintings/rebirth_paintings/divine_clam.json`
+- `kubejs/data/creativeengineering/paintings/rebirth_paintings/divine_clam.png`
+- `kubejs/data/creativeengineering/paintings/rebirth_paintings/divine_touch.json`
+- `kubejs/data/creativeengineering/paintings/rebirth_paintings/divine_touch.png`
+- `kubejs/data/creativeengineering/paintings/rebirth_paintings/down_under.json`
+- `kubejs/data/creativeengineering/paintings/rebirth_paintings/down_under.png`
+- `kubejs/data/creativeengineering/paintings/rebirth_paintings/dramatic_snow.json`
+- `kubejs/data/creativeengineering/paintings/rebirth_paintings/dramatic_snow.png`
+- `kubejs/data/creativeengineering/paintings/rebirth_paintings/dream_land.json`
+- `kubejs/data/creativeengineering/paintings/rebirth_paintings/dream_land.png`
+- `kubejs/data/creativeengineering/paintings/rebirth_paintings/dressed.json`
+- `kubejs/data/creativeengineering/paintings/rebirth_paintings/dressed.png`
+- `kubejs/data/creativeengineering/paintings/rebirth_paintings/drowning.json`
+- `kubejs/data/creativeengineering/paintings/rebirth_paintings/drowning.png`
+- `kubejs/data/creativeengineering/paintings/rebirth_paintings/dry_lands.json`
+- `kubejs/data/creativeengineering/paintings/rebirth_paintings/dry_lands.png`
+- `kubejs/data/creativeengineering/paintings/rebirth_paintings/dry_mountains.json`
+- `kubejs/data/creativeengineering/paintings/rebirth_paintings/dry_mountains.png`
+- `kubejs/data/creativeengineering/paintings/rebirth_paintings/dunes.json`
+- `kubejs/data/creativeengineering/paintings/rebirth_paintings/dunes.png`
+- `kubejs/data/creativeengineering/paintings/rebirth_paintings/dust_2.json`
+- `kubejs/data/creativeengineering/paintings/rebirth_paintings/dust_2.png`
+- `kubejs/data/creativeengineering/paintings/rebirth_paintings/dwarf.json`
+- `kubejs/data/creativeengineering/paintings/rebirth_paintings/dwarf.png`
+- `kubejs/data/creativeengineering/paintings/rebirth_paintings/dystopia.json`
+- `kubejs/data/creativeengineering/paintings/rebirth_paintings/dystopia.png`
+- `kubejs/data/creativeengineering/paintings/rebirth_paintings/empty_forest.json`
+- `kubejs/data/creativeengineering/paintings/rebirth_paintings/empty_forest.png`
+- `kubejs/data/creativeengineering/paintings/rebirth_paintings/endless_desert.json`
+- `kubejs/data/creativeengineering/paintings/rebirth_paintings/endless_desert.png`
+- `kubejs/data/creativeengineering/paintings/rebirth_paintings/endless_forest.json`
+- `kubejs/data/creativeengineering/paintings/rebirth_paintings/endless_forest.png`
+- `kubejs/data/creativeengineering/paintings/rebirth_paintings/entering_danger.json`
+- `kubejs/data/creativeengineering/paintings/rebirth_paintings/entering_danger.png`
+- `kubejs/data/creativeengineering/paintings/rebirth_paintings/eruption.json`
+- `kubejs/data/creativeengineering/paintings/rebirth_paintings/eruption.png`
+- `kubejs/data/creativeengineering/paintings/rebirth_paintings/euphoria.json`
+- `kubejs/data/creativeengineering/paintings/rebirth_paintings/euphoria.png`
+- `kubejs/data/creativeengineering/paintings/rebirth_paintings/explosive_sight.json`
+- `kubejs/data/creativeengineering/paintings/rebirth_paintings/explosive_sight.png`
+- `kubejs/data/creativeengineering/paintings/rebirth_paintings/extinction.json`
+- `kubejs/data/creativeengineering/paintings/rebirth_paintings/extinction.png`
+- `kubejs/data/creativeengineering/paintings/rebirth_paintings/extravagance.json`
+- `kubejs/data/creativeengineering/paintings/rebirth_paintings/extravagance.png`
+- `kubejs/data/creativeengineering/paintings/rebirth_paintings/fall.json`
+- `kubejs/data/creativeengineering/paintings/rebirth_paintings/fall.png`
+- `kubejs/data/creativeengineering/paintings/rebirth_paintings/fallen_angel.json`
+- `kubejs/data/creativeengineering/paintings/rebirth_paintings/fallen_angel.png`
+- `kubejs/data/creativeengineering/paintings/rebirth_paintings/false_hike.json`
+- `kubejs/data/creativeengineering/paintings/rebirth_paintings/false_hike.png`
+- `kubejs/data/creativeengineering/paintings/rebirth_paintings/familiar_island.json`
+- `kubejs/data/creativeengineering/paintings/rebirth_paintings/familiar_island.png`
+- `kubejs/data/creativeengineering/paintings/rebirth_paintings/family.json`
+- `kubejs/data/creativeengineering/paintings/rebirth_paintings/family.png`
+- `kubejs/data/creativeengineering/paintings/rebirth_paintings/famous_painting.json`
+- `kubejs/data/creativeengineering/paintings/rebirth_paintings/famous_painting.png`
+- `kubejs/data/creativeengineering/paintings/rebirth_paintings/fauna_basket.json`
+- `kubejs/data/creativeengineering/paintings/rebirth_paintings/fauna_basket.png`
+- `kubejs/data/creativeengineering/paintings/rebirth_paintings/field.json`
+- `kubejs/data/creativeengineering/paintings/rebirth_paintings/field.png`
+- `kubejs/data/creativeengineering/paintings/rebirth_paintings/field_landscape.json`
+- `kubejs/data/creativeengineering/paintings/rebirth_paintings/field_landscape.png`
+- `kubejs/data/creativeengineering/paintings/rebirth_paintings/fiery_sunset.json`
+- `kubejs/data/creativeengineering/paintings/rebirth_paintings/fiery_sunset.png`
+- `kubejs/data/creativeengineering/paintings/rebirth_paintings/fiji_water.json`
+- `kubejs/data/creativeengineering/paintings/rebirth_paintings/fiji_water.png`
+- `kubejs/data/creativeengineering/paintings/rebirth_paintings/flesh_cavern.json`
+- `kubejs/data/creativeengineering/paintings/rebirth_paintings/flesh_cavern.png`
+- `kubejs/data/creativeengineering/paintings/rebirth_paintings/flower_head.json`
+- `kubejs/data/creativeengineering/paintings/rebirth_paintings/flower_head.png`
+- `kubejs/data/creativeengineering/paintings/rebirth_paintings/flowers.json`
+- `kubejs/data/creativeengineering/paintings/rebirth_paintings/flowers.png`
+- `kubejs/data/creativeengineering/paintings/rebirth_paintings/flute.json`
+- `kubejs/data/creativeengineering/paintings/rebirth_paintings/flute.png`
+- `kubejs/data/creativeengineering/paintings/rebirth_paintings/flying_woman.json`
+- `kubejs/data/creativeengineering/paintings/rebirth_paintings/flying_woman.png`
+- `kubejs/data/creativeengineering/paintings/rebirth_paintings/forest.json`
+- `kubejs/data/creativeengineering/paintings/rebirth_paintings/forest.png`
+- `kubejs/data/creativeengineering/paintings/rebirth_paintings/forested_mountains.json`
+- `kubejs/data/creativeengineering/paintings/rebirth_paintings/forested_mountains.png`
+- `kubejs/data/creativeengineering/paintings/rebirth_paintings/foresty_hill.json`
+- `kubejs/data/creativeengineering/paintings/rebirth_paintings/foresty_hill.png`
+- `kubejs/data/creativeengineering/paintings/rebirth_paintings/foresty_hills.json`
+- `kubejs/data/creativeengineering/paintings/rebirth_paintings/foresty_hills.png`
+- `kubejs/data/creativeengineering/paintings/rebirth_paintings/foresty_plateau.json`
+- `kubejs/data/creativeengineering/paintings/rebirth_paintings/foresty_plateau.png`
+- `kubejs/data/creativeengineering/paintings/rebirth_paintings/freezing_horse.json`
+- `kubejs/data/creativeengineering/paintings/rebirth_paintings/freezing_horse.png`
+- `kubejs/data/creativeengineering/paintings/rebirth_paintings/friend.json`
+- `kubejs/data/creativeengineering/paintings/rebirth_paintings/friend.png`
+- `kubejs/data/creativeengineering/paintings/rebirth_paintings/fruit_man.json`
+- `kubejs/data/creativeengineering/paintings/rebirth_paintings/fruit_man.png`
+- `kubejs/data/creativeengineering/paintings/rebirth_paintings/funny_monkey.json`
+- `kubejs/data/creativeengineering/paintings/rebirth_paintings/funny_monkey.png`
+- `kubejs/data/creativeengineering/paintings/rebirth_paintings/gambling_canines.json`
+- `kubejs/data/creativeengineering/paintings/rebirth_paintings/gambling_canines.png`
+- `kubejs/data/creativeengineering/paintings/rebirth_paintings/gentleman.json`
+- `kubejs/data/creativeengineering/paintings/rebirth_paintings/gentleman.png`
+- `kubejs/data/creativeengineering/paintings/rebirth_paintings/ghost_and_witches.json`
+- `kubejs/data/creativeengineering/paintings/rebirth_paintings/ghost_and_witches.png`
+- `kubejs/data/creativeengineering/paintings/rebirth_paintings/gingerbread_home.json`
+- `kubejs/data/creativeengineering/paintings/rebirth_paintings/gingerbread_home.png`
+- `kubejs/data/creativeengineering/paintings/rebirth_paintings/glaciers.json`
+- `kubejs/data/creativeengineering/paintings/rebirth_paintings/glaciers.png`
+- `kubejs/data/creativeengineering/paintings/rebirth_paintings/golden_arches.json`
+- `kubejs/data/creativeengineering/paintings/rebirth_paintings/golden_arches.png`
+- `kubejs/data/creativeengineering/paintings/rebirth_paintings/grapes.json`
+- `kubejs/data/creativeengineering/paintings/rebirth_paintings/grapes.png`
+- `kubejs/data/creativeengineering/paintings/rebirth_paintings/graveyard.json`
+- `kubejs/data/creativeengineering/paintings/rebirth_paintings/graveyard.png`
+- `kubejs/data/creativeengineering/paintings/rebirth_paintings/great_waves.json`
+- `kubejs/data/creativeengineering/paintings/rebirth_paintings/great_waves.png`
+- `kubejs/data/creativeengineering/paintings/rebirth_paintings/green_dungeon.json`
+- `kubejs/data/creativeengineering/paintings/rebirth_paintings/green_dungeon.png`
+- `kubejs/data/creativeengineering/paintings/rebirth_paintings/ground_control.json`
+- `kubejs/data/creativeengineering/paintings/rebirth_paintings/ground_control.png`
+- `kubejs/data/creativeengineering/paintings/rebirth_paintings/hallows_eve.json`
+- `kubejs/data/creativeengineering/paintings/rebirth_paintings/hallows_eve.png`
+- `kubejs/data/creativeengineering/paintings/rebirth_paintings/hard_headed.json`
+- `kubejs/data/creativeengineering/paintings/rebirth_paintings/hard_headed.png`
+- `kubejs/data/creativeengineering/paintings/rebirth_paintings/haunted_mansion.json`
+- `kubejs/data/creativeengineering/paintings/rebirth_paintings/haunted_mansion.png`
+- `kubejs/data/creativeengineering/paintings/rebirth_paintings/have_you_seen_chef.json`
+- `kubejs/data/creativeengineering/paintings/rebirth_paintings/have_you_seen_chef.png`
+- `kubejs/data/creativeengineering/paintings/rebirth_paintings/heartbroken.json`
+- `kubejs/data/creativeengineering/paintings/rebirth_paintings/heartbroken.png`
+- `kubejs/data/creativeengineering/paintings/rebirth_paintings/hell.json`
+- `kubejs/data/creativeengineering/paintings/rebirth_paintings/hell.png`
+- `kubejs/data/creativeengineering/paintings/rebirth_paintings/hells_fire.json`
+- `kubejs/data/creativeengineering/paintings/rebirth_paintings/hells_fire.png`
+- `kubejs/data/creativeengineering/paintings/rebirth_paintings/hells_pit.json`
+- `kubejs/data/creativeengineering/paintings/rebirth_paintings/hells_pit.png`
+- `kubejs/data/creativeengineering/paintings/rebirth_paintings/hells_tennents.json`
+- `kubejs/data/creativeengineering/paintings/rebirth_paintings/hells_tennents.png`
+- `kubejs/data/creativeengineering/paintings/rebirth_paintings/hole.json`
+- `kubejs/data/creativeengineering/paintings/rebirth_paintings/hole.png`
+- `kubejs/data/creativeengineering/paintings/rebirth_paintings/horse.json`
+- `kubejs/data/creativeengineering/paintings/rebirth_paintings/horse.png`
+- `kubejs/data/creativeengineering/paintings/rebirth_paintings/hunter_gatherer.json`
+- `kubejs/data/creativeengineering/paintings/rebirth_paintings/hunter_gatherer.png`
+- `kubejs/data/creativeengineering/paintings/rebirth_paintings/ice_cape.json`
+- `kubejs/data/creativeengineering/paintings/rebirth_paintings/ice_cape.png`
+- `kubejs/data/creativeengineering/paintings/rebirth_paintings/icy_peaks.json`
+- `kubejs/data/creativeengineering/paintings/rebirth_paintings/icy_peaks.png`
+- `kubejs/data/creativeengineering/paintings/rebirth_paintings/incoming_danger.json`
+- `kubejs/data/creativeengineering/paintings/rebirth_paintings/incoming_danger.png`
+- `kubejs/data/creativeengineering/paintings/rebirth_paintings/incoming_fog.json`
+- `kubejs/data/creativeengineering/paintings/rebirth_paintings/incoming_fog.png`
+- `kubejs/data/creativeengineering/paintings/rebirth_paintings/intestine_worms.json`
+- `kubejs/data/creativeengineering/paintings/rebirth_paintings/intestine_worms.png`
+- `kubejs/data/creativeengineering/paintings/rebirth_paintings/isle_of_demise.json`
+- `kubejs/data/creativeengineering/paintings/rebirth_paintings/isle_of_demise.png`
+- `kubejs/data/creativeengineering/paintings/rebirth_paintings/ivory.json`
+- `kubejs/data/creativeengineering/paintings/rebirth_paintings/ivory.png`
+- `kubejs/data/creativeengineering/paintings/rebirth_paintings/lady.json`
+- `kubejs/data/creativeengineering/paintings/rebirth_paintings/lady.png`
+- `kubejs/data/creativeengineering/paintings/rebirth_paintings/leafs.json`
+- `kubejs/data/creativeengineering/paintings/rebirth_paintings/leafs.png`
+- `kubejs/data/creativeengineering/paintings/rebirth_paintings/liminal.json`
+- `kubejs/data/creativeengineering/paintings/rebirth_paintings/liminal.png`
+- `kubejs/data/creativeengineering/paintings/rebirth_paintings/lions_might.json`
+- `kubejs/data/creativeengineering/paintings/rebirth_paintings/lions_might.png`
+- `kubejs/data/creativeengineering/paintings/rebirth_paintings/madness.json`
+- `kubejs/data/creativeengineering/paintings/rebirth_paintings/madness.png`
+- `kubejs/data/creativeengineering/paintings/rebirth_paintings/masks.json`
+- `kubejs/data/creativeengineering/paintings/rebirth_paintings/masks.png`
+- `kubejs/data/creativeengineering/paintings/rebirth_paintings/meat_man.json`
+- `kubejs/data/creativeengineering/paintings/rebirth_paintings/meat_man.png`
+- `kubejs/data/creativeengineering/paintings/rebirth_paintings/meeting_place.json`
+- `kubejs/data/creativeengineering/paintings/rebirth_paintings/meeting_place.png`
+- `kubejs/data/creativeengineering/paintings/rebirth_paintings/metropolitan.json`
+- `kubejs/data/creativeengineering/paintings/rebirth_paintings/metropolitan.png`
+- `kubejs/data/creativeengineering/paintings/rebirth_paintings/misfortune.json`
+- `kubejs/data/creativeengineering/paintings/rebirth_paintings/misfortune.png`
+- `kubejs/data/creativeengineering/paintings/rebirth_paintings/modern_artist.json`
+- `kubejs/data/creativeengineering/paintings/rebirth_paintings/modern_artist.png`
+- `kubejs/data/creativeengineering/paintings/rebirth_paintings/moors.json`
+- `kubejs/data/creativeengineering/paintings/rebirth_paintings/moors.png`
+- `kubejs/data/creativeengineering/paintings/rebirth_paintings/mortice.json`
+- `kubejs/data/creativeengineering/paintings/rebirth_paintings/mortice.png`
+- `kubejs/data/creativeengineering/paintings/rebirth_paintings/mount_snow.json`
+- `kubejs/data/creativeengineering/paintings/rebirth_paintings/mount_snow.png`
+- `kubejs/data/creativeengineering/paintings/rebirth_paintings/mountain_top.json`
+- `kubejs/data/creativeengineering/paintings/rebirth_paintings/mountain_top.png`
+- `kubejs/data/creativeengineering/paintings/rebirth_paintings/mountains.json`
+- `kubejs/data/creativeengineering/paintings/rebirth_paintings/mountains.png`
+- `kubejs/data/creativeengineering/paintings/rebirth_paintings/mushrooms.json`
+- `kubejs/data/creativeengineering/paintings/rebirth_paintings/mushrooms.png`
+- `kubejs/data/creativeengineering/paintings/rebirth_paintings/musician.json`
+- `kubejs/data/creativeengineering/paintings/rebirth_paintings/musician.png`
+- `kubejs/data/creativeengineering/paintings/rebirth_paintings/mysterious_rocks.json`
+- `kubejs/data/creativeengineering/paintings/rebirth_paintings/mysterious_rocks.png`
+- `kubejs/data/creativeengineering/paintings/rebirth_paintings/mythology.json`
+- `kubejs/data/creativeengineering/paintings/rebirth_paintings/mythology.png`
+- `kubejs/data/creativeengineering/paintings/rebirth_paintings/nature.json`
+- `kubejs/data/creativeengineering/paintings/rebirth_paintings/nature.png`
+- `kubejs/data/creativeengineering/paintings/rebirth_paintings/oasis.json`
+- `kubejs/data/creativeengineering/paintings/rebirth_paintings/oasis.png`
+- `kubejs/data/creativeengineering/paintings/rebirth_paintings/observing.json`
+- `kubejs/data/creativeengineering/paintings/rebirth_paintings/observing.png`
+- `kubejs/data/creativeengineering/paintings/rebirth_paintings/ocean_breeze.json`
+- `kubejs/data/creativeengineering/paintings/rebirth_paintings/ocean_breeze.png`
+- `kubejs/data/creativeengineering/paintings/rebirth_paintings/ocean_surface.json`
+- `kubejs/data/creativeengineering/paintings/rebirth_paintings/ocean_surface.png`
+- `kubejs/data/creativeengineering/paintings/rebirth_paintings/old_bay.json`
+- `kubejs/data/creativeengineering/paintings/rebirth_paintings/old_bay.png`
+- `kubejs/data/creativeengineering/paintings/rebirth_paintings/old_structure.json`
+- `kubejs/data/creativeengineering/paintings/rebirth_paintings/old_structure.png`
+- `kubejs/data/creativeengineering/paintings/rebirth_paintings/ominous_clouds.json`
+- `kubejs/data/creativeengineering/paintings/rebirth_paintings/ominous_clouds.png`
+- `kubejs/data/creativeengineering/paintings/rebirth_paintings/ominous_stones.json`
+- `kubejs/data/creativeengineering/paintings/rebirth_paintings/ominous_stones.png`
+- `kubejs/data/creativeengineering/paintings/rebirth_paintings/orange_feline.json`
+- `kubejs/data/creativeengineering/paintings/rebirth_paintings/orange_feline.png`
+- `kubejs/data/creativeengineering/paintings/rebirth_paintings/oranges.json`
+- `kubejs/data/creativeengineering/paintings/rebirth_paintings/oranges.png`
+- `kubejs/data/creativeengineering/paintings/rebirth_paintings/out_of_place_painting.json`
+- `kubejs/data/creativeengineering/paintings/rebirth_paintings/out_of_place_painting.png`
+- `kubejs/data/creativeengineering/paintings/rebirth_paintings/outdoors.json`
+- `kubejs/data/creativeengineering/paintings/rebirth_paintings/outdoors.png`
+- `kubejs/data/creativeengineering/paintings/rebirth_paintings/painted_stars.json`
+- `kubejs/data/creativeengineering/paintings/rebirth_paintings/painted_stars.png`
+- `kubejs/data/creativeengineering/paintings/rebirth_paintings/painter.json`
+- `kubejs/data/creativeengineering/paintings/rebirth_paintings/painter.png`
+- `kubejs/data/creativeengineering/paintings/rebirth_paintings/pancakes.json`
+- `kubejs/data/creativeengineering/paintings/rebirth_paintings/pancakes.png`
+- `kubejs/data/creativeengineering/paintings/rebirth_paintings/passing_storm.json`
+- `kubejs/data/creativeengineering/paintings/rebirth_paintings/passing_storm.png`
+- `kubejs/data/creativeengineering/paintings/rebirth_paintings/peak.json`
+- `kubejs/data/creativeengineering/paintings/rebirth_paintings/peak.png`
+- `kubejs/data/creativeengineering/paintings/rebirth_paintings/plains.json`
+- `kubejs/data/creativeengineering/paintings/rebirth_paintings/plains.png`
+- `kubejs/data/creativeengineering/paintings/rebirth_paintings/planktons.json`
+- `kubejs/data/creativeengineering/paintings/rebirth_paintings/planktons.png`
+- `kubejs/data/creativeengineering/paintings/rebirth_paintings/plateau.json`
+- `kubejs/data/creativeengineering/paintings/rebirth_paintings/plateau.png`
+- `kubejs/data/creativeengineering/paintings/rebirth_paintings/portrait.json`
+- `kubejs/data/creativeengineering/paintings/rebirth_paintings/portrait.png`
+- `kubejs/data/creativeengineering/paintings/rebirth_paintings/princess.json`
+- `kubejs/data/creativeengineering/paintings/rebirth_paintings/princess.png`
+- `kubejs/data/creativeengineering/paintings/rebirth_paintings/produce.json`
+- `kubejs/data/creativeengineering/paintings/rebirth_paintings/produce.png`
+- `kubejs/data/creativeengineering/paintings/rebirth_paintings/puffer_fish.json`
+- `kubejs/data/creativeengineering/paintings/rebirth_paintings/puffer_fish.png`
+- `kubejs/data/creativeengineering/paintings/rebirth_paintings/pyramids.json`
+- `kubejs/data/creativeengineering/paintings/rebirth_paintings/pyramids.png`
+- `kubejs/data/creativeengineering/paintings/rebirth_paintings/reef.json`
+- `kubejs/data/creativeengineering/paintings/rebirth_paintings/reef.png`
+- `kubejs/data/creativeengineering/paintings/rebirth_paintings/remains.json`
+- `kubejs/data/creativeengineering/paintings/rebirth_paintings/remains.png`
+- `kubejs/data/creativeengineering/paintings/rebirth_paintings/river.json`
+- `kubejs/data/creativeengineering/paintings/rebirth_paintings/river.png`
+- `kubejs/data/creativeengineering/paintings/rebirth_paintings/rocky_desert.json`
+- `kubejs/data/creativeengineering/paintings/rebirth_paintings/rocky_desert.png`
+- `kubejs/data/creativeengineering/paintings/rebirth_paintings/rocky_storm.json`
+- `kubejs/data/creativeengineering/paintings/rebirth_paintings/rocky_storm.png`
+- `kubejs/data/creativeengineering/paintings/rebirth_paintings/royalty.json`
+- `kubejs/data/creativeengineering/paintings/rebirth_paintings/royalty.png`
+- `kubejs/data/creativeengineering/paintings/rebirth_paintings/ruined.json`
+- `kubejs/data/creativeengineering/paintings/rebirth_paintings/ruined.png`
+- `kubejs/data/creativeengineering/paintings/rebirth_paintings/ruins.json`
+- `kubejs/data/creativeengineering/paintings/rebirth_paintings/ruins.png`
+- `kubejs/data/creativeengineering/paintings/rebirth_paintings/sacred_angel_from_above.json`
+- `kubejs/data/creativeengineering/paintings/rebirth_paintings/sacred_angel_from_above.png`
+- `kubejs/data/creativeengineering/paintings/rebirth_paintings/sakura.json`
+- `kubejs/data/creativeengineering/paintings/rebirth_paintings/sakura.png`
+- `kubejs/data/creativeengineering/paintings/rebirth_paintings/sakura_mountain.json`
+- `kubejs/data/creativeengineering/paintings/rebirth_paintings/sakura_mountain.png`
+- `kubejs/data/creativeengineering/paintings/rebirth_paintings/sand_castle.json`
+- `kubejs/data/creativeengineering/paintings/rebirth_paintings/sand_castle.png`
+- `kubejs/data/creativeengineering/paintings/rebirth_paintings/scarecrow.json`
+- `kubejs/data/creativeengineering/paintings/rebirth_paintings/scarecrow.png`
+- `kubejs/data/creativeengineering/paintings/rebirth_paintings/scattering.json`
+- `kubejs/data/creativeengineering/paintings/rebirth_paintings/scattering.png`
+- `kubejs/data/creativeengineering/paintings/rebirth_paintings/scholars_death.json`
+- `kubejs/data/creativeengineering/paintings/rebirth_paintings/scholars_death.png`
+- `kubejs/data/creativeengineering/paintings/rebirth_paintings/sculpture.json`
+- `kubejs/data/creativeengineering/paintings/rebirth_paintings/sculpture.png`
+- `kubejs/data/creativeengineering/paintings/rebirth_paintings/sea_rocks.json`
+- `kubejs/data/creativeengineering/paintings/rebirth_paintings/sea_rocks.png`
+- `kubejs/data/creativeengineering/paintings/rebirth_paintings/sea_salt.json`
+- `kubejs/data/creativeengineering/paintings/rebirth_paintings/sea_salt.png`
+- `kubejs/data/creativeengineering/paintings/rebirth_paintings/shepards.json`
+- `kubejs/data/creativeengineering/paintings/rebirth_paintings/shepards.png`
+- `kubejs/data/creativeengineering/paintings/rebirth_paintings/shiny_earing.json`
+- `kubejs/data/creativeengineering/paintings/rebirth_paintings/shiny_earing.png`
+- `kubejs/data/creativeengineering/paintings/rebirth_paintings/sight.json`
+- `kubejs/data/creativeengineering/paintings/rebirth_paintings/sight.png`
+- `kubejs/data/creativeengineering/paintings/rebirth_paintings/skeleton.json`
+- `kubejs/data/creativeengineering/paintings/rebirth_paintings/skeleton.png`
+- `kubejs/data/creativeengineering/paintings/rebirth_paintings/smile.json`
+- `kubejs/data/creativeengineering/paintings/rebirth_paintings/smile.png`
+- `kubejs/data/creativeengineering/paintings/rebirth_paintings/snoot.json`
+- `kubejs/data/creativeengineering/paintings/rebirth_paintings/snoot.png`
+- `kubejs/data/creativeengineering/paintings/rebirth_paintings/snowed_in.json`
+- `kubejs/data/creativeengineering/paintings/rebirth_paintings/snowed_in.png`
+- `kubejs/data/creativeengineering/paintings/rebirth_paintings/snowscape.json`
+- `kubejs/data/creativeengineering/paintings/rebirth_paintings/snowscape.png`
+- `kubejs/data/creativeengineering/paintings/rebirth_paintings/snowy_forest.json`
+- `kubejs/data/creativeengineering/paintings/rebirth_paintings/snowy_forest.png`
+- `kubejs/data/creativeengineering/paintings/rebirth_paintings/snowy_mountain.json`
+- `kubejs/data/creativeengineering/paintings/rebirth_paintings/snowy_mountain.png`
+- `kubejs/data/creativeengineering/paintings/rebirth_paintings/snowy_mountain_peak.json`
+- `kubejs/data/creativeengineering/paintings/rebirth_paintings/snowy_mountain_peak.png`
+- `kubejs/data/creativeengineering/paintings/rebirth_paintings/sour_joke.json`
+- `kubejs/data/creativeengineering/paintings/rebirth_paintings/sour_joke.png`
+- `kubejs/data/creativeengineering/paintings/rebirth_paintings/space.json`
+- `kubejs/data/creativeengineering/paintings/rebirth_paintings/space.png`
+- `kubejs/data/creativeengineering/paintings/rebirth_paintings/starved.json`
+- `kubejs/data/creativeengineering/paintings/rebirth_paintings/starved.png`
+- `kubejs/data/creativeengineering/paintings/rebirth_paintings/still_life.json`
+- `kubejs/data/creativeengineering/paintings/rebirth_paintings/still_life.png`
+- `kubejs/data/creativeengineering/paintings/rebirth_paintings/strange_room.json`
+- `kubejs/data/creativeengineering/paintings/rebirth_paintings/strange_room.png`
+- `kubejs/data/creativeengineering/paintings/rebirth_paintings/stripes.json`
+- `kubejs/data/creativeengineering/paintings/rebirth_paintings/stripes.png`
+- `kubejs/data/creativeengineering/paintings/rebirth_paintings/summit.json`
+- `kubejs/data/creativeengineering/paintings/rebirth_paintings/summit.png`
+- `kubejs/data/creativeengineering/paintings/rebirth_paintings/sunset_valley.json`
+- `kubejs/data/creativeengineering/paintings/rebirth_paintings/sunset_valley.png`
+- `kubejs/data/creativeengineering/paintings/rebirth_paintings/sunsetting.json`
+- `kubejs/data/creativeengineering/paintings/rebirth_paintings/sunsetting.png`
+- `kubejs/data/creativeengineering/paintings/rebirth_paintings/sunsetting_alps.json`
+- `kubejs/data/creativeengineering/paintings/rebirth_paintings/sunsetting_alps.png`
+- `kubejs/data/creativeengineering/paintings/rebirth_paintings/supper_time.json`
+- `kubejs/data/creativeengineering/paintings/rebirth_paintings/supper_time.png`
+- `kubejs/data/creativeengineering/paintings/rebirth_paintings/taiga.json`
+- `kubejs/data/creativeengineering/paintings/rebirth_paintings/taiga.png`
+- `kubejs/data/creativeengineering/paintings/rebirth_paintings/thalassophobia.json`
+- `kubejs/data/creativeengineering/paintings/rebirth_paintings/thalassophobia.png`
+- `kubejs/data/creativeengineering/paintings/rebirth_paintings/the_fog.json`
+- `kubejs/data/creativeengineering/paintings/rebirth_paintings/the_fog.png`
+- `kubejs/data/creativeengineering/paintings/rebirth_paintings/three_heads_are_better_than_two.json`
+- `kubejs/data/creativeengineering/paintings/rebirth_paintings/three_heads_are_better_than_two.png`
+- `kubejs/data/creativeengineering/paintings/rebirth_paintings/tides.json`
+- `kubejs/data/creativeengineering/paintings/rebirth_paintings/tides.png`
+- `kubejs/data/creativeengineering/paintings/rebirth_paintings/timeline.json`
+- `kubejs/data/creativeengineering/paintings/rebirth_paintings/timeline.png`
+- `kubejs/data/creativeengineering/paintings/rebirth_paintings/tropics.json`
+- `kubejs/data/creativeengineering/paintings/rebirth_paintings/tropics.png`
+- `kubejs/data/creativeengineering/paintings/rebirth_paintings/twigs.json`
+- `kubejs/data/creativeengineering/paintings/rebirth_paintings/twigs.png`
+- `kubejs/data/creativeengineering/paintings/rebirth_paintings/twins.json`
+- `kubejs/data/creativeengineering/paintings/rebirth_paintings/twins.png`
+- `kubejs/data/creativeengineering/paintings/rebirth_paintings/underwater.json`
+- `kubejs/data/creativeengineering/paintings/rebirth_paintings/underwater.png`
+- `kubejs/data/creativeengineering/paintings/rebirth_paintings/unidentified_object.json`
+- `kubejs/data/creativeengineering/paintings/rebirth_paintings/unidentified_object.png`
+- `kubejs/data/creativeengineering/paintings/rebirth_paintings/uranium.json`
+- `kubejs/data/creativeengineering/paintings/rebirth_paintings/uranium.png`
+- `kubejs/data/creativeengineering/paintings/rebirth_paintings/vase.json`
+- `kubejs/data/creativeengineering/paintings/rebirth_paintings/vase.png`
+- `kubejs/data/creativeengineering/paintings/rebirth_paintings/volcano.json`
+- `kubejs/data/creativeengineering/paintings/rebirth_paintings/volcano.png`
+- `kubejs/data/creativeengineering/paintings/rebirth_paintings/war_face.json`
+- `kubejs/data/creativeengineering/paintings/rebirth_paintings/war_face.png`
+- `kubejs/data/creativeengineering/paintings/rebirth_paintings/war_horse.json`
+- `kubejs/data/creativeengineering/paintings/rebirth_paintings/war_horse.png`
+- `kubejs/data/creativeengineering/paintings/rebirth_paintings/warming.json`
+- `kubejs/data/creativeengineering/paintings/rebirth_paintings/warming.png`
+- `kubejs/data/creativeengineering/paintings/rebirth_paintings/warning.json`
+- `kubejs/data/creativeengineering/paintings/rebirth_paintings/warning.png`
+- `kubejs/data/creativeengineering/paintings/rebirth_paintings/waves.json`
+- `kubejs/data/creativeengineering/paintings/rebirth_paintings/waves.png`
+- `kubejs/data/creativeengineering/paintings/rebirth_paintings/west_spring.json`
+- `kubejs/data/creativeengineering/paintings/rebirth_paintings/west_spring.png`
+- `kubejs/data/creativeengineering/paintings/rebirth_paintings/western_forest.json`
+- `kubejs/data/creativeengineering/paintings/rebirth_paintings/western_forest.png`
+- `kubejs/data/creativeengineering/paintings/rebirth_paintings/wheat_field.json`
+- `kubejs/data/creativeengineering/paintings/rebirth_paintings/wheat_field.png`
+- `kubejs/data/creativeengineering/paintings/rebirth_paintings/winder_wonderland.json`
+- `kubejs/data/creativeengineering/paintings/rebirth_paintings/winder_wonderland.png`
+- `kubejs/data/creativeengineering/paintings/rebirth_paintings/windmill.json`
+- `kubejs/data/creativeengineering/paintings/rebirth_paintings/windmill.png`
+- `kubejs/data/creativeengineering/paintings/rebirth_paintings/winter_night.json`
+- `kubejs/data/creativeengineering/paintings/rebirth_paintings/winter_night.png`
+- `kubejs/data/creativeengineering/paintings/rebirth_paintings/woodlands.json`
+- `kubejs/data/creativeengineering/paintings/rebirth_paintings/woodlands.png`
+- `kubejs/data/creativeengineering/paintings/rebirth_paintings/wrangler.json`
+- `kubejs/data/creativeengineering/paintings/rebirth_paintings/wrangler.png`
+- `kubejs/data/creativeengineering/paintings/rebirth_paintings/zone.json`
+- `kubejs/data/creativeengineering/paintings/rebirth_paintings/zone.png`
+- `kubejs/data/creativeengineering/paintings/supplementaries/bombs.json`
+- `kubejs/data/creativeengineering/paintings/supplementaries/bombs.png`
+- `kubejs/data/creativeengineering/paintings/toomanypaintings/afternoon.json`
+- `kubejs/data/creativeengineering/paintings/toomanypaintings/afternoon.png`
+- `kubejs/data/creativeengineering/paintings/toomanypaintings/allay.json`
+- `kubejs/data/creativeengineering/paintings/toomanypaintings/allay.png`
+- `kubejs/data/creativeengineering/paintings/toomanypaintings/american.json`
+- `kubejs/data/creativeengineering/paintings/toomanypaintings/american.png`
+- `kubejs/data/creativeengineering/paintings/toomanypaintings/ancient_days.json`
+- `kubejs/data/creativeengineering/paintings/toomanypaintings/ancient_days.png`
+- `kubejs/data/creativeengineering/paintings/toomanypaintings/arthemis.json`
+- `kubejs/data/creativeengineering/paintings/toomanypaintings/arthemis.png`
+- `kubejs/data/creativeengineering/paintings/toomanypaintings/ateneah.json`
+- `kubejs/data/creativeengineering/paintings/toomanypaintings/ateneah.png`
+- `kubejs/data/creativeengineering/paintings/toomanypaintings/automat.json`
+- `kubejs/data/creativeengineering/paintings/toomanypaintings/automat.png`
+- `kubejs/data/creativeengineering/paintings/toomanypaintings/axperty.json`
+- `kubejs/data/creativeengineering/paintings/toomanypaintings/axperty.png`
+- `kubejs/data/creativeengineering/paintings/toomanypaintings/balcony.json`
+- `kubejs/data/creativeengineering/paintings/toomanypaintings/balcony.png`
+- `kubejs/data/creativeengineering/paintings/toomanypaintings/bee.json`
+- `kubejs/data/creativeengineering/paintings/toomanypaintings/bee.png`
+- `kubejs/data/creativeengineering/paintings/toomanypaintings/benda.json`
+- `kubejs/data/creativeengineering/paintings/toomanypaintings/benda.png`
+- `kubejs/data/creativeengineering/paintings/toomanypaintings/cafe.json`
+- `kubejs/data/creativeengineering/paintings/toomanypaintings/cafe.png`
+- `kubejs/data/creativeengineering/paintings/toomanypaintings/clocks.json`
+- `kubejs/data/creativeengineering/paintings/toomanypaintings/clocks.png`
+- `kubejs/data/creativeengineering/paintings/toomanypaintings/cow.json`
+- `kubejs/data/creativeengineering/paintings/toomanypaintings/cow.png`
+- `kubejs/data/creativeengineering/paintings/toomanypaintings/creation.json`
+- `kubejs/data/creativeengineering/paintings/toomanypaintings/creation.png`
+- `kubejs/data/creativeengineering/paintings/toomanypaintings/desperate.json`
+- `kubejs/data/creativeengineering/paintings/toomanypaintings/desperate.png`
+- `kubejs/data/creativeengineering/paintings/toomanypaintings/drowned.json`
+- `kubejs/data/creativeengineering/paintings/toomanypaintings/drowned.png`
+- `kubejs/data/creativeengineering/paintings/toomanypaintings/earth_far_away.json`
+- `kubejs/data/creativeengineering/paintings/toomanypaintings/earth_far_away.png`
+- `kubejs/data/creativeengineering/paintings/toomanypaintings/earth_rise.json`
+- `kubejs/data/creativeengineering/paintings/toomanypaintings/earth_rise.png`
+- `kubejs/data/creativeengineering/paintings/toomanypaintings/enderman.json`
+- `kubejs/data/creativeengineering/paintings/toomanypaintings/enderman.png`
+- `kubejs/data/creativeengineering/paintings/toomanypaintings/false_mirror.json`
+- `kubejs/data/creativeengineering/paintings/toomanypaintings/false_mirror.png`
+- `kubejs/data/creativeengineering/paintings/toomanypaintings/federico.json`
+- `kubejs/data/creativeengineering/paintings/toomanypaintings/federico.png`
+- `kubejs/data/creativeengineering/paintings/toomanypaintings/french.json`
+- `kubejs/data/creativeengineering/paintings/toomanypaintings/french.png`
+- `kubejs/data/creativeengineering/paintings/toomanypaintings/frida.json`
+- `kubejs/data/creativeengineering/paintings/toomanypaintings/frida.png`
+- `kubejs/data/creativeengineering/paintings/toomanypaintings/garden.json`
+- `kubejs/data/creativeengineering/paintings/toomanypaintings/garden.png`
+- `kubejs/data/creativeengineering/paintings/toomanypaintings/ghast.json`
+- `kubejs/data/creativeengineering/paintings/toomanypaintings/ghast.png`
+- `kubejs/data/creativeengineering/paintings/toomanypaintings/giorgio.json`
+- `kubejs/data/creativeengineering/paintings/toomanypaintings/giorgio.png`
+- `kubejs/data/creativeengineering/paintings/toomanypaintings/karma.json`
+- `kubejs/data/creativeengineering/paintings/toomanypaintings/karma.png`
+- `kubejs/data/creativeengineering/paintings/toomanypaintings/lady.json`
+- `kubejs/data/creativeengineering/paintings/toomanypaintings/lady.png`
+- `kubejs/data/creativeengineering/paintings/toomanypaintings/lisa.json`
+- `kubejs/data/creativeengineering/paintings/toomanypaintings/lisa.png`
+- `kubejs/data/creativeengineering/paintings/toomanypaintings/lovers.json`
+- `kubejs/data/creativeengineering/paintings/toomanypaintings/lovers.png`
+- `kubejs/data/creativeengineering/paintings/toomanypaintings/meninas.json`
+- `kubejs/data/creativeengineering/paintings/toomanypaintings/meninas.png`
+- `kubejs/data/creativeengineering/paintings/toomanypaintings/milkmaid.json`
+- `kubejs/data/creativeengineering/paintings/toomanypaintings/milkmaid.png`
+- `kubejs/data/creativeengineering/paintings/toomanypaintings/morning.json`
+- `kubejs/data/creativeengineering/paintings/toomanypaintings/morning.png`
+- `kubejs/data/creativeengineering/paintings/toomanypaintings/narcissus.json`
+- `kubejs/data/creativeengineering/paintings/toomanypaintings/narcissus.png`
+- `kubejs/data/creativeengineering/paintings/toomanypaintings/night.json`
+- `kubejs/data/creativeengineering/paintings/toomanypaintings/night.png`
+- `kubejs/data/creativeengineering/paintings/toomanypaintings/not_reproduced.json`
+- `kubejs/data/creativeengineering/paintings/toomanypaintings/not_reproduced.png`
+- `kubejs/data/creativeengineering/paintings/toomanypaintings/piazza.json`
+- `kubejs/data/creativeengineering/paintings/toomanypaintings/piazza.png`
+- `kubejs/data/creativeengineering/paintings/toomanypaintings/pig.json`
+- `kubejs/data/creativeengineering/paintings/toomanypaintings/pig.png`
+- `kubejs/data/creativeengineering/paintings/toomanypaintings/pillars.json`
+- `kubejs/data/creativeengineering/paintings/toomanypaintings/pillars.png`
+- `kubejs/data/creativeengineering/paintings/toomanypaintings/rain.json`
+- `kubejs/data/creativeengineering/paintings/toomanypaintings/rain.png`
+- `kubejs/data/creativeengineering/paintings/toomanypaintings/renibond.json`
+- `kubejs/data/creativeengineering/paintings/toomanypaintings/renibond.png`
+- `kubejs/data/creativeengineering/paintings/toomanypaintings/rider.json`
+- `kubejs/data/creativeengineering/paintings/toomanypaintings/rider.png`
+- `kubejs/data/creativeengineering/paintings/toomanypaintings/ring.json`
+- `kubejs/data/creativeengineering/paintings/toomanypaintings/ring.png`
+- `kubejs/data/creativeengineering/paintings/toomanypaintings/school.json`
+- `kubejs/data/creativeengineering/paintings/toomanypaintings/school.png`
+- `kubejs/data/creativeengineering/paintings/toomanypaintings/scream.json`
+- `kubejs/data/creativeengineering/paintings/toomanypaintings/scream.png`
+- `kubejs/data/creativeengineering/paintings/toomanypaintings/self_portrait.json`
+- `kubejs/data/creativeengineering/paintings/toomanypaintings/self_portrait.png`
+- `kubejs/data/creativeengineering/paintings/toomanypaintings/sheep.json`
+- `kubejs/data/creativeengineering/paintings/toomanypaintings/sheep.png`
+- `kubejs/data/creativeengineering/paintings/toomanypaintings/skeleton.json`
+- `kubejs/data/creativeengineering/paintings/toomanypaintings/skeleton.png`
+- `kubejs/data/creativeengineering/paintings/toomanypaintings/slime.json`
+- `kubejs/data/creativeengineering/paintings/toomanypaintings/slime.png`
+- `kubejs/data/creativeengineering/paintings/toomanypaintings/snow_golem.json`
+- `kubejs/data/creativeengineering/paintings/toomanypaintings/snow_golem.png`
+- `kubejs/data/creativeengineering/paintings/toomanypaintings/son.json`
+- `kubejs/data/creativeengineering/paintings/toomanypaintings/son.png`
+- `kubejs/data/creativeengineering/paintings/toomanypaintings/spider.json`
+- `kubejs/data/creativeengineering/paintings/toomanypaintings/spider.png`
+- `kubejs/data/creativeengineering/paintings/toomanypaintings/squares.json`
+- `kubejs/data/creativeengineering/paintings/toomanypaintings/squares.png`
+- `kubejs/data/creativeengineering/paintings/toomanypaintings/starry_night.json`
+- `kubejs/data/creativeengineering/paintings/toomanypaintings/starry_night.png`
+- `kubejs/data/creativeengineering/paintings/toomanypaintings/steve.json`
+- `kubejs/data/creativeengineering/paintings/toomanypaintings/steve.png`
+- `kubejs/data/creativeengineering/paintings/toomanypaintings/stray.json`
+- `kubejs/data/creativeengineering/paintings/toomanypaintings/stray.png`
+- `kubejs/data/creativeengineering/paintings/toomanypaintings/swing.json`
+- `kubejs/data/creativeengineering/paintings/toomanypaintings/swing.png`
+- `kubejs/data/creativeengineering/paintings/toomanypaintings/takeamuke.json`
+- `kubejs/data/creativeengineering/paintings/toomanypaintings/takeamuke.png`
+- `kubejs/data/creativeengineering/paintings/toomanypaintings/villager.json`
+- `kubejs/data/creativeengineering/paintings/toomanypaintings/villager.png`
+- `kubejs/data/creativeengineering/paintings/toomanypaintings/wave.json`
+- `kubejs/data/creativeengineering/paintings/toomanypaintings/wave.png`
+- `kubejs/data/creativeengineering/paintings/toomanypaintings/wheat_field.json`
+- `kubejs/data/creativeengineering/paintings/toomanypaintings/wheat_field.png`
+- `kubejs/data/creativeengineering/paintings/toomanypaintings/wither_skeleton.json`
+- `kubejs/data/creativeengineering/paintings/toomanypaintings/wither_skeleton.png`
+- `kubejs/data/creativeengineering/paintings/toomanypaintings/zombie.json`
+- `kubejs/data/creativeengineering/paintings/toomanypaintings/zombie.png`
+- `kubejs/data/creativeengineering/paintings/toomanypaintings/zombie_pigman.json`
+- `kubejs/data/creativeengineering/paintings/toomanypaintings/zombie_pigman.png`
+- `kubejs/data/creativeengineering/paintings/upgrade_aquatic/sightless.json`
+- `kubejs/data/creativeengineering/paintings/upgrade_aquatic/sightless.png`
+- `kubejs/data/more_mooblooms/moobloom_spawns/creativeengineering.json`
+- `kubejs/data/oceanic_delight/loot_tables/gameplay/fishing_net_on_kelp.json`
+- `kubejs/data/oceanic_delight/loot_tables/gameplay/fishing_net_on_sea_grass.json`
+- `kubejs/data/vintagedelight/moonlight/soft_fluids/pepper_jam.json`
+- `kubejs/data/vintagedelight/moonlight/soft_fluids/relish.json`
+- `kubejs/data/watchtower_building/advancements/watchtower_found.json`
+- `kubejs/generation_scripts/food/can_servings.json`
+- `kubejs/generation_scripts/food/can_types.json`
+- `kubejs/generation_scripts/food/food_types.json`
+- `kubejs/generation_scripts/food/mortar_catalog.json`
+- `kubejs/generation_scripts/food/placeable.json`
+- `kubejs/server_scripts/_lib/dump_all.js`
+- `kubejs/server_scripts/_lib/dump_bee_nests.js`
+- `kubejs/server_scripts/_lib/dump_biome.js`
+- `kubejs/server_scripts/_lib/dump_climate.js`
+- `kubejs/server_scripts/_lib/dump_compost.js`
+- `kubejs/server_scripts/_lib/dump_crafting_audit.js`
+- `kubejs/server_scripts/_lib/dump_crop_growth.js`
+- `kubejs/server_scripts/_lib/dump_flower_pots.js`
+- `kubejs/server_scripts/_lib/dump_fluid.js`
+- `kubejs/server_scripts/_lib/dump_food.js`
+- `kubejs/server_scripts/_lib/dump_gear.js`
+- `kubejs/server_scripts/_lib/dump_items.js`
+- `kubejs/server_scripts/_lib/dump_names.js`
+- `kubejs/server_scripts/_lib/dump_paintings.js`
+- `kubejs/server_scripts/_lib/dump_physics.js`
+- `kubejs/server_scripts/_lib/dump_placeable.js`
+- `kubejs/server_scripts/_lib/dump_potions.js`
+- `kubejs/server_scripts/_lib/dump_recipes.js`
+- `kubejs/server_scripts/_lib/dump_spawns.js`
+- `kubejs/server_scripts/_lib/dump_stacks.js`
+- `kubejs/server_scripts/_lib/dump_structuregen.js`
+- `kubejs/server_scripts/_lib/dump_tags.js`
+- `kubejs/server_scripts/_lib/flower_world.js`
+- `kubejs/server_scripts/_lib/loot_dump.js`
+- `kubejs/server_scripts/_lib/metal_test_recipes.js`
+- `kubejs/server_scripts/_lib/recipe_scan.js`
+- `kubejs/server_scripts/_lib/sequence_assembly_processes.js`
+- `kubejs/server_scripts/_lib/structure_dump.js`
+- `kubejs/server_scripts/_lib/villager_trades_dump.js`
+- `kubejs/server_scripts/_lib/wood_test_recipes.js`
+- `kubejs/server_scripts/cooking/alcohol.js`
+- `kubejs/server_scripts/economy/coin.js`
+- `kubejs/server_scripts/engineering/potion_bottling.js`
+- `kubejs/server_scripts/engineering/potion_buckets.js`
+- `kubejs/server_scripts/engineering/sample_syringe.js`
+- `kubejs/server_scripts/equipment/tipped_arrows.js`
+- `kubejs/server_scripts/loot/00_lib.js`
+- `kubejs/server_scripts/loot/05_tuning.js`
+- `kubejs/server_scripts/loot/06_dead_maps.js`
+- `kubejs/server_scripts/loot/07_rules.js`
+- `kubejs/server_scripts/loot/08_leaf_apples.js`
+- `kubejs/server_scripts/loot/10_removals.js`
+- `kubejs/server_scripts/loot/20_frequency.js`
+- `kubejs/server_scripts/loot/30_redistribute.js`
+- `kubejs/server_scripts/loot/40_targeted.js`
+- `kubejs/server_scripts/loot/95_tag_capture.js`
+- `kubejs/server_scripts/loot/99_debug.js`
+- `kubejs/server_scripts/loot/loot_config.json`
+- `kubejs/server_scripts/loot/loot_index.json`
+- `kubejs/server_scripts/magic/armor_effects.js`
+- `kubejs/server_scripts/magic/lava_vision.js`
+- `kubejs/server_scripts/magic/tool_effects.js`
+- `kubejs/server_scripts/other/dead_recipe_removal.js`
+- `kubejs/server_scripts/other/feature_ports.js`
+- `kubejs/server_scripts/other/flowers.js`
+- `kubejs/server_scripts/other/harvest.js`
+- `kubejs/server_scripts/other/jeed_providers.js`
+- `kubejs/server_scripts/other/misc_mods.js`
+- `kubejs/server_scripts/other/removed_mobs.js`
+- `kubejs/server_scripts/other/starter_kit.js`
+- `kubejs/server_scripts/tags/entitytags.js`
+- `kubejs/server_scripts/tags/item_physics_tags.js`
+- `kubejs/server_scripts/tags/loottags.js`
+- `kubejs/server_scripts/worldgen/_biome_rules.js`
+- `kubejs/server_scripts/worldgen/bee_nests.js`
+- `kubejs/server_scripts/worldgen/biome_overrides.js`
+- `kubejs/server_scripts/worldgen/earth_fill.js`
+- `kubejs/server_scripts/worldgen/ground_match.js`
+- `kubejs/server_scripts/worldgen/mob_spawns.js`
+- `kubejs/server_scripts/worldgen/mushroom_spawns.js`
+- `kubejs/server_scripts/worldgen/structure_overrides.js`
+- `kubejs/server_scripts/worldgen/terrain_adaptation.js`
+- `kubejs/server_scripts/worldgen/water_fill.js`
+- `kubejs/server_scripts/worldgen/wild_flowers.js`
+- `kubejs/startup_scripts/cooking/alcohol_drinks.js`
+- `kubejs/startup_scripts/cooking/food_values.js`
+- `kubejs/startup_scripts/cooking/potions.js`
+- `kubejs/startup_scripts/func/armor_effects.js`
+- `kubejs/startup_scripts/func/item_physics.js`
+- `kubejs/startup_scripts/func/potion_area.js`
+- `kubejs/startup_scripts/func/sample_syringe.js`
+- `kubejs/startup_scripts/func/tool_effects.js`
+- `kubejs/startup_scripts/items/potion_buckets.js`
+- `kubejs/startup_scripts/items/sample_syringe.js`
+- `kubejs/startup_scripts/magic/magic_resistance.js`
+- `mods/CannedGoods-1.19.2-3.jar`
+- `mods/NethersDelight-1.19-3.1.jar`
+- `mods/babyMobs-1.0.0.jar`
+- `mods/backportedDisplay-1.7.0-ce-19.2-01.jar`
+- `mods/backportedFungi-1.3-ce-19.2-01.jar`
+- `mods/backportedMiners-1.4.5-ce-19.2-01.jar`
+- `mods/backportedVeggies-1.9.2-ce-19.2-03.jar`
+- `mods/backportedVintage-0.1.6-ce-19.2-09.jar`
+- `mods/create_salt 1.19.2-1.1.0.jar`
+- `mods/creativeLabels-1.0.0.jar`
+- `mods/creative_brewing-1.0.0.jar`
+- `mods/creative_delight-1.0.0.jar`
+- `mods/creativeengineering-1.1.04.jar`
+- `mods/goldenfood-1.19.2-2.0.0.jar`
+- `mods/incubationAdditions-1.1.0.jar`
+- `mods/moreMooblooms-1.1.0.jar`
+- `mods/salt-1.19.2-1.2.4.1.jar`
+
+</details>
+
 <!-- deploy:1.1.06 -->
 ## 1.1.06 - 2026-10-31 17:30
 

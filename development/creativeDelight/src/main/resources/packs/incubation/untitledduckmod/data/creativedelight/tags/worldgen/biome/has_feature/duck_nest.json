@@ -1,0 +1,9 @@
+{
+  "replace": false,
+  "values": [
+    {
+      "id": "#untitledduckmod:duck_spawn",
+      "required": false
+    }
+  ]
+}

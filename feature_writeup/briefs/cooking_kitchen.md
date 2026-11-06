@@ -5,7 +5,7 @@ built rows cut down to the table at the end). What got built is written up in [k
 KT-24), [remainder_buffer.md](../remainder_buffer.md) (RB-), [stepstool.md](../stepstool.md) (STL-) and
 [crops.md](../crops.md) 2.3 (hoe area, CR-, last CR-99).
 
-Paths below are relative to `development/patcherMod/src/main/java/com/SaintAlfonzo/creativeengineering/` unless they
+Paths below are relative to `development/creativeCommon/src/main/java/com/SaintAlfonzo/creativecommon/` unless they
 start with `kubejs/`, `config/`, `tools/`, `development/` or `feature_writeup/`.
 
 ## Scope and order
@@ -31,7 +31,7 @@ area than the hoe of the same tier (wood 3, iron 5, diamond 7, netherite 9 in th
 ### Now
 - **Area harvest already exists for hoes** ([crops.md](../crops.md) 2.3): Quark's Simple Harvest (right-click, replant)
   and Hoe Harvesting (break an area), sized per item by the tags `creativeengineering:hoe_harvest/<N>x<N>`, N 1 to 9
-  ([crops/HoeHarvestArea.java](../../development/patcherMod/src/main/java/com/SaintAlfonzo/creativeengineering/crops/HoeHarvestArea.java),
+  ([crops/HoeHarvestArea.java](../../development/creativeCommon/src/main/java/com/SaintAlfonzo/creativecommon/crops/HoeHarvestArea.java),
   `MAX_SIZE = 9`; largest tag wins; even sizes reach toward the look). Mixins `mixin/QuarkHoeAreaHarvestMixin`
   (`SimpleHarvestModule.click`) and `mixin/QuarkHoeAreaBreakMixin` (`HoeHarvestingModule.onBlockBroken`). Tooltip
   `crops/HoeHarvestTooltip` ("Harvest area: NxN", lang `creativeengineering.hoe_harvest.*`), registered at

@@ -1,0 +1,6 @@
+{
+  "description": "Standing damage of Creative Delight members' cooking stoves that is not under a mod's own Common id: Ender's Delight's endstone stove. Included by #creativecommon:fire and #creativecommon:burn_tick (patcherMod), so shields treat it as fire and as a burn tick. Moved out of those files 2026-11-04 (creative_split.md 7.9 step 3); a separate tag because two of our jars cannot ship the same data path (Forge serves only the first jar's copy).",
+  "values": [
+    "endersdelight.endstone_stove"
+  ]
+}

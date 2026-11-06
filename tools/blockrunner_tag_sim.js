@@ -55,9 +55,9 @@ const event = {
 let handler
 global.ServerEvents = { tags: (type, fn) => { if (type === 'block') handler = fn } }
 global.StartupEvents = { postInit: () => {} }
-eval(fs.readFileSync(ROOT + 'kubejs/startup_scripts/_lib/item_dict.js', 'utf8'))
-eval(fs.readFileSync(ROOT + 'kubejs/startup_scripts/_lib/block_dict.js', 'utf8'))
-eval(fs.readFileSync(ROOT + 'development/patcherMod/src/main/resources/kubejs_startup/creativeengineering/func/tag_helper.js', 'utf8'))
+eval(fs.readFileSync(ROOT + 'development/creativeCommon/src/main/resources/kubejs_startup/creativecommon/_lib/item_dict.js', 'utf8'))
+eval(fs.readFileSync(ROOT + 'development/creativeCommon/src/main/resources/kubejs_startup/creativecommon/_lib/block_dict.js', 'utf8'))
+eval(fs.readFileSync(ROOT + 'development/creativeCommon/src/main/resources/kubejs_startup/creativecommon/func/tag_helper.js', 'utf8'))
 eval(fs.readFileSync(ROOT + 'kubejs/server_scripts/tags/blocktags.js', 'utf8'))
 handler(event)
 console.log(warnings.length ? 'WARNINGS:\n' + warnings.join('\n') : 'no dead patterns / unknown ids')

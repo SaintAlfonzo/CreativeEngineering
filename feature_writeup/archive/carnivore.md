@@ -69,7 +69,7 @@ item instead of the raw one.
 
 | Carnivore item | Overlaps with | Problem | Proposal |
 |---|---|---|---|
-| `squid_tentacle`, `cooked_squid_tentacle` | Miner's `tentacles`, Ocean's `tentacles`, Oceanic `squid_tentacles`; **the owner removed all tentacles 2026-10-29** (`dishes/ocean #4`, `creativedelight/members #24`); squids drop one Miner's squid item per kill and are cut into calamari (`dishes/ocean #3`) | A fourth tentacle item against a standing decision. Its drop is a `LivingDropsEvent`, so the pack's LootJS squid filter (`kubejs/data/creative_delight/kubejs/miners_delight/loot.js`) would not remove it | Do not register (D3) |
+| `squid_tentacle`, `cooked_squid_tentacle` | Miner's `tentacles`, Ocean's `tentacles`, Oceanic `squid_tentacles`; **the owner removed all tentacles 2026-10-29** (`dishes/ocean #4`, `creativedelight/members #24`); squids drop one Miner's squid item per kill and are cut into calamari (`dishes/ocean #3`) | A fourth tentacle item against a standing decision. Its drop is a `LivingDropsEvent`, so the pack's LootJS squid filter (`kubejs/data/creativedelight/kubejs/miners_delight/loot.js`) would not remove it | Do not register (D3) |
 | `glow_squid_tentacle` | Oceanic `glow_squid_tentacles` (removed), Glowing Calamari (CD) | Same as above | Do not register (D3) |
 | `golden_squid_tentacle` | none (Water Breathing + Absorption II food) | Its only input is a glow squid tentacle | Do not register with D3, or rebase on Glowing Calamari if the owner asks (D3) |
 | `guardian_meat` | Hostile Delight `guardianfillet` (+ cooked), Ocean's `guardian_tail` (+ cooked) | A third guardian meat | Do not register; the guardian already gives two meats (D4) |
@@ -112,7 +112,7 @@ sniffer 2, camel 2, eyeball 1), 19 kept.
 
 ### 2.3 Systems
 
-- **Loot:** the pack handles mob food drops with LootJS in the CD tree (`kubejs/data/creative_delight/kubejs/<member>/loot.js`,
+- **Loot:** the pack handles mob food drops with LootJS in the CD tree (`kubejs/data/creativedelight/kubejs/<member>/loot.js`,
   `i.any_knife` for knife kills) and records them in [loot.md](../loot.md). Carnivore's `LivingDropsEvent` runs outside
   loot tables: LootJS cannot see or filter it, the loot census misses it, and it fires on every death. The port
   re-expresses the drops as LootJS entity modifiers (F4).
@@ -231,7 +231,7 @@ has no handler.
 Route (D1, recommended): no Java. The items are plain foods plus one on-eat teleport, and all drops can be expressed
 as loot, so the port is the feature_porting tier "KubeJS / data" inside the Creative Delight tree (memory
 `creative-delight-routing`): items under the `carnivore` namespace in `development/creativeDelight/src/main/resources/kubejs_startup/carnivore/`,
-server scripts in `kubejs/data/creative_delight/kubejs/carnivore/`. Textures and lang come from the donor jar in
+server scripts in `kubejs/data/creativedelight/kubejs/carnivore/`. Textures and lang come from the donor jar in
 `carnivore_upstream/` through patcherMod's donor reader (as Farmer's Structures, memory `farmers-structures-donor`).
 If that reader cannot serve item textures, the fallback is a CD Java member with the Miner's donor setup (D1).
 
@@ -241,9 +241,9 @@ If that reader cannot serve item textures, the fallback is a CD Java member with
 | F1 | Register the kept items (19 under the recommended answers to D2-D8) under `carnivore:`; mite teleport only if D5 keeps it | CD startup scripts | `kubejs_startup/carnivore/carnivore_items.js` |
 | F2 | Ids in `item_dict.js` / `food_dict.js` under meat family names (`f` names, creative_delight.md 13: exotic mob meats keep their family name) | memory `item-dict-mechanics` | `_lib/item_dict.js`, `_lib/food_dict.js` |
 | F3 | Tags via `global.tags`: `forge:raw_meats` / `food_type/raw/meat` / `food_type/cooked/meat` (not `forge:raw_meat`, memory `forge-raw-meat-tag-gotcha`), bird and fish tags where they apply | [tag_helper.js](../../development/patcherMod/src/main/resources/kubejs_startup/creativeengineering/func/tag_helper.js) | `kubejs_startup/carnivore/` |
-| F4 | Mob drops as LootJS entity modifiers, adult only, fire -> cooked, gate per D10 with `i.any_knife`; mooshroom swaps beef and cooked beef (B6); add the rows to the loot census | [loot.md](../loot.md), CD `miners_delight/loot.js` as the model | `kubejs/data/creative_delight/kubejs/carnivore/loot.js` |
+| F4 | Mob drops as LootJS entity modifiers, adult only, fire -> cooked, gate per D10 with `i.any_knife`; mooshroom swaps beef and cooked beef (B6); add the rows to the loot census | [loot.md](../loot.md), CD `miners_delight/loot.js` as the model | `kubejs/data/creativedelight/kubejs/carnivore/loot.js` |
 | F5 | Item merges: none needed if D3-D7 hold (the duplicates are never registered). If the owner keeps any, add them to [item_merges.md](../item_merges.md) and `_core/item_merges.js` | item_merges.md | |
-| F6 | Recipes through `global.NCH`: full cook set for every kept raw item (fixes B5); cooking pot Horse Mince and Insect Powder (input `arthropod` per D7) with S&D / Central Kitchen mirrors unless `_manual_only`; cutting board frogspawn; bowl remainders | [recipes_cooking.md](../recipes_cooking.md) | `kubejs/data/creative_delight/kubejs/carnivore/recipes.js` |
+| F6 | Recipes through `global.NCH`: full cook set for every kept raw item (fixes B5); cooking pot Horse Mince and Insect Powder (input `arthropod` per D7) with S&D / Central Kitchen mirrors unless `_manual_only`; cutting board frogspawn; bowl remainders | [recipes_cooking.md](../recipes_cooking.md) | `kubejs/data/creativedelight/kubejs/carnivore/recipes.js` |
 | F7 | Potions: none (no potions, no brewing) | | |
 | F8 | Food values: `food_types.json` and the family rules (meat/raw, meat/cooked); retune B7 values; Spice of Life entries | [food.md](../food.md), [food_families.md](../food_families.md) | `kubejs/generation_scripts/food/food_types.json` |
 | F9 | Food families: `python3 tools/food_families.py --check` | food_families.md | |
@@ -284,8 +284,8 @@ D10 before F4. F8 before F12.
 |---|---|
 | `carnivore_upstream/carnivore-1.5.0.jar` | donor jar, unmodified (textures, lang) |
 | `development/creativeDelight/src/main/resources/kubejs_startup/carnivore/carnivore_items.js` | item registration, values, mite teleport (if kept) |
-| `kubejs/data/creative_delight/kubejs/carnivore/loot.js` | LootJS mob drops |
-| `kubejs/data/creative_delight/kubejs/carnivore/recipes.js` | NCH recipes |
+| `kubejs/data/creativedelight/kubejs/carnivore/loot.js` | LootJS mob drops |
+| `kubejs/data/creativedelight/kubejs/carnivore/recipes.js` | NCH recipes |
 | `kubejs/startup_scripts/_lib/item_dict.js`, `food_dict.js` | ids |
 | `kubejs/generation_scripts/food/food_types.json` | food values |
 | CD lang overlay | renames (F13) |
@@ -324,4 +324,4 @@ D10 before F4. F8 before F12.
 ## 9. History
 
 - 2026-10-30: investigation written from the decompiled jar (`org.domi`, 42 classes) and its data, the pack dicts,
-  member sources and writeups (ocean_delight, miners_delight, ends_delight, hostile_delight, creative_delight). Nothing built.
+  member sources and writeups (ocean_delight, miners_delight, ends_delight, hostile_delight, creativedelight). Nothing built.

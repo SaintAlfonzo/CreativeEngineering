@@ -12,7 +12,7 @@ ROOT = Path(__file__).resolve().parents[2]
 MODS = ROOT / 'mods'
 KUBEJS_DATA = ROOT / 'kubejs' / 'data'
 EXPORTED = ROOT / 'kubejs' / 'exported'
-OUT = ROOT / 'kubejs' / 'assets' / 'creativeengineering' / 'jei_world'
+OUT = ROOT / 'kubejs' / 'assets' / 'creativecommon' / 'jei_world'
 
 
 class Context:

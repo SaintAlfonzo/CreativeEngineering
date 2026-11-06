@@ -17,8 +17,8 @@
   run. Findings F1 to F9 (section 4); decisions in section 9.4 and 10.4.
 - **Files to open:** [item_physics_tags.js](../kubejs/server_scripts/tags/item_physics_tags.js) (what floats and
   burns), [func/item_physics.js](../kubejs/startup_scripts/func/item_physics.js) (burn transforms),
-  [itemphysic/ItemPhysicSplit.java](../development/patcherMod/src/main/java/com/SaintAlfonzo/creativeengineering/itemphysic/ItemPhysicSplit.java),
-  [mixin/ItemPhysicServerMixin.java](../development/patcherMod/src/main/java/com/SaintAlfonzo/creativeengineering/mixin/ItemPhysicServerMixin.java).
+  [itemphysic/ItemPhysicSplit.java](../development/creativeCommon/src/main/java/com/SaintAlfonzo/creativecommon/itemphysic/ItemPhysicSplit.java),
+  [mixin/ItemPhysicServerMixin.java](../development/creativeCommon/src/main/java/com/SaintAlfonzo/creativecommon/mixin/ItemPhysicServerMixin.java).
 - **Knobs:** the four tags (`/reload`); the burn-transform rules and programmatic rules (startup, restart);
   ItemPhysic's own `config/itemphysic.json` (lists `swimmingItems`, `burningItems`, `undestroyableItems`); TNT shrapnel
   in `[shrapnel]` ([tnt_shrapnel.md](tnt_shrapnel.md)).
@@ -167,7 +167,7 @@ Brief: [briefs/items_item-physics.md](briefs/items_item-physics.md). Nothing her
 
 ## 5. File map
 
-- patcherMod: [itemphysic/](../development/patcherMod/src/main/java/com/SaintAlfonzo/creativeengineering/itemphysic/) (`ItemPhysicSplit`, `ItemBurnTransform`, `BurnBlastDamage`, `AllurementItemCurses`), [mixin/ItemPhysicServerMixin.java](../development/patcherMod/src/main/java/com/SaintAlfonzo/creativeengineering/mixin/ItemPhysicServerMixin.java), `data/creativeengineering/tags/items/physics/*.json` (seed).
+- patcherMod: [itemphysic/](../development/creativeCommon/src/main/java/com/SaintAlfonzo/creativecommon/itemphysic/) (`ItemPhysicSplit`, `ItemBurnTransform`, `BurnBlastDamage`, `AllurementItemCurses`), [mixin/ItemPhysicServerMixin.java](../development/creativeCommon/src/main/java/com/SaintAlfonzo/creativecommon/mixin/ItemPhysicServerMixin.java), `data/creativeengineering/tags/items/physics/*.json` (seed).
 - KubeJS: [func/item_physics.js](../kubejs/startup_scripts/func/item_physics.js) (`global.itemPhysics`), [tags/item_physics_tags.js](../kubejs/server_scripts/tags/item_physics_tags.js).
 - Audit: [_lib/dump_physics.js](../kubejs/server_scripts/_lib/dump_physics.js) (`/dumpphysics`, in `/dumpall`),
   [tools/item_physics_audit.py](../tools/item_physics_audit.py) (`/cegen run item_physics_audit`), output

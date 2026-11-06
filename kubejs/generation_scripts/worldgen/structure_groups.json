@@ -367,84 +367,84 @@
           "fit_keep": false
         },
         "mysticrift_pillagers_towers_aris:acacia_pillager_tower": {
-          "weight": 10,
+          "weight": 30,
           "frequency": 0.930863,
           "fit_base": {
             "weight": 5,
             "frequency": 0.4211
           },
           "fit_keep": true,
-          "tuned": "fit_keep tower: --fit-rates keeps its density on its own biome list (biome fits, 2026-10-12); kept by the weight strip (user, 2026-10-30)"
+          "tuned": "fit_keep tower: --fit-rates keeps its density on its own biome list (biome fits, 2026-10-12); kept by the weight strip (user, 2026-10-30); weight x3 by hand (user, 2026-11-01)"
         },
         "mysticrift_pillagers_towers_aris:birch_pillager_tower": {
-          "weight": 8,
+          "weight": 24,
           "frequency": 0.905604,
           "fit_base": {
             "weight": 5,
             "frequency": 0.38
           },
           "fit_keep": true,
-          "tuned": "fit_keep tower: --fit-rates keeps its density on its own biome list (biome fits, 2026-10-12); kept by the weight strip (user, 2026-10-30)"
+          "tuned": "fit_keep tower: --fit-rates keeps its density on its own biome list (biome fits, 2026-10-12); kept by the weight strip (user, 2026-10-30); weight x3 by hand (user, 2026-11-01)"
         },
         "mysticrift_pillagers_towers_aris:cherry_pillager_tower": {
-          "weight": 17,
+          "weight": 51,
           "frequency": 0.856877,
           "fit_base": {
             "weight": 5,
             "frequency": 0.4211
           },
           "fit_keep": true,
-          "tuned": "fit_keep tower: --fit-rates keeps its density on its own biome list (biome fits, 2026-10-12); kept by the weight strip (user, 2026-10-30)"
+          "tuned": "fit_keep tower: --fit-rates keeps its density on its own biome list (biome fits, 2026-10-12); kept by the weight strip (user, 2026-10-30); weight x3 by hand (user, 2026-11-01)"
         },
         "mysticrift_pillagers_towers_aris:desert_pillager_tower": {
-          "weight": 1,
+          "weight": 3,
           "frequency": 0.650021,
           "fit_base": {
             "weight": 5,
             "frequency": 0.4692
           },
           "fit_keep": true,
-          "tuned": "fit_keep tower: --fit-rates keeps its density on its own biome list (biome fits, 2026-10-12); kept by the weight strip (user, 2026-10-30)"
+          "tuned": "fit_keep tower: --fit-rates keeps its density on its own biome list (biome fits, 2026-10-12); kept by the weight strip (user, 2026-10-30); weight x3 by hand (user, 2026-11-01)"
         },
         "mysticrift_pillagers_towers_aris:end_pillager_tower": {
-          "weight": 1,
+          "weight": 3,
           "frequency": 0.019706,
           "fit_base": {
             "weight": 5,
             "frequency": 0.4301
           },
           "fit_keep": true,
-          "tuned": "fit_keep tower: --fit-rates keeps its density on its own biome list (biome fits, 2026-10-12); kept by the weight strip (user, 2026-10-30)"
+          "tuned": "fit_keep tower: --fit-rates keeps its density on its own biome list (biome fits, 2026-10-12); kept by the weight strip (user, 2026-10-30); weight x3 by hand (user, 2026-11-01)"
         },
         "mysticrift_pillagers_towers_aris:jungle_pillager_tower": {
-          "weight": 10,
+          "weight": 30,
           "frequency": 0.973476,
           "fit_base": {
             "weight": 5,
             "frequency": 0.9278
           },
           "fit_keep": true,
-          "tuned": "fit_keep tower: --fit-rates keeps its density on its own biome list (biome fits, 2026-10-12); kept by the weight strip (user, 2026-10-30)"
+          "tuned": "fit_keep tower: --fit-rates keeps its density on its own biome list (biome fits, 2026-10-12); kept by the weight strip (user, 2026-10-30); weight x3 by hand (user, 2026-11-01)"
         },
         "mysticrift_pillagers_towers_aris:mangrove_pillager_tower": {
-          "weight": 5,
+          "weight": 15,
           "frequency": 0.038089,
           "fit_base": {
             "weight": 5,
             "frequency": 0.5938
           },
           "fit_keep": true,
-          "tuned": "fit_keep tower: --fit-rates keeps its density on its own biome list (biome fits, 2026-10-12); kept by the weight strip (user, 2026-10-30)"
+          "tuned": "fit_keep tower: --fit-rates keeps its density on its own biome list (biome fits, 2026-10-12); kept by the weight strip (user, 2026-10-30); weight x3 by hand (user, 2026-11-01)"
         },
         "mysticrift_pillagers_towers_aris:oak_wood_pillager_tower": {
-          "weight": 5,
+          "weight": 15,
           "frequency": 0.467934,
           "fit_base": {
             "weight": 5,
             "frequency": 0.9425
           },
           "fit_keep": true,
-          "tuned": "fit_keep tower: --fit-rates keeps its density on its own biome list (biome fits, 2026-10-12); kept by the weight strip (user, 2026-10-30)"
+          "tuned": "fit_keep tower: --fit-rates keeps its density on its own biome list (biome fits, 2026-10-12); kept by the weight strip (user, 2026-10-30); weight x3 by hand (user, 2026-11-01)"
         },
         "creativeengineering:meta/pillager_camp_ruin": {
           "weight": 1,
@@ -566,16 +566,6 @@
           "frequency": 1.0,
           "fit_keep": false
         },
-        "philipsruins:rare_ruin": {
-          "weight": 100,
-          "frequency": 0.007794,
-          "fit_keep": false
-        },
-        "philipsruins:start_nether_ruin": {
-          "weight": 100,
-          "frequency": 0.8688,
-          "fit_keep": false
-        },
         "terralith:glacial_hut": {
           "weight": 100,
           "frequency": 0.686437,
@@ -670,6 +660,11 @@
           "weight": 100,
           "frequency": 1.0,
           "fit_keep": false
+        },
+        "creativeengineering:meta/waystone_ruins": {
+          "weight": 1,
+          "frequency": 1.0,
+          "note": "Meta structure with an anchor: never picked by this weight; it takes \"share\" (meta_structures.json) of the slots its anchors win here, so no member's rate changes. Keep the weight at 1."
         }
       }
     },
@@ -1500,7 +1495,7 @@
       }
     },
     "nether_ruins": {
-      "note": "Nether ruins: Twigs' bloodstone obelisk and Philip's three Nether ruins (Nether dungeon, sealed ghast statue, lava ruins). Grid from their crowding (spacing 14, separation 7). Added 2026-10-12.",
+      "note": "Nether ruins: Twigs' bloodstone obelisk and Philip's three Nether ruins (Nether dungeon, sealed ghast statue, lava ruins). Grid from their crowding (spacing 14, separation 7). Added 2026-10-12. 2026-11-02 (structures/contents #1): Philip's lost soul dungeon, rare ruin and blackstone Nether ruin moved in from the Overworld; the dungeon and the blackstone ruin set by hand to the other Philip Nether ruins' weight and frequency (the fit to their Overworld rates gave weights 148 and 214), the rare ruin kept rare as fitted.",
       "placement": {
         "spacing": 14,
         "separation": 7,
@@ -1526,6 +1521,18 @@
           "weight": 100,
           "frequency": 1.0,
           "fit_keep": false
+        },
+        "philipsruins:lost_soul_dungeon": {
+          "weight": 100,
+          "frequency": 0.5993
+        },
+        "philipsruins:rare_ruin": {
+          "weight": 6,
+          "frequency": 0.3759
+        },
+        "philipsruins:start_nether_ruin": {
+          "weight": 100,
+          "frequency": 0.5993
         }
       }
     },
@@ -2146,10 +2153,6 @@
         "separation": 13
       },
       "structures": {
-        "philipsruins:lost_soul_dungeon": {
-          "frequency": 0.991,
-          "fit_keep": false
-        },
         "philipsruins:bone_dungeon": {
           "frequency": 0.29382,
           "fit_keep": false

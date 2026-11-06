@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 """Compare the block-state id range files written by the patcherMod debug switch.
 
-Enable [debug.block_state_sync] enabled=true in config/creativeengineering-common.toml on the
+Enable [debug.block_state_sync] enabled=true in config/creativedevtools-common.toml on the
 client and on the dedicated server. Each side writes logs/ce_block_state_ranges_<side>.txt (one
 line per block: first state id, state count, registry name). Block ids are synced by Forge but
 state COUNTS are not, so the first block whose count differs shifts every id after it.

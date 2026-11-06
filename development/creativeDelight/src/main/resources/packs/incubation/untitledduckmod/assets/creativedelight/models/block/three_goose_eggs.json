@@ -1,0 +1,7 @@
+{
+  "parent": "incubation:block/three_turkey_eggs",
+  "textures": {
+    "eggs": "creativedelight:block/goose_eggs",
+    "particle": "#eggs"
+  }
+}

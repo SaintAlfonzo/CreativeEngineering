@@ -1,0 +1,10 @@
+# Run r1102b, A3: restart with nothing changed after w_6_A.qb (SQ-WGE-06c second reboot).
+pace 2
+
+## SQ-WGE-06c-2 | nothing changed, reboot: still 7, still no warning
+bootexpect Done \(
+bootreject piece order changed
+shell python3 -c "import json;e=json.load(open('kubejs/generation_scripts/worldgen/pool_config.json'))['pools']['betterfortresses:bridge']['elements']['betterfortresses:bridge/bridge_pillar #2'];print(e);exit(0 if e['current']==7 else 1)"
+
+## SQ-WGE-06c-3 | set up A4: stored original of bridge_pillar #2 changed to 99 (stop, then boot A4)
+shell python3 -c "import json;p='kubejs/generation_scripts/worldgen/pool_config.json';d=json.load(open(p));e=d['pools']['betterfortresses:bridge']['elements']['betterfortresses:bridge/bridge_pillar #2'];e['original']=99;json.dump(d,open(p,'w'),indent=2);print(e)"

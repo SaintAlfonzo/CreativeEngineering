@@ -1,6 +1,8 @@
 # Storage Delight 26.10.05 against the installed 25.12.09
 
-**BUILT 2026-10-25 (decisions in section 5); Shipped in 1.1.03 (deployed to server and players 2026-10-26); SQ-STD-01 PASSED 2026-10-26, SQ-STD-02 queued. The `build/libs` jar differs from the `mods/` copy (2026-10-30 check: a newer build waits to install).** Replaced: `storagedelight-25.12.09-1.19-forge.jar` (`mods/`, `server_mods/`), 1.19.2. Evaluated
+**BUILT 2026-10-25 (decisions in section 5); Shipped in 1.1.03 (deployed to server and players 2026-10-26); SQ-STD-01 PASSED 2026-10-26, SQ-STD-02 PASSED r1102b 2026-11-02. The 2026-10-29 23:54 build (name tag, JEI wood order) is the `mods/` copy (identical, deep scan 2026-11-02).** Replaced: `storagedelight-25.12.09-1.19-forge.jar` (`mods/`, `server_mods/`), 1.19.2. Evaluated
+
+**2026-11-04:** `-02` built, not installed: declares a mandatory `farmersdelight` dependency (`[1.19.2-1.2.4,)`, AFTER), which upstream never did (creative_split.md 7.17). Scratch SQ-DEP-08.
 2026-10-25 against `devmods/checkNewerVersionForContent/storagedelight-26.10.05-26.3-neoforge.jar` (NeoForge, vanilla
 26.3), method in [devmods_evaluation.md](devmods_evaluation.md) section 1. Both jars unpacked in `DecompiledMods/`. Plan
 row: `largecontent/mod-additions #33` in [todo/TODO.md](todo/TODO.md). No config file. The pack's scripts do not touch
@@ -81,6 +83,9 @@ poplar are in 26.10.05 only.
 
 ## 4. Tests
 
+- **r1102b 2026-11-02** (scratch server; verdicts in `perf/runs/r1102b/` HANDOVER.md and the slice judged.md): PASS SQ-STD-02.
+- **r1103 2026-11-03** (scratch server; verdicts in `perf/runs/r1103/` FINAL.md and the slice judged.md): PASS SQ-STD-03.
+
 Prefix `STD-`. Needs `repackedStorage-25.12.09-1.19-forge-ce-19.2-01.jar` in `mods/` (and `server_mods/`); install with
 `./gradlew :repackedStorage:installToMods` once no game is running (it moves `storagedelight-25.12.09-1.19-forge.jar`
 to `development/repackedStorage/jar_archive/displaced/`).
@@ -94,6 +99,8 @@ to `development/repackedStorage/jar_archive/displaced/`).
 | STD-05 | Tuff countertops show Quark's polished tuff on top; blackstone, diorite and stone bricks show the vanilla texture; no missing-texture purple on any of the 50 |
 | STD-06 | A world saved before the jar: the original 90 blocks and their contents are intact after loading with it |
 | STD-07 | Wood, bamboo and Oak blocks burn 300 ticks in a furnace; Crimson / Warped ones do not |
+
+Queue: SQ-STD-01, -02 (passed), SQ-STD-03 (STD-07 fuel) and CQ-STD-01 (STD-04, STD-05), the last two added by the deep scan 2026-11-02.
 
 
 ## 5. Owner decisions and build plan (2026-10-25)
@@ -117,4 +124,4 @@ registered from the wood / type tables) and `en_us.json` and the axe tag; it add
 as in the installed recipes. The tuff top face uses `quark:block/polished_tuff` (vanilla has no polished tuff on 1.19.2).
 Properties and fuel (300 ticks, overworld woods) as the existing blocks; bamboo burns like them.
 
-**Tests:** `STD-`, section 4. 2026-10-26 scratch run: SQ-STD-01 PASSED (no `storagedelight` error, 140 `storagedelight:` blocks, 140 recipes); SQ-STD-02 (place and use) not run.
+**Tests:** `STD-`, section 4. 2026-10-26 scratch run: SQ-STD-01 PASSED (no `storagedelight` error, 140 `storagedelight:` blocks, 140 recipes); SQ-STD-02 (place and use) PASSED r1102b 2026-11-02 (`perf/runs/r1102b/s3/judged.md`: 3 `use SUCCESS`, each drops itself and its contents). STD-01 to STD-07 in game open.

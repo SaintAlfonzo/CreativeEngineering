@@ -351,29 +351,6 @@
       }
     },
     {
-      "file": "CannedGoods-1.19.2-3.jar",
-      "name": "Canned Goods :|",
-      "version": "1.0.3",
-      "sha1": "9afaf0978e46cebd0d1b7e86fbb35f211e03fc29",
-      "modId": "canned_goods",
-      "side": "both",
-      "source": {
-        "curseforge": {
-          "projectId": 643975,
-          "fileId": 4556245,
-          "slug": "canned-goods",
-          "url": "https://www.curseforge.com/minecraft/mc-mods/canned-goods/files/4556245"
-        },
-        "modrinth": {
-          "projectId": "6TbZXmz1",
-          "versionId": "elQzfpeK",
-          "slug": "canned-goods",
-          "url": "https://modrinth.com/mod/canned-goods/version/elQzfpeK",
-          "download": "https://cdn.modrinth.com/data/6TbZXmz1/versions/elQzfpeK/CannedGoods-1.19.2-3.jar"
-        }
-      }
-    },
-    {
       "file": "Carry Cats 2.5 1.19.2.jar",
       "name": "Carry cats!",
       "version": "2.5+mc1.19.2-forge",
@@ -1040,6 +1017,29 @@
       }
     },
     {
+      "file": "FTBQuestsOptimizer-forge-1.2.1-1.19.2.jar",
+      "name": "FTB Quests Optimizer",
+      "version": "1.2.1-1.19.2",
+      "sha1": "2af2fb5a77c0ffe8e19370616367439930b49fbc",
+      "modId": "ftbqoptimizer",
+      "side": "both",
+      "source": {
+        "curseforge": {
+          "projectId": 912469,
+          "fileId": 5065537,
+          "slug": "ftb-quests-optimizer",
+          "url": "https://www.curseforge.com/minecraft/mc-mods/ftb-quests-optimizer/files/5065537"
+        },
+        "modrinth": {
+          "projectId": "oPwMsrcf",
+          "versionId": "6qmXDQpl",
+          "slug": "ftb-quests-optimizer",
+          "url": "https://modrinth.com/mod/ftb-quests-optimizer/version/6qmXDQpl",
+          "download": "https://cdn.modrinth.com/data/oPwMsrcf/versions/6qmXDQpl/FTBQuestsOptimizer-forge-1.2.1-1.19.2.jar"
+        }
+      }
+    },
+    {
       "file": "FarmersRespite-1.19-2.0.jar",
       "name": "Farmer's Respite",
       "version": "1.19-2.0",
@@ -1697,22 +1697,6 @@
           "slug": "nekos-enchanted-books",
           "url": "https://modrinth.com/mod/nekos-enchanted-books/version/G0oQtyG8",
           "download": "https://cdn.modrinth.com/data/VZWuyRVr/versions/G0oQtyG8/NekosEnchantedBooks-1.19-2.0.3.jar"
-        }
-      }
-    },
-    {
-      "file": "NethersDelight-1.19-3.1.jar",
-      "name": "Nether's Delight",
-      "version": "1.19-3.1",
-      "sha1": "844fcf67924c682d65adee493e4dd5ba2f6cc9f3",
-      "modId": "nethersdelight",
-      "side": "both",
-      "source": {
-        "curseforge": {
-          "projectId": 496394,
-          "fileId": 4731072,
-          "slug": "nethers-delight",
-          "url": "https://www.curseforge.com/minecraft/mc-mods/nethers-delight/files/4731072"
         }
       }
     },
@@ -3045,78 +3029,6 @@
       }
     },
     {
-      "file": "babyMobs-1.0.0.jar",
-      "name": "babyMobs-1.0.0.jar",
-      "version": "Unknown",
-      "sha1": "25d6e9bfc676396511d927846e898a50bd3dd3f5",
-      "modId": "baby_mobs",
-      "side": "both",
-      "source": "local"
-    },
-    {
-      "file": "backportedBrewin-4.5.0-ce-19.2-04.jar",
-      "name": "backportedBrewin-4.5.0-ce-19.2-04",
-      "version": "",
-      "sha1": "e15fb240ed13afc9da93b800b74751116ba37613",
-      "modId": "brewinandchewin",
-      "side": "both",
-      "source": "local"
-    },
-    {
-      "file": "backportedDisplay-1.7.0-ce-19.2-01.jar",
-      "name": "backportedDisplay-1.7.0-ce-19.2-01",
-      "version": "",
-      "sha1": "14cf16f69797fa93212deb50565e8a8987e490a4",
-      "modId": "displaydelight",
-      "side": "both",
-      "source": "local"
-    },
-    {
-      "file": "backportedFungi-1.3-ce-19.2-01.jar",
-      "name": "backportedFungi-1.3-ce-19.2-01",
-      "version": "",
-      "sha1": "9a014a9e02c7ad7e588004057c52a361bbc0cf69",
-      "modId": "fungidelight",
-      "side": "both",
-      "source": "local"
-    },
-    {
-      "file": "backportedMiners-1.4.5-ce-19.2-01.jar",
-      "name": "backportedMiners-1.4.5-ce-19.2-01",
-      "version": "",
-      "sha1": "c161c3603552af9cc4f238ed203b3515213d3952",
-      "modId": "miners_delight",
-      "side": "both",
-      "source": "local"
-    },
-    {
-      "file": "backportedVeggies-1.9.2-ce-19.2-03.jar",
-      "name": "backportedVeggies-1.9.2-ce-19.2-03",
-      "version": "",
-      "sha1": "db8ae2f868d07dccbaa6399cb75a61b6259ebc60",
-      "modId": "veggiesdelight",
-      "side": "both",
-      "source": "local"
-    },
-    {
-      "file": "backportedVinery-1.5.5-ce-19.2-06.jar",
-      "name": "backportedVinery-1.5.5-ce-19.2-06",
-      "version": "",
-      "sha1": "0294f0a8c47d5591ed4b6052eccd420ee15b3aba",
-      "modId": "vinery",
-      "side": "both",
-      "source": "local"
-    },
-    {
-      "file": "backportedVintage-0.1.6-ce-19.2-09.jar",
-      "name": "backportedVintage-0.1.6-ce-19.2-09",
-      "version": "",
-      "sha1": "0240fdc14326d2d118833015792bbf0ecb2c30a2",
-      "modId": "vintagedelight",
-      "side": "both",
-      "source": "local"
-    },
-    {
       "file": "badpackets-forge-0.2.3.jar",
       "name": "bad packets",
       "version": "forge-0.2.3",
@@ -4406,29 +4318,6 @@
       }
     },
     {
-      "file": "create_salt 1.19.2-1.1.0.jar",
-      "name": "Create : The Salt",
-      "version": "1.1.0",
-      "sha1": "42555b0d3b17f16477d1fc3c2aebf074c44a3d99",
-      "modId": "create__the_salt",
-      "side": "both",
-      "source": {
-        "curseforge": {
-          "projectId": 951106,
-          "fileId": 5000032,
-          "slug": "create-the-salt",
-          "url": "https://www.curseforge.com/minecraft/mc-mods/create-the-salt/files/5000032"
-        },
-        "modrinth": {
-          "projectId": "OXUFUU4x",
-          "versionId": "IwhIDWd7",
-          "slug": "create-the-salt",
-          "url": "https://modrinth.com/mod/create-the-salt/version/IwhIDWd7",
-          "download": "https://cdn.modrinth.com/data/OXUFUU4x/versions/IwhIDWd7/create_salt%201.19.2-1.1.0.jar"
-        }
-      }
-    },
-    {
       "file": "create_tweaked_controllers-1.19.2-1.2.4.jar",
       "name": "Create: Tweaked Controllers",
       "version": "1.19.2-1.2.4",
@@ -4599,29 +4488,92 @@
       }
     },
     {
-      "file": "creativeLabels-1.0.0.jar",
-      "name": "creativeLabels-1.0.0.jar",
-      "version": "Unknown",
-      "sha1": "cbaa7a3fc916a1f04572deead4ce191f83e80aa4",
+      "file": "creativeLabels-1.0.1.jar",
+      "name": "creativeLabels-1.0.1",
+      "version": "",
+      "sha1": "5ef374a6a11f5e3ff72043670a5b5ff4c970c03f",
       "modId": "creative_labels",
       "side": "both",
       "source": "local"
     },
     {
-      "file": "creative_delight-1.0.0.jar",
-      "name": "creative_delight-1.0.0",
+      "file": "creativebrewing-1.0.0.jar",
+      "name": "creativebrewing-1.0.0",
       "version": "",
-      "sha1": "be79bbd448227b830e7894aa649dd66c7eda3025",
-      "modId": "creative_delight",
+      "sha1": "214444fd5ab00dbd2be8ec2fdfdc318ae777ffc8",
+      "modId": "creativebrewing",
       "side": "both",
       "source": "local"
     },
     {
-      "file": "creativeengineering-1.1.04.jar",
-      "name": "creativeengineering-1.1.04",
+      "file": "creativecalendar-1.0.0.jar",
+      "name": "creativecalendar-1.0.0",
       "version": "",
-      "sha1": "88ef707a9664556ae06f7af388769559852fb576",
+      "sha1": "90278e3875e0bf1dfa2f5d7ae86c75d42c41e7e6",
+      "modId": "creativecalendar",
+      "side": "both",
+      "source": "local"
+    },
+    {
+      "file": "creativecommon-1.1.0.jar",
+      "name": "creativecommon-1.1.0",
+      "version": "",
+      "sha1": "f5cf0d1714ce1a2d661727567f6f850bf50b944b",
+      "modId": "creativecommon",
+      "side": "both",
+      "source": "local"
+    },
+    {
+      "file": "creativecompat-1.0.0.jar",
+      "name": "creativecompat-1.0.0",
+      "version": "",
+      "sha1": "de608b64b3d13b70f7bbe14bedcd329c4f5315d8",
+      "modId": "creativecompat",
+      "side": "both",
+      "source": "local"
+    },
+    {
+      "file": "creativedelight-1.1.0.jar",
+      "name": "creativedelight-1.1.0",
+      "version": "",
+      "sha1": "90676d4f6af23557e8dc9106539ec37a655c854f",
+      "modId": "creativedelight",
+      "side": "both",
+      "source": "local"
+    },
+    {
+      "file": "creativeengineering-2.0.0.jar",
+      "name": "creativeengineering-2.0.0",
+      "version": "",
+      "sha1": "15e19f9d95261e16da4955e865e3a166d2b3bb7e",
       "modId": "creativeengineering",
+      "side": "both",
+      "source": "local"
+    },
+    {
+      "file": "creativeequipment-1.0.0.jar",
+      "name": "creativeequipment-1.0.0",
+      "version": "",
+      "sha1": "66e2cb8f993c4f965c03be3e3d7ae724426f5100",
+      "modId": "creativeequipment",
+      "side": "both",
+      "source": "local"
+    },
+    {
+      "file": "creativemagic-1.0.0.jar",
+      "name": "creativemagic-1.0.0",
+      "version": "",
+      "sha1": "d6b342350848c1041847cb51506838039a55149c",
+      "modId": "creativemagic",
+      "side": "both",
+      "source": "local"
+    },
+    {
+      "file": "creativeworldgen-1.0.0.jar",
+      "name": "creativeworldgen-1.0.0",
+      "version": "",
+      "sha1": "c311daf741a04b188538f6bd2144410f4e383ce9",
+      "modId": "creativeworldgen",
       "side": "both",
       "source": "local"
     },
@@ -5328,6 +5280,38 @@
       }
     },
     {
+      "file": "ftb-chunks-forge-1902.4.7-build.420.jar",
+      "name": "FTB Chunks (NeoForge)",
+      "version": "ftb-chunks-forge-1902.4.7-build.420.jar",
+      "sha1": "a5394a4a7df1bf1aaced0760fe575e77532a97e2",
+      "modId": "ftbchunks",
+      "side": "both",
+      "source": {
+        "curseforge": {
+          "projectId": 314906,
+          "fileId": 5710631,
+          "slug": "ftb-chunks-forge",
+          "url": "https://www.curseforge.com/minecraft/mc-mods/ftb-chunks-forge/files/5710631"
+        }
+      }
+    },
+    {
+      "file": "ftb-essentials-forge-1902.3.5-build.120.jar",
+      "name": "FTB Essentials (Forge & Fabric)",
+      "version": "ftb-essentials-forge-1902.3.5-build.120.jar",
+      "sha1": "4422d045d5f1605a65c391d9ee087f14fe2cbbc3",
+      "modId": "ftbessentials",
+      "side": "both",
+      "source": {
+        "curseforge": {
+          "projectId": 410811,
+          "fileId": 5120109,
+          "slug": "ftb-essentials",
+          "url": "https://www.curseforge.com/minecraft/mc-mods/ftb-essentials/files/5120109"
+        }
+      }
+    },
+    {
       "file": "ftb-library-forge-1902.4.1-build.236.jar",
       "name": "FTB Library (NeoForge)",
       "version": "ftb-library-forge-1902.4.1-build.236.jar",
@@ -5473,29 +5457,6 @@
           "fileId": 4436710,
           "slug": "geode-plus",
           "url": "https://www.curseforge.com/minecraft/mc-mods/geode-plus/files/4436710"
-        }
-      }
-    },
-    {
-      "file": "goldenfood-1.19.2-2.0.0.jar",
-      "name": "Golden Foods!",
-      "version": "1.19.2-2.0.0",
-      "sha1": "4109e4d6d484892b8efc201b1a32b9361df930cd",
-      "modId": "goldenfood",
-      "side": "both",
-      "source": {
-        "curseforge": {
-          "projectId": 873866,
-          "fileId": 4626468,
-          "slug": "golden-foods",
-          "url": "https://www.curseforge.com/minecraft/mc-mods/golden-foods/files/4626468"
-        },
-        "modrinth": {
-          "projectId": "zUg53pQP",
-          "versionId": "1dqbhxZp",
-          "slug": "golden-foods",
-          "url": "https://modrinth.com/mod/golden-foods/version/1dqbhxZp",
-          "download": "https://cdn.modrinth.com/data/zUg53pQP/versions/1dqbhxZp/goldenfood-1.19.2-2.0.0%281%29.jar"
         }
       }
     },
@@ -5746,15 +5707,6 @@
           "download": "https://cdn.modrinth.com/data/A4Xrv60A/versions/xNXbdthU/incubation-1.19.2-3.0.1.jar"
         }
       }
-    },
-    {
-      "file": "incubationAdditions-1.1.0.jar",
-      "name": "incubationAdditions-1.1.0.jar",
-      "version": "Unknown",
-      "sha1": "143389d861a01bbaa91a581e1bc38b2c715911e3",
-      "modId": "incubation_additions",
-      "side": "both",
-      "source": "local"
     },
     {
       "file": "interiors-0.5.6+forge-mc1.19.2-build.105.jar",
@@ -6520,15 +6472,6 @@
           "download": "https://cdn.modrinth.com/data/ekzqyEZL/versions/j2uMfiXV/more-immersive-wires-1.19.2-1.1.3.jar"
         }
       }
-    },
-    {
-      "file": "moreMooblooms-1.1.0.jar",
-      "name": "moreMooblooms-1.1.0.jar",
-      "version": "Unknown",
-      "sha1": "55791af964974eefbbb760b89890f8bf44e8215b",
-      "modId": "more_mooblooms",
-      "side": "both",
-      "source": "local"
     },
     {
       "file": "moredelight-25.07.28-1.19-forge.jar",
@@ -7337,29 +7280,6 @@
           "slug": "rubidium",
           "url": "https://modrinth.com/mod/rubidium/version/bmmEZ4mh",
           "download": "https://cdn.modrinth.com/data/4ZqxOvjD/versions/bmmEZ4mh/rubidium-mc1.19.2-0.6.2c.jar"
-        }
-      }
-    },
-    {
-      "file": "salt-1.19.2-1.2.4.1.jar",
-      "name": "The Salt",
-      "version": "1.2.4.1",
-      "sha1": "2d9e01126dfbc69ec56c0346ec73ecd6995ea8ea",
-      "modId": "salt",
-      "side": "both",
-      "source": {
-        "curseforge": {
-          "projectId": 832006,
-          "fileId": 5550436,
-          "slug": "salt",
-          "url": "https://www.curseforge.com/minecraft/mc-mods/salt/files/5550436"
-        },
-        "modrinth": {
-          "projectId": "CrDd9QcD",
-          "versionId": "Fn21QjeY",
-          "slug": "salt",
-          "url": "https://modrinth.com/mod/salt/version/Fn21QjeY",
-          "download": "https://cdn.modrinth.com/data/CrDd9QcD/versions/Fn21QjeY/salt-1.19.2-1.2.4.1.jar"
         }
       }
     },
@@ -8642,28 +8562,6 @@
           "slug": "galosphere",
           "url": "https://modrinth.com/mod/galosphere/version/lnBzxe5j",
           "download": "https://cdn.modrinth.com/data/Kn7xyQ1v/versions/lnBzxe5j/Galosphere-1.19.2-1.3.0-Forge.jar"
-        }
-      }
-    },
-    {
-      "file": "JRFTL [1.19.1]-1.4.3.jar",
-      "name": "Just Another Rotten Flesh to Leather Mod",
-      "version": "1.4.3",
-      "sha1": "70277b252bfd525df11f2f1ed71afc66772154ab",
-      "modId": "jrftl",
-      "source": {
-        "curseforge": {
-          "projectId": 247136,
-          "fileId": 4459026,
-          "slug": "just-another-rotten-flesh-to-leather-mod",
-          "url": "https://www.curseforge.com/minecraft/mc-mods/just-another-rotten-flesh-to-leather-mod/files/4459026"
-        },
-        "modrinth": {
-          "projectId": "8nIicBYu",
-          "versionId": "HqEAO1Tg",
-          "slug": "jrftl",
-          "url": "https://modrinth.com/mod/jrftl/version/HqEAO1Tg",
-          "download": "https://cdn.modrinth.com/data/8nIicBYu/versions/HqEAO1Tg/JRFTL%20%5B1.19.1%5D-1.4.3.jar"
         }
       }
     },

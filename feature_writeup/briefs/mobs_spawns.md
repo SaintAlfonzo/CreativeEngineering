@@ -106,7 +106,7 @@ biome type: no single wild animal swamping a biome's creature picks, waterfowl a
    The ratio is 3:2 everywhere except ponds (4:3); weights are integers, so ponds can only become 6 / 4 (more birds) or
    stay. Decide what "parity" means first (Decisions), then adjust `duck_ponds` / `goose_ponds` weights.
 4. Preview offline: edit the JSON, run `python3 tools/gen_spawn_table.py` (applies the rules to the last dump), read
-   section 1 and 3; `bash tools/test_mob_spawns.sh` (needs `./gradlew :patcherMod:compileJava` once).
+   section 1 and 3; `bash tools/test_mob_spawns.sh` (needs `./gradlew :creativeCommon:compileJava` once).
 5. Rejoin, `/dumpspawns`, regenerate, commit; add the rules to mob_spawns.md 3 "Rules now" and a History line.
 
 ### Ids and data

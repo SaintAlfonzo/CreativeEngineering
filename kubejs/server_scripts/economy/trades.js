@@ -111,7 +111,7 @@ MoreJSEvents.villagerTrades((e) => {
   e.addTrade(v.cleric, 5, [Item.of(i.emerald, 3)], Item.of(i.experience_bottle, 1)).maxUses(12).villagerExperience(30).priceMultiplier(0.05)
   e.addTrade(v.cleric, 5, [Item.of(i.emerald, 4)], Item.of(i.echo_shard, 1)).maxUses(16).villagerExperience(6).priceMultiplier(0.1)
 
-  // Farmer: Veggies Delight's produce trades are Creative Delight members #2 (kubejs/data/creative_delight/kubejs/veggiesdelight/trades.js)
+  // Farmer: Veggies Delight's produce trades are Creative Delight members #2 (kubejs/data/creativedelight/kubejs/veggiesdelight/trades.js)
 })
 
 console.log('The trade event has finished!')

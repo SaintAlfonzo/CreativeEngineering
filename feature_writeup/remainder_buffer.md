@@ -25,12 +25,12 @@ cooking pot?", and drink > tea "integrate with later bottle/bowl output buffer s
 
 Files to open first:
 
-- `development/patcherMod/src/main/java/com/SaintAlfonzo/creativeengineering/cooking/`: `RemainderBuffer` (routing,
+- `development/creativeCommon/src/main/java/com/SaintAlfonzo/creativecommon/cooking/`: `RemainderBuffer` (routing,
   fit check, leftover rule), `RemainderBufferHolder`, `RemainderBufferStorage` (saving), `RemainderOutputHandler`
   (automation), `RemainderSlot`, `client/RemainderSlotFrames`
 - Creative Delight (QoL-1 since 2026-10-25, creative_delight.md 22): `mixin/farmersdelight/` `CookingPotRemainderMixin`,
   `CookingPotMenuRemainderMixin`, `CookingPotScreenRemainderMixin`; `mixin/farmersrespite/` `KettleRemainderMixin`,
-  `KettleMenuRemainderMixin`, `KettleScreenRemainderMixin`; switch `creative_delight-common.toml [qol] remainderBuffer`
+  `KettleMenuRemainderMixin`, `KettleScreenRemainderMixin`; switch `creativedelight-common.toml [qol] remainderBuffer`
   (`qol/RemainderBufferQol`). patcherMod's `[cooking] remainderBuffer` is the oven's only; the other dials are shared
 - `oven/OvenBlockEntity`, `OvenMenu`, `client/OvenScreen` (native buffer)
 - `compat/WthitRemainderBuffer` (the WTHIT "Holding" / "Waiting" lines, 3.3)
@@ -112,14 +112,14 @@ they often land on the counter or roll off it.
 `cooking/RemainderBuffer` is an `ItemStackHandler` with **2 slots** at normal stack limits (buckets 16). Two slots
 cover the mixed cases (a milk bucket and a honey bottle in one pot recipe). Each leftover goes, in order:
 
-1. **Recycle.** If the leftover is what the waiting meal is served in, the container slot is empty or holds the
-   same item, and the waiting meals still need containers there (meals waiting minus containers already in the
-   slot), it goes to the container slot. The same tick plates the meal with it. Only as many as are needed go
-   there: spares would pile up in a slot that automation can't empty (the first GameTest run caught exactly that,
-   see 6). "Served in" is the station's own `isContainerValid`: the recipe's `container` (`mealContainerStack` /
+1. **Recycle.** Since 2026-11-03 (3.8) a leftover goes to the container slot only when that slot already holds the
+   same item (up to its stack size), otherwise to the buffer first; a buffer leftover the waiting meal is plated with
+   moves to the container slot after `recycleShowTicks`. (Was: to the container slot when the waiting meal is served
+   in it, capped at what the waiting meals still needed, which stalled a copper pot whose single leftover slot was
+   already taken, SQ-RB-21b.) "Served in" is the station's own `isContainerValid`: the recipe's `container` (`mealContainerStack` /
    `drinkContainerStack`, set just before the leftover loop), or else the result's crafting remainder (hot cocoa
    has no `container` field; it is served in its remainder, a bottle). Example: kettle strong green tea (green tea
-   + honey bottle, served in a glass bottle): one bottle plates the drink, the other goes to the buffer. This
+   + honey bottle, served in a glass bottle): the bottles go to the buffer and move to the container slot to plate the drink. This
    covers the tea item in cooking.md without touching the recipes.
 2. **Buffer.** Otherwise it merges into a matching buffer stack, then into an empty slot.
 3. **Overflow.** Whatever is left is thrown as before. With `stallWhenFull` on (the default) this can't happen,
@@ -226,6 +226,80 @@ Scratch server 2026-10-22 (SQ-OM-01, alcohol.md AL-81 to AL-84): 9 slots; the ou
 slots take nothing from any face; bottom and sides pull output, empties and leftovers, the top only ingredients; an
 8-slot `-02` keg loads into the same slots. The leftover overflow and stall (AL-79, AL-80) stay in game.
 
+### 3.7 Copper pot and pickling jar: recycle (BUILT 2026-11-02, TODO `food/drinks #17`)
+
+Owner 2026-11-02: every station gets the same treatment as the cooking pot and oven: leftovers back into the
+plating slot, a leftover slot, a wait when full, and the overflow thrown, never lost. The cooking pot, oven and
+kettle already had all of it (3.1 to 3.3; the kettle tank's GUI boxes keep their empties in their own box). The two
+native Creative Delight stations had the leftover slot, the wait and the overflow, not the recycle:
+
+- **Copper pot** (Miner's Delight port, `CopperPotBlockEntity`): a leftover that is what the waiting meal is served
+  in (the recipe's container, or the Copper Cup for a cup soup) goes into the container slot, as many as the waiting
+  meals still need (`recycleRoom`: meals minus containers already there, 0 when the slot holds another item); the
+  next tick plates the meal. The rest goes to the leftover slot (7), then out of the pot's side. The stall check
+  (`leftoversFit`) simulates the same split. Setting: the port's `remainderBuffer` (recycle and slot together).
+- **Pickling jar** (Vintage Delight port, `FermentingJarBlockEntity`): the batch's container is taken before the
+  leftovers; a leftover that matches the recipe's container ingredient (and `#vintagedelight:container_items`) goes
+  back into the container slot when that slot is now empty, one at a time, so a run of batches keeps its container.
+  The rest goes to the leftover slot (9), then the delayed throw on top of the jar. The stall check simulates the
+  same. Setting: `vintage.pickling_jar.remainderBuffer`.
+
+No plating delay (`recycleShowTicks`) on these two: the recycled container plates on the next tick. Tests RB-15,
+RB-16; scratch SQ-RB-21, SQ-RB-22.
+
+### 3.8 One rule on all five stations (BUILT 2026-11-03, plan_scratch_bugfix_1103.md 2.3, TODO `creativedelight/members #37`)
+
+Owner 2026-11-03: the FD cooking pot, the Miner's copper pot, the Farmer's Respite kettle, the oven and the Pickling
+Jar follow the same leftover, container-slot and automation rules, from shared code (`development/shared/stations`,
+compiled into Creative Delight and the Miner's and Vintage members under their own packages). Not included: the
+Brewin' keg (3.6), Create Central Kitchen.
+
+- **Leftovers** (`LeftoverPlan`, owner 2026-11-03 evening): a leftover goes to the container slot only when that slot
+  already holds the same item (merged up to its stack size); otherwise to the overflow (leftover) slots, a matching
+  stack first; only when those are full, to an empty container slot if the recipe is served in it; then the station
+  waits (`stallWhenFull`) or, with that off, throws the rest.
+- **Overflow to container slot** (`OverflowPull`): an overflow item the waiting meal can be plated with moves to the
+  container slot, as many as the waiting meals still need (meals minus containers already there), after CD
+  `[cooking] recycleShowTicks` (default 10 ticks, 0.5 s) of the same candidate waiting; plating then waits the same
+  ticks, so the container is seen in each slot. Spares stay in the overflow slot. On the Pickling Jar, which plates
+  nothing, the same move fills an empty container slot with the container the current ingredients' recipe needs, one
+  at a time, so batches keep running. The waiting meal is the one in the meal slot (above the output slot), not yet
+  plated. The same call does the dry run
+  before a craft and the store after it. Pot, kettle and oven through `RemainderBuffer` (2 overflow slots), copper
+  pot (leftover slot 7) and Pickling Jar (leftover slot 9) natively. All five have a container slot; on the Pickling
+  Jar it takes back the recipe's container (after the batch took its own).
+- **Containers only in the container slot** (`StationContainers`): each station's containers are what its recipes
+  are served in (FD pot and copper pot: every cooking recipe's container or result remainder, plus
+  `#farmersdelight:serving_containers`; kettle: every brewing recipe's container; oven: every baking recipe's
+  container; Pickling Jar: every pickling recipe's container, plus `#vintagedelight:container_items`). Built from the
+  live recipe manager and rebuilt after every reload (`TagsUpdatedEvent`, client `RecipesUpdatedEvent`). A container
+  is refused in an ingredient slot, and the container slot takes only containers (or what the waiting meal needs).
+  An item that is a container and also an ingredient of one of that station's recipes stays allowed in the ingredient
+  slots, so no recipe breaks; each build logs those as `[stations] <station>: also used as an ingredient, allowed in
+  the ingredient slots: ...` (latest.log, server side).
+  - Where it is enforced: the inventory's `isItemValid`, which hand placement, shift-click and every hopper or pipe
+    go through. Copper pot, oven and jar override it; the FD pot and kettle inventories are the mods' own anonymous
+    `ItemStackHandler`s, so CD sets a rule on them at construction (`StationSlotRule`, mixin
+    `forge.ItemStackHandlerSlotRuleMixin`, a null check on every other handler). Internal moves (`setStackInSlot`)
+    skip it.
+- **Shift-click**: any valid container from the player inventory goes to the container slot and nowhere else (was:
+  the copper pot only took bowls, the FD pot only its tag, the kettle only glass bottles, the jar only its tag; a
+  container that did not fit spilled into the ingredient slots). Everything else goes to the ingredient slots only.
+  The FD pot and kettle keep their own `quickMoveStack`: its container-slot fallback plus the slot rule give this.
+- **Automation faces** (one layout): every face inserts, a container into the container slot and anything else into
+  the ingredient slots (oven: bakeware into the tool slot). The top pulls the ingredient slots; the sides and the
+  bottom pull the outputs, then the leftover slots. The container slot is never pulled, so no pipe takes a batch's
+  container mid-craft. Exception: the oven pulls outputs and leftovers from every face (its top usually carries a
+  pot, oven.md 3.5). Was: the FD pot, kettle and copper pot took ingredients only from the top and containers only
+  from the sides; the Pickling Jar's sides fed and drained only the container slot and only its bottom drained the
+  outputs (the "inconsistent slot pulls"). Mixins `farmersdelight.CookingPotItemHandlerMixin`,
+  `farmersrespite.KettleItemHandlerMixin`; `CopperPotItemHandler`, `FermentingJarItemHandler`.
+- **Pickling Jar progress**: belongs to one recipe; when the inputs make a different recipe the count starts at 0
+  (upstream kept it, so a new batch could finish at once).
+
+Spares wait in the overflow slots, where hoppers below can take them; the container slot only holds what is put in
+or pulled over for the waiting meals (and same-kind leftovers once it holds that item).
+
 ## 4. Risks
 
 - **Menu sync**: the extra slots exist only where patcherMod is loaded. It is `both` in
@@ -255,7 +329,7 @@ slots take nothing from any face; bottom and sides pull output, empties and left
 
 ## 6. Offline checks (2026-10-18)
 
-- `./gradlew :patcherMod:build`: compiles (the whole mod, against the pack's 414 jars in `libs/`) and reobfuscates;
+- `./gradlew :creativeCommon:build`: compiles (the whole mod, against the pack's 414 jars in `libs/`) and reobfuscates;
   the reobf jar's mixin classes carry SRG names for the inherited menu/screen members (3.5).
 - GameTests: `tools/test_remainder_buffer.sh` (harness in `tools/remainder_buffer_test/`: builds the `cooking/`
   classes, the pot/kettle BE + menu mixins and `oven/` straight from patcherMod's source, with FD 1.2.4 and Respite
@@ -294,6 +368,9 @@ SRG-named jar in game, Create Central Kitchen alongside.
 
 ## 7. In-game test suite
 
+- **r1102b 2026-11-02** (scratch server; verdicts in `perf/runs/r1102b/` HANDOVER.md and the slice judged.md): rerun pending (batch fault) SQ-RB-21, -21b, -22.
+- **r1103 2026-11-03** (scratch server; verdicts in `perf/runs/r1103/` FINAL.md and the slice judged.md): PASS SQ-RB-21; FAIL SQ-RB-21b: the copper pot stalls when a recipe leaves two kinds of leftover and slot 5 already holds the container (`CopperPotBlockEntity.leftoversFit` 334-364; the bowl-only rerun passes); SQ-RB-22 OPEN: no fermenting recipe returns a container, so N/A; owner to confirm none is meant to exist.
+
 In patcherMod 1.0.7 and later (pack 1.0.7, DEPLOYED 2026-10-18).
 
 - [ ] **RB-01 Pot recycle:** hot cocoa with a milk bottle. Nothing on the ground; the cocoa comes out plated.
@@ -321,6 +398,33 @@ In patcherMod 1.0.7 and later (pack 1.0.7, DEPLOYED 2026-10-18).
 - [ ] **RB-14 Recycle shows** (patcherMod 1.1.01): watch an FD pot cook a tomato-sauce bowl meal with the plating
   slot empty: the bowl appears in the plating slot for half a second, then the meal is plated. The same with hot
   cocoa and a milk bottle in the pot, and strong green tea in the kettle.
+- [ ] **RB-15 Copper pot recycle** (rule of 3.8, CD jar of 2026-11-03 19:13+): a Miner's copper pot over heat, plating
+  slot empty, a bowl-served recipe with a bowl-food ingredient (tomato sauce): the bowl lands in the container slot and
+  the meal comes out plated after about 1 s (bowl in the leftover slot for 0.5 s, then in the container slot for
+  0.5 s); nothing on the ground; with 1 bowl already in the container slot the recycled bowl stacks there at once, and
+  a bottle leftover (cooking oil) goes to the leftover slot in the same batch.
+- [ ] **RB-16 Pickling jar recycle:** a pickling jar recipe whose ingredient leaves the same item as its container (find
+  one in JEI) with one container in the container slot and ingredients for 3 batches: all 3 batches run, the container
+  slot ends with 1, nothing thrown.
+
+- [ ] **RB-17 Containers only in the container slot** (3.8): on each of the five stations, try a valid container (a bowl
+  on the pot, a glass bottle on the kettle, paper on the oven for muffins, a mason jar on the Pickling Jar) in each
+  ingredient slot by hand: refused; shift-click a stack of it: it all goes to the container slot and, with that slot
+  full, stays in the inventory. A non-container (a carrot) cannot be placed in the container slot. Check latest.log
+  for the `[stations] ... also used as an ingredient` lines and that every item listed there still goes in an
+  ingredient slot.
+- [ ] **RB-18 Automation faces** (3.8): on the pot, copper pot, kettle and Pickling Jar, a hopper feeding a mix of
+  ingredients and containers into the top and into a side: containers end in the container slot, ingredients in the
+  ingredient slots, from both faces. A hopper under each pulls the outputs, then the leftovers, never the container
+  slot. On the Pickling Jar a hopper on a side face also pulls the pickles.
+- [ ] **RB-20 Overflow pull** (3.8): FD pot, plating slot empty, a bowl in a leftover slot, a bowl-served meal cooks:
+  the bowl stays in the leftover slot for 0.5 s, moves to the container slot, stays 0.5 s, then the meal is plated;
+  with 3 meals waiting and 5 bowls in a leftover slot, 3 move and 2 stay. A glass bottle in the leftover slot never
+  moves for a bowl meal. Same on the kettle (bottle drink), oven (muffins and paper) and copper pot. Pickling Jar: a
+  container-recipe's ingredients, container slot empty, the container in slot 9: it moves to slot 6 after 0.5 s and
+  the batch starts.
+- [ ] **RB-19 Pickling Jar progress per recipe** (3.8): start pickles (2 min), wait until the arrow is past half, swap
+  the inputs for kimchi: the arrow restarts and the kimchi takes the full 2 min.
 
 ## 8. History
 
@@ -333,6 +437,13 @@ In patcherMod 1.0.7 and later (pack 1.0.7, DEPLOYED 2026-10-18).
   checked and found to be the designed recycle (3.1, `cooking/kitchen #4`); WTHIT "Holding" / "Waiting" line built
   (3.3, `cooking/kitchen #3`). GameTests 17, harness stand-in config resynced.
 - 2026-10-21 (later): plating delay `[cooking] recycleShowTicks` (3.1, `cooking/kitchen #13`); GameTests 19.
+- 2026-11-02: container-slot recycle added to the copper pot and pickling jar (3.7, `food/drinks #17`); Creative
+  Delight jar built, not installed.
+- 2026-11-03: one rule on all five stations (3.8): shared `LeftoverPlan` (container slot up to a stack, then
+  overflow, then wait; fixes SQ-RB-21b), containers only in the container slot (hand, shift-click, automation), one
+  automation face layout, Pickling Jar progress per recipe. Headless check of `LeftoverPlan` 10 of 10 (the SQ-RB-21b
+  case included). The GameTest harness (`tools/remainder_buffer_test`) still compiles patcherMod's pre-carve copies
+  of `cooking/` and `oven/`, not Creative Delight's: not run.
 
 > **Superseded copy below (noted 2026-10-21):** everything from here on is the 2026-10-18 feasibility draft, left in
 > the file by mistake. Sections 0-8 above are current; delete the copy once checked.

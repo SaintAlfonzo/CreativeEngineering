@@ -42,8 +42,8 @@ public record PieceHit(Direction face, Kind kind, int spot) {
     public AABB box(FaceContent[] faces) {
         FaceContent c = faces[face.ordinal()];
         return switch (kind) {
-            case NOTE -> Spots.noteBox(face, c.rotation, spot, c.inset);
-            case LABEL -> Spots.labelBox(face, c.rotation, c.inset);
+            case NOTE -> Spots.noteBox(face, c.rotation, c.place(), spot);
+            case LABEL -> Spots.labelBox(face, c.rotation, c.place());
             case PANEL -> Spots.panelBox(face, c.rotation, c.inset);
         };
     }
@@ -67,7 +67,7 @@ public record PieceHit(Direction face, Kind kind, int spot) {
             FaceContent c = faces[d.ordinal()];
             if (c == null || c.isEmpty()) continue;
             if (c.kind == FaceContent.Kind.LABEL) {
-                double dist = Spots.boxDistance(Spots.labelBox(d, c.rotation, c.inset), local);
+                double dist = Spots.boxDistance(Spots.labelBox(d, c.rotation, c.place()), local);
                 if (dist < bestDist) {
                     bestDist = dist;
                     best = new PieceHit(d, Kind.LABEL, -1);
@@ -76,7 +76,7 @@ public record PieceHit(Direction face, Kind kind, int spot) {
             }
             for (int spot = 0; spot < Spots.COUNT; spot++) {
                 if (c.notes[spot] == null) continue;
-                double dist = Spots.boxDistance(Spots.noteBox(d, c.rotation, spot, c.inset), local);
+                double dist = Spots.boxDistance(Spots.noteBox(d, c.rotation, c.place(), spot), local);
                 if (dist < bestDist) {
                     bestDist = dist;
                     best = new PieceHit(d, Kind.NOTE, spot);

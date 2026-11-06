@@ -4,11 +4,11 @@ import java.util.List;
 
 import com.SaintAlfonzo.creativeengineering.CEConfig;
 import com.SaintAlfonzo.creativeengineering.CreativeEngineering;
-import com.SaintAlfonzo.creativeengineering.cooking.RemainderBuffer;
-import com.SaintAlfonzo.creativeengineering.cooking.RemainderBufferHolder;
-import com.SaintAlfonzo.creativeengineering.cooking.RemainderSlot;
-import com.SaintAlfonzo.creativeengineering.oven.OvenBlockEntity;
-import com.SaintAlfonzo.creativeengineering.oven.OvenRegistry;
+import com.SaintAlfonzo.creativedelight.cooking.RemainderBuffer;
+import com.SaintAlfonzo.creativedelight.cooking.RemainderBufferHolder;
+import com.SaintAlfonzo.creativedelight.cooking.RemainderSlot;
+import com.SaintAlfonzo.creativedelight.oven.OvenBlockEntity;
+import com.SaintAlfonzo.creativedelight.oven.OvenRegistry;
 
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;

@@ -1071,7 +1071,7 @@ warning (an unknown structure type, or a set naming a missing structure, would f
 `MetaSlots` would let an anchored meta take group slots of its own). A definition with an error is left out on its
 own. The applier also warns when no anchor of a meta is in its group, and when one anchor's metas share more than 100%.
 
-**How one is built** (patcherMod [MetaStructure](../development/patcherMod/src/main/java/com/SaintAlfonzo/creativeengineering/worldgen/MetaStructure.java),
+**How one is built** (patcherMod [MetaStructure](../development/creativeCommon/src/main/java/com/SaintAlfonzo/creativecommon/worldgen/MetaStructure.java),
 structure type `creativeengineering:meta`):
 1. **Anchor:** the structure whose slot this is (`MetaSlots`), generated at the start chunk exactly as alone. Without a
    slot behind it (`/place structure creativeengineering:meta/...`) the anchor is drawn by its weight in the group.
@@ -1080,7 +1080,7 @@ structure type `creativeengineering:meta`):
    accept it, within 7 chunks of the start chunk, `margin` blocks clear (x/z) of every piece already placed, and
    `spacing` from the other copies. (Before 2026-10-11 evening a part didn't check its own biome rules.)
 3. **Feature parts:** spots spread evenly over the distance ring, over water at least `water_depth` deep, clear of the
-   structures placed before ([MetaFeaturePiece](../development/patcherMod/src/main/java/com/SaintAlfonzo/creativeengineering/worldgen/MetaFeaturePiece.java)).
+   structures placed before ([MetaFeaturePiece](../development/creativeCommon/src/main/java/com/SaintAlfonzo/creativecommon/worldgen/MetaFeaturePiece.java)).
    The flotilla's placed feature is [meta/flotilla_driftwood](../kubejs/data/creativeengineering/worldgen/placed_feature/meta/flotilla_driftwood.json).
 4. **Not enough:** a part that places fewer than its minimum count fails the meta, and the slot is the plain anchor.
 
@@ -1233,9 +1233,9 @@ volcanic biomes, basalt cliffs, stony spires, stony shore); mushroom fields.
   through the biome tag, so another datapack adding a biome to it widens the fit.
 - **How:** `structure_overrides.js` validates the fits (any error applies none, as for the biome rules) and stages
   `{fits, structures}` to patcherMod
-  [StructureBiomeFits](../development/patcherMod/src/main/java/com/SaintAlfonzo/creativeengineering/worldgen/StructureBiomeFits.java).
+  [StructureBiomeFits](../development/creativeCommon/src/main/java/com/SaintAlfonzo/creativecommon/worldgen/StructureBiomeFits.java).
   At ServerAboutToStart (before the biome rules), each structure's fit tags are joined into one biome list, and
-  [StructureBiomesMixin](../development/patcherMod/src/main/java/com/SaintAlfonzo/creativeengineering/mixin/StructureBiomesMixin.java)
+  [StructureBiomesMixin](../development/creativeCommon/src/main/java/com/SaintAlfonzo/creativecommon/mixin/StructureBiomesMixin.java)
   makes `Structure#biomes()` return it.
   - That one method is what every consumer reads: generation's biome check, `/locate` and explorer maps, the
     StructureCheck, meta structure parts and the water rule.
@@ -1523,7 +1523,7 @@ inside them, ruins most often**. To be measured on the scratch server (ST-145) b
 
 Standalone sets (underground dungeons, mineshafts, strongholds, Nether and End) take no part.
 
-**How it works** (patcherMod [PlacementPriority](../development/patcherMod/src/main/java/com/SaintAlfonzo/creativeengineering/worldgen/PlacementPriority.java),
+**How it works** (patcherMod [PlacementPriority](../development/creativeCommon/src/main/java/com/SaintAlfonzo/creativecommon/worldgen/PlacementPriority.java),
 `ChunkGeneratorPlacementPriorityMixin`):
 1. When a ranked start is generated (after its biome rules, earth fill and surface check; only if it keeps its
    frequency roll), every set with a higher-ranked member is looked at: its grid slots whose start could reach this
@@ -1608,6 +1608,11 @@ of them act on new chunks only.
    work, and rebuilds every pool whose order changed (logged as "put in canonical order"). Switch: CEConfig
    `[worldgen.pools] canonicalOrder` (default true). The order is no longer vanilla's, so a seed's villages differ
    from a vanilla game's (they already did) but repeat on every start.
+   **Weight bug from the sort, fixed 2026-11-02 (`rates-and-groups #9`, plan_worldgen_edit.md B1).** The sort
+   renumbered duplicate pieces (`#2`, `#3`) while `pool_config.json` kept `current` under the old keys, so 223
+   duplicates in 27 pools played another piece's weight. Data reset to the originals (the 9 vinery / beautify edits
+   kept); `PoolTuner.mergeCurrent` now lets an unedited entry follow the live weight when its stored `original`
+   differs, and keeps an edited one with a warning in `pool_tag_report.md`.
 2. **Cloud Storage and Domestication Innovation houses dropped on reload (05_phase_5.md 3.2).** Their pieces hold
    the builtin `ProcessorLists` holder, which the world's registry codec refuses: saving logs "Element ...
    minecraft:empty is not valid in current registry set" and writes the piece as `{}`. **Fix:** at ServerAboutToStart,
@@ -1775,7 +1780,7 @@ pyramid replacement share) and the fortified metas (anchors weight 400, camps / 
 Sim: `node tools/structure_tuning_sim.js --test-overrides[=FILE]`; RhinoRun arg `testoverrides`.
 `build_deploy.py` ships the file and warns when a staged toml has `testOverrides = true` or `structureDensity` != 1.
 
-**Fortified metas (#6).** `[worldgen.locate] searchTimeoutSeconds` 120 -> 300 (CEConfig default and instance toml,
+**Fortified metas (#6).** `[worldgen.locate] searchTimeoutSeconds` 120 -> 300 on 2026-10-30, back to 120 on 2026-11-02 (user, `locate #5`: SQ-WG30-C05 answered in 1 to 5 s) (CEConfig default and instance toml,
 marked tuned in its comment; searches are non-blocking, a long one only holds a locator thread). Shares
 `meta/fortified_ruins` and `meta/fortified_camps` 0.20 -> 0.25 each (`tuned` in `meta_structures.json`; D1 now 25 / 25
 / 40, 10% plain). With the strip: fortified ruins 1 per ~340 -> 182 chunks, camps ~337 -> 185 (estimates). A 300 s
@@ -1933,6 +1938,14 @@ after pruning (satellite dropped, anchor cancels the meta).
   `under 9 water` lines end `-> kept`; `(predicted)` lines appear with placement priority on, and `/celocate` census
   counts EARTH_FILL and PRIORITY rejects as before (no mixin error at boot). SQ-EF-11.
 
+- [ ] **ST-328 Earth fill on the placed blocks [scratch]:** under `log = "ALL"`, kept starts have no column more than
+  `beardReach` over air or water, no flooded base, no foreign template earth (ground match), ponds and `wet_ok` stilts keep
+  their water, the logged counts match the world, cancelled and pruned pieces are absent. SQ-EFB-00 to SQ-EFB-16
+  (`/zq under` probe). TODO `structures/earthfill #18`.
+  Scratch r1103w 2026-11-03 (first run, [judged](../perf/runs/r1103w/w/judged_w1.md)): FAIL SQ-EFB-02, -03, -04, -11,
+  -21 (overhangs logged as 0 over air; a villages-size limit question), PASS -00, -01, -05, -09, -12, -17 to -20, -22;
+  OPEN -06, -07, -14; batch faults -08, -10, -15; -13 client look; -16, -19 (W2), -22 (W3 half) not run.
+
 ### 3.30 Terrain batch 4, beard footprint, ocean geode floor (added 2026-10-30, TODO `structures/terrain #1`, `#2`, `#6`)
 
 Status: BUILT 2026-10-30, patcherMod installed 2026-10-30 17:06; BROKEN: scratch r1031 (2026-10-31) SQ-TER-01 FAILED (ancient_crypt sunk start refused), SQ-TER-05 PASSED; SQ-TER-02 to -04, -06 not run. FIXED 2026-11-01: the crypt is off `sunk_start` (`structures/earthfill #17`), `/reload`; rerun SQ-TER-01b. New chunks only.
@@ -2000,6 +2013,33 @@ Tests:
   own block with the crystals showing only in the opening; `CUT`: flush with the floor, rim in the floor's block;
   prismarine geodes untouched in both.
 
+### 3.33 Earth fill: water depth 2, sandstone and terracotta bases (added 2026-11-02, TODO `structures/earthfill #19`)
+
+BUILT 2026-11-02 (patcherMod 1.1.07 build/libs 00:42, not in `mods/`; EarthFillTest +8 checks, not run yet). New chunks only.
+
+**Water depth (user: "lower the water depth required for cancelled to 2, not 6").** Earth over water counted toward
+`maxOverWater` only where the water ran deeper than the beard's reach (`beardReach` 6, `buryReach` 10), because the beard
+fills shallower water. Now water has its own reach, `[worldgen.earth_fill] waterReach` (default 2, never past the beard's
+reach): earth over water 3 or more deep counts. Air keeps `beardReach`. Pruning counts the same way (`pruneMaxHanging` 8
+counts water past 2), so a village drops a house on a deep fill before the whole start is judged. Expect more cancels and
+prunes at rivers, lakes and coasts (SQ-EFB-19 measures it against a `waterReach = 6` world).
+
+**Desert and badlands bases.** Only `earth_fill/earth` blocks (dirt, sand, gravel, clay, path) are counted, so a structure on
+a sandstone or terracotta floor showed little earth and the water and air limits saw little of it. `tools/earth_base_scan.py`
+(bottom 3 layers of every rigid template): T&T badlands village 0 % earth (red sandstone 56 %, terracotta 14 %), wooded
+badlands village 0 % (terracotta 37 %), badlands outpost 0 %, Philip's badlands dungeon 0 %, vanilla desert village 24 %
+(sandstone 54 %), fortified desert village 43 %, T&T desert outpost 49 %, desert village temple 22 %, Philip's desert ruins 42 %.
+New pair like `stone_base`: block tag `creativeengineering:earth_fill/sand_base` (`#forge:sandstone`, `#minecraft:terracotta`,
+Philip's sand stone brick, red sand stone brick, sandstone tiles) counts for the structures in the structure tag of the same
+name (`worldgen/earth_fill.js`, those 9). Their size class rises with the counted floor, so their air and mound limits grow
+with it. Left out: Better Desert Temples and the desert mimic (buried / underground); the desert pyramid is a legacy piece,
+judged by its footprint (3.28). Code: `EarthFill.withBases` (earth tags plus either base tag, cached per earth list).
+
+- [ ] **ST-329 Water depth 2 [scratch]:** kept starts have no water deeper than 2 under their earth; more over-water cancels and
+  prunes than with `waterReach = 6`, villages lost near rivers reported. SQ-EFB-17 to -19.
+- [ ] **ST-330 Desert bases counted [scratch]:** desert and badlands structures in `sand_base` log their sandstone / terracotta
+  floor as earth, houses over water or cliffs are pruned, dry-desert counts within 10 % of before. SQ-EFB-20 to -22.
+
 ### 3.31 Meta batch: sky clusters, caravans, meteorite strikes, temples with ruins (added 2026-10-30)
 
 Thirteen metas (rows in the 3.16 table), all data except one new part field; five more the same evening (meteor
@@ -2063,6 +2103,16 @@ runs. Metas keep `"spawn_overrides": {}`: the meta's own would cover every piece
 in `struck_monument`, `witch_coven` and `witch_cart_caravan` put guardians across the meteorite's 144-block piece box and
 witches and cats on the wagons; removed). Before that date a boxed part also lost its own overrides of other categories
 (the witch hut's cats).
+
+**Monument rooms after a reload (fixed 2026-11-02, `structures/contents #8`).** Vanilla saves an ocean monument as
+its building piece only; the rooms (and the three elder guardians, two in the wing rooms and one in the penthouse) are
+rebuilt from the seed whenever a start is read back from disk (`OceanMonumentStructure.regeneratePiecesAfterLoad`),
+but only for a start whose structure is the monument. A `meta/struck_monument` start saved before all its chunks were
+decorated (a `/locate`, a server stop, chunks unloading mid-generation) came back with the outer walls only: no rooms,
+no elder guardians. patcherMod `StructureStartMetaMonumentMixin` (`StructureStart.loadStaticStart` RETURN) calls
+`MetaStructure.repairMonumentsAfterLoad`, which rebuilds a roomless monument part the vanilla way from the chunk it was
+generated at and swaps it in when box and facing match (else one warning per start). Lone monuments were never
+affected; guardian respawns (SQ-META31-09) were not either.
 
 **Meteor shower biomes.** The meta's own `biomes` is the fit biome tag `#creativeengineering:land/desert` (sand deserts;
 filled at load by `structure_overrides.js`), so a meteorite slot outside a desert stays a plain meteorite.
@@ -2167,13 +2217,57 @@ attempt). Box mobs count toward the monster cap and despawn like any monster. 6%
 Omen). Takes a Pillage's own illagers (archer, legioner, skirmisher) are not in any pool. Structures already generated
 keep their spawners.
 
+**Box spawn height** (added 2026-11-02, TODO `structures/contents #6`; patcherMod `StructureSpawnBoxes.boxHeight`,
+`NaturalSpawnerBoxHeightMixin` at the return of `NaturalSpawner#getRandomPosWithin`). Vanilla starts each spawn attempt
+at a random height from the world bottom (y -64) to the column top, so over a 22-high Mysticrift tower about 1 attempt
+in 8 lands in the tower's height range and fewer than 1 in 20 on one of its floors; the rest fall in the ground and
+caves under it, where the biome's monsters spawn. In a column a box of that category covers (the piece boxes over the
+column for `piece`, the box around all pieces for `full`, a meta's box parts as in 3.31), half the attempts now start
+at a random height between the box's bottom and the column top. The other half, every unboxed column and every
+category without a box keep vanilla's height. Caps (no budget of their own, owner 2026-11-02), light and placement
+rules, the 24-block player distance and the box lookup are unchanged: the attempt only starts where the box mobs can
+stand. Applies to every box, the vanilla outpost included (`towers`).
+
+**Probe: `/cespawnbox [pos] [category]`** (added 2026-11-02, op level 2; default: the executor's block, `monster`).
+Prints and logs one `[spawn-boxes]` line: the box that answers a natural spawn there (`box <id> of <structure>`, inside
+a meta `box <meta box> (part box <part's box>) of <meta>, part <part>`, or `spawn_overrides` of a meta part) with its
+pool as `type weight (min-max)`, or `no box (structures referenced here: ...) -> vanilla [...]` with the list vanilla
+would use (a structure's own `spawn_overrides`, else the biome's). It asks the same lookup the spawner does, so a row can
+check the box resolution without waiting on random spawns. Code: `StructureSpawnBoxes.lookup` / `probe`.
+
+**Pre-scratch findings (2026-11-02, `mobs/pillagers #6`, `structures/contents #6`).** Static check of
+`spawn_boxes.json` against the tags: every siege, camp, ship and witch structure resolves to the box in the table above,
+no overlap (no `first wins` warning in the r1031 or r1101 logs; 67 structures boxed); inside `meta/pillager_tower_siege`
+the anchor tower (`towers`), the camps (`camps`) and the weapons (`vehicles`) all take the meta's `large_tower` pool in
+`inMeta`. Code reading finds no path that hands a part its own pool while the meta has a box. The r1101 SQ-SB-04 counts
+(2 pillagers, 3 vindicators, no evoker by the anchor of the meta at chunk [-24, 2], whose parts were the T&T forest
+tower at -375 91 44, a C.C.C. camp at -333 101 36 and a catapult at -375 72 20) are unlikely under `large_tower` (about
+2% for 3 dark-spawned picks with no evoker, illusioner or witch) but come from one 240 s window with qa within 24 blocks
+of the camp, and the SQ-SB-03 lone birch tower spawned no illager while zombies did. Not settled; the next run probes
+first (`/cespawnbox` inside each part) and counts mobs only after that, with patrols off and the area cleared. Spawn
+facts that thin box mobs: the spawner picks a height from the world bottom to the column top, so most attempts over a
+tower land below it in caves (biome mobs); every box monster but the pillager needs block light 0, so lit tower
+interiors only spawn pillagers; box mobs share the monster cap with cave mobs; nothing spawns within 24 blocks of a
+player. Owner 2026-11-02: no cap change and no budget outside the cap;
+make the attempts reach the box instead.
+
+**Cause found (2026-11-02, `structures/contents #6`).** Not the box lookup and not the spawn rules: the birch tower
+(`birch_pillager_tower_new`, 15 x 22 x 15, `full` box, base y 81 at [-2016, 6672]) has standing room on most of its levels
+(ground yard 92 spots, floors at +4..+6, +10, the balcony at +14 with 95, the roof at +20/+21), dark except 2 lanterns
+at +7 (pillagers need block light 8 or less there, the others 0); `PatrollingMonster.checkPatrollingMonsterSpawnRules`
+(1.19.2 bytecode: block light > 8 refuses, then `checkAnyLightMonsterSpawnRules`) passes on every floor away from the
+lanterns. What starves it is the attempt height: y uniform over -64..103 gives about 1 in 20 of the tower-column
+attempts a floor level, and with the monster cap full of cave mobs only freed slots spawn anything, shared by about
+289 chunks: a few hundred spawns in 300 s, of which the tower's 1-2 chunks win well under 1 on a floor. Template
+pillagers (8 in the NBT) despawn at random beyond 32 blocks (qa stood 31-45 off). Fix: box spawn height (above).
+
 **Tests** (scratch queue SQ-SB; r1031 2026-10-31 ran SB-01 to -03, SB-04 to -08 not run):
 - **ST-320 Spawners gone:** *r1031 (SQ-SB-02): the log shows the spawners removed from the catapult, the Mysticrift oak and End towers and the Blocky Siege ship; the row's check was wrong, fixed row not rerun.* new world; `/ceplace` a catapult, a Mysticrift oak tower, the Blocky Siege ship and the End
   tower -> no spawner where the templates had them; `[spawner-filter]` lines for each; `removeSpawners = []` brings
   them back in new chunks.
 - **ST-321 Boxes load:** *PASS r1031 (2026-10-31, SQ-SB-01, -01b).* boot log `[spawn-boxes] 15 box(es)`, then `N structure(s) boxed` on the first spawn check, no
   `is in box ... and in box` warning.
-- **ST-322 Large tower mix:** *FAIL r1031 (2026-10-31, SQ-SB-03), cause not settled: no illager at a lone birch tower by night or day while zombies and a creeper spawned; monster cap or player distance suspected.* a Mysticrift tower at night on Normal -> pillagers, vindicators, evokers, illusioners,
+- **ST-322 Large tower mix:** *FAIL r1031 (2026-10-31, SQ-SB-03): no illager at a lone birch tower by night or day while zombies and a creeper spawned. Cause: attempt heights from the world bottom (see Cause found); box spawn height built 2026-11-02, rerun SQ-PSM-03.* a Mysticrift tower at night on Normal -> pillagers, vindicators, evokers, illusioners,
   witches; no ravager, no zombie inside the box. By day only pillagers.
 - **ST-323 Box inside a meta:** `/locate` a `meta/pillager_tower_siege`; by the anchor tower and by a siege weapon ->
   both spawn the large-tower mix (no ravagers); a lone T&T tower spawns the camp mix.
@@ -2184,6 +2278,24 @@ keep their spawners.
 - **ST-326 Unwrecked crew:** an Unwrecked ship with the pillager layout spawns the boat mix on deck; a villager-crew
   ship spawns biome mobs.
 - **ST-327 Witch boxes:** a witch wagon and a Terralith underground witch hut at night -> witches only.
+
+### 3.34 Quark spiral spires: no base over the void (added 2026-11-02, TODO `structures/contents #5`)
+
+Quark's Spiral Spires (End outer islands past 1050 blocks, `[world.spiral_spires]` rarity 200, radius 15) are a
+`MultiChunkFeatureGenerator`, not a structure: every chunk within the radius of a source rolls a column, walks down
+from y 256 to the first end stone and builds a spike there (`SpiralSpireGenerator.makeSpike`, decompiled 3.4-418).
+Quark only checks that the spike's own column is clear of other blocks; it never looks at the ground around it, so at
+an island edge the base (a disc of radius 7 at the surface, plus up to 5 layers below where the centre is solid)
+hangs over the void. Quark has no config switch for it.
+
+patcherMod `QuarkSpiralSpireFootprintMixin` (`makeSpike` HEAD) cancels a spike when any block under its base disc
+(i * i + j * j <= 49, one block below the surface) is air. The disc radius is 7 for every height and composition
+Quark rolls, so the check draws no random and the other spikes of the cluster are unchanged; only spikes on solid
+ground remain. No toggle. Test: ST-335.
+
+- [ ] **ST-335 Spires on solid ground [scratch]:** End, fly the outer islands past 1050 blocks until a spire cluster
+  (myalite crystal spirals on dusky myalite spikes); look under every spike from the side → each base sits on end
+  stone all round, none hangs over the void; spikes still generate inland (a cluster has several).
 
 ## 4. Limits and decisions
 
@@ -2275,17 +2387,17 @@ keep their spawners.
 - Applier: [structure_overrides.js](../kubejs/server_scripts/worldgen/structure_overrides.js) (`resolveTags`, `validatePlacement`, `memberSettings`, `plan`, `buildReport`, the `highPriorityData` handler at the end)
 - Groups tool: [tools/gen_structure_groups.py](../tools/gen_structure_groups.py) (`GROUP_SPECS` = the starting groups, `fit_group`, `sync`, `migrate`, `write_estimates`)
 - Scanner: [tools/gen_structure_config.py](../tools/gen_structure_config.py) (`VANILLA_STRUCTURE_SETS`, `CODE_REGISTERED_SETS`, `CODE_BLOCKS`, `scan_meta_structures`)
-- patcherMod: [worldgen/StructureFrequencies.java](../development/patcherMod/src/main/java/com/SaintAlfonzo/creativeengineering/worldgen/StructureFrequencies.java) + mixins [ChunkGeneratorStructureFrequencyMixin](../development/patcherMod/src/main/java/com/SaintAlfonzo/creativeengineering/mixin/ChunkGeneratorStructureFrequencyMixin.java), [StructureCheckFrequencyMixin](../development/patcherMod/src/main/java/com/SaintAlfonzo/creativeengineering/mixin/StructureCheckFrequencyMixin.java); [worldgen/PoolTuner.java](../development/patcherMod/src/main/java/com/SaintAlfonzo/creativeengineering/worldgen/PoolTuner.java), [LootContainerSwaps.java](../development/patcherMod/src/main/java/com/SaintAlfonzo/creativeengineering/worldgen/LootContainerSwaps.java), [WorldgenFiles.java](../development/patcherMod/src/main/java/com/SaintAlfonzo/creativeengineering/worldgen/WorldgenFiles.java) (report writer; KubeJS blocks java.io); mixins [StructureTemplateLootSwapMixin](../development/patcherMod/src/main/java/com/SaintAlfonzo/creativeengineering/mixin/StructureTemplateLootSwapMixin.java), [KubeJSVirtualDataPackListMixin](../development/patcherMod/src/main/java/com/SaintAlfonzo/creativeengineering/mixin/KubeJSVirtualDataPackListMixin.java), [ChunkGeneratorLocateMixin](../development/patcherMod/src/main/java/com/SaintAlfonzo/creativeengineering/mixin/ChunkGeneratorLocateMixin.java) + [DeadPlacementFilter.java](../development/patcherMod/src/main/java/com/SaintAlfonzo/creativeengineering/worldgen/DeadPlacementFilter.java)
-- Earth fill: [worldgen/EarthFill.java](../development/patcherMod/src/main/java/com/SaintAlfonzo/creativeengineering/worldgen/EarthFill.java) (`countEarth`, `beardOf`, `sizeOf`, `earthLimitsFor`, `count`, `pieceEarth`, `localEarth`, `pieceWater`, `localWater`, `predicted`, `topIsWater`, `waterLimitsFor`, `filter`) + mixin [ChunkGeneratorEarthFillMixin](../development/patcherMod/src/main/java/com/SaintAlfonzo/creativeengineering/mixin/ChunkGeneratorEarthFillMixin.java), knobs `CEConfig.EarthFill`, earth tag in [blocktags.js](../kubejs/server_scripts/tags/blocktags.js), exempt structures [worldgen/earth_fill.js](../kubejs/server_scripts/worldgen/earth_fill.js); water structures and ponds [worldgen/water_fill.js](../kubejs/server_scripts/worldgen/water_fill.js), knobs `CEConfig.WaterFill`; tests `EarthFillTest` and the calibration [tools/earth_fill_sim.sh](../tools/earth_fill_sim.sh) (`EarthFillSim`; `beard` mode measures the beard reach)
+- patcherMod: [worldgen/StructureFrequencies.java](../development/creativeCommon/src/main/java/com/SaintAlfonzo/creativecommon/worldgen/StructureFrequencies.java) + mixins [ChunkGeneratorStructureFrequencyMixin](../development/creativeCommon/src/main/java/com/SaintAlfonzo/creativecommon/mixin/ChunkGeneratorStructureFrequencyMixin.java), [StructureCheckFrequencyMixin](../development/creativeCommon/src/main/java/com/SaintAlfonzo/creativecommon/mixin/StructureCheckFrequencyMixin.java); [worldgen/PoolTuner.java](../development/creativeCommon/src/main/java/com/SaintAlfonzo/creativecommon/worldgen/PoolTuner.java), [LootContainerSwaps.java](../development/creativeCommon/src/main/java/com/SaintAlfonzo/creativecommon/worldgen/LootContainerSwaps.java), [WorldgenFiles.java](../development/creativeCommon/src/main/java/com/SaintAlfonzo/creativecommon/worldgen/WorldgenFiles.java) (report writer; KubeJS blocks java.io); mixins [StructureTemplateLootSwapMixin](../development/creativeCommon/src/main/java/com/SaintAlfonzo/creativecommon/mixin/StructureTemplateLootSwapMixin.java), [KubeJSVirtualDataPackListMixin](../development/creativeCommon/src/main/java/com/SaintAlfonzo/creativecommon/mixin/KubeJSVirtualDataPackListMixin.java), [ChunkGeneratorLocateMixin](../development/creativeCommon/src/main/java/com/SaintAlfonzo/creativecommon/mixin/ChunkGeneratorLocateMixin.java) + [DeadPlacementFilter.java](../development/creativeCommon/src/main/java/com/SaintAlfonzo/creativecommon/worldgen/DeadPlacementFilter.java)
+- Earth fill: [worldgen/EarthFill.java](../development/creativeCommon/src/main/java/com/SaintAlfonzo/creativecommon/worldgen/EarthFill.java) (`countEarth`, `beardOf`, `sizeOf`, `earthLimitsFor`, `count`, `pieceEarth`, `localEarth`, `pieceWater`, `localWater`, `predicted`, `topIsWater`, `waterLimitsFor`, `filter`) + mixin [ChunkGeneratorEarthFillMixin](../development/creativeCommon/src/main/java/com/SaintAlfonzo/creativecommon/mixin/ChunkGeneratorEarthFillMixin.java), knobs `CEConfig.EarthFill`, earth tag in [blocktags.js](../kubejs/server_scripts/tags/blocktags.js), exempt structures [worldgen/earth_fill.js](../kubejs/server_scripts/worldgen/earth_fill.js); water structures and ponds [worldgen/water_fill.js](../kubejs/server_scripts/worldgen/water_fill.js), knobs `CEConfig.WaterFill`; tests `EarthFillTest` and the calibration [tools/earth_fill_sim.sh](../tools/earth_fill_sim.sh) (`EarthFillSim`; `beard` mode measures the beard reach)
 - Terrain adaptation candidates: [tools/terrain_adaptation_scan.py](../tools/terrain_adaptation_scan.py) → [terrain_adaptation_scan.md](terrain_adaptation_scan.md) + `kubejs/generation_scripts/worldgen/terrain_adaptation_scan.json` (cache `tools/.cache/terrain_scan.json`; `/cegen run terrain_adaptation_scan`)
-- Terrain adaptation + template trim: [worldgen/TerrainAdaptation.java](../development/patcherMod/src/main/java/com/SaintAlfonzo/creativeengineering/worldgen/TerrainAdaptation.java) (`Mode`, `rebuild`, `override`, `rigid`, `softBox`, `SoftBox`, `beard`, `field`, `addSoft`), [worldgen/TemplateTrim.java](../development/patcherMod/src/main/java/com/SaintAlfonzo/creativeengineering/worldgen/TemplateTrim.java) (`kind`, `columns`, `trim`, `apply`), mixins [StructureTerrainAdaptationMixin](../development/patcherMod/src/main/java/com/SaintAlfonzo/creativeengineering/mixin/StructureTerrainAdaptationMixin.java), [BeardifierSoftMixin](../development/patcherMod/src/main/java/com/SaintAlfonzo/creativeengineering/mixin/BeardifierSoftMixin.java) and the trim call in [StructureTemplateGroundMatchMixin](../development/patcherMod/src/main/java/com/SaintAlfonzo/creativeengineering/mixin/StructureTemplateGroundMatchMixin.java); knobs `CEConfig.TerrainAdaptation`; structure tags [worldgen/terrain_adaptation.js](../kubejs/server_scripts/worldgen/terrain_adaptation.js), block tags `template_trim/*` in [blocktags.js](../kubejs/server_scripts/tags/blocktags.js); test `TerrainAdaptationTest`
+- Terrain adaptation + template trim: [worldgen/TerrainAdaptation.java](../development/creativeCommon/src/main/java/com/SaintAlfonzo/creativecommon/worldgen/TerrainAdaptation.java) (`Mode`, `rebuild`, `override`, `rigid`, `softBox`, `SoftBox`, `beard`, `field`, `addSoft`), [worldgen/TemplateTrim.java](../development/creativeCommon/src/main/java/com/SaintAlfonzo/creativecommon/worldgen/TemplateTrim.java) (`kind`, `columns`, `trim`, `apply`), mixins [StructureTerrainAdaptationMixin](../development/creativeCommon/src/main/java/com/SaintAlfonzo/creativecommon/mixin/StructureTerrainAdaptationMixin.java), [BeardifierSoftMixin](../development/creativeCommon/src/main/java/com/SaintAlfonzo/creativecommon/mixin/BeardifierSoftMixin.java) and the trim call in [StructureTemplateGroundMatchMixin](../development/creativeCommon/src/main/java/com/SaintAlfonzo/creativecommon/mixin/StructureTemplateGroundMatchMixin.java); knobs `CEConfig.TerrainAdaptation`; structure tags [worldgen/terrain_adaptation.js](../kubejs/server_scripts/worldgen/terrain_adaptation.js), block tags `template_trim/*` in [blocktags.js](../kubejs/server_scripts/tags/blocktags.js); test `TerrainAdaptationTest`
 - Banks and driftwood: tags `monobank/vault_houses` / `monobank/vault_streets` in [pool_tags.json](../kubejs/generation_scripts/worldgen/pool_tags.json); [driftwood placed features](../kubejs/data/upgrade_aquatic/worldgen/placed_feature/) and [land driftwood](../kubejs/data/creativeengineering/worldgen/placed_feature/driftwood_land/) with their [biome modifiers](../kubejs/data/creativeengineering/forge/biome_modifier/)
-- Meta structures: [meta_structures.json](../kubejs/generation_scripts/worldgen/meta_structures.json); [worldgen/MetaStructure.java](../development/patcherMod/src/main/java/com/SaintAlfonzo/creativeengineering/worldgen/MetaStructure.java) (`Part`, `strict`, `findGenerationPoint`, `placeStructures`, `placeFeatures`, `generate`, `Layout`, `Index`, `structureAt`, `structureOf`, `afterPlace`), [worldgen/MetaFeaturePiece.java](../development/patcherMod/src/main/java/com/SaintAlfonzo/creativeengineering/worldgen/MetaFeaturePiece.java), the anchor roll in `StructureFrequencies#anchorChosen`, part lookups in `TemplateTrim#apply`, `GroundMatch#apply`, `TerrainAdaptation#rigid`; applier: `metaSupport`, `metaProblems`, the `## Meta structures` report section and the `ServerEvents.tags` handler in [structure_overrides.js](../kubejs/server_scripts/worldgen/structure_overrides.js); placed feature [meta/flotilla_driftwood](../kubejs/data/creativeengineering/worldgen/placed_feature/meta/flotilla_driftwood.json); test `MetaTest`
-- Biome fits: [biome_fits.json](../kubejs/generation_scripts/worldgen/biome_fits.json) + the `tower`/`tower/*` tags in `structure_tags.json`; [worldgen/StructureBiomeFits.java](../development/patcherMod/src/main/java/com/SaintAlfonzo/creativeengineering/worldgen/StructureBiomeFits.java) (`stage`, `activate`, `fitEntry`, `resolve`, `biomesFor`, `FitBiomes`) + mixin [StructureBiomesMixin](../development/patcherMod/src/main/java/com/SaintAlfonzo/creativeengineering/mixin/StructureBiomesMixin.java); applier: `planBiomeFits`, `fitChain`, `fitStage`, the `## Biome fits` report section and both `ServerEvents.tags` handlers in [structure_overrides.js](../kubejs/server_scripts/worldgen/structure_overrides.js); estimates: `Pack.apply_biome_fits` and `fit_rates` (`--fit-rates`) in [tools/gen_structure_groups.py](../tools/gen_structure_groups.py); test `FitTest`
+- Meta structures: [meta_structures.json](../kubejs/generation_scripts/worldgen/meta_structures.json); [worldgen/MetaStructure.java](../development/creativeCommon/src/main/java/com/SaintAlfonzo/creativecommon/worldgen/MetaStructure.java) (`Part`, `strict`, `findGenerationPoint`, `placeStructures`, `placeFeatures`, `generate`, `Layout`, `Index`, `structureAt`, `structureOf`, `afterPlace`), [worldgen/MetaFeaturePiece.java](../development/creativeCommon/src/main/java/com/SaintAlfonzo/creativecommon/worldgen/MetaFeaturePiece.java), the anchor roll in `StructureFrequencies#anchorChosen`, part lookups in `TemplateTrim#apply`, `GroundMatch#apply`, `TerrainAdaptation#rigid`; applier: `metaSupport`, `metaProblems`, the `## Meta structures` report section and the `ServerEvents.tags` handler in [structure_overrides.js](../kubejs/server_scripts/worldgen/structure_overrides.js); placed feature [meta/flotilla_driftwood](../kubejs/data/creativeengineering/worldgen/placed_feature/meta/flotilla_driftwood.json); test `MetaTest`
+- Biome fits: [biome_fits.json](../kubejs/generation_scripts/worldgen/biome_fits.json) + the `tower`/`tower/*` tags in `structure_tags.json`; [worldgen/StructureBiomeFits.java](../development/creativeCommon/src/main/java/com/SaintAlfonzo/creativecommon/worldgen/StructureBiomeFits.java) (`stage`, `activate`, `fitEntry`, `resolve`, `biomesFor`, `FitBiomes`) + mixin [StructureBiomesMixin](../development/creativeCommon/src/main/java/com/SaintAlfonzo/creativecommon/mixin/StructureBiomesMixin.java); applier: `planBiomeFits`, `fitChain`, `fitStage`, the `## Biome fits` report section and both `ServerEvents.tags` handlers in [structure_overrides.js](../kubejs/server_scripts/worldgen/structure_overrides.js); estimates: `Pack.apply_biome_fits` and `fit_rates` (`--fit-rates`) in [tools/gen_structure_groups.py](../tools/gen_structure_groups.py); test `FitTest`
 - Dead explorer maps: [loot/06_dead_maps.js](../kubejs/server_scripts/loot/06_dead_maps.js)
-- Worldgen config: `CEConfig.Worldgen` (+ `WorldgenSystems`, `WorldgenDebug`, `PoolTuning`, `BiomeSolver`, `GroundMatch`, `MassPlace`), read through [worldgen/WorldgenConfig.java](../development/patcherMod/src/main/java/com/SaintAlfonzo/creativeengineering/worldgen/WorldgenConfig.java); density in `scalePlacement` in [structure_overrides.js](../kubejs/server_scripts/worldgen/structure_overrides.js)
-- `/ceplace`: [worldgen/MassPlacer.java](../development/patcherMod/src/main/java/com/SaintAlfonzo/creativeengineering/worldgen/MassPlacer.java) (`select`, `rowsFor`, `templateRows`, `signLines`, `verticalShift`, `placeStructure`, `placeTemplate`)
-- Ground matching: [worldgen/GroundMatch.java](../development/patcherMod/src/main/java/com/SaintAlfonzo/creativeengineering/worldgen/GroundMatch.java) (`sample`, `palette`, `rewrite`, `apply`), mixins [StructureTemplateGroundMatchMixin](../development/patcherMod/src/main/java/com/SaintAlfonzo/creativeengineering/mixin/StructureTemplateGroundMatchMixin.java) + [StructureStartGroundMatchMixin](../development/patcherMod/src/main/java/com/SaintAlfonzo/creativeengineering/mixin/StructureStartGroundMatchMixin.java), knobs `CEConfig.GroundMatch`, block tags at the end of [blocktags.js](../kubejs/server_scripts/tags/blocktags.js), exempt structures [worldgen/ground_match.js](../kubejs/server_scripts/worldgen/ground_match.js)
+- Worldgen config: `CEConfig.Worldgen` (+ `WorldgenSystems`, `WorldgenDebug`, `PoolTuning`, `BiomeSolver`, `GroundMatch`, `MassPlace`), read through [worldgen/WorldgenConfig.java](../development/creativeCommon/src/main/java/com/SaintAlfonzo/creativecommon/worldgen/WorldgenConfig.java); density in `scalePlacement` in [structure_overrides.js](../kubejs/server_scripts/worldgen/structure_overrides.js)
+- `/ceplace`: [worldgen/MassPlacer.java](../development/creativeCommon/src/main/java/com/SaintAlfonzo/creativecommon/worldgen/MassPlacer.java) (`select`, `rowsFor`, `templateRows`, `signLines`, `verticalShift`, `placeStructure`, `placeTemplate`)
+- Ground matching: [worldgen/GroundMatch.java](../development/creativeCommon/src/main/java/com/SaintAlfonzo/creativecommon/worldgen/GroundMatch.java) (`sample`, `palette`, `rewrite`, `apply`), mixins [StructureTemplateGroundMatchMixin](../development/creativeCommon/src/main/java/com/SaintAlfonzo/creativecommon/mixin/StructureTemplateGroundMatchMixin.java) + [StructureStartGroundMatchMixin](../development/creativeCommon/src/main/java/com/SaintAlfonzo/creativecommon/mixin/StructureStartGroundMatchMixin.java), knobs `CEConfig.GroundMatch`, block tags at the end of [blocktags.js](../kubejs/server_scripts/tags/blocktags.js), exempt structures [worldgen/ground_match.js](../kubejs/server_scripts/worldgen/ground_match.js)
 - Worldgen tool tests: [tools/test_worldgen_tools.sh](../tools/test_worldgen_tools.sh) ([tools/worldgen_test/](../tools/worldgen_test/): `GroundMatchTest`, `MassPlacerTest`; [tools/structure_density_check.js](../tools/structure_density_check.js)); the Java test classpath shared with `test_structure_groups.sh` is [tools/java_test_cp.sh](../tools/java_test_cp.sh)
 - Dump commands: `/dumpstructuregen` [dump_structuregen.js](../kubejs/server_scripts/_lib/dump_structuregen.js) → `kubejs/exported/worldgen/structuregen.json`; `/dumpstructures` [structure_dump.js](../kubejs/server_scripts/_lib/structure_dump.js) (names only)
 - Offline tools: [tools/structure_tuning_sim.js](../tools/structure_tuning_sim.js), [tools/test_structure_groups.sh](../tools/test_structure_groups.sh) (+ [tools/structure_groups_test/](../tools/structure_groups_test/)), [tools/check_structure_live.py](../tools/check_structure_live.py), [tools/audit_loot_containers.py](../tools/audit_loot_containers.py)
@@ -2413,10 +2525,7 @@ built and in the payload, not fully tested. Fixes from the rest of the 8.0 run g
   BUILT 2026-10-30: `tuned` field + `--strip-weights`, weights stripped, frequencies kept (3.27).
 
 **Structure contents**
-- **Move to the Nether** (marked 2026-10-12, not built): Philip's soul dungeons (lost soul dungeon, lost soul city),
-  rare ruin and blackstone Nether ruin, tag `plan/move_to_nether`. They spawn as now until then, and the Nether block
-  swaps leave them untouched. Philip's lost soul city is underground (`type/underground`); the Nether pass in the
-  grouping Todo above is the natural place.
+- **Move to the Nether**: BUILT 2026-11-02, see Done (`structures/contents #1`).
 - advanced periph structures are disabled by config, disable warning/remove structure directly 
 - ~~swap river tree to oak log, remove river log/wood~~ (done 2026-10-22, [recipes_wood.md](recipes_wood.md) 2.6), swap driftwood craft to oak planks, remove driftwood/logs
 
@@ -2449,6 +2558,31 @@ built and in the payload, not fully tested. Fixes from the rest of the 8.0 run g
 - increase minimum distance for jungle temples. if it makes sense to split every surface dungeon out by biome to have finer control, do this
 
 ### Done
+
+**2026-11-02: Philip's four Nether-built structures moved to the Nether** (`structures/contents #1`, data only; brief
+[structures_contents.md](briefs/structures_contents.md) #1; ST-294, ST-295). Biome fits `nether/soul` (soul sand valley:
+lost soul dungeon, lost soul city), `nether/forest` (crimson and warped forests: rare ruin) and `nether/wastes` (Nether
+wastes, basalt deltas: blackstone Nether ruin), all `inherit: false`, in `biome_fits.json` with same-named structure
+tags. Out of `type/ruin`, `type/underground`, `dungeon/underground_modded`, `land/any/deep`, `land/jungle`,
+`land/swamp` and `meta/large_ruins` (the ruin metas lose one anchor: level-three ruins, ancient towers and the forgotten
+church remain); into `type/nether_constructed`. Lost soul dungeon, rare ruin and blackstone ruin joined
+`group/nether_ruins` (out of `ruins` and Philip's `underground_structures` set); the lost soul city keeps its own set
+(spacing 37, separation 30). Rates by hand after the sync (its fit to their Overworld rates gave weights 148 and 214):
+dungeon and blackstone ruin weight 100, frequency 0.5993 like Philip's other Nether ruins (about 1 per 36 to 39
+chunks in their biomes), rare ruin weight 6, frequency 0.3759 (1 per 181); the four old members went from 1 per 34 to
+1 per 38 chunks (obelisk 28 to 30). Start heights in `kubejs/data/philipsruins/worldgen/structure/` (jar copies,
+only the height changed): rare ruin and blackstone ruin `absolute -95` on `WORLD_SURFACE_WG` (y 33 above the lava
+sea, Philip's own Nether convention), lost soul dungeon fixed y 12, lost soul city fixed y 5 (31 tall, to y 36; if
+lava floods it, ST-294 says move it to y 33). Wither skeleton spawn overrides kept. `plan/move_to_nether` removed:
+swap file unchanged (1407), `nether_swaps.md` lists no exempt structure. Existing worlds keep the Overworld copies
+already generated.
+
+- [ ] **ST-294 Soul builds in the Nether [scratch]:** new world; in the Nether `/locate structure` each of
+  `philipsruins:lost_soul_city`, `lost_soul_dungeon`, `rare_ruin`, `start_nether_ruin` → found, in its fit's biomes
+  (soul sand valley; crimson or warped forest; wastes or deltas), at y 5 / 12 / 33 / 33 (F3), not flooded by lava;
+  in the Overworld `/locate` finds none of the four.
+- [ ] **ST-295 Ruin metas without the rare ruin [scratch]:** Overworld `/locate structure
+  creativeengineering:meta/ruin_cluster` → found, anchored on a level-three ruin, ancient towers or forgotten church.
 
 **2026-10-14: 7.4, new structure mods + `vehicles` group + fortified-town shares 0.20 / 0.20 / 0.40** (patcherMod
 1.0.6 rebuilt in `build/libs` 01:28, not in `mods/`; offline checks pass; ST-170 to ST-190 next, on a scratch
@@ -2521,7 +2655,7 @@ In order, first match wins:
 | every Overworld structure | soul campfire left | campfire (2) |
 | every Overworld structure | potted crimson/warped fungus and roots | potted dead bush (4) |
 
-Exempt from every rule: `plan/move_to_nether` (Todo). A template a Nether or End structure can also place is never
+Exempt from every rule: none since 2026-11-02 (the four `plan/move_to_nether` structures moved to the Nether, 7 Done). A template a Nether or End structure can also place is never
 swapped (none was hit). The Unwrecked Ships **Nether ship** is disabled (`enabled: false`): it is the only crimson/warped
 ship; Overworld ships never take those pieces (the pool walk overcounted them, their jigsaw names don't match, so the
 nether_blocks_scan report lists crimson/warped for `unwrecked_ships:ship` wrongly). Read for "ancient crypt and lv2
@@ -3114,6 +3248,8 @@ Briefs: [briefs/structures_earthfill.md](briefs/structures_earthfill.md), [brief
 
 ## 8. In-game test suite
 
+- **r1102b 2026-11-02** (scratch server; verdicts in `perf/runs/r1102b/` HANDOVER.md and the slice judged.md): PASS SQ-DW-01, -02, -03; rerun pending (batch fault) SQ-LE-06.
+
 ### 8.0 Scratch-server run order, easiest to hardest (2026-10-12)
 
 Every pending structure-generation test, ST- (below) and LO- ([locate.md](locate.md) 7), in the order to run them:
@@ -3127,7 +3263,7 @@ passed before; ST-77 is superseded by ST-93.
 **8.0.0 Setup** (no tests):
 - Scratch dedicated server as in the scratch-server recipe (Trash `CreEngServer` libraries, instance `kubejs/` and
   `config/` copied, mods symlinked minus client-only rows), but with
-  `development/patcherMod/build/libs/creativeengineering-1.0.6.jar` instead of the older jar in `mods/`.
+  `development/creativeCommon/build/libs/creativecommon-1.0.6.jar` instead of the older jar in `mods/`.
 - `server.properties`: `level-seed=8675309`, `max-tick-time=-1`, a new `level-name` per world below.
 - Toml: `[worldgen.meta_structures] log = true`, `[worldgen.placement_priority] log = true`; everything else at
   the defaults.
@@ -3520,7 +3656,7 @@ estimates, the harsh/ordinary ratio in ST-185 skipped). Every correctness part s
   not in the tag (a YUNG's witch hut, a castle) -> its earth count and size are as before (stone not counted).
 
 **Terrain adaptation and template trim** (2026-10-09, 3.15). Install the jar first (`./gradlew installToMods` in
-`development/patcherMod` with the game closed), rejoin, and fly well away from explored land.
+`development/creativeCommon` with the game closed), rejoin, and fly well away from explored land.
 - [x] **ST-61 Loads clean:** no mixin error for `StructureTerrainAdaptationMixin` or `BeardifierSoftMixin` (the game would not start); `latest.log` has `[terrain-adaptation] world load: 97 structures tagged, modes {NONE=6, SOFT=91}, 95 trimmed` and no `answers terrainAdaptation itself` or `... wins` warning; no KubeJS error for `worldgen/terrain_adaptation.js`; the toml has `[worldgen.terrain_adaptation] skirtBump = 0` and `systems.terrainAdaptation` / `systems.templateTrim`. *2026-10-13 scratch phase 1 (seed 8675309, 1.0.6 build jar): PASSED: terrain-adaptation line exact (97, NONE=6 SOFT=91, 95 trimmed), no mixin/KubeJS errors, skirtBump = 0 and both systems keys.*
 - [ ] **ST-62 Ballista:** `L illager_siege_weapons:ballista` (or another siege weapon) until one generates on a slope. No flat square around it and no notch in the hill; the ground under and around it is the natural slope; it stands on its own slabs (one end may hang a block or two over a steep slope: that is `none`).
 - [ ] **ST-63 Soft house on a slope:** `L villager_butcher_house:butcher_house` (or the circus tent, a pillager tower) in hilly new terrain. The ground is level under the building and blends into the hill within about 4 blocks, following the walls with rounded corners; no square grass pad; the yard is natural ground.
@@ -3620,6 +3756,7 @@ estimates, the harsh/ordinary ratio in ST-185 skipped). Every correctness part s
 
 ## 9. History
 
+- **2026-11-02 late: worldgen edit plan steps 3 to 5 ([plan_worldgen_edit.md](plan_worldgen_edit.md)).** Meta part flag `punch` (3.16): an AE2 meteorite part gets crater type NONE plus a `MetaPunchPiece` shaft up through the pieces placed before; the struck desert pyramid uses it at distance [0, 4] (`metas #12`). Free-standing `ae2:meteorite` starts: 40 % surface, 30 % underground, 30 % 16 to 96 blocks up, moved ones without a crater (`AeMeteoriteHeightMixin`, `MeteoriteHeights`; metas keep the surface). Meta `meta/waystone_ruins` (share 0.2 on small ruins) with part `creativeengineering:waystone_ruin_part` (no structure set). Shares: camp ruin metas 0.25 [0.15], great tower siege 0.30 [0.50], meteor shower 0.33 [0.50]. Spawn box `end_tower`; probes: the lone birch tower and every siege part already resolve to the right box (`contents #6`, `pillagers #6`). This code moved to Creative Worldgen in the wave 5 carve the same evening. Tests SQ-WGE-09 to -15.
 - **2026-10-19:** the 3.23 fixes went out in pack 1.0.7 (DEPLOYED 2026-10-18 19:43; [plan_1.0.7.md](plan_1.0.7.md) SF):
   status lines updated. Nothing in this area changed for 1.0.8. ST-191 to ST-198 still pending.
 - **2026-10-18: six bugs from the scratch run fixed in source (3.23), for patcherMod 1.0.7, not built.** User: "tackle

@@ -88,7 +88,7 @@ Every class here is Worldgen unless noted. Internal references between worldgen 
 | DisplayDelightDishes | 75 | CD | dish list and linking | none | none |
 | DragonBreathingJEI | 176 | Engineering | JEI page for the dragon breathing fan recipe; only Engineering data | `fan.DragonBreathingRecipe`, `fan.DragonBreathingRecipeType` (Engineering) | @JeiPlugin |
 | DrinkFluidEffects | 101 | Common | shared API (2.4) | none | @Mod.EventBusSubscriber(CLIENT); @SubscribeEvent (recipe sync) |
-| DyeableCannedGolem | 38 | CD | Canned Goods golem dye (cans) | none | none (CannedGolemColorMixin) |
+| DyeableCannedGolem (removed 2026-11-02: replaced by `CannedGolemDye` in the Canned Goods member, [cans.md](../cans.md) 9) | 38 | CD | Canned Goods golem dye (cans) | none | none (CannedGolemColorMixin) |
 | FtbTooltipStacks | 50 | Common | FTB tooltip stack for AppleSkin (2.4) | `mixin.FtbTooltipListAccessor` (sweep B) | none |
 | IECompat | 148 | Engineering | IE arc recycling of springs, hammer_no_rotate blacklist (serves CD cutting boards through a tag) | none | ServerAboutToStartEvent @SubscribeEvent; called from CreativeEngineering.commonSetup |
 | ImmersivePostsMaterials | 60 | Engineering ? | Immersive Posts material cut (IE addon, block-state count); could be Compat or Common perf | none | none (three ImmersivePosts mixins) |

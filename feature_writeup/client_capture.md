@@ -5,7 +5,7 @@
 | Part | Status |
 |---|---|
 | Design (this file) | DESIGNED 2026-10-24, nothing built |
-| Driver mod `development/clientCapture` (mod id `cecapture`, dev-only, never in `mods/`) | not started |
+| Driver mod `development/creativeDevtools/members/capture` (mod id `cecapture`, dev-only, nested in Creative Devtools since 2026-11-01) | not started |
 | Runner `tools/client_capture/run_captures.py` | not started |
 | Cropper `tools/client_capture/crop.py` | not started |
 | Spec files `feature_writeup/testing/capture_specs/*.json` | not started |
@@ -305,7 +305,7 @@ golden egg odds), sound, anything that needs a real player's survival play over 
 
 | Path | What |
 |---|---|
-| `development/clientCapture/` | Driver mod: `CaptureDriver` (state machine), `Steps`, `Capture` (framebuffer + sidecar), `StageScreen`, mixins `ScreenModifierMixin`, `MouseHandlerMixin` |
+| `development/creativeDevtools/members/capture/` | Driver mod: `CaptureDriver` (state machine), `Steps`, `Capture` (framebuffer + sidecar), `StageScreen`, mixins `ScreenModifierMixin`, `MouseHandlerMixin` |
 | `tools/client_capture/run_captures.py` | Runner |
 | `tools/client_capture/crop.py` | Cropper, manifest, `index.md` |
 | `tools/client_capture/crop_regions.json` | Named HUD regions in GUI coords |

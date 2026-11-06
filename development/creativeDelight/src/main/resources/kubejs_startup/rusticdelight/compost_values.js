@@ -4,7 +4,7 @@
 // chance, put the row in a hand-written compost.js in this folder and rerun (the generator skips items listed
 // there; that file loads after this one, so its row wins meanwhile).
 // Moved from the pack's startup_scripts/compost/compost_values.js 2026-10-25, rows unchanged.
-// Compost values for rusticdelight: 18 items. Row: [i.<item_dict key>, chance]; chance 0-1 or a tier name from
+// Compost values for rusticdelight: 37 items. Row: [i.<item_dict key>, chance]; chance 0-1 or a tier name from
 // creativeengineering/compost_rules.js; 0 = not compostable. A row beats the rules; the exclusions there beat a
 // row. Engine: global.compost (patcherMod's func/compost.js). Startup script in the CD jar: CD rebuild + restart.
 
@@ -13,20 +13,42 @@
 	var C = global.compost
 
 	C.values('seeds', [
-		[i.bell_pepper_seeds, 0.3],
-		[i.coffee_beans,      0.65],
-		[i.cotton_seeds,      0.3],
+		[i.bell_pepper_seeds,      0.3],
+		[i.coffee_beans,           0.65],
+		[i.cotton_seeds,           0.3],
+		[i.dark_bell_pepper_seeds, 0.3],
+		[i.pale_bell_pepper_seeds, 0.3],
+	])
+
+	C.values('flowers', [
+		[i.wild_dark_bell_peppers, 0.65],
+		[i.wild_pale_bell_peppers, 0.65],
 	])
 
 	C.values('crops', [
-		[i.bell_pepper_green,  0.65],
-		[i.bell_pepper_red,    0.65],
-		[i.bell_pepper_yellow, 0.65],
-		[i.cotton_boll,        0.5],
-		[i.potato_slices,      0.5],
-		[i.wild_bell_peppers,  0.65],
-		[i.wild_coffee,        0.65],
-		[i.wild_cotton,        0.65],
+		[i.bell_pepper_black,        0.65],
+		[i.bell_pepper_blue,         0.65],
+		[i.bell_pepper_green,        0.65],
+		[i.bell_pepper_orange,       0.65],
+		[i.bell_pepper_pink,         0.65],
+		[i.bell_pepper_purple,       0.65],
+		[i.bell_pepper_red,          0.65],
+		[i.bell_pepper_slice_black,  0.3],
+		[i.bell_pepper_slice_blue,   0.3],
+		[i.bell_pepper_slice_green,  0.3],
+		[i.bell_pepper_slice_orange, 0.3],
+		[i.bell_pepper_slice_pink,   0.3],
+		[i.bell_pepper_slice_purple, 0.3],
+		[i.bell_pepper_slice_red,    0.3],
+		[i.bell_pepper_slice_white,  0.3],
+		[i.bell_pepper_slice_yellow, 0.3],
+		[i.bell_pepper_white,        0.65],
+		[i.bell_pepper_yellow,       0.65],
+		[i.cotton_boll,              0.5],
+		[i.potato_slices,            0.5],
+		[i.wild_bell_peppers,        0.65],
+		[i.wild_coffee,              0.65],
+		[i.wild_cotton,              0.65],
 	])
 
 	C.values('crates', [

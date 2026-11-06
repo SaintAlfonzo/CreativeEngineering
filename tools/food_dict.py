@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Food dict (global.food, alias f): lint, coverage and reverse index for kubejs/startup_scripts/_lib/food_dict.js.
+"""Food dict (global.food, alias f): lint, coverage and reverse index for development/creativeCommon/src/main/resources/kubejs_startup/creativecommon/_lib/food_dict.js.
 
 The food dict is a mask over the general dict (creative_delight.md 13): one line per food, `f.<key> = i.<general key>;`,
 key `<category>[_<form>][_<state>]_<name>` from the lists in _lib/food_grammar.js. The file is kept by hand; this tool
@@ -28,11 +28,12 @@ from collections import OrderedDict, defaultdict
 from pathlib import Path
 
 sys.path.insert(0, str(Path(__file__).resolve().parent))
+import pack_paths as P  # noqa: E402
 import food_catalog as fc  # noqa: E402  (item_dict parsing)
 import food_families as ff  # noqa: E402  (family per food)
 
 INSTANCE = Path(__file__).resolve().parent.parent
-LIB = INSTANCE / 'kubejs/startup_scripts/_lib'
+LIB = P.STARTUP_LIB
 GRAMMAR = LIB / 'food_grammar.js'
 DICT = LIB / 'food_dict.js'
 INDEX = INSTANCE / 'kubejs/generation_scripts/food/food_dict_index.json'
@@ -71,7 +72,6 @@ INGREDIENTS = {
     'brewinandchewin:scarlet_cheese_wheel': 'dairy_wheel_scarlet_cheese',
     'brewinandchewin:unripe_scarlet_cheese_wheel': 'dairy_wheel_unripe_scarlet_cheese',
     'minecraft:milk_bucket': 'dairy_milk_bucket', 'farmersdelight:milk_bottle': 'dairy_milk_bottle',
-    'miners_delight:milk_cup': 'dairy_milk_cup',
     # salt, sugar, spice
     'salt:salt': 'spice_salt', 'vintagedelight:salt_dust': 'spice_salt_dust', 'vintagedelight:salt': 'spice_salt_vintagedelight',
     'minecraft:sugar': 'spice_sugar', 'creativeengineering:powdered_sugar': 'spice_powdered_sugar',
@@ -138,7 +138,7 @@ FAMILY_KEY = {
     'pie/whole': ('pie', ''), 'pie/slice': ('pie', 'slice'), 'pie/small': ('pie', ''),
     'cake/whole': ('cake', ''), 'cake/slice': ('cake', 'slice'), 'cake/muffin': ('cake', ''), 'dessert/brownie': ('cake', ''),
     'cookie': ('cookie', ''),
-    'dessert/waffle': ('pastry', ''), 'dessert/roll': ('pastry', ''), 'dessert/pastry': ('pastry', ''),
+    'dessert/waffle': ('pastry', ''), 'dessert/roll': ('pastry', ''), 'dessert/pastry': ('pastry', ''), 'dessert/pancake': ('pastry', ''),
     'candy/bar': ('candy', ''), 'candy/piece': ('candy', ''), 'candy/coated': ('candy', ''), 'candy/marshmallow': ('candy', ''),
     'sandwich/square': ('sandwich', 'square'), 'sandwich/roll': ('sandwich', 'roll'), 'sandwich/burger': ('sandwich', 'burger'),
     'sandwich/wrap': ('sandwich', 'wrap'), 'sandwich/toast': ('sandwich', 'toast'),
@@ -148,7 +148,7 @@ FAMILY_KEY = {
     'soup/soup': ('soup', ''), 'soup/stew': ('soup', ''),
     'meal/rice': ('dish', ''), 'meal/pasta': ('dish', ''), 'meal/fried': ('dish', ''), 'meal/plate': ('dish', ''),
     'feast/whole': ('feast', ''), 'feast/serving': ('feast', 'serving'),
-    'drink/juice': ('drink', 'juice'), 'drink/tea': ('drink', ''), 'drink/coffee': ('drink', ''), 'drink/milk': ('drink', ''),
+    'drink/juice': ('fruit', 'juice'), 'drink/tea': ('drink', ''), 'drink/coffee': ('drink', ''), 'drink/milk': ('drink', ''),
     'drink/soda': ('drink', ''), 'drink/other': ('drink', ''),
     'alcohol/wine': ('alcohol', ''), 'alcohol/brew': ('alcohol', ''), 'alcohol/spirit': ('alcohol', ''),
     'alcohol/mixed': ('alcohol', ''),
@@ -174,7 +174,7 @@ NUT_WORDS = ('acorn', 'peanut', 'walnut', 'almond', 'pecan', 'hazelnut', 'chestn
 CATEGORY_WORDS = {
     'mushroom': ('mushroom',), 'cake': ('cake',), 'pie': ('pie',), 'cookie': ('cookie', 'cookies'), 'soup': ('soup',),
     'salad': ('salad',), 'sandwich': ('sandwich',), 'ice_cream': ('ice', 'cream'), 'golden': ('golden', 'enchanted'),
-    'can': ('canned',), 'feast': ('block', 'feast'), 'dough': ('dough',), 'meat': ('meat',), 'sauce': ('sauce',), 'egg': ('egg', 'eggs'), 'fruit': ('jam', 'jelly'),
+    'can': ('canned',), 'feast': ('block', 'feast'), 'dough': ('dough',), 'meat': ('meat',), 'sauce': ('sauce',), 'egg': ('egg', 'eggs'), 'fruit': ('jam', 'jelly', 'juice'),
     'drink': ('juice',),
 }
 CONTAINER_WORDS = ('bowl', 'of', 'plate', 'glass', 'mug', 'bottle', 'serving', 'raw')
@@ -241,10 +241,12 @@ def excluded_ids(key_val):
     body = removed[removed.index('global.removedItems'):]
     body = body[:body.index(']')]
     out |= {key_val.get(k) for k in re.findall(r'i\.(\w+)', body)}
-    # merge pairs: the pack's list, and Creative Delight's food lists (<mod>/item_merges.js, item_merges.md 1.1)
-    cd = INSTANCE / 'development/creativeDelight/src/main/resources/kubejs_startup'
-    for p in [LIB / 'item_merges.js', *sorted(cd.glob('*/item_merges.js'))]:
-        out |= {key_val.get(k) for k in re.findall(r'\[\s*i\.(\w+)\s*,\s*i\.\w+\s*\]', p.read_text())}
+    # merge pairs: the pack's list (dict keys), and Creative Delight's swap lists (ids; item_merges.md 1.1, 6)
+    p = LIB / 'item_merges.js'
+    out |= {key_val.get(k) for k in re.findall(r'\[\s*i\.(\w+)\s*,\s*i\.\w+\s*\]', p.read_text())}
+    swaps = INSTANCE / 'development/creativeDelight/src/main/resources/data/creativedelight/swaps'
+    for f in sorted(swaps.glob('merges_*.json')):
+        out |= {old for olds in json.loads(f.read_text()).get('merges', {}).values() for old in olds}
     return out - {None}
 
 

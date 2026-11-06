@@ -1,0 +1,5 @@
+glowing_calamari_crate_side, glowing_calamari_crate_top: PLACEHOLDER art (2026-11-01). Rustic Delight 1.7.0's
+calamari_crate_side / _top with the calamari's blue shades mapped by brightness onto the pack's glowing_calamari item
+colours (kubejs/assets/creativeengineering/textures/item/glowing_calamari.png); the wood is upstream's, unchanged.
+Rustic Delight is All Rights Reserved on the Forge versions' mods.toml; the owner gave MIT for its Forge files
+(rustic_delight.md). Get the upstream licence file confirmed before a release ships these, or replace with own art.

@@ -13,7 +13,7 @@ var WGP_Registry = Java.loadClass('net.minecraft.core.Registry')
 var WGP_RL = Java.loadClass('net.minecraft.resources.ResourceLocation')
 var WGP_DF = Java.loadClass('net.minecraft.world.level.levelgen.DensityFunction')
 var WGP_JsonOps = Java.loadClass('com.mojang.serialization.JsonOps')
-var WGP_Filter = Java.loadClass('com.SaintAlfonzo.creativeengineering.worldgen.DimensionFilter')
+var WGP_Filter = Java.loadClass('com.SaintAlfonzo.creativeworldgen.worldgen.DimensionFilter')
 
 function wgpCheck(name, ok, detail) {
 	console.info('[wgp] ' + (ok ? 'PASS' : 'FAIL') + ' ' + name + ': ' + detail)

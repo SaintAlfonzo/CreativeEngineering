@@ -1,0 +1,45 @@
+// creativeCompat: Creative Compat (mod id creativecompat, feature_writeup/creative_compat.md), carved out of patcherMod on
+// 2026-11-01 (creative_split.md 7.5, 7.6). Shared Forge setup comes from build-logic/src/main/groovy/ce.forge-mod.gradle.
+// This file adds what is specific to Compat, the same way creativeCalendar/build.gradle does:
+//   - the Compat script trees, authored in the pack folder so /reload (server) and F3+T (client) pick them up without a
+//     rebuild, copied into the jar at the same resource path:
+//       kubejs/data/creativecompat/kubejs/    -> data/creativecompat/kubejs/    (server scripts)
+//       kubejs/assets/creativecompat/kubejs/  -> assets/creativecompat/kubejs/  (client scripts)
+//     Startup scripts live in this project (src/main/resources/kubejs_startup/creativecompat/), loaded from the jar by
+//     Creative Common's startup loader.
+// Build: ./gradlew :creativeCompat:build --offline   Install: ./gradlew :creativeCompat:installToMods
+plugins {
+    id 'ce.forge-mod'
+}
+
+dependencies {
+    // Creative Common (creativecommon): a hard dependency (KubeJS, the shared helpers, the startup loader) and the
+    // Common APIs this jar calls (swap/ConfigRename, campfire/CampfireRainInfo, compat/JarContents, surface/LeafPileSlow,
+    // util/BurnBursts, compat/jei/world/WorldRows).
+    compileOnly project(':creativeCommon')
+    // The mods the tweaks target: the pack's jars, shared with Creative Common (git-ignored libs/, SRG-named).
+    compileOnly fileTree(dir: rootProject.file('development/creativeCommon/libs'), include: '*.jar')
+}
+
+def scriptTrees = ['data/creativecompat/kubejs', 'assets/creativecompat/kubejs']
+
+tasks.named('processResources', ProcessResources).configure {
+    scriptTrees.each { tree ->
+        from(rootProject.file("kubejs/${tree}")) {
+            into tree
+            exclude '**/*.md'
+        }
+    }
+}
+
+// The scripts in the jar run only through KubeJS; a missing tree means the pack-folder path moved.
+tasks.named('jar', Jar).configure {
+    doLast {
+        def entries = new java.util.zip.ZipFile(archiveFile.get().asFile).withCloseable { z -> z.entries().collect { it.name } }
+        ['kubejs_startup/creativecompat/', 'data/creativecompat/kubejs/', 'assets/creativecompat/kubejs/'].each { dir ->
+            if (!entries.any { it.startsWith(dir) && it.endsWith('.js') }) {
+                throw new GradleException("creativecompat jar has no scripts under ${dir}")
+            }
+        }
+    }
+}

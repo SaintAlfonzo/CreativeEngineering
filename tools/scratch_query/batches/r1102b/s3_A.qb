@@ -1,0 +1,1361 @@
+# Run r1102b, slice 3 (scope.txt lines 34-66, without the FTW / TIE worldgen-census rows), boot A: superflat world from
+# prep_srv.sh with spawn-animals=true (squid, cow, sheep rows) and the scratch probes of s3_setup.md copied in.
+# Queue rows marked group B in old sections (MRD, FFH-02, STD-02, ABD, FSD-07) need no terrain: they run here.
+# Order: boot-log rows (bootexpect / kjsexpect) first, then data rows (/zq, dumps + tools/scratch_query/dumpq.py), then
+# block and bot rows, then the rows that /reload (SQ-PF-05, SQ-ATC-04, SQ-LGM-10) last. s3_A2.qb is the restart after.
+#
+# Superflat: grass at y -61, air from y -60. Row blocks sit in lane x 100..300 at z 500 (one x per row, listed in the row),
+# the Farmer's template at 200 -60 540; all loaded by the first row's forceloads, with the probe spots: cbetest 400 400,
+# salttest x 300.. z 60 (build top), pottest 290 290..350 310, wetest 96..127 96..127. Bots: perfBot, one name per row.
+# Cooking Pot rows fill the pot with `data merge block` (FD keeps its ItemStackHandler in "Inventory": slots 0-5
+# ingredients, 6 meal, 7 container, 8 output) over a lit campfire. "Break as a survival player" = /zact break.
+pace 2
+
+## SQ-BM-01 | Baby Mobs on a dedicated server: members line, no client class
+bootexpect Done \(
+bootexpect \[creativedelight\] members: \[.*\bbaby_mobs\b
+bootreject (?i)baby ?mobs:.*(error|exception)
+bootreject (?i)(BabyRender|BabyKit|LivingEntityRendererBabyMixin).*(error|exception|crash|not found)
+bootreject (?i)baby_mobs\S*(mixin|class).*(error|exception|invalid dist)
+shell grep -hE "Baby Mobs|baby_mobs|BabyKit|LivingEntityRendererBabyMixin" logs/latest.log logs/debug.log 2>/dev/null | head -20; echo "kjs handler errors: $(grep -c 'Error occurred while handling event' logs/kubejs/server.log)"; true
+# lane and probe chunks for the whole batch (superflat generates fast; 30 s before any block tick)
+> forceload add 96 496 300 560
+> forceload add 400 400
+> forceload add 290 290 350 310
+> forceload add 300 60 400 60
+> forceload add 96 96 127 127
+> gamerule doDaylightCycle false
+> time set noon
+> weather clear 100000
+> difficulty easy
+sleep 30
+look rows/SQ-BM-01.shell.txt: the client mixins (mixin/client/*) are not named as applied; no crash or mixin error naming a client class
+
+## SQ-ROLL-01 | Roll Delight member loads (ROLL-01)
+bootexpect \[creativedelight\] members: \[.*\broll_delight\b
+bootexpect Found new data pack roll_upstream_data
+bootreject (?i)(failed to parse|loot table).*roll_delight
+kjsreject (?i)(error|exception).*roll_delight/
+shell echo "kubejs server.log Error lines: $(grep -c Error logs/kubejs/server.log)"; true
+
+## SQ-LGM-01 | Large Meals member loads (LGM-01)
+bootexpect \[creativedelight\] members: \[.*\blargemeals\b
+bootexpect Found new data pack largemeals_upstream_data
+bootreject Item is not food: largemeals:
+kjsreject (?i)(error|exception).*largemeals
+
+## SQ-BBQ-01 | Barbeque's Delight member loads, no recipe or compost warning
+bootexpect \[creativedelight\] members: \[.*\bbarbequesdelight\b
+bootreject (?i)barbequesdelight.*(exception|failed to parse|missing)
+kjsreject (?i)(warn|error).*(barbequesdelight|bbqSkewering|bbqGrilling|bbqCombine)
+shell grep -hn "barbequesdelight\|bbq" logs/kubejs/server.log logs/kubejs/startup.log | grep -i "warn\|error" | head; true
+
+## SQ-STK-01 | stack sizes applied, no missing dict key
+bootexpect \[stack_sizes\] set 1341 stack sizes
+bootreject no item_dict key
+kjsreject no item_dict key
+
+## SQ-NDM-01 | Nether's Delight member: one mod, mixin applies
+bootexpect \[creativedelight\] members: \[.*\bnethersdelight\b
+bootreject (?i)nethersdelight.*(duplicate|mixin.*(error|fail)|exception)
+bootreject (?i)duplicate mods? .*nethersdelight
+shell ! ls mods | grep -i "^NethersDelight-1.19-3.1"
+shell grep -hE "nethersdelight.ce.mixins|FungusColonyRulesMixin|nethersdelight.*1.19-3.1-ce" logs/latest.log logs/debug.log 2>/dev/null | head -8; true
+look rows/SQ-NDM-01.shell.txt: version 1.19-3.1-ce-19.2-01 and the mixin config listed; the display name "Nether's Delight (Creative Delight)" is a client mod-list check
+
+## SQ-CDFW-01 | CD framework counts at boot
+bootexpect \[cans\] registered \d+ generated cans
+bootexpect \[food types\] \d+ foods in 31 types
+bootexpect \[placeable\]
+bootexpect \[can servings\] 31\d cans
+bootexpect \[mortar\] 6 of 6 catalog crafts
+bootreject (?i)no .* member scripts loaded
+shell grep -hn "\[cans\]\|\[food types\]\|\[placeable\]\|\[can servings\]\|\[mortar\]\|genPut\|genMerge" logs/kubejs/startup.log logs/kubejs/server.log | head -20; true
+look [can servings] is 313 less cans of absent mods (rows/SQ-CDFW-01.shell.txt); a different [cans] count after a later generator run is not a fail by itself
+
+## SQ-VDF-01 | Veggies edits load; the five incomplete items exist
+kjsreject (?i)error.*(veggiesdelight/|moredelight/recipes|pneumaticcraft/recipes|creativeengineering/recipes)
+shell ! grep -n "no incomplete item registered" logs/kubejs/*.log
+
+## SQ-PT-01 | plantable families (log half; the tooltip half is CQ-PT-01)
+bootexpect \[plantable\] seed=\d+, crop=\d+, sapling=\d+, fungi_sapling=\d+, water=\d+, vine=\d+, vertical=\d+
+bootreject \[plantable\] no item_dict key
+> zq itemtag creativeengineering:plantable/seed
+> zq itemtag creativeengineering:plantable/crop
+> zq itemtag creativeengineering:plantable/sapling
+> zq itemtag creativeengineering:plantable/fungi_sapling
+> zq itemtag creativeengineering:plantable/water
+> zq itemtag creativeengineering:plantable/vine
+> zq itemtag creativeengineering:plantable/vertical
+count \[zq\] itemtag creativeengineering:plantable/ == 7
+reject \[zq\] itemtag creativeengineering:plantable/\S+ \(\d+\): .*botania:[a-z_]*(petal|flower|weeds|leaves)
+shell grep -h "\[plantable\]" logs/latest.log | head -3; true
+look counts near seed 49, crop 14, sapling 37, fungi_sapling 23, water 11, vine 23, vertical 5 (plantable.md 2)
+
+## SQ-MG-21 | Cod 'n' Chips merged into Fish and Chips
+> zq makes pneumaticcraft:cod_n_chips
+> zq uses pneumaticcraft:cod_n_chips
+> zq makes veggiesdelight:fish_and_chips
+> pbot spawn mg21 110 -60 506 minecraft:overworld survival
+> give mg21 pneumaticcraft:cod_n_chips 2
+sleep 3
+> clear mg21 veggiesdelight:fish_and_chips 0
+> clear mg21 pneumaticcraft:cod_n_chips 0
+expect makes pneumaticcraft:cod_n_chips: 0
+expect uses pneumaticcraft:cod_n_chips: 0 alone, 0 with
+expect makes veggiesdelight:fish_and_chips: [12]$
+expect creativedelight:\S*cooking/fish_and_chips ->
+reject veggiesdelight:cooking/fish_and_chips
+reject veggiesdelight:compat/moredelight\S*fish_and_chips
+expect Found 2 matching item
+expect No items were found on player mg21
+kjsreject (?i)already merged.*cod_n_chips
+> pbot remove mg21
+
+## SQ-MRD-01 | More Delight knives in the gear dump (queue group B: no terrain needed)
+> dumpgear
+waitlog \[dumpgear\] \d+ armor pieces 300
+shell python3 -I $INST/tools/scratch_query/dumpq.py gear moredelight:wooden_knife attackDamage=1.5 attackSpeed=2 miningSpeed=2 harvestLevel=0 moredelight:stone_knife attackDamage=2.5 attackSpeed=2 miningSpeed=4 harvestLevel=1
+
+## SQ-MRD-02 | toasts flagged fast; Cheese Toast 5 / 0.7
+> dumpfood
+waitlog Dumped \d+ foods 600
+shell python3 -I $INST/tools/scratch_query/dumpq.py food moredelight:toast fast=True moredelight:toast_with_chocolate fast=True moredelight:toast_with_egg fast=True moredelight:toast_with_glow_berries fast=True moredelight:toast_with_honey fast=True moredelight:toast_with_sweet_berries fast=True oceanic_delight:caviar_toast fast=True creativeengineering:cheese_toast fast=True nutrition=5 saturationModifier=0.7
+
+## SQ-FFH-02 | CD.food recipe ids (the 10-26 dump diff half is stale: s3_skip.md)
+kjsreject (?i)(cd_food\.js|global\.CD\.food|CD\.food).*(error|exception)
+bootreject (?i)duplicate recipe.*muffin
+> zq recipes creativedelight:baking/
+> zq recipes _from_culture_
+> zq recipes _by_fdcutting
+> zq recipes _from_glowing_calamari
+> zq recipes cooked_glowing_calamari
+> zq recipes muffin
+expect recipes matching creativedelight:baking/: [1-9]
+count \[zq\] creativedelight:farmersdelightcutting/[a-z_]+_from_culture_\S* -> == 7
+reject \[zq\] \S*culture_\S*_by_fdcutting
+count \[zq\] \S*(smelting|smoking|campfirecooking)/cooked_calamari(_slice)?_from_glowing_calamari(_slice)? -> == 6
+expect recipes matching cooked_glowing_calamari: 0$
+look muffin lines: one farmersdelightcooking/ (Cooking Pot) recipe per muffin
+
+## SQ-ABD-02 | Upgrade Aquatic driftwood salvaging moved to CD ids
+> zq recipes abnormals_delight:upgrade_aquatic/cutting/driftwood_
+> zq rdetail salvaging/driftwood_furniture
+> zq recipes salvaging/
+expect recipes matching abnormals_delight:upgrade_aquatic/cutting/driftwood_: 0$
+expect \[zq\] creativedelight:farmersdelightcutting/salvaging/driftwood_furniture \{
+expect \[zq\] creativedelight:farmersdelightcutting/salvaging/driftwood_chest_boat
+expect \[zq\] creativedelight:farmersdelightcutting/salvaging/driftwood_furnace_boat
+expect \[zq\] creativedelight:farmersdelightcutting/salvaging/crimson_boat
+expect \[zq\] creativedelight:farmersdelightcutting/salvaging/warped_boat
+expect \[zq\] creativedelight:farmersdelightcutting/salvaging/crimson_chest_boat
+expect \[zq\] creativedelight:farmersdelightcutting/salvaging/warped_chest_boat
+count \[zq\] creativedelight:farmersdelightcutting/salvaging/[a-z_]+_furnace_boat -> >= 10
+kjsreject (?i)fdCutting.*(warn|error)
+bootreject (?i)fdCutting.*warn
+look driftwood_furniture rdetail: input lists the 10 driftwood items incl. abnormals_delight:driftwood_cabinet (first 3 + "/+7"), result driftwood planks, axe tool; crimson / warped furnace boats take boatload: boats
+
+## SQ-ABD-03 | Adzuki curry: grid recipe moved, pot recipe kept
+> zq rdetail adzuki_curry
+reject \[zq\] abnormals_delight:neapolitan/adzuki_curry \{
+expect \[zq\] creativedelight:shapeless/adzuki_curry_cooked_manual_only \{
+expect \[zq\] abnormals_delight:neapolitan/cooking/adzuki_curry \{
+look manual_only inputs: roasted adzuki beans, dried banana, #forge:crops/carrot, pumpkin slice, bowl
+
+## SQ-ABD-04 | pickerelweed tag and the two CD cooking recipes
+> zq itemtag creativeengineering:pickerelweed
+> zq rdetail pickerelweed_juice
+> zq rdetail pike_with_beetroot
+expect itemtag creativeengineering:pickerelweed \(2\): .*upgrade_aquatic:blue_pickerelweed
+expect itemtag creativeengineering:pickerelweed \(2\): .*upgrade_aquatic:purple_pickerelweed
+reject \[zq\] abnormals_delight:\S*pickerelweed_juice \{
+reject \[zq\] abnormals_delight:\S*pike_with_beetroot \{
+expect \[zq\] creativedelight:farmersdelightcooking/pickerelweed_juice(_manual_only)? \{.*pickerelweed.*pickerelweed
+expect \[zq\] creativedelight:farmersdelightcooking/pike_with_beetroot \{.*pickerelweed.*pickerelweed
+look 1.0 xp and 200 ticks are not printed by /zq (recipe dump or JEI)
+
+## SQ-ABD-05 | milk bottle <-> bucket recipes moved to CD
+> zq rdetail milk_bottles_from_bucket
+> zq rdetail milk_bucket_from_bottles
+reject \[zq\] neapolitan:milk/milk_bottles_from_bucket
+reject \[zq\] neapolitan:milk/milk_bucket_from_bottles
+expect \[zq\] creativedelight:shapeless/milk_bottles_from_bucket \{.*-> 4 \S*milk_bottle
+expect \[zq\] creativedelight:shapeless/milk_bucket_from_bottles \{.*-> 1 \S*milk_bucket
+
+## SQ-FSD-07 | structure groups: Farmer's sets in group remote, no carp (queue group B: registry only)
+> dumpstructuregen
+waitlog structuregen\.json 300
+shell python3 -I $INST/tools/scratch_query/dumpq.py sset creativeengineering:group/remote +farmers_structures:aquacultures_cod +farmers_structures:cacaos +farmers_structures:fishs_stew +farmers_structures:ratatouilles +farmers_structures:shepherd_farms +farmers_structures:squids -farmers_structures:aquacultures_carp
+shell python3 -I $INST/tools/scratch_query/dumpq.py sset any -farmers_structures:aquacultures_carp
+
+## SQ-CDB-05 | Glowing Calamari recipes (server half; the JEI sprites are client: s3_skip.md)
+> zq makes creativeengineering:glowing_calamari_slice
+> zq makes creativeengineering:glowing_calamari_roll
+> zq uses creativeengineering:glowing_calamari
+> zq uses creativeengineering:glowing_calamari_slice
+expect makes creativeengineering:glowing_calamari_slice: [1-9]
+expect makes creativeengineering:glowing_calamari_roll: [1-9]
+expect (alone|shared) \S*smelting/cooked_calamari_from_glowing_calamari
+expect (alone|shared) \S*smoking/cooked_calamari_from_glowing_calamari
+expect (alone|shared) \S*campfirecooking/cooked_calamari_from_glowing_calamari
+expect (alone|shared) \S*fried_calamari
+
+## SQ-CDB-08 | Pickled Sea Pickle: Pickling Jar recipe, Pickled Pickles merge
+> zq makes creativeengineering:pickled_sea_pickle
+> zq rdetail pickled_sea_pickle
+> pbot spawn cdb8 110 -60 512 minecraft:overworld survival
+> give cdb8 brewinandchewin:pickled_pickles 3
+sleep 3
+> clear cdb8 creativeengineering:pickled_sea_pickle 0
+> clear cdb8 brewinandchewin:pickled_pickles 0
+expect -> 5 \S*pickled_sea_pickle <- .*sea_pickle
+expect Found 3 matching item
+expect No items were found on player cdb8
+> pbot remove cdb8
+look rdetail: Pickling Jar recipe 5 sea pickles + salt -> 5; "Pickled Pickles hidden" is JEI (client)
+
+## SQ-CDB-13 | Bowl of Water has no tags (server half; JEI hiding is client)
+> zq tagsof botania:water_bowl
+expect item tags of botania:water_bowl: ?$
+
+## SQ-CDB-15 | Cake Base, Pie Crust, Cacciatore inputs (Item.of(tag, n) fix; server half of a client row)
+> zq rdetail cake_base
+> zq rdetail pie_crust
+> zq rdetail cacciatore
+look cake base takes 2 chicken eggs, 3 flour, 2 honey bottles (not the first item of a tag only); pie crust has a cornmeal recipe; the cacciatore grid recipe slot holds several cooked chicken cuts (/+N). Crafting it by hand is the client half
+
+## SQ-SSP-02 | Sliced Sweet Potato tags
+> zq tagsof creativeengineering:sliced_sweet_potato
+expect item tags of creativeengineering:sliced_sweet_potato: .*\bforge:sliced_potato\b
+expect item tags of creativeengineering:sliced_sweet_potato: .*\bforge:sliced_potatoes\b
+expect item tags of creativeengineering:sliced_sweet_potato: .*\bforge:vegetables/sweet_potato\b
+expect item tags of creativeengineering:sliced_sweet_potato: .*\bforge:vegetables/potato\b
+expect item tags of creativeengineering:sliced_sweet_potato: .*\bforge:vegetables\b
+expect item tags of creativeengineering:sliced_sweet_potato: .*\bcreativeengineering:food_type/raw/veggie/sliced\b
+
+## SQ-SSP-03 | Sliced Sweet Potato food and compost (JEI half: client)
+> zq food creativeengineering:sliced_sweet_potato
+expect food creativeengineering:sliced_sweet_potato: nutrition 1, modifier 0.3
+> dumpcompost
+waitlog Dumped compost table 300
+shell python3 -I $INST/tools/scratch_query/dumpq.py compost creativeengineering:sliced_sweet_potato=0.5
+
+## SQ-LEM-02 | lemon cutting yields 8 slices
+> zq rdetail lemon_cutting
+> zq rdetail cutting/lemon_slice
+expect \[zq\] fruitsdelight:lemon_cutting \{.*-> 8 \S*lemon_slice
+expect \[zq\] fruitsdelight:cutting/lemon_slice \{.*-> 8 \S*lemon_slice
+look knife recipe also gives 1 Lemon Seeds (second result, not printed by rdetail: recipe dump or JEI)
+
+## SQ-ROLL-02 | chopstick foods and nether roll meat tags
+> zq itemtag creativeengineering:chopstick_foods
+> zq itemtag roll_delight:nether_roll_meat
+expect itemtag creativeengineering:chopstick_foods \(\d+\): .*roll_delight:rice_roll_slice
+expect itemtag creativeengineering:chopstick_foods \(\d+\): .*farmersdelight:salmon_slice
+expect itemtag creativeengineering:chopstick_foods \(\d+\): .*minecraft:pufferfish
+expect itemtag creativeengineering:chopstick_foods \(\d+\): .*minecraft:cooked_cod
+expect itemtag roll_delight:nether_roll_meat \(\d+\): .*minecraft:porkchop
+expect itemtag roll_delight:nether_roll_meat \(\d+\): .*bacon
+expect itemtag roll_delight:nether_roll_meat \(\d+\): .*prepared_flesh
+
+## SQ-ROLL-09 | Unbreaking applies to chopsticks (server half; anvil plank repair is CQ-ROLL-10)
+> pbot spawn rl9 175 -60 506 minecraft:overworld survival
+> pbot hold rl9 roll_delight:chopsticks
+> enchant rl9 minecraft:unbreaking 3
+expect Applied enchantment
+reject (?i)(can't|cannot) (be )?(enchant|apply)|does not support
+> pbot remove rl9
+
+## SQ-LGM-02 | Large Meals registry: 18 items, 3 blocks
+> dumpitemsbymod
+waitlog \[dumpitemsbymod\] wrote 300
+shell python3 -I $INST/tools/scratch_query/dumpq.py mod largemeals 18; python3 -I -c "import json;print(sorted(json.load(open('kubejs/exported/items_by_mod/largemeals.json'))['items']))"
+look rows/SQ-LGM-02.shell.txt: 18 items plus the 3 feast blocks (omurice_block, mushroom_pot_pie_block, roasted_mutton_rack_block)
+
+## SQ-LGM-04 | Sweet Berry Custard stack size (the pot half runs in the block rows)
+> zq item largemeals:sweet_berry_custard
+look max stack against food_stack-sizes (a drink-like custard in a glass bottle: 16 or 32)
+
+## SQ-LGM-06 | mutton rack cooking recipes (the cutting board half runs in the block rows)
+> zq makes largemeals:cooked_mutton_rack
+> zq rdetail cooked_mutton_rack
+expect makes largemeals:cooked_mutton_rack: [3-9]
+expect \{minecraft:smelting\} -> 1 \S*cooked_mutton_rack <- largemeals:raw_mutton_rack
+expect \{minecraft:smoking\} -> 1 \S*cooked_mutton_rack <- largemeals:raw_mutton_rack
+expect \{minecraft:campfire_cooking\} -> 1 \S*cooked_mutton_rack <- largemeals:raw_mutton_rack
+
+## SQ-LGM-09 | egg dishes accept duck, goose, parrot, turtle eggs; not the dragon egg
+> zq uses untitledduckmod:duck_egg
+> zq uses untitledduckmod:goose_egg
+> zq uses quark:egg_parrot_red_blue
+> zq uses minecraft:turtle_egg
+count (alone|shared) \S*tomato_egg_soup >= 4
+count (alone|shared) \S*omurice >= 4
+count (alone|shared) \S*sweet_berry_custard >= 4
+> zq uses minecraft:dragon_egg
+look the minecraft:dragon_egg uses list (last block of lines) has no tomato_egg_soup, omurice or sweet_berry_custard
+
+## SQ-VTD7-01 | Vintage hats, pizzas and cheese wheel stack to 8
+> zq item vintagedelight:red_chefs_hat
+> zq item vintagedelight:cheese_pizza
+> zq item vintagedelight:meat_pizza
+> zq item vintagedelight:cheese_wheel
+count item vintagedelight:(red_chefs_hat|cheese_pizza|meat_pizza|cheese_wheel): .*max stack 8$ == 4
+
+## SQ-VTD7-02 | BlockRunner surface tags for Vintage and salt blocks
+bootexpect BlockRunner tier overlaps checked: \d+ ids, 0 overlap
+> zq blocktag blockrunner:surface/wood
+> zq blocktag blockrunner:surface/natural_smooth
+> zq blocktag blockrunner:surface/constructed_brick
+> zq blocktag blockrunner:surface/constructed_smooth
+> zq blocktag blockrunner:surface/confectionery
+expect blocktag blockrunner:surface/wood \(\d+\): .*vintagedelight:peanut_crate
+expect blocktag blockrunner:surface/natural_smooth \(\d+\): .*vintagedelight:oat_bale
+expect blocktag blockrunner:surface/natural_smooth \(\d+\): .*salt:salt_block
+expect blocktag blockrunner:surface/constructed_brick \(\d+\): .*vintagedelight:salt_bricks
+expect blocktag blockrunner:surface/constructed_smooth \(\d+\): .*vintagedelight:smooth_salt_block
+expect blocktag blockrunner:surface/confectionery \(\d+\): .*vintagedelight:cheese_pizza
+
+## SQ-VDF-02 | Mashed Potatoes / Mashed Sweet Potatoes recipes
+> zq makes moredelight:mashed_potatoes
+> zq makes veggiesdelight:mashed_potatoes
+> zq rdetail mashed_
+reject moredelight:cooking/mashed_potatoes
+reject veggiesdelight:cooking/mashed_potatoes
+reject veggiesdelight:\S*vintagedelight\S*mashed_potatoes
+expect \[zq\] creativedelight:\S*mashed_potatoes_cooked_manual_only \{
+expect \[zq\] creativedelight:\S*mashed_sweet_potatoes_cooked_manual_only \{
+expect \[zq\] creativedelight:\S*farmersdelightcooking/mashed_potatoes\S* \{
+expect \[zq\] creativedelight:\S*farmersdelightcooking/mashed_sweet_potatoes\S* \{
+look which output id is Mashed Potatoes and which Mashed Sweet Potatoes; pot: potato or potato slices x2, milk, bowl / sweet potato or sliced sweet potato x2, milk, bowl; sweet grid recipe: 3 baked sweet potatoes
+
+## SQ-VDF-03 | stuffed bell peppers have no recipe or tag; Veggies bread recipes gone
+> zq makes veggiesdelight:stuffed_bellpeppers_block
+> zq makes veggiesdelight:stuffed_bellpepper
+> zq recipes veggiesdelight:bread_from_
+> zq tagsof veggiesdelight:stuffed_bellpeppers_block
+> zq tagsof veggiesdelight:stuffed_bellpepper
+> zq rdetail bread_from_dough
+expect makes veggiesdelight:stuffed_bellpeppers_block: 0$
+expect makes veggiesdelight:stuffed_bellpepper: 0$
+expect recipes matching veggiesdelight:bread_from_: 0$
+expect item tags of veggiesdelight:stuffed_bellpeppers_block: ?$
+expect item tags of veggiesdelight:stuffed_bellpepper: ?$
+expect \[zq\] creativedelight:\S*bread_from_dough\S* \{.*sweet_potato_dough
+look if the dough slot shows /+N only, sweet potato dough membership: zq itemtag forge:dough in SQ-VDF-04's lines
+
+## SQ-VDF-04 | quiche, vegan pizza, zucchini boat and bowl: manual_only + one assembly each
+> zq rdetail zucchini_quiche
+> zq rdetail vegan_pizza
+> zq rdetail stuffed_zucchini
+> zq itemtag forge:dough
+reject \[zq\] veggiesdelight:zucchini_quiche \{
+reject \[zq\] veggiesdelight:compat/vintagedelight/zucchini_quiche
+reject \[zq\] veggiesdelight:vegan_pizza \{
+count \[zq\] creativedelight:\S*zucchini_quiche_manual_only \{ == 1
+count \[zq\] creativedelight:\S*zucchini_quiche\S*sequenced_assembly \{ == 1
+count \[zq\] creativedelight:\S*vegan_pizza_manual_only \{ == 1
+count \[zq\] creativedelight:\S*vegan_pizza\S*sequenced_assembly \{ == 1
+count \[zq\] creativedelight:\S*stuffed_zucchini_boat\S*sequenced_assembly \{ == 1
+count \[zq\] creativedelight:\S*stuffed_zucchinis\S*sequenced_assembly \{ == 1
+expect itemtag forge:dough \(\d+\): .*veggiesdelight:sweet_potato_dough
+look vegan pizza grid row 2 dough, sauce, dough; its assembly starts on #forge:dough; boat and bowl assemblies start on the roasted zucchini
+
+## SQ-VDF-05 | skewer, vegetarian burger, patty, More Delight burgers
+> zq rdetail turnip_mutton_skewer
+> zq rdetail vegetarian_burger
+> zq makes veggiesdelight:cooked_vegetarian_patty
+> zq uses veggiesdelight:cooked_vegetarian_patty
+reject \[zq\] \S*turnip_mutton_skewer\S* \{minecraft:crafting_shapeless\}
+reject \[zq\] \S*vegetarian_burger\S* \{minecraft:crafting_shapeless\}
+count \[zq\] creativedelight:\S*turnip_mutton_skewer\S*manual_only \{ == 1
+count \[zq\] creativedelight:\S*turnip_mutton_skewer\S*sequenced_assembly \{ == 1
+count \[zq\] creativedelight:\S*vegetarian_burger\S*manual_only \{ == 1
+count \[zq\] creativedelight:\S*vegetarian_burger\S*sequenced_assembly \{ == 1
+expect makes veggiesdelight:cooked_vegetarian_patty: [3-9]
+count \[zq\] creativedelight:\S*(smelting|smoking|campfirecooking)/\S*vegetarian_patty\S* -> == 3
+expect (alone|shared) \S*simple_hamburger
+expect (alone|shared) \S*hamburger_with_egg
+expect (alone|shared) \S*loaded_hamburger
+reject veggiesdelight:compat/moredelight/\S*hamburger
+
+## SQ-VDF-06 | fermented garlic honey in the pickle preserve family
+> zq itemtag creativeengineering:food_family/preserve/pickle
+expect itemtag creativeengineering:food_family/preserve/pickle \(\d+\): .*veggiesdelight:fermented_garlic_honey
+
+## SQ-VDF-07 | Chips gone: no recipes, no tags, no Canned Chips
+> zq makes pneumaticcraft:chips
+> zq uses pneumaticcraft:chips
+> zq recipes creativedelight:cooking/fries
+> zq tagsof pneumaticcraft:chips
+> give @a creativeengineering:canned_chips
+> zq item creativeengineering:canned_chips
+expect makes pneumaticcraft:chips: 0$
+expect uses pneumaticcraft:chips: 0 alone, 0 with
+expect recipes matching creativedelight:cooking/fries: 0$
+expect item tags of pneumaticcraft:chips: ?$
+expect (Unknown item|error: .*canned_chips|item creativeengineering:canned_chips: class AirItem)
+look Chips hidden in JEI is the client half
+
+## SQ-VDF-08 | salting mashed potatoes (both mods)
+> zq itemtag salt:can_be_salted
+> zq uses moredelight:mashed_potatoes
+> zq uses veggiesdelight:mashed_potatoes
+expect itemtag salt:can_be_salted \(\d+\): .*moredelight:mashed_potatoes
+expect itemtag salt:can_be_salted \(\d+\): .*veggiesdelight:mashed_potatoes
+look a salting recipe (salt: or creativedelight: salting id) in both uses lists
+
+## SQ-VDF-09 | canning recipes for the new cans; no Canned Mhadjeb
+> zq makes creativeengineering:canned_mashed_potatoes
+> zq makes creativeengineering:canned_mashed_sweet_potatoes
+> zq makes creativeengineering:canned_bat_soup
+> zq makes creativeengineering:canned_cave_soup
+> zq makes creativeengineering:canned_insect_stew
+> zq makes creativeengineering:canned_golden_nutritional_bar
+> zq item creativeengineering:canned_mhadjeb
+> zq food creativeengineering:canned_noodle_soup
+> zq food creativeengineering:canned_bone_broth
+expect makes creativeengineering:canned_mashed_potatoes: [1-9]
+expect makes creativeengineering:canned_mashed_sweet_potatoes: [1-9]
+expect makes creativeengineering:canned_bat_soup: [2-9]
+expect makes creativeengineering:canned_cave_soup: [2-9]
+expect makes creativeengineering:canned_insect_stew: [2-9]
+expect makes creativeengineering:canned_golden_nutritional_bar: [1-9]
+expect (error: .*canned_mhadjeb|item creativeengineering:canned_mhadjeb: class AirItem)
+look CNS-08: canned noodle soup lists Nourishment, canned bone broth none; the golden bar can recipe uses honey; soups have a _broth recipe
+
+## SQ-VDF-10 | doughs compost at 85 %
+> dumpcompost
+waitlog Dumped compost table 300
+shell python3 -I $INST/tools/scratch_query/dumpq.py compost create:dough=0.85 vintagedelight:oat_dough=0.85 vintagedelight:cucumber_dough=0.85 veggiesdelight:sweet_potato_dough=0.85 farmersdelight:wheat_dough=0.85
+shell python3 -I -c "import json;n=json.load(open('kubejs/exported/compost/compost.json'))['now'];print({k:v for k,v in n.items() if 'noodle' in k and 'cucumber' in k})"
+look cucumber noodles unchanged against the instance dump (kubejs/exported/compost/compost.json)
+
+## SQ-STK-02 | food stack sizes 32 (desserts, sweets)
+> zq item fruitsdelight:pear_with_rock_sugar
+> zq item fruitsdelight:apple_jello
+> zq item fruitsdelight:hamimelon_shaved_ice
+> zq item fruitsdelight:mangosteen_cake
+> zq item berry_good:glowgurt
+> zq item incubation:scrambled_eggs
+> zq item farmersdelight:dog_food
+> zq item veggiesdelight:sweet_potato_pancakes
+count \[zq\] item \S+: .*max stack 32$ == 8
+
+## SQ-STK-03 | drink and cheese wheel stack sizes 32
+> zq item farmersdelight:hot_cocoa
+> zq item farmersdelight:melon_juice
+> zq item farmersrespite:gamblers_tea
+> zq item farmersrespite:strong_hot_cocoa
+> zq item create:builders_tea
+> zq item abnormals_delight:cherry_cream_soda
+> zq item brewinandchewin:flaxen_cheese_wheel
+> zq item brewinandchewin:unripe_scarlet_cheese_wheel
+count \[zq\] item \S+: .*max stack 32$ == 8
+
+## SQ-STK-04 | milk bottles and fish oil 64; brew flask and potion unchanged
+> zq item farmersdelight:milk_bottle
+> zq item neapolitan:milk_bottle
+> zq item alexsmobs:fish_oil
+> zq item botania:brew_flask
+> zq item minecraft:potion
+count \[zq\] item (farmersdelight:milk_bottle|neapolitan:milk_bottle|alexsmobs:fish_oil): .*max stack 64$ == 3
+look brew_flask and potion against the instance's kubejs/exported/stacks/stack_sizes.json (unchanged)
+
+## SQ-RDX-03 | Rustic pancakes recipes (block half runs in the block rows)
+> zq rdetail pancakes_from_pancake
+> zq rdetail pancake_from_pancakes
+> zq rdetail cutting/pancakes
+expect \[zq\] rusticdelight:pancakes_from_pancake \{.*supplementaries:pancake
+expect \[zq\] rusticdelight:pancake_from_pancakes \{.*-> 6 (supplementaries:)?pancake\b
+expect \[zq\] rusticdelight:cutting/pancakes \{.*-> 6 (supplementaries:)?pancake\b
+look pancakes_from_pancake takes 6 Supplementaries pancakes + bowl; the knife cut also returns a bowl (second result)
+
+## SQ-RDX-06 | Maple Glazed Bacon and Maple Cookie
+> zq makes maple_glazed_bacon
+> zq makes maple_cookie
+> zq rdetail maple_glazed_bacon
+> zq rdetail maple_cookie
+count \[zq\] \S+ -> \d+ abnormals_delight:maple_glazed_bacon$ == 1
+look bacon: cooked bacon + syrup + honey bottle; cookie: one Oven recipe, cookie dough + syrup + honey bottle -> 12, no 2-syrup recipe
+
+## SQ-RDX-07 | Supreme Pizza recipes and roasted slice tag (craft half: client)
+> zq makes brewinandchewin:pizza
+> zq rdetail pizza_manual_only
+> zq itemtag creativeengineering:roasted_bell_pepper_slice
+> zq uses minecraft:cooked_cod
+expect \[zq\] creativedelight:\S*pizza_manual_only \{
+expect (alone|shared) \S*pizza\S*sequenced_assembly|\[zq\] \S*pizza\S*sequenced_assembly
+expect itemtag creativeengineering:roasted_bell_pepper_slice \(9\)
+look cooked cod is in the pizza fish slot (food_type/cooked/fish), not the meat slot (food_type/cooked/meat)
+look cooked cod not in the pizza meat slot (no pizza id in the minecraft:cooked_cod uses list)
+
+## SQ-RDX-08 | Glowing Calamari Crate recipes and tags (block half runs in the block rows)
+> zq makes rusticdelight:glowing_calamari_crate
+> zq uses rusticdelight:glowing_calamari_crate
+> zq blocktag forge:storage_blocks/glowing_calamari
+> zq blocktag minecraft:mineable/axe
+expect makes rusticdelight:glowing_calamari_crate: [1-9]
+expect uses rusticdelight:glowing_calamari_crate: [1-9]
+expect blocktag forge:storage_blocks/glowing_calamari \(\d+\): .*rusticdelight:glowing_calamari_crate
+expect blocktag minecraft:mineable/axe \(\d+\): .*rusticdelight:glowing_calamari_crate
+
+## SQ-RDX-09 | Rustic roll assemblies (JEI sprites and the deployer run: client)
+> zq recipes bell_pepper_roll
+> zq recipes cherry_blossom_roll
+> zq recipes calamari_roll
+> zq recipes rice_roll_royale
+count \[zq\] \S*(bell_pepper_roll|cherry_blossom_roll|calamari_roll|glowing_calamari_roll|rice_roll_royale)\S*sequenced_assembly\S* -> >= 13
+expect \[zq\] \S*rice_roll_royale\S*sequenced_assembly\S* ->
+look 13 assemblies (9 bell pepper colours, cherry blossom, calamari, glowing calamari, Royale); green roll 2 per craft; shapeless roll recipes still there
+
+## SQ-RDX-10 | heatless Rustic soups and braised beef
+> zq rdetail bell_pepper_soup_cooked_manual_only
+> zq rdetail calamari_soup_cooked_manual_only
+> zq rdetail coffee_braised_beef_cooked_manual_only
+> zq uses rusticdelight:calamari
+expect \[zq\] creativedelight:shapeless/bell_pepper_soup_cooked_manual_only \{
+expect \[zq\] creativedelight:shapeless/calamari_soup_cooked_manual_only \{
+expect \[zq\] creativedelight:shapeless/coffee_braised_beef_cooked_manual_only \{
+reject (alone|shared) \S*(createmixing|mixing)/\S*calamari_soup
+look inputs as rustic_delight.md 5.10; no basin (mixing) route
+
+## SQ-RDX-11 | Golden Coffee Beans routes
+> zq makes rusticdelight:golden_coffee_beans
+> zq rdetail golden_coffee_beans
+reject \[zq\] rusticdelight:golden_coffee_beans \{
+expect \{create:mixing\} -> \S* ?\S*golden_coffee_beans
+expect \{immersiveengineering:arc_furnace\}
+look grid ring takes any gold nugget around a raw or roasted bean; heated mixer 6 nuggets, Arc Furnace 5
+
+## SQ-RDX-12 | one cutting recipe for Glowing Calamari (board half runs in the block rows)
+> zq makes creativeengineering:glowing_calamari_slice
+> zq rdetail glowing_calamari_slice_from_glowing_calamari
+count \[zq\] creativedelight:\S+ -> 2 creativeengineering:glowing_calamari_slice == 1
+expect \[zq\] creativedelight:farmersdelightcutting/glowing_calamari_slice_from_glowing_calamari
+reject \[zq\] \S*fdcutting\S*glowing_calamari
+
+## SQ-RDX-14 | Vintage pizzas unchanged (incomplete pizza sprite: client)
+> zq rdetail vintagedelight:cheese_pizza
+> zq rdetail vintagedelight:meat_pizza
+> zq item kubejs:incomplete_pizza
+expect item kubejs:incomplete_pizza: class
+look both Vintage pizza grids still dough, sauce, dough
+
+## SQ-NDM-03 | potted mimicarnation and meal_item tags
+> zq blocktag minecraft:flower_pots
+> zq itemtag nethersdelight:meal_item
+expect blocktag minecraft:flower_pots \(\d+\): .*nethersdelight:potted_mimicarnation
+expect itemtag nethersdelight:meal_item \(\d+\): .*farmersdelight:stuffed_potato
+
+## SQ-NDM-07 | Hoglin Mount takes wool or hemp fabric
+> zq rdetail hoglin_mount
+expect \[zq\] nethersdelight:\S*hoglin_mount\S* \{
+look one ingredient slot lists minecraft:white_wool and the hemp fabric (i.hoglin_mount)
+
+## SQ-CDFW-02 | food type, canned source and servings tags unchanged
+> dumptags item
+waitlog \[dumptags\] wrote 600
+shell python3 -I $INST/tools/scratch_query/dumpq.py tagdiff $INST/kubejs/exported creativeengineering:food_type creativeengineering:canned_source creativeengineering:cans/servings
+look sizes equal to the 10-30 instance dump except items of absent mods and the 11-01 additions (test_gen_members.py: 46 tags, 2724 entries offline)
+
+## SQ-CDFW-03 | placeable tags unchanged (tooltips: client)
+shell python3 -I $INST/tools/scratch_query/dumpq.py tagdiff $INST/kubejs/exported creativeengineering:placeable
+look #creativeengineering:placeable, /sneak, _on_plate, _on_small_plate, _on_coaster as in the instance dump (reads SQ-CDFW-02's /dumptags)
+
+## SQ-CDFW-04 | mortar crafts (can servings tooltip: client)
+> zq rdetail creativedelight:shapeless/
+> zq recipes mortar
+look 6 mortar crafts (create wheat, create sugar cane, farmersdelight rice x2, cocoa powder, garlic clove) among the lines; crafting a can and the Servings line are client checks
+
+## SQ-CDFW-05 | baked durian, baked pear, dried persimmon: one recipe per cooker
+> zq makes fruitsdelight:baked_durian
+> zq makes fruitsdelight:baked_pear
+> zq makes fruitsdelight:dried_persimmon
+expect makes fruitsdelight:baked_durian: 3$
+expect makes fruitsdelight:baked_pear: 3$
+expect makes fruitsdelight:dried_persimmon: 3$
+reject \[zq\] fruitsdelight:\S*_(smoking|campfire)\S* ->
+count \[zq\] creativedelight:(smelting|smoking|campfirecooking)/\S+ -> 1 fruitsdelight:(baked_durian|baked_pear|dried_persimmon) == 9
+
+## SQ-CDFW-06 | cooked family: three recipes each, old mod ids gone
+> zq makes grilled_ghast
+> zq makes cooked_rotten_ham
+> zq makes fried_turtle_egg
+> zq makes miners_delight:cooked_arthropod
+> zq makes cooked_duck_fillet
+> zq makes cooked_perch_slice
+> zq makes cooked_pike_slice
+> zq makes roasted_acorn
+> zq makes farmersdelight:fried_egg
+reject \[zq\] hostiledelight:(cghast_|cookrothamrecp|fteggrecp)
+reject \[zq\] miners_delight:cooked_arthropod \S* ->
+reject \[zq\] abnormals_delight:upgrade_aquatic/cooked_\S*_slice
+look each item: three creativedelight: smelting / smoking / campfirecooking lines (0.35 xp, 200 / 100 / 600 ticks are in the recipe dump only)
+
+## SQ-CDFW-07 | knife cuts of catfish, salmon, cod, duck
+> zq uses alexsmobs:raw_catfish
+> zq uses minecraft:salmon
+> zq uses minecraft:cod
+> zq itemtag forge:raw_duck
+reject alexsdelight:cutting/raw_catfish_slice
+reject farmersdelight:cutting/salmon$
+reject farmersdelight:cutting/cod$
+expect (alone|shared) creativedelight:farmersdelightcutting/\S*catfish
+expect (alone|shared) creativedelight:farmersdelightcutting/\S*salmon
+expect (alone|shared) creativedelight:farmersdelightcutting/\S*cod
+look yields (catfish 6 slices + bone meal, salmon / cod 6 + bone meal, duck 2 fillets) via `zq rdetail farmersdelightcutting/` if needed; the board run is not repeated here
+
+## SQ-CDFW-08 | golden gilding routes
+> zq rdetail golden_apple
+> zq rdetail golden_carrot
+> zq rdetail enchanted_golden_apple_sequenced_assembly
+reject \[zq\] minecraft:golden_apple \{
+reject \[zq\] minecraft:golden_carrot \{
+expect \[zq\] creativedelight:shaped/golden_apple \{
+expect \[zq\] creativedelight:shaped/golden_carrot \{
+expect \[zq\] creativedelight:createmixing/golden_\S*_gilding \{
+expect \[zq\] creativedelight:iearcfurnace/golden_\S*_arc_gilding \{
+expect \[zq\] creativedelight:createsequencedassembly/enchanted_golden_apple_sequenced_assembly \{
+look the shaped ring accepts rose gold ingots (ring slot /+N); mixer 6, arc 5, assembly 4 loops are in the recipe dump only
+
+## SQ-CDFW-09 | Farmer's assemblies and heatless rows
+> zq recipes barbecue_stick_
+> zq recipes grilled_salmon_
+> zq recipes bacon_and_eggs_
+> zq recipes salmon_roll_
+> zq recipes cod_roll_
+> zq recipes kelp_roll_
+> zq recipes rice_roll_medley_block_
+> zq recipes roasted_mutton_chops_
+> zq recipes shepherds_pie_block_
+> zq recipes stuffed_potato_
+> zq recipes steak_and_potatoes_
+> zq recipes mutton_wrap_
+> zq recipes fruit_salad_sequenced_assembly
+> zq recipes _cooked_manual_only
+count \[zq\] creativedelight:createsequencedassembly/(barbecue_stick|grilled_salmon|bacon_and_eggs|salmon_roll|cod_roll|kelp_roll|rice_roll_medley_block|roasted_mutton_chops|shepherds_pie_block|stuffed_potato|steak_and_potatoes|mutton_wrap|fruit_salad)_\S* -> >= 13
+expect createsequencedassembly/salmon_roll_\S* -> 3
+expect createsequencedassembly/fruit_salad_sequenced_assembly -> 2
+kjsreject incomplete\(.*not registered
+look heatless _cooked_manual_only of Farmer's, Fruits, Alex's, Abnormals, Delightful present (count line)
+
+## SQ-POT-03 | /pottest all: no exception except the Another Furniture planter box (F1)
+> dumppots
+waitlog Dumped \d+ potted blocks 300
+> pottest all
+waitlog \[pottest\] INFO PP-DONE 900
+count \[pottest\] FAIL PP-03: == 1
+expect \[pottest\] FAIL PP-03: another_furniture:oak_planter_box .*ClassCastException
+expect \[pottest\] FAIL PP-03: another_furniture:oak_planter_box .*fungidelight:cleaned_cap
+look the server is still running after the planter box (the next row answers); the four Fungi ids named
+
+## SQ-POT-04 | accepted plants come back when the holder breaks
+> pottest all
+waitlog \[pottest\] INFO PP-DONE 900
+count \[pottest\] FAIL PP-04: == 0
+count \[pottest\] PASS PP-04: >= 1
+
+## SQ-ATC-02 | Armor Trims cache correctness
+> atctest
+waitlog \[atctest\] (PASS|FAIL) ATC-06 300
+expect \[atctest\] INFO ATC-01: 1 trimmable class
+expect \[atctest\] \S+ ATC-02: getAllTrimmable 50 entries
+expect \[atctest\] PASS ATC-04
+expect \[atctest\] PASS ATC-05
+
+## SQ-ATC-03 | Armor Trims cache performance
+> atctest
+waitlog \[atctest\] (PASS|FAIL) ATC-06 300
+expect \[atctest\] PASS ATC-03
+expect \[atctest\] PASS ATC-06
+
+## SQ-SALT-06 | /salttest dissolving (probe updated 11-02: rain cases now "stays", SaltDissolvingInRain = false)
+> salttest
+waitlog \[salttest\] done \d+ pass 600
+expect \[salttest\] PASS Salt Layer beside water becomes water
+expect \[salttest\] PASS Salt Layer by a torch stays
+expect \[salttest\] PASS raw rock salt beside water stays
+expect \[salttest\] PASS leftover vintagedelight:salt_block by water dissolves, no layer
+expect \[salttest\] PASS Evaporator by water grows layers to 8
+expect \[salttest\] PASS vintagedelight:salt in rain, open sky, stays
+expect \[salttest\] PASS salt:raw_rock_salt_block in rain, open sky, stays
+expect \[salttest\] NOTE rain cases: .*isRainingAt true
+
+## SQ-SALT-08 | rain dissolving off: nothing dissolves in rain, water still dissolves
+shell grep -q "SaltDissolvingInRain = false" config/salt-common.toml && grep -q "SaltDissolvingInRain = false" $INST/configs_edited/root_config/salt-common.toml
+> salttest
+waitlog \[salttest\] done \d+ pass 600
+expect \[salttest\] PASS salt:salt_block in rain, open sky, stays
+expect \[salttest\] PASS salt:rock_salt_ore in rain, open sky, stays
+expect \[salttest\] PASS vintagedelight:salt_bricks in rain, open sky, stays
+expect \[salttest\] PASS vintagedelight:salt in rain, open sky, stays
+expect \[salttest\] PASS Salt Layer beside water becomes water
+expect \[salttest\] PASS salt:salt_block beside water dissolves
+
+## SQ-WE-03 | WorldEdit copy / paste / undo / redo through the API (the `//` commands by a player: s3_skip.md)
+> wetest
+waitlog \[wetest\] DONE 300
+count \[wetest\] FAIL == 0
+expect \[wetest\] PASS SQ-WE-03
+expect \[wetest\] PASS SQ-WE-ids
+look the copy-with-chest and sign lines match; undo leaves air, redo restores
+
+## SQ-WE-04 | lazy state ids for many-state blocks (first half; after the restart: SQ-WE-04b in s3_A2.qb)
+> wetest
+waitlog \[wetest\] DONE 300
+count \[wetest\] FAIL == 0
+expect \[wetest\] PASS SQ-WE-04: immersiveposts:ironpost_truss
+expect \[wetest\] PASS SQ-WE-04: createdeco:andesite_catwalk
+
+## SQ-PF-02 | /ceperf dump and the perf report
+> ceperf status
+expect recording '
+> ceperf dump smoke
+waitlog \[ceperf\] recording saved to 300
+capture PFF recording saved to (\S+)
+shell python3 -I $INST/tools/perf/perf_report.py {PFF} > ../pf02_report.txt 2>&1; echo "exit $?"; grep -n -A25 "Measured by the pack" ../pf02_report.txt | head -60
+look rows/SQ-PF-02.shell.txt: ticks, a row per dimension, handlers as server_scripts:<file>:<line>, entity and block entity types
+
+## SQ-BBQ-02 | Barbeque's recipes: 26, all creativedelight ids
+> zq rdetail creativedelight:skewering/
+> zq rdetail creativedelight:grilling/
+> zq rdetail creativedelight:combine/
+> zq recipes barbequesdelight:
+> zq rdetail bbq_grill
+> zq rdetail bbq_basin_from_logs
+> zq rdetail bbq_tray_from_logs
+count \[zq\] creativedelight:skewering/\S+ \{ == 10
+count \[zq\] creativedelight:grilling/\S+ \{ == 10
+count \[zq\] creativedelight:combine/\S+ \{ == 3
+expect recipes matching barbequesdelight:: 0$
+expect \[zq\] creativedelight:shaped/bbq_grill \{
+expect \[zq\] creativedelight:stonecutting/bbq_basin_from_logs \{
+expect \[zq\] creativedelight:stonecutting/bbq_tray_from_logs \{
+look skewering inputs are the forge: tags of barbeques_delight.md 3.1 (beef: 2 #forge:raw_beef + 2 #forge:crops/cabbage)
+
+## SQ-BBQ-03 | Barbeque's item and block tags
+bootexpect BlockRunner tier overlaps checked: \d+ ids, 0 overlap
+> zq itemtag barbequesdelight:raw_skewers
+> zq itemtag barbequesdelight:grilled_skewers
+> zq blocktag creativeengineering:campfire/rain_douses
+> zq blocktag blockrunner:surface/metal
+> zq blocktag blockrunner:surface/wood
+> zq tagsof barbequesdelight:grill
+> zq tagsof barbequesdelight:basin
+> zq itemtag creativeengineering:food_type/handheld
+> zq itemtag creativeengineering:food_type/meal
+> zq itemtag creativeengineering:food_type/hazard
+> zq tagsof barbequesdelight:raw_beef_skewer
+expect itemtag barbequesdelight:raw_skewers \(10\)
+expect itemtag barbequesdelight:grilled_skewers \(10\)
+expect blocktag creativeengineering:campfire/rain_douses \(\d+\): .*minecraft:campfire
+expect blocktag creativeengineering:campfire/rain_douses \(\d+\): .*barbequesdelight:grill
+expect blocktag blockrunner:surface/metal \(\d+\): .*barbequesdelight:grill
+expect blocktag blockrunner:surface/wood \(\d+\): .*barbequesdelight:basin
+expect blocktag blockrunner:surface/wood \(\d+\): .*barbequesdelight:tray
+expect itemtag creativeengineering:food_type/handheld \(\d+\): .*barbequesdelight:kebab_wrap
+expect itemtag creativeengineering:food_type/handheld \(\d+\): .*barbequesdelight:kebab_sandwich
+expect itemtag creativeengineering:food_type/meal \(\d+\): .*barbequesdelight:bibimbap
+expect itemtag creativeengineering:food_type/hazard \(\d+\): .*barbequesdelight:burnt_skewer
+reject item tags of barbequesdelight:raw_beef_skewer: .*food_type
+look the 10 grilled skewers in handheld; the grill / basin / tray mineable tags as upstream (block tags lines)
+
+## SQ-BBQ-04 | Barbeque's compost rows
+> dumpcompost
+waitlog Dumped compost table 300
+shell python3 -I $INST/tools/scratch_query/dumpq.py compost barbequesdelight:raw_beef_skewer=0.25 barbequesdelight:grilled_beef_skewer=0.5 barbequesdelight:burnt_skewer=0.25 barbequesdelight:kebab_wrap=0.5 barbequesdelight:kebab_sandwich=0.75 barbequesdelight:bibimbap=1 barbequesdelight:chili_powder=absent barbequesdelight:barbeque_sauce=absent barbequesdelight:grill=absent barbequesdelight:basin=absent barbequesdelight:tray=absent
+look the other 18 rows of barbeques_delight.md 3.7 by tier in kubejs/exported/compost/compost.json
+
+# ---------------------------------------------------------------- block and bot rows (lane z 500)
+
+## SQ-STD-02 | Storage Delight drawer and cabinets: 27 slots, dropped with contents (x 100..104; queue group B)
+> setblock 100 -60 500 storagedelight:bamboo_drawer
+> setblock 102 -60 500 storagedelight:oak_cabinet_with_polished_tuff_countertop
+> setblock 104 -60 500 storagedelight:warped_cabinet_with_stone_bricks_countertop
+> item replace block 100 -60 500 container.26 with minecraft:stick
+> item replace block 102 -60 500 container.26 with minecraft:stick
+> item replace block 104 -60 500 container.26 with minecraft:stick
+> item replace block 100 -60 500 container.27 with minecraft:stick
+> item replace block 102 -60 500 container.27 with minecraft:stick
+> item replace block 104 -60 500 container.27 with minecraft:stick
+count Replaced a slot at == 3
+count does not have slot == 3
+> pbot spawn std 102 -60 503 minecraft:overworld survival
+> pbot hold std minecraft:air
+> pbot use std 100 -60 500 south
+> pbot use std 102 -60 500 south
+> pbot use std 104 -60 500 south
+> zact break 100 -60 500 minecraft:iron_axe
+> zact break 102 -60 500 minecraft:iron_axe
+> zact break 104 -60 500 minecraft:iron_axe
+expect \[zact\] break 100 -60 500 storagedelight:bamboo_drawer held \S+: true, .*drops minecraft:stick x1, storagedelight:bamboo_drawer x1
+expect \[zact\] break 102 -60 500 \S+ held \S+: true, .*storagedelight:oak_cabinet_with_polished_tuff_countertop x1
+expect \[zact\] break 104 -60 500 \S+ held \S+: true, .*storagedelight:warped_cabinet_with_stone_bricks_countertop x1
+reject (?i)(block ?entity|storagedelight).*(exception|error)
+> pbot remove std
+look the three `pbot use` replies (a menu opened = SUCCESS / CONSUME); the stick in slot 26 dropped with each block
+
+## SQ-FSD-08 | cook_end_1_21 template has the hanging canvas sign (200 -60 540)
+> place template farmers_structures:cook_houses/cook_end_1_21 200 -60 540
+expect Loaded template
+> zq count 195 -64 535 235 -30 575 farmersdelight:hanging_canvas_sign
+expect \[zq\] count farmersdelight:hanging_canvas_sign: [1-9]
+look the sign hangs under a block (the count line's "on:" lists what is under it: air under a hanging sign is expected; the ceiling is the block above)
+
+## SQ-CDB-06 | lava bottle into a jar and back (/cbetest jars at 400 400)
+> cbetest jars
+waitlog \[cbetest\] done jars 120
+expect \[cbetest\] PASS jars lava bottle goes in
+expect \[cbetest\] PASS jars lava comes back out into a bottle
+
+## SQ-CDB-07 | milkshakes and Splash Milk's bottle into a jar
+> cbetest jars
+waitlog \[cbetest\] done jars 120
+expect \[cbetest\] PASS jars neapolitan:chocolate_milkshake goes in
+expect \[cbetest\] PASS jars neapolitan:vanilla_milkshake goes in
+expect \[cbetest\] PASS jars splash_milk:milk_bottle goes in
+look the splash_milk line's fluid is milk ("the milk bottle shows milk" in the jar is the client half)
+
+## SQ-EN-03 | End plants: soils and faster growth on tilled end stone
+> cbetest soils
+waitlog \[cbetest\] done soils 120
+> cbetest growth
+waitlog \[cbetest\] done growth 300
+count \[cbetest\] FAIL (soils|growth) == 0
+count \[cbetest\] PASS soils >= 4
+count \[cbetest\] PASS growth == 2
+look "void pepper spreads then fruits, 3 / 1 drops" is not probed (growth counts changes only)
+
+## SQ-EN-04 | Ender Dragon drops bare hand, knife, machete
+> cbetest dragon
+waitlog \[cbetest\] done dragon 300
+expect \[cbetest\] PASS dragon dragon bare: 5-7 meat, 2 legs, 1-2 teeth per kill
+count \[cbetest\] PASS dragon dragon (knife|machete): \+2 meat, \+1 tooth per kill == 2
+
+## SQ-EN-06 | Dragon Tooth Knife repairs with a Dragon Tooth
+> cbetest anvil
+waitlog \[cbetest\] done anvil 60
+expect \[cbetest\] PASS anvil dragon tooth knife repairs with a dragon tooth
+
+## SQ-CDB-09 | pickle soup and braised sea pickle cook (pots at 115 and 118)
+> zq rdetail pickle_soup
+> zq rdetail braised_sea_pickle
+> setblock 115 -60 500 minecraft:campfire[lit=true]
+> setblock 115 -59 500 farmersdelight:cooking_pot
+> data merge block 115 -59 500 {Inventory:{Items:[{Slot:0b,id:"vintagedelight:pickled_onion",Count:1b},{Slot:1b,id:"veggiesdelight:cauliflower",Count:1b},{Slot:2b,id:"veggiesdelight:broccoli",Count:1b},{Slot:3b,id:"minecraft:beetroot",Count:1b},{Slot:4b,id:"farmersdelight:cabbage_leaf",Count:1b},{Slot:7b,id:"minecraft:bowl",Count:4b}]}}
+> setblock 118 -60 500 minecraft:campfire[lit=true]
+> setblock 118 -59 500 farmersdelight:cooking_pot
+> data merge block 118 -59 500 {Inventory:{Items:[{Slot:0b,id:"oceanic_delight:sea_pickle_slices",Count:1b},{Slot:1b,id:"oceanic_delight:sea_pickle_slices",Count:1b},{Slot:2b,id:"minecraft:brown_mushroom",Count:1b},{Slot:3b,id:"minecraft:brown_mushroom",Count:1b},{Slot:7b,id:"minecraft:bowl",Count:4b}]}}
+count Modified block data of == 2
+sleep 25
+> data get block 115 -59 500 Inventory
+> data get block 118 -59 500 Inventory
+expect Slot: [68]b?, id: "vintagedelight:pickle_soup"
+expect Slot: [68]b?, id: "oceansdelight:braised_sea_pickle"
+look if a pot did not cook, compare its inputs with the rdetail lines (VTD-57 / VTD-58 may name a tag or a different slice item)
+
+## SQ-SSP-01 | cutting board: potato and sweet potato give 3 slices each (board at 125; the slicer half: s3_skip.md)
+> zq rdetail farmersdelightcutting/potato_slices
+> zq rdetail farmersdelightcutting/sliced_sweet_potato
+> setblock 125 -60 500 farmersdelight:cutting_board
+> pbot spawn ssp 125 -60 504 minecraft:overworld survival
+> pbot hold ssp minecraft:potato
+> pbot use ssp 125 -60 500 up
+> pbot hold ssp farmersdelight:iron_knife
+> pbot use ssp 125 -60 500 up
+sleep 2
+> zcount 121 -61 496 129 -57 508
+> clear ssp rusticdelight:potato_slices 0
+> kill @e[type=minecraft:item,x=125,y=-60,z=500,distance=..6]
+> pbot hold ssp veggiesdelight:sweet_potato
+> pbot use ssp 125 -60 500 up
+> pbot hold ssp farmersdelight:iron_knife
+> pbot use ssp 125 -60 500 up
+sleep 2
+> zcount 121 -61 496 129 -57 508
+> clear ssp creativeengineering:sliced_sweet_potato 0
+expect \[zq\] creativedelight:farmersdelightcutting/potato_slices \{
+expect \[zq\] creativedelight:farmersdelightcutting/sliced_sweet_potato \{
+reject (?i)(error|exception).*(potato_slices|sliced_sweet_potato)
+> pbot remove ssp
+look 3 Potato Slices, then 3 Sliced Sweet Potatoes: zcount item entities plus the bot's "Found N" (it can pick up drops)
+
+## SQ-CDJ4-08b | baby squid keeps its age (spawn-animals=true; water at 130)
+> fill 129 -61 499 131 -61 501 minecraft:water
+> summon minecraft:squid 130 -61 500 {Age:-24000,Tags:["cdj408b"]}
+sleep 5
+> data get entity @e[type=minecraft:squid,tag=cdj408b,limit=1] Age
+expect has the following entity data: -2\d{4}
+reject No entity was found
+
+## SQ-LEM-01 | ripe lemon tree: pick 10 times, break 10 times (tree at 135)
+> pbot spawn lem 135 -60 503 minecraft:overworld survival
+> pbot hold lem minecraft:air
+repeat 10
+> setblock 135 -60 500 fruitsdelight:lemon_tree[age=4,half=lower]
+> setblock 135 -59 500 fruitsdelight:lemon_tree[age=4,half=upper]
+> pbot use lem 135 -60 500 south
+> execute if block 135 -60 500 fruitsdelight:lemon_tree[age=2] run say LEM01 reset to age 2
+end
+sleep 2
+> zcount 131 -61 496 139 -56 506
+> clear lem fruitsdelight:lemon 0
+count LEM01 reset to age 2 == 10
+> kill @e[type=minecraft:item,x=135,y=-60,z=500,distance=..8]
+> clear lem
+repeat 10
+> setblock 135 -60 500 fruitsdelight:lemon_tree[age=4,half=lower]
+> setblock 135 -59 500 fruitsdelight:lemon_tree[age=4,half=upper]
+> zact break 135 -60 500 none
+end
+count \[zact\] break 135 -60 500 fruitsdelight:lemon_tree held none: true, .*fruitsdelight:lemon x[2-5]\b == 10
+> pbot remove lem
+look pick: zcount item:fruitsdelight:lemon plus the bot's "Found N" = 20 to 50 over 10 picks
+
+## SQ-CSI-01 | Curios hands, face, feet slots by IMC (bot at 140)
+bootreject (?i)IMC.*creativeengineering.*(error|exception)
+> pbot spawn csi 140 -60 503 minecraft:overworld survival
+sleep 2
+> curios list csi
+expect \bhands\b
+expect \bface\b
+expect \bfeet\b
+look rows/SQ-CSI-01.log: the three new slots listed alongside head, back and the rest
+
+## SQ-BM-02 | baby animals and a baby zombie keep their age on a dedicated server (x 145)
+> summon minecraft:cow 145 -60 500 {Age:-24000,NoAI:1b,Tags:["bm02"]}
+> summon minecraft:pig 145 -60 501 {Age:-24000,NoAI:1b,Tags:["bm02"]}
+> summon minecraft:sheep 145 -60 502 {Age:-24000,NoAI:1b,Tags:["bm02"]}
+> summon minecraft:chicken 145 -60 503 {Age:-24000,NoAI:1b,Tags:["bm02"]}
+> summon minecraft:wolf 145 -60 504 {Age:-24000,NoAI:1b,Tags:["bm02"]}
+> summon minecraft:cat 145 -60 505 {Age:-24000,NoAI:1b,Tags:["bm02"]}
+> summon minecraft:horse 145 -60 506 {Age:-24000,NoAI:1b,Tags:["bm02"]}
+> summon minecraft:villager 145 -60 507 {Age:-24000,NoAI:1b,Tags:["bm02"]}
+> summon minecraft:zombie 145 -60 508 {IsBaby:1b,NoAI:1b,PersistenceRequired:1b,Tags:["bm02"]}
+sleep 5
+> data get entity @e[type=minecraft:cow,tag=bm02,limit=1] Age
+> data get entity @e[type=minecraft:pig,tag=bm02,limit=1] Age
+> data get entity @e[type=minecraft:sheep,tag=bm02,limit=1] Age
+> data get entity @e[type=minecraft:chicken,tag=bm02,limit=1] Age
+> data get entity @e[type=minecraft:wolf,tag=bm02,limit=1] Age
+> data get entity @e[type=minecraft:cat,tag=bm02,limit=1] Age
+> data get entity @e[type=minecraft:horse,tag=bm02,limit=1] Age
+> data get entity @e[type=minecraft:villager,tag=bm02,limit=1] Age
+> data get entity @e[type=minecraft:zombie,tag=bm02,limit=1] IsBaby
+count has the following entity data: -2\d{4}$ == 8
+expect has the following entity data: 1b$
+reject No entity was found
+reject (?i)mixin.*(baby|remodel).*(error|exception)
+> kill @e[tag=bm02]
+
+## SQ-ROLL-03 | chopsticks feed the off-hand food (bot at 150)
+> pbot spawn rl3 150 -60 503 minecraft:overworld survival
+> effect give rl3 minecraft:hunger 1 255
+sleep 3
+> data get entity rl3 foodLevel
+> pbot hold rl3 roll_delight:chopsticks
+> item replace entity rl3 weapon.offhand with farmersdelight:cooked_rice
+> zq useitem rl3
+sleep 5
+> data get entity rl3 foodLevel
+> data get entity rl3 ActiveEffects
+> data get entity rl3 SelectedItem
+> data get entity rl3 Inventory
+expect useitem rl3 (CONSUME|SUCCESS)
+expect has the following entity data: \{.*id: "roll_delight:chopsticks".*Damage: 1\b
+> pbot remove rl3
+look foodLevel 19 -> 20 (capped); the Comfort effect Duration 1.5x the cooked rice's own (rice: zq food farmersdelight:cooked_rice); off-hand rice gone
+
+## SQ-ROLL-04 | chopsticks: no durability or extra food on dirt, bread, or at full hunger (bot at 150)
+> pbot spawn rl4 150 -60 506 minecraft:overworld survival
+> effect give rl4 minecraft:hunger 1 255
+sleep 3
+> pbot hold rl4 roll_delight:chopsticks
+> item replace entity rl4 weapon.offhand with minecraft:dirt
+> zq useitem rl4
+sleep 3
+> item replace entity rl4 weapon.offhand with minecraft:bread
+> zq useitem rl4
+sleep 3
+> effect give rl4 minecraft:saturation 2 10
+sleep 3
+> item replace entity rl4 weapon.offhand with farmersdelight:cooked_rice
+> zq useitem rl4
+sleep 3
+> data get entity rl4 SelectedItem
+> data get entity rl4 Inventory
+> data get entity rl4 foodLevel
+reject id: "roll_delight:chopsticks".*Damage: [1-9]
+> pbot remove rl4
+look the bread and the rice still in the off hand (slot -106), dirt kept; foodLevel 20 after the saturation; no Damage tag above 0 (ROLL-08)
+
+## SQ-ROLL-05 | Legendary Roll Medley servings by empty hand, dirt, chopsticks (medley at 155)
+> setblock 155 -60 500 roll_delight:legendary_roll_medley
+> pbot spawn rl5 155 -60 503 minecraft:overworld survival
+repeat 9
+> pbot hold rl5 minecraft:air
+> pbot use rl5 155 -60 500 up
+> data get entity rl5 SelectedItem
+> clear rl5
+> data get block 155 -60 500
+end
+> execute if block 155 -60 500 minecraft:air run say ROLL05 medley gone after 9
+> zcount 151 -61 496 159 -57 506
+> setblock 155 -60 500 roll_delight:legendary_roll_medley
+> pbot hold rl5 minecraft:dirt
+> pbot use rl5 155 -60 500 north
+> execute if block 155 -60 499 minecraft:dirt run say ROLL05 dirt placed against the medley
+> setblock 155 -60 499 minecraft:air
+> effect give rl5 minecraft:hunger 2 255
+sleep 3
+> data get entity rl5 foodLevel
+> pbot hold rl5 roll_delight:chopsticks
+> pbot use rl5 155 -60 500 up
+> data get entity rl5 foodLevel
+> data get entity rl5 SelectedItem
+expect ROLL05 medley gone after 9
+expect ROLL05 dirt placed against the medley
+> pbot remove rl5
+look the nine SelectedItem lines: 3 mushroom slices, 3 Salmon Maki, 2 Tobiko, then nothing (plate at servings 0), the 9th click breaks it (a bowl in zcount); chopsticks: foodLevel up, one serving gone, Damage 1
+
+## SQ-ROLL-06 | Mythical Roll Medley drops its servings and a bowl (medley at 160)
+> setblock 160 -60 500 roll_delight:mythical_roll_medley[servings=5]
+> zact break 160 -60 500 none
+> setblock 160 -60 500 roll_delight:mythical_roll_medley[servings=8]
+> zact break 160 -60 500 none
+expect \[zact\] break 160 -60 500 roll_delight:mythical_roll_medley held none: true, .*minecraft:bowl x1
+expect \[zact\] break 160 -60 500 roll_delight:mythical_roll_medley held none: true, .*drops roll_delight:mythical_roll_medley x1$
+look servings=5 drops 2 Nether Rolls and 3 Golden Roll Slices with the bowl
+
+## SQ-ROLL-07 | Wrapped Chopsticks block: add 3, take 4, break at 3 (block at 165)
+> setblock 165 -60 500 roll_delight:wrapped_chopsticks
+> pbot spawn rl7 165 -60 503 minecraft:overworld survival
+> pbot hold rl7 roll_delight:wrapped_chopsticks 3
+repeat 3
+> pbot use rl7 165 -60 500 up
+end
+> data get block 165 -60 500
+> pbot hold rl7 minecraft:air
+repeat 4
+> pbot use rl7 165 -60 500 up
+> clear rl7 roll_delight:chopsticks
+end
+count Removed 1 item == 4
+> execute unless block 165 -60 500 roll_delight:wrapped_chopsticks run say ROLL07 block gone
+expect ROLL07 block gone
+> setblock 165 -60 500 roll_delight:wrapped_chopsticks[chopsticks=3]
+> zact break 165 -60 500 none
+expect \[zact\] break 165 -60 500 roll_delight:wrapped_chopsticks held none: true, .*roll_delight:wrapped_chopsticks x3
+> pbot remove rl7
+
+## SQ-ROLL-08 | frogspawn: shears drop it, a hand does not (on water at 170)
+> fill 169 -61 499 171 -61 501 minecraft:water
+> setblock 170 -60 500 minecraft:frogspawn
+> zact break 170 -60 500 minecraft:shears
+> setblock 170 -60 500 minecraft:frogspawn
+> zact break 170 -60 500 none
+expect \[zact\] break 170 -60 500 minecraft:frogspawn held minecraft:shears: true, .*drops minecraft:frogspawn x1
+expect \[zact\] break 170 -60 500 minecraft:frogspawn held none: true, .*drops none
+
+## SQ-LGM-03 | Potato Soup: with a bowl it comes out, without one the pot keeps it (pots 180, 183)
+> setblock 180 -60 500 minecraft:campfire[lit=true]
+> setblock 180 -59 500 farmersdelight:cooking_pot
+> data merge block 180 -59 500 {Inventory:{Items:[{Slot:0b,id:"minecraft:potato",Count:1b},{Slot:1b,id:"minecraft:potato",Count:1b},{Slot:2b,id:"farmersdelight:onion",Count:1b},{Slot:3b,id:"minecraft:milk_bucket",Count:1b},{Slot:7b,id:"minecraft:bowl",Count:1b}]}}
+> setblock 183 -60 500 minecraft:campfire[lit=true]
+> setblock 183 -59 500 farmersdelight:cooking_pot
+> data merge block 183 -59 500 {Inventory:{Items:[{Slot:0b,id:"minecraft:potato",Count:1b},{Slot:1b,id:"minecraft:potato",Count:1b},{Slot:2b,id:"farmersdelight:onion",Count:1b},{Slot:3b,id:"minecraft:milk_bucket",Count:1b}]}}
+sleep 25
+> data get block 180 -59 500 Inventory
+> data get block 183 -59 500 Inventory
+expect Slot: 8b?, id: "largemeals:potato_soup"
+expect Slot: 6b?, id: "largemeals:potato_soup"
+reject Slot: 7b?, id: "minecraft:bowl"
+
+## SQ-LGM-04b | Sweet Berry Custard cooks with a glass bottle (pot 186; stack size row SQ-LGM-04 above)
+> setblock 186 -60 500 minecraft:campfire[lit=true]
+> setblock 186 -59 500 farmersdelight:cooking_pot
+> data merge block 186 -59 500 {Inventory:{Items:[{Slot:0b,id:"minecraft:sweet_berries",Count:1b},{Slot:1b,id:"minecraft:milk_bucket",Count:1b},{Slot:2b,id:"minecraft:egg",Count:1b},{Slot:3b,id:"minecraft:sugar",Count:1b},{Slot:7b,id:"minecraft:glass_bottle",Count:1b}]}}
+sleep 25
+> data get block 186 -59 500 Inventory
+expect Slot: 8b?, id: "largemeals:sweet_berry_custard"
+
+## SQ-LGM-05 | knife kills drop racks of mutton (sheep at 190)
+> zact kill 190 -60 500 minecraft:sheep 20 farmersdelight:iron_knife
+> zact kill 190 -60 500 minecraft:sheep 20 farmersdelight:iron_knife fire
+> zact kill 190 -60 500 minecraft:sheep 20 minecraft:stone_sword
+expect \[zact\] kill minecraft:sheep x20 held farmersdelight:iron_knife dead 20: .*largemeals:raw_mutton_rack x([5-9]|1[0-5])\b
+expect \[zact\] kill minecraft:sheep x20 held farmersdelight:iron_knife fire dead 20: .*largemeals:cooked_mutton_rack x([5-9]|1[0-5])\b
+expect \[zact\] kill minecraft:sheep x20 held minecraft:stone_sword dead 20: (?!.*mutton_rack)
+look about half of each knife batch drops a rack; the burning batch has no raw rack
+
+## SQ-LGM-06b | cutting board: raw and cooked rack give 4 chops (board at 195)
+> setblock 195 -60 500 farmersdelight:cutting_board
+> pbot spawn lg6 195 -60 504 minecraft:overworld survival
+> pbot hold lg6 largemeals:raw_mutton_rack
+> pbot use lg6 195 -60 500 up
+> pbot hold lg6 farmersdelight:iron_knife
+> pbot use lg6 195 -60 500 up
+sleep 2
+> zcount 191 -61 496 199 -57 508
+> clear lg6 farmersdelight:mutton_chops 0
+> kill @e[type=minecraft:item,x=195,y=-60,z=500,distance=..6]
+> pbot hold lg6 largemeals:cooked_mutton_rack
+> pbot use lg6 195 -60 500 up
+> pbot hold lg6 farmersdelight:iron_knife
+> pbot use lg6 195 -60 500 up
+sleep 2
+> zcount 191 -61 496 199 -57 508
+> clear lg6 farmersdelight:cooked_mutton_chops 0
+> pbot remove lg6
+look 4 Mutton Chops, then 4 Cooked Mutton Chops (zcount items plus the bot's "Found N")
+
+## SQ-LGM-07 | Omurice feast: 4 bowls then the plate; full and part-eaten drops (block at 200)
+> setblock 200 -60 500 largemeals:omurice_block
+> pbot spawn lg7 200 -60 503 minecraft:overworld survival
+> pbot hold lg7 minecraft:bowl 5
+repeat 5
+> pbot use lg7 200 -60 500 up
+end
+> clear lg7 largemeals:omurice 0
+> data get block 200 -60 500
+expect Found 4 matching item
+> setblock 200 -60 500 largemeals:omurice_block
+> zact break 200 -60 500 none
+> setblock 200 -60 500 largemeals:omurice_block[servings=2]
+> zact break 200 -60 500 none
+expect \[zact\] break 200 -60 500 largemeals:omurice_block held none: true, .*drops largemeals:omurice_block x1$
+expect \[zact\] break 200 -60 500 largemeals:omurice_block held none: true, .*drops minecraft:bowl x1$
+> pbot remove lg7
+look after the 4th bowl the block is the plate leftover (5th use); the setblock state name servings fits FeastBlock
+
+## SQ-LGM-08 | Roasted Rack feast from the pot, both ways; grid craft manual_only (pots 205, 208)
+> zq recipes roasted_mutton_rack
+> setblock 205 -60 500 minecraft:campfire[lit=true]
+> setblock 205 -59 500 farmersdelight:cooking_pot
+> data merge block 205 -59 500 {Inventory:{Items:[{Slot:0b,id:"largemeals:raw_mutton_rack",Count:1b},{Slot:1b,id:"farmersdelight:cooked_rice",Count:1b},{Slot:2b,id:"farmersdelight:cooked_rice",Count:1b},{Slot:3b,id:"minecraft:carrot",Count:1b},{Slot:4b,id:"minecraft:baked_potato",Count:1b},{Slot:7b,id:"minecraft:bowl",Count:1b}]}}
+> setblock 208 -60 500 minecraft:campfire[lit=true]
+> setblock 208 -59 500 farmersdelight:cooking_pot
+> data merge block 208 -59 500 {Inventory:{Items:[{Slot:0b,id:"largemeals:cooked_mutton_rack",Count:1b},{Slot:1b,id:"farmersdelight:cooked_rice",Count:1b},{Slot:2b,id:"farmersdelight:cooked_rice",Count:1b},{Slot:3b,id:"minecraft:carrot",Count:1b},{Slot:4b,id:"minecraft:baked_potato",Count:1b},{Slot:5b,id:"minecraft:baked_potato",Count:1b},{Slot:7b,id:"minecraft:bowl",Count:1b}]}}
+sleep 30
+> data get block 205 -59 500 Inventory
+> data get block 208 -59 500 Inventory
+count Slot: [68]b?, id: "largemeals:roasted_mutton_rack_block" == 2
+expect \[zq\] creativedelight:\S*roasted_mutton_rack\S*_manual_only ->
+
+## SQ-NDM-04 | Stuffed Hoglin and netherite machete ids; the pot cooks it (pot at 295)
+> zq rdetail stuffed_hoglin
+> zq rdetail netherite_machete_smithing
+expect \[zq\] farmersdelight:cooking/stuffed_hoglin \{
+expect \[zq\] minecraft:netherite_machete_smithing \{
+reject \[zq\] nethersdelight:cooking/stuffed_hoglin \{
+reject \[zq\] nethersdelight:netherite_machete_smithing \{
+> setblock 295 -60 500 minecraft:campfire[lit=true]
+> setblock 295 -59 500 farmersdelight:cooking_pot
+> data merge block 295 -59 500 {Inventory:{Items:[{Slot:0b,id:"farmersdelight:nether_salad",Count:1b},{Slot:1b,id:"farmersdelight:nether_salad",Count:1b},{Slot:2b,id:"nethersdelight:raw_stuffed_hoglin",Count:1b}]}}
+sleep 25
+> data get block 295 -59 500 Inventory
+expect Slot: [68]b?, id: "nethersdelight:stuffed_hoglin"
+look rdetail: the pot recipe's inputs and the smithing table Diamond Machete + Netherite Ingot
+
+## SQ-NDM-02 | Mimicarnation in a flower pot (pot at 256)
+> setblock 256 -60 500 minecraft:flower_pot
+> pbot spawn ndm2 256 -60 503 minecraft:overworld survival
+> pbot hold ndm2 nethersdelight:mimicarnation
+> pbot use ndm2 256 -60 500 up
+> execute if block 256 -60 500 nethersdelight:potted_mimicarnation run say NDM02 potted
+> pbot hold ndm2 minecraft:air
+> pbot use ndm2 256 -60 500 up
+> execute if block 256 -60 500 minecraft:flower_pot run say NDM02 empty pot back
+> clear ndm2 nethersdelight:mimicarnation 0
+> pbot hold ndm2 nethersdelight:mimicarnation
+> pbot use ndm2 256 -60 500 up
+> zact break 256 -60 500 none
+expect NDM02 potted
+expect NDM02 empty pot back
+expect Found 1 matching item
+expect \[zact\] break 256 -60 500 nethersdelight:potted_mimicarnation held none: true, .*minecraft:flower_pot x1
+expect \[zact\] break 256 -60 500 nethersdelight:potted_mimicarnation held none: true, .*nethersdelight:mimicarnation x1
+> pbot remove ndm2
+
+## SQ-NDM-05 | fungus colony survival on dirt by daylight (262 open, 268 boxed, 274 rich soul soil)
+> time set noon
+> setblock 262 -60 500 minecraft:dirt
+> setblock 262 -59 500 nethersdelight:crimson_fungus_colony
+> setblock 263 -59 500 minecraft:stone
+> execute unless block 262 -59 500 nethersdelight:crimson_fungus_colony run say NDM05 open-sky colony broke
+> fill 266 -60 498 270 -57 502 minecraft:stone hollow
+> setblock 268 -59 500 minecraft:dirt
+> setblock 268 -58 500 nethersdelight:crimson_fungus_colony
+> setblock 269 -58 500 minecraft:stone
+> execute if block 268 -58 500 nethersdelight:crimson_fungus_colony run say NDM05 roofed colony stays
+> setblock 274 -61 500 nethersdelight:rich_soul_soil
+> setblock 274 -60 500 nethersdelight:crimson_fungus_colony
+> setblock 275 -60 500 minecraft:stone
+> execute if block 274 -60 500 nethersdelight:crimson_fungus_colony run say NDM05 rich soul soil colony stays
+> setblock 278 -61 500 minecraft:dirt
+> pbot spawn ndm5 278 -60 503 minecraft:overworld survival
+> pbot hold ndm5 nethersdelight:crimson_fungus_colony
+> pbot use ndm5 278 -61 500 up
+> execute unless block 278 -60 500 nethersdelight:crimson_fungus_colony run say NDM05 placing on dirt in daylight refused
+expect NDM05 open-sky colony broke
+expect NDM05 roofed colony stays
+expect NDM05 rich soul soil colony stays
+expect NDM05 placing on dirt in daylight refused
+> pbot remove ndm5
+look the broken open-sky colony dropped its item (an item entity at 262 -59 500)
+
+## SQ-NDM-06 | 50 colonies on rich soul soil grow with random ticks (bot near them, x 280..289)
+> fill 280 -61 500 289 -61 504 nethersdelight:rich_soul_soil
+> fill 280 -60 500 289 -60 504 nethersdelight:crimson_fungus_colony[age=0]
+> pbot spawn ndm6 285 -60 507 minecraft:overworld survival
+> gamerule randomTickSpeed 30
+sleep 60
+> zq ages 280 -60 500 289 -60 504 nethersdelight:crimson_fungus_colony
+> gamerule randomTickSpeed 3
+> pbot remove ndm6
+expect ages nethersdelight:crimson_fungus_colony: 50 blocks, mean [1-3]\.
+reject (?i)(fungus|colony|CropGrow).*(error|exception)
+look the histogram reaches age 3 (season type nether: no growth penalty)
+
+## SQ-BBQ-05 | grill on a campfire: lights, goes out in rain on stone, stays lit on coal (212 stone, 216 coal block)
+> setblock 212 -61 500 minecraft:stone
+> setblock 216 -61 500 minecraft:coal_block
+> setblock 212 -60 500 minecraft:campfire[lit=false]
+> setblock 216 -60 500 minecraft:campfire[lit=false]
+> pbot spawn bbq5 214 -60 503 minecraft:overworld survival
+> pbot hold bbq5 barbequesdelight:grill
+> pbot use bbq5 212 -60 500 up
+> pbot hold bbq5 barbequesdelight:grill
+> pbot use bbq5 216 -60 500 up
+> execute if block 212 -60 500 barbequesdelight:grill[has_campfire=true,lit=false] run say BBQ05 grill on campfire 212
+> execute if block 216 -60 500 barbequesdelight:grill[has_campfire=true,lit=false] run say BBQ05 grill on campfire 216
+> pbot hold bbq5 minecraft:flint_and_steel
+> pbot use bbq5 212 -60 500 up
+> pbot hold bbq5 minecraft:flint_and_steel
+> pbot use bbq5 216 -60 500 up
+> execute if block 212 -60 500 barbequesdelight:grill[lit=true] run say BBQ05 lit 212
+> execute if block 216 -60 500 barbequesdelight:grill[lit=true] run say BBQ05 lit 216
+> weather rain 600
+sleep 15
+> execute if block 212 -60 500 barbequesdelight:grill[lit=false] run say BBQ05 out in rain on stone
+> execute if block 216 -60 500 barbequesdelight:grill[lit=true] run say BBQ05 still lit on coal
+> weather clear 100000
+> zact break 212 -60 500 none
+expect BBQ05 grill on campfire 212
+expect BBQ05 grill on campfire 216
+expect BBQ05 lit 212
+expect BBQ05 lit 216
+expect BBQ05 out in rain on stone
+expect BBQ05 still lit on coal
+expect \[zact\] break 212 -60 500 barbequesdelight:grill held none: true, .*drops barbequesdelight:grill x1, minecraft:campfire x1
+> pbot remove bbq5
+look if the grill landed one block up (y -59) instead of replacing the campfire, the execute lines are silent: check `data get block` / zq count by hand; light level 15 is not probed
+
+## SQ-BBQ-06 | an unflipped skewer burns at 640 ticks, its entry stays still (grill at 220; the flip half needs sneak: s3_skip.md)
+> setblock 220 -60 500 minecraft:campfire[lit=true]
+> pbot spawn bbq6 220 -60 503 minecraft:overworld survival
+> pbot hold bbq6 barbequesdelight:grill
+> pbot use bbq6 220 -60 500 up
+> pbot hold bbq6 minecraft:flint_and_steel
+> pbot use bbq6 220 -60 500 up
+> pbot hold bbq6 barbequesdelight:raw_beef_skewer
+> pbot use bbq6 220 -60 500 up
+> data get block 220 -60 500
+sleep 36
+> data get block 220 -60 500
+sleep 1
+> data get block 220 -60 500
+expect has the following block data: .*barbequesdelight:burnt_skewer
+> pbot remove bbq6
+look the two last reads (20 ticks apart) are the same burnt entry; no block-update spam lines
+
+## SQ-BBQ-07 | seasonings: sauce refused on a raw skewer, powder taken, sauce on a cutting board (grill 226, board 229)
+> setblock 226 -60 500 minecraft:campfire[lit=true]
+> pbot spawn bbq7 227 -60 503 minecraft:overworld survival
+> pbot hold bbq7 barbequesdelight:grill
+> pbot use bbq7 226 -60 500 up
+> pbot hold bbq7 barbequesdelight:raw_beef_skewer
+> pbot use bbq7 226 -60 500 up
+> pbot hold bbq7 barbequesdelight:barbeque_sauce
+> pbot use bbq7 226 -60 500 up
+> data get block 226 -60 500
+> pbot hold bbq7 barbequesdelight:chili_powder
+> pbot use bbq7 226 -60 500 up
+> data get block 226 -60 500
+> setblock 229 -60 500 farmersdelight:cutting_board
+> pbot hold bbq7 barbequesdelight:grilled_beef_skewer
+> pbot use bbq7 229 -60 500 up
+> pbot hold bbq7 barbequesdelight:barbeque_sauce
+> pbot use bbq7 229 -60 500 up
+> data get entity bbq7 SelectedItem
+> data get block 229 -60 500
+> pbot remove bbq7
+look sauce use on the raw skewer: no BBQSeasoning in the first grill read; chili powder: BBQSeasoning in the second; board: the cooked skewer gets the sauce, sauce Damage 1 (16 -> 15)
+
+## SQ-RDX-03b | Pancakes plate serves Supplementaries pancakes (plate at 238; sneak-use half: s3_skip.md)
+> setblock 238 -60 500 rusticdelight:pancakes
+> pbot spawn rdx3 238 -60 503 minecraft:overworld survival
+repeat 2
+> pbot hold rdx3 minecraft:air
+> pbot use rdx3 238 -60 500 up
+> data get entity rdx3 SelectedItem
+> clear rdx3
+end
+count id: "supplementaries:pancake" == 2
+> zact break 238 -60 500 none
+expect \[zact\] break 238 -60 500 rusticdelight:pancakes held none: true, .*supplementaries:pancake x4
+> pbot remove rdx3
+
+## SQ-RDX-08b | Glowing Calamari Crate places and drops itself (crate at 244)
+> setblock 244 -60 500 rusticdelight:glowing_calamari_crate
+> zact break 244 -60 500 none
+> setblock 244 -60 500 rusticdelight:glowing_calamari_crate
+> zact break 244 -60 500 minecraft:iron_axe
+count \[zact\] break 244 -60 500 rusticdelight:glowing_calamari_crate held \S+: true, .*drops rusticdelight:glowing_calamari_crate x1$ == 2
+
+## SQ-RDX-12b | knife on Glowing Calamari: 2 slices and a bone meal (board at 250)
+> setblock 250 -60 500 farmersdelight:cutting_board
+> pbot spawn rdx12 250 -60 504 minecraft:overworld survival
+> pbot hold rdx12 creativeengineering:glowing_calamari
+> pbot use rdx12 250 -60 500 up
+> pbot hold rdx12 farmersdelight:iron_knife
+> pbot use rdx12 250 -60 500 up
+sleep 2
+> zcount 246 -61 496 254 -57 508
+> clear rdx12 creativeengineering:glowing_calamari_slice 0
+> clear rdx12 minecraft:bone_meal 0
+> pbot remove rdx12
+look 2 Glowing Calamari Slices and 1 Bone Meal (zcount items plus the bot's "Found N")
+
+# ---------------------------------------------------------------- /reload rows (last; kjsexpect rows are all above)
+
+## SQ-PF-05 | /reload twice keeps the wrapped KubeJS handler count
+> ceperf status
+capture PFW (\d+) KubeJS handlers wrapped
+> reload
+waitlog Loaded \d+ pocket computer upgrades 300
+sleep 10
+> reload
+sleep 60
+count Loaded \d+ pocket computer upgrades >= 2
+> ceperf status
+sleep 2
+shell n=$(grep -o "[0-9]* KubeJS handlers wrapped" logs/latest.log | tail -1 | cut -d" " -f1); echo "before {PFW} after $n"; [ "$n" = "{PFW}" ]
+reject /ERROR\] \[KubeJS Server
+
+## SQ-ATC-04 | Armor Trims list rebuilt after the tag reload (follows SQ-PF-05's reloads)
+> reload
+waitlog Loaded \d+ pocket computer upgrades 300
+sleep 10
+> atctest
+waitlog \[atctest\] (PASS|FAIL) ATC-07 300
+expect \[atctest\] PASS ATC-07
+count \[atctest\] PASS ATC-0[3-6] == 4
+look counts against SQ-ATC-02's lines; the reload (Reloading! to the pocket computer line) no worse than 28 s
+
+## SQ-LGM-10 | after /reload: 13 manual_only and 3 assemblies make Large Meals food
+> zq makes largemeals
+count \[zq\] creativedelight:\S*_manual_only -> \d+ largemeals: == 13
+count \[zq\] creativedelight:createsequencedassembly/\S+ -> \d+ largemeals: == 3
+look 4 soups, 6 meals and desserts, 3 feasts among the manual_only ids; the assemblies start on a bowl

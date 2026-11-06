@@ -1,0 +1,249 @@
+{
+  "replace": false,
+  "values": [
+    {
+      "id": "farmersdelight:melon_popsicle",
+      "required": false
+    },
+    {
+      "id": "farmersdelight:barbecue_stick",
+      "required": false
+    },
+    {
+      "id": "farmersdelight:egg_sandwich",
+      "required": false
+    },
+    {
+      "id": "farmersdelight:chicken_sandwich",
+      "required": false
+    },
+    {
+      "id": "farmersdelight:hamburger",
+      "required": false
+    },
+    {
+      "id": "farmersdelight:dumplings",
+      "required": false
+    },
+    {
+      "id": "farmersdelight:bacon_sandwich",
+      "required": false
+    },
+    {
+      "id": "farmersdelight:mutton_wrap",
+      "required": false
+    },
+    {
+      "id": "farmersdelight:stuffed_potato",
+      "required": false
+    },
+    {
+      "id": "farmersdelight:cabbage_rolls",
+      "required": false
+    },
+    {
+      "id": "farmersdelight:salmon_roll",
+      "required": false
+    },
+    {
+      "id": "farmersdelight:cod_roll",
+      "required": false
+    },
+    {
+      "id": "farmersdelight:kelp_roll",
+      "required": false
+    },
+    {
+      "id": "farmersdelight:kelp_roll_slice",
+      "required": false
+    },
+    {
+      "id": "farmersdelight:kelp_roll_slice",
+      "required": false
+    },
+    {
+      "id": "farmersdelight:sweet_berry_cookie",
+      "required": false
+    },
+    {
+      "id": "farmersdelight:honey_cookie",
+      "required": false
+    },
+    {
+      "id": "minecraft:pumpkin_pie",
+      "required": false
+    },
+    {
+      "id": "minecraft:cookie",
+      "required": false
+    },
+    {
+      "id": "corn_delight:grilled_corn",
+      "required": false
+    },
+    {
+      "id": "corn_delight:classic_corn_dog",
+      "required": false
+    },
+    {
+      "id": "corn_delight:taco",
+      "required": false
+    },
+    {
+      "id": "delightful:cooked_marshmallow_stick",
+      "required": false
+    },
+    {
+      "id": "delightful:smore",
+      "required": false
+    },
+    {
+      "id": "delightful:cheeseburger",
+      "required": false
+    },
+    {
+      "id": "delightful:deluxe_cheeseburger",
+      "required": false
+    },
+    {
+      "id": "delightful:cantaloupe_popsicle",
+      "required": false
+    },
+    {
+      "id": "delightful:cantaloupe_bread",
+      "required": false
+    },
+    {
+      "id": "delightful:wrapped_cantaloupe",
+      "required": false
+    },
+    {
+      "id": "delightful:nut_butter_and_jelly_sandwich",
+      "required": false
+    },
+    {
+      "id": "oceansdelight:elder_guardian_roll",
+      "required": false
+    },
+    {
+      "id": "oceansdelight:fugu_roll",
+      "required": false
+    },
+    {
+      "id": "oceansdelight:honey_fried_kelp",
+      "required": false
+    },
+    {
+      "id": "oceansdelight:cooked_stuffed_cod",
+      "required": false
+    },
+    {
+      "id": "alexsdelight:gongylidia_bruschetta",
+      "required": false
+    },
+    {
+      "id": "alexsdelight:bison_burger",
+      "required": false
+    },
+    {
+      "id": "alexsdelight:bunfungus_sandwich",
+      "required": false
+    },
+    {
+      "id": "brewinandchewin:ham_and_cheese_sandwich",
+      "required": false
+    },
+    {
+      "id": "endersdelight:uncanny_cookies",
+      "required": false
+    },
+    {
+      "id": "endersdelight:crispy_skewer",
+      "required": false
+    },
+    {
+      "id": "endersdelight:strange_eclair",
+      "required": false
+    },
+    {
+      "id": "endersdelight:crawling_sandwich",
+      "required": false
+    },
+    {
+      "id": "ends_delight:stuffed_rice_cake",
+      "required": false
+    },
+    {
+      "id": "ends_delight:chorus_flower_pie",
+      "required": false
+    },
+    {
+      "id": "ends_delight:ender_bamboo_rice",
+      "required": false
+    },
+    {
+      "id": "ends_delight:chorus_fruit_popsicle",
+      "required": false
+    },
+    {
+      "id": "ends_delight:end_barbecue_stick",
+      "required": false
+    },
+    {
+      "id": "nethersdelight:nether_skewer",
+      "required": false
+    },
+    {
+      "id": "abnormals_delight:cherry_cookie",
+      "required": false
+    },
+    {
+      "id": "abnormals_delight:mulberry_cookie",
+      "required": false
+    },
+    {
+      "id": "abnormals_delight:maple_cookie",
+      "required": false
+    },
+    {
+      "id": "abnormals_delight:escargot",
+      "required": false
+    },
+    {
+      "id": "miners_delight:vegan_wrap",
+      "required": false
+    },
+    {
+      "id": "miners_delight:cave_hamburger",
+      "required": false
+    },
+    {
+      "id": "miners_delight:insect_sandwich",
+      "required": false
+    },
+    {
+      "id": "miners_delight:insect_wrap",
+      "required": false
+    },
+    {
+      "id": "miners_delight:squid_sandwich",
+      "required": false
+    },
+    {
+      "id": "miners_delight:tentacles_on_a_stick",
+      "required": false
+    },
+    {
+      "id": "miners_delight:improvised_barbecue_stick",
+      "required": false
+    },
+    {
+      "id": "miners_delight:vegan_hamburger",
+      "required": false
+    },
+    {
+      "id": "farmersrespite:green_tea_cookie",
+      "required": false
+    }
+  ]
+}

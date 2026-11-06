@@ -7,6 +7,13 @@
       ],
       "empty": "minecraft:glass_bottle",
       "capacity": 1
+    },
+    {
+      "filled": [
+        "vintagedelight:nut_milk_jar"
+      ],
+      "empty": "vintagedelight:empty_mason_jar",
+      "capacity": 1
     }
   ],
   "flowing_texture": "moonlight:soft_fluids/potion_flow",

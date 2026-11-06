@@ -1,0 +1,907 @@
+# Run r1102, SQ-CDJ5 Boot 1 (scratch_queue.md, section SQ-CDJ5 run plan): group A world cdj5 that Boot 0
+# (b0_oldworld.qb, SQ-CDJ-11) built with the five displaced standalone jars; now the nested members only.
+# Pre-boot setup (displaced jars out, config copies, spawn-animals, probes, region scan "before"): README.txt, Boot 1.
+# Order: run plan order, except the rows that need /reload or /dumpall (SQ-CDM-00, SQ-MDP-12, SQ-FGD-03b,
+# SQ-DDP-04, SQ-CDJ-09b, SQ-CDM-04, SQ-CDFW-11) are at the end; every kjsexpect/kjsreject row comes before the /reload.
+# b1_long.qb (SQ-FGD-07, pigs, about 12 min) runs after this file in the same boot.
+#
+# Home: the marker tagged cdj5home that Boot 0 left (capture H). Boot 0 blocks, offsets from H (y = H2, the air layer
+# above the superflat grass at H2-1): cookie plate (3) +2,0,0; plated hamburger +4,0,0; beef stew +6,0,0; small plate with
+# cake slice +8,0,0; Pickling Jar +2,0,3; Cheese Wheel +4,0,3; Veggies / Vintage crops on farmland +6..8,0,3; Fungi colony
+# +10,0,3; Copper Pot +2,1,6 on a campfire +2,0,6; Sticky Basket +4,0,6.
+# New blocks of this boot sit at z offsets 10..37 (lanes per row) and x offsets 40..60 (loot rolls); FGD-07 uses x -60..-41.
+# "Break as a fake player with an empty hand" = `setblock ... air destroy` (Block.dropResources with no tool and no
+# entity: the same loot context an empty hand gives; Display's getDrops override runs on that path too).
+# Bots (perfBot, survival, invulnerable): one name per row so inventories do not mix.
+pace 2
+
+## SQ-CDJ-09 | CD jar nests 20 members; five port items exist
+bootexpect Done \(
+bootexpect \[creativedelight\] members: \[([a-z_]+, ){19}[a-z_]+\]$
+bootreject NOT loaded|not from the Creative Delight jar|not nested
+shell ! ls mods | grep -i backported
+# error count against the last r1101 boot: judged by hand from rows/SQ-CDJ-09.shell.txt
+shell echo "error/exception lines in latest.log: $(grep -ciE 'error|exception' logs/latest.log)"
+> execute unless entity @e[type=minecraft:marker,tag=cdj5home] run say CDJ5 home marker missing
+> data get entity @e[type=minecraft:marker,tag=cdj5home,limit=1] Pos
+capture H entity data: \[(-?\d+)\.\d+d, (-?\d+)\.\d+d, (-?\d+)\.\d+d\]
+reject CDJ5 home marker missing
+> difficulty easy
+> weather clear 100000
+> gamerule doDaylightCycle false
+> pbot spawn cdj {H1} {H2} {H3-3} minecraft:overworld survival
+> give cdj veggiesdelight:cauliflower
+> give cdj vintagedelight:cheese_slice
+> give cdj fungidelight:inky_cap_mushroom
+> give cdj miners_delight:cave_carrot
+> give cdj displaydelight:abd_duck_noodles
+count Gave 1 +\[ >= 5
+reject Unknown item|No player was found
+look item counts per namespace (displaydelight 212, fungidelight 32, miners_delight 69, veggiesdelight 89, vintagedelight 134 or more) are SQ-CDJ-09b after /dumpall; error count in rows/SQ-CDJ-09.shell.txt against the last r1101 boot
+
+## SQ-CDJ-05 | Boot 0 blocks still there with their states and contents
+bootreject Failed to set block association
+bootreject (?i)(missing registry|unidentified mapping|registry .* missing)
+bootreject (?i)mixin apply failed.*(vintagedelight|fungidelight|minersdelight|displaydelight|veggiesdelight)
+> zcount {H1} {H2} {H3} {H1+10} {H2+1} {H3+6}
+waitlog \[zcount\] entities 30
+expect \[zcount\] blocks .*displaydelight:plated_cookie=1
+expect \[zcount\] blocks .*displaydelight:plated_hamburger=1
+expect \[zcount\] blocks .*displaydelight:beef_stew=1
+expect \[zcount\] blocks .*displaydelight:small_plated_cake_slice=1
+expect \[zcount\] blocks .*vintagedelight:fermenting_jar=1
+expect \[zcount\] blocks .*vintagedelight:cheese_wheel=1
+expect \[zcount\] blocks .*veggiesdelight:[a-z_]+=
+expect \[zcount\] blocks .*fungidelight:[a-z_]*colony=
+expect \[zcount\] blocks .*miners_delight:copper_pot=1
+expect \[zcount\] blocks .*miners_delight:sticky_basket=1
+expect \[zcount\] blocks .*minecraft:campfire=1
+> execute if block {H1+2} {H2} {H3} displaydelight:plated_cookie[stacks=3] run say CDJ05 cookie plate holds 3
+> execute if block {H1+4} {H2} {H3+3} vintagedelight:cheese_wheel[bites=0] run say CDJ05 cheese wheel bites 0
+expect CDJ05 cookie plate holds 3
+expect CDJ05 cheese wheel bites 0
+> data get block {H1+2} {H2} {H3+3}
+> data get block {H1+2} {H2+1} {H3+6}
+> data get block {H1+4} {H2} {H3+6}
+expect has the following block data: .*inventory: \{.*Items: \[\{
+expect has the following block data: .*Inventory: \{.*Items: \[\{
+> save-all flush
+waitlog Saved the game 120
+# region scan after against the "before" file README Boot 1 writes; differences are judged by hand (the jar keeps
+# fermenting and the pot keeps cooking between boots, so item ids in their inventories may change legitimately)
+shell python3 -I $INST/tools/scratch_query/region_ids.py cdj5/region '(displaydelight|veggiesdelight|vintagedelight|fungidelight|miners_delight):[a-z_]+' > ../cdj05_after.txt; diff ../cdj05_before.txt ../cdj05_after.txt; true
+look the jar, pot and basket block data lines still hold the Boot 0 contents (or their cooked results); the region diff in rows/SQ-CDJ-05.shell.txt shows no block id lost (only jar / pot item ids may change); crops and colony ids as Boot 0 recorded them
+
+## SQ-DDP-06 | Display config carried into the CD file, takeAll inverted
+shell ls config | grep -iE 'displaydelight|vintagedelight'
+shell test -f config/displaydelight-common.toml.moved && test ! -f config/displaydelight-common.toml
+shell test "$(grep -c 'config/displaydelight-common.toml carried into config/creativedelight-common.toml' logs/latest.log)" = 1
+bootexpect \[creativedelight\] config/displaydelight-common.toml carried into config/creativedelight-common.toml \(\d+ values\) and renamed to displaydelight-common.toml.moved
+bootreject could not carry|could not rename
+shell awk '/^[[:space:]]*\[/{s=$0} s ~ /^[[:space:]]*\[display\][[:space:]]*$/ && !/^[[:space:]]*\[/' config/creativedelight-common.toml
+shell awk '/^[[:space:]]*\[/{s=$0} s ~ /^[[:space:]]*\[display\][[:space:]]*$/ && /^[[:space:]]*takeAll[[:space:]]*=[[:space:]]*false/{f=1} END{exit !f}' config/creativedelight-common.toml
+look [display] in rows/SQ-DDP-06.shell.txt holds takeAll = false and the other eight keys
+
+## SQ-DDP-07 | (Boot 1 half, takeAll = false) bare-hand use of the Boot 0 cookie plate
+# perfBot and /zq cannot sneak: the takeAll half (sneaking bare hand: 1 taken, 2 stay) goes to the client row CQ-DDP-01.
+# This half is the plain bare-hand use, which takes 1 whatever takeAll says (InterationManager.tryTakeItemWithBareHand).
+> kill @e[type=minecraft:item]
+> pbot spawn ddp7 {H1+2} {H2} {H3-2} minecraft:overworld survival
+> execute if block {H1+2} {H2} {H3} displaydelight:plated_cookie[stacks=3] run say DDP07 plate holds 3
+# the starter kit puts a copper pickaxe in slot 0 (main hand): empty the hand first (r1102 judge: "use PASS", nothing taken)
+> item replace entity ddp7 weapon.mainhand with minecraft:air
+> pbot use ddp7 {H1+2} {H2} {H3} up
+> execute if block {H1+2} {H2} {H3} displaydelight:plated_cookie[stacks=2] run say DDP07 two left
+> data get entity ddp7 Inventory
+expect DDP07 plate holds 3
+expect DDP07 two left
+expect id: "minecraft:cookie"
+look sneak half not run here (no sneak in perfBot or /zq): CQ-DDP-01 does it with takeAll = false (Boot 2 world has takeAll = true, so set it back to false in the client copy for that half, or judge it in a Boot 1 copy)
+
+## SQ-VTD8-01 | Vintage config carried; remainderBuffer = false drops the bottles on the jar
+shell ls config | grep -i vintagedelight
+shell test -f config/vintagedelight-common.toml.moved && test ! -f config/vintagedelight-common.toml
+shell test "$(grep -c 'config/vintagedelight-common.toml carried into' logs/latest.log)" = 1
+bootreject could not carry|could not rename
+shell awk '/^[[:space:]]*\[/{s=$0} s ~ /\[vintage/' config/creativedelight-common.toml
+shell awk '/^[[:space:]]*\[/{s=$0} s ~ /^[[:space:]]*\[vintage\.pickling_jar\][[:space:]]*$/ && /^[[:space:]]*remainderBuffer[[:space:]]*=[[:space:]]*false/{f=1} END{exit !f}' config/creativedelight-common.toml
+shell awk '/^[[:space:]]*\[/{s=$0} s ~ /^[[:space:]]*\[vintage\.pickling_jar\][[:space:]]*$/ && /^[[:space:]]*stallWhenFull[[:space:]]*=/{f=1} END{exit !f}' config/creativedelight-common.toml
+shell awk '/^[[:space:]]*\[/{s=$0} s ~ /^[[:space:]]*\[vintage\.worldgen\][[:space:]]*$/ && /^[[:space:]]*magicVineConvertsDirtToLushGrass[[:space:]]*=/{f=1} END{exit !f}' config/creativedelight-common.toml
+> zq rdetail fermented_garlic
+> kill @e[type=minecraft:item]
+> setblock {H1} {H2} {H3+16} vintagedelight:fermenting_jar
+# 3 batches of 4 garlic cloves + 1 honey bottle (veggiesdelight compat fermenting recipe, 600 ticks each); put in by
+# NBT instead of from the top: a hopper above the jar would pick up the bottles the row looks for
+> data merge block {H1} {H2} {H3+16} {inventory:{Size:10,Items:[{Slot:0b,id:"veggiesdelight:garlic_clove",Count:3b},{Slot:1b,id:"veggiesdelight:garlic_clove",Count:3b},{Slot:2b,id:"veggiesdelight:garlic_clove",Count:3b},{Slot:3b,id:"veggiesdelight:garlic_clove",Count:3b},{Slot:4b,id:"minecraft:honey_bottle",Count:3b}]}}
+sleep 100
+> data get block {H1} {H2} {H3+16} inventory
+> zcount {H1-1} {H2} {H3+15} {H1+1} {H2+2} {H3+17}
+waitlog \[zcount\] entities 30
+expect \{(?=[^{}]*Slot: 7b?[,}])(?=[^{}]*"veggiesdelight:fermented_garlic_honey")(?=[^{}]*Count: 3b)[^{}]*\}
+reject has the following block data: .*Slot: 9b?[,}]
+expect \[zcount\] entities .*item:minecraft:glass_bottle x
+look the rdetail line shows the 4 cloves + honey bottle recipe (else the batch's inputs are wrong: BATCH-FAULT); 3 glass bottles in total lie on the jar
+
+## SQ-CDFW-10 | tool_dict.js / misc_dict.js load without a thrown check
+shell grep -nE "tool_dict|misc_dict" logs/kubejs/startup.log | head -5
+shell grep -q "Loaded script startup_scripts:_lib/tool_dict.js" logs/kubejs/startup.log && grep -q "Loaded script startup_scripts:_lib/misc_dict.js" logs/kubejs/startup.log
+shell ! grep -nE "tool_dict|misc_dict" logs/kubejs/startup.log logs/latest.log | grep -iE "error|throw|missing|warn"
+shell ! grep -nE "(tool|misc) dict: [0-9]+ problem" logs/kubejs/startup.log logs/latest.log
+look key counts (108 tool, 227 misc): KubeJS 1.19.2 has no /kubejs eval and the dicts print no count; judge offline (grep the two files) or leave to a client session with a startup print
+
+## SQ-FD-01 | food dict loads; veggie_slice_cooked_potato resolves
+shell ! grep -nE "food dict: [0-9]+ problem" logs/kubejs/startup.log logs/latest.log
+shell ! grep -niE "(food_grammar|food_dict)\.js.*(error|exception)" logs/kubejs/startup.log
+> zq item rusticdelight:baked_potato_slices
+expect \[zq\] item rusticdelight:baked_potato_slices: class
+reject \[zq\] item rusticdelight:baked_potato_slices: class AirItem
+look global.food.veggie_slice_cooked_potato = rusticdelight:baked_potato_slices cannot be read on a server (no eval); the dict check (no "food dict: N problem" line) proves every key resolved, and the target item exists
+
+## SQ-DDP-01 | Display member boots from the CD jar, no own config file
+bootexpect Done \(
+bootreject (?i)\b(error|exception)\b.*displaydelight
+bootreject Failed to set block association
+# the row's "no missing-registry line" (r1102: Unidentified mapping displaydelight:od_plated_baked_tentacle_on_a_stick)
+bootreject (?i)(missing registry|unidentified mapping)
+bootexpect \[creativedelight\] members: \[.*\bdisplaydelight\b
+shell test ! -f config/displaydelight-common.toml
+
+## SQ-DDP-02 | display blocks of each source mod drop their food, not the block
+> kill @e[type=minecraft:item]
+> setblock {H1} {H2} {H3+10} displaydelight:abd_duck_noodles
+> setblock {H1+2} {H2} {H3+10} displaydelight:edd_dragon_meat_stew
+> setblock {H1+4} {H2} {H3+10} displaydelight:erd_chorus_stew
+> setblock {H1+6} {H2} {H3+10} displaydelight:fr_green_tea
+> setblock {H1+8} {H2} {H3+10} displaydelight:md_cave_soup
+> setblock {H1+10} {H2} {H3+10} displaydelight:bnc_cheesy_pasta
+> setblock {H1+12} {H2} {H3+10} displaydelight:nd_grilled_strider
+> setblock {H1+14} {H2} {H3+10} displaydelight:md_plated_vegan_hamburger
+reject Unknown block type
+> fill {H1} {H2} {H3+10} {H1+14} {H2} {H3+10} minecraft:air destroy
+sleep 3
+> zcount {H1-1} {H2} {H3+9} {H1+15} {H2+2} {H3+11}
+waitlog \[zcount\] entities 30
+expect \[zcount\] entities .*item:abnormals_delight:duck_noodles x1
+expect \[zcount\] entities .*item:miners_delight:cave_soup x1
+expect \[zcount\] entities .*item:miners_delight:vegan_hamburger x1
+expect \[zcount\] entities .*item:displaydelight:food_plate x1
+reject \[zcount\] entities .*item:displaydelight:(abd|edd|erd|fr|md|bnc|nd)_
+look one food per block in the entities line (edd_ / erd_ / fr_ / bnc_ / nd_ to their mods' items), nothing else
+
+## SQ-DDP-03 | placed shakshouka and omelette drop one food each
+> kill @e[type=minecraft:item]
+> setblock {H1} {H2} {H3+12} creativeengineering:placed_shakshouka
+> setblock {H1+4} {H2} {H3+12} creativeengineering:placed_omelette
+reject Unknown block type
+> setblock {H1} {H2} {H3+12} minecraft:air destroy
+> setblock {H1+4} {H2} {H3+12} minecraft:air destroy
+sleep 3
+> zcount {H1-1} {H2} {H3+11} {H1+1} {H2+2} {H3+13}
+> zcount {H1+3} {H2} {H3+11} {H1+5} {H2+2} {H3+13}
+waitlog \[zcount\] entities 30
+count \[zcount\] entities item:[a-z_]+:[a-z_]+ x1=1$ == 2
+
+## SQ-DDP-05 | piston-pushed beef stew breaks and drops
+> kill @e[type=minecraft:item]
+> setblock {H1} {H2} {H3+14} minecraft:piston[facing=east]
+> setblock {H1+1} {H2} {H3+14} displaydelight:beef_stew
+> setblock {H1-1} {H2} {H3+14} minecraft:redstone_block
+sleep 3
+> execute if block {H1+1} {H2} {H3+14} displaydelight:beef_stew run say DDP05 stew still there
+> zcount {H1} {H2} {H3+13} {H1+4} {H2+2} {H3+15}
+waitlog \[zcount\] entities 30
+reject DDP05 stew still there
+expect \[zcount\] entities .*item:farmersdelight:beef_stew x1
+
+## SQ-FGD-00 | Fungi member boots: mixins, item_dict, spawn and crop rules
+bootreject (?i)(error|fail|warn).*(MushroomCowBreedingMixin|AnimalCanMateMooshroomMixin|HoglinMixin)
+bootreject Unknown (item|tag).*fungidelight
+shell ! grep -A80 "\[item_dict\] Missing/invalid item IDs:" logs/latest.log | grep -m5 "fungidelight"
+bootexpect \[mob-spawns\]
+bootexpect \[mushroom-spawns\]
+bootexpect \[wild-crops\]
+shell grep -nE "\[(mob-spawns|mushroom-spawns|wild-crops)\]" logs/latest.log | cut -c1-400
+look rows/SQ-FGD-00.shell.txt: mooshroom_mushroom_fields matched with 0 changes, the 4 Fungi cow rules matched and none idle; mushroom-spawns names 8 rules; wild-crops covers rooted_dirt and truffle_dirt
+
+## SQ-FGD-01 | /fgdtest all (FGD-01 to -06, -08, -09, -10 logic)
+# zz_fgd_probe.js copied in before the boot (README Boot 1); its blocks sit at absolute x 70..160, z 0
+> forceload add 64 -16 176 16
+sleep 10
+> fgdtest all
+waitlog \[fgdtest\] done all 300
+> forceload remove 64 -16 176 16
+count \[fgdtest\] FAIL == 0
+look any FAIL line: truffle pie (fungiport #3) may still fail if SQ-CM-36 is not fixed; the rows SQ-FGD-02 to -10 below are judged from these lines
+
+## SQ-FGD-02 | tags (from the /fgdtest all lines)
+look rows/SQ-FGD-01.log, part tags: all PASS (colonies in the Serene Seasons tags: known wording overreach, fungiport #3)
+
+## SQ-FGD-03 | compost (from /fgdtest all); after /reload: SQ-FGD-03b
+look rows/SQ-FGD-01.log, part compost: all PASS
+
+## SQ-FGD-04 | mobs (from /fgdtest all)
+look rows/SQ-FGD-01.log, part mobs: all PASS
+
+## SQ-FGD-05 | brewing (from /fgdtest all)
+look rows/SQ-FGD-01.log, part brewing: all PASS
+
+## SQ-FGD-06 | blocks (from /fgdtest all)
+look rows/SQ-FGD-01.log, part blocks: all PASS
+
+## SQ-FGD-08 | cows and lightning (from /fgdtest all, part cows)
+look rows/SQ-FGD-01.log, part cows: all PASS
+
+## SQ-FGD-09 | breeding (from /fgdtest all, part breed; getBreedOffspring, 40 per pair)
+look rows/SQ-FGD-01.log, part breed: mixed pairs about half each kind, same-kind pairs their own kind, moobloom no calf
+
+## SQ-FGD-10 | Weak Stomach (from /fgdtest all, part stomach)
+look rows/SQ-FGD-01.log, part stomach: all PASS
+
+## SQ-FGD-11 | farmer level 3 and wandering trader trades
+# zz_trades.js copied in before the boot; trades are built on this fresh boot (the "restart" of the row)
+> ztrades farmer 3 20
+> ztrades wandering 0 20
+waitlog \[ztrades\] wandering L0 #19 60
+expect \[ztrades\] farmer L3 .*fungidelight:inky_cap_mushroom_colony -> 1 minecraft:emerald
+expect \[ztrades\] farmer L3 .*fungidelight:morel_mushroom_colony -> 1 minecraft:emerald
+expect \[ztrades\] farmer L3 .*fungidelight:truffle -> 1 minecraft:emerald
+expect \[ztrades\] wandering L0 .*-> \d+ fungidelight:inky_cap_mushroom( |$)
+expect \[ztrades\] wandering L0 .*-> \d+ fungidelight:morel_mushroom( |$)
+expect \[ztrades\] wandering L0 .*-> \d+ fungidelight:inky_goo_veil
+look farmer L3 also buys the brown and red mushroom colonies (4 colonies in all) for 1 emerald
+
+## SQ-MDP-01 | Miner's member boots: upstream data, cup table, CCK hooks
+bootexpect Miner's Delight upstream data: 182 files
+# 16 = 14 upstream rows (1.4.5's 15 less farmersdelight:onion_soup) + the pack's Creamy Onion Soup + Delightful's cactus soup (r1102 judge)
+bootexpect Cup conversions: 16 bowl foods
+bootreject (?i)\b(error|exception)\b.*miners_delight
+bootreject (?i)(scavenging_cooked_|any_of).*(error|unknown|invalid)
+bootreject (?i)(CopperPotBlockEntityMixin|StickyBasketBlockEntityMixin|StickyBasketBlockEntityAccessor).*(not found|fail|error)
+
+## SQ-MDP-03 | copper pot cave soup serves 2 cups
+> setblock {H1} {H2} {H3+28} minecraft:campfire[lit=true]
+> setblock {H1} {H2+1} {H3+28} miners_delight:copper_pot
+> data merge block {H1} {H2+1} {H3+28} {Inventory:{Size:8,Items:[{Slot:0b,id:"miners_delight:cave_carrot",Count:1b},{Slot:1b,id:"minecraft:red_mushroom",Count:1b},{Slot:2b,id:"minecraft:brown_mushroom",Count:1b},{Slot:3b,id:"minecraft:brown_mushroom",Count:1b}]}}
+sleep 15
+> data get block {H1} {H2+1} {H3+28}
+expect has the following block data: .*miners_delight:cave_soup_cup
+expect has the following block data: .*Container: \{.*miners_delight:copper_cup
+look the cave_soup_cup stack in slot 4 (meal) has Count 2b
+
+## SQ-MDP-04a | squid, knife kill: the squid item, no tentacles (dishes/ocean #3)
+> kill @e[type=minecraft:item]
+> summon minecraft:squid {H1+40} {H2} {H3+10} {NoAI:1b,Invulnerable:1b,PersistenceRequired:1b,Tags:["mdpsq"]}
+> pbot spawn knf {H1+38} {H2} {H3+8} minecraft:overworld survival
+> pbot hold knf farmersdelight:iron_knife
+> pbot spawn bh {H1+38} {H2} {H3+6} minecraft:overworld survival
+pace 0.1
+repeat 20
+> execute as knf run loot spawn {H1+44} {H2} {H3+10} kill @e[type=minecraft:squid,tag=mdpsq,limit=1]
+end
+pace 2
+sleep 3
+> zcount {H1+42} {H2} {H3+8} {H1+46} {H2+3} {H3+12}
+waitlog \[zcount\] entities 30
+# shipped design (TODO dishes/ocean #3, #4, 1.1.03): a squid drops its Miner's item every kill, no tentacles or ink;
+# the queue row's tentacles 1-3 is stale (r1102 judge)
+expect \[zcount\] entities .*item:miners_delight:squid x
+reject \[zcount\] entities .*item:miners_delight:tentacles x
+
+## SQ-MDP-04b | squid, bare-hand kill: the squid item every kill, no tentacles (dishes/ocean #3)
+> kill @e[type=minecraft:item]
+pace 0.1
+repeat 20
+> execute as bh run loot spawn {H1+44} {H2} {H3+14} kill @e[type=minecraft:squid,tag=mdpsq,limit=1]
+end
+pace 2
+sleep 3
+> zcount {H1+42} {H2} {H3+12} {H1+46} {H2+3} {H3+16}
+waitlog \[zcount\] entities 30
+# shipped design (dishes/ocean #3): the squid item every kill, bare hand too; no tentacles (r1102 judge)
+expect \[zcount\] entities .*item:miners_delight:squid x
+reject \[zcount\] entities .*item:miners_delight:tentacles x
+> kill @e[type=minecraft:squid,tag=mdpsq]
+look squid items total 20 over the 20 rolls (one per kill), no ink sac
+
+## SQ-MDP-05 | Miner's items exist, hot_cocoa_cup removed
+> pbot spawn md5 {H1} {H2} {H3-5} minecraft:overworld survival
+> give md5 miners_delight:hot_cocoa_cup
+> give md5 miners_delight:arthropod
+> give md5 miners_delight:cooked_arthropod
+> give md5 miners_delight:spider_leg
+> give md5 miners_delight:baked_spider_leg
+> give md5 miners_delight:moss
+> give md5 miners_delight:copper_carrot
+> give md5 miners_delight:crunchy_bar
+> give md5 miners_delight:nutritional_bar
+> give md5 miners_delight:golden_nutritional_bar
+> give md5 miners_delight:bat_cookie
+> give md5 miners_delight:bat_soup_cup
+> give md5 miners_delight:insect_stew_cup
+> give md5 miners_delight:bone_broth_cup
+> give md5 miners_delight:onion_soup_cup
+expect Unknown item.*miners_delight:hot_cocoa_cup
+count Gave 1 +\[ == 14
+shell ! grep -A80 "\[item_dict\] Missing/invalid item IDs:" logs/latest.log | grep -m5 "miners_delight"
+shell ! grep -niE "unknown item.*miners_delight" logs/kubejs/startup.log logs/kubejs/server.log
+look registry count in namespace miners_delight: SQ-CDJ-09b (items_by_mod after /dumpall; the row says 69 minus hot_cocoa_cup, the 2026-10-24 dump already had 69 without it: record the number)
+
+## SQ-MDP-06 | copper pot: Miner's soups serve 2 cups, Creamy Onion Soup to onion_soup_cup
+> setblock {H1+2} {H2} {H3+28} minecraft:campfire[lit=true]
+> setblock {H1+2} {H2+1} {H3+28} miners_delight:copper_pot
+> data merge block {H1+2} {H2+1} {H3+28} {Inventory:{Size:8,Items:[{Slot:0b,id:"rusticdelight:calamari",Count:1b},{Slot:1b,id:"rusticdelight:calamari",Count:1b},{Slot:2b,id:"create:dough",Count:1b},{Slot:3b,id:"farmersdelight:onion",Count:1b}]}}
+> setblock {H1+4} {H2} {H3+28} minecraft:campfire[lit=true]
+> setblock {H1+4} {H2+1} {H3+28} miners_delight:copper_pot
+> data merge block {H1+4} {H2+1} {H3+28} {Inventory:{Size:8,Items:[{Slot:0b,id:"miners_delight:bat_wing",Count:1b},{Slot:1b,id:"miners_delight:bat_wing",Count:1b}]}}
+> setblock {H1+6} {H2} {H3+28} minecraft:campfire[lit=true]
+> setblock {H1+6} {H2+1} {H3+28} miners_delight:copper_pot
+> data merge block {H1+6} {H2+1} {H3+28} {Inventory:{Size:8,Items:[{Slot:0b,id:"miners_delight:arthropod",Count:1b},{Slot:1b,id:"miners_delight:arthropod",Count:1b},{Slot:2b,id:"miners_delight:arthropod",Count:1b},{Slot:3b,id:"miners_delight:arthropod",Count:1b}]}}
+> setblock {H1+8} {H2} {H3+28} minecraft:campfire[lit=true]
+> setblock {H1+8} {H2+1} {H3+28} miners_delight:copper_pot
+> data merge block {H1+8} {H2+1} {H3+28} {Inventory:{Size:8,Items:[{Slot:0b,id:"brewinandchewin:flaxen_cheese_wedge",Count:1b},{Slot:1b,id:"farmersdelight:onion",Count:1b},{Slot:2b,id:"minecraft:carrot",Count:1b},{Slot:3b,id:"minecraft:bread",Count:1b}]}}
+> setblock {H1+10} {H2} {H3+28} minecraft:campfire[lit=true]
+> setblock {H1+10} {H2+1} {H3+28} miners_delight:copper_pot
+> data merge block {H1+10} {H2+1} {H3+28} {Inventory:{Size:8,Items:[{Slot:0b,id:"minecraft:beef",Count:1b},{Slot:1b,id:"minecraft:carrot",Count:1b},{Slot:2b,id:"minecraft:potato",Count:1b}]}}
+# Bone Broth: the pack's bone_to_2_bone_broth pot recipe (bone + one mushroom-tag item -> 2 bowls) (r1102 judge)
+> setblock {H1+20} {H2} {H3+28} minecraft:campfire[lit=true]
+> setblock {H1+20} {H2+1} {H3+28} miners_delight:copper_pot
+> data merge block {H1+20} {H2+1} {H3+28} {Inventory:{Size:8,Items:[{Slot:0b,id:"minecraft:bone",Count:1b},{Slot:1b,id:"fungidelight:cooked_cleaned_cap",Count:1b}]}}
+> zq rdetail bone_broth
+> zq uses farmersdelight:onion_soup
+sleep 15
+> say MDP06 takoyaki
+> data get block {H1+2} {H2+1} {H3+28}
+> say MDP06 bat soup
+> data get block {H1+4} {H2+1} {H3+28}
+> say MDP06 insect stew
+> data get block {H1+6} {H2+1} {H3+28}
+> say MDP06 creamy onion soup
+> data get block {H1+8} {H2+1} {H3+28}
+> say MDP06 beef stew
+> data get block {H1+10} {H2+1} {H3+28}
+> say MDP06 bone broth
+> data get block {H1+20} {H2+1} {H3+28}
+expect has the following block data: .*miners_delight:takoyaki
+expect has the following block data: .*miners_delight:bat_soup_cup
+expect has the following block data: .*miners_delight:insect_stew_cup
+expect has the following block data: .*miners_delight:onion_soup_cup
+expect has the following block data: .*miners_delight:bone_broth_cup
+expect has the following block data: .*miners_delight:beef_stew_cup
+expect \[zq\] uses farmersdelight:onion_soup: 0 alone, 0 with other items
+look cups have Count 2b (bone broth: 2 bowls -> 4 cups?) and Container copper_cup; takoyaki is the 1.4.5 recipe shape (2 x #forge:foods/tentacles, which holds calamari since dishes/ocean #4, dough, onion); FD beef stew serves 2 beef_stew_cup (upstream cup table row; the queue's "one bowl" is stale)
+
+## SQ-MDP-07 | Miner's foods: values (poison cure not batchable)
+> zq food miners_delight:nutritional_bar
+> zq food miners_delight:golden_nutritional_bar
+> zq food miners_delight:crunchy_bar
+> zq food miners_delight:moss
+> zq food miners_delight:copper_carrot
+> zq food miners_delight:bat_cookie
+> zq food minecraft:cookie
+count \[zq\] food miners_delight:[a-z_]+: nutrition \d+ == 6
+look values against food_values.js / the food dump; Poison II cured by both bars only and Bat Cookie use duration need a real eat (FakePlayer finishUsingItem probe, none written; perfBot cannot eat): CQ-MND-01 or a later probe
+
+## SQ-MDP-08a | spider, knife kill: arthropod 1-3, spider leg about 40 %
+> kill @e[type=minecraft:item]
+> summon minecraft:spider {H1+50} {H2} {H3+10} {NoAI:1b,Invulnerable:1b,PersistenceRequired:1b,Tags:["mdpsp"]}
+> summon minecraft:spider {H1+50} {H2} {H3+20} {NoAI:1b,Invulnerable:1b,PersistenceRequired:1b,Fire:30000s,Tags:["mdpspf"]}
+> summon minecraft:cave_spider {H1+50} {H2} {H3+30} {NoAI:1b,Invulnerable:1b,PersistenceRequired:1b,Tags:["mdpcs"]}
+> summon minecraft:silverfish {H1+50} {H2} {H3+40} {NoAI:1b,Invulnerable:1b,PersistenceRequired:1b,Tags:["mdpsf"]}
+> summon minecraft:bat {H1+50} {H2+2} {H3+50} {NoAI:1b,Invulnerable:1b,PersistenceRequired:1b,Tags:["mdpbat"]}
+pace 0.05
+repeat 300
+> execute as knf run loot spawn {H1+44} {H2} {H3+20} kill @e[type=minecraft:spider,tag=mdpsp,limit=1]
+end
+pace 2
+sleep 3
+> zcount {H1+42} {H2} {H3+18} {H1+46} {H2+3} {H3+22}
+waitlog \[zcount\] entities 30
+expect \[zcount\] entities .*item:miners_delight:arthropod x
+expect \[zcount\] entities .*item:miners_delight:spider_leg x
+reject \[zcount\] entities .*item:miners_delight:(cooked_arthropod|baked_spider_leg) x
+look arthropod total 300..900 (1-3 each roll), spider_leg about 120, cobweb some
+
+## SQ-MDP-08b | spider, bare-hand kill: no arthropod
+> kill @e[type=minecraft:item]
+pace 0.05
+repeat 300
+> execute as bh run loot spawn {H1+44} {H2} {H3+24} kill @e[type=minecraft:spider,tag=mdpsp,limit=1]
+end
+pace 2
+sleep 3
+> zcount {H1+42} {H2} {H3+22} {H1+46} {H2+3} {H3+26}
+waitlog \[zcount\] entities 30
+reject \[zcount\] entities .*item:miners_delight:arthropod x
+
+## SQ-MDP-08c | burning spider, knife kill: cooked arthropod and baked leg, no raw
+> kill @e[type=minecraft:item]
+pace 0.05
+repeat 300
+> execute as knf run loot spawn {H1+44} {H2} {H3+28} kill @e[type=minecraft:spider,tag=mdpspf,limit=1]
+end
+pace 2
+sleep 3
+> zcount {H1+42} {H2} {H3+26} {H1+46} {H2+3} {H3+30}
+waitlog \[zcount\] entities 30
+expect \[zcount\] entities .*item:miners_delight:cooked_arthropod x
+expect \[zcount\] entities .*item:miners_delight:baked_spider_leg x
+reject \[zcount\] entities .*item:miners_delight:(arthropod|spider_leg) x
+
+## SQ-MDP-08d | cave spider, knife kill: arthropod, no spider leg
+> kill @e[type=minecraft:item]
+pace 0.05
+repeat 300
+> execute as knf run loot spawn {H1+44} {H2} {H3+32} kill @e[type=minecraft:cave_spider,tag=mdpcs,limit=1]
+end
+pace 2
+sleep 3
+> zcount {H1+42} {H2} {H3+30} {H1+46} {H2+3} {H3+34}
+waitlog \[zcount\] entities 30
+expect \[zcount\] entities .*item:miners_delight:arthropod x
+reject \[zcount\] entities .*item:miners_delight:spider_leg x
+
+## SQ-MDP-08e | cave spider, bare-hand kill: no arthropod
+> kill @e[type=minecraft:item]
+pace 0.05
+repeat 300
+> execute as bh run loot spawn {H1+44} {H2} {H3+36} kill @e[type=minecraft:cave_spider,tag=mdpcs,limit=1]
+end
+pace 2
+sleep 3
+> zcount {H1+42} {H2} {H3+34} {H1+46} {H2+3} {H3+38}
+waitlog \[zcount\] entities 30
+reject \[zcount\] entities .*item:miners_delight:arthropod x
+
+## SQ-MDP-08f | silverfish, knife kill: 1 arthropod always, eggs about 50 %
+> kill @e[type=minecraft:item]
+pace 0.05
+repeat 300
+> execute as knf run loot spawn {H1+54} {H2} {H3+10} kill @e[type=minecraft:silverfish,tag=mdpsf,limit=1]
+end
+pace 2
+sleep 3
+> zcount {H1+52} {H2} {H3+8} {H1+56} {H2+3} {H3+12}
+waitlog \[zcount\] entities 30
+expect \[zcount\] entities .*item:miners_delight:arthropod x
+expect \[zcount\] entities .*item:miners_delight:silverfish_eggs x
+look arthropod total 300, eggs about 150
+
+## SQ-MDP-08g | silverfish, bare-hand kill: eggs about 5 %, no arthropod
+> kill @e[type=minecraft:item]
+pace 0.05
+repeat 300
+> execute as bh run loot spawn {H1+54} {H2} {H3+14} kill @e[type=minecraft:silverfish,tag=mdpsf,limit=1]
+end
+pace 2
+sleep 3
+> zcount {H1+52} {H2} {H3+12} {H1+56} {H2+3} {H3+16}
+waitlog \[zcount\] entities 30
+reject \[zcount\] entities .*item:miners_delight:arthropod x
+look eggs total about 15
+
+## SQ-MDP-08h | bat, knife and bare-hand kills (as SQ-MDP-04 for squids)
+> kill @e[type=minecraft:item]
+pace 0.1
+repeat 50
+> execute as knf run loot spawn {H1+54} {H2} {H3+18} kill @e[type=minecraft:bat,tag=mdpbat,limit=1]
+end
+repeat 50
+> execute as bh run loot spawn {H1+54} {H2} {H3+24} kill @e[type=minecraft:bat,tag=mdpbat,limit=1]
+end
+pace 2
+sleep 3
+> zcount {H1+52} {H2} {H3+16} {H1+56} {H2+3} {H3+20}
+> zcount {H1+52} {H2} {H3+22} {H1+56} {H2+3} {H3+26}
+waitlog \[zcount\] entities 30
+> kill @e[tag=mdpsp]
+> kill @e[tag=mdpspf]
+> kill @e[tag=mdpcs]
+> kill @e[tag=mdpsf]
+> kill @e[tag=mdpbat]
+look first zcount line (knife) vs second (bare): bat_wing drops as the port's GLM says (knife adds or replaces)
+
+## SQ-MDP-09 | mineshaft chests can hold copper and cave carrots
+> kill @e[type=minecraft:item]
+pace 0.05
+repeat 400
+> loot spawn {H1+58} {H2} {H3+30} loot minecraft:chests/abandoned_mineshaft
+end
+pace 2
+sleep 5
+> zcount {H1+55} {H2} {H3+27} {H1+61} {H2+3} {H3+33}
+waitlog \[zcount\] entities 30
+expect \[zcount\] entities .*item:miners_delight:copper_carrot x
+expect \[zcount\] entities .*item:miners_delight:cave_carrot x
+expect \[zcount\] entities .*item:minecraft:rail x
+look a few stacks per 100 rolls of each carrot; vanilla kinds (rails, iron, golden apple) still there
+> kill @e[type=minecraft:item]
+
+## SQ-MDP-10 | feasts serve and leave the leftover; sticky basket; copper cup on water
+> kill @e[type=minecraft:item]
+> setblock {H1} {H2} {H3+31} miners_delight:stuffed_squid
+> setblock {H1+3} {H2} {H3+31} miners_delight:fake_meatloaf
+> setblock {H1+6} {H2} {H3+31} miners_delight:glazed_arachnid_limbs
+reject Unknown block type
+> pbot spawn fst {H1+3} {H2} {H3+33} minecraft:overworld survival
+> pbot hold fst minecraft:bowl 16
+repeat 4
+> pbot use fst {H1} {H2} {H3+31} up
+> pbot use fst {H1+3} {H2} {H3+31} up
+> pbot use fst {H1+6} {H2} {H3+31} up
+end
+> data get entity fst Inventory
+> zcount {H1} {H2} {H3+31} {H1+6} {H2} {H3+31}
+> setblock {H1+3} {H2} {H3+31} minecraft:air destroy
+sleep 3
+> zcount {H1+2} {H2} {H3+30} {H1+4} {H2+2} {H3+32}
+expect id: "miners_delight:bowl_of_stuffed_squid"
+expect id: "miners_delight:plate_of_fake_meatloaf"
+expect id: "miners_delight:plate_of_glazed_arachnid_limbs"
+# sticky basket over a hopper; an item dropped on top is collected (facing up, the default) and the hopper pulls it
+# out (the basket has no output of its own; r1102 judge: a chest under it stayed empty)
+> setblock {H1} {H2} {H3+34} minecraft:hopper
+> setblock {H1} {H2+1} {H3+34} miners_delight:sticky_basket
+> summon minecraft:item {H1} {H2+3} {H3+34} {Item:{id:"minecraft:apple",Count:3b},PickupDelay:0s}
+sleep 3
+> data get block {H1} {H2+1} {H3+34}
+sleep 10
+> data get block {H1} {H2+1} {H3+34}
+> data get block {H1} {H2} {H3+34}
+expect has the following block data: \{(?=.*id: "minecraft:hopper")(?=.*minecraft:apple)
+# copper cup on a water source: the bot stands east of it looking west, 60 degrees down (the ray meets the water top inside the source block); /zq useitem is the air use
+> setblock {H1+3} {H2-1} {H3+37} minecraft:water
+> pbot spawn cup {H1+4} {H2} {H3+37} minecraft:overworld survival
+> tp cup {H1+4} {H2} {H3+37} 90 60
+> pbot hold cup miners_delight:copper_cup
+> zq useitem cup
+> data get entity cup SelectedItem
+expect id: "miners_delight:water_cup"
+look feasts: 4 servings each into the right container (bowl / plate ids above; a "needs a X" refusal means the container is not a bowl: BATCH-FAULT, rerun with that item), the meatloaf block left as its leftover state in the first zcount line, its break drops only the leftover; sticky basket: apples in the hopper below (the basket collected them; the hopper pulls them within about 1 s, so the basket line may already be empty); copper cup on a cow (milk cup) and on a fish (nothing) need an entity use: CQ-MND-01
+
+## SQ-MDP-11 | Miner's haste / mining fatigue brews
+> zq potion minecraft:awkward miners_delight:copper_carrot
+> zq potion miners_delight:haste minecraft:redstone,minecraft:glowstone_dust,minecraft:fermented_spider_eye
+> zq potion miners_delight:mining_fatigue minecraft:redstone,minecraft:glowstone_dust
+> zq potion rusticdelight:haste minecraft:redstone,minecraft:glowstone_dust,miners_delight:copper_carrot
+expect \[zq\] potion miners_delight:haste registered: true
+expect minecraft:awkward \+ miners_delight:copper_carrot -> minecraft:potion haste
+expect miners_delight:haste \+ minecraft:redstone -> minecraft:potion \S+
+expect miners_delight:haste \+ minecraft:glowstone_dust -> minecraft:potion \S+
+expect miners_delight:haste \+ minecraft:fermented_spider_eye -> minecraft:potion mining_fatigue
+expect miners_delight:mining_fatigue \+ minecraft:redstone -> minecraft:potion \S+
+expect miners_delight:mining_fatigue \+ minecraft:glowstone_dust -> minecraft:potion \S+
+look the output names drop the namespace and long / strong forms may print the base name (Potion.getName, as vanilla long_swiftness prints "swiftness"): "haste" from awkward + copper carrot must be the Miner's potion, not rusticdelight:haste (the last line shows Rustic's own chain); exactly one mix each; Create mixer, bottler, potion bucket, tipped-arrow routes for the Miner's potions: record from /zq recipes miners_delight below or JEI (gap goes to TODO potions/potions)
+> zq recipes miners_delight:haste
+
+## SQ-MDP-13 | Miner's foods have their recipes
+> zq makes miners_delight:arthropod
+> zq makes miners_delight:spider_leg
+> zq makes miners_delight:bat_cookie
+> zq makes miners_delight:bat_rolls
+> zq makes miners_delight:squid_sandwich
+> zq makes miners_delight:glow_ink_pasta
+> zq makes miners_delight:vegan_patty
+> zq makes miners_delight:vegan_hamburger
+> zq makes miners_delight:vegan_wrap
+> zq makes miners_delight:vegan_steak_and_potatoes
+> zq makes miners_delight:fake_meatloaf
+> zq makes miners_delight:cave_hamburger
+> zq makes miners_delight:tentacles_on_a_stick
+> zq recipes miners_delight
+# spider_leg is a mob drop only (upstream has no recipe for it) and tentacles_on_a_stick is a removed item
+# (dishes/ocean #4): 11 of the 13 must have a recipe, those two none (r1102 judge)
+count \[zq\] makes miners_delight:[a-z_]+: [1-9] == 11
+expect \[zq\] makes miners_delight:spider_leg: 0
+expect \[zq\] makes miners_delight:tentacles_on_a_stick: 0
+look the recipe types (cooking pot, cutting board, smoking, campfire, crafting) in the makes lines; Create mixing / crafting only where cooking.js adds them; no recipe outputs a dropped item (hot_cocoa_cup)
+
+## SQ-MDP-14 | copper pot leftover slot (Size 8): bucket into slot 7, full slot 7 stalls, hopper empties 6 and 7
+# stale row text: "needs port -02 in mods/": the port is nested in the CD jar now (-03); MDConfig still writes its own
+# config/miners_delight-common.toml (not moved into the CD file)
+bootexpect Miner's Delight upstream data: \d+ files
+bootreject (?i)miners_upstream.*(error|missing)
+shell test -f config/miners_delight-common.toml
+> zq rdetail farmersdelight:cooking/hot_cocoa
+> setblock {H1+14} {H2} {H3+28} minecraft:campfire[lit=true]
+> setblock {H1+14} {H2+1} {H3+28} miners_delight:copper_pot
+> data merge block {H1+14} {H2+1} {H3+28} {Inventory:{Size:8,Items:[{Slot:0b,id:"minecraft:milk_bucket",Count:1b},{Slot:1b,id:"minecraft:sugar",Count:1b},{Slot:2b,id:"minecraft:cocoa_beans",Count:1b},{Slot:3b,id:"minecraft:cocoa_beans",Count:1b},{Slot:5b,id:"minecraft:glass_bottle",Count:4b}]}}
+sleep 15
+> say MDP14 first meal
+> data get block {H1+14} {H2+1} {H3+28}
+expect \{(?=[^{}]*Slot: 7b?[,}])(?=[^{}]*"minecraft:bucket")[^{}]*\}
+# slot 7 full of another item: the next meal must not start
+> setblock {H1+16} {H2} {H3+28} minecraft:campfire[lit=true]
+> setblock {H1+16} {H2+1} {H3+28} miners_delight:copper_pot
+> data merge block {H1+16} {H2+1} {H3+28} {Inventory:{Size:8,Items:[{Slot:0b,id:"minecraft:milk_bucket",Count:1b},{Slot:1b,id:"minecraft:sugar",Count:1b},{Slot:2b,id:"minecraft:cocoa_beans",Count:1b},{Slot:3b,id:"minecraft:cocoa_beans",Count:1b},{Slot:7b,id:"minecraft:stone",Count:64b}]}}
+sleep 15
+> say MDP14 slot 7 full
+> data get block {H1+16} {H2+1} {H3+28}
+# stall: the milk bucket still in slot 0 and no meal (r1102: the pot cooked anyway, canCook skips leftoversFit when the meal slot is empty)
+expect has the following block data: (?=.*id: "minecraft:stone", Count: 64b)(?=.*Slot: 0, id: "minecraft:milk_bucket").*miners_delight:copper_pot
+# hopper under an unheated pot holding items in slots 6 and 7
+> setblock {H1+18} {H2} {H3+28} minecraft:hopper
+> setblock {H1+18} {H2+1} {H3+28} miners_delight:copper_pot
+> data merge block {H1+18} {H2+1} {H3+28} {Inventory:{Size:8,Items:[{Slot:6b,id:"minecraft:apple",Count:2b},{Slot:7b,id:"minecraft:bucket",Count:1b}]}}
+sleep 5
+> say MDP14 hopper
+> data get block {H1+18} {H2} {H3+28}
+> data get block {H1+18} {H2+1} {H3+28}
+expect has the following block data: (?=.*id: "minecraft:hopper")(?=.*minecraft:apple)(?=.*minecraft:bucket)
+look the milk bucket + sugar + 2 cocoa inputs cook quarkdelight:cloud_latte (not hot cocoa; still a bucket leftover, fine); first pot: bucket in slot 7, nothing on the floor; "slot 7 full" pot: milk still in slot 0, no meal; hopper: holds the apples and the bucket, the pot's 6 and 7 empty. Old-style Size:7 inventory kept after a chunk reload: not batched (needs a chunk unload; do by hand: data merge Size:7, forceload remove, wait, data get)
+
+## SQ-MDP-16 | cave carrot crate pack on the Miner's mineshaft table
+> loottuning
+> kill @e[type=minecraft:item]
+pace 0.05
+repeat 300
+> loot spawn {H1+58} {H2} {H3+40} loot miners_delight:chests/md_abandoned_mineshaft
+end
+pace 2
+sleep 5
+> zcount {H1+55} {H2} {H3+37} {H1+61} {H2+3} {H3+43}
+waitlog \[zcount\] entities 30
+expect \[zcount\] entities .*item:miners_delight:cave_carrot_crate x
+look /loottuning lists packs only as a count (no names): the crate showing up in the rolls is the evidence
+> kill @e[type=minecraft:item]
+
+## SQ-VTD5-01 | cheese wheel and pizzas: 4 slices at bites 0, 2 at bites 2, none from a blast
+> kill @e[type=minecraft:item]
+> setblock {H1} {H2} {H3+18} vintagedelight:cheese_wheel
+> setblock {H1+3} {H2} {H3+18} vintagedelight:cheese_pizza
+> setblock {H1+6} {H2} {H3+18} vintagedelight:meat_pizza
+> setblock {H1+9} {H2} {H3+18} vintagedelight:cheese_wheel[bites=2]
+> setblock {H1} {H2} {H3+18} minecraft:air destroy
+> setblock {H1+3} {H2} {H3+18} minecraft:air destroy
+> setblock {H1+6} {H2} {H3+18} minecraft:air destroy
+> setblock {H1+9} {H2} {H3+18} minecraft:air destroy
+sleep 3
+> zcount {H1-1} {H2} {H3+17} {H1+1} {H2+2} {H3+19}
+> zcount {H1+2} {H2} {H3+17} {H1+4} {H2+2} {H3+19}
+> zcount {H1+5} {H2} {H3+17} {H1+7} {H2+2} {H3+19}
+> zcount {H1+8} {H2} {H3+17} {H1+10} {H2+2} {H3+19}
+expect \[zcount\] entities item:vintagedelight:cheese_slice x4=1$
+expect \[zcount\] entities item:vintagedelight:cheese_pizza_slice x4=1$
+expect \[zcount\] entities item:vintagedelight:meat_pizza_slice x4=1$
+expect \[zcount\] entities item:vintagedelight:cheese_slice x2=1$
+# blast: a wheel 30 blocks off the other lanes, TNT with no fuse beside it
+> setblock {H1+30} {H2} {H3+18} vintagedelight:cheese_wheel
+> summon minecraft:tnt {H1+31} {H2} {H3+18} {Fuse:0s}
+sleep 4
+> execute if block {H1+30} {H2} {H3+18} vintagedelight:cheese_wheel run say VTD5 wheel survived the blast
+> zcount {H1+25} {H2-3} {H3+13} {H1+35} {H2+3} {H3+23}
+reject VTD5 wheel survived the blast
+reject \[zcount\] entities .*item:vintagedelight:cheese_slice
+look a fifth entities line with grass / dirt only (blast); 4 slices x 3 breaks and 2 at bites 2 in the first four lines
+
+## SQ-VTD4-06 | Magic Peanut, Smooth Salt Block, Vine Tile drop themselves
+> kill @e[type=minecraft:item]
+> setblock {H1} {H2} {H3+20} vintagedelight:magic_peanut
+> setblock {H1+3} {H2} {H3+20} vintagedelight:smooth_salt_block
+> setblock {H1+6} {H2} {H3+20} vintagedelight:vine_tile
+> setblock {H1} {H2} {H3+20} minecraft:air destroy
+> setblock {H1+3} {H2} {H3+20} minecraft:air destroy
+> setblock {H1+6} {H2} {H3+20} minecraft:air destroy
+sleep 3
+> zcount {H1-1} {H2} {H3+19} {H1+1} {H2+2} {H3+21}
+> zcount {H1+2} {H2} {H3+19} {H1+4} {H2+2} {H3+21}
+> zcount {H1+5} {H2} {H3+19} {H1+7} {H2+2} {H3+21}
+expect \[zcount\] entities item:vintagedelight:magic_peanut x1=1$
+expect \[zcount\] entities item:vintagedelight:smooth_salt_block x1=1$
+expect \[zcount\] entities item:vintagedelight:vine_tile x1=1$
+
+## SQ-MXS-01 | mixed seeds: no load error, tags
+bootreject (?i)mixed_seeds.*(error|unknown)
+kjsreject (?i)mixed_seeds.*(error|unknown)
+kjsreject Error occurred while handling event.*mixed_seeds
+> zq itemtag vintagedelight:mixed_seeds_plants
+> zq itemtag forge:seeds
+expect \[zq\] itemtag vintagedelight:mixed_seeds_plants .*minecraft:wheat_seeds
+expect \[zq\] itemtag vintagedelight:mixed_seeds_plants .*minecraft:beetroot_seeds
+expect \[zq\] itemtag vintagedelight:mixed_seeds_plants .*farmersdelight:cabbage_seeds
+expect \[zq\] itemtag vintagedelight:mixed_seeds_plants .*minecraft:melon_seeds
+expect \[zq\] itemtag vintagedelight:mixed_seeds_plants .*minecraft:pumpkin_seeds
+expect \[zq\] itemtag forge:seeds .*vintagedelight:mixed_seeds
+
+## SQ-MXS-02 | mixed seeds plant mixed crops on farmland, not on grass or stone
+> fill {H1} {H2-1} {H3+22} {H1+19} {H2-1} {H3+22} minecraft:farmland[moisture=7]
+> fill {H1} {H2-1} {H3+23} {H1+19} {H2-1} {H3+23} minecraft:water
+> pbot spawn mx {H1+10} {H2} {H3+25} minecraft:overworld survival
+> pbot hold mx vintagedelight:mixed_seeds 20
+pace 0.5
+> pbot use mx {H1} {H2-1} {H3+22} up
+> pbot use mx {H1+1} {H2-1} {H3+22} up
+> pbot use mx {H1+2} {H2-1} {H3+22} up
+> pbot use mx {H1+3} {H2-1} {H3+22} up
+> pbot use mx {H1+4} {H2-1} {H3+22} up
+> pbot use mx {H1+5} {H2-1} {H3+22} up
+> pbot use mx {H1+6} {H2-1} {H3+22} up
+> pbot use mx {H1+7} {H2-1} {H3+22} up
+> pbot use mx {H1+8} {H2-1} {H3+22} up
+> pbot use mx {H1+9} {H2-1} {H3+22} up
+> pbot use mx {H1+10} {H2-1} {H3+22} up
+> pbot use mx {H1+11} {H2-1} {H3+22} up
+> pbot use mx {H1+12} {H2-1} {H3+22} up
+> pbot use mx {H1+13} {H2-1} {H3+22} up
+> pbot use mx {H1+14} {H2-1} {H3+22} up
+> pbot use mx {H1+15} {H2-1} {H3+22} up
+> pbot use mx {H1+16} {H2-1} {H3+22} up
+> pbot use mx {H1+17} {H2-1} {H3+22} up
+> pbot use mx {H1+18} {H2-1} {H3+22} up
+> pbot use mx {H1+19} {H2-1} {H3+22} up
+pace 2
+> zcount {H1} {H2} {H3+22} {H1+19} {H2} {H3+22}
+> data get entity mx SelectedItem
+expect Found no elements matching SelectedItem
+reject \[zcount\] blocks .*minecraft:air=
+# one more seed on grass (natural floor) and on stone: nothing planted, the seed kept
+> setblock {H1+3} {H2-1} {H3+26} minecraft:stone
+> pbot hold mx vintagedelight:mixed_seeds 1
+> pbot use mx {H1} {H2-1} {H3+26} up
+> pbot use mx {H1+3} {H2-1} {H3+26} up
+> execute if block {H1} {H2} {H3+26} minecraft:air run say MXS02 grass stays empty
+> execute if block {H1+3} {H2} {H3+26} minecraft:air run say MXS02 stone stays empty
+> data get entity mx SelectedItem
+expect MXS02 grass stays empty
+expect MXS02 stone stays empty
+expect has the following entity data: \{.*id: "vintagedelight:mixed_seeds"
+look the zcount blocks line: 20 crops, at least four of wheat, beetroots, farmersdelight cabbages, melon_stem, pumpkin_stem
+
+## SQ-MXS-03 | mixed seeds from village chests and from grass (not with shears)
+> kill @e[type=minecraft:item]
+pace 0.1
+repeat 40
+> loot spawn {H1+40} {H2} {H3+30} loot minecraft:chests/village/village_plains_house
+end
+pace 2
+sleep 3
+> zcount {H1+37} {H2} {H3+27} {H1+43} {H2+3} {H3+33}
+> setblock {H1+40} {H2} {H3+36} minecraft:grass
+pace 0.05
+repeat 300
+> loot spawn {H1+40} {H2+1} {H3+38} mine {H1+40} {H2} {H3+36}
+end
+pace 2
+sleep 3
+> zcount {H1+38} {H2} {H3+37} {H1+42} {H2+3} {H3+40}
+> setblock {H1+46} {H2} {H3+36} minecraft:grass
+# the shears case through a bot holding shears: LootJS matchMainHand reads the player's main hand, not the /loot tool
+# (r1102 judge: plain /loot mine ... minecraft:shears dropped 2 mixed seeds since no player was in the context)
+> pbot spawn mxs {H1+46} {H2} {H3+34} minecraft:overworld survival
+> pbot hold mxs minecraft:shears
+pace 0.05
+repeat 100
+> execute as mxs run loot spawn {H1+46} {H2+1} {H3+38} mine {H1+46} {H2} {H3+36} minecraft:shears
+end
+pace 2
+sleep 3
+> zcount {H1+44} {H2} {H3+37} {H1+48} {H2+3} {H3+40}
+shell grep -c "CE/vintage_mixed_seeds_grass" logs/latest.log; true
+look line 1 (chest rolls): some vintagedelight:mixed_seeds (share 0.04, 1-4); line 2 (300 empty-hand grass, /loot mine with no tool): about 6 mixed seeds; line 3 (100 with shears): grass items only, no mixed seeds
+> kill @e[type=minecraft:item]
+
+## SQ-CDM-01 | Veggies / Vintage recipes under creativedelight:, twins gone
+> zq recipes carrot_juice
+> zq recipes dandelion_juice
+> zq recipes turnip_water
+> zq recipes cauliflower_bread
+> zq recipes cheese_burger
+> zq recipes deluxe_burger
+> zq recipes bread_from_smelting
+expect \[zq\] creativedelight:[a-z_/]*carrot_juice
+expect \[zq\] creativedelight:[a-z_/]*dandelion_juice
+expect \[zq\] creativedelight:[a-z_/]*turnip_water
+expect \[zq\] creativedelight:[a-z_/]*cauliflower_bread
+expect \[zq\] creativedelight:[a-z_/]*cheese_burger
+expect \[zq\] creativedelight:[a-z_/]*deluxe_burger
+reject \[zq\] veggiesdelight:cooking/carrot_juice ->
+reject \[zq\] vintagedelight:bread_from_smelting ->
+reject \[zq\] vintagedelight:cheese_burger ->
+look each kind once (pot _manual_only, mixing, filling, emptying, bottling, baking, shaped _manual_only, sequenced assembly); no creativeengineering: twin of the same recipe; total recipe count vs the pre-move dump: SQ-CDFW-11's dump-diff
+
+## SQ-CDM-02 | moved tag scripts still fill the tags
+> zq itemtag forge:crops/oat
+> zq itemtag forge:seeds/ghost_pepper
+> zq itemtag forge:storage_blocks/truffle
+> zq itemtag forge:mushrooms/inky_cap
+> zq itemtag forge:dough
+expect \[zq\] itemtag forge:crops/oat .*vintagedelight:oat
+expect \[zq\] itemtag forge:seeds/ghost_pepper .*vintagedelight:ghost_pepper_seeds
+expect \[zq\] itemtag forge:storage_blocks/truffle .*fungidelight:truffle_crate
+expect \[zq\] itemtag forge:mushrooms/inky_cap .*fungidelight:inky_cap_mushroom_colony
+expect \[zq\] itemtag forge:dough .*vintagedelight:oat_dough
+
+## SQ-CDM-03 | Veggies loot packs and table additions
+> loottuning
+> kill @e[type=minecraft:item]
+pace 0.2
+repeat 10
+> loot spawn {H1+40} {H2} {H3+44} loot minecraft:chests/village/village_taiga_house
+end
+pace 2
+sleep 3
+> zcount {H1+37} {H2} {H3+41} {H1+43} {H2+3} {H3+47}
+look /loottuning prints counts only (packed pairs, added items): compare with the last r1101 output; cauliflower and seeds in the 10 taiga house rolls at the usual rate (small sample)
+> kill @e[type=minecraft:item]
+
+## SQ-CDM-05 | Copper Pot: Brewin' Creamy Onion Soup serves the onion soup cup
+bootexpect Cup conversions: \d+ bowl foods
+> setblock {H1+12} {H2} {H3+28} minecraft:campfire[lit=true]
+> setblock {H1+12} {H2+1} {H3+28} miners_delight:copper_pot
+> data merge block {H1+12} {H2+1} {H3+28} {Inventory:{Size:8,Items:[{Slot:0b,id:"brewinandchewin:flaxen_cheese_wedge",Count:1b},{Slot:1b,id:"farmersdelight:onion",Count:1b},{Slot:2b,id:"minecraft:carrot",Count:1b},{Slot:3b,id:"minecraft:bread",Count:1b}]}}
+sleep 15
+> data get block {H1+12} {H2+1} {H3+28}
+expect has the following block data: .*miners_delight:onion_soup_cup
+look Cup conversions 16 = 14 upstream rows + the pack's Creamy Onion Soup + Delightful's cactus soup (SQ-MDP-01)
+
+## SQ-RDX-01 | Rustic member: upstream data, no recipe or NCH error
+bootexpect Rustic Delight upstream data: \d+ files
+bootreject (?i)rusticdelight.*(parse error|exception)
+bootreject incomplete\(.*\) not registered
+kjsreject (?i)(rusticdelight|pizza|golden_coffee).*(error|warn)
+kjsreject (?i)\[NCH\].*warn
+
+## SQ-RDX-04 | coffees: only Caffeinated, 900 ticks, amplifier 0
+> zq food rusticdelight:syrup_coffee
+> zq food rusticdelight:pumpkin_coffee
+> zq food rusticdelight:cherry_blossom_coffee
+expect \[zq\] food rusticdelight:syrup_coffee: .*effects \[farmersrespite:caffeinated amp 0 900t x1(\.0)?\]
+expect \[zq\] food rusticdelight:pumpkin_coffee: .*effects \[farmersrespite:caffeinated amp 0 900t x1(\.0)?\]
+expect \[zq\] food rusticdelight:cherry_blossom_coffee: .*effects \[farmersrespite:caffeinated amp 0 900t x1(\.0)?\]
+reject \[zq\] food rusticdelight:[a-z_]*coffee: .*minecraft:(speed|haste)
+look food properties only: an effect the drink adds in code on finish (not in FoodProperties) needs a real drink (client); /data get entity @s ActiveEffects of the row needs a player that drinks
+
+## SQ-RDX-05 | coffee recipes merged
+> zq recipes farmersrespite:brewing/coffee
+> zq recipes create_central_kitchen:mixing/coffee
+> zq rdetail creativedelight:farmersrespitebrewing/gamblers_tea
+expect \[zq\] recipes matching farmersrespite:brewing/coffee: 0
+expect \[zq\] recipes matching create_central_kitchen:mixing/coffee: 0
+expect \[zq\] creativedelight:farmersrespitebrewing/gamblers_tea \{.*<- .*coffee_beans
+expect \[zq\] creativedelight:farmersrespitebrewing/gamblers_tea \{.*<- .*minecraft:glow_berries
+look JEI: Respite's coffee items hidden / merged as before: client (CQ rows)
+
+# ---- /reload and /dumpall from here on: no kjsexpect / kjsreject below ----
+
+## SQ-CDM-00 | /reload: no script error from the moved Veggies / Vintage / Fungi trees (also SQ-MDP-12)
+> reload
+waitlog (Reloaded|reload) 180
+sleep 15
+reject (?i)Error occurred while handling event.*(veggiesdelight|vintagedelight|fungidelight)/
+reject (?i)(veggiesdelight|vintagedelight|fungidelight)/[a-z_/]+\.js.*(error|exception)
+# the cup table is a reload listener: /reload re-reads it and logs the line again; the same 16 = the table survived (r1102 judge)
+expect Cup conversions: 16 bowl foods
+reject (?i)Error occurred while handling event.*miners_delight
+look any other "Error occurred while handling event" in rows/SQ-CDM-00.log: name the file (not judged here)
+
+## SQ-MDP-12 | cup table survives /reload (judged from SQ-CDM-00's segment)
+look rows/SQ-CDM-00.log: the reload's "Cup conversions: 16" line (same count = table intact; an expect there) and no error naming miners_delight (a reject there); SQ-CDM-05's pot is already served
+
+## SQ-FGD-03b | Fungi compost values unchanged after /reload
+> fgdtest compost
+waitlog \[fgdtest\] done compost 120
+count \[fgdtest\] FAIL == 0
+
+## SQ-CDFW-11a | /dumpall after the reload
+> dumpall
+waitlog \[dumpall\] \d+/\d+ ok in 900
+expect \[dumpall\] \d+/\d+ ok
+look failed dumps in the line (names, food, stacks need a client: expected on a server)
+
+## SQ-CDJ-09b | item counts per port namespace (after /dumpall)
+shell python3 -I -c "import json,sys;m={'displaydelight':212,'fungidelight':32,'miners_delight':69,'veggiesdelight':89,'vintagedelight':134};n={k:len(json.load(open('kubejs/exported/items_by_mod/%s.json'%k))['items']) for k in m};print(n,'minimum',m);sys.exit(any(n[k]<m[k] for k in m))"
+
+## SQ-DDP-04 | Display links (after /dumpall, which runs /dumpplaceable)
+bootexpect \[dumpplaceable\] \d+ candidates, \d+ Display Delight links
+shell python3 -I -c "import json,sys;a=json.load(open('kubejs/exported/food/placeable.json'))['displayDelight'];b=json.load(open(sys.argv[1]))['displayDelight'];na=sum(len(v) for v in a.values());nb=sum(len(v) for v in b.values());print({k:len(v) for k,v in a.items()},'scratch',na,'instance (10-30 dump)',nb);sys.exit(na<nb)" $INST/kubejs/exported/food/placeable.json
+look placeable_catalog.py writes pack files and reads only the instance dump, so it is not run here; "Display Delight gaps": run it by hand on a copy (or after the owner copies this dump back) and compare with the 2026-10-24 numbers (about 95 more links)
+
+## SQ-CDM-04 | Veggies trades (from the /dumpall trades dump)
+shell grep -o 'veggiesdelight:[a-z_]*' kubejs/exported/villager_trades.json | sort | uniq -c
+shell grep -q 'veggiesdelight:' kubejs/exported/villager_trades.json
+look farmer level 1 holds the six Veggies produce trades; the Wandering Trader common pool holds the seven Veggies items (rows/SQ-CDM-04.shell.txt, and the json by hand)
+
+## SQ-CDFW-11 | no Veggies recipe, tag or loot id lost in the pilot move (server dump half)
+# no --ns: the snapshot was taken without one, so a filtered "after" reports every other namespace LOST (r1102: 80857
+# false LOST lines); the Veggies lines are pulled out by the grep below
+shell python3 -I $INST/tools/cd_move_diff.py dump-diff --exported kubejs/exported --verbose > ../cdfw11_diff.txt; echo "exit $?"; tail -2 ../cdfw11_diff.txt; grep "^LOST" ../cdfw11_diff.txt | grep -i veggies
+look rows/SQ-CDFW-11.shell.txt: no LOST veggiesdelight: recipe, tag or loot id and no LOST recipe with a Veggies output, other than ids moved to creativedelight:<same path> with the same type; LOST lines from other 11-01 moves go to the run notes (baseline is the stale 10-30 snapshot); the registry half waits for CQ-CDJ-01's /cedumpnames; "no error after /reload" is SQ-CDM-00's reject

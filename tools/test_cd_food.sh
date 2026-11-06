@@ -3,7 +3,7 @@
 # runs CD's cd_food.js and the server scripts that call global.CD.food in the pack's own Rhino fork, with the real
 # item and fluid dicts and a recording global.NCH stub, and prints every recipe call. Then lists the family recipe ids
 # that are not in the last recipe dump (kubejs/exported/recipes/all.csv). Usage: tools/test_cd_food.sh [server script ...]
-# (paths under kubejs/data/creative_delight/kubejs/; "parse:<path>" only compiles one). Needs the ATLauncher library
+# (paths under kubejs/data/creativedelight/kubejs/; "parse:<path>" only compiles one). Needs the ATLauncher library
 # folder (Rhino's gson). No game needed.
 set -euo pipefail
 ROOT="$(cd "$(dirname "$0")/.." && pwd)"
@@ -24,7 +24,7 @@ for line in open(sys.argv[1]).read().splitlines():
 	if not m or m.group(1) not in types: continue
 	parts = m.group(2).split(' | ')
 	if 'e' in parts and parts.index('e') + 1 < len(parts):
-		made.add('creative_delight:%s/%s' % (types[m.group(1)], parts[parts.index('e') + 1]))
+		made.add('creativedelight:%s/%s' % (types[m.group(1)], parts[parts.index('e') + 1]))
 dump = set(r['id'] for r in csv.DictReader(open('kubejs/exported/recipes/all.csv')))
 new = sorted(x for x in made if x not in dump)
 print('== %d ids made, %d not in the dump' % (len(made), len(new)))

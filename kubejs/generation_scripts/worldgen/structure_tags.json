@@ -593,7 +593,7 @@
       ]
     },
     "type/ruin": {
-      "note": "Overworld land ruins, surface and buried. start_nether_ruin is a nether-themed ruin that spawns in the Overworld. Ocean ruins are type/underwater_ruin, portals type/ruined_portal. Also the ruin meta structures (a large ruin with small ones, a scatter of small ones).",
+      "note": "Overworld land ruins, surface and buried. Ocean ruins are type/underwater_ruin, portals type/ruined_portal. Also the ruin meta structures (a large ruin with small ones, a scatter of small ones).",
       "values": [
         "philipsruins:ancient_ruins",
         "philipsruins:ancient_towers",
@@ -604,12 +604,9 @@
         "philipsruins:level_two_ruins_pool",
         "philipsruins:level_three_ruins",
         "philipsruins:pumpkin_ruins",
-        "philipsruins:rare_ruin",
         "philipsruins:desert_structures",
         "philipsruins:badlands_structures",
-        "philipsruins:start_nether_ruin",
         "philipsruins:underground_structures",
-        "philipsruins:lost_soul_city",
         "terralith:glacial_hut",
         "terralith:underground/oak_cabin",
         "forest_ruins:*",
@@ -617,6 +614,7 @@
         "forgotten_church:*",
         "creativeengineering:meta/ruin_cluster",
         "creativeengineering:meta/ruin_scatter",
+        "creativeengineering:meta/waystone_ruins",
         "eugene:ruined_drum_tower"
       ]
     },
@@ -659,7 +657,7 @@
       ]
     },
     "type/underground": {
-      "note": "Underground structures that are not dungeons (those are dungeon/underground) or mineshafts: Terralith's cave structures, Philip's deep ruins and lost soul city, buried treasure.",
+      "note": "Underground structures that are not dungeons (those are dungeon/underground) or mineshafts: Terralith's cave structures, Philip's deep ruins, buried treasure.",
       "values": [
         "terralith:underground/oak_cabin",
         "terralith:underground/giant_bee_hive",
@@ -668,7 +666,6 @@
         "terralith:underground/sunken_tower",
         "terralith:underground/witch_hut",
         "philipsruins:underground_structures",
-        "philipsruins:lost_soul_city",
         "minecraft:buried_treasure",
         "#mod/subterrestrial",
         "farmers_structures:ratatouilles",
@@ -741,7 +738,11 @@
         "philipsruins:sealedruinedghaststatue1",
         "philipsruins:nether_lava_ruins",
         "twigs:bloodstone_obelisk",
-        "eugene:piglin_camp"
+        "eugene:piglin_camp",
+        "philipsruins:lost_soul_dungeon",
+        "philipsruins:lost_soul_city",
+        "philipsruins:rare_ruin",
+        "philipsruins:start_nether_ruin"
       ]
     },
     "type/end_environmental": {
@@ -816,7 +817,6 @@
         "philipsruins:ancient_dungeon",
         "philipsruins:bone_dungeon",
         "philipsruins:sculk_dungeon",
-        "philipsruins:lost_soul_dungeon",
         "terralith:underground/frosted_dungeon"
       ]
     },
@@ -1003,12 +1003,15 @@
       ]
     },
     "group/nether_ruins": {
-      "note": "Nether ruins: Twigs' bloodstone obelisk and Philip's three Nether ruins (Nether dungeon, sealed ghast statue, lava ruins). Nether only; ruins stays Overworld-only. Added 2026-10-12.",
+      "note": "Nether ruins: Twigs' bloodstone obelisk and Philip's three Nether ruins (Nether dungeon, sealed ghast statue, lava ruins), and since 2026-11-02 the four builds moved from the Overworld except the lost soul city (own set, it is big): lost soul dungeon, rare ruin, blackstone Nether ruin (structures/contents #1). Nether only; ruins stays Overworld-only. Added 2026-10-12.",
       "values": [
         "twigs:bloodstone_obelisk",
         "philipsruins:start_nether_dungeon",
         "philipsruins:sealedruinedghaststatue1",
-        "philipsruins:nether_lava_ruins"
+        "philipsruins:nether_lava_ruins",
+        "philipsruins:lost_soul_dungeon",
+        "philipsruins:rare_ruin",
+        "philipsruins:start_nether_ruin"
       ]
     },
     "group/way_signs": {
@@ -1243,7 +1246,6 @@
         "eugene:fake_trader_camp",
         "eugene:pillager_camp",
         "eugene:ruined_drum_tower",
-        "eugene:undead_castle",
         "farmers_structures:aquacultures_cod",
         "farmers_structures:aquacultures_common",
         "farmers_structures:cooks",
@@ -1664,7 +1666,6 @@
         "philipsruins:level_three_ruins",
         "philipsruins:level_two_ruins",
         "philipsruins:level_two_ruins_pool",
-        "philipsruins:rare_ruin",
         "small_cat_statues:cat_1",
         "small_cat_statues:cat_2",
         "small_cat_statues:cat_3",
@@ -1697,7 +1698,6 @@
         "philipsruins:level_two_ruins",
         "philipsruins:level_two_ruins_pool",
         "philipsruins:pumpkin_ruins",
-        "philipsruins:rare_ruin",
         "towns_and_towers:pillager_outpost_swamp",
         "towns_and_towers:village_swamp",
         "villagesandpillages:village_witch",
@@ -1776,11 +1776,10 @@
       ]
     },
     "land/any/deep": {
-      "note": "Biome fit: deep underground structures (YUNG's skeleton dungeon, Philip's bone dungeon and lost soul city), whose start height (y -50 to -30) is in a cave biome: the cave biomes plus every land/any biome. Spawn in the land/any/deep biomes. Real tag: creativeengineering:land/any/deep.",
+      "note": "Biome fit: deep underground structures (YUNG's skeleton dungeon, Philip's bone dungeon), whose start height (y -50 to -30) is in a cave biome: the cave biomes plus every land/any biome. Spawn in the land/any/deep biomes. Real tag: creativeengineering:land/any/deep.",
       "values": [
         "betterdungeons:skeleton_dungeon",
-        "philipsruins:bone_dungeon",
-        "philipsruins:lost_soul_city"
+        "philipsruins:bone_dungeon"
       ]
     },
     "land/sky": {
@@ -1790,10 +1789,9 @@
       ]
     },
     "meta/large_ruins": {
-      "note": "Large land ruins (about 15 to 26 blocks across): anchors of meta/ruin_cluster, the ruin of meta/pillager_camp_ruin. Read from the templates: Philip's level-three ruins (13 to 22 wide) and rare ruin (20), the ancient towers, the forgotten church. Real tag: creativeengineering:meta/large_ruins.",
+      "note": "Large land ruins (about 15 to 26 blocks across): anchors of meta/ruin_cluster, the ruin of meta/pillager_camp_ruin. Read from the templates: Philip's level-three ruins (13 to 22 wide), the ancient towers, the forgotten church. Real tag: creativeengineering:meta/large_ruins. The rare ruin left 2026-11-02 (moved to the Nether).",
       "values": [
         "philipsruins:level_three_ruins",
-        "philipsruins:rare_ruin",
         "philipsruins:ancient_towers",
         "forgotten_church:forgotten_church"
       ]
@@ -2012,15 +2010,6 @@
         "philipsruins:ocean_fortress"
       ]
     },
-    "plan/move_to_nether": {
-      "note": "PLANNED, not applied (2026-10-12): structures built of Nether blocks to be moved to the Nether later: Philip's soul dungeons (lost soul dungeon, lost soul city), the rare ruin and the blackstone Nether ruin. Until then they spawn as now, and the Nether block swaps (nether_swap_rules.json) leave them untouched.",
-      "values": [
-        "philipsruins:lost_soul_dungeon",
-        "philipsruins:lost_soul_city",
-        "philipsruins:rare_ruin",
-        "philipsruins:start_nether_ruin"
-      ]
-    },
     "meta/sky_clouds": {
       "note": "Cloud Storage's sky temples (the storage clouds): anchors and parts of meta/cloud_cluster and meta/cloud_balloons. Real tag: creativeengineering:meta/sky_clouds.",
       "values": [
@@ -2101,6 +2090,25 @@
       "note": "The ocean monument: anchor of meta/struck_monument. Real tag: creativeengineering:meta/monuments.",
       "values": [
         "minecraft:monument"
+      ]
+    },
+    "nether/soul": {
+      "note": "Biome fit: soul sand valley. Philip's lost soul dungeon and lost soul city, moved from the Overworld 2026-11-02 (structures/contents #1). Real tag: creativeengineering:nether/soul.",
+      "values": [
+        "philipsruins:lost_soul_dungeon",
+        "philipsruins:lost_soul_city"
+      ]
+    },
+    "nether/forest": {
+      "note": "Biome fit: crimson and warped forests. Philip's rare ruin, moved from the Overworld 2026-11-02. Real tag: creativeengineering:nether/forest.",
+      "values": [
+        "philipsruins:rare_ruin"
+      ]
+    },
+    "nether/wastes": {
+      "note": "Biome fit: Nether wastes and basalt deltas. Philip's blackstone Nether ruin, moved from the Overworld 2026-11-02. Real tag: creativeengineering:nether/wastes.",
+      "values": [
+        "philipsruins:start_nether_ruin"
       ]
     }
   }

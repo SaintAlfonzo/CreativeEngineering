@@ -2,14 +2,14 @@
 # Offline checks for the mob spawn tuning (feature_writeup/mob_spawns.md section 6):
 #   1. Java/Python parity: tools/mob_spawns_test/cases.json through patcherMod SpawnTuning.apply on real vanilla spawn
 #      lists (Bootstrap) and through gen_spawn_table.apply_rule; spawners after and change lines must be identical
-#   2. Rhino: kubejs/server_scripts/worldgen/mob_spawns.js in the pack's Rhino fork with tools/mob_spawns_test/
+#   2. Rhino: kubejs/data/creativeworldgen/kubejs/worldgen/mob_spawns.js in the pack's Rhino fork with tools/mob_spawns_test/
 #      rules_fixture.json; every tag must equal the generator's selection, and the one tune_spawns modifier + the
 #      forge:none files must be what the rules say
 #   3. Rhino: bad rules are reported and left out; CEConfig mobSpawns off, an old jar (no SpawnTuning) and a missing
 #      mod write nothing for what they cover
 #   4. generator on a fixture dump: runs, warns that the dump predates the rules, and stops warning once the dump
 #      shows them; --mob prints a table
-# Needs a built patcherMod (./gradlew :patcherMod:compileJava) and the ATLauncher library folder. No game needed.
+# Needs a built patcherMod (./gradlew :creativeCommon:compileJava) and the ATLauncher library folder. No game needed.
 set -euo pipefail
 ROOT="$(cd "$(dirname "$0")/.." && pwd)"
 T="$(mktemp -d)"; trap 'rm -rf "$T"' EXIT
@@ -23,8 +23,8 @@ echo "== 1. Java/Python parity"
 source "$ROOT/tools/java_test_cp.sh"
 mkdir -p "$T/stub" "$T/test"
 javac -proc:none -nowarn -cp "$CP" -d "$T/stub" tools/structure_groups_test/net/minecraftforge/fml/loading/FMLEnvironment.java
-javac -proc:none -nowarn -cp "$T/stub:$CP" -d "$T/test" "$D"/com/SaintAlfonzo/creativeengineering/worldgen/SpawnTuningParity.java 2>&1 | grep -v 'warning\|unchecked\|deprecat' || true
-java -cp "$T/stub:$T/test:$CP" com.SaintAlfonzo.creativeengineering.worldgen.SpawnTuningParity "$D/cases.json" "$T/parity.json" 2>&1 \
+javac -proc:none -nowarn -cp "$T/stub:$CP" -d "$T/test" "$D"/com/SaintAlfonzo/creativeworldgen/worldgen/SpawnTuningParity.java 2>&1 | grep -v 'warning\|unchecked\|deprecat' || true
+java -cp "$T/stub:$T/test:$CP" com.SaintAlfonzo.creativeworldgen.worldgen.SpawnTuningParity "$D/cases.json" "$T/parity.json" 2>&1 \
   | grep -E 'cases run|Exception|Error' || status=1
 python3 - "$T/parity.json" "$D/cases.json" <<'PY' || status=1
 import json, sys

@@ -1,8 +1,0 @@
-{
-  "parent": "cookingforblockheads:block/tool_rack",
-  "render_type": "minecraft:cutout",
-  "textures": {
-    "particle": "cookingforblockheads:block/rack/smoked_tool_rack",
-    "texture": "cookingforblockheads:block/rack/smoked_tool_rack"
-  }
-}

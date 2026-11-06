@@ -32,7 +32,7 @@ checks fail instead of bushes quietly coming back.
   `bushierflowers:grown_flower_plain_placed` (`net/Pandarix/bushierflowers/world/feature/ModPlacedFeatures`). There is
   no worldgen JSON in the jar.
 - The pack overrides all 5 with `{"type": "forge:none"}` in `kubejs/data/bushierflowers/forge/biome_modifier/` (same
-  file names). Growth is off by `development/patcherMod/.../mixin/BushierFlowersDisableMixin.java`.
+  file names). Growth is off by `development/creativeCommon/.../mixin/BushierFlowersDisableMixin.java`.
 - The pack pins `bushierflowers-0.0.2-1.19.2.jar` (`pack/manifest.json`, `pack/MODLIST.md`). So an "update" only
   happens when someone changes the manifest.
 - The same pattern (a mod modifier replaced by `forge:none`) is used at runtime by `wild_flowers.js` (Botania, Buzzier

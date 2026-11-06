@@ -1,0 +1,9 @@
+{
+  "replace": false,
+  "values": [
+    "creativedelight:duck_nest",
+    "creativedelight:duck_egg_nest",
+    "creativedelight:goose_nest",
+    "creativedelight:goose_egg_nest"
+  ]
+}

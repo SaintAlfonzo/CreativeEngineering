@@ -1,0 +1,9 @@
+{
+  "description": "Meta tag: everything shields tune under the ELEMENTAL column. Fire, cold, electricity and chemical damage, none of which vanilla shields could ever block. Edit this file's #includes to move a kind of damage in or out of the elemental column - no Java involved.",
+  "values": [
+    "#creativecommon:fire",
+    "#creativecommon:cold",
+    "#creativecommon:electric",
+    "#creativecommon:chemical"
+  ]
+}

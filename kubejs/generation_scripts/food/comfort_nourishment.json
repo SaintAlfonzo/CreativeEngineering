@@ -38,7 +38,7 @@
 			"seconds": 0
 		},
 		"glowgurt": {
-			"effect": "comfort",
+			"effect": "nourishment",
 			"seconds": 240
 		},
 		"cheesy_pasta": {
@@ -81,8 +81,16 @@
 			"effect": "comfort",
 			"seconds": 60
 		},
-		"field_salad": {
+		"cactus_chili": {
 			"effect": "nourishment",
+			"seconds": 240
+		},
+		"cactus_soup": {
+			"effect": "comfort",
+			"seconds": 240
+		},
+		"field_salad": {
+			"effect": "comfort",
 			"seconds": 240
 		},
 		"matcha_ice_cream": {
@@ -96,6 +104,22 @@
 		"sinigang": {
 			"effect": "nourishment",
 			"seconds": 240
+		},
+		"stuffed_cantaloupe": {
+			"effect": "nourishment",
+			"seconds": 240
+		},
+		"amberveil_stew": {
+			"effect": "none",
+			"seconds": 0
+		},
+		"amberveiled_curry": {
+			"effect": "none",
+			"seconds": 0
+		},
+		"chicken_curry": {
+			"effect": "none",
+			"seconds": 0
 		},
 		"chorus_stew": {
 			"effect": "none",
@@ -113,7 +137,15 @@
 			"effect": "none",
 			"seconds": 0
 		},
+		"steak_fries": {
+			"effect": "comfort",
+			"seconds": 60
+		},
 		"twisted_cereal": {
+			"effect": "none",
+			"seconds": 0
+		},
+		"veil_of_flames_risotto": {
 			"effect": "none",
 			"seconds": 0
 		},
@@ -190,8 +222,8 @@
 			"seconds": 0
 		},
 		"dog_food": {
-			"effect": "comfort",
-			"seconds": 60
+			"effect": "none",
+			"seconds": 0
 		},
 		"fish_stew": {
 			"effect": "comfort",
@@ -204,6 +236,10 @@
 		"fruit_salad": {
 			"effect": "comfort",
 			"seconds": 60
+		},
+		"gleaming_salad": {
+			"effect": "nourishment",
+			"seconds": 120
 		},
 		"grilled_salmon": {
 			"effect": "nourishment",
@@ -274,7 +310,7 @@
 			"seconds": 0
 		},
 		"vegetable_noodles": {
-			"effect": "comfort",
+			"effect": "nourishment",
 			"seconds": 240
 		},
 		"vegetable_soup": {
@@ -297,11 +333,23 @@
 			"effect": "none",
 			"seconds": 0
 		},
+		"apple_jelly": {
+			"effect": "none",
+			"seconds": 0
+		},
 		"bayberry_jello": {
 			"effect": "none",
 			"seconds": 0
 		},
+		"bayberry_jelly": {
+			"effect": "none",
+			"seconds": 0
+		},
 		"blueberry_jello": {
+			"effect": "none",
+			"seconds": 0
+		},
+		"blueberry_jelly": {
 			"effect": "none",
 			"seconds": 0
 		},
@@ -313,11 +361,23 @@
 			"effect": "none",
 			"seconds": 0
 		},
+		"chorus_jelly": {
+			"effect": "none",
+			"seconds": 0
+		},
 		"cranberry_jello": {
 			"effect": "none",
 			"seconds": 0
 		},
+		"cranberry_jelly": {
+			"effect": "none",
+			"seconds": 0
+		},
 		"durian_jello": {
+			"effect": "none",
+			"seconds": 0
+		},
+		"durian_jelly": {
 			"effect": "none",
 			"seconds": 0
 		},
@@ -329,7 +389,15 @@
 			"effect": "none",
 			"seconds": 0
 		},
+		"fig_jelly": {
+			"effect": "none",
+			"seconds": 0
+		},
 		"glowberry_jello": {
+			"effect": "none",
+			"seconds": 0
+		},
+		"glowberry_jelly": {
 			"effect": "none",
 			"seconds": 0
 		},
@@ -337,7 +405,15 @@
 			"effect": "none",
 			"seconds": 0
 		},
+		"hamimelon_jelly": {
+			"effect": "none",
+			"seconds": 0
+		},
 		"hawberry_jello": {
+			"effect": "none",
+			"seconds": 0
+		},
+		"hawberry_jelly": {
 			"effect": "none",
 			"seconds": 0
 		},
@@ -345,7 +421,15 @@
 			"effect": "none",
 			"seconds": 0
 		},
+		"kiwi_jelly": {
+			"effect": "none",
+			"seconds": 0
+		},
 		"lemon_jello": {
+			"effect": "none",
+			"seconds": 0
+		},
+		"lemon_jelly": {
 			"effect": "none",
 			"seconds": 0
 		},
@@ -357,7 +441,15 @@
 			"effect": "none",
 			"seconds": 0
 		},
+		"lychee_jelly": {
+			"effect": "none",
+			"seconds": 0
+		},
 		"mango_jello": {
+			"effect": "none",
+			"seconds": 0
+		},
+		"mango_jelly": {
 			"effect": "none",
 			"seconds": 0
 		},
@@ -369,7 +461,15 @@
 			"effect": "none",
 			"seconds": 0
 		},
+		"mangosteen_jelly": {
+			"effect": "none",
+			"seconds": 0
+		},
 		"melon_jello": {
+			"effect": "none",
+			"seconds": 0
+		},
+		"melon_jelly": {
 			"effect": "none",
 			"seconds": 0
 		},
@@ -381,6 +481,10 @@
 			"effect": "none",
 			"seconds": 0
 		},
+		"orange_jelly": {
+			"effect": "none",
+			"seconds": 0
+		},
 		"orange_marinated_pork": {
 			"effect": "nourishment",
 			"seconds": 240
@@ -389,7 +493,15 @@
 			"effect": "none",
 			"seconds": 0
 		},
+		"peach_jelly": {
+			"effect": "none",
+			"seconds": 0
+		},
 		"pear_jello": {
+			"effect": "none",
+			"seconds": 0
+		},
+		"pear_jelly": {
 			"effect": "none",
 			"seconds": 0
 		},
@@ -401,7 +513,15 @@
 			"effect": "none",
 			"seconds": 0
 		},
+		"persimmon_jelly": {
+			"effect": "none",
+			"seconds": 0
+		},
 		"pineapple_jello": {
+			"effect": "none",
+			"seconds": 0
+		},
+		"pineapple_jelly": {
 			"effect": "none",
 			"seconds": 0
 		},
@@ -410,6 +530,10 @@
 			"seconds": 240
 		},
 		"sweetberry_jello": {
+			"effect": "none",
+			"seconds": 0
+		},
+		"sweetberry_jelly": {
 			"effect": "none",
 			"seconds": 0
 		},
@@ -645,6 +769,54 @@
 			"effect": "none",
 			"seconds": 0
 		},
+		"lm_chicken_curry": {
+			"effect": "nourishment",
+			"seconds": 240
+		},
+		"cod_deluxe": {
+			"effect": "comfort",
+			"seconds": 240
+		},
+		"hearty_lunch": {
+			"effect": "nourishment",
+			"seconds": 240
+		},
+		"mushroom_pot_pie": {
+			"effect": "nourishment",
+			"seconds": 240
+		},
+		"omurice": {
+			"effect": "nourishment",
+			"seconds": 240
+		},
+		"pasta_with_mushroom_sauce": {
+			"effect": "comfort",
+			"seconds": 240
+		},
+		"potato_soup": {
+			"effect": "comfort",
+			"seconds": 240
+		},
+		"pufferfish_broth": {
+			"effect": "comfort",
+			"seconds": 120
+		},
+		"red_soup": {
+			"effect": "comfort",
+			"seconds": 240
+		},
+		"rice_pudding": {
+			"effect": "none",
+			"seconds": 0
+		},
+		"roasted_mutton_rack": {
+			"effect": "nourishment",
+			"seconds": 240
+		},
+		"tomato_egg_soup": {
+			"effect": "comfort",
+			"seconds": 240
+		},
 		"beetroot_soup": {
 			"effect": "none",
 			"seconds": 0
@@ -670,30 +842,10 @@
 			"seconds": 0
 		},
 		"rabbit_stew": {
-			"effect": "nourishment",
+			"effect": "comfort",
 			"seconds": 240
 		},
-		"baked_cod_stew_cup": {
-			"effect": "none",
-			"seconds": 0
-		},
 		"bat_soup": {
-			"effect": "none",
-			"seconds": 0
-		},
-		"bat_soup_cup": {
-			"effect": "none",
-			"seconds": 0
-		},
-		"beef_stew_cup": {
-			"effect": "comfort",
-			"seconds": 60
-		},
-		"beetroot_soup_cup": {
-			"effect": "none",
-			"seconds": 0
-		},
-		"bone_broth_cup": {
 			"effect": "none",
 			"seconds": 0
 		},
@@ -704,18 +856,6 @@
 		"cave_soup": {
 			"effect": "comfort",
 			"seconds": 240
-		},
-		"cave_soup_cup": {
-			"effect": "none",
-			"seconds": 0
-		},
-		"chicken_soup_cup": {
-			"effect": "comfort",
-			"seconds": 60
-		},
-		"fish_stew_cup": {
-			"effect": "comfort",
-			"seconds": 60
 		},
 		"glow_ink_pasta": {
 			"effect": "comfort",
@@ -729,22 +869,6 @@
 			"effect": "none",
 			"seconds": 0
 		},
-		"insect_stew_cup": {
-			"effect": "none",
-			"seconds": 0
-		},
-		"mushroom_stew_cup": {
-			"effect": "none",
-			"seconds": 0
-		},
-		"noodle_soup_cup": {
-			"effect": "comfort",
-			"seconds": 60
-		},
-		"onion_soup_cup": {
-			"effect": "comfort",
-			"seconds": 60
-		},
 		"pasta_with_veggieballs": {
 			"effect": "comfort",
 			"seconds": 240
@@ -757,14 +881,6 @@
 			"effect": "nourishment",
 			"seconds": 240
 		},
-		"pumpkin_soup_cup": {
-			"effect": "comfort",
-			"seconds": 60
-		},
-		"rabbit_stew_cup": {
-			"effect": "comfort",
-			"seconds": 60
-		},
 		"seasoned_arthropods": {
 			"effect": "comfort",
 			"seconds": 240
@@ -776,10 +892,6 @@
 		"vegan_steak_and_potatoes": {
 			"effect": "nourishment",
 			"seconds": 240
-		},
-		"vegetable_soup_cup": {
-			"effect": "comfort",
-			"seconds": 60
 		},
 		"weird_caviar": {
 			"effect": "none",
@@ -822,7 +934,7 @@
 			"seconds": 240
 		},
 		"diced_potatoes_with_egg_and_tomato": {
-			"effect": "comfort",
+			"effect": "nourishment",
 			"seconds": 240
 		},
 		"diced_potatoes_with_porkchop": {
@@ -832,10 +944,6 @@
 		"mashed_potatoes": {
 			"effect": "comfort",
 			"seconds": 240
-		},
-		"moredelight_potato_salad": {
-			"effect": "none",
-			"seconds": 0
 		},
 		"adzuki_curry": {
 			"effect": "comfort",
@@ -870,12 +978,12 @@
 			"seconds": 60
 		},
 		"vanilla_ice_cream": {
-			"effect": "none",
-			"seconds": 0
+			"effect": "comfort",
+			"seconds": 60
 		},
 		"vanilla_pudding": {
-			"effect": "none",
-			"seconds": 0
+			"effect": "comfort",
+			"seconds": 60
 		},
 		"grilled_strider": {
 			"effect": "comfort",
@@ -889,9 +997,65 @@
 			"effect": "comfort",
 			"seconds": 120
 		},
+		"bowl_of_paella": {
+			"effect": "comfort",
+			"seconds": 240
+		},
+		"fish_egg_noodle_soup": {
+			"effect": "comfort",
+			"seconds": 240
+		},
+		"globular_rice": {
+			"effect": "nourishment",
+			"seconds": 240
+		},
+		"glow_squid_stew": {
+			"effect": "comfort",
+			"seconds": 120
+		},
+		"pasta_with_eyeball": {
+			"effect": "nourishment",
+			"seconds": 240
+		},
+		"plate_of_stuffed_pufferfish": {
+			"effect": "comfort",
+			"seconds": 240
+		},
+		"sea_salad": {
+			"effect": "none",
+			"seconds": 0
+		},
+		"shrimp_rice": {
+			"effect": "comfort",
+			"seconds": 240
+		},
+		"shrimp_stew": {
+			"effect": "nourishment",
+			"seconds": 240
+		},
+		"squid_and_pickles": {
+			"effect": "nourishment",
+			"seconds": 240
+		},
+		"squid_salad": {
+			"effect": "none",
+			"seconds": 0
+		},
 		"bowl_of_guardian_soup": {
 			"effect": "comfort",
 			"seconds": 240
+		},
+		"cooked_nether_wart": {
+			"effect": "none",
+			"seconds": 0
+		},
+		"golden_roll": {
+			"effect": "nourishment",
+			"seconds": 120
+		},
+		"golden_roll_slice": {
+			"effect": "nourishment",
+			"seconds": 120
 		},
 		"batter": {
 			"effect": "none",
@@ -904,6 +1068,10 @@
 		"bell_pepper_soup": {
 			"effect": "none",
 			"seconds": 0
+		},
+		"calamari_soup": {
+			"effect": "comfort",
+			"seconds": 240
 		},
 		"coffee_braised_beef": {
 			"effect": "comfort",
@@ -922,6 +1090,10 @@
 			"seconds": 240
 		},
 		"potato_salad": {
+			"effect": "comfort",
+			"seconds": 120
+		},
+		"sweet_salad": {
 			"effect": "comfort",
 			"seconds": 120
 		},
@@ -946,12 +1118,12 @@
 			"seconds": 240
 		},
 		"cesar_salad": {
-			"effect": "comfort",
+			"effect": "nourishment",
 			"seconds": 240
 		},
 		"coleslaw": {
-			"effect": "comfort",
-			"seconds": 120
+			"effect": "nourishment",
+			"seconds": 240
 		},
 		"dandelion_and_eggs": {
 			"effect": "nourishment",
@@ -986,7 +1158,7 @@
 			"seconds": 240
 		},
 		"potato_noodles": {
-			"effect": "comfort",
+			"effect": "nourishment",
 			"seconds": 240
 		},
 		"rice_and_vegetables": {
@@ -1021,13 +1193,37 @@
 			"effect": "none",
 			"seconds": 0
 		},
+		"ancient_fruit_jam_jar": {
+			"effect": "comfort",
+			"seconds": 60
+		},
+		"ancient_fruit_jello": {
+			"effect": "none",
+			"seconds": 0
+		},
 		"apple_sauce_jar": {
 			"effect": "comfort",
 			"seconds": 120
 		},
+		"banana_jam_jar": {
+			"effect": "comfort",
+			"seconds": 60
+		},
+		"banana_jello": {
+			"effect": "none",
+			"seconds": 0
+		},
 		"cheese_pasta": {
 			"effect": "comfort",
 			"seconds": 120
+		},
+		"cherry_jam_jar": {
+			"effect": "comfort",
+			"seconds": 60
+		},
+		"cherry_jello": {
+			"effect": "none",
+			"seconds": 0
 		},
 		"cucumber_salad": {
 			"effect": "comfort",
@@ -1037,21 +1233,41 @@
 			"effect": "nourishment",
 			"seconds": 240
 		},
-		"glow_berry_jam_jar": {
+		"green_grape_jam_jar": {
 			"effect": "comfort",
 			"seconds": 60
+		},
+		"green_grape_jello": {
+			"effect": "none",
+			"seconds": 0
 		},
 		"honey_jar": {
 			"effect": "comfort",
 			"seconds": 240
 		},
+		"mulberry_jam_jar": {
+			"effect": "comfort",
+			"seconds": 60
+		},
+		"mulberry_jello": {
+			"effect": "none",
+			"seconds": 0
+		},
 		"nut_mash_jar": {
 			"effect": "comfort",
 			"seconds": 120
 		},
+		"nut_milk_jar": {
+			"effect": "none",
+			"seconds": 0
+		},
 		"oatmeal": {
 			"effect": "none",
 			"seconds": 0
+		},
+		"overnight_oats": {
+			"effect": "nourishment",
+			"seconds": 240
 		},
 		"pad_thai": {
 			"effect": "nourishment",
@@ -1061,19 +1277,47 @@
 			"effect": "comfort",
 			"seconds": 120
 		},
+		"pepper_jello": {
+			"effect": "none",
+			"seconds": 0
+		},
 		"pickle_soup": {
 			"effect": "nourishment",
 			"seconds": 240
+		},
+		"raspberry_jam_jar": {
+			"effect": "comfort",
+			"seconds": 60
+		},
+		"raspberry_jello": {
+			"effect": "none",
+			"seconds": 0
+		},
+		"red_grape_jam_jar": {
+			"effect": "comfort",
+			"seconds": 60
+		},
+		"red_grape_jello": {
+			"effect": "none",
+			"seconds": 0
 		},
 		"relish_jar": {
 			"effect": "comfort",
 			"seconds": 60
 		},
-		"sweet_berry_jam_jar": {
+		"salmonberry_jam_jar": {
 			"effect": "comfort",
 			"seconds": 60
 		},
-		"vinegar_jar": {
+		"salmonberry_jello": {
+			"effect": "none",
+			"seconds": 0
+		},
+		"strawberry_jam_jar": {
+			"effect": "comfort",
+			"seconds": 60
+		},
+		"strawberry_jello": {
 			"effect": "none",
 			"seconds": 0
 		}
@@ -1094,10 +1338,16 @@
 		"twisted_cereal_wood",
 		"dragon_leg_with_sauce",
 		"mango_salad",
+		"moredelight_potato_salad",
 		"plate_of_stuffed_hoglin_ham",
 		"plate_of_stuffed_hoglin_roast",
 		"plate_of_stuffed_hoglin_snout",
-		"overnight_oats"
+		"caesar_salad",
+		"oceanic_potato_salad",
+		"mulberry_jam_bottle",
+		"glow_berry_jam_jar",
+		"sweet_berry_jam_jar",
+		"vinegar_jar"
 	],
 	"strip": [
 		"fish_oil",
@@ -1109,8 +1359,10 @@
 		"jelly_bottle",
 		"lavender_tea",
 		"matcha_latte",
+		"matcha_milkshake",
 		"nut_butter_bottle",
 		"prickly_pear_juice",
+		"salmonberry_milkshake",
 		"chorus_juice",
 		"bubble_tea",
 		"chorus_flower_tea",
@@ -1141,43 +1393,22 @@
 		"strong_rose_hip_tea",
 		"strong_yellow_tea",
 		"yellow_tea",
-		"apple_jelly",
-		"bayberry_jelly",
 		"bayberry_soup",
 		"bellini_cocktail",
 		"blueberry_custard",
-		"blueberry_jelly",
-		"chorus_jelly",
-		"cranberry_jelly",
-		"durian_jelly",
-		"fig_jelly",
-		"glowberry_jelly",
-		"hamimelon_jelly",
 		"hamimelon_juice",
 		"hamimelon_shaved_ice",
-		"hawberry_jelly",
 		"hawberry_tea",
-		"kiwi_jelly",
 		"kiwi_juice",
-		"lemon_jelly",
 		"lemon_juice",
 		"lychee_cherry_tea",
-		"lychee_jelly",
-		"mango_jelly",
 		"mango_milkshake",
 		"mango_tea",
-		"mangosteen_jelly",
 		"mangosteen_tea",
-		"melon_jelly",
-		"orange_jelly",
 		"orange_juice",
-		"peach_jelly",
 		"peach_tea",
-		"pear_jelly",
 		"pear_juice",
-		"persimmon_jelly",
-		"pineapple_jelly",
-		"sweetberry_jelly",
+		"sweet_berry_custard",
 		"honey_bottle",
 		"adzuki_milkshake",
 		"banana_milkshake",
@@ -1186,13 +1417,16 @@
 		"strawberry_banana_smoothie",
 		"strawberry_milkshake",
 		"vanilla_milkshake",
+		"cherry_blossom_coffee",
 		"chocolate_coffee",
 		"coffee",
 		"cooking_oil",
 		"dark_coffee",
 		"honey_coffee",
 		"milk_coffee",
-		"mulberry_jam_bottle",
+		"pumpkin_coffee",
+		"syrup",
+		"syrup_coffee",
 		"carrot_juice",
 		"dandelion_juice",
 		"fermented_garlic_honey",
@@ -1204,6 +1438,6 @@
 		"pepper_jam_bottle",
 		"relish_bottle",
 		"sweet_berry_jam_bottle",
-		"vinegar"
+		"vinegar_bottle"
 	]
 }

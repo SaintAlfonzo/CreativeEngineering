@@ -110,3 +110,4 @@ Compiles; mixin descriptors checked with javap against SB 3.20.2. Recipes not ye
 - 2026-10-22: built (recipes, six mixins, colour handler, config switch, Curios deny, NCH methods, tag with the basket). Not run in game.
 - 2026-10-22: investigated, decisions recorded (basket only, skin hitbox, clear by crafting, no upgrade or display
   drawing, per-skin display position as future work).
+- 2026-11-04: moved to Creative Equipment ([creative_equipment.md](creative_equipment.md)): `backpackskin/`, the six mixins, `[backpackSkins]` (`config/creativeequipment-common.toml`), `kubejs/data/creativeequipment/kubejs/other/backpack_skins.js`. Same behaviour.

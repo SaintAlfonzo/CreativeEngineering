@@ -39,7 +39,7 @@ Status Planned · Work KubeJS · TODO `recipes/metal #1` (F1)
 Every metal with a plate gets the same set of plate recipes, all from the pack, and no press makes a removed item.
 
 ### Now
-Per metal today (pack lines in [metal_base_materials.js](../../kubejs/server_scripts/metal/metal_base_materials.js)):
+Per metal today (pack lines in [metal_base_materials.js](../../kubejs/data/creativeengineering/kubejs/metal/metal_base_materials.js)):
 
 | Route | Pack's own | Mod recipes still live |
 |---|---|---|
@@ -159,7 +159,7 @@ Status Planned · Work data (KubeJS tags) · TODO `recipes/metal #3` (F5, RM-11)
 Decide where rose gold may stand in for gold, and make the tags say exactly that.
 
 ### Now
-- Pack tags ([metaltags.js](../../kubejs/server_scripts/tags/metaltags.js)): line 15 rose gold rod in
+- Pack tags ([metaltags.js](../../kubejs/data/creativeengineering/kubejs/tags/metaltags.js)): line 15 rose gold rod in
   `forge:rods/gold` (and `forge:rods`, `forge:rods/all_metal`), line 40 rose gold nugget in `forge:nuggets/gold`, line
   42 the MCA rose gold block in `forge:storage_blocks/gold` (with `t.addTag`, so the parents too).
 - **MCA's own tags** (**jar**): `data/forge/tags/items/ingots/gold.json` = `mca:rose_gold_ingot`,
@@ -245,7 +245,7 @@ Close the remaining gaps in the metal scripts and remove the leftovers.
   `smelting/ingot_<m>_from_dust` (per the header audit; unverified per metal).
 - **Header audit** (lines 3-29): written as a chat reply ("Want me to fill these in?"); items 1-3 partly wrong (see
   metal #1, #2).
-- **Tall rusty iron door** ([misc_metal_crafts.js](../../kubejs/server_scripts/metal/misc_metal_crafts.js) lines
+- **Tall rusty iron door** ([misc_metal_crafts.js](../../kubejs/data/creativeengineering/kubejs/metal/misc_metal_crafts.js) lines
   68-69): `createSplashing(i.tall_rusty_iron_door, i.tall_iron_door)` with "// Broken? Item still craftable". Note the
   direction: every row of the splashing block (lines 57-70) turns a **clean** item into its rusty one (washing rusts
   it); the writeup said the reverse and is corrected. Dramatic Doors makes its tall and short doors through runtime
@@ -308,7 +308,7 @@ Status Planned · Work KubeJS · TODO `recipes/metal #5`
 `createdeco:polished_iron_bars` has a recipe again.
 
 ### Now
-- [metal_building.js](../../kubejs/server_scripts/metal/metal_building.js) line 11 removes
+- [metal_building.js](../../kubejs/data/creativeengineering/kubejs/metal/metal_building.js) line 11 removes
   `createdeco:polished_iron_bars_from_iron_ingot_stonecutting` (1 iron ingot → 4, **jar**), the item's only real
   recipe; `createdeco:iron_bars_from_panel` turns the overlay back into bars, and the overlay is made from the bars.
 - Create Deco uses polished iron bars in `createdeco:iron_catwalk` (3), `iron_catwalk_stairs` and `iron_support` (4),

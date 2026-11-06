@@ -1,0 +1,13 @@
+{
+  "replace": false,
+  "values": [
+    {"id": "supplementaries:jar", "required": false},
+    {"id": "supplementaries:sack", "required": false},
+    {"id": "trashcans:item_trash_can", "required": false},
+    {"id": "trashcans:liquid_trash_can", "required": false},
+    {"id": "trashcans:energy_trash_can", "required": false},
+    {"id": "trashcans:ultimate_trash_can", "required": false},
+    {"id": "vintagedelight:fermenting_jar", "required": false},
+    {"id": "#botanypots:all_botany_pots", "required": false}
+  ]
+}

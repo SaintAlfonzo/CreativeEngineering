@@ -1,0 +1,39 @@
+# Run r1102b, worldgen slice, boot W1b: the W1 world "wge" restarted (same OUT_W1, no prep).
+# Before boot (w_setup.md W1b): delete the searchTimeoutSeconds line from OUT_W1/srv/config/creativeworldgen-common.toml
+# (SQ-WGE-02a: Forge writes the default back). Same RES as w_1_B.qb (captures L6A..L6D).
+pace 2
+
+## SQ-WGE-02a | searchTimeoutSeconds: line removed before boot, Forge writes 120 back
+bootexpect Done \(
+shell grep -n 'searchTimeoutSeconds' config/creativeworldgen-common.toml; grep -qE '^\s*searchTimeoutSeconds = 120' config/creativeworldgen-common.toml
+
+## SQ-WGE-06d-r1 | restart pair, second boot: minecraft:village_plains from 0 0 at the same place
+> execute positioned 0 70 0 run locate structure minecraft:village_plains
+waitlog (nearest minecraft:village_plains.* is at|type "?minecraft:village_plains|minecraft:village_plains.*timed out|Could not find) 200
+capture R6A nearest minecraft:village_plains.* is at \[(-?\d+), (~|-?\d+), (-?\d+)\]
+shell echo "first {L6A1} {L6A3}, after restart {R6A1} {R6A3}"; [ "{L6A1} {L6A3}" = "{R6A1} {R6A3}" ]
+
+## SQ-WGE-06d-r2 | restart pair, second boot: minecraft:village_plains from 2000 0 at the same place
+> execute positioned 2000 70 0 run locate structure minecraft:village_plains
+waitlog (nearest minecraft:village_plains.* is at|type "?minecraft:village_plains|minecraft:village_plains.*timed out|Could not find) 200
+capture R6B nearest minecraft:village_plains.* is at \[(-?\d+), (~|-?\d+), (-?\d+)\]
+shell echo "first {L6B1} {L6B3}, after restart {R6B1} {R6B3}"; [ "{L6B1} {L6B3}" = "{R6B1} {R6B3}" ]
+
+## SQ-WGE-06d-r3 | restart pair, second boot: minecraft:village_plains from 0 2000 at the same place
+> execute positioned 0 70 2000 run locate structure minecraft:village_plains
+waitlog (nearest minecraft:village_plains.* is at|type "?minecraft:village_plains|minecraft:village_plains.*timed out|Could not find) 200
+capture R6C nearest minecraft:village_plains.* is at \[(-?\d+), (~|-?\d+), (-?\d+)\]
+shell echo "first {L6C1} {L6C3}, after restart {R6C1} {R6C3}"; [ "{L6C1} {L6C3}" = "{R6C1} {R6C3}" ]
+
+## SQ-WGE-06d-r4 | restart pair, second boot: minecraft:pillager_outpost from 0 0 at the same place
+> execute positioned 0 70 0 run locate structure minecraft:pillager_outpost
+waitlog (nearest minecraft:pillager_outpost.* is at|type "?minecraft:pillager_outpost|minecraft:pillager_outpost.*timed out|Could not find) 200
+capture R6D nearest minecraft:pillager_outpost.* is at \[(-?\d+), (~|-?\d+), (-?\d+)\]
+shell echo "first {L6D1} {L6D3}, after restart {R6D1} {R6D3}"; [ "{L6D1} {L6D3}" = "{R6D1} {R6D3}" ]
+
+## SQ-WGE-06d | same layouts across restarts; no invalid element on save
+# PoolElementStructurePiece minecraft:empty at save is a known third-party line (gotchas): excluded below
+> save-all flush
+waitlog Saved the game 300
+reject (?i)Element (?!minecraft:empty).* is not valid
+# the fresh-area layout half is checked across worlds of the same seed: w_3_B.qb SQ-WGE-06d-x (layouts, W1 vs W2)

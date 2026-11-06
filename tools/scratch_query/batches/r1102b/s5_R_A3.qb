@@ -1,0 +1,34 @@
+# Run r1102b slice 5 RERUN, group A config 3: same level, restarted with A2 config plus
+# [vintage.pickling_jar] overflowEjectDelayTicks = 0 set before the boot (the live edit in the first run was not read).
+pace 2
+
+## S5RA3-00 | setup: home marker, clock, no mob spawning (not a queue row)
+bootexpect Done \(
+> data get entity @e[type=minecraft:marker,tag=s5home,limit=1] Pos
+capture S5H entity data: \[(-?\d+)\.\d+d, (-?\d+)\.\d+d, (-?\d+)\.\d+d\]
+> time set noon
+> weather clear 1000000
+> season set MID_SPRING
+> gamerule doMobSpawning false
+> kill @e[type=!minecraft:player,type=!minecraft:marker]
+shell grep -nE 'remainderBuffer|fertileSoilBoost|cookwarePickup|overflowEjectDelayTicks' config/creativedelight-common.toml
+> say S5RA3 setup done
+expect S5RA3 setup done
+reject (Unknown (item|block|block type|entity)|does not (have|accept)|Incorrect argument for command|Unknown or incomplete command|That position is not loaded|No player was found|no such bot|no such item|Invalid (block state|tag)|\[(zq|s5)\] (error|no player))
+reject Enum constant must be one of
+
+## SQ-VTD8-02c | overflowEjectDelayTicks = 0: the bottle is thrown in the same second as the batch
+shell awk '/^[[:space:]]*\[/{s=$0} s ~ /^[[:space:]]*\[vintage\.pickling_jar\][[:space:]]*$/ && /^[[:space:]]*overflowEjectDelayTicks[[:space:]]*=[[:space:]]*0[[:space:]]*$/{f=1} END{exit !f}' config/creativedelight-common.toml
+> kill @e[type=minecraft:item]
+> setblock {S5H1+30} {S5H2} {S5H3+30} vintagedelight:fermenting_jar
+> data merge block {S5H1+30} {S5H2} {S5H3+30} {inventory:{Size:10,Items:[{Slot:0b,id:"veggiesdelight:garlic_clove",Count:12b},{Slot:1b,id:"minecraft:honey_bottle",Count:3b}]}}
+pace 0.5
+repeat 105
+> data get block {S5H1+30} {S5H2} {S5H3+30} inventory.Items[{Slot:7}]
+> zcount {S5H1+29} {S5H2} {S5H3+29} {S5H1+31} {S5H2+2} {S5H3+31}
+end
+pace 2
+> data get block {S5H1+30} {S5H2} {S5H3+30} inventory
+expect \[zcount\] entities .*item:minecraft:glass_bottle x
+reject (Unknown (item|block|block type|entity)|does not (have|accept)|Incorrect argument for command|Unknown or incomplete command|That position is not loaded|No player was found|no such bot|no such item|Invalid (block state|tag)|\[(zq|s5)\] (error|no player))
+look each bottle appears in the same reading as its slot 7 step (no 1 s lag); set before this boot, so a lag here is a real FAIL

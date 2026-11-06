@@ -1,0 +1,26 @@
+# Run r1103, slice B, boot 1 (sB_1): level sb1, group A superflat, with the OLD Creative Labels jar
+# (mods/creativeLabels-1.0.0.jar, the deployed one) swapped into srv/mods in place of the 1.0.1 build jar.
+# Setup in sB_setup.md. This boot only makes the "old save" for SQ-LBS-05: /cltest place and /cltest labels (the
+# tools/creative_labels_test/server_probe.js groups, X 0 and X 120 at y -58, z -3..12), a /zlbs dump of every
+# face_paper block entity, save, stop. sB_2.qb boots the same level on 1.0.1 and compares the dump.
+pace 2
+
+## SQ-LBS-05a | old save half: Creative Labels 1.0.0 places notes and labels (sB_1)
+bootexpect Done \(
+shell ls mods | grep -i creativeLabels; ls kubejs/server_scripts | grep -E "zz_(cl|zlbs)_probe"
+shell ls mods | grep -q "creativeLabels-1.0.0.jar" && ! ls mods | grep -q "creativeLabels-1.0.1"
+> gamerule doMobSpawning false
+> forceload add -8 -8 170 16
+sleep 20
+> cltest place
+waitlog \[cltest\] DONE place 120
+> cltest labels
+waitlog \[cltest\] DONE labels 120
+> zlbs dump -4 -4 170 14
+waitlog \[zlbs\] DONE dump 60
+expect \[zlbs\] INFO dump \S+ \S+ \S+ \S+: [1-9]\d* face_paper block entities
+reject \[zlbs\] FAIL
+reject (Unknown or incomplete command|Incorrect argument for command|That position is not loaded)
+> save-all flush
+waitlog Saved the game 60
+look the cltest place / labels results are the 1.0.0 behaviour (FAILs here are not this row's subject); the "[zlbs] be" lines are the baseline sB_2's SQ-LBS-05 compares

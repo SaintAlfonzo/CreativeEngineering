@@ -17,6 +17,7 @@ art donors with their gameplay off; then they are dropped. Test prefix `SN-`. Tr
 | Phase 3: labels on `face_paper` (Labels' interactions, real-colour icon, dyed icon, close-only drawing) | BUILT (3.10, 3.11) |
 | Phase 4: donor jars with gameplay off (recipes, JEI, Sticky It's tooltip handler) | BUILT (3.13): mod side (creative-tab hiding, tooltip mixin) and pack side (JEI hiding, recipes) |
 | Phase 5: our own textures and models, then drop both donor jars | PLANNED, later (3.14) |
+| Labels on non-full blocks (surface test) and centred notes on jars, sacks, trash cans, Pickling Jars, botany pots | BUILT 2026-11-02 in `creativeLabels-1.0.1.jar` (3.3a), NOT installed (waiting in `build/libs`); headless 325 + 142 + 1828 + 394 pass; scratch test queued (SQ-LBS-00 to -05, CQ-LBS-01); SN-56 to SN-60 pending |
 | Headless tests | `tools/creative_labels_test/run.sh`: 4 suites, all pass (2026-10-21, section 6) |
 | Scratch server tests | 2026-10-21: boots on a dedicated server; 60 checks over 41 SN- tests, all PASSED after 3 fixes (Moonlight range, FastWorkbench crafting path, mixin-package crash); section 6.1 |
 | In-game tests | not run yet (shipped in 1.1.01, deployed 2026-10-22); first in game: SN-10, SN-12, SN-23, SN-28, SN-29, SN-39, SN-47, SN-48 (client-only), then SN-55 with the crafting table |
@@ -192,8 +193,8 @@ face's own frame (x left to right, y bottom to top, 16 px):
 The curl hangs at the bottom of each note (towards y 0 on walls; towards the player's facing on floors and ceilings).
 
 **A spot is allowed** when the host fills the spot's whole footprint at the face. "At the face" means at the cell
-boundary, or inset by at most 1/16 (chests, ender chests, barrels), plus the shape rules below. Labels need a
-five-spot face (its 10x10 px centre square filled).
+boundary, or inset by at most 1/16 (chests, ender chests, barrels), plus the shape rules below. Labels: see 3.3a
+(stairs and slabs keep the five-spot rule; everything else uses the surface test).
 
 | Host | Spots |
 |---|---|
@@ -212,6 +213,49 @@ How it is decided: block class first (`StairBlock`, `SlabBlock`, `FenceBlock`, `
 `creative_labels:paper/deny`), then the shape test for full or nearly full faces. Spot masks for stairs, slabs and
 rotated floors and ceilings are worked out in the face's frame after the face's rotation, so a stair's top-back corner
 lands on the right side whatever way the stair faces.
+
+### 3.3a Labels by surface, centred notes (2026-11-02)
+
+The original Labels mod put a label on any solid block, at the outermost point of its shape. Our five-spot rule
+refused jars, sacks, trash cans, botany pots and cauldrons. Labels now have their own test; notes keep the table above
+except for the centre-note hosts.
+
+**Label surface test** (`Spots.labelSurface`): the host's outline shape seen from the face, sampled on a half-pixel
+grid (32 x 32). Each sample records the depth of the first surface behind it (the merged outline, so a cauldron's
+2 px walls count and no thickness limit applies). The outermost surface `d0` may be at most 8 px deep. Samples
+within 1 px of `d0` are usable (the trash can's rim and body together; a jar's lid is 2 px off its body and stays
+out). The label is the largest usable square nearest the face centre, capped at 10 px; it shrinks down to 6 px, and
+under 6 px nothing fits. Full faces, chests and barrels get the standard label exactly as before.
+
+| Host | Label |
+|---|---|
+| Stairs, slabs (user, 2026-11-02) | the five-spot rule: full faces only, never an inset face (slab halves, stair fronts, sides, tops) |
+| Doors, trapdoors (user, 2026-11-02) | none (they swing) |
+| No collision shape (plants, pressure plates), posts, heads, fence gates, the deny tag | none |
+| Supplementaries Jar side | 10 px, 3 px in |
+| Sack side | 10 px, 2 px in, 1 px below centre (under the neck) |
+| Trash cans side | 10 px, 2 px in (rim) |
+| Pickling Jar side | 10 px, 3.25 px in |
+| Botany pot side | 8 px, 2 px in, filling the pot's height |
+| Cauldron, composter side | 10 px; tops: none (2 px rim) |
+| Jar top | 6 px, on the lid |
+| Botany pot top | 10 px on the soil, 8 px in |
+| Flower pot side | 6 px |
+
+**Centred notes** (`Spots.centreNoteFit`, block tag `creative_labels:paper/centre_note`, user 2026-11-02): Supplementaries
+Jar and Sack, the four trash cans, Vintage Delight's Pickling Jar (`vintagedelight:fermenting_jar`) and
+`#botanypots:all_botany_pots`. Each side face takes one note, the centre spot moved to the middle of the host's
+visible side (the bounding box of the usable samples, same 1 px window), at that surface's depth. The note's 9
+sample points must lie on that surface. Shifts: jar 1 px down, sack 2, trash can and Pickling Jar 1.25, botany pot 4.
+Tops (owner 2026-11-03, plan_scratch_bugfix_1103 4.4, SQ-LBS-03): only hosts in `creative_labels:paper/note_on_top` (the
+jar and the Pickling Jar) take one note on top, centred on the lid by the same centre-note test (the Pickling Jar's lid
+is 2.5 px down, too deep for the shape test's 2 px). Every other centre-note top (sack neck, trash can rim, botany pot
+soil) and every bottom takes none; before, tops used the shape test, which let the jar lid and the sack neck carry spot C.
+
+**Stored placement:** `FaceContent` keeps a shift (px) and the label edge beside the inset (`Spots.Place`); NBT
+`OffX`, `OffY`, `Size` are written only when they differ from 0, 0, 10, so labels and notes placed earlier load
+unchanged. A host change re-fits: a label moves or shrinks to its new square and drops only when nothing fits;
+centred notes follow the new centre.
 
 **Covered face:** when all five spots of a five-spot face hold notes, the hit shape becomes the whole face panel; a
 right-click that lands between notes does nothing, so the crafting table, furnace or chest behind can't be used
@@ -593,6 +637,9 @@ Planned, `development/creativeLabels/src/main/java/.../creativelabels/`:
   - `LabelRenderTest`: the dyed-icon ramp and pixel packing, the label icon / name view frame on every face, the
     text rotation quaternion.
   - 2026-10-21 run: 235 + 142 + 1828 + 394 checks, all pass.
+  - 2026-11-02 run (3.3a added to `SpotsTest`: label surface on the modded shapes read from their jars and on
+    vanilla blocks, stairs/slabs/doors/trapdoors denied, centred notes, shifted boxes and hits, re-fit, NBT keys):
+    325 + 142 + 1828 + 394, all pass.
 
 ### 6.1 Scratch server (2026-10-21)
 
@@ -625,6 +672,8 @@ Bugs found and fixed on the way (jar rebuilt and reinstalled each time; the head
 | 3 | The first fix put the shared helper in the mixin package; the server crashed on the first craft (Mixin refuses to load ordinary classes from its package) | helper moved to `crafting/` |
 
 ## 7. In-game test suite
+
+- **r1103 2026-11-03** (scratch server; verdicts in `perf/runs/r1103/` FINAL.md and the slice judged.md): PASS SQ-LBS-05a, -00, -01, -02, -05; FAIL SQ-LBS-03: a sticky note is accepted on the top of the Supplementaries jar and sack, against 3.3a (`Spots.fit` 298-300; owner decides which is right); FAIL SQ-LBS-04: host set to air: the face paper cell clears but no label or note item drops, 20 of 20 (`FacePaperInteractions.hostChanged` / `refit`, `FacePaperBlock.updateShape` / `neighborChanged`); confirm by hand first.
 
 Rewritten for the full spec before anything was built (earlier drafts were never run). Boxes are ticked from real
 play only; "server half PASSED" notes are from the scratch server (6.1).
@@ -707,6 +756,24 @@ Item labels:
 - [ ] **SN-55 crafting blocked:** a labelled plank in the inventory grid → no result; set `blockLabelledCrafting =
   false` → it crafts, unlabelled output. Scratch server 2026-10-21: server half PASSED (after the FastWorkbench fix).
 
+Labels by surface and centred notes (3.3a, `creativeLabels-1.0.1`):
+
+- [ ] **SN-56 labels on odd blocks:** a label on the side of a Supplementaries Jar, a Sack, each trash can, a
+  Pickling Jar, a botany pot, a cauldron and a composter → placed flat on the block's surface, not floating more
+  than 1 px; the botany pot's label is smaller (8 px) and fills the pot's height; show an item on each → the icon
+  and name scale with the label.
+- [ ] **SN-57 labels refused:** a label on a door, a trapdoor, a slab's top half-face, a stair's side, front or top,
+  a cauldron's top, a pressure plate, a flower → nothing placed, label not used up. Full blocks, chests and barrels
+  take a label as before.
+- [ ] **SN-58 centred note:** a sticky note on the side of each centre-note host (Jar, Sack, trash cans, Pickling Jar,
+  botany pot) → one note in the middle of that side; a second note on the same side → refused; their tops → refused,
+  except the jar and the Pickling Jar (one note centred on the lid).
+- [ ] **SN-59 old placements:** a world with labels and notes placed under 1.0.0 → all still in place after updating.
+- [ ] **SN-60 re-fit:** a label on a botany pot side, then break the pot → the label drops; a note on a jar side, then
+  break the jar → the note drops with its text.
+- [ ] **SN-61 jar tops and pushed hosts:** a note on top of a Jar and of a Pickling Jar → accepted, centred on the lid;
+  on top of a Sack → refused. A piston pushes a stone host with a note on its side → the note drops with its text.
+
 Labels:
 
 - [ ] **SN-36 place:** a label on a chest front sits flush on its face. Scratch server 2026-10-21: server half PASSED (placement; the look needs a client).
@@ -769,3 +836,13 @@ Donor jars and performance:
   `blockLabelledCrafting` extended to FastWorkbench's crafting path (it bypassed the vanilla one), a mixin-package
   crash from that fix fixed; final run 60 checks PASSED. Status table, 6 and 7 updated; TODO `largecontent/stickynotes
   #1-4` to Testing.
+- 2026-11-02: labels went on no non-full block (the user: sacks, jars, Pickling Jars, botany pots, trash cans,
+  cauldrons; the original mod allowed them). Cause: the five-spot rule plus the 2 px inset limit and the per-box 4 px
+  thickness. Built 3.3a: label surface test, stairs and slabs keep the old label rule, doors and trapdoors none,
+  centred notes by tag; `creativeLabels-1.0.1`, not installed. SN-56 to SN-60 added.
+- 2026-11-03 (plan_scratch_bugfix_1103 4.4, 4.5): jar and Pickling Jar tops take one centred note (tag
+  `creative_labels:paper/note_on_top`), other centre-note tops none (SQ-LBS-03 found the jar and sack tops open). SQ-LBS-04
+  (no drops when a host went to air) was not a probe fault (the probe already used flag 3) and the Labels code path
+  drops; suspected cause is Creative Worldgen's FirstTickWater drop flag left set after a cancelled or failed fluid
+  tick, now cleared every level tick and checked per thread. The probe gained a wall-torch control and a piston case.
+  Rebuilt into `creativeLabels-1.0.1` (still not installed). SN-61 added.

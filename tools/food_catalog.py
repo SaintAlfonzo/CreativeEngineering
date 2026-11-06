@@ -1,15 +1,19 @@
 #!/usr/bin/env python3
 """Food types: classify every food in the pack into one type, keep the assignments, and check them.
 
-The assignments live in kubejs/generation_scripts/food/food_types.json (type -> item_dict keys). The tag script
-next to it (Creative Delight creativeengineering/food_type_tags.js) turns them into #creativeengineering:food_type/<type> item tags, and every
-nested type also lands in its parents (raw/meat/sliced -> raw/meat -> raw -> food_type).
+The assignments live in kubejs/generation_scripts/food/food_types.json (type -> item_dict keys). Every write also
+splits them by item namespace into Creative Delight member scripts, kubejs/data/creativedelight/kubejs/<namespace>/
+food_types.js (`// requires: <namespace>`, outRoot in tools/generators.json, creative_delight.md 28.2); the tag script
+Creative Delight creativeengineering/food_type_tags.js merges those into #creativeengineering:food_type/<type> item
+tags, and every nested type also lands in its parents (raw/meat/sliced -> raw/meat -> raw -> food_type). The game
+never reads the JSON.
 
 Source data is the /dumpfood export (kubejs/exported/food/*.json): what the game itself reports after
 every mod and KubeJS edit. Run /dumpfood in game first, then:
 
     python3 tools/food_catalog.py            classify new foods, update food_types.json + item_dict keys, check
-    python3 tools/food_catalog.py --check    only check (exit 1 on problems), change nothing
+    python3 tools/food_catalog.py --check    only check (exit 1 on problems, or member scripts not matching the JSON)
+    python3 tools/food_catalog.py --members  only rewrite the member scripts from food_types.json (after a hand edit)
 
 Hand edits in food_types.json are kept: an item already listed stays where it is. Only foods that are in
 no type yet get the automatic rules below (and are printed so you can move them). A food that has no
@@ -24,10 +28,11 @@ from pathlib import Path
 
 sys.path.insert(0, str(Path(__file__).resolve().parent))
 import pack_paths  # noqa: E402
+import gen_out  # noqa: E402
 
 INSTANCE = Path(__file__).resolve().parent.parent
 EXPORT = INSTANCE / 'kubejs/exported/food'
-DICT = INSTANCE / 'kubejs/startup_scripts/_lib/item_dict.js'
+DICT = pack_paths.ITEM_DICT
 TYPES_JSON = INSTANCE / 'kubejs/generation_scripts/food/food_types.json'
 
 TAG_ROOT = 'creativeengineering:food_type'
@@ -53,6 +58,7 @@ TYPES = OrderedDict([
     ('baked', 'Bread and buns'),
     ('dairy', 'Cheese'),
     ('sweet', 'Desserts and confectionery: cake/pie slices, cookies, candy, chocolate, ice cream'),
+    ('sweet/pancake', 'Pancakes eaten as items: single pancakes and pancake dishes (food_families.md dessert/pancake)'),
     ('handheld', 'Sandwiches, burgers, wraps, rolls, skewers, stuffed vegetables, pizza/quiche slices'),
     ('salad', 'Salads'),
     ('soup', 'Soups, stews and broths'),
@@ -83,6 +89,7 @@ OVERRIDES = {
     'farmersdelight:dog_food': 'special',
     'farmersdelight:apple_cider': 'drink',
     'farmersdelight:kelp_roll_slice': 'handheld',
+    'farmersdelight:gleaming_salad': 'salad',   # golden, ruled by GOLDEN_EXTRA in gen_comfort_nourishment.py (plan_scratch_bugfix_1103 5.4)
     'quarkdelight:bowl_of_exotic_fruits': 'salad',
     'quarkdelight:cooked_whole_crab': 'meal',
     'quarkdelight:miso_with_bamboo_sprouts': 'soup',
@@ -317,6 +324,8 @@ def classify(f, cooked_from, cut_from, feast_servings):
         return 'drink'
     if 'salad' in p:
         return 'salad'
+    if 'pancake' in p:   # the pancake family, every mod (food_families.md 4.7)
+        return 'sweet/pancake'
     if R_SWEET.search(p):
         return 'sweet'
     if R_HANDHELD.search(p) and f.get('remainder') not in BOWLS:
@@ -351,8 +360,8 @@ def classify(f, cooked_from, cut_from, feast_servings):
 # ── food_types.json ──────────────────────────────────────────────────────────
 
 README = [
-    'Food type assignments: every food in exactly one type, as item_dict keys (kubejs/startup_scripts/_lib/item_dict.js).',
-    'creative_delight creativeengineering/food_type_tags.js turns each type into #creativeengineering:food_type/<type>; a nested type',
+    'Food type assignments: every food in exactly one type, as item_dict keys (development/creativeCommon/src/main/resources/kubejs_startup/creativecommon/_lib/item_dict.js).',
+    'creativedelight creativeengineering/food_type_tags.js turns each type into #creativeengineering:food_type/<type>; a nested type',
     '(raw/meat/sliced) is also in its parents (raw/meat, raw, and #creativeengineering:food_type).',
     'Move an item by moving its key. python3 tools/food_catalog.py adds foods that are in no type yet and checks',
     'the rest; it never moves an item you placed. Reference: feature_writeup/food.md.',
@@ -386,6 +395,28 @@ def write_types(data):
     TYPES_JSON.write_text('\n'.join(lines) + '\n')
 
 
+def type_member_parts(data):
+    """food_types.json data -> {namespace: {types: {type: [keys]}, canned: {can: [source keys]}}}. The
+    creativeengineering part (always loaded) names every type; a can goes with its first source's namespace."""
+    _, key_val, _ = pack_paths.parse_item_dict()
+    parts = {ns: {'types': p} for ns, p in gen_out.split_lists(data['types'], key_val, 'creativeengineering').items()}
+    for can in sorted(data['canned']):
+        srcs = data['canned'][can]
+        ns = gen_out.namespace_of(srcs[0], key_val) if srcs else 'creativeengineering'
+        parts.setdefault(ns, {'types': {}}).setdefault('canned', {})[can] = srcs
+    for p in parts.values():
+        p.setdefault('canned', {})
+    return parts
+
+
+def write_type_members(check=False):
+    """Member scripts from food_types.json as it is on disk. True when something differs (check) or changed."""
+    data = json.loads(TYPES_JSON.read_text())
+    changed, stale = gen_out.write_member_scripts('food_catalog', 'food_types', type_member_parts(data),
+                                                  gen_out.INSTANCE / gen_out.DATA_ROOT, 'Food types', check)
+    return gen_out.report_member_scripts('food_types', changed, stale, check)
+
+
 # ── item_dict generated block ────────────────────────────────────────────────
 
 BLOCK_START = '// ############################## Food mods (generated by tools/food_catalog.py) ##############################'
@@ -410,7 +441,7 @@ def render_block(existing_block_entries, new_entries, tag_entries, comments=None
         for k, v in rows:
             out.append(f"i.{k.ljust(w)} = '{v}';" + comments.get(k, ''))
         out.append('')
-    out.append('// ===== food type tags (creative_delight creativeengineering/food_type_tags.js) =====')
+    out.append('// ===== food type tags (creativedelight creativeengineering/food_type_tags.js) =====')
     w = max(len(k) for k, _ in tag_entries)
     for k, v in tag_entries:
         out.append(f"i.{k.ljust(w)} = '{v}';")
@@ -463,7 +494,11 @@ def all_type_paths():
 def main():
     ap = argparse.ArgumentParser(description=__doc__, formatter_class=argparse.RawDescriptionHelpFormatter)
     ap.add_argument('--check', action='store_true', help='report only; write nothing; exit 1 on problems')
+    ap.add_argument('--members', action='store_true', help='only rewrite the member scripts from food_types.json')
     args = ap.parse_args()
+    if args.members:
+        write_type_members()
+        return
 
     foods, blocks, recipes = load_export()
     food_ids = {f['id'] for f in foods}
@@ -554,7 +589,8 @@ def main():
     if args.check:
         if added or new_entries:
             print(f'{len(added)} food(s) in no type and {len(new_entries)} without an item_dict key - run without --check')
-        sys.exit(1 if (problems or added or new_entries) else 0)
+        stale = write_type_members(check=True)
+        sys.exit(1 if (problems or added or new_entries or stale) else 0)
 
     write_types(data)
     tag_entries = [(type_tag_key(t), '#' + TAG_ROOT + '/' + t) for t in all_type_paths()]
@@ -562,6 +598,7 @@ def main():
     block = render_block(block_entries(src), new_entries, tag_entries, block_comments(src))
     DICT.write_text(write_dict_block(src, block))
     print(f'wrote {TYPES_JSON.relative_to(INSTANCE)} and the generated block in {DICT.relative_to(INSTANCE)}')
+    write_type_members()
     write_catalog(foods, blocks, recipes, data, id_of_key, cooked_from, cut_from)
     sys.exit(1 if problems else 0)
 

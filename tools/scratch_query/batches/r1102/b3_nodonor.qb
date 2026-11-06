@@ -1,0 +1,21 @@
+# Run r1102, SQ-CDJ5 Boot 3: no OUT/srv/miners_upstream (README Boot 3: rm the srv symlink only, never the instance
+# folder). The boot is EXPECTED TO STOP in mod construction, so this file sends no console command; it only reads
+# logs/latest.log and the crash report.
+# Runner: start the boot, then wait for any of: 'reads its textures' in logs/latest.log, a new file in crash-reports/,
+# 'Done (' (= FAIL: no stop), with a timeout of about 240 s (Monitor, not sleep loops). After an FML stop the JVM can
+# stay alive: kill your recorded pid once the message is in the log (gotchas.md "Boot"), wait for game_jvms.sh to be
+# empty, then `qrun.py run OUT b3_nodonor.qb RES`. A boot that never reaches the message nor Done within the timeout:
+# kill the pid, keep the log tail in the run notes, the row FAILs on its own (no message line).
+pace 2
+
+## SQ-MDP-17 | Miner's member stops startup naming both missing donor jars
+bootexpect Miner's Delight \(Creative Delight\) reads its textures, models and recipes from the original Miner's Delight jar, which must be in the folder 'miners_upstream' of the game directory \(not in mods/\):
+bootexpect missing: .*miners_upstream/miners_delight-1\.20\.1-1\.4\.5-backport\.jar
+bootexpect get it from https://cdn\.modrinth\.com/data/qMxbM4BQ/versions/p0INUam7/miners_delight-1\.20\.1-1\.4\.5-backport\.jar \(Modrinth
+bootexpect missing: .*miners_upstream/miners_delight-1\.19\.2-1\.1\.2\.jar
+bootexpect get it from https://mediafilez\.forgecdn\.net/files/4738/272/miners_delight-1\.19\.2-1\.1\.2\.jar \(CurseForge
+bootreject \(Backport\) reads its textures
+bootreject Done \(
+shell grep -n -A6 "reads its textures" logs/latest.log | head -20
+shell f=$(ls -t crash-reports/*.txt 2>/dev/null | head -1); [ -n "$f" ] && { echo "$f"; grep -n -m12 -iE "Description|reads its textures|Suspected Mod|Mod File|Failure message|Caused by" "$f"; }; true
+look the crash report / log blames only Miner's Delight (Creative Delight) (Suspected Mods: creativedelight or miners_delight), no other mod named as the cause

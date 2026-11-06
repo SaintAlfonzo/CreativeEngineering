@@ -1,6 +1,6 @@
 {
   "_readme": {
-    "workflow": "Set a biome's \"multiplier\" (or \"replace_with\"), then /reload or rejoin to see the solve (result_pct / note below update), and create a NEW world to use it. kubejs/server_scripts/worldgen/biome_overrides.js solves the layout at every world load. Multipliers other than 0/1 need a climate sample from /dumpclimate first (see README.md).",
+    "workflow": "Set a biome's \"multiplier\" (or \"replace_with\"), then /reload or rejoin to see the solve (result_pct / note below update), and create a NEW world to use it. kubejs/data/creativeworldgen/kubejs/worldgen/biome_overrides.js solves the layout at every world load. Multipliers other than 0/1 need a climate sample from /dumpclimate first (see README.md).",
     "multiplier": "1.0 = untouched. 0 = removed (its climate space goes to whichever biomes border it). 0.5 = half as common, 2.0 = twice as common, measured against share_pct. The solver hits these by raising/lowering one offset penalty per biome, so a boosted biome grows outward from its existing patches into its climate neighbours, never appears somewhere climatically unrelated.",
     "replace_with": "A biome id, or null. Relabels every entry of this biome to that one -- an exact swap of the same climate space. Overrides multiplier.",
     "target_pct": "Optional: an absolute share goal (% of the biome's layer) instead of a multiplier; overrides it. Works for a biome the samples never hit: its entries win the samples they lose by the smallest margins. tools/biome_rarity_floor.py writes these. \"target_layer\" (optional) names the layer for a never-hit biome (default surface).",
@@ -1234,7 +1234,7 @@
           "entries": 1,
           "layer": "surface",
           "share_pct": 65.125,
-          "result_pct": 70.365
+          "result_pct": 65.185
         },
         "minecraft:small_end_islands": {
           "multiplier": 1,
@@ -1261,12 +1261,12 @@
           "result_pct": 3.95
         },
         "nullscape:shadowlands": {
-          "multiplier": 0.5,
+          "multiplier": 0.75,
           "replace_with": null,
           "entries": 1,
           "layer": "surface",
           "share_pct": 21.3,
-          "result_pct": 10.735
+          "result_pct": 15.915
         },
         "nullscape:void_barrens": {
           "multiplier": 2,

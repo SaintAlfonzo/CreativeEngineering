@@ -121,7 +121,7 @@
             'minecraft:milk_bucket', 1)
 
         // 2.3 chocolate cake (MG-10 server half): knife recipe and the placed-cake slice tag
-        let cut = recipe(rm, 'creative_delight:farmersdelightcutting/chocolate_cake')
+        let cut = recipe(rm, 'creativedelight:farmersdelightcutting/chocolate_cake')
         let cutOut = 'missing'
         if (cut) {
             cutOut = desc(cut.getResultItem())

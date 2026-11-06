@@ -1,0 +1,85 @@
+# Run r1102b, worldgen slice, boot W3: group B fresh world "efboff", seed 8675309, [worldgen.systems] earthFill = false
+# and searchTimeoutSeconds = 5 (SQ-EFB-16, SQ-WGE-02c). Setup: w_setup.md W3. Same RES (RV from vars.json).
+pace 2
+
+## SQ-EFB-16-boot | earth fill off, timeout 5 in the toml
+bootexpect Done \(
+shell grep -qE '^\s*earthFill = false' config/creativeengineering-common.toml && grep -qE '^\s*searchTimeoutSeconds = 5' config/creativeengineering-common.toml && echo 'earthFill false, timeout 5'
+
+## SQ-WGE-02c | mansion search ends after 5 s with its counters; tick under 100 ms; thread free
+> locate structure minecraft:mansion
+sleep 3
+> forge tps
+waitlog (timed out after|nearest minecraft:mansion is at) 120
+expect timed out after 5 s
+reject timed out after (120|300) s
+> locate structure creativeengineering:meta/fortified_ruins
+waitlog (nearest creativeengineering:meta/fortified_ruins.* is at|fortified_ruins.*timed out after) 120
+look the Overall tick line under 100 ms during the search; the timeout line carries its counters; fortified ruins answered or timed out the same way
+
+## W3-GEN-RV | river square r 300 again
+> chunky shape square
+> chunky world minecraft:overworld
+> chunky center {RV1} {RV3}
+> chunky radius 300
+> chunky start
+waitlog Task finished 5400
+
+## SQ-EFB-16 | switch off: the probe finds floating or flooded starts the first world cancelled
+> forceload add {RV1-300} {RV3-300} {RV1-88} {RV3-88}
+sleep 10
+> zq under {RV1-208} {RV3-208} 6 -
+> say zqtile rv16 1
+waitlog zqtile rv16 1$ 600
+> forceload remove {RV1-300} {RV3-300} {RV1-88} {RV3-88}
+> forceload add {RV1-300} {RV3-120} {RV1-88} {RV3+120}
+sleep 10
+> zq under {RV1-208} {RV3} 6 -
+> say zqtile rv16 2
+waitlog zqtile rv16 2$ 600
+> forceload remove {RV1-300} {RV3-120} {RV1-88} {RV3+120}
+> forceload add {RV1-300} {RV3+88} {RV1-88} {RV3+300}
+sleep 10
+> zq under {RV1-208} {RV3+208} 6 -
+> say zqtile rv16 3
+waitlog zqtile rv16 3$ 600
+> forceload remove {RV1-300} {RV3+88} {RV1-88} {RV3+300}
+> forceload add {RV1-120} {RV3-300} {RV1+120} {RV3-88}
+sleep 10
+> zq under {RV1} {RV3-208} 6 -
+> say zqtile rv16 4
+waitlog zqtile rv16 4$ 600
+> forceload remove {RV1-120} {RV3-300} {RV1+120} {RV3-88}
+> forceload add {RV1-120} {RV3-120} {RV1+120} {RV3+120}
+sleep 10
+> zq under {RV1} {RV3} 6 -
+> say zqtile rv16 5
+waitlog zqtile rv16 5$ 600
+> forceload remove {RV1-120} {RV3-120} {RV1+120} {RV3+120}
+> forceload add {RV1-120} {RV3+88} {RV1+120} {RV3+300}
+sleep 10
+> zq under {RV1} {RV3+208} 6 -
+> say zqtile rv16 6
+waitlog zqtile rv16 6$ 600
+> forceload remove {RV1-120} {RV3+88} {RV1+120} {RV3+300}
+> forceload add {RV1+88} {RV3-300} {RV1+300} {RV3-88}
+sleep 10
+> zq under {RV1+208} {RV3-208} 6 -
+> say zqtile rv16 7
+waitlog zqtile rv16 7$ 600
+> forceload remove {RV1+88} {RV3-300} {RV1+300} {RV3-88}
+> forceload add {RV1+88} {RV3-120} {RV1+300} {RV3+120}
+sleep 10
+> zq under {RV1+208} {RV3} 6 -
+> say zqtile rv16 8
+waitlog zqtile rv16 8$ 600
+> forceload remove {RV1+88} {RV3-120} {RV1+300} {RV3+120}
+> forceload add {RV1+88} {RV3+88} {RV1+300} {RV3+300}
+sleep 10
+> zq under {RV1+208} {RV3+208} 6 -
+> say zqtile rv16 9
+waitlog zqtile rv16 9$ 600
+> forceload remove {RV1+88} {RV3+88} {RV1+300} {RV3+300}
+reject \[earth-fill\] .* -> CANCELLED
+shell python3 -I $INST/tools/scratch_query/efb_judge.py under logs/latest.log --box {RV1-300} {RV3-300} {RV1+300} {RV3+300} --except '(underground|mineshaft|stronghold|ancient_city|trial|dungeon|monument|shipwreck|ocean_ruin|buried|fossil|geode|catacomb|crypt|cave|bunker|vault|tomb|sewer|lair|deep|mine)' --need over6 || python3 -I $INST/tools/scratch_query/efb_judge.py under logs/latest.log --box {RV1-300} {RV3-300} {RV1+300} {RV3+300} --except '(underground|mineshaft|stronghold|ancient_city|trial|dungeon|monument|shipwreck|ocean_ruin|buried|fossil|geode|catacomb|crypt|cave|bunker|vault|tomb|sewer|lair|deep|mine)' --need basewater
+look a few over6 > 0 or base water > 0 starts here that W1 cancelled (compare ids and chunks with SQ-EFB-05 / w1_latest.log); no difference: take the coast square

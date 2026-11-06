@@ -9,7 +9,8 @@
 // global.foodValueCopies (created with `global.foodValueCopies = global.foodValueCopies || {}`):
 //   delightful/delightful_foods.js   cantaloupe_slice
 //   minecraft/food_values.js         glistering_melon_slice
-// The effect swaps and Farmer's Respite cake slice effects stay in the pack's startup_scripts/cooking/food_values.js.
+// The effect swaps and Farmer's Respite cake slice effects: Creative Brewing's kubejs_startup/creativeengineering/
+// effect_swaps.js (moved from the pack's cooking/food_values.js 2026-11-01).
 global.foodValueCopies = global.foodValueCopies || {}
 
 ItemEvents.modification(e => {

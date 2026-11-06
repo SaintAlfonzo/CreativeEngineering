@@ -1,0 +1,12 @@
+# r1103 Boot 0 (group A superflat b0): dumps and generators the slice A rows read (SQ-CDJ7 header).
+## B0-DUMPALL | /dumpall on the 00:48 CD build, wave-5 jars
+> dumpall
+waitlog \[dumpall\] \d+/\d+ ok in 900
+## B0-CEGEN | /cegen food_families (skewer family)
+> cegen food_families
+sleep 60
+## B0-DUMPFOOD | /dumpfood (gilded cans), /dumpcompost (SQ-CDF-08)
+> dumpfood
+sleep 30
+> dumpcompost
+sleep 30

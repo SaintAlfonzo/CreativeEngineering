@@ -11,15 +11,12 @@ Status: OFF = disabled in `structure_groups.json`, BLOCKED = another mod stops i
 | Structure | Group | Status | T1 | T2 | T3 | Blocks |
 |---|---|---|---:|---:|---:|---|
 | `minecraft:ruined_portal` | standalone | OFF | 1860 |  | 1 | netherrack 1860, magma_block 1 |
-| `philipsruins:lost_soul_city` | standalone |  | 1172 | 2 | 3 | soul_soil 839, soul_sand 331, ancient_debris 2, nether_wart 2, polished_blackstone_pressure_plate 2, soul_lantern 1 |
-| `philipsruins:lost_soul_dungeon` | standalone |  | 670 | 363 | 18 | soul_soil 336, polished_basalt 335, soul_sand 330, basalt 28, soul_lantern 17, nether_wart 4 ... |
 | `philipsruins:underground_structures` | standalone |  | 204 | 399 | 17 | polished_basalt 363, soul_soil 110, soul_sand 94, basalt 36, soul_lantern 17 |
 | `minecraft:ancient_city` | standalone |  | 173 | 705 | 301 | polished_basalt 705, soul_sand 173, soul_fire 173, soul_lantern 128 |
 | `betterdungeons:zombie_dungeon` | entrance_dungeons |  | 97 |  | 2 | soul_sand 97, warped_stairs 1, soul_lantern 1 |
 | `underground_bunkers:underground_bunker` | standalone |  | 60 | 29 | 24 | soul_sand 30, nether_wart 30, basalt 22, nether_brick_wall 14, magma_block 10, polished_basalt 7 |
 | `betterjungletemples:jungle_temple` | surface_dungeons |  | 34 |  | 150 | magma_block 143, netherrack 34, soul_wall_torch 7 |
 | `terralith:underground/frosted_dungeon` | standalone |  | 32 | 233 | 48 | polished_basalt 233, soul_soil 32, soul_fire 28, soul_lantern 20 |
-| `philipsruins:start_nether_ruin` | ruins |  | 13 | 2287 | 610 | polished_blackstone_bricks 910, polished_blackstone 622, blackstone 334, nether_bricks 313, polished_blackstone_brick_stairs 97, blackstone_slab 90 ... |
 | `terralith:fortified_desert_village` | settlements |  | 8 |  | 36 | crimson_trapdoor 36, netherrack 8 |
 | `philipsruins:ancient_crypt` | standalone |  | 6 |  |  | soul_sand 6 |
 | `philipsruins:sculk_dungeon` | standalone |  | 4 | 36 | 4 | polished_basalt 17, basalt 10, polished_blackstone_brick_wall 8, soul_soil 4, soul_fire 4, blackstone 1 |
@@ -33,7 +30,7 @@ Status: OFF = disabled in `structure_groups.json`, BLOCKED = another mod stops i
 | `minecraft:pillager_outpost` | pillager_settlements |  |  | 174 | 12 | polished_blackstone_button 96, polished_blackstone_wall 54, polished_blackstone 24, soul_lantern 12 |
 | `simply_houses:taiga_forge` | remote |  |  | 168 | 15 | basalt 74, polished_basalt 71, blackstone 8, nether_wart_block 6, polished_blackstone_brick_slab 5, magma_block 4 ... |
 | `betterstrongholds:stronghold` | standalone |  |  | 154 | 223 | nether_gold_ore 172, polished_blackstone_slab 64, polished_blackstone_stairs 48, polished_blackstone 31, crimson_button 24, nether_brick_fence 12 ... |
-| `betterdeserttemples:desert_temple` | surface_dungeons |  |  | 130 | 80 | magma_block 48, polished_blackstone 44, blackstone_wall 32, polished_blackstone_stairs 29, warped_pressure_plate 24, blackstone 10 ... |
+| `betterdeserttemples:desert_temple` | desert_temples |  |  | 130 | 80 | magma_block 48, polished_blackstone 44, blackstone_wall 32, polished_blackstone_stairs 29, warped_pressure_plate 24, blackstone 10 ... |
 | `simply_houses:plains_house` | remote |  |  | 97 | 1 | basalt 50, polished_basalt 47, soul_lantern 1 |
 | `terralith:spire` | surface_dungeons |  |  | 30 | 230 | soul_lantern 221, blackstone 26, warped_trapdoor 8, polished_blackstone_brick_wall 4, soul_wall_torch 1 |
 | `unwrecked_ships:ship` | boats |  |  | 25 | 1170 | warped_wart_block 303, nether_wart_block 303, crimson_planks 110, warped_planks 110, crimson_slab 80, warped_slab 80 ... |
@@ -43,7 +40,6 @@ Status: OFF = disabled in `structure_groups.json`, BLOCKED = another mod stops i
 | `mysticrift_pillagers_towers_aris:jungle_pillager_tower` | pillager_settlements |  |  | 9 |  | crying_obsidian 9 |
 | `oldvillagerstatue:old_villager_statue` | ruins |  |  | 8 |  | crying_obsidian 8 |
 | `desert_village_temple:village_temple` | remote |  |  | 4 | 3 | blackstone_slab 4, magma_block 3 |
-| `philipsruins:rare_ruin` | ruins |  |  | 3 | 97 | twisting_vines_plant 51, weeping_vines_plant 10, nether_brick_fence 8, twisting_vines 8, soul_lantern 8, nether_wart_block 4 ... |
 | `antiquetradingship:antique_trading_ship` | boats |  |  | 2 |  | polished_blackstone_button 2 |
 | `towns_and_towers:village_forest` | settlements |  |  | 2 |  | blackstone 2 |
 | `illagerwarship:warship` | boats |  |  |  | 115 | nether_bricks 69, nether_brick_slab 37, nether_brick_fence 9 |
@@ -56,6 +52,7 @@ Status: OFF = disabled in `structure_groups.json`, BLOCKED = another mod stops i
 | `hopo:underwater_ruins` | ocean_ruins |  |  |  | 5 | magma_block 5 |
 | `eugene:witch_wagon` | vehicles |  |  |  | 4 | soul_lantern 4 |
 | `gothic_church:church` | remote |  |  |  | 4 | glowstone 4 |
+| `minecraft:village_snowy` | settlements |  |  |  | 4 | soul_wall_torch 4 |
 | `minecraft:village_savanna` | settlements |  |  |  | 3 | magma_block 2, potted_crimson_fungus 1 |
 | `minecraft:village_taiga` | settlements |  |  |  | 3 | magma_block 2, potted_crimson_fungus 1 |
 | `philipsruins:pumpkin_ruins` | ruins |  |  |  | 3 | soul_lantern 3 |
@@ -79,97 +76,76 @@ Status: OFF = disabled in `structure_groups.json`, BLOCKED = another mod stops i
 | `towns_and_towers:pillager_outpost_snowy_plains` | pillager_settlements |  |  |  | 1 | potted_crimson_roots 1 |
 | `towns_and_towers:village_old_growth_taiga` | settlements |  |  |  | 1 | magma_block 1 |
 
-68 structures, 67 live; tier 1 in 15, tier 2 in 29, tier 3 only in 32.
+65 structures, 64 live; tier 1 in 12, tier 2 in 25, tier 3 only in 33.
 
 ## By block
 
 | Block | Tier | Live structures | Total blocks |
 |---|---:|---:|---:|
-| `minecraft:soul_sand` | 1 | 8 | 1063 |
-| `minecraft:soul_soil` | 1 | 6 | 1322 |
-| `minecraft:netherrack` | 1 | 5 | 59 |
-| `minecraft:nether_wart` | 1 | 3 | 36 |
-| `minecraft:polished_basalt` | 2 | 11 | 1985 |
-| `minecraft:basalt` | 2 | 10 | 875 |
-| `minecraft:blackstone` | 2 | 7 | 402 |
-| `minecraft:polished_blackstone` | 2 | 6 | 903 |
-| `minecraft:crying_obsidian` | 2 | 5 | 37 |
-| `minecraft:polished_blackstone_brick_wall` | 2 | 5 | 54 |
-| `minecraft:blackstone_slab` | 2 | 4 | 105 |
-| `minecraft:polished_blackstone_button` | 2 | 4 | 112 |
-| `minecraft:polished_blackstone_slab` | 2 | 4 | 330 |
-| `minecraft:polished_blackstone_stairs` | 2 | 4 | 500 |
-| `minecraft:gilded_blackstone` | 2 | 3 | 55 |
-| `minecraft:polished_blackstone_brick_slab` | 2 | 3 | 115 |
-| `minecraft:polished_blackstone_brick_stairs` | 2 | 3 | 140 |
-| `minecraft:polished_blackstone_pressure_plate` | 2 | 3 | 12 |
-| `minecraft:blackstone_stairs` | 2 | 2 | 60 |
-| `minecraft:chiseled_polished_blackstone` | 2 | 2 | 14 |
-| `minecraft:polished_blackstone_bricks` | 2 | 2 | 1051 |
+| `minecraft:soul_sand` | 1 | 6 | 402 |
+| `minecraft:netherrack` | 1 | 4 | 46 |
+| `minecraft:soul_soil` | 1 | 4 | 147 |
+| `minecraft:nether_wart` | 1 | 1 | 30 |
+| `minecraft:polished_basalt` | 2 | 10 | 1650 |
+| `minecraft:basalt` | 2 | 9 | 847 |
+| `minecraft:blackstone` | 2 | 6 | 68 |
+| `minecraft:polished_blackstone` | 2 | 5 | 281 |
+| `minecraft:polished_blackstone_brick_wall` | 2 | 4 | 51 |
+| `minecraft:blackstone_slab` | 2 | 3 | 15 |
+| `minecraft:crying_obsidian` | 2 | 3 | 27 |
+| `minecraft:polished_blackstone_button` | 2 | 3 | 101 |
+| `minecraft:polished_blackstone_slab` | 2 | 3 | 316 |
+| `minecraft:polished_blackstone_stairs` | 2 | 3 | 487 |
+| `minecraft:gilded_blackstone` | 2 | 2 | 6 |
+| `minecraft:polished_blackstone_brick_slab` | 2 | 2 | 45 |
+| `minecraft:polished_blackstone_brick_stairs` | 2 | 2 | 43 |
+| `minecraft:polished_blackstone_pressure_plate` | 2 | 2 | 10 |
+| `minecraft:blackstone_stairs` | 2 | 1 | 6 |
 | `minecraft:blackstone_wall` | 2 | 1 | 32 |
+| `minecraft:chiseled_polished_blackstone` | 2 | 1 | 1 |
 | `minecraft:cracked_polished_blackstone_bricks` | 2 | 1 | 30 |
+| `minecraft:polished_blackstone_bricks` | 2 | 1 | 141 |
 | `minecraft:polished_blackstone_wall` | 2 | 1 | 54 |
-| `minecraft:soul_lantern` | 3 | 27 | 477 |
+| `minecraft:soul_lantern` | 3 | 23 | 448 |
 | `minecraft:magma_block` | 3 | 19 | 248 |
-| `minecraft:crimson_trapdoor` | 3 | 5 | 46 |
-| `minecraft:nether_wart_block` | 3 | 5 | 330 |
+| `minecraft:crimson_trapdoor` | 3 | 4 | 44 |
 | `minecraft:glowstone` | 3 | 4 | 19 |
-| `minecraft:nether_brick_fence` | 3 | 4 | 108 |
 | `minecraft:potted_crimson_fungus` | 3 | 4 | 5 |
 | `minecraft:shroomlight` | 3 | 4 | 38 |
-| `minecraft:soul_campfire` | 3 | 4 | 9 |
 | `minecraft:crimson_button` | 3 | 3 | 28 |
-| `minecraft:nether_brick_wall` | 3 | 3 | 45 |
+| `minecraft:nether_wart_block` | 3 | 3 | 311 |
+| `minecraft:soul_campfire` | 3 | 3 | 8 |
 | `minecraft:soul_fire` | 3 | 3 | 205 |
-| `minecraft:ancient_debris` | 3 | 2 | 9 |
-| `minecraft:crimson_fungus` | 3 | 2 | 4 |
+| `minecraft:soul_wall_torch` | 3 | 3 | 12 |
 | `minecraft:crimson_slab` | 3 | 2 | 86 |
-| `minecraft:nether_brick_slab` | 3 | 2 | 64 |
-| `minecraft:nether_brick_stairs` | 3 | 2 | 51 |
-| `minecraft:nether_bricks` | 3 | 2 | 382 |
+| `minecraft:nether_brick_fence` | 3 | 2 | 21 |
+| `minecraft:nether_brick_wall` | 3 | 2 | 20 |
 | `minecraft:nether_gold_ore` | 3 | 2 | 179 |
-| `minecraft:soul_wall_torch` | 3 | 2 | 8 |
-| `minecraft:twisting_vines` | 3 | 2 | 9 |
-| `minecraft:twisting_vines_plant` | 3 | 2 | 65 |
 | `minecraft:warped_stairs` | 3 | 2 | 26 |
 | `minecraft:warped_trapdoor` | 3 | 2 | 13 |
-| `minecraft:warped_wart_block` | 3 | 2 | 305 |
+| `minecraft:ancient_debris` | 3 | 1 | 7 |
 | `minecraft:crimson_fence` | 3 | 1 | 47 |
-| `minecraft:crimson_nylium` | 3 | 1 | 21 |
+| `minecraft:crimson_fungus` | 3 | 1 | 1 |
 | `minecraft:crimson_planks` | 3 | 1 | 110 |
 | `minecraft:crimson_roots` | 3 | 1 | 1 |
 | `minecraft:crimson_stairs` | 3 | 1 | 25 |
+| `minecraft:nether_brick_slab` | 3 | 1 | 37 |
+| `minecraft:nether_brick_stairs` | 3 | 1 | 8 |
+| `minecraft:nether_bricks` | 3 | 1 | 69 |
 | `minecraft:nether_sprouts` | 3 | 1 | 1 |
 | `minecraft:potted_crimson_roots` | 3 | 1 | 1 |
-| `minecraft:red_nether_brick_stairs` | 3 | 1 | 20 |
-| `minecraft:red_nether_bricks` | 3 | 1 | 61 |
 | `minecraft:respawn_anchor` | 3 | 1 | 1 |
 | `minecraft:stripped_warped_hyphae` | 3 | 1 | 1 |
+| `minecraft:twisting_vines` | 3 | 1 | 1 |
+| `minecraft:twisting_vines_plant` | 3 | 1 | 14 |
 | `minecraft:warped_fence` | 3 | 1 | 47 |
 | `minecraft:warped_fungus` | 3 | 1 | 1 |
 | `minecraft:warped_planks` | 3 | 1 | 110 |
 | `minecraft:warped_pressure_plate` | 3 | 1 | 24 |
 | `minecraft:warped_slab` | 3 | 1 | 80 |
-| `minecraft:weeping_vines` | 3 | 1 | 4 |
-| `minecraft:weeping_vines_plant` | 3 | 1 | 10 |
+| `minecraft:warped_wart_block` | 3 | 1 | 303 |
 
 ## Templates (live structures with tier 1 or 2)
-
-### `philipsruins:lost_soul_city`
-
-- `philipsruins:lost_soul_city_part3`: soul_soil 185, soul_sand 78
-- `philipsruins:lost_soul_city_start`: soul_soil 217, soul_sand 35
-- `philipsruins:lost_soul_city_part2`: soul_soil 153, soul_sand 94
-- `philipsruins:lost_soul_city_part4`: soul_soil 152, soul_sand 87, ancient_debris 2, nether_wart 2, polished_blackstone_pressure_plate 2, soul_lantern 1
-- `philipsruins:lost_soul_city_part1`: soul_soil 132, soul_sand 37
-
-### `philipsruins:lost_soul_dungeon`
-
-- `philipsruins:lost_prison1`: soul_soil 117, soul_sand 116, polished_basalt 88, basalt 21, soul_lantern 5, soul_campfire 1
-- `philipsruins:walkway3`: polished_basalt 82, soul_soil 82, soul_sand 80, soul_lantern 8, basalt 4, nether_wart 4
-- `philipsruins:lost_soul_walkway1`: soul_soil 59, soul_sand 57, polished_basalt 52, soul_lantern 2
-- `philipsruins:lost_soul_start_pool`: polished_basalt 61, soul_sand 41, soul_soil 37, basalt 3, soul_lantern 1
-- `philipsruins:walkway2`: polished_basalt 52, soul_soil 41, soul_sand 36, soul_lantern 1
 
 ### `philipsruins:underground_structures`
 
@@ -217,14 +193,6 @@ Status: OFF = disabled in `structure_groups.json`, BLOCKED = another mod stops i
 ### `terralith:underground/frosted_dungeon`
 
 - `terralith:underground/dungeon1`: polished_basalt 233, soul_soil 32, soul_fire 28, soul_lantern 20
-
-### `philipsruins:start_nether_ruin`
-
-- `philipsruins:start_nether_ruin`: polished_blackstone_bricks 339, nether_bricks 313, blackstone 128, nether_brick_fence 79, red_nether_bricks 61, polished_blackstone 57, polished_blackstone_brick_stairs 56, nether_brick_stairs 43, blackstone_stairs 35, blackstone_slab 28, nether_brick_slab 27, nether_brick_wall 25, crimson_nylium 21, gilded_blackstone 20, red_nether_brick_stairs 20, nether_wart_block 15, netherrack 13, polished_blackstone_brick_slab 12, polished_blackstone_stairs 12, chiseled_polished_blackstone 11, polished_blackstone_button 8, crying_obsidian 7, polished_blackstone_slab 5, crimson_fungus 3, polished_blackstone_brick_wall 3
-- `philipsruins:nether_ruin1`: polished_blackstone_bricks 176, polished_blackstone 146, blackstone 63, blackstone_slab 28, gilded_blackstone 12, polished_blackstone_brick_stairs 12, blackstone_stairs 3, polished_blackstone_button 1, soul_lantern 1
-- `philipsruins:nether_ruin2`: polished_blackstone_bricks 152, polished_blackstone 126, blackstone 49, polished_blackstone_brick_slab 26, blackstone_slab 18, blackstone_stairs 9, polished_blackstone_brick_stairs 5, gilded_blackstone 2, polished_blackstone_button 1
-- `philipsruins:nether_ruin3`: polished_blackstone 145, polished_blackstone_bricks 129, blackstone 52, polished_blackstone_brick_slab 15, gilded_blackstone 8, polished_blackstone_brick_stairs 8, blackstone_stairs 7, blackstone_slab 5, polished_blackstone_button 1, polished_blackstone_stairs 1
-- `philipsruins:nether_ruin4`: polished_blackstone 148, polished_blackstone_bricks 114, blackstone 42, polished_blackstone_brick_slab 17, polished_blackstone_brick_stairs 16, blackstone_slab 11, polished_blackstone_slab 9, gilded_blackstone 7, chiseled_polished_blackstone 2, soul_lantern 2
 
 ### `terralith:fortified_desert_village`
 
@@ -355,10 +323,6 @@ Status: OFF = disabled in `structure_groups.json`, BLOCKED = another mod stops i
 ### `desert_village_temple:village_temple`
 
 - `desert_village_temple:villager_desert_temple`: blackstone_slab 4, magma_block 3
-
-### `philipsruins:rare_ruin`
-
-- `philipsruins:rare_ruin`: twisting_vines_plant 51, weeping_vines_plant 10, nether_brick_fence 8, twisting_vines 8, soul_lantern 8, nether_wart_block 4, weeping_vines 4, crying_obsidian 3, warped_wart_block 2, crimson_trapdoor 2
 
 ### `antiquetradingship:antique_trading_ship`
 

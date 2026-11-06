@@ -1,0 +1,124 @@
+# Run 2026-11-01, Creative Split waves 2 and 3, boot 2 (split_w234.sh prep2): installed mods/ jars (patcherMod
+# 1.1.06, creativedelight, creativebrewing, creativecompat, calendar, devtools) on the boot 1 save of cs2_boot1.qb,
+# srv config carried from boot 1. Note: the instance kubejs/ already holds the wave 4 script moves (scripts now inside
+# the wave 4 CB / CD jars), so script rows judge only what waves 2 and 3 touch.
+pace 2
+
+## SQ-CS2-02 | swap lists and registry remap
+bootexpect \[swaps\] 2 list file\(s\): 2 namespace move\(s\), 0 single id\(s\)
+bootexpect \[swaps\] minecraft:block: \d+ id\(s\) remapped
+bootreject left missing
+bootreject Missing Registry Entries|missing blocks
+shell grep -E "\[swaps\]" logs/latest.log | cut -c1-220
+
+## SQ-CS2-03 | remapped blocks keep their states; chest unchanged (the old CD had no items)
+> pbot spawn qa {H1} {H2} {H3} minecraft:overworld creative
+sleep 5
+> data get block {H1+2} {H2} {H3}
+> execute if block {H1+2} {H2} {H3} creativedelight:treated_stick[axis_y=true] run say CS2 stick ok
+> execute if block {H1+3} {H2} {H3+3} creativedelight:treated_stick_tomatoes[age=2] run say CS2 tomato stick ok
+> data get block {H1+4} {H2} {H3} Items
+expect CS2 stick ok
+expect CS2 tomato stick ok
+expect immersiveengineering:stick_treated", Count: 3b
+reject creative_delight:
+
+## SQ-CS2-04 | saved village farm places
+> tp qa {V1} 200 {V3}
+sleep 45
+> save-all flush
+waitlog Saved the game 120
+shell grep -E "village_farm_crops|Failed to load structure|Unknown processor|Failed to parse" logs/latest.log | head -5; echo "---"; python3 $INST/tools/scratch_query/region_ids.py cs234/region "creative_?delight:[a-z_]+"
+look farm pieces placed with no decode error; region files name creativedelight:village_farm_crops (old id none or only in chunks not resaved)
+
+## SQ-CS2-05 | config files carried over
+bootexpect \[swaps\] config creative_delight-common.toml carried over to creativedelight-common.toml
+bootexpect \[swaps\] config creative_brewing-common.toml carried over to creativebrewing-common.toml
+shell ls config/ | grep -i creative; grep -n "placeableTooltips" config/creativedelight-common.toml; head -2 config/creativebrewing-common.toml
+look creativedelight file has placeableTooltips = false; underscore files gone; CB marker comment kept or not (Forge may rewrite)
+
+## SQ-CS2-06 | script packs, no old namespace
+shell grep -E "startup script packs in order|\[creativedelight\]|\[creativebrewing\]" logs/kubejs/startup.log logs/kubejs/server.log | cut -c1-220 | head -12; echo "old ns in kjs logs: $(grep -c creative_delight logs/kubejs/startup.log logs/kubejs/server.log | tr '\n' ' ')"; grep -c "Unknown feature creative_delight" logs/latest.log
+kjsreject creative_delight
+bootreject Unknown feature creative_delight
+> recipescan
+waitlog Scan complete 300
+look packs creativecalendar, creativedelight, creativebrewing load with core lines; recipescan clean of creative_delight ids
+
+## SQ-CS2-07 | NCH.cfg lookup and the can action
+shell grep -E "NCH.cfg|IngredientActions|can_serving" logs/kubejs/server.log | head -8 | cut -c1-220
+kjsreject section in any registered config
+kjsreject IngredientActions not available|no creativeengineering:can_serving
+look no NCH.cfg / IngredientActions WARN (the craft half is a client check)
+
+## SQ-CS2-08 | CE mixin plugin gate, IW fast path
+shell grep -E "creativeengineering.mixins.json" logs/debug.log | grep -iE "error|fail" | head -3; grep -c "IwServerLevelTick" logs/debug.log; grep -E "IwServerLevelTick" logs/debug.log | head -2 | cut -c1-200; grep -iE "\[perf\].*(immersive|IW)" logs/latest.log | head -2 | cut -c1-200
+look IwServerLevelTickMixin applied, IW fast path line, no mixin config error
+
+## SQ-CMP-01 | Compat loads, mixins apply once
+bootexpect \[creativecompat\] loaded \(config/
+bootreject creativecompat\.mixins\.json.*(Error|error|failed)
+shell grep -c "from creativecompat.mixins.json" logs/debug.log; grep -o "Mixing [A-Za-z_.]* from creativecompat.mixins.json" logs/debug.log | sort -u | wc -l; grep -o "Mixing [A-Za-z_.]* from creativecompat.mixins.json" logs/debug.log | sed 's/Mixing //;s/ from.*//' | sort -u > /tmp/cmp_mx.txt; grep -o "Mixing [A-Za-z_.]* from creativeengineering.mixins.json" logs/debug.log | sed 's/Mixing //;s/ from.*//' | sort -u | comm -12 - /tmp/cmp_mx.txt | head; rm -f /tmp/cmp_mx.txt
+look up to 27 common mixins from creativecompat.mixins.json; none also from creativeengineering.mixins.json (the comm list above is empty)
+
+## SQ-CMP-02 | config sections carried to the Compat file
+bootexpect \[swaps\] config sections \[leaf_piles, moss, vine_shearing, campfire, monster_box, trash_slot\] carried over
+shell grep -n "rainOutTicks" config/creativecompat-common.toml; grep -nE "^\s*\[(leaf_piles|moss|vine_shearing|campfire|monster_box|trash_slot)\]" config/creativeengineering-common.toml || echo "CE has none of the six"
+look Compat file rainOutTicks = 200; CE file lost the six sections (restart half in cs2_boot2b)
+
+## SQ-CMP-03 | Compat startup pack, item physics
+shell grep -E "startup script packs in order|creativecompat|item_physics" logs/kubejs/startup.log | cut -c1-220 | head -8
+kjsreject global\.itemPhysics missing|ItemPhysicSplit not on classpath
+look pack creativecompat loads; [item_physics] summary line as before
+
+## SQ-CMP-04 | /dumpphysics
+> dumpphysics
+sleep 5
+reject Unknown command
+reject (Error|Exception)
+look rules listed
+
+## SQ-CMP-05 | TNT item in fire, fireproof item in lava
+> forceload add {H1+20} {H3+20}
+sleep 5
+# items of the same kind merge: clear earlier test items first
+> kill @e[type=minecraft:item,x={H1+22},y={H2},z={H3+20},distance=..30]
+> setblock {H1+20} {H2-1} {H3+20} minecraft:netherrack
+> setblock {H1+20} {H2} {H3+20} minecraft:fire
+> setblock {H1+24} {H2-1} {H3+20} minecraft:stone
+> setblock {H1+24} {H2} {H3+20} minecraft:lava
+> summon minecraft:item {H1+20} {H2+1} {H3+20} {Item:{id:"minecraft:tnt",Count:1b},Tags:["cmp_tnt2"]}
+> summon minecraft:item {H1+24} {H2+1} {H3+20} {Item:{id:"minecraft:netherite_ingot",Count:1b},Tags:["cmp_fp2"]}
+sleep 15
+> execute if block {H1+20} {H2} {H3+20} minecraft:fire run say CMP fire still burning
+> execute unless entity @e[type=item,tag=cmp_tnt2] run say CMP tnt item burned
+> execute if entity @e[type=item,tag=cmp_fp2] run say CMP fireproof item survived
+expect CMP tnt item burned
+expect CMP fireproof item survived
+shell grep -iE "shrapnel|burnExplode|BurnBursts" logs/latest.log | tail -3 | cut -c1-200
+look the blast itself is not visible on a console; the TNT item is consumed and the netherite stays
+
+## SQ-CMP-06 | weathered cardboard box, monster box loot, physics tags
+> setblock {H1+8} {H2} {H3} creativeengineering:weathered_cardboard_box
+> execute if block {H1+8} {H2} {H3} creativeengineering:weathered_cardboard_box run say CMP box placed
+> give qa creativeengineering:weathered_cardboard_box
+> loot give qa loot creativeengineering:misc/monster_box_reward
+expect CMP box placed
+reject Unknown (block|item)|Unknown loot table
+> dumptags
+waitlog (dumptags|tags).*(done|written|wrote) 300
+shell python3 -c "import json;d=json.load(open('kubejs/exported/tags/item_tags_by_item.json'));print({k:len(v) for k,v in d.items() if 'cardboard' in k})" 2>&1 | cut -c1-300; ls kubejs/exported/tags/ | head
+look block, item and loot resolve; physics tags present
+
+## SQ-CMP-07 | paintings
+shell grep -ciE "paintings" logs/latest.log; grep -iE "immersive_?paintings" logs/latest.log | grep -iE "error|fail|load" | head -3 | cut -c1-200; ls kubejs/data | head -40 | tr '\n' ' '
+look painting count as before the carve, no load error
+
+## SQ-CMP-08 | moved server scripts, /reload
+shell grep -E "Error occurred while handling event|creativecompat" logs/kubejs/server.log | head -6 | cut -c1-220; grep -c "Error occurred while handling event" logs/latest.log
+kjsreject Error occurred while handling event
+> reload
+waitlog (Reloaded|reload) 180
+sleep 10
+shell grep -cE "Error occurred while handling event|ReferenceError" logs/kubejs/server.log
+look no script error from moved Compat files; /reload clean

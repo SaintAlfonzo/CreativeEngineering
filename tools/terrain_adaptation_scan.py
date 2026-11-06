@@ -40,9 +40,9 @@ WORLDGEN = ROOT / 'kubejs/generation_scripts/worldgen'
 OUT_MD = ROOT / 'feature_writeup/terrain_adaptation_scan.md'
 OUT_JSON = WORLDGEN / 'terrain_adaptation_scan.json'
 CACHE = ROOT / 'tools/.cache/terrain_scan.json'
-TAG_JS = ROOT / 'kubejs/server_scripts/worldgen/terrain_adaptation.js'
+TAG_JS = ROOT / 'kubejs/data/creativeworldgen/kubejs/worldgen/terrain_adaptation.js'
 TAG_EXPORT = ROOT / 'kubejs/exported/tags/block_tags.json'
-EARTH_FILL_JS = ROOT / 'kubejs/server_scripts/worldgen/earth_fill.js'
+EARTH_FILL_JS = ROOT / 'kubejs/data/creativeworldgen/kubejs/worldgen/earth_fill.js'
 MEASURE_VERSION = 2   # bump when measure() changes, so the cache is rebuilt
 
 # Vanilla jigsaw structures (registered in code in 1.19.2: no structure JSON to read). Values from
@@ -516,7 +516,7 @@ def write(rows, live_tags, pad, plants):
              f'air-only columns. **Mild**: {round(100 * MILD_WASTE)}% and {MILD_COLS}+. Totals over multi-template structures '
              'add every reachable variant once, so a jigsaw structure with many alternatives counts each of them.')
     L.append('')
-    L.append('**Choosing tags** (add ids to `kubejs/server_scripts/worldgen/terrain_adaptation.js`, then rejoin; new chunks only):')
+    L.append('**Choosing tags** (add ids to `kubejs/data/creativeworldgen/kubejs/worldgen/terrain_adaptation.js`, then rejoin; new chunks only):')
     L.append('- `soft` + `template_trim`: a building on a pad. The pad and the air around it go, the ground is levelled only under '
              'the building and blends out in 4 blocks (+ `skirtBump`).')
     L.append('- `soft` alone: keeps the template\'s pad and courtyards (they are levelled too) but rounds and shortens the '

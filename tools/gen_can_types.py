@@ -3,7 +3,7 @@
 salad, soup, meal, pie, feast, drink, golden, dairy, preserve, dessert, cake), plus the food values of Canned Goods'
 own cans that no recipe makes (norecipe rows), so none keeps the mod's broken saturation modifiers.
 
-Two kinds of section (SECTIONS below, mirroring the Goal comments in kubejs/data/creative_delight/kubejs/creativeengineering/canning.js):
+Two kinds of section (SECTIONS below, mirroring the Goal comments in kubejs/data/creativedelight/kubejs/creativeengineering/canning.js):
   mult  a meal is the food it holds x mult (hunger and saturation points); every source shares one recipe.
   meal  a meal is a fixed size (hunger, saturation points), e.g. the Baked Potato meal of raw veggies. The recipe is
         sized by the first (whole) source's value, at most 8 (the grid less the can); the other sources are its
@@ -14,14 +14,20 @@ Cans without their own sprite (kubejs/assets/creativeengineering/textures/item/<
 
 Input (run /dumpfood in game first):  kubejs/exported/food/catalog.json, foods.json
 Output:
-  kubejs/generation_scripts/food/can_types.json   every can: values, effects, servings, recipes (read by
-                                                  development/creativeDelight/src/main/resources/kubejs_startup/creativeengineering/cans.js and creative_delight/kubejs/creativeengineering/canning.js)
-  kubejs/startup_scripts/_lib/item_dict.js        block between the BEGIN/END GENERATED CANS markers (new cans only)
+  kubejs/generation_scripts/food/can_types.json   every can: values, effects, servings, recipes (the record)
+  development/creativeCommon/src/main/resources/kubejs_startup/creativecommon/_lib/item_dict.js        block between the BEGIN/END GENERATED CANS markers (new cans only)
   kubejs/generation_scripts/food/can_servings.json  servings for every generated can (other entries kept)
   kubejs/generation_scripts/food/food_types.json  new cans added to types.canned and the canned map
+  Creative Delight startup member scripts (framework #7, creative_delight.md 28.2; outRoot of the "can_types" entry in
+  tools/generators.json handRun): development/creativeDelight/src/main/resources/kubejs_startup/<namespace>/
+  can_types.js and can_servings.js, the two JSONs split by the namespace of each can's first source food
+  (`// requires: <namespace>`). CD's startup cans.js and server canning.js / can_tags.js read those through
+  global.CD.genMerge, never the JSON; a run needs a CD jar build and a restart. The food types follow through
+  food_catalog's member scripts.
 
     python3 tools/gen_can_types.py            write everything
     python3 tools/gen_can_types.py --check    print what would change, write nothing
+    python3 tools/gen_can_types.py --members  only rewrite the member scripts from the current JSONs
 
 "existing" cans are Canned Goods items (canned_goods:*): no new item, their food values are overridden at startup.
 Everything else is a creativeengineering: item. Coverage worksheet: feature_writeup/can_parity.md.
@@ -36,11 +42,13 @@ from pathlib import Path
 
 sys.path.insert(0, str(Path(__file__).resolve().parent))
 import food_catalog  # noqa: E402  (write_types keeps food_types.json's one-line-per-type layout)
+import gen_out  # noqa: E402
+import pack_paths  # noqa: E402
 
 INSTANCE = Path(__file__).resolve().parent.parent
 EXPORT = INSTANCE / 'kubejs/exported/food'
 GEN = INSTANCE / 'kubejs/generation_scripts/food'
-DICT = INSTANCE / 'kubejs/startup_scripts/_lib/item_dict.js'
+DICT = pack_paths.ITEM_DICT
 OUT = GEN / 'can_types.json'
 SERVINGS = GEN / 'can_servings.json'
 TYPES = GEN / 'food_types.json'
@@ -68,7 +76,7 @@ ANCHOR = "i.any_bell_pepper               = '#forge:crops/bell_pepper';       //
 # pot       the recipes are Cooking Pot recipes (the empty can goes in the container slot, at most 6 inputs)
 SALT = ['salt', 'bone_broth']
 SWEET = ['sugar', 'honey_bottle']
-VINEGAR = ['vinegar']   # Vintage Delight's vinegar bottle, the pack vinegar (vintage_delight.md S9, dishes/ingredients #6)
+VINEGAR = ['vinegar']   # i.vinegar = the vinegar jar (mason jar, plan_scratch_bugfix_1103 1.1), the pack vinegar (vintage_delight.md S9, dishes/ingredients #6)
 SECTIONS = OrderedDict([
     ('raw_veggie',   dict(meal=(5, 6), servings=2, target=0.8, adv=0.7, dur=1.0, fast=False, extra=[('_salt', SALT, 0, 1), ('_vinegar', VINEGAR, 0, 1)])),
     ('raw_fruit',    dict(meal=(5, 3), servings=3, target=0.8, adv=0.7, dur=1.0, fast=False, extra=[('_sugar', SWEET, 0, 1), ('_vinegar', VINEGAR, 0, 1)])),
@@ -203,8 +211,9 @@ EXPLICIT = [
     ('raw_meat', 'canned_raw_mutton', 'Canned Raw Mutton', ['mutton'], False, dict(input=['raw_mutton'])),
     ('raw_meat', 'canned_raw_pork', 'Canned Raw Pork', ['porkchop'], False, dict(input=['raw_pork'])),
     ('raw_meat', 'canned_raw_rabbit', 'Canned Raw Rabbit', ['rabbit'], False),
-    # Shulker: a low value meat (1.2 a mollusk), so its own small meal (2, 1) x 4 keeps a full can at 8 mollusks
-    ('raw_meat', 'canned_shulker', 'Canned Shulker Flesh', ['shulker_mollusk', 'shulker_filet'], False,
+    # Shulker: a low value meat, so its own small meal (2, 1) x 4 keeps a full can at 8 pieces. End's Delight's meat and
+    # slice since 2026-11-02 (Ender's mollusk and filet merged into them, TODO dishes/ingredients #32)
+    ('raw_meat', 'canned_shulker', 'Canned Shulker Flesh', ['shulker_meat', 'shulker_meat_slice'], False,
      dict(meal=(2, 1))),
 
     # raw fish: sliced cuts share the whole fish's count
@@ -258,12 +267,10 @@ EXPLICIT = [
     ('cooked_veggie', 'canned_boiled_corn', 'Canned Boiled Corn', ['boiled_corn'], False),
     ('cooked_veggie', 'canned_dried_banana', 'Canned Dried Banana', ['dried_banana'], False),
     ('cooked_veggie', 'canned_dried_persimmon', 'Canned Dried Persimmon', ['dried_persimmon'], False),
-    # Vintage Delight's kimchi and pickle are the same foods as Brewin's (vintage_delight.md 3.1, both ship until VTD-40):
-    # they fill the same can; the value source stays Brewin's
-    ('cooked_veggie', 'canned_kimchi', 'Canned Kimchi', ['kimchi', 'vintagedelight_kimchi'], False),
+    # Kimchi merged (merges/dishes #9, owner 2026-11-02): Brewin's kimchi is removed, Vintage Delight's fills the can
+    ('cooked_veggie', 'canned_kimchi', 'Canned Kimchi', ['vintagedelight_kimchi'], False),
     ('cooked_veggie', 'canned_pickled_pickles', 'Canned Pickles', ['pickle', 'pickled_sea_pickle'], False),   # pickled pickles merged (dishes/pickles-and-ferments #1)
     ('cooked_veggie', 'canned_roasted_adzuki_beans', 'Canned Roasted Adzuki Beans', ['roasted_adzuki_beans'], False),
-    ('cooked_veggie', 'canned_chips', 'Canned Chips', ['chips'], False),
     ('cooked_veggie', 'canned_grilled_corn', 'Canned Grilled Corn', ['grilled_corn'], False),
     ('cooked_veggie', 'canned_tortilla_chip', 'Canned Tortilla Chips', ['tortilla_chip'], False),
     # Veggies Delight and Vintage Delight (2026-10-23); roasted florets alone (no whole roasted cauliflower). Not canned:
@@ -276,6 +283,7 @@ EXPLICIT = [
     ('cooked_veggie', 'canned_pickled_pepper', 'Canned Pickled Peppers', ['pickled_pepper'], False),
     ('cooked_veggie', 'canned_roasted_peanut', 'Canned Roasted Peanuts', ['roasted_peanut'], False),
     ('cooked_veggie', 'canned_cooked_inky_cap', 'Canned Cooked Inky Cap', ['cooked_cleaned_cap'], False),   # Fungi Delight
+    ('cooked_veggie', 'canned_cooked_nether_wart', 'Canned Cooked Nether Wart', ['cooked_nether_wart'], False),   # Roll Delight (roll_delight.md 4.1, D14)
 
     # meat: whole cut, or whole + sliced. Patties, bacon, bison, smoked ham, chevon, hoglin, kangaroo, moose,
     # bunfungus, lobster and crab are not canned cooked (can_parity.md Want /, 2026-10-13)
@@ -299,6 +307,16 @@ EXPLICIT = [
 
     ('soup', 'canned_rabbit_stew', None, ['rabbit_stew'], True),
     ('soup', 'canned_mushrooms', None, ['mushroom_stew'], True),
+    # Bayberry Soup is typed drink since 1.1.03, so the soup loop no longer finds it; its can (shipped) stays
+    ('soup', 'canned_bayberry_soup', 'Canned Bayberry Soup', ['bayberry_soup'], False),
+    # Farmer's Delight's Ratatouille (TODO cans/canning #18, 2026-11-02): a vegetable stew, canned like the soups
+    ('soup', 'canned_ratatouille', 'Canned Ratatouille', ['ratatouille'], False),
+    # Miner's Delight (owner 2026-11-01): these four only; Miner's stays in UNDECIDED_MODS so no other food is canned
+    # and the cups stay cups (miners_delight.md I3)
+    ('soup', 'canned_bat_soup', 'Canned Bat Soup', ['bat_soup'], False),
+    ('soup', 'canned_cave_soup', 'Canned Cave Soup', ['cave_soup'], False),
+    ('soup', 'canned_insect_stew', 'Canned Insect Stew', ['insect_stew'], False),
+    ('golden', 'canned_golden_nutritional_bar', 'Canned Golden Nutritional Bar', ['golden_nutritional_bar'], False),
 
     ('bread', 'canned_bread', None, ['minecraft_bread'], True),
     ('bread', 'canned_sweet_roll', 'Canned Sweet Rolls', ['sweet_roll'], False),
@@ -326,6 +344,9 @@ EXPLICIT = [
     ('meal', 'canned_cheese_pasta', 'Canned Cheese Pasta', ['cheese_pasta'], False),
     ('meal', 'canned_pad_thai', 'Canned Pad Thai', ['pad_thai'], False),
     ('meal', 'canned_truffle_pasta', 'Canned Truffle Pasta', ['truffle_pasta'], False),   # Fungi Delight
+    # mashed potatoes, split (merges/dishes #2, owner 2026-11-01: both cannable and saltable)
+    ('meal', 'canned_mashed_potatoes', 'Canned Mashed Potatoes', ['mashed_potatoes'], False),
+    ('meal', 'canned_mashed_sweet_potatoes', 'Canned Mashed Sweet Potatoes', ['veggiesdelight_mashed_potatoes'], False),
 
     # pie filling: 4 slices (or 4 fruitsdelight pies). Slices whose whole pie comes from a mod not in the pack get no
     # can: cherry and truffle (Central Kitchen, pies from Environmental), blueberry, crimson berry, green apple and
@@ -368,6 +389,12 @@ EXPLICIT = [
      dict(input=['stuffed_pumpkin_block'])),
     ('feast', 'canned_stuffed_shulker', 'Canned Stuffed Shulker', ['stuffed_shulker_bowl'], False,
      dict(input=['stuffed_shulker'])),
+    # Large Meals feasts (plan_meals_rolls_bbq.md A3); the raw and cooked mutton racks are not canned (no meat row)
+    ('feast', 'canned_omurice', 'Canned Omurice', ['omurice'], False, dict(input=['omurice_block'])),
+    ('feast', 'canned_mushroom_pot_pie', 'Canned Mushroom Pot Pie', ['mushroom_pot_pie'], False,
+     dict(input=['mushroom_pot_pie_block'])),
+    ('feast', 'canned_roasted_mutton_rack', 'Canned Roasted Rack of Mutton', ['roasted_mutton_rack'], False,
+     dict(input=['roasted_mutton_rack_block'])),
 
     # drinks: honey clears poison in Canned Goods' code; milk is not a food, the can clears effects itself
     ('drink', 'canned_honey_bottles', None, ['honey_bottle'], True, dict(code_fx=True)),
@@ -401,7 +428,7 @@ EXPLICIT = [
     ('golden', 'canned_enchanted_apples', None, ['enchanted_golden_apple'], True, dict(norecipe=True, code_fx=True)),
     ('soup', 'canned_beetroot_soup', None, ['beetroot_soup'], True, dict(norecipe=True)),
     ('soup', 'canned_suspicious_stew', None, ['suspicious_stew'], True, dict(norecipe=True, code_fx=True)),
-    # Canned Food and the Hot Hot Hotpot are removed from the pack (startup_scripts/_lib/removed_items.js)
+    # Canned Food and the Hot Hot Hotpot are removed from the pack (creativecommon/_lib/removed_items.js)
 ]
 
 # soup keys that are not canned; salads without a can
@@ -409,14 +436,17 @@ SKIP = {
     'salad': {'maggot_salad', 'potato_salad', 'moredelight_potato_salad'},
     'soup': {'cavern_explorer_stew', 'chorus_stew_wood', 'endermite_stew_wood', 'suspicious_stew'},
     'bread': {'strawberry_scones', 'bread_slice', 'toast', 'tortilla'},
+    # golden handhelds: the roll family is never canned (roll_delight.md 4 step 13)
+    'golden': {'golden_roll', 'golden_roll_slice'},
 }
 # Mod namespaces installed but not yet in a /dumpfood: their cans are configured above and skipped (listed as waiting)
 # until the catalog has their foods. Empty this once the dump is taken. Vintage Delight: vintage_delight.md 4.0 step 8;
 # Fungi Delight: fungi_delight.md step 8.
-AWAIT_DUMP = set()   # emptied 2026-10-25: Vintage and Fungi Delight are in the 2026-10-24 /dumpfood
+AWAIT_DUMP = {'roll_delight', 'largemeals'}   # emptied 2026-10-25 (Vintage, Fungi Delight); Roll Delight port added 2026-11-01; Large Meals 2026-11-02 (its 4 soup cans)
 # Mods whose foods are typed but whose cans are not decided yet (each mod page's "Cans" row: hostile_delight.md step
 # 12, ends_delight.md, ocean_delight.md, miners_delight.md I3 "cups are not cans"). The type loops skip their foods;
-# explicit cans above still apply. Take a mod out once its cans are decided.
+# explicit cans above still apply. Take a mod out once its cans are decided (Miner's: decided 2026-11-01, four explicit
+# cans only, so it stays listed).
 UNDECIDED_MODS = {'hostiledelight', 'ends_delight', 'miners_delight', 'oceanic_delight', 'oceansdelight'}
 WAITING = []
 # sources that already have an explicit can above (not repeated by the type loops)
@@ -424,6 +454,16 @@ STRIP_NAME = re.compile(r'^(Bowl of|Plate of|Slice of|Bar of)\s+')
 CAN_SPRITE_NOTE = 'canned_goods:items/canned_food'   # fallback sprite (a section without a GROUP_SPRITE entry)
 # Canned Goods cans removed from the pack (removed_items.js): dropped from can_servings.json and the canned type
 REMOVED = ['canned_food', 'hot_hot_hotpot']
+# Pack items newer than the last /dumpfood: catalog entries from their startup definitions, used only while the
+# catalog lacks them (drop a row once a dump has it). Same fields as catalog.json; saturation = nutrition x mod x 2.
+PENDING_FOODS = [
+    # CD veggiesdelight/veggies_items.js (dishes/ingredients #20)
+    dict(id='creativeengineering:sliced_sweet_potato', type='raw/veggie/sliced', nutrition=1, saturationModifier=0.3,
+         saturation=0.6, flags='', effects=[], codeEffects=None, remainder=None),
+    # CD vintagedelight/vintage_items.js (dishes/pickles-and-ferments #1)
+    dict(id='creativeengineering:pickled_sea_pickle', type='cooked/veggie', nutrition=4, saturationModifier=0.3,
+         saturation=2.4, flags='F', effects=[], codeEffects=None, remainder=None),
+]
 
 
 def load_json(path):
@@ -653,7 +693,7 @@ def build(foods, names, keymap_all, keymap_base, types):
     loop('bread', ['baked'], SKIP['bread'])
     loop('salad', ['salad'], SKIP['salad'])
     loop('soup', ['soup'], SKIP['soup'])
-    loop('golden', ['golden', 'golden/enchanted'])
+    loop('golden', ['golden', 'golden/enchanted'], SKIP['golden'])
 
     # honey bread from plain bread + honey, golden cans need honey in the can
     if 'canned_honey_bread' in cans:
@@ -693,13 +733,46 @@ def dict_block(cans):
     return '\n'.join(lines) + '\n'
 
 
+def can_member_parts(cans, servings):
+    """can_types / can_servings data -> ({ns: {cans: {...}}}, {ns: {servings: {...}}}). A can goes with its first
+    source food's namespace; a servings entry that is not a can (multi-serving bottles) with its own item's."""
+    _, key_val, _ = pack_paths.parse_item_dict()
+    can_ns = {}
+    types_parts = {}
+    for k, c in cans.items():
+        srcs = c.get('sources') or []
+        ns = gen_out.namespace_of(srcs[0], key_val) if srcs else 'creativeengineering'
+        can_ns[k] = ns
+        types_parts.setdefault(ns, {'cans': OrderedDict()})['cans'][k] = c
+    serv_parts = {}
+    for k, n in servings.items():
+        ns = can_ns.get(k) or gen_out.namespace_of(k, key_val)
+        serv_parts.setdefault(ns, {'servings': OrderedDict()})['servings'][k] = n
+    return types_parts, serv_parts
+
+
+def write_can_members(check=False):
+    """Member scripts from can_types.json and can_servings.json as they are on disk; True when something differs."""
+    types_parts, serv_parts = can_member_parts(load_json(OUT)['cans'], load_json(SERVINGS)['servings'])
+    root = gen_out.INSTANCE / gen_out.STARTUP_ROOT
+    a = gen_out.write_member_scripts('can_types', 'can_types', types_parts, root, 'Generated cans (values, effects, recipes)', check)
+    b = gen_out.write_member_scripts('can_types', 'can_servings', serv_parts, root, 'Servings per can', check)
+    return gen_out.report_member_scripts('can_types', *a, check) | gen_out.report_member_scripts('can_servings', *b, check)
+
+
 def main():
     ap = argparse.ArgumentParser()
     ap.add_argument('--check', action='store_true')
+    ap.add_argument('--members', action='store_true', help='only rewrite the member scripts from the current JSONs')
     args = ap.parse_args()
+    if args.members:
+        write_can_members()
+        return
 
     catalog = load_json(EXPORT / 'catalog.json')['foods']
     foods = {f['id']: f for f in catalog}
+    for f in PENDING_FOODS:
+        foods.setdefault(f['id'], OrderedDict(f))
     names = {f['id']: f.get('name') for f in load_json(EXPORT / 'foods.json')['foods']}
     dict_text = DICT.read_text(encoding='utf-8')
     base_text = strip_generated(dict_text)
@@ -729,7 +802,7 @@ def main():
         'Generated by tools/gen_can_types.py from kubejs/exported/food/catalog.json. Do not edit by hand, edit SECTIONS / EXPLICIT in the script.',
         'cans: can item_dict key -> values per meal, effects (ticks) and recipes. existing = a Canned Goods can whose food values are overridden at startup.',
         'recipes: inputs are {any: item_dict keys (alternatives), n: how many}; a recipe always also takes an empty can.',
-        'Read by development/creativeDelight/src/main/resources/kubejs_startup/creativeengineering/cans.js (items, overrides) and kubejs/data/creative_delight/kubejs/creativeengineering/canning.js (recipes).',
+        'Read by development/creativeDelight/src/main/resources/kubejs_startup/creativeengineering/cans.js (items, overrides) and kubejs/data/creativedelight/kubejs/creativeengineering/canning.js (recipes).',
     ]
     out['cans'] = cans
     new_out = json.dumps(out, indent=1, ensure_ascii=False) + '\n'
@@ -775,6 +848,9 @@ def main():
         types_json['canned'][k] = c['sources']
 
     if args.check:
+        for path, text in ((OUT, new_out), (DICT, new_dict), (SERVINGS, new_servings)):
+            print('%s %s' % (path.name, 'unchanged' if path.exists() and path.read_text(encoding='utf-8') == text else 'WOULD CHANGE'))
+        write_can_members(check=True)
         print('check only, nothing written')
         return
     OUT.write_text(new_out, encoding='utf-8')
@@ -782,6 +858,8 @@ def main():
     SERVINGS.write_text(new_servings, encoding='utf-8')
     food_catalog.write_types(types_json)
     print('wrote %s, %s, %s, %s' % (OUT.name, DICT.name, SERVINGS.name, TYPES.name))
+    write_can_members()
+    food_catalog.write_type_members()
 
 
 if __name__ == '__main__':

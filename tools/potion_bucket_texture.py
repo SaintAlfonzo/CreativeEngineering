@@ -1,13 +1,13 @@
 #!/usr/bin/env python3
 """Generate the potion-bucket item textures as two layers each, so the item can be
-dynamically tinted per-potion at runtime (see startup_scripts/items/potion_buckets.js
+dynamically tinted per-potion at runtime (see development/creativeBrewing/src/main/resources/kubejs_startup/creativeengineering/potion_buckets.js
 .color(...)) instead of baking one fixed colour into the PNG.
 
 Takes vanilla `water_bucket.png`, splits it into:
   <id>.png         - layer0, the steel bucket body untouched; liquid pixels transparent.
   <id>_liquid.png  - layer1, the liquid swirl only (recoloured to neutral grey so the
                      runtime tint multiplies cleanly onto it), body pixels transparent.
-The item model (kubejs/assets/creativeengineering/models/item/<id>.json) maps these two
+The item model (Creative Brewing jar, assets/creativebrewing/models/item/<id>.json) maps these two
 files to layer0/layer1; layer0 is left untinted (color() returns white for layer 0) and
 layer1 is tinted with the bucket's potion colour.
 
@@ -28,7 +28,7 @@ sys.path.insert(0, str(Path(__file__).resolve().parent))
 import pack_paths  # noqa: E402
 
 CLIENT_EXTRA = pack_paths.vanilla_jar()   # any vanilla jar with the assets (tools/pack_paths.py)
-OUT = Path("kubejs/assets/creativeengineering/textures/item")
+OUT = Path("development/creativeBrewing/src/main/resources/assets/creativebrewing/textures/item")
 
 IDS = ["potion_bucket", "splash_potion_bucket", "lingering_potion_bucket"]
 

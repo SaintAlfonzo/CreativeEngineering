@@ -2,7 +2,7 @@
 
 Source: kubejs/exported/world_jei/mob_buckets.json (/dumpworldjei, patcherMod devtools/WorldJeiMobBuckets.java).
 Mobs picked up some other way (Buzzier Bees bottles, the duck sack, Quark slime, Upgrade Aquatic squid) are
-hand-written in kubejs/assets/creativeengineering/jei_world/mob_bottling/manual.json. The mob_transformation tab is
+hand-written in kubejs/assets/creativecommon/jei_world/mob_bottling/manual.json. The mob_transformation tab is
 manual only.
 """
 from .common import entity, item, mod_of, row

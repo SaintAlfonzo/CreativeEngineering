@@ -31,15 +31,15 @@
             try {
                 let rm = level.getServer().getRecipeManager()
                 let p = $KMFakeFactory.get(level, new $KMGameProfile($KMUUID.randomUUID(), 'km'))
-                let ids = ['creative_delight:mortar/corn_cornmeal', 'creative_delight:mortar/wild_corn_cornmeal',
-                    'creative_delight:mortar/corn_kernels_cornmeal', 'creative_delight:createcrushing/wild_corn_cornmeal',
-                    'creative_delight:createmilling/wild_corn_cornmeal', 'creative_delight:iebottling/cornmeal_tortilla_raw',
-                    'creative_delight:mortar/hay_block_flour', 'creative_delight:createmilling/hay_block_flour',
-                    'creative_delight:createcrushing/hay_block_flour', 'creative_delight:createmilling/corn_cornmeal',
-                    'creative_delight:shaped/bowl_from_bamboo', 'creative_delight:shaped/mortar_and_pestle',
-                    'creative_delight:createsplashing/cornmeal_tortilla_raw']
+                let ids = ['creativedelight:mortar/corn_cornmeal', 'creativedelight:mortar/wild_corn_cornmeal',
+                    'creativedelight:mortar/corn_kernels_cornmeal', 'creativedelight:createcrushing/wild_corn_cornmeal',
+                    'creativedelight:createmilling/wild_corn_cornmeal', 'creativedelight:iebottling/cornmeal_tortilla_raw',
+                    'creativedelight:mortar/hay_block_flour', 'creativedelight:createmilling/hay_block_flour',
+                    'creativedelight:createcrushing/hay_block_flour', 'creativedelight:createmilling/corn_cornmeal',
+                    'creativedelight:shaped/bowl_from_bamboo', 'creativedelight:shaped/mortar_and_pestle',
+                    'creativedelight:createsplashing/cornmeal_tortilla_raw']
                 let catalog = JSON.parse(String(JsonIO.readString('kubejs/generation_scripts/food/mortar_catalog.json')))
-                catalog.recipes.forEach(r => ids.push('creative_delight:mortar/' + r.id))
+                catalog.recipes.forEach(r => ids.push('creativedelight:mortar/' + r.id))
                 ids.forEach(id => check('KM-01 loaded ' + id, rm.byKey(new $KMRL(id)).isPresent(), ''))
 
                 let mortar = () => Item.of('creativeengineering:mortar_and_pestle')
@@ -67,7 +67,7 @@
                 let r8 = craft(level, p, [Item.of('corn_delight:corn'), mortar()])
                 // crates and bags are machine-only (dishes/ingredients #14)
                 ;['corn_crate_cornmeal', 'corn_kernel_bag_cornmeal'].forEach(id => check('KM-12 no mortar/' + id,
-                    !rm.byKey(new $KMRL('creative_delight:mortar/' + id)).isPresent(), ''))
+                    !rm.byKey(new $KMRL('creativedelight:mortar/' + id)).isPresent(), ''))
                 let r11 = craft(level, p, [Item.of('corn_delight:wild_corn'), Item.of('corn_delight:wild_corn'), mortar()])
                 check('KM-13 2 wild corn + mortar', r11 != null && r11.out == '3x creativeengineering:cornmeal',
                     r11 == null ? 'no recipe' : r11.id + ' -> ' + r11.out)

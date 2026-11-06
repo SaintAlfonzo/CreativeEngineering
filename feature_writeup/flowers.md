@@ -160,7 +160,7 @@ First pass (2026-10-07), numbers from [flowers_by_biome.md](flowers_by_biome.md)
 | [gen_wild_flowers.py](../tools/gen_wild_flowers.py) | snapshot + report + config checks |
 | [test_wild_flowers.sh](../tools/test_wild_flowers.sh), [RhinoWildFlowers.java](../tools/wild_flowers_test/RhinoWildFlowers.java) | offline test |
 | [flowers_by_biome.md](flowers_by_biome.md) | generated report |
-| `development/patcherMod/.../CEConfig.java`, `worldgen/WorldgenConfig.java` | `wildFlowers` switch |
+| `development/creativeCommon/.../CEConfig.java`, `worldgen/WorldgenConfig.java` | `wildFlowers` switch |
 
 ## 6. Offline checks
 

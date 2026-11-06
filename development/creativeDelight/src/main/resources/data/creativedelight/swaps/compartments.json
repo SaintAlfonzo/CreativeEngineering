@@ -1,0 +1,206 @@
+{
+  "_comment": "M8 (2026-11-04, plan_cb_publish.md 3b, D6): the Cooking for Blockheads and Incubation compartments folded into Creative Delight's own jar; every block and item they register moved to creativedelight:. Racks and fruit baskets were cookingforblockheads:<wood>_* (the blockheads_additions member registered them under CfB's namespace); nests and crates were incubation_additions:* (and the nests creativeengineering:* in patcherMod up to 1.0.5, formerly remapped by IncubationAdditions). SwapRemapper remaps blocks and items; without the compartment's mod the new ids do not exist and old ones are dropped as for any absent mod. Never prune.",
+  "replaces": {
+    "creativedelight:oak_spice_rack": [
+      "cookingforblockheads:oak_spice_rack"
+    ],
+    "creativedelight:oak_tool_rack": [
+      "cookingforblockheads:oak_tool_rack"
+    ],
+    "creativedelight:oak_fruit_basket": [
+      "cookingforblockheads:oak_fruit_basket"
+    ],
+    "creativedelight:spruce_spice_rack": [
+      "cookingforblockheads:spruce_spice_rack"
+    ],
+    "creativedelight:spruce_tool_rack": [
+      "cookingforblockheads:spruce_tool_rack"
+    ],
+    "creativedelight:spruce_fruit_basket": [
+      "cookingforblockheads:spruce_fruit_basket"
+    ],
+    "creativedelight:birch_spice_rack": [
+      "cookingforblockheads:birch_spice_rack"
+    ],
+    "creativedelight:birch_tool_rack": [
+      "cookingforblockheads:birch_tool_rack"
+    ],
+    "creativedelight:birch_fruit_basket": [
+      "cookingforblockheads:birch_fruit_basket"
+    ],
+    "creativedelight:jungle_spice_rack": [
+      "cookingforblockheads:jungle_spice_rack"
+    ],
+    "creativedelight:jungle_tool_rack": [
+      "cookingforblockheads:jungle_tool_rack"
+    ],
+    "creativedelight:jungle_fruit_basket": [
+      "cookingforblockheads:jungle_fruit_basket"
+    ],
+    "creativedelight:acacia_spice_rack": [
+      "cookingforblockheads:acacia_spice_rack"
+    ],
+    "creativedelight:acacia_tool_rack": [
+      "cookingforblockheads:acacia_tool_rack"
+    ],
+    "creativedelight:acacia_fruit_basket": [
+      "cookingforblockheads:acacia_fruit_basket"
+    ],
+    "creativedelight:dark_oak_spice_rack": [
+      "cookingforblockheads:dark_oak_spice_rack"
+    ],
+    "creativedelight:dark_oak_tool_rack": [
+      "cookingforblockheads:dark_oak_tool_rack"
+    ],
+    "creativedelight:dark_oak_fruit_basket": [
+      "cookingforblockheads:dark_oak_fruit_basket"
+    ],
+    "creativedelight:mangrove_spice_rack": [
+      "cookingforblockheads:mangrove_spice_rack"
+    ],
+    "creativedelight:mangrove_tool_rack": [
+      "cookingforblockheads:mangrove_tool_rack"
+    ],
+    "creativedelight:mangrove_fruit_basket": [
+      "cookingforblockheads:mangrove_fruit_basket"
+    ],
+    "creativedelight:crimson_spice_rack": [
+      "cookingforblockheads:crimson_spice_rack"
+    ],
+    "creativedelight:crimson_tool_rack": [
+      "cookingforblockheads:crimson_tool_rack"
+    ],
+    "creativedelight:crimson_fruit_basket": [
+      "cookingforblockheads:crimson_fruit_basket"
+    ],
+    "creativedelight:warped_spice_rack": [
+      "cookingforblockheads:warped_spice_rack"
+    ],
+    "creativedelight:warped_tool_rack": [
+      "cookingforblockheads:warped_tool_rack"
+    ],
+    "creativedelight:warped_fruit_basket": [
+      "cookingforblockheads:warped_fruit_basket"
+    ],
+    "creativedelight:twisted_spice_rack": [
+      "cookingforblockheads:twisted_spice_rack"
+    ],
+    "creativedelight:twisted_tool_rack": [
+      "cookingforblockheads:twisted_tool_rack"
+    ],
+    "creativedelight:twisted_fruit_basket": [
+      "cookingforblockheads:twisted_fruit_basket"
+    ],
+    "creativedelight:dreamwood_spice_rack": [
+      "cookingforblockheads:dreamwood_spice_rack"
+    ],
+    "creativedelight:dreamwood_tool_rack": [
+      "cookingforblockheads:dreamwood_tool_rack"
+    ],
+    "creativedelight:dreamwood_fruit_basket": [
+      "cookingforblockheads:dreamwood_fruit_basket"
+    ],
+    "creativedelight:livingwood_spice_rack": [
+      "cookingforblockheads:livingwood_spice_rack"
+    ],
+    "creativedelight:livingwood_tool_rack": [
+      "cookingforblockheads:livingwood_tool_rack"
+    ],
+    "creativedelight:livingwood_fruit_basket": [
+      "cookingforblockheads:livingwood_fruit_basket"
+    ],
+    "creativedelight:smoked_spice_rack": [
+      "cookingforblockheads:smoked_spice_rack"
+    ],
+    "creativedelight:smoked_tool_rack": [
+      "cookingforblockheads:smoked_tool_rack"
+    ],
+    "creativedelight:smoked_fruit_basket": [
+      "cookingforblockheads:smoked_fruit_basket"
+    ],
+    "creativedelight:treated_wood_spice_rack": [
+      "cookingforblockheads:treated_wood_spice_rack"
+    ],
+    "creativedelight:treated_wood_tool_rack": [
+      "cookingforblockheads:treated_wood_tool_rack"
+    ],
+    "creativedelight:treated_wood_fruit_basket": [
+      "cookingforblockheads:treated_wood_fruit_basket"
+    ],
+    "creativedelight:vertical_treated_wood_spice_rack": [
+      "cookingforblockheads:vertical_treated_wood_spice_rack"
+    ],
+    "creativedelight:vertical_treated_wood_tool_rack": [
+      "cookingforblockheads:vertical_treated_wood_tool_rack"
+    ],
+    "creativedelight:vertical_treated_wood_fruit_basket": [
+      "cookingforblockheads:vertical_treated_wood_fruit_basket"
+    ],
+    "creativedelight:rubberwood_spice_rack": [
+      "cookingforblockheads:rubberwood_spice_rack"
+    ],
+    "creativedelight:rubberwood_tool_rack": [
+      "cookingforblockheads:rubberwood_tool_rack"
+    ],
+    "creativedelight:rubberwood_fruit_basket": [
+      "cookingforblockheads:rubberwood_fruit_basket"
+    ],
+    "creativedelight:ancient_spice_rack": [
+      "cookingforblockheads:ancient_spice_rack"
+    ],
+    "creativedelight:ancient_tool_rack": [
+      "cookingforblockheads:ancient_tool_rack"
+    ],
+    "creativedelight:ancient_fruit_basket": [
+      "cookingforblockheads:ancient_fruit_basket"
+    ],
+    "creativedelight:bamboo_spice_rack": [
+      "cookingforblockheads:bamboo_spice_rack"
+    ],
+    "creativedelight:bamboo_tool_rack": [
+      "cookingforblockheads:bamboo_tool_rack"
+    ],
+    "creativedelight:bamboo_fruit_basket": [
+      "cookingforblockheads:bamboo_fruit_basket"
+    ],
+    "creativedelight:driftwood_spice_rack": [
+      "cookingforblockheads:driftwood_spice_rack"
+    ],
+    "creativedelight:driftwood_tool_rack": [
+      "cookingforblockheads:driftwood_tool_rack"
+    ],
+    "creativedelight:driftwood_fruit_basket": [
+      "cookingforblockheads:driftwood_fruit_basket"
+    ],
+    "creativedelight:emu_nest": [
+      "incubation_additions:emu_nest",
+      "creativeengineering:emu_nest"
+    ],
+    "creativedelight:emu_egg_nest": [
+      "incubation_additions:emu_egg_nest",
+      "creativeengineering:emu_egg_nest"
+    ],
+    "creativedelight:duck_nest": [
+      "incubation_additions:duck_nest",
+      "creativeengineering:duck_nest"
+    ],
+    "creativedelight:duck_egg_nest": [
+      "incubation_additions:duck_egg_nest",
+      "creativeengineering:duck_egg_nest"
+    ],
+    "creativedelight:goose_nest": [
+      "incubation_additions:goose_nest",
+      "creativeengineering:goose_nest"
+    ],
+    "creativedelight:goose_egg_nest": [
+      "incubation_additions:goose_egg_nest",
+      "creativeengineering:goose_egg_nest"
+    ],
+    "creativedelight:duck_egg_crate": [
+      "incubation_additions:duck_egg_crate"
+    ],
+    "creativedelight:goose_egg_crate": [
+      "incubation_additions:goose_egg_crate"
+    ]
+  }
+}

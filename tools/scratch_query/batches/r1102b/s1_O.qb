@@ -1,0 +1,42 @@
+# Run r1102b slice 1, Boot O (the OLD world for SQ-VTD4-05, SQ-CBJ-04 and the CDJ-07 world half). Group A superflat
+# from prep_srv.sh (level s1a) plus three pre-nest jars copied into OUT/srv/mods/ (a top-level jar wins over the
+# nested copy of the same mod id, SQ-CDJ-02): backportedVintage-0.1.6-ce-19.2-03.jar (shipped in 1.1.02, 9-slot jar),
+# backportedVinery-1.5.5-ce-19.2-06.jar and backportedBrewin-4.5.0-ce-19.2-04.jar (pre Creative Brewing). See
+# s1_setup.md, Boot O. Blocks sit at offsets from the marker tagged s1home (y = H2, the air layer over the grass):
+#   -28,0,0 Pickling Jar (Size 9, 9 stick stacks of counts 1..9); -26,0,0 keg; -24,0,0 fermentation barrel;
+#   -28,0,3 FD stove with a cooking pot (2 potatoes) on it; -26,0,3 cutting board with a carrot; -24,0,3 skillet.
+# s1_A.qb (Boot A, same world, pre-nest jars removed) reads them back first.
+pace 2
+
+## SQ-VTD4-05o | old world: Vintage -03, Vinery -06, Brewin' -04 load top-level; blocks placed
+bootexpect Done \(
+shell grep -oE "member [a-z_]+ is loaded from [^ ,]+" logs/latest.log | sort -u; ls mods | grep -i backported
+> execute unless entity @e[type=minecraft:marker,tag=s1home] run summon minecraft:marker ~ ~ ~ {Tags:["s1home"]}
+sleep 2
+> data get entity @e[type=minecraft:marker,tag=s1home,limit=1] Pos
+capture H entity data: \[(-?\d+)\.\d+d, (-?\d+)\.\d+d, (-?\d+)\.\d+d\]
+> forceload add {H1-32} {H3} {H1-14} {H3+16}
+sleep 3
+> fill {H1-30} {H2} {H3} {H1-20} {H2+2} {H3+5} minecraft:air
+> fill {H1-30} {H2-1} {H3} {H1-20} {H2-1} {H3+5} minecraft:stone
+> setblock {H1-28} {H2} {H3} vintagedelight:fermenting_jar{inventory:{Size:9,Items:[{Slot:0,id:"minecraft:stick",Count:1b},{Slot:1,id:"minecraft:stick",Count:2b},{Slot:2,id:"minecraft:stick",Count:3b},{Slot:3,id:"minecraft:stick",Count:4b},{Slot:4,id:"minecraft:stick",Count:5b},{Slot:5,id:"minecraft:stick",Count:6b},{Slot:6,id:"minecraft:stick",Count:7b},{Slot:7,id:"minecraft:stick",Count:8b},{Slot:8,id:"minecraft:stick",Count:9b}]}}
+> setblock {H1-26} {H2} {H3} brewinandchewin:keg{Inventory:{Items:[{Slot:0,id:"minecraft:wheat",Count:3b},{Slot:1,id:"minecraft:sugar",Count:2b}]}}
+> setblock {H1-24} {H2} {H3} vinery:fermentation_barrel{Items:[{Slot:0b,id:"vinery:red_grape",Count:4b}],FluidLevel:0}
+> setblock {H1-28} {H2} {H3+3} farmersdelight:stove
+> setblock {H1-28} {H2+1} {H3+3} farmersdelight:cooking_pot{Inventory:{Items:[{Slot:0,id:"minecraft:potato",Count:2b}]}}
+> setblock {H1-26} {H2} {H3+3} farmersdelight:cutting_board{Inventory:{Items:[{Slot:0,id:"minecraft:carrot",Count:1b}]}}
+> setblock {H1-24} {H2} {H3+3} farmersdelight:skillet
+> data get block {H1-28} {H2} {H3}
+> data get block {H1-26} {H2} {H3}
+> data get block {H1-24} {H2} {H3}
+> data get block {H1-28} {H2+1} {H3+3}
+> data get block {H1-26} {H2} {H3+3}
+expect has the following block data: .*Size: 9
+expect has the following block data: .*Count: 9b
+expect has the following block data: .*Inventory: \{.*minecraft:wheat
+expect has the following block data: .*vinery:red_grape
+expect has the following block data: .*minecraft:potato
+reject Unknown block|Invalid|does not have property
+> save-all flush
+waitlog Saved the game 120
+look the shell output names vintagedelight, vinery and brewinandchewin as loaded from the backported jars (not the CD / CB jar); the five block data lines hold what was set

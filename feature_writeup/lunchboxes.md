@@ -2,8 +2,8 @@
 
 Spice of Life: Apple Pie Edition (`solapplepie` 2.2.0, LGPL-2.1) ships three food containers. The pack retextures
 and renames them, adds a fourth tier, and adds skins, dye and soap. Every recipe that turns one box into another keeps
-the food inside. Test prefix `LB-`. Built 2026-10-29; untested in game; not in the 1.1.04 payload. Installed: patcherMod 1.1.04 (2026-10-31 00:44) and Creative Delight 1.0.0 (2026-10-31 00:29) are in `mods/`,
-not yet booted. TODO rows: `items/storage-and-item-loss #9` (this feature), `ui/tooltips #2` (slot
+the food inside. Test prefix `LB-`. Built 2026-10-29; shipped with 1.1.05 (server 2026-10-31, client 1.1.06; changelog family Lunchboxes); scratch server PASSED
+r1031 (SQ-LB-01, -02); untested in game (deep scan 2026-11-02). TODO rows: `items/storage-and-item-loss #9` (this feature), `ui/tooltips #2` (slot
 count), `mobs/tweaks #7` (seagulls), scratchpad 2026-10-29 (reskinning).
 
 ## 0. At a glance
@@ -19,7 +19,7 @@ count), `mobs/tweaks #7` (seagulls), scratchpad 2026-10-29 (reskinning).
 | "Slots: N" tooltip | BUILT 2026-10-29, untested |
 | Seagulls ignore all lunchboxes (inventory and dropped) | BUILT 2026-10-29, untested (MT-26 in [mob_block_tweaks.md](mob_block_tweaks.md)) |
 
-- **Pending:** the in-game suite (section 7). Scratch rows SQ-LB-01, -02 PASSED r1031 (2026-10-31) with patcherMod
+- **Pending:** the in-game suite (section 7); the client checks are CQ-LB-01 (LB-01, -02, -07 to -11). Scratch rows SQ-LB-01, -02 PASSED r1031 (2026-10-31) with patcherMod
   1.1.04 and Creative Delight 1.0.0.
 - **Files to open:** section 5.
 - **Knobs:** none in config. The slot count of the new tier is fixed at registration (`LunchboxItems.NETHERITE_SLOTS`).
@@ -120,14 +120,14 @@ with no step for the skin, and Supplementaries' recipe would compete with the pa
 
 | File | What |
 |---|---|
-| [lunchbox/Lunchboxes.java](../development/patcherMod/src/main/java/com/SaintAlfonzo/creativeengineering/lunchbox/Lunchboxes.java) | tiers, skins table, tag/dye/contents helpers |
-| [lunchbox/LunchboxItems.java](../development/patcherMod/src/main/java/com/SaintAlfonzo/creativeengineering/lunchbox/LunchboxItems.java) | Netherite Lunchbox |
-| [lunchbox/LunchboxRecipes.java](../development/patcherMod/src/main/java/com/SaintAlfonzo/creativeengineering/lunchbox/LunchboxRecipes.java) | the 5 serializers; recipe classes beside it |
-| [lunchbox/LunchboxTooltip.java](../development/patcherMod/src/main/java/com/SaintAlfonzo/creativeengineering/lunchbox/LunchboxTooltip.java) | slot line |
-| [lunchbox/client/LunchboxClient.java](../development/patcherMod/src/main/java/com/SaintAlfonzo/creativeengineering/lunchbox/client/LunchboxClient.java) | item properties, dye tint |
-| [mixin/AlexsMobsSeagullStealMixin.java](../development/patcherMod/src/main/java/com/SaintAlfonzo/creativeengineering/mixin/AlexsMobsSeagullStealMixin.java), [AlexsMobsSeagullItemMixin.java](../development/patcherMod/src/main/java/com/SaintAlfonzo/creativeengineering/mixin/AlexsMobsSeagullItemMixin.java) | seagulls |
-| [neoCraftHelper.js](../development/patcherMod/src/main/resources/kubejs_startup/creativeengineering/func/neoCraftHelper.js) | `lunchboxShaped`, `lunchboxSmithing`, `lunchboxSkin`, `lunchboxDye`, `lunchboxSoap` |
-| [solapplepie/lunchboxes.js](../kubejs/data/creative_delight/kubejs/solapplepie/lunchboxes.js) | the recipes (Creative Delight tree; in the CD jar) |
+| [lunchbox/Lunchboxes.java](../development/creativeCommon/src/main/java/com/SaintAlfonzo/creativecommon/lunchbox/Lunchboxes.java) | tiers, skins table, tag/dye/contents helpers |
+| [lunchbox/LunchboxItems.java](../development/creativeCommon/src/main/java/com/SaintAlfonzo/creativecommon/lunchbox/LunchboxItems.java) | Netherite Lunchbox |
+| [lunchbox/LunchboxRecipes.java](../development/creativeCommon/src/main/java/com/SaintAlfonzo/creativecommon/lunchbox/LunchboxRecipes.java) | the 5 serializers; recipe classes beside it |
+| [lunchbox/LunchboxTooltip.java](../development/creativeCommon/src/main/java/com/SaintAlfonzo/creativecommon/lunchbox/LunchboxTooltip.java) | slot line |
+| [lunchbox/client/LunchboxClient.java](../development/creativeCommon/src/main/java/com/SaintAlfonzo/creativecommon/lunchbox/client/LunchboxClient.java) | item properties, dye tint |
+| [mixin/AlexsMobsSeagullStealMixin.java](../development/creativeCommon/src/main/java/com/SaintAlfonzo/creativecommon/mixin/AlexsMobsSeagullStealMixin.java), [AlexsMobsSeagullItemMixin.java](../development/creativeCommon/src/main/java/com/SaintAlfonzo/creativecommon/mixin/AlexsMobsSeagullItemMixin.java) | seagulls |
+| [neoCraftHelper.js](../development/creativeCommon/src/main/resources/kubejs_startup/creativecommon/func/neoCraftHelper.js) | `lunchboxShaped`, `lunchboxSmithing`, `lunchboxSkin`, `lunchboxDye`, `lunchboxSoap` |
+| [solapplepie/lunchboxes.js](../kubejs/data/creativedelight/kubejs/solapplepie/lunchboxes.js) | the recipes (Creative Delight tree; in the CD jar) |
 | [namechanges.js](../kubejs/client_scripts/namechanges.js) | names and screen titles |
 | `kubejs/assets/solapplepie/textures/items/` | source art (copper, iron, netherite + outline masks); `lunchbox_dye/` generated |
 | `kubejs/assets/solapplepie/models/item/` | generated item and look models |
@@ -136,7 +136,7 @@ with no step for the skin, and Supplementaries' recipe would compete with the pa
 ## 6. Offline checks
 
 - `python3 tools/gen_lunchbox_looks.py --check` (exit 0 = textures and models match the source art).
-- `./gradlew :patcherMod:build --offline` (2026-10-29: clean, no mixin target warnings for the seagull mixins).
+- `./gradlew :creativeCommon:build --offline` (2026-10-29: clean, no mixin target warnings for the seagull mixins).
 - `node --check` on `lunchboxes.js`, `neoCraftHelper.js`, `namechanges.js`.
 
 ## 7. In-game test suite

@@ -4,7 +4,7 @@
     "structure fields": "biomes, step, terrain_adaptation, spawn_overrides: as in any structure json (the meta's own; biomes is where its start may be, the parts still check their own lists). note: ignored by the game. spawn_overrides: leave it {}. Each part (the anchor too) keeps its own overrides and spawn box on its own pieces (patcherMod StructureSpawnBoxes); the meta's own would apply to every piece of every part.",
     "anchor": "Optional. \"#tag\" or a structure id, or a list of them. With an anchor the meta never takes a group slot of its own: when the group's pick lands on one of these (in the meta's own group) and that structure keeps its frequency roll, the slot becomes the meta with chance \"share\", built on that very structure exactly as it would be on its own. If the parts fall short, the slot is the plain anchor. So no structure's rate and no group's slot count changes. No anchor: the meta is an ordinary group member (its weight and frequency count), and the parts centre on the start chunk's middle. A meta without an anchor may also be a replacement (\"replaces\" + \"share\" on its entry in structure_groups.json): it then builds its parts in the slots the named member wins, centred on the start chunk (meta/meteorite_desert_pyramid). Its first part, when that is a structure part at distance [0, 0] with chance 1, is its core: a short core fails the meta even with keepShortParts (the slot is then the plain named member), and the core does not count as a satellite.",
     "share": "Needed with an anchor: 0..1, the chance that a slot one of its anchors won becomes this meta. Several metas may share an anchor; their shares add up (the total is cut at 1, in id order). /place structure <meta> without a slot behind it picks the anchor by its weight in the group.",
-    "parts": "Placed in order after the anchor; put structure parts before feature parts (features keep clear of structures placed before them, not after). Each part has \"structures\" or \"features\" (placed features, \"#tag\" or ids), plus: count = n or [min, max] copies (fewer than min placed: the whole meta fails and the group slot falls through to its next member); chance (0..1, default 1) = the part is tried at all (a skipped part never fails the meta); distance = [min, max] blocks from the anchor's centre (default [0, 64], at most 112); spacing = least blocks between two copies of this part (default 0); margin = blocks of clearance from every structure piece placed before (default 4); tries per copy (default 16; structures try from the near end of the range outwards); water_depth (features) = least water depth at the spot (default 0 = any ground); radius (features) = half-width of the piece box (default 6); overlap = true lets its copies stand on pieces placed before (no margin check against them; put such a part last, its box counts for the parts after it). An AE2 meteorite part with overlap carves its crater through the anchor: a start places its pieces in order, the anchor's first. cluster (structures) = blocks: the first copy lands in the distance ring, every later copy within cluster blocks of the first (spacing still applies), so the copies stand as a group on one side instead of around the anchor.",
+    "parts": "Placed in order after the anchor; put structure parts before feature parts (features keep clear of structures placed before them, not after). Each part has \"structures\" or \"features\" (placed features, \"#tag\" or ids), plus: count = n or [min, max] copies (fewer than min placed: the whole meta fails and the group slot falls through to its next member); chance (0..1, default 1) = the part is tried at all (a skipped part never fails the meta); distance = [min, max] blocks from the anchor's centre (default [0, 64], at most 112); spacing = least blocks between two copies of this part (default 0); margin = blocks of clearance from every structure piece placed before (default 4); tries per copy (default 16; structures try from the near end of the range outwards); water_depth (features) = least water depth at the spot (default 0 = any ground); radius (features) = half-width of the piece box (default 6); overlap = true lets its copies stand on pieces placed before (no margin check against them; put such a part last, its box counts for the parts after it). An AE2 meteorite part with overlap carves its crater through the anchor: a start places its pieces in order, the anchor's first. punch (overlap structure parts) = true: an AE2 meteorite in the part gets no crater (the sphere replaces the blocks it overlaps, as in the ocean) and a shaft of air from the sphere up through the pieces placed before (a meteorite through a pyramid roof). cluster (structures) = blocks: the first copy lands in the distance ring, every later copy within cluster blocks of the first (spacing still applies), so the copies stand as a group on one side instead of around the anchor.",
     "tags": "The structure tags named here (creativeengineering:meta/*) are generated from the meta/* tags in structure_tags.json, so membership is edited there.",
     "placed features": "A placed feature used by a part must have no \"minecraft:biome\" modifier (it only works for features a biome lists). Ours are in kubejs/data/creativeengineering/worldgen/placed_feature/meta/.",
     "companions": "Optional (needs an anchor): {structures, count, distance}. Structures started in chunks of their own around the meta (patcherMod PlacementPriority), count = n or [min, max], distance = [min, max] blocks from the meta's start chunk (16..512), spread evenly around it. Each is a full start, so it keeps its whole reach (unlike a part, which must stay within 7 chunks). Companions take no grid slot, skip frequency rolls, and rank one below their group in the placement priority. Only members of the meta's own group are used. \"parts\" may be empty when a meta has companions."
@@ -117,6 +117,28 @@
           ],
           "spacing": 16,
           "margin": 3
+        }
+      ]
+    },
+    "creativeengineering:meta/waystone_ruins": {
+      "note": "A small ruin with a waystone standing beside it (plan_worldgen_edit A6). The part is creativeengineering:waystone_ruin_part, a one-piece jigsaw of Waystones' village waystone, in no structure set, so it never spawns alone. Shares with the other small-ruin metas: ruin_scatter 0.3 + this 0.2 = 0.5.",
+      "type": "creativeengineering:meta",
+      "biomes": "#minecraft:is_overworld",
+      "step": "surface_structures",
+      "terrain_adaptation": "beard_thin",
+      "spawn_overrides": {},
+      "anchor": "#creativeengineering:meta/small_ruins",
+      "share": 0.2,
+      "parts": [
+        {
+          "structures": "creativeengineering:waystone_ruin_part",
+          "count": 1,
+          "distance": [
+            4,
+            12
+          ],
+          "margin": 1,
+          "tries": 24
         }
       ]
     },
@@ -268,7 +290,7 @@
       "terrain_adaptation": "beard_thin",
       "spawn_overrides": {},
       "anchor": "#creativeengineering:meta/pillager_large_towers",
-      "share": 0.5,
+      "share": 0.3,
       "parts": [
         {
           "structures": "#creativeengineering:meta/pillager_outworks",
@@ -356,7 +378,7 @@
       "terrain_adaptation": "beard_thin",
       "spawn_overrides": {},
       "anchor": "#creativeengineering:meta/pillager_camps",
-      "share": 0.15,
+      "share": 0.25,
       "parts": [
         {
           "structures": "#creativeengineering:meta/large_ruins",
@@ -390,7 +412,7 @@
       "terrain_adaptation": "beard_thin",
       "spawn_overrides": {},
       "anchor": "#creativeengineering:meta/pillager_camps",
-      "share": 0.15,
+      "share": 0.25,
       "parts": [
         {
           "structures": "#creativeengineering:meta/small_ruins",
@@ -953,7 +975,7 @@
       ]
     },
     "creativeengineering:meta/meteorite_desert_pyramid": {
-      "note": "A vanilla desert pyramid struck by an AE2 sky stone meteorite. No anchor: a replacement taking 8% of YUNG's desert temple slots (structure_groups.json), built on the slot's chunk.",
+      "note": "A vanilla desert pyramid struck by an AE2 sky stone meteorite: the meteorite lands within 4 blocks of the centre and punches through (punch: no crater, the sphere replaces what it overlaps, a shaft above it). No anchor: a replacement taking 8% of YUNG's desert temple slots (structure_groups.json), built on the slot's chunk.",
       "type": "creativeengineering:meta",
       "biomes": "#minecraft:is_overworld",
       "step": "surface_structures",
@@ -975,9 +997,10 @@
           "count": 1,
           "distance": [
             0,
-            12
+            4
           ],
           "overlap": true,
+          "punch": true,
           "tries": 24
         }
       ]
@@ -1048,7 +1071,7 @@
       "terrain_adaptation": "none",
       "spawn_overrides": {},
       "anchor": "#creativeengineering:meta/meteorites",
-      "share": 0.5,
+      "share": 0.33,
       "parts": [
         {
           "structures": "#creativeengineering:meta/meteorites",

@@ -100,7 +100,7 @@ Baked Potato meals (5, 6), 2 servings. Additive: salt or bone broth.
 | Want | Item | Can | Input (basic / +additive) | Alt input (sliced) | Impl | Texture | Recipe | Food audit | Effects | Food h/s | Craft sum h/s | Canned h/s | In -> out | Out vs target |
 |---|---|---|---|---|---|---|---|---|---|---|---|---|---|---|
 | x | Beetroot `minecraft:beetroot` | Canned Beetroot | 8 / 6+1 | - | x | x | x | x | none | 1 / 1.2 | 8 / 9.6 | 10 / 12 | 125% / 125% | 100% / 100% |
-| x | Bell Pepper `rusticdelight:bell_pepper_*` | Canned Bell Pepper | 8 / 6+1 | - | x | x | x | x | none | 1 / 0.2 | 8 / 1.6 | 10 / 12 | 125% / 750% | 100% / 100% |
+| x | Bell Pepper `rusticdelight:bell_pepper_*` | Canned Bell Pepper | 8 / 6+1 | - | x | x | x | x | none | 2 / 0.8 | 16 / 6.4 | 10 / 12 | 62% / 188% | 100% / 100% |
 | x | Cabbage `farmersdelight:cabbage` | Canned Cabbage | 5 / 3+1 | Cabbage Leaf: x | x | x | x | x | none | 2 / 1.6 | 10 / 8 | 10 / 12 | 100% / 150% | 100% / 100% |
 | x | Cactus Flesh `delightful:cactus_flesh` | Canned Cactus Flesh | 4 / 3+1 | - | x | / | x | x | none | 3 / 1.8 | 12 / 7.2 | 10 / 12 | 83% / 167% | 100% / 100% |
 | x | Carrot `minecraft:carrot` | Canned Carrot | 3 / 2+1 | - | x | x | x | x | none | 3 / 3.6 | 9 / 10.8 | 10 / 12 | 111% / 111% | 100% / 100% |
@@ -191,7 +191,7 @@ Meat Meals (5, 3), 4 servings. Additive: salt or bone broth.
 | x | Raw Mutton `minecraft:mutton` | Canned Raw Mutton | 8 / 6+1 | Raw Mutton Chops: x | x | x | x | x | none | 2 / 1.2 | 16 / 9.6 | 20 / 12 | 125% / 125% | 100% / 100% |
 | x | Raw Porkchop `minecraft:porkchop` | Canned Raw Pork | 5 / 4+1 | Raw Bacon: x | x | x | x | x | none | 3 / 1.8 | 15 / 9 | 20 / 12 | 133% / 133% | 100% / 100% |
 | x | Raw Rabbit `minecraft:rabbit` | Canned Raw Rabbit | 5 / 4+1 | - | x | / | x | x | none | 3 / 1.8 | 15 / 9 | 20 / 12 | 133% / 133% | 100% / 100% |
-| x | Shulker Mollusk `endersdelight:shulker_mollusk` | Canned Shulker Flesh | 8 / 6+1 | Shulker Filet: x | x | / | x | x | x | 1 / 0.2 | 8 / 1.6 | 8 / 4 | 100% / 250% | 40% / 33% |
+| x | Shulker Mollusk `endersdelight:shulker_mollusk` | Canned Shulker Flesh | 8 / 6+1 | Shulker Filet: x | x | / | x | x | x | 1 / 0.2 | 8 / 1.6 | 8 / 4 | - | - |
 | / | Ground Strider `nethersdelight:ground_strider` | Canned Ground Strider | n/a | - | - | - | - | - | - | - | - | - | n/a | n/a |
 | / | Hoglin Ear `nethersdelight:hoglin_ear` | Canned Hoglin Ear | n/a | - | - | - | - | - | none | - | - | - | n/a | n/a |
 | / | Raw Duck `untitledduckmod:raw_duck` | Canned Raw Duck | n/a | - | - | - | - | - | none | - | - | - | n/a | n/a |
@@ -268,18 +268,19 @@ Item x2 meals, 4 servings. Additive: salt.
 | x | Boiled Blue Pickerelweed `upgrade_aquatic:boiled_blue_pickerelweed` | Canned Boiled Blue Pickerelweed | 6 / 5+1 | - | x | - | x | x | none | 2 / 0 | 12 / 0 | 16 / 0 | 133% / - | 100% / - |
 | x | Boiled Corn `corn_delight:boiled_corn` | Canned Boiled Corn | 6 / 5+1 | - | x | - | x | x | none | 6 / 2.4 | 36 / 14.4 | 48 / 19.2 | 133% / 133% | 100% / 100% |
 | x | Boiled Purple Pickerelweed `upgrade_aquatic:boiled_purple_pickerelweed` | Canned Boiled Purple Pickerelweed | 6 / 5+1 | - | x | - | x | x | none | 3 / 0 | 18 / 0 | 24 / 0 | 133% / - | 100% / - |
-| x | Chips `pneumaticcraft:chips` | Canned Chips | 6 / 5+1 | - | x | / | x | x | none | 5 / 6 | 30 / 36 | 40 / 48 | 133% / 133% | 100% / 100% |
+| x | Chips `pneumaticcraft:chips` | Canned Chips | 6 / 5+1 | - | x | / | x | x | none | 5 / 6 | 30 / 36 | 40 / 48 | - | - |
 | x | Dried Banana `neapolitan:dried_banana` | Canned Dried Banana | 6 / 5+1 | - | x | - | x | x | x | 4 / 2.4 | 24 / 14.4 | 32 / 19.2 | 133% / 133% | 100% / 100% |
 | x | Dried Persimmon `fruitsdelight:dried_persimmon` | Canned Dried Persimmon | 6 / 5+1 | - | x | - | x | x | x | 4 / 2.4 | 24 / 14.4 | 32 / 19.2 | 133% / 133% | 100% / 100% |
 | x | Grilled Corn `corn_delight:grilled_corn` | Canned Grilled Corn | 6 / 5+1 | - | x | / | x | x | none | 6 / 2.4 | 36 / 14.4 | 48 / 19.2 | 133% / 133% | 100% / 100% |
-| x | Kimchi `brewinandchewin:kimchi` | Canned Kimchi | 6 / 5+1 | - | x | - | x | x | x | 2 / 2.4 | 12 / 14.4 | 16 / 19.2 | 133% / 133% | 100% / 100% |
-| x | Pickled Pickles `brewinandchewin:pickled_pickles` | Canned Pickled Pickles | 6 / 5+1 | - | x | - | x | x | x | 4 / 2.4 | 24 / 14.4 | 32 / 19.2 | 133% / 133% | 100% / 100% |
+| x | Kimchi `brewinandchewin:kimchi` | Canned Kimchi | 6 / 5+1 | - | x | - | x | x | x | 2 / 2.4 | 12 / 14.4 | 16 / 19.2 | - | - |
+| x | Pickled Pickles `brewinandchewin:pickled_pickles` | Canned Pickled Pickles | 6 / 5+1 | - | x | - | x | x | x | 4 / 2.4 | 24 / 14.4 | 32 / 19.2 | - | - |
 | x | Roasted Adzuki Beans `neapolitan:roasted_adzuki_beans` | Canned Roasted Adzuki Beans | 6 / 5+1 | - | x | - | x | x | x | 3 / 2.4 | 18 / 14.4 | 24 / 19.2 | 133% / 133% | 100% / 100% |
 | x | Tortilla Chip `corn_delight:tortilla_chip` | Canned Tortilla Chips | 6 / 5+1 | - | x | / | x | x | none | 1 / 0.2 | 6 / 1.2 | 8 / 1.6 | 133% / 133% | 100% / 100% |
 | x | Baked Sweet Potato `veggiesdelight:baked_sweet_potato` | Canned Baked Sweet Potato | 6 / 5+1 | - | x | / | x | x | none | 4 / 4 | 24 / 24 | 32 / 32 | 133% / 133% | 100% / 100% |
 | x | Cooked Inky Cap `fungidelight:cooked_cleaned_cap` (fungi_delight.md step 8; waits on /dumpfood after the restart) | Canned Cooked Inky Cap | - | - | - | - | - | x | - | 6 / 7.2 | 36 / 43.2 | 48 / 57.6 | 133% / 133% | 100% / 100% |
-| x | Kimchi `vintagedelight:kimchi` (fills Canned Kimchi; waits on /dumpfood with Vintage loaded) | Canned Kimchi | - | - | - | - | - | x | - | 4 / 2.4 | 12 / 14.4 | 16 / 19.2 | 133% / 133% | 100% / 100% |
-| x | Pickle `vintagedelight:pickle` (fills Canned Pickled Pickles; waits on /dumpfood with Vintage loaded) | Canned Pickled Pickles | - | - | - | - | - | x | - | 6 / 3.6 | 24 / 14.4 | 32 / 19.2 | 133% / 133% | 100% / 100% |
+| x | Cooked Nether Wart `roll_delight:cooked_nether_wart` (Roll Delight port, roll_delight.md 4.1 D14; configured; waits on /dumpfood with the member loaded) | Canned Cooked Nether Wart | - | - | - | - | - | x | - | 6 / 3.6 | 36 / 21.6 | 48 / 28.8 | - | - |
+| x | Kimchi `vintagedelight:kimchi` (fills Canned Kimchi; waits on /dumpfood with Vintage loaded) | Canned Kimchi | - | - | - | - | - | x | - | 4 / 2.4 | 24 / 14.4 | 32 / 19.2 | 133% / 133% | 100% / 100% |
+| x | Pickle `vintagedelight:pickle` (fills Canned Pickled Pickles; waits on /dumpfood with Vintage loaded) | Canned Pickled Pickles | - | - | - | - | - | x | - | 6 / 3.6 | 36 / 21.6 | 48 / 28.8 | 133% / 133% | 100% / 100% |
 | x | Pickled Beetroot `vintagedelight:pickled_beetroot` (configured; waits on /dumpfood with Vintage loaded) | Canned Pickled Beetroot | - | - | - | - | - | x | - | 5 / 4 | 30 / 24 | 40 / 32 | 133% / 133% | 100% / 100% |
 | x | Pickled Onion `vintagedelight:pickled_onion` (configured; waits on /dumpfood with Vintage loaded) | Canned Pickled Onions | - | - | - | - | - | x | - | 6 / 2.4 | 36 / 14.4 | 48 / 19.2 | 133% / 133% | 100% / 100% |
 | x | Pickled Pepper `vintagedelight:pickled_pepper` (configured; waits on /dumpfood with Vintage loaded) | Canned Pickled Peppers | - | - | - | - | - | x | - | 6 / 3.6 | 36 / 21.6 | 48 / 28.8 | 133% / 133% | 100% / 100% |
@@ -362,7 +363,7 @@ Bread x2 meals, 4 servings, no additive (honey bread also 5 bread + honey).
 | x | Sourdough Bread `pneumaticcraft:sourdough_bread` | Canned Sourdough Bread | 6 | - | x | / | x | x | none | 7 / 14 | 42 / 84 | 56 / 112 | 133% / 133% | 100% / 100% |
 | x | Cauliflower Bread `veggiesdelight:cauliflower_bread` | Canned Cauliflower Bread | 6 | - | x | / | x | x | none | 6 / 7.2 | 36 / 43.2 | 48 / 57.6 | 133% / 133% | 100% / 100% |
 | x | Garlic Bread `veggiesdelight:garlic_bread` | Canned Garlic Bread | 6 | - | x | / | x | x | none | 5 / 4 | 30 / 24 | 40 / 32 | 133% / 133% | 100% / 100% |
-| x | Mhadjeb `veggiesdelight:mhadjeb` | Canned Mhadjeb | 6 | - | x | / | x | x | none | 12 / 19.2 | 72 / 115.2 | 96 / 153.6 | 133% / 133% | 100% / 100% |
+| x | Mhadjeb `veggiesdelight:mhadjeb` | Canned Mhadjeb | 6 | - | x | / | x | x | none | 12 / 19.2 | 72 / 115.2 | 96 / 153.6 | - | - |
 | / | Bread Slice `moredelight:bread_slice` (not canned, removed 2026-10-13) | n/a | n/a | - | n/a | n/a | n/a | n/a | n/a | n/a | n/a | n/a | n/a | n/a |
 | / | Toast `moredelight:toast` (not canned, removed 2026-10-13) | n/a | n/a | - | n/a | n/a | n/a | n/a | n/a | n/a | n/a | n/a | n/a | n/a |
 | / | Tortilla `corn_delight:tortilla` (not canned, removed 2026-10-13) | n/a | n/a | - | n/a | n/a | n/a | n/a | n/a | n/a | n/a | n/a | n/a | n/a |
@@ -376,7 +377,7 @@ Salad x1.25 meals, 8 servings, fast, effects 0.75x. Vinegar additive: 5 salads +
 |---|---|---|---|---|---|---|---|---|---|---|---|---|---|---|
 | x | Chicken Salad `moredelight:chicken_salad` | Canned Chicken Salad | 6 | - | x | / | x | x | x | 6 / 7.2 | 36 / 43.2 | 64 / 71.9 | 178% / 167% | 107% / 100% |
 | x | Bowl of Exotic Fruits `quarkdelight:bowl_of_exotic_fruits` | Canned Exotic Fruits | 6 | - | x | / | x | x | none | 11 / 11 | 66 / 66 | 112 / 110 | 170% / 167% | 102% / 100% |
-| x | Field Salad `delightful:field_salad` | Canned Field Salad | 6 | - | x | / | x | x | x | 10 / 11 | 60 / 66 | 104 / 110 | 173% / 167% | 104% / 100% |
+| x | Field Salad `delightful:field_salad` | Canned Field Salad | 6 | - | x | / | x | x | x | 10 / 12 | 60 / 72 | 104 / 110 | 173% / 153% | 104% / 92% |
 | x | Fruit Salad `farmersdelight:fruit_salad` | Canned Fruit Salad | 6 | - | x | / | x | x | x | 6 / 7.2 | 36 / 43.2 | 64 / 71.9 | 178% / 167% | 107% / 100% |
 | x | Lush Moss Salad `quarkdelight:lush_moss_salad` | Canned Lush Moss Salad | 6 | - | x | / | x | x | none | 8 / 8 | 48 / 48 | 80 / 80 | 167% / 167% | 100% / 100% |
 | x | Mango Salad `fruitsdelight:mango_salad` | Canned Mango Salad | 6 | - | x | / | x | x | x | 8 / 9.6 | 48 / 57.6 | 80 / 96 | 167% / 167% | 100% / 100% |
@@ -384,7 +385,7 @@ Salad x1.25 meals, 8 servings, fast, effects 0.75x. Vinegar additive: 5 salads +
 | x | Nether Salad `farmersdelight:nether_salad` | Canned Nether Salad | 6 | - | x | / | x | x | x | 5 / 4 | 30 / 24 | 48 / 40 | 160% / 167% | 96% / 100% |
 | x | Broccoli Salad `veggiesdelight:broccoli_salad` | Canned Broccoli Salad | 6 / 5+1 | - | x | / | x | x | x | 6 / 7.2 | 36 / 43.2 | 64 / 71.9 | 178% / 167% | 107% / 100% |
 | x | Cesar Salad `veggiesdelight:cesar_salad` | Canned Cesar Salad | 6 / 5+1 | - | x | / | x | x | x | 10 / 14 | 60 / 84 | 104 / 140 | 173% / 167% | 104% / 100% |
-| x | Coleslaw `veggiesdelight:coleslaw` | Canned Coleslaw | 6 / 5+1 | - | x | / | x | x | x | 8 / 9.6 | 48 / 57.6 | 80 / 96 | 167% / 167% | 100% / 100% |
+| x | Coleslaw `veggiesdelight:coleslaw` | Canned Coleslaw | 6 / 5+1 | - | x | / | x | x | x | 12 / 14.4 | 72 / 86.4 | 80 / 96 | 111% / 111% | 67% / 67% |
 | x | Cucumber Salad `vintagedelight:cucumber_salad` (configured; waits on /dumpfood with Vintage loaded) | Canned Cucumber Salad | - | - | - | - | - | x | - | 8 / 11.2 | 48 / 67.2 | 80 / 112 | 167% / 167% | 100% / 100% |
 | x | Turnip Salad `veggiesdelight:turnip_salad` | Canned Turnip Salad | 6 / 5+1 | - | x | / | x | x | x | 6 / 7.2 | 36 / 43.2 | 64 / 71.9 | 178% / 167% | 107% / 100% |
 | / | Maggot Salad `alexsdelight:maggot_salad` (plan: all salads but maggot salad) | n/a | n/a | - | n/a | n/a | n/a | n/a | n/a | n/a | n/a | n/a | n/a | n/a |
@@ -420,7 +421,7 @@ Soup x1.25 meals, 8 servings, effects 0.75x. Additive: salt or bone broth (3 sou
 | x | Noodle Soup `farmersdelight:noodle_soup` | Canned Noodle Soup | 6 / 3+1 | - | x | / | x | x | x | 14 / 21 | 84 / 126 | 144 / 210 | 171% / 167% | 103% / 100% |
 | x | Pumpkin Soup `farmersdelight:pumpkin_soup` | Canned Pumpkin Soup | 6 / 3+1 | - | x | / | x | x | x | 14 / 21 | 84 / 126 | 144 / 210 | 171% / 167% | 103% / 100% |
 | x | Rabbit Stew `minecraft:rabbit_stew` | Canned Rabbit Stew | 6 / 3+1 | - | x | x | x | x | none | 10 / 12 | 60 / 72 | 104 / 120 | 173% / 167% | 104% / 100% |
-| x | Sinigang `delightful:sinigang` | Canned Sinigang | 6 / 3+1 | - | x | / | x | x | x | 15 / 27 | 90 / 162 | 152 / 270 | 169% / 167% | 101% / 100% |
+| x | Sinigang `delightful:sinigang` | Canned Sinigang | 6 / 3+1 | - | x | / | x | x | x | 12 / 16.8 | 72 / 100.8 | 152 / 270 | 211% / 268% | 127% / 161% |
 | x | Sopa De Macaco `alexsmobs:sopa_de_macaco` | Canned Sopa De Macaco | 6 / 3+1 | - | x | / | x | x | none | 5 / 4 | 30 / 24 | 48 / 40 | 160% / 167% | 96% / 100% |
 | x | Strider Moss Stew `nethersdelight:strider_moss_stew` | Canned Strider Moss Stew | 6 / 3+1 | - | x | / | x | x | x | 8 / 9.6 | 48 / 57.6 | 80 / 96 | 167% / 167% | 100% / 100% |
 | x | Vegetable Soup `farmersdelight:vegetable_soup` | Canned Vegetable Soup | 6 / 3+1 | - | x | / | x | x | x | 12 / 19.2 | 72 / 115.2 | 120 / 192 | 167% / 167% | 100% / 100% |
@@ -729,56 +730,56 @@ Golden x0.25 meals, 10 servings, effects 0.25x, 2 golden + honey bottle.
 
 | Want | Item | Can | Input (basic / +additive) | Alt input (sliced) | Impl | Texture | Recipe | Food audit | Effects | Food h/s | Craft sum h/s | Canned h/s | In -> out | Out vs target |
 |---|---|---|---|---|---|---|---|---|---|---|---|---|---|---|
-| x | Enchanted Golden Apple `minecraft:enchanted_golden_apple` | Canned Enchanted Golden Apple | None / 2+1 | - | x | / | x | x | x | 8 / 128 | 22 / 257.2 | 20 / 320 | 91% / 124% | 100% / 100% |
-| x | Enchanted Golden Baked Potato `goldenfood:enchanted_golden_baked_potato` | Canned Enchanted Golden Baked Potato | None / 2+1 | - | x | / | x | x | x | 8 / 128 | 22 / 257.2 | 20 / 320 | 91% / 124% | 100% / 100% |
-| x | Enchanted Golden Beetroot `goldenfood:enchanted_golden_beetroot` | Canned Enchanted Golden Beetroot | None / 2+1 | - | x | / | x | x | x | 8 / 128 | 22 / 257.2 | 20 / 320 | 91% / 124% | 100% / 100% |
-| x | Enchanted Golden Beetroot Soup `goldenfood:enchanted_golden_beetroot_soup` | Canned Enchanted Golden Beetroot Soup | None / 2+1 | - | x | / | x | x | x | 8 / 128 | 22 / 257.2 | 20 / 320 | 91% / 124% | 100% / 100% |
-| x | Enchanted Golden Bread `goldenfood:enchanted_golden_bread` | Canned Enchanted Golden Bread | None / 2+1 | - | x | / | x | x | x | 8 / 128 | 22 / 257.2 | 20 / 320 | 91% / 124% | 100% / 100% |
-| x | Enchanted Golden Carrot `goldenfood:enchanted_golden_carrot` | Canned Enchanted Golden Carrot | None / 2+1 | - | x | / | x | x | x | 8 / 128 | 22 / 257.2 | 20 / 320 | 91% / 124% | 100% / 100% |
-| x | Enchanted Golden Chorus Fruit `goldenfood:enchanted_golden_chorus_fruit` | Canned Enchanted Golden Chorus Fruit | None / 2+1 | - | x | / | x | x | x | 8 / 128 | 22 / 257.2 | 20 / 320 | 91% / 124% | 100% / 100% |
-| x | Enchanted Golden Cooked Beef `goldenfood:enchanted_golden_cooked_beef` | Canned Enchanted Golden Cooked Beef | None / 2+1 | - | x | / | x | x | x | 8 / 128 | 22 / 257.2 | 20 / 320 | 91% / 124% | 100% / 100% |
-| x | Enchanted Golden Cooked Chicken `goldenfood:enchanted_golden_cooked_chicken` | Canned Enchanted Golden Cooked Chicken | None / 2+1 | - | x | / | x | x | x | 8 / 128 | 22 / 257.2 | 20 / 320 | 91% / 124% | 100% / 100% |
-| x | Enchanted Golden Cooked Cod `goldenfood:enchanted_golden_cooked_cod` | Canned Enchanted Golden Cooked Cod | None / 2+1 | - | x | / | x | x | x | 8 / 128 | 22 / 257.2 | 20 / 320 | 91% / 124% | 100% / 100% |
-| x | Enchanted Golden Cooked Mutton `goldenfood:enchanted_golden_cooked_mutton` | Canned Enchanted Golden Cooked Mutton | None / 2+1 | - | x | / | x | x | x | 8 / 128 | 22 / 257.2 | 20 / 320 | 91% / 124% | 100% / 100% |
-| x | Enchanted Golden Cooked Porkchop `goldenfood:enchanted_golden_cooked_porkchop` | Canned Enchanted Golden Cooked Porkchop | None / 2+1 | - | x | / | x | x | x | 8 / 128 | 22 / 257.2 | 20 / 320 | 91% / 124% | 100% / 100% |
-| x | Enchanted Golden Cooked Rabbit `goldenfood:enchanted_golden_cooked_rabbit` | Canned Enchanted Golden Cooked Rabbit | None / 2+1 | - | x | / | x | x | x | 8 / 128 | 22 / 257.2 | 20 / 320 | 91% / 124% | 100% / 100% |
-| x | Enchanted Golden Cooked Salmon `goldenfood:enchanted_golden_cooked_salmon` | Canned Enchanted Golden Cooked Salmon | None / 2+1 | - | x | / | x | x | x | 8 / 128 | 22 / 257.2 | 20 / 320 | 91% / 124% | 100% / 100% |
-| x | Enchanted Golden Cookie `goldenfood:enchanted_golden_cookie` | Canned Enchanted Golden Cookie | None / 2+1 | - | x | / | x | x | x | 8 / 128 | 22 / 257.2 | 20 / 320 | 91% / 124% | 100% / 100% |
-| x | Enchanted Golden Dried Kelp `goldenfood:enchanted_golden_dried_kelp` | Canned Enchanted Golden Dried Kelp | None / 2+1 | - | x | / | x | x | x | 8 / 128 | 22 / 257.2 | 20 / 320 | 91% / 124% | 100% / 100% |
-| x | Enchanted Golden Glow Berries `goldenfood:enchanted_golden_glow_berries` | Canned Enchanted Golden Glow Berries | None / 2+1 | - | x | / | x | x | x | 8 / 128 | 22 / 257.2 | 20 / 320 | 91% / 124% | 100% / 100% |
-| x | Enchanted Golden Honey Bottle `goldenfood:enchanted_golden_honey_bottle` | Canned Enchanted Golden Honey Bottle | None / 2+1 | - | x | / | x | x | x | 8 / 128 | 22 / 257.2 | 20 / 320 | 91% / 124% | 100% / 100% |
-| x | Enchanted Golden Melon Slice `goldenfood:enchanted_golden_melon_slice` | Canned Enchanted Golden Melon Slice | None / 2+1 | - | x | / | x | x | x | 8 / 128 | 22 / 257.2 | 20 / 320 | 91% / 124% | 100% / 100% |
+| x | Enchanted Golden Apple `minecraft:enchanted_golden_apple` | Canned Enchanted Golden Apple | None / 2+1 | - | x | / | x | x | x | 16 / 9.6 | 38 / 20.4 | 20 / 320 | 53% / 1569% | 50% / 1333% |
+| x | Enchanted Golden Baked Potato `goldenfood:enchanted_golden_baked_potato` | Canned Enchanted Golden Baked Potato | None / 2+1 | - | x | / | x | x | x | 20 / 24 | 46 / 49.2 | 20 / 320 | 43% / 650% | 40% / 533% |
+| x | Enchanted Golden Beetroot `goldenfood:enchanted_golden_beetroot` | Canned Enchanted Golden Beetroot | None / 2+1 | - | x | / | x | x | x | 4 / 4.8 | 14 / 10.8 | 20 / 320 | 143% / 2963% | 200% / 2667% |
+| x | Enchanted Golden Beetroot Soup `goldenfood:enchanted_golden_beetroot_soup` | Canned Enchanted Golden Beetroot Soup | None / 2+1 | - | x | / | x | x | x | 20 / 24 | 46 / 49.2 | 20 / 320 | 43% / 650% | 40% / 533% |
+| x | Enchanted Golden Bread `goldenfood:enchanted_golden_bread` | Canned Enchanted Golden Bread | None / 2+1 | - | x | / | x | x | x | 20 / 24 | 46 / 49.2 | 20 / 320 | 43% / 650% | 40% / 533% |
+| x | Enchanted Golden Carrot `goldenfood:enchanted_golden_carrot` | Canned Enchanted Golden Carrot | None / 2+1 | - | x | / | x | x | x | 12 / 14.4 | 30 / 30 | 20 / 320 | 67% / 1067% | 67% / 889% |
+| x | Enchanted Golden Chorus Fruit `goldenfood:enchanted_golden_chorus_fruit` | Canned Enchanted Golden Chorus Fruit | None / 2+1 | - | x | / | x | x | x | 16 / 9.6 | 38 / 20.4 | 20 / 320 | 53% / 1569% | 50% / 1333% |
+| x | Enchanted Golden Cooked Beef `goldenfood:enchanted_golden_cooked_beef` | Canned Enchanted Golden Cooked Beef | None / 2+1 | - | x | / | x | x | x | 20 / 32 | 46 / 65.2 | 20 / 320 | 43% / 491% | 40% / 400% |
+| x | Enchanted Golden Cooked Chicken `goldenfood:enchanted_golden_cooked_chicken` | Canned Enchanted Golden Cooked Chicken | None / 2+1 | - | x | / | x | x | x | 20 / 24 | 46 / 49.2 | 20 / 320 | 43% / 650% | 40% / 533% |
+| x | Enchanted Golden Cooked Cod `goldenfood:enchanted_golden_cooked_cod` | Canned Enchanted Golden Cooked Cod | None / 2+1 | - | x | / | x | x | x | 20 / 24 | 46 / 49.2 | 20 / 320 | 43% / 650% | 40% / 533% |
+| x | Enchanted Golden Cooked Mutton `goldenfood:enchanted_golden_cooked_mutton` | Canned Enchanted Golden Cooked Mutton | None / 2+1 | - | x | / | x | x | x | 20 / 32 | 46 / 65.2 | 20 / 320 | 43% / 491% | 40% / 400% |
+| x | Enchanted Golden Cooked Porkchop `goldenfood:enchanted_golden_cooked_porkchop` | Canned Enchanted Golden Cooked Porkchop | None / 2+1 | - | x | / | x | x | x | 20 / 32 | 46 / 65.2 | 20 / 320 | 43% / 491% | 40% / 400% |
+| x | Enchanted Golden Cooked Rabbit `goldenfood:enchanted_golden_cooked_rabbit` | Canned Enchanted Golden Cooked Rabbit | None / 2+1 | - | x | / | x | x | x | 20 / 24 | 46 / 49.2 | 20 / 320 | 43% / 650% | 40% / 533% |
+| x | Enchanted Golden Cooked Salmon `goldenfood:enchanted_golden_cooked_salmon` | Canned Enchanted Golden Cooked Salmon | None / 2+1 | - | x | / | x | x | x | 20 / 32 | 46 / 65.2 | 20 / 320 | 43% / 491% | 40% / 400% |
+| x | Enchanted Golden Cookie `goldenfood:enchanted_golden_cookie` | Canned Enchanted Golden Cookie | None / 2+1 | - | x | / | x | x | x | 8 / 4.8 | 22 / 10.8 | 20 / 320 | 91% / 2963% | 100% / 2667% |
+| x | Enchanted Golden Dried Kelp `goldenfood:enchanted_golden_dried_kelp` | Canned Enchanted Golden Dried Kelp | None / 2+1 | - | x | / | x | x | x | 4 / 2.4 | 14 / 6 | 20 / 320 | 143% / 5333% | 200% / 5333% |
+| x | Enchanted Golden Glow Berries `goldenfood:enchanted_golden_glow_berries` | Canned Enchanted Golden Glow Berries | None / 2+1 | - | x | / | x | x | x | 8 / 1.6 | 22 / 4.4 | 20 / 320 | 91% / 7273% | 100% / 8000% |
+| x | Enchanted Golden Honey Bottle `goldenfood:enchanted_golden_honey_bottle` | Canned Enchanted Golden Honey Bottle | None / 2+1 | - | x | / | x | x | x | 20 / 4 | 46 / 9.2 | 20 / 320 | 43% / 3478% | 40% / 3200% |
+| x | Enchanted Golden Melon Slice `goldenfood:enchanted_golden_melon_slice` | Canned Enchanted Golden Melon Slice | None / 2+1 | - | x | / | x | x | x | 8 / 4.8 | 22 / 10.8 | 20 / 320 | 91% / 2963% | 100% / 2667% |
 | x | Enchanted Golden Milk Bucket `goldenfood:enchanted_golden_milk_bucket` | Canned Enchanted Golden Milk Bucket | None / 2+1 | - | x | / | x | x | x | 8 / 128 | 22 / 257.2 | 20 / 320 | 91% / 124% | 100% / 100% |
 | x | Enchanted Golden Moss Clump `immersive_weathering:enchanted_golden_moss_clump` | Canned Enchanted Golden Moss Clump | None / 2+1 | - | x | / | x | x | x | 6 / 9.6 | 18 / 20.4 | 20 / 24 | 111% / 118% | 133% / 100% |
-| x | Enchanted Golden Mushroom Stew `goldenfood:enchanted_golden_mushroom_stew` | Canned Enchanted Golden Mushroom Stew | None / 2+1 | - | x | / | x | x | x | 8 / 128 | 22 / 257.2 | 20 / 320 | 91% / 124% | 100% / 100% |
+| x | Enchanted Golden Mushroom Stew `goldenfood:enchanted_golden_mushroom_stew` | Canned Enchanted Golden Mushroom Stew | None / 2+1 | - | x | / | x | x | x | 20 / 24 | 46 / 49.2 | 20 / 320 | 43% / 650% | 40% / 533% |
 | x | Enchanted Golden Pumpkin Pie `goldenfood:enchanted_golden_pumpkin_pie` | Canned Enchanted Golden Pumpkin Pie | None / 2+1 | - | x | / | x | x | x | 8 / 128 | 22 / 257.2 | 20 / 320 | 91% / 124% | 100% / 100% |
-| x | Enchanted Golden Rabbit Stew `goldenfood:enchanted_golden_rabbit_stew` | Canned Enchanted Golden Rabbit Stew | None / 2+1 | - | x | / | x | x | x | 8 / 128 | 22 / 257.2 | 20 / 320 | 91% / 124% | 100% / 100% |
-| x | Enchanted Golden Sweet Berries `goldenfood:enchanted_golden_sweet_berries` | Canned Enchanted Golden Sweet Berries | None / 2+1 | - | x | / | x | x | x | 8 / 128 | 22 / 257.2 | 20 / 320 | 91% / 124% | 100% / 100% |
-| x | Golden Apple `minecraft:golden_apple` | Canned Golden Apple | None / 2+1 | - | x | / | x | x | x | 4 / 9.6 | 14 / 20.4 | 10 / 24 | 71% / 118% | 100% / 100% |
-| x | Golden Baked Potato `goldenfood:golden_baked_potato` | Canned Golden Baked Potato | None / 2+1 | - | x | / | x | x | x | 4 / 9.6 | 14 / 20.4 | 10 / 24 | 71% / 118% | 100% / 100% |
-| x | Golden Beetroot `goldenfood:golden_beetroot` | Canned Golden Beetroot | None / 2+1 | - | x | / | x | x | x | 4 / 9.6 | 14 / 20.4 | 10 / 24 | 71% / 118% | 100% / 100% |
-| x | Golden Beetroot Soup `goldenfood:golden_beetroot_soup` | Canned Golden Beetroot Soup | None / 2+1 | - | x | / | x | x | x | 4 / 9.6 | 14 / 20.4 | 10 / 24 | 71% / 118% | 100% / 100% |
-| x | Golden Bread `goldenfood:golden_bread` | Canned Golden Bread | None / 2+1 | - | x | / | x | x | x | 4 / 9.6 | 14 / 20.4 | 10 / 24 | 71% / 118% | 100% / 100% |
-| x | Golden Carrot `minecraft:golden_carrot` | Canned Golden Carrot | None / 2+1 | - | x | / | x | x | x | 4 / 9.6 | 14 / 20.4 | 10 / 24 | 71% / 118% | 100% / 100% |
-| x | Golden Chorus Fruit `goldenfood:golden_chorus_fruit` | Canned Golden Chorus Fruit | None / 2+1 | - | x | / | x | x | x | 4 / 9.6 | 14 / 20.4 | 10 / 24 | 71% / 118% | 100% / 100% |
-| x | Golden Cooked Beef `goldenfood:golden_cooked_beef` | Canned Golden Cooked Beef | None / 2+1 | - | x | / | x | x | x | 4 / 9.6 | 14 / 20.4 | 10 / 24 | 71% / 118% | 100% / 100% |
-| x | Golden Cooked Chicken `goldenfood:golden_cooked_chicken` | Canned Golden Cooked Chicken | None / 2+1 | - | x | / | x | x | x | 4 / 9.6 | 14 / 20.4 | 10 / 24 | 71% / 118% | 100% / 100% |
-| x | Golden Cooked Cod `goldenfood:golden_cooked_cod` | Canned Golden Cooked Cod | None / 2+1 | - | x | / | x | x | x | 4 / 9.6 | 14 / 20.4 | 10 / 24 | 71% / 118% | 100% / 100% |
-| x | Golden Cooked Mutton `goldenfood:golden_cooked_mutton` | Canned Golden Cooked Mutton | None / 2+1 | - | x | / | x | x | x | 4 / 9.6 | 14 / 20.4 | 10 / 24 | 71% / 118% | 100% / 100% |
-| x | Golden Cooked Porkchop `goldenfood:golden_cooked_porkchop` | Canned Golden Cooked Porkchop | None / 2+1 | - | x | / | x | x | x | 4 / 9.6 | 14 / 20.4 | 10 / 24 | 71% / 118% | 100% / 100% |
-| x | Golden Cooked Rabbit `goldenfood:golden_cooked_rabbit` | Canned Golden Cooked Rabbit | None / 2+1 | - | x | / | x | x | x | 4 / 9.6 | 14 / 20.4 | 10 / 24 | 71% / 118% | 100% / 100% |
-| x | Golden Cooked Salmon `goldenfood:golden_cooked_salmon` | Canned Golden Cooked Salmon | None / 2+1 | - | x | / | x | x | x | 4 / 9.6 | 14 / 20.4 | 10 / 24 | 71% / 118% | 100% / 100% |
-| x | Golden Cookie `goldenfood:golden_cookie` | Canned Golden Cookie | None / 2+1 | - | x | / | x | x | x | 4 / 9.6 | 14 / 20.4 | 10 / 24 | 71% / 118% | 100% / 100% |
-| x | Golden Dried Kelp `goldenfood:golden_dried_kelp` | Canned Golden Dried Kelp | None / 2+1 | - | x | / | x | x | x | 4 / 9.6 | 14 / 20.4 | 10 / 24 | 71% / 118% | 100% / 100% |
-| x | Golden Glow Berries `goldenfood:golden_glow_berries` | Canned Golden Glow Berries | None / 2+1 | - | x | / | x | x | x | 4 / 9.6 | 14 / 20.4 | 10 / 24 | 71% / 118% | 100% / 100% |
-| x | Golden Honey Bottle `goldenfood:golden_honey_bottle` | Canned Golden Honey Bottle | None / 2+1 | - | x | / | x | x | x | 4 / 9.6 | 14 / 20.4 | 10 / 24 | 71% / 118% | 100% / 100% |
-| x | Golden Melon Slice `goldenfood:golden_melon_slice` | Canned Golden Melon Slice | None / 2+1 | - | x | / | x | x | x | 4 / 9.6 | 14 / 20.4 | 10 / 24 | 71% / 118% | 100% / 100% |
+| x | Enchanted Golden Rabbit Stew `goldenfood:enchanted_golden_rabbit_stew` | Canned Enchanted Golden Rabbit Stew | None / 2+1 | - | x | / | x | x | x | 20 / 24 | 46 / 49.2 | 20 / 320 | 43% / 650% | 40% / 533% |
+| x | Enchanted Golden Sweet Berries `goldenfood:enchanted_golden_sweet_berries` | Canned Enchanted Golden Sweet Berries | None / 2+1 | - | x | / | x | x | x | 8 / 1.6 | 22 / 4.4 | 20 / 320 | 91% / 7273% | 100% / 8000% |
+| x | Golden Apple `minecraft:golden_apple` | Canned Golden Apple | None / 2+1 | - | x | / | x | x | x | 8 / 4.8 | 22 / 10.8 | 10 / 24 | 45% / 222% | 50% / 200% |
+| x | Golden Baked Potato `goldenfood:golden_baked_potato` | Canned Golden Baked Potato | None / 2+1 | - | x | / | x | x | x | 10 / 12 | 26 / 25.2 | 10 / 24 | 38% / 95% | 40% / 80% |
+| x | Golden Beetroot `goldenfood:golden_beetroot` | Canned Golden Beetroot | None / 2+1 | - | x | / | x | x | x | 2 / 2.4 | 10 / 6 | 10 / 24 | 100% / 400% | 200% / 400% |
+| x | Golden Beetroot Soup `goldenfood:golden_beetroot_soup` | Canned Golden Beetroot Soup | None / 2+1 | - | x | / | x | x | x | 12 / 14.4 | 30 / 30 | 10 / 24 | 33% / 80% | 33% / 67% |
+| x | Golden Bread `goldenfood:golden_bread` | Canned Golden Bread | None / 2+1 | - | x | / | x | x | x | 10 / 12 | 26 / 25.2 | 10 / 24 | 38% / 95% | 40% / 80% |
+| x | Golden Carrot `minecraft:golden_carrot` | Canned Golden Carrot | None / 2+1 | - | x | / | x | x | x | 6 / 7.2 | 18 / 15.6 | 10 / 24 | 56% / 154% | 67% / 133% |
+| x | Golden Chorus Fruit `goldenfood:golden_chorus_fruit` | Canned Golden Chorus Fruit | None / 2+1 | - | x | / | x | x | x | 8 / 4.8 | 22 / 10.8 | 10 / 24 | 45% / 222% | 50% / 200% |
+| x | Golden Cooked Beef `goldenfood:golden_cooked_beef` | Canned Golden Cooked Beef | None / 2+1 | - | x | / | x | x | x | 16 / 25.6 | 38 / 52.4 | 10 / 24 | 26% / 46% | 25% / 38% |
+| x | Golden Cooked Chicken `goldenfood:golden_cooked_chicken` | Canned Golden Cooked Chicken | None / 2+1 | - | x | / | x | x | x | 12 / 14.4 | 30 / 30 | 10 / 24 | 33% / 80% | 33% / 67% |
+| x | Golden Cooked Cod `goldenfood:golden_cooked_cod` | Canned Golden Cooked Cod | None / 2+1 | - | x | / | x | x | x | 10 / 12 | 26 / 25.2 | 10 / 24 | 38% / 95% | 40% / 80% |
+| x | Golden Cooked Mutton `goldenfood:golden_cooked_mutton` | Canned Golden Cooked Mutton | None / 2+1 | - | x | / | x | x | x | 12 / 19.2 | 30 / 39.6 | 10 / 24 | 33% / 61% | 33% / 50% |
+| x | Golden Cooked Porkchop `goldenfood:golden_cooked_porkchop` | Canned Golden Cooked Porkchop | None / 2+1 | - | x | / | x | x | x | 16 / 25.6 | 38 / 52.4 | 10 / 24 | 26% / 46% | 25% / 38% |
+| x | Golden Cooked Rabbit `goldenfood:golden_cooked_rabbit` | Canned Golden Cooked Rabbit | None / 2+1 | - | x | / | x | x | x | 10 / 12 | 26 / 25.2 | 10 / 24 | 38% / 95% | 40% / 80% |
+| x | Golden Cooked Salmon `goldenfood:golden_cooked_salmon` | Canned Golden Cooked Salmon | None / 2+1 | - | x | / | x | x | x | 12 / 19.2 | 30 / 39.6 | 10 / 24 | 33% / 61% | 33% / 50% |
+| x | Golden Cookie `goldenfood:golden_cookie` | Canned Golden Cookie | None / 2+1 | - | x | / | x | x | x | 4 / 2.4 | 14 / 6 | 10 / 24 | 71% / 400% | 100% / 400% |
+| x | Golden Dried Kelp `goldenfood:golden_dried_kelp` | Canned Golden Dried Kelp | None / 2+1 | - | x | / | x | x | x | 2 / 1.2 | 10 / 3.6 | 10 / 24 | 100% / 667% | 200% / 800% |
+| x | Golden Glow Berries `goldenfood:golden_glow_berries` | Canned Golden Glow Berries | None / 2+1 | - | x | / | x | x | x | 4 / 0.8 | 14 / 2.8 | 10 / 24 | 71% / 857% | 100% / 1200% |
+| x | Golden Honey Bottle `goldenfood:golden_honey_bottle` | Canned Golden Honey Bottle | None / 2+1 | - | x | / | x | x | x | 12 / 2.4 | 30 / 6 | 10 / 24 | 33% / 400% | 33% / 400% |
+| x | Golden Melon Slice `goldenfood:golden_melon_slice` | Canned Golden Melon Slice | None / 2+1 | - | x | / | x | x | x | 4 / 2.4 | 14 / 6 | 10 / 24 | 71% / 400% | 100% / 400% |
 | x | Golden Milk Bucket `goldenfood:golden_milk_bucket` | Canned Golden Milk Bucket | None / 2+1 | - | x | / | x | x | x | 4 / 9.6 | 14 / 20.4 | 10 / 24 | 71% / 118% | 100% / 100% |
 | x | Golden Moss Clump `immersive_weathering:golden_moss_clump` | Canned Golden Moss Clump | None / 2+1 | - | x | / | x | x | x | 4 / 4.8 | 14 / 10.8 | 10 / 12 | 71% / 111% | 100% / 100% |
-| x | Golden Mushroom Stew `goldenfood:golden_mushroom_stew` | Canned Golden Mushroom Stew | None / 2+1 | - | x | / | x | x | x | 4 / 9.6 | 14 / 20.4 | 10 / 24 | 71% / 118% | 100% / 100% |
+| x | Golden Mushroom Stew `goldenfood:golden_mushroom_stew` | Canned Golden Mushroom Stew | None / 2+1 | - | x | / | x | x | x | 12 / 14.4 | 30 / 30 | 10 / 24 | 33% / 80% | 33% / 67% |
 | x | Golden Pumpkin Pie `goldenfood:golden_pumpkin_pie` | Canned Golden Pumpkin Pie | None / 2+1 | - | x | / | x | x | x | 4 / 9.6 | 14 / 20.4 | 10 / 24 | 71% / 118% | 100% / 100% |
-| x | Golden Rabbit Stew `goldenfood:golden_rabbit_stew` | Canned Golden Rabbit Stew | None / 2+1 | - | x | / | x | x | x | 4 / 9.6 | 14 / 20.4 | 10 / 24 | 71% / 118% | 100% / 100% |
-| x | Golden Sweet Berries `goldenfood:golden_sweet_berries` | Canned Golden Sweet Berries | None / 2+1 | - | x | / | x | x | x | 4 / 9.6 | 14 / 20.4 | 10 / 24 | 71% / 118% | 100% / 100% |
+| x | Golden Rabbit Stew `goldenfood:golden_rabbit_stew` | Canned Golden Rabbit Stew | None / 2+1 | - | x | / | x | x | x | 20 / 24 | 46 / 49.2 | 10 / 24 | 22% / 49% | 20% / 40% |
+| x | Golden Sweet Berries `goldenfood:golden_sweet_berries` | Canned Golden Sweet Berries | None / 2+1 | - | x | / | x | x | x | 4 / 0.8 | 14 / 2.8 | 10 / 24 | 71% / 857% | 100% / 1200% |
 
 ### 2.18 Special <a id="special"></a>
 
@@ -1319,18 +1320,19 @@ Generated by `tools/can_audit.py` from can_types.json (what is built) and the fo
 
 | Section | Cans | In -> out (basic) | In -> out (additive) | Out vs target |
 |---|---:|---|---|---|
-| raw_veggie | 20 | h 83 to 167%, s 83 to 750% | h 111 to 333%, s 167 to 1000% | h 100%, s 100% |
+| raw_veggie | 20 | h 62 to 167%, s 83 to 250% | h 83 to 333%, s 167 to 375% | h 100%, s 100% |
 | raw_fruit | 34 | h 83 to 188%, s 94 to 1000% | h 125 to 250%, s 125 to 1499% | h 100 to 140%, s 100 to 167% |
-| raw_meat | 6 | h 100 to 133%, s 125 to 250% | h 133 to 167%, s 167 to 333% | h 40 to 100%, s 33 to 100% |
+| raw_meat | 6 | h 125 to 200%, s 100 to 133% | h 167 to 200%, s 100 to 167% | h 40 to 100%, s 33 to 100% |
 | raw_fish | 12 | h 100 to 200%, s 83 to 500% | h 133 to 267%, s 111 to 667% | h 100%, s 100% |
 | hazard | 5 | h 100 to 200%, s 75 to 500% | n/a | h 40 to 100%, s 33 to 100% |
 | special | 2 | h 125%, s 125% | h 188%, s 188% | h 100%, s 100% |
 | cookies | 13 | h 125%, s 125% | h 167%, s 167% | h 100%, s 100% |
-| cooked_veggie | 26 | h 133%, s 133% | h 160%, s 160% | h 100%, s 100% |
+| cooked_veggie | 25 | h 133%, s 133% | h 160%, s 160% | h 100%, s 100% |
 | cooked_meat | 16 | h 120%, s 120% | h 150%, s 150% | h 100%, s 100% |
-| soup | 38 | h 133 to 178%, s 167% | h 267 to 356%, s 333 to 334% | h 80 to 107%, s 100% |
-| bread | 12 | h 133%, s 133% | h 155%, s 246% | h 100%, s 100% |
-| meal | 21 | h 143 to 160%, s 150% | n/a | h 95 to 107%, s 100% |
+| soup | 42 | h 133 to 211%, s 167 to 268% | h 267 to 422%, s 333 to 536% | h 80 to 127%, s 100 to 161% |
+| golden | 56 | h 22 to 143%, s 46 to 7273% | n/a | h 20 to 200%, s 38 to 8000% |
+| bread | 11 | h 133%, s 133% | h 155%, s 246% | h 100%, s 100% |
+| meal | 23 | h 143 to 160%, s 150% | n/a | h 95 to 107%, s 100% |
 | pie | 14 | h 100%, s 100% | n/a | h 100%, s 100% |
 | feast | 9 | h 55 to 150%, s 55 to 150% | n/a | h 100%, s 100% |
 | drink | 2 | h 100%, s 100% | n/a | h 100%, s 100% |
@@ -1338,26 +1340,25 @@ Generated by `tools/can_audit.py` from can_types.json (what is built) and the fo
 | preserve | 2 | h 100%, s 100% | n/a | h 100%, s 100% |
 | dessert | 1 | h 167%, s 167% | h 333%, s 333% | h 100%, s 100% |
 | cake | 1 | h 114%, s 101% | h 200%, s 176% | h 114%, s 101% |
-| golden | 55 | h 71 to 111%, s 111 to 124% | n/a | h 100 to 133%, s 100% |
-| salad | 14 | h 160 to 178%, s 167% | h 185 to 206%, s 196 to 199% | h 96 to 107%, s 100% |
+| salad | 14 | h 111 to 178%, s 111 to 167% | h 133 to 213%, s 133 to 200% | h 67 to 107%, s 67 to 100% |
 
 **raw_veggie**
 
 | Can | Basic recipe | Input | Output | In -> out | Additive input | In -> out (additive) | Target | Out vs target |
 |---|---|---|---|---|---|---|---|---|
 | canned_beetroot | 8 beetroot | 8 / 9.6 | 10 / 12 | 125% / 125% | 6 / 7.2 | 167% / 167% | 10 / 12 | 100% / 100% |
-| canned_cabbage | 5 any_cabbage | 10 / 8 | 10 / 12 | 100% / 150% | 6 / 4.8 | 167% / 250% | 10 / 12 | 100% / 100% |
+| canned_cabbage | 5 cabbage | 10 / 8 | 10 / 12 | 100% / 150% | 6 / 4.8 | 167% / 250% | 10 / 12 | 100% / 100% |
 | canned_carrot | 3 carrot | 9 / 10.8 | 10 / 12 | 111% / 111% | 6 / 7.2 | 167% / 167% | 10 / 12 | 100% / 100% |
 | canned_onion | 5 onion | 10 / 8 | 10 / 12 | 100% / 150% | 6 / 4.8 | 167% / 250% | 10 / 12 | 100% / 100% |
 | canned_potato | 8 any_potato | 8 / 4.8 | 10 / 12 | 125% / 250% | 6 / 3.6 | 167% / 333% | 10 / 12 | 100% / 100% |
 | canned_tomato | 8 tomato | 8 / 4.8 | 10 / 12 | 125% / 250% | 6 / 3.6 | 167% / 333% | 10 / 12 | 100% / 100% |
-| canned_bell_pepper | 8 any_bell_pepper | 8 / 1.6 | 10 / 12 | 125% / 750% | 6 / 1.2 | 167% / 1000% | 10 / 12 | 100% / 100% |
+| canned_bell_pepper | 8 any_bell_pepper | 16 / 6.4 | 10 / 12 | 62% / 188% | 12 / 4.8 | 83% / 250% | 10 / 12 | 100% / 100% |
 | canned_cactus_flesh | 4 cactus_flesh | 12 / 7.2 | 10 / 12 | 83% / 167% | 9 / 5.4 | 111% / 222% | 10 / 12 | 100% / 100% |
 | canned_gongylidia | 2 gongylidia | 6 / 14.4 | 10 / 12 | 167% / 83% | 3 / 7.2 | 333% / 167% | 10 / 12 | 100% / 100% |
 | canned_corn | 6 corn | 12 / 4.8 | 10 / 12 | 83% / 250% | 8 / 3.2 | 125% / 375% | 10 / 12 | 100% / 100% |
 | canned_broccoli | 5 broccoli | 10 / 8 | 10 / 12 | 100% / 150% | 6 / 4.8 | 167% / 250% | 10 / 12 | 100% / 100% |
 | canned_cauliflower | 2 cauliflower/cauliflower_floret | 8 / 6.4 | 10 / 12 | 125% / 188% | 4 / 3.2 | 250% / 375% | 10 / 12 | 100% / 100% |
-| canned_sweet_potato | 5 sweet_potato | 10 / 8 | 10 / 12 | 100% / 150% | 6 / 4.8 | 167% / 250% | 10 / 12 | 100% / 100% |
+| canned_sweet_potato | 5 sweet_potato/sliced_sweet_potato | 10 / 8 | 10 / 12 | 100% / 150% | 6 / 4.8 | 167% / 250% | 10 / 12 | 100% / 100% |
 | canned_turnip | 5 turnip | 10 / 8 | 10 / 12 | 100% / 150% | 6 / 4.8 | 167% / 250% | 10 / 12 | 100% / 100% |
 | canned_zucchini | 3 zucchini/zucchini_slice | 9 / 7.2 | 10 / 12 | 111% / 167% | 6 / 4.8 | 167% / 250% | 10 / 12 | 100% / 100% |
 | canned_cucumber | 6 cucumber | 12 / 4.8 | 10 / 12 | 83% / 250% | 8 / 3.2 | 125% / 375% | 10 / 12 | 100% / 100% |
@@ -1414,7 +1415,7 @@ Generated by `tools/can_audit.py` from can_types.json (what is built) and the fo
 | canned_raw_mutton | 8 raw_mutton | 16 / 9.6 | 20 / 12 | 125% / 125% | 12 / 7.2 | 167% / 167% | 20 / 12 | 100% / 100% |
 | canned_raw_pork | 5 raw_pork | 15 / 9 | 20 / 12 | 133% / 133% | 12 / 7.2 | 167% / 167% | 20 / 12 | 100% / 100% |
 | canned_raw_rabbit | 5 rabbit | 15 / 9 | 20 / 12 | 133% / 133% | 12 / 7.2 | 167% / 167% | 20 / 12 | 100% / 100% |
-| canned_shulker | 8 shulker_mollusk/shulker_filet | 8 / 1.6 | 8 / 4 | 100% / 250% | 6 / 1.2 | 133% / 333% | 20 / 12 | 40% / 33% |
+| canned_shulker | 1 shulker_meat/shulker_meat_slice | 4 / 4 | 8 / 4 | 200% / 100% | 4 / 4 | 200% / 100% | 20 / 12 | 40% / 33% |
 
 **raw_fish**
 
@@ -1426,7 +1427,7 @@ Generated by `tools/can_audit.py` from can_types.json (what is built) and the fo
 | canned_raw_calamari | 7 calamari/calamari_slice | 14 / 5.6 | 16 / 8 | 114% / 143% | 12 / 4.8 | 133% / 167% | 16 / 8 | 100% / 100% |
 | canned_raw_catfish | 6 catfish/raw_catfish_slice | 12 / 7.2 | 16 / 8 | 133% / 111% | 10 / 6 | 160% / 133% | 16 / 8 | 100% / 100% |
 | canned_raw_cod | 8 cod/cod_slice | 16 / 3.2 | 16 / 8 | 100% / 250% | 12 / 2.4 | 133% / 333% | 16 / 8 | 100% / 100% |
-| canned_raw_crab | 8 raw_crab | 8 / 4.8 | 16 / 8 | 200% / 167% | 6 / 3.6 | 267% / 222% | 16 / 8 | 100% / 100% |
+| canned_raw_crab | 8 crab | 8 / 4.8 | 16 / 8 | 200% / 167% | 6 / 3.6 | 267% / 222% | 16 / 8 | 100% / 100% |
 | canned_raw_lionfish | 6 lionfish | 12 / 7.2 | 16 / 8 | 133% / 111% | 10 / 6 | 160% / 133% | 16 / 8 | 100% / 100% |
 | canned_raw_perch | 7 perch/perch_slice | 14 / 5.6 | 16 / 8 | 114% / 143% | 12 / 4.8 | 133% / 167% | 16 / 8 | 100% / 100% |
 | canned_raw_pike | 4 pike/pike_slice | 12 / 7.2 | 16 / 8 | 133% / 111% | 9 / 5.4 | 178% / 148% | 16 / 8 | 100% / 100% |
@@ -1484,10 +1485,9 @@ Generated by `tools/can_audit.py` from can_types.json (what is built) and the fo
 | canned_boiled_corn | 6 boiled_corn | 36 / 14.4 | 48 / 19.2 | 133% / 133% | 30 / 12 | 160% / 160% | 48 / 19.2 | 100% / 100% |
 | canned_dried_banana | 6 dried_banana | 24 / 14.4 | 32 / 19.2 | 133% / 133% | 20 / 12 | 160% / 160% | 32 / 19.2 | 100% / 100% |
 | canned_dried_persimmon | 6 dried_persimmon | 24 / 14.4 | 32 / 19.2 | 133% / 133% | 20 / 12 | 160% / 160% | 32 / 19.2 | 100% / 100% |
-| canned_kimchi | 6 kimchi/vintagedelight_kimchi | 12 / 14.4 | 16 / 19.2 | 133% / 133% | 10 / 12 | 160% / 160% | 16 / 19.2 | 100% / 100% |
-| canned_pickled_pickles | 6 pickled_pickles/pickle | 24 / 14.4 | 32 / 19.2 | 133% / 133% | 20 / 12 | 160% / 160% | 32 / 19.2 | 100% / 100% |
+| canned_kimchi | 6 vintagedelight_kimchi | 24 / 14.4 | 32 / 19.2 | 133% / 133% | 20 / 12 | 160% / 160% | 32 / 19.2 | 100% / 100% |
+| canned_pickled_pickles | 6 pickle/pickled_sea_pickle | 36 / 21.6 | 48 / 28.8 | 133% / 133% | 30 / 18 | 160% / 160% | 48 / 28.8 | 100% / 100% |
 | canned_roasted_adzuki_beans | 6 roasted_adzuki_beans | 18 / 14.4 | 24 / 19.2 | 133% / 133% | 15 / 12 | 160% / 160% | 24 / 19.2 | 100% / 100% |
-| canned_chips | 6 chips | 30 / 36 | 40 / 48 | 133% / 133% | 25 / 30 | 160% / 160% | 40 / 48 | 100% / 100% |
 | canned_grilled_corn | 6 grilled_corn | 36 / 14.4 | 48 / 19.2 | 133% / 133% | 30 / 12 | 160% / 160% | 48 / 19.2 | 100% / 100% |
 | canned_tortilla_chip | 6 tortilla_chip | 6 / 1.2 | 8 / 1.6 | 133% / 133% | 5 / 1 | 160% / 160% | 8 / 1.6 | 100% / 100% |
 | canned_baked_sweet_potato | 6 baked_sweet_potato | 24 / 24 | 32 / 32 | 133% / 133% | 20 / 20 | 160% / 160% | 32 / 32 | 100% / 100% |
@@ -1526,12 +1526,16 @@ Generated by `tools/can_audit.py` from can_types.json (what is built) and the fo
 |---|---|---|---|---|---|---|---|---|
 | canned_rabbit_stew | 6 rabbit_stew | 60 / 72 | 104 / 120 | 173% / 167% | 30 / 36 | 347% / 333% | 100 / 120 | 104% / 100% |
 | canned_mushrooms | 6 mushroom_stew | 36 / 43.2 | 64 / 71.9 | 178% / 167% | 18 / 21.6 | 356% / 333% | 60 / 72 | 107% / 100% |
+| canned_bayberry_soup | 6 bayberry_soup | 6 / 2.4 | 8 / 4 | 133% / 167% | 3 / 1.2 | 267% / 333% | 10 / 4 | 80% / 100% |
+| canned_ratatouille | 6 ratatouille | 60 / 72 | 104 / 120 | 173% / 167% | 30 / 36 | 347% / 333% | 100 / 120 | 104% / 100% |
+| canned_bat_soup | 6 bat_soup | 42 / 37.8 | 72 / 63.1 | 171% / 167% | 21 / 18.9 | 343% / 334% | 70 / 63 | 103% / 100% |
+| canned_cave_soup | 6 cave_soup | 60 / 48 | 104 / 80.1 | 173% / 167% | 30 / 24 | 347% / 334% | 100 / 80 | 104% / 100% |
+| canned_insect_stew | 6 insect_stew | 48 / 43.2 | 80 / 72 | 167% / 167% | 24 / 21.6 | 333% / 333% | 80 / 72 | 100% / 100% |
 | canned_beetroot_soup | no recipe | n/a | 64 / 71.9 | n/a | - | - | 60 / 72 | 107% / 100% |
 | canned_suspicious_stew | no recipe | n/a | 64 / 71.9 | n/a | - | - | 60 / 72 | 107% / 100% |
 | canned_acacia_blossom_soup | 6 acacia_blossom_soup | 72 / 115.2 | 120 / 192 | 167% / 167% | 36 / 57.6 | 333% / 333% | 120 / 192 | 100% / 100% |
 | canned_adzuki_stew | 6 adzuki_stew | 48 / 57.6 | 80 / 96 | 167% / 167% | 24 / 28.8 | 333% / 333% | 80 / 96 | 100% / 100% |
 | canned_baked_cod_stew | 6 baked_cod_stew | 84 / 126 | 144 / 210 | 171% / 167% | 42 / 63 | 343% / 333% | 140 / 210 | 103% / 100% |
-| canned_bayberry_soup | 6 bayberry_soup | 6 / 2.4 | 8 / 4 | 133% / 167% | 3 / 1.2 | 267% / 333% | 10 / 4 | 80% / 100% |
 | canned_beef_stew | 6 beef_stew | 72 / 115.2 | 120 / 192 | 167% / 167% | 36 / 57.6 | 333% / 333% | 120 / 192 | 100% / 100% |
 | canned_ce_beetroot_soup | 6 beetroot_soup | 36 / 43.2 | 64 / 71.9 | 178% / 167% | 18 / 21.6 | 356% / 333% | 60 / 72 | 107% / 100% |
 | canned_bell_pepper_soup | 6 bell_pepper_soup | 36 / 43.2 | 64 / 71.9 | 178% / 167% | 18 / 21.6 | 356% / 333% | 60 / 72 | 107% / 100% |
@@ -1557,11 +1561,72 @@ Generated by `tools/can_audit.py` from can_types.json (what is built) and the fo
 | canned_oatmeal | 6 oatmeal | 48 / 72 | 80 / 120 | 167% / 167% | 24 / 36 | 333% / 333% | 80 / 120 | 100% / 100% |
 | canned_pickle_soup | 6 pickle_soup | 78 / 132.6 | 128 / 220.9 | 164% / 167% | 39 / 66.3 | 328% / 333% | 130 / 221 | 98% / 100% |
 | canned_pumpkin_soup | 6 pumpkin_soup | 84 / 126 | 144 / 210 | 171% / 167% | 42 / 63 | 343% / 333% | 140 / 210 | 103% / 100% |
-| canned_sinigang | 6 sinigang | 90 / 162 | 152 / 270 | 169% / 167% | 45 / 81 | 338% / 333% | 150 / 270 | 101% / 100% |
+| canned_sinigang | 6 sinigang | 72 / 100.8 | 152 / 270 | 211% / 268% | 36 / 50.4 | 422% / 536% | 120 / 168 | 127% / 161% |
 | canned_sopa_de_macaco | 6 sopa_de_macaco | 30 / 24 | 48 / 40 | 160% / 167% | 15 / 12 | 320% / 334% | 50 / 40 | 96% / 100% |
 | canned_strider_moss_stew | 6 strider_moss_stew | 48 / 57.6 | 80 / 96 | 167% / 167% | 24 / 28.8 | 333% / 333% | 80 / 96 | 100% / 100% |
 | canned_turnip_beef_stew | 6 turnip_beef_stew | 84 / 126 | 144 / 210 | 171% / 167% | 42 / 63 | 343% / 333% | 140 / 210 | 103% / 100% |
 | canned_vegetable_soup | 6 vegetable_soup | 72 / 115.2 | 120 / 192 | 167% / 167% | 36 / 57.6 | 333% / 333% | 120 / 192 | 100% / 100% |
+
+**golden**
+
+| Can | Basic recipe | Input | Output | In -> out | Additive input | In -> out (additive) | Target | Out vs target |
+|---|---|---|---|---|---|---|---|---|
+| canned_golden_nutritional_bar | 2 golden_nutritional_bar + 1 honey_bottle | 26 / 33.2 | 30 / 40 | 115% / 121% | - | - | 25 / 40 | 120% / 100% |
+| canned_pumpkin_pie | no recipe | n/a | 10 / 24 | n/a | - | - | 15 / 18 | 67% / 133% |
+| canned_golden_carrot | no recipe | n/a | 10 / 24 | n/a | - | - | 15 / 18 | 67% / 133% |
+| canned_golden_apples | no recipe | n/a | 10 / 24 | n/a | - | - | 20 / 12 | 50% / 200% |
+| canned_enchanted_apples | no recipe | n/a | 20 / 320 | n/a | - | - | 40 / 24 | 50% / 1333% |
+| canned_glistering_melon_slice | 2 glistering_melon_slice + 1 honey_bottle | 14 / 20.4 | 10 / 24 | 71% / 118% | - | - | 10 / 24 | 100% / 100% |
+| canned_golden_apple | 2 golden_apple + 1 honey_bottle | 22 / 10.8 | 10 / 24 | 45% / 222% | - | - | 20 / 12 | 50% / 200% |
+| canned_golden_baked_potato | 2 golden_baked_potato + 1 honey_bottle | 26 / 25.2 | 10 / 24 | 38% / 95% | - | - | 25 / 30 | 40% / 80% |
+| canned_golden_beetroot | 2 golden_beetroot + 1 honey_bottle | 10 / 6 | 10 / 24 | 100% / 400% | - | - | 5 / 6 | 200% / 400% |
+| canned_golden_beetroot_soup | 2 golden_beetroot_soup + 1 honey_bottle | 30 / 30 | 10 / 24 | 33% / 80% | - | - | 30 / 36 | 33% / 67% |
+| canned_golden_bread | 2 golden_bread + 1 honey_bottle | 26 / 25.2 | 10 / 24 | 38% / 95% | - | - | 25 / 30 | 40% / 80% |
+| canned_ce_golden_carrot | 2 golden_carrot + 1 honey_bottle | 18 / 15.6 | 10 / 24 | 56% / 154% | - | - | 15 / 18 | 67% / 133% |
+| canned_golden_chorus_fruit | 2 golden_chorus_fruit + 1 honey_bottle | 22 / 10.8 | 10 / 24 | 45% / 222% | - | - | 20 / 12 | 50% / 200% |
+| canned_golden_cooked_beef | 2 golden_cooked_beef + 1 honey_bottle | 38 / 52.4 | 10 / 24 | 26% / 46% | - | - | 40 / 64 | 25% / 38% |
+| canned_golden_cooked_chicken | 2 golden_cooked_chicken + 1 honey_bottle | 30 / 30 | 10 / 24 | 33% / 80% | - | - | 30 / 36 | 33% / 67% |
+| canned_golden_cooked_cod | 2 golden_cooked_cod + 1 honey_bottle | 26 / 25.2 | 10 / 24 | 38% / 95% | - | - | 25 / 30 | 40% / 80% |
+| canned_golden_cooked_mutton | 2 golden_cooked_mutton + 1 honey_bottle | 30 / 39.6 | 10 / 24 | 33% / 61% | - | - | 30 / 48 | 33% / 50% |
+| canned_golden_cooked_porkchop | 2 golden_cooked_porkchop + 1 honey_bottle | 38 / 52.4 | 10 / 24 | 26% / 46% | - | - | 40 / 64 | 25% / 38% |
+| canned_golden_cooked_rabbit | 2 golden_cooked_rabbit + 1 honey_bottle | 26 / 25.2 | 10 / 24 | 38% / 95% | - | - | 25 / 30 | 40% / 80% |
+| canned_golden_cooked_salmon | 2 golden_cooked_salmon + 1 honey_bottle | 30 / 39.6 | 10 / 24 | 33% / 61% | - | - | 30 / 48 | 33% / 50% |
+| canned_golden_cookie | 2 golden_cookie + 1 honey_bottle | 14 / 6 | 10 / 24 | 71% / 400% | - | - | 10 / 6 | 100% / 400% |
+| canned_golden_dried_kelp | 2 golden_dried_kelp + 1 honey_bottle | 10 / 3.6 | 10 / 24 | 100% / 667% | - | - | 5 / 3 | 200% / 800% |
+| canned_golden_glow_berries | 2 golden_glow_berries + 1 honey_bottle | 14 / 2.8 | 10 / 24 | 71% / 857% | - | - | 10 / 2 | 100% / 1200% |
+| canned_golden_honey_bottle | 2 golden_honey_bottle + 1 honey_bottle | 30 / 6 | 10 / 24 | 33% / 400% | - | - | 30 / 6 | 33% / 400% |
+| canned_golden_melon_slice | 2 golden_melon_slice + 1 honey_bottle | 14 / 6 | 10 / 24 | 71% / 400% | - | - | 10 / 6 | 100% / 400% |
+| canned_golden_milk_bucket | 2 golden_milk_bucket + 1 honey_bottle | 14 / 20.4 | 10 / 24 | 71% / 118% | - | - | 10 / 24 | 100% / 100% |
+| canned_golden_moss_clump | 2 golden_moss_clump + 1 honey_bottle | 14 / 10.8 | 10 / 12 | 71% / 111% | - | - | 10 / 12 | 100% / 100% |
+| canned_golden_mushroom_stew | 2 golden_mushroom_stew + 1 honey_bottle | 30 / 30 | 10 / 24 | 33% / 80% | - | - | 30 / 36 | 33% / 67% |
+| canned_golden_pumpkin_pie | 2 golden_pumpkin_pie + 1 honey_bottle | 14 / 20.4 | 10 / 24 | 71% / 118% | - | - | 10 / 24 | 100% / 100% |
+| canned_golden_rabbit_stew | 2 golden_rabbit_stew + 1 honey_bottle | 46 / 49.2 | 10 / 24 | 22% / 49% | - | - | 50 / 60 | 20% / 40% |
+| canned_golden_sweet_berries | 2 golden_sweet_berries + 1 honey_bottle | 14 / 2.8 | 10 / 24 | 71% / 857% | - | - | 10 / 2 | 100% / 1200% |
+| canned_enchanted_golden_apple | 2 enchanted_golden_apple + 1 honey_bottle | 38 / 20.4 | 20 / 320 | 53% / 1569% | - | - | 40 / 24 | 50% / 1333% |
+| canned_enchanted_golden_baked_potato | 2 enchanted_golden_baked_potato + 1 honey_bottle | 46 / 49.2 | 20 / 320 | 43% / 650% | - | - | 50 / 60 | 40% / 533% |
+| canned_enchanted_golden_beetroot | 2 enchanted_golden_beetroot + 1 honey_bottle | 14 / 10.8 | 20 / 320 | 143% / 2963% | - | - | 10 / 12 | 200% / 2667% |
+| canned_enchanted_golden_beetroot_soup | 2 enchanted_golden_beetroot_soup + 1 honey_bottle | 46 / 49.2 | 20 / 320 | 43% / 650% | - | - | 50 / 60 | 40% / 533% |
+| canned_enchanted_golden_bread | 2 enchanted_golden_bread + 1 honey_bottle | 46 / 49.2 | 20 / 320 | 43% / 650% | - | - | 50 / 60 | 40% / 533% |
+| canned_enchanted_golden_carrot | 2 enchanted_golden_carrot + 1 honey_bottle | 30 / 30 | 20 / 320 | 67% / 1067% | - | - | 30 / 36 | 67% / 889% |
+| canned_enchanted_golden_chorus_fruit | 2 enchanted_golden_chorus_fruit + 1 honey_bottle | 38 / 20.4 | 20 / 320 | 53% / 1569% | - | - | 40 / 24 | 50% / 1333% |
+| canned_enchanted_golden_cooked_beef | 2 enchanted_golden_cooked_beef + 1 honey_bottle | 46 / 65.2 | 20 / 320 | 43% / 491% | - | - | 50 / 80 | 40% / 400% |
+| canned_enchanted_golden_cooked_chicken | 2 enchanted_golden_cooked_chicken + 1 honey_bottle | 46 / 49.2 | 20 / 320 | 43% / 650% | - | - | 50 / 60 | 40% / 533% |
+| canned_enchanted_golden_cooked_cod | 2 enchanted_golden_cooked_cod + 1 honey_bottle | 46 / 49.2 | 20 / 320 | 43% / 650% | - | - | 50 / 60 | 40% / 533% |
+| canned_enchanted_golden_cooked_mutton | 2 enchanted_golden_cooked_mutton + 1 honey_bottle | 46 / 65.2 | 20 / 320 | 43% / 491% | - | - | 50 / 80 | 40% / 400% |
+| canned_enchanted_golden_cooked_porkchop | 2 enchanted_golden_cooked_porkchop + 1 honey_bottle | 46 / 65.2 | 20 / 320 | 43% / 491% | - | - | 50 / 80 | 40% / 400% |
+| canned_enchanted_golden_cooked_rabbit | 2 enchanted_golden_cooked_rabbit + 1 honey_bottle | 46 / 49.2 | 20 / 320 | 43% / 650% | - | - | 50 / 60 | 40% / 533% |
+| canned_enchanted_golden_cooked_salmon | 2 enchanted_golden_cooked_salmon + 1 honey_bottle | 46 / 65.2 | 20 / 320 | 43% / 491% | - | - | 50 / 80 | 40% / 400% |
+| canned_enchanted_golden_cookie | 2 enchanted_golden_cookie + 1 honey_bottle | 22 / 10.8 | 20 / 320 | 91% / 2963% | - | - | 20 / 12 | 100% / 2667% |
+| canned_enchanted_golden_dried_kelp | 2 enchanted_golden_dried_kelp + 1 honey_bottle | 14 / 6 | 20 / 320 | 143% / 5333% | - | - | 10 / 6 | 200% / 5333% |
+| canned_enchanted_golden_glow_berries | 2 enchanted_golden_glow_berries + 1 honey_bottle | 22 / 4.4 | 20 / 320 | 91% / 7273% | - | - | 20 / 4 | 100% / 8000% |
+| canned_enchanted_golden_honey_bottle | 2 enchanted_golden_honey_bottle + 1 honey_bottle | 46 / 9.2 | 20 / 320 | 43% / 3478% | - | - | 50 / 10 | 40% / 3200% |
+| canned_enchanted_golden_melon_slice | 2 enchanted_golden_melon_slice + 1 honey_bottle | 22 / 10.8 | 20 / 320 | 91% / 2963% | - | - | 20 / 12 | 100% / 2667% |
+| canned_enchanted_golden_milk_bucket | 2 enchanted_golden_milk_bucket + 1 honey_bottle | 22 / 257.2 | 20 / 320 | 91% / 124% | - | - | 20 / 320 | 100% / 100% |
+| canned_enchanted_golden_moss_clump | 2 enchanted_golden_moss_clump + 1 honey_bottle | 18 / 20.4 | 20 / 24 | 111% / 118% | - | - | 15 / 24 | 133% / 100% |
+| canned_enchanted_golden_mushroom_stew | 2 enchanted_golden_mushroom_stew + 1 honey_bottle | 46 / 49.2 | 20 / 320 | 43% / 650% | - | - | 50 / 60 | 40% / 533% |
+| canned_enchanted_golden_pumpkin_pie | 2 enchanted_golden_pumpkin_pie + 1 honey_bottle | 22 / 257.2 | 20 / 320 | 91% / 124% | - | - | 20 / 320 | 100% / 100% |
+| canned_enchanted_golden_rabbit_stew | 2 enchanted_golden_rabbit_stew + 1 honey_bottle | 46 / 49.2 | 20 / 320 | 43% / 650% | - | - | 50 / 60 | 40% / 533% |
+| canned_enchanted_golden_sweet_berries | 2 enchanted_golden_sweet_berries + 1 honey_bottle | 22 / 4.4 | 20 / 320 | 91% / 7273% | - | - | 20 / 4 | 100% / 8000% |
 
 **bread**
 
@@ -1575,7 +1640,6 @@ Generated by `tools/can_audit.py` from can_types.json (what is built) and the fo
 | canned_cornbread | 6 cornbread | 24 / 24 | 32 / 32 | 133% / 133% | - | - | 32 / 32 | 100% / 100% |
 | canned_garlic_bread | 6 garlic_bread | 30 / 24 | 40 / 32 | 133% / 133% | - | - | 40 / 32 | 100% / 100% |
 | canned_honey_bread | 6 honey_bread | 36 / 57.6 | 48 / 76.8 | 133% / 133% | 31 / 31.2 | 155% / 246% | 48 / 76.8 | 100% / 100% |
-| canned_mhadjeb | 6 mhadjeb | 72 / 115.2 | 96 / 153.6 | 133% / 133% | - | - | 96 / 153.6 | 100% / 100% |
 | canned_mulberry_bread | 6 mulberry_bread | 54 / 43.2 | 72 / 57.6 | 133% / 133% | - | - | 72 / 57.6 | 100% / 100% |
 | canned_nether_wart_sourdough | 6 nether_wart_sourdough | 24 / 9.6 | 32 / 12.8 | 133% / 133% | - | - | 32 / 12.8 | 100% / 100% |
 | canned_sourdough_bread | 6 sourdough_bread | 42 / 84 | 56 / 112 | 133% / 133% | - | - | 56 / 112 | 100% / 100% |
@@ -1605,6 +1669,8 @@ Generated by `tools/can_audit.py` from can_types.json (what is built) and the fo
 | canned_cheese_pasta | 2 cheese_pasta | 18 / 27 | 28 / 40.5 | 156% / 150% | - | - | 27 / 40.5 | 104% / 100% |
 | canned_pad_thai | 2 pad_thai | 24 / 36 | 36 / 54 | 150% / 150% | - | - | 36 / 54 | 100% / 100% |
 | canned_truffle_pasta | 2 truffle_pasta | 24 / 38.4 | 36 / 57.6 | 150% / 150% | - | - | 36 / 57.6 | 100% / 100% |
+| canned_mashed_potatoes | 2 mashed_potatoes | 24 / 38.4 | 36 / 57.6 | 150% / 150% | - | - | 36 / 57.6 | 100% / 100% |
+| canned_mashed_sweet_potatoes | 2 veggiesdelight_mashed_potatoes | 20 / 28 | 32 / 42 | 160% / 150% | - | - | 30 / 42 | 107% / 100% |
 
 **pie**
 
@@ -1673,91 +1739,31 @@ Generated by `tools/can_audit.py` from can_types.json (what is built) and the fo
 |---|---|---|---|---|---|---|---|---|
 | canned_cake | 1 cake | 14 / 2.8 | 16 / 2.8 | 114% / 101% | 8 / 1.6 | 200% / 176% | 14 / 2.8 | 114% / 101% |
 
-**golden**
-
-| Can | Basic recipe | Input | Output | In -> out | Additive input | In -> out (additive) | Target | Out vs target |
-|---|---|---|---|---|---|---|---|---|
-| canned_pumpkin_pie | no recipe | n/a | 10 / 24 | n/a | - | - | 10 / 24 | 100% / 100% |
-| canned_golden_carrot | no recipe | n/a | 10 / 24 | n/a | - | - | 10 / 24 | 100% / 100% |
-| canned_golden_apples | no recipe | n/a | 10 / 24 | n/a | - | - | 10 / 24 | 100% / 100% |
-| canned_enchanted_apples | no recipe | n/a | 20 / 320 | n/a | - | - | 20 / 320 | 100% / 100% |
-| canned_glistering_melon_slice | 2 glistering_melon_slice + 1 honey_bottle | 14 / 20.4 | 10 / 24 | 71% / 118% | - | - | 10 / 24 | 100% / 100% |
-| canned_golden_apple | 2 golden_apple + 1 honey_bottle | 14 / 20.4 | 10 / 24 | 71% / 118% | - | - | 10 / 24 | 100% / 100% |
-| canned_golden_baked_potato | 2 golden_baked_potato + 1 honey_bottle | 14 / 20.4 | 10 / 24 | 71% / 118% | - | - | 10 / 24 | 100% / 100% |
-| canned_golden_beetroot | 2 golden_beetroot + 1 honey_bottle | 14 / 20.4 | 10 / 24 | 71% / 118% | - | - | 10 / 24 | 100% / 100% |
-| canned_golden_beetroot_soup | 2 golden_beetroot_soup + 1 honey_bottle | 14 / 20.4 | 10 / 24 | 71% / 118% | - | - | 10 / 24 | 100% / 100% |
-| canned_golden_bread | 2 golden_bread + 1 honey_bottle | 14 / 20.4 | 10 / 24 | 71% / 118% | - | - | 10 / 24 | 100% / 100% |
-| canned_ce_golden_carrot | 2 golden_carrot + 1 honey_bottle | 14 / 20.4 | 10 / 24 | 71% / 118% | - | - | 10 / 24 | 100% / 100% |
-| canned_golden_chorus_fruit | 2 golden_chorus_fruit + 1 honey_bottle | 14 / 20.4 | 10 / 24 | 71% / 118% | - | - | 10 / 24 | 100% / 100% |
-| canned_golden_cooked_beef | 2 golden_cooked_beef + 1 honey_bottle | 14 / 20.4 | 10 / 24 | 71% / 118% | - | - | 10 / 24 | 100% / 100% |
-| canned_golden_cooked_chicken | 2 golden_cooked_chicken + 1 honey_bottle | 14 / 20.4 | 10 / 24 | 71% / 118% | - | - | 10 / 24 | 100% / 100% |
-| canned_golden_cooked_cod | 2 golden_cooked_cod + 1 honey_bottle | 14 / 20.4 | 10 / 24 | 71% / 118% | - | - | 10 / 24 | 100% / 100% |
-| canned_golden_cooked_mutton | 2 golden_cooked_mutton + 1 honey_bottle | 14 / 20.4 | 10 / 24 | 71% / 118% | - | - | 10 / 24 | 100% / 100% |
-| canned_golden_cooked_porkchop | 2 golden_cooked_porkchop + 1 honey_bottle | 14 / 20.4 | 10 / 24 | 71% / 118% | - | - | 10 / 24 | 100% / 100% |
-| canned_golden_cooked_rabbit | 2 golden_cooked_rabbit + 1 honey_bottle | 14 / 20.4 | 10 / 24 | 71% / 118% | - | - | 10 / 24 | 100% / 100% |
-| canned_golden_cooked_salmon | 2 golden_cooked_salmon + 1 honey_bottle | 14 / 20.4 | 10 / 24 | 71% / 118% | - | - | 10 / 24 | 100% / 100% |
-| canned_golden_cookie | 2 golden_cookie + 1 honey_bottle | 14 / 20.4 | 10 / 24 | 71% / 118% | - | - | 10 / 24 | 100% / 100% |
-| canned_golden_dried_kelp | 2 golden_dried_kelp + 1 honey_bottle | 14 / 20.4 | 10 / 24 | 71% / 118% | - | - | 10 / 24 | 100% / 100% |
-| canned_golden_glow_berries | 2 golden_glow_berries + 1 honey_bottle | 14 / 20.4 | 10 / 24 | 71% / 118% | - | - | 10 / 24 | 100% / 100% |
-| canned_golden_honey_bottle | 2 golden_honey_bottle + 1 honey_bottle | 14 / 20.4 | 10 / 24 | 71% / 118% | - | - | 10 / 24 | 100% / 100% |
-| canned_golden_melon_slice | 2 golden_melon_slice + 1 honey_bottle | 14 / 20.4 | 10 / 24 | 71% / 118% | - | - | 10 / 24 | 100% / 100% |
-| canned_golden_milk_bucket | 2 golden_milk_bucket + 1 honey_bottle | 14 / 20.4 | 10 / 24 | 71% / 118% | - | - | 10 / 24 | 100% / 100% |
-| canned_golden_moss_clump | 2 golden_moss_clump + 1 honey_bottle | 14 / 10.8 | 10 / 12 | 71% / 111% | - | - | 10 / 12 | 100% / 100% |
-| canned_golden_mushroom_stew | 2 golden_mushroom_stew + 1 honey_bottle | 14 / 20.4 | 10 / 24 | 71% / 118% | - | - | 10 / 24 | 100% / 100% |
-| canned_golden_pumpkin_pie | 2 golden_pumpkin_pie + 1 honey_bottle | 14 / 20.4 | 10 / 24 | 71% / 118% | - | - | 10 / 24 | 100% / 100% |
-| canned_golden_rabbit_stew | 2 golden_rabbit_stew + 1 honey_bottle | 14 / 20.4 | 10 / 24 | 71% / 118% | - | - | 10 / 24 | 100% / 100% |
-| canned_golden_sweet_berries | 2 golden_sweet_berries + 1 honey_bottle | 14 / 20.4 | 10 / 24 | 71% / 118% | - | - | 10 / 24 | 100% / 100% |
-| canned_enchanted_golden_apple | 2 enchanted_golden_apple + 1 honey_bottle | 22 / 257.2 | 20 / 320 | 91% / 124% | - | - | 20 / 320 | 100% / 100% |
-| canned_enchanted_golden_baked_potato | 2 enchanted_golden_baked_potato + 1 honey_bottle | 22 / 257.2 | 20 / 320 | 91% / 124% | - | - | 20 / 320 | 100% / 100% |
-| canned_enchanted_golden_beetroot | 2 enchanted_golden_beetroot + 1 honey_bottle | 22 / 257.2 | 20 / 320 | 91% / 124% | - | - | 20 / 320 | 100% / 100% |
-| canned_enchanted_golden_beetroot_soup | 2 enchanted_golden_beetroot_soup + 1 honey_bottle | 22 / 257.2 | 20 / 320 | 91% / 124% | - | - | 20 / 320 | 100% / 100% |
-| canned_enchanted_golden_bread | 2 enchanted_golden_bread + 1 honey_bottle | 22 / 257.2 | 20 / 320 | 91% / 124% | - | - | 20 / 320 | 100% / 100% |
-| canned_enchanted_golden_carrot | 2 enchanted_golden_carrot + 1 honey_bottle | 22 / 257.2 | 20 / 320 | 91% / 124% | - | - | 20 / 320 | 100% / 100% |
-| canned_enchanted_golden_chorus_fruit | 2 enchanted_golden_chorus_fruit + 1 honey_bottle | 22 / 257.2 | 20 / 320 | 91% / 124% | - | - | 20 / 320 | 100% / 100% |
-| canned_enchanted_golden_cooked_beef | 2 enchanted_golden_cooked_beef + 1 honey_bottle | 22 / 257.2 | 20 / 320 | 91% / 124% | - | - | 20 / 320 | 100% / 100% |
-| canned_enchanted_golden_cooked_chicken | 2 enchanted_golden_cooked_chicken + 1 honey_bottle | 22 / 257.2 | 20 / 320 | 91% / 124% | - | - | 20 / 320 | 100% / 100% |
-| canned_enchanted_golden_cooked_cod | 2 enchanted_golden_cooked_cod + 1 honey_bottle | 22 / 257.2 | 20 / 320 | 91% / 124% | - | - | 20 / 320 | 100% / 100% |
-| canned_enchanted_golden_cooked_mutton | 2 enchanted_golden_cooked_mutton + 1 honey_bottle | 22 / 257.2 | 20 / 320 | 91% / 124% | - | - | 20 / 320 | 100% / 100% |
-| canned_enchanted_golden_cooked_porkchop | 2 enchanted_golden_cooked_porkchop + 1 honey_bottle | 22 / 257.2 | 20 / 320 | 91% / 124% | - | - | 20 / 320 | 100% / 100% |
-| canned_enchanted_golden_cooked_rabbit | 2 enchanted_golden_cooked_rabbit + 1 honey_bottle | 22 / 257.2 | 20 / 320 | 91% / 124% | - | - | 20 / 320 | 100% / 100% |
-| canned_enchanted_golden_cooked_salmon | 2 enchanted_golden_cooked_salmon + 1 honey_bottle | 22 / 257.2 | 20 / 320 | 91% / 124% | - | - | 20 / 320 | 100% / 100% |
-| canned_enchanted_golden_cookie | 2 enchanted_golden_cookie + 1 honey_bottle | 22 / 257.2 | 20 / 320 | 91% / 124% | - | - | 20 / 320 | 100% / 100% |
-| canned_enchanted_golden_dried_kelp | 2 enchanted_golden_dried_kelp + 1 honey_bottle | 22 / 257.2 | 20 / 320 | 91% / 124% | - | - | 20 / 320 | 100% / 100% |
-| canned_enchanted_golden_glow_berries | 2 enchanted_golden_glow_berries + 1 honey_bottle | 22 / 257.2 | 20 / 320 | 91% / 124% | - | - | 20 / 320 | 100% / 100% |
-| canned_enchanted_golden_honey_bottle | 2 enchanted_golden_honey_bottle + 1 honey_bottle | 22 / 257.2 | 20 / 320 | 91% / 124% | - | - | 20 / 320 | 100% / 100% |
-| canned_enchanted_golden_melon_slice | 2 enchanted_golden_melon_slice + 1 honey_bottle | 22 / 257.2 | 20 / 320 | 91% / 124% | - | - | 20 / 320 | 100% / 100% |
-| canned_enchanted_golden_milk_bucket | 2 enchanted_golden_milk_bucket + 1 honey_bottle | 22 / 257.2 | 20 / 320 | 91% / 124% | - | - | 20 / 320 | 100% / 100% |
-| canned_enchanted_golden_moss_clump | 2 enchanted_golden_moss_clump + 1 honey_bottle | 18 / 20.4 | 20 / 24 | 111% / 118% | - | - | 15 / 24 | 133% / 100% |
-| canned_enchanted_golden_mushroom_stew | 2 enchanted_golden_mushroom_stew + 1 honey_bottle | 22 / 257.2 | 20 / 320 | 91% / 124% | - | - | 20 / 320 | 100% / 100% |
-| canned_enchanted_golden_pumpkin_pie | 2 enchanted_golden_pumpkin_pie + 1 honey_bottle | 22 / 257.2 | 20 / 320 | 91% / 124% | - | - | 20 / 320 | 100% / 100% |
-| canned_enchanted_golden_rabbit_stew | 2 enchanted_golden_rabbit_stew + 1 honey_bottle | 22 / 257.2 | 20 / 320 | 91% / 124% | - | - | 20 / 320 | 100% / 100% |
-| canned_enchanted_golden_sweet_berries | 2 enchanted_golden_sweet_berries + 1 honey_bottle | 22 / 257.2 | 20 / 320 | 91% / 124% | - | - | 20 / 320 | 100% / 100% |
-
 **salad**
 
 | Can | Basic recipe | Input | Output | In -> out | Additive input | In -> out (additive) | Target | Out vs target |
 |---|---|---|---|---|---|---|---|---|
-| canned_bowl_of_exotic_fruits | 6 bowl_of_exotic_fruits | 66 / 66 | 112 / 110 | 170% / 167% | 56 / 55.4 | 200% / 199% | 110 / 110 | 102% / 100% |
-| canned_broccoli_salad | 6 broccoli_salad | 36 / 43.2 | 64 / 71.9 | 178% / 167% | 31 / 36.4 | 206% / 198% | 60 / 72 | 107% / 100% |
-| canned_cesar_salad | 6 cesar_salad | 60 / 84 | 104 / 140 | 173% / 167% | 51 / 70.4 | 204% / 199% | 100 / 140 | 104% / 100% |
-| canned_chicken_salad | 6 chicken_salad | 36 / 43.2 | 64 / 71.9 | 178% / 167% | 31 / 36.4 | 206% / 198% | 60 / 72 | 107% / 100% |
-| canned_coleslaw | 6 coleslaw | 48 / 57.6 | 80 / 96 | 167% / 167% | 41 / 48.4 | 195% / 198% | 80 / 96 | 100% / 100% |
-| canned_cucumber_salad | 6 cucumber_salad | 48 / 67.2 | 80 / 112 | 167% / 167% | 41 / 56.4 | 195% / 199% | 80 / 112 | 100% / 100% |
-| canned_field_salad | 6 field_salad | 60 / 66 | 104 / 110 | 173% / 167% | 51 / 55.4 | 204% / 199% | 100 / 110 | 104% / 100% |
-| canned_fruit_salad | 6 fruit_salad | 36 / 43.2 | 64 / 71.9 | 178% / 167% | 31 / 36.4 | 206% / 198% | 60 / 72 | 107% / 100% |
-| canned_inky_caps_salad | 6 inky_caps_salad | 48 / 72 | 80 / 120 | 167% / 167% | 41 / 60.4 | 195% / 199% | 80 / 120 | 100% / 100% |
-| canned_lush_moss_salad | 6 lush_moss_salad | 48 / 48 | 80 / 80 | 167% / 167% | 41 / 40.4 | 195% / 198% | 80 / 80 | 100% / 100% |
-| canned_mango_salad | 6 mango_salad | 48 / 57.6 | 80 / 96 | 167% / 167% | 41 / 48.4 | 195% / 198% | 80 / 96 | 100% / 100% |
-| canned_mixed_salad | 6 mixed_salad | 36 / 43.2 | 64 / 71.9 | 178% / 167% | 31 / 36.4 | 206% / 198% | 60 / 72 | 107% / 100% |
-| canned_nether_salad | 6 nether_salad | 30 / 24 | 48 / 40 | 160% / 167% | 26 / 20.4 | 185% / 196% | 50 / 40 | 96% / 100% |
-| canned_turnip_salad | 6 turnip_salad | 36 / 43.2 | 64 / 71.9 | 178% / 167% | 31 / 36.4 | 206% / 198% | 60 / 72 | 107% / 100% |
+| canned_bowl_of_exotic_fruits | 6 bowl_of_exotic_fruits | 66 / 66 | 112 / 110 | 170% / 167% | 55 / 55 | 204% / 200% | 110 / 110 | 102% / 100% |
+| canned_broccoli_salad | 6 broccoli_salad | 36 / 43.2 | 64 / 71.9 | 178% / 167% | 30 / 36 | 213% / 200% | 60 / 72 | 107% / 100% |
+| canned_cesar_salad | 6 cesar_salad | 60 / 84 | 104 / 140 | 173% / 167% | 50 / 70 | 208% / 200% | 100 / 140 | 104% / 100% |
+| canned_chicken_salad | 6 chicken_salad | 36 / 43.2 | 64 / 71.9 | 178% / 167% | 30 / 36 | 213% / 200% | 60 / 72 | 107% / 100% |
+| canned_coleslaw | 6 coleslaw | 72 / 86.4 | 80 / 96 | 111% / 111% | 60 / 72 | 133% / 133% | 120 / 144 | 67% / 67% |
+| canned_cucumber_salad | 6 cucumber_salad | 48 / 67.2 | 80 / 112 | 167% / 167% | 40 / 56 | 200% / 200% | 80 / 112 | 100% / 100% |
+| canned_field_salad | 6 field_salad | 60 / 72 | 104 / 110 | 173% / 153% | 50 / 60 | 208% / 183% | 100 / 120 | 104% / 92% |
+| canned_fruit_salad | 6 fruit_salad | 36 / 43.2 | 64 / 71.9 | 178% / 167% | 30 / 36 | 213% / 200% | 60 / 72 | 107% / 100% |
+| canned_inky_caps_salad | 6 inky_caps_salad | 48 / 72 | 80 / 120 | 167% / 167% | 40 / 60 | 200% / 200% | 80 / 120 | 100% / 100% |
+| canned_lush_moss_salad | 6 lush_moss_salad | 48 / 48 | 80 / 80 | 167% / 167% | 40 / 40 | 200% / 200% | 80 / 80 | 100% / 100% |
+| canned_mango_salad | 6 mango_salad | 48 / 57.6 | 80 / 96 | 167% / 167% | 40 / 48 | 200% / 200% | 80 / 96 | 100% / 100% |
+| canned_mixed_salad | 6 mixed_salad | 36 / 43.2 | 64 / 71.9 | 178% / 167% | 30 / 36 | 213% / 200% | 60 / 72 | 107% / 100% |
+| canned_nether_salad | 6 nether_salad | 30 / 24 | 48 / 40 | 160% / 167% | 25 / 20 | 192% / 200% | 50 / 40 | 96% / 100% |
+| canned_turnip_salad | 6 turnip_salad | 36 / 43.2 | 64 / 71.9 | 178% / 167% | 30 / 36 | 213% / 200% | 60 / 72 | 107% / 100% |
 
 <!-- END CAN AUDIT -->
 
 ## 5. File map
 
 - [development/creativeDelight/src/main/resources/kubejs_startup/creativeengineering/cans.js](../development/creativeDelight/src/main/resources/kubejs_startup/creativeengineering/cans.js): hand-written cans, generated can registration, Canned Goods food overrides
-- [kubejs/data/creative_delight/kubejs/creativeengineering/canning.js](../kubejs/data/creative_delight/kubejs/creativeengineering/canning.js): recipes, section goals, plans for pie/feast/meal/drink/special
+- [kubejs/data/creativedelight/kubejs/creativeengineering/canning.js](../kubejs/data/creativedelight/kubejs/creativeengineering/canning.js): recipes, section goals, plans for pie/feast/meal/drink/special
 - [tools/gen_can_types.py](../tools/gen_can_types.py) -> [can_types.json](../kubejs/generation_scripts/food/can_types.json): generated cans
 - [can_servings.json](../kubejs/generation_scripts/food/can_servings.json): servings per can
 - [food_types.json](../kubejs/generation_scripts/food/food_types.json): food families, `canned` map (can -> sources)
@@ -1798,6 +1804,8 @@ at Canned Goods' beetroot can any more (it was the fallback until 2026-10-21).
   recipe ids.
 
 ## 7. In-game tests
+
+- **r1103 2026-11-03** (scratch server; verdicts in `perf/runs/r1103/` FINAL.md and the slice judged.md): PASS SQ-CNP-01, SQ-VNG-02; FAIL SQ-VNG-01: four Vintage pickling recipes (3 froglights, leather) still take the merged-away `vinegar_bottle` (`kubejs/data/creativedelight/kubejs/vintagedelight/recipes.js` 26, 90; `i.vinegar` in item_dict.js).
 
 - [ ] **CP-01 removed cans gone:** JEI search "Canned Mint", "Canned Acorns", "Canned Grapes", "Canned Mite Crust",
   "Canned Raw Ham" (and chevon, hoglin, kangaroo, moose, bison, bunfungus) -> no results.
@@ -1848,9 +1856,9 @@ at Canned Goods' beetroot can any more (it was the fallback until 2026-10-21).
   + can, or 4 slices + sugar -> 4 fast servings.
 - [ ] **CP-22 removed** (values and recipes: scratch server PASSED 2026-10-22, SQ-OF-03, after the trade fix in 8, 0 of 240 level 2 butcher offers; JEI: in game): Canned Food and the Hot Hot Hotpot are hidden in JEI; a butcher (any level) never offers Canned
   Food; the butcher's other trades are still there.
-- [ ] **CP-23 opened filling:** an opened Canned Apple Pie Filling (2 / 4) + Pie Crust gives no result; a full one gives
+- [ ] **CP-23 opened filling** (CQ-CNP-01): an opened Canned Apple Pie Filling (2 / 4) + Pie Crust gives no result; a full one gives
   an Apple Pie.
-- [ ] **CP-24 manual only:** JEI's Create "Shapeless Mixing" / "Automated Crafting" categories list no `*_pie_manual_only`
+- [ ] **CP-24 manual only** (server half: SQ-CNP-01): JEI's Create "Shapeless Mixing" / "Automated Crafting" categories list no `*_pie_manual_only`
   recipe; filling + crust in a basin under a mixer, in a mechanical crafter, or in an IE Assembler makes nothing. In a
   crafting terminal with the player's inventory (AE2) the recipe works. Canning recipes (empty can + food) still run in
   the mixer.
@@ -1867,7 +1875,7 @@ at Canned Goods' beetroot can any more (it was the fallback until 2026-10-21).
   Sweet Potato + 2 sugar + can in the Cooking Pot -> the filling; full filling + Pie Crust -> Sweet Potato Pie by hand
   and in the oven.
 - [ ] **CP-30 vinegar additive:** JEI on Vinegar Bottle shows a `_vinegar` can recipe for Canned Carrot, Canned Apple,
-  Canned Raw Beef, Canned Raw Cod and Canned Mixed Salad.
+  Canned Raw Beef, Canned Raw Cod and Canned Mixed Salad. Since 2026-11-02 the Vinegar Bottle is merged into the Vinegar Jar: the recipes take the jar (scratch SQ-VNG-01, -02, deep scan 2026-11-02).
 - [ ] **CP-31 Vintage cans (after `/dumpfood` with Vintage loaded, `gen_can_types.py`, restart):** the 16 Vintage cans
   exist; Vintage Kimchi fills Canned Kimchi, Pickle fills Canned Pickled Pickles, Salted Cod and Salted Salmon fill
   Canned Fish and Canned Cooked Salmon.

@@ -1,7 +1,7 @@
 # recipes / wood: implementation brief
 
 Written 2026-10-21 from [TODO](../todo/TODO.md) `# recipes`, Sub `wood`. Feature writeup:
-[recipes_wood.md](../recipes_wood.md) (test prefix `RW-`, last id RW-10). Code: `kubejs/server_scripts/wood/`
+[recipes_wood.md](../recipes_wood.md) (test prefix `RW-`, last id RW-10). Code: `kubejs/data/creativeengineering/kubejs/wood/`
 (`bark.js`, `wood_types.js`, `sawdust.js`, `ash.js`); the IE sawmill side is [engineering.md](../engineering.md) 2.1
 (211 JSONs in patcherMod `data/creativeengineering/recipes/sawmill/`).
 
@@ -51,7 +51,7 @@ Settle F4: make sure twisted logs and wood have exactly one stripping recipe per
 drop the misleading comment.
 
 ### Now
-- [bark.js](../../kubejs/server_scripts/wood/bark.js) 23-28: `compatSpecies` lists twisted with `cutLog` / `cutWood`
+- [bark.js](../../kubejs/data/creativeengineering/kubejs/wood/bark.js) 23-28: `compatSpecies` lists twisted with `cutLog` / `cutWood`
   (Create ids) but no `fdLog` / `fdWood`. Lines 53-57 run the FD removal + `fdCutting` over `species` only (vanilla 9),
   and 64-73 do the Quark trio. Twisted gets its own two lines, 59-62:
   `R.fdCutting(i.log_twisted, R.AXE, [i.log_twisted_stripped, Item.of(i.bark_twisted).withChance(0.50)], e)` and the
@@ -130,13 +130,13 @@ Status Planned / Work KubeJS / TODO `recipes/wood #2` ([recipes_wood.md](../reci
 Clear the F5 comments in `wood_types.js` and `bark.js`, and do the work they point at.
 
 ### Now
-- [wood_types.js](../../kubejs/server_scripts/wood/wood_types.js) 46-52: removes
+- [wood_types.js](../../kubejs/data/creativeengineering/kubejs/wood/wood_types.js) 46-52: removes
   `quarkengineering:sawmill/<name>/<name>_{slab,log,door}` for blossom, ancient and azalea. Line 51 is
   `// (whatever the 4th line is below this)`. **Verified (jar):** Quark Engineering has
   `data/quarkengineering/recipes/sawmill/<name>/<name>_stairs.json` for all three (input `quark:<name>_planks_stairs`,
   result `quark:<name>_planks`, 1600 RF, `quark:flag blossom_trees` etc.), plus `sawmill/bookshelves/<name>_bookshelf`.
   So the 4th line is `_stairs`, matching the IE vanilla `_stairs` removal at 43.
-- [bark.js](../../kubejs/server_scripts/wood/bark.js) 97-98: `// ── Replace FD bark recipes with IW ──` then only
+- [bark.js](../../kubejs/data/creativeengineering/kubejs/wood/bark.js) 97-98: `// ── Replace FD bark recipes with IW ──` then only
   `R.remove({ id: 'farmersdelight:paper_from_tree_bark' }, e)`. Is the replacement done? FD's 18 vanilla log/wood
   cutting recipes are replaced (53-57). Quark Delight's six log/wood recipes and its `hollow_logs` are replaced too
   (64-88). **Verified (jar)** that `farmersdelight:tree_bark` is still made by Abnormals Delight's
@@ -329,7 +329,7 @@ mulberry vines stay. Every recipe that made or used river wood points at oak.
      `m_213888_(RandomSource, boolean)` (`remap = false`, SRG name as the project's other vanilla-method mixins),
      `@Inject(at = @At("RETURN"), cancellable = true)` returning a lazily built `Holder.direct(new ConfiguredFeature<>(
      UAFeatures.RIVER_TREE.get(), <RIVER_TREE_CONFIG with BlockStateProvider.simple(Blocks.OAK_LOG)>))`. Needs the UA
-     jar in `development/patcherMod/libs/` (copied from `mods/`). The mixin has no level to read the registry from,
+     jar in `development/creativeCommon/libs/` (copied from `mods/`). The mixin has no level to read the registry from,
      so it duplicates the tree shape in Java.
    Gate either behind a CEConfig switch, e.g. `[worldgen.systems] riverTreeOak = true`, so it can be turned off
    without a build. Add it to `creativeengineering.mixins.json` (mixin route only).
@@ -396,10 +396,10 @@ Status: Planned / Work: KubeJS / TODO `recipes/wood #4` ([recipes_wood.md](../re
 New leather fermenting recipes: any tree bark ferments into leather.
 
 ### Now
-- Bark: every species' bark comes from stripping ([bark.js](../../kubejs/server_scripts/wood/bark.js)); the dict key
+- Bark: every species' bark comes from stripping ([bark.js](../../kubejs/data/creativeengineering/kubejs/wood/bark.js)); the dict key
   `i.any_bark` = `#immersive_weathering:bark` (item_dict 585; that the tag holds every species' bark and the Upgrade
   Aquatic driftwood bark is *unverified*).
-- Leather today: prepared flesh smoked ([mob_resources.js](../../kubejs/server_scripts/engineering/mob_resources.js) lines
+- Leather today: prepared flesh smoked ([mob_resources.js](../../kubejs/data/creativeengineering/kubejs/engineering/mob_resources.js) lines
   31-32), Ersatz leather from hemp fabric and honeycomb; `i.leather`.
 - Fermenting helpers: `R.vdPickling` (Vintage Pickling Jar, no heat, no fluid, default 2400 ticks) and `R.bncFermenting`
   (Brewin' keg, needs a base fluid, used in alcohol.js line 28 with `i.any_bark`).

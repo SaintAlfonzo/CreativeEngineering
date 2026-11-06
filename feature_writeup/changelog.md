@@ -7,11 +7,11 @@ checks pass; the owner has used the button in game (CL-13 found 2026-10-27, fixe
 
 | Part | Status | Where it will live |
 |---|---|---|
-| Changelog source files (one Markdown file per version, plus the working list) | BUILT | `kubejs/assets/creativeengineering/changelog/` (`1.1.01.md` to `1.1.04.md` frozen, `unreleased.md` working list) |
+| Changelog source files (one Markdown file per version, plus the working list) | BUILT | `kubejs/assets/creativecommon/changelog/` (`1.1.01.md` to `1.1.04.md` frozen, `unreleased.md` working list) |
 | Book button on the title screen and the pause menu, with an update popup | BUILT | patcherMod `changelog/ChangelogButtons.java` (`ScreenEvent.Init.Post`, `ScreenEvent.Render.Post`) |
 | Changelog screen (version list left, scrolling text right, Forge Mods-screen layout) | BUILT | patcherMod `changelog/ChangelogScreen.java`, `ChangelogPanel.java` |
 | Markdown -> vanilla text (commonmark-java 0.21.0, relocated into the jar) | BUILT | patcherMod `changelog/ChangelogMarkdown.java` |
-| Version list + read marker (newest version the player has opened) | BUILT | `changelog/ChangelogStore.java`; `config/creativeengineering/changelog_seen.txt` (player config, git-ignored) |
+| Version list + read marker (newest version the player has opened) | BUILT | `changelog/ChangelogStore.java`; `config/creativecommon/changelog_seen.txt` (player config, git-ignored) |
 | Deploy integration (ship `unreleased.md` as `<version>.md`, rename on snapshot, deployed files frozen, lint) | BUILT | `tools/build_deploy.py` (`check_changelog`, `freeze_changelog`), `tools/changelog_lint.py` |
 | Writing rules for entries | DESIGN | section 3.6 of this file |
 | 1.1.01 changelog (every change since 1.0.9) | DEPLOYED 2026-10-22, frozen as `changelog/1.1.01.md`. 1.1.02 deployed 2026-10-23, frozen as `changelog/1.1.02.md`; `unreleased.md` now holds the 1.1.03 working list. Written 2026-10-21, audited 2026-10-22 (section 8) | `unreleased.md`: one bullet per player-visible change in 9 families, kept true as work lands (re-synced 2026-10-22 against the working tree); lint 0 errors, length warnings only (the lint counts sub-bullets into the 300, every single bullet and sub-bullet is under it). Same-behaviour ports (tier 1, Glowing Illagers, Comfortable Campfires, Bottled Air, Fast Leaf Decay's cascade) have no bullet |
@@ -104,7 +104,7 @@ Drink food values, wine aging, hunger bars in food screens.
 ### 3.1 Source files
 
 ```
-kubejs/assets/creativeengineering/changelog/
+kubejs/assets/creativecommon/changelog/
   unreleased.md     the working list (dev only, never shipped under this name)
   1.1.01.md         one file per released version, frozen once deployed
   1.0.9.md          historic (brief), added with 1.1.01
@@ -220,7 +220,7 @@ deployed date from the log. 1.0.5 was never deployed (folded into 1.0.6), so it 
 
 ### 3.7 Code layout (planned)
 
-`development/patcherMod/src/main/java/com/SaintAlfonzo/creativeengineering/changelog/`:
+`development/patcherMod/src/main/java/com/SaintAlfonzo/creativecommon/changelog/`:
 
 | Class | Job |
 |---|---|
@@ -270,8 +270,8 @@ is not run in dev.
 
 ## 5. File map
 
-- [../kubejs/assets/creativeengineering/changelog/](../kubejs/assets/creativeengineering/changelog/)
-- [../development/patcherMod/src/main/java/com/SaintAlfonzo/creativeengineering/changelog/](../development/patcherMod/src/main/java/com/SaintAlfonzo/creativeengineering/changelog/)
+- [../kubejs/assets/creativecommon/changelog/](../kubejs/assets/creativecommon/changelog/)
+- [../development/patcherMod/src/main/java/com/SaintAlfonzo/creativecommon/changelog/](../development/patcherMod/src/main/java/com/SaintAlfonzo/creativecommon/changelog/)
 - [../development/patcherMod/build.gradle](../development/patcherMod/build.gradle) (`shade`, `relocateCommonmark`), [../development/patcherMod/NOTICE-commonmark.txt](../development/patcherMod/NOTICE-commonmark.txt)
 - [../tools/build_deploy.py](../tools/build_deploy.py) (`KUBEJS_CLASSES`, `CONFIG_CLASSES`, `check_changelog`, `freeze_changelog`)
 - [../tools/changelog_lint.py](../tools/changelog_lint.py)
@@ -322,7 +322,7 @@ NOTICE, and the MC overrides reobfuscated (`m_6303_`, `m_5646_`, ...).
   2026-10-21: Done in 10.8 s, `[changelog]` written to the toml, no log line from the changelog classes. Two more
   `PoseStack ... invalid dist` lines than a boot with the previous 1.1.01 dev jar (19 vs 17), both in the KubeJS load
   phase like the rest, not traced (that jar also lacks other uncommitted changes); worth a look on the real server.
-- [ ] **CL-12 fresh install:** delete `config/creativeengineering/changelog_seen.txt` → the bubble shows once.
+- [ ] **CL-12 fresh install:** delete `config/creativecommon/changelog_seen.txt` → the bubble shows once.
 - [ ] **CL-13 tooltip not covered:** with the bubble showing, hover or Tab-focus the book button → the bubble hides
   and the "What's New" tooltip is fully visible; it returns when the button loses hover and focus.
 

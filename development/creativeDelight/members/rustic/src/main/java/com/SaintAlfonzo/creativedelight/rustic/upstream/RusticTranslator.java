@@ -24,8 +24,17 @@ import java.util.function.UnaryOperator;
  * to upstream data goes through this class, never through a file at an upstream path.
  */
 public final class RusticTranslator {
-    /** Upstream ids the port does not register (owner 2026-10-25: Fruit Beignet removed from the pack). */
-    public static final Set<String> REMOVED = Set.of("fruit_beignet");
+    /**
+     * Upstream ids the port does not register: Fruit Beignet (owner 2026-10-25), the plain single Pancake and Fried Dough
+     * (owner 2026-11-01, TODO creativedelight/members #15, #25). Data naming one is dropped, after {@link #REPLACED}.
+     */
+    public static final Set<String> REMOVED = Set.of("fruit_beignet", "pancake", "fried_dough");
+    /**
+     * Removed ids whose place another mod's item takes in upstream data: the plain plate's recipes, cut and loot use
+     * Supplementaries' pancake (owner 2026-11-01, TODO creativedelight/members #15). A data file naming the other mod's
+     * item is still dropped when that mod is absent ({@link #missingRecipeId}).
+     */
+    public static final Map<String, String> REPLACED = Map.of("pancake", "supplementaries:pancake");
     /**
      * Whole upstream folders the pack does not use: advancements (the pack drops them all), the biome modifiers (the
      * pack places every wild plant through Creative Delight's wild_crops.json), the chest seed and bean swaps (the pack's loot scripts own
@@ -117,7 +126,7 @@ public final class RusticTranslator {
                 return null;
             }
         }
-        String text = new String(bytes, StandardCharsets.UTF_8);
+        String text = withReplacedIds(new String(bytes, StandardCharsets.UTF_8));
         if (mentionsRemoved(text) && !path.contains("/tags/")) {
             return null;
         }
@@ -325,6 +334,13 @@ public final class RusticTranslator {
     private static boolean namesRemoved(String path) {
         String file = path.substring(path.lastIndexOf('/') + 1);
         return REMOVED.stream().anyMatch(id -> file.equals(id + ".json") || file.equals(id + ".png") || file.equals(id + ".png.mcmeta"));
+    }
+
+    private static String withReplacedIds(String text) {
+        for (Entry<String, String> entry : REPLACED.entrySet()) {
+            text = text.replace("\"" + RusticDelightMod.MODID + ":" + entry.getKey() + "\"", "\"" + entry.getValue() + "\"");
+        }
+        return text;
     }
 
     private static boolean mentionsRemoved(String text) {

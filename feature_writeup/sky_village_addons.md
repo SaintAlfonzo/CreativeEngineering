@@ -1,6 +1,6 @@
 # Sky Village addon houses (Farmer's Delight, Vinery, Brewery)
 
-Status: BUILT 2026-10-30 (templates, pools, swap table; data only, `/reload` is not enough for new worldgen pieces: restart). Scratch server load and placement PASSED r1031 (2026-10-31); placement in villages, loot and in-game looks open (section 4). TODO row `skyvillages #1`. Test prefix `SVA-`.
+Status: BUILT 2026-10-30 (templates, pools, swap table; data only, `/reload` is not enough for new worldgen pieces: restart). Scratch server load and placement PASSED r1031 (2026-10-31), hanging herbs (SQ-SVA-05) PASSED r1101; placement in villages (SQ-SVA-03), loot (SQ-SVA-04) and in-game looks open (section 4). TODO row `skyvillages #1`. Test prefix `SVA-`.
 
 Goal: the Sky Villages addon houses spawn in the pack's existing sky villages (`skyvillages:skyvillage`), built from
 blocks the pack has, with no new structure, structure set or biome change.
@@ -184,7 +184,7 @@ The block has no survival rule, so nothing breaks.
    `skyvillage_houses.json` and the Brewery deco to `skyvillage_deco.json` at the D2 weights.
 4. **Pack systems that list sky village templates:**
    - Village farm crops: add the 3 FD farms and the Vinery houses as `"auto"` in
-     `development/creativeDelight/src/main/resources/creative_delight/village_farms.json` only if they hold vanilla
+     `development/creativeDelight/src/main/resources/creativedelight/village_farms.json` only if they hold vanilla
      crops (the swap rolls vanilla crop fields only); needs a CD rebuild.
    - Loot: no new tables. Rerun the loot generators with `/cegen` after `/dumpall` (`template_loot` cache,
      `loot_breakdown`, `audit_loot_containers`, `lootr_fixed_containers`) so the counts include the new houses.
@@ -196,7 +196,7 @@ The block has no survival rule, so nothing breaks.
 ## 4. Tests
 
 SVA-01 PASSED offline 2026-10-30 (3.1). Scratch server r1031 (2026-10-31): SQ-SVA-01 (SVA-02) and SQ-SVA-02 (all 17
-templates place, block entities present) PASSED; SQ-SVA-03 (SVA-06) and SQ-SVA-04 (SVA-07) not run (deferred). Queue:
+templates place, block entities present) PASSED; SQ-SVA-03 (SVA-06) and SQ-SVA-04 (SVA-07) not run (deferred). r1101 (2026-11-01, deep scan 2026-11-02): SQ-SVA-05 (SVA-08) PASS; SQ-SVA-03 ran to LOOK (the first village counted no addon blocks; the night fly-through could not make the houses out), SQ-SVA-04 and CQ-SVA were batch faults (the client fell and faced away): all three open, rerun by daylight at the r1101 positions (scratch_run_2026-11-01.md 3); the client half is queue row CQ-SVA-01 (deep scan 2026-11-02; was a batch block only). Queue:
 [scratch_queue.md](testing/scratch_queue.md); the looks need the user in game.
 
 | ID | Check |

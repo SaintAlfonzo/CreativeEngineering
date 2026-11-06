@@ -126,7 +126,7 @@ Botania's Trinket Case (`botania:bauble_box`) accepts any item, not just trinket
   Botania. So: mixin.
 - `BaubleBoxItem.SIZE = 24`. The case drops its contents when the item entity is destroyed (`onDestroyed`).
 - patcherMod mixins against mod classes: `creativeengineering.mixins.json` (package `...creativeengineering.mixin`,
-  e.g. `QuarkSortingHandlerMixin`), mod jars on the compile classpath from `development/patcherMod/libs/` (copied from
+  e.g. `QuarkSortingHandlerMixin`), mod jars on the compile classpath from `development/creativeCommon/libs/` (copied from
   `mods/`, git-ignored, build.gradle 17). No refmap: vanilla members by SRG name with `remap = false`.
 
 ### Build
@@ -188,9 +188,9 @@ A magic counterpart to the pack's metal components ([engineering.md](../engineer
 made from magic materials. They gate magic-side recipes the way the metal components gate machines.
 
 ### Now
-- Metal components: 13 KubeJS items in [items/components.js](../../kubejs/startup_scripts/items/components.js) 2-14
+- Metal components: 13 KubeJS items in [items/components.js](../../development/creativeEngineering/src/main/resources/kubejs_startup/creativeengineering/items/components.js) 2-14
   (`creativeengineering:component_<metal>`, names "<Metal> <Kind> Component") plus IE's iron and steel. Recipes in
-  [engineering/components.js](../../kubejs/server_scripts/engineering/components.js): crafting `P P / _C_ / P P`
+  [engineering/components.js](../../kubejs/data/creativeengineering/kubejs/engineering/components.js): crafting `P P / _C_ / P P`
   (35-51), sequenced assembly with `R.incomplete('component_<m>')` (54-70; transition items in
   `startup_scripts/changes/transition_items.js` 128-131), Engineer's Workbench blueprint `components` (73-...),
   disassembly. Textures `kubejs/assets/creativeengineering/textures/item/component_<m>.png` + models. Tag

@@ -21,7 +21,7 @@ Open rows: #1, #12, #16, #17, #18, #19 (Planned), #4 (Bug), #3, #6, #8, #9, #13 
 - Food code lives in Creative Delight (memory `creative-delight-routing`): cans.js, food_value_copies.js,
   comfort_nourishment.js and cultures.js are CD startup scripts
   (`development/creativeDelight/src/main/resources/kubejs_startup/creativeengineering/`), recipes are CD server scripts
-  by mod (`kubejs/data/creative_delight/kubejs/<mod>/`). The pack's `startup_scripts/cooking/food_values.js` keeps
+  by mod (`kubejs/data/creativedelight/kubejs/<mod>/`). The pack's `startup_scripts/cooking/food_values.js` keeps
   only effect swaps; `alcohol_drinks.js` stays in the pack until Creative Brewing takes it.
 - **Comfort and Nourishment have an owner:** CD `comfort_nourishment.js` (priority -100, runs after every other food
   rebuild) sets them from `generation_scripts/food/comfort_nourishment.json` (row #15). Any value writer here must
@@ -168,8 +168,8 @@ Recipes that still take `minecraft:egg` as an item (dump, IE recipes and 7 unrea
 
 | Recipe id | Type | Where | Change |
 |---|---|---|---|
-| `creative_delight:smelting/egg_to_fried_egg_by_smelting`, `smoking/...`, `campfirecooking/...` | furnace / smoker / campfire | CD [farmersdelight/recipes.js](../../kubejs/data/creative_delight/kubejs/farmersdelight/recipes.js) lines 367-369, input `i.minecraft_egg` | edit to `i.eggs` |
-| `creativeengineering:shaped/quiche_manual_only` | crafting shaped | CD [brewinandchewin/recipes.js](../../kubejs/data/creative_delight/kubejs/brewinandchewin/recipes.js) line 62, key `e: i.minecraft_egg` (its assembly twin already deploys `i.eggs`, lines 69-70) | edit to `i.eggs` |
+| `creativedelight:smelting/egg_to_fried_egg_by_smelting`, `smoking/...`, `campfirecooking/...` | furnace / smoker / campfire | CD [farmersdelight/recipes.js](../../kubejs/data/creativedelight/kubejs/farmersdelight/recipes.js) lines 367-369, input `i.minecraft_egg` | edit to `i.eggs` |
+| `creativeengineering:shaped/quiche_manual_only` | crafting shaped | CD [brewinandchewin/recipes.js](../../kubejs/data/creativedelight/kubejs/brewinandchewin/recipes.js) line 62, key `e: i.minecraft_egg` (its assembly twin already deploys `i.eggs`, lines 69-70) | edit to `i.eggs` |
 | `rusticdelight:fried_egg_from_cooking_oil` (+ `sliceanddice:cooking/rusticdelight/...` copy) | `farmersdelight:cooking` | Rustic Delight jar | replaceInput (the Slice & Dice copy follows) |
 | `create_factory:cake_paste` | `create:mixing` | Create: Factory jar | replaceInput |
 | `create_deep_dark:compacting_echo_cake_base` | `create:compacting` | Create Deep Dark jar | replaceInput |
@@ -182,7 +182,7 @@ Recipes that still take `minecraft:egg` as an item (dump, IE recipes and 7 unrea
 1. CD farmersdelight/recipes.js 367-369 and brewinandchewin/recipes.js 62: `i.minecraft_egg` -> `i.eggs`.
    **Edit the source, don't replaceInput:** `NCH.replaceInput` (neoCraftHelper.js 635) walks only data-loaded
    recipes unless `includeAdded`, and these are script-added.
-2. Mod recipes, in the CD tree of each mod (`kubejs/data/creative_delight/kubejs/<mod>/recipes.js`, as fruitsdelight
+2. Mod recipes, in the CD tree of each mod (`kubejs/data/creativedelight/kubejs/<mod>/recipes.js`, as fruitsdelight
    does): `R.replaceInput({ id: '<id>' }, i.minecraft_egg, i.eggs, e)` for the Rustic, Create Factory, Create Deep
    Dark and Hostile Delight ids. If several share a file, `R.bulk('replaceInput', [...])` (neoCraftHelper.js 760).
 3. Pickled egg: per the decision, a replaceInput in CD `vintagedelight/recipes.js` (the port is ours, so a data edit
@@ -221,7 +221,7 @@ Status **In Progress** / Work KubeJS / `food/types-and-tuning #9`
 The 7 cultures are (poor) food; the Cooking Pot grows them less efficiently than the mixer.
 
 ### Done
-- Recipes ([cultivated_meat.js](../../kubejs/data/creative_delight/kubejs/creativeengineering/cultivated_meat.js), CD,
+- Recipes ([cultivated_meat.js](../../kubejs/data/creativedelight/kubejs/creativeengineering/cultivated_meat.js), CD,
   85 lines): syringe; syringe + culture base + slime -> 1 culture (29-35); heated mixing 1 culture + 250 mB diluted
   bonemeal + 250 mB plant oil -> 3 (37-43); cutting board -> raw meat / fish slices (57 on); blocks 9 <-> 1.
 - 2026-10-27: Cooking Pot route, culture + bone meal + cooking oil -> **3** (lines 45-54, `<animal>_culture_cooking`,
@@ -269,7 +269,7 @@ type entry.
 ### Now
 - Design: food.md 3.5 (one config, startup apply, server SoL map, starting bands per type, canned parity rule).
   Decisions D1 to D6 (4.3) are open.
-- Pieces that exist: types and tags (CD `kubejs/data/creative_delight/kubejs/creativeengineering/food_type_tags.js`;
+- Pieces that exist: types and tags (CD `kubejs/data/creativedelight/kubejs/creativeengineering/food_type_tags.js`;
   families and their tags, row #13), `tools/food_catalog.py` (classifier, `--check`, catalog,
   `kubejs/exported/food/catalog.json` per food with values, effects, code effects, SoL now and by formula), three
   value writers already at startup: CD cans.js (generated cans + the Canned Goods overrides, `ceCanFood` sets flags
@@ -333,7 +333,7 @@ type entry.
    `('generation_scripts/food/food_tuning.json', 'runtime')`, or the deploy preflight fails.
 
 **C. Spice of Life values (server):**
-7. CD `kubejs/data/creative_delight/kubejs/solapplepie/sol_complexity.js` (server):
+7. CD `kubejs/data/creativedelight/kubejs/solapplepie/sol_complexity.js` (server):
    ```js
    var SOL = { CH: Java.loadClass('com.tarinoita.solsweetpotato.ConfigHandler'),
                FI: Java.loadClass('com.tarinoita.solsweetpotato.tracking.FoodInstance') }
@@ -609,7 +609,7 @@ Storage crates for more golden foods, like Quark's golden apple and golden carro
 1. Pick the foods (decision). For each, a block `creativeengineering:golden_<food>_crate` in a new CD startup script
    `kubejs_startup/goldenfood/golden_crates.js` (dict keys `i.golden_<food>_crate`), wood material, axe tag, a
    texture from Quark's golden crate with the food's sprite (textureswapper).
-2. Recipes in CD `kubejs/data/creative_delight/kubejs/goldenfood/crates.js`: `R.shaped` 9 -> crate and `R.shapeless`
+2. Recipes in CD `kubejs/data/creativedelight/kubejs/goldenfood/crates.js`: `R.shaped` 9 -> crate and `R.shapeless`
    crate -> 9 (`global.NCH`), plus the storage-block tags with `global.tags`.
 3. Stack 64; no compost, no loot.
 

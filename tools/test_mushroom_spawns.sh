@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 # Offline checks for the mushroom spawn system (feature_writeup/fungi_delight.md section 5.1.1):
 #   1. generator: tools/gen_crop_worldgen_table.py runs with no config problems (it evaluates mushroom_spawns.json too)
-#   2. Rhino: kubejs/server_scripts/worldgen/mushroom_spawns.js (+ _biome_rules.js) in the pack's Rhino fork; every
+#   2. Rhino: kubejs/data/creativeworldgen/kubejs/worldgen/mushroom_spawns.js (+ _biome_rules.js) in the pack's Rhino fork; every
 #      rule tag must equal the generator's resolved list (cave rules include ocean and cave biomes), one add modifier
 #      per rule at its mode's step, forge:none for every disable_modifiers id, no remove modifier; the brown/red
 #      colonies are no longer wild_crops.json rules

@@ -1,0 +1,7 @@
+
+[chopsticks]
+	#Duration multiplier for the effects a food gives when eaten from the off hand with chopsticks in the main hand
+	#(or from a roll medley with chopsticks). Instant and ambient effects are left alone; the amplifier never changes.
+	#Range: 1.0 ~ 10.0
+	lengthenFactor = 1.5
+
