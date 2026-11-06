@@ -1,0 +1,9 @@
+
+[copper_pot]
+	#Port setting: keep the ingredients' leftover containers (empty buckets, bottles, bowls) in a take-only
+	#leftover slot right of the output instead of throwing them out of the pot. The bottom face extracts it.
+	remainderBuffer = true
+	#Port setting: with remainderBuffer on, should the pot wait instead of cooking when a meal's leftovers would
+	#not fit in the leftover slot? False cooks anyway and throws what does not fit.
+	stallWhenFull = true
+

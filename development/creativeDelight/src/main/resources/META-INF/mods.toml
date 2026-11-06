@@ -1,5 +1,5 @@
-# Creative Delight: manifest mod id only (no registry content). The members are nested jars, each with its own
-# mods.toml (META-INF/jarjar/metadata.json). creative_delight.md 0.3, 10.1, 14.2.
+# Creative Delight: its own content (kitchen and food Java, the Cooking for Blockheads and Incubation compartments) plus
+# the members, nested jars each with its own mods.toml (META-INF/jarjar/metadata.json). creative_delight.md 0.3, 10.1, 14.2.
 modLoader="javafml"
 loaderVersion="${loader_version_range}"
 license="${mod_license}"
@@ -10,13 +10,13 @@ displayName="${mod_name}"
 authors="${mod_authors}"
 description='''${mod_description}'''
 
-[[dependencies.creative_delight]]
+[[dependencies.creativedelight]]
 modId="forge"
 mandatory=true
 versionRange="${forge_version_range}"
 ordering="NONE"
 side="BOTH"
-[[dependencies.creative_delight]]
+[[dependencies.creativedelight]]
 modId="minecraft"
 mandatory=true
 versionRange="${minecraft_version_range}"
@@ -24,16 +24,72 @@ ordering="NONE"
 side="BOTH"
 # patcherMod: supplies KubeJS (it requires it), the shared helpers (global.NCH, global.tags, global.compost) and the
 # startup script loader. Not a standalone Delight bundle (Q23). CreativeDelight logs an error at boot when the
-# installed patcherMod has no loader.
-[[dependencies.creative_delight]]
-modId="creativeengineering"
+# installed patcherMod has no loader. 1.1.07: the kitchen Java moved here at the CD carve calls Common's
+# compat.RemainderView and swap.ConfigRename.mergeSections (creative_delight.md 34).
+[[dependencies.creativedelight]]
+modId="creativecommon"
 mandatory=true
-versionRange="[1.1.03,)"
+versionRange="[1.1.0,)"
 ordering="AFTER"
 side="BOTH"
-[[dependencies.creative_delight]]
+# Creative Compat: required by every other Creative jar (creative_split.md 7.6).
+[[dependencies.creativedelight]]
+modId="creativecompat"
+mandatory=true
+versionRange="[1.0.0,)"
+ordering="AFTER"
+side="BOTH"
+# Creative Calendar: seasons, season types and crop seasons the CD crops grow by (feature_writeup/creative_calendar.md).
+# AFTER so its startup script pack (global.CAL) runs before CD's.
+[[dependencies.creativedelight]]
+modId="creativecalendar"
+mandatory=true
+versionRange="[1.0.0,)"
+ordering="AFTER"
+side="BOTH"
+[[dependencies.creativedelight]]
 modId="farmersdelight"
 mandatory=true
 versionRange="[1.19.2-1.2.4,)"
+ordering="AFTER"
+side="BOTH"
+
+# The optional compartments folded in from the blockheadsAdditions and incubationAdditions members at M8
+# (plan_cb_publish.md 3b): each only loads with its mods (compat/Compartments). AFTER so their registries and
+# block entity types exist when CD's compartments touch them.
+[[dependencies.creativedelight]]
+modId="cookingforblockheads"
+mandatory=false
+versionRange="[13.3,)"
+ordering="AFTER"
+side="BOTH"
+
+[[dependencies.creativedelight]]
+modId="balm"
+mandatory=false
+versionRange="[4.6,)"
+ordering="AFTER"
+side="BOTH"
+
+[[dependencies.creativedelight]]
+modId="incubation"
+mandatory=false
+versionRange="[3.0,)"
+ordering="AFTER"
+side="BOTH"
+
+# The Incubation compartment's bird mods (as the incubation_additions member had them): emu nest with Alex's Mobs, duck
+# and goose nests and crates with Untitled Duck Mod.
+[[dependencies.creativedelight]]
+modId="alexsmobs"
+mandatory=false
+versionRange="[1.21,)"
+ordering="AFTER"
+side="BOTH"
+
+[[dependencies.creativedelight]]
+modId="untitledduckmod"
+mandatory=false
+versionRange="[0.6,)"
 ordering="AFTER"
 side="BOTH"

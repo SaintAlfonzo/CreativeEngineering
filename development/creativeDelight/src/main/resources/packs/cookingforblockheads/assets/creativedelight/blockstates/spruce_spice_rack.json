@@ -1,0 +1,19 @@
+{
+  "variants": {
+    "facing=north": {
+      "model": "creativedelight:block/spruce_spice_rack"
+    },
+    "facing=east": {
+      "model": "creativedelight:block/spruce_spice_rack",
+      "y": 90
+    },
+    "facing=south": {
+      "model": "creativedelight:block/spruce_spice_rack",
+      "y": 180
+    },
+    "facing=west": {
+      "model": "creativedelight:block/spruce_spice_rack",
+      "y": 270
+    }
+  }
+}

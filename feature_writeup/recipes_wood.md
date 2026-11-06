@@ -1,6 +1,6 @@
 # Wood recipes: bark from stripping, sawdust, ash, mulch soils, saw shapes, soot
 
-Part of backlog row 20 (recipe progression), split per folder. This one covers `kubejs/server_scripts/wood/`. The IE
+Part of backlog row 20 (recipe progression), split per folder. This one covers `kubejs/data/creativeengineering/kubejs/wood/`. The IE
 Sawmill's per-blade recipes (which replace IE's own log and plank sawmill recipes) are in
 [engineering.md](engineering.md) 2.1; the composter table in [composting.md](composting.md).
 
@@ -13,7 +13,7 @@ Sawmill's per-blade recipes (which replace IE's own log and plank sawmill recipe
 | Compost, fertile soil and nulch from mulches and bark | DEPLOYED |
 | Create saw: planks → every wood shape for 13 species; IE sawmill door and stair recipes removed | DEPLOYED |
 | Soot from Sooty Chimneys scraping (75 % / 50 %); torches ×12 from animal fat | DEPLOYED |
-| Removed woods: Upgrade Aquatic's river wood merged into oak; its tree is the Mulberry tree (oak trunk, mulberry leaves and vines) | BUILT 2026-10-22 (KubeJS + datapack; patcherMod `MulberrySapling` in the `mods/` jar of 11:06, md5 b5f60533, and the newer `build/libs` one; not in `server_mods/`); shipped in 1.1.01 (2026-10-22); scratch server PASSED 2026-10-22 (SQ-MB-00 to SQ-MB-04, second bulk run); RW-15, RW-16, RW-18 to RW-20 in game |
+| Removed woods: Upgrade Aquatic's river wood merged into oak; its tree is the Mulberry tree (oak trunk, mulberry leaves and vines); Quark azalea wood merged into oak, azalea tree back to an oak trunk (2026-11-02, RW-29) | BUILT 2026-10-22 (KubeJS + datapack; patcherMod `MulberrySapling` in the `mods/` jar of 11:06, md5 b5f60533, and the newer `build/libs` one; not in `server_mods/`); shipped in 1.1.01 (2026-10-22); scratch server PASSED 2026-10-22 (SQ-MB-00 to SQ-MB-04, second bulk run); RW-15, RW-16, RW-18 to RW-20 in game |
 
 - **Pending:** smoked wood (RW-23 to RW-26) and bark leather (RW-27), built 2026-10-30. Scratch r1031 (2026-10-31):
   SQ-RW-23 FAILED: the `#creativeengineering:smokable/*` shape tags included Botania, driftwood, crimson and warped.
@@ -22,8 +22,8 @@ Sawmill's per-blade recipes (which replace IE's own log and plank sawmill recipe
   SQ-RW-23 to rerun; SQ-RW-25,
   -26, -27 PASSED; SQ-RW-24 (filling fluid amounts) client check pending. D&D woods removed: SQ-RW-28 PASSED. Removed woods (2.6) shipped in 1.1.01; scratch server PASSED 2026-10-22 (SQ-MB, `tools/farm_worldgen_probe.js`); RW-15, RW-16, RW-18 to RW-20 in game. RW-01 to RW-10 have never been run. Findings F1 to F6 (section 4); none needs
   a decision, F1 is a bug.
-- **Files to open:** [bark.js](../kubejs/server_scripts/wood/bark.js), [sawdust.js](../kubejs/server_scripts/wood/sawdust.js),
-  [wood_types.js](../kubejs/server_scripts/wood/wood_types.js), [ash.js](../kubejs/server_scripts/wood/ash.js),
+- **Files to open:** [bark.js](../kubejs/data/creativeengineering/kubejs/wood/bark.js), [sawdust.js](../kubejs/data/creativeengineering/kubejs/wood/sawdust.js),
+  [wood_types.js](../kubejs/data/creativeengineering/kubejs/wood/wood_types.js), [ash.js](../kubejs/data/creativeengineering/kubejs/wood/ash.js),
   [removed_woods.js](../kubejs/startup_scripts/_lib/removed_woods.js) (+ [server side](../kubejs/server_scripts/wood/removed_woods.js)).
 - **Knobs:** CEConfig `[worldgen.systems] mulberrySapling` (2.6). Server scripts (`/reload`); removed woods need a restart.
 
@@ -121,6 +121,23 @@ chunks, about 2), same filters (dry column, OCEAN_FLOOR heightmap, biome), and i
 the datapack doesn't reach in 1.19.2, so patcherMod `MulberrySapling` swaps it on Forge's `SaplingGrowTreeEvent` for
 the datapack copy. Switch `[worldgen.systems] mulberrySapling` (off: UA's tree with river logs, which drop oak). The
 mulberry hedge's recipe read `#upgrade_aquatic:river_logs` (empty now) and is re-added with an oak log (x2).
+Leaf support (2026-11-02, `farming/trees #4`): Separated Leaves ships a rule for the river leaves that counts only
+`#upgrade_aquatic:river_logs` as their log, so Mulberry Leaves on the oak trunk had no log in range and decayed (the
+pack's leaf decay reads the same rules). The pack overrides that rule in
+`kubejs/data/upgrade_aquatic/separated_leaves/river.json`: logs `#upgrade_aquatic:river_logs` and `#minecraft:oak_logs`.
+Mulberry leaves still do not connect through other leaves (the rule's `leaves` list is unchanged). `/reload`; already
+placed leaves recheck on their next block update or tick.
+
+**Quark azalea wood (2026-11-02, `farming/trees #5`).** Quark's `Azalea Wood` module is off in `config/quark-common.toml`
+(backup in `configs_edited/root_config/` and the CreEngServer mirror). Quark still registers the blocks (old worlds keep
+them); with the module off, its `enabledStatusChanged` puts the vanilla oak log back as the azalea tree's trunk
+(`TreeFeatures.AZALEA_TREE`), so naturally generated and bone-mealed azalea trees have oak trunks again. The wood is merged
+into oak like river (`removedWoods.azalea`, 100 ids: Quark's 27 wood ids, Every Compat's 46, Lightman's Currency's 20,
+Dramatic Doors' 2, Supplementaries' 2, Supp Squared's shelf, Abnormals Delight's cabinet, Immersive Weathering's bark; Creative Delight's three azalea racks were pulled from `RackWoods` instead, never released) plus the six Railways tracks (hidden only).
+The azalea rows were taken out of `wood_types.js`, `bark.js`, `engineeringtags.js`, `fabric.js` and the CD `kitchen.js` rack
+list; the jar sawmill jsons for azalea are removed at load by the output purge. Azalea bushes, leaves, flowers, leaf carpets,
+hedges, leaf piles and azalea tea stay. Restart (startup list and Quark config). Generated lists that still name azalea wood
+(`item_physics_families.json`, `wthit/silk_touch_blocks.json`) refresh on the next `/cegen`. Test RW-29.
 
 **D&D woods (2026-10-31).** Create: Dreams & Desires rose, rubber and spirit wood have no source: the jar has no tree, sapling,
 leaves or worldgen, no recipe or loot table outputs their logs, and nothing in the pack adds one (creative only). The three
@@ -185,7 +202,7 @@ are NCH's generated ones, so they ignore counts (F1).
 
 ## 5. File map
 
-- [server_scripts/wood/](../kubejs/server_scripts/wood/): `bark.js`, `sawdust.js`, `wood_types.js`, `ash.js`,
+- [server_scripts/wood/](../kubejs/data/creativeengineering/kubejs/wood/): `bark.js`, `sawdust.js`, `wood_types.js`, `ash.js`,
   `removed_woods.js`.
 - Removed woods: [startup_scripts/_lib/removed_woods.js](../kubejs/startup_scripts/_lib/removed_woods.js) (lists; keys in
   `item_dict.js` section "removed woods"), `kubejs/data/upgrade_aquatic/worldgen/configured_feature/river_tree.json`,
@@ -234,6 +251,14 @@ None.
 - [ ] **RW-26 No overlap:** JEI shows smoked planks only in the 100 mB recipes, and the createaddition recipe is gone.
 - [ ] **RW-28 D&D woods gone [game]:** JEI search `rose`, `rubber`, `spirit`: no log, wood, planks, door, Every Compat furniture, sign, track or bark of those woods (rose gold, rose quartz, raw rubber and rubber blocks stay); the item list has no D&D bark. `/give @s create_dd:rose_planks 4` gives 4 oak planks. Startup log: `[removedWoods] 4 woods merged into oak`, no `[item_dict] Missing` line.
 - [ ] **RW-27 Bark leather:** 4 bark (mixed species, also crimson scales and driftwood bark) + salt in the Pickling Jar -> 1 leather after 2400 ticks; non-bark logs do nothing.
+- [ ] **RW-29 Azalea wood gone [game, after restart]:** JEI search `azalea`: only the azalea and flowering azalea bushes,
+  leaves, leaf carpets, hedges, leaf piles, flowers and Azalea Tea; no azalea log, planks, door, boat, chest, Every Compat
+  furniture, Lightman's Currency display, rack, sign, track or bark. `/place feature minecraft:azalea_tree` and bone meal
+  on an azalea bush: oak log trunk, azalea leaves. A Quark azalea log given by `/give` turns into an oak log in the
+  inventory; one mined from an old world drops an oak log.
+- [ ] **RW-30 Mulberry leaves on oak [game]:** `/place feature upgrade_aquatic:river_tree` (or bone-meal a Mulberry Sapling),
+  wait 2 minutes: no Mulberry Leaves decay. Break one leaf next to the trunk: the rest stay. Break the trunk: the leaves
+  decay as other leaves do.
 
 ## 8. History
 
@@ -261,3 +286,6 @@ None.
   are built from an allow-list (item_dict keys of oak, spruce, birch, jungle, acacia, dark oak, mangrove) instead of the
   vanilla / forge wood tags minus exclusions; Botania, driftwood, Quark and every other modded wood and crimson / warped
   no longer smoke. RW-23 rewritten. `/reload`; not run in game.
+- 2026-11-02: `farming/trees #5`: Quark azalea wood removed (module off, 100 ids merged into oak, 6 tracks hidden, azalea racks pulled
+  from Creative Delight); the azalea tree has an oak trunk again, its leaves and flowers stay (owner 2026-11-02). `farming/trees #4`: Separated Leaves rule for Mulberry Leaves also accepts oak logs
+  (`kubejs/data/upgrade_aquatic/separated_leaves/river.json`). RW-29, RW-30; not run in game.

@@ -1,0 +1,406 @@
+{
+  "_readme": [
+    "Where wild crops and fruit trees generate (Creative Delight). Applied at world load by",
+    "kubejs/data/creativedelight/kubejs/_worldgen/wild_crops.js (creativedelight-common.toml [worldgen] wildCrops). Rejoin the",
+    "world after editing; only chunks generated afterwards change. Authored in the pack folder, copied into the Creative Delight",
+    "jar at the same path; the folder copy wins while it exists. Reference + tests: feature_writeup/crops.md section 2.8,",
+    "creative_delight.md 24. Resolved biome lists: feature_writeup/crops_by_biome.md (python3 tools/gen_crop_worldgen_table.py).",
+    "",
+    "Biome traits: kubejs/generation_scripts/worldgen/biome_traits.json (shared with the pack's other biome-rule systems).",
+    "Biomes marked 'ocean' or 'cave' never match a crop rule.",
+    "",
+    "crops: one entry per biome list.",
+    "  where: clauses, OR'ed. A clause is traits that must all hold; '!trait' must not hold.",
+    "  add / except: biome ids added after / removed after the clauses.",
+    "  features: placed features added to those biomes (via the biome tag creativedelight:wild_crops/<key>).",
+    "  disable_modifiers: the mods' own biome modifiers for this crop, replaced by forge:none.",
+    "  remove_features: features that biome files list (vanilla patches via Terralith); removed from every overworld",
+    "  biome, so 'features' must hold Creative Delight's copy (creativedelight:wild/*) instead.",
+    "  step: the decoration step the features are added at (default vegetal_decoration; underground_ores for ore-like features).",
+    "  label: shown in the reports.  notes: why, for the reader.",
+    "  requires: a mod id the rule needs besides its features' own namespaces; the rule is skipped without it.",
+    "Mushrooms (brown and red colonies, inky cap, morel, caves) are in the pack's mushroom_spawns.json."
+  ],
+
+  "crops": {
+    "cabbage": {
+      "label": "Cabbage",
+      "where": ["sandy beach", "cliff"],
+      "features": ["creativedelight:wild/cabbages"],
+      "disable_modifiers": ["farmersdelight:wild_cabbages"],
+      "notes": "Pack feature: FD's own only tests for sand below; this one also takes dirt/grass (cliff tops)."
+    },
+    "beetroot": {
+      "label": "Beetroot (Sea Beet)",
+      "where": ["sandy beach", "cliff"],
+      "features": ["creativedelight:wild/beetroots"],
+      "disable_modifiers": ["farmersdelight:wild_beetroots"]
+    },
+    "turnip": {
+      "label": "Turnip",
+      "where": ["sandy beach", "cliff"],
+      "features": ["veggiesdelight:patch_wild_turnips"],
+      "notes": "Wherever sea beets grow; the port takes sand or dirt below, as the pack sea beet feature does. 1 in 30 chunks."
+    },
+    "carrot": {
+      "label": "Carrot",
+      "where": ["temperate grassy !swamp"],
+      "features": ["farmersdelight:patch_wild_carrots"],
+      "disable_modifiers": ["farmersdelight:wild_carrots"]
+    },
+    "onion": {
+      "label": "Onion",
+      "where": ["temperate grassy !swamp"],
+      "features": ["farmersdelight:patch_wild_onions"],
+      "disable_modifiers": ["farmersdelight:wild_onions"]
+    },
+    "broccoli": {
+      "label": "Broccoli",
+      "where": ["temperate grassy !swamp"],
+      "features": ["veggiesdelight:patch_wild_broccoli"],
+      "notes": "Veggies Delight backport: the port ships the feature with its rarity and no biome modifier. 1 in 240 chunks, half the carrot and onion rate."
+    },
+    "cauliflower": {
+      "label": "Cauliflower",
+      "where": ["temperate grassy !swamp"],
+      "features": ["veggiesdelight:patch_wild_cauliflowers"],
+      "notes": "1 in 240 chunks."
+    },
+    "garlic": {
+      "label": "Garlic",
+      "where": ["temperate grassy !swamp"],
+      "features": ["veggiesdelight:patch_wild_garlic"],
+      "notes": "1 in 240 chunks."
+    },
+    "oats": {
+      "label": "Oats",
+      "where": ["cold grassy", "temperate grassy"],
+      "features": ["vintagedelight:patch_wild_oats"],
+      "notes": "Vintage Delight backport: the port ships the feature and no biome modifier. Vintage's own filter was overworld 0.4 to 0.9 temperature (the temperate band, swamps included); the pack adds the cold grassy biomes (owner, 2026-10-23). Grows on any dirt soil."
+    },
+    "peanuts": {
+      "label": "Peanuts",
+      "where": ["warm dry grassy"],
+      "features": ["vintagedelight:patch_wild_peanuts"],
+      "notes": "Vintage's filter was the same as oats; the pack moves them to the hot dry grassy biomes (owner, 2026-10-23). Any dirt soil."
+    },
+    "cucumbers": {
+      "label": "Cucumbers",
+      "where": ["wet grassy", "wet muddy", "swamp", "cold grassy !snowy", "temperate grassy"],
+      "features": ["vintagedelight:patch_wild_cucumbers"],
+      "notes": "Vintage's filter was #forge:is_wet (swamps, jungles, mangroves); the pack adds the cold and temperate grassy biomes (owner, 2026-10-23). The port's patch takes any dirt soil (sand dropped)."
+    },
+    "sweet_berries": {
+      "label": "Sweet Berries",
+      "where": ["cold grassy"],
+      "features": ["creativedelight:wild/sweet_berries"],
+      "remove_features": ["minecraft:patch_berry_common", "minecraft:patch_berry_rare"]
+    },
+    "pumpkin": {
+      "label": "Pumpkin",
+      "where": ["cold grassy forest !snowy", "autumn"],
+      "features": ["creativedelight:wild/pumpkin"],
+      "remove_features": ["minecraft:patch_pumpkin"],
+      "notes": "No orchard biome exists in the pack; 'autumn' = Terralith Skylands Autumn, which also keeps its own pumpkin patch."
+    },
+    "melon": {
+      "label": "Melon",
+      "where": ["warm wet !cliff"],
+      "features": ["creativedelight:wild/melon"],
+      "remove_features": ["terralith:jungle/patch_melon", "minecraft:patch_melon_sparse", "minecraft:patch_melon"]
+    },
+    "mini_melon": {
+      "label": "Mini Melon",
+      "where": ["warm wet !cliff"],
+      "features": ["delightful:patch_mini_melon"],
+      "disable_modifiers": ["delightful:mini_melon"]
+    },
+    "cocoa": {
+      "label": "Cocoa",
+      "where": ["warm wet !cliff"],
+      "except": ["minecraft:jungle", "minecraft:sparse_jungle", "terralith:amethyst_canyon", "terralith:amethyst_rainforest",
+                 "terralith:jungle_mountains", "terralith:rocky_jungle", "terralith:skylands_summer", "terralith:tropical_jungle"],
+      "features": ["creativedelight:wild/cocoa_jungle_tree"],
+      "notes": "Cocoa only comes on vanilla-style jungle trees. The excepted biomes already grow them; the rest get a jungle tree in 1 chunk of 3."
+    },
+    "vanilla": {
+      "label": "Vanilla",
+      "where": ["warm wet !cliff"],
+      "features": ["neapolitan:patch_vanilla_vine"],
+      "disable_modifiers": ["neapolitan:add_feature/vanilla_vine"]
+    },
+    "potato": {
+      "label": "Potato",
+      "where": ["cold grassy !snowy"],
+      "features": ["farmersdelight:patch_wild_potatoes"],
+      "disable_modifiers": ["farmersdelight:wild_potatoes"]
+    },
+    "salmonberry": {
+      "label": "Salmonberries",
+      "where": ["cold grassy !snowy"],
+      "features": ["delightful:patch_wild_salmonberries"],
+      "disable_modifiers": ["delightful:salmonberries"]
+    },
+    "raspberry": {
+      "label": "Raspberry",
+      "where": ["temperate grassy", "cold grassy snowy"],
+      "features": ["creativedelight:wild/raspberry_bush"],
+      "requires": "hearthandharvest",
+      "notes": "Hearth and Harvest 1.4.1's patch (Farmer's Delight wild crop: ripe bushes on dirt with grass and coarse dirt, 1 in 62 chunks), as Creative Delight's copy. 1.4.1 placed it in every overworld biome of temperature 0.4 to 0.9; here the temperate grassy biomes, plus the blueberry biomes (cold grassy snowy; owner 2026-11-02, farming/wild-crops #7)."
+    },
+    "blueberry": {
+      "label": "Blueberry",
+      "where": ["cold grassy snowy"],
+      "features": ["fruitsdelight:blueberry_bush"],
+      "disable_modifiers": ["fruitsdelight:blueberry"]
+    },
+    "sugar_cane": {
+      "label": "Sugar Cane",
+      "where": ["river", "beach"],
+      "features": ["creativedelight:wild/sugar_cane"],
+      "remove_features": ["minecraft:patch_sugar_cane", "minecraft:patch_sugar_cane_swamp", "minecraft:patch_sugar_cane_desert",
+                          "minecraft:patch_sugar_cane_badlands", "terralith:cherry/sugarcane"]
+    },
+    "tomato": {
+      "label": "Tomato",
+      "where": ["warm dry grassy"],
+      "features": ["farmersdelight:patch_wild_tomatoes"],
+      "disable_modifiers": ["farmersdelight:wild_tomatoes"]
+    },
+    "cotton": {
+      "label": "Cotton",
+      "where": ["warm dry grassy"],
+      "features": ["rusticdelight:wild_cotton_placed"]
+    },
+    "sweet_potato": {
+      "label": "Sweet Potato",
+      "where": ["warm dry grassy"],
+      "features": ["veggiesdelight:patch_wild_sweet_potatoes"],
+      "notes": "1 in 100 chunks."
+    },
+    "zucchini": {
+      "label": "Zucchini",
+      "where": ["warm dry grassy"],
+      "features": ["veggiesdelight:patch_wild_zucchinis"],
+      "notes": "1 in 100 chunks."
+    },
+    "cantaloupe": {
+      "label": "Mini Cantaloupe",
+      "where": ["warm desert", "warm badlands"],
+      "features": ["creativedelight:wild/mini_cantaloupe"],
+      "disable_modifiers": ["delightful:cantaloupe"],
+      "notes": "Cantaloupe merge (item_merges.md 2.10): Delightful's cantaloupe is the Mini Cantaloupe and grows where the Cantaloupe (hamimelon) does, on the same soils (pack feature, copy of wild/hamimelon). Was warm dry grassy, Delightful's patch."
+    },
+    "corn": {
+      "label": "Corn",
+      "where": ["warm dry grassy"],
+      "features": ["corn_delight:patch_wild_corn"],
+      "disable_modifiers": ["corn_delight:wild_corn"]
+    },
+    "rice": {
+      "label": "Rice",
+      "where": ["warm wet !cliff"],
+      "features": ["farmersdelight:patch_wild_rice"],
+      "disable_modifiers": ["farmersdelight:wild_rice"]
+    },
+    "bell_pepper": {
+      "label": "Bell Pepper",
+      "where": ["warm wet !cliff"],
+      "features": ["rusticdelight:wild_bell_peppers_placed"]
+    },
+    "giant_bell_pepper": {
+      "label": "Giant Bell Peppers",
+      "where": ["warm dry grassy"],
+      "features": ["rusticdelight:bell_pepper_block_patch_placed"],
+      "requires": "creativedelight",
+      "notes": "Rustic Delight 1.7.0 (Creative Delight): red, yellow and green giant peppers, 1 in 64 chunks (owner 2026-10-25: fairly rare); the port drops upstream's own biome modifier. Owner 2026-10-25: hot dry grassy, like the wild crops there."
+    },
+    "coffee": {
+      "label": "Coffee (Rustic Delight)",
+      "where": ["warm wet !cliff"],
+      "features": ["rusticdelight:wild_coffee_placed"],
+      "disable_modifiers": ["farmersrespite:coffee_bush"],
+      "notes": "farmersrespite:coffee_bush is the Basalt Deltas spawn of Farmer's Respite's coffee; switched off."
+    },
+    "tea": {
+      "label": "Tea",
+      "where": ["temperate wet grassy", "swamp", "jungle", "cherry"],
+      "add": ["minecraft:dark_forest", "terralith:lush_valley", "terralith:cloud_forest"],
+      "features": ["farmersrespite:patch_wild_tea_bush"],
+      "disable_modifiers": ["farmersrespite:wild_tea_bush"],
+      "notes": "Wet and misty ground: every swamp and jungle, the sakura biomes, plus the damp forests (downfall 0.8 or cloud cover). The bush needs #minecraft:dirt, which holds mud."
+    },
+    "flax": {
+      "label": "Flax (off)",
+      "where": [],
+      "disable_modifiers": ["supplementaries:wild_flax"],
+      "notes": "Wild flax is off: Supplementaries' config has it disabled and its modifier is forge:none here too, so flipping the config does not bring it back."
+    },
+    "strawberry": {
+      "label": "Strawberries",
+      "where": ["cold grassy mountain !snowy"],
+      "features": ["neapolitan:patch_strawberry_bush"],
+      "disable_modifiers": ["neapolitan:add_feature/strawberry_bush"]
+    },
+    "adzuki": {
+      "label": "Adzuki Beans",
+      "where": ["temperate grassy forest"],
+      "features": ["neapolitan:patch_adzuki_sprouts"],
+      "disable_modifiers": ["neapolitan:add_feature/adzuki_sprouts"]
+    },
+    "mint": {
+      "label": "Mint",
+      "where": ["cold grassy mountain"],
+      "features": ["neapolitan:mint_pond"],
+      "disable_modifiers": ["neapolitan:add_feature/mint_pond"],
+      "notes": "The mint pond needs a flat grass spot, so rocky and snowy peaks are left out by 'grassy'."
+    },
+    "banana": {
+      "label": "Banana",
+      "add": ["minecraft:jungle", "minecraft:bamboo_jungle", "terralith:tropical_jungle", "terralith:amethyst_rainforest"],
+      "features": ["neapolitan:banana_plant_common"],
+      "disable_modifiers": ["neapolitan:add_feature/banana_plant/common", "neapolitan:add_feature/banana_plant/rare"],
+      "notes": "Dense jungles keep Neapolitan's common rate; the beach spawn (rare) is switched off."
+    },
+    "banana_sparse": {
+      "label": "Banana",
+      "where": ["warm wet forest"],
+      "except": ["minecraft:jungle", "minecraft:bamboo_jungle", "terralith:tropical_jungle", "terralith:amethyst_rainforest"],
+      "features": ["neapolitan:banana_plant_uncommon"],
+      "disable_modifiers": ["neapolitan:add_feature/banana_plant/uncommon"]
+    },
+    "lemon": {
+      "label": "Lemon",
+      "where": ["warm wet forest"],
+      "features": ["fruitsdelight:lemon_tree"],
+      "disable_modifiers": ["fruitsdelight:lemon"]
+    },
+    "cranberry": {
+      "label": "Cranberry",
+      "where": ["cold wet grassy"],
+      "features": ["fruitsdelight:cranberry_bush"],
+      "disable_modifiers": ["fruitsdelight:cranberry"],
+      "notes": "Cold wet = Caldera, Cloud Forest, Ice Marsh, Siberian Taiga, Yellowstone (the cold biomes with 'wet')."
+    },
+    "pineapple": {
+      "label": "Pineapple",
+      "where": ["warm beach", "warm wet coastal"],
+      "features": ["fruitsdelight:pineapple"],
+      "disable_modifiers": ["fruitsdelight:pineapple"],
+      "notes": "Fruits Delight's feature needs sand below; outside beaches it only takes where the coast has sand."
+    },
+    "hamimelon": {
+      "label": "Cantaloupe",
+      "where": ["warm desert", "warm badlands"],
+      "features": ["creativedelight:wild/hamimelon"],
+      "disable_modifiers": ["fruitsdelight:hamimelon"],
+      "notes": "Pack feature: Fruits Delight's own needs plain sand; this one takes sand, red sand and terracotta."
+    },
+    "lychee": { "label": "Lychee (tree)", "where": ["jungle"], "features": ["fruitsdelight:tree/lychee_tree"], "disable_modifiers": ["fruitsdelight:lychee"] },
+    "mango": { "label": "Mango (tree)", "where": ["jungle"], "features": ["fruitsdelight:tree/mango_tree"], "disable_modifiers": ["fruitsdelight:mango"] },
+    "peach": { "label": "Peach (tree)", "where": ["jungle"], "features": ["fruitsdelight:tree/peach_tree"], "disable_modifiers": ["fruitsdelight:peach"] },
+    "orange": { "label": "Orange (tree)", "where": ["jungle"], "features": ["fruitsdelight:tree/orange_tree"], "disable_modifiers": ["fruitsdelight:orange"] },
+    "kiwi": { "label": "Kiwi (tree)", "where": ["jungle"], "features": ["fruitsdelight:tree/kiwi_tree"], "disable_modifiers": ["fruitsdelight:kiwi"] },
+    "bayberry": { "label": "Bayberry (tree)", "where": ["swamp !cold"], "features": ["fruitsdelight:tree/bayberry_tree"], "disable_modifiers": ["fruitsdelight:bayberry"] },
+    "mangosteen": { "label": "Mangosteen (tree)", "where": ["swamp !cold"], "features": ["fruitsdelight:tree/mangosteen_tree"], "disable_modifiers": ["fruitsdelight:mangosteen"] },
+    "durian": { "label": "Durian (tree)", "where": ["swamp !cold"], "features": ["fruitsdelight:tree/durian_tree"], "disable_modifiers": ["fruitsdelight:durian"] },
+    "pear": { "label": "Pear (tree)", "where": ["birch"], "features": ["fruitsdelight:tree/pear_tree"], "disable_modifiers": ["fruitsdelight:pear"] },
+    "apple": { "label": "Apple (tree)", "where": ["oak forest"], "features": ["vinery:tree_apple"], "disable_modifiers": ["vinery:add_apple_tree", "fruitsdelight:apple"], 
+      "notes": "Vinery apple tree. Oak/dark oak leaves no longer drop apples (loot/08_leaf_apples.js)."
+    },
+    "grape": {
+      "label": "Grapes (red and white bushes)",
+      "where": ["temperate grassy !swamp !dark_oak"],
+      "features": ["vinery:red_grape_bush_chance", "vinery:white_grape_bush_chance"],
+      "disable_modifiers": ["vinery:add_red_grape", "vinery:add_white_grape"],
+      "notes": "Vinery's rate (1 chunk in 22 each). Vinery's own lists were vanilla tags only (forests, rivers, mountains, plains)."
+    },
+    "grape_savanna": {
+      "label": "Grapes (savanna bushes)",
+      "where": ["warm dry grassy"],
+      "features": ["vinery:savanna_red_grape_bush_chance", "vinery:savanna_white_grape_bush_chance"],
+      "disable_modifiers": ["vinery:add_savanna_red_grape", "vinery:add_savanna_white_grape"]
+    },
+    "grape_taiga": {
+      "label": "Grapes (taiga bushes)",
+      "where": ["cold grassy forest !snowy"],
+      "features": ["vinery:taiga_red_grape_bush_chance", "vinery:taiga_white_grape_bush_chance"],
+      "disable_modifiers": ["vinery:add_taiga_red_grape", "vinery:add_taiga_white_grape"]
+    },
+    "grape_jungle": {
+      "label": "Grapes (jungle vines)",
+      "where": ["jungle", "warm wet swamp"],
+      "features": ["vinery:jungle_red_grape_bush_chance", "vinery:jungle_white_grape_bush_chance"],
+      "disable_modifiers": ["vinery:add_jungle_red_grape", "vinery:add_jungle_white_grape"],
+      "notes": "Vines hang off tree trunks and walls, so only tree-covered warm wet biomes (1 chunk in 10 each, Vinery's rate)."
+    },
+    "cherry": { "label": "Cherry (tree)", "where": ["mountain forest"], "features": ["vinery:tree_cherry"], "disable_modifiers": ["vinery:add_cherry_tree"] },
+    "rubber": {
+      "label": "Rubber tree",
+      "where": ["jungle"],
+      "features": ["creativedelight:wild/rubber_tree"],
+      "remove_features": ["minecraft:rubber_tree_placement"],
+      "notes": "Myrtrees adds its tree from Java (Architectury biome modification, id minecraft:rubber_tree_placement; 1% of chunks x 5 trees, any forest/taiga/jungle). Removed everywhere, pack copy in 1 chunk of 4 in jungles."
+    },
+    "fig": { "label": "Fig (tree)", "where": ["cold forest !snowy"], "features": ["fruitsdelight:tree/fig_tree"], "disable_modifiers": ["fruitsdelight:fig"] },
+    "sea_grape": {
+      "label": "Sea Grape",
+      "where": [],
+      "add": ["minecraft:warm_ocean", "minecraft:lukewarm_ocean", "minecraft:deep_lukewarm_ocean"],
+      "features": ["creativedelight:wild/sea_grape"],
+      "disable_modifiers": ["oceanic_delight:patch_wild_sea_grape_biome_modifier"],
+      "requires": "oceanic_delight",
+      "notes": "Oceanic Delight (Creative Delight member); the sea floor of the mod's three warm oceans. Pack feature wild/sea_grape: the newer Oceanic jar's patch (64 tries, spread 6; was 32 / 5), 1 in 30 chunks as the mod's (starting density, farming/wild-crops #6); the mod's own modifier off. 'add' because ocean biomes never match a where clause."
+    },
+    "hawberry": { "label": "Hawberry (tree)", "where": ["cold forest !snowy"], "features": ["fruitsdelight:tree/hawberry_tree"], "disable_modifiers": ["fruitsdelight:hawberry"] },
+    "persimmon": { "label": "Persimmon (tree)", "where": ["snowy forest"], "features": ["fruitsdelight:tree/persimmon_tree"], "disable_modifiers": ["fruitsdelight:persimmon"] },
+    "rooted_dirt": {
+      "label": "Rooted Dirt and Truffle Dirt (truffle ground)",
+      "step": "underground_ores",
+      "where": ["dark_oak", "cold forest", "birch"],
+      "features": ["creativedelight:wild/rooted_dirt_blob", "creativedelight:wild/truffle_dirt_ore"],
+      "notes": "Fungi Delight's blob (size 20, turns dirt near the surface into rooted dirt), 1 in 3 chunks, then its truffle ore (size 6, replaces rooted dirt only): every chunk, 5 tries near the surface, so it only lands where a blob is. One rule, so one modifier adds both in this order and the blob is always placed first (two rules gave no truffle dirt at all, scratch r1102 SQ-FGD-14; creativedelight members #42). Fungi's own biomes were every taiga and the dark forest; the pack keeps the dark forest and the cold forests and adds birch forests (owner 2026-11-02; fungi_delight.md 5.1.3). The port ships no biome modifier."
+    },
+    "end_amberveil": {
+      "label": "Amberveils (End)",
+      "where": [],
+      "add": ["minecraft:end_highlands", "minecraft:end_midlands", "minecraft:end_barrens", "minecraft:small_end_islands", "nullscape:crystal_peaks", "nullscape:shadowlands", "nullscape:void_barrens"],
+      "features": ["creativedelight:wild/end_amberveil"],
+      "requires": "enders_additions",
+      "notes": "Ender's Delight 1.1.4's patch (10 tries, spread 3), 1 in 10 chunks, on end stone only. Rebuilt in the enders_additions member; 1.1.4's biome modifiers are not shipped. The four vanilla End land biomes (1.1.4's list) plus Nullscape's three land biomes."
+    },
+    "end_chorusflame": {
+      "label": "Chorusflame (End)",
+      "where": [],
+      "add": ["minecraft:end_highlands", "minecraft:end_midlands", "minecraft:end_barrens", "minecraft:small_end_islands", "nullscape:crystal_peaks", "nullscape:shadowlands", "nullscape:void_barrens"],
+      "features": ["creativedelight:wild/end_chorusflame"],
+      "requires": "enders_additions",
+      "notes": "1.1.4's patch, ages 0 to 2 mixed, 1 in 15 chunks, on end stone only. The four vanilla End land biomes (1.1.4's list) plus Nullscape's three land biomes."
+    },
+    "end_saffron": {
+      "label": "Ethereal Saffron (End)",
+      "where": [],
+      "add": ["minecraft:end_highlands", "minecraft:end_midlands", "minecraft:end_barrens", "minecraft:small_end_islands", "nullscape:crystal_peaks", "nullscape:shadowlands", "nullscape:void_barrens"],
+      "features": ["creativedelight:wild/end_saffron"],
+      "requires": "enders_additions",
+      "notes": "1.1.4's patch (4 tries, spread 1), 1 in 25 chunks, on end stone only. The four vanilla End land biomes (1.1.4's list) plus Nullscape's three land biomes."
+    },
+    "end_voidpepper": {
+      "label": "Void Pepper Sprout (End)",
+      "where": [],
+      "add": ["minecraft:end_highlands", "minecraft:end_midlands", "minecraft:end_barrens", "minecraft:small_end_islands", "nullscape:crystal_peaks", "nullscape:shadowlands", "nullscape:void_barrens"],
+      "features": ["creativedelight:wild/end_voidpepper"],
+      "requires": "enders_additions",
+      "notes": "1.1.4's patch, spreading sprouts on the ground, 1 in 15 chunks, on end stone only; they spread and fruit by random tick. The four vanilla End land biomes (1.1.4's list) plus Nullscape's three land biomes."
+    },
+    "chorus_succulent": {
+      "label": "Chorus Succulent (End)",
+      "where": [],
+      "add": ["minecraft:end_highlands"],
+      "features": ["creativedelight:wild/chorus_succulent"],
+      "disable_modifiers": ["ends_delight:add_chorus_succulent"],
+      "requires": "ends_delight",
+      "notes": "End's Delight 2.1 places it from Java (its placed feature ends_delight:chorus_succulent: 1 in 8 chunks, 20 tries, 1 to 3 per block) in the End Highlands only; same feature and biome here, its modifier off (ends_delight.md 3.1, mod-additions #15: kept)."
+    }
+  }
+}

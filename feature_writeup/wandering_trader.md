@@ -185,14 +185,14 @@ weight, then the per-category gap check. Regenerate after any stock change: `/du
 
 | File | Role |
 |---|---|
-| [CEConfig.java](../development/patcherMod/src/main/java/com/SaintAlfonzo/creativeengineering/CEConfig.java) | `[wandering_trader]` |
-| [trader/WanderingTraderTweaks.java](../development/patcherMod/src/main/java/com/SaintAlfonzo/creativeengineering/trader/WanderingTraderTweaks.java) | trader wait, common count, extra rare offers |
+| [CEConfig.java](../development/creativeCommon/src/main/java/com/SaintAlfonzo/creativecommon/CEConfig.java) | `[wandering_trader]` |
+| [trader/WanderingTraderTweaks.java](../development/creativeCommon/src/main/java/com/SaintAlfonzo/creativecommon/trader/WanderingTraderTweaks.java) | trader wait, common count, extra rare offers |
 | [backportedVinery forge/WinemakerSpawner.java](../development/backportedVinery/src/main/java/net/satisfy/vinery/forge/WinemakerSpawner.java) | Winemaker spawner + saved data (moved from patcherMod 2026-10-27) |
-| [trader/TradeListings.java](../development/patcherMod/src/main/java/com/SaintAlfonzo/creativeengineering/trader/TradeListings.java) | listing builders, find-by-result |
-| [trader/TagItemListing.java](../development/patcherMod/src/main/java/com/SaintAlfonzo/creativeengineering/trader/TagItemListing.java) | random tag member listing |
-| [trader/WinemakerTrades.java](../development/patcherMod/src/main/java/com/SaintAlfonzo/creativeengineering/trader/WinemakerTrades.java) | Winemaker pool extras (reflection, no Vinery compile dependency) |
-| [mixin/WanderingTraderSpawnerMixin.java](../development/patcherMod/src/main/java/com/SaintAlfonzo/creativeengineering/mixin/WanderingTraderSpawnerMixin.java) | 24000 constant |
-| [mixin/WanderingTraderTradesMixin.java](../development/patcherMod/src/main/java/com/SaintAlfonzo/creativeengineering/mixin/WanderingTraderTradesMixin.java) | 5 constant + TAIL rare injection |
+| [trader/TradeListings.java](../development/creativeCommon/src/main/java/com/SaintAlfonzo/creativecommon/trader/TradeListings.java) | listing builders, find-by-result |
+| [trader/TagItemListing.java](../development/creativeCommon/src/main/java/com/SaintAlfonzo/creativecommon/trader/TagItemListing.java) | random tag member listing |
+| [trader/WinemakerTrades.java](../development/creativeCommon/src/main/java/com/SaintAlfonzo/creativecommon/trader/WinemakerTrades.java) | Winemaker pool extras (reflection, no Vinery compile dependency) |
+| [mixin/WanderingTraderSpawnerMixin.java](../development/creativeCommon/src/main/java/com/SaintAlfonzo/creativecommon/mixin/WanderingTraderSpawnerMixin.java) | 24000 constant |
+| [mixin/WanderingTraderTradesMixin.java](../development/creativeCommon/src/main/java/com/SaintAlfonzo/creativecommon/mixin/WanderingTraderTradesMixin.java) | 5 constant + TAIL rare injection |
 | [startup_scripts/func/trade_helper.js](../kubejs/startup_scripts/func/trade_helper.js) | `global.trades` |
 | [server_scripts/economy/wandering_trades.js](../kubejs/server_scripts/economy/wandering_trades.js) | the stock |
 | [server_scripts/tags/tradetags.js](../kubejs/server_scripts/tags/tradetags.js) | `trades/golden_food`, `trades/canned_golden` |

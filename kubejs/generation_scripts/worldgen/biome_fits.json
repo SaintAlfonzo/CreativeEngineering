@@ -694,6 +694,29 @@
       "biomes": [
         "#minecraft:is_deep_ocean"
       ]
+    },
+    "nether/soul": {
+      "note": "Soul sand valley only (inherit false). Philip's soul builds moved from the Overworld (lost soul dungeon, lost soul city; structures/contents #1, 2026-11-02).",
+      "inherit": false,
+      "biomes": [
+        "minecraft:soul_sand_valley"
+      ]
+    },
+    "nether/forest": {
+      "note": "Crimson and warped forests (inherit false). Philip's rare ruin (twisting and weeping vines, crimson trapdoors) moved from the Overworld jungle and swamp (structures/contents #1, 2026-11-02).",
+      "inherit": false,
+      "biomes": [
+        "minecraft:crimson_forest",
+        "minecraft:warped_forest"
+      ]
+    },
+    "nether/wastes": {
+      "note": "Nether wastes and basalt deltas (inherit false). Philip's blackstone Nether ruin moved from the Overworld (structures/contents #1, 2026-11-02).",
+      "inherit": false,
+      "biomes": [
+        "minecraft:nether_wastes",
+        "minecraft:basalt_deltas"
+      ]
     }
   },
   "biome_tags": {

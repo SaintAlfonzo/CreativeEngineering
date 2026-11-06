@@ -1,0 +1,33 @@
+# Run 2026-11-01, Creative Split waves 2 to 4, boot 1 (tools/scratch_query/split_w234.sh prep1): OLD jars
+# (patcherMod 1.1.05, creative_delight, creative_brewing, Calendar with the committed mods.toml; no Devtools, so no
+# perfBot) and the committed kubejs/config, group B world cs234. Makes the save that boot 2 (cs2_boot2.qb) loads.
+# The old CD registered only two blocks under creative_delight: (treated_stick, treated_stick_tomatoes) and the
+# village_farm_crops processor type; no items (the stick item is IE's), so there are no item ids to remap.
+pace 2
+
+## SQ-CS2-01 | old-id save: placed sticks and a village start
+bootexpect Done \(
+> execute unless entity @e[type=minecraft:marker,tag=cshome] run summon minecraft:marker ~ ~ ~ {Tags:["cshome"]}
+sleep 2
+> data get entity @e[type=minecraft:marker,tag=cshome,limit=1] Pos
+capture H entity data: \[(-?\d+)\.\d+d, (-?\d+)\.\d+d, (-?\d+)\.\d+d\]
+> setblock {H1+2} {H2} {H3} creative_delight:treated_stick[axis_y=true,axis_x=false,axis_z=false]
+> setblock {H1+3} {H2-1} {H3+3} minecraft:farmland
+> setblock {H1+3} {H2} {H3+3} creative_delight:treated_stick_tomatoes[age=2]
+> setblock {H1+4} {H2} {H3} minecraft:chest{Items:[{Slot:0b,id:"immersiveengineering:stick_treated",Count:3b}]}
+> execute if block {H1+2} {H2} {H3} creative_delight:treated_stick[axis_y=true] run say CS2 stick placed
+> execute if block {H1+3} {H2} {H3+3} creative_delight:treated_stick_tomatoes[age=2] run say CS2 tomato stick placed
+expect CS2 stick placed
+expect CS2 tomato stick placed
+reject Unknown block type|Expected integer
+> locate structure minecraft:village_plains
+waitlog (The nearest|Could not find) 300
+capture V is at \[(-?\d+), (~|-?\d+), (-?\d+)\]
+# 7 chunks off the village: its start is saved, its farm pieces not placed
+> forceload add {V1+112} {V3}
+sleep 40
+> forceload remove {V1+112} {V3}
+sleep 10
+> save-all flush
+waitlog Saved the game 120
+look save written; a village located

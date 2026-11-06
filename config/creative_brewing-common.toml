@@ -1,7 +1,0 @@
-
-#One switch per Creative Brewing member. Off: Creative Brewing's scripts skip that member's recipe,
-#tag and loot rows (the member's own data is untouched). Server scripts re-read it on /reload.
-[members]
-	vinery = true
-	brewinandchewin = true
-

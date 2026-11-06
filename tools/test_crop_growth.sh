@@ -2,13 +2,13 @@
 # Offline checks for the WTHIT crop growth rules (feature_writeup/crops.md 2.9):
 #   1. CropGrowth maths + rule parsing, against the shipped crop_growth.json (javac/java, only needs gson)
 #   2. tools/crop_growth_coverage.py: every growing block in the /dumpcropgrowth audit is ruled, fallback or skipped
-# Build the patcherMod classes first: ./gradlew :patcherMod:compileJava --offline
+# Build the patcherMod classes first: ./gradlew :creativeCommon:compileJava --offline
 set -euo pipefail
 ROOT="$(cd "$(dirname "$0")/.." && pwd)"
 T="$(mktemp -d)"; trap 'rm -rf "$T"' EXIT
 GSON="$HOME/.local/share/atlauncher/libraries/com/google/code/gson/gson/2.8.9/gson-2.8.9.jar"
-CLS="$ROOT/development/patcherMod/build/classes/java/main"
-RULES="$ROOT/development/creativeDelight/src/main/resources/assets/creative_delight/crop_growth.json"
+CLS="$ROOT/development/creativeCommon/build/classes/java/main"
+RULES="$ROOT/development/creativeDelight/src/main/resources/assets/creativedelight/crop_growth.json"
 cd "$ROOT"
 
 echo "== 1. logic"

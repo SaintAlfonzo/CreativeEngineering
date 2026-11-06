@@ -79,8 +79,8 @@ FD's `DrinkableItem` with an always-edible food carrying the same 15 s Slow Fall
 
 ## 3. Plans
 
-All data, in Creative Delight's non-member files (`kubejs/data/creative_delight/kubejs/`, recipe ids
-`creative_delight:<type>/<suffix>`, helpers `global.NCH`). Each needs the CD jar rebuilt and installed; never while the
+All data, in Creative Delight's non-member files (`kubejs/data/creativedelight/kubejs/`, recipe ids
+`creativedelight:<type>/<suffix>`, helpers `global.NCH`). Each needs the CD jar rebuilt and installed; never while the
 game runs. Built 2026-10-25: `:creativeDelight:build` and `installToMods` done with the game closed. New dict keys
 (`item_dict.js`, section "Abnormals Delight 6.0.3 salvaging and recipes") need a full restart.
 
@@ -147,7 +147,7 @@ bottles, as Neapolitan's took the tag) and `shapeless/milk_bucket_from_bottles`.
 
 ### 3.5 Perch and Pike slice XP (BUILT 2026-10-25)
 
-`kubejs/data/creative_delight/kubejs/abnormals_delight/upgrade_aquatic.js` (requires `abnormals_delight` and
+`kubejs/data/creativedelight/kubejs/abnormals_delight/upgrade_aquatic.js` (requires `abnormals_delight` and
 `upgrade_aquatic`): removes `abnormals_delight:upgrade_aquatic/cooked_perch_slice` and `.../cooked_pike_slice` and re-adds
 them with `NCH.smelting` at 0.35 xp, 200 ticks. Changelog bullet added (Food & Cooking). Test SQ-ABD-01 queued.
 
@@ -162,7 +162,9 @@ this FD reads, so nothing carries over. (`farmersdelight:pumpkin_slice` also app
 
 ## 4. Tests (once built)
 
-Prefix `ABD-`. SQ-ABD-01 to 05 PASSED by `/zq` in the 2026-10-26 scratch run ([scratch_queue.md](testing/scratch_queue.md)); the in-game ABD rows stay pending.
+- **r1102b 2026-11-02** (scratch server; verdicts in `perf/runs/r1102b/` HANDOVER.md and the slice judged.md): PASS SQ-ABD-02, -03, -04, -05.
+
+Prefix `ABD-`. SQ-ABD-01 to 05 PASSED by `/zq` in the 2026-10-26 scratch run ([scratch_queue.md](testing/scratch_queue.md)), -02 to -05 again r1102b 2026-11-02; the in-game ABD rows stay pending. Client half: CQ-ABD-01 (JEI pages, deep scan 2026-11-02).
 
 - [ ] **ABD-01 Slice XP:** smelt a Perch Slice and a Pike Slice in a furnace -> 0.35 xp each; smoker and campfire unchanged.
 - [ ] **ABD-02 Salvaging (3.1):** driftwood door / sign / trapdoor / fence / gate / plate / button /

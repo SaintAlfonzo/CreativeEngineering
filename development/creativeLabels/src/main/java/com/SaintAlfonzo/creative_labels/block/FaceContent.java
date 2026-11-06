@@ -13,7 +13,8 @@ import java.util.List;
 /**
  * What one face of a {@code face_paper} cell holds: nothing, up to five notes (one per {@link Spots} spot) or one
  * label; exclusive (sticky_notes.md 3.2). Plus the face rotation (floors and ceilings only, 3.5) and the host
- * inset (how far into the host cell the paper surface sits, 0 to 0.5 blocks; BRIEF 3).
+ * inset (how far into the host cell the paper surface sits, 0 to 0.5 blocks; BRIEF 3), the pieces' shift in the face
+ * frame (centred notes, fitted labels) and the label's edge ({@link Spots.Place}).
  */
 public final class FaceContent {
 
@@ -25,6 +26,9 @@ public final class FaceContent {
     public static final String KEY_LABEL = "Label";
     public static final String KEY_ROTATION = "Rotation";
     public static final String KEY_INSET = "Inset";
+    public static final String KEY_OFF_X = "OffX";
+    public static final String KEY_OFF_Y = "OffY";
+    public static final String KEY_SIZE = "Size";
 
     public Kind kind = Kind.NONE;
     /** Index = spot ({@link Spots#TL} .. {@link Spots#BR}); null = empty. */
@@ -36,6 +40,22 @@ public final class FaceContent {
     public Direction rotation;
     /** Blocks into the host cell (0 = at the cell boundary, 1/16 chests, 0.5 slab halves). */
     public float inset;
+    /** Shift of the pieces in the face frame, px (notes: every spot; label: its centre off (8, 8)). */
+    public float offX, offY;
+    /** The label's edge, px. */
+    public float labelSize = Spots.LABEL_SIZE;
+
+    /** Where this face's pieces sit. */
+    public Spots.Place place() {
+        return new Spots.Place(inset, offX, offY, labelSize);
+    }
+
+    public void setPlace(Spots.Place p) {
+        inset = p.inset();
+        offX = p.offX();
+        offY = p.offY();
+        labelSize = p.size();
+    }
 
     public boolean isEmpty() {
         return kind == Kind.NONE;
@@ -114,7 +134,7 @@ public final class FaceContent {
         for (int i = 0; i < notes.length; i++) notes[i] = null;
         label = null;
         rotation = null;
-        inset = 0;
+        setPlace(Spots.Place.ZERO);
     }
 
     /** Every piece as an item: notes with colour, special and text; a label blank (spec 3.2). */
@@ -134,7 +154,7 @@ public final class FaceContent {
         for (int i = 0; i < notes.length; i++) c.notes[i] = notes[i] == null ? null : notes[i].copy();
         c.label = label == null ? null : label.copy();
         c.rotation = rotation;
-        c.inset = inset;
+        c.setPlace(place());
         return c;
     }
 
@@ -160,6 +180,9 @@ public final class FaceContent {
         }
         if (rotation != null) tag.putString(KEY_ROTATION, rotation.getName());
         if (inset != 0) tag.putFloat(KEY_INSET, inset);
+        if (offX != 0) tag.putFloat(KEY_OFF_X, offX);
+        if (offY != 0) tag.putFloat(KEY_OFF_Y, offY);
+        if (labelSize != Spots.LABEL_SIZE) tag.putFloat(KEY_SIZE, labelSize);
         return tag;
     }
 
@@ -185,12 +208,15 @@ public final class FaceContent {
             if (r != null && r.getAxis().isHorizontal()) c.rotation = r;
         }
         c.inset = tag.getFloat(KEY_INSET);
+        c.offX = tag.getFloat(KEY_OFF_X);
+        c.offY = tag.getFloat(KEY_OFF_Y);
+        c.labelSize = tag.contains(KEY_SIZE, Tag.TAG_FLOAT) ? tag.getFloat(KEY_SIZE) : Spots.LABEL_SIZE;
         return c;
     }
 
     @Override
     public String toString() {
         return "FaceContent{" + kind + ", mask=" + Integer.toBinaryString(noteMask()) + ", label=" + label
-                + ", rotation=" + rotation + ", inset=" + inset + "}";
+                + ", rotation=" + rotation + ", inset=" + inset + ", off=" + offX + "," + offY + ", size=" + labelSize + "}";
     }
 }

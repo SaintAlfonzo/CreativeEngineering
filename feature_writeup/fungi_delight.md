@@ -31,9 +31,9 @@ This file has three parts:
 |---|---|---|
 | Mod inventory (2 mushrooms, 2 colonies, truffle and truffle dirt, 2 huge mushrooms, inky goo veil, 32 items, 17 blocks, 2 cow entities, 2 effects, 3 potions, 34 recipe files, pig / wolf / hoglin / sniffer hooks) | §2 | reference, from `FungiDelight-1.20.1-1.3.jar` |
 | Overlap list | §3 | analysis; small (no other truffle, morel or inky cap in the pack) |
-| Integration list in build order | §4, build record §4.0 | built 2026-10-23, deployed with 1.1.02; dump-driven steps open (TODO `ports/fungiport #2`) |
+| Integration list in build order | §4, build record §4.0 | built 2026-10-23, deployed with 1.1.02; dump-driven steps open (TODO `ports/fungiport #2`). Deep scan 2026-11-02: port `-02` is a nested Creative Delight member (`members/fungi`), in the installed CD jar (2026-11-02 14:01); `server_mods/` still `-01` |
 | Decisions for the owner | §5, answered in §5.1 | D1 to D12, each with a recommendation; owner plan 2026-10-23 |
-| Tests | §8 | FGD-01 to FGD-40 not ticked; server side by `/fgdtest all` 135 / 136 (2026-10-26); open: SQ-FGD-12 to -15 (group B), CQ-FGD client rows in [testing/scratch_queue.md](testing/scratch_queue.md) |
+| Tests | §8 | FGD-01 to FGD-40 not ticked; server side by `/fgdtest all` 135 / 136 (2026-10-26); open: SQ-FGD-12 to -15 (group B), CQ-FGD client rows in [testing/scratch_queue.md](testing/scratch_queue.md). Deep scan 2026-11-02: r1102 on the nested `-02`: SQ-FGD-00 to -11 (with -03b, -07a, -07b) PASS, SQ-FGD-13 PASS, -12 LOOK (mushroom-fields half: SQ-FGD-12m), **-14 FAIL** (no truffle dirt; fixed in `wild_crops.json`, TODO `creativedelight/members #42`, rerun queued), -15 not judged (SQ-FGD-15c); the SQ-FGDC rows are in the postponed worldgen slice of r1102b |
 
 - **Source to port from:** `~/.local/share/atlauncher/downloads/FungiDelight-1.20.1-1.3.jar` (Forge 1.20.1, closest
   API; downloaded 2026-10-23 from Modrinth, sha1 checked). 53 classes; decompile with
@@ -239,9 +239,9 @@ none from these). The overlaps are dish families and systems.
 Steps that match the Veggies or Vintage ports are only named; see [veggies_delight.md](veggies_delight.md) §4 and
 [vintage_delight.md](vintage_delight.md) §4 for the detail.
 
-1. **Port (new jar).** `development/backportedFungi`, mod id `fungidelight` (ids unchanged), version
+1. **Port (new jar).** `development/creativeDelight/members/fungi`, mod id `fungidelight` (ids unchanged), version
    `1.3-ce-19.2-01`, root `settings.gradle`, `installToMods`, `mod_sides.md` row (both sides: entities and a client
-   renderer). Resources through a copy of `development/backportedVeggies/tools/port_resources.py`, MIT notice kept. 1.20.1 -> 1.19.2: block `Material`,
+   renderer). Resources through a copy of `development/creativeDelight/members/veggies/tools/port_resources.py`, MIT notice kept. 1.20.1 -> 1.19.2: block `Material`,
    `CreativeModeTab` subclass, recipe JSON without `category`, `MushroomBlock(Properties, Supplier<Holder<...>>)`,
    `canBeReplaced()` -> material check, 1.19.2 loot table call in the pig goal, placement modifier codec, the
    1.20-only block tags left out. **Dropped:** `SnifferAiMixin`, the `sniffer_food` tag and the sniffer config;
@@ -287,19 +287,19 @@ Steps that match the Veggies or Vintage ports are only named; see [veggies_delig
 
 Built in one session from §5.1. Installed and deployed with 1.1.02 (2026-10-23). **Hard dependency:** the pack's placed
 features in `kubejs/data` reference `fungidelight:*` configured features and blocks, so a world without the port jar
-fails to load. Game closed: `./gradlew :backportedFungi:installToMods :patcherMod:installToMods --offline`.
+fails to load. Game closed: `./gradlew :backportedFungi:installToMods :creativeCommon:installToMods --offline`.
 
 | Part | Where | Notes |
 |---|---|---|
-| Port jar `backportedFungi-1.3-ce-19.2-01` | `development/backportedFungi` (README lists every deviation) | No config (defaults hard-coded), no sniffer, advancements, Botany Pots, compost hook, Autumnity / Spawn tags, `has_*` biome tags, `#forge:alcohol` file; no biome modifiers or placed features (8 configured features ship). Fixes: inky patch on `inky_cap_placeable_on`; pig digging asks `getMobGriefingEvent` before digging and before changing the block (loot table call on the CHEST parameter set); veil capped at 16 (bone meal refused at the cap); Weak Stomach reads `#creativeengineering:food_type/drink/alcohol`; Burrowing as `PotionBrewing.addMix` (AT); stews as `fungidelight:effect_stew` (Luck / Comfort / Haste, 160 ticks; upstream's numeric ids were Blindness, Saturation and 35). `MushroomCowMixin` deleted, `FDMCow` keeps lightning immunity, shearing, renderer. Trades and sounds kept |
+| Port jar `backportedFungi-1.3-ce-19.2-01` | `development/creativeDelight/members/fungi` (README lists every deviation) | No config (defaults hard-coded), no sniffer, advancements, Botany Pots, compost hook, Autumnity / Spawn tags, `has_*` biome tags, `#forge:alcohol` file; no biome modifiers or placed features (8 configured features ship). Fixes: inky patch on `inky_cap_placeable_on`; pig digging asks `getMobGriefingEvent` before digging and before changing the block (loot table call on the CHEST parameter set); veil capped at 16 (bone meal refused at the cap); Weak Stomach reads `#creativeengineering:food_type/drink/alcohol`; Burrowing as `PotionBrewing.addMix` (AT); stews as `fungidelight:effect_stew` (Luck / Comfort / Haste, 160 ticks; upstream's numeric ids were Blindness, Saturation and 35). `MushroomCowMixin` deleted, `FDMCow` keeps lightning immunity, shearing, renderer. Trades and sounds kept |
 | Mooshroom family | patcherMod `mooshroom/MooshroomFamily`, `MushroomTypeSetter`, mixins `MushroomCowBreedingMixin`, `AnimalCanMateMooshroomMixin`; `SpawnTuning` `brown_chance` | Brown on NATURAL / CHUNK_GENERATION `SpecialSpawn` of `minecraft:mooshroom` by the biome's `brown_chance`; any two of red, brown, inky cap cow, morel cow breed, calf 50 % either parent's kind (vanilla 1/1024 mutation only for two same-type vanilla parents); the calf is the chosen parent's entity type. Fungi cows are found by entity id, so patcherMod does not depend on the port. Headless `pickCalf` test passed (400k rolls per pair). Mooblooms extend `Cow`, untouched |
 | Cow spawns | `mob_spawns.json` | `mooshroom_dark_forests` gains `brown_chance` 0.5; new `mooshroom_mushroom_fields` (factor 1, `brown_chance` 0.25); `inky_cap_cow_dark_forests` (2), `inky_cap_cow_mushroom_fields` (8), `morel_cow_dark_forests_swamps` (2), `morel_cow_mushroom_fields` (8), groups 3 to 4. `spawn_ground` is already met (`#minecraft:mooshrooms_spawnable_on` holds `#minecraft:dirt`). `spawns_by_biome.md` regenerated from the 10-23 dump |
 | Mushroom spawn system (§5.1.1) | `mushroom_spawns.json` / `.js`, shared code `worldgen/_biome_rules.js`, CEConfig `[worldgen.systems] mushroomSpawns`, `tools/test_mushroom_spawns.sh` | Table below. FD brown / red colony rules moved here unchanged. Pack copies of the colony feature for inky cap and morel (dirt and podzol, not mycelium only). Cave mode: no light predicate in 1.19.2 placement, so vanilla's underground test (`surface_relative_threshold_filter` OCEAN_FLOOR_WG at most -13) after an `environment_scan` to a floor; colonies only over `#minecraft:mushroom_grow_block` or `#minecraft:dirt`; noise caves only (features accept `air`, carvers leave `cave_air`) |
 | Truffle dirt | `wild_crops.json` rules `rooted_dirt` (1 in 3) and `truffle_dirt` (every chunk, count 5), new per-rule `step` (`underground_ores`), `dark_oak` or `cold forest` (25 biomes) | Order relies on modifier id order (rooted before truffle): FGD-32 |
 | Items, tags | `item_dict.js` (32 + truffle pie + 3 tags), `cookingtags.js` | `#forge:mushrooms/inky_cap` (+ cooked cap, colony), `/morel` (+ colony), `/truffle`; all in `#forge:mushrooms`; 5 `#forge:storage_blocks/*`. Pack users of `#forge:mushrooms`: bone broth, veg wrap filling (fine) |
-| Recipes | `cooking.js`, `baking.js`; since 2026-10-25 the meal rows below are Creative Delight QoL-5 (`kubejs/data/creative_delight/kubejs/fungidelight/cooking.js`) | Grid meals re-id'd `_manual_only` (ice cream marked placeholder for `sweets #4`); heatless routes for the 7 pot meals; truffle pie in the oven pie list (crust + 2 truffles + 2 sugar, no can) |
+| Recipes | `cooking.js`, `baking.js`; since 2026-10-25 the meal rows below are Creative Delight QoL-5 (`kubejs/data/creativedelight/kubejs/fungidelight/cooking.js`) | Grid meals re-id'd `_manual_only` (ice cream marked placeholder for `sweets #4`); heatless routes for the 7 pot meals; truffle pie in the oven pie list (crust + 2 truffles + 2 sugar, no can) |
 | Food, cans, compost | `food_types.json` (16 foods), `gen_can_types.py` (truffle, cooked inky cap, truffle pasta; soup and salad by the type loops; `AWAIT_DUMP` holds `fungidelight`), `compost_values.js` (19 rows, upstream values) | Values are tuned after `/dumpfood` (CQ-FGD-DUMP) |
-| Effects, JEI | `kubejs/assets/creativeengineering/lang/en_us.json` (JEED text), `kubejs/assets/creative_delight/kubejs/fungidelight/jei_info.js` (Creative Delight QoL-6 since 2026-10-25) (the pack's first JEI info pages: mushroom colonies, truffle, Weak Stomach foods) | [potions.md](potions.md) 2.3 row, PO-27 |
+| Effects, JEI | `kubejs/assets/creativeengineering/lang/en_us.json` (JEED text), `kubejs/assets/creativedelight/kubejs/fungidelight/jei_info.js` (Creative Delight QoL-6 since 2026-10-25) (the pack's first JEI info pages: mushroom colonies, truffle, Weak Stomach foods) | [potions.md](potions.md) 2.3 row, PO-27 |
 
 Mushroom rules (1 in N chunks; brown / red rates read from vanilla, Terralith and FD data; a Fungi form compared
 with the mean of brown and red):
@@ -409,10 +409,11 @@ using the existing info-page route (step 18).
 
 ### 5.1.3 Truffles, rooted dirt, pigs, wolves
 
-- **Placement folded into `wild_crops.json`:** rooted dirt blob and truffle dirt become two `wild_crops.json` rules
-  (with the per-rule `step` field already planned in §4 step 4 for `underground_ores`). **Biomes: dark forest and
-  cold forest only** (clauses `dark_oak` or `cold forest`, no longer all of `coniferous`); the other taiga
-  and conifer biomes lose them. Truffle dirt keeps "every chunk the blob is there".
+- **Placement folded into `wild_crops.json`:** rooted dirt blob and truffle dirt are one `wild_crops.json` rule
+  (`rooted_dirt`, step `underground_ores`, features blob then truffle ore, so one modifier places them in that order; as
+  two rules no truffle dirt generated, r1102 SQ-FGD-14, `creativedelight/members #42`, merged 2026-11-02). **Biomes: dark
+  forest, cold forest and birch forest** (clauses `dark_oak`, `cold forest` or `birch`; birch added by the owner
+  2026-11-02, no longer all of `coniferous`); the other taiga and conifer biomes lose them. Truffle dirt keeps "every chunk the blob is there".
 - **Pig food:** the Fungi additions (brown and red mushroom, inky cap, morel, truffle) go onto `Pig.FOOD_ITEMS`
   as in §2.3 and are listed **for review with the whole mob-food system** (`tweaks #13`): marker in the TODO row
   and in [mob_block_tweaks.md](mob_block_tweaks.md); no other pig-food change until then.
@@ -505,7 +506,7 @@ filter value against the live cave biomes, and the starting rates above (FGD-28)
 
 | Path | What |
 |---|---|
-| `development/backportedFungi/` | the port (README with every deviation, `NOTICE-upstream-MIT.txt`) |
+| `development/creativeDelight/members/fungi/` | the port (README with every deviation, `NOTICE-upstream-MIT.txt`) |
 | `kubejs/startup_scripts/_lib/item_dict.js`, block dict | ids |
 | `kubejs/generation_scripts/worldgen/wild_crops.json`, `kubejs/server_scripts/worldgen/wild_crops.js` | wild rules, `step` field |
 | `kubejs/generation_scripts/worldgen/mob_spawns.json` | cow spawns, `brown_chance` |
@@ -513,10 +514,10 @@ filter value against the live cave biomes, and the starting rates above (FGD-28)
 | `kubejs/server_scripts/` (cooking, potions), CD `kubejs_startup/fungidelight/compost.js` (was `compost_values.js`) | recipes and compost |
 | `mod_sides.md`, `tools/build_deploy.py` | release |
 | `kubejs/server_scripts/worldgen/_biome_rules.js` | code shared by wild crops and mushroom spawns |
-| `development/patcherMod/.../mooshroom/`, `mixin/MushroomCowBreedingMixin.java`, `mixin/AnimalCanMateMooshroomMixin.java`, `worldgen/SpawnTuning.java` | brown mooshrooms, breeding |
-| `kubejs/assets/creative_delight/kubejs/fungidelight/jei_info.js` (CD), `kubejs/assets/creativeengineering/lang/en_us.json` | JEI info pages, JEED text |
+| `development/creativeCommon/.../mooshroom/`, `mixin/MushroomCowBreedingMixin.java`, `mixin/AnimalCanMateMooshroomMixin.java`, `worldgen/SpawnTuning.java` | brown mooshrooms, breeding |
+| `kubejs/assets/creativedelight/kubejs/fungidelight/jei_info.js` (CD), `kubejs/assets/creativeengineering/lang/en_us.json` | JEI info pages, JEED text |
 | `tools/test_mushroom_spawns.sh`, `tools/test_wild_crops.sh`, `tools/gen_crop_worldgen_table.py` | offline checks, [crops_by_biome.md](crops_by_biome.md) |
-| `kubejs/assets/creativeengineering/changelog/unreleased.md` | bullets when built |
+| `kubejs/assets/creativecommon/changelog/unreleased.md` | bullets when built |
 
 ## 7. Offline checks (once built)
 
@@ -574,6 +575,13 @@ filter value against the live cave biomes, and the starting rates above (FGD-28)
 
 ## 9. History
 
+- 2026-11-03 (CD members run): the two cows had no entity name (`entity.fungidelight.inky_cap_cow` / `morel_cow` missing
+  from the member lang): added as Inky Cap Cow and Morel Cow (`ui/names #13`). Weak Stomach's description drops "From eating
+  inky caps or durian." and the effect gets a JEED provider: the `#fungidelight:alcohol_reaction` foods (Creative Brewing
+  `jeed_providers.js`, `ui/effects #12`). Burrowing's description had no "from" wording; it comes only from its potions,
+  which JEED lists by itself, so it needs no provider row. In the CD and Creative Brewing jars installed 2026-11-03
+  00:08, not booted; client row CQ-CDM2-01 (queue section SQ-CDJ7).
+
 - 2026-10-23: investigation written from the Forge 1.20.1 1.3 jar (downloaded from Modrinth, decompiled, 53 classes)
   and the NeoForge 1.21.1 1.3 jar already in `DecompiledMods/` (same content), checked against the pack's
   display-name, tag, biome and recipe exports, the FD 1.19.2-1.2.4 classes and the Forge 1.19.2 source. Found: no
@@ -586,3 +594,15 @@ filter value against the live cave biomes, and the starting rates above (FGD-28)
   mushroom spawn system with cave mode, truffle dirt rules, ids, tags, recipes, truffle pie, food types, cans (waiting
   on the dump), compost, JEED text, JEI info pages, changelog. FGD-02, FGD-15, FGD-23 retired into FGD-28, -30, -35.
   Offline checks (§7) pass. Live checks queued as SQ-FGD at the top of the scratch queue. Jars not installed.
+- 2026-11-01: `creativedelight/members #8` (move the mooshroom family into More Mooblooms) not built: creative_split.md
+  7.6 (owner) sends `mooshroom/`, `MooshroomFamily` and More Mooblooms to Creative Worldgen as fauna, not CD. The
+  move rides the Worldgen carve (`creativesplit/worldgen #8`); the classes stay in patcherMod until then.
+- **2026-11-02:** nested in Creative Delight (`creativedelight/members #1`): `bundled_in=creativeDelight`, jar `backportedFungi-1.3-ce-19.2-02` inside the CD jar, "Fungi Delight (Creative Delight)"; folder stays `development/creativeDelight/members/fungi`; build and install through `:creativeDelight:` only.
+- **2026-11-02 (afternoon):** folder moved to `development/creativeDelight/members/fungi` (plan_creative_delight.md I8).
+  Truffle dirt fix (I6): the blob and truffle ore rules merged into one, birch forests added (5.1.3); crops_by_biome.md
+  regenerated. Rerun SQ-FGD-14 in the SQ-FGDC world.
+
+### 5.1.8 Owner decisions 2026-11-02
+
+- Lightning swaps mooshroom types both ways: red <-> brown, and Inky Cap Cow <-> Morel Cow (replaces "Fungi cows ignore lightning", FGD-27 expectation changes; `FDMCow` loses its lightning immunity and swaps instead).
+- New mushrooms (inky cap, morel): light levels and valid spawn locations match the vanilla mushrooms (FGD-28 cave filter follows vanilla; the "light at most 7" value is replaced). Rates stay lower than vanilla (new ones rarer).

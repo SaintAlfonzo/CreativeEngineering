@@ -1,6 +1,6 @@
 package com.SaintAlfonzo.creativedelight.mixin.farmersdelight;
 
-import com.SaintAlfonzo.creativeengineering.compat.MealSlotTooltip;
+import com.SaintAlfonzo.creativedelight.compat.MealSlotTooltip;
 import com.mojang.blaze3d.vertex.PoseStack;
 import net.minecraft.network.chat.Component;
 import org.spongepowered.asm.mixin.Mixin;

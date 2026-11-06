@@ -1,0 +1,373 @@
+# Run r1103 slice A, RERUN of the batch faults found by the judge (perf/runs/r1103/sA/judged.md). Not run yet.
+#
+# Part 1 (rows SA-R-00 to SQ-CNG-04b-R): CURRENT jars (patcherMod 1.1.08, creativeworldgen, creativedelight,
+# creativebrewing as in sA_2.qb), group A superflat. Any group A world works: the boot 2/3 world sAo
+# ($SCR/r1103/sA2/srv/sAo, marker sahome) or a fresh one (SA-R-00 summons the marker if it is missing).
+# Setup as sA_setup.md "Boot 2" (prep_srv.sh, decouple the jars), probes zq, zp, zcount, salt_probe and the FIXED
+# sA_probe.js (11-03 judge: classes hoisted, /sa eatcd, /sa ack, /sa offers; copy it again, the old copy is stale).
+# difficulty=normal, spawn-monsters=true, spawn-animals=true (raid, pillagers). Run with
+#   qrun.py run "$OUT2" .../sA_R.qb "$RES" --rows SA-R-00,SQ-GLD-06-R,SQ-GLD-07-R,SQ-GLD-08-R,SQ-GLD2-01-R,
+#     SQ-GLD-03-R,SQ-SWP-05-R,SQ-BBQF-04-R,SQ-NEST-01-R,SQ-SLT-03-R,SQ-CWG-09-R,SQ-CWG-08b-R,SQ-CNG-04b-R
+# (one comma list, no spaces; part 2 left out).
+#
+# Part 2 (rows SQ-CWG-08o-R, SQ-CWG-08-R): needs the OLD 1.1.06 world. Two boots: SQ-CWG-08o-R on the 1.1.06 release
+# (deploy/latest, exactly as sA_setup.md "Boot 1", on the boot 1 world $SCR/r1103/sA/srv/sAo or a fresh sAo), then
+# copy that world to a current-jar server (sA_setup.md "Boot 2") and run SQ-CWG-08-R. SA-R-00 first in both boots.
+# Only the village half of SQ-CWG-08 is open (the rest PASSED in r1103): skip part 2 if the owner accepts that.
+pace 2
+
+## SA-R-00 | setup: home marker, clock, weather, forceload the work area (not a queue row)
+> execute unless entity @e[type=minecraft:marker,tag=sahome] run summon minecraft:marker 0 -60 0 {Tags:["sahome"]}
+> data get entity @e[type=minecraft:marker,tag=sahome,limit=1] Pos
+capture SAH entity data: \[(-?\d+)\.\d+d, (-?\d+)\.\d+d, (-?\d+)\.\d+d\]
+> gamerule doDaylightCycle false
+> time set noon
+> gamerule doWeatherCycle false
+> weather clear 1000000
+> gamerule doPatrolSpawning false
+> gamerule doTraderSpawning false
+> gamerule randomTickSpeed 3
+> scoreboard objectives add sacwg dummy
+> forceload add {SAH1} {SAH3} {SAH1+96} {SAH3+160}
+sleep 30
+> say SAR setup done
+expect SAR setup done
+reject (Unknown (item|block|block type|entity)|Incorrect argument for command|Unknown or incomplete command|That position is not loaded|No player was found|no such bot|no such item|\[(zq|sa|zp)\] (error|no player))
+
+## SQ-GLD-06-R | anvil: no golden output in any order (r1103: probe failed with "redeclaration of var $SAAnvil")
+> pbot spawn sagld {SAH1+10} {SAH2} {SAH3+40} minecraft:overworld survival
+sleep 2
+> clear sagld
+> item replace entity sagld weapon.mainhand with minecraft:enchanted_book{StoredEnchantments:[{id:"goldenfood:gf_enchantment",lvl:1s}]}
+> item replace entity sagld weapon.offhand with goldenfood:golden_bread
+> sa anvil sagld
+> item replace entity sagld weapon.mainhand with goldenfood:golden_bread
+> item replace entity sagld weapon.offhand with minecraft:enchanted_book{StoredEnchantments:[{id:"goldenfood:gf_enchantment",lvl:1s}]}
+> sa anvil sagld
+> item replace entity sagld weapon.mainhand with minecraft:enchanted_book{StoredEnchantments:[{id:"goldenfood:gf_enchantment",lvl:1s}]}
+> item replace entity sagld weapon.offhand with minecraft:golden_apple
+> sa anvil sagld
+# control: a real anvil combination must give an output, or the probe proves nothing
+> item replace entity sagld weapon.mainhand with minecraft:iron_sword
+> item replace entity sagld weapon.offhand with minecraft:enchanted_book{StoredEnchantments:[{id:"minecraft:sharpness",lvl:1s}]}
+> sa anvil sagld
+waitlog \[sa\] anvil sagld 1 minecraft:iron_sword 30
+count \[sa\] anvil sagld .*(gf_enchantment|golden_bread|golden_apple).* -> empty == 3
+expect \[sa\] anvil sagld 1 minecraft:iron_sword .* -> 1 minecraft:iron_sword
+> pbot remove sagld
+look the three golden pairs give empty; the sword + Sharpness control gives a sword (probe works). The enchreg and /enchant halves PASSED in r1103
+reject (Unknown (item|block|block type|entity)|Incorrect argument for command|Unknown or incomplete command|No player was found|no such bot|no such item|\[(zq|sa|zp)\] (error|no player))
+
+## SQ-GLD-07-R | golden chorus cooldowns (r1103: getGameTime not reachable, and the 2 s pace hid a 5 to 10 tick cooldown)
+> pbot spawn sachor {SAH1+60} {SAH2} {SAH3+70} minecraft:overworld survival
+sleep 2
+> clear sachor
+> pbot hold sachor minecraft:chorus_fruit 4
+> sa eatcd sachor
+waitlog \[sa\] eatcd sachor minecraft:chorus_fruit: cooldown 30
+> tp sachor {SAH1+60} {SAH2} {SAH3+70}
+> pbot hold sachor goldenfood:golden_chorus_fruit 4
+> sa eatcd sachor
+waitlog \[sa\] eatcd sachor goldenfood:golden_chorus_fruit: cooldown 30
+> tp sachor {SAH1+60} {SAH2} {SAH3+70}
+> pbot hold sachor goldenfood:enchanted_golden_chorus_fruit 4
+> sa eatcd sachor
+waitlog \[sa\] eatcd sachor goldenfood:enchanted_golden_chorus_fruit: cooldown 30
+expect \[sa\] eatcd sachor minecraft:chorus_fruit: cooldown (19|20|21) ticks
+expect \[sa\] eatcd sachor goldenfood:golden_chorus_fruit: cooldown (9|10|11) ticks
+expect \[sa\] eatcd sachor goldenfood:enchanted_golden_chorus_fruit: cooldown (4|5|6) ticks
+> pbot remove sachor
+look the "ate, moved D blocks" lines: golden and enchanted both teleport (r1103 measured 12 and 32 blocks); cooldown ticks golden 10, enchanted 5, vanilla chorus 20 (counted by the probe's own tick counter, +-1)
+reject (Unknown (item|block|block type|entity)|Incorrect argument for command|Unknown or incomplete command|No player was found|no such bot|no such item|\[(zq|sa|zp)\] (error|no player))
+
+## SQ-GLD-08-R | the 23 golden recipes (r1103 queried goldenfood:, the recipes are creativedelight:shaped/golden_*)
+> zq recipes creativedelight:shaped/golden_
+> zq recipes creativedelight:shaped/enchanted_golden_
+waitlog \[zq\] recipes matching creativedelight:shaped/enchanted_golden_: \d+ 30
+expect \[zq\] recipes matching creativedelight:shaped/enchanted_golden_: 0
+look count of creativedelight:shaped/golden_* = 23 golden foods (17 foods, 3 stews, milk, honey, cake) plus the pack's golden_apple and golden_carrot (25 in all if both are listed); no enchanted grid recipe
+reject (Unknown or incomplete command|\[zq\] error)
+
+## SQ-GLD2-01-R | golden apple keeps 8 ingots, golden cake takes nuggets (r1103: rdetail matched no recipe id)
+> zq rdetail creativedelight:shaped/golden_apple
+> zq rdetail creativedelight:shaped/golden_cake
+waitlog \[zq\] rdetail matching creativedelight:shaped/golden_cake: \d+ 30
+expect \[zq\] creativedelight:shaped/golden_apple \{minecraft:crafting_shaped\} -> 1 golden_apple <- .*gold_ingot
+reject \[zq\] creativedelight:shaped/golden_apple \{.*gold_nugget
+expect \[zq\] creativedelight:shaped/golden_cake \{.*gold_nugget
+look apple: 8 gold ingots + apple; cake: gold nuggets around the cake (golden beef = cooked beef + 8 nuggets PASSED in r1103)
+reject (Unknown or incomplete command|\[zq\] error)
+
+## SQ-GLD-03-R | diagnostic for the r1103 FAIL: vanilla honey and milk on the same kind of bot (where does the 14 s bundle come from)
+> pbot spawn sagld3 {SAH1+12} {SAH2} {SAH3+40} minecraft:overworld survival
+sleep 2
+> clear sagld3
+> effect clear sagld3
+> pbot hold sagld3 minecraft:honey_bottle
+> zp eat sagld3
+> zp effects sagld3
+> effect clear sagld3
+> effect give sagld3 minecraft:speed 60
+> pbot hold sagld3 minecraft:milk_bucket
+> zp eat sagld3
+> zp effects sagld3
+> effect clear sagld3
+> effect give sagld3 minecraft:speed 60
+> pbot hold sagld3 goldenfood:golden_milk_bucket
+> zp eat sagld3
+> zp effects sagld3
+> effect clear sagld3
+waitlog \[zp\] effects sagld3 30
+> pbot remove sagld3
+look if vanilla honey or milk also gives Haste, Speed II, Strength, Luck, Regeneration for 280 t, the bundle comes from another mod's drink handler, not Golden Food (r1103 SQ-GLD-03 FAIL); the golden milk line must show the bundle gone after Speed was cleared, or name it again
+reject (Unknown (item|block|block type|entity)|Incorrect argument for command|Unknown or incomplete command|No player was found|no such bot|no such item|\[(zq|sa|zp)\] (error|no player))
+
+## SQ-SWP-05-R | nested shulker contents (r1103 read Items[1]: the merged list puts the box at list index 0)
+> setblock {SAH1+22} {SAH2} {SAH3+60} minecraft:chest
+> data merge block {SAH1+22} {SAH2} {SAH3+60} {Items:[{Slot:1b,id:"minecraft:shulker_box",Count:1b,tag:{BlockEntityTag:{Items:[{Slot:0b,id:"farmersrespite:coffee",Count:3b}]}}}]}
+> ceswap items
+sleep 2
+> data get block {SAH1+22} {SAH2} {SAH3+60} Items[{Slot:1b}]
+expect minecraft:shulker_box
+expect rusticdelight:coffee.*Count: 3b|rusticdelight:coffee.*Count:3b
+reject farmersrespite:coffee
+reject (Unknown (item|block|block type|entity)|Incorrect argument for command|Unknown or incomplete command|Found no elements)
+
+## SQ-BBQF-04-R | butcher seasoning trades (r1103: MCA replaces minecraft:villager, and data get does not build offers)
+> summon minecraft:villager {SAH1+80} {SAH2} {SAH3+80} {NoAI:1b,PersistenceRequired:1b,Tags:["sabbq"],VillagerData:{profession:"minecraft:butcher",level:1,type:"minecraft:plains"}}
+> summon mca:male_villager {SAH1+84} {SAH2} {SAH3+80} {NoAI:1b,PersistenceRequired:1b,Tags:["sabbq2"],VillagerData:{profession:"minecraft:butcher",level:1,type:"minecraft:plains"}}
+sleep 3
+> sa offers sabbq
+> sa offers sabbq2
+waitlog \[sa\] offers sabbq2 30
+expect \[sa\] offer \d+: .*-> \d+ barbequesdelight:[a-z_]*(cumin|chili|pepper|barbeque|buffalo|honey_mustard)
+> kill @e[tag=sabbq]
+> kill @e[tag=sabbq2]
+look each seasoning offer: 12 emerald -> 64 powder or 16 sauce, maxUses 4, xp 4 (a level-1 butcher rolls 2 of its level-1 trades: if no seasoning shows, the row is still open, not a FAIL: summon more butchers)
+reject (Unknown (item|block|block type|entity)|Incorrect argument for command|Unknown or incomplete command|\[sa\] error)
+
+## SQ-NEST-01-R | emu nest spawns emus (r1103: no emu in the 28 x 16 box 5 s after the place; emus run)
+> place feature incubation_additions:nest_emu {SAH1+82} {SAH2} {SAH3+130}
+> zcount {SAH1+66} {SAH2-1} {SAH3+114} {SAH1+98} {SAH2+4} {SAH3+146}
+waitlog \[zcount\] entities 30
+> execute if entity @e[type=alexsmobs:emu] run say SAR emu exists
+> zq count {SAH1+76} {SAH2-2} {SAH3+124} {SAH1+88} {SAH2+3} {SAH3+136} incubation_additions:emu_egg_nest
+waitlog \[zq\] count incubation_additions:emu_egg_nest 30
+expect \[zq\] count incubation_additions:emu_egg_nest: [1-9]
+expect SAR emu exists
+look if no emu: check the nest feature's spawn check (Incubation BirdNestFeature calls SpawnPlacements.checkSpawnRules; Alex's Mobs emu needs #alexsmobs:emu_spawns below and light > 8), then FAIL
+reject (Unknown (item|block|block type|entity)|Incorrect argument for command|Unknown or incomplete command|\[zq\] error)
+
+## SQ-SLT-03-R | the five rain lines of /salttest (r1103 ran it under "weather clear")
+> weather rain 6000
+sleep 5
+> salttest
+waitlog \[salttest\] done 400
+> weather clear 1000000
+count \[salttest\] PASS .* in rain >= 5
+reject \[salttest\] FAIL .* in rain
+look the rain lines PASS (salt items in rain under open sky stay); the other lines as in r1103 (all PASS)
+
+## SQ-CWG-09-R | Forgiving Void catches a perfBot in the End (r1103: the bot never acks its spawn teleport, Forgiving Void skips a player "teleporting")
+> execute in minecraft:the_end run forceload add 160 0 239 31
+sleep 10
+> pbot spawn safv 210 250 16 minecraft:the_end survival
+> sa ack safv
+pace 1
+repeat 30
+> sa ack safv
+end
+pace 2
+> data get entity safv Pos
+> data get entity safv Dimension
+> pbot remove safv
+> execute in minecraft:the_end run forceload remove 160 0 239 31
+reject safv fell out of the world
+expect \[sa\] ack safv: sent ids
+look safv caught by Forgiving Void (no "fell out of the world"), x pulled toward 0 from 210 by 20 to 25 per catch (the Pos line); if "[sa] ack" disconnects the bot, the accessor check did not run: note it, OPEN
+reject (Unknown (item|block|block type|entity)|Incorrect argument for command|Unknown or incomplete command|No player was found|no such bot|\[sa\] error)
+
+## SQ-CWG-08b-R | a raid on the current jars: raiders glow (r1103: no village on the old world, no raid)
+> forceload add {SAH1+312} {SAH3-112} {SAH1+543} {SAH3+119}
+sleep 30
+> place structure minecraft:village_plains {SAH1+424} {SAH2} {SAH3}
+sleep 10
+> clone {SAH1+392} {SAH2-4} {SAH3-32} {SAH1+455} {SAH2+3} {SAH3+31} {SAH1+392} {SAH2+60} {SAH3-32} filtered #minecraft:beds
+> pbot spawn saraid {SAH1+424} {SAH2+1} {SAH3} minecraft:overworld survival
+sleep 2
+> clear saraid
+> effect give saraid minecraft:bad_omen 6000 0
+sleep 45
+> execute store result score #saraiders sacwg if entity @e[type=#minecraft:raiders,x={SAH1+296},y={SAH2-20},z={SAH3-128},dx=256,dy=60,dz=256]
+> scoreboard players get #saraiders sacwg
+> execute as @e[type=#minecraft:raiders,limit=3,sort=nearest] at @s run data get entity @s Glowing
+> execute as @e[type=#minecraft:raiders,limit=3,sort=nearest] at @s run data get entity @s ActiveEffects
+> pbot remove saraid
+> forceload remove {SAH1+312} {SAH3-112} {SAH1+543} {SAH3+119}
+reject That position is not loaded
+reject #saraiders has 0
+look village placed (Generated structure / clone count of beds > 0); raid started (raiders counted above 0); raiders glow (Glowing 1b or a glowing effect)
+reject (Unknown (item|block|block type|entity)|Incorrect argument for command|Unknown or incomplete command|No player was found|no such bot|no such item)
+
+## SQ-CNG-04b-R | canned golem: lightning and death drops (r1103 killed the item entities before counting them)
+> summon canned_goods:canned_golem {SAH1+14} {SAH2} {SAH3+100} {PersistenceRequired:1b,Tags:["sacng4r"]}
+> kill @e[type=minecraft:item]
+> execute at @e[type=canned_goods:canned_golem,tag=sacng4r,limit=1] run summon minecraft:lightning_bolt ~ ~ ~
+sleep 3
+> zcount {SAH1+6} {SAH2-1} {SAH3+92} {SAH1+22} {SAH2+4} {SAH3+108}
+waitlog \[zcount\] entities 30
+> kill @e[type=canned_goods:canned_golem,tag=sacng4r]
+sleep 2
+> zcount {SAH1+6} {SAH2-1} {SAH3+92} {SAH1+22} {SAH2+4} {SAH3+108}
+> fill {SAH1+6} {SAH2} {SAH3+92} {SAH1+22} {SAH2+3} {SAH3+108} minecraft:air replace minecraft:fire
+reject (Exception|Error occurred while handling event)
+look first zcount: what the lightning procedure left (golem alive or not, items); second: the death drop (r1103 lost both: the golem died or vanished after the bolt and 7 item entities were killed unread). Compare with upstream Canned Goods (cans.md 9)
+reject (Unknown (item|block|block type|entity)|Incorrect argument for command|Unknown or incomplete command)
+
+## SQ-CWG-08o-R | PART 2, boot on the OLD 1.1.06 release (deploy/latest): a placed village (r1103: forceload 7x7 chunks too small, "That position is not loaded")
+> forceload add {SAH1+56} {SAH3-112} {SAH1+287} {SAH3+119}
+sleep 40
+> place structure minecraft:village_plains {SAH1+168} {SAH2} {SAH3}
+sleep 10
+> clone {SAH1+128} {SAH2-4} {SAH3-32} {SAH1+191} {SAH2+3} {SAH3+31} {SAH1+128} {SAH2+60} {SAH3-32} filtered minecraft:bell
+> clone {SAH1+128} {SAH2-4} {SAH3-32} {SAH1+191} {SAH2+3} {SAH3+31} {SAH1+128} {SAH2+80} {SAH3-32} filtered #minecraft:beds
+> save-all flush
+reject That position is not loaded
+look village placed; the bell / bed clone counts noted for SQ-CWG-08-R (forceload stays)
+reject (Unknown (item|block|block type|entity)|does not (have|accept)|Incorrect argument for command|Unknown or incomplete command|No player was found)
+
+## SQ-CWG-08-R | PART 2, current jars on the world saved by SQ-CWG-08o-R: the village survives the upgrade
+> forceload add {SAH1+56} {SAH3-112} {SAH1+287} {SAH3+119}
+sleep 30
+> clone {SAH1+128} {SAH2-4} {SAH3-32} {SAH1+191} {SAH2+3} {SAH3+31} {SAH1+128} {SAH2+60} {SAH3-32} filtered minecraft:bell
+> clone {SAH1+128} {SAH2-4} {SAH3-32} {SAH1+191} {SAH2+3} {SAH3+31} {SAH1+128} {SAH2+80} {SAH3-32} filtered #minecraft:beds
+look bell / bed clone counts equal SQ-CWG-08o-R's ("No blocks were cloned" there means the old half failed again)
+reject (Unknown (item|block|block type|entity)|Incorrect argument for command|Unknown or incomplete command|That position is not loaded|No player was found)
+
+# ===================================================================================================================
+# Part 3 (rows SB-R-00 to SQ-NEST-02-R): GROUP B world, current jars WITH endersdelight-1.19-1.2.2.jar. Any group B
+# level works: the boot 4 world sAb2 ($SCR/r1103/sAb/srv/sAb2) or a fresh one (prep_srv.sh ... B, seed 8675309,
+# difficulty=normal, spawn-monsters=true, spawn-animals=true; decouple the jars). Probes: zq, zp, zcount and the FIXED
+# sA_probe.js (copy it again: boot 4 had the 02:22 copy, before the 02:26 fix). Run in its own boot with
+#   qrun.py run "$OUT4" .../sA_R.qb "$RES" --rows SB-R-00,SQ-VTDA-10-R,SQ-GLD-14-R,SQ-GLD-09-R,SQ-CDM2-02-R,SQ-NEST-02-R
+# Always include SB-R-00: r1103 boot 4 ran sA_4.qb with --from SQ-VTDA-10, skipped SA4-00, so {SBH} was never
+# captured and every command using it failed ("Expected integer").
+# SQ-ENM-05b (needs a boot without Ender's 1.2.2) waits for the SQ-ENM-03 fix; not here.
+
+## SB-R-00 | setup: home marker at spawn, clock, weather, forceload spawn (not a queue row)
+> execute unless entity @e[type=minecraft:marker,tag=sbhome] run summon minecraft:marker ~ ~ ~ {Tags:["sbhome"]}
+sleep 2
+> data get entity @e[type=minecraft:marker,tag=sbhome,limit=1] Pos
+capture SBH entity data: \[(-?\d+)\.\d+d, (-?\d+)\.\d+d, (-?\d+)\.\d+d\]
+> gamerule doDaylightCycle false
+> time set noon
+> gamerule doWeatherCycle false
+> weather clear 1000000
+> gamerule doPatrolSpawning false
+> gamerule doTraderSpawning false
+> forceload add {SBH1-16} {SBH3-16} {SBH1+48} {SBH3+48}
+sleep 30
+> say SBR setup done
+expect SBR setup done
+reject (Unknown (item|block|block type|entity)|Incorrect argument for command|Unknown or incomplete command|Expected (integer|double)|That position is not loaded)
+
+## SQ-VTDA-10-R | wild ghost peppers: only the crimson nylium one survives a neighbour update (r1103: {SBH} unset)
+> setblock {SBH1+20} 200 {SBH3} minecraft:grass_block
+> setblock {SBH1+22} 200 {SBH3} minecraft:moss_block
+> setblock {SBH1+24} 200 {SBH3} minecraft:mycelium
+> setblock {SBH1+26} 200 {SBH3} minecraft:crimson_nylium
+> setblock {SBH1+20} 201 {SBH3} vintagedelight:wild_ghost_peppers
+> setblock {SBH1+22} 201 {SBH3} vintagedelight:wild_ghost_peppers
+> setblock {SBH1+24} 201 {SBH3} vintagedelight:wild_ghost_peppers
+> setblock {SBH1+26} 201 {SBH3} vintagedelight:wild_ghost_peppers
+sleep 1
+> setblock {SBH1+20} 201 {SBH3+1} minecraft:stone
+> setblock {SBH1+22} 201 {SBH3+1} minecraft:stone
+> setblock {SBH1+24} 201 {SBH3+1} minecraft:stone
+> setblock {SBH1+26} 201 {SBH3+1} minecraft:stone
+> fill {SBH1+20} 201 {SBH3+1} {SBH1+26} 201 {SBH3+1} minecraft:air
+sleep 2
+> execute if block {SBH1+20} 201 {SBH3} vintagedelight:wild_ghost_peppers run say SBR pepper grass survived
+> execute if block {SBH1+22} 201 {SBH3} vintagedelight:wild_ghost_peppers run say SBR pepper moss survived
+> execute if block {SBH1+24} 201 {SBH3} vintagedelight:wild_ghost_peppers run say SBR pepper mycelium survived
+> execute if block {SBH1+26} 201 {SBH3} vintagedelight:wild_ghost_peppers run say SBR pepper nylium survived
+expect SBR pepper nylium survived
+reject SBR pepper (grass|moss|mycelium) survived
+reject (Unknown (item|block|block type|entity)|Incorrect argument for command|Unknown or incomplete command|Expected (integer|double)|Invalid (block state|tag))
+
+## SQ-GLD-14-R | no Golden Food Enchantment from the table or librarians (r1103: old probe copy, {SBH} unset, MCA villagers)
+> sa enchtable minecraft:diamond_sword 30 20
+> sa enchtable minecraft:book 30 20
+waitlog \[sa\] enchtable minecraft:book L30: 20 rolls 60
+expect \[sa\] enchtable minecraft:diamond_sword L30: 20 rolls, goldenfood 0
+expect \[sa\] enchtable minecraft:book L30: 20 rolls, goldenfood 0
+> fill {SBH1+28} 200 {SBH3+2} {SBH1+32} 200 {SBH3+6} minecraft:glass
+pace 0.3
+repeat 20
+> summon mca:male_villager {SBH1+30} 201 {SBH3+4} {NoAI:1b,PersistenceRequired:1b,Tags:["salib"],VillagerData:{profession:"minecraft:librarian",level:1,type:"minecraft:plains"}}
+end
+pace 2
+sleep 3
+> sa offers salib
+waitlog \[sa\] offers salib 60
+sleep 3
+expect \[sa\] offer \d+: .*-> 1 minecraft:enchanted_book
+reject goldenfood:gf_enchantment
+> kill @e[tag=salib]
+look 20 table rolls on a sword and a book name no goldenfood enchantment; the librarians' offers include enchanted books (idOf shows only the item id: the reject on gf_enchantment covers the table lines; a librarian book's enchantment is not printed, so also check that none of the 20 offers lists "goldenfood" anywhere). enchreg false and /enchant unknown PASSED in r1103
+reject (Unknown (item|block|block type|entity)|Incorrect argument for command|Unknown or incomplete command|Expected (integer|double)|\[sa\] error)
+
+## SQ-GLD-09-R | village chests: no Golden Food book; Chalk / Botania / CC loot injected once (r1103: {SBH} unset)
+> fill {SBH1+36} 199 {SBH3} {SBH1+44} 199 {SBH3+8} minecraft:glass
+> kill @e[type=minecraft:item]
+pace 0.1
+repeat 20
+> loot spawn {SBH1+38} 201 {SBH3+2} loot minecraft:chests/village/village_plains_house
+> loot spawn {SBH1+42} 201 {SBH3+6} loot minecraft:chests/village/village_cartographer
+end
+pace 2
+sleep 3
+> zcount {SBH1+36} 200 {SBH3} {SBH1+40} 203 {SBH3+4}
+> zcount {SBH1+40} 200 {SBH3+4} {SBH1+44} 203 {SBH3+8}
+> execute as @e[type=minecraft:item,nbt={Item:{id:"minecraft:enchanted_book"}}] run data get entity @s Item
+waitlog \[zcount\] entities 30
+sleep 2
+reject goldenfood:gf_enchantment
+shell grep -nhiE "loot tuning|reverted|restored" logs/latest.log | head -20 || true
+look zcount: chalk / botania / computercraft items appear (one injected pool each); the loot-tuning lines count 0 tables reverted and 0 injections restored (boot 4 log: 191 tables rewritten, as boot 2)
+> kill @e[type=minecraft:item]
+reject (Unknown (item|block|block type|entity)|Incorrect argument for command|Unknown or incomplete command|Expected (integer|double))
+
+## SQ-CDM2-02-R | warm ocean: sea grape patches (r1103: 0 in 64 chunks, rarity 1 in 30 per chunk: too small a sample)
+> locate biome minecraft:warm_ocean
+waitlog The nearest minecraft:warm_ocean 600
+capture SWO The nearest minecraft:warm_ocean is at \[(-?\d+), (~|-?\d+), (-?\d+)\]
+> forceload add {SWO1-120} {SWO3-120} {SWO1+119} {SWO3+119}
+sleep 180
+> zq count {SWO1-120} 20 {SWO3-120} {SWO1+119} 64 {SWO3+119} oceanic_delight:wild_sea_grape
+> zq count {SWO1-120} 20 {SWO3-120} {SWO1+119} 64 {SWO3+119} minecraft:sand
+waitlog \[zq\] count minecraft:sand 180
+> forceload remove {SWO1-120} {SWO3-120} {SWO1+119} {SWO3+119}
+shell ! grep -hE "\[wild-crops\].*(rror|xception|unknown|missing)" logs/latest.log logs/kubejs/server.log
+look 225 chunks (about 7 patches expected if all warm ocean): wild_sea_grape above 0 = PASS; 0 with sand floor present = FAIL (check the farmersdelight:wild_crop predicates in kubejs/data/creativedelight/worldgen/configured_feature/wild/sea_grape.json); the sand count shows the chunks were loaded
+reject (Unknown (item|block|block type|entity)|Incorrect argument for command|Unknown or incomplete command|\[zq\] error)
+
+## SQ-NEST-02-R | swamp, river, savanna nests (r1103: 0 in 64 chunks each; placed rarity 1 in 32)
+> locate biome minecraft:swamp
+waitlog The nearest minecraft:swamp 600
+capture SSW The nearest minecraft:swamp is at \[(-?\d+), (~|-?\d+), (-?\d+)\]
+> locate biome minecraft:savanna
+waitlog The nearest minecraft:savanna 600
+capture SSV The nearest minecraft:savanna is at \[(-?\d+), (~|-?\d+), (-?\d+)\]
+> forceload add {SSW1-120} {SSW3-120} {SSW1+119} {SSW3+119}
+> forceload add {SSV1-120} {SSV3-120} {SSV1+119} {SSV3+119}
+sleep 240
+> zq count {SSW1-120} 55 {SSW3-120} {SSW1+119} 110 {SSW3+119} incubation_additions:duck_egg_nest
+> zq count {SSW1-120} 55 {SSW3-120} {SSW1+119} 110 {SSW3+119} incubation_additions:goose_egg_nest
+> zq count {SSV1-120} 55 {SSV3-120} {SSV1+119} 110 {SSV3+119} incubation_additions:emu_egg_nest
+waitlog \[zq\] count incubation_additions:emu_egg_nest 240
+> forceload remove {SSW1-120} {SSW3-120} {SSW1+119} {SSW3+119}
+> forceload remove {SSV1-120} {SSV3-120} {SSV1+119} {SSV3+119}
+shell ! grep -hiE "(incubation|nest).*(rror|xception|unknown|missing|invalid)" logs/latest.log | grep -v "Error loading class" | grep -q .
+look 225 chunks per biome spot: at least one duck or goose nest in the swamp and one emu nest in the savanna; none = check the member's placed_feature rarity and biome modifiers (packs/*/data/incubation_additions/)
+reject (Unknown (item|block|block type|entity)|Incorrect argument for command|Unknown or incomplete command|\[zq\] error)

@@ -1,0 +1,15 @@
+{
+  "_comment": "Item merge list (swap lists 'merges', SwapLists.java; feature_writeup/item_merges.md 6): both items stay registered; the old one is purged and the survivor takes over its recipes, loot and tags (CD startup script creativedelight/swap_merges.js) and every stack of it in the world (Common swap/ItemMerges). Applied only while every 'requires' mod is loaded. Never prune: an old world whose old item is later unregistered is remapped from this list. More Delight's diced potatoes go, Rustic Delight's potato slices stay (item_merges.md 2.4). One Potato Salad: More Delight's goes, Rustic Delight's stays (item_merges.md 2.17, merges/dishes #4).",
+  "requires": [
+    "moredelight",
+    "rusticdelight"
+  ],
+  "merges": {
+    "rusticdelight:potato_slices": [
+      "moredelight:diced_potatoes"
+    ],
+    "rusticdelight:potato_salad": [
+      "moredelight:potato_salad"
+    ]
+  }
+}

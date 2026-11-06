@@ -1,14 +1,14 @@
 {
  "_about": "Which pack version each machine runs. Written by `tools/build_deploy.py --snapshot` after a payload is copied out; update payloads are diffed against these versions' history/<version>.json.",
  "server": {
-  "version": "1.1.05",
-  "date": "2026-10-31T12:52",
-  "snapshotSha1": "2d6806f7d47c565363a3c258bd9bc98fdef7ba67"
+  "version": "1.2.01",
+  "date": "2026-11-04T22:15",
+  "snapshotSha1": "4dfccc2a4628ecedd60adb6dfe3943e50711b639"
  },
  "client": {
-  "version": "1.1.06",
-  "date": "2026-10-31T17:58",
-  "snapshotSha1": "8d9f57ef022d26f837eaf24afc1bbe29a65b3fee"
+  "version": "1.2.01",
+  "date": "2026-11-04T22:15",
+  "snapshotSha1": "4dfccc2a4628ecedd60adb6dfe3943e50711b639"
  },
  "log": [
   {
@@ -137,6 +137,42 @@
    "date": "2026-10-31T17:58",
    "targets": [
     "client"
+   ]
+  },
+  {
+   "version": "1.2.00",
+   "date": "2026-11-03T20:40",
+   "targets": [
+    "client"
+   ],
+   "notes": "full install applied to CreativeEngineeringClient; dev instance is the build source"
+  },
+  {
+   "version": "1.2.00",
+   "date": "2026-11-03T20:55",
+   "targets": [
+    "server"
+   ]
+  },
+  {
+   "version": "1.2.00",
+   "date": "2026-11-03T20:55",
+   "targets": [
+    "client"
+   ]
+  },
+  {
+   "version": "1.2.01",
+   "date": "2026-11-04T22:15",
+   "targets": [
+    "client"
+   ]
+  },
+  {
+   "version": "1.2.01",
+   "date": "2026-11-04T22:15",
+   "targets": [
+    "server"
    ]
   }
  ]

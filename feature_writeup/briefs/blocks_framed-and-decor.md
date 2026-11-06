@@ -50,7 +50,7 @@ Copycats+ copycat whose camo on the top face is dirt, grass or another soil.
   Create's `CopycatBlock` (checked by grepping the extracted classes). Forge's default `IForgeBlock.canSustainPlant`
   looks at the framed block itself, which is not in `#minecraft:dirt`, so `BushBlock.canSurvive` fails.
 - Camo lookup already exists in patcherMod:
-  [CamoSpeed.camo(BlockEntity)](../../development/patcherMod/src/main/java/com/SaintAlfonzo/creativeengineering/surface/CamoSpeed.java#L84-L104)
+  [CamoSpeed.camo(BlockEntity)](../../development/creativeEngineering/src/main/java/com/SaintAlfonzo/creativeengineering/surface/CamoSpeed.java#L84-L104)
   (FramedBlocks via `FramedCamo`, Copycats+ via `CopycatsPlusCamo`, Create's `CopycatBlockEntity.getMaterial()`).
   FramedBlocks' `FramedBlockEntity.getCamo(Direction)` gives the camo of one face (double blocks).
 - Related mixins: `FramedDoubleCamoOrderMixin`, `CopycatMaterialOrderMixin` (same targets, remap = false, SRG names).
@@ -251,7 +251,7 @@ Vines can grow on and under non-full blocks such as stacked logs.
 - `vinery:stackable_log` (Vinery port `StackableLogBlock extends SlabBlock`,
   [StackableLogBlock.java:245-257](../../development/creativeBrewing/members/vinery/src/main/java/net/satisfy/vinery/core/block/StackableLogBlock.java#L245-L257))
   is made of four log boxes: no full face anywhere, so no vine.
-- patcherMod already mixes into `VineBlock` ([VineBlockShearMixin.java](../../development/patcherMod/src/main/java/com/SaintAlfonzo/creativeengineering/mixin/VineBlockShearMixin.java),
+- patcherMod already mixes into `VineBlock` ([VineBlockShearMixin.java](../../development/creativeCommon/src/main/java/com/SaintAlfonzo/creativecommon/mixin/VineBlockShearMixin.java),
   sheared vines stop spreading; modded vines subclassing `VineBlock` included).
 
 ### Build

@@ -3,7 +3,6 @@ package com.SaintAlfonzo.creativedelight.delightful;
 import com.SaintAlfonzo.creativedelight.delightful.block.BaklavaBlock;
 import com.SaintAlfonzo.creativedelight.delightful.block.CantaloupePlantBlock;
 import com.SaintAlfonzo.creativedelight.delightful.block.MilkshakeCauldronBlock;
-import com.SaintAlfonzo.creativedelight.delightful.item.CupItem;
 import com.SaintAlfonzo.creativedelight.delightful.item.FluixKnifeItem;
 import com.SaintAlfonzo.creativedelight.delightful.item.GummyItem;
 import com.SaintAlfonzo.creativedelight.delightful.item.ShakeItem;
@@ -74,8 +73,6 @@ public final class DelightfulBackportRegistry {
 			() -> new ConsumableItem(ModItems.bowlFoodItem(DelightfulBackportFoods.CACTUS_CHILI), true));
 	public static final RegistryObject<Item> CACTUS_SOUP = ITEMS.register("cactus_soup",
 			() -> new ConsumableItem(ModItems.bowlFoodItem(DelightfulBackportFoods.CACTUS_SOUP), true));
-	public static final RegistryObject<Item> CACTUS_SOUP_CUP = ITEMS.register("cactus_soup_cup",
-			() -> new CupItem(ModItems.foodItem(DelightfulBackportFoods.CACTUS_SOUP_CUP).stacksTo(16)));
 
 	// Baklava (3.8.1's Mulberry Pie is not taken: Create Central Kitchen already places Upgrade Aquatic's and slices it)
 	public static final RegistryObject<Item> BAKLAVA_ITEM = ITEMS.register("baklava",

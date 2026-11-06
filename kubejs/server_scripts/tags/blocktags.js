@@ -20,37 +20,19 @@ ServerEvents.tags('block', e => {
 
 	// The Vintage Delight ghost pepper soil tag moved to Creative Delight 2026-10-27 (vintagedelight/tags.js).
 
-	// Oven (patcherMod oven/, feature_writeup/oven.md 2.4, 3.1). What heats it from below: FD's open-fire
-	// sources (fire, campfires, lava; nested, so it stays live) + magma, lava cauldron, blaze burners and
-	// the blaze lantern. Every stove and oven is left out on purpose ("non-stove" rule). OvenHeat gates
-	// lit blocks by `lit` and idle blaze burners by heat level.
-	t.add(e, b.t_oven_heat_sources, [
-		b.t_fd_tray_heat_sources, b.magma_block, b.lava_cauldron, b.blaze_burner, b.lit_blaze_burner, b.blaze_lantern,
-	])
-	// Stove heat on top: FD's lit gate means a pot or skillet on the oven only heats while the oven is heated.
-	t.add(e, b.t_fd_heat_sources, b.oven)
-	t.mineable(e, 'pickaxe', null, b.oven)
-	// Monster box (mob_block_tweaks.md 2.9): mined like obsidian; a contraption must not carry the vault off.
-	t.mineable(e, 'pickaxe', 'diamond', b.monster_box, { exclusive: true })
-	t.add(e, b.t_create_non_movable, b.monster_box)
-	// Bakeware is hammered on the cutting board (NCH.hammering); without this the IE hammer rotates the board
-	// instead of cutting (patcherMod IECompat.registerHammerNoRotate).
-	t.add(e, b.t_hammer_no_rotate, b.cutting_board)
+	// Oven heat sources and the oven's stove heat and pickaxe tags: Creative Delight (creativeengineering/kitchen_tags.js).
+	// Monster box, Rubidium blendable, campfire rain and no_world_dye tags: Creative Compat (creativecompat/kubejs/tags/blocktags.js).
+	// Bakeware hammering (cutting board): Creative Delight (creativeengineering/kitchen_tags.js).
 	// Counter supports / toppers (Cooking for Blockheads): Creative Delight cookingforblockheads/kitchen.js (2026-10-31).
-	// Villager ladders (patcherMod McaVillagerPathLaddersMixin, feature_writeup/mob_block_tweaks.md 2.8): every block named
-	// *ladder*; the mixin also requires minecraft:climbable, so a non-climbable match does nothing. Vines, ropes, chains,
-	// scaffolding and grab rails stay out on purpose.
-	t.addMatching(e, b.t_villager_ladders, '*:*ladder*')
-	// Rubidium blends the vanilla grass block's tint per vertex across neighbours (biome blend > 0) but colours
-	// modded blocks flat per block, so Vinery's grass slab came out a shade off next to grass. This tag opts it in.
-	t.add(e, b.t_blendable_blocks, global.item.grass_slab)
+	// Villager ladders, structure ground match, earth fill, template trim and wild plant soil tags: Creative Worldgen
+	// (creativeworldgen/kubejs/tags/blocktags.js, 2026-11-02).
 
 	// Keg temperature + Vinery cold storage (Brewin port BnCHeatSources; Vinery WineYears.storageKind). The keg tag
 	// already holds FD heat_sources; these only warm kegs, they don't let FD pots cook. Running gates are in
 	// BnCHeatSources: lit/active/on must be true, blaze heaters (burner, liquid burner, enchanter) need fuel. Skipped
 	// for now: machines whose running state lives only in the block entity (IE arc furnace, advanced blast furnace,
 	// preheater; PneumaticCraft heat blocks; Create steam engines/boilers; Compressed Creativity heater, D&D furnace
-	// engine, Cooking for Blockheads oven, which has no block state and would count while idle).
+	// engine). The Cooking for Blockheads oven gets a `lit` state from Creative Delight and comes in through FD heat_sources.
 	t.add(e, b.t_keg_heat_sources, [
 		b.furnace, b.blast_furnace, b.smoker, b.quark_deepslate_furnace, b.quark_blackstone_furnace,
 		b.keypad_furnace, b.keypad_blast_furnace, b.keypad_smoker,
@@ -65,17 +47,6 @@ ServerEvents.tags('block', e => {
 		b.snow, b.snow_block, b.powder_snow, b.thin_ice, b.iw_permafrost, b.iw_cryosol,
 		b.t_ice, b.polished_packed_ice, b.chiseled_packed_ice,
 	])
-
-	// Campfire rain (patcherMod campfire/CampfireRain.java, CEConfig [campfire]). Unlit Campfire burns campfires
-	// forever; rain puts out the ones in rain_douses unless the block below is in rain_proof_fuel.
-	// Soul campfires stay out of rain_douses; Tinted Campfires aren't CampfireBlocks, so never ticked.
-	t.add(e, b.t_campfire_rain_douses, b.campfire)
-	t.add(e, b.t_campfire_rain_proof_fuel, [b.coal_block, b.quark_charcoal_block, b.architects_palette_charcoal_block])
-
-	// In-world dyeing (Supplementaries [tweaks.dye_blocks], patcherMod SupplementariesDyeBlocksMixin). Blocks with a
-	// block entity never dye in world (sacks lost their contents, canvas signs their text); no_world_dye is for plain
-	// blocks the dyeing audit takes out too (TODO blocks/dyeing #1). Empty until then.
-	t.add(e, b.t_no_world_dye, [])
 
 	// Ore Excavation undo (patcherMod excavation/VeinUndo.java, CEConfig [vein_undo]). An undo whose vein mine broke
 	// any of these is refused; blocks with a block entity are refused in code (a restored chest rerolls its loot).
@@ -155,6 +126,7 @@ ServerEvents.tags('block', e => {
 		'minecraft:polished_*', 'minecraft:smooth_*', 'minecraft:cut_*sandstone*', 'minecraft:chiseled_*sandstone',
 		'minecraft:chiseled_polished_blackstone', 'minecraft:*_glazed_terracotta', 'minecraft:dark_prismarine*',
 		'/^minecraft:(chiseled_)?quartz_(block|pillar|slab|stairs)$/',
+		'vintagedelight:smooth_salt_block', 'vintagedelight:salt_pillar',   // Vintage Delight salt decor
 		'#forge:storage_blocks/diamond', '#forge:storage_blocks/emerald', '#forge:storage_blocks/lapis',
 		'#forge:storage_blocks/redstone', '#forge:storage_blocks/quartz',
 		// quark
@@ -254,6 +226,7 @@ ServerEvents.tags('block', e => {
 		'architects_palette:*brick*', 'architects_palette:*_tile*', item.moonshale_flagstone,
 		'botania:*brick*', 'ae2:*brick*', 'clayworks:*brick*', 'createdeco:*brick*', 'pneumaticcraft:*brick*',
 		'twigs:*brick*', 'twigs:*shingle*', 'design_decor:*castel*', 'design_decor:*stone_tiles', '@mosaic_masonry',
+		'vintagedelight:*brick*',   // Vintage Delight salt bricks and mixed salt bricks
 		'/^immersiveengineering:(slab_)?(alloybrick|blastbrick|blastbrick_reinforced|cokebrick)$/',
 		'engineersdecor:clinker_brick_*', 'engineersdecor:slag_brick_*', 'engineersdecor:dark_shingle_roof*',
 		'/^buzzier_bees:(chiseled_)?honeycomb_(brick|tile)[a-z_]*$/', '/^securitycraft:(reinforced_)?crystal_quartz_bricks$/',
@@ -290,6 +263,7 @@ ServerEvents.tags('block', e => {
 		'/^vinery:(cherry_(beam|floorboard)|stackable_log|[a-z_]*crate|[a-z_]*_wine_rack_(big|mid|small)|[a-z_]*_lattice)$/', '/^create_compressed:(large_)?cogwheel_block$/',
 		'farmersdelight:*_crate', 'rusticdelight:*crate', 'delightful:*_crate', 'quarkdelight:*_fruit_crate',
 		'fruitsdelight:*_crate', item.chorus_crate, item.corn_crate,
+		'vintagedelight:*_crate',   // Vintage Delight cucumber, ghost pepper and peanut crates
 		// Brewin' port: both copy oak planks. The coaster stays untiered: it is 1 px thin, so the block under it counts
 		item.heating_cask, item.ice_crate,
 	], { except: ['/^(copycats|framedblocks):/'] }) // their copycat/framed trapdoors are camouflage
@@ -334,6 +308,7 @@ ServerEvents.tags('block', e => {
 	])
 
 	t.addMatching(e, runner.natural_rough, [
+		'salt:raw_rock_salt_block',   // raw salt crystals, like raw stone (salt.md 6 S3)
 		'minecraft:podzol', 'minecraft:mycelium', 'minecraft:crimson_nylium', 'minecraft:warped_nylium',
 		'minecraft:netherrack', 'minecraft:basalt', 'minecraft:nether_*_ore', 'supplementaries:ashen_basalt',
 		'minecraft:*coral_block', 'minecraft:mangrove_roots',
@@ -365,6 +340,9 @@ ServerEvents.tags('block', e => {
 		// sacks, bags and bales
 		'suppsquared:sack_*', 'delightful:*_sack', 'rusticdelight:*_bag', 'vinery:*_bag', 'farmersrespite:*_sack', item.corn_kernel_bag,
 		'/^farmersdelight:(rice_bag|rice_bale|straw_bale|tatami)$/',
+		'/^vintagedelight:oat_(bag|bale)$/',
+		// the one salt block (packed salt dust, food/seasoning #6) and Vintage's own; Raw Rock Salt Block is natural_rough
+		'salt:salt_block', 'vintagedelight:salt_block',
 	])
 
 	t.addMatching(e, runner.dust, [
@@ -385,6 +363,7 @@ ServerEvents.tags('block', e => {
 		// gourds and fruit blocks (a hard rind: no visual sink), feasts and cakes
 		'minecraft:melon', 'minecraft:pumpkin', 'minecraft:carved_pumpkin', 'minecraft:jack_o_lantern', item.chorus_fruit_block,
 		'/^delightful:(sliced_)?(cantaloupe|melon|mini_melon|pumpkin)$/', '/^brewinandchewin:(pizza|quiche)$/',
+		'/^vintagedelight:(cheese|meat)_pizza$/', 'vintagedelight:cheese_wheel',
 		'/^createaddition:(chocolate|honey)_cake$/', '/^rusticdelight:[a-z_]*(pancakes|cheesecake)$/', item.chorus_pie,
 		'/^goldenfood:(enchanted_)?golden_cake$/', item.hamimelon, item.coffee_cake, item.rose_hip_pie,
 		item.fig_pudding, item.mangosteen_cake, item.pineapple_fried_rice, item.nachos_block, item.popcorn_box,
@@ -451,70 +430,7 @@ ServerEvents.tags('block', e => {
 
 	t.overlaps(e, runnerTags.concat(basicTiers), 'BlockRunner tier')
 
-	// ── Structure ground matching (patcherMod worldgen/GroundMatch, CEConfig [ground_match]) ──
-	// A base family: these blocks in a structure's bottom layers become the sampled local ground where
-	// the ground isn't this family (grass pads on volcanic peaks, dirt in deserts). A new family = a new
-	// tag here + its id in [ground_match] families. dirt_path and farmland stay: they're design, not base.
-	t.add(e, 'creativeengineering:ground_match/grass', [
-		item.grass_block, item.dirt, item.coarse_dirt, item.podzol, item.rooted_dirt, item.mycelium,
-	])
-	// Dropped when the block under them is swapped (both halves of tall plants).
-	t.add(e, 'creativeengineering:ground_match/plants', [
-		'#minecraft:flowers', '#minecraft:saplings', item.grass, item.fern, item.tall_grass, item.large_fern,
-		item.dead_bush, item.brown_mushroom, item.red_mushroom, b.sweet_berry_bush,
-	])
-	// Never sampled as ground: tree and crop parts that neighbouring chunks' features spill onto the surface.
-	t.add(e, 'creativeengineering:ground_match/not_ground', [
-		'#minecraft:leaves', '#minecraft:logs', item.brown_mushroom_block, item.red_mushroom_block,
-		item.mushroom_stem, item.cactus, item.bamboo, item.pumpkin, item.melon_block,
-	])
-
-	// ── Structure earth fill (patcherMod worldgen/EarthFill, CEConfig [worldgen.earth_fill]) ──
-	// Earth that counts when a structure's foundation sits over water or air: a start whose template
-	// bases hold more of these over water or air than the limits is cancelled. Loose ground only, not
-	// stone or bricks (those are the building). More tags can be listed in [earth_fill] blocks.
-	t.add(e, 'creativeengineering:earth_fill/earth', [
-		'#minecraft:dirt', '#forge:sand', '#forge:gravel', 'minecraft:clay', 'minecraft:dirt_path',
-	])
-	// Stone and brick bases, counted as earth only for structures in the structure tag of the same name
-	// (worldgen/earth_fill.js): ones that stand on a stone plate instead of a dirt pad, like the drum tower.
-	t.add(e, 'creativeengineering:earth_fill/stone_base', [
-		'#minecraft:base_stone_overworld', item.cobblestone, item.mossy_cobblestone, item.stone_bricks,
-		item.mossy_stone_bricks, item.cracked_stone_bricks, item.smooth_stone, item.polished_andesite,
-		item.polished_diorite, item.polished_granite, item.polished_deepslate, item.deepslate_bricks,
-		// End builds (the End House): end stone, its bricks and purpur
-		item.end_stone, item.end_stone_bricks, item.purpur_block,
-	])
-
-	// ── Template trim (patcherMod worldgen/TemplateTrim, CEConfig [worldgen.terrain_adaptation]) ──
-	// For structures in creativeengineering:template_trim: a template column holding only air, pad and plants
-	// isn't placed, so the natural ground stays there. Pad = loose ground a template brings along; dirt_path
-	// and farmland are left out on purpose (paths and crop plots are design, so their columns count as built).
-	t.add(e, 'creativeengineering:template_trim/pad', [
-		'#minecraft:dirt', '#forge:sand', '#forge:gravel', 'minecraft:clay', item.snow_block,
-	])
-	// Loose things standing on a pad: dropped with it.
-	t.add(e, 'creativeengineering:template_trim/plants', [
-		'#creativeengineering:ground_match/plants', item.snow, item.moss_carpet,
-	])
-
-	// ── Crop parity (patcherMod crops/CropParity, feature_writeup/crops.md) ──
-	// Soils that count as farmland for crops whose own check is hard-coded to vanilla farmland
-	// (tobacco via mixin/TobaccoPlacementMixin). Untilled Rich Soil stays out, as for every farmland crop.
-	t.add(e, 'creativeengineering:crops/farmland_soils', [item.farmland, item.rich_farmland, item.fertile_soil])
-	// Non-CropBlock plants treated as farmland crops: vanilla farmland under them doesn't dry back to
-	// dirt, soaked Fertile Soil bone-meals them, Quark's hoe area break includes them. Their right-click
-	// replant is a separate line in config/quark-common.toml "Harvestable Blocks".
-	t.add(e, 'creativeengineering:crops/farmland_crops', item.tobacco_seeds)
-
-	// ── Wild plant soils (tools/gen_soil_compat.py, feature_writeup/crops.md 2.8.1) ──
-	// Ground that worldgen plant/tree features hard-coded to grass_block also accept (the generator's
-	// kubejs/data overrides and the pack's wild/hamimelon test this tag). Immersive Weathering lays these
-	// soils before vegetation. Permafrost is left out on purpose.
-	t.add(e, 'creativeengineering:worldgen/grass_like_soils', [
-		item.grass_block, item.humus, item.fluvisol, item.immersive_weathering_silt, item.vertisol,
-		item.cryosol, item.rooted_grass_block,
-	])
+	// Crop parity (farmland soils and crops): Creative Delight (creativeengineering/crop_tags.js).
 })
 
 console.log('block tags finished')

@@ -1,6 +1,5 @@
 {
   "fluid_type.pneumaticcraft.memory_essence": "Liquid Experience",
   "item.pneumaticcraft.memory_essence_bucket": "Liquid Experience Bucket",
-  "gui.tooltip.item.pneumaticcraft.memory_essence_bucket": "Experience in liquid form.",
-  "gui.tooltip.item.pneumaticcraft.glycerol": "Tastes sweet!"
+  "gui.tooltip.item.pneumaticcraft.memory_essence_bucket": "Experience in liquid form."
 }

@@ -63,7 +63,7 @@
     const $OMDamage = Java.loadClass('net.minecraft.world.damagesource.DamageSource')
     const $OMBus = Java.loadClass('net.minecraftforge.common.MinecraftForge')
     const $OMEvents = Java.loadClass('net.minecraftforge.event.ForgeEventFactory')
-    const $OMCE = Java.loadClass('com.SaintAlfonzo.creativeengineering.CEConfig')
+    const $OMCE = Java.loadClass('com.SaintAlfonzo.creativecommon.CommonConfig')
 
     const i = global.item
     const Y = -60
@@ -498,7 +498,7 @@
     // ---------------------------------------------------------------- air (featureporting #3, FP-13)
     function air(level) {
         const $RightClick = Java.loadClass('net.minecraftforge.event.entity.player.PlayerInteractEvent$RightClickItem')
-        let cfg = $OMCE.BOTTLED_AIR
+        let cfg = Java.loadClass('com.SaintAlfonzo.creativeequipment.CEQConfig').BOTTLED_AIR  // [bottled_air]: Creative Equipment since 2026-11-04
         info('[bottled_air] enabled=' + cfg.enabled.get() + ' airPerBottle=' + cfg.airPerBottle.get() + ' fireEvaporates=' + cfg.fireEvaporates.get() + ' noDrinkingUnderwater=' + cfg.noDrinkingUnderwater.get())
         let x = 180
         cmd('fill ' + (x - 1) + ' ' + Y + ' ' + (Z - 1) + ' ' + (x + 1) + ' ' + (Y + 3) + ' ' + (Z + 1) + ' minecraft:glass')

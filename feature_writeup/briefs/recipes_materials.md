@@ -49,7 +49,7 @@ pass.
   `#forge:rope` (or move to `#forge:ropes` only once FD's and Quark's ropes are merged away).
 - **Bug, rope pulley:** `i.any_rope = '#forge:rope'` (item_dict 681, again at 1578) is singular. The only Forge rope
   tag in the cached jars is `forge:ropes` (Supplementaries, holding `supplementaries:rope`), and no pack script fills
-  `forge:rope`. [create_utilities.js](../../kubejs/server_scripts/engineering/create_utilities.js) 55-60 replaces
+  `forge:rope`. [create_utilities.js](../../kubejs/data/creativeengineering/kubejs/engineering/create_utilities.js) 55-60 replaces
   the wool in `create:crafting/kinetics/rope_pulley` with `i.any_rope`. If no other mod fills `forge:rope`, the rope
   pulley has no working recipe. Check in game: JEI rope pulley; the rope slot is empty or doesn't cycle. Fixed by
   #2 step 3.
@@ -309,7 +309,7 @@ Ferns count as grass, tall ferns as tall grass, and leaves match in many crafts.
 ### Now
 - Items: `i.grass`, `i.tall_grass`, `i.fern`, `i.large_fern` (item_dict 611-614), `i.t_leaves` = `#minecraft:leaves`.
 - One tag already treats them alike: `forge:mulch/green` = grass, tall grass, fern, large fern
-  ([wood_tags.js](../../kubejs/server_scripts/tags/wood_tags.js) lines 25-28, written with bare `e.add`: move to
+  ([wood_tags.js](../../kubejs/data/creativeengineering/kubejs/tags/wood_tags.js) lines 25-28, written with bare `e.add`: move to
   `global.tags` when touched). The wandering trader pool lists grass, tall grass and large fern but not the fern
   (wandering_trades.js line 52).
 - Crafts that take leaves by tag (verified): Create tea, Fruits Delight's mango, mangosteen, hawberry and peach teas

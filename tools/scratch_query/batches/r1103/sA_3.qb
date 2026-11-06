@@ -1,0 +1,127 @@
+# Run r1103 slice A, boot 3: same srv and world as boot 2 (level sAo), restarted with four scratch config edits and the
+# Worldgen loot json moved out of kubejs/data (sA_setup.md "Boot 3"):
+#   salt-common.toml [Dissolving] SaltDissolvingChance = 1.0          (SQ-SLT-05)
+#   creativeengineering-swaps.toml [swappers] onPlayerDataLoad = false, onCommand = false   (SQ-SWP-06, -08)
+#   enders_additions-common.toml [growth] chorusflameGrowthSlow = 0   (SQ-ENM-04)
+#   kubejs/data/creativeworldgen/kubejs/loot/loot_config.json + loot_index.json moved to OUT/moved_loot/  (SQ-CWG-05)
+# Second-boot halves: SQ-CWG-02b, SQ-CNG-04b. /reload only in the last two rows (SQ-ENM-04b, SQ-MDL-01b); every
+# kjsexpect / kjsreject row is before it.
+pace 2
+
+## SA3-00 | setup: home marker, forceload (not a queue row)
+bootexpect Done \(
+> data get entity @e[type=minecraft:marker,tag=sahome,limit=1] Pos
+capture SAH entity data: \[(-?\d+)\.\d+d, (-?\d+)\.\d+d, (-?\d+)\.\d+d\]
+> forceload add {SAH1} {SAH3} {SAH1+96} {SAH3+96}
+sleep 30
+> say SA3 setup done
+expect SA3 setup done
+
+## SQ-CWG-02b | second boot: no carry-over WARN, files as after the first boot
+shell grep -nE "(WARN|ERROR).*(creativeworldgen-common|creativeengineering-common|carrySections|config sections)" logs/latest.log | head -5 || true
+shell ! grep -qE "WARN.*(creativeworldgen-common|creativeengineering-common|config sections)" logs/latest.log
+shell awk '/^\[named_mobs\]/{s=1;next} /^\[/{s=0} s && /chance/' config/creativeworldgen-common.toml | grep -E "chance = 0\.02"
+shell ! grep -nE "^\[(worldgen|forgiving_void|leaf_decay|raids|named_mobs)\]" config/creativeengineering-common.toml
+bootreject config sections .*carried over
+look nothing carried again (the sections are already in the Worldgen file); no WARN
+
+## SQ-CWG-05 | loot tuning loads from the jar when the kubejs/data json files are gone
+shell ! ls kubejs/data/creativeworldgen/kubejs/loot/loot_config.json kubejs/data/creativeworldgen/kubejs/loot/loot_index.json 2>/dev/null
+kjsreject \[loot-tuning\] (could not read|disabled: missing)
+kjsexpect \[loot-tuning\] \d+ rules -> rewrote \d+ tables
+> loottuning
+sleep 2
+expect Loot tuning: active
+look the "N rules" number equals SQ-CWG-04's /loottuning in sA_2.qb (rows/SQ-CWG-04.log)
+
+## SQ-CNG-04b | the 5b golem after the restart; lightning and death run upstream code
+> data get entity @e[type=canned_goods:canned_golem,tag=sacng4,limit=1] Color
+expect has the following entity data: 5b
+> data merge entity @e[type=canned_goods:canned_golem,tag=sacng4,limit=1] {NoAI:0b}
+> execute at @e[type=canned_goods:canned_golem,tag=sacng4,limit=1] run summon minecraft:lightning_bolt ~ ~ ~
+sleep 3
+> data get entity @e[type=canned_goods:canned_golem,tag=sacng4,limit=1] Color
+> kill @e[type=minecraft:item]
+> kill @e[type=canned_goods:canned_golem,tag=sacng4]
+sleep 2
+> zcount {SAH1+10} {SAH2-1} {SAH3+6} {SAH1+18} {SAH2+3} {SAH3+14}
+waitlog \[zcount\] entities 30
+reject (Exception|Error occurred while handling event)
+look lightning: whatever the upstream procedure does (no exception); death drop as before (zcount items)
+
+## SQ-SLT-05 | Salt config read from salt-common.toml: DissolvingChance 1.0 dissolves the Salt Layer in 1 tick
+shell grep -nE "SaltDissolvingChance" config/salt-common.toml
+bootreject salt-common\.toml.*(ParsingException|parse|Failed loading|corrected)
+shell ! awk '/^\[/{print}' config/creativedelight-common.toml | grep -qE "^\[salt\]"
+> salttest
+waitlog \[salttest\] done 400
+expect \[salttest\] PASS Salt Layer beside water becomes water.* 1 ticks
+reject (Unknown or incomplete command)
+
+## SQ-SWP-06 | onPlayerDataLoad off: a player saved before the merge lists is rewritten once on login, then not again
+> pbot spawn saswp6 {SAH1+5} {SAH2} {SAH3+5} minecraft:overworld survival
+sleep 3
+> data get entity saswp6 EnderItems
+expect \[swaps\] saswp6: \d+ merged stack\(s\) rewritten
+expect neapolitan:banana
+reject alexsmobs:banana
+> pbot remove saswp6
+sleep 2
+> pbot spawn saswp6 {SAH1+5} {SAH2} {SAH3+5} minecraft:overworld survival
+sleep 3
+> say SA3 swp6 second join done
+expect SA3 swp6 second join done
+count \[swaps\] saswp6: == 1
+> pbot remove saswp6
+look EnderItems slot 0: 4 neapolitan:banana; one "[swaps] saswp6" line over both joins (SQ-SWP-06o in sA_1.qb set the old stack; if that row FAILed, this row is setup-blocked)
+reject (Unknown (item|block|block type|entity)|Incorrect argument for command|Unknown or incomplete command|No player was found|no such bot)
+
+## SQ-SWP-08 | onCommand off: /ceswap items refused, nothing rewritten
+> setblock {SAH1+22} {SAH2} {SAH3+54} minecraft:chest
+> data merge block {SAH1+22} {SAH2} {SAH3+54} {Items:[{Slot:0b,id:"alexsmobs:banana",Count:2b}]}
+> ceswap items
+sleep 2
+> data get block {SAH1+22} {SAH2} {SAH3+54} Items
+expect onCommand
+expect alexsmobs:banana
+reject (Unknown (item|block|block type|entity)|Incorrect argument for command|Unknown or incomplete command)
+
+## SQ-ENM-04 | chorusflameGrowthSlow 0: chorusflame on end stone stays age 0
+> fill {SAH1+30} {SAH2-1} {SAH3+30} {SAH1+38} {SAH2-1} {SAH3+30} minecraft:end_stone
+> setblock {SAH1+30} {SAH2} {SAH3+30} endersdelight:chorus_flame_block[age=0]
+> setblock {SAH1+32} {SAH2} {SAH3+30} endersdelight:chorus_flame_block[age=0]
+> setblock {SAH1+34} {SAH2} {SAH3+30} endersdelight:chorus_flame_block[age=0]
+> setblock {SAH1+36} {SAH2} {SAH3+30} endersdelight:chorus_flame_block[age=0]
+> pbot spawn saenm {SAH1+34} {SAH2+3} {SAH3+34} minecraft:overworld creative
+> gamerule randomTickSpeed 300
+sleep 40
+> gamerule randomTickSpeed 3
+> zq ages {SAH1+30} {SAH2} {SAH3+30} {SAH1+36} {SAH2} {SAH3+30} endersdelight:chorus_flame_block
+waitlog \[zq\] (ages|done) 30
+shell grep -nE "chorusflameGrowthSlow" config/enders_additions-common.toml
+> pbot remove saenm
+look ages histogram all 0 (4 plants, 40 s at randomTickSpeed 300 with a bot in range); with the 0.1 default most would grow
+reject (Unknown (item|block|block type|entity)|Incorrect argument for command|Unknown or incomplete command|Invalid (block state|tag)|\[zq\] error)
+
+## SQ-ENM-04b | members.enders_additions false, /reload: no Void Pepper or 1.1.4 meal recipe from Creative Delight
+> zq uses endersdelight:voidpepper
+> zq recipes creativedelight:endersdelight
+waitlog \[zq\] recipes matching creativedelight:endersdelight: \d+ 30
+shell python3 "$INST/tools/scratch_query/qrun.py" toml config/creativedelight-common.toml members enders_additions false && grep -nE "enders_additions" config/creativedelight-common.toml
+> reload
+waitlog (Reloaded|reload) 120
+sleep 10
+> zq uses endersdelight:voidpepper
+> zq makes endersdelight:crushed_voidpepper
+> zq makes endersdelight:amberveil_stew
+> zq recipes creativedelight:endersdelight
+waitlog \[zq\] recipes matching creativedelight:endersdelight: \d+ 30
+look before / after: the uses and recipes lines lose every creativedelight: Void Pepper recipe and the 1.1.4 meals (pot recipes of amberveil_stew etc.) after the switch; if nothing changes, the switch is read only at startup (note it; the row says /reload)
+reject (Unknown or incomplete command|\[zq\] error)
+
+## SQ-MDL-01b | after /reload: one [loot-drops] line for this load
+> say SA3 mdl01b check
+expect SA3 mdl01b check
+shell grep -hE "\[loot-drops\]" logs/kubejs/server.log | head -5
+shell echo "loot-drops lines in this kubejs log (after /reload): $(grep -hcE '\[loot-drops\] [0-9]+ drop pools' logs/kubejs/server.log || true)"
+look exactly one "[loot-drops] 17 drop pools and 2 shared entries in 11 tables" since the /reload (KubeJS truncates server.log on reload), no warning

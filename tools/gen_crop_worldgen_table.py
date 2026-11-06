@@ -18,14 +18,14 @@ How it works:
   have no json, so JAVA_PLACED below restates them from the decompiled jars (feature_writeup/crops.md 2.7).
   Config-driven chances are read from config/*.toml.
 
-- The pack's own placement, Creative Delight's kubejs/data/creative_delight/kubejs/_worldgen/wild_crops.json and the
-  pack's mushroom_spawns.json (applied in game by the wild_crops.js next to it and kubejs/server_scripts/worldgen/
+- The pack's own placement, Creative Delight's kubejs/data/creativedelight/kubejs/_worldgen/wild_crops.json and the
+  pack's mushroom_spawns.json (applied in game by the wild_crops.js next to it and kubejs/data/creativeworldgen/kubejs/worldgen/
   mushroom_spawns.js), with the biome traits of biome_traits.json, is evaluated with the same rules:
   the mods' modifiers they switch off are dropped, remove_features run after every add (Forge's order), and each
   rule's features go to the biomes it matches (mushroom rules in cave mode also match ocean and cave biomes). The
   Creative Delight wildCrops / CEConfig mushroomSpawns switches can't be read offline: the tables assume both are on, and the
   summary's "mod default" column shows the numbers with them off.
-- The Fungi Delight port (development/backportedFungi) ships only configured features, under the upstream ids. While
+- The Fungi Delight port (development/creativeDelight/members/fungi) ships only configured features, under the upstream ids. While
   no jar in mods/ has them, they are read from the upstream jar in the ATLauncher downloads folder.
 
 Rates are patch attempts per chunk (1/N = one chunk in N on average). "Per 1000 chunks" multiplies the
@@ -51,7 +51,7 @@ BIOME_DATA = INSTANCE / 'kubejs/exported/biome_data.json'
 BIOME_CONFIG = INSTANCE / 'kubejs/generation_scripts/worldgen/biome_config.json'
 OUT_MD = INSTANCE / 'feature_writeup/crops_by_biome.md'
 OUT_JSON = INSTANCE / 'kubejs/exported/worldgen/crop_worldgen.json'
-WILD_CROPS = INSTANCE / 'kubejs/data/creative_delight/kubejs/_worldgen/wild_crops.json'
+WILD_CROPS = INSTANCE / 'kubejs/data/creativedelight/kubejs/_worldgen/wild_crops.json'
 BIOME_TRAITS = INSTANCE / 'kubejs/generation_scripts/worldgen/biome_traits.json'
 MUSHROOM_SPAWNS = INSTANCE / 'kubejs/generation_scripts/worldgen/mushroom_spawns.json'
 FUNGI_UPSTREAM = Path.home() / '.local/share/atlauncher/downloads/FungiDelight-1.20.1-1.3.jar'
@@ -176,7 +176,8 @@ JAVA_PLACED = {
     # Rustic Delight 1.7.0 (Creative Delight port; json in the rustic_upstream donor, rarity from the port's ChanceFilter)
     'rusticdelight:bell_pepper_block_patch_placed': dict(crop='Giant Bell Peppers', mods=[rarity(64), HM_MOTION],
         ground='grass block', notes='48 tries within 7; red, yellow, green giant pepper blocks (needs Creative Delight)'),
-    # Nether's Delight 3.1 NDGeneration + PropelplantFeature
+    # Nether's Delight 3.1 NDGeneration + PropelplantFeature (CD repackedNethers; 4.0 renamed it propelplant_patch, the pack
+    # keeps the 3.1 id, nethers_delight.md 4.5)
     'nethersdelight:patch_propelplant': dict(crop='Propelplant', mods=[{'type': 'minecraft:count', 'count': 8}, FULL_RANGE],
         ground='#minecraft:nylium (crimson/warped nylium)', notes='cross-shaped 7x7, y -1..+1 of a random height, 1 in 3 spots'),
     # Neapolitan 4.1.0 NeapolitanFeatures
@@ -235,6 +236,7 @@ CROP_BLOCKS = {
     'minecraft:sugar_cane': 'Sugar Cane', 'minecraft:cave_vines': 'Glow Berries', 'minecraft:bamboo': 'Bamboo',
     'minecraft:cactus': 'Cactus', 'minecraft:chorus_flower': 'Chorus Fruit',
     'myrtrees:rubberwood_log': 'Rubber tree',
+    'oceanic_delight:wild_sea_grape': 'Sea Grape',
     'supplementaries:wild_flax': 'Flax',
     'endersdelight:amberveil_mushroom': 'Amberveils', 'endersdelight:chorus_flame_block': 'Chorusflame',
     'endersdelight:ethereal_saffron_bush': 'Ethereal Saffron', 'endersdelight:voidpepper_block': 'Void Pepper',
@@ -250,14 +252,14 @@ CROP_BLOCKS = {
     'farmersdelight:wild_cabbages': 'Cabbage', 'farmersdelight:wild_beetroots': 'Beetroot (Sea Beet)',
     'farmersdelight:brown_mushroom_colony': 'Brown Mushroom Colony', 'farmersdelight:red_mushroom_colony': 'Red Mushroom Colony',
     'fruitsdelight:hamimelon': 'Cantaloupe', 'delightful:cantaloupe': 'Mini Cantaloupe',  # item_merges.md 2.10
-    # Veggies Delight backport (development/backportedVeggies)
+    # Veggies Delight backport (development/creativeDelight/members/veggies)
     'veggiesdelight:wild_broccoli': 'Broccoli', 'veggiesdelight:wild_cauliflowers': 'Cauliflower',
     'veggiesdelight:wild_garlic': 'Garlic', 'veggiesdelight:wild_sweet_potatoes': 'Sweet Potato',
     'veggiesdelight:wild_turnips': 'Turnip', 'veggiesdelight:wild_zucchinis': 'Zucchini',
-    # Vintage Delight backport (development/backportedVintage); wild ghost peppers are Nether-only
+    # Vintage Delight backport (development/creativeDelight/members/vintage); wild ghost peppers are Nether-only
     'vintagedelight:wild_oats': 'Oats', 'vintagedelight:wild_peanuts': 'Peanuts',
     'vintagedelight:wild_cucumbers': 'Cucumbers',
-    # Fungi Delight backport (development/backportedFungi); placement in mushroom_spawns.json / wild_crops.json
+    # Fungi Delight backport (development/creativeDelight/members/fungi); placement in mushroom_spawns.json / wild_crops.json
     'miners_delight:wild_cave_carrots': 'Cave Carrot',
     'fungidelight:inky_cap_mushroom': 'Inky Cap', 'fungidelight:morel_mushroom': 'Morel',
     'fungidelight:inky_cap_mushroom_colony': 'Inky Cap Colony', 'fungidelight:morel_mushroom_colony': 'Morel Colony',
@@ -271,6 +273,8 @@ def iter_sources():
     """(label, {path: bytes-reader}) in load order: vanilla, forge, mods, kubejs/data."""
     # the Vinery port ships code only and reads its data from the upstream jars at runtime (1.5.5 wins over 1.3.10)
     upstream = [INSTANCE / 'vinery_upstream' / n for n in ('letsdo-vinery-forge-1.3.10.jar', 'letsdo-vinery-fabric-1.5.5.jar')]
+    # so does the Oceanic Delight rebuild (Creative Delight member, ocean_delight.md 5.6): its worldgen data and modifier
+    upstream.append(INSTANCE / 'oceanic_upstream' / 'oceanic_delight-1.0.1-forge-1.19.2.jar')
     fungi = False
     for jar in BASE_JARS + sorted(MODS.glob('*.jar')) + upstream:
         try:
@@ -590,7 +594,8 @@ def build_rows(fb, world, crop_set, area, oceans, dim_of, notes_by_feature):
         dims = defaultdict(float)
         for b in bmap:
             d, layer, pct = area.get(b, (dim_of(b), '?', 0.0))
-            if layer == 'surface' and b not in oceans:
+            # a sea-floor feature (OCEAN_FLOOR_WG heightmap, e.g. wild sea grape, farming/wild-crops #6) counts ocean area
+            if layer == 'surface' and (b not in oceans or 'sea floor' in where):
                 dims[d] += pct
         for crop in sorted(crop_set(fid)):
             n = ([extra] if extra else []) + notes + ([notes_by_feature[fid]] if fid in notes_by_feature else [])
@@ -725,7 +730,7 @@ def write_md(rows, rows_default, wild, area, dim_of, dropped, checks):
     L.append('Generated by `python3 tools/gen_crop_worldgen_table.py`. Do not edit by hand; the explanations, ground rules and '
              'gaps are in [crops.md](crops.md) sections 2.7 and 2.8. Rerun after adding or updating mods, after `/dumpbiomes`, '
              'after retuning biomes (`biome_config.json`) or after editing `wild_crops.json` or `mushroom_spawns.json`.\n')
-    L.append('Every table assumes the pack\'s placement (`kubejs/data/creative_delight/kubejs/_worldgen/wild_crops.json` and '
+    L.append('Every table assumes the pack\'s placement (`kubejs/data/creativedelight/kubejs/_worldgen/wild_crops.json` and '
              '`mushroom_spawns.json`, Creative Delight `[worldgen] wildCrops = true`, CEConfig `mushroomSpawns = true`). Section 1 also '
              'shows each crop with the switches off (the mods\' own spawns).\n')
     L.append('- **Rate**: patch attempts per chunk. "1 in 30 chunks" means a chunk tries once with probability 1/30.')

@@ -17,7 +17,7 @@ cactus soup, pufferfish broth): each such face takes the texture of its element'
 
 Item ids come from /dumpitemsbymod (kubejs/exported/items_by_mod/displaydelight.json).
 
-The pack's port of Display Delight 1.7.0 (development/backportedDisplay, jar backportedDisplay-*.jar) ships an item
+The pack's port of Display Delight 1.7.0 (development/creativeDelight/members/display, jar backportedDisplay-*.jar) ships an item
 model for every item and fixes the '#missing' faces itself, so against it this writes nothing; files under OUT that
 the jar no longer needs are deleted, so they stop overriding the port's own models.
 
@@ -41,7 +41,7 @@ PLATED_GUI = {'rotation': [37, 44, 0], 'translation': [0, 4, 0], 'scale': [0.8, 
 
 
 def read_jar():
-    jars = next((j for j in (sorted(lang_index.MODS.glob(g)) for g in JAR_GLOBS) if j), None)
+    jars = next((j for j in (lang_index.pack_paths.mod_jars(g) for g in JAR_GLOBS) if j), None)
     if not jars:
         sys.exit('no %s in mods/' % ' or '.join(JAR_GLOBS))
     files = {}

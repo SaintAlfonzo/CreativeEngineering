@@ -1,4 +1,4 @@
-// Shared setup for every in-tree Forge mod (patcherMod, exposureBackport). A mod's build.gradle applies
+// Shared setup for every in-tree Forge mod (creativeCommon, exposureBackport, ...). A mod's build.gradle applies
 // `id 'ce.forge-mod'` and adds only what is specific to it (dependencies, extra source sets, compiler args).
 //
 // Reads from the root gradle.properties: minecraft_version(_range), forge_version(_range),
@@ -232,7 +232,22 @@ tasks.withType(AbstractArchiveTask).configureEach {
 }
 
 // License files in the mod's folder (GPLv3 LICENSE / LICENSE.txt, upstream NOTICE-*) go into its jar.
+// A mod whose mod_license names the GPL and whose folder has no LICENSE file stops the build, so no jar ships
+// without the licence text (plan_cb_publish.md M6).
+def checkLicenseFile = tasks.register('checkLicenseFile') {
+    def license = prop('mod_license', '')
+    def hasFile = ['LICENSE', 'LICENSE.txt'].any { new File(projectDir, it).isFile() }
+    inputs.property('mod_license', license)
+    inputs.property('has_license_file', hasFile)
+    doLast {
+        if (license.contains('GPL') && !hasFile) {
+            throw new GradleException("${project.path}: mod_license '${license}' names the GPL but ${projectDir} " +
+                    "has no LICENSE or LICENSE.txt; copy development/creativeCommon/LICENSE.txt there")
+        }
+    }
+}
 tasks.named('jar', Jar).configure {
+    dependsOn checkLicenseFile
     from(projectDir) {
         include 'LICENSE', 'LICENSE.txt', 'NOTICE*'
         rename { "${jarName}-${it}" }

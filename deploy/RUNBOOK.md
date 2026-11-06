@@ -87,3 +87,33 @@ Everything is written under `kubejs/exported/`. Bring it home with
 python3 tools/build_deploy.py --snapshot                  # both machines run the staged version
 python3 tools/build_deploy.py --snapshot --target server  # only the server was updated
 ```
+
+## 7. New world: pregenerate (only when the final server world is created)
+
+Not for updates of an existing world. Do it once, on the new world, before anyone joins (TODO `locate #3`,
+feature_writeup/briefs/worldgen_locate.md "locate #3").
+
+1. Nobody online. Back up `serverconfig/`. Set `max-tick-time=-1` in `server.properties` for the run (long chunk jobs
+   have hit the watchdog). In `config/chunky/config.json` set `continueOnRestart` to true and delete stale files in
+   `config/chunky/tasks/`.
+2. Chunky, real chunks around spawn (about 1.6 h at 11 chunks/s for radius 2000):
+
+   ```
+   chunky world minecraft:overworld
+   chunky spawn
+   chunky shape square
+   chunky radius 2000
+   chunky start
+   ```
+
+3. After Chunky finishes, Distant Horizons LODs (op level 4; the console has it). Radius in chunks = the DH toml's
+   `lodChunkRenderDistanceRadius` (192), or 256 if the server's realtime radius is 256:
+
+   ```
+   dh pregen start minecraft:overworld <spawnX> <spawnZ> 192
+   dh pregen status
+   ```
+
+   Nether and End: only with a Creative Worldgen jar whose DH clip is limited to the Overworld (it is from 2026-11-02).
+4. Put `max-tick-time` back, set `continueOnRestart` back to false, restart, run the section 3 checks.
+5. Record the DH pregen wall time and the size of the DH data folder in feature_writeup/locate.md 3.7.

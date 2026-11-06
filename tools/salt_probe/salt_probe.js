@@ -1,4 +1,4 @@
-// Salt merge block-behaviour probe (scratch queue SQ-SALT-05 to -07, feature_writeup/item_merges.md 2.9). Scratch-only:
+// Salt merge block-behaviour probe (scratch queue SQ-SALT-05 to -08, feature_writeup/item_merges.md 2.9). Scratch-only:
 // copy into a scratch server's kubejs/server_scripts as zz_salt_probe.js, never into the pack. Run /salttest; results are
 // "[salttest] PASS|FAIL|NOTE ..." lines in logs/latest.log, then "[salttest] done N pass, M fail".
 // A dedicated server with no player gives forceloaded chunks no random ticks, so the probe calls each block's
@@ -115,22 +115,28 @@
             'above ' + idAt(level, pos.above()) + ' layers ' + layersAt(level, pos.above()) + ', evaporator ' + idAt(level, pos))
         set(level, pos.above(), 'minecraft:air'); clear(level, pos)
 
-        // rain: Salt Layer in open sky goes, raw rock salt stays
+        // The Salt's Salt Block beside water dissolves (SQ-SALT-08 second half)
+        pos = nextPos(level)
+        clear(level, pos); set(level, pos, 'salt:salt_block'); set(level, pos.relative($STDir.EAST), 'minecraft:water')
+        n = tickUntil(level, pos, () => idAt(level, pos) != 'salt:salt_block')
+        check('salt:salt_block beside water dissolves', n > 0, n + ' ticks, now ' + idAt(level, pos))
+        clear(level, pos)
+
+        // rain (SaltDissolvingInRain = false since 2026-10-28, SQ-SALT-06 / -08): nothing dissolves in open-sky rain
         level.setWeatherParameters(0, 6000, true, false)
         pos = nextPos(level)
         let biome = String(level.getBiome(pos).unwrapKey().get().location())
         let rainy = level.isRainingAt(pos.above())
         note('rain cases', 'biome ' + biome + ', isRainingAt ' + rainy)
-        clear(level, pos); set(level, pos, VT + 'salt')
-        n = tickUntil(level, pos, () => idAt(level, pos) != VT + 'salt')
-        check('Salt Layer in rain, open sky, becomes air', rainy && n > 0 && idAt(level, pos) == 'minecraft:air',
-            rainy ? n + ' ticks, now ' + idAt(level, pos) : 'no rain at this spot (biome ' + biome + ')')
         clear(level, pos)
-        pos = nextPos(level)
-        clear(level, pos); set(level, pos, 'salt:raw_rock_salt_block')
-        tickTimes(level, pos, TRIES)
-        check('raw rock salt in rain stays', idAt(level, pos) == 'salt:raw_rock_salt_block', 'now ' + idAt(level, pos))
-        clear(level, pos)
+        ;[VT + 'salt', 'salt:salt_block', 'salt:rock_salt_ore', VT + 'salt_bricks', 'salt:raw_rock_salt_block'].forEach(id => {
+            pos = nextPos(level)
+            clear(level, pos); set(level, pos, id)
+            tickTimes(level, pos, TRIES)
+            check(id + ' in rain, open sky, stays', rainy && idAt(level, pos) == id,
+                rainy ? 'now ' + idAt(level, pos) + ' after ' + TRIES + ' ticks' : 'no rain at this spot (biome ' + biome + ')')
+            clear(level, pos)
+        })
         level.setWeatherParameters(wasRaining ? 0 : 6000, wasRaining ? 6000 : 0, wasRaining, false)
     }
 

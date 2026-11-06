@@ -16,9 +16,9 @@
     const $BKWrapper = Java.loadClass('net.minecraftforge.items.wrapper.RecipeWrapper')
     const $BKRL = Java.loadClass('net.minecraft.resources.ResourceLocation')
     const $BKForgeReg = Java.loadClass('net.minecraftforge.registries.ForgeRegistries')
-    const $BKServings = Java.loadClass('com.SaintAlfonzo.creativeengineering.food.CanServings')
-    const $BKOven = Java.loadClass('com.SaintAlfonzo.creativeengineering.oven.OvenBlockEntity')
-    const $BKConfig = Java.loadClass('com.SaintAlfonzo.creativeengineering.CEConfig')
+    const $BKServings = Java.loadClass('com.SaintAlfonzo.creativedelight.food.CanServings')
+    const $BKOven = Java.loadClass('com.SaintAlfonzo.creativedelight.oven.OvenBlockEntity')
+    const $BKConfig = Java.loadClass('com.SaintAlfonzo.creativedelight.CDConfig')
 
     const i = global.item
     let pass = 0, fail = 0

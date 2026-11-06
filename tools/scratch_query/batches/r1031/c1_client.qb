@@ -8,7 +8,7 @@ pace 2
 
 ## CQ-R31-BOOT | client boot and world join clean
 bootexpect FIRST_CLIENT_TICK|Sound engine started
-bootreject (Mixin apply failed|InvalidInjectionException).*(creativeengineering|creative_delight)
+bootreject (Mixin apply failed|InvalidInjectionException).*(creativeengineering|creativedelight)
 bootreject (?i)(FallingBlockWaterSplash|KettleScreenTankMixin|KettleJeiBaseMixin|WateringCanJeiPlugin|CropSeasonTooltip).*(error|fail)
 kjsreject (?i)error occurred
 > gamemode creative

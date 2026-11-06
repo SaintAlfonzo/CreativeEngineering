@@ -255,7 +255,7 @@ Each is documented where it belongs; one line each here.
   can't check (build warnings "Cannot find target for @Shadow field"). Instance fields come through `@Shadow` in
   `OreExcavationSchedulerMixin` / `HistoryMixin` / `BlockHistoryMixin` (matched by name and type at runtime);
   `MiningScheduler.INSTANCE` and `ExcavationSettings.autoPickup` through reflection in `excavation/VeinUndoAccess`.
-  OE's jar is in `development/patcherMod/libs/` for compiling.
+  OE's jar is in `development/creativeCommon/libs/` for compiling.
 - **Limits:** only the newest vein mine is checked; a refused one stays on top of the stack, so older ones can't be
   undone until 3 newer vein mines push it out. The cooldown is in memory (resets on restart, like OE's history).
   Drops that don't fit the inventory lie at the player's feet and must be picked up before an undo. Items a
@@ -418,7 +418,7 @@ All in patcherMod `src/main/java/com/SaintAlfonzo/creativeengineering/` unless n
 - 2.15 `compat/LightmansTooltipStacks`, `mixin/LCEasyScreenHelperMixin`, `mixin/LCEasyGuiGraphicsMixin`; 2.16 `mixin/JeiRecipeLayoutTooltipMixin`, `mixin/JeiRecipesGuiTooltipMixin`; 2.17 `mixin/IcebergTitleBreakMixin`; 2.18 `compat/guititle/`, `mixin/ContainerTitlePlaqueMixin`, `mixin/RenderSystemShaderTextureMixin`.
 - 2.25 `compat/TrinketCaseRules`, `mixin/TrinketCaseInventoryMixin`, `mixin/TrinketCaseSlotMixin`, `mixin/TrinketCaseMenuMixin`, `mixin/ItemBackedInventoryAccessor`, [kubejs/client_scripts/tooltips.js](../kubejs/client_scripts/tooltips.js) (Botania section), `config/quark-common.toml` `Allowed Screens`.
 - 2.19 `mixin/CreativeMenuDisableMixin`, `mixin/XpHelperMixin`, `mixin/XpPumpUpgradeWrapperMixin`, `mixin/XPFluidManagerMixin`, `mixin/MemoryStickItemMixin`, `mixin/PneumaticCraftUtilsMixin`, `mixin/IETagUtilsMixin`, `mixin/CopperPickaxeItemMixin`, `CETiers`.
-- 2.28 `compat/SophisticatedPolymorphCompat`, `compat/SophisticatedPolymorphClient`, `mixin/SophisticatedCraftingPolymorphMixin`, `mixin/SophisticatedUpgradeOpenMixin`, `mixin/PolymorphRecipeSelectionPacketMixin`; compile dep `development/patcherMod/libs/polymorph-forge-0.46.6+1.19.2.jar` (copied from `mods/`, git-ignored).
+- 2.28 `compat/SophisticatedPolymorphCompat`, `compat/SophisticatedPolymorphClient`, `mixin/SophisticatedCraftingPolymorphMixin`, `mixin/SophisticatedUpgradeOpenMixin`, `mixin/PolymorphRecipeSelectionPacketMixin`; compile dep `development/creativeCommon/libs/polymorph-forge-0.46.6+1.19.2.jar` (copied from `mods/`, git-ignored).
 - 2.29 `compat/CraftingMenuPolymorphCompat`, `compat/CraftingMenuPolymorphClient`, `mixin/IECraftingTablePolymorphMixin`, `mixin/PrettyPipesCraftingTerminalPolymorphMixin`; compile deps `libs/ImmersiveEngineering-1.19.2-9.2.4-170.jar`, `libs/PrettyPipes-1.13.6.jar`.
 - 2.30 `block/MossTint`, `CEConfig.Moss`; `assets/creativeengineering/models/block/moss_block_tinted.json`, `moss_carpet_tinted.json`, `textures/block/moss_block_tinted.png` (grayscale made with a one-off PIL script: luminance / brightest pixel).
 - 2.31 [tools/gen_ua_coral_growths.py](../tools/gen_ua_coral_growths.py) writes `kubejs/data/immersive_weathering/block_growths/ua_*_coral.json` (generated, do not edit).

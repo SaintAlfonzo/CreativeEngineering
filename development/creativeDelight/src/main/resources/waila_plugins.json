@@ -1,11 +1,11 @@
 {
-  "creative_delight:crop_growth": {
+  "creativedelight:crop_growth": {
     "entrypoints": {
       "client": "com.SaintAlfonzo.creativedelight.compat.wthit.WthitCropGrowth"
     },
     "side": "client"
   },
-  "creative_delight:kettle_tank": {
+  "creativedelight:kettle_tank": {
     "entrypoints": {
       "client": "com.SaintAlfonzo.creativedelight.compat.wthit.WthitKettleTank"
     },
@@ -13,5 +13,17 @@
     "required": [
       "farmersrespite"
     ]
+  },
+  "creativedelight:powdered_sugar_name": {
+    "entrypoints": {
+      "client": "com.SaintAlfonzo.creativedelight.compat.wthit.WthitPowderedSugar"
+    },
+    "side": "client"
+  },
+  "creativedelight:cookware_toggle": {
+    "entrypoints": {
+      "client": "com.SaintAlfonzo.creativedelight.compat.wthit.WthitCookwareToggle"
+    },
+    "side": "client"
   }
 }

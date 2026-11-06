@@ -5,7 +5,7 @@ update payloads; 1.0.5 was staged (2026-10-11) but never copied out; 1.0.6 (2026
 1.0.7 (2026-10-18), 1.0.8 (2026-10-19 10:20), 1.0.9 (2026-10-19 15:54), 1.1.01 (2026-10-22 22:39) and 1.1.02
 (2026-10-23, recorded 2026-10-24) and 1.1.03 (2026-10-26 19:04, server and players) went out as update payloads too;
 1.1.05 (update from 1.1.04, 108 files, 18.8 MB) was applied to the CreativeEngineeringClient instance 2026-10-31 12:51 with `--force`
-(verify showed EXTRA on four same-named 1.1.04 jars that the payload replaces: backportedVeggies -03, creative_delight, creativeengineering-1.1.04, repackedStorage; old copies in the session scratchpad). The server is recorded at 1.1.04 (user's word, 2026-10-31) and
+(verify showed EXTRA on four same-named 1.1.04 jars that the payload replaces: backportedVeggies -03, creativedelight, creativeengineering-1.1.04, repackedStorage; old copies in the session scratchpad). The server is recorded at 1.1.04 (user's word, 2026-10-31) and
 1.1.05 is not applied there yet ([deploy/DEPLOYED.json](../deploy/DEPLOYED.json)).
 
 ## 0. At a glance
@@ -20,7 +20,7 @@ update payloads; 1.0.5 was staged (2026-10-11) but never copied out; 1.0.6 (2026
 | Mod sides (`mod_sides.md`): a jar with no row stops the build; a row whose side changed is listed under "Mods whose side changed" and the jar moves between `mods/` and `client_mods/` | BUILT; 2026-10-11: 4 rows added (Breedable Killer Rabbit server, Cool Rain both, MEED both, Pretty Rain client), JEED moved client -> both; 2026-10-14: 4 rows (Campsite Structures, restApi, Unlit Campfire both; rsec server), 417 rows | [mod_sides.md](../mod_sides.md) |
 | Display Delight item models: preflight warns when `gen_display_delight_models.py --check` fails or the DD export is older than the jar ([wthit_lines.md](wthit_lines.md) F3) | BUILT 2026-10-20; passes | `check_display_delight_models` |
 | In-tree mods (`IN_TREE_MODS`): patcherMod, exposureBackport, incubationAdditions, moreMooblooms, backportedVinery and backportedBrewin (2026-10-18; the two ports replaced by the `creativeBrewing` bundle 2026-10-31, which nests them); preflight checks `mods/` equals the build, the shipped jar is archived | BUILT; two jars with one mod id in `mods/` stop the build since 1.0.9 (4) | `IN_TREE_MODS` |
-| Vinery donor jars (`vinery_upstream` category, both sides; [alcohol.md](alcohol.md) B4.8, D14): the two unmodified Vinery jars ship in the payload for now (a published pack downloads them from Modrinth / CurseForge instead, not built). Preflight: while the port is in `mods/` (since 2026-10-31: the `creative_brewing` jar that nests it), each jar must exist with the sha1 `UpstreamJars.java` pins. README step: copy `vinery_upstream/` next to `mods/` | BUILT 2026-10-18, not run (the port isn't in `mods/` yet) | `vinery_upstream_jars`, `collect` |
+| Vinery donor jars (`vinery_upstream` category, both sides; [alcohol.md](alcohol.md) B4.8, D14): the two unmodified Vinery jars ship in the payload for now (a published pack downloads them from Modrinth / CurseForge instead, not built). Preflight: while the port is in `mods/` (since 2026-10-31: the `creativebrewing` jar that nests it), each jar must exist with the sha1 `UpstreamJars.java` pins. README step: copy `vinery_upstream/` next to `mods/` | BUILT 2026-10-18, not run (the port isn't in `mods/` yet) | `vinery_upstream_jars`, `collect` |
 | `world_serverconfig/` payload folder: the full serverconfig set every build, with README steps to copy it into existing worlds (server and single-player saves) | BUILT 2026-10-21; scratch server PASSED 2026-10-22 (SQ-OM-17 scratch build, SQ-OM-18 world boot); a real release build and a single-player save in game (DP-08) | `main` (after `select_payload`), `render_readme` |
 | Mod-update checklist: [Mod updates](#mod-updates-version-pinned-fixes) lists the version-pinned fixes; preflight warns when a pinned jar in `mods/` changed (`PINNED_MODS`, `check_pinned_mods`) | BUILT 2026-10-26; the check passes on the current `mods/` and warns on a changed file (offline) | `PINNED_MODS` |
 | Climate samples gzipped and moved out of `exported/` | BUILT (patcherMod 1.0.3, copied to `mods/`); tuner output byte-identical | [BiomeLayoutTuner.java](../development/patcherMod/src/main/java/com/SaintAlfonzo/creativeengineering/worldgen/BiomeLayoutTuner.java), [dump_climate.js](../kubejs/server_scripts/_lib/dump_climate.js) |
@@ -138,7 +138,7 @@ Runtime inputs in `generation_scripts/`, with their readers:
 | `worldgen/bee_nests.json` | `worldgen/bee_nests.js` (BeeNests) |
 | `worldgen/wild_flowers.json`, `worldgen/flower_features.json` (snapshot) | `worldgen/wild_flowers.js` |
 | `worldgen/meta_structures.json`, `worldgen/biome_fits.json` | `structure_overrides.js` (MetaStructure, StructureBiomeFits) |
-| `worldgen/season_types.json` | `tags/seasontags.js` (SeasonTypes) |
+| `worldgen/season_types.json` | Calendar `sereneseasons/seasontags.js` (SeasonTypes) |
 
 Generator-only files stay home (dev): e.g. `biome_merge_proposals.json`, `bee_nests_baseline.json`,
 `soil_compat_manifest.json`, `terrain_adaptation_scan.json`.
@@ -166,7 +166,7 @@ an unmatched file is functional.
 From 1.1.01 every payload carries the players' notes for its version ([changelog.md](changelog.md) 3.5,
 `check_changelog` / `freeze_changelog` in build_deploy.py).
 
-- `kubejs/assets/creativeengineering/changelog/unreleased.md` is the working list: KUBEJS_CLASSES `dev`, never
+- `kubejs/assets/creativecommon/changelog/unreleased.md` is the working list: KUBEJS_CLASSES `dev`, never
   shipped under that name. The other `*.md` files there are `client`.
 - Staging `X`: when the working list has bullets, the payload gets `.../changelog/X.md` with `# X` (the
   working list's subtitle kept) and `Released <today>` on top. The tree is not touched, so restaging just
@@ -176,7 +176,13 @@ From 1.1.01 every payload carries the players' notes for its version ([changelog
   If the working list changed after staging, it is left alone and the script says to trim it by hand.
 - Preflight: `tools/changelog_lint.py` errors are errors; every changelog file a deployed version shipped must
   still match the sha1 in that version's history json (edited or deleted = error).
-- `CONFIG_CLASSES`: `creativeengineering/changelog_seen.txt` (the read marker) is `player`; it is git-ignored too.
+- `CONFIG_CLASSES`: `creativecommon/changelog_seen.txt` (the read marker) is `player`; it is git-ignored too.
+
+### New world pregen
+
+When the final server world is created (not on updates): Chunky around spawn, then Distant Horizons `dh pregen`, with
+nobody online. Steps in `deploy/RUNBOOK.md` section 7 (shipped in every payload); background and decisions in
+[briefs/worldgen_locate.md](briefs/worldgen_locate.md) `locate #3`. Test LO-21.
 
 ### Mod updates (version-pinned fixes)
 
@@ -339,8 +345,26 @@ just stops working (at most a log warning) or breaks later in play. The pack's m
   "re-staged from the client instance state actually deployed"; `history/1.1.04.json` rewritten), not copied, no
   server snapshot. Built with warnings (patcherMod and Vintage sources newer than the jars in `mods/`). Found by the
   2026-10-31 TODO scan: the payload's `creativeengineering-1.1.04.jar` (2026-10-29 22:02, 3,283,729 bytes) and
-  `creative_delight-1.0.0.jar` (2026-10-29 18:18) are not the jars in the client instance (both 2026-10-29 17:16), so
+  `creativedelight-1.0.0.jar` (2026-10-29 18:18) are not the jars in the client instance (both 2026-10-29 17:16), so
   this payload would give the server a different 1.1.04 than the client: check before copying ([TODO](todo/TODO.md)
   `pack/release #7`). Since then patcherMod 1.1.04 (2026-10-31 00:44), Creative Delight (00:29), Vinery `-06` (00:41),
   Brewin' `-04` (00:30) and three new third-party jars (Botany Pots, Cozy's Improved Cats, Room for Two) went into
   `mods/`; they belong to the next version.
+
+- 2026-11-02, owner: the Creative Delight cutover goes in the next deployment (unless a fix has to be pushed first); the Creative Split deployment is **1.2.00**. Release numbers are not yet staged.
+- 2026-11-02 night (plan_creative_delight.md K): `build_deploy.py` `CATEGORIES` gained `oceanic_upstream` and `enders_upstream`
+  (missing, so every deploy build raised a KeyError) and `goldenfood_upstream`, each with server and client copy steps;
+  `UPSTREAM_DONORS` gained the Golden Food pin and points `enders_upstream` at `creativeDelight/members/ends`. Dry run:
+  the only preflight error left is three FTB jars with no `mod_sides.md` row. Next deployment (Creative Delight cutover,
+  then 1.2.00), server by hand: copy `goldenfood_upstream/` (and `oceanic_upstream/`, `enders_upstream/`) beside `mods/`;
+  remove `salt-1.19.2-1.2.4.1.jar`, `create_salt 1.19.2-1.1.0.jar`, `CannedGoods-1.19.2-3.jar`, `goldenfood-1.19.2-2.0.0.jar`
+  (now Creative Delight members) and `moreMooblooms-1.1.0.jar` (now in Creative Worldgen); install
+  `creativedelight-1.0.0.jar`, `creativeengineering-1.1.08.jar`, `creativeworldgen-1.0.0.jar` (and `creativebrewing-1.0.0.jar`
+  of 2026-11-03). None of these has booted in the dev instance yet (last boot 2026-10-31).
+- 2026-11-03: 1.2.00 staged as a full install payload (`--version 1.2.00 --mode install`, config functional): 2870 files,
+  549.2 MB; removals 1102 per side. Every in-tree mod (patcherMod, exposureBackport, creativeLabels, the five Creative
+  bundles, creativeDevtools) rebuilt from source and installed first (Vinery and Brewin' members clean-built for the
+  missing refmap). Preflight warnings left: Display Delight dump older than the CD jar (model check passes), 67 uncommitted
+  changes. Applied 2026-11-03 20:40 to CreativeEngineeringClient (`apply.sh client --no-world`: old jars to
+  `mods_before_1.2.00/`, 1085 removals, verify --installed OK, 407 jars); snapshot client 1.2.00, server still 1.1.05. The dev
+  instance is the build source (already 1.2.00). Not booted on these jars yet.

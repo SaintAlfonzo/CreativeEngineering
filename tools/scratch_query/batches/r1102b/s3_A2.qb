@@ -1,0 +1,20 @@
+# Run r1102b slice 3, boot A2: the s3_A world restarted (stop, game_jvms.sh empty) with the srv/farmers_upstream
+# symlink removed (s3_setup.md). Restore the symlink afterwards if the world boots again.
+pace 2
+
+## SQ-FSD-02 | no donor jar: one warning, the game loads on Farmer's Structures 1.0.0 data
+bootexpect Done \(
+bootexpect is missing: Farmer's Structures runs on its installed 1\.0\.0 data
+bootreject \[farmers-donor\] \d+ files from Farmer's Structures 1\.0\.6
+shell n=$(grep -c "is missing: Farmer's Structures runs on its installed 1.0.0 data" logs/latest.log); echo "warnings: $n"; [ "$n" -eq 1 ]
+> forceload add 96 96 127 127
+sleep 20
+> place structure farmers_structures:cooks 240 -60 600
+look the cook house places (1.0.0 pieces only; any "Empty or non-existent pool" line names a 1.0.6 piece)
+
+## SQ-WE-04b | WorldEdit lazy ids after a restart (second half of SQ-WE-04)
+> wetest
+waitlog \[wetest\] DONE 300
+count \[wetest\] FAIL == 0
+expect \[wetest\] PASS SQ-WE-04: immersiveposts:ironpost_truss
+expect \[wetest\] PASS SQ-WE-ids

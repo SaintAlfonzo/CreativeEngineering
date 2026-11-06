@@ -1,0 +1,54 @@
+# Creative Devtools: the pack's developer tools (feature_writeup/creative_devtools.md). Dev mods/ only. The members are
+# nested jars, each with its own mods.toml (META-INF/jarjar/metadata.json).
+modLoader="javafml"
+loaderVersion="${loader_version_range}"
+license="${mod_license}"
+[[mods]]
+modId="${mod_id}"
+version="${mod_version}"
+displayName="${mod_name}"
+authors="${mod_authors}"
+description='''${mod_description}'''
+
+[[dependencies.creativedevtools]]
+modId="forge"
+mandatory=true
+versionRange="${forge_version_range}"
+ordering="NONE"
+side="BOTH"
+[[dependencies.creativedevtools]]
+modId="minecraft"
+mandatory=true
+versionRange="${minecraft_version_range}"
+ordering="NONE"
+side="BOTH"
+# patcherMod (becomes creativecommon at the Q1 swap): KubeJS, the shared helpers, the startup script loader and the
+# util/ hooks the probes subscribe to. Needs the patcherMod build that has those hooks.
+[[dependencies.creativedevtools]]
+modId="creativecommon"
+mandatory=true
+versionRange="[1.1.0,)"
+ordering="AFTER"
+side="BOTH"
+# Creative Compat: required by every other Creative jar (creative_split.md 7.6).
+[[dependencies.creativedevtools]]
+modId="creativecompat"
+mandatory=true
+versionRange="[1.0.0,)"
+ordering="AFTER"
+side="BOTH"
+# Creative Worldgen: /ceplace (MassPlacer), the /dumpspawns tuning record and /ceperf mobcap read its classes; each is
+# skipped when it is not loaded (creative_split.md 7.6: Devtools has an optional dependency on Worldgen).
+[[dependencies.creativedevtools]]
+modId="creativeworldgen"
+mandatory=false
+versionRange="[1.0.0,)"
+ordering="AFTER"
+side="BOTH"
+# Immersive Engineering: only for the recycling log (ie/IeRecyclingDiagnostics), registered when IE is loaded.
+[[dependencies.creativedevtools]]
+modId="immersiveengineering"
+mandatory=false
+versionRange="[0,)"
+ordering="AFTER"
+side="BOTH"

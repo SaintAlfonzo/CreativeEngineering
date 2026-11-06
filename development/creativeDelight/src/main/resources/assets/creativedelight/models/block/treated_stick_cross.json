@@ -1,0 +1,7 @@
+{
+  "parent": "supplementaries:block/stick_cross",
+  "textures": {
+    "0": "creativedelight:block/treated_stick_cross",
+    "particle": "creativedelight:block/treated_stick_cross"
+  }
+}

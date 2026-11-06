@@ -6,7 +6,7 @@ to #20 added, #2 / #3 moved to Built, line refs re-checked). Reference writeups:
 GR-30), [shields.md](../shields.md) (2.7 recipes, F5 banners, F8 Armor Trims smithing), [armor_effects.md](../armor_effects.md)
 (effects on this gear). Code: [end_gear.js](../../kubejs/server_scripts/equipment/end_gear.js),
 [tune_tools.js](../../kubejs/startup_scripts/func/tune_tools.js), [tune_armor.js](../../kubejs/startup_scripts/func/tune_armor.js),
-[equipmenttags.js](../../kubejs/server_scripts/tags/equipmenttags.js), [neoCraftHelper.js](../../development/patcherMod/src/main/resources/kubejs_startup/creativeengineering/func/neoCraftHelper.js)
+[equipmenttags.js](../../kubejs/server_scripts/tags/equipmenttags.js), [neoCraftHelper.js](../../development/creativeCommon/src/main/resources/kubejs_startup/creativecommon/func/neoCraftHelper.js)
 (in the patcherMod jar since 2026-10; `cfg` 725-758, `echoAssembly` 1507, `felsicAssembly` 1520, `dragonAssembly` 1531),
 patcherMod `CEConfig.java` (`Crafting` 376-438, `DragonGear` 226-240), `mixin/SequencedAssemblyRecipeMixin.java`,
 `gear/AirBrakeHandler.java`. New test ids are placeholders (`GR-newN`), numbered when queued; GR-31 to GR-42 below are
@@ -90,7 +90,7 @@ The config says what it does: either the toml comment is right, or the Long Reac
 their own amounts.
 
 ### Now
-- `NCH.felsicAssembly` ([neoCraftHelper.js](../../development/patcherMod/src/main/resources/kubejs_startup/creativeengineering/func/neoCraftHelper.js) 1520-1529) uses `mb`
+- `NCH.felsicAssembly` ([neoCraftHelper.js](../../development/creativeCommon/src/main/resources/kubejs_startup/creativecommon/func/neoCraftHelper.js) 1520-1529) uses `mb`
   for both `create:filling` steps: step 1 `Long Reach` (`{Bottle:"REGULAR",Potion:"creativeengineering:long_reach"}`)
   and step 4 the configured `potion`.
 - `CEConfig.Crafting.FelsicPiece` (CEConfig.java 410-437): field `mb`, toml key `potionMb`, comment "mB of potion
@@ -312,7 +312,7 @@ armor need.
 - **`wardrobe:bound_leather` and `wardrobe:hardened_leather` are still not in item_dict.js** (the wardrobe block at
   item_dict.js 14854-14895 has the armor, hats and backpacks only). No pack script touches the two items.
 - Ersatz leather: `i.ersatz_leather` (`immersiveengineering:ersatz_leather`, item_dict.js 1604); the pack's recipe is
-  honeycomb + hemp fabric (shapeless and Create deploying, [mob_resources.js](../../kubejs/server_scripts/engineering/mob_resources.js) 11-14).
+  honeycomb + hemp fabric (shapeless and Create deploying, [mob_resources.js](../../kubejs/data/creativeengineering/kubejs/engineering/mob_resources.js) 11-14).
 - Targets (verified in jars 2026-10-21): Sophisticated Backpacks `sophisticatedbackpacks:backpack`
   (`i.sophisticatedbackpacks_backpack`; type `sophisticatedbackpacks:basic_backpack`, `L` = `#forge:leather` x4) and
   `sophisticatedbackpacks:upgrade_base` (vanilla shaped, 1 leather); `minecraft:leather_horse_armor`
@@ -376,7 +376,7 @@ Pneumatic armor is made through PneumaticCraft machines, not a plain grid, and k
 - Pneumatic armor (`pneumaticcraft:pneumatic_helmet/chestplate/leggings/boots`): type
   `pneumaticcraft:crafting_shaped_pressurizable`, `CPC / CAC / CCC` with air canisters, a printed circuit board and
   the steel piece; drops the steel piece's NBT (see #4).
-- PNC is barely edited in the pack ([pneumatic.js](../../kubejs/server_scripts/engineering/pneumatic.js): compressed
+- PNC is barely edited in the pack ([pneumatic.js](../../kubejs/data/creativeengineering/kubejs/engineering/pneumatic.js): compressed
   iron → steel swap). NCH has `pcPressureChamber` (2341), `pcExplosionCrafting` (2362), `pcThermoPlant` (2381); no
   PNC assembly-line or amadron helper.
 
@@ -663,7 +663,7 @@ meal.
   either".
 - The dragon hoe's only fertilizer link is the bone meal charm: `#creativeengineering:bonemeal_charms` = `[i.dragon_hoe]`
   ([equipmenttags.js](../../kubejs/server_scripts/tags/equipmenttags.js) 32).
-  [BonemealCharmMixin](../../development/patcherMod/src/main/java/com/SaintAlfonzo/creativeengineering/mixin/BonemealCharmMixin.java)
+  [BonemealCharmMixin](../../development/creativeCommon/src/main/java/com/SaintAlfonzo/creativecommon/mixin/BonemealCharmMixin.java)
   injects at `RETURN` of `BoneMealItem#useOn` (`m_6225_`): with a charm in the other hand, `chance` 0.5 refunds the
   bone meal, `damageChance` 0.1 costs the charm 1 durability (`[bonemeal_charm]` in the instance toml, line 1023). So
   with the dragon hoe held, bone meal is often "not consumed".

@@ -21,5 +21,7 @@ Reference: [deploy.md](../../../feature_writeup/deploy.md) (read section 0 and t
 5. **User copies the payload** and runs `sh apply.sh server|client <folder>`. Then, on their word only:
    `python3 tools/build_deploy.py --snapshot [VER] [--target server|client] [--date ...]`. This freezes
    `changelog/<ver>.md` and restarts `unreleased.md`.
+5b. **New server world only** (not an update): the pregen in `deploy/RUNBOOK.md` section 7 (Chunky, then
+   `dh pregen`), before anyone joins. Remind the user when a release says the server starts a new world.
 6. **Docs**: release row in the plan / [README.md](../../../feature_writeup/README.md) release table; features
    shipped move to DEPLOYED. Never edit a deployed version's changelog file.

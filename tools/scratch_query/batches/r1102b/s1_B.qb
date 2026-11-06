@@ -1,0 +1,114 @@
+# Run r1102b slice 1, Boot B: group B fresh normal world (prep_srv.sh OUT_B s1b B; seed 8675309, structures on).
+# Probes: zz_zq_probe.js (prep_srv.sh) and zz_count.js (tools/fungi_probe/zcount.js). Setup: s1_setup.md, Boot B.
+# Loot rolls happen inside a glass box at y 120 over the biome (items cannot drift away; the biome at y 120 is the
+# surface biome). Every location comes from /locate (capture), so nothing depends on the seed layout.
+# Worldgen rows load new chunks only through vanilla forceload (never from a KubeJS command).
+pace 2
+
+## SQ-FN-03 | fishing net junk about 5 % in both tables, river and ocean
+bootexpect Done \(
+> locate biome minecraft:river
+waitlog (The nearest minecraft:river|Could not find) 300
+capture R nearest minecraft:river is at \[(-?\d+), (~|-?\d+), (-?\d+)\]
+> forceload add {R1-3} {R3-3} {R1+3} {R3+3}
+sleep 5
+> fill {R1-3} 119 {R3-3} {R1+3} 123 {R3+3} minecraft:glass hollow
+> kill @e[type=minecraft:item]
+pace 0.05
+repeat 400
+> loot spawn {R1} 121 {R3} loot oceanic_delight:gameplay/fishing_net_on_sea_grass
+end
+pace 2
+sleep 3
+> zcount {R1-2} 120 {R3-2} {R1+2} 122 {R3+2}
+waitlog \[zcount\] entities 30
+> kill @e[type=minecraft:item]
+pace 0.05
+repeat 400
+> loot spawn {R1} 121 {R3} loot oceanic_delight:gameplay/fishing_net_on_kelp
+end
+pace 2
+sleep 3
+> zcount {R1-2} 120 {R3-2} {R1+2} 122 {R3+2}
+sleep 2
+> kill @e[type=minecraft:item]
+> execute positioned 0 70 0 run locate biome minecraft:ocean
+waitlog (The nearest minecraft:ocean is|Could not find) 300
+capture O nearest minecraft:ocean is at \[(-?\d+), (~|-?\d+), (-?\d+)\]
+> forceload add {O1-3} {O3-3} {O1+3} {O3+3}
+sleep 5
+> fill {O1-3} 119 {O3-3} {O1+3} 123 {O3+3} minecraft:glass hollow
+pace 0.05
+repeat 400
+> loot spawn {O1} 121 {O3} loot oceanic_delight:gameplay/fishing_net_on_sea_grass
+end
+pace 2
+sleep 3
+> zcount {O1-2} 120 {O3-2} {O1+2} 122 {O3+2}
+sleep 2
+> kill @e[type=minecraft:item]
+pace 0.05
+repeat 400
+> loot spawn {O1} 121 {O3} loot oceanic_delight:gameplay/fishing_net_on_kelp
+end
+pace 2
+sleep 3
+> zcount {O1-2} 120 {O3-2} {O1+2} 122 {O3+2}
+sleep 2
+> kill @e[type=minecraft:item]
+count \[zcount\] entities == 4
+reject (?i)\[zcount\] entities .*item:minecraft:(lily_pad|potion|fishing_rod|ink_sac) x
+reject Unknown loot table|No such loot table
+look each of the 4 zcount lines (river sea grass, river kelp, ocean sea grass, ocean kelp): junk (leather_boots, leather, bone, string, bowl, stick, tripwire_hook, rotten_flesh, upgrade_aquatic:driftwood_log) about 20 of 400 rolls (merged stacks: add the xN counts); river sea grass also shows caviar (oceanic_delight:salmon_eggs, SQ-RM-02 net half)
+
+## SQ-VP-15 | wild ghost peppers in crimson and warped forests on nylium, nowhere else in the Nether
+bootreject (?i)feature order cycle
+> execute in minecraft:the_nether run locate biome minecraft:crimson_forest
+waitlog (The nearest minecraft:crimson_forest|Could not find) 300
+capture C nearest minecraft:crimson_forest is at \[(-?\d+), (~|-?\d+), (-?\d+)\]
+> execute in minecraft:the_nether run locate biome minecraft:warped_forest
+waitlog (The nearest minecraft:warped_forest|Could not find) 300
+capture W nearest minecraft:warped_forest is at \[(-?\d+), (~|-?\d+), (-?\d+)\]
+> execute in minecraft:the_nether run locate biome minecraft:nether_wastes
+waitlog (The nearest minecraft:nether_wastes|Could not find) 300
+capture N nearest minecraft:nether_wastes is at \[(-?\d+), (~|-?\d+), (-?\d+)\]
+> execute in minecraft:the_nether run locate biome minecraft:soul_sand_valley
+waitlog (The nearest minecraft:soul_sand_valley|Could not find) 300
+capture S nearest minecraft:soul_sand_valley is at \[(-?\d+), (~|-?\d+), (-?\d+)\]
+> execute in minecraft:the_nether run forceload add {C1-32} {C3-32} {C1+31} {C3+31}
+> execute in minecraft:the_nether run forceload add {W1-32} {W3-32} {W1+31} {W3+31}
+> execute in minecraft:the_nether run forceload add {N1-32} {N3-32} {N1+31} {N3+31}
+> execute in minecraft:the_nether run forceload add {S1-32} {S3-32} {S1+31} {S3+31}
+sleep 30
+> execute in minecraft:the_nether run zq count {C1-32} 0 {C3-32} {C1+31} 127 {C3+31} vintagedelight:wild_ghost_peppers
+> execute in minecraft:the_nether run zq count {W1-32} 0 {W3-32} {W1+31} 127 {W3+31} vintagedelight:wild_ghost_peppers
+> execute in minecraft:the_nether run zq count {N1-32} 0 {N3-32} {N1+31} 127 {N3+31} vintagedelight:wild_ghost_peppers
+> execute in minecraft:the_nether run zq count {S1-32} 0 {S3-32} {S1+31} 127 {S3+31} vintagedelight:wild_ghost_peppers
+> say VP15 counted
+waitlog VP15 counted 600
+count \[zq\] count vintagedelight:wild_ghost_peppers: == 4
+reject \[zq\] error
+> execute in minecraft:the_nether run forceload remove all
+look line 1 (crimson) and 2 (warped): count > 0, standing on crimson_nylium / warped_nylium only; lines 3 (wastes) and 4 (soul sand valley): 0. A box edge may cross into another biome: a few peppers in line 3 / 4 next to a forest are judged by their "on" list
+
+## SQ-LE-06 | desert temples group live at 32 / 20; temple starts at least 21 chunks apart; priority over the desert mimic
+bootreject (?i)structure_groups.*(error|invalid)
+bootexpect \[structure-tuning\] \d+ groups
+> dumpstructuregen
+sleep 10
+shell f=kubejs/exported/worldgen/structuregen.json; python3 -I -c "import json,sys; d=json.load(open(sys.argv[1])); s=d['structure_sets']['creativeengineering:group/desert_temples']; p=s['placement']; print('spacing', p.get('spacing'), 'separation', p.get('separation'), 'structures', [x.get('structure', x) for x in s['structures']])" $f
+> execute positioned 0 70 0 run locate structure #creativeengineering:group/desert_temples
+waitlog (The nearest|Could not find) 900
+capture D is at \[(-?\d+), (~|-?\d+), (-?\d+)\]
+> execute positioned {D1} 70 {D3} run locate structure #creativeengineering:group/desert_temples
+> execute positioned {D1+400} 70 {D3} run locate structure #creativeengineering:group/desert_temples
+> execute positioned {D1-400} 70 {D3} run locate structure #creativeengineering:group/desert_temples
+> execute positioned {D1} 70 {D3+400} run locate structure #creativeengineering:group/desert_temples
+> execute positioned {D1} 70 {D3-400} run locate structure #creativeengineering:group/desert_temples
+> execute positioned {D1+400} 70 {D3+400} run locate structure #creativeengineering:group/desert_temples
+> execute positioned {D1-400} 70 {D3-400} run locate structure #creativeengineering:group/desert_temples
+shell for k in $(seq 90); do [ "$(grep -c 'The nearest #creativeengineering:group/desert_temples' logs/latest.log)" -ge 9 ] && break; sleep 10; done; grep -oE 'The nearest #creativeengineering:group/desert_temples is at .*' logs/latest.log
+shell grep -oE "\[placement-priority\] dropped [^ ]+ .*desert[^ ]*" logs/latest.log | head -5; grep -cE "\[placement-priority\] dropped betterdeserttemples:desert_temple .*overlaps towns_and_towers:mimic_desert" logs/latest.log
+reject Could not find a structure|There is no structure with type
+count The nearest .* is at \[ >= 9
+look shell: spacing 32, separation 20 and the four members (YUNG's temple, vanilla pyramid, the two metas); the 9 locate results: every two distinct starts at least 336 blocks (21 chunks) apart; a priority drop line, if any, drops the mimic for the temple and never the reverse (the grep count after it must be 0)

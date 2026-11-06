@@ -1,0 +1,94 @@
+{
+  "type": "minecraft:generic",
+  "pools": [
+    {
+      "rolls": 1,
+      "entries": [
+        {
+          "type": "minecraft:item",
+          "name": "minecraft:air",
+          "weight": 2
+        },
+        {
+          "type": "minecraft:item",
+          "name": "minecraft:clay_ball",
+          "weight": 5
+        },
+        {
+          "type": "minecraft:item",
+          "name": "minecraft:scute",
+          "weight": 1,
+          "conditions": [
+            {
+              "condition": "minecraft:random_chance",
+              "chance": 0.1
+            }
+          ]
+        },
+        {
+          "type": "minecraft:item",
+          "name": "oceanic_delight:shrimp",
+          "weight": 4,
+          "conditions": [
+            {
+              "condition": "creativeengineering:biome_tag",
+              "tag": "creativeengineering:fishing_net/shrimp_ocean"
+            }
+          ]
+        },
+        {
+          "type": "minecraft:item",
+          "name": "oceanic_delight:salmon_eggs",
+          "weight": 3,
+          "conditions": [
+            {
+              "condition": "creativeengineering:biome_tag",
+              "tag": "creativeengineering:fishing_net/river"
+            }
+          ]
+        },
+        {
+          "type": "minecraft:loot_table",
+          "name": "creativedelight:gameplay/fishing_net/coral",
+          "weight": 2,
+          "conditions": [
+            {
+              "condition": "creativeengineering:biome_tag",
+              "tag": "creativeengineering:fishing_net/warm_ocean"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "rolls": 1,
+      "conditions": [
+        {
+          "condition": "creativeengineering:biome_tag",
+          "tag": "creativeengineering:fishing_net/ocean"
+        }
+      ],
+      "entries": [
+        {
+          "type": "minecraft:loot_table",
+          "name": "creativedelight:gameplay/fishing_net/ocean_treasure"
+        }
+      ]
+    },
+    {
+      "rolls": 1,
+      "conditions": [
+        {
+          "condition": "minecraft:random_chance",
+          "chance": 0.05
+        }
+      ],
+      "entries": [
+        {
+          "type": "minecraft:loot_table",
+          "name": "creativedelight:gameplay/fishing_net/junk"
+        }
+      ]
+    }
+  ]
+}

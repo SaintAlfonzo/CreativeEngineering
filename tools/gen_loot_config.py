@@ -1,11 +1,11 @@
 #!/usr/bin/env python3
 """
-Builds the chest-loot tuning catalog + index read by kubejs/server_scripts/loot/05_tuning.js:
+Builds the chest-loot tuning catalog + index read by kubejs/data/creativeworldgen/kubejs/loot/05_tuning.js:
 
-  kubejs/server_scripts/loot/loot_config.json  - EDITABLE. Every item that can show up in chest
+  kubejs/data/creativeworldgen/kubejs/loot/loot_config.json  - EDITABLE. Every item that can show up in chest
                                                  loot, with its "remove" / "frequency" knobs and a
                                                  read-only "where" view (chance per chest, %).
-  kubejs/server_scripts/loot/loot_index.json   - GENERATED, don't edit. Which tables hold a direct
+  kubejs/data/creativeworldgen/kubejs/loot/loot_index.json   - GENERATED, don't edit. Which tables hold a direct
                                                  entry for each item (what the runtime rewrites
                                                  pre-roll), and each table's declared type.
 
@@ -41,6 +41,7 @@ flagged "missing"; "settings" and "patterns" are never touched once they exist.
 
 Run: python3 tools/gen_loot_config.py      then /reload in game.
 """
+import io
 import json
 import sys
 import math
@@ -61,12 +62,16 @@ TAGS_EXPORT = INSTANCE / 'kubejs/exported/tags/item_tags.json'
 RUNTIME_ADDITIONS = INSTANCE / 'kubejs/exported/loot_runtime_additions.json'
 TEMPLATE_CACHE = INSTANCE / 'tools/.cache/template_loot.json'
 STALE_EXPORT_SECONDS = 600  # a /dumploot rewrites every live namespace within seconds of each other
-OUT_DIR = INSTANCE / 'kubejs/server_scripts/loot'
+OUT_DIR = INSTANCE / 'kubejs/data/creativeworldgen/kubejs/loot'
 CONFIG_PATH = OUT_DIR / 'loot_config.json'
 INDEX_PATH = OUT_DIR / 'loot_index.json'
 
 # The vanilla jar with the loose data/ jsons (tools/pack_paths.py). Its file name lands in loot_config.json ("over").
 VANILLA_JAR = pack_paths.vanilla_jar()
+# (port jar name prefix, donor jar it serves its data from); the port's translator drops nothing from the chest tables.
+DONOR_DATA_JARS = [
+    ('backportedMiners-', INSTANCE / 'miners_upstream/miners_delight-1.20.1-1.4.5-backport.jar'),
+]
 
 CHEST_TYPE = 'minecraft:chest'
 CHEST_PATH = re.compile(r'(^|/)chests?/')
@@ -79,7 +84,7 @@ DEFAULT_SETTINGS = OrderedDict([
 ])
 
 # Seeded on first generation only. Bans (PneumaticCraft, Lightman's coins), '#tag' groups and
-# packed food live in kubejs/server_scripts/loot/07_rules.js as global.lootTuning calls.
+# packed food live in kubejs/data/creativeworldgen/kubejs/loot/07_rules.js as global.lootTuning calls.
 DEFAULT_PATTERNS = OrderedDict()
 
 README = OrderedDict([
@@ -116,7 +121,7 @@ README = OrderedDict([
     ('how', 'Where the item is a normal entry in a loot table JSON (almost always), its weight is rewritten '
             'before the roll. Items that mods inject in code (global loot modifiers, tag entries, pools added '
             'in code) are thinned or removed after the roll by LootJS instead: removed stacks leave an empty slot there. '
-            'Full details: kubejs/server_scripts/loot/README.md.'),
+            'Full details: kubejs/data/creativeworldgen/kubejs/loot/readme.md.'),
     ('regenerate', 'python3 tools/gen_loot_config.py (after mod updates / a fresh /dumploot). Keeps your edits.'),
 ])
 
@@ -139,12 +144,34 @@ def iter_data_sources():
         yield VANILLA_JAR.name, z.read, z.namelist()
     else:
         print('WARNING: vanilla -extra jar not found; vanilla loot tables will be missing')
+    nested_names = []
     for jar in sorted(MODS_DIR.glob('*.jar')):
         try:
             z = zipfile.ZipFile(jar)
         except zipfile.BadZipFile:
             continue
         yield jar.name, z.read, z.namelist()
+        # Members nested in a bundle (Creative Delight, Creative Brewing: META-INF/jarjar/) load as mods of their own.
+        for n in sorted(z.namelist()):
+            if n.startswith('META-INF/jarjar/') and n.endswith('.jar'):
+                try:
+                    nz = zipfile.ZipFile(io.BytesIO(z.read(n)))
+                except zipfile.BadZipFile:
+                    continue
+                nested_names.append(n.rsplit('/', 1)[-1])
+                yield f'{jar.name}!{n.rsplit("/", 1)[-1]}', nz.read, nz.namelist()
+    # Donor jars a port serves its data from at runtime (no data/ of its own in the port jar): Miner's Delight reads
+    # the 1.4.5 jar in miners_upstream/ (MinersTranslator; creativedelight members #40). Tables only, as served: the
+    # translator leaves the donor's loot modifiers out (members #51), the pack's loot rules give those drops.
+    for port_prefix, donor in DONOR_DATA_JARS:
+        if not any(name.startswith(port_prefix) for name in nested_names) and not list(MODS_DIR.glob(port_prefix + '*.jar')):
+            continue
+        if not donor.exists():
+            print(f'WARNING: donor jar {donor.relative_to(INSTANCE)} missing; its loot tables will be missing')
+            continue
+        z = zipfile.ZipFile(donor)
+        names = [n for n in z.namelist() if n.startswith('data/') and '/loot_modifiers/' not in n]
+        yield donor.name, z.read, names
     if KUBEJS_DATA.exists():
         files = [p for p in KUBEJS_DATA.rglob('*.json')]
         names = ['data/' + p.relative_to(KUBEJS_DATA).as_posix() for p in files]

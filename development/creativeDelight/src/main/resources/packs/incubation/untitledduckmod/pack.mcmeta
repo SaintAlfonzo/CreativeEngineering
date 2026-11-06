@@ -1,0 +1,8 @@
+{
+  "pack": {
+    "description": "Creative Delight: Incubation compartment, duck and goose content (added only with Incubation and Untitled Duck Mod)",
+    "pack_format": 9,
+    "forge:resource_pack_format": 9,
+    "forge:data_pack_format": 10
+  }
+}

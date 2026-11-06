@@ -1,0 +1,49 @@
+# Run r1102, SQ-CDJ5 Boot 1, long part: SQ-FGD-07 (pigs dig truffle dirt and podzol), about 12 min.
+# Same boot as b1_main.qb (run it after that file, before stopping). Needs spawn-animals=true (README Boot 1), else
+# vanilla discards the pigs on their next tick. Pen: x offsets -60..-41, z 0..19 from the cdj5home marker, on the
+# superflat floor (H2-1); the perfBot bots of b1_main stand within 128 blocks, so the chunks tick.
+pace 2
+
+## SQ-FGD-07a | mobGriefing true: pigs turn podzol and truffle dirt into coarse dirt
+> data get entity @e[type=minecraft:marker,tag=cdj5home,limit=1] Pos
+capture H entity data: \[(-?\d+)\.\d+d, (-?\d+)\.\d+d, (-?\d+)\.\d+d\]
+> kill @e[type=minecraft:item]
+> fill {H1-60} {H2-1} {H3} {H1-41} {H2-1} {H3+19} minecraft:podzol
+> fill {H1-60} {H2-1} {H3} {H1-41} {H2-1} {H3+9} fungidelight:truffle_dirt
+> fill {H1-61} {H2} {H3-1} {H1-40} {H2} {H3-1} minecraft:oak_fence
+> fill {H1-61} {H2} {H3+20} {H1-40} {H2} {H3+20} minecraft:oak_fence
+> fill {H1-61} {H2} {H3-1} {H1-61} {H2} {H3+20} minecraft:oak_fence
+> fill {H1-40} {H2} {H3-1} {H1-40} {H2} {H3+20} minecraft:oak_fence
+> gamerule mobGriefing true
+pace 0.2
+repeat 40
+> summon minecraft:pig {H1-50} {H2} {H3+10} {Age:0,PersistenceRequired:1b,Tags:["fgdpig"]}
+end
+pace 2
+sleep 5
+> execute if entity @e[type=minecraft:pig,tag=fgdpig] run say FGD07 pigs alive
+expect FGD07 pigs alive
+sleep 300
+> zcount {H1-60} {H2-1} {H3} {H1-41} {H2} {H3+19}
+waitlog \[zcount\] entities 30
+expect \[zcount\] blocks .*minecraft:coarse_dirt=\d+
+reject (?i)Parameters not allowed|loot.*(error|exception)
+look coarse dirt count (2026-10-26: 19 of 400 in about 4.5 min), truffles / sticks / clay among the entities
+
+## SQ-FGD-07b | mobGriefing false: no block changes
+# gamerule first, then let digs already running end (60 ticks; stop() checks mobGriefing), then refill: r1102 had the
+# gamerule 4 s after the refill and one dig finished in that window (1 coarse dirt)
+> gamerule mobGriefing false
+sleep 6
+> kill @e[type=minecraft:item]
+> fill {H1-60} {H2-1} {H3} {H1-41} {H2-1} {H3+19} minecraft:podzol
+> fill {H1-60} {H2-1} {H3} {H1-41} {H2-1} {H3+9} fungidelight:truffle_dirt
+> execute if entity @e[type=minecraft:pig,tag=fgdpig] run say FGD07 pigs alive
+expect FGD07 pigs alive
+sleep 240
+> zcount {H1-60} {H2-1} {H3} {H1-41} {H2} {H3+19}
+waitlog \[zcount\] entities 30
+reject \[zcount\] blocks .*minecraft:coarse_dirt=
+> gamerule mobGriefing true
+> kill @e[type=minecraft:pig,tag=fgdpig]
+> kill @e[type=minecraft:item]

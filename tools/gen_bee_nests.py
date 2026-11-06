@@ -10,7 +10,7 @@ rolls its decorator's probability once, and the nest then needs a free spot besi
 leaves. So per biome: nests per chunk = sum over its tree features of (trees per chunk x nest chance per tree).
 
 Offline estimate ("before" = the mods as loaded + the pack's wild_crops.json changes; "after" = bee_nests.json
-applied the way kubejs/server_scripts/worldgen/bee_nests.js and patcherMod BeeNests apply it):
+applied the way kubejs/data/creativeworldgen/kubejs/worldgen/bee_nests.js and patcherMod BeeNests apply it):
 - tree counts are placement ATTEMPTS: block/noise filters, the biome check and failed trunks are not simulated,
   so heavily filtered features (Terralith's 200-try Yellowstone birches) read far too high. Nest chances are exact.
 - bushes (trunk at most 1 tall) never get a nest: the decorator looks for a log above the first one.

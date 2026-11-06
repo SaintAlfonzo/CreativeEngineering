@@ -17,7 +17,7 @@ file is kept as history; VJ-01 to VJ-10 can no longer run.
 | Grape Stomping page | BUILT, in `mods/` |
 | Wine Aging page | BUILT, in `mods/` |
 
-- **Files to open:** `development/patcherMod/.../compat/vinery/` (one class per page, `VineryIds` for every id and number).
+- **Files to open:** `development/creativeCommon/.../compat/vinery/` (one class per page, `VineryIds` for every id and number).
 - **Knobs:** none of our own. The aging page reads Vinery's `config/vinery/config.json5` (`year_length_in_days`, `years_per_effect_level`).
 - **How to measure:** open any Vinery wine, grape, apple or apple mash in JEI and press R / U.
 
@@ -80,15 +80,15 @@ Brief: [briefs/alcohol_vineryport.md](briefs/alcohol_vineryport.md). Nothing her
 
 ## 5. File map
 
-- [VineryJEI.java](../development/patcherMod/src/main/java/com/SaintAlfonzo/creativeengineering/compat/vinery/VineryJEI.java): plugin, registration, catalysts
-- [VineryIds.java](../development/patcherMod/src/main/java/com/SaintAlfonzo/creativeengineering/compat/vinery/VineryIds.java): ids, Vinery's hardcoded numbers, config read
-- [VineryCategory.java](../development/patcherMod/src/main/java/com/SaintAlfonzo/creativeengineering/compat/vinery/VineryCategory.java): shared REI-style drawing
-- [FermentationCategory.java](../development/patcherMod/src/main/java/com/SaintAlfonzo/creativeengineering/compat/vinery/FermentationCategory.java), [WinePressCategory.java](../development/patcherMod/src/main/java/com/SaintAlfonzo/creativeengineering/compat/vinery/WinePressCategory.java), [GrapeStompingCategory.java](../development/patcherMod/src/main/java/com/SaintAlfonzo/creativeengineering/compat/vinery/GrapeStompingCategory.java), [WineAgingCategory.java](../development/patcherMod/src/main/java/com/SaintAlfonzo/creativeengineering/compat/vinery/WineAgingCategory.java)
-- Lang: `creativeengineering.jei.vinery.*` in [en_us.json](../development/patcherMod/src/main/resources/assets/creativeengineering/lang/en_us.json)
+- [VineryJEI.java](../development/creativeCommon/src/main/java/com/SaintAlfonzo/creativecommon/compat/vinery/VineryJEI.java): plugin, registration, catalysts
+- [VineryIds.java](../development/creativeCommon/src/main/java/com/SaintAlfonzo/creativecommon/compat/vinery/VineryIds.java): ids, Vinery's hardcoded numbers, config read
+- [VineryCategory.java](../development/creativeCommon/src/main/java/com/SaintAlfonzo/creativecommon/compat/vinery/VineryCategory.java): shared REI-style drawing
+- [FermentationCategory.java](../development/creativeCommon/src/main/java/com/SaintAlfonzo/creativecommon/compat/vinery/FermentationCategory.java), [WinePressCategory.java](../development/creativeCommon/src/main/java/com/SaintAlfonzo/creativecommon/compat/vinery/WinePressCategory.java), [GrapeStompingCategory.java](../development/creativeCommon/src/main/java/com/SaintAlfonzo/creativecommon/compat/vinery/GrapeStompingCategory.java), [WineAgingCategory.java](../development/creativeCommon/src/main/java/com/SaintAlfonzo/creativecommon/compat/vinery/WineAgingCategory.java)
+- Lang: `creativeengineering.jei.vinery.*` in [en_us.json](../development/creativeCommon/src/main/resources/assets/creativecommon/lang/en_us.json)
 
 ## 6. Offline checks
 
-- `./gradlew :patcherMod:build --offline` compiles; `javap -c` on the built classes shows every vanilla
+- `./gradlew :creativeCommon:build --offline` compiles; `javap -c` on the built classes shows every vanilla
   call remapped to SRG (`Level.m_46468_` getDayTime, `Font.m_92889_` draw, ...). Done 2026-10-01.
 
 ## 7. In-game test suite

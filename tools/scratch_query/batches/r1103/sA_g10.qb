@@ -1,0 +1,17 @@
+# Run r1103 slice A, SQ-GLD-10: two short boots that must STOP at startup (sA_setup.md "Boot 3x"). No server
+# command: run this file after each failed boot with --rows (the server is not up; only log and shell steps).
+#   boot 3a: srv/goldenfood_upstream replaced by an EMPTY folder         -> qrun.py run OUT sA_g10.qb RES --rows SQ-GLD-10a
+#   boot 3b: that folder holds another jar named goldenfood-1.19.2-2.0.0.jar -> qrun.py run OUT sA_g10.qb RES --rows SQ-GLD-10b
+# Then restore the symlink (ln -sfn "$INST/goldenfood_upstream" srv/goldenfood_upstream). Never touch $INST/goldenfood_upstream.
+
+## SQ-GLD-10a | donor jar missing: startup stops with the folder message
+shell grep -rhoE "Golden Food \(Creative Delight\) reads its textures, models and recipes from the original Golden Food jar[^\"]{0,200}" logs/latest.log crash-reports/ 2>/dev/null | head -3
+shell grep -rqE "Golden Food \(Creative Delight\) reads its textures, models and recipes from the original Golden Food jar.*goldenfood_upstream" logs/latest.log crash-reports/
+shell grep -rqiE "missing" logs/latest.log crash-reports/
+shell ! grep -q "Done (" logs/latest.log
+look the message names the folder goldenfood_upstream, says missing, and gives the source line
+
+## SQ-GLD-10b | wrong jar under the donor name: startup stops with "wrong file ... expected 4109e4d6..."
+shell grep -rhoE "wrong file[^\"]{0,200}" logs/latest.log crash-reports/ 2>/dev/null | head -3
+shell grep -rqE "wrong file.*expected 4109e4d6" logs/latest.log crash-reports/
+shell ! grep -q "Done (" logs/latest.log

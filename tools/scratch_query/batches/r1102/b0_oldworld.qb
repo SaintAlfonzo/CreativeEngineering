@@ -1,0 +1,55 @@
+# Run r1102 (2026-11-02), Boot 0: the OLD world for SQ-CDJ-11 / SQ-CDJ-05. Server from prep_srv.sh (group A, level cdj5)
+# plus the five pre-nest jars from development/creativeDelight/jar_archive/displaced/ copied into OUT/srv/mods/ (they win
+# over the nested copies). Everything is placed relative to the marker tagged cdj5home (offsets shared with the Boot 1+
+# batches, see README.txt in this folder).
+pace 2
+
+## SQ-CDJ-11 | old world: pre-nest jars load and their blocks are placed
+bootexpect Done \(
+bootexpect \[creativedelight\] members:
+count is loaded from backported.*not from the Creative Delight jar >= 0
+shell grep -cE "is loaded from .*backported.*not from the Creative Delight jar" logs/latest.log; grep -oE "member [a-z_]+ is loaded from [^ ,]+" logs/latest.log | sort -u
+> execute unless entity @e[type=minecraft:marker,tag=cdj5home] run summon minecraft:marker ~ ~ ~ {Tags:["cdj5home"]}
+sleep 2
+> data get entity @e[type=minecraft:marker,tag=cdj5home,limit=1] Pos
+capture H entity data: \[(-?\d+)\.\d+d, (-?\d+)\.\d+d, (-?\d+)\.\d+d\]
+> forceload add {H1} {H3} {H1+16} {H3+16}
+sleep 3
+> fill {H1} {H2} {H3} {H1+12} {H2+3} {H3+8} minecraft:air
+> fill {H1} {H2-1} {H3} {H1+12} {H2-1} {H3+8} minecraft:stone
+> setblock {H1+2} {H2} {H3} displaydelight:plated_cookie[stacks=3]
+> setblock {H1+4} {H2} {H3} displaydelight:plated_hamburger
+> setblock {H1+6} {H2} {H3} displaydelight:beef_stew
+> setblock {H1+8} {H2} {H3} displaydelight:small_plated_cake_slice
+> setblock {H1+2} {H2} {H3+3} vintagedelight:fermenting_jar{inventory:{Size:10,Items:[{Slot:0,id:"veggiesdelight:garlic",Count:3b},{Slot:1,id:"minecraft:honey_bottle",Count:3b}]}}
+> setblock {H1+4} {H2} {H3+3} vintagedelight:cheese_wheel
+> setblock {H1+6} {H2-1} {H3+3} minecraft:farmland
+> setblock {H1+6} {H2} {H3+3} veggiesdelight:cauliflower_crop
+> setblock {H1+7} {H2-1} {H3+3} minecraft:farmland
+> setblock {H1+7} {H2} {H3+3} veggiesdelight:garlic_crop
+> setblock {H1+8} {H2-1} {H3+3} minecraft:farmland
+> setblock {H1+8} {H2} {H3+3} vintagedelight:cucumber_crop
+> setblock {H1+10} {H2-1} {H3+3} minecraft:mycelium
+> setblock {H1+10} {H2} {H3+3} fungidelight:inky_cap_mushroom_colony
+> setblock {H1+2} {H2} {H3+6} minecraft:campfire[lit=true]
+> setblock {H1+2} {H2+1} {H3+6} miners_delight:copper_pot{Inventory:{Size:9,Items:[{Slot:0,id:"minecraft:potato",Count:2b},{Slot:1,id:"minecraft:carrot",Count:1b}]}}
+> setblock {H1+4} {H2} {H3+6} miners_delight:sticky_basket
+> data get block {H1+2} {H2} {H3+3}
+> data get block {H1+2} {H2+1} {H3+6}
+> execute if block {H1+2} {H2} {H3} displaydelight:plated_cookie[stacks=3] run say CDJ11 plate
+> execute if block {H1+4} {H2} {H3} displaydelight:plated_hamburger run say CDJ11 hamburger
+> execute if block {H1+6} {H2} {H3} displaydelight:beef_stew run say CDJ11 stew
+> execute if block {H1+8} {H2} {H3} displaydelight:small_plated_cake_slice run say CDJ11 cake
+> execute if block {H1+2} {H2} {H3+3} vintagedelight:fermenting_jar run say CDJ11 jar
+> execute if block {H1+4} {H2} {H3+3} vintagedelight:cheese_wheel run say CDJ11 cheese
+> execute if block {H1+6} {H2} {H3+3} veggiesdelight:cauliflower_crop run say CDJ11 cauliflower
+> execute if block {H1+7} {H2} {H3+3} veggiesdelight:garlic_crop run say CDJ11 garlic
+> execute if block {H1+8} {H2} {H3+3} vintagedelight:cucumber_crop run say CDJ11 cucumber
+> execute if block {H1+10} {H2} {H3+3} fungidelight:inky_cap_mushroom_colony run say CDJ11 colony
+> execute if block {H1+2} {H2+1} {H3+6} miners_delight:copper_pot run say CDJ11 pot
+> execute if block {H1+4} {H2} {H3+6} miners_delight:sticky_basket run say CDJ11 basket
+count CDJ11 (plate|hamburger|stew|cake|jar|cheese|cauliflower|garlic|cucumber|colony|pot|basket)$ == 12
+reject Unknown block type|Expected integer|Unknown block property|Invalid
+> save-all flush
+waitlog Saved the game 120
+look shell: five "is loaded from ... backported" member lines (Display, Fungi, Miner's, Veggies, Vintage); 12 blocks placed at home+offsets (README.txt)

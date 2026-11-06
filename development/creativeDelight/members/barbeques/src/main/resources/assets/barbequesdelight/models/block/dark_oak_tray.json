@@ -1,0 +1,7 @@
+{
+  "parent": "barbequesdelight:custom/tray",
+  "textures": {
+    "1": "barbequesdelight:block/dark_oak_tray",
+    "particle": "barbequesdelight:block/dark_oak_tray"
+  }
+}

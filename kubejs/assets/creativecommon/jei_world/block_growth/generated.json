@@ -1,0 +1,2527 @@
+{
+ "_generated_by": "tools/gen_jei_world.py",
+ "rows": [
+  {
+   "requires": [
+    "immersive_weathering"
+   ],
+   "inputs": [
+    {
+     "block": "minecraft:brain_coral_block",
+     "label": "Biome: Warm Ocean; Stops when 6 or more of the results are within 2 blocks"
+    },
+    {
+     "block": "minecraft:water",
+     "label": "Replaced"
+    }
+   ],
+   "outputs": [
+    {
+     "block": "minecraft:brain_coral_fan",
+     "chance": 0.7703
+    },
+    {
+     "block": "minecraft:brain_coral",
+     "chance": 0.2101
+    },
+    {
+     "block": "minecraft:wet_sponge",
+     "chance": 0.0196
+    }
+   ],
+   "notes": [
+    "Random tick 0.05%: grows on top or sideways, into water",
+    "Warm Ocean"
+   ]
+  },
+  {
+   "requires": [
+    "immersive_weathering"
+   ],
+   "inputs": [
+    {
+     "block": "minecraft:bubble_coral_block",
+     "label": "Biome: Warm Ocean; Stops when 6 or more of the results are within 2 blocks"
+    },
+    {
+     "block": "minecraft:water",
+     "label": "Replaced"
+    }
+   ],
+   "outputs": [
+    {
+     "block": "minecraft:bubble_coral_fan",
+     "chance": 0.7703
+    },
+    {
+     "block": "minecraft:bubble_coral",
+     "chance": 0.2101
+    },
+    {
+     "block": "minecraft:wet_sponge",
+     "chance": 0.0196
+    }
+   ],
+   "notes": [
+    "Random tick 0.05%: grows on top or sideways, into water",
+    "Warm Ocean"
+   ]
+  },
+  {
+   "requires": [
+    "immersive_weathering"
+   ],
+   "inputs": [
+    {
+     "block": "immersive_weathering:cracked_mud",
+     "label": "Stops when 3 or more of the results are within 2 blocks"
+    }
+   ],
+   "outputs": [
+    {
+     "block": "minecraft:sugar_cane"
+    }
+   ],
+   "notes": [
+    "Random tick 0.5%: grows on top"
+   ]
+  },
+  {
+   "requires": [
+    "immersive_weathering"
+   ],
+   "inputs": [
+    {
+     "block": "minecraft:crimson_nylium",
+     "label": "Stops when 5 or more of the results are within 2 blocks"
+    }
+   ],
+   "outputs": [
+    {
+     "block": "minecraft:crimson_roots",
+     "chance": 0.8197
+    },
+    {
+     "block": "minecraft:crimson_fungus",
+     "chance": 0.1639
+    },
+    {
+     "block": "minecraft:warped_fungus",
+     "chance": 0.0164
+    }
+   ],
+   "notes": [
+    "Random tick 0.2%: grows on top"
+   ]
+  },
+  {
+   "requires": [
+    "immersive_weathering"
+   ],
+   "inputs": [
+    {
+     "block_tag": "minecraft:fire",
+     "label": "Top block, open sky"
+    },
+    {
+     "block": "minecraft:grass_block",
+     "label": "Replaced"
+    }
+   ],
+   "outputs": [
+    {
+     "block": "minecraft:dirt"
+    }
+   ],
+   "notes": [
+    "Rain or snow 5%: grows below, into grass block"
+   ]
+  },
+  {
+   "requires": [
+    "immersive_weathering"
+   ],
+   "inputs": [
+    {
+     "block": "minecraft:fire_coral_block",
+     "label": "Biome: Warm Ocean; Stops when 6 or more of the results are within 2 blocks"
+    },
+    {
+     "block": "minecraft:water",
+     "label": "Replaced"
+    }
+   ],
+   "outputs": [
+    {
+     "block": "minecraft:fire_coral_fan",
+     "chance": 0.7703
+    },
+    {
+     "block": "minecraft:fire_coral",
+     "chance": 0.2101
+    },
+    {
+     "block": "minecraft:wet_sponge",
+     "chance": 0.0196
+    }
+   ],
+   "notes": [
+    "Random tick 0.05%: grows on top or sideways, into water",
+    "Warm Ocean"
+   ]
+  },
+  {
+   "requires": [
+    "immersive_weathering"
+   ],
+   "inputs": [
+    {
+     "block_tag": "minecraft:fire"
+    }
+   ],
+   "outputs": [
+    {
+     "block": "immersive_weathering:soot"
+    }
+   ],
+   "notes": [
+    "Random tick 5%: grows sideways",
+    "Next to a burnable block"
+   ]
+  },
+  {
+   "requires": [
+    "immersive_weathering"
+   ],
+   "inputs": [
+    {
+     "block": "minecraft:fern",
+     "label": "Biome: icy biomes"
+    }
+   ],
+   "outputs": [
+    {
+     "block": "immersive_weathering:frosty_fern"
+    }
+   ],
+   "notes": [
+    "Random tick 5%: changes in place",
+    "Icy biomes, at night"
+   ]
+  },
+  {
+   "requires": [
+    "immersive_weathering"
+   ],
+   "inputs": [
+    {
+     "block": "minecraft:fern",
+     "label": "Top block, open sky"
+    }
+   ],
+   "outputs": [
+    {
+     "block": "immersive_weathering:frosty_fern"
+    }
+   ],
+   "notes": [
+    "Snow 5%: changes in place"
+   ]
+  },
+  {
+   "requires": [
+    "immersive_weathering"
+   ],
+   "inputs": [
+    {
+     "block": "minecraft:glass",
+     "label": "Biome: icy biomes"
+    }
+   ],
+   "outputs": [
+    {
+     "block": "immersive_weathering:frosty_glass"
+    }
+   ],
+   "notes": [
+    "Random tick 5%: changes in place",
+    "Icy biomes, at night"
+   ]
+  },
+  {
+   "requires": [
+    "immersive_weathering"
+   ],
+   "inputs": [
+    {
+     "block": "minecraft:glass_pane",
+     "label": "Biome: icy biomes"
+    }
+   ],
+   "outputs": [
+    {
+     "block": "immersive_weathering:frosty_glass_pane"
+    }
+   ],
+   "notes": [
+    "Random tick 5%: changes in place",
+    "Icy biomes, at night"
+   ]
+  },
+  {
+   "requires": [
+    "immersive_weathering"
+   ],
+   "inputs": [
+    {
+     "block": "minecraft:glass_pane",
+     "label": "Top block, open sky"
+    }
+   ],
+   "outputs": [
+    {
+     "block": "immersive_weathering:frosty_glass_pane"
+    }
+   ],
+   "notes": [
+    "Snow 5%: changes in place"
+   ]
+  },
+  {
+   "requires": [
+    "immersive_weathering"
+   ],
+   "inputs": [
+    {
+     "block": "minecraft:glass",
+     "label": "Top block, open sky"
+    }
+   ],
+   "outputs": [
+    {
+     "block": "immersive_weathering:frosty_glass"
+    }
+   ],
+   "notes": [
+    "Snow 5%: changes in place"
+   ]
+  },
+  {
+   "requires": [
+    "immersive_weathering"
+   ],
+   "inputs": [
+    {
+     "block": "minecraft:grass",
+     "label": "Biome: icy biomes"
+    }
+   ],
+   "outputs": [
+    {
+     "block": "immersive_weathering:frosty_grass"
+    }
+   ],
+   "notes": [
+    "Random tick 5%: changes in place",
+    "Icy biomes, at night"
+   ]
+  },
+  {
+   "requires": [
+    "immersive_weathering"
+   ],
+   "inputs": [
+    {
+     "block": "minecraft:grass",
+     "label": "Top block, open sky"
+    }
+   ],
+   "outputs": [
+    {
+     "block": "immersive_weathering:frosty_grass"
+    }
+   ],
+   "notes": [
+    "Snow 5%: changes in place"
+   ]
+  },
+  {
+   "requires": [
+    "immersive_weathering"
+   ],
+   "inputs": [
+    {
+     "block": "immersive_weathering:frosty_grass"
+    }
+   ],
+   "outputs": [
+    {
+     "block": "minecraft:grass"
+    }
+   ],
+   "notes": [
+    "Random tick 5%: changes in place",
+    "By day"
+   ]
+  },
+  {
+   "requires": [
+    "immersive_weathering"
+   ],
+   "inputs": [
+    {
+     "blocks": [
+      "minecraft:grass_block",
+      "immersive_weathering:rooted_grass_block"
+     ],
+     "label": "Biome: Badlands, Eroded Badlands, Desert; Stops when 4 or more of the results are within 2 blocks"
+    }
+   ],
+   "outputs": [
+    {
+     "block": "minecraft:dead_bush"
+    }
+   ],
+   "notes": [
+    "Random tick 0.1%: grows on top",
+    "Some biomes, near grass"
+   ]
+  },
+  {
+   "requires": [
+    "immersive_weathering"
+   ],
+   "inputs": [
+    {
+     "blocks": [
+      "minecraft:grass_block",
+      "immersive_weathering:rooted_grass_block"
+     ],
+     "label": "Biome: Bamboo Jungle; Stops when 6 or more of the results are within 2 blocks"
+    }
+   ],
+   "outputs": [
+    {
+     "block": "minecraft:grass",
+     "chance": 0.5882
+    },
+    {
+     "block": "minecraft:fern",
+     "chance": 0.2941
+    },
+    {
+     "item": "minecraft:bamboo",
+     "label": "Grows as Bamboo Shoot",
+     "chance": 0.0588
+    },
+    {
+     "block": "minecraft:melon",
+     "chance": 0.0588
+    }
+   ],
+   "notes": [
+    "Random tick 0.1%: grows on top",
+    "Bamboo Jungle, near grass"
+   ]
+  },
+  {
+   "requires": [
+    "immersive_weathering"
+   ],
+   "inputs": [
+    {
+     "blocks": [
+      "minecraft:grass_block",
+      "immersive_weathering:rooted_grass_block"
+     ],
+     "label": "Stops when 5 or more of the results are within 2 blocks"
+    }
+   ],
+   "outputs": [
+    {
+     "block": "minecraft:grass"
+    }
+   ],
+   "notes": [
+    "Random tick 0.3%: grows on top",
+    "Near grass"
+   ]
+  },
+  {
+   "requires": [
+    "immersive_weathering"
+   ],
+   "inputs": [
+    {
+     "blocks": [
+      "minecraft:grass_block",
+      "immersive_weathering:rooted_grass_block"
+     ],
+     "label": "Biome: Birch Forest, Old Growth Birch Forest; Stops when 6 or more of the results are within 2 blocks"
+    }
+   ],
+   "outputs": [
+    {
+     "block": "minecraft:grass",
+     "chance": 0.4545
+    },
+    {
+     "block": "minecraft:lilac",
+     "chance": 0.3182
+    },
+    {
+     "block": "minecraft:dandelion",
+     "chance": 0.0455
+    },
+    {
+     "block": "minecraft:lily_of_the_valley",
+     "chance": 0.0455
+    },
+    {
+     "block": "immersive_weathering:weeds",
+     "chance": 0.0455
+    },
+    {
+     "block": "minecraft:brown_mushroom",
+     "chance": 0.0455
+    }
+   ],
+   "notes": [
+    "Random tick 0.1%: grows on top",
+    "Some biomes, near grass"
+   ]
+  },
+  {
+   "requires": [
+    "immersive_weathering"
+   ],
+   "inputs": [
+    {
+     "blocks": [
+      "minecraft:grass_block",
+      "immersive_weathering:rooted_grass_block"
+     ],
+     "label": "Biome: Birch Forest, Old Growth Birch Forest; Stops when 6 or more of the results are within 2 blocks"
+    }
+   ],
+   "outputs": [
+    {
+     "block": "minecraft:cornflower",
+     "chance": 0.0455
+    }
+   ],
+   "notes": [
+    "Random tick 0.1%: grows on top",
+    "Some biomes, near grass"
+   ]
+  },
+  {
+   "requires": [
+    "immersive_weathering"
+   ],
+   "inputs": [
+    {
+     "blocks": [
+      "minecraft:grass_block",
+      "immersive_weathering:rooted_grass_block"
+     ],
+     "label": "Biome: Dark Forest; Stops when 6 or more of the results are within 2 blocks"
+    }
+   ],
+   "outputs": [
+    {
+     "block": "minecraft:red_mushroom",
+     "chance": 0.2772
+    },
+    {
+     "block": "minecraft:brown_mushroom",
+     "chance": 0.2772
+    },
+    {
+     "block": "minecraft:poppy",
+     "chance": 0.2772
+    },
+    {
+     "block": "minecraft:rose_bush",
+     "chance": 0.1663
+    },
+    {
+     "block": "minecraft:carved_pumpkin",
+     "label": "Placed on a Dark Oak Fence",
+     "chance": 0.0011
+    },
+    {
+     "block": "minecraft:jack_o_lantern",
+     "label": "Placed on a Dark Oak Fence",
+     "chance": 0.0011
+    }
+   ],
+   "notes": [
+    "Random tick 0.1%: grows on top",
+    "Dark Forest, near grass"
+   ]
+  },
+  {
+   "requires": [
+    "immersive_weathering"
+   ],
+   "inputs": [
+    {
+     "blocks": [
+      "minecraft:grass_block",
+      "immersive_weathering:rooted_grass_block"
+     ],
+     "label": "Biome: Flower Forest; Stops when 6 or more of the results are within 2 blocks"
+    }
+   ],
+   "outputs": [
+    {
+     "block": "minecraft:grass",
+     "chance": 0.3226
+    },
+    {
+     "block": "minecraft:peony",
+     "chance": 0.1613
+    },
+    {
+     "block": "minecraft:lilac",
+     "chance": 0.1613
+    },
+    {
+     "block": "minecraft:rose_bush",
+     "chance": 0.1613
+    },
+    {
+     "block": "minecraft:red_tulip",
+     "chance": 0.0323
+    },
+    {
+     "block": "minecraft:white_tulip",
+     "chance": 0.0323
+    }
+   ],
+   "notes": [
+    "Random tick 0.1%: grows on top",
+    "Flower Forest, near grass"
+   ]
+  },
+  {
+   "requires": [
+    "immersive_weathering"
+   ],
+   "inputs": [
+    {
+     "blocks": [
+      "minecraft:grass_block",
+      "immersive_weathering:rooted_grass_block"
+     ],
+     "label": "Biome: Flower Forest; Stops when 6 or more of the results are within 2 blocks"
+    }
+   ],
+   "outputs": [
+    {
+     "block": "minecraft:orange_tulip",
+     "chance": 0.0323
+    },
+    {
+     "block": "minecraft:pink_tulip",
+     "chance": 0.0323
+    },
+    {
+     "block": "minecraft:lily_of_the_valley",
+     "chance": 0.0323
+    },
+    {
+     "block": "minecraft:allium",
+     "chance": 0.0323
+    }
+   ],
+   "notes": [
+    "Random tick 0.1%: grows on top",
+    "Flower Forest, near grass"
+   ]
+  },
+  {
+   "requires": [
+    "immersive_weathering"
+   ],
+   "inputs": [
+    {
+     "blocks": [
+      "minecraft:grass_block",
+      "immersive_weathering:rooted_grass_block"
+     ],
+     "label": "Biome: Forest, Windswept Forest; Stops when 6 or more of the results are within 2 blocks"
+    }
+   ],
+   "outputs": [
+    {
+     "block": "minecraft:grass",
+     "chance": 0.5556
+    },
+    {
+     "block": "minecraft:peony",
+     "chance": 0.2778
+    },
+    {
+     "block": "minecraft:poppy",
+     "chance": 0.0556
+    },
+    {
+     "block": "minecraft:lily_of_the_valley",
+     "chance": 0.0556
+    },
+    {
+     "block": "minecraft:azure_bluet",
+     "chance": 0.0556
+    }
+   ],
+   "notes": [
+    "Random tick 0.2%: grows on top",
+    "Some biomes, near grass"
+   ]
+  },
+  {
+   "requires": [
+    "immersive_weathering"
+   ],
+   "inputs": [
+    {
+     "blocks": [
+      "minecraft:grass_block",
+      "immersive_weathering:rooted_grass_block"
+     ],
+     "label": "Biome: Jungle; Stops when 6 or more of the results are within 2 blocks"
+    }
+   ],
+   "outputs": [
+    {
+     "block": "minecraft:fern",
+     "chance": 0.7143
+    },
+    {
+     "block": "minecraft:dandelion",
+     "chance": 0.1429
+    },
+    {
+     "block": "minecraft:melon",
+     "chance": 0.1429
+    }
+   ],
+   "notes": [
+    "Random tick 0.1%: grows on top",
+    "Jungle, near grass"
+   ]
+  },
+  {
+   "requires": [
+    "immersive_weathering"
+   ],
+   "inputs": [
+    {
+     "blocks": [
+      "minecraft:grass_block",
+      "immersive_weathering:rooted_grass_block"
+     ],
+     "label": "Biome: Lush Caves; Stops when 6 or more of the results are within 2 blocks"
+    }
+   ],
+   "outputs": [
+    {
+     "block": "minecraft:grass",
+     "chance": 0.8333
+    },
+    {
+     "block": "minecraft:azalea",
+     "chance": 0.0833
+    },
+    {
+     "block": "minecraft:flowering_azalea",
+     "chance": 0.0833
+    }
+   ],
+   "notes": [
+    "Random tick 0.1%: grows on top",
+    "Lush Caves, near grass"
+   ]
+  },
+  {
+   "requires": [
+    "immersive_weathering"
+   ],
+   "inputs": [
+    {
+     "blocks": [
+      "minecraft:grass_block",
+      "immersive_weathering:rooted_grass_block"
+     ],
+     "label": "Biome: Old Growth Spruce Taiga, Old Growth Pine Taiga; Stops when 6 or more of the results are within 2 blocks"
+    }
+   ],
+   "outputs": [
+    {
+     "block": "minecraft:grass",
+     "chance": 0.625
+    },
+    {
+     "block": "minecraft:fern",
+     "chance": 0.25
+    },
+    {
+     "block": "minecraft:red_mushroom",
+     "chance": 0.0625
+    },
+    {
+     "block": "minecraft:brown_mushroom",
+     "chance": 0.0625
+    }
+   ],
+   "notes": [
+    "Random tick 0.1%: grows on top",
+    "Some biomes, near grass"
+   ]
+  },
+  {
+   "requires": [
+    "immersive_weathering"
+   ],
+   "inputs": [
+    {
+     "blocks": [
+      "minecraft:grass_block",
+      "immersive_weathering:rooted_grass_block"
+     ],
+     "label": "Biome: Plains; Stops when 6 or more of the results are within 2 blocks"
+    }
+   ],
+   "outputs": [
+    {
+     "block": "minecraft:grass",
+     "chance": 0.6849
+    },
+    {
+     "block": "minecraft:dandelion",
+     "chance": 0.0685
+    },
+    {
+     "block": "minecraft:azure_bluet",
+     "chance": 0.0685
+    },
+    {
+     "block": "minecraft:oxeye_daisy",
+     "chance": 0.0685
+    },
+    {
+     "block": "minecraft:cornflower",
+     "chance": 0.0685
+    },
+    {
+     "block": "immersive_weathering:weeds",
+     "chance": 0.0342
+    }
+   ],
+   "notes": [
+    "Random tick 0.1%: grows on top",
+    "Plains, near grass"
+   ]
+  },
+  {
+   "requires": [
+    "immersive_weathering"
+   ],
+   "inputs": [
+    {
+     "blocks": [
+      "minecraft:grass_block",
+      "immersive_weathering:rooted_grass_block"
+     ],
+     "label": "Biome: Plains; Stops when 6 or more of the results are within 2 blocks"
+    }
+   ],
+   "outputs": [
+    {
+     "block": "minecraft:pumpkin",
+     "chance": 0.0068
+    }
+   ],
+   "notes": [
+    "Random tick 0.1%: grows on top",
+    "Plains, near grass"
+   ]
+  },
+  {
+   "requires": [
+    "immersive_weathering"
+   ],
+   "inputs": [
+    {
+     "blocks": [
+      "minecraft:grass_block",
+      "immersive_weathering:rooted_grass_block"
+     ],
+     "label": "Biome: Sparse Jungle; Stops when 6 or more of the results are within 2 blocks"
+    }
+   ],
+   "outputs": [
+    {
+     "block": "minecraft:fern",
+     "chance": 0.7042
+    },
+    {
+     "block": "minecraft:dandelion",
+     "chance": 0.1408
+    },
+    {
+     "block": "minecraft:melon",
+     "chance": 0.1408
+    },
+    {
+     "block": "minecraft:grass",
+     "chance": 0.0141
+    }
+   ],
+   "notes": [
+    "Random tick 0.1%: grows on top",
+    "Sparse Jungle, near grass"
+   ]
+  },
+  {
+   "requires": [
+    "immersive_weathering"
+   ],
+   "inputs": [
+    {
+     "blocks": [
+      "minecraft:grass_block",
+      "immersive_weathering:rooted_grass_block"
+     ],
+     "label": "Biome: Sunflower Plains; Stops when 6 or more of the results are within 2 blocks"
+    }
+   ],
+   "outputs": [
+    {
+     "block": "minecraft:grass",
+     "chance": 0.9091
+    },
+    {
+     "block": "minecraft:sunflower",
+     "chance": 0.0455
+    },
+    {
+     "block": "minecraft:dandelion",
+     "chance": 0.0091
+    },
+    {
+     "block": "minecraft:poppy",
+     "chance": 0.0091
+    },
+    {
+     "block": "minecraft:azure_bluet",
+     "chance": 0.0091
+    },
+    {
+     "block": "minecraft:oxeye_daisy",
+     "chance": 0.0091
+    }
+   ],
+   "notes": [
+    "Random tick 0.1%: grows on top",
+    "Sunflower Plains, near grass"
+   ]
+  },
+  {
+   "requires": [
+    "immersive_weathering"
+   ],
+   "inputs": [
+    {
+     "blocks": [
+      "minecraft:grass_block",
+      "immersive_weathering:rooted_grass_block"
+     ],
+     "label": "Biome: Sunflower Plains; Stops when 6 or more of the results are within 2 blocks"
+    }
+   ],
+   "outputs": [
+    {
+     "block": "minecraft:cornflower",
+     "chance": 0.0091
+    }
+   ],
+   "notes": [
+    "Random tick 0.1%: grows on top",
+    "Sunflower Plains, near grass"
+   ]
+  },
+  {
+   "requires": [
+    "immersive_weathering"
+   ],
+   "inputs": [
+    {
+     "blocks": [
+      "minecraft:grass_block",
+      "immersive_weathering:rooted_grass_block"
+     ],
+     "label": "Biome: Swamp; Stops when 6 or more of the results are within 2 blocks"
+    }
+   ],
+   "outputs": [
+    {
+     "block": "minecraft:grass",
+     "chance": 0.9901
+    },
+    {
+     "block": "minecraft:blue_orchid",
+     "chance": 0.0099
+    }
+   ],
+   "notes": [
+    "Random tick 0.1%: grows on top",
+    "Swamp, near grass"
+   ]
+  },
+  {
+   "requires": [
+    "immersive_weathering"
+   ],
+   "inputs": [
+    {
+     "blocks": [
+      "minecraft:grass_block",
+      "immersive_weathering:rooted_grass_block"
+     ],
+     "label": "Biome: Taiga, Snowy Taiga; Stops when 6 or more of the results are within 2 blocks"
+    }
+   ],
+   "outputs": [
+    {
+     "block": "minecraft:fern",
+     "chance": 0.4762
+    },
+    {
+     "block": "minecraft:grass",
+     "chance": 0.381
+    },
+    {
+     "block": "minecraft:sweet_berry_bush",
+     "chance": 0.1429
+    }
+   ],
+   "notes": [
+    "Random tick 0.1%: grows on top",
+    "Taiga, Snowy Taiga, near grass"
+   ]
+  },
+  {
+   "requires": [
+    "immersive_weathering"
+   ],
+   "inputs": [
+    {
+     "blocks": [
+      "minecraft:grass_block",
+      "immersive_weathering:rooted_grass_block"
+     ],
+     "label": "Biome: Wooded Badlands, Savanna, Savanna Plateau, Windswept Savanna; Stops when 6 or more of the results are within 2 blocks"
+    }
+   ],
+   "outputs": [
+    {
+     "block": "minecraft:grass",
+     "chance": 0.7692
+    },
+    {
+     "block": "minecraft:dead_bush",
+     "chance": 0.2308
+    }
+   ],
+   "notes": [
+    "Random tick 0.05%: grows on top",
+    "Some biomes, near grass"
+   ]
+  },
+  {
+   "requires": [
+    "immersive_weathering"
+   ],
+   "inputs": [
+    {
+     "block": "minecraft:horn_coral_block",
+     "label": "Biome: Warm Ocean; Stops when 6 or more of the results are within 2 blocks"
+    },
+    {
+     "block": "minecraft:water",
+     "label": "Replaced"
+    }
+   ],
+   "outputs": [
+    {
+     "block": "minecraft:horn_coral_fan",
+     "chance": 0.7703
+    },
+    {
+     "block": "minecraft:horn_coral",
+     "chance": 0.2101
+    },
+    {
+     "block": "minecraft:wet_sponge",
+     "chance": 0.0196
+    }
+   ],
+   "notes": [
+    "Random tick 0.05%: grows on top or sideways, into water",
+    "Warm Ocean"
+   ]
+  },
+  {
+   "requires": [
+    "immersive_weathering"
+   ],
+   "inputs": [
+    {
+     "block": "immersive_weathering:humus",
+     "label": "Stops when 6 or more of the results are within 2 blocks"
+    }
+   ],
+   "outputs": [
+    {
+     "block": "minecraft:grass",
+     "chance": 0.9091
+    },
+    {
+     "block": "minecraft:red_mushroom",
+     "chance": 0.0909
+    }
+   ],
+   "notes": [
+    "Random tick 2%: grows on top"
+   ]
+  },
+  {
+   "requires": [
+    "immersive_weathering"
+   ],
+   "inputs": [
+    {
+     "block": "minecraft:fern",
+     "label": "Stops when 2 or more of the results are within 4 blocks"
+    }
+   ],
+   "outputs": [
+    {
+     "block": "minecraft:large_fern"
+    }
+   ],
+   "notes": [
+    "Random tick 0.1%: changes in place"
+   ]
+  },
+  {
+   "requires": [
+    "immersive_weathering"
+   ],
+   "inputs": [
+    {
+     "block_tag": "immersive_weathering:deciduous_leaf_piles"
+    },
+    {
+     "block_tag": "minecraft:dirt",
+     "label": "Replaced"
+    }
+   ],
+   "outputs": [
+    {
+     "block": "immersive_weathering:humus"
+    }
+   ],
+   "notes": [
+    "Random tick 0.5%: grows below, into dirt",
+    "Pile 2+ layers"
+   ]
+  },
+  {
+   "requires": [
+    "immersive_weathering"
+   ],
+   "inputs": [
+    {
+     "block_tag": "immersive_weathering:coniferous_leaf_piles"
+    },
+    {
+     "block_tag": "minecraft:dirt",
+     "label": "Replaced"
+    }
+   ],
+   "outputs": [
+    {
+     "block": "minecraft:podzol"
+    }
+   ],
+   "notes": [
+    "Random tick 0.5%: grows below, into dirt",
+    "Pile 2+ layers"
+   ]
+  },
+  {
+   "requires": [
+    "immersive_weathering"
+   ],
+   "inputs": [
+    {
+     "block": "minecraft:magma_block",
+     "label": "Stops when 12 or more of the results are within 3 blocks"
+    },
+    {
+     "block": "minecraft:netherrack",
+     "label": "Replaced"
+    }
+   ],
+   "outputs": [
+    {
+     "block": "minecraft:magma_block"
+    }
+   ],
+   "notes": [
+    "Random tick 0.3%: grows on any side, into netherrack",
+    "Near lava; no water near"
+   ]
+  },
+  {
+   "requires": [
+    "immersive_weathering"
+   ],
+   "inputs": [
+    {
+     "block": "minecraft:mud",
+     "label": "Biome: Desert"
+    }
+   ],
+   "outputs": [
+    {
+     "block": "immersive_weathering:cracked_mud"
+    }
+   ],
+   "notes": [
+    "Random tick 1%: changes in place",
+    "Desert"
+   ]
+  },
+  {
+   "requires": [
+    "immersive_weathering"
+   ],
+   "inputs": [
+    {
+     "block": "minecraft:mud",
+     "label": "Biome: the Nether"
+    }
+   ],
+   "outputs": [
+    {
+     "block": "immersive_weathering:cracked_mud"
+    }
+   ],
+   "notes": [
+    "Random tick 5%: changes in place",
+    "The Nether"
+   ]
+  },
+  {
+   "requires": [
+    "immersive_weathering"
+   ],
+   "inputs": [
+    {
+     "block": "minecraft:mycelium",
+     "label": "Stops when 3 or more of the results are within 2 blocks"
+    }
+   ],
+   "outputs": [
+    {
+     "block": "minecraft:red_mushroom",
+     "chance": 0.5
+    },
+    {
+     "block": "minecraft:brown_mushroom",
+     "chance": 0.5
+    }
+   ],
+   "notes": [
+    "Random tick 0.1%: grows on top"
+   ]
+  },
+  {
+   "requires": [
+    "immersive_weathering"
+   ],
+   "inputs": [
+    {
+     "block": "minecraft:podzol",
+     "label": "Stops when 6 or more of the results are within 2 blocks"
+    }
+   ],
+   "outputs": [
+    {
+     "block": "minecraft:fern",
+     "chance": 0.9091
+    },
+    {
+     "block": "minecraft:brown_mushroom",
+     "chance": 0.0909
+    }
+   ],
+   "notes": [
+    "Random tick 0.1%: grows on top"
+   ]
+  },
+  {
+   "requires": [
+    "immersive_weathering"
+   ],
+   "inputs": [
+    {
+     "block": "minecraft:red_sandstone",
+     "label": "Stops when 16 or more of the results are within 1 blocks"
+    }
+   ],
+   "outputs": [
+    {
+     "block": "immersive_weathering:red_sand_layer_block"
+    }
+   ],
+   "notes": [
+    "Random tick 0.5%: grows below",
+    "Near water"
+   ]
+  },
+  {
+   "requires": [
+    "immersive_weathering"
+   ],
+   "inputs": [
+    {
+     "blocks": [
+      "minecraft:rooted_dirt",
+      "immersive_weathering:rooted_grass_block"
+     ],
+     "label": "Stops when 10 or more of the results are within 2 blocks"
+    },
+    {
+     "block": "minecraft:dirt",
+     "label": "Replaced"
+    }
+   ],
+   "outputs": [
+    {
+     "block": "minecraft:rooted_dirt"
+    }
+   ],
+   "notes": [
+    "Random tick 0.1%: grows on any side, into dirt"
+   ]
+  },
+  {
+   "requires": [
+    "immersive_weathering"
+   ],
+   "inputs": [
+    {
+     "blocks": [
+      "minecraft:rooted_dirt",
+      "immersive_weathering:rooted_grass_block"
+     ],
+     "label": "Stops when 10 or more of the results are within 2 blocks"
+    },
+    {
+     "block": "minecraft:grass_block",
+     "label": "Replaced"
+    }
+   ],
+   "outputs": [
+    {
+     "block": "immersive_weathering:rooted_grass_block"
+    }
+   ],
+   "notes": [
+    "Random tick 0.1%: grows on any side, into grass block"
+   ]
+  },
+  {
+   "requires": [
+    "immersive_weathering"
+   ],
+   "inputs": [
+    {
+     "block": "immersive_weathering:rooted_grass_block",
+     "label": "Biome: Birch Forest, Old Growth Birch Forest; Stops when 6 or more of the results are within 2 blocks"
+    }
+   ],
+   "outputs": [
+    {
+     "block": "minecraft:birch_sapling"
+    }
+   ],
+   "notes": [
+    "Random tick 1%: grows on top",
+    "Some biomes"
+   ]
+  },
+  {
+   "requires": [
+    "immersive_weathering"
+   ],
+   "inputs": [
+    {
+     "block": "immersive_weathering:rooted_grass_block",
+     "label": "Biome: Forest, Windswept Forest, Flower Forest; Stops when 6 or more of the results are within 2 blocks"
+    }
+   ],
+   "outputs": [
+    {
+     "block": "minecraft:oak_sapling",
+     "chance": 0.9091
+    },
+    {
+     "block": "minecraft:birch_sapling",
+     "chance": 0.0909
+    }
+   ],
+   "notes": [
+    "Random tick 1%: grows on top",
+    "Some biomes"
+   ]
+  },
+  {
+   "requires": [
+    "immersive_weathering"
+   ],
+   "inputs": [
+    {
+     "block": "immersive_weathering:rooted_grass_block",
+     "label": "Biome: Jungle, Sparse Jungle; Stops when 6 or more of the results are within 2 blocks"
+    }
+   ],
+   "outputs": [
+    {
+     "block": "minecraft:jungle_sapling"
+    }
+   ],
+   "notes": [
+    "Random tick 1%: grows on top",
+    "Jungle, Sparse Jungle"
+   ]
+  },
+  {
+   "requires": [
+    "immersive_weathering"
+   ],
+   "inputs": [
+    {
+     "block": "immersive_weathering:rooted_grass_block",
+     "label": "Biome: Taiga, Snowy Taiga; Stops when 6 or more of the results are within 2 blocks"
+    }
+   ],
+   "outputs": [
+    {
+     "block": "minecraft:spruce_sapling"
+    }
+   ],
+   "notes": [
+    "Random tick 1%: grows on top",
+    "Taiga, Snowy Taiga"
+   ]
+  },
+  {
+   "requires": [
+    "immersive_weathering"
+   ],
+   "inputs": [
+    {
+     "block": "immersive_weathering:rooted_grass_block",
+     "label": "Biome: Wooded Badlands, Savanna, Savanna Plateau, Windswept Savanna; Stops when 6 or more of the results are within 2 blocks"
+    }
+   ],
+   "outputs": [
+    {
+     "block": "minecraft:acacia_sapling"
+    }
+   ],
+   "notes": [
+    "Random tick 0.1%: grows on top",
+    "Some biomes"
+   ]
+  },
+  {
+   "requires": [
+    "immersive_weathering"
+   ],
+   "inputs": [
+    {
+     "blocks": [
+      "immersive_weathering:rooted_grass_block",
+      "minecraft:rooted_dirt"
+     ],
+     "label": "Stops when 6 or more of the results are within 3 blocks"
+    },
+    {
+     "block": "minecraft:water",
+     "label": "Replaced"
+    }
+   ],
+   "outputs": [
+    {
+     "block": "immersive_weathering:hanging_roots_wall",
+     "chance": 0.6667
+    },
+    {
+     "block": "minecraft:hanging_roots",
+     "chance": 0.3333
+    }
+   ],
+   "notes": [
+    "Random tick 1%: grows sideways or below, into air or water"
+   ]
+  },
+  {
+   "requires": [
+    "immersive_weathering"
+   ],
+   "inputs": [
+    {
+     "block": "minecraft:sandstone",
+     "label": "Stops when 16 or more of the results are within 1 blocks"
+    }
+   ],
+   "outputs": [
+    {
+     "block": "immersive_weathering:sand_layer_block"
+    }
+   ],
+   "notes": [
+    "Random tick 0.5%: grows below",
+    "Near water"
+   ]
+  },
+  {
+   "requires": [
+    "immersive_weathering"
+   ],
+   "inputs": [
+    {
+     "block_tag": "minecraft:saplings",
+     "label": "Biome: Desert"
+    }
+   ],
+   "outputs": [
+    {
+     "block": "minecraft:dead_bush"
+    }
+   ],
+   "notes": [
+    "Random tick 0.05%: changes in place",
+    "Desert"
+   ]
+  },
+  {
+   "requires": [
+    "immersive_weathering"
+   ],
+   "inputs": [
+    {
+     "block_tag": "minecraft:saplings",
+     "label": "Biome: the Nether"
+    }
+   ],
+   "outputs": [
+    {
+     "block": "minecraft:dead_bush"
+    }
+   ],
+   "notes": [
+    "Random tick 0.5%: changes in place",
+    "The Nether"
+   ]
+  },
+  {
+   "requires": [
+    "immersive_weathering"
+   ],
+   "inputs": [
+    {
+     "blocks": [
+      "immersive_weathering:silt",
+      "immersive_weathering:fluvisol"
+     ],
+     "label": "Stops when 5 or more of the results are within 2 blocks"
+    },
+    {
+     "block": "minecraft:water",
+     "label": "Replaced"
+    }
+   ],
+   "outputs": [
+    {
+     "block": "minecraft:seagrass"
+    }
+   ],
+   "notes": [
+    "Random tick 0.3%: grows on top, into water"
+   ]
+  },
+  {
+   "requires": [
+    "immersive_weathering"
+   ],
+   "inputs": [
+    {
+     "block": "minecraft:grass",
+     "label": "Stops when 2 or more of the results are within 4 blocks"
+    }
+   ],
+   "outputs": [
+    {
+     "block": "minecraft:tall_grass"
+    }
+   ],
+   "notes": [
+    "Random tick 0.1%: changes in place"
+   ]
+  },
+  {
+   "requires": [
+    "immersive_weathering"
+   ],
+   "inputs": [
+    {
+     "block": "minecraft:seagrass",
+     "label": "Stops when 2 or more of the results are within 4 blocks"
+    }
+   ],
+   "outputs": [
+    {
+     "item": "minecraft:seagrass",
+     "label": "Grows as Tall Seagrass"
+    }
+   ],
+   "notes": [
+    "Random tick 0.5%: changes in place"
+   ]
+  },
+  {
+   "requires": [
+    "immersive_weathering"
+   ],
+   "inputs": [
+    {
+     "block": "minecraft:ice",
+     "label": "Top block, open sky; Biome: icy biomes"
+    },
+    {
+     "fluid": "minecraft:water",
+     "amount": 1000,
+     "label": "Replaced"
+    }
+   ],
+   "outputs": [
+    {
+     "block": "immersive_weathering:thin_ice"
+    }
+   ],
+   "notes": [
+    "Clear sky 10%: grows sideways, into water",
+    "Icy biomes, at night"
+   ]
+  },
+  {
+   "requires": [
+    "immersive_weathering"
+   ],
+   "inputs": [
+    {
+     "block": "minecraft:ice",
+     "label": "Top block, open sky; Biome: icy biomes"
+    },
+    {
+     "fluid": "minecraft:water",
+     "amount": 1000,
+     "label": "Replaced"
+    }
+   ],
+   "outputs": [
+    {
+     "block": "immersive_weathering:thin_ice"
+    }
+   ],
+   "notes": [
+    "Rain or snow 10%: grows sideways, into water",
+    "Icy biomes"
+   ]
+  },
+  {
+   "requires": [
+    "immersive_weathering"
+   ],
+   "inputs": [
+    {
+     "block": "immersive_weathering:thin_ice",
+     "label": "Top block, open sky; Biome: icy biomes; Only thin ice that can still spread"
+    },
+    {
+     "fluid": "minecraft:water",
+     "amount": 1000,
+     "label": "Replaced"
+    }
+   ],
+   "outputs": [
+    {
+     "block": "immersive_weathering:thin_ice"
+    }
+   ],
+   "notes": [
+    "Clear sky 10%: grows sideways, into water",
+    "Icy biomes, at night"
+   ]
+  },
+  {
+   "requires": [
+    "immersive_weathering"
+   ],
+   "inputs": [
+    {
+     "block": "immersive_weathering:thin_ice",
+     "label": "Top block, open sky; Biome: icy biomes; Only thin ice that can still spread; Stops when 7 or more of the results are within 3 blocks"
+    },
+    {
+     "fluid": "minecraft:water",
+     "amount": 1000,
+     "label": "Replaced"
+    }
+   ],
+   "outputs": [
+    {
+     "block": "immersive_weathering:thin_ice"
+    }
+   ],
+   "notes": [
+    "Rain or snow 10%: grows sideways, into water",
+    "Icy biomes"
+   ]
+  },
+  {
+   "requires": [
+    "immersive_weathering"
+   ],
+   "inputs": [
+    {
+     "block": "immersive_weathering:thin_ice",
+     "label": "Top block, open sky; Biome: icy biomes; Only thin ice that can still spread"
+    }
+   ],
+   "outputs": [
+    {
+     "block": "minecraft:ice"
+    }
+   ],
+   "notes": [
+    "Rain or snow 10%: changes in place",
+    "Icy biomes, next to packed ice"
+   ]
+  },
+  {
+   "requires": [
+    "immersive_weathering"
+   ],
+   "inputs": [
+    {
+     "block": "minecraft:tube_coral_block",
+     "label": "Biome: Warm Ocean; Stops when 6 or more of the results are within 2 blocks"
+    },
+    {
+     "block": "minecraft:water",
+     "label": "Replaced"
+    }
+   ],
+   "outputs": [
+    {
+     "block": "minecraft:tube_coral_fan",
+     "chance": 0.7703
+    },
+    {
+     "block": "minecraft:tube_coral",
+     "chance": 0.2101
+    },
+    {
+     "block": "minecraft:wet_sponge",
+     "chance": 0.0196
+    }
+   ],
+   "notes": [
+    "Random tick 0.05%: grows on top or sideways, into water",
+    "Warm Ocean"
+   ]
+  },
+  {
+   "requires": [
+    "immersive_weathering"
+   ],
+   "inputs": [
+    {
+     "block": "minecraft:warped_wart_block",
+     "label": "Stops when 6 or more of the results are within 2 blocks"
+    }
+   ],
+   "outputs": [
+    {
+     "block": "minecraft:twisting_vines"
+    }
+   ],
+   "notes": [
+    "Random tick 10%: grows on top"
+   ]
+  },
+  {
+   "requires": [
+    "immersive_weathering",
+    "upgrade_aquatic"
+   ],
+   "inputs": [
+    {
+     "block": "upgrade_aquatic:acan_coral_block",
+     "label": "Biome: Warm Ocean; Stops when 6 or more of the results are within 2 blocks"
+    },
+    {
+     "block": "minecraft:water",
+     "label": "Replaced"
+    }
+   ],
+   "outputs": [
+    {
+     "block": "upgrade_aquatic:acan_coral_fan",
+     "chance": 0.7703
+    },
+    {
+     "block": "upgrade_aquatic:acan_coral",
+     "chance": 0.2101
+    },
+    {
+     "block": "minecraft:wet_sponge",
+     "chance": 0.0196
+    }
+   ],
+   "notes": [
+    "Random tick 0.05%: grows on top or sideways, into water",
+    "Warm Ocean"
+   ]
+  },
+  {
+   "requires": [
+    "immersive_weathering",
+    "upgrade_aquatic"
+   ],
+   "inputs": [
+    {
+     "block": "upgrade_aquatic:branch_coral_block",
+     "label": "Biome: Warm Ocean; Stops when 6 or more of the results are within 2 blocks"
+    },
+    {
+     "block": "minecraft:water",
+     "label": "Replaced"
+    }
+   ],
+   "outputs": [
+    {
+     "block": "upgrade_aquatic:branch_coral_fan",
+     "chance": 0.7703
+    },
+    {
+     "block": "upgrade_aquatic:branch_coral",
+     "chance": 0.2101
+    },
+    {
+     "block": "minecraft:wet_sponge",
+     "chance": 0.0196
+    }
+   ],
+   "notes": [
+    "Random tick 0.05%: grows on top or sideways, into water",
+    "Warm Ocean"
+   ]
+  },
+  {
+   "requires": [
+    "immersive_weathering",
+    "upgrade_aquatic"
+   ],
+   "inputs": [
+    {
+     "block": "upgrade_aquatic:chrome_coral_block",
+     "label": "Biome: Warm Ocean; Stops when 6 or more of the results are within 2 blocks"
+    },
+    {
+     "block": "minecraft:water",
+     "label": "Replaced"
+    }
+   ],
+   "outputs": [
+    {
+     "block": "upgrade_aquatic:chrome_coral_fan",
+     "chance": 0.7703
+    },
+    {
+     "block": "upgrade_aquatic:chrome_coral",
+     "chance": 0.2101
+    },
+    {
+     "block": "minecraft:wet_sponge",
+     "chance": 0.0196
+    }
+   ],
+   "notes": [
+    "Random tick 0.05%: grows on top or sideways, into water",
+    "Warm Ocean"
+   ]
+  },
+  {
+   "requires": [
+    "immersive_weathering",
+    "upgrade_aquatic"
+   ],
+   "inputs": [
+    {
+     "block": "upgrade_aquatic:finger_coral_block",
+     "label": "Biome: Warm Ocean; Stops when 6 or more of the results are within 2 blocks"
+    },
+    {
+     "block": "minecraft:water",
+     "label": "Replaced"
+    }
+   ],
+   "outputs": [
+    {
+     "block": "upgrade_aquatic:finger_coral_fan",
+     "chance": 0.7703
+    },
+    {
+     "block": "upgrade_aquatic:finger_coral",
+     "chance": 0.2101
+    },
+    {
+     "block": "minecraft:wet_sponge",
+     "chance": 0.0196
+    }
+   ],
+   "notes": [
+    "Random tick 0.05%: grows on top or sideways, into water",
+    "Warm Ocean"
+   ]
+  },
+  {
+   "requires": [
+    "immersive_weathering",
+    "upgrade_aquatic"
+   ],
+   "inputs": [
+    {
+     "block": "upgrade_aquatic:moss_coral_block",
+     "label": "Biome: Warm Ocean; Stops when 6 or more of the results are within 2 blocks"
+    },
+    {
+     "block": "minecraft:water",
+     "label": "Replaced"
+    }
+   ],
+   "outputs": [
+    {
+     "block": "upgrade_aquatic:moss_coral_fan",
+     "chance": 0.7703
+    },
+    {
+     "block": "upgrade_aquatic:moss_coral",
+     "chance": 0.2101
+    },
+    {
+     "block": "minecraft:wet_sponge",
+     "chance": 0.0196
+    }
+   ],
+   "notes": [
+    "Random tick 0.05%: grows on top or sideways, into water",
+    "Warm Ocean"
+   ]
+  },
+  {
+   "requires": [
+    "immersive_weathering",
+    "upgrade_aquatic"
+   ],
+   "inputs": [
+    {
+     "block": "upgrade_aquatic:petal_coral_block",
+     "label": "Biome: Warm Ocean; Stops when 6 or more of the results are within 2 blocks"
+    },
+    {
+     "block": "minecraft:water",
+     "label": "Replaced"
+    }
+   ],
+   "outputs": [
+    {
+     "block": "upgrade_aquatic:petal_coral_fan",
+     "chance": 0.7703
+    },
+    {
+     "block": "upgrade_aquatic:petal_coral",
+     "chance": 0.2101
+    },
+    {
+     "block": "minecraft:wet_sponge",
+     "chance": 0.0196
+    }
+   ],
+   "notes": [
+    "Random tick 0.05%: grows on top or sideways, into water",
+    "Warm Ocean"
+   ]
+  },
+  {
+   "requires": [
+    "immersive_weathering",
+    "upgrade_aquatic"
+   ],
+   "inputs": [
+    {
+     "block": "upgrade_aquatic:pillow_coral_block",
+     "label": "Biome: Warm Ocean; Stops when 6 or more of the results are within 2 blocks"
+    },
+    {
+     "block": "minecraft:water",
+     "label": "Replaced"
+    }
+   ],
+   "outputs": [
+    {
+     "block": "upgrade_aquatic:pillow_coral_fan",
+     "chance": 0.7703
+    },
+    {
+     "block": "upgrade_aquatic:pillow_coral",
+     "chance": 0.2101
+    },
+    {
+     "block": "minecraft:wet_sponge",
+     "chance": 0.0196
+    }
+   ],
+   "notes": [
+    "Random tick 0.05%: grows on top or sideways, into water",
+    "Warm Ocean"
+   ]
+  },
+  {
+   "requires": [
+    "immersive_weathering",
+    "upgrade_aquatic"
+   ],
+   "inputs": [
+    {
+     "block": "upgrade_aquatic:prismarine_coral_block",
+     "label": "Biome: Is Ocean biomes; Stops when 6 or more of the results are within 2 blocks"
+    },
+    {
+     "block": "minecraft:water",
+     "label": "Replaced"
+    }
+   ],
+   "outputs": [
+    {
+     "block": "upgrade_aquatic:prismarine_coral_fan",
+     "chance": 0.7703
+    },
+    {
+     "block": "upgrade_aquatic:prismarine_coral",
+     "chance": 0.2101
+    },
+    {
+     "block": "minecraft:wet_sponge",
+     "chance": 0.0196
+    }
+   ],
+   "notes": [
+    "Random tick 0.05%: grows on top or sideways, into water",
+    "Is Ocean biomes"
+   ]
+  },
+  {
+   "requires": [
+    "immersive_weathering",
+    "upgrade_aquatic"
+   ],
+   "inputs": [
+    {
+     "block": "upgrade_aquatic:rock_coral_block",
+     "label": "Biome: Warm Ocean; Stops when 6 or more of the results are within 2 blocks"
+    },
+    {
+     "block": "minecraft:water",
+     "label": "Replaced"
+    }
+   ],
+   "outputs": [
+    {
+     "block": "upgrade_aquatic:rock_coral_fan",
+     "chance": 0.7703
+    },
+    {
+     "block": "upgrade_aquatic:rock_coral",
+     "chance": 0.2101
+    },
+    {
+     "block": "minecraft:wet_sponge",
+     "chance": 0.0196
+    }
+   ],
+   "notes": [
+    "Random tick 0.05%: grows on top or sideways, into water",
+    "Warm Ocean"
+   ]
+  },
+  {
+   "requires": [
+    "immersive_weathering",
+    "upgrade_aquatic"
+   ],
+   "inputs": [
+    {
+     "block": "upgrade_aquatic:silk_coral_block",
+     "label": "Biome: Warm Ocean; Stops when 6 or more of the results are within 2 blocks"
+    },
+    {
+     "block": "minecraft:water",
+     "label": "Replaced"
+    }
+   ],
+   "outputs": [
+    {
+     "block": "upgrade_aquatic:silk_coral_fan",
+     "chance": 0.7703
+    },
+    {
+     "block": "upgrade_aquatic:silk_coral",
+     "chance": 0.2101
+    },
+    {
+     "block": "minecraft:wet_sponge",
+     "chance": 0.0196
+    }
+   ],
+   "notes": [
+    "Random tick 0.05%: grows on top or sideways, into water",
+    "Warm Ocean"
+   ]
+  },
+  {
+   "requires": [
+    "immersive_weathering",
+    "upgrade_aquatic"
+   ],
+   "inputs": [
+    {
+     "block": "upgrade_aquatic:star_coral_block",
+     "label": "Biome: Warm Ocean; Stops when 6 or more of the results are within 2 blocks"
+    },
+    {
+     "block": "minecraft:water",
+     "label": "Replaced"
+    }
+   ],
+   "outputs": [
+    {
+     "block": "upgrade_aquatic:star_coral_fan",
+     "chance": 0.7703
+    },
+    {
+     "block": "upgrade_aquatic:star_coral",
+     "chance": 0.2101
+    },
+    {
+     "block": "minecraft:wet_sponge",
+     "chance": 0.0196
+    }
+   ],
+   "notes": [
+    "Random tick 0.05%: grows on top or sideways, into water",
+    "Warm Ocean"
+   ]
+  },
+  {
+   "requires": [
+    "immersive_weathering"
+   ],
+   "inputs": [
+    {
+     "block": "immersive_weathering:vertisol",
+     "label": "Stops when 3 or more of the results are within 3 blocks"
+    }
+   ],
+   "outputs": [
+    {
+     "block": "minecraft:dead_bush",
+     "chance": 0.6667
+    },
+    {
+     "block": "minecraft:grass",
+     "chance": 0.3333
+    }
+   ],
+   "notes": [
+    "Random tick 0.5%: grows on top"
+   ]
+  },
+  {
+   "requires": [
+    "immersive_weathering"
+   ],
+   "inputs": [
+    {
+     "block": "minecraft:warped_nylium",
+     "label": "Stops when 5 or more of the results are within 2 blocks"
+    }
+   ],
+   "outputs": [
+    {
+     "block": "minecraft:warped_roots",
+     "chance": 0.8197
+    },
+    {
+     "block": "minecraft:warped_fungus",
+     "chance": 0.1639
+    },
+    {
+     "block": "minecraft:crimson_fungus",
+     "chance": 0.0164
+    }
+   ],
+   "notes": [
+    "Random tick 0.1%: grows on top"
+   ]
+  },
+  {
+   "requires": [
+    "immersive_weathering"
+   ],
+   "inputs": [
+    {
+     "block": "minecraft:farmland",
+     "label": "Top block, open sky; Stops when 4 or more of the results are within 2 blocks"
+    },
+    {
+     "block_tag": "immersive_weathering:weeds_replaceable",
+     "label": "Broken and replaced"
+    }
+   ],
+   "outputs": [
+    {
+     "block": "immersive_weathering:weeds"
+    }
+   ],
+   "notes": [
+    "Clear sky 0.1%: grows on top, into air or a crop",
+    "Near grass"
+   ]
+  },
+  {
+   "requires": [
+    "immersive_weathering"
+   ],
+   "inputs": [
+    {
+     "block": "minecraft:farmland",
+     "label": "Top block, open sky; Stops when 5 or more of the results are within 3 blocks"
+    },
+    {
+     "block_tag": "immersive_weathering:weeds_replaceable",
+     "label": "Broken and replaced"
+    }
+   ],
+   "outputs": [
+    {
+     "block": "immersive_weathering:weeds"
+    }
+   ],
+   "notes": [
+    "Clear sky 10%: grows on top, into air or a crop",
+    "Near weeds"
+   ]
+  },
+  {
+   "requires": [
+    "immersive_weathering"
+   ],
+   "inputs": [
+    {
+     "block": "minecraft:nether_wart_block",
+     "label": "Stops when 6 or more of the results are within 2 blocks"
+    }
+   ],
+   "outputs": [
+    {
+     "block": "minecraft:weeping_vines"
+    }
+   ],
+   "notes": [
+    "Random tick 10%: grows below"
+   ]
+  },
+  {
+   "requires": [
+    "immersive_weathering"
+   ],
+   "inputs": [
+    {
+     "blocks": [
+      "immersive_weathering:stone_wall",
+      "minecraft:chiseled_stone_bricks",
+      "minecraft:cobblestone",
+      "minecraft:cobblestone_slab",
+      "minecraft:cobblestone_stairs",
+      "minecraft:cobblestone_wall",
+      "minecraft:stone",
+      "minecraft:stone_brick_slab",
+      "minecraft:stone_brick_stairs",
+      "minecraft:stone_brick_wall",
+      "minecraft:stone_bricks",
+      "minecraft:stone_slab",
+      "minecraft:stone_stairs"
+     ],
+     "label": "Top block in desert or warm ocean biomes"
+    }
+   ],
+   "outputs": [
+    {
+     "blocks": [
+      "immersive_weathering:sandy_stone_wall",
+      "immersive_weathering:sandy_chiseled_stone_bricks",
+      "immersive_weathering:sandy_cobblestone",
+      "immersive_weathering:sandy_cobblestone_slab",
+      "immersive_weathering:sandy_cobblestone_stairs",
+      "immersive_weathering:sandy_cobblestone_wall",
+      "immersive_weathering:sandy_stone",
+      "immersive_weathering:sandy_stone_brick_slab",
+      "immersive_weathering:sandy_stone_brick_stairs",
+      "immersive_weathering:sandy_stone_brick_wall",
+      "immersive_weathering:sandy_stone_bricks",
+      "immersive_weathering:sandy_stone_slab",
+      "immersive_weathering:sandy_stone_stairs"
+     ]
+    },
+    {
+     "block": "immersive_weathering:sand_layer_block",
+     "label": "Sometimes on top"
+    }
+   ],
+   "notes": [
+    "Sandstorm 10%: turns sandy",
+    "Rain in desert or warm ocean biomes"
+   ],
+   "linked": true
+  },
+  {
+   "requires": [
+    "immersive_weathering"
+   ],
+   "inputs": [
+    {
+     "blocks": [
+      "immersive_weathering:stone_wall",
+      "minecraft:chiseled_stone_bricks",
+      "minecraft:cobblestone",
+      "minecraft:cobblestone_slab",
+      "minecraft:cobblestone_stairs",
+      "minecraft:cobblestone_wall",
+      "minecraft:stone",
+      "minecraft:stone_brick_slab",
+      "minecraft:stone_brick_stairs",
+      "minecraft:stone_brick_wall",
+      "minecraft:stone_bricks",
+      "minecraft:stone_slab",
+      "minecraft:stone_stairs"
+     ]
+    }
+   ],
+   "outputs": [
+    {
+     "blocks": [
+      "immersive_weathering:snowy_stone_wall",
+      "immersive_weathering:snowy_chiseled_stone_bricks",
+      "immersive_weathering:snowy_cobblestone",
+      "immersive_weathering:snowy_cobblestone_slab",
+      "immersive_weathering:snowy_cobblestone_stairs",
+      "immersive_weathering:snowy_cobblestone_wall",
+      "immersive_weathering:snowy_stone",
+      "immersive_weathering:snowy_stone_brick_slab",
+      "immersive_weathering:snowy_stone_brick_stairs",
+      "immersive_weathering:snowy_stone_brick_wall",
+      "immersive_weathering:snowy_stone_bricks",
+      "immersive_weathering:snowy_stone_slab",
+      "immersive_weathering:snowy_stone_stairs"
+     ]
+    }
+   ],
+   "notes": [
+    "Snow 10%: turns snowy",
+    "Block light 11 or less above"
+   ],
+   "linked": true
+  },
+  {
+   "requires": [
+    "immersive_weathering"
+   ],
+   "inputs": [
+    {
+     "blocks": [
+      "immersive_weathering:stone_wall",
+      "minecraft:chiseled_stone_bricks",
+      "minecraft:cobblestone",
+      "minecraft:cobblestone_slab",
+      "minecraft:cobblestone_stairs",
+      "minecraft:cobblestone_wall",
+      "minecraft:stone",
+      "minecraft:stone_brick_slab",
+      "minecraft:stone_brick_stairs",
+      "minecraft:stone_brick_wall",
+      "minecraft:stone_bricks",
+      "minecraft:stone_slab",
+      "minecraft:stone_stairs"
+     ],
+     "label": "Below the sand pile"
+    },
+    {
+     "block": "immersive_weathering:sand_layer_block",
+     "label": "2 or more layers"
+    }
+   ],
+   "outputs": [
+    {
+     "blocks": [
+      "immersive_weathering:sandy_stone_wall",
+      "immersive_weathering:sandy_chiseled_stone_bricks",
+      "immersive_weathering:sandy_cobblestone",
+      "immersive_weathering:sandy_cobblestone_slab",
+      "immersive_weathering:sandy_cobblestone_stairs",
+      "immersive_weathering:sandy_cobblestone_wall",
+      "immersive_weathering:sandy_stone",
+      "immersive_weathering:sandy_stone_brick_slab",
+      "immersive_weathering:sandy_stone_brick_stairs",
+      "immersive_weathering:sandy_stone_brick_wall",
+      "immersive_weathering:sandy_stone_bricks",
+      "immersive_weathering:sandy_stone_slab",
+      "immersive_weathering:sandy_stone_stairs"
+     ]
+    },
+    {
+     "block": "immersive_weathering:sand_layer_block",
+     "label": "One layer less"
+    }
+   ],
+   "notes": [
+    "Random tick: the pile seeps into the block below"
+   ],
+   "linked": true
+  },
+  {
+   "requires": [
+    "immersive_weathering"
+   ],
+   "inputs": [
+    {
+     "blocks": [
+      "architects_palette:twisted_leaves",
+      "fruitsdelight:apple_leaves",
+      "fruitsdelight:bayberry_leaves",
+      "fruitsdelight:durian_leaves",
+      "fruitsdelight:fig_leaves",
+      "fruitsdelight:hawberry_leaves",
+      "fruitsdelight:kiwi_leaves",
+      "fruitsdelight:lychee_leaves",
+      "fruitsdelight:mango_leaves",
+      "fruitsdelight:mangosteen_leaves",
+      "fruitsdelight:orange_leaves",
+      "fruitsdelight:peach_leaves",
+      "fruitsdelight:pear_leaves",
+      "fruitsdelight:persimmon_leaves",
+      "minecraft:acacia_leaves",
+      "minecraft:azalea_leaves",
+      "minecraft:birch_leaves",
+      "minecraft:dark_oak_leaves",
+      "minecraft:flowering_azalea_leaves",
+      "minecraft:jungle_leaves",
+      "minecraft:mangrove_leaves",
+      "minecraft:oak_leaves",
+      "minecraft:spruce_leaves",
+      "myrtrees:rubberwood_leaves",
+      "quark:ancient_leaves",
+      "quark:blue_blossom_leaves",
+      "quark:lavender_blossom_leaves",
+      "quark:orange_blossom_leaves",
+      "quark:pink_blossom_leaves",
+      "quark:red_blossom_leaves",
+      "quark:yellow_blossom_leaves",
+      "upgrade_aquatic:river_leaves",
+      "vinery:apple_leaves",
+      "vinery:cherry_leaves",
+      "vinery:grapevine_leaves"
+     ],
+     "label": "Natural (not player placed) leaves"
+    }
+   ],
+   "outputs": [
+    {
+     "blocks": [
+      "immersive_weathering:architects_palette/twisted_leaf_pile",
+      "immersive_weathering:fruitsdelight/apple_leaf_pile",
+      "immersive_weathering:fruitsdelight/bayberry_leaf_pile",
+      "immersive_weathering:fruitsdelight/durian_leaf_pile",
+      "immersive_weathering:fruitsdelight/fig_leaf_pile",
+      "immersive_weathering:fruitsdelight/hawberry_leaf_pile",
+      "immersive_weathering:fruitsdelight/kiwi_leaf_pile",
+      "immersive_weathering:fruitsdelight/lychee_leaf_pile",
+      "immersive_weathering:fruitsdelight/mango_leaf_pile",
+      "immersive_weathering:fruitsdelight/mangosteen_leaf_pile",
+      "immersive_weathering:fruitsdelight/orange_leaf_pile",
+      "immersive_weathering:fruitsdelight/peach_leaf_pile",
+      "immersive_weathering:fruitsdelight/pear_leaf_pile",
+      "immersive_weathering:fruitsdelight/persimmon_leaf_pile",
+      "immersive_weathering:acacia_leaf_pile",
+      "immersive_weathering:azalea_leaf_pile",
+      "immersive_weathering:birch_leaf_pile",
+      "immersive_weathering:dark_oak_leaf_pile",
+      "immersive_weathering:flowering_azalea_leaf_pile",
+      "immersive_weathering:jungle_leaf_pile",
+      "immersive_weathering:mangrove_leaf_pile",
+      "immersive_weathering:oak_leaf_pile",
+      "immersive_weathering:spruce_leaf_pile",
+      "immersive_weathering:myrtrees/rubberwood_leaf_pile",
+      "immersive_weathering:quark/ancient_leaf_pile",
+      "immersive_weathering:quark/blue_blossom_leaf_pile",
+      "immersive_weathering:quark/lavender_blossom_leaf_pile",
+      "immersive_weathering:quark/orange_blossom_leaf_pile",
+      "immersive_weathering:quark/pink_blossom_leaf_pile",
+      "immersive_weathering:quark/red_blossom_leaf_pile",
+      "immersive_weathering:quark/yellow_blossom_leaf_pile",
+      "immersive_weathering:upgrade_aquatic/river_leaf_pile",
+      "immersive_weathering:vinery/apple_leaf_pile",
+      "immersive_weathering:vinery/cherry_leaf_pile",
+      "immersive_weathering:vinery/grapevine_leaf_pile"
+     ],
+     "label": "Lands on the ground below"
+    }
+   ],
+   "notes": [
+    "Random tick 0.05%: drops a pile up to 12 blocks below"
+   ],
+   "linked": true
+  }
+ ]
+}

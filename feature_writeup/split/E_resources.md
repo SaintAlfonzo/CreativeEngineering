@@ -152,7 +152,7 @@ Lang key groups in `PMR/assets/creativeengineering/lang/en_us.json`:
 | `fireflybushport` | 1 | firefly bush biome modifier | Worldgen |
 | `immersive_weathering` | 11 | Upgrade Aquatic coral block growths | Worldgen ? (IW soil/plant growth is a worldgen-side system in memory `iw-soil-wild-plants`; Compat if read as an IW tweak) |
 | `fruitsdelight`, `vinery`, `rusticdelight`, `neapolitan` | 4 + 6 + 3 + 2 | wild crop configured features and biome modifiers | CD (wild crops system lives in Creative Delight since 10-25; creative_delight.md 1100 to 1108) |
-| `creative_delight/worldgen/` | 29 | wild crop configured/placed features | CD |
+| `creativedelight/worldgen/` | 29 | wild crop configured/placed features | CD |
 | `more_mooblooms/moobloom_spawns/creativeengineering.json` | 1 | moobloom spawn rules | CD (moreMooblooms member) |
 | `felsic_gear/loot_tables/blocks/felsic_block.json` | 1 | felsic block drop | Equipment |
 | `lightmanscurrency/loot_tables/loot_addons/` | 9 | coin drops per entity/boss tier | Worldgen (`loot/`) |
@@ -167,7 +167,7 @@ Lang key groups in `PMR/assets/creativeengineering/lang/en_us.json`:
 |---|---|---|---|
 | `paintings/<ns>/` | 950 (4.5M) | Immersive Paintings datapack: every painting of 14 painting mods as PNG + JSON (immersive_paintings.md) | Compat |
 | `moonlight/soft_fluids/` | 66 | soups, stews and cups as Supplementaries soft fluids | CD |
-| `worldgen/configured_feature/wild/`, `worldgen/placed_feature/wild/` | 5 + 23 | pack wild crops | CD (same system as `creative_delight/worldgen`) |
+| `worldgen/configured_feature/wild/`, `worldgen/placed_feature/wild/` | 5 + 23 | pack wild crops | CD (same system as `creativedelight/worldgen`) |
 | `worldgen/configured_feature/felsic_ore.json`, `worldgen/placed_feature/felsic_ore_*.json` | 7 | felsic ore in End biomes | Worldgen (Equipment owns the gear, Worldgen the ore placement) |
 | `worldgen/placed_feature/meta/` | 13 | meta-structure placed features | Worldgen |
 | `worldgen/placed_feature/driftwood_land/` | 3 | | Worldgen |
@@ -178,9 +178,9 @@ Lang key groups in `PMR/assets/creativeengineering/lang/en_us.json`:
 | `loot_tables/gameplay/fishing_net/` | 3 | coral, ocean treasure, junk | CD (creative_delight.md 154) |
 | `loot_tables/misc/monster_box_reward.json` | 1 | `mobs/MonsterBoxVault` reward | Worldgen (fauna) |
 | `recipes/sawmill/` | 5 | hand-written sawmill recipes (recycle slab/stairs/door, layered obsidian, rose quartz) | Engineering |
-| `curios/slots/{face,feet,hands}.json`, `curios/entities/player_hands_face.json` | 4 | Curios slot definitions | Equipment ? (`backpackskin/BackpackSkinCurios` is Equipment; `compat/CornDelightCurios` cob pipe is CD; one jar must own the slot files, Equipment suggested) |
-| `creative_delight/kubejs/`, `creative_delight/cup_conversion/` | 108 + 1 | CD server scripts and cup conversion data | CD (sweep F for the scripts) |
-| `creative_brewing/kubejs/_core/cb_server.js` | 1 | CB server core | CB (sweep F) |
+| ~~`curios/slots/{face,feet,hands}.json`, `curios/entities/player_hands_face.json`~~ (deleted 2026-11-01: never loaded on Curios 5.1.x; slots now IMC in patcherMod `compat/CuriosSlots`, moves with the Equipment Java) | 4 | Curios slot definitions | Equipment ? (`backpackskin/BackpackSkinCurios` is Equipment; `compat/CornDelightCurios` cob pipe is CD; one jar must own the slot files, Equipment suggested) |
+| `creativedelight/kubejs/`, `creativedelight/cup_conversion/` | 108 + 1 | CD server scripts and cup conversion data | CD (sweep F for the scripts) |
+| `creativebrewing/kubejs/_core/cb_server.js` | 1 | CB server core | CB (sweep F) |
 
 No `kubejs/data/creativeengineering/kubejs/` folder exists yet; the `creativeengineering` namespace holds only data.
 Pack server scripts live in `kubejs/server_scripts/` (sweep F).
@@ -231,8 +231,8 @@ Item-level split of `textures/item`, `models/item`, `models/block`, `blockstates
 | `myrtrees` | 2 | rubberwood log blockstates | Engineering ? (wood/IE rubber chain; Compat if only visual) |
 | `pneumaticcraft` | 2 | lang + compressed iron block texture | Engineering |
 | `canned_goods`, `create_confectionery`, `brewinandchewin` (kimchi), `endersdelight`, `rusticdelight`, `jrftl`, `vintagedelight`, `solapplepie` (lunchboxes), `salt`, `displaydelight/lang`, `farmersrespite/lang` | 9 + 1 + 1 + 13 + 6 + 1 + 17 + 25 + 19 + 1 + 1 | food item/crop textures, lunchbox models, salt blocks, Delight lang | CD (`salt` CD ? as in 3.2) |
-| `creative_delight` | 22 | CD client scripts (17 mod folders) + treated stick textures | CD (scripts: sweep F) |
-| `creative_brewing/kubejs/_core/cb_client.js` | 1 | CB client core | CB (sweep F) |
+| `creativedelight` | 22 | CD client scripts (17 mod folders) + treated stick textures | CD (scripts: sweep F) |
+| `creativebrewing/kubejs/_core/cb_client.js` | 1 | CB client core | CB (sweep F) |
 | `dragonloot`, `felsic_gear`, `nock_enough_arrows` | 1 + 1 + 2 | dragon scale, felsic block, torch arrows | Equipment |
 | `eugene/lang` (en_us, zh_cn), `watchtower_building/lang` | 3 | structure mod names | Worldgen |
 | `minecraft/texts/{splashes,minecraftsplashes}.txt` | 2 | splash texts | Common ? (branding like the panorama; pack if the owner prefers resources outside jars) |

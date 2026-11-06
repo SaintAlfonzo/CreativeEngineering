@@ -96,3 +96,4 @@ Open decisions: which families to take, and the pylon and Wise Oak values.
 ## 7. History
 
 - 2026-10-31: audit written. Nothing built.
+- 2026-11-04: the enchanting rows now live in Creative Magic ([creative_magic.md](creative_magic.md)); this plan's tags and values go there when built.

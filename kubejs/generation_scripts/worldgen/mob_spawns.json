@@ -270,6 +270,43 @@
       ],
       "label": "Plan 9.6",
       "notes": "Geese on lakes and ponds, as duck_ponds."
+    },
+    {
+      "id": "lone_villagers",
+      "mob": "minecraft:villager",
+      "action": "set",
+      "weight": 1,
+      "min": 1,
+      "max": 1,
+      "category": "creature",
+      "where": [
+        "temperate grassy plains"
+      ],
+      "add": [
+        "terralith:highlands"
+      ],
+      "label": "spawns #4",
+      "notes": "Now and then one villager alone in plains, sunflower plains, steppe, valley clearing, meadow, blooming plateau and the highlands (MCA turns it into an MCA villager). Creature category: misc never spawns. The lone_villagers_daylight condition keeps it out of caves."
+    },
+    {
+      "id": "allay_mystical",
+      "mob": "minecraft:allay",
+      "action": "set",
+      "weight": 3,
+      "min": 1,
+      "max": 2,
+      "category": "creature",
+      "add": [
+        "terralith:moonlight_grove",
+        "terralith:moonlight_valley",
+        "terralith:mirage_isles",
+        "terralith:amethyst_rainforest",
+        "terralith:amethyst_canyon",
+        "terralith:lavender_forest",
+        "terralith:lavender_valley"
+      ],
+      "label": "spawns #5",
+      "notes": "Allays in the magical Terralith biomes (moonlight, lavender, amethyst, mirage isles). The allay_daylight condition keeps them out of dark cave pockets."
     }
   ],
   "conditions": [
@@ -315,6 +352,30 @@
       ],
       "label": "Plan 9.6",
       "notes": "In grassy land biomes ducks and geese spawn only on water, so they turn up on lakes and ponds. Rivers, swamps and beaches are not in it."
+    },
+    {
+      "id": "lone_villagers_daylight",
+      "condition": "light_only",
+      "mobs": [
+        "minecraft:villager"
+      ],
+      "rules": [
+        "lone_villagers"
+      ],
+      "label": "spawns #4",
+      "notes": "Lone villagers only where it is light (the villager rule allows any light)."
+    },
+    {
+      "id": "allay_daylight",
+      "condition": "light_only",
+      "mobs": [
+        "minecraft:allay"
+      ],
+      "rules": [
+        "allay_mystical"
+      ],
+      "label": "spawns #5",
+      "notes": "Allays have no placement rule (they could appear in any air pocket); in their biomes they need light above 8."
     }
   ],
   "spawn_ground": {

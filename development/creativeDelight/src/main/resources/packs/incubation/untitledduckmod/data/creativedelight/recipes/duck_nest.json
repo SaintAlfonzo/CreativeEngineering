@@ -1,0 +1,18 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "key": {
+    "G": {
+      "item": "minecraft:grass"
+    },
+    "T": {
+      "item": "minecraft:tall_grass"
+    }
+  },
+  "pattern": [
+    "T T",
+    "GGG"
+  ],
+  "result": {
+    "item": "creativedelight:duck_nest"
+  }
+}

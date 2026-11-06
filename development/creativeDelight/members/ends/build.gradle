@@ -1,6 +1,15 @@
 // repackedEnds: End's Delight 1.19.2-2.1 repacked for Creative Delight. Everything is in
 // build-logic/src/main/groovy/ce.forge-repack.gradle and gradle.properties; the overlay is src/.
 // Build: ./gradlew :repackedEnds:build --offline (ships only inside :creativeDelight:bundleJar).
+// Since 2026-11-02 (plan J1, ends_delight.md 5.9) the overlay also holds the enders_additions mod (Ender's Delight
+// 1.1.4's End plants and dishes, our code, package com.SaintAlfonzo.creativedelight.enders), folded in from the former
+// endersAdditions member; its art and data are read at runtime from enders_upstream/.
 plugins {
     id 'ce.forge-repack'
+}
+
+dependencies {
+    // enders_additions: Farmer's Delight's ConsumableItem, the Nourishment effect and the creative tab.
+    // flatDir notation: 'local:<file name without -version>:<version>' (libs/ is git-ignored, copied from mods/)
+    compileOnly fg.deobf('local:FarmersDelight-1.19.2:1.2.4')
 }

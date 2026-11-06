@@ -76,11 +76,11 @@ walkable block that nothing gives a speed to, so the next mod added doesn't sile
 - **Mods added in 1.1.01 to 1.1.06 (checked 2026-10-31, blockstate json count per jar; none has a pattern in
   blocktags.js yet):** Botany Pots 9.0.44 (98, pots: functional), Vintage Delight port `-09` (71), Veggies Delight port
   `-03` (26), Fungi Delight port (16, huge mushroom blocks: `ports/fungiport #2` asks for their tier), Miner's Delight
-  port `backportedMiners-1.4.5` (in `mods/`), and inside `creative_delight-1.0.0.jar`'s nested members: End's Delight
+  port `backportedMiners-1.4.5` (in `mods/`), and inside `creativedelight-1.0.0.jar`'s nested members: End's Delight
   (8), Oceanic Delight (8), Ocean's Delight (1), Ender's additions (4), Hearth and Harvest port (1), Cooking for
-  Blockheads additions (40, kitchen furniture: functional), plus `creative_delight` itself (2). Hostile Delight (1).
+  Blockheads additions (40, kitchen furniture: functional), plus `creativedelight` itself (2). Hostile Delight (1).
   No blocks: Sky Structures, Room for Two, Carry Cats, Baby Mobs, Cozy's Improved Cats (2 vanilla-namespace
-  overrides), ModernFix, `creative_brewing` (its Vinery and Brewin' members are the ones above). patcherMod now also
+  overrides), ModernFix, `creativebrewing` (its Vinery and Brewin' members are the ones above). patcherMod now also
   ships `powdered_sugar_block` and `placed_*` egg dishes (placed food: thin).
 - **KubeJS blocks:** culture blocks are tiered (`'creativeengineering:*_culture_block'`, spongy, blocktags.js 404);
   prepared flesh, layered obsidian, coils, plates and dust piles are tiered (blockrunner.md 2).
@@ -92,13 +92,13 @@ walkable block that nothing gives a speed to, so the next mod added doesn't sile
   `/dumptags`). The scan is a generator, `blockrunner_scan` in [tools/generators.json](../../tools/generators.json),
   with `dumps: ["dumptags block", "dumpitemsbymod"]` (generators.json 252-256). Its "could register" filter is a name
   regex (`thin`, scan.py 60), not the real collision shape. `kubejs/exported/` (the dumps) is not in the repo.
-- **What "typed" means at runtime:** `RunSpeed.Info.typed()` ([RunSpeed.java](../../development/patcherMod/src/main/java/com/SaintAlfonzo/creativeengineering/surface/RunSpeed.java)
+- **What "typed" means at runtime:** `RunSpeed.Info.typed()` ([RunSpeed.java](../../development/creativeEngineering/src/main/java/com/SaintAlfonzo/creativeengineering/surface/RunSpeed.java)
   68-70): a tier, a json override, a native speed factor, or an inside slowdown. The WTHIT `hideUntyped` switch uses it.
   `RunSpeed.standTop` (174) with `REGISTER_HEIGHT` (82, private) is the "collision top >= 0.2 registers" rule.
 
 ### Build
 1. **Dump command (patcherMod devtools).** New `devtools/SurfaceAudit.java`, modelled on
-   [devtools/WthitIconDump.java](../../development/patcherMod/src/main/java/com/SaintAlfonzo/creativeengineering/devtools/WthitIconDump.java)
+   [devtools/WthitIconDump.java](../../development/creativeCommon/src/main/java/com/SaintAlfonzo/creativecommon/devtools/WthitIconDump.java)
    (registration, JSON writing to `kubejs/exported/`, try/catch per block). A server command `/cedumpsurface` (op 2;
    tags are loaded on the server) writes `kubejs/exported/surface_audit.json`, one row per block (default state):
    `id`, `collisionTop` (`getCollisionShape(EmptyBlockGetter.INSTANCE, BlockPos.ZERO).max(Y)`, -1 when empty),
@@ -236,7 +236,7 @@ listed in the writeup; optionally a tooltip says so.
 1. **Tag.** `#creativeengineering:slippery` (block tag) in a server tag script via `global.tags.add`, = the slippery
    tier (nested `#blockrunner:surface/slippery`) minus `supplementaries:soap_block` (it has its own effect). Add a
    `b.t_slippery` / `i.`-style key in block_dict.js for it.
-2. **Config** under `[surface]` (CEConfig `Surface`, [CEConfig.java](../../development/patcherMod/src/main/java/com/SaintAlfonzo/creativeengineering/CEConfig.java)
+2. **Config** under `[surface]` (CEConfig `Surface`, [CEConfig.java](../../development/creativeCommon/src/main/java/com/SaintAlfonzo/creativecommon/CEConfig.java)
    1725): new `[surface.slippery]`: `soapSlip` (true), `slipChance` (0.14, soap's), `scaleWithFriction` (true),
    `boatIceFriction` (0.98; 0 = off). Both sides must match (movement is predicted).
 3. **Soap slip** (`surface/SoapSlip.java` + a Forge `LivingEvent.LivingTickEvent` subscriber; players and mobs only,

@@ -29,8 +29,8 @@ reject tactical_fishing:fishing_creativeengineering_powdered_sugar_bucket
 > zq itemtag creativeengineering:field_salad/root
 > zq itemtag creativeengineering:field_salad/nut
 > zq itemtag creativeengineering:field_salad/green
-expect creative_delight:shapeless/field_salad_manual_only
-expect creative_delight:shapeless/field_salad_flowers_manual_only
+expect creativedelight:shapeless/field_salad_manual_only
+expect creativedelight:shapeless/field_salad_flowers_manual_only
 reject delightful:food/field_salad
 expect itemtag creativeengineering:field_salad/root \(5\)
 expect itemtag creativeengineering:field_salad/nut \(2\)
@@ -46,13 +46,13 @@ look the shrimp fried rice effect named is Comfort
 ## SQ-CM-22 | veggie noodle dough
 > zq rdetail cucumber_dough
 > zq itemtag creativeengineering:veggie_noodle_veg
-expect creative_delight:shapeless/cucumber_dough
+expect creativedelight:shapeless/cucumber_dough
 reject vintagedelight:cucumber_dough \{
 expect itemtag creativeengineering:veggie_noodle_veg \(6\)
 
 ## SQ-CM-23 | shrimp fried rice in the Cooking Pot
 > zq rdetail farmersdelightcooking/shrimp_fried_rice
-expect creative_delight:farmersdelightcooking/shrimp_fried_rice
+expect creativedelight:farmersdelightcooking/shrimp_fried_rice
 look inputs: Fried Rice + 2 of #forge:shrimps
 
 ## SQ-CM-24 | no strawberry banana smoothie
@@ -65,9 +65,9 @@ expect makes neapolitan:strawberry_banana_smoothie: 0
 > zq makes veggiesdelight:sweet_potato_cupcake
 > zq rdetail jam_jar
 reject farmersdelight:cooking.*-> \d+ (fruitsdelight:blueberry_muffin|fruitsdelight:cranberry_muffin|veggiesdelight:sweet_potato_cupcake)
-expect creative_delight:farmersdelightcooking/green_grape_jam_jar
-expect creative_delight:farmersdelightcooking/red_grape_jam_jar
-expect creative_delight:farmersdelightcooking/cherry_jam_jar
+expect creativedelight:farmersdelightcooking/green_grape_jam_jar
+expect creativedelight:farmersdelightcooking/red_grape_jam_jar
+expect creativedelight:farmersdelightcooking/cherry_jam_jar
 look each new jar recipe gives 2 with container vintagedelight:empty_mason_jar; none of the 6 removed jam items is a result
 
 ## SQ-BJ-02 | any bread
@@ -111,7 +111,7 @@ kjsreject (rusticdelight/recipes\.js|removed_items\.js).*(Error|error)
 > zq uses oceanic_delight:squid_tentacles
 > zq uses oceanic_delight:glow_squid_tentacles
 > zq makes tentacle
-expect creative_delight:shapeless/seagrass_salad
+expect creativedelight:shapeless/seagrass_salad
 count : 0 alone, 0 with other items == 6
 expect makes tentacle: 0
 look seagrass salad takes 2 minecraft:seagrass + bowl; the 4 tentacle-on-a-stick and grilled ids are covered by "makes tentacle"

@@ -54,7 +54,12 @@ public final class LabelLayout {
 
     /** A view-frame point (px, px, depth in blocks into the host) in cell-local coordinates. */
     public static Vec3 at(Direction face, @Nullable Direction rotation, double fx, double viewY, double depth) {
-        return Spots.local(face, rotation, fx, frameY(face, rotation, viewY), depth);
+        return at(face, rotation, Spots.Place.ZERO, fx, viewY, depth);
+    }
+
+    /** As above, laid out for the standard label and moved and scaled onto {@code place}'s square. */
+    public static Vec3 at(Direction face, @Nullable Direction rotation, Spots.Place place, double fx, double viewY, double depth) {
+        return Spots.local(face, rotation, place.labelX(fx), place.labelY(frameY(face, rotation, viewY)), depth);
     }
 
     /** The viewer's right as a world direction. */
@@ -97,16 +102,24 @@ public final class LabelLayout {
      * bottom-left, bottom-right, top-right, top-left (texture u 0..1 left to right, v 0..1 bottom to top).
      */
     public static Vec3[] iconCorners(Direction face, @Nullable Direction rotation, float inset, boolean showName) {
+        return iconCorners(face, rotation, Spots.Place.at(inset), showName);
+    }
+
+    public static Vec3[] iconCorners(Direction face, @Nullable Direction rotation, Spots.Place place, boolean showName) {
         float[] r = iconRect(showName);
-        double d = iconDepth(inset);
+        double d = iconDepth(place.inset());
         return new Vec3[]{
-                at(face, rotation, r[0], r[1], d), at(face, rotation, r[2], r[1], d),
-                at(face, rotation, r[2], r[3], d), at(face, rotation, r[0], r[3], d)};
+                at(face, rotation, place, r[0], r[1], d), at(face, rotation, place, r[2], r[1], d),
+                at(face, rotation, place, r[2], r[3], d), at(face, rotation, place, r[0], r[3], d)};
     }
 
     /** Where the name's box starts: its top centre, in cell-local coordinates. */
     public static Vec3 textAnchor(Direction face, @Nullable Direction rotation, float inset) {
-        return at(face, rotation, CENTRE_X, TEXT_TOP, textDepth(inset));
+        return textAnchor(face, rotation, Spots.Place.at(inset));
+    }
+
+    public static Vec3 textAnchor(Direction face, @Nullable Direction rotation, Spots.Place place) {
+        return at(face, rotation, place, CENTRE_X, TEXT_TOP, textDepth(place.inset()));
     }
 
     /** Px per font unit so that a name of {@code widthUnits} fits the text box. */

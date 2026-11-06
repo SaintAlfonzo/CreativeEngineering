@@ -1,6 +1,6 @@
 # Engineering recipes: machine gating, mechanisms, redstone, rails, resource stones, dusts
 
-Part of backlog row 20 (recipe progression), split per folder. This one covers `kubejs/server_scripts/engineering/`
+Part of backlog row 20 (recipe progression), split per folder. This one covers `kubejs/data/creativeengineering/kubejs/engineering/`
 except the parts that already have a writeup: components, coils and the sample syringe
 ([engineering.md](engineering.md)), potion bottling ([potions.md](potions.md)), potion buckets
 ([potion_buckets.md](potion_buckets.md)) and the archery and bullet blueprints ([archery.md](archery.md)).
@@ -21,10 +21,10 @@ except the parts that already have a writeup: components, coils and the sample s
 
 - **Pending:** buckets (built 2026-10-29, jar installed 2026-10-31 00:44; RE-28 PASSED r1031 2026-10-31, RE-29, RE-30 in game). Otherwise nothing built and unshipped. RE-01 to RE-20 have never been run. Findings F1 to F10 (section 4); F1 and F2
   need your call; F3 fixed 2026-11-01 (script, `/reload`).
-- **Files to open:** [process.js](../kubejs/server_scripts/engineering/process.js) (machine gating),
-  [redstone.js](../kubejs/server_scripts/engineering/redstone.js),
-  [resource_blocks.js](../kubejs/server_scripts/engineering/resource_blocks.js),
-  [dust.js](../kubejs/server_scripts/engineering/dust.js).
+- **Files to open:** [process.js](../kubejs/data/creativeengineering/kubejs/engineering/process.js) (machine gating),
+  [redstone.js](../kubejs/data/creativeengineering/kubejs/engineering/redstone.js),
+  [resource_blocks.js](../kubejs/data/creativeengineering/kubejs/engineering/resource_blocks.js),
+  [dust.js](../kubejs/data/creativeengineering/kubejs/engineering/dust.js).
 - **Knobs:** none. All server scripts (`/reload`).
 
 ## 1. Overview
@@ -216,14 +216,14 @@ tuff. Stone recipes in Gates, Create Things and Misc, stonecutter, repeater and 
 
 ## 5. File map
 
-- [server_scripts/engineering/](../kubejs/server_scripts/engineering/): `process.js`, `create_utilities.js`,
+- [server_scripts/engineering/](../kubejs/data/creativeengineering/kubejs/engineering/): `process.js`, `create_utilities.js`,
   `pneumatic.js`, `mechanisms.js`, `redstone.js`, `transport.js`, `resource_blocks.js`, `dust.js`, `end.js`,
   `crystal.js`, `power.js`, `music.js`, `computing.js`, `health.js`, `oil.js`, `mob_resources.js`, `fabric.js`,
   `vibrating.js`, `laser_cutting.js`, `blueprints.js`.
 - Elsewhere: [engineering.md](engineering.md) (`components.js`, `sample_syringe.js`), [potions.md](potions.md)
   (`potion_bottling.js`), [potion_buckets.md](potion_buckets.md) (`potion_buckets.js`).
 - Helpers: [func/neoCraftHelper.js](../kubejs/startup_scripts/func/neoCraftHelper.js); tags:
-  [tags/metaltags.js](../kubejs/server_scripts/tags/metaltags.js) (steel as compressed iron).
+  [tags/metaltags.js](../kubejs/data/creativeengineering/kubejs/tags/metaltags.js) (steel as compressed iron).
 
 ## 6. Offline checks
 

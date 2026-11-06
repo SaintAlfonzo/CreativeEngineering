@@ -1,8 +1,8 @@
 #!/usr/bin/env python3
-"""Resources for patcherMod's Display Delight dishes (compat/DisplayDelightDishes) from their list.
+"""Resources for Creative Delight's Display Delight dishes (moved from patcherMod 2026-11-01) (compat/DisplayDelightDishes) from their list.
 
-The list is development/patcherMod/src/main/resources/creativeengineering/displaydelight_dishes.json. For each entry
-this writes, into patcherMod's resources:
+The list is development/creativeDelight/src/main/resources/creativeengineering/displaydelight_dishes.json. For each entry
+this writes, into Creative Delight's resources:
   assets/creativeengineering/blockstates/<block>.json     four facings, like Display Delight's own food blocks
   assets/creativeengineering/models/block/<block>.json    bowl: Display Delight's bowl (displaydelight:block/bowl)
                                                           with a food surface cut from the item sprite (crop);
@@ -11,17 +11,18 @@ this writes, into patcherMod's resources:
   data/creativeengineering/loot_tables/blocks/<block>.json  drops the food (survives explosion), as Display Delight's
   data/displaydelight/tags/items/displayable.json         every dish food (optional entries), so Display Delight
                                                           lets it be put down
-  assets/creativeengineering/lang/en_us.json              "Placed <food name>" per block (other keys kept)
+  assets/creativedelight/lang/en_us.json                   "Placed <food name>" per block (other keys kept)
 The item sprite comes from the food's item model (layer0) in its mod jar, or for a KubeJS item its sprite in
 kubejs/assets; names from the /dumpfood export, else the entry's "name".
-Display Delight's models and textures are referenced, not copied. Output goes into the patcherMod jar, so a change
-needs a patcherMod rebuild (not listed in generators.json for that reason).
+Display Delight's models and textures are referenced, not copied. Output goes into the Creative Delight jar, so a change
+needs a Creative Delight rebuild (not listed in generators.json for that reason).
 
     python3 tools/gen_dd_dishes.py           write the files
     python3 tools/gen_dd_dishes.py --check   exit 1 if any file is missing or stale
 """
 import argparse
 import glob
+import io
 import json
 import sys
 import zipfile
@@ -32,9 +33,9 @@ sys.path.insert(0, str(Path(__file__).resolve().parent))
 import display_delight_jar as ddj  # noqa: E402  (the Display Delight jar in mods/)
 
 INSTANCE = Path(__file__).resolve().parent.parent
-RES = INSTANCE / 'development/patcherMod/src/main/resources'
+RES = INSTANCE / 'development/creativeDelight/src/main/resources'
 LIST = RES / 'creativeengineering/displaydelight_dishes.json'
-LANG = RES / 'assets/creativeengineering/lang/en_us.json'
+LANG = RES / 'assets/creativedelight/lang/en_us.json'  # own namespace: Forge serves one jar's copy of a shared path
 TAG = RES / 'data/displaydelight/tags/items/displayable.json'
 FOODS = INSTANCE / 'kubejs/exported/food/foods.json'
 
@@ -50,12 +51,25 @@ def item_sprite(item_id):
     """layer0 of the item's model, read from whichever mod jar ships it."""
     ns, path = item_id.split(':', 1)
     entry = f'assets/{ns}/models/item/{path}.json'
+    def layer0(z):
+        if entry in z.namelist():
+            tex = json.loads(z.read(entry)).get('textures', {}).get('layer0')
+            if tex:
+                return tex if ':' in tex else 'minecraft:' + tex
+        return None
+
     for jar in sorted(glob.glob(str(INSTANCE / 'mods' / '*.jar'))) + sorted(glob.glob(str(INSTANCE / 'server_mods' / '*.jar'))):
         with zipfile.ZipFile(jar) as z:
-            if entry in z.namelist():
-                tex = json.loads(z.read(entry)).get('textures', {}).get('layer0')
-                if tex:
-                    return tex if ':' in tex else 'minecraft:' + tex
+            tex = layer0(z)
+            if tex:
+                return tex
+            # members nested in a bundle jar (Creative Delight's META-INF/jarjar/*.jar since 2026-11-02)
+            for n in z.namelist():
+                if n.startswith('META-INF/jarjar/') and n.endswith('.jar'):
+                    with zipfile.ZipFile(io.BytesIO(z.read(n))) as inner:
+                        tex = layer0(inner)
+                        if tex:
+                            return tex
     # A KubeJS item has no model in a jar: its generated model's layer0 is <ns>:item/<path>, the sprite in kubejs/assets
     if (INSTANCE / 'kubejs/assets' / ns / 'textures/item' / f'{path}.png').exists():
         return f'{ns}:item/{path}'

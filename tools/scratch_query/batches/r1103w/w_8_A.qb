@@ -1,0 +1,18 @@
+# Run r1102b, A4: restart after SQ-WGE-06c-3 changed the stored original (forced reorder).
+pace 2
+
+## SQ-WGE-06c-4 | stored original differs: piece order changed warning in the report, value kept at 7
+bootexpect Done \(
+shell grep -n 'piece order changed under an edited duplicate' kubejs/generation_scripts/worldgen/pool_tag_report.md | grep 'bridge_pillar #2'; r=$?; python3 -c "import json;e=json.load(open('kubejs/generation_scripts/worldgen/pool_config.json'))['pools']['betterfortresses:bridge']['elements']['betterfortresses:bridge/bridge_pillar #2'];print(e);exit(0 if e['current']==7 else 1)" && exit $r
+shell grep -a '\[pool-tuning\]' logs/latest.log | cut -c1-300
+
+## SQ-IP-16 | /dumpphysics after /reload; audit over the scratch dump (LAST: /reload)
+> reload
+sleep 40
+> dumpphysics
+waitlog (Dumped \d+ items|\[dumpphysics\] failed) 300
+expect Dumped \d+ items \(\d+ survive lava\)
+reject \[dumpphysics\] skipped
+shell test -s kubejs/exported/physics/item_physics.json && mkdir -p tools feature_writeup kubejs/generation_scripts/physics && cp $INST/tools/item_physics_audit.py tools/ && python3 -I tools/item_physics_audit.py > ../ip16.txt 2>&1; r=$?; head -30 ../ip16.txt; grep -n 'dump\|unclassified\|netherite_scrap' feature_writeup/item_physics_audit.md | head -12; exit $r
+# the audit runs on a copy inside srv/ so it reads the scratch dump and writes srv/feature_writeup, not the instance
+look audit header "dump yes", unclassified below 650, minecraft:netherite_scrap under fire_resistant_item (IP-21); block-item rows carry material / sound

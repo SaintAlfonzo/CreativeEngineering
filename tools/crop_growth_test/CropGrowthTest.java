@@ -1,10 +1,10 @@
 import java.io.FileReader;
 import java.util.List;
 
-import com.SaintAlfonzo.creativeengineering.crops.CropGrowth;
-import com.SaintAlfonzo.creativeengineering.crops.CropGrowth.Display;
-import com.SaintAlfonzo.creativeengineering.crops.CropGrowth.Rule;
-import com.SaintAlfonzo.creativeengineering.crops.CropGrowth.Stage;
+import com.SaintAlfonzo.creativedelight.crops.CropGrowth;
+import com.SaintAlfonzo.creativedelight.crops.CropGrowth.Display;
+import com.SaintAlfonzo.creativedelight.crops.CropGrowth.Rule;
+import com.SaintAlfonzo.creativedelight.crops.CropGrowth.Stage;
 import com.google.gson.JsonParser;
 
 /** Headless checks for the WTHIT crop growth rules (tools/test_crop_growth.sh). args[0] = crop_growth.json. */

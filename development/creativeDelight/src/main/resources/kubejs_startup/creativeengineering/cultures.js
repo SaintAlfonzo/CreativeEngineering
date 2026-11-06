@@ -8,14 +8,14 @@
 // Restart to apply.
 //
 // Meat cultures: the raw lab-grown precursor for each cultivated-meat line. Recipes (samples, growth, cutting, culture
-// blocks): kubejs/data/creative_delight/kubejs/creativeengineering/cultivated_meat.js. Plain items, no .food().
+// blocks): kubejs/data/creativedelight/kubejs/creativeengineering/cultivated_meat.js. Plain items, no .food().
 // Textures and models: assets/creativeengineering/{textures,models}/item/.
 //
 // Culture blocks (<animal>_culture_block) are 9-culture storage blocks, same stats as prepared_flesh_block (the pack's
 // misc_items.js): clay material, mud sound, hand-breakable. Blockstate, block model and item model are hand-authored
 // under assets/creativeengineering/{blockstates,models/block,models/item}/<animal>_culture_block.json (cube_all,
 // texture creativeengineering:block/culture_block/<animal>_culture_block.png). Storage block and hoe tags:
-// kubejs/data/creative_delight/kubejs/creativeengineering/cultivated_meat_tags.js.
+// kubejs/data/creativedelight/kubejs/creativeengineering/cultivated_meat_tags.js.
 
 StartupEvents.registry('item', e => {
 	var i = global.item

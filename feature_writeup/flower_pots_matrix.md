@@ -7,7 +7,7 @@ Y = accepted, blank = refused, part = accepted by one variant only (rich vs plai
 
 ## Summary: accepted plants per holder and kind
 
-| Holder | flower (66) | tall flower (6) | botania (203) | sapling (33) | mushroom (13) | grass / fern (18) | vine (60) | crop / seed (44) | water (74) | cactus / cane (8) | hedge (0) | other (18) | All |
+| Holder | flower (66) | tall flower (6) | botania (203) | sapling (33) | mushroom (13) | grass / fern (18) | vine (60) | crop / seed (45) | water (74) | cactus / cane (8) | hedge (0) | other (18) | All |
 |---|---|---|---|---|---|---|---|---|---|---|---|---|---|
 | Flower pot | 40 | 4 | 0 | 29 | 5 | 10 | 6 | 14 | 1 | 4 | 0 | 2 | 115 |
 | Framed pot | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 3 | 0 | 0 | 0 | 1 | 5 |
@@ -19,7 +19,7 @@ Y = accepted, blank = refused, part = accepted by one variant only (rich vs plai
 | Vinery pot | 0 | 6 | 16 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 22 |
 | Vinery box | 55 | 0 | 68 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 123 |
 | Silt pot (Twigs) | 38 | 0 | 87 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 125 |
-| Planter (Supp.) | 62 | 4 | 203 | 33 | 13 | 13 | 18 | 36 | 0 | 4 | 0 | 9 | 395 |
+| Planter (Supp.) | 62 | 4 | 203 | 33 | 13 | 13 | 18 | 37 | 0 | 4 | 0 | 9 | 396 |
 
 ## Plants no flower pot takes
 
@@ -32,7 +32,7 @@ Plants the vanilla pot (and so the framed and hanging pots) refuses, by kind:
 - **mushroom** (8): `farmersdelight:brown_mushroom_colony`, `farmersdelight:red_mushroom_colony`, `fungidelight:inky_cap_mushroom`, `fungidelight:inky_cap_mushroom_colony`, `fungidelight:morel_mushroom`, `fungidelight:morel_mushroom_colony`, `nethersdelight:crimson_fungus_colony`, `nethersdelight:warped_fungus_colony`
 - **grass / fern** (8): `minecraft:hanging_roots`, `minecraft:small_dripleaf`, `fruitsdelight:lemon_seeds`, `fruitsdelight:lemon_tree`, `immersive_weathering:frosty_fern`, `immersive_weathering:frosty_grass`, `upgrade_aquatic:beachgrass`, `upgrade_aquatic:tall_beachgrass`
 - **vine** (54): `minecraft:glow_lichen`, `minecraft:sculk_vein`, `alexsmobs:stink_bottle`, `floralench:allium_bush`, `floralench:allium_vine`, `floralench:azure_bluet_bush`, `floralench:azure_bluet_vine`, `floralench:blue_orchid_bush`, `floralench:blue_orchid_vine`, `floralench:cornflower_bush`, `floralench:cornflower_vine`, `floralench:dandelion_bush`, `floralench:dandelion_vine`, `floralench:lilac_bush`, `floralench:lilac_vine`, `floralench:lily_of_the_valley_bush`, `floralench:lily_of_the_valley_vine`, `floralench:orange_tulip_bush`, `floralench:orange_tulip_vine`, `floralench:oxeye_daisy_bush`, `floralench:oxeye_daisy_vine`, `floralench:peony_bush`, `floralench:peony_vine`, `floralench:pink_tulip_bush`, `floralench:pink_tulip_vine`, `floralench:poppy_bush`, `floralench:poppy_vine`, `floralench:red_tulip_bush`, `floralench:red_tulip_vine`, `floralench:rose_bush_bush`, `floralench:rose_bush_vine`, `floralench:sunflower_bush`, `floralench:sunflower_vine`, `floralench:white_tulip_bush`, `floralench:white_tulip_vine`, `floralench:wither_rose_bush`, `floralench:wither_rose_vine`, `immersive_weathering:frost`, `immersive_weathering:ivy`, `immersive_weathering:moss_clump`, `immersive_weathering:soot`, `quark:cut_vine`, `twigs:petrified_lichen`, `upgrade_aquatic:river_leaf_pile`, `vinery:grapevine_lattice`, `vinery:grapevine_stem`, `vinery:jungle_grape_seeds_red`, `vinery:jungle_grape_seeds_white`, `vinery:red_grape_seeds`, `vinery:savanna_grape_seeds_red`, `vinery:savanna_grape_seeds_white`, `vinery:taiga_grape_seeds_red`, `vinery:taiga_grape_seeds_white`, `vinery:white_grape_seeds`
-- **crop / seed** (30): `minecraft:melon`, `minecraft:pumpkin`, `corn_delight:corn_seeds`, `delightful:cantaloupe`, `delightful:cantaloupe_seeds`, `delightful:mini_melon`, `endercrop:ender_seeds`, `farmersdelight:cabbage_seeds`, `farmersdelight:onion`, `farmersdelight:tomato_seeds`, `fruitsdelight:hamimelon`, `fruitsdelight:hamimelon_seeds`, `immersive_weathering:weeds`, `miners_delight:cave_carrot`, `rusticdelight:bell_pepper_seeds`, `rusticdelight:coffee_beans`, `rusticdelight:cotton_seeds`, `rusticdelight:dark_bell_pepper_seeds`, `rusticdelight:pale_bell_pepper_seeds`, `veggiesdelight:broccoli_seeds`, `veggiesdelight:cauliflower_seeds`, `veggiesdelight:garlic_clove`, `veggiesdelight:sweet_potato`, `veggiesdelight:turnip_seeds`, `veggiesdelight:zucchini_seeds`, `vintagedelight:cucumber_seeds`, `vintagedelight:ghost_pepper`, `vintagedelight:ghost_pepper_seeds`, `vintagedelight:oat_seeds`, `vintagedelight:peanut`
+- **crop / seed** (31): `minecraft:melon`, `minecraft:pumpkin`, `corn_delight:corn_seeds`, `delightful:cantaloupe`, `delightful:cantaloupe_seeds`, `delightful:mini_melon`, `endercrop:ender_seeds`, `farmersdelight:cabbage_seeds`, `farmersdelight:onion`, `farmersdelight:tomato_seeds`, `fruitsdelight:hamimelon`, `fruitsdelight:hamimelon_seeds`, `hearthandharvest:raspberry_pips`, `immersive_weathering:weeds`, `miners_delight:cave_carrot`, `rusticdelight:bell_pepper_seeds`, `rusticdelight:coffee_beans`, `rusticdelight:cotton_seeds`, `rusticdelight:dark_bell_pepper_seeds`, `rusticdelight:pale_bell_pepper_seeds`, `veggiesdelight:broccoli_seeds`, `veggiesdelight:cauliflower_seeds`, `veggiesdelight:garlic_clove`, `veggiesdelight:sweet_potato`, `veggiesdelight:turnip_seeds`, `veggiesdelight:zucchini_seeds`, `vintagedelight:cucumber_seeds`, `vintagedelight:ghost_pepper`, `vintagedelight:ghost_pepper_seeds`, `vintagedelight:oat_seeds`, `vintagedelight:peanut`
 - **water** (73): `minecraft:brain_coral`, `minecraft:brain_coral_fan`, `minecraft:bubble_coral`, `minecraft:bubble_coral_fan`, `minecraft:dead_brain_coral`, `minecraft:dead_brain_coral_fan`, `minecraft:dead_bubble_coral`, `minecraft:dead_bubble_coral_fan`, `minecraft:dead_fire_coral`, `minecraft:dead_fire_coral_fan`, `minecraft:dead_horn_coral`, `minecraft:dead_horn_coral_fan`, `minecraft:dead_tube_coral`, `minecraft:dead_tube_coral_fan`, `minecraft:fire_coral`, `minecraft:fire_coral_fan`, `minecraft:horn_coral`, `minecraft:horn_coral_fan`, `minecraft:kelp`, `minecraft:lily_pad`, `minecraft:seagrass`, `minecraft:tube_coral`, `minecraft:tube_coral_fan`, `upgrade_aquatic:acan_coral`, `upgrade_aquatic:acan_coral_fan`, `upgrade_aquatic:branch_coral`, `upgrade_aquatic:branch_coral_fan`, `upgrade_aquatic:chrome_coral`, `upgrade_aquatic:chrome_coral_fan`, `upgrade_aquatic:dead_acan_coral`, `upgrade_aquatic:dead_acan_coral_fan`, `upgrade_aquatic:dead_branch_coral`, `upgrade_aquatic:dead_branch_coral_fan`, `upgrade_aquatic:dead_chrome_coral`, `upgrade_aquatic:dead_chrome_coral_fan`, `upgrade_aquatic:dead_finger_coral`, `upgrade_aquatic:dead_finger_coral_fan`, `upgrade_aquatic:dead_moss_coral`, `upgrade_aquatic:dead_moss_coral_fan`, `upgrade_aquatic:dead_petal_coral`, `upgrade_aquatic:dead_petal_coral_fan`, `upgrade_aquatic:dead_pillow_coral`, `upgrade_aquatic:dead_pillow_coral_fan`, `upgrade_aquatic:dead_rock_coral`, `upgrade_aquatic:dead_rock_coral_fan`, `upgrade_aquatic:dead_silk_coral`, `upgrade_aquatic:dead_silk_coral_fan`, `upgrade_aquatic:dead_star_coral`, `upgrade_aquatic:dead_star_coral_fan`, `upgrade_aquatic:elder_prismarine_coral`, `upgrade_aquatic:elder_prismarine_coral_fan`, `upgrade_aquatic:elder_prismarine_coral_shower`, `upgrade_aquatic:finger_coral`, `upgrade_aquatic:finger_coral_fan`, `upgrade_aquatic:moss_coral`, `upgrade_aquatic:moss_coral_fan`, `upgrade_aquatic:ochre_kelp`, `upgrade_aquatic:petal_coral`, `upgrade_aquatic:petal_coral_fan`, `upgrade_aquatic:pillow_coral`, `upgrade_aquatic:pillow_coral_fan`, `upgrade_aquatic:polar_kelp`, `upgrade_aquatic:prismarine_coral`, `upgrade_aquatic:prismarine_coral_fan`, `upgrade_aquatic:prismarine_coral_shower`, `upgrade_aquatic:rock_coral`, `upgrade_aquatic:rock_coral_fan`, `upgrade_aquatic:silk_coral`, `upgrade_aquatic:silk_coral_fan`, `upgrade_aquatic:star_coral`, `upgrade_aquatic:star_coral_fan`, `upgrade_aquatic:thorny_kelp`, `upgrade_aquatic:tongue_kelp`
 - **cactus / cane** (4): `minecraft:chorus_plant`, `endersdelight:chorusflame`, `ends_delight:chorus_succulent`, `twigs:bamboo_leaves`
 - **other** (16): `minecraft:big_dripleaf`, `minecraft:moss_block`, `minecraft:spore_blossom`, `alexsmobs:banana_peel`, `delightful:salmonberry_pips`, `endersdelight:amberveil`, `endersdelight:ethereal_saffron`, `farmersdelight:rice`, `farmersdelight:sandy_shrub`, `fruitsdelight:blueberry`, `fruitsdelight:blueberry_bush`, `fruitsdelight:cranberry`, `fruitsdelight:pineapple_sapling`, `fruitsdelight:wild_pineapple`, `neapolitan:strawberry_pips`, `nethersdelight:propelplant_cane`
@@ -45,12 +45,14 @@ Plants the vanilla pot (and so the framed and hanging pots) refuses, by kind:
 - hanging: `minecraft:allium` predicted yes, probe no
 - framed: `minecraft:azalea` predicted yes, probe no
 - hanging: `minecraft:azalea` predicted yes, probe no
+- pbox: `minecraft:azalea` predicted no, probe yes
 - framed: `minecraft:azure_bluet` predicted yes, probe no
 - hanging: `minecraft:azure_bluet` predicted yes, probe no
 - framed: `minecraft:bamboo` predicted yes, probe no
 - hanging: `minecraft:bamboo` predicted yes, probe no
 - framed: `minecraft:beetroot_seeds` predicted yes, probe no
 - hanging: `minecraft:beetroot_seeds` predicted yes, probe no
+- pbox: `minecraft:beetroot_seeds` predicted yes, probe no
 - framed: `minecraft:birch_sapling` predicted yes, probe no
 - hanging: `minecraft:birch_sapling` predicted yes, probe no
 - framed: `minecraft:blue_orchid` predicted yes, probe no
@@ -59,41 +61,52 @@ Plants the vanilla pot (and so the framed and hanging pots) refuses, by kind:
 - hanging: `minecraft:brown_mushroom` predicted yes, probe no
 - framed: `minecraft:cactus` predicted yes, probe no
 - hanging: `minecraft:cactus` predicted yes, probe no
+- pbox: `minecraft:cactus` predicted yes, probe no
 - framed: `minecraft:carrot` predicted yes, probe no
 - hanging: `minecraft:carrot` predicted yes, probe no
+- pbox: `minecraft:carrot` predicted yes, probe no
 - framed: `minecraft:chorus_flower` predicted yes, probe no
 - hanging: `minecraft:chorus_flower` predicted yes, probe no
+- pbox: `minecraft:chorus_flower` predicted yes, probe no
 - silt: `minecraft:chorus_flower` predicted yes, probe no
 - framed: `minecraft:cocoa_beans` predicted yes, probe no
 - hanging: `minecraft:cocoa_beans` predicted yes, probe no
+- pbox: `minecraft:cocoa_beans` predicted yes, probe no
 - framed: `minecraft:cornflower` predicted yes, probe no
 - hanging: `minecraft:cornflower` predicted yes, probe no
 - framed: `minecraft:crimson_fungus` predicted yes, probe no
 - hanging: `minecraft:crimson_fungus` predicted yes, probe no
 - framed: `minecraft:crimson_roots` predicted yes, probe no
 - hanging: `minecraft:crimson_roots` predicted yes, probe no
+- pbox: `minecraft:crimson_roots` predicted yes, probe no
 - framed: `minecraft:dandelion` predicted yes, probe no
 - hanging: `minecraft:dandelion` predicted yes, probe no
 - framed: `minecraft:dark_oak_sapling` predicted yes, probe no
 - hanging: `minecraft:dark_oak_sapling` predicted yes, probe no
 - framed: `minecraft:dead_bush` predicted yes, probe no
 - hanging: `minecraft:dead_bush` predicted yes, probe no
+- pbox: `minecraft:dead_bush` predicted yes, probe no
 - framed: `minecraft:fern` predicted yes, probe no
 - hanging: `minecraft:fern` predicted yes, probe no
 - framed: `minecraft:flowering_azalea` predicted yes, probe no
 - hanging: `minecraft:flowering_azalea` predicted yes, probe no
+- pbox: `minecraft:flowering_azalea` predicted no, probe yes
 - framed: `minecraft:flowering_azalea_leaves` predicted no, probe yes
 - planter: `minecraft:flowering_azalea_leaves` predicted no, probe yes
 - framed: `minecraft:glow_berries` predicted yes, probe no
 - hanging: `minecraft:glow_berries` predicted yes, probe no
+- pbox: `minecraft:glow_berries` predicted yes, probe no
+- pbox: `minecraft:glow_lichen` predicted yes, probe no
 - framed: `minecraft:grass` predicted yes, probe no
 - hanging: `minecraft:grass` predicted yes, probe no
+- pbox: `minecraft:grass` predicted yes, probe no
 - framed: `minecraft:jungle_sapling` predicted yes, probe no
 - hanging: `minecraft:jungle_sapling` predicted yes, probe no
 - framed: `minecraft:large_fern` predicted yes, probe no
 - hanging: `minecraft:large_fern` predicted yes, probe no
 - framed: `minecraft:lilac` predicted yes, probe no
 - hanging: `minecraft:lilac` predicted yes, probe no
+- pbox: `minecraft:lilac` predicted yes, probe no
 - framed: `minecraft:lily_of_the_valley` predicted yes, probe no
 - hanging: `minecraft:lily_of_the_valley` predicted yes, probe no
 - planter: `minecraft:lily_pad` predicted yes, probe no
@@ -102,12 +115,15 @@ Plants the vanilla pot (and so the framed and hanging pots) refuses, by kind:
 - framed: `minecraft:melon` predicted no, probe yes
 - framed: `minecraft:melon_seeds` predicted yes, probe no
 - hanging: `minecraft:melon_seeds` predicted yes, probe no
+- pbox: `minecraft:melon_seeds` predicted yes, probe no
 - framed: `minecraft:moss_block` predicted no, probe yes
 - planter: `minecraft:moss_block` predicted no, probe yes
 - framed: `minecraft:nether_sprouts` predicted yes, probe no
 - hanging: `minecraft:nether_sprouts` predicted yes, probe no
+- pbox: `minecraft:nether_sprouts` predicted yes, probe no
 - framed: `minecraft:nether_wart` predicted yes, probe no
 - hanging: `minecraft:nether_wart` predicted yes, probe no
+- pbox: `minecraft:nether_wart` predicted yes, probe no
 - framed: `minecraft:oak_sapling` predicted yes, probe no
 - hanging: `minecraft:oak_sapling` predicted yes, probe no
 - framed: `minecraft:orange_tulip` predicted yes, probe no
@@ -116,21 +132,25 @@ Plants the vanilla pot (and so the framed and hanging pots) refuses, by kind:
 - hanging: `minecraft:oxeye_daisy` predicted yes, probe no
 - framed: `minecraft:peony` predicted yes, probe no
 - hanging: `minecraft:peony` predicted yes, probe no
+- pbox: `minecraft:peony` predicted yes, probe no
 - framed: `minecraft:pink_tulip` predicted yes, probe no
 - hanging: `minecraft:pink_tulip` predicted yes, probe no
 - framed: `minecraft:poppy` predicted yes, probe no
 - hanging: `minecraft:poppy` predicted yes, probe no
 - framed: `minecraft:potato` predicted yes, probe no
 - hanging: `minecraft:potato` predicted yes, probe no
+- pbox: `minecraft:potato` predicted yes, probe no
 - framed: `minecraft:pumpkin` predicted no, probe yes
 - framed: `minecraft:pumpkin_seeds` predicted yes, probe no
 - hanging: `minecraft:pumpkin_seeds` predicted yes, probe no
+- pbox: `minecraft:pumpkin_seeds` predicted yes, probe no
 - framed: `minecraft:red_mushroom` predicted yes, probe no
 - hanging: `minecraft:red_mushroom` predicted yes, probe no
 - framed: `minecraft:red_tulip` predicted yes, probe no
 - hanging: `minecraft:red_tulip` predicted yes, probe no
 - framed: `minecraft:rose_bush` predicted yes, probe no
 - hanging: `minecraft:rose_bush` predicted yes, probe no
+- pbox: `minecraft:rose_bush` predicted yes, probe no
 - framed: `minecraft:sea_pickle` predicted yes, probe no
 - hanging: `minecraft:sea_pickle` predicted yes, probe no
 - planter: `minecraft:sea_pickle` predicted yes, probe no
@@ -142,6 +162,7 @@ Plants the vanilla pot (and so the framed and hanging pots) refuses, by kind:
 - hanging: `minecraft:sugar_cane` predicted yes, probe no
 - framed: `minecraft:sunflower` predicted yes, probe no
 - hanging: `minecraft:sunflower` predicted yes, probe no
+- pbox: `minecraft:sunflower` predicted yes, probe no
 - framed: `minecraft:sweet_berries` predicted yes, probe no
 - hanging: `minecraft:sweet_berries` predicted yes, probe no
 - planter: `minecraft:sweet_berries` predicted yes, probe no
@@ -155,6 +176,7 @@ Plants the vanilla pot (and so the framed and hanging pots) refuses, by kind:
 - hanging: `minecraft:warped_fungus` predicted yes, probe no
 - framed: `minecraft:warped_roots` predicted yes, probe no
 - hanging: `minecraft:warped_roots` predicted yes, probe no
+- pbox: `minecraft:warped_roots` predicted yes, probe no
 - framed: `minecraft:weeping_vines` predicted yes, probe no
 - hanging: `minecraft:weeping_vines` predicted yes, probe no
 - framed: `minecraft:wheat_seeds` predicted yes, probe no
@@ -365,6 +387,8 @@ Plants the vanilla pot (and so the framed and hanging pots) refuses, by kind:
 - hanging: `farmersrespite:wild_tea_bush` predicted yes, probe no
 - framed: `fruitsdelight:apple_sapling` predicted yes, probe no
 - hanging: `fruitsdelight:apple_sapling` predicted yes, probe no
+- fbox: `fruitsdelight:apple_sapling` predicted no, probe yes
+- pbox: `fruitsdelight:apple_sapling` predicted no, probe yes
 - framed: `fruitsdelight:bayberry_sapling` predicted yes, probe no
 - hanging: `fruitsdelight:bayberry_sapling` predicted yes, probe no
 - framed: `fruitsdelight:durian_sapling` predicted yes, probe no
@@ -404,6 +428,9 @@ Plants the vanilla pot (and so the framed and hanging pots) refuses, by kind:
 - planter: `neapolitan:banana_frond` predicted yes, probe no
 - framed: `neapolitan:mint_sprout` predicted yes, probe no
 - hanging: `neapolitan:mint_sprout` predicted yes, probe no
+- pot: `nethersdelight:mimicarnation` predicted yes, probe no
+- framed: `nethersdelight:mimicarnation` predicted yes, probe no
+- hanging: `nethersdelight:mimicarnation` predicted yes, probe no
 - planter: `nethersdelight:propelplant_cane` predicted yes, probe no
 - framed: `quark:ancient_sapling` predicted yes, probe no
 - hanging: `quark:ancient_sapling` predicted yes, probe no
@@ -972,6 +999,12 @@ Plants the vanilla pot (and so the framed and hanging pots) refuses, by kind:
 | `inky_cap_mushroom_colony` | mushroom |  |  |  | Y | Y |  |  |  |  |  | Y |
 | `morel_mushroom` | mushroom |  |  |  | Y | Y |  |  |  |  |  | Y |
 | `morel_mushroom_colony` | mushroom |  |  |  | Y | Y |  |  |  |  |  | Y |
+
+### hearthandharvest (1)
+
+| Plant | Kind | Flower pot | Framed pot | Hanging pot (Supp.) | Flower box (Supp.) | Planter box (AF) | Hanging pot (Beautify) | Large pot (Floral) | Vinery pot | Vinery box | Silt pot (Twigs) | Planter (Supp.) |
+|---|---|---|---|---|---|---|---|---|---|---|---|---|
+| `raspberry_pips` | crop / seed |  |  |  |  |  |  |  |  |  |  | Y |
 
 ### immersive_weathering (9)
 

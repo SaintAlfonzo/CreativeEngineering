@@ -99,12 +99,12 @@ configVersion = 5
 
 [toggles]
 	teleportSoundEnabled = true
-	genderSystemEnabled = true
+	genderSystemEnabled = false
 	reviveEnabled = true
 	bedRevivalEnabled = false
 	fetchingEnabled = true
 	accidentalAttackRecoveryEnabled = true
-	allowVanillaTaming = false
+	allowVanillaTaming = true
 	enableFallDamage = false
 	enableTotemReroll = false
 
@@ -123,11 +123,11 @@ configVersion = 5
 	minHealthPercentage = 0.5
 
 [ancientFish]
-	fishingEnabled = true
-	ancientCodFishingChance = 0.05
-	ancientSalmonFishingChance = 0.05
-	ancientSalmonDropChance = 0.5
-	ancientCodDropChance = 0.5
+	fishingEnabled = false
+	ancientCodFishingChance = 0.0
+	ancientSalmonFishingChance = 0.0
+	ancientSalmonDropChance = 0.0
+	ancientCodDropChance = 0.0
 	experienceForSmeltingAncientFish = 1.0
 	ticksToSmeltAncientFish = 200
 	rawAncientFishNutritionAmount = 2

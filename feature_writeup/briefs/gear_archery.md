@@ -24,7 +24,7 @@ A blueprint recipe that lists the same ingredient more than once must be craftab
 once in the helper, not at the call sites.
 
 ### Now
-- Helper: [neoCraftHelper.js:2277-2300](../../development/patcherMod/src/main/resources/kubejs_startup/creativeengineering/func/neoCraftHelper.js)
+- Helper: [neoCraftHelper.js:2277-2300](../../development/creativeCommon/src/main/resources/kubejs_startup/creativecommon/func/neoCraftHelper.js)
   `ieBlueprint(outputs, inputs, category, e, idOverride)`. It maps each input through `_nbtItemJson(..., { countMode:
   'base_ingredient' })` (line 541-600; plain inputs fall through to `_itemJson`, line 479) and emits one JSON input per
   array entry. No merge step. Unchanged since the 2026-10-21 scan (checked 2026-10-31; last touched in commit ffa47cf).
@@ -38,11 +38,11 @@ once in the helper, not at the call sites.
   |---|---|---|
   | [archery.js:65](../../kubejs/server_scripts/equipment/archery.js) | spectral arrow | `i.glowstone` x2 |
   | archery.js:275, 276 | split arrow (electrum, brass) | `i.arrow` x4 |
-  | [redstone.js:53](../../kubejs/server_scripts/engineering/redstone.js) | dropper | `i.anystone` x4 |
+  | [redstone.js:53](../../kubejs/data/creativeengineering/kubejs/engineering/redstone.js) | dropper | `i.anystone` x4 |
   | redstone.js:60 | observer | `i.anystone` x4 |
   | redstone.js:65 | piston | `i.planks` x2, `i.anystone` x2 |
   | redstone.js:229 | thunder detector | `i.mundane_potion` x2 |
-  | [music.js:12, 18](../../kubejs/server_scripts/engineering/music.js) | note block, jukebox | `i.planks` x3 |
+  | [music.js:12, 18](../../kubejs/data/creativeengineering/kubejs/engineering/music.js) | note block, jukebox | `i.planks` x3 |
 
   9 recipes. `i.planks` = `#minecraft:planks`, `i.anystone` = `#forge:stone` (tags), `i.mundane_potion` is a raw
   `forge:nbt` ingredient object (item_dict.js:1306), `i.glowstone` / `i.arrow` plain items.

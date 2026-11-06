@@ -1,6 +1,6 @@
 {
   "_readme": [
-    "Season types per biome, for Serene Seasons in the overworld. Read by kubejs/server_scripts/tags/seasontags.js,",
+    "Season types per biome, for Serene Seasons in the overworld. Read by kubejs/data/creativecalendar/kubejs/sereneseasons/seasontags.js,",
     "which fills the biome tags creativeengineering:seasons/<type>; patcherMod seasons/SeasonTypes reads the tags.",
     "Edit, then /reload (tags). Reference: feature_writeup/weather.md; per-biome result:",
     "feature_writeup/weather_by_biome.md (python3 tools/gen_weather_table.py reads this file too).",

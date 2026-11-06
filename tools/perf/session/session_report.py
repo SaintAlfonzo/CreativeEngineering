@@ -7,7 +7,7 @@
 
 Segments: a boot runs from its process start to its end; "startup" lasts until `Done (`; after that each timeline
 `mark` starts a segment named by its text (before the first mark: "(unmarked)"). Ticks are the pack's
-creativeengineering.ServerTick events. --prune deletes the raw recordings and the parse cache after processing
+creativecommon.ServerTick events. --prune deletes the raw recordings and the parse cache after processing
 (the HTML, ticks.tsv and summary stay). Run it with no server up: parsing loads the CPU.
 """
 import argparse, collections, datetime, glob, json, os, re, shutil, subprocess, sys
@@ -72,10 +72,10 @@ def process(d, prune):
                 open(os.path.join(b, 'ticks.tsv'), 'w', encoding='utf8') as out:
             out.write('t_ms\tkind\tms\tinfo\n')
             for line in fh:
-                if '"creativeengineering.' not in line:
+                if '"creativecommon.' not in line:
                     continue
                 e = json.loads(line)
-                k = e['type'][len('creativeengineering.'):]
+                k = e['type'][len('creativecommon.'):]
                 if k == 'ServerTick':
                     out.write('%d\ttick\t%.3f\t\n' % (e['t'] + e['dur'], e['dur']))
                 elif k == 'ChunkWait':

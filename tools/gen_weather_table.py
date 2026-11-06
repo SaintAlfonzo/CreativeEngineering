@@ -13,7 +13,7 @@ Inputs:
   precipitation, and the dimensions whose biome source can place it.
 - kubejs/generation_scripts/worldgen/season_types.json: the pack's season types (arid, frozen, dry, tropical,
   temperate, adaptive) and snow_seasons (the sub-seasons a biome may snow in), applied in game as biome tags by
-  kubejs/server_scripts/tags/seasontags.js and patcherMod seasons/SeasonTypes.
+  kubejs/data/creativecalendar/kubejs/sereneseasons/seasontags.js and Creative Calendar seasons/SeasonTypes.
 - Biome jsons (vanilla, Forge, mod jars, kubejs/data, via gen_crop_worldgen_table): temperature_modifier, and
   the is_ocean / is_river / is_beach tags.
 - kubejs/generation_scripts/worldgen/biome_config.json: post-tuning share of each dimension per biome.
@@ -47,7 +47,7 @@ CLIMATE = INSTANCE / 'kubejs/generation_scripts/worldgen/climate/minecraft__over
 SEASON_TYPES = INSTANCE / 'kubejs/generation_scripts/worldgen/season_types.json'
 SS_PACK = INSTANCE / 'configs_edited/server_config/sereneseasons-server.toml'
 SS_SEASONS = INSTANCE / 'config/sereneseasons/seasons.toml'
-CE_CONFIG = INSTANCE / 'config/creativeengineering-common.toml'
+CE_CONFIG = INSTANCE / 'config/creativecalendar-common.toml'  # Creative Calendar's [seasons] (creative_calendar.md 4.3)
 BETTER_DAYS = INSTANCE / 'config/betterdays-common.toml'
 SAVES = INSTANCE / 'saves'
 OUT_MD = INSTANCE / 'feature_writeup/weather_by_biome.md'
@@ -55,7 +55,7 @@ OUT_MD = INSTANCE / 'feature_writeup/weather_by_biome.md'
 MAX_Y = 320          # overworld build height (Tectonic increased_height = false)
 SNOW_BELOW = 0.15    # Biome.warmEnoughToRain: temperature >= 0.15F
 FROZEN_MAX = 0.1     # SeasonTypes.FROZEN_MAX_TEMPERATURE
-SNOW_LINE_DEFAULT = 320  # CEConfig [seasons] snowLineY (build height)
+SNOW_LINE_DEFAULT = 320  # Calendar config [seasons] snowLineY (build height)
 
 # Serene Seasons ServerConfig defaults (single-player worlds get these)
 SS_DEFAULT = {
@@ -83,7 +83,7 @@ SUB_IDS = [f'{part}_{season}' for season in SEASON_WORDS for part in ('early', '
 WINTER = {9, 10, 11}
 
 # filled by main(): season_types.json snow_seasons as {biome: set of sub-season indexes it may snow in}, and
-# CEConfig [seasons] snowLineY
+# Calendar config [seasons] snowLineY
 SNOW_ALLOWED = {}
 SNOW_LINE_MIN = SNOW_LINE_DEFAULT
 WET = {3, 4, 5}
@@ -162,7 +162,7 @@ def season_ticks(path):
 
 
 def seasons_config(key, default):
-    """A CEConfig [seasons] value."""
+    """A Calendar config [seasons] value."""
     if not CE_CONFIG.exists():
         return default
     m = re.search(r'^\[seasons\](.*?)(^\[|\Z)', CE_CONFIG.read_text(), re.M | re.S)
@@ -171,7 +171,7 @@ def seasons_config(key, default):
 
 
 def seasons_enabled():
-    """CEConfig [seasons] enabled (default true)."""
+    """Calendar config [seasons] enabled (default true)."""
     return seasons_config('enabled', True) is not False
 
 
@@ -277,7 +277,7 @@ def cell(b, cls, sub, snow_rules=True):
 
 def snow_line_y(t, blocked=False, gauge=False):
     """Lowest y where it snows (None: at every height). Biome.getHeightAdjustedTemperature cools 0.05 per 40 blocks
-    above y80 (+-8 blocks noise); SeasonTypes.applySnowRules keeps rain below CEConfig snowLineY when it rains at
+    above y80 (+-8 blocks noise); SeasonTypes.applySnowRules keeps rain below the Calendar config's snowLineY when it rains at
     y80, and when snow_seasons leaves the sub-season out; gauge (temperate and cold): always snows from snowLineY up."""
     if t < SNOW_BELOW:
         return SNOW_LINE_MIN if blocked else None
@@ -449,7 +449,7 @@ def main():
       'Section 1 is the rules, section 2 the problems the generator finds, section 3 the overworld table, '
       'section 4 the other dimensions, section 5 the calendar and the local worlds.\n')
     if types is None:
-        w('**CEConfig `[seasons] enabled = false`: the season types are off, Serene Seasons\' own rules apply.**\n')
+        w('**`creativecalendar-common.toml` `[seasons] enabled = false`: the season types are off, Serene Seasons\' own rules apply.**\n')
 
     # ── 1. rules
     w('## 1. How it is decided\n')
@@ -492,7 +492,7 @@ def main():
       f'`{str(toml_value(seasons_txt, "change_weather_frequency")).lower()}` (`RandomUpdateHandler.adjustWeatherFrequency`: '
       'in winter thunder is cleared and a dry spell longer than 1.5 days is cut to 0.5-1.5; in spring a dry spell '
       'longer than 4 days is cut to 0.5-4; in summer the wait for thunder is cut the same way to 0.5-1.5 days).\n')
-    w('### 1.3 The pack\'s season types (patcherMod `seasons/SeasonTypes`)\n')
+    w('### 1.3 The pack\'s season types (Creative Calendar `seasons/SeasonTypes`)\n')
     w('Biome tags `creativeengineering:seasons/<type>` from `kubejs/generation_scripts/worldgen/season_types.json`; '
       'details and tests in [weather.md](weather.md). A tagged biome ignores Serene Seasons\' tropical rule and its '
       'blacklist (oceans). Oceans that are not frozen-tagged get the seasonal weather but keep vanilla ice (they never '
@@ -523,7 +523,7 @@ def main():
         w(f'| adaptive | {len(types["adaptive"])} (rivers, beaches) | the nearest land biome\'s, per column | the land\'s '
           '| the land\'s |')
         w('| (untagged) | rest | Serene Seasons\' own rule (1.2) | | |\n')
-        w(f'**Snow line** (CEConfig `[seasons] snowLineY` = {SNOW_LINE_MIN}, the build height is {MAX_Y}): below it, '
+        w(f'**Snow line** (`creativecalendar-common.toml` `[seasons] snowLineY` = {SNOW_LINE_MIN}, the build height is {MAX_Y}): below it, '
           'height alone never turns rain into snow. A column snows there only if its biome snows at y80 in the '
           'current sub-season (every dimension). At and above it, temperate and cold biomes always snow (overworld): '
           'no block can sit that high, so snow only tells a flyer they are above build height; their snow-line '
@@ -684,7 +684,7 @@ def main():
         n += 1
         w(f'### 3.{n} {title} ({len(group)}, {pct(sum(share(b) for b in group))})\n')
         if cls_name == 'adaptive':
-            w('Each column takes the nearest land biome\'s type and temperature (rings of 8 directions out to CEConfig '
+            w('Each column takes the nearest land biome\'s type and temperature (rings of 8 directions out to the Calendar config '
               '`[seasons] adaptiveRadius`). "Land in its bands" is what the climate samples put around it: the '
               'most common land classes in the bands where the biome was sampled.\n')
             w('| Biome | Base | Bands | Share | Land in its bands |')

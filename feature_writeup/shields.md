@@ -27,9 +27,9 @@
   from the three new vanilla-class mixins (`MobShieldDisableMixin`, `MobEffectTickContextMixin`,
   `ShieldDecorationRecipeMixin`). Still to run in game: SH-43, then SH-14, SH-19, SH-33 to SH-42.
 
-- **Files to open:** [ShieldTier.java](../development/patcherMod/src/main/java/com/SaintAlfonzo/creativeengineering/shield/ShieldTier.java) (defaults),
-  [ShieldBlocking.java](../development/patcherMod/src/main/java/com/SaintAlfonzo/creativeengineering/shield/ShieldBlocking.java) (can it block),
-  [ShieldBlockHandler.java](../development/patcherMod/src/main/java/com/SaintAlfonzo/creativeengineering/shield/ShieldBlockHandler.java) (how much, wear, knockback, effects),
+- **Files to open:** [ShieldTier.java](../development/creativeCommon/src/main/java/com/SaintAlfonzo/creativecommon/shield/ShieldTier.java) (defaults),
+  [ShieldBlocking.java](../development/creativeCommon/src/main/java/com/SaintAlfonzo/creativecommon/shield/ShieldBlocking.java) (can it block),
+  [ShieldBlockHandler.java](../development/creativeCommon/src/main/java/com/SaintAlfonzo/creativecommon/shield/ShieldBlockHandler.java) (how much, wear, knockback, effects),
   [shield.js](../kubejs/server_scripts/equipment/shield.js) (recipes).
 - **Knobs:** `config/creativeengineering-common.toml`: `[shields]` (enabled, wearThreshold, disableCooldownTicks,
   unblockableEffectTicks), `[shields.facing]`, `[shields.<tier>]` (durability, repairItem, knockbackThreshold, blocksBurnTicks, blocksContactTicks, shielderEffects,
@@ -209,7 +209,7 @@ To change a row: an effect goes in `unblockableEffectTicks`; a block source goes
 ### 2.9 Damage tags
 
 1.19.2 has no damage-type registry, so the pack has its own tags. Each tag is a list of `DamageSource`
-message ids in `data/creativeengineering/damage_tags/<name>.json`:
+message ids in `data/creativecommon/damage_tags/<name>.json`:
 
 - **Entries:** exact ids, `*` globs, and `#creativeengineering:<tag>` includes. Any pack can add to a tag;
   `"replace": true` overrides lower packs.
@@ -369,26 +369,26 @@ message ids in `data/creativeengineering/damage_tags/<name>.json`:
 
 ## 5. File map
 
-- [shield/ShieldTier.java](../development/patcherMod/src/main/java/com/SaintAlfonzo/creativeengineering/shield/ShieldTier.java): tier enum, code defaults, `of(stack)`.
-- [shield/ShieldGroup.java](../development/patcherMod/src/main/java/com/SaintAlfonzo/creativeengineering/shield/ShieldGroup.java): physical / elemental / magic, default facing, armour-bypass rule.
-- [shield/ShieldCategory.java](../development/patcherMod/src/main/java/com/SaintAlfonzo/creativeengineering/shield/ShieldCategory.java): tag-based classification, priority order.
-- [shield/ElementalKind.java](../development/patcherMod/src/main/java/com/SaintAlfonzo/creativeengineering/shield/ElementalKind.java): fire / electric / cold / chemical.
-- [shield/ShieldBlocking.java](../development/patcherMod/src/main/java/com/SaintAlfonzo/creativeengineering/shield/ShieldBlocking.java): block verdict and facing.
-- [shield/ShieldBlockHandler.java](../development/patcherMod/src/main/java/com/SaintAlfonzo/creativeengineering/shield/ShieldBlockHandler.java): reduction, round-down, wear, knockback, effects.
-- [shield/ShieldEffects.java](../development/patcherMod/src/main/java/com/SaintAlfonzo/creativeengineering/shield/ShieldEffects.java): effect string parser.
-- [shield/ShieldConfig.java](../development/patcherMod/src/main/java/com/SaintAlfonzo/creativeengineering/shield/ShieldConfig.java): null-safe live config reads.
-- [shield/ShieldTooltip.java](../development/patcherMod/src/main/java/com/SaintAlfonzo/creativeengineering/shield/ShieldTooltip.java), [shield/IronShieldTooltip.java](../development/patcherMod/src/main/java/com/SaintAlfonzo/creativeengineering/shield/IronShieldTooltip.java): tooltip lines.
-- [shield/TierShieldItem.java](../development/patcherMod/src/main/java/com/SaintAlfonzo/creativeengineering/shield/TierShieldItem.java), [shield/ShieldItems.java](../development/patcherMod/src/main/java/com/SaintAlfonzo/creativeengineering/shield/ShieldItems.java): items and registration.
-- [shield/client/](../development/patcherMod/src/main/java/com/SaintAlfonzo/creativeengineering/shield/client/): renderer, sprites, blocking predicate.
-- [shield/ShieldTickGate.java](../development/patcherMod/src/main/java/com/SaintAlfonzo/creativeengineering/shield/ShieldTickGate.java): burn / contact tick gates.
-- [compat/jei/SmithingTemplateJEI.java](../development/patcherMod/src/main/java/com/SaintAlfonzo/creativeengineering/compat/jei/SmithingTemplateJEI.java), [ArmorTrimsSmithing.java](../development/patcherMod/src/main/java/com/SaintAlfonzo/creativeengineering/compat/jei/ArmorTrimsSmithing.java): hide template-only smithing from JEI's vanilla category (F8).
-- [shield/EffectTickContext.java](../development/patcherMod/src/main/java/com/SaintAlfonzo/creativeengineering/shield/EffectTickContext.java): which effect is ticking on which entity.
-- Mixins: [LivingEntityShieldMixin](../development/patcherMod/src/main/java/com/SaintAlfonzo/creativeengineering/mixin/LivingEntityShieldMixin.java), [VanillaShieldDurabilityMixin](../development/patcherMod/src/main/java/com/SaintAlfonzo/creativeengineering/mixin/VanillaShieldDurabilityMixin.java), [VanillaShieldRepairMixin](../development/patcherMod/src/main/java/com/SaintAlfonzo/creativeengineering/mixin/VanillaShieldRepairMixin.java), [ShieldDisableCooldownMixin](../development/patcherMod/src/main/java/com/SaintAlfonzo/creativeengineering/mixin/ShieldDisableCooldownMixin.java), [MobShieldDisableMixin](../development/patcherMod/src/main/java/com/SaintAlfonzo/creativeengineering/mixin/MobShieldDisableMixin.java), [MobEffectTickContextMixin](../development/patcherMod/src/main/java/com/SaintAlfonzo/creativeengineering/mixin/MobEffectTickContextMixin.java), [ShieldDecorationRecipeMixin](../development/patcherMod/src/main/java/com/SaintAlfonzo/creativeengineering/mixin/ShieldDecorationRecipeMixin.java).
-- `CEConfig.Shields` / `CEConfig.DamageTagConfig` in [CEConfig.java](../development/patcherMod/src/main/java/com/SaintAlfonzo/creativeengineering/CEConfig.java).
-- [damage/](../development/patcherMod/src/main/java/com/SaintAlfonzo/creativeengineering/damage/): `DamageFlag`, `DamageTags`, `DamageTagSnapshot`, `DamageTagLoader`, `DamageTagLogger`.
-- [damage_tags/](../development/patcherMod/src/main/resources/data/creativeengineering/damage_tags/): the 32 tag files ([burn_tick.json](../development/patcherMod/src/main/resources/data/creativeengineering/damage_tags/burn_tick.json), [contact_tick.json](../development/patcherMod/src/main/resources/data/creativeengineering/damage_tags/contact_tick.json)).
-- Models: `development/patcherMod/src/main/resources/assets/creativeengineering/models/item/<tier>_shield.json`; textures: [kubejs/assets/creativeengineering/textures/entity/shield/](../kubejs/assets/creativeengineering/textures/entity/shield/).
-- KubeJS: [shield.js](../kubejs/server_scripts/equipment/shield.js), [end_gear.js](../kubejs/server_scripts/equipment/end_gear.js), [equipmenttags.js](../kubejs/server_scripts/tags/equipmenttags.js) (dragon_gear), [transition_items.js](../kubejs/startup_scripts/changes/transition_items.js), [namechanges.js](../kubejs/client_scripts/namechanges.js), `item_dict.js`.
+- [shield/ShieldTier.java](../development/creativeCommon/src/main/java/com/SaintAlfonzo/creativecommon/shield/ShieldTier.java): tier enum, code defaults, `of(stack)`.
+- [shield/ShieldGroup.java](../development/creativeCommon/src/main/java/com/SaintAlfonzo/creativecommon/shield/ShieldGroup.java): physical / elemental / magic, default facing, armour-bypass rule.
+- [shield/ShieldCategory.java](../development/creativeCommon/src/main/java/com/SaintAlfonzo/creativecommon/shield/ShieldCategory.java): tag-based classification, priority order.
+- [shield/ElementalKind.java](../development/creativeCommon/src/main/java/com/SaintAlfonzo/creativecommon/shield/ElementalKind.java): fire / electric / cold / chemical.
+- [shield/ShieldBlocking.java](../development/creativeCommon/src/main/java/com/SaintAlfonzo/creativecommon/shield/ShieldBlocking.java): block verdict and facing.
+- [shield/ShieldBlockHandler.java](../development/creativeCommon/src/main/java/com/SaintAlfonzo/creativecommon/shield/ShieldBlockHandler.java): reduction, round-down, wear, knockback, effects.
+- [shield/ShieldEffects.java](../development/creativeCommon/src/main/java/com/SaintAlfonzo/creativecommon/shield/ShieldEffects.java): effect string parser.
+- [shield/ShieldConfig.java](../development/creativeCommon/src/main/java/com/SaintAlfonzo/creativecommon/shield/ShieldConfig.java): null-safe live config reads.
+- [shield/ShieldTooltip.java](../development/creativeCommon/src/main/java/com/SaintAlfonzo/creativecommon/shield/ShieldTooltip.java), [shield/IronShieldTooltip.java](../development/creativeCommon/src/main/java/com/SaintAlfonzo/creativecommon/shield/IronShieldTooltip.java): tooltip lines.
+- [shield/TierShieldItem.java](../development/creativeCommon/src/main/java/com/SaintAlfonzo/creativecommon/shield/TierShieldItem.java), [shield/ShieldItems.java](../development/creativeCommon/src/main/java/com/SaintAlfonzo/creativecommon/shield/ShieldItems.java): items and registration.
+- [shield/client/](../development/creativeCommon/src/main/java/com/SaintAlfonzo/creativecommon/shield/client/): renderer, sprites, blocking predicate.
+- [shield/ShieldTickGate.java](../development/creativeCommon/src/main/java/com/SaintAlfonzo/creativecommon/shield/ShieldTickGate.java): burn / contact tick gates.
+- [compat/jei/SmithingTemplateJEI.java](../development/creativeCommon/src/main/java/com/SaintAlfonzo/creativecommon/compat/jei/SmithingTemplateJEI.java), [ArmorTrimsSmithing.java](../development/creativeCommon/src/main/java/com/SaintAlfonzo/creativecommon/compat/jei/ArmorTrimsSmithing.java): hide template-only smithing from JEI's vanilla category (F8).
+- [shield/EffectTickContext.java](../development/creativeCommon/src/main/java/com/SaintAlfonzo/creativecommon/shield/EffectTickContext.java): which effect is ticking on which entity.
+- Mixins: [LivingEntityShieldMixin](../development/creativeCommon/src/main/java/com/SaintAlfonzo/creativecommon/mixin/LivingEntityShieldMixin.java), [VanillaShieldDurabilityMixin](../development/creativeCommon/src/main/java/com/SaintAlfonzo/creativecommon/mixin/VanillaShieldDurabilityMixin.java), [VanillaShieldRepairMixin](../development/creativeCommon/src/main/java/com/SaintAlfonzo/creativecommon/mixin/VanillaShieldRepairMixin.java), [ShieldDisableCooldownMixin](../development/creativeCommon/src/main/java/com/SaintAlfonzo/creativecommon/mixin/ShieldDisableCooldownMixin.java), [MobShieldDisableMixin](../development/creativeCommon/src/main/java/com/SaintAlfonzo/creativecommon/mixin/MobShieldDisableMixin.java), [MobEffectTickContextMixin](../development/creativeCommon/src/main/java/com/SaintAlfonzo/creativecommon/mixin/MobEffectTickContextMixin.java), [ShieldDecorationRecipeMixin](../development/creativeCommon/src/main/java/com/SaintAlfonzo/creativecommon/mixin/ShieldDecorationRecipeMixin.java).
+- `CEConfig.Shields` / `CEConfig.DamageTagConfig` in [CEConfig.java](../development/creativeCommon/src/main/java/com/SaintAlfonzo/creativecommon/CEConfig.java).
+- [damage/](../development/creativeCommon/src/main/java/com/SaintAlfonzo/creativecommon/damage/): `DamageFlag`, `DamageTags`, `DamageTagSnapshot`, `DamageTagLoader`, `DamageTagLogger`.
+- [damage_tags/](../development/creativeCommon/src/main/resources/data/creativecommon/damage_tags/): the 32 tag files ([burn_tick.json](../development/creativeCommon/src/main/resources/data/creativecommon/damage_tags/burn_tick.json), [contact_tick.json](../development/creativeCommon/src/main/resources/data/creativecommon/damage_tags/contact_tick.json)).
+- Models: `development/creativeCommon/src/main/resources/assets/creativeengineering/models/item/<tier>_shield.json`; textures: [kubejs/assets/creativeengineering/textures/entity/shield/](../kubejs/assets/creativeengineering/textures/entity/shield/).
+- KubeJS: [shield.js](../kubejs/server_scripts/equipment/shield.js), [end_gear.js](../kubejs/server_scripts/equipment/end_gear.js), [equipmenttags.js](../kubejs/server_scripts/tags/equipmenttags.js) (dragon_gear), [transition_items.js](../development/creativeEngineering/src/main/resources/kubejs_startup/creativeengineering/changes/transition_items.js), [namechanges.js](../kubejs/client_scripts/namechanges.js), `item_dict.js`.
 - Background: [damage_types_findings.md](../damage_types_findings.md); [tools/shield_check.py](../tools/shield_check.py), [tools/test_shields.sh](../tools/test_shields.sh), [tools/shield_test/](../tools/shield_test/).
 
 ## 6. Offline checks
@@ -548,3 +548,4 @@ on F3+H. "Raise" means hold right click.
 - 2026-10-22: Resistance on block for echo (I), felsic and dragon (II), 2 s (`gear/shields #5`): `ShieldTier` defaults and
   the instance toml's `shielderEffects`. patcherMod 1.1.01 in `mods/`, not run. SH-44; scratch probe SQ-GM-01.
 - 2026-10-22 (second bulk run): SQ-GM-01 PASS on the scratch server (pillager attackers); the SH-44 tooltip stays in game.
+- 2026-11-04: code, mixins, `[shields]` and the shield recipes moved to Creative Equipment (`creativeequipment`, [creative_equipment.md](creative_equipment.md)); paths: `development/creativeEquipment/.../shield/`, `config/creativeequipment-common.toml`, `kubejs/data/creativeequipment/kubejs/equipment/shield.js`. The damage tags stay in patcherMod (Common). Same behaviour.

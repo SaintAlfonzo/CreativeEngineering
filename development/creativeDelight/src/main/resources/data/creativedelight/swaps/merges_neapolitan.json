@@ -1,0 +1,14 @@
+{
+  "_comment": "Item merge list (swap lists 'merges', SwapLists.java; feature_writeup/item_merges.md 6): both items stay registered; the old one is purged and the survivor takes over its recipes, loot and tags (CD startup script creativedelight/swap_merges.js) and every stack of it in the world (Common swap/ItemMerges). Applied only while every 'requires' mod is loaded. Never prune: an old world whose old item is later unregistered is remapped from this list. Neapolitan's milk bottle goes into Farmer's Delight's (2.2), its chocolate cake into Create Crafts & Additions' (2.3).",
+  "requires": [
+    "neapolitan"
+  ],
+  "merges": {
+    "farmersdelight:milk_bottle": [
+      "neapolitan:milk_bottle"
+    ],
+    "createaddition:chocolate_cake": [
+      "neapolitan:chocolate_cake"
+    ]
+  }
+}

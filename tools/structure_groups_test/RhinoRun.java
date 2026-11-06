@@ -3,7 +3,7 @@ import java.nio.file.*;
 import java.util.*;
 
 /**
- * Runs kubejs/server_scripts/worldgen/structure_overrides.js in the pack's own Rhino fork with the KubeJS
+ * Runs kubejs/data/creativeworldgen/kubejs/worldgen/structure_overrides.js in the pack's own Rhino fork with the KubeJS
  * globals stubbed, and writes what it would add: every structure_set json, frequencies.json (the table handed
  * to patcherMod), rules.raw.json / fits.raw.json (the biome rules and biome fits staged), report.md, tags.raw.json
  * (the creativeengineering:meta/* and fit structure tags its ServerEvents.tags handler adds) and biome_tags.raw.json
@@ -70,7 +70,7 @@ public class RhinoRun {
 			"  return { writeText: function (p, t) { __HOST.writeText(p, t) } } } };",
 			"var ServerEvents = { highPriorityData: function (fn) { __cb = fn }, tags: function (t, fn) { if (t == 'worldgen/structure') __tagsCb = fn; if (t == 'worldgen/biome') __biomeTagsCb = fn } };");
 		cx.evaluateString(scope, prelude, "prelude", 1, null);
-		cx.evaluateString(scope, Files.readString(root.resolve("kubejs/server_scripts/worldgen/structure_overrides.js")), "structure_overrides.js", 1, null);
+		cx.evaluateString(scope, Files.readString(root.resolve("kubejs/data/creativeworldgen/kubejs/worldgen/structure_overrides.js")), "structure_overrides.js", 1, null);
 		cx.evaluateString(scope, "__cb({ add: function (p, t) { __HOST.add(String(p), String(t)) } });", "fire", 1, null);
 		cx.evaluateString(scope, "if (__tagsCb) __tagsCb({ add: function (t, id) { __HOST.tag(String(t), String(id)) } });", "fire tags", 1, null);
 		cx.evaluateString(scope, "if (__biomeTagsCb) __biomeTagsCb({ add: function (t, id) { __HOST.biomeTag(String(t), String(id)) } });", "fire biome tags", 1, null);

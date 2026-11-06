@@ -22,3 +22,10 @@ description='''${mod_description}'''
     versionRange="[1.19.2,1.20)"
     ordering="NONE"
     side="BOTH"
+# Pack addition (creative_split.md 7.17): the cabinets use Farmer's Delight classes; upstream never declared it.
+[[dependencies.storagedelight]]
+    modId="farmersdelight"
+    mandatory=true
+    versionRange="[1.19.2-1.2.4,)"
+    ordering="AFTER"
+    side="BOTH"

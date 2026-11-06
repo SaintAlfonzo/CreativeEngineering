@@ -1,0 +1,7 @@
+{
+  "parent": "supplementaries:block/stick_y_tomatoes",
+  "textures": {
+    "0": "creativedelight:block/treated_stick",
+    "particle": "creativedelight:block/treated_stick"
+  }
+}

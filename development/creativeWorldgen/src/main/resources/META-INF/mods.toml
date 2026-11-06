@@ -1,0 +1,98 @@
+# Creative Worldgen (feature_writeup/creative_worldgen.md): the pack's world generation and fauna. Registers the
+# creativeengineering:bee_nests and :tune_spawns biome modifier codecs, the :meta structure type and its piece types and
+# the :biome_tag loot condition; every id keeps the creativeengineering namespace. The members More Mooblooms and Baby
+# Mobs are nested jars, each with its own mods.toml (META-INF/jarjar/metadata.json).
+modLoader="javafml"
+loaderVersion="${loader_version_range}"
+license="${mod_license}"
+[[mods]]
+modId="${mod_id}"
+version="${mod_version}"
+displayName="${mod_name}"
+authors="${mod_authors}"
+description='''${mod_description}'''
+
+[[dependencies.creativeworldgen]]
+modId="forge"
+mandatory=true
+versionRange="${forge_version_range}"
+ordering="NONE"
+side="BOTH"
+[[dependencies.creativeworldgen]]
+modId="minecraft"
+mandatory=true
+versionRange="${minecraft_version_range}"
+ordering="NONE"
+side="BOTH"
+# patcherMod: KubeJS, the shared helpers, the startup script loader and the Common APIs this jar calls
+# (swap/ConfigRename, util/WorldgenFiles). Becomes creativecommon at the final swap (creative_split.md 7.6 Q1). The range
+# must exclude every patcherMod that still carries the worldgen classes and mixins (1.1.07 and older: they would apply twice).
+[[dependencies.creativeworldgen]]
+modId="creativecommon"
+mandatory=true
+versionRange="[1.1.0,)"
+ordering="AFTER"
+side="BOTH"
+# Creative Compat: required by every other Creative jar (creative_split.md 7.6).
+[[dependencies.creativeworldgen]]
+modId="creativecompat"
+mandatory=true
+versionRange="[1.0.0,)"
+ordering="AFTER"
+side="BOTH"
+# The mods the gated mixins and listeners target: optional, each mixin is gated on its mod (WorldgenMixinPlugin)
+# and each listener on ModList. No ordering: patcherMod never declared them either, so the load order stays as it was.
+[[dependencies.creativeworldgen]]
+modId="asynclocator"
+mandatory=false
+versionRange="*"
+ordering="NONE"
+side="BOTH"
+[[dependencies.creativeworldgen]]
+modId="lightmanscurrency"
+mandatory=false
+versionRange="*"
+ordering="NONE"
+side="BOTH"
+[[dependencies.creativeworldgen]]
+modId="cloudstorage"
+mandatory=false
+versionRange="*"
+ordering="NONE"
+side="BOTH"
+[[dependencies.creativeworldgen]]
+modId="forgivingvoid"
+mandatory=false
+versionRange="*"
+ordering="NONE"
+side="BOTH"
+[[dependencies.creativeworldgen]]
+modId="bushierflowers"
+mandatory=false
+versionRange="*"
+ordering="NONE"
+side="BOTH"
+[[dependencies.creativeworldgen]]
+modId="quark"
+mandatory=false
+versionRange="*"
+ordering="NONE"
+side="BOTH"
+[[dependencies.creativeworldgen]]
+modId="mca"
+mandatory=false
+versionRange="*"
+ordering="NONE"
+side="BOTH"
+[[dependencies.creativeworldgen]]
+modId="ae2"
+mandatory=false
+versionRange="*"
+ordering="NONE"
+side="BOTH"
+[[dependencies.creativeworldgen]]
+modId="immersive_weathering"
+mandatory=false
+versionRange="*"
+ordering="NONE"
+side="BOTH"

@@ -1,0 +1,6 @@
+{
+  "_comment": "Ids dropped with no replacement (swap lists 'removed', SwapLists.java). Old worlds load them as missing without the warning; never converted. Never prune. Brewin' and Chewin's kimchi: removed in favour of Vintage Delight's (merges/dishes #9, owner 2026-11-02); the item is still registered by the Brewin' port and hidden through Creative Delight's removed items, so this entry applies only once the port stops registering it.",
+  "removed": [
+    "brewinandchewin:kimchi"
+  ]
+}

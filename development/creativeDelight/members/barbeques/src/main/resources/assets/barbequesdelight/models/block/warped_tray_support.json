@@ -1,0 +1,8 @@
+{
+  "parent": "barbequesdelight:custom/tray_support",
+  "textures": {
+    "1": "barbequesdelight:block/warped_tray",
+    "2": "barbequesdelight:block/warped_tray",
+    "particle": "barbequesdelight:block/warped_tray"
+  }
+}

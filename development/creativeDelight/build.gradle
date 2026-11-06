@@ -3,13 +3,14 @@
 // this file adds what is specific to CD:
 //   - the CD script trees, authored in the pack folder so /reload and F3+T pick them up without a rebuild (10.4),
 //     copied into the jar at the same resource paths:
-//       kubejs/data/creative_delight/kubejs/    -> data/creative_delight/kubejs/    (server scripts)
-//       kubejs/assets/creative_delight/kubejs/  -> assets/creative_delight/kubejs/  (client scripts)
-//       kubejs/data/creative_delight/worldgen/  -> data/creative_delight/worldgen/  (wild crop features, 24)
-//       kubejs/data/creative_delight/cup_conversion/ -> data/creative_delight/cup_conversion/ (Miner's cups, 27)
-//     Startup scripts live in this project (src/main/resources/kubejs_startup/creative_delight/), loaded from the
-//     jar by patcherMod's startup loader.
-//   - creative_delight_members.txt: the mod ids of bundle_members, read by CreativeDelight / CDConfig (one list).
+//       kubejs/data/creativedelight/kubejs/    -> data/creativedelight/kubejs/    (server scripts)
+//       kubejs/assets/creativedelight/kubejs/  -> assets/creativedelight/kubejs/  (client scripts)
+//       kubejs/data/creativedelight/worldgen/  -> data/creativedelight/worldgen/  (wild crop features, 24)
+//       kubejs/data/creativedelight/cup_conversion/ -> data/creativedelight/cup_conversion/ (Miner's cups, 27; empty since the cup foods went, dishes/meals #53)
+//       kubejs/data/creativedelight/loot_tables/ -> data/creativedelight/loot_tables/ (Oceanic fishing net tables, 5)
+//     Startup scripts live in this project (src/main/resources/kubejs_startup/creativedelight/), loaded from the
+//     jar by Creative Common's startup loader.
+//   - creativedelight_members.txt: the mod ids of bundle_members, read by CreativeDelight / CDConfig (one list).
 //   - -Pcd_test_suite: also packs the scratch test suite (tools/creative_delight_test/, all three script types)
 //     into the jar, for the jar-path checks of SQ-CDT. Never for a release (build_deploy refuses such a jar).
 // Build: ./gradlew :creativeDelight:build --offline   Install: ./gradlew :creativeDelight:installToMods
@@ -20,9 +21,9 @@ plugins {
 dependencies {
     // Fruits Delight compartment (compat/FruitsDelightHooks). SRG-named jar; only its own type is used.
     compileOnly 'local:fruitsdelight:0.5.11'
-    // QoL compartments (creative_delight.md 8): the remainder buffer API, CEConfig and CropGrowth are patcherMod's
-    // (a hard dependency); the pot (QoL-1), kettle (QoL-1) and WTHIT (QoL-6) jars as in patcherMod/libs.
-    compileOnly project(':patcherMod')
+    // QoL compartments (creative_delight.md 8): CEConfig, ConfigRename, RemainderView and the JEI helpers are Creative Common's
+    // (a hard dependency); the pot (QoL-1), kettle (QoL-1) and WTHIT (QoL-6) jars as in creativeCommon/libs.
+    compileOnly project(':creativeCommon')
     compileOnly 'local:FarmersDelight:1.19.2-1.2.4'
     compileOnly 'local:FarmersRespite:1.19-2.0'
     compileOnly 'local:wthit:1.19.2-forge-5.36.1'
@@ -32,18 +33,68 @@ dependencies {
     compileOnly 'local:jei:1.19.2-forge-11.8.1.1034'
     // Banana merge (item_merges.md 2.1): the gorilla and sugar glider forage mixins.
     compileOnly 'local:alexsmobs:1.21.1'
+    // The kitchen and food Java moved from patcherMod at the CD carve (2026-11-01, creative_delight.md 34): the mods it
+    // touches (Quark, Spice of Life, Corn Delight, Canned Goods, The Salt, Immersive Weathering, AppleSkin, Curios, KubeJS,
+    // The Dirty Stuff, ...) from Creative Common's git-ignored libs/, and the Display Delight port for the placed dishes.
+    // (Cooking for Blockheads and Balm are excluded here: the compartment compiles against their deobf copies below.)
+    compileOnly fileTree(dir: rootProject.file('development/creativeCommon/libs'), include: '*.jar',
+            exclude: ['cookingforblockheads-*.jar', 'balm-*.jar'])
+    compileOnly project(':backportedDisplay')
+    // M8 compartments (plan_cb_publish.md 3b; were the blockheadsAdditions and incubationAdditions members). Cooking for
+    // Blockheads and Balm (libs/, copied from mods/): the racks extend CfB's blocks, the mixins target its oven and corner;
+    // deobf as the member had them. Incubation, Blueprint, Alex's Mobs, Citadel, Untitled Duck Mod and GeckoLib come
+    // SRG-named from Creative Common's libs/ above. The coaster offset mixin targets the Brewin' port (Creative Brewing).
+    compileOnly fg.deobf('local:cookingforblockheads-forge-1.19.2:13.3.4')
+    compileOnly fg.deobf('local:balm-forge-1.19.2:4.6.0')
+    compileOnly project(':backportedBrewin')
 }
 
-def scriptTrees = ['data/creative_delight/kubejs', 'assets/creative_delight/kubejs']
-def dataTrees = ['data/creative_delight/worldgen', 'data/creative_delight/cup_conversion']
+// The ARR guard of ce.forge-mod (checkNoArrResources, gradle.properties resource_guard_*) compares jar-root paths; the
+// compartments' files sit under packs/<pack>/, so compare those too with the pack prefix taken off. Nothing of the
+// installed Cooking for Blockheads jar may ship (memory arr-mod-overrides-route); our packs only name its models as
+// parents.
+def arrPacks = tasks.register('checkNoArrPackResources') {
+    group = 'verification'
+    description = 'Fails if a file under src/main/resources/packs/*/ repeats a path of the installed Cooking for Blockheads jar'
+    def packsDir = file('src/main/resources/packs')
+    inputs.dir(packsDir)
+    doLast {
+        def jar = rootProject.file('mods').listFiles()?.find { it.name ==~ /cookingforblockheads-.*\.jar/ }
+        if (jar == null) return
+        def ours = [] as Set
+        packsDir.eachFileRecurse(groovy.io.FileType.FILES) { f ->
+            def rel = packsDir.toPath().relativize(f.toPath()).toString().replace('\\', '/')
+            def m = rel =~ /^(?:incubation\/[^\/]+|[^\/]+)\/(.+)$/
+            if (m.matches()) ours << m.group(1)
+        }
+        def clashes = []
+        new java.util.zip.ZipFile(jar).withCloseable { zip ->
+            // tag files are merged by path, never overridden (data/<ns>/tags/...): the same path is ours, not a copy
+            zip.entries().each { e ->
+                if (!e.directory && e.name != 'pack.mcmeta' && !(e.name ==~ /data\/[^\/]+\/tags\/.+/) && ours.contains(e.name)) clashes << e.name
+            }
+        }
+        if (clashes) throw new GradleException("packs/ repeat paths of ${jar.name} (ARR):\n  " + clashes.join('\n  '))
+    }
+}
+tasks.named('check') { dependsOn arrPacks }
+tasks.named('jar') { dependsOn arrPacks }
+
+def scriptTrees = ['data/creativedelight/kubejs', 'assets/creativedelight/kubejs']
+def dataTrees = ['data/creativedelight/worldgen', 'data/creativedelight/cup_conversion', 'data/creativedelight/loot_tables']
 def testSuite = rootProject.file('tools/creative_delight_test/suite')
 def withTestSuite = project.hasProperty('cd_test_suite')
 
-def membersFile = layout.buildDirectory.file('generated/cd_members/creative_delight_members.txt')
+def membersFile = layout.buildDirectory.file('generated/cd_members/creativedelight_members.txt')
 def writeMembers = tasks.register('writeMembersList') {
     def ids = providers.provider {
         (findProperty('bundle_members') ?: '').toString().split(',')*.trim().findAll { it }
-                .collect { project(it).findProperty('mod_id').toString() }
+                .collectMany { m ->
+                    // a member jar that holds a second mod lists it in bundle_extra_mods (End's: enders_additions), so
+                    // that mod gets its own [members] switch too
+                    def extra = (project(m).findProperty('bundle_extra_mods') ?: '').toString().split(',')*.trim().findAll { it }
+                    [project(m).findProperty('mod_id').toString()] + extra
+                }
     }
     inputs.property('ids', ids)
     outputs.file(membersFile)
@@ -75,15 +126,15 @@ tasks.named('processResources', ProcessResources).configure {
 tasks.named('jar', Jar).configure {
     doLast {
         def entries = new java.util.zip.ZipFile(archiveFile.get().asFile).withCloseable { z -> z.entries().collect { it.name } }
-        ['kubejs_startup/creative_delight/', 'data/creative_delight/kubejs/', 'assets/creative_delight/kubejs/'].each { dir ->
+        ['kubejs_startup/creativedelight/', 'data/creativedelight/kubejs/', 'assets/creativedelight/kubejs/'].each { dir ->
             if (!entries.any { it.startsWith(dir) && it.endsWith('.js') }) {
-                throw new GradleException("creative_delight jar has no scripts under ${dir}")
+                throw new GradleException("creativedelight jar has no scripts under ${dir}")
             }
         }
     }
 }
 
-// A test-suite build is a separate jar (creative_delight-<v>-cdtest.jar): never archived, never installed.
+// A test-suite build is a separate jar (creativedelight-<v>-cdtest.jar): never archived, never installed.
 if (withTestSuite) {
     tasks.named('bundleJar', Jar).configure { archiveClassifier = 'cdtest' }
     tasks.named('archiveJar').configure { enabled = false }

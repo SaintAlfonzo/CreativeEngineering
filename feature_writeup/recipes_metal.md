@@ -1,7 +1,7 @@
 # Metal recipes: one material per metal, ore processing, plates, rods, wires, bars
 
-Part of backlog row 20 (recipe progression), split per folder. This one covers `kubejs/server_scripts/metal/` and the
-metal half of [tags/metaltags.js](../kubejs/server_scripts/tags/metaltags.js). Wire coils and coil blocks (the end of
+Part of backlog row 20 (recipe progression), split per folder. This one covers `kubejs/data/creativeengineering/kubejs/metal/` and the
+metal half of [tags/metaltags.js](../kubejs/data/creativeengineering/kubejs/tags/metaltags.js). Wire coils and coil blocks (the end of
 `metal_base_materials.js`) are in [engineering.md](engineering.md) 2.4; steel and compressed iron in
 [recipes_engineering.md](recipes_engineering.md) 2.1.
 
@@ -18,9 +18,9 @@ metal half of [tags/metaltags.js](../kubejs/server_scripts/tags/metaltags.js). W
 
 - **Pending:** nothing built and unshipped. RM-01 to RM-14 have never been run. Findings F1 to F7 (section 4); F1 and F4
   need your call.
-- **Files to open:** [metal_base_materials.js](../kubejs/server_scripts/metal/metal_base_materials.js) (the header
-  comment lines 3-29 is an earlier audit of the gaps; partly stale, see F1 and F4), [metal_building.js](../kubejs/server_scripts/metal/metal_building.js),
-  [misc_metal_crafts.js](../kubejs/server_scripts/metal/misc_metal_crafts.js).
+- **Files to open:** [metal_base_materials.js](../kubejs/data/creativeengineering/kubejs/metal/metal_base_materials.js) (the header
+  comment lines 3-29 is an earlier audit of the gaps; partly stale, see F1 and F4), [metal_building.js](../kubejs/data/creativeengineering/kubejs/metal/metal_building.js),
+  [misc_metal_crafts.js](../kubejs/data/creativeengineering/kubejs/metal/misc_metal_crafts.js).
 - **Knobs:** none. Server scripts (`/reload`).
 
 ## 1. Overview
@@ -146,9 +146,9 @@ input (the Create sheets and nuggets are swapped out of every recipe that uses t
 
 ## 5. File map
 
-- [server_scripts/metal/](../kubejs/server_scripts/metal/): `metal_base_materials.js` (762 lines: unification, ore
+- [server_scripts/metal/](../kubejs/data/creativeengineering/kubejs/metal/): `metal_base_materials.js` (762 lines: unification, ore
   tables, parts, coils), `metal_building.js` (bars), `misc_metal_crafts.js`.
-- Tags: [tags/metaltags.js](../kubejs/server_scripts/tags/metaltags.js).
+- Tags: [tags/metaltags.js](../kubejs/data/creativeengineering/kubejs/tags/metaltags.js).
 - Ore stones (Create's veridium etc.) are in [recipes_engineering.md](recipes_engineering.md) 2.5.
 
 ## 6. Offline checks

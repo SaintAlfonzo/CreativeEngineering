@@ -3,14 +3,19 @@ package com.SaintAlfonzo.creativedelight.mixin.farmersdelight;
 import javax.annotation.Nullable;
 
 import com.SaintAlfonzo.creativedelight.qol.RemainderBufferQol;
-import com.SaintAlfonzo.creativeengineering.cooking.RemainderBuffer;
-import com.SaintAlfonzo.creativeengineering.cooking.RemainderBufferHolder;
-import com.SaintAlfonzo.creativeengineering.cooking.RemainderOutputHandler;
+import com.SaintAlfonzo.creativedelight.cooking.RemainderBuffer;
+import com.SaintAlfonzo.creativedelight.cooking.RemainderBufferHolder;
+import com.SaintAlfonzo.creativedelight.cooking.RemainderOutputHandler;
+import com.SaintAlfonzo.creativedelight.cooking.FdPotContainers;
+import com.SaintAlfonzo.creativedelight.cooking.StationSlotRule;
 
+import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.core.NonNullList;
 import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.entity.BlockEntity;
+import net.minecraft.world.level.block.state.BlockState;
 import net.minecraftforge.common.capabilities.Capability;
 import net.minecraftforge.common.capabilities.ForgeCapabilities;
 import net.minecraftforge.common.util.LazyOptional;
@@ -37,6 +42,8 @@ import vectorwing.farmersdelight.common.crafting.CookingPotRecipe;
  *    container is seen in its slot ({@link RemainderBuffer#holdPlating}).
  *  - {@code canCook}: with {@code [cooking] stallWhenFull}, a craft whose leftovers wouldn't fit doesn't start (the pot
  *    waits as it does with a full meal slot).
+ *  - {@code <init>}: a {@link StationSlotRule} on the inventory: containers ({@link FdPotContainers}) only in the
+ *    container slot, never in an ingredient slot; hand, shift-click and hoppers all go through it.
  *  - {@code getDroppableInventory}: the buffer drops with the pot.
  *  - {@code getCapability}: the side/bottom handler also extracts from the buffer, after FD's output slot. It is
  *    invalidated together with FD's own output handler.
@@ -63,6 +70,11 @@ public abstract class CookingPotRemainderMixin implements RemainderBufferHolder 
     @Shadow
     public abstract ItemStack getMeal();
 
+    @Shadow
+    private boolean doesMealHaveContainer(ItemStack meal) {
+        throw new AssertionError();
+    }
+
     @Unique
     private RemainderBuffer ce$remainders;
 
@@ -77,17 +89,45 @@ public abstract class CookingPotRemainderMixin implements RemainderBufferHolder 
         return ce$remainders;
     }
 
+    /** Containers only in the container slot, never in an ingredient slot (remainder_buffer.md 3.8). */
+    @Inject(method = "<init>", at = @At("TAIL"))
+    private void ce$slotRule(BlockPos pos, BlockState state, CallbackInfo ci) {
+        StationSlotRule.apply(inventory, (slot, stack) -> {
+            if (slot < INGREDIENT_SLOTS) return !ce$isContainer(stack);
+            if (slot == CookingPotBlockEntity.CONTAINER_SLOT) return ce$isContainer(stack) || isContainerValid(stack);
+            return true;
+        });
+    }
+
+    @Unique
+    private boolean ce$isContainer(ItemStack stack) {
+        return FdPotContainers.POT.isContainer(((BlockEntity) (Object) this).getLevel(), stack);
+    }
+
     @Inject(method = "ejectIngredientRemainder", at = @At("HEAD"), cancellable = true)
     private void ce$keepRemainder(ItemStack remainder, CallbackInfo ci) {
         if (!RemainderBufferQol.enabled()) return;
         ItemStack rest = ce$getRemainderBuffer().store(remainder, inventory, CookingPotBlockEntity.CONTAINER_SLOT,
-                stack -> isContainerValid(stack), getMeal().getCount());
+                stack -> isContainerValid(stack));
         if (rest.isEmpty()) {
             ci.cancel();
         } else {
             // A fresh stack (FD's getCraftingRemainingItem / getDefaultInstance): FD throws what's left of it.
             remainder.setCount(rest.getCount());
         }
+    }
+
+    /** A leftover in the buffer that plates the waiting meal moves to the container slot (remainder_buffer.md 3.8). */
+    @Inject(method = "cookingTick", at = @At("HEAD"))
+    private static void ce$pullTick(Level level, BlockPos pos, BlockState state, CookingPotBlockEntity station, CallbackInfo ci) {
+        ((CookingPotRemainderMixin) (Object) station).ce$pullForPlating();
+    }
+
+    @Unique
+    private void ce$pullForPlating() {
+        ItemStack meal = getMeal();
+        int mealsWaiting = !meal.isEmpty() && doesMealHaveContainer(meal) ? meal.getCount() : 0;
+        ce$getRemainderBuffer().pullForPlating(inventory, CookingPotBlockEntity.CONTAINER_SLOT, mealsWaiting, stack -> isContainerValid(stack));
     }
 
     @Inject(method = "useStoredContainersOnMeal", at = @At("HEAD"), cancellable = true)
@@ -103,8 +143,7 @@ public abstract class CookingPotRemainderMixin implements RemainderBufferHolder 
         boolean fits = ce$getRemainderBuffer().fits(
                 RemainderBuffer.leftovers(inventory, 0, INGREDIENT_SLOTS, CookingPotBlockEntity.INGREDIENT_REMAINDER_OVERRIDES),
                 inventory, CookingPotBlockEntity.CONTAINER_SLOT,
-                RemainderBuffer.servedIn(recipe.getOutputContainer(), recipe.getResultItem()),
-                getMeal().getCount() + recipe.getResultItem().getCount());
+                RemainderBuffer.servedIn(recipe.getOutputContainer(), recipe.getResultItem()));
         if (!fits) {
             cir.setReturnValue(false);
             BlockEntity self = (BlockEntity) (Object) this;

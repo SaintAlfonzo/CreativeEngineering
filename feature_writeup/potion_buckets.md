@@ -15,8 +15,8 @@
 - **Pending:** nothing built and unshipped. PB-01 to PB-23 have never been run. Findings F1 to F7 (section 4) are
   open; F1 and F3 need your call.
 - **Files to open:** [potion_area.js](../kubejs/startup_scripts/func/potion_area.js) (all the cloud tuning),
-  [server_scripts/engineering/potion_buckets.js](../kubejs/server_scripts/engineering/potion_buckets.js) (right click),
-  [potion_bottling.js](../kubejs/server_scripts/engineering/potion_bottling.js) (bucket recipes, from line 23),
+  [server_scripts/engineering/potion_buckets.js](../kubejs/data/creativeengineering/kubejs/engineering/potion_buckets.js) (right click),
+  [potion_bottling.js](../kubejs/data/creativeengineering/kubejs/engineering/potion_bottling.js) (bucket recipes, from line 23),
   [tipped_arrows.js](../kubejs/server_scripts/equipment/tipped_arrows.js).
 - **Knobs:** `global.potionArea.BUCKETS` in `potion_area.js` (radius, growth, linger time, wait, effect multiplier,
   rings per bucket) and `DEFAULT_EFFECTS`. Startup script: restart. Arrow tipping amounts are in `tipped_arrows.js`
@@ -139,8 +139,11 @@ Lingering `create:potion` only; one recipe pair per potion.
 - **F5.** FIXED 2026-10-23 (TODO `potions/potion-buckets #5`, with the Night Vision fallback bug). **Recipes for potions no machine holds.** 15 bucket recipes and 2 arrow recipes per registered potion, water,
   awkward, thick and mundane included. Water never exists as `create:potion` (Create uses plain water), so those
   never run; the arrow ones give vanilla's Arrow of Splashing / uncraftable arrows. Harmless JEI noise.
-- **F6. Dispensed clouds have no owner.** Kills from a dispensed harming or poison bucket credit nobody, and
-  owner-checking mods treat it as ambient.
+- **F6. Dispensed clouds have no owner.** FIXED 2026-11-02 (`potions/potion-buckets #3`, decided 2026-11-02: credit
+  the dispenser's owner; Creative Brewing, not yet in `mods/`). A dispenser placed by a player stores that player's UUID
+  in its block entity (Forge persistent data, `creativeengineering:DispenserOwner`, `PotionBucketDispenser.onPlace`);
+  a bucket it fires spawns clouds owned by that player while they are online in the same dimension, so a harming
+  bucket's kill credits them. Dispensers placed before the change, or the owner offline: no owner, as before. Test PB-24.
 - **F7. The dome and the textures were never checked in game** ([todo.txt](todo/todo.txt): shape and feel of the ring
   stack, and the liquid layer's brightness, `lum * 1.6` in the texture tool).
 
@@ -167,11 +170,11 @@ Lingering `create:potion` only; one recipe pair per potion.
 
 - [startup_scripts/items/potion_buckets.js](../kubejs/startup_scripts/items/potion_buckets.js): items, tint, bottle remainder.
 - [startup_scripts/func/potion_area.js](../kubejs/startup_scripts/func/potion_area.js): `global.potionArea`, dispenser handler install.
-- [server_scripts/engineering/potion_buckets.js](../kubejs/server_scripts/engineering/potion_buckets.js): right click.
-- [server_scripts/engineering/potion_bottling.js](../kubejs/server_scripts/engineering/potion_bottling.js): `bucketRecipes()`.
+- [server_scripts/engineering/potion_buckets.js](../kubejs/data/creativeengineering/kubejs/engineering/potion_buckets.js): right click.
+- [server_scripts/engineering/potion_bottling.js](../kubejs/data/creativeengineering/kubejs/engineering/potion_bottling.js): `bucketRecipes()`.
 - [client_scripts/potion_buckets.js](../kubejs/client_scripts/potion_buckets.js): tooltip ([tooltips.md](tooltips.md)).
 - [server_scripts/equipment/tipped_arrows.js](../kubejs/server_scripts/equipment/tipped_arrows.js): machine tipping.
-- [potion/PotionBucketDispenser.java](../development/patcherMod/src/main/java/com/SaintAlfonzo/creativeengineering/potion/PotionBucketDispenser.java): dispenser (`CreativeEngineering.java` line 290).
+- [potion/PotionBucketDispenser.java](../development/creativeCommon/src/main/java/com/SaintAlfonzo/creativecommon/potion/PotionBucketDispenser.java): dispenser (`CreativeEngineering.java` line 290).
 - Textures: `kubejs/assets/creativeengineering/textures/item/{potion,splash_potion,lingering_potion}_bucket[_liquid].png`; [tools/potion_bucket_texture.py](../tools/potion_bucket_texture.py).
 - `item_dict.js`: `i.ce_potion_bucket`, `i.ce_splash_potion_bucket`, `i.ce_lingering_potion_bucket`.
 
@@ -182,6 +185,8 @@ dispenser behaviors registered`, and `potion bottling done (N recipes)` / `tippe
 recipes)` with N > 0.
 
 ## 7. In-game test suite
+
+- **r1102b 2026-11-02** (scratch server; verdicts in `perf/runs/r1102b/` HANDOVER.md and the slice judged.md): PASS SQ-LE-01, -03, -03b, -03c, -04, -05.
 
 - [ ] **PB-01 Looks:** `/give` each bucket with `{Potion:"minecraft:swiftness"}` → light-blue liquid, bucket body
   untinted; a blank bucket's liquid is white.
@@ -221,6 +226,9 @@ recipes)` with N > 0.
   a block: nothing happens, bucket kept. A bucket with no NBT still bursts Night Vision.
 - [ ] **PB-23 Survival cooldown:** survival, two Swiftness buckets in the hotbar, burst one and switch to the other
   within a second: the second is on cooldown (white sweep on the slot).
+- [ ] **PB-24 Dispenser owner:** place a new dispenser, load a Harming potion bucket (II), power it with a pig in front
+  (not undead: Harming heals them): the pig dies and drops XP, and `/scoreboard objectives add k minecraft.killed:minecraft.pig`
+  then a second kill shows 1 for you. An old dispenser, or the placer logged out: no XP, no credit.
 
 ## 8. History
 
@@ -232,3 +240,4 @@ recipes)` with N > 0.
 - 2026-10-23: survival cooldown fixed (`potions/potion-buckets #4`); no-effect potion buckets no longer burst Night
   Vision and are kept, and no bucket / tipped arrow recipes are made for no-effect potions (`#5`, F5). Tests PB-21 to
   PB-23. Dispensed no-effect buckets are still emptied (the dispenser path ignores the empty result). Not run in game.
+- 2026-11-02: dispensed clouds credit the dispenser's placer (F6, `#3`). Test PB-24. Not run in game.

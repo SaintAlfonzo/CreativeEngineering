@@ -3,7 +3,7 @@
 Lint for the player changelog files (feature_writeup/changelog.md 3.2, 3.5), plus the stamping helpers
 tools/build_deploy.py uses to ship the working list as a version file.
 
-Folder: kubejs/assets/creativeengineering/changelog/
+Folder: kubejs/assets/creativecommon/changelog/
   unreleased.md   the working list: first line `# Unreleased` (optionally `# Unreleased - Subtitle`), no date line
   <version>.md    first line `# <version>` (optionally ` - Subtitle`), second line `Released yyyy-mm-dd`
 
@@ -29,8 +29,8 @@ import re
 import sys
 
 ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
-FOLDER = os.path.join(ROOT, 'kubejs', 'assets', 'creativeengineering', 'changelog')
-KUBEJS_PREFIX = 'assets/creativeengineering/changelog/'   # path inside kubejs/ (build_deploy's file keys)
+FOLDER = os.path.join(ROOT, 'kubejs', 'assets', 'creativecommon', 'changelog')
+KUBEJS_PREFIX = 'assets/creativecommon/changelog/'   # path inside kubejs/ (build_deploy's file keys)
 UNRELEASED = 'unreleased'
 
 VERSION = re.compile(r'\d+(\.\d+)*')
@@ -40,7 +40,7 @@ ICON_ID = re.compile(r'[a-z0-9_.-]+:[a-z0-9_./-]+')
 BULLET = re.compile(r'^( *)([-*+]) (.*)$')
 DATE_LINE = re.compile(r'Released (\d{4}-\d{2}-\d{2})')
 DEV_WORDS = [
-    (re.compile(r'patcherMod', re.I), 'patcherMod'),
+    (re.compile(r'creativeCommon', re.I), 'creativeCommon'),
     (re.compile(r'KubeJS', re.I), 'KubeJS'),
     (re.compile(r'\bmixins?\b', re.I), 'mixin'),
     (re.compile(r'CEConfig'), 'CEConfig'),

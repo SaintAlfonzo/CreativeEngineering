@@ -62,8 +62,8 @@
     }
 
     function shield(level) {
-        const $ShieldConfig = Java.loadClass('com.SaintAlfonzo.creativeengineering.shield.ShieldConfig')
-        const $ShieldTier = Java.loadClass('com.SaintAlfonzo.creativeengineering.shield.ShieldTier')
+        const $ShieldConfig = Java.loadClass('com.SaintAlfonzo.creativeequipment.shield.ShieldConfig')
+        const $ShieldTier = Java.loadClass('com.SaintAlfonzo.creativeequipment.shield.ShieldTier')
         ;['ECHO', 'FELSIC', 'DRAGON'].forEach(t => log('INFO shielderEffects ' + t + ' = "' + $ShieldConfig.shielderEffects($ShieldTier[t]) + '"'))
         SHIELDS.forEach(row => {
             // Not zombies: undead mobs can't get Regeneration or Poison (dragon shield)
@@ -161,7 +161,7 @@
     function vein(level) {
         const $VU = Java.loadClass('com.SaintAlfonzo.creativeengineering.excavation.VeinUndo')
         const $VUA = Java.loadClass('com.SaintAlfonzo.creativeengineering.excavation.VeinUndoAccess')
-        const $CE = Java.loadClass('com.SaintAlfonzo.creativeengineering.CEConfig')
+        const $CE = Java.loadClass('com.SaintAlfonzo.creativecommon.CommonConfig')
         const $History = Java.loadClass('oreexcavation.undo.ExcavateHistory')
         const $BlockHistory = Java.loadClass('oreexcavation.undo.BlockHistory')
         const $Deque = Java.loadClass('java.util.ArrayDeque')
@@ -196,7 +196,7 @@
     }
 
     function sack(level) {
-        const $SB = Java.loadClass('com.SaintAlfonzo.creativeengineering.compat.SackBundle')
+        const $SB = Java.loadClass('com.SaintAlfonzo.creativecommon.compat.SackBundle')
         const $Slot = Java.loadClass('net.minecraft.world.inventory.Slot')
         const $SlotAccess = Java.loadClass('net.minecraft.world.entity.SlotAccess')
         const $Click = Java.loadClass('net.minecraft.world.inventory.ClickAction')

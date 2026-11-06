@@ -1,0 +1,8 @@
+{
+  "parent": "barbequesdelight:custom/tray_support",
+  "textures": {
+    "1": "barbequesdelight:block/spruce_tray",
+    "2": "barbequesdelight:block/spruce_tray",
+    "particle": "barbequesdelight:block/spruce_tray"
+  }
+}

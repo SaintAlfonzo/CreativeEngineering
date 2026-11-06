@@ -18,7 +18,7 @@
 - **Files to open:** [archery.js](../kubejs/server_scripts/equipment/archery.js) (every arrow recipe),
   [bullets.js](../kubejs/server_scripts/equipment/bullets.js),
   [equipmenttags.js](../kubejs/server_scripts/tags/equipmenttags.js) lines 44-105 (fletching and shaft tags),
-  [blueprints.js](../kubejs/server_scripts/engineering/blueprints.js) (the blueprints).
+  [blueprints.js](../kubejs/data/creativeengineering/kubejs/engineering/blueprints.js) (the blueprints).
 - **Knobs:** none; all recipes (`/reload`).
 
 ## 1. Overview
@@ -142,7 +142,7 @@ IE's own cartridge recipes are untouched.
   `bullet`. The finding before the fix: It uses blueprint category `projectiles`;
   no recipe in the pack makes a `{blueprint:"projectiles"}` and IE's own categories are `bullet` and `specialBullet`
   (checked 2026-10-21 in the IE 9.2.4-170 jar: IE's own armor-piercing recipe is in `bullet`). Fix: change the category to `bullet`, or add a `projectiles` blueprint
-  to [blueprints.js](../kubejs/server_scripts/engineering/blueprints.js) and its duplication list.
+  to [blueprints.js](../kubejs/data/creativeengineering/kubejs/engineering/blueprints.js) and its duplication list.
 - **F2. Split arrow costs differ.** DECIDED 2026-10-29 (owner): keep both costs (TODO `gear/archery #3`). The grid recipe takes 6 arrows + 1 wire for 2 split arrows; the
   blueprint takes 4 arrows + 1 wire for the same 2. Pick one.
 - **F3. The archery blueprint needs an Ethereal Arrow.** KEPT 2026-10-22 (TODO `gear/archery #4`): intended, the
@@ -191,12 +191,12 @@ IE's own cartridge recipes are untouched.
 
 - [server_scripts/equipment/archery.js](../kubejs/server_scripts/equipment/archery.js): removals, fletching, arrows, quiver, slingshot.
 - [server_scripts/equipment/bullets.js](../kubejs/server_scripts/equipment/bullets.js): armor-piercing bullets.
-- [server_scripts/engineering/blueprints.js](../kubejs/server_scripts/engineering/blueprints.js): `archery` and `bullet` blueprints, blueprint duplication.
+- [server_scripts/engineering/blueprints.js](../kubejs/data/creativeengineering/kubejs/engineering/blueprints.js): `archery` and `bullet` blueprints, blueprint duplication.
 - [server_scripts/tags/equipmenttags.js](../kubejs/server_scripts/tags/equipmenttags.js): `#forge:fletching`, `#forge:arrow_shaft/*`.
 - [server_scripts/magic/enchants.js](../kubejs/server_scripts/magic/enchants.js), [client_scripts/jeichanges.js](../kubejs/client_scripts/jeichanges.js): NEA enchantments.
-- [startup_scripts/items/misc_items.js](../kubejs/startup_scripts/items/misc_items.js) (`creativeengineering:arrow_fletching`), [startup_scripts/_lib/removed_items.js](../kubejs/startup_scripts/_lib/removed_items.js) (NEA quiver and torch arrow).
+- [startup_scripts/items/misc_items.js](../development/creativeEngineering/src/main/resources/kubejs_startup/creativeengineering/items/misc_items.js) (`creativeengineering:arrow_fletching`), [startup_scripts/_lib/removed_items.js](../kubejs/startup_scripts/_lib/removed_items.js) (NEA quiver and torch arrow).
 - [client_scripts/tooltips.js](../kubejs/client_scripts/tooltips.js) lines 592-618 and 673: one line per arrow.
-- patcherMod: [CycleEnchantmentMixin](../development/patcherMod/src/main/java/com/SaintAlfonzo/creativeengineering/mixin/CycleEnchantmentMixin.java), [StockpileEnchantmentMixin](../development/patcherMod/src/main/java/com/SaintAlfonzo/creativeengineering/mixin/StockpileEnchantmentMixin.java), [RecoveryEnchantmentMixin](../development/patcherMod/src/main/java/com/SaintAlfonzo/creativeengineering/mixin/RecoveryEnchantmentMixin.java), [compat/NockRecipeBookSync.java](../development/patcherMod/src/main/java/com/SaintAlfonzo/creativeengineering/compat/NockRecipeBookSync.java) (`CreativeEngineering.java` line 291).
+- patcherMod: [CycleEnchantmentMixin](../development/creativeCommon/src/main/java/com/SaintAlfonzo/creativecommon/mixin/CycleEnchantmentMixin.java), [StockpileEnchantmentMixin](../development/creativeCommon/src/main/java/com/SaintAlfonzo/creativecommon/mixin/StockpileEnchantmentMixin.java), [RecoveryEnchantmentMixin](../development/creativeCommon/src/main/java/com/SaintAlfonzo/creativecommon/mixin/RecoveryEnchantmentMixin.java), [compat/NockRecipeBookSync.java](../development/creativeCommon/src/main/java/com/SaintAlfonzo/creativecommon/compat/NockRecipeBookSync.java) (`CreativeEngineering.java` line 291).
 - `NCH.fletching` (~line 888) and `NCH.ieBlueprint` (~line 1787) in [neoCraftHelper.js](../kubejs/startup_scripts/func/neoCraftHelper.js).
 - Not here: tipped arrows ([potion_buckets.md](potion_buckets.md) 2.5); the dragon bow and crossbow ([gear_tuning.md](gear_tuning.md), [armor_effects.md](armor_effects.md)).
 
@@ -258,3 +258,4 @@ replacement or a hidden item.
 - 2026-11-01: F9 found and fixed (`loot/tables #10`): loot already clean; the three NEA mixins now also override
   `isTradeable` (`m_6594_`), so no librarian (vanilla or DVT) or LC cashier offers them. AR-14 updated. patcherMod built,
   not installed; needs install + restart. Not run in game.
+- 2026-11-04: archery recipes and shaft / fletching tags moved to Creative Equipment (`kubejs/data/creativeequipment/kubejs/equipment/archery.js`, `tags/equipmenttags.js`); `NockRecipeBookSync` too. The NEA enchantment mixins and filters moved to Creative Magic ([creative_magic.md](creative_magic.md)). Same behaviour.

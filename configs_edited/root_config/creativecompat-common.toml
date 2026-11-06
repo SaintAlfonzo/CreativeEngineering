@@ -1,0 +1,71 @@
+#Immersive Weathering leaf piles (1-8 layers). Their slowdown is still IW's own (on/off: IW
+#leaf_piles_slow; Depth Strider, foxes and bees walk through); this sets the height it starts at.
+[leaf_piles]
+	#Layers a leaf pile needs before it slows walking, and before WTHIT shows a Run Speed line for it.
+	#IW's own rule is 4 (more than 3 layers). 9 = piles never slow. Movement is worked out on the
+	#client too, so keep this the same on the server and every client.
+	#Range: 1 ~ 9
+	slowFromLayers = 4
+
+#Moss block and moss carpet colour (client only; the server ignores this section).
+[moss]
+	#On: moss block and moss carpet take the biome's grass colour, like grass blocks.
+	#Off: vanilla's fixed green moss. Read when models load: press F3+T or restart after changing it.
+	biomeTint = true
+	#How far moss follows the grass colour. 1.0 = shifts as much as grass does from Lush Caves
+	#grass (where moss keeps its vanilla green); 0.0 = vanilla green everywhere. Chunks pick up
+	#a change when they re-render (F3+A).
+	#Range: 0.0 ~ 1.0
+	tintStrength = 1.0
+
+#Shears on a modded vine (Floral Enchantment's flower vines, Botania's solid vine) stop it growing,
+#as Quark's Shear Vines does for the vanilla vine. Shears on the tip of a weeping, twisting or cave
+#vine or kelp stop it growing longer (1.20's behaviour).
+[vine_shearing]
+	#Shears stop vines growing. Off: shears do nothing to vines (vines already sheared stay so).
+	enabled = true
+	#Shearing a modded vine also removes the same vine hanging below it, as Quark does.
+	cutBelow = true
+	#Client: a sheared modded vine is drawn with its bottom trimmed, like Quark's cut vine. Read when
+	#models load: press F3+T or restart after changing it.
+	trimmedLook = true
+
+#Quark monster boxes (server side).
+[monster_box]
+	#true: a box stays after it spawns its wave, ejects one reward when the wave is gone, then waits
+	#cooldownTicks before it can trigger again; it only breaks while sneaking, and Create drills skip it.
+	#false: Quark's own box (breaks itself after spawning).
+	vaultMode = true
+	#Game ticks between the reward and the box re-arming (72000 = 1 hour).
+	#Range: > 20
+	cooldownTicks = 72000
+	#Loot table rolled once for the reward; one stack of the result is ejected.
+	rewardTable = "creativeengineering:misc/monster_box_reward"
+	#true: the ejected stack is cut to 1 item; false: the stack as the table rolled it.
+	rewardSingleCount = false
+	#A wave mob farther than this many blocks from its box counts as gone.
+	#Range: 4 ~ 256
+	leashRange = 24
+	#Ticks between checks of an active box's wave.
+	#Range: 1 ~ 200
+	checkIntervalTicks = 20
+
+#TrashSlot defaults (client side). Screens are full Java class names; F3 can't show them,
+#but TrashSlotSaveState.json in the game folder lists every screen opened so far.
+[trash_slot]
+	#Screens that show the trash slot by default. Each one is switched on once per client, the
+	#first time it opens after being added here; pressing the toggle key afterwards still sticks.
+	enabledScreens = ["net.minecraft.client.gui.screens.inventory.InventoryScreen", "net.minecraft.client.gui.screens.inventory.CreativeModeInventoryScreen", "net.minecraft.client.gui.screens.inventory.ContainerScreen", "net.minecraft.client.gui.screens.inventory.CraftingScreen", "net.minecraft.client.gui.screens.inventory.FurnaceScreen", "net.minecraft.client.gui.screens.inventory.BlastFurnaceScreen", "net.minecraft.client.gui.screens.inventory.SmokerScreen", "net.minecraft.client.gui.screens.inventory.AnvilScreen", "net.minecraft.client.gui.screens.inventory.SmithingScreen", "net.minecraft.client.gui.screens.inventory.GrindstoneScreen", "net.minecraft.client.gui.screens.inventory.StonecutterScreen", "net.minecraft.client.gui.screens.inventory.LoomScreen", "net.minecraft.client.gui.screens.inventory.CartographyTableScreen", "net.minecraft.client.gui.screens.inventory.EnchantmentScreen", "net.minecraft.client.gui.screens.inventory.BrewingStandScreen", "net.p3pp3rf1y.sophisticatedbackpacks.client.gui.BackpackScreen"]
+	#true: every other container screen (modded machines, storage, ...) also shows it by default,
+	#except the ones in excludedScreens. false: only enabledScreens do.
+	allContainers = false
+	#Never switched on by allContainers.
+	excludedScreens = ["net.p3pp3rf1y.sophisticatedbackpacks.client.gui.BackpackSettingsScreen"]
+	#Starting position for a screen the player hasn't opened yet: 'class|anchorX|anchorY|x|y'.
+	#The anchor is a fraction of the panel (0.5 = centre, 1.0 = right/bottom edge) and x/y are
+	#pixels from it to the slot's top-left; the slot is 28x28. Screens not listed start under the
+	#panel's bottom-right corner. Dragging the slot in game overrides this.
+	positions = ["net.minecraft.client.gui.screens.inventory.CreativeModeInventoryScreen|1.0|1.0|0|-28", "net.p3pp3rf1y.sophisticatedbackpacks.client.gui.BackpackScreen|1.0|1.0|-28|0"]
+	#true: each Sophisticated Backpacks tier (leather, copper, iron, gold, diamond, netherite)
+	#remembers its own trash slot position and on/off state. false: all backpacks share one.
+	splitBackpacksByTier = true

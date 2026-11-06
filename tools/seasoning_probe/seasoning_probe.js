@@ -7,7 +7,7 @@
     const $SNUUID = Java.loadClass('java.util.UUID')
     const $SNCraftingContainer = Java.loadClass('net.minecraft.world.inventory.CraftingContainer')
     const $SNRecipeType = Java.loadClass('net.minecraft.world.item.crafting.RecipeType')
-    const $SNSeasonings = Java.loadClass('com.SaintAlfonzo.creativeengineering.food.Seasonings')
+    const $SNSeasonings = Java.loadClass('com.SaintAlfonzo.creativedelight.food.Seasonings')
     const $SNRL = Java.loadClass('net.minecraft.resources.ResourceLocation')
     const $SNList = Java.loadClass('java.util.List')
     const i = global.item

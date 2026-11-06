@@ -1,8 +1,9 @@
 # End's Delight and Ender's Delight
 
-**Built 2026-10-25, Shipped in 1.1.03 (deployed to server and players 2026-10-26)** (section 5); scratch SQ-EN-01 to -04, -06 PASSED 2026-10-26, SQ-EN-07 partial; EN- rows not run in game. End's Delight 2.1 is a Creative Delight member
-(`repackedEnds`, now `-ce-19.2-02`); Ender's Delight 1.2.2 stays its own ARR jar, and its 1.1.4 content is rebuilt in the
-new CD member `enders_additions` (`development/creativeDelight/members/enders/`). Decision rows: `largecontent/mod-additions
+**Built 2026-10-25, Shipped in 1.1.03 (deployed to server and players 2026-10-26)** (section 5); scratch SQ-EN-01 to -04, -06 PASSED 2026-10-26 (SQ-EN-04, -06 again r1102b; SQ-EN-03 OPEN in r1102b: void pepper spread not probed), SQ-EN-07 partial; EN- rows not run in game. Shulker meat merge (Ender's into End's) BUILT 2026-11-02, scratch PASSED r1102b (5.8). End's Delight 2.1 is a Creative Delight member
+(`repackedEnds`, now `-ce-19.2-03`); Ender's Delight 1.2.2 stays its own ARR jar, and its 1.1.4 content (mod id
+`enders_additions`) is rebuilt inside the End's member (`development/creativeDelight/members/ends/`, merged 2026-11-02,
+section 5.9; built, not in a CD jar yet). Decision rows: `largecontent/mod-additions
 #4`, `#15`, `#28`, `#29` and `creativedelight/members #7` in [todo/TODO.md](todo/TODO.md). Test prefix `EN-` (section 5.6).
 
 Split out of the former combined add-ons survey (survey written 2026-10-23, planned rows added 2026-10-24).
@@ -143,7 +144,7 @@ newer jar dropped the Twisted Cereal wooden-bowl recipe, an item the pack alread
 | Amberveil Stew | amberveil, crushed void pepper, ethereal saffron, chorus flower | 4 / 0.5, Regeneration 0:30 |
 | Amberveiled Curry | amberveil, crushed void pepper, chorus flower | 5 / 0.5, Absorption 3:00 |
 | Veil of Flames Risotto | amberveil, ethereal saffron, chorus flower | 7 / 0.9, Fire Resistance 2:00 |
-| Chicken Curry | amberveil, ethereal saffron, crushed void pepper, chicken, chicken cuts, rice | 7 / 0.9, Nourishment 5:00 |
+| End Chicken Curry (was Chicken Curry; renamed 2026-11-01, Large Meals keeps the name) | amberveil, ethereal saffron, crushed void pepper, chicken, chicken cuts, rice | 7 / 0.9, Nourishment 5:00 |
 | Steak With French Fries | crushed void pepper, beef, milk bottle, potato | 6 / 0.7 |
 
 Crushed Void Pepper: Farmer's Delight knife, voidpepper to 2; Create milling, voidpepper to 2 with a 30% chance of a third.
@@ -221,9 +222,11 @@ author FoggyHillside. TODO: `largecontent/mod-additions #29`.
 |---|---|
 | Newer-jar review (sections 3.1, 3.2, 3.3) | Written 2026-10-25 |
 | Overlap survey (section 1) | Written 2026-10-23 |
-| End's 2.6.1 changes, Ender's 1.1.4 content, End House, integration rows (section 5) | BUILT 2026-10-25 in the CD jar (`creative_delight-1.0.0.jar` with `repackedEnds-1.19.2-2.1-ce-19.2-02`, `endersAdditions-1.1.4-ce-19.2-01`); not installed; EN-01 to EN-16 queued |
+| End's 2.6.1 changes, Ender's 1.1.4 content, End House, integration rows (section 5) | BUILT 2026-10-25 in the CD jar (`creativedelight-1.0.0.jar` with `repackedEnds-1.19.2-2.1-ce-19.2-02`, `endersAdditions-1.1.4-ce-19.2-01`); shipped 1.1.03; scratch per 5.6; EN- rows not run in game (deep scan 2026-11-02) |
 | Food tuning, cans, names audit for the new items | Open: needs `/dumpall` after install (section 5.5) |
 | Tower spacing / End grouping pass; strict y 50 House check | Open decisions (section 5.5) |
+| Ender's 1.1.4 art and data via donor jar (`members #9`, section 5.3) | BUILT 2026-11-01, folded into `repackedEnds` -03 on 2026-11-02 (row below; donor read unchanged) (`endersAdditions-1.1.4-ce-19.2-03` in the CD jar; in `mods/` since the CD jar of 11-02 14:01, not played); needs `enders_upstream/endersdelight-1.1.4.jar` on server and clients; SQ-DNR-E queued, not run (not in r1102b's scope); donor route kept, member merged into End's (5.9) |
+| Ender's 1.1.4 content merged into the End's member (`members #46`, plan J1, section 5.9) | BUILT 2026-11-02 (`repackedEnds-1.19.2-2.1-ce-19.2-03`, two mods in one jar); nested in the CD jar installed 2026-11-02 23:16 (and 2026-11-03 00:08); old member `members/enders` deleted; not booted; SQ-ENM-01 to -05 queued (SQ-CDJ6) |
 
 ## 5. Built 2026-10-25
 
@@ -239,10 +242,10 @@ Mysticrift End tower in `type/end_constructed`; mortar route for Crushed Void Pe
 | Dragon drops with no tool (2.1's dragon_meat 5 to 7, dragon_leg 2, dragon_tooth 1 or 2); knife extras +2 meat, +1 tooth (2.6.1's files); machete: `nd_add_dragon_meat` / `_tooth` rewritten to the same extras, `nd_add_dragon_leg` taken off the list; the other four `nd_` (mob parts) unchanged. `dragon_loot_tools` tag now unused | `members/ends/src/main/resources/data/ends_delight/loot_modifiers/`, `data/forge/loot_modifiers/global_loot_modifiers.json` (pinned in `replaced_resources`) |
 | Dragon Tooth tier repairs with a Dragon Tooth (was Bone Block); other tier values stay 2.1's (`gear #12`) | overlay mixin `com.SaintAlfonzo.creativedelight.ends.mixin.DragonToothTierMixin` (target `MaterialRegistry$4.m_6282_`), `ends_delight.ce.mixins.json` |
 | 13 retextures from 2.6.1 | overlay `assets/ends_delight/textures/`, pinned; NOTICE updated |
-| Dragon Tooth Knife smithed (egg shell knife + tooth), shapeless craft removed; crimson fungus inputs of Assorted Salad, Roasted Dragon Steak, Dragon Leg with Sauce -> `#creativeengineering:cookable_fungi` (crimson, warped, inky cap, morel, truffle; Ender Noodle already took 4 options, unchanged); End's crate unpack removed (shared route); heatless grid routes for the 9 pot meals | `kubejs/data/creative_delight/kubejs/ends_delight/recipes.js` |
+| Dragon Tooth Knife smithed (egg shell knife + tooth), shapeless craft removed; crimson fungus inputs of Assorted Salad, Roasted Dragon Steak, Dragon Leg with Sauce -> `#creativeengineering:cookable_fungi` (crimson, warped, inky cap, morel, truffle; Ender Noodle already took 4 options, unchanged); End's crate unpack removed (shared route); heatless grid routes for the 9 pot meals | `kubejs/data/creativedelight/kubejs/ends_delight/recipes.js` |
 | Tags: crate in `forge:storage_blocks/chorus_fruit` (block: axe), pie slice in `#creativeengineering:chorus_pie_slice`, shulker meat and slice in `#endersdelight:shulker_loot`, the fungus tag | `ends_delight/tags.js` |
 | Chorus Succulent kept: 2.1 places it from Java (`ends_delight:chorus_succulent`, 1 in 8 chunks, 20 tries) in End Highlands; now the wild-crops rule `chorus_succulent` with the same feature type and biome, 2.1's modifier `forge:none` | `_worldgen/wild_crops.json`, `worldgen/*/wild/chorus_succulent.json` |
-| Drop tooltips and JEI pages (7 items) | `kubejs/assets/creative_delight/kubejs/ends_delight/` |
+| Drop tooltips and JEI pages (7 items) | `kubejs/assets/creativedelight/kubejs/ends_delight/` |
 
 ### 5.2 Ender's Delight (non-member, pack rows in CD's `endersdelight` folder)
 
@@ -252,18 +255,21 @@ Mysticrift End tower in `type/end_constructed`; mortar route for Crushed Void Pe
 | Mining tags (crate axe, stove pickaxe), Shulker Filet in `#forge:shulker_meat` (End's pot meals take it), pie slice tag, soils, spice tag | `endersdelight/tags.js` |
 | Self-drop loot tables for Chorus Crate and Endstone Stove (1.1.4's files) | `enders_additions` jar `data/endersdelight/loot_tables/blocks/` |
 | 12 retextures from 1.1.4 (MIT notice beside them) | `kubejs/assets/endersdelight/textures/item/` (the KubeJS pack sits above mod jars; a member jar cannot override the ARR jar's paths) |
-| Knife drop tooltips and JEI pages (sight, crust, mollusk); "You need a Shulker Bowl to eat this" | `kubejs/assets/creative_delight/kubejs/endersdelight/client.js` |
+| Knife drop tooltips and JEI pages (sight, crust, mollusk); "You need a Shulker Bowl to eat this" | `kubejs/assets/creativedelight/kubejs/endersdelight/client.js` |
 
 ### 5.3 Ender's 1.1.4 content (member `enders_additions`)
 
+**Owner decision 2026-11-02 (superseding): the 1.2.2 donor route is dropped (creative_delight.md 38.5). Ender's 1.2.2 stays its own jar; this member's content folds into the End's member (done 2026-11-02, section 5.9) and registers whether or not `endersdelight` is present (plan J1.2; old worlds without Ender's may lose the 1.2.2 items, accepted).** Earlier decision, void: Owner decision 2026-11-02: Ender's Delight 1.2.2 itself is also nested in Creative Delight on the Oceanic donor route** (our own code for every upstream id, art and data read from the unmodified `enders_upstream/endersdelight-1.2.2.jar`, nothing of it shipped, the installed jar leaves `mods/`), absorbing this member. TODO `creativedelight/members #33`; plan in creative_delight.md 38.1. Not built.
+
+
 Mod id `enders_additions`, registers under `endersdelight:` (Forge may log an "alternative prefix" warning); hard
-dependency on `endersdelight` and `farmersdelight`. Build guard `checkNoArrResources` fails on any path the ARR jar has.
+dependency on `farmersdelight`, optional (load-after) on `endersdelight` since the merge (5.9; before: hard). Build guard `checkNoArrResources` fails on any path the ARR jar has.
 Blocks `amberveil_mushroom`, `ethereal_saffron_bush`, `chorus_flame_block` (age 0 to 2), `voidpepper_block` (multiface,
 no block entity: 1.1.4's was dead code); items `amberveil`, `ethereal_saffron`, `chorusflame`, `voidpepper`,
 `crushed_voidpepper` and five Shulker Bowl dishes (1.1.4 food values: stew and curry also give Speed 2:00). Names:
 the pepper item reads "Void Pepper", the spice "Crushed Void Pepper" (1.1.4: "Void Pepper Sprout" / "Void Pepper").
 
-- Soil: all four survive only on `#creative_delight:end_plant_soil_slow` (end stone) or `_fast` (Endercrop's tilled end
+- Soil: all four survive only on `#creativedelight:end_plant_soil_slow` (end stone) or `_fast` (Endercrop's tilled end
   stone); the void pepper on any attached face. Growth chances in `config/enders_additions-common.toml [growth]`:
   `chorusflameGrowthSlow` 0.1, `chorusflameGrowthFast` 0.2 (1.1.4: 1/5), `voidpepperTickSlow` 0.5, `voidpepperTickFast` 1.0.
 - Void pepper blockstate fixed so the plain and fruiting vines no longer overlap; spread waits for loaded chunks.
@@ -274,6 +280,25 @@ the pepper item reads "Void Pepper", the spice "Crushed Void Pepper" (1.1.4: "Vo
   void barrens. `tools/gen_crop_worldgen_table.py` now accepts registered non-Overworld biomes in `add` and knows the
   five End crops.
 - Not ported: the `end_flames` particle (1.1.4 uses it on its own stove only).
+
+**Donor jar (2026-11-01, TODO `creativedelight/members #9`, owner: donor route in case of licence issues).** The member
+jar (`endersAdditions-1.1.4-ce-19.2-03`) no longer carries any 1.1.4 file. The art and data are read at load from the
+unmodified `endersdelight-1.1.4.jar` (sha1 `d1541d70c7dbae71c2a7e1693f512f2166908802`) in `<game dir>/enders_upstream/`
+(`upstream/UpstreamJars`, shared `DonorJars` / `BuiltInPacks`), as two always-on bottom packs `enders_upstream_assets` /
+`enders_upstream_data`; the game stops with a message naming the folder and file when it is missing or a different file.
+`upstream/EndersTranslator` takes only the 48 listed paths (the set the member shipped, reviewed 2026-10-25), none of
+which exists in the installed 1.2.2 jar, so 1.2.2's own look and data are untouched. Still in the jar: our code,
+`mods.toml`, `pack.mcmeta`, the lang file (our names for the 1.1.4 keys) and the MIT notice. Build guard
+`checkNoArrResources` now checks against both the 1.2.2 jar and the donor.
+
+Review of the shipped files against the donor: 38 assets and 4 data files were byte-identical (blockstates, models,
+textures, the End House pool and set); `end_house.nbt` and the `endstone_stove` table differed only in compression /
+formatting (same content). Edited, now done in memory by the translator: the `voidpepper_block` blockstate (each
+multipart case states `pepper`, so plain and fruiting vines no longer overlap), the `end_house` structure (type
+`minecraft:jigsaw`, `minecraft:` biome ids), the six block loot tables (1.20 `random_sequence` dropped, `type`
+`minecraft:block`; Chorus Crate also gets `survives_explosion`). An offline harness checked that all 48 translated files
+equal the previously shipped ones (JSON compared as data), so nothing changes in game. Registry ids unchanged (same id
+strings in `EABlocks` / `EAItems` as -01 and -02).
 
 ### 5.4 End House
 
@@ -292,7 +317,44 @@ now scans jars nested in `META-INF/jarjar/`. The Mysticrift End tower is in `typ
   new items and End's integration rows; `/cegen run worldgen` (or `gen_structure_config.py` + `gen_structure_groups.py`).
 - `food/drinks #7` (pot teas cost more), machete review, End gear values (`gear #12`) unchanged.
 
+### 5.7 Ender's Delight 1.2.2 inventory (`creativedelight/members #33` step 1, 2026-11-02)
+
+Read from the installed `mods/endersdelight-1.19-1.2.2.jar` (ARR, mod id `endersdelight`, needs Farmer's Delight
+`[1.19-1.2,)`, no mixins, no entities) against the pack. Inventory only: the member (`portedEnders`) is not built.
+
+| Kind | Upstream 1.2.2 | Where the pack touches it |
+|---|---|---|
+| Items (24 + 4 block items) | chorus_juice, chorus_pie_slice, chorus_stew(_wood), crawling_sandwich, crispy_skewer, ender_paella(_wood), ender_shard, enderman_sight, endermite_stew(_wood), mite_crust, pearl_pasta(_wood), shulker_bowl, shulker_filet, shulker_mollusk, sight_fragment, strange_eclair, stuffed_shulker_bowl, twisted_cereal(_wood), uncanny_cookies | `item_dict.js` (41 `endersdelight:` keys, 1.1.4 content included), `food_dict.js`, `tool_dict.js` / `misc_dict.js` (shulker_bowl, the `_wood` stews, ender_shard, enderman_sight, sight_fragment, chorus_crate, endstone_stove), CD `endersdelight/food_types.js`, `placeable.js`, startup `endersdelight/can_types.js`, `creativeengineering/baked_goods.js` (strange_eclair), Moonlight soft fluids (`chorus_stew`, `endermite_stew`) |
+| Blocks (4) | chorus_crate, chorus_pie, endstone_stove, stuffed_shulker_block (blockstates: the same four) | `block_dict.js` (chorus_crate, endstone_stove); the stove is in Farmer's `heat_sources` block tag (upstream data) |
+| Block entity (1) | endstone stove (FD stove behaviour: cooks up to 6 items on top, burns entities standing on it), with its renderer | patcherMod damage tags `burn_tick`, `fire` name the `endersdelight.endstone_stove` damage |
+| Effect (1) | `endersdelight:phasing` (acts when the player is attacked, class `WhenPlayerIsAttacked`; exact behaviour to read in game); damage source `wasWatered` | `ShieldConfig` default list (`endersdelight:phasing`), damage tags `armor_piercing`, `environmental` (`wasWatered`) |
+| Recipes (21) | chorus_crate, chorus_fruit_from_crate, chorus_juice, chorus_pie, chorus_pie_slice, cooking/{chorus_stew, ender_paella, endermite_stew, pearl_pasta, stuffed_shulker}, crawling_sandwich, crispy_skewer, cutting/{ender_shard, shulker_filet, sight_fragment}, endstone_stove, shulker_bowl, strange_eclair, twisted_cereal, twisted_cereal_wood, uncanny_cookies | CD `endersdelight/recipes.js` removes and rebuilds 5 (chorus_fruit_from_crate, shulker_bowl, crispy_skewer, crawling_sandwich, twisted_cereal_wood) and adds the rest of its rows under `creativedelight:`; `ends_delight/recipes.js` shares the chorus crate unpack |
+| Loot modifiers (4) | scavenging enderman sight (enderman), mite crust (endermite), shulker mollusk (shulker); slicing chorus pie | none in the pack (loot overhaul does not name them) |
+| Tags (4 files) | `endersdelight:items/enderman_loot`, `enderman_sight`, `shulker_loot`; `farmersdelight:blocks/heat_sources` | CD `endersdelight/tags.js` and `ends_delight/tags.js` (End's shulker meat in `#endersdelight:shulker_loot`) |
+| Lang (4 non-item keys) | `death.attack.wasWatered`, `effect.endersdelight.phasing`, `endersdelight.block.stuffed_shulker.use_shulker_bowl`, `itemGroup.endersdelighttab` | CD client `creativeengineering/names.js` renames the 1.1.4 blocks only |
+| Art | 51 textures, 46 models (28 item), 5 blockstates | read from the donor jar by the member, never copied (ARR) |
+| Classes (30) | blocks (stove, pie, stuffed shulker feast), the stove block entity and renderer, items (consumable, drinkable, chorus juice, stew), foods, creative tab, JEI plugin, effect and attack hook, damage source, tags, data generator, text util | the member writes its own for each, from behaviour |
+
+- **Overlap with `enders_additions` (1.1.4 member):** none by id. 1.1.4's 14 registrations (amberveil, amberveil_mushroom,
+  amberveil_stew, amberveiled_curry, chicken_curry, chorusflame, chorus_flame_block, crushed_voidpepper, ethereal_saffron,
+  ethereal_saffron_bush, steak_fries, veil_of_flames_risotto, voidpepper, voidpepper_block) are not in 1.2.2; both use
+  the `endersdelight` namespace, so folding them into one member (C2) is a merge of registers and donor reads, not a rename.
+  The 1.1.4 End House structure and its 48 donor paths stay as they are.
+- **Old worlds:** every id above and the four block state definitions must stay as 1.2.2 has them; nothing converts.
+- **Member build (steps 2 to 5 of 38.1, not started):** our code for the 28 items, 4 blocks, the stove block entity, the
+  Phasing effect and `wasWatered`; 1.2.2 art, models, lang, recipes, loot modifiers and tags read from
+  `enders_upstream/endersdelight-1.2.2.jar` (sha1 to pin) beside the 1.1.4 file; then the standalone jar leaves `mods/`.
+
 ### 5.6 Tests
+
+- **r1102b 2026-11-02** (scratch server; verdicts in `perf/runs/r1102b/` HANDOVER.md and the slice judged.md): PASS SQ-EN-04, -06; OPEN (no verdict, rerun row written) SQ-EN-03.
+- **plan_scratch_bugfix_1103 2026-11-03 (built, CD jar 19:43 and Creative Brewing jar 19:45, not installed):** the switch is back:
+  `members/ends/gradle.properties` `bundle_extra_mods=enders_additions`, and `writeMembersList` (CD and Creative Brewing
+  `build.gradle`) writes every member's extra mod ids, so `creativedelight_members.txt` lists `enders_additions` and
+  `CDConfig` gives it a `[members]` switch. Levitation: the reagent is `ends_delight:shulker_meat_slice` (shulker shell if
+  the slice is missing), and `mix()` skips an unknown or empty reagent with a warning, so no boot stops without Ender's 1.2.2.
+  Rerun SQ-ENM-03, -04b, -05b.
+- **r1103 2026-11-03** (scratch server; verdicts in `perf/runs/r1103/` FINAL.md and the slice judged.md): PASS SQ-ENM-02o, -01, -02, -04, -05, SQ-EN-03; FAIL SQ-ENM-04b: the `[members] enders_additions` switch is gone: no row in `creativedelight_members.txt`, so always on (`CDConfig.readMembers`; build-logic members task); FAIL SQ-ENM-03: without endersdelight-1.19-1.2.2.jar, `MoreJSEvents.registerPotionBrewing` throws "Ingredient must have at least one item" and startup stops (Creative Brewing `potions.js` line 47, levitation reagent `endersdelight:shulker_filet`, no mod-loaded guard); SQ-ENM-05b OPEN: unrun, needs the boot without Ender's 1.2.2, blocked by SQ-ENM-03.
 
 | ID | Check |
 |---|---|
@@ -319,3 +381,60 @@ feature (type `ends_delight:chorus_succulent_feature`; registered id `ends_delig
 located, ground check not run); EN-02, EN-05, EN-08, EN-10 to EN-15 open.
 
 Changelog: bullets added 2026-10-25 (Farming, Food, World Generation, Loot, Gear, Interface families).
+
+Scratch r1102b (2026-11-02, `perf/runs/r1102b/s3/`): SQ-EN-04 (dragon drops) and SQ-EN-06 (knife repair) PASS again;
+SQ-EN-03 OPEN (soils and growth PASS; void pepper spreading, fruiting and the 3 / 1 drops not probed).
+
+### 5.8 Shulker meat from End's Delight only (2026-11-02, TODO `dishes/ingredients #32`)
+
+BUILT 2026-11-02 (food and cooking batch, [plan_food_cooking_batch.md](plan_food_cooking_batch.md)): Ender's
+`shulker_mollusk` merges into End's `shulker_meat`, `shulker_filet` into `shulker_meat_slice` (CD startup
+`endersdelight/item_merges.js`); Ender's knife loot modifier off, the filet cut removed, Canned Shulker Flesh on End's
+meat. End's own textures kept; the owner updates them later. Scratch r1102b: SQ-FCB-04e (knife kills: End's meat in 46
+of 50 rolls, never 2, no mollusk) and SQ-FCB-05 (old items in an inventory turn into the survivors) PASS. Not played.
+
+### 5.9 Ender's 1.1.4 content merged into the End's member (2026-11-02, plan_creative_delight.md J1, TODO `creativedelight/members #46`)
+
+BUILT 2026-11-02: `./gradlew :repackedEnds:build --offline` passes, `repackedEnds-1.19.2-2.1-ce-19.2-03.jar` (was `-02`).
+Nested in `mods/creativedelight-1.0.0.jar` (installed 2026-11-02 23:16 by the plan-K session, again 2026-11-03 00:08);
+Ender's Delight 1.2.2 stays its own jar in `mods/`. Not booted (last boot 2026-10-31).
+
+- **Shape:** the `ce.forge-repack` overlay already compiled Java (the Dragon Tooth mixin), so the `enders_additions` code
+  (package `com.SaintAlfonzo.creativedelight.enders`, unchanged), its lang file and its MIT notice
+  (`NOTICE-upstream-MIT-enders.txt`) moved into `members/ends/` as overlay files. No change to the repack plugin or any
+  other member. `members/ends/build.gradle` gained the Farmer's Delight `compileOnly` (`libs/`, git-ignored);
+  `gradle.properties` gained `shared_sources=packs,upstream` with `shared_base=com.SaintAlfonzo.creativedelight.enders`
+  and the `resource_guard_*` keys of the old member. 1.1.4's `pack.mcmeta` was dropped (End's upstream one ships).
+- **One jar, two mods:** `META-INF/mods.toml` has two `[[mods]]` entries, `ends_delight` (End's Delight (Creative
+  Delight)) and `enders_additions` (Ender's Delight Additions (Creative Delight), version `1.1.4-ce-19.2-04`, written out
+  in full since the expansion keys are End's). Keeping the mod id keeps `config/enders_additions-common.toml`, the
+  `[members] enders_additions` switch, `global.CD.on('enders_additions')`, the wild-crops `requires`, `seasonings.js`
+  `needs`, and the startup error text. Registry ids unchanged (`endersdelight:`), so old worlds keep every 1.1.4 block
+  and item. `endersdelight` is now `mandatory=false`, `ordering=AFTER`.
+- **Without Ender's 1.2.2:** the 14 registrations, End House, donor packs and wild plants still load. The five dishes
+  return 1.2.2's Shulker Bowl when present (`ShulkerBowlDishItem` looks it up at use) and nothing otherwise; their pot
+  and grid recipes need the bowl, so they run only with `endersdelight`.
+- **Scripts:** `endersdelight/additions.js` dropped `// requires: endersdelight` (keeps `requires: enders_additions`);
+  its meal rows check `global.CD.on('endersdelight')`; the spice tag and the End plant soil tags moved there from
+  `endersdelight/tags.js` (which keeps its header, all its other rows name 1.2.2 content).
+- **Donor:** unchanged. `upstream/UpstreamJars` still pins `enders_upstream/endersdelight-1.1.4.jar` (sha1 `d1541d70...`)
+  and stops the game when it is missing or different; `checkNoArrResources` runs on the End's member against the 1.2.2
+  jar and the donor (checked 2026-11-02: an added 1.1.4 model path fails the build). `data/forge/loot_modifiers/
+  global_loot_modifiers.json` is a guard own-file (End's edited copy; the 1.2.2 jar has the same path). There was never
+  a `check_donor.py` for Ender's. `tools/build_deploy.py` `UPSTREAM_DONORS['enders_upstream']` must point at
+  `creativeDelight/members/ends` (package path unchanged).
+- **Old member:** backed up to `development/creativeDelight/moved_code_backup/2026-11-02-j1-enders/members/enders/`
+  (source, libs, released jars). `members/enders`, its `settings.gradle` entry and its `bundle_members` row were removed
+  together (2026-11-02 night, plan K), and `tools/build_deploy.py` `UPSTREAM_DONORS['enders_upstream']` now points at
+  `members/ends`; the installed CD jar nests `enders_additions` once (inside `repackedEnds`).
+
+Tests (scratch queue SQ-ENM-01 to -05; SQ-DNR-E-01 to -04 and SQ-EN-01, -03, -05, -07 rerun on the merged jar):
+
+| ID | Check |
+|---|---|
+| ENM-01 | Boot with Ender's 1.2.2: mod list shows `ends_delight` and `enders_additions` once each, from the CD jar; no duplicate-mod error |
+| ENM-02 | Old world (1.1.03+) with the 1.1.4 plants, dishes and an End House: no missing ids, art and models as before |
+| ENM-03 | Boot without Ender's 1.2.2: the 14 `endersdelight:` ids register, End plants grow, no meal recipe errors; dishes eat with no bowl back |
+| ENM-04 | `config/enders_additions-common.toml` still read; `[members] enders_additions = false` skips the 1.1.4 recipes and tags |
+| ENM-05 | Spice and soil tags present with and without Ender's 1.2.2 |
+

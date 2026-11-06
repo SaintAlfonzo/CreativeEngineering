@@ -1,0 +1,47 @@
+// creativeMagic: Creative Magic (mod id creativemagic, feature_writeup/creative_magic.md), carved out of patcherMod on
+// 2026-11-04 (creative_split.md 7.6, wave 6). Shared Forge setup comes from build-logic/src/main/groovy/ce.forge-mod.gradle.
+// This file adds what is specific to Magic, the same way creativeCompat/build.gradle does:
+//   - the Magic script trees, authored in the pack folder so /reload (server) and F3+T (client) pick them up without a
+//     rebuild, copied into the jar at the same resource path:
+//       kubejs/data/creativemagic/kubejs/    -> data/creativemagic/kubejs/    (server scripts)
+//       kubejs/assets/creativemagic/kubejs/  -> assets/creativemagic/kubejs/  (client scripts)
+//     The startup script lives in this project (src/main/resources/kubejs_startup/creativemagic/), loaded from the jar
+//     by Creative Common's startup loader.
+// Build: ./gradlew :creativeMagic:build --offline   Install: ./gradlew :creativeMagic:installToMods
+plugins {
+    id 'ce.forge-mod'
+}
+
+dependencies {
+    // Creative Common (creativecommon): a hard dependency (KubeJS, the shared helpers, the startup loader) and the
+    // Common API this jar calls (swap/ConfigRename).
+    compileOnly project(':creativeCommon')
+    // Creative Compat: required by every Creative jar (creative_split.md 7.6).
+    compileOnly project(':creativeCompat')
+    // The mods the mixins target (Nock Enough Arrows, Botania, Quark): the pack's jars, shared with Creative Common
+    // (git-ignored libs/, SRG-named).
+    compileOnly fileTree(dir: rootProject.file('development/creativeCommon/libs'), include: '*.jar')
+}
+
+def scriptTrees = ['data/creativemagic/kubejs', 'assets/creativemagic/kubejs']
+
+tasks.named('processResources', ProcessResources).configure {
+    scriptTrees.each { tree ->
+        from(rootProject.file("kubejs/${tree}")) {
+            into tree
+            exclude '**/*.md'
+        }
+    }
+}
+
+// The scripts in the jar run only through KubeJS; a missing tree means the pack-folder path moved.
+tasks.named('jar', Jar).configure {
+    doLast {
+        def entries = new java.util.zip.ZipFile(archiveFile.get().asFile).withCloseable { z -> z.entries().collect { it.name } }
+        ['kubejs_startup/creativemagic/', 'data/creativemagic/kubejs/', 'assets/creativemagic/kubejs/'].each { dir ->
+            if (!entries.any { it.startsWith(dir) && it.endsWith('.js') }) {
+                throw new GradleException("creativemagic jar has no scripts under ${dir}")
+            }
+        }
+    }
+}

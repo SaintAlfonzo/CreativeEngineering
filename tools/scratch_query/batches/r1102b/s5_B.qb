@@ -1,0 +1,653 @@
+# Run r1102b slice 5, group B boot 1: fresh normal world (prep_srv.sh OUT s5b B spawn-animals=true spawn-monsters=true
+# difficulty=normal; seed 8675309). Rows SQ-PSD-06, -07, SQ-PSM-08, -09, -03, -05, -04, -02, SQ-PSM-06a/-07a (locate
+# the struck and the lone monument without loading them, save, stop: s5_B2.qb visits them after the restart).
+# /locate of a meta structure can run for a long time and cannot be cancelled (gotchas.md): the meta rows are last; if
+# one hangs past its waitlog, stop the server (kill after the save line) and go on with s5_B2.qb only if PSM-06a/-07a
+# captured. Locate results are captured into vars (RES/vars.json), so s5_B2.qb reuses them.
+# Home: spawn marker s5bhome (capture S5B). Never probe ungenerated chunks from KubeJS: forceload first (vanilla).
+pace 2
+
+## S5B-00 | setup: home marker, clock (not a queue row)
+bootexpect Done \(
+> execute unless entity @e[type=minecraft:marker,tag=s5bhome] run summon minecraft:marker ~ ~ ~ {Tags:["s5bhome"]}
+sleep 2
+> data get entity @e[type=minecraft:marker,tag=s5bhome,limit=1] Pos
+capture S5B entity data: \[(-?\d+)\.\d+d, (-?\d+)\.\d+d, (-?\d+)\.\d+d\]
+> gamerule doDaylightCycle false
+> time set noon
+> gamerule doWeatherCycle false
+> weather clear 1000000
+shell df -h / | tail -1
+reject (Unknown (item|block|block type|entity)|does not (have|accept)|Incorrect argument for command|Unknown or incomplete command|That position is not loaded|No player was found|no such bot|no such item|Invalid (block state|tag)|\[(zq|s5)\] (error|no player))
+
+## SQ-PSD-06 | village farms (minecraft:village_savanna, dry 1 of 3): cotton possible, never peppers or coffee
+> locate structure minecraft:village_savanna
+waitlog (The nearest minecraft:village_savanna is at|Could not find) 600
+capture S5V1 The nearest minecraft:village_savanna is at \[(-?\d+), (~|-?\d+), (-?\d+)\]
+> forceload add {S5V11-48} {S5V13-48} {S5V11+48} {S5V13+48}
+sleep 10
+> zq count {S5V11-48} 50 {S5V13-48} {S5V11+48} 130 {S5V13+48} rusticdelight:cotton
+> say PSD06 dry0 rusticdelight:cotton counted
+waitlog PSD06 dry0 rusticdelight:cotton counted 240
+> zq count {S5V11-48} 50 {S5V13-48} {S5V11+48} 130 {S5V13+48} rusticdelight:bell_peppers
+> say PSD06 dry0 rusticdelight:bell_peppers counted
+waitlog PSD06 dry0 rusticdelight:bell_peppers counted 240
+> zq count {S5V11-48} 50 {S5V13-48} {S5V11+48} 130 {S5V13+48} rusticdelight:coffee
+> say PSD06 dry0 rusticdelight:coffee counted
+waitlog PSD06 dry0 rusticdelight:coffee counted 240
+> forceload remove {S5V11-48} {S5V13-48} {S5V11+48} {S5V13+48}
+reject \[zq\] count rusticdelight:(bell_peppers|coffee): [1-9]
+reject (Unknown (item|block|block type|entity)|does not (have|accept)|Incorrect argument for command|Unknown or incomplete command|That position is not loaded|No player was found|no such bot|no such item|Invalid (block state|tag)|\[(zq|s5)\] (error|no player))
+look across SQ-PSD-06, -06b, -06c: cotton above 0 in at least one dry village (35 % of fields replaced, 50/50 split: a village can have none); wild crop patches near a village also count
+
+## SQ-PSD-06b | village farms (minecraft:village_desert, dry 2 of 3): cotton possible, never peppers or coffee
+> locate structure minecraft:village_desert
+waitlog (The nearest minecraft:village_desert is at|Could not find) 600
+capture S5V2 The nearest minecraft:village_desert is at \[(-?\d+), (~|-?\d+), (-?\d+)\]
+> forceload add {S5V21-48} {S5V23-48} {S5V21+48} {S5V23+48}
+sleep 10
+> zq count {S5V21-48} 50 {S5V23-48} {S5V21+48} 130 {S5V23+48} rusticdelight:cotton
+> say PSD06 dry1 rusticdelight:cotton counted
+waitlog PSD06 dry1 rusticdelight:cotton counted 240
+> zq count {S5V21-48} 50 {S5V23-48} {S5V21+48} 130 {S5V23+48} rusticdelight:bell_peppers
+> say PSD06 dry1 rusticdelight:bell_peppers counted
+waitlog PSD06 dry1 rusticdelight:bell_peppers counted 240
+> zq count {S5V21-48} 50 {S5V23-48} {S5V21+48} 130 {S5V23+48} rusticdelight:coffee
+> say PSD06 dry1 rusticdelight:coffee counted
+waitlog PSD06 dry1 rusticdelight:coffee counted 240
+> forceload remove {S5V21-48} {S5V23-48} {S5V21+48} {S5V23+48}
+reject \[zq\] count rusticdelight:(bell_peppers|coffee): [1-9]
+reject (Unknown (item|block|block type|entity)|does not (have|accept)|Incorrect argument for command|Unknown or incomplete command|That position is not loaded|No player was found|no such bot|no such item|Invalid (block state|tag)|\[(zq|s5)\] (error|no player))
+look across SQ-PSD-06, -06b, -06c: cotton above 0 in at least one dry village (35 % of fields replaced, 50/50 split: a village can have none); wild crop patches near a village also count
+
+## SQ-PSD-06c | village farms (minecraft:village_savanna, dry 3 of 3): cotton possible, never peppers or coffee
+> execute positioned {S5B1+4000} 70 {S5B3+4000} run locate structure minecraft:village_savanna
+waitlog (The nearest minecraft:village_savanna is at|Could not find) 600
+capture S5V3 The nearest minecraft:village_savanna is at \[(-?\d+), (~|-?\d+), (-?\d+)\]
+> forceload add {S5V31-48} {S5V33-48} {S5V31+48} {S5V33+48}
+sleep 10
+> zq count {S5V31-48} 50 {S5V33-48} {S5V31+48} 130 {S5V33+48} rusticdelight:cotton
+> say PSD06 dry2 rusticdelight:cotton counted
+waitlog PSD06 dry2 rusticdelight:cotton counted 240
+> zq count {S5V31-48} 50 {S5V33-48} {S5V31+48} 130 {S5V33+48} rusticdelight:bell_peppers
+> say PSD06 dry2 rusticdelight:bell_peppers counted
+waitlog PSD06 dry2 rusticdelight:bell_peppers counted 240
+> zq count {S5V31-48} 50 {S5V33-48} {S5V31+48} 130 {S5V33+48} rusticdelight:coffee
+> say PSD06 dry2 rusticdelight:coffee counted
+waitlog PSD06 dry2 rusticdelight:coffee counted 240
+> forceload remove {S5V31-48} {S5V33-48} {S5V31+48} {S5V33+48}
+reject \[zq\] count rusticdelight:(bell_peppers|coffee): [1-9]
+reject (Unknown (item|block|block type|entity)|does not (have|accept)|Incorrect argument for command|Unknown or incomplete command|That position is not loaded|No player was found|no such bot|no such item|Invalid (block state|tag)|\[(zq|s5)\] (error|no player))
+look across SQ-PSD-06, -06b, -06c: cotton above 0 in at least one dry village (35 % of fields replaced, 50/50 split: a village can have none); wild crop patches near a village also count
+
+## SQ-PSD-06d | village farms (towns_and_towers:village_jungle, jungle 1 of 3): peppers and coffee possible, never cotton
+> locate structure towns_and_towers:village_jungle
+waitlog (The nearest towns_and_towers:village_jungle is at|Could not find) 900
+capture S5V4 The nearest towns_and_towers:village_jungle is at \[(-?\d+), (~|-?\d+), (-?\d+)\]
+> forceload add {S5V41-48} {S5V43-48} {S5V41+48} {S5V43+48}
+sleep 10
+> zq count {S5V41-48} 50 {S5V43-48} {S5V41+48} 130 {S5V43+48} rusticdelight:cotton
+> say PSD06 wet0 rusticdelight:cotton counted
+waitlog PSD06 wet0 rusticdelight:cotton counted 240
+> zq count {S5V41-48} 50 {S5V43-48} {S5V41+48} 130 {S5V43+48} rusticdelight:bell_peppers
+> say PSD06 wet0 rusticdelight:bell_peppers counted
+waitlog PSD06 wet0 rusticdelight:bell_peppers counted 240
+> zq count {S5V41-48} 50 {S5V43-48} {S5V41+48} 130 {S5V43+48} rusticdelight:coffee
+> say PSD06 wet0 rusticdelight:coffee counted
+waitlog PSD06 wet0 rusticdelight:coffee counted 240
+> forceload remove {S5V41-48} {S5V43-48} {S5V41+48} {S5V43+48}
+reject \[zq\] count rusticdelight:cotton: [1-9]
+reject (Unknown (item|block|block type|entity)|does not (have|accept)|Incorrect argument for command|Unknown or incomplete command|That position is not loaded|No player was found|no such bot|no such item|Invalid (block state|tag)|\[(zq|s5)\] (error|no player))
+look across SQ-PSD-06d, -06e, -06f: peppers or coffee above 0 in at least one jungle village
+
+## SQ-PSD-06e | village farms (towns_and_towers:village_sparse_jungle, jungle 2 of 3): peppers and coffee possible, never cotton
+> locate structure towns_and_towers:village_sparse_jungle
+waitlog (The nearest towns_and_towers:village_sparse_jungle is at|Could not find) 900
+capture S5V5 The nearest towns_and_towers:village_sparse_jungle is at \[(-?\d+), (~|-?\d+), (-?\d+)\]
+> forceload add {S5V51-48} {S5V53-48} {S5V51+48} {S5V53+48}
+sleep 10
+> zq count {S5V51-48} 50 {S5V53-48} {S5V51+48} 130 {S5V53+48} rusticdelight:cotton
+> say PSD06 wet1 rusticdelight:cotton counted
+waitlog PSD06 wet1 rusticdelight:cotton counted 240
+> zq count {S5V51-48} 50 {S5V53-48} {S5V51+48} 130 {S5V53+48} rusticdelight:bell_peppers
+> say PSD06 wet1 rusticdelight:bell_peppers counted
+waitlog PSD06 wet1 rusticdelight:bell_peppers counted 240
+> zq count {S5V51-48} 50 {S5V53-48} {S5V51+48} 130 {S5V53+48} rusticdelight:coffee
+> say PSD06 wet1 rusticdelight:coffee counted
+waitlog PSD06 wet1 rusticdelight:coffee counted 240
+> forceload remove {S5V51-48} {S5V53-48} {S5V51+48} {S5V53+48}
+reject \[zq\] count rusticdelight:cotton: [1-9]
+reject (Unknown (item|block|block type|entity)|does not (have|accept)|Incorrect argument for command|Unknown or incomplete command|That position is not loaded|No player was found|no such bot|no such item|Invalid (block state|tag)|\[(zq|s5)\] (error|no player))
+look across SQ-PSD-06d, -06e, -06f: peppers or coffee above 0 in at least one jungle village
+
+## SQ-PSD-06f | village farms (towns_and_towers:village_jungle, jungle 3 of 3): peppers and coffee possible, never cotton
+> execute positioned {S5B1-4000} 70 {S5B3+4000} run locate structure towns_and_towers:village_jungle
+waitlog (The nearest towns_and_towers:village_jungle is at|Could not find) 900
+capture S5V6 The nearest towns_and_towers:village_jungle is at \[(-?\d+), (~|-?\d+), (-?\d+)\]
+> forceload add {S5V61-48} {S5V63-48} {S5V61+48} {S5V63+48}
+sleep 10
+> zq count {S5V61-48} 50 {S5V63-48} {S5V61+48} 130 {S5V63+48} rusticdelight:cotton
+> say PSD06 wet2 rusticdelight:cotton counted
+waitlog PSD06 wet2 rusticdelight:cotton counted 240
+> zq count {S5V61-48} 50 {S5V63-48} {S5V61+48} 130 {S5V63+48} rusticdelight:bell_peppers
+> say PSD06 wet2 rusticdelight:bell_peppers counted
+waitlog PSD06 wet2 rusticdelight:bell_peppers counted 240
+> zq count {S5V61-48} 50 {S5V63-48} {S5V61+48} 130 {S5V63+48} rusticdelight:coffee
+> say PSD06 wet2 rusticdelight:coffee counted
+waitlog PSD06 wet2 rusticdelight:coffee counted 240
+> forceload remove {S5V61-48} {S5V63-48} {S5V61+48} {S5V63+48}
+reject \[zq\] count rusticdelight:cotton: [1-9]
+reject (Unknown (item|block|block type|entity)|does not (have|accept)|Incorrect argument for command|Unknown or incomplete command|That position is not loaded|No player was found|no such bot|no such item|Invalid (block state|tag)|\[(zq|s5)\] (error|no player))
+look across SQ-PSD-06d, -06e, -06f: peppers or coffee above 0 in at least one jungle village
+
+## SQ-PSD-07 | raspberry bushes in snowy taiga and grove
+> zq biometag creativedelight:wild_crops/raspberry
+waitlog \[zq\] biometag 30
+expect \[zq\] biometag creativedelight:wild_crops/raspberry \(\d+\): (?=.*minecraft:snowy_taiga)(?=.*minecraft:grove)
+> locate biome minecraft:snowy_taiga
+waitlog (The nearest minecraft:snowy_taiga is at|Could not find) 600
+capture S5T The nearest minecraft:snowy_taiga is at \[(-?\d+), (~|-?\d+), (-?\d+)\]
+> forceload add {S5T1-64} {S5T3-64} {S5T1+63} {S5T3+63}
+sleep 15
+> zq count {S5T1-64} 40 {S5T3-64} {S5T1+63} 200 {S5T3+63} hearthandharvest:raspberry_bush
+> say PSD07 S5T counted
+waitlog PSD07 S5T counted 300
+> forceload remove {S5T1-64} {S5T3-64} {S5T1+63} {S5T3+63}
+> locate biome minecraft:grove
+waitlog (The nearest minecraft:grove is at|Could not find) 600
+capture S5G The nearest minecraft:grove is at \[(-?\d+), (~|-?\d+), (-?\d+)\]
+> forceload add {S5G1-64} {S5G3-64} {S5G1+63} {S5G3+63}
+sleep 15
+> zq count {S5G1-64} 40 {S5G3-64} {S5G1+63} 200 {S5G3+63} hearthandharvest:raspberry_bush
+> say PSD07 S5G counted
+waitlog PSD07 S5G counted 300
+> forceload remove {S5G1-64} {S5G3-64} {S5G1+63} {S5G3+63}
+count \[zq\] count hearthandharvest:raspberry_bush: [1-9] >= 2
+reject (Unknown (item|block|block type|entity)|does not (have|accept)|Incorrect argument for command|Unknown or incomplete command|That position is not loaded|No player was found|no such bot|no such item|Invalid (block state|tag)|\[(zq|s5)\] (error|no player))
+look a 0 in one biome is not a fail by itself if the biome tag holds it (the row's fallback: /place feature creativedelight:wild/raspberry_bush there)
+
+## SQ-PSM-08 | giant squid flees a whale at 12 blocks, not at 30
+> locate biome minecraft:deep_ocean
+waitlog (The nearest minecraft:deep_ocean is at|Could not find) 600
+capture S5O The nearest minecraft:deep_ocean is at \[(-?\d+), (~|-?\d+), (-?\d+)\]
+> forceload add {S5O1-48} {S5O3-48} {S5O1+48} {S5O3+48}
+sleep 10
+shell grep -n '^\[giant_squid\]' -A4 config/creativecompat-common.toml
+> summon alexsmobs:giant_squid {S5O1} 45 {S5O3} {PersistenceRequired:1b,Tags:["s5gs"]}
+> summon alexsmobs:cachalot_whale {S5O1+30} 45 {S5O3} {NoAI:1b,PersistenceRequired:1b,Tags:["s5wh"]}
+sleep 1
+> data get entity @e[tag=s5gs,limit=1] Pos
+capture S5Q0 entity data: \[(-?[\d.]+)d, (-?[\d.]+)d, (-?[\d.]+)d\]
+sleep 10
+> data get entity @e[tag=s5gs,limit=1] Pos
+capture S5Q1 entity data: \[(-?[\d.]+)d, (-?[\d.]+)d, (-?[\d.]+)d\]
+> data get entity @e[tag=s5wh,limit=1] Pos
+capture S5WA entity data: \[(-?[\d.]+)d, (-?[\d.]+)d, (-?[\d.]+)d\]
+> execute as @e[tag=s5wh] at @e[tag=s5gs,limit=1] run tp @s ~12 ~ ~
+sleep 5
+> data get entity @e[tag=s5gs,limit=1] Pos
+capture S5Q2 entity data: \[(-?[\d.]+)d, (-?[\d.]+)d, (-?[\d.]+)d\]
+> data get entity @e[tag=s5wh,limit=1] Pos
+capture S5WB entity data: \[(-?[\d.]+)d, (-?[\d.]+)d, (-?[\d.]+)d\]
+sleep 15
+> data get entity @e[tag=s5gs,limit=1] Pos
+capture S5Q3 entity data: \[(-?[\d.]+)d, (-?[\d.]+)d, (-?[\d.]+)d\]
+shell python3 -c "import math; q0=({S5Q01},{S5Q02},{S5Q03}); q1=({S5Q11},{S5Q12},{S5Q13}); w=({S5WA1},{S5WA2},{S5WA3}); q2=({S5Q21},{S5Q22},{S5Q23}); w2=({S5WB1},{S5WB2},{S5WB3}); q3=({S5Q31},{S5Q32},{S5Q33}); print('30 m: moved', round(math.dist(q0,q1),1), 'whale dist', round(math.dist(q1,w),1)); print('12 m: dist at tp', round(math.dist(q2,w2),1), 'after 15 s', round(math.dist(q3,w2),1))"
+reject (Unknown (item|block|block type|entity)|does not (have|accept)|Incorrect argument for command|Unknown or incomplete command|That position is not loaded|No player was found|no such bot|no such item|Invalid (block state|tag)|\[(zq|s5)\] (error|no player))
+look rows/SQ-PSM-08.shell.txt: at 30 the squid's movement is ordinary wandering; after the 12-block tp it moves away and stops past about 24
+
+## SQ-PSM-09 | natural squid, glow squid and dolphin babies, 2-6 %
+> setblock {S5O1} 64 {S5O3} minecraft:glass
+> pbot spawn s5sq {S5O1} 65 {S5O3} minecraft:overworld survival
+sleep 5
+> kill @e[type=minecraft:squid]
+> kill @e[type=minecraft:glow_squid]
+> kill @e[type=minecraft:dolphin]
+> scoreboard objectives add s5age dummy
+> scoreboard objectives add s5n dummy
+sleep 600
+> execute as @e[type=minecraft:squid] store result score @s s5age run data get entity @s Age
+> execute store result score #squid s5n if entity @e[type=minecraft:squid]
+> execute store result score #squid_baby s5n if entity @e[type=minecraft:squid,scores={s5age=..-1}]
+> scoreboard players get #squid s5n
+> scoreboard players get #squid_baby s5n
+> execute as @e[type=minecraft:glow_squid] store result score @s s5age run data get entity @s Age
+> execute store result score #glow_squid s5n if entity @e[type=minecraft:glow_squid]
+> execute store result score #glow_squid_baby s5n if entity @e[type=minecraft:glow_squid,scores={s5age=..-1}]
+> scoreboard players get #glow_squid s5n
+> scoreboard players get #glow_squid_baby s5n
+> execute as @e[type=minecraft:dolphin] store result score @s s5age run data get entity @s Age
+> execute store result score #dolphin s5n if entity @e[type=minecraft:dolphin]
+> execute store result score #dolphin_baby s5n if entity @e[type=minecraft:dolphin,scores={s5age=..-1}]
+> scoreboard players get #dolphin s5n
+> scoreboard players get #dolphin_baby s5n
+> ceperf mobcap
+sleep 2
+> pbot remove s5sq
+> forceload remove {S5O1-48} {S5O3-48} {S5O1+48} {S5O3+48}
+expect #squid has \d+ \[s5n\]
+reject (Unknown (item|block|block type|entity)|does not (have|accept)|Incorrect argument for command|Unknown or incomplete command|That position is not loaded|No player was found|no such bot|no such item|Invalid (block state|tag)|\[(zq|s5)\] (error|no player))
+look counts (#type has N): with 60+ of a type, babies about 2-5 % squid and glow squid, 2-6 % dolphins; few squid: record the mobcap line (water_creature cap held by Alex's Mobs?)
+
+## SQ-PSM-03 | lone birch pillager tower: box probe and illager spawns inside
+> locate structure mysticrift_pillagers_towers_aris:birch_pillager_tower
+waitlog (The nearest mysticrift_pillagers_towers_aris:birch_pillager_tower is at|Could not find) 900
+capture S5BT The nearest mysticrift_pillagers_towers_aris:birch_pillager_tower is at \[(-?\d+), (~|-?\d+), (-?\d+)\]
+> forceload add {S5BT1-32} {S5BT3-32} {S5BT1+32} {S5BT3+32}
+sleep 10
+> summon minecraft:armor_stand {S5BT1+30} 300 {S5BT3} {Tags:["s5by"],NoGravity:1b,Invisible:1b}
+> spreadplayers {S5BT1+30} {S5BT3} 0 1 false @e[tag=s5by,limit=1]
+sleep 1
+> data get entity @e[tag=s5by,limit=1] Pos
+capture S5BY entity data: \[(-?\d+)\.\d+d, (-?\d+)\.\d+d, (-?\d+)\.\d+d\]
+> kill @e[tag=s5by]
+> cespawnbox {S5BT1} {S5BY2+1} {S5BT3}
+sleep 2
+expect \[spawn-boxes\] .*box large_towers of mysticrift_pillagers_towers_aris:birch_pillager_tower -> \[minecraft:pillager 7 \(1-1\), minecraft:vindicator 3 \(1-1\), minecraft:evoker 3 \(1-1\), minecraft:illusioner 3 \(1-1\), minecraft:witch 3 \(1-1\)\]
+> gamerule doPatrolSpawning false
+> difficulty peaceful
+sleep 2
+> difficulty normal
+> time set 18000
+> setblock {S5BT1} {S5BY2+49} {S5BT3} minecraft:glass
+> pbot spawn s5tw {S5BT1} {S5BY2+50} {S5BT3} minecraft:overworld survival
+sleep 2
+> execute positioned {S5BT1} {S5BY2} {S5BT3} run kill @e[type=!minecraft:player,type=!minecraft:marker,distance=..128]
+repeat 10
+sleep 30
+> execute if entity @e[type=minecraft:pillager,x={S5BT1-15},y={S5BY2},z={S5BT3-15},dx=30,dy=22,dz=30] run say PSM03 pillager in the tower
+> execute if entity @e[type=minecraft:vindicator,x={S5BT1-15},y={S5BY2},z={S5BT3-15},dx=30,dy=22,dz=30] run say PSM03 vindicator in the tower
+> execute if entity @e[type=minecraft:evoker,x={S5BT1-15},y={S5BY2},z={S5BT3-15},dx=30,dy=22,dz=30] run say PSM03 evoker in the tower
+> execute if entity @e[type=minecraft:illusioner,x={S5BT1-15},y={S5BY2},z={S5BT3-15},dx=30,dy=22,dz=30] run say PSM03 illusioner in the tower
+> execute if entity @e[type=minecraft:witch,x={S5BT1-15},y={S5BY2},z={S5BT3-15},dx=30,dy=22,dz=30] run say PSM03 witch in the tower
+end
+> execute as @e[type=minecraft:zombie,x={S5BT1-15},y={S5BY2},z={S5BT3-15},dx=30,dy=22,dz=30] run data get entity @s Pos
+> execute as @e[type=minecraft:skeleton,x={S5BT1-15},y={S5BY2},z={S5BT3-15},dx=30,dy=22,dz=30] run data get entity @s Pos
+> execute as @e[type=minecraft:creeper,x={S5BT1-15},y={S5BY2},z={S5BT3-15},dx=30,dy=22,dz=30] run data get entity @s Pos
+> ceperf mobcap
+sleep 2
+> time set noon
+> pbot remove s5tw
+> forceload remove {S5BT1-32} {S5BT3-32} {S5BT1+32} {S5BT3+32}
+shell grep -c 'NaturalSpawnerBoxHeightMixin' logs/debug.log; true
+bootreject (?i)NaturalSpawnerBoxHeightMixin.*(error|fail)
+count PSM03 pillager in the tower >= 3
+reject (Unknown (item|block|block type|entity)|does not (have|accept)|Incorrect argument for command|Unknown or incomplete command|That position is not loaded|No player was found|no such bot|no such item|Invalid (block state|tag)|\[(zq|s5)\] (error|no player))
+look biome monsters (zombie/skeleton/creeper Pos lines) only outside the tower walls; mobcap shows the monster cap 70 at level 0; the tower base y is the ground 30 blocks east of the locate point
+
+## SQ-PSM-05 | spawn boxes: pillager ship, villager ship, witch wagon, swamp hut, Terralith witch hut
+> locate structure unwrecked_ships:ship
+waitlog (The nearest unwrecked_ships:ship is at|Could not find) 900
+capture S5SH The nearest unwrecked_ships:ship is at \[(-?\d+), (~|-?\d+), (-?\d+)\]
+> forceload add {S5SH1-16} {S5SH3-16} {S5SH1+16} {S5SH3+16}
+sleep 8
+> summon minecraft:armor_stand {S5SH1} 300 {S5SH3} {Tags:["s5sh"],NoGravity:1b,Invisible:1b}
+> spreadplayers {S5SH1} {S5SH3} 0 1 false @e[tag=s5sh,limit=1]
+sleep 1
+> data get entity @e[tag=s5sh,limit=1] Pos
+capture S5SHY entity data: \[(-?\d+)\.\d+d, (-?\d+)\.\d+d, (-?\d+)\.\d+d\]
+> kill @e[tag=s5sh]
+> cespawnbox {S5SH1} {S5SHY2} {S5SH3}
+> cespawnbox {S5SH1} {S5SHY2-3} {S5SH3}
+sleep 2
+> forceload remove {S5SH1-16} {S5SH3-16} {S5SH1+16} {S5SH3+16}
+> locate structure eugene:witch_wagon
+waitlog (The nearest eugene:witch_wagon is at|Could not find) 900
+capture S5WW The nearest eugene:witch_wagon is at \[(-?\d+), (~|-?\d+), (-?\d+)\]
+> forceload add {S5WW1-16} {S5WW3-16} {S5WW1+16} {S5WW3+16}
+sleep 8
+> summon minecraft:armor_stand {S5WW1} 300 {S5WW3} {Tags:["s5ww"],NoGravity:1b,Invisible:1b}
+> spreadplayers {S5WW1} {S5WW3} 0 1 false @e[tag=s5ww,limit=1]
+sleep 1
+> data get entity @e[tag=s5ww,limit=1] Pos
+capture S5WWY entity data: \[(-?\d+)\.\d+d, (-?\d+)\.\d+d, (-?\d+)\.\d+d\]
+> kill @e[tag=s5ww]
+> cespawnbox {S5WW1} {S5WWY2} {S5WW3}
+> cespawnbox {S5WW1} {S5WWY2-3} {S5WW3}
+sleep 2
+> forceload remove {S5WW1-16} {S5WW3-16} {S5WW1+16} {S5WW3+16}
+> locate structure minecraft:swamp_hut
+waitlog (The nearest minecraft:swamp_hut is at|Could not find) 900
+capture S5SW The nearest minecraft:swamp_hut is at \[(-?\d+), (~|-?\d+), (-?\d+)\]
+> forceload add {S5SW1-16} {S5SW3-16} {S5SW1+16} {S5SW3+16}
+sleep 8
+> summon minecraft:armor_stand {S5SW1} 300 {S5SW3} {Tags:["s5sw"],NoGravity:1b,Invisible:1b}
+> spreadplayers {S5SW1} {S5SW3} 0 1 false @e[tag=s5sw,limit=1]
+sleep 1
+> data get entity @e[tag=s5sw,limit=1] Pos
+capture S5SWY entity data: \[(-?\d+)\.\d+d, (-?\d+)\.\d+d, (-?\d+)\.\d+d\]
+> kill @e[tag=s5sw]
+> cespawnbox {S5SW1} {S5SWY2} {S5SW3}
+> cespawnbox {S5SW1} {S5SWY2-3} {S5SW3}
+sleep 2
+> forceload remove {S5SW1-16} {S5SW3-16} {S5SW1+16} {S5SW3+16}
+> locate structure terralith:underground/witch_hut
+waitlog (The nearest terralith:underground/witch_hut is at|Could not find) 900
+capture S5TH The nearest terralith:underground/witch_hut is at \[(-?\d+), (~|-?\d+), (-?\d+)\]
+> forceload add {S5TH1-16} {S5TH3-16} {S5TH1+16} {S5TH3+16}
+sleep 8
+> cespawnbox {S5TH1} -40 {S5TH3}
+> cespawnbox {S5TH1} -30 {S5TH3}
+> cespawnbox {S5TH1} -20 {S5TH3}
+> cespawnbox {S5TH1} -10 {S5TH3}
+> cespawnbox {S5TH1} 0 {S5TH3}
+> cespawnbox {S5TH1} 10 {S5TH3}
+> cespawnbox {S5TH1} 20 {S5TH3}
+> cespawnbox {S5TH1} 30 {S5TH3}
+> cespawnbox {S5TH1} 40 {S5TH3}
+> cespawnbox {S5TH1} 50 {S5TH3}
+> cespawnbox {S5TH1} 60 {S5TH3}
+sleep 2
+> forceload remove {S5TH1-16} {S5TH3-16} {S5TH1+16} {S5TH3+16}
+expect \[spawn-boxes\] .*box witch_huts_full .*\[minecraft:witch 1 \(1-1\)\]
+expect \[spawn-boxes\] .*box witch_huts .*\[minecraft:witch 1 \(1-1\)\]
+reject (Unknown (item|block|block type|entity)|does not (have|accept)|Incorrect argument for command|Unknown or incomplete command|That position is not loaded|No player was found|no such bot|no such item|Invalid (block state|tag)|\[(zq|s5)\] (error|no player))
+look the ship line: box unwrecked_pillager_ships (boat pool) for a pillager-crew ship, no box for a villager-crew one (the row wants one of each: repeat the ship locate from another origin if this one is a villager ship); wagon and swamp hut witch_huts_full; Terralith hut witch_huts at the y it sits
+
+## SQ-PSM-04 | meta pillager camp + ruin: camp part boxed, ruin part never an illager pool
+> locate structure creativeengineering:meta/pillager_camp_ruin
+waitlog (The nearest creativeengineering:meta/pillager_camp_ruin is at|Could not find) 1500
+capture S5CR The nearest creativeengineering:meta/pillager_camp_ruin is at \[(-?\d+), (~|-?\d+), (-?\d+)\]
+> forceload add {S5CR1-48} {S5CR3-48} {S5CR1+48} {S5CR3+48}
+sleep 15
+> summon minecraft:armor_stand {S5CR1-32} 300 {S5CR3-32} {Tags:["s5cg"],NoGravity:1b,Invisible:1b}
+> spreadplayers {S5CR1-32} {S5CR3-32} 0 1 false @e[tag=s5cg,limit=1]
+sleep 1
+> data get entity @e[tag=s5cg,limit=1] Pos
+capture S5CG entity data: \[(-?\d+)\.\d+d, (-?\d+)\.\d+d, (-?\d+)\.\d+d\]
+> kill @e[tag=s5cg]
+> cespawnbox {S5CR1-32} {S5CG2} {S5CR3-32}
+sleep 1
+> summon minecraft:armor_stand {S5CR1-32} 300 {S5CR3} {Tags:["s5cg"],NoGravity:1b,Invisible:1b}
+> spreadplayers {S5CR1-32} {S5CR3} 0 1 false @e[tag=s5cg,limit=1]
+sleep 1
+> data get entity @e[tag=s5cg,limit=1] Pos
+capture S5CG entity data: \[(-?\d+)\.\d+d, (-?\d+)\.\d+d, (-?\d+)\.\d+d\]
+> kill @e[tag=s5cg]
+> cespawnbox {S5CR1-32} {S5CG2} {S5CR3}
+sleep 1
+> summon minecraft:armor_stand {S5CR1-32} 300 {S5CR3+32} {Tags:["s5cg"],NoGravity:1b,Invisible:1b}
+> spreadplayers {S5CR1-32} {S5CR3+32} 0 1 false @e[tag=s5cg,limit=1]
+sleep 1
+> data get entity @e[tag=s5cg,limit=1] Pos
+capture S5CG entity data: \[(-?\d+)\.\d+d, (-?\d+)\.\d+d, (-?\d+)\.\d+d\]
+> kill @e[tag=s5cg]
+> cespawnbox {S5CR1-32} {S5CG2} {S5CR3+32}
+sleep 1
+> summon minecraft:armor_stand {S5CR1} 300 {S5CR3-32} {Tags:["s5cg"],NoGravity:1b,Invisible:1b}
+> spreadplayers {S5CR1} {S5CR3-32} 0 1 false @e[tag=s5cg,limit=1]
+sleep 1
+> data get entity @e[tag=s5cg,limit=1] Pos
+capture S5CG entity data: \[(-?\d+)\.\d+d, (-?\d+)\.\d+d, (-?\d+)\.\d+d\]
+> kill @e[tag=s5cg]
+> cespawnbox {S5CR1} {S5CG2} {S5CR3-32}
+sleep 1
+> summon minecraft:armor_stand {S5CR1} 300 {S5CR3} {Tags:["s5cg"],NoGravity:1b,Invisible:1b}
+> spreadplayers {S5CR1} {S5CR3} 0 1 false @e[tag=s5cg,limit=1]
+sleep 1
+> data get entity @e[tag=s5cg,limit=1] Pos
+capture S5CG entity data: \[(-?\d+)\.\d+d, (-?\d+)\.\d+d, (-?\d+)\.\d+d\]
+> kill @e[tag=s5cg]
+> cespawnbox {S5CR1} {S5CG2} {S5CR3}
+sleep 1
+> summon minecraft:armor_stand {S5CR1} 300 {S5CR3+32} {Tags:["s5cg"],NoGravity:1b,Invisible:1b}
+> spreadplayers {S5CR1} {S5CR3+32} 0 1 false @e[tag=s5cg,limit=1]
+sleep 1
+> data get entity @e[tag=s5cg,limit=1] Pos
+capture S5CG entity data: \[(-?\d+)\.\d+d, (-?\d+)\.\d+d, (-?\d+)\.\d+d\]
+> kill @e[tag=s5cg]
+> cespawnbox {S5CR1} {S5CG2} {S5CR3+32}
+sleep 1
+> summon minecraft:armor_stand {S5CR1+32} 300 {S5CR3-32} {Tags:["s5cg"],NoGravity:1b,Invisible:1b}
+> spreadplayers {S5CR1+32} {S5CR3-32} 0 1 false @e[tag=s5cg,limit=1]
+sleep 1
+> data get entity @e[tag=s5cg,limit=1] Pos
+capture S5CG entity data: \[(-?\d+)\.\d+d, (-?\d+)\.\d+d, (-?\d+)\.\d+d\]
+> kill @e[tag=s5cg]
+> cespawnbox {S5CR1+32} {S5CG2} {S5CR3-32}
+sleep 1
+> summon minecraft:armor_stand {S5CR1+32} 300 {S5CR3} {Tags:["s5cg"],NoGravity:1b,Invisible:1b}
+> spreadplayers {S5CR1+32} {S5CR3} 0 1 false @e[tag=s5cg,limit=1]
+sleep 1
+> data get entity @e[tag=s5cg,limit=1] Pos
+capture S5CG entity data: \[(-?\d+)\.\d+d, (-?\d+)\.\d+d, (-?\d+)\.\d+d\]
+> kill @e[tag=s5cg]
+> cespawnbox {S5CR1+32} {S5CG2} {S5CR3}
+sleep 1
+> summon minecraft:armor_stand {S5CR1+32} 300 {S5CR3+32} {Tags:["s5cg"],NoGravity:1b,Invisible:1b}
+> spreadplayers {S5CR1+32} {S5CR3+32} 0 1 false @e[tag=s5cg,limit=1]
+sleep 1
+> data get entity @e[tag=s5cg,limit=1] Pos
+capture S5CG entity data: \[(-?\d+)\.\d+d, (-?\d+)\.\d+d, (-?\d+)\.\d+d\]
+> kill @e[tag=s5cg]
+> cespawnbox {S5CR1+32} {S5CG2} {S5CR3+32}
+sleep 1
+> forceload remove {S5CR1-48} {S5CR3-48} {S5CR1+48} {S5CR3+48}
+shell grep -E '\[meta-structures\].*pillager_camp_ruin' logs/latest.log | tail -3
+expect \[spawn-boxes\] .*box meta_camps \(part box camps\)
+reject \[spawn-boxes\] .*part philipsruins:\S+ -> \[minecraft:pillager
+reject (Unknown (item|block|block type|entity)|does not (have|accept)|Incorrect argument for command|Unknown or incomplete command|That position is not loaded|No player was found|no such bot|no such item|Invalid (block state|tag)|\[(zq|s5)\] (error|no player))
+look the 3x3 probe grid: the camp part reads box meta_camps with the camp_meta pool; the ruin part spawn_overrides or 'no box -> vanilla' with its own list
+
+## SQ-PSM-02 | meta pillager tower siege: every part gets the meta_tower_siege box
+> locate structure creativeengineering:meta/pillager_tower_siege
+waitlog (The nearest creativeengineering:meta/pillager_tower_siege is at|Could not find) 1800
+capture S5TS The nearest creativeengineering:meta/pillager_tower_siege is at \[(-?\d+), (~|-?\d+), (-?\d+)\]
+> forceload add {S5TS1-64} {S5TS3-64} {S5TS1+64} {S5TS3+64}
+sleep 20
+shell grep -E '\[meta-structures\].*pillager_tower_siege' logs/latest.log | tail -3
+> summon minecraft:armor_stand {S5TS1-48} 300 {S5TS3-48} {Tags:["s5tg"],NoGravity:1b,Invisible:1b}
+> spreadplayers {S5TS1-48} {S5TS3-48} 0 1 false @e[tag=s5tg,limit=1]
+sleep 1
+> data get entity @e[tag=s5tg,limit=1] Pos
+capture S5TG entity data: \[(-?\d+)\.\d+d, (-?\d+)\.\d+d, (-?\d+)\.\d+d\]
+> kill @e[tag=s5tg]
+> cespawnbox {S5TS1-48} {S5TG2} {S5TS3-48}
+sleep 1
+> summon minecraft:armor_stand {S5TS1-48} 300 {S5TS3-24} {Tags:["s5tg"],NoGravity:1b,Invisible:1b}
+> spreadplayers {S5TS1-48} {S5TS3-24} 0 1 false @e[tag=s5tg,limit=1]
+sleep 1
+> data get entity @e[tag=s5tg,limit=1] Pos
+capture S5TG entity data: \[(-?\d+)\.\d+d, (-?\d+)\.\d+d, (-?\d+)\.\d+d\]
+> kill @e[tag=s5tg]
+> cespawnbox {S5TS1-48} {S5TG2} {S5TS3-24}
+sleep 1
+> summon minecraft:armor_stand {S5TS1-48} 300 {S5TS3} {Tags:["s5tg"],NoGravity:1b,Invisible:1b}
+> spreadplayers {S5TS1-48} {S5TS3} 0 1 false @e[tag=s5tg,limit=1]
+sleep 1
+> data get entity @e[tag=s5tg,limit=1] Pos
+capture S5TG entity data: \[(-?\d+)\.\d+d, (-?\d+)\.\d+d, (-?\d+)\.\d+d\]
+> kill @e[tag=s5tg]
+> cespawnbox {S5TS1-48} {S5TG2} {S5TS3}
+sleep 1
+> summon minecraft:armor_stand {S5TS1-48} 300 {S5TS3+24} {Tags:["s5tg"],NoGravity:1b,Invisible:1b}
+> spreadplayers {S5TS1-48} {S5TS3+24} 0 1 false @e[tag=s5tg,limit=1]
+sleep 1
+> data get entity @e[tag=s5tg,limit=1] Pos
+capture S5TG entity data: \[(-?\d+)\.\d+d, (-?\d+)\.\d+d, (-?\d+)\.\d+d\]
+> kill @e[tag=s5tg]
+> cespawnbox {S5TS1-48} {S5TG2} {S5TS3+24}
+sleep 1
+> summon minecraft:armor_stand {S5TS1-48} 300 {S5TS3+48} {Tags:["s5tg"],NoGravity:1b,Invisible:1b}
+> spreadplayers {S5TS1-48} {S5TS3+48} 0 1 false @e[tag=s5tg,limit=1]
+sleep 1
+> data get entity @e[tag=s5tg,limit=1] Pos
+capture S5TG entity data: \[(-?\d+)\.\d+d, (-?\d+)\.\d+d, (-?\d+)\.\d+d\]
+> kill @e[tag=s5tg]
+> cespawnbox {S5TS1-48} {S5TG2} {S5TS3+48}
+sleep 1
+> summon minecraft:armor_stand {S5TS1-24} 300 {S5TS3-48} {Tags:["s5tg"],NoGravity:1b,Invisible:1b}
+> spreadplayers {S5TS1-24} {S5TS3-48} 0 1 false @e[tag=s5tg,limit=1]
+sleep 1
+> data get entity @e[tag=s5tg,limit=1] Pos
+capture S5TG entity data: \[(-?\d+)\.\d+d, (-?\d+)\.\d+d, (-?\d+)\.\d+d\]
+> kill @e[tag=s5tg]
+> cespawnbox {S5TS1-24} {S5TG2} {S5TS3-48}
+sleep 1
+> summon minecraft:armor_stand {S5TS1-24} 300 {S5TS3-24} {Tags:["s5tg"],NoGravity:1b,Invisible:1b}
+> spreadplayers {S5TS1-24} {S5TS3-24} 0 1 false @e[tag=s5tg,limit=1]
+sleep 1
+> data get entity @e[tag=s5tg,limit=1] Pos
+capture S5TG entity data: \[(-?\d+)\.\d+d, (-?\d+)\.\d+d, (-?\d+)\.\d+d\]
+> kill @e[tag=s5tg]
+> cespawnbox {S5TS1-24} {S5TG2} {S5TS3-24}
+sleep 1
+> summon minecraft:armor_stand {S5TS1-24} 300 {S5TS3} {Tags:["s5tg"],NoGravity:1b,Invisible:1b}
+> spreadplayers {S5TS1-24} {S5TS3} 0 1 false @e[tag=s5tg,limit=1]
+sleep 1
+> data get entity @e[tag=s5tg,limit=1] Pos
+capture S5TG entity data: \[(-?\d+)\.\d+d, (-?\d+)\.\d+d, (-?\d+)\.\d+d\]
+> kill @e[tag=s5tg]
+> cespawnbox {S5TS1-24} {S5TG2} {S5TS3}
+sleep 1
+> summon minecraft:armor_stand {S5TS1-24} 300 {S5TS3+24} {Tags:["s5tg"],NoGravity:1b,Invisible:1b}
+> spreadplayers {S5TS1-24} {S5TS3+24} 0 1 false @e[tag=s5tg,limit=1]
+sleep 1
+> data get entity @e[tag=s5tg,limit=1] Pos
+capture S5TG entity data: \[(-?\d+)\.\d+d, (-?\d+)\.\d+d, (-?\d+)\.\d+d\]
+> kill @e[tag=s5tg]
+> cespawnbox {S5TS1-24} {S5TG2} {S5TS3+24}
+sleep 1
+> summon minecraft:armor_stand {S5TS1-24} 300 {S5TS3+48} {Tags:["s5tg"],NoGravity:1b,Invisible:1b}
+> spreadplayers {S5TS1-24} {S5TS3+48} 0 1 false @e[tag=s5tg,limit=1]
+sleep 1
+> data get entity @e[tag=s5tg,limit=1] Pos
+capture S5TG entity data: \[(-?\d+)\.\d+d, (-?\d+)\.\d+d, (-?\d+)\.\d+d\]
+> kill @e[tag=s5tg]
+> cespawnbox {S5TS1-24} {S5TG2} {S5TS3+48}
+sleep 1
+> summon minecraft:armor_stand {S5TS1} 300 {S5TS3-48} {Tags:["s5tg"],NoGravity:1b,Invisible:1b}
+> spreadplayers {S5TS1} {S5TS3-48} 0 1 false @e[tag=s5tg,limit=1]
+sleep 1
+> data get entity @e[tag=s5tg,limit=1] Pos
+capture S5TG entity data: \[(-?\d+)\.\d+d, (-?\d+)\.\d+d, (-?\d+)\.\d+d\]
+> kill @e[tag=s5tg]
+> cespawnbox {S5TS1} {S5TG2} {S5TS3-48}
+sleep 1
+> summon minecraft:armor_stand {S5TS1} 300 {S5TS3-24} {Tags:["s5tg"],NoGravity:1b,Invisible:1b}
+> spreadplayers {S5TS1} {S5TS3-24} 0 1 false @e[tag=s5tg,limit=1]
+sleep 1
+> data get entity @e[tag=s5tg,limit=1] Pos
+capture S5TG entity data: \[(-?\d+)\.\d+d, (-?\d+)\.\d+d, (-?\d+)\.\d+d\]
+> kill @e[tag=s5tg]
+> cespawnbox {S5TS1} {S5TG2} {S5TS3-24}
+sleep 1
+> summon minecraft:armor_stand {S5TS1} 300 {S5TS3} {Tags:["s5tg"],NoGravity:1b,Invisible:1b}
+> spreadplayers {S5TS1} {S5TS3} 0 1 false @e[tag=s5tg,limit=1]
+sleep 1
+> data get entity @e[tag=s5tg,limit=1] Pos
+capture S5TG entity data: \[(-?\d+)\.\d+d, (-?\d+)\.\d+d, (-?\d+)\.\d+d\]
+> kill @e[tag=s5tg]
+> cespawnbox {S5TS1} {S5TG2} {S5TS3}
+sleep 1
+> summon minecraft:armor_stand {S5TS1} 300 {S5TS3+24} {Tags:["s5tg"],NoGravity:1b,Invisible:1b}
+> spreadplayers {S5TS1} {S5TS3+24} 0 1 false @e[tag=s5tg,limit=1]
+sleep 1
+> data get entity @e[tag=s5tg,limit=1] Pos
+capture S5TG entity data: \[(-?\d+)\.\d+d, (-?\d+)\.\d+d, (-?\d+)\.\d+d\]
+> kill @e[tag=s5tg]
+> cespawnbox {S5TS1} {S5TG2} {S5TS3+24}
+sleep 1
+> summon minecraft:armor_stand {S5TS1} 300 {S5TS3+48} {Tags:["s5tg"],NoGravity:1b,Invisible:1b}
+> spreadplayers {S5TS1} {S5TS3+48} 0 1 false @e[tag=s5tg,limit=1]
+sleep 1
+> data get entity @e[tag=s5tg,limit=1] Pos
+capture S5TG entity data: \[(-?\d+)\.\d+d, (-?\d+)\.\d+d, (-?\d+)\.\d+d\]
+> kill @e[tag=s5tg]
+> cespawnbox {S5TS1} {S5TG2} {S5TS3+48}
+sleep 1
+> summon minecraft:armor_stand {S5TS1+24} 300 {S5TS3-48} {Tags:["s5tg"],NoGravity:1b,Invisible:1b}
+> spreadplayers {S5TS1+24} {S5TS3-48} 0 1 false @e[tag=s5tg,limit=1]
+sleep 1
+> data get entity @e[tag=s5tg,limit=1] Pos
+capture S5TG entity data: \[(-?\d+)\.\d+d, (-?\d+)\.\d+d, (-?\d+)\.\d+d\]
+> kill @e[tag=s5tg]
+> cespawnbox {S5TS1+24} {S5TG2} {S5TS3-48}
+sleep 1
+> summon minecraft:armor_stand {S5TS1+24} 300 {S5TS3-24} {Tags:["s5tg"],NoGravity:1b,Invisible:1b}
+> spreadplayers {S5TS1+24} {S5TS3-24} 0 1 false @e[tag=s5tg,limit=1]
+sleep 1
+> data get entity @e[tag=s5tg,limit=1] Pos
+capture S5TG entity data: \[(-?\d+)\.\d+d, (-?\d+)\.\d+d, (-?\d+)\.\d+d\]
+> kill @e[tag=s5tg]
+> cespawnbox {S5TS1+24} {S5TG2} {S5TS3-24}
+sleep 1
+> summon minecraft:armor_stand {S5TS1+24} 300 {S5TS3} {Tags:["s5tg"],NoGravity:1b,Invisible:1b}
+> spreadplayers {S5TS1+24} {S5TS3} 0 1 false @e[tag=s5tg,limit=1]
+sleep 1
+> data get entity @e[tag=s5tg,limit=1] Pos
+capture S5TG entity data: \[(-?\d+)\.\d+d, (-?\d+)\.\d+d, (-?\d+)\.\d+d\]
+> kill @e[tag=s5tg]
+> cespawnbox {S5TS1+24} {S5TG2} {S5TS3}
+sleep 1
+> summon minecraft:armor_stand {S5TS1+24} 300 {S5TS3+24} {Tags:["s5tg"],NoGravity:1b,Invisible:1b}
+> spreadplayers {S5TS1+24} {S5TS3+24} 0 1 false @e[tag=s5tg,limit=1]
+sleep 1
+> data get entity @e[tag=s5tg,limit=1] Pos
+capture S5TG entity data: \[(-?\d+)\.\d+d, (-?\d+)\.\d+d, (-?\d+)\.\d+d\]
+> kill @e[tag=s5tg]
+> cespawnbox {S5TS1+24} {S5TG2} {S5TS3+24}
+sleep 1
+> summon minecraft:armor_stand {S5TS1+24} 300 {S5TS3+48} {Tags:["s5tg"],NoGravity:1b,Invisible:1b}
+> spreadplayers {S5TS1+24} {S5TS3+48} 0 1 false @e[tag=s5tg,limit=1]
+sleep 1
+> data get entity @e[tag=s5tg,limit=1] Pos
+capture S5TG entity data: \[(-?\d+)\.\d+d, (-?\d+)\.\d+d, (-?\d+)\.\d+d\]
+> kill @e[tag=s5tg]
+> cespawnbox {S5TS1+24} {S5TG2} {S5TS3+48}
+sleep 1
+> summon minecraft:armor_stand {S5TS1+48} 300 {S5TS3-48} {Tags:["s5tg"],NoGravity:1b,Invisible:1b}
+> spreadplayers {S5TS1+48} {S5TS3-48} 0 1 false @e[tag=s5tg,limit=1]
+sleep 1
+> data get entity @e[tag=s5tg,limit=1] Pos
+capture S5TG entity data: \[(-?\d+)\.\d+d, (-?\d+)\.\d+d, (-?\d+)\.\d+d\]
+> kill @e[tag=s5tg]
+> cespawnbox {S5TS1+48} {S5TG2} {S5TS3-48}
+sleep 1
+> summon minecraft:armor_stand {S5TS1+48} 300 {S5TS3-24} {Tags:["s5tg"],NoGravity:1b,Invisible:1b}
+> spreadplayers {S5TS1+48} {S5TS3-24} 0 1 false @e[tag=s5tg,limit=1]
+sleep 1
+> data get entity @e[tag=s5tg,limit=1] Pos
+capture S5TG entity data: \[(-?\d+)\.\d+d, (-?\d+)\.\d+d, (-?\d+)\.\d+d\]
+> kill @e[tag=s5tg]
+> cespawnbox {S5TS1+48} {S5TG2} {S5TS3-24}
+sleep 1
+> summon minecraft:armor_stand {S5TS1+48} 300 {S5TS3} {Tags:["s5tg"],NoGravity:1b,Invisible:1b}
+> spreadplayers {S5TS1+48} {S5TS3} 0 1 false @e[tag=s5tg,limit=1]
+sleep 1
+> data get entity @e[tag=s5tg,limit=1] Pos
+capture S5TG entity data: \[(-?\d+)\.\d+d, (-?\d+)\.\d+d, (-?\d+)\.\d+d\]
+> kill @e[tag=s5tg]
+> cespawnbox {S5TS1+48} {S5TG2} {S5TS3}
+sleep 1
+> summon minecraft:armor_stand {S5TS1+48} 300 {S5TS3+24} {Tags:["s5tg"],NoGravity:1b,Invisible:1b}
+> spreadplayers {S5TS1+48} {S5TS3+24} 0 1 false @e[tag=s5tg,limit=1]
+sleep 1
+> data get entity @e[tag=s5tg,limit=1] Pos
+capture S5TG entity data: \[(-?\d+)\.\d+d, (-?\d+)\.\d+d, (-?\d+)\.\d+d\]
+> kill @e[tag=s5tg]
+> cespawnbox {S5TS1+48} {S5TG2} {S5TS3+24}
+sleep 1
+> summon minecraft:armor_stand {S5TS1+48} 300 {S5TS3+48} {Tags:["s5tg"],NoGravity:1b,Invisible:1b}
+> spreadplayers {S5TS1+48} {S5TS3+48} 0 1 false @e[tag=s5tg,limit=1]
+sleep 1
+> data get entity @e[tag=s5tg,limit=1] Pos
+capture S5TG entity data: \[(-?\d+)\.\d+d, (-?\d+)\.\d+d, (-?\d+)\.\d+d\]
+> kill @e[tag=s5tg]
+> cespawnbox {S5TS1+48} {S5TG2} {S5TS3+48}
+sleep 1
+> forceload remove {S5TS1-64} {S5TS3-64} {S5TS1+64} {S5TS3+64}
+expect \[spawn-boxes\] .*box meta_tower_siege \(part box (towers|camps|vehicles)\) of creativeengineering:meta/pillager_tower_siege, part \S+ -> \[minecraft:pillager 7 \(1-1\), minecraft:vindicator 3 \(1-1\), minecraft:evoker 3 \(1-1\), minecraft:illusioner 3 \(1-1\), minecraft:witch 3 \(1-1\)\]
+reject (Unknown (item|block|block type|entity)|does not (have|accept)|Incorrect argument for command|Unknown or incomplete command|That position is not loaded|No player was found|no such bot|no such item|Invalid (block state|tag)|\[(zq|s5)\] (error|no player))
+look the [meta-structures] line (rows/SQ-PSM-02.shell.txt) gives the part chunks: the grid points inside a tower, a camp and a weapon each print the meta_tower_siege line with their part box; 'no box' only between parts
+
+## SQ-PSM-06a | locate the struck monument and a lone monument without loading them; save and stop
+> locate structure creativeengineering:meta/struck_monument
+waitlog (The nearest creativeengineering:meta/struck_monument is at|Could not find) 1800
+capture S5SM The nearest creativeengineering:meta/struck_monument is at \[(-?\d+), (~|-?\d+), (-?\d+)\]
+> locate structure minecraft:monument
+waitlog (The nearest minecraft:monument is at|Could not find) 900
+capture S5LM The nearest minecraft:monument is at \[(-?\d+), (~|-?\d+), (-?\d+)\]
+> save-all flush
+waitlog Saved the game 120
+look the runner stops the server now (scratch_server.sh stop; kill after 'All dimensions are saved' if an Async Locator search hangs) and boots s5_B2.qb on the same level; S5SM / S5LM are in RES/vars.json

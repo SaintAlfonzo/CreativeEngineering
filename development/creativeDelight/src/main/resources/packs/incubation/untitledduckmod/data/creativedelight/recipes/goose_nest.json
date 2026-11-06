@@ -1,0 +1,18 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "key": {
+    "G": {
+      "item": "minecraft:grass"
+    },
+    "T": {
+      "item": "minecraft:tall_grass"
+    }
+  },
+  "pattern": [
+    "G G",
+    "TTT"
+  ],
+  "result": {
+    "item": "creativedelight:goose_nest"
+  }
+}

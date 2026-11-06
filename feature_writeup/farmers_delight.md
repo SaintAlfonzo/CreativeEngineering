@@ -1,6 +1,6 @@
 # Farmer's Delight 1.3.4 against the installed 1.2.4
 
-**BUILT 2026-10-25, Shipped in 1.1.03 (deployed to server and players 2026-10-26); boot check SQ-FDB-01 PASSED 2026-10-25, SQ-FDB-02 to 12 queued** (section 4: repack `-02` in the Creative Delight jar, CD-tree scripts; tests SQ-FDB-01 to 12). Onion Soup still to evaluate. Installed: `FarmersDelight-1.19.2-1.2.4.jar` (`mods/`). Evaluated 2026-10-25 against
+**BUILT 2026-10-25, Shipped in 1.1.03 (deployed to server and players 2026-10-26); scratch r1102b 2026-11-02: SQ-FDB-01 to -03, -10, -13 to -15 PASSED, -04 FAILED (Gleaming Salad has no Nourishment), -05 to -07, -09, -11 open (probe faults), -08 needs a player, -12 client** (section 4: repack `-02` in the Creative Delight jar, CD-tree scripts; tests SQ-FDB-01 to 15; deep scan 2026-11-02). Onion Soup left out (owner 2026-11-02). Installed: `FarmersDelight-1.19.2-1.2.4.jar` (`mods/`). Evaluated 2026-10-25 against
 `devmods/checkNewerVersionForContent/FarmersDelight-1.20.1-1.3.4.jar` (1.20.1 / Forge 47), method in
 [devmods_evaluation.md](devmods_evaluation.md) section 1. Both jars unpacked in `DecompiledMods/`. Plan row:
 `largecontent/mod-additions #18` in [todo/TODO.md](todo/TODO.md).
@@ -148,7 +148,7 @@ item and is meant to accept a modded one is the only place it would matter. **De
 | Rich soil not trampled | **BUILT** **add** | patcherMod mixin |
 | Villagers work rich soil | **BUILT** **add** (and Fertile Soil, configurable) | patcherMod mixin + `villager_plantable_seeds` tag |
 | Vegetable Noodles: any mushroom | **BUILT** carry over | change the recipe's mushroom input to `#forge:mushrooms` (`NCH` override of `farmersdelight:vegetable_noodles`) |
-| Onion Soup | **TODO** evaluate adding | overlap check with Creamy Onion Soup (now Nourishment in the pack, food.md 2026-10-20) and the Onion Soup cup; then add as a pot recipe plus item, or skip |
+| Onion Soup | **LEFT OUT (owner 2026-11-02)** | overlap check with Creamy Onion Soup (now Nourishment in the pack, food.md 2026-10-20) and the Onion Soup cup; then add as a pot recipe plus item, or skip |
 | Dog Food: any raw meat | **BUILT** carry over (pack raw meat food type, see 4.3) | change the `wolf_prey` input to `#forge:raw_meat` (override of `farmersdelight:dog_food`) |
 
 **Where the Java goes (staged 2026-10-25, [creative_delight.md](creative_delight.md) 21).** Farmer's Delight 1.2.4 is now a
@@ -161,9 +161,12 @@ class `replaced_classes`. Recipe and loot rows stay KubeJS through the helpers.
 
 Added by the owner 2026-10-25 and built the same day: the placeable vanilla Pumpkin Pie (third pie, with a switch to compare
 all three), Rabbit Stew (any potato), Cabbage Rolls (inlined filling), the feedback lines and the Rich Soil tooltip. Only
-Onion Soup is still TODO (evaluate). Build detail in section 4.
+Onion Soup is left out (owner 2026-11-02). Build detail in section 4.
 
 ## 4. Built 2026-10-25 (shipped in 1.1.03, not tested in game)
+
+- **r1102b 2026-11-02** (scratch server; verdicts in `perf/runs/r1102b/` HANDOVER.md and the slice judged.md): PASS SQ-FDB-02, -03, -10, -13, -14, -15; FAIL SQ-FDB-04: Gleaming Salad loses Nourishment: no rule in `tools/gen_comfort_nourishment.py` (check after the 19:50 regeneration); OPEN (no verdict, rerun row written) SQ-FDB-05, -06; rerun pending (batch fault) SQ-FDB-07, -09, -11.
+- **r1103 2026-11-03** (scratch server; verdicts in `perf/runs/r1103/` FINAL.md and the slice judged.md): PASS SQ-FDB-09, -11; FAIL SQ-FDB-05: live `placeAs` toml edits never reload (no file-watcher reload; `FDBackportConfig.java`, `FDBackportEvents.java`); check by hand first; SQ-FDB-06 OPEN: the vanilla control farmland was not trampled either, so the row proves nothing; SQ-FDB-07 OPEN: MCA replaces summoned villagers and FD's farmland hook does not reach MCA brains; owner decision.
 
 Owner request 2026-10-25: execute the backport; keep Onion Soup for evaluation; add Gleaming Salad, the third placeable
 pumpkin pie with a way to compare all three in game, Rope Fence and Gate, the Rabbit Stew / Vegetable Noodles / Cabbage
@@ -178,16 +181,17 @@ farmer villagers on rich farmland and Fertile Soil (configurable), and the feedb
 | Mixins (`farmersdelight.ce.mixins.json`, appended to `mixin_configs`) | `.../farmers/mixin/`: `FarmersDelightInitMixin` (calls `FDBackports.init()` at the end of FD's constructor, so registers, config and listeners belong to FD's container), `RopeFenceConnectionMixin`, `VillagersTargetFarmlandMixin`, `SkilletUnderwaterMixin`. SRG names, `remap = false` |
 | Assets and data at new paths (47 files from the 1.3.4 donor, MIT) | `members/farmers/src/main/resources/assets/farmersdelight/` (blockstates, models, textures incl. 1.3.4's `block/bowl.png` the salad model needs, `particles/sparkle.json`), `data/farmersdelight/loot_tables/blocks/` (rope fence, gate, salad; `random_sequence` dropped) |
 | Edited upstream files (`replaced_resources`, sha1-pinned) | `lang/en_us.json` (6 names, 2 subtitles, rice line, skillet line), `sounds.json` (2 gate sounds, lead-knot events) |
-| Recipes (CD tree, `global.CD.recipes`, ids `creative_delight:`) | `kubejs/data/creative_delight/kubejs/farmersdelight/recipes.js` |
+| Recipes (CD tree, `global.CD.recipes`, ids `creativedelight:`) | `kubejs/data/creativedelight/kubejs/farmersdelight/recipes.js` |
 | Tags | `.../farmersdelight/tags.js`: cabbage roll filling (runs without CD), `forge:fences` / `forge:fence_gates`, knife-mineable pie (with CD) |
 | Loot (LootJS; runs without CD, needs only FD) | `.../farmersdelight/loot.js` |
 | Dict keys | `item_dict.js` (end of the farmersdelight section, plus `any_hoe`, `any_shears`, `t_forge_fences`, `t_forge_fence_gates`, `t_wolf_prey`), `block_dict.js` |
-| Tooltip | `kubejs/client_scripts/tooltips.js` (`fdVillagerLine`, shown only with `creative_delight` loaded) |
+| Tooltip | `kubejs/client_scripts/tooltips.js` (`fdVillagerLine`, shown only with `creativedelight` loaded) |
 | Version | repack `1.19.2-1.2.4-ce-19.2-02`; `:creativeDelight:build` 2026-10-25 nests it |
 
 ### 4.2 Behaviour and choices
 
-- **Config** `config/farmersdelight-ce-common.toml` (registered by the repack, FD's container). Forge re-reads it on save.
+- **Config** `config/farmersdelight-ce-common.toml` (registered by the repack, FD's container). A change needs a restart:
+  r1103 (SQ-FDB-05) showed a live edit is not picked up; the config comment says so since 2026-11-03.
   - `[pumpkin_pie] placeAs = FARMERSDELIGHT | DELIGHTFUL | CREATE_CENTRAL_KITCHEN | OFF`: the "see all three" switch.
     A `RightClickBlock` handler at HIGHEST (Delightful's runs at NORMAL) places `<mod>:pumpkin_pie` with Delightful's
     rules (not on a Cutting Board, solid block below, room). `OFF` leaves it to the two mods as before (which one won was
@@ -197,6 +201,10 @@ farmer villagers on rich farmland and Fertile Soil (configurable), and the feedb
     with a warning (vanilla `HarvestFarmland` plants only on `FarmBlock`, and already harvests/plants on both soils when
     a villager stands next to them; the sensor is what makes them walk there). Resolved lazily after load/reload. 1.20's
     `villager_plantable_seeds` tag has no 1.19.2 reader, so not added.
+  - MCA villagers (the pack replaces vanilla villagers with MCA's) never pass the sensor above: their harvesting chore
+    scans for `minecraft:farmland` only. Since 2026-11-03 (SQ-FDB-07) the CD mixin `mca/McaHarvestAnyFarmlandMixin`
+    lets that scan take any `FarmBlock` in the Overworld (Rich Soil Farmland, Fertile farmland, modded farmland); other
+    dimensions keep MCA's rule. The list above stays for vanilla villagers.
 - **Rich soil trample**: a `FarmlandTrampleEvent` cancel for `RichSoilFarmlandBlock` instead of 1.3.4's `turnToDirt`
   mixin; 1.2.4's rich farmland inherits vanilla `fallOn`, so trampling turned it into plain Dirt. Not configurable.
   Tooltip: Rich Soil no longer claims "can't be trampled" (untilled soil is not farmland); Rich Soil Farmland does.
@@ -214,7 +222,7 @@ farmer villagers on rich farmland and Fertile Soil (configurable), and the feedb
   block (board and chains from 1.3.4's entity texture `entity/signs/hanging/canvas.png`, copied to `textures/block/`; 8 models,
   `attached` V chains or straight chains, 22.5 degree steps by element rotation plus blockstate y) with 1.3.4's property names. Placed
   under a block that supports the centre (or any non-air block); sneaking while placing sets `attached`, which then pops off when
-  the support above goes (unattached never pops). Recipe 6 from 2 Chains, 4 logs, 2 Canvas (1.3.4's, `creative_delight:` id
+  the support above goes (unattached never pops). Recipe 6 from 2 Chains, 4 logs, 2 Canvas (1.3.4's, `creativedelight:` id
   `crafting_shaped/hanging_canvas_sign`). Tag `minecraft:mineable/axe`; loot drops itself. Limits: no text, dyes, wall variant
   or hanging-sign tag.
 - **Feedback lines**: of 2.4's list only two changed meaning. Rice: "This seed must be planted in shallow water." (lang).
@@ -239,13 +247,25 @@ farmer villagers on rich farmland and Fertile Soil (configurable), and the feedb
 ### 4.4 Textures preview
 
 A local page (not published) renders every new model in 3D, the item icons, the 47 new textures, and the 55 textures
-1.3.4 retextured (not adopted; 2.4 row still open), plus the three pumpkin pies side by side. Generator in the session
+1.3.4 retextured (not adopted; 2.4 row open: owner picks from the 2026-11-02 side-by-side sheets), plus the three pumpkin pies side by side. Generator in the session
 scratchpad (`fd_preview/gen_preview.py`); regenerate there or copy it to `tools/` if it is wanted again.
 
 ### 4.5 Open
 
-- Install Creative Delight (never while the game runs), then SQ-CDJ-07 / 08 and SQ-FDB-01 to 12.
-- Onion Soup evaluation (section 3 row).
+- Scratch r1102b 2026-11-02 (`perf/runs/r1102b/s1/judged.md`): SQ-FDB-01, -02, -03, -10, -13, -14, -15 PASS. **SQ-FDB-04 FAIL:**
+  `tools/gen_comfort_nourishment.py` has no rule for `farmersdelight:gleaming_salad`, so the Comfort / Nourishment pass strips
+  its Nourishment (same class as Rustic, TODO `creativedelight/members #43`); fix: add the rule, `/dumpall`, `/cegen`. Rerun with
+  fixed probes: -05 (pie pick: Delightful / Central Kitchen pies absent, live toml reload unconfirmed), -06, -07 (MCA replaces the
+  summoned villager), -09, -11. -08 needs a player, -12 is the client check.
+- Onion Soup: **LEFT OUT (owner 2026-11-02)**; the copper onion soup leaves with the copper cups. Not added.
 - Pick one pumpkin pie after comparing (SQ-FDB-05), then remove or merge the other slices.
 - Gleaming Salad: cans, food-type tags after `/dumpall`.
-- Until CD is installed, `item_dict` postInit warns about the 5 new item keys.
+
+### 4.6 Retextures adopted (owner, 2026-11-02)
+
+Ten 1.3.4 item textures are copied into `kubejs/assets/farmersdelight/textures/item/` (the KubeJS pack sits above the mod jars; MIT
+notice in `farmers_delight_art_notice.txt`): chicken soup, honey glazed ham and its block item, stuffed pumpkin and its block item,
+pumpkin soup, vegetable soup, bone broth, fried rice, rice roll medley (block item). The other 45 retextures (blocks, canvas signs,
+rice crops, cutting board, tray, shepherd's pie, stuffed pumpkin block faces) are not adopted. Client only, resource reload (F3+T) or restart;
+check in game: the ten icons in the inventory and JEI, and any can or Display Delight plate that borrows them. Queue row CQ-FDB-01 (deep scan 2026-11-02).
+

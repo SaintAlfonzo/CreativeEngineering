@@ -2,7 +2,7 @@
 // Corn Delight 1.2.11's three new items on the installed 1.0.3 (feature_writeup/corn_delight.md 2). Creative Delight
 // startup script, loaded from the jar after the pack's startup_scripts, so global.item exists here. Restart to apply.
 // Art: kubejs/assets/creativeengineering/textures/item (MIT, from the 1.2.11 jar; notice beside it). Recipes, tags,
-// loot and trades: data/creative_delight/kubejs/corn_delight/.
+// loot and trades: data/creativedelight/kubejs/corn_delight/.
 
 StartupEvents.registry('item', e => {
     var i = global.item

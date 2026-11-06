@@ -1,7 +1,7 @@
-import com.SaintAlfonzo.creativeengineering.changelog.ChangelogMarkdown;
-import com.SaintAlfonzo.creativeengineering.changelog.ChangelogMarkdown.Block;
-import com.SaintAlfonzo.creativeengineering.changelog.ChangelogMarkdown.Kind;
-import com.SaintAlfonzo.creativeengineering.changelog.ChangelogStore;
+import com.SaintAlfonzo.creativecommon.changelog.ChangelogMarkdown;
+import com.SaintAlfonzo.creativecommon.changelog.ChangelogMarkdown.Block;
+import com.SaintAlfonzo.creativecommon.changelog.ChangelogMarkdown.Kind;
+import com.SaintAlfonzo.creativecommon.changelog.ChangelogStore;
 import net.minecraft.ChatFormatting;
 import net.minecraft.network.chat.ClickEvent;
 import net.minecraft.network.chat.Component;

@@ -1,0 +1,15 @@
+{
+  "_comment": "Item merge list (swap lists 'merges', SwapLists.java; feature_writeup/item_merges.md 6): both items stay registered; the old one is purged and the survivor takes over its recipes, loot and tags (CD startup script creativedelight/swap_merges.js) and every stack of it in the world (Common swap/ItemMerges). Applied only while every 'requires' mod is loaded. Never prune: an old world whose old item is later unregistered is remapped from this list. Upgrade Aquatic's mulberry jam bottle and block go into the pack jam line's mulberry jam jar and jam block (dishes/jams #8, owner 2026-11-03).",
+  "requires": [
+    "vintagedelight",
+    "upgrade_aquatic"
+  ],
+  "merges": {
+    "vintagedelight:mulberry_jam_jar": [
+      "upgrade_aquatic:mulberry_jam_bottle"
+    ],
+    "vintagedelight:mulberry_jam_block": [
+      "upgrade_aquatic:mulberry_jam_block"
+    ]
+  }
+}

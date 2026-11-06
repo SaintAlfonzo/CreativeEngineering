@@ -1,6 +1,6 @@
 
 #Growth of the End plants. Each plant only grows on its soil: blocks in the block tag
-#creative_delight:end_plant_soil_fast use the Fast chance, blocks in creative_delight:end_plant_soil_slow
+#creativedelight:end_plant_soil_fast use the Fast chance, blocks in creativedelight:end_plant_soil_slow
 #the Slow chance. Off those blocks the plants cannot be placed and break.
 [growth]
 	#Chance per random tick that a Chorusflame on slow soil grows one stage (3 stages).

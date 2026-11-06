@@ -6,23 +6,25 @@ Written 2026-10-05. Test prefix `NE-`.
 
 | Part | Status |
 |---|---|
-| Own mod: **Incubation Additions** (`incubation_additions`, [development/incubationAdditions](../development/incubationAdditions/README.md), jar `incubationAdditions-1.0.0.jar`) | BUILT 2026-10-05, in `mods/` with patcherMod 1.0.5 and DEPLOYED with pack 1.0.6 (2026-10-14, first time it ships); booted in single player 2026-10-11 without errors. Scratch server: old `creativeengineering:` nests remap, emu/duck/goose all lay into their nests |
+| **Creative Delight's Incubation compartment** (was the own mod Incubation Additions, `incubation_additions`) | Since M8 (2026-11-04, plan_cb_publish.md 3b): part of Creative Delight's own jar (1.1.0, built, not installed), behind a Java load guard (Incubation loaded, `[compartments] incubation` on); ids `creativedelight:*` (swap list `compartments.json` maps `incubation_additions:*` and the older `creativeengineering:*` nests); packs `packs/incubation/<bird mod>/` added only with Incubation and that bird mod. Scratch SQ-CDFO-01 to -03 queued, CQ-CDFO-01 in game. Before M8: nested member `members/incubation` since the Creative Split CD carve (2026-11-01); BUILT 2026-10-05, DEPLOYED with pack 1.0.6 (2026-10-14). |
 | Per-mod gating | BUILT 2026-10-05, scratch servers: Incubation only -> nothing registered, no extra packs; + duck mod -> duck/goose nests + crates + duck pack only; + Alex's Mobs -> emu nest + emu pack only; full pack -> both packs, all 7 recipes |
 | Duck and goose egg crates (`WaterfowlEggCrates`) | BUILT 2026-10-05, scratch-server verified (blocks, loot, axe tag, recipes load); not seen in game |
 | New sprites for the duck mod's duck/goose egg items (`client/DuckModEggModels`) | BUILT 2026-10-05, client side NOT run yet (NE-13) |
 | Emu nest (`EmuNests`, Alex's Mobs emus) | DEPLOYED in patcherMod 1.0.2 (old id `creativeengineering:emu_nest`), never tested in game |
-| Duck and goose nests (`WaterfowlNests`, Untitled Duck Mod) | moved to Incubation Additions (`incubation_additions:duck_nest` / `goose_nest`); DEPLOYED with pack 1.0.6 (2026-10-14) (the 2026-10-05 staging that had them under the old patcherMod ids was rebuilt before it went out, so the old duck/goose ids never reached a player); scratch-server verified 2026-10-05 |
+| Duck and goose nests (`WaterfowlNests`, Untitled Duck Mod) | moved to Incubation Additions (`creativedelight:duck_nest` / `goose_nest`); DEPLOYED with pack 1.0.6 (2026-10-14) (the 2026-10-05 staging that had them under the old patcherMod ids was rebuilt before it went out, so the old duck/goose ids never reached a player); scratch-server verified 2026-10-05 |
 | Foreign-nest NPE guard (`LayEggInNestGoalMixin`) | DEPLOYED with the emu nest (1.0.2) |
 | Goose golden egg (`goldenegg/`, 3.11; [vintage_delight.md](vintage_delight.md) §2.5) | BUILT 2026-10-23 in 1.1.0 (`DropSpot` logic test 9/9 in plain Java), `incubationAdditions-1.1.0.jar` in `mods/`, DEPLOYED with 1.1.02 (1.1.02 changelog Mobs & Animals); scratch SQ-VP-13 PASSED (NE-15, NE-16 logic); NE-15 to NE-17 in game |
-| Textures | emu, duck and goose eggs have their own sheets (but the duck and goose sheets are byte-identical copies of Incubation's `duck_eggs.png` / `turkey_eggs.png` and the emu sheet is a recolour of `turkey_eggs.png`, checked 2026-10-21: see 4); duck/goose nest base + item textures are swappable copies of the hay nest; the emu nest base + item still use Incubation's twig nest. All in the Incubation Additions jar; override from `kubejs/assets/incubation_additions/`. See 2.3 |
+| Wild nests (2.4, TODO `mobs/nests #3` habitat half) | BUILT 2026-11-03 (data in the member's bird packs + CD `incubation/bird_nests.js`); installed in the CD jar 2026-11-03 00:08, not booted. Tests SQ-NEST-01, -02 (queue section SQ-CDJ7) |
+| Textures | emu, duck and goose eggs have their own sheets (but the duck and goose sheets are byte-identical copies of Incubation's `duck_eggs.png` / `turkey_eggs.png` and the emu sheet is a recolour of `turkey_eggs.png`, checked 2026-10-21: see 4); duck/goose nest base + item textures are swappable copies of the hay nest; the emu nest base + item still use Incubation's twig nest. All in the Creative Delight jar (`packs/incubation/`); override from `kubejs/assets/creativedelight/`. See 2.3 |
 
-**Files to open first:** [EmuNests.java](../development/incubationAdditions/src/main/java/com/SaintAlfonzo/incubation_additions/nest/EmuNests.java),
-[WaterfowlNests.java](../development/incubationAdditions/src/main/java/com/SaintAlfonzo/incubation_additions/nest/WaterfowlNests.java),
-[LayEggInNestGoalMixin.java](../development/incubationAdditions/src/main/java/com/SaintAlfonzo/incubation_additions/mixin/LayEggInNestGoalMixin.java),
-[IncubationAdditions.java](../development/incubationAdditions/src/main/java/com/SaintAlfonzo/incubation_additions/IncubationAdditions.java) (gating, packs).
+**Files to open first:** [EmuNests.java](../development/creativeDelight/src/main/java/com/SaintAlfonzo/creativedelight/compat/incubation/nest/EmuNests.java),
+[WaterfowlNests.java](../development/creativeDelight/src/main/java/com/SaintAlfonzo/creativedelight/compat/incubation/nest/WaterfowlNests.java),
+[LayEggInNestGoalMixin.java](../development/creativeDelight/src/main/java/com/SaintAlfonzo/creativedelight/mixin/incubation/LayEggInNestGoalMixin.java),
+[IncubationCompartment.java](../development/creativeDelight/src/main/java/com/SaintAlfonzo/creativedelight/compat/incubation/IncubationCompartment.java) and [CompartmentPacks.java](../development/creativeDelight/src/main/java/com/SaintAlfonzo/creativedelight/compat/CompartmentPacks.java) (gating, packs).
 
-**Knobs:** `config/incubation_additions-common.toml`, `[goose] goldenEggChance` (1 in N, default 1000, 0 = off; since
-1.1.0). No CEConfig section. Egg timers are the mobs' own (6000 to 12000 ticks).
+**Knobs:** `config/creativedelight-common.toml`, `[incubation] goldenEggChance` (1 in N, default 1000, 0 = off; was
+`incubation_additions-common.toml [goose]` until M8, carried once); `[compartments] incubation` (default on, restart)
+turns the whole compartment off. No CEConfig section. Egg timers are the mobs' own (6000 to 12000 ticks).
 
 **How to measure:** put a nest in a pen with the bird, wait one lay cycle (5 to 10 minutes), check the
 nest fills instead of an egg dropping. A hopper under the nest pulls the eggs out.
@@ -53,11 +55,11 @@ Environmental and Autumnity, which are not in the pack, so in stock form only ch
 
 | Nest | Bird (mod) | Empty nest block (has item) | Filled nest block (no item) | Egg item | Recipe |
 |---|---|---|---|---|---|
-| Emu | Emu (Alex's Mobs) | `incubation_additions:emu_nest` | `incubation_additions:emu_egg_nest` | `alexsmobs:emu_egg` | `B B` / `BBB`, B = `#immersive_weathering:bark` |
-| Duck | Duck (Untitled Duck Mod) | `incubation_additions:duck_nest` | `incubation_additions:duck_egg_nest` | `untitledduckmod:duck_egg` | `T T` / `GGG`, G = grass, T = tall grass |
-| Goose | Goose (Untitled Duck Mod) | `incubation_additions:goose_nest` | `incubation_additions:goose_egg_nest` | `untitledduckmod:goose_egg` | `G G` / `TTT`, G = grass, T = tall grass |
+| Emu | Emu (Alex's Mobs) | `creativedelight:emu_nest` | `creativedelight:emu_egg_nest` | `alexsmobs:emu_egg` | `B B` / `BBB`, B = `#immersive_weathering:bark` |
+| Duck | Duck (Untitled Duck Mod) | `creativedelight:duck_nest` | `creativedelight:duck_egg_nest` | `untitledduckmod:duck_egg` | `T T` / `GGG`, G = grass, T = tall grass |
+| Goose | Goose (Untitled Duck Mod) | `creativedelight:goose_nest` | `creativedelight:goose_egg_nest` | `untitledduckmod:goose_egg` | `G G` / `TTT`, G = grass, T = tall grass |
 
-Recipes ship in the mod (`packs/<mod id>/data/incubation_additions/recipes/`), not KubeJS.
+Recipes ship in the mod (`packs/incubation/<bird mod>/data/creativedelight/recipes/`), not KubeJS.
 For comparison, the pack's twig nest recipe (KubeJS `misc_mods.js`) is `T T` / `TTT` from twigs or any wooden rod.
 The duck and goose recipes use the same two ingredients in swapped rows, so the U shapes stay distinct.
 
@@ -68,7 +70,7 @@ Other properties:
 | Block properties | Incubation `TWIG_NEST` | Incubation `HAY_NEST` | Incubation `HAY_NEST` |
 | Flammability | 60 / 20 | 60 / 20 | 60 / 20 |
 | Mined by | hoe (`incubation:bird_nests`) | hoe | hoe |
-| Drop when broken | nest with shears, else 1-3 oak bark (like twig nest -> sticks), through the item tag `incubation_additions:emu_nest_drops` so the table still loads without Immersive Weathering (then: nothing) | the empty nest | the empty nest |
+| Drop when broken | nest with shears, else 1-3 oak bark (like twig nest -> sticks), through the item tag `creativedelight:emu_nest_drops` so the table still loads without Immersive Weathering (then: nothing) | the empty nest | the empty nest |
 | Compost chance (empty nest item) | 0.65 (pack, KubeJS compost) | 0.65 | 0.65 |
 | Creative tab | Decorations | Decorations | Decorations |
 | Lay sound | chicken egg | duck mod's duck egg sound | duck mod's goose egg sound |
@@ -77,8 +79,8 @@ Egg crates (Untitled Duck Mod only), the same as Incubation's chicken egg crate:
 
 | Crate | Recipe | Back to eggs | Properties |
 |---|---|---|---|
-| `incubation_additions:duck_egg_crate` | 9 `untitledduckmod:duck_egg` (3x3) | crate -> 9 duck eggs (shapeless) | copy of the chicken egg crate (wood, strength 1.5, wood sound), axe-mineable, flammable 5 / 20, drops itself, Decorations tab |
-| `incubation_additions:goose_egg_crate` | 9 `untitledduckmod:goose_egg` (3x3) | crate -> 9 goose eggs | same |
+| `creativedelight:duck_egg_crate` | 9 `untitledduckmod:duck_egg` (3x3) | crate -> 9 duck eggs (shapeless) | copy of the chicken egg crate (wood, strength 1.5, wood sound), axe-mineable, flammable 5 / 20, drops itself, Decorations tab |
+| `creativedelight:goose_egg_crate` | 9 `untitledduckmod:goose_egg` (3x3) | crate -> 9 goose eggs | same |
 
 No other recipe in the pack's jars uses 9 duck or goose eggs (checked 2026-10-05).
 
@@ -103,36 +105,36 @@ All texture paths below are inside a resource pack root, so `incubation:block/ha
 
 | Part | Texture in use | Referenced from |
 |---|---|---|
-| Nest base (empty and filled) | `incubation:block/twig_nest`, in `mods/incubation-1.19.2-3.0.1.jar` | blockstates [emu_nest.json](../development/incubationAdditions/src/main/resources/packs/alexsmobs/assets/incubation_additions/blockstates/emu_nest.json) and [emu_egg_nest.json](../development/incubationAdditions/src/main/resources/packs/alexsmobs/assets/incubation_additions/blockstates/emu_egg_nest.json), model `incubation:block/twig_nest` |
-| Nest item sprite | `incubation:item/twig_nest` (Incubation jar) | [models/item/emu_nest.json](../development/incubationAdditions/src/main/resources/packs/alexsmobs/assets/incubation_additions/models/item/emu_nest.json) |
-| Eggs | **ours:** [textures/block/emu_eggs.png](../development/incubationAdditions/src/main/resources/packs/alexsmobs/assets/incubation_additions/textures/block/emu_eggs.png) (recoloured turkey eggs) | [models/block/one_emu_egg.json](../development/incubationAdditions/src/main/resources/packs/alexsmobs/assets/incubation_additions/models/block/one_emu_egg.json) to `six_emu_eggs.json`, each parented on `incubation:block/*_turkey_egg(s)` |
+| Nest base (empty and filled) | `incubation:block/twig_nest`, in `mods/incubation-1.19.2-3.0.1.jar` | blockstates [emu_nest.json](../development/creativeDelight/src/main/resources/packs/incubation/alexsmobs/assets/creativedelight/blockstates/emu_nest.json) and [emu_egg_nest.json](../development/creativeDelight/src/main/resources/packs/incubation/alexsmobs/assets/creativedelight/blockstates/emu_egg_nest.json), model `incubation:block/twig_nest` |
+| Nest item sprite | `incubation:item/twig_nest` (Incubation jar) | [models/item/emu_nest.json](../development/creativeDelight/src/main/resources/packs/incubation/alexsmobs/assets/creativedelight/models/item/emu_nest.json) |
+| Eggs | **ours:** [textures/block/emu_eggs.png](../development/creativeDelight/src/main/resources/packs/incubation/alexsmobs/assets/creativedelight/textures/block/emu_eggs.png) (recoloured turkey eggs) | [models/block/one_emu_egg.json](../development/creativeDelight/src/main/resources/packs/incubation/alexsmobs/assets/creativedelight/models/block/one_emu_egg.json) to `six_emu_eggs.json`, each parented on `incubation:block/*_turkey_egg(s)` |
 
-**Duck nest** (files in the Incubation Additions jar, `assets/incubation_additions/`)
-
-| Part | Texture file (swap this) | Referenced from |
-|---|---|---|
-| Nest base (empty and filled) | [textures/block/duck_nest.png](../development/incubationAdditions/src/main/resources/packs/untitledduckmod/assets/incubation_additions/textures/block/duck_nest.png) (copy of Incubation's hay nest) | [models/block/duck_nest.json](../development/incubationAdditions/src/main/resources/packs/untitledduckmod/assets/incubation_additions/models/block/duck_nest.json) (twig-nest geometry), used by blockstates [duck_nest.json](../development/incubationAdditions/src/main/resources/packs/untitledduckmod/assets/incubation_additions/blockstates/duck_nest.json) and [duck_egg_nest.json](../development/incubationAdditions/src/main/resources/packs/untitledduckmod/assets/incubation_additions/blockstates/duck_egg_nest.json) |
-| Nest item sprite | [textures/item/duck_nest.png](../development/incubationAdditions/src/main/resources/packs/untitledduckmod/assets/incubation_additions/textures/item/duck_nest.png) (copy of Incubation's hay nest item) | [models/item/duck_nest.json](../development/incubationAdditions/src/main/resources/packs/untitledduckmod/assets/incubation_additions/models/item/duck_nest.json) |
-| Eggs | [textures/block/duck_eggs.png](../development/incubationAdditions/src/main/resources/packs/untitledduckmod/assets/incubation_additions/textures/block/duck_eggs.png) (byte-identical to Incubation's `duck_eggs.png`, md5 checked 2026-10-21) | [models/block/one_duck_egg.json](../development/incubationAdditions/src/main/resources/packs/untitledduckmod/assets/incubation_additions/models/block/one_duck_egg.json) to `six_duck_eggs.json`, each parented on `incubation:block/*_duck_egg(s)` |
-
-**Goose nest** (files in the Incubation Additions jar, `assets/incubation_additions/`)
+**Duck nest** (files in the Creative Delight jar, `packs/incubation/untitledduckmod/assets/creativedelight/`)
 
 | Part | Texture file (swap this) | Referenced from |
 |---|---|---|
-| Nest base (empty and filled) | [textures/block/goose_nest.png](../development/incubationAdditions/src/main/resources/packs/untitledduckmod/assets/incubation_additions/textures/block/goose_nest.png) (copy of Incubation's hay nest) | [models/block/goose_nest.json](../development/incubationAdditions/src/main/resources/packs/untitledduckmod/assets/incubation_additions/models/block/goose_nest.json) (twig-nest geometry), used by blockstates [goose_nest.json](../development/incubationAdditions/src/main/resources/packs/untitledduckmod/assets/incubation_additions/blockstates/goose_nest.json) and [goose_egg_nest.json](../development/incubationAdditions/src/main/resources/packs/untitledduckmod/assets/incubation_additions/blockstates/goose_egg_nest.json) |
-| Nest item sprite | [textures/item/goose_nest.png](../development/incubationAdditions/src/main/resources/packs/untitledduckmod/assets/incubation_additions/textures/item/goose_nest.png) (copy of Incubation's hay nest item) | [models/item/goose_nest.json](../development/incubationAdditions/src/main/resources/packs/untitledduckmod/assets/incubation_additions/models/item/goose_nest.json) |
-| Eggs | [textures/block/goose_eggs.png](../development/incubationAdditions/src/main/resources/packs/untitledduckmod/assets/incubation_additions/textures/block/goose_eggs.png) (byte-identical to Incubation's `turkey_eggs.png`, md5 checked 2026-10-21) | [models/block/one_goose_egg.json](../development/incubationAdditions/src/main/resources/packs/untitledduckmod/assets/incubation_additions/models/block/one_goose_egg.json) to `six_goose_eggs.json`, each parented on `incubation:block/*_turkey_egg(s)` |
+| Nest base (empty and filled) | [textures/block/duck_nest.png](../development/creativeDelight/src/main/resources/packs/incubation/untitledduckmod/assets/creativedelight/textures/block/duck_nest.png) (copy of Incubation's hay nest) | [models/block/duck_nest.json](../development/creativeDelight/src/main/resources/packs/incubation/untitledduckmod/assets/creativedelight/models/block/duck_nest.json) (twig-nest geometry), used by blockstates [duck_nest.json](../development/creativeDelight/src/main/resources/packs/incubation/untitledduckmod/assets/creativedelight/blockstates/duck_nest.json) and [duck_egg_nest.json](../development/creativeDelight/src/main/resources/packs/incubation/untitledduckmod/assets/creativedelight/blockstates/duck_egg_nest.json) |
+| Nest item sprite | [textures/item/duck_nest.png](../development/creativeDelight/src/main/resources/packs/incubation/untitledduckmod/assets/creativedelight/textures/item/duck_nest.png) (copy of Incubation's hay nest item) | [models/item/duck_nest.json](../development/creativeDelight/src/main/resources/packs/incubation/untitledduckmod/assets/creativedelight/models/item/duck_nest.json) |
+| Eggs | [textures/block/duck_eggs.png](../development/creativeDelight/src/main/resources/packs/incubation/untitledduckmod/assets/creativedelight/textures/block/duck_eggs.png) (byte-identical to Incubation's `duck_eggs.png`, md5 checked 2026-10-21) | [models/block/one_duck_egg.json](../development/creativeDelight/src/main/resources/packs/incubation/untitledduckmod/assets/creativedelight/models/block/one_duck_egg.json) to `six_duck_eggs.json`, each parented on `incubation:block/*_duck_egg(s)` |
+
+**Goose nest** (files in the Creative Delight jar, `packs/incubation/untitledduckmod/assets/creativedelight/`)
+
+| Part | Texture file (swap this) | Referenced from |
+|---|---|---|
+| Nest base (empty and filled) | [textures/block/goose_nest.png](../development/creativeDelight/src/main/resources/packs/incubation/untitledduckmod/assets/creativedelight/textures/block/goose_nest.png) (copy of Incubation's hay nest) | [models/block/goose_nest.json](../development/creativeDelight/src/main/resources/packs/incubation/untitledduckmod/assets/creativedelight/models/block/goose_nest.json) (twig-nest geometry), used by blockstates [goose_nest.json](../development/creativeDelight/src/main/resources/packs/incubation/untitledduckmod/assets/creativedelight/blockstates/goose_nest.json) and [goose_egg_nest.json](../development/creativeDelight/src/main/resources/packs/incubation/untitledduckmod/assets/creativedelight/blockstates/goose_egg_nest.json) |
+| Nest item sprite | [textures/item/goose_nest.png](../development/creativeDelight/src/main/resources/packs/incubation/untitledduckmod/assets/creativedelight/textures/item/goose_nest.png) (copy of Incubation's hay nest item) | [models/item/goose_nest.json](../development/creativeDelight/src/main/resources/packs/incubation/untitledduckmod/assets/creativedelight/models/item/goose_nest.json) |
+| Eggs | [textures/block/goose_eggs.png](../development/creativeDelight/src/main/resources/packs/incubation/untitledduckmod/assets/creativedelight/textures/block/goose_eggs.png) (byte-identical to Incubation's `turkey_eggs.png`, md5 checked 2026-10-21) | [models/block/one_goose_egg.json](../development/creativeDelight/src/main/resources/packs/incubation/untitledduckmod/assets/creativedelight/models/block/one_goose_egg.json) to `six_goose_eggs.json`, each parented on `incubation:block/*_turkey_egg(s)` |
 
 **Egg crates and the duck mod's egg items** (Untitled Duck Mod pack)
 
 | Part | Texture file (swap this) | Referenced from |
 |---|---|---|
-| Duck egg crate top / side | [duck_egg_crate_top.png](../development/incubationAdditions/src/main/resources/packs/untitledduckmod/assets/incubation_additions/textures/block/duck_egg_crate_top.png), [duck_egg_crate_side.png](../development/incubationAdditions/src/main/resources/packs/untitledduckmod/assets/incubation_additions/textures/block/duck_egg_crate_side.png); bottom is Incubation's `chicken_egg_crate_bottom` | [models/block/duck_egg_crate.json](../development/incubationAdditions/src/main/resources/packs/untitledduckmod/assets/incubation_additions/models/block/duck_egg_crate.json) (`cube_bottom_top`) |
-| Goose egg crate top / side | [goose_egg_crate_top.png](../development/incubationAdditions/src/main/resources/packs/untitledduckmod/assets/incubation_additions/textures/block/goose_egg_crate_top.png), [goose_egg_crate_side.png](../development/incubationAdditions/src/main/resources/packs/untitledduckmod/assets/incubation_additions/textures/block/goose_egg_crate_side.png); same bottom | [models/block/goose_egg_crate.json](../development/incubationAdditions/src/main/resources/packs/untitledduckmod/assets/incubation_additions/models/block/goose_egg_crate.json) |
-| `untitledduckmod:duck_egg` item | [textures/item/duck_egg.png](../development/incubationAdditions/src/main/resources/packs/untitledduckmod/assets/incubation_additions/textures/item/duck_egg.png) (yours, 2026-10-05) | [models/item/duck_egg.json](../development/incubationAdditions/src/main/resources/packs/untitledduckmod/assets/incubation_additions/models/item/duck_egg.json), swapped in for the duck mod's model by `client/DuckModEggModels` |
-| `untitledduckmod:goose_egg` item | [textures/item/goose_egg.png](../development/incubationAdditions/src/main/resources/packs/untitledduckmod/assets/incubation_additions/textures/item/goose_egg.png) (yours, 2026-10-05) | [models/item/goose_egg.json](../development/incubationAdditions/src/main/resources/packs/untitledduckmod/assets/incubation_additions/models/item/goose_egg.json), same swap |
+| Duck egg crate top / side | [duck_egg_crate_top.png](../development/creativeDelight/src/main/resources/packs/incubation/untitledduckmod/assets/creativedelight/textures/block/duck_egg_crate_top.png), [duck_egg_crate_side.png](../development/creativeDelight/src/main/resources/packs/incubation/untitledduckmod/assets/creativedelight/textures/block/duck_egg_crate_side.png); bottom is Incubation's `chicken_egg_crate_bottom` | [models/block/duck_egg_crate.json](../development/creativeDelight/src/main/resources/packs/incubation/untitledduckmod/assets/creativedelight/models/block/duck_egg_crate.json) (`cube_bottom_top`) |
+| Goose egg crate top / side | [goose_egg_crate_top.png](../development/creativeDelight/src/main/resources/packs/incubation/untitledduckmod/assets/creativedelight/textures/block/goose_egg_crate_top.png), [goose_egg_crate_side.png](../development/creativeDelight/src/main/resources/packs/incubation/untitledduckmod/assets/creativedelight/textures/block/goose_egg_crate_side.png); same bottom | [models/block/goose_egg_crate.json](../development/creativeDelight/src/main/resources/packs/incubation/untitledduckmod/assets/creativedelight/models/block/goose_egg_crate.json) |
+| `untitledduckmod:duck_egg` item | [textures/item/duck_egg.png](../development/creativeDelight/src/main/resources/packs/incubation/untitledduckmod/assets/creativedelight/textures/item/duck_egg.png) (yours, 2026-10-05) | [models/item/duck_egg.json](../development/creativeDelight/src/main/resources/packs/incubation/untitledduckmod/assets/creativedelight/models/item/duck_egg.json), swapped in for the duck mod's model by `client/DuckModEggModels` |
+| `untitledduckmod:goose_egg` item | [textures/item/goose_egg.png](../development/creativeDelight/src/main/resources/packs/incubation/untitledduckmod/assets/creativedelight/textures/item/goose_egg.png) (yours, 2026-10-05) | [models/item/goose_egg.json](../development/creativeDelight/src/main/resources/packs/incubation/untitledduckmod/assets/creativedelight/models/item/goose_egg.json), same swap |
 
-All of these files live in `development/incubationAdditions/src/main/resources/packs/<mod id>/assets/incubation_additions/`
+All of these files live in `development/creativeDelight/src/main/resources/packs/incubation/<bird mod>/assets/creativedelight/`
 (`alexsmobs` for the emu, `untitledduckmod` for the rest) and ship inside the jar. Each folder is a
 built-in pack that only loads when its mod is installed.
 
@@ -154,36 +156,54 @@ PNG at the same path there replaces the jar's copy and reloads with F3+T. No mod
 
 1. *Any of our textures* (emu/duck/goose egg sheets, duck/goose nest base and item, crate top/side,
    duck/goose egg item sprites): put the new PNG at
-   `kubejs/assets/incubation_additions/textures/<block|item>/<name>.png`, same name as in the tables.
+   `kubejs/assets/creativedelight/textures/<block|item>/<name>.png`, same name as in the tables.
    Keep an egg sheet on the layout its geometry reads (duck = Incubation duck layout, goose and emu =
    turkey). Want a different egg geometry? Change the six `parent` lines of that bird's egg models.
 2. *Emu nest base or item:* it still points at Incubation's `twig_nest` textures. Copy the duck
    pattern in the mod's resources: `textures/block/emu_nest.png`, `models/block/emu_nest.json` with
    the `nest` texture override, the two emu blockstates repointed, and an item model.
 3. Once a texture is final, copy it into the right `packs/<mod id>/assets/` folder and rebuild
-   (`./gradlew :incubationAdditions:installToMods`), then delete the `kubejs/assets/` copy.
+   (now `./gradlew :creativeDelight:installToMods`, the member is nested), then delete the `kubejs/assets/` copy.
 4. Resource-pack zips in `resourcepacks/` beat `kubejs/assets/` (see the lang-priority note in
    memory); none touch these paths as of 2026-10-05.
 
+### 2.4 Where nests generate (built 2026-11-03)
+
+Incubation's own feature type `incubation:bird_nest` (config `state`, `entity_id`; places the filled nest with 2 to 4
+eggs on air above a grass block and tries to spawn 4 of the bird nearby), one set per bird in that bird's pack:
+
+| Nest | Placed feature | Bird spawned | Mod default biomes (`#creativedelight:has_feature/<bird>_nest`) | Pack adds (CD `incubation/bird_nests.js`) |
+|---|---|---|---|---|
+| Duck nest (`duck_egg_nest`) | `creativedelight:nest_duck` | `untitledduckmod:duck` | `#untitledduckmod:duck_spawn` (rivers) | `#creativeengineering:mob_spawns/duck_wetlands` (swamps, beaches) |
+| Goose nest (`goose_egg_nest`) | `creativedelight:nest_goose` | `untitledduckmod:goose` | `#untitledduckmod:goose_spawn` (rivers) | `#creativeengineering:mob_spawns/goose_wetlands` |
+| Emu nest (`emu_egg_nest`) | `creativedelight:nest_emu` | `alexsmobs:emu` | `#minecraft:is_savanna` | `#creativeengineering:mob_spawns/am_emu_savanna` (savanna trait, Terralith's included) |
+
+Placement as Incubation's chicken nests: rarity 1 in 32 chunks, in square, heightmap, biome filter; biome modifiers
+`forge:add_features`, step `vegetal_decoration`. Files: `packs/incubation/<mod>/data/creativedelight/worldgen/
+{configured_feature,placed_feature}/nest_<bird>.json`, `tags/worldgen/biome/has_feature/<bird>_nest.json`,
+`forge/biome_modifier/add_feature/<bird>_nest.json`. Brief recommendations taken (TODO decisions "none"): birds spawn
+with the nest, 1 in 32, the `*_ponds` rules left out (they match every grassy land biome). Grass only: badlands, sand
+and snow get none. New chunks only. Quick look: `/place feature creativedelight:nest_duck` on grass.
+
 ## 3. What the pack changes
 
-1. **Emus lay in nests.** [EntityEmuEggLayerMixin](../development/incubationAdditions/src/main/java/com/SaintAlfonzo/incubation_additions/mixin/EntityEmuEggLayerMixin.java)
+1. **Emus lay in nests.** [EntityEmuEggLayerMixin](../development/creativeDelight/src/main/java/com/SaintAlfonzo/creativedelight/mixin/alexsmobs/EntityEmuEggLayerMixin.java)
    makes `EntityEmu` an `EggLayer`. It only exposes the emu's existing `timeUntilNextEgg` timer, which
    already works exactly like the chicken's (6000 + rand(6000), saved as NBT `EggLayTime`).
-2. **Ducks and geese lay in nests.** [DuckEntityEggLayerMixin](../development/incubationAdditions/src/main/java/com/SaintAlfonzo/incubation_additions/mixin/DuckEntityEggLayerMixin.java)
-   and [GooseEntityEggLayerMixin](../development/incubationAdditions/src/main/java/com/SaintAlfonzo/incubation_additions/mixin/GooseEntityEggLayerMixin.java)
+2. **Ducks and geese lay in nests.** [DuckEntityEggLayerMixin](../development/creativeDelight/src/main/java/com/SaintAlfonzo/creativedelight/mixin/untitledduckmod/DuckEntityEggLayerMixin.java)
+   and [GooseEntityEggLayerMixin](../development/creativeDelight/src/main/java/com/SaintAlfonzo/creativedelight/mixin/untitledduckmod/GooseEntityEggLayerMixin.java)
    do the same with the duck mod's private `eggLayTime` (NBT `duckEggLayTime` / `gooseEggLayTime`).
 3. **Three new nest pairs** (empty + filled) registered in `EmuNests` and `WaterfowlNests`. The
    filled nest's constructor adds itself to its empty nest's egg map, so nothing else is needed to
    link them.
 4. **Foreign-nest NPE guard.** Incubation's goal accepts any empty nest as a target, then crashes
-   when the nest has no variant for the bird's egg. [LayEggInNestGoalMixin](../development/incubationAdditions/src/main/java/com/SaintAlfonzo/incubation_additions/mixin/LayEggInNestGoalMixin.java)
+   when the nest has no variant for the bird's egg. [LayEggInNestGoalMixin](../development/creativeDelight/src/main/java/com/SaintAlfonzo/creativedelight/mixin/incubation/LayEggInNestGoalMixin.java)
    rejects those nests in `isValidTarget`, which also gives the "each bird only uses its own nest"
    rule in 2.2.
 5. **Own mod since 2026-10-05.** Everything above lived in patcherMod (`creativeengineering:` ids) up
    to 1.0.5. `IncubationAdditions.remapOldIds` (a `MissingMappingsEvent` handler, same as Exposure
    Extras does for the camera bags) loads nests and nest items saved under the old ids as the
-   `incubation_additions:` ones, egg counts included.
+   `creativedelight:` ones, egg counts included.
 6. **One content set per bird mod.** Incubation is the only hard dependency. `IncubationAdditions`
    keeps a list of sets (Alex's Mobs: emu nest; Untitled Duck Mod: duck/goose nests, egg crates, egg
    item sprites). A set whose mod is missing registers nothing, and `IncubationAdditionsMixinPlugin`
@@ -193,18 +213,18 @@ PNG at the same path there replaces the jar's copy and reloads with F3+T. No mod
    `packs/<mod id>/`, not the jar's root resources. `addPacks` (Forge `AddPackFindersEvent`) adds that
    folder as a required, hidden built-in pack, for both client resources and server data, only for
    active sets. On an existing world the pack is switched on automatically (`datapack list` shows
-   `incubation_additions:<mod id> (built-in)`). Tags: the nests join `incubation:bird_nests`
+   `creativedelight:<mod id> (built-in)`). Tags: the nests join `incubation:bird_nests`
    (hoe-mineable), the crates `minecraft:mineable/axe`.
 8. **Egg crates** (`crate/WaterfowlEggCrates`): duck and goose versions of Incubation's chicken egg
    crate, properties copied from it.
 9. **Duck mod egg item sprites** (`client/DuckModEggModels`, client only): the duck mod's
    `duck_egg` / `goose_egg` inventory models are replaced at model bake (`ModelEvent.BakingCompleted`)
-   by `incubation_additions:item/duck_egg` / `goose_egg`.
+   by `creativedelight:item/duck_egg` / `goose_egg`.
 10. **KubeJS keeps only pack-level bits:** `i.*` / `b.*` keys for the nests and crates in the dicts,
    compost values. The nest recipes (`misc_mods.js`) and the `bird_nests` tag (`blocktags.js`) moved
    into the mod.
 11. **Goose golden egg** (1.1.0, Untitled Duck Mod set, only while Vintage Delight is loaded and
-   `vintagedelight:golden_egg` exists). [GooseEntityEggLayerMixin](../development/incubationAdditions/src/main/java/com/SaintAlfonzo/incubation_additions/mixin/GooseEntityEggLayerMixin.java):
+   `vintagedelight:golden_egg` exists). [GooseEntityEggLayerMixin](../development/creativeDelight/src/main/java/com/SaintAlfonzo/creativedelight/mixin/untitledduckmod/GooseEntityEggLayerMixin.java):
    at the head of `aiStep`, on the first tick the egg timer is 400 or less (the nest goal's window, before
    the goals run that tick), it rolls `goldenEggChance` once per egg. A win sets a "golden egg due" flag:
    `LayEggInNestGoalMixin` makes `canEggBeLaid` false for that goose, so it never starts or continues a nest
@@ -239,8 +259,8 @@ PNG at the same path there replaces the jar's copy and reloads with F3+T. No mod
 - **Placeholder nest looks.** The duck and goose nest textures are still copies of the hay nest, and
   the emu nest uses the twig nest, so the bases look alike until those PNGs are repainted. The
   eggs are distinct: emu, duck and goose each have their own sheet.
-- **Nest variety in spawning (planned, scratchpad 2026-10-21).** New textures for the duplicated nests (above), and
-  nests generating in goose, duck and emu habitats. TODO `mobs/nests #3`.
+- **Nest variety in spawning (scratchpad 2026-10-21).** Nests in goose, duck and emu habitats BUILT 2026-11-03 (2.4).
+  New textures for the duplicated nests still need art (the 4 nest PNGs of the license bullet above). TODO `mobs/nests #3`.
 - **Egg geometry follows the painted layout.** The duck sheet is painted to Incubation's duck-egg
   UVs, so duck nests use the `*_duck_eggs` models; the goose sheet fits the turkey UVs, so geese get
   the larger turkey eggs (same as emus).
@@ -268,24 +288,28 @@ PNG at the same path there replaces the jar's copy and reloads with F3+T. No mod
 
 ## 5. File map
 
+Since M8 (2026-11-04, plan_cb_publish.md 3b) the code is Creative Delight's Incubation compartment, not a member mod.
+
 | File | Role |
 |---|---|
-| [nest/EmuNests.java](../development/incubationAdditions/src/main/java/com/SaintAlfonzo/incubation_additions/nest/EmuNests.java) | emu nest blocks + item, flammability |
-| [nest/WaterfowlNests.java](../development/incubationAdditions/src/main/java/com/SaintAlfonzo/incubation_additions/nest/WaterfowlNests.java) | duck + goose nest blocks + items, flammability |
-| [mixin/EntityEmuEggLayerMixin.java](../development/incubationAdditions/src/main/java/com/SaintAlfonzo/incubation_additions/mixin/EntityEmuEggLayerMixin.java) | emu as EggLayer |
-| [mixin/DuckEntityEggLayerMixin.java](../development/incubationAdditions/src/main/java/com/SaintAlfonzo/incubation_additions/mixin/DuckEntityEggLayerMixin.java) | duck as EggLayer |
-| [mixin/GooseEntityEggLayerMixin.java](../development/incubationAdditions/src/main/java/com/SaintAlfonzo/incubation_additions/mixin/GooseEntityEggLayerMixin.java) | goose as EggLayer |
-| [mixin/LayEggInNestGoalMixin.java](../development/incubationAdditions/src/main/java/com/SaintAlfonzo/incubation_additions/mixin/LayEggInNestGoalMixin.java) | skip nests with no variant for the bird's egg |
-| [IncubationAdditions.java](../development/incubationAdditions/src/main/java/com/SaintAlfonzo/incubation_additions/IncubationAdditions.java) | mod class: content sets per bird mod, built-in packs, flammability, old-id remap |
-| [IncubationAdditionsMixinPlugin.java](../development/incubationAdditions/src/main/java/com/SaintAlfonzo/incubation_additions/IncubationAdditionsMixinPlugin.java) | applies each mixin only when the mod it serves is installed |
-| [crate/WaterfowlEggCrates.java](../development/incubationAdditions/src/main/java/com/SaintAlfonzo/incubation_additions/crate/WaterfowlEggCrates.java) | duck + goose egg crates |
-| [client/DuckModEggModels.java](../development/incubationAdditions/src/main/java/com/SaintAlfonzo/incubation_additions/client/DuckModEggModels.java) | duck mod egg item model swap (client) |
-| [mods.toml](../development/incubationAdditions/src/main/resources/META-INF/mods.toml), [gradle.properties](../development/incubationAdditions/gradle.properties), [README.md](../development/incubationAdditions/README.md) | mod metadata and dependencies, version, build notes |
-| [packs/alexsmobs/](../development/incubationAdditions/src/main/resources/packs/alexsmobs/) | emu pack: assets, recipe, loot tables, `bird_nests` tag, `emu_nest_drops` item tag |
-| [packs/untitledduckmod/](../development/incubationAdditions/src/main/resources/packs/untitledduckmod/) | duck/goose pack: assets (nests, crates, egg item sprites), recipes, loot tables, `bird_nests` + `mineable/axe` tags |
-| [kubejs/server_scripts/other/misc_mods.js](../kubejs/server_scripts/other/misc_mods.js) | twig nest recipe (the others moved to the mod) |
-| [kubejs/startup_scripts/compost/compost_values.js](../kubejs/startup_scripts/compost/compost_values.js) | 0.65 for all nests |
-| [item_dict.js](../kubejs/startup_scripts/_lib/item_dict.js), [block_dict.js](../kubejs/startup_scripts/_lib/block_dict.js) | ids |
+| [compat/incubation/nest/EmuNests.java](../development/creativeDelight/src/main/java/com/SaintAlfonzo/creativedelight/compat/incubation/nest/EmuNests.java) | emu nest blocks + item, flammability |
+| [compat/incubation/nest/WaterfowlNests.java](../development/creativeDelight/src/main/java/com/SaintAlfonzo/creativedelight/compat/incubation/nest/WaterfowlNests.java) | duck + goose nest blocks + items, flammability |
+| [mixin/alexsmobs/EntityEmuEggLayerMixin.java](../development/creativeDelight/src/main/java/com/SaintAlfonzo/creativedelight/mixin/alexsmobs/EntityEmuEggLayerMixin.java) | emu as EggLayer |
+| [mixin/untitledduckmod/DuckEntityEggLayerMixin.java](../development/creativeDelight/src/main/java/com/SaintAlfonzo/creativedelight/mixin/untitledduckmod/DuckEntityEggLayerMixin.java) | duck as EggLayer |
+| [mixin/untitledduckmod/GooseEntityEggLayerMixin.java](../development/creativeDelight/src/main/java/com/SaintAlfonzo/creativedelight/mixin/untitledduckmod/GooseEntityEggLayerMixin.java) | goose as EggLayer |
+| [mixin/incubation/LayEggInNestGoalMixin.java](../development/creativeDelight/src/main/java/com/SaintAlfonzo/creativedelight/mixin/incubation/LayEggInNestGoalMixin.java) | skip nests with no variant for the bird's egg |
+| [compat/incubation/IncubationCompartment.java](../development/creativeDelight/src/main/java/com/SaintAlfonzo/creativedelight/compat/incubation/IncubationCompartment.java) | entry point: content sets per bird mod, flammability |
+| [compat/Compartments.java](../development/creativeDelight/src/main/java/com/SaintAlfonzo/creativedelight/compat/Compartments.java), [compat/CompartmentPacks.java](../development/creativeDelight/src/main/java/com/SaintAlfonzo/creativedelight/compat/CompartmentPacks.java), [compat/CDMixinPlugin.java](../development/creativeDelight/src/main/java/com/SaintAlfonzo/creativedelight/compat/CDMixinPlugin.java) | load guard (Incubation loaded, `[compartments] incubation`), the built-in packs per bird mod, the mixin gate |
+| [compat/incubation/crate/WaterfowlEggCrates.java](../development/creativeDelight/src/main/java/com/SaintAlfonzo/creativedelight/compat/incubation/crate/WaterfowlEggCrates.java) | duck + goose egg crates |
+| [compat/incubation/client/DuckModEggModels.java](../development/creativeDelight/src/main/java/com/SaintAlfonzo/creativedelight/compat/incubation/client/DuckModEggModels.java) | duck mod egg item model swap (client) |
+| [swaps/compartments.json](../development/creativeDelight/src/main/resources/data/creativedelight/swaps/compartments.json) | old ids (`incubation_additions:*`, `creativeengineering:*` nests) to `creativedelight:*` |
+| [packs/incubation/alexsmobs/](../development/creativeDelight/src/main/resources/packs/incubation/alexsmobs/) | emu pack (Incubation + Alex's Mobs): assets, recipe, loot tables, `bird_nests` tag, `emu_nest_drops` item tag |
+| [packs/incubation/untitledduckmod/](../development/creativeDelight/src/main/resources/packs/incubation/untitledduckmod/) | duck/goose pack (Incubation + Untitled Duck Mod): assets (nests, crates, egg item sprites), recipes, loot tables, `bird_nests` + `mineable/axe` tags |
+| `packs/incubation/*/data/creativedelight/worldgen/`, `forge/biome_modifier/`, `tags/worldgen/biome/` | wild nests (2.4) |
+| [kubejs/data/creativedelight/kubejs/incubation/bird_nests.js](../kubejs/data/creativedelight/kubejs/incubation/bird_nests.js) | pack habitats for the wild nests (biome tags) |
+| [kubejs/server_scripts/other/misc_mods.js](../kubejs/server_scripts/other/misc_mods.js) | twig nest recipe (the others are in the packs) |
+| [kubejs_startup/incubation/compost.js](../development/creativeDelight/src/main/resources/kubejs_startup/incubation/compost.js) | 0.65 for all nests |
+| [item_dict.js](../development/creativeCommon/src/main/resources/kubejs_startup/creativecommon/_lib/item_dict.js), [block_dict.js](../development/creativeCommon/src/main/resources/kubejs_startup/creativecommon/_lib/block_dict.js) | ids |
 
 ## 6. Offline checks
 
@@ -312,6 +336,8 @@ PNG at the same path there replaces the jar's copy and reloads with F3+T. No mod
 
 ## 7. In-game test suite
 
+- **r1103 2026-11-03** (scratch server; verdicts in `perf/runs/r1103/` FINAL.md and the slice judged.md): PASS SQ-NEST-01; SQ-NEST-02 OPEN: 0 nests in swamp and savanna, but no loaded-ground check; hand-check.
+
 - [ ] **NE-01 emu nest recipe:** 5 bark in a U in a crafting table -> 1 Emu Nest, twig-nest sprite.
 - [ ] **NE-02 duck/goose recipes:** `T T`/`GGG` -> Duck Nest; `G G`/`TTT` -> Goose Nest (G grass, T tall grass).
 - [ ] **NE-03 emu lays in nest:** fence an adult emu with an emu nest, wait up to 10 min -> nest shows 1 emu egg (our recoloured texture), no egg on the ground.
@@ -321,7 +347,7 @@ PNG at the same path there replaces the jar's copy and reloads with F3+T. No mod
 - [ ] **NE-07 hopper pulls eggs:** hopper under a filled nest -> eggs move into the hopper one at a time, nest goes back to empty.
 - [ ] **NE-08 break and take:** right-click a filled nest -> 1 egg; break it with a hoe -> empty nest (emu: bark unless sheared). Note whether leftover eggs drop.
 - [ ] **NE-09 nests burn and compost:** fire next to a nest spreads to it; an empty nest in a composter has a 65 % chance to add a layer.
-- [ ] **NE-10 hotswap:** place a test PNG at `kubejs/assets/incubation_additions/textures/block/emu_eggs.png`, F3+T -> emu eggs change, chicken and turkey eggs don't.
+- [ ] **NE-10 hotswap:** place a test PNG at `kubejs/assets/creativedelight/textures/block/emu_eggs.png` (was `incubation_additions/` before M8), F3+T -> emu eggs change, chicken and turkey eggs don't.
 - [ ] **NE-11 duck/goose look:** fill a duck and a goose nest -> each shows its own egg texture (duck eggs on the duck shape, goose eggs as larger turkey-shaped eggs); nest bases and items look like the hay nest; no missing-texture checkerboard.
 - [ ] **NE-12 old world:** load a world that has an emu nest from 1.0.2-1.0.4 (or duck/goose nests from a
   1.0.5 test) after installing Incubation Additions -> the nests are still there, no "missing registry
@@ -363,3 +389,7 @@ PNG at the same path there replaces the jar's copy and reloads with F3+T. No mod
 - 2026-10-25: the goose lays the Golden Egg as a block (`GoldenGooseEgg.lay`, `DropSpot.pickBlock`); item only
   in a closed 1x1 pen. Built (`:incubationAdditions:build` passes, `pickBlock` checked in plain Java: open ground
   gives the next block over); not in `mods/`, not run in game. NE-15, NE-16 updated, NE-17 added.
+- 2026-11-02 (deep scan): the mod is a Creative Delight member since 2026-11-01 (`development/creativeDelight/members/incubation`); file links in this writeup repointed, build through `:creativeDelight:`.
+- 2026-11-03: wild duck, goose and emu nests (2.4, TODO `mobs/nests #3` habitat half): worldgen data in the two bird packs, pack habitats in CD `incubation_additions/bird_nests.js`. In the CD jar installed 2026-11-03 00:08, not booted. SQ-NEST-01, -02.
+- 2026-11-04: M8 (plan_cb_publish.md 3b, D3, D6): Incubation Additions folded into Creative Delight's own jar as the optional Incubation compartment (sections 0 and 5); ids moved to `creativedelight:*` (swap list `compartments.json`, which also takes over the old `creativeengineering:*` nest remap), config to `creativedelight-common.toml [incubation]`, scripts to `incubation/` (`// requires: incubation`, emu and duck rows guarded by `global.has`). CD 1.1.0 built, not installed. Tests SQ-CDFO-01 to -03, CQ-CDFO-01.
+- 2026-11-05: the 11 Incubation-derived textures (nests, egg sheets, crate faces) no longer ship; Creative Delight builds them on the client from Incubation's jar ([creative_delight.md](creative_delight.md) 40.1, TODO `mobs/nests #2`). Paths unchanged, so the section 4 tables and NE-10 still apply. Tests CQ-LCA-03, -04.

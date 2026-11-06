@@ -1,8 +1,8 @@
 package com.SaintAlfonzo.creativedelight.mixin.farmersrespite;
 
-import com.SaintAlfonzo.creativeengineering.cooking.RemainderBuffer;
-import com.SaintAlfonzo.creativeengineering.cooking.RemainderBufferHolder;
-import com.SaintAlfonzo.creativeengineering.cooking.RemainderSlot;
+import com.SaintAlfonzo.creativedelight.cooking.RemainderBuffer;
+import com.SaintAlfonzo.creativedelight.cooking.RemainderBufferHolder;
+import com.SaintAlfonzo.creativedelight.cooking.RemainderSlot;
 
 import net.minecraft.world.entity.player.Inventory;
 import net.minecraft.world.entity.player.Player;

@@ -1,0 +1,74 @@
+# Run r1102b, worldgen slice, boot W2: group B fresh world "efb6", seed 8675309, waterReach = 6 (SQ-EFB-19 second
+# world, SQ-EFB-22). Setup: w_setup.md W2. Same RES as w_1_B.qb (square centres RV, CO, DE, BV come from
+# RES/vars.json; same seed = same terrain). W1 files in $INST/perf/runs/r1103w/w.
+pace 2
+
+## SQ-EFB-19-W6 | second world: waterReach 6 in the toml
+bootexpect Done \(
+shell grep -qE '^\s*waterReach = 6' config/creativeworldgen-common.toml && grep -qE '^\s*log = "ALL"' config/creativeworldgen-common.toml && echo 'waterReach 6, earth-fill log ALL'
+> chunky shape square
+
+## W2-GEN-RV | square RV r 300 (same centre as W1)
+> chunky world minecraft:overworld
+> chunky center {RV1} {RV3}
+> chunky radius 300
+> chunky start
+waitlog Task finished 5400
+
+## W2-GEN-CO | square CO r 300 (same centre as W1)
+> chunky world minecraft:overworld
+> chunky center {CO1} {CO3}
+> chunky radius 300
+> chunky start
+waitlog Task finished 5400
+
+## W2-GEN-DE | square DE r 300 (same centre as W1)
+> chunky world minecraft:overworld
+> chunky center {DE1} {DE3}
+> chunky radius 300
+> chunky start
+waitlog Task finished 5400
+
+## W2-GEN-BV | square BV r 300 (same centre as W1)
+> chunky world minecraft:overworld
+> chunky center {BV1} {BV3}
+> chunky radius 300
+> chunky start
+waitlog Task finished 5400
+
+## W2-CEN-RV | census 20 at the river square
+> celocate census 20 {RV1} {RV3}
+waitlog \[celocate\] census done 900
+shell mkdir -p $INST/perf/runs/r1103w/w && cp kubejs/exported/worldgen/locate_census.json $INST/perf/runs/r1103w/w/w2_census_rv20.json && echo copied w2_census_rv20
+
+## W2-CEN-CO | census 20 at the coast square
+> celocate census 20 {CO1} {CO3}
+waitlog \[celocate\] census done 900
+shell mkdir -p $INST/perf/runs/r1103w/w && cp kubejs/exported/worldgen/locate_census.json $INST/perf/runs/r1103w/w/w2_census_co20.json && echo copied w2_census_co20
+
+## W2-CEN-DE | census 20 at the desert square
+> celocate census 20 {DE1} {DE3}
+waitlog \[celocate\] census done 900
+shell mkdir -p $INST/perf/runs/r1103w/w && cp kubejs/exported/worldgen/locate_census.json $INST/perf/runs/r1103w/w/w2_census_de20.json && echo copied w2_census_de20
+
+## W2-CEN-BV | census 20 at the badlands square
+> celocate census 20 {BV1} {BV3}
+waitlog \[celocate\] census done 900
+shell mkdir -p $INST/perf/runs/r1103w/w && cp kubejs/exported/worldgen/locate_census.json $INST/perf/runs/r1103w/w/w2_census_bv20.json && echo copied w2_census_bv20
+> save-all flush
+waitlog Saved the game 300
+shell mkdir -p $INST/perf/runs/r1103w/w; cp logs/latest.log $INST/perf/runs/r1103w/w/w2_latest.log
+
+## SQ-EFB-19 | waterReach 2 vs 6: more over-water cancels and prunes at 2; villages near rivers
+shell for v in "RV {RV1} {RV3}" "CO {CO1} {CO3}"; do set -- $v; for w in w1 w2; do echo "== $1 $w"; python3 -I $INST/tools/scratch_query/efb_judge.py log $INST/perf/runs/r1103w/w/${w}_latest.log --box $(($2-300)) $(($3-300)) $(($2+300)) $(($3+300)) | head -1; done; done
+shell python3 -c "import json; W='$INST/perf/runs/r1103w/w/'; [print(sq, w, [(s['structure'], s['built']) for s in json.load(open(W+w+'_census_'+sq+'20.json'))['structures'] if 'village' in s['structure'] or 'outpost' in s['structure']]) for sq in ('rv','co') for w in ('w1','w2')]"
+look world 2 (W1) more over-water cancels and prunes than world 6 (W2); villages lost near water in the river square: flag if more than a third; kept river villages on filled banks (client look)
+
+## SQ-EFB-22 | deserts still work: desert and badlands counts within 10 % in both worlds
+shell python3 -c "import json,re; W='$INST/perf/runs/r1103w/w/'; rx=r'(village_desert|fortified_desert_village|village_badlands|pillager_outpost_(desert|badlands)|desert_pyramid|betterdeserttemples:desert_temple)'; [print(sq, w, sorted((s['structure'], s['built']) for s in json.load(open(W+w+'_census_'+sq+'20.json'))['structures'] if re.search(rx, s['structure']))) for sq in ('de','bv') for w in ('w1','w2')]"
+shell for w in w1 w2; do echo "== $w CANCELLED per id"; grep -a "CANCELLED" $INST/perf/runs/r1103w/w/${w}_latest.log | grep -v predicted | grep -oE "(minecraft:village_desert|terralith:fortified_desert_village|towns_and_towers:village_badlands|towns_and_towers:pillager_outpost_(desert|badlands)|minecraft:desert_pyramid|betterdeserttemples:desert_temple)" | sort | uniq -c; done
+look dry-desert counts within 10 % across the worlds; losses only at water and cliffs; two kept oasis villages from the client: houses on sand banks, no floor over water
+
+## SQ-WGE-06d-x | same seed, two worlds: village layouts piece by piece (canonical pool order)
+shell W1=$(cat $INST/perf/runs/r1103w/w/w1_srv_path)/wge; test -d $W1 || { echo "W1 world not found: $W1"; exit 1; }; f=0; for sq in "{RV1} {RV3}" "{CO1} {CO3}" "{DE1} {DE3}" "{BV1} {BV3}"; do set -- $sq; echo "== square $1 $2"; python3 -I $INST/tools/scratch_query/efb_judge.py layouts $W1 efb6 --id village --box $(($1-300)) $(($2-300)) $(($1+300)) $(($2+300)) | tail -6 || f=1; done; exit $f
+# W1 world path from w1_srv_path (written by w_1_B.qb SQ-EFB-20); W1 must not be deleted before this row

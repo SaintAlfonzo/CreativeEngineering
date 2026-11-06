@@ -1,0 +1,40 @@
+# Create: The Salt (Creative Delight repack): upstream mods.toml with the display name suffix, our version and
+# cleaned dependencies (creative_delight.md 0.3, 14.1.6). Expanded by ce.forge-mod's processResources.
+# Every recipe is a create: recipe on Salt's salts. Salt is required (same Creative Delight jar). Create is optional
+# (members #48, CD boots with optional mods absent): without it the mod has one empty @Mod class and its create:
+# recipes are skipped at data load with a log line. Create is always in this pack.
+# The upstream optional "allmods" entry (an MCreator placeholder) is dropped.
+modLoader="javafml"
+loaderVersion="[43,)"
+license="${mod_license}"
+[[mods]]
+modId="${mod_id}"
+version="${mod_version}"
+displayName="${mod_name}"
+credits="Created using mod maker MCreator - https://mcreator.net/about"
+authors="${mod_authors}"
+description='''${mod_description}'''
+[[dependencies.create__the_salt]]
+    modId="forge"
+    mandatory=true
+    versionRange="[43,)"
+    ordering="NONE"
+    side="BOTH"
+[[dependencies.create__the_salt]]
+    modId="minecraft"
+    mandatory=true
+    versionRange="[1.19.2,1.20)"
+    ordering="NONE"
+    side="BOTH"
+[[dependencies.create__the_salt]]
+    modId="create"
+    mandatory=false
+    versionRange="[0,)"
+    ordering="AFTER"
+    side="BOTH"
+[[dependencies.create__the_salt]]
+    modId="salt"
+    mandatory=true
+    versionRange="[0,)"
+    ordering="AFTER"
+    side="BOTH"

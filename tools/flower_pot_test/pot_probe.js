@@ -73,6 +73,18 @@
         return level.getEntitiesOfClass($PTItemEntity, new $PTAABB(p.getX() - 3, p.getY() - 3, p.getZ() - 3, p.getX() + 4, p.getY() + 5, p.getZ() + 4))
     }
     function killItems(level, p) { let l = items(level, p); for (let i = 0; i < l.size(); i++) l.get(i).discard() }
+    // the first frames of a caught Java exception (unwrapping Rhino's WrappedException), so an err names its frame
+    function frames(e) {
+        try {
+            let t = e && e.javaException ? e.javaException : e
+            if (t && t.getWrappedException) t = t.getWrappedException()
+            if (!t || !t.getStackTrace) return null
+            let st = t.getStackTrace(), out = []
+            for (let i = 0; i < st.length && out.length < 12; i++) out.push(String(st[i]))
+            return out
+        } catch (x) { return null }
+    }
+
     function drops(level, p) {
         let l = items(level, p), out = []
         for (let i = 0; i < l.size(); i++) { let st = l.get(i).getItem(); out.push(st.getCount() + 'x ' + key($PTReg.ITEMS, st.getItem())) }
@@ -110,7 +122,7 @@
         let res = { n: 0, first: null, drops: [], survive: null, placedAbove: null, err: null, clicks: [] }
         if (key($PTReg.BLOCKS, level.getBlockState(at).getBlock()) != baseId(H.id)) { res.err = 'holder did not place'; return res }
         let soil = H.kind == 'soil'
-        let before = sig(level, at, soil)
+        let before = sig(level, at, soil), empty = before
         let g = guardThrowable(() => {
             for (let k = 0; k < H.pts.length; k++) {
                 p.setItemInHand($PTHand.MAIN_HAND, Item.of(plant.item, 4))
@@ -121,9 +133,19 @@
                 res.clicks.push(r)
                 if (after != before) { res.n++; if (res.first == null) res.first = after }
                 before = after
+                // a click that empties the holder again (Beautify's hanging pot hands the plant back) ends the clicks
+                // with the plant in: replant once and stop, so the break below tests the drop, not an empty holder
+                if (res.n > 0 && after == empty && k + 1 < H.pts.length) {
+                    p.setItemInHand($PTHand.MAIN_HAND, Item.of(plant.item, 4))
+                    let pt0 = H.pts[0]
+                    let hit0 = new $PTHit(facePoint(at, H.face, pt0[0], pt0[1]), $PTDir.byName(H.face), at, false)
+                    res.clicks.push(String(p.gameMode.useItemOn(p, level, p.getMainHandItem(), $PTHand.MAIN_HAND, hit0)))
+                    res.toggle = true
+                    break
+                }
             }
         })
-        if (!g.ok) res.err = String(g.error)
+        if (!g.ok) { res.err = String(g.error); res.stack = frames(g.error) }
         let upState = level.getBlockState(at.above())
         if (soil) res.survive = upState.isAir() ? null : !!upState.canSurvive(level, at.above())
         else if (!H.ceiling && !upState.isAir()) res.placedAbove = String(upState)

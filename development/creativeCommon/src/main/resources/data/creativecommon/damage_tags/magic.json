@@ -1,0 +1,12 @@
+{
+  "description": "Vanilla-flagged magic (poison/instant damage, potions, evoker fangs, thorns, warden boom, Alex's Mobs farseer) plus the two non-vanilla-flagged magic-adjacent tags below. This is the tag shields tune their MAGIC column against.",
+  "values": [
+    "magic",
+    "indirectMagic",
+    "thorns",
+    "sonic_boom",
+    "farseer",
+    "#creativecommon:psychic",
+    "#creativecommon:life_drain"
+  ]
+}

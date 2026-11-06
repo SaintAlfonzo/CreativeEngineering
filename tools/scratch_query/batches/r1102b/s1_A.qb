@@ -1,0 +1,842 @@
+# Run r1102b slice 1, Boot A: group A superflat world s1a that Boot O (s1_O.qb) built with the three pre-nest jars;
+# those jars are out now (current mods/ only: CD nests Vintage, CB nests Vinery and Brewin'). Setup: s1_setup.md, Boot A.
+# Probes copied into srv/kubejs/server_scripts before the boot: zz_zq_probe.js (prep_srv.sh), zz_vtd_probe.js
+# (tools/vintage_probe/vintage_probe.js), zz_kt_probe.js (tools/kitchen_probe/cfb_kitchen_probe.js), zz_count.js
+# (tools/fungi_probe/zcount.js), zz_trades.js (tools/fungi_probe/ztrades.js), zz_zloot_probe.js and zz_zti_probe.js
+# (tools/scratch_query/).
+# Home: the marker tagged s1home (capture H; y = H2, the air layer over the superflat grass). Lanes, offsets from H:
+#   Boot O blocks x -30..-20, z 0..5; starter-kit bots x 0, z -5; PS-03 x 2, z -10; VTD6-01 x 10..21, z -20;
+#   VTD6-02 x 10..14, z -25; LE-03 dispensers x 30, z -10 / -22 / -34; FDB-03 x 40..46, z -10 / -14; FDB-04 x 50, z -10;
+#   FDB-05 x 54..62, z -10; FDB-06 x 54..57, z -16; FDB-07 x 70..82, z -10..-26; FDB-11 x 44..50, z -30;
+#   FDB-13 / -14 x 40..72, z -40 / -50 (stone ceiling at H2+3); CDJ-07 sapling x 90, z -10; VP-16 template x 60..90, z 20..45.
+#   /vtdtest builds at absolute x 200..300, z 20..40, y -60; /kttest at absolute x 0..12, y -58.
+# Order: Boot O read-back first, boot-log rows, data rows, probes, world rows, then the rows that edit a config
+# (FDB-05, FDB-07, TI-01) and last the /reload (VP-05b). No kjsexpect rows, so the /reload order is free.
+# Bots get a starter kit 10 ticks after their first join (creativecompat starter_kit.js): every row that needs a
+# bot's hand or inventory waits 2 s and clears the bot first. One bot name per row.
+pace 2
+
+## SQ-VTD4-05 | 1.1.02 Pickling Jar (9 slots) loads in the nested Vintage with its 9 items and a 10th slot
+bootexpect Done \(
+bootreject (?i)mixin apply failed.*(vintagedelight|vinery|brewinandchewin|farmersdelight)
+shell ls mods | grep -i backported; true
+> data get entity @e[type=minecraft:marker,tag=s1home,limit=1] Pos
+capture H entity data: \[(-?\d+)\.\d+d, (-?\d+)\.\d+d, (-?\d+)\.\d+d\]
+> forceload add {H1-32} {H3-56} {H1+96} {H3+48}
+> forceload add 192 16 304 48
+sleep 5
+> difficulty easy
+> weather clear 100000
+> gamerule doDaylightCycle false
+> time set 2000
+> data get block {H1-28} {H2} {H3}
+expect has the following block data: .*Size: 10
+expect has the following block data: .*Count: 9b
+reject (?i)fermenting.?jar.*(error|exception)
+look the jar's Items list still has the 9 stick stacks (counts 1..9) in slots 0..8 and Size 10; no error naming the jar in latest.log
+
+## SQ-CBJ-04 | Vinery / Brewin' blocks of a pre-Creative-Brewing world keep their contents in the CB jar
+bootreject (?i)(Unknown block|missing registry|unidentified mapping).*(vinery|foundation|brewinandchewin)
+bootreject (?i)vinery_upstream.*(missing|not found)
+> data get block {H1-26} {H2} {H3}
+> data get block {H1-24} {H2} {H3}
+expect has the following block data: .*minecraft:wheat
+expect has the following block data: .*vinery:red_grape
+sleep 120
+> data get block {H1-26} {H2} {H3}
+> data get block {H1-24} {H2} {H3}
+look keg still holds 3 wheat + 2 sugar (or a fermenting result) and the barrel 4 red grapes after 2 min of ticking; no Vinery donor warning in latest.log
+
+## SQ-CDJ-07 | FD repack nested: mod file, mixins, dependents, FD blocks of the old world, rich soil under a tree
+bootreject (?i)farmersdelight.*(missing.*dependenc|requires farmersdelight|is not installed)
+bootreject (?i)farmersdelight\.mixins\.json.*(error|failed)
+shell grep -m1 -o "Found valid mod file repackedFarmers[^ ]*" logs/debug.log; echo "FD mixins applied: $(grep -c 'from farmersdelight.mixins.json' logs/debug.log)"; ls mods | grep -i "^FarmersDelight" ; grep -c "farmersdelight-common.toml" logs/debug.log; true
+> execute if block {H1-28} {H2} {H3+3} farmersdelight:stove run say CDJ07 stove kept
+> execute if block {H1-24} {H2} {H3+3} farmersdelight:skillet run say CDJ07 skillet kept
+> data get block {H1-28} {H2+1} {H3+3}
+> data get block {H1-26} {H2} {H3+3}
+expect CDJ07 stove kept
+expect CDJ07 skillet kept
+expect has the following block data: .*minecraft:potato
+expect has the following block data: .*minecraft:carrot
+> fill {H1+88} {H2-1} {H3-12} {H1+92} {H2+8} {H3-8} minecraft:air
+> setblock {H1+90} {H2-1} {H3-10} farmersdelight:rich_soil
+> setblock {H1+90} {H2} {H3-10} minecraft:oak_sapling
+> pbot spawn cdj7 {H1+88} {H2} {H3-10} minecraft:overworld survival
+sleep 2
+> clear cdj7
+> give cdj7 farmersdelight:cooking_pot
+> pbot hold cdj7 minecraft:bone_meal 32
+repeat 8
+> pbot use cdj7 {H1+90} {H2} {H3-10}
+end
+> execute if block {H1+90} {H2} {H3-10} minecraft:oak_log run say CDJ07 tree grew
+> execute if block {H1+90} {H2-1} {H3-10} farmersdelight:rich_soil run say CDJ07 rich soil kept
+expect CDJ07 tree grew
+expect CDJ07 rich soil kept
+expect Gave 1 +\[.*to cdj7
+reject Unknown item
+look shell: repackedFarmers mod file found, FD mixin count > 0, no standalone FarmersDelight jar, FD common config read; the client half (FD mod name, logo, config button, JEI) is SQ-CDJ-08
+
+## SQ-PR-00 | Pretty Rain on the server
+bootexpect Done \(
+bootreject (?i)(particlerain|PrettyRainSeason).*(error|exception|failed)
+shell ls mods | grep -i "pretty rain"; grep -c -i "particlerain" logs/debug.log; grep -m3 -i "particlerain" logs/debug.log | cut -c1-200
+> weather rain 600
+sleep 20
+> weather clear 100000
+reject (?i)particlerain.*(error|exception)
+look shell: the Pretty Rain jar is in srv/mods and debug.log names the particlerain mod file; no crash while it rained
+
+## SQ-CNS-01 | Comfort / Nourishment split at startup
+bootexpect \[comfort_nourishment\] \d+ ruled foods set, \d+ bottles stripped, \d+ other foods lost Nourishment
+bootreject \[comfort_nourishment\] (could not read|no item_dict key)
+bootreject comfort_nourishment\.js.*(Error|error|exception)
+shell grep -o "\[comfort_nourishment\] [0-9]* ruled foods set.*" logs/latest.log | head -1
+look the ruled count is 269 (row text) or the current comfort_nourishment.json count
+
+## SQ-DB-00 | dough blocks register (server half)
+bootreject (?i)(gingerdough|cookie_dough|sweet_potato_dough|oat_dough|cucumber_dough|sourdough)_block.*(error|missing|unknown)
+shell grep -iE "baking_ingredients\.js.*(error|exception)" logs/kubejs/startup.log | head -3; echo "startup errors naming baking_ingredients: $(grep -ciE 'baking_ingredients\.js.*(error|exception)' logs/kubejs/startup.log)"
+> zq item creativeengineering:gingerdough_block
+> zq item creativeengineering:sourdough_block
+expect \[zq\] item creativeengineering:gingerdough_block: class
+expect \[zq\] item creativeengineering:sourdough_block: class
+reject \[zq\] error
+
+## SQ-LE-01 | potion mixes, bottling and tipping counts
+bootexpect \[CE potions\] added \d+ item-agnostic potion mixes
+bootexpect potion bottling done \(\d+ recipes\)
+bootexpect tipped arrow tipping done
+shell grep -oE "\[CE potions\] added [0-9]+ item-agnostic potion mixes|potion bottling done \([0-9]+ recipes\)|tipped arrow tipping done.*|removeByPotion.*" logs/latest.log | sort | uniq -c
+look counts against the user's 2026-10-31 log (58 mixes, 2295 bottling recipes, 127 potions x 2 tipping); the luck rows are SQ-LE-04
+
+## SQ-VTD6-02a | Quark own-pick mixin and tag
+bootreject (?i)QuarkOwnPickMixin.*(error|failed|not apply)
+shell echo "QuarkOwnPickMixin lines: $(grep -c QuarkOwnPickMixin logs/debug.log)"
+> zq blocktag creativeengineering:crops/own_pick
+expect blocktag creativeengineering:crops/own_pick \(\d+\):.*vintagedelight:cucumber_crop
+expect blocktag creativeengineering:crops/own_pick \(\d+\):.*vintagedelight:ghost_pepper_crop
+expect blocktag creativeengineering:crops/own_pick \(\d+\):.*veggiesdelight:zucchini_crop
+
+## SQ-SK-01 | starter kit on first join (perfBot bot = real ServerPlayer through placeNewPlayer)
+> pbot spawn skbot {H1} {H2} {H3-5} minecraft:overworld survival
+waitlog \[starter-kit\] .* kit given to skbot 30
+reject Error occurred while handling event 'PlayerEvents\.loggedIn'
+reject \[starter-kit\] could not (read|write)
+sleep 2
+shell L=$(sed -n 's/^level-name=//p' server.properties); U=$(python3 -c "import hashlib,uuid;print(uuid.UUID(bytes=hashlib.md5(b'OfflinePlayer:skbot').digest(),version=3))"); cat "$L/data/starterkit/tracking.json"; echo; grep -q "$U" "$L/data/starterkit/tracking.json" && echo "skbot $U in tracking.json"
+> data get entity skbot Inventory
+look shell: tracking.json exists with skbot's uuid under "multiplayer"; inventory holds a kit (wooden sword + 9 bread, or copper pickaxe / axe + 8 bread) and the boots / offhand shield
+
+## SQ-SK-02 | rejoin: no second kit; with the file deleted the marker tag still blocks a kit
+> tag skbot list
+expect collective\.firstJoin\.starterkit
+> pbot remove skbot
+sleep 3
+> pbot spawn skbot {H1} {H2} {H3-5} minecraft:overworld survival
+sleep 3
+count \[starter-kit\] .* kit given to skbot \( == 0
+shell L=$(sed -n 's/^level-name=//p' server.properties); rm -f "$L/data/starterkit/tracking.json"; echo removed
+> pbot remove skbot
+sleep 3
+> pbot spawn skbot {H1} {H2} {H3-5} minecraft:overworld survival
+sleep 3
+count \[starter-kit\] .* kit given to skbot \( == 0
+> pbot spawn skbot2 {H1+2} {H2} {H3-5} minecraft:overworld survival
+waitlog \[starter-kit\] .* kit given to skbot2 30
+sleep 2
+shell L=$(sed -n 's/^level-name=//p' server.properties); cat "$L/data/starterkit/tracking.json"; echo
+reject Error occurred while handling event 'PlayerEvents\.loggedIn'
+look skbot gets no kit on either rejoin (tag kept in its playerdata); the new bot skbot2 gets one and the file is written again (holds skbot2; skbot only if the script re-marks tagged players, which it does not: record)
+
+## SQ-CNS-02 | Comfort / Nourishment on eight foods
+> zq food farmersdelight:noodle_soup
+> zq food minecraft:beef_stew
+> zq food farmersdelight:bone_broth
+> zq food farmersdelight:dog_food
+> zq food minecraft:golden_carrot
+> zq food minecraft:enchanted_golden_apple
+> zq food delightful:chunkwich
+> zq food delightful:azalea_tea
+expect food farmersdelight:noodle_soup: .*farmersdelight:nourishment amp 0 4800t
+expect food minecraft:beef_stew: .*farmersdelight:comfort amp 0 4800t
+reject food farmersdelight:bone_broth: .*(comfort|nourishment)
+expect food farmersdelight:dog_food: .*farmersdelight:comfort amp 0 1200t
+expect food minecraft:golden_carrot: .*farmersdelight:nourishment amp 0 2400t
+expect food minecraft:enchanted_golden_apple: .*farmersdelight:nourishment amp 0 4800t
+expect food minecraft:enchanted_golden_apple: .*minecraft:absorption
+reject food delightful:chunkwich: .*nourishment
+reject food delightful:azalea_tea: .*(comfort|nourishment)
+reject not a food|\[zq\] error
+
+## SQ-VTD4-03 | Ghost Charcoal is a food (Wither 100 t, Fire Resistance 3600 t)
+> zq food vintagedelight:ghost_charcoal
+expect food vintagedelight:ghost_charcoal: nutrition 0,
+expect food vintagedelight:ghost_charcoal: .*minecraft:wither amp 0 100t
+expect food vintagedelight:ghost_charcoal: .*minecraft:fire_resistance amp 0 3600t
+reject not a food
+look alwaysEat is not printed by /zq food: the eat half is client (CQ) if needed
+
+## SQ-PS-04 | powdered sugar item exists
+> zq item creativeengineering:powdered_sugar
+> pbot spawn ps04 {H1+4} {H2} {H3-5} minecraft:overworld survival
+sleep 2
+> give ps04 creativeengineering:powdered_sugar 4
+expect \[zq\] item creativeengineering:powdered_sugar: class
+expect Gave 4 +\[
+reject Unknown item
+
+## SQ-DB-02 | dough block tags
+> zq tagsof creativeengineering:gingerdough_block
+> zq tagsof creativeengineering:cookie_dough_block
+> zq tagsof creativeengineering:sweet_potato_dough_block
+> zq tagsof creativeengineering:oat_dough_block
+> zq tagsof creativeengineering:cucumber_dough_block
+> zq tagsof creativeengineering:sourdough_block
+count block tags of creativeengineering:[a-z_]+dough_block: .*minecraft:mineable/shovel == 6
+count block tags of creativeengineering:[a-z_]+dough_block: .*blockrunner:surface/spongy == 6
+count block tags of creativeengineering:[a-z_]+dough_block: .*forge:storage_blocks/[a-z_]*dough == 6
+count item tags of creativeengineering:[a-z_]+dough_block: .*forge:storage_blocks/[a-z_]*dough == 6
+
+## SQ-RM-02 | renamed Oceanic items and Fried Rice: ids, recipes, loot unchanged
+bootreject (?i)(Unknown item|\[NCH\]).*(salmon_eggs|fish_egg_roll|fish_egg_noodle_soup|fried_rice)
+> zq makes oceanic_delight:fish_egg_roll
+> zq makes oceanic_delight:fish_egg_roll_slice
+> zq makes oceanic_delight:fish_egg_noodle_soup
+> zq uses oceanic_delight:salmon_eggs
+> zq makes farmersdelight:fried_rice
+> zq item oceanic_delight:salmon_eggs
+expect makes oceanic_delight:fish_egg_roll: [1-9]
+expect makes oceanic_delight:fish_egg_roll_slice: [1-9]
+expect makes oceanic_delight:fish_egg_noodle_soup: [1-9]
+expect uses oceanic_delight:salmon_eggs: \d+ alone
+reject uses oceanic_delight:salmon_eggs: 0 alone, 0 with
+expect makes farmersdelight:fried_rice: [1-9]
+expect \[zq\] item oceanic_delight:salmon_eggs: class
+look the net loot half (salmon_eggs from the river net) is SQ-FN-03 in the group B boot
+
+## SQ-RM-03 | orange jam from slices: pot and heated mixer; Fruits Delight's 2-orange recipes stay
+> zq rdetail orange_jam_from_slices
+> zq makes fruitsdelight:orange_jelly
+> zq recipes flowing_orange_jam
+expect creativedelight:farmersdelightcooking/orange_jam_from_slices \{farmersdelight:cooking\} -> .*orange_jelly <- .*fruitsdelight:orange_slice
+expect creativedelight:createmixing/orange_jam_from_slices \{create:mixing\}
+expect farmersdelight:cooking/orange_jelly ->
+expect fruitsdelight:mixing/flowing_orange_jam
+look pot recipe inputs: 4 x orange_slice, lemon_slice, a sweetener; mixer: the same plus water (fluid ingredients are not listed by rdetail; heated and 100 mB in / 125 mB out are judged from the script, kubejs/data/creativedelight/kubejs/fruitsdelight/recipes.js)
+
+## SQ-LE-04 | luck / unluck brews: only the pack's six, none from fermented spider eye
+> zq potion minecraft:awkward buzzier_bees:four_leaf_clover,buzzier_bees:silverfish_bottle
+> zq potion minecraft:luck minecraft:redstone,minecraft:glowstone_dust,minecraft:fermented_spider_eye
+> zq potion buzzier_bees:unluck minecraft:redstone,minecraft:glowstone_dust,minecraft:fermented_spider_eye
+expect minecraft:awkward \+ buzzier_bees:four_leaf_clover -> minecraft:potion
+expect minecraft:awkward \+ buzzier_bees:silverfish_bottle -> minecraft:potion
+expect minecraft:luck \+ minecraft:redstone -> minecraft:potion
+expect minecraft:luck \+ minecraft:glowstone_dust -> minecraft:potion
+expect buzzier_bees:unluck \+ minecraft:redstone -> minecraft:potion
+expect buzzier_bees:unluck \+ minecraft:glowstone_dust -> minecraft:potion
+expect minecraft:luck \+ minecraft:fermented_spider_eye -> nothing
+reject registered: false
+look the potion names on the six lines (luck / unluck; long and strong share the base name, so "exactly one mix each" is not provable from /zq: PotionBrewing.POTION_MIXES is private)
+
+## SQ-LE-05 | no bedroll from leatherworkers
+> ztrades leatherworker 1 15
+> ztrades leatherworker 2 15
+> ztrades leatherworker 3 15
+> ztrades leatherworker 4 15
+> ztrades leatherworker 5 15
+waitlog \[ztrades\] leatherworker L5 #14 90
+reject (?i)\[ztrades\].*bedroll
+expect \[ztrades\] leatherworker L1
+
+## SQ-FDB-02 | FD 1.3.4 backport items
+bootreject (?i)item_dict.*(rope_fence|gleaming_salad|pumpkin_pie_slice|hanging_canvas_sign)
+> pbot spawn fdb2 {H1+6} {H2} {H3-5} minecraft:overworld survival
+sleep 2
+> give fdb2 farmersdelight:rope_fence 3
+> give fdb2 farmersdelight:rope_fence_gate
+> give fdb2 farmersdelight:gleaming_salad_block
+> give fdb2 farmersdelight:gleaming_salad
+> give fdb2 farmersdelight:pumpkin_pie_slice
+> setblock {H1+8} {H2} {H3-5} farmersdelight:pumpkin_pie
+> execute if block {H1+8} {H2} {H3-5} farmersdelight:pumpkin_pie run say FDB02 pie placed
+> zq item farmersdelight:gleaming_salad
+count Gave \d+ +\[ >= 5
+expect FDB02 pie placed
+expect \[zq\] item farmersdelight:gleaming_salad: .*max stack 16
+reject Unknown item|Unknown block
+
+## SQ-FDB-09 | FD backport recipes and the three replaced inputs
+> zq recipes rope_fence
+> zq recipes gleaming_salad_block
+> zq recipes pumpkin_pie_from_fd_slices
+> zq recipes _furniture
+> zq recipes salvaging/oak_chest_boat
+> zq recipes salvaging/spruce_chest_boat
+> zq recipes salvaging/birch_chest_boat
+> zq recipes salvaging/jungle_chest_boat
+> zq recipes salvaging/acacia_chest_boat
+> zq recipes salvaging/dark_oak_chest_boat
+> zq recipes salvaging/mangrove_chest_boat
+> zq recipes salvaging/chest_minecart
+> zq recipes salvaging/furnace_minecart
+> zq recipes salvaging/hopper_minecart
+> zq recipes salvaging/tnt_minecart
+> zq recipes cutting/oak_door
+> zq recipes cutting/oak_sign
+> zq recipes cutting/oak_trapdoor
+> zq rdetail farmersdelight:cooking/rabbit_stew
+> zq rdetail farmersdelight:cooking/vegetable_noodles
+> zq rdetail farmersdelight:cooking/dog_food
+expect creativedelight:[a-z_/]*shaped/rope_fence -> 3 (farmersdelight:)?rope_fence
+expect creativedelight:[a-z_/]*shaped/rope_fence_gate ->
+expect creativedelight:[a-z_/]*gleaming_salad_block ->
+expect creativedelight:[a-z_/]*pumpkin_pie_from_fd_slices ->
+count creativedelight:farmersdelightcutting/salvaging/[a-z_]+_furniture -> >= 9
+count creativedelight:farmersdelightcutting/salvaging/[a-z_]+_chest_boat -> >= 7
+count creativedelight:farmersdelightcutting/salvaging/[a-z_]+_minecart -> == 4
+reject farmersdelight:cutting/oak_(door|sign|trapdoor) ->
+expect farmersdelight:cooking/rabbit_stew \{.*minecraft:potato
+reject farmersdelight:cooking/rabbit_stew \{.*minecraft:baked_potato
+look vegetable noodles take a mushroom tag (several mushroom ids), dog food a raw meat tag (food_type/raw/meat ids); furniture recipes list every part of the wood (0.75 plank chance is in the result, not printed)
+
+## SQ-FDB-10 | FD tags
+> zq itemtag farmersdelight:cabbage_roll_ingredients
+> zq itemtag forge:fences
+> zq blocktag farmersdelight:mineable/knife
+expect itemtag farmersdelight:cabbage_roll_ingredients \(\d+\):.*minecraft:beef
+expect itemtag farmersdelight:cabbage_roll_ingredients \(\d+\):.*farmersdelight:tomato
+reject itemtag farmersdelight:cabbage_roll_ingredients \(\d+\):.*minecraft:egg\b
+expect itemtag forge:fences \(\d+\):.*farmersdelight:rope_fence
+expect blocktag farmersdelight:mineable/knife \(\d+\):.*farmersdelight:pumpkin_pie
+
+## SQ-FDB-15 | Hanging Canvas Sign recipe (server half)
+> zq rdetail hanging_canvas_sign
+expect creativedelight:[a-z_/]*hanging_canvas_sign \{minecraft:crafting_shaped\} -> 6 (farmersdelight:)?hanging_canvas_sign <- .*minecraft:chain
+expect hanging_canvas_sign \{.*farmersdelight:canvas
+look the log slots accept several woods; JEI page, icon, name and the Farmer's Structures house signs are client (CQ)
+
+## SQ-VTD4-07 | Vintage loot packs and adds registered from the CD tree
+> loottuning
+> zloot packs vintagedelight
+> zloot adds vintagedelight
+expect \[zloot\] pack vintagedelight:oat_bale
+expect \[zloot\] pack vintagedelight:oat_bag
+expect \[zloot\] pack vintagedelight:peanut_crate
+expect \[zloot\] pack vintagedelight:cucumber_crate
+expect \[zloot\] pack vintagedelight:ghost_pepper_crate
+count \[zloot\] add vintagedelight:[a-z_]+ share >= 15
+expect \[zloot\] add vintagedelight:mixed_seeds
+reject global.lootTuning missing|\[zloot\] error
+look the three bell pepper crates and the seed bag of the row: grep /zloot packs bell_pepper by hand if they moved to the Rustic member; adds cover the 7 vanilla tables (bastion hoglin stable, ruined portal, 5 village houses)
+
+## SQ-VP-11 | Vintage tables only by /loot, Veggies adds and packs, farmer and wandering trades
+> vtdtest loot
+waitlog \[vtdtest\] done loot 120
+> zloot adds veggiesdelight
+> zloot packs veggiesdelight
+> ztrades farmer 1 20
+> ztrades wandering 0 20
+waitlog \[ztrades\] wandering L0 #19 90
+reject \[vtdtest\] FAIL
+count \[zloot\] pack veggiesdelight:[a-z_]+ >= 6
+expect \[zloot\] add veggiesdelight:
+expect (?i)\[ztrades\] farmer L1.*veggiesdelight:
+expect (?i)\[ztrades\] wandering L0.*veggiesdelight:
+look add shares between 0.015 and 0.04; the exported/loot scan for the 8 Vintage chest tables needs a /dumpall (not in this boot)
+
+## SQ-VP-03 | /vtdtest cooking
+> vtdtest cooking
+waitlog \[vtdtest\] done cooking 120
+expect \[vtdtest\] done cooking: \d+ pass, 0 fail
+reject \[vtdtest\] FAIL
+
+## SQ-VP-04 | /vtdtest tags
+> vtdtest tags
+waitlog \[vtdtest\] done tags 120
+expect \[vtdtest\] done tags: \d+ pass, 0 fail
+reject \[vtdtest\] FAIL
+
+## SQ-VP-05 | /vtdtest compost (before /reload; SQ-VP-05b repeats after it)
+> vtdtest compost
+waitlog \[vtdtest\] done compost 120
+expect \[vtdtest\] done compost: \d+ pass, 0 fail
+reject \[vtdtest\] FAIL
+
+## SQ-VP-07 | /vtdtest fluidsrun
+> vtdtest fluidsrun
+waitlog \[vtdtest\] done fluidsrun 120
+expect \[vtdtest\] done fluidsrun: \d+ pass, 0 fail
+reject \[vtdtest\] FAIL
+
+## SQ-VP-06 | /vtdtest fluids (bots joined above, so Moonlight's soft-fluid map is filled)
+> vtdtest fluids
+waitlog \[vtdtest\] done fluids 120
+expect \[vtdtest\] done fluids: \d+ pass, 0 fail
+reject \[vtdtest\] FAIL
+
+## SQ-VTD4-08 | honey_vd soft fluid holds the honey jar only
+> vtdtest fluids
+waitlog \[vtdtest\] done fluids 120
+expect \[vtdtest\] NOTE fluids soft fluid vintagedelight:honey_vd: mason jar fills vintagedelight:honey_jar
+reject (?i)\[vtdtest\] NOTE fluids soft fluid vintagedelight:honey_vd: .*apple_?sauce
+reject \[vtdtest\] NOTE fluids soft fluid vintagedelight:honey_vd: not loaded
+
+## SQ-VP-09 | /vtdtest crops (soil survival, fake-player harvest ages)
+> vtdtest crops
+waitlog \[vtdtest\] done crops 120
+expect \[vtdtest\] done crops: \d+ pass, 0 fail
+reject \[vtdtest\] FAIL
+look the 10-25 FAILs (ghost pepper on farmland, harvest to age 0: vintageport #7 / #8) should be gone with Vintage -06 and later
+
+## SQ-VP-10 | /vtdtest mobs
+> vtdtest mobs
+waitlog \[vtdtest\] done mobs 120
+expect \[vtdtest\] done mobs: \d+ pass, 0 fail
+reject \[vtdtest\] FAIL
+
+## SQ-VP-16 | Veggies depot houses: pool weights live, chests Lootr
+shell f=kubejs/generation_scripts/worldgen/pool_tag_report.md; grep -c "veggiesdelight:village/houses/[a-z]*_depot_house" $f; grep "veggiesdelight:village/houses/[a-z]*_depot_house" $f | head -5 | cut -c1-160
+bootexpect \[pool-tuning\] \d+ pools / \d+ pieces
+> fill {H1+60} {H2} {H3+20} {H1+90} {H2+14} {H3+45} minecraft:air
+> place template veggiesdelight:village/houses/plains_depot_house {H1+64} {H2} {H3+24}
+sleep 5
+> zcount {H1+60} {H2-1} {H3+20} {H1+90} {H2+14} {H3+45}
+waitlog \[zcount\] entities 30
+reject Template .* not found|Invalid
+look shell: the 5 depot houses listed with weight 4 and "mod/veggiesdelight x0.5"; zcount blocks: the house is placed and its chests are lootr:lootr_chest (a plain minecraft:chest with a loot table may only convert at worldgen: then note it, the village check needs a group B village)
+
+## SQ-PS-03 | powdered sugar block does not freeze
+> setblock {H1+2} {H2} {H3-10} creativeengineering:powdered_sugar_block
+> execute if block {H1+2} {H2} {H3-10} creativeengineering:powdered_sugar_block run say PS03 placed
+> time set 18000
+> summon minecraft:zombie {H1+2}.5 {H2} {H3-10}.5 {NoAI:1b,PersistenceRequired:1b,Tags:["ps03"]}
+sleep 20
+> data get entity @e[type=minecraft:zombie,tag=ps03,limit=1] TicksFrozen
+> data get entity @e[type=minecraft:zombie,tag=ps03,limit=1] Pos
+> kill @e[type=minecraft:zombie,tag=ps03]
+> time set 2000
+expect PS03 placed
+expect Found no elements matching TicksFrozen|has the following entity data: 0$
+reject No entity was found
+
+## SQ-VTD6-01 | ghost pepper crop on the three soul soils only; wild ghost peppers also on nylium
+> fill {H1+9} {H2-1} {H3-22} {H1+22} {H2+1} {H3-18} minecraft:air
+> setblock {H1+10} {H2-1} {H3-20} minecraft:farmland
+> setblock {H1+12} {H2-1} {H3-20} minecraft:soul_soil
+> setblock {H1+14} {H2-1} {H3-20} nethersdelight:rich_soul_soil
+> setblock {H1+16} {H2-1} {H3-20} immersive_weathering:nulch_block
+> setblock {H1+18} {H2-1} {H3-20} minecraft:grass_block
+> setblock {H1+20} {H2-1} {H3-20} minecraft:crimson_nylium
+> setblock {H1+10} {H2-1} {H3-18} minecraft:farmland
+> setblock {H1+12} {H2-1} {H3-18} minecraft:soul_soil
+> setblock {H1+14} {H2-1} {H3-18} nethersdelight:rich_soul_soil
+> setblock {H1+16} {H2-1} {H3-18} immersive_weathering:nulch_block
+> setblock {H1+18} {H2-1} {H3-18} minecraft:grass_block
+> setblock {H1+20} {H2-1} {H3-18} minecraft:crimson_nylium
+> setblock {H1+10} {H2} {H3-20} vintagedelight:ghost_pepper_crop[age=0]
+> setblock {H1+12} {H2} {H3-20} vintagedelight:ghost_pepper_crop[age=0]
+> setblock {H1+14} {H2} {H3-20} vintagedelight:ghost_pepper_crop[age=0]
+> setblock {H1+16} {H2} {H3-20} vintagedelight:ghost_pepper_crop[age=0]
+> setblock {H1+18} {H2} {H3-20} vintagedelight:ghost_pepper_crop[age=0]
+> setblock {H1+20} {H2} {H3-20} vintagedelight:ghost_pepper_crop[age=0]
+> setblock {H1+10} {H2} {H3-18} vintagedelight:wild_ghost_peppers
+> setblock {H1+12} {H2} {H3-18} vintagedelight:wild_ghost_peppers
+> setblock {H1+14} {H2} {H3-18} vintagedelight:wild_ghost_peppers
+> setblock {H1+16} {H2} {H3-18} vintagedelight:wild_ghost_peppers
+> setblock {H1+18} {H2} {H3-18} vintagedelight:wild_ghost_peppers
+> setblock {H1+20} {H2} {H3-18} vintagedelight:wild_ghost_peppers
+# block update: a stone set and cleared beside each plant (east side) runs its updateShape / canSurvive
+> fill {H1+11} {H2} {H3-20} {H1+11} {H2} {H3-18} minecraft:stone
+> fill {H1+13} {H2} {H3-20} {H1+13} {H2} {H3-18} minecraft:stone
+> fill {H1+15} {H2} {H3-20} {H1+15} {H2} {H3-18} minecraft:stone
+> fill {H1+17} {H2} {H3-20} {H1+17} {H2} {H3-18} minecraft:stone
+> fill {H1+19} {H2} {H3-20} {H1+19} {H2} {H3-18} minecraft:stone
+> fill {H1+21} {H2} {H3-20} {H1+21} {H2} {H3-18} minecraft:stone
+> zcount {H1+10} {H2} {H3-20} {H1+20} {H2} {H3-20}
+waitlog \[zcount\] entities 30
+> zcount {H1+10} {H2} {H3-18} {H1+20} {H2} {H3-18}
+sleep 2
+> execute if block {H1+10} {H2} {H3-20} minecraft:air run say VTD601 crop farmland popped
+> execute if block {H1+12} {H2} {H3-20} vintagedelight:ghost_pepper_crop run say VTD601 crop soul soil kept
+> execute if block {H1+14} {H2} {H3-20} vintagedelight:ghost_pepper_crop run say VTD601 crop rich soul soil kept
+> execute if block {H1+16} {H2} {H3-20} vintagedelight:ghost_pepper_crop run say VTD601 crop nulch kept
+> execute if block {H1+18} {H2} {H3-20} minecraft:air run say VTD601 crop grass popped
+> execute if block {H1+20} {H2} {H3-20} minecraft:air run say VTD601 crop nylium popped
+> execute if block {H1+10} {H2} {H3-18} minecraft:air run say VTD601 wild farmland popped
+> execute if block {H1+12} {H2} {H3-18} vintagedelight:wild_ghost_peppers run say VTD601 wild soul soil kept
+> execute if block {H1+14} {H2} {H3-18} vintagedelight:wild_ghost_peppers run say VTD601 wild rich soul soil kept
+> execute if block {H1+16} {H2} {H3-18} vintagedelight:wild_ghost_peppers run say VTD601 wild nulch kept
+> execute if block {H1+18} {H2} {H3-18} minecraft:air run say VTD601 wild grass popped
+> execute if block {H1+20} {H2} {H3-18} vintagedelight:wild_ghost_peppers run say VTD601 wild nylium kept
+count VTD601 (crop|wild) [a-z ]+ (kept|popped) == 12
+look a missing VTD601 line names the plant that did the wrong thing; zcount lines show what each lane holds after the updates
+
+## SQ-VTD6-02 | empty-hand right-click on ripe own-pick crops: fruit only, ages 5 / 5 / 4
+> fill {H1+9} {H2-1} {H3-27} {H1+15} {H2+1} {H3-24} minecraft:air
+> setblock {H1+10} {H2-1} {H3-25} minecraft:farmland
+> setblock {H1+12} {H2-1} {H3-25} minecraft:soul_soil
+> setblock {H1+14} {H2-1} {H3-25} minecraft:farmland
+> setblock {H1+10} {H2} {H3-25} vintagedelight:cucumber_crop[age=7]
+> setblock {H1+12} {H2} {H3-25} vintagedelight:ghost_pepper_crop[age=7]
+> setblock {H1+14} {H2} {H3-25} veggiesdelight:zucchini_crop[age=7]
+> pbot spawn vtd62 {H1+12} {H2} {H3-27} minecraft:overworld survival
+sleep 2
+> clear vtd62
+> item replace entity vtd62 weapon.mainhand with minecraft:air
+> pbot use vtd62 {H1+10} {H2} {H3-25}
+> pbot use vtd62 {H1+12} {H2} {H3-25}
+> pbot use vtd62 {H1+14} {H2} {H3-25}
+sleep 2
+> execute if block {H1+10} {H2} {H3-25} vintagedelight:cucumber_crop[age=5] run say VTD602 cucumber age 5
+> execute if block {H1+12} {H2} {H3-25} vintagedelight:ghost_pepper_crop[age=5] run say VTD602 ghost pepper age 5
+> execute if block {H1+14} {H2} {H3-25} veggiesdelight:zucchini_crop[age=4] run say VTD602 zucchini age 4
+> zcount {H1+9} {H2} {H3-27} {H1+15} {H2+1} {H3-24}
+waitlog \[zcount\] entities 30
+> data get entity vtd62 Inventory
+expect VTD602 cucumber age 5
+expect VTD602 ghost pepper age 5
+expect VTD602 zucchini age 4
+reject (?i)\[zcount\] entities .*item:[a-z_]+:[a-z_]*seeds
+reject (?i)has the following entity data: .*_seeds
+look fruit (cucumber, ghost pepper, zucchini) in the bot's inventory or on the ground, no seeds; "use" replies PASS/SUCCESS logged; if the block reads age 0 the tag or the mixin is the cause (row notes)
+
+## SQ-KT-02 | KT-17 on the Blockhead counter: Display Delight blocks grow a leg, the coaster pops
+> kttest
+sleep 20
+expect \[kttest\] PASS KT-17 displaydelight:food_plate keeps a leg when its minecraft:stone is broken
+expect \[kttest\] PASS KT-17 displaydelight:plated_hamburger keeps a leg when its minecraft:stone is broken
+expect \[kttest\] PASS KT-17 displaydelight:food_plate keeps a leg when its cookingforblockheads:counter is broken
+expect \[kttest\] PASS KT-17 brewinandchewin:coaster pops when its cookingforblockheads:counter is broken
+reject \[kttest\] FAIL KT-17
+look other [kttest] FAILs (KT-01 to KT-16) belong to SQ-KT-01 / -25: list them in the notes
+
+## SQ-LE-03 | potion bucket from a dispenser: Swiftness bucket gives a Swiftness cloud
+pace 0.5
+> kill @e[type=minecraft:area_effect_cloud]
+> setblock {H1+30} {H2} {H3-10} minecraft:dispenser[facing=north]{Items:[{Slot:0b,id:"creativeengineering:potion_bucket",Count:1b,tag:{Potion:"minecraft:swiftness"}}]}
+> setblock {H1+30} {H2} {H3-9} minecraft:redstone_block
+sleep 1
+> execute positioned {H1+30} {H2} {H3-11} if entity @e[type=minecraft:area_effect_cloud,distance=..6] run say LE03 swiftness cloud
+> execute positioned {H1+30} {H2} {H3-11} run data get entity @e[type=minecraft:area_effect_cloud,distance=..6,limit=1,sort=nearest]
+pace 2
+expect LE03 swiftness cloud
+expect (?i)has the following entity data: .*(swiftness|minecraft:speed|Id: 1b)
+
+## SQ-LE-03b | awkward potion bucket: no cloud
+pace 0.5
+> kill @e[type=minecraft:area_effect_cloud]
+> setblock {H1+30} {H2} {H3-22} minecraft:dispenser[facing=north]{Items:[{Slot:0b,id:"creativeengineering:potion_bucket",Count:1b,tag:{Potion:"minecraft:awkward"}}]}
+> setblock {H1+30} {H2} {H3-21} minecraft:redstone_block
+sleep 1
+> execute positioned {H1+30} {H2} {H3-23} if entity @e[type=minecraft:area_effect_cloud,distance=..6] run say LE03b cloud
+> data get block {H1+30} {H2} {H3-22} Items
+pace 2
+reject LE03b cloud
+look where the awkward bucket went (still in the dispenser, ejected, or emptied) from the Items line
+
+## SQ-LE-03c | blank potion bucket: Night Vision cloud
+pace 0.5
+> kill @e[type=minecraft:area_effect_cloud]
+> setblock {H1+30} {H2} {H3-34} minecraft:dispenser[facing=north]{Items:[{Slot:0b,id:"creativeengineering:potion_bucket",Count:1b}]}
+> setblock {H1+30} {H2} {H3-33} minecraft:redstone_block
+sleep 1
+> execute positioned {H1+30} {H2} {H3-35} if entity @e[type=minecraft:area_effect_cloud,distance=..6] run say LE03c cloud
+> execute positioned {H1+30} {H2} {H3-35} run data get entity @e[type=minecraft:area_effect_cloud,distance=..6,limit=1,sort=nearest]
+pace 2
+expect LE03c cloud
+expect (?i)has the following entity data: .*(night_vision|Id: 16b)
+
+## SQ-FDB-03 | rope fences join each other, the gate and stone, not oak fences; gate opens on use and redstone
+> fill {H1+38} {H2-1} {H3-16} {H1+48} {H2+2} {H3-6} minecraft:air
+> fill {H1+38} {H2-1} {H3-16} {H1+48} {H2-1} {H3-6} minecraft:stone
+> setblock {H1+39} {H2} {H3-10} minecraft:stone
+> setblock {H1+43} {H2} {H3-10} minecraft:oak_fence
+> setblock {H1+43} {H2} {H3-14} minecraft:oak_fence
+> pbot spawn fdb3 {H1+42} {H2} {H3-7} minecraft:overworld survival
+sleep 2
+> clear fdb3
+> pbot hold fdb3 farmersdelight:rope_fence 16
+> pbot use fdb3 {H1+40} {H2-1} {H3-10}
+> pbot use fdb3 {H1+41} {H2-1} {H3-10}
+> pbot use fdb3 {H1+42} {H2-1} {H3-10}
+> pbot use fdb3 {H1+40} {H2-1} {H3-14}
+> pbot use fdb3 {H1+42} {H2-1} {H3-14}
+> pbot hold fdb3 farmersdelight:rope_fence_gate 4
+> pbot use fdb3 {H1+41} {H2-1} {H3-14}
+sleep 1
+> execute if block {H1+40} {H2} {H3-10} farmersdelight:rope_fence[west=true,east=true] run say FDB03 rope joins stone and rope
+> execute if block {H1+41} {H2} {H3-10} farmersdelight:rope_fence[west=true,east=true] run say FDB03 middle rope joins both
+> execute if block {H1+42} {H2} {H3-10} farmersdelight:rope_fence[west=true,east=false] run say FDB03 rope skips oak fence
+> execute if block {H1+43} {H2} {H3-10} minecraft:oak_fence[west=false] run say FDB03 oak fence skips rope
+> execute if block {H1+40} {H2} {H3-14} farmersdelight:rope_fence[east=true] run say FDB03 rope joins gate west
+> execute if block {H1+42} {H2} {H3-14} farmersdelight:rope_fence[west=true] run say FDB03 rope joins gate east
+> execute if block {H1+43} {H2} {H3-14} minecraft:oak_fence[west=false] run say FDB03 oak fence skips gate
+> execute if block {H1+41} {H2} {H3-14} farmersdelight:rope_fence_gate[open=false] run say FDB03 gate closed
+> pbot hold fdb3 minecraft:stick
+> pbot use fdb3 {H1+41} {H2} {H3-14} south
+> execute if block {H1+41} {H2} {H3-14} farmersdelight:rope_fence_gate[open=true] run say FDB03 gate opened by use
+> pbot use fdb3 {H1+41} {H2} {H3-14} south
+> setblock {H1+41} {H2-1} {H3-14} minecraft:redstone_block
+> execute if block {H1+41} {H2} {H3-14} farmersdelight:rope_fence_gate[open=true,powered=true] run say FDB03 gate opened by redstone
+> setblock {H1+41} {H2-1} {H3-14} minecraft:stone
+> execute if block {H1+41} {H2} {H3-14} farmersdelight:rope_fence_gate[open=false] run say FDB03 gate closed on redstone off
+> data get block {H1+41} {H2} {H3-14}
+count FDB03 [a-z ]+ == 11
+reject Unknown block|Unknown item
+look a missing FDB03 line names the failing join (rope fence states printed by a failing "execute if" are not logged: read them with /data or a setblock-free check by hand); the lead knot, the knot sound and the 1.5-block collision are client (CQ)
+
+## SQ-FDB-04 | Gleaming Salad: 4 servings with a bowl, leftovers drop a bowl, the salad's food values
+> fill {H1+49} {H2} {H3-11} {H1+51} {H2+1} {H3-9} minecraft:air
+> setblock {H1+50} {H2} {H3-10} farmersdelight:gleaming_salad_block
+> pbot spawn fdb4 {H1+50} {H2} {H3-8} minecraft:overworld survival
+sleep 2
+> clear fdb4
+> pbot hold fdb4 minecraft:bowl 8
+repeat 4
+> pbot use fdb4 {H1+50} {H2} {H3-10} south
+end
+> data get block {H1+50} {H2} {H3-10}
+> execute if block {H1+50} {H2} {H3-10} farmersdelight:gleaming_salad_block run say FDB04 leftovers stay
+> clear fdb4 farmersdelight:gleaming_salad 0
+> kill @e[type=minecraft:item]
+> setblock {H1+50} {H2} {H3-10} minecraft:air destroy
+sleep 1
+> zcount {H1+48} {H2-1} {H3-12} {H1+52} {H2+2} {H3-8}
+waitlog \[zcount\] entities 30
+> zq food farmersdelight:gleaming_salad
+expect Found 4 matching item
+expect \[zcount\] entities .*item:minecraft:bowl x1
+expect food farmersdelight:gleaming_salad: nutrition 14,.*farmersdelight:nourishment amp 0 6000t
+look servings state at 0 (leftover) before the break; the block light 12 -> 0 per serving is not readable from a command (client F3 or WTHIT: CQ)
+
+## SQ-FDB-06 | Rich Soil Farmland is not trampled (vanilla Farmland is, as a control)
+> fill {H1+53} {H2-1} {H3-17} {H1+58} {H2+6} {H3-15} minecraft:air
+> setblock {H1+54} {H2-1} {H3-16} farmersdelight:rich_soil_farmland
+> setblock {H1+57} {H2-1} {H3-16} minecraft:farmland
+> summon minecraft:iron_golem {H1+54}.5 {H2+4} {H3-16}.5 {Tags:["fdb6"]}
+> summon minecraft:iron_golem {H1+57}.5 {H2+4} {H3-16}.5 {Tags:["fdb6"]}
+sleep 3
+> execute if block {H1+54} {H2-1} {H3-16} farmersdelight:rich_soil_farmland run say FDB06 rich soil farmland kept
+> execute if block {H1+57} {H2-1} {H3-16} minecraft:dirt run say FDB06 control farmland trampled
+> kill @e[type=minecraft:iron_golem,tag=fdb6]
+expect FDB06 rich soil farmland kept
+look "FDB06 control farmland trampled" proves the drop happened; without it the drop was too short (rerun from {H2+6})
+
+## SQ-FDB-11 | onion from zombie kills with Looting III, knife on pumpkins
+> fill {H1+42} {H2} {H3-32} {H1+52} {H2+2} {H3-28} minecraft:air
+> summon minecraft:zombie {H1+44}.5 {H2} {H3-30}.5 {NoAI:1b,Invulnerable:1b,PersistenceRequired:1b,Silent:1b,Tags:["fdb11"]}
+> pbot spawn fdb11 {H1+46} {H2} {H3-28} minecraft:overworld survival
+sleep 2
+> clear fdb11
+> item replace entity fdb11 weapon.mainhand with minecraft:iron_sword{Enchantments:[{id:"minecraft:looting",lvl:3s}]}
+> kill @e[type=minecraft:item]
+pace 0.05
+repeat 300
+> execute as fdb11 run loot spawn {H1+48} {H2} {H3-30} kill @e[type=minecraft:zombie,tag=fdb11,limit=1]
+end
+pace 2
+sleep 3
+> zcount {H1+47} {H2-1} {H3-31} {H1+49} {H2+2} {H3-29}
+waitlog \[zcount\] entities 30
+expect \[zcount\] entities .*item:farmersdelight:onion x
+> kill @e[type=minecraft:item]
+pace 0.05
+repeat 300
+> loot spawn {H1+48} {H2} {H3-30} kill @e[type=minecraft:zombie,tag=fdb11,limit=1]
+end
+pace 2
+sleep 3
+> zcount {H1+47} {H2-1} {H3-31} {H1+49} {H2+2} {H3-29}
+sleep 2
+> kill @e[type=minecraft:item]
+> setblock {H1+51} {H2} {H3-30} minecraft:pumpkin
+> loot spawn {H1+51} {H2+1} {H3-30} mine {H1+51} {H2} {H3-30} farmersdelight:iron_knife
+> loot spawn {H1+51} {H2+1} {H3-28} mine {H1+51} {H2} {H3-30} farmersdelight:iron_knife{Enchantments:[{id:"minecraft:silk_touch",lvl:1s}]}
+sleep 2
+> zcount {H1+50} {H2} {H3-31} {H1+52} {H2+2} {H3-30}
+> zcount {H1+50} {H2} {H3-29} {H1+52} {H2+2} {H3-27}
+> kill @e[type=minecraft:zombie,tag=fdb11]
+look first zcount: onion total about 15 of 300 (2 % + 3 x 1 %); second (no killer): no onion; third: 4 pumpkin_slice, no pumpkin; fourth: minecraft:pumpkin
+
+## SQ-FDB-13 | Hanging Canvas Sign block states: 16 rotations x attached, waterlogged (server half)
+> fill {H1+38} {H2} {H3-44} {H1+74} {H2+3} {H3-38} minecraft:air
+> fill {H1+38} {H2+3} {H3-44} {H1+74} {H2+3} {H3-38} minecraft:stone
+pace 0.3
+> setblock {H1+40} {H2+2} {H3-40} farmersdelight:hanging_canvas_sign[rotation=0,attached=true]
+> setblock {H1+40} {H2+2} {H3-42} farmersdelight:hanging_canvas_sign[rotation=0,attached=false]
+> setblock {H1+42} {H2+2} {H3-40} farmersdelight:hanging_canvas_sign[rotation=1,attached=true]
+> setblock {H1+42} {H2+2} {H3-42} farmersdelight:hanging_canvas_sign[rotation=1,attached=false]
+> setblock {H1+44} {H2+2} {H3-40} farmersdelight:hanging_canvas_sign[rotation=2,attached=true]
+> setblock {H1+44} {H2+2} {H3-42} farmersdelight:hanging_canvas_sign[rotation=2,attached=false]
+> setblock {H1+46} {H2+2} {H3-40} farmersdelight:hanging_canvas_sign[rotation=3,attached=true]
+> setblock {H1+46} {H2+2} {H3-42} farmersdelight:hanging_canvas_sign[rotation=3,attached=false]
+> setblock {H1+48} {H2+2} {H3-40} farmersdelight:hanging_canvas_sign[rotation=4,attached=true]
+> setblock {H1+48} {H2+2} {H3-42} farmersdelight:hanging_canvas_sign[rotation=4,attached=false]
+> setblock {H1+50} {H2+2} {H3-40} farmersdelight:hanging_canvas_sign[rotation=5,attached=true]
+> setblock {H1+50} {H2+2} {H3-42} farmersdelight:hanging_canvas_sign[rotation=5,attached=false]
+> setblock {H1+52} {H2+2} {H3-40} farmersdelight:hanging_canvas_sign[rotation=6,attached=true]
+> setblock {H1+52} {H2+2} {H3-42} farmersdelight:hanging_canvas_sign[rotation=6,attached=false]
+> setblock {H1+54} {H2+2} {H3-40} farmersdelight:hanging_canvas_sign[rotation=7,attached=true]
+> setblock {H1+54} {H2+2} {H3-42} farmersdelight:hanging_canvas_sign[rotation=7,attached=false]
+> setblock {H1+56} {H2+2} {H3-40} farmersdelight:hanging_canvas_sign[rotation=8,attached=true]
+> setblock {H1+56} {H2+2} {H3-42} farmersdelight:hanging_canvas_sign[rotation=8,attached=false]
+> setblock {H1+58} {H2+2} {H3-40} farmersdelight:hanging_canvas_sign[rotation=9,attached=true]
+> setblock {H1+58} {H2+2} {H3-42} farmersdelight:hanging_canvas_sign[rotation=9,attached=false]
+> setblock {H1+60} {H2+2} {H3-40} farmersdelight:hanging_canvas_sign[rotation=10,attached=true]
+> setblock {H1+60} {H2+2} {H3-42} farmersdelight:hanging_canvas_sign[rotation=10,attached=false]
+> setblock {H1+62} {H2+2} {H3-40} farmersdelight:hanging_canvas_sign[rotation=11,attached=true]
+> setblock {H1+62} {H2+2} {H3-42} farmersdelight:hanging_canvas_sign[rotation=11,attached=false]
+> setblock {H1+64} {H2+2} {H3-40} farmersdelight:hanging_canvas_sign[rotation=12,attached=true]
+> setblock {H1+64} {H2+2} {H3-42} farmersdelight:hanging_canvas_sign[rotation=12,attached=false]
+> setblock {H1+66} {H2+2} {H3-40} farmersdelight:hanging_canvas_sign[rotation=13,attached=true]
+> setblock {H1+66} {H2+2} {H3-42} farmersdelight:hanging_canvas_sign[rotation=13,attached=false]
+> setblock {H1+68} {H2+2} {H3-40} farmersdelight:hanging_canvas_sign[rotation=14,attached=true]
+> setblock {H1+68} {H2+2} {H3-42} farmersdelight:hanging_canvas_sign[rotation=14,attached=false]
+> setblock {H1+70} {H2+2} {H3-40} farmersdelight:hanging_canvas_sign[rotation=15,attached=true]
+> setblock {H1+70} {H2+2} {H3-42} farmersdelight:hanging_canvas_sign[rotation=15,attached=false]
+> setblock {H1+72} {H2+2} {H3-40} farmersdelight:hanging_canvas_sign[rotation=5,attached=true,waterlogged=true]
+> execute if block {H1+40} {H2+2} {H3-40} farmersdelight:hanging_canvas_sign[rotation=0,attached=true] run say FDB13 r0 attached
+> execute if block {H1+40} {H2+2} {H3-42} farmersdelight:hanging_canvas_sign[rotation=0,attached=false] run say FDB13 r0 free
+> execute if block {H1+42} {H2+2} {H3-40} farmersdelight:hanging_canvas_sign[rotation=1,attached=true] run say FDB13 r1 attached
+> execute if block {H1+42} {H2+2} {H3-42} farmersdelight:hanging_canvas_sign[rotation=1,attached=false] run say FDB13 r1 free
+> execute if block {H1+44} {H2+2} {H3-40} farmersdelight:hanging_canvas_sign[rotation=2,attached=true] run say FDB13 r2 attached
+> execute if block {H1+44} {H2+2} {H3-42} farmersdelight:hanging_canvas_sign[rotation=2,attached=false] run say FDB13 r2 free
+> execute if block {H1+46} {H2+2} {H3-40} farmersdelight:hanging_canvas_sign[rotation=3,attached=true] run say FDB13 r3 attached
+> execute if block {H1+46} {H2+2} {H3-42} farmersdelight:hanging_canvas_sign[rotation=3,attached=false] run say FDB13 r3 free
+> execute if block {H1+48} {H2+2} {H3-40} farmersdelight:hanging_canvas_sign[rotation=4,attached=true] run say FDB13 r4 attached
+> execute if block {H1+48} {H2+2} {H3-42} farmersdelight:hanging_canvas_sign[rotation=4,attached=false] run say FDB13 r4 free
+> execute if block {H1+50} {H2+2} {H3-40} farmersdelight:hanging_canvas_sign[rotation=5,attached=true] run say FDB13 r5 attached
+> execute if block {H1+50} {H2+2} {H3-42} farmersdelight:hanging_canvas_sign[rotation=5,attached=false] run say FDB13 r5 free
+> execute if block {H1+52} {H2+2} {H3-40} farmersdelight:hanging_canvas_sign[rotation=6,attached=true] run say FDB13 r6 attached
+> execute if block {H1+52} {H2+2} {H3-42} farmersdelight:hanging_canvas_sign[rotation=6,attached=false] run say FDB13 r6 free
+> execute if block {H1+54} {H2+2} {H3-40} farmersdelight:hanging_canvas_sign[rotation=7,attached=true] run say FDB13 r7 attached
+> execute if block {H1+54} {H2+2} {H3-42} farmersdelight:hanging_canvas_sign[rotation=7,attached=false] run say FDB13 r7 free
+> execute if block {H1+56} {H2+2} {H3-40} farmersdelight:hanging_canvas_sign[rotation=8,attached=true] run say FDB13 r8 attached
+> execute if block {H1+56} {H2+2} {H3-42} farmersdelight:hanging_canvas_sign[rotation=8,attached=false] run say FDB13 r8 free
+> execute if block {H1+58} {H2+2} {H3-40} farmersdelight:hanging_canvas_sign[rotation=9,attached=true] run say FDB13 r9 attached
+> execute if block {H1+58} {H2+2} {H3-42} farmersdelight:hanging_canvas_sign[rotation=9,attached=false] run say FDB13 r9 free
+> execute if block {H1+60} {H2+2} {H3-40} farmersdelight:hanging_canvas_sign[rotation=10,attached=true] run say FDB13 r10 attached
+> execute if block {H1+60} {H2+2} {H3-42} farmersdelight:hanging_canvas_sign[rotation=10,attached=false] run say FDB13 r10 free
+> execute if block {H1+62} {H2+2} {H3-40} farmersdelight:hanging_canvas_sign[rotation=11,attached=true] run say FDB13 r11 attached
+> execute if block {H1+62} {H2+2} {H3-42} farmersdelight:hanging_canvas_sign[rotation=11,attached=false] run say FDB13 r11 free
+> execute if block {H1+64} {H2+2} {H3-40} farmersdelight:hanging_canvas_sign[rotation=12,attached=true] run say FDB13 r12 attached
+> execute if block {H1+64} {H2+2} {H3-42} farmersdelight:hanging_canvas_sign[rotation=12,attached=false] run say FDB13 r12 free
+> execute if block {H1+66} {H2+2} {H3-40} farmersdelight:hanging_canvas_sign[rotation=13,attached=true] run say FDB13 r13 attached
+> execute if block {H1+66} {H2+2} {H3-42} farmersdelight:hanging_canvas_sign[rotation=13,attached=false] run say FDB13 r13 free
+> execute if block {H1+68} {H2+2} {H3-40} farmersdelight:hanging_canvas_sign[rotation=14,attached=true] run say FDB13 r14 attached
+> execute if block {H1+68} {H2+2} {H3-42} farmersdelight:hanging_canvas_sign[rotation=14,attached=false] run say FDB13 r14 free
+> execute if block {H1+70} {H2+2} {H3-40} farmersdelight:hanging_canvas_sign[rotation=15,attached=true] run say FDB13 r15 attached
+> execute if block {H1+70} {H2+2} {H3-42} farmersdelight:hanging_canvas_sign[rotation=15,attached=false] run say FDB13 r15 free
+> execute if block {H1+72} {H2+2} {H3-40} farmersdelight:hanging_canvas_sign[rotation=5,attached=true,waterlogged=true] run say FDB13 waterlogged
+pace 2
+> data get block {H1+72} {H2+2} {H3-40}
+count FDB13 r\d+ (attached|free)$ == 32
+expect FDB13 waterlogged
+reject does not have property|does not accept|Unknown block
+look the placed sign facing the player, even 22.5-degree steps, V / straight chains, water shown and textures are client (CQ, SQ-FDB-13 visual half)
+
+## SQ-FDB-14 | attached sign pops when the stone above goes and drops 1 item; unattached stays; a mined sign drops itself
+> fill {H1+38} {H2} {H3-52} {H1+50} {H2+3} {H3-48} minecraft:air
+> fill {H1+40} {H2+3} {H3-50} {H1+48} {H2+3} {H3-50} minecraft:stone
+> setblock {H1+42} {H2+2} {H3-50} farmersdelight:hanging_canvas_sign[rotation=0,attached=true]
+> setblock {H1+46} {H2+2} {H3-50} farmersdelight:hanging_canvas_sign[rotation=0,attached=false]
+> kill @e[type=minecraft:item]
+> setblock {H1+42} {H2+3} {H3-50} minecraft:air
+> setblock {H1+46} {H2+3} {H3-50} minecraft:air
+sleep 2
+> execute if block {H1+42} {H2+2} {H3-50} minecraft:air run say FDB14 attached sign popped
+> execute if block {H1+46} {H2+2} {H3-50} farmersdelight:hanging_canvas_sign run say FDB14 unattached sign stays
+> zcount {H1+40} {H2-1} {H3-52} {H1+44} {H2+3} {H3-48}
+waitlog \[zcount\] entities 30
+> setblock {H1+44} {H2+3} {H3-50} minecraft:stone
+> setblock {H1+44} {H2+2} {H3-50} farmersdelight:hanging_canvas_sign[rotation=0,attached=true]
+> loot spawn {H1+44} {H2} {H3-48} mine {H1+44} {H2+2} {H3-50} minecraft:iron_axe
+sleep 1
+> zcount {H1+43} {H2-1} {H3-49} {H1+45} {H2+1} {H3-47}
+expect FDB14 attached sign popped
+expect FDB14 unattached sign stays
+expect \[zcount\] entities .*item:farmersdelight:hanging_canvas_sign x1=1
+look the first zcount holds exactly one sign item (the popped one); mining speed with an axe against a hand is client (CQ)
+
+## SQ-FDB-05 | vanilla Pumpkin Pie placed as FD / Delightful / Central Kitchen pie by config, live (edits the toml)
+> fill {H1+53} {H2-1} {H3-12} {H1+64} {H2+2} {H3-6} minecraft:air
+> fill {H1+53} {H2-1} {H3-12} {H1+64} {H2-1} {H3-8} minecraft:stone
+> setblock {H1+62} {H2} {H3-10} farmersdelight:cutting_board
+> pbot spawn fdb5 {H1+58} {H2} {H3-7} minecraft:overworld survival
+sleep 2
+> clear fdb5
+> pbot hold fdb5 minecraft:pumpkin_pie 8
+> pbot use fdb5 {H1+54} {H2-1} {H3-10}
+> pbot use fdb5 {H1+62} {H2} {H3-10}
+shell python3 $INST/tools/scratch_query/qrun.py toml config/farmersdelight-ce-common.toml pumpkin_pie placeAs '"DELIGHTFUL"'; grep -n "placeAs" config/farmersdelight-ce-common.toml
+sleep 4
+> pbot use fdb5 {H1+56} {H2-1} {H3-10}
+shell python3 $INST/tools/scratch_query/qrun.py toml config/farmersdelight-ce-common.toml pumpkin_pie placeAs '"CREATE_CENTRAL_KITCHEN"'
+sleep 4
+> pbot use fdb5 {H1+58} {H2-1} {H3-10}
+shell python3 $INST/tools/scratch_query/qrun.py toml config/farmersdelight-ce-common.toml pumpkin_pie placeAs '"OFF"'
+sleep 4
+> pbot use fdb5 {H1+60} {H2-1} {H3-10}
+shell python3 $INST/tools/scratch_query/qrun.py toml config/farmersdelight-ce-common.toml pumpkin_pie placeAs '"FARMERSDELIGHT"'
+sleep 4
+> execute if block {H1+54} {H2} {H3-10} farmersdelight:pumpkin_pie run say FDB05 FD pie
+> execute if block {H1+56} {H2} {H3-10} delightful:pumpkin_pie run say FDB05 Delightful pie
+> execute if block {H1+58} {H2} {H3-10} create_central_kitchen:pumpkin_pie run say FDB05 Central Kitchen pie
+> execute if block {H1+62} {H2+1} {H3-10} minecraft:air run say FDB05 nothing on the cutting board
+> data get block {H1+62} {H2} {H3-10}
+> data get block {H1+60} {H2} {H3-10}
+> pbot hold fdb5 farmersdelight:iron_knife
+> pbot use fdb5 {H1+54} {H2} {H3-10}
+sleep 1
+> data get entity fdb5 Inventory
+> zcount {H1+53} {H2} {H3-11} {H1+55} {H2+1} {H3-9}
+expect FDB05 FD pie
+expect FDB05 Delightful pie
+expect FDB05 Central Kitchen pie
+expect FDB05 nothing on the cutting board
+expect (?i)farmersdelight:pumpkin_pie_slice
+look OFF lane (+60): what Delightful / Central Kitchen do alone (a pie block of one of them, or nothing); the cutting board data shows whether the pie went onto the board as an item (allowed) - never a pie block above it; pies left in the bot: 8 minus the placed ones
+
+## SQ-FDB-07 | farmer villager works Rich Soil Farmland and Fertile Soil (secondary job site); empty list clears it (edits the toml)
+> fill {H1+68} {H2-1} {H3-28} {H1+84} {H2+3} {H3-8} minecraft:air
+> fill {H1+68} {H2-1} {H3-28} {H1+84} {H2-1} {H3-8} minecraft:grass_block
+> fill {H1+76} {H2-1} {H3-16} {H1+80} {H2-1} {H3-12} farmersdelight:rich_soil_farmland
+> fill {H1+76} {H2-1} {H3-26} {H1+80} {H2-1} {H3-22} immersive_weathering:mulch_block
+> setblock {H1+72} {H2} {H3-14} minecraft:composter
+> summon minecraft:villager {H1+73}.5 {H2} {H3-14}.5 {PersistenceRequired:1b,Tags:["fdb7"],VillagerData:{profession:"minecraft:farmer",level:1,type:"minecraft:plains"},Inventory:[{id:"minecraft:wheat_seeds",Count:16b}]}
+> time set 2000
+sleep 120
+> data get entity @e[type=minecraft:villager,tag=fdb7,limit=1] Brain.memories
+> zcount {H1+76} {H2} {H3-26} {H1+80} {H2} {H3-12}
+expect (?i)minecraft:secondary_job_site
+shell python3 $INST/tools/scratch_query/qrun.py toml config/farmersdelight-ce-common.toml villagers farmlandBlocks '[]'; grep -n "farmlandBlocks" config/farmersdelight-ce-common.toml
+sleep 60
+> data get entity @e[type=minecraft:villager,tag=fdb7,limit=1] Brain.memories
+shell python3 $INST/tools/scratch_query/qrun.py toml config/farmersdelight-ce-common.toml villagers farmlandBlocks '["farmersdelight:rich_soil_farmland", "immersive_weathering:mulch_block"]'
+look first memories line: secondary_job_site lists rich farmland / mulch positions (x 76..80); zcount: wheat planted there; second line (empty list): secondary_job_site empty or absent
+
+## SQ-TI-01 | pack clock helpers, [time] on and off (toggles the Creative Calendar config, leaves it on)
+> zti
+> zti off
+> zti on
+expect \[zti\] active true, dayStart 22300(\.0)?,
+expect \[zti\] clock\(11800\) 7:30 pm, clock24\(11800\) 19:30
+expect \[zti\] dayNumber\(0\) 1$
+expect \[zti\] dayNumber\(22299\) 1$
+expect \[zti\] dayNumber\(22300\) 2$
+expect \[zti\] dayNumber\(46299\) 2$
+expect \[zti\] active false
+expect \[zti\] clock\(11800\) 5:48 pm, clock24\(11800\) 17:48, clock24\(0\) 06:00
+reject \[zti\] error
+look "dayStart 22300" is the pack value (if the scratch toml differs, recompute); the off block: vanilla clock; SeasonHUD "Day x/24" comparison is client (CQ)
+
+## SQ-VP-05b | /vtdtest compost after /reload
+> reload
+waitlog (Reloaded|reload) 180
+sleep 20
+> vtdtest compost
+waitlog \[vtdtest\] done compost 120
+expect \[vtdtest\] done compost: \d+ pass, 0 fail
+reject \[vtdtest\] FAIL

@@ -1,0 +1,24 @@
+# Remap rerun, boot 2 (world cs234r): old-id save from cs2r_boot1.qb opened straight with the wave 4 jars (1.1.07 with the
+# SwapRemapper fix).
+pace 2
+
+## SQ-CS2-02f | swap remap with the fixed jar
+bootexpect \[swaps\] 2 list file\(s\): 2 namespace move\(s\), 0 single id\(s\)
+bootexpect \[swaps\] minecraft:block: 2 id\(s\) remapped to their survivors
+bootreject left missing
+bootreject listed id\(s\) had no survivor
+shell grep -E "\[swaps\]" logs/latest.log | cut -c60-260
+
+## SQ-CS2-03f | remapped blocks keep their states
+> pbot spawn qa {H1} {H2} {H3} minecraft:overworld survival
+sleep 5
+> execute if block {H1+2} {H2} {H3} creativedelight:treated_stick[axis_y=true] run say CS2 stick ok
+> execute if block {H1+3} {H2} {H3+3} creativedelight:treated_stick_tomatoes[age=2] run say CS2 tomato stick ok
+> data get block {H1+4} {H2} {H3} Items
+expect CS2 stick ok
+expect CS2 tomato stick ok
+> save-all flush
+waitlog Saved the game 120
+shell python3 $INST/tools/scratch_query/region_ids.py $(grep -m1 "^level-name=" server.properties | cut -d= -f2)/region "creative_?delight:[a-z_]+"
+look r.-1.0 names creativedelight:treated_stick* after the save (no creative_delight: left there)
+

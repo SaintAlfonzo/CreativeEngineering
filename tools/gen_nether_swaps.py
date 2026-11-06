@@ -8,7 +8,7 @@ worldgen/TemplateBlockSwaps applies when a template loads (feature_writeup/struc
 Owners: every structure (live or not) whose pool walk reaches the template (terrain_adaptation_scan.reach). A template
 some Nether or End structure can also place is skipped (the walk ignores jigsaw names, so it overcounts: an Overworld
 ship "reaches" the Nether ship's crimson keel). A rule applies to a template when one of its Overworld owners is in
-the rule's structures and none of its owners is excepted (rule "except" plus the plan/move_to_nether tag).
+the rule's structures and none of its owners is excepted (rule "except").
 "except_holding" (block selectors) also skips every structure any of whose templates holds a matching block (palette
 check), e.g. ["@sculk"] for the sculk structures.
 Block selectors: an id, "@nether" (every block nether_blocks_scan classifies), "@nether_bricks" (the nether brick
@@ -32,7 +32,6 @@ ROOT = GSG.INSTANCE
 RULES = T.WORLDGEN / 'nether_swap_rules.json'
 OUT_JSON = T.WORLDGEN / 'nether_block_swaps.json'
 OUT_MD = ROOT / 'feature_writeup/nether_swaps.md'
-MOVE_TAG = 'plan/move_to_nether'
 
 BRICKS = {
     'minecraft:nether_bricks': 'minecraft:deepslate_bricks', 'minecraft:red_nether_bricks': 'minecraft:deepslate_bricks',
@@ -145,7 +144,6 @@ def main():
     dims = GSG.read_json(GSG.BIOME_CONFIG)['dimensions']
     overworld = set(dims['minecraft:overworld']['biomes'])
     elsewhere = set(dims['minecraft:the_nether']['biomes']) | set(dims['minecraft:the_end']['biomes'])
-    moving = set(pack.tag_members.get(MOVE_TAG, ()))
 
     owners, ow_owned, other_dim, templates = structure_owners(pack, overworld, elsewhere)
 
@@ -185,7 +183,7 @@ def main():
                 ow_owners = owners[t]
                 if scope != ['*'] and not (ow_owners & set(scope)):
                     continue
-                if ow_owners & (set(r.get('except', [])) | moving | holding[i]):
+                if ow_owners & (set(r.get('except', [])) | holding[i]):
                     continue
                 if t in other_dim:
                     skipped_dim[block] += 1
@@ -201,18 +199,16 @@ def main():
         'entries': 'template id -> [{pos, from, to}], the same format as meat_block_swaps.json; applied by patcherMod '
                    'worldgen/TemplateBlockSwaps when the template loads, only where the template still has `from` at `pos`.'},
         'templates': out}, indent=1) + '\n')
-    write(rules, report, owners, skipped_dim, moving, holding)
+    write(rules, report, owners, skipped_dim, holding)
     n = sum(len(v) for v in out.values())
     print(f'{n} block swap(s) in {len(out)} template(s) -> {OUT_JSON.relative_to(ROOT)}; '
           f'{sum(skipped_dim.values())} matching block(s) left alone in templates Nether/End structures share')
 
 
-def write(rules, report, owners, skipped_dim, moving, holding):
+def write(rules, report, owners, skipped_dim, holding):
     L = ['# Nether block swaps', '', 'Written by `python3 tools/gen_nether_swaps.py` from '
          '`kubejs/generation_scripts/worldgen/nether_swap_rules.json`. Do not edit. Per rule: every template it changes, '
-         'with block counts. Applied by patcherMod `TemplateBlockSwaps` when a template loads.', '',
-         'Exempt from every rule (`plan/move_to_nether`, to be moved to the Nether later): '
-         + (', '.join(f'`{m}`' for m in sorted(moving)) or 'none') + '.', '']
+         'with block counts. Applied by patcherMod `TemplateBlockSwaps` when a template loads.', '']
     for i, r in enumerate(rules):
         rows = report.get(i, {})
         total = sum(rows.values())

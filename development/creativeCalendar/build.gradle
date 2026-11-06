@@ -1,0 +1,45 @@
+// creativeCalendar: Creative Calendar (mod id creativecalendar, feature_writeup/creative_calendar.md), carved out of
+// patcherMod on 2026-11-01. Shared Forge setup comes from build-logic/src/main/groovy/ce.forge-mod.gradle. This file
+// adds what is specific to Calendar, the same way creativeBrewing/build.gradle does for CB:
+//   - the Calendar server script tree, authored in the pack folder so /reload picks it up without a rebuild, copied into
+//     the jar at the same resource path:
+//       kubejs/data/creativecalendar/kubejs/  -> data/creativecalendar/kubejs/  (server scripts)
+//     Startup scripts live in this project (src/main/resources/kubejs_startup/creativecalendar/), loaded from the jar by
+//     Creative Common's startup loader. No client scripts yet.
+// Build: ./gradlew :creativeCalendar:build --offline   Install: ./gradlew :creativeCalendar:installToMods
+plugins {
+    id 'ce.forge-mod'
+}
+
+dependencies {
+    // Creative Common (creativecommon): a hard dependency (KubeJS, the shared helpers, the startup loader); no Java
+    // of it is called yet, kept for the pack APIs later rows may need (Creative Common after the Q1 swap).
+    compileOnly project(':creativeCommon')
+    // The mods the time and season code steers; the pack's jars, shared with Creative Common (git-ignored libs/).
+    compileOnly files(rootProject.file('development/creativeCommon/libs/SereneSeasons-1.19.2-8.1.0.24.jar'))
+    compileOnly files(rootProject.file('development/creativeCommon/libs/seasonhud-forge-1.19.2-2.0.4.jar'))
+    compileOnly files(rootProject.file('development/creativeCommon/libs/wthit-1.19.2-forge-5.36.1.jar'))
+}
+
+def scriptTrees = ['data/creativecalendar/kubejs']
+
+tasks.named('processResources', ProcessResources).configure {
+    scriptTrees.each { tree ->
+        from(rootProject.file("kubejs/${tree}")) {
+            into tree
+            exclude '**/*.md'
+        }
+    }
+}
+
+// The scripts in the jar run only through KubeJS; a missing tree means the pack-folder path moved.
+tasks.named('jar', Jar).configure {
+    doLast {
+        def entries = new java.util.zip.ZipFile(archiveFile.get().asFile).withCloseable { z -> z.entries().collect { it.name } }
+        ['kubejs_startup/creativecalendar/', 'data/creativecalendar/kubejs/'].each { dir ->
+            if (!entries.any { it.startsWith(dir) && it.endsWith('.js') }) {
+                throw new GradleException("creativecalendar jar has no scripts under ${dir}")
+            }
+        }
+    }
+}

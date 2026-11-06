@@ -1,0 +1,1557 @@
+# Run r1102b, worldgen slice, boot W1: group B fresh normal world "wge", seed 8675309 (compares with SQ-WG30).
+# Setup: w_setup.md W1 (prep_srv.sh OUT_W1 wge B; srv toml [worldgen.earth_fill] log = "ALL",
+# [worldgen.meta_structures] log = true). One boot for SQ-WGE-01 to -05, -06d (first half), -08, SQ-EFB-00 to -15,
+# -17 to -22 (first world), SQ-PSW-00, -02 to -05. Cross-boot files go to $INST/perf/runs/r1102b/w (census jsons,
+# logs); captures (square centres) carry to W2 / W3 / W1b through RES/vars.json, so use ONE RES for all w_ batches.
+# Squares are Chunky r 300 (r 400 for PL and HI, the WGE-03b squares), probed in 13x13-chunk tiles with /zq under
+# (tools/scratch_query/qb_tiles.py) and judged offline with tools/scratch_query/efb_judge.py on logs/latest.log.
+# /reload only in the last row (SQ-EFB-20): it drops Chunky commands. Resume with qrun.py --from ID.
+pace 2
+
+## SQ-EFB-00 | offline: worldgen tool tests (GroundMatch, EarthFill 113+, Meta print ALL)
+shell bash $INST/tools/test_worldgen_tools.sh > ../twt.txt 2>&1; grep -nE "^==|ALL|FAIL|error:|Could not find" ../twt.txt | head -60; ! grep -qE "FAIL|error:|Could not find or load main class" ../twt.txt
+
+## SQ-EFB-17 | offline: water reach and withBases checks in EarthFillTest
+shell m=0; for p in "water reach 2" "no water reach" "water reach leaves air" "bury: water reach 2 too" "water reach above the beard" "no base tag" "sand base" "stone + sand"; do grep -F "$p" ../twt.txt || { echo "MISSING: $p"; m=1; }; done; [ $m = 0 ] && ! grep -qE "FAIL|error:" ../twt.txt
+
+## SQ-PSW-00 | offline: worldgen json, nether scan, no glowstone line
+shell (cd $INST && python3 tools/check_worldgen_json.py) > ../cwj.txt 2>&1; r1=$?; tail -8 ../cwj.txt; (cd $INST && python3 tools/nether_worldgen_scan.py) 2>&1 | tail -8; n=$(grep -c glowstone $INST/feature_writeup/nether_worldgen_scan.md || true); echo "check_worldgen_json rc $r1, glowstone lines $n"; [ "$r1" = 0 ] && [ "$n" = 0 ]
+look check_worldgen_json: 0 problems; the scan prints 47 structures and a processor count
+
+## SQ-WGE-08 | full-boot regression: ERROR count, mixin / exception lines, Done time, tick at 5 min
+bootexpect Done \(
+bootreject (Mixin apply failed|InvalidInjectionException|Critical injection failure)
+shell mkdir -p $INST/perf/runs/r1102b/w; cp logs/latest.log $INST/perf/runs/r1102b/w/w1_boot.log; grep -o "Done ([0-9.]*s)" logs/latest.log; echo "ERROR lines: $(grep -c ERROR logs/latest.log || true)"; grep -iE "mixin|exception" logs/latest.log | grep -v "Error loading class" | cut -c1-300 | head -40
+> execute unless entity @e[type=minecraft:marker,tag=wgehome] run summon minecraft:marker ~ ~ ~ {Tags:["wgehome"]}
+sleep 2
+> data get entity @e[type=minecraft:marker,tag=wgehome,limit=1] Pos
+capture S entity data: \[(-?\d+)\.\d+d, (-?\d+)\.\d+d, (-?\d+)\.\d+d\]
+sleep 240
+> forge tps
+waitlog Overall 30
+look ERROR count and the mixin / exception lines against the last clean group B boot (perf/runs/r1101 w2 or the SQ-WG30 boot); Done time within 10 % of SQ-WG30; Overall mean tick at about 5 min; the 9 World Generation changelog bullets each match a WGE row
+
+## SQ-EFB-01 | probe: /zq under at spawn prints full lines; earth-fill log has lines (log = ALL)
+bootexpect \[earth-fill\]
+> zq under {S1} {S3} 4 -
+waitlog \[zq\] (under: \d+ starts|error) 120
+expect \[zq\] under: \d+ starts
+reject \[zq\] error
+reject Error occurred while handling event
+shell echo "earth-fill lines: $(grep -c "\[earth-fill\]" logs/latest.log || true)"; grep "\[zq\] under " logs/latest.log | tail -5 | cut -c1-400
+look the under lines carry every field (pieces, cols, air-below, water-below, base water, base earth, ring, foreign); 0 starts at an ocean spawn is a pass for the probe, rerun on a square tile (SQ-EFB-02) if so
+
+## SQ-WGE-01a | End solver: shadowlands 0.75, no note for it, crystal peaks 3, void barrens 2
+bootexpect \[biome-tuning\] override minecraft:the_end
+bootreject \[biome-tuning\] note minecraft:the_end nullscape:shadowlands
+bootreject (?i)(error|exception).*(BiomeLayoutTuner|biome-tuning)
+shell grep -A1 '"nullscape:shadowlands"' kubejs/generation_scripts/worldgen/biome_config.json | grep -q '"multiplier": 0.75' && grep -A1 '"nullscape:crystal_peaks"' kubejs/generation_scripts/worldgen/biome_config.json | grep -q '"multiplier": 3' && grep -A1 '"nullscape:void_barrens"' kubejs/generation_scripts/worldgen/biome_config.json | grep -q '"multiplier": 2'; r=$?; grep -a 'biome-tuning\]' logs/latest.log | sed 's/.*\[biome-tuning\]/[biome-tuning]/' | grep -iE 'the_end|nullscape' | cut -c1-300; exit $r
+look the End line: shadowlands modelled share near 14 % (aim about 16 %); no solver note for it
+
+## SQ-WGE-01b | End locate nullscape:shadowlands from 0 0 (under 1500 blocks)
+> execute in minecraft:the_end positioned 0 70 0 run locate biome nullscape:shadowlands
+waitlog (nearest nullscape:shadowlands is at|Could not find) 600
+expect nearest nullscape:shadowlands is at .*\((1[0-4]\d\d|\d{1,3}) blocks away\)
+
+## SQ-WGE-01b-2 | End locate nullscape:shadowlands from 3000 0 (under 1500 blocks)
+> execute in minecraft:the_end positioned 3000 70 0 run locate biome nullscape:shadowlands
+waitlog (nearest nullscape:shadowlands is at|Could not find) 600
+expect nearest nullscape:shadowlands is at .*\((1[0-4]\d\d|\d{1,3}) blocks away\)
+
+## SQ-WGE-01b-3 | End locate nullscape:shadowlands from 0 3000 (under 1500 blocks)
+> execute in minecraft:the_end positioned 0 70 3000 run locate biome nullscape:shadowlands
+waitlog (nearest nullscape:shadowlands is at|Could not find) 600
+expect nearest nullscape:shadowlands is at .*\((1[0-4]\d\d|\d{1,3}) blocks away\)
+
+## SQ-WGE-01b-4 | End locate nullscape:shadowlands from -3000 -3000 (under 1500 blocks)
+> execute in minecraft:the_end positioned -3000 70 -3000 run locate biome nullscape:shadowlands
+waitlog (nearest nullscape:shadowlands is at|Could not find) 600
+expect nearest nullscape:shadowlands is at .*\((1[0-4]\d\d|\d{1,3}) blocks away\)
+
+## SQ-WGE-01b-5 | End locate nullscape:crystal_peaks from 0 0
+> execute in minecraft:the_end positioned 0 70 0 run locate biome nullscape:crystal_peaks
+waitlog (nearest nullscape:crystal_peaks is at|Could not find) 600
+expect nearest nullscape:crystal_peaks is at
+
+## SQ-WGE-01b-6 | End locate nullscape:void_barrens from 0 0
+> execute in minecraft:the_end positioned 0 70 0 run locate biome nullscape:void_barrens
+waitlog (nearest nullscape:void_barrens is at|Could not find) 600
+expect nearest nullscape:void_barrens is at
+
+## SQ-WGE-03a | undead castle fits plains + taiga, not highlands; override string read
+shell python3 -c "import json;t=json.load(open('kubejs/generation_scripts/worldgen/structure_tags.json'))['tags'];c='eugene:undead_castle';r=[k for k in ('land/plains','land/taiga','land/highlands') if c in t.get(k,{}).get('values',[])];print(r);exit(0 if r==['land/plains','land/taiga'] else 1)"; r=$?; grep -n 'undead_castle' config/creativeengineering-common.toml; exit $r
+bootreject overrides: .*undead_castle.*skipped
+# there is no boot line for an override (stale row text); the limits show in each castle line: SQ-WGE-03b checks (limit 800) / (limit 400)
+
+## SQ-WGE-04a | tower weights x3 kept, frequencies unchanged, estimates table
+shell python3 -I $INST/tools/scratch_query/wge04a_check.py kubejs
+look frequency values equal the pre-change ones (git history of structure_groups.json); WGE-00 ran --check already
+
+## SQ-WGE-02b | locate meta/fortified_camps from 0 0 at searchTimeoutSeconds 120
+> execute positioned 0 70 0 run locate structure creativeengineering:meta/fortified_camps
+waitlog (nearest creativeengineering:meta/fortified_camps.* is at|type "?creativeengineering:meta/fortified_camps|creativeengineering:meta/fortified_camps.*timed out|Could not find) 200
+expect nearest creativeengineering:meta/fortified_camps.* is at
+reject timed out after 300
+
+## SQ-WGE-02b-2 | locate meta/fortified_camps from 2448 -624
+> execute positioned 2448 70 -624 run locate structure creativeengineering:meta/fortified_camps
+waitlog (nearest creativeengineering:meta/fortified_camps.* is at|type "?creativeengineering:meta/fortified_camps|creativeengineering:meta/fortified_camps.*timed out|Could not find) 200
+expect nearest creativeengineering:meta/fortified_camps.* is at
+
+## SQ-WGE-02b-3 | locate meta/fortified_ruins from 0 0
+> execute positioned 0 70 0 run locate structure creativeengineering:meta/fortified_ruins
+waitlog (nearest creativeengineering:meta/fortified_ruins.* is at|type "?creativeengineering:meta/fortified_ruins|creativeengineering:meta/fortified_ruins.*timed out|Could not find) 200
+expect nearest creativeengineering:meta/fortified_ruins.* is at
+look answers 1 to 5 s as on 10-30 (1823 / 3019 / 2608 blocks); a timeout line must say 120 s and appear once
+
+## SQ-WGE-06d-1 | restart pair, first boot: locate minecraft:village_plains from 0 0
+> execute positioned 0 70 0 run locate structure minecraft:village_plains
+waitlog (nearest minecraft:village_plains.* is at|type "?minecraft:village_plains|minecraft:village_plains.*timed out|Could not find) 200
+capture L6A nearest minecraft:village_plains.* is at \[(-?\d+), (~|-?\d+), (-?\d+)\]
+
+## SQ-WGE-06d-2 | restart pair, first boot: locate minecraft:village_plains from 2000 0
+> execute positioned 2000 70 0 run locate structure minecraft:village_plains
+waitlog (nearest minecraft:village_plains.* is at|type "?minecraft:village_plains|minecraft:village_plains.*timed out|Could not find) 200
+capture L6B nearest minecraft:village_plains.* is at \[(-?\d+), (~|-?\d+), (-?\d+)\]
+
+## SQ-WGE-06d-3 | restart pair, first boot: locate minecraft:village_plains from 0 2000
+> execute positioned 0 70 2000 run locate structure minecraft:village_plains
+waitlog (nearest minecraft:village_plains.* is at|type "?minecraft:village_plains|minecraft:village_plains.*timed out|Could not find) 200
+capture L6C nearest minecraft:village_plains.* is at \[(-?\d+), (~|-?\d+), (-?\d+)\]
+
+## SQ-WGE-06d-4 | restart pair, first boot: locate minecraft:pillager_outpost from 0 0
+> execute positioned 0 70 0 run locate structure minecraft:pillager_outpost
+waitlog (nearest minecraft:pillager_outpost.* is at|type "?minecraft:pillager_outpost|minecraft:pillager_outpost.*timed out|Could not find) 200
+capture L6D nearest minecraft:pillager_outpost.* is at \[(-?\d+), (~|-?\d+), (-?\d+)\]
+
+## W1-GEN-PL | square PL r 400: plains (EFB-02, -10, WGE-03b)
+> locate biome minecraft:plains
+waitlog (nearest minecraft:plains is at|Could not find) 600
+capture PL nearest minecraft:plains is at \[(-?\d+), (~|-?\d+), (-?\d+)\]
+> chunky shape square
+> chunky world minecraft:overworld
+> chunky center {PL1} {PL3}
+> chunky radius 400
+> chunky start
+waitlog Task finished 5400
+
+## W1-GEN-HI | square HI r 400: alpine highlands (EFB-03, -07 places, WGE-03b)
+> locate biome terralith:alpine_highlands
+waitlog (nearest terralith:alpine_highlands is at|Could not find) 600
+capture HI nearest terralith:alpine_highlands is at \[(-?\d+), (~|-?\d+), (-?\d+)\]
+> chunky world minecraft:overworld
+> chunky center {HI1} {HI3}
+> chunky radius 400
+> chunky start
+waitlog Task finished 5400
+
+## W1-GEN-DE | square DE r 300: desert (EFB-04, -08, -21, -22)
+> locate biome minecraft:desert
+waitlog (nearest minecraft:desert is at|Could not find) 600
+capture DE nearest minecraft:desert is at \[(-?\d+), (~|-?\d+), (-?\d+)\]
+> chunky world minecraft:overworld
+> chunky center {DE1} {DE3}
+> chunky radius 300
+> chunky start
+waitlog Task finished 5400
+
+## W1-GEN-OA | square OA r 300: desert oasis (EFB-21)
+> execute positioned {DE1} 70 {DE3} run locate biome terralith:desert_oasis
+waitlog (nearest terralith:desert_oasis is at|Could not find) 600
+capture OA nearest terralith:desert_oasis is at \[(-?\d+), (~|-?\d+), (-?\d+)\]
+> chunky world minecraft:overworld
+> chunky center {OA1} {OA3}
+> chunky radius 300
+> chunky start
+waitlog Task finished 5400
+
+## W1-GEN-JU | square JU r 300: jungle (EFB-04)
+> locate biome minecraft:jungle
+waitlog (nearest minecraft:jungle is at|Could not find) 600
+capture JU nearest minecraft:jungle is at \[(-?\d+), (~|-?\d+), (-?\d+)\]
+> chunky world minecraft:overworld
+> chunky center {JU1} {JU3}
+> chunky radius 300
+> chunky start
+waitlog Task finished 5400
+
+## W1-GEN-RV | square RV r 300: river by the plains (EFB-05, -12, -15, -16, -19)
+> execute positioned {PL1} 70 {PL3} run locate biome minecraft:river
+waitlog (nearest minecraft:river is at|Could not find) 600
+capture RV nearest minecraft:river is at \[(-?\d+), (~|-?\d+), (-?\d+)\]
+> chunky world minecraft:overworld
+> chunky center {RV1} {RV3}
+> chunky radius 300
+> chunky start
+waitlog Task finished 5400
+
+## W1-GEN-CO | square CO r 300: coast village (EFB-06, -19)
+> locate biome minecraft:beach
+waitlog (nearest minecraft:beach is at|Could not find) 600
+capture BE nearest minecraft:beach is at \[(-?\d+), (~|-?\d+), (-?\d+)\]
+> execute positioned {BE1} 70 {BE3} run locate structure #minecraft:village
+waitlog (nearest #minecraft:village.* is at|type "?minecraft:village|minecraft:village.*timed out|Could not find) 200
+capture CO nearest #minecraft:village.* is at \[(-?\d+), (~|-?\d+), (-?\d+)\]
+> chunky world minecraft:overworld
+> chunky center {CO1} {CO3}
+> chunky radius 300
+> chunky start
+waitlog Task finished 5400
+
+## W1-GEN-SW | square SW r 300: swamp (EFB-07)
+> locate biome minecraft:swamp
+waitlog (nearest minecraft:swamp is at|Could not find) 600
+capture SW nearest minecraft:swamp is at \[(-?\d+), (~|-?\d+), (-?\d+)\]
+> chunky world minecraft:overworld
+> chunky center {SW1} {SW3}
+> chunky radius 300
+> chunky start
+waitlog Task finished 5400
+
+## W1-GEN-MG | square MG r 300: mangrove swamp (EFB-07)
+> locate biome minecraft:mangrove_swamp
+waitlog (nearest minecraft:mangrove_swamp is at|Could not find) 600
+capture MG nearest minecraft:mangrove_swamp is at \[(-?\d+), (~|-?\d+), (-?\d+)\]
+> chunky world minecraft:overworld
+> chunky center {MG1} {MG3}
+> chunky radius 300
+> chunky start
+waitlog Task finished 5400
+
+## W1-GEN-SN | square SN r 300: snowy plains (EFB-09)
+> locate biome minecraft:snowy_plains
+waitlog (nearest minecraft:snowy_plains is at|Could not find) 600
+capture SN nearest minecraft:snowy_plains is at \[(-?\d+), (~|-?\d+), (-?\d+)\]
+> chunky world minecraft:overworld
+> chunky center {SN1} {SN3}
+> chunky radius 300
+> chunky start
+waitlog Task finished 5400
+
+## W1-GEN-BV | square BV r 300: badlands village (EFB-09, -21, -22)
+> locate structure towns_and_towers:village_badlands
+waitlog (nearest towns_and_towers:village_badlands.* is at|type "?towns_and_towers:village_badlands|towns_and_towers:village_badlands.*timed out|Could not find) 200
+capture BV nearest towns_and_towers:village_badlands.* is at \[(-?\d+), (~|-?\d+), (-?\d+)\]
+> chunky world minecraft:overworld
+> chunky center {BV1} {BV3}
+> chunky radius 300
+> chunky start
+waitlog Task finished 5400
+
+## W1-GEN-VO | square VO r 300: volcanic peaks (EFB-09)
+> locate biome terralith:volcanic_peaks
+waitlog (nearest terralith:volcanic_peaks is at|Could not find) 600
+capture VO nearest terralith:volcanic_peaks is at \[(-?\d+), (~|-?\d+), (-?\d+)\]
+> chunky world minecraft:overworld
+> chunky center {VO1} {VO3}
+> chunky radius 300
+> chunky start
+waitlog Task finished 5400
+
+## W1-GEN-DD | deep cave square r 200 (PSW-04)
+> locate biome minecraft:deep_dark
+waitlog (nearest minecraft:deep_dark is at|Could not find) 600
+capture DD nearest minecraft:deep_dark is at \[(-?\d+), (~|-?\d+), (-?\d+)\]
+> chunky world minecraft:overworld
+> chunky center {DD1} {DD3}
+> chunky radius 200
+> chunky start
+waitlog Task finished 5400
+
+## W1-GEN-SP | spawn square r 1000 (PSW-04, WGE-05a; about 15,600 chunks, the longest step)
+> chunky world minecraft:overworld
+> chunky center {S1} {S3}
+> chunky radius 1000
+> chunky start
+waitlog Task finished 9000
+
+## W1-GEN-NE | Nether square r 300 at 0 0 (WGE-05c)
+> chunky world minecraft:the_nether
+> chunky center 0 0
+> chunky radius 300
+> chunky start
+waitlog Task finished 5400
+
+## W1-GEN-EN | End square r 600 at 1500 0 (PSW-05, WGE-05c)
+> execute in minecraft:the_end run forceload add 1500 0 1500 0
+> chunky world minecraft:the_end
+> chunky center 1500 0
+> chunky radius 600
+> chunky start
+waitlog Task finished 5400
+> execute in minecraft:the_end run forceload remove all
+> chunky world minecraft:overworld
+> save-all flush
+waitlog Saved the game 300
+
+## SQ-EFB-02 | air: plains square, kept starts over6 0
+> forceload add {PL1-400} {PL3-400} {PL1-192} {PL3-192}
+sleep 10
+> zq under {PL1-312} {PL3-312} 6 -
+> say zqtile pl 1
+waitlog zqtile pl 1$ 600
+> forceload remove {PL1-400} {PL3-400} {PL1-192} {PL3-192}
+> forceload add {PL1-400} {PL3-224} {PL1-192} {PL3+16}
+sleep 10
+> zq under {PL1-312} {PL3-104} 6 -
+> say zqtile pl 2
+waitlog zqtile pl 2$ 600
+> forceload remove {PL1-400} {PL3-224} {PL1-192} {PL3+16}
+> forceload add {PL1-400} {PL3-16} {PL1-192} {PL3+224}
+sleep 10
+> zq under {PL1-312} {PL3+104} 6 -
+> say zqtile pl 3
+waitlog zqtile pl 3$ 600
+> forceload remove {PL1-400} {PL3-16} {PL1-192} {PL3+224}
+> forceload add {PL1-400} {PL3+192} {PL1-192} {PL3+400}
+sleep 10
+> zq under {PL1-312} {PL3+312} 6 -
+> say zqtile pl 4
+waitlog zqtile pl 4$ 600
+> forceload remove {PL1-400} {PL3+192} {PL1-192} {PL3+400}
+> forceload add {PL1-224} {PL3-400} {PL1+16} {PL3-192}
+sleep 10
+> zq under {PL1-104} {PL3-312} 6 -
+> say zqtile pl 5
+waitlog zqtile pl 5$ 600
+> forceload remove {PL1-224} {PL3-400} {PL1+16} {PL3-192}
+> forceload add {PL1-224} {PL3-224} {PL1+16} {PL3+16}
+sleep 10
+> zq under {PL1-104} {PL3-104} 6 -
+> say zqtile pl 6
+waitlog zqtile pl 6$ 600
+> forceload remove {PL1-224} {PL3-224} {PL1+16} {PL3+16}
+> forceload add {PL1-224} {PL3-16} {PL1+16} {PL3+224}
+sleep 10
+> zq under {PL1-104} {PL3+104} 6 -
+> say zqtile pl 7
+waitlog zqtile pl 7$ 600
+> forceload remove {PL1-224} {PL3-16} {PL1+16} {PL3+224}
+> forceload add {PL1-224} {PL3+192} {PL1+16} {PL3+400}
+sleep 10
+> zq under {PL1-104} {PL3+312} 6 -
+> say zqtile pl 8
+waitlog zqtile pl 8$ 600
+> forceload remove {PL1-224} {PL3+192} {PL1+16} {PL3+400}
+> forceload add {PL1-16} {PL3-400} {PL1+224} {PL3-192}
+sleep 10
+> zq under {PL1+104} {PL3-312} 6 -
+> say zqtile pl 9
+waitlog zqtile pl 9$ 600
+> forceload remove {PL1-16} {PL3-400} {PL1+224} {PL3-192}
+> forceload add {PL1-16} {PL3-224} {PL1+224} {PL3+16}
+sleep 10
+> zq under {PL1+104} {PL3-104} 6 -
+> say zqtile pl 10
+waitlog zqtile pl 10$ 600
+> forceload remove {PL1-16} {PL3-224} {PL1+224} {PL3+16}
+> forceload add {PL1-16} {PL3-16} {PL1+224} {PL3+224}
+sleep 10
+> zq under {PL1+104} {PL3+104} 6 -
+> say zqtile pl 11
+waitlog zqtile pl 11$ 600
+> forceload remove {PL1-16} {PL3-16} {PL1+224} {PL3+224}
+> forceload add {PL1-16} {PL3+192} {PL1+224} {PL3+400}
+sleep 10
+> zq under {PL1+104} {PL3+312} 6 -
+> say zqtile pl 12
+waitlog zqtile pl 12$ 600
+> forceload remove {PL1-16} {PL3+192} {PL1+224} {PL3+400}
+> forceload add {PL1+192} {PL3-400} {PL1+400} {PL3-192}
+sleep 10
+> zq under {PL1+312} {PL3-312} 6 -
+> say zqtile pl 13
+waitlog zqtile pl 13$ 600
+> forceload remove {PL1+192} {PL3-400} {PL1+400} {PL3-192}
+> forceload add {PL1+192} {PL3-224} {PL1+400} {PL3+16}
+sleep 10
+> zq under {PL1+312} {PL3-104} 6 -
+> say zqtile pl 14
+waitlog zqtile pl 14$ 600
+> forceload remove {PL1+192} {PL3-224} {PL1+400} {PL3+16}
+> forceload add {PL1+192} {PL3-16} {PL1+400} {PL3+224}
+sleep 10
+> zq under {PL1+312} {PL3+104} 6 -
+> say zqtile pl 15
+waitlog zqtile pl 15$ 600
+> forceload remove {PL1+192} {PL3-16} {PL1+400} {PL3+224}
+> forceload add {PL1+192} {PL3+192} {PL1+400} {PL3+400}
+sleep 10
+> zq under {PL1+312} {PL3+312} 6 -
+> say zqtile pl 16
+waitlog zqtile pl 16$ 600
+> forceload remove {PL1+192} {PL3+192} {PL1+400} {PL3+400}
+shell python3 -I $INST/tools/scratch_query/efb_judge.py under logs/latest.log --box {PL1-400} {PL3-400} {PL1+400} {PL3+400} --except '(underground|mineshaft|stronghold|ancient_city|trial|dungeon|monument|shipwreck|ocean_ruin|buried|fossil|geode|catacomb|crypt|cave|bunker|vault|tomb|sewer|lair|deep|mine)' --fail over6
+look no village house standing on air (client tour: chunks in the over6 list)
+
+## SQ-EFB-03 | air, mounds: highlands square
+> forceload add {HI1-400} {HI3-400} {HI1-192} {HI3-192}
+sleep 10
+> zq under {HI1-312} {HI3-312} 6 -
+> say zqtile hi 1
+waitlog zqtile hi 1$ 600
+> forceload remove {HI1-400} {HI3-400} {HI1-192} {HI3-192}
+> forceload add {HI1-400} {HI3-224} {HI1-192} {HI3+16}
+sleep 10
+> zq under {HI1-312} {HI3-104} 6 -
+> say zqtile hi 2
+waitlog zqtile hi 2$ 600
+> forceload remove {HI1-400} {HI3-224} {HI1-192} {HI3+16}
+> forceload add {HI1-400} {HI3-16} {HI1-192} {HI3+224}
+sleep 10
+> zq under {HI1-312} {HI3+104} 6 -
+> say zqtile hi 3
+waitlog zqtile hi 3$ 600
+> forceload remove {HI1-400} {HI3-16} {HI1-192} {HI3+224}
+> forceload add {HI1-400} {HI3+192} {HI1-192} {HI3+400}
+sleep 10
+> zq under {HI1-312} {HI3+312} 6 -
+> say zqtile hi 4
+waitlog zqtile hi 4$ 600
+> forceload remove {HI1-400} {HI3+192} {HI1-192} {HI3+400}
+> forceload add {HI1-224} {HI3-400} {HI1+16} {HI3-192}
+sleep 10
+> zq under {HI1-104} {HI3-312} 6 -
+> say zqtile hi 5
+waitlog zqtile hi 5$ 600
+> forceload remove {HI1-224} {HI3-400} {HI1+16} {HI3-192}
+> forceload add {HI1-224} {HI3-224} {HI1+16} {HI3+16}
+sleep 10
+> zq under {HI1-104} {HI3-104} 6 -
+> say zqtile hi 6
+waitlog zqtile hi 6$ 600
+> forceload remove {HI1-224} {HI3-224} {HI1+16} {HI3+16}
+> forceload add {HI1-224} {HI3-16} {HI1+16} {HI3+224}
+sleep 10
+> zq under {HI1-104} {HI3+104} 6 -
+> say zqtile hi 7
+waitlog zqtile hi 7$ 600
+> forceload remove {HI1-224} {HI3-16} {HI1+16} {HI3+224}
+> forceload add {HI1-224} {HI3+192} {HI1+16} {HI3+400}
+sleep 10
+> zq under {HI1-104} {HI3+312} 6 -
+> say zqtile hi 8
+waitlog zqtile hi 8$ 600
+> forceload remove {HI1-224} {HI3+192} {HI1+16} {HI3+400}
+> forceload add {HI1-16} {HI3-400} {HI1+224} {HI3-192}
+sleep 10
+> zq under {HI1+104} {HI3-312} 6 -
+> say zqtile hi 9
+waitlog zqtile hi 9$ 600
+> forceload remove {HI1-16} {HI3-400} {HI1+224} {HI3-192}
+> forceload add {HI1-16} {HI3-224} {HI1+224} {HI3+16}
+sleep 10
+> zq under {HI1+104} {HI3-104} 6 -
+> say zqtile hi 10
+waitlog zqtile hi 10$ 600
+> forceload remove {HI1-16} {HI3-224} {HI1+224} {HI3+16}
+> forceload add {HI1-16} {HI3-16} {HI1+224} {HI3+224}
+sleep 10
+> zq under {HI1+104} {HI3+104} 6 -
+> say zqtile hi 11
+waitlog zqtile hi 11$ 600
+> forceload remove {HI1-16} {HI3-16} {HI1+224} {HI3+224}
+> forceload add {HI1-16} {HI3+192} {HI1+224} {HI3+400}
+sleep 10
+> zq under {HI1+104} {HI3+312} 6 -
+> say zqtile hi 12
+waitlog zqtile hi 12$ 600
+> forceload remove {HI1-16} {HI3+192} {HI1+224} {HI3+400}
+> forceload add {HI1+192} {HI3-400} {HI1+400} {HI3-192}
+sleep 10
+> zq under {HI1+312} {HI3-312} 6 -
+> say zqtile hi 13
+waitlog zqtile hi 13$ 600
+> forceload remove {HI1+192} {HI3-400} {HI1+400} {HI3-192}
+> forceload add {HI1+192} {HI3-224} {HI1+400} {HI3+16}
+sleep 10
+> zq under {HI1+312} {HI3-104} 6 -
+> say zqtile hi 14
+waitlog zqtile hi 14$ 600
+> forceload remove {HI1+192} {HI3-224} {HI1+400} {HI3+16}
+> forceload add {HI1+192} {HI3-16} {HI1+400} {HI3+224}
+sleep 10
+> zq under {HI1+312} {HI3+104} 6 -
+> say zqtile hi 15
+waitlog zqtile hi 15$ 600
+> forceload remove {HI1+192} {HI3-16} {HI1+400} {HI3+224}
+> forceload add {HI1+192} {HI3+192} {HI1+400} {HI3+400}
+sleep 10
+> zq under {HI1+312} {HI3+312} 6 -
+> say zqtile hi 16
+waitlog zqtile hi 16$ 600
+> forceload remove {HI1+192} {HI3+192} {HI1+400} {HI3+400}
+shell python3 -I $INST/tools/scratch_query/efb_judge.py log logs/latest.log --box {HI1-400} {HI3-400} {HI1+400} {HI3+400}
+shell python3 -I $INST/tools/scratch_query/efb_judge.py under logs/latest.log --box {HI1-400} {HI3-400} {HI1+400} {HI3+400} --except '(underground|mineshaft|stronghold|ancient_city|trial|dungeon|monument|shipwreck|ocean_ruin|buried|fossil|geode|catacomb|crypt|cave|bunker|vault|tomb|sewer|lair|deep|mine)' --fail over6
+look mound starts within the limit kept with air-below 0; over the limit CANCELLED (log summary "cancel mound"); two mound starts from the side are a client look
+
+## SQ-EFB-08 | earth, desert: foreign none; Philip ruins placed twice on sand; no grass on sand
+> forceload add {DE1+80} {DE3-20} {DE1+140} {DE3+20}
+sleep 10
+> execute positioned {DE1+100} 80 {DE3} run place structure philipsruins:ancient_ruins
+> execute positioned {DE1+130} 80 {DE3} run place structure philipsruins:ancient_ruins
+sleep 5
+> forceload remove {DE1+80} {DE3-20} {DE1+140} {DE3+20}
+> forceload add {DE1-300} {DE3-300} {DE1-88} {DE3-88}
+sleep 10
+> zq under {DE1-208} {DE3-208} 6 -
+> say zqtile de 1
+waitlog zqtile de 1$ 600
+> forceload remove {DE1-300} {DE3-300} {DE1-88} {DE3-88}
+> forceload add {DE1-300} {DE3-120} {DE1-88} {DE3+120}
+sleep 10
+> zq under {DE1-208} {DE3} 6 -
+> say zqtile de 2
+waitlog zqtile de 2$ 600
+> forceload remove {DE1-300} {DE3-120} {DE1-88} {DE3+120}
+> forceload add {DE1-300} {DE3+88} {DE1-88} {DE3+300}
+sleep 10
+> zq under {DE1-208} {DE3+208} 6 -
+> say zqtile de 3
+waitlog zqtile de 3$ 600
+> forceload remove {DE1-300} {DE3+88} {DE1-88} {DE3+300}
+> forceload add {DE1-120} {DE3-300} {DE1+120} {DE3-88}
+sleep 10
+> zq under {DE1} {DE3-208} 6 -
+> say zqtile de 4
+waitlog zqtile de 4$ 600
+> forceload remove {DE1-120} {DE3-300} {DE1+120} {DE3-88}
+> forceload add {DE1-120} {DE3-120} {DE1+120} {DE3+120}
+sleep 10
+> zq under {DE1} {DE3} 6 -
+> say zqtile de 5
+waitlog zqtile de 5$ 600
+> forceload remove {DE1-120} {DE3-120} {DE1+120} {DE3+120}
+> forceload add {DE1-120} {DE3+88} {DE1+120} {DE3+300}
+sleep 10
+> zq under {DE1} {DE3+208} 6 -
+> say zqtile de 6
+waitlog zqtile de 6$ 600
+> forceload remove {DE1-120} {DE3+88} {DE1+120} {DE3+300}
+> forceload add {DE1+88} {DE3-300} {DE1+300} {DE3-88}
+sleep 10
+> zq under {DE1+208} {DE3-208} 6 -
+> say zqtile de 7
+waitlog zqtile de 7$ 600
+> forceload remove {DE1+88} {DE3-300} {DE1+300} {DE3-88}
+> forceload add {DE1+88} {DE3-120} {DE1+300} {DE3+120}
+sleep 10
+> zq under {DE1+208} {DE3} 6 -
+> say zqtile de 8
+waitlog zqtile de 8$ 600
+> forceload remove {DE1+88} {DE3-120} {DE1+300} {DE3+120}
+> forceload add {DE1+88} {DE3+88} {DE1+300} {DE3+300}
+sleep 10
+> zq under {DE1+208} {DE3+208} 6 -
+> say zqtile de 9
+waitlog zqtile de 9$ 600
+> forceload remove {DE1+88} {DE3+88} {DE1+300} {DE3+300}
+shell python3 -I $INST/tools/scratch_query/efb_judge.py under logs/latest.log --box {DE1-300} {DE3-300} {DE1+300} {DE3+300} --except '(underground|mineshaft|stronghold|ancient_city|trial|dungeon|monument|shipwreck|ocean_ruin|buried|fossil|geode|catacomb|crypt|cave|bunker|vault|tomb|sewer|lair|deep|mine)' --fail foreign
+> save-all flush
+waitlog Saved the game 300
+shell python3 -I $INST/tools/scratch_query/region_blocks.py blocks wge 'minecraft:(grass|tall_grass)$' --near 'minecraft:(sand|red_sand|sandstone)$' --box {DE1-300} {DE3-300} {DE1+300} {DE3+300}
+look grass plants next to sand (the --near count) should be 0 or at the desert edge only; base earth sand / sandstone
+
+## SQ-EFB-04 | air, earthless pieces: jungle square, then pyramid / igloo / jungle / camp / ruin over every square
+> forceload add {JU1-300} {JU3-300} {JU1-88} {JU3-88}
+sleep 10
+> zq under {JU1-208} {JU3-208} 6 -
+> say zqtile ju 1
+waitlog zqtile ju 1$ 600
+> forceload remove {JU1-300} {JU3-300} {JU1-88} {JU3-88}
+> forceload add {JU1-300} {JU3-120} {JU1-88} {JU3+120}
+sleep 10
+> zq under {JU1-208} {JU3} 6 -
+> say zqtile ju 2
+waitlog zqtile ju 2$ 600
+> forceload remove {JU1-300} {JU3-120} {JU1-88} {JU3+120}
+> forceload add {JU1-300} {JU3+88} {JU1-88} {JU3+300}
+sleep 10
+> zq under {JU1-208} {JU3+208} 6 -
+> say zqtile ju 3
+waitlog zqtile ju 3$ 600
+> forceload remove {JU1-300} {JU3+88} {JU1-88} {JU3+300}
+> forceload add {JU1-120} {JU3-300} {JU1+120} {JU3-88}
+sleep 10
+> zq under {JU1} {JU3-208} 6 -
+> say zqtile ju 4
+waitlog zqtile ju 4$ 600
+> forceload remove {JU1-120} {JU3-300} {JU1+120} {JU3-88}
+> forceload add {JU1-120} {JU3-120} {JU1+120} {JU3+120}
+sleep 10
+> zq under {JU1} {JU3} 6 -
+> say zqtile ju 5
+waitlog zqtile ju 5$ 600
+> forceload remove {JU1-120} {JU3-120} {JU1+120} {JU3+120}
+> forceload add {JU1-120} {JU3+88} {JU1+120} {JU3+300}
+sleep 10
+> zq under {JU1} {JU3+208} 6 -
+> say zqtile ju 6
+waitlog zqtile ju 6$ 600
+> forceload remove {JU1-120} {JU3+88} {JU1+120} {JU3+300}
+> forceload add {JU1+88} {JU3-300} {JU1+300} {JU3-88}
+sleep 10
+> zq under {JU1+208} {JU3-208} 6 -
+> say zqtile ju 7
+waitlog zqtile ju 7$ 600
+> forceload remove {JU1+88} {JU3-300} {JU1+300} {JU3-88}
+> forceload add {JU1+88} {JU3-120} {JU1+300} {JU3+120}
+sleep 10
+> zq under {JU1+208} {JU3} 6 -
+> say zqtile ju 8
+waitlog zqtile ju 8$ 600
+> forceload remove {JU1+88} {JU3-120} {JU1+300} {JU3+120}
+> forceload add {JU1+88} {JU3+88} {JU1+300} {JU3+300}
+sleep 10
+> zq under {JU1+208} {JU3+208} 6 -
+> say zqtile ju 9
+waitlog zqtile ju 9$ 600
+> forceload remove {JU1+88} {JU3+88} {JU1+300} {JU3+300}
+shell python3 -I $INST/tools/scratch_query/efb_judge.py under logs/latest.log --id '(pyramid|igloo|jungle|camp|ruin)' --except '(underground|mineshaft|stronghold|ancient_city|trial|dungeon|monument|shipwreck|ocean_ruin|buried|fossil|geode|catacomb|crypt|cave|bunker|vault|tomb|sewer|lair|deep|mine)' --fail over6
+shell python3 -I $INST/tools/scratch_query/efb_judge.py log logs/latest.log --id '(pyramid|igloo|jungle|camp|ruin)'
+look a camp or ruin more than 6 over air has a CANCELLED line, not a world entry; tents and plinths on the ground (LOOK one camp, one ruin, client)
+
+## SQ-EFB-05 | water, lakes: river square at maxWaterSurplus 0.5
+shell grep -n 'maxWaterSurplus' config/creativeengineering-common.toml | grep -q '= 0.5' && echo 'maxWaterSurplus 0.5'
+> forceload add {RV1-300} {RV3-300} {RV1-88} {RV3-88}
+sleep 10
+> zq under {RV1-208} {RV3-208} 6 -
+> say zqtile rv 1
+waitlog zqtile rv 1$ 600
+> forceload remove {RV1-300} {RV3-300} {RV1-88} {RV3-88}
+> forceload add {RV1-300} {RV3-120} {RV1-88} {RV3+120}
+sleep 10
+> zq under {RV1-208} {RV3} 6 -
+> say zqtile rv 2
+waitlog zqtile rv 2$ 600
+> forceload remove {RV1-300} {RV3-120} {RV1-88} {RV3+120}
+> forceload add {RV1-300} {RV3+88} {RV1-88} {RV3+300}
+sleep 10
+> zq under {RV1-208} {RV3+208} 6 -
+> say zqtile rv 3
+waitlog zqtile rv 3$ 600
+> forceload remove {RV1-300} {RV3+88} {RV1-88} {RV3+300}
+> forceload add {RV1-120} {RV3-300} {RV1+120} {RV3-88}
+sleep 10
+> zq under {RV1} {RV3-208} 6 -
+> say zqtile rv 4
+waitlog zqtile rv 4$ 600
+> forceload remove {RV1-120} {RV3-300} {RV1+120} {RV3-88}
+> forceload add {RV1-120} {RV3-120} {RV1+120} {RV3+120}
+sleep 10
+> zq under {RV1} {RV3} 6 -
+> say zqtile rv 5
+waitlog zqtile rv 5$ 600
+> forceload remove {RV1-120} {RV3-120} {RV1+120} {RV3+120}
+> forceload add {RV1-120} {RV3+88} {RV1+120} {RV3+300}
+sleep 10
+> zq under {RV1} {RV3+208} 6 -
+> say zqtile rv 6
+waitlog zqtile rv 6$ 600
+> forceload remove {RV1-120} {RV3+88} {RV1+120} {RV3+300}
+> forceload add {RV1+88} {RV3-300} {RV1+300} {RV3-88}
+sleep 10
+> zq under {RV1+208} {RV3-208} 6 -
+> say zqtile rv 7
+waitlog zqtile rv 7$ 600
+> forceload remove {RV1+88} {RV3-300} {RV1+300} {RV3-88}
+> forceload add {RV1+88} {RV3-120} {RV1+300} {RV3+120}
+sleep 10
+> zq under {RV1+208} {RV3} 6 -
+> say zqtile rv 8
+waitlog zqtile rv 8$ 600
+> forceload remove {RV1+88} {RV3-120} {RV1+300} {RV3+120}
+> forceload add {RV1+88} {RV3+88} {RV1+300} {RV3+300}
+sleep 10
+> zq under {RV1+208} {RV3+208} 6 -
+> say zqtile rv 9
+waitlog zqtile rv 9$ 600
+> forceload remove {RV1+88} {RV3+88} {RV1+300} {RV3+300}
+shell python3 -I $INST/tools/scratch_query/efb_judge.py under logs/latest.log --box {RV1-300} {RV3-300} {RV1+300} {RV3+300} --except "(underground|mineshaft|stronghold|ancient_city|trial|dungeon|monument|shipwreck|ocean_ruin|buried|fossil|geode|catacomb|crypt|cave|bunker|vault|tomb|sewer|lair|deep|mine)|(swamp_hut|witch_hut|mangrove_pillager_tower|aquaculture|fisherman|pond)" --fail deepwater --fail basewater
+shell python3 -I $INST/tools/scratch_query/efb_judge.py log logs/latest.log --box {RV1-300} {RV3-300} {RV1+300} {RV3+300}
+shell grep -a '\[earth-fill\]' logs/latest.log | grep -v predicted | grep -- 'footprint' | grep -- '-> kept' | sed 's/.*\[earth-fill\]//' | cut -c1-300 | head -40
+look every "too wet" start has no probe line; kept footprints at most 60:40 water:ground; record how many kept starts sit between 50:50 and 60:40
+
+## SQ-EFB-06 | water, coast: villages, no floor in the water, pruned houses gone
+> forceload add {CO1-300} {CO3-300} {CO1-88} {CO3-88}
+sleep 10
+> zq under {CO1-208} {CO3-208} 6 -
+> say zqtile co 1
+waitlog zqtile co 1$ 600
+> forceload remove {CO1-300} {CO3-300} {CO1-88} {CO3-88}
+> forceload add {CO1-300} {CO3-120} {CO1-88} {CO3+120}
+sleep 10
+> zq under {CO1-208} {CO3} 6 -
+> say zqtile co 2
+waitlog zqtile co 2$ 600
+> forceload remove {CO1-300} {CO3-120} {CO1-88} {CO3+120}
+> forceload add {CO1-300} {CO3+88} {CO1-88} {CO3+300}
+sleep 10
+> zq under {CO1-208} {CO3+208} 6 -
+> say zqtile co 3
+waitlog zqtile co 3$ 600
+> forceload remove {CO1-300} {CO3+88} {CO1-88} {CO3+300}
+> forceload add {CO1-120} {CO3-300} {CO1+120} {CO3-88}
+sleep 10
+> zq under {CO1} {CO3-208} 6 -
+> say zqtile co 4
+waitlog zqtile co 4$ 600
+> forceload remove {CO1-120} {CO3-300} {CO1+120} {CO3-88}
+> forceload add {CO1-120} {CO3-120} {CO1+120} {CO3+120}
+sleep 10
+> zq under {CO1} {CO3} 6 -
+> say zqtile co 5
+waitlog zqtile co 5$ 600
+> forceload remove {CO1-120} {CO3-120} {CO1+120} {CO3+120}
+> forceload add {CO1-120} {CO3+88} {CO1+120} {CO3+300}
+sleep 10
+> zq under {CO1} {CO3+208} 6 -
+> say zqtile co 6
+waitlog zqtile co 6$ 600
+> forceload remove {CO1-120} {CO3+88} {CO1+120} {CO3+300}
+> forceload add {CO1+88} {CO3-300} {CO1+300} {CO3-88}
+sleep 10
+> zq under {CO1+208} {CO3-208} 6 -
+> say zqtile co 7
+waitlog zqtile co 7$ 600
+> forceload remove {CO1+88} {CO3-300} {CO1+300} {CO3-88}
+> forceload add {CO1+88} {CO3-120} {CO1+300} {CO3+120}
+sleep 10
+> zq under {CO1+208} {CO3} 6 -
+> say zqtile co 8
+waitlog zqtile co 8$ 600
+> forceload remove {CO1+88} {CO3-120} {CO1+300} {CO3+120}
+> forceload add {CO1+88} {CO3+88} {CO1+300} {CO3+300}
+sleep 10
+> zq under {CO1+208} {CO3+208} 6 -
+> say zqtile co 9
+waitlog zqtile co 9$ 600
+> forceload remove {CO1+88} {CO3+88} {CO1+300} {CO3+300}
+shell python3 -I $INST/tools/scratch_query/efb_judge.py under logs/latest.log --box {CO1-300} {CO3-300} {CO1+300} {CO3+300} --id village --fail basewater --fail deepwater
+> save-all flush
+waitlog Saved the game 300
+shell python3 -I $INST/tools/scratch_query/efb_judge.py gone wge logs/latest.log --box {CO1-300} {CO3-300} {CO1+300} {CO3+300} --id village
+
+## SQ-EFB-07 | water kept on purpose: swamp + mangrove stilts, placed ponds and fisherman house
+> forceload add {SW1-300} {SW3-300} {SW1-88} {SW3-88}
+sleep 10
+> zq under {SW1-208} {SW3-208} 6 -
+> say zqtile sw 1
+waitlog zqtile sw 1$ 600
+> forceload remove {SW1-300} {SW3-300} {SW1-88} {SW3-88}
+> forceload add {SW1-300} {SW3-120} {SW1-88} {SW3+120}
+sleep 10
+> zq under {SW1-208} {SW3} 6 -
+> say zqtile sw 2
+waitlog zqtile sw 2$ 600
+> forceload remove {SW1-300} {SW3-120} {SW1-88} {SW3+120}
+> forceload add {SW1-300} {SW3+88} {SW1-88} {SW3+300}
+sleep 10
+> zq under {SW1-208} {SW3+208} 6 -
+> say zqtile sw 3
+waitlog zqtile sw 3$ 600
+> forceload remove {SW1-300} {SW3+88} {SW1-88} {SW3+300}
+> forceload add {SW1-120} {SW3-300} {SW1+120} {SW3-88}
+sleep 10
+> zq under {SW1} {SW3-208} 6 -
+> say zqtile sw 4
+waitlog zqtile sw 4$ 600
+> forceload remove {SW1-120} {SW3-300} {SW1+120} {SW3-88}
+> forceload add {SW1-120} {SW3-120} {SW1+120} {SW3+120}
+sleep 10
+> zq under {SW1} {SW3} 6 -
+> say zqtile sw 5
+waitlog zqtile sw 5$ 600
+> forceload remove {SW1-120} {SW3-120} {SW1+120} {SW3+120}
+> forceload add {SW1-120} {SW3+88} {SW1+120} {SW3+300}
+sleep 10
+> zq under {SW1} {SW3+208} 6 -
+> say zqtile sw 6
+waitlog zqtile sw 6$ 600
+> forceload remove {SW1-120} {SW3+88} {SW1+120} {SW3+300}
+> forceload add {SW1+88} {SW3-300} {SW1+300} {SW3-88}
+sleep 10
+> zq under {SW1+208} {SW3-208} 6 -
+> say zqtile sw 7
+waitlog zqtile sw 7$ 600
+> forceload remove {SW1+88} {SW3-300} {SW1+300} {SW3-88}
+> forceload add {SW1+88} {SW3-120} {SW1+300} {SW3+120}
+sleep 10
+> zq under {SW1+208} {SW3} 6 -
+> say zqtile sw 8
+waitlog zqtile sw 8$ 600
+> forceload remove {SW1+88} {SW3-120} {SW1+300} {SW3+120}
+> forceload add {SW1+88} {SW3+88} {SW1+300} {SW3+300}
+sleep 10
+> zq under {SW1+208} {SW3+208} 6 -
+> say zqtile sw 9
+waitlog zqtile sw 9$ 600
+> forceload remove {SW1+88} {SW3+88} {SW1+300} {SW3+300}
+> forceload add {MG1-300} {MG3-300} {MG1-88} {MG3-88}
+sleep 10
+> zq under {MG1-208} {MG3-208} 6 -
+> say zqtile mg 1
+waitlog zqtile mg 1$ 600
+> forceload remove {MG1-300} {MG3-300} {MG1-88} {MG3-88}
+> forceload add {MG1-300} {MG3-120} {MG1-88} {MG3+120}
+sleep 10
+> zq under {MG1-208} {MG3} 6 -
+> say zqtile mg 2
+waitlog zqtile mg 2$ 600
+> forceload remove {MG1-300} {MG3-120} {MG1-88} {MG3+120}
+> forceload add {MG1-300} {MG3+88} {MG1-88} {MG3+300}
+sleep 10
+> zq under {MG1-208} {MG3+208} 6 -
+> say zqtile mg 3
+waitlog zqtile mg 3$ 600
+> forceload remove {MG1-300} {MG3+88} {MG1-88} {MG3+300}
+> forceload add {MG1-120} {MG3-300} {MG1+120} {MG3-88}
+sleep 10
+> zq under {MG1} {MG3-208} 6 -
+> say zqtile mg 4
+waitlog zqtile mg 4$ 600
+> forceload remove {MG1-120} {MG3-300} {MG1+120} {MG3-88}
+> forceload add {MG1-120} {MG3-120} {MG1+120} {MG3+120}
+sleep 10
+> zq under {MG1} {MG3} 6 -
+> say zqtile mg 5
+waitlog zqtile mg 5$ 600
+> forceload remove {MG1-120} {MG3-120} {MG1+120} {MG3+120}
+> forceload add {MG1-120} {MG3+88} {MG1+120} {MG3+300}
+sleep 10
+> zq under {MG1} {MG3+208} 6 -
+> say zqtile mg 6
+waitlog zqtile mg 6$ 600
+> forceload remove {MG1-120} {MG3+88} {MG1+120} {MG3+300}
+> forceload add {MG1+88} {MG3-300} {MG1+300} {MG3-88}
+sleep 10
+> zq under {MG1+208} {MG3-208} 6 -
+> say zqtile mg 7
+waitlog zqtile mg 7$ 600
+> forceload remove {MG1+88} {MG3-300} {MG1+300} {MG3-88}
+> forceload add {MG1+88} {MG3-120} {MG1+300} {MG3+120}
+sleep 10
+> zq under {MG1+208} {MG3} 6 -
+> say zqtile mg 8
+waitlog zqtile mg 8$ 600
+> forceload remove {MG1+88} {MG3-120} {MG1+300} {MG3+120}
+> forceload add {MG1+88} {MG3+88} {MG1+300} {MG3+300}
+sleep 10
+> zq under {MG1+208} {MG3+208} 6 -
+> say zqtile mg 9
+waitlog zqtile mg 9$ 600
+> forceload remove {MG1+88} {MG3+88} {MG1+300} {MG3+300}
+> forceload add {HI1+80} {HI3-40} {HI1+240} {HI3+40}
+sleep 10
+> execute positioned {HI1+100} 100 {HI3} run place structure farmers_structures:aquacultures_common
+> execute positioned {HI1+160} 100 {HI3} run place structure farmers_structures:aquacultures_carp
+> execute positioned {HI1+220} 100 {HI3} run place structure old_swamp_fisherman_house:fisherman_house
+sleep 5
+> zq under {HI1+160} {HI3} 6 aquacultures
+> zq under {HI1+220} {HI3} 3 fisherman
+> say zqtile hi7 1
+waitlog zqtile hi7 1$ 300
+> forceload remove {HI1+80} {HI3-40} {HI1+240} {HI3+40}
+shell python3 -I $INST/tools/scratch_query/efb_judge.py under logs/latest.log --id '(swamp_hut|witch_hut|mangrove_pillager_tower)' --need waterbelow
+shell python3 -I $INST/tools/scratch_query/efb_judge.py under logs/latest.log --id 'aquacultures' --need basewater
+look huts and towers stand on stilts with water under them, not earth; ponds full, rim intact (client look at the HI +100..+220 x positions)
+
+## SQ-EFB-09 | earth, other grounds: snowy plains, badlands village, volcanic peaks
+> forceload add {SN1-300} {SN3-300} {SN1-88} {SN3-88}
+sleep 10
+> zq under {SN1-208} {SN3-208} 6 -
+> say zqtile sn 1
+waitlog zqtile sn 1$ 600
+> forceload remove {SN1-300} {SN3-300} {SN1-88} {SN3-88}
+> forceload add {SN1-300} {SN3-120} {SN1-88} {SN3+120}
+sleep 10
+> zq under {SN1-208} {SN3} 6 -
+> say zqtile sn 2
+waitlog zqtile sn 2$ 600
+> forceload remove {SN1-300} {SN3-120} {SN1-88} {SN3+120}
+> forceload add {SN1-300} {SN3+88} {SN1-88} {SN3+300}
+sleep 10
+> zq under {SN1-208} {SN3+208} 6 -
+> say zqtile sn 3
+waitlog zqtile sn 3$ 600
+> forceload remove {SN1-300} {SN3+88} {SN1-88} {SN3+300}
+> forceload add {SN1-120} {SN3-300} {SN1+120} {SN3-88}
+sleep 10
+> zq under {SN1} {SN3-208} 6 -
+> say zqtile sn 4
+waitlog zqtile sn 4$ 600
+> forceload remove {SN1-120} {SN3-300} {SN1+120} {SN3-88}
+> forceload add {SN1-120} {SN3-120} {SN1+120} {SN3+120}
+sleep 10
+> zq under {SN1} {SN3} 6 -
+> say zqtile sn 5
+waitlog zqtile sn 5$ 600
+> forceload remove {SN1-120} {SN3-120} {SN1+120} {SN3+120}
+> forceload add {SN1-120} {SN3+88} {SN1+120} {SN3+300}
+sleep 10
+> zq under {SN1} {SN3+208} 6 -
+> say zqtile sn 6
+waitlog zqtile sn 6$ 600
+> forceload remove {SN1-120} {SN3+88} {SN1+120} {SN3+300}
+> forceload add {SN1+88} {SN3-300} {SN1+300} {SN3-88}
+sleep 10
+> zq under {SN1+208} {SN3-208} 6 -
+> say zqtile sn 7
+waitlog zqtile sn 7$ 600
+> forceload remove {SN1+88} {SN3-300} {SN1+300} {SN3-88}
+> forceload add {SN1+88} {SN3-120} {SN1+300} {SN3+120}
+sleep 10
+> zq under {SN1+208} {SN3} 6 -
+> say zqtile sn 8
+waitlog zqtile sn 8$ 600
+> forceload remove {SN1+88} {SN3-120} {SN1+300} {SN3+120}
+> forceload add {SN1+88} {SN3+88} {SN1+300} {SN3+300}
+sleep 10
+> zq under {SN1+208} {SN3+208} 6 -
+> say zqtile sn 9
+waitlog zqtile sn 9$ 600
+> forceload remove {SN1+88} {SN3+88} {SN1+300} {SN3+300}
+> forceload add {BV1-300} {BV3-300} {BV1-88} {BV3-88}
+sleep 10
+> zq under {BV1-208} {BV3-208} 6 -
+> say zqtile bv 1
+waitlog zqtile bv 1$ 600
+> forceload remove {BV1-300} {BV3-300} {BV1-88} {BV3-88}
+> forceload add {BV1-300} {BV3-120} {BV1-88} {BV3+120}
+sleep 10
+> zq under {BV1-208} {BV3} 6 -
+> say zqtile bv 2
+waitlog zqtile bv 2$ 600
+> forceload remove {BV1-300} {BV3-120} {BV1-88} {BV3+120}
+> forceload add {BV1-300} {BV3+88} {BV1-88} {BV3+300}
+sleep 10
+> zq under {BV1-208} {BV3+208} 6 -
+> say zqtile bv 3
+waitlog zqtile bv 3$ 600
+> forceload remove {BV1-300} {BV3+88} {BV1-88} {BV3+300}
+> forceload add {BV1-120} {BV3-300} {BV1+120} {BV3-88}
+sleep 10
+> zq under {BV1} {BV3-208} 6 -
+> say zqtile bv 4
+waitlog zqtile bv 4$ 600
+> forceload remove {BV1-120} {BV3-300} {BV1+120} {BV3-88}
+> forceload add {BV1-120} {BV3-120} {BV1+120} {BV3+120}
+sleep 10
+> zq under {BV1} {BV3} 6 -
+> say zqtile bv 5
+waitlog zqtile bv 5$ 600
+> forceload remove {BV1-120} {BV3-120} {BV1+120} {BV3+120}
+> forceload add {BV1-120} {BV3+88} {BV1+120} {BV3+300}
+sleep 10
+> zq under {BV1} {BV3+208} 6 -
+> say zqtile bv 6
+waitlog zqtile bv 6$ 600
+> forceload remove {BV1-120} {BV3+88} {BV1+120} {BV3+300}
+> forceload add {BV1+88} {BV3-300} {BV1+300} {BV3-88}
+sleep 10
+> zq under {BV1+208} {BV3-208} 6 -
+> say zqtile bv 7
+waitlog zqtile bv 7$ 600
+> forceload remove {BV1+88} {BV3-300} {BV1+300} {BV3-88}
+> forceload add {BV1+88} {BV3-120} {BV1+300} {BV3+120}
+sleep 10
+> zq under {BV1+208} {BV3} 6 -
+> say zqtile bv 8
+waitlog zqtile bv 8$ 600
+> forceload remove {BV1+88} {BV3-120} {BV1+300} {BV3+120}
+> forceload add {BV1+88} {BV3+88} {BV1+300} {BV3+300}
+sleep 10
+> zq under {BV1+208} {BV3+208} 6 -
+> say zqtile bv 9
+waitlog zqtile bv 9$ 600
+> forceload remove {BV1+88} {BV3+88} {BV1+300} {BV3+300}
+> forceload add {VO1-300} {VO3-300} {VO1-88} {VO3-88}
+sleep 10
+> zq under {VO1-208} {VO3-208} 6 -
+> say zqtile vo 1
+waitlog zqtile vo 1$ 600
+> forceload remove {VO1-300} {VO3-300} {VO1-88} {VO3-88}
+> forceload add {VO1-300} {VO3-120} {VO1-88} {VO3+120}
+sleep 10
+> zq under {VO1-208} {VO3} 6 -
+> say zqtile vo 2
+waitlog zqtile vo 2$ 600
+> forceload remove {VO1-300} {VO3-120} {VO1-88} {VO3+120}
+> forceload add {VO1-300} {VO3+88} {VO1-88} {VO3+300}
+sleep 10
+> zq under {VO1-208} {VO3+208} 6 -
+> say zqtile vo 3
+waitlog zqtile vo 3$ 600
+> forceload remove {VO1-300} {VO3+88} {VO1-88} {VO3+300}
+> forceload add {VO1-120} {VO3-300} {VO1+120} {VO3-88}
+sleep 10
+> zq under {VO1} {VO3-208} 6 -
+> say zqtile vo 4
+waitlog zqtile vo 4$ 600
+> forceload remove {VO1-120} {VO3-300} {VO1+120} {VO3-88}
+> forceload add {VO1-120} {VO3-120} {VO1+120} {VO3+120}
+sleep 10
+> zq under {VO1} {VO3} 6 -
+> say zqtile vo 5
+waitlog zqtile vo 5$ 600
+> forceload remove {VO1-120} {VO3-120} {VO1+120} {VO3+120}
+> forceload add {VO1-120} {VO3+88} {VO1+120} {VO3+300}
+sleep 10
+> zq under {VO1} {VO3+208} 6 -
+> say zqtile vo 6
+waitlog zqtile vo 6$ 600
+> forceload remove {VO1-120} {VO3+88} {VO1+120} {VO3+300}
+> forceload add {VO1+88} {VO3-300} {VO1+300} {VO3-88}
+sleep 10
+> zq under {VO1+208} {VO3-208} 6 -
+> say zqtile vo 7
+waitlog zqtile vo 7$ 600
+> forceload remove {VO1+88} {VO3-300} {VO1+300} {VO3-88}
+> forceload add {VO1+88} {VO3-120} {VO1+300} {VO3+120}
+sleep 10
+> zq under {VO1+208} {VO3} 6 -
+> say zqtile vo 8
+waitlog zqtile vo 8$ 600
+> forceload remove {VO1+88} {VO3-120} {VO1+300} {VO3+120}
+> forceload add {VO1+88} {VO3+88} {VO1+300} {VO3+300}
+sleep 10
+> zq under {VO1+208} {VO3+208} 6 -
+> say zqtile vo 9
+waitlog zqtile vo 9$ 600
+> forceload remove {VO1+88} {VO3+88} {VO1+300} {VO3+300}
+shell for v in "SN {SN1} {SN3}" "BV {BV1} {BV3}" "VO {VO1} {VO3}"; do set -- $v; echo "== $1"; python3 -I $INST/tools/scratch_query/efb_judge.py under logs/latest.log --box $(($2-300)) $(($3-300)) $(($2+300)) $(($3+300)) --except '(underground|mineshaft|stronghold|ancient_city|trial|dungeon|monument|shipwreck|ocean_ruin|buried|fossil|geode|catacomb|crypt|cave|bunker|vault|tomb|sewer|lair|deep|mine)' --fail foreign | grep -v "^  "; done
+shell f=0; for v in "SN {SN1} {SN3}" "BV {BV1} {BV3}" "VO {VO1} {VO3}"; do set -- $v; python3 -I $INST/tools/scratch_query/efb_judge.py under logs/latest.log --box $(($2-300)) $(($3-300)) $(($2+300)) $(($3+300)) --except '(underground|mineshaft|stronghold|ancient_city|trial|dungeon|monument|shipwreck|ocean_ruin|buried|fossil|geode|catacomb|crypt|cave|bunker|vault|tomb|sewer|lair|deep|mine)' --fail foreign > /dev/null || f=1; done; exit $f
+shell grep '\[zq\] under ' logs/latest.log | grep -E 'base earth: [^|]*(terracotta|red_sand|basalt|snow)' | cut -c1-400 | head -20
+look badlands bases terracotta / red sand, volcanic stone or basalt family, snowy snow or dirt under snow per ring (ground_match/exempt is empty today)
+
+## SQ-EFB-21 | sand base counted: desert oasis + badlands village lines include the sandstone / terracotta floor
+> forceload add {OA1-300} {OA3-300} {OA1-88} {OA3-88}
+sleep 10
+> zq under {OA1-208} {OA3-208} 6 -
+> say zqtile oa 1
+waitlog zqtile oa 1$ 600
+> forceload remove {OA1-300} {OA3-300} {OA1-88} {OA3-88}
+> forceload add {OA1-300} {OA3-120} {OA1-88} {OA3+120}
+sleep 10
+> zq under {OA1-208} {OA3} 6 -
+> say zqtile oa 2
+waitlog zqtile oa 2$ 600
+> forceload remove {OA1-300} {OA3-120} {OA1-88} {OA3+120}
+> forceload add {OA1-300} {OA3+88} {OA1-88} {OA3+300}
+sleep 10
+> zq under {OA1-208} {OA3+208} 6 -
+> say zqtile oa 3
+waitlog zqtile oa 3$ 600
+> forceload remove {OA1-300} {OA3+88} {OA1-88} {OA3+300}
+> forceload add {OA1-120} {OA3-300} {OA1+120} {OA3-88}
+sleep 10
+> zq under {OA1} {OA3-208} 6 -
+> say zqtile oa 4
+waitlog zqtile oa 4$ 600
+> forceload remove {OA1-120} {OA3-300} {OA1+120} {OA3-88}
+> forceload add {OA1-120} {OA3-120} {OA1+120} {OA3+120}
+sleep 10
+> zq under {OA1} {OA3} 6 -
+> say zqtile oa 5
+waitlog zqtile oa 5$ 600
+> forceload remove {OA1-120} {OA3-120} {OA1+120} {OA3+120}
+> forceload add {OA1-120} {OA3+88} {OA1+120} {OA3+300}
+sleep 10
+> zq under {OA1} {OA3+208} 6 -
+> say zqtile oa 6
+waitlog zqtile oa 6$ 600
+> forceload remove {OA1-120} {OA3+88} {OA1+120} {OA3+300}
+> forceload add {OA1+88} {OA3-300} {OA1+300} {OA3-88}
+sleep 10
+> zq under {OA1+208} {OA3-208} 6 -
+> say zqtile oa 7
+waitlog zqtile oa 7$ 600
+> forceload remove {OA1+88} {OA3-300} {OA1+300} {OA3-88}
+> forceload add {OA1+88} {OA3-120} {OA1+300} {OA3+120}
+sleep 10
+> zq under {OA1+208} {OA3} 6 -
+> say zqtile oa 8
+waitlog zqtile oa 8$ 600
+> forceload remove {OA1+88} {OA3-120} {OA1+300} {OA3+120}
+> forceload add {OA1+88} {OA3+88} {OA1+300} {OA3+300}
+sleep 10
+> zq under {OA1+208} {OA3+208} 6 -
+> say zqtile oa 9
+waitlog zqtile oa 9$ 600
+> forceload remove {OA1+88} {OA3+88} {OA1+300} {OA3+300}
+shell grep -aE '\[earth-fill\] (minecraft:village_desert|terralith:fortified_desert_village|towns_and_towers:village_badlands|towns_and_towers:village_wooded_badlands|towns_and_towers:pillager_outpost_desert|towns_and_towers:pillager_outpost_badlands|philipsruins:desert_structures|philipsruins:badlands_start_dungeon|desert_village_temple:village_temple)' logs/latest.log | grep -v predicted | sed 's/.*\[earth-fill\]//' | cut -c1-320 | head -40
+shell python3 -I $INST/tools/scratch_query/efb_judge.py under logs/latest.log --id '(village_desert|fortified_desert|village_badlands|village_wooded_badlands|pillager_outpost_desert|pillager_outpost_badlands|desert_structures|badlands_start_dungeon|village_temple)' --fail over6 --fail deepwater
+look a T&T badlands village logs hundreds of earth (size medium or larger), not 0 to 16; a house over a river or cliff logs over water / air and is pruned or the start cancelled
+
+## SQ-EFB-10 | earth, the beard band: fill under 3 kept villages (plains, river, desert)
+> forceload add {PL1-400} {PL3-400} {PL1-192} {PL3-192}
+sleep 10
+> zq under {PL1-312} {PL3-312} 6 village
+> say zqtile pl10 1
+waitlog zqtile pl10 1$ 600
+> forceload remove {PL1-400} {PL3-400} {PL1-192} {PL3-192}
+> forceload add {PL1-400} {PL3-224} {PL1-192} {PL3+16}
+sleep 10
+> zq under {PL1-312} {PL3-104} 6 village
+> say zqtile pl10 2
+waitlog zqtile pl10 2$ 600
+> forceload remove {PL1-400} {PL3-224} {PL1-192} {PL3+16}
+> forceload add {PL1-400} {PL3-16} {PL1-192} {PL3+224}
+sleep 10
+> zq under {PL1-312} {PL3+104} 6 village
+> say zqtile pl10 3
+waitlog zqtile pl10 3$ 600
+> forceload remove {PL1-400} {PL3-16} {PL1-192} {PL3+224}
+> forceload add {PL1-400} {PL3+192} {PL1-192} {PL3+400}
+sleep 10
+> zq under {PL1-312} {PL3+312} 6 village
+> say zqtile pl10 4
+waitlog zqtile pl10 4$ 600
+> forceload remove {PL1-400} {PL3+192} {PL1-192} {PL3+400}
+> forceload add {PL1-224} {PL3-400} {PL1+16} {PL3-192}
+sleep 10
+> zq under {PL1-104} {PL3-312} 6 village
+> say zqtile pl10 5
+waitlog zqtile pl10 5$ 600
+> forceload remove {PL1-224} {PL3-400} {PL1+16} {PL3-192}
+> forceload add {PL1-224} {PL3-224} {PL1+16} {PL3+16}
+sleep 10
+> zq under {PL1-104} {PL3-104} 6 village
+> say zqtile pl10 6
+waitlog zqtile pl10 6$ 600
+> forceload remove {PL1-224} {PL3-224} {PL1+16} {PL3+16}
+> forceload add {PL1-224} {PL3-16} {PL1+16} {PL3+224}
+sleep 10
+> zq under {PL1-104} {PL3+104} 6 village
+> say zqtile pl10 7
+waitlog zqtile pl10 7$ 600
+> forceload remove {PL1-224} {PL3-16} {PL1+16} {PL3+224}
+> forceload add {PL1-224} {PL3+192} {PL1+16} {PL3+400}
+sleep 10
+> zq under {PL1-104} {PL3+312} 6 village
+> say zqtile pl10 8
+waitlog zqtile pl10 8$ 600
+> forceload remove {PL1-224} {PL3+192} {PL1+16} {PL3+400}
+> forceload add {PL1-16} {PL3-400} {PL1+224} {PL3-192}
+sleep 10
+> zq under {PL1+104} {PL3-312} 6 village
+> say zqtile pl10 9
+waitlog zqtile pl10 9$ 600
+> forceload remove {PL1-16} {PL3-400} {PL1+224} {PL3-192}
+> forceload add {PL1-16} {PL3-224} {PL1+224} {PL3+16}
+sleep 10
+> zq under {PL1+104} {PL3-104} 6 village
+> say zqtile pl10 10
+waitlog zqtile pl10 10$ 600
+> forceload remove {PL1-16} {PL3-224} {PL1+224} {PL3+16}
+> forceload add {PL1-16} {PL3-16} {PL1+224} {PL3+224}
+sleep 10
+> zq under {PL1+104} {PL3+104} 6 village
+> say zqtile pl10 11
+waitlog zqtile pl10 11$ 600
+> forceload remove {PL1-16} {PL3-16} {PL1+224} {PL3+224}
+> forceload add {PL1-16} {PL3+192} {PL1+224} {PL3+400}
+sleep 10
+> zq under {PL1+104} {PL3+312} 6 village
+> say zqtile pl10 12
+waitlog zqtile pl10 12$ 600
+> forceload remove {PL1-16} {PL3+192} {PL1+224} {PL3+400}
+> forceload add {PL1+192} {PL3-400} {PL1+400} {PL3-192}
+sleep 10
+> zq under {PL1+312} {PL3-312} 6 village
+> say zqtile pl10 13
+waitlog zqtile pl10 13$ 600
+> forceload remove {PL1+192} {PL3-400} {PL1+400} {PL3-192}
+> forceload add {PL1+192} {PL3-224} {PL1+400} {PL3+16}
+sleep 10
+> zq under {PL1+312} {PL3-104} 6 village
+> say zqtile pl10 14
+waitlog zqtile pl10 14$ 600
+> forceload remove {PL1+192} {PL3-224} {PL1+400} {PL3+16}
+> forceload add {PL1+192} {PL3-16} {PL1+400} {PL3+224}
+sleep 10
+> zq under {PL1+312} {PL3+104} 6 village
+> say zqtile pl10 15
+waitlog zqtile pl10 15$ 600
+> forceload remove {PL1+192} {PL3-16} {PL1+400} {PL3+224}
+> forceload add {PL1+192} {PL3+192} {PL1+400} {PL3+400}
+sleep 10
+> zq under {PL1+312} {PL3+312} 6 village
+> say zqtile pl10 16
+waitlog zqtile pl10 16$ 600
+> forceload remove {PL1+192} {PL3+192} {PL1+400} {PL3+400}
+capture VA \[zq\] under \S*village\S* chunk -?\d+ -?\d+ box (-?\d+) (-?\d+) (-?\d+) to (-?\d+) (-?\d+) (-?\d+) \| pieces
+> forceload add {VA1} {VA3} {VA4} {VA6}
+sleep 10
+> zq count {VA1} {VA2-8} {VA3} {VA4} {VA2-1} {VA6} minecraft:stone
+> zq count {VA1} {VA2-8} {VA3} {VA4} {VA2-1} {VA6} minecraft:dirt
+> zq count {VA1} {VA2-8} {VA3} {VA4} {VA2-1} {VA6} minecraft:grass_block
+> zq count {VA1} {VA2-8} {VA3} {VA4} {VA2-1} {VA6} minecraft:sand
+> zq count {VA1} {VA2-8} {VA3} {VA4} {VA2-1} {VA6} minecraft:sandstone
+> forceload remove {VA1} {VA3} {VA4} {VA6}
+> forceload add {DE1-300} {DE3-300} {DE1-88} {DE3-88}
+sleep 10
+> zq under {DE1-208} {DE3-208} 6 village
+> say zqtile de10 1
+waitlog zqtile de10 1$ 600
+> forceload remove {DE1-300} {DE3-300} {DE1-88} {DE3-88}
+> forceload add {DE1-300} {DE3-120} {DE1-88} {DE3+120}
+sleep 10
+> zq under {DE1-208} {DE3} 6 village
+> say zqtile de10 2
+waitlog zqtile de10 2$ 600
+> forceload remove {DE1-300} {DE3-120} {DE1-88} {DE3+120}
+> forceload add {DE1-300} {DE3+88} {DE1-88} {DE3+300}
+sleep 10
+> zq under {DE1-208} {DE3+208} 6 village
+> say zqtile de10 3
+waitlog zqtile de10 3$ 600
+> forceload remove {DE1-300} {DE3+88} {DE1-88} {DE3+300}
+> forceload add {DE1-120} {DE3-300} {DE1+120} {DE3-88}
+sleep 10
+> zq under {DE1} {DE3-208} 6 village
+> say zqtile de10 4
+waitlog zqtile de10 4$ 600
+> forceload remove {DE1-120} {DE3-300} {DE1+120} {DE3-88}
+> forceload add {DE1-120} {DE3-120} {DE1+120} {DE3+120}
+sleep 10
+> zq under {DE1} {DE3} 6 village
+> say zqtile de10 5
+waitlog zqtile de10 5$ 600
+> forceload remove {DE1-120} {DE3-120} {DE1+120} {DE3+120}
+> forceload add {DE1-120} {DE3+88} {DE1+120} {DE3+300}
+sleep 10
+> zq under {DE1} {DE3+208} 6 village
+> say zqtile de10 6
+waitlog zqtile de10 6$ 600
+> forceload remove {DE1-120} {DE3+88} {DE1+120} {DE3+300}
+> forceload add {DE1+88} {DE3-300} {DE1+300} {DE3-88}
+sleep 10
+> zq under {DE1+208} {DE3-208} 6 village
+> say zqtile de10 7
+waitlog zqtile de10 7$ 600
+> forceload remove {DE1+88} {DE3-300} {DE1+300} {DE3-88}
+> forceload add {DE1+88} {DE3-120} {DE1+300} {DE3+120}
+sleep 10
+> zq under {DE1+208} {DE3} 6 village
+> say zqtile de10 8
+waitlog zqtile de10 8$ 600
+> forceload remove {DE1+88} {DE3-120} {DE1+300} {DE3+120}
+> forceload add {DE1+88} {DE3+88} {DE1+300} {DE3+300}
+sleep 10
+> zq under {DE1+208} {DE3+208} 6 village
+> say zqtile de10 9
+waitlog zqtile de10 9$ 600
+> forceload remove {DE1+88} {DE3+88} {DE1+300} {DE3+300}
+capture VB \[zq\] under \S*village\S* chunk -?\d+ -?\d+ box (-?\d+) (-?\d+) (-?\d+) to (-?\d+) (-?\d+) (-?\d+) \| pieces
+> forceload add {VB1} {VB3} {VB4} {VB6}
+sleep 10
+> zq count {VB1} {VB2-8} {VB3} {VB4} {VB2-1} {VB6} minecraft:stone
+> zq count {VB1} {VB2-8} {VB3} {VB4} {VB2-1} {VB6} minecraft:dirt
+> zq count {VB1} {VB2-8} {VB3} {VB4} {VB2-1} {VB6} minecraft:grass_block
+> zq count {VB1} {VB2-8} {VB3} {VB4} {VB2-1} {VB6} minecraft:sand
+> zq count {VB1} {VB2-8} {VB3} {VB4} {VB2-1} {VB6} minecraft:sandstone
+> forceload remove {VB1} {VB3} {VB4} {VB6}
+look plains fill dirt / grass, desert fill sand / sandstone, little bare stone; the river village (RV square lines in SQ-EFB-05) and one desert village edge from below sea level are a client look
+
+## SQ-EFB-11 | log vs world: probe columns against each start's earth-fill line
+shell python3 -I $INST/tools/scratch_query/efb_judge.py vslog logs/latest.log
+look at least 20 pairs; copy the table into the run doc
+
+## SQ-EFB-12 | cancelled really gone; census counts EARTH_FILL rejects
+> save-all flush
+waitlog Saved the game 300
+shell python3 -I $INST/tools/scratch_query/efb_judge.py gone wge logs/latest.log
+> celocate census 20 {RV1} {RV3}
+waitlog \[celocate\] census done 2400
+shell mkdir -p $INST/perf/runs/r1102b/w && cp kubejs/exported/worldgen/locate_census.json $INST/perf/runs/r1102b/w/w1_census_rv.json && echo copied w1_census_rv
+shell python3 -c "import json,collections; d=json.load(open('$INST/perf/runs/r1102b/w/w1_census_rv.json')); c=collections.Counter(); [c.update(s.get('missReasons') or {}) for s in d['structures']]; print(dict(c))"
+look the miss reasons include the earth-fill rejects (name of the reason in the census json)
+
+## SQ-EFB-13 | pruned pieces gone (village and wet only)
+shell python3 -I $INST/tools/scratch_query/efb_judge.py gone wge logs/latest.log | grep -iE "pruned|contradictions|gone:"
+shell grep -a 'pruned [0-9]* of' logs/latest.log | grep -v predicted | sed 's/.*\[earth-fill\]//' | cut -c1-200 | head -10
+look one pruned village (client): no street ending in a beard blob or a half path into water (E8)
+
+## SQ-WGE-03b-PL | census 96 at the plains square (undead castle)
+> celocate census 96 {PL1} {PL3}
+waitlog \[celocate\] census done 2400
+shell mkdir -p $INST/perf/runs/r1102b/w && cp kubejs/exported/worldgen/locate_census.json $INST/perf/runs/r1102b/w/w1_census_pl.json && echo copied w1_census_pl
+
+## SQ-WGE-03b-HI | census 96 at the highlands square (undead castle)
+> celocate census 96 {HI1} {HI3}
+waitlog \[celocate\] census done 2400
+shell mkdir -p $INST/perf/runs/r1102b/w && cp kubejs/exported/worldgen/locate_census.json $INST/perf/runs/r1102b/w/w1_census_hi.json && echo copied w1_census_hi
+
+## SQ-WGE-03b | undead castle: none in highlands, cancels over air below 800, kept castles at limit 800
+bootexpect eugene:undead_castle at chunk .*over air after beard \(limit 800\).*\(limit 400\)
+shell python3 -I $INST/tools/scratch_query/efb_judge.py starts wge --id 'eugene:undead_castle' | tee ../castles.txt; ! grep -i 'highlands' ../castles.txt | grep -v 'not full'
+shell python3 -I $INST/tools/scratch_query/efb_judge.py log logs/latest.log --id 'eugene:undead_castle'; grep -a 'eugene:undead_castle at chunk' logs/latest.log | grep -v predicted | sed 's/.*\[earth-fill\]//' | cut -c1-260 | head -20
+shell python3 -c "import json,re,sys; d=json.load(open('$INST/perf/runs/r1102b/w/w1_census_pl.json')); print('census', d['centerChunk'], 'r', d['radiusChunks'], d['seconds'], 's, falseNegatives', d['falseNegatives']); [print(s['structure'], 'slots', s['slots'], 'built', s['built'], 'known', s['known'], 'chunks/start', round(s['slots']/max(s['built'],1)), 'misses', s.get('missReasons')) for s in d['structures'] if re.search(r'undead_castle', s['structure'])]"
+shell python3 -c "import json,re,sys; d=json.load(open('$INST/perf/runs/r1102b/w/w1_census_hi.json')); print('census', d['centerChunk'], 'r', d['radiusChunks'], d['seconds'], 's, falseNegatives', d['falseNegatives']); [print(s['structure'], 'slots', s['slots'], 'built', s['built'], 'known', s['known'], 'chunks/start', round(s['slots']/max(s['built'],1)), 'misses', s.get('missReasons')) for s in d['structures'] if re.search(r'undead_castle', s['structure'])]"
+look no CANCELLED castle over air below 800; castle count per area about as before (EF-06: 3 found, 1 kept); a kept castle on a slope with no earth over 6+ air is a client look (ST-240)
+
+## SQ-EFB-14 | undead castle placed blocks: over6 only where logged
+shell python3 -I $INST/tools/scratch_query/efb_judge.py under logs/latest.log --id undead_castle
+look each kept castle: over6 columns only where its line logged air (limit 800), max gap recorded; walls from the side is a client look
+
+## SQ-WGE-04b-1 | census 128 at 0 0 (pillager towers)
+> celocate census 128 0 0
+waitlog \[celocate\] census done 3600
+shell mkdir -p $INST/perf/runs/r1102b/w && cp kubejs/exported/worldgen/locate_census.json $INST/perf/runs/r1102b/w/w1_census_0_0.json && echo copied w1_census_0_0
+
+## SQ-WGE-04b | census 128 at 4000 4000; towers 1.3 to 2.2 x as common, end and mangrove within 15 %
+> celocate census 128 4000 4000
+waitlog \[celocate\] census done 3600
+shell mkdir -p $INST/perf/runs/r1102b/w && cp kubejs/exported/worldgen/locate_census.json $INST/perf/runs/r1102b/w/w1_census_4k.json && echo copied w1_census_4k
+shell python3 -c "import json,re,sys; d=json.load(open('$INST/perf/runs/r1102b/w/w1_census_0_0.json')); print('census', d['centerChunk'], 'r', d['radiusChunks'], d['seconds'], 's, falseNegatives', d['falseNegatives']); [print(s['structure'], 'slots', s['slots'], 'built', s['built'], 'known', s['known'], 'chunks/start', round(s['slots']/max(s['built'],1)), 'misses', s.get('missReasons')) for s in d['structures'] if re.search(r'pillager_tower|camp|vehicle|statue', s['structure'])]"
+shell python3 -c "import json,re,sys; d=json.load(open('$INST/perf/runs/r1102b/w/w1_census_4k.json')); print('census', d['centerChunk'], 'r', d['radiusChunks'], d['seconds'], 's, falseNegatives', d['falseNegatives']); [print(s['structure'], 'slots', s['slots'], 'built', s['built'], 'known', s['known'], 'chunks/start', round(s['slots']/max(s['built'],1)), 'misses', s.get('missReasons')) for s in d['structures'] if re.search(r'pillager_tower|camp|vehicle|statue', s['structure'])]"
+look chunks/start against the pre-change 192 / 288 / 230 / 599 / 151 / 1304 / 242 (acacia, birch, cherry, desert, jungle, mangrove, oak); end 232 and mangrove within 15 %; camps, vehicles, statues not down by more than 15 %
+
+## SQ-EFB-15 | meta parts placed by a lake: over6 0, base water 0, foreign none
+> forceload add {RV1+20} {RV3-60} {RV1+180} {RV3+60}
+sleep 10
+> execute positioned {RV1+60} 100 {RV3} run place structure creativeengineering:meta/farmers_camp
+> execute positioned {RV1+140} 100 {RV3} run place structure creativeengineering:meta/ruin_scatter
+sleep 5
+> zq under {RV1+100} {RV3} 3 meta
+waitlog \[zq\] under: \d+ starts 300
+> forceload remove {RV1+20} {RV3-60} {RV1+180} {RV3+60}
+shell python3 -I $INST/tools/scratch_query/efb_judge.py under logs/latest.log --box {RV1+20} {RV3-60} {RV1+180} {RV3+60} --id meta --fail over6 --fail basewater --fail foreign
+shell grep -a 'dropped [0-9]* of' logs/latest.log | cut -c1-260 | tail -5
+look the place spots are by the river square centre: if /place says the position is invalid, pick a slope by hand; dropped parts not in the world
+
+## SQ-EFB-18 | waterReach 2 written with its comment; over-water lines parse
+shell grep -n -B3 'waterReach' config/creativeengineering-common.toml | head -8; grep -q 'waterReach = 2' config/creativeengineering-common.toml && n=$(grep -c 'over water (limit' logs/latest.log) && echo "over water lines: $n" && [ $n -gt 0 ]
+bootreject (?i)config.*(error|invalid).*creativeengineering
+
+## SQ-EFB-19-RV | waterReach 2 world: census 20 at the river square
+> celocate census 20 {RV1} {RV3}
+waitlog \[celocate\] census done 900
+shell mkdir -p $INST/perf/runs/r1102b/w && cp kubejs/exported/worldgen/locate_census.json $INST/perf/runs/r1102b/w/w1_census_rv20.json && echo copied w1_census_rv20
+
+## SQ-EFB-19-CO | waterReach 2 world: census 20 at the coast square
+> celocate census 20 {CO1} {CO3}
+waitlog \[celocate\] census done 900
+shell mkdir -p $INST/perf/runs/r1102b/w && cp kubejs/exported/worldgen/locate_census.json $INST/perf/runs/r1102b/w/w1_census_co20.json && echo copied w1_census_co20
+shell for v in "RV {RV1} {RV3}" "CO {CO1} {CO3}"; do set -- $v; echo "== $1"; python3 -I $INST/tools/scratch_query/efb_judge.py log logs/latest.log --box $(($2-300)) $(($3-300)) $(($2+300)) $(($3+300)) | head -1; done
+shell python3 -I $INST/tools/scratch_query/efb_judge.py under logs/latest.log --id village --box {RV1-300} {RV3-300} {RV1+300} {RV3+300} --fail deepwater
+# the comparison with waterReach 6 is in w_3_B.qb (SQ-EFB-19)
+
+## SQ-EFB-22-DE | first world: census 20 at the desert square
+> celocate census 20 {DE1} {DE3}
+waitlog \[celocate\] census done 900
+shell mkdir -p $INST/perf/runs/r1102b/w && cp kubejs/exported/worldgen/locate_census.json $INST/perf/runs/r1102b/w/w1_census_de20.json && echo copied w1_census_de20
+
+## SQ-EFB-22-BV | first world: census 20 at the badlands square
+> celocate census 20 {BV1} {BV3}
+waitlog \[celocate\] census done 900
+shell mkdir -p $INST/perf/runs/r1102b/w && cp kubejs/exported/worldgen/locate_census.json $INST/perf/runs/r1102b/w/w1_census_bv20.json && echo copied w1_census_bv20
+# comparison in w_3_B.qb (SQ-EFB-22)
+
+## SQ-WGE-05b-1 | village 1 for the waystone check: minecraft:village_plains from 0 0
+> execute positioned 0 70 0 run locate structure minecraft:village_plains
+waitlog (nearest minecraft:village_plains.* is at|type "?minecraft:village_plains|minecraft:village_plains.*timed out|Could not find) 200
+capture WA nearest minecraft:village_plains.* is at \[(-?\d+), (~|-?\d+), (-?\d+)\]
+> forceload add {WA1-48} {WA3-48} {WA1+48} {WA3+48}
+sleep 15
+> forceload remove {WA1-48} {WA3-48} {WA1+48} {WA3+48}
+
+## SQ-WGE-05b-2 | village 2 for the waystone check: minecraft:village_desert from 0 0
+> execute positioned 0 70 0 run locate structure minecraft:village_desert
+waitlog (nearest minecraft:village_desert.* is at|type "?minecraft:village_desert|minecraft:village_desert.*timed out|Could not find) 200
+capture WB nearest minecraft:village_desert.* is at \[(-?\d+), (~|-?\d+), (-?\d+)\]
+> forceload add {WB1-48} {WB3-48} {WB1+48} {WB3+48}
+sleep 15
+> forceload remove {WB1-48} {WB3-48} {WB1+48} {WB3+48}
+
+## SQ-WGE-05b-3 | village 3 for the waystone check: minecraft:village_savanna from 0 0
+> execute positioned 0 70 0 run locate structure minecraft:village_savanna
+waitlog (nearest minecraft:village_savanna.* is at|type "?minecraft:village_savanna|minecraft:village_savanna.*timed out|Could not find) 200
+capture WC nearest minecraft:village_savanna.* is at \[(-?\d+), (~|-?\d+), (-?\d+)\]
+> forceload add {WC1-48} {WC3-48} {WC1+48} {WC3+48}
+sleep 15
+> forceload remove {WC1-48} {WC3-48} {WC1+48} {WC3+48}
+
+## SQ-WGE-05b-4 | village 4 for the waystone check: minecraft:village_snowy from 0 0
+> execute positioned 0 70 0 run locate structure minecraft:village_snowy
+waitlog (nearest minecraft:village_snowy.* is at|type "?minecraft:village_snowy|minecraft:village_snowy.*timed out|Could not find) 200
+capture WD nearest minecraft:village_snowy.* is at \[(-?\d+), (~|-?\d+), (-?\d+)\]
+> forceload add {WD1-48} {WD3-48} {WD1+48} {WD3+48}
+sleep 15
+> forceload remove {WD1-48} {WD3-48} {WD1+48} {WD3+48}
+
+## SQ-WGE-05b-5 | village 5 for the waystone check: minecraft:village_taiga from 0 0
+> execute positioned 0 70 0 run locate structure minecraft:village_taiga
+waitlog (nearest minecraft:village_taiga.* is at|type "?minecraft:village_taiga|minecraft:village_taiga.*timed out|Could not find) 200
+capture WE nearest minecraft:village_taiga.* is at \[(-?\d+), (~|-?\d+), (-?\d+)\]
+> forceload add {WE1-48} {WE3-48} {WE1+48} {WE3+48}
+sleep 15
+> forceload remove {WE1-48} {WE3-48} {WE1+48} {WE3+48}
+
+## SQ-WGE-05b-6 | village 6 for the waystone check: minecraft:village_plains from 4000 4000
+> execute positioned 4000 70 4000 run locate structure minecraft:village_plains
+waitlog (nearest minecraft:village_plains.* is at|type "?minecraft:village_plains|minecraft:village_plains.*timed out|Could not find) 200
+capture WF nearest minecraft:village_plains.* is at \[(-?\d+), (~|-?\d+), (-?\d+)\]
+> forceload add {WF1-48} {WF3-48} {WF1+48} {WF3+48}
+sleep 15
+> forceload remove {WF1-48} {WF3-48} {WF1+48} {WF3+48}
+
+## SQ-WGE-05b-7 | village 7 for the waystone check: minecraft:village_desert from 4000 4000
+> execute positioned 4000 70 4000 run locate structure minecraft:village_desert
+waitlog (nearest minecraft:village_desert.* is at|type "?minecraft:village_desert|minecraft:village_desert.*timed out|Could not find) 200
+capture WG nearest minecraft:village_desert.* is at \[(-?\d+), (~|-?\d+), (-?\d+)\]
+> forceload add {WG1-48} {WG3-48} {WG1+48} {WG3+48}
+sleep 15
+> forceload remove {WG1-48} {WG3-48} {WG1+48} {WG3+48}
+
+## SQ-WGE-05b-8 | village 8 for the waystone check: minecraft:village_savanna from 4000 4000
+> execute positioned 4000 70 4000 run locate structure minecraft:village_savanna
+waitlog (nearest minecraft:village_savanna.* is at|type "?minecraft:village_savanna|minecraft:village_savanna.*timed out|Could not find) 200
+capture WH nearest minecraft:village_savanna.* is at \[(-?\d+), (~|-?\d+), (-?\d+)\]
+> forceload add {WH1-48} {WH3-48} {WH1+48} {WH3+48}
+sleep 15
+> forceload remove {WH1-48} {WH3-48} {WH1+48} {WH3+48}
+
+## SQ-WGE-05b-9 | village 9 for the waystone check: minecraft:village_snowy from 4000 4000
+> execute positioned 4000 70 4000 run locate structure minecraft:village_snowy
+waitlog (nearest minecraft:village_snowy.* is at|type "?minecraft:village_snowy|minecraft:village_snowy.*timed out|Could not find) 200
+capture WI nearest minecraft:village_snowy.* is at \[(-?\d+), (~|-?\d+), (-?\d+)\]
+> forceload add {WI1-48} {WI3-48} {WI1+48} {WI3+48}
+sleep 15
+> forceload remove {WI1-48} {WI3-48} {WI1+48} {WI3+48}
+
+## SQ-WGE-05b-10 | village 10 for the waystone check: minecraft:village_taiga from 4000 4000
+> execute positioned 4000 70 4000 run locate structure minecraft:village_taiga
+waitlog (nearest minecraft:village_taiga.* is at|type "?minecraft:village_taiga|minecraft:village_taiga.*timed out|Could not find) 200
+capture WJ nearest minecraft:village_taiga.* is at \[(-?\d+), (~|-?\d+), (-?\d+)\]
+> forceload add {WJ1-48} {WJ3-48} {WJ1+48} {WJ3+48}
+sleep 15
+> forceload remove {WJ1-48} {WJ3-48} {WJ1+48} {WJ3+48}
+
+## SQ-WGE-05b | waystone within 20 blocks of the centre in at least 9 of 10 villages
+> save-all flush
+waitlog Saved the game 300
+shell n=0; for v in "{WA1} {WA3}" "{WB1} {WB3}" "{WC1} {WC3}" "{WD1} {WD3}" "{WE1} {WE3}" "{WF1} {WF3}" "{WG1} {WG3}" "{WH1} {WH3}" "{WI1} {WI3}" "{WJ1} {WJ3}"; do set -- $v; t=$(python3 -I $INST/tools/scratch_query/region_blocks.py blocks wge 'waystones:(mossy_|sandy_)?waystone$' --box $(($1-24)) $(($2-24)) $(($1+24)) $(($2+24)) | sed -n 's/.*\/: \([0-9]*\) in .*/\1/p'); echo "village $1 $2: ${t:-0} waystone blocks"; [ "${t:-0}" -gt 0 ] && n=$((n+1)); done; echo "villages with a waystone: $n of 10"; [ $n -ge 9 ]
+look each waystone registered (right-click shows a name): client
+
+## SQ-WGE-05a | waystone toml 60 + forceSpawnInVillages; lone waystone rate over the pregen squares
+shell grep -nE '^\s*(frequency|forceSpawnInVillages|spawnInVillages)\s*=' config/waystones-common.toml; grep -qE '^\s*frequency = 60' config/waystones-common.toml && grep -qE '^\s*forceSpawnInVillages = true' config/waystones-common.toml
+shell python3 -I $INST/tools/scratch_query/region_blocks.py blocks wge 'waystones:(mossy_|sandy_)?waystone$' --json ../wge05a.json | head -12
+look rate = blocks / 2 per land chunk read: about 1 per 60 chunks of free land (was 1 per 25), villages included in the count (subtract the 05b villages); deserts no longer the densest
+
+## SQ-WGE-05c | waystones in the Nether and End squares
+shell python3 -I $INST/tools/block_census.py wge waystones:waystone waystones:mossy_waystone waystones:sandy_waystone --dim nether | head -12; python3 -I $INST/tools/block_census.py wge waystones:waystone waystones:mossy_waystone waystones:sandy_waystone --dim end | head -12
+look waystones in both (about the 60 chunk rate), none in lava or over the void; nothing from waystones worldgen in latest.log
+reject (?i)waystones.*(exception|error)
+
+## SQ-PSW-02 | Nether: lost soul city in soul sand valley at y 5
+> execute in minecraft:the_nether run locate structure philipsruins:lost_soul_city
+waitlog (nearest philipsruins:lost_soul_city.* is at|type "?philipsruins:lost_soul_city|philipsruins:lost_soul_city.*timed out|Could not find) 200
+capture NC nearest philipsruins:lost_soul_city.* is at \[(-?\d+), (~|-?\d+), (-?\d+)\]
+expect nearest philipsruins:lost_soul_city.* is at
+> execute in minecraft:the_nether run forceload add {NC1-16} {NC3-16} {NC1+16} {NC3+16}
+sleep 10
+> zq under {NC1} {NC3} 2 lost_soul minecraft:the_nether
+waitlog \[zq\] under: \d+ starts 120
+> execute in minecraft:the_nether run forceload remove {NC1-16} {NC3-16} {NC1+16} {NC3+16}
+
+## SQ-PSW-02-b | Nether: philipsruins:lost_soul_dungeon
+> execute in minecraft:the_nether run locate structure philipsruins:lost_soul_dungeon
+waitlog (nearest philipsruins:lost_soul_dungeon.* is at|type "?philipsruins:lost_soul_dungeon|philipsruins:lost_soul_dungeon.*timed out|Could not find) 200
+capture ND nearest philipsruins:lost_soul_dungeon.* is at \[(-?\d+), (~|-?\d+), (-?\d+)\]
+expect nearest philipsruins:lost_soul_dungeon.* is at
+> execute in minecraft:the_nether run forceload add {ND1-16} {ND3-16} {ND1+16} {ND3+16}
+sleep 10
+> zq under {ND1} {ND3} 2 lost_soul_dungeon minecraft:the_nether
+waitlog \[zq\] under: \d+ starts 120
+> execute in minecraft:the_nether run forceload remove {ND1-16} {ND3-16} {ND1+16} {ND3+16}
+
+## SQ-PSW-02-c | Nether: philipsruins:rare_ruin
+> execute in minecraft:the_nether run locate structure philipsruins:rare_ruin
+waitlog (nearest philipsruins:rare_ruin.* is at|type "?philipsruins:rare_ruin|philipsruins:rare_ruin.*timed out|Could not find) 200
+capture NR nearest philipsruins:rare_ruin.* is at \[(-?\d+), (~|-?\d+), (-?\d+)\]
+expect nearest philipsruins:rare_ruin.* is at
+> execute in minecraft:the_nether run forceload add {NR1-16} {NR3-16} {NR1+16} {NR3+16}
+sleep 10
+> zq under {NR1} {NR3} 2 rare_ruin minecraft:the_nether
+waitlog \[zq\] under: \d+ starts 120
+> execute in minecraft:the_nether run forceload remove {NR1-16} {NR3-16} {NR1+16} {NR3+16}
+
+## SQ-PSW-02-d | Nether: philipsruins:start_nether_ruin
+> execute in minecraft:the_nether run locate structure philipsruins:start_nether_ruin
+waitlog (nearest philipsruins:start_nether_ruin.* is at|type "?philipsruins:start_nether_ruin|philipsruins:start_nether_ruin.*timed out|Could not find) 200
+capture NS nearest philipsruins:start_nether_ruin.* is at \[(-?\d+), (~|-?\d+), (-?\d+)\]
+expect nearest philipsruins:start_nether_ruin.* is at
+> execute in minecraft:the_nether run forceload add {NS1-16} {NS3-16} {NS1+16} {NS3+16}
+sleep 10
+> zq under {NS1} {NS3} 2 start_nether_ruin minecraft:the_nether
+waitlog \[zq\] under: \d+ starts 120
+> execute in minecraft:the_nether run forceload remove {NS1-16} {NS3-16} {NS1+16} {NS3+16}
+
+## SQ-PSW-02-o1 | Overworld locate philipsruins:lost_soul_city finds none
+> locate structure philipsruins:lost_soul_city
+waitlog (nearest philipsruins:lost_soul_city.* is at|type "?philipsruins:lost_soul_city|philipsruins:lost_soul_city.*timed out|Could not find) 200
+reject nearest philipsruins:lost_soul_city.* is at
+
+## SQ-PSW-02-o2 | Overworld locate philipsruins:lost_soul_dungeon finds none
+> locate structure philipsruins:lost_soul_dungeon
+waitlog (nearest philipsruins:lost_soul_dungeon.* is at|type "?philipsruins:lost_soul_dungeon|philipsruins:lost_soul_dungeon.*timed out|Could not find) 200
+reject nearest philipsruins:lost_soul_dungeon.* is at
+
+## SQ-PSW-02-o3 | Overworld locate philipsruins:rare_ruin finds none
+> locate structure philipsruins:rare_ruin
+waitlog (nearest philipsruins:rare_ruin.* is at|type "?philipsruins:rare_ruin|philipsruins:rare_ruin.*timed out|Could not find) 200
+reject nearest philipsruins:rare_ruin.* is at
+
+## SQ-PSW-02-o4 | Overworld locate philipsruins:start_nether_ruin finds none
+> locate structure philipsruins:start_nether_ruin
+waitlog (nearest philipsruins:start_nether_ruin.* is at|type "?philipsruins:start_nether_ruin|philipsruins:start_nether_ruin.*timed out|Could not find) 200
+reject nearest philipsruins:start_nether_ruin.* is at
+
+## SQ-PSW-02-y | Nether ruins: box y and biome
+shell grep '\[zq\] under philipsruins:' logs/latest.log | cut -c1-260
+look start boxes: city and dungeon bottoms near y 5 / y 12, rare ruin and blackstone ruin near y 33; biome (soul sand valley; crimson / warped; wastes / basalt deltas) and no lava flood: client tp to the captured NC / ND / NR / NS positions
+
+## SQ-PSW-03 | meta/ruin_cluster found, anchored on a level-three ruin, towers or church
+> locate structure creativeengineering:meta/ruin_cluster
+waitlog (nearest creativeengineering:meta/ruin_cluster.* is at|type "?creativeengineering:meta/ruin_cluster|creativeengineering:meta/ruin_cluster.*timed out|Could not find) 200
+expect nearest creativeengineering:meta/ruin_cluster.* is at
+
+## SQ-PSW-03-b | meta/pillager_camp_ruin found, never on a rare ruin
+> locate structure creativeengineering:meta/pillager_camp_ruin
+waitlog (nearest creativeengineering:meta/pillager_camp_ruin.* is at|type "?creativeengineering:meta/pillager_camp_ruin|creativeengineering:meta/pillager_camp_ruin.*timed out|Could not find) 200
+expect nearest creativeengineering:meta/pillager_camp_ruin.* is at
+shell grep -aE 'meta-structures\].*(ruin_cluster|pillager_camp_ruin)' logs/latest.log | cut -c1-300 | tail -12
+reject meta/(ruin_cluster|pillager_camp_ruin).*rare_ruin
+look anchors named in the [meta-structures] lines (log = true): level-three ruin, ancient towers or forgotten church
+
+## SQ-PSW-04 | no glowstone in the Overworld (spawn r 1000 + deep dark square)
+> save-all flush
+waitlog Saved the game 300
+shell python3 -I $INST/tools/block_census.py wge minecraft:glowstone minecraft:soul_fire minecraft:soul_lantern > ../psw04.txt; head -30 ../psw04.txt; n=$(sed -n 's/^  minecraft:glowstone: \([0-9]*\) in.*/\1/p' ../psw04.txt); echo "glowstone $n"; [ "$n" = 0 ]
+look a gothic church in the area shows yellow corundum (NW-11): client
+
+## SQ-PSW-05 | End spires generate past 1050 blocks; bases on end stone
+shell python3 -I $INST/tools/block_census.py wge quark:dusky_myalite quark:myalite_crystal --dim end > ../psw05.txt; head -12 ../psw05.txt; n=$(sed -n 's/^  quark:myalite_crystal: \([0-9]*\) in.*/\1/p' ../psw05.txt); [ "${n:-0}" -gt 0 ]
+bootreject (?i)QuarkSpiralSpireFootprintMixin.*(fail|error)
+look tp to 3 to 5 of the listed chunks and look under each spike from the side (client): end stone all round, none over the void
+
+## SQ-WGE-01b-S | End biome sample (/dumpclimate 20,000 points): shadowlands 12 to 20 %, others within x1.3 of SQ-WG30-E03
+> dumpclimate
+waitlog (dumpclimate.* done in|\[dumpclimate\] .*failed) 1200
+shell f=kubejs/generation_scripts/worldgen/climate/minecraft__the_end.json.gz; mkdir -p $INST/perf/runs/r1102b/w; cp $f $INST/perf/runs/r1102b/w/w1_end_climate.json.gz; python3 -I $INST/tools/scratch_query/climate_share.py $f --min nullscape:shadowlands 12 20 --min nullscape:crystal_peaks 4.06 6.86 --min nullscape:void_barrens 5.47 9.24; r=$?; cp $INST/kubejs/generation_scripts/worldgen/climate/*.json.gz kubejs/generation_scripts/worldgen/climate/; echo restored the instance samples; exit $r
+# the restore keeps the next world load / reload on the shipped samples (BiomeLayoutTuner reads a new dump)
+
+## SQ-EFB-20 | sand_base tag lists the 8 sandstones, terracottas, 3 Philip blocks; no unresolved key; /reload clean (LAST: drops Chunky)
+kjsreject (?i)(philips_sand_stone_brick|philips_red_sand_stone_brick|philips_sandstone_tiles).*(unknown|unresolved|missing|not found)
+bootreject (?i)(philips_sand_stone_brick|philips_red_sand_stone_brick|philips_sandstone_tiles).*(unknown|unresolved|missing|not found)
+> zq blocktag creativeengineering:earth_fill/sand_base
+waitlog \[zq\] done 60
+expect blocktag creativeengineering:earth_fill/sand_base \(\d+\): .*philips
+expect blocktag creativeengineering:earth_fill/sand_base \(\d+\): .*terracotta
+shell mkdir -p $INST/perf/runs/r1102b/w; cp logs/latest.log $INST/perf/runs/r1102b/w/w1_latest.log; pwd > $INST/perf/runs/r1102b/w/w1_srv_path; echo saved W1 log and path
+> reload
+sleep 40
+reject \[earth-fill\] blocks:.*(holds no block|unknown)
+look the tag line: 8 forge:sandstone blocks, the terracottas, the 3 Philip blocks

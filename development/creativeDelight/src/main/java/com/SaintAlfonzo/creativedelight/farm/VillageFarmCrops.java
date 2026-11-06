@@ -46,7 +46,7 @@ import java.util.Set;
 
 /**
  * Village farms grow more crops (owner 2026-10-25, feature_writeup/crops.md 2.11, creative_delight.md 25). The rules are
- * {@code creative_delight/village_farms.json} in this jar: climate groups of crop blocks, and the farm templates that
+ * {@code creativedelight/village_farms.json} in this jar: climate groups of crop blocks, and the farm templates that
  * belong to each group. At server start the processor is appended to the pool elements of those templates (the vanilla
  * {@code farm_*} lists are shared by nothing else, but most modded farms use {@code minecraft:empty}, so a list cannot be
  * the hook). When a farm piece is placed, every field (all blocks of one vanilla crop in that piece) is rolled with the
@@ -61,8 +61,18 @@ public final class VillageFarmCrops extends StructureProcessor {
 			DeferredRegister.create(Registry.STRUCTURE_PROCESSOR_REGISTRY, CreativeDelight.MOD_ID);
 	public static final RegistryObject<StructureProcessorType<VillageFarmCrops>> TYPE =
 			PROCESSORS.register("village_farm_crops", () -> () -> CODEC);
+	/**
+	 * Load-only alias for the id this type had before the mod id lost its underscore (creative_split.md 7.6). Farm pieces
+	 * saved in structure starts carry the processor inline by type id, and the processor registry is vanilla (no Forge
+	 * remap, so the swap list cannot reach it). A saved piece decodes through this alias; the processor it builds reports
+	 * {@link #TYPE}, so the start saves under the new id. Never prune.
+	 */
+	public static final DeferredRegister<StructureProcessorType<?>> LEGACY_PROCESSORS =
+			DeferredRegister.create(Registry.STRUCTURE_PROCESSOR_REGISTRY, "creative_delight");
+	public static final RegistryObject<StructureProcessorType<VillageFarmCrops>> LEGACY_TYPE =
+			LEGACY_PROCESSORS.register("village_farm_crops", () -> () -> CODEC);
 
-	private static final String RULES_PATH = "creative_delight/village_farms.json";
+	private static final String RULES_PATH = "creativedelight/village_farms.json";
 	private static final String AUTO = "auto";
 	private static final Set<Block> BASE_CROPS = Set.of(Blocks.WHEAT, Blocks.CARROTS, Blocks.POTATOES, Blocks.BEETROOTS);
 
@@ -88,7 +98,7 @@ public final class VillageFarmCrops extends StructureProcessor {
 	private static Rules load() {
 		String text = CDResources.text(RULES_PATH);
 		if (text == null) {
-			CreativeDelight.LOGGER.error("[creative_delight] {} is missing from the jar; village farms stay as they are", RULES_PATH);
+			CreativeDelight.LOGGER.error("[creativedelight] {} is missing from the jar; village farms stay as they are", RULES_PATH);
 			return new Rules(0F, Map.of(), Map.of());
 		}
 		JsonObject root = JsonParser.parseString(text).getAsJsonObject();
@@ -245,7 +255,7 @@ public final class VillageFarmCrops extends StructureProcessor {
 				}
 			}
 		}
-		CreativeDelight.LOGGER.info("[creative_delight] village farm crops added to {} pool elements of {} listed farm templates{}", elements,
+		CreativeDelight.LOGGER.info("[creativedelight] village farm crops added to {} pool elements of {} listed farm templates{}", elements,
 				rules.templates().size(), failed == 0 ? "" : " (" + failed + " failed)");
 	}
 }

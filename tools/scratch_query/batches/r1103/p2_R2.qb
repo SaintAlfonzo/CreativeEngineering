@@ -1,0 +1,345 @@
+# Run r1103 phase 2 rerun 2 (p2_R2): BATCH-FAULT and diagnostic rows of the s5r block (perf/runs/r1103/p2/judged.md,
+# section "s5r / s5b"). NOT RUN. Independent of p2_R.qb.
+# Boot 1, FRESH group A superflat (as drive_p2.sh step RA):
+#   bash tools/scratch_query/prep_srv.sh $SCR/s5r2 s5r2 A difficulty=normal spawn-monsters=true spawn-animals=true spawn-protection=16
+#   probes: tools/fungi_probe/zcount.js:zz_count.js  tools/scratch_query/s5_probe.js:zz_s5_probe.js (zz_zq_probe.js from prep_srv.sh)
+#   toml (creativedelight-common.toml): stem_fruit secondFruitMinutes / thirdFruitMinutes / fourthFruitMinutes 0,
+#   maxFruits 3, fertileSoilBoost false
+#   qrun.py run $SCR/s5r2 tools/scratch_query/batches/r1103/p2_R2.qb perf/runs/r1103/p2R2 --rows S5R2-00,SQ-PSF-08a,SQ-RB-21b,SQ-DRK-04,SQ-PSF-02,SQ-FCB-07c,S5RA-PSF-bot,SQ-PSF-08
+#   (SQ-PSF-08 waits until 600 s after SQ-PSF-08a; about 14 min in all)
+# Boot 2, same level: stop, set stem_fruit fertileSoilBoost true, boot, then
+#   qrun.py run $SCR/s5r2 tools/scratch_query/batches/r1103/p2_R2.qb perf/runs/r1103/p2R2 --rows S5R2-00,S5RA-PSF-bot,SQ-PSF-08b   (about 7 min)
+pace 2
+
+
+## S5R2-00 | setup (copy of S5RA-00): home marker, clock, weather, no mob spawning, far site forceload (not a queue row)
+bootexpect Done \(
+> execute unless entity @e[type=minecraft:marker,tag=s5home] run summon minecraft:marker ~ ~ ~ {Tags:["s5home"]}
+sleep 2
+> data get entity @e[type=minecraft:marker,tag=s5home,limit=1] Pos
+capture S5H entity data: \[(-?\d+)\.\d+d, (-?\d+)\.\d+d, (-?\d+)\.\d+d\]
+> gamerule doDaylightCycle false
+> time set noon
+> gamerule doWeatherCycle false
+> weather clear 1000000
+> gamerule doPatrolSpawning false
+> gamerule doTraderSpawning false
+> gamerule doMobSpawning false
+> kill @e[type=!minecraft:player,type=!minecraft:marker]
+> difficulty normal
+> forceload add {S5H1+384} {S5H3-16} {S5H1+432} {S5H3+48}
+sleep 5
+> say S5R2 setup done
+expect S5R2 setup done
+reject (Unknown (item|block|block type|entity)|does not (have|accept)|Incorrect argument for command|Unknown or incomplete command|That position is not loaded|No player was found|no such bot|no such item|Invalid (block state|tag)|\[(zq|s5)\] (error|no player))
+
+## SQ-PSF-08a | start (r1103 p2_R2: air over the farmland before it is set, soil read back): melon stems on mulch and on farmland, fertileSoilBoost = false (read in SQ-PSF-08)
+# stone on all four sides of each stem: no fruit can grow, so the stem stays melon_stem and its age is readable
+shell grep -n 'fertileSoilBoost' config/creativedelight-common.toml
+> kill @e[type=alexsmobs:crow]
+> kill @e[type=minecraft:slime]
+> fill {S5H1+43} {S5H2-1} {S5H3+65} {S5H1+45} {S5H2} {S5H3+67} minecraft:stone
+> setblock {S5H1+44} {S5H2-1} {S5H3+66} immersive_weathering:mulch_block[moisture=7]
+> setblock {S5H1+44} {S5H2} {S5H3+66} minecraft:melon_stem[age=0]
+> fill {S5H1+47} {S5H2-1} {S5H3+65} {S5H1+49} {S5H2} {S5H3+67} minecraft:stone
+> setblock {S5H1+48} {S5H2} {S5H3+66} minecraft:air
+> setblock {S5H1+48} {S5H2-1} {S5H3+66} minecraft:farmland[moisture=7]
+> setblock {S5H1+49} {S5H2-1} {S5H3+66} minecraft:water
+sleep 1
+> execute if block {S5H1+48} {S5H2-1} {S5H3+66} minecraft:farmland run say S5SOIL farmland kept 48
+> execute if block {S5H1+48} {S5H2-1} {S5H3+66} minecraft:dirt run say S5SOIL farmland turned to dirt 48
+> setblock {S5H1+48} {S5H2} {S5H3+66} minecraft:melon_stem[age=0]
+> pbot spawn s5f8 {S5H1+46} {S5H2} {S5H3+62} minecraft:overworld survival
+pace 0.2
+> execute unless block {S5H1+44} {S5H2} {S5H3+66} minecraft:melon_stem run say S5F8 mulch stem gone
+> execute if block {S5H1+44} {S5H2} {S5H3+66} minecraft:melon_stem[age=0] run say S5F8 mulch age 0
+> execute if block {S5H1+44} {S5H2} {S5H3+66} minecraft:melon_stem[age=1] run say S5F8 mulch age 1
+> execute if block {S5H1+44} {S5H2} {S5H3+66} minecraft:melon_stem[age=2] run say S5F8 mulch age 2
+> execute if block {S5H1+44} {S5H2} {S5H3+66} minecraft:melon_stem[age=3] run say S5F8 mulch age 3
+> execute if block {S5H1+44} {S5H2} {S5H3+66} minecraft:melon_stem[age=4] run say S5F8 mulch age 4
+> execute if block {S5H1+44} {S5H2} {S5H3+66} minecraft:melon_stem[age=5] run say S5F8 mulch age 5
+> execute if block {S5H1+44} {S5H2} {S5H3+66} minecraft:melon_stem[age=6] run say S5F8 mulch age 6
+> execute if block {S5H1+44} {S5H2} {S5H3+66} minecraft:melon_stem[age=7] run say S5F8 mulch age 7
+pace 2
+pace 0.2
+> execute unless block {S5H1+48} {S5H2} {S5H3+66} minecraft:melon_stem run say S5F8 farmland stem gone
+> execute if block {S5H1+48} {S5H2} {S5H3+66} minecraft:melon_stem[age=0] run say S5F8 farmland age 0
+> execute if block {S5H1+48} {S5H2} {S5H3+66} minecraft:melon_stem[age=1] run say S5F8 farmland age 1
+> execute if block {S5H1+48} {S5H2} {S5H3+66} minecraft:melon_stem[age=2] run say S5F8 farmland age 2
+> execute if block {S5H1+48} {S5H2} {S5H3+66} minecraft:melon_stem[age=3] run say S5F8 farmland age 3
+> execute if block {S5H1+48} {S5H2} {S5H3+66} minecraft:melon_stem[age=4] run say S5F8 farmland age 4
+> execute if block {S5H1+48} {S5H2} {S5H3+66} minecraft:melon_stem[age=5] run say S5F8 farmland age 5
+> execute if block {S5H1+48} {S5H2} {S5H3+66} minecraft:melon_stem[age=6] run say S5F8 farmland age 6
+> execute if block {S5H1+48} {S5H2} {S5H3+66} minecraft:melon_stem[age=7] run say S5F8 farmland age 7
+pace 2
+shell date +%s > ../s5f8_t0
+count S5F8 (mulch|farmland) age 0 == 2
+expect S5SOIL farmland kept 48
+reject S5SOIL farmland turned to dirt
+reject (Unknown (item|block|block type|entity)|does not (have|accept)|Incorrect argument for command|Unknown or incomplete command|That position is not loaded|No player was found|no such bot|no such item|Invalid (block state|tag)|\[(zq|s5)\] (error|no player))
+
+## SQ-RB-21b | Copper Pot, 3 meals' inputs and 1 bowl in slot 5: no bowl lost (pure bowl-food recipe)
+# r1103 p2: the probe's last pick (rusticdelight:cooking/fried_chicken) also leaves a glass bottle (cooking oil); with
+# a bowl in slot 5 that pot never started (CopperPotBlockEntity.leftoversFit: bowl and bottle both need slot 7), judged
+# FAIL. This rerun uses kangaroo pasta (tomato sauce leaves a bowl, nothing else), NBT from the p2 potnbt3 line.
+> kill @e[type=minecraft:item]
+> setblock {S5H1+50} {S5H2} {S5H3+24} minecraft:campfire[lit=true]
+> setblock {S5H1+50} {S5H2+1} {S5H3+24} miners_delight:copper_pot
+> data merge block {S5H1+50} {S5H2+1} {S5H3+24} {Inventory:{Size:8,Items:[{Slot:0b,id:"alexsdelight:cooked_kangaroo_shank",Count:3b},{Slot:1b,id:"farmersdelight:raw_pasta",Count:3b},{Slot:2b,id:"farmersdelight:tomato_sauce",Count:3b},{Slot:5b,id:"minecraft:bowl",Count:1b}]}}
+pace 1
+repeat 8
+sleep 6
+> data get block {S5H1+50} {S5H2+1} {S5H3+24}
+end
+pace 2
+> zcount {S5H1+48} {S5H2} {S5H3+22} {S5H1+52} {S5H2+3} {S5H3+26}
+waitlog \[zcount\] entities 30
+expect Slot: 6, id: "alexsdelight:kangaroo_pasta", Count: 3b
+reject \[zcount\] entities .*item:minecraft:bowl
+look over the readings CookTimeTotal is above 0 (the pot runs); slot 5 never holds more bowls than meals still waiting, extra bowls in slot 7; at the end bowls before (1 + 3 recycled) = slot 5 + slot 7 + plated meals
+
+## SQ-DRK-04 | spout fills a bottle from Kiwi Tea (diagnostic: recipe presence)
+# r1103 p2: every spout line read "needs -1 mB, gives nothing" (no filling recipe matched) while the drain worked;
+# NCH createBottle makes the filling and emptying pair together. List both recipes and retry the spout.
+> zq recipes kiwi_tea
+> zq recipes lychee_juice
+> zq bytype create:filling
+> s5 spout creativeengineering:kiwi_tea 250 minecraft:glass_bottle
+> s5 spout minecraft:water 250 minecraft:glass_bottle
+expect \[zq\] \S*filling\S*kiwi_tea\S* ->
+expect \[s5\] spout creativeengineering:kiwi_tea 250 mB into minecraft:glass_bottle: can true, needs 250 mB, gives creativeengineering:kiwi_tea x1
+look the water spout line is the probe control (vanilla potion fill); if it also reads -1, the probe is wrong, not the pack
+
+## SQ-PSF-02 | iron hoe (r1103 p2_R2: bot 5 blocks off and its inventory counted; 7 tomatoes for 9 vines in p2, bot 2 blocks away) on the middle bottom vine resets 3 tomato columns, climbing, nothing broken
+> kill @e[type=minecraft:item]
+> kill @e[type=alexsmobs:crow]
+> kill @e[type=minecraft:slime]
+> setblock {S5H1+20} {S5H2-1} {S5H3+60} minecraft:farmland
+> setblock {S5H1+20} {S5H2} {S5H3+60} farmersdelight:tomatoes[age=3]
+> setblock {S5H1+20} {S5H2+1} {S5H3+60} supplementaries:rope_tomatoes[age=3]
+> setblock {S5H1+20} {S5H2+2} {S5H3+60} supplementaries:rope_tomatoes[age=3]
+> setblock {S5H1+21} {S5H2-1} {S5H3+60} minecraft:farmland
+> setblock {S5H1+21} {S5H2} {S5H3+60} farmersdelight:tomatoes[age=3]
+> setblock {S5H1+21} {S5H2+1} {S5H3+60} supplementaries:stick_tomatoes[age=3]
+> setblock {S5H1+21} {S5H2+2} {S5H3+60} supplementaries:stick_tomatoes[age=3]
+> setblock {S5H1+22} {S5H2-1} {S5H3+60} minecraft:farmland
+> setblock {S5H1+22} {S5H2} {S5H3+60} farmersdelight:tomatoes[age=3]
+> setblock {S5H1+22} {S5H2+1} {S5H3+60} creativedelight:treated_stick_tomatoes[age=3]
+> setblock {S5H1+22} {S5H2+2} {S5H3+60} creativedelight:treated_stick_tomatoes[age=3]
+> pbot spawn s5tm {S5H1+21} {S5H2} {S5H3+58}
+sleep 2
+> clear s5tm minecraft:overworld survival
+> pbot hold s5tm minecraft:iron_hoe
+> pbot use s5tm {S5H1+21} {S5H2} {S5H3+60} up
+> tp s5tm {S5H1+21} {S5H2} {S5H3+54}
+sleep 2
+# age check per vine (block ids differ per column, so one test per position)
+> execute if block {S5H1+20} {S5H2} {S5H3+60} farmersdelight:tomatoes[age=0] run say PSF02 vine reset
+> execute if block {S5H1+20} {S5H2+1} {S5H3+60} supplementaries:rope_tomatoes[age=0] run say PSF02 vine reset
+> execute if block {S5H1+20} {S5H2+2} {S5H3+60} supplementaries:rope_tomatoes[age=0] run say PSF02 vine reset
+> execute if block {S5H1+21} {S5H2} {S5H3+60} farmersdelight:tomatoes[age=0] run say PSF02 vine reset
+> execute if block {S5H1+21} {S5H2+1} {S5H3+60} supplementaries:stick_tomatoes[age=0] run say PSF02 vine reset
+> execute if block {S5H1+21} {S5H2+2} {S5H3+60} supplementaries:stick_tomatoes[age=0] run say PSF02 vine reset
+> execute if block {S5H1+22} {S5H2} {S5H3+60} farmersdelight:tomatoes[age=0] run say PSF02 vine reset
+> execute if block {S5H1+22} {S5H2+1} {S5H3+60} creativedelight:treated_stick_tomatoes[age=0] run say PSF02 vine reset
+> execute if block {S5H1+22} {S5H2+2} {S5H3+60} creativedelight:treated_stick_tomatoes[age=0] run say PSF02 vine reset
+> zcount {S5H1+19} {S5H2} {S5H3+59} {S5H1+23} {S5H2+4} {S5H3+61}
+waitlog \[zcount\] entities 30
+> data get entity s5tm SelectedItem
+> data get entity s5tm Inventory
+count PSF02 vine reset == 9
+look tomatoes = zcount drops plus any in s5tm Inventory (the hoe holder stands 2 blocks off at the click, so a pickup before the tp is possible): 9 to 18 in total
+expect \[zcount\] entities .*item:farmersdelight:tomato x
+reject \[zcount\] entities .*item:(minecraft:stick|supplementaries:rope|farmersdelight:rope|farmersdelight:tomato_seeds|creativedelight:treated_stick)
+# r1102b judge: pack config/quark-common.toml "Harvesting Costs Durability" = false, the harvest code follows it: no hoe damage
+expect s5tm has the following entity data: \{.*id: "minecraft:iron_hoe".*Damage: 0\b
+reject (Unknown (item|block|block type|entity)|does not (have|accept)|Incorrect argument for command|Unknown or incomplete command|That position is not loaded|No player was found|no such bot|no such item|Invalid (block state|tag)|\[(zq|s5)\] (error|no player))
+look tomatoes 9..18 in total (1 to 2 per vine)
+
+## SQ-FCB-07c | granite cutting board cuts with a knife (cut half of SQ-FCB-07: the pack has no carrot cutting recipe)
+> setblock {S5H1+404} {S5H2} {S5H3+10} farmersdelight:granite_cutting_board
+> kill @e[type=minecraft:item]
+> pbot spawn s5cc {S5H1+404} {S5H2} {S5H3+14} minecraft:overworld survival
+sleep 2
+> clear s5cc
+> pbot hold s5cc minecraft:salmon
+> pbot use s5cc {S5H1+404} {S5H2} {S5H3+10} up
+sleep 1
+> pbot hold s5cc farmersdelight:iron_knife
+> pbot use s5cc {S5H1+404} {S5H2} {S5H3+10} up
+sleep 2
+> zcount {S5H1+403} {S5H2} {S5H3+9} {S5H1+405} {S5H2+3} {S5H3+11}
+waitlog \[zcount\] entities 30
+> data get block {S5H1+404} {S5H2} {S5H3+10}
+expect \[zcount\] entities .*item:farmersdelight:salmon_slice x
+> pbot remove s5cc
+look 6 salmon slices and a bone meal (SQ-CDFW-07's yield), board empty afterwards
+
+## S5RA-PSF-bot | bot for the stem rows (random ticks need a player near)
+> pbot spawn s5st {S5H1+34} {S5H2} {S5H3+72} minecraft:overworld survival
+reject (Unknown (item|block|block type|entity)|does not (have|accept)|Incorrect argument for command|Unknown or incomplete command|That position is not loaded|No player was found|no such bot|no such item|Invalid (block state|tag)|\[(zq|s5)\] (error|no player))
+
+## SQ-PSF-08 | read: mulch stem not far ahead of the farmland stem with fertileSoilBoost = false
+# one say line per stem and age (labels mulch / farmland): the capture never reuses the other stem's line
+> kill @e[type=alexsmobs:crow]
+> kill @e[type=minecraft:slime]
+repeat 3
+shell echo "elapsed $(( $(date +%s) - $(cat ../s5f8_t0) )) s"
+pace 0.2
+> execute unless block {S5H1+44} {S5H2} {S5H3+66} minecraft:melon_stem run say S5F8 mulch stem gone
+> execute if block {S5H1+44} {S5H2} {S5H3+66} minecraft:melon_stem[age=0] run say S5F8 mulch age 0
+> execute if block {S5H1+44} {S5H2} {S5H3+66} minecraft:melon_stem[age=1] run say S5F8 mulch age 1
+> execute if block {S5H1+44} {S5H2} {S5H3+66} minecraft:melon_stem[age=2] run say S5F8 mulch age 2
+> execute if block {S5H1+44} {S5H2} {S5H3+66} minecraft:melon_stem[age=3] run say S5F8 mulch age 3
+> execute if block {S5H1+44} {S5H2} {S5H3+66} minecraft:melon_stem[age=4] run say S5F8 mulch age 4
+> execute if block {S5H1+44} {S5H2} {S5H3+66} minecraft:melon_stem[age=5] run say S5F8 mulch age 5
+> execute if block {S5H1+44} {S5H2} {S5H3+66} minecraft:melon_stem[age=6] run say S5F8 mulch age 6
+> execute if block {S5H1+44} {S5H2} {S5H3+66} minecraft:melon_stem[age=7] run say S5F8 mulch age 7
+pace 2
+pace 0.2
+> execute unless block {S5H1+48} {S5H2} {S5H3+66} minecraft:melon_stem run say S5F8 farmland stem gone
+> execute if block {S5H1+48} {S5H2} {S5H3+66} minecraft:melon_stem[age=0] run say S5F8 farmland age 0
+> execute if block {S5H1+48} {S5H2} {S5H3+66} minecraft:melon_stem[age=1] run say S5F8 farmland age 1
+> execute if block {S5H1+48} {S5H2} {S5H3+66} minecraft:melon_stem[age=2] run say S5F8 farmland age 2
+> execute if block {S5H1+48} {S5H2} {S5H3+66} minecraft:melon_stem[age=3] run say S5F8 farmland age 3
+> execute if block {S5H1+48} {S5H2} {S5H3+66} minecraft:melon_stem[age=4] run say S5F8 farmland age 4
+> execute if block {S5H1+48} {S5H2} {S5H3+66} minecraft:melon_stem[age=5] run say S5F8 farmland age 5
+> execute if block {S5H1+48} {S5H2} {S5H3+66} minecraft:melon_stem[age=6] run say S5F8 farmland age 6
+> execute if block {S5H1+48} {S5H2} {S5H3+66} minecraft:melon_stem[age=7] run say S5F8 farmland age 7
+pace 2
+sleep 60
+end
+shell t0=$(cat ../s5f8_t0); while [ $(( $(date +%s) - t0 )) -lt 600 ]; do sleep 5; done; echo "final reading at $(( $(date +%s) - t0 )) s"
+> say S5F8 final
+pace 0.2
+> execute unless block {S5H1+44} {S5H2} {S5H3+66} minecraft:melon_stem run say S5F8F mulch stem gone
+> execute if block {S5H1+44} {S5H2} {S5H3+66} minecraft:melon_stem[age=0] run say S5F8F mulch age 0
+> execute if block {S5H1+44} {S5H2} {S5H3+66} minecraft:melon_stem[age=1] run say S5F8F mulch age 1
+> execute if block {S5H1+44} {S5H2} {S5H3+66} minecraft:melon_stem[age=2] run say S5F8F mulch age 2
+> execute if block {S5H1+44} {S5H2} {S5H3+66} minecraft:melon_stem[age=3] run say S5F8F mulch age 3
+> execute if block {S5H1+44} {S5H2} {S5H3+66} minecraft:melon_stem[age=4] run say S5F8F mulch age 4
+> execute if block {S5H1+44} {S5H2} {S5H3+66} minecraft:melon_stem[age=5] run say S5F8F mulch age 5
+> execute if block {S5H1+44} {S5H2} {S5H3+66} minecraft:melon_stem[age=6] run say S5F8F mulch age 6
+> execute if block {S5H1+44} {S5H2} {S5H3+66} minecraft:melon_stem[age=7] run say S5F8F mulch age 7
+pace 2
+pace 0.2
+> execute unless block {S5H1+48} {S5H2} {S5H3+66} minecraft:melon_stem run say S5F8F farmland stem gone
+> execute if block {S5H1+48} {S5H2} {S5H3+66} minecraft:melon_stem[age=0] run say S5F8F farmland age 0
+> execute if block {S5H1+48} {S5H2} {S5H3+66} minecraft:melon_stem[age=1] run say S5F8F farmland age 1
+> execute if block {S5H1+48} {S5H2} {S5H3+66} minecraft:melon_stem[age=2] run say S5F8F farmland age 2
+> execute if block {S5H1+48} {S5H2} {S5H3+66} minecraft:melon_stem[age=3] run say S5F8F farmland age 3
+> execute if block {S5H1+48} {S5H2} {S5H3+66} minecraft:melon_stem[age=4] run say S5F8F farmland age 4
+> execute if block {S5H1+48} {S5H2} {S5H3+66} minecraft:melon_stem[age=5] run say S5F8F farmland age 5
+> execute if block {S5H1+48} {S5H2} {S5H3+66} minecraft:melon_stem[age=6] run say S5F8F farmland age 6
+> execute if block {S5H1+48} {S5H2} {S5H3+66} minecraft:melon_stem[age=7] run say S5F8F farmland age 7
+pace 2
+sleep 2
+capture S5MA S5F8F mulch age (\d)
+capture S5MF S5F8F farmland age (\d)
+shell echo mulch {S5MA} farmland {S5MF}; test $(( {S5MA} - {S5MF} )) -le 2
+reject S5F8F? (mulch|farmland) stem gone
+> pbot remove s5f8
+reject (Unknown (item|block|block type|entity)|does not (have|accept)|Incorrect argument for command|Unknown or incomplete command|That position is not loaded|No player was found|no such bot|no such item|Invalid (block state|tag)|\[(zq|s5)\] (error|no player))
+look per-minute ages (rows/SQ-PSF-08.log, S5F8 lines; elapsed times in the shell file) and the final pair: mulch not more than 2 stages ahead at randomTickSpeed 3
+
+## SQ-PSF-08b | (boot 2, fertileSoilBoost true; r1103 p2_R2 farmland fix) fertileSoilBoost = true: the mulch stem races ahead
+# fresh stems east of the SQ-PSF-08 pair; read every minute for 6 min, verdict on the 4 min and the last reading
+> kill @e[type=alexsmobs:crow]
+> kill @e[type=minecraft:slime]
+> fill {S5H1+51} {S5H2-1} {S5H3+65} {S5H1+53} {S5H2} {S5H3+67} minecraft:stone
+> setblock {S5H1+52} {S5H2-1} {S5H3+66} immersive_weathering:mulch_block[moisture=7]
+> setblock {S5H1+52} {S5H2} {S5H3+66} minecraft:melon_stem[age=0]
+> fill {S5H1+55} {S5H2-1} {S5H3+65} {S5H1+57} {S5H2} {S5H3+67} minecraft:stone
+> setblock {S5H1+56} {S5H2} {S5H3+66} minecraft:air
+> setblock {S5H1+56} {S5H2-1} {S5H3+66} minecraft:farmland[moisture=7]
+> setblock {S5H1+57} {S5H2-1} {S5H3+66} minecraft:water
+sleep 1
+> execute if block {S5H1+56} {S5H2-1} {S5H3+66} minecraft:farmland run say S5SOIL farmland kept 56
+> execute if block {S5H1+56} {S5H2-1} {S5H3+66} minecraft:dirt run say S5SOIL farmland turned to dirt 56
+> setblock {S5H1+56} {S5H2} {S5H3+66} minecraft:melon_stem[age=0]
+> pbot spawn s5f8b {S5H1+54} {S5H2} {S5H3+62} minecraft:overworld survival
+shell date +%s > ../s5f8b_t0
+repeat 4
+sleep 60
+shell echo "elapsed $(( $(date +%s) - $(cat ../s5f8b_t0) )) s"
+pace 0.2
+> execute unless block {S5H1+52} {S5H2} {S5H3+66} minecraft:melon_stem run say S5G mulch stem gone
+> execute if block {S5H1+52} {S5H2} {S5H3+66} minecraft:melon_stem[age=0] run say S5G mulch age 0
+> execute if block {S5H1+52} {S5H2} {S5H3+66} minecraft:melon_stem[age=1] run say S5G mulch age 1
+> execute if block {S5H1+52} {S5H2} {S5H3+66} minecraft:melon_stem[age=2] run say S5G mulch age 2
+> execute if block {S5H1+52} {S5H2} {S5H3+66} minecraft:melon_stem[age=3] run say S5G mulch age 3
+> execute if block {S5H1+52} {S5H2} {S5H3+66} minecraft:melon_stem[age=4] run say S5G mulch age 4
+> execute if block {S5H1+52} {S5H2} {S5H3+66} minecraft:melon_stem[age=5] run say S5G mulch age 5
+> execute if block {S5H1+52} {S5H2} {S5H3+66} minecraft:melon_stem[age=6] run say S5G mulch age 6
+> execute if block {S5H1+52} {S5H2} {S5H3+66} minecraft:melon_stem[age=7] run say S5G mulch age 7
+pace 2
+pace 0.2
+> execute unless block {S5H1+56} {S5H2} {S5H3+66} minecraft:melon_stem run say S5G farmland stem gone
+> execute if block {S5H1+56} {S5H2} {S5H3+66} minecraft:melon_stem[age=0] run say S5G farmland age 0
+> execute if block {S5H1+56} {S5H2} {S5H3+66} minecraft:melon_stem[age=1] run say S5G farmland age 1
+> execute if block {S5H1+56} {S5H2} {S5H3+66} minecraft:melon_stem[age=2] run say S5G farmland age 2
+> execute if block {S5H1+56} {S5H2} {S5H3+66} minecraft:melon_stem[age=3] run say S5G farmland age 3
+> execute if block {S5H1+56} {S5H2} {S5H3+66} minecraft:melon_stem[age=4] run say S5G farmland age 4
+> execute if block {S5H1+56} {S5H2} {S5H3+66} minecraft:melon_stem[age=5] run say S5G farmland age 5
+> execute if block {S5H1+56} {S5H2} {S5H3+66} minecraft:melon_stem[age=6] run say S5G farmland age 6
+> execute if block {S5H1+56} {S5H2} {S5H3+66} minecraft:melon_stem[age=7] run say S5G farmland age 7
+pace 2
+end
+> say S5G 4 min reading above
+repeat 2
+sleep 60
+shell echo "elapsed $(( $(date +%s) - $(cat ../s5f8b_t0) )) s"
+pace 0.2
+> execute unless block {S5H1+52} {S5H2} {S5H3+66} minecraft:melon_stem run say S5G mulch stem gone
+> execute if block {S5H1+52} {S5H2} {S5H3+66} minecraft:melon_stem[age=0] run say S5G mulch age 0
+> execute if block {S5H1+52} {S5H2} {S5H3+66} minecraft:melon_stem[age=1] run say S5G mulch age 1
+> execute if block {S5H1+52} {S5H2} {S5H3+66} minecraft:melon_stem[age=2] run say S5G mulch age 2
+> execute if block {S5H1+52} {S5H2} {S5H3+66} minecraft:melon_stem[age=3] run say S5G mulch age 3
+> execute if block {S5H1+52} {S5H2} {S5H3+66} minecraft:melon_stem[age=4] run say S5G mulch age 4
+> execute if block {S5H1+52} {S5H2} {S5H3+66} minecraft:melon_stem[age=5] run say S5G mulch age 5
+> execute if block {S5H1+52} {S5H2} {S5H3+66} minecraft:melon_stem[age=6] run say S5G mulch age 6
+> execute if block {S5H1+52} {S5H2} {S5H3+66} minecraft:melon_stem[age=7] run say S5G mulch age 7
+pace 2
+pace 0.2
+> execute unless block {S5H1+56} {S5H2} {S5H3+66} minecraft:melon_stem run say S5G farmland stem gone
+> execute if block {S5H1+56} {S5H2} {S5H3+66} minecraft:melon_stem[age=0] run say S5G farmland age 0
+> execute if block {S5H1+56} {S5H2} {S5H3+66} minecraft:melon_stem[age=1] run say S5G farmland age 1
+> execute if block {S5H1+56} {S5H2} {S5H3+66} minecraft:melon_stem[age=2] run say S5G farmland age 2
+> execute if block {S5H1+56} {S5H2} {S5H3+66} minecraft:melon_stem[age=3] run say S5G farmland age 3
+> execute if block {S5H1+56} {S5H2} {S5H3+66} minecraft:melon_stem[age=4] run say S5G farmland age 4
+> execute if block {S5H1+56} {S5H2} {S5H3+66} minecraft:melon_stem[age=5] run say S5G farmland age 5
+> execute if block {S5H1+56} {S5H2} {S5H3+66} minecraft:melon_stem[age=6] run say S5G farmland age 6
+> execute if block {S5H1+56} {S5H2} {S5H3+66} minecraft:melon_stem[age=7] run say S5G farmland age 7
+pace 2
+end
+> say S5G final
+pace 0.2
+> execute unless block {S5H1+52} {S5H2} {S5H3+66} minecraft:melon_stem run say S5GF mulch stem gone
+> execute if block {S5H1+52} {S5H2} {S5H3+66} minecraft:melon_stem[age=0] run say S5GF mulch age 0
+> execute if block {S5H1+52} {S5H2} {S5H3+66} minecraft:melon_stem[age=1] run say S5GF mulch age 1
+> execute if block {S5H1+52} {S5H2} {S5H3+66} minecraft:melon_stem[age=2] run say S5GF mulch age 2
+> execute if block {S5H1+52} {S5H2} {S5H3+66} minecraft:melon_stem[age=3] run say S5GF mulch age 3
+> execute if block {S5H1+52} {S5H2} {S5H3+66} minecraft:melon_stem[age=4] run say S5GF mulch age 4
+> execute if block {S5H1+52} {S5H2} {S5H3+66} minecraft:melon_stem[age=5] run say S5GF mulch age 5
+> execute if block {S5H1+52} {S5H2} {S5H3+66} minecraft:melon_stem[age=6] run say S5GF mulch age 6
+> execute if block {S5H1+52} {S5H2} {S5H3+66} minecraft:melon_stem[age=7] run say S5GF mulch age 7
+pace 2
+pace 0.2
+> execute unless block {S5H1+56} {S5H2} {S5H3+66} minecraft:melon_stem run say S5GF farmland stem gone
+> execute if block {S5H1+56} {S5H2} {S5H3+66} minecraft:melon_stem[age=0] run say S5GF farmland age 0
+> execute if block {S5H1+56} {S5H2} {S5H3+66} minecraft:melon_stem[age=1] run say S5GF farmland age 1
+> execute if block {S5H1+56} {S5H2} {S5H3+66} minecraft:melon_stem[age=2] run say S5GF farmland age 2
+> execute if block {S5H1+56} {S5H2} {S5H3+66} minecraft:melon_stem[age=3] run say S5GF farmland age 3
+> execute if block {S5H1+56} {S5H2} {S5H3+66} minecraft:melon_stem[age=4] run say S5GF farmland age 4
+> execute if block {S5H1+56} {S5H2} {S5H3+66} minecraft:melon_stem[age=5] run say S5GF farmland age 5
+> execute if block {S5H1+56} {S5H2} {S5H3+66} minecraft:melon_stem[age=6] run say S5GF farmland age 6
+> execute if block {S5H1+56} {S5H2} {S5H3+66} minecraft:melon_stem[age=7] run say S5GF farmland age 7
+pace 2
+sleep 2
+capture S5MB S5GF mulch age (\d)
+capture S5MG S5GF farmland age (\d)
+shell echo mulch {S5MB} farmland {S5MG}; test {S5MB} -eq 7 && test {S5MG} -lt 7
+reject S5GF? (mulch|farmland) stem gone
+> pbot remove s5f8b
+reject (Unknown (item|block|block type|entity)|does not (have|accept)|Incorrect argument for command|Unknown or incomplete command|That position is not loaded|No player was found|no such bot|no such item|Invalid (block state|tag)|\[(zq|s5)\] (error|no player))
+look per-minute S5G lines: the row wants the mulch stem at 7 within a few minutes (4 min reading) and the farmland stem far behind; the check uses the 6 min pair

@@ -1,0 +1,139 @@
+{
+ "files": 14,
+ "errors": [],
+ "globals": {
+  "item": {
+   "type": "object",
+   "keys": 14509.0,
+   "hash": "74fce1b7",
+   "bytes": 793987
+  },
+  "subdict": {
+   "type": "object",
+   "keys": 2.0,
+   "hash": "d0b58e0f",
+   "bytes": 17541
+  },
+  "food": {
+   "type": "object",
+   "keys": 1579.0,
+   "hash": "0cfa5ab7",
+   "bytes": 88899
+  },
+  "foodGrammar": {
+   "type": "object",
+   "keys": 3.0,
+   "hash": "c81b3fcd",
+   "bytes": 514
+  },
+  "foodKey": {
+   "type": "object",
+   "keys": 1579.0,
+   "hash": "0cfa5ab7",
+   "bytes": 88899
+  },
+  "fluid": {
+   "type": "object",
+   "keys": 191.0,
+   "hash": "97fac335",
+   "bytes": 8876
+  },
+  "blocks": {
+   "type": "object",
+   "keys": 187.0,
+   "hash": "42ac54c5",
+   "bytes": 9408
+  },
+  "effect": {
+   "type": "object",
+   "keys": 38.0,
+   "hash": "25de53d5",
+   "bytes": 1396
+  },
+  "tool": {
+   "type": "object",
+   "keys": 105.0,
+   "hash": "7a960f05",
+   "bytes": 5008
+  },
+  "toolKey": {
+   "type": "object",
+   "keys": 105.0,
+   "hash": "7a960f05",
+   "bytes": 5008
+  },
+  "misc": {
+   "type": "object",
+   "keys": 227.0,
+   "hash": "deff1a47",
+   "bytes": 12287
+  },
+  "miscKey": {
+   "type": "object",
+   "keys": 227.0,
+   "hash": "deff1a47",
+   "bytes": 12287
+  },
+  "multiblock": {
+   "type": "object",
+   "keys": 21.0,
+   "hash": "41e0a91f",
+   "bytes": 1281
+  },
+  "removedItems": {
+   "type": "object",
+   "keys": 841.0,
+   "hash": "04307ecf",
+   "bytes": 31445
+  },
+  "removedWoods": {
+   "type": "object",
+   "keys": 5.0,
+   "hash": "8ac5b775",
+   "bytes": 29436
+  },
+  "removedWoodTracks": {
+   "type": "object",
+   "keys": 24.0,
+   "hash": "2a7c93bf",
+   "bytes": 793
+  },
+  "itemMerges": {
+   "type": "object",
+   "keys": 424.0,
+   "hash": "8ac5b775",
+   "bytes": 29436
+  },
+  "itemMergeGroups": {
+   "type": "object",
+   "keys": 2.0,
+   "hash": "27a955ad",
+   "bytes": 29466
+  },
+  "itemMergeRun": {
+   "type": "object",
+   "keys": 3.0,
+   "hash": "055151b5",
+   "bytes": 26316
+  },
+  "addItemMerges": {
+   "type": "function",
+   "keys": -1.0,
+   "hash": "41c60297",
+   "bytes": 8523
+  },
+  "trades": {
+   "type": "object",
+   "keys": 11.0,
+   "hash": "b72812c5",
+   "bytes": 70208
+  },
+  "jeiOrder": {
+   "type": "object",
+   "keys": 13.0,
+   "hash": "d44c5e0d",
+   "bytes": 79186
+  }
+ },
+ "note": "plan_cb_publish.md 2.2 step 1: pack-folder kubejs/startup_scripts/_lib + func, before the move. tools/dict_baseline/run.sh"
+}

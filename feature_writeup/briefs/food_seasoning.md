@@ -47,11 +47,11 @@ temporary source ships with the port.
   `#salt:can_be_salted` or `#forge:salts`.
 - **`#salt:can_be_salted`**: 148 items in the 2026-10-30 tag dump (`kubejs/exported/tags/item_tags.json`), still the
   jar's list; no pack script adds to or removes from it (the only mention is a comment in
-  [seasoning_tags.js](../../kubejs/data/creative_delight/kubejs/creativeengineering/seasoning_tags.js) line 13).
+  [seasoning_tags.js](../../kubejs/data/creativedelight/kubejs/creativeengineering/seasoning_tags.js) line 13).
   Intermediates still in it: `farmersdelight:bone_broth`, `cooked_rice`, `tomato_sauce`.
 - **Create: The Salt**: 67 `create__the_salt:*` `create:mixing` recipes in the 2026-10-30 recipe dump (food + salt ->
   the same food `{Salted:1b}`, FD foods and vanilla only). Its salt production recipes are removed.
-- **Salt routes** ([salt.js](../../kubejs/data/creative_delight/kubejs/creativeengineering/salt.js), CD): raw rock salt
+- **Salt routes** ([salt.js](../../kubejs/data/creativedelight/kubejs/creativeengineering/salt.js), CD): raw rock salt
   -> 4 salt by hand, crushing, milling (and the mortar via `mortar_catalog.json`); heated basin 200 mB water -> 60 %
   salt (`water_salt`); cauldron evaporation bonus 50 % (`kubejs/data/salt/loot_tables/cauldron_evaporation/`); Large
   Salt Lamp from 7 Salt Blocks. Salt's own butcher trades are on (`ButcherSaltTradesEnabled = true`); the trade dump
@@ -60,7 +60,7 @@ temporary source ships with the port.
   [seasonings.js](../../development/creativeDelight/src/main/resources/kubejs_startup/creativeengineering/seasonings.js)
   (5 seasonings: cheese, onion, garlic, sugar, void_pepper), patcherMod `food/Seasonings.java` (223 lines; bonus
   kinds `nutrition`, `saturation`, `heal`, `effects`; `combines`), `food/SeasoningRecipe`, crafts by `NCH.season`
-  (neoCraftHelper.js 1400-1412) from [seasoning.js](../../kubejs/data/creative_delight/kubejs/creativeengineering/seasoning.js),
+  (neoCraftHelper.js 1400-1412) from [seasoning.js](../../kubejs/data/creativedelight/kubejs/creativeengineering/seasoning.js),
   foods by `#<ns>:seasonable/<path>` from `families` / `add` / `remove`. Today every seasoning with foods is on popcorn
   only; sugar has none.
 
@@ -201,7 +201,7 @@ No recipe, loot or catch still takes or gives a pre-merge salt item, and Vintage
 
 ### Now
 - SQ-SALT-01 (2026-10-28) found two leftovers; fixed 2026-10-28 in CD
-  [vintagedelight/recipes.js](../../kubejs/data/creative_delight/kubejs/vintagedelight/recipes.js) (froglight
+  [vintagedelight/recipes.js](../../kubejs/data/creativedelight/kubejs/vintagedelight/recipes.js) (froglight
   fermenting on The Salt's block; Tactical Fishing salt bucket and powdered sugar bucket catches removed).
 - The retest ran as **SQ-CM-10 in r1031 and PASSED 2026-10-31** (scratch_run_2026-10-31.md section 8 PASS list; the
   row checks the three froglight recipes on `salt:salt_block` and both fishing recipes absent).
@@ -423,19 +423,19 @@ villager trades for every seasoning (BBQ's six, pack seasonings, salt), one leve
   temporary" for all six.
 - Trades: pack trades in [economy/trades.js](../../kubejs/server_scripts/economy/trades.js) (MoreJS
   `MoreJSEvents.villagerTrades`, `allLevels` range helper lines 13-16); food-mod trades in CD trees by mod
-  (`kubejs/data/creative_delight/kubejs/<mod>/trades.js`, e.g. corn_delight, rusticdelight, veggiesdelight). Salt's own
+  (`kubejs/data/creativedelight/kubejs/<mod>/trades.js`, e.g. corn_delight, rusticdelight, veggiesdelight). Salt's own
   butcher trades are on (`ButcherSaltTradesEnabled = true`, salt-common.toml; 4 `salt:salt` trades in the
   2026-10-30 trade dump, swapped to salt dust by the merge). Pack seasonings come from crops or crafts (cheese,
   onion, garlic, sugar, void pepper); no trades.
 
 ### Build
-1. **Temporary source (with the port):** shapeless crafts in CD `kubejs/data/creative_delight/kubejs/barbequesdelight/recipes.js`
+1. **Temporary source (with the port):** shapeless crafts in CD `kubejs/data/creativedelight/kubejs/barbequesdelight/recipes.js`
    via `global.NCH`: cumin powder from `i.t_spices` / seeds on the mortar or cutting board, pepper powder from
    `i.crushed_voidpepper` or bell pepper seeds, chili powder from `#forge:chilipepper` (`i.t_chilipepper`, item_dict.js
    2035), the sauces from their namesakes (honey + a mustard source: the pack has no mustard item, decision; chili +
    butter; tomato sauce + sugar). Before the fold, one craft
    gives one durability item; after it, the count of 4.3 #1.
-2. **Trade pass** (after row 11): `kubejs/data/creative_delight/kubejs/barbequesdelight/trades.js` for the six on the
+2. **Trade pass** (after row 11): `kubejs/data/creativedelight/kubejs/barbequesdelight/trades.js` for the six on the
    butcher (levels 2 to 4), cheese / onion / garlic on the farmer, salt left to Salt's own trades or replaced by a
    pack trade on the fisherman / butcher at level 1 (`ButcherSaltTradesEnabled = false` then, configs_edited copy).
 3. Rerun `/dumpall` for `villager_trades.json`; check every trade names an item that exists (no `salt:salt`).

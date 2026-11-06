@@ -7,7 +7,7 @@ pace 2
 
 ## SQ-W11-BOOT | boot clean, bot joins
 bootexpect Done \(
-bootreject (Mixin apply failed|InvalidInjectionException|Critical injection failure).*(creativeengineering|creative_delight|creative_brewing)
+bootreject (Mixin apply failed|InvalidInjectionException|Critical injection failure).*(creativeengineering|creativedelight|creativebrewing)
 > gamerule sendCommandFeedback true
 > pbot spawn qa 0 120 0 minecraft:overworld creative
 > pbot status

@@ -51,7 +51,7 @@ The one-game-JVM rule holds: before every boot the runner waits (up to 60 min) w
 
 ## 3. Design
 
-### 3.1 The bot mod (`development/perfBot`)
+### 3.1 The bot mod (`development/creativeDevtools/members/perfbot`, nested in Creative Devtools since 2026-11-01)
 
 - `BotConnection` extends `Connection`. Its channel is an `EmbeddedChannel` set by reflection (fields found by
   type). It carries Forge's `fml:netversion` attribute, because `ConnectionType.forVersionFlag(null)` throws. It also
@@ -195,6 +195,8 @@ Also checked: `./gradlew :perfBot:build --offline` builds; every plan command ex
 
 ## 7. Live test list (scratch queue SQ-PB-)
 
+- **r1102b 2026-11-02** (scratch server; verdicts in `perf/runs/r1102b/` HANDOVER.md and the slice judged.md): PASS SQ-SK-01, -02.
+
 Results 2026-10-28 night ([testing/scratch_queue_run_2026-10-28.md](testing/scratch_queue_run_2026-10-28.md)): PB-01 to -04 PASS (PB-02 wheat half: 17 of 81 grew with a bot, 0 without;
 the night-mob half is G03b). PB-05 is the g1 run.
 
@@ -310,7 +312,7 @@ The queue in [testing/scratch_queue.md](testing/scratch_queue.md) runs first. Re
 
 | File | Role |
 |---|---|
-| `development/perfBot/` | the dev-only mod (`CePerfBot`, `BotConnection`, `BotPlayer`, `Bots`, `TickLog`, `BotCommands`) |
+| `development/creativeDevtools/members/perfbot/` (nested in Creative Devtools) | the dev-only mod (`CePerfBot`, `BotConnection`, `BotPlayer`, `Bots`, `TickLog`, `BotCommands`) |
 | `tools/perf/suite/perf_suite.py` | runner: run / resume / status / report |
 | `tools/perf/suite/server.py` | setup on `eval_server.sh`, boot, liveness, RCON calls, stop, triage, JFR salvage |
 | `tools/perf/suite/rcon.py`, `ticklog.py`, `builders.py` | RCON client, tick log reader and window stats, command builders |

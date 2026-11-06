@@ -12,6 +12,7 @@ cd "$ROOT"
 
 echo "== 1. lint"
 python3 tools/food_dict.py --check
+python3 tools/kitchen_dicts.py --check
 
 RHINO="$(ls mods/rhino-forge-*.jar | head -1)"; GSON="$L/com/google/code/gson/gson/2.8.9/gson-2.8.9.jar"
 javac -proc:none -cp "$RHINO:$GSON" -d "$T" tools/food_dict_test/RhinoRun.java

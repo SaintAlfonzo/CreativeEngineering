@@ -1,0 +1,9 @@
+ 11 ( 10 srv) SQ-CWG Creative Worldgen carve, 2026-11-02 ([creative_worldgen.md](../creative_worldgen.md  SQ-CWG-01 SQ-CWG-02 SQ-CWG-03 SQ-CWG-04 SQ-CWG-05 SQ-CWG-06 SQ-CWG-07 SQ-CWG-08 SQ-CWG-09 SQ-CWG-10 CQ-CWG-11
+  7 (  5 srv) Salt and Create: The Salt as Creative Delight members (added 2026-11-02, plan_creative_del  SQ-SLT-01 SQ-SLT-02 SQ-SLT-03 SQ-SLT-04 SQ-SLT-05 CQ-SLT-01 CQ-SLT-02
+  6 (  4 srv) SQ-CNG Canned Goods repacked in Creative Delight, 2026-11-02 ([cans.md](../cans.md) 9, TOD  SQ-CNG-01 SQ-CNG-02 SQ-CNG-03 SQ-CNG-04 CQ-CNG-01 CQ-CNG-02
+  5 (  5 srv) End's member with Ender's 1.1.4 content, 2026-11-02 ([ends_delight.md](../ends_delight.md)  SQ-ENM-01 SQ-ENM-02 SQ-ENM-03 SQ-ENM-04 SQ-ENM-05
+ 17 ( 14 srv) SQ-GLD Golden Food donor rebuild, 2026-11-02 ([golden_food.md](../golden_food.md) sections  SQ-GLD-01 SQ-GLD-02 SQ-GLD-03 SQ-GLD-04 SQ-GLD-05 SQ-GLD-06 SQ-GLD-07 SQ-GLD-08 SQ-GLD-09 SQ-GLD-10 CQ-GLD-01 CQ-GLD-02 SQ-GLD-11 SQ-GLD-12 SQ-GLD-13 SQ-GLD-14 CQ-GLD-03
+  5 (  5 srv) SQ-MDL Miner's loot on the pack loot system (creativedelight members #51)  SQ-MDL-01 SQ-MDL-02 SQ-MDL-03 SQ-MDL-04 SQ-MDL-05
+  7 (  5 srv) Pancake family, 2026-11-02 ([writeup](../food_families.md) section 4.7, TODO `dishes/meals  SQ-PCK-01 SQ-PCK-02 SQ-PCK-03 SQ-PCK-04 SQ-PCK-05 CQ-PCK-01 CQ-PCK-02
+  8 (  8 srv) Swappers: merges from swap lists and the world half, 2026-11-02 ([item_merges.md](../item_  SQ-SWP-01 SQ-SWP-02 SQ-SWP-03 SQ-SWP-04 SQ-SWP-05 SQ-SWP-06 SQ-SWP-07 SQ-SWP-08
+ 27 ( 22 srv) SQ-CDJ7 Creative Delight member open rows, 2026-11-03 (CD and Creative Brewing jars instal  SQ-BBQF-01 SQ-BBQF-02 SQ-BBQF-03 SQ-BBQF-04 SQ-BBQF-05 SQ-BBQF-06 SQ-BBQF-07 SQ-VTDA-10 SQ-VTDA-11 SQ-VTDA-12 SQ-VTDA-13 SQ-CDM2-01 SQ-CDM2-02 SQ-CDM2-03 SQ-CDM2-04 SQ-GLD2-01 SQ-GLD2-02 SQ-GLD2-03 SQ-GLD2-05 SQ-SALT2-01 SQ-NEST-01 SQ-NEST-02 CQ-VTDA-01 CQ-CDM2-01 CQ-GLD2-04 CQ-MRGT-01 CQ-BBQF-01

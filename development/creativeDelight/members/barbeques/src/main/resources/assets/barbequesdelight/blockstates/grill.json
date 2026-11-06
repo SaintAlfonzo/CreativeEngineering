@@ -1,0 +1,49 @@
+{
+  "variants": {
+    "facing=north,has_campfire=false": {
+      "model": "barbequesdelight:block/grill"
+    },
+    "facing=north,has_campfire=true,lit=true": {
+      "model": "barbequesdelight:block/grill_with_campfire"
+    },
+    "facing=north,has_campfire=true,lit=false": {
+      "model": "barbequesdelight:block/grill_with_campfire_off"
+    },
+    "facing=east,has_campfire=false": {
+      "model": "barbequesdelight:block/grill",
+      "y": 90
+    },
+    "facing=east,has_campfire=true,lit=true": {
+      "model": "barbequesdelight:block/grill_with_campfire",
+      "y": 90
+    },
+    "facing=east,has_campfire=true,lit=false": {
+      "model": "barbequesdelight:block/grill_with_campfire_off",
+      "y": 90
+    },
+    "facing=south,has_campfire=false": {
+      "model": "barbequesdelight:block/grill",
+      "y": 180
+    },
+    "facing=south,has_campfire=true,lit=true": {
+      "model": "barbequesdelight:block/grill_with_campfire",
+      "y": 180
+    },
+    "facing=south,has_campfire=true,lit=false": {
+      "model": "barbequesdelight:block/grill_with_campfire_off",
+      "y": 180
+    },
+    "facing=west,has_campfire=false": {
+      "model": "barbequesdelight:block/grill",
+      "y": 270
+    },
+    "facing=west,has_campfire=true,lit=true": {
+      "model": "barbequesdelight:block/grill_with_campfire",
+      "y": 270
+    },
+    "facing=west,has_campfire=true,lit=false": {
+      "model": "barbequesdelight:block/grill_with_campfire_off",
+      "y": 270
+    }
+  }
+}

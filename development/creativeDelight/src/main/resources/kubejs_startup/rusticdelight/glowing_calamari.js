@@ -2,7 +2,7 @@
 // Glowing calamari line (TODO dishes/ocean #3): a glow squid cuts to glowing calamari, which slices and rolls like Rustic
 // Delight's calamari and cooks into its Cooked Calamari. Creative Delight startup script, loaded from the jar after the
 // pack's startup_scripts, so global.item exists here. Restart to apply. Recipes:
-// data/creative_delight/kubejs/rusticdelight/recipes.js.
+// data/creativedelight/kubejs/rusticdelight/recipes.js.
 //
 // Art: kubejs/assets/creativeengineering/textures/item/glowing_calamari*.png, Rustic's calamari sprites palette-swapped to
 // the glow ink sac (notice beside them; Rustic's licence still to confirm).

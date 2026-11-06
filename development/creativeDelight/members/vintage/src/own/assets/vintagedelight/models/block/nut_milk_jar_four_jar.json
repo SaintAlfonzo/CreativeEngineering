@@ -1,0 +1,6 @@
+{
+  "parent": "vintagedelight:block/template_mason_jar_four",
+  "textures": {
+    "2": "vintagedelight:block/nut_milk_jar_interior_texture"
+  }
+}

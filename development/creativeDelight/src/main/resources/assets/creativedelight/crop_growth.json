@@ -1,0 +1,45 @@
+{
+  "_comment": [
+    "WTHIT 'Growth: X% / Mature' line for plants WTHIT doesn't cover (Creative Delight compat/wthit/WthitCropGrowth, format in patcherMod crops/CropGrowth).",
+    "First matching rule wins. 'blocks' take ids, '*' globs and '#block_tags'. 'property' defaults to age; 'stages'",
+    "names an enum property's values in growth order; 'max' = fully grown, 'harvest' = pickable from here (default max),",
+    "'empty' = values up to this show no line. Blocks WTHIT already covers (CropBlock, vanilla stems / wart / cocoa /",
+    "sweet berries) are skipped automatically. Regenerate the audit with /dumpcropgrowth, check coverage with",
+    "python3 tools/crop_growth_coverage.py. Copy this file to kubejs/assets/creativedelight/ to override."
+  ],
+  "rules": [
+    { "blocks": ["delightful:salmonberry_bush"], "harvest": 3 },
+    { "blocks": ["hearthandharvest:raspberry_bush"], "harvest": 3 },
+    { "blocks": ["delightful:cantaloupe_plant"] },
+
+    { "blocks": ["vinery:red_grape_bush", "vinery:white_grape_bush", "vinery:savanna_grape_bush_*", "vinery:taiga_grape_bush_*"], "harvest": 2 },
+    { "blocks": ["vinery:jungle_grape_bush_*"] },
+    { "blocks": ["vinery:grapevine_stem"], "empty": 0 },
+    { "blocks": ["vinery:grapevine_lattice"], "empty": 0, "harvest": 3 },
+
+    { "blocks": ["floralench:*_bush"], "harvest": 2 },
+
+    { "blocks": ["farmersrespite:coffee_stem_double"], "properties": ["age", "age1"] },
+    { "blocks": ["farmersrespite:coffee_stem", "farmersrespite:coffee_stem_middle", "farmersrespite:tea_bush"] },
+
+    { "blocks": ["immersiveengineering:hemp"], "property": "growth",
+      "stages": ["bottom0", "bottom1", "bottom2", "bottom3", "bottom4", "top0"], "max": 4 },
+
+    { "blocks": ["the_dirty_stuff:tobacco_seeds"], "property": "blockstate" },
+
+    { "blocks": ["fruitsdelight:durian_leaves"], "property": "fruit", "stages": ["none", "flowers", "small", "fruits"],
+      "requires": { "persistent": "false" } },
+    { "blocks": ["fruitsdelight:*_leaves"], "property": "type", "stages": ["leaves", "flowers", "fruits"],
+      "requires": { "persistent": "false" } },
+
+    { "blocks": [
+        "neapolitan:strawberry_bush", "neapolitan:mint", "neapolitan:adzuki_sprouts",
+        "fruitsdelight:blueberry_bush", "fruitsdelight:cranberry_bush", "fruitsdelight:lemon_tree",
+        "fruitsdelight:pineapple", "fruitsdelight:hamimelon_stem",
+        "upgrade_aquatic:mulberry_vine",
+        "farmersdelight:rice", "farmersdelight:budding_tomatoes",
+        "farmersdelight:brown_mushroom_colony", "farmersdelight:red_mushroom_colony",
+        "nethersdelight:crimson_fungus_colony", "nethersdelight:warped_fungus_colony"
+    ] }
+  ]
+}

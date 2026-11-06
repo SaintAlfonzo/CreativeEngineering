@@ -1,0 +1,114 @@
+package com.SaintAlfonzo.creativedelight.mixin.untitledduckmod;
+
+import com.SaintAlfonzo.creativedelight.compat.incubation.goldenegg.GoldenEggLayer;
+import com.SaintAlfonzo.creativedelight.compat.incubation.goldenegg.GoldenGooseEgg;
+import com.teamabnormals.incubation.core.api.EggLayer;
+import net.minecraft.sounds.SoundEvent;
+import net.minecraft.util.RandomSource;
+import net.minecraft.world.entity.EntityType;
+import net.minecraft.world.entity.TamableAnimal;
+import net.minecraft.world.entity.item.ItemEntity;
+import net.minecraft.world.item.Item;
+import net.minecraft.world.level.ItemLike;
+import net.minecraft.world.level.Level;
+import net.untitledduckmod.ModItems;
+import net.untitledduckmod.ModSoundEvents;
+import net.untitledduckmod.goose.GooseEntity;
+import org.spongepowered.asm.mixin.Mixin;
+import org.spongepowered.asm.mixin.Shadow;
+import org.spongepowered.asm.mixin.Unique;
+import org.spongepowered.asm.mixin.injection.At;
+import org.spongepowered.asm.mixin.injection.Inject;
+import org.spongepowered.asm.mixin.injection.Redirect;
+import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
+
+/**
+ * Makes Untitled Duck Mod geese an Incubation {@link EggLayer}; see {@link DuckEntityEggLayerMixin}
+ * (GooseEntity.aiStep has the identical eggLayTime countdown and 6000 + rand(6000) reset).
+ * Nests: nest.WaterfowlNests.
+ *
+ * Golden egg (goldenegg.GoldenGooseEgg): aiStep (m_8107_) runs the goal selector inside super.aiStep()
+ * and only then counts eggLayTime down, dropping the egg at 0. The roll is injected at HEAD, the first
+ * tick eggLayTime is at most 400 - before the goals have seen it, so before LayEggInNestGoal (active
+ * below 400) can start the walk to a nest. A win keeps that goal off (LayEggInNestGoalMixin) until the
+ * drop at 0, where the spawnAtLocation (m_19998_) call is redirected to the golden egg; the goose's own
+ * sound before it and timer reset after it stay as they are. The roll state is not saved: a goose
+ * reloaded inside the 400-tick window rolls again.
+ */
+@Mixin(value = GooseEntity.class, remap = false)
+public abstract class GooseEntityEggLayerMixin extends TamableAnimal implements EggLayer, GoldenEggLayer {
+
+    @Shadow
+    private int eggLayTime;
+
+    // This egg's roll is done / was won. Cleared whenever the timer is back above the nest window.
+    @Unique
+    private boolean creativedelight$goldenRolled;
+    @Unique
+    private boolean creativedelight$goldenDue;
+
+    protected GooseEntityEggLayerMixin(EntityType<? extends TamableAnimal> type, Level level) {
+        super(type, level);
+    }
+
+    @Override
+    public int getEggTimer() {
+        return this.eggLayTime;
+    }
+
+    @Override
+    public void setEggTimer(int time) {
+        this.eggLayTime = time;
+    }
+
+    // Geese carry no jockeys.
+    @Override
+    public boolean isBirdJockey() {
+        return false;
+    }
+
+    @Override
+    public Item getEggItem() {
+        return ModItems.getGooseEgg();
+    }
+
+    // Same reset GooseEntity.aiStep uses after a lay.
+    @Override
+    public int getNextEggTime(RandomSource random) {
+        return random.nextInt(6000) + 6000;
+    }
+
+    @Override
+    public SoundEvent getEggLayingSound() {
+        return ModSoundEvents.getGooseEggSound();
+    }
+
+    @Override
+    public boolean creativedelight$isGoldenEggDue() {
+        return this.creativedelight$goldenDue;
+    }
+
+    // 400 = LayEggInNestGoal.canEggBeLaid's window (eggTimer < 400).
+    @Inject(method = "m_8107_", at = @At("HEAD"))
+    private void creativedelight$rollGoldenEgg(CallbackInfo ci) {
+        if (this.level.isClientSide) return;
+        if (this.eggLayTime > 400) {
+            this.creativedelight$goldenRolled = false;
+            this.creativedelight$goldenDue = false;
+        } else if (!this.creativedelight$goldenRolled) {
+            this.creativedelight$goldenRolled = true;
+            this.creativedelight$goldenDue = GoldenGooseEgg.roll(this.random);
+        }
+    }
+
+    @Redirect(method = "m_8107_", at = @At(value = "INVOKE",
+            target = "Lnet/untitledduckmod/goose/GooseEntity;m_19998_(Lnet/minecraft/world/level/ItemLike;)Lnet/minecraft/world/entity/item/ItemEntity;"))
+    private ItemEntity creativedelight$layGoldenEgg(GooseEntity goose, ItemLike egg) {
+        if (this.creativedelight$goldenDue) {
+            this.creativedelight$goldenDue = false;
+            // The goose drops the return value, so null is fine once the golden egg is laid.
+            if (GoldenGooseEgg.lay(this)) return null;
+        }
+        return this.spawnAtLocation(egg);
+    }
+}

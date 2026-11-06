@@ -6,10 +6,10 @@ Written 2026-10-31 from [TODO](../todo/TODO.md) `alcohol/brewinport` (row 4 open
 [creative_brewing.md](../creative_brewing.md) (`CBR-`).
 
 **Where the port lives now (2026-10-31):** `development/creativeBrewing/members/brewin` (Gradle project `:backportedBrewin`,
-version `4.5.0-ce-19.2-05`), nested in `creative_brewing-1.0.0.jar`. Build and install only through `:creativeBrewing:`
-(a member's own `installToMods` refuses). `mods/creative_brewing-1.0.0.jar` (2026-10-31 16:55) is byte-identical to
+version `4.5.0-ce-19.2-05`), nested in `creativebrewing-1.0.0.jar`. Build and install only through `:creativeBrewing:`
+(a member's own `installToMods` refuses). `mods/creativebrewing-1.0.0.jar` (2026-10-31 16:55) is byte-identical to
 `development/creativeBrewing/build/libs/`, and `logs/latest.log` shows it booted 2026-10-31 17:15
-(`[creative_brewing] members: [vinery, brewinandchewin]`, no Vinery / Brewin' errors). Older rows that say "`-04` installed,
+(`[creativebrewing] members: [vinery, brewinandchewin]`, no Vinery / Brewin' errors). Older rows that say "`-04` installed,
 not yet booted" describe the standalone jar this replaced.
 
 ## Scope and order

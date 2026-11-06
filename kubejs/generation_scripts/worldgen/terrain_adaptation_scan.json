@@ -1,5 +1,5 @@
 {
- "generated": "2026-10-30",
+ "generated": "2026-11-05",
  "thresholds": {
   "strong": [
    0.3,
@@ -777,12 +777,62 @@
    "why": "built in code, no templates to read"
   },
   {
-   "id": "desert_village_temple:village_temple",
+   "id": "creativeengineering:sky_island",
+   "type": "minecraft:jigsaw",
+   "origin": "kubejs/data",
+   "adaptation": "none",
+   "yung": false,
+   "env": "afloat",
+   "state": null,
+   "tags": [],
+   "templates": 9,
+   "matching": 0,
+   "box": 697,
+   "built": 352,
+   "pad": 201,
+   "air": 144,
+   "out_air": 4394,
+   "water": 0,
+   "solid": 2558,
+   "waste": 0.495,
+   "worst": "sky_structures:sky_grass_blacksmith",
+   "missing": [],
+   "jigsaw": true,
+   "verdict": "afloat",
+   "why": "floats or stands in water on purpose (earth_fill/exempt)"
+  },
+  {
+   "id": "creativeengineering:waystone_ruin_part",
    "type": "minecraft:jigsaw",
    "origin": "kubejs/data",
    "adaptation": "beard_thin",
    "yung": false,
    "env": "surface",
+   "state": null,
+   "tags": [],
+   "templates": 1,
+   "matching": 0,
+   "box": 30,
+   "built": 25,
+   "pad": 0,
+   "air": 5,
+   "out_air": 24,
+   "water": 0,
+   "solid": 55,
+   "waste": 0.167,
+   "worst": "waystones:village/common/waystone",
+   "missing": [],
+   "jigsaw": true,
+   "verdict": "compact",
+   "why": "17% unbuilt"
+  },
+  {
+   "id": "desert_village_temple:village_temple",
+   "type": "minecraft:jigsaw",
+   "origin": "kubejs/data",
+   "adaptation": "beard_thin",
+   "yung": false,
+   "env": "afloat",
    "state": null,
    "tags": [
     "template_trim",
@@ -2650,30 +2700,29 @@
    "origin": "vanilla (code)",
    "adaptation": "beard_thin",
    "yung": false,
-   "env": "surface",
+   "env": "afloat",
    "state": null,
    "tags": [],
-   "templates": 93,
+   "templates": 94,
    "matching": 28,
-   "box": 5060,
-   "built": 3877,
+   "box": 5109,
+   "built": 3926,
    "pad": 574,
    "air": 468,
    "out_air": 4980,
-   "water": 80,
-   "solid": 15615,
-   "waste": 0.234,
+   "water": 86,
+   "solid": 15740,
+   "waste": 0.232,
    "worst": "minecraft:village/desert/zombie/town_centers/desert_meeting_point_3",
    "missing": [
     "feature:minecraft:patch_cactus",
     "feature:minecraft:pile_hay",
     "minecraft:empty",
-    "farmersdelight:village/houses/desert_compost_pile",
     "vinery:vinery_desert"
    ],
    "jigsaw": true,
-   "verdict": "settlement",
-   "why": "settlement (93 pieces, 28 terrain-matching)"
+   "verdict": "afloat",
+   "why": "floats or stands in water on purpose (earth_fill/exempt)"
   },
   {
    "id": "minecraft:village_plains",
@@ -2684,27 +2733,27 @@
    "env": "surface",
    "state": null,
    "tags": [],
-   "templates": 112,
+   "templates": 113,
    "matching": 38,
-   "box": 7631,
-   "built": 6303,
-   "pad": 670,
+   "box": 7708,
+   "built": 6379,
+   "pad": 671,
    "air": 581,
-   "out_air": 6678,
-   "water": 137,
-   "solid": 23166,
-   "waste": 0.174,
+   "out_air": 6684,
+   "water": 139,
+   "solid": 23417,
+   "waste": 0.172,
    "worst": "minecraft:village/plains/zombie/houses/plains_meeting_point_4",
    "missing": [
     "minecraft:empty",
     "feature:minecraft:flower_plain",
     "feature:minecraft:oak",
     "feature:minecraft:pile_hay",
-    "farmersdelight:village/houses/plains_compost_pile"
+    "vinery:vinery_plains"
    ],
    "jigsaw": true,
    "verdict": "settlement",
-   "why": "settlement (112 pieces, 38 terrain-matching)"
+   "why": "settlement (113 pieces, 38 terrain-matching)"
   },
   {
    "id": "minecraft:village_savanna",
@@ -2715,27 +2764,27 @@
    "env": "surface",
    "state": null,
    "tags": [],
-   "templates": 157,
+   "templates": 159,
    "matching": 64,
-   "box": 11496,
-   "built": 9246,
-   "pad": 1278,
+   "box": 11618,
+   "built": 9367,
+   "pad": 1279,
    "air": 785,
-   "out_air": 11965,
-   "water": 155,
-   "solid": 36225,
-   "waste": 0.196,
+   "out_air": 11971,
+   "water": 159,
+   "solid": 36600,
+   "waste": 0.194,
    "worst": "minecraft:village/savanna/zombie/houses/savanna_animal_pen_2",
    "missing": [
     "minecraft:empty",
     "feature:minecraft:acacia",
     "feature:minecraft:pile_hay",
     "feature:minecraft:pile_melon",
-    "farmersdelight:village/houses/savanna_compost_pile"
+    "vinery:vinery_savanna"
    ],
    "jigsaw": true,
    "verdict": "settlement",
-   "why": "settlement (157 pieces, 64 terrain-matching)"
+   "why": "settlement (159 pieces, 64 terrain-matching)"
   },
   {
    "id": "minecraft:village_snowy",
@@ -2746,27 +2795,26 @@
    "env": "surface",
    "state": null,
    "tags": [],
-   "templates": 98,
+   "templates": 99,
    "matching": 39,
-   "box": 5016,
-   "built": 3737,
-   "pad": 927,
-   "air": 268,
-   "out_air": 6094,
-   "water": 18,
-   "solid": 17512,
-   "waste": 0.255,
+   "box": 5079,
+   "built": 3789,
+   "pad": 937,
+   "air": 269,
+   "out_air": 6135,
+   "water": 21,
+   "solid": 17635,
+   "waste": 0.254,
    "worst": "etched:village/snowy/houses/snowy_bard_house_1",
    "missing": [
     "minecraft:empty",
-    "farmersdelight:village/houses/snowy_compost_pile",
     "feature:minecraft:pile_ice",
     "feature:minecraft:pile_snow",
     "feature:minecraft:spruce"
    ],
    "jigsaw": true,
    "verdict": "settlement",
-   "why": "settlement (98 pieces, 39 terrain-matching)"
+   "why": "settlement (99 pieces, 39 terrain-matching)"
   },
   {
    "id": "minecraft:village_taiga",
@@ -2777,16 +2825,16 @@
    "env": "surface",
    "state": null,
    "tags": [],
-   "templates": 159,
+   "templates": 161,
    "matching": 56,
-   "box": 11417,
-   "built": 9267,
-   "pad": 658,
+   "box": 11539,
+   "built": 9380,
+   "pad": 667,
    "air": 1486,
-   "out_air": 11203,
-   "water": 176,
-   "solid": 35160,
-   "waste": 0.188,
+   "out_air": 11241,
+   "water": 178,
+   "solid": 35528,
+   "waste": 0.187,
    "worst": "minecraft:village/taiga/zombie/town_centers/taiga_meeting_point_1",
    "missing": [
     "minecraft:empty",
@@ -2797,7 +2845,7 @@
    ],
    "jigsaw": true,
    "verdict": "settlement",
-   "why": "settlement (159 pieces, 56 terrain-matching)"
+   "why": "settlement (161 pieces, 56 terrain-matching)"
   },
   {
    "id": "mini_clock_tower:mini_clock_tower",
@@ -3193,9 +3241,7 @@
    "yung": false,
    "env": "seabed",
    "state": null,
-   "tags": [
-    "terrain_adaptation/sunk_start"
-   ],
+   "tags": [],
    "templates": 8,
    "matching": 1,
    "box": 1858,
@@ -3209,8 +3255,8 @@
    "worst": "philipsruins:crypt_room3",
    "missing": [],
    "jigsaw": true,
-   "verdict": "tagged",
-   "why": "already in terrain_adaptation/sunk_start"
+   "verdict": "skip-env",
+   "why": "seabed: its air and ground are part of the design"
   },
   {
    "id": "philipsruins:ancient_dungeon",
@@ -3322,7 +3368,7 @@
    "origin": "PhilipsRuins1.19.2-10.8.jar",
    "adaptation": "beard_thin",
    "yung": false,
-   "env": "surface",
+   "env": "afloat",
    "state": null,
    "tags": [],
    "templates": 2,
@@ -3338,8 +3384,8 @@
    "worst": "philipsruins:badlands_start_dungeon",
    "missing": [],
    "jigsaw": true,
-   "verdict": "compact",
-   "why": "1% unbuilt"
+   "verdict": "afloat",
+   "why": "floats or stands in water on purpose (earth_fill/exempt)"
   },
   {
    "id": "philipsruins:badlands_structures",
@@ -3397,7 +3443,7 @@
    "origin": "PhilipsRuins1.19.2-10.8.jar",
    "adaptation": "bury",
    "yung": false,
-   "env": "surface",
+   "env": "afloat",
    "state": null,
    "tags": [],
    "templates": 1,
@@ -3413,8 +3459,8 @@
    "worst": "philipsruins:mod_structures/desert_ruin9",
    "missing": [],
    "jigsaw": true,
-   "verdict": "mild",
-   "why": "28% unbuilt, 28 pad + 0 air-only columns"
+   "verdict": "afloat",
+   "why": "floats or stands in water on purpose (earth_fill/exempt)"
   },
   {
    "id": "philipsruins:end_gate_fortress",
@@ -3627,7 +3673,7 @@
   {
    "id": "philipsruins:lost_soul_city",
    "type": "minecraft:jigsaw",
-   "origin": "PhilipsRuins1.19.2-10.8.jar",
+   "origin": "kubejs/data",
    "adaptation": "beard_thin",
    "yung": false,
    "env": "underground",
@@ -3652,7 +3698,7 @@
   {
    "id": "philipsruins:lost_soul_dungeon",
    "type": "minecraft:jigsaw",
-   "origin": "PhilipsRuins1.19.2-10.8.jar",
+   "origin": "kubejs/data",
    "adaptation": "beard_thin",
    "yung": false,
    "env": "underground",
@@ -3777,10 +3823,10 @@
   {
    "id": "philipsruins:rare_ruin",
    "type": "minecraft:jigsaw",
-   "origin": "PhilipsRuins1.19.2-10.8.jar",
+   "origin": "kubejs/data",
    "adaptation": "beard_thin",
    "yung": false,
-   "env": "surface",
+   "env": "buried",
    "state": null,
    "tags": [],
    "templates": 0,
@@ -3877,10 +3923,10 @@
   {
    "id": "philipsruins:start_nether_ruin",
    "type": "minecraft:jigsaw",
-   "origin": "PhilipsRuins1.19.2-10.8.jar",
+   "origin": "kubejs/data",
    "adaptation": "beard_thin",
    "yung": false,
-   "env": "surface",
+   "env": "buried",
    "state": null,
    "tags": [],
    "templates": 5,
@@ -3896,8 +3942,8 @@
    "worst": "philipsruins:nether_ruin1",
    "missing": [],
    "jigsaw": true,
-   "verdict": "mild",
-   "why": "28% unbuilt, 512 pad + 0 air-only columns"
+   "verdict": "skip-env",
+   "why": "buried: its air and ground are part of the design"
   },
   {
    "id": "philipsruins:underground_structures",
@@ -4332,7 +4378,7 @@
    "air": 1352,
    "out_air": 38632,
    "water": 94,
-   "solid": 27549,
+   "solid": 27555,
    "waste": 0.252,
    "worst": "skyvillages:bridge_5",
    "missing": [],
@@ -4833,7 +4879,7 @@
    "origin": "Terralith_1.19.3_v2.3.12.jar",
    "adaptation": "beard_thin",
    "yung": false,
-   "env": "surface",
+   "env": "afloat",
    "state": null,
    "tags": [],
    "templates": 24,
@@ -4852,8 +4898,8 @@
     "terralith:village/desert/houses/farmer"
    ],
    "jigsaw": true,
-   "verdict": "settlement",
-   "why": "settlement (24 pieces, 15 terrain-matching)"
+   "verdict": "afloat",
+   "why": "floats or stands in water on purpose (earth_fill/exempt)"
   },
   {
    "id": "terralith:fortified_village",
@@ -8913,7 +8959,7 @@
    "origin": "Towns-and-Towers-v.1.10-_FORGE-1.19.2_.jar",
    "adaptation": "beard_thin",
    "yung": false,
-   "env": "surface",
+   "env": "afloat",
    "state": null,
    "tags": [
     "template_trim",
@@ -8994,7 +9040,7 @@
    "origin": "Towns-and-Towers-v.1.10-_FORGE-1.19.2_.jar",
    "adaptation": "beard_thin",
    "yung": false,
-   "env": "surface",
+   "env": "afloat",
    "state": null,
    "tags": [
     "template_trim",
@@ -9519,7 +9565,7 @@
    "origin": "Towns-and-Towers-v.1.10-_FORGE-1.19.2_.jar",
    "adaptation": "beard_thin",
    "yung": false,
-   "env": "surface",
+   "env": "afloat",
    "state": null,
    "tags": [],
    "templates": 53,
@@ -9537,8 +9583,8 @@
     "minecraft:empty"
    ],
    "jigsaw": true,
-   "verdict": "settlement",
-   "why": "settlement (53 pieces, 4 terrain-matching)"
+   "verdict": "afloat",
+   "why": "floats or stands in water on purpose (earth_fill/exempt)"
   },
   {
    "id": "towns_and_towers:village_beach",
@@ -9950,7 +9996,7 @@
    "origin": "Towns-and-Towers-v.1.10-_FORGE-1.19.2_.jar",
    "adaptation": "beard_thin",
    "yung": false,
-   "env": "surface",
+   "env": "afloat",
    "state": null,
    "tags": [],
    "templates": 17,
@@ -9966,8 +10012,8 @@
    "worst": "kaisyn:village/wooded_badlands_tipi/town_centers/wooded_badlands_meeting_point_1",
    "missing": [],
    "jigsaw": true,
-   "verdict": "settlement",
-   "why": "settlement (17 pieces, 0 terrain-matching)"
+   "verdict": "afloat",
+   "why": "floats or stands in water on purpose (earth_fill/exempt)"
   },
   {
    "id": "towns_and_towers:wreckage_ocean",

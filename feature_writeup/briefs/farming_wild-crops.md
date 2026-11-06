@@ -37,19 +37,19 @@ table (add the target column first); then **C**, the choices that wait on other 
 G15 (V5/V18 coffee was settled by the `food/drinks #3` merge, 2026-10-22). #5 goes with group B (same json, same
 density table); #6 needs only the ocean `add` list and a generator sea-floor row.
 
-Every change here is worldgen: **new chunks only**, rejoin to apply (switch `config/creative_delight-common.toml`
+Every change here is worldgen: **new chunks only**, rejoin to apply (switch `config/creativedelight-common.toml`
 `[worldgen] wildCrops`, line 41), and rerun `python3 tools/gen_crop_worldgen_table.py` plus `tools/test_wild_crops.sh`
 after each edit. Wild crops moved into Creative Delight on 2026-10-25 (memory `vegetation-worldgen-system`): tags are
-`creative_delight:wild_crops/<key>`, pack features `creative_delight:wild/*`. Files (checked 2026-10-31):
-- [wild_crops.json](../../kubejs/data/creative_delight/kubejs/_worldgen/wild_crops.json) (404 lines: `_readme`, `crops`
+`creativedelight:wild_crops/<key>`, pack features `creativedelight:wild/*`. Files (checked 2026-10-31):
+- [wild_crops.json](../../kubejs/data/creativedelight/kubejs/_worldgen/wild_crops.json) (404 lines: `_readme`, `crops`
   69 rules; the jar copy is read when the pack folder copy is absent, via `CDResources.text`);
 - biome traits moved out to [biome_traits.json](../../kubejs/generation_scripts/worldgen/biome_traits.json) (146 biomes,
   shared with mushrooms, flowers, bees, mob spawns);
-- applier [wild_crops.js](../../kubejs/data/creative_delight/kubejs/_worldgen/wild_crops.js) (59 lines) builds on the
+- applier [wild_crops.js](../../kubejs/data/creativedelight/kubejs/_worldgen/wild_crops.js) (59 lines) builds on the
   shared [_biome_rules.js](../../kubejs/server_scripts/worldgen/_biome_rules.js) (`resolve` line 56: `never` traits
   skip a biome, but `add` biomes bypass it, line 66; tags via `global.tags.add` line 147; modifiers lines 167-197;
   unclassified-biome warning line 245);
-- pack features in `kubejs/data/creative_delight/worldgen/{configured,placed}_feature/wild/` (11 configured,
+- pack features in `kubejs/data/creativedelight/worldgen/{configured,placed}_feature/wild/` (11 configured,
   18 placed today), copied into the CD jar by its `dataTrees`;
 - [tools/gen_crop_worldgen_table.py](../../tools/gen_crop_worldgen_table.py) (844 lines; `JAVA_PLACED` line 114 restates
   the Java-registered placed features; FD chances via `fd()` line 101; `NEVER = {'ocean', 'cave'}` line 486).
@@ -72,8 +72,8 @@ chance 300, sugar cane 6, mint / corn / persimmon still the mods' Java placed fe
 | Crop | Now | Mod default | Change | Feature in `wild_crops.json` | Knob |
 |---|---|---|---|---|---|
 | Mint pond | 13.1 | 4.1 | x3.2 | `neapolitan:mint_pond` (Java, rarity 4) | pack placed copy |
-| Pumpkin | 0.3 | 1.8 | x0.19 | `creative_delight:wild/pumpkin` (chance 300) | edit the json |
-| Sugar cane | 9.3 | 132.2 | x0.07 | `creative_delight:wild/sugar_cane` (chance 6) | edit the json (+ count) or widen the rule |
+| Pumpkin | 0.3 | 1.8 | x0.19 | `creativedelight:wild/pumpkin` (chance 300) | edit the json |
+| Sugar cane | 9.3 | 132.2 | x0.07 | `creativedelight:wild/sugar_cane` (chance 6) | edit the json (+ count) or widen the rule |
 | Persimmon tree | 0.5 | 1.3 | x0.37 | `fruitsdelight:tree/persimmon_tree` (Java, 1/50) | pack placed copy |
 | Rice | 1.6 | 6.8 | x0.24 | `farmersdelight:patch_wild_rice` | FD config `[world.wild_rice] chance = 20` (farmersdelight-common.toml line 98) |
 | Corn | 2.2 | 7.8 | x0.28 | `corn_delight:patch_wild_corn` (Java, rarity 30 hard-coded) | pack placed copy |
@@ -87,7 +87,7 @@ Per 1000 = attempts per chunk x share of land area x 1000; it is an upper bound 
    `_readme`). In the generator, print a "Target" and "Chance for target" column in §1: for a single rarity-filtered
    feature, `chance_needed = current_chance x now / target`. `wild_crops.js` ignores the key.
 2. **Pack placed copies** for Java placed features (one json each in
-   `kubejs/data/creative_delight/worldgen/placed_feature/wild/`), then swap the id in the crop's `features`:
+   `kubejs/data/creativedelight/worldgen/placed_feature/wild/`), then swap the id in the crop's `features`:
    - `wild/mint_pond.json`: `{"feature": "neapolitan:mint_pond", "placement": [rarity_filter N, in_square,
      heightmap WORLD_SURFACE_WG, biome]}` (the generator records Neapolitan's heightmap as WORLD surface; the
      original uses `PlacementUtils` constant `f_195354_`, check it maps to WORLD_SURFACE_WG).
@@ -112,7 +112,7 @@ Per 1000 = attempts per chunk x share of land area x 1000; it is an upper bound 
 ### Ids and data
 Configured features (verified ids): `neapolitan:mint_pond`, `corn_delight:patch_wild_corn`,
 `fruitsdelight:tree/persimmon_tree_wild` (pattern `tree/<name>_tree_wild`). Placed ids today: `neapolitan:mint_pond`,
-`corn_delight:patch_wild_corn`, `fruitsdelight:tree/persimmon_tree`. New pack ids `creative_delight:wild/mint_pond`,
+`corn_delight:patch_wild_corn`, `fruitsdelight:tree/persimmon_tree`. New pack ids `creativedelight:wild/mint_pond`,
 `wild/corn`, `wild/persimmon_tree`.
 
 ### Decisions
@@ -163,7 +163,7 @@ Fix or accept each place where a crop's rule puts it in a biome whose ground it 
      matching_block_tag offset [0,-1,0] tag fruitsdelight:pineapple_grows_on)` (copy the shape of `wild/hamimelon.json`);
    - `placed_feature/wild/pineapple.json`: rarity_filter 32, in_square, heightmap (MOTION_BLOCKING like the other pack
      copies), biome;
-   - `wild_crops.json` key `pineapple`: `features` -> `creative_delight:wild/pineapple` (keep
+   - `wild_crops.json` key `pineapple`: `features` -> `creativedelight:wild/pineapple` (keep
      `disable_modifiers: ["fruitsdelight:pineapple"]`), update its `notes`.
    - The wild block still needs the tag to survive, so to reach jungle grass or mangrove mud the tag must grow:
      `t.add(e, 'fruitsdelight:pineapple_grows_on', [item.grass_block, item.mud])` in
@@ -181,7 +181,7 @@ the tag is not extended anywhere today). This
 
 ### Ids and data
 `fruitsdelight:wild_pineapple` = `i.wild_pineapple` (item_dict.js 13268), tag `fruitsdelight:pineapple_grows_on`
-(verified contents), new `creative_delight:wild/pineapple`. Biome ids as listed (in `biome_traits.json`).
+(verified contents), new `creativedelight:wild/pineapple`. Biome ids as listed (in `biome_traits.json`).
 
 ### Decisions
 - Pineapple on grass / mud: recommendation yes for the wild block only is impossible (one tag serves both), so: add
@@ -195,7 +195,7 @@ the tag is not extended anywhere today). This
 
 ### Tests
 - **CR-80 Pineapple ground** (proposed): `terralith:tropical_jungle` and `mangrove_swamp` -> wild pineapples on grass / mud as
-  well as sand. `/place feature creative_delight:wild/pineapple` on stone -> fails.
+  well as sand. `/place feature creativedelight:wild/pineapple` on stone -> fails.
 - **CR-81 Cane banks** (proposed): `frozen_river` and `terralith:gravel_beach` -> no cane attempts (generator shows them gone);
   `river` -> cane.
 
@@ -346,16 +346,16 @@ A third cantaloupe patch, the most common of the three, that places both the Can
 ### Now
 - After the cantaloupe merge (`merges/fruit #1`, [item_merges.md](../item_merges.md) 2.10, built 2026-10-28) two rules
   share one biome set (`warm desert` + `warm badlands`: 8 deserts, 7 badlands in biome_traits.json):
-  - key `hamimelon`, label "Cantaloupe": `creative_delight:wild/hamimelon` (random_patch 24 tries, xz 5, y 3,
+  - key `hamimelon`, label "Cantaloupe": `creativedelight:wild/hamimelon` (random_patch 24 tries, xz 5, y 3,
     `simple_block fruitsdelight:hamimelon` on sand / red sand / terracotta / `#creativeengineering:worldgen/grass_like_soils`),
     placed rarity 64, MOTION_BLOCKING; disables `fruitsdelight:hamimelon`.
-  - key `cantaloupe`, label "Mini Cantaloupe": `creative_delight:wild/mini_cantaloupe` (same shape, places
+  - key `cantaloupe`, label "Mini Cantaloupe": `creativedelight:wild/mini_cantaloupe` (same shape, places
     `delightful:cantaloupe`), placed rarity 64; disables `delightful:cantaloupe`.
 - crops_by_biome.md §1: Cantaloupe 1.0 per 1000 (x2.47), Mini Cantaloupe 1.0 (new). The Mini Cantaloupe used to be
   `warm dry grassy` (12 savanna / shrubland biomes) with Delightful's own patch.
 
 ### Build
-1. Configured `kubejs/data/creative_delight/worldgen/configured_feature/wild/cantaloupe_mixed.json`: copy of
+1. Configured `kubejs/data/creativedelight/worldgen/configured_feature/wild/cantaloupe_mixed.json`: copy of
    `wild/hamimelon.json` with `to_place` a `minecraft:weighted_state_provider` of `fruitsdelight:hamimelon` and
    `delightful:cantaloupe` (weights per Decisions), maybe more tries (32) so it reads as a field.
 2. Placed `placed_feature/wild/cantaloupe_mixed.json`: rarity below 64 (Decisions), in_square, MOTION_BLOCKING, biome.
@@ -369,7 +369,7 @@ A third cantaloupe patch, the most common of the three, that places both the Can
 
 ### Ids and data
 `fruitsdelight:hamimelon` (block), `delightful:cantaloupe` (block, Delightful is a CD member); new
-`creative_delight:wild/cantaloupe_mixed`, tag `creative_delight:wild_crops/cantaloupe_mixed`.
+`creativedelight:wild/cantaloupe_mixed`, tag `creativedelight:wild_crops/cantaloupe_mixed`.
 
 ### Decisions
 - Biomes: recommendation the old Mini Cantaloupe range `warm dry grassy` (savannas, shrublands) so the common patch
@@ -384,8 +384,8 @@ A third cantaloupe patch, the most common of the three, that places both the Can
 - New chunks only.
 
 ### Tests
-- CR-new1 (proposed, numbered when queued): `/place feature creative_delight:wild/cantaloupe_mixed` on savanna grass x5
-  -> both blocks appear; biome tag `creative_delight:wild_crops/cantaloupe_mixed` lists the chosen biomes.
+- CR-new1 (proposed, numbered when queued): `/place feature creativedelight:wild/cantaloupe_mixed` on savanna grass x5
+  -> both blocks appear; biome tag `creativedelight:wild_crops/cantaloupe_mixed` lists the chosen biomes.
 - CR-new2 (proposed): fly a new savanna 30 chunks -> mixed patches more often than the desert single patches.
 
 ---
@@ -413,12 +413,12 @@ the mod's own modifier is off so it never generates twice (DA-14).
   `ocean` and `cave`, so a `where` clause cannot reach them; `add` bypasses `never` (_biome_rules.js line 66).
 
 ### Build
-1. Configured `kubejs/data/creative_delight/worldgen/configured_feature/wild/sea_grape.json`: the 1.0.1 json with
+1. Configured `kubejs/data/creativedelight/worldgen/configured_feature/wild/sea_grape.json`: the 1.0.1 json with
    `tries` 64, `xz_spread` 6 (written fresh in the pack; no conversion).
 2. Placed `placed_feature/wild/sea_grape.json`: rarity N (start 30, the mod's), in_square, heightmap OCEAN_FLOOR_WG,
    biome (drop the `count 1`).
 3. Rule `sea_grape` in `wild_crops.json`: `"label": "Sea Grape", "where": [], "add": ["minecraft:warm_ocean",
-   "minecraft:lukewarm_ocean", "minecraft:deep_lukewarm_ocean"], "features": ["creative_delight:wild/sea_grape"],
+   "minecraft:lukewarm_ocean", "minecraft:deep_lukewarm_ocean"], "features": ["creativedelight:wild/sea_grape"],
    "disable_modifiers": ["oceanic_delight:patch_wild_sea_grape_biome_modifier"]`, plus `target_per_1000` once #1 adds
    the key. Using `add` avoids touching `never`.
 4. Generator: oceans are dropped from the share (`NEVER` line 486, `oceans` line 617; "surface mode skips ocean").
@@ -428,8 +428,8 @@ the mod's own modifier is off so it never generates twice (DA-14).
 
 ### Ids and data
 Verified: `oceanic_delight:wild_sea_grape` (block), `oceanic_delight:patch_wild_sea_grape` (configured + placed),
-modifier id above; `farmersdelight:wild_crop` feature type (FD 1.19.2). New `creative_delight:wild/sea_grape`, tag
-`creative_delight:wild_crops/sea_grape`.
+modifier id above; `farmersdelight:wild_crop` feature type (FD 1.19.2). New `creativedelight:wild/sea_grape`, tag
+`creativedelight:wild_crops/sea_grape`.
 
 ### Decisions
 - Density target: recommendation keep about the mod's rate (rarity 30) with the bigger patch; set the number after the
@@ -445,7 +445,7 @@ modifier id above; `farmersdelight:wild_crop` feature type (FD 1.19.2). New `cre
 - DA-14 (ocean_delight.md 3.1, proposed there): fresh warm ocean -> sea grape patches once per spot, at the rule's
   density; `/place feature oceanic_delight:patch_wild_sea_grape` still works (the feature exists, only the modifier is
   off).
-- CR-new3 (proposed, numbered when queued): biome tag `creative_delight:wild_crops/sea_grape` lists the three oceans;
+- CR-new3 (proposed, numbered when queued): biome tag `creativedelight:wild_crops/sea_grape` lists the three oceans;
   no `[wild-crops]` error lines.
 
 ---

@@ -6,13 +6,13 @@ Written by `python3 tools/meat_block_scan.py`. Do not edit. Every red block (`re
 
 | Block | Lone | In groups |
 |---|---:|---:|
-| `minecraft:red_glazed_terracotta` | 5 | 0 |
+| `minecraft:red_glazed_terracotta` | 6 | 0 |
 | `minecraft:red_terracotta` | 71 | 865 |
-| `minecraft:red_wool` | 160 | 567 |
+| `minecraft:red_wool` | 169 | 600 |
 | `minecraft:red_concrete` | 18 | 668 |
 | `minecraft:red_concrete_powder` | 3 | 2 |
 | `minecraft:red_mushroom_block` | 2 | 242 |
-| `minecraft:nether_wart_block` | 45 | 285 |
+| `minecraft:nether_wart_block` | 40 | 271 |
 | `minecraft:redstone_block` | 71 | 151 |
 
 ## Marked (5 blocks in 4 templates)
@@ -24,7 +24,7 @@ Written by `python3 tools/meat_block_scan.py`. Do not edit. Every red block (`re
 | `kaisyn:village/mushroom_fields_fantasy/houses/mushroom_butcher_1` | `towns_and_towers:village_mushroom_fields` | 0 2 2, 2 2 4 |
 | `skyvillages:farm_2` | `skyvillages:skyvillage` | 7 15 7 |
 
-## Review (370 lone red blocks, not marked)
+## Review (375 lone red blocks, not marked)
 
 Settlement = in a settlement-family structure or a food-named template.
 
@@ -118,8 +118,10 @@ Settlement = in a settlement-family structure or a food-named template.
 | `philipsruins:desert_ruin3` | `philipsruins:desert_structures` | no | red_terracotta 1 |
 | `philipsruins:field_stone_ruins1` | `philipsruins:field_stone_ruins` | no | red_terracotta 5, red_concrete_powder 2 |
 | `philipsruins:sculk_dungeon_room1` | `philipsruins:sculk_dungeon` | no | redstone_block 1 |
-| `philipsruins:start_nether_ruin` | `philipsruins:start_nether_ruin` | no | nether_wart_block 5 |
 | `skyvillages:cartographer_1` | `skyvillages:skyvillage` | no | redstone_block 4 |
+| `skyvillages:letsdo_brewery/sky_village_letsdo_brewery_0` | `skyvillages:skyvillage` | no | red_wool 2 |
+| `skyvillages:letsdo_brewery/sky_village_letsdo_brewery_1` | `skyvillages:skyvillage` | no | red_wool 7 |
+| `skyvillages:letsdo_vinery/sky_village_letsdo_vinery_2` | `skyvillages:skyvillage` | no | red_glazed_terracotta 1 |
 | `skyvillages:librarian_1` | `skyvillages:skyvillage` | no | redstone_block 1 |
 | `terralith:spire/base_l` | `terralith:spire` | no | redstone_block 1 |
 | `underground_bunkers:underground_bunker/underground_bunkers_large_room_0` | `underground_bunkers:underground_bunker` | no | redstone_block 3 |

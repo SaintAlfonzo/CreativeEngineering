@@ -1,0 +1,195 @@
+# Run 2026-11-01, Creative Split wave 4, boot 3 (split_w234.sh prep3): build/libs jars (patcherMod 1.1.07 with the
+# SwapRemapper fix, CD nesting Baby Mobs and Incubation Additions, CB, Compat, Calendar, Devtools) on the boot 1/2
+# world; srv CE config still holds the sections wave 4 moves, with edited values (merge path). The spawn chunk still
+# holds the boot 1 blocks under creative_delight: ids, so the remap rows of SQ-CS2 are rerun here.
+pace 2
+
+## SQ-CS2-02r | swap remap with the fixed jar
+bootexpect \[swaps\] 2 list file\(s\): 2 namespace move\(s\), 0 single id\(s\)
+bootexpect \[swaps\] minecraft:block: 2 id\(s\) remapped to their survivors
+bootreject left missing
+bootreject listed id\(s\) had no survivor
+shell grep -E "\[swaps\]" logs/latest.log | cut -c60-260
+
+## SQ-CS2-03r | remapped blocks keep their states
+> pbot spawn qa {H1} {H2} {H3} minecraft:overworld survival
+sleep 5
+> execute if block {H1+2} {H2} {H3} creativedelight:treated_stick[axis_y=true] run say CS2 stick ok
+> execute if block {H1+3} {H2} {H3+3} creativedelight:treated_stick_tomatoes[age=2] run say CS2 tomato stick ok
+> data get block {H1+4} {H2} {H3} Items
+expect CS2 stick ok
+expect CS2 tomato stick ok
+> save-all flush
+waitlog Saved the game 120
+shell python3 $INST/tools/scratch_query/region_ids.py cs234/region "creative_?delight:[a-z_]+"
+look r.-1.0 names creativedelight:treated_stick* after the save (no creative_delight: left there)
+
+## SQ-CBJ4-01 | CB mixins
+bootreject creativebrewing\.mixins\.json.*(Error|error|failed)
+shell grep -c "from creativebrewing.mixins.json" logs/debug.log; grep -o "Mixing [A-Za-z_.]* from creativebrewing.mixins.json" logs/debug.log | sed 's/Mixing //;s/ from.*//' | sort -u > cb_mx.txt; wc -l < cb_mx.txt; cat cb_mx.txt | tr '\n' ' '; echo; echo "also from CE:"; grep -o "Mixing [A-Za-z_.]* from creativeengineering.mixins.json" logs/debug.log | sed 's/Mixing //;s/ from.*//' | sort -u | comm -12 - cb_mx.txt; rm -f cb_mx.txt
+look 14 common mixins (minus absent mods), none also from creativeengineering.mixins.json
+
+## SQ-CBJ4-02 | config sections merged into the CB file
+bootexpect \[swaps\] config sections .*alcohol.* merged from creativeengineering-common.toml into creativebrewing-common.toml
+shell grep -E "\[swaps\] config sections" logs/latest.log | cut -c60-300; grep -nE "^\s*\[|quarkLine|reductionPerLevel|intervalSeconds|chancePerPiece" config/creativebrewing-common.toml; echo CE:; grep -nE "^\[(alcohol|effects|magic_resistance|copper_poisoning)\]" config/creativeengineering-common.toml || echo "CE has none of the four"
+look CB file has [alcohol] quarkLine = false, [magic_resistance] reductionPerLevel = 0.3, copper 10 / 1.0; CE file lost the four
+
+## SQ-CBJ4-03 | CE potions from CB, potion bucket dispenser
+> give qa minecraft:potion{Potion:"creativeengineering:long_reach"}
+> setblock {H1-4} {H2} {H3} minecraft:dispenser[facing=north]{Items:[{Slot:0b,id:"creativeengineering:potion_bucket",Count:1b,tag:{Potion:"minecraft:swiftness"}}]}
+> setblock {H1-4} {H2} {H3+1} minecraft:redstone_block
+sleep 1
+> execute positioned {H1-4} {H2} {H3-1} if entity @e[type=minecraft:area_effect_cloud,distance=..6] run say CBJ4 bucket cloud
+> execute positioned {H1-4} {H2} {H3-1} if entity @e[type=minecraft:item,distance=..3] run say CBJ4 bucket ejected
+> data get block {H1-4} {H2} {H3} Items
+expect Gave 1 +.*to qa
+expect CBJ4 bucket cloud|minecraft:bucket
+reject CBJ4 bucket ejected
+reject Unknown (item|potion)|Invalid
+
+## SQ-CBJ4-04 | effect remap from the CB file
+> effect give qa upgrade_aquatic:insomnia 30
+> effect give qa neapolitan:agility 30
+> data get entity qa ActiveEffects
+look Insomnia refused, Agility swapped to vinery:climbing_effect (Id of that effect in the ActiveEffects reply)
+
+## SQ-CBJ4-05 | copper poisoning
+> effect clear qa
+> item replace entity qa armor.head with everythingcopper:copper_helmet{state:"oxidized"}
+sleep 40
+> data get entity qa ActiveEffects
+expect Id: 19
+look poison (Id 19) applied within 40 s at interval 10, chance 1.0
+
+## SQ-CBJ4-06 | lingerification list, DragonBreathBrewing
+shell grep -E "DragonBreathBrewing|Lingerification|lingerification_list" logs/latest.log | grep -iE "error|fail|exception" | head -3; unzip -l mods/creativebrewing-1.0.0.jar | grep -c "data/creativeengineering/recipes/lingerification_list.json"
+look no error lines; the CB jar holds the lingerification list (1)
+
+## SQ-CBJ4-07 | Magic Resistance cuts magic damage by 30 % (iron golems: perfBot bots are invulnerable)
+> difficulty normal
+> summon minecraft:iron_golem {H1-12} {H2} {H3+4} {Tags:["mrC"],NoAI:1b,PersistenceRequired:1b}
+> summon minecraft:iron_golem {H1-12} {H2} {H3+8} {Tags:["mrB"],NoAI:1b,PersistenceRequired:1b}
+sleep 2
+> effect give @e[tag=mrB,limit=1] creativeengineering:magic_resistance 60 0
+> effect give @e[tag=mrC,limit=1] minecraft:instant_damage 1 0
+> effect give @e[tag=mrB,limit=1] minecraft:instant_damage 1 0
+sleep 2
+> data get entity @e[tag=mrC,limit=1] Health
+> data get entity @e[tag=mrB,limit=1] Health
+> difficulty peaceful
+expect 94\.0f
+expect 95\.8f
+
+## SQ-CBM-01 | CB startup pack
+shell grep -E "Error|creativebrewing\]|potion_area|Tool Effects|\[alcohol\]|\[food values\]|CE potions|could not install|global.trades missing|jar-startup" logs/kubejs/startup.log | cut -c1-220 | head -40
+kjsreject could not install dispenser handler
+kjsreject global\.trades missing
+look CB pack lists its startup files; [alcohol] food values set on 44 of 44 drinks; [food values] 12 effect swaps
+
+## SQ-CBM-02 | CB-registered items, effect, potion
+> give qa creativeengineering:potion_bucket
+> effect give qa creativeengineering:magic_resistance 10
+> give qa minecraft:potion{Potion:"creativeengineering:long_reach"}
+reject Unknown (item|effect)
+expect Applied effect
+expect Gave 1 +\[.*\] to qa
+
+## SQ-CBM-03 | CB recipes and ids
+shell grep -E "potion bottling done|tipped arrow|alcohol recipes|jeed_providers.js:" logs/kubejs/server.log | cut -c1-200 | head -10
+> zq recipes creativebrewing:
+sleep 5
+look bottling 1710, tipped 94 x 2 as in boot 2; recipe ids creativebrewing:<type>/...
+
+## SQ-CBM-05 | CB fluid tags
+> dumptags
+waitlog (dumptags|tags).*(done|written|wrote) 300
+shell python3 -c "import json;d=json.load(open('kubejs/exported/tags/fluid_tags.json'));print({k:v for k,v in d.items() if k in ('forge:fluid/potion','forge:fluid/dragon_breath','forge:potion')})" 2>&1 | cut -c1-600
+look create:potion in forge:fluid/potion, IE potion fluid not; dragon's breath in the second
+
+## SQ-CBM-06 | tool and armor effects
+> effect clear qa
+> item replace entity qa weapon.mainhand with dragonloot:dragon_sword
+> item replace entity qa armor.head with create_deep_dark:echo_armor_helmet
+> item replace entity qa armor.chest with create_deep_dark:echo_armor_chestplate
+> item replace entity qa armor.legs with create_deep_dark:echo_armor_leggings
+> item replace entity qa armor.feet with create_deep_dark:echo_armor_boots
+sleep 8
+> data get entity qa ActiveEffects
+look held and set effects present (compare tool_effects / armor_effects rows for the two)
+
+## SQ-CDS-01 | sample syringe
+shell grep -E "sample_syringe|Error" logs/kubejs/startup.log | head -5 | cut -c1-200
+> give qa creativeengineering:cow_sample_syringe
+> give qa creativeengineering:sample_syringe
+reject Unknown item
+look both syringes exist (sampling a cow is a client / bot-use check)
+
+## SQ-CDS-02 | CD kitchen tags (dumptags of SQ-CBM-05)
+shell python3 $INST/tools/scratch_query/tag_diff.py $INST/perf/runs/rcs234/boot2_tags kubejs/exported/tags block:creativeengineering:oven_heat_sources block:farmersdelight:heat_sources block:minecraft:mineable/shovel block:creativeengineering:crops/farmland_soils item:creativeengineering:hoe_harvest/5x5 item:forge:storage_blocks/sourdough
+look same contents as boot 2 (heat_sources has the oven only after wave 4 if the oven moved: judge the diff)
+
+## SQ-CDS-03 | CD fluid and fishing tags
+shell python3 $INST/tools/scratch_query/tag_diff.py $INST/perf/runs/rcs234/boot2_tags kubejs/exported/tags fluid:forge:fluid/tea fluid:forge:fluid/honey block:creativeengineering:fishing_net/kelp
+look same contents as boot 2
+
+## SQ-CDS-04 | mining tiers (harvest.js now in CD)
+shell python3 $INST/tools/scratch_query/tag_diff.py $INST/perf/runs/rcs234/boot2_tags kubejs/exported/tags block:creativeengineering:needs_copper_tool block:minecraft:needs_iron_tool block:minecraft:needs_stone_tool block:minecraft:needs_diamond_tool
+look same contents as boot 2
+
+## SQ-CDJ4-01 | CD mixins
+bootreject creativedelight\.mixins\.json.*(Error|error|failed)
+shell grep -c "from creativedelight.mixins.json" logs/debug.log; grep -o "Mixing [A-Za-z_.]* from creativedelight.mixins.json" logs/debug.log | sed 's/Mixing //;s/ from.*//' | sort -u > cd_mx.txt; wc -l < cd_mx.txt; echo "also from CE:"; grep -o "Mixing [A-Za-z_.]* from creativeengineering.mixins.json" logs/debug.log | sed 's/Mixing //;s/ from.*//' | sort -u | comm -12 - cd_mx.txt; rm -f cd_mx.txt
+look the moved common mixins apply from creativedelight.mixins.json, none also from creativeengineering.mixins.json
+
+## SQ-CDJ4-02 | CD sections merged
+bootexpect \[swaps\] config sections .*canning.* merged from creativeengineering-common.toml into creativedelight-common.toml
+shell grep -E "\[swaps\] config sections" logs/latest.log | cut -c60-300; grep -nE "^\s*\[|emptyCanChance|troughMissCooldownTicks" config/creativedelight-common.toml; echo "CD [perf] keys:"; awk '/^\[perf\]/{f=1;next} /^\[/{f=0} f && /=/' config/creativedelight-common.toml; echo CE:; grep -nE "^\[(crop_growth|dandelion_maturing|crop_drops|stem_fruit|canning|cooking)\]" config/creativeengineering-common.toml || echo "CE has none of the six"; grep -n "troughMissCooldownTicks" config/creativeengineering-common.toml || echo "CE has no troughMissCooldownTicks"
+look merge names the six sections and perf; CD file emptyCanChance = 0.5, [perf] only troughMissCooldownTicks = 300; CE lost them
+
+## SQ-CDJ4-03 | CD members, nested Baby Mobs and Incubation Additions
+bootexpect \[creativedelight\] members: .*baby_mobs, incubation_additions
+bootreject is loaded from .* not from the Creative Delight jar
+shell grep -E "\[creativedelight\] members" logs/latest.log | cut -c60-400; ls mods | grep -iE "babymobs|incubationAdditions" || echo "no standalone jars"
+
+## SQ-CDJ4-04 | oven from CD
+> setblock {H1-8} {H2} {H3} minecraft:campfire[lit=true]
+> setblock {H1-8} {H2+1} {H3} creativeengineering:oven
+> data get block {H1-8} {H2+1} {H3}
+> give qa creativeengineering:oven
+> give qa creativeengineering:powdered_sugar_bucket
+reject Unknown (block|item)
+expect has the following block data
+shell grep -iE "missing.*(oven|powdered_sugar_block|placed_)|Registry Object not present" logs/latest.log | head -3
+
+## SQ-CDJ4-05 | NCH.cfg finds CDConfig
+shell grep -E "NCH.cfg\] (no .*COOKING|no .*CROP_DROPS|creativedelight:)" logs/kubejs/server.log | head -5 | cut -c1-200; grep "creativedelight config class" logs/kubejs/server.log | head -2 | cut -c1-200; grep -cE "section in any registered config" logs/kubejs/server.log
+kjsreject no COOKING section|no CROP_DROPS section
+look no missing-section WARN; overrides name creativedelight:
+
+## SQ-CDJ4-07 | lunchbox serializers
+> give qa solapplepie:lunchbag
+> zq recipes creativeengineering:lunchbox
+sleep 5
+shell grep -E "lunchbox" logs/latest.log | grep -iE "error|unknown|serializer" | head -3 | cut -c1-200
+look lunchbox recipes present (zq lists them), no unknown serializer
+
+## SQ-CDJ4-08 | nested member content
+> fill {H1-1} {H2} {H3+9} {H1+1} {H2+1} {H3+11} minecraft:water
+> summon minecraft:squid {H1} {H2} {H3+10} {Age:-24000,Tags:["cdj4sq"],PersistenceRequired:1b}
+> data get entity @e[type=minecraft:squid,tag=cdj4sq,limit=1] Age
+> give qa incubation_additions:emu_nest
+reject Unknown item
+expect has the following entity data: -2
+look baby squid keeps its negative Age; nest item exists
+
+## SQ-CDJ4-06 | soil yield and crop drops after /reload (last: /reload truncates server.log)
+> reload
+waitlog (Reloaded|reload) 180
+sleep 15
+shell grep -iE "soil_yield|crop_drops|no switch in CDConfig" logs/kubejs/server.log | head -5 | cut -c1-200; grep -cE "Error occurred while handling event|ReferenceError" logs/kubejs/server.log
+kjsreject no switch in CDConfig
+
+## SQ-CBM-04 | wandering trades after /reload
+shell grep "wandering trades" logs/kubejs/server.log | cut -c1-200
+kjsexpect \[wandering trades\] common 208, rare 39
+kjsexpect \[wandering trades\] winemaker 34

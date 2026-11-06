@@ -1,0 +1,7 @@
+{
+  "parent": "cookingforblockheads:block/fruit_basket",
+  "textures": {
+    "particle": "creativedelight:block/fruit_basket/dreamwood",
+    "texture": "creativedelight:block/fruit_basket/dreamwood"
+  }
+}

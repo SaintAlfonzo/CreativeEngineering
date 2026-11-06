@@ -1,0 +1,19 @@
+// backportedBarbeques: Barbeque's Delight 1.3.0 (lcy0x1, NeoForge 1.21.1, LGPL-2.1) ported to Forge 1.19.2 as plain Forge
+// (no Registrate or L2 libraries), mod id barbequesdelight, nested in Creative Delight (feature_writeup/barbeques_delight.md 4).
+// Shared Forge setup comes from build-logic/src/main/groovy/ce.forge-mod.gradle.
+// Build from the instance root (`./gradlew :backportedBarbeques:build`); it ships through `:creativeDelight:installToMods`.
+plugins {
+    id 'ce.forge-mod'
+}
+
+dependencies {
+    // Farmer's Delight: heat sources (HeatableBlockEntity), skillet sounds, steam particles, Nourishment, cutting board,
+    // the creative tab. flatDir notation: 'local:<file name without -version>:<version>'
+    compileOnly fg.deobf('local:FarmersDelight-1.19.2:1.2.4')
+    // Optional: the Skewering and Grilling categories (compat/jei). Only loaded by JEI.
+    compileOnly fg.deobf('local:jei-1.19.2-forge:11.8.1.1034')
+    // Optional: the grill progress lines (compat/wthit, the Jade tooltip ported). Only loaded by WTHIT.
+    compileOnly files(rootProject.file('development/creativeCommon/libs/wthit-1.19.2-forge-5.36.1.jar'))
+    // The pack rain rule for the grill campfire (campfire.CampfireRainInfo: tags and Creative Compat's config readers).
+    compileOnly project(':creativeCommon')
+}

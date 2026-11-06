@@ -12,7 +12,7 @@ Written 2026-10-21 from [todo/TODO.md](../todo/TODO.md) `# worldgen`, Sub `biome
 |---|---|---|---|
 | #3 flower changes need a rerun | Planned | make `gen_nether_worldgen.py` rerun (or flag) the flower snapshot | **first**: a small tool change, and #2 is the next run that would hit it |
 | #2 frostfire caves (B12) | Planned | decide, then two `features` rules and one generator run | **second** |
-| #4 no glowstone in the Overworld | Planned | close the two blind spots (processors, a real-world census), then act on anything found | **third**; mostly verification, the known sources are already fixed |
+| #4 no glowstone in the Overworld | Testing | built 2026-11-02: processor pass in the scan (none puts out glowstone), `tools/block_census.py`; static result clean, no data change; NW-21 (census on a fresh world) queued | done |
 | #1 | Testing | NW-01 to NW-05, NW-08, NW-09 | listed at the end |
 
 Related: `structures/netherblockswap #3` (soul lanterns in structures: same lantern choice as B12, decide
@@ -147,7 +147,7 @@ No soul fire or soul lanterns generated in Terralith's frostfire caves (or an ex
 
 ## biomes/netherblocks #4: No glowstone in the Overworld
 
-Status Planned · Work data / patcherMod · TODO `worldgen / biomes/netherblocks #4`
+Status Testing (Build 1 and 2 done 2026-11-02, step 3 is NW-21; nothing found, so step 4 not needed; step 5 in [nether_worldgen.md](../nether_worldgen.md) 0, 1.1, 6, 7) · Work data / patcherMod · TODO `worldgen / biomes/netherblocks #4`
 
 ### Goal
 

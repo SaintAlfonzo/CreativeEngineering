@@ -1,0 +1,6 @@
+// repackedCreateSalt: Create: The Salt 1.19.2-1.1.0 repacked for Creative Delight. Everything is in
+// build-logic/src/main/groovy/ce.forge-repack.gradle and gradle.properties; the overlay is src/ (mods.toml only).
+// Build: ./gradlew :repackedCreateSalt:build --offline (ships only inside :creativeDelight:bundleJar).
+plugins {
+    id 'ce.forge-repack'
+}

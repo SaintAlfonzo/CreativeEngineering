@@ -11,7 +11,7 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 
 /**
  * Placeable treated sticks (feature_writeup/treated_sticks.md): Item#useOn of Immersive Engineering's treated stick
- * places {@code creative_delight:treated_stick}. useOn runs only after the clicked block's own use passed, the same
+ * places {@code creativedelight:treated_stick}. useOn runs only after the clicked block's own use passed, the same
  * order as Supplementaries' placeable sticks. IE's item class (IEBaseItem) has no useOn of its own.
  */
 @Mixin(Item.class)

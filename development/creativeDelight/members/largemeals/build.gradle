@@ -1,0 +1,11 @@
+// backportedLargeMeals: Large Meals 1.3.0 ported to Forge 1.19.2 (mod id largemeals), nested in Creative Delight.
+// Shared Forge setup comes from build-logic/src/main/groovy/ce.forge-mod.gradle.
+// Build from the instance root (`./gradlew :backportedLargeMeals:build`); it ships through `:creativeDelight:installToMods`.
+plugins {
+    id 'ce.forge-mod'
+}
+
+dependencies {
+    // Farmer's Delight: FeastBlock, ConsumableItem and its effects (Comfort, Nourishment).
+    compileOnly fg.deobf('local:FarmersDelight-1.19.2:1.2.4')
+}

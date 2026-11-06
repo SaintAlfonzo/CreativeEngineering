@@ -13,7 +13,7 @@ public class CreativeEngineering {
 
     public CreativeEngineering() {
         ModLoadingContext.get().registerConfig(ModConfig.Type.COMMON, CEConfig.COMMON_SPEC, "rbtest-common.toml");
-        com.SaintAlfonzo.creativeengineering.oven.OvenRegistry.register(FMLJavaModLoadingContext.get().getModEventBus());
-        MinecraftForge.EVENT_BUS.register(com.SaintAlfonzo.creativeengineering.cooking.RemainderBufferStorage.class);
+        com.SaintAlfonzo.creativedelight.oven.OvenRegistry.register(FMLJavaModLoadingContext.get().getModEventBus());
+        MinecraftForge.EVENT_BUS.register(com.SaintAlfonzo.creativedelight.cooking.RemainderBufferStorage.class);
     }
 }
