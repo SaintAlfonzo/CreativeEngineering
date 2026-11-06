@@ -24,7 +24,7 @@ var ZLP_pending = null
 function zlpCfg() {
 	var out = {}
 	try {
-		var ce = Java.loadClass('com.SaintAlfonzo.creativeengineering.CEConfig').LEAF_DECAY
+		var ce = Java.loadClass('com.SaintAlfonzo.creativeworldgen.CWGConfig').LEAF_DECAY
 		out.enabled = ce.enabled.get(); out.onlyWhenDisturbed = ce.onlyWhenDisturbed.get(); out.leafPiles = ce.leafPiles.get()
 	} catch (e) { out.ceErr = String(e) }
 	try {

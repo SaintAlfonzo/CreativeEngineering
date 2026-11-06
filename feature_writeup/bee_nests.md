@@ -157,10 +157,10 @@ Brief: [briefs/mobs_bees.md](briefs/mobs_bees.md). Nothing here is built.
 - [kubejs/generation_scripts/worldgen/bee_nests.json](../kubejs/generation_scripts/worldgen/bee_nests.json): the rules
 - [kubejs/server_scripts/worldgen/bee_nests.js](../kubejs/server_scripts/worldgen/bee_nests.js): tags, modifier, tree features, load check
 - [kubejs/server_scripts/_lib/dump_bee_nests.js](../kubejs/server_scripts/_lib/dump_bee_nests.js): `/dumpbeenests [reset]`
-- [development/patcherMod/.../worldgen/BeeNests.java](../development/patcherMod/src/main/java/com/SaintAlfonzo/creativeengineering/worldgen/BeeNests.java): modifier type, rule fold, decorator swap, counters, dump writer
-- [TreeFeatureBeeNestsMixin.java](../development/patcherMod/src/main/java/com/SaintAlfonzo/creativeengineering/mixin/TreeFeatureBeeNestsMixin.java),
-  [BeehiveDecoratorBeeNestsMixin.java](../development/patcherMod/src/main/java/com/SaintAlfonzo/creativeengineering/mixin/BeehiveDecoratorBeeNestsMixin.java),
-  [ChunkGeneratorBeeNestsMixin.java](../development/patcherMod/src/main/java/com/SaintAlfonzo/creativeengineering/mixin/ChunkGeneratorBeeNestsMixin.java)
+- [development/creativeCommon/.../worldgen/BeeNests.java](../development/creativeCommon/src/main/java/com/SaintAlfonzo/creativecommon/worldgen/BeeNests.java): modifier type, rule fold, decorator swap, counters, dump writer
+- [TreeFeatureBeeNestsMixin.java](../development/creativeCommon/src/main/java/com/SaintAlfonzo/creativecommon/mixin/TreeFeatureBeeNestsMixin.java),
+  [BeehiveDecoratorBeeNestsMixin.java](../development/creativeCommon/src/main/java/com/SaintAlfonzo/creativecommon/mixin/BeehiveDecoratorBeeNestsMixin.java),
+  [ChunkGeneratorBeeNestsMixin.java](../development/creativeCommon/src/main/java/com/SaintAlfonzo/creativecommon/mixin/ChunkGeneratorBeeNestsMixin.java)
 - [tools/gen_bee_nests.py](../tools/gen_bee_nests.py) -> [bee_nests_by_biome.md](bee_nests_by_biome.md); `/cegen run bee_nests`
 - [tools/test_bee_nests.sh](../tools/test_bee_nests.sh), [tools/bee_nests_test/](../tools/bee_nests_test/)
 - CEConfig `[worldgen.systems] beeNests` (`CEConfig.java`, `WorldgenConfig.beeNestsEnabled()`)

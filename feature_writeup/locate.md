@@ -37,7 +37,7 @@ classes and Async Locator 1.3.0; decisions in 4)
 **Knobs:** `config/creativeengineering-common.toml`
 - `[worldgen.locate]`: `foldPlacement` (true), `foldBiomes` (true), `nonBlockingLoads` (true), `threadSafeStructureCheck`
   (true, read when a dimension loads), `logMissesAtLeast` (8; 0 = every search, -1 = never), `batchRadius` (100 chunks),
-  `batchTimeoutSeconds` (120), `censusRegionChunks` (32), `loadTimeoutSeconds` (300), `searchTimeoutSeconds` (300 since 2026-10-30, was 120; 3.5; structure_tuning.md 3.27).
+  `batchTimeoutSeconds` (120), `censusRegionChunks` (32), `loadTimeoutSeconds` (300), `searchTimeoutSeconds` (120 since 2026-11-02; 300 from 2026-10-30, 120 before; 3.5; structure_tuning.md 3.27).
 - `[worldgen.distant]`: `clip` (true), `clipBelowY` (48, rounded down to a multiple of 16), `oceanFloorY` (48),
   `deepOceanFloorY` (8), `floorVariation` (4), `floorScale` (24 blocks), `skipFeatures` (true).
   The clip and the feature skip apply in the Overworld only (since 2026-10-30, TODO `locate #4`): the Nether and the End
@@ -394,16 +394,16 @@ never drawn, so a flat floor at 48 is invisible. But the DH toml is a player con
   `createStructures`), `Structure#generate` / `isValidBiome`, `JigsawPlacement#addPieces`,
   `ServerChunkCache#getChunk` / `getChunkFuture`.
 - Async Locator: `brightspark.asynclocator.AsyncLocator`, `AsyncLocatorConfigForge`, `logic/LocateCommandLogic`.
-- Pack, existing: [StructureCheckFrequencyMixin](../development/patcherMod/src/main/java/com/SaintAlfonzo/creativeengineering/mixin/StructureCheckFrequencyMixin.java),
-  [StructureCheckMetaMixin](../development/patcherMod/src/main/java/com/SaintAlfonzo/creativeengineering/mixin/StructureCheckMetaMixin.java),
-  [ChunkGeneratorMetaLocateMixin](../development/patcherMod/src/main/java/com/SaintAlfonzo/creativeengineering/mixin/ChunkGeneratorMetaLocateMixin.java),
-  [ChunkGeneratorLocateMixin](../development/patcherMod/src/main/java/com/SaintAlfonzo/creativeengineering/mixin/ChunkGeneratorLocateMixin.java),
-  [MetaSlots](../development/patcherMod/src/main/java/com/SaintAlfonzo/creativeengineering/worldgen/MetaSlots.java) (`predictGenerationPoint`, `fits`, `locateAt`),
-  [StructureBiomeRules](../development/patcherMod/src/main/java/com/SaintAlfonzo/creativeengineering/worldgen/StructureBiomeRules.java),
-  [EarthFill](../development/patcherMod/src/main/java/com/SaintAlfonzo/creativeengineering/worldgen/EarthFill.java),
-  [PlacementPriority](../development/patcherMod/src/main/java/com/SaintAlfonzo/creativeengineering/worldgen/PlacementPriority.java),
-  [AsyncMapTrades](../development/patcherMod/src/main/java/com/SaintAlfonzo/creativeengineering/compat/AsyncMapTrades.java).
-- Pack, built 2026-10-12 (under `development/patcherMod/.../creativeengineering/`): `worldgen/LocatePrediction`, `LocateLoads`,
+- Pack, existing: [StructureCheckFrequencyMixin](../development/creativeCommon/src/main/java/com/SaintAlfonzo/creativecommon/mixin/StructureCheckFrequencyMixin.java),
+  [StructureCheckMetaMixin](../development/creativeCommon/src/main/java/com/SaintAlfonzo/creativecommon/mixin/StructureCheckMetaMixin.java),
+  [ChunkGeneratorMetaLocateMixin](../development/creativeCommon/src/main/java/com/SaintAlfonzo/creativecommon/mixin/ChunkGeneratorMetaLocateMixin.java),
+  [ChunkGeneratorLocateMixin](../development/creativeCommon/src/main/java/com/SaintAlfonzo/creativecommon/mixin/ChunkGeneratorLocateMixin.java),
+  [MetaSlots](../development/creativeCommon/src/main/java/com/SaintAlfonzo/creativecommon/worldgen/MetaSlots.java) (`predictGenerationPoint`, `fits`, `locateAt`),
+  [StructureBiomeRules](../development/creativeCommon/src/main/java/com/SaintAlfonzo/creativecommon/worldgen/StructureBiomeRules.java),
+  [EarthFill](../development/creativeCommon/src/main/java/com/SaintAlfonzo/creativecommon/worldgen/EarthFill.java),
+  [PlacementPriority](../development/creativeCommon/src/main/java/com/SaintAlfonzo/creativecommon/worldgen/PlacementPriority.java),
+  [AsyncMapTrades](../development/creativeCommon/src/main/java/com/SaintAlfonzo/creativecommon/compat/AsyncMapTrades.java).
+- Pack, built 2026-10-12 (under `development/creativeCommon/.../creativeengineering/`): `worldgen/LocatePrediction`, `LocateLoads`,
   `LocateStats`, `LocateCommand`, `LocateCensus`, `LocateReflect`, `DistantClip`, `compat/AsyncLocatorBridge`;
   `mixin/StructureCheckThreadSafeMixin`, `NoiseBasedChunkGeneratorDistantClipMixin`, `NoiseChunkDistantClipMixin`,
   `ConfiguredFeatureDistantClipMixin`. Open work: [briefs/worldgen_locate.md](briefs/worldgen_locate.md).

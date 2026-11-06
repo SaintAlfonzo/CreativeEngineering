@@ -1,0 +1,10 @@
+{
+  "description": "Burning and hot-block ticks. inFire covers fire and soul fire, campfires (vanilla and Tinted Campfires), Decorative Blocks bonfires and braziers, Vinery burning log piles and hot Salt cauldrons; hotFloor covers magma blocks, Immersive Weathering nulch and the Immersive Petroleum flarestack top; the stove id covers Farmer's Delight and Nether's Delight stoves, and #creativedelight:stoves (Creative Delight) the Ender's Delight endstone stove. Shields only attempt these on tiers with [shields.<tier>].blocksBurnTicks = true (netherite and above by default). An ownerless fireball also uses the onFire id; projectiles never count as ticks. Lava and Create fan fire are deliberately not here and keep using the tier's fire percentage.",
+  "values": [
+    "onFire",
+    "inFire",
+    "hotFloor",
+    "farmersdelight.stove",
+    "#creativedelight:stoves"
+  ]
+}

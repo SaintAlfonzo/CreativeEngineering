@@ -1,0 +1,25 @@
+{
+  "_comment": "Item merge list (swap lists 'merges', SwapLists.java; feature_writeup/item_merges.md 6): both items stay registered; the old one is purged and the survivor takes over its recipes, loot and tags (CD startup script creativedelight/swap_merges.js) and every stack of it in the world (Common swap/ItemMerges). Applied only while every 'requires' mod is loaded. Never prune: an old world whose old item is later unregistered is remapped from this list. Cantaloupe: Fruits Delight's hamimelon slice, popsicle and the generated can go into Delightful's cantaloupe ones (item_merges.md 2.10); Fruits Delight's apple tree goes into Vinery's (2.11).",
+  "requires": [
+    "fruitsdelight",
+    "delightful",
+    "vinery"
+  ],
+  "merges": {
+    "delightful:cantaloupe_slice": [
+      "fruitsdelight:hamimelon_slice"
+    ],
+    "delightful:cantaloupe_popsicle": [
+      "fruitsdelight:hamimelon_popsicle"
+    ],
+    "creativeengineering:canned_cantaloupe": [
+      "creativeengineering:canned_hamimelon"
+    ],
+    "vinery:apple_tree_sapling": [
+      "fruitsdelight:apple_sapling"
+    ],
+    "vinery:apple_leaves": [
+      "fruitsdelight:apple_leaves"
+    ]
+  }
+}

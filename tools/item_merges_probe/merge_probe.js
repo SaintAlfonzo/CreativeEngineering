@@ -47,9 +47,9 @@
             let rm = server.getRecipeManager()
 
             // SQ-MG-01: the new cider recipes parsed (a bad custom json is dropped at load, so present = parsed)
-            ;['creative_delight:createmixing/long_apple_cider', 'creative_delight:createmixing/strong_apple_cider',
-              'creative_delight:iemixer/apple_cider', 'creative_delight:iemixer/long_apple_cider',
-              'creative_delight:iemixer/strong_apple_cider'].forEach(id => {
+            ;['creativedelight:createmixing/long_apple_cider', 'creativedelight:createmixing/strong_apple_cider',
+              'creativedelight:iemixer/apple_cider', 'creativedelight:iemixer/long_apple_cider',
+              'creativedelight:iemixer/strong_apple_cider'].forEach(id => {
                 let r = recipe(rm, id)
                 check('SQ-MG-01 loaded ' + id, r != null, r == null ? 'missing' : String($MGForgeReg.RECIPE_SERIALIZERS.getKey(r.getSerializer())))
             })

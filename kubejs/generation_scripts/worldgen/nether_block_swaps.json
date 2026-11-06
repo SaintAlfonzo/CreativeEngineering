@@ -4,6 +4,480 @@
   "entries": "template id -> [{pos, from, to}], the same format as meat_block_swaps.json; applied by patcherMod worldgen/TemplateBlockSwaps when the template loads, only where the template still has `from` at `pos`."
  },
  "templates": {
+  "betterdeserttemples:main_entrance_doorway/main_entrance_doorway_0": [
+   {
+    "pos": [
+     17,
+     1,
+     4
+    ],
+    "from": "minecraft:crimson_slab",
+    "to": {
+     "Name": "minecraft:mangrove_slab",
+     "Properties": {
+      "waterlogged": "false",
+      "type": "top"
+     }
+    }
+   },
+   {
+    "pos": [
+     17,
+     1,
+     6
+    ],
+    "from": "minecraft:crimson_slab",
+    "to": {
+     "Name": "minecraft:mangrove_slab",
+     "Properties": {
+      "waterlogged": "false",
+      "type": "top"
+     }
+    }
+   },
+   {
+    "pos": [
+     15,
+     2,
+     5
+    ],
+    "from": "minecraft:crimson_slab",
+    "to": {
+     "Name": "minecraft:mangrove_slab",
+     "Properties": {
+      "waterlogged": "false",
+      "type": "top"
+     }
+    }
+   },
+   {
+    "pos": [
+     16,
+     2,
+     5
+    ],
+    "from": "minecraft:crimson_slab",
+    "to": {
+     "Name": "minecraft:mangrove_slab",
+     "Properties": {
+      "waterlogged": "false",
+      "type": "bottom"
+     }
+    }
+   },
+   {
+    "pos": [
+     13,
+     3,
+     5
+    ],
+    "from": "minecraft:crimson_slab",
+    "to": {
+     "Name": "minecraft:mangrove_slab",
+     "Properties": {
+      "waterlogged": "false",
+      "type": "bottom"
+     }
+    }
+   },
+   {
+    "pos": [
+     14,
+     3,
+     5
+    ],
+    "from": "minecraft:crimson_slab",
+    "to": {
+     "Name": "minecraft:mangrove_slab",
+     "Properties": {
+      "waterlogged": "false",
+      "type": "bottom"
+     }
+    }
+   }
+  ],
+  "betterdeserttemples:puzzle_big/puzzle_big_4_0": [
+   {
+    "pos": [
+     6,
+     10,
+     2
+    ],
+    "from": "minecraft:warped_pressure_plate",
+    "to": {
+     "Name": "minecraft:dark_oak_pressure_plate",
+     "Properties": {
+      "powered": "false"
+     }
+    }
+   },
+   {
+    "pos": [
+     6,
+     10,
+     4
+    ],
+    "from": "minecraft:warped_pressure_plate",
+    "to": {
+     "Name": "minecraft:dark_oak_pressure_plate",
+     "Properties": {
+      "powered": "false"
+     }
+    }
+   },
+   {
+    "pos": [
+     6,
+     10,
+     6
+    ],
+    "from": "minecraft:warped_pressure_plate",
+    "to": {
+     "Name": "minecraft:dark_oak_pressure_plate",
+     "Properties": {
+      "powered": "false"
+     }
+    }
+   },
+   {
+    "pos": [
+     6,
+     10,
+     8
+    ],
+    "from": "minecraft:warped_pressure_plate",
+    "to": {
+     "Name": "minecraft:dark_oak_pressure_plate",
+     "Properties": {
+      "powered": "false"
+     }
+    }
+   }
+  ],
+  "betterdeserttemples:puzzle_big/puzzle_big_4_1": [
+   {
+    "pos": [
+     6,
+     10,
+     2
+    ],
+    "from": "minecraft:warped_pressure_plate",
+    "to": {
+     "Name": "minecraft:dark_oak_pressure_plate",
+     "Properties": {
+      "powered": "false"
+     }
+    }
+   },
+   {
+    "pos": [
+     6,
+     10,
+     4
+    ],
+    "from": "minecraft:warped_pressure_plate",
+    "to": {
+     "Name": "minecraft:dark_oak_pressure_plate",
+     "Properties": {
+      "powered": "false"
+     }
+    }
+   },
+   {
+    "pos": [
+     6,
+     10,
+     6
+    ],
+    "from": "minecraft:warped_pressure_plate",
+    "to": {
+     "Name": "minecraft:dark_oak_pressure_plate",
+     "Properties": {
+      "powered": "false"
+     }
+    }
+   },
+   {
+    "pos": [
+     6,
+     10,
+     8
+    ],
+    "from": "minecraft:warped_pressure_plate",
+    "to": {
+     "Name": "minecraft:dark_oak_pressure_plate",
+     "Properties": {
+      "powered": "false"
+     }
+    }
+   }
+  ],
+  "betterdeserttemples:puzzle_big/puzzle_big_4_2": [
+   {
+    "pos": [
+     6,
+     10,
+     2
+    ],
+    "from": "minecraft:warped_pressure_plate",
+    "to": {
+     "Name": "minecraft:dark_oak_pressure_plate",
+     "Properties": {
+      "powered": "false"
+     }
+    }
+   },
+   {
+    "pos": [
+     6,
+     10,
+     4
+    ],
+    "from": "minecraft:warped_pressure_plate",
+    "to": {
+     "Name": "minecraft:dark_oak_pressure_plate",
+     "Properties": {
+      "powered": "false"
+     }
+    }
+   },
+   {
+    "pos": [
+     6,
+     10,
+     6
+    ],
+    "from": "minecraft:warped_pressure_plate",
+    "to": {
+     "Name": "minecraft:dark_oak_pressure_plate",
+     "Properties": {
+      "powered": "false"
+     }
+    }
+   },
+   {
+    "pos": [
+     6,
+     10,
+     8
+    ],
+    "from": "minecraft:warped_pressure_plate",
+    "to": {
+     "Name": "minecraft:dark_oak_pressure_plate",
+     "Properties": {
+      "powered": "false"
+     }
+    }
+   }
+  ],
+  "betterdeserttemples:puzzle_big/puzzle_big_4_3": [
+   {
+    "pos": [
+     6,
+     10,
+     2
+    ],
+    "from": "minecraft:warped_pressure_plate",
+    "to": {
+     "Name": "minecraft:dark_oak_pressure_plate",
+     "Properties": {
+      "powered": "false"
+     }
+    }
+   },
+   {
+    "pos": [
+     6,
+     10,
+     4
+    ],
+    "from": "minecraft:warped_pressure_plate",
+    "to": {
+     "Name": "minecraft:dark_oak_pressure_plate",
+     "Properties": {
+      "powered": "false"
+     }
+    }
+   },
+   {
+    "pos": [
+     6,
+     10,
+     6
+    ],
+    "from": "minecraft:warped_pressure_plate",
+    "to": {
+     "Name": "minecraft:dark_oak_pressure_plate",
+     "Properties": {
+      "powered": "false"
+     }
+    }
+   },
+   {
+    "pos": [
+     6,
+     10,
+     8
+    ],
+    "from": "minecraft:warped_pressure_plate",
+    "to": {
+     "Name": "minecraft:dark_oak_pressure_plate",
+     "Properties": {
+      "powered": "false"
+     }
+    }
+   }
+  ],
+  "betterdeserttemples:puzzle_big/puzzle_big_4_4": [
+   {
+    "pos": [
+     6,
+     10,
+     2
+    ],
+    "from": "minecraft:warped_pressure_plate",
+    "to": {
+     "Name": "minecraft:dark_oak_pressure_plate",
+     "Properties": {
+      "powered": "false"
+     }
+    }
+   },
+   {
+    "pos": [
+     6,
+     10,
+     4
+    ],
+    "from": "minecraft:warped_pressure_plate",
+    "to": {
+     "Name": "minecraft:dark_oak_pressure_plate",
+     "Properties": {
+      "powered": "false"
+     }
+    }
+   },
+   {
+    "pos": [
+     6,
+     10,
+     6
+    ],
+    "from": "minecraft:warped_pressure_plate",
+    "to": {
+     "Name": "minecraft:dark_oak_pressure_plate",
+     "Properties": {
+      "powered": "false"
+     }
+    }
+   },
+   {
+    "pos": [
+     6,
+     10,
+     8
+    ],
+    "from": "minecraft:warped_pressure_plate",
+    "to": {
+     "Name": "minecraft:dark_oak_pressure_plate",
+     "Properties": {
+      "powered": "false"
+     }
+    }
+   }
+  ],
+  "betterdeserttemples:puzzle_big/puzzle_big_4_5": [
+   {
+    "pos": [
+     6,
+     10,
+     2
+    ],
+    "from": "minecraft:warped_pressure_plate",
+    "to": {
+     "Name": "minecraft:dark_oak_pressure_plate",
+     "Properties": {
+      "powered": "false"
+     }
+    }
+   },
+   {
+    "pos": [
+     6,
+     10,
+     4
+    ],
+    "from": "minecraft:warped_pressure_plate",
+    "to": {
+     "Name": "minecraft:dark_oak_pressure_plate",
+     "Properties": {
+      "powered": "false"
+     }
+    }
+   },
+   {
+    "pos": [
+     6,
+     10,
+     6
+    ],
+    "from": "minecraft:warped_pressure_plate",
+    "to": {
+     "Name": "minecraft:dark_oak_pressure_plate",
+     "Properties": {
+      "powered": "false"
+     }
+    }
+   },
+   {
+    "pos": [
+     6,
+     10,
+     8
+    ],
+    "from": "minecraft:warped_pressure_plate",
+    "to": {
+     "Name": "minecraft:dark_oak_pressure_plate",
+     "Properties": {
+      "powered": "false"
+     }
+    }
+   }
+  ],
+  "betterdeserttemples:statues/statue_2": [
+   {
+    "pos": [
+     1,
+     4,
+     2
+    ],
+    "from": "minecraft:crimson_button",
+    "to": {
+     "Name": "minecraft:mangrove_button",
+     "Properties": {
+      "face": "wall",
+      "powered": "false",
+      "facing": "west"
+     }
+    }
+   },
+   {
+    "pos": [
+     2,
+     4,
+     1
+    ],
+    "from": "minecraft:crimson_button",
+    "to": {
+     "Name": "minecraft:mangrove_button",
+     "Properties": {
+      "face": "wall",
+      "powered": "false",
+      "facing": "north"
+     }
+    }
+   }
+  ],
   "betterdungeons:skeleton_dungeon/skeleton_shell": [
    {
     "pos": [
@@ -1107,6 +1581,25 @@
     }
    }
   ],
+  "betterdungeons:zombie_dungeon/zombie_start": [
+   {
+    "pos": [
+     12,
+     2,
+     16
+    ],
+    "from": "minecraft:warped_stairs",
+    "to": {
+     "Name": "minecraft:dark_oak_stairs",
+     "Properties": {
+      "half": "bottom",
+      "waterlogged": "false",
+      "shape": "straight",
+      "facing": "south"
+     }
+    }
+   }
+  ],
   "betterjungletemples:challenge_room/challenge_room_water_parkour": [
    {
     "pos": [
@@ -1722,6 +2215,396 @@
       "north": "none",
       "west": "none",
       "up": "true"
+     }
+    }
+   }
+  ],
+  "betterstrongholds:rooms/junction_md": [
+   {
+    "pos": [
+     8,
+     10,
+     2
+    ],
+    "from": "minecraft:crimson_button",
+    "to": {
+     "Name": "minecraft:mangrove_button",
+     "Properties": {
+      "face": "wall",
+      "powered": "false",
+      "facing": "west"
+     }
+    }
+   },
+   {
+    "pos": [
+     10,
+     10,
+     2
+    ],
+    "from": "minecraft:crimson_button",
+    "to": {
+     "Name": "minecraft:mangrove_button",
+     "Properties": {
+      "face": "wall",
+      "powered": "false",
+      "facing": "east"
+     }
+    }
+   }
+  ],
+  "betterstrongholds:rooms/mess": [
+   {
+    "pos": [
+     2,
+     5,
+     8
+    ],
+    "from": "minecraft:crimson_button",
+    "to": {
+     "Name": "minecraft:mangrove_button",
+     "Properties": {
+      "face": "wall",
+      "powered": "false",
+      "facing": "north"
+     }
+    }
+   },
+   {
+    "pos": [
+     2,
+     5,
+     10
+    ],
+    "from": "minecraft:crimson_button",
+    "to": {
+     "Name": "minecraft:mangrove_button",
+     "Properties": {
+      "face": "wall",
+      "powered": "false",
+      "facing": "south"
+     }
+    }
+   }
+  ],
+  "betterstrongholds:starts/junction_lg": [
+   {
+    "pos": [
+     14,
+     10,
+     2
+    ],
+    "from": "minecraft:crimson_button",
+    "to": {
+     "Name": "minecraft:mangrove_button",
+     "Properties": {
+      "face": "wall",
+      "powered": "false",
+      "facing": "west"
+     }
+    }
+   },
+   {
+    "pos": [
+     14,
+     10,
+     28
+    ],
+    "from": "minecraft:crimson_button",
+    "to": {
+     "Name": "minecraft:mangrove_button",
+     "Properties": {
+      "face": "wall",
+      "powered": "false",
+      "facing": "west"
+     }
+    }
+   },
+   {
+    "pos": [
+     16,
+     10,
+     2
+    ],
+    "from": "minecraft:crimson_button",
+    "to": {
+     "Name": "minecraft:mangrove_button",
+     "Properties": {
+      "face": "wall",
+      "powered": "false",
+      "facing": "east"
+     }
+    }
+   },
+   {
+    "pos": [
+     16,
+     10,
+     28
+    ],
+    "from": "minecraft:crimson_button",
+    "to": {
+     "Name": "minecraft:mangrove_button",
+     "Properties": {
+      "face": "wall",
+      "powered": "false",
+      "facing": "east"
+     }
+    }
+   },
+   {
+    "pos": [
+     10,
+     11,
+     2
+    ],
+    "from": "minecraft:crimson_button",
+    "to": {
+     "Name": "minecraft:mangrove_button",
+     "Properties": {
+      "face": "wall",
+      "powered": "false",
+      "facing": "west"
+     }
+    }
+   },
+   {
+    "pos": [
+     10,
+     11,
+     28
+    ],
+    "from": "minecraft:crimson_button",
+    "to": {
+     "Name": "minecraft:mangrove_button",
+     "Properties": {
+      "face": "wall",
+      "powered": "false",
+      "facing": "west"
+     }
+    }
+   },
+   {
+    "pos": [
+     12,
+     11,
+     2
+    ],
+    "from": "minecraft:crimson_button",
+    "to": {
+     "Name": "minecraft:mangrove_button",
+     "Properties": {
+      "face": "wall",
+      "powered": "false",
+      "facing": "east"
+     }
+    }
+   },
+   {
+    "pos": [
+     12,
+     11,
+     28
+    ],
+    "from": "minecraft:crimson_button",
+    "to": {
+     "Name": "minecraft:mangrove_button",
+     "Properties": {
+      "face": "wall",
+      "powered": "false",
+      "facing": "east"
+     }
+    }
+   },
+   {
+    "pos": [
+     18,
+     11,
+     2
+    ],
+    "from": "minecraft:crimson_button",
+    "to": {
+     "Name": "minecraft:mangrove_button",
+     "Properties": {
+      "face": "wall",
+      "powered": "false",
+      "facing": "west"
+     }
+    }
+   },
+   {
+    "pos": [
+     18,
+     11,
+     28
+    ],
+    "from": "minecraft:crimson_button",
+    "to": {
+     "Name": "minecraft:mangrove_button",
+     "Properties": {
+      "face": "wall",
+      "powered": "false",
+      "facing": "west"
+     }
+    }
+   },
+   {
+    "pos": [
+     20,
+     11,
+     2
+    ],
+    "from": "minecraft:crimson_button",
+    "to": {
+     "Name": "minecraft:mangrove_button",
+     "Properties": {
+      "face": "wall",
+      "powered": "false",
+      "facing": "east"
+     }
+    }
+   },
+   {
+    "pos": [
+     20,
+     11,
+     28
+    ],
+    "from": "minecraft:crimson_button",
+    "to": {
+     "Name": "minecraft:mangrove_button",
+     "Properties": {
+      "face": "wall",
+      "powered": "false",
+      "facing": "east"
+     }
+    }
+   },
+   {
+    "pos": [
+     11,
+     16,
+     2
+    ],
+    "from": "minecraft:crimson_button",
+    "to": {
+     "Name": "minecraft:mangrove_button",
+     "Properties": {
+      "face": "wall",
+      "powered": "false",
+      "facing": "west"
+     }
+    }
+   },
+   {
+    "pos": [
+     11,
+     16,
+     28
+    ],
+    "from": "minecraft:crimson_button",
+    "to": {
+     "Name": "minecraft:mangrove_button",
+     "Properties": {
+      "face": "wall",
+      "powered": "false",
+      "facing": "west"
+     }
+    }
+   },
+   {
+    "pos": [
+     14,
+     16,
+     2
+    ],
+    "from": "minecraft:crimson_button",
+    "to": {
+     "Name": "minecraft:mangrove_button",
+     "Properties": {
+      "face": "wall",
+      "powered": "false",
+      "facing": "east"
+     }
+    }
+   },
+   {
+    "pos": [
+     14,
+     16,
+     28
+    ],
+    "from": "minecraft:crimson_button",
+    "to": {
+     "Name": "minecraft:mangrove_button",
+     "Properties": {
+      "face": "wall",
+      "powered": "false",
+      "facing": "east"
+     }
+    }
+   },
+   {
+    "pos": [
+     16,
+     16,
+     2
+    ],
+    "from": "minecraft:crimson_button",
+    "to": {
+     "Name": "minecraft:mangrove_button",
+     "Properties": {
+      "face": "wall",
+      "powered": "false",
+      "facing": "west"
+     }
+    }
+   },
+   {
+    "pos": [
+     16,
+     16,
+     28
+    ],
+    "from": "minecraft:crimson_button",
+    "to": {
+     "Name": "minecraft:mangrove_button",
+     "Properties": {
+      "face": "wall",
+      "powered": "false",
+      "facing": "west"
+     }
+    }
+   },
+   {
+    "pos": [
+     19,
+     16,
+     2
+    ],
+    "from": "minecraft:crimson_button",
+    "to": {
+     "Name": "minecraft:mangrove_button",
+     "Properties": {
+      "face": "wall",
+      "powered": "false",
+      "facing": "east"
+     }
+    }
+   },
+   {
+    "pos": [
+     19,
+     16,
+     28
+    ],
+    "from": "minecraft:crimson_button",
+    "to": {
+     "Name": "minecraft:mangrove_button",
+     "Properties": {
+      "face": "wall",
+      "powered": "false",
+      "facing": "east"
      }
     }
    }
@@ -4022,6 +4905,44 @@
     }
    }
   ],
+  "betterwitchhuts:witch_hut_sm": [
+   {
+    "pos": [
+     3,
+     4,
+     2
+    ],
+    "from": "minecraft:crimson_trapdoor",
+    "to": {
+     "Name": "minecraft:mangrove_trapdoor",
+     "Properties": {
+      "half": "bottom",
+      "waterlogged": "false",
+      "powered": "false",
+      "facing": "west",
+      "open": "true"
+     }
+    }
+   },
+   {
+    "pos": [
+     4,
+     4,
+     1
+    ],
+    "from": "minecraft:crimson_trapdoor",
+    "to": {
+     "Name": "minecraft:mangrove_trapdoor",
+     "Properties": {
+      "half": "bottom",
+      "waterlogged": "false",
+      "powered": "false",
+      "facing": "north",
+      "open": "true"
+     }
+    }
+   }
+  ],
   "chefsdelight:plains_chef_house": [
    {
     "pos": [
@@ -5849,6 +6770,40 @@
      "Properties": {
       "waterlogged": "false",
       "hanging": "false"
+     }
+    }
+   }
+  ],
+  "kaisyn:outpost/forts/jungle/base_plate": [
+   {
+    "pos": [
+     14,
+     26,
+     22
+    ],
+    "from": "minecraft:crimson_button",
+    "to": {
+     "Name": "minecraft:mangrove_button",
+     "Properties": {
+      "powered": "false",
+      "facing": "west",
+      "face": "wall"
+     }
+    }
+   },
+   {
+    "pos": [
+     16,
+     26,
+     22
+    ],
+    "from": "minecraft:crimson_button",
+    "to": {
+     "Name": "minecraft:mangrove_button",
+     "Properties": {
+      "powered": "false",
+      "facing": "east",
+      "face": "wall"
      }
     }
    }
@@ -11146,6 +12101,22 @@
     }
    }
   ],
+  "philipsruins:ocean_ruin6": [
+   {
+    "pos": [
+     6,
+     0,
+     2
+    ],
+    "from": "minecraft:stripped_warped_hyphae",
+    "to": {
+     "Name": "minecraft:stripped_dark_oak_wood",
+     "Properties": {
+      "axis": "z"
+     }
+    }
+   }
+  ],
   "philipsruins:pumpkin_ruin_four": [
    {
     "pos": [
@@ -11419,6 +12390,24 @@
     "from": "minecraft:nether_wart_block",
     "to": {
      "Name": "minecraft:air"
+    }
+   },
+   {
+    "pos": [
+     9,
+     0,
+     12
+    ],
+    "from": "minecraft:crimson_trapdoor",
+    "to": {
+     "Name": "minecraft:mangrove_trapdoor",
+     "Properties": {
+      "half": "top",
+      "waterlogged": "false",
+      "powered": "false",
+      "facing": "north",
+      "open": "false"
+     }
     }
    },
    {
@@ -11962,6 +12951,150 @@
      "Properties": {
       "waterlogged": "false",
       "hanging": "true"
+     }
+    }
+   },
+   {
+    "pos": [
+     68,
+     15,
+     3
+    ],
+    "from": "minecraft:warped_trapdoor",
+    "to": {
+     "Name": "minecraft:dark_oak_trapdoor",
+     "Properties": {
+      "waterlogged": "false",
+      "half": "bottom",
+      "powered": "false",
+      "open": "true",
+      "facing": "west"
+     }
+    }
+   },
+   {
+    "pos": [
+     68,
+     15,
+     4
+    ],
+    "from": "minecraft:warped_trapdoor",
+    "to": {
+     "Name": "minecraft:dark_oak_trapdoor",
+     "Properties": {
+      "waterlogged": "false",
+      "half": "bottom",
+      "powered": "false",
+      "open": "true",
+      "facing": "west"
+     }
+    }
+   },
+   {
+    "pos": [
+     68,
+     15,
+     10
+    ],
+    "from": "minecraft:warped_trapdoor",
+    "to": {
+     "Name": "minecraft:dark_oak_trapdoor",
+     "Properties": {
+      "waterlogged": "false",
+      "half": "bottom",
+      "powered": "false",
+      "open": "true",
+      "facing": "west"
+     }
+    }
+   },
+   {
+    "pos": [
+     68,
+     15,
+     11
+    ],
+    "from": "minecraft:warped_trapdoor",
+    "to": {
+     "Name": "minecraft:dark_oak_trapdoor",
+     "Properties": {
+      "waterlogged": "false",
+      "half": "bottom",
+      "powered": "false",
+      "open": "true",
+      "facing": "west"
+     }
+    }
+   },
+   {
+    "pos": [
+     69,
+     15,
+     2
+    ],
+    "from": "minecraft:warped_trapdoor",
+    "to": {
+     "Name": "minecraft:dark_oak_trapdoor",
+     "Properties": {
+      "waterlogged": "false",
+      "half": "bottom",
+      "powered": "false",
+      "open": "true",
+      "facing": "north"
+     }
+    }
+   },
+   {
+    "pos": [
+     69,
+     15,
+     5
+    ],
+    "from": "minecraft:warped_trapdoor",
+    "to": {
+     "Name": "minecraft:dark_oak_trapdoor",
+     "Properties": {
+      "waterlogged": "false",
+      "half": "bottom",
+      "powered": "false",
+      "open": "true",
+      "facing": "south"
+     }
+    }
+   },
+   {
+    "pos": [
+     69,
+     15,
+     9
+    ],
+    "from": "minecraft:warped_trapdoor",
+    "to": {
+     "Name": "minecraft:dark_oak_trapdoor",
+     "Properties": {
+      "waterlogged": "false",
+      "half": "bottom",
+      "powered": "false",
+      "open": "true",
+      "facing": "north"
+     }
+    }
+   },
+   {
+    "pos": [
+     69,
+     15,
+     12
+    ],
+    "from": "minecraft:warped_trapdoor",
+    "to": {
+     "Name": "minecraft:dark_oak_trapdoor",
+     "Properties": {
+      "waterlogged": "false",
+      "half": "bottom",
+      "powered": "false",
+      "open": "true",
+      "facing": "south"
      }
     }
    },
@@ -16487,6 +17620,656 @@
     "from": "minecraft:netherrack",
     "to": {
      "Name": "minecraft:magma_block"
+    }
+   }
+  ],
+  "terralith:village/desert/houses/cartographer2": [
+   {
+    "pos": [
+     2,
+     4,
+     5
+    ],
+    "from": "minecraft:crimson_trapdoor",
+    "to": {
+     "Name": "minecraft:mangrove_trapdoor",
+     "Properties": {
+      "half": "bottom",
+      "waterlogged": "false",
+      "powered": "false",
+      "facing": "west",
+      "open": "true"
+     }
+    }
+   },
+   {
+    "pos": [
+     2,
+     4,
+     8
+    ],
+    "from": "minecraft:crimson_trapdoor",
+    "to": {
+     "Name": "minecraft:mangrove_trapdoor",
+     "Properties": {
+      "half": "bottom",
+      "waterlogged": "false",
+      "powered": "false",
+      "facing": "west",
+      "open": "true"
+     }
+    }
+   },
+   {
+    "pos": [
+     2,
+     4,
+     11
+    ],
+    "from": "minecraft:crimson_trapdoor",
+    "to": {
+     "Name": "minecraft:mangrove_trapdoor",
+     "Properties": {
+      "half": "bottom",
+      "waterlogged": "false",
+      "powered": "false",
+      "facing": "west",
+      "open": "true"
+     }
+    }
+   },
+   {
+    "pos": [
+     3,
+     4,
+     4
+    ],
+    "from": "minecraft:crimson_trapdoor",
+    "to": {
+     "Name": "minecraft:mangrove_trapdoor",
+     "Properties": {
+      "half": "bottom",
+      "waterlogged": "false",
+      "powered": "false",
+      "facing": "north",
+      "open": "true"
+     }
+    }
+   },
+   {
+    "pos": [
+     3,
+     4,
+     6
+    ],
+    "from": "minecraft:crimson_trapdoor",
+    "to": {
+     "Name": "minecraft:mangrove_trapdoor",
+     "Properties": {
+      "half": "bottom",
+      "waterlogged": "false",
+      "powered": "false",
+      "facing": "south",
+      "open": "true"
+     }
+    }
+   },
+   {
+    "pos": [
+     3,
+     4,
+     7
+    ],
+    "from": "minecraft:crimson_trapdoor",
+    "to": {
+     "Name": "minecraft:mangrove_trapdoor",
+     "Properties": {
+      "half": "bottom",
+      "waterlogged": "false",
+      "powered": "false",
+      "facing": "north",
+      "open": "true"
+     }
+    }
+   },
+   {
+    "pos": [
+     3,
+     4,
+     9
+    ],
+    "from": "minecraft:crimson_trapdoor",
+    "to": {
+     "Name": "minecraft:mangrove_trapdoor",
+     "Properties": {
+      "half": "bottom",
+      "waterlogged": "false",
+      "powered": "false",
+      "facing": "south",
+      "open": "true"
+     }
+    }
+   },
+   {
+    "pos": [
+     3,
+     4,
+     10
+    ],
+    "from": "minecraft:crimson_trapdoor",
+    "to": {
+     "Name": "minecraft:mangrove_trapdoor",
+     "Properties": {
+      "half": "bottom",
+      "waterlogged": "false",
+      "powered": "false",
+      "facing": "north",
+      "open": "true"
+     }
+    }
+   },
+   {
+    "pos": [
+     3,
+     4,
+     12
+    ],
+    "from": "minecraft:crimson_trapdoor",
+    "to": {
+     "Name": "minecraft:mangrove_trapdoor",
+     "Properties": {
+      "half": "bottom",
+      "waterlogged": "false",
+      "powered": "false",
+      "facing": "south",
+      "open": "true"
+     }
+    }
+   },
+   {
+    "pos": [
+     4,
+     4,
+     4
+    ],
+    "from": "minecraft:crimson_trapdoor",
+    "to": {
+     "Name": "minecraft:mangrove_trapdoor",
+     "Properties": {
+      "half": "bottom",
+      "waterlogged": "false",
+      "powered": "false",
+      "facing": "north",
+      "open": "true"
+     }
+    }
+   },
+   {
+    "pos": [
+     4,
+     4,
+     6
+    ],
+    "from": "minecraft:crimson_trapdoor",
+    "to": {
+     "Name": "minecraft:mangrove_trapdoor",
+     "Properties": {
+      "half": "bottom",
+      "waterlogged": "false",
+      "powered": "false",
+      "facing": "south",
+      "open": "true"
+     }
+    }
+   },
+   {
+    "pos": [
+     4,
+     4,
+     7
+    ],
+    "from": "minecraft:crimson_trapdoor",
+    "to": {
+     "Name": "minecraft:mangrove_trapdoor",
+     "Properties": {
+      "half": "bottom",
+      "waterlogged": "false",
+      "powered": "false",
+      "facing": "north",
+      "open": "true"
+     }
+    }
+   },
+   {
+    "pos": [
+     4,
+     4,
+     9
+    ],
+    "from": "minecraft:crimson_trapdoor",
+    "to": {
+     "Name": "minecraft:mangrove_trapdoor",
+     "Properties": {
+      "half": "bottom",
+      "waterlogged": "false",
+      "powered": "false",
+      "facing": "south",
+      "open": "true"
+     }
+    }
+   },
+   {
+    "pos": [
+     4,
+     4,
+     10
+    ],
+    "from": "minecraft:crimson_trapdoor",
+    "to": {
+     "Name": "minecraft:mangrove_trapdoor",
+     "Properties": {
+      "half": "bottom",
+      "waterlogged": "false",
+      "powered": "false",
+      "facing": "north",
+      "open": "true"
+     }
+    }
+   },
+   {
+    "pos": [
+     4,
+     4,
+     12
+    ],
+    "from": "minecraft:crimson_trapdoor",
+    "to": {
+     "Name": "minecraft:mangrove_trapdoor",
+     "Properties": {
+      "half": "bottom",
+      "waterlogged": "false",
+      "powered": "false",
+      "facing": "south",
+      "open": "true"
+     }
+    }
+   },
+   {
+    "pos": [
+     5,
+     4,
+     5
+    ],
+    "from": "minecraft:crimson_trapdoor",
+    "to": {
+     "Name": "minecraft:mangrove_trapdoor",
+     "Properties": {
+      "half": "bottom",
+      "waterlogged": "false",
+      "powered": "false",
+      "facing": "east",
+      "open": "true"
+     }
+    }
+   },
+   {
+    "pos": [
+     5,
+     4,
+     8
+    ],
+    "from": "minecraft:crimson_trapdoor",
+    "to": {
+     "Name": "minecraft:mangrove_trapdoor",
+     "Properties": {
+      "half": "bottom",
+      "waterlogged": "false",
+      "powered": "false",
+      "facing": "east",
+      "open": "true"
+     }
+    }
+   },
+   {
+    "pos": [
+     5,
+     4,
+     11
+    ],
+    "from": "minecraft:crimson_trapdoor",
+    "to": {
+     "Name": "minecraft:mangrove_trapdoor",
+     "Properties": {
+      "half": "bottom",
+      "waterlogged": "false",
+      "powered": "false",
+      "facing": "east",
+      "open": "true"
+     }
+    }
+   },
+   {
+    "pos": [
+     7,
+     4,
+     5
+    ],
+    "from": "minecraft:crimson_trapdoor",
+    "to": {
+     "Name": "minecraft:mangrove_trapdoor",
+     "Properties": {
+      "half": "top",
+      "waterlogged": "false",
+      "powered": "false",
+      "facing": "west",
+      "open": "true"
+     }
+    }
+   },
+   {
+    "pos": [
+     7,
+     4,
+     8
+    ],
+    "from": "minecraft:crimson_trapdoor",
+    "to": {
+     "Name": "minecraft:mangrove_trapdoor",
+     "Properties": {
+      "half": "top",
+      "waterlogged": "false",
+      "powered": "false",
+      "facing": "west",
+      "open": "true"
+     }
+    }
+   },
+   {
+    "pos": [
+     7,
+     4,
+     11
+    ],
+    "from": "minecraft:crimson_trapdoor",
+    "to": {
+     "Name": "minecraft:mangrove_trapdoor",
+     "Properties": {
+      "half": "top",
+      "waterlogged": "false",
+      "powered": "false",
+      "facing": "west",
+      "open": "true"
+     }
+    }
+   },
+   {
+    "pos": [
+     8,
+     4,
+     4
+    ],
+    "from": "minecraft:crimson_trapdoor",
+    "to": {
+     "Name": "minecraft:mangrove_trapdoor",
+     "Properties": {
+      "half": "top",
+      "waterlogged": "false",
+      "powered": "false",
+      "facing": "north",
+      "open": "true"
+     }
+    }
+   },
+   {
+    "pos": [
+     8,
+     4,
+     6
+    ],
+    "from": "minecraft:crimson_trapdoor",
+    "to": {
+     "Name": "minecraft:mangrove_trapdoor",
+     "Properties": {
+      "half": "top",
+      "waterlogged": "false",
+      "powered": "false",
+      "facing": "south",
+      "open": "true"
+     }
+    }
+   },
+   {
+    "pos": [
+     8,
+     4,
+     7
+    ],
+    "from": "minecraft:crimson_trapdoor",
+    "to": {
+     "Name": "minecraft:mangrove_trapdoor",
+     "Properties": {
+      "half": "top",
+      "waterlogged": "false",
+      "powered": "false",
+      "facing": "north",
+      "open": "true"
+     }
+    }
+   },
+   {
+    "pos": [
+     8,
+     4,
+     9
+    ],
+    "from": "minecraft:crimson_trapdoor",
+    "to": {
+     "Name": "minecraft:mangrove_trapdoor",
+     "Properties": {
+      "half": "top",
+      "waterlogged": "false",
+      "powered": "false",
+      "facing": "south",
+      "open": "true"
+     }
+    }
+   },
+   {
+    "pos": [
+     8,
+     4,
+     10
+    ],
+    "from": "minecraft:crimson_trapdoor",
+    "to": {
+     "Name": "minecraft:mangrove_trapdoor",
+     "Properties": {
+      "half": "top",
+      "waterlogged": "false",
+      "powered": "false",
+      "facing": "north",
+      "open": "true"
+     }
+    }
+   },
+   {
+    "pos": [
+     8,
+     4,
+     12
+    ],
+    "from": "minecraft:crimson_trapdoor",
+    "to": {
+     "Name": "minecraft:mangrove_trapdoor",
+     "Properties": {
+      "half": "top",
+      "waterlogged": "false",
+      "powered": "false",
+      "facing": "south",
+      "open": "true"
+     }
+    }
+   },
+   {
+    "pos": [
+     9,
+     4,
+     4
+    ],
+    "from": "minecraft:crimson_trapdoor",
+    "to": {
+     "Name": "minecraft:mangrove_trapdoor",
+     "Properties": {
+      "half": "top",
+      "waterlogged": "false",
+      "powered": "false",
+      "facing": "north",
+      "open": "true"
+     }
+    }
+   },
+   {
+    "pos": [
+     9,
+     4,
+     6
+    ],
+    "from": "minecraft:crimson_trapdoor",
+    "to": {
+     "Name": "minecraft:mangrove_trapdoor",
+     "Properties": {
+      "half": "top",
+      "waterlogged": "false",
+      "powered": "false",
+      "facing": "south",
+      "open": "true"
+     }
+    }
+   },
+   {
+    "pos": [
+     9,
+     4,
+     7
+    ],
+    "from": "minecraft:crimson_trapdoor",
+    "to": {
+     "Name": "minecraft:mangrove_trapdoor",
+     "Properties": {
+      "half": "top",
+      "waterlogged": "false",
+      "powered": "false",
+      "facing": "north",
+      "open": "true"
+     }
+    }
+   },
+   {
+    "pos": [
+     9,
+     4,
+     9
+    ],
+    "from": "minecraft:crimson_trapdoor",
+    "to": {
+     "Name": "minecraft:mangrove_trapdoor",
+     "Properties": {
+      "half": "top",
+      "waterlogged": "false",
+      "powered": "false",
+      "facing": "south",
+      "open": "true"
+     }
+    }
+   },
+   {
+    "pos": [
+     9,
+     4,
+     10
+    ],
+    "from": "minecraft:crimson_trapdoor",
+    "to": {
+     "Name": "minecraft:mangrove_trapdoor",
+     "Properties": {
+      "half": "top",
+      "waterlogged": "false",
+      "powered": "false",
+      "facing": "north",
+      "open": "true"
+     }
+    }
+   },
+   {
+    "pos": [
+     9,
+     4,
+     12
+    ],
+    "from": "minecraft:crimson_trapdoor",
+    "to": {
+     "Name": "minecraft:mangrove_trapdoor",
+     "Properties": {
+      "half": "top",
+      "waterlogged": "false",
+      "powered": "false",
+      "facing": "south",
+      "open": "true"
+     }
+    }
+   },
+   {
+    "pos": [
+     10,
+     4,
+     5
+    ],
+    "from": "minecraft:crimson_trapdoor",
+    "to": {
+     "Name": "minecraft:mangrove_trapdoor",
+     "Properties": {
+      "half": "top",
+      "waterlogged": "false",
+      "powered": "false",
+      "facing": "east",
+      "open": "true"
+     }
+    }
+   },
+   {
+    "pos": [
+     10,
+     4,
+     8
+    ],
+    "from": "minecraft:crimson_trapdoor",
+    "to": {
+     "Name": "minecraft:mangrove_trapdoor",
+     "Properties": {
+      "half": "top",
+      "waterlogged": "false",
+      "powered": "false",
+      "facing": "east",
+      "open": "true"
+     }
+    }
+   },
+   {
+    "pos": [
+     10,
+     4,
+     11
+    ],
+    "from": "minecraft:crimson_trapdoor",
+    "to": {
+     "Name": "minecraft:mangrove_trapdoor",
+     "Properties": {
+      "half": "top",
+      "waterlogged": "false",
+      "powered": "false",
+      "facing": "east",
+      "open": "true"
+     }
     }
    }
   ],

@@ -38,14 +38,14 @@ ingredient type a mod adds goes after these, in its current order, until the pac
 ## 3. Tags drive the order
 
 - Placement is by tag. An ingredient's tag says where it sits, e.g.
-  `creativeengineering:jei/equipment/tools/copper` puts it in Equipment > Tools > Copper.
-- The tag path is the hierarchy: `creativeengineering:jei/<category>/<subcategory>/<subsubcategory>`. Depth is two or
+  `creativecommon:jei/equipment/tools/copper` puts it in Equipment > Tools > Copper.
+- The tag path is the hierarchy: `creativecommon:jei/<category>/<subcategory>/<subsubcategory>`. Depth is two or
   three levels below `jei/`; a subcategory with no sub-subcategories holds items directly.
 - Tags are made through `global.tags` ([tag_helper.js](../kubejs/startup_scripts/func/tag_helper.js)),
   and item ids come from `global.item` / the item, block and fluid dicts, per [CLAUDE.md](../CLAUDE.md).
   The helper should accept a mod-wide or pattern match (e.g. every `*_copper_*` tool) as well as
   single ids, so whole families are tagged in one line.
-- One placement per ingredient. An ingredient in two `creativeengineering:jei/...` leaf tags on
+- One placement per ingredient. An ingredient in two `creativecommon:jei/...` leaf tags on
   different branches is an error the system reports (see 6); it is placed by the first match in the
   defined order. Parent tags along the same path are fine: the deepest tag wins (10.3).
 - The same scheme covers fluids (`fluid` tags) and effects (`mob_effect` tags). Multiblocks are
@@ -111,7 +111,7 @@ generated table in this folder, like the other catalogs). Each ingredient is in 
 
 | Class | Meaning | Source |
 |---|---|---|
-| **Shown, placed** | in JEI and in a `creativeengineering:jei/...` leaf | |
+| **Shown, placed** | in JEI and in a `creativecommon:jei/...` leaf | |
 | **Shown, unplaced** | in JEI but in no leaf; sorted after every category, in JEI's current order | the to-do list for tagging |
 | **Not shown** | registered, but never in JEI's list (no mod registers it as an ingredient; e.g. technical blocks, bucket-less fluids before fluid_jei.js) | registry minus JEI's list |
 | **Hidden by default** | registered as an ingredient but hidden by the mod itself or JEI's defaults (mod blacklists, `hidden` NBT variants, ...) | |
@@ -258,7 +258,7 @@ the KubeJS 1902.6.2-build.73, JEED 1.19.2-2.1.4 and JEI Multiblocks 1.19.2-0.0.3
 ### 9.6 Cost
 
 - The base list is tens of thousands of elements. Placement lookup per element is one map lookup
-  (item/fluid/effect -> leaf, built once per JEI start by walking the `creativeengineering:jei/*`
+  (item/fluid/effect -> leaf, built once per JEI start by walking the `creativecommon:jei/*`
   tags), and the sort key is a few ints, computed once per element and kept. The sort is then
   `n log n` integer compares, same order of cost as JEI's own `MOD_NAME` stage (which compares
   strings).
@@ -272,7 +272,7 @@ the KubeJS 1902.6.2-build.73, JEED 1.19.2-2.1.4 and JEI Multiblocks 1.19.2-0.0.3
 | Piece | Where | Runs on |
 |---|---|---|
 | Ordering definition: category tree, per-level order, leaf sort modes, custom lists, mod order, multiblock leaves, pack-hidden lists | one KubeJS startup file, e.g. `kubejs/startup_scripts/jei/order.js`, as `global.jeiOrder`, built through a new helper in `startup_scripts/func/` (like `global.tags`); item ids from `global.item` and the dicts | both sides (startup scripts load on client and server) |
-| `creativeengineering:jei/...` tags | one server script, e.g. `server_scripts/tags/jei_order.js`, that walks `global.jeiOrder` and makes the tags through `global.tags.add` / `addMatching` (`@mod`, `#tag`, globs) for `item`, `fluid`, `mob_effect` | server |
+| `creativecommon:jei/...` tags | one server script, e.g. `server_scripts/tags/jei_order.js`, that walks `global.jeiOrder` and makes the tags through `global.tags.add` / `addMatching` (`@mod`, `#tag`, globs) for `item`, `fluid`, `mob_effect` | server |
 | Hand-off to Java | a client script calls `Java.loadClass('com.SaintAlfonzo.creativeengineering.compat.jei.PackIngredientOrder').define(JSON.stringify(global.jeiOrder))`, the same pattern as the worldgen dumps' `WorldgenFiles` | client |
 | Sort, re-sort, attribution, report | patcherMod `compat/jei/PackIngredientOrder` + client mixins on JEI | client |
 | Switches | `CEConfig` `[jei]`: `packOrder` (on: pack order; off: JEI's `IngredientSortStages` as now), `orderReport` (write the report at each JEI start) | client |
@@ -305,12 +305,12 @@ global.jeiOrder = {
 - Order of `children` = the predefined order at that level. `sort` is the leaf's mode chain (5);
   default `['mod', 'creative']`.
 - `from` is optional: members can also come from any other script tagging
-  `creativeengineering:jei/<path>` directly through `global.tags`.
+  `creativecommon:jei/<path>` directly through `global.tags`.
 - A node with `sort` but also `children` sorts its own direct members before its children.
 
 ### 10.3 Placement rules
 
-- An ingredient's placement is its **deepest** `creativeengineering:jei/...` tag, so a script that
+- An ingredient's placement is its **deepest** `creativecommon:jei/...` tag, so a script that
   adds the whole chain (`global.tags.tagChain`) still places by the leaf.
 - Two tags on different branches = conflict: placed by the first in definition order, reported.
 - A tag path missing from the definition still places its members: after its defined siblings,
@@ -372,7 +372,7 @@ off nothing is re-sorted, so the feature can ship disabled.
 
 Additional test from the investigation:
 
-- **JO-11** An effect tagged `creativeengineering:jei/...` through `ServerEvents.tags('mob_effect')`
+- **JO-11** An effect tagged `creativecommon:jei/...` through `ServerEvents.tags('mob_effect')`
   is placed on the client (proves `mob_effect` tags sync; if not, effect leaves move to id lists).
 - **JO-12** The fluids fluid_jei.js adds are sorted with the other fluids, not appended at the end.
 
@@ -408,15 +408,15 @@ parser and sort key in a harness (order below came out as designed). **Nothing h
 
 | File | What |
 |---|---|
-| [PackIngredientOrder.java](../development/patcherMod/src/main/java/com/SaintAlfonzo/creativeengineering/compat/jei/PackIngredientOrder.java) | definition parse, placements from tags + lists, sort key, re-sort |
-| [PackOrderReport.java](../development/patcherMod/src/main/java/com/SaintAlfonzo/creativeengineering/compat/jei/PackOrderReport.java) | `kubejs/exported/jei_order.json` |
-| [JeiIngredientChanges.java](../development/patcherMod/src/main/java/com/SaintAlfonzo/creativeengineering/compat/jei/JeiIngredientChanges.java) | runtime adds/removes with the plugin that made them |
+| [PackIngredientOrder.java](../development/creativeCommon/src/main/java/com/SaintAlfonzo/creativecommon/compat/jei/PackIngredientOrder.java) | definition parse, placements from tags + lists, sort key, re-sort |
+| [PackOrderReport.java](../development/creativeCommon/src/main/java/com/SaintAlfonzo/creativecommon/compat/jei/PackOrderReport.java) | `kubejs/exported/jei_order.json` |
+| [JeiIngredientChanges.java](../development/creativeCommon/src/main/java/com/SaintAlfonzo/creativecommon/compat/jei/JeiIngredientChanges.java) | runtime adds/removes with the plugin that made them |
 | `mixin/JeiIngredientFilterAccessor`, `JeiIngredientFilterMixin`, `JeiStarterMixin`, `JeiPluginCallerMixin`, `JeiIngredientManagerMixin` | client mixins (10.6) |
-| [CEConfig.java](../development/patcherMod/src/main/java/com/SaintAlfonzo/creativeengineering/CEConfig.java) `[jei]` | `packOrder` (default on), `orderReport` (default off) |
+| [CEConfig.java](../development/creativeCommon/src/main/java/com/SaintAlfonzo/creativecommon/CEConfig.java) `[jei]` | `packOrder` (default on), `orderReport` (default off) |
 | [func/jei_order.js](../kubejs/startup_scripts/func/jei_order.js) | `global.jeiOrder`: `define`, `tag`, `walk`, `toJson`, `packHidden`; checks node ids, sort modes, list entries |
 | [jei/order.js](../kubejs/startup_scripts/jei/order.js) | the definition (first small tree, 12.2) |
 | [_lib/effect_dict.js](../kubejs/startup_scripts/_lib/effect_dict.js), [_lib/multiblock_dict.js](../kubejs/startup_scripts/_lib/multiblock_dict.js) | new dicts: `global.effect` (vanilla effects), `global.multiblock` (all 21 IE multiblocks, ids read from the IE 9.2.4 jar; the arc furnace is `multiblocks/arcfurnace`) |
-| [tags/jei_order_tags.js](../kubejs/server_scripts/tags/jei_order_tags.js) | `creativeengineering:jei/...` item, fluid and mob_effect tags from the definition |
+| [tags/jei_order_tags.js](../kubejs/server_scripts/tags/jei_order_tags.js) | `creativecommon:jei/...` item, fluid and mob_effect tags from the definition |
 | [client_scripts/jei_order.js](../kubejs/client_scripts/jei_order.js) | hands the definition to Java |
 | [client_scripts/fluid_jei.js](../kubejs/client_scripts/fluid_jei.js) | dead fluids now come from `packHidden` |
 | [tools/jei_order_report.py](../tools/jei_order_report.py) | report -> `feature_writeup/jei_order_catalog.md` (`--check` exits 1 on definition problems) |
@@ -434,7 +434,7 @@ parser and sort key in a harness (order below came out as designed). **Nothing h
 
 ### 12.3 Behaviour as built
 
-- An ingredient's place: its deepest `creativeengineering:jei/...` tag (item tags only, not a block's tags);
+- An ingredient's place: its deepest `creativecommon:jei/...` tag (item tags only, not a block's tags);
   else the first node whose `list` names it. Tag on two branches, or tag vs a list elsewhere: kept by definition
   order, reported as a conflict.
 - Re-sorts: when JEI finishes starting (join, `/reload`), when a mod adds ingredients later, and when
@@ -445,7 +445,7 @@ parser and sort key in a harness (order below came out as designed). **Nothing h
 
 ### 12.4 First in-game run
 
-1. Build and install patcherMod (`./gradlew :patcherMod:installToMods`), set `orderReport = true` under `[jei]`
+1. Build and install patcherMod (`./gradlew :creativeCommon:installToMods`), set `orderReport = true` under `[jei]`
    in the patcherMod common config.
 2. Join a world. latest.log: `[jeiOrder] defined 10 nodes over 4 types` (startup), `[jeiOrder] item: 2 jei
    tags` / `fluid: 1` / `effect: 1` (server), `[jei order] definition: 4 types, 10 nodes`, `[jei order] sorted

@@ -36,7 +36,7 @@
     // id -> recipe, built once per command (never getType() on every recipe: memory rhino-fieldandmethods-gotcha)
     let byId = null, aliased = {}
     // recipe ids for enumeration: a moved recipe is listed once, under its creativeengineering: alias (the checks'
-    // prefixes), not also under its creative_delight: id
+    // prefixes), not also under its creativedelight: id
     function recipeKeys(server) {
         return Object.keys(recipes(server)).filter(id => !aliased[id])
     }
@@ -44,11 +44,11 @@
         if (byId) return byId
         byId = {}
         server.getRecipeManager().getRecipes().forEach(r => { byId[String(r.getId())] = r })
-        // Food recipes moved into Creative Delight's tree on 2026-10-25 (creative_delight: ids, same paths): a
-        // creativeengineering: id the checks name also finds its creative_delight: twin
+        // Food recipes moved into Creative Delight's tree on 2026-10-25 (creativedelight: ids, same paths): a
+        // creativeengineering: id the checks name also finds its creativedelight: twin
         Object.keys(byId).forEach(id => {
-            if (id.indexOf('creative_delight:') != 0) return
-            let old = 'creativeengineering:' + id.substring('creative_delight:'.length)
+            if (id.indexOf('creativedelight:') != 0) return
+            let old = 'creativeengineering:' + id.substring('creativedelight:'.length)
             if (byId[old] == null) { byId[old] = byId[id]; aliased[id] = true }
         })
         return byId
@@ -123,8 +123,8 @@
             'potato_salad_egg_solution', 'glow_berry_custard_egg_solution', 'blueberry_custard_egg_solution',
             'vanilla_pudding_egg_solution'].map(s => C + 'createmixing/' + s))
         // Brewin' dishes: Creative Delight brewinandchewin/recipes.js since 2026-10-31
-        expectIds(server, ['creative_delight:createmixing/vegetable_omelet_egg_solution',
-            'creative_delight:createsequencedassembly/quiche_egg_solution_sequenced_assembly'])
+        expectIds(server, ['creativedelight:createmixing/vegetable_omelet_egg_solution',
+            'creativedelight:createsequencedassembly/quiche_egg_solution_sequenced_assembly'])
         expectIds(server, [C + 'createmixing/frosting', C + 'createcompacting/frosting', C + 'createfilling/cake_frosting_spout',
             C + 'shapeless/frosting_manual_only'])
         // berry matcha latte (RC-73)
@@ -253,7 +253,7 @@
     // ---- placed food for Spice of Life (FO-44): class, map file, every entry valid
     function sol() {
         let cls = null
-        try { cls = Java.loadClass('com.SaintAlfonzo.creativeengineering.food.PlacedFoodSol') } catch (e) { }
+        try { cls = Java.loadClass('com.SaintAlfonzo.creativedelight.food.PlacedFoodSol') } catch (e) { }
         check('PlacedFoodSol in the jar', cls != null, cls == null ? 'class not found: wrong jar' : 'loaded')
         let blocks = null
         try { blocks = JSON.parse(String(JsonIO.readString('kubejs/generation_scripts/food/placed_food_slices.json'))).blocks } catch (e) { }

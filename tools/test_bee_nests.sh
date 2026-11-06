@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 # Offline checks for the bee nest tuning (feature_writeup/bee_nests.md section 6):
 #   1. generator: tools/gen_bee_nests.py runs on the real bee_nests.json with no config problems
-#   2. Rhino, real config: kubejs/server_scripts/worldgen/bee_nests.js in the pack's Rhino fork; every rule tag equals
+#   2. Rhino, real config: kubejs/data/creativeworldgen/kubejs/worldgen/bee_nests.js in the pack's Rhino fork; every rule tag equals
 #      the generator's resolved list, the bee_nests modifier holds the chance/scale rules in file order, and every
 #      trees rule has its placed feature (rate tier as the generator computes it) + add_features modifier
 #   3. Rhino, fixture (tools/bee_nests_test/rules_fixture.json): the same parity on every rule shape; each bad rule

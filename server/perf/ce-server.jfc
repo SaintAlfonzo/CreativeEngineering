@@ -9,7 +9,7 @@
                           threads produced ~400k of these per 5 minutes; the server thread barely uses them.
     minecraft.*           Minecraft's own events: ServerTickTime (1 s), ChunkGeneration, NetworkSummary,
                           LoadWorld. Per-packet events stay off.
-    creativeengineering.* The pack's own events (patcherMod 1.1.03+, feature_writeup/perf.md 3.6): every tick, each
+    creativecommon.* The pack's own events (patcherMod 1.1.03+, feature_writeup/perf.md 3.6): every tick, each
                           dimension's tick, chunk waits, KubeJS handlers by script, entity and block entity time by
                           type. Set "enabled" to false on any of them to switch its hook to a no-op within a second.
   Do NOT use vanilla's /jfr command instead: its config takes a stop-the-world heap census (jdk.ObjectCount).
@@ -1093,14 +1093,14 @@
     <event name="minecraft.LoadWorld"><setting name="enabled">true</setting></event>
     <event name="minecraft.PacketReceived"><setting name="enabled">false</setting></event>
     <event name="minecraft.PacketSent"><setting name="enabled">false</setting></event>
-    <event name="creativeengineering.ServerTick"><setting name="enabled">true</setting><setting name="threshold">0 ms</setting></event>
-    <event name="creativeengineering.LevelTick"><setting name="enabled">true</setting><setting name="threshold">0 ms</setting></event>
-    <event name="creativeengineering.ChunkWait"><setting name="enabled">true</setting><setting name="threshold">0 ms</setting><setting name="stackTrace">true</setting></event>
-    <event name="creativeengineering.ChunkWaitStats"><setting name="enabled">true</setting><setting name="threshold">0 ms</setting></event>
-    <event name="creativeengineering.KubeJSHandler"><setting name="enabled">true</setting><setting name="threshold">5 ms</setting></event>
-    <event name="creativeengineering.KubeJSHandlerStats"><setting name="enabled">true</setting><setting name="threshold">0 ms</setting></event>
-    <event name="creativeengineering.SlowEntityTick"><setting name="enabled">true</setting><setting name="threshold">0 ms</setting></event>
-    <event name="creativeengineering.EntityTypeTicks"><setting name="enabled">true</setting><setting name="threshold">0 ms</setting></event>
-    <event name="creativeengineering.SlowBlockEntityTick"><setting name="enabled">true</setting><setting name="threshold">0 ms</setting></event>
-    <event name="creativeengineering.BlockEntityTypeTicks"><setting name="enabled">true</setting><setting name="threshold">0 ms</setting></event>
+    <event name="creativecommon.ServerTick"><setting name="enabled">true</setting><setting name="threshold">0 ms</setting></event>
+    <event name="creativecommon.LevelTick"><setting name="enabled">true</setting><setting name="threshold">0 ms</setting></event>
+    <event name="creativecommon.ChunkWait"><setting name="enabled">true</setting><setting name="threshold">0 ms</setting><setting name="stackTrace">true</setting></event>
+    <event name="creativecommon.ChunkWaitStats"><setting name="enabled">true</setting><setting name="threshold">0 ms</setting></event>
+    <event name="creativecommon.KubeJSHandler"><setting name="enabled">true</setting><setting name="threshold">5 ms</setting></event>
+    <event name="creativecommon.KubeJSHandlerStats"><setting name="enabled">true</setting><setting name="threshold">0 ms</setting></event>
+    <event name="creativecommon.SlowEntityTick"><setting name="enabled">true</setting><setting name="threshold">0 ms</setting></event>
+    <event name="creativecommon.EntityTypeTicks"><setting name="enabled">true</setting><setting name="threshold">0 ms</setting></event>
+    <event name="creativecommon.SlowBlockEntityTick"><setting name="enabled">true</setting><setting name="threshold">0 ms</setting></event>
+    <event name="creativecommon.BlockEntityTypeTicks"><setting name="enabled">true</setting><setting name="threshold">0 ms</setting></event>
 </configuration>

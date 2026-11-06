@@ -1,0 +1,28 @@
+{
+  "_comment": "Item merge list (swap lists 'merges', SwapLists.java; feature_writeup/item_merges.md 6): both items stay registered; the old one is purged and the survivor takes over its recipes, loot and tags (CD startup script creativedelight/swap_merges.js) and every stack of it in the world (Common swap/ItemMerges). Applied only while every 'requires' mod is loaded. Never prune: an old world whose old item is later unregistered is remapped from this list. Farmer's Respite's coffee goes, Rustic Delight's stays: crop, beans, sack, wild bush and the three drinks; long coffee folds into plain, strong into dark (item_merges.md 2.8).",
+  "requires": [
+    "farmersrespite",
+    "rusticdelight"
+  ],
+  "merges": {
+    "rusticdelight:coffee_beans": [
+      "farmersrespite:coffee_berries"
+    ],
+    "rusticdelight:roasted_coffee_beans": [
+      "farmersrespite:coffee_beans"
+    ],
+    "rusticdelight:coffee_beans_bag": [
+      "farmersrespite:coffee_beans_sack"
+    ],
+    "rusticdelight:wild_coffee": [
+      "farmersrespite:wild_coffee_bush"
+    ],
+    "rusticdelight:coffee": [
+      "farmersrespite:coffee",
+      "farmersrespite:long_coffee"
+    ],
+    "rusticdelight:dark_coffee": [
+      "farmersrespite:strong_coffee"
+    ]
+  }
+}

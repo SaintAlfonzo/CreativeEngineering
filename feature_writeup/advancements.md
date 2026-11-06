@@ -13,7 +13,7 @@ this file is the reference for the switch.
 | Replacement sources for lost rewards | Vinery banner: crafting recipe ([alcohol.md](alcohol.md) 10.5). The rest have none (3.2) |
 | In-game tests | AV-01 to AV-05 pending |
 
-- **Files to open:** `development/patcherMod/src/main/java/com/SaintAlfonzo/creativeengineering/mixin/ServerAdvancementManagerMixin.java`,
+- **Files to open:** `development/creativeCommon/src/main/java/com/SaintAlfonzo/creativecommon/mixin/ServerAdvancementManagerMixin.java`,
   `CEConfig.Advancements`.
 - **Knob:** `config/creativeengineering-common.toml` `[advancements] enabled` (default `false`). Read when data loads:
   a change applies on the next `/reload` or world start.
@@ -74,8 +74,8 @@ progress through advancements. Use FTB Quests, loot or code.
 
 ## 5. File map
 
-- [ServerAdvancementManagerMixin.java](../development/patcherMod/src/main/java/com/SaintAlfonzo/creativeengineering/mixin/ServerAdvancementManagerMixin.java)
-- [CEConfig.java](../development/patcherMod/src/main/java/com/SaintAlfonzo/creativeengineering/CEConfig.java) `Advancements`
+- [ServerAdvancementManagerMixin.java](../development/creativeCommon/src/main/java/com/SaintAlfonzo/creativecommon/mixin/ServerAdvancementManagerMixin.java)
+- [CEConfig.java](../development/creativeCommon/src/main/java/com/SaintAlfonzo/creativecommon/CEConfig.java) `Advancements`
 - Vinery port: `UpstreamTranslator` (`vintage_perfection` dropped), [alcohol.md](alcohol.md) 10.2
 - Banner recipe: [alcohol.js](../kubejs/server_scripts/cooking/alcohol.js), [alcohol.md](alcohol.md) 10.5
 

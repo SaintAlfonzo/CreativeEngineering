@@ -1,0 +1,6 @@
+{
+  "type": "forge:add_features",
+  "biomes": "#creativedelight:has_feature/goose_nest",
+  "features": "creativedelight:nest_goose",
+  "step": "vegetal_decoration"
+}

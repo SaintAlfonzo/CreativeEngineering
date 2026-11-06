@@ -1,0 +1,9 @@
+pace 2
+## SQ-CAL-06c | arid locate on normal terrain
+> locate biome #creativeengineering:seasons/arid
+waitlog (Located|Could not find) 300
+expect (desert|badlands|sands|canyon|oasis|spires|mesa)
+## SQ-CDV-03c | dumpclimatecaves on a multi_noise overworld
+> dumpclimatecaves
+waitlog \[dumpclimatecaves\].*(wrote|done|failed|Dumped)|Dumped.*climate 600
+reject ReferenceError

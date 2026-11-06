@@ -1,8 +1,0 @@
-{
-  "parent": "cookingforblockheads:block/spice_rack",
-  "render_type": "minecraft:cutout",
-  "textures": {
-    "particle": "cookingforblockheads:block/rack/azalea_spice_rack",
-    "texture": "cookingforblockheads:block/rack/azalea_spice_rack"
-  }
-}

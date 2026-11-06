@@ -1,0 +1,20 @@
+{
+  "color": "#1f4b6a",
+  "containers": [
+    {
+      "filled": [
+        "rusticdelight:calamari_soup"
+      ],
+      "empty": "minecraft:bowl",
+      "capacity": 2
+    }
+  ],
+  "flowing_texture": "moonlight:soft_fluids/potion_flow",
+  "food": {
+    "divider": 2,
+    "item": "rusticdelight:calamari_soup"
+  },
+  "from_mod": "rusticdelight",
+  "still_texture": "moonlight:soft_fluids/soup_liquid",
+  "translation_key": "item.rusticdelight.calamari_soup"
+}

@@ -10,14 +10,14 @@ creative_delight.md 19.
 
 | File | Checks |
 |---|---|
-| `kubejs_startup/creative_delight/_cdtest/cdtest_startup.js` | Startup loader: helpers (patcherMod pack) and dicts (pack folder) exist before the CD pack; `cd_core.js` first by priority; compost helper callable at startup top level |
-| `kubejs_startup/creative_delight/_cdtest/cdtest_startup_absent.js` | `// requires:` honoured by the startup loader |
-| `data/creative_delight/kubejs/_cdtest/cdtest_cooking_mirror.js` | GENERATED: real single-line helper calls from `kubejs/server_scripts/cooking/`, unchanged, inside `global.CD.recipes()`; each recipe is the `creative_delight:` twin of the pack's `creativeengineering:` recipe |
-| `data/creative_delight/kubejs/_cdtest/cdtest_namespace.js` | `ns()` / `withNamespace()` scoping, nesting, restore after an error; member switch; pack server globals before CD scripts |
-| `data/creative_delight/kubejs/_cdtest/cdtest_requires_absent.js`, `cdtest_requires_present.js` | Compartment headers in the CD server tree |
-| `data/creative_delight/kubejs/_cdtest/cdtest_tags.js` | `global.tags` from a CD script |
-| `data/creative_delight/kubejs/_cdtest/cdtest_probe.js` | `/cdtest <startup / ns / mirror / requires / tags / config / all>`: `[cdtest] PASS/FAIL` lines, then `[cdtest] done` |
-| `assets/creative_delight/kubejs/_cdtest/cdtest_client.js` | Client tree: a log line and a tooltip on the fishing net |
+| `kubejs_startup/creativedelight/_cdtest/cdtest_startup.js` | Startup loader: helpers (patcherMod pack) and dicts (pack folder) exist before the CD pack; `cd_core.js` first by priority; compost helper callable at startup top level |
+| `kubejs_startup/creativedelight/_cdtest/cdtest_startup_absent.js` | `// requires:` honoured by the startup loader |
+| `data/creativedelight/kubejs/_cdtest/cdtest_cooking_mirror.js` | GENERATED: real single-line helper calls from `kubejs/server_scripts/cooking/`, unchanged, inside `global.CD.recipes()`; each recipe is the `creativedelight:` twin of the pack's `creativeengineering:` recipe |
+| `data/creativedelight/kubejs/_cdtest/cdtest_namespace.js` | `ns()` / `withNamespace()` scoping, nesting, restore after an error; member switch; pack server globals before CD scripts |
+| `data/creativedelight/kubejs/_cdtest/cdtest_requires_absent.js`, `cdtest_requires_present.js` | Compartment headers in the CD server tree |
+| `data/creativedelight/kubejs/_cdtest/cdtest_tags.js` | `global.tags` from a CD script |
+| `data/creativedelight/kubejs/_cdtest/cdtest_probe.js` | `/cdtest <startup / ns / mirror / requires / tags / config / all>`: `[cdtest] PASS/FAIL` lines, then `[cdtest] done` |
+| `assets/creativedelight/kubejs/_cdtest/cdtest_client.js` | Client tree: a log line and a tooltip on the fishing net |
 
 Outside `suite/` (scratch-only, not in any jar):
 
@@ -35,11 +35,11 @@ regenerate it; the file stays as the record of SQ-CDT-05's 57/57 pass. `python3 
 ## Two ways to load it
 
 - **Jar path** (the real one): `./gradlew :creativeDelight:build -Pcd_test_suite --offline` writes
-  `development/creativeDelight/build/libs/creative_delight-<v>-cdtest.jar` (all three script types inside; not
+  `development/creativeDelight/build/libs/creativedelight-<v>-cdtest.jar` (all three script types inside; not
   archived, `installToMods` refuses it, `build_deploy.py` refuses a jar holding `_cdtest/`). Copy that jar and the
-  patcherMod jar from `development/patcherMod/build/libs/` into the scratch server's `mods/`, with the upstream
+  patcherMod jar from `development/creativeCommon/build/libs/` into the scratch server's `mods/`, with the upstream
   `oceansdelight-*`, `oceanic_delight-*` and `ends_delight-*` jars removed.
 - **Folder path** (the dev loop, 10.4): with the normal CD jar in the scratch `mods/`, copy `suite/data` and
-  `suite/assets` into the scratch server's `kubejs/` (they land at `kubejs/data/creative_delight/kubejs/_cdtest/`
+  `suite/assets` into the scratch server's `kubejs/` (they land at `kubejs/data/creativedelight/kubejs/_cdtest/`
   etc.). The startup half cannot load from a folder there (only the jar or `startup_scripts/`), so `/cdtest startup`
   FAILs "suite ran" on this path by design; run the other parts.

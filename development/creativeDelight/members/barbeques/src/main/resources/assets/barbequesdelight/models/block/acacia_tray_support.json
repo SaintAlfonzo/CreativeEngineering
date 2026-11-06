@@ -1,0 +1,8 @@
+{
+  "parent": "barbequesdelight:custom/tray_support",
+  "textures": {
+    "1": "barbequesdelight:block/acacia_tray",
+    "2": "barbequesdelight:block/acacia_tray",
+    "particle": "barbequesdelight:block/acacia_tray"
+  }
+}

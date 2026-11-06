@@ -1,0 +1,9 @@
+// backportedDisplay: Display Delight 1.7.0 (Forge 1.20.1) ported to Forge 1.19.2 (mod id displaydelight).
+// Shared Forge setup comes from build-logic/src/main/groovy/ce.forge-mod.gradle.
+// A Creative Delight member since 2026-11-02 (plan_creative_delight.md A2): build from the instance root
+// (`./gradlew :backportedDisplay:build`); it ships only through `:creativeDelight:installToMods`.
+// Resources come from the upstream jar through tools/port_resources.py (run it again after changing it); the same
+// tool writes src/main/java/.../init/DisplayFoods.java from tools/display_blocks.json.
+plugins {
+    id 'ce.forge-mod'
+}

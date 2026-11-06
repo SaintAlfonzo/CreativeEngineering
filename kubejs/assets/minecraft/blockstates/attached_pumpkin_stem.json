@@ -1,0 +1,67 @@
+{
+  "multipart": [
+    {
+      "when": {
+        "OR": [
+          {
+            "facing": "north"
+          },
+          {
+            "north": "true"
+          }
+        ]
+      },
+      "apply": {
+        "model": "minecraft:block/attached_pumpkin_stem",
+        "y": 90
+      }
+    },
+    {
+      "when": {
+        "OR": [
+          {
+            "facing": "east"
+          },
+          {
+            "east": "true"
+          }
+        ]
+      },
+      "apply": {
+        "model": "minecraft:block/attached_pumpkin_stem",
+        "y": 180
+      }
+    },
+    {
+      "when": {
+        "OR": [
+          {
+            "facing": "south"
+          },
+          {
+            "south": "true"
+          }
+        ]
+      },
+      "apply": {
+        "model": "minecraft:block/attached_pumpkin_stem",
+        "y": 270
+      }
+    },
+    {
+      "when": {
+        "OR": [
+          {
+            "facing": "west"
+          },
+          {
+            "west": "true"
+          }
+        ]
+      },
+      "apply": {
+        "model": "minecraft:block/attached_pumpkin_stem"
+      }
+    }
+  ]
+}

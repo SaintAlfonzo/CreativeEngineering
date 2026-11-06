@@ -20,7 +20,7 @@ baselines + entry counts are refreshed, new biomes appear with multiplier 1.0, b
 vanished are dropped (with a warning if you had edited them).
 
 Run: python3 tools/gen_biome_config.py
-Then edit biome_config.json; kubejs/server_scripts/worldgen/biome_overrides.js (patcherMod's
+Then edit biome_config.json; kubejs/data/creativeworldgen/kubejs/worldgen/biome_overrides.js (patcherMod's
 BiomeLayoutTuner) solves and applies it at every world load, so the next NEW world gets it.
 """
 import json
@@ -62,7 +62,7 @@ VANILLA_NETHER = {
 README = OrderedDict([
     ('workflow', 'Set a biome\'s "multiplier" (or "replace_with"), then /reload or rejoin to see the solve '
                  '(result_pct / note below update), and create a NEW world to use it. '
-                 'kubejs/server_scripts/worldgen/biome_overrides.js solves the layout at every world load. '
+                 'kubejs/data/creativeworldgen/kubejs/worldgen/biome_overrides.js solves the layout at every world load. '
                  'Multipliers other than 0/1 need a climate sample from /dumpclimate first (see README.md).'),
     ('multiplier', '1.0 = untouched. 0 = removed (its climate space goes to whichever biomes border it). '
                    '0.5 = half as common, 2.0 = twice as common, measured against share_pct. The solver '

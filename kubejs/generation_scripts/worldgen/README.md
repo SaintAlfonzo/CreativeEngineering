@@ -171,14 +171,14 @@ and the `CR-47`.. tests: `feature_writeup/crops.md` section 2.8.
 | File | Concern |
 |---|---|
 | `biome_traits.json` | **Edit for a new biome.** Traits per biome; also read by `mushroom_spawns.json`, `wild_flowers.json`, `bee_nests.json`, `mob_spawns.json` and their generators |
-| `kubejs/data/creative_delight/kubejs/_worldgen/wild_crops.json` | **Edit this for crops.** `crops` (rule, features, modifiers to switch off, vanilla patches to remove). Copied into the CD jar |
-| `kubejs/data/creative_delight/kubejs/_worldgen/wild_crops.js` | At world load: biome tag `creative_delight:wild_crops/<crop>`, mod modifiers -> `forge:none`, one add modifier per crop, one remove modifier for the vanilla patches (highPriorityData). Checks the live tags on `ServerEvents.loaded`. Machinery: the pack's `kubejs/server_scripts/worldgen/_biome_rules.js` |
-| `kubejs/data/creative_delight/worldgen/*_feature/wild/` | CD's own features (`creative_delight:wild/*`) where a mod's ground test would block a biome, and copies of the vanilla patches |
+| `kubejs/data/creativedelight/kubejs/_worldgen/wild_crops.json` | **Edit this for crops.** `crops` (rule, features, modifiers to switch off, vanilla patches to remove). Copied into the CD jar |
+| `kubejs/data/creativedelight/kubejs/_worldgen/wild_crops.js` | At world load: biome tag `creativedelight:wild_crops/<crop>`, mod modifiers -> `forge:none`, one add modifier per crop, one remove modifier for the vanilla patches (highPriorityData). Checks the live tags on `ServerEvents.loaded`. Machinery: the pack's `kubejs/server_scripts/worldgen/_biome_rules.js` |
+| `kubejs/data/creativedelight/worldgen/*_feature/wild/` | CD's own features (`creativedelight:wild/*`) where a mod's ground test would block a biome, and copies of the vanilla patches |
 | `tools/gen_crop_worldgen_table.py` | Evaluates the same rules -> `feature_writeup/crops_by_biome.md` (biome lists, before/after density, coverage) |
 | `tools/test_wild_crops.sh` | Offline: generator + the real script in Rhino, tags must match |
 
 Workflow: edit `wild_crops.json`, run the generator to see the lists, then rejoin (biome modifiers are read at world
-load, not on `/reload`). Only new chunks change. `creative_delight-common.toml [worldgen] wildCrops = false` turns it
+load, not on `/reload`). Only new chunks change. `creativedelight-common.toml [worldgen] wildCrops = false` turns it
 off. A new biome mod: its biomes show up as unclassified in the generator and the log; add them to `biome_traits.json`.
 
 ## Biome frequency tuning (how common each biome is)

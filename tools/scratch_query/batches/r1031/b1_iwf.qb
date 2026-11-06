@@ -1,6 +1,6 @@
 # Run 2026-10-31, boots B1b and B1c: the B1 world rebooted twice for the Immersive Weathering comparisons.
 # Same RES as B1 (reuses {PL1}/{PL3} from vars.json). Plan steps B1b, B1c.
-#   B1b: add -Dcreativeengineering.iwFastTick=false to srv/user_jvm_args.txt, run row SQ-IWF-02b
+#   B1b: add -Dcreativecommon.iwFastTick=false to srv/user_jvm_args.txt, run row SQ-IWF-02b
 #   B1c: remove that flag, set block_growths = false in srv/config/immersive_weathering-common.toml, run SQ-IWF-04,
 #        then put block_growths back to true
 pace 2

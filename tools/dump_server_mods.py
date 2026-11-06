@@ -6,6 +6,7 @@ into the dedicated server's mods/ folder.
 Which jars count as server-side comes from the table in mod_sides.md (instance root):
   side "both" or "server"  -> copied
   side "client"            -> skipped
+  side "dev"               -> skipped (dev instance only, never on a server or in a payload: Creative Devtools)
 
 Each jar is matched to its row by the first mod id in its META-INF/mods.toml (or fabric.mod.json),
 so a mod updated to a new version needs no doc edit. Jars with no mod id (datapack-style jars,
@@ -31,7 +32,7 @@ ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 MODS = os.path.join(ROOT, 'mods')
 DOC = os.path.join(ROOT, 'mod_sides.md')
 SERVER_SIDES = {'both', 'server'}
-VALID_SIDES = SERVER_SIDES | {'client'}
+VALID_SIDES = SERVER_SIDES | {'client', 'dev'}  # dev: dev mods/ only (Creative Devtools)
 
 
 def read_doc():

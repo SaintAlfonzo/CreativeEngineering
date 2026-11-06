@@ -65,7 +65,7 @@ public final class KettleBases {
 		if (fluid == null || fluid == Fluids.EMPTY) throw new JsonParseException("Unknown base fluid " + fluidId);
 		int amount = GsonHelper.getAsInt(base, "count", GsonHelper.getAsInt(base, "amount", KettleTank.UNIT));
 		if (amount != KettleTank.UNIT) {
-			LOGGER.warn("[creative_delight] Kettle recipe {}: base amount {} mB read as one unit ({} mB)", id, amount, KettleTank.UNIT);
+			LOGGER.warn("[creativedelight] Kettle recipe {}: base amount {} mB read as one unit ({} mB)", id, amount, KettleTank.UNIT);
 		}
 		FluidStack stack = new FluidStack(fluid, KettleTank.UNIT);
 		if (base.has("nbt")) {

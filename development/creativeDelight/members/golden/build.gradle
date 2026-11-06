@@ -1,0 +1,7 @@
+// portedGolden: Golden Food 2.0.0 rebuilt for Creative Delight (mod id goldenfood), our own code only; art and data come
+// from the unmodified upstream jar in <game dir>/goldenfood_upstream/ (feature_writeup/golden_food.md).
+// Shared Forge setup comes from build-logic/src/main/groovy/ce.forge-mod.gradle.
+// Build from the instance root (`./gradlew :creativeDelight:build`); it ships only nested in the Creative Delight jar.
+plugins {
+    id 'ce.forge-mod'
+}

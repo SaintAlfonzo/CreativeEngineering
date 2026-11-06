@@ -193,7 +193,7 @@ curve is chosen against the enchantments actually in the pack.
    Verify the two `15` constants are the only ones in that method (decompile the 1.19.2 client jar method, or
    check with `-Dmixin.debug.export=true`).
 3. **CEConfig section `[enchanting]`** in
-   `development/patcherMod/src/main/java/com/SaintAlfonzo/creativeengineering/CEConfig.java` (pattern:
+   `development/creativeCommon/src/main/java/com/SaintAlfonzo/creativecommon/CEConfig.java` (pattern:
    `ArmorEnchant`, line 384): `powerCap` (int, default 15 = vanilla, range 15-50) and #4's `powerOverrides` list.
    Top cost = `2 * powerCap`.
 4. **Easy Magic:** keep `max_enchanting_power = 15` so power stays the plain sum and `powerCap` is the only scale.

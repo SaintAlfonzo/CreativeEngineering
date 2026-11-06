@@ -11,8 +11,8 @@
 | Creative inventory screen + survival inventory while in creative | DEPLOYED with 1.0.3 |
 | Slot kept on screen at high GUI scale (upstream Y clamp bug) | DEPLOYED with 1.0.3 |
 
-- **Files to open:** [TrashSlotCompat.java](../development/patcherMod/src/main/java/com/SaintAlfonzo/creativeengineering/compat/TrashSlotCompat.java),
-  [TrashSlotGuiHandlerMixin.java](../development/patcherMod/src/main/java/com/SaintAlfonzo/creativeengineering/mixin/TrashSlotGuiHandlerMixin.java),
+- **Files to open:** [TrashSlotCompat.java](../development/creativeCommon/src/main/java/com/SaintAlfonzo/creativecommon/compat/TrashSlotCompat.java),
+  [TrashSlotGuiHandlerMixin.java](../development/creativeCommon/src/main/java/com/SaintAlfonzo/creativecommon/mixin/TrashSlotGuiHandlerMixin.java),
   `CEConfig.TrashSlot`.
 - **Knobs:** `config/creativeengineering-common.toml` `[trash_slot]`: `enabledScreens`, `allContainers`, `excludedScreens`, `positions`, `splitBackpacksByTier`.
 - **Per-client state:** `TrashSlotSaveState.json` (TrashSlot's, one entry per screen) and `TrashSlotSaveState.ce.json` (ours: screens the pack has switched on once). Both live in the game folder and are never deployed.
@@ -77,12 +77,12 @@ shared one spot even though each tier has a different panel size, and it never a
 
 ## 5. File map
 
-- [../development/patcherMod/src/main/java/com/SaintAlfonzo/creativeengineering/compat/TrashSlotCompat.java](../development/patcherMod/src/main/java/com/SaintAlfonzo/creativeengineering/compat/TrashSlotCompat.java): settings resolution, switch-on record, `StorageTierLayout`, creative provider.
-- [../development/patcherMod/src/main/java/com/SaintAlfonzo/creativeengineering/mixin/TrashSlotGuiHandlerMixin.java](../development/patcherMod/src/main/java/com/SaintAlfonzo/creativeengineering/mixin/TrashSlotGuiHandlerMixin.java): `onScreenInit` overwrite, creative redirects.
-- [../development/patcherMod/src/main/java/com/SaintAlfonzo/creativeengineering/mixin/TrashSlotComponentMixin.java](../development/patcherMod/src/main/java/com/SaintAlfonzo/creativeengineering/mixin/TrashSlotComponentMixin.java): Y clamp.
-- [../development/patcherMod/src/main/java/com/SaintAlfonzo/creativeengineering/mixin/TrashSlotSaveStateAccessor.java](../development/patcherMod/src/main/java/com/SaintAlfonzo/creativeengineering/mixin/TrashSlotSaveStateAccessor.java): settings map.
-- `../development/patcherMod/src/main/java/com/SaintAlfonzo/creativeengineering/CEConfig.java`: `TrashSlot` section.
-- `../development/patcherMod/libs/trashslot-forge-1.19.2-12.1.0.jar`: compile-only.
+- [../development/creativeCommon/src/main/java/com/SaintAlfonzo/creativecommon/compat/TrashSlotCompat.java](../development/creativeCommon/src/main/java/com/SaintAlfonzo/creativecommon/compat/TrashSlotCompat.java): settings resolution, switch-on record, `StorageTierLayout`, creative provider.
+- [../development/creativeCommon/src/main/java/com/SaintAlfonzo/creativecommon/mixin/TrashSlotGuiHandlerMixin.java](../development/creativeCommon/src/main/java/com/SaintAlfonzo/creativecommon/mixin/TrashSlotGuiHandlerMixin.java): `onScreenInit` overwrite, creative redirects.
+- [../development/creativeCommon/src/main/java/com/SaintAlfonzo/creativecommon/mixin/TrashSlotComponentMixin.java](../development/creativeCommon/src/main/java/com/SaintAlfonzo/creativecommon/mixin/TrashSlotComponentMixin.java): Y clamp.
+- [../development/creativeCommon/src/main/java/com/SaintAlfonzo/creativecommon/mixin/TrashSlotSaveStateAccessor.java](../development/creativeCommon/src/main/java/com/SaintAlfonzo/creativecommon/mixin/TrashSlotSaveStateAccessor.java): settings map.
+- `../development/creativeCommon/src/main/java/com/SaintAlfonzo/creativecommon/CEConfig.java`: `TrashSlot` section.
+- `../development/creativeCommon/libs/trashslot-forge-1.19.2-12.1.0.jar`: compile-only.
 
 ## 6. Offline checks
 
@@ -109,6 +109,6 @@ shared one spot even though each tier has a different panel size, and it never a
 
 ## 8. History
 
-- 2026-09-30: investigated (plan_1.0.3 section 5.5), then built; compiled as patcherMod 1.0.3 (in `development/patcherMod/build/libs/` and `jar_archive/`, not in `mods/`, not deployed).
+- 2026-09-30: investigated (plan_1.0.3 section 5.5), then built; compiled as patcherMod 1.0.3 (in `development/creativeCommon/build/libs/` and `jar_archive/`, not in `mods/`, not deployed).
 - 2026-10-02: in `mods/` (patcherMod 1.0.3 copied in, confirmed against the jar contents); not deployed.
 - 2026-10-19: status sweep: went out with pack 1.0.3 (DEPLOYED 2026-10-02); TS-01 to TS-13 pending.

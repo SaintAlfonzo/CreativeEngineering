@@ -45,7 +45,7 @@ Facts that frame every row:
 | `shrapnel` (Shrapnel) | 568-626 | 8 | Engineering | shrapnel/ShrapnelEntity, shrapnel/ShrapnelSpawner, CreativeEngineering | Engineering | |
 | `bonemeal_charm` (BonemealCharm) | 627-659 | 4 | Equipment | mixin/BonemealCharmMixin | Equipment | |
 | `crop_growth` (CropGrowth) | 660-693 | 2 | CD | CD:compat/wthit/WthitCropGrowth (`showHarvestable`, `fallback`) | CD | |
-| `crop_drops` (CropDrops, `.bell_peppers`; SoilYield `.soil_yield`, `.soil_yield.crops`) | 694-800 | 42 | CD | no Java reader; js: kubejs/data/creative_delight/kubejs/creativeengineering/soil_yield.js (`Java.loadClass(...).CROP_DROPS.SOIL_YIELD` and `NCH.cfg(..., 'CROP_DROPS.SOIL_YIELD')`), kubejs/data/creative_delight/kubejs/rusticdelight/crop_drops.js (`NCH.cfg(..., 'CROP_DROPS')`) | CD | |
+| `crop_drops` (CropDrops, `.bell_peppers`; SoilYield `.soil_yield`, `.soil_yield.crops`) | 694-800 | 42 | CD | no Java reader; js: kubejs/data/creativedelight/kubejs/creativeengineering/soil_yield.js (`Java.loadClass(...).CROP_DROPS.SOIL_YIELD` and `NCH.cfg(..., 'CROP_DROPS.SOIL_YIELD')`), kubejs/data/creativedelight/kubejs/rusticdelight/crop_drops.js (`NCH.cfg(..., 'CROP_DROPS')`) | CD | |
 | `stem_fruit` (StemFruit) | 801-835 | 5 | CD | crops/StemExtraFruit | CD | |
 | `leaf_decay` (LeafDecay) | 836-902 | 7 | Worldgen | block/FastLeafDecayPort, block/LeafDecayPiles, block/LeafDecayRange | Worldgen (leaf decay is a Worldgen row although in `block/`) | |
 | `leaf_piles` (LeafPiles) | 903-927 | 1 | Compat | mixin/LeafPileSlowMixin; surface/StuckInBlock (Run Speed line) | Compat; Engineering | SPLIT (one key read from two jars; see 2) |
@@ -147,8 +147,8 @@ dotted path over its static fields. Every moved section breaks these unless `NCH
 | `kubejs/server_scripts/equipment/dragon_autorepair.js` | `dragon_gear.autorepairEnabled`, `autorepairIntervalTicks`, `autorepairAmountPerInterval` | `Java.loadClass` (falls back to off) | Equipment |
 | `kubejs/server_scripts/equipment/end_gear.js` | `crafting.felsic_<piece>.*` (10 pieces) | `NCH.cfg` | Equipment |
 | `kubejs/server_scripts/magic/armor_effects.js` | `perf.mountEffectIntervalTicks` | `Java.loadClass` | CB (gear effects) |
-| `kubejs/data/creative_delight/kubejs/creativeengineering/soil_yield.js` | `crop_drops.soil_yield.*`, `.crops.*` | `Java.loadClass(...).CROP_DROPS.SOIL_YIELD` and `NCH.cfg` | CD (already a CD script) |
-| `kubejs/data/creative_delight/kubejs/rusticdelight/crop_drops.js` | `crop_drops.bell_peppers.*` | `NCH.cfg` | CD |
+| `kubejs/data/creativedelight/kubejs/creativeengineering/soil_yield.js` | `crop_drops.soil_yield.*`, `.crops.*` | `Java.loadClass(...).CROP_DROPS.SOIL_YIELD` and `NCH.cfg` | CD (already a CD script) |
+| `kubejs/data/creativedelight/kubejs/rusticdelight/crop_drops.js` | `crop_drops.bell_peppers.*` | `NCH.cfg` | CD |
 | `kubejs/server_scripts/_lib/recipe_scan.js` | `debug.recipe_scan.recipeScanAtLoad` | `NCH.cfg` | Devtools |
 | jar `kubejs_startup/creativeengineering/func/neoCraftHelper.js` | `cooking.ovenIngredientCounts` | `NCH.cfg` inside NCH | Common reading CD |
 

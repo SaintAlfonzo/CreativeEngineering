@@ -2,7 +2,7 @@
 # Pack performance evaluation on a scratch dedicated server (feature_writeup/perf.md section 10).
 #   eval_server.sh setup OUT LEVEL [events-off]   scratch_server.sh setup, then: normal world with structures and a fixed
 #                                                 seed, jars COPIED (not symlinked), JFR recording with ce-server.jfc
-#                                                 (events-off: every creativeengineering.* event disabled), the probes
+#                                                 (events-off: every creativecommon.* event disabled), the probes
 #   eval_server.sh boot OUT                       refuses to start while another game JVM is up
 #   eval_server.sh wait OUT PATTERN [SECS]        waits until logs/latest.log has PATTERN (or a crash), prints the line
 #   eval_server.sh cmd|stop OUT ...               as scratch_server.sh
@@ -36,7 +36,7 @@ p = sys.argv[1]
 s = open(p).read()
 s = re.sub(r'(<event name="creativeengineering\.[^"]+">\s*<setting name="enabled">)true', r'\1false', s)
 open(p, "w").write(s)
-print("events off:", s.count('creativeengineering.'), "creativeengineering names in jfc")
+print("events off:", s.count('creativecommon.'), "creativeengineering names in jfc")
 EOF
   fi
   cat > user_jvm_args.txt <<EOF

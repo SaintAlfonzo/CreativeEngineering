@@ -1,5 +1,7 @@
 #!/usr/bin/env python3
-"""Foods with a block model of their own on Brewin' and Chewin' coasters -> kubejs/assets/creativeengineering/brewinandchewin/coaster/.
+"""Foods with a block model of their own on Brewin' and Chewin' coasters -> the Creative Brewing jar's
+assets/creativebrewing/brewinandchewin/coaster/ (was the KubeJS resource pack's assets/creativeengineering/ up to
+2026-11-04, plan_cb_publish.md M3; a CB rebuild ships them, and the port skips a file whose item is not registered).
 
 The Brewin' port's coaster draws an item with its own small model when a coaster JSON names one
 (assets/<ns>/brewinandchewin/coaster/*.json, any namespace), and with [coaster] taggedItemsOnly on it takes only
@@ -18,7 +20,7 @@ Block models are full-size blocks (a DD plate is 14 px across), so each entry ge
 side down to TARGET_PX (about the size of the port's own bowls) and its height to MAX_HEIGHT_PX.
 
 placeable_catalog.py reads these files too: their items join #creativeengineering:placeable_on_coaster, and
-data/creative_delight/kubejs/creativeengineering/placeable_tags.js puts that tag into
+data/creativedelight/kubejs/creativeengineering/placeable_tags.js puts that tag into
 #brewinandchewin:placeable_on_coaster. So run this first. Items not in the dumps (kubejs/exported/food/placeable.json,
 items_by_mod/) are left out until /dumpall has seen them.
 
@@ -33,7 +35,7 @@ import zipfile
 import lang_index
 import placeable_catalog as pc
 
-OUT = lang_index.INSTANCE / 'kubejs/assets/creativeengineering/brewinandchewin/coaster'
+OUT = lang_index.INSTANCE / 'development/creativeBrewing/src/main/resources/assets/creativebrewing/brewinandchewin/coaster'
 # Widest side of a block model on a coaster, in pixels; the port's bowls are 12, its tankards 7.
 TARGET_PX = 10.0
 # Tallest a model may stand; Vinery's medium bottles are 18.
@@ -169,7 +171,10 @@ def file_name(item_id):
 def jars_for(patterns):
     out = []
     for pattern in patterns:
-        found = sorted(lang_index.INSTANCE.glob(pattern))
+        folder, _, name = pattern.rpartition('/')
+        # mods/ jars may be nested in a bundle (Creative Delight members)
+        found = (lang_index.pack_paths.mod_jars(name, lang_index.INSTANCE / folder) if folder == 'mods'
+                 else sorted(lang_index.INSTANCE.glob(pattern)))
         if found:
             out.append(found[-1])
     return out

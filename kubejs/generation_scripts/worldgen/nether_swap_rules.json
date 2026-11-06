@@ -1,7 +1,7 @@
 {
  "_readme": {
   "what": "Nether blocks in Overworld structures, swapped when a template loads (patcherMod worldgen/TemplateBlockSwaps). python3 tools/gen_nether_swaps.py expands these rules over every template into exact positions in nether_block_swaps.json; rerun it after editing this file or after mod updates.",
-  "rules": "In order; the first rule that matches a block at a position wins. structures: ids (or [\"*\"] = every Overworld structure); except: ids skipped (plus the plan/move_to_nether tag for every rule); except_holding: block selectors, skips every structure any of whose templates holds a matching block (\"@sculk\" = the sculk structures); blocks: block ids, \"@nether\", \"@nether_bricks\" or \"@sculk\"; to: a block id (state properties carry over per the generator's KEEP table, else by id suffix: trapdoor, button, pressure plate, slab, stairs, wall, wall torch, lantern, log/wood/hyphae/stem), \"air\" (removed), or \"deepslate\" (the nether brick family to its deepslate brick twin; a fence becomes a wall).",
+  "rules": "In order; the first rule that matches a block at a position wins. structures: ids (or [\"*\"] = every Overworld structure); except: ids skipped; except_holding: block selectors, skips every structure any of whose templates holds a matching block (\"@sculk\" = the sculk structures); blocks: block ids, \"@nether\", \"@nether_bricks\" or \"@sculk\"; to: a block id (state properties carry over per the generator's KEEP table, else by id suffix: trapdoor, button, pressure plate, slab, stairs, wall, wall torch, lantern, log/wood/hyphae/stem), \"air\" (removed), or \"deepslate\" (the nether brick family to its deepslate brick twin; a fence becomes a wall).",
   "safety": "A template any Nether or End structure can also place is never swapped (Nether builds keep their blocks)."
  },
  "rules": [
@@ -299,6 +299,76 @@
     "minecraft:soul_torch"
    ],
    "to": "minecraft:torch"
+  },
+  {
+   "note": "Crimson trapdoors to mangrove trapdoors, state kept (K28)",
+   "structures": [
+    "*"
+   ],
+   "blocks": [
+    "minecraft:crimson_trapdoor"
+   ],
+   "to": "minecraft:mangrove_trapdoor"
+  },
+  {
+   "note": "Crimson buttons to mangrove buttons, state kept (K29)",
+   "structures": [
+    "*"
+   ],
+   "blocks": [
+    "minecraft:crimson_button"
+   ],
+   "to": "minecraft:mangrove_button"
+  },
+  {
+   "note": "Crimson slabs to mangrove slabs, state kept (K33)",
+   "structures": [
+    "*"
+   ],
+   "blocks": [
+    "minecraft:crimson_slab"
+   ],
+   "to": "minecraft:mangrove_slab"
+  },
+  {
+   "note": "Warped pressure plates to dark oak pressure plates (K30)",
+   "structures": [
+    "*"
+   ],
+   "blocks": [
+    "minecraft:warped_pressure_plate"
+   ],
+   "to": "minecraft:dark_oak_pressure_plate"
+  },
+  {
+   "note": "Warped trapdoors to dark oak trapdoors, state kept (K31)",
+   "structures": [
+    "*"
+   ],
+   "blocks": [
+    "minecraft:warped_trapdoor"
+   ],
+   "to": "minecraft:dark_oak_trapdoor"
+  },
+  {
+   "note": "Warped stairs to dark oak stairs, state kept (K35)",
+   "structures": [
+    "*"
+   ],
+   "blocks": [
+    "minecraft:warped_stairs"
+   ],
+   "to": "minecraft:dark_oak_stairs"
+  },
+  {
+   "note": "Stripped warped hyphae to stripped dark oak wood, axis kept (K36)",
+   "structures": [
+    "*"
+   ],
+   "blocks": [
+    "minecraft:stripped_warped_hyphae"
+   ],
+   "to": "minecraft:stripped_dark_oak_wood"
   }
  ]
 }

@@ -9,7 +9,7 @@
     const $SBCrafting = Java.loadClass('net.minecraft.world.inventory.CraftingContainer')
     const $SBRecipeType = Java.loadClass('net.minecraft.world.item.crafting.RecipeType')
     const $SBForgeReg = Java.loadClass('net.minecraftforge.registries.ForgeRegistries')
-    const $SBServings = Java.loadClass('com.SaintAlfonzo.creativeengineering.food.CanServings')
+    const $SBServings = Java.loadClass('com.SaintAlfonzo.creativedelight.food.CanServings')
 
     const CAN = 'creativeengineering:canned_sweet_berry_pie_filling'
     const PIE = 'farmersdelight:sweet_berry_cheesecake'

@@ -5,7 +5,7 @@
 // Baking ingredients of the baking overhaul (feature_writeup/oven.md 2.6): frosting tops every cake, cookie dough is
 // the base of every cookie, powdered sugar is ground sugar. Plain items, not food. Own textures (sources in
 // textureswapper/frosting.png, textureswapper/baking/dough/, textureswapper/powdered_sugar/). Recipes:
-// kubejs/data/creative_delight/kubejs/creativeengineering/baking.js, kubejs/data/creative_delight/kubejs/creativeengineering/powdered_sugar.js. The powdered sugar block and bucket are
+// kubejs/data/creativedelight/kubejs/creativeengineering/baking.js, kubejs/data/creativedelight/kubejs/creativeengineering/powdered_sugar.js. The powdered sugar block and bucket are
 // patcherMod (food/PowderedSugarRegistry.java).
 
 StartupEvents.registry('item', e => {

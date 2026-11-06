@@ -65,6 +65,13 @@
 		blocks: ['MushroomBlock', 'FungusBlock'],
 	})
 
+	// Every dough, as Farmer's Delight's wheat dough and raw pasta (owner 2026-11-01): Create, oat, cucumber, sweet
+	// potato, sourdough, cookie and ginger doughs. Before crops so a dough typed as raw veggie keeps this value.
+	C.category('doughs', 'very_high', {
+		tags: [i.any_dough],
+		ids: [/dough$/],
+	})
+
 	// Fruit, vegetables, grain, berries, nuts - raw produce.
 	C.category('crops', 'high', {
 		tags: [i.t_crops, i.vegetables, i.fruit, i.t_berries, i.t_berries_c, i.t_grain, i.t_nuts, i.t_tea_leaves,

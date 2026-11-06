@@ -1,8 +1,8 @@
 #!/usr/bin/env python3
 """Shields: offline checks for the tier shields and the damage tags they read.
 
-Reads the live [shields] section of config/creativeengineering-common.toml, the code defaults in
-ShieldTier.java and the damage tag files in patcherMod, then prints:
+Reads the live [shields] section of config/creativeequipment-common.toml, the code defaults in
+Creative Equipment's ShieldTier.java and the damage tag files in patcherMod, then prints:
 
   1. the effective ladder per tier (what the game uses right now, from the toml)
   2. where the toml differs from the ShieldTier.java defaults (a fresh toml would get the code values)
@@ -23,13 +23,17 @@ from pathlib import Path
 import toml
 
 INSTANCE = Path(__file__).resolve().parent.parent
-TOML = INSTANCE / 'config/creativeengineering-common.toml'
-PM = INSTANCE / 'development/patcherMod/src/main'
-TIER_JAVA = PM / 'java/com/SaintAlfonzo/creativeengineering/shield/ShieldTier.java'
+# [shields] moved to Creative Equipment's file on 2026-11-04; its first boot carries the section over, so read the old
+# file only until then.
+TOML = INSTANCE / 'config/creativeequipment-common.toml'
+if not TOML.exists():
+    TOML = INSTANCE / 'config/creativeengineering-common.toml'
+PM = INSTANCE / 'development/creativeCommon/src/main'
+TIER_JAVA = INSTANCE / 'development/creativeEquipment/src/main/java/com/SaintAlfonzo/creativeequipment/shield/ShieldTier.java'
 TAGS = PM / 'resources/data/creativeengineering/damage_tags'
-ITEM_DICT = INSTANCE / 'kubejs/startup_scripts/_lib/item_dict.js'
-RECIPES = [INSTANCE / 'kubejs/server_scripts/equipment/shield.js',
-           INSTANCE / 'kubejs/server_scripts/equipment/end_gear.js']
+ITEM_DICT = INSTANCE / 'development/creativeCommon/src/main/resources/kubejs_startup/creativecommon/_lib/item_dict.js'
+RECIPES = [INSTANCE / 'kubejs/data/creativeequipment/kubejs/equipment/shield.js',
+           INSTANCE / 'kubejs/data/creativeequipment/kubejs/equipment/end_gear.js']
 
 GROUPS = ('physical', 'elemental', 'magic')
 ELEMENTS = ('fire', 'electric', 'cold', 'chemical')            # ElementalKind declaration order

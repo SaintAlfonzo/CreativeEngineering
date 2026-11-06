@@ -1,0 +1,34 @@
+# Large Meals 1.3.0 ported to Forge 1.19.2 (Creative Delight member). Keeps the upstream mod id so every resource location,
+# model and texture matches the upstream art, which is read from largemeals_upstream/ at runtime.
+modLoader="javafml"
+loaderVersion="${loader_version_range}"
+license="${mod_license}"
+issueTrackerURL="https://github.com/SaintAlfonzo/CreativeEngineering/issues"
+
+[[mods]]
+modId="largemeals"
+version="${mod_version}"
+displayName="${mod_name}"
+authors="${mod_authors}"
+description='''${mod_description}'''
+
+[[dependencies.largemeals]]
+modId="forge"
+mandatory=true
+versionRange="${forge_version_range}"
+ordering="NONE"
+side="BOTH"
+
+[[dependencies.largemeals]]
+modId="minecraft"
+mandatory=true
+versionRange="${minecraft_version_range}"
+ordering="NONE"
+side="BOTH"
+
+[[dependencies.largemeals]]
+modId="farmersdelight"
+mandatory=true
+versionRange="[1.19.2-1.2.4,)"
+ordering="AFTER"
+side="BOTH"

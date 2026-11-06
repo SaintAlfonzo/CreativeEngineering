@@ -1,5 +1,9 @@
 # End's Delight (Creative Delight repack): upstream mods.toml with the display name suffix, our version and
 # cleaned dependencies (creative_delight.md 0.3, 14.1.6). Expanded by ce.forge-mod's processResources.
+# Two mods in this jar: ends_delight (the repack) and enders_additions (Ender's Delight 1.1.4's End plants and dishes,
+# our own code, folded in from the former endersAdditions member, ends_delight.md 5.9). enders_additions keeps its mod id
+# so its config file, the [members] switch and the scripts' `requires: enders_additions` keep working; its ids are
+# endersdelight:, registered whether or not the installed Ender's Delight 1.2.2 is present.
 modLoader="javafml"
 loaderVersion="[43,)"
 license="${mod_license}"
@@ -28,5 +32,38 @@ description='''${mod_description}'''
     modId="farmersdelight"
     mandatory=true
     versionRange="[1.19-1.2.4,)"
+    ordering="AFTER"
+    side="BOTH"
+
+[[mods]]
+modId="enders_additions"
+version="1.1.4-ce-19.2-04"
+displayName="Ender's Delight Additions (Creative Delight)"
+authors="Axedgaming (Ender's Delight 1.1.4, MIT); 1.19.2 rebuild: SaintAlfonzo"
+credits="Ender's Delight by Axedgaming (1.1.4 art and data, MIT)"
+description='''Amberveils, Ethereal Saffron, Chorusflame, Void Pepper and five End dishes from the MIT Ender's Delight 1.1.4 release, rebuilt for Forge 1.19.2; reads its art and data from the 1.1.4 jar in enders_upstream/. Part of End's Delight (Creative Delight).'''
+[[dependencies.enders_additions]]
+    modId="forge"
+    mandatory=true
+    versionRange="[43,)"
+    ordering="NONE"
+    side="BOTH"
+[[dependencies.enders_additions]]
+    modId="minecraft"
+    mandatory=true
+    versionRange="[1.19.2,1.20)"
+    ordering="NONE"
+    side="BOTH"
+[[dependencies.enders_additions]]
+    modId="farmersdelight"
+    mandatory=true
+    versionRange="[1.19-1.2.4,)"
+    ordering="AFTER"
+    side="BOTH"
+# Optional: the endersdelight: ids register without it; when it is installed, load after it.
+[[dependencies.enders_additions]]
+    modId="endersdelight"
+    mandatory=false
+    versionRange="[1.19-1.2.2,)"
     ordering="AFTER"
     side="BOTH"

@@ -1,0 +1,25 @@
+{
+  "_comment": [
+    "WTHIT state lines (compat/WthitStateLines, format in compat/StateLines): 'Label: n / max' from an integer block",
+    "state property. Every matching rule adds a line, in this order; a later rule whose label or property the block",
+    "already shows is skipped, so specific rules come first. 'blocks' take ids, '*' globs and '#block_tags'; 'except' skips ids/globs;",
+    "a block without the property skips the rule. 'label' is the line id and lang key creativecommon.wthit.state.<label>.",
+    "'mode': count = value / top (default), taken = what's left of a count of what's gone (cake bites),",
+    "plus_one = value + 1 of top + 1 (Brewin' gives a last slice at servings 0).",
+    "Copy this file to kubejs/assets/creativecommon/ to override. feature_writeup/wthit_lines.md 2.5."
+  ],
+  "rules": [
+    { "blocks": ["brewinandchewin:*_cheese_wheel", "brewinandchewin:pizza"], "property": "servings", "label": "slices", "mode": "plus_one" },
+    { "blocks": ["rusticdelight:*_pancakes"], "property": "servings", "label": "servings", "mode": "taken" },
+    { "blocks": ["*"], "property": "servings", "label": "servings" },
+    { "blocks": ["*"], "property": "bites", "label": "slices", "mode": "taken" },
+
+    { "blocks": ["*"], "property": "eggs", "label": "eggs" },
+    { "blocks": ["*"], "property": "hatch", "label": "hatch" },
+
+    { "blocks": ["*cauldron*"], "except": ["minecraft:water_cauldron", "minecraft:lava_cauldron"], "property": "level", "label": "level" },
+
+    { "blocks": ["minecraft:respawn_anchor"], "property": "charges", "label": "charges" },
+    { "blocks": ["minecraft:sea_pickle"], "property": "pickles", "label": "pickles" }
+  ]
+}

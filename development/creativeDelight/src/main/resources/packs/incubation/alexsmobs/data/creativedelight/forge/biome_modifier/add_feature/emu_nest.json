@@ -1,0 +1,6 @@
+{
+  "type": "forge:add_features",
+  "biomes": "#creativedelight:has_feature/emu_nest",
+  "features": "creativedelight:nest_emu",
+  "step": "vegetal_decoration"
+}

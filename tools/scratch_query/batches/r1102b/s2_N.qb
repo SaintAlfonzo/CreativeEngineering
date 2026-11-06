@@ -1,0 +1,52 @@
+# Run r1102b, slice 2, boot N: three removals in one fresh normal world (prep_srv.sh OUT_N s2n B), then boot:
+#   - fruitsdelight-0.5.11.jar out of srv/mods (SQ-FR-05; no mod in mods/ declares a dependency on it)
+#   - FarmersRespite-1.19-2.0.jar out of srv/mods (SQ-CDQ-03; no dependents either)
+#   - srv/kubejs/data/creativedelight/ deleted (SQ-WCD-06: rules, scripts and features from the CD jar copy)
+# The wild-crop counts then drop by the Fruits Delight and Respite rows (each named in a "mod not loaded, skipped" line).
+# Probes: zz_zq_probe.js, zz_count.js.
+pace 2
+
+## SQ-FR-05 | Creative Delight loads without Fruits Delight
+bootexpect Done \(
+bootreject (?i)mixin apply failed|InvalidInjectionException
+bootreject ClassNotFoundException.*dev\.xkmc\.fruitsdelight|NoClassDefFoundError.*dev/xkmc/fruitsdelight
+bootreject Error occurred while handling event.*fruitsdelight/
+kjsreject (?i)error.*fruitsdelight/
+shell ls mods | grep -ci fruitsdelight; ! ls mods | grep -qi fruitsdelight
+shell grep -iE "fruitsdelight" logs/kubejs/server.log logs/kubejs/startup.log | head -8; true
+look the kubejs lines show the Fruits Delight scripts skipped by their "// requires: fruitsdelight" header (or no line at all), no error
+
+## SQ-CDQ-03 | Creative Delight loads without Farmer's Respite; pot buffer still works
+bootreject (?i)farmersrespite.*creativedelight\.mixins\.json|creativedelight\.mixins\.json.*farmersrespite
+bootreject /(ERROR|FATAL)\].*ClassNotFoundException.*umpaz\.farmersrespite
+shell ! ls mods | grep -qi farmersrespite
+> execute unless entity @e[type=minecraft:marker,tag=s2nhome] run summon minecraft:marker ~ 201 ~ {Tags:["s2nhome"]}
+sleep 2
+> data get entity @e[type=minecraft:marker,tag=s2nhome,limit=1] Pos
+capture N entity data: \[(-?\d+)\.\d+d, (-?\d+)\.\d+d, (-?\d+)\.\d+d\]
+> forceload add {N1-8} {N3-8} {N1+24} {N3+24}
+sleep 5
+> fill {N1-2} {N2-1} {N3-2} {N1+20} {N2-1} {N3+20} minecraft:stone
+> fill {N1-2} {N2} {N3-2} {N1+20} {N2+4} {N3+20} minecraft:air
+> setblock {N1+2} {N2} {N3+2} minecraft:campfire[lit=true]
+> kill @e[type=minecraft:item]
+> setblock {N1+2} {N2+1} {N3+2} farmersdelight:cooking_pot{Inventory:{Size:9,Items:[{Slot:0b,id:"minecraft:glow_berries",Count:1b},{Slot:1b,id:"farmersdelight:milk_bottle",Count:1b},{Slot:2b,id:"minecraft:egg",Count:1b},{Slot:3b,id:"minecraft:sugar",Count:1b}]}}
+sleep 25
+> data get block {N1+2} {N2+1} {N3+2}
+> zcount {N1-1} {N2-1} {N3-1} {N1+5} {N2+3} {N3+5}
+waitlog \[zcount\] entities 30
+expect farmersdelight:glow_berry_custard
+expect minecraft:glass_bottle
+reject item:minecraft:glass_bottle
+
+## SQ-WCD-06 | wild crop rules and features from the CD jar (pack folder copy deleted)
+shell test ! -d kubejs/data/creativedelight
+bootexpect \[wild-crops\] \d+ crop modifiers added, \d+ mod modifiers off, \d+ biome-file patches removed
+bootexpect \[wild-crops\] \d+ crop/biome pairs in \d+ crop tags
+bootreject \[wild-crops\] could not read
+bootreject \[wild-crops\] .*(no such biome|is not in #creativedelight:wild_crops/)
+bootexpect \[creativedelight\] server scripts ready
+shell grep -E "\[wild-crops\]" logs/latest.log | cut -c1-300
+> execute positioned {N1+10} {N2} {N3+10} run place feature creativedelight:wild/cabbages ~ ~ ~
+reject Unknown|ERROR
+look counts as SQ-WCD-01 minus the fruitsdelight and farmersrespite rows (named in "mod not loaded, skipped" lines); /place feature only proves the jar's configured feature loads (on stone it may place nothing: "Failed to place feature" is fine)

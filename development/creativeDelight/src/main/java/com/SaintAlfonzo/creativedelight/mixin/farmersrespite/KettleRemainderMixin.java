@@ -3,15 +3,19 @@ package com.SaintAlfonzo.creativedelight.mixin.farmersrespite;
 import javax.annotation.Nullable;
 
 import com.SaintAlfonzo.creativedelight.qol.RemainderBufferQol;
-import com.SaintAlfonzo.creativeengineering.cooking.RemainderBuffer;
-import com.SaintAlfonzo.creativeengineering.cooking.RemainderBufferHolder;
-import com.SaintAlfonzo.creativeengineering.cooking.RemainderOutputHandler;
+import com.SaintAlfonzo.creativedelight.cooking.RemainderBuffer;
+import com.SaintAlfonzo.creativedelight.cooking.RemainderBufferHolder;
+import com.SaintAlfonzo.creativedelight.cooking.RemainderOutputHandler;
+import com.SaintAlfonzo.creativedelight.cooking.StationSlotRule;
+import com.SaintAlfonzo.creativedelight.compat.farmersrespite.KettleContainers;
 
+import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.core.NonNullList;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.entity.BlockEntity;
+import net.minecraft.world.level.block.state.BlockState;
 import net.minecraftforge.common.capabilities.Capability;
 import net.minecraftforge.common.capabilities.ForgeCapabilities;
 import net.minecraftforge.common.util.LazyOptional;
@@ -33,9 +37,10 @@ import vectorwing.farmersdelight.common.utility.ItemUtils;
 /**
  * Farmer's Respite kettle (1.19-2.0): the same as CookingPotRemainderMixin for the pot. The kettle has no throw
  * method of its own: {@code processBrewing} calls FD's {@code ItemUtils.spawnItemEntity} inline for each ingredient
- * (slots 0-1) with a crafting remainder, so that call is redirected. Two bottles per "strong"/"long" upgrade: one
- * plates the drink through the container slot, one goes to the buffer. Plating waits {@code [cooking]
- * recycleShowTicks} after a recycle ({@code useStoredContainersOnMeal} HEAD), as on the pot.
+ * (slots 0-1) with a crafting remainder, so that call is redirected. A bottle leftover goes to the container slot when
+ * the drink is served in bottles (spares wait there for the next drinks), else to the buffer ({@code LeftoverPlan}).
+ * Plating waits {@code [cooking] recycleShowTicks} after a recycle ({@code useStoredContainersOnMeal} HEAD), as on the
+ * pot. {@code <init>}: containers ({@link KettleContainers}) only in the container slot, never in an ingredient slot.
  * Creative Delight QoL-1 compartment (moved from patcherMod 2026-10-25): applies only with this mod loaded
  * (compat.CDMixinPlugin); new leftovers are stored only while {@code [qol] remainderBuffer} is on (qol.RemainderBufferQol).
  */
@@ -58,6 +63,11 @@ public abstract class KettleRemainderMixin implements RemainderBufferHolder {
     @Shadow
     public abstract ItemStack getMeal();
 
+    @Shadow
+    private boolean doesMealHaveContainer(ItemStack meal) {
+        throw new AssertionError();
+    }
+
     @Unique
     private RemainderBuffer ce$remainders;
 
@@ -72,16 +82,44 @@ public abstract class KettleRemainderMixin implements RemainderBufferHolder {
         return ce$remainders;
     }
 
+    /** Containers only in the container slot, never in an ingredient slot (remainder_buffer.md 3.8). */
+    @Inject(method = "<init>", at = @At("TAIL"))
+    private void ce$slotRule(BlockPos pos, BlockState state, CallbackInfo ci) {
+        StationSlotRule.apply(inventory, (slot, stack) -> {
+            if (slot < INGREDIENT_SLOTS) return !ce$isContainer(stack);
+            if (slot == KettleBlockEntity.CONTAINER_SLOT) return ce$isContainer(stack) || isContainerValid(stack);
+            return true;
+        });
+    }
+
+    @Unique
+    private boolean ce$isContainer(ItemStack stack) {
+        return KettleContainers.KETTLE.isContainer(((BlockEntity) (Object) this).getLevel(), stack);
+    }
+
     @Redirect(method = "processBrewing", at = @At(value = "INVOKE",
             target = "Lvectorwing/farmersdelight/common/utility/ItemUtils;spawnItemEntity(Lnet/minecraft/world/level/Level;Lnet/minecraft/world/item/ItemStack;DDDDDD)V"))
     private void ce$keepRemainder(Level level, ItemStack remainder, double x, double y, double z, double xMotion, double yMotion, double zMotion) {
         ItemStack rest = RemainderBufferQol.enabled()
                 ? ce$getRemainderBuffer().store(remainder, inventory, KettleBlockEntity.CONTAINER_SLOT,
-                stack -> isContainerValid(stack), getMeal().getCount())
+                stack -> isContainerValid(stack))
                 : remainder;
         if (!rest.isEmpty()) {
             ItemUtils.spawnItemEntity(level, rest, x, y, z, xMotion, yMotion, zMotion);
         }
+    }
+
+    /** A leftover in the buffer that plates the waiting meal moves to the container slot (remainder_buffer.md 3.8). */
+    @Inject(method = "brewingTick", at = @At("HEAD"))
+    private static void ce$pullTick(Level level, BlockPos pos, BlockState state, KettleBlockEntity station, CallbackInfo ci) {
+        ((KettleRemainderMixin) (Object) station).ce$pullForPlating();
+    }
+
+    @Unique
+    private void ce$pullForPlating() {
+        ItemStack meal = getMeal();
+        int mealsWaiting = !meal.isEmpty() && doesMealHaveContainer(meal) ? meal.getCount() : 0;
+        ce$getRemainderBuffer().pullForPlating(inventory, KettleBlockEntity.CONTAINER_SLOT, mealsWaiting, stack -> isContainerValid(stack));
     }
 
     @Inject(method = "useStoredContainersOnMeal", at = @At("HEAD"), cancellable = true)
@@ -97,8 +135,7 @@ public abstract class KettleRemainderMixin implements RemainderBufferHolder {
         boolean fits = ce$getRemainderBuffer().fits(
                 RemainderBuffer.leftovers(inventory, 0, INGREDIENT_SLOTS, null),
                 inventory, KettleBlockEntity.CONTAINER_SLOT,
-                RemainderBuffer.servedIn(recipe.getOutputContainer(), recipe.getResultItem()),
-                getMeal().getCount() + recipe.getResultItem().getCount());
+                RemainderBuffer.servedIn(recipe.getOutputContainer(), recipe.getResultItem()));
         if (!fits) {
             cir.setReturnValue(false);
             BlockEntity self = (BlockEntity) (Object) this;

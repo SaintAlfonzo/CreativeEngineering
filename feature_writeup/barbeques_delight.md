@@ -1,7 +1,7 @@
 # Barbeque's Delight: overlap and integration report
 
-Investigation written 2026-10-30 for TODO `largecontent/mod-additions #12` (the Barbeque's Delight part). Nothing is
-built. Jar: `devmods/toBackport/barbequesdelight-1.3.0.jar` (NeoForge 1.21.1), unpacked and decompiled in
+Investigation written 2026-10-30 for TODO `largecontent/mod-additions #12` (the Barbeque's Delight part). **Port built
+2026-11-01** (section 4.0); in `mods/` since the Creative Delight jar of 11-02 14:01, scratch run r1102b (8), not played yet. Jar: `devmods/toBackport/barbequesdelight-1.3.0.jar` (NeoForge 1.21.1), unpacked and decompiled in
 `DecompiledMods/barbequesdelight-1.3.0/` (`jar/`, `src/`). Licence **LGPL-2.1** (`neoforge.mods.toml`), so the fork route
 applies: a port is needed (1.21.1 NeoForge -> 1.19.2 Forge) and may reuse upstream code and assets with the notice kept.
 Short name in this file: **BBQ**. Test prefix: **BBQ-** (unused in `feature_writeup/`).
@@ -16,9 +16,10 @@ asks for it by name. Upstream bugs are fixed.
 | Inventory | 36 items (33 plus 3 block items), 3 blocks, 0 effects, 0 potions, 26 recipes, 6 butcher trades, 1 mixin | surveyed (1, 3) |
 | Upstream bugs | B1-B5 | found (3.6) |
 | Overlap | skewer family (8 pack skewers), pack seasonings framework, wrap/sandwich rules, Create basin name | surveyed (2) |
-| Fold-in | steps 0-19 | planned (4), amended 2026-10-31 |
+| Fold-in | steps 0-19 | built 2026-11-01 (4.0); in `mods/` (CD jar 11-02 14:01), not played |
 | Decisions | O1-O9 (owner, 2026-10-31); D1-D10 | O1-O9 recorded (0.1); D1-D4, D7 answered by them, D5, D6, D8-D10 defaults stand (5) |
-| Tests | BBQ-01..BBQ-21 | drafted (8), amended 2026-10-31 |
+| Fold (4.5) | seasoning fold, `grilled`, trades, furnace routes, cooked-ingredient craft, names | BUILT 2026-11-03, installed in the CD jar 2026-11-03 00:08, not booted; SQ-BBQF-01 to -07 queued (SQ-CDJ7) |
+| Tests | BBQ-01..BBQ-40; scratch SQ-BBQ-01..08, SQ-BBQF-01..07 | in game: none run. Scratch r1102b (2026-11-02): SQ-BBQ-01, -03, -04, -05 PASS; -02, -06, -07 OPEN (batch faults); -08 not run (needs a player) |
 
 - **Jar:** `barbequesdelight-1.3.0`, mod id `barbequesdelight`, authors lcy0x1 (xkmc), package `com.mao.barbequesdelight`
   (forked from Mao's original). 60 Java classes, about 1,600 lines of logic.
@@ -29,12 +30,12 @@ asks for it by name. Upstream bugs are fixed.
 - **Pack references:** none to `barbequesdelight` in `kubejs/`, `item_dict.js` or `development/*/src`. The `barbecue`
   hits in `backportedDisplay` are FD's and End's Delight's sticks. Dumps (2026-10-20) predate nothing here: the jar is
   not installed, so `/dumpall` comes after the port (step 0).
-- **Already live:** nothing.
+- **Already live:** nothing played. Built 2026-11-01: the Creative Delight member `backportedBarbeques` (4.0), in `mods/` since 11-02 14:01.
 
 ## 0.1 Owner decisions (2026-10-31)
 
 Recorded from the owner's notes. They set the scope of the port; where they differ from a recommendation in sections
-2 to 5, they win. Nothing is built.
+2 to 5, they win. Built as recorded here on 2026-11-01 (4.0).
 
 | # | Decision | Effect on this report | TODO |
 |---|---|---|---|
@@ -68,6 +69,15 @@ Recorded from the owner's notes. They set the scope of the port; where they diff
 | O28 | **Raw skewers take seasonings, not sauces.** Seasonings on a raw skewer **copy over to the cooked skewer** when it is grilled | 4.3 #5 answered. The port refuses the three sauces on raw skewers (a change from upstream, which allows any seasoning on any BBQ skewer) | `largecontent/mod-additions #37`, `food/seasoning #11` |
 | O29 | **Cooked-ingredient skewers follow the skewer family rule: shaped plus one sequenced assembly** | Replaces the "shapeless" wording of O19. Not an exception: the same rule as Crispy Skewer ([recipes_cooking.md](recipes_cooking.md) 2.1). 4.3 #8 answered | `dishes/meals #46` |
 | O30 | **A grilled and a crafted cooked skewer of the same line are the same item but do not stack**, because their seasonings differ (`grilled` present or absent) | Pack framework behaviour: seasonings are NBT, sorted, and stacks split on NBT. 4.3 #9 answered, no special code | none |
+| O31 | **Seasoning conversion (4.3 #1): 64 powders and 16 sauces.** One old durable powder becomes 64 single-use items and one sauce 16. When default crafting recipes for the seasonings are added, one craft gives 64 powders or 16 sauces | 4.3 #1 answered | `food/seasoning #11`, `#17` |
+| O32 | **Raw meat and raw skewers follow raw chicken** for the Hunger chance and the AppleSkin shank colour. **Chicken alone has the extra poison chance.** **No new "nasty" food type**: the downside is folded into the vanilla raw-chicken system | Supersedes O26 and O27 and 4.3 #4. Raw skewers carry the chance of their meat | `food/types-and-tuning #19`, [food.md](food.md) 3.17 |
+| O33 | **Raw skewers can be smelted, smoked or campfire-cooked** (cooked skewer, no `grilled`, so no +2 saturation); the campfire counts (owner 2026-11-02) | 4.3 #6 answered, O22 settled | `dishes/meals #49` |
+| O34 | **Names.** A skewer is named **"Raw TYPE"** when uncooked and plain **"TYPE"** when cooked (no "Cooked" and no "Grilled" in the name). Seasoned items take the prefixes **Chili Flavored, Salted, Peppered, Garlic**. **"Grilled" appears only as a seasoning tooltip line, and only on a skewer that was grilled** | Supersedes O23 and the 3.9 "Cooked" column: the "Grilled X" names become plain "X". 4.3 #7 answered | `dishes/meals #50`, `#46` |
+| O35 | **Skewers as ingredients** (wrap, sandwich, bibimbap, other recipes) **do not carry `grilled`**, and are accepted grilled or not | Supersedes the 4.3 #10 default (combos no longer carry `grilled` saturation) | `dishes/meals #46`, `#48` |
+| O36 | **The `grilled` tooltip is shown exactly like the salt and other seasoning tooltips**: the same system, same line style and AppleSkin entry | 4.3 #12 answered | `food/seasoning #13` |
+| O37 | **4.3 #2, #3, #5, #8, #9, #11, #13, #14 follow their defaults** | Raw pack skewers: CD member under the original namespace, one basin recipe per skewer, stack 64. `grilled` +2 saturation points, capped. Sauces refused on raw skewers. `[food]` config section. Grilling JEI category name kept, raw pack skewers added. Tests BBQ-20 to BBQ-24 to be added | `dishes/meals #50`, `food/seasoning #13` |
+| O38 | **Section 5 answers.** D1: basin + grill, basin + furnace or smoker (no `grilled`), and an **expensive** shaped cooked-ingredient craft. D2: **re-add the six butcher seasoning trades** (reverses O6, 2026-11-02 second pass) and **mark an item for a crafting recipe for each seasoning**. D3: recommended (wrap on tortilla, shaped sandwich + one assembly, bibimbap takes and returns a bowl). D4: **map the six seasonings onto the pack seasoning framework**. D5: Mutton, Ingredients Basin kept. D6: the pack campfire rules (3.4.1: rain does not put out a signal fire; coal and charcoal blocks make one; no item fuelling). D7: **no placeables until models exist; pinned as a Display Delight item, not a Barbeque's Delight one**. D8: plain Forge rewrite. D9: upstream values until the skewer type lands. D10: tray marked for evaluation | O6 is reversed: the trades come back (row `food/seasoning #18`), so the source gap closes | `food/seasoning #12`, `#17`, `#18`, `food/placeable #5` |
+| O39 | **A basin and a tray in every vanilla wood** (2026-11-04) | Basin from the wood's stripped log texture, tray from Farmer's Delight's crate bottom palette-swapped to the wood's planks. Partly reverses O5 ("no recipe changes"): one stonecutter pair per wood. Oak keeps the 1.3.0 ids. Built, see 3.11 | none |
 
 ## 1. Overview
 
@@ -206,6 +216,8 @@ upstream source of all six is the butcher trade, which the port drops (O6), so u
 are creative or command only.
 
 All six are ported as upstream and marked for folding into the pack framework (O4, `food/seasoning #11`).
+**Folded 2026-11-03 (4.5):** they are pack seasonings now (crafted on, single use, stack 64); the table above is the
+upstream mechanic.
 
 #### 3.3.1 How the pack seasoning system works (for the fold)
 
@@ -243,7 +255,7 @@ Differences from BBQ's mechanic, which the fold has to close:
   sounds, steam and smoke particles.
 - **Ingredients Basin** (stonecutter: log -> 2; axe): 2 slots, click to insert, sneak to insert one; stick in main hand
   + side in off hand on a slot makes a skewer.
-- **Tray** (stonecutter: log -> 4; axe): 3 display slots, no logic; stacks on itself, breaks unsupported. Ported **for evaluation** (O12): keep or drop is decided in `largecontent/mod-additions #38` after play.
+- **Tray** (stonecutter: log -> 4; axe): 3 display slots, no logic; stacks on itself (any wood since O39), breaks unsupported. Ported **for evaluation** (O12): keep or drop is decided in `largecontent/mod-additions #38` after play.
 
 #### 3.4.1 Grill campfire in the port (O11)
 
@@ -255,7 +267,7 @@ as the pack's campfires do:
 | State | `lit` and `waterlogged` as a vanilla campfire; heat and light only while lit (light 15) |
 | Placed / merged | Unlit when placed, as the pack's campfires (Unlit Campfire default, kept); lit by flint and steel, fire charge or a fire arrow |
 | Extinguish | Water (waterlogged), a splash water potion, a shovel, as vanilla |
-| Weather | The pack rain rule (patcherMod `campfire/CampfireRain`, tag `creativeengineering:campfire/rain_douses`): lit grill-campfire goes out in rain unless the block under it is in `campfire/rain_proof_fuel` (coal block, charcoal blocks); burns forever otherwise |
+| Weather (rule revised 2026-11-02: rain does not douse a campfire in the signal-fire state; coal and charcoal blocks are signal-fire sources; see briefs/gameplay_misc.md) | The pack rain rule (CD `campfire/CampfireRain`, tag `creativecommon:campfire/rain_douses`): lit grill-campfire goes out in rain unless the block under it is in `campfire/rain_proof_fuel` (coal block, charcoal blocks); burns forever otherwise |
 | Break | Drops the grill and the campfire (upstream) |
 | Cold grill | Unchanged: progress falls by 2 per tick (B5 kept) |
 
@@ -265,7 +277,11 @@ Soul campfire merging: only if upstream supports it; otherwise plain campfire on
 
 ### 3.5 Recipes, loot, trades
 
-26 recipes as in 1 (Facts), all ported. No mob or chest loot. The six level-1 butcher trades are **not ported** (O6, which also removes B2). Seasoning trades come back in a comprehensive pass (`food/seasoning #12`) that covers every seasoning, not BBQ's alone.
+26 recipes as in 1 (Facts), all ported. No mob or chest loot. The six level-1 butcher trades were not ported at first
+(O6); **restored 2026-11-03** as upstream sold them (O38, `food/seasoning #18`): butcher level 1, 12 emeralds, 4 uses,
+4 XP, price multiplier 0.05, now giving 64 of a powder or 16 of a sauce (O31). B2 (the novice pool flood) is kept by
+that decision. CD server script `barbequesdelight/trades.js`. The comprehensive pass for every seasoning stays
+`food/seasoning #12`.
 
 ### 3.6 Upstream bugs
 
@@ -338,7 +354,14 @@ skewer burns (B5).
 | Void Pepper | Crushed Void Pepper (Ender's) | +2 nutrition, +0.4 saturation | nothing | popcorn |
 | Salt | Salt mod | own `Salted` tag, +2 nutrition (separate system) | any | every valid food |
 
-### 3.9 Skewer names (O23)
+### 3.9 Skewer names (O23, REVISED by O34 2026-11-02)
+
+**Built 2026-11-03 (4.5):** cooked skewers read plain "Beef Skewer", "Mutton Skewer" and so on (en_us only; the other
+three lang files keep upstream text); raw ones keep "Raw ...". Name prefixes on a skewer: Salted, Garlic, Cumin Flavored,
+Peppered (was Pepper Flavored), Chili Flavored, Honey Mustard Flavored, Buffalo Flavored, Barbeque Flavored. Grilled is
+a tooltip line only.
+
+**Superseded:** cooked skewers get no "Cooked" prefix, uncooked ones say "Raw", seasoned items take the prefixes Chili Flavored, Salted, Peppered and Garlic. The table below is the 2026-10-31 "Cooked" plan and is not to be built; redo it from O34: cooked skewers drop "Grilled" and "Cooked" and read plain "Beef Skewer" and so on; raw ones read "Raw Beef Skewer"; mutton stays (D5).
 
 Lang only; ids stay `grilled_*` and `raw_*` (port rule: keep upstream ids). Items cooked by any route say "Cooked".
 
@@ -361,12 +384,108 @@ Lang only; ids stay `grilled_*` and `raw_*` (port rule: keep upstream ids). Item
 The raw names of the 8 pack skewers are decision 7 in 4.3. The Grill block, the "Grilling" JEI category and the recipe
 type `grilling` keep their names.
 
+### 3.11 Wood variants (O39, 2026-11-04)
+
+A basin and a tray in each vanilla 1.19.2 wood: oak, spruce, birch, jungle, acacia, dark oak, mangrove, crimson,
+warped. Built 2026-11-04 (Creative Delight jar, not installed yet).
+
+- **Ids.** Oak keeps 1.3.0's `barbequesdelight:basin` / `tray` (placed blocks in saves stay); the rest are
+  `<wood>_basin` / `<wood>_tray`. Names "<Wood> Ingredients Basin", "<Wood> Tray"; oak's are "Oak Ingredients Basin"
+  ["Ingredients Basin"] and "Oak Tray" ["Tray"]. Dict keys `bbq_<wood>_basin` / `bbq_<wood>_tray` (item and block).
+- **Code.** `BBQBlocks.Wood` enum; `BASINS` / `TRAYS` maps (blocks and items), `BASIN` / `TRAY` are the oak entries.
+  One block entity type each, valid for every wood. Each copies its planks' properties (nether woods do not burn).
+  Trays stack on any tray (was the same block only). JEI lists every basin as a skewering catalyst.
+- **Textures.** Basin: the vanilla stripped log (`stripped_<wood>_log`, `_stem` for the nether woods) on the
+  unchanged `custom/basin` model. Tray: `textures/block/<wood>_tray.png`, Farmer's Delight's `crate_bottom` with its
+  4 wood tones mapped to the planks' 7-colour ramp (by brightness, positions 0, 2, 4, 6) and the frame the darkest plank
+  colour darkened by the crate's frame/wood ratio. The oak tray uses `oak_tray.png` too (the shared `custom/tray` and
+  `custom/tray_support` models point at it), so no tray reads Farmer's Delight's crate any more. Generator:
+  one-off palette swap, not in `tools/` (rerun from this description if the crate or a plank changes).
+- **Recipes.** Stonecutter, that wood's logs -> 2 basins / 4 trays (`#minecraft:<wood>_logs`, `_stems` for the nether
+  woods). The oak pair takes `#creativedelight:bbq_oak_logs`: `#minecraft:logs` minus the 8 other woods, so modded
+  logs still make the oak pair (as FD's spruce cutting board, kitchen.md 2.11). Ids
+  `creativedelight:stonecutting/bbq_<wood>_basin_from_logs`, `bbq_<wood>_tray_from_logs` (oak included; the old
+  `bbq_basin_from_logs` / `bbq_tray_from_logs` ids are gone).
+- **Tags.** All 18 in `mineable/axe` (member data) and `blockrunner:surface/wood` (`tags.js`).
+- Tests: SQ-BBQW-01 to -03, CQ-BBQW-01.
+
+### 3.10 Skewer inputs and basin handling (2026-11-04)
+
+**Skewer input tags.** Every basin and off-hand input of a skewering recipe is a pack tag
+`creativedelight:skewering/<input>` (dict keys `i.t_skewering_<input>`), seeded in `barbequesdelight/tags.js` and read by
+`recipes.js`. Adding a variant to an input = one entry in its tag; every skewer using that input takes it.
+
+| Tag | Seeded with | Used by |
+|---|---|---|
+| `beef` | `#forge:raw_beef` | beef skewer (basin) |
+| `chicken` | `#forge:raw_chicken` | chicken skewer (basin) |
+| `cod` / `salmon` | `#forge:raw_fishes/cod` / `salmon` | cod / salmon skewer (basin) |
+| `mutton` | `#forge:raw_mutton` | lamb skewer (basin) |
+| `mushroom` | brown mushroom | mushroom skewer (basin) |
+| `pork` | `#forge:raw_pork` | pork sausage skewer (basin) |
+| `potato` | `#forge:crops/potato` + Veggies sweet potato (whole only: no Rustic potato slices) | potato skewer (basin) |
+| `rabbit` | raw rabbit | rabbit skewer (basin) |
+| `vegetables` | `#forge:vegetables` | vegetable skewer (basin) |
+| `cabbage` | `#forge:crops/cabbage` (cabbage, cabbage leaf) | beef, rabbit skewer (off hand) |
+| `onion` / `tomato` | `#forge:crops/onion` / `tomato` | chicken / cod, salmon skewer (off hand) |
+| `bacon` | `#forge:raw_bacon` | potato skewer (off hand) |
+| `fruit` | `#forge:fruits` | vegetable skewer (off hand) |
+
+Bug fixed with it: the recipes passed `Item.of('#tag', n)`, which KubeJS turns into the tag's first item, so each skewer
+took only one item per input (one beef, one cabbage, ...). Inputs are now `{ id: tag, count: n }`. The same bug locked the
+Kebab Sandwich and Bibimbap to one cooked skewer; fixed the same way. A basin well still holds one item kind, so the n
+items of an input are one stack of one variant.
+
+**Sneak grab with full hands.** Forge skips `Block#use` when the player sneaks with anything in either hand, so the
+basin's sneak take-one only worked empty-handed. `BasinBlock.onSneakGrab` (RightClickBlock listener) takes one item from
+the clicked well into the inventory (dropped when full) whenever the player sneaks with an item in either hand. Empty
+hands keep the old path (one item into the hand). Sneak-insert-one never worked on the basin and is now replaced by this.
+The Tray is unchanged.
+
+**JEI.** Skewering: background padded 8px on the left; the vanilla empty off-hand slot sprite is drawn left of the
+off-hand slot. Grilling: the result shows the `grilled` seasoning (`PackSeasonings.addGrilled` on a copy, as the Grill
+does).
+
 ## 4. Fold-in, in build order
+
+### 4.0 Build record (2026-11-01)
+
+Built in one session, steps 0-19. Not installed (the game may be running): the Creative Delight jar and the patcherMod
+jar go to `mods/` together. Offline checks done: member, bundle and patcherMod compile; the bundle nests
+`backportedBarbeques-1.3.0-ce-19.2-01.jar` and carries the scripts; `recipes.js` run headless through the real NCH gives
+the 26 recipes with the inputs and times of 3.1; the item, block and food dicts load (food grammar check passes). The
+javac logic harness of 7 was not written: the grill tick needs a Level and recipe manager, so it is covered by SQ-BBQ-05
+to -08 instead.
+
+| Step | Done | Where / note |
+|---|---|---|
+| 0 Port | yes | `development/creativeDelight/members/barbeques` (project `backportedBarbeques`, mod id `barbequesdelight`, package `com.SaintAlfonzo.creativedelight.barbeques`), nested last in `bundle_members`. Not `development/backportedBarbeques` as planned: CD members live under `members/`. LGPL notice `NOTICE-upstream-LGPL.txt`. B1 fixed. Stack NBT: seasoning `BBQSeasoning` (string), combo contents `Skewers` (list), grill `Entries` |
+| 1 Ids | yes | `item_dict.js` (36 items + `t_raw_skewers`, `t_grilled_skewers`, `t_raw_cod`, `t_raw_bacon`; the blocks are `bbq_grill`, `bbq_basin`, `bbq_tray` because `i.basin` is Create's), `block_dict.js` (3 blocks), `food_dict.js` (34 keys) |
+| 2 Tags | yes | `kubejs/data/creativedelight/kubejs/barbequesdelight/tags.js`; skewer tags also in the port's data; mineable tags in the port's data; CarryOn tag dropped |
+| 3, 7 Recipes | yes | All 26 through `global.NCH` (`recipes.js`): new emitters `bbqSkewering`, `bbqGrilling`, `bbqCombine` in patcherMod's `neoCraftHelper.js`. The port ships **no** recipe data (step 3's "23 stay as data" dropped in favour of step 7) |
+| 8 Effects | none needed | |
+| 9 Food types | yes | `food_types.json`: 10 cooked skewers, wrap, sandwich `handheld` (where the pack skewers are; no skewer type yet), bibimbap `meal`, burnt skewer `hazard`; raw skewers are not food. SoL complexity: nothing to add (the tuning system of food.md 3.5 is not built, defaults apply) |
+| 10 Families | yes | `tools/food_families.py`: cooked skewers in `NO_FAMILY` (closest: skewer, waits for `dishes/meals #46`), bibimbap override `meal/rice`; wrap and sandwich by name (`sandwich/wrap`, `sandwich/roll`), burnt by type (`hazard`). `food_families.json` regenerates after `/dumpall` |
+| 11 Stack sizes | after `/dumpall` | upstream sizes now (skewers and combos 64, seasonings 1); `gen_stack_sizes.py` reads the families after the dump |
+| 13 Compost | yes | CD startup `barbequesdelight/compost.js`, 24 rows |
+| 16 Lang | yes | 3.9 names ("Cooked ...", Lamb shown as Mutton); `en_ud`, `uk_ua`, `zh_cn` carried; Jade and tab keys dropped |
+| 17 Audit | yes | BlockRunner: grill `metal`, basin and tray `wood` (`tags.js`, dict keys `t_blockrunner_metal` / `_wood`); WTHIT provider `compat/wthit` (`barbequesdelight:grill`, server data + client lines); Item Physic audit after `/dumpall` |
+| 18 JEI | yes | Grilling and Skewering categories; fixes: Skewering page has its own title (1.3.0 showed "Grilling" on both), time line shows each side (half the recipe time) |
+| 19 Release | partly | `mod_sides.md` note on the CD row, changelog family `## Barbeque's Delight`; plan row at the next release |
+
+Other port choices (no owner decision needed, recorded here):
+- **Cutting board:** a `PlayerInteractEvent.RightClickBlock` listener (priority HIGH) instead of 1.3.0's mixin.
+- **Campfire merge:** any dry plain campfire is taken in (1.3.0 needed a lit one, but the pack places campfires
+  unlit), and the grill starts unlit (3.4.1). Splash water bottles put it out through a `ProjectileImpactEvent`
+  listener; fire arrows light it; the shovel test is `ShovelItem` (1.19.2 has no douse tool action).
+- **Creative tab:** Farmer's Delight's, as every CD member; 1.3.0's own tab is not registered.
+- **Grill and storage blocks drop their contents** when broken (1.3.0 did through its library).
+- **Recipes are `isSpecial`** (kept out of the recipe book, as the pack does for custom types).
 
 Route (O10: plain Forge rewrite, part of Creative Delight): fork into `development/backportedBarbeques` (LGPL-2.1 upstream notice + GPLv3 for our code), ids under
 `barbequesdelight:` (port rule: keep upstream ids), then nest as a Creative Delight member like the other Delight ports.
 KubeJS rows go in CD trees: startup `development/creativeDelight/src/main/resources/kubejs_startup/barbequesdelight/`,
-server `kubejs/data/creative_delight/kubejs/barbequesdelight/` (memory `creative-delight-routing`).
+server `kubejs/data/creativedelight/kubejs/barbequesdelight/` (memory `creative-delight-routing`).
 
 0. **Port the code** (the large step). Replace the four bundled libraries with plain Forge 1.19.2 (D8):
    - Registrate MC1.21 -> `DeferredRegister` + hand-written models and blockstates (copy the generated JSON from the jar).
@@ -476,12 +595,14 @@ Full seasoning catalog, cap and pairs: [seasonings.md](seasonings.md).
 
 ### 4.3 Further open decisions (found 2026-10-31)
 
+**All answered 2026-11-02** (owner decisions O31 to O38 in 0.1); the table below keeps the original wording. Answers: #1 64 and 16; #2 default; #3 default; #4 no nasty type, folded into raw chicken (O32); #5 default; #6 yes, no `grilled` (O33); #7 O34; #8 default; #9 default; #10 O35; #11 default; #12 O36; #13 default; #14 default.
+
 Each has a default that applies if unanswered.
 
 | # | Decision | Size | Default |
 |---|---|---|---|
 | 1 | Items per old durable item after the fold (O20): how many seasoning items replace one 64-use powder and one 16-use sauce, and does the craft or trade yield that many | big | The same number of uses as upstream: one craft or trade gives 64 powders or 16 sauces ("a similar usable amount"); tune in play |
-| 2 | Raw versions of the 8 pack skewers (O24): item namespace (the pack skewer's own mod id via a CD member, or `barbequesdelight`), the recipe that makes them (basin with raw ingredients? what ingredients), grill time, stack size, and a recolored texture for each | big | CD member under the original mod's namespace, one basin recipe per skewer from its raw ingredients, grill time by the closest BBQ line, stack 64, recolor review in `food/placeable #5` |
+| 2 | Raw versions of the 8 pack skewers (O24): item namespace (the pack skewer's own mod id via a CD member, or `barbequesdelight`), the recipe that makes them (basin with raw ingredients? what ingredients), grill time, stack size, and a recolored texture for each | big | CD member under the original mod's namespace, one basin recipe per skewer from its raw ingredients, grill time by the closest BBQ line, stack 64, recolor review in `food/placeable #5`; **built 2026-11-04 (4.7)**, crafted by hand from raw ingredients (plan_meals_rolls_bbq.md), not a basin recipe |
 | 3 | `grilled` +2 saturation (O25): confirm this means +2 saturation points in the pack's unit (capped at the food's hunger, like cheese's +2), not +2 hunger shanks | small | +2 saturation points, capped |
 | 4 | "Nasty" food type | big | **Answered (O27):** hazard-style downside for chicken only; other raw meats worse but not nasty. Poison chance and values: `food/types-and-tuning #19` |
 | 5 | Sauces and raw skewers | big | **Answered (O28):** no sauces on raw skewers; seasonings allowed and copied to the cooked skewer |
@@ -495,7 +616,101 @@ Each has a default that applies if unanswered.
 | 13 | JEI: the Grilling category keeps its name though the item is "Cooked"; add the 8 raw pack skewers to it | small | Keep "Grilling" (the station) |
 | 14 | Tests: names, raw skewer food and poison, `grilled` saturation, crafted skewer without `grilled`, sauce on a raw skewer | small | Added as BBQ-20 to BBQ-24 when 4.3 is answered |
 
+### 4.4 Third batch (2026-11-02)
+
+- Shaped cooked-ingredient skewer craft: cooked ingredients, plus one extra input of the largest-value ingredient on the line.
+- Lamb (Mutton) 9 / 0.8 and rabbit 8 / 0.8 accepted (`food/types-and-tuning #19`); the rest tuned later.
+- Butcher trades restored as upstream sold them: six, level 1, 12 emeralds, 4 uses, 4 XP (`food/seasoning #18`).
+- Kebab Sandwich and Bibimbap recipes: defaults (`dishes/meals #48`). Tray: still in evaluation (`largecontent/mod-additions #38`).
+- Pinned: raw pack skewers (`dishes/meals #50`, waits on textures) and seasoning crafts (`food/seasoning #17`).
+
+### 4.5 Fold build (2026-11-03)
+
+Built in one session for `food/seasoning #11`, `#13`, `#18`, `dishes/meals #46` (part) and `#49`. Compiled
+(`:backportedBarbeques:compileJava`, `:creativeDelight:compileJava`), then `:creativeDelight:build`; installed with the CD jar
+2026-11-03 00:08 (member `backportedBarbeques-1.3.0-ce-19.2-01` nested; framework Java, `seasonings.js` and lang are in
+the CD jar), not run in game (last boot 2026-10-31). Scratch rows SQ-BBQF-01 to -07 (queue section SQ-CDJ7); client
+tests BBQ-17, BBQ-22 to -29.
+
+| Part | Built | Where |
+|---|---|---|
+| New seasoning kinds | `fast`, `alwaysEdible`, `damage` (+ `damageType` fire / magic / generic), `transform` {chance, duration, amplifier}, `station`, `combinesAll` | CD `food/Seasonings` (`Kinds`, `Transform`, `foodProperties`, `addFromStation`, `without`, `applyEaten`), parsed from `seasonings.js` |
+| Cap | `[food] maxSeasonings` (default 2, 1-16) and `[food] grilledCountsTowardMax` (default false) in **creativedelight-common.toml** (CD's `CDConfig.Food`, not CEConfig: the framework moved to CD at the carve). `Seasonings.canAdd` refuses a craft past the cap | `CDConfig`, `Seasonings` |
+| Six seasonings | defined once in `seasonings.js` as `barbequesdelight:cumin` (heal 2), `pepper` (fast), `chili` (always edible, 2 fire damage), `honey_mustard` (chance x2, duration x0.5), `buffalo` (2 fire damage, duration x0.5, amplifier +1), `barbeque` (duration x2). Powders on `#barbequesdelight:raw_skewers` + `grilled_skewers`, sauces on `grilled_skewers` only (O28 by tag). No pairs among them (not decided) | `seasonings.js` |
+| Crafts | the existing `seasoning.js` loop emits one `NCH.season` craft per seasoning; one item consumed | no change needed |
+| Click use retired | grill and cutting board seasoning removed; seasoning items lose durability, stack 64; old `BBQSeasoning` NBT is not converted (no conversions) | member `GrillBlock`, `BarbequesDelight`, `SeasoningItem`, `BBQItems` |
+| Fast / always edible / transform on the food | the skewers and combos ask `Seasonings.foodProperties` (member `compat/PackSeasonings`, reflection: members do not compile against CD). Other foods do not get these three kinds until their item asks too | member `BBQSkewerItem`, `BBQSandwichItem` |
+| `grilled` | station seasoning `barbequesdelight:grilled`, +2 saturation points (capped at the food level), no craft, combines with any. The Grill adds it when a flipped skewer finishes; furnace, smoker, campfire and shaped crafts do not. Tooltip "Grilled: +2 saturation" and AppleSkin by the existing seasoning code | `seasonings.js`, member `GrillBlockEntity` |
+| Raw to cooked | the Grill copies the raw skewer's NBT (seasonings included) as before | unchanged |
+| Combos | the combine recipe drops `grilled` from the skewers it stores (O35); eating runs each stored skewer's seasoning bonuses | member `CombineItemRecipe`, `BBQSandwichItem` |
+| Trades | six butcher level-1 trades (3.5) | `barbequesdelight/trades.js` |
+| Furnace routes (O33) | smelting (200 ticks), smoking (100), campfire (600), 0.35 XP, for all 10 lines. Vanilla cooking keeps no NBT: seasonings on a raw skewer are lost on these routes | `recipes.js` |
+| Cooked-ingredient craft (O38, 4.4) | shaped, `_manual_only`, 10 lines: `[' AB', 'ABA', 'S  ']` with 3 A + 2 B (A = the larger: cooked beef / chicken / cod / salmon, baked potato over cooked bacon, cooked rabbit, vegetables over fruits) or `[' AA', 'AAA', 'S  ']` with 5 cooked mutton / brown mushroom / cooked pork. Mushroom and vegetable lines have no cooked form, so raw inputs. The family's sequenced assembly is not built (family recipes later) | `recipes.js` |
+| Family | cooked skewers leave `NO_FAMILY` in `tools/food_families.py` and classify as `skewer` (handheld, "skewer" in the name) at the next `/dumpall` + `food_families` run; that also makes them saltable | `tools/food_families.py` |
+| Names (O34) | 3.9 | member `en_us.json`, `BBQSkewerItem`, `BBQLang` |
+| WTHIT (`ui/wthit #13`) | already built 2026-11-01 (step 17): per-slot countdown, Ready to Flip at half time, Cooked, Burnt | member `compat/wthit` |
+
+Not built: raw pack skewers (`dishes/meals #50`, pinned), seasoning crafting recipes (`food/seasoning #17`, pinned),
+seasoned-icon overlays for the seven new seasonings (no textures; the model lookup finds nothing and draws none, the
+model loader may log a missing-model line per id), the 8 pack skewers as seasonable foods (with `#50`).
+
+### 4.7 Skewer line, raw pack skewers, plain combos (2026-11-04, plan_meals_rolls_bbq.md C)
+
+Built 2026-11-04 into the CD jar; not run in game. Answers 4.3 #2 (raw pack skewers), with the recipe changed by the owner's
+plan from a basin recipe to a craft by hand.
+
+- **Helper `F.skewer`** (CD `cd_food.js`): one call per skewer line emits the raw skewer (basin for the ten BBQ lines, a
+  shaped craft from raw ingredients for the pack skewers, shapeless for the End Skewer), the Grill (skipped while the member
+  is off), furnace / smoker / campfire (0.35 xp, vanilla times), the heatless `_from_cooked_manual_only` craft and the
+  existing assembly. All 18 lines are in `barbequesdelight/skewers.js`; the ten BBQ lines keep their recipe ids (BBQ-39).
+- **Raw pack skewers** (`PackRawSkewers.java`): `farmersdelight:raw_barbecue_stick`, `ends_delight:raw_end_barbecue_stick`,
+  `miners_delight:raw_improvised_barbecue_stick`, `nethersdelight:raw_nether_skewer`, `oceanic_delight:raw_seafood_skewer`,
+  `veggiesdelight:raw_turnip_mutton_skewer`, `endersdelight:raw_crispy_skewer`, `hostiledelight:raw_caveskewer`; each only while
+  its mod is loaded. `BBQSkewerItem`, not edible, stack 64, stick remainder (blaze rod for the Nether Skewer), raw cod skewer
+  texture for all (recolors: `food/placeable #5`), names "Raw ..." (O34) in the member lang, in `#barbequesdelight:raw_skewers`
+  (powders yes, sauces no).
+
+| Skewer | Raw craft | Heatless craft | Grill ticks (closest line) |
+|---|---|---|---|
+| Barbecue Skewer (FD) | onion, tomato, any raw meat (food type), stick | onion, tomato, cooked meat; assembly kept | 320 (beef) |
+| End Skewer (End's) | shapeless: Shulker Mollusk, raw dragon meat, chorus fruit, stick; 1 (upstream 3, endermite meat dropped) | mollusk, roasted dragon meat, chorus fruit | 320 (lamb) |
+| Improvised Skewer (Miner's) | cave carrot, brown mushroom, bat wing | baked cave carrot, brown mushroom, smoked bat wing | 280 (potato) |
+| Nether Skewer (Nether's) | propelpearl, raw strider (upstream's inputs), blaze rod | none (no cooked strider) | 320 (beef) |
+| Seafood Skewer (Oceanic) | shrimp, raw calamari, sea pickle | fried shrimp, cooked calamari, sea pickle (upstream) | 240 (cod) |
+| Turnip Mutton Skewer (Veggies) | raw mutton, turnip | cooked mutton, turnip; assembly kept | 320 (lamb) |
+| Crispy Skewer (Ender's) | mite crust, 2 chorus fruit | mite crust, chorus fruit, popped chorus fruit; assembly kept | 280 (chicken) |
+| Cave Skewer (Hostile) | glow berries, spider eye, rotten flesh | none (all raw already) | 280 (chicken) |
+
+- **Shulker mollusk merge undone** (owner, End Skewer uses the mollusk only): the 11-02 merge (`dishes/ingredients #32`,
+  [item_merges.md](item_merges.md) 2.14) is emptied for the mollusk and filet; Ender's knife drop and mollusk-to-filet cut are
+  upstream's again; the stuffed shulker (pot and heatless) takes End's shulker meat, so every other recipe keeps End's meat.
+- **Combos** (C8): Kebab Wrap (shaped on a tortilla + assembly), Kebab Sandwich (shaped on whole bread + assembly; the long-roll
+  sandwich family's bread, no separate bread-roll tag exists) and Bibimbap (heatless rice meal) from cooked BBQ skewers. No
+  combine recipe, nothing stored, no skewer effects; `BBQSandwichItem` keeps only its own seasoning. Static values: Wrap
+  10 / 0.6 (8 / 0.7), Sandwich 16 / 0.6 (14 / 0.7), Bibimbap 16 / 0.8 (16 / 0.7); effects kept (Wrap Nourishment 1:00 at
+  50 %, Bibimbap Nourishment 2:00). Set in `BBQItems.java` (no startup food-value file exists for the member).
+- **Seasoning tooltip** (C1): the seasoning item shows the line a seasoned food shows (CD `SeasoningTooltip.line`, by
+  reflection from `SeasoningItem`); 1.3.0's info text only without Creative Delight. Salt is not a pack seasoning (The Salt's
+  "Salted"), so it is unchanged.
+- **Names** (C11a): Barbecue on a Stick, End Barbecue Stick, Improvised Barbecue Stick are Barbecue Skewer, End Skewer,
+  Improvised Skewer (CD `creativeengineering/names.js`; Display Delight plated names follow).
+- **Family and cans** (C5, C6): every cooked skewer is `skewer` (name rule also matches "barbecue stick" until the renames reach
+  the dump); raw skewers are not foods, so no family; no skewer can row or type loop.
+
+### 4.6 Owner fixes (2026-11-03, after the 1.2.00 play)
+
+- Seasoned icons: the seven new seasonings (`cumin`, `pepper`, `chili`, `honey_mustard`, `buffalo`, `barbeque`, `grilled`)
+  get overlay models `barbequesdelight:item/seasoned/<id>` in the member, all on Salt's `salt:item/salted_overlay` texture
+  until own textures exist (owner: "use the salt icon for now"). Fixes the seven `Unable to load model` lines.
+- WTHIT: `barbequesdelight.jade.burnt` reads "Burnt" (was "Burnt!!").
+- JEI titles: the Seasoning page title was lost to the shared lang path, not a BBQ fault ([creative_split.md](creative_split.md) 3 rule 11).
+- Trades: the six seasonings were missing from JER only on the dedicated server ([trade_sync.md](trade_sync.md)).
+
+Built into the CD jar and installed 2026-11-03 (member still `-01`). Tests: CQ-BBQF-02, CQ-LNG-01, CQ-TSY-01.
+
 ## 5. Decisions for the owner
+
+All answered 2026-11-02 (O38 in 0.1).
 
 | # | Question | Recommendation | Default if not answered |
 |---|---|---|---|
@@ -521,11 +736,12 @@ answered (tray ported for evaluation). **No decision is open** apart from the qu
 
 | Path | What |
 |---|---|
-| `development/backportedBarbeques/` | Forked port: Java (blocks, block entities, recipes, items, mixin, JEI, WTHIT grill provider), data, assets, `LICENSE` (LGPL-2.1 notice) |
-| `development/creativeDelight/` | Member nesting (build script, CD row) |
-| `development/creativeDelight/src/main/resources/kubejs_startup/barbequesdelight/` | Item dict additions, food values |
-| `kubejs/data/creative_delight/kubejs/barbequesdelight/` | NCH recipes (grill, basin, tray, family mirrors, combos), tags |
-| `development/patcherMod/.../kubejs_startup/creativeengineering/func/neoCraftHelper.js` | `bbqSkewering`, `bbqGrilling` emitters |
+| `development/creativeDelight/members/barbeques/` | The port (built 2026-11-01): Java (blocks, block entities, recipes, items, cutting board event, JEI, WTHIT grill provider), data (loot, tags), assets, `NOTICE-upstream-LGPL.txt` |
+| `development/creativeDelight/gradle.properties`, root `settings.gradle` | Member nesting (`bundle_members`, project `backportedBarbeques`) |
+| `kubejs/startup_scripts/_lib/item_dict.js`, `block_dict.js`, `food_dict.js` | Ids |
+| `kubejs/data/creativedelight/kubejs/barbequesdelight/` | `recipes.js` (all 26), `tags.js` |
+| `development/creativeCommon/.../kubejs_startup/creativeengineering/func/neoCraftHelper.js` | `bbqSkewering`, `bbqGrilling`, `bbqCombine` emitters |
+| `kubejs/generation_scripts/food/food_types.json`, `tools/food_families.py` | Food types, family overrides |
 | `development/creativeDelight/src/main/resources/kubejs_startup/barbequesdelight/compost.js` | 24 compost entries (hand file) |
 | `feature_writeup/barbeques_delight.md` | this file; plus rows in `food_families.md`, `creative_delight.md`, `mod_sides.md` |
 
@@ -540,6 +756,15 @@ answered (tray ported for evaluation). **No decision is open** apart from the qu
 
 ## 8. In-game test suite (drafted)
 
+- **r1102b 2026-11-02** (scratch server; verdicts in `perf/runs/r1102b/` HANDOVER.md and the slice judged.md): PASS SQ-BBQ-01, -03, -04, -05; rerun pending (batch fault) SQ-BBQ-02, -06, -07.
+- **r1103 2026-11-03** (scratch server; verdicts in `perf/runs/r1103/` FINAL.md and the slice judged.md): PASS SQ-BBQF-01, -05, -02, -03, -04, -06, -07, SQ-BBQ-02, -06, -07.
+
+Scratch r1102b (2026-11-02, `perf/runs/r1102b/s3/judged.md`): SQ-BBQ-01 (boot), -03 (tags), -04 (24 compost rows by
+tier), -05 (grill on a campfire, rain on stone / coal, drops grill + campfire: server half of BBQ-07, BBQ-18) PASS.
+OPEN, batch faults: SQ-BBQ-02 (skewering 10 and grilling 10 present; the combine recipes are `creativedelight:shapeless/*`,
+the row's id pattern is stale), SQ-BBQ-06 and -07 (the bot's click lands outside the grill slot, nothing reached the
+grill). SQ-BBQ-08 not run (bots cannot craft).
+
 | ID | Test | Pass |
 |---|---|---|
 | BBQ-01 | Craft grill; stonecut a log into 2 basins and 4 trays | items appear |
@@ -552,20 +777,40 @@ answered (tray ported for evaluation). **No decision is open** apart from the qu
 | BBQ-18 | Lit grill-campfire: water, splash water potion, shovel, rain (on stone, then on a coal block) | extinguished by the first three; out in rain on stone, stays lit on a coal block; relit by flint and steel |
 | BBQ-19 | Tray: place, fill 3 slots, stack trays, break the support | storage works, unsupported tray breaks (for the evaluation row) |
 | BBQ-08 | Grill with no heat after half cooking | progress falls back |
-| BBQ-09 | Each powder on a skewer on the grill and on a cutting board | name prefix; durability -1 |
+| BBQ-09 | (retired 2026-11-03 by the fold, see BBQ-22, BBQ-28) | - |
 | BBQ-10 | Eat chili, buffalo, cumin, pepper seasoned skewers | 2 fire damage; 2 fire damage + amplifier +1; heal 2; fast eat |
 | BBQ-11 | Barbeque sauce on beef skewer | Strength 3:00 |
 | BBQ-12 | Eat a cooked skewer | stick returned |
 | BBQ-13 | Kebab wrap (on bread), sandwich, bibimbap by the upstream combine recipes | contents tooltip; skewer effects applied on eating; sticks returned from crafting |
 | BBQ-14 | JEI: Skewering and Grilling categories | pages present with times "each side"; no family mirror recipes |
-| BBQ-15 | Open 12 butcher offers across levels | no BBQ seasoning offered at any level |
+| BBQ-15 | (replaced 2026-11-03 by BBQ-27: trades restored) | - |
 | BBQ-16 | Compost a raw skewer, a cooked skewer, the sandwich, bibimbap; seasoning and tray | 25%, 50%, 75%, 100% chance; seasoning and tray not accepted; JEI/`/dumpcompost` lists 24 rows |
-| BBQ-20 | Sauce on a raw skewer on the grill and on a cutting board; powder on a raw skewer | sauce refused, powder accepted (port rule, O28) |
+| BBQ-20 | Sauce on a raw skewer by craft; powder on a raw skewer | sauce refused, powder accepted (O28, by seasonable tag since 4.5) |
 | BBQ-21 | Season a raw skewer with a powder, grill it | the cooked skewer keeps the seasoning and name prefix |
 | BBQ-17 | WTHIT on the grill with a skewer on each slot | countdown per slot, Ready to Flip at half time; no Jade needed |
+| BBQ-22 | Craft a cooked beef skewer with chili powder, then with honey mustard sauce; try a sauce on a raw skewer | one powder consumed, "Chili Flavored Beef Skewer", tooltip "Chili: edible when full, 1 heart of burn damage"; sauce craft on raw refused (4.5) |
+| BBQ-23 | Chili skewer + pepper craft; set `[food] maxSeasonings = 1` and retry | refused (no pair defined); with onion + garlic popcorn at cap 1 the pair craft is refused |
+| BBQ-24 | Grill a raw skewer seasoned with cumin | cooked skewer has Cumin and Grilled lines, AppleSkin +2 saturation; eating heals 1 heart |
+| BBQ-25 | Smelt, smoke and campfire-cook a raw beef skewer; craft one from 3 cooked beef, 2 cabbage, stick | Beef Skewer without a Grilled line; does not stack with a grilled one |
+| BBQ-26 | Kebab wrap from a grilled skewer | wrap's stored skewer has no Grilled line; a crafted (not grilled) skewer is accepted too |
+| BBQ-27 | Butcher level 1 offers | BBQ seasonings at 12 emeralds, 64 powders or 16 sauces, 4 uses |
+| BBQ-28 | Right-click a skewer on the grill or a cutting board with a seasoning | nothing happens (use retired); seasonings stack to 64 |
+| BBQ-29 | Eat pepper, buffalo, barbeque sauce beef skewers | eaten fast; Strength II 0:45 and 1 heart burn; Strength 3:00 |
+| BBQ-30 | Basin: 2 sweet potatoes, stick in main hand, 2 bacon in off hand; then 2 FD minced beef + 2 cabbage leaves | Raw Potato Skewer; Raw Beef Skewer |
+| BBQ-31 | Sneak + right click a filled basin well holding a stick (and an off-hand item); then with empty hands | one item into the inventory, hands unchanged; empty-handed: one item into the hand |
+| BBQ-32 | JEI Skewering page | off-hand shield icon left of the lower input slot; slots line up with their frames |
+| BBQ-33 | JEI Grilling page result; Kebab Sandwich with two different cooked skewers | result tooltip has the Grilled line; sandwich crafts |
+| BBQ-34 | Hover each of the six seasoning items, then a skewer seasoned with each | the item's line reads exactly as the food's seasoning line (name, colours, numbers) |
+| BBQ-35 | Each of the eight pack skewers: craft the raw one, then grill, smelt, smoke and campfire-cook it | the cooked pack skewer each time; Nether and Cave have no heatless craft, the other six do; End Skewer craft gives 1 |
+| BBQ-36 | Raw pack skewer + a powder, then + a sauce; grill the powdered one | powder accepted, sauce refused; the cooked skewer keeps the powder line |
+| BBQ-37 | Family dump and can list | every cooked skewer (10 BBQ + 8 pack) in `skewer`; no skewer can |
+| BBQ-38 | Craft Kebab Wrap, Kebab Sandwich, Bibimbap from seasoned skewers; eat each (AppleSkin) | normal JEI pages; no skewer names or effects on the result; 10 / 0.6, 16 / 0.6, 16 / 0.8 |
+| BBQ-39 | Recipe dump before and after: the ten BBQ lines | same ids (`creativedelight:` skewering, grilling, smelting, smoking, campfire, `_from_cooked_manual_only`) |
+| BBQ-40 | Kill a shulker with a knife; cut a Shulker Mollusk; JEI uses of the mollusk | mollusk drops (and End's meat); 2 filets; End Skewer and its heatless craft, stuffed shulker on End's meat |
 
 ## 9. History
 
+- 2026-11-04 (plan_meals_rolls_bbq.md C, 4.7): `F.skewer` for all 18 skewer lines, eight raw pack skewers, shulker mollusk merge undone, plain combos with static values, seasoning item tooltip, Skewer renames; BBQ-34..40.
 - 2026-10-30: investigation written (jar decompiled to `DecompiledMods/barbequesdelight-1.3.0/`), nothing built.
 - 2026-10-31: owner decisions O1-O9 recorded (0.1): all skewers and the three combos added without the family fold,
   all six seasonings kept as upstream and marked for the pack framework (3.3.1 describes it), seasoning trades dropped,
@@ -576,3 +821,12 @@ answered (tray ported for evaluation). **No decision is open** apart from the qu
 - 2026-10-31 (third batch): skewer fold revised (BBQ system kept, other mods' skewers added to it, raw skewers stay as worse and sometimes poisonous food); `grilled` does not count toward the cap, configurable; catalog written in [seasonings.md](seasonings.md). Questions Q1-Q3 answered, Q6-Q7 new.
 - 2026-10-31 (fourth batch): O20-O26 recorded (seasoning use, `grilled` only from the Grill, smelt note, Cooked names, raw pack skewers, +2 saturation, nasty only for bad meats). 4.2 answered, 4.3 lists 14 further decisions, 3.9 has the name table.
 - 2026-10-31 (fifth batch): O27-O30 recorded (nasty default confirmed, sauces refused on raw skewers and seasonings copied to the cooked skewer, cooked-ingredient crafts follow shaped plus one assembly, grilled and crafted skewers split by seasoning). 4.3 #4, #5, #8, #9 answered. Tests BBQ-20, BBQ-21 added; the fold-stage tests (assembly craft, stack split) come with `dishes/meals #46`.
+- 2026-11-01: port built (4.0): Creative Delight member `backportedBarbeques`, NCH emitters, 26 recipes, tags, dicts,
+  compost, food types, family overrides, BlockRunner tiers, WTHIT and JEI. Scratch rows SQ-BBQ-01 to -08 queued. Not
+  installed.
+- 2026-11-02: owner decisions O31-O38 recorded (0.1): 64 / 16 seasoning conversion, raw meat follows raw chicken with no nasty type, raw skewers smeltable or smokable, new naming rule, skewers as ingredients carry no `grilled`, 4.3 and section 5 answered. Nothing built.
+- 2026-11-02 (deep scan): member in `mods/` since the CD jar of 11-02 14:01; scratch r1102b: SQ-BBQ-01, -03 to -05 PASS, -02, -06, -07 OPEN (batch faults), -08 not run.
+- 2026-11-03: fold built (4.5): BBQ seasonings in the pack framework (new kinds, cap config, crafts, click use retired), `grilled`, butcher trades restored, furnace / smoker / campfire routes, shaped cooked-ingredient craft, O34 names, skewer family membership. Compiled; installed in the CD jar 2026-11-03 00:08, not booted. Tests BBQ-22 to BBQ-29, scratch SQ-BBQF-01 to -07.
+- 2026-11-04: skewer input tags (3.10) with sweet potato in `potato`; fixed `Item.of(tag, n)` collapsing every skewering
+  input and the sandwich / bibimbap skewer to one item; basin sneak grab with items in hand; JEI off-hand icon and
+  grilled result. Built and installed in the CD jar 2026-11-04. Tests BBQ-30 to BBQ-33, scratch SQ-BBQS-01 to -03.

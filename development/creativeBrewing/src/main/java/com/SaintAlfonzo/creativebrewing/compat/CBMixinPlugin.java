@@ -5,7 +5,7 @@ import com.SaintAlfonzo.creativebrewing.shared.GatedMixinPlugin;
 import java.util.Map;
 
 /**
- * Mixin config plugin for creative_brewing.mixins.json, the same compartment rule as Creative Delight's CDMixinPlugin
+ * Mixin config plugin for creativebrewing.mixins.json, the same compartment rule as Creative Delight's CDMixinPlugin
  * (creative_delight.md 12): a mixin in {@code mixin.<modid>.} applies only when that mod is loaded (and, for a mod in
  * {@link #FOR_VERSION}, only at that version), so CB boots the same without it. Vanilla targets go in
  * {@code mixin.minecraft.} (always loaded). The gate is the shared {@link GatedMixinPlugin}
@@ -19,6 +19,6 @@ public class CBMixinPlugin extends GatedMixinPlugin {
 	private static final Map<String, String> FOR_VERSION = Map.of();
 
 	public CBMixinPlugin() {
-		super("[creative_brewing]", COMPARTMENT_PREFIX, FOR_VERSION, Map.of());
+		super("[creativebrewing]", COMPARTMENT_PREFIX, FOR_VERSION, Map.of());
 	}
 }

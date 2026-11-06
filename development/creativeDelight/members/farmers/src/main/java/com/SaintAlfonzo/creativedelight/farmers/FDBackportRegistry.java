@@ -23,6 +23,14 @@ import net.minecraftforge.eventbus.api.IEventBus;
 import net.minecraftforge.registries.DeferredRegister;
 import net.minecraftforge.registries.ForgeRegistries;
 import net.minecraftforge.registries.RegistryObject;
+import net.minecraftforge.fml.util.ObfuscationReflectionHelper;
+import net.minecraft.world.level.block.entity.BlockEntityType;
+import vectorwing.farmersdelight.common.block.CuttingBoardBlock;
+import vectorwing.farmersdelight.common.registry.ModBlockEntityTypes;
+import java.lang.reflect.Field;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Set;
 import vectorwing.farmersdelight.FarmersDelight;
 import vectorwing.farmersdelight.common.FoodValues;
 import vectorwing.farmersdelight.common.item.ConsumableItem;
@@ -81,6 +89,60 @@ public final class FDBackportRegistry {
 			() -> new BlockItem(GLEAMING_SALAD_BLOCK.get(), ModItems.basicItem().stacksTo(1)));
 	public static final RegistryObject<Item> GLEAMING_SALAD = ITEMS.register("gleaming_salad",
 			() -> new ConsumableItem(ModItems.bowlFoodItem(GLEAMING_SALAD_FOOD), true));
+
+	/**
+	 * Stone cutting boards (TODO cooking/kitchen #25, pack addition): Farmer's Delight's cutting board block in granite,
+	 * andesite and diorite. Same block class and block entity as the wooden board ({@link #allowExtraBoards} adds them to
+	 * the cutting board block entity type), stone sound and hardness, pickaxe-mineable (pack tag).
+	 */
+	public static final List<RegistryObject<Block>> STONE_CUTTING_BOARDS = List.of(
+			stoneBoard("granite", MaterialColor.DIRT), stoneBoard("andesite", MaterialColor.STONE),
+			stoneBoard("diorite", MaterialColor.QUARTZ));
+
+	private static RegistryObject<Block> stoneBoard(String stone, MaterialColor color) {
+		String name = stone + "_cutting_board";
+		RegistryObject<Block> block = BLOCKS.register(name, () -> new CuttingBoardBlock(
+				BlockBehaviour.Properties.of(Material.STONE, color).strength(1.5F, 6.0F).sound(SoundType.STONE)));
+		ITEMS.register(name, () -> new BlockItem(block.get(), ModItems.basicItem()));
+		return block;
+	}
+
+	/**
+	 * Wood cutting boards (TODO cooking/kitchen #38, pack addition): FD's board in the other vanilla woods (FD's own board
+	 * is the spruce one). Same block class and block entity as FD's; properties copied from the wood's planks (map colour,
+	 * nether woods not flammable) with FD's board strength 2.0. Axe-mineable through the pack tag.
+	 */
+	public static final List<RegistryObject<Block>> WOOD_CUTTING_BOARDS = List.of(
+			woodBoard("oak", Blocks.OAK_PLANKS), woodBoard("birch", Blocks.BIRCH_PLANKS),
+			woodBoard("jungle", Blocks.JUNGLE_PLANKS), woodBoard("acacia", Blocks.ACACIA_PLANKS),
+			woodBoard("dark_oak", Blocks.DARK_OAK_PLANKS), woodBoard("mangrove", Blocks.MANGROVE_PLANKS),
+			woodBoard("crimson", Blocks.CRIMSON_PLANKS), woodBoard("warped", Blocks.WARPED_PLANKS));
+
+	private static RegistryObject<Block> woodBoard(String wood, Block planks) {
+		String name = wood + "_cutting_board";
+		RegistryObject<Block> block = BLOCKS.register(name, () -> new CuttingBoardBlock(
+				BlockBehaviour.Properties.copy(planks).strength(2.0F).sound(SoundType.WOOD)));
+		ITEMS.register(name, () -> new BlockItem(block.get(), ModItems.basicItem()));
+		return block;
+	}
+
+	/**
+	 * Common setup: the stone and wood boards keep a cutting board block entity (BlockEntityType.validBlocks, SRG
+	 * f_58915_).
+	 */
+	@SuppressWarnings("unchecked")
+	static void allowExtraBoards() {
+		BlockEntityType<?> type = ModBlockEntityTypes.CUTTING_BOARD.get();
+		try {
+			Field field = ObfuscationReflectionHelper.findField(BlockEntityType.class, "f_58915_");
+			Set<Block> valid = new HashSet<>((Set<Block>) field.get(type));
+			STONE_CUTTING_BOARDS.forEach(b -> valid.add(b.get()));
+			WOOD_CUTTING_BOARDS.forEach(b -> valid.add(b.get()));
+			field.set(type, valid);
+		} catch (ReflectiveOperationException | RuntimeException e) {
+			FarmersDelight.LOGGER.error("[creativedelight] could not add the stone and wood cutting boards to the cutting board block entity", e);
+		}
+	}
 
 	private FDBackportRegistry() {}
 

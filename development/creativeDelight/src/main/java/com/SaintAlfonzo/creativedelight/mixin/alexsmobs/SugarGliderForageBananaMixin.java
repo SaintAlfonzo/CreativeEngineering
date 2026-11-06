@@ -19,7 +19,7 @@ public abstract class SugarGliderForageBananaMixin {
 
 	@Redirect(method = "lambda$static$1", remap = false, at = @At(value = "FIELD", opcode = Opcodes.GETSTATIC,
 			target = "Lcom/github/alexthe666/alexsmobs/item/AMItemRegistry;BANANA:Lnet/minecraftforge/registries/RegistryObject;"))
-	private static RegistryObject<Item> creative_delight$neapolitanBanana() {
+	private static RegistryObject<Item> creativedelight$neapolitanBanana() {
 		return BananaMergeHooks.banana(AMItemRegistry.BANANA);
 	}
 }

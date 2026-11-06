@@ -11,7 +11,9 @@ import java.util.function.Supplier;
 /**
  * Food values: Rustic Delight 1.7.0's, apart from two kept at 1.3.0 (feature_writeup/rustic_delight.md 5.3): Bell
  * Pepper Soup gives Comfort (the pack keeps Comfort on soups) and Honey and Chocolate Coffee last 900 ticks (the pack's
- * Caffeinated swap reads these durations).
+ * Caffeinated swap reads these durations). Syrup, Pumpkin and Cherry Blossom Coffee (3 beans, milk and a flavour, as
+ * Honey and Chocolate) last the same 900 ticks at level I (owner 2026-11-01, TODO creativedelight/members #11; 1.7.0:
+ * Syrup 1800, Pumpkin and Cherry Blossom 1200 with one of the two effects at level II).
  */
 public final class RDFoods {
     private static final int BRIEF = 600;
@@ -39,13 +41,12 @@ public final class RDFoods {
     public static final FoodProperties MILK_COFFEE = coffee(0, 0.0F, SHORT, 0, SHORT, 0);
     public static final FoodProperties CHOCOLATE_COFFEE = coffee(0, 0.0F, 900, 0, 900, 0);
     public static final FoodProperties HONEY_COFFEE = coffee(6, 0.1F, 900, 0, 900, 0);
-    public static final FoodProperties SYRUP_COFFEE = coffee(0, 0.0F, 1800, 0, 1800, 0);
+    public static final FoodProperties SYRUP_COFFEE = coffee(0, 0.0F, 900, 0, 900, 0);
     public static final FoodProperties DARK_COFFEE = coffee(0, 0.0F, 900, 1, 900, 1);
-    public static final FoodProperties PUMPKIN_COFFEE = coffee(0, 0.0F, SHORT, 0, SHORT, 1);
-    public static final FoodProperties CHERRY_BLOSSOM_COFFEE = coffee(0, 0.0F, SHORT, 1, SHORT, 0);
+    public static final FoodProperties PUMPKIN_COFFEE = coffee(0, 0.0F, 900, 0, 900, 0);
+    public static final FoodProperties CHERRY_BLOSSOM_COFFEE = coffee(0, 0.0F, 900, 0, 900, 0);
 
     public static final FoodProperties SYRUP_SANDWICH = food(8, 0.7F).build();
-    public static final FoodProperties PANCAKE = food(4, 0.6F).build();
     public static final FoodProperties HONEY_PANCAKE = withEffect(4, 0.6F, MobEffects.MOVEMENT_SPEED, 900);
     public static final FoodProperties CHOCOLATE_PANCAKE = withEffect(4, 0.6F, MobEffects.MOVEMENT_SPEED, 900);
     public static final FoodProperties CHERRY_BLOSSOM_PANCAKE = withEffect(4, 0.6F, MobEffects.HEALTH_BOOST, BRIEF);
@@ -58,7 +59,6 @@ public final class RDFoods {
     public static final FoodProperties CHERRY_BLOSSOM_ROLL = food(6, 0.5F).build();
     public static final FoodProperties BELL_PEPPER_ROLL = food(7, 0.8F).build();
     public static final FoodProperties STUFFED_BELL_PEPPER = food(10, 0.7F).build();
-    public static final FoodProperties FRIED_DOUGH = food(6, 0.5F).build();
     public static final FoodProperties SPRING_ROLLS = food(6, 0.6F).build();
     public static final FoodProperties FRIED_FISH = food(8, 0.7F).build();
     public static final FoodProperties FRIED_DUMPLINGS = food(10, 0.8F).build();

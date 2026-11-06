@@ -4,11 +4,11 @@ Written 2026-10-21 from [TODO.md](../todo/TODO.md) `# engineering`, Sub `sawmill
 [engineering.md](../engineering.md) (2.1 sawblade routing, 2.2 Dragon Breathing, 2.3 components, 2.4 coils, F1-F9,
 EN-01 to EN-18). Neighbours: [recipes_metal.md](../recipes_metal.md) (plates / rods / wires, F1 F4 F6),
 [recipes_engineering.md](../recipes_engineering.md) 2.2-2.3 (mechanisms, redstone, Gates, Project Red; F7, F11).
-Code: [components.js](../../kubejs/server_scripts/engineering/components.js),
-[metal_base_materials.js](../../kubejs/server_scripts/metal/metal_base_materials.js) 687-759 (coils),
-[blueprints.js](../../kubejs/server_scripts/engineering/blueprints.js), [mechanisms.js](../../kubejs/server_scripts/engineering/mechanisms.js),
-[redstone.js](../../kubejs/server_scripts/engineering/redstone.js), [metaltags.js](../../kubejs/server_scripts/tags/metaltags.js),
-[generation_scripts/sawmill.js](../../kubejs/generation_scripts/sawmill.js), [wood_types.js](../../kubejs/server_scripts/wood/wood_types.js),
+Code: [components.js](../../kubejs/data/creativeengineering/kubejs/engineering/components.js),
+[metal_base_materials.js](../../kubejs/data/creativeengineering/kubejs/metal/metal_base_materials.js) 687-759 (coils),
+[blueprints.js](../../kubejs/data/creativeengineering/kubejs/engineering/blueprints.js), [mechanisms.js](../../kubejs/data/creativeengineering/kubejs/engineering/mechanisms.js),
+[redstone.js](../../kubejs/data/creativeengineering/kubejs/engineering/redstone.js), [metaltags.js](../../kubejs/data/creativeengineering/kubejs/tags/metaltags.js),
+[generation_scripts/sawmill.js](../../kubejs/generation_scripts/sawmill.js), [wood_types.js](../../kubejs/data/creativeengineering/kubejs/wood/wood_types.js),
 patcherMod `sawmill/`, `mixin/Sawmill*Mixin.java`.
 
 Jars checked (scratchpad cache): ImmersiveEngineering 9.2.4-170, kubejs-forge 1902.6.2-build.73,
@@ -134,7 +134,7 @@ in the patcherMod jar.
   local `var` inside `ServerEvents.recipes`; it also removes IE's door / stairs recycling (41-44) and Quark
   Engineering's sawmill recipes (47-52; the comment at 51 is a leftover). `bark.js` 90-95 removes IE's log recipes.
 - Why JSON: `NCH.ieSawmill` (neoCraftHelper.js 2302-2330; the helper now ships in patcherMod's jar,
-  `development/patcherMod/src/main/resources/kubejs_startup/creativeengineering/func/`, and its error already points at
+  `development/creativeCommon/src/main/resources/kubejs_startup/creativecommon/func/`, and its error already points at
   a sawmill JSON) goes through kubejs-immersive-engineering's
   `SawmillRecipeSchema`, which re-serializes secondaries in a shape IE rejects. Verified in kubejs 1902.6.2
   `RecipesEventJS` / `RecipeJS.createRecipe`: a datapack recipe nobody changed is handed to the game as IE's own parsed
@@ -168,7 +168,7 @@ in the patcherMod jar.
    },
    ```
    (`event.add(path, string)` as `worldgen/wild_flowers.js` 518 and `worldgen/bee_nests.js` 253 use it.)
-3. **Generator script** `kubejs/server_scripts/wood/sawmill_data.js`, IIFE like the worldgen scripts:
+3. **Generator script** `kubejs/data/creativeengineering/kubejs/wood/sawmill_data.js`, IIFE like the worldgen scripts:
    `ServerEvents.highPriorityData(event => global.woodSpecies.forEach(s => ...))`. Profiles by form key, not regex:
    `{ stairs:'stairs', fencegate:'fence_gate', fence:'fence', door:'door', trapdoor:'trapdoor',
    pressureplate:'pressure_plate', button:'button', sign:'sign', railing:'railing', ladder:'ladder',

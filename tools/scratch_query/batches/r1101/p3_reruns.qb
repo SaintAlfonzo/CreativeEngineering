@@ -108,7 +108,7 @@ look CookTimeTotal 200; slot 2 holds ash after 12 s
 look IE crusher: amethyst shard -> dust + 25 % dust; no glowstone from shards
 
 ## SQ-RSP-09b | drink filling / emptying ids
-kjsreject Error parsing recipe creative_delight:createfilling/
+kjsreject Error parsing recipe creativedelight:createfilling/
 > zq rdetail createfilling/milk_coffee
 > zq rdetail createfilling/lavender_tea
 > zq rdetail matcha_latte

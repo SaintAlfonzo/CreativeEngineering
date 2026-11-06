@@ -10,8 +10,8 @@ rustic_delight.md 5) already delivers most of the owner list in rustic_delight.m
 nothing left to build, #16 only an unspecified "syrup changes", #15 is the same work as `merges/baking #1`. Their sections
 below say what is done (with evidence) and which RD- tests check it. #29 was fixed 2026-10-31.
 
-Rule for every script move: files go to `kubejs/data/creative_delight/kubejs/<modid>/` (server) or
-`kubejs/assets/creative_delight/kubejs/<modid>/` (client), startup to `development/creativeDelight/src/main/resources/kubejs_startup/<modid>/`;
+Rule for every script move: files go to `kubejs/data/creativedelight/kubejs/<modid>/` (server) or
+`kubejs/assets/creativedelight/kubejs/<modid>/` (client), startup to `development/creativeDelight/src/main/resources/kubejs_startup/<modid>/`;
 `// requires:` header for non-member mods; recipes through `global.NCH`, tags through `global.tags`, ids from the dicts; the pack keeps no copy.
 Effect swaps, potions and alcohol belong to Creative Brewing ([creative_brewing.md](../creative_brewing.md) 4.2), not CD.
 
@@ -38,10 +38,10 @@ Effect swaps, potions and alcohol belong to Creative Brewing ([creative_brewing.
 Status Bug (TODO) / KubeJS / `creativedelight/members #29`. **Fixed 2026-10-31; TODO should be Testing.**
 ### Now
 - Fixed per [ocean_delight.md](../ocean_delight.md) 5.5 and [creative_delight.md](../creative_delight.md) 31: in CD
-  [oceansdelight/recipes.js](../../kubejs/data/creative_delight/kubejs/oceansdelight/recipes.js) the `replaceInput` swaps
+  [oceansdelight/recipes.js](../../kubejs/data/creativedelight/kubejs/oceansdelight/recipes.js) the `replaceInput` swaps
   (lines 38-44) now run before the removal loop (47-49); raw calamari joins `#forge:squid_tentacles` and `#forge:foods/tentacles`
-  in [oceansdelight/tags.js](../../kubejs/data/creative_delight/kubejs/oceansdelight/tags.js) (an empty tag cannot be a `replaceInput` target).
-- File mtime 2026-10-31 12:31; `mods/creative_delight-1.0.0.jar` (16:45) holds the same 3237-byte `recipes.js`. Committed in `ffa47cf`.
+  in [oceansdelight/tags.js](../../kubejs/data/creativedelight/kubejs/oceansdelight/tags.js) (an empty tag cannot be a `replaceInput` target).
+- File mtime 2026-10-31 12:31; `mods/creativedelight-1.0.0.jar` (16:45) holds the same 3237-byte `recipes.js`. Committed in `ffa47cf`.
 ### Build
 Nothing. Rerun the tests.
 ### Tests
@@ -109,7 +109,7 @@ Status Planned / KubeJS / data / `creativedelight/members #6`
   `creativeengineering:biome_tag` stays in patcherMod.
 - No `oceanic_delight/` folder in the CD trees yet (only `oceansdelight/`).
 ### Build
-1. New CD `kubejs/data/creative_delight/kubejs/oceanic_delight/tags.js` with the fill (via `global.tags`, ids from the dicts);
+1. New CD `kubejs/data/creativedelight/kubejs/oceanic_delight/tags.js` with the fill (via `global.tags`, ids from the dicts);
    the coral line keeps `// requires: upgrade_aquatic` or a `Platform.isLoaded` guard. Tag ids stay `creativeengineering:fishing_net/*`.
 2. The two tables move into the Oceanic repack overlay `development/creativeDelight/members/oceanic/src/main/resources/data/oceanic_delight/loot_tables/gameplay/`
    (MIT, overlay at the upstream path is allowed); delete the pack copies; clean-build (memory `repack-stale-resources`).
@@ -163,7 +163,7 @@ Status Planned / KubeJS / data / `creativedelight/members #11`
 One coffee family (Rustic's) with every coffee giving Caffeinated, and no coffee code left in pack folders that belong to CD.
 ### Now (checked 2026-10-31)
 - Already in CD: the Farmer's Respite purge (startup and server `farmersrespite/item_merges.js`, 7 merge pairs, coffee recipe removals),
-  Kettle coffees (`farmersrespite/kettle.js`), coffee names (`assets/creative_delight/kubejs/rusticdelight/client.js`), compost
+  Kettle coffees (`farmersrespite/kettle.js`), coffee names (`assets/creativedelight/kubejs/rusticdelight/client.js`), compost
   (`kubejs_startup/rusticdelight/compost_values.js`, `farmersrespite/compost_values.js`), coffee fluids (`kubejs_startup/creativeengineering/fluids.js`),
   canned coffee berries (CD `creativeengineering/canning.js`).
 - Still in the pack: the Caffeinated swap [food_values.js:15-16](../../kubejs/startup_scripts/cooking/food_values.js) (coffee, milk, honey,
@@ -191,7 +191,7 @@ SQ-RD-20 (all 8 coffees). Proposed RD-35: AppleSkin / JEED tooltip of the three 
 Status Planned / KubeJS / data / `creativedelight/members #14`. **Built by the port; nothing left to build.**
 ### Now (evidence)
 - Seeds: Dark in `minecraft:chests/ancient_city` and `ancient_city_ice_box` (the sculk chests), Pale in the 11 `skyvillages:chests/sky_village_*`
-  and `cloudstorage:chests/loot_balloon`, share 0.04, 1-3 ([rusticdelight/loot.js:23-31](../../kubejs/data/creative_delight/kubejs/rusticdelight/loot.js));
+  and `cloudstorage:chests/loot_balloon`, share 0.04, 1-3 ([rusticdelight/loot.js:23-31](../../kubejs/data/creativedelight/kubejs/rusticdelight/loot.js));
   rare trader offer (`rusticdelight/trades.js`). Re-placing them is `loot/tables #13`.
 - Items: all 9 slices, roasted slices, rolls, stuffed peppers; three medleys and Rice Roll Royale (RDBlocks.java:67-69, `PepperMedleyBlock`, `RiceRollRoyaleBlock`);
   roasted-pepper stuffed pepper recipes (rusticdelight/recipes.js:69-76, RD-33).
@@ -208,7 +208,7 @@ Status Planned / KubeJS / data / `creativedelight/members #15`
 - The port has 7 placeable pancake stacks (plain, honey, chocolate, cherry blossom, vegetable, pumpkin, coffee; `PancakeStackBlock`, 6 per plate,
   sneak-use returns one up to 12) with 1.7.0's pot recipes.
 - Single pancake items retextured to the Supplementaries shape, shipped 1.1.05 (changelog 1.1.05 Blocks & Building); Supplementaries'
-  pancake renamed Stackable Pancake, shipped 1.1.05; its recipes in CD [supplementaries/recipes.js:26-32](../../kubejs/data/creative_delight/kubejs/supplementaries/recipes.js).
+  pancake renamed Stackable Pancake, shipped 1.1.05; its recipes in CD [supplementaries/recipes.js:26-32](../../kubejs/data/creativedelight/kubejs/supplementaries/recipes.js).
 - The open pancake work (pot recipe 3 batter + 2 sugar + 1 egg -> 4, syrup on stackable pancakes, keep or drop each overlap) is
   `merges/baking #1` (In Progress, [merges_baking.md](merges_baking.md)); the food type is `dishes/meals #12`.
 ### Decisions
@@ -219,7 +219,7 @@ SQ-RD-04, SQ-RD-17; the `merges/baking #1` tests.
 ## members #16: Rustic: syrup changes and maple foods
 Status Planned / KubeJS / data / `creativedelight/members #16`
 ### Now
-- Maple foods done 2026-10-25: Maple Glazed Bacon = cooked bacon + syrup ([rusticdelight/recipes.js:36-38](../../kubejs/data/creative_delight/kubejs/rusticdelight/recipes.js));
+- Maple foods done 2026-10-25: Maple Glazed Bacon = cooked bacon + syrup ([rusticdelight/recipes.js:36-38](../../kubejs/data/creativedelight/kubejs/rusticdelight/recipes.js));
   Maple Cookie = cookie dough + syrup + honey in the oven (recipes.js:24, the cookie family).
 - Syrup (`i.syrup`, tag `i.t_syrup`): donor pot recipe, glass bottle + `#rusticdelight:syrup_ingredients` (apple, `#forge:crops/beetroot`) + sugar;
   `sugar_from_syrup`; used by Syrup Cookie, Syrup Cheesecake (pie), Syrup Coffee (also Kettle, `farmersrespite/kettle.js:84`), Syrup Sandwich, Sweet Salad.
@@ -274,8 +274,8 @@ SQ-RD-23.
 Status Planned / KubeJS / data / `creativedelight/members #20`. **Built 2026-10-25; nothing left to build.**
 ### Now (evidence)
 Bell Pepper Pasta and Soup from any 3 peppers (donor) plus the grid pasta from 3 roasted peppers (recipes.js:63-67); bell peppers in
-`#brewinandchewin:foods/pizza_topping` ([brewinandchewin/tags.js:22-23](../../kubejs/data/creative_delight/kubejs/brewinandchewin/tags.js));
-Supreme Pizza: bell pepper, cheese, onion, mushroom, tomato sauce, cooked meat on a dough ([brewinandchewin/recipes.js:32](../../kubejs/data/creative_delight/kubejs/brewinandchewin/recipes.js));
+`#brewinandchewin:foods/pizza_topping` ([brewinandchewin/tags.js:22-23](../../kubejs/data/creativedelight/kubejs/brewinandchewin/tags.js));
+Supreme Pizza: bell pepper, cheese, onion, mushroom, tomato sauce, cooked meat on a dough ([brewinandchewin/recipes.js:32](../../kubejs/data/creativedelight/kubejs/brewinandchewin/recipes.js));
 names Supreme Pizza / Supreme Pizza Slice (namechanges.js:65-66). The "ingredient list" decision is this list.
 ### Tests
 SQ-RD-06, SQ-RD-07.
@@ -317,13 +317,13 @@ Status Planned / KubeJS / data / `creativedelight/members #26`
 ### Goal
 Every sushi roll has a Create sequenced assembly; Rustic's pot meals get the pack's grid route from cooked ingredients.
 ### Now
-- Pattern: CD [farmersdelight/recipes.js:209-235](../../kubejs/data/creative_delight/kubejs/farmersdelight/recipes.js) (salmon, cod, kelp roll, rice
+- Pattern: CD [farmersdelight/recipes.js:209-235](../../kubejs/data/creativedelight/kubejs/farmersdelight/recipes.js) (salmon, cod, kelp roll, rice
   medley): `R.incomplete(key)` + `R.createSequencedAssembly(out, cooked_rice, [deploying steps], [key], e, id, loops)`; the shapeless craft stays.
   Incomplete items are registered from the list in [transition_items.js:29](../../kubejs/startup_scripts/changes/transition_items.js) (pack startup).
 - Rustic rolls (all shapeless 2 of a filling + cooked rice -> 2): `bell_pepper_roll_<9 colours>`, `calamari_roll`, `cherry_blossom_roll`, plus the pack's
   `glowing_calamari_roll` (recipes.js:60); Rice Roll Royale (shapeless from 8 rolls). Other mods' rolls: Oceanic `egg_roll`, `fish_egg_roll`, `sea_pickle_roll`,
   `shrimp_roll`; Ocean's `elder_guardian_roll`, `fugu_roll`; Hostile `guardianroll`. No dict keys yet for the 9 pepper rolls or `cherry_blossom_roll`.
-- "Heated manual recipes" read as the heatless meal rule ([farmersdelight/recipes.js:258-268](../../kubejs/data/creative_delight/kubejs/farmersdelight/recipes.js)):
+- "Heated manual recipes" read as the heatless meal rule ([farmersdelight/recipes.js:258-268](../../kubejs/data/creativedelight/kubejs/farmersdelight/recipes.js)):
   a grid route from cooked ingredients, ids ending `_manual_only`. Rustic has one (Bell Pepper Pasta, rusticdelight/recipes.js:63-67).
   Pot meals without one: Bell Pepper Soup, Calamari Soup, Spring Rolls, the 9 stuffed peppers.
 ### Build

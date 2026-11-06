@@ -1,0 +1,62 @@
+# Run r1102b, worldgen slice, group A boots A1 to A4 on one superflat world "wga" (prep_srv.sh OUT_A wga A).
+# Order and between-boot edits: w_setup.md A1..A4. A1 = w_5_A.qb (fresh), A2 = w_6_A.qb, A3 = w_7_A.qb, A4 = w_8_A.qb.
+pace 2
+
+## SQ-PSW-01 | nether fits and lost soul dungeon: no unknown-biome / missing-tag / still lists warning
+bootexpect Done \(
+bootreject (?i)biome fit.*nether/(soul|forest|wastes).*(unknown|missing|no such)
+bootreject (?i)(unknown|missing).*(nether/(soul|forest|wastes))
+bootreject standalone.*still lists.*lost_soul
+shell grep -aiE 'biome fit|nether/(soul|forest|wastes)|philipsruins' logs/latest.log | cut -c1-300 | head -20
+
+## SQ-FTW-05 | fresh chunk 2000 away, inside the window: torch washed away, no torch item
+> pbot spawn ftw 0 -60 0 minecraft:overworld creative
+sleep 3
+pace 1
+> tp ftw 2000 -60 2000
+sleep 4
+> kill @e[type=minecraft:item]
+> setblock 2003 -60 2000 minecraft:torch
+> setblock 2002 -60 2000 minecraft:water
+sleep 3
+> execute if block 2003 -60 2000 minecraft:torch run say FTW05 torch still there
+> execute positioned 2003 -60 2000 if entity @e[type=minecraft:item,distance=..8] run say FTW05 item present
+> execute positioned 2003 -60 2000 unless entity @e[type=minecraft:item,distance=..8] run say FTW05 no item
+pace 2
+expect FTW05 no item
+reject FTW05 torch still there
+reject FTW05 item present
+# superflat: grass at y -61, so a torch at y -60 stands on it; the whole step must finish inside windowTicks 600 (30 s) of the chunk first ticking
+
+## SQ-IP-15 | Allurement curses under ItemPhysic: Ascension item rises, Fleeting pushes a mob
+> forceload add 16 16 48 48
+sleep 3
+> summon minecraft:item 20 -55 20 {Tags:["ip15a"],PickupDelay:32767,Item:{id:"minecraft:iron_sword",Count:1b,tag:{Enchantments:[{id:"allurement:ascension_curse",lvl:1s}]}}}
+> summon minecraft:item 20 -55 24 {Tags:["ip15n"],PickupDelay:32767,Item:{id:"minecraft:iron_sword",Count:1b}}
+> summon minecraft:iron_golem 40.5 -60 40.5 {Tags:["ip15g"]}
+> summon minecraft:item 40.5 -59 41.5 {Tags:["ip15f"],PickupDelay:32767,Item:{id:"minecraft:iron_sword",Count:1b,tag:{Enchantments:[{id:"allurement:fleeting_curse",lvl:1s}]}}}
+sleep 6
+> execute as @e[tag=ip15a,y=-54,dy=300] run say IP15 ascension above start
+> execute as @e[tag=ip15n,y=-62,dy=4] run say IP15 plain on the ground
+> data get entity @e[tag=ip15a,limit=1] Pos
+> data get entity @e[tag=ip15g,limit=1] Pos
+> data get entity @e[tag=ip15g,limit=1] Motion
+expect IP15 ascension above start
+expect IP15 plain on the ground
+reject (?i)(ItemPhysicServerMixin|AllurementUtil|AllurementItemCurses).*(error|exception|fail)
+bootreject (?i)(ItemPhysicServerMixin|AllurementItemCurses).*(error|exception|fail)
+> forceload remove 16 16 48 48
+look golem position against 40.5 / 40.5 (pushed away from the Fleeting item); the drop by a player (Q) is a client check
+
+## SQ-WGE-06a | pool tuning: no piece order changed warning; retuned list only vinery / beautify / tech pools
+bootexpect \[pool-tuning\] .* pool\(s\) retuned
+bootreject piece order changed
+shell grep -a '\[pool-tuning\]' logs/latest.log | cut -c1-300; R=kubejs/generation_scripts/worldgen/pool_tag_report.md; awk '/^## Retuned pools/{f=1;next} /^## /{f=0} f && /^### /' $R | tee ../retuned.txt; n=$(wc -l < ../retuned.txt); echo "retuned pools: $n"; grep -c 'piece order changed\|changed this edited piece' $R || true; [ $n -lt 39 ] && ! grep -qE 'betterfortresses:bridge|nullscape:dragon_skeleton|subterrestrial|unwrecked_ships|villagesandpillages' ../retuned.txt
+look the retuned list has only the vinery / beautify / tech pools (the 9 village pieces)
+
+## SQ-WGE-06b | every #2 / #3 duplicate plays its own weight (current == original)
+shell python3 -c "import json;d=json.load(open('kubejs/generation_scripts/worldgen/pool_config.json'))['pools'];bad=[(p,k,e) for p,v in d.items() for k,e in v.get('elements',{}).items() if ' #' in k and e.get('current')!=e.get('original')];print(len(bad),'duplicates with current != original');[print(' ',b) for b in bad[:20]];b=d.get('betterfortresses:bridge',{}).get('elements',{});print('bridge pillars',[(k,e['current']) for k,e in b.items() if 'bridge_pillar' in k]);[print(p,[(k,e['original'],e['current']) for k,e in d.get(p,{}).get('elements',{}).items() if ' #' in k][:6]) for p in ('subterrestrial:cabin/deepslate/base','nullscape:dragon_skeleton','unwrecked_ships:ship/sails','villagesandpillages:village_witch/road_and_house')];exit(1 if bad else 0)"
+look bridge pillars 10 / 15 / 20 in that order; the 300-generation sampling half has no probe (not batched, w_skip.md)
+
+## SQ-WGE-06c-0 | set up the hand edit for A2: bridge_pillar #2 current 7 (stop, then boot A2)
+shell python3 -c "import json;p='kubejs/generation_scripts/worldgen/pool_config.json';d=json.load(open(p));e=d['pools']['betterfortresses:bridge']['elements']['betterfortresses:bridge/bridge_pillar #2'];print('before',e);e['current']=7;json.dump(d,open(p,'w'),indent=2);print('after',e)"

@@ -1,0 +1,20 @@
+{
+  "_comment": "Item merge list (swap lists 'merges', SwapLists.java; feature_writeup/item_merges.md 6): both items stay registered; the old one is purged and the survivor takes over its recipes, loot and tags (CD startup script creativedelight/swap_merges.js) and every stack of it in the world (Common swap/ItemMerges). Applied only while every 'requires' mod is loaded. Never prune: an old world whose old item is later unregistered is remapped from this list. Cozy's Improved Cats' ancient fish go, the vanilla fish stay (item_merges.md 2.12, cozy_cats.md 10).",
+  "requires": [
+    "cozys_improved_cats"
+  ],
+  "merges": {
+    "minecraft:cod": [
+      "cozys-improved-cats:ancient_cod"
+    ],
+    "minecraft:salmon": [
+      "cozys-improved-cats:ancient_salmon"
+    ],
+    "minecraft:cooked_cod": [
+      "cozys-improved-cats:ancient_cooked_cod"
+    ],
+    "minecraft:cooked_salmon": [
+      "cozys-improved-cats:ancient_cooked_salmon"
+    ]
+  }
+}

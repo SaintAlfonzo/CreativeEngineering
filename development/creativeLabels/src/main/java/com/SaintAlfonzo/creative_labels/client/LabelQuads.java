@@ -31,10 +31,15 @@ public final class LabelQuads {
 
     /** A point of the label model (cell-local blocks, SOUTH-face frame) on the target face. */
     public static Vec3 map(Vec3 p, Direction face, @Nullable Direction rotation, float inset) {
+        return map(p, face, rotation, Spots.Place.at(inset));
+    }
+
+    /** As above, then moved and scaled onto the label's square ({@link Spots.Place#labelX}); depth is not scaled. */
+    public static Vec3 map(Vec3 p, Direction face, @Nullable Direction rotation, Spots.Place place) {
         boolean mirror = NoteShape.mirrored(face, rotation);
         double fx = (1.0 - p.x) * 16.0;
         if (mirror) fx = 16.0 - fx;
-        return Spots.local(face, rotation, fx, p.y * 16.0, p.z - 1.0 + inset);
+        return Spots.local(face, rotation, place.labelX(fx), place.labelY(p.y * 16.0), p.z - 1.0 + place.inset());
     }
 
     /** A direction of the label model on the target face (same linear map, no origin). */
@@ -49,6 +54,10 @@ public final class LabelQuads {
 
     /** The model's quads moved onto a face. */
     public static List<BakedQuad> place(List<BakedQuad> model, Direction face, @Nullable Direction rotation, float inset) {
+        return place(model, face, rotation, Spots.Place.at(inset));
+    }
+
+    public static List<BakedQuad> place(List<BakedQuad> model, Direction face, @Nullable Direction rotation, Spots.Place place) {
         List<BakedQuad> out = new ArrayList<>(model.size());
         QuadBakingVertexConsumer baker = new QuadBakingVertexConsumer(out::add);
         for (BakedQuad quad : model) {
@@ -58,7 +67,7 @@ public final class LabelQuads {
             for (int i = 0; i < 4; i++) {
                 int o = i * STRIDE;
                 Vec3 p = new Vec3(Float.intBitsToFloat(data[o]), Float.intBitsToFloat(data[o + 1]), Float.intBitsToFloat(data[o + 2]));
-                Vec3 q = map(p, face, rotation, inset);
+                Vec3 q = map(p, face, rotation, place);
                 v[i] = new NoteShape.PlacedVertex(q.x, q.y, q.z, Float.intBitsToFloat(data[o + 4]), Float.intBitsToFloat(data[o + 5]));
             }
             Vec3 modelNormal = unpackNormal(data[7]);

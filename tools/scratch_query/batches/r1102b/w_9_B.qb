@@ -1,0 +1,30 @@
+# Run r1102b, worldgen slice, boot F1: group B fresh world "ftw_on" on the eval seed -8188900049893920259, as
+# shipped (first-tick water on). SQ-FTW-02 (ftw_on half) and SQ-TIE-01 (census at the perf.md 10.9 centre 4000 4000
+# after the same Chunky r 400 the wgp_new world had). Setup: w_setup.md F1. Baseline: perf/wgp/wgp_new.
+pace 2
+
+## SQ-FTW-02 | ftw_on: item entities after the spawn chunks ticked 120 s
+bootexpect Done \(
+sleep 120
+> save-all flush
+waitlog Saved the game 300
+shell mkdir -p $INST/perf/runs/r1102b/w; rm -rf ../ftw_on_snap; mkdir ../ftw_on_snap && cp -r ftw_on/entities ../ftw_on_snap/ && python3 -I $INST/tools/perf/eval/entity_census.py ../ftw_on_snap > $INST/perf/runs/r1102b/w/ftw_on_census.txt 2>&1; head -40 $INST/perf/runs/r1102b/w/ftw_on_census.txt
+look item entities near 0 (moss carpet, seeds, azalea, glow berries, torches, cocoa, Miner's plants each under 10; sugar cane / cactus / bamboo expected leftovers); the ftw_off half is w_10_B.qb; baseline 672 items (perf.md 10.2 #5)
+
+## W-F1-GEN | Chunky r 400 at 4000 4000 (as wgp_new before its census)
+> chunky world minecraft:overworld
+> chunky shape square
+> chunky center 4000 4000
+> chunky radius 400
+> chunky start
+waitlog Task finished 5400
+
+## SQ-TIE-01 | census 96 at 4000 4000: falseNegatives 0, built equal to wgp_new, no reflection error
+> celocate census 96 4000 4000
+waitlog \[celocate\] census done 2400
+shell mkdir -p $INST/perf/runs/r1102b/w && cp kubejs/exported/worldgen/locate_census.json $INST/perf/runs/r1102b/w/f1_census_tie.json && echo copied f1_census_tie
+reject (?i)locate reflection
+bootreject (?i)locate reflection
+bootreject f_48435_
+shell python3 -c "import json; a=json.load(open('$INST/perf/runs/r1102b/w/f1_census_tie.json')); b=json.load(open('$INST/perf/wgp/wgp_new/locate_census.json')); print('seconds', a['seconds'], 'vs', b['seconds'], '; falseNegatives', a['falseNegatives'], 'vs', b['falseNegatives']); B={s['structure']:s for s in b['structures']}; diff=[(s['structure'], s['built'], B[s['structure']]['built']) for s in a['structures'] if s['structure'] in B and s['built']!=B[s['structure']]['built']]; print(len(diff), 'structures with a different built count'); [print(' ', d) for d in diff[:30]]; [print(s['structure'], 'fn', s['falseNegatives'], 'no.biome', s['predictedNo']['biome'], 'was', B.get(s['structure'],{}).get('predictedNo',{}).get('biome')) for s in a['structures'] if s['structure'].endswith(('old_refinery','mining_outpost'))]; exit(0 if a['falseNegatives']==0 else 1)"
+look built per structure equal to wgp_new (generation unchanged; 6 structures differed by 1-5 between wgp_old and wgp_new from options 2 and 4, same here is fine); census time within noise of 424 s

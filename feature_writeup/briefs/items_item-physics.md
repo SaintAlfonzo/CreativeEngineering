@@ -114,10 +114,10 @@ other floaters settle without bobbing forever; items that survive lava float on 
 ### Now
 - ItemPhysic's floaters dive 2.8 blocks from a 3-block drop and bob 0.35 for good (no vertical drag in fluids); in lava
   every item sinks at -0.0033 a tick and floating is never applied (item_physics.md 10.1, F8, F9).
-- [ItemPhysicServerMixin.java](../../development/patcherMod/src/main/java/com/SaintAlfonzo/creativeengineering/mixin/ItemPhysicServerMixin.java)
+- [ItemPhysicServerMixin.java](../../development/creativeCommon/src/main/java/com/SaintAlfonzo/creativecommon/mixin/ItemPhysicServerMixin.java)
   already has a TAIL inject on `updatePre` (53-56) that calls `AllurementItemCurses.tick(item)`; the redirects at
   58-79 route ItemPhysic's lists through `ItemPhysicSplit`.
-- [ItemPhysicSplit.java](../../development/patcherMod/src/main/java/com/SaintAlfonzo/creativeengineering/itemphysic/ItemPhysicSplit.java):
+- [ItemPhysicSplit.java](../../development/creativeCommon/src/main/java/com/SaintAlfonzo/creativecommon/itemphysic/ItemPhysicSplit.java):
   tag keys 48-52, `forcedSink` 154, `isFloat` 159, `touchingLava` 179. No buoyancy concept beyond float / sink.
 - No `[itemphysic]` section in CEConfig (only a label at CEConfig.java 3417) or in the toml.
 - Simulated constants (scratchpad `float_sim.py`, 10.2): skim drag 0.45 / k 0.12 / rest 0.05 with entry look-ahead;

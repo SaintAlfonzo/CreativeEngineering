@@ -2,7 +2,7 @@
   "block.farmersdelight.stove": "Stove",
   "block.farmersdelight.cooking_pot": "Cooking Pot",
   "block.farmersdelight.basket": "Basket",
-  "block.farmersdelight.cutting_board": "Cutting Board",
+  "block.farmersdelight.cutting_board": "Spruce Cutting Board",
   "block.farmersdelight.skillet": "Skillet",
   "block.farmersdelight.oak_cabinet": "Oak Cabinet",
   "block.farmersdelight.birch_cabinet": "Birch Cabinet",
@@ -275,5 +275,16 @@
   "item.farmersdelight.gleaming_salad": "Bowl of Gleaming Salad",
   "farmersdelight.subtitles.rope_fence_gate.open": "Rope Fence Gate unties",
   "farmersdelight.subtitles.rope_fence_gate.close": "Rope Fence Gate ties",
-  "farmersdelight.item.skillet.underwater": "Can't cook underwater..."
+  "farmersdelight.item.skillet.underwater": "Can't cook underwater...",
+  "block.farmersdelight.granite_cutting_board": "Granite Cutting Board",
+  "block.farmersdelight.andesite_cutting_board": "Andesite Cutting Board",
+  "block.farmersdelight.diorite_cutting_board": "Diorite Cutting Board",
+  "block.farmersdelight.oak_cutting_board": "Oak Cutting Board",
+  "block.farmersdelight.birch_cutting_board": "Birch Cutting Board",
+  "block.farmersdelight.jungle_cutting_board": "Jungle Cutting Board",
+  "block.farmersdelight.acacia_cutting_board": "Acacia Cutting Board",
+  "block.farmersdelight.dark_oak_cutting_board": "Dark Oak Cutting Board",
+  "block.farmersdelight.mangrove_cutting_board": "Mangrove Cutting Board",
+  "block.farmersdelight.crimson_cutting_board": "Crimson Cutting Board",
+  "block.farmersdelight.warped_cutting_board": "Warped Cutting Board"
 }

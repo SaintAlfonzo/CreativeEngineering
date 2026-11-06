@@ -1,0 +1,70 @@
+# Run r1102, SQ-CDJ5 Boot 2: same world cdj5, srv creativedelight-common.toml with [members] displaydelight = false,
+# [display] takeAll = true, [vintage.pickling_jar] remainderBuffer = true (README Boot 2). spawn-animals and the probes
+# stay from Boot 1. New blocks at z offsets 50..56 from the cdj5home marker (clear of Boot 0 and Boot 1 lanes).
+pace 2
+
+## SQ-CDJ-10 | Display switch off: no error, Display blocks still place and drop
+bootexpect Done \(
+bootexpect \[creativedelight\] members: \[([a-z_]+, ){19}[a-z_]+\]$
+bootreject Error occurred while handling event
+bootreject (?i)\b(error|warn)\b.*displaydelight
+kjsreject (?i)\b(error|warn)\b.*displaydelight
+shell awk '/^[[:space:]]*\[/{s=$0} s ~ /^[[:space:]]*\[members\][[:space:]]*$/ && /^[[:space:]]*displaydelight[[:space:]]*=[[:space:]]*false/{f=1} END{exit !f}' config/creativedelight-common.toml
+> data get entity @e[type=minecraft:marker,tag=cdj5home,limit=1] Pos
+capture H entity data: \[(-?\d+)\.\d+d, (-?\d+)\.\d+d, (-?\d+)\.\d+d\]
+> kill @e[type=minecraft:item]
+> setblock {H1} {H2} {H3+50} displaydelight:beef_stew
+reject Unknown block type
+> execute if block {H1} {H2} {H3+50} displaydelight:beef_stew run say CDJ10 stew placed
+> setblock {H1} {H2} {H3+50} minecraft:air destroy
+sleep 3
+> zcount {H1-1} {H2} {H3+49} {H1+1} {H2+2} {H3+51}
+waitlog \[zcount\] entities 30
+expect CDJ10 stew placed
+expect \[zcount\] entities item:farmersdelight:beef_stew x1=1$
+look "break it as the bot" done as a no-tool destroy (same loot context); a bot break would need a dig command perfBot does not have
+
+## SQ-DDP-07b | (SQ-DDP-07, Boot 2 half, takeAll = true) fresh cookie plate of 3
+# perfBot and /zq cannot sneak: the takeAll half (sneaking bare hand: all 3 taken, the plate stays) is CQ-DDP-01's.
+# Here only the plain bare-hand use, which takes 1 whatever takeAll says. Id SQ-DDP-07b so it does not overwrite the
+# Boot 1 half's result (qrun keeps one result per id in RES).
+shell awk '/^[[:space:]]*\[/{s=$0} s ~ /^[[:space:]]*\[display\][[:space:]]*$/ && /^[[:space:]]*takeAll[[:space:]]*=[[:space:]]*true/{f=1} END{exit !f}' config/creativedelight-common.toml
+> kill @e[type=minecraft:item]
+> setblock {H1+3} {H2} {H3+50} displaydelight:plated_cookie[stacks=3]
+> pbot spawn ddp7b {H1+3} {H2} {H3+48} minecraft:overworld survival
+> pbot use ddp7b {H1+3} {H2} {H3+50} up
+> execute if block {H1+3} {H2} {H3+50} displaydelight:plated_cookie[stacks=2] run say DDP07 two left
+> data get entity ddp7b Inventory
+expect DDP07 two left
+expect id: "minecraft:cookie"
+look sneak half (all 3 taken, plate stays) not run: CQ-DDP-01
+
+## SQ-VTD4-04 | remainderBuffer = true: glass bottle in slot 9, out from below, dropped on break
+> zq rdetail fermented_garlic
+> kill @e[type=minecraft:item]
+> setblock {H1+6} {H2} {H3+52} vintagedelight:fermenting_jar
+> data merge block {H1+6} {H2} {H3+52} {inventory:{Size:10,Items:[{Slot:0b,id:"veggiesdelight:garlic_clove",Count:1b},{Slot:1b,id:"veggiesdelight:garlic_clove",Count:1b},{Slot:2b,id:"veggiesdelight:garlic_clove",Count:1b},{Slot:3b,id:"veggiesdelight:garlic_clove",Count:1b},{Slot:4b,id:"minecraft:honey_bottle",Count:1b}]}}
+> setblock {H1+9} {H2} {H3+52} vintagedelight:fermenting_jar
+> data merge block {H1+9} {H2} {H3+52} {inventory:{Size:10,Items:[{Slot:0b,id:"veggiesdelight:garlic_clove",Count:1b},{Slot:1b,id:"veggiesdelight:garlic_clove",Count:1b},{Slot:2b,id:"veggiesdelight:garlic_clove",Count:1b},{Slot:3b,id:"veggiesdelight:garlic_clove",Count:1b},{Slot:4b,id:"minecraft:honey_bottle",Count:1b}]}}
+sleep 40
+> say VTD4 jar A
+> data get block {H1+6} {H2} {H3+52} inventory
+> say VTD4 jar B
+> data get block {H1+9} {H2} {H3+52} inventory
+expect \{(?=[^{}]*Slot: 7b?[,}])(?=[^{}]*"veggiesdelight:fermented_garlic_honey")[^{}]*\}
+expect \{(?=[^{}]*Slot: 9b?[,}])(?=[^{}]*"minecraft:glass_bottle")[^{}]*\}
+# jar A: a hopper under it pulls the output and the bottle (bottom face)
+> setblock {H1+6} {H2-1} {H3+52} minecraft:hopper
+> setblock {H1+6} {H2-2} {H3+52} minecraft:chest
+sleep 8
+> say VTD4 hopper and chest under jar A
+> data get block {H1+6} {H2-1} {H3+52}
+> data get block {H1+6} {H2-2} {H3+52}
+# jar B: broken with the bottle still in slot 9
+> setblock {H1+9} {H2} {H3+52} minecraft:air destroy
+sleep 3
+> zcount {H1+8} {H2} {H3+51} {H1+10} {H2+2} {H3+53}
+waitlog \[zcount\] entities 30
+expect \[zcount\] entities .*item:minecraft:glass_bottle x1
+expect \[zcount\] entities .*item:veggiesdelight:fermented_garlic_honey x1
+look jar A: the bottle and the garlic honey left through the bottom (hopper or chest holds them, the jar's slots 7 and 9 empty); jar B drops its contents including the bottle (and the jar item)

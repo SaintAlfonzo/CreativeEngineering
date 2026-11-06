@@ -173,7 +173,7 @@ doesn't exist, JFR writes a *file* named `exit`. The launch scripts create the f
   is shown, with "mods differ" when the match isn't exact. Changed / missing / extra files are listed for
   `mods`, `config`, `defaultconfigs` and `kubejs`.
 - **Jars for attribution.** Each server jar is found by sha1 in `mods/`, `deploy/latest/mods`,
-  `server_mods/`, `development/patcherMod/jar_archive` and `development/patcherMod/build/libs`, and symlinked into
+  `server_mods/`, `development/creativeCommon/jar_archive` and `development/creativeCommon/build/libs`, and symlinked into
   `perf/incoming/<name>/mods/`. `perf_report.py` then attributes with the jars that server actually ran;
   `deploy/latest/mods` is only an update payload now. Jars with no local copy are listed. Hashes are cached in
   `perf/.cache/jar_sha1.json`.
@@ -279,7 +279,7 @@ Closes the blind spots of sampling (section 4) with measured times. patcherMod d
 - [../server/perf/report.sh](../server/perf/report.sh), [../tools/perf/ingest_report.py](../tools/perf/ingest_report.py)
 - [../tools/perf/perf_report.py](../tools/perf/perf_report.py), [../tools/perf/PerfParse.java](../tools/perf/PerfParse.java), [../tools/perf/modindex.py](../tools/perf/modindex.py), [../tools/perf/report_html.py](../tools/perf/report_html.py)
 - [../tools/build_deploy.py](../tools/build_deploy.py) (`server` category)
-- patcherMod: [perf/](../development/patcherMod/src/main/java/com/SaintAlfonzo/creativeengineering/perf/) (`PerfJfrEvents`,
+- patcherMod: [perf/](../development/creativeCommon/src/main/java/com/SaintAlfonzo/creativecommon/perf/) (`PerfJfrEvents`,
   `PerfEvents`, `PerfStatsHolder`, `KubeJSHandlerTiming`, `PerfCommand`) and the mixins `ServerTickPerfMixin`,
   `ServerLevelTickPerfMixin`, `ServerChunkCacheWaitPerfMixin`, `LevelEntityTickPerfMixin`, `BlockEntityTickPerfMixin`,
   `EntityTypePerfStatsMixin`, `BlockEntityTypePerfStatsMixin`, `KubeJSEventHandlerListenMixin`,
@@ -339,6 +339,9 @@ Notes:
 
 ## 8. In-game test suite
 
+- **r1102b 2026-11-02** (scratch server; verdicts in `perf/runs/r1102b/` HANDOVER.md and the slice judged.md): PASS SQ-ATC-02, -03, -04, SQ-PF-02, -05, SQ-WE-03, -04; not run SQ-WE-04b.
+- **r1103 2026-11-03** (scratch server; verdicts in `perf/runs/r1103/` FINAL.md and the slice judged.md): PASS SQ-WE-04b.
+
 - [ ] **PF-01 recording starts:** deploy the build that includes `server/` and start the server with
   `LaunchServer.sh`/`.bat` -> the console shows `Started recording 1`, `perf/jfr-repo/<date>_<pid>/` exists,
   and the launch line shows `-Xmx6G -XX:FlightRecorderOptions=...`.
@@ -392,7 +395,7 @@ Pack events (3.6), scratch-queue rows SQ-PF-01 to -06:
   JEI page costs 58 s per join; Distant Horizons' server and client threads; heap near the cap; worldgen 3.5x slower than
   2026-09-28. PF-17 partial.
 
-- 2026-10-26: Pack events built (3.6, TODO `server #9`): ten `creativeengineering.*` JFR events from 9 patcherMod
+- 2026-10-26: Pack events built (3.6, TODO `server #9`): ten `creativecommon.*` JFR events from 9 patcherMod
   mixins, `/ceperf status|dump`, the events in `ce-server.jfc`, `PerfParse` and `perf_report.py` read them (new
   "Measured by the pack's hooks" section). Headless JFR and report tests pass; patcherMod 1.1.03 rebuilt;
   live checks queued as SQ-PF-01 to -06.
@@ -583,6 +586,9 @@ Fix (patcherMod `worldgen/FirstTickWater`, `LevelChunkFirstTickWaterMixin`, `Flo
   spawns nothing. That covers the blocks the water replaces and the plants that lose their support in the same tick
   (cave vines, carpets on a washed block, torches). Lava drops nothing in vanilla anyway;
 - nothing runs during generation (no startup or pregen cost); outside a window a fluid tick costs one map lookup.
+- 2026-11-03 (now in Creative Worldgen): the settling flag is cleared at the end of every level tick and the drop hook
+  checks the thread that set it. RETURN of `FlowingFluid.tick` does not run when the tick throws or another mod cancels
+  it after the HEAD hook; a flag left set skipped every block drop in the world (suspected cause of SQ-LBS-04, r1103).
 - Config: `[worldgen.systems] firstTickWater` (default on; off = vanilla drops) and `[worldgen.first_tick_water]
   windowTicks` (default 600 = 30 s, 0 to 72000; 0 = no window). Both apply at once.
 
@@ -824,7 +830,7 @@ named threads in the window. Nothing was changed; status: INVESTIGATED.
    Creative Delight run repeats the data-recipe scan the pack run already swapped. Fix: the second run walks only the added
    recipes; both walk the added recipes once with an id lookup instead of 30 filtered scans. Exact. The 5 s
    estimate is a log gap that also holds Creative Delight's other late scripts. BUILT 2026-10-27 (TODO server #20):
-   the merges are split into a `pack` group (rocky dirt, the 92 removed-wood pairs) and a `creative_delight` group (the
+   the merges are split into a `pack` group (rocky dirt, the 92 removed-wood pairs) and a `creativedelight` group (the
    14 food pairs), each swapped by one run only; `NCH.replaceItems` does one filtered pass over the data recipes and
    one prefiltered walk of the added ones per run (item_merges.md 1.1). The pair count had grown to 107 since the
    measurement, so the old cost was higher than above. Tests: scratch queue SQ-IMS-01 to -04.
@@ -930,7 +936,7 @@ screen, Play, sp_drive phases, JFR dump). Results in `perf/overall/ov1/` (untrac
 | Client heap after GC (10 GB) | 6.6-9.0 GB exploring | | at most 5.0 GB |
 | Client FPS, uncapped, render distance 8 | averages 174-403 | | medians 292 (spawn), 298 (exploring), 317 (back); p5 66 / 122 / 205 |
 
-Single player ticks are run 2's `creativeengineering.ServerTick` events; FPS is run 3 (the logger was broken in runs
+Single player ticks are run 2's `creativecommon.ServerTick` events; FPS is run 3 (the logger was broken in runs
 1-2, below).
 
 Reading it:
@@ -962,7 +968,7 @@ Reading it:
 4. Kit fixes: `client_fps_log.js` used KubeJS 5's `java()` and then the class-filtered `java.lang.Runtime` (the 10.1
    FPS column did not come from it); now FPS only, heap from JFR. `client_drive.sh` resolves its results path
    (jcmd writes relative to the client's cwd); `eval_client.py` adds `dumponexit`. `merge_core_probe.js` expectations
-   updated (107 merges, 4-bottle milk recipes, `creative_delight:` cake cutting id).
+   updated (107 merges, 4-bottle milk recipes, `creativedelight:` cake cutting id).
 
 ### 12.3 Open
 
@@ -1034,7 +1040,7 @@ blocks, all logged on `main` during mod loading; Copycats is gone from the prege
 
 Each bulk scratch-queue run is also a performance run: every server records, and each queue entry is a measured
 segment. Benchmarks with fixed windows (boot, idle, pregen, reload) are the perf suite's G scenarios
-([perf_suite.md](perf_suite.md), its own runner, bot players from `development/perfBot`); this section covers
+([perf_suite.md](perf_suite.md), its own runner, bot players from `development/creativeDevtools/members/perfbot`); this section covers
 queue runs driven through `scratch_server.sh` only. Servers the suite owns (`srv/perf_suite.owner`) are skipped.
 
 | Part | Status |
@@ -1135,7 +1141,7 @@ the suite (G03a, G04, G12) against `g1`. TODO `server #29`.
   body with a call to `IwGrowthFast.blockTick`, which uses the state vanilla already read unless the block
   random-ticked (only its random tick runs between vanilla's read and the hook). An unknown descriptor or a missing
   handler logs a warning and leaves IW's code as it is.
-- Off switch for A/B measurements: JVM property `-Dcreativeengineering.iwFastTick=false` (all three parts).
+- Off switch for A/B measurements: JVM property `-Dcreativecommon.iwFastTick=false` (all three parts).
 - Checked headless (scratchpad harness): the rewrite on IW's real `callTick` bytecode gives a 9-instruction body that
   passes ASM's type-aware verifier as a ServerLevel method; another mixin's handler and other post-applies are left
   alone. Mixin application, growth behaviour and the gain need a server: SQ-IWF-01 to -05 (scratch_queue.md).

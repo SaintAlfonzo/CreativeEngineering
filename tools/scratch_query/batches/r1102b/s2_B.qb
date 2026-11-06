@@ -1,0 +1,177 @@
+# Run r1102b, slice 2, boot B: group B fresh normal world (prep_srv.sh OUT_B s2b B: seed 8675309, structures on).
+# Probes: zz_zq_probe.js (prep_srv.sh), zz_count.js (tools/fungi_probe/zcount.js). No player: "fly around" and "look at
+# the farms" become /locate + forceload 7 x 7 chunks around the hit + /zq count of the blocks in a box (y 40..160).
+# Locates may be async (Async Locator): every capture waits for its "is at [" line first.
+# Order: boot greps, biome rows (jungle, savanna, beach), villages (five types), deadwood metas, then the End (INV-06).
+pace 2
+
+## SQ-WCD-01 | wild crops at boot: modifier counts, tag check, unclassified warning
+bootexpect Done \(
+bootexpect \[wild-crops\] \d+ crop modifiers added, \d+ mod modifiers off, \d+ biome-file patches removed
+bootexpect \[wild-crops\] \d+ crop/biome pairs in \d+ crop tags
+bootreject Error occurred while handling event.*wild_crops
+shell grep -E "\[wild-crops\]" logs/latest.log | cut -c1-400
+look the counts (62 / 49 / 12 on 2026-10-25; each missing mod named in a "mod not loaded, skipped" line); no "problems" error lines; the Terralith cave biomes warning names biome_traits.json
+
+## SQ-WCD-03 | no wild-crops tag problems
+bootreject \[wild-crops\] .*(no such biome|is not in #creativedelight:wild_crops/|could not read)
+
+## SQ-RD-10 | village farm crops: log line; savanna farms grow cotton, plains unchanged
+# stale queue text: the line now reads "added to N pool elements of M listed farm templates" (VillageFarmCrops.java)
+bootexpect \[creativedelight\] village farm crops added to [1-9]\d* pool elements of \d+ listed farm templates$
+bootreject village farm crops .*failed
+> locate structure minecraft:village_savanna
+waitlog is at \[ 600
+capture VS is at \[(-?\d+), (~|-?\d+), (-?\d+)\]
+> forceload add {VS1-48} {VS3-48} {VS1+48} {VS3+48}
+sleep 40
+> zq count {VS1-56} 40 {VS3-56} {VS1+56} 160 {VS3+56} rusticdelight:cotton
+waitlog \[zq\] count rusticdelight:cotton 300
+> zq count {VS1-56} 40 {VS3-56} {VS1+56} 160 {VS3+56} minecraft:wheat
+waitlog \[zq\] count minecraft:wheat 300
+expect \[zq\] count rusticdelight:cotton: [1-9]\d*
+> locate structure minecraft:village_plains
+waitlog The nearest minecraft:village_plains 600
+capture VP The nearest minecraft:village_plains is at \[(-?\d+), (~|-?\d+), (-?\d+)\]
+> forceload add {VP1-48} {VP3-48} {VP1+48} {VP3+48}
+sleep 40
+> zq count {VP1-56} 40 {VP3-56} {VP1+56} 160 {VP3+56} rusticdelight:cotton
+sleep 45
+> zq count {VP1-56} 40 {VP3-56} {VP1+56} 160 {VP3+56} minecraft:wheat
+sleep 45
+look savanna box: cotton among the vanilla crops (about 25%); plains box: cotton 0 (the second cotton count line); a count of 0 crops at all = the box missed the village (judge against the wheat count)
+
+## SQ-WCD-07 | savanna village farms read the renamed cotton tag
+> zq count {VS1-56} 40 {VS3-56} {VS1+56} 160 {VS3+56} rusticdelight:cotton
+waitlog \[zq\] count rusticdelight:cotton 300
+expect \[zq\] count rusticdelight:cotton: [1-9]\d*
+> zq biometag creativedelight:wild_crops/cotton
+expect biometag creativedelight:wild_crops/cotton \(\d+\): .*minecraft:savanna
+
+## SQ-RD-27 | crops in desert, snowy and taiga village farms (savanna and plains: SQ-RD-10)
+> locate structure minecraft:village_desert
+waitlog The nearest minecraft:village_desert 600
+capture VD The nearest minecraft:village_desert is at \[(-?\d+), (~|-?\d+), (-?\d+)\]
+> locate structure minecraft:village_snowy
+waitlog The nearest minecraft:village_snowy 600
+capture VN The nearest minecraft:village_snowy is at \[(-?\d+), (~|-?\d+), (-?\d+)\]
+> locate structure minecraft:village_taiga
+waitlog The nearest minecraft:village_taiga 600
+capture VT The nearest minecraft:village_taiga is at \[(-?\d+), (~|-?\d+), (-?\d+)\]
+> forceload add {VD1-48} {VD3-48} {VD1+48} {VD3+48}
+> forceload add {VN1-48} {VN3-48} {VN1+48} {VN3+48}
+> forceload add {VT1-48} {VT3-48} {VT1+48} {VT3+48}
+sleep 60
+> zq count {VD1-56} 40 {VD3-56} {VD1+56} 160 {VD3+56} rusticdelight:cotton
+waitlog \[zq\] count rusticdelight:cotton 300
+> zq count {VD1-56} 40 {VD3-56} {VD1+56} 160 {VD3+56} minecraft:wheat
+waitlog \[zq\] count minecraft:wheat 300
+> zq count {VN1-56} 40 {VN3-56} {VN1+56} 160 {VN3+56} rusticdelight:cotton
+sleep 45
+> zq count {VN1-56} 40 {VN3-56} {VN1+56} 160 {VN3+56} minecraft:potatoes
+sleep 30
+> zq count {VT1-56} 40 {VT3-56} {VT1+56} 160 {VT3+56} rusticdelight:cotton
+sleep 30
+> zq count {VT1-56} 40 {VT3-56} {VT1+56} 160 {VT3+56} minecraft:pumpkin_stem
+sleep 30
+look per type (desert, snowy, taiga) cotton 0 and only vanilla crops; record the per-type lists for the farm audit (farming/crops #16): add carrots / beetroots counts by hand if wanted
+
+## SQ-WCD-02 | jungle: cocoa and melons; beach: wild cabbages on sand
+> locate biome minecraft:jungle
+waitlog The nearest minecraft:jungle 600
+capture JG The nearest minecraft:jungle is at \[(-?\d+), (~|-?\d+), (-?\d+)\]
+> forceload add {JG1-48} {JG3-48} {JG1+48} {JG3+48}
+sleep 40
+> zq count {JG1-56} 40 {JG3-56} {JG1+56} 200 {JG3+56} minecraft:cocoa
+waitlog \[zq\] count minecraft:cocoa 300
+> zq count {JG1-56} 40 {JG3-56} {JG1+56} 200 {JG3+56} minecraft:melon
+waitlog \[zq\] count minecraft:melon 300
+expect \[zq\] count minecraft:cocoa: [1-9]
+expect \[zq\] count minecraft:melon: [1-9]
+> locate biome minecraft:beach
+waitlog The nearest minecraft:beach 600
+capture BC The nearest minecraft:beach is at \[(-?\d+), (~|-?\d+), (-?\d+)\]
+> forceload add {BC1-48} {BC3-48} {BC1+48} {BC3+48}
+sleep 40
+> zq count {BC1-56} 50 {BC3-56} {BC1+56} 100 {BC3+56} farmersdelight:wild_cabbages
+waitlog \[zq\] count farmersdelight:wild_cabbages 300
+expect \[zq\] count farmersdelight:wild_cabbages: [1-9]\d*; on: .*minecraft:sand
+look 7 x 7 chunks per biome; a 0 on a small beach strip is not a fail by itself: rerun with another beach (execute positioned X 70 Z run locate biome minecraft:beach)
+
+## SQ-RD-26 | Rustic wilds by climate; giant peppers rare, warm dry grassy only; none in the jungle
+> zq count {JG1-56} 40 {JG3-56} {JG1+56} 200 {JG3+56} rusticdelight:wild_bell_peppers
+waitlog \[zq\] count rusticdelight:wild_bell_peppers 300
+> zq count {JG1-56} 40 {JG3-56} {JG1+56} 200 {JG3+56} rusticdelight:wild_coffee
+waitlog \[zq\] count rusticdelight:wild_coffee 300
+> zq count {JG1-56} 40 {JG3-56} {JG1+56} 200 {JG3+56} rusticdelight:bell_pepper_red_block
+waitlog \[zq\] count rusticdelight:bell_pepper_red_block 300
+expect \[zq\] count rusticdelight:bell_pepper_red_block: 0
+> locate biome minecraft:savanna
+waitlog The nearest minecraft:savanna 600
+capture SV The nearest minecraft:savanna is at \[(-?\d+), (~|-?\d+), (-?\d+)\]
+> forceload add {SV1-64} {SV3-64} {SV1+64} {SV3+64}
+sleep 60
+> zq count {SV1-72} 40 {SV3-72} {SV1+72} 160 {SV3+72} rusticdelight:wild_cotton
+waitlog \[zq\] count rusticdelight:wild_cotton 300
+> zq count {SV1-72} 40 {SV3-72} {SV1+72} 160 {SV3+72} rusticdelight:bell_pepper_red_block
+sleep 45
+> zq count {SV1-72} 40 {SV3-72} {SV1+72} 160 {SV3+72} rusticdelight:wild_coffee
+sleep 30
+> zq biometag creativedelight:wild_crops/bell_pepper
+> zq biometag creativedelight:wild_crops/coffee
+> zq biometag creativedelight:wild_crops/giant_bell_pepper
+look jungle box: wild bell peppers and wild coffee present, no giant pepper; savanna box (9 x 9 chunks): wild cotton present, giant peppers rare (about 1 patch per 64 chunks: 0 or 1 patch here is normal); the biometag lines show warm wet (peppers, coffee) and warm dry grassy (giant pepper) lists only
+
+## SQ-DW-01 | deadwood metas staged, report lists group/deadwood
+bootreject (?i)deadwood.*(does not exist|staging error|unknown)
+bootexpect \[meta-structures\]
+shell grep -n -A12 "group/deadwood" kubejs/generation_scripts/worldgen/structure_tag_report.md | head -16
+shell grep -q "6 of 6 members live" kubejs/generation_scripts/worldgen/structure_tag_report.md
+shell grep -iE "deadwood|\[meta-structures\]" logs/latest.log | head -10
+look report: Grid spacing 16, separation 5, 6 members (acacia, birch, cherry, jungle, oak, spruce)
+
+## SQ-DW-02 | acacia deadwood near a savanna: own wood only
+> execute positioned {SV1} 80 {SV3} run locate structure creativeengineering:meta/deadwood_acacia
+waitlog The nearest creativeengineering:meta/deadwood_acacia|Could not find 900
+capture DA The nearest creativeengineering:meta/deadwood_acacia is at \[(-?\d+), (~|-?\d+), (-?\d+)\]
+> forceload add {DA1-16} {DA3-16} {DA1+16} {DA3+16}
+sleep 30
+> zq count {DA1-24} 40 {DA3-24} {DA1+24} 160 {DA3+24} minecraft:acacia_log
+waitlog \[zq\] count minecraft:acacia_log 300
+> zq count {DA1-24} 40 {DA3-24} {DA1+24} 160 {DA3+24} minecraft:oak_log
+sleep 20
+expect \[zq\] count minecraft:acacia_log: ([5-9]|\d\d+)
+look found within about 30 chunks of the savanna hit (blocks away in the locate line); oak count near 0 (savanna trees are acacia; an oak count from nearby trees is not a fail on its own)
+
+## SQ-DW-03 | spruce deadwood from a taiga, oak from a forest
+> locate biome minecraft:taiga
+waitlog The nearest minecraft:taiga 600
+capture TG The nearest minecraft:taiga is at \[(-?\d+), (~|-?\d+), (-?\d+)\]
+> execute positioned {TG1} 80 {TG3} run locate structure creativeengineering:meta/deadwood_spruce
+waitlog The nearest creativeengineering:meta/deadwood_spruce|Could not find 900
+capture DS The nearest creativeengineering:meta/deadwood_spruce is at \[(-?\d+), (~|-?\d+), (-?\d+)\]
+> forceload add {DS1-16} {DS3-16} {DS1+16} {DS3+16}
+> locate biome minecraft:forest
+waitlog The nearest minecraft:forest 600
+capture FO The nearest minecraft:forest is at \[(-?\d+), (~|-?\d+), (-?\d+)\]
+> execute positioned {FO1} 80 {FO3} run locate structure creativeengineering:meta/deadwood_oak
+waitlog The nearest creativeengineering:meta/deadwood_oak|Could not find 900
+capture DO The nearest creativeengineering:meta/deadwood_oak is at \[(-?\d+), (~|-?\d+), (-?\d+)\]
+> forceload add {DO1-16} {DO3-16} {DO1+16} {DO3+16}
+sleep 30
+> zq count {DS1-24} 40 {DS3-24} {DS1+24} 160 {DS3+24} minecraft:spruce_log
+waitlog \[zq\] count minecraft:spruce_log 300
+> zq count {DO1-24} 40 {DO3-24} {DO1+24} 160 {DO3+24} minecraft:oak_log
+waitlog \[zq\] count minecraft:oak_log 300
+expect \[zq\] count minecraft:spruce_log: [1-9]
+expect \[zq\] count minecraft:oak_log: [1-9]
+look both found near their biome; the logs counted are the patch's own wood (trees nearby add to it: judge the "on:" part and the box size)
+
+## SQ-INV-06 | End: nullscape biomes found or tuned out
+> execute in minecraft:the_end run forceload add -64 -64 64 64
+sleep 30
+> execute in minecraft:the_end run locate biome nullscape:crystal_peaks
+waitlog nullscape:crystal_peaks|Could not find 600
+> execute in minecraft:the_end run locate biome nullscape:void_barrens
+waitlog nullscape:void_barrens|Could not find 600
+look record found / not found for each (seed 8675309) in TODO worldgen/biomes #8 and #4; "Could not find" = the tuning flipped the biome out

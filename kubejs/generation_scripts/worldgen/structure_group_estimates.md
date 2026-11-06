@@ -61,58 +61,58 @@ Pillager outposts: vanilla, and every Towns & Towers tower, fort and camp outpos
 
 Grid: spacing 32, separation 8 (members never start closer than 9 chunks = 144 blocks apart). At most 1 structure per 32 x 32 chunks anywhere. Excluded within 4 chunks of `creativeengineering:group/settlements` grid slots.
 
-Capped (old combined density above the group grid): 70 biome(s), 30% of the group's area. Largest: `terralith:yellowstone` 1 per 27 -> 28, `minecraft:plains` 1 per 26 -> 28, `terralith:highlands` 1 per 26 -> 28, `terralith:brushland` 1 per 30 -> 27, `terralith:lush_desert` 1 per 30 -> 28, `terralith:rocky_mountains` 1 per 26 -> 28.
+Capped (old combined density above the group grid): 70 biome(s), 31% of the group's area. Largest: `terralith:yellowstone` 1 per 27 -> 28, `minecraft:plains` 1 per 26 -> 27, `terralith:highlands` 1 per 26 -> 27, `terralith:brushland` 1 per 30 -> 27, `terralith:lush_desert` 1 per 30 -> 27, `terralith:rocky_mountains` 1 per 26 -> 27.
 
 | Structure | Weight | Frequency | Mod default 1 per | New 1 per | Ratio | Note |
 |---|---|---|---|---|---|---|
-| `minecraft:pillager_outpost` | 100 | 1.0 | 121 | 66 | 3.36 |  |
-| `towns_and_towers:exclusives/pillager_outpost_classic` | 100 | 0.2338 | 110 | 69 | 2.55 |  |
+| `minecraft:pillager_outpost` | 100 | 1.0 | 121 | 66 | 3.33 |  |
+| `towns_and_towers:exclusives/pillager_outpost_classic` | 100 | 0.2338 | 110 | 72 | 2.33 |  |
 | `towns_and_towers:exclusives/pillager_outpost_iberian` | 100 | 1.0 | - | - | - | no biome in this pack |
-| `towns_and_towers:exclusives/pillager_outpost_mediterranean` | 100 | 1.0 | 163 | 62 | 6.89 |  |
-| `towns_and_towers:exclusives/pillager_outpost_oriental` | 100 | 1.0 | 174 | 63 | 7.52 |  |
+| `towns_and_towers:exclusives/pillager_outpost_mediterranean` | 100 | 1.0 | 163 | 64 | 6.45 |  |
+| `towns_and_towers:exclusives/pillager_outpost_oriental` | 100 | 1.0 | 174 | 64 | 7.48 |  |
 | `towns_and_towers:exclusives/pillager_outpost_rustic` | 100 | 1.0 | - | - | - | no biome in this pack |
-| `towns_and_towers:exclusives/pillager_outpost_swedish` | 100 | 1.0 | 222 | 85 | 6.85 |  |
-| `towns_and_towers:exclusives/pillager_outpost_tudor` | 100 | 1.0 | 197 | 83 | 5.64 |  |
-| `towns_and_towers:pillager_outpost_badlands` | 100 | 1.0 | 171 | 63 | 7.31 |  |
-| `towns_and_towers:pillager_outpost_beach` | 100 | 0.878499 | 117 | 38 | 9.51 |  |
-| `towns_and_towers:pillager_outpost_birch_forest` | 100 | 0.720211 | 188 | 91 | 4.25 |  |
-| `towns_and_towers:pillager_outpost_desert` | 100 | 0.995091 | 147 | 58 | 6.34 |  |
-| `towns_and_towers:pillager_outpost_flower_forest` | 100 | 0.891321 | 222 | 90 | 6.05 |  |
-| `towns_and_towers:pillager_outpost_forest` | 100 | 0.610697 | 178 | 94 | 3.56 |  |
-| `towns_and_towers:pillager_outpost_grove` | 100 | 1.0 | 250 | 83 | 9.05 |  |
-| `towns_and_towers:pillager_outpost_jungle` | 100 | 0.560666 | 156 | 63 | 6.12 |  |
-| `towns_and_towers:pillager_outpost_meadow` | 100 | 1.0 | 208 | 84 | 6.12 |  |
+| `towns_and_towers:exclusives/pillager_outpost_swedish` | 100 | 1.0 | 222 | 85 | 6.79 |  |
+| `towns_and_towers:exclusives/pillager_outpost_tudor` | 100 | 1.0 | 197 | 84 | 5.55 |  |
+| `towns_and_towers:pillager_outpost_badlands` | 100 | 1.0 | 171 | 65 | 6.97 |  |
+| `towns_and_towers:pillager_outpost_beach` | 100 | 0.878499 | 117 | 40 | 8.60 |  |
+| `towns_and_towers:pillager_outpost_birch_forest` | 100 | 0.720211 | 188 | 93 | 4.08 |  |
+| `towns_and_towers:pillager_outpost_desert` | 100 | 0.995091 | 147 | 58 | 6.29 |  |
+| `towns_and_towers:pillager_outpost_flower_forest` | 100 | 0.891321 | 222 | 92 | 5.90 |  |
+| `towns_and_towers:pillager_outpost_forest` | 100 | 0.610697 | 178 | 97 | 3.40 |  |
+| `towns_and_towers:pillager_outpost_grove` | 100 | 1.0 | 250 | 83 | 9.01 |  |
+| `towns_and_towers:pillager_outpost_jungle` | 100 | 0.560666 | 156 | 66 | 5.59 |  |
+| `towns_and_towers:pillager_outpost_meadow` | 100 | 1.0 | 208 | 85 | 5.99 |  |
 | `towns_and_towers:pillager_outpost_mushroom_fields` | 100 | 0.237868 | 110 | 70 | 2.48 |  |
-| `towns_and_towers:pillager_outpost_old_growth_taiga` | 100 | 1.0 | 204 | 85 | 5.79 |  |
-| `towns_and_towers:pillager_outpost_savanna` | 100 | 1.0 | 141 | 58 | 5.99 |  |
-| `towns_and_towers:pillager_outpost_snowy_beach` | 100 | 0.4394 | 292 | 141 | 4.29 |  |
-| `towns_and_towers:pillager_outpost_snowy_plains` | 100 | 0.584075 | 250 | 109 | 5.28 |  |
-| `towns_and_towers:pillager_outpost_snowy_slopes` | 100 | 1.0 | 250 | 83 | 9.05 |  |
-| `towns_and_towers:pillager_outpost_snowy_taiga` | 100 | 1.0 | 250 | 83 | 9.05 |  |
-| `towns_and_towers:pillager_outpost_sparse_jungle` | 100 | 1.0 | 156 | 47 | 10.91 |  |
-| `towns_and_towers:pillager_outpost_sunflower_plains` | 100 | 1.0 | 208 | 84 | 6.12 |  |
-| `towns_and_towers:pillager_outpost_swamp` | 100 | 0.915151 | 134 | 67 | 3.98 |  |
-| `towns_and_towers:pillager_outpost_taiga` | 100 | 1.0 | 204 | 85 | 5.79 |  |
-| `towns_and_towers:pillager_outpost_wooded_badlands` | 100 | 1.0 | 171 | 63 | 7.31 |  |
-| `mysticrift_pillagers_towers_aris:acacia_pillager_tower` | 10 | 0.930863 | 190 | 192 | 0.98 |  |
-| `mysticrift_pillagers_towers_aris:birch_pillager_tower` | 8 | 0.905604 | 200 | 288 | 0.48 |  |
-| `mysticrift_pillagers_towers_aris:cherry_pillager_tower` | 17 | 0.856877 | 190 | 230 | 0.68 |  |
-| `mysticrift_pillagers_towers_aris:desert_pillager_tower` | 1 | 0.650021 | 180 | 599 | 0.09 |  |
-| `mysticrift_pillagers_towers_aris:end_pillager_tower` | 1 | 0.019706 | 188 | 232 | 0.66 |  |
-| `mysticrift_pillagers_towers_aris:jungle_pillager_tower` | 10 | 0.973476 | 128 | 151 | 0.72 |  |
-| `mysticrift_pillagers_towers_aris:mangrove_pillager_tower` | 5 | 0.038089 | 160 | 1304 | 0.02 |  |
-| `mysticrift_pillagers_towers_aris:oak_wood_pillager_tower` | 5 | 0.467934 | 127 | 242 | 0.28 |  |
-| `creativeengineering:meta/pillager_camp_ruin` | 1 | 1.0 | - | 163 | new |  |
-| `creativeengineering:meta/pillager_camp_ruins` | 1 | 1.0 | - | 157 | new |  |
-| `creativeengineering:meta/pillager_camp_siege` | 1 | 1.0 | - | 136 | new |  |
-| `creativeengineering:meta/pillager_great_tower_siege` | 1 | 1.0 | - | 358 | new |  |
-| `creativeengineering:meta/pillager_stronghold_siege` | 1 | 1.0 | - | 104 | new |  |
-| `creativeengineering:meta/pillager_tower_siege` | 1 | 1.0 | - | 87 | new |  |
-| `takesapillage:bastille` | 34 | 1.0 | 55 | 122 | 0.21 |  |
-| `takesapillage:pillager_camp` | 87 | 1.0 | 39 | 77 | 0.26 |  |
-| `eugene:fake_trader_camp` | 100 | 1.0 | 200 | 77 | 6.84 |  |
-| `eugene:pillager_camp` | 100 | 1.0 | 58 | 77 | 0.57 |  |
-| `creativeengineering:meta/pillager_camp_meteorite` | 1 | 1.0 | - | 186 | new |  |
+| `towns_and_towers:pillager_outpost_old_growth_taiga` | 100 | 1.0 | 204 | 85 | 5.71 |  |
+| `towns_and_towers:pillager_outpost_savanna` | 100 | 1.0 | 141 | 60 | 5.57 |  |
+| `towns_and_towers:pillager_outpost_snowy_beach` | 100 | 0.4394 | 292 | 141 | 4.28 |  |
+| `towns_and_towers:pillager_outpost_snowy_plains` | 100 | 0.584075 | 250 | 109 | 5.26 |  |
+| `towns_and_towers:pillager_outpost_snowy_slopes` | 100 | 1.0 | 250 | 83 | 9.01 |  |
+| `towns_and_towers:pillager_outpost_snowy_taiga` | 100 | 1.0 | 250 | 83 | 9.01 |  |
+| `towns_and_towers:pillager_outpost_sparse_jungle` | 100 | 1.0 | 156 | 49 | 9.96 |  |
+| `towns_and_towers:pillager_outpost_sunflower_plains` | 100 | 1.0 | 208 | 85 | 5.99 |  |
+| `towns_and_towers:pillager_outpost_swamp` | 100 | 0.915151 | 134 | 68 | 3.85 |  |
+| `towns_and_towers:pillager_outpost_taiga` | 100 | 1.0 | 204 | 85 | 5.71 |  |
+| `towns_and_towers:pillager_outpost_wooded_badlands` | 100 | 1.0 | 171 | 65 | 6.97 |  |
+| `mysticrift_pillagers_towers_aris:acacia_pillager_tower` | 30 | 0.930863 | 190 | 115 | 2.73 |  |
+| `mysticrift_pillagers_towers_aris:birch_pillager_tower` | 24 | 0.905604 | 200 | 169 | 1.39 |  |
+| `mysticrift_pillagers_towers_aris:cherry_pillager_tower` | 51 | 0.856877 | 190 | 137 | 1.92 |  |
+| `mysticrift_pillagers_towers_aris:desert_pillager_tower` | 3 | 0.650021 | 180 | 355 | 0.26 |  |
+| `mysticrift_pillagers_towers_aris:end_pillager_tower` | 3 | 0.019706 | 188 | 232 | 0.66 |  |
+| `mysticrift_pillagers_towers_aris:jungle_pillager_tower` | 30 | 0.973476 | 128 | 91 | 1.96 |  |
+| `mysticrift_pillagers_towers_aris:mangrove_pillager_tower` | 15 | 0.038089 | 160 | 765 | 0.04 |  |
+| `mysticrift_pillagers_towers_aris:oak_wood_pillager_tower` | 15 | 0.467934 | 127 | 190 | 0.45 |  |
+| `creativeengineering:meta/pillager_camp_ruin` | 1 | 1.0 | - | 128 | new |  |
+| `creativeengineering:meta/pillager_camp_ruins` | 1 | 1.0 | - | 124 | new |  |
+| `creativeengineering:meta/pillager_camp_siege` | 1 | 1.0 | - | 138 | new |  |
+| `creativeengineering:meta/pillager_great_tower_siege` | 1 | 1.0 | - | 276 | new |  |
+| `creativeengineering:meta/pillager_stronghold_siege` | 1 | 1.0 | - | 105 | new |  |
+| `creativeengineering:meta/pillager_tower_siege` | 1 | 1.0 | - | 88 | new |  |
+| `takesapillage:bastille` | 34 | 1.0 | 55 | 124 | 0.20 |  |
+| `takesapillage:pillager_camp` | 87 | 1.0 | 39 | 78 | 0.25 |  |
+| `eugene:fake_trader_camp` | 100 | 1.0 | 200 | 78 | 6.68 |  |
+| `eugene:pillager_camp` | 100 | 1.0 | 58 | 78 | 0.56 |  |
+| `creativeengineering:meta/pillager_camp_meteorite` | 1 | 1.0 | - | 189 | new |  |
 
 ### `ruins` -> `creativeengineering:group/ruins`
 
@@ -124,37 +124,36 @@ Capped (old combined density above the group grid): 62 biome(s), 62% of the grou
 
 | Structure | Weight | Frequency | Mod default 1 per | New 1 per | Ratio | Note |
 |---|---|---|---|---|---|---|
-| `philipsruins:ancient_ruins` | 100 | 0.860538 | 50 | 46 | 1.18 |  |
-| `philipsruins:ancient_towers` | 100 | 0.862964 | 50 | 46 | 1.18 |  |
+| `philipsruins:ancient_ruins` | 100 | 0.860538 | 50 | 46 | 1.20 |  |
+| `philipsruins:ancient_towers` | 100 | 0.862964 | 50 | 46 | 1.20 |  |
 | `philipsruins:badlands_structures` | 100 | 0.266459 | 58 | 35 | 2.73 |  |
 | `philipsruins:desert_structures` | 100 | 0.250975 | 44 | 35 | 1.59 |  |
-| `philipsruins:field_stone_ruins` | 100 | 1.0 | 75 | 64 | 1.37 |  |
-| `philipsruins:field_stone_ruins_rocks` | 100 | 0.513101 | 68 | 68 | 1.00 |  |
-| `philipsruins:level_one_ruins` | 100 | 1.0 | 75 | 64 | 1.37 |  |
-| `philipsruins:level_three_ruins` | 100 | 1.0 | 85 | 64 | 1.76 |  |
-| `philipsruins:level_two_ruins` | 100 | 1.0 | 113 | 64 | 3.11 |  |
-| `philipsruins:level_two_ruins_pool` | 100 | 1.0 | 113 | 64 | 3.11 |  |
-| `philipsruins:pumpkin_ruins` | 100 | 1.0 | 50 | 55 | 0.82 |  |
-| `philipsruins:rare_ruin` | 100 | 0.007794 | 360 | 546 | 0.43 |  |
-| `philipsruins:start_nether_ruin` | 100 | 0.8688 | 310 | 49 | 40.59 |  |
-| `terralith:glacial_hut` | 100 | 0.686437 | 27 | 41 | 0.44 |  |
-| `forest_ruins:ruin_1` | 100 | 0.904155 | 45 | 73 | 0.38 |  |
-| `forest_ruins:ruin_2` | 100 | 0.904155 | 45 | 73 | 0.38 |  |
-| `forest_ruins:ruin_3` | 100 | 0.904155 | 45 | 73 | 0.38 |  |
-| `forest_ruins:ruin_4` | 100 | 0.904155 | 45 | 73 | 0.38 |  |
-| `forest_ruins:ruin_5` | 100 | 0.904155 | 45 | 73 | 0.38 |  |
-| `forest_ruins:ruin_6` | 100 | 0.904155 | 45 | 73 | 0.38 |  |
-| `forest_ruins:ruin_7` | 100 | 0.904155 | 45 | 73 | 0.38 |  |
+| `philipsruins:field_stone_ruins` | 100 | 1.0 | 75 | 63 | 1.44 |  |
+| `philipsruins:field_stone_ruins_rocks` | 100 | 0.513101 | 68 | 67 | 1.02 |  |
+| `philipsruins:level_one_ruins` | 100 | 1.0 | 75 | 63 | 1.44 |  |
+| `philipsruins:level_three_ruins` | 100 | 1.0 | 85 | 63 | 1.85 |  |
+| `philipsruins:level_two_ruins` | 100 | 1.0 | 113 | 63 | 3.27 |  |
+| `philipsruins:level_two_ruins_pool` | 100 | 1.0 | 113 | 63 | 3.27 |  |
+| `philipsruins:pumpkin_ruins` | 100 | 1.0 | 50 | 55 | 0.84 |  |
+| `terralith:glacial_hut` | 100 | 0.686437 | 27 | 39 | 0.47 |  |
+| `forest_ruins:ruin_1` | 100 | 0.904155 | 45 | 72 | 0.39 |  |
+| `forest_ruins:ruin_2` | 100 | 0.904155 | 45 | 72 | 0.39 |  |
+| `forest_ruins:ruin_3` | 100 | 0.904155 | 45 | 72 | 0.39 |  |
+| `forest_ruins:ruin_4` | 100 | 0.904155 | 45 | 72 | 0.39 |  |
+| `forest_ruins:ruin_5` | 100 | 0.904155 | 45 | 72 | 0.39 |  |
+| `forest_ruins:ruin_6` | 100 | 0.904155 | 45 | 72 | 0.39 |  |
+| `forest_ruins:ruin_7` | 100 | 0.904155 | 45 | 72 | 0.39 |  |
 | `forgotten_church:forgotten_church` | 100 | 1.0 | 55 | 69 | 0.64 |  |
 | `watchtower_building:abandoned_watchtower` | 21 | 0.194882 | 48 | 115 | 0.17 |  |
 | `creativeengineering:meta/ruin_cluster` | 1 | 1.0 | - | 52 | new |  |
-| `creativeengineering:meta/ruin_scatter` | 1 | 1.0 | - | 41 | new |  |
+| `creativeengineering:meta/ruin_scatter` | 1 | 1.0 | - | 40 | new |  |
 | `old_illager_statue:old_illager_statue` | 26 | 1.0 | 42 | 104 | 0.16 |  |
 | `oldvillagerstatue:old_villager_statue` | 26 | 1.0 | 40 | 104 | 0.15 |  |
-| `small_cat_statues:cat_1` | 19 | 1.0 | 30 | 120 | 0.06 |  |
-| `small_cat_statues:cat_2` | 19 | 1.0 | 30 | 120 | 0.06 |  |
-| `small_cat_statues:cat_3` | 19 | 1.0 | 30 | 120 | 0.06 |  |
-| `eugene:ruined_drum_tower` | 100 | 1.0 | 126 | 71 | 3.14 |  |
+| `small_cat_statues:cat_1` | 19 | 1.0 | 30 | 119 | 0.06 |  |
+| `small_cat_statues:cat_2` | 19 | 1.0 | 30 | 119 | 0.06 |  |
+| `small_cat_statues:cat_3` | 19 | 1.0 | 30 | 119 | 0.06 |  |
+| `eugene:ruined_drum_tower` | 100 | 1.0 | 101 | 70 | 2.09 |  |
+| `creativeengineering:meta/waystone_ruins` | 1 | 1.0 | - | - | - | empty biome tag: never spawns unless a mod fills it at runtime |
 
 ### `surface_dungeons` -> `creativeengineering:group/surface_dungeons`
 
@@ -170,7 +169,7 @@ Grid: spacing 16, separation 10 (members never start closer than 11 chunks = 176
 | `terralith:spire` | 100 | 0.445566 | 36 | 24 | 2.26 |  |
 | `towns_and_towers:mimic_desert` | 100 | 0.521 | 32 | 24 | 1.76 |  |
 | `minecraft:jungle_pyramid` | 1 | 1.0 | 32 | 58 | 0.30 | replaces `betterjungletemples:jungle_temple` in 10% of its slots |
-| `eugene:undead_castle` | 100 | 0.026314 | 96 | 99 | 0.93 |  |
+| `eugene:undead_castle` | 100 | 0.026314 | 93 | 100 | 0.87 |  |
 | `creativeengineering:meta/jungle_temple_ruins` | 1 | 1.0 | - | 31 | new |  |
 
 ### `witch_huts` -> `creativeengineering:group/witch_huts`
@@ -393,16 +392,19 @@ Capped (old combined density above the group grid): 145 biome(s), 100% of the gr
 
 ### `nether_ruins` -> `creativeengineering:group/nether_ruins`
 
-Nether ruins: Twigs' bloodstone obelisk and Philip's three Nether ruins (Nether dungeon, sealed ghast statue, lava ruins). Grid from their crowding (spacing 14, separation 7). Added 2026-10-12.
+Nether ruins: Twigs' bloodstone obelisk and Philip's three Nether ruins (Nether dungeon, sealed ghast statue, lava ruins). Grid from their crowding (spacing 14, separation 7). Added 2026-10-12. 2026-11-02 (structures/contents #1): Philip's lost soul dungeon, rare ruin and blackstone Nether ruin moved in from the Overworld; the dungeon and the blackstone ruin set by hand to the other Philip Nether ruins' weight and frequency (the fit to their Overworld rates gave weights 148 and 214), the rare ruin kept rare as fitted.
 
 Grid: spacing 14, separation 7 (members never start closer than 8 chunks = 128 blocks apart). At most 1 structure per 14 x 14 chunks anywhere.
 
 | Structure | Weight | Frequency | Mod default 1 per | New 1 per | Ratio | Note |
 |---|---|---|---|---|---|---|
-| `philipsruins:nether_lava_ruins` | 100 | 0.5993 | 52 | 34 | 2.31 |  |
-| `philipsruins:sealedruinedghaststatue1` | 100 | 0.5993 | 52 | 34 | 2.31 |  |
-| `philipsruins:start_nether_dungeon` | 100 | 0.5993 | 52 | 34 | 2.31 |  |
-| `twigs:bloodstone_obelisk` | 100 | 1.0 | 20 | 28 | 0.51 |  |
+| `philipsruins:nether_lava_ruins` | 100 | 0.5993 | 52 | 38 | 1.91 |  |
+| `philipsruins:sealedruinedghaststatue1` | 100 | 0.5993 | 52 | 38 | 1.91 |  |
+| `philipsruins:start_nether_dungeon` | 100 | 0.5993 | 52 | 38 | 1.91 |  |
+| `twigs:bloodstone_obelisk` | 100 | 1.0 | 20 | 30 | 0.43 |  |
+| `philipsruins:lost_soul_dungeon` | 100 | 0.5993 | 60 | 36 | 2.75 |  |
+| `philipsruins:rare_ruin` | 6 | 0.3759 | 360 | 181 | 3.98 |  |
+| `philipsruins:start_nether_ruin` | 100 | 0.5993 | 310 | 39 | 61.64 |  |
 
 ### `way_signs` -> `creativeengineering:group/way_signs`
 
@@ -478,10 +480,9 @@ Capped (old combined density above the group grid): 9 biome(s), 100% of the grou
 | `philipsruins:end_ruins` | 1 | 1.0 | 49 | 35 | 2.00 |  |
 | `philipsruins:end_gate_fortress` | 1 | 1.0 | 49 | 35 | 2.00 |  |
 | `philipsruins:lost_soul_city` | 1 | 1.0 | 80 | 38 | 4.50 |  |
-| `philipsruins:lost_soul_dungeon` | 1 | 0.991 | 120 | 46 | 6.74 |  |
 | `philipsruins:bone_dungeon` | 1 | 0.29382 | 61 | 43 | 2.00 |  |
-| `philipsruins:underground_structures` | 1 | 0.9885 | 120 | 46 | 6.73 |  |
-| `philipsruins:sculk_dungeon` | 1 | 0.991 | 120 | 46 | 6.74 |  |
+| `philipsruins:underground_structures` | 1 | 0.9885 | 104 | 40 | 6.73 |  |
+| `philipsruins:sculk_dungeon` | 1 | 0.991 | 104 | 40 | 6.74 |  |
 | `terralith:underground/oak_cabin` | 11 | 1.0 | 16 | 4 | 13.44 |  |
 | `terralith:underground/giant_bee_hive` | 2 | 0.4261 | 34 | 14 | 5.73 |  |
 | `terralith:underground/mining_outpost` | 13 | 0.1097 | 13 | 11 | 1.47 |  |

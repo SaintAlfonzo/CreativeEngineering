@@ -20,7 +20,7 @@ Status **Pinned** / Work: KubeJS / id `creativedelight/qol #3`. Rules still in d
 ### Now (checked 2026-10-31)
 - The food dict exists (framework #4, built 2026-10-25, In Progress): `kubejs/startup_scripts/_lib/food_dict.js` (1542 keys)
   and `food_grammar.js`; pack scripts alias it `fd` (`f` is the fluid dict there).
-- The food type tags already live in the CD tree: [food_type_tags.js](../../kubejs/data/creative_delight/kubejs/creativeengineering/food_type_tags.js)
+- The food type tags already live in the CD tree: [food_type_tags.js](../../kubejs/data/creativedelight/kubejs/creativeengineering/food_type_tags.js)
   (moved from `server_scripts/tags/foodtypetags.js` 2026-10-25, rows unchanged). It reads
   [food_types.json](../../kubejs/generation_scripts/food/food_types.json), keyed by **item_dict** keys, not food dict keys;
   removed items lose the tags again in `_core/removed_item_tags.js`. No `qol.foodTypes` switch yet
@@ -49,7 +49,7 @@ As built: [creative_delight.md](../creative_delight.md) 22; tests in 22.4, scrat
 | Row | What | Open tiers | Tests |
 |---|---|---|---|
 | `qol #1` | Remainder buffer: pot and kettle mixins in CD `mixin/farmersdelight/`, `mixin/farmersrespite/`; buffer API and oven stay in patcherMod | S C P | CDQ-01 to -03, SQ-CDQ-01 to -03 |
-| `qol #2` | Placeable-food tooltip lines: `kubejs/assets/creative_delight/kubejs/_qol/placeable_tooltip.js`, switch `qol.placeableTooltips` | C | CDQ-04, SQ-CDQ-04 |
+| `qol #2` | Placeable-food tooltip lines: `kubejs/assets/creativedelight/kubejs/_qol/placeable_tooltip.js`, switch `qol.placeableTooltips` | C | CDQ-04, SQ-CDQ-04 |
 | `qol #4` | Compost rows for member foods (101 rows in `kubejs_startup/<mod>/compost.js`), switch `qol.compost` | S | CDQ-05, SQ-CDQ-05 |
 | `qol #5` | Heatless pot routes and grid-meal moves into `<mod>/cooking.js`, switch `qol.manualOnlyRoutes` | S | CDQ-06, SQ-CDQ-06 |
 | `qol #6` | WTHIT crop line (`compat/wthit/WthitCropGrowth`) and Fungi JEI pages, switches `qol.wthitCropLine`, `qol.jeiInfoPages` | C | CDQ-07, -08, SQ-CDQ-07, -08 |

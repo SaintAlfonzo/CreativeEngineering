@@ -1,7 +1,7 @@
 # Brief: worldgen / locate
 
 Written 2026-10-21 from [todo/TODO.md](../todo/TODO.md) `# worldgen`, Sub `locate`. Feature writeup:
-[locate.md](../locate.md) (prefix `LO-`). Code: `development/patcherMod/src/main/java/com/SaintAlfonzo/creativeengineering/`
+[locate.md](../locate.md) (prefix `LO-`). Code: `development/creativeCommon/src/main/java/com/SaintAlfonzo/creativecommon/`
 (paths below are relative to it unless they start with a repo folder).
 
 ## Scope and order

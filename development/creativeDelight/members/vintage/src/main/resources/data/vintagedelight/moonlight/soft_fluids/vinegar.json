@@ -1,0 +1,20 @@
+{
+  "color": "#580000",
+  "containers": [
+    {
+      "filled": [
+        "vintagedelight:vinegar_jar"
+      ],
+      "empty": "vintagedelight:empty_mason_jar",
+      "capacity": 1
+    }
+  ],
+  "flowing_texture": "moonlight:soft_fluids/potion_flow",
+  "food": {
+    "divider": 1,
+    "item": "vintagedelight:vinegar_jar"
+  },
+  "from_mod": "vintagedelight",
+  "still_texture": "moonlight:soft_fluids/soup_liquid",
+  "translation_key": "item.vintagedelight.vinegar_bottle"
+}

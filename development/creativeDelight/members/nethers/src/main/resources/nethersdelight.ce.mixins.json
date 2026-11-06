@@ -1,0 +1,12 @@
+{
+  "required": true,
+  "minVersion": "0.8",
+  "package": "com.SaintAlfonzo.creativedelight.nethers.mixin",
+  "compatibilityLevel": "JAVA_17",
+  "mixins": [
+    "FungusColonyRulesMixin"
+  ],
+  "injectors": {
+    "defaultRequire": 1
+  }
+}

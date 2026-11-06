@@ -6,7 +6,7 @@ pace 2
 
 ## SQ-A2-BOOT | reboot clean
 bootexpect Done \(
-bootreject (Mixin apply failed|InvalidInjectionException).*(creativeengineering|creative_delight)
+bootreject (Mixin apply failed|InvalidInjectionException).*(creativeengineering|creativedelight)
 > pbot spawn qa 0 -60 0
 > time set noon
 > gamerule doDaylightCycle false

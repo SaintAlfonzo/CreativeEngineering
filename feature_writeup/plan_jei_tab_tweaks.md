@@ -39,7 +39,7 @@ Jars installed since; shipped in 1.1.04 (client 2026-10-29). CQ-JT-01 to CQ-JT-1
 
 ## Part A: generator and data
 
-Files: `tools/jei_world/*.py`, `kubejs/assets/creativeengineering/jei_world/<tab>/manual.json`, the lang overlay.
+Files: `tools/jei_world/*.py`, `kubejs/assets/creativecommon/jei_world/<tab>/manual.json`, the lang overlay.
 Applied by `python3 tools/gen_jei_world.py`, then F3+T in game. No jar.
 
 | Step | TODO | Change |
@@ -55,8 +55,8 @@ Applied by `python3 tools/gen_jei_world.py`, then F3+T in game. No jar.
 
 ## Part B: patcherMod Java
 
-Files: `development/patcherMod/src/main/java/com/SaintAlfonzo/creativeengineering/compat/jei/` (and `world/`),
-`CEConfig.java`, one new IE mixin. One `./gradlew :patcherMod:build --offline`, plus a headless harness check of the
+Files: `development/creativeCommon/src/main/java/com/SaintAlfonzo/creativecommon/compat/jei/` (and `world/`),
+`CEConfig.java`, one new IE mixin. One `./gradlew :creativeCommon:build --offline`, plus a headless harness check of the
 pure logic (stand-in map, fluid scale curve, note joining).
 
 | Step | TODO | Change |
@@ -86,6 +86,6 @@ pure logic (stand-in map, fluid scale curve, note joining).
   [effects.md](effects.md) and [TODO](todo/TODO.md) updated; `#28` closed as kept, `#10` folded into `#23`.
 - Tests: the briefs' proposed JW-21 to JW-25 and JC-30, plus new IDs for B6 to B8 and C1 to C3, in the writeups and
   [testing/scratch_queue.md](testing/scratch_queue.md) (no scratch server boot unless asked).
-- Player changelog bullets (JEI family) in `kubejs/assets/creativeengineering/changelog/unreleased.md`;
+- Player changelog bullets (JEI family) in `kubejs/assets/creativecommon/changelog/unreleased.md`;
   `python3 tools/changelog_lint.py`.
 - Hand over: test IDs and the jars waiting for `mods/` (patcherMod, moreMooblooms).

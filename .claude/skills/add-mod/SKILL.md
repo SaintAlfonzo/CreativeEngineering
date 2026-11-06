@@ -19,7 +19,7 @@ description: Add (or remove/replace) a third-party mod jar in the pack - sides r
 7. **Early checks**: `logs/latest.log` for `Failed to parse`, mixin errors, the mod id.
 8. **Content mod** (items, food, systems): run the `integration-report` skill before any integration work.
 9. **Docs, same session**: writeup row or section; TODO entry; player changelog bullet in
-   `kubejs/assets/creativeengineering/changelog/unreleased.md` if players notice it (new mod = yes), then
+   `kubejs/assets/creativecommon/changelog/unreleased.md` if players notice it (new mod = yes), then
    `python3 tools/changelog_lint.py`.
 10. Removing a mod: same steps in reverse; drop its `mod_sides.md` row, grep the namespace in `kubejs/` and
     `development/` for dead references, note the removal in the changelog.

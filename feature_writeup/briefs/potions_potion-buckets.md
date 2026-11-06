@@ -4,10 +4,10 @@ Written 2026-10-21 from [TODO.md](../todo/TODO.md) `# potions`, Sub `potion-buck
 Feature writeup: [potion_buckets.md](../potion_buckets.md) (test prefix `PB-`, last PB-20). Code:
 [startup_scripts/items/potion_buckets.js](../../kubejs/startup_scripts/items/potion_buckets.js) (items, bottle
 remainder), [startup_scripts/func/potion_area.js](../../kubejs/startup_scripts/func/potion_area.js) (clouds,
-dispenser handler), [server_scripts/engineering/potion_buckets.js](../../kubejs/server_scripts/engineering/potion_buckets.js)
-(right click), [server_scripts/engineering/potion_bottling.js](../../kubejs/server_scripts/engineering/potion_bottling.js)
+dispenser handler), [server_scripts/engineering/potion_buckets.js](../../kubejs/data/creativeengineering/kubejs/engineering/potion_buckets.js)
+(right click), [server_scripts/engineering/potion_bottling.js](../../kubejs/data/creativeengineering/kubejs/engineering/potion_bottling.js)
 (bucket and bottle recipes), [server_scripts/equipment/tipped_arrows.js](../../kubejs/server_scripts/equipment/tipped_arrows.js),
-patcherMod `CE/potion/PotionBucketDispenser.java` (`CE/` = `development/patcherMod/src/main/java/com/SaintAlfonzo/creativeengineering/`).
+patcherMod `CE/potion/PotionBucketDispenser.java` (`CE/` = `development/creativeCommon/src/main/java/com/SaintAlfonzo/creativecommon/`).
 
 Jar facts checked 2026-10-21: KubeJS 1902.6.2 build 73 (`RecipeJS.replaceIngredient`, `IngredientActionFilter`,
 `ReplaceAction`); recipe scan of the 132 mod jars cached in the scratchpad (not all 407). Vanilla behaviour

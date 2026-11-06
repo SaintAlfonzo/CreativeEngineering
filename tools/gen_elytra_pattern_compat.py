@@ -45,7 +45,7 @@ ELYTRA_JAR = os.path.join(MODS_DIR, "customizableelytra-1.19.0-1.7.4.jar")
 VANILLA_JAR = pack_paths.vanilla_jar()
 OUT_ROOT = os.path.join(
     INSTANCE_ROOT,
-    "development/patcherMod/src/main/resources/assets/creativeengineering/textures/entity",
+    "development/creativeCompat/src/main/resources/assets/creativeengineering/textures/entity",
 )
 
 PATTERN_RE = re.compile(r"^assets/([a-z0-9_.\-]+)/textures/entity/banner/([a-z0-9_./\-]+)\.png$")

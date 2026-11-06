@@ -40,8 +40,8 @@ sys.path.insert(0, HERE)
 import report_html as R  # noqa: E402
 
 INCOMING = os.path.join(ROOT, 'perf', 'incoming')
-JAR_DIRS = [os.path.join(ROOT, d) for d in ('mods', 'deploy/latest/mods', 'server_mods', 'development/patcherMod/jar_archive',
-                                            'development/patcherMod/build/libs',
+JAR_DIRS = [os.path.join(ROOT, d) for d in ('mods', 'deploy/latest/mods', 'server_mods', 'development/creativeCommon/jar_archive',
+                                            'development/creativeCommon/build/libs',
                                             'development/exposureBackport/jar_archive',
                                             'development/exposureBackport/build/libs')]
 JAR_CACHE = os.path.join(ROOT, 'perf', '.cache', 'jar_sha1.json')

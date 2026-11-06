@@ -16,7 +16,7 @@ import java.util.Map;
 import java.util.function.Consumer;
 
 /**
- * Mixin config plugin for creative_delight.mixins.json: the Java compartments of creative_delight.md 12. A mixin in
+ * Mixin config plugin for creativedelight.mixins.json: the Java compartments of creative_delight.md 12. A mixin in
  * {@code mixin.<modid>.} applies only when that mod is loaded (and, for a mod in {@link #FOR_VERSION}, only at that
  * version: those mixins fix bugs of one jar and would undo the upstream fix on a newer one). Nothing outside the
  * compartment's package references the mod, so CD boots the same without it. The gate is the shared
@@ -72,7 +72,32 @@ public class CDMixinPlugin extends GatedMixinPlugin {
 			"FruitsDelightLeafCheckMixin", CDMixinPlugin::patchLeafCheckHandler);
 
 	public CDMixinPlugin() {
-		super("[creative_delight]", COMPARTMENT_PREFIX, FOR_VERSION, Map.of());
+		super("[creativedelight]", COMPARTMENT_PREFIX, FOR_VERSION, Map.of());
+	}
+
+	/**
+	 * Mixins of the M8 compartments (plan_cb_publish.md 3b) that need more than their package's mod: the compartment
+	 * ({@link Compartments}, mods and switch) as well. Package {@code cookingforblockheads.} and {@code incubation.} mixins
+	 * need their compartment too; the incubation nest goal needs a bird mod with nests (emus or ducks and geese).
+	 */
+	private static final Map<String, String> NEEDS_COMPARTMENT = Map.of(
+			"CuttingBoardRendererOffsetMixin", Compartments.CFB,
+			"CoasterRendererOffsetMixin", Compartments.CFB,
+			"EntityEmuEggLayerMixin", Compartments.INCUBATION,
+			"DuckEntityEggLayerMixin", Compartments.INCUBATION,
+			"GooseEntityEggLayerMixin", Compartments.INCUBATION);
+
+	@Override
+	public boolean shouldApplyMixin(String targetClassName, String mixinClassName) {
+		if (!super.shouldApplyMixin(targetClassName, mixinClassName)) return false;
+		String simple = mixinClassName.substring(mixinClassName.lastIndexOf('.') + 1);
+		String compartment = NEEDS_COMPARTMENT.get(simple);
+		if (mixinClassName.startsWith(COMPARTMENT_PREFIX + Compartments.CFB + ".")) compartment = Compartments.CFB;
+		if (mixinClassName.startsWith(COMPARTMENT_PREFIX + Compartments.INCUBATION + ".")) {
+			if (!Compartments.loaded("alexsmobs") && !Compartments.loaded("untitledduckmod")) return false;
+			compartment = Compartments.INCUBATION;
+		}
+		return compartment == null || Compartments.on(compartment);
 	}
 
 	@Override
@@ -93,7 +118,7 @@ public class CDMixinPlugin extends GatedMixinPlugin {
 				}
 			}
 		}
-		LOGGER.warn("[creative_delight] Fruits Delight's getFoodData handler not found in {}: null guard not applied",
+		LOGGER.warn("[creativedelight] Fruits Delight's getFoodData handler not found in {}: null guard not applied",
 				targetClass.name);
 	}
 

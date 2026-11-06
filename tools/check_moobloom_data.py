@@ -4,7 +4,7 @@
     python3 tools/check_moobloom_data.py
 
 Reads the variants, breeding rules and spawn rules the game would load: the mod's own
-(development/moreMooblooms/src/main/resources/data and its packs/more_mooblooms/*/data switch packs) with the pack's
+(development/creativeWorldgen/members/mooblooms/src/main/resources/data and its packs/more_mooblooms/*/data switch packs) with the pack's
 kubejs/data on top (same path wins), and checks:
 - every variant (mooblooms.md 4.4): only known keys; a non-empty flower pool of block states (or {state,
   weight >= 1, chance 0-1, drop, optional, feed_weight >= 1}); feed and spawns_in_dark_on ids/#tags; any_weight and breed_weight >= 0;
@@ -27,7 +27,7 @@ import re
 import sys
 
 ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
-MOD_RES = os.path.join(ROOT, 'development', 'moreMooblooms', 'src', 'main', 'resources')
+MOD_RES = os.path.join(ROOT, 'development', 'creativeWorldgen', 'members', 'mooblooms', 'src', 'main', 'resources')
 KUBEJS = os.path.join(ROOT, 'kubejs')
 BIOMES = os.path.join(KUBEJS, 'exported', 'biome_data.json')
 ID = re.compile(r'^[a-z0-9_.-]+:[a-z0-9_./-]+$')

@@ -1,6 +1,6 @@
 # Corn Delight 1.2.11 against the installed 1.0.3
 
-**BUILT 2026-10-25; Shipped in 1.1.03 (deployed to server and players 2026-10-26); boot check SQ-CN-00 PASSED 2026-10-25; CN-01 to CN-11 not run in game.** Owner decisions are in section 2, what was built and where in section 5; the rest of the 1.2.11 diff is not taken (section 3). Open: Corn Delight 1.0.3's `village_house` and `shipwreck_loot` loot modifiers use `mmlib:add_loot_table` (mmlib not in the pack), so its chest loot never loads (found 2026-10-26, TODO `largecontent/mod-additions #31`). Installed: `corn_delight-1.0.3-1.19.2.jar` (`mods/`, `server_mods/`), 1.19.2, needs Mysterious Mountain
+**BUILT 2026-10-25; Shipped in 1.1.03 (deployed to server and players 2026-10-26); scratch SQ-CN-00 to -03, -05 to -07 PASSED (r1101 boot, r1102b 2026-11-02), SQ-CN-04 (knife Corncob) open: a console `/loot ... mine` has no player for LootJS `matchMainHand`, needs a fake-player break; CN-01 to CN-11 not run in game.** Owner decisions are in section 2, what was built and where in section 5; the rest of the 1.2.11 diff is not taken (section 3). Open: Corn Delight 1.0.3's `village_house` and `shipwreck_loot` loot modifiers never load: the two modifiers name `mmlib:add_loot_table`, but the installed Mysterious Mountain Lib 1.2.3 registers its serializer as `mysterious_mountain_lib:add_loot_table` (`GLMRegistry`, mod id `mysterious_mountain_lib`), so `latest.log` warns `Could not decode GlobalLootModifier ... corn_delight:village_house` / `shipwreck_loot` (deep scan 2026-11-02; the earlier "mmlib not in the pack" was wrong) (found 2026-10-26, TODO `largecontent/mod-additions #31`). Installed: `corn_delight-1.0.3-1.19.2.jar` (`mods/`, `server_mods/`), 1.19.2, needs Mysterious Mountain
 Lib (installed 1.2.3). Evaluated 2026-10-25 against `devmods/checkNewerVersionForContent/corn_delight-1.2.11-1.20.1.jar`
 (1.20.1 / Forge, needs FD 1.3.2 and MML 1.5.15), method in [devmods_evaluation.md](devmods_evaluation.md) section 1.
 Both jars unpacked in `DecompiledMods/`. Plan row: `largecontent/mod-additions #24` in [todo/TODO.md](todo/TODO.md).
@@ -28,7 +28,7 @@ villager food pool. Village corn farms are handled elsewhere. Nothing else from 
 Where it goes: the installed 1.0.3 jar stays. New items are KubeJS items in the `creativeengineering:` namespace (like
 `cornmeal`), registered in Creative Delight's startup tree `kubejs_startup/corn_delight/` and keyed once in `item_dict.js`
 (`i.corncob`, `i.corn_popsicle`, `i.cob_pipe`). Recipes go through NCH, tags through `global.tags`, in the
-`kubejs/data/creative_delight/kubejs/corn_delight/` server tree (`// requires: corn_delight`, needs `global.CD`). MIT art from the
+`kubejs/data/creativedelight/kubejs/corn_delight/` server tree (`// requires: corn_delight`, needs `global.CD`). MIT art from the
 1.2.11 jar, notice kept. Java (cob pipe, villager hook) stays in patcherMod (Corn is not a CD member, see
 [creative_delight.md](creative_delight.md) section on routing).
 
@@ -37,7 +37,7 @@ Where it goes: the installed 1.0.3 jar stays. New items are KubeJS items in the 
 | Part | Plan |
 |---|---|
 | Item | `creativeengineering:corncob`, stack 64 |
-| Best kernel route | Cutting board with a knife: 1 Corncob -> 6 corn kernels. Corn itself stays 1 -> 4 ([cooking.js](../kubejs/server_scripts/cooking/cooking.js) "Cornmeal"), so the cob is the most efficient route per item. **6 is a placeholder**, confirm |
+| Kernel routes | 1 Corncob -> 2 corn kernels on the cutting board (knife), 3 from the mortar and pestle, 4 + 0.5 cornmeal from Create crushing, the Millstone and the IE crusher (owner change 2026-11-04 [6 on the board, no other route]). Board: `corn_delight/recipes.js`; Create and mortar: `creativeengineering/recipes.js` (`foodGrinding` `corncob_kernels`, mortar fixed at 3); IE: `immersiveengineering/recipes.js` |
 | Cornmeal routes | Corn and wild corn through Create milling, the Millstone and the IE crusher: existing cornmeal outputs plus a 10% Corncob secondary (`foodGrinding` and `ieCrushing` secondaries in the Cornmeal block). The mortar mirror is the machine average rounded down, so it gives no cob. Crates, kernel bags, kernels and PneumaticCraft get none |
 | Compost | Same chance as Straw (0.3 in the Farmer's Delight compost rows), as a row in CD's `corn_delight/compost.js` beside the existing one |
 | Other 1.2.11 uses (Paper, Organic Compost, fuel, IE ethanol, pig food) | not taken |
@@ -53,11 +53,12 @@ tuning pass ([food.md](food.md)). Not a one-off.
 ### 2.3 Cob Pipe
 
 `creativeengineering:cob_pipe`, shapeless: wooden rod + Corncob. Cosmetic, no stats. Wearable in the vanilla head armor slot
-(item `getEquipmentSlot` HEAD, patcherMod) and in a Curios head slot (item tag `curios:head`, with the 1.20 renderer ported).
-If a mouth or face Curios slot exists it takes the pipe first: the item is also in the `curios:mouth` and `curios:face` tags
-(unused tags are harmless). The pack's Curios 5.1.6.4 defines no such slot today (only Curios' stock set plus Season HUD's
-calendar slot), so that part only takes effect if a mod or the pack adds one; the pack does not add a slot for it. At build
-check that quick-equip puts the pipe in the mouth slot before head when both exist. The hidden "General of the Maize"
+(`LivingEntity.getEquipmentSlotForItem` returns HEAD for it: CD `MobCobPipeSlotMixin`; until 2026-11-01 it targeted
+`Mob`, never applied, so the head slot took it only by right click) and in a Curios head slot (item tag `curios:head`, with the 1.20 renderer ported).
+The pack's Curios Face slot ([curios_slots.md](curios_slots.md)) takes the pipe first: the item is in the `curios:face` tag,
+and a right click tries Face, then the empty head slot, then a Curios head slot. The old `curios:mouth` tag was dropped
+2026-11-02 (no mod registers a mouth slot, and Curios listed it in the pipe's slot tooltip; `gameplay/misc #19`).
+The hidden "General of the Maize"
 advancement is skipped (the pack drops advancements).
 
 ### 2.4 Mature corn with a knife
@@ -94,10 +95,15 @@ Village corn farms: handled elsewhere (not in this plan).
 
 ## 4. Tests
 
-In game (client), after installing both jars and a restart. The server halves are queued as SQ-CN in
-[scratch_queue.md](testing/scratch_queue.md).
+- **r1102b 2026-11-02** (scratch server; verdicts in `perf/runs/r1102b/` HANDOVER.md and the slice judged.md): PASS SQ-CN-01, -02, -03, -05, -06, -07; rerun pending (batch fault) SQ-CN-04.
+- **r1103 2026-11-03** (scratch server; verdicts in `perf/runs/r1103/` FINAL.md and the slice judged.md): PASS SQ-CN-04b, -04, -07.
 
-- [ ] CN-01 Corncob in JEI; cutting board + knife gives 6 kernels.
+In game (client), after installing both jars and a restart. The server halves are queued as SQ-CN in
+[scratch_queue.md](testing/scratch_queue.md): SQ-CN-00 PASS (r1101 boot), -01 to -03, -05 to -07 PASS r1102b 2026-11-02
+(`perf/runs/r1102b/s2/`; -05 now checks Face + Head only, the mouth tag was dropped), -04 open (rerun with a fake player
+breaking the corn with a knife: SQ-CN-04b). Client half: CQ-CN-01 (CN-01, CN-05, CN-06). Both added by the deep scan 2026-11-02.
+
+- [ ] CN-01 Corncob in JEI; cutting board + knife gives 2 kernels; mortar gives 3; Create mill, Millstone and IE crusher give 4 + a 50% cornmeal (2026-11-04).
 - [ ] CN-02 Mill, Millstone, IE crusher on corn: cornmeal as before, Corncob about 1 in 10 over 50 runs; wild corn in the mill
   and Millstone the same; mortar gives no cob. (Wild corn in the IE crusher gives kernels only, as before: no cob.)
 - [ ] CN-03 Composter accepts a Corncob at the Straw chance (0.3).
@@ -124,12 +130,12 @@ In game (client), after installing both jars and a restart. The server halves ar
 | Items | CD startup `kubejs_startup/corn_delight/corn_items.js`; keys in `item_dict.js` (`i.corncob`, `i.corn_popsicle`, `i.cob_pipe`), `food_dict.js` (`f.dessert_corn_popsicle`), `block_dict.js` (`b.corn_crop`) | KubeJS items, `creativeengineering:` namespace |
 | Art | `kubejs/assets/creativeengineering/textures/item/` (`corncob`, `corn_popsicle`, `cob_pipe`, `cob_pipe_uv`), MIT notice `corn_delight_art_notice.txt` there | The pipe model is `models/item/cob_pipe.json`: Forge `separate_transforms`, 3D (`cob_pipe_3d.json`, 1.2.11's model) in hand and on the head, flat sprite in the GUI, on the ground and in frames. 1.2.11 did this with MML's `MultiModelBakedModel`, which MML 1.2.3 lacks |
 | Compost | CD startup `corn_delight/compost.js` | 0.3 |
-| Recipes | `kubejs/data/creative_delight/kubejs/corn_delight/recipes.js` (cob cutting, popsicle, pipe, Classic Corn Dog grid); cob secondary in `creativeengineering/recipes.js` (corn and wild corn `foodGrinding`) and `immersiveengineering/recipes.js` (corn crusher) | `foodGrinding` keeps byproducts machine-only, so the mortar gives no cob. Wild corn in the IE crusher is a kernel recipe, not a cornmeal route, so it gets no cob |
-| Tags | `corn_delight/tags.js`: `curios:head`, `curios:mouth`; `curios:face` is in `server_scripts/tags/curiostags.js` | The pack now has a Face slot ([curios_slots.md](curios_slots.md)); it is the "mouth or face" slot of 2.3 |
+| Recipes | `kubejs/data/creativedelight/kubejs/corn_delight/recipes.js` (cob cutting, popsicle, pipe, Classic Corn Dog grid); cob secondary in `creativeengineering/recipes.js` (corn and wild corn `foodGrinding`) and `immersiveengineering/recipes.js` (corn crusher) | `foodGrinding` keeps byproducts machine-only, so the mortar gives no cob. Wild corn in the IE crusher is a kernel recipe, not a cornmeal route, so it gets no cob |
+| Tags | `corn_delight/tags.js`: `curios:face`, `curios:head` (mouth dropped 2026-11-02) | The pack's Face slot ([curios_slots.md](curios_slots.md)) is the "mouth or face" slot of 2.3 |
 | Knife loot | `corn_delight/loot.js` (LootJS, `CE/corn_knife_corncob`) | `corn_crop` at age 7, as 1.2.11's straw modifier (either half) |
 | Trades | `corn_delight/trades.js` (MoreJS) | Fixed prices: 24 corn -> 1 emerald (Novice, 16 uses); 8 emeralds -> 8 Cornbread / 8 Tortillas (Apprentice); wanderer corn 1 emerald COMMON, Popcorn Box 2 emeralds RARE |
 | Head slot | patcherMod `mixin/MobCobPipeSlotMixin` (`Mob.getEquipmentSlotForItem`, SRG `m_147233_`) | Armor slot, shift click, dispensers. Mobs that pick up gear may wear it too, as with 1.2.11's `Equipable` |
-| Right click, Curios | patcherMod `compat/CornDelightCompat` (+ `CornDelightCurios`): mouth, face, empty head slot, then Curios head; `compat/CobPipeRenderer` (client, 1.2.11's renderer ported to 1.19.2) | Done in a right-click handler, not a Curios capability, so the order is the pack's |
+| Right click, Curios | CD `compat/CornDelightCompat` (+ `CornDelightCurios`): face, empty head slot, then Curios head; `compat/CobPipeRenderer` (client, 1.2.11's renderer ported to 1.19.2) | Done in a right-click handler, not a Curios capability, so the order is the pack's |
 | Villager food | `CornDelightCompat.addVillagerFood` (common setup) | Corn in `WANTED_ITEMS` and `FOOD_POINTS` (1). `FOOD_POINTS` was not new: the Veggies port already extends it; both copy the current value, so they combine. Written by Unsafe (no refmap, so no `@Accessor`) |
 | Food Plate | patcherMod `displaydelight_dishes.json` entry `placed_corn_popsicle` (`plate`), files from `tools/gen_dd_dishes.py` | The pack's own route for a food Display Delight has no block for (the sprite on DD's tray), not DD's Food Plate block item. The generator now also reads a KubeJS item's sprite from `kubejs/assets`, takes an entry `name`, and searches `server_mods/` (End's Delight is only there today) |
 

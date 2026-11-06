@@ -95,7 +95,7 @@ Polymorph's recipe choice works in every crafting screen of the pack, not only t
   `IECraftingTablePolymorphMixin`, `PrettyPipesCraftingTerminalPolymorphMixin`). Mixins listed in
   `creativeengineering.mixins.json` 46, 54-56. (fixes_compat's table rows 37-38 still say "jar not yet in `mods/`":
   stale, the TODO says shipped in 1.1.01.)
-- The pattern ([IECraftingTablePolymorphMixin.java](../../development/patcherMod/src/main/java/com/SaintAlfonzo/creativeengineering/mixin/IECraftingTablePolymorphMixin.java)):
+- The pattern ([IECraftingTablePolymorphMixin.java](../../development/creativeCommon/src/main/java/com/SaintAlfonzo/creativecommon/mixin/IECraftingTablePolymorphMixin.java)):
   `@Redirect` the menu's `RecipeManager.m_44015_` call to `RecipeSelection.getPlayerRecipe(menu, type, inv, level,
   player)`, implement `CraftingMenuPolymorphCompat.PolymorphCraftingMenu` (`refreshCraftingResult`, `resultSlot`); the
   client widget registers for that marker interface.

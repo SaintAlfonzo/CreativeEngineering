@@ -47,7 +47,7 @@ does not affect the structure numbers.
 Setup, at a reboot the structure tests already need (switch tests reboot once each):
 
 1. Stop the server. In `srv/mods/`, point the creativeengineering link at
-   `development/patcherMod/build/libs/creativeengineering-1.0.7.jar` and remove the 1.0.6 link
+   `development/creativeCommon/build/libs/creativecommon-1.0.7.jar` and remove the 1.0.6 link
    (two jars with the same modid will not boot).
 2. Copy `feature_writeup/testing/fridge_sort/zz_scratch_fridgesort.js` into `srv/kubejs/server_scripts/`.
    Do not use `/reload`, because it drops Chunky's commands. The reboot loads the script.

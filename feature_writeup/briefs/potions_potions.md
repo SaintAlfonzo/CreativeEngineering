@@ -3,7 +3,7 @@
 Written 2026-10-21 from [TODO.md](../todo/TODO.md) `# potions`, Sub `potions` (rows 2 to 9 open, row 1 Complete). Feature
 writeups: [potions.md](../potions.md) (test prefix `PO-`, last PO-26) and [effects.md](../effects.md) (prefix `EF-`).
 Main code: [potions.js](../../kubejs/startup_scripts/cooking/potions.js) (all potions and mixes) and patcherMod
-`fluidbrewing/` + `potion/` (`development/patcherMod/src/main/java/com/SaintAlfonzo/creativeengineering/`, shortened
+`fluidbrewing/` + `potion/` (`development/creativeCommon/src/main/java/com/SaintAlfonzo/creativecommon/`, shortened
 to `CE/` below).
 
 Jar facts checked 2026-10-21 by decompiling: buzzier_bees 5.0.1 (`BBMobEffects`), blueprint 6.2.0 (`DataUtil.addMix`),
@@ -434,7 +434,7 @@ From the 140-effect table (effects.md 2.1) and the jars:
   (verified). The pack puts it on copper, iron and gold armor (`armor_effects.js` lines 207-220).
 - **Stunned** `immersiveengineering:stunned`: stops endermen teleporting; not electric.
 - **Power Outage** `alexsmobs:power_down`: April Fools freeze; electric only by name.
-- The pack's damage tag `creativeengineering:electric` (`development/patcherMod/src/main/resources/data/creativeengineering/damage_tags/electric.json`)
+- The pack's damage tag `creativeengineering:electric` (`development/creativeCommon/src/main/resources/data/creativeengineering/damage_tags/electric.json`)
   lists IE tesla / wire / razor shock, CCA `tesla_coil`, SecurityCraft electricity / taser and `lightningBolt`.
 
 So there is nothing to merge.

@@ -1,0 +1,114 @@
+{
+ "_generated_by": "tools/gen_jei_world.py",
+ "rows": [
+  {
+   "requires": [
+    "endersdelight"
+   ],
+   "inputs": [
+    {
+     "entity": "minecraft:enderman"
+    }
+   ],
+   "action": {
+    "tag": "farmersdelight:tools/knives"
+   },
+   "outputs": [
+    {
+     "item": "endersdelight:enderman_sight"
+    }
+   ],
+   "notes": [
+    "Killed with a knife."
+   ]
+  },
+  {
+   "requires": [
+    "endersdelight"
+   ],
+   "inputs": [
+    {
+     "entity": "minecraft:endermite"
+    }
+   ],
+   "action": {
+    "tag": "farmersdelight:tools/knives"
+   },
+   "outputs": [
+    {
+     "item": "endersdelight:mite_crust"
+    }
+   ],
+   "notes": [
+    "Killed with a knife."
+   ]
+  },
+  {
+   "requires": [
+    "endersdelight"
+   ],
+   "inputs": [
+    {
+     "entity": "minecraft:shulker"
+    }
+   ],
+   "action": {
+    "tag": "farmersdelight:tools/knives"
+   },
+   "outputs": [
+    {
+     "item": "endersdelight:shulker_mollusk"
+    }
+   ],
+   "notes": [
+    "Killed with a knife."
+   ]
+  },
+  {
+   "requires": [
+    "endersdelight"
+   ],
+   "inputs": [
+    {
+     "block": "endersdelight:chorus_pie"
+    }
+   ],
+   "action": {
+    "tag": "farmersdelight:tools/knives"
+   },
+   "outputs": [
+    {
+     "item": "endersdelight:chorus_pie_slice",
+     "count": 4,
+     "label": "4 from a whole one, fewer once eaten"
+    }
+   ],
+   "notes": [
+    "Cut with a knife."
+   ]
+  },
+  {
+   "requires": [
+    "farmersdelight",
+    "supplementaries"
+   ],
+   "inputs": [
+    {
+     "block": "supplementaries:flax"
+    }
+   ],
+   "action": {
+    "tag": "farmersdelight:straw_harvesters"
+   },
+   "outputs": [
+    {
+     "item": "farmersdelight:straw"
+    }
+   ],
+   "notes": [
+    "Cut with a knife.",
+    "Fully grown only."
+   ]
+  }
+ ]
+}

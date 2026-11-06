@@ -26,7 +26,7 @@ wait_quiet() { local last=-1 same=0 n; for _ in $(seq 600); do n=$(stat -c %s "$
 mark "level $LEVEL as shipped, PREGEN=$PREGEN"
 JFR_MAX=400m bash "$EV" setup "$OUT" "$LEVEL"
 cd "$SRV" || exit 1
-ls -la --time-style=+%m-%d_%H:%M mods/ | grep -E "creativeengineering|creative_delight|modernfix" >> "$TL"
+ls -la --time-style=+%m-%d_%H:%M mods/ | grep -E "creativeengineering|creativedelight|modernfix" >> "$TL"
 
 mark boot
 bash "$EV" boot "$OUT" || { mark "boot refused"; exit 1; }

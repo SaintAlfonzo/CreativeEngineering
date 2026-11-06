@@ -77,7 +77,7 @@ public final class FacePaperInteractions {
     /**
      * Re-checks a face against its host's current fit: every note whose spot no longer fits and a label that no
      * longer fits are removed and returned (as a FaceContent, so {@link FaceContent#drops()} gives their items);
-     * the inset follows the host. An emptied face is cleared (rotation and inset reset).
+     * the placement (inset, centred-note shift, label square) follows the host. An emptied face is cleared.
      */
     public static FaceContent refit(FaceContent c, Spots.Fit fit) {
         FaceContent removed = new FaceContent();
@@ -87,7 +87,7 @@ public final class FacePaperInteractions {
                 LabelData l = c.removeLabel();
                 if (l != null) removed.setLabel(l);
             } else {
-                c.inset = fit.inset();
+                c.setPlace(fit.label());
             }
             return removed;
         }
@@ -96,7 +96,7 @@ public final class FacePaperInteractions {
             NoteData n = c.removeNote(spot);
             if (n != null) removed.putNote(spot, n);
         }
-        if (!c.isEmpty()) c.inset = fit.inset();
+        if (!c.isEmpty()) c.setPlace(fit.notePlace());
         return removed;
     }
 
@@ -234,20 +234,20 @@ public final class FacePaperInteractions {
         c.putNote(spot, note);
         if (first) {
             c.rotation = face.getAxis().isVertical() ? rotation : null;
-            c.inset = fit.inset();
+            c.setPlace(fit.notePlace());
         }
         applyState(level, cell, be);
         if (!player.getAbilities().instabuild) stack.shrink(1);
         sound(level, cell, SoundEvents.BOOK_PAGE_TURN);
         if (gold && level instanceof ServerLevel server) {
-            Vec3 p = Spots.noteBox(face, c.rotation, spot, c.inset).getCenter();
+            Vec3 p = Spots.noteBox(face, c.rotation, c.place(), spot).getCenter();
             server.sendParticles(ParticleTypes.FIREWORK, cell.getX() + p.x, cell.getY() + p.y, cell.getZ() + p.z,
                     6, 0.1, 0.1, 0.1, 0.03);
         }
         return InteractionResult.CONSUME;
     }
 
-    /** Places a blank label on an empty five-spot face at the boundary or within the inset limit (3.10); no fit -> FAIL. */
+    /** Places a blank label where {@link Spots#fit} puts one (fitted to the host's surface, 3.10); no fit -> FAIL. */
     public static InteractionResult placeLabel(Level level, Player player, ItemStack stack, BlockPos cell, Direction face, Vec3 hit) {
         if (!(stack.getItem() instanceof LabelItem) || stack.isEmpty()) return InteractionResult.PASS;
         BlockState cellState = level.getBlockState(cell);
@@ -267,7 +267,7 @@ public final class FacePaperInteractions {
         FaceContent c = be.face(face);
         c.setLabel(new LabelData());
         c.rotation = face.getAxis().isVertical() ? rotation : null;
-        c.inset = fit.inset();
+        c.setPlace(fit.label());
         applyState(level, cell, be);
         if (!player.getAbilities().instabuild) stack.shrink(1);
         sound(level, cell, SoundEvents.BOOK_PAGE_TURN);
@@ -439,10 +439,10 @@ public final class FacePaperInteractions {
                                          Direction face, BlockState host, BlockPos hostPos) {
         FaceContent c = be.face(face);
         if (c.isEmpty()) return stateFor(state, be.contentMask());
-        float insetBefore = c.inset;
+        Spots.Place before = c.place();
         Spots.Fit fit = Spots.fit(host, level, hostPos, face, c.rotation);
         FaceContent removed = refit(c, fit);
-        if (removed.isEmpty() && c.inset == insetBefore) return state;
+        if (removed.isEmpty() && c.place().equals(before)) return state;
         if (level instanceof ServerLevel server) {
             for (ItemStack drop : removed.drops()) Block.popResource(server, pos, drop);
         }

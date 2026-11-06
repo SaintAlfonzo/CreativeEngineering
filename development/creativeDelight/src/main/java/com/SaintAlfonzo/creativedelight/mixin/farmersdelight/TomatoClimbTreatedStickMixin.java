@@ -12,7 +12,7 @@ import vectorwing.farmersdelight.common.block.TomatoVineBlock;
 
 /**
  * Placeable treated sticks (feature_writeup/treated_sticks.md): an FD tomato vine with a placed treated stick above
- * climbs onto it as {@code creative_delight:treated_stick_tomatoes} instead of FD's rope-logged vine.
+ * climbs onto it as {@code creativedelight:treated_stick_tomatoes} instead of FD's rope-logged vine.
  */
 @Mixin(value = TomatoVineBlock.class, remap = false)
 public abstract class TomatoClimbTreatedStickMixin {

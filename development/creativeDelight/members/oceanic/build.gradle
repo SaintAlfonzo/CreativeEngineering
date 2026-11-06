@@ -1,6 +1,12 @@
-// repackedOceanic: Oceanic Delight 1.0.1 repacked for Creative Delight. Everything is in
-// build-logic/src/main/groovy/ce.forge-repack.gradle and gradle.properties; the overlay is src/.
-// Build: ./gradlew :repackedOceanic:build --offline (ships only inside :creativeDelight:bundleJar).
+// portedOceanic: Oceanic Delight 1.0.1 rebuilt for Creative Delight (mod id oceanic_delight), our own code only; art and
+// data come from the unmodified upstream jar in <game dir>/oceanic_upstream/ (feature_writeup/ocean_delight.md 5.6).
+// Shared Forge setup comes from build-logic/src/main/groovy/ce.forge-mod.gradle.
+// Build from the instance root (`./gradlew :creativeDelight:build`); it ships only nested in the Creative Delight jar.
 plugins {
-    id 'ce.forge-repack'
+    id 'ce.forge-mod'
+}
+
+dependencies {
+    // JEI: the six information pages upstream had (compat/OceanicJei); optional at runtime.
+    compileOnly fg.deobf('local:jei-1.19.2-forge:11.8.1.1034')
 }

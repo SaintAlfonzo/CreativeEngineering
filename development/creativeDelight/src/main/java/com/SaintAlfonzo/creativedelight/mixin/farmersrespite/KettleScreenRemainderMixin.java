@@ -1,6 +1,6 @@
 package com.SaintAlfonzo.creativedelight.mixin.farmersrespite;
 
-import com.SaintAlfonzo.creativeengineering.cooking.client.RemainderSlotFrames;
+import com.SaintAlfonzo.creativedelight.cooking.client.RemainderSlotFrames;
 import com.mojang.blaze3d.vertex.PoseStack;
 
 import net.minecraft.client.gui.screens.inventory.AbstractContainerScreen;

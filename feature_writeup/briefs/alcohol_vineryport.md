@@ -7,11 +7,11 @@ open row (3, 4, 5, 8, 15, 22, 24, 25, 26, 28) and checked against the pack. Layo
 (history only since 2026-10-27), [creative_brewing.md](../creative_brewing.md) (the bundle).
 
 **Where the port lives now (2026-10-31):** `development/creativeBrewing/members/vinery` (Gradle project `:backportedVinery`,
-version `1.5.5-ce-19.2-08`), nested in `creative_brewing-1.0.0.jar`. Build and install only through
+version `1.5.5-ce-19.2-08`), nested in `creativebrewing-1.0.0.jar`. Build and install only through
 `./gradlew :creativeBrewing:build --offline` / `:creativeBrewing:installToMods` (game closed). `mods/` holds that jar since
 2026-10-31 16:55 and `logs/latest.log` shows it booted 2026-10-31 17:15 with no Vinery errors. Paths below that start
 `members/vinery/` mean `development/creativeBrewing/members/vinery/src/main/`. Pack-side Vinery scripts go to Creative
-Brewing's tree `kubejs/data/creative_brewing/kubejs/vinery/` (creative_brewing.md 2.4); `kubejs/server_scripts/cooking/alcohol.js`
+Brewing's tree `kubejs/data/creativebrewing/kubejs/vinery/` (creative_brewing.md 2.4); `kubejs/server_scripts/cooking/alcohol.js`
 still holds the older Vinery rows until `creativebrewing/move #1`.
 
 ## Scope and order
@@ -248,7 +248,7 @@ Non-Vinery ingredients by family, with the audit question each raises:
 - Grapes and juices are Vinery's own; other "grapes" in the pack are Oceanic Delight sea grapes (a different food).
 
 ### Build
-1. One Creative Brewing file `kubejs/data/creative_brewing/kubejs/vinery/recipes.js` (`// requires: vinery`, early return on
+1. One Creative Brewing file `kubejs/data/creativebrewing/kubejs/vinery/recipes.js` (`// requires: vinery`, early return on
    `!global.CB || !global.CB.on('vinery')`, rows inside `global.CB.recipes`).
 2. For each accepted change: `R.remove({ id: 'vinery:<id>' }, e)` and rebuild with the matching `global.NCH` helper
    (`R.shaped`, `R.shapeless`; the wine fermentation and apple press types need a `vineryFermenting` / `vineryPress` helper
@@ -342,7 +342,7 @@ D14 option A: when the pack is published, each machine downloads the two Vinery 
 payload.
 
 ### Now
-- Payload today: `tools/build_deploy.py` `UPSTREAM_DONORS` (line 507) ties `vinery_upstream/` to the `creative_brewing` jar
+- Payload today: `tools/build_deploy.py` `UPSTREAM_DONORS` (line 507) ties `vinery_upstream/` to the `creativebrewing` jar
   and checks each jar's sha1 against
   `members/vinery/java/net/satisfy/vinery/forge/upstream/UpstreamJars.java` lines 22-25 (1.5.5 Modrinth URL given; 1.3.10
   CurseForge files page, no direct link). `deploy/latest/` carries `vinery_upstream/` and three more donor folders

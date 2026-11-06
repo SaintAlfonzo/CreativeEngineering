@@ -7,7 +7,7 @@ column, section 4.4).
     python3 tools/gen_moobloom_variants.py --doc other.md   # read the table from another copy of the writeup
 
 The table is the source; edit it, then rerun this. Per row it writes, under
-development/moreMooblooms/src/main/resources/data/more_mooblooms/:
+development/creativeWorldgen/members/mooblooms/src/main/resources/data/more_mooblooms/:
   moobloom_variants/<id>.json   flowers, feed, scale (keys it doesn't own, like egg_colors, any_weight,
                                 breed_weight and spawns_in_dark_on, are kept from the existing file)
   tags/items/feed/<id>.json     the Extra food column, when it has entries
@@ -42,7 +42,7 @@ import sys
 
 ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 DOC = os.path.join(ROOT, 'feature_writeup', 'mooblooms.md')
-MOD = os.path.join(ROOT, 'development', 'moreMooblooms')
+MOD = os.path.join(ROOT, 'development', 'creativeWorldgen', 'members', 'mooblooms')
 DATA = os.path.join(MOD, 'src', 'main', 'resources', 'data', 'more_mooblooms')
 NS = 'more_mooblooms'
 TALL = {'sunflower', 'lilac', 'rose_bush', 'peony'}

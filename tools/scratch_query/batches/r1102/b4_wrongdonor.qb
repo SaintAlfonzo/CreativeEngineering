@@ -1,0 +1,17 @@
+# Run r1102, SQ-CDJ5 Boot 4: OUT/srv/miners_upstream is a srv-local folder (a copy, not the symlink) holding only
+# miners_delight-1.20.1-1.4.5-backport.jar (README Boot 4). The boot is EXPECTED TO STOP; no console command here.
+# Runner: as b3_nodonor.qb (wait for 'reads its textures', a crash report or 'Done (' with a ~240 s timeout, kill your
+# pid after an FML stop, game_jvms.sh empty, then qrun.py run OUT b4_wrongdonor.qb RES).
+pace 2
+
+## SQ-MDP-15 | only the 1.4.5 donor present: startup stops naming the 1.1.2 jar
+bootexpect Miner's Delight \(Creative Delight\) reads its textures, models and recipes from the original Miner's Delight jar, which must be in the folder 'miners_upstream' of the game directory \(not in mods/\):
+bootexpect missing: .*miners_upstream/miners_delight-1\.19\.2-1\.1\.2\.jar
+bootexpect get it from https://mediafilez\.forgecdn\.net/files/4738/272/miners_delight-1\.19\.2-1\.1\.2\.jar \(CurseForge
+bootreject missing: .*miners_delight-1\.20\.1-1\.4\.5-backport\.jar
+bootreject wrong file: .*miners_delight-1\.20\.1-1\.4\.5-backport\.jar
+bootreject Done \(
+shell test -d miners_upstream && test ! -L miners_upstream && ls miners_upstream
+shell grep -n -A6 "reads its textures" logs/latest.log | head -20
+shell f=$(ls -t crash-reports/*.txt 2>/dev/null | head -1); [ -n "$f" ] && { echo "$f"; grep -n -m12 -iE "Description|reads its textures|Suspected Mod|Mod File|Failure message|Caused by" "$f"; }; true
+look only the 1.1.2 jar named (missing), with its CurseForge link; the 1.4.5 copy passes its sha1 check (no "wrong file" line)

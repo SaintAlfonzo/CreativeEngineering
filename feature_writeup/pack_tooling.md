@@ -27,7 +27,7 @@ the feature-specific uses. Deploy tooling is in [deploy.md](deploy.md), the perf
 - **Files to open:** [item_dict.js](../kubejs/startup_scripts/_lib/item_dict.js),
   [neoCraftHelper.js](../kubejs/startup_scripts/func/neoCraftHelper.js),
   [tag_helper.js](../kubejs/startup_scripts/func/tag_helper.js),
-  [CEConfig.java](../development/patcherMod/src/main/java/com/SaintAlfonzo/creativeengineering/CEConfig.java),
+  [CEConfig.java](../development/creativeCommon/src/main/java/com/SaintAlfonzo/creativecommon/CEConfig.java),
   [dump_all.js](../kubejs/server_scripts/_lib/dump_all.js), [generators.json](../tools/generators.json).
 - **The rules** (CLAUDE.md): recipes through `global.NCH`, tags through `global.tags`, every id defined once in a
   dictionary and referenced by key, and one writeup per feature.
@@ -91,7 +91,7 @@ config, the Java dump and dev commands, and its jar is built by the root Gradle 
   smithing (`backpackSkin`, `backpackSkinClear`).
 - **Utilities:** `remove`, `replaceInput`, `replaceOutput` (option `includeAdded`, below), `bulk(name, rows)` (call a helper once per row),
   `cfg(defaults, 'CRAFTING.X')` (values from CEConfig), `incomplete(key)` / `registerIncomplete` (transitional items
-  from [transition_items.js](../kubejs/startup_scripts/changes/transition_items.js)).
+  from [transition_items.js](../development/creativeEngineering/src/main/resources/kubejs_startup/creativeengineering/changes/transition_items.js)).
 - **Known gaps** (documented at each helper): `ieSawmill` can't do secondaries (a datapack JSON instead) (F9).
 - **`includeAdded` (2026-10-22):** KubeJS 1902.6's `replaceInput` / `replaceOutput` swap only recipes loaded from
   data, never script-added ones. `R.replaceInput` / `R.replaceOutput` with `includeAdded` also swap the script-added
@@ -195,7 +195,7 @@ which `audit_loot_containers.py` uses too.
 | `tools/test_worldgen_tools.sh` | 9 Java/node/Python checks on the worldgen code | [structure_tuning.md](structure_tuning.md) 6 |
 | `tools/test_remainder_buffer.sh` | GameTests in a scratch ForgeGradle project with FD and Respite | [remainder_buffer.md](remainder_buffer.md) 6 |
 
-- **How they run:** Java tests compile against `development/patcherMod/build/classes` (build first) on a classpath
+- **How they run:** Java tests compile against `development/creativeCommon/build/classes` (build first) on a classpath
   from [java_test_cp.sh](../tools/java_test_cp.sh): the mapped Forge jar in the ForgeGradle cache plus libraries
   from ATLauncher's folder (F7). Rhino tests run the real `.js` files in the pack's Rhino fork through a small Java
   runner (`tools/*_test/Rhino*.java`).
@@ -213,7 +213,7 @@ which `audit_loot_containers.py` uses too.
   `ce.forge-mod-refmap` for mods with real Mixin refmaps (below).
 - Shared versions in the root `gradle.properties` (Forge 43.3.9, `org.gradle.java.home`); per-mod ids and versions in
   each mod's `gradle.properties` (`replaces_jars` moves a replaced third-party jar out of `mods/`).
-- `./gradlew :patcherMod:installToMods` builds and swaps the jar into `mods/`, moving the old one to
+- `./gradlew :creativeCommon:installToMods` builds and swaps the jar into `mods/`, moving the old one to
   `development/<mod>/jar_archive/displaced/`. `development/<mod>/libs/` (compile-only copies of mod jars) is
   gitignored. The root [README.md](../README.md) has the commands.
 - patcherMod has no refmap and only runs reobfuscated: its mixins on vanilla classes use SRG names with
@@ -248,7 +248,8 @@ which `audit_loot_containers.py` uses too.
   |---|---|---|
   | `packs` | `BuiltInPacks` (`addFolder`: a `packs/<...>/` folder of the jar; `addMemory`: an in-memory pack of one pack type; `addUpstream`: a port's `<prefix>_assets` / `<prefix>_data` pair at the bottom), `MemoryPackResources` (path -> bytes `PackResources`, description from the caller) | backportedMiners, backportedVinery, Rustic (CD member), creativeLabels (`DonorArt`), patcherMod (`worldgen/donor/FarmersDonor`), moreMooblooms, incubationAdditions |
   | `upstream` | `DonorJars` (`Jar` record, `verifyOrFail`, `read` by entry prefix, `readEntry`, `sha1`). Each port keeps its own `upstream/UpstreamJars.java` with the `new Jar("file", "sha1", ...)` pins, which `tools/build_deploy.py` reads | backportedMiners, backportedVinery, Rustic |
-  | `mixinplugin` | `GatedMixinPlugin`: a mixin applies only when its mod is loaded, named by a compartment package (`mixin.<modid>.`, optional exact version) or by a simple-name table (any of several mods); subclasses add `postApply` edits | creativeDelight (`CDMixinPlugin`, compartments + the Fruits Delight bytecode edits), moreMooblooms, incubationAdditions, creativeLabels (tables) |
+  | `mixinplugin` | `GatedMixinPlugin`: a mixin applies only when its mod is loaded, named by a compartment package (`mixin.<modid>.`, optional exact version) or by a simple-name table (any of several mods, each with an optional tested Maven version range, outside it the mod counts as absent with one WARN; Creative Common's `MOD_RANGE` since 2026-11-05); subclasses add `postApply` edits | creativeDelight (`CDMixinPlugin`, compartments + the Fruits Delight bytecode edits), moreMooblooms, incubationAdditions, creativeLabels (tables) |
+  | `stations` | `LeftoverPlan` (where a cooking station's ingredient leftovers go: container slot up to a stack, then the overflow slots, the rest returned), `StationContainers` (a station's plating containers from the live recipe manager, rebuilt on reload; container-and-ingredient items logged and left out) ([remainder_buffer.md](remainder_buffer.md) 3.8) | creativeDelight (FD pot, kettle, oven), backportedMiners (copper pot), backportedVintage (Pickling Jar) |
   | `itemhidden` | `mixin.ItemHiddenMixin` (`Item.allowedIn`, SRG name, no refmap) + `shared.HiddenItems` (the mod sets its test at construction) | moreMooblooms (Buzzier Bees buttercup and egg, only with Buzzier Bees), creativeLabels (`DonorItems`) |
 
 ### 2.9 Item-loss repro harness
@@ -265,7 +266,7 @@ Slice & Dice copies every Farmer's Delight cooking-pot recipe into a heated Crea
 so `R.remove` can't reach the copy. It skips recipe ids ending in `_manual_only`. The pack uses that to keep a pot
 recipe off the mixer and give the mixer its own ratio: `cooking_oil_manual_only` (pot) next to
 `cooking_oil_heated_mixing` ([cooking.js](../kubejs/server_scripts/cooking/cooking.js) line 293), and
-`wood_pellets_manual_only` ([sawdust.js](../kubejs/server_scripts/wood/sawdust.js) line 57). The crab bars id uses the
+`wood_pellets_manual_only` ([sawdust.js](../kubejs/data/creativeengineering/kubejs/wood/sawdust.js) line 57). The crab bars id uses the
 suffix too, though it's a shapeless recipe.
 
 ## 3. What the pack changes
@@ -335,9 +336,9 @@ Everything here is the pack's own; nothing replaces a mod. The conventions and t
 ## 5. File map
 
 - Dictionaries: [startup_scripts/_lib/](../kubejs/startup_scripts/_lib/) (`item_dict.js`, `block_dict.js`, `fluid_dict.js`, `effect_dict.js`, `multiblock_dict.js`, `removed_items.js`); worklists in [startup_scripts/todo/](../kubejs/startup_scripts/todo/).
-- Helpers: [startup_scripts/func/](../kubejs/startup_scripts/func/) (`neoCraftHelper.js`, `tag_helper.js`, plus the feature helpers: `tune_tools.js`, `armor_effects.js`, `compost.js`, `trade_helper.js`, `jei_order.js`, `item_physics.js`, ...); [changes/transition_items.js](../kubejs/startup_scripts/changes/transition_items.js).
+- Helpers: [startup_scripts/func/](../kubejs/startup_scripts/func/) (`neoCraftHelper.js`, `tag_helper.js`, plus the feature helpers: `tune_tools.js`, `armor_effects.js`, `compost.js`, `trade_helper.js`, `jei_order.js`, `item_physics.js`, ...); [changes/transition_items.js](../development/creativeEngineering/src/main/resources/kubejs_startup/creativeengineering/changes/transition_items.js).
 - Server `_lib/`: the `dump_*.js` commands, `dump_all.js`, `export_io.js`, `java_guard.js`, `recipe_scan.js`, `loot_dump.js`, `structure_dump.js`, `villager_trades_dump.js`, and the test recipes (F4).
-- patcherMod: [CEConfig.java](../development/patcherMod/src/main/java/com/SaintAlfonzo/creativeengineering/CEConfig.java), [devtools/](../development/patcherMod/src/main/java/com/SaintAlfonzo/creativeengineering/devtools/) (`GeneratorCommand`, `GeneratorRunner`, `BlockStateSyncDebug`).
+- patcherMod: [CEConfig.java](../development/creativeCommon/src/main/java/com/SaintAlfonzo/creativecommon/CEConfig.java), [devtools/](../development/creativeCommon/src/main/java/com/SaintAlfonzo/creativecommon/devtools/) (`GeneratorCommand`, `GeneratorRunner`, `BlockStateSyncDebug`).
 - Tools: [tools/generators.json](../tools/generators.json), `tools/*.py` (generators, reports, scans), `tools/test_*.sh` + `tools/*_test/`, [java_test_cp.sh](../tools/java_test_cp.sh), [pack_paths.py](../tools/pack_paths.py) (shared paths, item_dict parser, lenient JSON, jar locator), [lang_index.py](../tools/lang_index.py) (every en_us table), [tools/item_repro/](../tools/item_repro/README.md), [tools/perf/](../tools/perf/) ([perf.md](perf.md)), [build_deploy.py](../tools/build_deploy.py) ([deploy.md](deploy.md)), [gen_pack_manifest.py](../tools/gen_pack_manifest.py), [dump_server_mods.py](../tools/dump_server_mods.py), [decompile_mod.py](../tools/decompile_mod.py).
 - Build: [settings.gradle](../settings.gradle), [gradle.properties](../gradle.properties), [build-logic/](../build-logic/), [README.md](../README.md).
 
@@ -377,7 +378,7 @@ Everything here is the pack's own; nothing replaces a mod. The conventions and t
 - [ ] **TL-14 `tools/dump_server_mods.py`:** copies only `both` / `server` jars into `server_mods/`; with a jar missing
   from `mod_sides.md` it writes nothing and names the jar. (`/dumpservermods` was removed 2026-10-27; `/dumpall` no
   longer copies jars.)
-- [ ] **TL-15 Gradle:** `./gradlew :patcherMod:build` succeeds (libs populated); `./gradlew :patcherMod:installToMods`
+- [ ] **TL-15 Gradle:** `./gradlew :creativeCommon:build` succeeds (libs populated); `./gradlew :creativeCommon:installToMods`
   moves the old jar to `jar_archive/displaced/`.
 - [ ] **TL-16 `_manual_only`:** JEI on cooking oil → the cooking-pot recipe (2 oil from 6 ingredients) and a separate
   heated mixing recipe (1 oil from 3 + a bottle); no mixer copy of the pot recipe.

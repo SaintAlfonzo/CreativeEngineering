@@ -43,12 +43,13 @@ rebuilt (its history json is what the machines are checked against): build the n
 
 What goes where:
   mods/*.jar               side from mod_sides.md (same lookup as tools/dump_server_mods.py). Jars in
-                           sub-folders (mods/panorama/) are never shipped.
+                           sub-folders (mods/panorama/) are never shipped, nor side `dev` jars (Creative
+                           Devtools: dev mods/ only, feature_writeup/creative_devtools.md).
   kubejs/                  files .gitignore doesn't ignore, filtered by KUBEJS_CLASSES: runtime and client
                            files ship, dev files (notes, reports, generator inputs, /dump output in
                            exported/) never do. An unclassified file is a preflight error.
                            Player changelog (feature_writeup/changelog.md 3.5): the working list
-                           assets/creativeengineering/changelog/unreleased.md never ships under that name;
+                           assets/creativecommon/changelog/unreleased.md never ships under that name;
                            the payload gets it as <version>.md with "# <version>" and "Released <today>" on
                            top (the tree is not touched). --snapshot then writes that same text into the
                            tree as <version>.md and starts a fresh unreleased.md.
@@ -131,27 +132,52 @@ SERVER_CONFIG_EDITS = os.path.join(ROOT, 'configs_edited', 'server_config')
 # must be in mods/). Each project keeps its released jars in development/<project>/jar_archive/.
 DEVELOPMENT = os.path.join(ROOT, 'development')
 IN_TREE_MODS = [
-    ('patcherMod', 'creativeengineering', True),
+    # Creative Common: patcherMod until the Creative Split swap (2026-11-04, creative_split.md 7.13); the shared core
+    # every Creative jar requires. Its jar displaces the old creativeengineering-1.x jars (replaces_jars).
+    ('creativeCommon', 'creativecommon', True),
     ('exposureBackport', 'exposureBackport', True),
-    ('incubationAdditions', 'incubationAdditions', True),
-    ('moreMooblooms', 'moreMooblooms', True),
-    ('babyMobs', 'babyMobs', True),
     ('creativeLabels', 'creativeLabels', True),
-    ('backportedVeggies', 'backportedVeggies', True),
-    ('backportedVintage', 'backportedVintage', True),
-    ('backportedFungi', 'backportedFungi', True),
-    # Creative Delight: the bundle jar; its members (development/creativeDelight/members/) never ship on their own.
-    ('creativeDelight', 'creative_delight', True),
+    # Creative Delight: the bundle jar; its members (development/creativeDelight/members/, Baby Mobs and Incubation
+    # Additions included since 2026-11-01; the Veggies, Vintage, Fungi, Miner's and Display ports since 2026-11-02,
+    # creativedelight members #1 / #35) never ship on their own.
+    ('creativeDelight', 'creativedelight', True),
     # Creative Brewing: the same for the Vinery and Brewin' ports (development/creativeBrewing/members/).
-    ('creativeBrewing', 'creative_brewing', True),
+    ('creativeBrewing', 'creativebrewing', True),
+    # Creative Calendar: time, seasons, crop seasons (feature_writeup/creative_calendar.md); CD and CB require it.
+    ('creativeCalendar', 'creativecalendar', True),
+    # Creative Compat: tweaks to third-party mods (feature_writeup/creative_compat.md); every other Creative jar requires it.
+    ('creativeCompat', 'creativecompat', True),
+    # Creative Worldgen: world generation and fauna (feature_writeup/creative_worldgen.md); nests More Mooblooms and Baby
+    # Mobs (development/creativeWorldgen/members/; More Mooblooms shipped on its own before 2026-11-02).
+    ('creativeWorldgen', 'creativeworldgen', True),
+    # Creative Magic: Dark Fire and the Nether portal rule, enchantment tweaks, the Botania Trinket Case, magic recipes
+    # (feature_writeup/creative_magic.md).
+    ('creativeMagic', 'creativemagic', True),
+    # Creative Equipment: gear (shields, stepstools, backpack skins, air brake, tool and armor tuning, archery, End gear,
+    # harvest tiers; feature_writeup/creative_equipment.md).
+    ('creativeEquipment', 'creativeequipment', True),
+    # Creative Engineering: machines and engineering (fan type, sawmill routing, shrapnel, surfaces, liquid XP, the
+    # component, metal and wood scripts; feature_writeup/creative_engineering.md). Mod id creativeengineering since the
+    # swap, version 2.x (1.x jars of that id were patcherMod).
+    ('creativeEngineering', 'creativeengineering', True),
 ]
 # Extra source trees per in-tree project for the "src newer than the jar" check (paths from the instance root).
 IN_TREE_EXTRA_SRC = {
-    'creativeDelight': ['development/creativeDelight/members', 'kubejs/data/creative_delight/kubejs',
-                        'kubejs/assets/creative_delight/kubejs', 'kubejs/data/creative_delight/worldgen',
-                        'kubejs/data/creative_delight/cup_conversion'],
-    'creativeBrewing': ['development/creativeBrewing/members', 'kubejs/data/creative_brewing/kubejs',
-                        'kubejs/assets/creative_brewing/kubejs'],
+    'creativeCommon': ['kubejs/data/creativecommon/kubejs', 'kubejs/assets/creativecommon/kubejs'],
+    'creativeDelight': ['development/creativeDelight/members', 'kubejs/data/creativedelight/kubejs',
+                        'kubejs/assets/creativedelight/kubejs', 'kubejs/data/creativedelight/worldgen',
+                        'kubejs/data/creativedelight/cup_conversion', 'kubejs/data/creativedelight/loot_tables',
+                        'development/shared'],
+    'creativeBrewing': ['development/creativeBrewing/members', 'kubejs/data/creativebrewing/kubejs',
+                        'kubejs/assets/creativebrewing/kubejs'],
+    'creativeCalendar': ['kubejs/data/creativecalendar/kubejs'],
+    'creativeCompat': ['kubejs/data/creativecompat/kubejs', 'kubejs/assets/creativecompat/kubejs'],
+    'creativeWorldgen': ['development/creativeWorldgen/members', 'kubejs/data/creativeworldgen/kubejs',
+                         'kubejs/data/more_mooblooms/moobloom_spawns', 'development/shared'],
+    'creativeMagic': ['kubejs/data/creativemagic/kubejs', 'kubejs/assets/creativemagic/kubejs', 'development/shared'],
+    'creativeEquipment': ['kubejs/data/creativeequipment/kubejs', 'kubejs/assets/creativeequipment/kubejs',
+                          'development/shared'],
+    'creativeEngineering': ['kubejs/data/creativeengineering/kubejs', 'development/shared'],
 }
 # Third-party jars that patcherMod fixes target by version (deploy.md "Mod updates"): (jar file prefix, the file the
 # fixes were written against). A different file under the same prefix means the mod was updated: rerun the checklist.
@@ -184,9 +210,21 @@ CATEGORIES = {
     # the unmodified Rustic Delight 1.7.0 jar the Creative Delight port reads its art and data from (rustic_delight.md
     # 5), as for Miner's Delight. Never in mods/.
     'rustic_upstream': (('server', 'client'), 'rustic_upstream'),
+    # the unmodified Roll Delight 1.3.1 jar the Creative Delight port reads its art from (roll_delight.md 4), as for
+    # Rustic Delight. Never in mods/.
+    'roll_upstream': (('server', 'client'), 'roll_upstream'),
+    # the unmodified Large Meals 1.3.0 jar the Creative Delight port reads its art from (large_meals.md 4), as for
+    # Roll Delight. Never in mods/.
+    'largemeals_upstream': (('server', 'client'), 'largemeals_upstream'),
     # the unmodified Farmer's Structures 1.0.6 jar the patcherMod worldgen donor reads (farmers_structures.md 5).
     # Never in mods/: it is a NeoForge jar.
     'farmers_upstream': (('server', 'client'), 'farmers_upstream'),
+    # the unmodified donor jars of the Creative Delight members Oceanic Delight (creative_delight.md 36), Ender's
+    # additions in the End's member (ends_delight.md 5.9) and Golden Food (golden_food.md), as for Miner's Delight.
+    # Never in mods/. (Oceanic and Ender's were missing here, so files[folder] raised KeyError; fixed 2026-11-02.)
+    'oceanic_upstream': (('server', 'client'), 'oceanic_upstream'),
+    'enders_upstream': (('server', 'client'), 'enders_upstream'),
+    'goldenfood_upstream': (('server', 'client'), 'goldenfood_upstream'),
     'server': (('server',), ''),
 }
 TREES = ('kubejs', 'config', 'defaultconfigs', 'server')
@@ -212,19 +250,43 @@ KUBEJS_CLASSES = [
     ('archive/*', 'dev'),                  # old worldgen tuning, never loaded
     ('exported/*', 'dev'),                 # /dump* output
     ('startup_scripts/todo/*', 'dev'),     # .txt work lists
-    ('assets/creativeengineering/changelog/unreleased.md', 'dev'),  # working list: shipped as <version>.md (check_changelog)
-    ('assets/creativeengineering/changelog/*.md', 'client'),        # player changelog, one file per version
+    ('assets/creativecommon/changelog/unreleased.md', 'dev'),  # working list: shipped as <version>.md (check_changelog)
+    ('assets/creativecommon/changelog/*.md', 'client'),        # player changelog, one file per version
     ('*.md', 'dev'),                       # notes and reports; the tuners rewrite their *_report.md on every load
-    # Creative Delight's script and data trees: authored here, shipped only inside the creative_delight jar (Q25)
-    ('data/creative_delight/kubejs/*', 'dev'),
-    ('data/creative_delight/worldgen/*', 'dev'),
-    ('data/creative_delight/cup_conversion/*', 'dev'),
-    ('assets/creative_delight/kubejs/*', 'dev'),
-    # Creative Brewing's script trees: the same, shipped only inside the creative_brewing jar
-    ('data/creative_brewing/kubejs/*', 'dev'),
-    ('assets/creative_brewing/kubejs/*', 'dev'),
+    # Creative Delight's script and data trees: authored here, shipped only inside the creativedelight jar (Q25)
+    ('data/creativedelight/kubejs/*', 'dev'),
+    ('data/creativedelight/worldgen/*', 'dev'),
+    ('data/creativedelight/cup_conversion/*', 'dev'),
+    ('data/creativedelight/loot_tables/*', 'dev'),   # Oceanic fishing net tables (creative_delight.md 36), in the CD jar
+    ('assets/creativedelight/kubejs/*', 'dev'),
+    # Creative Common's server and client helper scripts (plan_cb_publish.md M1): shipped only inside the creativecommon jar
+    ('data/creativecommon/kubejs/*', 'dev'),
+    ('assets/creativecommon/kubejs/*', 'dev'),
+    # Creative Brewing's script trees: the same, shipped only inside the creativebrewing jar
+    ('data/creativebrewing/kubejs/*', 'dev'),
+    ('assets/creativebrewing/kubejs/*', 'dev'),
+    # Creative Devtools' script trees: dev only, like its jar (feature_writeup/creative_devtools.md)
+    ('data/creativedevtools/kubejs/*', 'dev'),
+    ('assets/creativedevtools/kubejs/*', 'dev'),
+    # Creative Calendar's server script tree: the same, shipped only inside the creativecalendar jar
+    ('data/creativecalendar/kubejs/*', 'dev'),
+    # Creative Compat's script trees: the same, shipped only inside the creativecompat jar
+    ('data/creativecompat/kubejs/*', 'dev'),
+    ('assets/creativecompat/kubejs/*', 'dev'),
+    # Creative Worldgen's server script tree (with the loot framework's loot_config.json / loot_index.json) and the
+    # moobloom spawn rules it ships as a data tree: the same, shipped only inside the creativeworldgen jar
+    ('data/creativeworldgen/kubejs/*', 'dev'),
+    ('data/more_mooblooms/*', 'dev'),
+    # Creative Magic's script trees: the same, shipped only inside the creativemagic jar
+    ('data/creativemagic/kubejs/*', 'dev'),
+    ('assets/creativemagic/kubejs/*', 'dev'),
+    # Creative Equipment's script trees: the same, shipped only inside the creativeequipment jar
+    ('data/creativeequipment/kubejs/*', 'dev'),
+    ('assets/creativeequipment/kubejs/*', 'dev'),
+    # Creative Engineering's server script tree: the same, shipped only inside the creativeengineering jar
+    ('data/creativeengineering/kubejs/*', 'dev'),
     ('startup_scripts/*', 'runtime'),
-    ('server_scripts/*', 'runtime'),       # incl. loot/loot_config.json + loot_index.json (05_tuning.js)
+    ('server_scripts/*', 'runtime'),
     ('data/*', 'runtime'),
     ('config/*', 'runtime'),
     ('client_scripts/*', 'client'),
@@ -237,7 +299,7 @@ KUBEJS_CLASSES = [
     ('generation_scripts/worldgen/loot_container_swaps.json', 'runtime'),  # LootContainerSwaps
     ('generation_scripts/worldgen/pool_config.json', 'runtime'),        # PoolTuner
     ('generation_scripts/worldgen/pool_tags.json', 'runtime'),          # PoolTuner
-    ('generation_scripts/worldgen/crop_seasons.json', 'runtime'),       # server_scripts/tags/cropseasontags.js
+    ('generation_scripts/worldgen/crop_seasons.json', 'runtime'),       # Calendar sereneseasons/cropseasontags.js
     ('generation_scripts/worldgen/structure_config.json', 'runtime'),   # worldgen/structure_overrides.js
     ('generation_scripts/worldgen/structure_groups.json', 'runtime'),   # worldgen/structure_overrides.js
     ('generation_scripts/worldgen/structure_tags.json', 'runtime'),     # structure_overrides.js, MassPlacer
@@ -249,7 +311,7 @@ KUBEJS_CLASSES = [
     ('generation_scripts/worldgen/biome_fits.json', 'runtime'),         # structure_overrides.js (StructureBiomeFits)
     ('generation_scripts/worldgen/meta_structures.json', 'runtime'),    # structure_overrides.js (MetaStructure)
     ('generation_scripts/worldgen/structure_test_overrides.json', 'runtime'),  # structure_overrides.js, only with [worldgen.debug] testOverrides
-    ('generation_scripts/worldgen/season_types.json', 'runtime'),       # tags/seasontags.js (SeasonTypes)
+    ('generation_scripts/worldgen/season_types.json', 'runtime'),       # Calendar sereneseasons/seasontags.js (SeasonTypes)
     ('generation_scripts/worldgen/wild_flowers.json', 'runtime'),       # worldgen/wild_flowers.js
     ('generation_scripts/worldgen/flower_features.json', 'runtime'),    # worldgen/wild_flowers.js (snapshot)
     ('generation_scripts/worldgen/meat_block_swaps.json', 'runtime'),   # TemplateBlockSwaps (tools/meat_block_scan.py)
@@ -262,14 +324,18 @@ KUBEJS_CLASSES = [
     ('generation_scripts/worldgen/nether_worldgen_rules.json', 'dev'),  # tools/gen_nether_worldgen.py input
     ('generation_scripts/worldgen/nether_worldgen_manifest.json', 'dev'),  # tools/gen_nether_worldgen.py
     ('generation_scripts/worldgen/terrain_adaptation_scan.json', 'dev'),  # tools/terrain_adaptation_scan.py
-    ('generation_scripts/food/food_types.json', 'runtime'),             # CD creativeengineering/food_type_tags.js
-    ('generation_scripts/food/can_servings.json', 'runtime'),           # creative_delight creativeengineering/can_tags.js
-    ('generation_scripts/food/can_types.json', 'runtime'),              # items/cans.js (generated per-type cans)
-    ('generation_scripts/food/placeable.json', 'runtime'),             # CD creativeengineering/placeable_tags.js (placeable food tooltips)
-    ('generation_scripts/food/mortar_catalog.json', 'runtime'),        # cooking/mortar.js (tools/gen_mortar_catalog.py)
+    # The next five are generator records since framework #7 (2026-11-01): the game reads the CD member scripts
+    # (<mod>/food_types.js, placeable.js, mortar_catalog.js in data/creativedelight/kubejs, kubejs_startup/<mod>/
+    # can_types.js and can_servings.js in the CD jar), which the generators write from them.
+    ('generation_scripts/food/food_types.json', 'dev'),                 # tools/food_catalog.py record (hand edits)
+    ('generation_scripts/food/can_servings.json', 'dev'),               # tools/gen_can_types.py record
+    ('generation_scripts/food/can_types.json', 'dev'),                  # tools/gen_can_types.py record
+    ('generation_scripts/food/placeable.json', 'dev'),                  # tools/placeable_catalog.py record
+    ('generation_scripts/food/mortar_catalog.json', 'dev'),             # tools/gen_mortar_catalog.py record
     ('generation_scripts/food/placed_food_slices.json', 'runtime'),    # PlacedFoodSol (Spice of Life bites of placed cakes)
     ('generation_scripts/food/food_families.json', 'runtime'),         # CD seasoning_tags.js (food family item tags)
     ('generation_scripts/food/comfort_nourishment.json', 'runtime'),   # CD creativeengineering/comfort_nourishment.js (tools/gen_comfort_nourishment.py)
+    ('generation_scripts/food/food_tuning.json', 'runtime'),           # CD goldenfood/golden_values.js (golden and gilded multipliers)
     ('generation_scripts/food/food_dict_index.json', 'dev'),           # tools/food_dict.py lookup only
     ('generation_scripts/stacks/stack_sizes.json', 'runtime'),          # changes/stack_sizes.js
     ('generation_scripts/names/name_fixes.json', 'client'),             # client_scripts/name_fixes.js (tools/name_audit.py)
@@ -286,7 +352,7 @@ KUBEJS_CLASSES = [
 # player has stays in place even when the pack stops shipping it.
 CONFIG_CLASSES = [
     ('trashslot-common.toml', 'player', '1.0.3'),   # TrashSlot deletion behaviour; pushed once with 1.0.3
-    ('creativeengineering/changelog_seen.txt', 'player'),  # changelog read marker (also git-ignored)
+    ('creativecommon/changelog_seen.txt', 'player'),  # changelog read marker (also git-ignored)
     ('DistantHorizons.toml', 'player', '1.1.04'),    # LOD distance/quality + DH threads and server request distances; pushed once with 1.0.4 and again with 1.1.04
     ('jei/blacklist.cfg', 'functional'),            # hidden ingredients (pack-defined)
     ('jei/recipe-category-sort-order.ini', 'functional'),   # pack's recipe tab order
@@ -418,6 +484,8 @@ def collect(pre, root=ROOT, unknown_side=None, config_mode='full', pack_version=
         if side is None:
             unknown.append(f'{jar} (mod id: {modid or "none"})')
             continue
+        if side == 'dev':
+            continue  # dev mods/ only (Creative Devtools, Q6): never in a payload or a recorded version
         entry = by_file.get(('mods', jar))
         # hand-added jars (patcherMod) get an entry named after the file, version "Unknown"
         name = entry['name'] if entry and not entry['name'].endswith('.jar') else modid or os.path.splitext(jar)[0]
@@ -445,7 +513,7 @@ def collect(pre, root=ROOT, unknown_side=None, config_mode='full', pack_version=
         # Third-party jars nesting the same library (xaerolib, spectrelib, ...) are resolved by FML's Jar-in-Jar
         # version selection; only a clash with a top-level jar or a Creative Delight / Creative Brewing member needs action.
         dupes = {m: jars for m, jars in by_id.items()
-                 if len(jars) > 1 and any('!' not in j or j.startswith(('creative_delight', 'creative_brewing')) for j in jars)}
+                 if len(jars) > 1 and any('!' not in j or j.startswith(('creativedelight', 'creativebrewing')) for j in jars)}
         if dupes:
             pre.error('mods/ holds more than one jar for a mod id (FML loads only one; remove the others):\n'
                       + '\n'.join(f'    {m}: {", ".join(jars)}' for m, jars in sorted(dupes.items())))
@@ -506,14 +574,26 @@ def collect(pre, root=ROOT, unknown_side=None, config_mode='full', pack_version=
 # Donor folders: {folder: (port jar prefix, name in messages, UpstreamJars.java that pins the jars)}.
 UPSTREAM_DONORS = {
     # nested in the Creative Brewing jar, so the CB jar in mods/ is what needs the donor
-    'vinery_upstream': ('creative_brewing', 'Vinery (Creative Brewing)',
+    'vinery_upstream': ('creativebrewing', 'Vinery (Creative Brewing)',
                         ('creativeBrewing/members/vinery', 'net', 'satisfy', 'vinery', 'forge', 'upstream')),
-    'miners_upstream': ('backportedMiners', "Miner's Delight", ('backportedMiners', 'com', 'sammy', 'minersdelight', 'upstream')),
     # nested in the Creative Delight jar, so the CD jar in mods/ is what needs the donor
-    'farmers_upstream': ('creativeengineering', "Farmer's Structures donor (patcherMod)",
-                         ('patcherMod', 'com', 'SaintAlfonzo', 'creativeengineering', 'worldgen', 'donor')),
-    'rustic_upstream': ('creative_delight', 'Rustic Delight (Creative Delight)',
+    'miners_upstream': ('creativedelight', "Miner's Delight (Creative Delight)",
+                        ('creativeDelight/members/miners', 'com', 'sammy', 'minersdelight', 'upstream')),
+    # in the Creative Worldgen jar since the wave 5 carve (2026-11-02; patcherMod before)
+    'farmers_upstream': ('creativeworldgen', "Farmer's Structures donor (Creative Worldgen)",
+                         ('creativeWorldgen', 'com', 'SaintAlfonzo', 'creativeworldgen', 'worldgen', 'donor')),
+    'rustic_upstream': ('creativedelight', 'Rustic Delight (Creative Delight)',
                         ('creativeDelight/members/rustic', 'com', 'SaintAlfonzo', 'creativedelight', 'rustic', 'upstream')),
+    'roll_upstream': ('creativedelight', 'Roll Delight (Creative Delight)',
+                      ('creativeDelight/members/roll', 'com', 'SaintAlfonzo', 'creativedelight', 'roll', 'upstream')),
+    'largemeals_upstream': ('creativedelight', 'Large Meals (Creative Delight)',
+                            ('creativeDelight/members/largemeals', 'com', 'SaintAlfonzo', 'creativedelight', 'largemeals', 'upstream')),
+    'oceanic_upstream': ('creativedelight', 'Oceanic Delight (Creative Delight)',
+                         ('creativeDelight/members/oceanic', 'com', 'SaintAlfonzo', 'creativedelight', 'oceanic', 'upstream')),
+    'enders_upstream': ('creativedelight', "Ender's Delight Additions (Creative Delight)",
+                        ('creativeDelight/members/ends', 'com', 'SaintAlfonzo', 'creativedelight', 'enders', 'upstream')),
+    'goldenfood_upstream': ('creativedelight', 'Golden Food (Creative Delight)',
+                            ('creativeDelight/members/golden', 'com', 'SaintAlfonzo', 'creativedelight', 'golden', 'upstream')),
 }
 
 
@@ -531,7 +611,7 @@ def check_structures(pre):
     """Regenerate structure_config.json and sync structure_groups.json in a scratch copy of the
     worldgen folder; either one changing means the committed data is stale for the installed mods.
     Also warns when a shipped CEConfig still has the [worldgen.debug] test switches on."""
-    for cfg in ('config/creativeengineering-common.toml', 'configs_edited/root_config/creativeengineering-common.toml'):
+    for cfg in ('config/creativeworldgen-common.toml', 'configs_edited/root_config/creativeworldgen-common.toml'):
         path = os.path.join(ROOT, cfg)
         if os.path.exists(path):
             text = open(path, encoding='utf8').read()
@@ -640,12 +720,12 @@ def check_climate_reader(pre, files):
     if not any(p.startswith('generation_scripts/worldgen/climate/') for p in files['kubejs']):
         return
     for jar, src in files['mods'].items():
-        if re.match(r'creativeengineering-.*\.jar$', jar):
+        if re.match(r'creativecommon-.*\.jar$', jar):
             with zipfile.ZipFile(src) as z:
-                cls = z.read('com/SaintAlfonzo/creativeengineering/worldgen/WorldgenFiles.class')
+                cls = z.read('com/SaintAlfonzo/creativecommon/util/WorldgenFiles.class')  # Creative Common since 2026-11-04
             if b'readGzipText' not in cls:
                 pre.error(f'mods/{jar} predates the gzipped climate samples (no WorldgenFiles.readGzipText): '
-                          'copy the current development/patcherMod/build/libs jar into mods/ first')
+                          'copy the current development/creativeCommon/build/libs jar into mods/ first')
 
 
 def check_display_delight_models(pre):
@@ -653,6 +733,10 @@ def check_display_delight_models(pre):
     JEI draws as the purple cube (WTHIT falls back to the block model). The item list comes from
     /dumpitemsbymod, so an export older than the jar may miss the new items."""
     jars = [j for j in os.listdir(MODS) if re.match(r'(displaydelight|backportedDisplay)-.*\.jar$', j)]
+    if not jars:
+        # nested in the Creative Delight jar since 2026-11-02 (plan_creative_delight.md A2)
+        jars = [j for j in os.listdir(MODS) if re.match(r'creativedelight-.*\.jar$', j)
+                and any(n.startswith('backportedDisplay-') for n, _ in nested_modids(os.path.join(MODS, j)))]
     if not jars:
         return
     export = os.path.join(ROOT, 'kubejs', 'exported', 'items_by_mod', 'displaydelight.json')
@@ -686,7 +770,7 @@ def check_changelog(pre, files, version, deployed, stage_dir):
     """Lint the changelog folder, keep deployed versions' files frozen, and put the working list into the
     payload as <version>.md (stamped copy written into stage_dir; the tree is not touched)."""
     if not os.path.isdir(CHANGELOG_DIR):
-        pre.warn('no changelog folder (kubejs/assets/creativeengineering/changelog/): this version has no player notes')
+        pre.warn('no changelog folder (kubejs/assets/creativecommon/changelog/): this version has no player notes')
         return
     for path, (errors, warnings) in lint_paths([CHANGELOG_DIR]).items():
         label = path if path.startswith('(') else os.path.relpath(path, ROOT)
@@ -1486,23 +1570,31 @@ def render_readme(cur, prev, d, dpay, base, payload):
         rm('server'),
         ("Copy `mods/` into the server's `mods/`" + only_changed + '. Do not copy `client_mods/`.') if has('mods') else
         'No server jars changed.',
-        f"Copy {folders(('kubejs', 'config', 'defaultconfigs', 'vinery_upstream', 'miners_upstream', 'rustic_upstream', 'farmers_upstream'))} over the server's folders{only_changed}."
-        if folders(('kubejs', 'config', 'defaultconfigs', 'vinery_upstream', 'miners_upstream', 'rustic_upstream', 'farmers_upstream')) else None,
+        f"Copy {folders(('kubejs', 'config', 'defaultconfigs', 'vinery_upstream', 'miners_upstream', 'rustic_upstream', 'roll_upstream', 'largemeals_upstream', 'farmers_upstream', 'oceanic_upstream', 'enders_upstream', 'goldenfood_upstream'))} over the server's folders{only_changed}."
+        if folders(('kubejs', 'config', 'defaultconfigs', 'vinery_upstream', 'miners_upstream', 'rustic_upstream', 'roll_upstream', 'largemeals_upstream', 'farmers_upstream', 'oceanic_upstream', 'enders_upstream', 'goldenfood_upstream')) else None,
         ('`vinery_upstream/` goes next to `mods/`, never inside it: the Vinery backport reads those two jars and '
          'stops the game with a message if they are missing.') if has('vinery_upstream') else None,
         ("`miners_upstream/` goes next to `mods/`, never inside it: the Miner's Delight backport reads that jar and "
          'stops the game with a message if it is missing.') if has('miners_upstream') else None,
         ("`rustic_upstream/` goes next to `mods/`, never inside it: Creative Delight's Rustic Delight port reads that jar "
          'and stops the game with a message if it is missing.') if has('rustic_upstream') else None,
+        ("`roll_upstream/` goes next to `mods/`, never inside it: Creative Delight's Roll Delight port reads that jar "
+         'and stops the game with a message if it is missing.') if has('roll_upstream') else None,
+        ("`largemeals_upstream/` goes next to `mods/`, never inside it: Creative Delight's Large Meals port reads that jar "
+         'and stops the game with a message if it is missing.') if has('largemeals_upstream') else None,
         ("`farmers_upstream/` goes next to `mods/`, never inside it: patcherMod reads Farmer's Structures 1.0.6 from it for the "
          'new farm structures and house pieces. Without it the old 1.0.0 structures run alone.') if has('farmers_upstream') else None,
+        *[(f"`{d}/` goes next to `mods/`, never inside it: Creative Delight's {n} member reads that jar "
+           'and stops the game with a message if it is missing.') if has(d) else None
+          for d, n in (('oceanic_upstream', 'Oceanic Delight'), ('enders_upstream', "End's Delight (Ender's additions)"),
+                       ('goldenfood_upstream', 'Golden Food'))],
         ('Copy the *contents* of `server/` into the server folder itself (`LaunchServer.sh`/`.bat`, `perf/`); if you '
          "changed MEMORY or JAVAPATH in the server's LaunchServer script, set them again.") if has('server') else None,
         world_step('the server world (`world/`, or the `level-name` folder)'),
     ])
     rp_order = [p[len('file/'):] for p in cur['resourcePackOrder'] if p.startswith('file/')]
     show_order = rp_order and (not update or (base or {}).get('resourcePackOrder') != cur['resourcePackOrder'])
-    client_trees = folders(('kubejs', 'config', 'defaultconfigs', 'resourcepacks', 'shaderpacks', 'vinery_upstream', 'miners_upstream', 'rustic_upstream', 'farmers_upstream'))
+    client_trees = folders(('kubejs', 'config', 'defaultconfigs', 'resourcepacks', 'shaderpacks', 'vinery_upstream', 'miners_upstream', 'rustic_upstream', 'roll_upstream', 'largemeals_upstream', 'farmers_upstream', 'oceanic_upstream', 'enders_upstream', 'goldenfood_upstream'))
     lines += ['', '## Client', ''] + numbered([
         'Close the game.',
         rm('client'),

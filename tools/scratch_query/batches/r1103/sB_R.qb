@@ -1,0 +1,87 @@
+# Run r1103, slice B, rerun (sB_R): the two sB_2 BATCH-FAULT rows the judge fixed (perf/runs/r1103/sB/judged.md).
+# One boot on a fresh group A superflat; nothing depends on sB_1's level.
+# Setup:
+#   OUT=<scratchpad>/r1103/sbr; bash $INST/tools/scratch_query/prep_srv.sh "$OUT" sbr A; cd "$OUT/srv" || exit 1
+#   cp "$INST/tools/scratch_query/zsb_probe.js" kubejs/server_scripts/zz_zsb_probe.js   (fixed: /zsb items used
+#   l.dimension.location(), which threw "Cannot find function location"; now server.overworld())
+#   /zq is from prep_srv; perfBot (ceperfbot) added by prep_srv. Jars as sB_2: creativedelight 11-03 (Hearth member
+#   for the watering can), corn_delight, LootJS. No toml edits.
+# Changes against sB_2: SQ-CN-04b unchanged (probe fix only). SQ-WCT-08: `tp ... facing <pos>` turns the bot from its
+#   FEET (Entity.lookAt with the console's FEET anchor), so facing y -59.8 pitched it slightly UP and the can's eye
+#   raycast missed the campfire (use PASS, WaterLevel stayed 5). Now an explicit rotation (yaw 180 = north, pitch 35:
+#   the eye ray meets the campfire top at about z 500.8), and the starter kit's off-hand shield is cleared so the
+#   /zq useitem off-hand fallback does not fire.
+# Superflat: grass y -61, air from y -60. Row lane x 96..212 z 496..512.
+pace 2
+
+## SQ-CN-04b | corn knife harvest by a player: corncobs from age 7 with a knife only (x 100..106)
+bootexpect Done \(
+> gamerule doMobSpawning false
+> gamerule doDaylightCycle false
+> time set noon
+> weather clear 100000
+> forceload add 96 496 212 512
+sleep 30
+> setblock 100 -61 500 minecraft:farmland
+> setblock 100 -60 500 corn_delight:corn_crop[age=7,upper=false]
+> setblock 100 -59 500 corn_delight:corn_crop[age=7,upper=true]
+> setblock 104 -61 500 minecraft:farmland
+> setblock 104 -60 500 corn_delight:corn_crop[age=3,upper=false]
+> pbot spawn cn4 102.5 -60 502.5 minecraft:overworld survival
+> pbot hold cn4 farmersdelight:iron_knife
+> kill @e[type=minecraft:item,x=98,y=-62,z=504,dx=6,dy=8,dz=5]
+# loot spawn does not break the block, so the age 7 crop stays set between rolls; drops land at z 506, away from the bot
+pace 0.5
+repeat 40
+> execute as cn4 run loot spawn 100.5 -59 506.5 mine 100 -60 500 mainhand
+end
+pace 2
+sleep 3
+> zsb items 98 -62 504 104 -54 509
+> kill @e[type=minecraft:item,x=98,y=-62,z=504,dx=6,dy=8,dz=5]
+> pbot hold cn4 minecraft:air
+pace 0.5
+repeat 20
+> execute as cn4 run loot spawn 100.5 -59 506.5 mine 100 -60 500 mainhand
+end
+pace 2
+sleep 3
+> zsb items 98 -62 504 104 -54 509
+> kill @e[type=minecraft:item,x=98,y=-62,z=504,dx=6,dy=8,dz=5]
+> pbot hold cn4 farmersdelight:iron_knife
+pace 0.5
+repeat 20
+> execute as cn4 run loot spawn 100.5 -59 506.5 mine 104 -60 500 mainhand
+end
+pace 2
+sleep 3
+> zsb items 98 -62 504 104 -54 509
+> kill @e[type=minecraft:item,x=98,y=-62,z=504,dx=6,dy=8,dz=5]
+> pbot remove cn4
+count \[zsb\] items\b == 3
+expect \[zsb\] items .*creativeengineering:corncob=([4-9]|1[0-8])\b
+count \[zsb\] items .*creativeengineering:corncob= == 1
+reject (Unknown (item|block|entity)|Unknown or incomplete command|Incorrect argument for command|That position is not loaded|No player was found|no such bot|no such item|\[(zq|zsb|zlbs)\] (error|unknown))
+look the three [zsb] items lines in order: knife on age 7 (about 10 corncobs of 40), empty hand (0), knife on age 3 (0); if the first is 0 too, LootJS matchMainHand sees no player (the row's fail note: check by hand in the client)
+
+## SQ-WCT-08 | watering can puts out a campfire (water 5 -> 4); an empty can does not (x 204, 208)
+> setblock 204 -60 500 minecraft:campfire[lit=true]
+> setblock 208 -60 500 minecraft:campfire[lit=true]
+> pbot spawn wct8 204.5 -60 502.5 minecraft:overworld survival
+> tp wct8 204.5 -60 502.5 180 35
+> item replace entity wct8 weapon.mainhand with hearthandharvest:golden_watering_can{WaterLevel:5}
+> item replace entity wct8 weapon.offhand with minecraft:air
+> zq useitem wct8
+> execute if block 204 -60 500 minecraft:campfire[lit=false]
+> data get entity wct8 SelectedItem
+> tp wct8 208.5 -60 502.5 180 35
+> item replace entity wct8 weapon.mainhand with hearthandharvest:golden_watering_can{WaterLevel:0}
+> item replace entity wct8 weapon.offhand with minecraft:air
+> zq useitem wct8
+> execute if block 208 -60 500 minecraft:campfire[lit=true]
+> pbot remove wct8
+count Test passed == 2
+expect wct8 has the following entity data: .*WaterLevel: 4\b
+reject (Unknown (item|block|entity)|Unknown or incomplete command|Incorrect argument for command|That position is not loaded|No entity was found|no such bot|\[zq\] no player)
+look the two "[zq] useitem wct8" results: the first SUCCESS / CONSUME, the second PASS
+

@@ -80,6 +80,7 @@
 		[i.durian_flesh,    0.3],
 		[i.durian_helmet,   0.3],
 		[i.durian_shell,    0.3],
+		[i.hamimelon_slice, 0.5],
 		[i.pineapple_slice, 0.5],
 	])
 })()

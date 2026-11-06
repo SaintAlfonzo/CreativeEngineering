@@ -1,0 +1,571 @@
+# Run r1103, slice B, boot 2 (sB_2): the same level sb1 as sB_1 (group A superflat), restarted with the 1.0.1 Creative
+# Labels build jar back in srv/mods. Setup in sB_setup.md (probes zz_zsb_probe.js, zz_zlbs_probe.js; /zq from prep_srv).
+# Order: boot-log and kjsexpect rows first (SQ-CF-02 reads the world's serverconfig written at sB_1's first boot), the
+# SQ-LBS-05 old-save compare before any other label row, then /zq and /zsb data rows, block and bot rows, the
+# randomTickSpeed row (SQ-VTD9-01), and the /reload row (SQ-CUP-04) last.
+#
+# Superflat: grass y -61, air from y -60. Areas (forceloaded by the first row): cltest area x -8..170 z -8..16 (sB_1's
+# notes and labels, kept), /zlbs hosts x 300..360 z 16..40 at y -58, row lane x 96..212 z 496..512 (one x per row,
+# listed in the row). SQ-VTD9-01 forceloads its own lane x 0..200 z 1000..1060. Bots: perfBot, one name per row,
+# removed at the end of the row (bots near a lane would give it random ticks).
+pace 2
+
+## SQ-CF-02 | Spice of Life world config from defaultconfigs: movement speed attribute (A, new level)
+bootexpect Done \(
+shell L=$(grep -m1 '^level-name=' server.properties | cut -d= -f2); f="$L/serverconfig/solapplepie-server.toml"; ls -l defaultconfigs/solapplepie-server.toml "$f"; grep -oE "generic\.(movement_)?speed,[0-9.]+" "$f"; grep -nE "minFoodsToActivate|resetOnDeath|queueSize" "$f"; grep -niE "solapplepie" logs/latest.log | grep -iE "warn|error" | head; grep -q "generic.movement_speed,0.01" "$f" && ! grep -q "generic.speed,2" "$f"
+bootreject (?i)solapplepie.*(attribute|unknown).*(warn|error|invalid)
+# areas for the whole batch; 30 s before any block tick
+> gamerule doMobSpawning false
+> gamerule doDaylightCycle false
+> time set noon
+> weather clear 100000
+> forceload add -8 -8 170 16
+> forceload add 296 16 364 40
+> forceload add 96 496 212 512
+sleep 30
+look rows/SQ-CF-02.shell.txt: generic.movement_speed,0.01 and no generic.speed,2; minFoodsToActivate 10, resetOnDeath true, queueSize 256; no attribute warning (the 4 known largemeals complexity warnings are fine)
+
+## SQ-CUP-01 | Miner's Delight without the copper cup family: data loads, no cup id anywhere
+bootexpect Miner's Delight upstream data: \d+ files
+bootreject Cup conversions
+bootreject (?i)\bminers_delight:(copper|water|milk|powder_snow|beef_stew|onion_soup|[a-z_]+)_cup\b
+bootreject (?i)\bdelightful:cactus_soup_cup\b
+kjsreject (?i)\bminers_delight:[a-z_]*_cup\b|cactus_soup_cup
+shell n=$(grep -oE "Miner's Delight upstream data: [0-9]+" logs/latest.log | grep -oE "[0-9]+$" | head -1); echo "upstream files $n (182 before)"; grep -nE "Unknown item" logs/kubejs/startup.log logs/kubejs/server.log | grep -iE "item_dict|food_dict|tool_dict|stack_sizes|comfort" | head; echo "handler errors: $(grep -c 'Error occurred while handling event' logs/latest.log)"; [ -n "$n" ] && [ "$n" -lt 182 ]
+look rows/SQ-CUP-01.shell.txt: no Unknown item line from the dicts, stack_sizes or comfort_nourishment; any handler error line is unrelated to cups
+
+## SQ-FO-01 | food types line, no food_types warning, no new item_dict Missing for a food key
+bootexpect \[food types\] \d+ foods in 31 types, \d+ canned sources
+bootreject \[food types\].*(no item_dict key|is in both)
+shell grep -hoE "\[food types\] [0-9]+ foods in [0-9]+ types, [0-9]+ canned sources" logs/latest.log | head -3; grep -n "\[item_dict\] Missing" logs/kubejs/startup.log | grep -vE "catfish_slice|jei_bucket_|tmted_|rs_" | head; true
+look N about 1016 or more and M about 252 in the [food types] line; any item_dict Missing line printed is not a food key
+
+## SQ-FO-05 | egg stacks 64, stack sizes applied
+bootexpect \[stack_sizes\] set \d+ stack sizes
+bootreject no item_dict key
+> zq item minecraft:egg
+> zq item quark:egg_parrot_blue
+> zq item alexsmobs:emu_egg
+waitlog \[zq\] item alexsmobs:emu_egg: 30
+count \[zq\] item (minecraft:egg|quark:egg_parrot_blue|alexsmobs:emu_egg): .*max stack 64$ == 3
+shell grep -hoE "\[stack_sizes\] set [0-9]+ stack sizes" logs/latest.log logs/kubejs/startup.log | head -2; true
+reject (Unknown (item|block|entity)|Unknown or incomplete command|Incorrect argument for command|\[(zq|zsb|zlbs)\] (error|unknown))
+look the stack_sizes count is about 1341
+
+## SQ-LBS-00 | Creative Labels 1.0.1: centre_note tag loads, no creative_labels error
+bootreject Couldn't load tag creative_labels:paper/centre_note
+bootreject (?i)(ERROR|Exception).*creative_labels
+shell ls mods | grep -i creativeLabels; ls mods | grep -q "creativeLabels-1.0.1"
+
+## SQ-LBS-05 | old save from 1.0.0 (sB_1) on 1.0.1: notes and labels kept, no OffX / OffY / Size keys
+> zlbs dump -4 -4 170 14
+waitlog \[zlbs\] DONE dump 60
+expect \[zlbs\] INFO dump \S+ \S+ \S+ \S+: [1-9]\d* face_paper block entities
+reject \[zlbs\] be .*\b(OffX|OffY|Size)\b
+shell pre=$(for f in $(ls logs/*.log.gz | grep -v debug); do zcat "$f"; done | grep -o '\[zlbs\] be .*' | sort); post=$(grep -o '\[zlbs\] be .*' logs/latest.log | sort); echo "pre $(printf '%s\n' "$pre" | grep -c 'be ') post $(printf '%s\n' "$post" | grep -c 'be ')"; diff <(printf '%s\n' "$pre") <(printf '%s\n' "$post") && echo SAME
+look rows/SQ-LBS-05.shell.txt: SAME, or only differences that keep every note and label with the same spots (and no OffX / OffY / Size key); the pre lines come from sB_1's rotated log
+
+## SQ-LBS-01 | labels by surface: face Place per host (zlbs labels)
+> zlbs labels
+waitlog \[zlbs\] DONE labels 60
+count \[zlbs\] PASS labels == 12
+reject \[zlbs\] FAIL
+look on a FAIL, the line's place (inset/offX/offY/size) against the wanted value; "labels left" 3 = one label used
+
+## SQ-LBS-02 | labels refused on doors, trapdoors, slabs, stairs, cauldron top, pressure plate, poppy (zlbs refused)
+> zlbs refused
+waitlog \[zlbs\] DONE refused 60
+count \[zlbs\] PASS refused == 9
+reject \[zlbs\] FAIL
+
+## SQ-LBS-03 | centre notes: spot C at the host's offY, second note and top note refused (zlbs centre)
+> zlbs centre
+waitlog \[zlbs\] DONE centre 60
+count \[zlbs\] PASS centre == 24
+reject \[zlbs\] FAIL
+
+## SQ-LBS-04 | host set to air: label and written note drop, cell air (zlbs refit, after -01 and -03)
+> zlbs refit
+waitlog \[zlbs\] DONE refit 60
+count \[zlbs\] PASS refit == 20
+reject \[zlbs\] FAIL
+look the label drops are blank (no NBT), the note drops carry their Text
+
+## SQ-CNP-01 | can grid guard: crafting recipes taking a can are _manual_only, no automation recipe takes one
+> zsb cans
+waitlog \[zsb\] cans: \d+ recipes take a pack can 180
+expect \[zsb\] cans: [1-9]\d* recipes take a pack can, 0 violations
+reject \[zsb\] (error|unknown)
+look the "cans by serializer" line; any create:mixing / mechanical_crafting / IE / AE2 line printed is a canning route (result is a can)
+
+## SQ-CNS-03 | Comfort / Nourishment on cans match their dishes
+> zq food farmersdelight:noodle_soup
+> zq food creativeengineering:canned_noodle_soup
+> zq food creativeengineering:canned_bone_broth
+> zq food farmersdelight:beef_stew
+> zq food creativeengineering:canned_beef_stew
+waitlog \[zq\] food creativeengineering:canned_beef_stew: 30
+expect \[zq\] food creativeengineering:canned_noodle_soup: .*farmersdelight:nourishment
+reject \[zq\] food creativeengineering:canned_bone_broth: .*farmersdelight:(nourishment|comfort)
+expect \[zq\] food creativeengineering:canned_beef_stew: .*farmersdelight:comfort
+reject (Unknown (item|block|entity)|Unknown or incomplete command|Incorrect argument for command|not a food|\[(zq|zsb|zlbs)\] (error|unknown))
+look the canned noodle soup's nourishment ticks equal the noodle soup's; the canned beef stew's comfort ticks equal the beef stew's
+
+## SQ-DRK-07 | Bayberry Juice: drink type, stack 32, canned, no soft fluid or recipe error
+> zq tagsof fruitsdelight:bayberry_soup
+> zq item fruitsdelight:bayberry_soup
+> zq tagsof creativeengineering:canned_bayberry_soup
+> zq recipes canned_bayberry
+waitlog \[zq\] recipes matching canned_bayberry: 30
+expect \[zq\] item tags of fruitsdelight:bayberry_soup: .*\bcreativeengineering:food_type/drink\b
+reject \[zq\] item tags of fruitsdelight:bayberry_soup: .*\bcreativeengineering:food_type/soup\b
+expect \[zq\] item fruitsdelight:bayberry_soup: .*max stack 32$
+expect \[zq\] item tags of creativeengineering:canned_bayberry_soup: .*\bcreativeengineering:food_type/canned\b
+expect \[zq\] recipes matching canned_bayberry: [1-9]
+bootreject (?i)^(?=.*bayberry_soup)(?=.*\b(error|warn)).*
+reject (Unknown (item|block|entity)|Unknown or incomplete command|Incorrect argument for command|\[(zq|zsb|zlbs)\] (error|unknown))
+look the canned_bayberry recipe lines include the canning recipe
+
+## SQ-MRD-04 | More Delight carrot soup keeps Comfort
+> zq food moredelight:carrot_soup
+waitlog \[zq\] food moredelight:carrot_soup: 30
+expect \[zq\] food moredelight:carrot_soup: .*farmersdelight:comfort
+
+## SQ-FFB-02 | sponge cake: one baking recipe, nothing else makes it, no can takes it
+> zq makes oceanic_delight:sponge_cake
+> zq rdetail sponge_cake
+> zq uses oceanic_delight:sponge_cake
+waitlog \[zq\] uses oceanic_delight:sponge_cake: 30
+expect \[zq\] makes oceanic_delight:sponge_cake: 1$
+expect \[zq\] creativedelight:baking/sponge_cake -> \d+ oceanic_delight:sponge_cake
+expect \[zq\] creativedelight:baking/sponge_cake \{creativeengineering:baking\}
+reject \[zq\] (alone|shared) \S*canned
+reject (Unknown (item|block|entity)|Unknown or incomplete command|Incorrect argument for command|\[(zq|zsb|zlbs)\] (error|unknown))
+look the rdetail line: pie crust, minecraft:sponge, minecraft:prismarine_shard, 2 sweeteners, pie tin (tool)
+
+## SQ-FFB-03 | honey cake: oven (cake pan) and the _manual_only hand recipe, no 2-bottle or Crafts & Additions recipe
+> zq makes createaddition:honey_cake
+> zq rdetail honey_cake
+waitlog \[zq\] rdetail matching honey_cake: 30
+expect \[zq\] creativedelight:shapeless/honey_cake_manual_only -> \d+ createaddition:honey_cake
+reject \[zq\] createaddition:\S+ -> \d+ createaddition:honey_cake
+look the oven recipe: cake base, frosting, 1 honey bottle, 1 honeycomb (cake pan); hand recipe: baked cake base, frosting, honey bottle, honeycomb; no recipe with 2 honey bottles
+
+## SQ-FFB-04 | bread tags without the four foreign breads
+> zq itemtag forge:bread
+> zq itemtag creativeengineering:food_family/bread
+waitlog \[zq\] itemtag creativeengineering:food_family/bread 30
+reject \[zq\] itemtag (forge:bread|creativeengineering:food_family/bread) \(\d+\): .*\b(buzzier_bees:honey_bread|upgrade_aquatic:mulberry_bread|hostiledelight:glowbread|fruitsdelight:jelly_bread)\b
+expect \[zq\] itemtag forge:bread \([1-9]
+look forge:bread holds garlic, banana and cantaloupe bread, the bread slice and toast
+
+## SQ-FO-02 | nested food_type tags, canned_source
+> zq tagsof farmersdelight:bacon
+> zq tagsof minecraft:cooked_porkchop
+> zq tagsof minecraft:carrot
+> zq tagsof neapolitan:strawberries
+> zq itemtag creativeengineering:food_type/meal/feast
+waitlog \[zq\] itemtag creativeengineering:food_type/meal/feast 30
+expect \[zq\] item tags of farmersdelight:bacon: (?=.*\bcreativeengineering:food_type/raw/meat/sliced\b)(?=.*\bcreativeengineering:food_type/raw/meat( |$))(?=.*\bcreativeengineering:food_type/raw( |$))(?=.*\bcreativeengineering:food_type( |$))
+expect \[zq\] item tags of minecraft:cooked_porkchop: (?=.*\bcreativeengineering:food_type/cooked/meat\b)(?=.*\bcreativeengineering:canned_source\b)
+reject \[zq\] item tags of minecraft:carrot: .*\bcreativeengineering:canned_source\b
+expect \[zq\] item tags of neapolitan:strawberries: .*\bcreativeengineering:food_type/raw/fruit\b
+expect \[zq\] itemtag creativeengineering:food_type/meal/feast \([1-9]
+
+## SQ-FO-03 | empty can recipes: the four makers, the canned_goods removals
+> zq makes canned_goods:empty_can
+> zq recipes canned_goods:
+> zq uses canned_goods:empty_can
+waitlog \[zq\] uses canned_goods:empty_can: 60
+reject \[zq\] canned_goods:(recipe_canned_|hot_hot_hotpot_recipe|ironintocan|irontocrushedcan|fullemptycan|recycling_cans)
+look makers: stonecutting 4 from an iron ingot, shaped 12 from 2 #forge:plates/iron, deploying 12, IE blueprint components 32 from 4 plates; Soda and Reef-Cola still made; no smelting / blasting recipe among the empty-can uses
+
+## SQ-FO-04 | fried egg, cooking oil, fried chicken recipes
+> zq makes farmersdelight:fried_egg
+> zq rdetail fried_egg
+> zq recipes incubation:fried_egg
+> zq tagsof minecraft:pumpkin_seeds
+> zq rdetail cooking_oil
+> zq recipes fried_chicken
+waitlog \[zq\] recipes matching fried_chicken: 30
+expect \[zq\] recipes matching incubation:fried_egg: 0
+expect \[zq\] item tags of minecraft:pumpkin_seeds: .*\brusticdelight:cooking_oil_ingredients\b
+reject \[zq\] sliceanddice:\S*cooking_oil\S* \{
+kjsreject \[NCH\].*cooking_oil
+look fried egg from minecraft:egg: smelting 200 t, smoking 100 t, campfire 600 t; one FD cooking _manual_only (3 + 3 seeds -> 2 rusticdelight:cooking_oil) and one heated mixing (3 seeds + glass bottle -> 1); the Slice & Dice fried chicken mixing still listed
+
+## SQ-JSL-01 | jams and jellies take slices; the old _from_slices recipes are gone
+> zq rdetail farmersdelight:cooking/orange_jelly
+> zq rdetail farmersdelight:cooking/lemon_jelly
+> zq rdetail fruitsdelight:mixing/flowing_orange_jam
+> zq rdetail fruitsdelight:mixing/flowing_lemon_jam
+> zq recipes jam_from_slices
+waitlog \[zq\] recipes matching jam_from_slices: 30
+expect \[zq\] recipes matching jam_from_slices: 0
+count \[zq\] rdetail matching \S+: [1-9]\d*$ == 4
+look each whole-fruit slot lists the fruit (#forge:fruits/orange / lemon) and the slice; the lemon recipes keep a separate Lemon Slice slot; the pot recipes' container is vintagedelight:empty_mason_jar (rdetail+ fields)
+
+## SQ-PS-06 | powdered sugar crushing and milling: second result at 0.5
+> zq rdetail sugar_powdered_sugar
+waitlog \[zq\] rdetail matching sugar_powdered_sugar: 30
+expect rdetail\+ creativedelight:createcrushing/sugar_powdered_sugar results: 1 creativeengineering:powdered_sugar @1(\.0)?, 1 creativeengineering:powdered_sugar @0\.5
+expect rdetail\+ creativedelight:createmilling/sugar_powdered_sugar results: 1 creativeengineering:powdered_sugar @1(\.0)?, 1 creativeengineering:powdered_sugar @0\.5
+
+## SQ-RCO-01 | no vanilla smoker recipe; Quark and Nether's Delight smokers only
+> zq recipes minecraft:smoker
+> zq makes minecraft:smoker
+waitlog \[zq\] makes minecraft:smoker: 30
+expect \[zq\] recipes matching minecraft:smoker: 0
+expect \[zq\] quark:building/crafting/furnaces/deepslate_smoker -> 1 minecraft:smoker
+expect \[zq\] quark:building/crafting/furnaces/blackstone_smoker -> 1 minecraft:smoker
+reject \[zq\] (?!quark:building/crafting/furnaces/(deepslate|blackstone)_smoker |nethersdelight:)\S+ -> \d+ minecraft:smoker$
+look the third maker is Nether's Delight's nether brick smoker
+
+## SQ-RCO-02 | cake makers: the two _manual_only, oven, 7-slice reassembly only
+> zq makes minecraft:cake
+waitlog \[zq\] makes minecraft:cake: 30
+expect \[zq\] creativedelight:shapeless/cake_manual_only -> 1 minecraft:cake
+expect \[zq\] creativedelight:shapeless/cake_berry_manual_only -> 1 minecraft:cake
+expect \[zq\] creativedelight:baking/cake -> 1 minecraft:cake
+reject \[zq\] (minecraft:cake|farmersdelight:cake_from_milk_bottle|neapolitan:\S+|create:\S+) -> \d+ minecraft:cake$
+look the remaining maker is the 7-slice reassembly; nothing else
+
+## SQ-VNG-01 | vinegar can recipes use the jar, not the merged-away bottle
+> zq uses vintagedelight:vinegar_jar
+> zq uses vintagedelight:vinegar_bottle
+> zq makes creativeengineering:canned_apple
+waitlog \[zq\] makes creativeengineering:canned_apple: 30
+expect \[zq\] uses vintagedelight:vinegar_bottle: 0 alone, 0 with other items
+expect \[zq\] (alone|shared) creativedelight:shapeless/canned_\S+_vinegar
+capture VNGID \[zq\] (creativedelight:shapeless/canned_apple_vinegar\S*) -> \d+ creativeengineering:canned_apple
+kjsreject \[NCH\].*vinegar
+look the jar's uses list the raw veggie, fruit, meat, fish and salad _vinegar can recipes
+
+## SQ-VNG-02 | vinegar jar returns the empty mason jar in a can craft
+> zsb remitem vintagedelight:vinegar_jar
+> zsb rem {VNGID}
+waitlog \[zsb\] rem slot 30
+expect \[zsb\] remitem vintagedelight:vinegar_jar => vintagedelight:empty_mason_jar
+expect \[zsb\] rem slot \d+: .*vintagedelight:vinegar_jar => vintagedelight:empty_mason_jar
+reject \[zsb\] (error|unknown|rem \S+: no such recipe)
+
+## SQ-CUP-02 | no cup items: 50 miners_delight items, every cup /give unknown, cactus soup kept
+> zsb ns miners_delight
+> give @p miners_delight:copper_cup
+> give @p miners_delight:water_cup
+> give @p miners_delight:milk_cup
+> give @p miners_delight:powder_snow_cup
+> give @p miners_delight:beef_stew_cup
+> give @p miners_delight:onion_soup_cup
+> give @p delightful:cactus_soup_cup
+> zq item delightful:cactus_soup
+waitlog \[zq\] item delightful:cactus_soup: 30
+expect \[zsb\] ns miners_delight: 50 items, cup ids \(0\)
+count Unknown item >= 7
+expect \[zq\] item delightful:cactus_soup: class (?!AirItem)
+
+## SQ-CUP-03 | Copper Pot: recipe keyed on the water bucket; soups served in bowls (x 110..122)
+> zq rdetail miners_delight:copper_pot
+> zsb potnbt miners_delight:cave_soup
+> zsb potnbt miners_delight:bat_soup
+> zsb potnbt farmersdelight:beef_stew
+> zsb potnbt delightful:cactus_soup
+waitlog \[zsb\] potnbt delightful:cactus_soup 30
+capture CP1 \[zsb\] potnbt miners_delight:cave_soup (\{.*\})$
+capture CT1 \[zsb\] potrecipe \S+ cook (\d+) -> \d+ miners_delight:cave_soup
+capture CP2 \[zsb\] potnbt miners_delight:bat_soup (\{.*\})$
+capture CT2 \[zsb\] potrecipe \S+ cook (\d+) -> \d+ miners_delight:bat_soup
+capture CP3 \[zsb\] potnbt farmersdelight:beef_stew (\{.*\})$
+capture CT3 \[zsb\] potrecipe \S+ cook (\d+) -> \d+ farmersdelight:beef_stew
+capture CP4 \[zsb\] potnbt delightful:cactus_soup (\{.*\})$
+capture CT4 \[zsb\] potrecipe \S+ cook (\d+) -> \d+ delightful:cactus_soup
+expect \[zq\] miners_delight:copper_pot \{
+> setblock 110 -60 500 minecraft:campfire[lit=true]
+> setblock 110 -59 500 miners_delight:copper_pot
+> data merge block 110 -59 500 {CP1}
+> setblock 114 -60 500 minecraft:campfire[lit=true]
+> setblock 114 -59 500 miners_delight:copper_pot
+> data merge block 114 -59 500 {CP2}
+> setblock 118 -60 500 minecraft:campfire[lit=true]
+> setblock 118 -59 500 miners_delight:copper_pot
+> data merge block 118 -59 500 {CP3}
+> setblock 122 -60 500 minecraft:campfire[lit=true]
+> setblock 122 -59 500 miners_delight:copper_pot
+> data merge block 122 -59 500 {CP4}
+shell m=0; for t in {CT1} {CT2} {CT3} {CT4}; do [ "$t" -gt "$m" ] && m=$t; done; sleep $(( m / 20 + 15 )); echo "waited $(( m / 20 + 15 )) s"
+> data get block 110 -59 500
+> data get block 114 -59 500
+> data get block 118 -59 500
+> data get block 122 -59 500
+expect 110, -59, 500 has the following block data: .*miners_delight:cave_soup
+expect 114, -59, 500 has the following block data: .*miners_delight:bat_soup
+expect 118, -59, 500 has the following block data: .*farmersdelight:beef_stew
+expect 122, -59, 500 has the following block data: .*delightful:cactus_soup
+reject has the following block data: .*_cup"
+reject (Unknown (item|block|entity)|Unknown or incomplete command|Incorrect argument for command|That position is not loaded|\[(zq|zsb|zlbs)\] (error|unknown))
+look the copper_pot rdetail line: the centre ingredient is only minecraft:water_bucket; each pot: the soup served (output slot) in its bowl with the recipe's count, container minecraft:bowl (potrecipe lines)
+
+## SQ-JSL-02 | Cooking Pot with an Empty Mason Jar: orange jam from slices, then lemon jam (x 130, 134)
+> zsb potnbt fruitsdelight:orange_jelly
+> zsb potnbt fruitsdelight:lemon_jelly
+waitlog \[zsb\] potnbt fruitsdelight:lemon_jelly 30
+capture JT1 \[zsb\] potrecipe \S+ cook (\d+) -> \d+ fruitsdelight:orange_jelly
+capture JT2 \[zsb\] potrecipe \S+ cook (\d+) -> \d+ fruitsdelight:lemon_jelly
+> setblock 130 -60 500 minecraft:campfire[lit=true]
+> setblock 130 -59 500 farmersdelight:cooking_pot
+> data merge block 130 -59 500 {Inventory:{Size:9,Items:[{Slot:0b,id:"fruitsdelight:orange_slice",Count:1b},{Slot:1b,id:"fruitsdelight:orange_slice",Count:1b},{Slot:2b,id:"minecraft:sugar",Count:1b},{Slot:3b,id:"fruitsdelight:lemon_slice",Count:1b},{Slot:7b,id:"vintagedelight:empty_mason_jar",Count:1b}]}}
+> setblock 134 -60 500 minecraft:campfire[lit=true]
+> setblock 134 -59 500 farmersdelight:cooking_pot
+> data merge block 134 -59 500 {Inventory:{Size:9,Items:[{Slot:0b,id:"fruitsdelight:lemon_slice",Count:1b},{Slot:1b,id:"fruitsdelight:lemon_slice",Count:1b},{Slot:2b,id:"fruitsdelight:lemon_slice",Count:1b},{Slot:3b,id:"minecraft:sugar",Count:1b},{Slot:7b,id:"vintagedelight:empty_mason_jar",Count:1b}]}}
+shell m={JT1}; [ {JT2} -gt $m ] && m={JT2}; sleep $(( m / 20 + 15 )); echo "waited $(( m / 20 + 15 )) s"
+> data get block 130 -59 500 Inventory
+> data get block 134 -59 500 Inventory
+expect 130, -59, 500 has the following block data: .*Slot: 8b, id: "fruitsdelight:orange_jelly"
+expect 134, -59, 500 has the following block data: .*Slot: 8b, id: "fruitsdelight:lemon_jelly"
+reject (Unknown (item|block|entity)|Unknown or incomplete command|Incorrect argument for command|That position is not loaded|\[(zq|zsb|zlbs)\] (error|unknown))
+look slot 8 holds the jam (Orange Jam / Lemon Jam = orange_jelly / lemon_jelly) and the mason jar was used; on a FAIL check whether slot 6 holds the meal (no container taken) or the inputs stayed (no recipe matched)
+
+## SQ-CN-04b | corn knife harvest by a player: corncobs from age 7 with a knife only (x 100..106)
+> setblock 100 -61 500 minecraft:farmland
+> setblock 100 -60 500 corn_delight:corn_crop[age=7,upper=false]
+> setblock 100 -59 500 corn_delight:corn_crop[age=7,upper=true]
+> setblock 104 -61 500 minecraft:farmland
+> setblock 104 -60 500 corn_delight:corn_crop[age=3,upper=false]
+> pbot spawn cn4 102.5 -60 502.5 minecraft:overworld survival
+> pbot hold cn4 farmersdelight:iron_knife
+> kill @e[type=minecraft:item,x=98,y=-62,z=504,dx=6,dy=8,dz=5]
+# loot spawn does not break the block, so the age 7 crop stays set between rolls; drops land at z 506, away from the bot
+pace 0.5
+repeat 40
+> execute as cn4 run loot spawn 100.5 -59 506.5 mine 100 -60 500 mainhand
+end
+pace 2
+sleep 3
+> zsb items 98 -62 504 104 -54 509
+> kill @e[type=minecraft:item,x=98,y=-62,z=504,dx=6,dy=8,dz=5]
+> pbot hold cn4 minecraft:air
+pace 0.5
+repeat 20
+> execute as cn4 run loot spawn 100.5 -59 506.5 mine 100 -60 500 mainhand
+end
+pace 2
+sleep 3
+> zsb items 98 -62 504 104 -54 509
+> kill @e[type=minecraft:item,x=98,y=-62,z=504,dx=6,dy=8,dz=5]
+> pbot hold cn4 farmersdelight:iron_knife
+pace 0.5
+repeat 20
+> execute as cn4 run loot spawn 100.5 -59 506.5 mine 104 -60 500 mainhand
+end
+pace 2
+sleep 3
+> zsb items 98 -62 504 104 -54 509
+> kill @e[type=minecraft:item,x=98,y=-62,z=504,dx=6,dy=8,dz=5]
+> pbot remove cn4
+count \[zsb\] items\b == 3
+expect \[zsb\] items .*creativeengineering:corncob=([4-9]|1[0-8])\b
+count \[zsb\] items .*creativeengineering:corncob= == 1
+reject (Unknown (item|block|entity)|Unknown or incomplete command|Incorrect argument for command|That position is not loaded|No player was found|no such bot|no such item|\[(zq|zsb|zlbs)\] (error|unknown))
+look the three [zsb] items lines in order: knife on age 7 (about 10 corncobs of 40), empty hand (0), knife on age 3 (0); if the first is 0 too, LootJS matchMainHand sees no player (the row's fail note: check by hand in the client)
+
+## SQ-SGF-01 | Spout Gun water shots wet farmland, wheat kept (x 148..152)
+> fill 150 -61 499 152 -61 501 minecraft:farmland[moisture=0]
+> setblock 151 -60 500 minecraft:wheat[age=2]
+> summon create_things_and_misc:projectile_spout_gun_water 150.5 -57 499.5 {Motion:[0.0d,-1.5d,0.0d]}
+> summon create_things_and_misc:projectile_spout_gun_water 151.5 -57 500.5 {Motion:[0.0d,-1.5d,0.0d]}
+sleep 2
+> execute if block 150 -61 499 minecraft:farmland[moisture=7]
+> execute if block 151 -61 500 minecraft:farmland[moisture=7]
+> execute if block 151 -60 500 minecraft:wheat
+count Test passed == 3
+bootreject (?i)SpoutGunFarmland.*(error|exception)
+reject (Unknown (item|block|entity)|Unknown or incomplete command|Incorrect argument for command|That position is not loaded)
+look a summoned shot with no owner may not move (row fail note): then fire the water Spout Gun from a bot by hand
+
+## SQ-SGF-02 | lava and honey Spout Gun shots never wet farmland (x 156..160)
+> fill 156 -61 499 160 -61 501 minecraft:farmland[moisture=0]
+> summon create_things_and_misc:projectile_spout_gun_lava 157.5 -57 499.5 {Motion:[0.0d,-1.5d,0.0d]}
+> summon create_things_and_misc:projectile_spout_gun_honey 159.5 -57 500.5 {Motion:[0.0d,-1.5d,0.0d]}
+sleep 2
+> execute unless block 157 -61 499 minecraft:farmland[moisture=7]
+> execute unless block 159 -61 500 minecraft:farmland[moisture=7]
+count Test passed == 2
+reject (Unknown (item|block|entity)|Unknown or incomplete command|Incorrect argument for command|That position is not loaded)
+look valid only if SQ-SGF-01 wet its farmland (same summon path)
+
+## SQ-STD-03 | Storage Delight fuel: bamboo drawer and oak cabinet burn, warped cabinet does not (x 166..170)
+> setblock 166 -60 500 minecraft:furnace
+> setblock 168 -60 500 minecraft:furnace
+> setblock 170 -60 500 minecraft:furnace
+> data merge block 166 -60 500 {Items:[{Slot:0b,id:"minecraft:raw_iron",Count:1b},{Slot:1b,id:"storagedelight:bamboo_drawer",Count:1b}]}
+> data merge block 168 -60 500 {Items:[{Slot:0b,id:"minecraft:raw_iron",Count:1b},{Slot:1b,id:"storagedelight:oak_cabinet_with_polished_tuff_countertop",Count:1b}]}
+> data merge block 170 -60 500 {Items:[{Slot:0b,id:"minecraft:raw_iron",Count:1b},{Slot:1b,id:"storagedelight:warped_cabinet_with_stone_bricks_countertop",Count:1b}]}
+sleep 2
+> data get block 166 -60 500 BurnTime
+> data get block 168 -60 500 BurnTime
+> data get block 170 -60 500 BurnTime
+> data get block 166 -60 500 Items
+> data get block 170 -60 500 Items
+expect 166, -60, 500 has the following block data: (2[5-9]\d|300)s?$
+expect 168, -60, 500 has the following block data: (2[5-9]\d|300)s?$
+expect 170, -60, 500 has the following block data: 0s?$
+expect 170, -60, 500 has the following block data: \[.*Slot: 1b, id: "storagedelight:warped_cabinet_with_stone_bricks_countertop"
+reject 166, -60, 500 has the following block data: \[.*Slot: 1b
+reject (Unknown (item|block|entity)|Unknown or incomplete command|Incorrect argument for command|That position is not loaded)
+
+## SQ-WCT-06 | netherite and dragon watering cans survive lava, golden burns (x 176)
+> setblock 176 -61 500 minecraft:lava
+> summon item 176.5 -60 500.5 {Item:{id:"hearthandharvest:netherite_watering_can",Count:1b},Tags:["wct6n"]}
+> summon item 176.5 -60 500.5 {Item:{id:"hearthandharvest:dragon_watering_can",Count:1b},Tags:["wct6d"]}
+> summon item 176.5 -60 500.5 {Item:{id:"hearthandharvest:golden_watering_can",Count:1b},Tags:["wct6g"]}
+sleep 5
+> execute if entity @e[tag=wct6n]
+> execute if entity @e[tag=wct6d]
+> execute if entity @e[tag=wct6g]
+count Test passed == 2
+expect Test failed
+> kill @e[tag=wct6n]
+> kill @e[tag=wct6d]
+> setblock 176 -61 500 minecraft:grass_block
+reject (Unknown (item|block|entity)|Unknown or incomplete command|Incorrect argument for command|That position is not loaded)
+look the failed test is the golden can's (third execute)
+
+## SQ-WCT-07 | watering can skips tree growers and fungi, keeps its levels; area use leaves a sapling alone (x 184..197)
+> setblock 184 -61 500 minecraft:dirt
+> setblock 184 -60 500 minecraft:oak_sapling
+> setblock 186 -61 500 minecraft:dirt
+> setblock 186 -60 500 minecraft:mangrove_propagule
+> setblock 188 -61 500 minecraft:dirt
+> setblock 188 -60 500 minecraft:azalea
+> setblock 190 -61 500 minecraft:crimson_nylium
+> setblock 190 -60 500 minecraft:crimson_fungus
+> setblock 192 -61 500 minecraft:mycelium
+> setblock 192 -60 500 minecraft:red_mushroom
+> setblock 196 -61 500 minecraft:farmland[moisture=0]
+> setblock 196 -60 500 minecraft:wheat[age=0]
+> setblock 197 -61 500 minecraft:dirt
+> setblock 197 -60 500 minecraft:oak_sapling
+> pbot spawn wct7 190.5 -60 503.5 minecraft:overworld survival
+> item replace entity wct7 weapon.mainhand with hearthandharvest:golden_watering_can{WaterLevel:16,BonemealLevel:16,FertilizerItem:"minecraft:bone_meal"}
+> pbot use wct7 184 -60 500 up
+> pbot use wct7 186 -60 500 up
+> pbot use wct7 188 -60 500 up
+> pbot use wct7 190 -60 500 up
+> pbot use wct7 192 -60 500 up
+> data get entity wct7 SelectedItem
+> execute if block 184 -60 500 minecraft:oak_sapling[stage=0]
+> execute if block 186 -60 500 minecraft:mangrove_propagule[stage=0]
+> execute if block 188 -60 500 minecraft:azalea
+> execute if block 190 -60 500 minecraft:crimson_fungus
+> execute if block 192 -60 500 minecraft:red_mushroom
+> pbot use wct7 196 -60 500 up
+sleep 1
+> execute unless block 196 -60 500 minecraft:wheat[age=0]
+> execute if block 197 -60 500 minecraft:oak_sapling[stage=0]
+> data get entity wct7 SelectedItem
+> pbot remove wct7
+count Test passed == 7
+expect wct7 has the following entity data: (?=.*WaterLevel: 16\b)(?=.*BonemealLevel: 16\b)
+reject (Unknown (item|block|entity)|Unknown or incomplete command|Incorrect argument for command|That position is not loaded|No entity was found|no such bot)
+look the first SelectedItem line (after the five clicks) keeps 16 / 16; the wheat grew (unless ... age=0 passed) and the sapling beside it stayed stage 0
+
+## SQ-WCT-08 | watering can puts out a campfire (water 5 -> 4); an empty can does not (x 204, 208)
+> setblock 204 -60 500 minecraft:campfire[lit=true]
+> setblock 208 -60 500 minecraft:campfire[lit=true]
+> pbot spawn wct8 204.5 -60 502.5 minecraft:overworld survival
+> tp wct8 204.5 -60 502.5 facing 204.5 -59.8 500.5
+> item replace entity wct8 weapon.mainhand with hearthandharvest:golden_watering_can{WaterLevel:5}
+> zq useitem wct8
+> execute if block 204 -60 500 minecraft:campfire[lit=false]
+> data get entity wct8 SelectedItem
+> tp wct8 208.5 -60 502.5 facing 208.5 -59.8 500.5
+> item replace entity wct8 weapon.mainhand with hearthandharvest:golden_watering_can{WaterLevel:0}
+> zq useitem wct8
+> execute if block 208 -60 500 minecraft:campfire[lit=true]
+> pbot remove wct8
+count Test passed == 2
+expect wct8 has the following entity data: .*WaterLevel: 4\b
+reject (Unknown (item|block|entity)|Unknown or incomplete command|Incorrect argument for command|That position is not loaded|No entity was found|no such bot|\[zq\] no player)
+look the two "[zq] useitem wct8" results: the first SUCCESS / CONSUME, the second PASS
+
+## SQ-VTD9-01 | Magic Peanut trees grow without the golden egg (lane x 0..200 z 1000..1060)
+> forceload add 0 1000 200 1060
+sleep 30
+> pbot spawn vtd9 100.5 -60 1020.5 minecraft:overworld survival
+> place feature vintagedelight:magic_vine_tree 0 -60 1000
+> place feature vintagedelight:magic_vine_tree 20 -60 1000
+> place feature vintagedelight:magic_vine_tree 40 -60 1000
+> place feature vintagedelight:magic_vine_tree 60 -60 1000
+> place feature vintagedelight:magic_vine_tree 80 -60 1000
+> place feature vintagedelight:magic_vine_tree 100 -60 1000
+> place feature vintagedelight:magic_vine_tree 120 -60 1000
+> place feature vintagedelight:magic_vine_tree 140 -60 1000
+> place feature vintagedelight:magic_vine_tree 160 -60 1000
+> place feature vintagedelight:magic_vine_tree 180 -60 1000
+> setblock 0 -60 1040 vintagedelight:magic_peanut
+> setblock 40 -60 1040 vintagedelight:magic_peanut
+> setblock 80 -60 1040 vintagedelight:magic_peanut
+> setblock 120 -60 1040 vintagedelight:magic_peanut
+> setblock 160 -60 1040 vintagedelight:magic_peanut
+> gamerule randomTickSpeed 1000
+sleep 60
+> gamerule randomTickSpeed 3
+> pbot remove vtd9
+> fill -3 -60 997 3 -30 1003 minecraft:air replace vintagedelight:golden_egg
+> fill 17 -60 997 23 -30 1003 minecraft:air replace vintagedelight:golden_egg
+> fill 37 -60 997 43 -30 1003 minecraft:air replace vintagedelight:golden_egg
+> fill 57 -60 997 63 -30 1003 minecraft:air replace vintagedelight:golden_egg
+> fill 77 -60 997 83 -30 1003 minecraft:air replace vintagedelight:golden_egg
+> fill 97 -60 997 103 -30 1003 minecraft:air replace vintagedelight:golden_egg
+> fill 117 -60 997 123 -30 1003 minecraft:air replace vintagedelight:golden_egg
+> fill 137 -60 997 143 -30 1003 minecraft:air replace vintagedelight:golden_egg
+> fill 157 -60 997 163 -30 1003 minecraft:air replace vintagedelight:golden_egg
+> fill 177 -60 997 183 -30 1003 minecraft:air replace vintagedelight:golden_egg
+> fill -3 -60 1037 3 -30 1043 minecraft:air replace vintagedelight:golden_egg
+> fill 37 -60 1037 43 -30 1043 minecraft:air replace vintagedelight:golden_egg
+> fill 77 -60 1037 83 -30 1043 minecraft:air replace vintagedelight:golden_egg
+> fill 117 -60 1037 123 -30 1043 minecraft:air replace vintagedelight:golden_egg
+> fill 157 -60 1037 163 -30 1043 minecraft:air replace vintagedelight:golden_egg
+> fill -3 -60 997 3 -30 1003 minecraft:air replace vintagedelight:magic_vine
+> fill 17 -60 997 23 -30 1003 minecraft:air replace vintagedelight:magic_vine
+> fill 37 -60 997 43 -30 1003 minecraft:air replace vintagedelight:magic_vine
+> fill 57 -60 997 63 -30 1003 minecraft:air replace vintagedelight:magic_vine
+> fill 77 -60 997 83 -30 1003 minecraft:air replace vintagedelight:magic_vine
+> fill 97 -60 997 103 -30 1003 minecraft:air replace vintagedelight:magic_vine
+> fill 117 -60 997 123 -30 1003 minecraft:air replace vintagedelight:magic_vine
+> fill 137 -60 997 143 -30 1003 minecraft:air replace vintagedelight:magic_vine
+> fill 157 -60 997 163 -30 1003 minecraft:air replace vintagedelight:magic_vine
+> fill 177 -60 997 183 -30 1003 minecraft:air replace vintagedelight:magic_vine
+> fill -3 -60 1037 3 -30 1043 minecraft:air replace vintagedelight:magic_vine
+> fill 37 -60 1037 43 -30 1043 minecraft:air replace vintagedelight:magic_vine
+> fill 77 -60 1037 83 -30 1043 minecraft:air replace vintagedelight:magic_vine
+> fill 117 -60 1037 123 -30 1043 minecraft:air replace vintagedelight:magic_vine
+> fill 157 -60 1037 163 -30 1043 minecraft:air replace vintagedelight:magic_vine
+count No blocks were filled == 15
+count Successfully filled \d+ block == 15
+reject (Unknown (item|block|block type|entity)|Unknown or incomplete command|Incorrect argument for command|That position is not loaded|no such bot|feature .*(not found|failed)|Failed to place)
+look the 15 egg fills come first (all "No blocks were filled" = no golden egg); the 15 vine fills each remove blocks; a sapling that did not grow shows as a "No blocks" among the vine fills (count 16+)
+
+## SQ-CUP-04 | milk tags without the cup; a Supplementaries jar takes Cave Soup and gives the bowl back (x 140; /reload first)
+# /reload fills Moonlight's soft-fluid item map (empty on a dedicated server until a player joins or a reload);
+# it truncates logs/kubejs/server.log, so this row is last
+> reload
+waitlog Loaded \d+ pocket computer upgrades 300
+sleep 10
+> zq itemtag forge:milk
+> zq itemtag forge:milk/milk
+waitlog \[zq\] itemtag forge:milk/milk 30
+reject \[zq\] itemtag forge:milk(/milk)? \(\d+\): .*miners_delight:milk_cup
+reject (?i)(failed to load|couldn't load) tag.*milk
+> setblock 140 -60 500 supplementaries:jar
+> pbot spawn cup4 140.5 -60 502.5 minecraft:overworld survival
+> pbot hold cup4 miners_delight:cave_soup
+> pbot use cup4 140 -60 500 up
+> data get block 140 -60 500
+> data get entity cup4 SelectedItem
+> data get entity cup4 Inventory
+> pbot remove cup4
+expect 140, -60, 500 has the following block data: .*cave_soup
+expect cup4 has the following entity data: .*minecraft:bowl
+reject (Unknown (item|block|entity)|Unknown or incomplete command|Incorrect argument for command|That position is not loaded|No entity was found|no such bot|no such item)
+look the "pbot use" reply is SUCCESS / CONSUME; the jar's fluid is the cave soup; the bot holds a bowl

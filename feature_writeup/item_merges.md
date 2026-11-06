@@ -1,9 +1,11 @@
 # Item merges (total replacements)
 
-Status: BUILT 2026-10-22, scratch server PASSED 2026-10-22 (section 4.1), not tested in game, not deployed. Cantaloupe (2.10) built 2026-10-28, scratch test queued (SQ-CM). KubeJS,
+Status: BUILT 2026-10-22, scratch server PASSED 2026-10-22 (section 4.1), shipped 1.1.01, not tested in game. Cantaloupe (2.10) built 2026-10-28, scratch PASSED (SQ-CM), shipped 1.1.04 / 1.1.05. Food merges 2.13 to 2.15 (2026-11-01 / 11-02): scratch PASSED r1102b, unreleased (deep scan 2026-11-02). KubeJS,
 plus patcherMod for 2.6 (fluid tooltips) and 2.7 (worldgen): a full restart is needed.
 Still in game: MG-01, MG-02, MG-04, MG-05, MG-07, MG-13 (2.1 to 2.5), MG-16, MG-17, MG-20 (JEI tooltips), the MG-21
 names, and the machine runs of MG-18 / MG-19. Coffee (2.8, built, scratch server PASSED 2026-10-22 for the recipe and effect parts: SQ-CO-01, SQ-CO-02, `tools/food_drinks_probe/food_drinks_probe.js` `/fdtest coffee`, after two fixes in 2.8); in game MG-23 (JEI), MG-24 (drinking), MG-25 (inventory swap, real player only), MG-26 (JEI), MG-27 (JEI), MG-28 (an old bush).
+
+Swap lists (section 6, TODO `creativedelight/swappers #2`, `#3`): CD merges moved into `swaps/merges_*.json` and the Java world half built 2026-11-02; patcherMod 1.1.08 installed 2026-11-02 23:20 and the CD jar 2026-11-02 23:16 (again 2026-11-03 00:08), not booted (SQ-SWP-01 to -08, queue section SQ-CDJ6).
 
 One item is purged and the survivor takes over everything it did: recipes, tags, loot, and any copy that still
 reaches a player. Open merges are in [todo/TODO.md](todo/TODO.md) family `merges` (plans: section 5), plus `food/drinks #3`.
@@ -12,17 +14,18 @@ reaches a player. Open merges are in [todo/TODO.md](todo/TODO.md) family `merges
 
 | Piece | File | What it does |
 |---|---|---|
-| Merge lists | pack: `kubejs/startup_scripts/_lib/item_merges.js`, `_lib/removed_woods.js`; Creative Delight: `development/creativeDelight/src/main/resources/kubejs_startup/<mod>/item_merges.js` | `global.addItemMerges(group, pairs)`: `[purged, survivor]` pairs (item dict keys) into one group. Adds each purged id to `global.removedItems`; `global.itemMerges` is every pair (probes, tools) |
+| Merge lists | pack: `kubejs/startup_scripts/_lib/item_merges.js`, `_lib/removed_woods.js`; Creative Delight: its swap lists `development/creativeDelight/src/main/resources/data/creativedelight/swaps/merges_*.json` (section 6; were `kubejs_startup/<mod>/item_merges.js` until 2026-11-02) | `global.addItemMerges(group, pairs)`: `[purged, survivor]` pairs (pack: item dict keys; CD: ids from the lists, fed in by CD's `creativedelight/swap_merges.js`) into one group. Adds each purged id to `global.removedItems`; `global.itemMerges` is every pair (probes, tools) |
 | Hide and strip | `removed_items.js` consumers | JEI hides the purged item (`client_scripts/jeichanges.js`); its item tags are stripped and `recipe_scan.js` (`/recipescan`, off at load by default) logs any recipe that still uses or makes it (`[jeiRemove] <id> -> n recipe(s)`) |
-| Recipes | pack: `kubejs/server_scripts/other/item_merges.js` (priority -100); CD: `kubejs/data/creative_delight/kubejs/_core/item_merges.js` (priority -100, last in the CD tree) | `global.itemMergeRun.recipes(e, group)` -> `NCH.replaceItems`: every input and output of every recipe, data and script-added. Per-merge removals of duplicates: the pack file (general), CD `<mod>/item_merges.js` (food) |
+| Recipes | pack: `kubejs/server_scripts/other/item_merges.js` (priority -100); CD: `kubejs/data/creativedelight/kubejs/_core/item_merges.js` (priority -100, last in the CD tree) | `global.itemMergeRun.recipes(e, group)` -> `NCH.replaceItems`: every input and output of every recipe, data and script-added. Per-merge removals of duplicates: the pack file (general), CD `<mod>/item_merges.js` (food) |
 | Tags | same files as the per-merge removals | The survivor joins the tags recipes or mobs read |
 | Loot | the two run files, LootJS | Every table: purged entry -> survivor, same count (`CE/item_merges/<group>`) |
 | Inventory | the two run files, `PlayerEvents.inventoryChanged` | A purged stack in a player inventory becomes the survivor, same count. Catches mod code (Neapolitan's milk cauldron), old chests and old worlds |
+| World (CD group) | Common `swap/ItemMerges` (patcherMod) | Stacks already in the world: player inventories and ender chests, containers, dropped items; NBT and count kept (section 6) |
 
-To add a merge: add the pair with `global.addItemMerges` in its group's list (food: the purged item's mod folder in
-CD's startup tree), then remove any duplicate recipes the swap leaves and add tags in the matching server file, and add a
-section and tests here. `tools/food_dict.py` and `tools/jei_world/tab_drops.py` read `[i.a, i.b]` pairs from the pack's
-`_lib` files and every CD `*/item_merges.js`.
+To add a merge: pack: add the pair with `global.addItemMerges` in the pack's list; food: add `"survivor": ["purged"]` to
+the CD swap list `merges_<purged mod>.json` (section 6; its `requires` names the mods both items need). Then remove any duplicate recipes the swap leaves and add tags in the matching server file, and add a
+section and tests here. `tools/food_dict.py`, `tools/food_families.py` and `tools/jei_world/tab_drops.py` read `[i.a, i.b]` pairs from the pack's
+`_lib` files and the ids from CD's `swaps/merges_*.json`.
 
 ### 1.1 Groups: who runs a merge (2026-10-27, perf.md 11.2 #4, TODO `server #20`)
 
@@ -32,7 +35,7 @@ script. The recipe swap tool runs twice per recipe event (once per group); no pa
 | Group | Pairs | Run from | Sees |
 |---|---|---|---|
 | `pack` | general: rocky dirt (2.5), the removed woods ([recipes_wood.md](recipes_wood.md) 2.6), 93 pairs. Later split out by mod | `server_scripts/other/item_merges.js`, priority -100 | data recipes, and recipes added by the pack's scripts before it. A CD script that adds a recipe naming a pack-purged id is not swapped: name the survivor there |
-| `creative_delight` | food: banana, milk bottle, chocolate cake, diced potatoes, the 7 coffee pairs, pickled pickles, the 2 salt pairs, 14 pairs | CD `_core/item_merges.js`, priority -100 (CD loads after every pack script) | data recipes and every added recipe (pack and CD) |
+| `creativedelight` | food: banana, milk bottle, chocolate cake, diced potatoes, the 7 coffee pairs, pickled pickles, the 2 salt pairs, 14 pairs | CD `_core/item_merges.js`, priority -100 (CD loads after every pack script) | data recipes and every added recipe (pack and CD) |
 
 - `global.addItemMerges` refuses a purged id already in any group (logs `already merged`), and warns when a pair
   chains with another (a survivor that is purged elsewhere).
@@ -44,7 +47,7 @@ script. The recipe swap tool runs twice per recipe event (once per group); no pa
   two Rhino walks of the added recipes per pair, and Creative Delight repeated the whole pass for every pair. No
   fallback: the pack scripts and patcherMod ship together, so the run needs a patcherMod with `replaceItems`.
 - Recipe ids that moved with the food work: the chocolate cake cutting recipe and Gambler's Tea are now
-  `creative_delight:` ids (were `creativeengineering:`).
+  `creativedelight:` ids (were `creativeengineering:`).
 
 ## 2. Merges
 
@@ -123,7 +126,7 @@ drinks go, Rustic's drinks give Caffeinated instead of Speed and Haste, every ot
 
 - Recipes after the swap: FR coffee cake (grid, CCK mixing and dough craft, pack baking.js) and blazing chili take
   roasted beans; gambler's tea (kettle) and Canned Coffee Berries take raw beans.
-- Removed in `kubejs/data/creative_delight/kubejs/farmersrespite/item_merges.js` (in the pack's
+- Removed in `kubejs/data/creativedelight/kubejs/rusticdelight/coffee_merge.js` (in the pack's
   `server_scripts/other/item_merges.js` until 2026-10-27; the swap would leave them as loops, duplicates or a kettle
   route to Rustic's coffee): `farmersrespite:brewing/{coffee,long_coffee,strong_coffee}`,
   `create_central_kitchen:{filling,emptying}/{coffee,long_coffee,strong_coffee}`, `create_central_kitchen:mixing/coffee`,
@@ -141,7 +144,7 @@ drinks go, Rustic's drinks give Caffeinated instead of Speed and Haste, every ot
   schema, so gambler's tea is removed and rebuilt with `R.frBrewing` on Rustic's beans. `mortar.js` skips catalogue
   entries naming a purged item (`[mortar] 6 of 7`).
 
-### 2.9 Salt (built 2026-10-26, scratch server PASSED r1031 2026-10-31 after the 2026-10-28 fix; TODO `food/seasoning #6`)
+### 2.9 Salt (VERIFIED COMPLETE 2026-11-02: code in CD `vintage_items.js` and `vintagedelight/recipes.js`, scratch r1031 pass; only play is open; built 2026-10-26, scratch server PASSED r1031 2026-10-31 after the 2026-10-28 fix; TODO `food/seasoning #6`)
 
 Scratch run 2026-10-28 ([run log](testing/scratch_queue_run_2026-10-28.md)): SQ-SALT-01 FAILED on two leftovers, fixed
 2026-10-28 in CD `vintagedelight/recipes.js` (rebuilt, CD jar installed, retest SQ-SALT-01): the 3 froglight jar recipes
@@ -177,8 +180,9 @@ bricks and the 17 lamps stay.
   (`src/lamp/salt_lamp_side_{salt,wood}.png`). Sources copied to `textureswapper/salt/src/`. The new Salt Block
   texture also goes over Vintage's `block/salt.png` (`kubejs/assets/vintagedelight/`), so the Salt Layer matches it.
 - Seasoning JEI page icon: salt dust (patcherMod `SeasoningJEI`, falls back to The Salt's salt).
-- Block behaviour (owner, 2026-10-26; patcherMod `block/SaltBlockTicks.java` + mixins `SaltBlockRandomTickMixin`,
-  `SaltLayerRandomTickMixin`, `SaltRockNoDissolveMixin`). All through The Salt's own `Melting` / `Dissolving`, so
+- Block behaviour (owner, 2026-10-26; Creative Delight `salt/SaltBlockTicks.java` + mixins `SaltBlockRandomTickMixin`,
+  `SaltLayerRandomTickMixin`; the rock salt exemption was `SaltRockNoDissolveMixin`, since 2026-11-02 an edit in the
+  Salt member's own `Dissolving`, [salt.md](salt.md)). All through The Salt's own `Melting` / `Dissolving`, so
   `salt-common.toml` chances apply:
   - Every salt block melts touching ice and snow (`#salt:meltables`, 40 % per random tick, one block per tick). The
     Salt's blocks did already; Vintage's whole salt family now does too: Salt Layer, Evaporator, smooth salt, salt
@@ -206,7 +210,7 @@ bricks and the 17 lamps stay.
     A big salt build in a snowy biome clears its touching snow once, then has nothing left to melt.
   - Rain does not dissolve salt (config off), so an outdoor Evaporator keeps its layers in rain.
 
-### 2.10 Cantaloupe (built 2026-10-28, scratch server PASSED 2026-10-28: SQ-CM-01 to -03, -09; shipped to the client in 1.1.04, server still 1.1.03; MG-39 to MG-44 in game; TODO `merges/fruit #1`)
+### 2.10 Cantaloupe (built 2026-10-28, scratch server PASSED 2026-10-28: SQ-CM-01 to -03, -09; shipped to the client in 1.1.04, server in 1.1.05; MG-39 to MG-44 in game; TODO `merges/fruit #1`)
 
 Owner plan 5.4 plus answers of 2026-10-28. Fruits Delight's hamimelon line is the **Cantaloupe** (melon block on a stem,
 seeds, jam, jello, juice, shaved ice, wild patch); Delightful's cantaloupe (the repack's sand crop, a small
@@ -233,7 +237,7 @@ Pairs: Creative Delight `kubejs_startup/fruitsdelight/item_merges.js`; server ha
 - Compost: the hami slice row removed; food_dict: `fruit_slice_hamimelon`, `can_hamimelon` removed.
 - Worldgen (`_worldgen/wild_crops.json`): the hamimelon rule (warm desert, warm badlands; sand, red sand, terracotta,
   grass-like soils) is labelled Cantaloupe. The Mini Cantaloupe rule moved there too (owner: same spawn locations):
-  new pack feature `creative_delight:wild/mini_cantaloupe`, a copy of `wild/hamimelon` placing `delightful:cantaloupe`.
+  new pack feature `creativedelight:wild/mini_cantaloupe`, a copy of `wild/hamimelon` placing `delightful:cantaloupe`.
   Was warm dry grassy with Delightful's `patch_cantaloupe`.
 - Open: the Mini Cantaloupe Plant still needs sand next to water to be planted (Delightful's rule); the wild patch
   places the fruit block, not the plant. `crops_by_biome.md` needs `python3 tools/gen_crop_worldgen_table.py`.
@@ -255,6 +259,132 @@ their apple trees; Vinery's grow in plains, sunflower plains, meadow and 9 Terra
 stay and keep fruiting; their leaves are typed `autumn_fruit` like Vinery's. The apple itself (`minecraft:apple`) is
 unchanged and its tooltip shows the Vinery apple tree's seasons. Apple jelly, jello and crates stay (made from apples).
 The Botany Pots apple recipe goes through the recipe swap onto the Vinery sapling.
+
+### 2.12 Ancient fish (built 2026-11-01, not run; SQ-CAT-02, SQ-CAT-04; [cozy_cats.md](cozy_cats.md) 10.2)
+
+Owner 2026-11-01: Cozy's Improved Cats' ancient fish go; cats tame with vanilla cod and salmon.
+
+| Purged | Survivor | Why |
+|---|---|---|
+| `cozys-improved-cats:ancient_cod` | `minecraft:cod` | taming fish is vanilla cod |
+| `cozys-improved-cats:ancient_salmon` | `minecraft:salmon` | taming fish is vanilla salmon |
+| `cozys-improved-cats:ancient_cooked_cod` | `minecraft:cooked_cod` | same food |
+| `cozys-improved-cats:ancient_cooked_salmon` | `minecraft:cooked_salmon` | same food |
+
+Pairs: Creative Delight `kubejs_startup/cozys_improved_cats/item_merges.js`; the server half
+(`data/creativedelight/kubejs/cozys_improved_cats/item_merges.js`) removes the 8 smelting / blasting recipes, which
+the swap would turn into copies of vanilla's. The Training String recipe goes through the swap (cod + salmon +
+string). Sources are off at the mod too: fishing swap and mob drops by config, fisherman trades by Creative Compat
+(`cats.CozyCats.onTrades`). The cooked fish's random effect on eating is lost with them.
+
+### 2.13 Fish and chips (built 2026-11-01, scratch PASSED r1102b: SQ-MG-21, SQ-VDF-07; not played; TODO `merges/dishes #1`, Veggies Delight M1)
+
+Owner 2026-11-01: Veggies Delight's Fish and Chips stays, PneumaticCraft's goes.
+
+| Purged | Survivor | Why |
+|---|---|---|
+| `pneumaticcraft:cod_n_chips` | `veggiesdelight:fish_and_chips` | same dish; both were shown as Fish and Chips |
+
+Pair: Creative Delight `kubejs_startup/pneumaticcraft/item_merges.js`. Server half in
+`data/creativedelight/kubejs/pneumaticcraft/recipes.js`: one frying route (Cooking Pot, cooking oil + any raw fish + 2
+sliced potatoes, in a bowl; was on a paper plate); the grid route (Fries + cooked fish + bowl) left with the Fries. Veggies Delight's two pot recipes (raw fish, potato, egg; its More Delight diced-potato version) are removed as
+duplicates. The survivor's food is Veggies Delight's (10, 12 saturation points, returns the bowl), not PneumaticCraft's
+(12, 24, no container). The "chips are fries" tooltip moved to the survivor. Fries (`pneumaticcraft:chips`) are
+removed outright (owner 2026-11-01, not a merge: no survivor): CD startup `pneumaticcraft/pneumatic_items.js`
+(removedItems), the pack's frying recipe gone, Canned Chips dropped from `gen_can_types.py`; `dishes/meals #34` closed.
+
+Tests: SQ-MG-21, SQ-VDF-07 (scratch); MG-48 (in game: JEI shows one Fish and Chips with the frying route, an old Cod 'n' Chips in an
+inventory turns into Fish and Chips).
+
+### 2.14 Shulker meat (built 2026-11-02, scratch PASSED r1102b: SQ-FCB-04e, -05; not played; TODO `dishes/ingredients #32`; UNDONE 2026-11-04)
+
+**Undone 2026-11-04** (plan_meals_rolls_bbq.md C3, owner: the End Skewer takes Ender's Shulker Mollusk only): both pairs
+removed from `merges_endersdelight.json`, the chance-0 knife loot override deleted (Ender's knife drop is upstream's again)
+and the mollusk-to-filet cut restored. Every other recipe keeps End's meat: the stuffed shulker (pot and heatless) takes End's
+shulker meat. Canned Shulker Flesh stays on End's meat and slice. Stacks a world merged between 11-02 and 11-04 stay End's
+meat (no conversion back). Text below is the 11-02 state.
+
+| Purged | Survivor |
+|---|---|
+| `endersdelight:shulker_mollusk` | `ends_delight:shulker_meat` |
+| `endersdelight:shulker_filet` | `ends_delight:shulker_meat_slice` |
+
+Pairs: CD startup `endersdelight/item_merges.js`. Server half: Ender's mollusk-to-filet cut removed
+(`endersdelight/recipes.js`, it duplicated End's meat-to-slice cut); Ender's knife loot modifier switched off by a pack
+datapack override (`kubejs/data/endersdelight/loot_modifiers/scavenging_shulker_mollusk_from_shulker.json`, chance 0),
+so a shulker killed with a knife drops End's meat once. Canned Shulker Flesh is filled from End's meat and slice. End's
+textures unchanged; the owner updates them later (2026-11-02).
+
+### 2.15 Caesar salad (built 2026-11-02, scratch PASSED r1102b: SQ-FCB-01, -05; not played; TODO `merges/dishes #6`)
+
+`oceanic_delight:caesar_salad` -> `veggiesdelight:cesar_salad` (Veggies' texture, shown as "Caesar Salad"). Pair: CD
+startup `oceanic_delight/item_merges.js`. Oceanic's recipe removed; the one recipe (CD `veggiesdelight/cooking.js`):
+cabbage, tomato, any cheese, any bread, bowl (by hand, `_manual_only`).
+
+### 2.16 Cooking for Blockheads racks and basket (built 2026-11-02, not run; SQ-FCB-05; TODO `cooking/kitchen #24`)
+
+CfB's own `spice_rack`, `tool_rack`, `fruit_basket` -> the blockheads_additions `oak_` versions (same CfB blocks and block
+entities, so kitchens use them). Pairs: CD startup `cookingforblockheads/item_merges.js` (only while the member is on).
+CfB's three recipes removed (`cookingforblockheads/kitchen.js`); woods with no rack of their own no longer make one.
+
+### 2.17 Potato salad (built 2026-11-03, in the CD jar installed 2026-11-03 00:08, not booted; SQ-CDM2-04; TODO `merges/dishes #4`, `textures/merges #1`)
+
+Owner 2026-11-02: one Potato Salad with Rustic Delight's texture.
+
+| Purged | Survivor |
+|---|---|
+| `moredelight:potato_salad` | `rusticdelight:potato_salad` |
+| `oceanic_delight:potato_salad` | `rusticdelight:potato_salad` |
+
+Pairs: CD swap lists `merges_moredelight.json` (requires moredelight, rusticdelight) and the new
+`merges_oceanic_delight_potato.json` (requires oceanic_delight, rusticdelight; a file of its own because the Caesar list
+requires veggiesdelight). Merges, not conversions. The survivor keeps its own art and food (8 hunger, Regeneration 0:05;
+Comfort by the Comfort / Nourishment rule). Recipes (CD `rusticdelight/recipes.js`): the three mods' recipes removed;
+Cooking Pot: 2 potatoes of any kind (potato, sweet potato or their slices), egg, milk, onion or garlic, bowl; by hand
+the same plus 1 more potato (`_manual_only`); the egg solution mixing takes 2 potatoes of any kind, onion or garlic and
+250 mB egg solution. The pickle input of the 2026-10-27 plan is dropped. Caesar salad texture (`textures/merges #2`):
+the survivor is Veggies Delight's own item, so it already has Veggies' texture (2.15); nothing to build.
+
+### 2.18 Nut mash (built 2026-11-03, in the CD jar installed 2026-11-03 00:08, not booted; VTD-84, VTD-85, SQ-VTDA-11, -12; TODO `merges/dishes #7`, `textures/merges #3`)
+
+Owner 2026-11-02: only nut mash, from acorn or peanut, mason jar only; nut butter dropped. Pairs (swap lists):
+`vintagedelight:nut_mash_bottle` -> `vintagedelight:nut_mash_jar` (`merges_vintagedelight.json`);
+`delightful:nut_butter_bottle` -> `vintagedelight:nut_mash_jar` and `delightful:nut_butter_and_jelly_sandwich` ->
+`vintagedelight:pb_j` (new `merges_delightful.json`, requires both mods). `delightful:nut_dough` is a removed item (CD
+`vintage_items.js`, swaps `removed.json`) with its recipe gone. Names (port lang, `src/own`): the jar is "Nut Mash" (was
+Nut Mash Jar), `pb_j` "Nut Mash and Jam Sandwich" (was PB & J); Vintage's item, so Vintage's texture (`textures/merges #3`
+needs nothing more). Recipes removed first, so the merge carries none over: Delightful's nut butter pot and both sandwich
+crafts (CD `delightful/recipes.js`), Vintage's nut mash pot and the bottle <-> jar crafts (`vintagedelight/recipes.js`).
+New pot (`vintagedelight/recipes.js`): 5 of acorn / roasted acorn / peanut / roasted peanut + any sugar -> 3 Nut Mash,
+each in an empty mason jar (was 5 roasted peanuts -> 1). Sandwich (`vintagedelight/cooking.js`): any bread + Nut Mash +
+any jam -> 1 (the jars are crafting remainders); Pad Thai's grid recipe takes the jar. `#forge:nut_butter` = the jar.
+Open: 1 sandwich per jar (the brief's D3 suggested 3); the generated food types still list the purged ids until the next
+food catalog run.
+
+### 2.19 Kimchi (built 2026-11-03, in the CD and Creative Brewing jars installed 2026-11-03 00:08, not booted; VTD-83, SQ-VTDA-11; TODO `merges/dishes #9`, `textures/merges #4`)
+
+Owner 2026-11-02: Vintage's kimchi wins; Brewin's is removed, not merged, and its recipes are not carried over. Brewin's
+kimchi: removed item (CD `vintage_items.js`, only while Brewin' is loaded), id in Creative Brewing's new
+`swaps/removed.json`; the pack's `brewin_kimchi` jar recipe is gone (Creative Brewing `brewinandchewin/alcohol.js`), the
+keg recipe was already removed. Tags: Brewin's kimchi left `#creativeengineering:pickled_veg` and the heatless soup veggie
+tag, Vintage's kimchi joins the latter. Canned Kimchi holds only Vintage's kimchi (`tools/gen_can_types.py`; values now
+from Vintage's kimchi: 8 hunger, 0.3, fast). New jar recipes (CD `vintagedelight/recipes.js`, `kimchi_from_<base>`), the
+upstream ghost pepper recipe kept: 4 cabbage leaves + salt + one of cucumber or zucchini (one recipe), onion, `#forge:eggs`,
+sea pickle, beetroot, `#creativeengineering:whole_raw_fish` -> 4, upstream time, no pickled pepper side output. The fish
+tag (CD `vintagedelight/tags.js`): cod, salmon, tropical fish, lionfish, perch, pike, blobfish, flying fish, catfish; no
+slices, squid or shellfish, no pufferfish. Texture: Vintage's own item (`textures/merges #4` needs nothing more).
+
+### 2.20 Quiche (built 2026-11-03, in the CD jar installed 2026-11-03 00:08, not booted; VTD-86, SQ-VTDA-13; TODO `merges/dishes #8`, `baking/baked-goods #19`)
+
+The quiche family (food_families.md `quiche`) has two items: Brewin's `brewinandchewin:quiche` and Veggies'
+`veggiesdelight:zucchini_quiche` (with slices). Owner 2026-11-02: baking type, pie tin, oven only, no plating
+(`R.ceBaking`, `{ exp: 0.1, time: 200, tool: #creativeengineering:bakeware/pie_tin }`, no container: a quiche has no
+crafting remainder). Brewin's (CD `brewinandchewin/recipes.js`, `quiche_meat`, `quiche_fungus`, `quiche_greens`): pie crust
++ cheese wedge + milk + `#forge:eggs` + one of `#creativeengineering:food_type/cooked/meat`, `#forge:mushrooms`,
+`#forge:salad_ingredients`. Zucchini (CD `veggiesdelight/recipes.js`): pie crust + cheese wedge + milk + `#forge:eggs` + 2
+roasted zucchini. Removed: the grid recipes and the three sequenced assemblies (milk, egg solution, zucchini). Open: the
+pack has no lettuce tag; the lettuce version uses `#forge:salad_ingredients` (cabbage, cabbage leaf, dandelion leaf,
+chopped clover); the zucchini quiche's "egg" is read as any egg.
 
 ## 3. Known limits
 
@@ -284,6 +414,9 @@ The Botany Pots apple recipe goes through the recipe swap onto the Vinery saplin
     item is merged away.
 
 ## 4. Tests
+
+- **r1102b 2026-11-02** (scratch server; verdicts in `perf/runs/r1102b/` HANDOVER.md and the slice judged.md): rerun pending (batch fault) SQ-SALT-06, -08.
+- **r1103 2026-11-03** (scratch server; verdicts in `perf/runs/r1103/` FINAL.md and the slice judged.md): PASS SQ-SWP-06o, -01, -02, -03, -04, -05, -06, -07, -08, SQ-VTDA-12, SQ-SALT-06, -08.
 
 After a full restart, `logs/latest.log` first: `[itemMerges] 1 pack merges registered` and the two
 recipe-event lines of 1.1 (SQ-IMS-01), `[food values] 5 effect swaps` with no
@@ -336,12 +469,15 @@ from `item_merges.js` or `cooking.js`, no `ieMixer` warning, no mixin apply erro
 | MG-41 | Craft: 1 slice; 9 slices; 4 slices (2x2); 1 Cantaloupe Seeds; 1 Mini Cantaloupe Seeds; Mini Cantaloupe + 2 ice cubes + stick | Cantaloupe Seeds; Cantaloupe; Mini Cantaloupe; Mini Cantaloupe Seeds; Cantaloupe Seeds; Cantaloupe Popsicle |
 | MG-42 | Knife on a Cantaloupe block on the cutting board; knife on a placed Mini Cantaloupe | 9 Cantaloupe Slices; 4 Cantaloupe Slices |
 | MG-43 | JEI uses of the Cantaloupe Slice: jam, juice, jello, popsicle, exotic fruits bowl, fruit salad, Cantaloupe Bread | All accept it |
-| MG-44 | New world, desert and badlands: find wild Cantaloupes and Mini Cantaloupes (`/place feature creative_delight:wild/mini_cantaloupe` to see one); WTHIT on the stem | Both on sand, red sand or terracotta; stem named Cantaloupe Stem |
+| MG-44 | New world, desert and badlands: find wild Cantaloupes and Mini Cantaloupes (`/place feature creativedelight:wild/mini_cantaloupe` to see one); WTHIT on the stem | Both on sand, red sand or terracotta; stem named Cantaloupe Stem |
 | MG-45 | Wares package and cardboard box (block and item): look; place an Old and a Weathered Cardboard Box; wash a Dustrial Decor box, then the result, in a Create fan; JEI for other recipes of Old/Weathered | Wares boxes brown; Weathered grey-brown; only the washing recipes exist; boxes walk and sink like Dustrial's (server half: scratch queue SQ-MG-16) |
 | MG-46 | Jungle: gorillas and sugar gliders foraging leaves; new world near banana plants | Neapolitan bananas only; no chimpanzees; JEI shows no chimpanzee spawn egg or head (server half: scratch queue SQ-MG-17 to -20) |
 - [ ] **MG-47 Apple tree [game]:** JEI has no Fruits Delight apple sapling or leaves; a Fruits Delight apple sapling
   given by `/give` turns into the Vinery apple tree sapling in the inventory; a new world's forest has no Fruits Delight
   apple trees; an apple's tooltip reads "Fertile: Autumn" / "Offseason: Winter, Dry".
+- [ ] **MG-48 Fish and chips [game]:** JEI shows one Fish and Chips (Veggies Delight's art) with the Cooking Pot
+  frying route, no Cod 'n' Chips, Fries or Canned Chips entry; a Cod 'n' Chips given by `/give`
+  turns into Fish and Chips in the inventory; eating it returns a bowl (2.13).
 
 Server half of MG-35 to MG-37 without a player: `tools/salt_probe/salt_probe.js` (`/salttest`, scratch queue SQ-SALT-05
 to -07) calls each block's random tick itself and times a salt-brick tick against a stone one (added 2026-10-27).
@@ -382,29 +518,38 @@ the chef's hat (Wardrobe / Simple Hats hat removed) confirmed working in game 20
 
 ### 5.1 Dishes (`merges/dishes`)
 
-- Fish and chips: keep Veggies Delight's. Merge VD's duplicate recipes. Remove PC's fish and chips, fries and every
+- Fish and chips (BUILT 2026-11-01, 2.13): keep Veggies Delight's. Merge VD's duplicate recipes. Remove PC's fish and chips, fries and every
   recipe or item tied to them. (Also: merge fish and cod and chips, from the 2026-10-24 note.)
-- Mashed potatoes: split instead of merge. More Delight's is Mashed Potatoes, VD's is Mashed Sweet Potatoes.
+- Mashed potatoes (BUILT 2026-11-01, `merges/dishes #2`; scratch PASSED r1102b): split instead of merge. More Delight's is Mashed Potatoes, VD's is Mashed Sweet Potatoes.
   Cooking pot: 2 potatoes or potato slices + 250 mB milk -> mashed potatoes (sweet potato input -> mashed sweet
   potatoes). Manual craft: 3 cooked potatoes. Both cannable and saltable (with salt).
-- Stuffed peppers: remove VD's stuffed peppers (item and feast); Rustic's stay. Also removed from the veggie tweaks.
-- Potato salad: one item. Inputs: sliced potatoes (or sweet potatoes, doubled for the manual cooked recipe), any egg,
-  onion or garlic, pickle or pickled sea pickle. Texture: More Delight's.
+- Stuffed peppers (BUILT 2026-11-01, `merges/dishes #3`; scratch PASSED r1102b): remove VD's stuffed peppers (item and feast); Rustic's stay. Also removed from the veggie tweaks.
+- Potato salad (BUILT 2026-11-03, 2.17): one item. Texture: Rustic Delight's (decided 2026-11-02, was More Delight's). Cooking pot: 2 potato of
+  any kind, 1 egg, 1 milk, 1 onion or garlic; the shapeless version adds 1 more potato. (Replaces the 2026-10-27 inputs
+  with sliced potatoes and pickle.)
 - Cheesy pasta: rename Brewin's to Cheesy Fish Pasta (BUILT 2026-10-30: `namechanges.js`, with its can and placed
-  block; unreleased). Add bone broth to the cheesy pasta heatless craft.
-- Caesar salad: use the correct spelling; Veggies Delight's texture; lettuce, tomato, cheese, bread.
-- Nut butter: remove nut dough. Only the nut mash jar remains: 5 nuts (acorn or peanut) + sugar -> 3 nut mash, needs
-  a mason jar. Nut butter sandwich: Vintage's texture, Delightful's name; any bread + any jam + a nut mash jar.
-- Pizza and quiche: no overlap. Rename Brewin's pizza to Supreme Pizza and rebuild its craft as dough, sauce, dough on
+  block; shipped 1.1.05). Add bone broth to the cheesy pasta heatless craft.
+  2026-11-02 (owner): no cheesy pasta found in game, so nothing is left to merge; the rename stands.
+- Caesar salad (BUILT 2026-11-02, 2.15): use the correct spelling; Veggies Delight's texture; lettuce, tomato, cheese, bread.
+- Nut butter (BUILT 2026-11-03, 2.18): remove nut dough. Only the nut mash jar remains: 5 nuts (acorn or peanut) + sugar -> 3 nut mash, needs
+  a mason jar. Nut butter sandwich: Vintage's texture; any bread + any jam + a nut mash jar.
+  DECIDED 2026-11-02 (owner): nut butter is dropped, only nut mash (acorn or peanut, mason jar only); rename to Nut Mash and
+  the sandwich to Nut Mash and Jam Sandwich, using nut mash in place of nut butter.
+- Pizza and quiche (quiche recipes BUILT 2026-11-03, 2.20): no overlap. Rename Brewin's pizza to Supreme Pizza and rebuild its craft as dough, sauce, dough on
   the bottom row. Make sure the quiche food family exists.
+  Quiche recipes DECIDED 2026-11-02 (owner), baking type, pie tin, oven only, no plating: pie crust + cheese wedge + milk +
+  any egg + (any cooked meat, or any fungus: two recipes); a lettuce version (any lettuce tag, dandelion leaf included);
+  Zucchini Quiche: pie crust + cheese wedge + milk + egg + 2 roasted zucchini.
 - Zucchini stuffing: no overlap, nothing to merge.
 - Skewers: fold into the skewer family with consistent rules (`dishes/meals #13`). Patties: every patty type is always
   interchangeable (`dishes/meals #14`).
 - Burgers: mark all burgers for an ingredient-variant audit and balancing. Drop More Delight's loaded burger in favour
-  of "The Burger", renamed Loaded Burger, accepting any cheese. (Rename BUILT 2026-10-30, `namechanges.js`, unreleased;
+  of "The Burger", renamed Loaded Burger, accepting any cheese. (Rename BUILT 2026-10-30, `namechanges.js`, shipped 1.1.05;
   the drop and the any-cheese recipe are open.)
-- Kimchi: Vintage Delight's texture.
-- Fish tempura: drop Fish Tempura and Raw Fish Tempura, keep fried fish. The fish and chips that used tempura go too.
+- Kimchi (BUILT 2026-11-03, 2.19): Vintage Delight's texture. DECIDED 2026-11-02 (owner): Brewin's kimchi removed, its recipes not migrated; new
+  Vintage kimchi recipes, one per pickleable in place of the ghost pepper: cucumber or zucchini, onion, egg, sea pickle,
+  beetroot, surstromming input fish (all whole raw fish).
+- Fish tempura (BUILT 2026-11-02 as removed items, `merges/dishes #11`; scratch PASSED r1102b SQ-FCB-01): drop Fish Tempura and Raw Fish Tempura, keep fried fish. The fish and chips that used tempura go too.
 
 ### 5.2 Baking (`merges/baking`)
 
@@ -446,11 +591,82 @@ the chef's hat (Wardrobe / Simple Hats hat removed) confirmed working in game 20
     to extend rope lower. Requires support like scaffolding"; recipe 3 Farmer's Delight ropes vertically.
   - Beautify: rename to Twine; tooltip "Climbable, acts like chain"; rope extension behaviour (like Create shafts);
     keep the existing recipe.
-- Rotten flesh: Architect's Palette's block becomes the pack's own prepared block with a prepared flesh item. Open
-  question: why is JRFTL active on the server, and why is no custom prepared flesh texture visible?
+- Rotten flesh: Architect's Palette's block becomes the pack's own prepared block with a prepared flesh item. BUILT
+  (`merges/materials #3`): the block is `creativeengineering:prepared_flesh_block` (KubeJS `misc_items.js`, hand-authored
+  cube_all model, texture `kubejs/assets/creativeengineering/textures/block/prepared_flesh_block.png`); the item keeps
+  the id `jrftl:prepared_flesh`, registered by `misc_items.js` since JRFTL was removed 2026-10-31. Recipes in
+  `server_scripts/engineering/mob_resources.js` (creosote filling and bottling of rotten flesh and Architect's Palette's
+  rotten flesh block, smoking to leather, 9 to 1 block). Why no custom texture showed: the pack sprite sat at
+  `kubejs/assets/prepared_flesh.png` (no namespace, never loaded) while JRFTL's own model drew its own sprite; since
+  10-31 it is at `kubejs/assets/jrftl/textures/item/prepared_flesh.png` (`textures/merges #9`), and the stray root copy
+  was deleted 2026-11-02. JRFTL question closed (jar removed). Unchecked in game: both textures after a full restart.
 
 ### 5.6 Mobs (`merges/mobs`)
 
 - Monkeys: built 2026-10-30, see 2.1 (chimpanzee off, gorilla and sugar glider foraging give Neapolitan's banana).
   Scratch r1031 (2026-10-31): mixins PASSED (SQ-MG-17); no chimpanzee in a jungle; the foraging drops are unproven
   (SQ-MG-18, -19: the checks logged nothing), client check pending with CQ-MG-20 / MG-46.
+
+## 6. Swap lists: merges from data, and the world half (TODO `creativedelight/swappers #2`, `#3`; built 2026-11-02; patcherMod 1.1.08 and the CD jar installed 2026-11-02 23:16 to 23:20, not booted; SQ-SWP-01 to -08, queue section SQ-CDJ6)
+
+Creative Delight's merges moved from startup scripts into its swap lists (the same files Common's `swap/SwapLists` reads
+for the registry remap, [creative_delight.md](creative_delight.md) 11), one place per item. The 38 pairs of 2.1 to 2.4
+and 2.8 to 2.16 are unchanged (40 with 2.17's two, 2026-11-03); only where they live changed.
+
+**Format.** `data/creativedelight/swaps/merges_<purged mod>.json` in the CD jar:
+`{ "requires": ["modA", "modB"], "merges": { "survivor:id": ["purged:id", ...] } }`. `merges` has the shape of `replaces`
+but names two items that are both still registered. `requires` (mod ids, the old `// requires:` headers) gates the
+file's merges: they apply only while every listed mod is loaded. A purged id may appear once across all lists (a
+second entry logs `merged twice` and is skipped). Like `replaces`, a merge also remaps the purged id in an old world
+once that item is no longer registered, with no `requires` check (the survivor must be registered). Ids are literal
+(namespace kept, as in every swap list), not dict keys, since the lists outlive the dict entries. Never pruned.
+
+| Piece | Where | What it does |
+|---|---|---|
+| Reader | Common `swap/SwapLists` (`merges()`, `scriptMerges(modId)`, record `Merge`) | Reads `merges` and `requires` with the other keys; logs `[swaps] n list file(s): ... k item merge(s)` |
+| Script half (#2) | CD `kubejs_startup/creativedelight/swap_merges.js` | Startup: `SwapLists.scriptMerges('creativedelight')` -> `global.addItemMerges('creativedelight', pairs)`; logs `[creativedelight] n item merge(s) from the swap lists`. Startup, not server, because `addItemMerges` feeds `global.removedItems` (JEI hide, tag strip) at load. The group's server half (`_core/item_merges.js`) then swaps recipes and loot as before; per-merge recipe and tag work stays in the server tree's mod folders |
+| World half (#3) | Common `swap/ItemMerges`, pure part `swap/ItemMergeCore`, switches `swap/SwapConfig` | Rewrites purged stacks already in the world (below) |
+
+**World half.** Live merges are the active list merges whose two items are registered (logged once:
+`[swaps] n item merge(s) live in the world (list <fingerprint>)`). A stack is saved to NBT, every item id in it is
+rewritten (the stack itself and any nested saved stack: shulker box, bundle, backpack contents; entity and block entity
+`id`s without a `Count` are left alone), and it is loaded back with its original count, so NBT, Forge capabilities and
+large modded counts are kept. A stack over the survivor's stack size (e.g. 64 bottles into 16-stack jars) is split:
+the rest goes to empty slots, then to the player (inventory or dropped at their feet) or to the ground above the
+container; a slot that refuses writes keeps the old stack. Never deletes. Covered: player inventory and ender chest;
+block entities that are a `Container` or expose a modifiable item handler; container entities (chest minecarts and
+boats); any menu a player opens (crafting, furnace and trade result slots skipped); dropped item entities (an
+over-sized dropped stack stays whole, pickup splits it). Not covered: item frames, armor stands, Curios slots,
+read-only item handlers, containers in chunks that never load.
+
+**Triggers** (`config/creativeengineering-swaps.toml`, `[swappers]`, COMMON; a file of its own beside
+`creativeengineering-common.toml`):
+
+| Key | Default | When |
+|---|---|---|
+| `onWorldLoad` | false | Every chunk load: its containers are rewritten on the next server tick (32 chunks a tick); every item and container entity as it enters a level |
+| `onPlayerDataLoad` | true | Every login: inventory and ender chest |
+| `onContainerOpen` | true | Every menu a player opens |
+| `onCommand` | true | `/ceswap items` (permission 2): online players, every loaded chunk, every item and container entity now; reports the counts |
+| `onceWhenUpdated` | true | Each chunk and player once per list version: the list fingerprint is stamped in the chunk NBT and the player's persisted data (`creativeengineering:swap_merges`); a chunk or player with an older or no stamp is rewritten on its next load. Item and container entities are rewritten as they enter a level while this is on |
+
+The KubeJS inventory swap of 1.1 still runs for both groups (it drops NBT; the Java login and open triggers keep it).
+
+### 6.1 Tests (SWP-)
+
+Offline (2026-11-02): `./gradlew :creativeCommon:build --offline` compiles; harness `MergeCoreTest` (scratchpad, plain
+javac/java on the patcherMod classes) 23 checks pass: top-level and nested rewrite, NBT and caps kept, entity ids
+untouched, int counts, split sums, fingerprint order-free. JSON: 38 pairs, no duplicates, no chains. Live rows
+SQ-SWP-01 to -08 in the scratch queue (section SQ-CDJ6). 2026-11-03: CD `swaps/merges_*.json` hold 40 pairs after
+2.17 to 2.20; the counts in SWP-01 (43) predate them, so recount at the first boot (plan_creative_delight.md L).
+
+| ID | Test | Expected |
+|---|---|---|
+| SWP-01 | Restart, `logs/latest.log` | `[swaps] ... 43 item merge(s)`, `[creativedelight] 43 item merge(s) from the swap lists` (fewer only when a `requires` mod is absent), `[swaps] n item merge(s) live in the world`; no `merged twice`, no `Error occurred while handling event` |
+| SWP-02 | JEI: search banana, coffee berries, diced potatoes, Caesar salad | The purged items are hidden, as before the move (recipes and loot follow the survivors) |
+| SWP-03 | Put 5 `alexsmobs:banana` with a custom name in a chest (`/data merge`), leave, `/ceswap items` | 5 Neapolitan bananas, name kept |
+| SWP-04 | 64 `vintagedelight:vinegar_bottle` in a chest, open it | Jars in 16-stacks (or the survivor's stack size) in the free slots, total 64; none lost |
+| SWP-05 | Shulker box holding Farmer's Respite coffee in a chest, open the chest | The box's contents read Rustic Delight coffee |
+| SWP-06 | Log out with a purged item in the inventory and ender chest, set `onPlayerDataLoad=false`, rejoin | Rewritten once (`onceWhenUpdated`); a second rejoin logs nothing |
+| SWP-07 | Drop a purged stack from an old save (or `/summon item ... {Item:{id:"alexsmobs:banana",Count:3b}}`) | The item entity holds 3 Neapolitan bananas |
+| SWP-08 | `onCommand=false`, `/ceswap items` | Refused with the config key named |

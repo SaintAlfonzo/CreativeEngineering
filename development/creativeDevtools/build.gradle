@@ -1,0 +1,47 @@
+// creativeDevtools: the Creative Devtools jar (feature_writeup/creative_devtools.md). The bundling (members nested under
+// META-INF/jarjar/, metadata.json) is build-logic/src/main/groovy/ce.forge-bundle.gradle; this file adds what is
+// specific to Devtools, the same way creativeBrewing/build.gradle does for CB:
+//   - the Devtools script trees, authored in the pack folder so /reload and F3+T pick them up without a rebuild, copied
+//     into the jar at the same resource paths:
+//       kubejs/data/creativedevtools/kubejs/    -> data/creativedevtools/kubejs/    (server scripts)
+//       kubejs/assets/creativedevtools/kubejs/  -> assets/creativedevtools/kubejs/  (client scripts)
+//     The startup core lives in this project (src/main/resources/kubejs_startup/creativedevtools/), loaded from the jar
+//     by Creative Common's startup loader.
+// Build: ./gradlew :creativeDevtools:build --offline   Install (dev mods/ only): ./gradlew :creativeDevtools:installToMods
+plugins {
+    id 'ce.forge-bundle'
+}
+
+dependencies {
+    // patcherMod: the hooks the probes subscribe to, WorldgenFiles (/ceplace), PerfEvents (/ceperf),
+    // BlockModelIcons (/cedumpicons). A hard dependency.
+    compileOnly project(':creativeCommon')
+    // Creative Worldgen: BiomeLayoutTuner and PoolTuner (/ceplace), SpawnTuning (/dumpspawns), MobCapLevels (/ceperf).
+    // An optional dependency: each reader checks ModList first.
+    compileOnly project(':creativeWorldgen')
+    // patcherMod's third-party compile jars (copies of mods/ jars): the IE API for ie/IeRecyclingDiagnostics.
+    compileOnly fileTree(dir: '../creativeCommon/libs', include: '*.jar')
+}
+
+def scriptTrees = ['data/creativedevtools/kubejs', 'assets/creativedevtools/kubejs']
+
+tasks.named('processResources', ProcessResources).configure {
+    scriptTrees.each { tree ->
+        from(rootProject.file("kubejs/${tree}")) {
+            into tree
+            exclude '**/*.md'
+        }
+    }
+}
+
+// The scripts in the jar run only through KubeJS; a missing tree means the pack-folder path moved.
+tasks.named('jar', Jar).configure {
+    doLast {
+        def entries = new java.util.zip.ZipFile(archiveFile.get().asFile).withCloseable { z -> z.entries().collect { it.name } }
+        ['kubejs_startup/creativedevtools/', 'data/creativedevtools/kubejs/', 'assets/creativedevtools/kubejs/'].each { dir ->
+            if (!entries.any { it.startsWith(dir) && it.endsWith('.js') }) {
+                throw new GradleException("creativedevtools jar has no scripts under ${dir}")
+            }
+        }
+    }
+}

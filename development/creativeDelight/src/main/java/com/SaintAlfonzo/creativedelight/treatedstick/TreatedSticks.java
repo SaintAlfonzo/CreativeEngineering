@@ -33,8 +33,8 @@ import vectorwing.farmersdelight.common.registry.ModBlocks;
 /**
  * Placeable treated sticks (feature_writeup/treated_sticks.md): Immersive Engineering's treated stick
  * ({@code immersiveengineering:stick_treated}) is placed like Supplementaries' sticks, as
- * {@code creative_delight:treated_stick}, and Farmer's Delight tomatoes climb it as
- * {@code creative_delight:treated_stick_tomatoes}, the same way they climb Supplementaries' sticks.
+ * {@code creativedelight:treated_stick}, and Farmer's Delight tomatoes climb it as
+ * {@code creativedelight:treated_stick_tomatoes}, the same way they climb Supplementaries' sticks.
  *
  * Own code (Supplementaries is ARR): the blocks re-implement the behaviour of Supplementaries' StickBlock and
  * TomatoStickBlock; the block models name Supplementaries' models as parents. Hooks:

@@ -1,0 +1,87 @@
+// Shared Forge setup (runs, mods.toml expansion, jar manifest, jar_archive, installToMods) comes from
+// build-logic/src/main/groovy/ce.forge-mod.gradle; this file has only what is specific to Creative Common (patcherMod until the 2026-11-04 swap).
+// Build from the instance root (`./gradlew :creativeCommon:build`) or from here (`./gradlew build`).
+plugins {
+    id 'maven-publish'
+    id 'ce.forge-mod'
+    // Only its ShadowJar task type is used (relocateCommonmark below); no shadowJar of the whole mod.
+    id 'com.github.johnrengelman.shadow' version '8.1.1' apply false
+}
+
+repositories {
+    mavenCentral()
+}
+
+configurations {
+    // Libraries bundled into the jar under our own package (relocated, so no other mod can clash with them).
+    shade
+}
+
+dependencies {
+    // Third-party mod jars copied from ../mods (git-ignored). They are SRG-named, see the note below.
+    compileOnly fileTree(dir: 'libs', include: '*.jar')
+    // Markdown parser for the changelog screen (changelog/ChangelogMarkdown). BSD-2-Clause, see NOTICE-commonmark.txt.
+    shade 'org.commonmark:commonmark:0.21.0'
+}
+
+// The shaded libraries are relocated BEFORE compiling, so the source imports the relocated package
+// (com.SaintAlfonzo.creativecommon.shadow.commonmark) and the normal jar -> reobfJar -> archive/install
+// chain stays as it is: the relocated classes are copied into the jar and reobf leaves them alone.
+def relocateCommonmark = tasks.register('relocateCommonmark', com.github.jengelman.gradle.plugins.shadow.tasks.ShadowJar) {
+    configurations = [project.configurations.shade]
+    archiveFileName = 'shade-relocated.jar'
+    destinationDirectory = layout.buildDirectory.dir('shade')
+    relocate 'org.commonmark', 'com.SaintAlfonzo.creativecommon.shadow.commonmark'
+    exclude 'META-INF/**', 'module-info.class'
+}
+
+dependencies {
+    compileOnly files(relocateCommonmark)
+}
+
+tasks.named('jar', Jar).configure {
+    dependsOn relocateCommonmark
+    from(relocateCommonmark.map { zipTree(it.archiveFile) }) {
+        exclude 'META-INF/**'
+    }
+}
+
+// Server and client helper scripts (plan_cb_publish.md M1): kept in the pack folder's kubejs/ tree like CB's and CD's,
+// copied into the jar, where KubeJS loads them as datapack / resource pack scripts. The startup dicts and helpers are in
+// src/main/resources/kubejs_startup/creativecommon/ (JarStartupScripts).
+def scriptTrees = ['data/creativecommon/kubejs', 'assets/creativecommon/kubejs']
+
+tasks.named('processResources', ProcessResources).configure {
+    scriptTrees.each { tree ->
+        from(rootProject.file("kubejs/${tree}")) {
+            into tree
+            exclude '**/*.md'
+        }
+    }
+}
+
+// A missing tree means a pack-folder path moved: fail rather than ship a jar without the dicts or helpers.
+tasks.named('jar', Jar).configure {
+    doLast {
+        def entries = new java.util.zip.ZipFile(archiveFile.get().asFile).withCloseable { z -> z.entries().collect { it.name } }
+        ['kubejs_startup/creativecommon/_lib/', 'kubejs_startup/creativecommon/func/', 'data/creativecommon/kubejs/',
+         'assets/creativecommon/kubejs/'].each { dir ->
+            if (!entries.any { it.startsWith(dir) && it.endsWith('.js') }) {
+                throw new GradleException("creativecommon jar has no scripts under ${dir}")
+            }
+        }
+    }
+}
+
+publishing {
+    publications {
+        register('mavenJava', MavenPublication) {
+            artifact jar
+        }
+    }
+    repositories {
+        maven {
+            url "file://${project.projectDir}/mcmodsrepo"
+        }
+    }
+}

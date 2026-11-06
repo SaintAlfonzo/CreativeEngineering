@@ -22,7 +22,7 @@ import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.registries.ForgeRegistries;
 import vectorwing.farmersdelight.common.block.PieBlock;
 import vectorwing.farmersdelight.common.block.RichSoilFarmlandBlock;
-import vectorwing.farmersdelight.common.registry.ModBlocks;
+import vectorwing.farmersdelight.common.block.CuttingBoardBlock;
 
 /** Forge-bus halves of the backports: rich soil trampling and vanilla Pumpkin Pie placement. */
 public final class FDBackportEvents {
@@ -53,7 +53,7 @@ public final class FDBackportEvents {
 		if (!(ForgeRegistries.BLOCKS.getValue(id) instanceof PieBlock pie)) return;
 		Player player = event.getEntity();
 		if (FDBackportConfig.pieSneakToPlace() && !player.isShiftKeyDown()) return;
-		if (event.getLevel().getBlockState(event.getPos()).is(ModBlocks.CUTTING_BOARD.get())) return;
+		if (event.getLevel().getBlockState(event.getPos()).getBlock() instanceof CuttingBoardBlock) return;
 
 		event.setUseItem(Event.Result.DENY);
 		event.setUseBlock(Event.Result.DENY);

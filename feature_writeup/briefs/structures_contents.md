@@ -3,7 +3,7 @@
 Written 2026-10-21 from [todo/TODO.md](../todo/TODO.md) `# structures`, Sub `contents`. Feature writeups:
 [structure_tuning.md](../structure_tuning.md) (section 7 Todo "Structure contents", prefix `ST-`),
 [nether_worldgen.md](../nether_worldgen.md) (S1, S2, S5, S28), [mob_spawns.md](../mob_spawns.md) 9 ("Later: pillager
-overhaul"). Java paths are relative to `development/patcherMod/src/main/java/com/SaintAlfonzo/creativeengineering/`.
+overhaul"). Java paths are relative to `development/creativeCommon/src/main/java/com/SaintAlfonzo/creativecommon/`.
 
 ## Scope and order
 
@@ -11,7 +11,7 @@ overhaul"). Java paths are relative to `development/patcherMod/src/main/java/com
 |---|---|---|---|
 | #3 pillager spawners | Built 2026-10-30 | as built: [structure_tuning.md](../structure_tuning.md) 3.32 (data-driven boxes in `spawn_boxes.json` instead of JSON copies; meta parts per (a)); scratch SQ-SB | done |
 | #2 river tree and driftwood cleanup | Planned | worldgen override (data) + item removal (KubeJS) | **second**, independent; needs one decision on what "remove driftwood" means |
-| #1 soul dungeons to the Nether | Planned | biome fit, tags, two structure json overrides, group moves | **last**: do it inside the Nether grouping pass (`structures/rates-and-groups #1`), as the row says |
+| #1 soul dungeons to the Nether | Built 2026-11-02 | as built: [structure_tuning.md](../structure_tuning.md) 7 Done (2026-11-02); ST-294, ST-295 queued | done ahead of the grouping pass (pre-scratch fix pass); the dungeon, rare ruin and blackstone ruin are in `group/nether_ruins`, the city keeps its own set |
 
 No row depends on another. #1 touches `structure_tags.json`, `biome_fits.json` and `structure_groups.json`, which
 the grouping pass edits too: one session, one `gen_structure_groups.py` run. Proposed test ids below are ST-290 to
@@ -56,6 +56,9 @@ the ForgeFlower jar in the same cache): `Structures`, `ChunkGenerator.getMobsAt`
     world spawn, and despawning at 128 blocks all apply as usual. Box mobs count toward the monster cap.
   - `full` covers the whole bounding box, including the ground and caves under the structure and the air around it;
     `piece` keeps to the pieces. Attempts land at random heights, so a small, tall box catches few of them.
+    *Correction 2026-11-02 (`structures/contents #6`): that starved the lone Mysticrift towers (no illager in SQ-SB-03);
+    patcherMod now starts half the attempts in a boxed column inside the box's height range ("Box spawn height",
+    [structure_tuning.md](../structure_tuning.md) 3.32).*
   - Each mob still needs its own spawn rule. Pillager (`PatrollingMonster.checkPatrollingMonsterSpawnRules`): block
     light 8 or less, any sky light, so they spawn by day. Vindicator, evoker, illusioner, witch, ravager
     (`Monster.checkMonsterSpawnRules`): dark only. **A mixed pool spawns only its pillagers in daylight.**
@@ -106,7 +109,7 @@ Blocky Siege's is a port in `kubejs/data/<ns>/structures/`. No vindicator, evoke
 processor list or mod code places a pillager spawner.
 
 **Metas drop the anchor's box.** A meta is one structure: its anchor and parts are all pieces of the meta's start
-([MetaStructure.java:62-64](../../development/patcherMod/src/main/java/com/SaintAlfonzo/creativeengineering/worldgen/MetaStructure.java#L62-L64)),
+([MetaStructure.java:62-64](../../development/creativeCommon/src/main/java/com/SaintAlfonzo/creativecommon/worldgen/MetaStructure.java#L62-L64)),
 and `getMobsAt` looks up overrides by structure. Every meta in `meta_structures.json` has `"spawn_overrides": {}`. So
 a vanilla or T&T outpost that became a meta anchor (35-50% of their slots, see the table) has **no pillager respawn
 today**, and a box added to a member's own JSON would not reach it inside a meta either. The same applies to Philip's
@@ -311,7 +314,7 @@ river log/wood, swap driftwood craft to oak planks, remove driftwood/logs".)
 4. **Old river logs keep a use**: loot overrides so `river_log`, `river_wood` and the stripped forms drop the oak
    equivalents (`kubejs/data/upgrade_aquatic/loot_tables/blocks/<id>.json`), for river trees generated before the
    change. Same for the driftwood log if the user removes it as an item (Decisions).
-5. **Recipes** (a new `kubejs/server_scripts/wood/upgrade_aquatic_woods.js`, IIFE, `var R = global.NCH, i = global.item`):
+5. **Recipes** (a new `kubejs/data/creativeengineering/kubejs/wood/upgrade_aquatic_woods.js`, IIFE, `var R = global.NCH, i = global.item`):
    - `R.replaceOutput({ output: i.planks_driftwood }, i.planks_driftwood, i.planks_oak, e)` and the same for
      `planks_river`: catches the jar's shapeless recipe and any sawmill / cutting compat recipe in one step (check in JEI
      that the count stays 4: unverified whether KubeJS 6's replaceOutput keeps the original count).
@@ -367,7 +370,7 @@ checked against a jar here; `check_worldgen_json.py` and a scratch world catch a
 
 ## structures/contents #1: Move soul dungeons to the Nether
 
-Status Planned · Work data · TODO `worldgen / structures/contents #1`
+Status Testing (built 2026-11-02, decisions taken as recommended: biomes per step 1, city at y 5, wither skeletons kept, lava accepted; rates set by hand, see [structure_tuning.md](../structure_tuning.md) 7 Done) · Work data · TODO `worldgen / structures/contents #1`
 
 ### Goal
 
@@ -474,4 +477,5 @@ None: all three rows are Planned.
 
 ## Writeup corrections made
 
-None for this subfamily.
+- 2026-11-02: "How a box works" said box spawns run at vanilla rates; for a tall, small box that meant almost none
+  (SQ-SB-03). Box spawn height added, see structure_tuning.md 3.32.

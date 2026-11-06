@@ -1,0 +1,27 @@
+{
+  "required": true,
+  "minVersion": "0.8",
+  "package": "com.SaintAlfonzo.baby_mobs.mixin",
+  "compatibilityLevel": "JAVA_17",
+  "mixins": [
+    "MobBabyMixin",
+    "LivingEntityBabyMixin",
+    "DolphinFeedMixin"
+  ],
+  "injectors": {
+    "defaultRequire": 1
+  },
+  "client": [
+    "client.LivingEntityRendererBabyMixin",
+    "client.RenderLayerBabyMixin",
+    "client.EquineHorseMarkingMixin",
+    "client.EquineHorseArmorMixin",
+    "client.EquineLlamaDecorMixin",
+    "client.PetFoxHeldItemMixin",
+    "client.UndeadArmorLayerMixin",
+    "client.UndeadItemInHandMixin",
+    "client.UndeadCustomHeadMixin",
+    "client.PetCozyYarnMixin",
+    "client.PetMoreMobVariantsLayersMixin"
+  ]
+}

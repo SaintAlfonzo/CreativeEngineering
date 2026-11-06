@@ -1,7 +1,8 @@
 # Creative Computers: circuits, ComputerCraft, AE2 and control engineering in one mod (reserved)
 
 Written 2026-11-01 from the Creative Split audit ([creative_split.md](creative_split.md) 2.3 and [split/](split/README.md)).
-**Status: reserved, not planned.** The rows below ride in Creative Engineering until this mod is planned; Creative
+**Status: dropped 2026-11-01 (owner): folded into Creative Engineering for good** (creative_split.md 7.6). The rows
+below are Engineering rows; this file stays as the list of them. Creative
 Common never holds them. No source header marks them (owner, 2026-11-01); this list is the marker.
 
 Mod id `creativecomputers`, package `com.SaintAlfonzo.creativecomputers`, config `creativecomputers-common.toml`, script
@@ -25,3 +26,5 @@ only because the owner named it, and may be dropped into Engineering for good wh
 ## 2. History
 
 - 2026-11-01: reserved from the split audit. Nothing moved.
+- 2026-11-04: the rows moved with the Engineering carve (wave 8): `computing.js`, `mechanisms.js` and `redstone.js` are in
+  Creative Engineering's server tree (`kubejs/data/creativeengineering/kubejs/engineering/`, [creative_engineering.md](creative_engineering.md)).

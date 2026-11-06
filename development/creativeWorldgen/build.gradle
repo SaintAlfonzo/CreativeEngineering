@@ -1,0 +1,56 @@
+// creativeWorldgen: Creative Worldgen (mod id creativeworldgen, feature_writeup/creative_worldgen.md), carved out of
+// patcherMod on 2026-11-02 (creative_split.md 7.6, wave 5). A bundle like Creative Delight: its own Java plus the
+// members More Mooblooms and Baby Mobs nested under META-INF/jarjar/ (build-logic/src/main/groovy/ce.forge-bundle.gradle).
+// This file adds what is specific to Worldgen:
+//   - the Worldgen server script tree, authored in the pack folder so /reload picks it up without a rebuild, copied
+//     into the jar at the same resource path:
+//       kubejs/data/creativeworldgen/kubejs/    -> data/creativeworldgen/kubejs/    (server scripts, with the loot
+//                                                  framework's loot_config.json / loot_index.json, read by
+//                                                  loot/05_tuning.js from the pack folder in dev, else from the jar)
+//     No client tree: no client script is Worldgen's. Startup scripts live in this project
+//     (src/main/resources/kubejs_startup/creativeworldgen/), loaded from the jar by Creative Common's startup loader.
+//   - dataTrees: pack-folder data trees shipped in the jar the same way (creative_worldgen.md 1). Only paths no other
+//     jar ships, so the pack folder copy (dev) and the jar copy share one resource id and load once:
+//       data/more_mooblooms/moobloom_spawns/  the pack's moobloom spawn rules (More Mooblooms, a Worldgen member,
+//                                              combines every file of that folder; creativeengineering.json is ours)
+//     The structure datapacks, Eugene, watchtower_building and the creativeengineering worldgen data stay in the pack
+//     folder: the structure generators (tools/gen_structure_config.py and the scanners) tell jar sets from kubejs/data
+//     ones by source, and campsite_structures, ipo and lightmanscurrency are overrides of loaded mods' jars.
+// Build: ./gradlew :creativeWorldgen:build --offline   Install: ./gradlew :creativeWorldgen:installToMods
+plugins {
+    id 'ce.forge-bundle'
+}
+
+dependencies {
+    // Creative Common (creativecommon): a hard dependency (KubeJS, the shared helpers, the startup loader, CEConfig's
+    // framework) and the Common APIs this jar calls.
+    compileOnly project(':creativeCommon')
+    // Creative Compat: required by every Creative jar (creative_split.md 7.6).
+    compileOnly project(':creativeCompat')
+    // The mods the worldgen and fauna rows target: the pack's jars, shared with Creative Common (git-ignored libs/, SRG-named).
+    compileOnly fileTree(dir: rootProject.file('development/creativeCommon/libs'), include: '*.jar')
+}
+
+def scriptTrees = ['data/creativeworldgen/kubejs']
+def dataTrees = ['data/more_mooblooms/moobloom_spawns']
+
+tasks.named('processResources', ProcessResources).configure {
+    (scriptTrees + dataTrees).each { tree ->
+        from(rootProject.file("kubejs/${tree}")) {
+            into tree
+            exclude '**/*.md'
+        }
+    }
+}
+
+// The scripts in the jar run only through KubeJS; a missing tree means the pack-folder path moved.
+tasks.named('jar', Jar).configure {
+    doLast {
+        def entries = new java.util.zip.ZipFile(archiveFile.get().asFile).withCloseable { z -> z.entries().collect { it.name } }
+        ['kubejs_startup/creativeworldgen/', 'data/creativeworldgen/kubejs/'].each { dir ->
+            if (!entries.any { it.startsWith(dir) && it.endsWith('.js') }) {
+                throw new GradleException("creativeworldgen jar has no scripts under ${dir}")
+            }
+        }
+    }
+}

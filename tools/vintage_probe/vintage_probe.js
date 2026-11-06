@@ -37,7 +37,7 @@
     const Y = -60
     const VT = 'vintagedelight:', VG = 'veggiesdelight:', C = 'creativeengineering:'
     // the pack's food recipes are under C or, since the move into Creative Delight (2026-10-25), CDN
-    const CDN = 'creative_delight:'
+    const CDN = 'creativedelight:'
     function ours(id, path) { return id.indexOf(C + path) == 0 || id.indexOf(CDN + path) == 0 }
     let pass = 0, fail = 0, part = ''
     function check(name, ok, detail) {
@@ -60,15 +60,17 @@
         if (byId) return byId
         byId = {}; aliasId = {}
         server.getRecipeManager().getRecipes().forEach(r => { byId[String(r.getId())] = r })
-        // Food recipes moved into Creative Delight's tree on 2026-10-25 (creative_delight: ids, same paths): a
-        // creativeengineering: id the checks name also finds its creative_delight: twin
+        // Food recipes moved into Creative Delight's tree on 2026-10-25 and brewing into Creative Brewing's on 10-31
+        // (creativedelight: / creativebrewing: ids, same paths): a creativeengineering: id the checks name also finds
+        // its twin under either namespace
         let aliased = 0
         Object.keys(byId).forEach(id => {
-            if (id.indexOf('creative_delight:') != 0) return
-            let old = 'creativeengineering:' + id.substring('creative_delight:'.length)
-            if (byId[old] == null) { aliasId[old] = byId[id]; aliased++ }
+            let ns = ['creativedelight:', 'creativebrewing:'].filter(n => id.indexOf(n) == 0)[0]
+            if (ns == null) return
+            let old = 'creativeengineering:' + id.substring(ns.length)
+            if (byId[old] == null && aliasId[old] == null) { aliasId[old] = byId[id]; aliased++ }
         })
-        note('recipe ids aliased from creative_delight:', aliased)
+        note('recipe ids aliased from creativedelight: / creativebrewing:', aliased)
         return byId
     }
     function ingredientsOf(r) {
@@ -355,7 +357,7 @@
             tagList(I, 'forge:seeds/' + n).join(', ')))
         note('peanut seeds', 'the peanut plants itself (no seed item); #forge:seeds/peanut = ' + (tagList(I, 'forge:seeds/peanut').join(', ') || 'empty'))
         let rp = tagList(I, 'creativeengineering:roasted_bell_pepper')
-        // all nine colours since the Rustic Delight 1.7.0 port (creative_delight rusticdelight/tags.js)
+        // all nine colours since the Rustic Delight 1.7.0 port (creativedelight rusticdelight/tags.js)
         check('#creativeengineering:roasted_bell_pepper', sameSet(rp, ['green', 'red', 'yellow', 'orange', 'white', 'pink', 'blue', 'purple', 'black']
             .map(c => 'rusticdelight:roasted_bell_pepper_' + c)), rp.join(', '))
         check('burrito takes every roasted pepper', rp.length > 0 && rp.every(x => takes(server, C + 'shapeless/stuffed_burrito_manual_only', x)), '')
@@ -365,12 +367,10 @@
             let keg = idsWhere(server, id => id.indexOf('brewinandchewin:fermenting/') == 0 || id.indexOf(C + 'fermenting/') == 0, out)
             check('no keg recipe for ' + out, keg.length == 0, keg.join(', ') || 'none')
         })
-        expectIds(server, [C + 'pickling/brewin_kimchi', C + 'pickling/pickled_sea_pickle'])
-        // VTD-55: Brewin's pickled pickles merged into Pickled Sea Pickle (2026-10-25); its honey jar recipe is gone
-        expectGone(server, [C + 'pickling/brewin_pickled_pickles'])
-        check('jar kimchi -> Brewin kimchi x2', has(server, C + 'pickling/brewin_kimchi') &&
-            resultOf(rget(server, C + 'pickling/brewin_kimchi')) == 'brewinandchewin:kimchi x2', has(server, C + 'pickling/brewin_kimchi') ?
-            resultOf(rget(server, C + 'pickling/brewin_kimchi')) : '-')
+        expectIds(server, [C + 'pickling/pickled_sea_pickle'])
+        // VTD-55: Brewin's pickled pickles merged into Pickled Sea Pickle (2026-10-25); its honey jar recipe is gone.
+        // merges/dishes #9 (item_merges.md 2.19, owner 2026-11-02): Brewin's kimchi is removed, its jar recipe too.
+        expectGone(server, [C + 'pickling/brewin_pickled_pickles', C + 'pickling/brewin_kimchi'])
         check('jar pickled sea pickle: 5 sea pickles + salt -> 5', has(server, C + 'pickling/pickled_sea_pickle') &&
             takes(server, C + 'pickling/pickled_sea_pickle', 'minecraft:sea_pickle') &&
             resultOf(rget(server, C + 'pickling/pickled_sea_pickle')) == 'creativeengineering:pickled_sea_pickle x5',
@@ -465,14 +465,14 @@
         check(soups.length + ' soups in and out', bad.length == 0, bad.map(id => id + ' (' + inOut(id)[1] + ')').join('; ') || 'all')
         NEW_SOUPS.forEach(id => { let r = inOut(id); check('soup ' + id, r[0], r[1]) })
         DRINKS.forEach(id => { let r = inOut(id); check('drink ' + id, r[0], r[1]) })
-        JAR_CONTENTS.forEach(n => {
-            ;[VT + n + '_bottle', VT + n + '_jar'].forEach(id => { let r = inOut(id); check('jar content ' + id, r[0], r[1]) })
-        })
+        // mason jars only since dishes/jams #1: the content bottles are merged into their jars (CD swaps
+        // merges_vintagedelight.json), so only the jars are checked
+        JAR_CONTENTS.forEach(n => { let id = VT + n + '_jar', r = inOut(id); check('jar content ' + id, r[0], r[1]) })
         // the 8th jar content: honey (upstream honey_vd.json lists the apple sauce items, not the honey jar)
         let h = inOut(VT + 'honey_jar')
         check('jar content ' + VT + 'honey_jar', h[0], h[1])
         try {
-            let hv = softFluids().get(VT + 'honey_vd')
+            let hv = softFluids().get(rl(VT + 'honey_vd'))
             note('soft fluid vintagedelight:honey_vd', hv == null || hv.isEmpty() ? 'not loaded' :
                 'mason jar fills ' + hv.getFilledContainer(item(VT + 'empty_mason_jar')).map(x => String($VReg.ITEMS.getKey(x))).orElse('nothing') +
                 ', bottle fills ' + hv.getFilledContainer(item('minecraft:glass_bottle')).map(x => String($VReg.ITEMS.getKey(x))).orElse('nothing'))
@@ -492,7 +492,7 @@
         })
         // real jar round trip for the drinks and jar contents (fdtest MJ-12 pattern)
         let rt = []
-        DRINKS.concat(JAR_CONTENTS.map(n => VT + n + '_bottle'), JAR_CONTENTS.map(n => VT + n + '_jar'), NEW_SOUPS).forEach(id => {
+        DRINKS.concat(JAR_CONTENTS.map(n => VT + n + '_jar'), NEW_SOUPS).forEach(id => {
             if (!itemExists(id)) { rt.push(id + ' (no item)'); return }
             let pos = place(level, 'supplementaries:jar', 22), tank = level.getBlockEntity(pos).getSoftFluidTank()
             let p = fake(level)
@@ -528,7 +528,8 @@
             check('fluid ' + n, key == C + n, key)
             check('tag forge:fluid/' + n, tagHas($VReg.FLUIDS, 'forge:fluid/' + n, C + n), tagList($VReg.FLUIDS, 'forge:fluid/' + n).join(', '))
             expectGone(server, [VG + 'cooking/' + n])
-            let pot = C + 'farmersdelightcooking/' + n + '_manual_only'
+            // Turnip Water's pot recipe follows the juice rule's name (drinks.js JUICES: turnip_juice_manual_only)
+            let pot = C + 'farmersdelightcooking/' + (n == 'turnip_water' ? 'turnip_juice' : n) + '_manual_only'
             check('pot ' + n, has(server, pot) && takes(server, pot, POT_IN[n]), has(server, pot) ? resultOf(rget(server, pot)) +
                 ', takes ' + POT_IN[n] + ' ' + takes(server, pot, POT_IN[n]) : 'not loaded')
             // Create mixer (heated): 250 mB out
@@ -873,8 +874,8 @@
         check('no port food gives Dehydrated', bad.length == 0, bad.join(', ') || 'none')
         // the 6 jar brews: vanilla effect ids
         ;['berserks_brew', 'brashing_tonic', 'dragons_belch', 'goblins_piss', 'oily_oaf', 'frost_fermenta'].forEach(n => {
-            // berserks_brew is replaced by creative_delight:pickling/berserks_brew (#forge:salt, SQ-VTD4-02)
-            let r = rget(server, VT + 'fermenting/' + n) || rget(server, 'creative_delight:pickling/' + n)
+            // berserks_brew is replaced by creativedelight:pickling/berserks_brew (#forge:salt, SQ-VTD4-02)
+            let r = rget(server, VT + 'fermenting/' + n) || rget(server, 'creativedelight:pickling/' + n)
             if (!r) { check('brew ' + n, false, 'not loaded'); return }
             let nbt = String(r.getResultItem().nbt), ids = [], m, re = /Id:(-?\d+)/g
             while ((m = re.exec(nbt)) != null) {

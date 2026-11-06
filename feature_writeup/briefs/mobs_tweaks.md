@@ -92,7 +92,7 @@ all.
    go at the head of `SeagullAIStealFromPlayers#isBlacklisted` (private, `remap = false`), so one tag covers both
    paths and the config line becomes a backup. The other 11 mobs each have their own `canTargetItem`. Add them only if
    one is seen taking a box (each is a one-line mixin on the same pattern).
-   Put `alexsmobs-1.21.1.jar` in `development/patcherMod/libs/` (compileOnly `fileTree`, build.gradle 17).
+   Put `alexsmobs-1.21.1.jar` in `development/creativeCommon/libs/` (compileOnly `fileTree`, build.gradle 17).
 
 ### Ids and data
 - `solapplepie:lunchbox`, `solapplepie:lunchbag`, `solapplepie:golden_lunchbox` (verified, `SOLSweetPotatoItems`).
@@ -543,7 +543,7 @@ break); when every mob of the wave is dead it spits out a single item rolled fro
   `...world.gen.MonsterBoxGenerator#generateChunk`.
 - Tables (verified): `quark:misc/monster_box`, `quark:misc/monster_box_spawns`, `quark:blocks/monster_box` (empty).
 - Item: `i.monster_box` = `quark:monster_box` ([item_dict.js](../../kubejs/startup_scripts/_lib/item_dict.js) 3293).
-- `Quark-3.4-418.jar` is already in `development/patcherMod/libs/`. `AutoRegLib-1.8.2-55.jar` isn't. It's needed
+- `Quark-3.4-418.jar` is already in `development/creativeCommon/libs/`. `AutoRegLib-1.8.2-55.jar` isn't. It's needed
   only if the mixin extends `ARLBlockEntity` for the client sync (Gotchas). The Create jar is needed for 3e.
 
 ### Decisions
@@ -639,7 +639,7 @@ Sleeping MCA villagers lie still in bed instead of lying with legs and arms bent
 
    Try a vanilla bed vs a Bedspreads bed, and note the bed block (F3) in the row.
 2. **(a) fix, client mixin** `McaVillagerSleepPoseMixin` in the `client` list of
-   [creativeengineering.mixins.json](../../development/patcherMod/src/main/resources/creativeengineering.mixins.json)
+   [creativeengineering.mixins.json](../../development/creativeCommon/src/main/resources/creativecommon.mixins.json)
    (line 122):
    ```java
    @Mixin(targets = "forge.net.mca.client.model.VillagerEntityBaseModelMCA")
@@ -658,7 +658,7 @@ Sleeping MCA villagers lie still in bed instead of lying with legs and arms bent
    TAIL reset alone is enough if the wear layers are re-copied: `VillagerEntityModelMCA#setupAnim` copies limbs to
    wear after `super`, so target `VillagerEntityModelMCA` too, or reset the wear parts as well. Use
    `@Mixin(targets = ...)` and `require = 0`, so a future MCA rename doesn't crash the client. patcherMod ships no refmap
-   ([build.gradle](../../development/patcherMod/build.gradle) 20-26): every mixin uses SRG names with `remap = false`,
+   ([build.gradle](../../development/creativeCommon/build.gradle) 20-26): every mixin uses SRG names with `remap = false`,
    so write `method = "m_6973_"` with `remap = false`. Use SRG names for fields too: `ModelPart` xRot `f_104203_`
    and zRot `f_104205_`, `EntityModel` young `f_102609_` (all three seen in MCA's decompiled model). Look up yRot,
    `riding` and `crouching` in the 1.19.2 mappings.

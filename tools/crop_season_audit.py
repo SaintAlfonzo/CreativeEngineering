@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 """Crop growth season audit: every growing plant in the pack, its crop season type (pack: crop_seasons.json,
-patcherMod seasons/CropSeasons, crops.md 2.12.1), and whether its growth fires Forge's crop-grow event at all
+Creative Calendar seasons/CropSeasons, crops.md 2.12.1), and whether its growth fires Forge's crop-grow event at all
 (a plant that never fires it ignores its type and grows at its own speed all year).
 
     python3 tools/crop_season_audit.py
@@ -14,7 +14,7 @@ Reads (kubejs/exported/, refresh with /dumpall):
   items_by_mod/*.json            item ids, to check the planting item exists
 and kubejs/generation_scripts/worldgen/crop_seasons.json (the types; read directly, so no dump is needed after
 editing it), and the class files of mods/*.jar (with their META-INF/jarjar jars), scanned for
-ForgeHooks.onCropsGrowPre (PACK_HOOKS: classes patcherMod's CropSeasonGrowHookMixin adds it to).
+ForgeHooks.onCropsGrowPre (PACK_HOOKS: classes Creative Calendar's CropSeasonGrowHookMixin adds it to).
 
 Writes:
   feature_writeup/crop_seasons_audit.md   the table and the findings (design: briefs/farming_crops.md crops #5)
@@ -44,7 +44,7 @@ VANILLA_EVENT = {
     'CropBlock', 'StemBlock', 'CocoaBlock', 'SugarCaneBlock', 'CactusBlock', 'SweetBerryBushBlock',
     'NetherWartBlock', 'BambooBlock', 'BambooSaplingBlock', 'GrowingPlantHeadBlock', 'ChorusFlowerBlock',
 }
-# Classes patcherMod mixin/CropSeasonGrowHookMixin makes fire the event (their tick grows the plant).
+# Classes Creative Calendar mixin/CropSeasonGrowHookMixin makes fire the event (their tick grows the plant).
 PACK_HOOKS = {
     'blusunrize.immersiveengineering.common.blocks.plant.HempBlock',
     'net.mcreator.thedirtystuff.block.TobaccoSeedsBlock',
@@ -250,7 +250,7 @@ def main():
                '`kubejs/exported/`, `kubejs/generation_scripts/worldgen/crop_seasons.json` and the jars in `mods/`. '
                'Do not edit by hand; the design is in [crops.md](crops.md) section 2.12.1.' % date.today().isoformat())
     out.append('')
-    out.append('Crop seasons (patcherMod `seasons/CropSeasons`): each season is fertile (growth +25 %), neutral or off '
+    out.append('Crop seasons (Creative Calendar `seasons/CropSeasons`): each season is fertile (growth +25 %), neutral or off '
                '(growth -25 %) for the crop\'s type, from the biome\'s calendar (four seasons, or wet/dry in tropical, '
                'dry and arid biomes). Only growth that fires Forge\'s `onCropsGrowPre` is checked, so a plant without '
                'the event grows at its own speed whatever its type. Serene Seasons\' own season tags (column SS) are '

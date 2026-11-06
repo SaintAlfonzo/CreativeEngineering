@@ -11,7 +11,7 @@ Block and item dyeing ideas, and the in-world dye and soap audit. Open work: `bl
 
 Sources: the `/dumpworldjei` dump `kubejs/exported/world_jei/tool_pairs.json` (2026-10-26: 160 colour sets, 466
 dye-blocked blocks, 2751 soap pairs), `config/supplementaries-common.toml`, the JEI world tab manual rows
-(`kubejs/assets/creativeengineering/jei_world/{dyeing,soaping}/manual.json`), and the bytecode of every mod jar whose
+(`kubejs/assets/creativecommon/jei_world/{dyeing,soaping}/manual.json`), and the bytecode of every mod jar whose
 block or interaction code reads a dye (`DyeItem`, `DyeColor.getColor(ItemStack)`, `#forge:dyes`) or the soap item.
 Block families were found from `kubejs/exported/tags/block_tags_by_block.json` (blocks in no tag are not scanned).
 Nothing was changed in game; "verify" marks a result read from code that still needs an in-game check (2.9).

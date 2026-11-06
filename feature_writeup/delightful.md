@@ -1,8 +1,8 @@
 # Delightful 3.8.1 against the installed 3.4.1
 
 **Built 2026-10-25: the value changes, the knife loot, the jam switch-off and the new items, as the Creative Delight
-member `repackedDelightful` (3). Shipped in 1.1.03 (deployed to server and players 2026-10-26) with the Creative Delight jar (installed 2026-10-26); DF-01 to DF-11, SQ-DF not
-run.** The 3.4.1 jar left `mods/` with that install. Evaluated 2026-10-25 against
+member `repackedDelightful` (3). Shipped in 1.1.03 (deployed to server and players 2026-10-26) with the Creative Delight jar (installed 2026-10-26); scratch SQ-DF-01 to -06 PASSED (r1102b s2, 2026-11-02), SQ-DF-07 (old world) not run;
+DF- rows not run in game. Member `-01` with the Cactus Soup Cup removed (copper cup removal) built 2026-11-02 21:10, not in `mods/`.** The 3.4.1 jar left `mods/` with that install. Evaluated 2026-10-25 against
 `devmods/checkNewerVersionForContent/Delightful-1.20.1-3.8.1.jar` (1.20.1 / Forge), method in
 [devmods_evaluation.md](devmods_evaluation.md) section 1. Both jars unpacked in `DecompiledMods/`. Plan row:
 `largecontent/mod-additions #23` in [todo/TODO.md](todo/TODO.md). Config: `config/delightful-common.toml`.
@@ -36,7 +36,7 @@ slice stays, the popsicle is Fruits Delight's, the wild patch grows in the hamim
 | Item | Needs | Note |
 |---|---|---|
 | Cantaloupe Bread, Cantaloupe Gummy, Cantaloupe Popsicle, Wrapped Cantaloupe, Bowl of Stuffed Cantaloupe (+ block) | cantaloupe (on here) | Cantaloupe Seeds and a Cantaloupe Plant crop that grows on sand are new too. All the cantaloupe foods |
-| Cactus Chili, Cactus Soup, Cactus Soup Cup | none (Chili also takes corn); the cup needs Miner's Delight's Copper Cup, which the port has (2.2) | cactus dishes |
+| Cactus Chili, Cactus Soup | none (Chili also takes corn). The Cactus Soup Cup was taken too and removed 2026-11-02 with the Copper Cup (`dishes/meals #53`) | cactus dishes |
 | Baklava (block) + slice | nuts, honey, dough | citrus optional (two recipes) |
 | Matcha Milkshake, Salmonberry Milkshake (+ milkshake cauldrons) | ice cream | cauldrons too |
 | Matcha Gummy (Glow Jam Cookie is not wanted, 2.3) | matcha | 3.8.1 has no matcha cookie (its new cookies are Glow Jam and Source Berry, both off), so only the gummy |
@@ -160,9 +160,9 @@ another namespace and still needed 3.4.1 beside it; the repack replaces the 3.4.
 | Hook | `DelightfulInitMixin` (end of Delightful's constructor) -> `DelightfulBackports.init()`: the registers below on Delightful's mod bus, and at common setup the milkshake cauldron interactions when Neapolitan is loaded. Mixin config `delightful.ce.mixins.json` (`mixin_configs`; the upstream manifest has none) |
 | Registry | `DelightfulBackportRegistry`: blocks `cantaloupe_plant`, `stuffed_cantaloupe_block` (FD `FeastBlock`, 4 servings, no leftovers), `baklava` (`BaklavaBlock`, a flat FD `PieBlock`), `matcha_milkshake_cauldron`, `salmonberry_milkshake_cauldron`; 20 items. All in Farmer's Delight's creative tab, like 3.4.1's. Nothing reads `delightful-common.toml`: every backported item is always on |
 | Foods | `DelightfulBackportFoods`: 3.8.1's `Nutrition` values. Green tea effect = Farmer's Respite Vitality, caffeinated = FR Caffeinated (3.8.1's own lookups) |
-| Classes | `CantaloupePlantBlock` (sand next to water, light 8, ages 0 to 3; when grown, using it picks a Cantaloupe and resets it; bone meal), `MilkshakeCauldronBlock`, `ShakeItem` (2 s drink), `GummyItem` (14 ticks), `CupItem` (gives back Miner's Copper Cup, looked up at use), `FluixKnifeItem`, `DelightfulBackportTiers` |
+| Classes | `CantaloupePlantBlock` (sand next to water, light 8, ages 0 to 3; when grown, using it picks a Cantaloupe and resets it; bone meal), `MilkshakeCauldronBlock`, `ShakeItem` (2 s drink), `GummyItem` (14 ticks), `CupItem` (gave back Miner's Copper Cup; removed 2026-11-02 with the cups), `FluixKnifeItem`, `DelightfulBackportTiers` |
 | Neapolitan compartment | `DelightfulMilkshakes`: Blueprint cauldron maps and `NeapolitanCauldronInteractions.addMilkshakeInteractions` (milk cauldron + ice cream -> milkshake cauldron; bottles fill and empty it). Only class that names Neapolitan or Blueprint, loaded only when Neapolitan is |
-| Resources | `tools/port_resources.py` copies from the donor: blockstates, models, textures, block loot (1.20's `random_sequence` dropped), the names (3.4.1's `en_us.json` plus the new keys, `replaced_resources` sha1-pinned), and `data/delightful/cup_conversion/cactus_soup.json` (Miner's Copper Pot serves Cactus Soup as the cup). 3.4.1's own art is kept where both jars have a file: 3.8.1 redrew the cantaloupe block textures, and the Stuffed Cantaloupe uses 3.4.1's. Pie models take Farmer's Delight's `template_pie*` from the FD member's overlay |
+| Resources | `tools/port_resources.py` copies from the donor: blockstates, models, textures, block loot (1.20's `random_sequence` dropped), the names (3.4.1's `en_us.json` plus the new keys, `replaced_resources` sha1-pinned), and (until 2026-11-02) `data/delightful/cup_conversion/cactus_soup.json` (removed with the Copper Cup). 3.4.1's own art is kept where both jars have a file: 3.8.1 redrew the cantaloupe block textures, and the Stuffed Cantaloupe uses 3.4.1's. Pie models take Farmer's Delight's `template_pie*` from the FD member's overlay |
 | Notice | `NOTICE-upstream-MIT.txt` (brnbrd, both jars) |
 
 Ids that collide with 3.4.1: none (checked against 3.4.1's registry classes and the live item list).
@@ -170,7 +170,7 @@ Ids that collide with 3.4.1: none (checked against 3.4.1's registry classes and 
 ### 3.2 Pack side
 
 - Ids: `item_dict.js`, after the Rustic ids (only CD's scripts use them).
-- Recipes: Creative Delight `kubejs/data/creative_delight/kubejs/delightful/recipes.js` (NCH, ids `creative_delight:<type>/<name>`).
+- Recipes: Creative Delight `kubejs/data/creativedelight/kubejs/delightful/recipes.js` (NCH, ids `creativedelight:<type>/<name>`).
   Both scripts return early unless the repack is the loaded Delightful (`Item.exists(i.cantaloupe_seeds)`), so a stale
   3.4.1 jar beside CD cannot break them.
 
@@ -183,7 +183,7 @@ Ids that collide with 3.4.1: none (checked against 3.4.1's registry classes and 
 | Stuffed Cantaloupe | pot: rice, cooked mutton, onion, berries, seeds; container Cantaloupe; 400 ticks | same |
 | Cantaloupe / Matcha Gummy | pot: fruit or Matcha, sugar, honey bottle, kelp; heated mixer with a honey block: 9 | same |
 | Cactus Chili | pot: raw pork, cactus flesh, tomato sauce, hot spice, corn; bowl | the corn version (the pack has corn) |
-| Cactus Soup | pot: cactus flesh, rice, tomato, onion; bowl. The cup: Copper Pot, cup_conversion | same |
+| Cactus Soup | pot: cactus flesh, rice, tomato, onion; bowl (the cup is removed, 2026-11-02) | same |
 | Baklava | **oven, pie tin: pie crust, 2 cooked nuts, honey bottle, sugar or honey** | upstream's grid recipe is not added: Baklava is a pie here (oven.md 2.6 baking rule). Cutting 4 slices and 4 slices -> Baklava kept |
 | Matcha / Salmonberry Milkshake | 3 bottles, the ice cream, milk -> 3 | same |
 | Roasted Acorn | furnace, smoker, campfire | same |
@@ -204,7 +204,9 @@ Ids that collide with 3.4.1: none (checked against 3.4.1's registry classes and 
 
 ## 4. Tests
 
-Live tests are queued as SQ-DF in [testing/scratch_queue.md](testing/scratch_queue.md). In game after the install:
+- **r1102b 2026-11-02** (scratch server; verdicts in `perf/runs/r1102b/` HANDOVER.md and the slice judged.md): PASS SQ-DF-01, -02, -03, -03b, -04, -05, -06; not run SQ-DF-07.
+
+Live tests are queued as SQ-DF in [testing/scratch_queue.md](testing/scratch_queue.md). Scratch (deep scan 2026-11-02): SQ-DF-01 to -06 and -03b PASS r1102b s2 (`perf/runs/r1102b/s2/`); SQ-DF-07 (3.4.1 old world) not run: the old jar does not boot beside CD. Client half: CQ-DF-01 (DF-02, DF-03, DF-05 to DF-07, DF-09, DF-11 looks; deep scan 2026-11-02). In game after the install:
 
 | ID | Check | Pass |
 |---|---|---|
@@ -215,7 +217,16 @@ Live tests are queued as SQ-DF in [testing/scratch_queue.md](testing/scratch_que
 | DF-05 | Cook Stuffed Cantaloupe, place it, use a bowl 4 times | 4 Bowls of Stuffed Cantaloupe, the block is gone after the 4th; picking it up whole drops the block |
 | DF-06 | Bake Baklava in the oven, place it, eat and cut it | 4 slices, Haste 30 s without particles |
 | DF-07 | Milk cauldron (Neapolitan) + Matcha Ice Cream, then 3 glass bottles | the cauldron turns into a Matcha Milkshake cauldron; 3 Matcha Milkshakes, empty cauldron |
-| DF-08 | Copper Pot: Cactus Soup recipe | serves Cactus Soup Cups; eating one gives back a Copper Cup |
+| DF-08 | (dropped 2026-11-02: the Cactus Soup Cup left with the Copper Cup) | Cactus Soup Cup absent from JEI; old cups become nothing or the remap target (`dishes/meals #53`) |
 | DF-09 | Fluix Knife on a mob | tooltip "Always has at least Looting I"; kills drop as with Looting I |
 | DF-10 | The 3 knives on a cutting board | they cut (in `forge:tools/knives`) |
 | DF-11 | Names | Iced Berry Matcha Latte, Nut Butter, Rose Rock Candy |
+
+## 5. Names (2026-11-03, `ui/names #14`)
+
+The Mini Cantaloupe Plant, Sliced Mini Cantaloupe, the cantaloupe JEI and description texts and Fruits Delight's Cantaloupe Stem,
+Attached Cantaloupe Stem, cauldrons and fluids (cantaloupe merge, item_merges.md 2.10) are now set in each mod's own lang
+namespace (3-argument `e.add` in CD `assets/creativedelight/kubejs/creativeengineering/names.js`). The 2-argument form wrote them
+into the minecraft lang, which the mod's own file can beat (the `ui/names #12` cause). Client restart (or F3+T).
+In the CD jar installed 2026-11-03 00:08, not booted; client row CQ-CDM2-01 (queue section SQ-CDJ7).
+

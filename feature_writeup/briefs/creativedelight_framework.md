@@ -24,7 +24,7 @@ Status In Progress / Work tool / TODO `creativedelight/framework #6`
 
 ### Goal
 Prove a move lost nothing: registry names, recipes (type, result, ingredients), tag contents and loot table ids are the
-same before and after, apart from the expected `creativeengineering:` -> `creative_delight:` recipe id namespace (Q24).
+same before and after, apart from the expected `creativeengineering:` -> `creativedelight:` recipe id namespace (Q24).
 
 ### Now
 - **Offline half built 2026-10-25:** [tools/cd_move_diff.py](../../tools/cd_move_diff.py) (184 lines), `snapshot`
@@ -53,7 +53,7 @@ same before and after, apart from the expected `creativeengineering:` -> `creati
 
 ### Tests
 - CDT-new1 (proposed, numbered when queued): the harness on two copies of the same dump passes; with one recipe removed, one tag member dropped
-  and one recipe renamed `creativeengineering:` -> `creative_delight:`, it reports exactly the first two.
+  and one recipe renamed `creativeengineering:` -> `creativedelight:`, it reports exactly the first two.
 
 ---
 
@@ -75,11 +75,11 @@ Status In Progress / Work KubeJS / tool / TODO `creativedelight/framework #4` (T
 ### Build (left)
 1. `_lib/tool_dict.js` and `_lib/misc_dict.js` with the same check (`global.subdict.check(t, 'tool')`); key rules first
    (creative_delight.md 13.3 examples).
-2. Pilot Veggies: rewrite the cooking calls in `kubejs/data/creative_delight/kubejs/veggiesdelight/recipes.js` to `f.*`
+2. Pilot Veggies: rewrite the cooking calls in `kubejs/data/creativedelight/kubejs/veggiesdelight/recipes.js` to `f.*`
    (CD scripts alias `f`; pack-folder scripts `fd`), then diff recipes with `#6`'s dump half (CDT-09).
 
 ### Decisions
-- Juice keys: **`drink_juice_`** (default, 13.5). Tag values in `f`: **no** (default).
+- Juice keys: **`fruit_juice_`** (owner 2026-11-01; was the default `drink_juice_`, 13.5). Tag values in `f`: **no** (default).
 
 ### Gotchas
 `f` is the fluid alias in the pack's startup and server folders; `food_dict.js` keeps its `f` inside a function. Kept by
@@ -100,10 +100,10 @@ The member files' cut, cook, bake, heatless meal, sequenced assembly and golden 
 `global.CD.food`, so each family's rule (`global.CD.FOOD` values, owner 2026-10-27) holds everywhere.
 
 ### Now
-Helper: [cd_food.js](../../development/creativeDelight/src/main/resources/kubejs_startup/creative_delight/cd_food.js)
+Helper: [cd_food.js](../../development/creativeDelight/src/main/resources/kubejs_startup/creativedelight/cd_food.js)
 (Creative Delight jar; values in `global.CD.FOOD` from line 38: slices 40, cook 44). Callers since 2026-10-27 (`#11`):
 `creativeengineering/baking.js`, `rusticdelight/recipes.js`, `creativeengineering/cultivated_meat.js`. Hand rows left
-(all under `kubejs/data/creative_delight/kubejs/`, checked 2026-10-31):
+(all under `kubejs/data/creativedelight/kubejs/`, checked 2026-10-31):
 
 | File:line | Row | Family call |
 |---|---|---|
@@ -148,7 +148,7 @@ the Miner's calamari loop (32), Hostile's prepared sea pickle (20).
 ### Gotchas
 - `assemble` turns an array step into a fill step (`Array.prototype.fill`, creative_delight.md 30 open bug,
   `baking/baked-goods #37`): fix it first or keep array steps out of moved assembly rows.
-- A family sweep never removes `creativeengineering:` or `creative_delight:` recipes; delete the old hand row itself.
+- A family sweep never removes `creativeengineering:` or `creativedelight:` recipes; delete the old hand row itself.
 - Ids change to the helper's suffixes: anything that names an old id (JEI hiding, `R.remove` lists, quests) needs a grep.
 
 ### Tests
@@ -197,14 +197,14 @@ Status In Progress / Work docs / TODO `creativedelight/framework #3`
   sha1 named) and `members/hearth/NOTICE-upstream-MIT.txt` (Hearth and Harvest 1.4.1, MIT) are present. Rustic
   (`backportedRustic`) is a donor-jar port (upstream jar read at runtime from `rustic_upstream/`, not shipped), so no
   notice is needed; Blockheads Additions holds only own code (CfB is All Rights Reserved; models name CfB parents by id).
-- **Left: Oceanic.** `repackedOceanic-1.0.1-ce-19.2-01.jar` is still nested in `creative_delight-1.0.0.jar`; its
+- **Left: Oceanic.** `repackedOceanic-1.0.1-ce-19.2-01.jar` is still nested in `creativedelight-1.0.0.jar`; its
   notice keeps "MIT, DariusZeBaguette" from `mods.toml`, while the author's Modrinth listing for the same file says
   All Rights Reserved.
 
 ### Build
 Owner decision, then either: (a) a message to the author and the notice updated with the answer, or (b) drop the repack:
 Oceanic back to its own upstream jar in `mods/`, the fishing-net overlay as a `@Pseudo` mixin in CD
-(`mixin.oceanic_delight.`, `CDMixinPlugin`), the member row out of `creative_delight_members` and `mod_sides.md`.
+(`mixin.oceanic_delight.`, `CDMixinPlugin`), the member row out of `creativedelight_members` and `mod_sides.md`.
 
 ### Decisions
 - **Ask the author first; if no answer by the next release, drop the repack** (option b keeps the overlay and ships

@@ -6,7 +6,7 @@ pace 2
 
 ## SQ-B1-BOOT | boot clean, bot up
 bootexpect Done \(
-bootreject (Mixin apply failed|InvalidInjectionException).*(creativeengineering|creative_delight)
+bootreject (Mixin apply failed|InvalidInjectionException).*(creativeengineering|creativedelight)
 bootreject \[named_mobs\].*(?i)warn
 > pbot spawn qa 0 120 0 minecraft:overworld creative
 > pbot status
@@ -159,7 +159,7 @@ sleep 30
 > zq count {FF1-48} 40 {FF3-48} {FF1+48} 140 {FF3+48} fruitsdelight:apple_leaves
 reject fruitsdelight:apple_sapling
 bootexpect \[itemMerges\]
-look the inventory shows the Vinery apple sapling id; the leaves count is 0; the [itemMerges] boot line count includes the creative_delight pairs
+look the inventory shows the Vinery apple sapling id; the leaves count is 0; the [itemMerges] boot line count includes the creativedelight pairs
 
 ## CQ-FF-01 | firefly bushes in savanna, shrubland, brushland, mangrove and orchid swamps
 > execute positioned 0 70 0 run locate biome minecraft:savanna

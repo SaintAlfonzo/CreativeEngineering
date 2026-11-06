@@ -99,15 +99,15 @@ config label is now "Sheared Grass and Vines".
 
 ## 5. File map
 
-- [VineShearing.java](../development/patcherMod/src/main/java/com/SaintAlfonzo/creativeengineering/block/VineShearing.java)
-- [VineBlockShearMixin.java](../development/patcherMod/src/main/java/com/SaintAlfonzo/creativeengineering/mixin/VineBlockShearMixin.java)
-- [VineShearingClient.java](../development/patcherMod/src/main/java/com/SaintAlfonzo/creativeengineering/block/VineShearingClient.java)
-- [WthitSheared.java](../development/patcherMod/src/main/java/com/SaintAlfonzo/creativeengineering/compat/WthitSheared.java)
-- [CEConfig.java](../development/patcherMod/src/main/java/com/SaintAlfonzo/creativeengineering/CEConfig.java) `VineShearing`, `Wthit.sheared`
+- [VineShearing.java](../development/creativeCommon/src/main/java/com/SaintAlfonzo/creativecommon/block/VineShearing.java)
+- [VineBlockShearMixin.java](../development/creativeCommon/src/main/java/com/SaintAlfonzo/creativecommon/mixin/VineBlockShearMixin.java)
+- [VineShearingClient.java](../development/creativeCommon/src/main/java/com/SaintAlfonzo/creativecommon/block/VineShearingClient.java)
+- [WthitSheared.java](../development/creativeCommon/src/main/java/com/SaintAlfonzo/creativecommon/compat/WthitSheared.java)
+- [CEConfig.java](../development/creativeCommon/src/main/java/com/SaintAlfonzo/creativecommon/CEConfig.java) `VineShearing`, `Wthit.sheared`
 
 ## 6. Offline checks (2026-10-31, all PASSED)
 
-- `./gradlew :patcherMod:build --offline`; reobf jar `javap`: calls are SRG (`GrowingPlantHeadBlock.m_187440_`
+- `./gradlew :creativeCommon:build --offline`; reobf jar `javap`: calls are SRG (`GrowingPlantHeadBlock.m_187440_`
   isMaxAge, `m_187438_` getMaxAgeState, `CaveVines.m_152951_`).
 - Headless harness (scratchpad `trimtest`): `VineShearingClient.trim` on a wall quad in all 4 vertex orders (bottom
   vertices to y 5/16, v 31% of the way up, u and x unchanged, top untouched), ceiling quad returned as is, tint kept;

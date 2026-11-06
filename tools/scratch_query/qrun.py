@@ -33,7 +33,7 @@ Batch format (one directive per line, '#' comments, blank lines ignored):
 Every row is also a perf segment: when a perf session is open (tools/perf/session/perf_session.sh) the row ID is
 marked there; RES/timeline.tsv always gets the wall-clock start and end of each row, so a JFR recording (server or
 client) can be cut to a row later. Results: RES/results.json (merged across runs), RES/results.md, RES/rows/ID.log
-(the row's log segment). Regexes are Python, matched per line.
+(the row's log segment), RES/rows/ID.shell.txt (shell step output). Regexes are Python, matched per line.
 """
 import json
 import os
@@ -216,6 +216,9 @@ def run_row(t, row, res):
         elif word == "shell":
             r = subprocess.run(["bash", "-c", arg], cwd=t.dir, capture_output=True, text=True,
                                env=dict(os.environ, INST=INST))
+            os.makedirs(os.path.join(res, "rows"), exist_ok=True)
+            with open(os.path.join(res, "rows", row["id"] + ".shell.txt"), "a") as so:
+                so.write(f"$ {arg}\n{r.stdout}{r.stderr}\n")
             if r.returncode:
                 fails.append(f"shell exit {r.returncode}: {(r.stderr or r.stdout).strip()[:200]}")
         elif word == "sleep":
@@ -337,7 +340,13 @@ def main():
     if os.path.exists(vp):
         VARS.update(json.load(open(vp)))
     started = start is None
+    crashdir = os.path.join(target, "srv", "crash-reports") if a[0] == "run" else None
+    crashes0 = set(os.listdir(crashdir)) if crashdir and os.path.isdir(crashdir) else set()
     for row in parse(batch):
+        if crashdir and os.path.isdir(crashdir) and set(os.listdir(crashdir)) - crashes0:
+            # the server died: later rows would only time out (r1102b 19:03, a probe crashed the tick loop)
+            print(f"ABORT: server crash report {sorted(set(os.listdir(crashdir)) - crashes0)} before {row['id']}")
+            break
         if not started:
             started = row["id"] == start
             if not started:

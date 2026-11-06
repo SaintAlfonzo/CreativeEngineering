@@ -9,7 +9,7 @@ Test prefix **STL-** · Last updated **2026-10-31** · Overall status **BUILT 20
 | 16 items `creativeengineering:<colour>_stepstool`, Another Furniture tall stool models | [stepstools.js](../kubejs/startup_scripts/items/stepstools.js), `item_dict.js` | BUILT, needs restart |
 | Recipe: Create seat of the colour on top of an oak fence | [stepstool.js](../kubejs/server_scripts/equipment/stepstool.js) | BUILT |
 | Tags `#creativeengineering:stepstools`, `#curios:feet` | [curiostags.js](../kubejs/server_scripts/tags/curiostags.js) | BUILT |
-| Curios Feet slot (vanilla boots icon) | [feet.json](../kubejs/data/creativeengineering/curios/slots/feet.json), [curios_slots.md](curios_slots.md) | BUILT, needs restart |
+| Curios Feet slot (vanilla boots icon) | patcherMod `compat/CuriosSlots.java` (IMC; the old feet.json was never read by Curios 5.1.x), [curios_slots.md](curios_slots.md) | BUILT 2026-11-01, jar not installed |
 | Step up / step off, collision, server checks, sync | patcherMod `stepstool/Stepstool.java` | BUILT |
 | Keys, stepping off on input, stool drawn under players | patcherMod `stepstool/client/StepstoolClient.java` | BUILT |
 | Stool collision for its owner; no flying kick | `mixin/EntityStepstoolCollisionMixin`, `mixin/ServerGamePacketListenerStepstoolMixin` | BUILT |
@@ -68,18 +68,18 @@ its colour. They stay up until they move, crouch, jump or something else knocks 
 
 - [kubejs/startup_scripts/items/stepstools.js](../kubejs/startup_scripts/items/stepstools.js), `kubejs/startup_scripts/_lib/item_dict.js` (`i.<colour>_stepstool`, `i.t_stepstools`, `i.t_curios_feet`)
 - [kubejs/server_scripts/equipment/stepstool.js](../kubejs/server_scripts/equipment/stepstool.js), [kubejs/server_scripts/tags/curiostags.js](../kubejs/server_scripts/tags/curiostags.js)
-- [kubejs/data/creativeengineering/curios/slots/feet.json](../kubejs/data/creativeengineering/curios/slots/feet.json), [entities/player_hands_face.json](../kubejs/data/creativeengineering/curios/entities/player_hands_face.json); lang `curios.identifier.feet` in `kubejs/assets/creativeengineering/lang/en_us.json`
-- [development/patcherMod/.../stepstool/](../development/patcherMod/src/main/java/com/SaintAlfonzo/creativeengineering/stepstool/) `Stepstool`, `StepstoolCurios`, `client/StepstoolClient`
+- patcherMod `compat/CuriosSlots.java` (feet slot IMC); lang `curios.identifier.feet` in `kubejs/assets/creativeengineering/lang/en_us.json`
+- [development/creativeCommon/.../stepstool/](../development/creativeCommon/src/main/java/com/SaintAlfonzo/creativecommon/stepstool/) `Stepstool`, `StepstoolCurios`, `client/StepstoolClient`
 - patcherMod `mixin/EntityStepstoolCollisionMixin` (`m_20272_`), `mixin/ServerGamePacketListenerStepstoolMixin` (`m_9793_`); `CEConfig.Stepstool`; key lang in patcherMod `assets/creativeengineering/lang/en_us.json`
 
 ## 6. Offline checks
 
-- 2026-10-29: `./gradlew :patcherMod:build --offline` passes. `changelog_lint.py` 0 errors.
+- 2026-10-29: `./gradlew :creativeCommon:build --offline` passes. `changelog_lint.py` 0 errors.
 
 ## 7. In-game test suite
 
 - [ ] **STL-01 boot:** start the game → no `Mixin apply failed` / `InvalidInjectionException` naming `Stepstool`; `latest.log` no KubeJS errors from `stepstools.js`, `stepstool.js`, `curiostags.js`.
-- [ ] **STL-02 items:** JEI shows 16 stepstools, each looking like that colour's tall stool, names "<Colour> Stepstool", tooltip 3 lines.
+- [ ] **STL-02 items:** JEI shows 16 stepstools, each looking like that colour's tall stool, names "<Colour> Stepstool", tooltip: Curios' "Slot: Feet" and the two use lines (the pack's "Worn in the Feet slot" line dropped 2026-11-02, `ui/tooltips #8`).
 - [ ] **STL-03 recipe:** red seat above an oak fence gives a Red Stepstool; same for one other colour.
 - [ ] **STL-04 slot:** the Curios screen has a Feet slot (boots icon, "Feet"); a stepstool goes in, other items do not.
 - [ ] **STL-05 step up:** wear one, stand still, hold Sprint + Jump → after about a quarter second you are a block higher, the stool is drawn under you (first and third person), no jump happens, wood sound.
@@ -100,3 +100,4 @@ its colour. They stay up until they move, crouch, jump or something else knocks 
 - 2026-10-29: Investigated (Another Furniture tall stools are one block tall; no Feet slot existed) and built: items,
   recipe, Feet slot, patcherMod stepstool package and two mixins. patcherMod 1.1.04 built, not installed (game running).
 - 2026-10-31: patcherMod 1.1.04 installed in `mods/` at 00:44 (stepstool classes in the jar); not yet booted.
+- 2026-11-04: moved to Creative Equipment ([creative_equipment.md](creative_equipment.md)): `stepstool/` Java, the two mixins, `[stepstool]` (now `config/creativeequipment-common.toml`), items `kubejs_startup/creativeequipment/items/stepstools.js`, recipe and feet tag in `kubejs/data/creativeequipment/kubejs/`. Channel id unchanged. Same behaviour.

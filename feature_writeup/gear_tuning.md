@@ -26,7 +26,7 @@
   [func/tune_armor.js](../kubejs/startup_scripts/func/tune_armor.js) (the numbers),
   [end_gear.js](../kubejs/server_scripts/equipment/end_gear.js) (the ladder recipes),
   [dragon_autorepair.js](../kubejs/server_scripts/equipment/dragon_autorepair.js),
-  [AirBrakeHandler.java](../development/patcherMod/src/main/java/com/SaintAlfonzo/creativeengineering/gear/AirBrakeHandler.java).
+  [AirBrakeHandler.java](../development/creativeCommon/src/main/java/com/SaintAlfonzo/creativecommon/gear/AirBrakeHandler.java).
 - **Knobs:**
   - Stats: code in the two tune files; edit and **restart** (`/reload` doesn't re-run `ItemEvents.modification`).
   - `config/creativeengineering-common.toml`, live through Create's config screen:
@@ -197,6 +197,31 @@ while gliding. Every tick held, on both the client and the server:
 
 From a typical 1.5 blocks/tick glide, the default brake reaches the stall speed in about 20 ticks (1 s).
 
+### 2.10 Armor trims: standard armor only (`gear/tuning #14`, built 2026-11-02)
+
+Armor Trims Backport 1.3.3 makes every `ArmorItem` trimmable (226 items, `kubejs/exported/gear/armor.csv`), including
+hats, goggles, backtanks, diving gear and custom-model sets where a trim is invisible or a "mystery belt". The pack keeps
+only standard armor drawn on the vanilla armor model:
+
+| Kept (item tag `creativeengineering:trimmable_armor`, `server_scripts/tags/equipmenttags.js`) |
+|---|
+| Vanilla leather, chainmail, iron, gold, diamond, netherite (4 pieces each) and the turtle shell |
+| Everything Copper copper, Create: Dreams & Desires echo, Felsic, Dragon Loot dragon (plus the upgraded dragon chestplate) |
+| Immersive Engineering steel, PneumaticCraft compressed iron |
+
+Out: Immersive Armors, Wardrobe, Botania, Alex's Mobs, Railways caps, Create Goggles, backtanks and diving gear, hats,
+PneumaticCraft pneumatic armor, IE faraday, cardboard. The list is the brief's recommendation; the render audit
+(`gear/tuning #16`) can move sets in or out with one tag line.
+
+How: patcherMod `compat/ArmorTrimsItemCache` already caches Armor Trims' `LargeItemLists.getAllTrimmable` (perf.md
+10.3). When the tag has members, the cached list keeps only them. That one list is what `TrimmableItem.applyTrim`
+checks (smithing table result), and what the JEI trim and untrimming pages, the untrimming recipe and the trimmed-item
+decorator read, so all of them narrow together and follow `/reload` (the cache resets on every tag load). An empty tag
+means Armor Trims' full list. Trim materials were already cut to 8 (`gear/tuning #18`).
+
+Limits: a piece trimmed before the change keeps its `trim` NBT; whether it still draws the trim or the decorator is
+unknown until checked (GR-44). Appearance of the kept sets was not checked in a client (GR-43).
+
 ## 3. What the pack changes
 
 - **Stats at startup:** `tune_tools.js` / `tune_armor.js` (`func/`, `// priority: -100` so `global.item` exists)
@@ -315,11 +340,11 @@ From a typical 1.5 blocks/tick glide, the default brake reaches the stall speed 
 - [server_scripts/equipment/dragon_autorepair.js](../kubejs/server_scripts/equipment/dragon_autorepair.js): autorepair.
 - [server_scripts/tags/equipmenttags.js](../kubejs/server_scripts/tags/equipmenttags.js): `#dragon_gear`, `#elytra_chestplates`.
 - [startup_scripts/func/neoCraftHelper.js](../kubejs/startup_scripts/func/neoCraftHelper.js): `cfg` (~line 630), `elytraDuplication`, `echoAssembly`, `felsicAssembly`, `dragonAssembly` (~lines 1159-1207).
-- [startup_scripts/changes/transition_items.js](../kubejs/startup_scripts/changes/transition_items.js): the incomplete items.
+- [startup_scripts/changes/transition_items.js](../development/creativeEngineering/src/main/resources/kubejs_startup/creativeengineering/changes/transition_items.js): the incomplete items.
 - [server_scripts/_lib/dump_gear.js](../kubejs/server_scripts/_lib/dump_gear.js): `/dumpgear`.
-- patcherMod: [gear/AirBrakeHandler.java](../development/patcherMod/src/main/java/com/SaintAlfonzo/creativeengineering/gear/AirBrakeHandler.java), [gear/ElytraDuplicationRecipe.java](../development/patcherMod/src/main/java/com/SaintAlfonzo/creativeengineering/gear/ElytraDuplicationRecipe.java), [gear/ElytraDuplicationSerializers.java](../development/patcherMod/src/main/java/com/SaintAlfonzo/creativeengineering/gear/ElytraDuplicationSerializers.java), [util/ElytraChestplates.java](../development/patcherMod/src/main/java/com/SaintAlfonzo/creativeengineering/util/ElytraChestplates.java), [util/ArmorEnchantabilityBridge.java](../development/patcherMod/src/main/java/com/SaintAlfonzo/creativeengineering/util/ArmorEnchantabilityBridge.java).
-- Mixins: [SequencedAssemblyRecipeMixin](../development/patcherMod/src/main/java/com/SaintAlfonzo/creativeengineering/mixin/SequencedAssemblyRecipeMixin.java), [ArmorMaterialEnchantabilityMixin](../development/patcherMod/src/main/java/com/SaintAlfonzo/creativeengineering/mixin/ArmorMaterialEnchantabilityMixin.java), [EasyElytraTakeoffHelperMixin](../development/patcherMod/src/main/java/com/SaintAlfonzo/creativeengineering/mixin/EasyElytraTakeoffHelperMixin.java), [EasyElytraTakeoffGroundCheckMixin](../development/patcherMod/src/main/java/com/SaintAlfonzo/creativeengineering/mixin/EasyElytraTakeoffGroundCheckMixin.java).
-- `CEConfig.DragonGear`, `AirBrake`, `Crafting` (+ `FelsicPiece`), `ArmorEnchant` in [CEConfig.java](../development/patcherMod/src/main/java/com/SaintAlfonzo/creativeengineering/CEConfig.java).
+- patcherMod: [gear/AirBrakeHandler.java](../development/creativeCommon/src/main/java/com/SaintAlfonzo/creativecommon/gear/AirBrakeHandler.java), [gear/ElytraDuplicationRecipe.java](../development/creativeCommon/src/main/java/com/SaintAlfonzo/creativecommon/gear/ElytraDuplicationRecipe.java), [gear/ElytraDuplicationSerializers.java](../development/creativeCommon/src/main/java/com/SaintAlfonzo/creativecommon/gear/ElytraDuplicationSerializers.java), [util/ElytraChestplates.java](../development/creativeCommon/src/main/java/com/SaintAlfonzo/creativecommon/util/ElytraChestplates.java), [util/ArmorEnchantabilityBridge.java](../development/creativeCommon/src/main/java/com/SaintAlfonzo/creativecommon/util/ArmorEnchantabilityBridge.java).
+- Mixins: [SequencedAssemblyRecipeMixin](../development/creativeCommon/src/main/java/com/SaintAlfonzo/creativecommon/mixin/SequencedAssemblyRecipeMixin.java), [ArmorMaterialEnchantabilityMixin](../development/creativeCommon/src/main/java/com/SaintAlfonzo/creativecommon/mixin/ArmorMaterialEnchantabilityMixin.java), [EasyElytraTakeoffHelperMixin](../development/creativeCommon/src/main/java/com/SaintAlfonzo/creativecommon/mixin/EasyElytraTakeoffHelperMixin.java), [EasyElytraTakeoffGroundCheckMixin](../development/creativeCommon/src/main/java/com/SaintAlfonzo/creativecommon/mixin/EasyElytraTakeoffGroundCheckMixin.java).
+- `CEConfig.DragonGear`, `AirBrake`, `Crafting` (+ `FelsicPiece`), `ArmorEnchant` in [CEConfig.java](../development/creativeCommon/src/main/java/com/SaintAlfonzo/creativecommon/CEConfig.java).
 - Not here: Customizable Elytra's banner-pattern fix (`CustomizableElytraBannerPatternMixin`, backlog row 10 "banner
   patterns"); effects on this gear ([armor_effects.md](armor_effects.md)); shields ([shields.md](shields.md)).
 
@@ -402,6 +427,12 @@ Survival unless noted. `/dumpgear` after a restart gives every stat for GR-01 to
 - [ ] **GR-31 Felsic Long Reach fill (F2):** JEI on the felsic helmet assembly: 500 mB Long Reach, then 500 mB Magic
   Resistance. Set `[crafting.felsic_helmet] reachPotionMb = 100`, `/reload` → log `CRAFTING.FELSIC_HELMET.reachMb
   overridden: default 500 -> 100`; JEI shows 100 mB Long Reach, 500 mB Magic Resistance. Put it back.
+- [ ] **GR-43 Trims on standard armor only (2.10):** smithing table with a trim template and a material: an iron
+  chestplate takes the trim; an Immersive Armors chestplate, a Wardrobe hat and a Create backtank give no result. JEI
+  trim pages list only the kept sets. One trimmed piece per kept set on an armor stand: the trim draws on the model
+  (note any set where it does not).
+- [ ] **GR-44 Old trims (2.10):** a piece outside the list trimmed before the change: it still loads; note whether the
+  trim draws and whether the untrimming recipe takes it.
 
 ## 8. History
 
@@ -419,6 +450,9 @@ Survival unless noted. `/dumpgear` after a restart gives every stat for GR-01 to
 - 2026-11-01: F13 toml fix (`dragonloot-common.toml` 12 chest, 10 legs, toughness 4.5; `gear/tuning #20`). F2 built: `reachPotionMb`
   key per felsic piece (`gear/tuning #6`, patcherMod built, not installed); GR-31 added. NCH numeric defaults (`?? N` returned 0
   in this Rhino) now go through `NCH._or`, incl. `felsicAssembly` hammerBlows.
+- 2026-11-02: armor trims limited to standard armor (2.10, `gear/tuning #14`): tag `creativeengineering:trimmable_armor`,
+  filter in patcherMod `ArmorTrimsItemCache` (built, not installed). GR-43, GR-44.
+- 2026-11-04: `tuneTools` / `tuneArmor`, armor enchantability, the armor cap, the copper tier and the gear scripts moved to Creative Equipment ([creative_equipment.md](creative_equipment.md)); config tables now in `config/creativeequipment-common.toml`. Same behaviour.
 
 ## Owner ideas (scratchpad 2026-10-26)
 
