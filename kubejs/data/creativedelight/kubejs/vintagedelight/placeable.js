@@ -4,22 +4,42 @@
 // Placeable food tags, vintagedelight part. Readers merge every part with global.CD.genMerge('placeable') (creative_delight.md 28.2).
 if (global.CD) global.CD.genPut('placeable', 'vintagedelight', {
  "placeable": [
+  "ancient_fruit_jam_jar",
   "apple_sauce_jar",
+  "banana_jam_jar",
   "cheese_pizza",
   "cheese_wheel",
+  "cherry_jam_jar",
+  "green_grape_jam_jar",
   "honey_jar",
   "meat_pizza",
+  "mulberry_jam_jar",
   "nut_mash_jar",
+  "nut_milk_jar",
   "pepper_jam_jar",
+  "raspberry_jam_jar",
+  "red_grape_jam_jar",
   "relish_jar",
+  "salmonberry_jam_jar",
+  "strawberry_jam_jar",
   "vinegar_jar"
  ],
  "placeable_on_coaster": [
+  "ancient_fruit_jam_jar",
   "apple_sauce_jar",
+  "banana_jam_jar",
+  "cherry_jam_jar",
+  "green_grape_jam_jar",
   "honey_jar",
+  "mulberry_jam_jar",
   "nut_mash_jar",
+  "nut_milk_jar",
   "pepper_jam_jar",
+  "raspberry_jam_jar",
+  "red_grape_jam_jar",
   "relish_jar",
+  "salmonberry_jam_jar",
+  "strawberry_jam_jar",
   "vinegar_jar"
  ]
 })

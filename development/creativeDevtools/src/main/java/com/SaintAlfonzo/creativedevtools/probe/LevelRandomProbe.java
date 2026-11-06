@@ -1,6 +1,6 @@
 package com.SaintAlfonzo.creativedevtools.probe;
 
-import com.SaintAlfonzo.creativeengineering.util.LevelRandomHook;
+import com.SaintAlfonzo.creativecommon.util.LevelRandomHook;
 import com.SaintAlfonzo.creativedevtools.DevtoolsConfig;
 import com.mojang.logging.LogUtils;
 import net.minecraft.world.level.levelgen.RandomSupport;

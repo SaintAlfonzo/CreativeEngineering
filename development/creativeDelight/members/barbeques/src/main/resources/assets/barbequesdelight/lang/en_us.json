@@ -77,5 +77,13 @@
   "config.waila.plugin_barbequesdelight.grill": "Grill progress",
   "barbequesdelight.tooltip.no_sauce_raw": "Goes on cooked skewers only",
   "barbequesdelight.seasoning.salted": "Salted ",
-  "barbequesdelight.seasoning.garlic": "Garlic "
+  "barbequesdelight.seasoning.garlic": "Garlic ",
+  "item.farmersdelight.raw_barbecue_stick": "Raw Barbecue Skewer",
+  "item.ends_delight.raw_end_barbecue_stick": "Raw End Skewer",
+  "item.miners_delight.raw_improvised_barbecue_stick": "Raw Improvised Skewer",
+  "item.nethersdelight.raw_nether_skewer": "Raw Nether Skewer",
+  "item.oceanic_delight.raw_seafood_skewer": "Raw Seafood Skewer",
+  "item.veggiesdelight.raw_turnip_mutton_skewer": "Raw Turnip Mutton Skewer",
+  "item.endersdelight.raw_crispy_skewer": "Raw Crispy Skewer",
+  "item.hostiledelight.raw_caveskewer": "Raw Cave Skewer"
 }

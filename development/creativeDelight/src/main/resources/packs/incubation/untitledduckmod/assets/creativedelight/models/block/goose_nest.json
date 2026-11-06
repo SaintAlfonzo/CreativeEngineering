@@ -1,0 +1,6 @@
+{
+  "parent": "incubation:block/twig_nest",
+  "textures": {
+    "nest": "creativedelight:block/goose_nest"
+  }
+}

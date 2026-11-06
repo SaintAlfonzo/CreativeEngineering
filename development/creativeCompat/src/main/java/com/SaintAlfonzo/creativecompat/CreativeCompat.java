@@ -13,16 +13,13 @@ import com.SaintAlfonzo.creativecompat.compat.SophisticatedPolymorphClient;
 import com.SaintAlfonzo.creativecompat.compat.SophisticatedPolymorphCompat;
 import com.SaintAlfonzo.creativecompat.compat.TrashSlotCompat;
 import com.SaintAlfonzo.creativecompat.compat.jei.BurnRows;
-import com.SaintAlfonzo.creativecompat.compat.jei.CampfireRows;
 import com.SaintAlfonzo.creativecompat.cats.CatFeather;
 import com.SaintAlfonzo.creativecompat.cats.CozyCats;
 import com.SaintAlfonzo.creativecompat.mobs.MonsterBoxVault;
-import com.SaintAlfonzo.creativeengineering.campfire.CampfireRainInfo;
-import com.SaintAlfonzo.creativeengineering.compat.JarContents;
-import com.SaintAlfonzo.creativeengineering.compat.jei.world.WorldRows;
-import com.SaintAlfonzo.creativeengineering.compat.jei.world.WorldTab;
-import com.SaintAlfonzo.creativeengineering.surface.LeafPileSlow;
-import com.SaintAlfonzo.creativeengineering.swap.ConfigRename;
+import com.SaintAlfonzo.creativecommon.compat.JarContents;
+import com.SaintAlfonzo.creativecommon.compat.jei.world.WorldRows;
+import com.SaintAlfonzo.creativecommon.compat.jei.world.WorldTab;
+import com.SaintAlfonzo.creativecommon.swap.ConfigRename;
 import com.mojang.logging.LogUtils;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.common.MinecraftForge;
@@ -80,20 +77,17 @@ public class CreativeCompat {
         IEventBus modEventBus = FMLJavaModLoadingContext.get().getModEventBus();
         modEventBus.addListener(CreativeCompat::commonSetup);
 
-        // What patcherMod's WTHIT and JEI code reads from here, through its own holders (no patcherMod class loads this
+        // [leaf_piles] slowFromLayers also feeds the WTHIT Run Speed line: Creative Engineering reads it through
+        // CompatConfig.LEAF_PILES into its surface/LeafPileSlow hook (2026-11-04; Compat links no content jar).
+        // What Creative Common's WTHIT and JEI code reads from here, through its own holders (no Common class loads this
         // jar's classes). Read live, so config reloads apply.
-        LeafPileSlow.set(() -> CompatConfig.SPEC.isLoaded() ? CompatConfig.LEAF_PILES.slowFromLayers.get() : LeafPileSlow.DEFAULT);
-        CampfireRainInfo.set(
-                () -> CompatConfig.SPEC.isLoaded() && CompatConfig.CAMPFIRE.rainDouses.get(),
-                () -> CompatConfig.SPEC.isLoaded() ? CompatConfig.CAMPFIRE.rainOutTicks.get() : 160);
         if (ModList.get().isLoaded("supplementaries")) {
             // Mixed jars (JarMixing): the WTHIT jar line groups the slots by item
             JarContents.set(JarMixing::kinds, JarMixing::total);
         }
         if (ModList.get().isLoaded("jei")) {
-            // JEI World Interactions: Burning and Campfire rows (WorldRows is JEI-free; JEI loads its plugin later)
+            // JEI World Interactions: Burning rows (Campfire Rules moved to Creative Delight 2026-11-04) (WorldRows is JEI-free; JEI loads its plugin later)
             WorldRows.provider(WorldTab.BURNING, BurnRows::rows);
-            WorldRows.provider(WorldTab.CAMPFIRE, CampfireRows::rows);
         }
 
         // Beautify botanist workbench as a flower pot (compat/BotanistPot, mixin/BotanistWorkbenchPotMixin; flower_pots.md).
@@ -118,6 +112,12 @@ public class CreativeCompat {
             if (ModList.get().isLoaded("sophisticatedcore")) {
                 MinecraftForge.EVENT_BUS.register(SophisticatedPolymorphCompat.class);
             }
+        }
+        // Immersive Paintings ([paintings]): every modded painting variant on its Datapacks page, built from the
+        // installed jars as a hidden data pack (paintings/PaintingPack; immersive_paintings.md). Vanilla's come from
+        // the pack's datapack.
+        if (ModList.get().isLoaded("immersive_paintings")) {
+            modEventBus.addListener(com.SaintAlfonzo.creativecompat.paintings.PaintingPack::add);
         }
         // Vine shearing ([vine_shearing]): shears stop modded vines and growing-plant tips growing.
         MinecraftForge.EVENT_BUS.register(VineShearing.class);
@@ -163,7 +163,7 @@ public class CreativeCompat {
 
     /** Lines of creativeengineering-common.toml that held the sections moved here. */
     private static final Pattern OLD_KEY = Pattern.compile(
-            "^\\s*(\\[(?:leaf_piles|moss|vine_shearing|campfire|monster_box|trash_slot)\\])", Pattern.MULTILINE);
+            "^\\s*(\\[(?:leaf_piles|moss|vine_shearing|monster_box|trash_slot)\\])", Pattern.MULTILINE);
 
     /**
      * The sections moved out of patcherMod's file. When this file already existed the carry-over did not run, and

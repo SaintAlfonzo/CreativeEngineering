@@ -203,7 +203,7 @@ Plan:
 
 2026-10-28:
 
-- `./gradlew :patcherMod:build --offline` passes.
+- `./gradlew :creativeCommon:build --offline` passes.
 - Headless CEConfig spec test (javac harness, memory `patchermod-headless-smoke-test`): 27 crop switches, all `false`;
   one set `true` reads back `true`; an unknown key gives `null`; soil defaults 2 x 0.35 / 2 x 0.25; the bell pepper
   section still reads `enabled = true`, weight 1.

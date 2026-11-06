@@ -67,41 +67,43 @@ ServerEvents.recipes(e => {
 	// ============================================================
 	// AE2 QoL Recipes (ae2qolrecipes): the mod's 19 templates x 16 colours + 7 fluix recipes = 311
 	// ============================================================
-	var colors = ['white', 'orange', 'magenta', 'light_blue', 'yellow', 'lime', 'pink', 'gray', 'light_gray', 'cyan', 'purple',
-		'blue', 'brown', 'green', 'red', 'black']
-	var cable = (color, kind) => i[color + '_' + kind + '_cable']
-	var dye = color => '#forge:dyes/' + color
-	var tag = kind => '#ae2:' + kind + '_cable'
-	var REDSTONE = '#forge:dusts/redstone', GLOWSTONE = '#forge:dusts/glowstone'
 	var shaped = [], shapeless = []
-	colors.forEach(c => {
-		var wool = i[c + '_wool']
-		// ring of 8 same-kind cables around a dye -> 8 coloured (every kind)
-		;['glass', 'covered', 'smart', 'covered_dense', 'smart_dense'].forEach(kind => {
-			shaped.push([Item.of(cable(c, kind), 8), ['CCC', 'CDC', 'CCC'], { C: tag(kind), D: dye(c) }, e, 'ae2_' + c + '_' + kind + '_cable_ring'])
-			shapeless.push([Item.of(cable(c, kind)), [tag(kind), dye(c)], e, 'ae2_' + c + '_' + kind + '_cable_dye'])
+	if (global.has('ae2')) {
+		var colors = ['white', 'orange', 'magenta', 'light_blue', 'yellow', 'lime', 'pink', 'gray', 'light_gray', 'cyan', 'purple',
+			'blue', 'brown', 'green', 'red', 'black']
+		var cable = (color, kind) => i[color + '_' + kind + '_cable']
+		var dye = color => '#forge:dyes/' + color
+		var tag = kind => '#ae2:' + kind + '_cable'
+		var REDSTONE = '#forge:dusts/redstone', GLOWSTONE = '#forge:dusts/glowstone'
+		colors.forEach(c => {
+			var wool = i[c + '_wool']
+			// ring of 8 same-kind cables around a dye -> 8 coloured (every kind)
+			;['glass', 'covered', 'smart', 'covered_dense', 'smart_dense'].forEach(kind => {
+				shaped.push([Item.of(cable(c, kind), 8), ['CCC', 'CDC', 'CCC'], { C: tag(kind), D: dye(c) }, e, 'ae2_' + c + '_' + kind + '_cable_ring'])
+				shapeless.push([Item.of(cable(c, kind)), [tag(kind), dye(c)], e, 'ae2_' + c + '_' + kind + '_cable_dye'])
+			})
+			// covered: glass + wool; dense -> 4
+			shapeless.push([Item.of(cable(c, 'covered')), [cable(c, 'glass'), wool], e, 'ae2_' + c + '_covered_cable_wool'])
+			shapeless.push([Item.of(cable(c, 'covered'), 4), [cable(c, 'covered_dense')], e, 'ae2_' + c + '_covered_cable_split'])
+			// smart: fluix glass + redstone + glowstone + wool; own covered + redstone + glowstone; any covered + dusts + dye; dense -> 4
+			shapeless.push([Item.of(cable(c, 'smart')), [i.fluix_glass_cable, REDSTONE, GLOWSTONE, wool], e, 'ae2_' + c + '_smart_cable_wool'])
+			shapeless.push([Item.of(cable(c, 'smart')), [cable(c, 'covered'), REDSTONE, GLOWSTONE], e, 'ae2_' + c + '_smart_cable_dusts'])
+			shapeless.push([Item.of(cable(c, 'smart')), [tag('covered'), REDSTONE, GLOWSTONE, dye(c)], e, 'ae2_' + c + '_smart_cable_dusts_dye'])
+			shapeless.push([Item.of(cable(c, 'smart'), 4), [cable(c, 'smart_dense')], e, 'ae2_' + c + '_smart_cable_split'])
+			// dense: 2x2 of the thin kind; smart dense from covered dense + dusts
+			shaped.push([Item.of(cable(c, 'covered_dense')), ['CC', 'CC'], { C: cable(c, 'covered') }, e, 'ae2_' + c + '_covered_dense_cable_pack'])
+			shaped.push([Item.of(cable(c, 'smart_dense')), ['CC', 'CC'], { C: cable(c, 'smart') }, e, 'ae2_' + c + '_smart_dense_cable_pack'])
+			shapeless.push([Item.of(cable(c, 'smart_dense')), [cable(c, 'covered_dense'), REDSTONE, GLOWSTONE], e, 'ae2_' + c + '_smart_dense_cable_dusts'])
 		})
-		// covered: glass + wool; dense -> 4
-		shapeless.push([Item.of(cable(c, 'covered')), [cable(c, 'glass'), wool], e, 'ae2_' + c + '_covered_cable_wool'])
-		shapeless.push([Item.of(cable(c, 'covered'), 4), [cable(c, 'covered_dense')], e, 'ae2_' + c + '_covered_cable_split'])
-		// smart: fluix glass + redstone + glowstone + wool; own covered + redstone + glowstone; any covered + dusts + dye; dense -> 4
-		shapeless.push([Item.of(cable(c, 'smart')), [i.fluix_glass_cable, REDSTONE, GLOWSTONE, wool], e, 'ae2_' + c + '_smart_cable_wool'])
-		shapeless.push([Item.of(cable(c, 'smart')), [cable(c, 'covered'), REDSTONE, GLOWSTONE], e, 'ae2_' + c + '_smart_cable_dusts'])
-		shapeless.push([Item.of(cable(c, 'smart')), [tag('covered'), REDSTONE, GLOWSTONE, dye(c)], e, 'ae2_' + c + '_smart_cable_dusts_dye'])
-		shapeless.push([Item.of(cable(c, 'smart'), 4), [cable(c, 'smart_dense')], e, 'ae2_' + c + '_smart_cable_split'])
-		// dense: 2x2 of the thin kind; smart dense from covered dense + dusts
-		shaped.push([Item.of(cable(c, 'covered_dense')), ['CC', 'CC'], { C: cable(c, 'covered') }, e, 'ae2_' + c + '_covered_dense_cable_pack'])
-		shaped.push([Item.of(cable(c, 'smart_dense')), ['CC', 'CC'], { C: cable(c, 'smart') }, e, 'ae2_' + c + '_smart_dense_cable_pack'])
-		shapeless.push([Item.of(cable(c, 'smart_dense')), [cable(c, 'covered_dense'), REDSTONE, GLOWSTONE], e, 'ae2_' + c + '_smart_dense_cable_dusts'])
-	})
-	// fluix (uncoloured): ring of 8 coloured cables around a water bucket (#ae2:can_remove_color) -> 8 fluix; dense -> 4
-	;['glass', 'covered', 'smart', 'covered_dense', 'smart_dense'].forEach(kind => {
-		shaped.push([Item.of(i['fluix_' + kind + '_cable'], 8), ['CCC', 'CDC', 'CCC'], { C: tag(kind), D: '#ae2:can_remove_color' }, e, 'ae2_fluix_' + kind + '_cable_ring'])
-	})
-	shapeless.push([Item.of(i.fluix_covered_cable, 4), [i.fluix_covered_dense_cable], e, 'ae2_fluix_covered_cable_split'])
-	shapeless.push([Item.of(i.fluix_smart_cable, 4), [i.fluix_smart_dense_cable], e, 'ae2_fluix_smart_cable_split'])
-	bulk('shaped', shaped)
-	bulk('shapeless', shapeless)
+		// fluix (uncoloured): ring of 8 coloured cables around a water bucket (#ae2:can_remove_color) -> 8 fluix; dense -> 4
+		;['glass', 'covered', 'smart', 'covered_dense', 'smart_dense'].forEach(kind => {
+			shaped.push([Item.of(i['fluix_' + kind + '_cable'], 8), ['CCC', 'CDC', 'CCC'], { C: tag(kind), D: '#ae2:can_remove_color' }, e, 'ae2_fluix_' + kind + '_cable_ring'])
+		})
+		shapeless.push([Item.of(i.fluix_covered_cable, 4), [i.fluix_covered_dense_cable], e, 'ae2_fluix_covered_cable_split'])
+		shapeless.push([Item.of(i.fluix_smart_cable, 4), [i.fluix_smart_dense_cable], e, 'ae2_fluix_smart_cable_split'])
+		bulk('shaped', shaped)
+		bulk('shapeless', shapeless)
+	}
 
 	console.log('[feature-ports] tier 1: ' + count + ' recipes (1 name tag, ' + splashing.length + ' splashing, ' + smelting.length +
 		' recycle smelting, ' + (shaped.length + shapeless.length) + ' AE2 cable)')

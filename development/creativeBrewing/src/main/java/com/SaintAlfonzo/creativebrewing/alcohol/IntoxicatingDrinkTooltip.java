@@ -52,7 +52,7 @@ public final class IntoxicatingDrinkTooltip {
             Either<FormattedText, TooltipComponent> element = elements.get(i);
             if (element.left().isEmpty()) continue;
             if (!isQuarkSaturation(element.left().get())) continue;
-            elements.set(i, Either.left(Component.translatable("tooltip.creativeengineering.intoxicating_drink")
+            elements.set(i, Either.left(Component.translatable("tooltip.creativebrewing.intoxicating_drink")
                     .withStyle(ChatFormatting.GRAY)));
             return;
         }

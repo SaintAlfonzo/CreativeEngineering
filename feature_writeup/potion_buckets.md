@@ -15,8 +15,8 @@
 - **Pending:** nothing built and unshipped. PB-01 to PB-23 have never been run. Findings F1 to F7 (section 4) are
   open; F1 and F3 need your call.
 - **Files to open:** [potion_area.js](../kubejs/startup_scripts/func/potion_area.js) (all the cloud tuning),
-  [server_scripts/engineering/potion_buckets.js](../kubejs/server_scripts/engineering/potion_buckets.js) (right click),
-  [potion_bottling.js](../kubejs/server_scripts/engineering/potion_bottling.js) (bucket recipes, from line 23),
+  [server_scripts/engineering/potion_buckets.js](../kubejs/data/creativeengineering/kubejs/engineering/potion_buckets.js) (right click),
+  [potion_bottling.js](../kubejs/data/creativeengineering/kubejs/engineering/potion_bottling.js) (bucket recipes, from line 23),
   [tipped_arrows.js](../kubejs/server_scripts/equipment/tipped_arrows.js).
 - **Knobs:** `global.potionArea.BUCKETS` in `potion_area.js` (radius, growth, linger time, wait, effect multiplier,
   rings per bucket) and `DEFAULT_EFFECTS`. Startup script: restart. Arrow tipping amounts are in `tipped_arrows.js`
@@ -170,11 +170,11 @@ Lingering `create:potion` only; one recipe pair per potion.
 
 - [startup_scripts/items/potion_buckets.js](../kubejs/startup_scripts/items/potion_buckets.js): items, tint, bottle remainder.
 - [startup_scripts/func/potion_area.js](../kubejs/startup_scripts/func/potion_area.js): `global.potionArea`, dispenser handler install.
-- [server_scripts/engineering/potion_buckets.js](../kubejs/server_scripts/engineering/potion_buckets.js): right click.
-- [server_scripts/engineering/potion_bottling.js](../kubejs/server_scripts/engineering/potion_bottling.js): `bucketRecipes()`.
+- [server_scripts/engineering/potion_buckets.js](../kubejs/data/creativeengineering/kubejs/engineering/potion_buckets.js): right click.
+- [server_scripts/engineering/potion_bottling.js](../kubejs/data/creativeengineering/kubejs/engineering/potion_bottling.js): `bucketRecipes()`.
 - [client_scripts/potion_buckets.js](../kubejs/client_scripts/potion_buckets.js): tooltip ([tooltips.md](tooltips.md)).
 - [server_scripts/equipment/tipped_arrows.js](../kubejs/server_scripts/equipment/tipped_arrows.js): machine tipping.
-- [potion/PotionBucketDispenser.java](../development/patcherMod/src/main/java/com/SaintAlfonzo/creativeengineering/potion/PotionBucketDispenser.java): dispenser (`CreativeEngineering.java` line 290).
+- [potion/PotionBucketDispenser.java](../development/creativeCommon/src/main/java/com/SaintAlfonzo/creativecommon/potion/PotionBucketDispenser.java): dispenser (`CreativeEngineering.java` line 290).
 - Textures: `kubejs/assets/creativeengineering/textures/item/{potion,splash_potion,lingering_potion}_bucket[_liquid].png`; [tools/potion_bucket_texture.py](../tools/potion_bucket_texture.py).
 - `item_dict.js`: `i.ce_potion_bucket`, `i.ce_splash_potion_bucket`, `i.ce_lingering_potion_bucket`.
 

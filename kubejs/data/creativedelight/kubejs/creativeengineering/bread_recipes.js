@@ -13,12 +13,12 @@ ServerEvents.recipes(e => {
 	var R = global.NCH
 
 	global.CD.recipes(() => {
-		var keep = [
+		var keep = [ // G5 begin (R.replaceInput filters)
 			{ output: i.t_bread }, { output: i.t_bread_loaf }, { output: i.bread_slice }, { output: i.toast },
 			{ output: i.bread_block }, { output: i.crustless_bread_block }, { output: i.bread_slab }, { output: i.bread_nub },
 			{ output: i.t_cans },
-		]
-		;[i.minecraft_bread, i.bread_slice].forEach(old => {
+		] // G5 end
+		;[i.minecraft_bread, i.bread_slice].forEach(old => { // G5
 			R.replaceInput({ input: old, not: keep }, old, i.t_bread, e)
 		})
 	})

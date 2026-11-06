@@ -51,7 +51,7 @@ public class RhinoWildCrops {
 			"var ServerEvents = { tags: function (type, fn) { if (type === 'worldgen/biome') __tags = fn },",
 			"  highPriorityData: function (fn) { __data = fn }, loaded: function (fn) {} };");
 		cx.evaluateString(scope, prelude, "prelude", 1, null);
-		cx.evaluateString(scope, Files.readString(root.resolve("development/patcherMod/src/main/resources/kubejs_startup/creativeengineering/func/tag_helper.js")), "tag_helper.js", 1, null);
+		cx.evaluateString(scope, Files.readString(root.resolve("development/creativeCommon/src/main/resources/kubejs_startup/creativecommon/func/tag_helper.js")), "tag_helper.js", 1, null);
 		cx.evaluateString(scope, Files.readString(root.resolve("kubejs/data/creativeworldgen/kubejs/worldgen/_biome_rules.js")), "_biome_rules.js", 1, null);
 		String path = script.equals("wild_crops") ? "kubejs/data/creativedelight/kubejs/_worldgen/wild_crops.js"
 				: "kubejs/data/creativeworldgen/kubejs/worldgen/" + script + ".js";

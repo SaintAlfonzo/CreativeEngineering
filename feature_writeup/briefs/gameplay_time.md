@@ -127,22 +127,22 @@ that the SUN season counter moves exactly as far as the sun.
 ### Now
 - Neither exists: no `tools/time_table.py`, no `time_table` entry in [tools/generators.json](../../tools/generators.json)
   (50 entries on 2026-10-31, none for time), no `tools/test_time.sh` or time test sources under `tools/`.
-- The derivations live in [TimeSettings.java](../../development/patcherMod/src/main/java/com/SaintAlfonzo/creativeengineering/time/TimeSettings.java)
+- The derivations live in [TimeSettings.java](../../development/creativeCommon/src/main/java/com/SaintAlfonzo/creativecommon/time/TimeSettings.java)
   (`dayUnits` 28, `daySpeed` 34, `nightSpeed` 38, `seasonDayDuration` 51, `yearDays` 59, `clock` 69, `clock24` 78,
   `dayNumber` 94, `realMinutes` 114) and the push targets in
-  [TimePush.java](../../development/patcherMod/src/main/java/com/SaintAlfonzo/creativeengineering/time/TimePush.java)
+  [TimePush.java](../../development/creativeCommon/src/main/java/com/SaintAlfonzo/creativecommon/time/TimePush.java)
   (74-87: Serene Seasons `day_duration` / `sub_season_duration` / `progress_season_while_offline`, SeasonHUD
   `day_length` / `sub_season_length`). Vinery is no longer pushed: the port reads `WineTime` itself (TimePush.java
   23-24, time.md 3.7), so the wine rows come from `[time.wine]` directly.
 - New since the first brief: `TimeDate.java` (`/cetime date`, row #6) does calendar math (Early Spring day 1 6:00 am
   = 0, time.md 3.11) inside command code; `CalendarDate.java` has `worldDay` / `year` helpers that need a `Level`.
 - The `[time]` values: [config/creativeengineering-common.toml](../../config/creativeengineering-common.toml) from 2012.
-- The SUN counter: `SeasonClock.onLevelTick` ([SeasonClock.java](../../development/patcherMod/src/main/java/com/SaintAlfonzo/creativeengineering/time/SeasonClock.java)
+- The SUN counter: `SeasonClock.onLevelTick` ([SeasonClock.java](../../development/creativeCommon/src/main/java/com/SaintAlfonzo/creativecommon/time/SeasonClock.java)
   63-90, the step at 85) adds every forward dayTime step to `seasonCycleTicks`, mod the cycle; it reads `SeasonSavedData` and
   `SeasonHandler`, so a test can't call it without Serene Seasons on the classpath.
 - Headless pattern to copy: [tools/test_shields.sh](../../tools/test_shields.sh) + `tools/shield_test/` (sources
   [tools/java_test_cp.sh](../../tools/java_test_cp.sh) for the mapped Forge classpath, an `FMLEnvironment` stub, runs
-  `ShieldConfigTest` against `development/patcherMod/build/classes`).
+  `ShieldConfigTest` against `development/creativeCommon/build/classes`).
 
 ### Build
 1. **`tools/time_table.py`** (stdlib only; `tomllib` on Python 3.11+, else a tiny reader for the `[time]` block).

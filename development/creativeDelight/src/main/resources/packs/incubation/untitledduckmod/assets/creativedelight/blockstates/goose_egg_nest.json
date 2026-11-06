@@ -1,0 +1,57 @@
+{
+  "multipart": [
+    {
+      "apply": {
+        "model": "creativedelight:block/goose_nest"
+      }
+    },
+    {
+      "apply": {
+        "model": "creativedelight:block/one_goose_egg"
+      },
+      "when": {
+        "eggs": "1"
+      }
+    },
+    {
+      "apply": {
+        "model": "creativedelight:block/two_goose_eggs"
+      },
+      "when": {
+        "eggs": "2"
+      }
+    },
+    {
+      "apply": {
+        "model": "creativedelight:block/three_goose_eggs"
+      },
+      "when": {
+        "eggs": "3"
+      }
+    },
+    {
+      "apply": {
+        "model": "creativedelight:block/four_goose_eggs"
+      },
+      "when": {
+        "eggs": "4"
+      }
+    },
+    {
+      "apply": {
+        "model": "creativedelight:block/five_goose_eggs"
+      },
+      "when": {
+        "eggs": "5"
+      }
+    },
+    {
+      "apply": {
+        "model": "creativedelight:block/six_goose_eggs"
+      },
+      "when": {
+        "eggs": "6"
+      }
+    }
+  ]
+}

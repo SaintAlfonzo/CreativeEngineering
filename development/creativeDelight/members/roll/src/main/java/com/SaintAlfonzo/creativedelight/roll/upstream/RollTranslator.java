@@ -34,7 +34,7 @@ public final class RollTranslator {
     private static final Map<String, String> LANG_SET = Map.of(
             "item.roll_delight.rice_roll_slice", "Rice Roll Slice",
             "item.roll_delight.amazing_salmon_roll", "Salmon Maki Roll",
-            "item.roll_delight.amazing_salmon_roll_slice", "Salmon Maki",
+            "item.roll_delight.amazing_salmon_roll_slice", "Salmon Maki Roll Slice",
             "itemGroup.roll_delight", "Roll Delight",
             "item.roll_delight.chopsticks.tooltip.0", "Lengthens effects of a food when eaten in offhand",
             "item.roll_delight.chopsticks.tooltip.1", "Get the juices and sauces in your mouth, not on your hands",

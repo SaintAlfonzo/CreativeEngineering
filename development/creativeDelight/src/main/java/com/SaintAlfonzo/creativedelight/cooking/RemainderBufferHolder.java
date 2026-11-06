@@ -1,6 +1,6 @@
 package com.SaintAlfonzo.creativedelight.cooking;
 
-import com.SaintAlfonzo.creativeengineering.compat.RemainderView;
+import com.SaintAlfonzo.creativecommon.compat.RemainderView;
 
 /**
  * A third-party station block entity given a {@link RemainderBuffer} by mixin (CookingPotRemainderMixin,

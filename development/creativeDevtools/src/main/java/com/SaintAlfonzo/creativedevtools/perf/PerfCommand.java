@@ -2,7 +2,7 @@ package com.SaintAlfonzo.creativedevtools.perf;
 
 import com.SaintAlfonzo.creativedevtools.CreativeDevtools;
 import com.SaintAlfonzo.creativeworldgen.perf.MobCapLevels;
-import com.SaintAlfonzo.creativeengineering.perf.PerfEvents;
+import com.SaintAlfonzo.creativecommon.perf.PerfEvents;
 import com.mojang.brigadier.arguments.StringArgumentType;
 import com.mojang.logging.LogUtils;
 import jdk.jfr.FlightRecorder;

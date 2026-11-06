@@ -3,7 +3,7 @@
 Written 2026-10-21 from [todo/TODO.md](../todo/TODO.md) `# structures`, Sub `netherblockswap`. Feature
 writeups: [nether_worldgen.md](../nether_worldgen.md) (decision sheet, prefix `NW-`), [nether_swaps.md](../nether_swaps.md)
 (generated: every swap in place), [meat_blocks.md](../meat_blocks.md) (generated). Java paths are relative to
-`development/patcherMod/src/main/java/com/SaintAlfonzo/creativeengineering/`.
+`development/creativeCommon/src/main/java/com/SaintAlfonzo/creativecommon/`.
 
 ## Scope and order
 
@@ -124,7 +124,7 @@ No crying obsidian in Overworld structures, unless the user keeps it.
 
 Exempt or skipped: Philip's `rare_ruin` 3 and `start_nether_ruin` 7 (`plan/move_to_nether`), the End tower and End
 gate fortress (End-shared). In play, crying obsidian otherwise comes from Create haunting obsidian
-(`kubejs/server_scripts/engineering/resource_blocks.js:156`, `:393`), which needs soul fire, i.e. Nether soul sand.
+(`kubejs/data/creativeengineering/kubejs/engineering/resource_blocks.js:156`, `:393`), which needs soul fire, i.e. Nether soul sand.
 
 ### Build
 

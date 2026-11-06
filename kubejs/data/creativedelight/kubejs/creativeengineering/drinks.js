@@ -27,7 +27,7 @@ ServerEvents.recipes(e => {
 	var kettle = (input, output, id, base, opts) => R.frBrewing(input, output, e, id, Object.assign({ base: base }, opts || {}))
 	var pot = (input, output, id, container) => R.fdCooking(input, output, e, id, 0.35, 200, container || bottle)
 	var mixHot = (output, input, id) => R.createMixing(output, input, e, id, 'heated')
-	var mb = (fluid) => Fluid.of(fluid, 250)
+	var mb = (fluid) => global.CD.fluidOf(fluid, 250)   // an absent fluid skips the NCH call (G5)
 	var x = (ing, n) => { var a = []; for (var k = 0; k < n; k++) a.push(ing); return a }
 
 	global.CD.recipes(() => {
@@ -35,6 +35,7 @@ ServerEvents.recipes(e => {
 		//######################### 1. Juices #########################
 		// [key, item, fluid (null: none), fruit, mod, upstream pot / Kettle recipes the rule replaces, mix (new juices)].
 		// Grid recipes (Fruits Delight's, Farmer's Delight's melon juice, Ender's Delight's chorus juice) stay.
+		// G5 begin: JUICES: the loop hands each row only to pot / kettle / mixHot (NCH); mb skips absent fluids
 		var JUICES = [
 			['bayberry', i.bayberry_soup, f.bayberry_juice, i.t_fruits_bayberry, 'fruitsdelight', ['farmersdelight:cooking/bayberry_soup']],
 			['hamimelon', i.hamimelon_juice, f.hamimelon_juice, i.t_drink_fruits_hamimelon, 'fruitsdelight', []],
@@ -53,6 +54,7 @@ ServerEvents.recipes(e => {
 			// Turnip Water is renamed Turnip Juice and follows the rule
 			['turnip', i.turnip_water, f.turnip_water, i.turnip, 'veggiesdelight', []],
 		]
+		// G5 end
 		JUICES.forEach(j => {
 			if (j[4] && !on(j[4])) return
 			j[5].forEach(id => R.remove({ id: id }, e))
@@ -78,7 +80,7 @@ ServerEvents.recipes(e => {
 		// Sea Pickle Tea's Kettle base. Upgrade Aquatic's pot recipe goes in abnormals_delight/upgrade_aquatic.js; Oceanic
 		// Delight's sea grape grid recipe stays.
 		var SEA = []
-		if (on('abnormals_delight') && on('upgrade_aquatic')) SEA.push(['pickerelweed', i.pickerelweed_juice, f.pickerelweed_juice, i.t_pickerelweed])
+		if (on('abnormals_delight') && on('upgrade_aquatic')) SEA.push(['pickerelweed', i.pickerelweed_juice, f.pickerelweed_juice, i.t_pickerelweed]) // G5
 		if (on('oceanic_delight')) SEA.push(['sea_grape', i.sea_grape_juice, f.sea_grape_juice, i.sea_grape])
 		SEA.forEach(j => {
 			pot([j[3], j[3], sweet, sweet], j[1], j[0] + '_juice_manual_only')
@@ -90,6 +92,7 @@ ServerEvents.recipes(e => {
 		// Kettle: 250 mB of the matching juice + any tea leaf + one extra (another fruit unless named). Heated mixing: the
 		// same + one more tea leaf + one sugar-like -> 250 mB of the tea.
 		// [key, tea item, tea fluid, juice fluid, extra, mod, old recipes replaced]
+		// G5 begin: TEAS: as JUICES
 		var TEAS = [
 			['kiwi', i.kiwi_tea, f.kiwi_tea, f.kiwi_juice, i.t_fruits_kiwi, 'fruitsdelight', []],
 			['turnip', i.turnip_tea, f.turnip_tea, f.turnip_water, i.turnip, 'veggiesdelight', []],
@@ -109,6 +112,7 @@ ServerEvents.recipes(e => {
 			['lychee_cherry', i.lychee_cherry_tea, f.lychee_cherry_tea, f.lychee_juice, i.spore_blossom, 'fruitsdelight', ['fruitsdelight:mixing/flowing_lychee_cherry_tea']],
 			['dandelion', i.dandelion_tea, f.dandelion_tea, f.dandelion_juice, i.dandelion, 'veggiesdelight', ['farmersrespite:brewing/dandelion_tea']],
 		]
+		// G5 end
 		var NEW_TEA_FLUIDS = ['kiwi', 'turnip', 'bayberry', 'hamimelon', 'carrot', 'lemon', 'melon', 'orange', 'pear']
 		TEAS.forEach(t => {
 			if (t[5] && !on(t[5])) return
@@ -121,6 +125,7 @@ ServerEvents.recipes(e => {
 		//######################### 2.3 Tea exceptions #########################
 		// Azalea (fixes the missing recipe, food/drinks #10): pot 2 flowering azalea + 2 azalea flowers; Kettle 1 + 1 on
 		// green tea; heated mixing the Kettle cost + one more azalea flower. Delightful's two recipes need Ecologics.
+		// G5 begin: azalea and lavender: NCH calls through pot / kettle / mixHot
 		R.remove({ output: i.azalea_tea, mod: 'delightful' }, e)
 		pot([i.t_flowering_azalea, i.t_flowering_azalea, i.t_azalea_flowers, i.t_azalea_flowers], i.azalea_tea, 'azalea_tea_manual_only')
 		kettle([i.t_flowering_azalea, i.t_azalea_flowers], i.azalea_tea, 'azalea_tea', f.green_tea)
@@ -132,9 +137,11 @@ ServerEvents.recipes(e => {
 		pot([i.t_pink_flowers, i.t_pink_flowers, i.t_lavender_tea_herbs, i.t_lavender_tea_herbs], i.lavender_tea, 'lavender_tea_manual_only')
 		kettle([i.t_pink_flowers, i.t_lavender_tea_herbs], i.lavender_tea, 'lavender_tea', f.green_tea)
 		mixHot(mb(f.lavender_tea), [mb(f.green_tea), i.t_pink_flowers, i.t_lavender_tea_herbs, i.t_lavender_tea_herbs], 'lavender_tea')
+		// G5 end
 
 		// Sea Pickle Tea (Hostile Delight's Sea Cucumber Tea): pot 3 sea pickles; Kettle 2 on sea grape or pickerelweed
 		// juice; heated mixing the Kettle cost + one more sea pickle
+		// G5 begin: NCH calls through pot / kettle / mixHot
 		if (on('hostiledelight')) {
 			R.remove({ id: 'hostiledelight:cucumbertearecp' }, e)
 			pot(x(i.t_sea_pickles, 3), i.seacucumbertea, 'sea_pickle_tea_manual_only')
@@ -143,6 +150,7 @@ ServerEvents.recipes(e => {
 				mixHot(i.seacucumbertea, [mb(j[2]), i.t_sea_pickles, i.t_sea_pickles, i.t_sea_pickles, bottle], 'sea_pickle_tea_on_' + j[0])
 			})
 		}
+		// G5 end
 
 		// Chorus Tea (Delightful's Ender Nectar): pot the chorus juice recipe + an ender eye; Kettle chorus juice + any tea
 		// leaf + ender eye; heated mixing that + one more tea leaf + one sugar-like -> 250 mB
@@ -156,6 +164,7 @@ ServerEvents.recipes(e => {
 
 		// Chorus Fruit Milk Tea: pot milk + chorus fruit, grain or dried chorus flower + one more dried chorus flower;
 		// Kettle the same item on milk (farmersrespite/kettle.js); heated mixing milk + the item + tea leaf + sugar-like
+		// G5 begin: NCH calls through pot / kettle / mixHot
 		if (on('ends_delight')) {
 			var chorusPick = [i.chorus_fruit, i.chorus_fruit_grain, i.dried_chorus_flower]
 			R.remove({ id: 'ends_delight:food/chorus_fruit_milk_tea' }, e)
@@ -170,13 +179,16 @@ ServerEvents.recipes(e => {
 		// water + tea leaf + milk + one more tea leaf + one sugar-like -> 250 mB
 		pot([i.water_bottle, leaf, leaf, i.milk], i.builders_tea, 'builders_tea_manual_only')
 		mixHot(mb(f.tea), [mb(f.water), leaf, leaf, i.milk, sweet], 'builders_tea')
+		// G5 end
 
 		//######################### 3. Lattes #########################
 		// Cloud latte: milk, cocoa beans and two bottled clouds (one is the container); its Slice & Dice copy follows
+		// G5 begin: NCH calls through pot
 		if (on('quarkdelight')) {
 			R.remove({ id: 'quarkdelight:cooking/cloud_latte' }, e)
 			pot([i.milk, i.bottled_cloud, i.cocoa_beans], i.cloud_latte, 'cloud_latte', i.bottled_cloud)
 		}
+		// G5 end
 		if (on('delightful')) {
 			// Matcha latte: honey is any sugar-like; pot milk + 2 matcha + sugar-like (Kettle: farmersrespite/kettle.js)
 			pot([i.milk, i.matcha, i.matcha, sweet], i.matcha_latte, 'matcha_latte')
@@ -199,6 +211,7 @@ ServerEvents.recipes(e => {
 
 			// Flavours: [key, item, fluid, additive]. Kettle straight from the plain coffee tank (milk + additive in one
 			// brew; the step from the milk coffee tank is in farmersrespite/kettle.js)
+			// G5 begin: FLAVOURS and the coffee mixes: NCH calls through kettle / mixHot
 			var FLAVOURS = [
 				['honey', i.honey_coffee, f.honey_coffee, i.honey_bottle],
 				['chocolate', i.chocolate_coffee, f.chocolate_coffee, i.t_coffee_chocolate],
@@ -217,6 +230,7 @@ ServerEvents.recipes(e => {
 				mixHot(mb(c[2]), [mb(f.milk_coffee), c[3]], c[0] + '_coffee')
 				mixHot(mb(c[2]), [mb(f.coffee), mb(f.milk), c[3]], c[0] + '_coffee_from_coffee')
 			})
+			// G5 end
 		}
 	})
 })

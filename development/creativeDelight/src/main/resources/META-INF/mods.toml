@@ -1,5 +1,5 @@
-# Creative Delight: manifest mod id only (no registry content). The members are nested jars, each with its own
-# mods.toml (META-INF/jarjar/metadata.json). creative_delight.md 0.3, 10.1, 14.2.
+# Creative Delight: its own content (kitchen and food Java, the Cooking for Blockheads and Incubation compartments) plus
+# the members, nested jars each with its own mods.toml (META-INF/jarjar/metadata.json). creative_delight.md 0.3, 10.1, 14.2.
 modLoader="javafml"
 loaderVersion="${loader_version_range}"
 license="${mod_license}"
@@ -27,9 +27,9 @@ side="BOTH"
 # installed patcherMod has no loader. 1.1.07: the kitchen Java moved here at the CD carve calls Common's
 # compat.RemainderView and swap.ConfigRename.mergeSections (creative_delight.md 34).
 [[dependencies.creativedelight]]
-modId="creativeengineering"
+modId="creativecommon"
 mandatory=true
-versionRange="[1.1.07,)"
+versionRange="[1.1.0,)"
 ordering="AFTER"
 side="BOTH"
 # Creative Compat: required by every other Creative jar (creative_split.md 7.6).
@@ -51,5 +51,45 @@ side="BOTH"
 modId="farmersdelight"
 mandatory=true
 versionRange="[1.19.2-1.2.4,)"
+ordering="AFTER"
+side="BOTH"
+
+# The optional compartments folded in from the blockheadsAdditions and incubationAdditions members at M8
+# (plan_cb_publish.md 3b): each only loads with its mods (compat/Compartments). AFTER so their registries and
+# block entity types exist when CD's compartments touch them.
+[[dependencies.creativedelight]]
+modId="cookingforblockheads"
+mandatory=false
+versionRange="[13.3,)"
+ordering="AFTER"
+side="BOTH"
+
+[[dependencies.creativedelight]]
+modId="balm"
+mandatory=false
+versionRange="[4.6,)"
+ordering="AFTER"
+side="BOTH"
+
+[[dependencies.creativedelight]]
+modId="incubation"
+mandatory=false
+versionRange="[3.0,)"
+ordering="AFTER"
+side="BOTH"
+
+# The Incubation compartment's bird mods (as the incubation_additions member had them): emu nest with Alex's Mobs, duck
+# and goose nests and crates with Untitled Duck Mod.
+[[dependencies.creativedelight]]
+modId="alexsmobs"
+mandatory=false
+versionRange="[1.21,)"
+ordering="AFTER"
+side="BOTH"
+
+[[dependencies.creativedelight]]
+modId="untitledduckmod"
+mandatory=false
+versionRange="[0.6,)"
 ordering="AFTER"
 side="BOTH"

@@ -11,8 +11,10 @@ var i = global.item;
 // ============================================================
 
 //Remove lightmans chocolate currency
+// G5 begin: R.remove filters only
 ;[i.coinpile_chocolate_copper, i.coinpile_chocolate_iron, i.coinpile_chocolate_gold,
   i.coinpile_chocolate_emerald, i.coinpile_chocolate_diamond, i.coinpile_chocolate_netherite].forEach(coin => {
+// G5 end
 	R.remove({ output: coin }, e)
 	R.remove({ input: coin }, e)
 })

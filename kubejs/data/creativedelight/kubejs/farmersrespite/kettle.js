@@ -38,6 +38,7 @@ ServerEvents.recipes(e => {
 
 		// Tiers: [tier item, base fluid] per drink. Long: + milk. Strong: + honey bottle (its bottle goes to the
 		// leftover slots).
+		// G5 begin: LONG, STRONG and the rows below reach NCH only (frBrewing through kettle, which checks the base fluid too)
 		var LONG = [
 			[i.long_black_tea, f.black_tea], [i.long_green_tea, f.green_tea], [i.long_yellow_tea, f.yellow_tea],
 			[i.long_rose_hip_tea, f.rose_hip_tea], [i.long_dandelion_tea, f.dandelion_tea], [i.long_purulent_tea, f.purulent_tea],
@@ -48,6 +49,7 @@ ServerEvents.recipes(e => {
 			[i.strong_rose_hip_tea, f.rose_hip_tea], [i.strong_purulent_tea, f.purulent_tea], [i.strong_gamblers_tea, f.gamblers_tea],
 			[i.strong_apple_cider, f.apple_cider], [i.strong_hot_cocoa, f.cck_hot_cocoa], [i.strong_melon_juice, f.melon_juice],
 		]
+		// G5 end
 		LONG.forEach(t => {
 			var id = t[0].split(':')[1]
 			kettle('farmersrespite:brewing/' + id, [i.milk], t[0], id, t[1])
@@ -60,6 +62,7 @@ ServerEvents.recipes(e => {
 		//######################### 1. Other mods' #########################
 		// Builder's Tea, two ways as before: Central Kitchen's (tea leaves + milk on water, 2 bottles) and Delightful's
 		// (tea leaves + leaves, milk-bottle container -> milk base)
+		// G5 begin: kettle rows (NCH frBrewing; the remove ids are recipe ids)
 		kettle('create_central_kitchen:brewing/builders_tea', [i.t_respite_tea_leaves, i.milk], Item.of(i.builders_tea, 2), 'builders_tea', f.water)
 		kettle('create:fr/tea', [i.t_tea_leaves, i.t_leaves], i.builders_tea, 'builders_tea_from_leaves', f.milk)
 		// lavender tea: the drink rules (creativeengineering/drinks.js)
@@ -71,6 +74,7 @@ ServerEvents.recipes(e => {
 		// chorus fruit, its grain or a dried chorus flower (food/drinks #15)
 		kettle('ends_delight:brewing/chorus_fruit_milk_tea', [[i.chorus_fruit, i.chorus_fruit_grain, i.dried_chorus_flower]], i.chorus_fruit_milk_tea, 'chorus_fruit_milk_tea', f.milk)
 		kettle('ends_delight:brewing/bubble_tea', [i.ender_pearl_grain], i.bubble_tea, 'bubble_tea', f.chorus_fruit_milk_tea)
+		// G5 end
 
 		//######################### 2. Rustic Delight's coffees #########################
 		// Coffee from roasted beans on water, the rest from the Coffee or Milk Coffee in the tank (as the grid
@@ -79,8 +83,8 @@ ServerEvents.recipes(e => {
 		if (global.CD.on('rusticdelight')) {
 			R.remove({ id: 'rusticdelight:brewing/coffee' }, e)
 			kettle(null, [i.roasted_coffee_beans, i.roasted_coffee_beans], i.coffee, 'coffee', f.water)
-			kettle(null, [i.milk], i.milk_coffee, 'milk_coffee', f.coffee)
-			kettle(null, [i.roasted_coffee_beans, i.roasted_coffee_beans], i.dark_coffee, 'dark_coffee', f.coffee)
+			kettle(null, [i.milk], i.milk_coffee, 'milk_coffee', f.coffee) // G5
+			kettle(null, [i.roasted_coffee_beans, i.roasted_coffee_beans], i.dark_coffee, 'dark_coffee', f.coffee) // G5
 			kettle(null, [i.honey_bottle], i.honey_coffee, 'honey_coffee', f.milk_coffee)
 			kettle(null, [i.t_coffee_chocolate], i.chocolate_coffee, 'chocolate_coffee', f.milk_coffee)
 			kettle(null, [i.t_syrup], i.syrup_coffee, 'syrup_coffee', f.milk_coffee)
@@ -93,6 +97,7 @@ ServerEvents.recipes(e => {
 		// The same file adds the flavoured coffees straight from the plain coffee tank (milk + additive in one brew).
 
 		//######################### 3. Spout and Item Drain pairs #########################
+		// G5 begin: BOTTLES only reaches R.createBottle
 		var BOTTLES = [
 			[i.lavender_tea, f.lavender_tea], [i.matcha_latte, f.matcha_latte], [i.berry_matcha_latte, f.berry_matcha_latte],
 		]
@@ -101,6 +106,7 @@ ServerEvents.recipes(e => {
 				[i.chocolate_coffee, f.chocolate_coffee], [i.dark_coffee, f.dark_coffee], [i.syrup_coffee, f.syrup_coffee],
 				[i.pumpkin_coffee, f.pumpkin_coffee], [i.cherry_blossom_coffee, f.cherry_blossom_coffee])
 		}
+		// G5 end
 		BOTTLES.forEach(b => R.createBottle(b[0], b[1], e, b[0].split(':')[1]))
 	})
 })

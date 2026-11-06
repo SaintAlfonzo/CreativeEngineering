@@ -34,7 +34,7 @@
     // a ripe harvest. produce: item keys, one picked per roll. knife: what a roll gives instead when the crop is cut with a
     // knife, as the crop's own table does. below: rows from the crop down to its soil (default 1).
     function crops(i, b) {
-        return [
+        return [ // G5 begin: crops of absent mods are filtered out (global.CD.absentIn) where the list is read
             { key: 'wheat', base: 1.00, block: b.wheat_crop, ripe: { age: '7' }, produce: [i.wheat] },
             { key: 'carrots', base: 3.71, block: b.carrots, ripe: { age: '7' }, produce: [i.minecraft_carrot] },
             { key: 'potatoes', base: 3.71, block: b.potatoes, ripe: { age: '7' }, produce: [i.minecraft_potato] },
@@ -66,19 +66,20 @@
             { key: 'oats', base: 1.00, block: b.oat_crop, ripe: { age: '7' }, produce: [i.oat], knife: i.raw_oats },
             { key: 'peanuts', base: 3.71, block: b.peanut_crop, ripe: { age: '7' }, produce: [i.peanut] },
             { key: 'adzuki', base: 2.50, block: b.adzuki_sprouts, ripe: { age: '6', flowering: 'true' }, produce: [i.adzuki_beans] },
-        ]
+        ] // G5 end
     }
 
     function soils(i, cfg) {
-        return [
+        return [ // G5 begin: soils of absent mods are filtered out (global.CD.absentIn) below
             { name: 'farmland', block: i.farmland, bonus: cfg.farmlandBonus },
             { name: 'rich farmland', block: i.rich_farmland, bonus: cfg.richFarmlandBonus },
             { name: 'fertile soil', block: i.fertile_soil, bonus: cfg.fertileSoilBonus },
             { name: 'rich soil', block: i.rich_soil, bonus: cfg.richSoilBonus },
+        // G5 end
         ].map(function (s) {
             s.bonus = Number(s.bonus)
             return s
-        }).filter(function (s) { return s.bonus > 0 })
+        }).filter(function (s) { return s.bonus > 0 && !global.CD.absentIn(s.block) })
     }
 
     var $SoilYield = (function () {
@@ -134,7 +135,7 @@
         var i = global.item
         var cfg = global.NCH.cfg(DEFAULTS, 'CROP_DROPS.SOIL_YIELD')
         var soilList = soils(i, cfg)
-        var on = crops(i, global.blocks).filter(function (c) { return cropOn(c.key) })
+        var on = crops(i, global.blocks).filter(function (c) { return cropOn(c.key) && !global.CD.absentIn(c.block) })
         if (!on.length || !soilList.length) {
             console.info(TAG + (on.length ? 'every soil at 0 bonus' : 'no crop switched on') + ': crop drops as their mods ship them')
             return

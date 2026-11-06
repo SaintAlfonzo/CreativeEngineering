@@ -13,7 +13,7 @@ mixin, driven by two CEConfig switches. Every other toast is left alone. Test pr
 | Every other toast | on, unchanged (2) |
 | In-game tests | TO-01 to TO-07 pending |
 
-- **Files to open:** `development/patcherMod/src/main/java/com/SaintAlfonzo/creativeengineering/mixin/ToastFilterMixin.java`,
+- **Files to open:** `development/creativeCommon/src/main/java/com/SaintAlfonzo/creativecommon/mixin/ToastFilterMixin.java`,
   `CEConfig.Toasts`.
 - **Knobs:** `config/creativeengineering-common.toml` `[toasts] tutorial` and `advancement` (both default `false` =
   hidden). Read for every toast, so a change applies to the next one.
@@ -93,16 +93,16 @@ Those toggles still work on top of the filter, per player.
 
 ## 5. File map
 
-- [ToastFilterMixin.java](../development/patcherMod/src/main/java/com/SaintAlfonzo/creativeengineering/mixin/ToastFilterMixin.java)
-- [CEConfig.java](../development/patcherMod/src/main/java/com/SaintAlfonzo/creativeengineering/CEConfig.java) `Toasts`
-- [creativeengineering.mixins.json](../development/patcherMod/src/main/resources/creativeengineering.mixins.json) `client` list
+- [ToastFilterMixin.java](../development/creativeCommon/src/main/java/com/SaintAlfonzo/creativecommon/mixin/ToastFilterMixin.java)
+- [CEConfig.java](../development/creativeCommon/src/main/java/com/SaintAlfonzo/creativecommon/CEConfig.java) `Toasts`
+- [creativeengineering.mixins.json](../development/creativeCommon/src/main/resources/creativecommon.mixins.json) `client` list
 - Related: [advancements.md](advancements.md), Exposure hints in `config/exposure-client.toml`, Rubidium Extra in
   `config/sodium-extra-options.json`
 
 ## 6. Offline checks
 
 - `unzip -l mods/creativeengineering-1.0.9.jar | grep ToastFilterMixin`: the class is in the installed jar.
-- `md5sum development/patcherMod/build/libs/creativeengineering-1.0.9.jar mods/creativeengineering-1.0.9.jar`: equal
+- `md5sum development/creativeCommon/build/libs/creativecommon-1.0.9.jar mods/creativeengineering-1.0.9.jar`: equal
   once installed (build 2026-10-19: `68b6f829...`).
 - `grep -A8 "^\[toasts\]" config/creativeengineering-common.toml` after a launch: the section with both switches
   `false`.

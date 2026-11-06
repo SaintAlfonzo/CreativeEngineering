@@ -37,7 +37,7 @@ adapters, 3.5 new families, 3.6 unclean soap, 3.7 tool interactions, 3.8a glow a
 ### Now
 - In-world dye: Supplementaries `[tweaks.dye_blocks] enabled = true` (`config/supplementaries-common.toml:451-453`),
   limited by patcherMod
-  [SupplementariesDyeBlocksMixin.java:32-46](../../development/patcherMod/src/main/java/com/SaintAlfonzo/creativeengineering/mixin/SupplementariesDyeBlocksMixin.java)
+  [SupplementariesDyeBlocksMixin.java:32-46](../../development/creativeCommon/src/main/java/com/SaintAlfonzo/creativecommon/mixin/SupplementariesDyeBlocksMixin.java)
   (HEAD of `DyeBehavior.tryPerformingAction`: cancels for any state with a block entity or in
   `#creativeengineering:no_world_dye`).
 - `b.t_no_world_dye` ([block_dict.js:167](../../kubejs/startup_scripts/_lib/block_dict.js#L167)) is filled with `[]`
@@ -264,7 +264,7 @@ Not progression: e.g. Old and Weathered cardboard boxes.
   [misc_mods.js:63-64](../../kubejs/server_scripts/other/misc_mods.js#L63-L64) (Dustrial Decor cardboard box → Old
   Cardboard Box `i.cardboard_box` = `design_decor:cardboard_box` → Weathered `i.weathered_cardboard_box` =
   `creativeengineering:weathered_cardboard_box`, `merges/materials #1`), the rust → clean bulk list
-  ([misc_metal_crafts.js:55-57](../../kubejs/server_scripts/metal/misc_metal_crafts.js#L55-L57)), feature ports
+  ([misc_metal_crafts.js:55-57](../../kubejs/data/creativeengineering/kubejs/metal/misc_metal_crafts.js#L55-L57)), feature ports
   (`feature_ports.js:45`), cornmeal → raw tortilla (CD `corn_delight/recipes.js:39`).
 - No pack code uses a cauldron interaction (no `CauldronInteraction` / `water_cauldron` in kubejs or patcherMod).
 - JEI world tabs exist for other interactions (`kubejs/assets/creativeengineering/jei_world/<kind>/manual.json`).

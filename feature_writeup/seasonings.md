@@ -88,3 +88,27 @@ left to the owner at the fold.
 - Raw skewer food values and poison chance: `food/types-and-tuning #19`.
 - Items per old durable item: 64 / 16 (O31), used by the trades.
 - The cooked-ingredient sequenced assembly per line (the shaped craft is built, 2026-11-03).
+
+## 6. Owner notes (scratchpad 2026-11-04)
+
+Checked against the code 2026-11-04. "Built" items are in the CD jar installed 2026-11-04 19:19 (barbeques_delight.md 3.10,
+3.11, 4.6) unless noted; several notes were probably written while playing an older jar.
+
+| Note | State | Row |
+|---|---|---|
+| Seasoned icon position per item or family (several on one food overlap) | Planned | [TODO](todo/TODO.md) `food/seasoning #9` |
+| Clearer off-hand slot (JEI) | Built: off-hand sprite left of the slot | `dishes/meals #62` |
+| Grill raw meat for the grilled effect; burnt meat item copied from the burnt skewer | Planned | `food/seasoning #22` |
+| Take 1 item from the Ingredients Basin with a full hand | Built: sneak grab | `dishes/meals #62` |
+| Several ingredient types per skewer (cabbage leaf types, potato types) | Built: skewering input tags | `dishes/meals #62` |
+| Any item in the off hand or basin | Planned (inputs are tag-limited) | `dishes/meals #61` |
+| JEI tab needs a name | Built ("Grilling", "Skewering") | `food/seasoning #21` |
+| Cumin, pepper and chili powder retextured as dusts | Planned | `textures/food #11` |
+| Seasonings missing from the trade JEI | Built: missing only on a dedicated server, filled by trade sync | `food/seasoning #21` |
+| Sauced icon missing: new shape, salt icon as fallback | In Progress: salt placeholder built, own shape planned | `food/seasoning #20` |
+| Sauces on more meat-like foods (whitelist) | Planned (sauces: cooked BBQ skewers only, 1) | `food/seasoning #23` |
+| Keep the Tray; Tray and Ingredients Basin wood variants | Built: 9 vanilla woods each (O39) | `dishes/meals #62`, `largecontent/mod-additions #38` |
+| WTHIT "Burnt!!" to "Burnt" | Built (en_us; uk_ua and zh_cn keep "!!") | `food/seasoning #21` |
+| Grilled icon in JEI grilling | Built | `dishes/meals #62` |
+| Effect chances used more in skewers | Planned | `food/types-and-tuning #19` |
+| Grilled icon or line missing | In Progress: the line is built (`food/seasoning #13`), the icon is the salt placeholder | `food/seasoning #20` |

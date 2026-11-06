@@ -242,7 +242,7 @@ breaking it gives the drink back.
 ### Decisions
 - **KubeJS `createCustom` with DD's `DrinkBlock`, or patcherMod Java?** Revised recommendation (2026-10-31): patcherMod,
   extending `DisplayDelightDishes` (it already registers DD blocks and links them; one list, one generator). KubeJS
-  remains the fallback (the TODO says KubeJS; [plate_blocks.js](../../kubejs/startup_scripts/items/plate_blocks.js)
+  remains the fallback (the TODO says KubeJS; [plate_blocks.js](../../development/creativeEngineering/src/main/resources/kubejs_startup/creativeengineering/items/plate_blocks.js)
   shows plates went the other way). Owner to confirm the Work column.
 - **Which drinks?** Recommend every glass-bottle and mug drink after the merges; skip cans and tankards.
 - **Liquid colour:** generated from item sprites (recommended; a recolor from `food/drinks #2` flows through on rerun)

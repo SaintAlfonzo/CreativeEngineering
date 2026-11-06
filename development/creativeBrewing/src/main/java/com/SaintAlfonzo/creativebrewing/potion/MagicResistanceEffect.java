@@ -1,12 +1,14 @@
 package com.SaintAlfonzo.creativebrewing.potion;
 
+import com.SaintAlfonzo.creativebrewing.CreativeBrewing;
+
 import com.SaintAlfonzo.creativebrewing.CBConfig;
 import java.util.HashSet;
 import java.util.Set;
 
-import com.SaintAlfonzo.creativeengineering.CEConfig;
-import com.SaintAlfonzo.creativeengineering.damage.DamageTags;
-import com.SaintAlfonzo.creativeengineering.shield.EffectTickContext;
+import com.SaintAlfonzo.creativecommon.CommonConfig;
+import com.SaintAlfonzo.creativecommon.damage.DamageTags;
+import com.SaintAlfonzo.creativecommon.shield.EffectTickContext;
 
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.effect.MobEffect;
@@ -18,7 +20,7 @@ import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.registries.ForgeRegistries;
 
 /**
- * creativeengineering:magic_resistance — the MobEffect itself is registered entirely in
+ * creativebrewing:magic_resistance — the MobEffect itself is registered entirely in
  * KubeJS ({@code startup_scripts/magic/magic_resistance.js}, {@code StartupEvents.registry
  * ('mob_effect', ...)}); that part needs no Java at all since it's a pack-original effect
  * with no cross-mod registry-timing problem. Its potions do need Java ({@link CEPotions}).
@@ -34,11 +36,11 @@ import net.minecraftforge.registries.ForgeRegistries;
  *       ticking effect's level is at most the Magic Resistance level. Shields never block these
  *       ticks ({@code [shields].unblockableEffectTicks}), so this is the cover for them. Recognised
  *       through {@link EffectTickContext}, since poison ticks share Instant Damage's source.</li>
- *   <li>Everything else in the {@code creativeengineering:magic} damage tag ({@link DamageTags}, the
+ *   <li>Everything else in the {@code creativecommon:magic} damage tag ({@link DamageTags}, the
  *       same tag the shields' MAGIC column reads: vanilla-flagged magic plus thorns, sonic boom,
  *       psychic and life drain) and those ticks above the Magic Resistance level lose 20% per level
  *       (vanilla Resistance's shape, capped at full immunity) in {@code LivingHurtEvent}. The rate
- *       is {@code [magic_resistance].reductionPerLevel} ({@link CEConfig.Magic}).</li>
+ *       is {@code [magic_resistance].reductionPerLevel} ({@link CommonConfig.Magic}).</li>
  * </ul>
  *
  * <p>The MobEffect is looked up lazily (cached after the first hit) rather than at class
@@ -48,7 +50,7 @@ import net.minecraftforge.registries.ForgeRegistries;
  */
 public final class MagicResistanceEffect {
 
-    private static final ResourceLocation ID = new ResourceLocation("creativeengineering", "magic_resistance");
+    private static final ResourceLocation ID = new ResourceLocation(CreativeBrewing.NS, "magic_resistance");
 
     private static final ResourceLocation MAGIC_TAG = DamageTags.id("magic");
 

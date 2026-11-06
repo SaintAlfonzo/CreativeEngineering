@@ -30,6 +30,7 @@ public final class MealItems {
     public static final RegistryObject<Item> PUFFERFISH_BROTH = ITEMS.register("pufferfish_broth",
             () -> new ConsumableItem(bowl(new FoodProperties.Builder().nutrition(8).saturationMod(0.7F)
                 .effect(() -> new MobEffectInstance(ModEffects.COMFORT.get(), 1200, 0), 1.0F)
+                .effect(() -> new MobEffectInstance(MobEffects.CONFUSION, 100, 0), 1.0F)
                 .build()), true));
     public static final RegistryObject<Item> POTATO_SOUP = ITEMS.register("potato_soup",
             () -> new ConsumableItem(bowl(new FoodProperties.Builder().nutrition(10).saturationMod(0.6F)

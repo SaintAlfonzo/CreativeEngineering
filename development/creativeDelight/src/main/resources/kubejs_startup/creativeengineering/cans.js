@@ -17,7 +17,7 @@
 // Food values are one serving (one meal). The number of servings per can lives in the <mod>/can_servings.js member
 // scripts (record generation_scripts/food/can_servings.json; CD food.CanServings), not here.
 // KubeJS saturation() is the modifier: saturation points = hunger x modifier x 2.
-// Dict keys: startup_scripts/_lib/item_dict.js generated cans block. Food types: generation_scripts/food/food_types.json.
+// Dict keys: creativecommon/_lib/item_dict.js generated cans block. Food types: generation_scripts/food/food_types.json.
 // Not canned: mint, acorn, grapes, mite crust, Alex's Mobs bananas, and raw or cooked ham, chevon, hoglin, kangaroo,
 // moose, bison, bunfungus. Coverage: feature_writeup/can_parity.md.
 // Cans marked "existing" are Canned Goods items (canned_bread, canned_beef...): only their food values change, including

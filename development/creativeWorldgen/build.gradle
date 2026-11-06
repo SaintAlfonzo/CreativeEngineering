@@ -8,7 +8,7 @@
 //                                                  framework's loot_config.json / loot_index.json, read by
 //                                                  loot/05_tuning.js from the pack folder in dev, else from the jar)
 //     No client tree: no client script is Worldgen's. Startup scripts live in this project
-//     (src/main/resources/kubejs_startup/creativeworldgen/), loaded from the jar by patcherMod's startup loader.
+//     (src/main/resources/kubejs_startup/creativeworldgen/), loaded from the jar by Creative Common's startup loader.
 //   - dataTrees: pack-folder data trees shipped in the jar the same way (creative_worldgen.md 1). Only paths no other
 //     jar ships, so the pack folder copy (dev) and the jar copy share one resource id and load once:
 //       data/more_mooblooms/moobloom_spawns/  the pack's moobloom spawn rules (More Mooblooms, a Worldgen member,
@@ -22,13 +22,13 @@ plugins {
 }
 
 dependencies {
-    // patcherMod (creativeengineering): a hard dependency (KubeJS, the shared helpers, the startup loader, CEConfig's
+    // Creative Common (creativecommon): a hard dependency (KubeJS, the shared helpers, the startup loader, CEConfig's
     // framework) and the Common APIs this jar calls.
-    compileOnly project(':patcherMod')
+    compileOnly project(':creativeCommon')
     // Creative Compat: required by every Creative jar (creative_split.md 7.6).
     compileOnly project(':creativeCompat')
-    // The mods the worldgen and fauna rows target: the pack's jars, shared with patcherMod (git-ignored libs/, SRG-named).
-    compileOnly fileTree(dir: rootProject.file('development/patcherMod/libs'), include: '*.jar')
+    // The mods the worldgen and fauna rows target: the pack's jars, shared with Creative Common (git-ignored libs/, SRG-named).
+    compileOnly fileTree(dir: rootProject.file('development/creativeCommon/libs'), include: '*.jar')
 }
 
 def scriptTrees = ['data/creativeworldgen/kubejs']

@@ -25,9 +25,9 @@ side="BOTH"
 # patcherMod (becomes creativecommon at the Q1 swap): KubeJS, the shared helpers, the startup script loader and the
 # util/ hooks the probes subscribe to. Needs the patcherMod build that has those hooks.
 [[dependencies.creativedevtools]]
-modId="creativeengineering"
+modId="creativecommon"
 mandatory=true
-versionRange="[1.1.05,)"
+versionRange="[1.1.0,)"
 ordering="AFTER"
 side="BOTH"
 # Creative Compat: required by every other Creative jar (creative_split.md 7.6).

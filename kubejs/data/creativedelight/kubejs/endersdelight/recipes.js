@@ -31,9 +31,11 @@ ServerEvents.recipes(e => {
 		R.shapeless(Item.of(i.chorus_fruit, 9), [i.t_storage_chorus_fruit], e, 'chorus_fruit_from_crate')
 
 		//######################### Shulker meat #########################
-		// Ender's mollusk and filet merge into End's shulker meat and slice (TODO dishes/ingredients #32; CD startup
-		// endersdelight/item_merges.js): the mollusk-to-filet cut would duplicate End's meat-to-slice cut
-		R.remove({ id: 'endersdelight:cutting/shulker_filet' }, e)
+		// Ender's mollusk and filet are back as their own items (plan_meals_rolls_bbq.md C3, 2026-11-04: the End Skewer
+		// takes the mollusk only; the 11-02 merge, dishes/ingredients #32, is undone for these two). Ender's knife drop and
+		// its mollusk-to-filet cut are upstream's again. Every other recipe keeps End's Delight meat: the stuffed shulker
+		// takes End's shulker meat in place of the mollusk.
+		R.replaceInput({ id: 'endersdelight:cooking/stuffed_shulker' }, i.shulker_mollusk, i.shulker_meat, e)
 
 		//######################### Shulker bowls #########################
 		// One shulker shell -> 12 bowls (Ender's Delight's gave 8; TODO recipes/cooking #4)
@@ -47,18 +49,8 @@ ServerEvents.recipes(e => {
 		R.shapeless(i.endermite_stew, [i.enderman, i.mite_crust, i.mite_crust, i.shulker_bowl], e, 'endermite_stew_cooked_manual_only')
 
 		// Assembly meals (TODO dishes/meals #3)
-		// Crispy skewer: shaped, a diagonal skewer
-		R.remove({ id: 'endersdelight:crispy_skewer' }, e)
-		R.shaped(i.crispy_skewer, [' MC', ' P ', 'S  '], { M: i.mite_crust, C: i.chorus_fruit, P: i.popped_chorus_fruit, S: i.stick },
-			e, 'crispy_skewer_manual_only')
-		if (Platform.isLoaded('create')) {
-			var incCrispySkewer = R.incomplete('crispy_skewer')
-			R.createSequencedAssembly(i.crispy_skewer, i.stick, [
-				e.recipes.create.deploying(incCrispySkewer, [incCrispySkewer, i.chorus_fruit]),
-				e.recipes.create.deploying(incCrispySkewer, [incCrispySkewer, i.popped_chorus_fruit]),
-				e.recipes.create.deploying(incCrispySkewer, [incCrispySkewer, i.mite_crust])
-			], ['crispy_skewer'], e, 'crispy_skewer_sequenced_assembly', 1)
-		}
+		// Crispy skewer: raw skewer, cooking, heatless craft and assembly in barbequesdelight/skewers.js (F.skewer,
+		// plan_meals_rolls_bbq.md C4)
 		// Crawling sandwich: shaped
 		R.remove({ id: 'endersdelight:crawling_sandwich' }, e)
 		R.shaped(i.crawling_sandwich, ['SMC', ' B '], { S: i.shulker_loot, M: i.mite_crust, C: i.chorus_fruit, B: i.t_bread },
@@ -78,7 +70,7 @@ ServerEvents.recipes(e => {
 		R.remove({ id: 'endersdelight:twisted_cereal_wood' }, e)
 		// (Quark's chorus fruit block removals: quark/recipes.js)
 		// Stuffed shulker shapeless
-		R.shapeless(Item.of(i.stuffed_shulker, 1), [i.tomato_sauce, i.tomato_sauce, i.cooked_rice, i.cooked_rice, i.brown_mushroom, i.chorus_fruit, i.shulker_mollusk, i.shulker_shell], e, 'stuffed_shulker_cooked_manual_only')
+		R.shapeless(Item.of(i.stuffed_shulker, 1), [i.tomato_sauce, i.tomato_sauce, i.cooked_rice, i.cooked_rice, i.brown_mushroom, i.chorus_fruit, i.shulker_meat, i.shulker_shell], e, 'stuffed_shulker_cooked_manual_only')
 		//Ender paella shapeless
 		R.shapeless(Item.of(i.ender_paella, 1), [i.cooked_rice, i.cooked_rice, i.shulker_loot, i.chorus_flower, i.chorus_flower, i.ender_sight, i.shulker_bowl], e, 'ender_paella_cooked_manual_only')
 		//Pearl pasta shapeless

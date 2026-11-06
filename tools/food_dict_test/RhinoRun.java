@@ -2,14 +2,14 @@ import dev.latvian.mods.rhino.*;
 import java.nio.file.*;
 
 /**
- * Loads kubejs/startup_scripts/_lib/{item_dict,food_grammar,food_dict}.js in the pack's own Rhino fork, in their
+ * Loads development/creativeCommon/src/main/resources/kubejs_startup/creativecommon/_lib/{item_dict,food_grammar,food_dict}.js in the pack's own Rhino fork, in their
  * priority order, and prints the result of the food dict's load check. With "bad", three broken lines are put in
  * front of the check (a missing general key, a key outside the grammar, an item named twice) and the check must
  * throw naming all three. tool_dict.js and misc_dict.js load after it when present. Usage: RhinoRun <instance root> [bad]
  */
 public class RhinoRun {
 	public static void main(String[] a) throws Exception {
-		Path lib = Paths.get(a[0], "kubejs/startup_scripts/_lib");
+		Path lib = Paths.get(a[0], "development/creativeCommon/src/main/resources/kubejs_startup/creativecommon/_lib");
 		boolean bad = a.length > 1 && a[1].equals("bad");
 		Context cx = Context.enter();
 		ScriptableObject scope = cx.initStandardObjects();

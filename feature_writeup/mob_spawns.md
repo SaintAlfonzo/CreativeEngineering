@@ -263,11 +263,11 @@ Trader, patrols, phantoms and villages don't use biome lists (section 4).
 ## 5. File map
 
 - [../kubejs/server_scripts/_lib/dump_spawns.js](../kubejs/server_scripts/_lib/dump_spawns.js) (`/dumpspawns`)
-- [../development/patcherMod/src/main/java/com/SaintAlfonzo/creativeengineering/worldgen/SpawnConditions.java](../development/patcherMod/src/main/java/com/SaintAlfonzo/creativeengineering/worldgen/SpawnConditions.java), mixins `SpawnPlacementsConditionsMixin`, `AnimalWalkTargetMixin`, `MushroomCowWalkTargetMixin`
+- [../development/creativeCommon/src/main/java/com/SaintAlfonzo/creativecommon/worldgen/SpawnConditions.java](../development/creativeCommon/src/main/java/com/SaintAlfonzo/creativecommon/worldgen/SpawnConditions.java), mixins `SpawnPlacementsConditionsMixin`, `AnimalWalkTargetMixin`, `MushroomCowWalkTargetMixin`
 - `config/quark-common.toml` (`Shiba = false`), mirrored in `configs_edited/root_config/`
 - [../kubejs/server_scripts/_lib/dump_all.js](../kubejs/server_scripts/_lib/dump_all.js) (`dumpspawns` after `dumpbiomes`)
-- [../development/patcherMod/src/main/java/com/SaintAlfonzo/creativeengineering/worldgen/SpawnDump.java](../development/patcherMod/src/main/java/com/SaintAlfonzo/creativeengineering/worldgen/SpawnDump.java)
-- [../development/patcherMod/src/main/java/com/SaintAlfonzo/creativeengineering/worldgen/SpawnTuning.java](../development/patcherMod/src/main/java/com/SaintAlfonzo/creativeengineering/worldgen/SpawnTuning.java) (modifier type, registered in `CreativeEngineering.java`)
+- [../development/creativeCommon/src/main/java/com/SaintAlfonzo/creativecommon/worldgen/SpawnDump.java](../development/creativeCommon/src/main/java/com/SaintAlfonzo/creativecommon/worldgen/SpawnDump.java)
+- [../development/creativeCommon/src/main/java/com/SaintAlfonzo/creativecommon/worldgen/SpawnTuning.java](../development/creativeCommon/src/main/java/com/SaintAlfonzo/creativecommon/worldgen/SpawnTuning.java) (modifier type, registered in `CreativeEngineering.java`)
 - `CEConfig.java` / `worldgen/WorldgenConfig.java` (`mobSpawns` switch)
 - [../kubejs/generation_scripts/worldgen/mob_spawns.json](../kubejs/generation_scripts/worldgen/mob_spawns.json) (the rules)
 - [../kubejs/server_scripts/worldgen/mob_spawns.js](../kubejs/server_scripts/worldgen/mob_spawns.js)
@@ -277,7 +277,7 @@ Trader, patrols, phantoms and villages don't use biome lists (section 4).
 
 ## 6. Offline checks
 
-`bash tools/test_mob_spawns.sh` (needs `./gradlew :patcherMod:compileJava` first; no game):
+`bash tools/test_mob_spawns.sh` (needs `./gradlew :creativeCommon:compileJava` first; no game):
 
 1. **Java/Python parity:** 20 cases in `tools/mob_spawns_test/cases.json` run through the real `SpawnTuning.apply`
    on vanilla spawn lists (plains, desert, snowy, ocean, mushroom fields, jungle, plains with a duplicate cow entry;

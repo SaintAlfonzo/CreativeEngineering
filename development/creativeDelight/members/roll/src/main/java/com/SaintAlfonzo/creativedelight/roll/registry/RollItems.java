@@ -28,14 +28,12 @@ public final class RollItems {
     public static final RegistryObject<Item> ANCIENT_ROLL = food("ancient_roll", 13, 0.6F);
     public static final RegistryObject<Item> ANCIENT_ROLL_SLICE = food("ancient_roll_slice", 6, 0.5F);
     /**
-     * Golden tier (roll_delight.md 2.3): always edible, stack 16 as the pack's golden foods. The whole roll's values and
-     * effects are copied from the golden tier by CD roll_delight/food_values.js (4 / 1.2 here as a matching base); the
-     * slice is half the roll and carries no effects, so a cut roll does not hand them out three times.
+     * Golden tier (roll_delight.md 2.3, plan_meals_rolls_bbq.md B3): the whole roll is the golden rule on the Rice Roll
+     * (x2 hunger capped at 20, modifier kept: 20 / 0.6), applied again at runtime by CD goldenfood/golden_values.js; the
+     * slice is a static 10 / 0.5 (half the roll, as the Rice Roll's slice). No effects, not always edible, stack 64.
      */
-    public static final RegistryObject<Item> GOLDEN_ROLL = ITEMS.register("golden_roll",
-            () -> new Item(props().stacksTo(16).food(new FoodProperties.Builder().nutrition(4).saturationMod(1.2F).alwaysEat().build())));
-    public static final RegistryObject<Item> GOLDEN_ROLL_SLICE = ITEMS.register("golden_roll_slice",
-            () -> new Item(props().stacksTo(16).food(new FoodProperties.Builder().nutrition(2).saturationMod(1.2F).alwaysEat().build())));
+    public static final RegistryObject<Item> GOLDEN_ROLL = food("golden_roll", 20, 0.6F);
+    public static final RegistryObject<Item> GOLDEN_ROLL_SLICE = food("golden_roll_slice", 10, 0.5F);
     public static final RegistryObject<Item> NETHER_ROLL = food("nether_roll", 6, 0.7F);
     public static final RegistryObject<Item> TOBIKO_ROLL = food("tobiko_roll", 7, 0.6F);
     /** As Farmer's Delight's Cooked Rice (D14): a bowl food that hands the bowl back, stack 64. */

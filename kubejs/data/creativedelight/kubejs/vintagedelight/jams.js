@@ -28,6 +28,7 @@ function packJams() {
 	var i = global.item
 	var f = global.fluid
 	var on = id => Platform.isLoaded(id)
+	// G5 begin: a row is used only while its ok is true (filter below); its ids then reach NCH and global.tags only
 	return [
 		{ n: 'ancient_fruit', fruit: i.ancient_fruit, ok: on('quark'), jar: i.ancient_fruit_jam_jar, block: i.ancient_fruit_jam_block,
 			jelloBlock: i.ancient_fruit_jello_block, jello: i.ancient_fruit_jello, jam: f.ancient_fruit_jam, melted: f.ancient_fruit_jello },
@@ -54,6 +55,7 @@ function packJams() {
 		{ n: 'strawberry', fruit: i.t_fruits_strawberry, ok: on('neapolitan'), jar: i.strawberry_jam_jar, block: i.strawberry_jam_block,
 			jelloBlock: i.strawberry_jello_block, jello: i.strawberry_jello, jam: f.strawberry_jam, melted: f.strawberry_jello }
 	]
+	// G5 end
 }
 
 ServerEvents.recipes(e => {
@@ -119,7 +121,7 @@ ServerEvents.recipes(e => {
 		//######################### Grape, cherry, salmonberry and raspberry jam #########################
 		// Salmonberry and raspberry (TODO dishes/jams #7, Vintage port -13): same pattern
 		// (the fruit from Delightful and Hearth and Harvest, so only while those are on)
-		var jamFruits = [[i.t_white_grapes, i.green_grape_jam_jar], [i.t_red_grapes, i.red_grape_jam_jar], [i.cherry, i.cherry_jam_jar]]
+		var jamFruits = [[i.t_white_grapes, i.green_grape_jam_jar], [i.t_red_grapes, i.red_grape_jam_jar], [i.cherry, i.cherry_jam_jar]] // G5 (fdCooking only)
 		if (global.CD.on('delightful')) jamFruits.push([i.t_fruits_salmonberries, i.salmonberry_jam_jar])
 		if (global.CD.on('hearthandharvest')) jamFruits.push([i.t_fruits_raspberries, i.raspberry_jam_jar])
 		jamFruits.forEach(p => {
@@ -132,10 +134,12 @@ ServerEvents.recipes(e => {
 		// Upgrade Aquatic's mulberry jam bottle and block merge into the mulberry jam jar and jam block (swaps
 		// merges_upgrade_aquatic_jams.json). Their bottle crafts and Create Central Kitchen's bottle and 250 mB recipes go;
 		// the jar follows the jam rules below. Central Kitchen's bucket <-> block and 1000 mB compacting stay.
+		// G5 begin: recipe ids for R.remove
 		;['upgrade_aquatic:mulberry_jam_bottle', 'upgrade_aquatic:mulberry_jam_bottle_from_block', 'upgrade_aquatic:mulberry_jam_block',
 			'create_central_kitchen:crafting/mulberry_jam_bottles_from_bucket', 'create_central_kitchen:crafting/mulberry_jam_bucket',
 			'create_central_kitchen:emptying/mulberry_jam_bottle', 'create_central_kitchen:filling/mulberry_jam_bottle',
 			'create_central_kitchen:mixing/mulberry_jam'].forEach(id => R.remove({ id: id }, e))
+		// G5 end
 
 		// Per jam, Fruits Delight's family: pot 4 fruit + sugar + lemon slice -> 1 jar (the new jams; the older jars have
 		// theirs above); 8 jars <-> 1 jam block, 8 bowls of jello <-> 1 jello block. Create: Spout and Item Drain at 125 mB
@@ -144,7 +148,7 @@ ServerEvents.recipes(e => {
 		packJams().filter(j => j.ok).forEach(j => {
 			var fruits = []
 			for (var k = 0; k < (j.fruitCount || 4); k++) fruits.push(j.fruit)
-			var pot = fruits.concat(j.noLemon ? [i.any_sugar] : [i.any_sugar, i.lemon_slice])
+			var pot = fruits.concat(j.noLemon ? [i.any_sugar] : [i.any_sugar, i.lemon_slice]) // G5 (pot only reaches NCH)
 			if (!j.potDone) R.fdCooking(pot, j.jar, e, j.n + '_jam_jar', 1.0, 400, i.empty_mason_jar)
 
 			var eight = (id) => [id, id, id, id, id, id, id, id]

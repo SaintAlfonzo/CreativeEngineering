@@ -27,7 +27,7 @@ for l in mods/*.jar; do
 done
 # dev jars: "glob in srv/mods to drop|build jar to use"; applied only when the build jar is newer than the mods/ one
 SWAPS=(
-  "creativeengineering-*.jar|$(ls -t "$INST"/development/patcherMod/build/libs/creativeengineering-*.jar | head -1)"
+  "creativeengineering-*.jar|$(ls -t "$INST"/development/creativeCommon/build/libs/creativecommon-*.jar | head -1)"
   "creativedelight-*.jar|$INST/development/creativeDelight/build/libs/creativedelight-1.0.0.jar"
   # Veggies, Vintage, Fungi, Miner's and Display are nested in the CD jar since 2026-11-02 (plan_creative_delight.md H):
   # no standalone swap rows for them (a rebuilt member reaches the scratch server through a rebuilt CD jar)

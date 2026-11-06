@@ -523,7 +523,7 @@ icon: salt; catalysts: crafting table, mechanical mixer):
 `onRuntimeAvailable` hides exactly the recipes it re-showed (by recipe id) from the Crafting and Mixing pages; if
 building the page throws, nothing is hidden. The crafts themselves are unchanged (the grid and basin still do them).
 Salted items keep Salt's own "Salted: +N nutrition" tooltip, so the page adds none. Off switch: CEConfig
-`[jei] seasoningCategory = false` (next JEI start). Compiles against `development/patcherMod/libs/salt-1.19.2-1.2.4.1.jar`
+`[jei] seasoningCategory = false` (next JEI start). Compiles against `development/creativeCommon/libs/salt-1.19.2-1.2.4.1.jar`
 (git-ignored, copied from `mods/`). FO-30, FO-31.
 
 ### 3.12 Pack seasonings framework (BUILT 2026-10-23)
@@ -643,8 +643,8 @@ from row 3: pepper, dill, cream and onion, ice cubes, popcorn variants. FO-45 to
   (not glycerol), +1 nutrition (placeholder). Test food: Create Factory's waffle. Popcorn is out: Corn Delight's
   popcorn + sugar is caramel popcorn. Which foods take it is still open (`food/seasoning #5`).
 - **Textures** (`textureswapper/powdered_sugar/make_psugar.py`, sheet `preview_sheet.png`): item = sugar's palette on
-  Create Confectionery's cocoa powder; block = the vanilla moss block recoloured with the powdered sugar item's palette
-  minus its darkest grey (`block_moss_soft1`, 2026-10-29; was `block_soft`, sugar and sugar cube palettes on powder
+  Create Confectionery's cocoa powder; block = the sugar cube palette on Immersive Weathering's vitrified sand (owner 2026-10-31, see above; LGPLv3
+  credited in CD's NOTICE-thirdparty.txt; 2026-10-29 it was the vanilla moss block, `block_moss_soft1`; before that `block_soft`, sugar and sugar cube palettes on powder
   snow, which read as snow); bucket = sugar and sugar cube palettes on the powder snow bucket's snow pixels. The block
   model keeps powder snow's (inner-face) shape.
 - **JEI** (2026-10-29, open): the block has no item of its own. The bucket is a `SolidBucketItem` (a `BlockItem`), so
@@ -860,8 +860,8 @@ Answered by the owner 2026-11-02 except D3 (pinned) and D4 (open).
 - [neoCraftHelper.js](../kubejs/startup_scripts/func/neoCraftHelper.js): `smoking(output, input, e, id, xp, cookingtime)`
 - [food_values.js](../kubejs/startup_scripts/cooking/food_values.js): one food's values copied onto another (cantaloupe slice, glistering melon slice)
 - [stack_sizes.js](../kubejs/startup_scripts/changes/stack_sizes.js): egg stack sizes (the `egg` rule; `item_properties.js` removed in 1.0.5)
-- patcherMod [compat/jei/SeasoningJEI.java](../development/patcherMod/src/main/java/com/SaintAlfonzo/creativeengineering/compat/jei/SeasoningJEI.java)
-  and [SeasoningCategory.java](../development/patcherMod/src/main/java/com/SaintAlfonzo/creativeengineering/compat/jei/SeasoningCategory.java): the Seasoning JEI page (3.11)
+- patcherMod [compat/jei/SeasoningJEI.java](../development/creativeCommon/src/main/java/com/SaintAlfonzo/creativecommon/compat/jei/SeasoningJEI.java)
+  and [SeasoningCategory.java](../development/creativeCommon/src/main/java/com/SaintAlfonzo/creativecommon/compat/jei/SeasoningCategory.java): the Seasoning JEI page (3.11)
 - Pack seasonings (3.12): patcherMod `food/Seasonings.java`, `SeasoningRecipe.java`, `SeasoningTooltip.java`;
   [seasonings.js](../development/creativeDelight/src/main/resources/kubejs_startup/creativeengineering/seasonings.js) (definitions), [seasoning.js](../kubejs/data/creativedelight/kubejs/creativeengineering/seasoning.js) (crafts),
   [seasoning_lang.js](../kubejs/assets/creativedelight/kubejs/creativeengineering/seasoning_lang.js) (names), NCH `season`; [seasoning_tags.js](../kubejs/data/creativedelight/kubejs/creativeengineering/seasoning_tags.js)
@@ -1004,7 +1004,7 @@ Cooking oil and fried eggs (3.7), after a restart:
   (JEI lists it; no 3-sugar recipe). Powdered Sugar Bucket alone in the grid gives 8 Powdered Sugar and the empty Bucket
   stays. Bucket + 8 Powdered Sugar in the grid gives a Powdered Sugar Bucket. JEI uses of the bucket: no Tactical
   Fishing catch. Rerun 2026-10-29.
-- [ ] **FO-52 Block:** place the bucket on the ground: a powdered sugar block with the grainy moss-pattern sugar texture
+- [ ] **FO-52 Block:** place the bucket on the ground: a powdered sugar block with the grainy vitrified-sand-pattern sugar texture
   (not the snow-like one), empty bucket in hand; pick-block and WTHIT show the Powdered Sugar Bucket. Note any JEI view
   that still shows snow or powder snow for it (2026-10-29 owner report, source not found). Walk in: you sink
   slowly, no frost overlay or freezing damage after 20 s. With leather boots you stand on top. Fall 10 blocks into it: no

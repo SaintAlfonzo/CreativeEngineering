@@ -98,14 +98,19 @@ public final class BBQItems {
                     .effect(() -> new MobEffectInstance(MobEffects.POISON, 200, 1), 1.0F)
                     .effect(() -> new MobEffectInstance(MobEffects.CONFUSION, 200, 1), 1.0F)
                     .build())));
+    /*
+     * Combos (plan_meals_rolls_bbq.md C8, 2026-11-04): ordinary shaped / meal recipes from cooked skewers, no stored
+     * skewers and no carried skewer effects; static values, 0.8 x the inputs (average cooked skewer 7.6 / 11.2 points)
+     * capped at 16 hunger. Upstream: wrap 8 / 0.7, sandwich 14 / 0.7, bibimbap 16 / 0.7.
+     */
     public static final RegistryObject<Item> KEBAB_WRAP = ITEMS.register("kebab_wrap",
-            () -> new BBQSandwichItem(ModItems.basicItem().food(new FoodProperties.Builder().nutrition(8).saturationMod(0.7F)
+            () -> new BBQSandwichItem(ModItems.basicItem().food(new FoodProperties.Builder().nutrition(10).saturationMod(0.6F)
                     .effect(() -> new MobEffectInstance(ModEffects.NOURISHMENT.get(), 1200, 0), 0.5F).build())));
     public static final RegistryObject<Item> KEBAB_SANDWICH = ITEMS.register("kebab_sandwich",
-            () -> new BBQSandwichItem(ModItems.basicItem().food(new FoodProperties.Builder().nutrition(14).saturationMod(0.7F)
+            () -> new BBQSandwichItem(ModItems.basicItem().food(new FoodProperties.Builder().nutrition(16).saturationMod(0.6F)
                     .build())));
     public static final RegistryObject<Item> BIBIMBAP = ITEMS.register("bibimbap",
-            () -> new BBQSandwichItem(ModItems.basicItem().food(new FoodProperties.Builder().nutrition(16).saturationMod(0.7F)
+            () -> new BBQSandwichItem(ModItems.basicItem().food(new FoodProperties.Builder().nutrition(16).saturationMod(0.8F)
                     .effect(() -> new MobEffectInstance(ModEffects.NOURISHMENT.get(), 2400, 0), 1.0F).build())));
 
     /**

@@ -13,7 +13,7 @@ dependencies {
     // Optional: the Skewering and Grilling categories (compat/jei). Only loaded by JEI.
     compileOnly fg.deobf('local:jei-1.19.2-forge:11.8.1.1034')
     // Optional: the grill progress lines (compat/wthit, the Jade tooltip ported). Only loaded by WTHIT.
-    compileOnly files(rootProject.file('development/patcherMod/libs/wthit-1.19.2-forge-5.36.1.jar'))
+    compileOnly files(rootProject.file('development/creativeCommon/libs/wthit-1.19.2-forge-5.36.1.jar'))
     // The pack rain rule for the grill campfire (campfire.CampfireRainInfo: tags and Creative Compat's config readers).
-    compileOnly project(':patcherMod')
+    compileOnly project(':creativeCommon')
 }

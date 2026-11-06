@@ -3,6 +3,34 @@
 // requires: abnormals_delight
 // Placeable food tags, abnormals_delight part. Readers merge every part with global.CD.genMerge('placeable') (creative_delight.md 28.2).
 if (global.CD) global.CD.genPut('placeable', 'abnormals_delight', {
+ "placeable": [
+  "duck_noodles",
+  "perch_with_mushrooms",
+  "pickerelweed_juice",
+  "pike_with_beetroot",
+  "slabdish"
+ ],
+ "placeable/sneak": [
+  "duck_noodles",
+  "perch_with_mushrooms",
+  "pickerelweed_juice",
+  "pike_with_beetroot",
+  "slabdish"
+ ],
+ "placeable_on_plate": [
+  "cherry_cookie",
+  "escargot",
+  "maple_cookie",
+  "mulberry_cookie"
+ ],
+ "placeable_on_small_plate": [
+  "abnormals_delight_chocolate_cake_slice",
+  "adzuki_cake_slice",
+  "banana_cake_slice",
+  "mint_cake_slice",
+  "strawberry_cake_slice",
+  "vanilla_cake_slice"
+ ],
  "placeable_on_coaster": [
   "abnormals_delight_chocolate_cake_slice",
   "adzuki_cake_slice",

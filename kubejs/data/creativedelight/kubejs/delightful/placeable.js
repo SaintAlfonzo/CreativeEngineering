@@ -4,30 +4,44 @@
 // Placeable food tags, delightful part. Readers merge every part with global.CD.genMerge('placeable') (creative_delight.md 28.2).
 if (global.CD) global.CD.genPut('placeable', 'delightful', {
  "placeable": [
+  "baklava",
   "berry_matcha_latte",
+  "cactus_chili",
+  "cactus_soup",
   "ender_nectar",
   "field_salad",
   "matcha_ice_cream",
   "matcha_latte",
+  "matcha_milkshake",
   "salmonberry_ice_cream",
+  "salmonberry_milkshake",
   "salmonberry_pie",
-  "sinigang"
+  "sinigang",
+  "stuffed_cantaloupe",
+  "stuffed_cantaloupe_block"
  ],
  "placeable/sneak": [
   "berry_matcha_latte",
+  "cactus_chili",
+  "cactus_soup",
   "ender_nectar",
   "field_salad",
   "matcha_ice_cream",
   "matcha_latte",
+  "matcha_milkshake",
   "salmonberry_ice_cream",
-  "sinigang"
+  "salmonberry_milkshake",
+  "sinigang",
+  "stuffed_cantaloupe"
  ],
  "placeable_on_plate": [
+  "cantaloupe_bread",
+  "cantaloupe_popsicle",
   "cheeseburger",
   "cooked_marshmallow_stick",
   "deluxe_cheeseburger",
-  "nut_butter_and_jelly_sandwich",
-  "smore"
+  "smore",
+  "wrapped_cantaloupe"
  ],
  "placeable_on_small_plate": [
   "delightful_pumpkin_pie_slice",
@@ -35,6 +49,10 @@ if (global.CD) global.CD.genPut('placeable', 'delightful', {
  ],
  "placeable_on_coaster": [
   "berry_matcha_latte",
+  "cactus_chili",
+  "cactus_soup",
+  "cantaloupe_bread",
+  "cantaloupe_popsicle",
   "cheeseburger",
   "cooked_marshmallow_stick",
   "delightful_pumpkin_pie_slice",
@@ -43,10 +61,14 @@ if (global.CD) global.CD.genPut('placeable', 'delightful', {
   "field_salad",
   "matcha_ice_cream",
   "matcha_latte",
+  "matcha_milkshake",
   "nut_butter_and_jelly_sandwich",
   "salmonberry_ice_cream",
+  "salmonberry_milkshake",
   "salmonberry_pie_slice",
   "sinigang",
-  "smore"
+  "smore",
+  "stuffed_cantaloupe",
+  "wrapped_cantaloupe"
  ]
 })

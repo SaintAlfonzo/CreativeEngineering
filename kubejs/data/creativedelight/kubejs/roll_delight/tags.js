@@ -17,6 +17,7 @@ ServerEvents.tags('item', e => {
 	t.add(e, i.t_chopstick_foods, [i.t_food_family_fish_raw, i.t_food_family_fish_raw_cut, i.t_food_family_fish_cooked,
 		i.t_food_family_fish_cooked_cut])
 
+	// G5 begin: FOODS is filtered by Item.exists below, then handed to global.tags
 	var FOODS = [
 		// Roll Delight
 		i.rice_roll, i.rice_roll_slice, i.amazing_salmon_roll, i.amazing_salmon_roll_slice, i.mushroom_roll,
@@ -53,6 +54,7 @@ ServerEvents.tags('item', e => {
 		i.squid_rings, i.stuffed_shulker_bowl, i.crab_rangoon, i.weird_caviar, i.sea_grape, i.braised_sea_pickle,
 		i.honey_fried_kelp, i.dried_kelp, i.cooked_crab, i.cooked_whole_crab, i.lobster_tail_cooked, i.shrimp_stew,
 	]
+	// G5 end
 	// End's Delight is to be removed (3.3.3): optional entries, added only while the mod's items are registered
 	var OPTIONAL = [
 		i.ender_noodle, i.ender_congee, i.ender_bamboo_rice, i.stir_fried_shulker_meat, i.raw_dragon_meat_cuts,

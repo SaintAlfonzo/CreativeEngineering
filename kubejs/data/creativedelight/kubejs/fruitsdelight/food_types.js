@@ -48,6 +48,7 @@ if (global.CD) global.CD.genPut('food_types', 'fruitsdelight', {
    "fig_tart",
    "glowberry_jello",
    "hamimelon_jello",
+   "hamimelon_popsicle",
    "hamimelon_shaved_ice",
    "hawberry_jello",
    "hawberry_sheet",

@@ -29,6 +29,7 @@
 //   hand food       wrapAssemble (fillings, wrap)     tortilla + fillings by hand; assembly on a tortilla, fillings in order
 //                   burgerAssemble / skewerAssemble / sandwichAssemble (pattern, keys, food, steps, base): shaped by hand
 //                   (`_manual_only`) plus one assembly on base (bread, stick, bread unless given)
+//                   skewer ({ raw, cooked, ... }): one whole skewer line, raw to cooked (below, at the function)
 //                   assemble (base, steps, food, loops): the sequenced assembly alone. A step is an ingredient
 //                   or an array of choices (deploy), { fill: Fluid.of(...) } (spout) or { press: true } (press)
 //   golden          goldenGild (food, golden, gold)   food in a ring of 8 gold; heated mixer + 6; Arc Furnace + 5
@@ -202,6 +203,43 @@ global.CD.food = function (e) {
 		},
 		burgerAssemble(pattern, keys, output, steps, base) { F._shapedAssemble(pattern, keys, output, steps, base || i.t_bread) },
 		skewerAssemble(pattern, keys, output, steps, base) { F._shapedAssemble(pattern, keys, output, steps, base || i.stick) },
+		// One skewer line (skewer family, food_families.md; plan_meals_rolls_bbq.md C2), the ten Barbeque's Delight lines and
+		// the eight pack skewers alike. o:
+		//   raw, cooked      the raw (not edible) and cooked skewer
+		//   skewering        { main, side } the Barbeque's Delight basin recipe (main / side: { id, count }, side null)
+		//   rawInputs        or 1 to 3 raw ingredient groups, crafted by hand with the stick into the raw skewer
+		//   grill            Grill ticks, both sides (Barbeque's Delight; skipped while its member is off)
+		//   cookedInputs     1 to 3 cooked ingredient groups: the heatless craft straight to the cooked skewer
+		//                    (`_from_cooked_manual_only`); none when no input has a cooked form (the raw craft would clash)
+		//   steps            the cooked skewer's sequenced assembly on the stick (cooked ingredients, in order)
+		//   shape            'bbq' 5 A or 3 A + 2 B (the Barbeque's Delight lines), 'diagonal' one of each (default),
+		//                    'shapeless' one of each, any layout
+		//   stick            the stick item (default the stick; the Nether Skewer's is a blaze rod)
+		// The furnace, smoker and campfire cook raw to cooked too (0.35 xp, the vanilla times); vanilla cooking keeps no
+		// NBT, so only the Grill carries a raw skewer's seasonings over. Ids: raw path (basin, raw craft), cooked path
+		// (grill), cooked path + _from_smelting / _from_smoking / _from_campfire / _from_cooked_manual_only.
+		skewer(o) {
+			var stick = o.stick || i.stick
+			var rawPath = pathOf(o.raw), cookedPath = pathOf(o.cooked)
+			var craft = (output, inputs, id) => {
+				var keys = { S: stick }, letters = ['A', 'B', 'C']
+				inputs.forEach((x, n) => { keys[letters[n]] = x })
+				if (o.shape === 'shapeless') return R.shapeless(output, inputs.concat([stick]), e, id)
+				var pattern = o.shape === 'bbq'
+					? (inputs.length === 1 ? [' AA', 'AAA', 'S  '] : [' AB', 'ABA', 'S  '])
+					: (inputs.length === 1 ? ['  A', ' A ', 'S  '] : inputs.length === 2 ? ['  A', ' B ', 'S  '] : [' AB', ' C ', 'S  '])
+				R.shaped(output, pattern, keys, e, id)
+			}
+			var bbq = global.CD.on('barbequesdelight')
+			if (o.skewering && bbq) R.bbqSkewering(o.raw, o.skewering.main, o.skewering.side, e, rawPath)
+			if (o.rawInputs) craft(o.raw, o.rawInputs, rawPath)
+			if (o.grill && bbq) R.bbqGrilling(o.cooked, o.raw, o.grill, e, cookedPath)
+			R.smelting(o.cooked, o.raw, e, cookedPath + '_from_smelting', 0.35)
+			R.smoking(o.cooked, o.raw, e, cookedPath + '_from_smoking', 0.35)
+			R.campfireCooking(o.cooked, o.raw, e, cookedPath + '_from_campfire', 0.35)
+			if (o.cookedInputs) craft(o.cooked, o.cookedInputs, cookedPath + '_from_cooked_manual_only')
+			if (o.steps) F.assemble(stick, o.steps, o.cooked)
+		},
 		sandwichAssemble(pattern, keys, output, steps, base) { F._shapedAssemble(pattern, keys, output, steps, base || i.t_bread) },
 		wrapAssemble(fillings, output) {
 			R.shapeless(output, [i.t_tortilla].concat(fillings), e, suffix(output, '_manual_only'))
@@ -223,8 +261,59 @@ global.CD.food = function (e) {
 			}
 		},
 		goldenEnchant(input, output) {
+			if (!global.has(global.fluid.xp)) return
 			F.assemble(input, [i.any_ingot_gold, { fill: Fluid.of(global.fluid.xp, V.gilded.xp) }, { press: true }], output, V.gilded.loops)
 		},
 	}
+	// Rule G5 for the family calls (plan_cb_publish.md M2): a call naming an id whose mod is not loaded (and that no
+	// other mod registers) is skipped whole and counted in NCH's per-mod summary, as an NCH call of its own would be.
+	// With every mod loaded nothing is skipped. F.slot only builds a slot, so it is left as is.
+	Object.keys(F).forEach(k => {
+		var fn = F[k]
+		if (k.charAt(0) === '_' || k === 'slot' || typeof fn !== 'function') return
+		F[k] = function () {
+			var ns = global.CD.absentIn(Array.prototype.slice.call(arguments))
+			if (ns) {
+				var counts = global.NCH._absentCounts
+				counts[ns] = (counts[ns] || 0) + 1
+				return undefined
+			}
+			return fn.apply(F, arguments)
+		}
+	})
 	return F
+}
+
+// The first absent mod named in v (an id, an array or plain object of them, nested), or null. Absent: the id's mod is
+// not loaded and the id is no registered item or fluid. Tags and strings without a colon (dict keys, patterns) never
+// count; Java objects (Fluid.of, Item.of) are not looked into.
+global.CD.absentIn = function (v, depth) {
+	depth = depth || 0
+	if (v === undefined || v === null || depth > 5) return null
+	if (typeof v === 'string') {
+		var colon = v.indexOf(':')
+		if (colon < 0 || v.charAt(0) === '#') return null
+		var ns = v.substring(0, colon)
+		if (global.has.mod(ns) || Item.exists(v) || global.NCH._fluidExists(v)) return null
+		return ns
+	}
+	var list = null
+	if (Array.isArray(v)) list = v
+	else if (typeof v === 'object' && typeof v.getClass !== 'function') list = Object.keys(v).map(k => v[k])
+	if (!list) return null
+	for (var n = 0; n < list.length; n++) {
+		var hit = global.CD.absentIn(list[n], depth + 1)
+		if (hit) return hit
+	}
+	return null
+}
+
+// Fluid.of(id, amount), or the bare id when that fluid is absent (its mod is not loaded and no other mod registers it).
+// Fluid.of of an unknown fluid gives the empty fluid, which NCH cannot tell from a real one; the bare id makes the NCH
+// call it is passed to skip as absent (rule G5, plan_cb_publish.md M2). With every mod loaded it is Fluid.of.
+global.CD.fluidOf = function (id, amount) {
+	var s = String(id)
+	var colon = s.indexOf(':')
+	if (colon > 0 && s.charAt(0) !== '#' && !global.has.mod(s.substring(0, colon)) && !global.NCH._fluidExists(s)) return s
+	return Fluid.of(id, amount)
 }

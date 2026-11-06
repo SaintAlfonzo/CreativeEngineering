@@ -40,13 +40,13 @@ console.log('potion_area func loading')
     //   effectMult     multiplies the carried potion's own effect durations
     //   rings          ring limit - how many stacked clouds make up the dome (1 = old flat disc)
     const BUCKETS = {
-        'creativeengineering:potion_bucket': {
+        'creativebrewing:potion_bucket': {
             radius: 1.0, growthPerTick: 0.030, lingerTicks: 35, waitTicks: 16, effectMult: 1.0, rings: 1,
         },
-        'creativeengineering:splash_potion_bucket': {
+        'creativebrewing:splash_potion_bucket': {
             radius: 1.5, growthPerTick: 0.04, lingerTicks: 50, waitTicks: 8, effectMult: 1.1, rings: 2,
         },
-        'creativeengineering:lingering_potion_bucket': {
+        'creativebrewing:lingering_potion_bucket': {
             radius: 2, growthPerTick: 0.05, lingerTicks: 100, waitTicks: 4, effectMult: 1.2, rings: 4,
         },
     }
@@ -138,14 +138,14 @@ console.log('potion_area func loading')
         // the effect as a ring applies it (duration x the bucket's effectMult) - the tooltip
         // in CB client creativeengineering/potion_buckets.js shows this, so it matches what the player gets
         scaled(itemId, inst) {
-            const dial = BUCKETS[itemId] || BUCKETS['creativeengineering:potion_bucket']
+            const dial = BUCKETS[itemId] || BUCKETS['creativebrewing:potion_bucket']
             return scaledInstance(inst, dial.effectMult)
         },
 
         // level: server-side Level | x,y,z: doubles (base spawn point) | itemId: a key of BUCKETS
         // stack: the potion-bucket ItemStack (read for NBT) | owner: LivingEntity or null
         spawn(level, x, y, z, itemId, stack, owner) {
-            const dial = BUCKETS[itemId] || BUCKETS['creativeengineering:potion_bucket']
+            const dial = BUCKETS[itemId] || BUCKETS['creativebrewing:potion_bucket']
             const ringCount = Math.max(1, Math.round(dial.rings || 1))
 
             // effects: prefer the bucket's own potion (getMobEffects is a single, unambiguous

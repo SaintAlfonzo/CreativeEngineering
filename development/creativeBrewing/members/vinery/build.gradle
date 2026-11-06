@@ -16,14 +16,14 @@ dependencies {
     compileOnly fg.deobf('local:jei-1.19.2-forge:11.8.1.1034')
 
     compileOnly 'io.github.llamalad7:mixinextras-common:0.4.1'
-    // WTHIT lines (B4.6); the pack's jar, shared with patcherMod
-    compileOnly files(rootProject.file('development/patcherMod/libs/wthit-1.19.2-forge-5.36.1.jar'))
+    // WTHIT lines (B4.6); the pack's jar, shared with Creative Common
+    compileOnly files(rootProject.file('development/creativeCommon/libs/wthit-1.19.2-forge-5.36.1.jar'))
     // The pack's [time] master (time.md 3.7): forge/PackTime calls Creative Calendar's time.WineTime (CB requires Calendar).
     compileOnly project(':creativeCalendar')
     // Flower box / pot plants use Supplementaries' special flower models when it is loaded (legacy/client/
     // SupplementariesFlowerModels). The pack's SRG jars; only a plain static method on a mod class is called.
-    compileOnly files(rootProject.file('development/patcherMod/libs/supplementaries-1.19.2-2.4.20.jar'))
-    compileOnly files(rootProject.file('development/patcherMod/libs/moonlight-1.19.2-2.3.7-forge.jar'))
+    compileOnly files(rootProject.file('development/creativeCommon/libs/supplementaries-1.19.2-2.4.20.jar'))
+    compileOnly files(rootProject.file('development/creativeCommon/libs/moonlight-1.19.2-2.3.7-forge.jar'))
     annotationProcessor 'io.github.llamalad7:mixinextras-common:0.4.1'
 }
 

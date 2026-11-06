@@ -17,8 +17,8 @@ if (global.CD) global.CD.genPut('food_types', 'farmersdelight', {
    "ham"
   ],
   "raw/meat/sliced": [
-   "chicken_cuts",
    "bacon",
+   "chicken_cuts",
    "minced_beef",
    "mutton_chops"
   ],
@@ -49,6 +49,7 @@ if (global.CD) global.CD.genPut('food_types', 'farmersdelight', {
    "apple_pie_slice",
    "cake_slice",
    "chocolate_pie_slice",
+   "fd_pumpkin_pie_slice",
    "glow_berry_custard",
    "honey_cookie",
    "melon_popsicle",

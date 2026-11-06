@@ -45,6 +45,7 @@ ServerEvents.recipes(e => {
 		var CAKE = { exp: 0.1, time: 200, tool: i.t_bakeware_cake_pan }
 
 		// [result key, flavour (2 per cake / pie / batch of cookies), pie filling can key (null: none) or a second cake / cookie flavour]
+		// G5 begin: CAKES, PIES and COOKIES only reach the global.CD.food family calls below, which skip absent mods' ids
 		var CAKES = [
 			['adzuki_cake', i.roasted_adzuki_beans], ['banana_cake', i.t_fruits_banana],
 			['chocolate_cake', i.t_bars_chocolate],          // Crafts & Additions' (Neapolitan's merges into it, item_merges.js)
@@ -87,11 +88,12 @@ ServerEvents.recipes(e => {
 			['gingerbread_man', i.gingerdough, i.any_sweetener],
 
 		]
+		// G5 end
 
 		//######################### Removals #########################
 		// Every recipe that makes one of these, from any mod, except slices -> whole and this pack's own (made below).
 		// The table rows are swept by their family call.
-		var REMOVED_OUTPUTS = [i.cake, i.neapolitan_chocolate_cake, i.cake_base, i.cake_base_baked, i.pie_crust]
+		var REMOVED_OUTPUTS = [i.cake, i.neapolitan_chocolate_cake, i.cake_base, i.cake_base_baked, i.pie_crust] // G5 (R.remove filters)
 		REMOVED_OUTPUTS.forEach(id => R.remove({ output: id, not: [{ id: /_from_slices$/ }, { mod: 'creativeengineering' }] }, e))
 
 		//######################### Bases #########################
@@ -119,7 +121,7 @@ ServerEvents.recipes(e => {
 
 		//######################### Cakes (cake pan) #########################
 		// Plain cake: 3 frosting, or 2 frosting and a red berry on top (the vanilla look).
-		var RED_BERRY = [i.sweet_berries, i.t_fruits_cranberry, i.cherry]
+		var RED_BERRY = [i.sweet_berries, i.t_fruits_cranberry].concat(global.has(i.cherry) ? [i.cherry] : [])
 		R.shapeless(i.cake, [i.cake_base_baked, Item.of(i.frosting, 3)], e, 'cake_manual_only')
 		R.shapeless(i.cake, [i.cake_base_baked, Item.of(i.frosting, 2), RED_BERRY], e, 'cake_berry_manual_only')
 		R.ceBaking([i.cake_base, n(i.frosting, 3)], Item.of(i.cake, 1), e, 'cake', CAKE)
@@ -140,14 +142,14 @@ ServerEvents.recipes(e => {
 		//######################### Muffins (muffin tin, paper) #########################
 		// The family call bakes 4 in the oven (flour, one paper each) and removes the mods' Cooking Pot recipes: muffins
 		// are not made in the pot (owner 2026-10-29).
-		F.muffinBake(i.t_fruits_blueberry, i.blueberry_muffin)
-		F.muffinBake(i.t_fruits_cranberry, i.cranberry_muffin)
+		F.muffinBake(i.t_fruits_blueberry, i.blueberry_muffin) // G5
+		F.muffinBake(i.t_fruits_cranberry, i.cranberry_muffin) // G5
 		F.muffinBake(i.baked_sweet_potato, i.sweet_potato_cupcake)   // Veggies Delight's, named Sweet Potato Muffin (its sweet potato dough craft stays)
 
 		//######################### Tarts (baking sheet) #########################
 		// Fruits Delight pot recipes.
-		F.tartBake(i.t_fruits_lemon, i.lemon_tart)
-		F.tartBake(i.t_fruits_fig, i.fig_tart)
+		F.tartBake(i.t_fruits_lemon, i.lemon_tart) // G5
+		F.tartBake(i.t_fruits_fig, i.fig_tart) // G5
 
 		// Oceanic Delight's Sponge Pie (renamed, assets oceanic_delight/names.js): crust + sponge + prismarine shard + 2 sugar,
 		// as its own grid recipe had it. No filling can.
@@ -157,11 +159,11 @@ ServerEvents.recipes(e => {
 		//######################### Hand pies (baking sheet) #########################
 		// One-serving pies with a savory or odd filling: crust + the mod's own filling, oven only (food_families.md
 		// `pie/small`). The mods' grid recipes are swept.
-		var HAND_PIES = [
+		var HAND_PIES = [ // G5 begin (family calls only)
 			['rottenpie', [n(i.cookedrottenham, 2), i.eggs]],                 // Hostile Delight (was + wheat)
 			['greenpie', [i.moss, i.turtle_egg, i.rottenham]],                // Hostile Delight (was the same, no crust)
 			['chorus_flower_pie', [n(i.dried_chorus_flower, 2), i.poppy, F.SWEET]],   // End's Delight (was on dough)
-		]
+		] // G5 end
 		HAND_PIES.forEach(p => F.handPieBake(p[1], i[p[0]]))
 
 		//######################### Breads (baking sheet) #########################

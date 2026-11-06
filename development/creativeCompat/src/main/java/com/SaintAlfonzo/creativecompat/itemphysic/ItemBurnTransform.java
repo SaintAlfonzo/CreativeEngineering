@@ -1,6 +1,6 @@
 package com.SaintAlfonzo.creativecompat.itemphysic;
 
-import com.SaintAlfonzo.creativeengineering.util.BurnBursts;
+import com.SaintAlfonzo.creativecommon.util.BurnBursts;
 import net.minecraft.core.Registry;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.tags.TagKey;

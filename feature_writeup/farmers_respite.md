@@ -1,6 +1,6 @@
 # Farmer's Respite 2.1.2 against the installed 2.0
 
-**BUILT 2026-10-25 (Creative Delight 1.0.0 + patcherMod 1.1.03, installed in `mods/`); Shipped in 1.1.03 (deployed to server and players 2026-10-26); scratch (deep scan 2026-11-02): SQ-RSP-01 to -04, -09 to -11, -13 PASSED (r1101, r1102b), -05 to -07, -12, -15 open (probe could not load the Kettle; pot drop unproven), -08 needs a player, -14 not run; CQ-RSP-01 and RSP- rows not run in game.** Installed: `FarmersRespite-1.19-2.0.jar` (`mods/`, `server_mods/`, `development/patcherMod/libs/`), 1.19.2.
+**BUILT 2026-10-25 (Creative Delight 1.0.0 + patcherMod 1.1.03, installed in `mods/`); Shipped in 1.1.03 (deployed to server and players 2026-10-26); scratch (deep scan 2026-11-02): SQ-RSP-01 to -04, -09 to -11, -13 PASSED (r1101, r1102b), -05 to -07, -12, -15 open (probe could not load the Kettle; pot drop unproven), -08 needs a player, -14 not run; CQ-RSP-01 and RSP- rows not run in game.** Installed: `FarmersRespite-1.19-2.0.jar` (`mods/`, `server_mods/`, `development/creativeCommon/libs/`), 1.19.2.
 Evaluated 2026-10-25 against `devmods/checkNewerVersionForContent/farmersrespite-1.20.1-2.1.2.jar` (1.20.1 / Forge, mods.toml
 says `1.20.1-2.1`), method in [devmods_evaluation.md](devmods_evaluation.md) section 1. Both jars unpacked in `DecompiledMods/`.
 Plan row: `largecontent/mod-additions #21` in [todo/TODO.md](todo/TODO.md).

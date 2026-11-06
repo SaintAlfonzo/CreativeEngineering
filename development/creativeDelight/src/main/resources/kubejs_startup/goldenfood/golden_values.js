@@ -45,6 +45,17 @@ ItemEvents.modification(e => {
 		})
 		done++
 	}
+	// Golden foods of other mods: item_dict key of the input food -> item_dict key of the golden food (golden multiplier
+	// only). Golden Roll on the Rice Roll (plan_meals_rolls_bbq.md B3: 20 / 0.6); its slice keeps the member's 10 / 0.5.
+	var PAIRS = {
+		rice_roll: 'golden_roll',
+	}
+	Object.keys(PAIRS).forEach(inKey => {
+		var inputId = i[inKey]
+		if (typeof inputId !== 'string') { console.warn('[golden values] ' + inKey + ' is not in item_dict'); return }
+		if (!Platform.isLoaded(String(inputId).split(':')[0])) return
+		apply(inputId, PAIRS[inKey], cfg.golden)
+	})
 	Object.keys(INPUTS).forEach(inKey => {
 		var inputId = i[inKey]
 		if (typeof inputId !== 'string') { console.warn('[golden values] ' + inKey + ' is not in item_dict'); return }

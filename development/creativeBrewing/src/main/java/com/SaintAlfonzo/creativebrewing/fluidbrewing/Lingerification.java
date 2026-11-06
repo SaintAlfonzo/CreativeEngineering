@@ -1,5 +1,7 @@
 package com.SaintAlfonzo.creativebrewing.fluidbrewing;
 
+import com.SaintAlfonzo.creativebrewing.CreativeBrewing;
+
 import blusunrize.immersiveengineering.api.crafting.FluidTagInput;
 import blusunrize.immersiveengineering.api.crafting.IERecipeTypes;
 import blusunrize.immersiveengineering.api.crafting.RefineryRecipe;
@@ -32,9 +34,9 @@ import java.util.List;
  *
  * <p>Mechanism mirrors IE's own {@code immersiveengineering:mixer_potion_list}: a
  * {@link GeneratedListRecipe} generator is registered in
- * {@link GeneratedListRecipe#LIST_GENERATORS} under {@code creativeengineering:lingerification_list},
+ * {@link GeneratedListRecipe#LIST_GENERATORS} under {@code creativebrewing:lingerification_list},
  * and a one-line datapack file
- * ({@code data/creativeengineering/recipes/lingerification_list.json} =
+ * ({@code data/creativebrewing/recipes/lingerification_list.json} =
  * {@code {"type":"immersiveengineering:generated_list"}}) pulls it in. The sub-recipes are real
  * {@link RefineryRecipe} instances, so {@code RefineryRecipe.RECIPES} (and therefore the Refinery
  * block entity + JEI) pick them up automatically via {@code CachedRecipeList.updateCache}'s
@@ -54,7 +56,7 @@ public final class Lingerification {
     private static final Logger LOGGER = LogUtils.getLogger();
 
     private static final ResourceLocation LIST_ID =
-            new ResourceLocation("creativeengineering", "lingerification_list");
+            new ResourceLocation(CreativeBrewing.NS, "lingerification_list");
 
     private static final ResourceLocation CREATE_POTION =
             new ResourceLocation("create", "potion");
@@ -119,7 +121,7 @@ public final class Lingerification {
         FluidTagInput input1 = new FluidTagInput(DRAGON_BREATH_TAG, DRAGON_BREATH_AMOUNT);
 
         return new RefineryRecipe(
-                new ResourceLocation("creativeengineering", "lingerification/" + path),
+                new ResourceLocation(CreativeBrewing.NS, "lingerification/" + path),
                 lingering, input0, input1, Ingredient.EMPTY, ENERGY);
     }
 }

@@ -9,7 +9,7 @@
 #      mod write nothing for what they cover
 #   4. generator on a fixture dump: runs, warns that the dump predates the rules, and stops warning once the dump
 #      shows them; --mob prints a table
-# Needs a built patcherMod (./gradlew :patcherMod:compileJava) and the ATLauncher library folder. No game needed.
+# Needs a built patcherMod (./gradlew :creativeCommon:compileJava) and the ATLauncher library folder. No game needed.
 set -euo pipefail
 ROOT="$(cd "$(dirname "$0")/.." && pwd)"
 T="$(mktemp -d)"; trap 'rm -rf "$T"' EXIT

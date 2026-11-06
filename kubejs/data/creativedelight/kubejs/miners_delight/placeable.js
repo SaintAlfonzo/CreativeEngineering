@@ -4,9 +4,33 @@
 // Placeable food tags, miners_delight part. Readers merge every part with global.CD.genMerge('placeable') (creative_delight.md 28.2).
 if (global.CD) global.CD.genPut('placeable', 'miners_delight', {
  "placeable": [
+  "bowl_of_stuffed_squid",
+  "cave_soup",
   "fake_meatloaf",
   "glazed_arachnid_limbs",
-  "stuffed_squid"
+  "glow_ink_pasta",
+  "pasta_with_veggieballs",
+  "plate_of_fake_meatloaf",
+  "plate_of_glazed_arachnid_limbs",
+  "stuffed_squid",
+  "takoyaki",
+  "vegan_steak_and_potatoes"
+ ],
+ "placeable/sneak": [
+  "bowl_of_stuffed_squid",
+  "cave_soup",
+  "glow_ink_pasta",
+  "pasta_with_veggieballs",
+  "plate_of_fake_meatloaf",
+  "plate_of_glazed_arachnid_limbs",
+  "takoyaki",
+  "vegan_steak_and_potatoes"
+ ],
+ "placeable_on_plate": [
+  "cave_hamburger",
+  "squid_sandwich",
+  "vegan_hamburger",
+  "vegan_wrap"
  ],
  "placeable_on_coaster": [
   "bowl_of_stuffed_squid",

@@ -166,7 +166,7 @@ an unmatched file is functional.
 From 1.1.01 every payload carries the players' notes for its version ([changelog.md](changelog.md) 3.5,
 `check_changelog` / `freeze_changelog` in build_deploy.py).
 
-- `kubejs/assets/creativeengineering/changelog/unreleased.md` is the working list: KUBEJS_CLASSES `dev`, never
+- `kubejs/assets/creativecommon/changelog/unreleased.md` is the working list: KUBEJS_CLASSES `dev`, never
   shipped under that name. The other `*.md` files there are `client`.
 - Staging `X`: when the working list has bullets, the payload gets `.../changelog/X.md` with `# X` (the
   working list's subtitle kept) and `Released <today>` on top. The tree is not touched, so restaging just
@@ -176,7 +176,7 @@ From 1.1.01 every payload carries the players' notes for its version ([changelog
   If the working list changed after staging, it is left alone and the script says to trim it by hand.
 - Preflight: `tools/changelog_lint.py` errors are errors; every changelog file a deployed version shipped must
   still match the sha1 in that version's history json (edited or deleted = error).
-- `CONFIG_CLASSES`: `creativeengineering/changelog_seen.txt` (the read marker) is `player`; it is git-ignored too.
+- `CONFIG_CLASSES`: `creativecommon/changelog_seen.txt` (the read marker) is `player`; it is git-ignored too.
 
 ### New world pregen
 

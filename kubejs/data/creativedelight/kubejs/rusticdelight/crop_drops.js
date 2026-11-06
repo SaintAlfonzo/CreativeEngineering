@@ -19,7 +19,7 @@
 (function () {
 
     var TAG = '[crop-drops] '
-    var SKIP = 'crop-drops:skip'
+    var SKIP = 'crop-drops:skip' // G5 (a marker string of this script, not an id)
 
     function names(pool) {
         return (pool.entries || []).map(function (e) { return e.name })

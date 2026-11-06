@@ -1,7 +1,7 @@
 package com.SaintAlfonzo.creativebrewing.mixin.immersiveengineering;
 
 import blusunrize.immersiveengineering.common.util.compat.jei.mixer.MixerRecipeCategory;
-import com.SaintAlfonzo.creativeengineering.compat.PotionFluidTooltip;
+import com.SaintAlfonzo.creativecommon.compat.PotionFluidTooltip;
 import mezz.jei.api.gui.builder.IRecipeSlotBuilder;
 import mezz.jei.api.gui.ingredient.IRecipeSlotTooltipCallback;
 import org.spongepowered.asm.mixin.Mixin;

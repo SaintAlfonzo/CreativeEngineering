@@ -29,7 +29,7 @@ prep1)
   # boot 1 only has to write a save with the old ids
   rm -f mods/creativeengineering-*.jar mods/creativedelight-*.jar mods/creativebrewing-*.jar mods/creativecompat-*.jar \
     mods/creativecalendar-*.jar mods/creativedevtools-*.jar
-  link "$INST/development/patcherMod/jar_archive/displaced/creativeengineering-1.1.05.jar"
+  link "$INST/development/creativeCommon/jar_archive/displaced/creativeengineering-1.1.05.jar"
   link "$INST/jar_archive/displaced/creative_delight-1.0.0.jar"
   link "$INST/jar_archive/displaced/creative_brewing-1.0.0.jar"
   # the old CD and CB require Calendar: a copy of the installed one without its Compat dependency block (the only
@@ -71,7 +71,7 @@ prep3)
   cd "$SRV" || exit 1
   rm -f mods/creativeengineering-*.jar mods/creativedelight-*.jar mods/creativebrewing-*.jar mods/creativecompat-*.jar \
     mods/creativecalendar-*.jar mods/creativedevtools-*.jar mods/creative_delight-*.jar mods/creative_brewing-*.jar
-  link "$INST/development/patcherMod/build/libs/creativeengineering-1.1.07.jar"
+  link "$INST/development/creativeCommon/build/libs/creativecommon-1.1.07.jar"
   for p in creativeDelight/build/libs/creativedelight creativeBrewing/build/libs/creativebrewing \
       creativeCompat/build/libs/creativecompat creativeCalendar/build/libs/creativecalendar \
       creativeDevtools/build/libs/creativedevtools; do link "$INST/development/$p-1.0.0.jar"; done

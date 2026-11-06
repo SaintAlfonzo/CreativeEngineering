@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 """Tool and misc dicts (global.tool alias t, global.misc alias m): seed, lint and coverage for
-kubejs/startup_scripts/_lib/tool_dict.js and misc_dict.js (creative_delight.md 13.3, framework #4).
+development/creativeCommon/src/main/resources/kubejs_startup/creativecommon/_lib/tool_dict.js and misc_dict.js (creative_delight.md 13.3, framework #4).
 
 Both are masks over the general dict like the food dict: one line per item, `t.<key> = i.<general key>;`, key
 `<category>_<name>` with the category from `toolGrammar` / `miscGrammar` in _lib/food_grammar.js (no forms, no states).
@@ -20,11 +20,12 @@ from collections import OrderedDict
 from pathlib import Path
 
 sys.path.insert(0, str(Path(__file__).resolve().parent))
+import pack_paths as P  # noqa: E402
 import food_dict as fdict  # noqa: E402  (food dict, exclusions)
 import food_catalog as fc  # noqa: E402  (item_dict parsing)
 
 INSTANCE = Path(__file__).resolve().parent.parent
-LIB = INSTANCE / 'kubejs/startup_scripts/_lib'
+LIB = P.STARTUP_LIB
 FILES = {'tool': LIB / 'tool_dict.js', 'misc': LIB / 'misc_dict.js'}
 ALIAS = {'tool': 't', 'misc': 'm'}
 

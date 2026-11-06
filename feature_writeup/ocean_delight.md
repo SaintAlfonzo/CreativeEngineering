@@ -358,3 +358,16 @@ Install: `portedOceanic-1.0.1-ce-19.2-02` and the CD scripts are in the CD jar i
 2026-10-31). Scratch rows (queue section SQ-CDJ7): SQ-CDM2-01 (DA-15), SQ-CDM2-02 (DA-14), SQ-CDM2-03 (DA-13), SQ-CDM2-04
 (potato salad merge, item_merges.md 2.17); client row CQ-CDM2-01 (Oceanic dish tooltip).
 
+
+## 9. Planned (scratchpad 2026-11-04)
+
+Owner notes for both mods, together with the Hostile Delight notes ([hostile_delight.md](hostile_delight.md) 5.1). None built
+(checked 2026-11-04: Hostile Delight's own guardian loot table is still live, no guardian, fugu or guardian soup code in the pack).
+
+- **Guardian Shell** ([TODO](todo/TODO.md) `dishes/ocean #11`): guardians drop Ocean's whole guardian item, renamed Guardian
+  Shell; Prismarine Shards and Crystals still drop. Cutting the shell gives 1 to 3 raw guardian fillets and a chance of a
+  Prismarine Shard. Replaces D3's "3 fillets" in hostile_delight.md 5.
+- **Guardian Soup** (`dishes/ocean #12`): Ocean's soup only (Hostile's removed), from a Guardian Shell, 2 guardian fillets, a
+  tomato, an onion and an Elder Guardian Eye.
+- **Fugu** (`dishes/ocean #13`): eating any fugu food has a 0.5% chance of Wither III and Poison III for 10 s.
+- **Elder guardian chunk** (`dishes/ocean #14`, open): a source for the elder guardian chunk; the mob-drop JEI tab updated with it.

@@ -1,5 +1,7 @@
 package com.SaintAlfonzo.creativebrewing.fluidbrewing;
 
+import com.SaintAlfonzo.creativebrewing.CreativeBrewing;
+
 import com.mojang.logging.LogUtils;
 import com.simibubi.create.content.fluids.potion.PotionFluid.BottleType;
 import com.simibubi.create.content.fluids.potion.PotionFluidHandler;
@@ -89,7 +91,7 @@ public final class DragonBreathBrewing {
             FluidStack lingering = PotionFluidHandler.getFluidFromPotion(potion, BottleType.LINGERING, AMOUNT);
 
             MixingRecipe recipe = new ProcessingRecipeBuilder<>(MixingRecipe::new,
-                    new ResourceLocation("creativeengineering", "potion_mixing_dragonbreath_" + slug))
+                    new ResourceLocation(CreativeBrewing.NS, "potion_mixing_dragonbreath_" + slug))
                     .require(FluidIngredient.fromFluidStack(splash))
                     .require(dragonBreathIngredient)
                     .output(lingering)

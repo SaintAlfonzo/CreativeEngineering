@@ -9,7 +9,17 @@
 	delightful = true
 	enders_additions = true
 	hearthandharvest = true
-	blockheads_additions = true
+
+#One switch per optional Creative Delight compartment (Java, assets and data folded into this jar).
+#Each works only with its mod installed; off = as if that mod were absent: no blocks, no changes to it,
+#no recipes or loot. Read at startup: restart to apply. Old saves keep the blocks only while it is on.
+[compartments]
+	#Cooking for Blockheads additions: wood spice racks, tool racks and fruit baskets, kitchen corner storage,
+	#oven fuel and smoking, the full-height fridge, counter-top placement. Needs Cooking for Blockheads and Balm.
+	cookingforblockheads = true
+	#Incubation additions: emu nests (Alex's Mobs), duck and goose nests and egg crates (Untitled Duck Mod),
+	#the goose golden egg (with Vintage Delight). Needs Incubation.
+	incubation = true
 
 #One switch per Creative Delight QoL feature (feature_writeup/creative_delight.md 8). Off: that feature
 #is skipped entirely. Startup and Java parts need a restart, server scripts re-read on /reload, client
@@ -216,3 +226,30 @@
 	#refilled next to an animal is noticed up to this long late. 0 = off (Quark's own behaviour).
 	#Range: 0 ~ 72000
 	troughMissCooldownTicks = 600
+
+#A lit campfire in #creativeengineering:campfire/rain_douses (the plain campfire; not soul or
+#Tinted campfires) goes out in open rain, unless it sits on a block in
+##creativeengineering:campfire/rain_proof_fuel (coal and charcoal blocks). Otherwise campfires
+#burn forever. Server side.
+[campfire]
+	#Master on/off switch. Off = rain never puts a campfire out.
+	rainDouses = true
+	#Ticks of unbroken rain before the campfire goes out (160 = 8 s, Unlit Campfire's default).
+	#Leaving the rain or being on a fuel block resets the count.
+	#Range: 1 ~ 72000
+	rainOutTicks = 160
+	#Comfortable Campfires port (campfire.CampfireComfort): players near a lit campfire get Farmer's
+	#Delight's Comfort, refreshed while under 3 s are left.
+	comfort = true
+	#Comfort when Farmer's Delight is present; false (or no Farmer's Delight) = Regeneration, as the mod.
+	useComfort = true
+	#Blocks around (and above) the campfire that count as near (the mod's 3).
+	#Range: 1 ~ 16
+	comfortDistance = 3
+	#Seconds of Comfort per application (the mod's 5).
+	#Range: 1 ~ 600
+	comfortSeconds = 5
+	#A campfire looks for players once per this many ticks (the mod checked every tick; campfires are
+	#spread over the period). 1 = every tick.
+	#Range: 1 ~ 200
+	comfortEveryTicks = 20

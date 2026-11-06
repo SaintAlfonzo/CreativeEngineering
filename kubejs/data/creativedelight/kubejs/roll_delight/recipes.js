@@ -35,7 +35,7 @@ ServerEvents.recipes(e => {
 		// Ancient Roll: Ancient Fruit where the pitcher plant was, Chorus Flower where the torchflower was (D2)
 		R.shaped(i.ancient_roll, [' A ', 'RCR', 'KKK'], { A: i.ancient_fruit, R: i.cooked_rice, C: i.chorus_flower,
 			K: i.dried_kelp }, e, 'ancient_roll')
-		F.assemble(i.cooked_rice, [i.ancient_fruit, i.chorus_flower, i.cooked_rice, i.dried_kelp, i.dried_kelp,
+		F.assemble(i.cooked_rice, [i.ancient_fruit, i.chorus_flower, i.cooked_rice, i.dried_kelp, i.dried_kelp, // G5 (family call)
 			i.dried_kelp], i.ancient_roll)
 
 		// Golden Roll: the golden food rule on the Rice Roll (ring of 8 gold nuggets, heated mixer, Arc Furnace)

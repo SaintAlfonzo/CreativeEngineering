@@ -89,7 +89,7 @@ in `mods/`.
 |---|---|---|
 | A1 cabbage | Testing | CD `farmersdelight/recipes.js`: 4 leaves by board and mixer; the 2-leaf grid craft back to a cabbage now takes 4 (else a dupe) |
 | A2 glycerol | Testing | CD `pneumaticcraft/tags.js` (`t.remove` from `#forge:sugar`); lang override deleted from `kubejs/assets/pneumaticcraft/lang/en_us.json` |
-| A3 shulker meat | Testing | CD startup `endersdelight/item_merges.js`; `endersdelight/recipes.js`; GLM override `kubejs/data/endersdelight/loot_modifiers/scavenging_shulker_mollusk_from_shulker.json` (chance 0); `gen_can_types.py` shulker can on End's meat. End's own art kept; the owner updates the shulker textures later (2026-11-02) |
+| A3 shulker meat | Testing | CD startup `endersdelight/item_merges.js`; `endersdelight/recipes.js`; GLM override `kubejs/data/endersdelight/loot_modifiers/scavenging_shulker_mollusk_from_shulker.json` (chance 0); `gen_can_types.py` shulker can on End's meat. End's own art kept; the owner updates the shulker textures later (2026-11-02). Partly undone 2026-11-04 (plan_meals_rolls_bbq.md C3): mollusk and filet out of the merge, GLM override deleted, filet cut back; stuffed shulker on End's meat |
 | A4 taco | Testing | CD `corn_delight/recipes.js`. No roasted onion exists, so the slot is onion or any roasted bell pepper |
 | A5 patty | Testing | CD `creativeengineering/patties.js` (priority -90), `i.t_patty` |
 | A6 kebab wrap | Testing | CD `barbequesdelight/recipes.js` |

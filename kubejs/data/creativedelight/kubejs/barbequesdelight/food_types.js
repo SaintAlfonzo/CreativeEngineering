@@ -15,8 +15,8 @@ if (global.CD) global.CD.genPut('food_types', 'barbequesdelight', {
    "grilled_rabbit_skewer",
    "grilled_salmon_skewer",
    "grilled_vegetable_skewer",
-   "kebab_wrap",
-   "kebab_sandwich"
+   "kebab_sandwich",
+   "kebab_wrap"
   ],
   "meal": [
    "bibimbap"

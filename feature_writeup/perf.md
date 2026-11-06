@@ -173,7 +173,7 @@ doesn't exist, JFR writes a *file* named `exit`. The launch scripts create the f
   is shown, with "mods differ" when the match isn't exact. Changed / missing / extra files are listed for
   `mods`, `config`, `defaultconfigs` and `kubejs`.
 - **Jars for attribution.** Each server jar is found by sha1 in `mods/`, `deploy/latest/mods`,
-  `server_mods/`, `development/patcherMod/jar_archive` and `development/patcherMod/build/libs`, and symlinked into
+  `server_mods/`, `development/creativeCommon/jar_archive` and `development/creativeCommon/build/libs`, and symlinked into
   `perf/incoming/<name>/mods/`. `perf_report.py` then attributes with the jars that server actually ran;
   `deploy/latest/mods` is only an update payload now. Jars with no local copy are listed. Hashes are cached in
   `perf/.cache/jar_sha1.json`.
@@ -279,7 +279,7 @@ Closes the blind spots of sampling (section 4) with measured times. patcherMod d
 - [../server/perf/report.sh](../server/perf/report.sh), [../tools/perf/ingest_report.py](../tools/perf/ingest_report.py)
 - [../tools/perf/perf_report.py](../tools/perf/perf_report.py), [../tools/perf/PerfParse.java](../tools/perf/PerfParse.java), [../tools/perf/modindex.py](../tools/perf/modindex.py), [../tools/perf/report_html.py](../tools/perf/report_html.py)
 - [../tools/build_deploy.py](../tools/build_deploy.py) (`server` category)
-- patcherMod: [perf/](../development/patcherMod/src/main/java/com/SaintAlfonzo/creativeengineering/perf/) (`PerfJfrEvents`,
+- patcherMod: [perf/](../development/creativeCommon/src/main/java/com/SaintAlfonzo/creativecommon/perf/) (`PerfJfrEvents`,
   `PerfEvents`, `PerfStatsHolder`, `KubeJSHandlerTiming`, `PerfCommand`) and the mixins `ServerTickPerfMixin`,
   `ServerLevelTickPerfMixin`, `ServerChunkCacheWaitPerfMixin`, `LevelEntityTickPerfMixin`, `BlockEntityTickPerfMixin`,
   `EntityTypePerfStatsMixin`, `BlockEntityTypePerfStatsMixin`, `KubeJSEventHandlerListenMixin`,
@@ -395,7 +395,7 @@ Pack events (3.6), scratch-queue rows SQ-PF-01 to -06:
   JEI page costs 58 s per join; Distant Horizons' server and client threads; heap near the cap; worldgen 3.5x slower than
   2026-09-28. PF-17 partial.
 
-- 2026-10-26: Pack events built (3.6, TODO `server #9`): ten `creativeengineering.*` JFR events from 9 patcherMod
+- 2026-10-26: Pack events built (3.6, TODO `server #9`): ten `creativecommon.*` JFR events from 9 patcherMod
   mixins, `/ceperf status|dump`, the events in `ce-server.jfc`, `PerfParse` and `perf_report.py` read them (new
   "Measured by the pack's hooks" section). Headless JFR and report tests pass; patcherMod 1.1.03 rebuilt;
   live checks queued as SQ-PF-01 to -06.
@@ -936,7 +936,7 @@ screen, Play, sp_drive phases, JFR dump). Results in `perf/overall/ov1/` (untrac
 | Client heap after GC (10 GB) | 6.6-9.0 GB exploring | | at most 5.0 GB |
 | Client FPS, uncapped, render distance 8 | averages 174-403 | | medians 292 (spawn), 298 (exploring), 317 (back); p5 66 / 122 / 205 |
 
-Single player ticks are run 2's `creativeengineering.ServerTick` events; FPS is run 3 (the logger was broken in runs
+Single player ticks are run 2's `creativecommon.ServerTick` events; FPS is run 3 (the logger was broken in runs
 1-2, below).
 
 Reading it:
@@ -1141,7 +1141,7 @@ the suite (G03a, G04, G12) against `g1`. TODO `server #29`.
   body with a call to `IwGrowthFast.blockTick`, which uses the state vanilla already read unless the block
   random-ticked (only its random tick runs between vanilla's read and the hook). An unknown descriptor or a missing
   handler logs a warning and leaves IW's code as it is.
-- Off switch for A/B measurements: JVM property `-Dcreativeengineering.iwFastTick=false` (all three parts).
+- Off switch for A/B measurements: JVM property `-Dcreativecommon.iwFastTick=false` (all three parts).
 - Checked headless (scratchpad harness): the rewrite on IW's real `callTick` bytecode gives a 9-instruction body that
   passes ASM's type-aware verifier as a ServerLevel method; another mixin's handler and other post-applies are left
   alone. Mixin application, growth behaviour and the gain need a server: SQ-IWF-01 to -05 (scratch_queue.md).

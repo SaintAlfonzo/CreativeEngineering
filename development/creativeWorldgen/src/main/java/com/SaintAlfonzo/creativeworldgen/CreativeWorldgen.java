@@ -1,6 +1,6 @@
 package com.SaintAlfonzo.creativeworldgen;
 
-import com.SaintAlfonzo.creativeengineering.swap.ConfigRename;
+import com.SaintAlfonzo.creativecommon.swap.ConfigRename;
 import com.SaintAlfonzo.creativeworldgen.block.FastLeafDecayPort;
 import com.SaintAlfonzo.creativeworldgen.forgivingvoid.ForgivingVoidBridge;
 import com.SaintAlfonzo.creativeworldgen.loot.BiomeTagCondition;

@@ -18,7 +18,7 @@ Options:
   --baseline FILE     an earlier .summary.json: adds "change" columns
   --out FILE          report path (default perf/reports/<recording name>.html)
   --name NAME         cache/report name (default the recording's file name); ingest_report.py sets it
-  --tsrg FILE         SRG->official method names (default development/patcherMod/build/createMcpToSrg/output.tsrg;
+  --tsrg FILE         SRG->official method names (default development/creativeCommon/build/createMcpToSrg/output.tsrg;
                       without it method names stay m_12345_, tick phases still work)
 
 How samples are attributed (details in the report's "Method and limits" section):
@@ -275,12 +275,12 @@ CHUNK_WAIT_HOOKS = ('net.minecraft.server.level.ServerChunkCache#m_7587_', 'net.
 
 
 def analyze_ce(ev, stacks, at, lo, secs):
-    """The pack's own creativeengineering.* events (patcherMod, perf.md 3.6): exact tick times, per dimension,
+    """The pack's own creativecommon.* events (patcherMod, perf.md 3.6): exact tick times, per dimension,
     chunk waits, KubeJS handlers by script, entity and block entity types. None when the recording has none."""
     by = collections.defaultdict(list)
     for e in ev:
-        if e['type'].startswith('creativeengineering.'):
-            by[e['type'][len('creativeengineering.'):]].append(e)
+        if e['type'].startswith('creativecommon.'):
+            by[e['type'][len('creativecommon.'):]].append(e)
     if not by:
         return None
     nsec = int(secs) + 1
@@ -674,7 +674,7 @@ def main():
     ap.add_argument('--baseline')
     ap.add_argument('--out')
     ap.add_argument('--name')
-    ap.add_argument('--tsrg', default=os.path.join(ROOT, 'development', 'patcherMod', 'build', 'createMcpToSrg', 'output.tsrg'))
+    ap.add_argument('--tsrg', default=os.path.join(ROOT, 'development', 'creativeCommon', 'build', 'createMcpToSrg', 'output.tsrg'))
     args = ap.parse_args()
     if not args.mods:
         dl = os.path.join(ROOT, 'deploy', 'latest', 'mods')

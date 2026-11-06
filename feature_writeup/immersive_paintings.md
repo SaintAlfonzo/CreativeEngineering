@@ -1,24 +1,33 @@
 # Immersive Paintings: every painting variant on the Datapacks page
 
-Test prefix **PA-** · Written **2026-10-19** · Status **DEPLOYED with pack 1.0.6 (2026-10-14); scratch-server verified;
-the painting screen has not been checked in game**
+Test prefix **PA-** · Written **2026-10-19** · Status **DEPLOYED with pack 1.0.6 (2026-10-14); 2026-11-05: modded set
+built at load by Creative Compat (built, NOT installed, scratch test queued: SQ-PA-01 to -04, CQ-PA-01, -02); the
+painting screen has not been checked in game**
 
 ## 0. At a glance
 
 | Part | Status |
 |---|---|
 | `/dumppaintings`: every registered painting variant with its size and whether it is placeable | DEPLOYED with 1.0.6, part of `/dumpall`; last run 2026-10-18 18:31 (475 variants) |
-| `tools/gen_immersive_paintings.py`: copies every variant into Immersive Paintings' Datapacks page (`/cegen` id `immersive_paintings`, group `pack`) | in use; output DEPLOYED with 1.0.6 |
-| Generated datapack paintings: 475 PNG + JSON pairs in `kubejs/data/creativeengineering/paintings/<ns>/` (4.5 MB), all at 32 px per block | DEPLOYED with 1.0.6. A scratch server loaded all 475 and built thumbnails; PA-01 to PA-07 pending |
+| Modded paintings (445) built at load from the installed jars: Creative Compat `paintings/PaintingArt` + `PaintingPack`, served as the hidden data pack `creativecompat_paintings`; `[paintings]` config | 2026-11-05: built, NOT installed. Offline: all 445 equal the old generated files (pixels and json); scratch rows SQ-PA-01 to -04, CQ-PA-01, -02 queued |
+| `tools/gen_immersive_paintings.py`: since 2026-11-05 writes only the 30 vanilla paintings (`/cegen` id `immersive_paintings`, group `pack`) | in use; output in `kubejs/data/creativeengineering/paintings/minecraft/` (pack folder, never a jar) |
+| Before 2026-11-05: all 475 as generated files (in `kubejs/data`, then in the Compat jar after the split) | DEPLOYED with 1.0.6; removed 2026-11-05 (licence audit, TODO `licence/compat #1`) |
 
-- **Files to open:** [tools/gen_immersive_paintings.py](../tools/gen_immersive_paintings.py) (header = the design),
+- **Files to open:** [PaintingArt.java](../development/creativeCompat/src/main/java/com/SaintAlfonzo/creativecompat/paintings/PaintingArt.java)
+  (header = the rules), [PaintingPack.java](../development/creativeCompat/src/main/java/com/SaintAlfonzo/creativecompat/paintings/PaintingPack.java)
+  (sources, the pack), [tools/gen_immersive_paintings.py](../tools/gen_immersive_paintings.py) (vanilla),
   [dump_paintings.js](../kubejs/server_scripts/_lib/dump_paintings.js), the output folder
-  [kubejs/data/creativeengineering/paintings/](../kubejs/data/creativeengineering/paintings/).
-- **Knobs:** `TARGET_RES` (32) and the vanilla author table in the generator; `config/immersive_paintings.json`
+  [kubejs/data/creativeengineering/paintings/minecraft/](../kubejs/data/creativeengineering/paintings/minecraft/).
+- **Knobs:** `creativecompat-common.toml` `[paintings]`: `enabled` (true), `extraSources` (empty; jars, zips or
+  folders to read more painting art and en_us lang from, after the mods, later entries win: a painting mod not
+  installed as a mod, a resource pack that retextures paintings, or a folder of such jars). `TARGET_RES` (32) in
+  `PaintingArt` and the generator; the vanilla author table in the generator; `config/immersive_paintings.json`
   (Immersive's own config, left at the mod defaults).
-- **Refresh:** after adding or removing a painting mod or a resource pack that retextures paintings: `/dumppaintings`
-  (or `/dumpall`), then `python3 tools/gen_immersive_paintings.py` (or `/cegen immersive_paintings`), then `/reload`.
-  The generator exits 1 and lists every skipped variant if a texture is missing or a size isn't whole blocks.
+- **Refresh:** modded paintings need none: a new painting mod is picked up at the next world load (the set is built
+  once per game and rebuilt when `extraSources` changes). Log line: `[paintings] N of M modded painting variants built
+  from K sources`, plus one line per texture a later source overrides and a WARN per skipped variant. Vanilla: after a
+  resource pack that retextures vanilla paintings, `/dumppaintings`, `python3 tools/gen_immersive_paintings.py`,
+  `/reload`.
 
 ## 1. Overview
 
@@ -60,13 +69,15 @@ variants appears in Immersive's screen.
 
 Dimensional Paintings registers no painting variants (it has its own items), so it isn't in the list.
 
-### 2.2 What the generator writes per variant
+### 2.2 What is built per variant (PaintingArt for modded, the generator for vanilla; same rules)
 
 - **Id in game:** `creativeengineering:paintings/<ns>/<id>.png`, so the screen's search matches a mod id or a name.
 - **Size:** the variant's pixel size / 16, in blocks. A size that isn't whole blocks is skipped and reported.
-- **Texture:** `assets/<ns>/textures/painting/<id>.png`, taken from the highest-priority source: the vanilla client
-  jar, then `mods/*.jar`, then `kubejs/assets`, then the resource-pack zips enabled in `options.txt`. A retextured
-  painting therefore looks the same in Immersive's screen as on a vanilla painting. Animated strips use the first
+- **Texture:** `assets/<ns>/textures/painting/<id>.png`, the last source that has it. Modded (Compat, at load): the
+  installed mod jars by file name, then `[paintings] extraSources` in order. Vanilla (generator): the vanilla client
+  jar, then `mods/*.jar`, then `kubejs/assets`, then the resource-pack zips enabled in `options.txt`. Enabled resource
+  packs no longer reach modded paintings by themselves (they are client-side; the set is built server-side): list the
+  pack in `extraSources`. Animated strips use the first
   frame. A texture off the block grid (Upgrade Aquatic's 65 x 31 sightless painting) is stretched to the variant's
   size, as vanilla does.
 - **Resolution:** under 32 px per block is scaled up nearest-neighbour by a whole factor to 32 (pixel art stays
@@ -84,18 +95,24 @@ Dimensional Paintings registers no painting variants (it has its own items), so 
    variants on a vanilla painting.
 2. **Resolution 32 for all of them.** The Datapacks page opens filtered to 32 px; a 16 px painting would be hidden
    until the player changed the filter. Upscaling by a whole factor keeps them sharp.
-3. **Generated data, not hand-kept.** The output folder is wiped and rewritten on every run, so it always matches
-   the current mods and resource packs.
+3. **Built from the installed jars, not shipped** (2026-11-05, TODO `licence/compat #1`). The 445 modded entries are
+   made in memory when the world's data loads, from each mod's own art, so no other mod's art is in any Creative jar
+   or the pack, and a newly added painting mod appears without a pack update. Served as the hidden data pack
+   `creativecompat_paintings` at the bottom of the stack (datapacks and `kubejs/data` can still override a path). Ids
+   are the old ones, so placed paintings keep their picture.
+4. **Vanilla's 30 from a pack-folder datapack** (`kubejs/data/creativeengineering/paintings/minecraft/`, generated).
+   The dedicated server has no vanilla textures to build from; Mojang art is never put in a published jar.
 
 Not changed: Immersive Paintings' recipes, config and its own 94 paintings; Cycle Paintings and vanilla painting
 placement.
 
 ## 4. Limits and decisions
 
-- **Snapshot, not live.** The PNGs are copied at generation time. A new painting mod or resource pack shows up only
-  after the refresh in 0.
-- **Size in the pack.** 4.5 MB in `kubejs/data`, shipped to both sides (the server serves the datapack paintings;
-  thumbnails are built server side).
+- **Server side.** The set is built where the data loads (dedicated server, or the integrated server). The client's
+  resource packs don't change modded paintings unless listed in the server's `extraSources`. About 0.7 s for 445
+  paintings (offline harness), once per game.
+- **Vanilla is still a snapshot.** A resource pack that retextures vanilla paintings needs the generator rerun.
+- **Size in the pack.** The vanilla datapack only (60 files); the Compat jar went from 2.2 MB to 0.4 MB.
 - **Authors are best effort.** Mods that credit nobody show the mod name (Rebirth Paintings shows "Valentine Love",
   Too Many Paintings "Too Many Paintings!").
 - **Kept separate from Cycle Paintings.** Cycle Paintings works on vanilla painting entities; Immersive's own
@@ -104,12 +121,16 @@ placement.
 
 ## 5. File map
 
-- [tools/gen_immersive_paintings.py](../tools/gen_immersive_paintings.py): the generator (uses `tools/lang_index.py`
-  for names, the vanilla jar path and the enabled resource packs).
+- Creative Compat `paintings/PaintingArt.java` (pure Java builder: images, names, authors) and `PaintingPack.java`
+  (variants from the registry, sources from the mod list and `extraSources`, the hidden data pack; registered in
+  `CreativeCompat` when `immersive_paintings` is loaded); config `CompatConfig.Paintings`.
+- [tools/gen_immersive_paintings.py](../tools/gen_immersive_paintings.py): the vanilla generator (uses
+  `tools/lang_index.py` for the vanilla jar path and the enabled resource packs).
+- [tools/scratch_query/painting_test_zip.py](../tools/scratch_query/painting_test_zip.py): the `extraSources` test zip.
 - [kubejs/server_scripts/_lib/dump_paintings.js](../kubejs/server_scripts/_lib/dump_paintings.js): `/dumppaintings`
   -> `kubejs/exported/paintings.json`. In `/dumpall` ([dump_all.js](../kubejs/server_scripts/_lib/dump_all.js)).
 - [tools/generators.json](../tools/generators.json): the `immersive_paintings` entry for `/cegen`.
-- `kubejs/data/creativeengineering/paintings/<ns>/<id>.png` + `.json`: generated output, do not edit.
+- `kubejs/data/creativeengineering/paintings/minecraft/<id>.png` + `.json`: generated vanilla output, do not edit.
 - `config/immersive_paintings.json`: the mod's config, defaults.
 
 ## 6. Offline checks
@@ -120,6 +141,10 @@ placement.
   `python3 -c "import json,glob; print({json.load(open(f))['resolution'] for f in glob.glob('kubejs/data/creativeengineering/paintings/**/*.json', recursive=True)})"`
   prints `{32}`.
 - A scratch dedicated server (2026-10-14) loaded all 475 as datapack paintings and built their thumbnails.
+- 2026-11-05: `PaintingArt` run offline over `mods/*.jar` with the variant list from `paintings.json` (javac harness,
+  gson only): 445 of 445 built in about 0.7 s, every PNG equal in pixels and every json equal to the generated files
+  it replaces. With `painting_test_zip.py`'s zip as an extra source, Afternoon came out solid magenta and the
+  override note named both sources. Vanilla generator rerun: 30 of 30, identical to before.
 
 ## 7. In-game tests
 
@@ -136,6 +161,9 @@ placement.
 - [ ] **PA-06 authors:** hover a vanilla painting → "By Kristoffer Zetterstrand"; Earth → "By Mojang"; a DarkPaintings
   one → its artist, not the mod name.
 - [ ] **PA-07 multiplayer:** on the dedicated server, a second player sees a pack painting another player placed.
+- Scratch queue (2026-11-05, built at load): SQ-PA-01 (445 built, no errors), SQ-PA-02 (vanilla datapack, reload
+  cache), SQ-PA-03 (`extraSources` override and a bad path), SQ-PA-04 (`enabled = false`), CQ-PA-01 (screen and an old
+  save's placed painting), CQ-PA-02 (override visible).
 
 ## 8. History
 
@@ -143,3 +171,7 @@ placement.
   of them. Shipped in pack 1.0.6 (DEPLOYED 2026-10-14).
 - 2026-10-18: `/dumppaintings` rerun with `/dumpall` (475, unchanged).
 - 2026-10-19: this writeup (TODO `pack/docs`).
+- 2026-11-05: licence fix (TODO `licence/compat #1`, owner pick in [creative_compat.md](creative_compat.md) 6.2): the
+  445 modded paintings are built at load from the installed jars (`paintings/PaintingArt`, `PaintingPack`, config
+  `[paintings]`), the 950 generated files left the Compat jar, the generator writes only vanilla's 30 into
+  `kubejs/data`. Built, not installed; scratch rows queued.

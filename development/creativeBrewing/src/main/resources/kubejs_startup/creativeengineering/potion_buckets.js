@@ -3,24 +3,25 @@
 // Potion buckets — three tiers of a throwable "large, short-lived, expanding
 // lingering-potion cloud" item.
 //
-//   normal    -> creativeengineering:potion_bucket
-//   splash    -> creativeengineering:splash_potion_bucket       (bigger area, longer effects)
-//   lingering -> creativeengineering:lingering_potion_bucket    (bigger still)
+//   normal    -> creativebrewing:potion_bucket
+//   splash    -> creativebrewing:splash_potion_bucket       (bigger area, longer effects)
+//   lingering -> creativebrewing:lingering_potion_bucket    (bigger still)
+//   (creativeengineering:* up to 2026-11-04; the swap list carries old buckets over, plan_cb_publish.md M4)
 //
 // Right-click behaviour + cloud spawning:
 //   CB server creativeengineering/potion_buckets.js
 //   potion_area.js (this folder)   (global.potionArea — all the tuning)
 //
-// Textures: kubejs/assets/creativeengineering/textures/item/<id>.png (body, untinted) +
-//   <id>_liquid.png (liquid swirl, tinted) — two-layer item/generated model in
-//   assets/creativeengineering/models/item/<id>.json. See tools/potion_bucket_texture.py.
+// Textures: the CB jar's assets/creativebrewing/textures/item/<id>.png (body, untinted) +
+//   <id>_liquid.png (liquid swirl, tinted) — two-layer item/generated model, set below and also in
+//   assets/creativebrewing/models/item/<id>.json. See tools/potion_bucket_texture.py.
 //
 // The buckets carry a potion the same way minecraft:potion does (NBT `Potion` /
 // `CustomPotionEffects` / `CustomPotionColor`). A blank bucket falls back to
 // global.potionArea.DEFAULT_EFFECTS. Survival crafting: server_scripts/engineering/
 // potion_bottling.js's potion_bucket_fill/potion_bucket_drain shapeless recipes convert
 // bucket <-> 4 matching potion bottles. Still also /give-able directly, e.g.
-//   /give @s creativeengineering:lingering_potion_bucket{Potion:"minecraft:strong_regeneration"}
+//   /give @s creativebrewing:lingering_potion_bucket{Potion:"minecraft:strong_regeneration"}
 
 StartupEvents.registry('item', e => {
     const SimpleColor = Java.loadClass('dev.latvian.mods.rhino.mod.util.color.SimpleColor')
@@ -51,7 +52,9 @@ StartupEvents.registry('item', e => {
         return new SimpleColor((Math.round(r / n) << 16) | (Math.round(g / n) << 8) | Math.round(b / n))
     }
 
-    const mk = (id, name) => e.create('creativeengineering:' + id)
+    const mk = (id, name) => e.create('creativebrewing:' + id)
+        .texture('layer0', 'creativebrewing:item/' + id)
+        .texture('layer1', 'creativebrewing:item/' + id + '_liquid')
         .unstackable() // like vanilla buckets - each one carries its own potion contents
         .group('brewing')
         .displayName(name)

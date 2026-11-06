@@ -44,26 +44,26 @@ var ef = global.effect
 global.seasoning = {
 	// popcorn only for now; open them up by family later
 	cheese: { id: 'creativeengineering:cheese', name: 'Cheese', item: i.t_cheese_wedge, saturation: 2,
-		families: [], add: [i.popcorn] },
+		families: [], add: global.has(i.popcorn) ? [i.popcorn] : [] },
 	onion:  { id: 'creativeengineering:onion',  name: 'Onion',  item: i.onion,  nutrition: 2, combines: ['garlic'],
-		families: [], add: [i.popcorn] },
+		families: [], add: global.has(i.popcorn) ? [i.popcorn] : [] },
 	garlic: { id: 'creativeengineering:garlic', name: 'Garlic', item: i.garlic,
 		effects: [{ effect: ef.speed, duration: 200, amplifier: 0 }],
-		families: [], add: [i.popcorn] },
+		families: [], add: global.has(i.popcorn) ? [i.popcorn] : [] },
 	// sugar or powdered sugar (not the rest of #forge:sugar: glycerol). Popcorn + sugar is Corn Delight's caramel popcorn,
 	// so no foods yet (was waffles).
 	sugar:  { id: 'creativeengineering:sugar',  name: 'Sugar',  item: [i.sugar, i.powdered_sugar], nutrition: 1,
 		families: [], add: [] },
 	// Ender's Delight's crushed void pepper, mirroring Salt's bonus: +2 nutrition and a 0.1 saturation modifier
 	// (config/salt-common.toml SaltingNutrition / SaltingSaturationModifier; absolute saturation = nutrition * modifier * 2).
-	void_pepper: { id: 'creativeengineering:void_pepper', name: 'Void Pepper', item: i.crushed_voidpepper,
-		nutrition: 2, saturation: 0.4, needs: 'enders_additions', families: [], add: [i.popcorn] },
+	void_pepper: { id: 'creativeengineering:void_pepper', name: 'Void Pepper', item: i.crushed_voidpepper, // G5 (needs: its tag and crafts are skipped while enders_additions is off)
+		nutrition: 2, saturation: 0.4, needs: 'enders_additions', families: [], add: global.has(i.popcorn) ? [i.popcorn] : [] },
 
 	// Barbeque's Delight (food/seasoning #11, barbeques_delight.md 4.1, seasonings.md): the six upstream seasonings,
 	// values as 1.3.0. Powders go on raw and cooked BBQ skewers (a raw skewer's seasonings carry over when it is
 	// grilled); sauces on cooked ones only (O28). One item per craft: a trade gives 64 powders or 16 sauces (O31).
 	// No pairs among the six (upstream allowed one per skewer); the proposed pairs of seasonings.md 4 are not decided.
-	// Foods by tag for now; the 8 pack skewers join with their raw versions (dishes/meals #50).
+	// Foods by tag: the raw_skewers tag holds the 8 raw pack skewers too (dishes/meals #50, plan_meals_rolls_bbq.md C3).
 	cumin: { id: 'barbequesdelight:cumin', name: 'Cumin', item: i.cumin_powder, heal: 2,
 		needs: 'barbequesdelight', families: [], add: [i.t_raw_skewers, i.t_grilled_skewers] },
 	pepper: { id: 'barbequesdelight:pepper', name: 'Pepper', item: i.pepper_powder, fast: true,

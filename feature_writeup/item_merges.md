@@ -296,7 +296,13 @@ removed outright (owner 2026-11-01, not a merge: no survivor): CD startup `pneum
 Tests: SQ-MG-21, SQ-VDF-07 (scratch); MG-48 (in game: JEI shows one Fish and Chips with the frying route, an old Cod 'n' Chips in an
 inventory turns into Fish and Chips).
 
-### 2.14 Shulker meat (built 2026-11-02, scratch PASSED r1102b: SQ-FCB-04e, -05; not played; TODO `dishes/ingredients #32`)
+### 2.14 Shulker meat (built 2026-11-02, scratch PASSED r1102b: SQ-FCB-04e, -05; not played; TODO `dishes/ingredients #32`; UNDONE 2026-11-04)
+
+**Undone 2026-11-04** (plan_meals_rolls_bbq.md C3, owner: the End Skewer takes Ender's Shulker Mollusk only): both pairs
+removed from `merges_endersdelight.json`, the chance-0 knife loot override deleted (Ender's knife drop is upstream's again)
+and the mollusk-to-filet cut restored. Every other recipe keeps End's meat: the stuffed shulker (pot and heatless) takes End's
+shulker meat. Canned Shulker Flesh stays on End's meat and slice. Stacks a world merged between 11-02 and 11-04 stay End's
+meat (no conversion back). Text below is the 11-02 state.
 
 | Purged | Survivor |
 |---|---|
@@ -648,7 +654,7 @@ The KubeJS inventory swap of 1.1 still runs for both groups (it drops NBT; the J
 
 ### 6.1 Tests (SWP-)
 
-Offline (2026-11-02): `./gradlew :patcherMod:build --offline` compiles; harness `MergeCoreTest` (scratchpad, plain
+Offline (2026-11-02): `./gradlew :creativeCommon:build --offline` compiles; harness `MergeCoreTest` (scratchpad, plain
 javac/java on the patcherMod classes) 23 checks pass: top-level and nested rewrite, NBT and caps kept, entity ids
 untouched, int counts, split sums, fingerprint order-free. JSON: 38 pairs, no duplicates, no chains. Live rows
 SQ-SWP-01 to -08 in the scratch queue (section SQ-CDJ6). 2026-11-03: CD `swaps/merges_*.json` hold 40 pairs after

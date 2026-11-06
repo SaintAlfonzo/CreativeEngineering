@@ -32,13 +32,13 @@ build brief for the agents: [BRIEF.md](BRIEF.md).
 | Label pictures and names (block entity renderer, LABEL faces only): one quad per label with a Moonlight render-to-texture icon (`requestFlatItemStackTexture` undyed, so NBT tints and glint show; `requestTexture` + download + ramp + upload when dyed), ids `creative_labels:labels/<item>/<dye>/<tag hash>` (C3); glow = full-bright; the item's name under a smaller icon within `textDistance`; `shouldRender`/`getViewDistance` from `pictureDistance` | `client/FacePaperRenderer`, `client/LabelLayout`, `client/IconDye` |
 | WTHIT: a note's name, icon, colour, text and day; a label shows the host (`getOverride`) plus "Label: item" | `compat/wthit/FacePaperWthit`, `waila_plugins.json` |
 | Config `creative_labels-common.toml` (`[notes]`, `[item_labels]`, `[wthit]`) and `creative_labels-client.toml` (`[labels]`) | `CLConfig` |
-| Donor jars, gameplay off (3.13): Sticky It's note and eraser and Labels' label answer false from `Item.allowedIn` (out of every creative tab and the search); Sticky It's tooltip handler (`TooltipRenderProcedure.execute`, the `{}` tag and `[Shift]` lines) is cancelled at its head while `sticky_it` is loaded. The pack side hides them from JEI, removes their recipes and re-adds the donor recipes for our items (`kubejs/startup_scripts/_lib/removed_items.js`, `kubejs/server_scripts/other/creative_labels.js`, NCH `creativeLabelsSpecial`) | `compat/DonorItems`, `mixin/ItemHiddenMixin`, `mixin/StickyItTooltipMixin` |
+| Donor jars, gameplay off (3.13): Sticky It's note and eraser and Labels' label answer false from `Item.allowedIn` (out of every creative tab and the search); Sticky It's tooltip handler (`TooltipRenderProcedure.execute`, the `{}` tag and `[Shift]` lines) is cancelled at its head while `sticky_it` is loaded. The pack side hides them from JEI, removes their recipes and re-adds the donor recipes for our items (`Creative Common kubejs_startup/creativecommon/_lib/removed_items.js`, `kubejs/server_scripts/other/creative_labels.js`, NCH `creativeLabelsSpecial`) | `compat/DonorItems`, `mixin/ItemHiddenMixin`, `mixin/StickyItTooltipMixin` |
 
 Art comes from the Sticky It! and Labels jars at runtime (both All Rights Reserved: nothing of theirs is in this
 jar; they are mandatory dependencies until phase 5 ships our own art).
 
 Pack side (instance root): `tools/build_deploy.py` IN_TREE_MODS, `mod_sides.md`, `instance.json`, patcherMod's
-`[mod_names]` default, `kubejs/startup_scripts/_lib/item_dict.js` (`i.cl_sticky_note`, `i.cl_label`, `i.cl_eraser`
+`[mod_names]` default, `Creative Common kubejs_startup/creativecommon/_lib/item_dict.js` (`i.cl_sticky_note`, `i.cl_label`, `i.cl_eraser`
 and the three donor keys), `removed_items.js` (donor items hidden in JEI), `neoCraftHelper.js`
 (`creativeLabelsSpecial`) and `kubejs/server_scripts/other/creative_labels.js` (donor recipes removed; note, eraser
 and label recipes; the four special recipes).

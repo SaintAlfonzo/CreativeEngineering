@@ -1,6 +1,6 @@
 // Moved from the pack's startup_scripts/magic/magic_resistance.js 2026-11-01 (creative_brewing.md 4.5).
 // Startup script in the CB jar: runs after the pack folder and CD; CB rebuild + restart.
-// creativeengineering:magic_resistance — a brand-new, pack-original MobEffect (the first
+// creativebrewing:magic_resistance — a brand-new, pack-original MobEffect (the first
 // one this pack defines itself, rather than reusing vanilla/Alex's Mobs/Better Beacons).
 //
 // Registering the effect itself needs no Java: unlike better_beacons:long_reach/phantom_bane
@@ -28,7 +28,7 @@
 StartupEvents.registry('mob_effect', event => {
 	const SimpleColor = Java.loadClass('dev.latvian.mods.rhino.mod.util.color.SimpleColor')
 
-	event.create('creativeengineering:magic_resistance', 'basic')
+	event.create('creativebrewing:magic_resistance', 'basic')
 		.displayName(Text.of('Magic Resistance'))
 		.beneficial()
 		.color(new SimpleColor(0x8a2be2)) // blueviolet - arcane-coded, distinct from vanilla Resistance's grey

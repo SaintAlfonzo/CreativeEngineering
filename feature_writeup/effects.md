@@ -713,7 +713,7 @@ pack-owned Haste potion line would be CB's, not patcherMod's. Owner choice neede
 - [kubejs/assets/creativeengineering/lang/en_us.json](../kubejs/assets/creativeengineering/lang/en_us.json): description overlay (placeholders, ported and fixed text).
 - [kubejs/server_scripts/other/jeed_providers.js](../kubejs/server_scripts/other/jeed_providers.js): every `jeed:effect_provider` / `jeed:potion_provider` recipe.
 - [neoCraftHelper.js](../kubejs/startup_scripts/func/neoCraftHelper.js) `jeedProvider`, `jeedPotionProvider`: the recipe helpers.
-- [EffectCategories.java](../development/patcherMod/src/main/java/com/SaintAlfonzo/creativeengineering/potion/EffectCategories.java), [MobEffectCategoryMixin.java](../development/patcherMod/src/main/java/com/SaintAlfonzo/creativeengineering/mixin/MobEffectCategoryMixin.java), CEConfig `[effects]`: category overrides.
+- [EffectCategories.java](../development/creativeCommon/src/main/java/com/SaintAlfonzo/creativecommon/potion/EffectCategories.java), [MobEffectCategoryMixin.java](../development/creativeCommon/src/main/java/com/SaintAlfonzo/creativecommon/mixin/MobEffectCategoryMixin.java), CEConfig `[effects]`: category overrides.
 - [kubejs/assets/kubejs/lang/en_us.json](../kubejs/assets/kubejs/lang/en_us.json): potion and arrow names for the `kubejs:*` and `creativeengineering:*` potions.
 - [kubejs/startup_scripts/cooking/potions.js](../kubejs/startup_scripts/cooking/potions.js): pack potions and brewing mixes.
 - [kubejs/startup_scripts/magic/magic_resistance.js](../kubejs/startup_scripts/magic/magic_resistance.js): the pack's effect.

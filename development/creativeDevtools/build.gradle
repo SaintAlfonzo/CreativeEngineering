@@ -6,7 +6,7 @@
 //       kubejs/data/creativedevtools/kubejs/    -> data/creativedevtools/kubejs/    (server scripts)
 //       kubejs/assets/creativedevtools/kubejs/  -> assets/creativedevtools/kubejs/  (client scripts)
 //     The startup core lives in this project (src/main/resources/kubejs_startup/creativedevtools/), loaded from the jar
-//     by patcherMod's startup loader.
+//     by Creative Common's startup loader.
 // Build: ./gradlew :creativeDevtools:build --offline   Install (dev mods/ only): ./gradlew :creativeDevtools:installToMods
 plugins {
     id 'ce.forge-bundle'
@@ -15,12 +15,12 @@ plugins {
 dependencies {
     // patcherMod: the hooks the probes subscribe to, WorldgenFiles (/ceplace), PerfEvents (/ceperf),
     // BlockModelIcons (/cedumpicons). A hard dependency.
-    compileOnly project(':patcherMod')
+    compileOnly project(':creativeCommon')
     // Creative Worldgen: BiomeLayoutTuner and PoolTuner (/ceplace), SpawnTuning (/dumpspawns), MobCapLevels (/ceperf).
     // An optional dependency: each reader checks ModList first.
     compileOnly project(':creativeWorldgen')
     // patcherMod's third-party compile jars (copies of mods/ jars): the IE API for ie/IeRecyclingDiagnostics.
-    compileOnly fileTree(dir: '../patcherMod/libs', include: '*.jar')
+    compileOnly fileTree(dir: '../creativeCommon/libs', include: '*.jar')
 }
 
 def scriptTrees = ['data/creativedevtools/kubejs', 'assets/creativedevtools/kubejs']

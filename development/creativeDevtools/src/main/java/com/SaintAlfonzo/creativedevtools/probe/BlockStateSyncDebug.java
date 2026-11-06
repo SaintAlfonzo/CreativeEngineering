@@ -4,7 +4,7 @@ import com.SaintAlfonzo.creativedevtools.CreativeDevtools;
 import com.SaintAlfonzo.creativedevtools.DevtoolsConfig;
 import com.mojang.logging.LogUtils;
 import it.unimi.dsi.fastutil.ints.IntArrayList;
-import com.SaintAlfonzo.creativeengineering.util.BlockStateLookupHook;
+import com.SaintAlfonzo.creativecommon.util.BlockStateLookupHook;
 import net.minecraft.network.protocol.game.ClientboundBlockUpdatePacket;
 import net.minecraft.network.protocol.game.ClientboundSectionBlocksUpdatePacket;
 import net.minecraft.world.level.block.Block;

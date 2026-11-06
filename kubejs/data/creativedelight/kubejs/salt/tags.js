@@ -11,7 +11,7 @@ ServerEvents.tags('item', e => {
 	if (!global.CD) return
 	var i = global.item
 	var t = global.tags
-	var MEAT_DISHES = [
+	var MEAT_DISHES = [ // G5 begin: filtered by mod below, then handed to global.tags
 		// alexsdelight
 		i.bison_burger, i.bison_patty, i.bunfungus_sandwich, i.bison_cooked, i.bunfungus_cooked,
 		i.bunfungus_drumstick_cooked, i.catfish_slice_cooked, i.centipede_leg_cooked, i.kangaroo_shank_cooked,
@@ -69,7 +69,7 @@ ServerEvents.tags('item', e => {
 		i.turnip_mutton_skewer,
 		// vintagedelight
 		i.cheese_burger, i.deluxe_burger, i.ghostly_chili, i.pad_thai, i.stuffed_burrito, i.surstromming
-	]
+	] // G5 end
 	var add = MEAT_DISHES.filter(id => typeof id === 'string' && Platform.isLoaded(id.split(':')[0]))
 	t.add(e, i.t_can_be_salted, add)
 	t.remove(e, i.t_can_be_salted, [i.bone_broth, i.cooked_rice, i.tomato_sauce])

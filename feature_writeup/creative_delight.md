@@ -55,7 +55,7 @@ engine" now means these scripts.
 | Nether's Delight | `NethersDelight-1.19-3.1.jar` (until the CD install moves it out) | `nethersdelight` | MIT (Umpaz) | [nethers_delight.md](nethers_delight.md) | CD member `repackedNethers` -01 (overlay: Potted Mimicarnation, Fungus Colony 4.0 rules mixin, 4.0 recipe paths) and rows in CD `nethersdelight/`, BUILT 2026-11-01, nested in the installed CD jar (2026-11-02; the standalone jar is out of `mods/`) (nethers_delight.md 4.9) |
 | Ender's Delight | `endersdelight-1.19-1.2.2.jar` (to leave `mods/`; donor `enders_upstream/endersdelight-1.2.2.jar`) | `endersdelight` | **All rights reserved** (Ax3dgaming, Furti Two) | [ends_delight.md](ends_delight.md) | dict, cooking, potions, `end.js`, shield and damage tags. **Owner 2026-11-02: becomes a donor-route member nested in CD (section 38.1, `members #33`), not built**; later 2026-11-02 the donor route was DROPPED (section 38.5): Ender's stays its own jar in `mods/`, pack changes fold into the End's member |
 | Ender's Delight Additions | in `creativedelight` (inside member `repackedEnds` since 2026-11-02; was `endersAdditions`) | `enders_additions` (registers `endersdelight:` ids) | MIT art and data from Ender's 1.1.4 (Axedgaming); code GPL3 | [ends_delight.md](ends_delight.md) 5.3, 5.9 | BUILT 2026-10-25: 4 End plants, 6 items, End House, Chorus Crate and Endstone Stove loot tables. Since 2026-11-02 overlay code of `repackedEnds` (second `[[mods]]` entry); member `endersAdditions` deleted |
-| Cooking for Blockheads Additions | in `creativedelight` (member `blockheadsAdditions`); Cooking for Blockheads itself stays `cookingforblockheads-forge-1.19.2-13.3.4.jar` | `blockheads_additions` (registers `cookingforblockheads:` ids) | Cooking for Blockheads **All rights reserved** (BlayTheNinth; modpack use only, no rehosting or published modified files), so not repacked; member code, art and data ours, GPL3 | [kitchen.md](kitchen.md) 9 | BUILT 2026-10-31: 40 wood racks, the CfB mixins, corner storage and counter toppers from patcherMod, fridge fill in code |
+| Cooking for Blockheads Additions | in `creativedelight`'s own jar (optional compartment since M8 2026-11-04; was member `blockheadsAdditions`); Cooking for Blockheads itself stays `cookingforblockheads-forge-1.19.2-13.3.4.jar` | none since M8 (registers `creativedelight:` ids; was `blockheads_additions` with `cookingforblockheads:` ids) | Cooking for Blockheads **All rights reserved** (BlayTheNinth; modpack use only, no rehosting or published modified files), so not repacked; member code, art and data ours, GPL3 | [kitchen.md](kitchen.md) 9 | BUILT 2026-10-31: 40 wood racks, the CfB mixins, corner storage and counter toppers from patcherMod, fridge fill in code |
 | Ocean's Delight | `oceansdelight-1.0.2-1.19.2.jar` | `oceansdelight` | MIT (Scouter456) | [ocean_delight.md](ocean_delight.md) | names (caviar) only |
 | Oceanic Delight | donor `oceanic_upstream/oceanic_delight-1.0.1-forge-1.19.2.jar` (not in `mods/`) | `oceanic_delight` | MIT upstream; our code GPL3 | [ocean_delight.md](ocean_delight.md) 5.6 | CD member `portedOceanic` `-02` on the donor route (section 36): own code for every upstream id, art and data read from the donor jar; fishing net, dict block, loot tables |
 
@@ -488,7 +488,7 @@ What goes where in the CD jar:
 2. **Helper extensions** that CD needs: the NCH namespace option (Q24); any helper that today exists only inline in one
    pack script (move it into `func/` first).
 3. **The helpers live in patcherMod's jar, written once (decided, Q26).** `neoCraftHelper.js`, `tag_helper.js`,
-   `compost.js` and the other shared `func/` helpers move to `development/patcherMod/src/main/resources/kubejs_startup/`
+   `compost.js` and the other shared `func/` helpers move to `development/creativeCommon/src/main/resources/kubejs_startup/`
    as the same JavaScript (no translation to Java; KubeJS runs them from the jar). The pack folder keeps no copy. The
    loader adds patcherMod's pack at HEAD (before the pack folder), every other mod's pack after it. Consequences:
    - NCH must read `global.item` / `global.fluid` lazily (at call time), since the dicts load after it; the dicts stay in the pack folder (decided, Q27).
@@ -898,7 +898,7 @@ Open:
 | Piece (plan ref) | Where | Notes |
 |---|---|---|
 | Startup loader (10.5.1) | patcherMod `compat/kubejs/JarStartupScripts`, mixins `KubeJSStartupJarScriptsMixin` (RETURN of `ScriptManager.loadFromDirectory`, require = 1) and `KubeJSScriptManagerInvoker` (`loadFile`) | Every mod jar with a root `kubejs_startup/` folder becomes a startup script pack named after its first mod id; order patcherMod, pack folder, other jars in mod-list order. Headers (`priority`, `requires`, `packmode`) go through KubeJS's own `loadFile`. Each pack has its own scope: shared code goes through `global` |
-| Helpers in patcherMod's jar (10.5.3, Q26) | `development/patcherMod/src/main/resources/kubejs_startup/creativeengineering/func/` | `neoCraftHelper.js`, `tag_helper.js`, `compost.js` moved with `git mv` (backups in 19.4). The pack folder keeps no copy. NCH reads `global.item` at call time now (six lines). The other `func/` helpers stay in the pack (they are pack-specific or read the dicts at load) |
+| Helpers in patcherMod's jar (10.5.3, Q26) | `development/creativeCommon/src/main/resources/kubejs_startup/creativecommon/func/` | `neoCraftHelper.js`, `tag_helper.js`, `compost.js` moved with `git mv` (backups in 19.4). The pack folder keeps no copy. NCH reads `global.item` at call time now (six lines). The other `func/` helpers stay in the pack (they are pack-specific or read the dicts at load) |
 | NCH namespace (10.3, Q24) | NCH `ns()`, `withNamespace(ns, fn)` (`apiVersion` removed 2026-10-27) | Scoped (answers the open Q24 detail): every recipe ID the helpers write uses `ns()`, recipe TYPES keep `modId` (`creativeengineering:seasoning`, ...). Restores after an error and when nested |
 | Build (14.3 B1, B3, B4, B5) | `build-logic`: `ce.forge-repack`, `ce.forge-bundle`; `ce.forge-mod` gains `shipped_jar_task`, `bundled_in`, `mixin_configs=none` | A repack refuses another upstream sha1 and any path the overlay and upstream both hold; `replaced_classes` is the B3 guard (no class replaced today). A member's `installToMods` refuses and names CD's task |
 | Repacks (B2) | `development/creativeDelight/members/{oceans,oceanic,ends}`, projects `repackedOceans`, `repackedOceanic`, `repackedEnds` | Versions `1.0.2-1.19.2-ce-19.2-01`, `1.0.1-ce-19.2-01`, `1.19.2-2.1-ce-19.2-01` (14.1.4). Upstream entries checked byte-identical (CRC) apart from `mods.toml` and the manifest. Upstream jars in `development/creativeDelight/upstream/` (git-ignored, copied from `mods/`). MIT notices written from the `mods.toml` data, since the jars ship none; years and sources checked against upstream 2026-10-25 (28.1) |
@@ -969,8 +969,8 @@ the mixin to `members/oceanic/src/main/java/com/SaintAlfonzo/creativedelight/oce
 
 ### 19.5 Install (done before the 1.1.03 build, 2026-10-26; never while the game runs)
 
-patcherMod and CD go in together: the patcherMod jar in `development/patcherMod/build/libs/` holds the helpers the pack folder no
-longer has, and the fishing net mixin is only in CD now. `./gradlew :patcherMod:installToMods :creativeDelight:installToMods
+patcherMod and CD go in together: the patcherMod jar in `development/creativeCommon/build/libs/` holds the helpers the pack folder no
+longer has, and the fishing net mixin is only in CD now. `./gradlew :creativeCommon:installToMods :creativeDelight:installToMods
 --offline` (CD's moves the four upstream jars, Farmer's Delight included, to `jar_archive/displaced/`), then the
 `mod_sides.md` member rows go (B9).
 
@@ -1667,6 +1667,17 @@ before: no gameplay change, so no changelog bullet.
   unchanged, `bundled_in=creativeDelight`). `replaces_jars` moves their standalone jars out of `mods/` at install; their
   `IN_TREE_MODS` rows and `mod_sides.md` rows are gone. Both get a `[members]` switch in CD's config (CD scripts have no
   rows for them yet, so the switch does nothing today). Their mod ids keep the underscore (a rename needs swap lists).
+- **Since M8 (2026-11-04, plan_cb_publish.md 3b, D3 and D6): Cooking for Blockheads Additions and Incubation Additions
+  are no longer members.** Both are optional compartments of CD's own jar (CD 1.1.0): code in `compat/cookingforblockheads/`
+  and `compat/incubation/` behind Java load guards (`compat/Compartments`: the mods loaded and `[compartments]
+  cookingforblockheads` / `incubation` on), mixins in `mixin/cookingforblockheads/`, `mixin/incubation/`,
+  `mixin/untitledduckmod/`, `mixin/alexsmobs/EntityEmuEggLayerMixin` (gated by `CDMixinPlugin`), assets and data in the
+  mod-gated built-in packs `packs/cookingforblockheads/`, `packs/incubation/alexsmobs/`, `packs/incubation/untitledduckmod/`
+  (`compat/CompartmentPacks`). The mod ids `blockheads_additions` and `incubation_additions`, the Gradle projects and
+  `members/blockheads`, `members/incubation` are gone; every block and item is `creativedelight:*` (swap list
+  `data/creativedelight/swaps/compartments.json`, 65 ids). CD now nests 20 members. Settings: `[cookingforblockheads]`
+  and `[incubation]` in `creativedelight-common.toml` (the old member files carried once). CfB, Balm and Incubation are
+  optional dependencies in CD's `mods.toml`.
 
 ### 34.2 Common hooks (patcherMod never imports CD)
 
@@ -1680,10 +1691,17 @@ before: no gameplay change, so no changelog bullet.
 Left in Common: `WthitKitchenStation` (reads no CD class), `MealSlotTooltip`, `PotionRows`, `JeiIcons`, `RecipeRows`,
 the `[jei] canCategories` / `seasoningCategory` and `[wthit] remainderBuffer` keys (CD reads them from CEConfig,
 downward). `mooshroom/` and More Mooblooms are Worldgen's (wave 5). The campfire went to Compat in wave 3.
+**Since 2026-11-04 (creative_split.md 7.9 steps 1 and 3) the campfire is CD's:** `campfire/CampfireRain`,
+`CampfireComfort`, `mixin/minecraft/CampfireRainMixin` (ungated vanilla target), `compat/jei/CampfireRows` (Campfire
+Rules tab through Common's `WorldRows.provider`, own copies of the JSON helpers) and `CDConfig` `[campfire]` (carried
+from `creativecompat-common.toml`, else `creativeengineering-common.toml`). CD fills Common's `CampfireRainInfo` for the
+WTHIT line; `CampfireRainTicks`, `WthitCampfire` and the `#creativecommon:campfire/*` tags stay in Common. The
+Ender's endstone stove damage id is CD's tag `creativedelight:stoves` (`data/creativedelight/damage_tags/`), included
+by Common's `fire` and `burn_tick`. Tests SQ-CFR-01 to -08, CQ-CFR-01.
 
 ### 34.3 Install and tests
 
-Install with the game closed, all together: `./gradlew :patcherMod:installToMods :creativeCompat:installToMods
+Install with the game closed, all together: `./gradlew :creativeCommon:installToMods :creativeCompat:installToMods
 :creativeCalendar:installToMods :creativeDelight:installToMods :creativeBrewing:installToMods --offline` (patcherMod
 1.1.07 with CB phases 2 and 3 and this carve; CD requires `[1.1.07,)`). Scratch SQ-CDJ4-01 to -08
 ([scratch_queue.md](testing/scratch_queue.md)), after SQ-CS2, SQ-CMP and SQ-CBJ4 pass. In game: CDJ4-C1 oven (bake,
@@ -1949,3 +1967,61 @@ Salt and Create: The Salt ([salt.md](salt.md)) and Canned Goods ([cans.md](cans.
 repack plugin's `replaced_classes` is now used for direct edits of upstream classes (Salt `Dissolving`, Canned Goods golem
 entity and renderer). Swap lists carry CD's item merges (`merges`, `requires`; [item_merges.md](item_merges.md) 6). Run
 record, install state and follow-ups: [plan_creative_delight.md](plan_creative_delight.md) section K.
+
+## 40. Licence audit (2026-11-04, plan_cb_publish.md Step 2)
+
+Audit of `creativedelight-1.1.0.jar` (23:35) and its 20 nested members, every file hash-compared against the
+`*_upstream/` donors, the CfB, Incubation and Ender's 1.2.2 jars and every jar in `mods/`. Summary row in
+[creative_brewing.md](creative_brewing.md) 9.2. The CfB and Incubation members were folded into CD's own jar (M8) as
+code plus built-in packs `packs/cookingforblockheads/`, `packs/incubation/`.
+
+| Part | Source licence | In the jar | Verdict |
+|---|---|---|---|
+| CD own code (182 classes) | own, GPLv3 | `creativedelight-LICENSE.txt`, `GPL-3.0-only` | OK |
+| CfB pack: 19 fruit basket textures | were byte copies of planks (Quark, Botania, Architects Palette, myrtrees, IE, Upgrade Aquatic, D&D, vanilla) | **no: built on the client since 2026-11-05** (`compat/art/CompartmentArt`) | OK |
+| CfB pack: 38 rack textures | were recolours of CfB's rack art with plank palettes | **no: built on the client since 2026-11-05** | OK |
+| Incubation pack: 11 nest, egg and crate PNGs | were 6 copies and 5 colour-mapped Incubation textures (Abnormals License) | **no: built on the client since 2026-11-05**; the owner's 2 egg item PNGs stay | OK |
+| `powdered_sugar_block.png` | IW `vitrified_sand` recolour (LGPLv3; owner confirmed 2026-11-05, `make_moss_candidates.py` output) | yes | OK: IW notice added 2026-11-05 |
+| `powdered_sugar_bucket.png` | `make_psugar.py` `bucket_soft` (byte-identical): vanilla powder snow bucket recoloured | yes | low ([creative_brewing.md](creative_brewing.md) 9.3) |
+| display | Display Delight LGPLv3, 5 Farmers 3D models (MIT); tray textures are FD's (MIT) | LICENSE + NOTICE (LGPL text, MIT) | OK; NOTICE names FD's tray textures (2026-11-05) |
+| fungi, veggies | MIT | LICENSE + MIT NOTICE | OK |
+| vintage | MIT 0.1.6 + GPL-3.0 KOTS fixes | LICENSE + NOTICE naming KOTS | OK |
+| golden, largemeals, roll, miners | ARR; donor route | classes only, 0 donor hits | OK |
+| oceanic | jar MIT, Modrinth ARR; donor route since 33.1 | classes only, 0 hits | OK (conflict moot) |
+| rustic | ARR in mods.toml (owner says MIT, unconfirmed) | classes + `glowing_calamari_crate` (2 PNGs derived from Rustic's `calamari_crate`) | fix |
+| cannedgoods (repack) | CannedGoods 1.19.2-3, AFL-3.0 | NOTICE with AFL text and change list | OK |
+| createsalt, oceans (repacks) | MIT (mods.toml only, no upstream LICENSE file) | MIT NOTICE | OK |
+| delightful, ends, farmers, nethers (repacks) | MIT (plus newer-version backports, MIT); Ender's 1.1.4 MIT, no 1.2.2 (ARR) file shipped | MIT NOTICEs | OK; ends NOTICE names the 13 2.6.1 textures (2026-11-05) |
+| salt (repack) | MIT | MIT NOTICE lists Dissolving, Melting, Configuration (2026-11-05) | OK |
+| barbeques (port) | Barbeque's Delight 1.3.0, LGPL-2.1; 164 upstream assets | LGPL NOTICE with the full LGPL-2.1 text (2026-11-05) | OK |
+| hearth (port) | Hearth and Harvest 1.4.1, MIT | MIT NOTICE; `mod_license` `MIT (upstream assets) / GPL-3.0-only` (2026-11-05) | OK |
+
+Repacks: every upstream entry is byte-identical or a listed replacement; no upstream ships a LICENSE file, so our NOTICE is
+the only licence text. No member needs removing. Pack folder, not audited: the 12 Ender's retextures in
+`kubejs/assets/endersdelight/`.
+
+Fixes: TODO `licence/cd #1` (CfB baskets and racks), `#2` (Rustic crate placeholders), `#3` (notices and the sugar
+textures), `mobs/nests #2` (Incubation repaint).
+
+2026-11-05: `NOTICE-thirdparty.txt` added to CD's main jar: IW (powdered sugar block, LGPL 3 text), vanilla powder snow
+bucket, CfB rack shape and every plank source of the basket and rack textures, Incubation art. Credit does not license the
+ARR or non-commercial planks or CfB's shape: `licence/cd #1` and `mobs/nests #2` stand.
+
+### 40.1 Compartment art built on the client (2026-11-05)
+
+Owner: the CfB and Incubation recolours are made on the fly, like Creative Brewing's Vinery bottle looks.
+`compat/art/CompartmentArt` builds 68 textures when the client loads resources, from each mod's own jar (vanilla from the
+vanilla pack), and serves them as the hidden resource pack `creativedelight_compartment_art` at the bottom of the stack
+(added in `CompartmentPacks`; resource packs and kubejs/assets still override). Recipes in `compat/art/ArtRecipes`:
+
+- 19 fruit baskets: the wood's planks as they are.
+- 19 spice racks: CfB's `spicerack.png` palette-swapped with the planks' colours (textureswapper/palette_swap.py's default
+  mode, ported in `Recolour`); 19 tool racks: CfB's `tool_rack.png` the same way, its 6 hook pixels kept.
+- Incubation: duck and goose nests (block, item) = `hay_nest`, duck eggs = `duck_eggs`, goose eggs = `turkey_eggs`; emu
+  eggs and the 4 duck / goose crate faces = Incubation's turkey eggs and chicken crate through a fixed colour map.
+- A wood whose mod is missing falls back to oak planks; an Incubation row only builds with its mod loaded.
+
+Checked offline: 66 of 68 equal the removed PNGs byte for byte; the two vertical treated wood racks differ in 30 and 20
+pixels between equally bright colours (Python set order broke the tie in the owner's art). The 68 PNGs left the source
+tree; `gen_cfb_racks.py` no longer copies rack art; `textureswapper/rack/` keeps the reference art. Tests CQ-LCA-01 to -04.
+

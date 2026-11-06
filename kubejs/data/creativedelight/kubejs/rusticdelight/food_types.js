@@ -5,11 +5,35 @@
 if (global.CD) global.CD.genPut('food_types', 'rusticdelight', {
  "types": {
   "raw/veggie": [
+   "bell_pepper_black",
+   "bell_pepper_blue",
    "bell_pepper_green",
+   "bell_pepper_orange",
+   "bell_pepper_pink",
+   "bell_pepper_purple",
    "bell_pepper_red",
+   "bell_pepper_roll_black",
+   "bell_pepper_roll_blue",
+   "bell_pepper_roll_green",
+   "bell_pepper_roll_orange",
+   "bell_pepper_roll_pink",
+   "bell_pepper_roll_purple",
+   "bell_pepper_roll_red",
+   "bell_pepper_roll_white",
+   "bell_pepper_roll_yellow",
+   "bell_pepper_white",
    "bell_pepper_yellow"
   ],
   "raw/veggie/sliced": [
+   "bell_pepper_slice_black",
+   "bell_pepper_slice_blue",
+   "bell_pepper_slice_green",
+   "bell_pepper_slice_orange",
+   "bell_pepper_slice_pink",
+   "bell_pepper_slice_purple",
+   "bell_pepper_slice_red",
+   "bell_pepper_slice_white",
+   "bell_pepper_slice_yellow",
    "potato_slices"
   ],
   "raw/fish": [
@@ -19,18 +43,42 @@ if (global.CD) global.CD.genPut('food_types', 'rusticdelight', {
    "calamari_slice"
   ],
   "cooked/veggie": [
+   "roasted_bell_pepper_black",
+   "roasted_bell_pepper_blue",
    "roasted_bell_pepper_green",
+   "roasted_bell_pepper_orange",
+   "roasted_bell_pepper_pink",
+   "roasted_bell_pepper_purple",
    "roasted_bell_pepper_red",
+   "roasted_bell_pepper_white",
    "roasted_bell_pepper_yellow"
   ],
   "cooked/veggie/sliced": [
-   "baked_potato_slices"
+   "baked_potato_slices",
+   "roasted_bell_pepper_slice_black",
+   "roasted_bell_pepper_slice_blue",
+   "roasted_bell_pepper_slice_green",
+   "roasted_bell_pepper_slice_orange",
+   "roasted_bell_pepper_slice_pink",
+   "roasted_bell_pepper_slice_purple",
+   "roasted_bell_pepper_slice_red",
+   "roasted_bell_pepper_slice_white",
+   "roasted_bell_pepper_slice_yellow"
   ],
   "cooked/fish": [
-   "cooked_calamari"
+   "cooked_calamari",
+   "fried_fish"
   ],
   "cooked/fish/sliced": [
    "cooked_calamari_slice"
+  ],
+  "sweet": [
+   "cherry_blossom_cheesecake_slice",
+   "cherry_blossom_cookie",
+   "coffee_cheesecake_slice",
+   "coffee_cookie",
+   "syrup_cheesecake_slice",
+   "syrup_cookie"
   ],
   "sweet/pancake": [
    "cherry_blossom_pancake",
@@ -42,16 +90,25 @@ if (global.CD) global.CD.genPut('food_types', 'rusticdelight', {
   ],
   "handheld": [
    "calamari_roll",
+   "cherry_blossom_roll",
+   "fried_dumplings",
    "spring_rolls",
+   "stuffed_bell_pepper_blue",
    "stuffed_bell_pepper_green",
+   "stuffed_bell_pepper_orange",
+   "stuffed_bell_pepper_purple",
    "stuffed_bell_pepper_red",
-   "stuffed_bell_pepper_yellow"
+   "stuffed_bell_pepper_white",
+   "stuffed_bell_pepper_yellow",
+   "syrup_sandwich"
   ],
   "salad": [
-   "potato_salad"
+   "potato_salad",
+   "sweet_salad"
   ],
   "soup": [
-   "bell_pepper_soup"
+   "bell_pepper_soup",
+   "calamari_soup"
   ],
   "meal": [
    "bell_pepper_pasta",
@@ -60,12 +117,20 @@ if (global.CD) global.CD.genPut('food_types', 'rusticdelight', {
    "fried_chicken",
    "fried_mushrooms"
   ],
+  "meal/feast": [
+   "stuffed_bell_pepper_black",
+   "stuffed_bell_pepper_pink"
+  ],
   "drink": [
+   "cherry_blossom_coffee",
    "chocolate_coffee",
    "coffee",
    "dark_coffee",
    "honey_coffee",
-   "milk_coffee"
+   "milk_coffee",
+   "pumpkin_coffee",
+   "syrup",
+   "syrup_coffee"
   ],
   "ingredient": [
    "batter",

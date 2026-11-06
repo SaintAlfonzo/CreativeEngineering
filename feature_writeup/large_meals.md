@@ -25,7 +25,7 @@ asks for it by name. Upstream bugs are fixed (3.5).
 | Fold-in | 4 | 21 steps planned |
 | Decisions | 5 | D1-D9 answered 2026-11-01 |
 | Build | 4.2 | BUILT 2026-11-01 (member + CD scripts + Display Delight `lm_`); in `mods/` since the CD jar of 11-02 14:01, not played; `/dumpall`, can generator, compost and `/cegen` wait on the game |
-| Tests | 8 | LGM-01..20 in game: none run. Scratch r1102b (2026-11-02): SQ-LGM-01 to -09 PASS; SQ-LGM-10 FAIL (Chicken Curry recipe ids clash with Ender's, 8); CQ-LGM-11 waits for the client round |
+| Tests | 8 | LGM-01..24 in game: none run. Scratch r1102b (2026-11-02): SQ-LGM-01 to -09 PASS; SQ-LGM-10 FAIL (Chicken Curry recipe ids clash with Ender's, 8); CQ-LGM-11 waits for the client round |
 
 - **Jar:** 156 files, no jarjar. `mods.toml` authors FoundWiz, jamb.
 - **Dependencies:** Forge 47+, Minecraft 1.20.1, Farmer's Delight 1.2.4+ (mandatory). Every recipe tag it uses exists
@@ -185,7 +185,8 @@ and `development/creativeDelight/src/main/resources/kubejs_startup/largemeals/` 
    rack plus the grid craft's cooked rice, carrots and baked potatoes (Q3, accepted); (b) a dearer variant that takes the **cooked**
    rack and adds extra ingredients (Q2, accepted: +1 baked potato, +1 carrot), same output. The upstream grid craft stays as the `_manual_only` heatless route.
    Inputs on tags (brown mushroom, bacon, eggs) throughout (B4, B6).
-9. **Effects:** none new; JEED text unchanged.
+9. **Effects:** none new; JEED text unchanged. Pufferfish Broth also gives Nausea 5 s (amplifier 0, chance 1.0) next to
+   Comfort 1 min (plan_meals_rolls_bbq.md A4, owner 2026-11-04); D3 (no poison) unchanged.
 10. **Food types and values:** `food_types.json`; values stay as upstream (D4; Chicken Curry 12 / 0.8). **Spice of Life
     (owner: register correctly):** the four `largemeals:` complexity entries name food items (`sweet_berry_custard`,
     `pufferfish_broth`, `mushroom_pot_pie` = the serving item, `hearty_lunch`), so they go live. Check: all 18 ids have Food
@@ -193,11 +194,17 @@ and `development/creativeDelight/src/main/resources/kubejs_startup/largemeals/` 
     not food and are not listed; the servings count when eaten from the hand and when served from the placed block
     (`PlacedFoodSol`, [food.md](food.md) 4.2 finding 5: confirm it covers any `FeastBlock`, else add the three); the custard's
     always-edible flag survives the pack's food-value pass.
-11. **Food families:** `python3 tools/food_families.py --check`.
+11. **Food families:** `python3 tools/food_families.py --check`. `FAMILY_OVERRIDE` (plan_meals_rolls_bbq.md A2, A5, A6): the
+    Mushroom Pot Pie block is `feast/whole` and its serving `feast/serving` (the "pie" name rule no longer takes it);
+    Cod Deluxe and Hearty Lunch are `meal/plate` (pot recipe plus heatless craft, bowl, Display Delight placed, as every
+    plate meal). Omurice and Tomato Egg Soup classify by type (`feast/*`, `soup/soup`); confirm after `/dumpall`.
 12. **Stack sizes** ([stack_sizes.md](stack_sizes.md)): bowl meals 16 as FD; Sweet Berry Custard by the bottle rule
-    (custard 32 in the drink family note); feasts 1.
-13. **Cans and jars** ([cans.md](cans.md)): soups by the generated per-type can rule (parity 2.11); feasts wait for
-    `cans/canning #17`; soups into the Supplementaries jar list.
+    (custard 32 in the drink family note); feasts 1. The plate-meal move (step 11) changes no stack size.
+13. **Cans and jars** ([cans.md](cans.md)): soups by the generated per-type can rule (parity 2.11). The three feasts
+    (Omurice, Mushroom Pot Pie, Roasted Rack of Mutton) each get a `feast` can row in `gen_can_types.py` (placed block in,
+    value source the serving, as Canned Shepherd's Pie; plan_meals_rolls_bbq.md A3). The raw and cooked mutton racks are
+    not canned (no meat row names them). `largemeals` leaves `AWAIT_DUMP` once `/dumpall` lists its foods; until then the
+    soup and feast cans show as waiting. Soups into the Supplementaries jar list.
 14. **Compost:** CD `compost.js` defaults for meals (racks as meat, not compostable).
 15. **Crops, seasons, worldgen:** none.
 16. **Names** ([names.md](names.md)): Large Meals keeps "Chicken Curry"; Ender's `endersdelight:chicken_curry` is renamed
@@ -327,9 +334,14 @@ crafts; Large Meals Chicken Curry has no recipe at all: `creativedelight:farmers
 | LGM-18 | Egg recipes with a duck, goose, parrot and turtle egg; a dragon egg | the four accepted by Tomato Egg Soup, Omurice, Sweet Berry Custard; the dragon egg rejected |
 | LGM-19 | Sheep kill with a knife | rack drop listed in the Knife and Machete Drops JEI tab |
 | LGM-20 | Display Delight: all 13 `lm_` blocks | each places and picks back up |
+| LGM-21 | Hover all 13 Large Meals foods that have an `lm_` block | each shows the placeable tooltip line |
+| LGM-22 | Eat Pufferfish Broth | Comfort 1 min and Nausea about 5 s; no poison |
+| LGM-23 | Can Omurice, Mushroom Pot Pie and Roasted Rack of Mutton (placed block + cans), then open each can | can crafts; uncanning gives servings |
+| LGM-24 | JEI uses of the raw and cooked mutton rack | no can recipe |
 
 ## 9. History
 
+- 2026-11-04 (plan_meals_rolls_bbq.md A): Pufferfish Broth Nausea 5 s; feast cans for the three feasts; pot pie and plate-meal family overrides; LGM-21..24 added. Built into the CD jar; generator output waits for `/dumpall`.
 - 2026-11-02 (deep scan): CD jar with the member in `mods/` since 11-02 14:01; scratch r1102b: SQ-LGM-01 to -09 PASS, SQ-LGM-10 FAIL (curry recipe id clash with Ender's).
 - 2026-11-02: Roasted Rack pot recipes: a carrot added to each, both at 6 ingredients (dearer one loses a rice); deviation accepted.
 - 2026-11-01: BUILT (4.2): member, scripts, Display Delight `lm_`, names, changelog family, scratch SQ-LGM-01..10; Roasted Rack pot recipes shrunk to the 6-slot limit.

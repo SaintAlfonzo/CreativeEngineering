@@ -56,37 +56,32 @@ public class FermentingRecipe implements Recipe<SimpleContainer> {
    }
 
    /**
-    * Port fix (creativedelight members #37, plan_creative_delight.md I2): for each ingredient entry, the input slot
-    * (0-5) it takes one item from, or null when the inputs do not make this recipe. Every non-empty slot feeds at least
-    * one entry and no slot feeds more entries than it holds items; entries spread over distinct slots first (one item per
-    * slot) and share a slot only when there are fewer slots than entries. The jar consumes exactly these slots, so a match
-    * and its craft always agree (upstream matched one entry per slot but consumed from the first matching slot, draining
-    * it, so the next batch no longer matched).
+    * Port fix (creativedelight members #37, plan_creative_delight.md I2; strict per slot 2026-11-04): for each
+    * ingredient entry, the input slot (0-5) it takes one item from, or null when the inputs do not make this recipe.
+    * One item per slot, as upstream's match: every non-empty slot feeds exactly one entry, so the number of filled
+    * slots must equal the number of entries and a stack never feeds two entries. The jar consumes exactly these slots,
+    * so a match and its craft always agree (upstream matched one entry per slot but consumed from the first matching
+    * slot, draining it; the I2 version let entries share a stacked slot, which started batches from too few slots).
     */
    public int[] assignSlots(Container container) {
       int n = this.inputItems.size();
-      int[] count = new int[LAST_INPUT_SLOT + 1];
+      boolean[] filled = new boolean[LAST_INPUT_SLOT + 1];
       int nonEmpty = 0;
-      long total = 0;
       for (int i = FIRST_INPUT_SLOT; i <= LAST_INPUT_SLOT; i++) {
-         ItemStack stack = container.getItem(i);
-         count[i] = stack.isEmpty() ? 0 : stack.getCount();
-         if (count[i] > 0) {
+         filled[i] = !container.getItem(i).isEmpty();
+         if (filled[i]) {
             nonEmpty++;
-            total += count[i];
          }
       }
-      if (n == 0 || nonEmpty > n || total < n) {
+      if (n == 0 || nonEmpty != n) {
          return null;
       }
       boolean[][] fits = new boolean[n][LAST_INPUT_SLOT + 1];
-      boolean[] slotUsable = new boolean[LAST_INPUT_SLOT + 1];
       for (int j = 0; j < n; j++) {
          boolean any = false;
          for (int i = FIRST_INPUT_SLOT; i <= LAST_INPUT_SLOT; i++) {
-            if (count[i] > 0 && this.inputItems.get(j).test(container.getItem(i))) {
+            if (filled[i] && this.inputItems.get(j).test(container.getItem(i))) {
                fits[j][i] = true;
-               slotUsable[i] = true;
                any = true;
             }
          }
@@ -94,35 +89,25 @@ public class FermentingRecipe implements Recipe<SimpleContainer> {
             return null;
          }
       }
-      for (int i = FIRST_INPUT_SLOT; i <= LAST_INPUT_SLOT; i++) {
-         if (count[i] > 0 && !slotUsable[i]) {
-            return null;
-         }
-      }
       int[] assign = new int[n];
-      return assign(0, fits, count, new int[LAST_INPUT_SLOT + 1], assign, nonEmpty) ? assign : null;
+      return assign(0, fits, new boolean[LAST_INPUT_SLOT + 1], assign) ? assign : null;
    }
 
-   /** Backtracking: entry j to an unused slot first, then to a used slot with items left. */
-   private static boolean assign(int j, boolean[][] fits, int[] count, int[] used, int[] assign, int unusedSlots) {
+   /** Backtracking perfect matching: entry j to a slot no earlier entry took. */
+   private static boolean assign(int j, boolean[][] fits, boolean[] used, int[] assign) {
       if (j == assign.length) {
-         return unusedSlots == 0;
+         return true;
       }
-      if (assign.length - j < unusedSlots) {
-         return false;
-      }
-      for (int pass = 0; pass < 2; pass++) {
-         for (int i = FIRST_INPUT_SLOT; i <= LAST_INPUT_SLOT; i++) {
-            if (!fits[j][i] || used[i] >= count[i] || (used[i] == 0) != (pass == 0)) {
-               continue;
-            }
-            used[i]++;
-            assign[j] = i;
-            if (assign(j + 1, fits, count, used, assign, used[i] == 1 ? unusedSlots - 1 : unusedSlots)) {
-               return true;
-            }
-            used[i]--;
+      for (int i = FIRST_INPUT_SLOT; i <= LAST_INPUT_SLOT; i++) {
+         if (!fits[j][i] || used[i]) {
+            continue;
          }
+         used[i] = true;
+         assign[j] = i;
+         if (assign(j + 1, fits, used, assign)) {
+            return true;
+         }
+         used[i] = false;
       }
       return false;
    }

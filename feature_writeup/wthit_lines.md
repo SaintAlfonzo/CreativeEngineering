@@ -28,9 +28,9 @@ campfire, sheetmetal tank, kitchen station and keg lines, and the coverage audit
 - **Pending:** WL-01 to WL-42 in game. The scratch server run (section 6) proved every plugin loads on both sides
   and showed seven lines in a world before the last round of changes; everything else is unseen.
 - **Findings:** F1 to F3 resolved; the coverage audit's F4 to F10 are all built (F9 on 2026-10-21).
-- **Files to open:** [waila_plugins.json](../development/patcherMod/src/main/resources/waila_plugins.json),
-  [compat/](../development/patcherMod/src/main/java/com/SaintAlfonzo/creativeengineering/compat/),
-  [state_lines.json](../development/patcherMod/src/main/resources/assets/creativeengineering/state_lines.json),
+- **Files to open:** [waila_plugins.json](../development/creativeCommon/src/main/resources/waila_plugins.json),
+  [compat/](../development/creativeCommon/src/main/java/com/SaintAlfonzo/creativecommon/compat/),
+  [state_lines.json](../development/creativeCommon/src/main/resources/assets/creativecommon/state_lines.json),
   [KegWthit.java](../development/backportedBrewin/src/main/java/umpaz/brewinandchewin/integration/wthit/KegWthit.java),
   [tools/wthit_icon_audit.py](../tools/wthit_icon_audit.py).
 - **Knobs:** WTHIT's plugin toggles (`config/waila/plugin_toggle.json5`) and options; the pack's `[wthit]`,
@@ -131,7 +131,7 @@ Every `BeehiveBlock` (beehive, bee nest, Upgrade Aquatic's driftwood and river b
 
 ### 2.5 State lines
 
-`compat/WthitStateLines` (client), rules in `assets/creativeengineering/state_lines.json` (copy to
+`compat/WthitStateLines` (client), rules in `assets/creativecommon/state_lines.json` (copy to
 `kubejs/assets/creativeengineering/` to override; pure logic in `compat/StateLines`). Each rule: `blocks` (ids, globs,
 `#tags`), `except`, an integer `property`, a `label` (lang `creativeengineering.wthit.state.<label>`) and a `mode`.
 Rules apply in order; a later rule whose label or property the block already shows is skipped.
@@ -156,7 +156,7 @@ Off with `[wthit] stateLines`, one line at a time in `[wthit.state_lines]`.
 - **Burn line:** Unlit Campfire's own, which it only wrote for Jade, in its words: "Burns forever" (the pack sets
   `campfireLitTime = 0`) or "Burn time: 42s".
 - **Rain line** (the pack's rule, [feature_porting.md](feature_porting.md) 2.2): only on campfires rain can
-  douse (`#creativeengineering:campfire/rain_douses`, the plain campfire): "Rain: Puts it out"; red "Rain: Going out in
+  douse (`#creativecommon:campfire/rain_douses`, the plain campfire): "Rain: Puts it out"; red "Rain: Going out in
   6s" while it rains on it (`[campfire] rainOutTicks` minus the ticks so far); green "Rain: Safe (fuel block below)" on
   a `#campfire/rain_proof_fuel` block. Soul and Tinted campfires get no rain line.
 
@@ -227,7 +227,7 @@ and "Needs Silk Touch" on every block that only drops itself with Silk Touch. Hi
 Silk Touch.
 
 - **Source:** loot tables are server data and never reach the client, so the list is a block tag,
-  `creativeengineering:wthit/needs_silk_touch`, synced like every tag. `tools/gen_silk_touch_blocks.py` (`/cegen run
+  `creativecommon:wthit/needs_silk_touch`, synced like every tag. `tools/gen_silk_touch_blocks.py` (`/cegen run
   silk_touch_blocks dumps`, after `/dumploot`) reads `kubejs/exported/loot_tables/` and writes
   `kubejs/generation_scripts/wthit/silk_touch_blocks.json`; `kubejs/server_scripts/tags/wthittags.js` adds the
   registered ones to the tag (`/reload`).
@@ -315,10 +315,10 @@ and single player with cheats on); everyone else falls through to the blacklist 
 
   WTHIT's own plugin toggles (`config/waila/plugin_toggle.json5`) turn a whole plugin off as well.
   `[debug.wthit] dumpIconsAtTitle` runs the icon dump at the title screen.
-- **Text:** `creativeengineering.wthit.*` and `config.waila.plugin_creativeengineering.*` in patcherMod's lang;
+- **Text:** `creativeengineering.wthit.*` and `config.waila.plugin_creativecommon.*` in patcherMod's lang;
   `brewinandchewin.wthit.keg.*` and `config.waila.plugin_brewinandchewin*` in the port's. Unlit Campfire, Applied
   Cooking, the keg GUI and WTHIT's own keys are reused where they exist.
-- **Compile-only jars:** `development/patcherMod/libs/` gained Moonlight, Unlit Campfire and Applied Cooking (WTHIT,
+- **Compile-only jars:** `development/creativeCommon/libs/` gained Moonlight, Unlit Campfire and Applied Cooking (WTHIT,
   Supplementaries and IE were there); the Brewin' port compiles against patcherMod's WTHIT jar. MC calls are
   checked with `javap` after reobf.
 
@@ -368,9 +368,9 @@ TreeChop ship WTHIT plugins.
 
 ## 5. File map
 
-- [waila_plugins.json](../development/patcherMod/src/main/resources/waila_plugins.json) (patcherMod),
+- [waila_plugins.json](../development/creativeCommon/src/main/resources/waila_plugins.json) (patcherMod),
   [waila_plugins.json](../development/backportedBrewin/src/main/resources/waila_plugins.json) (Brewin' port).
-- [compat/](../development/patcherMod/src/main/java/com/SaintAlfonzo/creativeengineering/compat/):
+- [compat/](../development/creativeCommon/src/main/java/com/SaintAlfonzo/creativecommon/compat/):
   `WthitBlockModelIcon` + `BlockModelIcons` (icon), `WthitHolderContents`, `WthitHive`, `WthitStateLines` +
   `StateLines`, `WthitCampfire`, `WthitSheetmetalTank`, `WthitKitchenStation`, `WthitCoaster`,
   `WthitRemainderBuffer`, `WthitSheared`, `WthitSilkTouch`, `WthitCropSeasons`, `WthitOperatorBlocks`.
@@ -378,9 +378,9 @@ TreeChop ship WTHIT plugins.
   `kubejs/generation_scripts/wthit/silk_touch_blocks.json` → [wthittags.js](../kubejs/server_scripts/tags/wthittags.js).
 - Sheared grass blocks in the ports: [LushGrassBlock.java](../development/backportedVintage/src/main/java/net/ribs/vintagedelight/block/custom/LushGrassBlock.java),
   [SpreadableGrassSlabBlock.java](../development/backportedVinery/src/main/java/net/satisfy/vinery/core/block/SpreadableGrassSlabBlock.java).
-- [state_lines.json](../development/patcherMod/src/main/resources/assets/creativeengineering/state_lines.json).
+- [state_lines.json](../development/creativeCommon/src/main/resources/assets/creativecommon/state_lines.json).
 - [KegWthit.java](../development/backportedBrewin/src/main/java/umpaz/brewinandchewin/integration/wthit/KegWthit.java).
-- [devtools/WthitIconDump.java](../development/patcherMod/src/main/java/com/SaintAlfonzo/creativeengineering/devtools/WthitIconDump.java) → `kubejs/exported/wthit_icons.json` → [tools/wthit_icon_audit.py](../tools/wthit_icon_audit.py).
+- [devtools/WthitIconDump.java](../development/creativeCommon/src/main/java/com/SaintAlfonzo/creativecommon/devtools/WthitIconDump.java) → `kubejs/exported/wthit_icons.json` → [tools/wthit_icon_audit.py](../tools/wthit_icon_audit.py).
 - [tools/gen_display_delight_models.py](../tools/gen_display_delight_models.py); `check_display_delight_models` in [tools/build_deploy.py](../tools/build_deploy.py).
 - `surface/WthitRunSpeed`, CD `compat/wthit/WthitCropGrowth`: the two older lines.
 

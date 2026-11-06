@@ -1,8 +1,0 @@
-{
-  "parent": "minecraft:block/cube_bottom_top",
-  "textures": {
-    "bottom": "incubation:block/chicken_egg_crate_bottom",
-    "side": "incubation_additions:block/duck_egg_crate_side",
-    "top": "incubation_additions:block/duck_egg_crate_top"
-  }
-}

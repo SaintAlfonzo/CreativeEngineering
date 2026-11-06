@@ -38,7 +38,7 @@ import gen_out  # noqa: E402
 ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 RECIPES = os.path.join(ROOT, 'kubejs', 'exported', 'food', 'recipes.json')
 TAGS = os.path.join(ROOT, 'kubejs', 'exported', 'tags', 'item_tags_by_item.json')
-DICT = os.path.join(ROOT, 'kubejs', 'startup_scripts', '_lib', 'item_dict.js')
+DICT = str(pack_paths.ITEM_DICT)
 OUT = os.path.join(ROOT, 'kubejs', 'generation_scripts', 'food', 'mortar_catalog.json')
 
 TYPES = ('create:milling', 'create:crushing')

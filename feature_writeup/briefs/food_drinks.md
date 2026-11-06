@@ -31,7 +31,7 @@ bunch; #11 and #12 are new sections. Status per TODO.
 | `food/drinks #11` Cherry Cream Soda and fruit sodas | Planned | small to medium | after the decisions |
 
 **Shared pieces (state 2026-10-31):**
-- **NCH Kettle helper `frBrewing` exists** ([neoCraftHelper.js:1113](../../development/patcherMod/src/main/resources/kubejs_startup/creativeengineering/func/neoCraftHelper.js#L1113);
+- **NCH Kettle helper `frBrewing` exists** ([neoCraftHelper.js:1113](../../development/creativeCommon/src/main/resources/kubejs_startup/creativecommon/func/neoCraftHelper.js#L1113);
   the shared helpers live in patcherMod's jar, so an edit needs a patcherMod rebuild and restart). It writes Creative
   Delight's tank format (farmers_respite.md K8): 1-2 ingredients, `opts.base` (the tank fluid one brew uses, 250 mB,
   default water, `'none'` for none), `container` (glass bottle), `time` 200, `exp` 0.35, one result. Drink tiers are the
@@ -42,7 +42,7 @@ bunch; #11 and #12 are new sections. Status per TODO.
   (Creative Delight, moved 2026-10-25): pack fluids are virtual (`noBucket().noBlock()`), a `drink(id, name, color)`
   shorthand at line 25 for Kettle drinks; ids in [fluid_dict.js](../../kubejs/startup_scripts/_lib/fluid_dict.js)
   ("Pack fluids", e.g. `f.chorus_juice` line 89, `f.milk_coffee` 102), `forge:fluid/<name>` tags in
-  [fluidtags.js](../../kubejs/server_scripts/tags/fluidtags.js). JEI shows a bottle's effects on its fluid through the
+  [fluidtags.js](../../kubejs/data/creativeengineering/kubejs/tags/fluidtags.js). JEI shows a bottle's effects on its fluid through the
   emptying recipe (patcherMod `compat/DrinkFluidEffects.java`), so a drink fluid needs a working `createBottle` pair.
 - **Kettle recipes** live in Creative Delight's
   [farmersrespite/kettle.js](../../kubejs/data/creativedelight/kubejs/farmersrespite/kettle.js) (109 lines: section 1
@@ -472,7 +472,7 @@ Every `NCH.createBottle` pair loads, so the Spout bottles and the Item Drain emp
   "nbt":{},"amount":0}` and `Can't modify the empty stack`. `createemptying/*` raise nothing (whether they give fluid is
   unchecked). `logs/kubejs/server.log` of 17:20 has no such line (the errors are in latest.log only).
 - Callers: kettle.js:107 (`BOTTLES.forEach(b => R.createBottle(...))`) and miners_delight/recipes.js:45 (water cup).
-- [createBottle](../../development/patcherMod/src/main/resources/kubejs_startup/creativeengineering/func/neoCraftHelper.js#L1883)
+- [createBottle](../../development/creativeCommon/src/main/resources/kubejs_startup/creativecommon/func/neoCraftHelper.js#L1883)
   builds `Fluid.of(fluid, mb)` inside NCH and passes `[container, fluidStack]` to `createFilling` (line 1828), which runs
   `toId`, `_validateAny` (442; calls `_ingredientLike` 189, `_isFluidLike` 436) on it and then
   `e.recipes.create.filling(output, input)`.

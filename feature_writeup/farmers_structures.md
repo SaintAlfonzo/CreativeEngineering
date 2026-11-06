@@ -126,8 +126,8 @@ Needs `farmers_upstream/` in the game folder (and on the server) and the Creativ
 
 ## 5. How it is built
 
-- **Reader:** patcherMod `worldgen/donor/` ([FarmersDonor](../development/patcherMod/src/main/java/com/SaintAlfonzo/creativeengineering/worldgen/donor/FarmersDonor.java),
-  [FarmersTranslator](../development/patcherMod/src/main/java/com/SaintAlfonzo/creativeengineering/worldgen/donor/FarmersTranslator.java),
+- **Reader:** patcherMod `worldgen/donor/` ([FarmersDonor](../development/creativeCommon/src/main/java/com/SaintAlfonzo/creativecommon/worldgen/donor/FarmersDonor.java),
+  [FarmersTranslator](../development/creativeCommon/src/main/java/com/SaintAlfonzo/creativecommon/worldgen/donor/FarmersTranslator.java),
   `UpstreamJars` pins the sha1). A built-in server data pack `farmers_structures_donor` at the top of the data packs (below
   KubeJS) over the installed 1.0.0 mod pack. A missing or different jar adds nothing and logs one warning.
 - **What it converts:** `structure/` -> `structures/`, `tags/block` -> `tags/blocks`; templates: item `count` -> `Count`

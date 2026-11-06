@@ -41,6 +41,7 @@ from collections import Counter, OrderedDict, defaultdict
 from pathlib import Path
 
 sys.path.insert(0, str(Path(__file__).resolve().parent))
+import pack_paths as PP  # noqa: E402
 import food_catalog as fc  # noqa: E402  (item_dict parsing, ingredient parsing)
 
 INSTANCE = Path(__file__).resolve().parent.parent
@@ -181,7 +182,10 @@ SQUARE_SANDWICH = {
 # Renamed foods whose dump name still says the old one (renames take effect at the next /dumpall)
 FAMILY_OVERRIDE = {'oceanic_delight:sponge_cake': 'pie/whole', 'oceanic_delight:sponge_cake_slice': 'pie/slice',
                    # rice bowl with no "rice" in its name (barbeques_delight.md 4 step 10)
-                   'barbequesdelight:bibimbap': 'meal/rice'}
+                   'barbequesdelight:bibimbap': 'meal/rice',
+                   # Large Meals (plan_meals_rolls_bbq.md A2, A5): the pot pie is a feast, not a pie; plate meals
+                   'largemeals:mushroom_pot_pie_block': 'feast/whole', 'largemeals:mushroom_pot_pie': 'feast/serving',
+                   'largemeals:cod_deluxe': 'meal/plate', 'largemeals:hearty_lunch': 'meal/plate'}
 # Sweet or baked one-offs that fit no other family: the dessert catchall, ahead of the special-type no-family rule
 DESSERT_OTHER = {'botania:mana_cookie', 'create_confectionery:gingerbread'}
 UNSORTED = 'unsorted'
@@ -394,7 +398,8 @@ def classify(r):
         return 'sandwich/square' if r['id'] in SQUARE_SANDWICH else 'sandwich/roll'
     if has(n, 'wrap', 'taco', 'fajita'):
         return 'sandwich/wrap'
-    if has(n, 'skewer', 'on a stick', 'corn dog', 'meatballs') and t == 'handheld':
+    # 'barbecue stick': End's and Miner's sticks before their Skewer renames reach the dump (plan_meals_rolls_bbq.md C5)
+    if has(n, 'skewer', 'on a stick', 'barbecue stick', 'corn dog', 'meatballs') and t == 'handheld':
         return 'skewer'
     if has(n, 'hawberry roll'):
         return 'candy/piece'
@@ -550,7 +555,7 @@ def build_rows(cat, foods, blocks):
 
 def add_dough_rows(rows, key_val):
     """Every f.dough_* in food_dict.js is a dough, edible or not (Create dough, cookie dough, sourdough ...)."""
-    src = (INSTANCE / 'kubejs/startup_scripts/_lib/food_dict.js').read_text()
+    src = (PP.STARTUP_LIB / 'food_dict.js').read_text()
     names = {}
     for group in load_json(INSTANCE / 'kubejs/exported/display_names.json', 'entries').values():
         for e in group:
@@ -842,6 +847,7 @@ RULES = {
     'preserve/jam': dict(place=[R('Own block, while sneaking (Fruits Delight jams)', PF,
                                   only_if(lambda m: m.row['mod'] == 'fruitsdelight', placed_on('sneak')))],
                          recipe=[D('Cooking Pot: fruit + sugar in a jar (Mixer mirrors it)', lambda m: m.at('Cooking Pot')),
+                                 R('Every jam cooks 400 ticks in the Cooking Pot (Fruits Delight 200 raised)', 'owner 2026-11-04'),
                                  P('Pot recipe: 4 fruit + 1 sugar + 1 lemon slice -> 2 jam', T('dishes/jams #2')),
                                  P('One jam item (Fruits Delight) and one jam block (Vintage Delight), always a mason jar '
                                    'recoloured to the jam; recipes take jam, never bottled jam or jelly',
@@ -1017,8 +1023,12 @@ RULES = {
     'skewer': dict(
         can=[R('Handhelds never canned (precedent); per item, can parity 2.25', CP, CAN)],
         place=[D('Food Plate', placed_on('plate'))],
-        recipe=[D('Shaped only + one sequenced assembly (as Crispy Skewer, ' + RCK + ' 2.1)',
-                  lambda m: m.no_shapeless() and m.at('Sequenced assembly')),
+        recipe=[R('One line per skewer (CD F.skewer, plan_meals_rolls_bbq.md C2): a raw skewer (not a food; Barbeque\'s '
+                  'Delight basin, or by hand from raw ingredients) cooked on the Grill, furnace, smoker or campfire; a '
+                  'heatless craft from cooked ingredients where they have a cooked form; one sequenced assembly where '
+                  'one existed', 'barbequesdelight/skewers.js', lambda m: m.at(('Smoker', 'Campfire / Skillet'))),
+                D('Shaped only + one sequenced assembly (as Crispy Skewer, ' + RCK + ' 2.1); the End Skewer is shapeless '
+                  '(owner 2026-11-04)', lambda m: m.no_shapeless() and m.at('Sequenced assembly')),
                 P('Skewers become their own food type (recipes, which foods open)', T('dishes/meals #13'))]),
     'roll': dict(
         can=[R('Handhelds never canned (precedent); per item, can parity 2.25', CP, CAN)],
@@ -1476,12 +1486,12 @@ def main():
     cat, foods, blocks, recipes, dump_place, tags, key_val, types, place_keys = load()
     rows = build_rows(cat, foods, blocks)
     add_dough_rows(rows, key_val)
-    removed = (INSTANCE / 'kubejs/startup_scripts/_lib/removed_items.js').read_text()
+    removed = (PP.STARTUP_LIB / 'removed_items.js').read_text()
     removed = removed[removed.index('global.removedItems'):]
     removed = re.findall(r'i\.(\w+)', removed[:removed.index(']')])
     # merged items (the old id of each [old, new] pair): the pack's list (dict keys) and Creative Delight's swap
     # lists (ids, data/creativedelight/swaps/merges_*.json; item_merges.md 6)
-    f = INSTANCE / 'kubejs/startup_scripts/_lib/item_merges.js'
+    f = PP.STARTUP_LIB / 'item_merges.js'
     if f.exists():
         removed += re.findall(r'\[\s*i\.(\w+)\s*,\s*i\.\w+\s*\]', f.read_text())
     swaps = INSTANCE / 'development/creativeDelight/src/main/resources/data/creativedelight/swaps'

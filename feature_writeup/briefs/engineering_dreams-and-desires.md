@@ -7,7 +7,7 @@ in [recipes_wood.md](../recipes_wood.md) (2.6 D&D woods, smoked wood RW-23 to RW
 (exclusive outputs, rose quartz sanding, EN-19 to EN-21), [blockrunner.md](../blockrunner.md) 3.5 (asphalt friction),
 [fixes_compat.md](../fixes_compat.md) 2.3 / 2.6 (drill and saw crash, axe ghosts) and
 [nether_worldgen.md](../nether_worldgen.md) F7 (deep layer). D&D code is in
-`kubejs/server_scripts/engineering/dreams_desires.js` (painted asphalt), `wood/smoked_wood.js` + `tags/wood_tags.js`
+`kubejs/data/creativeengineering/kubejs/engineering/dreams_desires.js` (painted asphalt), `wood/smoked_wood.js` + `tags/wood_tags.js`
 (smoked wood), `startup_scripts/_lib/removed_woods.js` (removed woods), `engineering/redstone.js` (rose quartz sanding).
 
 Rows #1 to #6 cite "scratchpad 2026-10-19" (git `2e8687f`, `feature_writeup/todo/change_scratchpad.md` lines 86-95):
@@ -39,7 +39,7 @@ Shipped: #1 smoked wood, #3 rose quartz sanding, #4 removed woods and #6 painted
 | #1, #3, #4 | Testing | see Built, needs play | done |
 
 `dreams_desires.js` stays the D&D script for #2, #7 (and the recipe half of #8); tags in
-`kubejs/server_scripts/tags/engineeringtags.js` (or `wood_tags.js` for wood).
+`kubejs/data/creativeengineering/kubejs/tags/engineeringtags.js` (or `wood_tags.js` for wood).
 
 Related rows: `worldgen/biomes/netherblocks #4` (no glowstone in the Overworld; [brief](worldgen_biomes_netherblocks.md) #4),
 `structures/rates-and-groups #7` (ocean geode depth, [brief](structures_rates-and-groups.md)), `magic #2` (Geode+ shards),
@@ -63,7 +63,7 @@ Only the woods meant to smoke get smoking recipes: no Botania magic woods and no
 
 - BUILT 2026-11-01: owner call is vanilla overworld woods only (oak, spruce, birch, jungle, acacia, dark oak, mangrove);
   `wood_tags.js` now adds those 91 item_dict ids per shape (allow-list). The notes below describe the old state.
-- `kubejs/server_scripts/tags/wood_tags.js` lines 35-52 build the 13 `#creativeengineering:smokable/<shape>` tags with
+- `kubejs/data/creativeengineering/kubejs/tags/wood_tags.js` lines 35-52 build the 13 `#creativeengineering:smokable/<shape>` tags with
   `global.tags.addMatching` from the vanilla / forge wood tags. `smokeExcept` (line 39) = `*:*smoked*`, `*:*polished*`,
   `*:*vertical*`. Botania (`botania:*`) and driftwood (`*:driftwood`, `*:driftwood_log`) are excluded only in the log
   (line 40) and wood (41) tags; the stripped, planks, slab, stairs, fence, fence gate, door, trapdoor, button and pressure
@@ -281,7 +281,7 @@ Tune what lava touching a milkshake generates, and fold the same results into mi
 - Those two numbers are in the **server config** `serverconfig/create_dd-server.toml` (per world: `saves/<world>/serverconfig/`
   in New World, Workspace and WorldA to WorldG, 25 / 5 where read; no `defaultconfigs/create_dd-server.toml` exists, checked
   2026-10-31), range 1 to 100 and 0 to 100.
-- The pack's machine route for ore stones exists: `kubejs/server_scripts/engineering/resource_blocks.js` has
+- The pack's machine route for ore stones exists: `kubejs/data/creativeengineering/kubejs/engineering/resource_blocks.js` has
   `R.createExtruding(i.veridium, [lava 1000, water 1000], e, 'veridium_extruding', catalyst dust block, 10)` and the same for
   crimsite and the other stones, plus compacting (250 mB lava + 2 gravel + 6 nuggets). Extruding with milkshake instead of
   water for the base stones (scorchia, dolomite, ...) is not defined: unverified (grep `milkshake` in server_scripts finds nothing).

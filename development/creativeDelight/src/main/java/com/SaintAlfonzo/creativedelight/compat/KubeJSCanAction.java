@@ -2,7 +2,7 @@ package com.SaintAlfonzo.creativedelight.compat;
 
 import com.SaintAlfonzo.creativedelight.food.CanServings;
 
-import com.SaintAlfonzo.creativeengineering.compat.kubejs.IngredientActions;
+import com.SaintAlfonzo.creativecommon.compat.kubejs.IngredientActions;
 
 /**
  * Registers the {@value #ID} KubeJS custom ingredient action: a can used in a KubeJS

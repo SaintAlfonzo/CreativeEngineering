@@ -1,7 +1,6 @@
 // requires: barbequesdelight
 // Tags of the Barbeque's Delight port (Creative Delight member barbequesdelight, barbeques_delight.md 4 step 2). The port's
-// own data has raw_skewers / grilled_skewers and the mineable tags; the skewer family and saltable tags wait for the
-// skewer fold (O1, dishes/meals #46). 1.3.0's CarryOn blacklist is dropped (no CarryOn in the pack).
+// own data has raw_skewers / grilled_skewers and the mineable tags; the eight raw pack skewers join raw_skewers here. 1.3.0's CarryOn blacklist is dropped (no CarryOn in the pack).
 ServerEvents.tags('item', e => {
 	if (!global.CD || !global.CD.on('barbequesdelight')) return
 	var t = global.tags
@@ -10,6 +9,14 @@ ServerEvents.tags('item', e => {
 	t.add(e, i.t_raw_skewers, [i.raw_cod_skewer, i.raw_salmon_skewer, i.raw_chicken_skewer, i.raw_mushroom_skewer,
 		i.raw_beef_skewer, i.raw_lamb_skewer, i.raw_rabbit_skewer, i.raw_pork_sausage_skewer, i.raw_potato_skewer,
 		i.raw_vegetable_skewer])
+	// The eight raw pack skewers (plan_meals_rolls_bbq.md C3): powders season them and the Grill takes them, as the BBQ
+	// raws; each only while its mod is loaded (the member registers it then)
+	;[[i.raw_bbq_stick, 'farmersdelight'], [i.raw_end_barbecue_stick, 'ends_delight'],
+		[i.raw_improvised_barbecue_stick, 'miners_delight'], [i.raw_nether_skewer, 'nethersdelight'],
+		[i.raw_seafood_skewer, 'oceanic_delight'], [i.raw_turnip_mutton_skewer, 'veggiesdelight'],
+		[i.raw_crispy_skewer, 'endersdelight'], [i.raw_caveskewer, 'hostiledelight']].forEach(r => { // G5
+		if (global.CD.on(r[1])) t.add(e, i.t_raw_skewers, r[0])
+	})
 	t.add(e, i.t_grilled_skewers, [i.grilled_cod_skewer, i.grilled_salmon_skewer, i.grilled_chicken_skewer,
 		i.grilled_mushroom_skewer, i.grilled_beef_skewer, i.grilled_lamb_skewer, i.grilled_rabbit_skewer,
 		i.grilled_pork_sausage_skewer, i.grilled_potato_skewer, i.grilled_vegetable_skewer])

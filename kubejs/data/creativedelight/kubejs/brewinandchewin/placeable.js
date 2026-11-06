@@ -4,8 +4,28 @@
 // Placeable food tags, brewinandchewin part. Readers merge every part with global.CD.genMerge('placeable') (creative_delight.md 28.2).
 if (global.CD) global.CD.genPut('placeable', 'brewinandchewin', {
  "placeable": [
+  "cheesy_pasta",
+  "creamy_onion_soup",
+  "fiery_fondue",
+  "horror_lasagna",
   "pizza",
-  "quiche"
+  "quiche",
+  "scarlet_pierogi",
+  "vegetable_omelet"
+ ],
+ "placeable/sneak": [
+  "cheesy_pasta",
+  "creamy_onion_soup",
+  "fiery_fondue",
+  "horror_lasagna",
+  "scarlet_pierogi",
+  "vegetable_omelet"
+ ],
+ "placeable_on_plate": [
+  "ham_and_cheese_sandwich"
+ ],
+ "placeable_on_small_plate": [
+  "quiche_slice"
  ],
  "placeable_on_coaster": [
   "beer",

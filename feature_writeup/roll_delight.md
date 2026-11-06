@@ -38,7 +38,8 @@ prefix `ROLL-`.
   noodle soups, on top of the 3.3 list.
 - **Chopstick tooltip on every chopstick food** (3.3): `Can be eaten in the offhand w/ chopsticks`, or, when the food has
   effects, `Can be eaten in the offhand w/ chopsticks, lengthens effect length`.
-- **D14: Cooked Nether Wart follows Cooked Rice** (4.1): type `veggie/cooked`, stack 64, returns a bowl, canned.
+- **D14: Cooked Nether Wart follows Cooked Rice** (4.1): stack 64, returns a bowl, canned. Type changed 2026-11-04
+  (plan_meals_rolls_bbq.md B1): `ingredient` (family `ingredient/other`), no longer a cooked vegetable; the can stays.
 - **D15: a medley leaves its empty plate** at 0 servings.
 - **D16: chopsticks repair on an anvil with any planks.**
 
@@ -56,7 +57,7 @@ asks for it by name. Upstream bugs are fixed (3.5).
 | Fold-in | 4 | 19 steps planned |
 | Decisions | 5 | D1-D17, all settled, D6 values confirmed (2026-11-01) |
 | Build | 4.2 | BUILT 2026-11-01 (member + CD scripts); in `mods/` since the CD jar of 11-02 14:01, not played; `/dumpall`, can generator and `/cegen` wait on the game |
-| Tests | 8 | ROLL-01..22 in game: none run. Scratch r1102b (2026-11-02): SQ-ROLL-01, -02, -05 to -09 PASS; SQ-ROLL-03, -04 OPEN (probe eats from the main hand only); CQ-ROLL-10 waits for the client round |
+| Tests | 8 | ROLL-01..27 in game: none run. Scratch r1102b (2026-11-02): SQ-ROLL-01, -02, -05 to -09 PASS; SQ-ROLL-03, -04 OPEN (probe eats from the main hand only); CQ-ROLL-10 waits for the client round |
 
 - **Jar:** 178 files; bundles `mixinextras-forge-0.5.0` (jarjar), unused by the code.
 - **Licence:** ARR (`mods.toml`). No fork; donor jar for art and models, Java written from behaviour.
@@ -133,6 +134,11 @@ so on), not as a special recipe. The upstream recipe (2 iron + 3 gold ingots + g
   Golden Roll is built on); the slice comes from cutting the Golden Roll as upstream. Rose gold counts as gold.
 - **Type and tags:** food type `golden` (golden apple tier, always-edible allowed), item tag `golden`, values from the golden
   tier in [food.md](food.md), not the upstream 12 / 1.2. Same plating, never-canned and stack rules as the other golden foods.
+- **Values (2026-11-04, plan_meals_rolls_bbq.md B3):** the golden rule of [food.md](food.md) 3.16 on the Rice Roll (14 / 0.6):
+  x2 hunger capped at 20, modifier kept, so **20 / 0.6**, applied by the `PAIRS` map of CD `goldenfood/golden_values.js`
+  (the member registers the same numbers). Slice static **10 / 0.5** (half the roll, the Rice Roll's own ratio). No effects,
+  not always edible, stack 64 on both. The Golden Dried Kelp value and effect copy (`roll_delight/food_values.js`) is gone.
+- **Slice not gildable:** made only by cutting the Golden Roll; no `goldenGild` / `goldenEnchant` names it (checked 2026-11-04).
 - **No enchanted tier** unless the Golden Food rules create one for every golden food (`goldenEnchant`); nothing added for the roll.
 - Chopsticks row (Night Vision) keeps the slice.
 
@@ -190,7 +196,7 @@ craft of already-cooked food, output total = input total (ratio 1.0), not the 1.
 | Salmon Maki Roll (4 salmon slice 4 + 2 rice 12 + 3 kelp 3) | 19 | 15 / 0.6, slices 9 | **13 / 0.6**, slices **6 / 0.5** |
 | Mushroom Roll (cabbage 2 + 2 rice 12 + colony 0 + 3 kelp 3) | 17 | 14 / 0.6, slices 8 | **11 / 0.6**, slices **6 / 0.5** |
 | Ancient Roll (ancient fruit 4 + 2 rice 12 + chorus flower 0 + 3 kelp 3) | 19 | 16 / 0.6, slices 10 | **13 / 0.6**, slices **6 / 0.5** |
-| Golden Roll | golden tier ([food.md](food.md)), base Rice Roll | 12 / 1.2, slices 6 | golden tier copied from Golden Dried Kelp: **4 / 1.2**, always edible, Regeneration II 5 s, Absorption I 120 s, Nourishment 120 s, stack 16; slice **2 / 1.2**, always edible, **no effects** (built 2026-11-01; owner check: effects on the slice would be handed out 3 times per roll) |
+| Golden Roll | golden tier ([food.md](food.md)), base Rice Roll | 12 / 1.2, slices 6 | golden rule on the Rice Roll (2.3, 2026-11-04): **20 / 0.6**, no effects, stack 64; slice **10 / 0.5**, no effects, stack 64 (was the Golden Dried Kelp copy: 4 / 1.2, always edible, Regeneration II, Absorption I, Nourishment, stack 16; slice 2 / 1.2) |
 | Tobiko Roll (3 Rice Roll Slice 21 + frogspawn 0 -> 3) | 21 | 7 / 0.6 | **7 / 0.6** (ratio 1.0: unchanged) |
 | Nether Roll (2 porkchop 6 + cooked nether wart 6 -> 2) | 12 | 7 / 0.7 | **6 / 0.7** (bacon or Prepared Flesh inputs give less raw hunger; the roll stays 6) |
 | Cooked Nether Wart | wart 0 + bowl | 6 / 0.3 | 6 / 0.3 (as Cooked Rice 6 / 0.4; saturation kept) |
@@ -431,7 +437,7 @@ already in that family. "Different" below means a pattern the family does not ye
 |---|---|---|
 | Rice, Mushroom, Ancient, Salmon Maki Roll, Golden Roll (+ slices) | `roll` (Golden also type `golden`, tag `golden`) | **Structure: same** (wrapper + filling, plated whole / slice, never canned, crafting + assembly). **Values: different.** Family today is hunger 4 to 15 (median 7), saturation 2.4 to 30 (median 8.4); upstream whole rolls are 10 to 16 hunger (Ancient 16 is above the family maximum) and each slice is as filling as a whole FD roll. D6 stands: scale to the FD roll |
 | Tobiko Roll, Nether Roll | `roll` | **Same.** Standalone rolls with no slice (as Shrimp / Sea Pickle whole rolls); the shapeless x2 / x3 yield matches the FD cod / salmon roll craft. Nether Roll is the first `roll` with a land-meat filling that is not cooked, but raw meat appears in 26 roll recipes already |
-| Cooked Nether Wart | `veggie/cooked`, exactly as Cooked Rice (D14) | **Same as Cooked Rice, the family's own bowl food:** type `cooked/veggie`, stack 64, returns a bowl, boiled in the Cooking Pot, generated can (x2 x 4 servings, 6 or 5 + salt, [can_parity.md](can_parity.md) 2.6; upstream had none), Display Delight placed / coaster. Hunger 6 / saturation 3.6 sits inside the type's range. Only new thing: the first fungus / Nether crop in the type, and no effect (Cooked Rice has Comfort; none added here). The earlier claim that no cooked vegetable returns a bowl was wrong |
+| Cooked Nether Wart | `ingredient/other` (2026-11-04, plan_meals_rolls_bbq.md B1; was `veggie/cooked` as Cooked Rice, D14) | **Type `ingredient` since 2026-11-04:** no cooked-vegetable tag, recipe or compost group reads it; the explicit can row stays. Before that, same as Cooked Rice: type `cooked/veggie`, stack 64, returns a bowl, boiled in the Cooking Pot, generated can (x2 x 4 servings, 6 or 5 + salt, [can_parity.md](can_parity.md) 2.6; upstream had none), Display Delight placed / coaster. Hunger 6 / saturation 3.6 sits inside the type's range. Only new thing: the first fungus / Nether crop in the type, and no effect (Cooked Rice has Comfort; none added here). The earlier claim that no cooked vegetable returns a bowl was wrong |
 | Legendary / Mythical Roll Medley | not a family; a feast block like the FD Rice Roll Medley (`food_blocks`, Feast Plating tab) | **Same as the FD medley:** 8 servings, rolls in a fixed order, taken by an empty hand. Differences: it is crafted from a bowl and the servings are mixed (3 + 3 + 2), as the FD medley mixes three kinds (3 + 2 + 3) |
 | Chopsticks, Wrapped Chopsticks | not food | tool and decoration; no family |
 
@@ -455,7 +461,7 @@ Ordering: 0 before everything; 1 before 2-4 (ids must exist in the dump); 2 befo
   with the port inputs, one assembly per roll and medley, five cuttings, pot recipe, `goldenGild`; the Slice & Dice pot copy covers
   the Mixer), `tags.js` (`chopstick_foods` = 4 fish family tags + 122 ids, missing ids filtered and logged once;
   `nether_roll_meat`; medleys knife-mineable and BlockRunner confectionery as FD feasts; wrapped chopsticks axe), startup
-  `roll_delight/food_values.js` (golden tier onto the Golden Roll), `compost.js` (rice / mushroom / ancient rolls 0.85, slices 0.5,
+  `roll_delight/food_values.js` (golden tier onto the Golden Roll; removed 2026-11-04, B3), `compost.js` (rice / mushroom / ancient rolls 0.85, slices 0.5,
   as the FD Kelp Roll), client `roll_delight/jei_info.js` (frogspawn shears page). Dicts, `transition_items.js`, `food_types.json`,
   `gen_can_types.py` (Cooked Nether Wart can, waits on `/dumpall`), [names.md](names.md) 3.3, [can_parity.md](can_parity.md) 2.6.
 - **Not built (open):** Display Delight plates and the Cooked Nether Wart placed / coaster look (need art and `display_blocks.json`
@@ -538,9 +544,15 @@ so nothing was eaten; rerun after the off-hand fallback in the probe.
 | ROLL-20 | Ancient Roll in JEI and craft; Cooked Nether Wart can | recipe shows Ancient Fruit and Chorus Flower; the cooked wart can exists and opens to 4 servings |
 | ROLL-21 | Hover a chopstick food without effects (Salmon Slice), one with effects (Glowing Calamari Roll, Cooked Rice), and a non-listed food | first: `Can be eaten in the offhand w/ chopsticks`; the effect foods: `..., lengthens effect length`; non-listed: no line |
 | ROLL-22 | Anvil repair of damaged chopsticks with oak, spruce and a modded plank | each repairs |
+| ROLL-23 | JEI uses of Cooked Nether Wart; `/dumptags` item `creativeengineering:food_type/cooked/veggie` | Nether Roll only (and its can); not in the cooked-vegetable tag; the can still crafts |
+| ROLL-24 | Hover the Salmon Maki slice | "Salmon Maki Roll Slice" |
+| ROLL-25 | Eat a Golden Roll and a Golden Roll Slice (AppleSkin) | 20 / 0.6 and 10 / 0.5, no effects, not eaten at full hunger, stack 64 |
+| ROLL-26 | JEI uses of the Golden Roll Slice | cutting result only; no gilding recipe with the slice as base or result |
+| ROLL-27 | JEI search "canned" for any roll, slice or medley | none |
 
 ## 9. History
 
+- 2026-11-04 (plan_meals_rolls_bbq.md B): Cooked Nether Wart to type `ingredient`; slice renamed Salmon Maki Roll Slice; Golden Roll 20 / 0.6 and slice 10 / 0.5 by the golden rule (kelp copy dropped); slice-gild and no-can checks; ROLL-23..27.
 - 2026-10-30: investigation written (jar inventory, decompiled code, overlap against the 10-24 item dump), nothing built.
 - 2026-10-31: owner rulings recorded: Rice Roll kept (not an overlap), Amazing Salmon Roll held for evaluation, Mushroom, Golden (golden food system) and Tobiko added; frogspawn source defined (shears plus Carnivore Frog Roe).
 - 2026-10-31: D9 settled (shears kept, Carnivore source optional, no work); Golden Roll handled like Golden Food's added foods (`goldenGild`).

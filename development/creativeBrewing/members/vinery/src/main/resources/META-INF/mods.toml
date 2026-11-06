@@ -35,11 +35,20 @@ versionRange="*"
 ordering="AFTER"
 side="BOTH"
 
+# Creative Calendar: forge/PackTime calls its time.WineTime (the pack's [time] master), so it is mandatory here as
+# well as on Creative Brewing. AFTER: Calendar's config is registered before Vinery reads it.
+[[dependencies.vinery]]
+modId="creativecalendar"
+mandatory=true
+versionRange="[1.0.0,)"
+ordering="AFTER"
+side="BOTH"
+
 # Satisfy's Foundation library 1.0.1 (MIT), ported in the same jar. Own mod id so its registry names stay upstream's.
 [[mods]]
 modId="foundation"
 version="1.0.1-ce-19.2"
-displayName="Creative Brewing"
+displayName="Foundation (Creative Brewing)"
 authors="satisfy (Foundation); 1.19.2 backport: SaintAlfonzo"
 description='''Satisfy's shared library for the Let's Do mods (furniture, storage, seats, banners, armor sets), ported to Forge 1.19.2 for the Vinery backport.'''
 

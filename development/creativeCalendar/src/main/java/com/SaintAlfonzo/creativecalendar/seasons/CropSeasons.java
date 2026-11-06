@@ -87,9 +87,8 @@ public final class CropSeasons {
         WARM_WET("warm_wet", new Fertility[]{N, F, N, O}, new Fertility[]{F, N}),
         /** Vinery apple trees: fertile autumn, neutral spring and summer, off winter; wet/dry as temperate. */
         AUTUMN_FRUIT("autumn_fruit", new Fertility[]{N, N, F, O}, new Fertility[]{N, O}),
-        /** Grasses (farming/crops #28; owner rule 2026-11-03): off in summer and in both tropical seasons (wet/dry
-         *  biomes, arid ones included), neutral in spring, autumn and winter; their spread, see {@link #refuseSpread}. */
-        GRASS("grass", new Fertility[]{N, O, N, N}, new Fertility[]{O, O}),
+        /** Grasses (farming/crops #28): off in winter only, neutral in every other season and in wet/dry biomes; their spread, see {@link #refuseSpread}. */
+        GRASS("grass", new Fertility[]{N, N, N, O}, new Fertility[]{N, N}),
         NETHER("nether", null, null),
         END("end", null, null),
         CAVE("cave", null, null),
@@ -194,6 +193,24 @@ public final class CropSeasons {
         }
         if (stack.getItem() instanceof BlockItem bi) return typeOf(bi.getBlock().defaultBlockState());
         return null;
+    }
+
+    /**
+     * The type to show players (tooltip, WTHIT): like {@link #typeOf(BlockState)}, but null for plants that do not grow
+     * (grass, tall grass, ferns: bush-shaped blocks of the grass type). They stay typed for the spread hooks.
+     */
+    @Nullable
+    public static Type displayTypeOf(BlockState state) {
+        Type type = typeOf(state);
+        return type == Type.GRASS && state.getBlock() instanceof net.minecraft.world.level.block.BushBlock ? null : type;
+    }
+
+    /** Item form of {@link #displayTypeOf(BlockState)}; the planting-item tag types always show. */
+    @Nullable
+    public static Type displayTypeOf(ItemStack stack) {
+        Type type = typeOf(stack);
+        if (type == Type.GRASS && stack.getItem() instanceof BlockItem bi) return displayTypeOf(bi.getBlock().defaultBlockState());
+        return type;
     }
 
     /** What the crop's type makes of where it stands; NEUTRAL for an untyped block or with the feature off. */

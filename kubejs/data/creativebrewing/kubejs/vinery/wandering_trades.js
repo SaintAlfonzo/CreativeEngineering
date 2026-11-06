@@ -10,12 +10,14 @@ MoreJSEvents.wandererTrades(e => {
 
 	t.winemakerReset()
 	// no Fruits Delight apple sapling: Vinery's apple tree is the pack's apple tree
-	t.winemakerSell([
-		i.bayberry_sapling, i.durian_sapling, i.fig_sapling, i.hawberry_sapling,
-		i.kiwi_sapling, i.lychee_sapling, i.mango_sapling, i.mangosteen_sapling, i.orange_sapling,
-		i.peach_sapling, i.pear_sapling, i.persimmon_sapling,
-	], { emeralds: 5, maxUses: 8 })
-	t.winemakerSell([i.pineapple_sapling], { emeralds: 3, maxUses: 8 })
+	if (global.has('fruitsdelight')) {
+		t.winemakerSell([
+			i.bayberry_sapling, i.durian_sapling, i.fig_sapling, i.hawberry_sapling,
+			i.kiwi_sapling, i.lychee_sapling, i.mango_sapling, i.mangosteen_sapling, i.orange_sapling,
+			i.peach_sapling, i.pear_sapling, i.persimmon_sapling,
+		], { emeralds: 5, maxUses: 8 })
+		t.winemakerSell([i.pineapple_sapling], { emeralds: 3, maxUses: 8 })
+	}
 	// Vinery's own list sells the white jungle grape in this slot instead of its seeds
 	t.winemakerSell([i.grape_seeds_white_jungle], { emeralds: 1, maxUses: 8 })
 

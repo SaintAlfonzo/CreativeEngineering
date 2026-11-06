@@ -34,5 +34,18 @@
   "creativeengineering:pot_contents": true,
   "barbequesdelight:grill": true,
   "creativedelight:powdered_sugar_name": true,
-  "creativedelight:cookware_toggle": true
+  "creativedelight:cookware_toggle": true,
+  "creativecommon:block_model_icon": true,
+  "creativecommon:coaster": true,
+  "creativecommon:holder_contents": true,
+  "creativecommon:hive": true,
+  "creativecommon:state_lines": true,
+  "creativecommon:campfire": true,
+  "creativecommon:sheetmetal_tank": true,
+  "creativecommon:kitchen_station": true,
+  "creativecommon:remainder_buffer": true,
+  "creativecommon:sheared": true,
+  "creativecommon:silk_touch": true,
+  "creativecommon:operator_blocks": true,
+  "creativecommon:pot_contents": true
 }

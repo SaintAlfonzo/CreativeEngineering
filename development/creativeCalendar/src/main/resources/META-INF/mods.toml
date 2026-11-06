@@ -26,9 +26,9 @@ side="BOTH"
 # loader. Becomes creativecommon at the final swap (creative_split.md 7.6 Q1). The range must exclude every patcherMod
 # that still carries time/ and seasons/ (it would register /cetime and the season mixins twice).
 [[dependencies.creativecalendar]]
-modId="creativeengineering"
+modId="creativecommon"
 mandatory=true
-versionRange="[1.1.05,)"
+versionRange="[1.1.0,)"
 ordering="AFTER"
 side="BOTH"
 # Creative Compat: required by every other Creative jar (creative_split.md 7.6).

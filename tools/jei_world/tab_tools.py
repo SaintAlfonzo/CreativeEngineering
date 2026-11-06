@@ -2,7 +2,7 @@
 
 Source: kubejs/exported/world_jei/tool_pairs.json (patcherMod devtools/WorldJeiToolPairs.java, run /dumpworldjei).
 Hand-written rows (Create sail / seat / valve handle dyeing, Supplementaries soap on globes, spikes, signs, mobs,
-the blackboard) are in kubejs/assets/creativeengineering/jei_world/<tab>/manual.json.
+the blackboard) are in kubejs/assets/creativecommon/jei_world/<tab>/manual.json.
 
 Mod behaviour this follows, read from the jars:
 - Immersive Weathering (ModEvents): an axe strip also pops 1 bark of the log's wood type ([item_interaction]

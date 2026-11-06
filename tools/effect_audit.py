@@ -47,7 +47,7 @@ EFFECT_OVERRIDES = {
     'vinery:resistance_effect': None,
 }
 # Pack-original effects named in code rather than by a lang key (same list as gen_effect_descriptions.py).
-CODE_NAMES = {'creativeengineering:magic_resistance': 'Magic Resistance'}
+CODE_NAMES = {'creativebrewing:magic_resistance': 'Magic Resistance'}
 POTION_KINDS = ('potion', 'splash_potion', 'lingering_potion', 'tipped_arrow')
 # Vanilla beacon effects: JEED lists the beacon for these by itself (BeaconBlockEntity.BEACON_EFFECTS)
 BEACON_EFFECTS = {'minecraft:speed', 'minecraft:haste', 'minecraft:resistance', 'minecraft:jump_boost',

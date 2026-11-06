@@ -3,7 +3,7 @@
 Written 2026-10-21 from [todo/TODO.md](../todo/TODO.md) `# worldgen`, Sub `biomes` (rows #2 to #7; #1 is at Testing).
 `biomes/netherblocks` is a separate subfamily and is not covered here. Feature writeup for the tuning rows:
 [biome_tuning.md](../biome_tuning.md) (tests `WG-`). The solver is patcherMod
-`development/patcherMod/src/main/java/com/SaintAlfonzo/creativeengineering/worldgen/BiomeLayoutTuner.java` (written
+`development/creativeCommon/src/main/java/com/SaintAlfonzo/creativecommon/worldgen/BiomeLayoutTuner.java` (written
 `BiomeLayoutTuner.java` below). Its config is `kubejs/generation_scripts/worldgen/biome_config.json` (written
 `biome_config.json`).
 

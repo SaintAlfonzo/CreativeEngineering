@@ -143,7 +143,7 @@ directly eat a whole can; a dedicated-server client guesses nothing for a last-s
 
 ## 5. File map
 
-- patcherMod: [food/CanServings.java](../development/patcherMod/src/main/java/com/SaintAlfonzo/creativeengineering/food/CanServings.java), [food/CanServingsTooltip.java](../development/patcherMod/src/main/java/com/SaintAlfonzo/creativeengineering/food/CanServingsTooltip.java), `mixin/ItemStackCanServingsMixin`, `compat/KubeJSCanAction`; `CEConfig.Canning`.
+- patcherMod: [food/CanServings.java](../development/creativeCommon/src/main/java/com/SaintAlfonzo/creativecommon/food/CanServings.java), [food/CanServingsTooltip.java](../development/creativeCommon/src/main/java/com/SaintAlfonzo/creativecommon/food/CanServingsTooltip.java), `mixin/ItemStackCanServingsMixin`, `compat/KubeJSCanAction`; `CEConfig.Canning`.
 - Canned Goods repack (section 9): [members/cannedgoods](../development/creativeDelight/members/cannedgoods/) (`CannedGolemDye`, the two modified upstream classes, `NOTICE-upstream-AFL.txt`).
 - KubeJS: [items/cans.js](../development/creativeDelight/src/main/resources/kubejs_startup/creativeengineering/cans.js), [cooking/canning.js](../kubejs/data/creativedelight/kubejs/creativeengineering/canning.js), [tags/cantags.js](../kubejs/data/creativedelight/kubejs/creativeengineering/can_tags.js), `generation_scripts/food/{can_servings.json, can_types.json}`, `assets/creativeengineering/textures/entity/canned_golem/`.
 - Tools: [tools/gen_can_types.py](../tools/gen_can_types.py).

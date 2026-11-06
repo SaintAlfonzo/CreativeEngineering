@@ -7,8 +7,8 @@ ServerEvents.tags('fluid', e => {
 	var f = global.fluid
 
 	;[
-		['forge:fluid/dragon_breath', f.dragon_breath],
-		['forge:fluid/potion', f.create_potion],
+		['forge:fluid/dragon_breath', f.dragon_breath], // G5
+		['forge:fluid/potion', f.create_potion], // G5
 	].forEach(([tag, fluid]) => t.addFluid(e, tag, fluid))
 
 	// Remove IE potion tag

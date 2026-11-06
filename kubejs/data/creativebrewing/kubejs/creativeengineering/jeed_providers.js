@@ -36,6 +36,8 @@ global.CB.recipes(() => {
 		})
 	}
 
+	// G5 begin: every row below only feeds add(), whose lists go to R.jeedProvider alone (Write section); NCH drops a
+	// provider or an effect of an absent mod by itself, one entry at a time.
 	//######################### Mobs (spawn eggs) #########################
 	add('minecraft:slowness', [i.stray_spawn_egg, i.witch_spawn_egg, i.spawn_egg_mudskipper, i.wraith_spawn_egg])
 	add('minecraft:instant_damage', i.witch_spawn_egg)
@@ -205,6 +207,7 @@ global.CB.recipes(() => {
 		'xaeroworldmap:no_world_map_harmful', 'xaeroworldmap:no_cave_maps', 'xaeroworldmap:no_cave_maps_harmful']
 	xaeroSwitches.filter(id => Platform.isLoaded(id.split(':')[0])).forEach(id => add(id, i.command_block))
 
+	// G5 end
 	//######################### Write #########################
 	var written = 0
 	Object.keys(providers).sort().forEach(effect => {

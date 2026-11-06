@@ -10,7 +10,7 @@ import java.util.Map;
  * (development/shared/mixinplugin). A mixin in {@link #NEEDS_MOD} applies when one of its mods is loaded; a mixin in
  * {@link #NEEDS_ALL} only when every one of its mods is (a target in one mod that calls code typed on another). Mixins
  * in neither table (vanilla targets whose feature does nothing without its mod: BlockItemOwnStackFillMixin,
- * StructureTemplateBotanistPotMixin, VineBlockShearMixin, CampfireRainMixin) always apply. The mixins moved from
+ * StructureTemplateBotanistPotMixin, VineBlockShearMixin) always apply. The mixins moved from
  * patcherMod unchanged apart from their package (SRG names, remap = false, creativeengineering$ member prefixes).
  */
 public class CompatMixinPlugin extends GatedMixinPlugin {
@@ -26,6 +26,8 @@ public class CompatMixinPlugin extends GatedMixinPlugin {
             Map.entry("HandcraftedItemHoldingSaveMixin", HANDCRAFTED),
             Map.entry("HandcraftedNightstandStorageMixin", HANDCRAFTED),
             Map.entry("HandcraftedNightstandUseMixin", HANDCRAFTED),
+            // Create: Dreams & Desires jetpack tooltip null-level guard (moved from Creative Common 2026-11-04)
+            Map.entry("JetpackItemTooltipMixin", List.of("create_dd")),
             Map.entry("SupplementariesDyeBlocksMixin", SUPPLEMENTARIES),
             Map.entry("SupplementariesJarTileMixin", SUPPLEMENTARIES),
             Map.entry("SupplementariesJarItemTooltipMixin", SUPPLEMENTARIES),

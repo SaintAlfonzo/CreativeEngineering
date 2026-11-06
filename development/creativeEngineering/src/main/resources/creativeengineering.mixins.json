@@ -1,0 +1,40 @@
+{
+  "required": true,
+  "minVersion": "0.8",
+  "package": "com.SaintAlfonzo.creativeengineering.mixin",
+  "compatibilityLevel": "JAVA_17",
+  "plugin": "com.SaintAlfonzo.creativeengineering.EngineeringMixinPlugin",
+  "mixins": [
+    "IETagUtilsMixin",
+    "IEConcreteSetTimeMixin",
+    "ImmersivePostsRegistrationMixin",
+    "ImmersivePostsValidItemMixin",
+    "TagLoaderImmersivePostsMixin",
+    "MemoryStickItemMixin",
+    "PneumaticCraftUtilsMixin",
+    "XpHelperMixin",
+    "XpPumpUpgradeWrapperMixin",
+    "XPFluidManagerMixin",
+    "SawmillRecipeMixin",
+    "SawmillRecipeSerializerMixin",
+    "SawmillProcessMixin",
+    "ProcessingRecipeMixin",
+    "ProcessingRecipeSerializerMixin",
+    "ExcavationDrillItemMixin",
+    "DeforesterSawItemMixin",
+    "OreExcavationBlockHistoryMixin",
+    "OreExcavationCommandUndoMixin",
+    "OreExcavationHistoryMixin",
+    "OreExcavationMiningAgentMixin",
+    "OreExcavationSchedulerMixin",
+    "BlockRunnerBlockStateMixin",
+    "BlockRunnerSpeedConfigMixin",
+    "FramedDoubleCamoOrderMixin",
+    "CopycatMaterialOrderMixin"
+  ],
+  "client": [
+    "SkullBlockEntityMixin",
+    "EntitySinkRenderMixin",
+    "CameraSinkMixin"
+  ]
+}

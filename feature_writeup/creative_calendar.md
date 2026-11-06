@@ -35,7 +35,7 @@ crop season) and **Creative Brewing** (Vinery's wine clock) both require it. pat
 
 ## 2. Inventory before the carve (2026-10-31, kept for reference)
 
-`PM` = `development/patcherMod/src/main/java/com/SaintAlfonzo/creativeengineering/`. Section 5 is what actually moved.
+`PM` = `development/creativeCommon/src/main/java/com/SaintAlfonzo/creativecommon/`. Section 5 is what actually moved.
 
 | Area | Where it was |
 |---|---|
@@ -67,7 +67,7 @@ crop season) and **Creative Brewing** (Vinery's wine clock) both require it. pat
 
 `ce.forge-mod` with `shared_sources=mixinplugin` (`GatedMixinPlugin` compiled in as
 `com.SaintAlfonzo.creativecalendar.shared.GatedMixinPlugin`), `disable_target_validator=true`, no refmap.
-`build.gradle` compiles against patcherMod and the Serene Seasons, SeasonHUD and WTHIT jars in `development/patcherMod/libs/`,
+`build.gradle` compiles against patcherMod and the Serene Seasons, SeasonHUD and WTHIT jars in `development/creativeCommon/libs/`,
 copies the server script tree into the jar, and fails the jar task when `kubejs_startup/creativecalendar/` or
 `data/creativecalendar/kubejs/` has no `.js`.
 
@@ -104,7 +104,7 @@ stays in the pack folder; the dependency is load order and the crop-season growt
 | Section | Keys | From |
 |---|---|---|
 | `[seasons]` | `enabled`, `adaptiveRadius`, `snowLineY` | `CEConfig.Seasons` |
-| `[crop_seasons]` | `enabled`, `fertileBonus`, `offPenalty`, `grassOffPenalty` (new 2026-11-03, 0.5: grass spread in summer and tropical seasons), `greenhouse`, `caveFertileBelowY`, `caveOffAboveY` | `CEConfig.CropSeasons` |
+| `[crop_seasons]` | `enabled`, `fertileBonus`, `offPenalty`, `grassOffPenalty` (new 2026-11-03, 0.5: grass spread in winter), `greenhouse`, `caveFertileBelowY`, `caveOffAboveY` | `CEConfig.CropSeasons` |
 | `[time]`, `.day`, `.seasons`, `.wine`, `.wine.boosts` | the 16 `[time]` keys | `CEConfig.Time` |
 | `[perf]` | `seasonsMeltIntervalTicks` (read by `SereneSeasonsMeltThrottleMixin`) | `CEConfig.Perf` |
 | `[wthit]` | `cropSeasons`, `cropOutOfSeason` (read by `WthitCropSeasons`) | `CEConfig.Wthit` |
@@ -177,7 +177,7 @@ The moved features keep their own suites: TI- ([time.md](time.md)), WE- ([weathe
 ## 7. Install (game closed)
 
 All four in one go (a new patcherMod without the Calendar jar loses `/cetime` and the seasons; the old patcherMod with it
-applies every season mixin twice): `./gradlew :patcherMod:installToMods :creativeCalendar:installToMods
+applies every season mixin twice): `./gradlew :creativeCommon:installToMods :creativeCalendar:installToMods
 :creativeDelight:installToMods :creativeBrewing:installToMods --offline`. The dedicated server (CreEngServer) needs
 the same four jars at the next deploy. Calendar's `creativeengineering` range `[1.1.04,)` cannot tell the old patcherMod
 1.1.04 from the new one: raise it with the next patcherMod version bump (8, Q1).
@@ -196,3 +196,10 @@ the same four jars at the next deploy. Calendar's `creativeengineering` range `[
 - 2026-11-01: carved (creative_split.md 7.6 wave 1): 13 classes, `WthitCropSeasons`, 18 mixins, 3 config sections and 3
   keys, 2 server scripts, 31 lang keys and the WTHIT entry moved; CD and CB require Calendar; Vinery's `PackTime` calls
   it directly. patcherMod, Calendar, CD and CB compile; SQ-CAL rows queued; not installed.
+
+## 10. Licence audit (2026-11-04, plan_cb_publish.md Step 2)
+
+`creativecalendar-1.0.0.jar` (23:34): 65 classes, 25 mixins (Serene Seasons, Better Days, IW, Botania, Vinery, Vintage,
+Xaero, SeasonHUD, Pretty Rain, Cool Rain), 4 scripts, lang, `waila_plugins.json`. No textures, no `@Overwrite`, no shaded
+library, no copied-code markers. mods.toml `GPL-3.0-only`, `creativecalendar-LICENSE.txt` present. Verdict OK: Q3 "all
+own code" holds against the built jar. Summary row in [creative_brewing.md](creative_brewing.md) 9.2.

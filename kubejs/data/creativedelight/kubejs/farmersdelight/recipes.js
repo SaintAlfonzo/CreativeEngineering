@@ -186,11 +186,8 @@ ServerEvents.recipes(e => {
 		}
 
 		//######################### Prepared #########################
-		//Barbecue stick
-		//Remove exising, replace w/ cooked meat tag
-		R.remove({ id: 'farmersdelight:barbecue_stick' }, e)
-		R.shapeless(Item.of(i.bbq_stick, 1), [i.onion, i.tomato, i.cooked_meat, i.stick], e)
-		F.assemble(i.stick, [i.onion, i.tomato, i.cooked_meat], i.bbq_stick)
+		// Barbecue Skewer (barbecue_stick): raw skewer, cooking, heatless craft and assembly in barbequesdelight/skewers.js
+		// (F.skewer, plan_meals_rolls_bbq.md C4)
 		// Fish stew
 		F.mealCraft([i.cooked_fish, i.cooked_fish, Item.of(i.tomato_sauce, 2), i.onion, i.bowl], i.fish_stew)
 

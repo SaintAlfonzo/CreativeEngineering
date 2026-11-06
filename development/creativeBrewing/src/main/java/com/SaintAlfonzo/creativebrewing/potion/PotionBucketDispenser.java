@@ -1,5 +1,7 @@
 package com.SaintAlfonzo.creativebrewing.potion;
 
+import com.SaintAlfonzo.creativebrewing.CreativeBrewing;
+
 import java.util.UUID;
 
 import javax.annotation.Nullable;
@@ -48,7 +50,7 @@ import com.mojang.logging.LogUtils;
 public final class PotionBucketDispenser {
 
     private static final Logger LOGGER = LogUtils.getLogger();
-    private static final String MODID = "creativeengineering";
+    private static final String MODID = CreativeBrewing.NS;
 
     private static final String[] BUCKET_IDS = {
             "potion_bucket",
@@ -62,7 +64,7 @@ public final class PotionBucketDispenser {
     }
 
     /** Forge persistent-data key on the dispenser block entity: the UUID of the player who placed it. */
-    static final String OWNER_KEY = "creativeengineering:DispenserOwner";
+    static final String OWNER_KEY = CreativeBrewing.NS + ":DispenserOwner";
 
     /** Forge bus: remember who placed a dispenser (droppers too, harmless: they never use dispense behaviours). */
     @SubscribeEvent

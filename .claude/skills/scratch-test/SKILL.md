@@ -48,7 +48,7 @@ date", "collect queued tests".
    - If it fails: the files and the likely cause, so a later session does not start cold.
 4. **Index it.** Test IDs into the feature writeup's test list; README status "built, scratch test queued"; the TODO
    row names the IDs. Only write `.qb` batch files when asked to build a run (part B2).
-5. **Refresh** ("is the queue up to date"): compare `kubejs/assets/creativeengineering/changelog/unreleased.md`,
+5. **Refresh** ("is the queue up to date"): compare `kubejs/assets/creativecommon/changelog/unreleased.md`,
    recently changed writeups and the latest run doc with the queue. Every player-visible bullet has a row; rows whose
    feature changed get rewritten; superseded rows say "superseded by X"; results stay in the Run log, never the rows.
    Update the "Jars in `mods/` now" line from `ls -l mods/` and the build outputs.

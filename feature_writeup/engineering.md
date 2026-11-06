@@ -15,11 +15,11 @@
 - **Pending:** exclusive chance outputs and rose quartz sand blasting (built 2026-10-30, jar installed 2026-10-31 00:44; EN-21 server half PASSED
   r1031 2026-10-31; EN-19, EN-20 and the EN-21 JEI look in game). EN-01 to EN-18 have never been run. Findings F1 to F8 (section 4) are
   open; F2 and F4 need your call.
-- **Files to open:** [sawmill/SawbladeRouting.java](../development/patcherMod/src/main/java/com/SaintAlfonzo/creativeengineering/sawmill/SawbladeRouting.java),
+- **Files to open:** [sawmill/SawbladeRouting.java](../development/creativeEngineering/src/main/java/com/SaintAlfonzo/creativeengineering/sawmill/SawbladeRouting.java),
   [generation_scripts/sawmill.js](../kubejs/generation_scripts/sawmill.js),
-  [fan/DragonBreathingFanProcessingType.java](../development/patcherMod/src/main/java/com/SaintAlfonzo/creativeengineering/fan/DragonBreathingFanProcessingType.java),
-  [components.js](../kubejs/server_scripts/engineering/components.js),
-  [metal_base_materials.js](../kubejs/server_scripts/metal/metal_base_materials.js) lines 687-760 (coils),
+  [fan/DragonBreathingFanProcessingType.java](../development/creativeEngineering/src/main/java/com/SaintAlfonzo/creativeengineering/fan/DragonBreathingFanProcessingType.java),
+  [components.js](../kubejs/data/creativeengineering/kubejs/engineering/components.js),
+  [metal_base_materials.js](../kubejs/data/creativeengineering/kubejs/metal/metal_base_materials.js) lines 687-760 (coils),
   [func/sample_syringe.js](../kubejs/startup_scripts/func/sample_syringe.js).
 - **Knobs:** none in the toml. Recipes are server scripts (`/reload`); the sawmill recipes are in the patcherMod jar
   (rebuild); the fan catalyst list is the block tag `#creativeengineering:fan_processing_catalysts/dragon_breathing`.
@@ -121,7 +121,7 @@ blocks are IE's LV and MV; the pack adds 9 coil items and 10 coil blocks).
 | HV wire coil (`immersiveengineering:wirecoil_steel`) | 2 steel + 2 aluminum wire + spool → 4 | spool, steel then aluminum wire, 3 loops → 8 | 3 steel + 3 aluminum wire + spool → 8 | 8 coils → 3 steel or 3 aluminum wire |
 | HV coil block (`immersiveengineering:coil_hv`) | 8 HV coils around an iron rod | 6 loops | 4 HV coils + iron rod | wirecutter + block → 4 HV coils |
 
-Coil blocks are KubeJS blocks ([coil_blocks.js](../kubejs/startup_scripts/items/coil_blocks.js)): metal, hardness
+Coil blocks are KubeJS blocks ([coil_blocks.js](../development/creativeEngineering/src/main/resources/kubejs_startup/creativeengineering/items/coil_blocks.js)): metal, hardness
 3, pickaxe, iron tier.
 
 ### 2.5 Sample syringe
@@ -154,11 +154,11 @@ Coil blocks are KubeJS blocks ([coil_blocks.js](../kubejs/startup_scripts/items/
 - **Fan type:** ported from Create: Halitosis. `DragonBreathingFanProcessingType` registers into Create's
   `FanProcessingTypeRegistry` at common setup; `DragonBreathingRecipe` / `DragonBreathingRecipeType` are a
   `ProcessingRecipe` type `creativeengineering:dragon_breathing`; `CatalystUtils` reads the skull's direction.
-- **Components, coils:** items in KubeJS ([items/components.js](../kubejs/startup_scripts/items/components.js)),
+- **Components, coils:** items in KubeJS ([items/components.js](../development/creativeEngineering/src/main/resources/kubejs_startup/creativeengineering/items/components.js)),
   recipes through `R.shaped` / `R.createSequencedAssembly` / `R.ieBlueprint` with transitional items from
   `transition_items.js`.
 - **Syringe:** items in [items/sample_syringe.js](../kubejs/startup_scripts/items/sample_syringe.js), the mob list in
-  `global.sampleSyringe`, handlers in [server_scripts/engineering/sample_syringe.js](../kubejs/server_scripts/engineering/sample_syringe.js)
+  `global.sampleSyringe`, handlers in [server_scripts/engineering/sample_syringe.js](../kubejs/data/creativeengineering/kubejs/engineering/sample_syringe.js)
   (`ItemEvents.entityInteracted` and `EntityEvents.hurt`).
 - **Exclusive chance outputs** (2026-10-30, `engineering/dreams-and-desires #3`): Create rolls every chance output of a
   processing recipe independently, so "80 % A, 20 % B" can give both or neither. A recipe JSON with
@@ -170,7 +170,7 @@ Coil blocks are KubeJS blocks ([coil_blocks.js](../kubejs/startup_scripts/items/
   sanding, millstone, crushing, basin); sequenced assembly's forced result keeps Create's path. KubeJS: pass
   `{ exclusive: true }` to a helper that supports it (so far `NCH.ddSanding`).
 - **Rose quartz sand blasting:** D&D's `create_dd:sanding/rose_quartz` (100 % polished) is replaced by
-  `creativeengineering:ddsanding/rose_quartz` in [redstone.js](../kubejs/server_scripts/engineering/redstone.js):
+  `creativeengineering:ddsanding/rose_quartz` in [redstone.js](../kubejs/data/creativeengineering/kubejs/engineering/redstone.js):
   exclusive, 80 % rose quartz / 20 % polished. One pass polishes about a fifth; loop the belt (funnel or chute back to
   the start) or let the items fall back into the stream to polish the rest. D&D's `SandingType.process` goes through
   `RecipeApplier.applyRecipeOn`, one `rollResults` per item. Sandpaper (100 %) and charging are unchanged.
@@ -187,7 +187,7 @@ Coil blocks are KubeJS blocks ([coil_blocks.js](../kubejs/startup_scripts/items/
   Check in game (EN-04); a tooltip line or a JEI info page would fix it.
 - **F3. Raw JSON and literal ids:** the 12 blueprint recipes are hand-written files in
   `kubejs/data/creativeengineering/recipes/blueprint/`, and the `vertical_planks` / `railings` shape tags in
-  [engineeringtags.js](../kubejs/server_scripts/tags/engineeringtags.js) list literal ids, against the NCH /
+  [engineeringtags.js](../kubejs/data/creativeengineering/kubejs/tags/engineeringtags.js) list literal ids, against the NCH /
   item-dictionary rules (`R.ieBlueprint` handles NBT outputs).
 - **F4. Component centres differ by route. Your call.** The iron component's blueprint takes a copper ingot where
   crafting and assembly take a copper rod; the diamond component's blueprint takes a gold component where the others
@@ -250,11 +250,11 @@ Brief: [briefs/engineering_dreams-and-desires.md](briefs/engineering_dreams-and-
 
 ## 5. File map
 
-- Sawmill: patcherMod [sawmill/](../development/patcherMod/src/main/java/com/SaintAlfonzo/creativeengineering/sawmill/) (`SawbladeRouting`, `duck/SawmillProcessExt`, `duck/SawmillRecipeExt`), mixins `SawmillProcessMixin`, `SawmillRecipeMixin`, `SawmillRecipeSerializerMixin`, [item/PrecisionSawbladeItem.java](../development/patcherMod/src/main/java/com/SaintAlfonzo/creativeengineering/item/PrecisionSawbladeItem.java), `data/forge/tags/items/sawblades.json`, `data/creativeengineering/recipes/sawmill/` (211); [generation_scripts/sawmill.js](../kubejs/generation_scripts/sawmill.js); `kubejs/data/creativeengineering/recipes/{blueprint,sawmill}/`; [blueprints.js](../kubejs/server_scripts/engineering/blueprints.js) (blueprint item); [tooltips.js](../kubejs/client_scripts/tooltips.js) line 446.
-- Fan: patcherMod [fan/](../development/patcherMod/src/main/java/com/SaintAlfonzo/creativeengineering/fan/), [compat/DragonBreathingJEI.java](../development/patcherMod/src/main/java/com/SaintAlfonzo/creativeengineering/compat/DragonBreathingJEI.java), `data/creativeengineering/tags/blocks/fan_processing_catalysts/dragon_breathing.json`; [dragon_breathing.js](../kubejs/server_scripts/magic/dragon_breathing.js); `NCH.dragonBreathing`.
-- Components and coils: [items/components.js](../kubejs/startup_scripts/items/components.js), [items/coil_blocks.js](../kubejs/startup_scripts/items/coil_blocks.js), [components.js](../kubejs/server_scripts/engineering/components.js), [metal_base_materials.js](../kubejs/server_scripts/metal/metal_base_materials.js), [transition_items.js](../kubejs/startup_scripts/changes/transition_items.js).
-- Exclusive outputs: patcherMod [fan/ExclusiveResults.java](../development/patcherMod/src/main/java/com/SaintAlfonzo/creativeengineering/fan/ExclusiveResults.java), `fan/duck/ProcessingRecipeExt`, mixins `ProcessingRecipeMixin`, `ProcessingRecipeSerializerMixin`; `NCH.ddSanding`; rose quartz recipe in [redstone.js](../kubejs/server_scripts/engineering/redstone.js).
-- Syringe: [items/sample_syringe.js](../kubejs/startup_scripts/items/sample_syringe.js), [func/sample_syringe.js](../kubejs/startup_scripts/func/sample_syringe.js), [server_scripts/engineering/sample_syringe.js](../kubejs/server_scripts/engineering/sample_syringe.js).
+- Sawmill: patcherMod [sawmill/](../development/creativeEngineering/src/main/java/com/SaintAlfonzo/creativeengineering/sawmill/) (`SawbladeRouting`, `duck/SawmillProcessExt`, `duck/SawmillRecipeExt`), mixins `SawmillProcessMixin`, `SawmillRecipeMixin`, `SawmillRecipeSerializerMixin`, [item/PrecisionSawbladeItem.java](../development/creativeEngineering/src/main/java/com/SaintAlfonzo/creativeengineering/item/PrecisionSawbladeItem.java), `data/forge/tags/items/sawblades.json`, `data/creativeengineering/recipes/sawmill/` (211); [generation_scripts/sawmill.js](../kubejs/generation_scripts/sawmill.js); `kubejs/data/creativeengineering/recipes/{blueprint,sawmill}/`; [blueprints.js](../kubejs/data/creativeengineering/kubejs/engineering/blueprints.js) (blueprint item); [tooltips.js](../kubejs/client_scripts/tooltips.js) line 446.
+- Fan: patcherMod [fan/](../development/creativeEngineering/src/main/java/com/SaintAlfonzo/creativeengineering/fan/), [compat/DragonBreathingJEI.java](../development/creativeEngineering/src/main/java/com/SaintAlfonzo/creativeengineering/compat/DragonBreathingJEI.java), `data/creativeengineering/tags/blocks/fan_processing_catalysts/dragon_breathing.json`; [dragon_breathing.js](../kubejs/server_scripts/magic/dragon_breathing.js); `NCH.dragonBreathing`.
+- Components and coils: [items/components.js](../development/creativeEngineering/src/main/resources/kubejs_startup/creativeengineering/items/components.js), [items/coil_blocks.js](../development/creativeEngineering/src/main/resources/kubejs_startup/creativeengineering/items/coil_blocks.js), [components.js](../kubejs/data/creativeengineering/kubejs/engineering/components.js), [metal_base_materials.js](../kubejs/data/creativeengineering/kubejs/metal/metal_base_materials.js), [transition_items.js](../development/creativeEngineering/src/main/resources/kubejs_startup/creativeengineering/changes/transition_items.js).
+- Exclusive outputs: patcherMod [fan/ExclusiveResults.java](../development/creativeEngineering/src/main/java/com/SaintAlfonzo/creativeengineering/fan/ExclusiveResults.java), `fan/duck/ProcessingRecipeExt`, mixins `ProcessingRecipeMixin`, `ProcessingRecipeSerializerMixin`; `NCH.ddSanding`; rose quartz recipe in [redstone.js](../kubejs/data/creativeengineering/kubejs/engineering/redstone.js).
+- Syringe: [items/sample_syringe.js](../kubejs/startup_scripts/items/sample_syringe.js), [func/sample_syringe.js](../kubejs/startup_scripts/func/sample_syringe.js), [server_scripts/engineering/sample_syringe.js](../kubejs/data/creativeengineering/kubejs/engineering/sample_syringe.js).
 
 ## 6. Offline checks
 

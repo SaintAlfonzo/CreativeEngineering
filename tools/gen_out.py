@@ -54,6 +54,14 @@ DATA_ROOT = 'kubejs/data/creativedelight/kubejs'
 STARTUP_ROOT = 'development/creativeDelight/src/main/resources/kubejs_startup'
 # Namespaces that are always loaded: their member scripts carry no requires header.
 NO_REQUIRES = ('minecraft', 'creativeengineering', 'creativedelight', 'forge')
+# Item namespaces whose jar has a different mod id. `// requires:` checks mod ids, so a header naming the namespace
+# makes KubeJS skip the file (guard_check reports it as 'requires names no loaded jar').
+NS_MOD_ID = {'cozys-improved-cats': 'cozys_improved_cats'}
+
+
+def requires_mod(ns):
+    """Mod id for a `// requires:` header of item namespace ns."""
+    return NS_MOD_ID.get(ns, ns)
 # Member scripts run before every hand-written CD script (cd_core.js is 1000, cd_food.js 999).
 MEMBER_PRIORITY = 900
 
@@ -139,7 +147,7 @@ def split_lists(lists, key_val, all_names_in=None):
 def member_text(gen_id, name, ns, data, what):
     lines = [header(gen_id).rstrip('\n'), f'// priority: {MEMBER_PRIORITY}']
     if ns not in NO_REQUIRES:
-        lines.append(f'// requires: {ns}')
+        lines.append(f'// requires: {requires_mod(ns)}')
     lines.append(f'// {what}, {ns} part. Readers merge every part with global.CD.genMerge(\'{name}\') (creative_delight.md 28.2).')
     body = json.dumps(data, indent=1, ensure_ascii=False)
     lines.append(f"if (global.CD) global.CD.genPut('{name}', '{ns}', {body})")

@@ -2,8 +2,12 @@
 // priority: 900
 // Placeable food tags, creativeengineering part. Readers merge every part with global.CD.genMerge('placeable') (creative_delight.md 28.2).
 if (global.CD) global.CD.genPut('placeable', 'creativeengineering', {
- "placeable": [],
- "placeable/sneak": [],
+ "placeable": [
+  "corn_popsicle"
+ ],
+ "placeable/sneak": [
+  "corn_popsicle"
+ ],
  "placeable_on_plate": [],
  "placeable_on_small_plate": [],
  "placeable_on_coaster": []

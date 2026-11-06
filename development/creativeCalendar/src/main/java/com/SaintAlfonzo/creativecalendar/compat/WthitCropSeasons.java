@@ -49,7 +49,7 @@ public final class WthitCropSeasons implements IWailaClientPlugin, IBlockCompone
             return;
         }
         BlockState state = accessor.getBlockState();
-        CropSeasons.Type type = CropSeasons.typeOf(state);
+        CropSeasons.Type type = CropSeasons.displayTypeOf(state);
         if (type == null || type == CropSeasons.Type.NONE) {
             return;
         }

@@ -5,6 +5,7 @@
 // no-NBT one. Same "every non-empty potion in registry order" loop used to generate the
 // create:potion bottling recipes - see ../../../data/creativebrewing/kubejs/creativeengineering/potion_bottling.js.
 JEIEvents.addFluids(e => {
+	if (!global.has('create')) return
 	const POTIONS = Java.loadClass('net.minecraft.core.Registry').POTION
 
 	let n = 0

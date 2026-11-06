@@ -22,7 +22,7 @@ ItemEvents.tooltip(e => {
 		);
 	}
 	e.add(i.rich_farmland, Text.green('Farmer villagers work it like Farmland'))
-	e.add(i.fertile_soil, Text.darkBlue('Farmer villagers work it like Farmland'))
+	if (global.has(i.fertile_soil)) e.add(i.fertile_soil, Text.darkBlue('Farmer villagers work it like Farmland'))
 })
 
 ClientEvents.lang('en_us', e => {
@@ -32,7 +32,7 @@ ClientEvents.lang('en_us', e => {
 	// Delight plates are renamed in kubejs/assets/displaydelight/lang
 	e.renameItem(i.sweet_berry_cheesecake, 'Sweet Berry Pie')
 	e.renameItem(i.sweet_berry_cheesecake_slice, 'Slice of Sweet Berry Pie')
-	e.renameItem(i.incomplete_sweet_berry_cheesecake, 'Incomplete Sweet Berry Pie')
+	if (global.has(i.incomplete_sweet_berry_cheesecake)) e.renameItem(i.incomplete_sweet_berry_cheesecake, 'Incomplete Sweet Berry Pie')
 	// FD's fried rice is made with eggs; Display Delight's placed copy is renamed in kubejs/assets/displaydelight/lang
 	e.renameItem(i.fried_rice, 'Egg Fried Rice')
 })

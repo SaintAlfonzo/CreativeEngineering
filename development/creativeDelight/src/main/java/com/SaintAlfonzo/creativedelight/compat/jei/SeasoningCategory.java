@@ -1,6 +1,6 @@
 package com.SaintAlfonzo.creativedelight.compat.jei;
 
-import com.SaintAlfonzo.creativeengineering.compat.jei.JeiArrow;
+import com.SaintAlfonzo.creativecommon.compat.jei.JeiArrow;
 import java.util.List;
 
 import javax.annotation.ParametersAreNonnullByDefault;

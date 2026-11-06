@@ -65,8 +65,8 @@ TAGS = OrderedDict([
 # The Brewin' port's coaster models (one file per item that has its own look on a coaster).
 COASTER_DIR = INSTANCE / 'development/creativeBrewing/members/brewin/src/main/resources/assets/brewinandchewin/brewinandchewin/coaster'
 # The pack's coaster models (Display Delight's placed models, other mods' wine bottles and jars, borrowed models),
-# from tools/gen_coaster_models.py.
-PACK_COASTER_DIR = INSTANCE / 'kubejs/assets/creativeengineering/brewinandchewin/coaster'
+# from tools/gen_coaster_models.py, shipped in the Creative Brewing jar.
+PACK_COASTER_DIR = INSTANCE / 'development/creativeBrewing/src/main/resources/assets/creativebrewing/brewinandchewin/coaster'
 # Only items with a coaster model go on a coaster (owner 2026-10-25: the produce of every raw, cooked, egg and dairy
 # food type had joined the tag and lay flat without a model; those were cut, food_families.md 4.4).
 

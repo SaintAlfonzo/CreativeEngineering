@@ -8,7 +8,7 @@
 // syringe item, plus one distinct "filled" item per sampled animal. Filled syringes are
 // their own real item ids (not one item + NBT) specifically so recipes can match them by
 // plain id - NBT-based ingredient matching (.weakNBT() etc.) kept silently breaking here
-// (see startup_scripts/_lib/item_dict.js history), so identity now lives in the item type.
+// (see creativecommon/_lib/item_dict.js history), so identity now lives in the item type.
 //
 // Written out one item per line on purpose (no shared helper/array loop) so each animal
 // can be added, removed, or debugged independently.

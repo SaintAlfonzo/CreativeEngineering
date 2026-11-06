@@ -11,7 +11,7 @@ import javax.annotation.ParametersAreNonnullByDefault;
 
 import org.slf4j.Logger;
 
-import com.SaintAlfonzo.creativeengineering.CEConfig;
+import com.SaintAlfonzo.creativecommon.CommonConfig;
 import com.SaintAlfonzo.creativedelight.CreativeDelight;
 import com.SaintAlfonzo.creativedelight.compat.jei.SeasoningCategory.Display;
 import com.SaintAlfonzo.creativedelight.food.SeasoningRecipe;
@@ -95,7 +95,7 @@ public class SeasoningJEI implements IModPlugin {
     public void registerRecipes(IRecipeRegistration registration) {
         movedCrafting = Set.of();
         movedMixing = Set.of();
-        if (Minecraft.getInstance().level == null || !CEConfig.JEI.seasoningCategory.get()) {
+        if (Minecraft.getInstance().level == null || !CommonConfig.JEI.seasoningCategory.get()) {
             return;
         }
         try {

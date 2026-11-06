@@ -3,7 +3,7 @@
 // ============================================================================
 //  ALL custom-potion + potion-brewing logic for the pack lives in this one file.
 //
-//   1. StartupEvents.registry('potion')   — register the kubejs:* potions
+//   1. StartupEvents.registry('potion')   — register the creativebrewing:* potions
 //   2. MoreJSEvents.registerPotionBrewing  — brewing-stand mixes as item-agnostic
 //        PotionBrewing.Mix entries (so they ALSO drive Create Automatic Brewing,
 //        the Create Mechanical Mixer, and the IE Mixer multiblock — none of those
@@ -55,26 +55,32 @@ const CUSTOM_POTIONS = {
 // long_reach / phantom_bane use a modded effect (better_beacons:*) — KubeJS's own
 // StartupEvents.registry('potion', ...) runs too early to ever see it (see CE potions
 // header comment below and patcherMod's CEPotions), so patcherMod registers
-// creativeengineering:long_reach / phantom_bane (+ long_/strong_ variants) as REAL
+// creativebrewing:long_reach / phantom_bane (+ long_/strong_ variants) as REAL
 // DeferredRegister<Potion> entries instead. Brewing mixes for them are added below
 // alongside AM_POTION_MIXES. [reagent, fromPotion, toPotion]
 const CE_POTION_MIXES = [
-	['geode:wrappist_shard',     'minecraft:thick',              'creativeengineering:long_reach'],
-	['minecraft:redstone',       'creativeengineering:long_reach', 'creativeengineering:long_long_reach'],
-	['minecraft:glowstone_dust', 'creativeengineering:long_reach', 'creativeengineering:strong_long_reach'],
-
-	['geode:celestite_shard',    'minecraft:thick',                  'creativeengineering:phantom_bane'],
-	['minecraft:redstone',       'creativeengineering:phantom_bane', 'creativeengineering:long_phantom_bane'],
-	// no glowstone step: Phantom Bane is levelless (patcherMod CEPotions, like Night Vision)
-
-	// pack-original effect (patcherMod's CEPotions.java, same timing dance as
+	// pack-original effect (CB's CEPotions.java, same timing dance as
 	// above since KubeJS's own 'potion' registry runs too early to see even its own
 	// 'mob_effect' registrations - see magic_resistance.js). amethyst_shard is a placeholder
 	// reagent - retune later.
-	['minecraft:amethyst_shard', 'minecraft:thick',                        'creativeengineering:magic_resistance'],
-	['minecraft:redstone',       'creativeengineering:magic_resistance',   'creativeengineering:long_magic_resistance'],
-	['minecraft:glowstone_dust', 'creativeengineering:magic_resistance',   'creativeengineering:strong_magic_resistance'],
+	['minecraft:amethyst_shard', 'minecraft:thick',                    'creativebrewing:magic_resistance'],
+	['minecraft:redstone',       'creativebrewing:magic_resistance',   'creativebrewing:long_magic_resistance'],
+	['minecraft:glowstone_dust', 'creativebrewing:magic_resistance',   'creativebrewing:strong_magic_resistance'],
 ]
+// Long Reach / Phantom Bane exist only with Better Beacons (CEPotions skips them otherwise); their base brews use
+// Geode's shards.
+if (global.has('better_beacons')) {
+	CE_POTION_MIXES.push(
+		['minecraft:redstone',       'creativebrewing:long_reach',   'creativebrewing:long_long_reach'],
+		['minecraft:glowstone_dust', 'creativebrewing:long_reach',   'creativebrewing:strong_long_reach'],
+		['minecraft:redstone',       'creativebrewing:phantom_bane', 'creativebrewing:long_phantom_bane'])
+	// no glowstone step: Phantom Bane is levelless (CEPotions, like Night Vision)
+	if (global.has('geode')) {
+		CE_POTION_MIXES.push(
+			['geode:wrappist_shard',  'minecraft:thick', 'creativebrewing:long_reach'],
+			['geode:celestite_shard', 'minecraft:thick', 'creativebrewing:phantom_bane'])
+	}
+}
 
 const LENGTHEN_REAGENT = 'minecraft:redstone'
 const AMPLIFY_REAGENT = 'minecraft:glowstone_dust'
@@ -86,25 +92,32 @@ const AMPLIFY_REAGENT = 'minecraft:glowstone_dust'
 // [reagent, fromPotion, toPotion]
 
 //TODO: give better/magic brewing ingredient
-const LUCK_POTION_MIXES = [
+const LUCK_POTION_MIXES = []
+// every potion a Buzzier Bees luck mix can output; removeByPotion(null, null, <this>) clears them
+const LUCK_POTIONS = []
+if (global.has('buzzier_bees')) {
+	LUCK_POTION_MIXES.push(
 	[global.item.four_leaf_clover,  'minecraft:awkward',   'minecraft:luck'],
 	[global.item.redstone,          'minecraft:luck',      'buzzier_bees:long_luck'],
 	[global.item.glowstone,         'minecraft:luck',      'buzzier_bees:strong_luck'],
 
 	[global.item.silverfish_bottle, 'minecraft:awkward',   'buzzier_bees:unluck'],
 	[global.item.redstone,          'buzzier_bees:unluck', 'buzzier_bees:long_unluck'],
-	[global.item.glowstone,         'buzzier_bees:unluck', 'buzzier_bees:strong_unluck'],
-]
+	[global.item.glowstone,         'buzzier_bees:unluck', 'buzzier_bees:strong_unluck'])
+	LUCK_POTIONS.push('minecraft:luck', 'buzzier_bees:long_luck', 'buzzier_bees:strong_luck',
+		'buzzier_bees:unluck', 'buzzier_bees:long_unluck', 'buzzier_bees:strong_unluck')
+}
 // potions/effects #9: Resilience (Quark) duplicates Knockback Resistance and goes; Restfulness and Insomnia (Upgrade
 // Aquatic) go with the Flare, which only an Insomnia potion on a Phantom can make. Every mix that outputs one is
 // removed; the effects themselves are refused or swapped by Creative Brewing ([effects] remap / removed).
-const REMOVED_POTIONS = ['quark:resilience', 'quark:long_resilience', 'quark:strong_resilience',
-	'upgrade_aquatic:restfulness', 'upgrade_aquatic:restfulness_strong',
-	'upgrade_aquatic:insomnia', 'upgrade_aquatic:insomnia_strong']
-
-// every potion a Buzzier Bees luck mix can output; removeByPotion(null, null, <this>) clears them
-const LUCK_POTIONS = ['minecraft:luck', 'buzzier_bees:long_luck', 'buzzier_bees:strong_luck',
-	'buzzier_bees:unluck', 'buzzier_bees:long_unluck', 'buzzier_bees:strong_unluck']
+const REMOVED_POTIONS = []
+if (global.has('quark')) {
+	REMOVED_POTIONS.push('quark:resilience', 'quark:long_resilience', 'quark:strong_resilience')
+}
+if (global.has('upgrade_aquatic')) {
+	REMOVED_POTIONS.push('upgrade_aquatic:restfulness', 'upgrade_aquatic:restfulness_strong',
+		'upgrade_aquatic:insomnia', 'upgrade_aquatic:insomnia_strong')
+}
 
 // Haste — Rustic Delight registers rusticdelight:haste / long_haste / strong_haste. 1.3.0 brews
 // them through its own IBrewingRecipe class (regular potion item only); Creative Delight's 1.7.0
@@ -123,7 +136,9 @@ const RD_POTION_MIXES = [
 // exact NBT, so lengthen / amplify / upgrade stop working once a potion is
 // splash / lingering and are invisible to the mixers. Re-add them as item-agnostic
 // PotionBrewing.Mix entries. [reagent, fromPotion, toPotion]
-const AM_POTION_MIXES = [
+const AM_POTION_MIXES = []
+if (global.has('alexsmobs')) {
+	AM_POTION_MIXES.push(
 	['minecraft:redstone',       'alexsmobs:knockback_resistance', 'alexsmobs:long_knockback_resistance'],
 	['minecraft:redstone',       'alexsmobs:lava_vision',          'alexsmobs:long_lava_vision'],
 	['minecraft:redstone',       'alexsmobs:bug_pheromones',       'alexsmobs:long_bug_pheromones'],
@@ -131,8 +146,6 @@ const AM_POTION_MIXES = [
 	['minecraft:redstone',       'alexsmobs:clinging',             'alexsmobs:long_clinging'],
 	['alexsmobs:komodo_spit',    'alexsmobs:poison_resistance',    'alexsmobs:long_poison_resistance'],
 	['minecraft:glowstone_dust', 'alexsmobs:knockback_resistance', 'alexsmobs:strong_knockback_resistance'],
-	// crab shell: Quark's Resilience reagent, now a second Knockback Resistance base next to AM's Strength + bear fur
-	[global.item.crab_shell,     'minecraft:awkward',              'alexsmobs:knockback_resistance'],
 	['minecraft:glowstone_dust', 'alexsmobs:soulsteal',            'alexsmobs:strong_soulsteal'],
 	['alexsmobs:gazelle_horn',   'minecraft:strong_swiftness',     'alexsmobs:speed_iii'],
 
@@ -140,10 +153,14 @@ const AM_POTION_MIXES = [
 	// non-potion base (patcherMod cancels the broken auto-generated {Potion:empty} recipe).
 	// Re-base it onto Potion of Poison II so it brews everywhere (stand + both mixers) and
 	// picks up splash/lingering parity for free. AM's poison-bottle stand recipe still works.
-	['alexsmobs:centipede_leg',  'minecraft:strong_poison',        'alexsmobs:poison_resistance'],
-]
+	['alexsmobs:centipede_leg',  'minecraft:strong_poison',        'alexsmobs:poison_resistance'])
+	// crab shell: Quark's Resilience reagent, now a second Knockback Resistance base next to AM's Strength + bear fur
+	if (global.has('quark')) {
+		AM_POTION_MIXES.push([global.item.crab_shell, 'minecraft:awkward', 'alexsmobs:knockback_resistance'])
+	}
+}
 
-// ── 1. register the kubejs:* potions ────────────────────────────────────────
+// ── 1. register the creativebrewing:* potions ────────────────────────────────────────
 // CUSTOM_POTIONS entries must use a VANILLA effect only. KubeJS evaluates this whole
 // callback in one early pass (to gather everything before real Forge registration
 // begins) — well before any OTHER mod's DeferredRegister<MobEffect> has fired, so a
@@ -164,9 +181,9 @@ StartupEvents.registry('potion', event => {
 			return
 		}
 		const amp = p.amp || 0
-		event.create(name).effect(eff, p.dur, amp)
-		if (p.long) event.create('long_' + name).effect(eff, p.long, amp)
-		if (p.strong) event.create('strong_' + name).effect(eff, p.strong[0], p.strong[1])
+		event.create('creativebrewing:' + name).effect(eff, p.dur, amp)
+		if (p.long) event.create('creativebrewing:long_' + name).effect(eff, p.long, amp)
+		if (p.strong) event.create('creativebrewing:strong_' + name).effect(eff, p.strong[0], p.strong[1])
 	})
 })
 
@@ -209,9 +226,9 @@ MoreJSEvents.registerPotionBrewing(event => {
 	// custom potions: base brew, then lengthen / amplify
 	Object.keys(CUSTOM_POTIONS).forEach(name => {
 		const p = CUSTOM_POTIONS[name]
-		mix(p.reagent, 'minecraft:' + p.base, 'kubejs:' + name)
-		if (p.long) mix(LENGTHEN_REAGENT, 'kubejs:' + name, 'kubejs:long_' + name)
-		if (p.strong) mix(AMPLIFY_REAGENT, 'kubejs:' + name, 'kubejs:strong_' + name)
+		mix(p.reagent, 'minecraft:' + p.base, 'creativebrewing:' + name)
+		if (p.long) mix(LENGTHEN_REAGENT, 'creativebrewing:' + name, 'creativebrewing:long_' + name)
+		if (p.strong) mix(AMPLIFY_REAGENT, 'creativebrewing:' + name, 'creativebrewing:strong_' + name)
 	})
 
 	// Alex's Mobs modifier steps
@@ -244,7 +261,7 @@ MoreJSEvents.registerPotionBrewing(event => {
 // PotionMixingRecipes.ALL / BY_ITEM are filled in a static {} block that runs the
 // FIRST time the class is touched — which Create does DURING mod setup, i.e. before
 // MoreJS (FMLCommonSetupEvent) has added our PotionBrewing.Mix entries. So the custom
-// kubejs:* potions never make it into Automatic Brewing.
+// creativebrewing:* potions never make it into Automatic Brewing.
 //
 // postInit (FMLLoadComplete) is always after common setup, so here we reflectively
 // re-run PotionMixingRecipes.createRecipes() / sortRecipesByItem() against the now-

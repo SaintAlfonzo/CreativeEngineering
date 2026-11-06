@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Food dict (global.food, alias f): lint, coverage and reverse index for kubejs/startup_scripts/_lib/food_dict.js.
+"""Food dict (global.food, alias f): lint, coverage and reverse index for development/creativeCommon/src/main/resources/kubejs_startup/creativecommon/_lib/food_dict.js.
 
 The food dict is a mask over the general dict (creative_delight.md 13): one line per food, `f.<key> = i.<general key>;`,
 key `<category>[_<form>][_<state>]_<name>` from the lists in _lib/food_grammar.js. The file is kept by hand; this tool
@@ -28,11 +28,12 @@ from collections import OrderedDict, defaultdict
 from pathlib import Path
 
 sys.path.insert(0, str(Path(__file__).resolve().parent))
+import pack_paths as P  # noqa: E402
 import food_catalog as fc  # noqa: E402  (item_dict parsing)
 import food_families as ff  # noqa: E402  (family per food)
 
 INSTANCE = Path(__file__).resolve().parent.parent
-LIB = INSTANCE / 'kubejs/startup_scripts/_lib'
+LIB = P.STARTUP_LIB
 GRAMMAR = LIB / 'food_grammar.js'
 DICT = LIB / 'food_dict.js'
 INDEX = INSTANCE / 'kubejs/generation_scripts/food/food_dict_index.json'

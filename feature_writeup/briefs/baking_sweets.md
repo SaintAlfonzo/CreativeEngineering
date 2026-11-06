@@ -187,7 +187,7 @@ echo shard variants; identify other crystals usable for rock candy (D1 below lis
   the other "crystal" option the original row named.
 - Dict keys: `i.quartz` 1365, `i.amethyst_shard` 1356, `i.echo_shard` 1364, `i.prismarine_crystals` 1361,
   `i.rose_quartz` 1487, `i.t_gems_certus_quartz` 2034. No `i.t_gems_quartz` / `i.t_gems_amethyst` keys yet.
-- Echo shards are craftable (sculk + amethyst, [crystal.js:40](../../kubejs/server_scripts/engineering/crystal.js#L40))
+- Echo shards are craftable (sculk + amethyst, [crystal.js:40](../../kubejs/data/creativeengineering/kubejs/engineering/crystal.js#L40))
   and a cleric trade ([trades.js:112](../../kubejs/server_scripts/economy/trades.js#L112)), so an echo candy is
   reachable, if dear.
 

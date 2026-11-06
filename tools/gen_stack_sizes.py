@@ -16,7 +16,7 @@ Source data (all under kubejs/exported/, from /dumpall):
   stacks/stack_sizes.json        /dumpstacks rows: edible, useAnim, remainder, classes (not the size)
   food/foods.json, food/drinks.json   remainder of edible items that are already at 64 (fallback)
   tags/item_tags.json            #forge:eggs, #forge:milk/milk_bottle
-and kubejs/generation_scripts/food/food_types.json (food type -> item_dict keys) + startup_scripts/_lib/item_dict.js.
+and kubejs/generation_scripts/food/food_types.json (food type -> item_dict keys) + creativecommon/_lib/item_dict.js.
 """
 import glob
 import json
@@ -201,6 +201,11 @@ def main():
     for i in sorted(tags.get('forge:milk/milk_bottle', [])):
         if i in universe:
             give(i, 64, 'bottle ingredient (milk)')
+
+    # Every jam jar is 64, including new pack jars the dumps do not list yet (food_type comes from item_dict, not the dump)
+    for i in sorted(set(food_type) | set(dict_key)):
+        if i.endswith('_jam_jar'):
+            give(i, 64, 'jam jar')
 
     for i, t in sorted(food_type.items()):
         if i not in universe:

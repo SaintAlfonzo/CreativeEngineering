@@ -1,6 +1,6 @@
 # Fruits Delight 1.1.3 against the installed 0.5.11
 
-**Built 2026-10-25 in Creative Delight, Shipped in 1.1.03 (deployed to server and players 2026-10-26); scratch rows SQ-FR-01 to -05 all PASSED (r1101 boot, r1102b 2026-11-02); client tooltip (FR-03) and play open** (section 5; tests FR-01 to FR-06). Installed: `fruitsdelight-0.5.11.jar` (`mods/`, `server_mods/`, `development/patcherMod/libs/`), 1.19.2.
+**Built 2026-10-25 in Creative Delight, Shipped in 1.1.03 (deployed to server and players 2026-10-26); scratch rows SQ-FR-01 to -05 all PASSED (r1101 boot, r1102b 2026-11-02); client tooltip (FR-03) and play open** (section 5; tests FR-01 to FR-06). Installed: `fruitsdelight-0.5.11.jar` (`mods/`, `server_mods/`, `development/creativeCommon/libs/`), 1.19.2.
 Evaluated 2026-10-25 against `devmods/checkNewerVersionForContent/fruitsdelight-1.1.3.jar` (1.20.1 / Forge), method in
 [devmods_evaluation.md](devmods_evaluation.md) section 1. Both jars unpacked in `DecompiledMods/`. Plan row:
 `largecontent/mod-additions #20` in [todo/TODO.md](todo/TODO.md).

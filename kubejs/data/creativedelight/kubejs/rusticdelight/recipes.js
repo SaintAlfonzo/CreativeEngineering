@@ -18,12 +18,12 @@ ServerEvents.recipes(e => {
 		// pack): maple foods take half Rustic's syrup, half honey as their main flavour (owner 2026-11-01, TODO
 		// creativedelight/members #16), so one syrup and one honey; it does not clash with the Syrup Cookie. Each family
 		// call sweeps the cookie's and cheesecake's other recipes.
-		var COOKIES = [
+		var COOKIES = [ // G5 begin (family calls only)
 			[i.syrup_cookie, i.syrup],
 			[i.coffee_cookie, i.roasted_coffee_beans],
 			[i.cherry_blossom_cookie, i.t_cherry_blossom],
 			[i.maple_cookie, i.syrup, i.honey_bottle],
-		]
+		] // G5 end
 		COOKIES.forEach(c => F.cookieBake(c[1], c[0], c[2]))
 		// Cheesecakes are pies here (as Sweet Berry Cheesecake): pie crust + 2 flavour + 2 sweet. Slices back to a
 		// whole cheesecake stay.
@@ -50,7 +50,7 @@ ServerEvents.recipes(e => {
 		// by hand the same plus 1 more potato.
 		var POTATO_ANY = [i.any_potato, i.t_vegetables_sweet_potato]
 		var ONION_OR_GARLIC = [i.onion, i.t_crops_garlic]
-		;['rusticdelight:potato_salad', 'moredelight:cooking/potato_salad', 'oceanic_delight:potato_salad']
+		;['rusticdelight:potato_salad', 'moredelight:cooking/potato_salad', 'oceanic_delight:potato_salad'] // G5 (R.remove ids)
 			.forEach(id => R.remove({ id: id }, e))
 		R.fdCooking([POTATO_ANY, POTATO_ANY, i.eggs, i.milk, ONION_OR_GARLIC], i.potato_salad, e, 'potato_salad', 1.0, 200, i.bowl)
 		R.shapeless(i.potato_salad, [POTATO_ANY, POTATO_ANY, POTATO_ANY, i.eggs, i.milk, ONION_OR_GARLIC, i.bowl], e,

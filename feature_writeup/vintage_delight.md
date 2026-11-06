@@ -932,6 +932,11 @@ Port `-14` and the CD scripts are in the CD jar installed 2026-11-03 00:08 (Crea
   consuming and the leftover check all use it, so split ingredients no longer drain the first slot and stall the next
   batch. Thrown leftovers (buffer off or full) wait CD `[vintage.pickling_jar] overflowEjectDelayTicks` ticks (default 20)
   in a queue saved with the jar and dropped if it breaks. Rows SQ-VTD8-01 (rewritten), SQ-VTD8-02.
+- **2026-11-04:** port `-18`, strict one item per slot (owner report: the jar started batches from stacked slots and
+  took several items from one slot). `assignSlots` now needs exactly as many filled input slots as ingredient entries,
+  each slot feeding one entry (perfect matching, backtracking); the shared-slot fallback of I2 is gone. Every pickling
+  recipe has 2 to 6 entries (NCH `pickling` enforces 1 to 6), so none becomes unmakeable. Row SQ-VTD8-02 (b) flipped,
+  SQ-VTD8-03 added.
 
 - **2026-11-03 (stations, port `-16`, in the CD jar built 19:13, not installed):** Pickling Jar on the five-station rule
   ([remainder_buffer.md](remainder_buffer.md) 3.8, TODO `creativedelight/members #37`, `cooking/kitchen #29`): leftovers through

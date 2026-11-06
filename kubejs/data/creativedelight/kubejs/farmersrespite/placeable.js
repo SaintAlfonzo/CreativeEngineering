@@ -4,8 +4,37 @@
 // Placeable food tags, farmersrespite part. Readers merge every part with global.CD.genMerge('placeable') (creative_delight.md 28.2).
 if (global.CD) global.CD.genPut('placeable', 'farmersrespite', {
  "placeable": [
+  "black_cod",
+  "black_tea",
+  "blazing_chili",
   "coffee_cake",
-  "rose_hip_pie"
+  "dandelion_tea",
+  "gamblers_tea",
+  "green_tea",
+  "purulent_tea",
+  "rose_hip_pie",
+  "rose_hip_tea",
+  "tea_curry",
+  "yellow_tea"
+ ],
+ "placeable/sneak": [
+  "black_cod",
+  "black_tea",
+  "blazing_chili",
+  "dandelion_tea",
+  "gamblers_tea",
+  "green_tea",
+  "purulent_tea",
+  "rose_hip_tea",
+  "tea_curry",
+  "yellow_tea"
+ ],
+ "placeable_on_plate": [
+  "green_tea_cookie"
+ ],
+ "placeable_on_small_plate": [
+  "coffee_cake_slice",
+  "rose_hip_pie_slice"
  ],
  "placeable_on_coaster": [
   "black_cod",

@@ -5,6 +5,7 @@ import com.mojang.logging.LogUtils;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.ListTag;
 import net.minecraft.nbt.Tag;
+import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.food.FoodProperties;
@@ -134,6 +135,36 @@ public final class PackSeasonings {
             applyEaten.invokeExact(player, stack);
         } catch (Throwable e) {
             LOGGER.warn("[barbequesdelight] could not apply seasonings", e);
+        }
+    }
+
+    private static boolean lookedLine;
+    @Nullable
+    private static MethodHandle line;
+
+    /**
+     * The tooltip line a food seasoned with {@code id} shows (Creative Delight's {@code food.SeasoningTooltip.line}), for
+     * the seasoning item's own tooltip (plan_meals_rolls_bbq.md C1). Client only (the line reads lang); null without
+     * Creative Delight.
+     */
+    @Nullable
+    public static Component tooltipLine(ResourceLocation id) {
+        if (!lookedLine) {
+            lookedLine = true;
+            try {
+                Class<?> c = Class.forName("com.SaintAlfonzo.creativedelight.food.SeasoningTooltip");
+                line = MethodHandles.publicLookup().findStatic(c, "line", MethodType.methodType(Component.class, ResourceLocation.class));
+            } catch (Throwable e) {
+                LOGGER.warn("[barbequesdelight] Creative Delight seasoning tooltip not found", e);
+            }
+        }
+        if (line == null) {
+            return null;
+        }
+        try {
+            return (Component) line.invokeExact(id);
+        } catch (Throwable e) {
+            return null;
         }
     }
 }

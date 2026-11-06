@@ -1,0 +1,1977 @@
+{
+ "_generated_by": "tools/gen_jei_world.py",
+ "rows": [
+  {
+   "requires": [
+    "immersive_weathering"
+   ],
+   "inputs": [
+    {
+     "block": "minecraft:oak_log"
+    }
+   ],
+   "action": {
+    "tag": "forge:tools/axes"
+   },
+   "outputs": [
+    {
+     "block": "minecraft:stripped_oak_log"
+    },
+    {
+     "item": "immersive_weathering:oak_bark"
+    }
+   ],
+   "notes": [
+    "Right-click the placed block.",
+    "Also drops 1 bark."
+   ]
+  },
+  {
+   "requires": [
+    "immersive_weathering"
+   ],
+   "inputs": [
+    {
+     "block": "minecraft:spruce_log"
+    }
+   ],
+   "action": {
+    "tag": "forge:tools/axes"
+   },
+   "outputs": [
+    {
+     "block": "minecraft:stripped_spruce_log"
+    },
+    {
+     "item": "immersive_weathering:spruce_bark"
+    }
+   ],
+   "notes": [
+    "Right-click the placed block.",
+    "Also drops 1 bark."
+   ]
+  },
+  {
+   "requires": [
+    "immersive_weathering"
+   ],
+   "inputs": [
+    {
+     "block": "minecraft:birch_log"
+    }
+   ],
+   "action": {
+    "tag": "forge:tools/axes"
+   },
+   "outputs": [
+    {
+     "block": "minecraft:stripped_birch_log"
+    },
+    {
+     "item": "immersive_weathering:birch_bark"
+    }
+   ],
+   "notes": [
+    "Right-click the placed block.",
+    "Also drops 1 bark."
+   ]
+  },
+  {
+   "requires": [
+    "immersive_weathering"
+   ],
+   "inputs": [
+    {
+     "block": "minecraft:jungle_log"
+    }
+   ],
+   "action": {
+    "tag": "forge:tools/axes"
+   },
+   "outputs": [
+    {
+     "block": "minecraft:stripped_jungle_log"
+    },
+    {
+     "item": "immersive_weathering:jungle_bark"
+    }
+   ],
+   "notes": [
+    "Right-click the placed block.",
+    "Also drops 1 bark."
+   ]
+  },
+  {
+   "requires": [
+    "immersive_weathering"
+   ],
+   "inputs": [
+    {
+     "block": "minecraft:acacia_log"
+    }
+   ],
+   "action": {
+    "tag": "forge:tools/axes"
+   },
+   "outputs": [
+    {
+     "block": "minecraft:stripped_acacia_log"
+    },
+    {
+     "item": "immersive_weathering:acacia_bark"
+    }
+   ],
+   "notes": [
+    "Right-click the placed block.",
+    "Also drops 1 bark."
+   ]
+  },
+  {
+   "requires": [
+    "immersive_weathering"
+   ],
+   "inputs": [
+    {
+     "block": "minecraft:dark_oak_log"
+    }
+   ],
+   "action": {
+    "tag": "forge:tools/axes"
+   },
+   "outputs": [
+    {
+     "block": "minecraft:stripped_dark_oak_log"
+    },
+    {
+     "item": "immersive_weathering:dark_oak_bark"
+    }
+   ],
+   "notes": [
+    "Right-click the placed block.",
+    "Also drops 1 bark."
+   ]
+  },
+  {
+   "requires": [
+    "immersive_weathering"
+   ],
+   "inputs": [
+    {
+     "block": "minecraft:mangrove_log"
+    }
+   ],
+   "action": {
+    "tag": "forge:tools/axes"
+   },
+   "outputs": [
+    {
+     "block": "minecraft:stripped_mangrove_log"
+    },
+    {
+     "item": "immersive_weathering:mangrove_bark"
+    }
+   ],
+   "notes": [
+    "Right-click the placed block.",
+    "Also drops 1 bark."
+   ]
+  },
+  {
+   "requires": [
+    "immersive_weathering"
+   ],
+   "inputs": [
+    {
+     "block": "minecraft:oak_wood"
+    }
+   ],
+   "action": {
+    "tag": "forge:tools/axes"
+   },
+   "outputs": [
+    {
+     "block": "minecraft:stripped_oak_wood"
+    },
+    {
+     "item": "immersive_weathering:oak_bark"
+    }
+   ],
+   "notes": [
+    "Right-click the placed block.",
+    "Also drops 1 bark."
+   ]
+  },
+  {
+   "requires": [
+    "immersive_weathering"
+   ],
+   "inputs": [
+    {
+     "block": "minecraft:spruce_wood"
+    }
+   ],
+   "action": {
+    "tag": "forge:tools/axes"
+   },
+   "outputs": [
+    {
+     "block": "minecraft:stripped_spruce_wood"
+    },
+    {
+     "item": "immersive_weathering:spruce_bark"
+    }
+   ],
+   "notes": [
+    "Right-click the placed block.",
+    "Also drops 1 bark."
+   ]
+  },
+  {
+   "requires": [
+    "immersive_weathering"
+   ],
+   "inputs": [
+    {
+     "block": "minecraft:birch_wood"
+    }
+   ],
+   "action": {
+    "tag": "forge:tools/axes"
+   },
+   "outputs": [
+    {
+     "block": "minecraft:stripped_birch_wood"
+    },
+    {
+     "item": "immersive_weathering:birch_bark"
+    }
+   ],
+   "notes": [
+    "Right-click the placed block.",
+    "Also drops 1 bark."
+   ]
+  },
+  {
+   "requires": [
+    "immersive_weathering"
+   ],
+   "inputs": [
+    {
+     "block": "minecraft:jungle_wood"
+    }
+   ],
+   "action": {
+    "tag": "forge:tools/axes"
+   },
+   "outputs": [
+    {
+     "block": "minecraft:stripped_jungle_wood"
+    },
+    {
+     "item": "immersive_weathering:jungle_bark"
+    }
+   ],
+   "notes": [
+    "Right-click the placed block.",
+    "Also drops 1 bark."
+   ]
+  },
+  {
+   "requires": [
+    "immersive_weathering"
+   ],
+   "inputs": [
+    {
+     "block": "minecraft:acacia_wood"
+    }
+   ],
+   "action": {
+    "tag": "forge:tools/axes"
+   },
+   "outputs": [
+    {
+     "block": "minecraft:stripped_acacia_wood"
+    },
+    {
+     "item": "immersive_weathering:acacia_bark"
+    }
+   ],
+   "notes": [
+    "Right-click the placed block.",
+    "Also drops 1 bark."
+   ]
+  },
+  {
+   "requires": [
+    "immersive_weathering"
+   ],
+   "inputs": [
+    {
+     "block": "minecraft:dark_oak_wood"
+    }
+   ],
+   "action": {
+    "tag": "forge:tools/axes"
+   },
+   "outputs": [
+    {
+     "block": "minecraft:stripped_dark_oak_wood"
+    },
+    {
+     "item": "immersive_weathering:dark_oak_bark"
+    }
+   ],
+   "notes": [
+    "Right-click the placed block.",
+    "Also drops 1 bark."
+   ]
+  },
+  {
+   "requires": [
+    "immersive_weathering"
+   ],
+   "inputs": [
+    {
+     "block": "minecraft:mangrove_wood"
+    }
+   ],
+   "action": {
+    "tag": "forge:tools/axes"
+   },
+   "outputs": [
+    {
+     "block": "minecraft:stripped_mangrove_wood"
+    },
+    {
+     "item": "immersive_weathering:mangrove_bark"
+    }
+   ],
+   "notes": [
+    "Right-click the placed block.",
+    "Also drops 1 bark."
+   ]
+  },
+  {
+   "requires": [
+    "immersive_weathering"
+   ],
+   "inputs": [
+    {
+     "block": "minecraft:warped_stem"
+    }
+   ],
+   "action": {
+    "tag": "forge:tools/axes"
+   },
+   "outputs": [
+    {
+     "block": "minecraft:stripped_warped_stem"
+    },
+    {
+     "item": "immersive_weathering:warped_scales"
+    }
+   ],
+   "notes": [
+    "Right-click the placed block.",
+    "Also drops 1 bark."
+   ]
+  },
+  {
+   "requires": [
+    "immersive_weathering"
+   ],
+   "inputs": [
+    {
+     "block": "minecraft:warped_hyphae"
+    }
+   ],
+   "action": {
+    "tag": "forge:tools/axes"
+   },
+   "outputs": [
+    {
+     "block": "minecraft:stripped_warped_hyphae"
+    },
+    {
+     "item": "immersive_weathering:warped_scales"
+    }
+   ],
+   "notes": [
+    "Right-click the placed block.",
+    "Also drops 1 bark."
+   ]
+  },
+  {
+   "requires": [
+    "immersive_weathering"
+   ],
+   "inputs": [
+    {
+     "block": "minecraft:crimson_stem"
+    }
+   ],
+   "action": {
+    "tag": "forge:tools/axes"
+   },
+   "outputs": [
+    {
+     "block": "minecraft:stripped_crimson_stem"
+    },
+    {
+     "item": "immersive_weathering:crimson_scales"
+    }
+   ],
+   "notes": [
+    "Right-click the placed block.",
+    "Also drops 1 bark."
+   ]
+  },
+  {
+   "requires": [
+    "immersive_weathering"
+   ],
+   "inputs": [
+    {
+     "block": "minecraft:crimson_hyphae"
+    }
+   ],
+   "action": {
+    "tag": "forge:tools/axes"
+   },
+   "outputs": [
+    {
+     "block": "minecraft:stripped_crimson_hyphae"
+    },
+    {
+     "item": "immersive_weathering:crimson_scales"
+    }
+   ],
+   "notes": [
+    "Right-click the placed block.",
+    "Also drops 1 bark."
+   ]
+  },
+  {
+   "requires": [
+    "botania",
+    "immersive_weathering"
+   ],
+   "inputs": [
+    {
+     "block": "botania:livingwood_log"
+    }
+   ],
+   "action": {
+    "tag": "forge:tools/axes"
+   },
+   "outputs": [
+    {
+     "block": "botania:stripped_livingwood_log"
+    },
+    {
+     "item": "immersive_weathering:botania/livingwood_bark"
+    }
+   ],
+   "notes": [
+    "Right-click the placed block.",
+    "Also drops 1 bark."
+   ]
+  },
+  {
+   "requires": [
+    "botania"
+   ],
+   "inputs": [
+    {
+     "block": "botania:glimmering_livingwood_log"
+    }
+   ],
+   "action": {
+    "tag": "forge:tools/axes"
+   },
+   "outputs": [
+    {
+     "block": "botania:glimmering_stripped_livingwood_log"
+    }
+   ],
+   "notes": [
+    "Right-click the placed block."
+   ]
+  },
+  {
+   "requires": [
+    "botania"
+   ],
+   "inputs": [
+    {
+     "block": "botania:livingwood"
+    }
+   ],
+   "action": {
+    "tag": "forge:tools/axes"
+   },
+   "outputs": [
+    {
+     "block": "botania:stripped_livingwood"
+    }
+   ],
+   "notes": [
+    "Right-click the placed block."
+   ]
+  },
+  {
+   "requires": [
+    "botania"
+   ],
+   "inputs": [
+    {
+     "block": "botania:glimmering_livingwood"
+    }
+   ],
+   "action": {
+    "tag": "forge:tools/axes"
+   },
+   "outputs": [
+    {
+     "block": "botania:glimmering_stripped_livingwood"
+    }
+   ],
+   "notes": [
+    "Right-click the placed block."
+   ]
+  },
+  {
+   "requires": [
+    "botania",
+    "immersive_weathering"
+   ],
+   "inputs": [
+    {
+     "block": "botania:dreamwood_log"
+    }
+   ],
+   "action": {
+    "tag": "forge:tools/axes"
+   },
+   "outputs": [
+    {
+     "block": "botania:stripped_dreamwood_log"
+    },
+    {
+     "item": "immersive_weathering:botania/dreamwood_bark"
+    }
+   ],
+   "notes": [
+    "Right-click the placed block.",
+    "Also drops 1 bark."
+   ]
+  },
+  {
+   "requires": [
+    "botania"
+   ],
+   "inputs": [
+    {
+     "block": "botania:glimmering_dreamwood_log"
+    }
+   ],
+   "action": {
+    "tag": "forge:tools/axes"
+   },
+   "outputs": [
+    {
+     "block": "botania:glimmering_stripped_dreamwood_log"
+    }
+   ],
+   "notes": [
+    "Right-click the placed block."
+   ]
+  },
+  {
+   "requires": [
+    "botania"
+   ],
+   "inputs": [
+    {
+     "block": "botania:dreamwood"
+    }
+   ],
+   "action": {
+    "tag": "forge:tools/axes"
+   },
+   "outputs": [
+    {
+     "block": "botania:stripped_dreamwood"
+    }
+   ],
+   "notes": [
+    "Right-click the placed block."
+   ]
+  },
+  {
+   "requires": [
+    "botania"
+   ],
+   "inputs": [
+    {
+     "block": "botania:glimmering_dreamwood"
+    }
+   ],
+   "action": {
+    "tag": "forge:tools/axes"
+   },
+   "outputs": [
+    {
+     "block": "botania:glimmering_stripped_dreamwood"
+    }
+   ],
+   "notes": [
+    "Right-click the placed block."
+   ]
+  },
+  {
+   "requires": [
+    "botania"
+   ],
+   "inputs": [
+    {
+     "block": "botania:livingwood_stairs"
+    }
+   ],
+   "action": {
+    "tag": "forge:tools/axes"
+   },
+   "outputs": [
+    {
+     "block": "botania:stripped_livingwood_stairs"
+    }
+   ],
+   "notes": [
+    "Right-click the placed block."
+   ]
+  },
+  {
+   "requires": [
+    "botania"
+   ],
+   "inputs": [
+    {
+     "block": "botania:livingwood_slab"
+    }
+   ],
+   "action": {
+    "tag": "forge:tools/axes"
+   },
+   "outputs": [
+    {
+     "block": "botania:stripped_livingwood_slab"
+    }
+   ],
+   "notes": [
+    "Right-click the placed block."
+   ]
+  },
+  {
+   "requires": [
+    "botania"
+   ],
+   "inputs": [
+    {
+     "block": "botania:livingwood_wall"
+    }
+   ],
+   "action": {
+    "tag": "forge:tools/axes"
+   },
+   "outputs": [
+    {
+     "block": "botania:stripped_livingwood_wall"
+    }
+   ],
+   "notes": [
+    "Right-click the placed block."
+   ]
+  },
+  {
+   "requires": [
+    "botania"
+   ],
+   "inputs": [
+    {
+     "block": "botania:dreamwood_stairs"
+    }
+   ],
+   "action": {
+    "tag": "forge:tools/axes"
+   },
+   "outputs": [
+    {
+     "block": "botania:stripped_dreamwood_stairs"
+    }
+   ],
+   "notes": [
+    "Right-click the placed block."
+   ]
+  },
+  {
+   "requires": [
+    "botania"
+   ],
+   "inputs": [
+    {
+     "block": "botania:dreamwood_slab"
+    }
+   ],
+   "action": {
+    "tag": "forge:tools/axes"
+   },
+   "outputs": [
+    {
+     "block": "botania:stripped_dreamwood_slab"
+    }
+   ],
+   "notes": [
+    "Right-click the placed block."
+   ]
+  },
+  {
+   "requires": [
+    "botania"
+   ],
+   "inputs": [
+    {
+     "block": "botania:dreamwood_wall"
+    }
+   ],
+   "action": {
+    "tag": "forge:tools/axes"
+   },
+   "outputs": [
+    {
+     "block": "botania:stripped_dreamwood_wall"
+    }
+   ],
+   "notes": [
+    "Right-click the placed block."
+   ]
+  },
+  {
+   "requires": [
+    "architects_palette",
+    "immersive_weathering"
+   ],
+   "inputs": [
+    {
+     "block": "architects_palette:twisted_log"
+    }
+   ],
+   "action": {
+    "tag": "forge:tools/axes"
+   },
+   "outputs": [
+    {
+     "block": "architects_palette:stripped_twisted_log"
+    },
+    {
+     "item": "immersive_weathering:architects_palette/twisted_bark"
+    }
+   ],
+   "notes": [
+    "Right-click the placed block.",
+    "Also drops 1 bark."
+   ]
+  },
+  {
+   "requires": [
+    "architects_palette",
+    "immersive_weathering"
+   ],
+   "inputs": [
+    {
+     "block": "architects_palette:twisted_wood"
+    }
+   ],
+   "action": {
+    "tag": "forge:tools/axes"
+   },
+   "outputs": [
+    {
+     "block": "architects_palette:stripped_twisted_wood"
+    },
+    {
+     "item": "immersive_weathering:architects_palette/twisted_bark"
+    }
+   ],
+   "notes": [
+    "Right-click the placed block.",
+    "Also drops 1 bark."
+   ]
+  },
+  {
+   "requires": [
+    "architects_palette"
+   ],
+   "inputs": [
+    {
+     "block": "architects_palette:bread_block"
+    }
+   ],
+   "action": {
+    "tag": "forge:tools/axes"
+   },
+   "outputs": [
+    {
+     "block": "architects_palette:crustless_bread_block"
+    }
+   ],
+   "notes": [
+    "Right-click the placed block."
+   ]
+  },
+  {
+   "requires": [
+    "vinery"
+   ],
+   "inputs": [
+    {
+     "block": "vinery:apple_log"
+    }
+   ],
+   "action": {
+    "tag": "forge:tools/axes"
+   },
+   "outputs": [
+    {
+     "block": "minecraft:stripped_oak_log"
+    }
+   ],
+   "notes": [
+    "Right-click the placed block."
+   ]
+  },
+  {
+   "requires": [
+    "vinery"
+   ],
+   "inputs": [
+    {
+     "block": "vinery:apple_wood"
+    }
+   ],
+   "action": {
+    "tag": "forge:tools/axes"
+   },
+   "outputs": [
+    {
+     "block": "minecraft:stripped_oak_wood"
+    }
+   ],
+   "notes": [
+    "Right-click the placed block."
+   ]
+  },
+  {
+   "requires": [
+    "immersive_weathering",
+    "vinery"
+   ],
+   "inputs": [
+    {
+     "block": "vinery:cherry_log"
+    }
+   ],
+   "action": {
+    "tag": "forge:tools/axes"
+   },
+   "outputs": [
+    {
+     "block": "vinery:stripped_cherry_log"
+    },
+    {
+     "item": "immersive_weathering:vinery/cherry_bark"
+    }
+   ],
+   "notes": [
+    "Right-click the placed block.",
+    "Also drops 1 bark."
+   ]
+  },
+  {
+   "requires": [
+    "immersive_weathering",
+    "vinery"
+   ],
+   "inputs": [
+    {
+     "block": "vinery:cherry_wood"
+    }
+   ],
+   "action": {
+    "tag": "forge:tools/axes"
+   },
+   "outputs": [
+    {
+     "block": "vinery:stripped_cherry_wood"
+    },
+    {
+     "item": "immersive_weathering:vinery/cherry_bark"
+    }
+   ],
+   "notes": [
+    "Right-click the placed block.",
+    "Also drops 1 bark."
+   ]
+  },
+  {
+   "requires": [
+    "quark"
+   ],
+   "inputs": [
+    {
+     "block": "quark:bamboo_post"
+    }
+   ],
+   "action": {
+    "tag": "forge:tools/axes"
+   },
+   "outputs": [
+    {
+     "block": "quark:stripped_bamboo_post"
+    }
+   ],
+   "notes": [
+    "Right-click the placed block."
+   ]
+  },
+  {
+   "requires": [
+    "quark"
+   ],
+   "inputs": [
+    {
+     "block": "quark:bamboo_block"
+    }
+   ],
+   "action": {
+    "tag": "forge:tools/axes"
+   },
+   "outputs": [
+    {
+     "block": "quark:stripped_bamboo_block"
+    }
+   ],
+   "notes": [
+    "Right-click the placed block."
+   ]
+  },
+  {
+   "requires": [
+    "quark"
+   ],
+   "inputs": [
+    {
+     "block": "quark:oak_post"
+    }
+   ],
+   "action": {
+    "tag": "forge:tools/axes"
+   },
+   "outputs": [
+    {
+     "block": "quark:stripped_oak_post"
+    }
+   ],
+   "notes": [
+    "Right-click the placed block."
+   ]
+  },
+  {
+   "requires": [
+    "quark"
+   ],
+   "inputs": [
+    {
+     "block": "quark:spruce_post"
+    }
+   ],
+   "action": {
+    "tag": "forge:tools/axes"
+   },
+   "outputs": [
+    {
+     "block": "quark:stripped_spruce_post"
+    }
+   ],
+   "notes": [
+    "Right-click the placed block."
+   ]
+  },
+  {
+   "requires": [
+    "quark"
+   ],
+   "inputs": [
+    {
+     "block": "quark:birch_post"
+    }
+   ],
+   "action": {
+    "tag": "forge:tools/axes"
+   },
+   "outputs": [
+    {
+     "block": "quark:stripped_birch_post"
+    }
+   ],
+   "notes": [
+    "Right-click the placed block."
+   ]
+  },
+  {
+   "requires": [
+    "quark"
+   ],
+   "inputs": [
+    {
+     "block": "quark:jungle_post"
+    }
+   ],
+   "action": {
+    "tag": "forge:tools/axes"
+   },
+   "outputs": [
+    {
+     "block": "quark:stripped_jungle_post"
+    }
+   ],
+   "notes": [
+    "Right-click the placed block."
+   ]
+  },
+  {
+   "requires": [
+    "quark"
+   ],
+   "inputs": [
+    {
+     "block": "quark:acacia_post"
+    }
+   ],
+   "action": {
+    "tag": "forge:tools/axes"
+   },
+   "outputs": [
+    {
+     "block": "quark:stripped_acacia_post"
+    }
+   ],
+   "notes": [
+    "Right-click the placed block."
+   ]
+  },
+  {
+   "requires": [
+    "quark"
+   ],
+   "inputs": [
+    {
+     "block": "quark:dark_oak_post"
+    }
+   ],
+   "action": {
+    "tag": "forge:tools/axes"
+   },
+   "outputs": [
+    {
+     "block": "quark:stripped_dark_oak_post"
+    }
+   ],
+   "notes": [
+    "Right-click the placed block."
+   ]
+  },
+  {
+   "requires": [
+    "quark"
+   ],
+   "inputs": [
+    {
+     "block": "quark:crimson_post"
+    }
+   ],
+   "action": {
+    "tag": "forge:tools/axes"
+   },
+   "outputs": [
+    {
+     "block": "quark:stripped_crimson_post"
+    }
+   ],
+   "notes": [
+    "Right-click the placed block."
+   ]
+  },
+  {
+   "requires": [
+    "quark"
+   ],
+   "inputs": [
+    {
+     "block": "quark:warped_post"
+    }
+   ],
+   "action": {
+    "tag": "forge:tools/axes"
+   },
+   "outputs": [
+    {
+     "block": "quark:stripped_warped_post"
+    }
+   ],
+   "notes": [
+    "Right-click the placed block."
+   ]
+  },
+  {
+   "requires": [
+    "quark"
+   ],
+   "inputs": [
+    {
+     "block": "quark:mangrove_post"
+    }
+   ],
+   "action": {
+    "tag": "forge:tools/axes"
+   },
+   "outputs": [
+    {
+     "block": "quark:stripped_mangrove_post"
+    }
+   ],
+   "notes": [
+    "Right-click the placed block."
+   ]
+  },
+  {
+   "requires": [
+    "immersive_weathering",
+    "quark"
+   ],
+   "inputs": [
+    {
+     "block": "quark:ancient_log"
+    }
+   ],
+   "action": {
+    "tag": "forge:tools/axes"
+   },
+   "outputs": [
+    {
+     "block": "quark:stripped_ancient_log"
+    },
+    {
+     "item": "immersive_weathering:quark/ancient_bark"
+    }
+   ],
+   "notes": [
+    "Right-click the placed block.",
+    "Also drops 1 bark."
+   ]
+  },
+  {
+   "requires": [
+    "immersive_weathering",
+    "quark"
+   ],
+   "inputs": [
+    {
+     "block": "quark:ancient_wood"
+    }
+   ],
+   "action": {
+    "tag": "forge:tools/axes"
+   },
+   "outputs": [
+    {
+     "block": "quark:stripped_ancient_wood"
+    },
+    {
+     "item": "immersive_weathering:quark/ancient_bark"
+    }
+   ],
+   "notes": [
+    "Right-click the placed block.",
+    "Also drops 1 bark."
+   ]
+  },
+  {
+   "requires": [
+    "quark"
+   ],
+   "inputs": [
+    {
+     "block": "quark:ancient_post"
+    }
+   ],
+   "action": {
+    "tag": "forge:tools/axes"
+   },
+   "outputs": [
+    {
+     "block": "quark:stripped_ancient_post"
+    }
+   ],
+   "notes": [
+    "Right-click the placed block."
+   ]
+  },
+  {
+   "requires": [
+    "immersive_weathering",
+    "quark"
+   ],
+   "inputs": [
+    {
+     "block": "quark:blossom_log"
+    }
+   ],
+   "action": {
+    "tag": "forge:tools/axes"
+   },
+   "outputs": [
+    {
+     "block": "quark:stripped_blossom_log"
+    },
+    {
+     "item": "immersive_weathering:quark/blossom_bark"
+    }
+   ],
+   "notes": [
+    "Right-click the placed block.",
+    "Also drops 1 bark."
+   ]
+  },
+  {
+   "requires": [
+    "immersive_weathering",
+    "quark"
+   ],
+   "inputs": [
+    {
+     "block": "quark:blossom_wood"
+    }
+   ],
+   "action": {
+    "tag": "forge:tools/axes"
+   },
+   "outputs": [
+    {
+     "block": "quark:stripped_blossom_wood"
+    },
+    {
+     "item": "immersive_weathering:quark/blossom_bark"
+    }
+   ],
+   "notes": [
+    "Right-click the placed block.",
+    "Also drops 1 bark."
+   ]
+  },
+  {
+   "requires": [
+    "quark"
+   ],
+   "inputs": [
+    {
+     "block": "quark:blossom_post"
+    }
+   ],
+   "action": {
+    "tag": "forge:tools/axes"
+   },
+   "outputs": [
+    {
+     "block": "quark:stripped_blossom_post"
+    }
+   ],
+   "notes": [
+    "Right-click the placed block."
+   ]
+  },
+  {
+   "requires": [
+    "immersive_weathering",
+    "quark"
+   ],
+   "inputs": [
+    {
+     "block": "quark:azalea_log"
+    }
+   ],
+   "action": {
+    "tag": "forge:tools/axes"
+   },
+   "outputs": [
+    {
+     "block": "quark:stripped_azalea_log"
+    },
+    {
+     "item": "immersive_weathering:quark/azalea_bark"
+    }
+   ],
+   "notes": [
+    "Right-click the placed block.",
+    "Also drops 1 bark."
+   ]
+  },
+  {
+   "requires": [
+    "immersive_weathering",
+    "quark"
+   ],
+   "inputs": [
+    {
+     "block": "quark:azalea_wood"
+    }
+   ],
+   "action": {
+    "tag": "forge:tools/axes"
+   },
+   "outputs": [
+    {
+     "block": "quark:stripped_azalea_wood"
+    },
+    {
+     "item": "immersive_weathering:quark/azalea_bark"
+    }
+   ],
+   "notes": [
+    "Right-click the placed block.",
+    "Also drops 1 bark."
+   ]
+  },
+  {
+   "requires": [
+    "quark"
+   ],
+   "inputs": [
+    {
+     "block": "quark:azalea_post"
+    }
+   ],
+   "action": {
+    "tag": "forge:tools/axes"
+   },
+   "outputs": [
+    {
+     "block": "quark:stripped_azalea_post"
+    }
+   ],
+   "notes": [
+    "Right-click the placed block."
+   ]
+  },
+  {
+   "requires": [
+    "everycomp"
+   ],
+   "inputs": [
+    {
+     "block": "everycomp:q/botania/livingwood_post"
+    }
+   ],
+   "action": {
+    "tag": "forge:tools/axes"
+   },
+   "outputs": [
+    {
+     "block": "everycomp:q/botania/stripped_livingwood_post"
+    }
+   ],
+   "notes": [
+    "Right-click the placed block."
+   ]
+  },
+  {
+   "requires": [
+    "everycomp"
+   ],
+   "inputs": [
+    {
+     "block": "everycomp:q/botania/dreamwood_post"
+    }
+   ],
+   "action": {
+    "tag": "forge:tools/axes"
+   },
+   "outputs": [
+    {
+     "block": "everycomp:q/botania/stripped_dreamwood_post"
+    }
+   ],
+   "notes": [
+    "Right-click the placed block."
+   ]
+  },
+  {
+   "requires": [
+    "everycomp"
+   ],
+   "inputs": [
+    {
+     "block": "everycomp:q/architects_palette/twisted_post"
+    }
+   ],
+   "action": {
+    "tag": "forge:tools/axes"
+   },
+   "outputs": [
+    {
+     "block": "everycomp:q/architects_palette/stripped_twisted_post"
+    }
+   ],
+   "notes": [
+    "Right-click the placed block."
+   ]
+  },
+  {
+   "requires": [
+    "everycomp"
+   ],
+   "inputs": [
+    {
+     "block": "everycomp:q/vinery/cherry_post"
+    }
+   ],
+   "action": {
+    "tag": "forge:tools/axes"
+   },
+   "outputs": [
+    {
+     "block": "everycomp:q/vinery/stripped_cherry_post"
+    }
+   ],
+   "notes": [
+    "Right-click the placed block."
+   ]
+  },
+  {
+   "requires": [
+    "create_dd",
+    "immersive_weathering"
+   ],
+   "inputs": [
+    {
+     "block": "create_dd:rose_log"
+    }
+   ],
+   "action": {
+    "tag": "forge:tools/axes"
+   },
+   "outputs": [
+    {
+     "block": "create_dd:stripped_rose_log"
+    },
+    {
+     "item": "immersive_weathering:create_dd/rose_bark"
+    }
+   ],
+   "notes": [
+    "Right-click the placed block.",
+    "Also drops 1 bark."
+   ]
+  },
+  {
+   "requires": [
+    "create_dd",
+    "immersive_weathering"
+   ],
+   "inputs": [
+    {
+     "block": "create_dd:rose_wood"
+    }
+   ],
+   "action": {
+    "tag": "forge:tools/axes"
+   },
+   "outputs": [
+    {
+     "block": "create_dd:stripped_rose_wood"
+    },
+    {
+     "item": "immersive_weathering:create_dd/rose_bark"
+    }
+   ],
+   "notes": [
+    "Right-click the placed block.",
+    "Also drops 1 bark."
+   ]
+  },
+  {
+   "requires": [
+    "create_dd",
+    "immersive_weathering"
+   ],
+   "inputs": [
+    {
+     "block": "create_dd:smoked_log"
+    }
+   ],
+   "action": {
+    "tag": "forge:tools/axes"
+   },
+   "outputs": [
+    {
+     "block": "create_dd:stripped_smoked_log"
+    },
+    {
+     "item": "immersive_weathering:create_dd/smoked_bark"
+    }
+   ],
+   "notes": [
+    "Right-click the placed block.",
+    "Also drops 1 bark."
+   ]
+  },
+  {
+   "requires": [
+    "create_dd",
+    "immersive_weathering"
+   ],
+   "inputs": [
+    {
+     "block": "create_dd:smoked_wood"
+    }
+   ],
+   "action": {
+    "tag": "forge:tools/axes"
+   },
+   "outputs": [
+    {
+     "block": "create_dd:stripped_smoked_wood"
+    },
+    {
+     "item": "immersive_weathering:create_dd/smoked_bark"
+    }
+   ],
+   "notes": [
+    "Right-click the placed block.",
+    "Also drops 1 bark."
+   ]
+  },
+  {
+   "requires": [
+    "create_dd",
+    "immersive_weathering"
+   ],
+   "inputs": [
+    {
+     "block": "create_dd:rubber_log"
+    }
+   ],
+   "action": {
+    "tag": "forge:tools/axes"
+   },
+   "outputs": [
+    {
+     "block": "create_dd:stripped_rubber_log"
+    },
+    {
+     "item": "immersive_weathering:create_dd/rubber_bark"
+    }
+   ],
+   "notes": [
+    "Right-click the placed block.",
+    "Also drops 1 bark."
+   ]
+  },
+  {
+   "requires": [
+    "create_dd",
+    "immersive_weathering"
+   ],
+   "inputs": [
+    {
+     "block": "create_dd:rubber_wood"
+    }
+   ],
+   "action": {
+    "tag": "forge:tools/axes"
+   },
+   "outputs": [
+    {
+     "block": "create_dd:stripped_rubber_wood"
+    },
+    {
+     "item": "immersive_weathering:create_dd/rubber_bark"
+    }
+   ],
+   "notes": [
+    "Right-click the placed block.",
+    "Also drops 1 bark."
+   ]
+  },
+  {
+   "requires": [
+    "create_dd",
+    "immersive_weathering"
+   ],
+   "inputs": [
+    {
+     "block": "create_dd:spirit_log"
+    }
+   ],
+   "action": {
+    "tag": "forge:tools/axes"
+   },
+   "outputs": [
+    {
+     "block": "create_dd:stripped_spirit_log"
+    },
+    {
+     "item": "immersive_weathering:create_dd/spirit_bark"
+    }
+   ],
+   "notes": [
+    "Right-click the placed block.",
+    "Also drops 1 bark."
+   ]
+  },
+  {
+   "requires": [
+    "create_dd",
+    "immersive_weathering"
+   ],
+   "inputs": [
+    {
+     "block": "create_dd:spirit_wood"
+    }
+   ],
+   "action": {
+    "tag": "forge:tools/axes"
+   },
+   "outputs": [
+    {
+     "block": "create_dd:stripped_spirit_wood"
+    },
+    {
+     "item": "immersive_weathering:create_dd/spirit_bark"
+    }
+   ],
+   "notes": [
+    "Right-click the placed block.",
+    "Also drops 1 bark."
+   ]
+  },
+  {
+   "requires": [
+    "everycomp"
+   ],
+   "inputs": [
+    {
+     "block": "everycomp:q/create_dd/rose_post"
+    }
+   ],
+   "action": {
+    "tag": "forge:tools/axes"
+   },
+   "outputs": [
+    {
+     "block": "everycomp:q/create_dd/stripped_rose_post"
+    }
+   ],
+   "notes": [
+    "Right-click the placed block."
+   ]
+  },
+  {
+   "requires": [
+    "everycomp"
+   ],
+   "inputs": [
+    {
+     "block": "everycomp:q/create_dd/smoked_post"
+    }
+   ],
+   "action": {
+    "tag": "forge:tools/axes"
+   },
+   "outputs": [
+    {
+     "block": "everycomp:q/create_dd/stripped_smoked_post"
+    }
+   ],
+   "notes": [
+    "Right-click the placed block."
+   ]
+  },
+  {
+   "requires": [
+    "everycomp"
+   ],
+   "inputs": [
+    {
+     "block": "everycomp:q/create_dd/rubber_post"
+    }
+   ],
+   "action": {
+    "tag": "forge:tools/axes"
+   },
+   "outputs": [
+    {
+     "block": "everycomp:q/create_dd/stripped_rubber_post"
+    }
+   ],
+   "notes": [
+    "Right-click the placed block."
+   ]
+  },
+  {
+   "requires": [
+    "everycomp"
+   ],
+   "inputs": [
+    {
+     "block": "everycomp:q/create_dd/spirit_post"
+    }
+   ],
+   "action": {
+    "tag": "forge:tools/axes"
+   },
+   "outputs": [
+    {
+     "block": "everycomp:q/create_dd/stripped_spirit_post"
+    }
+   ],
+   "notes": [
+    "Right-click the placed block."
+   ]
+  },
+  {
+   "requires": [
+    "immersive_weathering",
+    "upgrade_aquatic"
+   ],
+   "inputs": [
+    {
+     "block": "upgrade_aquatic:driftwood_log"
+    }
+   ],
+   "action": {
+    "tag": "forge:tools/axes"
+   },
+   "outputs": [
+    {
+     "block": "upgrade_aquatic:stripped_driftwood_log"
+    },
+    {
+     "item": "immersive_weathering:upgrade_aquatic/driftwood_bark"
+    }
+   ],
+   "notes": [
+    "Right-click the placed block.",
+    "Also drops 1 bark."
+   ]
+  },
+  {
+   "requires": [
+    "upgrade_aquatic"
+   ],
+   "inputs": [
+    {
+     "block": "upgrade_aquatic:driftwood"
+    }
+   ],
+   "action": {
+    "tag": "forge:tools/axes"
+   },
+   "outputs": [
+    {
+     "block": "upgrade_aquatic:stripped_driftwood"
+    }
+   ],
+   "notes": [
+    "Right-click the placed block."
+   ]
+  },
+  {
+   "requires": [
+    "upgrade_aquatic"
+   ],
+   "inputs": [
+    {
+     "block": "upgrade_aquatic:driftwood_post"
+    }
+   ],
+   "action": {
+    "tag": "forge:tools/axes"
+   },
+   "outputs": [
+    {
+     "block": "upgrade_aquatic:stripped_driftwood_post"
+    }
+   ],
+   "notes": [
+    "Right-click the placed block."
+   ]
+  },
+  {
+   "requires": [
+    "immersive_weathering",
+    "upgrade_aquatic"
+   ],
+   "inputs": [
+    {
+     "block": "upgrade_aquatic:river_log"
+    }
+   ],
+   "action": {
+    "tag": "forge:tools/axes"
+   },
+   "outputs": [
+    {
+     "block": "upgrade_aquatic:stripped_river_log"
+    },
+    {
+     "item": "immersive_weathering:upgrade_aquatic/river_bark"
+    }
+   ],
+   "notes": [
+    "Right-click the placed block.",
+    "Also drops 1 bark."
+   ]
+  },
+  {
+   "requires": [
+    "immersive_weathering",
+    "upgrade_aquatic"
+   ],
+   "inputs": [
+    {
+     "block": "upgrade_aquatic:river_wood"
+    }
+   ],
+   "action": {
+    "tag": "forge:tools/axes"
+   },
+   "outputs": [
+    {
+     "block": "upgrade_aquatic:stripped_river_wood"
+    },
+    {
+     "item": "immersive_weathering:upgrade_aquatic/river_bark"
+    }
+   ],
+   "notes": [
+    "Right-click the placed block.",
+    "Also drops 1 bark."
+   ]
+  },
+  {
+   "requires": [
+    "upgrade_aquatic"
+   ],
+   "inputs": [
+    {
+     "block": "upgrade_aquatic:river_post"
+    }
+   ],
+   "action": {
+    "tag": "forge:tools/axes"
+   },
+   "outputs": [
+    {
+     "block": "upgrade_aquatic:stripped_river_post"
+    }
+   ],
+   "notes": [
+    "Right-click the placed block."
+   ]
+  },
+  {
+   "requires": [
+    "everycomp"
+   ],
+   "inputs": [
+    {
+     "block": "everycomp:q/upgrade_aquatic/driftwood_post"
+    }
+   ],
+   "action": {
+    "tag": "forge:tools/axes"
+   },
+   "outputs": [
+    {
+     "block": "everycomp:q/upgrade_aquatic/stripped_driftwood_post"
+    }
+   ],
+   "notes": [
+    "Right-click the placed block."
+   ]
+  },
+  {
+   "requires": [
+    "everycomp"
+   ],
+   "inputs": [
+    {
+     "block": "everycomp:q/upgrade_aquatic/river_post"
+    }
+   ],
+   "action": {
+    "tag": "forge:tools/axes"
+   },
+   "outputs": [
+    {
+     "block": "everycomp:q/upgrade_aquatic/stripped_river_post"
+    }
+   ],
+   "notes": [
+    "Right-click the placed block."
+   ]
+  },
+  {
+   "requires": [
+    "vintagedelight"
+   ],
+   "inputs": [
+    {
+     "block": "vintagedelight:magic_vine"
+    }
+   ],
+   "action": {
+    "tag": "forge:tools/axes"
+   },
+   "outputs": [
+    {
+     "block": "vintagedelight:stripped_magic_vine"
+    }
+   ],
+   "notes": [
+    "Right-click the placed block."
+   ]
+  },
+  {
+   "requires": [
+    "vintagedelight"
+   ],
+   "inputs": [
+    {
+     "block": "vintagedelight:magic_vine_block"
+    }
+   ],
+   "action": {
+    "tag": "forge:tools/axes"
+   },
+   "outputs": [
+    {
+     "block": "vintagedelight:stripped_magic_vine_block"
+    }
+   ],
+   "notes": [
+    "Right-click the placed block."
+   ]
+  }
+ ]
+}

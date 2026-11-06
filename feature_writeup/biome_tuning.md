@@ -14,7 +14,7 @@
   apply to worlds created after it; WG-09 to WG-13 not run in game. WG-01 to WG-08 have never been run. Findings F1 to F5 (section 4); F1 and
   F3 need your call.
 - **Files to open:** [biome_config.json](../kubejs/generation_scripts/worldgen/biome_config.json) (the edits and the
-  solver's results), [BiomeLayoutTuner.java](../development/patcherMod/src/main/java/com/SaintAlfonzo/creativeengineering/worldgen/BiomeLayoutTuner.java),
+  solver's results), [BiomeLayoutTuner.java](../development/creativeCommon/src/main/java/com/SaintAlfonzo/creativecommon/worldgen/BiomeLayoutTuner.java),
   [biome_overrides.js](../kubejs/server_scripts/worldgen/biome_overrides.js),
   [dump_climate.js](../kubejs/server_scripts/_lib/dump_climate.js), [gen_biome_config.py](../tools/gen_biome_config.py).
 - **Knobs:** `biome_config.json` (`multiplier`, `replace_with` per biome); `config/creativeengineering-common.toml`
@@ -280,7 +280,7 @@ before), only when an input changed: the result is cached on the input hashes in
 
 - [kubejs/generation_scripts/worldgen/biome_config.json](../kubejs/generation_scripts/worldgen/biome_config.json), `biome_baselines/`, `climate/*.json.gz`; [worldgen/README.md](../kubejs/generation_scripts/worldgen/README.md).
 - [kubejs/server_scripts/worldgen/biome_overrides.js](../kubejs/server_scripts/worldgen/biome_overrides.js), [kubejs/server_scripts/_lib/dump_climate.js](../kubejs/server_scripts/_lib/dump_climate.js).
-- patcherMod [worldgen/BiomeLayoutTuner.java](../development/patcherMod/src/main/java/com/SaintAlfonzo/creativeengineering/worldgen/BiomeLayoutTuner.java); `CEConfig.Worldgen` (`biomeLayout`, `[worldgen.biome_solver]`).
+- patcherMod [worldgen/BiomeLayoutTuner.java](../development/creativeCommon/src/main/java/com/SaintAlfonzo/creativecommon/worldgen/BiomeLayoutTuner.java); `CEConfig.Worldgen` (`biomeLayout`, `[worldgen.biome_solver]`).
 - [tools/gen_biome_config.py](../tools/gen_biome_config.py) (in `generators.json`, groups `core`, `worldgen`).
 - [tools/biome_rarity_floor.py](../tools/biome_rarity_floor.py): writes the rarity-floor multipliers (2.1); rerun after a resample.
 - Readers of the config: `gen_structure_biome_table.py`, `gen_spawn_table.py`, `gen_crop_worldgen_table.py`, `structure_biome_coverage.py`, `gen_weather_table.py` (climate).

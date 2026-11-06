@@ -210,7 +210,7 @@ def delta(cur, base):
 
 
 def render_ce(c, out):
-    """The pack's own measured events (patcherMod creativeengineering.*, perf.md 3.6)."""
+    """The pack's own measured events (patcherMod creativecommon.*, perf.md 3.6)."""
     out.append('<h2>Measured by the pack\'s hooks</h2><p class="note">Exact times from patcherMod\'s own JFR events, '
                'not samples: every tick, every dimension, every chunk wait, every KubeJS handler call, every entity and '
                'block entity tick. Shares below are of the total server tick time.</p>')
@@ -358,7 +358,7 @@ def render(d, baseline=None):
     if d.get('ce'):
         render_ce(d['ce'], out)
     else:
-        out.append('<p class="note">No creativeengineering.* events in this recording (patcherMod 1.1.03 or later records '
+        out.append('<p class="note">No creativecommon.* events in this recording (patcherMod 1.1.03 or later records '
                    'exact tick, dimension, chunk-wait, KubeJS-script and entity-type times).</p>')
 
     # ── server thread by mod ──

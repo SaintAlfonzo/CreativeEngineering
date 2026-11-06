@@ -5,20 +5,20 @@
 //     the jar at the same resource path:
 //       kubejs/data/creativecalendar/kubejs/  -> data/creativecalendar/kubejs/  (server scripts)
 //     Startup scripts live in this project (src/main/resources/kubejs_startup/creativecalendar/), loaded from the jar by
-//     patcherMod's startup loader. No client scripts yet.
+//     Creative Common's startup loader. No client scripts yet.
 // Build: ./gradlew :creativeCalendar:build --offline   Install: ./gradlew :creativeCalendar:installToMods
 plugins {
     id 'ce.forge-mod'
 }
 
 dependencies {
-    // patcherMod (creativeengineering): a hard dependency (KubeJS, the shared helpers, the startup loader); no Java
+    // Creative Common (creativecommon): a hard dependency (KubeJS, the shared helpers, the startup loader); no Java
     // of it is called yet, kept for the pack APIs later rows may need (Creative Common after the Q1 swap).
-    compileOnly project(':patcherMod')
-    // The mods the time and season code steers; the pack's jars, shared with patcherMod (git-ignored libs/).
-    compileOnly files(rootProject.file('development/patcherMod/libs/SereneSeasons-1.19.2-8.1.0.24.jar'))
-    compileOnly files(rootProject.file('development/patcherMod/libs/seasonhud-forge-1.19.2-2.0.4.jar'))
-    compileOnly files(rootProject.file('development/patcherMod/libs/wthit-1.19.2-forge-5.36.1.jar'))
+    compileOnly project(':creativeCommon')
+    // The mods the time and season code steers; the pack's jars, shared with Creative Common (git-ignored libs/).
+    compileOnly files(rootProject.file('development/creativeCommon/libs/SereneSeasons-1.19.2-8.1.0.24.jar'))
+    compileOnly files(rootProject.file('development/creativeCommon/libs/seasonhud-forge-1.19.2-2.0.4.jar'))
+    compileOnly files(rootProject.file('development/creativeCommon/libs/wthit-1.19.2-forge-5.36.1.jar'))
 }
 
 def scriptTrees = ['data/creativecalendar/kubejs']

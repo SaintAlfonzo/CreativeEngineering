@@ -30,7 +30,7 @@ const HORSE_ARMOR_SLOT = 401
 // Null if the mod isn't on the classpath; the pass then uses MOUNT_INTERVAL_DEFAULT.
 const $ArmorFxCEConfig = (function () {
 	try {
-		return Java.loadClass('com.SaintAlfonzo.creativeengineering.CEConfig')
+		return Java.loadClass('com.SaintAlfonzo.creativecommon.CommonConfig')
 	} catch (err) {
 		return null
 	}

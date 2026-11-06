@@ -1,5 +1,7 @@
 package com.SaintAlfonzo.creativebrewing.compat.jei;
 
+import com.SaintAlfonzo.creativebrewing.CreativeBrewing;
+
 import blusunrize.immersiveengineering.api.crafting.RefineryRecipe;
 import blusunrize.immersiveengineering.common.util.compat.jei.IERecipeCategory;
 import blusunrize.immersiveengineering.common.util.compat.jei.refinery.RefineryRecipeCategory;
@@ -26,7 +28,7 @@ import java.lang.reflect.Field;
 public class LingerificationCategory extends RefineryRecipeCategory {
 
     public static final RecipeType<RefineryRecipe> TYPE = new RecipeType<>(
-            new ResourceLocation("creativeengineering", "lingerification"), RefineryRecipe.class);
+            new ResourceLocation(CreativeBrewing.NS, "lingerification"), RefineryRecipe.class);
 
     /**
      * True once the category is built + registered. {@code JEIHelperMixin} only strips these
@@ -45,7 +47,7 @@ public class LingerificationCategory extends RefineryRecipeCategory {
             throw new IllegalStateException(
                     "[CE] could not rebind IE refinery category type for Lingerification", e);
         }
-        this.title = Component.translatable("creativeengineering.jei.lingerification");
+        this.title = Component.translatable("creativebrewing.jei.lingerification");
     }
 
     /**

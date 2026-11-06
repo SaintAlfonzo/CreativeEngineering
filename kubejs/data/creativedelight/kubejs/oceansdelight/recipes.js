@@ -41,7 +41,8 @@ ServerEvents.recipes(e => {
 			R.replaceInput({ id: 'oceanic_delight:glow_squid_stew' }, i.glow_squid_tentacles, i.t_raw_calamari, e)
 			// sea pickle roll, shrimp rice, squid salad and takoyaki take the squid tentacle tag, which is empty once the
 			// tentacles are removed; raw calamari joins that tag instead (oceansdelight/tags.js), so they need no swap here.
-			;['seafood_skewer', 'squid_and_pickles'].forEach(r =>
+			// (the Seafood Skewer's recipes are barbequesdelight/skewers.js, on cooked calamari already)
+			;['squid_and_pickles'].forEach(r =>
 				R.replaceInput({ id: 'oceanic_delight:' + r }, i.grilled_squid_tentacles, i.t_cooked_calamari, e))
 		}
 		// After the swaps: a removal by input runs at once, so before them it took the dishes too (SQ-CM-32).

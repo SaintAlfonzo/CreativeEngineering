@@ -30,33 +30,6 @@
 	#models load: press F3+T or restart after changing it.
 	trimmedLook = true
 
-#A lit campfire in #creativeengineering:campfire/rain_douses (the plain campfire; not soul or
-#Tinted campfires) goes out in open rain, unless it sits on a block in
-##creativeengineering:campfire/rain_proof_fuel (coal and charcoal blocks). Otherwise campfires
-#burn forever. Server side.
-[campfire]
-	#Master on/off switch. Off = rain never puts a campfire out.
-	rainDouses = true
-	#Ticks of unbroken rain before the campfire goes out (160 = 8 s, Unlit Campfire's default).
-	#Leaving the rain or being on a fuel block resets the count.
-	#Range: 1 ~ 72000
-	rainOutTicks = 160
-	#Comfortable Campfires port (campfire.CampfireComfort): players near a lit campfire get Farmer's
-	#Delight's Comfort, refreshed while under 3 s are left.
-	comfort = true
-	#Comfort when Farmer's Delight is present; false (or no Farmer's Delight) = Regeneration, as the mod.
-	useComfort = true
-	#Blocks around (and above) the campfire that count as near (the mod's 3).
-	#Range: 1 ~ 16
-	comfortDistance = 3
-	#Seconds of Comfort per application (the mod's 5).
-	#Range: 1 ~ 600
-	comfortSeconds = 5
-	#A campfire looks for players once per this many ticks (the mod checked every tick; campfires are
-	#spread over the period). 1 = every tick.
-	#Range: 1 ~ 200
-	comfortEveryTicks = 20
-
 #Quark monster boxes (server side).
 [monster_box]
 	#true: a box stays after it spawns its wave, ejects one reward when the wave is gone, then waits

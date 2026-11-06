@@ -287,7 +287,7 @@ Steps that match the Veggies or Vintage ports are only named; see [veggies_delig
 
 Built in one session from §5.1. Installed and deployed with 1.1.02 (2026-10-23). **Hard dependency:** the pack's placed
 features in `kubejs/data` reference `fungidelight:*` configured features and blocks, so a world without the port jar
-fails to load. Game closed: `./gradlew :backportedFungi:installToMods :patcherMod:installToMods --offline`.
+fails to load. Game closed: `./gradlew :backportedFungi:installToMods :creativeCommon:installToMods --offline`.
 
 | Part | Where | Notes |
 |---|---|---|
@@ -514,10 +514,10 @@ filter value against the live cave biomes, and the starting rates above (FGD-28)
 | `kubejs/server_scripts/` (cooking, potions), CD `kubejs_startup/fungidelight/compost.js` (was `compost_values.js`) | recipes and compost |
 | `mod_sides.md`, `tools/build_deploy.py` | release |
 | `kubejs/server_scripts/worldgen/_biome_rules.js` | code shared by wild crops and mushroom spawns |
-| `development/patcherMod/.../mooshroom/`, `mixin/MushroomCowBreedingMixin.java`, `mixin/AnimalCanMateMooshroomMixin.java`, `worldgen/SpawnTuning.java` | brown mooshrooms, breeding |
+| `development/creativeCommon/.../mooshroom/`, `mixin/MushroomCowBreedingMixin.java`, `mixin/AnimalCanMateMooshroomMixin.java`, `worldgen/SpawnTuning.java` | brown mooshrooms, breeding |
 | `kubejs/assets/creativedelight/kubejs/fungidelight/jei_info.js` (CD), `kubejs/assets/creativeengineering/lang/en_us.json` | JEI info pages, JEED text |
 | `tools/test_mushroom_spawns.sh`, `tools/test_wild_crops.sh`, `tools/gen_crop_worldgen_table.py` | offline checks, [crops_by_biome.md](crops_by_biome.md) |
-| `kubejs/assets/creativeengineering/changelog/unreleased.md` | bullets when built |
+| `kubejs/assets/creativecommon/changelog/unreleased.md` | bullets when built |
 
 ## 7. Offline checks (once built)
 

@@ -24,7 +24,7 @@ A checked list of everything that will move into Creative Calendar, each file ma
 ### Now (checked 2026-10-31)
 - Marked: only `time/WineTime.java` (line 10, "Reserved for Creative Calendar (owner, 2026-10-31): moves with the whole
   time/ package ...").
-- patcherMod (`development/patcherMod/src/main/java/com/SaintAlfonzo/creativeengineering/`), all present:
+- patcherMod (`development/creativeCommon/src/main/java/com/SaintAlfonzo/creativecommon/`), all present:
   - `time/`: CalendarDate, SeasonClock, TimeClient, TimeCommand, TimeDate, TimePause, TimePresets, TimePush,
     TimeSettings, WineTime.
   - `seasons/`: CropSeasons, CropSeasonTooltip, SeasonTypes.

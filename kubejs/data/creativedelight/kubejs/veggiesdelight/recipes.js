@@ -102,11 +102,7 @@ ServerEvents.recipes(e => {
 			R.remove({ id: 'veggiesdelight:compat/moredelight/' + b }, e))
 
 		//######################### Turnip mutton skewer #########################
-		// Skewer family rule (food_families.md `skewer`; creativedelight/members #30 R10): shaped, a diagonal skewer as the
-		// Crispy Skewer, plus one assembly on the stick.
-		R.remove({ id: 'veggiesdelight:turnip_mutton_skewer' }, e)
-		F.skewerAssemble(['  M', ' T ', 'S  '], { M: i.cooked_mutton, T: fd.veggie_turnip, S: i.stick }, fd.dish_turnip_mutton_skewer,
-			[fd.veggie_turnip, i.cooked_mutton])
+		// Raw skewer, cooking, heatless craft and assembly: barbequesdelight/skewers.js (F.skewer, plan_meals_rolls_bbq.md C4)
 
 		//######################### Stuffed Bell Peppers removed #########################
 		// The feast and its serving are in removedItems (veggies_items.js; TODO merges/dishes #3, M3); Rustic's stay.

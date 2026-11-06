@@ -3,7 +3,7 @@
 Written 2026-10-21 from [todo/TODO.md](../todo/TODO.md) `# structures`, Sub `contents`. Feature writeups:
 [structure_tuning.md](../structure_tuning.md) (section 7 Todo "Structure contents", prefix `ST-`),
 [nether_worldgen.md](../nether_worldgen.md) (S1, S2, S5, S28), [mob_spawns.md](../mob_spawns.md) 9 ("Later: pillager
-overhaul"). Java paths are relative to `development/patcherMod/src/main/java/com/SaintAlfonzo/creativeengineering/`.
+overhaul"). Java paths are relative to `development/creativeCommon/src/main/java/com/SaintAlfonzo/creativecommon/`.
 
 ## Scope and order
 
@@ -109,7 +109,7 @@ Blocky Siege's is a port in `kubejs/data/<ns>/structures/`. No vindicator, evoke
 processor list or mod code places a pillager spawner.
 
 **Metas drop the anchor's box.** A meta is one structure: its anchor and parts are all pieces of the meta's start
-([MetaStructure.java:62-64](../../development/patcherMod/src/main/java/com/SaintAlfonzo/creativeengineering/worldgen/MetaStructure.java#L62-L64)),
+([MetaStructure.java:62-64](../../development/creativeCommon/src/main/java/com/SaintAlfonzo/creativecommon/worldgen/MetaStructure.java#L62-L64)),
 and `getMobsAt` looks up overrides by structure. Every meta in `meta_structures.json` has `"spawn_overrides": {}`. So
 a vanilla or T&T outpost that became a meta anchor (35-50% of their slots, see the table) has **no pillager respawn
 today**, and a box added to a member's own JSON would not reach it inside a meta either. The same applies to Philip's
@@ -314,7 +314,7 @@ river log/wood, swap driftwood craft to oak planks, remove driftwood/logs".)
 4. **Old river logs keep a use**: loot overrides so `river_log`, `river_wood` and the stripped forms drop the oak
    equivalents (`kubejs/data/upgrade_aquatic/loot_tables/blocks/<id>.json`), for river trees generated before the
    change. Same for the driftwood log if the user removes it as an item (Decisions).
-5. **Recipes** (a new `kubejs/server_scripts/wood/upgrade_aquatic_woods.js`, IIFE, `var R = global.NCH, i = global.item`):
+5. **Recipes** (a new `kubejs/data/creativeengineering/kubejs/wood/upgrade_aquatic_woods.js`, IIFE, `var R = global.NCH, i = global.item`):
    - `R.replaceOutput({ output: i.planks_driftwood }, i.planks_driftwood, i.planks_oak, e)` and the same for
      `planks_river`: catches the jar's shapeless recipe and any sawmill / cutting compat recipe in one step (check in JEI
      that the count stays 4: unverified whether KubeJS 6's replaceOutput keeps the original count).

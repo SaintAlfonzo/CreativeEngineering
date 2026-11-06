@@ -2,7 +2,7 @@
 loader and the vanilla / Forge jar locator. Standard library only, so importing it is cheap.
 
     import pack_paths as P
-    P.INSTANCE, P.MODS, P.ITEM_DICT
+    P.INSTANCE, P.MODS, P.ITEM_DICT, P.STARTUP_LIB   # STARTUP_LIB: the dicts' folder in Creative Common
     src, key_val, by_id = P.parse_item_dict()     # key -> value (last wins), item id -> [keys] (no '#tag' values)
     P.item_dict_first_keys()                      # value -> first key that assigns it
     P.loads_lenient(raw)                          # json with // and /* */ comments and trailing commas
@@ -20,7 +20,9 @@ from pathlib import Path
 
 INSTANCE = Path(__file__).resolve().parent.parent
 MODS = INSTANCE / 'mods'
-ITEM_DICT = INSTANCE / 'kubejs/startup_scripts/_lib/item_dict.js'
+# The dicts (global.item, food, fluid, blocks, ...) ship in Creative Common's jar since plan_cb_publish.md M1 (2026-11-04).
+STARTUP_LIB = INSTANCE / 'development/creativeCommon/src/main/resources/kubejs_startup/creativecommon/_lib'
+ITEM_DICT = STARTUP_LIB / 'item_dict.js'
 GRADLE_CACHE = Path.home() / '.gradle/caches/forge_gradle'
 
 

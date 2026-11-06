@@ -1147,7 +1147,7 @@ Soil yield (extra produce on better soil, built 2026-10-28, off per crop by defa
 [crop_yields.md](crop_yields.md).
 
 - **Fertile Soil** is a rename of Immersive Weathering's Mulch Block ([namechanges.js](../kubejs/client_scripts/namechanges.js)).
-  The pack adds its own recipes from Rich Soil plus mulches ([sawdust.js](../kubejs/server_scripts/wood/sawdust.js))
+  The pack adds its own recipes from Rich Soil plus mulches ([sawdust.js](../kubejs/data/creativeengineering/kubejs/wood/sawdust.js))
   and soil tooltips ([tooltips.js](../kubejs/client_scripts/tooltips.js), Rich Soil and Fertile Soil lines).
 - **Quark Simple Harvest and Hoe Harvesting** are enabled with default settings.
 - **Berry Good:** sweet berries and glow berries only plant from pips (`Sweet Berries require pips` and
@@ -1347,7 +1347,7 @@ Brief: [briefs/farming_crops.md](briefs/farming_crops.md). Nothing here is built
 - Growing seasons (§2.12): [tools/crop_season_audit.py](../tools/crop_season_audit.py) -> [crop_seasons_audit.md](crop_seasons_audit.md); `/dumpcropgrowth` ([dump_crop_growth.js](../kubejs/server_scripts/_lib/dump_crop_growth.js)) records each block's item for it; [config/sereneseasons/fertility.toml](../config/sereneseasons/fertility.toml)
 - [kubejs/client_scripts/namechanges.js](../kubejs/client_scripts/namechanges.js): Fertile Soil rename
 - [kubejs/client_scripts/tooltips.js](../kubejs/client_scripts/tooltips.js): soil tooltips
-- [kubejs/server_scripts/wood/sawdust.js](../kubejs/server_scripts/wood/sawdust.js): Fertile Soil recipes
+- [kubejs/data/creativeengineering/kubejs/wood/sawdust.js](../kubejs/data/creativeengineering/kubejs/wood/sawdust.js): Fertile Soil recipes
 - [vinery.md](vinery.md): grape bush, stem and lattice detail
 - Wild generation (§2.7): [tools/gen_crop_worldgen_table.py](../tools/gen_crop_worldgen_table.py) (its `JAVA_PLACED` table restates the
   Java-registered features) → [crops_by_biome.md](crops_by_biome.md) and `kubejs/exported/worldgen/crop_worldgen.json`.
@@ -1403,7 +1403,7 @@ Everything in §2 was read from decompiled classes (2026-10-02). To re-check aft
   `78 crop/feature rows, 61 crops`, 13 land biomes with no crop (V19) and the flax note (V6). Not covered: the KubeJS
   type wrappers and Forge actually loading the modifiers, which needs the game (CR-47).
 - **WTHIT growth line (§2.9):** `tools/test_crop_growth.sh` (about 5 s; compile patcherMod first with
-  `./gradlew :patcherMod:compileJava --offline`). It runs 38 checks on the maths and the shipped rule file, then
+  `./gradlew :creativeCommon:compileJava --offline`). It runs 38 checks on the maths and the shipped rule file, then
   `tools/crop_growth_coverage.py` against `kubejs/exported/crops/crop_growth_audit.json`. After adding mods, run
   `/dumpcropgrowth` (or `/dumpall`) and the coverage script; an UNKNOWN row is a new plant to give a rule or a skip reason.
   Not covered offline: the WTHIT overlay itself (CR-59 to CR-66).
@@ -1649,7 +1649,7 @@ PASSED r1031 (2026-10-31; SQ-CS-03 to -05 on a plains superflat), including the 
 - **2026-10-04:** §2.9 WTHIT growth line. Cause: WTHIT's `PlantProvider` only handles `CropBlock` subclasses and five vanilla blocks by
   identity. New `/dumpcropgrowth` audit (290 growing blocks, 22 native, 62 ruled, 206 not crops), `crop_growth.json` rules, patcherMod
   `crops/WthitCropGrowth` + `CropGrowth`, `[crop_growth]` config, coverage tool and `tools/test_crop_growth.sh` (38 checks). Built
-  into `development/patcherMod/build/libs` (md5 23df38e7), not installed to `mods/`; not seen in game. Hemp's state is an enum
+  into `development/creativeCommon/build/libs` (md5 23df38e7), not installed to `mods/`; not seen in game. Hemp's state is an enum
   (`growth`), found only after the first audit pass read integer properties alone; Durian leaves use `fruit` not `type`, found by the
   coverage tool. CR-59 to CR-66 added.
 - **2026-10-05:** §2.8.1 Immersive Weathering soils. Cause: IW soils are laid before vegetation and many features test

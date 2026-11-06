@@ -145,8 +145,8 @@ public final class CBConfig {
 
 		private Magic(ForgeConfigSpec.Builder b) {
 			b.comment(
-					"Tuning for creativeengineering:magic_resistance's damage reduction against",
-					"the creativeengineering:magic damage tag (the same tag the shields' MAGIC column",
+					"Tuning for creativebrewing:magic_resistance's damage reduction against",
+					"the creativecommon:magic damage tag (the same tag the shields' MAGIC column",
 					"reads: potions, poison, evoker fangs, thorns, sonic booms, curses, life drain) and",
 					"against the periodic damage of the effects listed in negatedEffectTicks."
 			).push("magic_resistance");

@@ -8,11 +8,18 @@
 // load. To add a merge, add the pair to a list file (one place per item), never a second addItemMerges call. Restart to apply.
 
 ;(() => {
-	var $SwapLists = Java.loadClass('com.SaintAlfonzo.creativeengineering.swap.SwapLists')
+	var $SwapLists = Java.loadClass('com.SaintAlfonzo.creativecommon.swap.SwapLists')
 	var lists = $SwapLists.get().scriptMerges(global.CD.modId)
 	var pairs = []
 	// Array.from on a Java collection throws in this Rhino; copy by hand (old id -> survivor, list order)
-	lists.keySet().forEach(old => pairs.push([String(old), String(lists.get(old))]))
+	// The rack and basket survivors exist only while the Cooking for Blockheads compartment is on (its [compartments]
+	// switch can be off with CfB installed; the file's requires only checks mods).
+	var cfbOn = global.CD.on('cookingforblockheads')
+	lists.keySet().forEach(old => {
+		var survivor = String(lists.get(old))
+		if (!cfbOn && /^creativedelight:.*_(spice_rack|tool_rack|fruit_basket)$/.test(survivor)) return
+		pairs.push([String(old), survivor])
+	})
 	global.addItemMerges('creativedelight', pairs)
 	console.info('[creativedelight] ' + pairs.length + ' item merge(s) from the swap lists')
 })()

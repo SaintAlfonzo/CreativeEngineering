@@ -27,7 +27,7 @@ The ask, from cooking.md:
 
 Files to open first:
 
-- `development/patcherMod/src/main/java/com/SaintAlfonzo/creativeengineering/oven/`: `OvenBlock`, `OvenBlockEntity`,
+- `development/creativeCommon/src/main/java/com/SaintAlfonzo/creativecommon/oven/`: `OvenBlock`, `OvenBlockEntity`,
   `OvenHeat`, `OvenItemHandler`, `OvenMenu`, `OvenResultSlot`, `BakingRecipe`, `OvenRegistry`, `client/OvenScreen`,
   `jei/OvenJeiPlugin`, `jei/BakingRecipeCategory`
 - [kubejs/data/creativedelight/kubejs/creativeengineering/baking.js](../kubejs/data/creativedelight/kubejs/creativeengineering/baking.js): baking and crafting recipes
@@ -433,7 +433,7 @@ overrides the muffin recipe ids. If muffins still can't be cooked in game, the c
 
 | File | What |
 |---|---|
-| `development/patcherMod/.../oven/OvenRegistry.java` | block, item, block entity, menu, recipe type + serializer |
+| `development/creativeCommon/.../oven/OvenRegistry.java` | block, item, block entity, menu, recipe type + serializer |
 | `.../oven/OvenBlock.java` | states, use (plate or open), drops, burn on step, particles, comparator |
 | `.../oven/OvenBlockEntity.java` | inventory, tick (heat, bake, plate), xp, save/sync, capability |
 | `.../oven/OvenHeat.java` | heat rule and tags |
@@ -443,23 +443,23 @@ overrides the muffin recipe ids. If muffins still can't be cooked in game, the c
 | `.../oven/client/OvenScreen.java` | GUI on FD's texture |
 | `.../oven/jei/OvenJeiPlugin.java`, `BakingRecipeCategory.java` | JEI page, catalyst, click area, transfer |
 | `.../CreativeEngineering.java` | `OvenRegistry.register`, `MenuScreens.register` |
-| `development/patcherMod/src/main/resources/assets/creativeengineering/{blockstates,models/block,models/item}/oven*.json`, `lang/en_us.json` | models, names |
-| `development/patcherMod/src/main/resources/data/creativeengineering/loot_tables/blocks/oven.json` | drop |
+| `development/creativeCommon/src/main/resources/assets/creativeengineering/{blockstates,models/block,models/item}/oven*.json`, `lang/en_us.json` | models, names |
+| `development/creativeCommon/src/main/resources/data/creativeengineering/loot_tables/blocks/oven.json` | drop |
 | `development/creativeDelight/src/main/resources/kubejs_startup/creativeengineering/bakeware.js` | bakeware items |
 | `development/creativeDelight/src/main/resources/kubejs_startup/creativeengineering/baking_ingredients.js` | frosting, cookie dough (baking overhaul) |
 | `kubejs/data/creativedelight/kubejs/creativeengineering/baking.js` | baking + crafting recipes |
 | `kubejs/server_scripts/cooking/cooking.js` "Muffins" | the dough fix |
 | `kubejs/server_scripts/tags/blocktags.js`, `cookingtags.js` | tags (2.4) |
 | `kubejs/startup_scripts/func/neoCraftHelper.js` | `ceBaking`, `hammering` |
-| `development/patcherMod/.../cooking/RemainderBuffer.java` | `leftovers(..., counts)`: n leftovers for n items taken |
-| `development/patcherMod/.../compat/IECompat.java`, `CreativeEngineering.java` | `registerHammerNoRotate` (cutting board vs IE hammer) |
+| `development/creativeCommon/.../cooking/RemainderBuffer.java` | `leftovers(..., counts)`: n leftovers for n items taken |
+| `development/creativeCommon/.../compat/IECompat.java`, `CreativeEngineering.java` | `registerHammerNoRotate` (cutting board vs IE hammer) |
 | `kubejs/startup_scripts/_lib/item_dict.js`, `block_dict.js` | ids and tag keys |
 
 ## 6. Offline checks
 
 Done 2026-10-18 in a scratch ForgeGradle project (Forge 43.3.9, official mappings, JEI 11.8.1.1034 compile-only,
 FD 1.2.4 at runtime) holding the `oven/` package and a stand-in main class. The patcherMod jar itself wasn't built: it
-needs the ~50 third-party jars in `development/patcherMod/libs/`.
+needs the ~50 third-party jars in `development/creativeCommon/libs/`.
 
 - `compileJava`: clean (the two deprecation warnings are suppressed as in FD).
 - `runGameTestServer`, test datapack (magma/campfire/lava heat tag, iron ingot as bakeware, three test recipes):

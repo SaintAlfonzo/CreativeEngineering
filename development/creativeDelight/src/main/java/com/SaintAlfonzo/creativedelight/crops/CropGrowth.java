@@ -78,7 +78,7 @@ public final class CropGrowth {
 
     /** Glob over a full block id: {@code *} matches anything, the rest is literal (Common's {@code Globs}). */
     public static Pattern glob(String text) {
-        return com.SaintAlfonzo.creativeengineering.util.Globs.glob(text);
+        return com.SaintAlfonzo.creativecommon.util.Globs.glob(text);
     }
 
     public static List<Rule> parse(JsonObject root) {

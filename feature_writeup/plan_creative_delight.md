@@ -4,7 +4,7 @@ Status: G steps 1 to 3 BUILT 2026-11-02 (see section H); fix plan I built 2026-1
 section F and not resolved here. Row ids refer to [todo/TODO.md](todo/TODO.md); background is
 [creative_delight.md](creative_delight.md) (sections 35 to 38). Every change that touches game data adds its live checks to
 [testing/scratch_queue.md](testing/scratch_queue.md) (no scratch boot until the owner says so) and a bullet to
-`kubejs/assets/creativeengineering/changelog/unreleased.md` where a player can notice it. Hand-edited configs are copied to
+`kubejs/assets/creativecommon/changelog/unreleased.md` where a player can notice it. Hand-edited configs are copied to
 `configs_edited/root_config/`. Never replace a jar while the game runs.
 
 ## 0. Standing rules for this plan (owner)
@@ -179,7 +179,7 @@ unreleased bullets (Copper Pot leftover slot, Cave Carrot Crates), so no new bul
 | # | Status | Result |
 |---|---|---|
 | I1 | Built | Swap lists gained `"removed": [ids]` (patcherMod `SwapLists.isRemoved`, `SwapRemapper` calls Forge `ignore()`); CD `data/creativedelight/swaps/removed.json`; Display `plate_displayable.json` entry dropped. Takes effect only with the new patcherMod |
-| I2 | Built | `FermentingRecipe.assignSlots` (one slot per ingredient entry, distinct slots first, backtracking) drives match, consume and `remaindersFit`; thrown leftovers queue for CD `[vintage.pickling_jar] overflowEjectDelayTicks` (default 20, saved in the block entity, dropped when the jar breaks); `CdSettings.number` added. The duplicate bottle has no code path left (one leftover per consumed item); offline assignment harness passes (split 4, stacked, 2+2, greedy trap, too few, stray slot) |
+| I2 | Built | `FermentingRecipe.assignSlots` (one slot per ingredient entry, distinct slots first, backtracking; 2026-11-04 Vintage `-18`: strict, filled slots = entries, no shared slot) drives match, consume and `remaindersFit`; thrown leftovers queue for CD `[vintage.pickling_jar] overflowEjectDelayTicks` (default 20, saved in the block entity, dropped when the jar breaks); `CdSettings.number` added. The duplicate bottle has no code path left (one leftover per consumed item); offline assignment harness passes (split 4, stacked, 2+2, greedy trap, too few, stray slot) |
 | I3 | Built | `creativedelight:shapeless/cave_hamburger` |
 | I4 | Built | Empty meal slot returns `leftoversFit()` |
 | I5 | Built | `gen_loot_config.py` reads nested bundle jars and the Miner's 1.4.5 donor; regenerated index adds `miners_delight:chests/md_abandoned_mineshaft` and 15 `farmersdelight:chests/fd_*` tables (lost since FD was nested), so FD chest crates apply again |
@@ -249,7 +249,7 @@ References to `salt` and `create__the_salt` found 2026-11-02 (these must keep wo
 | CD Java | `salt/SaltBlockTicks`, mixins `SaltBlockRandomTickMixin`, `SaltLayerRandomTickMixin`, `SaltRockNoDissolveMixin` (hook `ISaltBlock`; `salt:raw_rock_salt_block` exempt) | Keep working first; once Salt is a member, replace the three mixins by direct edits |
 | CD scripts | `creativeengineering/salt.js` (removes `salt:salt_from_raw_rock_salt` and three `create__the_salt:` recipes by id, rebuilds 4 salt per raw rock salt), `seasoning_tags.js`, `vintagedelight/recipes.js`, startup `vintagedelight/item_merges.js` | Recipe ids unchanged; rows under `creativedelight:` (R2) |
 | Vintage member | its own `salt`, `salt_block`, `evaporator`, `SaltBlock`, `SaltLayerBlock` (not Salt's `ISaltBlock`); salt merge (food/seasoning #6) makes Vintage's salt dust the one salt | No change; both stay members of one jar, so the "only if Vintage is off" fallback in `salt.js` stays |
-| Pack KubeJS | `item_dict.js` (`t_can_be_salted` = `#salt:can_be_salted`), `server_scripts/tags/blocktags.js` (`salt:salt_block`, `salt:raw_rock_salt_block`), `assets/creativeengineering/jei_world/salt/manual.json` | Stay; ids unchanged |
+| Pack KubeJS | `item_dict.js` (`t_can_be_salted` = `#salt:can_be_salted`), `server_scripts/tags/blocktags.js` (`salt:salt_block`, `salt:raw_rock_salt_block`), `assets/creativecommon/jei_world/salt/manual.json` | Stay; ids unchanged |
 | patcherMod | `WorldTab.SALT` (JEI world tab names `salt:salt_block`, `salt:salt`), `CEConfig` mod-name override `create__the_salt` and the seasoning JEI text | Stay; mod-name override changes to the "(Creative Delight)" name |
 | Config | `config/salt-common.toml` (salting nutrition, saturation, food values) | Move into `creativedelight-common.toml` `[salt]` with `ConfigRename.mergeSections` (R3), old file read once and renamed; copy to `configs_edited/` |
 | Creative Brewing, Calendar, Compat | none found (an earlier grep hit was `basalt`) | none |

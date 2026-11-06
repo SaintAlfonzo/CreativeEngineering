@@ -7,7 +7,7 @@ import com.SaintAlfonzo.creativebrewing.potion.CopperPoisoningHandler;
 import com.SaintAlfonzo.creativebrewing.potion.MagicResistanceEffect;
 import com.SaintAlfonzo.creativebrewing.potion.PhantomBaneRules;
 import com.SaintAlfonzo.creativebrewing.potion.PotionBucketDispenser;
-import com.SaintAlfonzo.creativeengineering.swap.ConfigRename;
+import com.SaintAlfonzo.creativecommon.swap.ConfigRename;
 import com.mojang.logging.LogUtils;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.eventbus.api.IEventBus;
@@ -39,16 +39,17 @@ import java.util.regex.Pattern;
  * {@code assets/creativebrewing/kubejs/}) that call the pack's helpers, {@link CBConfig}, and the potion, effect,
  * potion machine and alcohol Java moved here from patcherMod on 2026-11-01 (creative_brewing.md 4.2 phases 2 and 3).
  *
- * Ids stay: the potions, the magic_resistance damage rules, JEI recipe types, lang keys and the lingerification list
- * keep the {@code creativeengineering} namespace ({@link #NS}); this mod id is the jar's identity, its config file and
- * its script packs.
+ * Ids: everything CB registers or names (the potions, the Magic Resistance effect, the potion buckets, JEI recipe
+ * types, lang keys, the lingerification list) is under {@code creativebrewing} ({@link #NS}, the mod id) since
+ * 2026-11-04 (plan_cb_publish.md M4; they were {@code creativeengineering:} and {@code kubejs:}). The old ids are in
+ * {@code data/creativebrewing/swaps/creative_split.json}, so saved effects, buckets and the registry table carry over.
  */
 @Mod(CreativeBrewing.MOD_ID)
 public class CreativeBrewing {
 
 	public static final String MOD_ID = "creativebrewing";
-	/** The namespace of the ids the moved patcherMod code registers and reads: patcherMod's, unchanged by the move. */
-	public static final String NS = "creativeengineering";
+	/** The namespace of every id CB registers and reads (plan_cb_publish.md M4; was creativeengineering). */
+	public static final String NS = MOD_ID;
 	public static final Logger LOGGER = LogUtils.getLogger();
 
 	private static final String OLD_FILE = "creativeengineering-common.toml";
@@ -66,10 +67,10 @@ public class CreativeBrewing {
 		if (!carried) warnOldKeys();
 
 		IEventBus modEventBus = FMLJavaModLoadingContext.get().getModEventBus();
-		// Better Beacons fallback potions and the magic_resistance potion (creativeengineering:*).
+		// Better Beacons fallback potions and the magic_resistance potion (creativebrewing:*).
 		CEPotions.register(modEventBus);
 		modEventBus.addListener(CreativeBrewing::commonSetup);
-		// Damage-reduction half of creativeengineering:magic_resistance (the MobEffect itself is registered in KubeJS,
+		// Damage-reduction half of creativebrewing:magic_resistance (the MobEffect itself is registered in KubeJS,
 		// startup magic/magic_resistance.js).
 		MinecraftForge.EVENT_BUS.register(MagicResistanceEffect.class);
 		// Oxidized Everything Copper gear rolls for Poison ([copper_poisoning]; the effect-tick half is
@@ -87,8 +88,10 @@ public class CreativeBrewing {
 	}
 
 	private static void commonSetup(FMLCommonSetupEvent event) {
-		event.enqueueWork(DragonBreathBrewing::build);
-		event.enqueueWork(Lingerification::registerListGenerator);
+		// Create and IE are not CB dependencies; these classes import them (creative_split.md 7.16)
+		ModList mods = ModList.get();
+		if (mods.isLoaded("create")) event.enqueueWork(DragonBreathBrewing::build);
+		if (mods.isLoaded("create") && mods.isLoaded("immersiveengineering")) event.enqueueWork(Lingerification::registerListGenerator);
 		event.enqueueWork(PotionBucketDispenser::register);
 	}
 

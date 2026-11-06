@@ -22,13 +22,13 @@ expect Test passed
 
 ## SQ-WT-01 | WTHIT silk touch tag
 > setblock 0 -50 0 minecraft:glass
-> execute if block 0 -50 0 #creativeengineering:wthit/needs_silk_touch
+> execute if block 0 -50 0 #creativecommon:wthit/needs_silk_touch
 > setblock 0 -50 0 minecraft:iron_ore
-> execute if block 0 -50 0 #creativeengineering:wthit/needs_silk_touch
+> execute if block 0 -50 0 #creativecommon:wthit/needs_silk_touch
 > setblock 0 -50 0 minecraft:dirt
-> execute if block 0 -50 0 #creativeengineering:wthit/needs_silk_touch
+> execute if block 0 -50 0 #creativecommon:wthit/needs_silk_touch
 > setblock 0 -50 0 minecraft:oak_leaves
-> execute if block 0 -50 0 #creativeengineering:wthit/needs_silk_touch
+> execute if block 0 -50 0 #creativecommon:wthit/needs_silk_touch
 > setblock 0 -50 0 minecraft:air
 count Test passed == 2
 count Test failed == 2

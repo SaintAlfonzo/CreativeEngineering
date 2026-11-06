@@ -69,12 +69,12 @@ its colour. They stay up until they move, crouch, jump or something else knocks 
 - [kubejs/startup_scripts/items/stepstools.js](../kubejs/startup_scripts/items/stepstools.js), `kubejs/startup_scripts/_lib/item_dict.js` (`i.<colour>_stepstool`, `i.t_stepstools`, `i.t_curios_feet`)
 - [kubejs/server_scripts/equipment/stepstool.js](../kubejs/server_scripts/equipment/stepstool.js), [kubejs/server_scripts/tags/curiostags.js](../kubejs/server_scripts/tags/curiostags.js)
 - patcherMod `compat/CuriosSlots.java` (feet slot IMC); lang `curios.identifier.feet` in `kubejs/assets/creativeengineering/lang/en_us.json`
-- [development/patcherMod/.../stepstool/](../development/patcherMod/src/main/java/com/SaintAlfonzo/creativeengineering/stepstool/) `Stepstool`, `StepstoolCurios`, `client/StepstoolClient`
+- [development/creativeCommon/.../stepstool/](../development/creativeCommon/src/main/java/com/SaintAlfonzo/creativecommon/stepstool/) `Stepstool`, `StepstoolCurios`, `client/StepstoolClient`
 - patcherMod `mixin/EntityStepstoolCollisionMixin` (`m_20272_`), `mixin/ServerGamePacketListenerStepstoolMixin` (`m_9793_`); `CEConfig.Stepstool`; key lang in patcherMod `assets/creativeengineering/lang/en_us.json`
 
 ## 6. Offline checks
 
-- 2026-10-29: `./gradlew :patcherMod:build --offline` passes. `changelog_lint.py` 0 errors.
+- 2026-10-29: `./gradlew :creativeCommon:build --offline` passes. `changelog_lint.py` 0 errors.
 
 ## 7. In-game test suite
 
@@ -100,3 +100,4 @@ its colour. They stay up until they move, crouch, jump or something else knocks 
 - 2026-10-29: Investigated (Another Furniture tall stools are one block tall; no Feet slot existed) and built: items,
   recipe, Feet slot, patcherMod stepstool package and two mixins. patcherMod 1.1.04 built, not installed (game running).
 - 2026-10-31: patcherMod 1.1.04 installed in `mods/` at 00:44 (stepstool classes in the jar); not yet booted.
+- 2026-11-04: moved to Creative Equipment ([creative_equipment.md](creative_equipment.md)): `stepstool/` Java, the two mixins, `[stepstool]` (now `config/creativeequipment-common.toml`), items `kubejs_startup/creativeequipment/items/stepstools.js`, recipe and feet tag in `kubejs/data/creativeequipment/kubejs/`. Channel id unchanged. Same behaviour.

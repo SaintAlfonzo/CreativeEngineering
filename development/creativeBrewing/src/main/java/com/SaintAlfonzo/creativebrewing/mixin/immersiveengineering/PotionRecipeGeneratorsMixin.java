@@ -1,5 +1,7 @@
 package com.SaintAlfonzo.creativebrewing.mixin.immersiveengineering;
 
+import com.SaintAlfonzo.creativebrewing.CreativeBrewing;
+
 import blusunrize.immersiveengineering.api.crafting.FluidTagInput;
 import blusunrize.immersiveengineering.api.crafting.IngredientWithSize;
 import blusunrize.immersiveengineering.api.crafting.MixerRecipe;
@@ -197,7 +199,7 @@ public class PotionRecipeGeneratorsMixin {
         FluidTagInput lavaIn = new FluidTagInput(FluidTags.LAVA, CREATIVEENGINEERING$AMOUNT);
         IngredientWithSize[] reagent = { new IngredientWithSize(Ingredient.of(tooth)) };
         out.add(new MixerRecipe(
-                new ResourceLocation("creativeengineering", "mixer_potion_parity/lava_vision_base"),
+                new ResourceLocation(CreativeBrewing.NS, "mixer_potion_parity/lava_vision_base"),
                 outStack, lavaIn, reagent, CREATIVEENGINEERING$ENERGY));
     }
 
@@ -219,7 +221,7 @@ public class PotionRecipeGeneratorsMixin {
         FluidTagInput in = new FluidTagInput(
                 Either.right(List.of(CREATIVEENGINEERING$CREATE_POTION)), amt, inTag);
 
-        ResourceLocation id = new ResourceLocation("creativeengineering",
+        ResourceLocation id = new ResourceLocation(CreativeBrewing.NS,
                 "mixer_potion_parity/" + creativeengineering$slug(from, fromType)
                         + "_to_" + creativeengineering$slug(to, toType) + "_" + out.size());
 

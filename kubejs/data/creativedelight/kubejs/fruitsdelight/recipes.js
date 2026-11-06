@@ -49,6 +49,11 @@ ServerEvents.recipes(e => {
 		//Muffins: oven only, the muffin family call in creativeengineering/baking.js; it removes Fruits Delight's Cooking
 		// Pot muffins (TODO cooking/oven #3, baking/baked-goods 2026-10-29).
 
+		//######################### Jam cook time #########################
+		// Food family rule (food_families.md, preserve/jam, owner 2026-11-04): every jam cooks 400 ticks in the pot. The pack's
+		// own jams already do (vintagedelight/jams.js); Fruits Delight's 22 jelly recipes had 200.
+		R.setCookTime({ type: 'farmersdelight:cooking', id: /^farmersdelight:cooking\/\w+_jelly$/ }, 400, e)
+
 		//######################### Jams take slices #########################
 		// Orange and lemon jam (TODO baking/sweets #6, dishes/jams #6, owner 2026-11-02): every whole-fruit slot of Fruits
 		// Delight's pot and heated mixing recipes also takes that fruit's slice, one for one (2 oranges or 2 orange slices,

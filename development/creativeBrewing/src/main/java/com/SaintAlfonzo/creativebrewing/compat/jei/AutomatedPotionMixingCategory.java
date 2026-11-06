@@ -1,5 +1,7 @@
 package com.SaintAlfonzo.creativebrewing.compat.jei;
 
+import com.SaintAlfonzo.creativebrewing.CreativeBrewing;
+
 import blusunrize.immersiveengineering.api.crafting.MixerRecipe;
 import blusunrize.immersiveengineering.common.util.compat.jei.IERecipeCategory;
 import blusunrize.immersiveengineering.common.util.compat.jei.mixer.MixerRecipeCategory;
@@ -26,7 +28,7 @@ import java.lang.reflect.Field;
 public class AutomatedPotionMixingCategory extends MixerRecipeCategory {
 
     public static final RecipeType<MixerRecipe> TYPE = new RecipeType<>(
-            new ResourceLocation("creativeengineering", "automated_potion_mixing"), MixerRecipe.class);
+            new ResourceLocation(CreativeBrewing.NS, "automated_potion_mixing"), MixerRecipe.class);
 
     /**
      * True once the category is built + registered. {@code JEIHelperMixin} only strips potion
@@ -45,7 +47,7 @@ public class AutomatedPotionMixingCategory extends MixerRecipeCategory {
             throw new IllegalStateException(
                     "[CE] could not rebind IE mixer category type for Automated Potion Mixing", e);
         }
-        this.title = Component.translatable("creativeengineering.jei.automated_potion_mixing");
+        this.title = Component.translatable("creativebrewing.jei.automated_potion_mixing");
     }
 
     /** A mixer recipe belongs on this page iff it outputs Create's {@code create:potion} fluid. */

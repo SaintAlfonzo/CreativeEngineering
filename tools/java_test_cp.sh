@@ -1,8 +1,8 @@
 # Sourced by tools/test_*.sh: sets CP to the classpath for headless patcherMod tests (dev/Mojmap names:
-# the mapped Forge jar + development/patcherMod/build/classes + development/creativeWorldgen/build/classes (the worldgen
+# the mapped Forge jar + development/creativeCommon/build/classes + development/creativeWorldgen/build/classes (the worldgen
 # classes since 2026-11-02) + what Bootstrap.bootStrap() needs). Expects ROOT, L, C.
 MAPPED="$HOME/.gradle/caches/forge_gradle/minecraft_user_repo/net/minecraftforge/forge/1.19.2-43.3.9_mapped_official_1.19.2/forge-1.19.2-43.3.9_mapped_official_1.19.2.jar"
-CP="$MAPPED:$ROOT/development/patcherMod/build/classes/java/main:$ROOT/development/creativeWorldgen/build/classes/java/main"
+CP="$MAPPED:$ROOT/development/creativeCommon/build/classes/java/main:$ROOT/development/creativeWorldgen/build/classes/java/main"
 for a in com.mojang/datafixerupper it.unimi.dsi/fastutil com.google.guava/guava com.google.code.gson/gson org.apache.logging.log4j/log4j-api \
          org.slf4j/slf4j-api com.mojang/logging com.mojang/brigadier com.google.guava/failureaccess org.apache.commons/commons-lang3; do
   CP="$CP:$(find "$C/$a" -name '*.jar' ! -name '*sources*' | sort | tail -1)"

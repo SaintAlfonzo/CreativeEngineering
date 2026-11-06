@@ -123,11 +123,13 @@ var echoHit = [
 var discombobulate = [
 	{ effect: 'minecraft:nausea', amplifier: 1, duration: 100 },
 	{ effect: 'minecraft:hunger', amplifier: 1, duration: 100 },
-	{ effect: 'supplementaries:overencumbered', amplifier: 1, duration: 100 },
-	{ effect: 'vinery:trippy', amplifier: 1, duration: 110 },
-	{ effect: 'alexsmobs:earthquake', amplifier: 1, duration: 10 },
-	{ effect: 'alexsmobs:fear', amplifier: 1, duration: 10 },
 ]
+if (global.has('supplementaries')) discombobulate.push({ effect: 'supplementaries:overencumbered', amplifier: 1, duration: 100 })
+discombobulate.push({ effect: 'vinery:trippy', amplifier: 1, duration: 110 })
+if (global.has('alexsmobs')) {
+	discombobulate.push({ effect: 'alexsmobs:earthquake', amplifier: 1, duration: 10 },
+		{ effect: 'alexsmobs:fear', amplifier: 1, duration: 10 })
+}
 
 global.toolEffects.onHit(i.echo_pickaxe, echoHit)
 global.toolEffects.onHit(i.echo_axe, echoHit)
@@ -135,24 +137,27 @@ global.toolEffects.onHit(i.echo_shovel, echoHit)
 global.toolEffects.onHit(i.echo_hoe, echoHit)
 
 // ═══════════════════════════ dragon ═══════════════════════════════════
-global.toolEffects.onHit(i.dragon_sword, { effect: 'minecraft:weakness', amplifier: 2, duration: 200 })
-global.toolEffects.onHit(i.dragon_sword, { effect: 'alexsmobs:exsanguination', amplifier: 1, duration: 150 })
-global.toolEffects.held(i.dragon_sword, { effect: 'botania:soul_cross', amplifier: 1, duration: 50 })
+// Dragon Loot's tools; rows naming another optional mod's effect sit in its own guard.
+if (global.has('dragonloot')) {
+	global.toolEffects.onHit(i.dragon_sword, { effect: 'minecraft:weakness', amplifier: 2, duration: 200 })
+	if (global.has('alexsmobs')) global.toolEffects.onHit(i.dragon_sword, { effect: 'alexsmobs:exsanguination', amplifier: 1, duration: 150 })
+	if (global.has('botania')) global.toolEffects.held(i.dragon_sword, { effect: 'botania:soul_cross', amplifier: 1, duration: 50 })
 
-global.toolEffects.onHit(i.dragon_axe, { effect: 'minecraft:levitation', amplifier: 1, duration: 60 })
-global.toolEffects.onHit(i.dragon_axe, { effect: 'alexsmobs:exsanguination', amplifier: 1, duration: 150 })
-global.toolEffects.held(i.dragon_axe, { effect: 'minecraft:jump_boost', amplifier: 2, duration: 100 })
+	global.toolEffects.onHit(i.dragon_axe, { effect: 'minecraft:levitation', amplifier: 1, duration: 60 })
+	if (global.has('alexsmobs')) global.toolEffects.onHit(i.dragon_axe, { effect: 'alexsmobs:exsanguination', amplifier: 1, duration: 150 })
+	global.toolEffects.held(i.dragon_axe, { effect: 'minecraft:jump_boost', amplifier: 2, duration: 100 })
 
-global.toolEffects.onHit(i.dragon_shovel, discombobulate)
-global.toolEffects.held(i.dragon_shovel, { effect: 'alexsmobs:knockback_resistance', amplifier: 1, duration: 50 })
+	global.toolEffects.onHit(i.dragon_shovel, discombobulate)
+	if (global.has('alexsmobs')) global.toolEffects.held(i.dragon_shovel, { effect: 'alexsmobs:knockback_resistance', amplifier: 1, duration: 50 })
 
-global.toolEffects.onHit(i.dragon_trident, { effect: 'minecraft:mining_fatigue', amplifier: 1, duration: 60 })
-global.toolEffects.held(i.dragon_trident, { effect: 'minecraft:slow_falling', amplifier: 1, duration: 50 })
+	global.toolEffects.onHit(i.dragon_trident, { effect: 'minecraft:mining_fatigue', amplifier: 1, duration: 60 })
+	global.toolEffects.held(i.dragon_trident, { effect: 'minecraft:slow_falling', amplifier: 1, duration: 50 })
 
-global.toolEffects.held(i.dragon_bow, { effect: 'minecraft:invisibility', amplifier: 0, duration: 60 })
-global.toolEffects.onHit(i.dragon_bow, { effect: 'minecraft:slowness', amplifier: 3, duration: 50 })
-global.toolEffects.onHit(i.dragon_bow, { effect: 'minecraft:glowing', amplifier: 0, duration: 500 })
+	global.toolEffects.held(i.dragon_bow, { effect: 'minecraft:invisibility', amplifier: 0, duration: 60 })
+	global.toolEffects.onHit(i.dragon_bow, { effect: 'minecraft:slowness', amplifier: 3, duration: 50 })
+	global.toolEffects.onHit(i.dragon_bow, { effect: 'minecraft:glowing', amplifier: 0, duration: 500 })
 
-global.toolEffects.held(i.dragon_crossbow, { effect: 'minecraft:resistance', amplifier: 1, duration: 60 })
-global.toolEffects.onHit(i.dragon_crossbow, { effect: 'alexsmobs:exsanguination', amplifier: 1, duration: 150 })
-global.toolEffects.onHit(i.dragon_crossbow, { effect: 'minecraft:weakness', amplifier: 2, duration: 250 })
+	global.toolEffects.held(i.dragon_crossbow, { effect: 'minecraft:resistance', amplifier: 1, duration: 60 })
+	if (global.has('alexsmobs')) global.toolEffects.onHit(i.dragon_crossbow, { effect: 'alexsmobs:exsanguination', amplifier: 1, duration: 150 })
+	global.toolEffects.onHit(i.dragon_crossbow, { effect: 'minecraft:weakness', amplifier: 2, duration: 250 })
+}

@@ -11,7 +11,7 @@ DisplayItems / DisplayBlocks / PlatedBlocks / SmallPlatedBlocks classes, in its 
 What changes on the way (feature_writeup/display_delight.md section 5):
 
   * left out: every block whose prefix names a mod the pack does not have (EXCLUDED_PREFIXES), and every block whose
-    food the pack removes (kubejs/startup_scripts/_lib/removed_items.js, read through item_dict.js), with its
+    food the pack removes (Creative Common kubejs_startup/creativecommon/_lib/removed_items.js, read through item_dict.js), with its
     blockstate, item model, lang keys and the block models and textures only it uses; the tag entries of the left-out
     mods; the two unregistered showcase blocks
   * Miner's Delight: 1.7.0's tags name `minersdelight:` items, the pack's port is `miners_delight` (the Java side maps
@@ -41,8 +41,8 @@ INSTANCE = os.path.dirname(os.path.dirname(os.path.dirname(os.path.dirname(MOD))
 sys.path.insert(0, os.path.join(INSTANCE, 'tools'))
 import display_delight_jar as ddj  # noqa: E402  (1.7.0's block name -> food rule)
 OUT = os.path.join(MOD, 'src', 'main', 'resources')
-REMOVED_ITEMS = os.path.join(INSTANCE, 'kubejs', 'startup_scripts', '_lib', 'removed_items.js')
-ITEM_DICT = os.path.join(INSTANCE, 'kubejs', 'startup_scripts', '_lib', 'item_dict.js')
+REMOVED_ITEMS = os.path.join(INSTANCE, 'development', 'creativeCommon', 'src', 'main', 'resources', 'kubejs_startup', 'creativecommon', '_lib', 'removed_items.js')
+ITEM_DICT = os.path.join(INSTANCE, 'development', 'creativeCommon', 'src', 'main', 'resources', 'kubejs_startup', 'creativecommon', '_lib', 'item_dict.js')
 JAVA_OUT = os.path.join(MOD, 'src', 'main', 'java', 'com', 'jkvin114', 'displaydelight', 'init', 'DisplayFoods.java')
 NS = 'displaydelight'
 A = 'assets/%s/' % NS

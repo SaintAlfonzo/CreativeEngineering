@@ -434,5 +434,5 @@ grep -E "/(WARN|ERROR|FATAL)\]" debug/11_03/latest.log | sed -E 's/^\[[^]]*\] //
 The S4 sources: our files by `grep -rl '"forge:none"'` over `kubejs/data` and `development/`; the mod jars were scanned
 for `forge/biome_modifier/*.json` containing `forge:none` (none found). The S5 context: the lines before each
 `RuntimeDistCleaner` line in `latest.log`. The S2 list: the `Missing minecraft:item:` block, checked against
-`kubejs/assets/creativeengineering/changelog/1.2.00.md`. The server's own `logs/kubejs/*.log` were not included in
+`kubejs/assets/creativecommon/changelog/1.2.00.md`. The server's own `logs/kubejs/*.log` were not included in
 `debug/11_03/`, so section 5 (K-rows) is only re-checked through the KubeJS lines that reach `latest.log`.

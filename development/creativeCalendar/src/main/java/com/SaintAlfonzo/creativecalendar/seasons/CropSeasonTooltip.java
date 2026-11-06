@@ -33,7 +33,7 @@ public final class CropSeasonTooltip {
     @SubscribeEvent
     public static void onTooltip(ItemTooltipEvent event) {
         if (!CropSeasons.enabled()) return;
-        CropSeasons.Type type = CropSeasons.typeOf(event.getItemStack());
+        CropSeasons.Type type = CropSeasons.displayTypeOf(event.getItemStack());
         if (type == null) return;
         List<Component> lines = summary(type);
         List<Component> tooltip = event.getToolTip();

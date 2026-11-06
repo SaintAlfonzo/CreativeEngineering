@@ -37,10 +37,10 @@ and fix the misfits.
 
 ### Now
 - Classification lives in data: 32 tag files in
-  [damage_tags/](../../development/patcherMod/src/main/resources/data/creativeengineering/damage_tags/). The category
-  order is fixed in [ShieldCategory.java:37-43](../../development/patcherMod/src/main/java/com/SaintAlfonzo/creativeengineering/shield/ShieldCategory.java):
+  [damage_tags/](../../development/creativeCommon/src/main/resources/data/creativeengineering/damage_tags/). The category
+  order is fixed in [ShieldCategory.java:37-43](../../development/creativeCommon/src/main/java/com/SaintAlfonzo/creativecommon/shield/ShieldCategory.java):
   explosion, projectile, magic, elemental, melee, then other (physical).
-- The verdict is `ShieldBlocking.verdict` ([ShieldBlocking.java:42-77](../../development/patcherMod/src/main/java/com/SaintAlfonzo/creativeengineering/shield/ShieldBlocking.java)):
+- The verdict is `ShieldBlocking.verdict` ([ShieldBlocking.java:42-77](../../development/creativeCommon/src/main/java/com/SaintAlfonzo/creativecommon/shield/ShieldBlocking.java)):
   invulnerability-bypass, piercing arrow, unblockable effect tick, tick gate, 0% reduction, armour-piercing physical,
   then facing.
 - [tools/shield_check.py](../../tools/shield_check.py) (187 lines) already loads the live toml, the `ShieldTier.java`
@@ -114,11 +114,11 @@ completely, with a shield sound each tick. Decide which of these ticks to exclud
 The row lists magma, stoves, powder snow, acid, copper poisoning and modded magic ticks. Since the second 2026-10-05
 build (DEPLOYED with 1.0.6, unchanged through 1.1.05; checked 2026-10-31):
 - **magma (`hotFloor`), stoves (`farmersdelight.stove`, `endersdelight.endstone_stove`):** in
-  [burn_tick.json](../../development/patcherMod/src/main/resources/data/creativeengineering/damage_tags/burn_tick.json), so they are
+  [burn_tick.json](../../development/creativeCommon/src/main/resources/data/creativeengineering/damage_tags/burn_tick.json), so they are
   only attempted by tiers with `blocksBurnTicks` (netherite and above).
 - **copper poisoning and the Alex's Mobs magic ticks** (Debilitating Sting, Exsanguination, Ender Flu), plus poison,
   wither and Phasing: never blocked (`[shields] unblockableEffectTicks`,
-  [ShieldConfig.java:49-51](../../development/patcherMod/src/main/java/com/SaintAlfonzo/creativeengineering/shield/ShieldConfig.java)).
+  [ShieldConfig.java:49-51](../../development/creativeCommon/src/main/java/com/SaintAlfonzo/creativecommon/shield/ShieldConfig.java)).
 - **cactus, berry bushes, wither roots, beanstalk thorns, barbed panes:** `contact_tick`, diamond and above.
 
 What is actually left (shields.md 2.8):
@@ -131,7 +131,7 @@ What is actually left (shields.md 2.8):
 `ieAcid` is in `chemical` too, but no 1-damage IE acid tick was found in the 2026-10-05 scan.
 
 ### Build (if powder snow should be excluded below echo)
-Add a third tick gate. It's the existing pattern: [ShieldTickGate.java](../../development/patcherMod/src/main/java/com/SaintAlfonzo/creativeengineering/shield/ShieldTickGate.java)
+Add a third tick gate. It's the existing pattern: [ShieldTickGate.java](../../development/creativeCommon/src/main/java/com/SaintAlfonzo/creativecommon/shield/ShieldTickGate.java)
 generalises burn and contact.
 1. `ShieldTickGate`: `FREEZE("freeze_tick", "blocksFreezeTicks", "Blocks freezing")`.
 2. New data file `damage_tags/freeze_tick.json`: `{"description": "Freezing ticks: powder snow ...", "values": ["freeze"]}`.
@@ -174,11 +174,11 @@ Damage tag `creativeengineering:freeze_tick` (new). Config `[shields.<tier>] blo
 Status **Planned** · Work: patcherMod · id `gear/shields #2`
 
 ### Goal
-The `TODO` at [ShieldTier.java:46](../../development/patcherMod/src/main/java/com/SaintAlfonzo/creativeengineering/shield/ShieldTier.java):
+The `TODO` at [ShieldTier.java:46](../../development/creativeCommon/src/main/java/com/SaintAlfonzo/creativecommon/shield/ShieldTier.java):
 "adjust kbthreshold to be more reasonable, add variable shield cooldown to each shield".
 
 ### Now
-- **Knockback:** `ShieldBlockHandler.onShieldBlock` ([ShieldBlockHandler.java:80-82](../../development/patcherMod/src/main/java/com/SaintAlfonzo/creativeengineering/shield/ShieldBlockHandler.java))
+- **Knockback:** `ShieldBlockHandler.onShieldBlock` ([ShieldBlockHandler.java:80-82](../../development/creativeCommon/src/main/java/com/SaintAlfonzo/creativecommon/shield/ShieldBlockHandler.java))
   flags the holder when `remaining < knockbackThreshold(tier)`. `onKnockback` (103-109) then cancels the holder's next
   `LivingKnockBackEvent`. Binary: a full push or none. Thresholds are 1, 2, 3, 4, 5, 6, 7, 8 (copper → dragon), the same in
   code and toml (checked 2026-10-31). The physical % in the table below are the live toml's; the code defaults are higher
@@ -200,11 +200,11 @@ The `TODO` at [ShieldTier.java:46](../../development/patcherMod/src/main/java/co
   pushes, warden included. Dragon's 8 does nothing because 100% physical leaves 0.
 - **Disable cooldown:** one global `[shields] disableCooldownTicks` = 20 (CEConfig.java:2121-2127), read by
   `ShieldConfig.disableCooldownTicks()` (ShieldConfig.java:40-46) from two mixins:
-  - [ShieldDisableCooldownMixin](../../development/patcherMod/src/main/java/com/SaintAlfonzo/creativeengineering/mixin/ShieldDisableCooldownMixin.java):
+  - [ShieldDisableCooldownMixin](../../development/creativeCommon/src/main/java/com/SaintAlfonzo/creativecommon/mixin/ShieldDisableCooldownMixin.java):
     `@ModifyConstant` on the `100` in `Player#disableShield` (`m_36384_`). The shield isn't a parameter, but
     `player.getUseItem()` is still the raised shield at that point (vanilla calls `addCooldown(getUseItem().getItem(), 100)`
     before `stopUsingItem()`).
-  - [MobShieldDisableMixin](../../development/patcherMod/src/main/java/com/SaintAlfonzo/creativeengineering/mixin/MobShieldDisableMixin.java):
+  - [MobShieldDisableMixin](../../development/creativeCommon/src/main/java/com/SaintAlfonzo/creativecommon/mixin/MobShieldDisableMixin.java):
     line 46, `shield` is a parameter.
 
 ### Build

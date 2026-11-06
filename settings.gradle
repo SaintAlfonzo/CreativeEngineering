@@ -29,7 +29,7 @@ plugins {
 rootProject.name = 'CreativeEngineering'
 
 // The mod folders live under development/; project names (and :task paths) stay the bare mod names.
-['patcherMod', 'exposureBackport', 'creativeLabels', 'repackedStorage', 'creativeCalendar', 'creativeCompat'].each { name ->
+['creativeCommon', 'exposureBackport', 'creativeLabels', 'repackedStorage', 'creativeCalendar', 'creativeCompat', 'creativeMagic', 'creativeEquipment', 'creativeEngineering'].each { name ->
     include name
     project(":${name}").projectDir = file("development/${name}")
 }
@@ -40,7 +40,7 @@ rootProject.name = 'CreativeEngineering'
 // The Salt, Canned Goods (repacks) and Golden Food (donor port) joined 2026-11-02 (plan_creative_delight.md J2 to J4).
 include 'creativeDelight'
 project(':creativeDelight').projectDir = file('development/creativeDelight')
-['repackedFarmers': 'farmers', 'repackedOceans': 'oceans', 'portedOceanic': 'oceanic', 'repackedEnds': 'ends', 'repackedNethers': 'nethers', 'backportedRustic': 'rustic', 'backportedRoll': 'roll', 'backportedLargeMeals': 'largemeals', 'repackedDelightful': 'delightful', 'backportedHearth': 'hearth', 'blockheadsAdditions': 'blockheads', 'incubationAdditions': 'incubation', 'backportedBarbeques': 'barbeques', 'backportedDisplay': 'display', 'backportedVeggies': 'veggies', 'backportedVintage': 'vintage', 'backportedFungi': 'fungi', 'backportedMiners': 'miners', 'repackedSalt': 'salt', 'repackedCreateSalt': 'createsalt', 'repackedCannedGoods': 'cannedgoods', 'portedGolden': 'golden'].each { name, dir ->
+['repackedFarmers': 'farmers', 'repackedOceans': 'oceans', 'portedOceanic': 'oceanic', 'repackedEnds': 'ends', 'repackedNethers': 'nethers', 'backportedRustic': 'rustic', 'backportedRoll': 'roll', 'backportedLargeMeals': 'largemeals', 'repackedDelightful': 'delightful', 'backportedHearth': 'hearth', 'backportedBarbeques': 'barbeques', 'backportedDisplay': 'display', 'backportedVeggies': 'veggies', 'backportedVintage': 'vintage', 'backportedFungi': 'fungi', 'backportedMiners': 'miners', 'repackedSalt': 'salt', 'repackedCreateSalt': 'createsalt', 'repackedCannedGoods': 'cannedgoods', 'portedGolden': 'golden'].each { name, dir ->
     include name
     project(":${name}").projectDir = file("development/creativeDelight/members/${dir}")
 }

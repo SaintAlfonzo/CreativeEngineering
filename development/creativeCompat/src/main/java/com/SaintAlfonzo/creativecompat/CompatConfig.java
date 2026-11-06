@@ -15,29 +15,30 @@ public final class CompatConfig {
     public static final LeafPiles LEAF_PILES;
     public static final Moss MOSS;
     public static final VineShearing VINE_SHEARING;
-    public static final Campfire CAMPFIRE;
     public static final MonsterBox MONSTER_BOX;
     public static final TrashSlot TRASH_SLOT;
     public static final Cats CATS;
     public static final GiantSquid GIANT_SQUID;
+    public static final Paintings PAINTINGS;
 
     /**
      * The toml tables carried over from creativeengineering-common.toml, in order. {@code [cats]} (added 2026-11-01,
-     * after the carve) and {@code [giant_squid]} (2026-11-02) are new in this file and are not carried.
+     * after the carve) and {@code [giant_squid]} (2026-11-02) are new in this file and are not carried. {@code [campfire]}
+     * moved on to Creative Delight's file on 2026-11-04 (creative_split.md 7.9 step 1), which carries it from here.
      */
     public static final List<String> SECTIONS =
-            List.of("leaf_piles", "moss", "vine_shearing", "campfire", "monster_box", "trash_slot");
+            List.of("leaf_piles", "moss", "vine_shearing", "monster_box", "trash_slot");
 
     static {
         ForgeConfigSpec.Builder builder = new ForgeConfigSpec.Builder();
         LEAF_PILES = new LeafPiles(builder);
         MOSS = new Moss(builder);
         VINE_SHEARING = new VineShearing(builder);
-        CAMPFIRE = new Campfire(builder);
         MONSTER_BOX = new MonsterBox(builder);
         TRASH_SLOT = new TrashSlot(builder);
         CATS = new Cats(builder);
         GIANT_SQUID = new GiantSquid(builder);
+        PAINTINGS = new Paintings(builder);
         SPEC = builder.build();
     }
 
@@ -45,7 +46,7 @@ public final class CompatConfig {
 
     /**
      * Immersive Weathering leaf piles: how tall a pile must be to slow you ({@code mixin/LeafPileSlowMixin},
-     * read by the WTHIT Run Speed line in patcherMod's {@code surface.StuckInBlock} through {@code surface.LeafPileSlow}). Read on every entity-in-pile tick.
+     * read by the WTHIT Run Speed line in Creative Engineering's {@code surface.StuckInBlock}, which sets {@code surface.LeafPileSlow} from it). Read on every entity-in-pile tick.
      */
     public static final class LeafPiles {
         public final ForgeConfigSpec.IntValue slowFromLayers;
@@ -115,54 +116,6 @@ public final class CompatConfig {
             ).define("trimmedLook", true);
 
             b.pop(); // vine_shearing
-        }
-    }
-
-    /**
-     * Rain puts out campfires ({@code campfire.CampfireRain}, {@code mixin/CampfireRainMixin}). Unlit Campfire
-     * still places them unlit but burns them forever with its own rain check off. Read every tick.
-     */
-    public static final class Campfire {
-        public final ForgeConfigSpec.BooleanValue rainDouses;
-        public final ForgeConfigSpec.IntValue rainOutTicks;
-        public final ForgeConfigSpec.BooleanValue comfort;
-        public final ForgeConfigSpec.BooleanValue useComfort;
-        public final ForgeConfigSpec.IntValue comfortDistance;
-        public final ForgeConfigSpec.IntValue comfortSeconds;
-        public final ForgeConfigSpec.IntValue comfortEveryTicks;
-
-        private Campfire(ForgeConfigSpec.Builder b) {
-            b.comment(
-                    "A lit campfire in #creativeengineering:campfire/rain_douses (the plain campfire; not soul or",
-                    "Tinted campfires) goes out in open rain, unless it sits on a block in",
-                    "#creativeengineering:campfire/rain_proof_fuel (coal and charcoal blocks). Otherwise campfires",
-                    "burn forever. Server side."
-            ).push("campfire");
-
-            rainDouses = b.comment("Master on/off switch. Off = rain never puts a campfire out.")
-                    .define("rainDouses", true);
-
-            rainOutTicks = b.comment(
-                    "Ticks of unbroken rain before the campfire goes out (160 = 8 s, Unlit Campfire's default).",
-                    "Leaving the rain or being on a fuel block resets the count."
-            ).defineInRange("rainOutTicks", 160, 1, 72000);
-
-            comfort = b.comment(
-                    "Comfortable Campfires port (campfire.CampfireComfort): players near a lit campfire get Farmer's",
-                    "Delight's Comfort, refreshed while under 3 s are left."
-            ).define("comfort", true);
-            useComfort = b.comment("Comfort when Farmer's Delight is present; false (or no Farmer's Delight) = Regeneration, as the mod.")
-                    .define("useComfort", true);
-            comfortDistance = b.comment("Blocks around (and above) the campfire that count as near (the mod's 3).")
-                    .defineInRange("comfortDistance", 3, 1, 16);
-            comfortSeconds = b.comment("Seconds of Comfort per application (the mod's 5).")
-                    .defineInRange("comfortSeconds", 5, 1, 600);
-            comfortEveryTicks = b.comment(
-                    "A campfire looks for players once per this many ticks (the mod checked every tick; campfires are",
-                    "spread over the period). 1 = every tick."
-            ).defineInRange("comfortEveryTicks", 20, 1, 200);
-
-            b.pop(); // campfire
         }
     }
 
@@ -353,6 +306,46 @@ public final class CompatConfig {
         /** The stop radius (never below the start), or Alex's Mobs' 60 before the config loads. */
         public static float stop() {
             return SPEC.isLoaded() ? Math.max(GIANT_SQUID.whaleFleeStop.get(), GIANT_SQUID.whaleFleeStart.get()) : 60.0F;
+        }
+    }
+
+    /**
+     * Immersive Paintings' Datapacks page entries for modded paintings, built from the installed jars
+     * ({@code paintings/PaintingPack}, feature_writeup/immersive_paintings.md). Read on each data load (world start,
+     * /reload); a changed list is rebuilt then.
+     */
+    public static final class Paintings {
+        public final ForgeConfigSpec.BooleanValue enabled;
+        public final ForgeConfigSpec.ConfigValue<List<? extends String>> extraSources;
+
+        private Paintings(ForgeConfigSpec.Builder b) {
+            b.comment(
+                    "Immersive Paintings: every modded painting variant is offered on its Datapacks page, built from the",
+                    "art in the installed mod jars when the world's data loads (server side). Vanilla paintings come from",
+                    "the pack's own datapack, not from here."
+            ).push("paintings");
+
+            enabled = b.comment("Build the modded paintings set.").define("enabled", true);
+            extraSources = b.comment(
+                    "More places to read painting art from (assets/<mod>/textures/painting/<id>.png and the en_us lang),",
+                    "after the installed mods; a later entry wins for the same painting. Paths are relative to the game",
+                    "folder (or absolute). Each entry is a jar or zip (a painting mod, a resource pack that retextures",
+                    "paintings), a folder with assets/ in it, or a folder of jars and zips.",
+                    "Example: [\"resourcepacks/My Paintings.zip\", \"painting_jars\"]"
+            ).defineListAllowEmpty(List.of("extraSources"), List::of, o -> o instanceof String);
+
+            b.pop(); // paintings
+        }
+
+        /** On, or true before the config loads. */
+        public static boolean enabled() {
+            return !SPEC.isLoaded() || PAINTINGS.enabled.get();
+        }
+
+        /** The extra sources, or none before the config loads. */
+        public static List<String> extraSources() {
+            if (!SPEC.isLoaded()) return List.of();
+            return PAINTINGS.extraSources.get().stream().map(String::valueOf).toList();
         }
     }
 }

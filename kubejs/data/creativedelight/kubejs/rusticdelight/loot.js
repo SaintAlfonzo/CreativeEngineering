@@ -26,9 +26,13 @@ if (global.CWG) global.CWG.lootRules(function (L) {
         L.add(table, i.dark_bell_pepper_seeds, { share: 0.03, count: 1 })
     })
     // Pale seeds: sky village house chests and the cloud balloon chest
-    var SKY = ['armorer', 'butcher', 'cartographer', 'fisher', 'fletcher', 'mason', 'normal_house', 'shepherd', 'temple',
-        'toolsmith', 'weaponsmith'].map(function (h) { return 'skyvillages:chests/sky_village_' + h })
-    SKY.concat(['cloudstorage:chests/loot_balloon']).forEach(function (table) {
+    var SKY = []
+    if (global.has('skyvillages')) {
+        SKY = ['armorer', 'butcher', 'cartographer', 'fisher', 'fletcher', 'mason', 'normal_house', 'shepherd', 'temple',
+            'toolsmith', 'weaponsmith'].map(function (h) { return 'skyvillages:chests/sky_village_' + h })
+    }
+    if (global.has('cloudstorage')) SKY.push('cloudstorage:chests/loot_balloon')
+    SKY.forEach(function (table) {
         L.add(table, i.pale_bell_pepper_seeds, { share: 0.03, count: 1 })
     })
 })

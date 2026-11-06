@@ -3,7 +3,7 @@ package com.SaintAlfonzo.creativedevtools.dump;
 import com.SaintAlfonzo.creativedevtools.CreativeDevtools;
 import com.SaintAlfonzo.creativedevtools.DevtoolsConfig;
 
-import com.SaintAlfonzo.creativeengineering.compat.BlockModelIcons;
+import com.SaintAlfonzo.creativecommon.compat.BlockModelIcons;
 import com.google.gson.GsonBuilder;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;

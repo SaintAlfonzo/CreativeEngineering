@@ -63,4 +63,28 @@ public final class MemberConfigMove {
 					file.getKey(), CDConfig.FILE, moved.size(), file.getKey());
 		}
 	}
+
+	/**
+	 * M8 (plan_cb_publish.md 3b): the {@code [members] blockheads_additions} and {@code incubation_additions} switches became
+	 * {@code [compartments] cookingforblockheads} and {@code incubation}. Copies a player's value across once, before Forge
+	 * corrects the file and drops the old keys.
+	 */
+	public static void carryCompartmentSwitches() {
+		Path to = FMLPaths.CONFIGDIR.get().resolve(CDConfig.FILE);
+		if (!Files.isRegularFile(to)) return;
+		try (CommentedFileConfig cfg = CommentedFileConfig.builder(to, TomlFormat.instance()).build()) {
+			cfg.load();
+			boolean changed = false;
+			for (Map.Entry<String, String> e : Compartments.OLD_MEMBER_SWITCH.entrySet()) {
+				Object v = cfg.get("members." + e.getValue());
+				if (!(v instanceof Boolean) || cfg.contains("compartments." + e.getKey())) continue;
+				cfg.set("compartments." + e.getKey(), v);
+				changed = true;
+				CreativeDelight.LOGGER.info("[creativedelight] [members] {} carried to [compartments] {} ({})", e.getValue(), e.getKey(), v);
+			}
+			if (changed) cfg.save();
+		} catch (Exception e) {
+			CreativeDelight.LOGGER.error("[creativedelight] could not carry the [members] switches to [compartments]: {}", e.toString());
+		}
+	}
 }

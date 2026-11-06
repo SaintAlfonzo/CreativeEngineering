@@ -12,7 +12,7 @@ Nothing registered **hands**, and no mod offers a mouth or face slot. The pack n
 
 | Part | Where |
 |---|---|
-| Registration of all three (IMC `register_type`, only when Curios is loaded) | patcherMod `compat/CuriosSlots.java`, hooked in `CreativeEngineering` next to `BackpackSkinCurios` |
+| Registration of all three (IMC `register_type`, only when Curios is loaded) | Creative Equipment `compat/CuriosSlots.java` (from Creative Common 2026-11-04), hooked in `CreativeEquipment` next to `BackpackSkinCurios` |
 | Hands slot (1, Curios `HANDS` preset: priority 140, Curios hands icon) | `CuriosSlots` |
 | Face slot (1, priority 50 between head and necklace, vanilla empty helmet icon, lang "Face"; own `empty_face_slot.png` dropped 2026-11-04, it rendered as the missing texture) | `CuriosSlots` (`minecraft:item/empty_armor_slot_helmet`), `curios.identifier.face` in `lang/en_us.json` |
 | Feet slot (1, priority 190 between belt and charm, vanilla empty boots icon, lang "Feet"), 2026-10-29 | `CuriosSlots`, `curios.identifier.feet` in `lang/en_us.json` |
@@ -48,8 +48,9 @@ Notes:
 slot names the slot(s) it fits. Curios itself already prints "Slot: Face, Head" (gold, names yellow) from
 `getCurioTags(item)`, the `curios:<slot>` item tags plus mixins such as Simple Hats' head rule, so the pack's own slots
 get it once registered. The gap: an item with a curio capability passes that line through `ICurio.getSlotsTooltip`,
-which its mod can override to hide. patcherMod `compat/CuriosSlotTooltip` (client, Forge LOW, only with Curios) adds the
-same line to any curio item whose tooltip has none; CEConfig `[tooltips] curiosSlotLine`. Owner 2026-11-02: extend the
+which its mod can override to hide. Creative Equipment `compat/CuriosSlotTooltip` (client, Forge LOW, only with Curios;
+from Creative Common 2026-11-04) adds the same line to any curio item whose tooltip has none;
+`creativeequipment-common.toml` `[tooltips] curiosSlotLine` (was Common's `[tooltips]`; the move resets a changed value). Owner 2026-11-02: extend the
 current line to all items (wording is Curios'). The stepstools' own "Worn in the Feet slot" line was dropped. Row
 `ui/tooltips #8`, tests TT-40 in [tooltips.md](tooltips.md) and CS-08 below.
 

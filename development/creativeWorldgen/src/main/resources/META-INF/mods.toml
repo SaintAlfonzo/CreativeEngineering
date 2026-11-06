@@ -28,9 +28,9 @@ side="BOTH"
 # (swap/ConfigRename, util/WorldgenFiles). Becomes creativecommon at the final swap (creative_split.md 7.6 Q1). The range
 # must exclude every patcherMod that still carries the worldgen classes and mixins (1.1.07 and older: they would apply twice).
 [[dependencies.creativeworldgen]]
-modId="creativeengineering"
+modId="creativecommon"
 mandatory=true
-versionRange="[1.1.08,)"
+versionRange="[1.1.0,)"
 ordering="AFTER"
 side="BOTH"
 # Creative Compat: required by every other Creative jar (creative_split.md 7.6).

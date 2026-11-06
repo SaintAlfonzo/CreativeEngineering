@@ -272,13 +272,27 @@
     "botania:black_lotus": {
       "remove": false,
       "frequency": 1,
-      "chests": 7,
+      "chests": 21,
       "where": {
         "minecraft:chests/abandoned_mineshaft": 35.0,
         "minecraft:chests/desert_pyramid": 35.0,
         "minecraft:chests/jungle_temple": 25.0,
         "minecraft:chests/spawn_bonus_chest": 10.0,
         "minecraft:chests/stronghold_corridor": 10.0,
+        "minecraft:chests/village/village_temple": 10.0,
+        "minecraft:chests/village/village_toolsmith": 10.0,
+        "minecraft:chests/village/village_weaponsmith": 10.0,
+        "simply_houses:chests/forest_chapel/forest_chapel_normal": 10.0,
+        "simply_houses:chests/forest_fort/forest_fort_normal": 10.0,
+        "simply_houses:chests/forest_stonemason/forest_stonemason_normal": 10.0,
+        "simply_houses:chests/plains_house/plains_house_normal": 10.0,
+        "simply_houses:chests/plains_mansion/plains_mansion_normal": 10.0,
+        "simply_houses:chests/plains_mansion/plains_mansion_treasure": 10.0,
+        "simply_houses:chests/taiga_forge/taiga_forge_barrels": 10.0,
+        "simply_houses:chests/taiga_house/taiga_house_barrels": 10.0,
+        "skyvillages:chests/sky_village_temple": 10.0,
+        "skyvillages:chests/sky_village_toolsmith": 10.0,
+        "skyvillages:chests/sky_village_weaponsmith": 10.0,
         "minecraft:chests/simple_dungeon": 5.0,
         "underground_bunkers:chests/underground_bunker/underground_bunker_treasure": 2.5
       }
@@ -365,23 +379,37 @@
     "chalk:black_chalk": {
       "remove": false,
       "frequency": 1,
-      "chests": 5,
+      "chests": 12,
       "where": {
         "minecraft:chests/desert_pyramid": 8.81,
         "minecraft:chests/abandoned_mineshaft": 8.69,
         "minecraft:chests/simple_dungeon": 8.69,
         "underground_bunkers:chests/underground_bunker/underground_bunker_treasure": 4.35,
-        "minecraft:chests/spawn_bonus_chest": 3.77
+        "minecraft:chests/spawn_bonus_chest": 3.77,
+        "minecraft:chests/village/village_cartographer": 3.77,
+        "minecraft:chests/village/village_mason": 3.77,
+        "minecraft:chests/village/village_plains_house": 3.77,
+        "minecraft:chests/village/village_savanna_house": 3.77,
+        "skyvillages:chests/sky_village_cartographer": 3.77,
+        "skyvillages:chests/sky_village_mason": 3.77,
+        "skyvillages:chests/sky_village_normal_house": 3.77
       }
     },
     "chalk:chalk_box": {
       "remove": false,
       "frequency": 1,
-      "chests": 5,
+      "chests": 12,
       "where": {
         "minecraft:chests/abandoned_mineshaft": 17.0,
         "minecraft:chests/simple_dungeon": 17.0,
         "minecraft:chests/spawn_bonus_chest": 11.1,
+        "minecraft:chests/village/village_cartographer": 11.1,
+        "minecraft:chests/village/village_mason": 11.1,
+        "minecraft:chests/village/village_plains_house": 11.1,
+        "minecraft:chests/village/village_savanna_house": 11.1,
+        "skyvillages:chests/sky_village_cartographer": 11.1,
+        "skyvillages:chests/sky_village_mason": 11.1,
+        "skyvillages:chests/sky_village_normal_house": 11.1,
         "minecraft:chests/desert_pyramid": 10.5,
         "underground_bunkers:chests/underground_bunker/underground_bunker_treasure": 8.49
       }
@@ -389,60 +417,102 @@
     "chalk:gray_chalk": {
       "remove": false,
       "frequency": 1,
-      "chests": 2,
+      "chests": 9,
       "where": {
         "minecraft:chests/desert_pyramid": 8.81,
-        "minecraft:chests/spawn_bonus_chest": 5.63
+        "minecraft:chests/spawn_bonus_chest": 5.63,
+        "minecraft:chests/village/village_cartographer": 5.63,
+        "minecraft:chests/village/village_mason": 5.63,
+        "minecraft:chests/village/village_plains_house": 5.63,
+        "minecraft:chests/village/village_savanna_house": 5.63,
+        "skyvillages:chests/sky_village_cartographer": 5.63,
+        "skyvillages:chests/sky_village_mason": 5.63,
+        "skyvillages:chests/sky_village_normal_house": 5.63
       }
     },
     "chalk:light_blue_chalk": {
       "remove": false,
       "frequency": 1,
-      "chests": 2,
+      "chests": 9,
       "where": {
         "minecraft:chests/spawn_bonus_chest": 9.3,
+        "minecraft:chests/village/village_cartographer": 9.3,
+        "minecraft:chests/village/village_mason": 9.3,
+        "minecraft:chests/village/village_plains_house": 9.3,
+        "minecraft:chests/village/village_savanna_house": 9.3,
+        "skyvillages:chests/sky_village_cartographer": 9.3,
+        "skyvillages:chests/sky_village_mason": 9.3,
+        "skyvillages:chests/sky_village_normal_house": 9.3,
         "minecraft:chests/desert_pyramid": 8.81
       }
     },
     "chalk:light_gray_chalk": {
       "remove": false,
       "frequency": 1,
-      "chests": 5,
+      "chests": 12,
       "where": {
         "minecraft:chests/abandoned_mineshaft": 17.0,
         "minecraft:chests/simple_dungeon": 17.0,
         "minecraft:chests/desert_pyramid": 8.81,
         "underground_bunkers:chests/underground_bunker/underground_bunker_treasure": 8.49,
-        "minecraft:chests/spawn_bonus_chest": 7.47
+        "minecraft:chests/spawn_bonus_chest": 7.47,
+        "minecraft:chests/village/village_cartographer": 7.47,
+        "minecraft:chests/village/village_mason": 7.47,
+        "minecraft:chests/village/village_plains_house": 7.47,
+        "minecraft:chests/village/village_savanna_house": 7.47,
+        "skyvillages:chests/sky_village_cartographer": 7.47,
+        "skyvillages:chests/sky_village_mason": 7.47,
+        "skyvillages:chests/sky_village_normal_house": 7.47
       }
     },
     "chalk:orange_chalk": {
       "remove": false,
       "frequency": 1,
-      "chests": 2,
+      "chests": 9,
       "where": {
         "minecraft:chests/spawn_bonus_chest": 9.3,
+        "minecraft:chests/village/village_cartographer": 9.3,
+        "minecraft:chests/village/village_mason": 9.3,
+        "minecraft:chests/village/village_plains_house": 9.3,
+        "minecraft:chests/village/village_savanna_house": 9.3,
+        "skyvillages:chests/sky_village_cartographer": 9.3,
+        "skyvillages:chests/sky_village_mason": 9.3,
+        "skyvillages:chests/sky_village_normal_house": 9.3,
         "minecraft:chests/desert_pyramid": 8.81
       }
     },
     "chalk:white_chalk": {
       "remove": false,
       "frequency": 1,
-      "chests": 5,
+      "chests": 12,
       "where": {
         "minecraft:chests/abandoned_mineshaft": 21.0,
         "minecraft:chests/simple_dungeon": 21.0,
         "underground_bunkers:chests/underground_bunker/underground_bunker_treasure": 10.5,
         "minecraft:chests/spawn_bonus_chest": 9.3,
+        "minecraft:chests/village/village_cartographer": 9.3,
+        "minecraft:chests/village/village_mason": 9.3,
+        "minecraft:chests/village/village_plains_house": 9.3,
+        "minecraft:chests/village/village_savanna_house": 9.3,
+        "skyvillages:chests/sky_village_cartographer": 9.3,
+        "skyvillages:chests/sky_village_mason": 9.3,
+        "skyvillages:chests/sky_village_normal_house": 9.3,
         "minecraft:chests/desert_pyramid": 8.81
       }
     },
     "chalk:yellow_chalk": {
       "remove": false,
       "frequency": 1,
-      "chests": 2,
+      "chests": 9,
       "where": {
         "minecraft:chests/spawn_bonus_chest": 9.3,
+        "minecraft:chests/village/village_cartographer": 9.3,
+        "minecraft:chests/village/village_mason": 9.3,
+        "minecraft:chests/village/village_plains_house": 9.3,
+        "minecraft:chests/village/village_savanna_house": 9.3,
+        "skyvillages:chests/sky_village_cartographer": 9.3,
+        "skyvillages:chests/sky_village_mason": 9.3,
+        "skyvillages:chests/sky_village_normal_house": 9.3,
         "minecraft:chests/desert_pyramid": 8.81
       }
     },
@@ -1297,7 +1367,7 @@
       "frequency": 1,
       "chests": 5,
       "where": {
-        "minecraft:chests/village/village_savanna_house": 71.7,
+        "minecraft:chests/village/village_savanna_house": 71.6,
         "beautify:chests/botanist/botanist_chest_desert": 24.6,
         "beautify:chests/botanist/botanist_chest_savanna": 24.6,
         "wares:agreement/village/savanna_payment_buy": 12.5,
@@ -1421,10 +1491,10 @@
         "minecraft:chests/spawn_bonus_chest": 83.8,
         "terralith:village/desert/food": 77.4,
         "terralith:village/fortified/food": 77.4,
-        "minecraft:chests/village/village_plains_house": 74.2,
-        "skyvillages:chests/sky_village_normal_house": 74.2,
         "takesapillage:chests/bastille/farm": 74.2,
         "takesapillage:chests/bastille/graveyard": 74.2,
+        "minecraft:chests/village/village_plains_house": 74.1,
+        "skyvillages:chests/sky_village_normal_house": 74.1,
         "terralith:village/fortified/tavern_downstairs": 73.2,
         "minecraft:chests/igloo_chest": 70.4,
         "terralith:village/desert/generic": 70.1,
@@ -1673,7 +1743,7 @@
         "villager_farmer_house:chests/fixed/6d9792742d": 100.0,
         "villager_farmer_house:chests/fixed/752ac63222": 100.0,
         "kaisyn:village/village_swamp_house": 67.8,
-        "minecraft:chests/village/village_snowy_house": 66.3,
+        "minecraft:chests/village/village_snowy_house": 66.2,
         "betterdungeons:spider_dungeon/chests/egg_room": 49.1,
         "veggiesdelight:chests/vd_wagon_snowy": 42.4,
         "subterrestrial:chests/cabin/kitchen": 34.8,
@@ -1702,7 +1772,7 @@
         "betterdeserttemples:chests/food_storage": 55.8,
         "terralith:village/fortified/tavern_downstairs": 16.1,
         "kaisyn:village/village_swamp_house": 10.3,
-        "minecraft:chests/village/village_snowy_house": 9.9
+        "minecraft:chests/village/village_snowy_house": 9.89
       }
     },
     "minecraft:bell": {
@@ -1856,7 +1926,7 @@
         "terralith:spire/common": 46.2,
         "wares:agreement/village/snowy_payment_buy": 16.7,
         "wares:package/village/snowy": 13.2,
-        "minecraft:chests/village/village_snowy_house": 9.9
+        "minecraft:chests/village/village_snowy_house": 9.89
       }
     },
     "minecraft:blue_orchid": {
@@ -2056,7 +2126,7 @@
         "minecraft:chests/stronghold_library": 88.0,
         "betterdungeons:skeleton_dungeon/chests/common": 77.9,
         "betterdungeons:spider_dungeon/chests/egg_room": 77.0,
-        "minecraft:chests/ancient_city": 72.4,
+        "minecraft:chests/ancient_city": 72.5,
         "mes:houses_books": 69.4,
         "terralith:underground/chest": 67.8,
         "villagesandpillages:village_witch/house/attic_chest": 51.2,
@@ -2103,8 +2173,8 @@
         "illager_viking_longship:chests/longship": 13.5,
         "wares:package/village/snowy": 13.2,
         "philipsruins:chest/nether_lava_ruins_loot": 12.1,
-        "minecraft:chests/village/village_plains_house": 12.1,
-        "skyvillages:chests/sky_village_normal_house": 12.1,
+        "minecraft:chests/village/village_plains_house": 12.0,
+        "skyvillages:chests/sky_village_normal_house": 12.0,
         "philipsruins:chest/lost_soul_city_loot": 11.6,
         "minecraft:chests/bastion_other": 11.2,
         "wares:package/village/savanna": 11.1,
@@ -2257,17 +2327,17 @@
         "terralith:village/desert/food": 77.4,
         "terralith:village/fortified/food": 77.4,
         "mes:large_carts": 75.0,
-        "minecraft:chests/village/village_plains_house": 74.2,
-        "skyvillages:chests/sky_village_normal_house": 74.2,
         "takesapillage:chests/bastille/farm": 74.2,
+        "minecraft:chests/village/village_plains_house": 74.1,
+        "skyvillages:chests/sky_village_normal_house": 74.1,
         "terralith:village/fortified/tavern_downstairs": 73.2,
         "kaisyn:village/exclusives/village_mediterranean_house": 72.5,
-        "minecraft:chests/village/village_savanna_house": 71.7,
+        "minecraft:chests/village/village_savanna_house": 71.6,
         "terralith:village/desert/generic": 70.1,
         "terralith:village/fortified/generic": 70.1,
         "mes:general": 68.7,
         "kaisyn:village/village_swamp_house": 67.8,
-        "minecraft:chests/village/village_snowy_house": 66.3,
+        "minecraft:chests/village/village_snowy_house": 66.2,
         "minecraft:chests/village/village_taiga_house": 65.6,
         "mes:houses_flower": 64.2,
         "betterstrongholds:chests/mess": 63.9,
@@ -2814,7 +2884,7 @@
         "minecraft:chests/village/village_fisher": 43.0,
         "skyvillages:chests/sky_village_fisher": 43.0,
         "philipsruins:chest/nether_lava_ruins_loot": 41.3,
-        "minecraft:chests/village/village_snowy_house": 41.2,
+        "minecraft:chests/village/village_snowy_house": 41.1,
         "minecraft:chests/shipwreck_supply": 37.3,
         "underground_bunkers:chests/underground_bunker/underground_bunker_supply": 36.0,
         "minecraft:chests/stronghold_crossing": 34.3,
@@ -3348,8 +3418,8 @@
         "small_villager_greenhouse:chests/fixed/120d23465a": 100.0,
         "beautify:chests/botanist/botanist_chest": 43.6,
         "beautify:chests/botanist/botanist_chest_savanna": 43.6,
-        "minecraft:chests/village/village_plains_house": 22.8,
-        "skyvillages:chests/sky_village_normal_house": 22.8,
+        "minecraft:chests/village/village_plains_house": 22.7,
+        "skyvillages:chests/sky_village_normal_house": 22.7,
         "subterrestrial:chests/cabin/beekeeping": 22.0,
         "terralith:village/desert/generic": 20.7,
         "terralith:village/fortified/generic": 20.7,
@@ -3938,11 +4008,11 @@
         "minecraft:chests/village/village_fisher": 24.2,
         "skyvillages:chests/sky_village_fisher": 24.2,
         "underground_bunkers:chests/underground_bunker/underground_bunker_normal": 23.2,
-        "minecraft:chests/village/village_plains_house": 22.8,
-        "skyvillages:chests/sky_village_normal_house": 22.8,
         "takesapillage:chests/bastille/farm": 22.8,
         "takesapillage:chests/bastille/graveyard": 22.8,
-        "minecraft:chests/village/village_savanna_house": 21.5,
+        "minecraft:chests/village/village_plains_house": 22.7,
+        "skyvillages:chests/sky_village_normal_house": 22.7,
+        "minecraft:chests/village/village_savanna_house": 21.4,
         "minecraft:chests/village/village_mason": 20.8,
         "skyvillages:chests/sky_village_mason": 20.8,
         "betterdeserttemples:chests/tomb": 20.6,
@@ -3978,7 +4048,7 @@
         "kaisyn:village/village_swamp_house": 10.3,
         "minecraft:chests/village/village_butcher": 10.2,
         "skyvillages:chests/sky_village_butcher": 10.2,
-        "minecraft:chests/village/village_snowy_house": 9.9,
+        "minecraft:chests/village/village_snowy_house": 9.89,
         "minecraft:chests/end_city_treasure": 8.55,
         "philipsruins:chest/ancient_ruins": 8.33,
         "philipsruins:chest/ancient_ruins_loot": 8.33,
@@ -4057,7 +4127,7 @@
         "philipsruins:chest/bone_dungeon_loot": 12.3,
         "philipsruins:chest/sculk_dungeon_loot": 11.4,
         "betterdungeons:skeleton_dungeon/chests/common": 9.96,
-        "minecraft:chests/ancient_city": 8.37,
+        "minecraft:chests/ancient_city": 8.38,
         "philipsruins:chest/nether_lava_ruins_loot": 8.27,
         "subterrestrial:chests/cabin/main": 5.06,
         "minecraft:chests/bastion_treasure": 4.44,
@@ -4167,8 +4237,8 @@
         "simply_houses:chests/taiga_woodcutter/taiga_woodcutter_normal": 18.6,
         "simply_houses:chests/taiga_woodcutter/taiga_woodcutter_treasure": 18.6,
         "hopo:chests/materials": 18.0,
-        "minecraft:chests/village/village_plains_house": 12.1,
-        "skyvillages:chests/sky_village_normal_house": 12.1,
+        "minecraft:chests/village/village_plains_house": 12.0,
+        "skyvillages:chests/sky_village_normal_house": 12.0,
         "terralith:village/desert/generic": 10.9,
         "terralith:village/fortified/generic": 10.9,
         "philipsruins:chest/ocean_ruin_fortress": 9.08,
@@ -4356,7 +4426,7 @@
       "frequency": 1,
       "chests": 1,
       "where": {
-        "minecraft:chests/village/village_snowy_house": 9.9
+        "minecraft:chests/village/village_snowy_house": 9.89
       }
     },
     "minecraft:gilded_blackstone": {
@@ -4685,9 +4755,9 @@
         "philipsruins:chest/desert_pyramid_loot": 17.4,
         "philipsruins:chest/ocean_ruins_loot": 12.8,
         "wares:agreement/village/savanna_requested_sell": 12.5,
-        "minecraft:chests/village/village_plains_house": 12.1,
-        "skyvillages:chests/sky_village_normal_house": 12.1,
         "takesapillage:chests/bastille/graveyard": 12.1,
+        "minecraft:chests/village/village_plains_house": 12.0,
+        "skyvillages:chests/sky_village_normal_house": 12.0,
         "philipsruins:chest/bone_dungeon_loot": 11.9,
         "minecraft:chests/village/village_savanna_house": 11.3,
         "terralith:village/desert/generic": 10.9,
@@ -5046,7 +5116,7 @@
       "frequency": 1,
       "chests": 3,
       "where": {
-        "minecraft:chests/village/village_savanna_house": 45.9,
+        "minecraft:chests/village/village_savanna_house": 45.8,
         "terralith:underground/chest": 33.2,
         "kaisyn:village/village_jungle_house": 16.1
       }
@@ -6697,7 +6767,7 @@
       "where": {
         "subterrestrial:chests/cabin/music": 29.8,
         "philipsruins:chest/nether_ruins_low": 9.77,
-        "minecraft:chests/ancient_city": 8.37,
+        "minecraft:chests/ancient_city": 8.38,
         "betterdungeons:small_nether_dungeon/chests/common": 7.88,
         "philipsruins:chest/badlands_dungeon_loot_low": 5.82,
         "underground_bunkers:chests/underground_bunker/underground_bunker_treasure": 5.42,
@@ -6989,8 +7059,8 @@
       "chests": 21,
       "where": {
         "small_villager_greenhouse:chests/fixed/120d23465a": 100.0,
-        "minecraft:chests/village/village_plains_house": 48.2,
-        "skyvillages:chests/sky_village_normal_house": 48.2,
+        "minecraft:chests/village/village_plains_house": 48.1,
+        "skyvillages:chests/sky_village_normal_house": 48.1,
         "terralith:village/desert/generic": 44.4,
         "terralith:village/fortified/generic": 44.4,
         "terralith:village/desert/generic_low": 38.0,
@@ -7300,8 +7370,8 @@
         "betterdungeons:zombie_dungeon/chests/common": 30.7,
         "betterdungeons:zombie_dungeon/chests/special": 30.7,
         "subterrestrial:chests/cabin/beekeeping": 22.0,
-        "minecraft:chests/village/village_plains_house": 12.1,
-        "skyvillages:chests/sky_village_normal_house": 12.1,
+        "minecraft:chests/village/village_plains_house": 12.0,
+        "skyvillages:chests/sky_village_normal_house": 12.0,
         "terralith:village/desert/generic": 10.9,
         "terralith:village/fortified/generic": 10.9,
         "terralith:village/desert/generic_low": 8.77,
@@ -7356,12 +7426,12 @@
         "plains_villager_tents:chests/fixed/b49b524504": 100.0,
         "villager_farmer_house:chests/fixed/69db62953d": 100.0,
         "villager_farmer_house:chests/fixed/752ac63222": 100.0,
-        "minecraft:chests/village/village_plains_house": 74.2,
-        "skyvillages:chests/sky_village_normal_house": 74.2,
+        "minecraft:chests/village/village_plains_house": 74.1,
+        "skyvillages:chests/sky_village_normal_house": 74.1,
         "terralith:village/desert/generic": 70.1,
         "terralith:village/fortified/generic": 70.1,
         "kaisyn:village/village_badlands_house": 68.5,
-        "minecraft:chests/village/village_snowy_house": 66.3,
+        "minecraft:chests/village/village_snowy_house": 66.2,
         "minecraft:chests/village/village_taiga_house": 65.6,
         "mes:houses_flower": 64.2,
         "betterstrongholds:chests/mess": 63.9,
@@ -8349,7 +8419,7 @@
         "terralith:spire/rare": 57.8,
         "terralith:spire/treasure": 57.8,
         "terralith:ruin/glacial/main_cs": 46.8,
-        "minecraft:chests/village/village_snowy_house": 34.5,
+        "minecraft:chests/village/village_snowy_house": 34.4,
         "terralith:spire/junk": 21.2,
         "wares:agreement/village/snowy_payment_buy": 16.7,
         "wares:package/village/snowy": 13.2
@@ -8364,7 +8434,7 @@
         "snowy_tents:chests/fixed/7665f2ac77": 100.0,
         "minecraft:chests/ancient_city_ice_box": 97.0,
         "terralith:spire/junk": 68.1,
-        "minecraft:chests/village/village_snowy_house": 66.3,
+        "minecraft:chests/village/village_snowy_house": 66.2,
         "terralith:ruin/glacial/junk": 66.2,
         "terralith:spire/rare": 57.8,
         "terralith:spire/treasure": 57.8,
@@ -8869,7 +8939,7 @@
       "frequency": 1,
       "chests": 3,
       "where": {
-        "minecraft:chests/village/village_savanna_house": 45.9,
+        "minecraft:chests/village/village_savanna_house": 45.8,
         "kaisyn:village/village_jungle_house": 16.1,
         "wares:package/village/plains": 1.82
       }
@@ -9220,7 +9290,7 @@
         "villager_farmer_house:chests/fixed/6d9792742d": 100.0,
         "villager_farmer_house:chests/fixed/752ac63222": 100.0,
         "mes:general": 80.8,
-        "minecraft:chests/village/village_savanna_house": 71.7,
+        "minecraft:chests/village/village_savanna_house": 71.6,
         "subterrestrial:chests/cabin/kitchen": 58.5,
         "minecraft:chests/village/village_fisher": 57.5,
         "skyvillages:chests/sky_village_fisher": 57.5,
@@ -9523,12 +9593,59 @@
       },
       "post_roll_only": true
     },
+    "neapolitan:ice_cubes": {
+      "remove": false,
+      "frequency": 1,
+      "chests": 1,
+      "where": {
+        "minecraft:chests/village/village_snowy_house": 0.607
+      },
+      "post_roll_only": true
+    },
     "neapolitan:music_disc_hullabaloo": {
       "remove": false,
       "frequency": 1,
       "chests": 1,
       "where": {
         "underground_bunkers:chests/underground_bunker/underground_bunker_treasure": 3.95
+      },
+      "post_roll_only": true
+    },
+    "neapolitan:strawberries": {
+      "remove": false,
+      "frequency": 1,
+      "chests": 2,
+      "where": {
+        "minecraft:chests/village/village_plains_house": 0.757,
+        "skyvillages:chests/sky_village_normal_house": 0.757
+      },
+      "post_roll_only": true
+    },
+    "neapolitan:strawberry_scones": {
+      "remove": false,
+      "frequency": 1,
+      "chests": 2,
+      "where": {
+        "minecraft:chests/village/village_plains_house": 0.757,
+        "skyvillages:chests/sky_village_normal_house": 0.757
+      },
+      "post_roll_only": true
+    },
+    "neapolitan:vanilla_fudge": {
+      "remove": false,
+      "frequency": 1,
+      "chests": 1,
+      "where": {
+        "minecraft:chests/village/village_savanna_house": 0.894
+      },
+      "post_roll_only": true
+    },
+    "neapolitan:vanilla_pods": {
+      "remove": false,
+      "frequency": 1,
+      "chests": 1,
+      "where": {
+        "minecraft:chests/village/village_savanna_house": 0.894
       },
       "post_roll_only": true
     },
@@ -10218,7 +10335,7 @@
       "frequency": 1,
       "chests": 1,
       "where": {
-        "minecraft:chests/ancient_city": 0.497
+        "minecraft:chests/ancient_city": 0.251
       },
       "post_roll_only": true
     },
@@ -10231,7 +10348,7 @@
         "minecraft:chests/bastion_treasure": 46.5,
         "underground_bunkers:chests/underground_bunker/underground_bunker_treasure": 1.65,
         "minecraft:chests/simple_dungeon": 0.864,
-        "minecraft:chests/ancient_city": 0.249
+        "minecraft:chests/ancient_city": 0.126
       },
       "post_roll_only": true
     },

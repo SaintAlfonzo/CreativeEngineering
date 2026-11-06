@@ -1,12 +1,15 @@
-# Creative Brewing: manifest mod id (no registry content yet). The members are nested jars, each with its own mods.toml
-# (META-INF/jarjar/metadata.json). feature_writeup/creative_brewing.md 2.
+# Creative Brewing: the bundle's own mod (potion, alcohol and effect content, config, scripts). The members (Vinery,
+# Foundation, Brewin' & Chewin') are nested jars, each with its own mods.toml (META-INF/jarjar/metadata.json).
+# feature_writeup/creative_brewing.md 2.
 modLoader="javafml"
 loaderVersion="${loader_version_range}"
 license="${mod_license}"
+issueTrackerURL="https://github.com/SaintAlfonzo/CreativeEngineering/issues"
 [[mods]]
 modId="${mod_id}"
 version="${mod_version}"
 displayName="${mod_name}"
+displayURL="https://github.com/SaintAlfonzo/CreativeEngineering"
 authors="${mod_authors}"
 description='''${mod_description}'''
 
@@ -22,12 +25,12 @@ mandatory=true
 versionRange="${minecraft_version_range}"
 ordering="NONE"
 side="BOTH"
-# patcherMod: supplies KubeJS (it requires it), the shared helpers (global.NCH, global.tags) and the startup script
-# loader.
+# Creative Common: supplies KubeJS (it requires it, and KubeJS pulls in Rhino and Architectury), the shared helpers
+# (global.NCH, global.tags), the dicts and the startup script loader.
 [[dependencies.creativebrewing]]
-modId="creativeengineering"
+modId="creativecommon"
 mandatory=true
-versionRange="[1.1.07,)"
+versionRange="[1.1.0,)"
 ordering="AFTER"
 side="BOTH"
 # Creative Compat: required by every other Creative jar (creative_split.md 7.6).
@@ -50,6 +53,6 @@ side="BOTH"
 [[dependencies.creativebrewing]]
 modId="creativedelight"
 mandatory=true
-versionRange="[1.0.0,)"
+versionRange="[1.1.0,)"
 ordering="AFTER"
 side="BOTH"

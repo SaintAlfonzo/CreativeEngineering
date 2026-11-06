@@ -10,7 +10,7 @@
 > recordings stay for debugging later. If disk runs short, drop the recordings of all-PASS boots first, never those
 > with a FAIL. Details: "Perf session" below and [scratch_run_2026-10-31.md](scratch_run_2026-10-31.md) section 0.
 >
-> **2026-11-04 later: added "SQ-BBQW Barbeque's Delight wood basins and trays" at the end (SQ-BBQW-01 to -03, CQ-BBQW-01).** **2026-11-04: added "SQ-BBQS Barbeque's Delight skewer inputs, basin sneak grab, JEI" at the end (SQ-BBQS-01 to -03, CQ-BBQS-01).** **2026-11-03 late: added "SQ-TSY Trade sync, split-jar lang, Barbeque's Delight icons" at the end (SQ-TSY-01, -02; CQ-TSY-01, CQ-LNG-01, CQ-BBQF-02; needs a dedicated scratch server).** **2026-11-03: added "SQ-CDJ7 Creative Delight member open rows" at the end (plan_creative_delight.md L: SQ-BBQF-01 to -07, SQ-VTDA-10 to -13, SQ-CDM2-01 to -04, SQ-GLD2-01 to -03, -05, SQ-SALT2-01, SQ-NEST-01, -02, reruns SQ-RD-22, SQ-CDF-08, SQ-VP-06; CQ-VTDA-01, CQ-CDM2-01, CQ-GLD2-04, CQ-MRGT-01, CQ-BBQF-01); SQ-GLD-08 now expects the 8-nugget recipes.** **2026-11-02 night: added "SQ-CDJ6 Creative Delight plan J and open rows" at the end (plan_creative_delight.md K: SQ-SLT-01 to -05, CQ-SLT-01, -02; SQ-CNG-01 to -04, CQ-CNG-01, -02; SQ-ENM-01 to -05; SQ-GLD-01 to -14, CQ-GLD-01 to -03; SQ-MDL-01 to -05; SQ-PCK-01 to -05, CQ-PCK-01, -02; SQ-SWP-01 to -08). SQ-DNR-E-01 to -04 and SQ-EN-01, -03, -05, -07 carry a rerun note for the merged End's member; SQ-MDP-04, -08, -09 superseded by SQ-MDL. Run SQ-CWG in the same session (Creative Worldgen first installed with it).**
+> **2026-11-05: added "SQ-PA Immersive Paintings built from the installed jars" at the end (SQ-PA-01 to -04, CQ-PA-01, -02; needs the Compat jar of 11-05 00:42 from build/libs).** **2026-11-04 night: added "SQ-DCM / SQ-CBS / SQ-CDFO Creative Brewing publish prep, Step 1" at the end (SQ-DCM-01 to -03, CQ-DCM-01, SQ-CBS-01, -02, SQ-CDFO-01 to -03, CQ-CDFO-01, CQ-CBS-01; nothing installed).** **2026-11-04 evening: added "SQ-CFR Campfire and Ender's stove tag in Creative Delight" at the end (SQ-CFR-01 to -08, CQ-CFR-01; Compat installed 19:05, CD 19:19, patcherMod 1.1.09 19:17).** **2026-11-04 later: added "SQ-BBQW Barbeque's Delight wood basins and trays" at the end (SQ-BBQW-01 to -03, CQ-BBQW-01).** **2026-11-04: added "SQ-BBQS Barbeque's Delight skewer inputs, basin sneak grab, JEI" at the end (SQ-BBQS-01 to -03, CQ-BBQS-01).** **2026-11-03 late: added "SQ-TSY Trade sync, split-jar lang, Barbeque's Delight icons" at the end (SQ-TSY-01, -02; CQ-TSY-01, CQ-LNG-01, CQ-BBQF-02; needs a dedicated scratch server).** **2026-11-03: added "SQ-CDJ7 Creative Delight member open rows" at the end (plan_creative_delight.md L: SQ-BBQF-01 to -07, SQ-VTDA-10 to -13, SQ-CDM2-01 to -04, SQ-GLD2-01 to -03, -05, SQ-SALT2-01, SQ-NEST-01, -02, reruns SQ-RD-22, SQ-CDF-08, SQ-VP-06; CQ-VTDA-01, CQ-CDM2-01, CQ-GLD2-04, CQ-MRGT-01, CQ-BBQF-01); SQ-GLD-08 now expects the 8-nugget recipes.** **2026-11-02 night: added "SQ-CDJ6 Creative Delight plan J and open rows" at the end (plan_creative_delight.md K: SQ-SLT-01 to -05, CQ-SLT-01, -02; SQ-CNG-01 to -04, CQ-CNG-01, -02; SQ-ENM-01 to -05; SQ-GLD-01 to -14, CQ-GLD-01 to -03; SQ-MDL-01 to -05; SQ-PCK-01 to -05, CQ-PCK-01, -02; SQ-SWP-01 to -08). SQ-DNR-E-01 to -04 and SQ-EN-01, -03, -05, -07 carry a rerun note for the merged End's member; SQ-MDP-04, -08, -09 superseded by SQ-MDL. Run SQ-CWG in the same session (Creative Worldgen first installed with it).**
 >
 > **2026-11-02 night (deep scan): added "Deep scan 2026-11-02: food, cooking and farming rows with no test" at the end (41 rows: SQ-FFB-02 to -04, SQ-RCO-01, -02, SQ-CNP-01, SQ-VNG-01, -02, SQ-PS-06, SQ-FO-01 to -05, SQ-CF-02, SQ-CNS-03, SQ-DRK-07, SQ-WCT-06 to -08, SQ-SGF-01, -02, SQ-VTD9-01, SQ-CN-04b, SQ-MRD-04, SQ-STD-03, and 15 CQ- rows). Not in r1102b's frozen scope; also missing from that scope although never run: SQ-DNR-O-01 to -05, SQ-DNR-E-01 to -04, SQ-VF-01 to -05, most SQ-CDJ5 fix reruns (SQ-CDJ-05, SQ-DDP-01 rerun, SQ-MDP-13, -14, -16, SQ-LOOT-FD1, SQ-VTD8-01).**
 >
@@ -61,7 +61,7 @@ New rows (written 2026-10-31, not in the sections below):
 | SQ-PRI-03 | A | boot; `ls mods config \| grep -i jrftl`; grep latest.log for `jrftl` | no JRFTL jar and no `jrftl-common.toml`; no log line naming jrftl; rotten flesh in a Create or IE recipe is unchanged (prepared flesh route, SQ-JRFTL-01) | stale file in the scratch `mods/` |
 | CQ-PRI-01 | client | WTHIT on glass, ice, grass block, iron ore, stone, dirt, oak log, leaves (replaces the book-icon wording of CQ-WT-01) | (r1101: glass, ice, iron ore, stone are yellow 'Drops Differently' in this pack, since glass drops shards, ice cubes, raw iron; green 'True' needs a block with no drop at all) glass, ice, iron ore: green "Silk Touch Required: True"; grass block and other blocks that drop something else: yellow "Drops Differently"; dirt, oak log: no line; no book icon anywhere; with the Silk Touch pickaxe the line follows the wthit_lines.md WL-37 rule; the `[wthit]` option that shows "Silk Touch Required: False" (default off) turns red False lines on for dirt and oak log | `WthitSilkTouch.java`, `silk_touch_blocks.json` (run `tools/gen_silk_touch_blocks.py`) |
 | CQ-PRI-02 | client | look at the Powdered Sugar block (`creativeengineering:powdered_sugar_block`); JEI | the new texture, no missing texture, edge tiling seamless | `powdered_sugar_block.png` |
-| CQ-PRI-03 | client | mod list screen, JEI mod filter, WTHIT mod name on a Vinery block, a Brewin' keg, a Foundation block, Creative Engineering item, baby mob, incubation nest, moobloom, Exposure camera | "Let's Do Vinery (Creative Brewing)", "Brewin' & Chewin' (Creative Brewing)", "Creative Brewing" for Foundation; the pack's own mods show no "(Alfonzo)" | `credit.txt`, `mods.toml` display names, `waila_plugins.json` |
+| CQ-PRI-03 | client | mod list screen, JEI mod filter, WTHIT mod name on a Vinery block, a Brewin' keg, a Foundation block, Creative Engineering item, baby mob, incubation nest, moobloom, Exposure camera | "Vinery (Creative Brewing)", "Brewin' & Chewin' (Creative Brewing)", "Foundation (Creative Brewing)" (renamed 2026-11-04, plan_cb_publish M5); the pack's own mods show no "(Alfonzo)" | `credit.txt`, `mods.toml` display names, `waila_plugins.json` |
 | CQ-PRI-04 | client | flower pots (flower_pots.md 5 table, built in the flower_test boot): WTHIT on a pot, flower box, planter box and Silt Pot; hover Large Flower Box, Vinery Flower Box, Planter Box, Silt Pot, Rich Hanging Pot | WTHIT shows the contents; "Can be placed on walls" on the three boxes; the Silt Pot hint; names "Large Flower Box" and "Rich Hanging Pot" (a Rich Pot on the ground); Planter Box plants drawn as in the Large Flower Box | `tooltips.js` Flower Pots block, `namechanges.js`, `WthitPotContents` |
 
 Live checks waiting for a bulk scratch-server session. A bulk session groups the entries by world group, runs each
@@ -144,7 +144,7 @@ Feature: [../fungi_delight.md](../fungi_delight.md) §4.0 / §8 (FGD-), [../poti
 `mods/` holds patcherMod 1.1.03 (built and installed 2026-10-26 14:32), which supersedes `creativeengineering-1.1.01` and 1.1.02 in every row. KubeJS tree as of 2026-10-25 (mushroom_spawns, `_biome_rules.js`, wild_crops `step`, mob_spawns rules, cooking.js Fungi block,
 baking.js truffle pie, compost rows, jei_info.js).
 
-Before the run (game closed, `pgrep -c java` is 0): `./gradlew :patcherMod:installToMods --offline` (the Fungi jar is
+Before the run (game closed, `pgrep -c java` is 0): `./gradlew :creativeCommon:installToMods --offline` (the Fungi jar is
 already installed). **Never boot without the port jar:** `kubejs/data/creativeengineering/worldgen/placed_feature/wild/mushrooms/`
 references `fungidelight:*` features and blocks, and a world fails to load without them. The probe exists
 (`tools/fungi_probe/fungi_probe.js`, command `/fgdtest <part>`, output `[fgdtest] PASS|FAIL <part> ...`; copy it into
@@ -191,7 +191,7 @@ open. `server_mods/` still holds Veggies -01 and Incubation Additions 1.0.0. Sti
 compost_values.js, can_types.json, food_types.json, wild_crops.json, soup soft fluids, Vinery grape bush `tries`).
 Boot-time failures are likely: run SQ-VP-00 first and fix before the rest.
 
-Before the run (game closed, `pgrep -c java` is 0): `./gradlew :patcherMod:installToMods --offline` (source changed since
+Before the run (game closed, `pgrep -c java` is 0): `./gradlew :creativeCommon:installToMods --offline` (source changed since
 md5 2d2d74ab); check `mods/` holds the jars above; `diff` the `mods/` set against `server_mods/`
 (the scratch server reads `mods/` through `mod_sides.md`, so `server_mods/` staleness is a deploy matter, not a test one).
 The Vintage probe exists (`tools/vintage_probe/vintage_probe.js`, command `/vtdtest <part>` or `all`, output
@@ -374,7 +374,7 @@ Feature: [../wthit_lines.md](../wthit_lines.md) 2.11 (WL-37); TODO `ui/wthit #11
 
 | ID | Group | Commands | Pass | If it fails |
 |---|---|---|---|---|
-| SQ-WT-01 | any | `/setblock 0 100 0 minecraft:glass`, `/execute if block 0 100 0 #creativeengineering:wthit/needs_silk_touch`; same for `minecraft:iron_ore`, `minecraft:dirt`, `minecraft:oak_leaves` | glass and iron ore: "Test passed"; dirt and oak leaves: "Test failed"; no `[wthit-silk-touch]` error in the log | `wthittags.js` read error: path of `silk_touch_blocks.json`; empty tag: rerun `tools/gen_silk_touch_blocks.py` |
+| SQ-WT-01 | any | `/setblock 0 100 0 minecraft:glass`, `/execute if block 0 100 0 #creativecommon:wthit/needs_silk_touch`; same for `minecraft:iron_ore`, `minecraft:dirt`, `minecraft:oak_leaves` | glass and iron ore: "Test passed"; dirt and oak leaves: "Test failed"; no `[wthit-silk-touch]` error in the log | `wthittags.js` read error: path of `silk_touch_blocks.json`; empty tag: rerun `tools/gen_silk_touch_blocks.py` |
 
 #### SQ-LE: low-effort TODO batch (added 2026-10-23)
 
@@ -503,7 +503,7 @@ an `idSuffix` of `sqks_test`.
 
 Feature: [../creative_delight.md](../creative_delight.md) 14.1 to 14.3. **Built 2026-10-25:** `creativedelight-1.0.0.jar`
 (`development/creativeDelight/build/libs/`) nests the Ocean's, Oceanic and End's repacks; the four ports are not bundled yet
-(SQ-CDJ-05 waits for them). Run with patcherMod from `development/patcherMod/build/libs/` (it holds the helpers now, so the
+(SQ-CDJ-05 waits for them). Run with patcherMod from `development/creativeCommon/build/libs/` (it holds the helpers now, so the
 pack's `kubejs/startup_scripts/func/` no longer has NCH, tags or compost) and with `oceansdelight-*`, `oceanic_delight-*`,
 `ends_delight-*` moved out of the scratch `mods/` unless the row says otherwise. Run SQ-CDT in the same boot.
 
@@ -538,7 +538,7 @@ press, wine rack). Not run yet (owner: queue only).
 
 Feature: [../creative_delight.md](../creative_delight.md) 10 (startup loader, helpers in patcherMod's jar, NCH namespace, CD
 script trees), tests CDT- in its section 19. Suite and how to load it: [tools/creative_delight_test/README.md](../../tools/creative_delight_test/README.md).
-Build `./gradlew :patcherMod:build :creativeDelight:build -Pcd_test_suite --offline`; scratch `mods/`: the patcherMod jar and
+Build `./gradlew :creativeCommon:build :creativeDelight:build -Pcd_test_suite --offline`; scratch `mods/`: the patcherMod jar and
 `creativedelight-1.0.0-cdtest.jar`, the three upstream member jars removed. Boot once for SQ-CDT-01 to -07, then the rows say what
 changes. Not run yet (owner: queue only).
 
@@ -1435,7 +1435,7 @@ The scratch `kubejs/exported/` of this run (server-safe dumps) was not copied in
 
 ### 2026-10-25 Creative Delight run (group A, CD focus)
 
-Jars: patcherMod `development/patcherMod/build/libs/creativeengineering-1.1.02.jar` built 15:41 (the startup loader; the
+Jars: patcherMod `development/creativeCommon/build/libs/creativecommon-1.1.02.jar` built 15:41 (the startup loader; the
 `mods/` copy predates it), `creativedelight-1.0.0.jar` / `-cdtest.jar` rebuilt 16:06 with fix 1, the rest of `mods/` as
 found. One superflat world (cdt2), about 12 boots. Probes: `tools/creative_delight_test/cdj_probe.js` (`/cdjtest`, new),
 `bench_boot.sh` (new). Setup fix: `scratch_server.sh setup` now links every `*_upstream` folder (the Miner's port refused
@@ -1647,7 +1647,7 @@ Needs the Creative Delight jar rebuilt and installed (`:creativeDelight:build`, 
 
 ## Farmer's Structures donor (farmers_structures.md section 5)
 
-Needs patcherMod rebuilt and installed (`:patcherMod:installToMods`), the Creative Delight jar (hanging canvas sign), and `farmers_upstream/FarmersStructures-1.0.6-1.21.1_neoforge.jar` in the game folder.
+Needs patcherMod rebuilt and installed (`:creativeCommon:installToMods`), the Creative Delight jar (hanging canvas sign), and `farmers_upstream/FarmersStructures-1.0.6-1.21.1_neoforge.jar` in the game folder.
 
 | ID | Group | Action | Expect | Depends on |
 |---|---|---|---|---|
@@ -1723,7 +1723,7 @@ Needs patcherMod 1.1.03 rebuilt 2026-10-26 (the perf mixins) and the server boot
 | SQ-PF-01 | A | Boot; `/ceperf status` (PF-14) | Recording `ce` running; all 10 events recorded; hooks: all run except possibly chunk wait; KubeJS handlers wrapped > 0; no mixin warning for the 9 perf mixins | |
 | SQ-PF-02 | A | After 2 min, `/ceperf dump smoke`; copy the file here, `python3 tools/perf/perf_report.py <file>` (PF-15) | Chat says saved; the report's "Measured by the pack's hooks" has ticks, a row per dimension, handlers as `server_scripts:<file>:<line>`, entity and block entity types | SQ-PF-01 |
 | SQ-PF-03 | B | New world: `/tp` 5 times to unexplored land 2000+ blocks apart, then `/ceperf dump tp` and report (PF-16) | Chunk waits lists waits over 1 ms with a caller and phase; totals non-zero | SQ-PF-01 |
-| SQ-PF-04 | B | Chunky pregen 2601 chunks with the jfc as is, then with every `creativeengineering.*` set to `enabled=false` (PF-17) | Same time within noise (1:34 in the 2026-09-28 A/B) | SQ-PF-01 |
+| SQ-PF-04 | B | Chunky pregen 2601 chunks with the jfc as is, then with every `creativecommon.*` set to `enabled=false` (PF-17) | Same time within noise (1:34 in the 2026-09-28 A/B) | SQ-PF-01 |
 | SQ-PF-05 | A | `/reload` twice, `/ceperf status` (PF-18) | Wrapped-handler count unchanged; no KubeJS errors | SQ-PF-01 |
 | SQ-PF-06 | client | Single player without a recording: play a minute, `/ceperf status` (PF-19) | No errors; "no JFR recording is running"; events listed as not recorded | |
 
@@ -1921,7 +1921,7 @@ Results 2026-10-27 evening run (Run log): SQ-FTW-01, -02 (72 items with FTW vs 5
 ## Worldgen hot spots, 2026-10-27 ([perf.md](../perf.md) 10.8, TODO `perf #13`)
 
 Target: patcherMod built 2026-10-27 with `DimensionFilter`, the shared terrain cache and `sampleGrid` 4 (NOT yet in
-`mods/`: install it first, `./gradlew :patcherMod:build --offline` then `:patcherMod:installToMods`, game closed), plus
+`mods/`: install it first, `./gradlew :creativeCommon:build --offline` then `:creativeCommon:installToMods`, game closed), plus
 the pack file `kubejs/data/tectonic/worldgen/density_function/overworld/legacy/cliffs.json`. Group B worlds on the eval
 seed -8188900049893920259 with `tools/perf/eval/eval_server.sh setup OUT LEVEL` (JFR on; it copies
 `tools/worldgen_perf_probe/wgp_probe.js` as `/wgp`). Edit `OUT/srv/config/creativeengineering-common.toml` before the
@@ -2151,7 +2151,7 @@ patcherMod 1.1.03 (19:58 source, in the 20:44 jar). Client only, Round 2 (creati
 
 | ID | World | Commands | Expected | If it fails |
 |---|---|---|---|---|
-| CQ-CL-13 | client, title screen and pause menu | With an unread marker (delete `config/creativeengineering/changelog_seen.txt`), hover the book button, then Tab to focus it | Bubble disappears while hovered or focused, "What's New" tooltip fully visible; bubble back when the mouse leaves | Bubble still drawn over the tooltip: `ChangelogButtons` render hook not reached (check the jar time) |
+| CQ-CL-13 | client, title screen and pause menu | With an unread marker (delete `config/creativecommon/changelog_seen.txt`), hover the book button, then Tab to focus it | Bubble disappears while hovered or focused, "What's New" tooltip fully visible; bubble back when the mouse leaves | Bubble still drawn over the tooltip: `ChangelogButtons` render hook not reached (check the jar time) |
 | SQ-MG-16 | C | Full restart; look at a Wares package block, Wares cardboard box block and both items in JEI; `/give` and place a Weathered Cardboard Box and an Old Cardboard Box; wash a Dustrial Decor Cardboard Box in a Create fan, then wash the result; check JEI for any other recipe of the Old or Weathered box | Wares boxes brown; Weathered box grey-brown with light tape, Old box keeps its original pale texture and name; the first wash gives an Old box, the second a Weathered box, and no crafting recipe makes either; weathered box mines with an axe at Dustrial-box speed, walking on it is soft-tier speed and it sinks slightly; no purple-black squares | Path or namespace wrong: check `kubejs/assets/wares/textures/` and `design_decor/` |
 | BR-01 | A | Give honey bread, toast, bread slice, banana bread; craft a hamburger (burger, patty, tomato, onion, salad), a chicken sandwich and a pb_j with each; `/reload` first | Each bread works in each recipe; JEI shows #forge:bread listing all of them | bread_tags.js not loaded (CD jar/patcherMod stale) or tag add rejected: grep latest.log for `bread_tags` |
 | BR-02 | A | Craft garlic bread with a garlic bread + 4 roasted garlic cloves; cut a bread slice with a knife; look both up in JEI | No recipe from garlic bread or a slice; plain bread, cornbread, sourdough and cauliflower bread still work | replaceInput missed: check ids veggiesdelight:garlic_bread and veggiesdelight:compat/moredelight/cutting/bread_slice |
@@ -2220,12 +2220,12 @@ Levels can be forced with `[perf] mobCapForceLevel` in `config/creativeengineeri
 
 patcherMod 1.1.03 with `IwBlockGrowthHandlerMixin`, `IwBlockGrowthHolderMixin`, `IwServerLevelTickMixin` and the
 config plugin `perf/CEMixinPlugin` (rewrites IW's `callTick` handler). Group B (normal world, real biomes). Any player
-with op. The JVM switch `-Dcreativeengineering.iwFastTick=false` turns all three parts off for the comparison boots.
+with op. The JVM switch `-Dcreativecommon.iwFastTick=false` turns all three parts off for the comparison boots.
 
 | ID | World | Commands | Expected | If it fails |
 |---|---|---|---|---|
 | SQ-IWF-01 | B | Boot; grep latest.log for `[perf] Immersive Weathering`, `IwBlockGrowth`, `IwServerLevel`, `Mixin` errors | One `callTick handler handler$...$callTick now calls IwGrowthFast.blockTick` line; no mixin error; `Loaded N block growths configurations` as before | `not found` / `unknown signature` warning: IW's handler name or descriptor differs (javap the merged ServerLevel); crash at load: read the mixin error |
-| SQ-IWF-02 | B | In a plains area: `/fill` a 16x1x16 grass_block floor with air above, a 5x3x5 oak_leaves block 3 above air next to it; `/gamerule randomTickSpeed 300` for 60 s, then 3; count grass / flowers on the floor and leaf piles under the leaves. Repeat on a boot with `-Dcreativeengineering.iwFastTick=false` | Grass and flowers grow on the floor and leaf piles form, in both boots, counts of the same order | Nothing in the fast boot only: the per-block tables were not filled (`IwGrowthFast.rebuilt` not called: check the `rebuild` RETURN inject) |
+| SQ-IWF-02 | B | In a plains area: `/fill` a 16x1x16 grass_block floor with air above, a 5x3x5 oak_leaves block 3 above air next to it; `/gamerule randomTickSpeed 300` for 60 s, then 3; count grass / flowers on the floor and leaf piles under the leaves. Repeat on a boot with `-Dcreativecommon.iwFastTick=false` | Grass and flowers grow on the floor and leaf piles form, in both boots, counts of the same order | Nothing in the fast boot only: the per-block tables were not filled (`IwGrowthFast.rebuilt` not called: check the `rebuild` RETURN inject) |
 | SQ-IWF-03 | B | Snowy biome (`/locate biome minecraft:snowy_plains`): `/weather thunder`, `/gamerule randomTickSpeed 300` 60 s; look for snowy stone and icicles near exposed stone; then `/weather clear` | Snow-covered stone or icicles appear (universal snow growths through the sky tick) | None: the universal table is empty, check `universal[]` after rebuild |
 | SQ-IWF-04 | B | `/stop`; set `block_growths = false` in `config/immersive_weathering-common.toml`; boot; SQ-IWF-02 setup again; then restore `true` | No grass, flowers or leaf piles from growths (leaf piles still come from decay) | Growths run: the switch is not read (`growthsOn`) |
 | SQ-IWF-05 | B | Perf suite run on the new jar: `perf_suite.py run general g2` (or at least G03a, G04, G12); compare with `g1` (perf.md 15.1) | IW `tickBlock` share of the Server thread well under 0.5% (g1: 1.9 to 2.6%); IW allocation share near 0 (g1: 5.5 to 6.4%); tickChunk share down by about the same | Shares unchanged: the overwrite is not live (check `IwGrowthFast` frames in the JFR) |
@@ -2308,7 +2308,7 @@ Jars: Creative Delight and patcherMod rebuilt 2026-10-29 (see the session hand-o
 
 ## Stepstools, 2026-10-29 ([stepstool.md](../stepstool.md))
 
-Needs patcherMod 1.1.04 (built 2026-10-29, `development/patcherMod/build/libs/creativeengineering-1.1.04.jar`, not yet in `mods/`) and current kubejs.
+Needs patcherMod 1.1.04 (built 2026-10-29, `development/creativeCommon/build/libs/creativecommon-1.1.04.jar`, not yet in `mods/`) and current kubejs.
 
 | ID | Group | Commands | Pass | If it fails |
 |---|---|---|---|---|
@@ -2324,7 +2324,7 @@ Script-only except the Storage Delight name (repackedStorage jar rebuilt 2026-10
 | SQ-CM-30 | A | boot with current kubejs; recipe id dump | no recipe outputs or takes `rusticdelight:fruit_beignet`; no errors from `rusticdelight/recipes.js` or `removed_items.js` | `creativedelight/members #22` |
 | SQ-CM-31 | A | same probe | `oceansdelight:seagrass_salad` recipe is `creativedelight:shapeless/seagrass_salad` with 2 `minecraft:seagrass` + bowl; no tentacle item (`miners_delight:tentacles`, `baked_tentacles`, `tentacles_on_a_stick`, `oceansdelight:tentacles`, `cut_tentacles`, `tentacle_on_a_stick`, `baked_tentacle_on_a_stick`, `oceanic_delight:squid_tentacles`, `glow_squid_tentacles`, `grilled_squid_tentacles`) is an output or input of any recipe (`/recipescan`) | `creativedelight/members #24`, `dishes/ocean #4` |
 | SQ-CM-32 | A | same probe | `oceansdelight:cooking/squid_rings`, `oceanic_delight:sea_pickle_roll`, `shrimp_rice`, `squid_salad`, `takoyaki` take `#forge:raw_fishes/calamari`; `glow_squid_stew` takes `#forge:raw_fishes/calamari` (glowing and every slice included); `seafood_skewer`, `squid_and_pickles` take `#forge:cooked_fishes/calamari` (the tag replace in the four `#forge:squid_tentacles` recipes is the part most likely to miss) | replaceInput on a tag |
-| SQ-CM-33 | A | boot; JEI item list (client) | the 140 Storage Delight blocks sit together in wood order (oak, spruce, birch, jungle, acacia, dark oak, mangrove, crimson, warped, bamboo); no tag error naming `creativeengineering:jei/storage_delight` | `creativedelight/members #23` |
+| SQ-CM-33 | A | boot; JEI item list (client) | the 140 Storage Delight blocks sit together in wood order (oak, spruce, birch, jungle, acacia, dark oak, mangrove, crimson, warped, bamboo); no tag error naming `creativecommon:jei/storage_delight` | `creativedelight/members #23` |
 | SQ-CM-34 | A | after the repackedStorage install; mod list | Storage Delight shows as "Storage Delight (Creative Delight)" | jar not installed |
 | SQ-CM-35 | A | boot with the 2026-10-31 12:32 CD jar; recipe probe + kubejs/startup.log and latest.log | `#forge:squid_tentacles` and `#forge:foods/tentacles` hold the raw calamari items; `miners_delight:cooking/takoyaki` takes calamari in both tentacle slots; `squid_rings`, `glow_squid_stew`, `seafood_skewer`, `squid_and_pickles` exist (rerun SQ-CM-32 alongside); no `[NCH]` error naming `squid_tentacles` or `truffle_pie` | `dishes/ocean #4` |
 | SQ-CM-36 | A | same boot; recipe probe, `/fgdtest all`, then a client | `create_central_kitchen:truffle_pie` is an item (Truffle Pie, chocolate pie sprite) that places CCK's truffle pie block; `creativedelight:baking/truffle_pie` exists and takes `fungidelight:truffle`; the placed pie gives truffle pie slices; `/fgdtest` oven truffle pie PASS; no `[NCH] ceBaking ... truffle_pie` error and no `truffle_pie` in the item_dict missing-id list | `ports/fungiport #3` |
@@ -3087,7 +3087,7 @@ hint) are in the in-game suite, not here.
 |---|---|---|---|---|
 | SQ-BBQ-01 | A | Boot; `grep -n "barbequesdelight" logs/latest.log \| grep -i "error\|exception\|failed to parse\|missing" \| head`; `grep -n "barbequesdelight\|bbq" logs/kubejs/server.log logs/kubejs/startup.log \| grep -i "warn\|error" \| head` | mod `barbequesdelight` loads from the CD jar (`creativedelight_members.txt`); no recipe parse errors; no NCH warning for the 26 recipes; no compost warning for the 24 rows | `CampfireRainInfo` missing (patcherMod old); an unknown item key in `recipes.js` |
 | SQ-BBQ-02 | A | Recipe lookup: types `barbequesdelight:skewering` (10), `barbequesdelight:grilling` (10), `barbequesdelight:combine` (3); ids `creativedelight:shaped/bbq_grill`, `creativedelight:stonecutting/bbq_basin_from_logs`, `bbq_tray_from_logs` | 26 recipes, all `creativedelight:` ids; none under `barbequesdelight:` (the port ships no recipe data); skewering inputs are the `forge:` tags of 3.1 (beef: 2 `#forge:raw_beef` + 2 `#forge:crops/cabbage`) | NCH emitters missing (patcherMod jar not rebuilt) |
-| SQ-BBQ-03 | A | `/dumptags` item and block: `barbequesdelight:raw_skewers`, `grilled_skewers`; block `creativeengineering:campfire/rain_douses`, `blockrunner:surface/metal`, `blockrunner:surface/wood`, `minecraft:mineable/pickaxe`, `mineable/axe`; `creativeengineering:food_type/handheld`, `/meal`, `/hazard` | 10 + 10 skewers; rain_douses holds `minecraft:campfire` and `barbequesdelight:grill`; metal holds the grill, wood the basin and tray; mineable as upstream; the 10 cooked skewers, wrap and sandwich in handheld, bibimbap in meal, burnt skewer in hazard; raw skewers in no food type; `BlockRunner tier overlaps` 0 | `tags.js` not loaded (`global.CD.on`) |
+| SQ-BBQ-03 | A | `/dumptags` item and block: `barbequesdelight:raw_skewers`, `grilled_skewers`; block `creativecommon:campfire/rain_douses`, `blockrunner:surface/metal`, `blockrunner:surface/wood`, `minecraft:mineable/pickaxe`, `mineable/axe`; `creativeengineering:food_type/handheld`, `/meal`, `/hazard` | 10 + 10 skewers; rain_douses holds `minecraft:campfire` and `barbequesdelight:grill`; metal holds the grill, wood the basin and tray; mineable as upstream; the 10 cooked skewers, wrap and sandwich in handheld, bibimbap in meal, burnt skewer in hazard; raw skewers in no food type; `BlockRunner tier overlaps` 0 | `tags.js` not loaded (`global.CD.on`) |
 | SQ-BBQ-04 | A | Compost probe or `/dumpcompost`: the 24 items of 3.7; a seasoning, the grill, basin, tray | raw 25 %, cooked 50 %, burnt 25 %, wrap 50 %, sandwich 75 %, bibimbap 100 %; the seasonings and blocks have no row | CD startup `barbequesdelight/compost.js` not in the jar |
 | SQ-BBQ-05 | A | Bot: place a grill on a placed campfire (`/setblock` campfire then use the grill item on it); `/data get block` / block state; `/setblock ~ ~-1 ~ minecraft:stone`, `/weather rain`, light it with flint and steel, wait 200 ticks; repeat on `minecraft:coal_block` | state `has_campfire=true,lit=false` on placing; lit by flint and steel (light 15); out in rain after `rainOutTicks` (160) on stone; still lit on the coal block; breaking drops the grill and a campfire | rain rule: grill not in `rain_douses`, or Creative Compat not filling CampfireRainInfo |
 | SQ-BBQ-06 | A | Bot: grill on a lit campfire, put `raw_beef_skewer` on a slot (use on the top), wait 160 ticks, sneak-use empty hand, wait 160, take; second skewer left 640 ticks unflipped; `/data get block` on the grill during the burnt state twice, 20 ticks apart | flip allowed at 160; Cooked Beef Skewer at 320; the unflipped one becomes Burnt Skewer at 640; the burnt entry's Time keeps counting between reads (after the B1 fix) and no block update spam | tick order; entry time not saved |
@@ -3336,7 +3336,7 @@ SQ-FD-01, SQ-CDM-00 to -05.
 Fixes of [plan_creative_delight.md](../plan_creative_delight.md) I1 to I8 (TODO `creativedelight/members #36` to `#42`).
 Targets `mods/creativedelight-1.0.0.jar` installed 2026-11-02 after 13:04 (members Veggies `-05`, Vintage `-12`, Fungi
 `-02`, Miner's `-04`, Display `-03`; the four port folders now live in `development/creativeDelight/members/`) **and
-patcherMod `creativeengineering-1.1.07` built 13:04, still in `development/patcherMod/build/libs/`** (the swap-list
+patcherMod `creativeengineering-1.1.07` built 13:04, still in `development/creativeCommon/build/libs/`** (the swap-list
 `removed` key, I1; also carries the SQ-EFB work of the 00:42 build): copy it into the scratch `OUT/srv/mods/` (or `mods/`
 once the owner installs it). Old boots of the SQ-CDJ5 plan carry over: Boot 0 world (SQ-CDJ-11) for SQ-CDJ-05 / SQ-DDP-01,
 a fresh group A level for the rest, the SQ-FGDC fresh group B world for SQ-FGD-14. Batches of r1102 in
@@ -3352,7 +3352,8 @@ a fresh group A level for the rest, the SQ-FGDC fresh group B world for SQ-FGD-1
 | SQ-LOOT-FD1 (I5 side effect) | A | 300 x `/loot spawn ~ ~ ~ loot farmersdelight:chests/fd_village_plains_house` and the same for `fd_shipwreck_supply`; count crates and bags | some rolls give `farmersdelight:cabbage_crate`, `tomato_crate`, `onion_crate`, `rice_bag` (or the carrot/potato/beetroot crates) where loose ones were; no error naming `farmersdelight:chests` in `logs/kubejs/server.log` | FD tables not in `loot_index.json` (nested jars are read since 2026-11-02) |
 | SQ-MDP-18 (I7) | A | `/give` the bot a netherite knife; `/summon minecraft:spider` on fire (`/summon minecraft:spider ~ ~ ~ {Fire:200s}`) 20 times and kill each with the knife while burning; 20 more not burning | burning: `miners_delight:cooked_arthropod` drops, never `miners_delight:arthropod`; not burning: raw arthropod 1 to 3 | translator patch not applied: `MinersTranslator.PATCH_DATA` path key (`data/miners_delight/loot_modifiers/scavenging_spider.json`) |
 | SQ-VTD8-01 (rewritten, I2) | A | `[vintage.pickling_jar] remainderBuffer = true`, `stallWhenFull = true`; place a jar; `/data merge block` slots 0-3 with 3 garlic cloves each (`Count:3b`; fermented garlic honey is 4 cloves + 1 honey bottle) and slot 4 with 3 honey bottles; wait 3 recipe times; `/data get block` after each | three batches finish: 3 fermented garlic honey in slot 7; slots 0-3 lose exactly 1 each per batch (3, 2, 1, 0); slot 4 loses 1 honey per batch; 3 glass bottles in slot 9 | stalls after one batch: `FermentingRecipe.assignSlots` / the jar's `craftItem(recipe, slots)` |
-| SQ-VTD8-02 (new, I2) | A | (b) slot 0 = 4 cloves, slot 1 = 1 honey; then slots 0-1 = 2 cloves each, slot 2 = 1 honey; one batch each. (c) slot 9 pre-filled with 16 glass bottles (full), `stallWhenFull = false`, 3 batches with one honey bottle each; count item entities of `minecraft:glass_bottle` on top of the jar at +0 and +20 ticks after each batch, and slot 9; then `remainderBuffer = false`, 3 more batches | (b) both match and finish: 4 cloves from slot 0 / 2 from each of slots 0-1, 1 honey; (c) slot 9 stays 16; no bottle entity at +0, exactly 1 per batch at +20 (3 in total); with the buffer off exactly 3 bottles ejected, none in slot 9, none doubled; `overflowEjectDelayTicks = 0` throws them at once | duplicate bottle: note where it came from (slot 9 count vs entities); delay ignored: CD `[vintage.pickling_jar] overflowEjectDelayTicks` not read (`CdSettings.number`) |
+| SQ-VTD8-02 (new, I2) | A | (b) slot 0 = 4 cloves, slot 1 = 1 honey; then slots 0-1 = 2 cloves each, slot 2 = 1 honey; one batch each. (c) slot 9 pre-filled with 16 glass bottles (full), `stallWhenFull = false`, 3 batches with one honey bottle each; count item entities of `minecraft:glass_bottle` on top of the jar at +0 and +20 ticks after each batch, and slot 9; then `remainderBuffer = false`, 3 more batches | (b) (flipped 2026-11-04, strict per slot) neither starts: progress stays 0 for 2 recipe times, slots unchanged; (c) slot 9 stays 16; no bottle entity at +0, exactly 1 per batch at +20 (3 in total); with the buffer off exactly 3 bottles ejected, none in slot 9, none doubled; `overflowEjectDelayTicks = 0` throws them at once | duplicate bottle: note where it came from (slot 9 count vs entities); delay ignored: CD `[vintage.pickling_jar] overflowEjectDelayTicks` not read (`CdSettings.number`) |
+| SQ-VTD8-03 (Vintage -18, strict per slot) | A | place a jar; (a) `/data merge block` slots 0-4 with 1 cucumber each and slot 5 with 1 salt (pickle: 5 cucumbers + salt); (b) slots 0-2 with 2 cucumbers each, slot 3 with 1 salt (6 cucumbers in 3 slots); (c) slots 0-4 with 3 cucumbers each, slot 5 with 3 salt; wait the recipe time + 20 t after each, `/data get block` | (a) 5 pickles in slot 7, slots 0-5 empty; (b) no batch, progress 0, slots unchanged; (c) three batches, each slot loses exactly 1 per batch (3, 2, 1, 0), 15 pickles | (b) starts or (c) takes 2+ from a slot: `FermentingRecipe.assignSlots` (shared-slot fallback still in the installed jar? check the nested `backportedVintage-...-18`) |
 | SQ-FGD-14 rerun (I6) | B, the SQ-FGDC world | as SQ-FGD-14, plus a birch forest square (radius 300 each: dark forest, taiga, birch forest, and a conifer biome that is none of these) | rooted dirt and `fungidelight:truffle_dirt` in dark forest, taiga and birch forest, truffle dirt only inside rooted dirt; neither in the other conifer biome | still 0 truffle dirt: the two features run in one modifier now (`wild_crops.json` key `rooted_dirt`); next step is the truffle ore's placement (count or a y offset into the blob) |
 
 ## SQ-FGDC Fungi census rerun, 2026-11-02 ([plan_creative_delight.md](../plan_creative_delight.md) I, r1102 [scratch_run_2026-11-02.md](scratch_run_2026-11-02.md) 8; the mushroom half of SQ-FGD-12 and SQ-FGD-15)
@@ -4082,5 +4083,212 @@ Client:
 - CQ-BBQW-01: the 9 basins show their stripped log, the 9 trays their palette-swapped crate (item, placed, all four
   facings, the stacked `support` model with legs); names "<Wood> Ingredients Basin" / "<Wood> Tray", oak's "Oak ..."; the
   JEI Skewering page lists the 9 basins as catalysts; the stonecutter on a spruce log offers only the spruce pair.
+- SQ-JAMT-01: every Fruits Delight jelly pot recipe (22, e.g. apple_jelly, kiwi_jelly) has cookingtime 400 in the loaded recipe set
+  (or in JEI); sweet berry, pepper, glow berry and pack jam pot recipes unchanged at 400; no other pot recipe changed.
 
 Results: not run yet.
+
+## SQ-CFR Campfire and Ender's stove tag in Creative Delight, 2026-11-04 ([creative_split.md](../creative_split.md) 7.9 steps 1 and 3, TODO `creativesplit/cdfinish #11`)
+
+Targets `creativecompat-1.0.0.jar` (installed 2026-11-04 19:05), `creativedelight-1.0.0.jar` (19:19) and `creativeengineering-1.1.09.jar` (19:17) (campfire rain, Comfort,
+Campfire Rules JEI rows and `[campfire]` moved from Compat to CD; mixin now `mixin.minecraft.CampfireRainMixin` in
+`creativedelight.mixins.json`). CFR-08 checks patcherMod 1.1.09's `#creativedelight:stoves` include in
+`damage_tags/fire.json` and `burn_tick.json` (built by the Creative Magic and Equipment carve session, installed with
+Creative Magic and Creative Equipment). Group A (superflat) unless noted; CFR-02 to -04 each need their own config state
+before the boot. Run SQ-NDM (Nether's Delight member, same CD jar) in the same boots.
+
+| ID | Group | Commands | Pass | If it fails |
+|---|---|---|---|---|
+| SQ-CFR-01 | A | Boot; `grep -n "CampfireRainMixin" logs/debug.log`; `grep -niE "campfire.*(error\|exception)\|InvalidInjection" logs/latest.log \| head` | `CampfireRainMixin` applies once, from `creativedelight.mixins.json` (none from `creativecompat.mixins.json`); no injection error (CD has `defaultRequire: 1`, so a miss crashes the boot) | Mixin json entry, or a stale Compat jar still listing it (applied twice: `@Unique` field clash) |
+| SQ-CFR-02 | A | Before the boot: `config/creativecompat-common.toml` holds `[campfire]` with `rainOutTicks = 100`, `config/creativedelight-common.toml` exists without `[campfire]`. Boot; read both files; reboot and grep again | `[swaps] config sections [campfire] merged from creativecompat-common.toml into creativedelight-common.toml`; the CD file has `[campfire]` with `rainOutTicks = 100` and the other six keys; after the boot the Compat file has no `[campfire]`; second boot: no merge line, no WARN | `CreativeDelight` constructor order (carry must run before `registerConfig`), or Forge did not correct the Compat file |
+| SQ-CFR-03 | A | Before the boot: no `config/creativedelight-common.toml`; Compat file with `[campfire] rainOutTicks = 100`. Boot | `[swaps] config sections [campfire] carried over from creativecompat-common.toml to creativedelight-common.toml`, then the CD carve sections merged from `creativeengineering-common.toml` (if present); the CD file has `[members]`, `[campfire]` (100) and every other section after Forge's correction | `carrySections` wrote the file first and the second carry skipped: the merge branch must run |
+| SQ-CFR-04 | A | Before the boot (pack that skipped 1.2.00): Compat file without `[campfire]` (or no Compat file), `config/creativeengineering-common.toml` with `[campfire] rainOutTicks = 120`, CD file present. Boot | `[swaps] config sections [campfire] merged from creativeengineering-common.toml into creativedelight-common.toml`; CD file `rainOutTicks = 120` | The fallback `mergeSections(OLD_FILE ...)` in `CreativeDelight` ran before the Compat one, or `campfireCarried` was true |
+| SQ-CFR-05 | A | Default config. `/weather rain`; `/setblock` stone, a lit `minecraft:campfire` on it under open sky; second lit campfire on `minecraft:coal_block`; a lit `minecraft:soul_campfire` on stone; a lit campfire on stone under a 3-block roof; wait 200 ticks; `/data get block` / block state of each | Only the open-sky one on stone is `lit=false` (after 160 ticks; fizz sound, food on it stays); coal-block, soul and roofed ones stay `lit=true`; `/weather clear` + relight: stays lit | `CampfireRain` not ticking (mixin not applied) or `CDConfig.CAMPFIRE` not read; tags `#creativeengineering:campfire/rain_douses` / `rain_proof_fuel` (blocktags.js) |
+| SQ-CFR-06 | A | `qrun.py toml` CD `[campfire] rainDouses = false`, reboot; repeat the open-sky campfire of CFR-05 | Stays lit after 400 ticks | `rainDouses` read from the wrong spec (Compat) |
+| SQ-CFR-07 | A | Default config. Bot player 2 blocks from a lit campfire, wait 40 ticks, `/data get entity <bot> ActiveEffects`; move the bot 6 blocks away, wait 120 ticks; `qrun.py toml` CD `[campfire] useComfort = false`, reboot, repeat at 2 blocks | Near: `farmersdelight:comfort` with 3 to 5 s left; far: none after it runs out; `useComfort = false`: `minecraft:regeneration` | `CampfireComfort.tick` not called, or the effect lookup (`farmersdelight:comfort` registry) |
+| SQ-CFR-08 | A | Boot; `grep "\[damage-tags\] loaded" logs/latest.log`; `grep -i "creativedelight:stoves" logs/latest.log`; probe (server script, `/reload`): `DamageTags.is(new DamageSource('endersdelight.endstone_stove'), 'creativecommon:fire')` and the same for `creativecommon:burn_tick` | Loaded line lists `creativedelight:stoves(1)`; no "neither a built-in flag tag nor defined by any pack" WARN for it; with patcherMod 1.1.09 or later both probes are true (with 1.1.08 also true, from the old direct entry) | CD jar missing `data/creativedelight/damage_tags/stoves.json`, or patcherMod's files lost the include |
+| CQ-CFR-01 | client | Client with JEI and WTHIT, rain on: look at a lit campfire on stone in open rain; open JEI World Interactions, Campfire Rules tab | WTHIT shows the rain line with the count; Campfire Rules rows: placed unlit, lighting, shovel, water, rain 8 s, coal rule, soul campfire, Comfort; each row once (Compat no longer adds them) | `WorldRows.provider(CAMPFIRE ...)` in `CreativeDelight.registerKitchen`; WTHIT reads `CampfireRainInfo` set from CD |
+
+Results: not run yet.
+
+## SQ-CMG / SQ-CEQ Creative Magic and Creative Equipment carves, 2026-11-04 ([creative_magic.md](../creative_magic.md) 4, [creative_equipment.md](../creative_equipment.md) 4, TODO `creativesplit/magic #12`, `creativesplit/equipment #9`)
+
+Not run. Targets the jars installed 2026-11-04 19:17: `creativeengineering-1.1.09.jar`, `creativemagic-1.0.0.jar`,
+`creativeequipment-1.0.0.jar`, `creativedelight-1.0.0.jar` (clean build, no `creativeengineering/harvest.js`). One save
+carried across: boot 1 on the 1.2.01 jars (patcherMod 1.1.08, no Magic or Equipment jar), a world with a lit Nether
+portal frame, a tier shield, a stepstool and a skinned backpack in a chest, `/save-all`; boot 2 on the new jars. Instance
+config with `[botania]` and the nine Equipment tables still in `creativeengineering-common.toml` and no
+`creativemagic-common.toml` / `creativeequipment-common.toml` (delete them in the scratch copy); before boot 1 set
+`[botania] trinketCaseAnyItem = false` and `[shields] wearThreshold` to a non-default value. Run SQ-CFR in the same boots.
+
+| ID | Group | Commands | Pass | If it fails |
+|---|---|---|---|---|
+| SQ-CMG-01 | A | Boot 2: `grep -E "creativemagic.mixins.json\|creativeequipment.mixins.json\|creativeengineering.mixins.json" logs/latest.log`; `grep -c "from creativemagic.mixins.json" logs/debug.log`; same for `creativeequipment`; mod list | No mixin apply error; Magic's 7 and Equipment's 20 mixins apply (gated ones only with their mod); none of them from `creativeengineering.mixins.json` | a mixin left in or missing from a json; package rename missed |
+| SQ-CMG-02 | A | Same boot: read `config/creativemagic-common.toml`, `config/creativeequipment-common.toml`, `config/creativeengineering-common.toml`; restart, read again | `[swaps] config sections [botania] carried over` and the nine Equipment tables carried; `trinketCaseAnyItem = false` and the edited `wearThreshold` in the new files; after the restart the CE file has none of the ten tables, `[damage_tags]` still there | `ConfigRename.carrySections` not reached before Forge loads configs; a table name in `SECTIONS` misspelt |
+| SQ-CMG-03 | A | Same boot: `grep -E "startup script packs in order\|creativemagic\|creativeequipment\|NCH.cfg" logs/kubejs/startup.log logs/kubejs/server.log \| head -30` | Packs `creativemagic` and `creativeequipment` load after the pack folder; no `global.CMG missing` / `global.CEQ missing`; no `no ... section in any registered config` (end_gear.js reads `CRAFTING.FELSIC_*`); no script error | `cmg_core.js` / `ceq_core.js` not in the jar; `registerConfig` class name wrong |
+| SQ-CMG-04 | A | Same save: `/data get block` the portal frame; light a new obsidian frame with `minecraft:flint_and_steel` and with `creativeengineering:flint_and_terrasteel` (`/give`); `/recipe` or the recipe dump for `creativemagic:` ids | Ordinary flame fails and the frame turns to crying obsidian; Dark Fire opens the portal; existing portal blocks still there; Flint and Terrasteel, Ender Storage, CEI machine and sculk recipes exist under `creativemagic:` | `PortalFailureHandler` subscriber not registered (modid); `DARK_FIRE` not registered |
+| SQ-CMG-05 | A | Same boot: `trinket_case_probe.js` (SQ-TC-01 config, then SQ-TC-02 with the `false` from the carry); `/dumptags` fluid `forge:experience`; MoreJS enchanted book trades | Probe answers as SQ-TC-01 / -02; `#forge:experience` holds only Create's liquid experience; no Cycle, Stockpile or Recovery on tables or librarians | Trinket mixins gated off (botania id); fluid tag script not in the jar tree |
+| SQ-CEQ-01 | A | Same save: `/data get` the chest with the skinned backpack and the player inventory (tier shield, stepstool in the Curios feet slot); `/give` each tier shield; `/dumptags` item `creativeengineering:stepstools`, `curios:feet`, `creativeengineering:dragon_gear`, `creativeengineering:elytra_chestplates`, `creativeengineering:bonemeal_charms` | Items load with their NBT (skin tag kept); `creativeengineering:copper_shield` .. `dragon_shield` exist; the tags hold the same members as on boot 1 | ids registered under the wrong namespace; tag script missing from the jar tree |
+| SQ-CEQ-02 | A | Bot player: block a zombie hit with an iron shield and a copper shield; hold the air brake while gliding (`/effect` levitation off, elytra on); bone meal with the dragon hoe in the off hand (100 tries); glass bottle in water with the bot underwater at low air | Shield wear and reduction as the [shields] values say (SQ-SH rows); air brake slows the glide; bone meal refunds at about `bonemeal_charm.chance`; Bottled Air refills air | listener not registered in `CreativeEquipment`; config read from the wrong class |
+| SQ-CEQ-03 | A | Bot: equip a stepstool in the feet slot, send the step-up packet (or `perfBot` step command); stand on it, move | Player raised one block, steps off on move; no `creativeengineering:stepstool` channel mismatch on join | channel not registered (`Stepstool.register`) |
+| SQ-CEQ-04 | A | Recipe dump: `grep -c "creativeequipment:" ` in the recipe list; check felsic assembly, End gear, shield, stepstool, archery, bullets, camera bag, backpack skin recipes | All present under `creativeequipment:` ids; felsic assembly reads its potion mB from `creativeequipment-common.toml` | `CEQ.recipes` wrapper broken; `NCH.cfg` falls back to defaults |
+| SQ-CEQ-05 | A | `/dumptags` block `creativeengineering:needs_copper_tool`, `minecraft:needs_iron_tool` on `creativeengineering:plate_block_iron` and the copper dust pile (the old SQ-CDS-04 check, now Equipment's `harvest.js`); mine an iron plate block with a copper pickaxe (Everything Copper) | One tier and one tool per listed block, as before; `harvest.js` runs once (one `[tags]` log line, not two); copper pickaxe uses the copper tier | `harvest.js` in both the CD and Equipment jars; `CopperPickaxeItemMixin` gated off |
+| SQ-CEQ-06 | A | Dedicated server boot with Nock Enough Arrows; bot joins | No `DecoderException: readerIndex` kick (NockRecipeBookSync still runs from Equipment's common setup) | `commonSetup` listener not added |
+| SQ-CEQ-07 | A | Dragon gear worn by the bot at reduced durability, wait 220 ticks | Durability up by `[dragon_gear.autorepair] amountPerInterval` | `dragon_autorepair.js` still loads `CEConfig` |
+| SQ-CEQ-08 | A | `tune_tools` / `tune_armor`: `/data get` attributes of an echo sword, felsic pickaxe, dragon helmet and a wooden knife (More Delight) | Values as the boilerplate in `func/tune_tools.js` / `tune_armor.js` (same as before the carve); echo pickaxe, axe, shovel, hoe and Felsic Scrap exist | Equipment startup pack not loaded, or loaded before the dicts |
+| CQ-CEQ-01 | client | Client: hold each tier shield and block; wear a skinned backpack (with `allowEquip` on) and place it; stepstool Step Up key in Controls; Iron Shield name; felsic, dragon and stepstool tooltips; Flint and Terrasteel and Dark Fire names and textures; enchanted book with Cycle shows the red line | LOOK: shields render with their base textures and block pose; backpack shows the skin block; key listed as "Step Up (Stepstool)"; names and tooltips as before; Dark Fire animated as before | client registrations (`ClientModEvents`) not on `creativeequipment`; lang file under the wrong namespace |
+
+Results: not run yet.
+
+## SQ-CEN Creative Engineering carve and the creativecommon swap, 2026-11-04 ([creative_engineering.md](../creative_engineering.md) 5, [creative_split.md](../creative_split.md) 7.13, TODO `creativesplit/engineering #10`)
+
+Not run. Built 2026-11-04, NOT installed. Targets `creativecommon-1.0.0.jar` (replaces `creativeengineering-1.1.09.jar`),
+`creativeengineering-2.0.0.jar` (new) and every Creative jar rebuilt against them (Compat, Calendar, Devtools, Delight,
+Brewing, Worldgen, Magic, Equipment: each now requires `creativecommon`). The 1.1.09 jars can no longer be rebuilt from the
+tree, so SQ-CMG and SQ-CEQ run on these jars too: read their `creativeengineering-common.toml` checks as "the carried
+tables are not in the Common or Engineering file". One save carried across: boot 1 on the jars in `mods/` today (1.1.09,
+Magic, Equipment); in the world: an IE sawmill with a precision sawblade cutting logs, a chest with a wooden water bucket,
+creosote-soaked sawdust and a precision sawblade, a dragon head facing away from an encased fan, a framed block with camo,
+an asphalt path; before boot 1 set `[shrapnel] count = 12`, `[surface.wthit] format = "PERCENT"`, `[toasts]` or `[jei]` one
+non-default value, and make sure `creativeengineering-swaps.toml` exists; `/save-all`; boot 2 on the new jars with no
+`creativecommon-common.toml`. Recipe and registry dumps from both boots (`/dumpall`) for the diffs.
+
+| ID | Group | Commands | Pass | If it fails |
+|---|---|---|---|---|
+| SQ-CEN-01 | A | Boot 2: mod list; `grep -E "creativecommon.mixins.json\|creativeengineering.mixins.json\|in both module\|split package" logs/latest.log`; `grep -c "from creativecommon.mixins.json" logs/debug.log`, same for `creativeengineering` | Server boots; `creativecommon` 1.0.0 and `creativeengineering` 2.0.0 in the list, no other jar missing its `creativecommon` dependency; Common's 74 and Engineering's 29 mixins apply (gated ones with their mod), no apply error | a jar still requires `creativeengineering [1.1.09,)`; package overlap between two jars; a gate id wrong (`EngineeringMixinPlugin`) |
+| SQ-CEN-02 | A | Same boot: read `config/creativecommon-common.toml`, `creativeengineering-common.toml`, `creativecommon-swaps.toml`; restart, read again | Log `[swaps] config sections ... carried over` into `creativecommon-common.toml`; the edited `[toasts]`/`[jei]` value is there; `creativeengineering-swaps.toml` renamed to `creativecommon-swaps.toml`; after the restart the CE file holds only `[shrapnel]` (count 12), `[surface]` (format PERCENT) and `[vein_undo]` | `CommonConfig.SECTIONS` incomplete; carry ran after Forge read the file |
+| SQ-CEN-03 | A | Same boot: `grep -E "startup script packs in order\|global.CEN missing\|in any registered config" logs/kubejs/startup.log logs/kubejs/server.log`; registry dump diff (items, blocks) boot 1 vs boot 2 | Packs: `creativecommon` first, then the pack folder, then the jars (`creativeengineering` among them); no `global.CEN missing`, no NCH.cfg section miss; same item and block ids (components, coils, plates, dust piles, misc parts, wood pellets, amethyst dust and lens, every transition item) | `HELPERS_MOD_ID` not `creativecommon` (helpers load late, every jar script fails); Engineering startup pack not in the jar |
+| SQ-CEN-04 | A | Recipe dump diff boot 1 vs boot 2: ids under `creativeengineering:`, count of `creativeengineering:sawmill/` recipes; JEI-free check that no recipe outputs a removed wood item (`global.removedWoods` outputs) | Same recipe ids and count (moved scripts keep NCH's default namespace); 211 jar sawmill recipes plus the pack's 5; no purged-wood output and no duplicate oak-twin recipes | an Engineering script failed (server.log); `removed_woods.js` order vs `item_merges.js` |
+| SQ-CEN-05 | A | Same save: `/data get block` the chest; `/summon minecraft:tnt ~ ~ ~ {Fuse:1}` near the bot, then `/execute if entity @e[type=creativeengineering:shrapnel]` count over 5 ticks | Wooden water bucket, sawblade and sawdust keep their ids and NBT; 12 shrapnel pieces per TNT | Engineering registries not created (`CreativeEngineering` constructor); config not read |
+| SQ-CEN-06 | A | Same save: an item on the belt under the dragon-head fan (dragon breathing recipe); the sawmill cutting a log; `grep -iE "FluidBridge\|liquid xp\|dragon_breathing" logs/latest.log` | Fan output as before; sawmill gives the routed sawdust with the precision blade; the XP bridge startup line names the CEI fluid; dragon breathing type registered once | fan type not registered (`DragonBreathingFanProcessingType::register` in Engineering setup); sawmill classes not pre-loaded (crash on first sawmill tick) |
+| SQ-CEN-07 | A | Bot vein mines a small ore vein (Ore Excavation), `/undo_excavation`; then vein mine dirt, undo twice quickly | Ore undo refused (`vein_undo_denied`); dirt undo works, the second inside the 5 s cooldown refused | Ore Excavation mixins gated off (`oreexcavation` id) |
+| SQ-CEN-08 | A | Same boot: Creative Brewing armor effects and CD JEI flags read Common's config: `grep -E "ArmorFx\|mountEffectInterval\|CommonConfig" logs/kubejs/server.log`; a horse with a mount-effect armor | No class-load error for `com.SaintAlfonzo.creativecommon.CommonConfig`; mount effects tick at `[perf] mountEffectIntervalTicks` | `armor_effects.js` still loads the old class (falls back to the default) |
+| CQ-CEN-01 | client | Client: WTHIT on asphalt (Run Speed line, percent format), on a 5-layer leaf pile with `[leaf_piles] slowFromLayers = 5` in Compat's file, on a framed block (camo line); stand in mud (sinking view); JEI dragon breathing category; names of the wooden bucket and the surface tiers; Common's lang (changelog button, WTHIT hive and campfire lines); Mods screen | LOOK: lines and names as before; leaf pile slows from 5 layers; Mods screen shows Creative Common and Creative Engineering with their descriptions | `LeafPileSlow` hook not set (Engineering constructor); a lang file at a shared path |
+
+Results: not run yet.
+
+## SQ-CNS Creative Common namespace and moves out (wave 9), 2026-11-04 ([creative_split.md](../creative_split.md) 7.14)
+
+Not run. Built 2026-11-04 with SQ-CEN's jars (Common, Compat, CD, Equipment, Brewing, Engineering rebuilt), NOT
+installed. Runs on SQ-CEN's save and boots (boot 2 = the new jars). Renamed outright: on the old save the item merges
+run once more and What's New shows once (expected, not a failure).
+
+| ID | Group | Commands | Pass | If it fails |
+|---|---|---|---|---|
+| SQ-CNS-01 | A | Boot 2: `grep -iE "damage tag\|damage_tags\|creativeengineering:(fire\|magic\|burn_tick)" logs/latest.log`; with `[damage_tags]` logging on, set the bot on fire and hit it with an Instant Damage potion, read the `DamageTagLogger` lines | Damage tags load from `creativecommon` (32 plus CD's `creativedelight:stoves`), no unknown `#creativeengineering:` reference; the fire hit is tagged `fire`/`burn_tick`, the magic hit `magic` | A file still naming `#creativeengineering:`: grep `development/*/src/main/resources/data/*/damage_tags` |
+| SQ-CNS-02 | A | Same boot: `/execute if block <glass> #creativecommon:wthit/needs_silk_touch` on a placed glass block; `grep -iE "jei_order_tags\|wthittags" logs/kubejs/server.log` | Glass matches; both scripts load with no error | `wthittags.js` TAG strings, `jei_order.js` TAG_ROOT |
+| SQ-CNS-03 | A | Boot 2 then boot 3: `grep -iE "item merge\|swap_merges" logs/latest.log` each time | Boot 2 runs the merge rewrite once (stamp `creativecommon:swap_merges`); boot 3 skips it | `swap/ItemMerges` STAMP |
+| SQ-CNS-04 | A | Same boot: `grep -E "creativecompat.mixins.json\|creativedelight.mixins.json\|creativecommon.mixins.json" logs/latest.log \| grep -iE "fail\|error\|could not"`; `/curios list @p` (or the Curios screen on the bot) | No mixin failures (Compat's Jetpack and falling-block mixins, CD's two Central Kitchen mixins on the client config only); the hands, face and feet slots exist (now registered by Equipment) | Equipment constructor `CuriosSlots::enqueue` under the `curios` check |
+| SQ-CNS-05 | A | Short JFR recording on boot 2 (perf suite settings, `server/perf/ce-server.jfc`), then `java tools/perf/PerfParse.java <file>` | `creativecommon.ServerTick` and `creativecommon.LevelTick` events counted | `PerfJfrEvents` names, the parser's prefix |
+| CQ-CNS-01 | client | Client on boot 2: WTHIT on a flower pot, a Supplementaries jar, a beehive, a sheared grass block, a glass block, a cake; WTHIT config screen; JEI world tabs (Weathering and Growth, Lightning, Salt) and a cycling crafting page; armor bar with dragon armor; What's New from the menu; hover a Curios item and a Create Central Kitchen cooking guide's meal slot; drop sand into water; open the creative search tab with D&D loaded | Every line reads as text (no raw `creativecommon.` keys), the plugin group is "Creative Common"; tabs have titles and rows; tinted armor bar; the changelog shows; "Slot:" line and the meal tooltip show; the sand splashes; no crash | Lang key renamed in Java but not in `assets/creativecommon/lang/en_us.json`, or `kubejs/assets/creativecommon/jei_world` missing |
+
+Results: not run yet.
+
+## SQ-DEP Split dependency fixes, Common to Delight to Brewing and part 2 (all jars), 2026-11-04 ([creative_split.md](../creative_split.md) 7.15, 7.16)
+
+Not run. Built 2026-11-04 with the SQ-CEN / SQ-CNS jars (Common, CD, Brewing rebuilt; Blockheads Additions `-02`,
+Vinery `-09`), NOT installed. Runs on the same boot as SQ-CNS.
+
+| ID | Group | Commands | Pass | If it fails |
+|---|---|---|---|---|
+| SQ-DEP-01 | A | Boot (full pack): `grep -iE "blockheads_additions.mixins.json\|CoasterRendererOffset\|\[blockheads_additions\]" logs/latest.log` | no apply error or skip line for the coaster mixin (Brewin' is loaded) | plugin class name in the json, shared_base package |
+| SQ-DEP-02 | A | Throwaway boot without `creativebrewing-*.jar` (CD and its deps only; expected to stop if something else needs Brewing, then note what) | no `CoasterBlockEntityRenderer` / `brewinandchewin` mixin error from Blockheads Additions; Forge does not list `brewinandchewin` as missing for `blockheads_additions` | gate not applied (client list), optional dep written as mandatory |
+| SQ-DEP-03 | A | Same full boot: `grep -iE "vinery.*creativecalendar\|creativecalendar.*vinery\|Missing.*creativecalendar" logs/latest.log` | no dependency error; Vinery loads after Creative Calendar | versionRange vs Calendar's 1.0.0 |
+| CQ-DEP-01 | client | Brewin' coaster with two drinks on a Cooking for Blockheads counter | LOOK: coaster sits on the counter top (offset as before) | gate skipped the mixin with Brewin' present |
+| SQ-DEP-04 | A | Part 2 (7.16), same full boot with all ten Creative jars: `grep -nE "Missing or unsupported mandatory\|NoClassDefFoundError\|ClassNotFoundException\|was not found .*(creative\|baby_mobs\|more_mooblooms\|exposure)" logs/latest.log \| head` | no hit naming one of our jars or packages (`com.SaintAlfonzo`, `ce.shared`, our mixin configs) | the class or mixin named; 7.16 map row for that jar |
+| SQ-DEP-05 | A | Same boot: `/setblock` a `minecraft:campfire` under open sky and one on a `minecraft:coal_block` beside it, `/weather thunder`, wait 400 ticks, then `/execute if block <pos> minecraft:campfire[lit=false]` for each; `/dumpall`, `grep -c "creativecommon:campfire/rain_douses" kubejs/exported/tags/block_tags.json` | open-sky campfire out, the one on coal lit; tag present (1) | Common's `CampfireRainInfo` namespace vs `block_dict.js` `t_campfire_rain_*` (7.17 item 1) |
+| SQ-DEP-07 | A | Same boot: `grep -nE "creativecommon.mixins.json.*(error\|fail\|not found)\|Mixin apply.*creativecommon" logs/latest.log \| head`; in game the JEI tooltip and AE2 terminal tooltip fixes still work (CQ rows of those features) | no hit; every gated mixin still applies (all 17 mods installed) | a `NEEDS_MOD` id that is not the mod's real id (7.17 item 2) |
+| SQ-DEP-08 | A | Same boot with `repackedStorage-...-ce-19.2-02.jar`: `grep -niE "storagedelight.*(missing\|requires\|error)" logs/latest.log \| head` | no hit; Storage Delight loads after Farmer's Delight | versionRange vs the Farmer's member version (7.17 item 3) |
+| SQ-DEP-06 | A | Same boot: `grep -nE "dragon's breath fluid brewing disabled\|Lingerification" logs/latest.log \| head` | no "disabled" warning; Create and IE are loaded, so both still register after the guard | `CreativeBrewing.commonSetup` guard ids (7.16 fix 2) |
+
+Results: not run yet.
+
+## Large Meals, Roll Delight and Barbeque's Delight changes, 2026-11-04 ([plan_meals_rolls_bbq.md](../plan_meals_rolls_bbq.md))
+
+CD jar built 2026-11-04 20:33 (not installed: see the plan's build note). Before the run: `/dumpall`, then remove
+`largemeals` and `roll_delight` from `AWAIT_DUMP` in `tools/gen_can_types.py`, run `python3 tools/gen_can_types.py`, `/cegen`
+(food families, placeables, stack sizes), `python3 tools/food_families.py --check`. One group A boot covers every server row.
+
+| ID | Group | Commands | Pass | If it fails |
+|---|---|---|---|---|
+| SQ-LGM-11 | A | Bot eats `largemeals:pufferfish_broth`; `/data get entity` the bot `ActiveEffects` | Comfort 1200 ticks and Nausea (`minecraft:nausea`) 100 ticks; no poison (LGM-22) | `MealItems.java` not in the nested jar |
+| SQ-LGM-12 | A | Recipe dump: `canned_omurice`, `canned_mushroom_pot_pie`, `canned_roasted_mutton_rack`; uses of `largemeals:raw_mutton_rack` / `cooked_mutton_rack` | three feast can recipes on the placed block, uncanning gives the serving; no can recipe takes either rack (LGM-23, -24) | `largemeals` still in `AWAIT_DUMP` |
+| SQ-LGM-13 | A | `food_families.json` after `/cegen` | Mushroom Pot Pie block `feast/whole`, serving `feast/serving`; Omurice `feast/*`; Tomato Egg Soup `soup/soup`; Cod Deluxe and Hearty Lunch `meal/plate` | name rule ahead of `FAMILY_OVERRIDE` |
+| SQ-LGM-14 | A | `placeable.json` after `/cegen` | all 13 Large Meals foods with an `lm_` block listed placeable (LGM-21) | DD link missing |
+| SQ-ROLL-10 | A | `/dumptags` item `creativeengineering:food_type/cooked/veggie` and `.../ingredient`; recipe dump for `canned_cooked_nether_wart` | Cooked Nether Wart in `ingredient`, not in `cooked/veggie`; the can recipe exists (ROLL-23) | `food_types.js` member script not regenerated |
+| SQ-ROLL-11 | A | Bot eats `roll_delight:golden_roll` and `golden_roll_slice` from hunger 4; `startup.log` grep `golden values` | +20 / +10 hunger, no effects; the `[golden values]` line counts one more food; neither eaten at full hunger (ROLL-25) | `PAIRS` skipped (mod id) |
+| SQ-ROLL-12 | A | Recipe dump filtered on `golden_roll_slice` and on `canned_` + `roll_delight:` | slice only as a cutting result; no gild or enchant recipe; no roll can (ROLL-26, -27) | |
+| SQ-BBQ2-01 | A | `grep -E "barbequesdelight\|skewers.js\|F.skewer" logs/kubejs/server.log` after `/reload`; registry check for the 8 raw ids (`/give` each) | no script error; all 8 raw skewers exist under their mods' namespaces | `PackRawSkewers` not registered |
+| SQ-BBQ2-02 | A | Recipe dump for each pack skewer: raw craft, `_from_smelting`, `_from_smoking`, `_from_campfire`, grilling, `_from_cooked_manual_only`, assembly | every route present; Nether and Cave have no heatless craft; End raw and heatless shapeless, 1 result; upstream crafts gone (BBQ-35) | id clash in the log |
+| SQ-BBQ2-03 | A | Recipe ids of the ten BBQ lines against the 11-03 dump | identical ids and results (BBQ-39) | helper id naming |
+| SQ-BBQ2-04 | A | `/dumptags` item `barbequesdelight:raw_skewers`; bot crafts a raw pack skewer with a cumin powder, then with a barbeque sauce | 18 raws in the tag; powder craft works, sauce refused (BBQ-36) | |
+| SQ-BBQ2-05 | A | Recipe dump for `kebab_wrap`, `kebab_sandwich`, `bibimbap`; bot eats each from hunger 2 | shaped + assembly (wrap, sandwich), shapeless `_cooked_manual_only` (bibimbap), no `barbequesdelight:combine`; +10 / +16 / +16 hunger, no skewer effects (BBQ-38) | incomplete item missing (transition_items.js) |
+| SQ-BBQ2-06 | A | Bot kills a shulker with a knife (10 tries); cuts a Shulker Mollusk on a board; recipe dump `stuffed_shulker` | mollusk drops; 2 filets; stuffed shulker takes `ends_delight:shulker_meat` (BBQ-40) | merge still active (old jar) |
+| SQ-BBQ2-07 | A | `food_families.json`, `can_types.json` after `/cegen` | all 18 cooked skewers in `skewer`; no skewer can (BBQ-37) | |
+| CQ-BBQ2-01 | client | Hover the six seasonings and a skewer seasoned with each (BBQ-34); names of the 3 renamed skewers, their plated blocks and the 8 raws; Salmon Maki Roll Slice (ROLL-24); JEI pages of raws and combos; Large Meals placeable tooltips (LGM-21) | LOOK: the seasoning lines match; names as listed; raw cod texture on all raws | |
+
+Results: not run yet.
+
+## SQ-DCM / SQ-CBS / SQ-CDFO Creative Brewing publish prep, Step 1 (dicts to Common, guards, fold-in, namespace, names), 2026-11-04 ([plan_cb_publish.md](../plan_cb_publish.md) 8)
+
+Not run. Built 2026-11-04 (Creative Common 1.1.0 and the jars listed in plan_cb_publish.md 9), NOT installed. Install order
+C, P, L, W, D, B, Q, game closed. Offline checks already passed: dict baseline equal
+(`tools/dict_baseline/run.sh`, [dict_baseline_2026-11-04.json](dict_baseline_2026-11-04.json)); `tools/guard_check.py` result
+in plan_cb_publish.md 8. SQ-CBS-01/02 and SQ-CDFO-02/03 need throwaway server folders with a reduced mod list.
+
+| ID | Group | Commands | Pass | If it fails |
+|---|---|---|---|---|
+| SQ-DCM-01 | A | Boot the full pack: `grep -nE "jar-startup\] startup script packs in order\|ReferenceError\|is not defined" logs/kubejs/startup.log \| head` | packs in order start with `creativecommon`; `creativecommon: 18 of 18 files loaded`; no `ReferenceError` / `is not defined` | a pack-folder script read a dict at top level before Common's pack (order), or a moved file is missing from the jar |
+| SQ-DCM-02 | A | Same boot: `/reload`; `grep -cE "error\|Error" logs/kubejs/server.log`; `/dumpall`, compare the recipe count with the last pre-migration dump; `grep "absent mods" logs/kubejs/server.log` | no new errors; recipe count equal; no `[absent mods]` line (every mod is present in the full pack) | `absent_mods.js` line names a mod: a namespace that is not a mod id (G5 false skip) |
+| SQ-DCM-03 | A | Old world (pre-migration save): `grep -nE "missing.*registry\|Missing mappings" logs/latest.log \| head`; hold an old `creativeengineering:potion_bucket`, have Magic Resistance active before the update | no unresolved ids for the moved ones; bucket and effect read as `creativebrewing:`; old bottled potions and potion fluids read as unknown (expected, D5) | swap list entry missing (`data/creativebrewing/swaps/creative_split.json`). Use a fresh save made with the old ids (memory forge-missing-mappings-staging); also CBR-06 in creative_brewing.md |
+| CQ-DCM-01 | client | Full pack client: hover a white wool and an Immersive Petroleum asphalt block; open JEI fluid list | pack tooltips show (wool test lines, asphalt flavour text stripped); `create:potion` in the JEI fluid list; JEI order unchanged | `global.tooltips` missing (Common client scripts not loaded), `fluid_jei.js` / `jei_order.js` not in the jar |
+| SQ-CBS-01 | B | **Minimal chain**: fresh server folder with Forge, KubeJS (+ Rhino, Architectury), Common, Compat, Calendar, CD, CB, the Vinery donor jars, no Cooking for Blockheads, Balm or Incubation; empty `kubejs/` | boots, no script error in `logs/kubejs/*.log`; `/effect give @s creativebrewing:magic_resistance` works; a potion bucket fills from a cauldron; one keg brew and one wine ferment | the mod or file named in the error (missing guard: add it, rerun `tools/guard_check.py`) |
+| SQ-CBS-02 | B | Minimal chain plus Alex's Mobs only | Alex's Mobs potion rows appear; `[absent mods]` lines name the other mods, no errors | an AM row guarded by the wrong mod id |
+| SQ-CDFO-01 | A | Full pack after M8, old world: placed racks, fridge, corner and oven keep their contents; oven fuel and smoking; emu, duck and goose nests and egg crates; `config/creativedelight-common.toml` | all work, no missing-registry warnings (old ids read as `creativedelight:`); moved config values present | swap list (`data/creativedelight/swaps/`), `MemberConfigMove` |
+| SQ-CDFO-02 | B | CD chain without Cooking for Blockheads, Balm and Incubation | boots; no CfB / Incubation class load error, no recipe, tag or loot error naming `cookingforblockheads` or the nests in `latest.log` | a compartment class referenced outside its `init` |
+| SQ-CDFO-03 | B | Pack with CfB but no Incubation; then Incubation without Alex's Mobs and Untitled Duck Mod | each boots; only the present half's content loads. Also CfB installed with `[compartments] cookingforblockheads = false`: no racks, no oven mixins, no rack merges | built-in pack mod list, mixin gate, `Compartments` switch |
+| CQ-CDFO-01 | client | Rack textures, raised oven and fridge-top fill, duck egg models; mod list | render as before; the two member mods no longer listed | packs not registered on the client |
+| CQ-CBS-01 | client | Mod list; potion buckets and the Magic Resistance icon on the minimal-chain client | "Vinery (Creative Brewing)", "Brewin' & Chewin' (Creative Brewing)", "Foundation (Creative Brewing)"; buckets and icon textured | M3 assets not in the CB jar |
+
+## CQ-LCA Licence fixes: compartment art built on the client, vanilla Resistance icon, 2026-11-05 ([creative_delight.md](../creative_delight.md) 40, [creative_brewing.md](../creative_brewing.md) 9.1)
+
+Not run. Built 2026-11-05 (Creative Delight 1.1.0 00:21, Creative Brewing 1.0.0), NOT installed. Offline check passed:
+the Java recipes reproduce 66 of the 68 removed PNGs byte for byte from the installed jars (scratch harness; the two
+vertical treated wood racks differ in 30 / 20 pixels between equally bright colours).
+
+| ID | Group | Commands | Pass | If it fails |
+|---|---|---|---|---|
+| CQ-LCA-01 | client | `logs/latest.log` after the title screen: grep `[compartment art]` | one line, "68 textures built from installed mods" (57 CfB + 11 Incubation), no "sources not found" in the full pack | `CompartmentArt.bytes` (mod file lookup or vanilla pack) |
+| CQ-LCA-02 | client | Place or JEI-view the 19 spice racks, 19 tool racks, 19 fruit baskets (one of each wood: oak, crimson, twisted, dreamwood, smoked, treated wood, vertical treated wood, rubberwood, ancient, driftwood) | textured like before (the art in `textureswapper/rack/`), no missing texture; tool rack hooks grey | `ArtRecipes.PLANKS` path, `TOOL_RACK_HOOKS` |
+| CQ-LCA-03 | client | Duck nest, goose nest (block and item), emu nest with eggs, duck and goose egg crates (top and side), duck and goose eggs in nests | as before (nests.md 4 table), no missing texture | `ArtRecipes.INCUBATION` colour maps |
+| CQ-LCA-04 | client | F3+T with a resource pack on; then `kubejs/assets/creativedelight/textures/block/emu_eggs.png` test file (NE-10) | textures still there after reload; the kubejs file overrides the built emu eggs | pack position (BOTTOM) |
+| CQ-LCA-05 | client | Magic Resistance in the inventory and on the HUD (`/effect give @s creativebrewing:magic_resistance`) | the vanilla Resistance icon | CB jar not installed |
+
+## SQ-PA Immersive Paintings built from the installed jars, 2026-11-05 ([writeup](../immersive_paintings.md) section 3, TODO `licence/compat #1`)
+
+Not run. Built 2026-11-05 00:42 (`creativecompat-1.0.0.jar` in `development/creativeCompat/build/libs/`), NOT installed
+(`mods/` still has the 11-04 19:05 jar with the 950 generated files). The vanilla 30 are in
+`kubejs/data/creativeengineering/paintings/minecraft/`. Offline check passed: the Java builder reproduces all 445 modded
+entries from `mods/*.jar` with no pixel or json difference, and a test zip overrides one painting's art.
+
+| ID | Group | Commands | Pass | If it fails |
+|---|---|---|---|---|
+| SQ-PA-01 | A | Boot; grep `srv/logs/latest.log` for `\[paintings\]` and `Couldn't load painting` | one line `[paintings] 445 of 445 modded painting variants built from <n> sources`, no `[paintings]` WARN, no `Couldn't load painting` | `paintings/PaintingPack` (registry or mod file lookup); WARN lines name the variant; old jar still in `mods/` (no line at all) |
+| SQ-PA-02 | A | `ls srv/kubejs/data/creativeengineering/paintings/minecraft \| wc -l`; `/reload`, then grep the log again | 60 files; after `/reload` no second `[paintings] ... built` line (cached) and no painting error | prep_srv.sh copy of `kubejs/data`; cache in `PaintingPack.files()` |
+| SQ-PA-03 | A | Stop; `python3 tools/scratch_query/painting_test_zip.py OUT/srv/pa_test.zip`; `qrun.py toml` set `[paintings] extraSources = ["pa_test.zip", "no_such.zip"]` in `srv/config/creativecompat-common.toml`; boot | `[paintings] art for toomanypaintings:afternoon from pa_test.zip (over toomanypaintings-...jar)`; WARN `extraSources no_such.zip: no such file or folder`; still 445 built | `PaintingPack.extraSources` path resolution (game folder = `srv/`) |
+| SQ-PA-04 | A | Stop; set `[paintings] enabled = false`; boot | no `[paintings] ... built` line; boots clean | `CompatConfig.Paintings.enabled` |
+| CQ-PA-01 | client | Single player, Immersive Paintings Datapacks page: then run the writeup's PA-01 to PA-06 | modded and vanilla paintings listed at 32 px per block as before; LOOK: an old save with a modded painting placed before this jar keeps its picture | ids must stay `creativeengineering:paintings/<ns>/<id>.png` (`PaintingArt.OUT_NAMESPACE`) |
+| CQ-PA-02 | client | With SQ-PA-03's zip set in the client's own config (single player), open the Datapacks page, search `afternoon` | LOOK: Afternoon is solid magenta | Immersive keys client images by painting id, so an older copy may be cached on the client: new world or relaunch, then retry; else the server log of SQ-PA-03 |
+
+## SQ-CMV Creative Common mixin version gates and manifest, 2026-11-05 ([creative_engineering.md](../creative_engineering.md) 7.1, TODO `creativecommon/publish #1`)
+
+Not run. Built and installed 2026-11-05 23:40 (`mods/creativecommon-1.1.0.jar`). Offline: every `MOD_RANGE` entry holds
+the installed version and excludes its upper bound. SQ-CMV-02/03 need a throwaway server folder with a reduced mod list.
+
+| ID | Group | Commands | Pass | If it fails |
+|---|---|---|---|---|
+| SQ-CMV-01 | A | Boot the full pack: `grep -nE "outside the tested range\|Mixin apply.*creativecommon\|creativecommon.mixins.json.*(fail\|error)" logs/latest.log \| head`; `grep -n "creativecommon: .* files loaded" logs/kubejs/startup.log` | no line from the first grep; the startup line shows all Common files loaded | a range that misses the pack's version (fix the bound in `MOD_RANGE`) |
+| SQ-CMV-02 | B | **Common alone**: fresh server folder with Forge, KubeJS, Rhino, Architectury and Common only, empty `kubejs/`; boot, `/reload`, stop | boots and stops clean; no `NoClassDefFoundError`, `ClassNotFoundException` or mixin error in `latest.log`; no script error in `logs/kubejs/` | a mixin into another mod without a `NEEDS_MOD` row, or Java code reaching an optional mod's classes without a load check |
+| SQ-CMV-03 | B | SQ-CMV-02's folder plus a gated mod with no further dependencies (Armor Trims or Nock Enough Arrows; check its `mods.toml`) whose `mods.toml` `version` is rewritten above the range (for example `1.4.0` / `1.3.0`, a copy in the scratchpad, never the real jar); boot | one WARN `[creativecommon] <mod> <version> is outside the tested range ...: its mixins are off`; boots clean | `GatedMixinPlugin.tableModOn` |
+| CQ-CMV-01 | client | Throwaway client with Iceberg but without Legendary Tooltips; hover items in the inventory and JEI | no crash, tooltips draw | `IcebergTitleBreakMixin` gate (`legendarytooltips`) |
+| CQ-CMV-02 | client | Full pack client: Mods screen, Creative Common | new description; the website and issue tracker link to the repo; no dependency error screen | `mods.toml` template values |

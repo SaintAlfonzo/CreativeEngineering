@@ -69,7 +69,7 @@
 //  Tooltip lines are pre-formatted raw strings ("§7- §aNight Vision §7(infinite)",
 //  identical style to EchoArmorTooltipMixin/echo_tools.js), built by
 //  _buildTooltipLines() below and fed straight into ItemEvents.tooltip's e.add(id,
-//  [...]) (which accepts raw strings directly, not just client_scripts/tooltips.js's
+//  [...]) (which accepts raw strings directly, not just creativecommon client _lib/tooltips.js's
 //  own {text,color} object convention — that convention can't do the two-tone
 //  "gray dash + colored name + gray duration" single line CDD uses, so this
 //  framework intentionally uses raw strings instead, same as echo_tools.js).
@@ -201,71 +201,75 @@ var i = global.item
 // effect/tooltip in place; this framework can only ADD a new one, so for echo the
 // mixins stay authoritative.
 
-global.armorEffects.set(
-	[i.ia_wooden_helmet, i.ia_wooden_chestplate, i.ia_wooden_leggings, i.ia_wooden_boots],
-	[{ effect: 'immersiveengineering:flammable' }]
-)
+// Each row needs every mod it names: the armor's own mod (dict keys resolve to it) and the effect's mod.
+if (global.has('immersiveengineering')) {
+	if (global.has('immersive_armors')) {
+		global.armorEffects.set(
+			[i.ia_wooden_helmet, i.ia_wooden_chestplate, i.ia_wooden_leggings, i.ia_wooden_boots],
+			[{ effect: 'immersiveengineering:flammable' }]
+		)
+	}
 
-global.armorEffects.set(
-	[i.copper_helmet, i.copper_chestplate, i.copper_leggings, i.copper_boots],
-	[{ effect: 'immersiveengineering:conductive' }]
-)
+	if (global.has('everythingcopper')) {
+		global.armorEffects.set(
+			[i.copper_helmet, i.copper_chestplate, i.copper_leggings, i.copper_boots],
+			[{ effect: 'immersiveengineering:conductive' }]
+		)
+	}
 
-global.armorEffects.set(
-	[i.iron_helmet, i.iron_chestplate, i.iron_leggings, i.iron_boots],
-	[{ effect: 'immersiveengineering:conductive' }]
-)
+	global.armorEffects.set(
+		[i.iron_helmet, i.iron_chestplate, i.iron_leggings, i.iron_boots],
+		[{ effect: 'immersiveengineering:conductive' }]
+	)
+}
 
-global.armorEffects.set(
-	[i.golden_helmet, i.golden_chestplate, i.golden_leggings, i.golden_boots],
-	[{ effect: 'minecraft:luck' },{ effect: 'immersiveengineering:conductive' }]
-)
+var goldenEffects = [{ effect: 'minecraft:luck' }]
+if (global.has('immersiveengineering')) goldenEffects.push({ effect: 'immersiveengineering:conductive' })
+global.armorEffects.set([i.golden_helmet, i.golden_chestplate, i.golden_leggings, i.golden_boots], goldenEffects)
 
 global.armorEffects.set(
 	[i.diamond_helmet, i.diamond_chestplate, i.diamond_leggings, i.diamond_boots],
 	[{ effect: 'minecraft:speed' }]
 )
 
-global.armorEffects.set(
-	[i.netherite_helmet, i.netherite_chestplate, i.netherite_leggings, i.netherite_boots],
-	[
-		{ effect: 'minecraft:fire_resistance' },
-		{ effect: 'alexsmobs:lava_vision' },
-		{ effect: 'alexsmobs:knockback_resistance' },
-	]
-)
+var netheriteEffects = [{ effect: 'minecraft:fire_resistance' }]
+if (global.has('alexsmobs')) {
+	netheriteEffects.push({ effect: 'alexsmobs:lava_vision' }, { effect: 'alexsmobs:knockback_resistance' })
+}
+global.armorEffects.set([i.netherite_helmet, i.netherite_chestplate, i.netherite_leggings, i.netherite_boots], netheriteEffects)
 
-global.armorEffects.set(
-	[i.felsic_helmet, i.felsic_chestplate, i.felsic_leggings, i.felsic_boots],
-	[
-		{ effect: 'better_beacons:long_reach' },
-		{ effect: 'minecraft:jump_boost' },
-		{ effect: 'creativeengineering:magic_resistance' },
-	]
-)
+if (global.has('felsic_gear')) {
+	var felsicEffects = []
+	if (global.has('better_beacons')) felsicEffects.push({ effect: 'better_beacons:long_reach' })
+	felsicEffects.push({ effect: 'minecraft:jump_boost' }, { effect: 'creativebrewing:magic_resistance' })
+	global.armorEffects.set([i.felsic_helmet, i.felsic_chestplate, i.felsic_leggings, i.felsic_boots], felsicEffects)
+}
 
 // dragonloot:upgraded_dragon_chestplate (elytra-capable, see
 // [[dragon-elytra-rocket-takeoff]]) replaces the base chestplate in the chest slot -
 // a player wears one or the other, never both - so the bonus is registered twice,
 // once per chestplate variant, sharing the same effects list.
-var dragonEffects = [
-	{ effect: 'minecraft:resistance' },
-	{ effect: 'creativeengineering:magic_resistance' },
-	{ effect: 'minecraft:fire_resistance' },
-	{ effect: 'alexsmobs:poison_resistance' },
-	{ effect: 'alexsmobs:knockback_resistance' },
-	{ effect: 'botania:feather_feet' },
-	{ effect: 'better_beacons:long_reach' },
-]
-global.armorEffects.set([i.dragon_helmet, i.dragon_chestplate, i.dragon_leggings, i.dragon_boots], dragonEffects)
-global.armorEffects.set([i.dragon_helmet, i.upgraded_dragon_chestplate, i.dragon_leggings, i.dragon_boots], dragonEffects)
-
 // dragon_horse_armor (dragonloot:dragon_horse_armor) is a HorseArmorItem worn by an
 // AbstractHorse, not player equipment — see mount() above for why it needs its own path.
 // Regeneration II, Health Boost II, Resistance II (potions/effects #4, decided 2026-10-29).
-var ef = global.effect
-global.armorEffects.mount(i.dragon_horse_armor, [
-	{ effect: ef.regeneration, amplifier: 1 },
-	{ effect: ef.health_boost, amplifier: 1 },
-	{ effect: ef.resistance, amplifier: 1 },
-])
+if (global.has('dragonloot')) {
+	var dragonEffects = [
+		{ effect: 'minecraft:resistance' },
+		{ effect: 'creativebrewing:magic_resistance' },
+		{ effect: 'minecraft:fire_resistance' },
+	]
+	if (global.has('alexsmobs')) {
+		dragonEffects.push({ effect: 'alexsmobs:poison_resistance' }, { effect: 'alexsmobs:knockback_resistance' })
+	}
+	if (global.has('botania')) dragonEffects.push({ effect: 'botania:feather_feet' })
+	if (global.has('better_beacons')) dragonEffects.push({ effect: 'better_beacons:long_reach' })
+	global.armorEffects.set([i.dragon_helmet, i.dragon_chestplate, i.dragon_leggings, i.dragon_boots], dragonEffects)
+	global.armorEffects.set([i.dragon_helmet, i.upgraded_dragon_chestplate, i.dragon_leggings, i.dragon_boots], dragonEffects)
+
+	var ef = global.effect
+	global.armorEffects.mount(i.dragon_horse_armor, [
+		{ effect: ef.regeneration, amplifier: 1 },
+		{ effect: ef.health_boost, amplifier: 1 },
+		{ effect: ef.resistance, amplifier: 1 },
+	])
+}

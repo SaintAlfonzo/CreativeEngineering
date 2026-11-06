@@ -23,19 +23,24 @@ if (global.CD) global.CD.genPut('food_types', 'endersdelight', {
    "crispy_skewer"
   ],
   "soup": [
+   "amberveil_stew",
    "chorus_stew",
    "chorus_stew_wood",
    "endermite_stew",
    "endermite_stew_wood"
   ],
   "meal": [
+   "amberveiled_curry",
+   "chicken_curry",
    "ender_paella",
    "ender_paella_wood",
    "pearl_pasta",
    "pearl_pasta_wood",
+   "steak_fries",
    "stuffed_shulker_bowl",
    "twisted_cereal",
-   "twisted_cereal_wood"
+   "twisted_cereal_wood",
+   "veil_of_flames_risotto"
   ],
   "drink": [
    "chorus_juice"

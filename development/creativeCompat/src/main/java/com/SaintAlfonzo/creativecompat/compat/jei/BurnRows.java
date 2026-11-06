@@ -146,7 +146,7 @@ public final class BurnRows {
     }
 
     // ------------------------------------------------------------------------------------------------------------
-    // JSON helpers (shared with CampfireRows)
+    // JSON helpers (Creative Delight's CampfireRows has its own copies)
 
     static JsonObject ing(String kind, String id, String label) {
         JsonObject o = new JsonObject();

@@ -12,7 +12,7 @@ stubs. Every food recipe lives in the Creative Delight server tree by the mod of
 `kubejs/data/creativedelight/kubejs/<mod>/recipes.js` / `tags.js` (memory `creative-delight-routing`); pack-own food
 items are registered in CD startup scripts (`development/creativeDelight/src/main/resources/kubejs_startup/<mod>/`, e.g.
 `moredelight/toast.js` registers `creativeengineering:cheese_toast`), with the dict key in `_lib/item_dict.js`. Recipes
-through `global.NCH` (`R`, [neoCraftHelper.js](../../development/patcherMod/src/main/resources/kubejs_startup/creativeengineering/func/neoCraftHelper.js)),
+through `global.NCH` (`R`, [neoCraftHelper.js](../../development/creativeCommon/src/main/resources/kubejs_startup/creativecommon/func/neoCraftHelper.js)),
 tags through `global.tags` (`t`), ids from `global.item` (`i`) / `global.fluid` (`f`; the food dict is `fd`).
 
 **Jars (2026-10-31):** Rustic Delight is the CD member `backportedRustic-1.7.0` (data read from
@@ -385,7 +385,7 @@ cooking oil, more fish into fish oil.
   piglin, piglin brute, polar bear, pufferfish, rabbit, sheep, tropical fish, turtle) plus optional modded ones. The squid
   drop was seen in SQ-CDB-04 (2026-10-25).
 - `delightful:animal_oil_bottle` (`i.animal_oil_bottle`): pot 2 fat -> 1 (`delightful:cooking/animal_oil_bottle`); its torch is
-  removed ([wood/ash.js:23-24](../../kubejs/server_scripts/wood/ash.js), torch from `i.t_animal_fat`). Delightful crafts 2 fat -> 1 tallow
+  removed ([wood/ash.js:23-24](../../kubejs/data/creativeengineering/kubejs/wood/ash.js), torch from `i.t_animal_fat`). Delightful crafts 2 fat -> 1 tallow
   (`delightful:integration/immersive_weathering/tallow_from_animal_fat`).
 - `immersive_weathering:tallow` (`i.tallow`): IW loot injects `immersive_weathering:injects/pig_tallow`, `hoglin_tallow`.
 - `#forge:animal_fat` = fat, tallow, animal oil ([misctags.js:61](../../kubejs/server_scripts/tags/misctags.js)); soap uses them

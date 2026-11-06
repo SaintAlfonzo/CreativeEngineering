@@ -22,7 +22,7 @@ Ports' own content and tests stay in [alcohol.md](alcohol.md) (Part A Brewin', `
 
 | Member | Gradle project | Folder | Mod ids | Display name | Version |
 |---|---|---|---|---|---|
-| Let's Do Vinery 1.5.5 port | `:backportedVinery` | `development/creativeBrewing/members/vinery` | `vinery`, `foundation` | "Let's Do Vinery (Creative Brewing)", "Creative Brewing" (the `foundation` id) | `1.5.5-ce-19.2-08` |
+| Let's Do Vinery 1.5.5 port | `:backportedVinery` | `development/creativeBrewing/members/vinery` | `vinery`, `foundation` | "Vinery (Creative Brewing)", "Foundation (Creative Brewing)" (the `foundation` id; both renamed 2026-11-04, plan_cb_publish.md M5) | `1.5.5-ce-19.2-08` |
 | Brewin' and Chewin' 4.5.0 port | `:backportedBrewin` | `development/creativeBrewing/members/brewin` | `brewinandchewin` | "Brewin' & Chewin' (Creative Brewing)" | `4.5.0-ce-19.2-05` |
 | (the bundle itself) | `:creativeBrewing` | `development/creativeBrewing` | `creativebrewing` | "Creative Brewing" | `1.0.0` |
 
@@ -37,7 +37,7 @@ on top of their last builds.
   Blockheads Additions still works and `./gradlew :backportedBrewin:compileJava` still runs. A member's own
   `installToMods` now stops with "ships nested in creativeBrewing's jar" (ce.forge-mod, `bundled_in`).
 - Each member: `bundled_in=creativeBrewing`; `mod_name` "(Creative Brewing)" label (0.3 of creative_delight.md, same rule);
-  `../patcherMod/libs/` compile paths now `rootProject.file('development/patcherMod/libs/...')`; Brewin's
+  `../patcherMod/libs/` compile paths now `rootProject.file('development/creativeCommon/libs/...')`; Brewin's
   `tools/check_data.py` and `tools/port_resources.py` find the instance root four levels up.
 - `.gitignore`: the member build/libs/jar_archive rules are now `/development/*/members/*/...` (CD and CB).
 - `settings.gradle`: the two projects left the flat list; a Creative Brewing block includes the bundle and its members.
@@ -113,6 +113,15 @@ Rules, as CD's (creative_delight.md 29): one folder per mod the rows touch (`vin
 `creativebrewing:<type>/<suffix>` ids. Server and client scripts load from the pack folder on `/reload` / F3+T;
 startup scripts need a CB rebuild and restart.
 
+Guards (2026-11-04, plan_cb_publish.md M2, rules G1 to G5): the jar boots with only its hard dependencies. A row in a
+pack-native file that names an optional mod's id (resolved through the dicts, not the folder name) sits in an
+`if (global.has('<modid>'))` block or behind an early `if (!global.has('<modid>')) return`: `potions.js` (Alex's Mobs,
+Buzzier Bees, Quark, Upgrade Aquatic, Better Beacons + Geode mixes), `armor_effects.js` and `tool_effects.js` (each effect
+and armor or tool mod), `effect_swaps.js` (Farmer's Respite, Neapolitan), `wandering_trades.js` (Fruits Delight),
+`names.js` (Dramatic Doors), `potion_fluid_jei.js` (Create). Rows handed only to `global.NCH` / `global.tags` need none
+(the helpers skip absent mods' ids, G5): `jeed_providers.js` and `fluid_tags.js` carry `// G5` markers. Check with
+`python3 tools/guard_check.py --jar creativebrewing` (0 findings on 2026-11-04, from 172).
+
 ### 2.5 Java
 
 Package `com.SaintAlfonzo.creativebrewing`. `CreativeBrewing` (the `@Mod`: config, member log, the stale-jar ERROR line
@@ -126,13 +135,18 @@ Since phase 2 (2026-11-01): `potion/` (CEPotions, CompoundEffects, CompoundEffec
 EffectCategories, EffectRules, MagicResistanceEffect, PhantomBaneRules, PotionBucketDispenser), `fluidbrewing/`
 (DragonBreathBrewing, Lingerification, PotionMixDedup), `compat/jei/` (AutomatedPotionMixingCategory,
 LingerificationCategory, PotionPagesJEI, and `PotionMachinesJEI`, the `@JeiPlugin` that registers the first two, split
-out of patcherMod's DragonBreathingJEI), `alcohol/IntoxicatingDrinkTooltip`, `trader/WinemakerTrades`. Ids keep the
-`creativeengineering` namespace (`CreativeBrewing.NS`). `CreativeBrewing` registers CEPotions, the three FORGE-bus
+out of patcherMod's DragonBreathingJEI), `alcohol/IntoxicatingDrinkTooltip`, `trader/WinemakerTrades`. Ids are `creativebrewing:` (`CreativeBrewing.NS` = the
+mod id since 2026-11-04, plan_cb_publish.md M4; they were `creativeengineering:`, and the 30 KubeJS potions `kubejs:`).
+The 41 old -> new entries (1 effect, 38 potions, 3 buckets; Magic Resistance's effect and potion share one) are in
+`data/creativebrewing/swaps/creative_split.json`. Potion ids saved as NBT strings (bottles, tipped arrows, bucket
+contents, Create and IE potion fluids) are not remapped (decision D5): those made before read as Uncraftable Potion. `CreativeBrewing` registers CEPotions, the three FORGE-bus
 handlers and the three setup tasks that `CreativeEngineering` used to. 25 mixins in compartments: `minecraft` (4),
 `create` (6), `immersiveengineering` (8), `jeed` (2), `create_deep_dark` (2), `everythingcopper`, `farmersrespite`,
-`fruitsdelight` (1 each); 14 common, 11 client. Resources: 10 lang keys in `assets/creativeengineering/lang/en_us.json`
-(JEI page titles, the intoxicating drink word, the compound effect parts) and `data/creativeengineering/recipes/
-lingerification_list.json`. Scripts load three of these classes by name: `com.SaintAlfonzo.creativebrewing.potion.
+`fruitsdelight` (1 each); 14 common, 11 client. Resources (all `creativebrewing`): 12 lang keys in `assets/creativebrewing/lang/en_us.json` (JEI page titles, the
+intoxicating drink word, the compound effect parts, Magic Resistance's name and JEED description),
+`data/creativebrewing/recipes/lingerification_list.json`, and since M3 (2026-11-04) the potion bucket textures and
+models, the Magic Resistance icon and the 206 coaster models (`assets/creativebrewing/brewinandchewin/coaster/`, from
+`tools/gen_coaster_models.py`; the Brewin' port skips a file whose item is not registered). Scripts load three of these classes by name: `com.SaintAlfonzo.creativebrewing.potion.
 PotionBucketDispenser`, `.fluidbrewing.DragonBreathBrewing`, `.trader.WinemakerTrades`.
 
 ## 3. Vinery donors
@@ -298,11 +312,13 @@ Moved as 4.2 lists, with these changes from the plan (creative_split.md 7.6 and 
 - `[jei]` tipped arrow and potion bucket switches stay in `CEConfig` (CB reads them downward).
 - Pack-folder assets of CB features (`kubejs/assets/creativeengineering/textures/mob_effect/magic_resistance.png`, the
   potion bucket textures, the effect rename lang overlay, the coaster models) are not moved: they stay in the KubeJS
-  resource pack.
+  resource pack. **Superseded 2026-11-04 (plan_cb_publish.md M3):** the textures, models, icon, coaster models and Magic
+  Resistance's description moved into the jar under `creativebrewing` (2.5); the effect lang overlay keeps only other
+  mods' effects.
 
 ## 5. Install (game closed)
 
-Phases 2 and 3 (2026-11-01): install patcherMod 1.1.07 and CB together (`./gradlew :patcherMod:installToMods
+Phases 2 and 3 (2026-11-01): install patcherMod 1.1.07 and CB together (`./gradlew :creativeCommon:installToMods
 :creativeBrewing:installToMods --offline`), only after the wave 2 and 3 scratch runs (SQ-CS2, SQ-CMP) pass; then SQ-CBJ4.
 The instance's config was moved by hand: the four sections are in `config/creativebrewing-common.toml` (backup in
 `configs_edited/root_config/`) and gone from the CE file.
@@ -317,9 +333,9 @@ be installed (it is). The pack's dedicated server (CreEngServer) needs the same 
 
 Scratch server: SQ-CBJ-01 to -05 in [scratch_queue.md](testing/scratch_queue.md). In game (after install):
 
-- [ ] **CBR-01 Mod list:** "Creative Brewing" is listed twice (the bundle, and Vinery's `foundation` id); Vinery shows
-  "Let's Do Vinery (Creative Brewing)", Brewin' "Brewin' & Chewin' (Creative Brewing)"; JEI's mod line and WTHIT's mod
-  line on a keg and a grapevine show the same names; no mod name ends in "(Alfonzo)".
+- [ ] **CBR-01 Mod list:** "Creative Brewing" is listed once (the bundle); Vinery's `foundation` id shows "Foundation
+  (Creative Brewing)", Vinery "Vinery (Creative Brewing)", Brewin' "Brewin' & Chewin' (Creative Brewing)"; JEI's mod line
+  and WTHIT's mod line on a keg and a grapevine show the same names; no mod name ends in "(Alfonzo)".
 - [ ] **CBR-02 Old world:** a world with kegs, coasters, aging barrels, apple presses and wine racks loads with every block
   and its contents; no "missing registry" or "unknown block" warnings for `vinery`, `foundation` or `brewinandchewin`.
 - [ ] **CBR-03 Config:** `config/creativebrewing-common.toml` exists with a `[members]` section holding `vinery` and
@@ -327,12 +343,17 @@ Scratch server: SQ-CBJ-01 to -05 in [scratch_queue.md](testing/scratch_queue.md)
 - [ ] **CBR-04 Log:** `logs/latest.log` has `[creativebrewing] members: [vinery, brewinandchewin]` and no
   `[creativebrewing] member ... is loaded from` ERROR line; `logs/kubejs/startup.log` lists `creativedelight` before
   `creativebrewing` in the startup pack order.
+- [ ] **CBR-06 `creativebrewing` ids (M3, M4):** JEI lists the potion buckets, the 38 CB potions and Magic Resistance
+  under "Creative Brewing"; the buckets show their two-layer textures with the potion's tint, the Magic Resistance HUD
+  icon and JEED text show; a world saved before with a potion bucket in a chest, Magic Resistance active and a
+  `kubejs:wither` potion loads with the bucket and the effect kept and no missing-registry warning for the old ids; the
+  old bottled potion reads Uncraftable Potion (D5, expected); a coaster still shows a Display Delight food's model.
 - [ ] **CBR-05 Brewin' and Vinery still work:** brew one keg batch and pour a tankard; press apples; age one wine.
   (Spot check; the full suites are AL- and VB- in alcohol.md.)
 
 ## 7. Appendix: inventory for the move (2026-10-31)
 
-Paths: `PM` = `development/patcherMod/src/main/java/com/SaintAlfonzo/creativeengineering/`, `PMR` = patcherMod resources,
+Paths: `PM` = `development/creativeCommon/src/main/java/com/SaintAlfonzo/creativecommon/`, `PMR` = patcherMod resources,
 `KJ` = `kubejs/`. Line numbers as of 2026-10-31.
 
 - **PM potion/** (whole): CEPotions, CompoundEffects, CompoundEffectTooltip, CopperPoisoningHandler (CB, Q3), EffectCategories,
@@ -353,7 +374,7 @@ Paths: `PM` = `development/patcherMod/src/main/java/com/SaintAlfonzo/creativeeng
   (stays), CckBrewingGuideMealTooltip (stays)).
 - **PMR:** `creativeengineering.mixins.json` (the entries above); `neoCraftHelper.js` helpers (stay, rule 2); lang
   `en_us.json` 6-8, 31, 49, 59-61, 162, 167, 209-213; `waila_plugins.json` 17-23 (coaster); `state_lines.json` 12 (Brewin'
-  cheese wheel and pizza); `data/creativeengineering/damage_tags/magic.json` (magic resistance).
+  cheese wheel and pizza); `data/creativecommon/damage_tags/magic.json` (magic resistance).
 - **KJ startup:** as phase 1, plus splits in `_lib/fluid_dict.js` (potion, Brewin' and dragon breath fluids),
   `_lib/item_dict.js`, `_lib/food_dict.js` 1243, `_lib/removed_items.js` 319-321 and 390-391,
   `changes/transition_items.js` 31 and 44, `jei/order.js` 175 and 302+: dict and
@@ -375,6 +396,10 @@ Paths: `PM` = `development/patcherMod/src/main/java/com/SaintAlfonzo/creativeeng
 
 ## 8. History
 
+- 2026-11-04 (plan_cb_publish.md M2 to M5): guards on every pack-native script (guard check 172 -> 0), every id under
+  `creativebrewing:` with 41 swap entries, bucket and effect art, coaster models and Magic Resistance's lang into the
+  jar, display names "Vinery (Creative Brewing)" and "Foundation (Creative Brewing)". Built, not installed.
+
 - 2026-10-31 (owner decisions): Brewin' dishes and tags moved into Creative Delight; Winemaker trades, Vinery
   effects and gear effects added to the CB move plan; wine clock reserved for Creative Calendar.
 - 2026-10-31 (later): `foundation` named "Creative Brewing", Brewin' "&", "(Alfonzo)" dropped from every mod name
@@ -389,6 +414,7 @@ Audit of the built `creativebrewing-1.0.0.jar` and its two nested members (TODO 
 | Part | Source licence | In the jar | Verdict |
 |---|---|---|---|
 | CB's own jar (Java, config, 3 KubeJS scripts) | own, GPLv3 | `creativebrewing-LICENSE.txt` | OK |
+| Vinery member: code (port of Let's Do Vinery 1.5.5 / 1.3.10 + Foundation) | MIT code; upstream `*/src/main/resources/` All Rights Reserved (Satisfy, 2022) | GPLv3 `LICENSE` + `backportedVinery-NOTICE-upstream-MIT.txt` (CurseForge licence text verbatim: ARR scope and both MIT notices); same file copied to `creativebrewing-NOTICE-vinery-upstream.txt` in the outer jar | OK. No upstream resources shipped (read from `vinery_upstream/` at runtime); NOTICE updated 2026-11-05 |
 | Brewin' member: code, textures, models, data, `logo.png` | Brewin' And Chewin' 4.5.0, MIT (Umpaz; checked against upstream `LICENSE`) | GPLv3 `LICENSE` + MIT notice in `backportedBrewin-NOTICE-upstream-MIT.txt` | OK. NeoForge milk textures (LGPL 2.1) left out |
 | Brewin' `fd_tray.png` | Farmer's Delight 1.21, MIT (vectorwing) | named in the same NOTICE | OK |
 | Vinery member: code (Vinery 1.5.5, 1.3.10 blocks, Foundation 1.0.1) | MIT (satisfy, Cristelknight) | GPLv3 `LICENSE` + both MIT notices | OK |
@@ -409,3 +435,100 @@ Open before upload:
   jar is not on Modrinth (sha1 lookup 404), only CurseForge; its source line points at the files list, not the file.
 - Courtesy: Vinery keeps upstream's mod id and name; tell satisfy (Let's Do) about the port before publishing.
 - Cosmetic: Foundation's `displayName` is "Creative Brewing".
+
+### 9.1 Re-audit 2026-11-04 (plan_cb_publish.md Step 2)
+
+Audit of the jars built 2026-11-04 after Step 1: `creativebrewing-1.0.0.jar` (23:31, Vinery `-09` and Brewin' `-05`
+nested) and `-own.jar` (271 KB). Same method as 9; textures pixel-compared against the vanilla 1.19.2 client, every jar
+in `mods/` and the donor folders. Supersedes the 2026-11-01 verdict for the own jar; the members' verdicts hold.
+
+| Part | Source licence | In the jar | Verdict |
+|---|---|---|---|
+| Java, 49 classes (33 mixins) | own, GPLv3; no `@Overwrite`, no upstream method bodies (IE, Create, vanilla); the JEI categories extend IE's, not copy | `com/SaintAlfonzo/creativebrewing/**` | OK |
+| KubeJS scripts (12 startup, 11 server, 8 client), lang, swap lists, mixin json | own | yes | OK |
+| 206 coaster model maps (`gen_coaster_models.py`), 3 bucket item models | own (id to model path only) | yes | OK |
+| 3 potion bucket bodies `*_potion_bucket.png` | **Mojang**: 122 of 122 opaque pixels equal vanilla `water_bucket.png` | `textures/item/` | low (9.3); optional: reference `minecraft:item/bucket` |
+| 3 liquid layers `*_liquid.png` | **Mojang-derived**: greyscale of vanilla's water pixels (`potion_bucket_texture.py`) | `textures/item/` | low (9.3) |
+| Magic Resistance icon | was a recolour of Botania's `cosmetic_lusitanic_shield.png`; **2026-11-05: replaced by vanilla `mob_effect/resistance.png`** (owner), retexture or repalette open | `textures/mob_effect/` | fixed (Botania); low (9.3) |
+| `mods.toml` `GPL-3.0-only`, `creativebrewing-LICENSE.txt` | own | yes | OK |
+| Vinery member `-09` | as 9 | only `mods.toml` and manifest differ from `-08` | OK |
+| Brewin' member `-05` | as 9 | resources identical; 4 classes changed (coaster renderer port) | OK; bump the version at release |
+
+Fixes: TODO `licence/cb #1` (buckets), `licence/cb #2` (effect icon).
+
+### 9.2 Chain summary (Step 2, 2026-11-04)
+
+| Jar | Audited | Verdict | Fixes | Writeup |
+|---|---|---|---|---|
+| Creative Brewing | 1.0.0 (23:31) | low: 6 Mojang-derived bucket textures and the vanilla Resistance icon (9.3); Botania icon removed 2026-11-05 | `licence/cb #1`, `#2` | 9.1 |
+| Creative Common | 1.1.0 (23:34) | OK: notices fixed, vanilla edits accepted (9.5), panorama the owner's own (all 2026-11-05); mixin version gates and manifest 2026-11-05 (`creativecommon/publish #1`) | `licence/common #1` to `#3` (closed) | [creative_engineering.md](creative_engineering.md) 7 |
+| Creative Compat | 1.0.0 (23:34) | remove / fix: all 475 paintings are other artists' art (126 not redistributable), banner-derived textures, TrashSlot overwrite; attribution NOTICE added 2026-11-05 | `licence/compat #1` to `#3` | [creative_compat.md](creative_compat.md) 6 |
+| Creative Calendar | 1.0.0 (23:34) | OK: Q3 "all own code" holds | none | [creative_calendar.md](creative_calendar.md) 10 |
+| Creative Delight | 1.1.0 (23:35), 20 nested members | fix: CfB basket and rack textures, Incubation art (`mobs/nests #2`), Rustic crate placeholders; notices fixed 2026-11-05; no member to remove | `licence/cd #1` to `#3`, `mobs/nests #2` | [creative_delight.md](creative_delight.md) 40 |
+| All five | `license="GPL-3.0-only"` (D4 settled as `-only`) and a GPLv3 file in every jar and member (M6 done) | GPL / LGPL source availability not met until the public repo (Step 3) | Step 3 | plan_cb_publish.md 10 |
+
+### 9.3 Mojang (vanilla) assets in our jars (2026-11-05)
+
+Mojang's EULA and usage guidelines do not license redistributing game assets, modified or not, so a copied or
+recoloured vanilla texture is technically unlicensed. In practice this is the norm in Forge and Fabric modding:
+thousands of mods on CurseForge and Modrinth ship recolours and edits of vanilla textures, neither platform rejects a
+file for it, and Mojang has never been reported acting against a mod over it. Rated **low**, not a blocker: CB's 6 bucket
+layers and Magic Resistance icon (vanilla Resistance), Common's 12 armor tint sheets, Compat's moss tint, CD's powdered
+sugar bucket. Where it costs nothing, prefer referencing the vanilla texture by resource location (the player's own
+client supplies it) over shipping a byte copy. Not covered by this: the 30 vanilla paintings in Compat (whole artworks by
+Kristoffer Zetterstrand, shipped as a set) stay in `licence/compat #1`.
+
+
+### 9.4 Readiness review 2026-11-05 (owner: "is creative brewing ready to publish")
+
+Verdict: **not ready.** Licences of CB's own jar and members pass (9, 9.1). What blocks it is the chain around it,
+verification, and what a public install looks like. Checked against the jar built 2026-11-05 00:05 and the tree.
+
+**Blockers**
+
+| # | Gap | Evidence | Fix |
+|---|---|---|---|
+| R1 | The 4 hard dependencies are unpublished; Compat and CD still have open licence rows | `mods.toml`: Common, Compat, Calendar, CD mandatory; 9.2 rows `licence/compat #1` (built, not installed), `#2`, `#3` (TrashSlot `@Overwrite`), `licence/cd #2`, `mobs/nests #2` | Finish those rows; publish Common, Compat, Calendar, CD first |
+| R2 | A public install must hand-place 10 jars, from 3 loaders and 3 MC versions | CB: `vinery_upstream/` (Vinery 1.5.5 Fabric 1.21.1, 1.3.10 Forge). CD: 7 members call `UpstreamJars.verifyOrFail()` in their constructor with no switch (enders, golden, largemeals, miners x2, oceanic, roll, rustic) | Install guide with links and sha1s on the project page; consider making CD's donor members skip (not crash) when their folder is absent; confirm the current CurseForge and Modrinth rules on required files not hosted as dependencies |
+| R3 | Step 1 builds were never booted | `mods/creativebrewing-1.0.0.jar` is the 11-03 build (sha1 differs from build/libs); SQ-DCM, SQ-CBS (the minimal-chain gate, plan_cb_publish.md M7), SQ-CDFO not run; CBR-01 to -06 open | Install with the game closed, run SQ-DCM, SQ-CBS-01/02, SQ-CDFO, then CBR |
+| R4 | 25 mixins into 8 optional mods apply at any version, and `defaultRequire 1` turns a changed target into a boot crash | `CBMixinPlugin.FOR_VERSION` empty; targets Create, IE, JEED, Create: Deep Dark, Everything Copper, Farmer's Respite, Fruits Delight, Better Beacons. The pack pins versions, public players will not | Gate each compartment on the tested version range (plugin, or optional `[[dependencies]]` with `versionRange`), or `require = 0` on the cosmetic (JEI, tooltip) injects |
+| R5 | Members claim upstream mod ids `vinery`, `foundation`, `brewinandchewin` | Brewin' And Chewin' 1.19.2 Forge and Vinery 1.3.10 Forge are on CurseForge for the same MC version; the pack removes them only through `replaces_jars` at install. Jar-in-Jar ranges are exact (`[1.5.5-ce-19.2-09]`, `[4.5.0-ce-19.2-05]`) | Scratch test CB plus each upstream jar in `mods/` (what FML resolves, crash text); state the conflict on the project page; tell satisfy and Umpaz before publishing (9) |
+| R6 | GPL source for the released file is not pushed | Repo public, but `origin/main` is at 2026-11-01; 262 uncommitted paths in CB's trees | Commit, push, tag; link the tag from each upload |
+
+**Should fix before upload**
+
+- `mods.toml`: description says "Needs the pack (Creative Common and KubeJS)"; header comments are stale ("no registry
+  content yet", "patcherMod"); no `issueTrackerURL`, `displayURL` or `logoFile` on CB itself (the members have them).
+- `creativedelight` range is `[1.0.0,)` while the jar was built and checked against CD 1.1.0; raise it if CB needs 1.1.0.
+- Project page must list KubeJS, Rhino and Architectury (reached only through Common's dependency).
+- Vinery's donor error message names "Let's Do Vinery (Backport)" (old name).
+- Version bumps at release (Brewin' member resources unchanged but 4 classes changed, 9.1).
+- Low (9.3): `licence/cb #1` buckets, `#2` Magic Resistance icon (vanilla Resistance today).
+
+**Checked and fine**
+
+- Licence: `GPL-3.0-only` and the GPLv3 text in the CB jar and both members; MIT notices for Brewin', Vinery,
+  Foundation and the Farmer's Delight tray; no ARR Vinery file in the jar (read at runtime, sha1-pinned).
+- Coupling: Java imports only Common and Calendar; all 17 globals CB scripts read are defined in the chain jars;
+  `tools/guard_check.py --jar creativebrewing` 0 findings.
+- Safety: the two serverbound packets (Brewin' JEI keg transfer, Foundation recipe book) run on the main thread and check
+  the open menu; no network calls; the only file write is the dev texture dump; reflection limited to compat fields.
+- Repo: no credentials in tracked files. Outside CB: CD's `moved_code_backup/.../libs/` tracks a Farmer's Delight jar
+  (MIT, no notice beside it); delete the backup or add the notice.
+
+### 9.5 Owner decisions 2026-11-05 on the 9.4 review
+
+| Item | Decision |
+|---|---|
+| Publish order | Common, Compat, Calendar and Creative Delight (CD) are published first; Creative Brewing (CB) is the goal. R1 stands: their open licence rows gate it |
+| R2 donor jars | The 10 jars are a manual download from a list of URLs on the project page and README first (names and sha1s from each `UpstreamJars`). A download script comes later. Future design: the player downloads the upstream mods from any source into `mods/`, and a startup script moves them into the shared upstream folder |
+| R4 mixin versions | Closed for now: the pack is static for mod updates, so versions are pinned and a version gate is not needed. Reopen if the mod list ever updates |
+| R5 ids | The ports keep the original ids (`vinery`, `foundation`, `brewinandchewin`). Duplicate-jar handling (real Vinery or Brewin' also in `mods/`) is later work; the project page states the conflict meanwhile |
+| R6 source | The whole project is one public repo, not split per submod: https://github.com/SaintAlfonzo/CreativeEngineering . Tag the release there and link the tag from the upload |
+| Textures | Vanilla textures and edits of them are wanted for visual consistency, and are not treated as a licence issue (supersedes 9.3's "optional cleanup"). `licence/cb #1` and `#2` are closed as accepted; no vanilla-art replacement work anywhere |
+| Manifest | Done 2026-11-05, built: CB requires CD `[1.1.0,)`; CB and CD descriptions rewritten; CB has `issueTrackerURL` and `displayURL` (the repo); stale header comments fixed |
+
+Dependencies to list on the project page, beyond the four Creative jars (pack versions in `mods/`): KubeJS
+`kubejs-forge-1902.6.2-build.73` (Common requires `[1902.6.0,)`), Rhino `rhino-forge-1902.2.3-build.284` and Architectury
+`architectury-6.6.92-forge` (both required by KubeJS, not declared by Common). Vinery needs the Let's Do Vinery 1.5.5 Fabric
+and 1.3.10 Forge jars in `vinery_upstream/`.

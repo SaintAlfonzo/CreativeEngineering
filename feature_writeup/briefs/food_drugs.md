@@ -82,7 +82,7 @@ The pack already ships **The Dirty Stuff 2.1** (`the_dirty_stuff`, `the_dirty_st
 
 - **World:** tobacco seeds from the wandering trader (1 emerald); villagers buy 7 leaves for 1 emerald; a loot modifier
   adds `chests/tobacco_village_chest` to `chests/village/village_plains_house`.
-- **Pack side so far (2026-10-31):** tobacco crop parity (`development/patcherMod/.../mixin/TobaccoPlacementMixin.java`,
+- **Pack side so far (2026-10-31):** tobacco crop parity (`development/creativeCommon/.../mixin/TobaccoPlacementMixin.java`,
   crops.md 2.5); WTHIT growth line now in Creative Delight
   (`development/creativeDelight/src/main/resources/assets/creativedelight/crop_growth.json:28`); compost values
   (`development/creativeDelight/src/main/resources/kubejs_startup/the_dirty_stuff/compost_values.js`); tobacco follows
@@ -201,7 +201,7 @@ effects table in `global.smoking`.
 
 ### Decisions
 - **Where the code lives** (routing since 2026-10-25, memory `creative-delight-routing`): `NCH` paths are in patcherMod's
-  jar (`development/patcherMod/src/main/resources/kubejs_startup/creativeengineering/func/neoCraftHelper.js`); the
+  jar (`development/creativeCommon/src/main/resources/kubejs_startup/creativecommon/func/neoCraftHelper.js`); the
   `kubejs/startup_scripts/cooking/smoking.js` / `server_scripts/cooking/smoking.js` paths above are from 2026-10-21.
   Options: Creative Delight's `the_dirty_stuff/` trees (the mod's compost already lives there) or Creative Brewing
   (intoxicants and effects, next to alcohol's Tipsy model). Recommendation: Creative Brewing for the smoking system and

@@ -26,3 +26,5 @@ only because the owner named it, and may be dropped into Engineering for good wh
 ## 2. History
 
 - 2026-11-01: reserved from the split audit. Nothing moved.
+- 2026-11-04: the rows moved with the Engineering carve (wave 8): `computing.js`, `mechanisms.js` and `redstone.js` are in
+  Creative Engineering's server tree (`kubejs/data/creativeengineering/kubejs/engineering/`, [creative_engineering.md](creative_engineering.md)).

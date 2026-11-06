@@ -32,7 +32,7 @@ import gen_out  # noqa: E402
 
 INSTANCE = Path(__file__).resolve().parent.parent
 EXPORT = INSTANCE / 'kubejs/exported/food'
-DICT = INSTANCE / 'kubejs/startup_scripts/_lib/item_dict.js'
+DICT = pack_paths.ITEM_DICT
 TYPES_JSON = INSTANCE / 'kubejs/generation_scripts/food/food_types.json'
 
 TAG_ROOT = 'creativeengineering:food_type'
@@ -360,7 +360,7 @@ def classify(f, cooked_from, cut_from, feast_servings):
 # ── food_types.json ──────────────────────────────────────────────────────────
 
 README = [
-    'Food type assignments: every food in exactly one type, as item_dict keys (kubejs/startup_scripts/_lib/item_dict.js).',
+    'Food type assignments: every food in exactly one type, as item_dict keys (development/creativeCommon/src/main/resources/kubejs_startup/creativecommon/_lib/item_dict.js).',
     'creativedelight creativeengineering/food_type_tags.js turns each type into #creativeengineering:food_type/<type>; a nested type',
     '(raw/meat/sliced) is also in its parents (raw/meat, raw, and #creativeengineering:food_type).',
     'Move an item by moving its key. python3 tools/food_catalog.py adds foods that are in no type yet and checks',

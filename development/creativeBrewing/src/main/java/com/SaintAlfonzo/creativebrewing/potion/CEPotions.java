@@ -22,7 +22,7 @@ import java.util.List;
  * Why Java: kubejs/startup_scripts/cooking/potions.js can't build these itself. KubeJS evaluates
  * StartupEvents.registry('potion', ...) scripts in one early pass (to gather everything before real Forge
  * registration begins), well before any RegisterEvent&lt;MobEffect&gt; has fired, including KubeJS's own
- * StartupEvents.registry('mob_effect', ...) (creativeengineering:magic_resistance, {@link MagicResistanceEffect}) and
+ * StartupEvents.registry('mob_effect', ...) (creativebrewing:magic_resistance, {@link MagicResistanceEffect}) and
  * better_beacons' DeferredRegister. So ForgeRegistries.MOB_EFFECTS.getValue(...) is always null at that point and the
  * potion silently never gets created. A DeferredRegister&lt;Potion&gt;'s supplier, by contrast, is only invoked at the
  * genuine RegisterEvent&lt;Potion&gt;, which fires after RegisterEvent&lt;MobEffect&gt; completes for every mod, so the
@@ -49,7 +49,7 @@ public final class CEPotions {
 
     /**
      * One effect: registers {@code <name>}, {@code long_<name>} and, for an effect with levels, {@code strong_<name>}
-     * in creativeengineering.
+     * in creativebrewing.
      *
      * @param needsMod mod that must be loaded for the potions to be registered, or null
      * @param missing  appended to the error when the effect is not found at potion registration
@@ -90,7 +90,7 @@ public final class CEPotions {
         POTIONS.register(name, () -> {
             MobEffect effect = ForgeRegistries.MOB_EFFECTS.getValue(row.effect());
             if (effect == null) {
-                LOGGER.error("[CE potions] {} not found while building creativeengineering:{} - {}", row.effect(), name, row.missing());
+                LOGGER.error("[CE potions] {} not found while building creativebrewing:{} - {}", row.effect(), name, row.missing());
                 return new Potion(new MobEffectInstance[0]);
             }
             return new Potion(new MobEffectInstance(effect, duration, amplifier));

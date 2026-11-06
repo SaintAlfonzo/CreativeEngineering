@@ -5,6 +5,7 @@ import com.SaintAlfonzo.creativedelight.barbeques.block.GrillBlock;
 import com.SaintAlfonzo.creativedelight.barbeques.registry.BBQBlocks;
 import com.SaintAlfonzo.creativedelight.barbeques.registry.BBQItems;
 import com.SaintAlfonzo.creativedelight.barbeques.registry.BBQRecipes;
+import com.SaintAlfonzo.creativedelight.barbeques.registry.PackRawSkewers;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.eventbus.api.IEventBus;
@@ -31,6 +32,7 @@ public class BarbequesDelight {
         BBQBlocks.BLOCKS.register(bus);
         BBQBlocks.BLOCK_ENTITIES.register(bus);
         BBQItems.ITEMS.register(bus);
+        PackRawSkewers.register(bus);
         BBQRecipes.SERIALIZERS.register(bus);
         BBQRecipes.TYPES.register(bus);
         // 1.3.0's cutting board seasoning use (a mixin, then a RightClickBlock listener) is retired at the seasoning fold

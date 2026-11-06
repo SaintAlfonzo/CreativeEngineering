@@ -4,9 +4,47 @@
 // Placeable food tags, endersdelight part. Readers merge every part with global.CD.genMerge('placeable') (creative_delight.md 28.2).
 if (global.CD) global.CD.genPut('placeable', 'endersdelight', {
  "placeable": [
-  "chorus_pie"
+  "amberveil_stew",
+  "amberveiled_curry",
+  "chicken_curry",
+  "chorus_juice",
+  "chorus_pie",
+  "chorus_stew",
+  "ender_paella",
+  "endermite_stew",
+  "pearl_pasta",
+  "steak_fries",
+  "stuffed_shulker_bowl",
+  "twisted_cereal",
+  "veil_of_flames_risotto"
+ ],
+ "placeable/sneak": [
+  "amberveil_stew",
+  "amberveiled_curry",
+  "chicken_curry",
+  "chorus_juice",
+  "chorus_stew",
+  "ender_paella",
+  "endermite_stew",
+  "pearl_pasta",
+  "steak_fries",
+  "stuffed_shulker_bowl",
+  "twisted_cereal",
+  "veil_of_flames_risotto"
+ ],
+ "placeable_on_plate": [
+  "crawling_sandwich",
+  "crispy_skewer",
+  "strange_eclair",
+  "uncanny_cookies"
+ ],
+ "placeable_on_small_plate": [
+  "chorus_pie_slice"
  ],
  "placeable_on_coaster": [
+  "amberveil_stew",
+  "amberveiled_curry",
+  "chicken_curry",
   "chorus_juice",
   "chorus_pie_slice",
   "chorus_stew",
@@ -15,9 +53,11 @@ if (global.CD) global.CD.genPut('placeable', 'endersdelight', {
   "ender_paella",
   "endermite_stew",
   "pearl_pasta",
+  "steak_fries",
   "strange_eclair",
   "stuffed_shulker_bowl",
   "twisted_cereal",
-  "uncanny_cookies"
+  "uncanny_cookies",
+  "veil_of_flames_risotto"
  ]
 })

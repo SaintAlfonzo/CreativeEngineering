@@ -21,7 +21,7 @@ as is. Plan row: `largecontent/mod-additions #16`, `#17` in [todo/TODO.md](todo/
   installed mod (MIT, never repacked); the member is an additions overlay like `enders_additions`: Java (the flower pot
   block, the colony mixin) in a new member `nethersAdditions`, scripts in CD `kubejs_startup/nethersdelight/` (a
   `compost_values.js` already lives there). Section 4.8 records the FD wiring; sections 4.1 to 4.7 still describe the
-  changes, with "patcherMod" read as "the CD member".
+  changes, with "creativeCommon" read as "the CD member".
 - **Superseded 2026-11-01 (owner, later the same day): Nether's Delight 3.1 is repacked into Creative Delight** as member
   `repackedNethers` (like End's `repackedEnds`; MIT allows it), and the separate 3.1 jar leaves `mods/`. The 4.0 changes
   go into the repack overlay and CD's `nethersdelight/` scripts. Plan: [creative_split.md](creative_split.md) 7.9 step 2.
@@ -36,7 +36,7 @@ as is. Plan row: `largecontent/mod-additions #16`, `#17` in [todo/TODO.md](todo/
 | Kind | Change |
 |---|---|
 | New block | `potted_mimicarnation` (block + `minecraft:flower_pots` tag entry; model gains `render_type cutout`). Not yet added |
-| Rename | `hoglin_mount` -> `hoglin_trophy` (block, item, blockstate, models, texture, recipe, loot, `mineable/axe` tag). Pack reference: `kubejs/server_scripts/engineering/fabric.js` (`replaceInput`) |
+| Rename | `hoglin_mount` -> `hoglin_trophy` (block, item, blockstate, models, texture, recipe, loot, `mineable/axe` tag). Pack reference: `kubejs/data/creativeengineering/kubejs/engineering/fabric.js` (`replaceInput`) |
 | Rename | worldgen feature `patch_propelplant` -> `propelplant_patch` (now data: configured feature, placed feature, biome modifier; count 8, crimson forest, vegetal decoration). Pack reference: `tools/gen_crop_worldgen_table.py` |
 | Tag | `nethersdelight:meal_item` gains `farmersdelight:stuffed_potato` |
 | Tag | `minecraft:flower_pots` gains `nethersdelight:potted_mimicarnation` |
@@ -164,7 +164,7 @@ question above, and the seasonal tag check.
 ### 4.9 As built (2026-11-01; installed 2026-11-02, scratch tested r1102b)
 
 Route: the 2026-11-01 repack decision (section 1, creative_split.md 7.9 step 2), which supersedes the additions overlay of
-4.8; the "patcherMod" of 4.1 to 4.4 is the repack overlay. Ids are 3.1's throughout; renames are display names only.
+4.8; the "creativeCommon" of 4.1 to 4.4 is the repack overlay. Ids are 3.1's throughout; renames are display names only.
 
 | Plan step | As built | Files |
 |---|---|---|
@@ -173,7 +173,7 @@ Route: the 2026-11-01 repack decision (section 1, creative_split.md 7.9 step 2),
 | 4.2 Tags | `nethersdelight:meal_item` + Stuffed Potato through `global.tags` (`i.t_nd_meal_item`). `mineable/axe` and machete order: nothing (as planned) | `tags.js`, `item_dict.js` |
 | 4.3 File moves | Done in the repack, not through `global.NCH`: NCH ids are always `<ns>:<type>/<suffix>`, so it cannot give `farmersdelight:cooking/stuffed_hoglin` or `minecraft:netherite_machete_smithing`. 3.1's two files are left out (`replaced_resources`) and shipped unchanged at 4.0's paths (the machete file keeps 3.1's 1.19.2 smithing format). No pack script named the old ids (grep). The old recipe advancements stay (dropped at load) | `members/nethers/src/main/resources/data/{farmersdelight,minecraft}/recipes/` |
 | 4.4 Fungus Colony | Mixin `FungusColonyRulesMixin` (`nethersdelight.ce.mixins.json`, beside upstream's `nethersdelight.mixins.json` in the manifest): growth bound 5 -> 4 (`@ModifyConstant` on the tick's only int 5), and 4.0's `canSurvive` added to the class (growable-on floor: always; else raw light < 13 and `canSustainPlant`). The crop-grow event: Creative Calendar's `CropSeasonGrowHookMixin` already fires it at the head of the colony tick, so the mixin does not fire it again (4.0 passes the roll as the event default; here the roll follows an allowed event). Seasonal check: both colonies are crop season type `nether` in `crop_seasons.json` (no calendar effect): PASS | `members/nethers/src/main/java/.../nethers/mixin/FungusColonyRulesMixin.java` |
-| 4.5 Renames | `block.nethersdelight.hoglin_mount` = "Hoglin Trophy" (CD `client.js`, 3-argument `e.add` in the mod's namespace). `fabric.js` `replaceInput` keeps the id, now through `i.hoglin_mount`. `gen_crop_worldgen_table.py` keeps `patch_propelplant` (comment added) | `client.js`, `kubejs/server_scripts/engineering/fabric.js`, `tools/gen_crop_worldgen_table.py` |
+| 4.5 Renames | `block.nethersdelight.hoglin_mount` = "Hoglin Trophy" (CD `client.js`, 3-argument `e.add` in the mod's namespace). `fabric.js` `replaceInput` keeps the id, now through `i.hoglin_mount`. `gen_crop_worldgen_table.py` keeps `patch_propelplant` (comment added) | `client.js`, `kubejs/data/creativeengineering/kubejs/engineering/fabric.js`, `tools/gen_crop_worldgen_table.py` |
 | 4.6 Skipped | As planned (refactors; 1.20 syntax). The stove save format stays 3.1's, so stove contents survive | none |
 | 4.8 FD systems | Colony base: 3.1's class (extends `BushBlock`, not FD's `MushroomColonyBlock`) is kept; no FD class is needed. Rich soul soil villagers / trample: still open (owner) | none |
 

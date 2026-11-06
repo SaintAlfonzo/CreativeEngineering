@@ -10,9 +10,9 @@
 
 - **Pending:** nothing built and unshipped. NP-01 to NP-12 have never been run (the TODO list says stability isn't
   confirmed). Findings F1 to F6 (section 4) are open; F1 and F2 need your call.
-- **Files to open:** [dimension/PortalFailureHandler.java](../development/patcherMod/src/main/java/com/SaintAlfonzo/creativeengineering/dimension/PortalFailureHandler.java),
-  [block/DarkFireBlock.java](../development/patcherMod/src/main/java/com/SaintAlfonzo/creativeengineering/block/DarkFireBlock.java),
-  [item/FlintAndTerraSteelItem.java](../development/patcherMod/src/main/java/com/SaintAlfonzo/creativeengineering/item/FlintAndTerraSteelItem.java).
+- **Files to open:** [dimension/PortalFailureHandler.java](../development/creativeCommon/src/main/java/com/SaintAlfonzo/creativecommon/dimension/PortalFailureHandler.java),
+  [block/DarkFireBlock.java](../development/creativeCommon/src/main/java/com/SaintAlfonzo/creativecommon/block/DarkFireBlock.java),
+  [item/FlintAndTerraSteelItem.java](../development/creativeEngineering/src/main/java/com/SaintAlfonzo/creativeengineering/item/FlintAndTerraSteelItem.java).
 - **Knobs:** none. The feature has no config switch; turning it off means a jar rebuild.
 
 ## 1. Overview
@@ -113,7 +113,7 @@ the frame, lava lighting the frame interior.
 
 ## 5. File map
 
-- patcherMod: [dimension/PortalFailureHandler.java](../development/patcherMod/src/main/java/com/SaintAlfonzo/creativeengineering/dimension/PortalFailureHandler.java), [block/DarkFireBlock.java](../development/patcherMod/src/main/java/com/SaintAlfonzo/creativeengineering/block/DarkFireBlock.java), [block/CreativeEngineeringBlocks.java](../development/patcherMod/src/main/java/com/SaintAlfonzo/creativeengineering/block/CreativeEngineeringBlocks.java) (registration), [item/FlintAndTerraSteelItem.java](../development/patcherMod/src/main/java/com/SaintAlfonzo/creativeengineering/item/FlintAndTerraSteelItem.java), `item/CreativeEngineeringItems.java` (registration).
+- patcherMod: [dimension/PortalFailureHandler.java](../development/creativeCommon/src/main/java/com/SaintAlfonzo/creativecommon/dimension/PortalFailureHandler.java), [block/DarkFireBlock.java](../development/creativeCommon/src/main/java/com/SaintAlfonzo/creativecommon/block/DarkFireBlock.java), [block/CreativeEngineeringBlocks.java](../development/creativeCommon/src/main/java/com/SaintAlfonzo/creativecommon/block/CreativeEngineeringBlocks.java) (registration), [item/FlintAndTerraSteelItem.java](../development/creativeEngineering/src/main/java/com/SaintAlfonzo/creativeengineering/item/FlintAndTerraSteelItem.java), `item/CreativeEngineeringItems.java` (registration).
 - Assets: patcherMod `assets/creativeengineering/{blockstates/dark_fire.json, models/block/dark_fire_0/1.json, models/item/flint_and_terrasteel.json, textures/block/dark_fire_*.png, textures/item/flint_and_terrasteel.png}`. `kubejs/assets/creativeengineering/textures/block/dark_fire_*.png` are different images with the same names; the KubeJS copy is the one the game shows.
 - KubeJS: [blocktags.js](../kubejs/server_scripts/tags/blocktags.js) (fire tag), [progression.js](../kubejs/server_scripts/magic/progression.js) (recipe), [namechanges.js](../kubejs/client_scripts/namechanges.js), `item_dict.js` (`i.flint_and_terrasteel`), `block_dict.js` (`b.dark_fire`).
 
@@ -153,3 +153,4 @@ Survival, Overworld, a fresh obsidian frame (4 × 5, corners optional) each time
   Flint and Terrasteel (temporary placer); shipped with 1.0.3.
 - 2026-10-18: this writeup; findings F1 to F6; tests NP-01 to NP-12. No code changed.
 - 2026-10-19: F6 fixed (DarkFireBlock comment; source only, ships with the next patcherMod build).
+- 2026-11-04: Dark Fire, Flint and Terrasteel and `PortalFailureHandler` moved to Creative Magic ([creative_magic.md](creative_magic.md)); ids unchanged. Same behaviour.

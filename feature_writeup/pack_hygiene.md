@@ -119,7 +119,7 @@ literal shape tag ids in `engineeringtags.js` (TODO `tooling/conventions #1`).
 
 53. **Status docs.** Judgement. `todo/todo.txt` is "kept as history" (TODO.md:15) but ebb0648 still ticked a box in it;
     [client_capture.md](client_capture.md) and its README row say nothing is built while `development/clientCapture`
-    has 11 Java files and `jar_archive/cecapture-0.1.0.jar`; `development/patcherMod/changelog.txt` is a Forge MDK
+    has 11 Java files and `jar_archive/cecapture-0.1.0.jar`; `development/creativeCommon/changelog.txt` is a Forge MDK
     leftover (635 lines) missing from TODO row 1's MDK list.
 
 ## 3. Suggested fix order
@@ -165,7 +165,7 @@ The in-tree mods and the pack scripts are built and deployed together, so there 
 each. Checks for an older copy add code paths that are never taken and hide a broken install instead of failing.
 
 1. **Creative Delight gates on a patcherMod helper version.** **FIXED 2026-10-27** (section 9). Rule, Reinvent. Current state:
-   - [neoCraftHelper.js:17](../development/patcherMod/src/main/resources/kubejs_startup/creativeengineering/func/neoCraftHelper.js) publishes `apiVersion: 1` on `global.NCH`.
+   - [neoCraftHelper.js:17](../development/creativeCommon/src/main/resources/kubejs_startup/creativecommon/func/neoCraftHelper.js) publishes `apiVersion: 1` on `global.NCH`.
    - [cd_core.js:19-22](../development/creativeDelight/src/main/resources/kubejs_startup/creativedelight/cd_core.js) sets `CD.apiVersion: 1` (read nowhere) and `CD.needsNchApi: 1`; lines 49-52 log an error when `NCH.apiVersion` is lower or missing.
    - Introduced in c36dfc4 (Mid 1.1.03). The docs make it a rule for callers: [creative_delight.md](creative_delight.md) line 478 ("a caller checks it", 10.6), line 505 and the 10.3 row at line 862.
    - Tests depend on it: `tools/creative_delight_test/suite/` (`cdtest_startup.js:7`, `cdtest_probe.js:50` asserts `apiVersion >= 1`, `cdtest_client.js:2`) and [scratch_queue.md](testing/scratch_queue.md) SQ-CDT-02 expects "NCH apiVersion 1".
@@ -234,7 +234,7 @@ one side changes.
 a case). Counts: raw `e.custom` 21 calls in 6 files (12 are sequenced-assembly steps, see section 4), raw recipe
 `e.remove` 16 in 3 files, raw tag `event.add/remove` 75 in 6 files. No `e.shaped` / `e.shapeless` / cooking calls anywhere.
 
-13. **Potion bottling and tipped arrows.** [potion_bottling.js](../kubejs/server_scripts/engineering/potion_bottling.js)
+13. **Potion bottling and tipped arrows.** [potion_bottling.js](../kubejs/data/creativeengineering/kubejs/engineering/potion_bottling.js)
     :72, :90 write raw `create:filling` / `create:emptying` JSON; `NCH.createFilling` already takes NBT fluids
     (`tipped_arrows.js:44` uses it). :82, :114 and `equipment/tipped_arrows.js:36` write raw IE `bottling_machine` JSON.
     Fix: `R.createFilling` / `R.createEmptying`; extend `NCH.ieBottling` to build results with `_nbtItemJson` (as
@@ -402,9 +402,9 @@ effects reserved for Creative Brewing). The Brewin' / alcohol rows in `cooking/c
 
 ## 6. File map
 
-- Reference pattern: [neoCraftHelper.js](../development/patcherMod/src/main/resources/kubejs_startup/creativeengineering/func/neoCraftHelper.js), [cd_core.js](../development/creativeDelight/src/main/resources/kubejs_startup/creativedelight/cd_core.js), [creative_delight.md](creative_delight.md) 10.3 / 10.6
+- Reference pattern: [neoCraftHelper.js](../development/creativeCommon/src/main/resources/kubejs_startup/creativecommon/func/neoCraftHelper.js), [cd_core.js](../development/creativeDelight/src/main/resources/kubejs_startup/creativedelight/cd_core.js), [creative_delight.md](creative_delight.md) 10.3 / 10.6
 - Rules: [CLAUDE.md](../CLAUDE.md); dicts: [item_dict.js](../kubejs/startup_scripts/_lib/item_dict.js), [effect_dict.js](../kubejs/startup_scripts/_lib/effect_dict.js)
-- Helpers: [tag_helper.js](../development/patcherMod/src/main/resources/kubejs_startup/creativeengineering/func/tag_helper.js), [item_merges.js](../kubejs/startup_scripts/_lib/item_merges.js)
+- Helpers: [tag_helper.js](../development/creativeCommon/src/main/resources/kubejs_startup/creativecommon/func/tag_helper.js), [item_merges.js](../kubejs/startup_scripts/_lib/item_merges.js)
 - Manifest: [generators.json](../tools/generators.json); sides: [mod_sides.md](../mod_sides.md)
 
 ## 7. Offline checks
@@ -520,7 +520,7 @@ new patcherMod, CD, Brewin', Vinery, Miner's, Creative Labels, More Mooblooms an
   - 7: `WineYears` keeps the Brewin'-absent branch; a missing `climate` method now throws instead of warning.
   - 8: patcherMod compiles against `project(':backportedBrewin')` and `project(':backportedDisplay')`.
   - Removed lib jars (`letsdo-vinery-forge-1.3.10`, `backportedBrewin-...-03`, `displaydelight-1.2.0`) moved to
-    `development/patcherMod/jar_archive/displaced/`. Built and installed, not tested. The first combined build failed once
+    `development/creativeCommon/jar_archive/displaced/`. Built and installed, not tested. The first combined build failed once
     in `:backportedBrewin:reobfJar` and passed on the rerun (that task also passes on its own).
 
 - 2026-10-27: fix order 3.3 done (findings 13 to 17): patcherMod helpers `enderStorage`, `axeScraping` (soot option),

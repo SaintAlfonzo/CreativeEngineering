@@ -29,7 +29,6 @@
     "QuarkSortingHandlerMixin",
     "VineBlockShearMixin",
     "LeafPileSlowMixin",
-    "CampfireRainMixin",
     "MonsterBoxBlockEntityMixin",
     "CreateBreakerMonsterBoxMixin",
     "DiFeatherEntityMixin",
@@ -50,7 +49,9 @@
     "TrashSlotComponentMixin",
     "TrashSlotSaveStateAccessor",
     "DhCloudHeightMixin",
-    "SimpleHatsFaceSlotMixin"
+    "SimpleHatsFaceSlotMixin",
+    "JetpackItemTooltipMixin",
+    "FallingBlockWaterSplashMixin"
   ],
   "server": []
 }

@@ -25,7 +25,7 @@ cooking pot?", and drink > tea "integrate with later bottle/bowl output buffer s
 
 Files to open first:
 
-- `development/patcherMod/src/main/java/com/SaintAlfonzo/creativeengineering/cooking/`: `RemainderBuffer` (routing,
+- `development/creativeCommon/src/main/java/com/SaintAlfonzo/creativecommon/cooking/`: `RemainderBuffer` (routing,
   fit check, leftover rule), `RemainderBufferHolder`, `RemainderBufferStorage` (saving), `RemainderOutputHandler`
   (automation), `RemainderSlot`, `client/RemainderSlotFrames`
 - Creative Delight (QoL-1 since 2026-10-25, creative_delight.md 22): `mixin/farmersdelight/` `CookingPotRemainderMixin`,
@@ -329,7 +329,7 @@ or pulled over for the waiting meals (and same-kind leftovers once it holds that
 
 ## 6. Offline checks (2026-10-18)
 
-- `./gradlew :patcherMod:build`: compiles (the whole mod, against the pack's 414 jars in `libs/`) and reobfuscates;
+- `./gradlew :creativeCommon:build`: compiles (the whole mod, against the pack's 414 jars in `libs/`) and reobfuscates;
   the reobf jar's mixin classes carry SRG names for the inherited menu/screen members (3.5).
 - GameTests: `tools/test_remainder_buffer.sh` (harness in `tools/remainder_buffer_test/`: builds the `cooking/`
   classes, the pot/kettle BE + menu mixins and `oven/` straight from patcherMod's source, with FD 1.2.4 and Respite

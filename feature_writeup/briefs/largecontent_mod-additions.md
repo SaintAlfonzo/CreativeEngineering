@@ -71,7 +71,7 @@ Item tags that group the items of a mod family: every Create add-on, every Farme
 ### Now (checked 2026-10-31)
 - No such tag exists (grep for `mod_family`, `create_addons`, `delight_addons` in `kubejs/` and the patcherMod
   `kubejs_startup/` finds nothing).
-- `global.tags.addMatching` (`development/patcherMod/src/main/resources/kubejs_startup/creativeengineering/func/tag_helper.js`
+- `global.tags.addMatching` (`development/creativeCommon/src/main/resources/kubejs_startup/creativecommon/func/tag_helper.js`
   lines 38-54) takes `@modid` entries and globs that may sit in the namespace half (`*_delight:*` becomes the regex
   `^[^:]*_delight:[^:]*$`, `_glob` lines 58-65).
 - 28 jars in `mods/` start with `create`; 15 Delight / Farmer's jars. Creative Delight nests FD, Ocean's, Oceanic, End's,

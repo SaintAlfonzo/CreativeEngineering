@@ -12,7 +12,7 @@ ServerEvents.tags('item', e => {
 	var t = global.tags
 	var i = global.item
 
-	var families = {
+	var families = { // G5 begin: every list is handed to global.tags.add below
 		// every cookie, plus the Botania biscuit and gingerbread men
 		cookies: [
 			i.cookie, i.honey_cookie, i.sweet_berry_cookie, i.green_tea_cookie, i.mulberry_cookie, i.cherry_cookie,
@@ -67,7 +67,7 @@ ServerEvents.tags('item', e => {
 		dried_fruit: [
 			i.dried_persimmon, i.dried_banana,
 		],
-	}
+	} // G5 end
 	Object.keys(families).forEach(name => {
 		var tag = i['t_jar_family_' + name]
 		t.add(e, tag, families[name])

@@ -1,6 +1,6 @@
 # Wood recipes: bark from stripping, sawdust, ash, mulch soils, saw shapes, soot
 
-Part of backlog row 20 (recipe progression), split per folder. This one covers `kubejs/server_scripts/wood/`. The IE
+Part of backlog row 20 (recipe progression), split per folder. This one covers `kubejs/data/creativeengineering/kubejs/wood/`. The IE
 Sawmill's per-blade recipes (which replace IE's own log and plank sawmill recipes) are in
 [engineering.md](engineering.md) 2.1; the composter table in [composting.md](composting.md).
 
@@ -22,8 +22,8 @@ Sawmill's per-blade recipes (which replace IE's own log and plank sawmill recipe
   SQ-RW-23 to rerun; SQ-RW-25,
   -26, -27 PASSED; SQ-RW-24 (filling fluid amounts) client check pending. D&D woods removed: SQ-RW-28 PASSED. Removed woods (2.6) shipped in 1.1.01; scratch server PASSED 2026-10-22 (SQ-MB, `tools/farm_worldgen_probe.js`); RW-15, RW-16, RW-18 to RW-20 in game. RW-01 to RW-10 have never been run. Findings F1 to F6 (section 4); none needs
   a decision, F1 is a bug.
-- **Files to open:** [bark.js](../kubejs/server_scripts/wood/bark.js), [sawdust.js](../kubejs/server_scripts/wood/sawdust.js),
-  [wood_types.js](../kubejs/server_scripts/wood/wood_types.js), [ash.js](../kubejs/server_scripts/wood/ash.js),
+- **Files to open:** [bark.js](../kubejs/data/creativeengineering/kubejs/wood/bark.js), [sawdust.js](../kubejs/data/creativeengineering/kubejs/wood/sawdust.js),
+  [wood_types.js](../kubejs/data/creativeengineering/kubejs/wood/wood_types.js), [ash.js](../kubejs/data/creativeengineering/kubejs/wood/ash.js),
   [removed_woods.js](../kubejs/startup_scripts/_lib/removed_woods.js) (+ [server side](../kubejs/server_scripts/wood/removed_woods.js)).
 - **Knobs:** CEConfig `[worldgen.systems] mulberrySapling` (2.6). Server scripts (`/reload`); removed woods need a restart.
 
@@ -202,7 +202,7 @@ are NCH's generated ones, so they ignore counts (F1).
 
 ## 5. File map
 
-- [server_scripts/wood/](../kubejs/server_scripts/wood/): `bark.js`, `sawdust.js`, `wood_types.js`, `ash.js`,
+- [server_scripts/wood/](../kubejs/data/creativeengineering/kubejs/wood/): `bark.js`, `sawdust.js`, `wood_types.js`, `ash.js`,
   `removed_woods.js`.
 - Removed woods: [startup_scripts/_lib/removed_woods.js](../kubejs/startup_scripts/_lib/removed_woods.js) (lists; keys in
   `item_dict.js` section "removed woods"), `kubejs/data/upgrade_aquatic/worldgen/configured_feature/river_tree.json`,

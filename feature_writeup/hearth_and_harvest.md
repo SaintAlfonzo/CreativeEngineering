@@ -212,7 +212,8 @@ port's recipes that used a dropped item point at the pack survivor instead.
 | Charcoal Block | `quark:charcoal_block`, `architects_palette:charcoal_block` | same block | Drop |
 | Bag of Salt, Bag of Sugar | The Salt's Salt Block; Supplementaries sugar cube block | similar | Drop (D13) |
 | Cotton Bale | Rustic Delight Cotton Crate | similar | Drop |
-| Spool, Rope Coil | name clash only: `creativeengineering:spool` (component), Quark / Supplementaries / FD rope (rope plan item_merges 5.5) | string and rope storage blocks | D13 |
+| Spool | name clash only: `creativeengineering:spool` (component) | string storage block | D13 |
+| Rope Coil | Quark / Supplementaries / FD rope (rope plan item_merges 5.5) | none: a storage block, not a rope item | **Keep as its own block (owner, 2026-11-04), crafted from 9 rope** |
 
 **Salt blocks**
 
@@ -223,6 +224,11 @@ port's recipes that used a dropped item point at the pack survivor instead.
 | Polished salt, salt slab / stairs / wall (8) | Vintage smooth salt, salt bricks, mixed salt bricks (with stairs, slabs, walls) | a third salt decor set | D13 |
 | Lightly / Well / Heavily Licked Salt Block (+ waxed, 7 more) | none: animals lick it, it wears down | new mechanic on a salt block | keep the mechanic on The Salt's block or drop: D13 |
 | Salt Drip | none | new | follows D13 |
+
+**Texture review (owner, 2026-11-04).** Side-by-side sheets of every 2.1 overlap are in
+`feature_writeup/hearth_and_harvest_{crops,drinks_jams,dishes,gear_blocks}_overlap.png`. Result: the only keeper is the
+Rope Coil block (own block, 9 rope). Every other H&H texture that overlaps a pack item is worse than the existing one
+and is not ported.
 
 ### 2.2 Mob drops, dishes, ingredients
 
@@ -538,6 +544,190 @@ port jar; brewing and alcohol stay in the alcohol scripts (reserved for Creative
 | D13 | Salt extras: decor set, licked salt blocks, salt drip, salt caves, bags | drop the decor set and bags (Vintage / The Salt cover them); licking: add the mechanic to The Salt's block only if wanted; salt caves: drop (The Salt ores + beach patch) | drop |
 | D14 | Small behaviours: pig / rabbit litters, cow bottle milking, village farm crops | keep rabbit litters and bottle milking; pig litters wait for the mob food overhaul (`tweaks #13`, Fungi Delight truffle litters); drop village crops | as recommended |
 
+### 5.1 Owner directives (2026-11-04)
+
+Recorded after the texture review (2.1). They extend or override the D1 to D14 defaults above where they overlap
+(D2, D9, D11, D13, D14 especially). "Investigate" = write findings into this report (or a sibling writeup) and bring
+a recommendation; nothing is built until the owner answers. "Do" = build, with tests and changelog per CLAUDE.md.
+
+| # | Kind | Directive | Touches |
+|---|---|---|---|
+| N1 | Investigate | **Crow audit:** evaluate both crows (H&H crow and Alex's Mobs crow): behaviour, texture, drops, spawn, tame / shoulder / stash, and anything else that differs; recommend one or a merge | D2 (default "drop" is on hold until the audit) |
+| N2 | Investigate | Scarecrows: H&H scarecrow (repels crows, dressable?) against the planned dressable scarecrow (`blocks/new #8`) and which crow it affects | N1, 2.1 farm blocks |
+| N3 | Do | Extra babies on breeding for rabbits and pigs (litters: H&H 1 in 3 breedings +1 baby); boost the Fungi Delight truffle effect | D14, `tweaks #13`, 2.3 litters |
+| N4 | Do | Milk a cow with a bottle to get the Farmer's Delight milk bottle (not an H&H bottle item) | D14, 2.1 drinks |
+| N5 | Investigate | Goat cheese line and its uses; goat milk textures (bottle, bucket) | 2.1 dairy, 3 new content |
+| N6 | Investigate | Chicken plucking (sneak, hurts without shears): it lowers karma; find the karma system and the exact rule | 2.3 systems |
+| N7 | Investigate | Difference in alcohol effects: H&H drinks against the pack's alcohol effect system | 2.1 drinks, alcohol.md |
+| N8 | Investigate | All hoe enchants (Tilling, Harvesting, any others in the jar) against the per-hoe harvest areas | D11, 2.3 hoe enchants |
+| N9 | Do | Implement manure (manure bag, fertiliser behaviour) | 3 new content |
+| N10 | Do | Fold in wild crop generation: hops (wild hops through `wild_crops.json`); raspberry stays | 2.3 worldgen, step 14 |
+| N11 | Do | Season tags are needed for hops and sunflower (`global.tags`) | 2.3 seasons tags, step 3 |
+| N12 | Do | Add mums; add the mum features through the worldgen system (`wild_flowers.json`, 28 two-colour patches); add a botanist trade | 3 new content, step 14 |
+| N13 | Investigate | Salt cave generation: compare with the pack's salt (The Salt ores, Vintage beach patch); swap in the pack's salt? | D13, 2.3 worldgen |
+| N14 | Do + investigate | Add the corn maze (custom structure type); investigate Lilliput Lane (H&H's one-template structure, 7 chest tables); both through the structure framework (step 15) | 3 new content |
+| N15 | Do | Villager farmable crops and trades must be integrated (farmer buys H&H crops, wandering trader, village farm crops), through the pack trade lists, not H&H's code | D14, 2.3 trades |
+| N16 | Investigate | Pungent and Tempting effects; is Bad Omen not in the game (the H&H Bad Omen brew and crow stash)? | D2, effects |
+| N17 | Decided | All blocked content (2.4, 1.20 vanilla content and missing mods) is dropped | 2.4 |
+| N18 | Do | Re-evaluate the overlap (2.1, 2.3) against all recent pack changes before the fold-in; the 2026-10-30 pass is stale | 2.1 |
+| N19 | Do + note + investigate | Rename the Create: Dreams & Desires sap to **Latex** (fluid, bucket, lang; Hearth and Harvest's sap stays "Sap"); note that the Latex textures need a recolor; real-life investigation of latex and rubber production (tapping, coagulation, vulcanising) to ground the rubber chain | D4, `engineering/dreams-and-desires #2` |
+
+Already recorded elsewhere: Rope Coil is its own block crafted from 9 rope (`blocks/new #18`, 2.1 storage table).
+
+### 5.2 Owner answers to D1 to D14 (2026-11-04)
+
+| # | Answer | Follow-up |
+|---|---|---|
+| D3 | **Implement blueberry pips** (overrides the "drop" recommendation; Fruits Delight's blueberry plant becomes plantable from the pips) | build; check against the Fruits Delight blueberry bush and 2.1 crops row |
+| D4 | **Keep the H&H tree tapper and merge syrup** (one Syrup item, Rustic's; tapper as an extra source). **Decided 2026-11-05: rename the D&D sap to Latex** (H&H keeps "Sap"); see N19 | build; no sap name clash left |
+| D5 | Drop chocolate milk | none |
+| D6 | Drop veggie pizza, corn stew, cotton candy | none |
+| D7 | **Add the roasting mechanic and the Charred Marshmallow** (on Delightful's marshmallow stick, hold near a campfire) | build |
+| D8 | **Investigate** seed pouch auto-pickup; **add XP on harvest** to the in-pack farm hats and straw hats (identify which items, make it an option) | list the hat items; config option per hat |
+| D9 | **Keep the H&H sprinkler with the rename** ("Field Sprinkler"); **keep the trough** (animal item) | build; the trough takes water (babies grow faster) next to Quark's feeding trough |
+| D10 | **Investigate the bottle crate**; add it if it is a storage block with no overlap | decide after the investigation |
+| D11 | **Keep the trellis, possibly merge with Vinery's lattice; drop mulch; investigate Tilling** | trellis vs lattice check; Tilling needs a Java enchantment port (see N8) |
+| D12 | **Investigate the stomping basin** (probably overlaps Vinery's press); **cask dropped (2026-11-05)** | basin investigation only |
+| D13 | **Investigate licking and salt caves (with swapped blocks)**: the licked stages and cave generation using the pack's salt blocks. **Salt decor set and bags dropped (2026-11-05)** | see N13 |
+| D14 | **Add rabbit and pig litters, bottle milking; drop village crops** (confirmed 2026-11-05: H&H adds no farmable crop of its own to villages; villager trades still integrated, N15) | N3, N4; pig litters no longer wait for `tweaks #13` |
+| D2 | **Implement the crow mechanics on Alex's Mobs' crow** (decided 2026-11-05): theft, nest stash (port the H&H nest), crow feather, crop pecking, wariness, trust and taming; H&H's crow entity is not ported. Overrides the 5.4 recommendation | [plan_hearth_crow_salt.md](plan_hearth_crow_salt.md) sections 4 and 5 |
+| D13 | **Implement licking** (decided 2026-11-05): worn stages on the pack's salt block, waxing, restoring, animal lick goal; **scarecrow ported** and added to `crow_fears` | [plan_hearth_crow_salt.md](plan_hearth_crow_salt.md) sections 2 and 3 |
+| D1 | **Port only the desired content** (decided 2026-11-05) | the keep list is this table plus N1 to N19 |
+
+Still open: D8 hat list, D10 bottle crate, D12 stomping basin, D13 salt caves. D2 and D13 licking decided 2026-11-05 (rows above); the crow and salt lick plan has its own open calls (plan section 7).
+Investigated 2026-11-05 (section 5.3); owner's follow-up notes in 5.5 (nothing built), crow on Alex's investigated in 5.4.
+
+### 5.3 Investigation results (2026-11-05): D2, D8, D10, D12, D13
+
+Read from the decompiled jar and the pack's own mods and writeups. Nothing built.
+
+**D2 and N1 (crow).** Both crows are small dark-navy birds (32x32 textures, same palette). Alex's Mobs (AM) crow is in the pack
+(`flying_birds` spawn, weight 10, grass, 3 to 5; drops 0 to 1 vanilla feather).
+
+| | H&H crow | AM crow |
+|---|---|---|
+| Spawn | near 8+ crops or generated nests (config), `#hearthandharvest:has_crows` | pack spawn table (`mob_spawns.md`) |
+| Tame | corn kernels, 1 in 5 per feed; also by dropped food (1 in 8) or pickup of a thrown item (1 in 3) | pumpkin seeds |
+| Shoulder | rides the shoulder; hops off to fetch items | rides the shoulder (sneak to remove) |
+| Item work | fetches nearby and thrown items to the owner; wild crows steal shiny items (`crow_shiny_items`) into nests | picks up items; deposits into a chest or furnace whose item frame matches the held item; heals on a hay block |
+| Combat | none (flees, flock alarm within 16 blocks) | pecks attackers, extra damage to undead |
+| Crops | pecks crops (needs mobGriefing), scared by players, villagers, carved pumpkin, jack o'lantern, scarecrow | circles and eats crops, scared by carved pumpkin and jack o'lantern |
+| Drops | crow feather (arrows, brush, quill, Bad Omen brew) | vanilla feather |
+
+- AM's crow already does everything H&H's does for a player except the trust / tempting system, shiny stealing and the
+  feather items. AM adds the item-frame deposit and combat help, which H&H lacks. Recommendation: **drop H&H's crow** (D2 default stands).
+- Correction to the D2 row: the scarecrow does not need code to scare AM crows. AM reads the block tag `alexsmobs:crow_fears`
+  (carved pumpkin, jack o'lantern); one `global.tags` line adds a scarecrow block to it. The dressable scarecrow (`blocks/new #8`) already plans the entity-tag equivalent.
+- The Bad Omen brew (awkward + crow feather) goes with the crow (N16 decides whether the brew is wanted with another ingredient).
+
+**D8 (hats and pouch).**
+- Farmer's Hat (H&H): a head item, not armour (durability 128, repaired with wheat). Wearing it gives 1 to 2 XP when a fully grown
+  crop is broken or right-click harvested (skipped if the hoe has H&H's Harvesting enchant) and costs 1 durability per harvest.
+- In-pack farm and straw hats: `wardrobe:farmers_hat_helmet`, `vinery:straw_hat` (leather material, part of the Winemaker set),
+  `simplehats:farmerbrim`, `simplehats:summerhat`; `alexsmobs:sombrero` and `simplehats:sombrero` are cosmetic. No script gives any of them a harvest effect today.
+  Recommendation: an XP-on-harvest rule over a config list of hat ids (the first three, summerhat if its model is a straw hat), no durability cost, in the armour / tool effect framework. Needs the owner to confirm the list.
+- Seed pouch auto-pickup already exists: **Quark's Seed Pouch** (module on) picks up matching seeds while the pouch is in the main or off hand, holds 640
+  of one seed / sapling / crop from its holdable tag, plants one seed per click and a Shift Range square (3) when sneak-used. H&H's pouch holds 512, picks up from the whole hotbar (seeds only), cycles
+  the area 1x1 to 9x9 (sneak-use) and plants from a dispenser. Its only gains over Quark's are the 9x9 area, the dispenser and hotbar pickup.
+  Recommendation: **do not port a second pouch**; if the larger area is wanted, extend Quark's pouch instead (decision for the owner).
+- The decompile plants onto `VILLAGER_FARMLANDS`, which looks like a mapping artefact for farmland; check at port time if the pouch is ported.
+
+**D10 (bottle crate).** The "bottle crate" is H&H's single `crate` block (recipe: 3 sticks over 3 wooden slabs gives 2). It is a slab-type block
+(bottom, top, double) with 9 slots per half, 1 item per slot, taking only `#hearthandharvest:bottles` (glass bottle, potions, milk, honey, XP,
+dragon breath, oil, syrup, brine, goat milk, plus H&H's tall wines) and eggs / turtle eggs; items render inside; hoppers insert from the sides and top and extract
+from the bottom. The `BottleCrateRecipe` serializer has no recipe in the jar (dead code).
+- Overlap: none found. Vinery's wine racks take only Vinery wine bottles, Quark and Immersive Engineering crates are bulk item storage, FD crates are food packs.
+  Nothing in the pack stores potions, milk or honey bottles or eggs as a display block.
+- Recommendation: **add it** as "Bottle Crate" (`quark:crate` is "Empty Crate", so the name must differ): drop the tall-wine entries (wine has the Vinery racks), rebuild
+  the bottle tag from pack ids through `global.tags`. Port cost: `CrateBlock` (367 lines), `CrateBlockEntity` (212), block and item renderers.
+
+**D12 (stomping basin).** The basin is a block any entity stomps by landing in it after a drop of 0.3 blocks or more, a jump (one recipe step per 5 ticks per entity); a 2x2 group becomes one
+multiblock (4 item slots, 32 B tank instead of 1 slot and 8 B). 15 recipes: 8 juices (4 fruit gives 500 mB: apple, blueberry, cherry, raspberry,
+glow berry, sweet berry, melon, plus red / green grape), 3 cooking oil (corn, peanut, 8 seeds), slime block to 9 slime balls, wet sponge to sponge and water, beetroot to sugar.
+- Vinery covers little of this: the Apple Press does apple to apple mash only (72 ticks), the Grapevine Pot does grape to wine juice only. Neither makes a berry or melon juice.
+  The pack's other juice routes are machines or Create / IE (squeezer, press, mixing), none by hand without power.
+- Recommendation: **keep the basin as the manual juicer**, with the berry, cherry, glow berry, melon and oil recipes; drop apple cider (Vinery press), both grape juices
+  (Vinery pot, section 2.1 "Drop") and the slime, sponge, sugar extras unless the owner wants them. Cask is already dropped.
+
+**D13 / N13 (licking and salt caves).** The pack's single salt block is The Salt's (`salt:salt_block`, a Creative Delight member): it melts on
+ice and snow and dissolves in water (35 %), grows no clusters; only raw rock salt block never dissolves and grows clusters (item_merges 2.9).
+- Licking: a player right-click (empty off hand) degrades the block with 5 % chance per lick; wax (honeycomb) locks it, an axe removes the wax; salt restores a stage. Three stages
+  (lightly, well, heavily licked), the last lick pops 1 salt. Every animal gets a goal (added on join) that keeps it within 12 blocks of a salt block and licks it every 8 minutes.
+  With the pack's block this needs three new stage blocks plus a waxed variant of each (the Salt Block cannot take H&H's property without a class overlay), the goal
+  and a dispenser rule. The goal also holds every animal near any salt block, which affects pens built beside a salt block.
+- Salt caves: 33-block carved caves, shell of salt block with calcite and tuff, 1.2 % pools, salt drips on ceiling and floor; 1 in 24 chunks, Y -40 to 30, in dry,
+  desert, badlands, savanna and beach biomes (config, off switch). Swapped for the pack: shell becomes **raw rock salt block** (a Salt Block shell would dissolve
+  into the pools), and the drips become The Salt's buds and cluster, which removes `SaltDripBlock` (204 lines) and its growth rule entirely. Needs a port of the 428-line feature plus a biome modifier.
+- Recommendation: **caves yes, with the swap** (a salt destination, no new blocks, cheap); **licking only if the owner wants the animal behaviour** (new blocks, new goal, pen side effect).
+  Default if not answered: caves swapped, no licking.
+
+### 5.4 Crow features on Alex's Mobs' crow (2026-11-05)
+
+Owner request: investigate crop pecking, shiny item stealing, the trust system and the crow feather, and what each takes on Alex's Mobs (AM).
+Investigation only. Sources: H&H `common/entity/crow/**`, `javap` of `EntityCrow` in `mods/alexsmobs-1.21.1.jar`.
+
+**AM's crow, the hook surface.** `EntityCrow extends TamableAnimal implements ITargetsDroppedItems`; constructor protected, goals set in `registerGoals`
+(float, sit, melee, follow owner, deposit chests, scatter, avoid pumpkins, breed, circle crops, wander, look, target items, owner-hurt target). Synced data: flying, sitting,
+command, attack tick, perch pos; `seedThrowerID` (the player who threw the taming seed). Data tags: `alexsmobs:crow_foodblocks` (`#minecraft:crops`), `crow_fears`
+(carved pumpkin, jack o'lantern), `crow_foodstuffs` (eggs, sugar, `#forge:seeds`), `scatters_crows`. Hook options: `EntityJoinLevelEvent` adding goals
+(as `FoxBerryGoals` in the hearth member, no mixin, fine for goals that only need public API); a mixin only for private state (`aiItemFlag`, perch). The pack already
+mixes AM (`mixin/alexsmobs`: seagull, emu, gorilla). Goals need a goal-flag set that does not clash with AM's flying `MoveControl`: H&H's goals assume its own `CrowMoveControl`, so movement must use AM's `getNavigation()` / `getBlockInViewAway`.
+
+**1. Crop pecking.** H&H: wild crow scans radius 8 every ~50 ticks, flies to a crop in `crow_edible_crops` (wheat, stems, sweet berries, cabbages, tomatoes, bushes, trellis, peanuts,
+corn) and on a 40-tick peck resets its age to 0 (needs mobGriefing; corn has a crow-proof state). AM: `CrowAICircleCrops` circles the crops and calls `peck()`, which is animation only, so
+**AM crows never damage crops** (checked: no `setBlock` call). To add: one goal (about 90 lines) reproducing the age reset over a pack tag, plus the tag (`global.tags`).
+Risk: a real crop loss for farms that today are only decorated; crows spawn weight 10 near fields. Gate by mobGriefing and a config switch; scarecrow / `crow_fears` already protect.
+
+**2. Shiny item stealing.** H&H: wild crow scans radius 10 for a dropped item in `crow_shiny_items` (gems, ingots, nuggets, ores, armour, tools, enchanted book, glowstone, ender pearl / eye),
+takes 1, carries it, flies to the nearest nest within 16 (`#hearthandharvest:nests`: its own nest plus `incubation:twig_nest` and `hay_nest`), waits 1 s, deposits into the nest's 4 slots and fires the stash trigger; with no nest it flies
+away from the nearest player and drops it. A thrown item tames with 1 in 3 (`tryTameFromPickup`). AM: `ITargetsDroppedItems` only targets `crow_foodstuffs` (edible), no stealing, no nests.
+To add: a steal goal (about 150 lines: scan, carry in the main hand, nest search, escape and drop), a shiny item tag, and a nest sink. **Nest overlap:** Incubation's nests are egg incubators and take no
+arbitrary items, so "deposit into a nest" has no inventory unless H&H's `NestBlock` (4-slot ground nest, about 250 lines with its block entity and loot) is ported; D2 and 2.1 had decided to drop it.
+Cheaper options: deposit into any container or drop the item beside an Incubation nest (about 40 lines). The AM crow's item-frame chest deposit is the existing equivalent. Risk: balance and trust (a crow
+taking player-dropped gems and ores near a base), mobGriefing-like rule, and a tame crow must not steal (guard `isTame()`).
+
+**3. Trust / tempting.** H&H: `CrowWariness` holds an alarm (120 ticks, set when a crow is hurt, spreads to wild crows within 16) and a trust meter 0 to 200 that decays unless being tempted. `CrowWaryTemptGoal`
+fires when a player holding crow food (corn kernels, `crow_tempt_items`) is within 10: the crow stands off at a comfort distance that shrinks from 4 to 1.5 blocks as trust fills (+1 per tick,
++2 sneaking, -5 sprinting); `CrowFleeEntityGoal` makes wild crows flee players, villagers and the alarm source (`scary_for_crow`: player, villager); at full trust the player's feed tames with 1 in 5 (feeding is otherwise instant). AM: crows
+already scatter from `#alexsmobs:neutral_land_animals` and pumpkins; taming is a thrown seed, no wariness. To add: a trust field (a capability or a mixin on `EntityCrow` for `trust` / `alarm`, plus NBT save), two goals
+(flee, wary-tempt, about 220 lines with the wariness class), a tag swap (tempt item becomes pumpkin seeds or `crow_foodstuffs`), and a rule changing AM's taming from instant to trust-gated, which needs a mixin on `mobInteract` / the seed-throw path.
+Risk: it changes how every pack player tames AM crows; AM's book text and the `crow_foodstuffs` taming would then be wrong. Make it a config switch, default off.
+
+**4. Crow feather.** H&H: item `crow_feather` (in `#forge:feathers`), dropped by the crow at 0 to 1 (+looting); recipes: arrows, brush and book and quill with it (all three exist with vanilla feathers), and the Bad Omen
+potion (awkward + crow feather, `PotionBrewingRecipesEvent`; vanilla 1.19.2 has no Bad Omen potion, only the effect). AM's crow drops **vanilla feather** (0 to 1 + looting). So the feather item adds nothing but the
+brew; the three crafting recipes need no item. To keep the brew on AM: skip the item, brew from a vanilla feather or `#forge:feathers` (one `BrewingRecipeRegistry` entry in Java, or Create / IE mixer routes under
+the pack's potion rules), and the Bad Omen potion and its effect text belong to N16. About 30 lines. Recommendation for the item was: do not add it; **superseded by the owner (2026-11-05): add the item and the brew** (5.5, plan P5).
+
+**Totals and recommendation.**
+
+| Feature | Files / lines | Hook | Risk | Recommend |
+|---|---|---|---|---|
+| Crop pecking | 1 goal, 1 tag, about 90 | `EntityJoinLevelEvent` | real crop loss, mobGriefing | **owner: crows damage crops** (5.5), default on |
+| Shiny stealing | 1 goal, 1 tag, 40 to 290 (nest sink) | `EntityJoinLevelEvent` | nests, balance | only the cheap variant (drop beside Incubation nest) if wanted |
+| Trust system | 2 goals, 1 mixin, about 260 | mixin on `mobInteract`, wariness state | changes AM taming | **owner: deep dive first** (plan section 8) |
+| Feather | 1 brewing entry, about 30 | brewing registry | none | **owner: add the item and the brew** (5.5) |
+
+Overall: the cheapest faithful carry-over is the Bad Omen brew from a vanilla feather and, if wanted, crop pecking; stealing and trust are the expensive, balance-touching parts and add little over AM's own deposit-and-follow design. This supports D2 (drop H&H's crow).
+
+### 5.5 Owner notes (2026-11-05, after 5.3 and 5.4): nothing built
+
+A build of items 1 to 6 below was made the same day and **undone at the owner's request**: they are notes to build later, not work done. The crow notes are in the plan
+[plan_hearth_crow_salt.md](plan_hearth_crow_salt.md) (P5 to P7, section 8).
+
+1. **Farmer's hat buff (D8):** add Wardrobe's Farmer's Hat, Vinery's Straw Hat, Simple Hats' Farmer Brim and Summer Hat to the XP-on-harvest rule (1 to 2 XP per ripe crop broken or
+   right-click harvested), with a tooltip line. Hook: Quark's `SimpleHarvestEvent` (HARVEST action) plus `BlockEvent.BreakEvent`; the hats as an item tag set through `global.tags`; Java in the CD jar (Quark is a compile dependency there).
+2. **Seed pouch (D8):** hotbar pickup (Quark takes seeds only while the pouch is in a hand: add a handler for the other hotbar slots, skip the hands) and a 5x5 planting area. Quark's sneak-use area is the config
+   `Shift Range` (3), so 5x5 is `config/quark-common.toml` line 529 plus its `configs_edited/` copy; "5x5 area pickup" was read as this planting area, confirm.
+3. **Bottle Crate (D10):** port H&H's `crate` (slab-type, 9 slots per half, bottles and eggs, hopper in from sides and top, out from below, sneak pick-up of a half, contents kept in the item), named "Bottle Crate" because `quark:crate` is "Empty Crate"; drop the tall-wine rule; bottle list rebuilt on pack ids; pack items have no display models so draw their flat models.
+4. **Stomping Basin in full (D12), for an eval against the Vinery press and Grapevine Pot:** block, 2 x 2 group, tanks, recipe type `stomping`, JEI page. Fluids exist in the pack for apple cider, melon juice (Central Kitchen) and cooking oil (Create Additions seed oil);
+   the five berry juices need new fluids, and bottled juices need the effects of N16. Grape juices are out (H&H's grapes are not ported). A stomp is a landing after a drop of 0.3 blocks or more.
+5. **Mob licking (D13):** animals near a Salt Block keep close and lick it; stages and wax. The pack's `salt:salt_block` is The Salt's falling `SaltSandBlock` (not a plain block), so the worn stages should be `SaltSandBlock`s in its dust colour with a waxed flag plus a `waxed_salt_block`; the three licked textures
+   need recolouring into the pack's peach salt palette (a quantile map from H&H's Salt Block to the pack's worked). Perf: use the lick-block registry of the plan (S5), not a per-animal scan. Overlaps plan_hearth_crow_salt.md S1 to S7: build it from there.
+6. **Salt caves, swapped (D13):** port the 1.4.1 feature with raw rock salt block walls (a Salt Block shell dissolves into the pools; raw rock salt never does) and The Salt's buds and cluster instead of salt drips; biome tag with Forge `forge:is_dry/overworld` etc. tags; config for rarity and height.
+
+Crow decisions (owner 2026-11-05): **add the crow feather item and the Bad Omen brew** (5.4 point 4 is reversed); **crop pecking damages crops** (5.4 point 1: AM only animates a peck, so a real age reset is added, default on);
+**trust system: write a deep dive first** (plan section 8). Shiny stealing stays as planned in the plan (C2).
+
 ## 6. File map (planned)
 
 | Path | What |
@@ -631,3 +821,4 @@ port jar; brewing and alcohol stay in the alcohol scripts (reserved for Creative
 - 2026-10-31: splash particles on every plant the can grows; tree growers (saplings, propagules, fungi, azaleas,
   mushrooms) excluded; the water Spout Gun (Create: Misc and Things) soaks farmland it hits (patcherMod
   `compat/SpoutGunFarmland`, `ProjectileImpactEvent`). Tests HNH-45 to HNH-47.
+- 2026-11-05: owner directed the crow mechanics (on AM's crow), nest stash, scarecrow and salt lick to be implemented; plan written in [plan_hearth_crow_salt.md](plan_hearth_crow_salt.md) (tests HNH-48 to HNH-68), nothing built.

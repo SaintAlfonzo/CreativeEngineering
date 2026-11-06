@@ -1,4 +1,5 @@
 // requires: alexsdelight
+// requires: alexsmobs
 // Alex's Delight recipe changes: bone broth and pasta grid routes, catfish slicing. Non-member file: recipe ids are
 // creativedelight:<type>/<suffix> (global.CD.recipes). Moved from the pack's kubejs/server_scripts/cooking/cooking.js
 // 2026-10-25, rows unchanged.

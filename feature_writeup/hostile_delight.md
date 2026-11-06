@@ -460,6 +460,53 @@ before step 6 (recipes name the survivors).
 | D15 | Names that collide: Soda, Blazing Ale | Soda -> "Dragon Soda" (Canned Goods has "Soda"; End's has "Dragon Breath Soda", so check that too); Blazing Ale stays a non-alcohol drink | rename Soda only |
 | D16 | Ender Substance stack 1 | 16 by the special bottle policy, or keep 1 | keep 1 |
 
+### 5.1 Owner notes (scratchpad 2026-11-04)
+
+Translated into the `## Hostile Delight` table of [TODO](todo/TODO.md) (`largecontent/mod-additions #6`, `#43` to `#51`).
+Nothing below is built yet (checked 2026-11-04: only `hostiledelight/recipes.js`, the generated food types, `hostile_items.js`
+removing the prepared sea pickle, the cookie and pie rebuilds in CD `baking.js` and the Cave Skewer line in
+`barbequesdelight/skewers.js` exist).
+
+Settles these decisions:
+
+| D | Owner note | Effect on the plan |
+|---|---|---|
+| D3 | Hostile's Guardian Soup removed | Ocean's Guardian Soup is the only one, on a new recipe (`dishes/ocean #12`) |
+| D6 | Magical Butter removed | XP question left only for any XP cookie that survives (none on the list below) |
+| D7 | Trembling Cookie removed | Reverses "keep"; the endermite-spawn joke goes |
+| D9 | Gazing Cookie removed | B5 air fill not needed |
+| D11 | Native tooltips removed | As recommended |
+| D12 | Magma Brownie baking only, Slime Brownie oven only | Both marked for brownie unification (`baking/baked-goods #18`) |
+| D13 | Guardian Burger / Sandwich removed | Moot |
+| D15 | Soda and Blazing Ale removed | Rename moot |
+
+Notes, as rows:
+
+- **Tooltips and effects (`#43`):** remove the mod's own tooltips; every food shows its effects as the pack's eaten-effect line.
+- **Removed (`#44`):** Magma Jelly, Frozen Flesh, every ghast food and drop (Ghast Blood, Ghast Brew included), Guardian Soup,
+  Guardian Ratty, Guardian Burger and Sandwich, Gazing, Vein, Trembling, Swelling and Crawling Cookies, Magical Butter, Soda,
+  Blazing Ale, Marine Cocktail, Dragon Tonic, Sunset Ade. CD `baking.js` lines 84-86 still rebuild several of these cookies
+  on dough (`cooking/oven #6`), and `items/jars #3` lists Hostile cookies for jars: both shrink. Guardian Ratty is on this list
+  and also has a recipe note (`#50`): open question.
+- **Blazing line (`#45`):** Blazing Apple shows its effects and is marked for effect balancing (Fire Resistance). Ardent Sauce
+  renamed Blazing Sauce: Apple Sauce jar, 2 Blaze Powder and a bowl, with the Blazing Apple's Fire Resistance effects, a more
+  blaze-powder-efficient route than the apple. Emitting Cookie renamed Blazing Cookie, Blaze Rod swapped for Blaze Powder
+  (today `baking.js:84` rebuilds it on dough with a rod).
+- **Brownies (`#46`):** Magma Brownie baking only, carrot swapped for any nether fungus, effects shown and balanced. Slime
+  Brownie oven only, recipe kept. Both join the brownie unification.
+- **Rotten foods (`#47`, `#48`):** Rotten Ham and Cooked Rotten Ham leave the normal meat tags for new raw and cooked rotten
+  meat tags; the raw one counts as rotten flesh, the cooked one as meat in dog food (`dishes/meals #8`). Every rotten food and
+  the Green Pie get the hunger food type with a 20% chance of Poison II for 5 s. Rotten Pie, Green Pie and Suspicious Bacon and
+  Eggs are not saltable (today they are in the salt tag, `food/seasoning #4`).
+- **Assembly (`#49`):** Suspicious Bacon and Eggs follows the bacon and eggs sequenced assembly.
+- **Guardian dishes (`#50`):** Guardian Roll gets a recipe in line with the roll family; Guardian Ratty takes raw guardian fillet
+  for every meat input; Guardian Ross and Sashimi keep their recipes, a more complex and rewarding craft later.
+- **Recipe tweaks (`#51`):** Spiked Tartare takes any cactus steak; Slime Syrup cooking gives 2x; Candied Salad swaps ferns for
+  any cabbage-leaf-like green (dandelion included).
+- **Elsewhere:** Refined Gelatin renamed Gelatin, new texture (`dishes/ingredients #30`); Cave Skewer in the skewer family (built
+  2026-11-04, `dishes/meals #50`), merge with Miner's Delight (`dishes/meals #58`); guardian shell, soup and fugu notes in
+  [ocean_delight.md](ocean_delight.md) 9.
+
 ## 6. File map (planned)
 
 | File | Change |
@@ -471,7 +518,7 @@ before step 6 (recipes name the survivors).
 | `kubejs/server_scripts/tags/cookingtags.js`, `storageblocktags.js` | steps 1, 15 |
 | `kubejs/data/minecraft/loot_tables/entities/{ghast,guardian,endermite}.json`, `kubejs/data/creativeengineering/loot_modifiers/*` + `forge/loot_modifiers/global_loot_modifiers.json` | step 3 |
 | `kubejs/server_scripts/equipment/tipped_arrows.js`, `engineering/potion_buckets.js`, `potion_bottling.js`, `other/jeed_providers.js` | steps 5, 8 |
-| `development/patcherMod`: Dioxiding mix, `IBrewingRecipe` off, Collapsing handler, Gazing cookie air, procedure cancels (D10), tooltip cancel (D11) | steps 5, 8, 9, 16 |
+| `development/creativeCommon`: Dioxiding mix, `IBrewingRecipe` off, Collapsing handler, Gazing cookie air, procedure cancels (D10), tooltip cancel (D11) | steps 5, 8, 9, 16 |
 | `kubejs/generation_scripts/food/food_types.json`, `tools/food_families.py`, `tools/gen_stack_sizes.py`, `gen_can_types.py`, `compost_values.js` | steps 9 to 13 |
 | `kubejs/assets/hostiledelight/lang/en_us.json` or `client_scripts/namechanges.js`, `client_scripts/jei_info.js`, tooltips | steps 14, 16 |
 | Docs: this file, effects.md, potions.md, loot.md, recipes_cooking.md, oven.md, food.md, item_merges.md, stack_sizes.md, TODO, README, changelog | each step |
@@ -526,3 +573,4 @@ before step 6 (recipes name the survivors).
 - 2026-10-23: investigation and plan written (inventory from the jar and decompiled code, overlap search against the
   2026-10-20 name dump and the four other 2026-10-23 jars, 12 upstream bugs, D1 to D16; later the same day: counts corrected, B12 added). Nothing built.
 - 2026-10-31: scratchpad notes translated into TODO rows (ghast foods removal added to `largecontent/mod-additions #6`). No code changed.
+- 2026-11-04: owner scratchpad notes added as 5.1 (settles D3, D6, D7, D9, D11, D12, D13, D15) and TODO rows `largecontent/mod-additions #43` to `#51` in a new `## Hostile Delight` table. No code changed.

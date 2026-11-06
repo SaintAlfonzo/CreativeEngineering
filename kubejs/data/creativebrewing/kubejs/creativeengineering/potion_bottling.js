@@ -28,7 +28,7 @@ var BOTTLES = [
 ]
 
 // ── Fill / bottle / drain the CE potion buckets ──────────────────────────────
-// creativeengineering:{potion,splash_potion,lingering_potion}_bucket carry their contents as
+// creativebrewing:{potion,splash_potion,lingering_potion}_bucket carry their contents as
 // plain {Potion:"..."} NBT (no fluid-handler capability, see potion_buckets.js), so — same as
 // the glass-bottle recipes above — each container needs one concrete recipe per potion x
 // bucket type rather than a generic capability-based fill/drain. One bucket = 1000 mB, vs

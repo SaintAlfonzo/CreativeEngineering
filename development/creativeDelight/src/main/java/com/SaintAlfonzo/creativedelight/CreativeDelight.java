@@ -46,16 +46,27 @@ public class CreativeDelight {
 	public CreativeDelight() {
 		// Mod id was creative_delight up to 2026-11-01 (creative_split.md 7.6): keep the player's values; ids remap through
 		// data/creativedelight/swaps/creative_split.json.
-		com.SaintAlfonzo.creativeengineering.swap.ConfigRename.carryOver("creative_delight-common.toml", "creativedelight-common.toml");
+		com.SaintAlfonzo.creativecommon.swap.ConfigRename.carryOver("creative_delight-common.toml", "creativedelight-common.toml");
+		// [campfire] moved from creativecompat-common.toml (2026-11-04, CDConfig.COMPAT_SECTIONS): carried first, so Compat's
+		// value wins; Compat drops the section from its own file when Forge corrects it.
+		boolean campfireCarried = com.SaintAlfonzo.creativecommon.swap.ConfigRename.carrySections(
+				CDConfig.COMPAT_FILE, CDConfig.FILE, CDConfig.COMPAT_SECTIONS)
+				|| !com.SaintAlfonzo.creativecommon.swap.ConfigRename.mergeSections(
+				CDConfig.COMPAT_FILE, CDConfig.FILE, CDConfig.COMPAT_SECTIONS).isEmpty();
 		// The sections moved from creativeengineering-common.toml at the CD carve (CDConfig.MOVED_SECTIONS): the first boot
 		// copies the player's values in (carry when this file is new, merge when it exists); patcherMod drops them from its own file when
 		// Forge corrects it. Must run before Forge reads the COMMON configs.
-		boolean carried = com.SaintAlfonzo.creativeengineering.swap.ConfigRename.carrySections(
+		boolean carried = com.SaintAlfonzo.creativecommon.swap.ConfigRename.carrySections(
 				CDConfig.OLD_FILE, CDConfig.FILE, CDConfig.MOVED_SECTIONS)
-				|| !com.SaintAlfonzo.creativeengineering.swap.ConfigRename.mergeSections(
+				|| !com.SaintAlfonzo.creativecommon.swap.ConfigRename.mergeSections(
 				CDConfig.OLD_FILE, CDConfig.FILE, CDConfig.MOVED_SECTIONS).isEmpty();
+		// A pack that skipped 1.2.00 still has [campfire] in patcherMod's file (Compat never carried it): take it from there.
+		if (!campfireCarried) com.SaintAlfonzo.creativecommon.swap.ConfigRename.mergeSections(
+				CDConfig.OLD_FILE, CDConfig.FILE, CDConfig.COMPAT_SECTIONS);
 		// The Display and Vintage ports' own files, read once into [display] / [vintage] (plan_creative_delight.md A6).
 		com.SaintAlfonzo.creativedelight.compat.MemberConfigMove.run();
+		// M8: [members] blockheads_additions / incubation_additions became [compartments] switches; read raw below.
+		com.SaintAlfonzo.creativedelight.compat.MemberConfigMove.carryCompartmentSwitches();
 		ModLoadingContext.get().registerConfig(ModConfig.Type.COMMON, CDConfig.SPEC, CDConfig.FILE);
 		// [salt] lives in this file, so its load events reach this bus, not Salt's: Salt rereads its food list here.
 		FMLJavaModLoadingContext.get().getModEventBus().addListener((net.minecraftforge.fml.event.config.ModConfigEvent.Loading e) -> {
@@ -70,11 +81,29 @@ public class CreativeDelight {
 		MinecraftForge.EVENT_BUS.addListener(VillageFarmCrops::onServerAboutToStart);
 		TreatedSticks.register(FMLJavaModLoadingContext.get().getModEventBus());
 		registerKitchen(FMLJavaModLoadingContext.get().getModEventBus());
+		registerCompartments(FMLJavaModLoadingContext.get().getModEventBus());
 
 		List<String> members = CDConfig.MEMBERS;
 		List<String> missing = members.stream().filter(id -> !ModList.get().isLoaded(id)).toList();
 		LOGGER.info("[creativedelight] members: {}{}", members, missing.isEmpty() ? "" : " (NOT loaded: " + missing + ")");
 		members.forEach(CreativeDelight::warnIfNotNested);
+	}
+
+	/**
+	 * The optional compartments folded in at M8 (plan_cb_publish.md 3b): each entry class is named only here, behind its
+	 * guard, so without Cooking for Blockheads, Balm or Incubation the JVM never loads a class that names their types.
+	 */
+	private static void registerCompartments(IEventBus modBus) {
+		if (com.SaintAlfonzo.creativedelight.compat.Compartments.on(com.SaintAlfonzo.creativedelight.compat.Compartments.CFB)) {
+			com.SaintAlfonzo.creativedelight.compat.cookingforblockheads.CfbCompartment.init(modBus);
+		}
+		if (com.SaintAlfonzo.creativedelight.compat.Compartments.on(com.SaintAlfonzo.creativedelight.compat.Compartments.INCUBATION)) {
+			com.SaintAlfonzo.creativedelight.compat.incubation.IncubationCompartment.init(modBus);
+		}
+		modBus.addListener(com.SaintAlfonzo.creativedelight.compat.CompartmentPacks::add);
+		LOGGER.info("[creativedelight] compartments: cookingforblockheads {}, incubation {}",
+				com.SaintAlfonzo.creativedelight.compat.Compartments.on(com.SaintAlfonzo.creativedelight.compat.Compartments.CFB) ? "on" : "off",
+				com.SaintAlfonzo.creativedelight.compat.Compartments.on(com.SaintAlfonzo.creativedelight.compat.Compartments.INCUBATION) ? "on" : "off");
 	}
 
 	/** The kitchen and food Java moved from patcherMod (creative_delight.md 34), registered as patcherMod did. */
@@ -87,8 +116,19 @@ public class CreativeDelight {
 		// Display Delight placed blocks for foods it has none for (compat/DisplayDelightDishes).
 		com.SaintAlfonzo.creativedelight.compat.DisplayDelightDishes.register(modBus);
 		// The oven's leftover slots show on WTHIT through Common's RemainderView (compat/WthitRemainderBuffer).
-		com.SaintAlfonzo.creativeengineering.compat.RemainderView.addStation(
+		com.SaintAlfonzo.creativecommon.compat.RemainderView.addStation(
 				com.SaintAlfonzo.creativedelight.oven.OvenBlockEntity.class);
+		// Campfires: rain puts them out, Comfort nearby (campfire/, mixin.minecraft.CampfireRainMixin; moved from Compat
+		// 2026-11-04). patcherMod's WTHIT line reads the switch and ticks through Common's CampfireRainInfo holder.
+		com.SaintAlfonzo.creativecommon.campfire.CampfireRainInfo.set(
+				() -> CDConfig.SPEC.isLoaded() && CDConfig.CAMPFIRE.rainDouses.get(),
+				() -> CDConfig.SPEC.isLoaded() ? CDConfig.CAMPFIRE.rainOutTicks.get() : 160);
+		if (mods.isLoaded("jei")) {
+			// JEI World Interactions: Campfire Rules rows (WorldRows is JEI-free; JEI loads its plugin later)
+			com.SaintAlfonzo.creativecommon.compat.jei.world.WorldRows.provider(
+					com.SaintAlfonzo.creativecommon.compat.jei.world.WorldTab.CAMPFIRE,
+					com.SaintAlfonzo.creativedelight.compat.jei.CampfireRows::rows);
+		}
 		// Spice of Life lunchboxes: Netherite tier, upgrade/skin/dye/soap recipes, "Slots" tooltip (lunchboxes.md).
 		if (mods.isLoaded("solapplepie")) {
 			com.SaintAlfonzo.creativedelight.lunchbox.LunchboxItems.register(modBus);

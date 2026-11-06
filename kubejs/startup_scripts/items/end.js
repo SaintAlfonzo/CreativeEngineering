@@ -1,3 +1,1 @@
-StartupEvents.registry('item', e => {
-    e.create('creativeengineering:felsic_scrap').displayName('Felsic Scrap')
-})
+// Felsic Scrap: Creative Equipment (kubejs_startup/creativeequipment/items/end_gear.js).

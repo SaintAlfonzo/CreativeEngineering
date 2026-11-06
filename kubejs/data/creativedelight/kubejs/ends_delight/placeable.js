@@ -4,10 +4,60 @@
 // Placeable food tags, ends_delight part. Readers merge every part with global.CD.genMerge('placeable') (creative_delight.md 28.2).
 if (global.CD) global.CD.genPut('placeable', 'ends_delight', {
  "placeable": [
+  "assorted_salad",
+  "bubble_tea",
+  "chorus_flower_tea",
+  "chorus_fruit_milk_tea",
   "chorus_fruit_pie",
+  "chorus_fruit_wine",
+  "dragon_breath_and_chorus_soup",
+  "dragon_breath_soda",
+  "dragon_leg_with_sauce",
+  "dragon_meat_stew",
   "dragon_meat_stew_block",
+  "end_mixed_salad",
+  "ender_congee",
+  "ender_noodle",
+  "enderman_gristle_stew",
+  "grilled_shulker",
   "grilled_shulker_block",
-  "steamed_dragon_egg_block"
+  "roasted_dragon_steak",
+  "shulker_omelette",
+  "shulker_soup",
+  "steamed_dragon_egg",
+  "steamed_dragon_egg_block",
+  "stir_fried_shulker_meat"
+ ],
+ "placeable/sneak": [
+  "assorted_salad",
+  "bubble_tea",
+  "chorus_flower_tea",
+  "chorus_fruit_milk_tea",
+  "chorus_fruit_wine",
+  "dragon_breath_and_chorus_soup",
+  "dragon_breath_soda",
+  "dragon_leg_with_sauce",
+  "dragon_meat_stew",
+  "end_mixed_salad",
+  "ender_congee",
+  "ender_noodle",
+  "enderman_gristle_stew",
+  "grilled_shulker",
+  "roasted_dragon_steak",
+  "shulker_omelette",
+  "shulker_soup",
+  "steamed_dragon_egg",
+  "stir_fried_shulker_meat"
+ ],
+ "placeable_on_plate": [
+  "chorus_flower_pie",
+  "chorus_fruit_popsicle",
+  "end_barbecue_stick",
+  "ender_bamboo_rice",
+  "stuffed_rice_cake"
+ ],
+ "placeable_on_small_plate": [
+  "chorus_fruit_pie_slice"
  ],
  "placeable_on_coaster": [
   "assorted_salad",

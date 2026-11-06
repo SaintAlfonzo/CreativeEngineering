@@ -11,9 +11,9 @@ ServerEvents.tags('item', e => {
 	var t = global.tags
 	var i = global.item
 
-	var general = [
+	var general = [ // G5 begin (filtered by mod, then global.tags)
 		i.garlic_bread, i.banana_bread, i.cantaloupe_bread, i.bread_slice, i.toast,
-	]
+	] // G5 end
 	t.add(e, i.t_bread, general.filter(id => Platform.isLoaded(String(id).split(':')[0])))
 
 	t.add(e, i.t_bread_loaf, ['#forge:bread/wheat', '#forge:bread/corn', '#forge:bread/cauliflower', i.sourdough_bread])

@@ -31,7 +31,8 @@ INST = os.path.abspath(os.path.join(HERE, "../../.."))
 sys.path.insert(0, os.path.join(INST, "tools/perf/eval"))
 
 # packs that stay selected in every config: required, generated from mod content, or the pack's own
-KEEP = ("vanilla", "mod_resources", "Generated Pack", "vinery_upstream_assets", "incubation_additions:")
+KEEP = ("vanilla", "mod_resources", "Generated Pack", "vinery_upstream_assets", "creativedelight:",
+        "creativedelight_compartment_art")
 MAX_BLOCKS = 160
 SITE = {"x": 500, "y": 100, "z": 0, "size": 48}
 VISTA = {"dim": "minecraft:overworld", "x": 0, "y": 140, "z": 0, "yaw": 45, "pitch": 30}

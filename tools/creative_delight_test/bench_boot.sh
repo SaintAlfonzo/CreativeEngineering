@@ -13,7 +13,7 @@ OUT=${1:?OUT dir}
 ROUNDS=${2:-2}
 SRV="$OUT/srv"
 CDJAR=$(ls "$INST"/development/creativeDelight/build/libs/creativedelight-*.jar | grep -v -- '-cdtest\|-own' | head -1)
-PMJAR="$INST/development/patcherMod/build/libs/creativeengineering-1.1.02.jar"
+PMJAR="$INST/development/creativeCommon/build/libs/creativecommon-1.1.02.jar"
 
 mods() {
   cd "$SRV/mods" || exit 1

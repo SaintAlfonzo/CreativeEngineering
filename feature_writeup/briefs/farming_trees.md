@@ -38,7 +38,7 @@ Picking a ripe lemon bush gives 2 to 5 lemons, and cutting a lemon gives 8 slice
   (246). Lemon recipes in the pack: CD
   [fruitsdelight/recipes.js](../../kubejs/data/creativedelight/kubejs/fruitsdelight/recipes.js) (orange jam takes one
   lemon slice, lines 42-45); nothing touches the cutting recipes yet.
-- The compile jar `fruitsdelight-0.5.11.jar` is already in `development/patcherMod/libs/`.
+- The compile jar `fruitsdelight-0.5.11.jar` is already in `development/creativeCommon/libs/`.
 
 ### Build
 1. **Pick count (patcherMod).** The TODO says KubeJS, but the count is in Java. Mixin on

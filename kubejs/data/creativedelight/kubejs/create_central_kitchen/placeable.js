@@ -3,6 +3,9 @@
 // requires: create_central_kitchen
 // Placeable food tags, create_central_kitchen part. Readers merge every part with global.CD.genMerge('placeable') (creative_delight.md 28.2).
 if (global.CD) global.CD.genPut('placeable', 'create_central_kitchen', {
+ "placeable": [
+  "truffle_pie"
+ ],
  "placeable_on_coaster": [
   "pumpkin_pie_slice"
  ]

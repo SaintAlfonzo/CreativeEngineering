@@ -28,6 +28,7 @@ The FD-style stations' leftover slots (pot, kettle, oven; rows #1, #3, #4, #13, 
 | Stepstool | BUILT 2026-10-29 as a worn stool that lifts the player one block ([stepstool.md](stepstool.md)); scratch server PASSED r1031 (SQ-STL-01, -02); client and play open | `#17` |
 | CfB oven as a stove: Farmer's Delight heat source while it burns fuel; cook surface raised to the block top (2.10) | BUILT 2026-11-03 (blockheadsAdditions; Creative Delight jar built and installed 2026-11-04 with the wood cutting boards); scratch SQ-CFS queued, CQ-CFS-01 in game | `#28` |
 | Wood cutting boards: oak, birch, jungle, acacia, dark oak, mangrove, crimson, warped; FD's board is the spruce one (2.11) | BUILT 2026-11-04 (repackedFarmers, KubeJS; Creative Delight jar installed); scratch SQ-CBW-01 to -03 queued, CQ-CBW-01 in game | `#38` |
+| CfB additions as an optional Creative Delight compartment (M8): no `blockheads_additions` mod, racks and baskets `creativedelight:*` with old-id swap, CD loads without CfB and Balm (section 9) | BUILT 2026-11-04 (Creative Delight 1.1.0, not installed); scratch SQ-CDFO-01 to -03 queued, CQ-CDFO-01 in game | plan_cb_publish.md M8 |
 | Scythe | Planned | `#16` |
 
 - **Pending:** the 1.1.01 parts (oven fuel, sink, board, corner) deployed 2026-10-22, the counter toppers with 1.1.03,
@@ -40,8 +41,9 @@ The FD-style stations' leftover slots (pot, kettle, oven; rows #1, #3, #4, #13, 
   [cookingforblockheads/kitchen.js](../kubejs/data/creativedelight/kubejs/cookingforblockheads/kitchen.js);
   [cooking/mortar.js](../kubejs/data/creativedelight/kubejs/creativeengineering/mortar.js) and NCH `mortar` / `foodGrinding`;
   [tools/gen_mortar_catalog.py](../tools/gen_mortar_catalog.py).
-- **Knobs:** `config/blockheads_additions-common.toml` `[kitchen] cuttingBoardOffsetX / Y / Z` and `plateOffsetX / Y / Z`
-  (pixels; Y default -1; in `creativeengineering-common.toml` until 2026-10-31, same keys);
+- **Knobs:** `config/creativedelight-common.toml` `[cookingforblockheads] cuttingBoardOffsetX / Y / Z` and `plateOffsetX / Y / Z`
+  (pixels; Y default -1; in `blockheads_additions-common.toml [kitchen]` until M8 2026-11-04 and
+  `creativeengineering-common.toml` until 2026-10-31, same keys);
   `config/cookingforblockheads-common.toml` `ovenRequiresCookingOil = false`, `sinkRequiresWater = false` (both also
   in `configs_edited/root_config/`).
 
@@ -107,7 +109,7 @@ water".
   `CuttingBoardRendererOffsetMixin` (client) pushes and translates FD's `CuttingBoardRenderer.render`, so the item on
   the board moves too; `CoasterRendererOffsetMixin` (client) does the same for the port's `CoasterBlockEntityRenderer`,
   which draws the coaster itself and its drinks (no block model). The port jar is a compileOnly lib in
-  `development/patcherMod/libs/` (copied from `mods/`). The hitbox and collision stay where they were (1 px above).
+  `development/creativeCommon/libs/` (copied from `mods/`). The hitbox and collision stay where they were (1 px above).
 - Offset config `[kitchen]` in pixels, -8 to 8: `cuttingBoardOffsetX / Y / Z` for the board, `plateOffsetX / Y / Z`
   for the plates, plated foods and the coaster (Y -1, X and Z 0 for both). X and Z in the frame of a counter facing
   north (+X east, +Z toward its back), turned with the counter's `facing` (south (-x, -z), east (-z, x), west
@@ -137,7 +139,7 @@ water".
   faces (the bottom shows over the door's gap when it swings open), textured with the white inside of CfB's own
   `fridge_side` (uv 1-15 on top and bottom, a 14 x 3 strip on the sides) with `tintindex` 0, so a dyed fridge's box
   takes the dye from CfB's block colour like the body.
-- Since 2026-10-31: the box is our own model `blockheads_additions:block/fridge_top_fill` (written by
+- Since 2026-10-31: the box is our own model `creativedelight:block/fridge_top_fill` (`blockheads_additions:` until M8; written by
   `tools/gen_cfb_racks.py`), registered as an additional model (so its texture is stitched).
   `client/FridgeTopFill` wraps the fridge's baked model for every `model_type=large_upper` state in
   `ModelEvent.BakingCompleted` and adds the box's quads in the fridge's first render pass. CfB's fridge model is a
@@ -450,32 +452,55 @@ Not covered offline: anything drawn (board offset, fridge), the corner's GUI on 
 - 2026-11-02: deep scan 2026-11-02: At a glance and 2.7 to 2.9 updated from the scratch runs (SQ-KT-21 r1031;
   SQ-KT-22 to -25 2026-11-01; SQ-KT-02, SQ-FCB-05, -07, -08 r1102b). No KT- test run in game yet.
 - 2026-11-04: wood cutting boards built (2.11, `cooking/kitchen #38`); counter offset now covers the stone boards too.
+- 2026-11-04: M8 (plan_cb_publish.md 3b): blockheadsAdditions folded into Creative Delight's own jar as the optional
+  Cooking for Blockheads compartment (section 9); racks and baskets renamed to `creativedelight:*` (swap list
+  `compartments.json`), config moved to `[cookingforblockheads]`. CD 1.1.0 built, not installed. SQ-CDFO-01 to -03, CQ-CDFO-01.
 
-## 9. Creative Delight member blockheadsAdditions
+## 9. Creative Delight's Cooking for Blockheads compartment (was the blockheadsAdditions member)
 
-- Project `development/creativeDelight/members/blockheads/` (`:blockheadsAdditions`, mod id `blockheads_additions`,
-  "Cooking for Blockheads Additions (Creative Delight)"), nested in the Creative Delight jar (`bundle_members`). New
-  blocks register under `cookingforblockheads:` (memory `arr-mod-overrides-route`).
+- **Since M8 (2026-11-04, plan_cb_publish.md 3b, decisions D3 and D6):** an optional compartment of Creative Delight's own
+  jar, no longer a nested mod. The mod id `blockheads_additions` and the project `:blockheadsAdditions`
+  (`development/creativeDelight/members/blockheads/`) are gone. Creative Delight loads without Cooking for Blockheads or
+  Balm; with both (and `[compartments] cookingforblockheads = true` in `creativedelight-common.toml`, read at startup)
+  everything works as before.
+  - Code: `compat/cookingforblockheads/` (`CfbCompartment` entry, `kitchen/`, `rack/`, `client/`) and
+    `mixin/cookingforblockheads/` (the oven, corner and `BlockStateCounterTopperMixin`), `mixin/farmersdelight/
+    CuttingBoardRendererOffsetMixin`, `mixin/brewinandchewin/CoasterRendererOffsetMixin` (Brewin' is Creative Brewing's).
+  - Load guard: `CreativeDelight.registerCompartments` calls `CfbCompartment.init` only when `compat/Compartments` says
+    the compartment is on (CfB and Balm loaded, switch on). Only those classes name CfB types; their listeners are
+    registered from `init` (no `@Mod.EventBusSubscriber`). `CDMixinPlugin` applies the mixins only with the compartment on.
+  - Assets and loot tables: the built-in pack `packs/cookingforblockheads/` in the jar (`compat/CompartmentPacks`, added
+    only with the compartment on), written by `tools/gen_cfb_racks.py`.
+  - Ids: the racks and baskets are `creativedelight:<wood>_spice_rack`, `_tool_rack`, `_fruit_basket` (were
+    `cookingforblockheads:<wood>_*`); `data/creativedelight/swaps/compartments.json` remaps old saves, and the merges of
+    CfB's own rack, tool rack and basket name the new oak ids. CfB's namespace is no longer used for any of our files.
+  - Config: `[cookingforblockheads]` in `creativedelight-common.toml` (the six counter offsets; were
+    `blockheads_additions-common.toml [kitchen]`, carried once by `MemberConfigMove`). The old `[members]
+    blockheads_additions` switch became `[compartments] cookingforblockheads` (value carried once).
+  - Scripts: `global.CD.on('cookingforblockheads')` is the compartment test (`kitchen.js`, the oven tooltip lines,
+    `swap_merges.js`); rack recipes skip a wood whose slab mod is absent.
 - **Licence route:** Cooking for Blockheads 13.3.4 is All Rights Reserved (its `LICENSE`: "All Rights Reserved,
   Copyright (c) 2023 BlayTheNinth"); its permissions page (mods.twelveiterations.com/permissions, read 2026-10-31)
   allows modpack use but no rehosting and no publicly published modified versions. It cannot be repacked like the MIT
   members, and a Miner's-style rewrite of the whole mod (with Balm) is out of proportion, so CfB stays its own jar in
-  `mods/` (mandatory dependency, `ordering="AFTER"`) and the member ships only our code (GPLv3), our art and our data.
-  The build guard `checkNoArrResources` (`resource_guard_jars=mods/cookingforblockheads-*.jar`) fails on any path the
-  CfB jar also ships; lang lives under `assets/blockheads_additions/lang/` for that reason (lang loads from every
-  namespace). Models name CfB's models as parents and its textures by id, never copy them.
-- **Moved here from patcherMod (2026-10-31), behaviour unchanged:** `CfbOvenFuelMixin`, `CfbOvenSmokingMixin`,
+  `mods/` (optional dependency of CD, `ordering="AFTER"`) and the compartment ships only our code (GPLv3), our art and
+  our data. The build guards `checkNoArrResources` (jar root, `resource_guard_jars=mods/cookingforblockheads-*.jar` in
+  CD's `gradle.properties`) and `checkNoArrPackResources` (CD `build.gradle`, the files under `packs/*/`) fail on any
+  path the CfB jar also ships (tag files excepted: they merge by path). Models name CfB's models as parents and its
+  textures by id, never copy them.
+- **Moved from patcherMod (2026-10-31), behaviour unchanged:** `CfbOvenFuelMixin`, `CfbOvenSmokingMixin`,
   `CfbCornerStorageMixin`, `CfbCornerUseMixin`, `CfbCornerStorage` (now `kitchen/CornerStorage`),
   `CounterToppers`, `BlockStateCounterTopperMixin`, `CuttingBoardRendererOffsetMixin`, `CoasterRendererOffsetMixin`,
-  `CEConfig.Kitchen` (now `BAConfig`, `blockheads_additions-common.toml`, same keys). Kept ids: the corner capability
+  `CEConfig.Kitchen` (then `BAConfig`, now `CDConfig.CFB`, same keys). Kept ids: the corner capability
   `creativeengineering:corner_storage` and the tags `#creativeengineering:counter_supports` / `counter_toppers`. The
-  pack's own Display Delight dishes are now recognised by their Display Delight block class instead of patcherMod's
-  dish list. The counter tags moved from the pack's `blocktags.js` to `cookingforblockheads/kitchen.js`.
+  pack's own Display Delight dishes are recognised by their Display Delight block class. The counter tags live in
+  `cookingforblockheads/kitchen.js`.
 - **New:** wood racks (2.7), fridge fill in code (2.4), oven as a stove (2.10).
-- **Build:** `./gradlew :blockheadsAdditions:build --offline`, ships through `:creativeDelight:installToMods`. Compiles
-  against `libs/` (CfB 13.3.4, Balm 4.6.0, Farmer's Delight 1.2.4; git-ignored, copied from `patcherMod/libs/`) and
-  `:backportedBrewin`. patcherMod and Creative Delight must be installed together: an old patcherMod beside this
-  member would attach the corner capability twice.
+- **Build:** `./gradlew :creativeDelight:build --offline`, install `:creativeDelight:installToMods`. Compiles against
+  CD's `libs/` (CfB 13.3.4 and Balm 4.6.0 deobf, git-ignored, copied from `creativeCommon/libs/`), Creative Common's
+  `libs/` and `:backportedBrewin`.
 - Still in the pack, not moved: CfB configs (`cookingforblockheads-common.toml`), milk jar bottles
   (`cookingforblockheads/milk_jar.js`) and tooltips (`assets/creativedelight/kubejs/cookingforblockheads/client.js`)
   were already in the Creative Delight trees.
+
+2026-11-05: the 19 fruit basket and 38 rack textures no longer ship; Creative Delight builds them on the client from the installed planks and Cooking for Blockheads' own rack art ([creative_delight.md](creative_delight.md) 40.1). `gen_cfb_racks.py` writes models, blockstates, loot and lang only. Tests CQ-LCA-01, -02.

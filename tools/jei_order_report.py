@@ -43,7 +43,10 @@ def md(s):
 def main():
     check = '--check' in sys.argv
     if not REPORT.exists():
-        sys.exit(f'{REPORT.relative_to(INSTANCE)} not found: set CEConfig [jei] orderReport = true and join a world')
+        # Opt-in report: no input is a skip (exit 2, a warnExit code in generators.json), not a failure.
+        print(f'skipped: {REPORT.relative_to(INSTANCE)} not found; set [jei] orderReport = true in '
+              f'config/creativecommon-common.toml and join a world to write it')
+        sys.exit(2)
     data = json.loads(REPORT.read_text(encoding='utf-8'))
     entries = data['entries']
     problems = data.get('problems', {})

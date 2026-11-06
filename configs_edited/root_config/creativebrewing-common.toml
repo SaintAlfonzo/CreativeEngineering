@@ -36,8 +36,8 @@
 	#by KubeJS (startup_scripts/cooking/potions.js). Server side, read live.
 	removed = ["upgrade_aquatic:restfulness", "upgrade_aquatic:insomnia", "alexsmobs:power_down"]
 
-#Tuning for creativeengineering:magic_resistance's damage reduction against
-#the creativeengineering:magic damage tag (the same tag the shields' MAGIC column
+#Tuning for creativebrewing:magic_resistance's damage reduction against
+#the creativecommon:magic damage tag (the same tag the shields' MAGIC column
 #reads: potions, poison, evoker fangs, thorns, sonic booms, curses, life drain) and
 #against the periodic damage of the effects listed in negatedEffectTicks.
 [magic_resistance]

@@ -25,7 +25,7 @@ from .common import (EXPORTED, KUBEJS_DATA, MODS, ROOT, block, block_tag, entity
 
 SUPP_CONFIG = ROOT / 'config' / 'supplementaries-common.toml'
 DELIGHTFUL_CONFIG = ROOT / 'config' / 'delightful-common.toml'
-LIB = ROOT / 'kubejs' / 'startup_scripts' / '_lib'
+LIB = ROOT / 'development/creativeCommon/src/main/resources/kubejs_startup/creativecommon/_lib'
 JAR = 'supplementaries:jar'
 UNIT_MB = 250          # one soft fluid unit (a bottle) in mB; a bucket is 4
 

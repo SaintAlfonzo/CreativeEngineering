@@ -52,11 +52,11 @@ def sha1Of = { File f -> java.security.MessageDigest.getInstance('SHA-1').digest
 def sha1OfBytes = { byte[] b -> java.security.MessageDigest.getInstance('SHA-1').digest(b).encodeHex().toString() }
 
 dependencies {
-    // Overlay code may name upstream classes (mixin targets); the upstream jar is SRG-named, like patcherMod's libs/.
+    // Overlay code may name upstream classes (mixin targets); the upstream jar is SRG-named, like Creative Common's libs/.
     compileOnly files(upstreamFile)
 }
 
-// Overlay mixins use SRG member names with remap = false (no refmap), as patcherMod's do.
+// Overlay mixins use SRG member names with remap = false (no refmap), as Creative Common's do.
 tasks.named('compileJava', JavaCompile).configure {
     options.compilerArgs << '-AdisableTargetValidator=true'
 }

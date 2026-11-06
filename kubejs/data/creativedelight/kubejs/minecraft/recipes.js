@@ -26,6 +26,7 @@ ServerEvents.recipes(e => {
 		// Drinks: the drink food type, plus fluid drinks and the two drinks with no food type, by recipe id. Recipes that need
 		// real sugar (powdered sugar, sugar cube, powdered sugar bucket) are script-added on i.sugar, so no pass sees them.
 		// The passes walk only the recipes loaded from data; scripts write the tags themselves.
+		// G5 begin: recipe filters (ids, types, mods) handed only to R.replaceInput
 		var BREWING = [{ type: 'vinery:wine_fermentation' }, { type: 'brewinandchewin:fermenting' }]
 		var PLAIN = [
 			{ mod: 'botania' }, { mod: 'prettypipes' }, { mod: 'securitycraft' },
@@ -39,6 +40,7 @@ ServerEvents.recipes(e => {
 		].concat(['chocolate', 'glowberry', 'pumpkin', 'strawberry', 'vanilla'].map(m => 'create_dd:mixing/flowing_' + m + '_milkshake'),
 			['hawberry_tea', 'lychee_cherry_tea', 'mango_tea', 'mangosteen_tea', 'peach_tea', 'lemon_juice', 'orange_juice',
 				'pear_juice'].map(d => 'fruitsdelight:mixing/flowing_' + d)).map(id => ({ id: id })))
+		// G5 end
 		var swap = (only, not, tag) => R.replaceInput(only.map(x => Object.assign(not.length ? { input: i.sugar, not: not } : { input: i.sugar }, x)),
 			i.sugar, tag, e)
 		swap(BREWING, [], i.any_sweetener_brewing)

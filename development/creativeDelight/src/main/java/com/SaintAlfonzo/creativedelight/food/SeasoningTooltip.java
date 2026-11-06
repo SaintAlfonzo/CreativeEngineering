@@ -34,7 +34,8 @@ public final class SeasoningTooltip {
         }
     }
 
-    private static Component line(ResourceLocation id) {
+    /** The line a food seasoned with {@code id} shows; also the seasoning item's own line (Barbeque's Delight SeasoningItem, by reflection). */
+    public static Component line(ResourceLocation id) {
         Seasonings.Definition def = Seasonings.get(id);
         // The lang key comes from Creative Delight's seasoning_lang.js; without it (TODO food/seasoning #16) the line
         // showed the raw key, so the script's name stands in

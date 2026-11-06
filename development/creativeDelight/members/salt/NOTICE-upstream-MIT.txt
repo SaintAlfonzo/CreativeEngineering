@@ -2,8 +2,9 @@ Salt 1.19.2-1.2.4.1 by mortuusars, repacked in repackedSalt (Creative Delight).
 Source: https://github.com/mortuusars/Salt (release jar salt-1.19.2-1.2.4.1; the jar ships no LICENSE file, its
 mods.toml declares "MIT"; the copyright year was not checked against the repository, 2026-11-02)
 The classes and resources of the upstream jar are distributed under the MIT License below. The overlay added for
-Creative Delight (mods.toml, and io/github/mortuusars/salt/Dissolving, a modified copy of the upstream class) is
-GNU GPL3, like the rest of the pack's code; the modified Dissolving also stays under the upstream MIT terms.
+Creative Delight (mods.toml, and modified copies of the upstream classes io/github/mortuusars/salt/Dissolving,
+Melting (with its inner class SaltItemDispenseBehavior) and Configuration) is GNU GPL3, like the rest of the pack's
+code; the modified classes also stay under the upstream MIT terms.
 
 MIT License
 

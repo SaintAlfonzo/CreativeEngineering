@@ -1,7 +1,7 @@
 package com.SaintAlfonzo.creativedelight.compat.jei;
 
-import com.SaintAlfonzo.creativeengineering.compat.jei.RecipeRows;
-import com.SaintAlfonzo.creativeengineering.compat.jei.JeiIcons;
+import com.SaintAlfonzo.creativecommon.compat.jei.RecipeRows;
+import com.SaintAlfonzo.creativecommon.compat.jei.JeiIcons;
 import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.HashSet;
@@ -13,7 +13,7 @@ import javax.annotation.ParametersAreNonnullByDefault;
 
 import org.slf4j.Logger;
 
-import com.SaintAlfonzo.creativeengineering.CEConfig;
+import com.SaintAlfonzo.creativecommon.CommonConfig;
 import com.SaintAlfonzo.creativedelight.CreativeDelight;
 import com.mojang.logging.LogUtils;
 
@@ -113,7 +113,7 @@ public class CanPagesJEI implements IModPlugin {
     @Override
     public void registerRecipes(IRecipeRegistration registration) {
         moved = Set.of();
-        if (Minecraft.getInstance().level == null || !CEConfig.JEI.canCategories.get()) {
+        if (Minecraft.getInstance().level == null || !CommonConfig.JEI.canCategories.get()) {
             return;
         }
         try {

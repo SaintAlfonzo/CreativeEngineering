@@ -36,6 +36,7 @@
     "mca.McaHarvestAnyFarmlandMixin",
     "forge.ItemStackHandlerSlotRuleMixin",
     "minecraft.AttachedStemExtraFruitMixin",
+    "minecraft.CampfireRainMixin",
     "minecraft.FarmBlockUnderCropsMixin",
     "minecraft.ItemStackCanServingsMixin",
     "minecraft.MobCobPipeSlotMixin",
@@ -48,7 +49,19 @@
     "quark.QuarkHoeAreaHarvestMixin",
     "quark.QuarkHoeHarvestMixin",
     "quark.QuarkOwnPickMixin",
-    "the_dirty_stuff.TobaccoPlacementMixin"
+    "the_dirty_stuff.TobaccoPlacementMixin",
+    "cookingforblockheads.BlockStateCounterTopperMixin",
+    "cookingforblockheads.CfbOvenFuelMixin",
+    "cookingforblockheads.CfbOvenSmokingMixin",
+    "cookingforblockheads.CfbCornerStorageMixin",
+    "cookingforblockheads.CfbCornerUseMixin",
+    "cookingforblockheads.CfbOvenLitMixin",
+    "cookingforblockheads.CfbOvenLitSyncMixin",
+    "cookingforblockheads.CfbOvenShapeMixin",
+    "alexsmobs.EntityEmuEggLayerMixin",
+    "untitledduckmod.DuckEntityEggLayerMixin",
+    "untitledduckmod.GooseEntityEggLayerMixin",
+    "incubation.LayEggInNestGoalMixin"
   ],
   "client": [
     "farmersdelight.CookingPotScreenRemainderMixin",
@@ -58,7 +71,12 @@
     "farmersrespite.KettleJeiBaseMixin",
     "farmersdelight.CookingPotMealTooltipMixin",
     "farmersrespite.KettleMealTooltipMixin",
-    "minecraft.SeasonedItemModelMixin"
+    "minecraft.SeasonedItemModelMixin",
+    "create_central_kitchen.CckCookingGuideMealTooltipMixin",
+    "create_central_kitchen.CckBrewingGuideMealTooltipMixin",
+    "farmersdelight.CuttingBoardRendererOffsetMixin",
+    "brewinandchewin.CoasterRendererOffsetMixin",
+    "cookingforblockheads.CfbOvenRendererMixin"
   ],
   "server": [],
   "injectors": {

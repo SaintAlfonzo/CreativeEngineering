@@ -245,7 +245,7 @@ CIC-10; 16 before any player-side test.
 | `kubejs/server_scripts/tags/*.js` (through `global.tags`), `blocktags.js` | steps 2, 15 |
 | `development/creativeDelight/src/main/resources/kubejs_startup/cozys-improved-cats/` (recipes, compost) | steps 4, 11 |
 | `kubejs/generation_scripts/food/food_types.json`, `tools/food_families.py`, `tools/gen_stack_sizes.py`, `gen_can_types.py` | steps 8 to 10 |
-| `development/patcherMod`: DI respawn skip, DI cat interact cancel, Dreamer bottles (plus B1 guard if needed) | step 12 |
+| `development/creativeCommon`: DI respawn skip, DI cat interact cancel, Dreamer bottles (plus B1 guard if needed) | step 12 |
 | `kubejs/client_scripts/tooltips.js`, `jei_info.js` | step 13 |
 | `config/cozys_improved_cats-common.toml` + `configs_edited/root_config/` copy | step 16 |
 | `mod_sides.md`; docs: this file, loot.md, mob_spawns.md, food.md, stack_sizes.md, cans.md, TODO, README, changelog | each step |

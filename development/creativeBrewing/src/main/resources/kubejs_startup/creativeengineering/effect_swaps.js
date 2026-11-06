@@ -15,14 +15,17 @@
 //   Neapolitan's Agility -> Vinery's Climbing, same durations (potions/effects #9). The banana cake blocks and anything
 //   else that gives Agility are swapped when applied by Creative Brewing ([effects] remap); this fixes the tooltips.
 var ef = global.effect
-global.foodEffectSwaps = [
-	{ items: ['coffee', 'milk_coffee', 'honey_coffee', 'chocolate_coffee', 'dark_coffee', 'syrup_coffee', 'pumpkin_coffee',
-		'cherry_blossom_coffee'],
-		from: [ef.speed, ef.haste], to: ef.caffeinated },
-	{ items: ['neapolitan_banana', 'banana_bread', 'dried_banana', 'banana_ice_cream', 'banana_milkshake',
-		'strawberry_banana_smoothie', 'adzuki_curry'],
-		from: [ef.agility], to: ef.climbing },
-]
+global.foodEffectSwaps = []
+if (global.has('farmersrespite')) {
+	global.foodEffectSwaps.push({ items: ['coffee', 'milk_coffee', 'honey_coffee', 'chocolate_coffee', 'dark_coffee',
+		'syrup_coffee', 'pumpkin_coffee', 'cherry_blossom_coffee'],
+		from: [ef.speed, ef.haste], to: ef.caffeinated })
+}
+if (global.has('neapolitan')) {
+	global.foodEffectSwaps.push({ items: ['neapolitan_banana', 'banana_bread', 'dried_banana', 'banana_ice_cream',
+		'banana_milkshake', 'strawberry_banana_smoothie', 'adzuki_curry'],
+		from: [ef.agility], to: ef.climbing })
+}
 
 ItemEvents.modification(e => {
 	var i = global.item
@@ -58,6 +61,7 @@ ItemEvents.modification(e => {
 // Coffee Cake loses Speed and its Caffeinated goes from 20 s to 30 s; Rose Hip Pie Slice loses Speed. Hunger and
 // saturation unchanged.
 ItemEvents.modification(e => {
+	if (!global.has('farmersrespite')) return
 	var i = global.item
 	var $SliceRegistries = Java.loadClass('net.minecraftforge.registries.ForgeRegistries')
 	var $SliceRL = Java.loadClass('net.minecraft.resources.ResourceLocation')

@@ -25,6 +25,11 @@ import java.util.Map;
  * <li>{@code [members]}: one switch per nested member, default on; off makes CD's scripts skip that member's rows
  * ({@code global.CD.on(id)}), the member's own data stays. The base members ({@link #BASE_MEMBERS}, Farmer's
  * Delight) get no switch: every other member needs them, so they are always on.</li>
+ * <li>{@code [compartments]}: one switch per optional Java compartment folded into CD's own jar (plan_cb_publish.md 3b,
+ * M8): {@code cookingforblockheads} and {@code incubation}, default on. Read raw at construction and by the mixin plugin
+ * ({@code compat.Compartments}), so a change needs a restart. Off: as if the mod were absent (no blocks, mixins, packs or
+ * script rows). {@code [cookingforblockheads]} and {@code [incubation]} hold their settings (were
+ * blockheads_additions-common.toml and incubation_additions-common.toml, carried over once).</li>
  * <li>{@code [qol]}: one switch per QoL feature of section 8 ({@link #QOL}), default on; scripts read it through
  * {@code global.CD.qol(id)}, Java through {@link #qol}.</li>
  * <li>{@code [worldgen]}: one switch per worldgen system CD owns ({@link #WORLDGEN}, creative_delight.md 24), default on;
@@ -71,6 +76,14 @@ public final class CDConfig {
 	public static final List<String> MOVED_SECTIONS = List.of("crop_growth", "dandelion_maturing", "crop_drops", "stem_fruit",
 			"canning", "cooking", "perf");
 
+	/**
+	 * Sections moved here from Creative Compat's file (2026-11-04, creative_split.md 7.9 step 1): {@code [campfire]}, keys,
+	 * comments and defaults unchanged. Carried from {@link #COMPAT_FILE} first, then from {@link #OLD_FILE} for a pack that
+	 * skipped 1.2.00 (where Compat first held it).
+	 */
+	public static final String COMPAT_FILE = "creativecompat-common.toml";
+	public static final List<String> COMPAT_SECTIONS = List.of("campfire");
+
 	public static final ForgeConfigSpec SPEC;
 	public static final CropGrowth CROP_GROWTH;
 	public static final CropDrops CROP_DROPS;
@@ -80,6 +93,9 @@ public final class CDConfig {
 	public static final Canning CANNING;
 	public static final Perf PERF;
 	public static final Food FOOD;
+	public static final Campfire CAMPFIRE;
+	public static final Cfb CFB;
+	public static final Incubation INCUBATION;
 	private static final Map<String, ForgeConfigSpec.BooleanValue> MEMBER_SWITCHES = new LinkedHashMap<>();
 	private static final Map<String, ForgeConfigSpec.BooleanValue> QOL = new LinkedHashMap<>();
 	private static final Map<String, ForgeConfigSpec.BooleanValue> WORLDGEN = new LinkedHashMap<>();
@@ -92,6 +108,17 @@ public final class CDConfig {
 			if (BASE_MEMBERS.contains(id)) continue;
 			MEMBER_SWITCHES.put(id, b.define(id, true));
 		}
+		b.pop();
+
+		b.comment("One switch per optional Creative Delight compartment (Java, assets and data folded into this jar).",
+				"Each works only with its mod installed; off = as if that mod were absent: no blocks, no changes to it,",
+				"no recipes or loot. Read at startup: restart to apply. Old saves keep the blocks only while it is on.").push("compartments");
+		b.comment("Cooking for Blockheads additions: wood spice racks, tool racks and fruit baskets, kitchen corner storage,",
+				"oven fuel and smoking, the full-height fridge, counter-top placement. Needs Cooking for Blockheads and Balm.")
+				.define(com.SaintAlfonzo.creativedelight.compat.Compartments.CFB, true);
+		b.comment("Incubation additions: emu nests (Alex's Mobs), duck and goose nests and egg crates (Untitled Duck Mod),",
+				"the goose golden egg (with Vintage Delight). Needs Incubation.")
+				.define(com.SaintAlfonzo.creativedelight.compat.Compartments.INCUBATION, true);
 		b.pop();
 
 		b.comment("One switch per Creative Delight QoL feature (feature_writeup/creative_delight.md 8). Off: that feature",
@@ -129,6 +156,9 @@ public final class CDConfig {
 		COOKING = new Cooking(b);
 		PERF = new Perf(b);
 		FOOD = new Food(b);
+		CAMPFIRE = new Campfire(b);
+		CFB = new Cfb(b);
+		INCUBATION = new Incubation(b);
 		SPEC = b.build();
 		com.SaintAlfonzo.creativedelight.compat.SaltConfigBridge.bind(SPEC);
 	}
@@ -179,6 +209,16 @@ public final class CDConfig {
 					"Features.DisableTakeAllInteratction", "!display.takeAll",
 					"Features.DisableHidePlateInteratction", "!display.axeHidesPlates",
 					"Features.DisablePutPlateInteratction", "!display.platesPutBack"),
+			// The two compartments folded in at M8 (plan_cb_publish.md 3b): their member files, every key.
+			"blockheads_additions-common.toml", Map.of(
+					"kitchen.cuttingBoardOffsetX", "cookingforblockheads.cuttingBoardOffsetX",
+					"kitchen.cuttingBoardOffsetY", "cookingforblockheads.cuttingBoardOffsetY",
+					"kitchen.cuttingBoardOffsetZ", "cookingforblockheads.cuttingBoardOffsetZ",
+					"kitchen.plateOffsetX", "cookingforblockheads.plateOffsetX",
+					"kitchen.plateOffsetY", "cookingforblockheads.plateOffsetY",
+					"kitchen.plateOffsetZ", "cookingforblockheads.plateOffsetZ"),
+			"incubation_additions-common.toml", Map.of(
+					"goose.goldenEggChance", "incubation.goldenEggChance"),
 			"vintagedelight-common.toml", Map.of(
 					"worldgen.magicVineConvertsDirtToLushGrass", "vintage.worldgen.magicVineConvertsDirtToLushGrass",
 					"pickling_jar.remainderBuffer", "vintage.pickling_jar.remainderBuffer",
@@ -256,6 +296,16 @@ public final class CDConfig {
 		ForgeConfigSpec.BooleanValue v = WORLDGEN.get(id);
 		if (v == null) return false;
 		return !SPEC.isLoaded() || v.get();
+	}
+
+	/** True if {@code id} names one of the optional compartments ({@code cookingforblockheads}, {@code incubation}). */
+	public static boolean isCompartment(String id) {
+		return com.SaintAlfonzo.creativedelight.compat.Compartments.isCompartment(id);
+	}
+
+	/** True if compartment {@code id} is active: its mods are loaded and its switch was on at startup. */
+	public static boolean compartment(String id) {
+		return com.SaintAlfonzo.creativedelight.compat.Compartments.on(id);
 	}
 
 	/** True if {@code modId} is one of the nested members. */
@@ -640,4 +690,106 @@ public final class CDConfig {
             return SPEC.isLoaded() && grilledCountsTowardMax.get();
         }
     }
+
+	/**
+	 * Rain puts out campfires ({@code campfire.CampfireRain}, {@code mixin/minecraft/CampfireRainMixin}) and the
+	 * Comfortable Campfires port ({@code campfire.CampfireComfort}). Unlit Campfire still places them unlit but burns them
+	 * forever with its own rain check off. Read every tick. Moved from Creative Compat's file 2026-11-04 ({@link #COMPAT_SECTIONS}).
+	 */
+	public static final class Campfire {
+		public final ForgeConfigSpec.BooleanValue rainDouses;
+		public final ForgeConfigSpec.IntValue rainOutTicks;
+		public final ForgeConfigSpec.BooleanValue comfort;
+		public final ForgeConfigSpec.BooleanValue useComfort;
+		public final ForgeConfigSpec.IntValue comfortDistance;
+		public final ForgeConfigSpec.IntValue comfortSeconds;
+		public final ForgeConfigSpec.IntValue comfortEveryTicks;
+
+		private Campfire(ForgeConfigSpec.Builder b) {
+			b.comment(
+					"A lit campfire in #creativecommon:campfire/rain_douses (the plain campfire; not soul or",
+					"Tinted campfires) goes out in open rain, unless it sits on a block in",
+					"#creativecommon:campfire/rain_proof_fuel (coal and charcoal blocks). Otherwise campfires",
+					"burn forever. Server side."
+			).push("campfire");
+
+			rainDouses = b.comment("Master on/off switch. Off = rain never puts a campfire out.")
+					.define("rainDouses", true);
+
+			rainOutTicks = b.comment(
+					"Ticks of unbroken rain before the campfire goes out (160 = 8 s, Unlit Campfire's default).",
+					"Leaving the rain or being on a fuel block resets the count."
+			).defineInRange("rainOutTicks", 160, 1, 72000);
+
+			comfort = b.comment(
+					"Comfortable Campfires port (campfire.CampfireComfort): players near a lit campfire get Farmer's",
+					"Delight's Comfort, refreshed while under 3 s are left."
+			).define("comfort", true);
+			useComfort = b.comment("Comfort when Farmer's Delight is present; false (or no Farmer's Delight) = Regeneration, as the mod.")
+					.define("useComfort", true);
+			comfortDistance = b.comment("Blocks around (and above) the campfire that count as near (the mod's 3).")
+					.defineInRange("comfortDistance", 3, 1, 16);
+			comfortSeconds = b.comment("Seconds of Comfort per application (the mod's 5).")
+					.defineInRange("comfortSeconds", 5, 1, 600);
+			comfortEveryTicks = b.comment(
+					"A campfire looks for players once per this many ticks (the mod checked every tick; campfires are",
+					"spread over the period). 1 = every tick."
+			).defineInRange("comfortEveryTicks", 20, 1, 200);
+
+			b.pop(); // campfire
+		}
+	}
+
+	/**
+	 * {@code [cookingforblockheads]}: the counter-top offsets of {@code compat.cookingforblockheads.kitchen.CounterToppers}
+	 * (were blockheads_additions-common.toml {@code [kitchen]}, and before 2026-10-31 creativeengineering-common.toml; same
+	 * keys and defaults, TODO cooking/kitchen #8, #20). Defined whether or not the compartment is on.
+	 */
+	public static final class Cfb {
+		public final ForgeConfigSpec.DoubleValue cuttingBoardOffsetX;
+		public final ForgeConfigSpec.DoubleValue cuttingBoardOffsetY;
+		public final ForgeConfigSpec.DoubleValue cuttingBoardOffsetZ;
+		public final ForgeConfigSpec.DoubleValue plateOffsetX;
+		public final ForgeConfigSpec.DoubleValue plateOffsetY;
+		public final ForgeConfigSpec.DoubleValue plateOffsetZ;
+
+		private Cfb(ForgeConfigSpec.Builder b) {
+			b.comment(
+					"Cooking for Blockheads compartment ([compartments] cookingforblockheads).",
+					"Small blocks on a Cooking for Blockheads counter or corner (#creativeengineering:counter_supports):",
+					"Farmer's Delight's cutting board, Display Delight's plates and plated foods, Brewin' and Chewin's",
+					"coaster (#creativeengineering:counter_toppers). The counter's worktop is 1 px lower than a full",
+					"block, so they and what lies on them are drawn shifted by these offsets, in pixels (1/16 block):",
+					"cuttingBoardOffset* for the board, plateOffset* for the plates and the coaster. X and Z are as",
+					"seen on a counter facing north (door to the north, back edge to the south: +X = east, +Z = toward",
+					"the back) and turn with the counter. Visual only; F3+A redraws."
+			).push("cookingforblockheads");
+			cuttingBoardOffsetX = b.comment("Sideways shift.").defineInRange("cuttingBoardOffsetX", 0.0, -8.0, 8.0);
+			cuttingBoardOffsetY = b.comment("Height shift; -1 puts the board on the worktop.")
+					.defineInRange("cuttingBoardOffsetY", -1.0, -8.0, 8.0);
+			cuttingBoardOffsetZ = b.comment("Shift toward the counter's back (negative = toward the door).")
+					.defineInRange("cuttingBoardOffsetZ", 0.0, -8.0, 8.0);
+			plateOffsetX = b.comment("Plates and coasters: sideways shift.").defineInRange("plateOffsetX", 0.0, -8.0, 8.0);
+			plateOffsetY = b.comment("Plates and coasters: height shift; -1 puts them on the worktop.")
+					.defineInRange("plateOffsetY", -1.0, -8.0, 8.0);
+			plateOffsetZ = b.comment("Plates and coasters: shift toward the counter's back (negative = toward the door).")
+					.defineInRange("plateOffsetZ", 0.0, -8.0, 8.0);
+			b.pop();
+		}
+	}
+
+	/** {@code [incubation]}: the Incubation compartment's settings (were incubation_additions-common.toml {@code [goose]}). */
+	public static final class Incubation {
+		public final ForgeConfigSpec.IntValue goldenEggChance;
+
+		private Incubation(ForgeConfigSpec.Builder b) {
+			b.comment("Incubation compartment ([compartments] incubation).").push("incubation");
+			goldenEggChance = b.comment("Untitled Duck Mod geese: chance, as 1 in N, that a goose lays a Golden Egg (Vintage Delight)",
+							"instead of its next goose egg. Rolled once per egg, before the goose looks for a nest; a golden egg",
+							"is always dropped on the ground near the goose, never laid in a nest. 0 = never.",
+							"Does nothing without Untitled Duck Mod and Vintage Delight.")
+					.defineInRange("goldenEggChance", 1000, 0, 1_000_000);
+			b.pop();
+		}
+	}
 }

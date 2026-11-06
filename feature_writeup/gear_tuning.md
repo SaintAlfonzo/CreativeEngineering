@@ -26,7 +26,7 @@
   [func/tune_armor.js](../kubejs/startup_scripts/func/tune_armor.js) (the numbers),
   [end_gear.js](../kubejs/server_scripts/equipment/end_gear.js) (the ladder recipes),
   [dragon_autorepair.js](../kubejs/server_scripts/equipment/dragon_autorepair.js),
-  [AirBrakeHandler.java](../development/patcherMod/src/main/java/com/SaintAlfonzo/creativeengineering/gear/AirBrakeHandler.java).
+  [AirBrakeHandler.java](../development/creativeCommon/src/main/java/com/SaintAlfonzo/creativecommon/gear/AirBrakeHandler.java).
 - **Knobs:**
   - Stats: code in the two tune files; edit and **restart** (`/reload` doesn't re-run `ItemEvents.modification`).
   - `config/creativeengineering-common.toml`, live through Create's config screen:
@@ -340,11 +340,11 @@ unknown until checked (GR-44). Appearance of the kept sets was not checked in a 
 - [server_scripts/equipment/dragon_autorepair.js](../kubejs/server_scripts/equipment/dragon_autorepair.js): autorepair.
 - [server_scripts/tags/equipmenttags.js](../kubejs/server_scripts/tags/equipmenttags.js): `#dragon_gear`, `#elytra_chestplates`.
 - [startup_scripts/func/neoCraftHelper.js](../kubejs/startup_scripts/func/neoCraftHelper.js): `cfg` (~line 630), `elytraDuplication`, `echoAssembly`, `felsicAssembly`, `dragonAssembly` (~lines 1159-1207).
-- [startup_scripts/changes/transition_items.js](../kubejs/startup_scripts/changes/transition_items.js): the incomplete items.
+- [startup_scripts/changes/transition_items.js](../development/creativeEngineering/src/main/resources/kubejs_startup/creativeengineering/changes/transition_items.js): the incomplete items.
 - [server_scripts/_lib/dump_gear.js](../kubejs/server_scripts/_lib/dump_gear.js): `/dumpgear`.
-- patcherMod: [gear/AirBrakeHandler.java](../development/patcherMod/src/main/java/com/SaintAlfonzo/creativeengineering/gear/AirBrakeHandler.java), [gear/ElytraDuplicationRecipe.java](../development/patcherMod/src/main/java/com/SaintAlfonzo/creativeengineering/gear/ElytraDuplicationRecipe.java), [gear/ElytraDuplicationSerializers.java](../development/patcherMod/src/main/java/com/SaintAlfonzo/creativeengineering/gear/ElytraDuplicationSerializers.java), [util/ElytraChestplates.java](../development/patcherMod/src/main/java/com/SaintAlfonzo/creativeengineering/util/ElytraChestplates.java), [util/ArmorEnchantabilityBridge.java](../development/patcherMod/src/main/java/com/SaintAlfonzo/creativeengineering/util/ArmorEnchantabilityBridge.java).
-- Mixins: [SequencedAssemblyRecipeMixin](../development/patcherMod/src/main/java/com/SaintAlfonzo/creativeengineering/mixin/SequencedAssemblyRecipeMixin.java), [ArmorMaterialEnchantabilityMixin](../development/patcherMod/src/main/java/com/SaintAlfonzo/creativeengineering/mixin/ArmorMaterialEnchantabilityMixin.java), [EasyElytraTakeoffHelperMixin](../development/patcherMod/src/main/java/com/SaintAlfonzo/creativeengineering/mixin/EasyElytraTakeoffHelperMixin.java), [EasyElytraTakeoffGroundCheckMixin](../development/patcherMod/src/main/java/com/SaintAlfonzo/creativeengineering/mixin/EasyElytraTakeoffGroundCheckMixin.java).
-- `CEConfig.DragonGear`, `AirBrake`, `Crafting` (+ `FelsicPiece`), `ArmorEnchant` in [CEConfig.java](../development/patcherMod/src/main/java/com/SaintAlfonzo/creativeengineering/CEConfig.java).
+- patcherMod: [gear/AirBrakeHandler.java](../development/creativeCommon/src/main/java/com/SaintAlfonzo/creativecommon/gear/AirBrakeHandler.java), [gear/ElytraDuplicationRecipe.java](../development/creativeCommon/src/main/java/com/SaintAlfonzo/creativecommon/gear/ElytraDuplicationRecipe.java), [gear/ElytraDuplicationSerializers.java](../development/creativeCommon/src/main/java/com/SaintAlfonzo/creativecommon/gear/ElytraDuplicationSerializers.java), [util/ElytraChestplates.java](../development/creativeCommon/src/main/java/com/SaintAlfonzo/creativecommon/util/ElytraChestplates.java), [util/ArmorEnchantabilityBridge.java](../development/creativeCommon/src/main/java/com/SaintAlfonzo/creativecommon/util/ArmorEnchantabilityBridge.java).
+- Mixins: [SequencedAssemblyRecipeMixin](../development/creativeCommon/src/main/java/com/SaintAlfonzo/creativecommon/mixin/SequencedAssemblyRecipeMixin.java), [ArmorMaterialEnchantabilityMixin](../development/creativeCommon/src/main/java/com/SaintAlfonzo/creativecommon/mixin/ArmorMaterialEnchantabilityMixin.java), [EasyElytraTakeoffHelperMixin](../development/creativeCommon/src/main/java/com/SaintAlfonzo/creativecommon/mixin/EasyElytraTakeoffHelperMixin.java), [EasyElytraTakeoffGroundCheckMixin](../development/creativeCommon/src/main/java/com/SaintAlfonzo/creativecommon/mixin/EasyElytraTakeoffGroundCheckMixin.java).
+- `CEConfig.DragonGear`, `AirBrake`, `Crafting` (+ `FelsicPiece`), `ArmorEnchant` in [CEConfig.java](../development/creativeCommon/src/main/java/com/SaintAlfonzo/creativecommon/CEConfig.java).
 - Not here: Customizable Elytra's banner-pattern fix (`CustomizableElytraBannerPatternMixin`, backlog row 10 "banner
   patterns"); effects on this gear ([armor_effects.md](armor_effects.md)); shields ([shields.md](shields.md)).
 
@@ -452,6 +452,7 @@ Survival unless noted. `/dumpgear` after a restart gives every stat for GR-01 to
   in this Rhino) now go through `NCH._or`, incl. `felsicAssembly` hammerBlows.
 - 2026-11-02: armor trims limited to standard armor (2.10, `gear/tuning #14`): tag `creativeengineering:trimmable_armor`,
   filter in patcherMod `ArmorTrimsItemCache` (built, not installed). GR-43, GR-44.
+- 2026-11-04: `tuneTools` / `tuneArmor`, armor enchantability, the armor cap, the copper tier and the gear scripts moved to Creative Equipment ([creative_equipment.md](creative_equipment.md)); config tables now in `config/creativeequipment-common.toml`. Same behaviour.
 
 ## Owner ideas (scratchpad 2026-10-26)
 

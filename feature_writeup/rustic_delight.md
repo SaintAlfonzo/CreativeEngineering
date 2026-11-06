@@ -214,7 +214,7 @@ content group, the worldgen and village rows, the client side and the cutover. R
 
 ### 5.7 Cutover (when the Creative Delight jar is installed)
 
-`./gradlew :patcherMod:installToMods :creativeDelight:installToMods --offline` moves `rusticdelight-forge-1.19.2-1.3.0.jar`
+`./gradlew :creativeCommon:installToMods :creativeDelight:installToMods --offline` moves `rusticdelight-forge-1.19.2-1.3.0.jar`
 out (`replaces_jars`); copy `rustic_upstream/` beside `mods/` on every client and server. Then drop the 1.3.0-only lines:
 `i.fruit_beignet` (item_dict, `removed_items.js`, `cooking.js` 817; done 2026-10-29, including the CD `recipes.js` removal) and the 1.3.0 note in `potions.js`; run `/dumpall`
 and the generators (food types, cans, compost, placeable) for the about 100 new items.

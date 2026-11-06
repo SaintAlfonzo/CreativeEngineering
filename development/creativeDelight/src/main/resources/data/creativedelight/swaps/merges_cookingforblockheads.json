@@ -1,17 +1,17 @@
 {
-  "_comment": "Item merge list (swap lists 'merges', SwapLists.java; feature_writeup/item_merges.md 6): both items stay registered; the old one is purged and the survivor takes over its recipes, loot and tags (CD startup script creativedelight/swap_merges.js) and every stack of it in the world (Common swap/ItemMerges). Applied only while every 'requires' mod is loaded. Never prune: an old world whose old item is later unregistered is remapped from this list. Cooking for Blockheads' own Spice Rack, Tool Rack and Fruit Basket go into the oak versions of the blockheads_additions member (item_merges.md 2.16, kitchen.md 2.7).",
+  "_comment": "Item merge list (swap lists 'merges', SwapLists.java; feature_writeup/item_merges.md 6): both items stay registered; the old one is purged and the survivor takes over its recipes, loot and tags (CD startup script creativedelight/swap_merges.js) and every stack of it in the world (Common swap/ItemMerges). Applied only while every 'requires' mod is loaded. Never prune: an old world whose old item is later unregistered is remapped from this list. Cooking for Blockheads' own Spice Rack, Tool Rack and Fruit Basket go into the oak versions of Creative Delight's Cooking for Blockheads compartment (item_merges.md 2.16, kitchen.md 2.7; the survivors were cookingforblockheads:oak_* until M8, compartments.json).",
   "requires": [
     "cookingforblockheads",
-    "blockheads_additions"
+    "balm"
   ],
   "merges": {
-    "cookingforblockheads:oak_spice_rack": [
+    "creativedelight:oak_spice_rack": [
       "cookingforblockheads:spice_rack"
     ],
-    "cookingforblockheads:oak_tool_rack": [
+    "creativedelight:oak_tool_rack": [
       "cookingforblockheads:tool_rack"
     ],
-    "cookingforblockheads:oak_fruit_basket": [
+    "creativedelight:oak_fruit_basket": [
       "cookingforblockheads:fruit_basket"
     ]
   }

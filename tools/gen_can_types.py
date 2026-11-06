@@ -15,7 +15,7 @@ Cans without their own sprite (kubejs/assets/creativeengineering/textures/item/<
 Input (run /dumpfood in game first):  kubejs/exported/food/catalog.json, foods.json
 Output:
   kubejs/generation_scripts/food/can_types.json   every can: values, effects, servings, recipes (the record)
-  kubejs/startup_scripts/_lib/item_dict.js        block between the BEGIN/END GENERATED CANS markers (new cans only)
+  development/creativeCommon/src/main/resources/kubejs_startup/creativecommon/_lib/item_dict.js        block between the BEGIN/END GENERATED CANS markers (new cans only)
   kubejs/generation_scripts/food/can_servings.json  servings for every generated can (other entries kept)
   kubejs/generation_scripts/food/food_types.json  new cans added to types.canned and the canned map
   Creative Delight startup member scripts (framework #7, creative_delight.md 28.2; outRoot of the "can_types" entry in
@@ -48,7 +48,7 @@ import pack_paths  # noqa: E402
 INSTANCE = Path(__file__).resolve().parent.parent
 EXPORT = INSTANCE / 'kubejs/exported/food'
 GEN = INSTANCE / 'kubejs/generation_scripts/food'
-DICT = INSTANCE / 'kubejs/startup_scripts/_lib/item_dict.js'
+DICT = pack_paths.ITEM_DICT
 OUT = GEN / 'can_types.json'
 SERVINGS = GEN / 'can_servings.json'
 TYPES = GEN / 'food_types.json'
@@ -389,6 +389,12 @@ EXPLICIT = [
      dict(input=['stuffed_pumpkin_block'])),
     ('feast', 'canned_stuffed_shulker', 'Canned Stuffed Shulker', ['stuffed_shulker_bowl'], False,
      dict(input=['stuffed_shulker'])),
+    # Large Meals feasts (plan_meals_rolls_bbq.md A3); the raw and cooked mutton racks are not canned (no meat row)
+    ('feast', 'canned_omurice', 'Canned Omurice', ['omurice'], False, dict(input=['omurice_block'])),
+    ('feast', 'canned_mushroom_pot_pie', 'Canned Mushroom Pot Pie', ['mushroom_pot_pie'], False,
+     dict(input=['mushroom_pot_pie_block'])),
+    ('feast', 'canned_roasted_mutton_rack', 'Canned Roasted Rack of Mutton', ['roasted_mutton_rack'], False,
+     dict(input=['roasted_mutton_rack_block'])),
 
     # drinks: honey clears poison in Canned Goods' code; milk is not a food, the can clears effects itself
     ('drink', 'canned_honey_bottles', None, ['honey_bottle'], True, dict(code_fx=True)),
@@ -422,7 +428,7 @@ EXPLICIT = [
     ('golden', 'canned_enchanted_apples', None, ['enchanted_golden_apple'], True, dict(norecipe=True, code_fx=True)),
     ('soup', 'canned_beetroot_soup', None, ['beetroot_soup'], True, dict(norecipe=True)),
     ('soup', 'canned_suspicious_stew', None, ['suspicious_stew'], True, dict(norecipe=True, code_fx=True)),
-    # Canned Food and the Hot Hot Hotpot are removed from the pack (startup_scripts/_lib/removed_items.js)
+    # Canned Food and the Hot Hot Hotpot are removed from the pack (creativecommon/_lib/removed_items.js)
 ]
 
 # soup keys that are not canned; salads without a can

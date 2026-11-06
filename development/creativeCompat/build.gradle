@@ -6,19 +6,19 @@
 //       kubejs/data/creativecompat/kubejs/    -> data/creativecompat/kubejs/    (server scripts)
 //       kubejs/assets/creativecompat/kubejs/  -> assets/creativecompat/kubejs/  (client scripts)
 //     Startup scripts live in this project (src/main/resources/kubejs_startup/creativecompat/), loaded from the jar by
-//     patcherMod's startup loader.
+//     Creative Common's startup loader.
 // Build: ./gradlew :creativeCompat:build --offline   Install: ./gradlew :creativeCompat:installToMods
 plugins {
     id 'ce.forge-mod'
 }
 
 dependencies {
-    // patcherMod (creativeengineering): a hard dependency (KubeJS, the shared helpers, the startup loader) and the
+    // Creative Common (creativecommon): a hard dependency (KubeJS, the shared helpers, the startup loader) and the
     // Common APIs this jar calls (swap/ConfigRename, campfire/CampfireRainInfo, compat/JarContents, surface/LeafPileSlow,
     // util/BurnBursts, compat/jei/world/WorldRows).
-    compileOnly project(':patcherMod')
-    // The mods the tweaks target: the pack's jars, shared with patcherMod (git-ignored libs/, SRG-named).
-    compileOnly fileTree(dir: rootProject.file('development/patcherMod/libs'), include: '*.jar')
+    compileOnly project(':creativeCommon')
+    // The mods the tweaks target: the pack's jars, shared with Creative Common (git-ignored libs/, SRG-named).
+    compileOnly fileTree(dir: rootProject.file('development/creativeCommon/libs'), include: '*.jar')
 }
 
 def scriptTrees = ['data/creativecompat/kubejs', 'assets/creativecompat/kubejs']

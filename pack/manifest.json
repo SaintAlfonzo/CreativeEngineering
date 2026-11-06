@@ -4500,7 +4500,7 @@
       "file": "creativebrewing-1.0.0.jar",
       "name": "creativebrewing-1.0.0",
       "version": "",
-      "sha1": "52e24a2a7f940135d8f26b46da231b0d451c96f2",
+      "sha1": "214444fd5ab00dbd2be8ec2fdfdc318ae777ffc8",
       "modId": "creativebrewing",
       "side": "both",
       "source": "local"
@@ -4509,8 +4509,17 @@
       "file": "creativecalendar-1.0.0.jar",
       "name": "creativecalendar-1.0.0",
       "version": "",
-      "sha1": "ae2b493620840beadf3e4f2bc28ce3a04d553b67",
+      "sha1": "90278e3875e0bf1dfa2f5d7ae86c75d42c41e7e6",
       "modId": "creativecalendar",
+      "side": "both",
+      "source": "local"
+    },
+    {
+      "file": "creativecommon-1.1.0.jar",
+      "name": "creativecommon-1.1.0",
+      "version": "",
+      "sha1": "f5cf0d1714ce1a2d661727567f6f850bf50b944b",
+      "modId": "creativecommon",
       "side": "both",
       "source": "local"
     },
@@ -4518,26 +4527,44 @@
       "file": "creativecompat-1.0.0.jar",
       "name": "creativecompat-1.0.0",
       "version": "",
-      "sha1": "fe0dc01db5832351a0b69500c464f735713cdf9c",
+      "sha1": "de608b64b3d13b70f7bbe14bedcd329c4f5315d8",
       "modId": "creativecompat",
       "side": "both",
       "source": "local"
     },
     {
-      "file": "creativedelight-1.0.0.jar",
-      "name": "creativedelight-1.0.0",
+      "file": "creativedelight-1.1.0.jar",
+      "name": "creativedelight-1.1.0",
       "version": "",
-      "sha1": "214f214641f4714739e20d1ab8898c319dfc393c",
+      "sha1": "90676d4f6af23557e8dc9106539ec37a655c854f",
       "modId": "creativedelight",
       "side": "both",
       "source": "local"
     },
     {
-      "file": "creativeengineering-1.1.08.jar",
-      "name": "creativeengineering-1.1.08",
+      "file": "creativeengineering-2.0.0.jar",
+      "name": "creativeengineering-2.0.0",
       "version": "",
-      "sha1": "e9a09b04d8ac877bc6157d810fbc071ff0609c5a",
+      "sha1": "15e19f9d95261e16da4955e865e3a166d2b3bb7e",
       "modId": "creativeengineering",
+      "side": "both",
+      "source": "local"
+    },
+    {
+      "file": "creativeequipment-1.0.0.jar",
+      "name": "creativeequipment-1.0.0",
+      "version": "",
+      "sha1": "66e2cb8f993c4f965c03be3e3d7ae724426f5100",
+      "modId": "creativeequipment",
+      "side": "both",
+      "source": "local"
+    },
+    {
+      "file": "creativemagic-1.0.0.jar",
+      "name": "creativemagic-1.0.0",
+      "version": "",
+      "sha1": "d6b342350848c1041847cb51506838039a55149c",
+      "modId": "creativemagic",
       "side": "both",
       "source": "local"
     },
@@ -4545,7 +4572,7 @@
       "file": "creativeworldgen-1.0.0.jar",
       "name": "creativeworldgen-1.0.0",
       "version": "",
-      "sha1": "e5346c9fb26d825bb2b61ff99f029736af51483d",
+      "sha1": "c311daf741a04b188538f6bd2144410f4e383ce9",
       "modId": "creativeworldgen",
       "side": "both",
       "source": "local"

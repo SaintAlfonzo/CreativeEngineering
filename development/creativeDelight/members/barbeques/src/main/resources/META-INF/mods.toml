@@ -35,8 +35,8 @@ ordering="AFTER"
 side="BOTH"
 
 [[dependencies.barbequesdelight]]
-modId="creativeengineering"
+modId="creativecommon"
 mandatory=true
-versionRange="[0,)"
+versionRange="[1.0.0,)"
 ordering="NONE"
 side="BOTH"

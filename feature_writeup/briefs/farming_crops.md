@@ -164,7 +164,7 @@ Unverified: flax's top-half state property name (`half`), not needed because the
 half). Build `mixin/TeaBushSoilMixin` targeting both classes (`@Mixin(value = {SmallTeaBushBlock.class,
 TeaBushBlock.class}, remap = false)`), `@Inject(method = "m_6266_", at = @At("RETURN"), cancellable = true)`:
 `if (!cir.getReturnValue() && CropParity.isFarmlandSoil(state)) cir.setReturnValue(true)`. Compile jar
-`FarmersRespite-1.19-2.0.jar` is already in `development/patcherMod/libs/` (checked 2026-10-31). Value is low: tea growth is a flat 1/20 (small) and
+`FarmersRespite-1.19-2.0.jar` is already in `development/creativeCommon/libs/` (checked 2026-10-31). Value is low: tea growth is a flat 1/20 (small) and
 1/12 (aging) per random tick through `onCropsGrowPre`, it ignores moisture, and bone meal is off
 (`enableBoneMealTeaBush = false`), so Rich Farmland's boost does nothing. It is consistency only.
 
@@ -268,7 +268,7 @@ replant, hoe area replant, hoe area break. Follow the §2.6 checklist (crops.md 
 
 ### Gotchas
 - One patcherMod build for crops #1, #2 and #4; register new mixins in
-  `development/patcherMod/src/main/resources/creativeengineering.mixins.json` next to `TobaccoPlacementMixin` (line 140)
+  `development/creativeCommon/src/main/resources/creativecommon.mixins.json` next to `TobaccoPlacementMixin` (line 140)
   and the Quark mixins (148-154).
 - `libs/` compile jars are not in git: Farmer's Respite for the tea mixin; the hemp rule reads properties by name.
 - The Vinery port change ships in the Creative Brewing jar (`creativebrewing-*.jar` in `mods/`); install it with the
@@ -827,7 +827,7 @@ Soul Soil (Nulch), with Rich Soul Soil an input of the Nulch recipe. Maybe recol
 
 ### Now (checked 2026-10-31)
 - Overworld: Fertile Soil recipes take Rich Soil plus mulches
-  ([sawdust.js](../../kubejs/server_scripts/wood/sawdust.js) lines 67-81, `R.shaped` / `R.createMixing`).
+  ([sawdust.js](../../kubejs/data/creativeengineering/kubejs/wood/sawdust.js) lines 67-81, `R.shaped` / `R.createMixing`).
 - Nulch (`i.nulch`, renamed Fertile Soul Soil): `sawdust.js` lines 83-86, 3 netherrack, 2 scales, ash, magma cream,
   nether wart, blaze powder -> 6 (Create mixing: 2 netherrack, 1 scale). No soul soil, no Rich Soul Soil. Line 83 is the
   note "Integrate nulch, move to compost file".
@@ -875,7 +875,7 @@ a fruit it did not grow. Extra-fruit growth stays slowed by the fruits around it
 ### Now (checked 2026-10-31)
 - Vanilla `AttachedStemBlock` has one `facing` property and one bent model per side; it points at one fruit only.
 - Extra stem fruit ([crops.md](../crops.md) 2.10; patcherMod
-  [StemExtraFruit.java](../../development/patcherMod/src/main/java/com/SaintAlfonzo/creativeengineering/crops/StemExtraFruit.java)
+  [StemExtraFruit.java](../../development/creativeCommon/src/main/java/com/SaintAlfonzo/creativecommon/crops/StemExtraFruit.java)
   `randomTick` lines 53-92, `reattach` from line 99, and `mixin/AttachedStemExtraFruitMixin`): grows up to 4 fruits on
   free sides; counts every same-kind fruit beside it toward the cap (hand-placed ones too); on harvest re-points
   `facing` at any remaining same-kind neighbour. Saved data holds only the last-fruit time per stem

@@ -7,7 +7,7 @@ Full data (ids, sha1, download urls) is in `manifest.json`.
 - Java 17
 - JVM args: `-Dlog4j.configurationFile=/home/liam/.local/share/atlauncher/assets/log_configs/client-1.19-debug.xml -XX:+UnlockExperimentalVMOptions -XX:+UseG1GC -XX:G1NewSizePercent=5 -XX:G1ReservePercent=10 -XX:MaxGCPauseMillis=50 -XX:G1HeapRegionSize=32M`
 
-## Mods (407: 364 both, 43 client)
+## Mods (410: 367 both, 43 client)
 
 | Side | Mod | Mod id | Version | File | Source |
 |---|---|---|---|---|---|
@@ -132,11 +132,14 @@ Full data (ids, sha1, download urls) is in `manifest.json`.
 | both | Create: Vintage Improvements | `vintageimprovements` | 1.19.2-0.2.0.3 | `vintageimprovements-1.19.2-0.2.0.3.jar` | [CF](https://www.curseforge.com/minecraft/mc-mods/create-vintage-improvements/files/5661435) [MR](https://modrinth.com/mod/create-vintage-improvements/version/nXivVakq) |
 | both | creativebrewing-1.0.0 | `creativebrewing` |  | `creativebrewing-1.0.0.jar` | local |
 | both | creativecalendar-1.0.0 | `creativecalendar` |  | `creativecalendar-1.0.0.jar` | local |
+| both | creativecommon-1.1.0 | `creativecommon` |  | `creativecommon-1.1.0.jar` | local |
 | both | creativecompat-1.0.0 | `creativecompat` |  | `creativecompat-1.0.0.jar` | local |
 | both | CreativeCore | `creativecore` | 2.11.28 | `CreativeCore_FORGE_v2.11.28_mc1.19.2.jar` | [CF](https://www.curseforge.com/minecraft/mc-mods/creativecore/files/5491926) [MR](https://modrinth.com/mod/creativecore/version/FHuLs5LQ) |
-| both | creativedelight-1.0.0 | `creativedelight` |  | `creativedelight-1.0.0.jar` | local |
-| both | creativeengineering-1.1.08 | `creativeengineering` |  | `creativeengineering-1.1.08.jar` | local |
+| both | creativedelight-1.1.0 | `creativedelight` |  | `creativedelight-1.1.0.jar` | local |
+| both | creativeengineering-2.0.0 | `creativeengineering` |  | `creativeengineering-2.0.0.jar` | local |
+| both | creativeequipment-1.0.0 | `creativeequipment` |  | `creativeequipment-1.0.0.jar` | local |
 | both | creativeLabels-1.0.1 | `creative_labels` |  | `creativeLabels-1.0.1.jar` | local |
+| both | creativemagic-1.0.0 | `creativemagic` |  | `creativemagic-1.0.0.jar` | local |
 | both | creativeworldgen-1.0.0 | `creativeworldgen` |  | `creativeworldgen-1.0.0.jar` | local |
 | both | Curios API (Forge/NeoForge) | `curios` | curios-forge-1.19.2-5.1.6.4.jar | `curios-forge-1.19.2-5.1.6.4.jar` | [CF](https://www.curseforge.com/minecraft/mc-mods/curios/files/5843737) |
 | both | Customizable Elytra | `customizableelytra` | forge-1.7.4-1.19.0 | `customizableelytra-1.19.0-1.7.4.jar` | [CF](https://www.curseforge.com/minecraft/mc-mods/customizable-elytra/files/4101953) [MR](https://modrinth.com/mod/customizable-elytra/version/gsnrKi46) |

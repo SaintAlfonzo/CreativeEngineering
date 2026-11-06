@@ -4,24 +4,24 @@
 // Food types, roll_delight part. Readers merge every part with global.CD.genMerge('food_types') (creative_delight.md 28.2).
 if (global.CD) global.CD.genPut('food_types', 'roll_delight', {
  "types": {
-  "cooked/veggie": [
-   "cooked_nether_wart"
-  ],
   "handheld": [
-   "rice_roll",
-   "rice_roll_slice",
    "amazing_salmon_roll",
    "amazing_salmon_roll_slice",
-   "mushroom_roll",
-   "mushroom_roll_slice",
    "ancient_roll",
    "ancient_roll_slice",
-   "tobiko_roll",
-   "nether_roll"
+   "mushroom_roll",
+   "mushroom_roll_slice",
+   "nether_roll",
+   "rice_roll",
+   "rice_roll_slice",
+   "tobiko_roll"
   ],
   "golden": [
    "golden_roll",
    "golden_roll_slice"
+  ],
+  "ingredient": [
+   "cooked_nether_wart"
   ]
  },
  "canned": {}

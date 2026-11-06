@@ -19,7 +19,7 @@ asks for it by name. Upstream bugs are fixed.
 | Fold-in | steps 0-19 | built 2026-11-01 (4.0); in `mods/` (CD jar 11-02 14:01), not played |
 | Decisions | O1-O9 (owner, 2026-10-31); D1-D10 | O1-O9 recorded (0.1); D1-D4, D7 answered by them, D5, D6, D8-D10 defaults stand (5) |
 | Fold (4.5) | seasoning fold, `grilled`, trades, furnace routes, cooked-ingredient craft, names | BUILT 2026-11-03, installed in the CD jar 2026-11-03 00:08, not booted; SQ-BBQF-01 to -07 queued (SQ-CDJ7) |
-| Tests | BBQ-01..BBQ-29; scratch SQ-BBQ-01..08, SQ-BBQF-01..07 | in game: none run. Scratch r1102b (2026-11-02): SQ-BBQ-01, -03, -04, -05 PASS; -02, -06, -07 OPEN (batch faults); -08 not run (needs a player) |
+| Tests | BBQ-01..BBQ-40; scratch SQ-BBQ-01..08, SQ-BBQF-01..07 | in game: none run. Scratch r1102b (2026-11-02): SQ-BBQ-01, -03, -04, -05 PASS; -02, -06, -07 OPEN (batch faults); -08 not run (needs a player) |
 
 - **Jar:** `barbequesdelight-1.3.0`, mod id `barbequesdelight`, authors lcy0x1 (xkmc), package `com.mao.barbequesdelight`
   (forked from Mao's original). 60 Java classes, about 1,600 lines of logic.
@@ -267,7 +267,7 @@ as the pack's campfires do:
 | State | `lit` and `waterlogged` as a vanilla campfire; heat and light only while lit (light 15) |
 | Placed / merged | Unlit when placed, as the pack's campfires (Unlit Campfire default, kept); lit by flint and steel, fire charge or a fire arrow |
 | Extinguish | Water (waterlogged), a splash water potion, a shovel, as vanilla |
-| Weather (rule revised 2026-11-02: rain does not douse a campfire in the signal-fire state; coal and charcoal blocks are signal-fire sources; see briefs/gameplay_misc.md) | The pack rain rule (patcherMod `campfire/CampfireRain`, tag `creativeengineering:campfire/rain_douses`): lit grill-campfire goes out in rain unless the block under it is in `campfire/rain_proof_fuel` (coal block, charcoal blocks); burns forever otherwise |
+| Weather (rule revised 2026-11-02: rain does not douse a campfire in the signal-fire state; coal and charcoal blocks are signal-fire sources; see briefs/gameplay_misc.md) | The pack rain rule (CD `campfire/CampfireRain`, tag `creativecommon:campfire/rain_douses`): lit grill-campfire goes out in rain unless the block under it is in `campfire/rain_proof_fuel` (coal block, charcoal blocks); burns forever otherwise |
 | Break | Drops the grill and the campfire (upstream) |
 | Cold grill | Unchanged: progress falls by 2 per tick (B5 kept) |
 
@@ -602,7 +602,7 @@ Each has a default that applies if unanswered.
 | # | Decision | Size | Default |
 |---|---|---|---|
 | 1 | Items per old durable item after the fold (O20): how many seasoning items replace one 64-use powder and one 16-use sauce, and does the craft or trade yield that many | big | The same number of uses as upstream: one craft or trade gives 64 powders or 16 sauces ("a similar usable amount"); tune in play |
-| 2 | Raw versions of the 8 pack skewers (O24): item namespace (the pack skewer's own mod id via a CD member, or `barbequesdelight`), the recipe that makes them (basin with raw ingredients? what ingredients), grill time, stack size, and a recolored texture for each | big | CD member under the original mod's namespace, one basin recipe per skewer from its raw ingredients, grill time by the closest BBQ line, stack 64, recolor review in `food/placeable #5` |
+| 2 | Raw versions of the 8 pack skewers (O24): item namespace (the pack skewer's own mod id via a CD member, or `barbequesdelight`), the recipe that makes them (basin with raw ingredients? what ingredients), grill time, stack size, and a recolored texture for each | big | CD member under the original mod's namespace, one basin recipe per skewer from its raw ingredients, grill time by the closest BBQ line, stack 64, recolor review in `food/placeable #5`; **built 2026-11-04 (4.7)**, crafted by hand from raw ingredients (plan_meals_rolls_bbq.md), not a basin recipe |
 | 3 | `grilled` +2 saturation (O25): confirm this means +2 saturation points in the pack's unit (capped at the food's hunger, like cheese's +2), not +2 hunger shanks | small | +2 saturation points, capped |
 | 4 | "Nasty" food type | big | **Answered (O27):** hazard-style downside for chicken only; other raw meats worse but not nasty. Poison chance and values: `food/types-and-tuning #19` |
 | 5 | Sauces and raw skewers | big | **Answered (O28):** no sauces on raw skewers; seasonings allowed and copied to the cooked skewer |
@@ -654,6 +654,49 @@ Not built: raw pack skewers (`dishes/meals #50`, pinned), seasoning crafting rec
 seasoned-icon overlays for the seven new seasonings (no textures; the model lookup finds nothing and draws none, the
 model loader may log a missing-model line per id), the 8 pack skewers as seasonable foods (with `#50`).
 
+### 4.7 Skewer line, raw pack skewers, plain combos (2026-11-04, plan_meals_rolls_bbq.md C)
+
+Built 2026-11-04 into the CD jar; not run in game. Answers 4.3 #2 (raw pack skewers), with the recipe changed by the owner's
+plan from a basin recipe to a craft by hand.
+
+- **Helper `F.skewer`** (CD `cd_food.js`): one call per skewer line emits the raw skewer (basin for the ten BBQ lines, a
+  shaped craft from raw ingredients for the pack skewers, shapeless for the End Skewer), the Grill (skipped while the member
+  is off), furnace / smoker / campfire (0.35 xp, vanilla times), the heatless `_from_cooked_manual_only` craft and the
+  existing assembly. All 18 lines are in `barbequesdelight/skewers.js`; the ten BBQ lines keep their recipe ids (BBQ-39).
+- **Raw pack skewers** (`PackRawSkewers.java`): `farmersdelight:raw_barbecue_stick`, `ends_delight:raw_end_barbecue_stick`,
+  `miners_delight:raw_improvised_barbecue_stick`, `nethersdelight:raw_nether_skewer`, `oceanic_delight:raw_seafood_skewer`,
+  `veggiesdelight:raw_turnip_mutton_skewer`, `endersdelight:raw_crispy_skewer`, `hostiledelight:raw_caveskewer`; each only while
+  its mod is loaded. `BBQSkewerItem`, not edible, stack 64, stick remainder (blaze rod for the Nether Skewer), raw cod skewer
+  texture for all (recolors: `food/placeable #5`), names "Raw ..." (O34) in the member lang, in `#barbequesdelight:raw_skewers`
+  (powders yes, sauces no).
+
+| Skewer | Raw craft | Heatless craft | Grill ticks (closest line) |
+|---|---|---|---|
+| Barbecue Skewer (FD) | onion, tomato, any raw meat (food type), stick | onion, tomato, cooked meat; assembly kept | 320 (beef) |
+| End Skewer (End's) | shapeless: Shulker Mollusk, raw dragon meat, chorus fruit, stick; 1 (upstream 3, endermite meat dropped) | mollusk, roasted dragon meat, chorus fruit | 320 (lamb) |
+| Improvised Skewer (Miner's) | cave carrot, brown mushroom, bat wing | baked cave carrot, brown mushroom, smoked bat wing | 280 (potato) |
+| Nether Skewer (Nether's) | propelpearl, raw strider (upstream's inputs), blaze rod | none (no cooked strider) | 320 (beef) |
+| Seafood Skewer (Oceanic) | shrimp, raw calamari, sea pickle | fried shrimp, cooked calamari, sea pickle (upstream) | 240 (cod) |
+| Turnip Mutton Skewer (Veggies) | raw mutton, turnip | cooked mutton, turnip; assembly kept | 320 (lamb) |
+| Crispy Skewer (Ender's) | mite crust, 2 chorus fruit | mite crust, chorus fruit, popped chorus fruit; assembly kept | 280 (chicken) |
+| Cave Skewer (Hostile) | glow berries, spider eye, rotten flesh | none (all raw already) | 280 (chicken) |
+
+- **Shulker mollusk merge undone** (owner, End Skewer uses the mollusk only): the 11-02 merge (`dishes/ingredients #32`,
+  [item_merges.md](item_merges.md) 2.14) is emptied for the mollusk and filet; Ender's knife drop and mollusk-to-filet cut are
+  upstream's again; the stuffed shulker (pot and heatless) takes End's shulker meat, so every other recipe keeps End's meat.
+- **Combos** (C8): Kebab Wrap (shaped on a tortilla + assembly), Kebab Sandwich (shaped on whole bread + assembly; the long-roll
+  sandwich family's bread, no separate bread-roll tag exists) and Bibimbap (heatless rice meal) from cooked BBQ skewers. No
+  combine recipe, nothing stored, no skewer effects; `BBQSandwichItem` keeps only its own seasoning. Static values: Wrap
+  10 / 0.6 (8 / 0.7), Sandwich 16 / 0.6 (14 / 0.7), Bibimbap 16 / 0.8 (16 / 0.7); effects kept (Wrap Nourishment 1:00 at
+  50 %, Bibimbap Nourishment 2:00). Set in `BBQItems.java` (no startup food-value file exists for the member).
+- **Seasoning tooltip** (C1): the seasoning item shows the line a seasoned food shows (CD `SeasoningTooltip.line`, by
+  reflection from `SeasoningItem`); 1.3.0's info text only without Creative Delight. Salt is not a pack seasoning (The Salt's
+  "Salted"), so it is unchanged.
+- **Names** (C11a): Barbecue on a Stick, End Barbecue Stick, Improvised Barbecue Stick are Barbecue Skewer, End Skewer,
+  Improvised Skewer (CD `creativeengineering/names.js`; Display Delight plated names follow).
+- **Family and cans** (C5, C6): every cooked skewer is `skewer` (name rule also matches "barbecue stick" until the renames reach
+  the dump); raw skewers are not foods, so no family; no skewer can row or type loop.
+
 ### 4.6 Owner fixes (2026-11-03, after the 1.2.00 play)
 
 - Seasoned icons: the seven new seasonings (`cumin`, `pepper`, `chili`, `honey_mustard`, `buffalo`, `barbeque`, `grilled`)
@@ -697,7 +740,7 @@ answered (tray ported for evaluation). **No decision is open** apart from the qu
 | `development/creativeDelight/gradle.properties`, root `settings.gradle` | Member nesting (`bundle_members`, project `backportedBarbeques`) |
 | `kubejs/startup_scripts/_lib/item_dict.js`, `block_dict.js`, `food_dict.js` | Ids |
 | `kubejs/data/creativedelight/kubejs/barbequesdelight/` | `recipes.js` (all 26), `tags.js` |
-| `development/patcherMod/.../kubejs_startup/creativeengineering/func/neoCraftHelper.js` | `bbqSkewering`, `bbqGrilling`, `bbqCombine` emitters |
+| `development/creativeCommon/.../kubejs_startup/creativeengineering/func/neoCraftHelper.js` | `bbqSkewering`, `bbqGrilling`, `bbqCombine` emitters |
 | `kubejs/generation_scripts/food/food_types.json`, `tools/food_families.py` | Food types, family overrides |
 | `development/creativeDelight/src/main/resources/kubejs_startup/barbequesdelight/compost.js` | 24 compost entries (hand file) |
 | `feature_writeup/barbeques_delight.md` | this file; plus rows in `food_families.md`, `creative_delight.md`, `mod_sides.md` |
@@ -757,9 +800,17 @@ grill). SQ-BBQ-08 not run (bots cannot craft).
 | BBQ-31 | Sneak + right click a filled basin well holding a stick (and an off-hand item); then with empty hands | one item into the inventory, hands unchanged; empty-handed: one item into the hand |
 | BBQ-32 | JEI Skewering page | off-hand shield icon left of the lower input slot; slots line up with their frames |
 | BBQ-33 | JEI Grilling page result; Kebab Sandwich with two different cooked skewers | result tooltip has the Grilled line; sandwich crafts |
+| BBQ-34 | Hover each of the six seasoning items, then a skewer seasoned with each | the item's line reads exactly as the food's seasoning line (name, colours, numbers) |
+| BBQ-35 | Each of the eight pack skewers: craft the raw one, then grill, smelt, smoke and campfire-cook it | the cooked pack skewer each time; Nether and Cave have no heatless craft, the other six do; End Skewer craft gives 1 |
+| BBQ-36 | Raw pack skewer + a powder, then + a sauce; grill the powdered one | powder accepted, sauce refused; the cooked skewer keeps the powder line |
+| BBQ-37 | Family dump and can list | every cooked skewer (10 BBQ + 8 pack) in `skewer`; no skewer can |
+| BBQ-38 | Craft Kebab Wrap, Kebab Sandwich, Bibimbap from seasoned skewers; eat each (AppleSkin) | normal JEI pages; no skewer names or effects on the result; 10 / 0.6, 16 / 0.6, 16 / 0.8 |
+| BBQ-39 | Recipe dump before and after: the ten BBQ lines | same ids (`creativedelight:` skewering, grilling, smelting, smoking, campfire, `_from_cooked_manual_only`) |
+| BBQ-40 | Kill a shulker with a knife; cut a Shulker Mollusk; JEI uses of the mollusk | mollusk drops (and End's meat); 2 filets; End Skewer and its heatless craft, stuffed shulker on End's meat |
 
 ## 9. History
 
+- 2026-11-04 (plan_meals_rolls_bbq.md C, 4.7): `F.skewer` for all 18 skewer lines, eight raw pack skewers, shulker mollusk merge undone, plain combos with static values, seasoning item tooltip, Skewer renames; BBQ-34..40.
 - 2026-10-30: investigation written (jar decompiled to `DecompiledMods/barbequesdelight-1.3.0/`), nothing built.
 - 2026-10-31: owner decisions O1-O9 recorded (0.1): all skewers and the three combos added without the family fold,
   all six seasonings kept as upstream and marked for the pack framework (3.3.1 describes it), seasoning trades dropped,

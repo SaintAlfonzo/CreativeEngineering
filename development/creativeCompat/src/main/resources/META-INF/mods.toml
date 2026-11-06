@@ -26,9 +26,9 @@ side="BOTH"
 # the WTHIT and JEI holders). Becomes creativecommon at the final swap (creative_split.md 7.6 Q1). The range must exclude
 # every patcherMod that still carries the compat classes and mixins (they would apply twice).
 [[dependencies.creativecompat]]
-modId="creativeengineering"
+modId="creativecommon"
 mandatory=true
-versionRange="[1.1.06,)"
+versionRange="[1.1.0,)"
 ordering="AFTER"
 side="BOTH"
 # The mods the tweaks target: optional, each mixin is gated on its mods (compat/CompatMixinPlugin) and each listener on

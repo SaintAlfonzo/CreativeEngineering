@@ -6,6 +6,9 @@ General Public License v3 (code and models). The port includes that mod's assets
 by tools/port_resources.py) and Java code ported from it. LGPLv3 section 2 and GPLv3 section 7 allow a modified copy to
 be conveyed under the GPLv3. The full LGPLv3 text is at the end of this file.
 
+The tray textures carried by the port are Farmer's Delight's (vectorwing, MIT License; the same notice as in
+repackedFarmers applies to them).
+
 Five of the upstream models are derived from the Farmers 3D resource pack by Pder, licensed under the MIT License. That
 notice must stay with all copies:
 

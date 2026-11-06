@@ -13,12 +13,12 @@ import javax.annotation.ParametersAreNonnullByDefault;
 
 import org.slf4j.Logger;
 
-import com.SaintAlfonzo.creativeengineering.CEConfig;
+import com.SaintAlfonzo.creativecommon.CommonConfig;
 import com.SaintAlfonzo.creativebrewing.CreativeBrewing;
-import com.SaintAlfonzo.creativeengineering.compat.jei.RecipeRows;
-import com.SaintAlfonzo.creativeengineering.compat.jei.RowPagesCategory;
-import com.SaintAlfonzo.creativeengineering.compat.jei.RowPagesCategory.Page;
-import com.SaintAlfonzo.creativeengineering.compat.jei.RowPagesCategory.Row;
+import com.SaintAlfonzo.creativecommon.compat.jei.RecipeRows;
+import com.SaintAlfonzo.creativecommon.compat.jei.RowPagesCategory;
+import com.SaintAlfonzo.creativecommon.compat.jei.RowPagesCategory.Page;
+import com.SaintAlfonzo.creativecommon.compat.jei.RowPagesCategory.Row;
 import com.mojang.logging.LogUtils;
 
 import mezz.jei.api.IModPlugin;
@@ -54,7 +54,7 @@ import net.minecraftforge.registries.ForgeRegistries;
  *   <li><b>Potion Buckets</b>, one page per potion and bucket: fill and drain by hand, the Spout, the Item Drain and
  *       the Bottling Machine ({@code kubejs/server_scripts/engineering/potion_bottling.js}).</li>
  * </ul>
- * Recipes are found by their id ({@code creativeengineering:<prefix>/<potion key>}); rows of one key share a page.
+ * Recipes are found by their id ({@code creativebrewing:<prefix>/<potion key>}); rows of one key share a page.
  * {@link #onRuntimeAvailable} hides exactly what was re-shown. Gated by {@code [jei] tippedArrowCategory} and
  * {@code [jei] potionBucketCategory}; re-run on every JEI reload.
  */
@@ -118,9 +118,9 @@ public class PotionPagesJEI implements IModPlugin {
         ItemStack bucket = RecipeRows.stack(POTION_BUCKET);
         bucket = bucket.isEmpty() ? new ItemStack(Items.WATER_BUCKET) : PotionUtils.setPotion(bucket, Potions.HEALING);
         registration.addRecipeCategories(
-                new RowPagesCategory(gui, TIPPED_ARROWS, "creativeengineering.jei.tipped_arrows",
+                new RowPagesCategory(gui, TIPPED_ARROWS, "creativebrewing.jei.tipped_arrows",
                         gui.createDrawableIngredient(VanillaTypes.ITEM_STACK, arrow), 1 + ARROW_KINDS.size()),
-                new RowPagesCategory(gui, POTION_BUCKETS, "creativeengineering.jei.potion_buckets",
+                new RowPagesCategory(gui, POTION_BUCKETS, "creativebrewing.jei.potion_buckets",
                         gui.createDrawableIngredient(VanillaTypes.ITEM_STACK, bucket), BUCKET_KINDS.size()));
     }
 
@@ -147,8 +147,8 @@ public class PotionPagesJEI implements IModPlugin {
         if (Minecraft.getInstance().level == null) {
             return;
         }
-        boolean arrows = CEConfig.JEI.tippedArrowCategory.get();
-        boolean buckets = CEConfig.JEI.potionBucketCategory.get();
+        boolean arrows = CommonConfig.JEI.tippedArrowCategory.get();
+        boolean buckets = CommonConfig.JEI.potionBucketCategory.get();
         if (!arrows && !buckets) {
             return;
         }

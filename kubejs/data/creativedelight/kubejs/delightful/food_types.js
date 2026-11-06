@@ -7,16 +7,27 @@ if (global.CD) global.CD.genPut('food_types', 'delightful', {
   "raw/veggie": [
    "cactus_flesh"
   ],
+  "raw/veggie/sliced": [
+   "baklava_slice"
+  ],
   "raw/fruit": [
    "acorn",
    "cantaloupe_slice",
-   "salmonberries"
+   "salmonberries",
+   "wrapped_cantaloupe"
   ],
   "cooked/veggie": [
    "cactus_steak"
   ],
+  "cooked/fruit": [
+   "roasted_acorn"
+  ],
+  "baked": [
+   "cantaloupe_bread"
+  ],
   "sweet": [
    "blueberry_pie_slice",
+   "cantaloupe_gummy",
    "cantaloupe_popsicle",
    "cooked_marshmallow_stick",
    "crimson_berry_pie_slice",
@@ -25,6 +36,7 @@ if (global.CD) global.CD.genPut('food_types', 'delightful', {
    "green_apple_pie_slice",
    "honey_glazed_walnut",
    "marshmallow_stick",
+   "matcha_gummy",
    "matcha_ice_cream",
    "nightshade_berry_pie_slice",
    "rock_candy",
@@ -46,10 +58,15 @@ if (global.CD) global.CD.genPut('food_types', 'delightful', {
    "field_salad"
   ],
   "soup": [
+   "cactus_chili",
+   "cactus_soup",
    "sinigang"
   ],
   "meal": [
    "coconut_curry"
+  ],
+  "meal/feast": [
+   "stuffed_cantaloupe"
   ],
   "drink": [
    "azalea_tea",
@@ -57,7 +74,9 @@ if (global.CD) global.CD.genPut('food_types', 'delightful', {
    "ender_nectar",
    "lavender_tea",
    "matcha_latte",
-   "prickly_pear_juice"
+   "matcha_milkshake",
+   "prickly_pear_juice",
+   "salmonberry_milkshake"
   ],
   "ingredient": [
    "animal_fat",
@@ -65,7 +84,8 @@ if (global.CD) global.CD.genPut('food_types', 'delightful', {
    "glow_jelly_bottle",
    "green_tea_leaf",
    "jelly_bottle",
-   "nut_butter_bottle"
+   "nut_butter_bottle",
+   "nut_dough"
   ]
  },
  "canned": {

@@ -59,49 +59,16 @@ Creative Delight	2	3
 Baking and Sweets	1	3
 Creative Mods	1	5
 
+## Writeup plans (add these to writeups and todo)
+
 ## Idea, Notes, Changes (Human scratchpad, don't write up or add to plans unless directed)
 
-- lower corncob cutting recipe (2 kernels), add mortar recipe (3 kernels), and grinding (create mill, crush, ie crush, 4 kernels + 0.5 cornmeal)
-- curios face slot
-    - missing texture, use standard helmet icon
-    - allow smoking pipe in slot
-- no strawberry storage block
-- all berries take bag/sacks, other fruits/veggies take crates?
-- book writing animation? not enough animations?
+- download jars to mods folder then move to an upstream folder system
+- unify all upstream folders into /upstream
 
-- new jam fluids and blocks displays incorrectly in jei, both square textures and doesnt fold around, register like other jams
-    - swap new jams to fruit colors. 
-- allow animals to eat thatch, apply gravity, implement w/ layers and thatch drawing on top?
-- missed honey jar retexture
-- swap empty mason jar texture to fruit delight icon
-
-- grass crop seasons missing language
-- 'Can be eaten w/ chopsticks' to foods that are eligible
-- rename redeco jar to empty terrarium
-- restore azalea wood? hasty removal
-- expand wood coverage to all woods automatically? (creative delight basket, rack, etc) investigate everycompat
-- paint polished stone textures on stone cutting boards, not palette swap (overlay texture w/o changing shape)
-- cosmetic curios back slot
-- change grass offseason to only winter (currently has cold grasses)
-
-- seasoning/bbq
-    - season icon location by item, family? overlap is consistant problem
-    - make offhand slot clearer 
-        - adjust
-    - allow grilling raw meat for grilled effect
-    - allow grabbing 1 item from ingredient basin with full hand
-    - allow multiple ingredient types for skewer (3 cabbage leaf type, 2 potato type)
-    - allow any item in offhand/in basin
-    - jei tab needs name
-    - retexture cumin, pepper, and chili powder to dusts
-    - seasonings not in trade jei
-    - sauced icon missing, add new shape
-        - fall back to salt icon
-    - allow sauce on more meat like foods, whitelist
-    - keep tray, new wood variants?
-    - ingredient basin wood variants
-    - change 'Burnt!!' wthit tooltip to 'Burnt'
-    - show grilled icon in jei grilling
-    - use effect chance more in skewers
-    - grilled icon/line missing
-        - fall back to salt icon
+- ensure swap system allows players running unmodified versions of delight, other mods to swap items to new variants. lower priority, swap for every merge and some removes
+- manure buildup system
+    - required hearth and harvest manure
+    - manure can build up as layers if too little space is in pen or manure not cleared consistanly enough
+        - manure mobs pathfind to open space to drop manure
+        - crammed mobs (touching other mobs, unable to pathfind to 3x3 clear space) drop manure layers instead of items with a chance

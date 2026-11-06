@@ -17,7 +17,6 @@ if (global.CD) global.CD.genPut('placeable', 'oceansdelight', {
   "squid_rings"
  ],
  "placeable_on_plate": [
-  "baked_tentacle_on_a_stick",
   "cooked_stuffed_cod",
   "elder_guardian_roll",
   "fugu_roll",
@@ -28,7 +27,6 @@ if (global.CD) global.CD.genPut('placeable', 'oceansdelight', {
   "fugu_roll"
  ],
  "placeable_on_coaster": [
-  "baked_tentacle_on_a_stick",
   "bowl_of_guardian_soup",
   "braised_sea_pickle",
   "cooked_stuffed_cod",

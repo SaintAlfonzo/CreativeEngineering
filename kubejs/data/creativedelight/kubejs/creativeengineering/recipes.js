@@ -18,11 +18,13 @@ ServerEvents.recipes(e => {
 		//######################### Dough blocks #########################
 		// Dough block for every other dough (development/creativeDelight/src/main/resources/kubejs_startup/creativeengineering/baking_ingredients.js, TODO baking/baked-goods #27):
 		// 9 dough <-> block, as Create Compressed's dough block (the wheat dough block is in create/recipes.js)
+		// G5 begin: rows naming an absent mod's id are filtered out below (Item.of of a missing id is air)
 		;[
 			[i.gingerdough, i.gingerdough_block], [i.cookie_dough, i.cookie_dough_block],
 			[i.sweet_potato_dough, i.sweet_potato_dough_block], [i.oat_dough, i.oat_dough_block],
 			[i.cucumber_dough, i.cucumber_dough_block], [i.sourdough, i.sourdough_block],
-		].forEach(d => {
+		// G5 end
+		].filter(d => !global.CD.absentIn(d)).forEach(d => {
 			R.shapeless(Item.of(d[1], 1), [Item.of(d[0], 9)], e)
 			R.shapeless(Item.of(d[0], 9), [Item.of(d[1], 1)], e)
 		})
@@ -60,9 +62,9 @@ ServerEvents.recipes(e => {
 		// Assemblies on bread need a different first step each, or Create only ever picks one of them: CCK's bacon, chicken
 		// and egg sandwiches already start with cooked bacon, cooked chicken and a fried egg. So the egg burger starts on
 		// the patty instead of the bread.
-		if (['create', 'farmersdelight', 'delightful', 'moredelight', 'alexsdelight', 'alexsmobs'].every(m => Platform.isLoaded(m))) {
+		if (global.has('create', 'farmersdelight', 'delightful', 'moredelight', 'alexsdelight', 'alexsmobs')) {
 			;[
-				'farmersdelight:hamburger', 'create_central_kitchen:sequenced_assembly/hamburger',
+				'farmersdelight:hamburger', 'create_central_kitchen:sequenced_assembly/hamburger', // G5 (R.remove ids)
 				'delightful:food/cheeseburger', 'delightful:food/cheeseburger_from_milk',
 				'delightful:food/deluxe_cheeseburger', 'delightful:food/deluxe_cheeseburger_from_milk',
 				'moredelight:simple_hamburger', 'moredelight:hamburger_with_egg', 'moredelight:loaded_hamburger',

@@ -1,5 +1,5 @@
 #!/bin/bash
-# Headless check of PoolTuner.mergeCurrent (needs ./gradlew :patcherMod:build first). Expect "ALL PASS".
+# Headless check of PoolTuner.mergeCurrent (needs ./gradlew :creativeCommon:build first). Expect "ALL PASS".
 ROOT="$(cd "$(dirname "$0")/../.." && pwd)"; L="$HOME/.local/share/atlauncher/libraries"; C="$HOME/.gradle/caches/modules-2/files-2.1"
 source "$ROOT/tools/java_test_cp.sh"; T="$(mktemp -d)"
 mkdir -p "$T/stub/net/minecraftforge/fml/loading"

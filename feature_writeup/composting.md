@@ -19,7 +19,7 @@ Test prefix `CM-` (the backlog proposed `CP-`, which [can_parity.md](can_parity.
   [compost_values.js](../kubejs/startup_scripts/compost/compost_values.js) (per-item chances),
   Creative Delight's `kubejs_startup/<mod>/compost.js` (the Farmer's, Fungi, Veggies and Vintage Delight rows, QoL-4
   since 2026-10-25, switch `[qol] compost`; `values(..., { when })`), patcherMod
-  [func/compost.js](../development/patcherMod/src/main/resources/kubejs_startup/creativeengineering/func/compost.js) (engine).
+  [func/compost.js](../development/creativeCommon/src/main/resources/kubejs_startup/creativecommon/func/compost.js) (engine).
 - **Knobs:** the two data files. After editing: `/kubejs reload startup_scripts`, then `/reload`.
 
 ## 1. Overview
@@ -130,7 +130,7 @@ the first rebuild), `now` (each item's chance, whether a value or a rule put it 
 - [startup_scripts/func/compost.js](../kubejs/startup_scripts/func/compost.js), [development/creativeDelight/src/main/resources/kubejs_startup/creativeengineering/compost_rules.js](../development/creativeDelight/src/main/resources/kubejs_startup/creativeengineering/compost_rules.js), [startup_scripts/compost/compost_values.js](../kubejs/startup_scripts/compost/compost_values.js).
 - [server_scripts/_lib/dump_compost.js](../kubejs/server_scripts/_lib/dump_compost.js) (`/dumpcompost`).
 - [tools/gen_compost_values.py](../tools/gen_compost_values.py).
-- Related recipes: [wood/sawdust.js](../kubejs/server_scripts/wood/sawdust.js) (compost, fertile soil, mulch).
+- Related recipes: [wood/sawdust.js](../kubejs/data/creativeengineering/kubejs/wood/sawdust.js) (compost, fertile soil, mulch).
 
 ## 6. Offline checks
 

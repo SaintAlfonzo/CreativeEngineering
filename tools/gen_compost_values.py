@@ -34,6 +34,7 @@ from pathlib import Path
 
 sys.path.insert(0, str(Path(__file__).resolve().parent))
 from food_catalog import INSTANCE, DICT, parse_dict, best_key, new_key  # noqa: E402
+import gen_out  # noqa: E402
 
 ROOT = INSTANCE / 'development/creativeDelight/src/main/resources/kubejs_startup'
 # Namespaces whose file goes to Creative Brewing's startup tree instead (creative_brewing.md 4.2 phase 1, 2026-11-01).
@@ -150,7 +151,7 @@ def render(folder, groups, order):
     total = sum(len(v) for v in groups.values())
     namespaces = sorted({r[0].split(':', 1)[0] for rows in groups.values() for r in rows})
     out = [f'// priority: {PRIORITY}']
-    out += [f'// requires: {ns}' for ns in namespaces if ns not in NO_REQUIRES]
+    out += [f'// requires: {gen_out.requires_mod(ns)}' for ns in namespaces if ns not in NO_REQUIRES]
     out += [
         f'{MARK} from a /dumpcompost dump: do not edit, rerun it. To change a',
         '// chance, put the row in a hand-written compost.js in this folder and rerun (the generator skips items listed',

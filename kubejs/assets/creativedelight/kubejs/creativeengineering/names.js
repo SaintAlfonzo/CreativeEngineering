@@ -13,14 +13,19 @@ ClientEvents.lang('en_us', e => {
     'Salmon roe.\n\nDrops from Salmon killed with a Knife, and from a Fishing Net used on kelp or seagrass in rivers.')
   e.add('jei.oceanic_delight.shrimp_information',
     'Found in kelp and seagrass in oceans that are not cold.\n\nUse a Fishing Net on them to catch some.')
+  // Skewers (plan_meals_rolls_bbq.md C11a): the three "Barbecue Stick" foods are Skewers like the rest of the family;
+  // ids unchanged. Their raw versions are named in the Barbeque's Delight member's lang.
+  e.renameItem(global.item.bbq_stick, 'Barbecue Skewer')
+  e.renameItem(global.item.end_barbecue_stick, 'End Skewer')
+  e.renameItem(global.item.improvised_barbecue_stick, 'Improvised Skewer')
   // Fruits Delight's bayberry soup is a drink (food/drinks #9): item, its Forge fluid and the can. Ids unchanged.
-  e.renameItem(global.item.bayberry_soup, 'Bayberry Juice')
+  if (global.has('fruitsdelight')) e.renameItem(global.item.bayberry_soup, 'Bayberry Juice')
   e.add('fluid.fruitsdelight.bayberry_soup', 'Bayberry Juice')
   e.renameItem(global.item.canned_bayberry_soup, 'Canned Bayberry Juice')
   // Drink rules (creative_delight_drinks.md 6, food/drinks #15): renames only, ids unchanged. The pack fluids of
   // Turnip Juice and Ice Berry Matcha are named in CD startup fluids.js; Central Kitchen already names the bubble tea fluid.
   e.renameItem(global.item.turnip_water, 'Turnip Juice')
-  e.renameItem(global.item.seacucumbertea, 'Sea Pickle Tea')
+  if (global.has('hostiledelight')) e.renameItem(global.item.seacucumbertea, 'Sea Pickle Tea')
   e.renameItem(global.item.bubble_tea, 'Chorus Fruit Bubble Tea')
   e.renameItem(global.item.berry_matcha_latte, 'Ice Berry Matcha')
   e.renameItem(global.item.ender_nectar, 'Chorus Tea')
@@ -57,32 +62,36 @@ ClientEvents.lang('en_us', e => {
       c.split('_').map(w => w.charAt(0).toUpperCase() + w.slice(1)).join(' ') + ' Plant'))
 
   // Dish renames (scratchpad 2026-10-30). Ids unchanged.
-  e.renameItem(global.item.cheesy_pasta, 'Cheesy Fish Pasta')  // Brewin's; merges/dishes #5
+  if (global.has('brewinandchewin')) e.renameItem(global.item.cheesy_pasta, 'Cheesy Fish Pasta')  // Brewin's; merges/dishes #5
   e.renameItem(global.item.canned_cheesy_pasta, 'Canned Cheesy Fish Pasta')
   e.add('block.displaydelight.bnc_cheesy_pasta', 'Placed Cheesy Fish Pasta')
   e.renameItem(global.item.deluxe_burger, 'Loaded Burger')  // Vintage's "The Burger"; merges/dishes #10
   e.add('block.supplementaries.pancake', 'Pancake')  // owner 2026-11-01 (creativedelight/members #15): "Pancake", the tooltip says stackable (supplementaries/client.js); was Stackable Pancake (merges/baking #1)
-  e.renameItem(global.item.jelly_bread, 'Bread with Jam')  // dishes/jams #3
+  if (global.has('fruitsdelight')) e.renameItem(global.item.jelly_bread, 'Bread with Jam')  // dishes/jams #3
   e.renameItem(global.item.coffee_cheesecake, 'Coffee Pie')  // creativedelight/members #25
   e.add('item.rusticdelight.coffee_cheesecake_slice', 'Slice of Coffee Pie')
   // The Dirty Stuff: the leaf package and the tobacco package both read "Tobacco Package" (food/drugs #2).
   // renameItem, not e.add(key, value): the 2-arg add writes the key into the minecraft namespace's lang file, and the
   // client merges lang files namespace by namespace in hash order, so the_dirty_stuff's own file could load later and
   // win (r1101 CQ-UI-01: tobacco_package stayed "Tobacco Package"; ui/names #12).
-  e.renameItem(global.item.tobacco_leafs_package, 'Bundle of Tobacco Leaves')
-  e.renameItem(global.item.dried_tobacco_leafs_package, 'Bundle of Dried Tobacco Leaves')
-  e.add('the_dirty_stuff', 'item.the_dirty_stuff.dried_tobacco_leaf_package', 'Bundle of Dried Tobacco Leaves')  // lang-only key, no item
-  e.renameItem(global.item.tobacco_package, 'Tobacco Bundle')
+  if (global.has('the_dirty_stuff')) {
+    e.renameItem(global.item.tobacco_leafs_package, 'Bundle of Tobacco Leaves')
+    e.renameItem(global.item.dried_tobacco_leafs_package, 'Bundle of Dried Tobacco Leaves')
+    e.add('the_dirty_stuff', 'item.the_dirty_stuff.dried_tobacco_leaf_package', 'Bundle of Dried Tobacco Leaves')  // lang-only key, no item
+    e.renameItem(global.item.tobacco_package, 'Tobacco Bundle')
+  }
   // Cantaloupe merge (item_merges.md 2.10): Fruits Delight's hamimelon line is the Cantaloupe, Delightful's cantaloupe
   // (sand crop) the Mini Cantaloupe. Ids unchanged.
-  e.renameItem(global.item.hamimelon, 'Cantaloupe')
-  e.renameItem(global.item.hamimelon_seeds, 'Cantaloupe Seeds')
-  e.renameItem(global.item.hamimelon_jello, 'Cantaloupe Jello')
-  e.renameItem(global.item.hamimelon_jelly, 'Cantaloupe Jam')
-  e.renameItem(global.item.hamimelon_juice, 'Cantaloupe Juice')
-  e.renameItem(global.item.hamimelon_shaved_ice, 'Cantaloupe Shaved Ice')
-  e.renameItem(global.item.hamimelon_jello_block, 'Cantaloupe Jello Block')
-  e.renameItem(global.item.hamimelon_jelly_block, 'Cantaloupe Jam Block')
+  if (global.has('fruitsdelight')) {
+    e.renameItem(global.item.hamimelon, 'Cantaloupe')
+    e.renameItem(global.item.hamimelon_seeds, 'Cantaloupe Seeds')
+    e.renameItem(global.item.hamimelon_jello, 'Cantaloupe Jello')
+    e.renameItem(global.item.hamimelon_jelly, 'Cantaloupe Jam')
+    e.renameItem(global.item.hamimelon_juice, 'Cantaloupe Juice')
+    e.renameItem(global.item.hamimelon_shaved_ice, 'Cantaloupe Shaved Ice')
+    e.renameItem(global.item.hamimelon_jello_block, 'Cantaloupe Jello Block')
+    e.renameItem(global.item.hamimelon_jelly_block, 'Cantaloupe Jam Block')
+  }
   // Blocks, fluids and texts in each mod's own namespace (3-argument add): a 2-argument add lands in the minecraft lang,
   // which the mod's own file can beat (ui/names #12; #14 cantaloupe plant and stem).
   e.add('fruitsdelight', 'block.fruitsdelight.hamimelon_stem', 'Cantaloupe Stem')
@@ -101,9 +110,9 @@ ClientEvents.lang('en_us', e => {
   e.add('delightful', 'jei.delightful.info.cantaloupe_seeds', 'Mini Cantaloupe Seeds will sprout when planted in sand next to water.')
 
   // Lunchbox tiers follow their textures (feature_writeup/lunchboxes.md). The container.* keys are the screen titles.
-  e.renameItem(global.item.copper_lunchbox, 'Copper Lunchbox')
+  if (global.has('solapplepie')) e.renameItem(global.item.copper_lunchbox, 'Copper Lunchbox')
   e.add('item.solapplepie.container.lunchbox', 'Copper Lunchbox')
-  e.renameItem(global.item.iron_lunchbox, 'Iron Lunchbox')
+  if (global.has('solapplepie')) e.renameItem(global.item.iron_lunchbox, 'Iron Lunchbox')
   e.add('item.solapplepie.container.golden_lunchbox', 'Iron Lunchbox')
   e.add('item.solapplepie.netherite_lunchbox', 'Netherite Lunchbox')
   e.add('item.solapplepie.container.netherite_lunchbox', 'Netherite Lunchbox')

@@ -1,5 +1,7 @@
 #!/usr/bin/env python3
-"""Foods with a block model of their own on Brewin' and Chewin' coasters -> kubejs/assets/creativeengineering/brewinandchewin/coaster/.
+"""Foods with a block model of their own on Brewin' and Chewin' coasters -> the Creative Brewing jar's
+assets/creativebrewing/brewinandchewin/coaster/ (was the KubeJS resource pack's assets/creativeengineering/ up to
+2026-11-04, plan_cb_publish.md M3; a CB rebuild ships them, and the port skips a file whose item is not registered).
 
 The Brewin' port's coaster draws an item with its own small model when a coaster JSON names one
 (assets/<ns>/brewinandchewin/coaster/*.json, any namespace), and with [coaster] taggedItemsOnly on it takes only
@@ -33,7 +35,7 @@ import zipfile
 import lang_index
 import placeable_catalog as pc
 
-OUT = lang_index.INSTANCE / 'kubejs/assets/creativeengineering/brewinandchewin/coaster'
+OUT = lang_index.INSTANCE / 'development/creativeBrewing/src/main/resources/assets/creativebrewing/brewinandchewin/coaster'
 # Widest side of a block model on a coaster, in pixels; the port's bowls are 12, its tankards 7.
 TARGET_PX = 10.0
 # Tallest a model may stand; Vinery's medium bottles are 18.

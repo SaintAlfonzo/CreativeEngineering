@@ -5,7 +5,7 @@
 // Pack drink and cooking fluids. Like Central Kitchen's drink fluids they are "virtual": no placed block and no bucket, they live
 // in tanks, basins and pipes only. Ids in _lib/fluid_dict.js ("Pack fluids"), forge:fluid/<name> tags in
 // server_scripts/tags/fluidtags.js, recipes in server_scripts/cooking/cooking.js ("Fluids"). JEI lists every
-// registered fluid (client_scripts/fluid_jei.js) and shows the bottle's effects on the fluid through its Create
+// registered fluid (creativecommon client _lib/fluid_jei.js) and shows the bottle's effects on the fluid through its Create
 // emptying recipe (patcherMod DrinkFluidEffects).
 
 StartupEvents.registry('fluid', e => {

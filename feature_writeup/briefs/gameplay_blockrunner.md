@@ -92,13 +92,13 @@ walkable block that nothing gives a speed to, so the next mod added doesn't sile
   `/dumptags`). The scan is a generator, `blockrunner_scan` in [tools/generators.json](../../tools/generators.json),
   with `dumps: ["dumptags block", "dumpitemsbymod"]` (generators.json 252-256). Its "could register" filter is a name
   regex (`thin`, scan.py 60), not the real collision shape. `kubejs/exported/` (the dumps) is not in the repo.
-- **What "typed" means at runtime:** `RunSpeed.Info.typed()` ([RunSpeed.java](../../development/patcherMod/src/main/java/com/SaintAlfonzo/creativeengineering/surface/RunSpeed.java)
+- **What "typed" means at runtime:** `RunSpeed.Info.typed()` ([RunSpeed.java](../../development/creativeEngineering/src/main/java/com/SaintAlfonzo/creativeengineering/surface/RunSpeed.java)
   68-70): a tier, a json override, a native speed factor, or an inside slowdown. The WTHIT `hideUntyped` switch uses it.
   `RunSpeed.standTop` (174) with `REGISTER_HEIGHT` (82, private) is the "collision top >= 0.2 registers" rule.
 
 ### Build
 1. **Dump command (patcherMod devtools).** New `devtools/SurfaceAudit.java`, modelled on
-   [devtools/WthitIconDump.java](../../development/patcherMod/src/main/java/com/SaintAlfonzo/creativeengineering/devtools/WthitIconDump.java)
+   [devtools/WthitIconDump.java](../../development/creativeCommon/src/main/java/com/SaintAlfonzo/creativecommon/devtools/WthitIconDump.java)
    (registration, JSON writing to `kubejs/exported/`, try/catch per block). A server command `/cedumpsurface` (op 2;
    tags are loaded on the server) writes `kubejs/exported/surface_audit.json`, one row per block (default state):
    `id`, `collisionTop` (`getCollisionShape(EmptyBlockGetter.INSTANCE, BlockPos.ZERO).max(Y)`, -1 when empty),
@@ -236,7 +236,7 @@ listed in the writeup; optionally a tooltip says so.
 1. **Tag.** `#creativeengineering:slippery` (block tag) in a server tag script via `global.tags.add`, = the slippery
    tier (nested `#blockrunner:surface/slippery`) minus `supplementaries:soap_block` (it has its own effect). Add a
    `b.t_slippery` / `i.`-style key in block_dict.js for it.
-2. **Config** under `[surface]` (CEConfig `Surface`, [CEConfig.java](../../development/patcherMod/src/main/java/com/SaintAlfonzo/creativeengineering/CEConfig.java)
+2. **Config** under `[surface]` (CEConfig `Surface`, [CEConfig.java](../../development/creativeCommon/src/main/java/com/SaintAlfonzo/creativecommon/CEConfig.java)
    1725): new `[surface.slippery]`: `soapSlip` (true), `slipChance` (0.14, soap's), `scaleWithFriction` (true),
    `boatIceFriction` (0.98; 0 = off). Both sides must match (movement is predicted).
 3. **Soap slip** (`surface/SoapSlip.java` + a Forge `LivingEvent.LivingTickEvent` subscriber; players and mobs only,

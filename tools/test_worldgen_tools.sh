@@ -11,7 +11,7 @@
 #   9. tools/check_worldgen_json.py: kubejs/data worldgen JSON has the keys 1.19.2's codecs require (ported 1.20 data)
 #  10. PoolTunerTest: canonical pool order, processor lists of pieces added in code rebound to the world's registry
 #  11. BiomeLayoutCacheTest: the biome tuner's disk cache (hit, wrong key, corrupt file, edited input)
-# Java parts run against development/patcherMod/build/classes, and test 2 also development/creativeDevtools/build/classes
+# Java parts run against development/creativeCommon/build/classes, and test 2 also development/creativeDevtools/build/classes
 # (run ./gradlew build first). No game needed.
 set -euo pipefail
 ROOT="$(cd "$(dirname "$0")/.." && pwd)"

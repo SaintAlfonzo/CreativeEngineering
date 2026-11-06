@@ -115,18 +115,18 @@ Brief: [briefs/items_jars.md](briefs/items_jars.md). Nothing here is built.
 
 - [kubejs/data/creativedelight/kubejs/creativeengineering/jar_tags.js](../kubejs/data/creativedelight/kubejs/creativeengineering/jar_tags.js): families
 - [kubejs/startup_scripts/_lib/item_dict.js](../kubejs/startup_scripts/_lib/item_dict.js): `i.t_jar_cookies`, `i.t_jar_family_*`
-- [compat/JarMixing.java](../development/patcherMod/src/main/java/com/SaintAlfonzo/creativeengineering/compat/JarMixing.java): rules
-- [mixin/SupplementariesJarTileMixin.java](../development/patcherMod/src/main/java/com/SaintAlfonzo/creativeengineering/mixin/SupplementariesJarTileMixin.java), [ItemDisplayTileAccessor.java](../development/patcherMod/src/main/java/com/SaintAlfonzo/creativeengineering/mixin/ItemDisplayTileAccessor.java)
-- [mixin/SupplementariesJarRendererMixin.java](../development/patcherMod/src/main/java/com/SaintAlfonzo/creativeengineering/mixin/SupplementariesJarRendererMixin.java), [SupplementariesJarItemRendererMixin.java](../development/patcherMod/src/main/java/com/SaintAlfonzo/creativeengineering/mixin/SupplementariesJarItemRendererMixin.java)
-- [mixin/SupplementariesJarItemTooltipMixin.java](../development/patcherMod/src/main/java/com/SaintAlfonzo/creativeengineering/mixin/SupplementariesJarItemTooltipMixin.java)
-- [compat/WthitHolderContents.java](../development/patcherMod/src/main/java/com/SaintAlfonzo/creativeengineering/compat/WthitHolderContents.java)
+- [compat/JarMixing.java](../development/creativeCommon/src/main/java/com/SaintAlfonzo/creativecommon/compat/JarMixing.java): rules
+- [mixin/SupplementariesJarTileMixin.java](../development/creativeCommon/src/main/java/com/SaintAlfonzo/creativecommon/mixin/SupplementariesJarTileMixin.java), [ItemDisplayTileAccessor.java](../development/creativeCommon/src/main/java/com/SaintAlfonzo/creativecommon/mixin/ItemDisplayTileAccessor.java)
+- [mixin/SupplementariesJarRendererMixin.java](../development/creativeCommon/src/main/java/com/SaintAlfonzo/creativecommon/mixin/SupplementariesJarRendererMixin.java), [SupplementariesJarItemRendererMixin.java](../development/creativeCommon/src/main/java/com/SaintAlfonzo/creativecommon/mixin/SupplementariesJarItemRendererMixin.java)
+- [mixin/SupplementariesJarItemTooltipMixin.java](../development/creativeCommon/src/main/java/com/SaintAlfonzo/creativecommon/mixin/SupplementariesJarItemTooltipMixin.java)
+- [compat/WthitHolderContents.java](../development/creativeCommon/src/main/java/com/SaintAlfonzo/creativecommon/compat/WthitHolderContents.java)
 - [tools/jar_mixing_test/probe.js](../tools/jar_mixing_test/probe.js): scratch-server probe
 - Brief: [briefs/baking_baked-goods.md](briefs/baking_baked-goods.md) #11
 
 ## 6. Offline checks
 
 Scratch server: `tools/creative_labels_test/scratch_server.sh setup OUT`, swap `OUT/srv/mods/creativeengineering-*.jar`
-for `development/patcherMod/build/libs/`, copy `tools/jar_mixing_test/probe.js` to
+for `development/creativeCommon/build/libs/`, copy `tools/jar_mixing_test/probe.js` to
 `OUT/srv/kubejs/server_scripts/zz_jar_probe.js`, boot, run `/jartest`, grep `[jartest]` in `logs/latest.log`.
 Checks J1 (tags), J2 (12 slots of 1), J3-J4 (player mix, refuse, take top), J5-J6 (item handler fill, order,
 capacity, comparator), J7 (old one-stack jar splits), J8 (gap closes), J9 (other families, solo items), J10 (jar

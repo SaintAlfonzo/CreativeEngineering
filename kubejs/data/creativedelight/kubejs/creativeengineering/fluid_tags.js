@@ -7,7 +7,7 @@ ServerEvents.tags('fluid', e => {
 	var t = global.tags
 	var f = global.fluid
 
-	;[
+	;[ // G5 begin: [tag, fluid] rows, each handed to global.tags.addFluid
 		['forge:fluid/tea', f.tea],
 		['forge:fluid/apple_cider', f.apple_cider],
 		['forge:fluid/long_apple_cider', f.long_apple_cider],
@@ -38,5 +38,6 @@ ServerEvents.tags('fluid', e => {
 		['forge:fluid/matcha_latte', f.matcha_latte],
 		['forge:fluid/berry_matcha_latte', f.berry_matcha_latte],
 		['forge:fluid/yeast_culture', f.yeast_culture],
+		// G5 end
 	].forEach(([tag, fluid]) => t.addFluid(e, tag, fluid))
 })

@@ -101,7 +101,7 @@ if (global.CD) global.CD.genPut('food_types', 'vintagedelight', {
    "strawberry_jam_jar",
    "sweet_berry_jam_bottle",
    "sweet_berry_jam_jar",
-   "vinegar",
+   "vinegar_bottle",
    "vinegar_jar"
   ],
   "special": [

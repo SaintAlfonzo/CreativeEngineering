@@ -240,8 +240,8 @@ Examples:
 - [placeable_tooltip.js](../kubejs/assets/creativedelight/kubejs/_qol/placeable_tooltip.js): placeable food lines + DD / Fruits Delight removals (tests in [placeable_food.md](placeable_food.md), PL-)
 - patcherMod `food/IntoxicatingDrinkTooltip`: Quark's saturation word -> "Intoxicating Drink" on every food with the Intoxication effect (drinks listed in `global.alcohol`, [alcohol.md](alcohol.md) 11)
 - [armor_effects_tooltip.js](../kubejs/client_scripts/armor_effects_tooltip.js), [tool_effects_tooltip.js](../kubejs/client_scripts/tool_effects_tooltip.js), [potion_buckets.js](../kubejs/client_scripts/potion_buckets.js)
-- patcherMod: [surface/CamoSpeedTooltip.java](../development/patcherMod/src/main/java/com/SaintAlfonzo/creativeengineering/surface/CamoSpeedTooltip.java), `shield/ShieldTooltip.java`, `shield/IronShieldTooltip.java`, `mixin/EchoArmorTooltipMixin.java`, `mixin/JetpackItemTooltipMixin.java`
-- Lang: [patcherMod lang en_us.json](../development/patcherMod/src/main/resources/assets/creativeengineering/lang/en_us.json) (`creativeengineering.tooltip.*`)
+- patcherMod: [surface/CamoSpeedTooltip.java](../development/creativeEngineering/src/main/java/com/SaintAlfonzo/creativeengineering/surface/CamoSpeedTooltip.java), `shield/ShieldTooltip.java`, `shield/IronShieldTooltip.java`, `mixin/EchoArmorTooltipMixin.java`, `mixin/JetpackItemTooltipMixin.java`
+- Lang: [patcherMod lang en_us.json](../development/creativeCommon/src/main/resources/assets/creativecommon/lang/en_us.json) (`creativeengineering.tooltip.*`)
 - Item keys: `global.item` in [item_dict.js](../kubejs/startup_scripts/_lib/item_dict.js)
 - Renames: `resourcepacks/Copycat Framed Block.zip` → `assets/framedblocks/lang/en_us.json` (backups in `configs_edited/resourcepacks/`)
 

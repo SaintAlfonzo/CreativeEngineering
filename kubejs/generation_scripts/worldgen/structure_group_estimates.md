@@ -61,7 +61,7 @@ Pillager outposts: vanilla, and every Towns & Towers tower, fort and camp outpos
 
 Grid: spacing 32, separation 8 (members never start closer than 9 chunks = 144 blocks apart). At most 1 structure per 32 x 32 chunks anywhere. Excluded within 4 chunks of `creativeengineering:group/settlements` grid slots.
 
-Capped (old combined density above the group grid): 70 biome(s), 30% of the group's area. Largest: `terralith:yellowstone` 1 per 27 -> 28, `minecraft:plains` 1 per 26 -> 27, `terralith:highlands` 1 per 26 -> 27, `terralith:brushland` 1 per 30 -> 27, `terralith:lush_desert` 1 per 30 -> 27, `terralith:rocky_mountains` 1 per 26 -> 27.
+Capped (old combined density above the group grid): 70 biome(s), 31% of the group's area. Largest: `terralith:yellowstone` 1 per 27 -> 28, `minecraft:plains` 1 per 26 -> 27, `terralith:highlands` 1 per 26 -> 27, `terralith:brushland` 1 per 30 -> 27, `terralith:lush_desert` 1 per 30 -> 27, `terralith:rocky_mountains` 1 per 26 -> 27.
 
 | Structure | Weight | Frequency | Mod default 1 per | New 1 per | Ratio | Note |
 |---|---|---|---|---|---|---|

@@ -1,6 +1,8 @@
 # Storage Delight 26.10.05 against the installed 25.12.09
 
 **BUILT 2026-10-25 (decisions in section 5); Shipped in 1.1.03 (deployed to server and players 2026-10-26); SQ-STD-01 PASSED 2026-10-26, SQ-STD-02 PASSED r1102b 2026-11-02. The 2026-10-29 23:54 build (name tag, JEI wood order) is the `mods/` copy (identical, deep scan 2026-11-02).** Replaced: `storagedelight-25.12.09-1.19-forge.jar` (`mods/`, `server_mods/`), 1.19.2. Evaluated
+
+**2026-11-04:** `-02` built, not installed: declares a mandatory `farmersdelight` dependency (`[1.19.2-1.2.4,)`, AFTER), which upstream never did (creative_split.md 7.17). Scratch SQ-DEP-08.
 2026-10-25 against `devmods/checkNewerVersionForContent/storagedelight-26.10.05-26.3-neoforge.jar` (NeoForge, vanilla
 26.3), method in [devmods_evaluation.md](devmods_evaluation.md) section 1. Both jars unpacked in `DecompiledMods/`. Plan
 row: `largecontent/mod-additions #33` in [todo/TODO.md](todo/TODO.md). No config file. The pack's scripts do not touch

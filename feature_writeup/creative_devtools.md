@@ -118,7 +118,7 @@ Scratch server (SQ-CDV, [scratch_queue.md](testing/scratch_queue.md)) and in gam
 
 ## 5. Install (game closed)
 
-`./gradlew :patcherMod:installToMods :creativeDevtools:installToMods --offline` together: patcherMod without Devtools
+`./gradlew :creativeCommon:installToMods :creativeDevtools:installToMods --offline` together: patcherMod without Devtools
 loses the tools, Devtools without the new patcherMod fails on the missing hooks. Not part of any player payload.
 
 ## 6. History

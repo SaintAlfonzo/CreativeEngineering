@@ -23,9 +23,8 @@ ClientEvents.lang('en_us', e => {
   e.add('item.creativeengineering.gold_wire', 'Gold Wire')
   e.add('item.creativeengineering.spool', 'Spool')
   e.add('item.creativeengineering.zinc_plate', 'Zinc Plate')
-  e.add('item.creativeengineering.flint_and_terrasteel', 'Flint and Terrasteel')
   e.add('item.creativeengineering.arrow_fletching', 'Arrow Fletching')
-  e.add('block.creativeengineering.dark_fire', 'Dark Fire')
+  // Flint and Terrasteel, Dark Fire: Creative Magic (assets/creativemagic/kubejs/names.js).
   e.add('block.creativeengineering.aluminum_plate_block', 'Aluminum Plate Block')
   e.add('block.creativeengineering.cast_iron_plate_block', 'Cast Iron Plate Block')
   e.add('block.creativeengineering.constantan_plate_block', 'Constantan Plate Block')
@@ -161,7 +160,7 @@ ClientEvents.lang('en_us', e => {
 	
 	e.renameItem('immersive_weathering:mulch_block', 'Fertile Soil')
 
-  e.renameItem('minecraft:shield', 'Iron Shield')
+  // Iron Shield (the vanilla shield as the iron tier): Creative Equipment (assets/creativeequipment/kubejs/names.js).
   
   e.add('entity.minecraft.villager.botanist', 'Botanist')
   e.add('entity.minecraft.villager.animal_tamer', 'Animal Tamer')

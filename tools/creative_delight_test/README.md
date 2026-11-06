@@ -37,7 +37,7 @@ regenerate it; the file stays as the record of SQ-CDT-05's 57/57 pass. `python3 
 - **Jar path** (the real one): `./gradlew :creativeDelight:build -Pcd_test_suite --offline` writes
   `development/creativeDelight/build/libs/creativedelight-<v>-cdtest.jar` (all three script types inside; not
   archived, `installToMods` refuses it, `build_deploy.py` refuses a jar holding `_cdtest/`). Copy that jar and the
-  patcherMod jar from `development/patcherMod/build/libs/` into the scratch server's `mods/`, with the upstream
+  patcherMod jar from `development/creativeCommon/build/libs/` into the scratch server's `mods/`, with the upstream
   `oceansdelight-*`, `oceanic_delight-*` and `ends_delight-*` jars removed.
 - **Folder path** (the dev loop, 10.4): with the normal CD jar in the scratch `mods/`, copy `suite/data` and
   `suite/assets` into the scratch server's `kubejs/` (they land at `kubejs/data/creativedelight/kubejs/_cdtest/`

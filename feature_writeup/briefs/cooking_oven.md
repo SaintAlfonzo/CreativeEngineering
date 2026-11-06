@@ -9,7 +9,7 @@ cookie / muffin / tart / hand-pie tables, oven and bakeware recipes),
 [baked_goods.js](../../kubejs/data/creativedelight/kubejs/creativeengineering/baked_goods.js) (wheat -> flour swap),
 the family calls in [cd_food.js](../../development/creativeDelight/src/main/resources/kubejs_startup/creativedelight/cd_food.js)
 (Creative Delight jar), `global.NCH.ceBaking` (line 1161), `fdCooking` (1074), `hammering` (1142) in
-[neoCraftHelper.js](../../development/patcherMod/src/main/resources/kubejs_startup/creativeengineering/func/neoCraftHelper.js)
+[neoCraftHelper.js](../../development/creativeCommon/src/main/resources/kubejs_startup/creativecommon/func/neoCraftHelper.js)
 (patcherMod jar), patcherMod `oven/` (`OvenBlockEntity`, `BakingRecipe`, `jei/OvenJeiPlugin`).
 
 ## Scope and order

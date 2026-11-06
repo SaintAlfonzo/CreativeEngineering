@@ -51,7 +51,7 @@ SCRIPT_ROOTS = [
     'kubejs/data/creativedelight/kubejs',
     'kubejs/assets/creativedelight/kubejs',
     'development/creativeDelight/src/main/resources/kubejs_startup',
-    'development/patcherMod/src/main/resources/kubejs_startup',
+    'development/creativeCommon/src/main/resources/kubejs_startup',
 ]
 DATA_ROOTS = ['kubejs/data']
 DATA_SUFFIXES = {'.json', '.mcfunction', '.nbt'}

@@ -9,9 +9,7 @@
 	delightful = true
 	enders_additions = true
 	hearthandharvest = true
-	blockheads_additions = true
 	nethersdelight = true
-	incubation_additions = true
 	roll_delight = true
 	largemeals = true
 	barbequesdelight = true
@@ -370,4 +368,79 @@
 	#On = Grilled (put on by the Barbeque's Delight Grill) counts toward maxSeasonings, and the Grill
 	#does not add it to a skewer that is already full. Off = it never counts.
 	grilledCountsTowardMax = false
+
+#A lit campfire in #creativecommon:campfire/rain_douses (the plain campfire; not soul or
+#Tinted campfires) goes out in open rain, unless it sits on a block in
+##creativecommon:campfire/rain_proof_fuel (coal and charcoal blocks). Otherwise campfires
+#burn forever. Server side.
+[campfire]
+	#Master on/off switch. Off = rain never puts a campfire out.
+	rainDouses = true
+	#Ticks of unbroken rain before the campfire goes out (160 = 8 s, Unlit Campfire's default).
+	#Leaving the rain or being on a fuel block resets the count.
+	#Range: 1 ~ 72000
+	rainOutTicks = 160
+	#Comfortable Campfires port (campfire.CampfireComfort): players near a lit campfire get Farmer's
+	#Delight's Comfort, refreshed while under 3 s are left.
+	comfort = true
+	#Comfort when Farmer's Delight is present; false (or no Farmer's Delight) = Regeneration, as the mod.
+	useComfort = true
+	#Blocks around (and above) the campfire that count as near (the mod's 3).
+	#Range: 1 ~ 16
+	comfortDistance = 3
+	#Seconds of Comfort per application (the mod's 5).
+	#Range: 1 ~ 600
+	comfortSeconds = 5
+	#A campfire looks for players once per this many ticks (the mod checked every tick; campfires are
+	#spread over the period). 1 = every tick.
+	#Range: 1 ~ 200
+	comfortEveryTicks = 20
+
+#One switch per optional Creative Delight compartment (Java, assets and data folded into this jar).
+#Each works only with its mod installed; off = as if that mod were absent: no blocks, no changes to it,
+#no recipes or loot. Read at startup: restart to apply. Old saves keep the blocks only while it is on.
+[compartments]
+	#Incubation additions: emu nests (Alex's Mobs), duck and goose nests and egg crates (Untitled Duck Mod),
+	#the goose golden egg (with Vintage Delight). Needs Incubation.
+	incubation = true
+	#Cooking for Blockheads additions: wood spice racks, tool racks and fruit baskets, kitchen corner storage,
+	#oven fuel and smoking, the full-height fridge, counter-top placement. Needs Cooking for Blockheads and Balm.
+	cookingforblockheads = true
+
+#Cooking for Blockheads compartment ([compartments] cookingforblockheads).
+#Small blocks on a Cooking for Blockheads counter or corner (#creativeengineering:counter_supports):
+#Farmer's Delight's cutting board, Display Delight's plates and plated foods, Brewin' and Chewin's
+#coaster (#creativeengineering:counter_toppers). The counter's worktop is 1 px lower than a full
+#block, so they and what lies on them are drawn shifted by these offsets, in pixels (1/16 block):
+#cuttingBoardOffset* for the board, plateOffset* for the plates and the coaster. X and Z are as
+#seen on a counter facing north (door to the north, back edge to the south: +X = east, +Z = toward
+#the back) and turn with the counter. Visual only; F3+A redraws.
+[cookingforblockheads]
+	#Sideways shift.
+	#Range: -8.0 ~ 8.0
+	cuttingBoardOffsetX = 0.0
+	#Height shift; -1 puts the board on the worktop.
+	#Range: -8.0 ~ 8.0
+	cuttingBoardOffsetY = -1.0
+	#Shift toward the counter's back (negative = toward the door).
+	#Range: -8.0 ~ 8.0
+	cuttingBoardOffsetZ = 0.0
+	#Plates and coasters: sideways shift.
+	#Range: -8.0 ~ 8.0
+	plateOffsetX = 0.0
+	#Plates and coasters: height shift; -1 puts them on the worktop.
+	#Range: -8.0 ~ 8.0
+	plateOffsetY = -1.0
+	#Plates and coasters: shift toward the counter's back (negative = toward the door).
+	#Range: -8.0 ~ 8.0
+	plateOffsetZ = 0.0
+
+#Incubation compartment ([compartments] incubation).
+[incubation]
+	#Untitled Duck Mod geese: chance, as 1 in N, that a goose lays a Golden Egg (Vintage Delight)
+	#instead of its next goose egg. Rolled once per egg, before the goose looks for a nest; a golden egg
+	#is always dropped on the ground near the goose, never laid in a nest. 0 = never.
+	#Does nothing without Untitled Duck Mod and Vintage Delight.
+	#Range: 0 ~ 1000000
+	goldenEggChance = 1000
 

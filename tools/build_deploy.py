@@ -49,7 +49,7 @@ What goes where:
                            files ship, dev files (notes, reports, generator inputs, /dump output in
                            exported/) never do. An unclassified file is a preflight error.
                            Player changelog (feature_writeup/changelog.md 3.5): the working list
-                           assets/creativeengineering/changelog/unreleased.md never ships under that name;
+                           assets/creativecommon/changelog/unreleased.md never ships under that name;
                            the payload gets it as <version>.md with "# <version>" and "Released <today>" on
                            top (the tree is not touched). --snapshot then writes that same text into the
                            tree as <version>.md and starts a fresh unreleased.md.
@@ -132,7 +132,9 @@ SERVER_CONFIG_EDITS = os.path.join(ROOT, 'configs_edited', 'server_config')
 # must be in mods/). Each project keeps its released jars in development/<project>/jar_archive/.
 DEVELOPMENT = os.path.join(ROOT, 'development')
 IN_TREE_MODS = [
-    ('patcherMod', 'creativeengineering', True),
+    # Creative Common: patcherMod until the Creative Split swap (2026-11-04, creative_split.md 7.13); the shared core
+    # every Creative jar requires. Its jar displaces the old creativeengineering-1.x jars (replaces_jars).
+    ('creativeCommon', 'creativecommon', True),
     ('exposureBackport', 'exposureBackport', True),
     ('creativeLabels', 'creativeLabels', True),
     # Creative Delight: the bundle jar; its members (development/creativeDelight/members/, Baby Mobs and Incubation
@@ -148,9 +150,20 @@ IN_TREE_MODS = [
     # Creative Worldgen: world generation and fauna (feature_writeup/creative_worldgen.md); nests More Mooblooms and Baby
     # Mobs (development/creativeWorldgen/members/; More Mooblooms shipped on its own before 2026-11-02).
     ('creativeWorldgen', 'creativeworldgen', True),
+    # Creative Magic: Dark Fire and the Nether portal rule, enchantment tweaks, the Botania Trinket Case, magic recipes
+    # (feature_writeup/creative_magic.md).
+    ('creativeMagic', 'creativemagic', True),
+    # Creative Equipment: gear (shields, stepstools, backpack skins, air brake, tool and armor tuning, archery, End gear,
+    # harvest tiers; feature_writeup/creative_equipment.md).
+    ('creativeEquipment', 'creativeequipment', True),
+    # Creative Engineering: machines and engineering (fan type, sawmill routing, shrapnel, surfaces, liquid XP, the
+    # component, metal and wood scripts; feature_writeup/creative_engineering.md). Mod id creativeengineering since the
+    # swap, version 2.x (1.x jars of that id were patcherMod).
+    ('creativeEngineering', 'creativeengineering', True),
 ]
 # Extra source trees per in-tree project for the "src newer than the jar" check (paths from the instance root).
 IN_TREE_EXTRA_SRC = {
+    'creativeCommon': ['kubejs/data/creativecommon/kubejs', 'kubejs/assets/creativecommon/kubejs'],
     'creativeDelight': ['development/creativeDelight/members', 'kubejs/data/creativedelight/kubejs',
                         'kubejs/assets/creativedelight/kubejs', 'kubejs/data/creativedelight/worldgen',
                         'kubejs/data/creativedelight/cup_conversion', 'kubejs/data/creativedelight/loot_tables',
@@ -161,6 +174,10 @@ IN_TREE_EXTRA_SRC = {
     'creativeCompat': ['kubejs/data/creativecompat/kubejs', 'kubejs/assets/creativecompat/kubejs'],
     'creativeWorldgen': ['development/creativeWorldgen/members', 'kubejs/data/creativeworldgen/kubejs',
                          'kubejs/data/more_mooblooms/moobloom_spawns', 'development/shared'],
+    'creativeMagic': ['kubejs/data/creativemagic/kubejs', 'kubejs/assets/creativemagic/kubejs', 'development/shared'],
+    'creativeEquipment': ['kubejs/data/creativeequipment/kubejs', 'kubejs/assets/creativeequipment/kubejs',
+                          'development/shared'],
+    'creativeEngineering': ['kubejs/data/creativeengineering/kubejs', 'development/shared'],
 }
 # Third-party jars that patcherMod fixes target by version (deploy.md "Mod updates"): (jar file prefix, the file the
 # fixes were written against). A different file under the same prefix means the mod was updated: rerun the checklist.
@@ -233,8 +250,8 @@ KUBEJS_CLASSES = [
     ('archive/*', 'dev'),                  # old worldgen tuning, never loaded
     ('exported/*', 'dev'),                 # /dump* output
     ('startup_scripts/todo/*', 'dev'),     # .txt work lists
-    ('assets/creativeengineering/changelog/unreleased.md', 'dev'),  # working list: shipped as <version>.md (check_changelog)
-    ('assets/creativeengineering/changelog/*.md', 'client'),        # player changelog, one file per version
+    ('assets/creativecommon/changelog/unreleased.md', 'dev'),  # working list: shipped as <version>.md (check_changelog)
+    ('assets/creativecommon/changelog/*.md', 'client'),        # player changelog, one file per version
     ('*.md', 'dev'),                       # notes and reports; the tuners rewrite their *_report.md on every load
     # Creative Delight's script and data trees: authored here, shipped only inside the creativedelight jar (Q25)
     ('data/creativedelight/kubejs/*', 'dev'),
@@ -242,6 +259,9 @@ KUBEJS_CLASSES = [
     ('data/creativedelight/cup_conversion/*', 'dev'),
     ('data/creativedelight/loot_tables/*', 'dev'),   # Oceanic fishing net tables (creative_delight.md 36), in the CD jar
     ('assets/creativedelight/kubejs/*', 'dev'),
+    # Creative Common's server and client helper scripts (plan_cb_publish.md M1): shipped only inside the creativecommon jar
+    ('data/creativecommon/kubejs/*', 'dev'),
+    ('assets/creativecommon/kubejs/*', 'dev'),
     # Creative Brewing's script trees: the same, shipped only inside the creativebrewing jar
     ('data/creativebrewing/kubejs/*', 'dev'),
     ('assets/creativebrewing/kubejs/*', 'dev'),
@@ -257,6 +277,14 @@ KUBEJS_CLASSES = [
     # moobloom spawn rules it ships as a data tree: the same, shipped only inside the creativeworldgen jar
     ('data/creativeworldgen/kubejs/*', 'dev'),
     ('data/more_mooblooms/*', 'dev'),
+    # Creative Magic's script trees: the same, shipped only inside the creativemagic jar
+    ('data/creativemagic/kubejs/*', 'dev'),
+    ('assets/creativemagic/kubejs/*', 'dev'),
+    # Creative Equipment's script trees: the same, shipped only inside the creativeequipment jar
+    ('data/creativeequipment/kubejs/*', 'dev'),
+    ('assets/creativeequipment/kubejs/*', 'dev'),
+    # Creative Engineering's server script tree: the same, shipped only inside the creativeengineering jar
+    ('data/creativeengineering/kubejs/*', 'dev'),
     ('startup_scripts/*', 'runtime'),
     ('server_scripts/*', 'runtime'),
     ('data/*', 'runtime'),
@@ -324,7 +352,7 @@ KUBEJS_CLASSES = [
 # player has stays in place even when the pack stops shipping it.
 CONFIG_CLASSES = [
     ('trashslot-common.toml', 'player', '1.0.3'),   # TrashSlot deletion behaviour; pushed once with 1.0.3
-    ('creativeengineering/changelog_seen.txt', 'player'),  # changelog read marker (also git-ignored)
+    ('creativecommon/changelog_seen.txt', 'player'),  # changelog read marker (also git-ignored)
     ('DistantHorizons.toml', 'player', '1.1.04'),    # LOD distance/quality + DH threads and server request distances; pushed once with 1.0.4 and again with 1.1.04
     ('jei/blacklist.cfg', 'functional'),            # hidden ingredients (pack-defined)
     ('jei/recipe-category-sort-order.ini', 'functional'),   # pack's recipe tab order
@@ -583,7 +611,7 @@ def check_structures(pre):
     """Regenerate structure_config.json and sync structure_groups.json in a scratch copy of the
     worldgen folder; either one changing means the committed data is stale for the installed mods.
     Also warns when a shipped CEConfig still has the [worldgen.debug] test switches on."""
-    for cfg in ('config/creativeengineering-common.toml', 'configs_edited/root_config/creativeengineering-common.toml'):
+    for cfg in ('config/creativeworldgen-common.toml', 'configs_edited/root_config/creativeworldgen-common.toml'):
         path = os.path.join(ROOT, cfg)
         if os.path.exists(path):
             text = open(path, encoding='utf8').read()
@@ -692,12 +720,12 @@ def check_climate_reader(pre, files):
     if not any(p.startswith('generation_scripts/worldgen/climate/') for p in files['kubejs']):
         return
     for jar, src in files['mods'].items():
-        if re.match(r'creativeengineering-.*\.jar$', jar):
+        if re.match(r'creativecommon-.*\.jar$', jar):
             with zipfile.ZipFile(src) as z:
-                cls = z.read('com/SaintAlfonzo/creativeengineering/util/WorldgenFiles.class')  # util/ since wave 2
+                cls = z.read('com/SaintAlfonzo/creativecommon/util/WorldgenFiles.class')  # Creative Common since 2026-11-04
             if b'readGzipText' not in cls:
                 pre.error(f'mods/{jar} predates the gzipped climate samples (no WorldgenFiles.readGzipText): '
-                          'copy the current development/patcherMod/build/libs jar into mods/ first')
+                          'copy the current development/creativeCommon/build/libs jar into mods/ first')
 
 
 def check_display_delight_models(pre):
@@ -742,7 +770,7 @@ def check_changelog(pre, files, version, deployed, stage_dir):
     """Lint the changelog folder, keep deployed versions' files frozen, and put the working list into the
     payload as <version>.md (stamped copy written into stage_dir; the tree is not touched)."""
     if not os.path.isdir(CHANGELOG_DIR):
-        pre.warn('no changelog folder (kubejs/assets/creativeengineering/changelog/): this version has no player notes')
+        pre.warn('no changelog folder (kubejs/assets/creativecommon/changelog/): this version has no player notes')
         return
     for path, (errors, warnings) in lint_paths([CHANGELOG_DIR]).items():
         label = path if path.startswith('(') else os.path.relpath(path, ROOT)

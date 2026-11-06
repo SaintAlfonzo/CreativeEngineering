@@ -10,7 +10,7 @@
 | Tool effects framework `global.toolEffects`: `onHit()` (to the target) and `held()` (to the wielder) | DEPLOYED, in-game test pending |
 | Echo tools on-hit Weakness II + Darkness II; dragon sword / axe / shovel / trident / bow / crossbow on-hit and held effects | DEPLOYED, in-game test pending; dragon bow and crossbow swapped 2026-10-22 (F4); on-hit never applied until F10 (fixed 2026-10-22); built, scratch server PASSED 2026-10-22 for the on-hit half (SQ-GM-02); held effects in game (AE-19, AE-20) |
 | Echo armor set bonus swapped from Resistance II + Strength II to Night Vision + Phantom Bane (`EchoArmorEffectProcedureMixin`), tooltip to match (`EchoArmorTooltipMixin`) | DEPLOYED (patcherMod), in-game test pending |
-| `creativeengineering:magic_resistance` effect (KubeJS) and its damage cut (`MagicResistanceEffect`, 20% per level on the `creativeengineering:magic` tag; Poison / Wither ticks at or below its level cancelled) | Effect DEPLOYED; tag switch and tick cover BUILT 2026-10-31 (`potions/effects #3`, patcherMod 1.1.04), scratch server PASSED r1031 (2026-10-31, SQ-EFX-02, -03) |
+| `creativeengineering:magic_resistance` effect (KubeJS) and its damage cut (`MagicResistanceEffect`, 20% per level on the `creativecommon:magic` tag; Poison / Wither ticks at or below its level cancelled) | Effect DEPLOYED; tag switch and tick cover BUILT 2026-10-31 (`potions/effects #3`, patcherMod 1.1.04), scratch server PASSED r1031 (2026-10-31, SQ-EFX-02, -03) |
 | Magic Resistance potions (base, long, strong) and their brewing | DEPLOYED; brewing and reagent belong to the potions writeup (backlog row 4); reagent is a placeholder |
 | Tooltip lines for all of the above (`armor_effects_tooltip.js`, `tool_effects_tooltip.js`) | DEPLOYED |
 
@@ -21,7 +21,7 @@
   [func/tool_effects.js](../kubejs/startup_scripts/func/tool_effects.js) (tool data + API),
   [magic/armor_effects.js](../kubejs/server_scripts/magic/armor_effects.js) and
   [magic/tool_effects.js](../kubejs/server_scripts/magic/tool_effects.js) (apply them),
-  [MagicResistanceEffect.java](../development/patcherMod/src/main/java/com/SaintAlfonzo/creativeengineering/potion/MagicResistanceEffect.java).
+  [MagicResistanceEffect.java](../development/creativeCommon/src/main/java/com/SaintAlfonzo/creativecommon/potion/MagicResistanceEffect.java).
 - **Knobs:** the effect lists are code (edit the startup file, restart; `/reload` doesn't re-run startup scripts).
   `config/creativeengineering-common.toml`: `[magic_resistance] reductionPerLevel` (0.2) and
   `[perf] mountEffectIntervalTicks` (100). Both live, no restart.
@@ -106,7 +106,7 @@ The check that all four pieces are worn is CDD's; the mixin only swaps the two `
 
 - **Effect:** `creativeengineering:magic_resistance`, beneficial, colour `#8a2be2`, registered in KubeJS.
 - **Cut:** a Forge `LivingHurtEvent` listener multiplies damage by `1 - min(1, reductionPerLevel x level)` when the
-  source is in the pack's `creativeengineering:magic` damage tag (the shields' MAGIC column, [shields.md](shields.md)
+  source is in the pack's `creativecommon:magic` damage tag (the shields' MAGIC column, [shields.md](shields.md)
   2.9) and the entity has the effect. 20% at I, 40% at II, 100% from V.
 - **What counts:** the tag: vanilla's magic flag (poison and Instant Damage, evoker fangs, thorns, the warden's sonic
   boom, dragon's breath clouds, modded sources that set the flag) plus `farseer`, `#psychic` (Botania relics) and
@@ -242,9 +242,9 @@ several `onHit()` calls on one item add up; armor `piece()` / `mount()` calls re
 - [server_scripts/magic/tool_effects.js](../kubejs/server_scripts/magic/tool_effects.js): hurt event (on hit), player tick (held).
 - [client_scripts/armor_effects_tooltip.js](../kubejs/client_scripts/armor_effects_tooltip.js), [client_scripts/tool_effects_tooltip.js](../kubejs/client_scripts/tool_effects_tooltip.js): tooltip lines.
 - [startup_scripts/magic/magic_resistance.js](../kubejs/startup_scripts/magic/magic_resistance.js): the effect.
-- [potion/MagicResistanceEffect.java](../development/patcherMod/src/main/java/com/SaintAlfonzo/creativeengineering/potion/MagicResistanceEffect.java): damage cut; [potion/MagicResistancePotions.java](../development/patcherMod/src/main/java/com/SaintAlfonzo/creativeengineering/potion/MagicResistancePotions.java): the three potions.
-- [mixin/EchoArmorEffectProcedureMixin.java](../development/patcherMod/src/main/java/com/SaintAlfonzo/creativeengineering/mixin/EchoArmorEffectProcedureMixin.java), [mixin/EchoArmorTooltipMixin.java](../development/patcherMod/src/main/java/com/SaintAlfonzo/creativeengineering/mixin/EchoArmorTooltipMixin.java): echo set bonus.
-- `CEConfig.Magic` (`[magic_resistance]`) and `CEConfig.Perf.mountEffectIntervalTicks` in [CEConfig.java](../development/patcherMod/src/main/java/com/SaintAlfonzo/creativeengineering/CEConfig.java); listener registered in `CreativeEngineering.java` line 109.
+- [potion/MagicResistanceEffect.java](../development/creativeCommon/src/main/java/com/SaintAlfonzo/creativecommon/potion/MagicResistanceEffect.java): damage cut; [potion/MagicResistancePotions.java](../development/creativeCommon/src/main/java/com/SaintAlfonzo/creativecommon/potion/MagicResistancePotions.java): the three potions.
+- [mixin/EchoArmorEffectProcedureMixin.java](../development/creativeCommon/src/main/java/com/SaintAlfonzo/creativecommon/mixin/EchoArmorEffectProcedureMixin.java), [mixin/EchoArmorTooltipMixin.java](../development/creativeCommon/src/main/java/com/SaintAlfonzo/creativecommon/mixin/EchoArmorTooltipMixin.java): echo set bonus.
+- `CEConfig.Magic` (`[magic_resistance]`) and `CEConfig.Perf.mountEffectIntervalTicks` in [CEConfig.java](../development/creativeCommon/src/main/java/com/SaintAlfonzo/creativecommon/CEConfig.java); listener registered in `CreativeEngineering.java` line 109.
 - Related: [potions.js](../kubejs/startup_scripts/cooking/potions.js) lines 68-74 (Magic Resistance brewing), [tooltips.js](../kubejs/client_scripts/tooltips.js) (dragon flavour lines), [tooltips.md](tooltips.md), [gear_tuning.md](gear_tuning.md) (the gear these effects sit on).
 
 ## 6. Offline checks

@@ -31,10 +31,10 @@ TNT minecarts burst correctly; one damage value is a fraction of today's while k
 not flood the server with projectiles (F2); explosives other than vanilla TNT can burst (F3).
 
 ### Now
-- [shrapnel/TntShrapnelHandler.java](../../development/patcherMod/src/main/java/com/SaintAlfonzo/creativeengineering/shrapnel/TntShrapnelHandler.java)
+- [shrapnel/TntShrapnelHandler.java](../../development/creativeEngineering/src/main/java/com/SaintAlfonzo/creativeengineering/shrapnel/TntShrapnelHandler.java)
   27-36: on `ExplosionEvent.Detonate`, server only, bursts when `explosion.getExploder()` is a `PrimedTnt` or
   `MinecartTNT`, at `explosion.getPosition()`, owner `getSourceMob()`.
-- [shrapnel/ShrapnelEntity.java](../../development/patcherMod/src/main/java/com/SaintAlfonzo/creativeengineering/shrapnel/ShrapnelEntity.java)
+- [shrapnel/ShrapnelEntity.java](../../development/creativeEngineering/src/main/java/com/SaintAlfonzo/creativeengineering/shrapnel/ShrapnelEntity.java)
   (119 lines, `ThrowableItemProjectile`): `onHitEntity` 75-84 does `hurt(DamageSource.thrown(this, owner), damage)` on
   **any** entity the projectile can hit, then discards; `canHitEntity` 96-98 = vanilla rule minus the owner. Vanilla's
   rule includes minecarts, boats, armor stands and other pickable non-living entities.
@@ -129,12 +129,12 @@ running the other way, no spreading, very fast burning of wood blocks with a hig
 and soul-fire sustain block (more magic sustain blocks to come).
 
 ### Now
-- [item/FlintAndTerraSteelItem.java](../../development/patcherMod/src/main/java/com/SaintAlfonzo/creativeengineering/item/FlintAndTerraSteelItem.java)
+- [item/FlintAndTerraSteelItem.java](../../development/creativeEngineering/src/main/java/com/SaintAlfonzo/creativeengineering/item/FlintAndTerraSteelItem.java)
   (56 lines): `useOn` 32-55 places Dark Fire in the space in front of the clicked face if it is air, any face, any
   block; javadoc line 17 "TEMPORARY testing behavior: places TerraFireBlock on any air block" (that class no longer
   exists). Recipe flint + terrasteel ingot ([progression.js](../../kubejs/server_scripts/magic/progression.js) 8,
   `i.flint_and_terrasteel` item_dict.js 752).
-- [block/DarkFireBlock.java](../../development/patcherMod/src/main/java/com/SaintAlfonzo/creativeengineering/block/DarkFireBlock.java)
+- [block/DarkFireBlock.java](../../development/creativeCommon/src/main/java/com/SaintAlfonzo/creativecommon/block/DarkFireBlock.java)
   (115 lines, `BaseFireBlock`, 1.0 fire damage): `canBurn` false (24); `canSurvive` 29-43 next to any sturdy face;
   `onPlace` 56-87 finds a portal shape and fires `PortalSpawnEvent` (no `super`); `updateShape` 92-114 removes it when
   it can't survive. `BaseFireBlock` has no random tick and never spreads (that is `FireBlock`), so "no spreading" is
@@ -197,7 +197,7 @@ Dark Fire opens a Nether portal only in the Overworld (decided 2026-10-29).
 ### Now
 - `DarkFireBlock#onPlace` (56-87) calls `PortalShape.findPortalShape(level, pos, PortalShape::isValid, Axis.X)` (tries
   X then Z) and `ForgeEventFactory.onTrySpawnPortal` with no dimension check; `PortalFailureHandler`
-  ([dimension/PortalFailureHandler.java](../../development/patcherMod/src/main/java/com/SaintAlfonzo/creativeengineering/dimension/PortalFailureHandler.java)
+  ([dimension/PortalFailureHandler.java](../../development/creativeCommon/src/main/java/com/SaintAlfonzo/creativecommon/dimension/PortalFailureHandler.java)
   48-59) creates the portal for Dark Fire. Vanilla fire only fires the event in the Overworld and the Nether
   (`BaseFireBlock#inPortalDimension`), so ordinary fire in the End does nothing at all.
 - NP-11 (End frame) has never been run.

@@ -1,19 +1,23 @@
 #!/usr/bin/env python3
-"""Resources of the Cooking for Blockheads wood racks and wood fruit baskets and the fridge fill (Creative Delight member blockheadsAdditions,
-feature_writeup/kitchen.md 9).
+"""Resources of the Cooking for Blockheads wood racks and wood fruit baskets and the fridge fill (Creative Delight's
+Cooking for Blockheads compartment, feature_writeup/kitchen.md 9; the blockheadsAdditions member until M8,
+plan_cb_publish.md 3b).
 
-Writes into development/creativeDelight/members/blockheads/src/main/resources/:
-  - textures: assets/cookingforblockheads/textures/block/rack/<wood>_spice_rack.png and <wood>_tool_rack.png, copied
-    from textureswapper/rack/swapped_spicerack/ and textureswapper/rack/toolrack_final/ (the owner's art: crops of
-    each wood's planks with the rack's hook pixels);
+Writes into the compartment's built-in pack, development/creativeDelight/src/main/resources/packs/cookingforblockheads/
+(added only while Cooking for Blockheads is loaded, compat/CompartmentPacks.java). Every id and file is in the
+creativedelight namespace (plan D6); CfB's namespace is only named as model parents and the fridge texture:
+  - no textures: the rack and fruit basket textures (creativedelight:block/rack/<wood>_<rack>, block/fruit_basket/<wood>)
+    are built on the client from the installed mods' planks and CfB's own rack art (compat/art/CompartmentArt.java,
+    recipes in compat/art/ArtRecipes.java; licence audit 2026-11-04). textureswapper/rack/ keeps the owner's reference
+    art those recipes reproduce;
   - per rack: blockstate, block model (parent = CfB's spice_rack / tool_rack model, only the texture swapped; CfB's
     models are named, never copied), item model, loot table (drops itself, keeps a custom name like CfB's);
-  - assets/blockheads_additions/lang/en_us.json (block names; a lang file loads from every namespace, so CfB's own
-    lang path is not repeated);
-  - assets/blockheads_additions/models/block/fridge_top_fill.json, the box the client adds on top of the 2-tall
-    fridge (client/FridgeTopFill.java).
+  - assets/creativedelight/lang/en_us.json (block names; lang files of every pack are merged, so CD's own lang in the
+    jar root is not overridden);
+  - assets/creativedelight/models/block/fridge_top_fill.json, the box the client adds on top of the 2-tall
+    fridge (compat/cookingforblockheads/client/FridgeTopFill.java).
 
-The wood list must match rack/RackWoods.java. Run from anywhere: python3 tools/gen_cfb_racks.py [--check]
+The wood list must match compat/cookingforblockheads/rack/RackWoods.java and compat/art/ArtRecipes.PLANKS. Run from anywhere: python3 tools/gen_cfb_racks.py [--check]
 (--check: exit 1 if any output would change).
 """
 import json
@@ -22,9 +26,10 @@ import shutil
 import sys
 
 ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
-RES = os.path.join(ROOT, 'development', 'creativeDelight', 'members', 'blockheads', 'src', 'main', 'resources')
+RES = os.path.join(ROOT, 'development', 'creativeDelight', 'src', 'main', 'resources', 'packs', 'cookingforblockheads')
 SRC = os.path.join(ROOT, 'textureswapper', 'rack')
-NS = 'cookingforblockheads'
+NS = 'creativedelight'
+CFB = 'cookingforblockheads'  # CfB's own namespace: model parents and the fridge texture only
 
 # wood key -> (display name, texture file stem in textureswapper/rack/<folder>/)
 # immersiveengineering__treated_wood.png is the same picture as _horizontal (and IE has no plain treated_wood
@@ -58,8 +63,8 @@ RACKS = {
 }
 
 FILL = {
-    'credit': 'Creative Delight (blockheadsAdditions): added on top of the 2-tall Cooking for Blockheads fridge, '
-              'client/FridgeTopFill.java (TODO cooking/kitchen #6)',
+    'credit': 'Creative Delight (Cooking for Blockheads compartment): added on top of the 2-tall Cooking for Blockheads '
+              'fridge, compat/cookingforblockheads/client/FridgeTopFill.java (TODO cooking/kitchen #6)',
     'textures': {
         'particle': 'cookingforblockheads:block/fridge_side',
         'fridge_side': 'cookingforblockheads:block/fridge_side',
@@ -89,10 +94,9 @@ def outputs():
         # fruit basket: CfB's model with its oak planks texture swapped for this wood's planks (plain planks art)
         fid = f'{wood}_fruit_basket'
         ftex = f'{NS}:block/fruit_basket/{wood}'
-        yield f'assets/{NS}/textures/block/fruit_basket/{wood}.png', ('file', os.path.join(SRC, stem + '.png'))
         yield f'assets/{NS}/blockstates/{fid}.json', dump({'variants': {'': {'model': f'{NS}:block/{fid}'}}})
         yield f'assets/{NS}/models/block/{fid}.json', dump({
-            'parent': f'{NS}:block/fruit_basket', 'textures': {'particle': ftex, 'texture': ftex}})
+            'parent': f'{CFB}:block/fruit_basket', 'textures': {'particle': ftex, 'texture': ftex}})
         yield f'assets/{NS}/models/item/{fid}.json', dump({'parent': f'{NS}:block/{fid}'})
         yield f'data/{NS}/loot_tables/blocks/{fid}.json', dump({
             'type': 'minecraft:block',
@@ -105,12 +109,11 @@ def outputs():
         for rack, (cfb_model, folder, label) in RACKS.items():
             rid = f'{wood}_{rack}'
             tex = f'{NS}:block/rack/{rid}'
-            yield f'assets/{NS}/textures/block/rack/{rid}.png', ('file', os.path.join(SRC, folder, stem + '.png'))
             yield f'assets/{NS}/blockstates/{rid}.json', dump({'variants': {
                 f'facing={f}': ({'model': f'{NS}:block/{rid}'} | ({'y': y} if y else {}))
                 for f, y in (('north', 0), ('east', 90), ('south', 180), ('west', 270))}})
             yield f'assets/{NS}/models/block/{rid}.json', dump({
-                'parent': f'{NS}:block/{cfb_model}',
+                'parent': f'{CFB}:block/{cfb_model}',
                 'render_type': 'minecraft:cutout',
                 'textures': {'particle': tex, 'texture': tex}})
             yield f'assets/{NS}/models/item/{rid}.json', dump({'parent': f'{NS}:block/{rid}'})
@@ -122,8 +125,8 @@ def outputs():
                                  'functions': [{'function': 'minecraft:copy_name', 'source': 'block_entity'}]}],
                     'conditions': [{'condition': 'minecraft:survives_explosion'}]}]})
             lang[f'block.{NS}.{rid}'] = f'{name} {label}'
-    yield 'assets/blockheads_additions/lang/en_us.json', dump(lang)
-    yield 'assets/blockheads_additions/models/block/fridge_top_fill.json', dump(FILL)
+    yield f'assets/{NS}/lang/en_us.json', dump(lang)
+    yield f'assets/{NS}/models/block/fridge_top_fill.json', dump(FILL)
 
 
 def main():

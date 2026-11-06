@@ -15,7 +15,7 @@ ServerEvents.tags('block', e => {
 	t.mineable(e, 'pickaxe', null, b.stone_cutting_boards)
 	t.mineable(e, 'axe', null, b.wood_cutting_boards)
 	t.add(e, b.t_hammer_no_rotate, b.stone_cutting_boards.concat(b.wood_cutting_boards))
-	if (global.CD.on('blockheads_additions')) {
+	if (global.CD.on('cookingforblockheads')) {
 		t.add(e, b.t_counter_toppers, b.stone_cutting_boards.concat(b.wood_cutting_boards))
 	}
 })

@@ -141,7 +141,7 @@ No Stockpile, Recovery or Cycle book from any container, and know which path sti
 
 ### Now
 - patcherMod 1.0.9 (DEPLOYED 2026-10-19) overrides three methods on each NEA enchantment class
-  ([StockpileEnchantmentMixin.java](../../development/patcherMod/src/main/java/com/SaintAlfonzo/creativeengineering/mixin/StockpileEnchantmentMixin.java),
+  ([StockpileEnchantmentMixin.java](../../development/creativeCommon/src/main/java/com/SaintAlfonzo/creativecommon/mixin/StockpileEnchantmentMixin.java),
   same for Cycle / Recovery): `m_6592_` (vanilla `isDiscoverable`, SRG name since 1.0.9), `canApplyAtEnchantingTable`
   and `isAllowedOnBooks` (Forge), all `false`. MoreJS removes them from librarian trades and the enchanting table
   ([enchants.js](../../kubejs/server_scripts/magic/enchants.js) lines 1-11). JEI still lists their books (the hide in

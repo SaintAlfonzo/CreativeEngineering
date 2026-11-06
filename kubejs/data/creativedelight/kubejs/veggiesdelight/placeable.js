@@ -6,10 +6,20 @@ if (global.CD) global.CD.genPut('placeable', 'veggiesdelight', {
  "placeable": [
   "beetroot_brownie_tray",
   "carrot_cake",
+  "cauliflower_kuku",
+  "dandelion_and_eggs",
   "lasagna_pan",
+  "shakshouka",
   "stuffed_bellpeppers_block",
+  "sweet_potato_pancakes",
   "sweet_potato_pie",
   "vegan_pizza",
   "zucchini_quiche"
+ ],
+ "placeable/sneak": [
+  "cauliflower_kuku",
+  "dandelion_and_eggs",
+  "shakshouka",
+  "sweet_potato_pancakes"
  ]
 })

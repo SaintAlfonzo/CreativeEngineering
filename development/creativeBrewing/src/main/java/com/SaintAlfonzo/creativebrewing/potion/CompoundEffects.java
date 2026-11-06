@@ -32,7 +32,7 @@ public final class CompoundEffects {
         }
 
         static Part text(String key) {
-            return new Part(null, "effect.creativeengineering.part." + key, false);
+            return new Part(null, "effect.creativebrewing.part." + key, false);
         }
     }
 
@@ -87,7 +87,7 @@ public final class CompoundEffects {
             list.append(Component.literal(name.getString()));
             first = false;
         }
-        return Component.translatable("effect.creativeengineering.compound.parts", list);
+        return Component.translatable("effect.creativebrewing.compound.parts", list);
     }
 
     @Nullable

@@ -6,7 +6,7 @@
 //       kubejs/data/creativebrewing/kubejs/    -> data/creativebrewing/kubejs/    (server scripts)
 //       kubejs/assets/creativebrewing/kubejs/  -> assets/creativebrewing/kubejs/  (client scripts)
 //     Startup scripts live in this project (src/main/resources/kubejs_startup/creativebrewing/ and one folder per mod),
-//     loaded from the jar by patcherMod's startup loader.
+//     loaded from the jar by Creative Common's startup loader.
 //   - creativebrewing_members.txt: the mod ids of bundle_members, read by CBConfig (one list).
 // Build: ./gradlew :creativeBrewing:build --offline   Install: ./gradlew :creativeBrewing:installToMods
 plugins {
@@ -14,11 +14,11 @@ plugins {
 }
 
 dependencies {
-    // CEConfig, the remainder buffer API and the other pack Java CB's compartments call; patcherMod is a hard dependency.
-    compileOnly project(':patcherMod')
+    // CEConfig, the remainder buffer API and the other pack Java CB's compartments call; Creative Common is a hard dependency.
+    compileOnly project(':creativeCommon')
     // The mods the potion, effect and machine code targets (Create, IE, JEI, JEED, Farmer's Respite, ...): the pack's
-    // jars, shared with patcherMod (git-ignored libs/, SRG-named), as creativeCompat does.
-    compileOnly fileTree(dir: rootProject.file('development/patcherMod/libs'), include: '*.jar')
+    // jars, shared with Creative Common (git-ignored libs/, SRG-named), as creativeCompat does.
+    compileOnly fileTree(dir: rootProject.file('development/creativeCommon/libs'), include: '*.jar')
 }
 
 def scriptTrees = ['data/creativebrewing/kubejs', 'assets/creativebrewing/kubejs']

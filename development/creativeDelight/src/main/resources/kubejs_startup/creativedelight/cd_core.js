@@ -8,6 +8,8 @@
 //   global.CD.on('oceansdelight')                  mod loaded and, for a nested member, its [members] switch on (a
 //                                                  port not nested yet has no switch: loaded = on); read it inside
 //                                                  an event callback (the config loads after startup scripts)
+//   global.CD.on('cookingforblockheads')           a compartment (also 'incubation'): its mods loaded and its
+//                                                  [compartments] switch on (read at startup, so safe at top level)
 //   global.CD.qol('compost')                       [qol] switch on (creative_delight.md 8); same timing rule
 //   global.CD.worldgen('wildCrops')                [worldgen] switch on (creative_delight.md 24); same timing rule
 //   global.CD.members()                            the nested members' mod ids
@@ -26,6 +28,8 @@ global.CD = {
 	},
 
 	on(member) {
+		// The optional compartments (plan_cb_publish.md 3b): their mods loaded and their [compartments] switch on at startup
+		if ($CDConfig.isCompartment(member)) return !!$CDConfig.compartment(member)
 		if (!Platform.isLoaded(member)) return false
 		return !$CDConfig.isMember(member) || !!$CDConfig.member(member)
 	},

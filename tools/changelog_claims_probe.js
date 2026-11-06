@@ -1,4 +1,4 @@
-// Changelog claims probe (scratch queue SQ-CL-01: bullets of kubejs/assets/creativeengineering/changelog/unreleased.md
+// Changelog claims probe (scratch queue SQ-CL-01: bullets of kubejs/assets/creativecommon/changelog/unreleased.md
 // fixed in the 2026-10-22 audit). Scratch-only: copy into a scratch server's kubejs/server_scripts
 // (tools/creative_labels_test/scratch_server.sh), never into the pack. Run /cltest; results are "[cltest] ..." lines
 // in logs/latest.log, ending in "[cltest] done: N PASS, M FAIL".

@@ -120,13 +120,13 @@ with no step for the skin, and Supplementaries' recipe would compete with the pa
 
 | File | What |
 |---|---|
-| [lunchbox/Lunchboxes.java](../development/patcherMod/src/main/java/com/SaintAlfonzo/creativeengineering/lunchbox/Lunchboxes.java) | tiers, skins table, tag/dye/contents helpers |
-| [lunchbox/LunchboxItems.java](../development/patcherMod/src/main/java/com/SaintAlfonzo/creativeengineering/lunchbox/LunchboxItems.java) | Netherite Lunchbox |
-| [lunchbox/LunchboxRecipes.java](../development/patcherMod/src/main/java/com/SaintAlfonzo/creativeengineering/lunchbox/LunchboxRecipes.java) | the 5 serializers; recipe classes beside it |
-| [lunchbox/LunchboxTooltip.java](../development/patcherMod/src/main/java/com/SaintAlfonzo/creativeengineering/lunchbox/LunchboxTooltip.java) | slot line |
-| [lunchbox/client/LunchboxClient.java](../development/patcherMod/src/main/java/com/SaintAlfonzo/creativeengineering/lunchbox/client/LunchboxClient.java) | item properties, dye tint |
-| [mixin/AlexsMobsSeagullStealMixin.java](../development/patcherMod/src/main/java/com/SaintAlfonzo/creativeengineering/mixin/AlexsMobsSeagullStealMixin.java), [AlexsMobsSeagullItemMixin.java](../development/patcherMod/src/main/java/com/SaintAlfonzo/creativeengineering/mixin/AlexsMobsSeagullItemMixin.java) | seagulls |
-| [neoCraftHelper.js](../development/patcherMod/src/main/resources/kubejs_startup/creativeengineering/func/neoCraftHelper.js) | `lunchboxShaped`, `lunchboxSmithing`, `lunchboxSkin`, `lunchboxDye`, `lunchboxSoap` |
+| [lunchbox/Lunchboxes.java](../development/creativeCommon/src/main/java/com/SaintAlfonzo/creativecommon/lunchbox/Lunchboxes.java) | tiers, skins table, tag/dye/contents helpers |
+| [lunchbox/LunchboxItems.java](../development/creativeCommon/src/main/java/com/SaintAlfonzo/creativecommon/lunchbox/LunchboxItems.java) | Netherite Lunchbox |
+| [lunchbox/LunchboxRecipes.java](../development/creativeCommon/src/main/java/com/SaintAlfonzo/creativecommon/lunchbox/LunchboxRecipes.java) | the 5 serializers; recipe classes beside it |
+| [lunchbox/LunchboxTooltip.java](../development/creativeCommon/src/main/java/com/SaintAlfonzo/creativecommon/lunchbox/LunchboxTooltip.java) | slot line |
+| [lunchbox/client/LunchboxClient.java](../development/creativeCommon/src/main/java/com/SaintAlfonzo/creativecommon/lunchbox/client/LunchboxClient.java) | item properties, dye tint |
+| [mixin/AlexsMobsSeagullStealMixin.java](../development/creativeCommon/src/main/java/com/SaintAlfonzo/creativecommon/mixin/AlexsMobsSeagullStealMixin.java), [AlexsMobsSeagullItemMixin.java](../development/creativeCommon/src/main/java/com/SaintAlfonzo/creativecommon/mixin/AlexsMobsSeagullItemMixin.java) | seagulls |
+| [neoCraftHelper.js](../development/creativeCommon/src/main/resources/kubejs_startup/creativecommon/func/neoCraftHelper.js) | `lunchboxShaped`, `lunchboxSmithing`, `lunchboxSkin`, `lunchboxDye`, `lunchboxSoap` |
 | [solapplepie/lunchboxes.js](../kubejs/data/creativedelight/kubejs/solapplepie/lunchboxes.js) | the recipes (Creative Delight tree; in the CD jar) |
 | [namechanges.js](../kubejs/client_scripts/namechanges.js) | names and screen titles |
 | `kubejs/assets/solapplepie/textures/items/` | source art (copper, iron, netherite + outline masks); `lunchbox_dye/` generated |
@@ -136,7 +136,7 @@ with no step for the skin, and Supplementaries' recipe would compete with the pa
 ## 6. Offline checks
 
 - `python3 tools/gen_lunchbox_looks.py --check` (exit 0 = textures and models match the source art).
-- `./gradlew :patcherMod:build --offline` (2026-10-29: clean, no mixin target warnings for the seagull mixins).
+- `./gradlew :creativeCommon:build --offline` (2026-10-29: clean, no mixin target warnings for the seagull mixins).
 - `node --check` on `lunchboxes.js`, `neoCraftHelper.js`, `namechanges.js`.
 
 ## 7. In-game test suite

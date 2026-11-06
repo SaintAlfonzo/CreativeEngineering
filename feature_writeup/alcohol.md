@@ -2,8 +2,8 @@
 
 > **Creative Brewing (2026-10-31):** both ports are now members of the Creative Brewing bundle: sources in
 > `development/creativeBrewing/members/vinery` and `.../members/brewin` (Gradle projects `:backportedVinery`, `:backportedBrewin`
-> unchanged), shipped only inside `creativebrewing-<v>.jar`, display names "Let's Do Vinery (Creative Brewing)" and "Brewin' &
-> Chewin' (Creative Brewing)" (`foundation`: "Creative Brewing"). Vinery `-08` and Brewin' `-05` are the first nested builds (built, not installed). Paths
+> unchanged), shipped only inside `creativebrewing-<v>.jar`, display names "Vinery (Creative Brewing)" and "Brewin' &
+> Chewin' (Creative Brewing)" (`foundation`: "Foundation (Creative Brewing)"; both renamed 2026-11-04, plan_cb_publish.md M5). Vinery `-08` and Brewin' `-05` are the first nested builds (built, not installed). Paths
 > `development/backportedVinery` / `development/backportedBrewin` below mean those folders. See [creative_brewing.md](creative_brewing.md).
 
 > **Merge note (2026-10-25):** this port is to be merged with the other Farmer's Delight add-on backports into a single jar, **Creative Delight**. The inventory summary, cross-port interactions and the merge process are in [creative_delight.md](creative_delight.md). This file stays the detailed record for Brewin' and Chewin' (Part A) and Vinery (Part B); its registry namespace and test prefix do not change.
@@ -2268,8 +2268,8 @@ Rows shared with Part A 3.1 (data components, codecs, packets, `c:` tags) apply 
 |---|---|
 | patcherMod | Remove `FermentationBarrelStackOutputMixin` (I2). Trim `compat/vinery` to the stomping and aging pages (I3). Rewrite `WinemakerTrades` (I4). Repoint `WinemakerSpawner` (I5) and `StuckInBlock` (I6). Update `crop_growth.json` (I8) |
 | [../kubejs/startup_scripts/_lib/item_dict.js](../kubejs/startup_scripts/_lib/item_dict.js) | I10 |
-| [../kubejs/server_scripts/tags/wood_tags.js](../kubejs/server_scripts/tags/wood_tags.js), [../kubejs/server_scripts/tags/blocktags.js](../kubejs/server_scripts/tags/blocktags.js) | I11, I12 |
-| [../kubejs/server_scripts/engineering/fabric.js](../kubejs/server_scripts/engineering/fabric.js), [../kubejs/server_scripts/other/misc_mods.js](../kubejs/server_scripts/other/misc_mods.js) | I13 |
+| [../kubejs/data/creativeengineering/kubejs/tags/wood_tags.js](../kubejs/data/creativeengineering/kubejs/tags/wood_tags.js), [../kubejs/server_scripts/tags/blocktags.js](../kubejs/server_scripts/tags/blocktags.js) | I11, I12 |
+| [../kubejs/data/creativeengineering/kubejs/engineering/fabric.js](../kubejs/data/creativeengineering/kubejs/engineering/fabric.js), [../kubejs/server_scripts/other/misc_mods.js](../kubejs/server_scripts/other/misc_mods.js) | I13 |
 | [../kubejs/server_scripts/loot/07_rules.js](../kubejs/server_scripts/loot/07_rules.js), [../kubejs/startup_scripts/compost/compost_values.js](../kubejs/startup_scripts/compost/compost_values.js) | I14, I15 |
 | [../kubejs/startup_scripts/func/tool_effects.js](../kubejs/startup_scripts/func/tool_effects.js) | I16 |
 | [../kubejs/assets/creativeengineering/lang/en_us.json](../kubejs/assets/creativeengineering/lang/en_us.json) | I17 |

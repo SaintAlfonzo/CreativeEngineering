@@ -40,7 +40,7 @@
     "    Delight's startup tree; also needs the --merge / --add-new choice)",
     "  hand workflows run with --check first: gen_can_types.py (rewrites item_dict.js and the can tables; its outRoot entry",
     "    is in the top-level handRun list, which /cegen does not read),",
-    "    gen_cfb_racks.py (Cooking for Blockheads wood racks and fridge fill, Creative Delight's blockheadsAdditions; jar rebuild)",
+    "    gen_cfb_racks.py (Cooking for Blockheads wood racks and fridge fill, Creative Delight's Cooking for Blockheads compartment; jar rebuild)",
     "  checks that print and write nothing: effect_audit, shield_check, check_moobloom_data, check_worldgen_json,",
     "    crop_growth_coverage, wthit_icon_audit, structure_biome_coverage, leaf_path_scan, changelog_lint",
     "  libraries and tests: pack_paths (shared paths, item_dict parser, lenient json, jar locator), lang_index, gen_out,",
@@ -69,7 +69,7 @@
         "kubejs/generation_scripts/food/can_types.json",
         "kubejs/generation_scripts/food/can_servings.json",
         "kubejs/generation_scripts/food/food_types.json",
-        "kubejs/startup_scripts/_lib/item_dict.js",
+        "development/creativeCommon/src/main/resources/kubejs_startup/creativecommon/_lib/item_dict.js",
         "development/creativeDelight/src/main/resources/kubejs_startup"
       ]
     }
@@ -348,7 +348,7 @@
       "outputs": [
         "kubejs/generation_scripts/food/food_types.json",
         "kubejs/data/creativedelight/kubejs",
-        "kubejs/startup_scripts/_lib/item_dict.js",
+        "development/creativeCommon/src/main/resources/kubejs_startup/creativecommon/_lib/item_dict.js",
         "feature_writeup/food_catalog.md",
         "kubejs/exported/food/catalog.json"
       ],
@@ -374,7 +374,7 @@
         "kubejs/generation_scripts/food/placeable.json",
         "kubejs/data/creativedelight/kubejs",
         "feature_writeup/placeable_catalog.md",
-        "kubejs/startup_scripts/_lib/item_dict.js"
+        "development/creativeCommon/src/main/resources/kubejs_startup/creativecommon/_lib/item_dict.js"
       ],
       "apply": "restart if item_dict.js changed, else /reload (tags) - tooltips follow the tags"
     },
@@ -392,7 +392,7 @@
       "groups": ["reports", "food"],
       "dumps": ["dumpfood"],
       "outputs": ["kubejs/generation_scripts/food/food_dict_index.json"],
-      "apply": "nothing in game reads the index; copy proposed lines into startup_scripts/_lib/food_dict.js (or run with --append), then restart",
+      "apply": "nothing in game reads the index; copy proposed lines into creativecommon/_lib/food_dict.js (or run with --append), then restart",
       "warnExit": [1],
       "highlight": ["with no key", "problem\\(s\\)"]
     },
@@ -401,7 +401,7 @@
       "script": "tools/gen_immersive_paintings.py",
       "groups": ["pack"],
       "dumps": ["dumppaintings"],
-      "outputs": ["development/creativeCompat/src/main/resources/data/creativeengineering/paintings"],
+      "outputs": ["kubejs/data/creativeengineering/paintings/minecraft"],
       "apply": "/reload (Immersive Paintings re-reads its datapack paintings)"
     },
     {
@@ -475,7 +475,7 @@
       "script": "tools/gen_jei_world.py",
       "groups": ["jei"],
       "dumps": ["dumpworldjei", "dumploot"],
-      "outputs": ["kubejs/assets/creativeengineering/jei_world"],
+      "outputs": ["kubejs/assets/creativecommon/jei_world"],
       "warnExit": [1],
       "apply": "F3+T, then rejoin the world (JEI reads the tabs when it starts)"
     },
@@ -484,7 +484,8 @@
       "script": "tools/jei_order_report.py",
       "groups": ["reports", "jei"],
       "outputs": ["feature_writeup/jei_order_catalog.md"],
-      "apply": "report only (reads kubejs/exported/jei_order.json, written at JEI start with CEConfig [jei] orderReport = true)"
+      "warnExit": [2],
+      "apply": "report only (reads kubejs/exported/jei_order.json, written at JEI start with creativecommon-common.toml [jei] orderReport = true; exit 2 = skipped, no report yet)"
     },
     {
       "id": "item_physics_audit",
@@ -501,6 +502,14 @@
       "dumps": ["dumpcropgrowth", "dumptags", "dumpitemsbymod"],
       "outputs": ["feature_writeup/crop_seasons_audit.md"],
       "apply": "report only (crop season type per crop from crop_seasons.json, grow-event check; crops.md section 2.12.1)"
+    },
+    {
+      "id": "guard_check",
+      "script": "tools/guard_check.py",
+      "groups": ["checks"],
+      "outputs": [],
+      "warnExit": [1],
+      "apply": "a check (plan_cb_publish.md 3.3): guard every row it lists in the Common, Compat, Calendar, Creative Delight and Creative Brewing scripts"
     }
   ]
 }

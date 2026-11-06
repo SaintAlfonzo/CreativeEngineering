@@ -75,6 +75,31 @@ public class CDMixinPlugin extends GatedMixinPlugin {
 		super("[creativedelight]", COMPARTMENT_PREFIX, FOR_VERSION, Map.of());
 	}
 
+	/**
+	 * Mixins of the M8 compartments (plan_cb_publish.md 3b) that need more than their package's mod: the compartment
+	 * ({@link Compartments}, mods and switch) as well. Package {@code cookingforblockheads.} and {@code incubation.} mixins
+	 * need their compartment too; the incubation nest goal needs a bird mod with nests (emus or ducks and geese).
+	 */
+	private static final Map<String, String> NEEDS_COMPARTMENT = Map.of(
+			"CuttingBoardRendererOffsetMixin", Compartments.CFB,
+			"CoasterRendererOffsetMixin", Compartments.CFB,
+			"EntityEmuEggLayerMixin", Compartments.INCUBATION,
+			"DuckEntityEggLayerMixin", Compartments.INCUBATION,
+			"GooseEntityEggLayerMixin", Compartments.INCUBATION);
+
+	@Override
+	public boolean shouldApplyMixin(String targetClassName, String mixinClassName) {
+		if (!super.shouldApplyMixin(targetClassName, mixinClassName)) return false;
+		String simple = mixinClassName.substring(mixinClassName.lastIndexOf('.') + 1);
+		String compartment = NEEDS_COMPARTMENT.get(simple);
+		if (mixinClassName.startsWith(COMPARTMENT_PREFIX + Compartments.CFB + ".")) compartment = Compartments.CFB;
+		if (mixinClassName.startsWith(COMPARTMENT_PREFIX + Compartments.INCUBATION + ".")) {
+			if (!Compartments.loaded("alexsmobs") && !Compartments.loaded("untitledduckmod")) return false;
+			compartment = Compartments.INCUBATION;
+		}
+		return compartment == null || Compartments.on(compartment);
+	}
+
 	@Override
 	public void postApply(String targetClassName, ClassNode targetClass, String mixinClassName, IMixinInfo mixinInfo) {
 		Consumer<ClassNode> patch = PATCHES.get(mixinClassName.substring(mixinClassName.lastIndexOf('.') + 1));

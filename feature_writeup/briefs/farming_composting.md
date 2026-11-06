@@ -18,7 +18,7 @@ when queued).
 
 Build order:
 
-1. **#5 and #2 together.** `kubejs/server_scripts/wood/compost.js` already exists (9 lines, made by #4). #2 moves the
+1. **#5 and #2 together.** `kubejs/data/creativeengineering/kubejs/wood/compost.js` already exists (9 lines, made by #4). #2 moves the
    compost, fertile soil and nulch recipes into it from `sawdust.js`; #5 edits the compost recipes on the way. One
    `/reload` for both. #5 does not wait for #2's recipe review: move the compost block first, nulch when its inputs are
    picked.
@@ -40,7 +40,7 @@ counterpart of Fertile Soil and a ghost pepper soil. Then it and the compost / f
 `sawdust.js` into `wood/compost.js`, and the author's note goes.
 
 ### Now
-- [kubejs/server_scripts/wood/sawdust.js](../../kubejs/server_scripts/wood/sawdust.js) (89 lines, re-checked
+- [kubejs/data/creativeengineering/kubejs/wood/sawdust.js](../../kubejs/data/creativeengineering/kubejs/wood/sawdust.js) (89 lines, re-checked
   2026-10-31):
   - lines 10-12, inside the `R.bulk('remove', ...)` at 9-18: removes `farmersdelight:organic_compost_from_rotten_flesh`,
     `farmersdelight:organic_compost_from_tree_bark` and `immersive_weathering:mulch_block`.
@@ -51,11 +51,11 @@ counterpart of Fertile Soil and a ghost pepper soil. Then it and the compost / f
   - line 83: the note. 84: `R.remove({ id: 'immersive_weathering:nulch_block' }, e)`. 85: `R.shapeless(Item.of(i.nulch,
     6), [3 netherrack, 2 i.any_scale, ash, magma cream, nether wart, blaze powder], e, 'nulch_manual_only')`. 86:
     `R.createMixing(... 2 netherrack, 1 scale ...)`, id `nulch_mixing`.
-- [kubejs/server_scripts/wood/compost.js](../../kubejs/server_scripts/wood/compost.js): one recipe, seed milling (#4).
+- [kubejs/data/creativeengineering/kubejs/wood/compost.js](../../kubejs/data/creativeengineering/kubejs/wood/compost.js): one recipe, seed milling (#4).
 - The Fertile Soil ladder (what the review compares against): FD organic compost (pack recipe: dirt + rot / bone /
   brown mulch, `sawdust.js` 61-65) -> rich soil -> **Fertile Soil**: 3 rich soil + one of each of the six mulches -> 6, or
   3 rich soil + 3 of one mulch + green, fungus, fertilizer -> 3 (67-81). Mulch tags `forge:mulch/{brown,bone,waste,
-  green,fungus,fertilizer}` in [tags/wood_tags.js](../../kubejs/server_scripts/tags/wood_tags.js) 11-16, already through
+  green,fungus,fertilizer}` in [tags/wood_tags.js](../../kubejs/data/creativeengineering/kubejs/tags/wood_tags.js) 11-16, already through
   `global.tags` (the 2026-10-21 optional step is done).
 - The Nether ladder today: Nether's Delight soul compost (its own two recipes, not touched by the pack, verified in
   `NethersDelight-1.19-3.1.jar`: soul soil + 2 twisting vines + 4 bone meal + 2 hoglin hide, or + 4 warped roots) matures
@@ -66,7 +66,7 @@ counterpart of Fertile Soil and a ghost pepper soil. Then it and the compost / f
   (`client_scripts/tooltips.js` 498); name and planting line `client_scripts/namechanges.js` 245-249; compost value 1.0
   (Creative Delight `kubejs_startup/immersive_weathering/compost_values.js` 95).
 - Recipe ids come out as `creativeengineering:<type>/<idSuffix>` (`NCH.shaped` 798, `shapeless` 822, `createMixing`
-  1665 in [neoCraftHelper.js](../../development/patcherMod/src/main/resources/kubejs_startup/creativeengineering/func/neoCraftHelper.js)).
+  1665 in [neoCraftHelper.js](../../development/creativeCommon/src/main/resources/kubejs_startup/creativecommon/func/neoCraftHelper.js)).
 
 ### Build
 1. **Review (owner).** Proposed recipe, mirroring Fertile Soil one rung up the Nether ladder:
@@ -193,12 +193,12 @@ vanilla composter: same chance table, hoppers, comparator, bone meal output.
 - KubeJS 6 (1.19.2) block types (`basic`, `slab`, `stairs`, `crop`, `cardinal`, ...) have no composter type. A KubeJS
   block wouldn't be a `ComposterBlock`, so it wouldn't take items, levels or hoppers. The blocks therefore go in patcherMod,
   and only the recipes are KubeJS.
-- patcherMod pattern to copy: [oven/OvenRegistry.java](../../development/patcherMod/src/main/java/com/SaintAlfonzo/creativeengineering/oven/OvenRegistry.java)
+- patcherMod pattern to copy: [oven/OvenRegistry.java](../../development/creativeCommon/src/main/java/com/SaintAlfonzo/creativecommon/oven/OvenRegistry.java)
   (own `DeferredRegister<Block>` / `<Item>`, `BlockItem` in `CreativeModeTab.TAB_DECORATIONS`, `register(modEventBus)`
   called from `CreativeEngineering.java` line 99). Assets in
-  `development/patcherMod/src/main/resources/assets/creativeengineering/{blockstates,models,textures,lang}`, loot in
+  `development/creativeCommon/src/main/resources/assets/creativeengineering/{blockstates,models,textures,lang}`, loot in
   `data/creativeengineering/loot_tables/blocks/` (the oven has one).
-- Species: the 13 in [wood_types.js](../../kubejs/server_scripts/wood/wood_types.js) 8-22 (`species` table, slab
+- Species: the 13 in [wood_types.js](../../kubejs/data/creativeengineering/kubejs/wood/wood_types.js) 8-22 (`species` table, slab
   keys `i.slab_<name>` at item_dict.js 254-422): oak, spruce, birch, dark_oak, jungle, acacia, mangrove, crimson, warped,
   twisted (`architects_palette:twisted_slab`), ancient / blossom / azalea (`quark:<name>_planks_slab`).
 - Vanilla composter loot (verified, `loot_tables/blocks/composter.json`): drops itself (explosion decay) and, when

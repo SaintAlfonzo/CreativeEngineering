@@ -6,7 +6,7 @@ import com.SaintAlfonzo.creativedelight.barbeques.recipe.GrillingRecipe;
 import com.SaintAlfonzo.creativedelight.barbeques.registry.BBQBlocks;
 import com.SaintAlfonzo.creativedelight.barbeques.registry.BBQItems;
 import com.SaintAlfonzo.creativedelight.barbeques.registry.BBQRecipes;
-import com.SaintAlfonzo.creativeengineering.campfire.CampfireRainInfo;
+import com.SaintAlfonzo.creativecommon.campfire.CampfireRainInfo;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.core.particles.ParticleTypes;
@@ -41,7 +41,7 @@ import javax.annotation.Nullable;
  * Heat: a Farmer's Delight heat source below, or the grill's own lit campfire.
  *
  * Port changes: B1 (a burnt entry no longer re-syncs every tick); the campfire goes out in rain by the pack rule
- * (barbeques_delight.md 3.4.1), read from patcherMod's CampfireRainInfo and the #creativeengineering:campfire/rain_douses
+ * (barbeques_delight.md 3.4.1), read from Common's CampfireRainInfo and the #creativecommon:campfire/rain_douses
  * tag, which the grill is in.
  */
 public class GrillBlockEntity extends BlockEntity implements HeatableBlockEntity, BlockSlot {

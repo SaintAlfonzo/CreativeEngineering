@@ -230,7 +230,7 @@ Wild jungle vines spawn at a random stage from 0 to 2.
   - Removed Vinery's per-variant grape and grape seed lines (`item.vinery.grape.tooltip.*`, `item.vinery.grapeseed.tooltip.*`). `removeTooltipKey` now accepts a key ending in `*` as a prefix, because Vinery builds the key from the item id.
   - Added `TODO` placeholder lines for the pot, press, barrel, stem, lattice, apple/cherry leaves and saplings, kitchen sink, stackable log and the wine storage blocks. **The placeholders show in game until written.** Vinery's own grey lines on those blocks are kept.
 - **JEI:** patcherMod's four 1.3.10 pages were removed 2026-10-27 ([vinery_jei.md](vinery_jei.md)); the port ships its own.
-- **Plant oil:** every grape seed squeezes into 50 mB of plant oil in the IE Squeezer at 6400 energy ([oil.js](../kubejs/server_scripts/engineering/oil.js)).
+- **Plant oil:** every grape seed squeezes into 50 mB of plant oil in the IE Squeezer at 6400 energy ([oil.js](../kubejs/data/creativeengineering/kubejs/engineering/oil.js)).
 - **Composting:**
   - grapes and seeds 0.4
   - grape and fruit crates 1.0
@@ -246,14 +246,14 @@ Wild jungle vines spawn at a random stage from 0 to 2.
   - Vinemaker Leggings accept white wool or IE hemp fabric.
   - The Everycomp cherry picture frame accepts wool, hemp fabric, paper or canvas.
 
-  Source: [misc_mods.js](../kubejs/server_scripts/other/misc_mods.js), [fabric.js](../kubejs/server_scripts/engineering/fabric.js).
-- **Tags:** `minecraft:barrel` added to `vinery:barrel` and `vinery:wooden_barrels` ([wood_tags.js](../kubejs/server_scripts/tags/wood_tags.js)).
+  Source: [misc_mods.js](../kubejs/server_scripts/other/misc_mods.js), [fabric.js](../kubejs/data/creativeengineering/kubejs/engineering/fabric.js).
+- **Tags:** `minecraft:barrel` added to `vinery:barrel` and `vinery:wooden_barrels` ([wood_tags.js](../kubejs/data/creativeengineering/kubejs/tags/wood_tags.js)).
 - **BlockRunner surfaces** ([blocktags.js](../kubejs/server_scripts/tags/blocktags.js), [blockrunner.md](blockrunner.md)):
   - wood tier: cherry fence gate, cherry beams and floorboards, stackable log, crates
   - dirt tier: Vinery dirt/grass slabs and loam
 - **BlockRunner display:** the taiga bush is listed as a 0.8 slow block in patcherMod `StuckInBlock` (display only).
 - **Flower box and flower pot** (port `-07`, 2026-10-31): the box takes `#creativeengineering:flower_box_plants` and sits centred on floors (`wall` state); the pot takes any plant a planter grows; both draw Supplementaries' flower box models. [flower_pots.md](flower_pots.md) 3.2.
-- **Textures:** `vinery:item/mash` is the generic fallback texture for incomplete sequenced-assembly items ([transition_items.js](../kubejs/startup_scripts/changes/transition_items.js)).
+- **Textures:** `vinery:item/mash` is the generic fallback texture for incomplete sequenced-assembly items ([transition_items.js](../development/creativeEngineering/src/main/resources/kubejs_startup/creativeengineering/changes/transition_items.js)).
 
 ## 4. Limits and decisions
 
@@ -273,7 +273,7 @@ Wild jungle vines spawn at a random stage from 0 to 2.
 - Pack tooltips: [kubejs/client_scripts/tooltips.js](../kubejs/client_scripts/tooltips.js) (Vinery section, `removeTooltipKey`)
 - JEI pages: none in patcherMod since 2026-10-27 ([vinery_jei.md](vinery_jei.md))
 - Item keys: Vinery block of `global.item` in [item_dict.js](../kubejs/startup_scripts/_lib/item_dict.js) (`i.grapevine_pot`, `i.wine_press`, `i.fermentation_barrel`, `i.grape_seeds_*`, ...)
-- Pack scripts touching Vinery: [oil.js](../kubejs/server_scripts/engineering/oil.js), [compost_values.js](../kubejs/startup_scripts/compost/compost_values.js), [cantags.js](../kubejs/data/creativedelight/kubejs/creativeengineering/can_tags.js), [07_rules.js](../kubejs/server_scripts/loot/07_rules.js), [misc_mods.js](../kubejs/server_scripts/other/misc_mods.js), [fabric.js](../kubejs/server_scripts/engineering/fabric.js), [wood_tags.js](../kubejs/server_scripts/tags/wood_tags.js), [blocktags.js](../kubejs/server_scripts/tags/blocktags.js)
+- Pack scripts touching Vinery: [oil.js](../kubejs/data/creativeengineering/kubejs/engineering/oil.js), [compost_values.js](../kubejs/startup_scripts/compost/compost_values.js), [cantags.js](../kubejs/data/creativedelight/kubejs/creativeengineering/can_tags.js), [07_rules.js](../kubejs/server_scripts/loot/07_rules.js), [misc_mods.js](../kubejs/server_scripts/other/misc_mods.js), [fabric.js](../kubejs/data/creativeengineering/kubejs/engineering/fabric.js), [wood_tags.js](../kubejs/data/creativeengineering/kubejs/tags/wood_tags.js), [blocktags.js](../kubejs/server_scripts/tags/blocktags.js)
 - Decompile helper: [tools/decompile_mod.py](../tools/decompile_mod.py)
 - Vinery classes behind §2:
   - `block/GrapevinePotBlock`

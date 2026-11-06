@@ -39,7 +39,7 @@ Vintage Delight brews: do any add effects? Split them into their own category, a
 - **Berserker's Brew is already rebuilt by the pack** (salt dust -> `#forge:salt`, vintageport #10) in Creative Delight
   [vintagedelight/recipes.js](../../kubejs/data/creativedelight/kubejs/vintagedelight/recipes.js) lines 18-24, with the same
   effects. The other five ship as upstream.
-- `R.vdPickling` ([neoCraftHelper.js](../../development/patcherMod/src/main/resources/kubejs_startup/creativeengineering/func/neoCraftHelper.js)
+- `R.vdPickling` ([neoCraftHelper.js](../../development/creativeCommon/src/main/resources/kubejs_startup/creativecommon/func/neoCraftHelper.js)
   lines 1211-1244) writes the output through `_nbtItemJson`, so an `Item.of(i.potion, nbt)` output keeps its NBT (the
   Berserker's Brew row proves it); `opts.container` sets the bottle the jar consumes.
 - Because they are potion items with NBT, not registered items: no creative tab entry, no food values, not in

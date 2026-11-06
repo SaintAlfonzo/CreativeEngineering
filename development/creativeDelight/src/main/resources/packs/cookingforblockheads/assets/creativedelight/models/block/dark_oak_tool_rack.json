@@ -1,0 +1,8 @@
+{
+  "parent": "cookingforblockheads:block/tool_rack",
+  "render_type": "minecraft:cutout",
+  "textures": {
+    "particle": "creativedelight:block/rack/dark_oak_tool_rack",
+    "texture": "creativedelight:block/rack/dark_oak_tool_rack"
+  }
+}
