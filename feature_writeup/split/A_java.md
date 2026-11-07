@@ -28,14 +28,14 @@ Every class here is Worldgen unless noted. Internal references between worldgen 
 | FirstTickWater | 114 | Worldgen | no drops while generated water settles | none | none |
 | GeneratedFallingBlocks | 48 | Worldgen | hold generated falling blocks ([worldgen.systems]) | none | none |
 | GroundMatch | 370 | Worldgen | structure ground match | none | @SubscribeEvent ServerStoppedEvent |
-| LocateCensus | 385 | Worldgen | /celocate census (locate analytics; dev-leaning but tied to locate) | none | none |
-| LocateCommand | 403 | Worldgen | /celocate | `compat.AsyncLocatorBridge` (Worldgen) | commands `celocate` (batch, census, reset, stats, status, stop); @SubscribeEvent RegisterCommandsEvent, ServerTickEvent, ServerAboutToStartEvent, ServerStoppingEvent |
+| LocateCensus | 385 | Worldgen | /cwglocate census (locate analytics; dev-leaning but tied to locate) | none | none |
+| LocateCommand | 403 | Worldgen | /cwglocate | `compat.AsyncLocatorBridge` (Worldgen) | commands `cwglocate` (batch, census, reset, stats, status, stop); @SubscribeEvent RegisterCommandsEvent, ServerTickEvent, ServerAboutToStartEvent, ServerStoppingEvent |
 | LocateLoads | 111 | Worldgen | locate chunk-load accounting | none | none |
 | LocatePrediction | 143 | Worldgen | locate prediction | none | none |
 | LocateReflect | 100 | Worldgen | SRG handles for locate | none | none |
 | LocateStats | 285 | Worldgen | locate stats | none | none |
 | LootContainerSwaps | 128 | Worldgen | Lootr-compatible container swaps in templates | none | none (used by StructureTemplateLootSwapMixin) |
-| MassPlacer | 729 | Worldgen ? | /ceplace mass structure placement; a test command, but built on PlacementPriority and TerrainAdaptation internals, so Devtools would depend on Worldgen | none | commands `ceplace` (by, preview, status, stop, structures, templates); @SubscribeEvent RegisterCommandsEvent, ServerTickEvent, ServerStoppedEvent |
+| MassPlacer | 729 | Worldgen ? | /cdevplace mass structure placement; a test command, but built on PlacementPriority and TerrainAdaptation internals, so Devtools would depend on Worldgen | none | commands `cdevplace` (by, preview, status, stop, structures, templates); @SubscribeEvent RegisterCommandsEvent, ServerTickEvent, ServerStoppedEvent |
 | MetaFeaturePiece | 80 | Worldgen | meta structure piece | none | none |
 | MetaSlots | 499 | Worldgen | meta structure slots | none | @SubscribeEvent ServerStoppedEvent |
 | MetaStructure | 818 | Worldgen | meta structures | none | `DeferredRegister<StructureType<?>>`, `DeferredRegister<StructurePieceType>` |
@@ -70,7 +70,7 @@ Every class here is Worldgen unless noted. Internal references between worldgen 
 | AppleSkinSeasonings | 54 | CD | AppleSkin values for seasoned food; only CD data | `food.Seasonings` (CD) | @SubscribeEvent FoodValuesEvent (manual registration when AppleSkin loaded) |
 | ArmorOverflowRenderer | 117 | Common | armor bar extra rows (2.4 armor bar) | `mixin.ArmorBarRendererAccessor` (sweep B) | @Mod.EventBusSubscriber(FORGE, CLIENT); @SubscribeEvent |
 | ArmorTrimsItemCache | 108 | Common | perf fix for Armor Trims item lists | none | addListener (recipe sync) |
-| AsyncLocatorBridge | 50 | Worldgen | only class touching Async Locator; used by /celocate | none | none |
+| AsyncLocatorBridge | 50 | Worldgen | only class touching Async Locator; used by /cwglocate | none | none |
 | AsyncMapTrades | 110 | Worldgen | map-trade locate through Async Locator (locate family, LC and Cloud Storage trades) | none | none (LCItemsForMapTradeMixin, CSSellingMapMixin) |
 | AutomatedPotionMixingCategory | 56 | CB | JEI category for pack potion brews (IE Mixer layout); only CB data | none | none (PotionRecipeGeneratorsMixin) |
 | BannerPatternAtlasCompat | 87 | Compat | bedspreads and customizableelytra atlas fix; third-party fix with no wider system | none | @Mod.EventBusSubscriber(MOD, CLIENT); @SubscribeEvent |
@@ -229,7 +229,7 @@ Every class here is Worldgen unless noted. Internal references between worldgen 
 | IwGrowthHolder | 12 | Common | duck for IwBlockGrowthHolderMixin | none | none |
 | KubeJSHandlerTiming | 45 | Common | KubeJS handler timing (perf) | none | none (KubeJSEventHandlerContainerMixin) |
 | MobCapLevels | 129 | Worldgen ? | mob cap levels: perf.md 17, but 2.1 lists "mob caps and spawn areas" under Worldgen fauna; PerfCommand (Devtools) reads it | none | none (MobCapLevelTickMixin, MobCapMixin, MobCapSpawnAreaMixin) |
-| PerfCommand | 153 | Devtools | /ceperf (2.1) | `perf.PerfEvents`, `perf.MobCapLevels` (Common, Worldgen ?) | commands `ceperf` (status, dump, mobcap); @Mod.EventBusSubscriber(FORGE); @SubscribeEvent RegisterCommandsEvent |
+| PerfCommand | 153 | Devtools | /cdevperf (2.1) | `perf.PerfEvents`, `perf.MobCapLevels` (Common, Worldgen ?) | commands `cdevperf` (status, dump, mobcap); @Mod.EventBusSubscriber(FORGE); @SubscribeEvent RegisterCommandsEvent |
 | PerfEvents | 343 | Common ? | state behind the perf mixins (Common); 2.1 names "JFR events" for Devtools, but seven Common perf mixins call this class, so it must stay under them | none | none |
 | PerfJfrEvents | 202 | Common ? | the JFR event classes; same note as PerfEvents (two Common mixins reference it) | none | none |
 | PerfStatsHolder | 6 | Common | duck for EntityType and BlockEntityType perf stats | none | none |
@@ -273,7 +273,7 @@ Every class here is Worldgen unless noted. Internal references between worldgen 
 
 Doubtful rows (24, target marked `?`):
 
-- `MassPlacer` (Worldgen ?): /ceplace mass structure placement; a test command, but built on PlacementPriority and TerrainAdaptation internals, so Devtools would depend on Worldgen
+- `MassPlacer` (Worldgen ?): /cdevplace mass structure placement; a test command, but built on PlacementPriority and TerrainAdaptation internals, so Devtools would depend on Worldgen
 - `SpawnDump` (Devtools ?): /dumpspawns backing class for `_lib/dump_spawns.js` (a dump, 2.1 Devtools); no Java callers, reached from KubeJS
 - `WorldgenFiles` (Common ?): plain-text file access for KubeJS scripts; generic, and also used by `food.PlacedFoodSol` (CD), so a Worldgen home gives CD an edge into Worldgen
 - `ImmersivePostsMaterials` (Engineering ?): Immersive Posts material cut (IE addon, block-state count); could be Compat or Common perf
@@ -414,14 +414,14 @@ inventory for how a `register(IEventBus)` method is wired from `CreativeEngineer
 | class | lines | target | reason | calls into other targets | registrations and event subscribers |
 |---|---|---|---|---|---|
 | devtools/BlockStateSyncDebug | 197 | Devtools | ghost-block debug switch ([debug.block_state_sync]) | none | `@Mod.EventBusSubscriber(FORGE)` + nested `(FORGE, CLIENT)`, 2 `@SubscribeEvent` |
-| devtools/DisplayNameDump | 319 | Devtools | /cedumpnames client name dump | none | `@Mod.EventBusSubscriber(CLIENT)`, 2 `@SubscribeEvent`, command `cedumpnames` |
-| devtools/GeneratorCommand | 363 | Devtools | /cegen command | none | `@Mod.EventBusSubscriber(FORGE)`, 2 `@SubscribeEvent`, command `cegen` (list, status, cancel, run, dumps) |
+| devtools/DisplayNameDump | 319 | Devtools | /cdevdumpnames client name dump | none | `@Mod.EventBusSubscriber(CLIENT)`, 2 `@SubscribeEvent`, command `cdevdumpnames` |
+| devtools/GeneratorCommand | 363 | Devtools | /cdevgen command | none | `@Mod.EventBusSubscriber(FORGE)`, 2 `@SubscribeEvent`, command `cdevgen` (list, status, cancel, run, dumps) |
 | devtools/GeneratorRunner | 351 | Devtools | runs tools/*.py as child processes | none | none |
 | devtools/LevelRandomProbe | 55 | Devtools | debug stand-in for a Level's random ([debug.level_random]) | none | none |
 | devtools/WorldJeiDump | 74 | Devtools | /dumpworldjei | none | `@Mod.EventBusSubscriber(FORGE)`, `@SubscribeEvent`, command `dumpworldjei` |
 | devtools/WorldJeiMobBuckets | 74 | Devtools | dump part: bucketable mobs | none | none |
 | devtools/WorldJeiToolPairs | 356 | Devtools | dump part: tool pairs | none | none |
-| devtools/WthitIconDump | 165 | Devtools | /cedumpicons client icon audit | compat.BlockModelIcons (Common) | `@Mod.EventBusSubscriber(CLIENT)`, 2 `@SubscribeEvent`, command `cedumpicons` |
+| devtools/WthitIconDump | 165 | Devtools | /cdevdumpicons client icon audit | compat.BlockModelIcons (Common) | `@Mod.EventBusSubscriber(CLIENT)`, 2 `@SubscribeEvent`, command `cdevdumpicons` |
 
 ### excavation (Engineering)
 | class | lines | target | reason | calls into other targets | registrations and event subscribers |
@@ -604,8 +604,8 @@ inventory for how a `register(IEventBus)` method is wired from `CreativeEngineer
 | time/CalendarDate | 40 | Calendar | calendar date on the SUN clock | none | none |
 | time/SeasonClock | 152 | Calendar | seasons following the sun | none | 3 `@SubscribeEvent` (server tick / level events); `ModList.isLoaded("sereneseasons")` |
 | time/TimeClient | 98 | Calendar | Serene Seasons calendar tooltip takes over the Vinery calendar's job | seasons.SeasonTypes (Calendar) | `@Mod.EventBusSubscriber(CLIENT)`, 2 `@SubscribeEvent` |
-| time/TimeCommand | 138 | Calendar | /cetime | none | `@SubscribeEvent` RegisterCommandsEvent, command `cetime` (push, set day/season/wine, date) |
-| time/TimeDate | 253 | Calendar | /cetime date subcommand | none | builds `Commands.literal("date")` for TimeCommand |
+| time/TimeCommand | 138 | Calendar | /ccaltime | none | `@SubscribeEvent` RegisterCommandsEvent, command `ccaltime` (push, set day/season/wine, date) |
+| time/TimeDate | 253 | Calendar | /ccaltime date subcommand | none | builds `Commands.literal("date")` for TimeCommand |
 | time/TimePause | 19 | Calendar | [time] pauseWhenEmpty | none | none |
 | time/TimePresets | 139 | Calendar | [time] preset sets | none (CEConfig.Time.Preset) | none |
 | time/TimePush | 107 | Calendar | pushes [time] into Serene Seasons and SeasonHUD configs | none | `@SubscribeEvent` (ModConfigEvent); `ModList.isLoaded` sereneseasons, seasonhud |

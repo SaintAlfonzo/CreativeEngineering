@@ -172,7 +172,7 @@ Status **Testing**: in the `mods/` Creative Delight jar of 2026-11-02 14:01; scr
 | Every rule in sections 1 to 4 | `kubejs/data/creativedelight/kubejs/creativeengineering/drinks.js`; input tags `drink_tags.js` |
 | Superseded recipes taken out | `farmersrespite/kettle.js` (dandelion tea, melon juice, lavender tea, the five Fruits Delight teas; matcha latte takes any sugar-like; chocolate and pumpkin coffee take the tags), `veggiesdelight/recipes.js` (pot), `endersdelight/recipes.js` (pot), `abnormals_delight/upgrade_aquatic.js` (pot), `delightful/recipes.js` (grid berry latte) |
 | Renames | client `assets/creativedelight/kubejs/creativeengineering/names.js`; fluid names in CD `fluids.js` |
-| Art | `kubejs/assets/creativeengineering/textures/item/<id>.png`: teas recoloured from Farmer's Respite's green tea, juices from Farmer's Delight's melon juice (MIT, `drink_rules_art_notice.txt`) |
+| Art | `development/creativeDelight/src/main/resources/assets/creativeengineering/textures/item/<id>.png`: teas recoloured from Farmer's Respite's green tea, juices from Farmer's Delight's melon juice (MIT, `drink_rules_art_notice.txt`) |
 
 Build choices (not decided by the owner; change freely):
 

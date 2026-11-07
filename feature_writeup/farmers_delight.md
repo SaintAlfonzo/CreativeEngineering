@@ -254,7 +254,7 @@ scratchpad (`fd_preview/gen_preview.py`); regenerate there or copy it to `tools/
 
 - Scratch r1102b 2026-11-02 (`perf/runs/r1102b/s1/judged.md`): SQ-FDB-01, -02, -03, -10, -13, -14, -15 PASS. **SQ-FDB-04 FAIL:**
   `tools/gen_comfort_nourishment.py` has no rule for `farmersdelight:gleaming_salad`, so the Comfort / Nourishment pass strips
-  its Nourishment (same class as Rustic, TODO `creativedelight/members #43`); fix: add the rule, `/dumpall`, `/cegen`. Rerun with
+  its Nourishment (same class as Rustic, TODO `creativedelight/members #43`); fix: add the rule, `/dumpall`, `/cdevgen`. Rerun with
   fixed probes: -05 (pie pick: Delightful / Central Kitchen pies absent, live toml reload unconfirmed), -06, -07 (MCA replaces the
   summoned villager), -09, -11. -08 needs a player, -12 is the client check.
 - Onion Soup: **LEFT OUT (owner 2026-11-02)**; the copper onion soup leaves with the copper cups. Not added.

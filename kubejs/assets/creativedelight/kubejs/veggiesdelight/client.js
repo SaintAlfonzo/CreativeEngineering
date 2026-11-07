@@ -1,3 +1,4 @@
+// requires: creativedelight
 // requires: veggiesdelight
 // Veggies Delight client rows.
 ClientEvents.lang('en_us', e => {

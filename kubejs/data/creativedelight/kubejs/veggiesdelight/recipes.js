@@ -1,3 +1,4 @@
+// requires: creativedelight
 // requires: veggiesdelight
 // Veggies Delight recipe rows (Creative Delight members #2, creative_delight.md 27; moved from the pack's
 // server_scripts/cooking/cooking.js and baking.js 2026-10-25, rows unchanged). Recipe ids are creativedelight:<type>/<suffix>
@@ -21,7 +22,7 @@ ServerEvents.recipes(e => {
 		R.replaceInput({ id: 'veggiesdelight:compat/moredelight/cutting/bread_slice' }, i.t_bread, i.t_bread_loaf, e)
 
 		//######################### Juices #########################
-		// Fluids like chorus juice (development/creativeDelight/src/main/resources/kubejs_startup/creativeengineering/fluids.js; feature_writeup/veggies_delight.md 4.9). Pot: Veggies
+		// Fluids like chorus juice (development/creativeDelight/src/main/resources/kubejs_startup/creativedelight/fluids.js; feature_writeup/veggies_delight.md 4.9). Pot: Veggies
 		// Delight's pot recipes removed: pot and Kettle follow the drink rules (creativeengineering/drinks.js, food/drinks #15).
 		// Create mixer, heated: Veggies Delight's pot inputs + 250 mB water -> 250 mB; spout, drain and IE Bottling Machine at
 		// 250 mB.

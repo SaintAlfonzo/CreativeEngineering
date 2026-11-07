@@ -1,0 +1,65 @@
+{
+  "replace": false,
+  "values": [
+    {
+      "id": "immersiveengineering:dust_copper",
+      "required": false
+    },
+    {
+      "id": "immersiveengineering:dust_iron",
+      "required": false
+    },
+    {
+      "id": "immersiveengineering:dust_gold",
+      "required": false
+    },
+    {
+      "id": "creativeengineering:zinc_grit",
+      "required": false
+    },
+    {
+      "id": "immersiveengineering:dust_aluminum",
+      "required": false
+    },
+    {
+      "id": "immersiveengineering:dust_lead",
+      "required": false
+    },
+    {
+      "id": "immersiveengineering:dust_nickel",
+      "required": false
+    },
+    {
+      "id": "immersiveengineering:dust_silver",
+      "required": false
+    },
+    {
+      "id": "immersiveengineering:dust_uranium",
+      "required": false
+    },
+    {
+      "id": "creativeengineering:cast_iron_grit",
+      "required": false
+    },
+    {
+      "id": "mca:rose_gold_dust",
+      "required": false
+    },
+    {
+      "id": "creativeengineering:brass_grit",
+      "required": false
+    },
+    {
+      "id": "immersiveengineering:dust_steel",
+      "required": false
+    },
+    {
+      "id": "immersiveengineering:dust_constantan",
+      "required": false
+    },
+    {
+      "id": "immersiveengineering:dust_electrum",
+      "required": false
+    }
+  ]
+}

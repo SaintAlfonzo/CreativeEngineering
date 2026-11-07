@@ -13,7 +13,7 @@ What it compares:
          that is gone is LOST; a content found at another path is MOVED.
 
 Dump half (framework #6, 2026-11-02): `dump-snapshot` / `dump-diff` read the game dumps in kubejs/exported/ (refresh
-them with /dumpall and the client /cedumpnames before each side of the move):
+them with /dumpall and the client /cdevdumpnames before each side of the move):
   registry  every id of every registry in display_names.json (block, item, fluid, effect, entity, ...); a block's state
             property names too (an old world needs them unchanged)
   recipes   recipes/all.csv ids with their type. A lost id is allowed only when `creativedelight:<same path>` exists with
@@ -196,7 +196,7 @@ def scan_dumps(exported, nss=None):
             if reg == 'block':
                 out['block_props'] = {r['id']: sorted(r.get('props') or []) for r in rows if keep(_ns(r['id']))}
     else:
-        print(f'warning: {names} missing (client /cedumpnames), registry not compared')
+        print(f'warning: {names} missing (client /cdevdumpnames), registry not compared')
     allcsv = exported / 'recipes/all.csv'
     if allcsv.is_file():
         with allcsv.open(newline='') as f:

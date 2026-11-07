@@ -170,7 +170,7 @@ Brief: [briefs/items_item-physics.md](briefs/items_item-physics.md). Nothing her
 - patcherMod: [itemphysic/](../development/creativeCommon/src/main/java/com/SaintAlfonzo/creativecommon/itemphysic/) (`ItemPhysicSplit`, `ItemBurnTransform`, `BurnBlastDamage`, `AllurementItemCurses`), [mixin/ItemPhysicServerMixin.java](../development/creativeCommon/src/main/java/com/SaintAlfonzo/creativecommon/mixin/ItemPhysicServerMixin.java), `data/creativeengineering/tags/items/physics/*.json` (seed).
 - KubeJS: [func/item_physics.js](../kubejs/startup_scripts/func/item_physics.js) (`global.itemPhysics`), [tags/item_physics_tags.js](../kubejs/server_scripts/tags/item_physics_tags.js).
 - Audit: [_lib/dump_physics.js](../kubejs/server_scripts/_lib/dump_physics.js) (`/dumpphysics`, in `/dumpall`),
-  [tools/item_physics_audit.py](../tools/item_physics_audit.py) (`/cegen run item_physics_audit`), output
+  [tools/item_physics_audit.py](../tools/item_physics_audit.py) (`/cdevgen run item_physics_audit`), output
   [item_physics_audit.md](item_physics_audit.md) and `kubejs/generation_scripts/physics/item_physics_families.json`.
 - Config: `config/itemphysic.json`.
 - Related: shrapnel ([tnt_shrapnel.md](tnt_shrapnel.md)).
@@ -302,7 +302,7 @@ in one table, and each maps to a material a player would recognise.
    It reads the manual-override list too, so every item lands in exactly one family tag.
 3. `item_physics_tags.js` maps families to behaviour with nested tag refs through `global.tags` (e.g. floats ⊇
    `#…/family/wood`, `#…/family/produce`). The hand lists shrink to the override list.
-4. New mods: `/dumpall`, `/cegen run item_physics_audit`; unclassified items or a mod with no default show in the
+4. New mods: `/dumpall`, `/cdevgen run item_physics_audit`; unclassified items or a mod with no default show in the
    report; add a tag rule, a name token, a mod default or an override, then rerun.
 
 ### 9.6 Decisions

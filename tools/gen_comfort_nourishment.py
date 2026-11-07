@@ -2,7 +2,7 @@
 """Comfort / Nourishment split (feature_writeup/comfort_nourishment.md section 9 and appendix C): resolve the rules
 below into kubejs/generation_scripts/food/comfort_nourishment.json.
 
-Creative Delight's creativeengineering/comfort_nourishment.js reads that file on ItemEvents.modification (startup)
+Creative Delight's creativedelight/comfort_nourishment.js reads that file on ItemEvents.modification (startup)
 and sets Farmer's Delight's Comfort / Nourishment on every food. Other effects, hunger and flags are not touched.
 
 Ruled forms: foods that hand back a bowl, a mason jar or a shulker bowl. First match wins:
@@ -251,7 +251,7 @@ def main():
                       'set: food -> Comfort / Nourishment and seconds ("none" = neither); keep: ruled foods with no '
                       'recipe found, left as they are; strip: both effects removed (bottles). Every other food loses '
                       'Nourishment at runtime. Keys are item_dict keys, raw ids where the item has no key. Read by '
-                      'Creative Delight creativeengineering/comfort_nourishment.js and tools/gen_can_types.py; restart '
+                      'Creative Delight creativedelight/comfort_nourishment.js and tools/gen_can_types.py; restart '
                       'to apply.')
     out['set'] = OrderedDict((key(fid), OrderedDict([('effect', d['effect'] or 'none'), ('seconds', d['seconds'])]))
                              for fid, d in ruled.items())

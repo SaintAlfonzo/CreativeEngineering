@@ -1,3 +1,4 @@
+// requires: creativeequipment
 // Creative Equipment; moved from kubejs/server_scripts/other/backpack_skins.js on 2026-11-04 (creative_split.md 7.6, wave 7), rows unchanged.
 // Recipe ids are creativeequipment:<type>/<suffix> (global.CEQ.recipes).
 // Backpack skins: smith a block from #creativeengineering:backpack_skins onto a Sophisticated Backpack to change its

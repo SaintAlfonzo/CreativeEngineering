@@ -57,7 +57,7 @@ import net.minecraftforge.registries.ForgeRegistries;
 public class SeasoningJEI implements IModPlugin {
 
     private static final Logger LOGGER = LogUtils.getLogger();
-    private static final ResourceLocation ID = new ResourceLocation(CreativeDelight.NS, "seasoning");
+    private static final ResourceLocation ID = new ResourceLocation(CreativeDelight.MOD_ID, "seasoning");
     private static final ResourceLocation SALT = new ResourceLocation("salt", "salt");
     private static final ResourceLocation SALT_DUST = new ResourceLocation("vintagedelight", "salt_dust");
     private static final ResourceLocation MIXER = new ResourceLocation("create", "mechanical_mixer");
@@ -95,7 +95,7 @@ public class SeasoningJEI implements IModPlugin {
     public void registerRecipes(IRecipeRegistration registration) {
         movedCrafting = Set.of();
         movedMixing = Set.of();
-        if (Minecraft.getInstance().level == null || !CommonConfig.JEI.seasoningCategory.get()) {
+        if (Minecraft.getInstance().level == null || !com.SaintAlfonzo.creativecompat.CompatConfig.JEI.seasoningCategory.get()) {
             return;
         }
         try {
@@ -280,7 +280,7 @@ public class SeasoningJEI implements IModPlugin {
             if (foods.isEmpty()) {
                 return null;
             }
-            return new Display(new ResourceLocation(CreativeDelight.NS, "seasoning/salt_mixing"), mixer,
+            return new Display(new ResourceLocation(CreativeDelight.MOD_ID, "seasoning/salt_mixing"), mixer,
                     List.of(foods, salts), salted(foods), true);
         }
 

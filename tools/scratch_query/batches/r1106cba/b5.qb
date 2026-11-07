@@ -1,0 +1,7 @@
+# r1106cba Boot 5: new OUT, KubeJS Delight, Serene Seasons, MoreJS dropped (SQ-CBA-14). FML error screen; run after the stop.
+## SQ-CBA-14 | missing hard dependencies reported by FML
+bootexpect Missing or unsupported mandatory dependencies
+bootexpect kubejsdelight
+bootexpect sereneseasons
+bootexpect morejs
+shell grep -nE "Missing or unsupported|Mod ID: '(kubejsdelight|sereneseasons|morejs)'|Requested by: '|kubejsdelight|sereneseasons|morejs" logs/latest.log | head -30

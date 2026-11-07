@@ -1,3 +1,4 @@
+// requires: creativedelight
 // Food type tags: every food in exactly one #creativeengineering:food_type/<type>, plus
 // #creativeengineering:canned_source for foods that already have a Canned Goods can.
 //

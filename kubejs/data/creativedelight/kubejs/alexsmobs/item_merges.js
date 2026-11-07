@@ -1,3 +1,4 @@
+// requires: creativedelight
 // requires: alexsmobs
 // requires: neapolitan
 // Banana merge (feature_writeup/item_merges.md 2.1): Alex's Mobs' banana into Neapolitan's. Moved from the pack's

@@ -64,7 +64,7 @@ public final class Stepstool {
 
     private static final String PROTOCOL = "1";
     public static final SimpleChannel CHANNEL = NetworkRegistry.newSimpleChannel(
-            new ResourceLocation("creativeengineering", "stepstool"),
+            new ResourceLocation(com.SaintAlfonzo.creativeequipment.CreativeEquipment.MOD_ID, "stepstool"),
             () -> PROTOCOL, PROTOCOL::equals, PROTOCOL::equals);
 
     /** Where a player's stool stands: its bottom centre (the player's feet when they stepped up) and the stool item. */

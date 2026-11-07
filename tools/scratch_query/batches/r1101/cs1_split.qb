@@ -72,7 +72,7 @@ look wine clock moves 8 days with the month
 > ceperf status
 > ceplace status
 > recipescan
-waitlog (recipescan|recipe scan).*(done|summary|checked|recipes) 300
+waitlog (?i)(recipescan|recipe scan).*(done|summary|checked|recipes|references) 300
 > dumpworldjei
 sleep 10
 > dumpspawns

@@ -112,7 +112,7 @@ walkable block that nothing gives a speed to, so the next mod added doesn't sile
 3. **generators.json:** extend `blockrunner_scan`: `dumps` += `"cedumpsurface"`, `args: ["--audit",
    "kubejs/exported/surface_audit.json"]`, `warnExit: [3]`, `highlight` for the "untyped" lines. With
    `[debug.generators]` on, it runs at dev-instance startup: that is the watcher.
-4. **The audit itself.** In the dev instance: `/cegen run blockrunner dumps`, read the list, tier each newcomer in
+4. **The audit itself.** In the dev instance: `/cdevgen run blockrunner dumps`, read the list, tier each newcomer in
    [blocktags.js](../../kubejs/server_scripts/tags/blocktags.js) with `t.addMatching` (single modded ids through new
    `global.item` keys in item_dict.js; for the Creative Delight members the keys live in their CD item tree, memory
    `creative-delight-routing`, families as wildcards), then `node tools/blockrunner_tag_sim.js` (0 overlaps,

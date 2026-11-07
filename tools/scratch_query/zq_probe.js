@@ -10,7 +10,7 @@
 //   /zq item <item id>       item class, max damage, max stack size
 //   /zq potion <id> [a,b]    potion registered?; with ingredients: what each brews the potion into (Forge registry)
 //   /zq season <b1,b2,..>    SeasonTypes.tagged (cached season type) of each biome
-//   /zq count x1 y1 z1 x2 y2 z2 <block>   blocks of that id in a box and what they stand on (loaded chunks only)
+//   /zq count x1 y1 z1 x2 y2 z2 <block> [dim]   blocks of that id in a box and what they stand on (loaded chunks only)
 //   /zq ages x1 y1 z1 x2 y2 z2 <block>    histogram and mean of the block's age property in a box (crop growth comparisons)
 //   /zq floating <x> <z> <r> sand / red sand / gravel with air below, y 0 to 140 (loaded chunks only, first 10)
 //   /zq under <x> <z> <rChunks> [id text|-] [dim]   structure starts judged on the placed blocks: air / water under the
@@ -38,7 +38,8 @@
     const $ZQBR = Java.loadClass('net.minecraftforge.common.brewing.BrewingRecipeRegistry')
     const $ZQRK = Java.loadClass('net.minecraft.resources.ResourceKey')
     const $ZQHand = Java.loadClass('net.minecraft.world.InteractionHand')
-    const $ZQSeason = Java.loadClass('com.SaintAlfonzo.creativecalendar.seasons.SeasonTypes')
+    // loaded on first use: a boot without Creative Calendar (r1106cbp p6) must still register /zq
+    let $ZQSeason = null
     function out(s) { console.info('[zq] ' + s) }
     function zqIng(g) {
         let s = g.getStacks(), ids = []
@@ -128,6 +129,7 @@
             } else if (what == 'season') {
                 // SeasonTypes.tagged (the cached season type) of each biome in a comma list
                 let reg = server.registryAccess().registryOrThrow($ZQReg.BIOME_REGISTRY)
+                if ($ZQSeason === null) $ZQSeason = Java.loadClass('com.SaintAlfonzo.creativecalendar.seasons.SeasonTypes')
                 arg.split(',').forEach(b => {
                     let h = reg.getHolderOrThrow($ZQRK.create($ZQReg.BIOME_REGISTRY, new $ZQRL(b)))
                     out('season ' + b + ': ' + $ZQSeason.tagged(h))
@@ -152,10 +154,12 @@
             } else if (what == 'count' || what == 'floating') {
                 // count x1 y1 z1 x2 y2 z2 <block>: blocks of that id in the box (loaded chunks only)
                 // floating x z r: sand / red sand / gravel with air below, y 0 to 140, loaded chunks only (first 10)
-                let lv = null
-                server.getAllLevels().forEach(l => { if (String(l.dimension) == 'minecraft:overworld') lv = l })
-                let $ZQPos = Java.loadClass('net.minecraft.core.BlockPos')
+                // count takes an optional 8th argument, the dimension (default minecraft:overworld)
                 let a = arg.split(' ').map(v => v)
+                let zqDim = (what == 'count' && a[7]) ? a[7] : 'minecraft:overworld'
+                let lv = null
+                server.getAllLevels().forEach(l => { if (String(l.dimension) == zqDim) lv = l })
+                let $ZQPos = Java.loadClass('net.minecraft.core.BlockPos')
                 let n = 0, found = [], skipped = 0, under = {}
                 let x1, y1, z1, x2, y2, z2, want = null
                 if (what == 'count') {

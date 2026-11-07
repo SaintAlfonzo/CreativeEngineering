@@ -1,3 +1,4 @@
+// requires: creativemagic
 // priority: 1000
 // Creative Magic client scripts (feature_writeup/creative_magic.md, creative_split.md 3.9, 7.6, wave 6). Authored here
 // in the pack folder (reloads on F3+T); the Magic build copies this tree into the jar at assets/creativemagic/kubejs/.

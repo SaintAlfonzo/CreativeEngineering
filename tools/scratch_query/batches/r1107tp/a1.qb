@@ -1,0 +1,94 @@
+# r1107tp boot a1: group A superflat, creativecompat-1.0.0 of 11-07 10:31 (Tempad member nested), tempad_upstream/ linked,
+# Curios, FTB Teams, WTHIT present; Immersive Portals, Portal Gun, Portal Gels, loadingscreentips left out.
+# Rows SQ-TP-01a, -02, -10, -18a, -27a.
+pace 1
+
+## SQ-TP-01a | boot with the donor present
+bootexpect Done \(
+shell grep -hiE "tempad" logs/latest.log | grep -iE "error|exception|fail|warn" | head -20; echo "errlines=$(grep -hiE 'tempad' logs/latest.log | grep -ciE 'error|exception|fail')"
+> datapack list
+sleep 2
+expect tempad_upstream
+look no tempad error lines; tempad_upstream_data in the datapack list
+
+## SQ-TP-02 | phase 1 recipes, forge tags, new-location upgrade absent
+> zq rdetail tempad:
+waitlog \[zq\] done 60
+expect tempad:tempad
+expect tempad:chronon_cell
+expect tempad:chronon_battery
+expect tempad:chronon_generator
+expect tempad:chronometer
+expect tempad:time_steel_shaped
+reject upgrades/new_location
+shell grep -hE "\[zq\]" logs/latest.log | grep -E "tempad:(tempad|chronon_cell|chronon_battery|chronon_generator|chronometer|time_steel_shaped) " -A4 | head -60
+look inputs use forge: tags (ender pearls, quartz, tinted glass) or items; no c: tags
+
+## SQ-TP-10 | phase 2 recipes and items
+expect tempad:card_cheap
+expect tempad:card_expensive
+expect tempad:location_card_clean
+expect tempad:card_wallet
+expect tempad:location_broadcaster
+expect tempad:screening_device
+expect tempad:player_teleport_upgrade
+shell grep -hE "Error|Couldn't|Unknown|Parsing error" logs/latest.log | grep -iE "tempad" | head -10; grep -hE "\[zq\]" logs/latest.log | grep -A4 "card_wallet " | head -8
+look card wallet with forge:leather; no tempad recipe/tag errors
+
+## SQ-TP-18a | phase 4 compat boot (Curios, FTB Teams, WTHIT present), recipes
+bootreject (ClassNotFound|NoClassDefFound).*tempad
+expect tempad:knowledge_projector
+expect tempad:knowledge_repository_upgrade
+expect upgrades/knowledge_repository
+shell grep -hE "tempad" logs/debug.log | grep -iE "curios" | head -10
+look debug log drops data/tempad/curios but keeps data/curios/tags
+
+## SQ-TP-27a | every recipe, every item registered and giveable
+> pbot spawn qa 0 -60 0 minecraft:overworld creative
+sleep 3
+> give qa tempad:location_card
+expect Gave 1 \[.*\] to qa
+> give qa tempad:card_wallet
+expect Gave 1 \[.*\] to qa
+> give qa tempad:time_steel
+expect Gave 1 \[.*\] to qa
+> give qa tempad:knowledge_projector
+expect Gave 1 \[.*\] to qa
+> give qa tempad:new_location_upgrade
+expect Gave 1 \[.*\] to qa
+> give qa tempad:player_teleport_upgrade
+expect Gave 1 \[.*\] to qa
+> give qa tempad:knowledge_repository_upgrade
+expect Gave 1 \[.*\] to qa
+> give qa tempad:timedoor_projector
+expect Gave 1 \[.*\] to qa
+> give qa tempad:timedoor_marker
+expect Gave 1 \[.*\] to qa
+> give qa tempad:chronon_cell
+expect Gave 1 \[.*\] to qa
+> give qa tempad:chronon_generator
+expect Gave 1 \[.*\] to qa
+> give qa tempad:location_broadcaster
+expect Gave 1 \[.*\] to qa
+> give qa tempad:tempad
+expect Gave 1 \[.*\] to qa
+> give qa tempad:chronomark
+expect Gave 1 \[.*\] to qa
+> give qa tempad:chronon_battery
+expect Gave 1 \[.*\] to qa
+> give qa tempad:chronometer
+expect Gave 1 \[.*\] to qa
+> give qa tempad:time_twister
+expect Gave 1 \[.*\] to qa
+> give qa tempad:workstation
+expect Gave 1 \[.*\] to qa
+> give qa tempad:metronome
+expect Gave 1 \[.*\] to qa
+> give qa tempad:screening_device
+expect Gave 1 \[.*\] to qa
+> give qa tempad:creative_chronometer
+expect Gave 1 \[.*\] to qa
+count Gave 1 \[ >= 21
+reject Unknown item
+shell grep -hE "\[zq\] .*tempad:" logs/latest.log | grep -vE "^\s" | grep -oE "tempad:[a-z_/]+" | sort -u | tr '\n' ' '; echo; grep -hcE "Error parsing recipe.*tempad|Couldn't load .*tempad" logs/latest.log
+look every tempad recipe listed, 0 parse errors

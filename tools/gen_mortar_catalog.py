@@ -21,7 +21,7 @@ The game reads the crafts from the member scripts, not the JSON (framework #7, c
 <namespace>/mortar_catalog.js per source recipe's mod under the entry's outRoot in tools/generators.json
 (kubejs/data/creativedelight/kubejs), headed `// requires: <namespace>`. The JSON stays the full record (skips too).
 
-Run: python3 tools/gen_mortar_catalog.py   (after /dumpfood, also /cegen run mortar_catalog)
+Run: python3 tools/gen_mortar_catalog.py   (after /dumpfood, also /cdevgen run mortar_catalog)
      python3 tools/gen_mortar_catalog.py --check   write nothing; exit 1 when the JSON or a member script would change
      python3 tools/gen_mortar_catalog.py --members only rewrite the member scripts from the current JSON
 """

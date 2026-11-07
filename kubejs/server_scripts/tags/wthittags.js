@@ -2,7 +2,7 @@
 // gives the block itself only with Silk Touch. patcherMod compat/WthitSilkTouch reads the tag on the client.
 //
 // The list lives in kubejs/generation_scripts/wthit/silk_touch_blocks.json, written by
-// tools/gen_silk_touch_blocks.py from the loot dump (/cegen run silk_touch_blocks dumps). Rerun it after a mod
+// tools/gen_silk_touch_blocks.py from the loot dump (/cdevgen run silk_touch_blocks dumps). Rerun it after a mod
 // update, then /reload. Reference + tests: feature_writeup/wthit_lines.md 2.11.
 //
 // Wrapped in an IIFE: all server scripts share one top-level scope.

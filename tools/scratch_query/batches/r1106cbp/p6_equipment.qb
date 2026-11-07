@@ -1,0 +1,17 @@
+# r1106cbp: Equipment without Calendar, Creative Delight, Creative Brewing, group A (SQ-CBP-08)
+## SQ-CBP-08 | Equipment without CB: no leaks, echo rows, felsic recipes with creativecommon:magic_resistance
+bootreject Missing or unsupported mandatory|Mixin apply failed|InvalidMixinException|Encountered an unexpected exception
+bootexpect \[creativeequipment\] loaded
+shell ! grep -nE "ReferenceError|TypeError|EvaluatorException|is not defined|global\.CB" logs/kubejs/startup.log logs/kubejs/server.log
+> cbo effects
+waitlog \[cbo\] done 30
+expect effects leaks 0$
+reject \[cbo\] leak
+look record "effects items by namespace"; creativeequipment echo pickaxe/axe/shovel/hoe onHit rows present
+shell grep -h "creativecommon:magic_resistance\|felsic" logs/kubejs/server.log | head -5
+> zq potion creativecommon:magic_resistance
+> zq potion creativecommon:darkness
+> zq potion creativecommon:long_resistance
+sleep 3
+expect potion creativecommon:magic_resistance registered: true
+expect potion creativecommon:long_resistance registered: true

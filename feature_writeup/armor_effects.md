@@ -116,7 +116,7 @@ The check that all four pieces are worn is CDD's; the mixin only swaps the two `
   cancelled in `LivingAttackEvent`, before the hurt sound and flash, recognised through `EffectTickContext` (poison ticks
   share Instant Damage's source). A higher level takes the per-level cut (Wither too, though it is not in the tag).
 - **Where it comes from:** felsic and dragon set bonuses (level I), the potions (base 3:00, long 8:00, strong
-  1:30 at II, from `CEPotions`), `/effect`. Felsic gear assembly fills with it (see
+  1:30 at II, from `CommonPotions`), `/effect`. Felsic gear assembly fills with it (see
   [gear_tuning.md](gear_tuning.md)).
 - **Effect description:** written 2026-10-31 in [lang/en_us.json](../kubejs/assets/creativeengineering/lang/en_us.json)
   line 13.
@@ -202,7 +202,7 @@ several `onHit()` calls on one item add up; armor `piece()` / `mount()` calls re
   Checked 2026-10-21 (Better Beacons 1.0.2 jar): its only consumer, `PhantomSpawnerMixin`, tests `hasEffect`, so the
   level does nothing; amplifier 0 is cosmetic ([briefs/potions_effects.md](briefs/potions_effects.md)).
   FIXED 2026-10-28 (owner: Phantom Bane is levelless, like Night Vision): the mixin gives both echo effects amplifier 0,
-  and patcherMod `CEPotions` registers no strong Phantom Bane potion (the glowstone mix is gone from `potions.js`).
+  and patcherMod `CommonPotions` registers no strong Phantom Bane potion (the glowstone mix is gone from `potions.js`).
   Scratch SQ-CM-07, SQ-CM-08.
 - **F8. One effect packet per effect per tick, unmeasured.** Re-adding an effect with a longer duration fires
   `onEffectUpdated`, which syncs the effect to the client. A dragon set plus a held dragon tool is 8 updates a

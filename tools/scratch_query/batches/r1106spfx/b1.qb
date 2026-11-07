@@ -1,0 +1,29 @@
+# r1106spfx boot b1: group B fresh world (seed 8675309), 22:07-22:09 builds, IP jars out. Rows SQ-SPFX-07, -04c.
+pace 1
+
+## SQ-SPFX-07 | sky island generates
+bootexpect Done \(
+> pbot spawn qa 0 200 0 minecraft:overworld creative
+> locate structure creativeengineering:sky_island
+waitlog (nearest|Could not find).*sky_island 300
+capture P is at \[(-?\d+), (~|-?\d+), (-?\d+)\]
+> tp qa {P1} 200 {P3}
+sleep 25
+> zq count {P1-40} 100 {P3-40} {P1+40} 250 {P3+40} minecraft:grass_block
+waitlog \[zq\] 120
+> zq count {P1-40} 0 {P3-40} {P1+40} 99 {P3+40} minecraft:grass_block
+waitlog \[zq\] 120
+shell sleep 5; grep -n "sky_island" $INST/kubejs/generation_scripts/worldgen/structure_tag_report.md | head -5; grep -n "sky_island" logs/latest.log | head -5
+look locate within ~2000 blocks; grass between y100-250 at the spot; report lists it under group/sky
+
+## SQ-SPFX-04c | felsic ore in Nullscape crystal peaks
+bootexpect mod data packs on: .*felsic_gear\+nullscape
+> execute in minecraft:the_end run locate biome nullscape:crystal_peaks
+waitlog (nearest|Could not find).*crystal_peaks 300
+capture N is at \[(-?\d+), (~|-?\d+), (-?\d+)\]
+> execute in minecraft:the_end run tp qa {N1} 120 {N3}
+sleep 30
+> zq count {N1-16} 0 {N3-16} {N1+15} 255 {N3+15} felsic_gear:felsic_block minecraft:the_end
+waitlog \[zq\] 180
+shell grep -h "mod data packs on" logs/latest.log | head -3
+look both felsic packs on; felsic_block count > 0 over 4 chunks

@@ -1,7 +1,7 @@
 package com.SaintAlfonzo.creativedelight.compat.jei;
 
-import com.SaintAlfonzo.creativecommon.compat.jei.RecipeRows;
-import com.SaintAlfonzo.creativecommon.compat.jei.JeiIcons;
+import com.SaintAlfonzo.creativecompat.compat.jei.RecipeRows;
+import com.SaintAlfonzo.creativecompat.compat.jei.JeiIcons;
 import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.HashSet;
@@ -56,12 +56,12 @@ import net.minecraft.world.item.crafting.Ingredient;
 public class CanPagesJEI implements IModPlugin {
 
     private static final Logger LOGGER = LogUtils.getLogger();
-    private static final ResourceLocation ID = new ResourceLocation(CreativeDelight.NS, "can_pages");
+    private static final ResourceLocation ID = new ResourceLocation(CreativeDelight.MOD_ID, "can_pages");
 
     public static final mezz.jei.api.recipe.RecipeType<CraftingRecipe> CANNING =
-            mezz.jei.api.recipe.RecipeType.create(CreativeDelight.NS, "canning", CraftingRecipe.class);
+            mezz.jei.api.recipe.RecipeType.create(CreativeDelight.MOD_ID, "canning", CraftingRecipe.class);
     public static final mezz.jei.api.recipe.RecipeType<CraftingRecipe> CAN_USES =
-            mezz.jei.api.recipe.RecipeType.create(CreativeDelight.NS, "can_uses", CraftingRecipe.class);
+            mezz.jei.api.recipe.RecipeType.create(CreativeDelight.MOD_ID, "can_uses", CraftingRecipe.class);
 
     private static final ResourceLocation EMPTY_CAN = new ResourceLocation("canned_goods", "empty_can");
     private static final ResourceLocation CRUSHED_CAN = new ResourceLocation("canned_goods", "crushed_empty_can");
@@ -113,7 +113,7 @@ public class CanPagesJEI implements IModPlugin {
     @Override
     public void registerRecipes(IRecipeRegistration registration) {
         moved = Set.of();
-        if (Minecraft.getInstance().level == null || !CommonConfig.JEI.canCategories.get()) {
+        if (Minecraft.getInstance().level == null || !com.SaintAlfonzo.creativecompat.CompatConfig.JEI.canCategories.get()) {
             return;
         }
         try {

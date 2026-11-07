@@ -50,7 +50,7 @@ public final class ItemBurnTransform {
         public final boolean keepCount;         // REPLACE: roll once per item in the stack (vs. once total)
         public final float power;               // EXPLODE: explosion radius
         public final float chance;              // both: 0..1 probability (per item for REPLACE+keepCount)
-        public final boolean shrapnel;          // EXPLODE: also fire a shrapnel burst (util.BurnBursts, patcherMod)
+        public final boolean shrapnel;          // EXPLODE: also fire a shrapnel burst (util.BurnBursts, shrapnel.ShrapnelSpawner)
 
         private Rule(Kind kind, ResourceLocation result, boolean keepCount, float power, float chance, boolean shrapnel) {
             this.kind = kind;

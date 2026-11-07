@@ -459,7 +459,7 @@ What goes where in the CD jar:
 - **Ids in scripts.** CD scripts use dict keys (`i.x`, `f.x`), never literal `ns:id`, the same rule as the pack.
 - **Config values.** `NCH.cfg()` already reads `CEConfig` from patcherMod; CD scripts get pack-wide values the same way.
 - **Generators.** `tools/*.py` that write rows for members get an output path in the CD tree (`tools/generators.json`
-  entry per generator); `/cegen` unchanged.
+  entry per generator); `/cdevgen` unchanged.
 - **Two front ends become one.** The second round's stage 2 (NCH writing a `ce_rules` schema) is gone: NCH is the only
   front end.
 
@@ -1177,10 +1177,55 @@ Offline 2026-10-25: `tools/test_wild_crops.sh` passes (63 crop tags match the ge
 | WCD-04 | Old CD jar + new folder trees: unchanged | SQ-WCD-05 |
 | WCD-05 | Jar copy only (folder removed): unchanged | SQ-WCD-06 |
 | WCD-06 | Savanna village farms grow cotton from the renamed tag | SQ-WCD-07 |
+| WCD-07 | Any optional mod absent: datapack loads, world creates; its rules skipped, one line each | SQ-CDW-01, -03, -04 |
+| WCD-08 | All mods present: every worldgen pack on, rubber trees still generate | SQ-CDW-02 |
 
 Install: patcherMod and CD together (19.5). Until then the folder trees run with the installed jars (WCD-04), except
 `VillageFarmCrops` in the installed CD 1.0.0, which still reads the old `creativeengineering:` tags and finds them empty: no
 Rustic crops in village farms until the new CD jar is in.
+
+### 24.4 Worldgen files gated on their mods (2026-11-06, framework #13)
+
+Seen in CEPortTesting (no Myrtrees): `Unknown registry key in minecraft:worldgen/trunk_placer_type:
+myrtrees:rubber_trunk_placer` from `wild/rubber_tree.json`, and the whole datapack failed on world select. Forge 1.19.2-43.3.9
+has no conditions for worldgen registries, so a file may only ship where every id it names exists.
+
+- **Source of truth: `"requires"` in `wild_crops.json`.** It already skipped a rule in `wild_crops.js` (`_biome_rules.js`)
+  when the mod is absent; now it also owns the rule's `creativedelight:wild/*` files. Added to `cabbage`, `beetroot`
+  (farmersdelight), `cantaloupe` (delightful), `hamimelon` (fruitsdelight), `rubber` (myrtrees), `rooted_dirt` (fungidelight);
+  the others had it.
+- **Build:** task `splitWorldgen` in CD's `build.gradle` (replaces the plain `worldgen` entry of `dataTrees`). Each gated rule's
+  placed features and the configured features they name go to `packs/worldgen/<requires>/data/creativedelight/worldgen/`
+  with a generated `pack.mcmeta`; the rest to `data/creativedelight/worldgen/`. A file left in the plain tree that names a
+  namespace other than minecraft, forge, creativedelight, creativeengineering (only tags there) fails the build; so does one
+  file claimed by two rules with different `requires`.
+- **Runtime:** `CompartmentPacks.addWorldgen` lists `packs/worldgen/` in the jar on `AddPackFindersEvent` (`SERVER_DATA`) and adds
+  each folder as a required, hidden built-in pack (`creativedelight:worldgen/<mod>`, `BuiltInPacks.addFolder`) only when
+  `Compartments.loaded(<mod>)` (LoadingModList). One log line: `wild crop worldgen packs on: [...]; off (mod not loaded): [...]`.
+- Members are nested and always loaded (a `[members]` switch only skips script rows), so in the pack only the external jars
+  matter: myrtrees, fruitsdelight. `enders_additions` registers the `endersdelight:` blocks itself, so the End crops gate on it,
+  not on the Ender's Delight jar.
+- `disable_modifiers` of an absent mod were already dropped silently, `remove_features` logged; unchanged (brief step 5).
+- `cup_conversion` (empty) and `loot_tables` (fishing net: `upgrade_aquatic`, `oceanic_delight` items) were checked and left:
+  a bad loot table entry is logged per table and does not stop the datapack.
+
+Inventory (2026-11-06; plain tree: `wild/cocoa_jungle_tree`, `melon`, `pumpkin`, `sugar_cane`, `sweet_berries`, vanilla ids only):
+
+| Pack (`requires`) | Files (placed + configured unless noted) | Ids named | Kind |
+|---|---|---|---|
+| `myrtrees` | `rubber_tree` | `myrtrees:rubber_trunk_placer`, `rubberwood_log/leaves/sapling` | external jar |
+| `fruitsdelight` | `hamimelon` | `fruitsdelight:hamimelon` | external jar |
+| `enders_additions` | `end_amberveil`, `end_chorusflame`, `end_saffron`, `end_voidpepper` | `endersdelight:*` blocks (registered by the member) | member |
+| `ends_delight` | `chorus_succulent` | `ends_delight:chorus_succulent` | member |
+| `delightful` | `mini_cantaloupe` | `delightful:cantaloupe` | member |
+| `hearthandharvest` | `raspberry_bush` | `hearthandharvest:raspberry_bush` | member |
+| `oceanic_delight` | `sea_grape` | `oceanic_delight:wild_sea_grape`, farmersdelight | member |
+| `fungidelight` | `rooted_dirt_blob`, `truffle_dirt_ore` (placed only) | `fungidelight:` configured features | member |
+| `farmersdelight` | `cabbages`, `beetroots` | `farmersdelight:` wild crops | member (base) |
+
+Checked offline: `splitWorldgen` puts 26 files in 9 packs, 5 in the plain tree; the jar has them at those paths; with
+`requires` taken off `rubber` the build fails naming both rubber files. `tools/test_wild_crops.sh` fails before reaching the
+rules (`tag_helper.js#83`, `namespace` of undefined), with the old `wild_crops.json` as well: a harness break, not this change.
 
 
 ## 25. Village farm crops (2026-10-25)
@@ -1286,7 +1331,7 @@ goes back to a `@Pseudo` mixin in patcherMod or CD). Recorded in TODO `creatived
 `tools/gen_out.py`: a generator entry in `tools/generators.json` may carry `outRoot`, a folder inside one of the trees the
 CD jar build copies (`kubejs/data/creativedelight/kubejs`, `kubejs/assets/creativedelight/kubejs`,
 `kubejs/data/creativedelight/worldgen`, `.../cup_conversion`). The script calls `out_root(id, default)`; missing means the
-default (pack folder, unchanged). `header(id)` is the first line of a generated file in a tree. `/cegen` is unchanged (the
+default (pack folder, unchanged). `header(id)` is the first line of a generated file in a tree. `/cdevgen` is unchanged (the
 runner ignores the field); `outputs` stay instance-relative and must lie under `outRoot` (`python3 tools/gen_out.py
 --check`). A run after a jar build makes the jar stale, which `build_deploy.py`'s freshness check already refuses.
 Test: `python3 tools/test_gen_out.py` (CDT-13, PASSED 2026-10-25).
@@ -1765,7 +1810,7 @@ game reads only the member scripts; nothing reads the JSONs by instance path any
   rewrites unchanged files never, deletes this generator's stale `<name>.js` in folders with no part), `split_lists`,
   `namespace_of`, `report_member_scripts`. `--check` rule changed: an output inside a CD tree must lie under the entry's
   `outRoot` (pack files beside it are fine). Manifest: `outRoot` `kubejs/data/creativedelight/kubejs` on `food_catalog`,
-  `placeable_catalog`, `mortar_catalog`; a new top-level `handRun` list (not read by `/cegen`) holds `can_types` with the
+  `placeable_catalog`, `mortar_catalog`; a new top-level `handRun` list (not read by `/cdevgen`) holds `can_types` with the
   startup root.
 - **Each generator:** `--members` rewrites only the member scripts from the current JSON (the step after a hand edit of
   `food_types.json`); `--check` also reports member scripts that differ (mortar gained a `--check`). `gen_mortar_catalog.py`
@@ -1899,6 +1944,12 @@ Harvest, Roll, Large Meals, Barbeque's, Cooking for Blockheads Additions, Baby M
 Decision needed per row (`members #34`): member, donor, or stays separate. Hostile, Display and the three no-folder mods are
 the first to decide.
 
+**Owner note 2026-11-06 (repack investigation, Fruits / Hostile / More):**
+- **More Delight: repack** (MIT; 6 classes, no mixins, Ocean's pattern). `TierRegistry` replaced for the knife stats (fixes SQ-MRD-01), `ItemRegistry` for fast toasts and the Cheese Toast. Do first.
+- **Hostile Delight: repack** (AFL 3.0, Canned Goods precedent: `replaced_classes`, AFL section 6 marks, overlay GPL-3.0-only). Needed for `mod-additions #43` (native tooltips, effects as food properties) and B4/B11; the rest of the 11-04 plan stays KubeJS/data. Upstream `mods.toml` says 1.0.0, so the repack version must sort above it.
+- **Fruits Delight: status quo.** Standalone ARR jar plus the CD fix mixins (version-gated to 0.5.11). Revisit only if its Java behaviour must change; then prefer an LGPL-2.1 port of 1.1.3 (Barbeque's precedent; 1.20.1, bundles Registrate/MixinExtras/l2serial) over the donor route.
+
+
 ### 38.3 Drinks, pancakes, reviews, release numbers
 
 - Drink rules answered in full: [creative_delight_drinks.md](creative_delight_drinks.md) sections 3, 4, 6, 7. Build is `food/drinks #15`.
@@ -2025,3 +2076,46 @@ Checked offline: 66 of 68 equal the removed PNGs byte for byte; the two vertical
 pixels between equally bright colours (Python set order broke the tie in the owner's art). The 68 PNGs left the source
 tree; `gen_cfb_racks.py` no longer copies rack art; `textureswapper/rack/` keeps the reference art. Tests CQ-LCA-01 to -04.
 
+
+### 40.2 Cooking textures moved into the jar (2026-11-06)
+
+The last 59 cooking sprites left `kubejs/assets/creativeengineering/textures/` for this jar's
+`assets/creativeengineering/textures/` (same paths, so every resource location is unchanged): 25 `item/canned_*`, 9
+`item/*_tea`, 5 `item/*_juice` (with `drink_rules_art_notice.txt`), 7 `item/culture_*`, 7 `block/culture_block/*`, 6
+`block/dough_block/*`. No other jar ships these paths. The culture and dough block blockstates and models stay in
+`kubejs/assets/creativeengineering/`. `gen_can_types.py` reads own-can sprites from the jar tree; `gen_dd_dishes.py` also
+looks in every in-tree jar's assets for a KubeJS item's sprite. Jar built, not installed. Test CQ-CDTX-01.
+
+### 40.3 Incomplete items and the Rustic notice (2026-11-06, plan_cb_publish.md 15)
+
+- CD registers its own sequenced assembly incomplete items: the 80 food rows left Engineering's
+  `changes/transition_items.js` for `kubejs_startup/creativedelight/cd_transition_items.js` (ids `kubejs:incomplete_<key>`
+  unchanged). Without the Engineering jar every CD assembly failed before. New food rows go in the CD file.
+- `members/rustic/NOTICE-upstream-MIT.txt`: MIT notice for the 2 glowing calamari crate textures (owner: Rustic Delight is
+  MIT per its CurseForge page). Note: the 1.7.0 donor jar's own `mods.toml` says `license="All Rights Reserved"`.
+- Tests SQ-CBC-01, -04, CQ-CBC-01.
+
+### 40.4 Food fluids renamed, startup folder renamed (2026-11-06, plan_cb_polish.md 4)
+
+- **Fluid ids:** the 33 food fluids CD registers (`kubejs_startup/creativedelight/fluids.js`, `drinks.js`: chorus, carrot,
+  dandelion juice, turnip water, egg solution, frosting, the 10 Kettle coffees and teas, the 17 drink-rule teas and
+  juices) moved from `creativeengineering:` to `creativedelight:` (owner decision 2026-11-06). Only Common's
+  `fluid_dict.js` named them; every script, tag and recipe goes through `global.fluid`, the `forge:fluid/<name>` tags are
+  unchanged. Items of the same names (`creativeengineering:kiwi_tea` bottles and so on) keep their ids. KubeJS registers
+  no bucket or block for these fluids, only each `flowing_<name>`.
+- **Remap:** `data/creativedelight/swaps/food_fluids.json` (66 `replaces` entries: 33 fluids and 33 flowing variants).
+  Forge aliases the old ids, so fluid in tanks, basins and pipes of older saves keeps its contents.
+- **Soft fluids:** the 59 Moonlight soft fluids left `kubejs/data/creativeengineering/moonlight/soft_fluids/` for the jar's
+  `data/creativeengineering/moonlight/soft_fluids/`, ids unchanged: Moonlight 2.3.7 `SoftFluidRegistry.get` has no alias
+  (only `selene`/`minecraft` to `moonlight`), so a namespace change would empty filled jars in saves (as found in 27). The three
+  hand-written drink soft fluids now name `creativedelight:` in `equivalent_fluids`. `tools/gen_soup_soft_fluids.py`
+  writes there and ignores its own files when it scans installed jars for coverage.
+- **Startup folder:** `kubejs_startup/creativeengineering/` merged into `kubejs_startup/creativedelight/` (13 files). The
+  whole `kubejs_startup/` tree of a jar is one script pack (`JarStartupScripts`), so the folder name changes no scope or
+  pack order; same-priority files keep their walk order. `gen_out.py` (member scripts) and `gen_compost_values.py` put
+  `creativeengineering:` items into `creativedelight/`. CB's own folder is renamed in plan_cb_polish.md 2.
+- **effect_swaps.js** (`global.foodEffectSwaps`, Farmer's Respite coffees, Neapolitan Agility to Climbing, Respite cake
+  slices) moved from the CB jar to `kubejs_startup/creativedelight/`; the Climbing swap now also needs Vinery
+  (`global.has('neapolitan', ef.climbing)`), so CD alone skips it.
+- Built 2026-11-06 (Common and CD in build/libs), not installed. Tests SQ-CDFL-01 to -04, CQ-CDFL-01.
+  Scratch r1106cbp 2026-11-06: SQ-CDFL-01 to -04 PASS (-04 static: soft fluid JSONs); CQ-CDFL-01 open.

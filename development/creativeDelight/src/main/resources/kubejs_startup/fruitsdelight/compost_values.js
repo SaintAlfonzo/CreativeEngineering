@@ -5,7 +5,7 @@
 // there; that file loads after this one, so its row wins meanwhile).
 // Moved from the pack's startup_scripts/compost/compost_values.js 2026-10-25, rows unchanged.
 // Compost values for fruitsdelight: 54 items. Row: [i.<item_dict key>, chance]; chance 0-1 or a tier name from
-// creativeengineering/compost_rules.js; 0 = not compostable. A row beats the rules; the exclusions there beat a
+// creativedelight/compost_rules.js; 0 = not compostable. A row beats the rules; the exclusions there beat a
 // row. Engine: global.compost (patcherMod's func/compost.js). Startup script in the CD jar: CD rebuild + restart.
 
 ;(function () {

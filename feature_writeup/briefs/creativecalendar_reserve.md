@@ -55,7 +55,7 @@ A checked list of everything that will move into Creative Calendar, each file ma
    then KubeJS, then config, as creative_brewing.md 4.2). File the plan as a new `creativecalendar` TODO row.
 
 ### Ids and data
-No registry ids (the reserved systems register only commands and config). Command `/cetime` keeps its name.
+No registry ids (the reserved systems register only commands and config). Command `/ccaltime` keeps its name.
 
 ### Decisions
 - CampfireRain: **stays with the campfire features** in patcherMod (it is about campfires going out, not weather rules).

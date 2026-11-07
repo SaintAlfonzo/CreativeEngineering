@@ -57,7 +57,7 @@ are those of `PM/CreativeEngineering.java` (576 lines) on 2026-11-01. `?` = doub
 | 213 | FORGE bus `PlacedFoodSol` | CD | `food/PlacedFoodSol` (CD) | |
 | 217 | FORGE bus `CamoSpeedTooltip` | Engineering | `surface/CamoSpeedTooltip` (Engineering) | |
 | 221 | FORGE bus `HoeHarvestTooltip` | CD | `crops/HoeHarvestTooltip` (CD) | |
-| 227-231 | mod bus `TimePush::onConfigReload`, `TimePresets::onConfigLoading`; FORGE bus `TimePush`, `SeasonClock`, `TimeCommand` (`/cetime`) | Calendar | `time/*` (Calendar) | |
+| 227-231 | mod bus `TimePush::onConfigReload`, `TimePresets::onConfigLoading`; FORGE bus `TimePush`, `SeasonClock`, `TimeCommand` (`/ccaltime`) | Calendar | `time/*` (Calendar) | |
 | 233, 235 | mod bus `SurfaceSpeeds::onConfigReload`; FORGE bus `SurfaceSpeeds` | Engineering | `surface/SurfaceSpeeds` (Engineering) | Block 233-235 is **Mixed** with line 234 |
 | 234 | mod bus `ModDisplayNames::onConfigReload` | Common | `util/ModDisplayNames` (Common) | |
 | 239-240 | FORGE bus `DamageTagLoader` (reload listener for `damage_tags/*.json`), `DamageTagLogger` | Equipment | `damage/*` (Equipment) | Backs `shield/ShieldCategory` |
@@ -66,9 +66,9 @@ are those of `PM/CreativeEngineering.java` (576 lines) on 2026-11-01. `?` = doub
 | 262 | FORGE bus `MooshroomFamily` | Worldgen? | `mooshroom/MooshroomFamily` (Worldgen? or CD with More Mooblooms, plan 2.2 open) | Brown chance on natural spawns reads `mob_spawns.json` (Worldgen data) |
 | 264, 266 | FORGE bus `NamedMobs`, `MonsterBoxVault` | Worldgen | `mobs/*` (Worldgen: fauna) | `MonsterBoxVault` is a Quark tweak; fauna decision keeps it with `mobs/` |
 | 270-271 | `BeeNests.register` (biome modifier `bee_nests`); FORGE bus `BeeNests` | Worldgen | `worldgen/BeeNests` (Worldgen) | |
-| 275-312 | FORGE bus `StructureBiomeRules`, `StructureBiomeFits`, `GroundMatch`, `EarthFill`, `DimensionFilter`, `SeabedClearance`, `SkyIslands`, `TerrainAdaptation`, `TemplateTrim`, `MassPlacer` (`/ceplace`) | Worldgen | `worldgen/*` (Worldgen) | `/ceplace` is a test tool but reads Worldgen internals: stays Worldgen |
-| 316 | FORGE bus `LocateCommand` (`/celocate batch, census, stats`) | Worldgen | `worldgen/LocateCommand` (Worldgen) | Measurement command on Worldgen internals |
-| 321-322 | mod bus `GeneratorCommand::onCommonSetup`, `::onLoadComplete` (run `tools/generators.json` at startup) | Devtools | `devtools/GeneratorCommand` (Devtools) | `/cegen` itself is an `@EventBusSubscriber` (D.3) |
+| 275-312 | FORGE bus `StructureBiomeRules`, `StructureBiomeFits`, `GroundMatch`, `EarthFill`, `DimensionFilter`, `SeabedClearance`, `SkyIslands`, `TerrainAdaptation`, `TemplateTrim`, `MassPlacer` (`/cdevplace`) | Worldgen | `worldgen/*` (Worldgen) | `/cdevplace` is a test tool but reads Worldgen internals: stays Worldgen |
+| 316 | FORGE bus `LocateCommand` (`/cwglocate batch, census, stats`) | Worldgen | `worldgen/LocateCommand` (Worldgen) | Measurement command on Worldgen internals |
+| 321-322 | mod bus `GeneratorCommand::onCommonSetup`, `::onLoadComplete` (run `tools/generators.json` at startup) | Devtools | `devtools/GeneratorCommand` (Devtools) | `/cdevgen` itself is an `@EventBusSubscriber` (D.3) |
 | 328 | commented-out `FluidBridge.logStartupDiagnostic()` | - | - | Dead line |
 | 329-334 | `TierSortingRegistry.registerTier(CETiers.COPPER, "creativeengineering:copper", after STONE, before IRON)` | Equipment | `CETiers` (Equipment, root package) | Tier id keeps the namespace |
 
@@ -199,12 +199,12 @@ is scanned per mod container, so a class in jar X annotated with modid Y never f
 | `devtools/WorldJeiDump` (`/dumpworldjei`) | FORGE, both | Devtools |
 | `time/TimeClient` | FORGE, client | Calendar |
 | `dimension/PortalFailureHandler` | FORGE, both | Worldgen |
-| `devtools/GeneratorCommand` (`/cegen`) | FORGE, both | Devtools |
+| `devtools/GeneratorCommand` (`/cdevgen`) | FORGE, both | Devtools |
 | `food/SeasonedItemModel` | MOD, client | CD |
 | `devtools/BlockStateSyncDebug` (two annotations: FORGE both, FORGE client) | FORGE, both + client | Devtools |
 | `food/IntoxicatingDrinkTooltip` | FORGE, client | CB (alcohol tooltip; creative_brewing.md 4.2) |
 | `seasons/SeasonTypes` | FORGE, both | Calendar |
-| `perf/PerfCommand` (`/ceperf status, mobcap, dump`) | FORGE, both | Devtools (plan 2.1 names PerfCommand) |
+| `perf/PerfCommand` (`/cdevperf status, mobcap, dump`) | FORGE, both | Devtools (plan 2.1 names PerfCommand) |
 | `compat/guititle/TitlePlaques` | MOD, client | Common |
 | `changelog/ChangelogButtons` | FORGE, client | Common |
 | `seasons/CropSeasons` | FORGE, both | Calendar |
@@ -249,15 +249,17 @@ Listeners added outside the main class (`EVENT_BUS.addListener` in static init):
 `compat/WthitStateLines` (TagsUpdated reset), `compat/DisplayDelightDishBlocks::onLevelLoad`, `compat/ArmorTrimsItemCache`.
 They move with their class.
 
-Commands (all on `RegisterCommandsEvent`): `/cetime` Calendar, `/ceplace` and `/celocate` Worldgen, `/cegen`,
-`/dumpworldjei`, `/ceperf` Devtools. The `/dumpall` family is KubeJS (`server_scripts/_lib`, sweep F).
+Commands (all on `RegisterCommandsEvent`): `/ccaltime` Calendar, `/cdevplace` and `/cwglocate` Worldgen, `/cdevgen`,
+`/dumpworldjei`, `/cdevperf` Devtools. The `/dumpall` family is KubeJS (`server_scripts/_lib`, sweep F).
 
 ## D.4 JEI and WTHIT entry points
 
 JEI finds `@JeiPlugin` classes by annotation scan of every mod jar, so a plugin class moves with no wiring; each jar
-just needs at least one `@JeiPlugin` class of its own and a plugin id in its own words (ids below keep
-`creativeengineering:` and may stay). WTHIT reads `waila_plugins.json` from the root of every jar: each jar ships its own
-`waila_plugins.json` listing only its entry classes (keys keep the `creativeengineering:` prefix).
+just needs at least one `@JeiPlugin` class of its own and a plugin id in its own words. WTHIT reads
+`waila_plugins.json` from the root of every jar: each jar ships its own `waila_plugins.json` listing only its entry
+classes. The ids below are as planned; since 2026-11-07 every plugin id, JEI category, WTHIT key and network channel
+uses its own jar's mod id ([plan_owner_ids.md](../plan_owner_ids.md), creative_split.md 7.20; `tools/id_owner_lint.py`
+checks it). The old "may stay" note is reversed.
 
 | entry point | what it registers | target jar | note on the split |
 |---|---|---|---|
@@ -329,9 +331,9 @@ Blocks of `CreativeEngineering.java` each jar takes, and what its main class mus
 | **Common** | 72-73 (own `commonSetup`), 79 (own toml), 137, 182, 234, 348, 527-532; D.3.1 Common rows; JEI world tabs, cycling, smithing template; WTHIT block_model_icon, holder_contents, hive?, state_lines, silk_touch, operator_blocks, pot_contents | `registerConfig(creativecommon-common.toml)`; `MinecraftForge.EVENT_BUS.register(WhistleArrowTracker)`; mod bus `ModDisplayNames::onConfigReload`; `ArmorTrimsItemCache.init()`; `commonSetup` with `ModDisplayNames.apply()`; client `DetailArmorBarCompat.register()`; `CEMixinPlugin` in `creativecommon.mixins.json`; `waila_plugins.json` with its 7 entries; no DeferredRegister; the `CE_NAMESPACE` constant for the others |
 | **Engineering** | 81 (two of three items), 83, 84?, 93, 144 + 420-518, 147, 173, 217, 233/235, 345, 355-357, 374, 378?, 387-389, 569-574; JEI dragon breathing?; WTHIT run_speed, sheetmetal_tank | DeferredRegisters ITEMS, ENTITY_TYPES, RECIPE_SERIALIZERS, RECIPE_TYPES in ns `creativeengineering`; FORGE bus `IECompat`, `TntShrapnelHandler`, `CamoSpeedTooltip`, `SurfaceSpeeds`; mod bus `SurfaceSpeeds::onConfigReload`; `commonSetup` with `IECompat.register()`, three sawmill `forceLoad`s, `FluidBridge` diagnostic, fan type registration, hammer no-rotate; client `RegisterRenderers` for shrapnel; own toml and mixins json; `immersiveengineering`, `create`, `pneumaticcraft` as optional deps |
 | **Equipment** (+ Magic rows) | 81 (`flint_and_terrasteel`), 85, 91, 111-114, 124-127, 169, 185?, 189, 195, 239-240, 329-334, 365-367, 380?, 540, 544-546, 555-559; D.3.1 `BackpackSkinColors`, `TierShieldMaterials` | DeferredRegisters ITEMS (shields, flint and terrasteel), RECIPE_SERIALIZERS (elytra duplication, backpack skins); `TierSortingRegistry.registerTier(COPPER)`; FORGE bus `ShieldBlockHandler`, `IronShieldTooltip`, `AirBrakeHandler`, `DamageTagLoader`, `DamageTagLogger`, `BottledAir`?, and if `curios` `BackpackSkinCurios`, `Stepstool`; `Stepstool.register()` (channel `creativeengineering:stepstool`); `commonSetup` with three damage `forceLoad`s and `NockRecipeBookSync`?; client `TierShieldClient.setup`, `StepstoolClient` (FORGE bus + key mappings); own toml, mixins json; optional deps `curios`, `create_deep_dark`, `easyelytratakeoff`, `nock_enough_arrows` |
-| **Worldgen** (+ fauna) | 62-66 + 82 (`dark_fire`), 74, 88, 96, 177, 179?, 245-255, 259-316, 262?, 264, 266, 371-372; D.3.1 `MulberrySapling`, `PortalFailureHandler`, `MossTint`?, `VineShearingClient`?; WTHIT sheared? | DeferredRegisters BLOCKS, LOOT_ITEM, STRUCTURE_TYPE, STRUCTURE_PIECE, BIOME_MODIFIER_SERIALIZERS (x2); mod bus `FarmersDonor::onAddPackFinders` (constructor); FORGE bus the 19 `worldgen/*` classes plus `FastLeafDecayPort`, `NamedMobs`, `MonsterBoxVault`, `MooshroomFamily`?, `VineShearing`?; `commonSetup` with the `ForgivingVoidBridge` forceLoad and log; commands `/ceplace`, `/celocate`; own toml (the `[worldgen.*]` tree), mixins json |
+| **Worldgen** (+ fauna) | 62-66 + 82 (`dark_fire`), 74, 88, 96, 177, 179?, 245-255, 259-316, 262?, 264, 266, 371-372; D.3.1 `MulberrySapling`, `PortalFailureHandler`, `MossTint`?, `VineShearingClient`?; WTHIT sheared? | DeferredRegisters BLOCKS, LOOT_ITEM, STRUCTURE_TYPE, STRUCTURE_PIECE, BIOME_MODIFIER_SERIALIZERS (x2); mod bus `FarmersDonor::onAddPackFinders` (constructor); FORGE bus the 19 `worldgen/*` classes plus `FastLeafDecayPort`, `NamedMobs`, `MonsterBoxVault`, `MooshroomFamily`?, `VineShearing`?; `commonSetup` with the `ForgivingVoidBridge` forceLoad and log; commands `/cdevplace`, `/cwglocate`; own toml (the `[worldgen.*]` tree), mixins json |
 | **Compat** | 105 (BotanistPot?), 107-109, 140, 151-154, 361, 375, 382?, 533-539; D.3.1 `SpoutGunFarmland`, `SackBundleScroll`, `NightstandStorage`, `BotanistPotClient`? | DeferredRegister BLOCK_ENTITY_TYPES (`botanist_pot`); `SackBundle.register()` (channel `creativeengineering:sack_bundle`); FORGE bus the two Polymorph compats if `polymorph`; client-only mod bus `PlantBoxModelsClient::onRegisterAdditional` in the constructor; `commonSetup` with `ItemPhysicSplit` forceLoad, `PlantBoxModels::commonSetup`, `SaltBlockTicks.init`?; client `TrashSlotCompat`, Polymorph clients; own toml, mixins json; optional deps `itemphysic`, `polymorph`, `trashslot`, `supplementaries`, `handcrafted`, `beautify` |
-| **Calendar** | 227-231; D.3.1 `CropSeasonTooltip`, `TimeClient`, `SeasonTypes`, `CropSeasons`; WTHIT crop_seasons | No DeferredRegister; mod bus `TimePush::onConfigReload`, `TimePresets::onConfigLoading`; FORGE bus `TimePush`, `SeasonClock`, `TimeCommand` (`/cetime`); own toml (`[time]`, seasons); mixins json for the Serene Seasons, SeasonHUD, Better Days, Xaero's mixins; optional deps `sereneseasons`, `seasonhud` |
+| **Calendar** | 227-231; D.3.1 `CropSeasonTooltip`, `TimeClient`, `SeasonTypes`, `CropSeasons`; WTHIT crop_seasons | No DeferredRegister; mod bus `TimePush::onConfigReload`, `TimePresets::onConfigLoading`; FORGE bus `TimePush`, `SeasonClock`, `TimeCommand` (`/ccaltime`); own toml (`[time]`, seasons); mixins json for the Serene Seasons, SeasonHUD, Better Days, Xaero's mixins; optional deps `sereneseasons`, `seasonhud` |
 | **Devtools** | 321-322; D.3.1 `WthitIconDump`, `DisplayNameDump`, `WorldJeiDump`, `GeneratorCommand`, `BlockStateSyncDebug`, `PerfCommand` | No DeferredRegister; mod bus `GeneratorCommand::onCommonSetup`, `::onLoadComplete`; everything else is `@EventBusSubscriber` (modid changed to `creativedevtools`); own toml (`[debug.*]`); `mixin_configs=none` unless sweep B assigns probe mixins; left out of player payloads (Q6) |
 | **CD** | 99, 101, 103, 117-121, 129-131, 134, 199-209, 213, 221, 384-386, 392-394?, 397-399, 541-543, 547-552, 561-567; D.3.1 `SeasonedItemModel`; JEI can_pages, seasoning, feast_plating, oven; WTHIT campfire, remainder_buffer, kitchen_station? | Into `CreativeDelight`'s existing constructor: DeferredRegisters BLOCKS, ITEMS, BLOCK_ENTITY_TYPES, MENU_TYPES, RECIPE_SERIALIZERS, RECIPE_TYPES in ns `creativeengineering` plus the `solapplepie` ITEMS holder; FORGE bus `RemainderBufferStorage`, `CanServings`, `CanServingsTooltip`, `Seasonings`, `SeasoningTooltip`, `PlacedFoodSol`, `HoeHarvestTooltip`, and gated `LunchboxTooltip`, `CornDelightCompat`, `AppleSkinSeasonings`; `commonSetup` adds `CornDelightCompat::addVillagerFood`, `RespitePottedTeaBush`?, `KubeJSCanAction`; client `LunchboxClient.setup` and `onItemColors`, `CobPipeRenderer`, oven `MenuScreens.register`; `waila_plugins.json` entries (CD has none today); optional deps `solapplepie`, `corn_delight`, `appleskin`, `displaydelight`, `farmersrespite` |
 | **CB** | 86, 158, 162, 165, 376-377, 379; D.3.1 `CompoundEffectTooltip`, `IntoxicatingDrinkTooltip`; JEI potion_pages; WTHIT coaster? | Into `CreativeBrewing`'s constructor: DeferredRegister POTIONS; FORGE bus `MagicResistanceEffect`, `CopperPoisoningHandler`, `PhantomBaneRules`; `commonSetup` adds `DragonBreathBrewing::build`, `Lingerification::registerListGenerator`, `PotionBucketDispenser::register`; `waila_plugins.json` for the coaster if taken |

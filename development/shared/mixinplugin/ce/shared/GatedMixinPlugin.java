@@ -89,6 +89,14 @@ public abstract class GatedMixinPlugin implements IMixinConfigPlugin {
         return compartmentOn.computeIfAbsent(rest.substring(0, dot), this::compartmentOn);
     }
 
+    /**
+     * True when {@code modId} is loaded and inside its {@code modRange} entry (no entry: any version), with the same
+     * one-time warning as the table gate. For plugin code that patches another mod's mixins rather than applying one.
+     */
+    protected boolean modOn(String modId) {
+        return tableModOn.computeIfAbsent(modId, this::tableModOn);
+    }
+
     private boolean tableModOn(String modId) {
         ModFileInfo file = LoadingModList.get().getModFileById(modId);
         if (file == null) return false;

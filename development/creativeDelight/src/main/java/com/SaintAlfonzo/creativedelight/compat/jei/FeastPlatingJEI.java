@@ -22,7 +22,7 @@ import net.minecraftforge.fml.ModList;
 public class FeastPlatingJEI implements IModPlugin {
 
     private static final Logger LOGGER = LogUtils.getLogger();
-    private static final ResourceLocation ID = new ResourceLocation(CreativeDelight.NS, "feast_plating");
+    private static final ResourceLocation ID = new ResourceLocation(CreativeDelight.MOD_ID, "feast_plating");
 
     private boolean active;
 

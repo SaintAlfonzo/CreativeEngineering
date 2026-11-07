@@ -1,3 +1,4 @@
+// requires: creativedelight
 // requires: delightful
 // requires: lootjs
 // Delightful 3.8.1 loot modifiers on the installed 3.4.1 (feature_writeup/delightful.md 2.5), as LootJS rows: 3.8.1's

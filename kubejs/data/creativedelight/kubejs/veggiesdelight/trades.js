@@ -1,3 +1,4 @@
+// requires: creativedelight
 // requires: veggiesdelight
 // requires: morejs
 // Veggies Delight trades (Creative Delight members #2, moved from the pack's economy/trades.js and

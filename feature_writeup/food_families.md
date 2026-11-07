@@ -24,7 +24,7 @@ put down, and what recipe shape it takes at each station. Families nest like foo
 skipped (sequenced assembly intermediates, lunchboxes, black powder cakes, removed and merged items); none unsorted.
 **Open first:** section 3.1, then 4.2 (4.4 for what the produce decision changed). To change a family or a rule, edit `RULES` / `classify()` in the tool; the tables follow.
 **Refresh:** `/dumpall` (needs `/dumpfood`, `/dumpplaceable`, `/dumptags item`) → `python3 tools/food_families.py`
-(or `/cegen run food_families`). No reload: nothing in game reads it.
+(or `/cdevgen run food_families`). No reload: nothing in game reads it.
 
 ## 1. Overview
 
@@ -3121,7 +3121,7 @@ Owner, 2026-11-02 (TODO `merges/baking #2`): the Stackable Pancake is not the ba
 keeps its own recipes. Every pancake in the pack survives. Built under TODO `dishes/meals #12` and Veggies R7
 (`creativedelight/members #30`). In the CD jar installed 2026-11-02 23:16 (again 2026-11-03 00:08), not booted. Tests
 FF-15 to FF-17; scratch rows SQ-PCK-01 to -05, CQ-PCK-01, -02 (queue section SQ-CDJ6). After the first boot also
-`/cegen food_families` (plan_creative_delight.md K).
+`/cdevgen food_families` (plan_creative_delight.md K).
 
 Survey (dicts, the 2026-10-30 dumps, Creative Delight scripts and the Rustic port, 2026-11-02):
 

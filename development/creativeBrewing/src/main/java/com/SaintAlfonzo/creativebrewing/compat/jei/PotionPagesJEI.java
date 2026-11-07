@@ -15,10 +15,10 @@ import org.slf4j.Logger;
 
 import com.SaintAlfonzo.creativecommon.CommonConfig;
 import com.SaintAlfonzo.creativebrewing.CreativeBrewing;
-import com.SaintAlfonzo.creativecommon.compat.jei.RecipeRows;
-import com.SaintAlfonzo.creativecommon.compat.jei.RowPagesCategory;
-import com.SaintAlfonzo.creativecommon.compat.jei.RowPagesCategory.Page;
-import com.SaintAlfonzo.creativecommon.compat.jei.RowPagesCategory.Row;
+import com.SaintAlfonzo.creativecompat.compat.jei.RecipeRows;
+import com.SaintAlfonzo.creativecompat.compat.jei.RowPagesCategory;
+import com.SaintAlfonzo.creativecompat.compat.jei.RowPagesCategory.Page;
+import com.SaintAlfonzo.creativecompat.compat.jei.RowPagesCategory.Row;
 import com.mojang.logging.LogUtils;
 
 import mezz.jei.api.IModPlugin;
@@ -147,8 +147,8 @@ public class PotionPagesJEI implements IModPlugin {
         if (Minecraft.getInstance().level == null) {
             return;
         }
-        boolean arrows = CommonConfig.JEI.tippedArrowCategory.get();
-        boolean buckets = CommonConfig.JEI.potionBucketCategory.get();
+        boolean arrows = com.SaintAlfonzo.creativecompat.CompatConfig.JEI.tippedArrowCategory.get();
+        boolean buckets = com.SaintAlfonzo.creativecompat.CompatConfig.JEI.potionBucketCategory.get();
         if (!arrows && !buckets) {
             return;
         }

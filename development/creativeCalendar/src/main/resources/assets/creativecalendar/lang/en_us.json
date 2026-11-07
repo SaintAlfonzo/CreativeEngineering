@@ -29,5 +29,6 @@
   "tooltip.creativeengineering.calendar.type.permanent_summer": "Summer all year",
   "tooltip.creativeengineering.calendar.type.permanent_autumn": "Autumn all year",
   "tooltip.creativeengineering.calendar.type.permanent_winter": "Winter all year",
-  "config.waila.plugin_creativeengineering.crop_seasons": "Crop Seasons"
+  "config.waila.plugin_creativecalendar": "Creative Calendar",
+  "config.waila.plugin_creativecalendar.crop_seasons": "Crop Seasons"
 }

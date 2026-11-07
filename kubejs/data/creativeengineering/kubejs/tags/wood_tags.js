@@ -1,3 +1,4 @@
+// requires: creativeengineering
 // Creative Engineering; moved from kubejs/server_scripts/tags/wood_tags.js on 2026-11-04 (creative_split.md 7.13, wave 8), rows unchanged.
 ServerEvents.tags('item', e => {
 console.log('wood tag started')
@@ -5,25 +6,8 @@ console.log('wood tag started')
 var i = global.item;
 var t = global.tags
 
-// ============================================================
-// Mulch
-// ============================================================
-
-t.add(e, 'forge:mulch/brown', [i.sawdust, i.straw])
-t.add(e, 'forge:mulch/bone', [i.bone, i.bonemeal])
-t.add(e, 'forge:mulch/waste', [i.rotten_flesh, i.spider_eye, i.poisonous_potato])
-t.add(e, 'forge:mulch/green', [i.moss, i.moss_clump, i.moss_paste, i.grass, i.tall_grass, i.fern, i.large_fern])
-t.add(e, 'forge:mulch/fungus', [i.red_mushroom, i.brown_mushroom, i.red_mushroom_colony, i.brown_mushroom_colony])
-t.add(e, 'forge:mulch/fertilizer', [i.ash, i.dust_saltpeter, i.fertilizer])
-
-// Seeds the millstone turns into bone meal (wood/compost.js). Corn kernels mill into cornmeal and rice is food. The
-// '#' entries are expanded to their members here, so a seed added to #forge:seeds by a later script is not copied.
-t.addMatching(e, 'creativeengineering:millable_seeds', [i.t_seeds, i.t_seeds_c], { except: [i.t_seeds_corn, i.t_seeds_rice] })
-
-// ============================================================
-// Wooden barrel
-// ============================================================
-t.add(e, ['vinery:barrel', 'vinery:wooden_barrels'], i.barrel)
+// Mulch and millable-seed tags moved to Creative Delight 2026-11-06 (creativeengineering/compost_tags.js there);
+// the Vinery barrel tag to Creative Brewing (vinery/tags.js).
 
 // ============================================================
 // Treated wood filling: planks that are not smoked

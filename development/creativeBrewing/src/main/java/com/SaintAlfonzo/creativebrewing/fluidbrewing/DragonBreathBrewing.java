@@ -71,8 +71,10 @@ public final class DragonBreathBrewing {
         if (built) return;
         built = true;
 
-        var dragonBreath = ForgeRegistries.FLUIDS.getValue(DRAGON_BREATH_FLUID);
-        if (dragonBreath == null) {
+        // getValue answers the registry default (minecraft:empty) for a missing id, never null: test containsKey.
+        var dragonBreath = ForgeRegistries.FLUIDS.containsKey(DRAGON_BREATH_FLUID)
+                ? ForgeRegistries.FLUIDS.getValue(DRAGON_BREATH_FLUID) : null;
+        if (dragonBreath == null || dragonBreath == net.minecraft.world.level.material.Fluids.EMPTY) {
             LOGGER.warn("[CE] {} not found - dragon's breath fluid brewing disabled "
                     + "(is Create Central Kitchen installed?)", DRAGON_BREATH_FLUID);
             return;

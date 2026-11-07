@@ -1,3 +1,4 @@
+// requires: creativedelight
 // requires: fruitsdelight
 // requires: delightful
 // Cantaloupe merge (feature_writeup/item_merges.md 2.10). Non-member file: recipe ids are

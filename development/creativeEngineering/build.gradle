@@ -9,7 +9,7 @@
 //     The startup scripts live in this project (src/main/resources/kubejs_startup/creativeengineering/), loaded from
 //     the jar by Creative Common's startup loader.
 //   - the 211 generated sawmill recipes (src/main/resources/data/creativeengineering/recipes/sawmill/, written by
-//     tools/gen_sawmill_recipes.py through /cegen).
+//     tools/gen_sawmill_recipes.py through /cdevgen).
 // Build: ./gradlew :creativeEngineering:build --offline   Install: ./gradlew :creativeEngineering:installToMods
 plugins {
     id 'ce.forge-mod'
@@ -17,14 +17,13 @@ plugins {
 
 dependencies {
     // Creative Common: a hard dependency (KubeJS, the shared helpers, the startup loader) and the Common APIs this
-    // jar calls (util/BurnBursts).
+    // jar calls.
     compileOnly project(':creativeCommon')
-    // Creative Compat: required by every Creative jar (creative_split.md 7.6); its [leaf_piles] value feeds
-    // surface/LeafPileSlow.
+    // Creative Compat: required by every Creative jar (creative_split.md 7.6); no class of it is called since the
+    // surface/ code moved there (2026-11-06).
     compileOnly project(':creativeCompat')
-    // The mods the mixins target (Create, IE, Immersive Posts, PneumaticCraft, Sophisticated Core, Dreams and Desires,
-    // Ore Excavation, BlockRunner, Framed Blocks, Copycats+, JEI, WTHIT): the pack's jars, shared with Creative Common
-    // (git-ignored libs/, SRG-named).
+    // The mods the mixins target (Create, IE, Immersive Posts, Dreams and Desires, JEI): the pack's jars, shared with
+    // Creative Common (git-ignored libs/, SRG-named).
     compileOnly fileTree(dir: rootProject.file('development/creativeCommon/libs'), include: '*.jar')
 }
 

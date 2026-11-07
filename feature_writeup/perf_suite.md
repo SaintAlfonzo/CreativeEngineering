@@ -10,7 +10,7 @@ real ones so that random ticks, mob spawning and player-gated code run as they d
 
 | Part | Status |
 |---|---|
-| `perfBot` dev mod (`ceperfbot` 0.1.0): bot players, tick log, `/pbot` | BUILT 2026-10-28; chunk-tracking bug fixed 02:24; scratch server PASSED 2026-10-28 (SQ-PB-01 to -04, [testing/scratch_queue_run_2026-10-28.md](testing/scratch_queue_run_2026-10-28.md)) |
+| `perfBot` dev mod (`cdevperfbot` 0.1.0): bot players, tick log, `/pbot` | BUILT 2026-10-28; chunk-tracking bug fixed 02:24; scratch server PASSED 2026-10-28 (SQ-PB-01 to -04, [testing/scratch_queue_run_2026-10-28.md](testing/scratch_queue_run_2026-10-28.md)) |
 | Runner `tools/perf/suite/perf_suite.py` (RCON, end-of-server triage, retries, resume, report) | BUILT 2026-10-28; offline self-test 12/12 PASS (section 6) |
 | General benchmarks G01 to G12 (`plans/general.py`) | BUILT 2026-10-28; first run g1 2026-10-28 03:04 to 05:27, every row ok (baseline; results in [testing/scratch_queue_run_2026-10-28.md](testing/scratch_queue_run_2026-10-28.md) "Perf suite g1"); G09 from rerun g1s |
 | Cooking scenarios C- | PROPOSED, owner veto pending (section 8) |
@@ -200,7 +200,7 @@ Also checked: `./gradlew :perfBot:build --offline` builds; every plan command ex
 Results 2026-10-28 night ([testing/scratch_queue_run_2026-10-28.md](testing/scratch_queue_run_2026-10-28.md)): PB-01 to -04 PASS (PB-02 wheat half: 17 of 81 grew with a bot, 0 without;
 the night-mob half is G03b). PB-05 is the g1 run.
 
-- [x] **PB-01 bot logs in:** boot with the jar and `-Dceperfbot.out=perf/bot` -> `pbot status` answers. Then `pbot
+- [x] **PB-01 bot logs in:** boot with the jar and `-Dcdevperfbot.out=perf/bot` -> `pbot status` answers. Then `pbot
   spawn bot1 ~ ~ ~` -> latest.log shows a normal join (no exception from Forge networking, FTB, KubeJS login
   handlers, Lightman's), `list` names bot1, `forge tps` shows the overworld with loaded chunks near spawn.
 - [x] **PB-02 bot counts as a player:** flat world, bot beside a 9 x 9 wheat field (age 0) with `randomTickSpeed 3`
@@ -312,7 +312,7 @@ The queue in [testing/scratch_queue.md](testing/scratch_queue.md) runs first. Re
 
 | File | Role |
 |---|---|
-| `development/creativeDevtools/members/perfbot/` (nested in Creative Devtools) | the dev-only mod (`CePerfBot`, `BotConnection`, `BotPlayer`, `Bots`, `TickLog`, `BotCommands`) |
+| `development/creativeDevtools/members/perfbot/` (nested in Creative Devtools) | the dev-only mod (`DevPerfBot`, `BotConnection`, `BotPlayer`, `Bots`, `TickLog`, `BotCommands`) |
 | `tools/perf/suite/perf_suite.py` | runner: run / resume / status / report |
 | `tools/perf/suite/server.py` | setup on `eval_server.sh`, boot, liveness, RCON calls, stop, triage, JFR salvage |
 | `tools/perf/suite/rcon.py`, `ticklog.py`, `builders.py` | RCON client, tick log reader and window stats, command builders |

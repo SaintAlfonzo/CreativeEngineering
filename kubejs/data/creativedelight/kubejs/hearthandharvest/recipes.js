@@ -1,3 +1,4 @@
+// requires: creativedelight
 // requires: hearthandharvest
 // Recipes for Hearth and Harvest content ported into the Creative Delight member hearthandharvest (hearth_and_harvest.md
 // 4.0, 4.1). Recipe ids are creativedelight:<type>/<suffix>.

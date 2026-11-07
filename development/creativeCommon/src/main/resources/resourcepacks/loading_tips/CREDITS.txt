@@ -1,0 +1,30 @@
+Loading Tips (resource pack)
+
+The tip text in assets/loading_tips/loading_tips/tips.json is taken from Loading Tips 1.2.1+26.1
+by Naw7k (https://modrinth.com/mod/loading-tips, https://github.com/Naw7k/Loading-Tips), licensed
+under the MIT License. For Creative Engineering it was filtered to tips that hold in Minecraft 1.19.2:
+tips about later versions, duplicates and incorrect tips were removed and one tip was reworded.
+The full list of removals is in the pack's feature writeup (feature_writeup/loading_tips.md).
+
+The tips are shown by Creative Common's loading screen tips feature, which follows the format of
+Loading Screen Tips by UltrusBot (https://github.com/UltrusBot/LoadingScreenTips, MIT License,
+Copyright (c) 2022 UltrusBot).
+
+MIT License
+
+Copyright (c) Naw7k
+
+Permission is hereby granted, free of charge, to any person obtaining a copy of this software and
+associated documentation files (the "Software"), to deal in the Software without restriction,
+including without limitation the rights to use, copy, modify, merge, publish, distribute,
+sublicense, and/or sell copies of the Software, and to permit persons to whom the Software is
+furnished to do so, subject to the following conditions:
+
+The above copyright notice and this permission notice shall be included in all copies or
+substantial portions of the Software.
+
+THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, INCLUDING BUT
+NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND
+NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES
+OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN
+CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.

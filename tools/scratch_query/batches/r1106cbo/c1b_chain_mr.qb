@@ -1,0 +1,20 @@
+# r1106cbo boot 1 restart: copper_poisoning off, magic_resistance reductionPerLevel 0.5 (SQ-CBO-05)
+## SQ-CBO-05 | config read: Magic Resistance 0.5 per level
+bootreject Incorrect key|correcting
+> forceload add 0 0
+sleep 2
+> summon minecraft:iron_golem 0 -60 5 {Tags:["cbaA"],NoAI:1b}
+> summon minecraft:iron_golem 3 -60 5 {Tags:["cbaB"],NoAI:1b}
+> effect give @e[tag=cbaA] creativecommon:magic_resistance 120 0
+> effect give @e[tag=cbaA] minecraft:instant_damage 1 0
+> effect give @e[tag=cbaB] minecraft:instant_damage 1 0
+sleep 2
+> data get entity @e[tag=cbaA,limit=1] Health
+> data get entity @e[tag=cbaB,limit=1] Health
+> effect give @e[tag=cbaA] minecraft:poison 10 0
+sleep 5
+> data get entity @e[tag=cbaA,limit=1] Health
+> kill @e[tag=cbaA]
+> kill @e[tag=cbaB]
+count entity data: 97\.0 == 2
+count entity data: 94\.0 == 1

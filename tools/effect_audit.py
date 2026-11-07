@@ -18,7 +18,7 @@ Source data:
   mods/jeed-*.jar data/jeed/recipes                 JEED's own effect_provider recipes
   kubejs/data/creativebrewing/kubejs/creativeengineering/jeed_providers.js   the provider recipes (CB; effect ids as
                                                     string literals),
-  CB kubejs_startup/creativeengineering/{armor,tool}_effects.js   plus the gear registries and the Vinery [wine] effects
+  Equipment kubejs_startup/creativeequipment/gear_effects.js, equipment/gear_jeed.js   gear rows; the Vinery [wine] effects
   config/vinery-common.toml, config/jeed-client.toml    config it reads; hidden_effects need no source
 
 Vanilla potions are skipped in the name check (the game names them itself).
@@ -87,9 +87,11 @@ def jei_sources(potions):
     providers = (INSTANCE / 'kubejs/data/creativebrewing/kubejs/creativeengineering/jeed_providers.js').read_text()
     for eid in EFFECT_ID.findall(providers):
         add(eid, 'provider')
-    for f in ('armor_effects.js', 'tool_effects.js'):
-        text = (INSTANCE / 'development/creativeBrewing/src/main/resources/kubejs_startup/creativeengineering' / f).read_text()
-        for eid in re.findall(r"effect:\s*'([a-z0-9_]+:[a-z0-9_]+)'", text):
+    # gear rows: Creative Equipment since 2026-11-06 (plan_cb_polish.md 1); the frameworks are Creative Common's
+    for f in ('development/creativeEquipment/src/main/resources/kubejs_startup/creativeequipment/gear_effects.js',
+              'kubejs/data/creativeequipment/kubejs/equipment/gear_jeed.js'):
+        text = (INSTANCE / f).read_text()
+        for eid in re.findall(r"effect:\s*'([a-z0-9_]+:[a-z0-9_]+)'", text) + EFFECT_ID.findall(text):
             add(eid, 'gear')
     vinery = (INSTANCE / 'config/vinery-common.toml').read_text()
     for eid in re.findall(r'"[a-z0-9_]+:[a-z0-9_]+\|([a-z0-9_]+:[a-z0-9_]+)\|', vinery):

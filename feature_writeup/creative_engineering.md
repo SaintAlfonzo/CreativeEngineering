@@ -118,10 +118,21 @@ scratchpad only). The live `config/` file is left for the first boot to split (S
 - `tools/build_deploy.py`: both jars in `IN_TREE_MODS`; the climate reader check reads Common's `WorldgenFiles`; the
   `[worldgen.debug]` release check now reads `creativeworldgen-common.toml` (it still read the CE file, stale since wave 5).
 
+## 4.1 Carve of 2026-11-06
+
+Non-engineering content moved to Magic, Compat, Equipment, Brewing, Delight and Worldgen; Engineering keeps machines,
+metals, components, coils, wood processing, prepared flesh, hemp fabric, and now ships its own block and item assets.
+No config file of its own any more (sections in `creativecompat-common.toml`). Details: [plan_cb_polish.md](plan_cb_polish.md) 9.
+
+KubeJS-registered blocks (dust piles, plate blocks, coil blocks) get their blockstate and models from KubeJS's
+generated pack, which outranks the jar: the scripts set textures with `.textureAll()` / `.texture(face, ...)` and the jar
+holds only the textures. Hand-made JSONs for these ids in the jar are ignored (they left the jar 2026-11-07, TODO
+`creativesplit/regression #21`). Compat's `weathered_cardboard_box` still has the problem (custom UVs lost).
+
 ## 5. Tests
 
 Scratch SQ-CEN-01 to -08 ([scratch_queue.md](testing/scratch_queue.md)); SQ-CMG and SQ-CEQ run on the same jars.
-In game: CQ-CEN-01 (WTHIT Run Speed, leaf piles, camo, sinking, JEI dragon breathing, names), pinned with the other
+In game: the 37 KubeJS blocks (dust piles, plate blocks, coil blocks) show textures; CQ-CEN-01 (WTHIT Run Speed, leaf piles, camo, sinking, JEI dragon breathing, names), pinned with the other
 client rows (creative_split.md 7.8).
 
 **Install** (game closed; all at once, the jars only work together): `./gradlew :creativeCommon:installToMods
@@ -132,6 +143,12 @@ install moves `creativeengineering-1.1.09.jar` to `development/creativeCommon/ja
 two new jars, put 1.1.09 back, and reinstall the other jars from their `jar_archive/displaced/` folders.
 
 ## 6. History
+
+- 2026-11-07: dust piles, plate blocks and coil blocks rendered untextured (generated KubeJS models beat the jar's);
+  fixed in the scripts, 111 dead JSONs removed. Built, not installed.
+
+- 2026-11-06 (plan_cb_polish.md 6): `engineering/dust.js` (powdered obsidian) asks for the `creativecommon:resistance`
+  potion (was `creativebrewing:`), so Engineering no longer needs Creative Brewing for it.
 
 - 2026-11-04: carved and swapped (wave 8). Owner: D3 (liquid XP bridge) goes to Engineering; the carve and the swap in
   one step, the project folder renamed too. Built: all ten Creative jars; not installed, not booted.
@@ -148,7 +165,7 @@ Audit of `creativecommon-1.1.0.jar` (23:34). Summary row in [creative_brewing.md
 | commonmark-java 0.21.0, shaded to `...creativecommon.shadow.commonmark` | BSD-2-Clause | yes, with `NOTICE-commonmark.txt` | fixed 2026-11-05 (names Creative Common and the `creativecommon` package) |
 | `kubejs_startup/creativecommon/_lib` (12 dicts) and `func/` helpers, `kubejs/_lib` scripts, data, lang, plugin json | own | yes | OK |
 | 12 `textures/gui/*_tint.png` (27x9) | **Mojang-derived**: recolours of the vanilla armor icon | yes | OK: vanilla art and edits of it are accepted everywhere (owner 2026-11-05, [creative_brewing.md](creative_brewing.md) 9.5) |
-| 6 title panorama PNGs (`assets/minecraft/.../title/background/`) | own: the owner's in-game capture (owner 2026-11-05) | yes | OK |
+| 6 title panorama PNGs (`assets/minecraft/.../title/background/`) | own: the owner's in-game capture (owner 2026-11-05) | no since 2026-11-07 (moved to the pack's `kubejs/assets/`, 7.1) | OK |
 | `credit.txt` (Numismatics by Layers of Railways, LGPL-3.0; owner 2026-11-05: https://www.curseforge.com/minecraft/mc-mods/numismatics) | the file it covers is not traced (no Numismatics jar to compare against) | yes | OK: kept, URL added |
 | `mods.toml` `GPL-3.0-only`, `creativecommon-LICENSE.txt` | own | yes | OK |
 | Farmer's Structures donor (ARR) | read at runtime from `farmers_upstream/` | no | OK |
@@ -159,9 +176,33 @@ closed: the owner's own). No licence row open for Common.
 ### 7.1 Publishing readiness (2026-11-05, TODO `creativecommon/publish #1`)
 
 Owner 2026-11-05: Creative Common is used only inside the pack for now, so the pack's defaults stay; a library is fine on
-CurseForge. Built and installed 2026-11-05 23:40 (`creativecommon-1.1.0.jar`).
+CurseForge. Built and installed 2026-11-05 23:40 (`creativecommon-1.1.0.jar`). Superseded 2026-11-07 (owner): the defaults
+are now vanilla and the pack sets its values in its config (vanilla defaults below).
 
-**Mixin version gates.** `perf/CEMixinPlugin` `MOD_RANGE` gives each of the 19 mods Common mixes into a tested range;
+**Immersive Portals with Serene Seasons (2026-11-06, reworked 2026-11-07).** Serene Seasons' access transformer makes
+every ChunkMap method public; Immersive Portals 2.3.7's `MixinChunkMap_C` overwrites `m_183760_` (playerLoadedChunk) as
+private, and IP's config does not set `overwrites.conformVisibility`, so Mixin throws "cannot reduce visibility" when
+ChunkMap loads (server crash at world creation or single-player join; scratch r1106spf, owner crash 2026-11-07 12:55).
+The first fix (an empty carrier mixin whose `preApply` set the method back to private) could not work: Mixin runs that
+check while building the target context, before any plugin `preApply` (SQ-SPFX-01 FAIL r1106spfx). Now
+`CommonMixinPlugin.acceptTargets` (gated on `immersive_portals` `[2.3.7,2.4)`) sets `conformAccessModifiers` on IP's
+`MixinConfig` through Unsafe, as the Heartstone reorder does, so Mixin upgrades the overwrite to public with one
+"Static binding violation" warning and logs `[compat] Immersive Portals overwrites conform to target visibility`.
+Built and installed 2026-11-07 13:00; test SQ-SPFX-01 (TODO `creativesplit/regression #19`).
+
+**Heartstone with Immersive Portals (2026-11-06 23:07).** Heartstone 1.1.2's client `LevelRendererMixin` @ModifyArg's the
+`renderEntity` call in `LevelRenderer.renderLevel`, and Immersive Portals 2.3.7's `MixinLevelRenderer` @Redirect's that same
+call. Both are priority 1000, IP registers first, so Heartstone's injector (require 1) finds no call and the client crashes at
+launch. `CommonMixinPlugin.orderHeartstoneBeforePortals` (from `acceptTargets`, retried in `preApply` until it finds the config)
+sets that one MixinInfo's priority to 999, so it applies first and both injectors work. Mixin neither exports nor opens its
+`transformer` package to mods, so `Config.allConfigs` (static; `Mixins.getConfigs()` is only the not-yet-selected queue, which
+was empty by then: first build 23:07 found nothing and the crash repeated at 23:10, fixed 23:11), `Config.config`,
+`MixinConfig.pendingMixins`/`mixins` and `MixinInfo.priority` are read
+and written with Unsafe; only `IMixinConfig`/`IMixinInfo` methods are called. Guards: client only, both mods loaded and
+inside `MOD_RANGE` (`heartstone` `[1.19.2-1.1.2,1.19.2-1.2)`, `immersive_portals` `[2.3.7,2.4)`); any reflection failure
+logs one ERROR and leaves Mixin unchanged. The shared `GatedMixinPlugin` gained `modOn(modId)` for this. Test CQ-SPFX-02.
+
+**Mixin version gates.** `perf/CommonMixinPlugin` `MOD_RANGE` gives each of the 20 mods Common mixes into a tested range (Immersive Portals added 2026-11-06);
 the shared `GatedMixinPlugin` (development/shared/mixinplugin) skips that mod's mixins with one WARN
 (`[creativecommon] <mod> <version> is outside the tested range <range>: its mixins are off`) when the loaded version is
 outside it, as when the mod is absent. Rule: from the version the pack runs to the mod's next minor release
@@ -188,10 +229,28 @@ boot. Removed: ItemPhysic, Create: Deep Dark's echo mixin and Easy Elytra Takeof
 **`mods.toml`**: description rewritten (library, interface, fixes and performance, pack settings); `issueTrackerURL` and
 `displayURL` point to the repo; authors from `gradle.properties`; stale patcherMod-era comments gone.
 
-**For wide distribution later (not now, owner 2026-11-05)**: switch the pack-only defaults to vanilla behaviour and set
-them in the pack's own config (`configs_edited/`): `[advancements] enabled` (false drops every advancement),
-`[toasts] advancement / tutorial`, the title panorama (move to the pack folder or a config switch), JEI `packOrder`,
-the creative menu disable, `[wandering_trader]` timing and offers, the swap triggers. TODO `creativecommon/publish #2`.
+**Vanilla defaults (2026-11-07, owner; TODO `creativecommon/publish #2`)**. Built and installed 13:27. A standalone install
+behaves as vanilla; the pack keeps its behaviour through `config/creativecommon-common.toml` (and the `configs_edited/root_config/`
+copy), which already held every value explicitly:
 
-**Still open before an upload**: standalone boot (SQ-CMV-02), the out-of-range check (SQ-CMV-03), commit, push and tag the
+| Setting | Default now (vanilla) | Pack value (in config) |
+|---|---|---|
+| `[advancements] enabled` | true | false |
+| `[toasts] tutorial`, `advancement` | true, true | false, false |
+| `[jei] packOrder` | false | true |
+| `[wandering_trader] enabled`, `traderIntervalTicks`, `commonTrades`, `rareTrades` | false, 24000, 5, 1 | true, 96000, 25, 5 |
+| `[creative_menu] disabled` (new key; `CreativeMenuDisableMixin` now asks it, before: always on) | false | true |
+
+The title panorama left the jar for `kubejs/assets/minecraft/textures/gui/title/background/` (pack-owned, shipped to
+clients as `assets/*`; KubeJS assets rank above mod jars). The `mods.toml` description now says the pack settings are off by
+default. Kept as they are: the swap triggers (`creativecommon-swaps.toml`) act only on merge lists that jars ship, so they are
+library behaviour, not pack taste. Pack-flavoured defaults still in place and not in this change: `[mod_names] overrides`
+(the pack's display-name list), `[effects]` remap / removed / HUD lists. Tests SQ-CMV-04, CQ-CMV-03.
+
+**Project page**: CurseForge project created 2026-11-07 (private, `curseforge.com/minecraft/mc-mods/creative-common`);
+description draft in [project_pages/creative_common.md](project_pages/creative_common.md). Update it when a feature,
+dependency range or default changes.
+
+**Still open before an upload**: standalone boot (SQ-CMV-02), the out-of-range check (SQ-CMV-03), vanilla defaults
+(SQ-CMV-04, CQ-CMV-03), the Immersive Portals fixes (SQ-SPFX-01, CQ-SPFX-02), commit, push and tag the
 source (creative_brewing.md 9.4 R6), project page.

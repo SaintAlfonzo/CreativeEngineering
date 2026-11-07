@@ -1,3 +1,4 @@
+// requires: creativecompat
 // Creative Compat; moved from kubejs/server_scripts/other/feature_ports.js on 2026-11-01.
 // Feature ports, tier 1 (feature_writeup/feature_porting.md 1): small recipe mods absorbed into the pack so their jars
 // can go. Each block below rebuilds a mod's recipes through global.NCH, same inputs and outputs, ids under

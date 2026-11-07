@@ -12,8 +12,8 @@ earlier ([creative_magic.md](creative_magic.md)).
 
 - **Java** (`com.SaintAlfonzo.creativeequipment`, same subpackages as in patcherMod; 35 classes plus 3 new):
   - `shield/` (tier shields, all but `EffectTickContext`) with `shield/client/`; `stepstool/` with `stepstool/client/`
-    (the `creativeengineering:stepstool` network channel, id unchanged); `backpackskin/` (7); `gear/` (air brake,
-    elytra duplication and its serializer); `item/BottledAir`; `CETiers` (copper tool tier, registered in this
+    (the `creativeequipment:stepstool` network channel, renamed 2026-11-07, plan_owner_ids.md); `backpackskin/` (7); `gear/` (air brake,
+    elytra duplication and its serializer); `item/BottledAir`; `CEQTiers` (copper tool tier, registered in this
     constructor); `util/ArmorEnchantabilityBridge`, `BonemealCharms`, `ElytraChestplates`;
     `compat/NockRecipeBookSync` (still needed: it fixes the RecipeBookType count in the recipe packet, which the
     recipe book's removal from the UI does not touch).
@@ -77,6 +77,23 @@ Scratch SQ-CEQ-01 to -08 ([scratch_queue.md](testing/scratch_queue.md)). In game
 creative_split.md 7.8): CQ-CEQ-01 shields, stepstool, backpack skin and air brake on a client.
 
 ## 5. History
+
+- 2026-11-06 (plan_cb_polish.md 1, built, not installed): every armor and tool effect row (`kubejs_startup/creativeequipment/gear_effects.js`),
+  their JEED providers (`equipment/gear_jeed.js`), copper poisoning (`effect/CopperPoisoningHandler`,
+  `CopperPoisoningEffectMixin`, `[copper_poisoning]` carried over from Creative Brewing's config) and the Create: Deep
+  Dark echo armor mixins came from Creative Brewing; `create_deep_dark` is an optional dependency. The felsic recipes
+  ask for `creativecommon:magic_resistance` (Common registers it). Tests SQ-CBP-08, -09, CQ-CBP-01.
+  Scratch r1106cbp 2026-11-06: SQ-CBP-09 PASS; SQ-CBP-08 FAIL (no leaks, echo rows and potions fine; felsic ingot assembly
+  needs Engineering's incomplete items, TODO `creativebrewing/publish #22`; backpack skin recipe needs Sophisticated Backpacks, `#23`).
+  2026-11-06 18:29: felsic transition items (11 rows) and the Felsic Scrap model and texture moved into Equipment
+  (`items/end_gear.js`, `assets/creativeengineering/`); ids unchanged. Tests SQ-CBP-08b, -11, CQ-CBP-02.
+  18:35: all end gear (echo, felsic, dragon) and air brake transition rows (37) in `items/end_gear.js`; felsic ore worldgen and
+  the felsic block loot table in `packs/felsic_gear/` (a data pack added only with Felsic Gear, `compat/ModDataPacks`);
+  2026-11-06 night: the three Nullscape biome rows moved to `packs/felsic_gear+nullscape/` (a `+` folder needs every
+  listed mod), and the felsic ingot assembly in `equipment/end_gear.js` runs only with Felsic Gear and Central Kitchen's
+  dragon breath (`global.has`): without Nullscape the pack named its biomes and the world failed to load (r1106spf
+  SQ-CBP-08b). Every script of the jar carries `// requires: creativeequipment`. Test SQ-SPFX-04, -05 (both PASS r1106spfx);
+  echo tool, air brake and tier shield entity textures in the jar; backpack skin recipes skip without Sophisticated Backpacks.
 
 - 2026-11-04: carved (wave 7). patcherMod 1.1.09 loses 35 classes, 20 mixins, 9 config sections, the shield models and
   8 lang keys; Equipment takes `harvest.js` back from Creative Delight's tree. Installed 19:17 with Creative Magic and

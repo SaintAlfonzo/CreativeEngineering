@@ -203,7 +203,7 @@ and `project(':backportedDisplay')`, reverse edges for sweep A).
 
 ## 3. tools/generators.json: output roots after the split
 
-Run in game by `/cegen` (`PM/devtools/GeneratorCommand`, `GeneratorRunner`: Devtools). The generators themselves are
+Run in game by `/cdevgen` (`PM/devtools/GeneratorCommand`, `GeneratorRunner`: Devtools). The generators themselves are
 Python in `tools/` and stay pack tooling. Output roots and where each lands:
 
 | Output root | Generators | Lands in |
@@ -222,7 +222,7 @@ Python in `tools/` and stay pack tooling. Output roots and where each lands:
 | `kubejs/exported/food/catalog.json` (food_catalog) | 1 | dev dump, pack |
 
 Every generator reads `kubejs/exported/` dumps written by `/dumpall` (`server_scripts/_lib/dump_*.js`): those scripts
-and the `/cegen` runner are Devtools. The generators' `reads` keys were not audited here.
+and the `/cdevgen` runner are Devtools. The generators' `reads` keys were not audited here.
 
 ## 4. mod_sides.md
 
@@ -239,7 +239,7 @@ Rows today (matched by mod id; `tools/dump_server_mods.py` refuses to run if a j
 | 436 | both | Creative Delight | `creativedelight` | `creativedelight-1.0.0.jar` |
 | 437 | both | Creative Brewing | `creativebrewing` | `creativebrewing-1.0.0.jar` |
 
-perfBot (`ceperfbot`) and clientCapture (`cecapture`) have no row: neither jar is ever in `mods/`.
+perfBot (`cdevperfbot`) and clientCapture (`cdevcapture`) have no row: neither jar is ever in `mods/`.
 
 Rows each new jar needs (side from this sweep; every carve jar has both server logic and client guards today, as
 patcherMod's row says "client-only parts are guarded", so `both` unless sweep B finds a jar whose mixins are all one
@@ -253,7 +253,7 @@ side):
 | both | Creative Worldgen | `creativeworldgen` | server-heavy; client parts (DistantClip, leaf decay visuals) keep it `both` |
 | both | Creative Compat | `creativecompat` | |
 | both | Creative Calendar | `creativecalendar` | |
-| server (dev only) | Creative Devtools | `creativedevtools` | dev `mods/` only, never in a payload (Q6); `/cegen`, `/dumpall` and the probes are server commands. If clientCapture is nested in it (6), the nested `cecapture` is `client`, which makes the bundle `both` on a dev machine; the row should say dev-only so `dump_server_mods.py` never ships it. |
+| server (dev only) | Creative Devtools | `creativedevtools` | dev `mods/` only, never in a payload (Q6); `/cdevgen`, `/dumpall` and the probes are server commands. If clientCapture is nested in it (6), the nested `cdevcapture` is `client`, which makes the bundle `both` on a dev machine; the row should say dev-only so `dump_server_mods.py` never ships it. |
 
 The three CD-bound jars lose their rows (or move into the CD row's member list) when nested.
 
@@ -289,8 +289,8 @@ gated mixin plugin, `disable_target_validator=true`), `src/main/resources/META-I
 
 | Project | mod id | What | Today | Nesting in Devtools needs |
 |---|---|---|---|---|
-| `development/perfBot` | `ceperfbot` | Server-side fake players for the perf suite (`tools/perf/suite/perf_suite.py`, `feature_writeup/perf_suite.md`): `CePerfBot`, `Bots`, `BotPlayer`, `BotConnection`, `BotCommands`, `TickLog` (6 files, no mixins, `mods.toml` side SERVER) | `ce.forge-mod`; `installToMods` throws (dev-only); `perf_suite.py` copies `build/libs/ceperfbot-*.jar` into its scratch server | `bundled_in=creativeDevtools`, Devtools as `ce.forge-bundle` with `bundle_members=:perfBot,:clientCapture`; `perf_suite.py` then copies the Devtools bundle (or keeps reading the member's own `build/libs` jar, which the bundle plugin still builds); `settings.gradle` entry moves to a Devtools members map |
-| `development/clientCapture` | `cecapture` | Client-side driver for queued visual tests in a throwaway client (`feature_writeup/client_capture.md`: designed 2026-10-24, "not started" in its status table, though 11 Java files and `cecapture.mixins.json` exist: `CeCapture`, `CaptureDriver`, `CapturePlan`, `Steps`, `VirtualInput`, `StageScreen`, `TestWorld`, two mixins, a JEI plugin); `mods.toml` side CLIENT, optional jei | `ce.forge-mod`, `compileOnly fileTree('libs')` (jei); `installToMods` throws; the jar goes to `tools/client_capture`'s own game dir (that folder does not exist yet) | same as perfBot; because it is CLIENT-only and perfBot SERVER-only, a Devtools bundle carrying both is loaded on both sides, each member no-op on the wrong side (Forge honours per-mod `side` for dependencies, not for loading); the `mod_sides.md` row (4) must say dev-only |
+| `development/perfBot` | `cdevperfbot` | Server-side fake players for the perf suite (`tools/perf/suite/perf_suite.py`, `feature_writeup/perf_suite.md`): `DevPerfBot`, `Bots`, `BotPlayer`, `BotConnection`, `BotCommands`, `TickLog` (6 files, no mixins, `mods.toml` side SERVER) | `ce.forge-mod`; `installToMods` throws (dev-only); `perf_suite.py` copies `build/libs/cdevperfbot-*.jar` into its scratch server | `bundled_in=creativeDevtools`, Devtools as `ce.forge-bundle` with `bundle_members=:perfBot,:clientCapture`; `perf_suite.py` then copies the Devtools bundle (or keeps reading the member's own `build/libs` jar, which the bundle plugin still builds); `settings.gradle` entry moves to a Devtools members map |
+| `development/clientCapture` | `cdevcapture` | Client-side driver for queued visual tests in a throwaway client (`feature_writeup/client_capture.md`: designed 2026-10-24, "not started" in its status table, though 11 Java files and `cdevcapture.mixins.json` exist: `DevCapture`, `CaptureDriver`, `CapturePlan`, `Steps`, `VirtualInput`, `StageScreen`, `TestWorld`, two mixins, a JEI plugin); `mods.toml` side CLIENT, optional jei | `ce.forge-mod`, `compileOnly fileTree('libs')` (jei); `installToMods` throws; the jar goes to `tools/client_capture`'s own game dir (that folder does not exist yet) | same as perfBot; because it is CLIENT-only and perfBot SERVER-only, a Devtools bundle carrying both is loaded on both sides, each member no-op on the wrong side (Forge honours per-mod `side` for dependencies, not for loading); the `mod_sides.md` row (4) must say dev-only |
 
 Neither references patcherMod. Both keep their current ids (existing ids, as the CD-bound jars do); Devtools itself
 is `creativedevtools`.

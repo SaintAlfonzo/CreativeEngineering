@@ -1,3 +1,4 @@
+// requires: creativedelight
 // requires: immersiveengineering
 // Hemp right-click harvest (TODO farming/crops #37, crops.md 2.1). Immersive Engineering's hemp is a two-block BushBlock
 // (growth bottom0..bottom4, then a top0 block above bottom4) with no right-click of its own, and Quark's harvest search

@@ -1,3 +1,4 @@
+// requires: creativeequipment
 // Creative Equipment; moved from kubejs/server_scripts/equipment/end_gear.js on 2026-11-04 (creative_split.md 7.6, wave 7), rows unchanged.
 // Recipe ids are creativeequipment:<type>/<suffix> (global.CEQ.recipes).
 ServerEvents.recipes(e => {
@@ -12,16 +13,16 @@ global.CEQ.recipes(() => {
 
     // out base key event potion A potion B
     R.bulk('echoAssembly', [
-        [i.echo_sword, i.netherite_sword, 'echo_sword', e, 'creativebrewing:darkness', 'minecraft:weakness'],
-        [i.echo_pickaxe, i.netherite_pickaxe, 'echo_pickaxe', e, 'creativebrewing:darkness', 'minecraft:weakness'],
-        [i.echo_axe, i.netherite_axe, 'echo_axe', e, 'creativebrewing:darkness', 'minecraft:weakness'],
-        [i.echo_shovel, i.netherite_shovel, 'echo_shovel', e, 'creativebrewing:darkness', 'minecraft:weakness'],
-        [i.echo_hoe, i.netherite_hoe, 'echo_hoe', e, 'creativebrewing:darkness', 'minecraft:weakness'],
-        [i.echo_helmet, i.netherite_helmet, 'echo_helmet', e, 'creativebrewing:darkness', 'minecraft:night_vision'],
-        [i.echo_chestplate, i.netherite_chestplate, 'echo_chestplate', e, 'creativebrewing:darkness', 'minecraft:night_vision'],
-        [i.echo_leggings, i.netherite_leggings, 'echo_leggings', e, 'creativebrewing:darkness', 'minecraft:night_vision'],
-        [i.echo_boots, i.netherite_boots, 'echo_boots', e, 'creativebrewing:darkness', 'minecraft:night_vision'],
-        [i.ce_echo_shield, i.ce_netherite_shield, 'echo_shield', e, 'creativebrewing:darkness', 'minecraft:night_vision']
+        [i.echo_sword, i.netherite_sword, 'echo_sword', e, 'creativecommon:darkness', 'minecraft:weakness'],
+        [i.echo_pickaxe, i.netherite_pickaxe, 'echo_pickaxe', e, 'creativecommon:darkness', 'minecraft:weakness'],
+        [i.echo_axe, i.netherite_axe, 'echo_axe', e, 'creativecommon:darkness', 'minecraft:weakness'],
+        [i.echo_shovel, i.netherite_shovel, 'echo_shovel', e, 'creativecommon:darkness', 'minecraft:weakness'],
+        [i.echo_hoe, i.netherite_hoe, 'echo_hoe', e, 'creativecommon:darkness', 'minecraft:weakness'],
+        [i.echo_helmet, i.netherite_helmet, 'echo_helmet', e, 'creativecommon:darkness', 'minecraft:night_vision'],
+        [i.echo_chestplate, i.netherite_chestplate, 'echo_chestplate', e, 'creativecommon:darkness', 'minecraft:night_vision'],
+        [i.echo_leggings, i.netherite_leggings, 'echo_leggings', e, 'creativecommon:darkness', 'minecraft:night_vision'],
+        [i.echo_boots, i.netherite_boots, 'echo_boots', e, 'creativecommon:darkness', 'minecraft:night_vision'],
+        [i.ce_echo_shield, i.ce_netherite_shield, 'echo_shield', e, 'creativecommon:darkness', 'minecraft:night_vision']
     ])
 
     R.bulk('remove', [
@@ -44,13 +45,17 @@ global.CEQ.recipes(() => {
         [{ id: 'felsic_gear:felsic_block_recipe' }, e],
         [{ id: 'felsic_gear:felsic_ingot_recipe' }, e]
     ])
-    const incFelsicIngot = R.incomplete('ingot_felsic')
-    R.createSequencedAssembly(Item.of(i.ingot_felsic, 1), i.plate_netherite, [
-        e.recipes.create.deploying(incFelsicIngot, [incFelsicIngot, i.scrap_felsic]),
-        e.recipes.create.deploying(incFelsicIngot, [incFelsicIngot, i.ingot_brass]),
-        e.recipes.create.filling(incFelsicIngot, [incFelsicIngot, Fluid.of(f.dragon_breath, 250)]),
-        e.recipes.create.pressing(incFelsicIngot, incFelsicIngot)
-    ], ['ingot_felsic'], e, 'felsic_ingot_sequenced_assembly', 4)
+    // Felsic Gear's ingot and Central Kitchen's dragon breath fluid: without either the steps would be built with air
+    // or the empty fluid (scratch r1106spf, SQ-CBP-08b), so the assembly needs both mods.
+    if (global.has(i.ingot_felsic, f.dragon_breath)) {
+        const incFelsicIngot = R.incomplete('ingot_felsic')
+        R.createSequencedAssembly(Item.of(i.ingot_felsic, 1), i.plate_netherite, [
+            e.recipes.create.deploying(incFelsicIngot, [incFelsicIngot, i.scrap_felsic]),
+            e.recipes.create.deploying(incFelsicIngot, [incFelsicIngot, i.ingot_brass]),
+            e.recipes.create.filling(incFelsicIngot, [incFelsicIngot, Fluid.of(f.dragon_breath, 250)]),
+            e.recipes.create.pressing(incFelsicIngot, incFelsicIngot)
+        ], ['ingot_felsic'], e, 'felsic_ingot_sequenced_assembly', 4)
+    }
 
     // Remove existing felsic smithing
     R.bulk('remove', [
@@ -66,16 +71,16 @@ global.CEQ.recipes(() => {
     ])
     
     // Felsic default values + config override 
-    const felsicHelmet = R.cfg({potion: 'creativebrewing:magic_resistance', mb: 500, reachMb: 500, loops: 1, blows: 5}, 'CRAFTING.FELSIC_HELMET')
-    const felsicChestplate = R.cfg({potion: 'creativebrewing:magic_resistance', mb: 500, reachMb: 500, loops: 1, blows: 5}, 'CRAFTING.FELSIC_CHESTPLATE')
-    const felsicLeggings = R.cfg({potion: 'creativebrewing:magic_resistance', mb: 500, reachMb: 500, loops: 1, blows: 5}, 'CRAFTING.FELSIC_LEGGINGS')
-    const felsicBoots = R.cfg({potion: 'creativebrewing:magic_resistance', mb: 500, reachMb: 500, loops: 1, blows: 5}, 'CRAFTING.FELSIC_BOOTS')
-    const felsicSword = R.cfg({potion: 'creativebrewing:magic_resistance', mb: 250, reachMb: 250, loops: 1, blows: 3}, 'CRAFTING.FELSIC_SWORD')
-    const felsicPickaxe = R.cfg({potion: 'creativebrewing:magic_resistance', mb: 250, reachMb: 250, loops: 1, blows: 3}, 'CRAFTING.FELSIC_PICKAXE')
-    const felsicAxe = R.cfg({potion: 'creativebrewing:magic_resistance', mb: 250, reachMb: 250, loops: 1, blows: 3}, 'CRAFTING.FELSIC_AXE')
-    const felsicShovel = R.cfg({potion: 'creativebrewing:magic_resistance', mb: 250, reachMb: 250, loops: 1, blows: 3}, 'CRAFTING.FELSIC_SHOVEL')
-    const felsicHoe = R.cfg({potion: 'creativebrewing:magic_resistance', mb: 250, reachMb: 250, loops: 1, blows: 3}, 'CRAFTING.FELSIC_HOE')
-    const felsicShield = R.cfg({potion: 'creativebrewing:magic_resistance', mb: 250, reachMb: 250, loops: 1, blows: 8}, 'CRAFTING.FELSIC_SHIELD')
+    const felsicHelmet = R.cfg({potion: 'creativecommon:magic_resistance', mb: 500, reachMb: 500, loops: 1, blows: 5}, 'CRAFTING.FELSIC_HELMET')
+    const felsicChestplate = R.cfg({potion: 'creativecommon:magic_resistance', mb: 500, reachMb: 500, loops: 1, blows: 5}, 'CRAFTING.FELSIC_CHESTPLATE')
+    const felsicLeggings = R.cfg({potion: 'creativecommon:magic_resistance', mb: 500, reachMb: 500, loops: 1, blows: 5}, 'CRAFTING.FELSIC_LEGGINGS')
+    const felsicBoots = R.cfg({potion: 'creativecommon:magic_resistance', mb: 500, reachMb: 500, loops: 1, blows: 5}, 'CRAFTING.FELSIC_BOOTS')
+    const felsicSword = R.cfg({potion: 'creativecommon:magic_resistance', mb: 250, reachMb: 250, loops: 1, blows: 3}, 'CRAFTING.FELSIC_SWORD')
+    const felsicPickaxe = R.cfg({potion: 'creativecommon:magic_resistance', mb: 250, reachMb: 250, loops: 1, blows: 3}, 'CRAFTING.FELSIC_PICKAXE')
+    const felsicAxe = R.cfg({potion: 'creativecommon:magic_resistance', mb: 250, reachMb: 250, loops: 1, blows: 3}, 'CRAFTING.FELSIC_AXE')
+    const felsicShovel = R.cfg({potion: 'creativecommon:magic_resistance', mb: 250, reachMb: 250, loops: 1, blows: 3}, 'CRAFTING.FELSIC_SHOVEL')
+    const felsicHoe = R.cfg({potion: 'creativecommon:magic_resistance', mb: 250, reachMb: 250, loops: 1, blows: 3}, 'CRAFTING.FELSIC_HOE')
+    const felsicShield = R.cfg({potion: 'creativecommon:magic_resistance', mb: 250, reachMb: 250, loops: 1, blows: 8}, 'CRAFTING.FELSIC_SHIELD')
 
     R.bulk('felsicAssembly', [
         [i.felsic_helmet, i.echo_helmet, 'felsic_helmet', e, felsicHelmet.potion, felsicHelmet.mb, felsicHelmet.loops, felsicHelmet.blows, felsicHelmet.reachMb],
@@ -116,8 +121,8 @@ global.CEQ.recipes(() => {
     // out base key event potion mb loops
     R.bulk('dragonAssembly', [
         // Armor, unique potions
-        [i.dragon_helmet, i.felsic_helmet, 'dragon_helmet', e, 'creativebrewing:long_magic_resistance', 250, 2],
-        [i.dragon_chestplate, i.felsic_chestplate, 'dragon_chestplate', e, 'creativebrewing:long_resistance', 250, 4],
+        [i.dragon_helmet, i.felsic_helmet, 'dragon_helmet', e, 'creativecommon:long_magic_resistance', 250, 2],
+        [i.dragon_chestplate, i.felsic_chestplate, 'dragon_chestplate', e, 'creativecommon:long_resistance', 250, 4],
         [i.dragon_leggings, i.felsic_leggings, 'dragon_leggings', e, 'minecraft:long_fire_resistance', 250, 3],
         [i.dragon_boots, i.felsic_boots, 'dragon_boots', e, 'alexsmobs:long_knockback_resistance', 250, 2],
 
@@ -135,10 +140,10 @@ global.CEQ.recipes(() => {
         [i.dragon_trident, i.trident, 'dragon_trident', e, 'minecraft:strong_regeneration', 250, 2],
 
         // Anvil, 6x scales, resistance
-        [i.dragon_anvil, i.anvil, 'dragon_anvil', e, 'creativebrewing:long_resistance', 250, 6],
+        [i.dragon_anvil, i.anvil, 'dragon_anvil', e, 'creativecommon:long_resistance', 250, 6],
 
         // Shield, resistance
-        [i.ce_dragon_shield, i.ce_felsic_shield, 'dragon_shield', e, 'creativebrewing:long_resistance', 250, 5],
+        [i.ce_dragon_shield, i.ce_felsic_shield, 'dragon_shield', e, 'creativecommon:long_resistance', 250, 5],
 
         // Air brake, slowness
         [i.air_brake, i.plate_netherite, 'air_brake', e, 'minecraft:strong_slowness', 250, 2]

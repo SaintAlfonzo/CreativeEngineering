@@ -582,14 +582,14 @@
 		#Log one [locate] line for every search with at least this many misses (0 = every search, -1 = never).
 		#Range: > -1
 		logMissesAtLeast = 8
-		#Default search radius of /celocate batch, in chunks (/locate uses 100).
+		#Default search radius of /cwglocate batch, in chunks (/locate uses 100).
 		#Range: 1 ~ 1000
 		batchRadius = 100
-		#A /celocate batch search still running after this long is reported as timed out and cancelled (Async
+		#A /cwglocate batch search still running after this long is reported as timed out and cancelled (Async
 		#Locator never completes a search that threw).
 		#Range: 5 ~ 3600
 		batchTimeoutSeconds = 120
-		#/celocate census splits its square into regions this many chunks wide; each region is one task on
+		#/cwglocate census splits its square into regions this many chunks wide; each region is one task on
 		#Async Locator's thread pool.
 		#Range: 4 ~ 256
 		censusRegionChunks = 32
@@ -598,7 +598,7 @@
 		#Range: 10 ~ 3600
 		loadTimeoutSeconds = 300
 		#Any structure search (/locate, maps, Async Locator) still running after this long ends as not found and
-		#logs a [locate] line with its counters; its thread is free again. /celocate stop ends running searches
+		#logs a [locate] line with its counters; its thread is free again. /cwglocate stop ends running searches
 		#too, and so does the server stopping. 0 = no deadline. Applies to new searches immediately.
 		#Tuned 2026-11-02 (user): 120 [300]; the fortified metas answer within 120 s.
 		#Range: 0 ~ 3600

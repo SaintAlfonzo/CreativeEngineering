@@ -69,7 +69,7 @@ rm -rf "$RES/ftw_snap"
 sleep 120
 cmd "forge tps"; sleep 3; mark "tps: $(grep -E 'Overall *:' logs/latest.log | tail -1 | sed 's/^.*Overall/Overall/')"
 cmd "wgp cliffs"; cmd "wgp dims"; sleep 5
-cmd "ceperf status"; sleep 2
+cmd "cdevperf status"; sleep 2
 
 if [ "$PREGEN" -gt 0 ]; then
   jcmd "$PID" JFR.start name=pregen settings="$SRV/perf/ce-server.jfc" disk=true > /dev/null
@@ -80,7 +80,7 @@ if [ "$PREGEN" -gt 0 ]; then
   cmd "forge tps"; sleep 3; mark "tps after pregen: $(grep -E 'Overall *:' logs/latest.log | tail -1 | sed 's/^.*Overall/Overall/')"
 fi
 if [ "$CENSUS" -gt 0 ]; then
-  mark "census start"; cmd "celocate census $CENSUS 4000 4000"
+  mark "census start"; cmd "cwglocate census $CENSUS 4000 4000"
   r=$(wait_for "census done" 3600); mark "census: $r"
   cp kubejs/exported/worldgen/locate_census.json "$RES/" 2>/dev/null
 fi
@@ -91,7 +91,7 @@ bash "$EV" stop "$OUT"
 for _ in $(seq 60); do [ -z "$(srv_pid)" ] && break; sleep 2; done
 p=$(srv_pid); [ -n "$p" ] && { kill -9 "$p"; mark "killed $p"; }
 gzip -c logs/latest.log > "$RES/latest.log.gz"
-grep -E 'Done \(|Task finished|\[wgp\]|\[ceperf\]|Mean tick time|census|DimensionFilter|Exception|Error occurred while handling event|mixin.*(warn|fail)' logs/latest.log \
+grep -E 'Done \(|Task finished|\[wgp\]|\[cdevperf\]|Mean tick time|census|DimensionFilter|Exception|Error occurred while handling event|mixin.*(warn|fail)' logs/latest.log \
   | grep -vE '\[(earth|water)-fill\]' | head -400 > "$RES/key_lines.txt"
 cp -r crash-reports "$RES/" 2>/dev/null
 mark finished

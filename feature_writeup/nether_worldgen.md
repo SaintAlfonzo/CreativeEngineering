@@ -328,7 +328,7 @@ How each remaining kind of decision would be built:
   2026-10-12) would stop that.
 - **Flower snapshot order.** `wild_flowers.js` rebuilds every Terralith flower feature from
   `flower_features.json`, so a change to a flower feature only lands after `gen_wild_flowers.py` reruns
-  (`/cegen` runs `nether_worldgen` before `wild_flowers`).
+  (`/cdevgen` runs `nether_worldgen` before `wild_flowers`).
 - **Per-block mix, not clumps.** Surface rule noise is sampled in 2D (one value per column), so clumps would be
   vertical streaks through the mountain; the mix is random per block instead. Crimsite veins as clumps would need an
   ore feature instead (not done).
@@ -349,7 +349,7 @@ How each remaining kind of decision would be built:
 
 - [../tools/nether_worldgen_scan.py](../tools/nether_worldgen_scan.py): the scan. `JAVA_FEATURES`, `CODE_ADDED`,
   `TYPE_BLOCKS` and `JAVA_CHECKED` hold what was read from decompiled jars.
-- [../tools/gen_nether_worldgen.py](../tools/gen_nether_worldgen.py) (`/cegen run nether_worldgen`),
+- [../tools/gen_nether_worldgen.py](../tools/gen_nether_worldgen.py) (`/cdevgen run nether_worldgen`),
   [../kubejs/generation_scripts/worldgen/nether_worldgen_rules.json](../kubejs/generation_scripts/worldgen/nether_worldgen_rules.json),
   `nether_worldgen_manifest.json`: the biome changes. Output: `kubejs/data/minecraft/worldgen/noise_settings/{overworld,large_biomes}.json`,
   `kubejs/data/terralith/worldgen/configured_feature/{flower/blue/nylium_disk,flower/blue/flowers,enchanted/enchanted_oak}.json`,

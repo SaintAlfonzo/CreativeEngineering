@@ -42,7 +42,7 @@ public final class SackBundle {
     private static final int MAX_SLOTS = 27;
 
     public static final SimpleChannel CHANNEL = NetworkRegistry.newSimpleChannel(
-            new ResourceLocation("creativeengineering", "sack_bundle"),
+            new ResourceLocation(com.SaintAlfonzo.creativecompat.CreativeCompat.MOD_ID, "sack_bundle"),
             () -> PROTOCOL, PROTOCOL::equals, PROTOCOL::equals);
 
     private SackBundle() {

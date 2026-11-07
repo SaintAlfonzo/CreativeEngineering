@@ -511,7 +511,7 @@ Brewing is unchanged. Note: in this pack `minecraft:golden_carrot` is not effect
 
 Salt shows its one `salt:salting` special craft as a Crafting-page extension, and Create: The Salt adds 65
 `create:mixing` recipes (food + `#forge:salts` -> the same food with `{Salted:1b}`), one Mixing page each. patcherMod's
-`SeasoningJEI` (a `@JeiPlugin`, client only) moves them onto one **Seasoning** page (`creativeengineering:seasoning`,
+`SeasoningJEI` (a `@JeiPlugin`, client only) moves them onto one **Seasoning** page (`creativedelight:seasoning`,
 icon: salt; catalysts: crafting table, mechanical mixer):
 - the salting craft: one page, machine slot = crafting table, every `#salt:can_be_salted` food + salt -> the salted
   food. Food and output cycle together (a JEI focus link), so "uses of" / "recipes for" a food shows that food only;

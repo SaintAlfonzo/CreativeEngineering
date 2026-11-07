@@ -1,3 +1,4 @@
+// requires: creativedelight
 // requires: salt
 // requires: create__the_salt
 // Create salting for every saltable food (salt.md 6 S5, TODO food/seasoning #1, 2026-11-03).

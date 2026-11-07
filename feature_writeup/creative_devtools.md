@@ -3,8 +3,8 @@
 Written 2026-11-01 (Creative Split wave 1, [creative_split.md](creative_split.md) 2.1, 7.6; TODO `creativesplit/devtools #4`).
 
 **Status: INSTALLED 2026-11-01 (dev `mods/`), scratch-verified: SQ-CDV-01 to -04 PASS (run rcs1, [scratch_run_2026-11-01.md](testing/scratch_run_2026-11-01.md) 6); CDV-01 to -06 in game open.** `creativedevtools-1.0.0.jar`
-(`development/creativeDevtools/build/libs/`) nests perfBot (`ceperfbot`) and clientCapture (`cecapture`). patcherMod
-lost the moved code in the same pass, so `/cegen`, `/dumpall`, the `/dump*` commands, `/ceperf`, `/ceplace` and the
+(`development/creativeDevtools/build/libs/`) nests perfBot (`cdevperfbot`) and clientCapture (`cdevcapture`). patcherMod
+lost the moved code in the same pass, so `/cdevgen`, `/dumpall`, the `/dump*` commands, `/cdevperf`, `/cdevplace` and the
 probes are gone from the dev instance until this jar is installed beside a rebuilt patcherMod.
 
 Written for: the owner and the split agents, as the execution record of the Devtools carve. Same shape as
@@ -15,11 +15,11 @@ Written for: the owner and the split agents, as the execution record of the Devt
 | Piece | Gradle project | Folder | Mod id | Ships |
 |---|---|---|---|---|
 | Creative Devtools (bundle) | `:creativeDevtools` | `development/creativeDevtools` | `creativedevtools` | dev `mods/` only (Q6) |
-| CE Perf Bot (member) | `:perfBot` | `development/creativeDevtools/members/perfbot` | `ceperfbot` | nested only |
-| CE Client Capture (member) | `:clientCapture` | `development/creativeDevtools/members/capture` | `cecapture` | nested only |
+| CE Perf Bot (member) | `:perfBot` | `development/creativeDevtools/members/perfbot` | `cdevperfbot` | nested only |
+| CE Client Capture (member) | `:clientCapture` | `development/creativeDevtools/members/capture` | `cdevcapture` | nested only |
 
-Both members are inert unless their system property is set (`-Dceperfbot.out` on a dedicated server,
-`-Dcecapture.plan` on a client), so nesting them in a jar that loads on both sides is safe. Their tools still take the
+Both members are inert unless their system property is set (`-Dcdevperfbot.out` on a dedicated server,
+`-Dcdevcapture.plan` on a client), so nesting them in a jar that loads on both sides is safe. Their tools still take the
 member's own `build/libs/` jar (`tools/perf/suite/server.py`, `tools/scratch_query/prep_srv.sh`); a top-level jar
 always beats a nested copy (creative_delight.md 14.1 point 4).
 
@@ -58,13 +58,13 @@ Package `com.SaintAlfonzo.creativedevtools` (PM = patcherMod's `com.SaintAlfonzo
 
 | From | To | Notes |
 |---|---|---|
-| PM `devtools/GeneratorCommand`, `GeneratorRunner` | `generators/` | `/cegen`; mod-bus `onCommonSetup` / `onLoadComplete` now added by `CreativeDevtools` |
+| PM `devtools/GeneratorCommand`, `GeneratorRunner` | `generators/` | `/cdevgen`; mod-bus `onCommonSetup` / `onLoadComplete` now added by `CreativeDevtools` |
 | PM `devtools/BlockStateSyncDebug` | `probe/` | listener on `BlockStateLookupHook` |
 | PM `devtools/LevelRandomProbe` | `probe/` | factory on `LevelRandomHook` |
-| PM `devtools/DisplayNameDump`, `WthitIconDump`, `WorldJeiDump`, `WorldJeiMobBuckets`, `WorldJeiToolPairs` | `dump/` | `/cedumpnames`, `/cedumpicons`, `/dumpworldjei` |
+| PM `devtools/DisplayNameDump`, `WthitIconDump`, `WorldJeiDump`, `WorldJeiMobBuckets`, `WorldJeiToolPairs` | `dump/` | `/cdevdumpnames`, `/cdevdumpicons`, `/dumpworldjei` |
 | PM `worldgen/SpawnDump` | `dump/` | `/dumpspawns` backing class (script loads the new class name) |
-| PM `perf/PerfCommand` | `perf/` | `/ceperf`; `PerfEvents`, `PerfJfrEvents`, `MobCapLevels` stay (Common perf mixins use them) |
-| PM `worldgen/MassPlacer` | `ceplace/` | `/ceplace`; `CEConfig.VerticalAlign` and the `WorldgenConfig.place*` readers moved into `DevtoolsConfig`; `BiomeLayoutTuner.WORLDGEN_DIR` and `PoolTuner.parseLenient` made public for it; its offline test is `tools/worldgen_test/com/SaintAlfonzo/creativedevtools/ceplace/MassPlacerTest.java` (`tools/test_worldgen_tools.sh` test 2) |
+| PM `perf/PerfCommand` | `perf/` | `/cdevperf`; `PerfEvents`, `PerfJfrEvents`, `MobCapLevels` stay (Common perf mixins use them) |
+| PM `worldgen/MassPlacer` | `cdevplace/` | `/cdevplace`; `CEConfig.VerticalAlign` and the `WorldgenConfig.place*` readers moved into `DevtoolsConfig`; `BiomeLayoutTuner.WORLDGEN_DIR` and `PoolTuner.parseLenient` made public for it; its offline test is `tools/worldgen_test/com/SaintAlfonzo/creativedevtools/cdevplace/MassPlacerTest.java` (`tools/test_worldgen_tools.sh` test 2) |
 | `CreativeEngineering.onServerStarted` IE recycling log | `ie/IeRecyclingDiagnostics` | same log lines, registered only when IE is loaded |
 | `kubejs/server_scripts/_lib/dump_*.js`, `loot_dump.js`, `structure_dump.js`, `villager_trades_dump.js` (25 files) | `kubejs/data/creativedevtools/kubejs/dump/` | command names unchanged |
 | `_lib/recipe_scan.js` scan half (`scanRemovedItemRecipes`, `/recipescan`, run-at-load) | `dump/recipe_scan.js` | the tag strip stays in the pack as `_lib/removed_item_tags.js` |
@@ -102,18 +102,18 @@ Tooling repointed: `tools/generators.json` readme, `tools/perf/suite/server.py` 
 
 Scratch server (SQ-CDV, [scratch_queue.md](testing/scratch_queue.md)) and in game:
 
-- [ ] **CDV-01 Load:** `logs/latest.log` has `[creativedevtools] loaded` with the member list `[ceperfbot, cecapture]`
+- [ ] **CDV-01 Load:** `logs/latest.log` has `[creativedevtools] loaded` with the member list `[cdevperfbot, cdevcapture]`
   and no ERROR for `creativedevtools`; `config/creativedevtools-common.toml` has `[debug.*]` and
   `[worldgen.mass_place]`; `creativeengineering-common.toml` has neither after a start.
-- [ ] **CDV-02 Commands:** `/cegen list`, `/ceperf status`, `/ceplace status`, `/recipescan`, `/dumpworldjei`,
+- [ ] **CDV-02 Commands:** `/cdevgen list`, `/cdevperf status`, `/cdevplace status`, `/recipescan`, `/dumpworldjei`,
   `/dumpspawns`, `/flowerworld` exist (tab completion) and run; `/dumpall` reports every dump ok.
 - [ ] **CDV-03 Scripts:** `logs/kubejs/server.log` has `[creativedevtools] server scripts ready` and no
   `writeExportJson` / `guardThrowable` ReferenceError; the test recipes show in JEI under `creativedevtools:` ids.
 - [ ] **CDV-04 Probes:** with `[debug.block_state_sync] enabled = true` a dedicated server writes
-  `logs/ce_block_state_ranges_server.txt`; with `[debug.level_random] probe = true` the log shows no
+  `logs/cdev_block_state_ranges_server.txt`; with `[debug.level_random] probe = true` the log shows no
   `[LevelRandomProbe]` error at world load. Both off again afterwards.
 - [ ] **CDV-05 Without Devtools:** with only patcherMod (no Devtools jar), the server starts, no `/dumpall`, no
-  `/cegen`, no Flower Test world type, removed items still lose their tags (`/recipescan` gone).
+  `/cdevgen`, no Flower Test world type, removed items still lose their tags (`/recipescan` gone).
 - [ ] **CDV-06 Flower Test:** the world type "Flower Test" is listed on a dev client and builds its table.
 
 ## 5. Install (game closed)

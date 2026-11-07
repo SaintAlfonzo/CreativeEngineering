@@ -1,3 +1,4 @@
+// requires: creativedelight
 // requires: farmersrespite
 // Farmer's Respite's long and strong apple cider in Create and IE machines. Non-member file: recipe ids are
 // creativedelight:<type>/<suffix> (global.CD.recipes). Moved from the pack's kubejs/server_scripts/cooking/cooking.js

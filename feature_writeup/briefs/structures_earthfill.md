@@ -512,7 +512,7 @@ Vanilla: `ChunkGenerator#tryGenerateStructure` `m_223104_`, `getBaseColumn` `m_2
 
 ### Gotchas
 - A must not change results: anything it skips would have failed the biome test anyway. Verify with
-  `/celocate census` counts before/after on the same seed, and `tools/test_structure_groups.sh`.
+  `/cwglocate census` counts before/after on the same seed, and `tools/test_structure_groups.sh`.
 - `StructureCheck`/`/locate` don't go through `tryGenerateStructure`; the locate path has its own dimension check
   (locate.md 7.3.2 dimension check).
 - Twigs' `canGenerate` also runs in the Nether, where it is needed; A leaves that alone.
@@ -522,7 +522,7 @@ Vanilla: `ChunkGenerator#tryGenerateStructure` `m_223104_`, `getBaseColumn` `m_2
 
 ### Tests
 - ST-213 Same starts with the filter [scratch]: two fresh worlds, same seed, Chunky r 64 at 2144 -2592, filter on/off:
-  identical `/celocate census` member counts; the JFR shows no `ObeliskStructure#canGenerate` in the Overworld.
+  identical `/cwglocate census` member counts; the JFR shows no `ObeliskStructure#canGenerate` in the Overworld.
 - ST-214 Terrain cache exact [scratch] (if B): `log = ALL` earth-fill lines identical with the cache on and off over
   the same square; JFR share of `EarthFill.predicted` down.
 - Offline: an `EarthFillTest` case that the cached and uncached `Terrain` answer the same for a fake generator.

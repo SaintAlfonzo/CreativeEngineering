@@ -54,6 +54,30 @@ versionRange="[1.19.2-1.2.4,)"
 ordering="AFTER"
 side="BOTH"
 
+# KubeJS Create: the recipe helper and member scripts make Create recipes (mixing, filling, deploying...).
+[[dependencies.creativedelight]]
+modId="kubejs_create"
+mandatory=true
+versionRange="[1902.2.4,)"
+ordering="AFTER"
+side="BOTH"
+
+# KubeJS Delight: Farmer's Delight cooking and cutting recipes through the recipe helper.
+[[dependencies.creativedelight]]
+modId="kubejsdelight"
+mandatory=true
+versionRange="[1.1.2,)"
+ordering="AFTER"
+side="BOTH"
+
+# LootJS: item merges and the member loot scripts.
+[[dependencies.creativedelight]]
+modId="lootjs"
+mandatory=true
+versionRange="[2.9.1,)"
+ordering="AFTER"
+side="BOTH"
+
 # The optional compartments folded in from the blockheadsAdditions and incubationAdditions members at M8
 # (plan_cb_publish.md 3b): each only loads with its mods (compat/Compartments). AFTER so their registries and
 # block entity types exist when CD's compartments touch them.
@@ -93,3 +117,85 @@ mandatory=false
 versionRange="[0.6,)"
 ordering="AFTER"
 side="BOTH"
+
+# Cooking mods Creative Delight integrates with but does not nest or repack (2026-11-06, owner): each is optional, CD
+# boots and runs its scripts without it (scratch r1106cba: the Creative Brewing chain had none of them, no script
+# error), and its rows are guarded by global.has / requires. AFTER so CD loads after each and its data overrides
+# theirs. Any version; the pack tests the one in mods/.
+[[dependencies.creativedelight]]
+modId="abnormals_delight"
+mandatory=false
+versionRange="*"
+ordering="AFTER"
+side="BOTH"
+
+[[dependencies.creativedelight]]
+modId="alexsdelight"
+mandatory=false
+versionRange="*"
+ordering="AFTER"
+side="BOTH"
+
+[[dependencies.creativedelight]]
+modId="corn_delight"
+mandatory=false
+versionRange="*"
+ordering="AFTER"
+side="BOTH"
+
+[[dependencies.creativedelight]]
+modId="create_central_kitchen"
+mandatory=false
+versionRange="*"
+ordering="AFTER"
+side="BOTH"
+
+[[dependencies.creativedelight]]
+modId="endersdelight"
+mandatory=false
+versionRange="*"
+ordering="AFTER"
+side="BOTH"
+
+[[dependencies.creativedelight]]
+modId="farmersrespite"
+mandatory=false
+versionRange="*"
+ordering="AFTER"
+side="BOTH"
+
+[[dependencies.creativedelight]]
+modId="fruitsdelight"
+mandatory=false
+versionRange="*"
+ordering="AFTER"
+side="BOTH"
+
+[[dependencies.creativedelight]]
+modId="hostiledelight"
+mandatory=false
+versionRange="*"
+ordering="AFTER"
+side="BOTH"
+
+[[dependencies.creativedelight]]
+modId="moredelight"
+mandatory=false
+versionRange="*"
+ordering="AFTER"
+side="BOTH"
+
+[[dependencies.creativedelight]]
+modId="quarkdelight"
+mandatory=false
+versionRange="*"
+ordering="AFTER"
+side="BOTH"
+
+[[dependencies.creativedelight]]
+modId="tmted"
+mandatory=false
+versionRange="*"
+ordering="AFTER"
+side="BOTH"
+

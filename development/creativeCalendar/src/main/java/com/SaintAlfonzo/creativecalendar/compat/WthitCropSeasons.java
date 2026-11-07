@@ -33,8 +33,8 @@ import net.minecraft.world.level.block.state.BlockState;
  */
 public final class WthitCropSeasons implements IWailaClientPlugin, IBlockComponentProvider {
 
-    private static final ResourceLocation SEASONS_LINE = new ResourceLocation(CreativeCalendar.NAMESPACE, "crop_seasons");
-    private static final ResourceLocation HERE_LINE = new ResourceLocation(CreativeCalendar.NAMESPACE, "crop_out_of_season");
+    private static final ResourceLocation SEASONS_LINE = new ResourceLocation(CreativeCalendar.MOD_ID, "crop_seasons");
+    private static final ResourceLocation HERE_LINE = new ResourceLocation(CreativeCalendar.MOD_ID, "crop_out_of_season");
     /** After the Growth line (default priority 1000). */
     private static final int PRIORITY = 1100;
 

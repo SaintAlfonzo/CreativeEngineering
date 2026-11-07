@@ -36,7 +36,7 @@ public final class SwapConfig {
 				"Rewrite a container's slots when a player opens it.")
 				.define("onContainerOpen", true);
 		ON_COMMAND = b.comment(
-				"Allow /ceswap items (operators): rewrites online players and every loaded chunk and entity now.")
+				"Allow /ccswap items (operators): rewrites online players and every loaded chunk and entity now.")
 				.define("onCommand", true);
 		ONCE_WHEN_UPDATED = b.comment(
 				"Rewrite each chunk and each player once per merge list version: a chunk or player saved with an older (or no)",

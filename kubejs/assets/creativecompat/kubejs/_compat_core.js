@@ -1,3 +1,4 @@
+// requires: creativecompat
 // priority: 1000
 // Creative Compat client scripts (feature_writeup/creative_split.md 3.9, 7.6). Authored here in the pack folder
 // (reloads on F3+T); the Compat build copies this tree into the jar at assets/creativecompat/kubejs/. tooltips.js

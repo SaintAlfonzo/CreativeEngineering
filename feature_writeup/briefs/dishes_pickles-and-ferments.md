@@ -209,7 +209,7 @@ Foods that get vinegar added carry a Foul Taste effect, on more foods than today
   never stacks with a plain one) and makes vinegar a penalty additive nobody picks.
 
 ### Gotchas
-Can effects are generated (`can_types.json`); a per-item effect added by hand is overwritten by the next `/cegen` unless
+Can effects are generated (`can_types.json`); a per-item effect added by hand is overwritten by the next `/cdevgen` unless
 the generator learns it.
 
 ### Tests
@@ -241,7 +241,7 @@ veggie works as the base in an alternative recipe.
    `R.vdPickling(Item.of(i.vintagedelight_kimchi, 4), [Item.of(i.t_pickleable_veg, 4), i.salt, i.t_chilipepper], e, 'kimchi_from_veg',
    { secondary: i.pickled_pepper })` (`i.t_chilipepper`, item_dict.js line 2035), new tag `i.t_pickleable_veg` in CD
    `vintagedelight/tags.js`.
-3. Clean-up: drop `i.kimchi` from the two tag lines and the compost row; `gen_can_types.py` line 263 to one source; `/cegen`.
+3. Clean-up: drop `i.kimchi` from the two tag lines and the compost row; `gen_can_types.py` line 263 to one source; `/cdevgen`.
 4. item_merges.md 2.x section, SQ-MG- queue entries (next free number), changelog bullet.
 
 ### Decisions
@@ -279,7 +279,7 @@ VTD-63 (proposed): pickled egg + coal -> century egg after 3 hours; a raw egg no
 
 ## Built, needs play
 
-- `dishes/pickles-and-ferments #1` Remove pickled pickles; pickled sea pickle: [vintage_delight.md](../vintage_delight.md) "Built 2026-10-25"; open: S~ (SQ-CDB-08 JEI, SQ-CDB-12 cans after `/dumpfood` + `/cegen`), C P (VTD-55); Canned Pickled Pickles rename waits for the can regeneration.
+- `dishes/pickles-and-ferments #1` Remove pickled pickles; pickled sea pickle: [vintage_delight.md](../vintage_delight.md) "Built 2026-10-25"; open: S~ (SQ-CDB-08 JEI, SQ-CDB-12 cans after `/dumpfood` + `/cdevgen`), C P (VTD-55); Canned Pickled Pickles rename waits for the can regeneration.
 - `dishes/pickles-and-ferments #3` Pickle soup: [vintage_delight.md](../vintage_delight.md) "Built 2026-10-25"; open: C P (VTD-57). Veggies' compat pickle soup (`veggiesdelight:compat/vintagedelight/cooking/pickle_soup`, pickle + carrot + potato + turnip or beetroot) is still in the 2026-10-30 dump beside the new recipe.
 - `dishes/pickles-and-ferments #4` Braised sea pickle accepts slices: [ocean_delight.md](../ocean_delight.md) 5.4; open: C P (VTD-58).
 - `dishes/pickles-and-ferments #10` Fermented garlic honey effects: Built 2026-10-28 (CD startup `veggiesdelight/veggies_foods.js` lines 15-22: Regeneration II 5 s, Health Boost II 30 s, owner chose II), shipped 1.1.04; SQ-CM-05 PASS; open: P T (VTD-64 proposed: drink it, both effects and lengths, tooltip and JEED agree). Fold into [veggies_delight.md](../veggies_delight.md) (drinks table line 118 still says 5 s).

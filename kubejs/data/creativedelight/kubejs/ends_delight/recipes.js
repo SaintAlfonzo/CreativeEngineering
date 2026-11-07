@@ -1,3 +1,4 @@
+// requires: creativedelight
 // requires: ends_delight
 // End's Delight recipe changes (Creative Delight member, ends_delight.md 3.1, 3.3; TODO largecontent/mod-additions #4,
 // #15, #29). Recipe ids are creativedelight:<type>/<suffix> (global.CD.recipes). Rows naming Ender's Delight items

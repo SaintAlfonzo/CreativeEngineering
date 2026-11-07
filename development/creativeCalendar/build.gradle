@@ -22,8 +22,17 @@ dependencies {
 }
 
 def scriptTrees = ['data/creativecalendar/kubejs']
+def genData = ['worldgen/season_types.json', 'worldgen/crop_seasons.json']
+def genDataExclude = []
 
 tasks.named('processResources', ProcessResources).configure {
+    // Generated data the jar's scripts and Java read (instance kubejs/generation_scripts/ first, this copy second;
+    // Creative Common WorldgenFiles / global.genText).
+    from(rootProject.file('kubejs/generation_scripts')) {
+        into 'generation_scripts'
+        include genData
+        exclude genDataExclude
+    }
     scriptTrees.each { tree ->
         from(rootProject.file("kubejs/${tree}")) {
             into tree
@@ -36,6 +45,9 @@ tasks.named('processResources', ProcessResources).configure {
 tasks.named('jar', Jar).configure {
     doLast {
         def entries = new java.util.zip.ZipFile(archiveFile.get().asFile).withCloseable { z -> z.entries().collect { it.name } }
+        genData.findAll { !it.contains('*') }.each { f ->
+            if (!entries.contains('generation_scripts/' + f)) throw new GradleException("creativecalendar jar has no generation_scripts/${f}")
+        }
         ['kubejs_startup/creativecalendar/', 'data/creativecalendar/kubejs/'].each { dir ->
             if (!entries.any { it.startsWith(dir) && it.endsWith('.js') }) {
                 throw new GradleException("creativecalendar jar has no scripts under ${dir}")

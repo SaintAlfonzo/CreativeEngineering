@@ -1,3 +1,4 @@
+// requires: creativedelight
 // Mortar and pestle (Old Guns) grinding for other mods' food recipes (TODO cooking/kitchen #10): one shapeless craft
 // per catalog entry, written by tools/gen_mortar_catalog.py from the /dumpfood recipe export (Create milling and
 // crushing whose main output is a food ingredient) into one <mod>/mortar_catalog.js member script per source recipe's

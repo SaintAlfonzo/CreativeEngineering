@@ -1,3 +1,4 @@
+// requires: creativedelight
 // requires: create
 // requires: create_compressed
 // Slime block from a dough block and green dye in a heated mixer (cooking/kitchen #12, briefs/cooking_kitchen.md):

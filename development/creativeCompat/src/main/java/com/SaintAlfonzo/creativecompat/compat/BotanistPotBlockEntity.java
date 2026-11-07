@@ -1,6 +1,6 @@
 package com.SaintAlfonzo.creativecompat.compat;
 
-import com.SaintAlfonzo.creativecommon.compat.PottedPlantHolder;
+import com.SaintAlfonzo.creativecompat.compat.PottedPlantHolder;
 
 import javax.annotation.Nullable;
 

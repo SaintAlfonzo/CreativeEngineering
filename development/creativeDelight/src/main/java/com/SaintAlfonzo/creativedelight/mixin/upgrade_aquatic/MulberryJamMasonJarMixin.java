@@ -21,13 +21,13 @@ import net.minecraftforge.registries.ForgeRegistries;
 @Mixin(targets = "com.teamabnormals.upgrade_aquatic.common.item.MulberryJamBottleItem", remap = false)
 public abstract class MulberryJamMasonJarMixin {
 
-	private static final ResourceLocation CE_EMPTY_MASON_JAR = new ResourceLocation("vintagedelight", "empty_mason_jar");
+	private static final ResourceLocation CD_EMPTY_MASON_JAR = new ResourceLocation("vintagedelight", "empty_mason_jar");
 
 	@Redirect(method = "m_5922_", remap = false, require = 1, allow = 2,
 			at = @At(value = "FIELD", opcode = org.objectweb.asm.Opcodes.GETSTATIC, remap = false,
 					target = "Lnet/minecraft/world/item/Items;f_42590_:Lnet/minecraft/world/item/Item;"))
 	private Item ce$masonJar() {
-		Item jar = ForgeRegistries.ITEMS.getValue(CE_EMPTY_MASON_JAR);
+		Item jar = ForgeRegistries.ITEMS.getValue(CD_EMPTY_MASON_JAR);
 		return jar == null || jar == Items.AIR ? Items.GLASS_BOTTLE : jar;
 	}
 }

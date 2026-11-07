@@ -1,3 +1,4 @@
+// requires: creativedelight
 // The pack's salt routes: raw rock salt -> 4 salt, heated basin water -> salt, the Large Salt Lamp. Moved from the
 // pack's kubejs/server_scripts/cooking/salt.js 2026-10-25. Salt is Vintage Delight's salt dust since the salt merge
 // (food/seasoning #6, vintage_items.js); The Salt's salt only if the Vintage member is off.

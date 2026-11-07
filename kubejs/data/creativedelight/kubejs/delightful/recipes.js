@@ -1,3 +1,4 @@
+// requires: creativedelight
 // requires: delightful
 // Recipes of the Delightful 3.8.1 items backported into the repack (feature_writeup/delightful.md 3.2). Creative
 // Delight member script: recipe ids are creativedelight:<type>/<suffix> (global.CD.recipes). The 3.8.1 recipes are
@@ -47,7 +48,8 @@ ServerEvents.recipes(e => {
 		})
 
 		//######################### Cactus #########################
-		R.fdCooking([i.raw_pork, i.t_crops_cactus, i.tomato_sauce, i.t_hot_spices, i.t_crops_corn], i.cactus_chili, e, 'cactus_chili', 1.0, 200, i.bowl)
+		// corn comes from Corn Delight (#forge:crops/corn); without it the recipe would name a tag that does not exist
+		if (global.has('corn_delight')) R.fdCooking([i.raw_pork, i.t_crops_cactus, i.tomato_sauce, i.t_hot_spices, i.t_crops_corn], i.cactus_chili, e, 'cactus_chili', 1.0, 200, i.bowl)
 		// The Cactus Soup Cup is the Copper Pot's serving (cup_conversion in the repack)
 		R.fdCooking([i.t_crops_cactus, i.rice, i.tomato, i.onion], i.cactus_soup, e, 'cactus_soup', 1.0, 200, i.bowl)
 
@@ -75,9 +77,12 @@ ServerEvents.recipes(e => {
 
 		//######################### Knives #########################
 		R.shaped(i.aluminum_knife, ['m', 's'], { m: i.ingot_aluminum, s: i.any_stick }, e, 'aluminum_knife')
-		R.shaped(i.certus_quartz_knife, ['m', 's'], { m: i.t_gems_certus_quartz, s: i.any_stick }, e, 'certus_quartz_knife')
-		// 1.20's smithing template is not in AE2 1.19.2: 1.19.2 smithing, Certus Quartz Knife + Fluix Block
-		R.smithing(i.fluix_knife, i.certus_quartz_knife, i.fluix_block, e, 'fluix_knife')
+		// certus quartz and fluix are Applied Energistics 2's
+		if (global.has('ae2')) {
+			R.shaped(i.certus_quartz_knife, ['m', 's'], { m: i.t_gems_certus_quartz, s: i.any_stick }, e, 'certus_quartz_knife')
+			// 1.20's smithing template is not in AE2 1.19.2: 1.19.2 smithing, Certus Quartz Knife + Fluix Block
+			R.smithing(i.fluix_knife, i.certus_quartz_knife, i.fluix_block, e, 'fluix_knife')
+		}
 
 		// The rows below moved from the pack's kubejs/server_scripts/cooking/cooking.js 2026-10-25, rows unchanged.
 

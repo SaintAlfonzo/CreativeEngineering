@@ -1,0 +1,50 @@
+# Tempad 3.0.4 ported to Forge 1.19.2 (feature_writeup/immersive_portals.md 2.1.1). Keeps the upstream mod id; art and
+# data are read from tempad_upstream/ at runtime.
+modLoader="javafml"
+loaderVersion="${loader_version_range}"
+license="${mod_license}"
+issueTrackerURL="https://github.com/SaintAlfonzo/CreativeEngineering/issues"
+
+[[mods]]
+modId="tempad"
+version="${mod_version}"
+displayName="${mod_name}"
+authors="${mod_authors}"
+description='''${mod_description}'''
+
+[[dependencies.tempad]]
+modId="forge"
+mandatory=true
+versionRange="${forge_version_range}"
+ordering="NONE"
+side="BOTH"
+
+[[dependencies.tempad]]
+modId="minecraft"
+mandatory=true
+versionRange="${minecraft_version_range}"
+ordering="NONE"
+side="BOTH"
+
+# Optional compat (phase 4, TP-D8): never required; every use is behind a ModList check. API checked against Curios
+# 1.19.2-5.1.6.4, FTB Teams 1902.2.14 and WTHIT 5.36.1.
+[[dependencies.tempad]]
+modId="curios"
+mandatory=false
+versionRange="*"
+ordering="NONE"
+side="BOTH"
+
+[[dependencies.tempad]]
+modId="ftbteams"
+mandatory=false
+versionRange="*"
+ordering="NONE"
+side="BOTH"
+
+[[dependencies.tempad]]
+modId="wthit"
+mandatory=false
+versionRange="*"
+ordering="NONE"
+side="BOTH"

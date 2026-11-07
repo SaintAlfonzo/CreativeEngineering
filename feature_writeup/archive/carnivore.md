@@ -237,7 +237,7 @@ If that reader cannot serve item textures, the fallback is a CD Java member with
 
 | # | Step | Pack system and doc | Files |
 |---|---|---|---|
-| F0 | `/dumpall`, then `/cegen` after F1 (dumps predate Miner's / Hostile) | memory `dumpall-refresh-workflow` | `kubejs/exported/` |
+| F0 | `/dumpall`, then `/cdevgen` after F1 (dumps predate Miner's / Hostile) | memory `dumpall-refresh-workflow` | `kubejs/exported/` |
 | F1 | Register the kept items (19 under the recommended answers to D2-D8) under `carnivore:`; mite teleport only if D5 keeps it | CD startup scripts | `kubejs_startup/carnivore/carnivore_items.js` |
 | F2 | Ids in `item_dict.js` / `food_dict.js` under meat family names (`f` names, creative_delight.md 13: exotic mob meats keep their family name) | memory `item-dict-mechanics` | `_lib/item_dict.js`, `_lib/food_dict.js` |
 | F3 | Tags via `global.tags`: `forge:raw_meats` / `food_type/raw/meat` / `food_type/cooked/meat` (not `forge:raw_meat`, memory `forge-raw-meat-tag-gotcha`), bird and fish tags where they apply | [tag_helper.js](../../development/patcherMod/src/main/resources/kubejs_startup/creativeengineering/func/tag_helper.js) | `kubejs_startup/carnivore/` |

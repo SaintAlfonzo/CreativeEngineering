@@ -1,3 +1,4 @@
+// requires: creativedelight
 // requires: barbequesdelight
 // requires: morejs
 // Barbeque's Delight butcher trades (food/seasoning #18, feature_writeup/barbeques_delight.md O38): the six seasonings

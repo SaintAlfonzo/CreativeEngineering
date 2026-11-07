@@ -1,3 +1,4 @@
+// requires: creativedelight
 // Input tags and fluid tags of the drink rules (feature_writeup/creative_delight_drinks.md, TODO food/drinks #15).
 // Recipes: creativeengineering/drinks.js. Every input with a slice form is accepted whole or sliced (section 0).
 ServerEvents.tags('item', e => {

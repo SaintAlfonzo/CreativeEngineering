@@ -523,7 +523,7 @@ def write(rows, live_tags, pad, plants):
              'skirt. For walled compounds and forts whose yards should stay flat.')
     L.append('- `template_trim` alone: for `none` structures (and YUNG\'s, which ignore the mode tags): no more air notches '
              'or floating pad, nothing else changes.')
-    L.append('- The suggestion column is a starting point from the numbers only; look at a structure with `/ceplace` or '
+    L.append('- The suggestion column is a starting point from the numbers only; look at a structure with `/cdevplace` or '
              '`/locate` before tagging a whole family.')
     L.append('')
     L.append('| Verdict | Structures |')
@@ -558,7 +558,7 @@ def write(rows, live_tags, pad, plants):
     section('2. Mild candidates', 'mild', 'Some pad or air around the building; trim and soft would help a little.')
     section('3. Settlements (review)', 'settlement',
             'Villages and other jigsaw settlements with terrain-matching streets. Their houses often carry small pads; '
-            'tagging the structure changes every house in it, so look at one first (`/ceplace structures <id>`).')
+            'tagging the structure changes every house in it, so look at one first (`/cdevplace structures <id>`).')
     section('3b. Ships, rafts and sky structures', 'afloat',
             'They float on the sea or in the sky (`earth_fill/exempt`). At sea, trim would stop their saved air from replacing '
             'sea water around the hull: the water would stay where the template had air. Not suggested by default; the '

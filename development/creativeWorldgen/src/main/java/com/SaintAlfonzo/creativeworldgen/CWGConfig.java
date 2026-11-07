@@ -10,7 +10,7 @@ import net.minecraftforge.common.ForgeConfigSpec;
  * unchanged: {@code [forgiving_void]}, {@code [leaf_decay]}, {@code [raids]}, the mob cap and spawn area keys of
  * {@code [perf]}, {@code [worldgen]} with every subtable, and {@code [named_mobs]}. The first boot with Worldgen copies a
  * player's values over ({@code swap.ConfigRename.carrySections}, called from {@link CreativeWorldgen}). The static field
- * names are CEConfig's, so {@code global.NCH.cfg(..., 'WORLDGEN')} finds them once the scripts register this class.
+ * names are the pre-carve CEConfig's, so {@code global.NCH.cfg(..., 'WORLDGEN')} finds them once the scripts register this class.
  */
 public final class CWGConfig {
 
@@ -206,7 +206,7 @@ public final class CWGConfig {
      * and per-piece values stay in kubejs/generation_scripts/worldgen/*.json (hundreds of entries); this is
      * the layer above them, for testing: turn a system off, scale every structure's rate, tune the solvers.
      * Read through {@code worldgen/WorldgenConfig}, which falls back to the defaults before the file loads.
-     * Most of it is read at world load (rejoin to apply); ground matching and /ceplace read it live.
+     * Most of it is read at world load (rejoin to apply); ground matching and /cdevplace read it live.
      */
     public static final class Worldgen {
         public final WorldgenSystems systems;
@@ -793,7 +793,7 @@ public final class CWGConfig {
         }
     }
 
-    /** {@code /ceplace}: whole structures or raw templates laid out in rows, for inspecting them in a flat world. */
+    /** {@code /cdevplace}: whole structures or raw templates laid out in rows, for inspecting them in a flat world. */
     /**
      * Knobs for {@code worldgen/MetaStructure}. The structures themselves are defined in
      * kubejs/generation_scripts/worldgen/meta_structures.json; on/off is [worldgen.systems] metaStructures.
@@ -853,7 +853,7 @@ public final class CWGConfig {
     /**
      * Structure searches (/locate, explorer maps, map trades, dolphins, Eyes of Ender; all through Async Locator):
      * the cheap "could it start here?" prediction, chunk loads for misses, StructureCheck thread safety, miss
-     * logging and the /celocate batch and census commands. See feature_writeup/locate.md.
+     * logging and the /cwglocate batch and census commands. See feature_writeup/locate.md.
      */
     public static final class LocateCfg {
         public final ForgeConfigSpec.BooleanValue foldPlacement;
@@ -893,14 +893,14 @@ public final class CWGConfig {
             logMissesAtLeast = b.comment(
                     "Log one [locate] line for every search with at least this many misses (0 = every search, -1 = never).")
                     .defineInRange("logMissesAtLeast", 8, -1, Integer.MAX_VALUE);
-            batchRadius = b.comment("Default search radius of /celocate batch, in chunks (/locate uses 100).")
+            batchRadius = b.comment("Default search radius of /cwglocate batch, in chunks (/locate uses 100).")
                     .defineInRange("batchRadius", 100, 1, 1000);
             batchTimeoutSeconds = b.comment(
-                    "A /celocate batch search still running after this long is reported as timed out and cancelled (Async",
+                    "A /cwglocate batch search still running after this long is reported as timed out and cancelled (Async",
                     "Locator never completes a search that threw).")
                     .defineInRange("batchTimeoutSeconds", 120, 5, 3600);
             censusRegionChunks = b.comment(
-                    "/celocate census splits its square into regions this many chunks wide; each region is one task on",
+                    "/cwglocate census splits its square into regions this many chunks wide; each region is one task on",
                     "Async Locator's thread pool.")
                     .defineInRange("censusRegionChunks", 32, 4, 256);
             loadTimeoutSeconds = b.comment(
@@ -909,7 +909,7 @@ public final class CWGConfig {
                     .defineInRange("loadTimeoutSeconds", 300, 10, 3600);
             searchTimeoutSeconds = b.comment(
                     "Any structure search (/locate, maps, Async Locator) still running after this long ends as not found and",
-                    "logs a [locate] line with its counters; its thread is free again. /celocate stop ends running searches",
+                    "logs a [locate] line with its counters; its thread is free again. /cwglocate stop ends running searches",
                     "too, and so does the server stopping. 0 = no deadline. Applies to new searches immediately.",
                     "Tuned 2026-11-02 (user): 120 [300]; the fortified metas answer within 120 s.")
                     .defineInRange("searchTimeoutSeconds", 120, 0, 3600);

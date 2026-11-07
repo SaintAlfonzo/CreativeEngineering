@@ -1,3 +1,4 @@
+// requires: creativeequipment
 // Harvest tier and tool per block (mining levels of the metal and ore blocks). Creative Equipment (tool progression;
 // owner, creative_split.md 7.6); moved from Creative Delight's creativeengineering/harvest.js on 2026-11-04 (it came from
 // the pack's server_scripts/other/harvest.js on 2026-11-01), rows unchanged. The exclusive mineable calls only touch the

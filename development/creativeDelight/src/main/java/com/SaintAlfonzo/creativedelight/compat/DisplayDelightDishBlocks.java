@@ -53,7 +53,8 @@ final class DisplayDelightDishBlocks {
         for (Entry e : ENTRIES) {
             Block block = e.block().get();
             if (!ForgeRegistries.ITEMS.containsKey(e.dish().item())) {
-                LOGGER.warn("[creativeengineering] Display Delight dish {}: item {} not installed", e.dish().block(), e.dish().item());
+                // normal when the food's mod is absent (corn_popsicle needs Corn Delight): debug only
+                LOGGER.debug("[creativeengineering] Display Delight dish {}: item {} not installed", e.dish().block(), e.dish().item());
                 continue;
             }
             Item item = ForgeRegistries.ITEMS.getValue(e.dish().item());

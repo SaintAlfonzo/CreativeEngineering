@@ -169,6 +169,9 @@ code goes in CD), then `gen_can_types.py` so cans copy the new effects, and a ch
 - Method to repeat: load `foods.json`, keep foods with exactly one of `farmersdelight:comfort` /
   `farmersdelight:nourishment`, drop the port mods and `creativeengineering`, then for hunger, modifier, saturation and
   seconds try every observed value as a split and count matches; separately test the name regex of 4.2.
+- `comfort_nourishment.js` reads `kubejs/generation_scripts/food/comfort_nourishment.json` from the instance, not the CD
+  jar: when the file is missing it logs a warning and changes nothing (was a TypeError in `ItemEvents.modification`,
+  found 2026-11-06 in the minimal CEPortTesting instance).
 
 ## 7. Tests
 
@@ -346,11 +349,11 @@ the old one.
 
 Applying R5: a generator in `tools/` writes the per-food effect list from the dumps into `generation_scripts/`, read
 by a startup food script in Creative Delight's `creativeengineering/` tree (FoodProperties are startup-time; restart
-needed). New bowls then get their effect from the next `/dumpall` + `/cegen`.
+needed). New bowls then get their effect from the next `/dumpall` + `/cdevgen`.
 
 ## 10. Built (2026-10-27)
 
-- **Generator** [gen_comfort_nourishment.py](../tools/gen_comfort_nourishment.py) (`/cegen run comfort_nourishment`,
+- **Generator** [gen_comfort_nourishment.py](../tools/gen_comfort_nourishment.py) (`/cdevgen run comfort_nourishment`,
   group `food`): the rules of 9.0 (1 to 5) and appendix C, written to
   `kubejs/generation_scripts/food/comfort_nourishment.json` (`set`: food -> effect and seconds, `keep`: no recipe
   found, `strip`: bottles). `--list` prints every ruled food with inputs, input hunger and recipe. The rules never read

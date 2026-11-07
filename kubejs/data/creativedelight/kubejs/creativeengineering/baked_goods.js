@@ -1,3 +1,4 @@
+// requires: creativedelight
 // Baking audit (TODO cooking/oven #6): no baked good or baking dough takes raw wheat. Every remaining recipe that
 // asked for wheat (the item or #forge:grain/wheat) now asks for wheat flour. Members of the oven tables in baking.js
 // (Hostile, End's and Miner's cookies and pies among them) are rebuilt on flour there and their mods' recipes swept;

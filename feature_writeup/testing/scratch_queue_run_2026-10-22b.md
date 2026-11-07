@@ -68,7 +68,7 @@ Feature: [../mixed_jars.md](../mixed_jars.md) 9 (MJ-11 to MJ-14), TODO `dishes/i
 
 | ID | Group | Commands | Pass | If it fails |
 |---|---|---|---|---|
-| SQ-MJ-01 | A | `/fdtest soupjar` | `24 soups are soft fluid items` and `every #food_type/soup item is a soft fluid item` PASS | grep `soft_fluid` / `moonlight` errors in latest.log; rerun `/cegen run soup_soft_fluids` |
+| SQ-MJ-01 | A | `/fdtest soupjar` | `24 soups are soft fluid items` and `every #food_type/soup item is a soft fluid item` PASS | grep `soft_fluid` / `moonlight` errors in latest.log; rerun `/cdevgen run soup_soft_fluids` |
 | SQ-MJ-02 | A | same | corn soup in (2, bowl back), six bowls fill and the 7th stays, a bowl takes one out; all 24 in and out as themselves; shulker bowl back, wooden bowl refused; a bottle soup pours 1 | Count 0: container `capacity` / `empty` in the json. Wrong item out: two fluids claim the same item |
 
 #### SQ-SOL: placed pies and cakes for Spice of Life

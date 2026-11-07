@@ -1,3 +1,4 @@
+// requires: creativedelight
 // Reserved for Creative Cultivation: all cultivated-meat code (the sample syringe, the meat cultures, the culture blocks,
 // their recipes, tags, lang and textures) is marked for a future own mod, Creative Cultivation, the way potion brewing
 // and alcohol are marked for Creative Brewing (creative_delight.md 29.5). Until then it lives in Creative Delight's

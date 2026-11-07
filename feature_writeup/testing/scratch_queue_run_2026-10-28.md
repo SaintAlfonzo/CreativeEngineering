@@ -57,7 +57,7 @@ Between boots, with no server up: `perf_session.sh report` (summary.md, summary.
 
 - patcherMod `creativeengineering-1.1.03.jar`: `mods/` held the 00:01 build, which has no `soil_yield`. Installed the
   00:16 build (`installToMods`, 01:19), so the sources and the jar match.
-- Creative Delight 00:16 (same as build/libs). perfBot `ceperfbot-0.1.0.jar` 00:50 (scratch `mods/` only).
+- Creative Delight 00:16 (same as build/libs). perfBot `cdevperfbot-0.1.0.jar` 00:50 (scratch `mods/` only).
 
 ## Tooling changes made in this run
 
@@ -92,7 +92,7 @@ Between boots, with no server up: `perf_session.sh report` (summary.md, summary.
 | SQ-SY-06 | PASS | 1500 rolls on Rich Farmland red 0.72 / green 0.73 / yellow 0.72 (farmland 0.49 / 0.50 / 0.47); `[crop-drops] bell peppers: weights 1:1:1` still logged |
 | SQ-STC-01 | PASS (logic) | `zq season` after two `/reload`s: plains, forest untagged (temperate); desert, badlands ARID; snowy plains, ice spikes FROZEN; same both times. HUD not looked at (no client) |
 | SQ-STC-02 | PASS (logic) | scratch datapack `creativeengineering:seasons/arid` + plains, forest -> `/reload` -> both ARID at once; file removed -> `/reload` -> back to untagged |
-| SQ-PB-01 | PASS | `ceperfbot ok`; `pbot spawn bot1 0 -60 0` -> normal join (`logged in with entity id`, Paragon handshakes, Distant Horizons `Player [bot1] joined`), no exception from Forge networking / FTB / Lightman's; `list` names bot1; `forge tps` overworld 6.2 ms. The one join error was the pack's own starter_kit.js (below) |
+| SQ-PB-01 | PASS | `cdevperfbot ok`; `pbot spawn bot1 0 -60 0` -> normal join (`logged in with entity id`, Paragon handshakes, Distant Horizons `Player [bot1] joined`), no exception from Forge networking / FTB / Lightman's; `list` names bot1; `forge tps` overworld 6.2 ms. The one join error was the pack's own starter_kit.js (below) |
 | SQ-SK / FP-10 | FAIL -> fixed -> PASS (bots) | `starter_kit.js` threw on every first join: (1) `Path.resolve('data')` ambiguous overload, (2) `server.isDedicatedServer()` not visible to Rhino on DedicatedServer, (3) `player.getStringUUID()` hidden; the JsonIO calls also passed a File where KubeJS 1902 takes a Path and parsed a Map's toString. Fixed with `resolve(java.lang.String)`, `server.isDedicated()`, `getGameProfile().getId()`, `JsonIO.readString/write(Path)`. After: bot5 got the Engineer kit (copper pickaxe, axe, 8 bread, boots, shield; Animal Dictionary given back), tracking.json lists its uuid, tag set; relog -> nothing; bot6 with its uuid pre-written -> tag only, no kit |
 | SQ-PB-02 | PASS (wheat half) | 9 x 9 wheat age 0, `randomTickSpeed 3`, noon, 5 min: 17 of 81 grew beside bot pbA at x 1000, 0 of 81 in a forceloaded field at x -1000 with no bot. The night-mob half runs in the suite (G03b) |
 | SQ-PB-03 | PASS | `pbot path pbA 1500 200 10 1.5` -> "path 334 ticks", `path_done:pbA` at tick 23972 (about 334 after the command); status-line chunks 4508 -> 3606 -> 3868 -> 4129 -> 4332 as the bot moved; `census-t.json` written |

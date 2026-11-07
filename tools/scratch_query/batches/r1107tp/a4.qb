@@ -1,0 +1,76 @@
+# r1107tp boot a4: same save, tempad-common.toml back to defaults, then allow_location_saving = false and
+# allow_intradimensional_travel = false before the boot. Later cases edit the toml while running (Forge config watcher)
+# and add scratch dimension-type tags under kubejs/data/tempad/ + /reload. Rows SQ-TP-27b, -22.
+pace 1
+
+## SQ-TP-27b | allow_location_saving = false
+bootexpect Done \(
+shell grep -E "^allow_" config/tempad-common.toml
+> pbot spawn qa 0.5 -60 0.5 minecraft:overworld survival
+sleep 3
+> clear qa
+> item replace entity qa hotbar.0 with tempad:tempad
+> ztp setchr qa 0 6000
+> ztp apps qa
+waitlog \[ztp\] apps 20
+expect \[ztp\] apps tempad:settings tempad:teleport$
+> ztp openapp qa tempad:new_location
+> ztp menu qa
+waitlog \[ztp\] menu 20
+expect \[ztp\] menu none\(inventory\)
+
+## SQ-TP-22a | allow_intradimensional_travel = false (config case)
+> kill @e[type=tempad:timedoor]
+> ztp open qa tempad:default Far East
+waitlog \[ztp\] open 20
+expect \[ztp\] open .*"Far East".* -> message ".*" key entity\.tempad\.timedoor\.fail\.intradimensional_all chronons 6000 -> 6000
+> ztp open qa tempad:default Hell Spot
+waitlog \[ztp\] open .*Hell 20
+expect \[ztp\] open .*"Hell Spot".* -> message none chronons 6000 -> 5000
+
+## SQ-TP-22b | allow_interdimensional_travel = false (config watcher, no restart)
+> kill @e[type=tempad:timedoor]
+shell sed -i 's/^allow_intradimensional_travel = false/allow_intradimensional_travel = true/; s/^allow_interdimensional_travel = true/allow_interdimensional_travel = false/' config/tempad-common.toml; grep -E "^allow_" config/tempad-common.toml
+sleep 6
+> ztp setchr qa 0 6000
+> ztp open qa tempad:default Hell Spot
+waitlog \[ztp\] open 20
+expect \[ztp\] open .*"Hell Spot".* -> message ".*" key entity\.tempad\.timedoor\.fail\.interdimensional chronons 6000 -> 6000
+> kill @e[type=tempad:timedoor]
+> ztp open qa tempad:default Far East
+waitlog \[ztp\] open .*Far 20
+expect \[ztp\] open .*"Far East".* -> message none chronons 6000 -> 5000
+look Hell Spot refused with the interdimensional key; Far East opens (intra back on)
+
+## SQ-TP-22c | intradimensional_travel_not_supported tag (overworld)
+> kill @e[type=tempad:timedoor]
+shell sed -i 's/^allow_interdimensional_travel = false/allow_interdimensional_travel = true/' config/tempad-common.toml; mkdir -p kubejs/data/tempad/tags/dimension_type; echo '{"replace":false,"values":["minecraft:overworld"]}' > kubejs/data/tempad/tags/dimension_type/intradimensional_travel_not_supported.json
+sleep 3
+> reload
+waitlog Added [0-9]+ recipes, removed 120
+sleep 5
+> ztp setchr qa 0 6000
+> ztp open qa tempad:default Far East
+waitlog \[ztp\] open 20
+expect \[ztp\] open .*"Far East".* -> message ".*" key entity\.tempad\.timedoor\.fail\.intradimensional chronons 6000 -> 6000
+look key is the tag case (intradimensional), not intradimensional_all
+
+## SQ-TP-22d | leaving_not_supported tag (overworld), Nether target
+shell rm kubejs/data/tempad/tags/dimension_type/intradimensional_travel_not_supported.json; echo '{"replace":false,"values":["minecraft:overworld"]}' > kubejs/data/tempad/tags/dimension_type/leaving_not_supported.json
+> reload
+waitlog Added [0-9]+ recipes, removed 120
+sleep 5
+> ztp open qa tempad:default Hell Spot
+waitlog \[ztp\] open 20
+expect \[ztp\] open .*"Hell Spot".* -> message ".*" key entity\.tempad\.timedoor\.fail\.leaving chronons 6000 -> 6000
+
+## SQ-TP-22e | entering_not_supported tag (the_nether), Nether target
+shell rm kubejs/data/tempad/tags/dimension_type/leaving_not_supported.json; echo '{"replace":false,"values":["minecraft:the_nether"]}' > kubejs/data/tempad/tags/dimension_type/entering_not_supported.json
+> reload
+waitlog Added [0-9]+ recipes, removed 120
+sleep 5
+> ztp open qa tempad:default Hell Spot
+waitlog \[ztp\] open 20
+expect \[ztp\] open .*"Hell Spot".* -> message ".*" key entity\.tempad\.timedoor\.fail\.entering chronons 6000 -> 6000
+shell rm -rf kubejs/data/tempad; grep -hiE "exception" logs/latest.log | grep -ciE "tempad"; true
+look no tempad exception in the log (count 0)

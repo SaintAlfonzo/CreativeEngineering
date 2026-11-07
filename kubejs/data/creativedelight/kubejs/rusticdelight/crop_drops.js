@@ -1,3 +1,4 @@
+// requires: creativedelight
 // requires: rusticdelight
 // Rustic Delight crop drops: per-crop fixes to harvest tables. Moved from the pack's server_scripts/loot/09_crop_drops.js
 // 2026-10-27, rows unchanged; it now runs after every pack loot script (they do not touch this table).

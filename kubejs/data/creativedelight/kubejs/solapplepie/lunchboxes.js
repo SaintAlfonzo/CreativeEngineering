@@ -1,3 +1,4 @@
+// requires: creativedelight
 // requires: solapplepie
 // Spice of Life lunchboxes: Lunchbag (paper, 5 slots) -> Copper Lunchbox (9) -> Iron Lunchbox (14) -> Netherite
 // Lunchbox (18, the pack's tier). Ids keep Spice of Life's names (lunchbox = copper, golden_lunchbox = iron).

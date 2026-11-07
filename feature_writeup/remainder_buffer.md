@@ -166,7 +166,7 @@ once the buffer is full).
   oven's handler is the same on every face, so every face can pull leftovers.
 - **Breaking**: RETURN inject on `getDroppableInventory` (pot, kettle; the oven's own list) drops the buffer with
   the rest. The pot's item form keeps only the meal, as before.
-- **WTHIT** (BUILT 2026-10-21, `compat/WthitRemainderBuffer`, plugin `creativeengineering:remainder_buffer`):
+- **WTHIT** (BUILT 2026-10-21, `compat/WthitRemainderBuffer`, plugin `creativecompat:remainder_buffer`):
   looking at a pot, kettle or oven shows "Holding: 3 Glass Bottle, 1 Bucket" while a leftover slot holds
   something, and a red "Waiting: leftover slots full" while a craft is held back for room (3.2). The server sends
   both (`blockData`), so the line doesn't rely on the client's copy of the slots. The stall flag is the game time

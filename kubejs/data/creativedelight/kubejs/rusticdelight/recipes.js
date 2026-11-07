@@ -1,3 +1,4 @@
+// requires: creativedelight
 // requires: rusticdelight
 // Rustic Delight 1.7.0 recipe changes (feature_writeup/rustic_delight.md 5.2). Creative Delight member script: recipe
 // ids are creativedelight:<type>/<suffix> (global.CD.recipes). The port's data is upstream's 1.7.0 data; each change

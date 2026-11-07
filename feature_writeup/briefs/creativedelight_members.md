@@ -306,7 +306,7 @@ Status Planned / KubeJS / data / lang / `creativedelight/members #25`
    CD `creativeengineering/recipes.js:21-28`); `L.pack` row in `rusticdelight/loot.js`; `#minecraft:mineable/axe` and the crate tags through `global.tags`.
 2. Fried Dough (after the owner confirms): dict key, `removed_items.js` row, `R.remove({ output: i.fried_dough })`.
 3. Veggies stuffed peppers: leave to `merges/dishes #3`.
-4. Changelog bullets (crate New, fried dough Removed); run `/cegen` placeable / compost generators for the new block.
+4. Changelog bullets (crate New, fried dough Removed); run `/cdevgen` placeable / compost generators for the new block.
 ### Decisions
 - Remove Fried Dough: the note had a question mark. Recommend keep: it is the only oil-fried dough and not an overlap; remove only if the owner confirms.
 ### Tests

@@ -1,3 +1,4 @@
+// requires: creativebrewing
 // priority: 1000
 // Creative Brewing client scripts (feature_writeup/creative_brewing.md 2.4). Authored here in the pack folder (reloads
 // on F3+T); the CB build copies this tree into the jar at assets/creativebrewing/kubejs/. Ships in the jar only. One

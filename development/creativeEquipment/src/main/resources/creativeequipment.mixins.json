@@ -24,8 +24,14 @@
     "MobShieldDisableMixin",
     "ShieldDecorationRecipeMixin",
     "BonemealCharmMixin",
-    "ArmorCapMixin"
+    "ArmorCapMixin",
+    "CopperPoisoningEffectMixin",
+    "EchoArmorEffectProcedureMixin",
+    "EchoArmorTooltipMixin"
   ],
-  "client": [],
+  "client": [
+    "ArmorBarRendererAccessor",
+    "ArmorBarRendererOverflowTickMixin"
+  ],
   "server": []
 }

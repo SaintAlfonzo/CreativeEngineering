@@ -1,3 +1,4 @@
+// requires: creativedelight
 // requires: brewinandchewin
 // Brewin' and Chewin' item tags for its dishes (owner, 2026-10-31: Brewin' dishes stay in Creative Delight, see
 // recipes.js here). Moved from the pack's server_scripts/tags/cookingtags.js 2026-10-31, rows unchanged. Nothing in the

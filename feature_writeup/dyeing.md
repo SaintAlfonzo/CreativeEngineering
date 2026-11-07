@@ -287,7 +287,7 @@ Overgrown and floral shears reuse IW's `moss_shearing` approach where it fits (W
 | 5 | New families (3.5), glow two-step, glow ink (1 per block) | patcherMod |
 | 5b | Crushed glow ink dye, chalk dyeing wool / carpet, glow chalk (3.8a) | KubeJS / patcherMod items, `global.item` keys |
 | 6 | Unclean pairs and tool interactions (3.6, 3.7) | patcherMod hook plus generator `tools/*.py` |
-| 7 | Regenerate the JEI world tabs (`/dumpworldjei`, `/cegen run jei_world`); rows for the new pairs | tools |
+| 7 | Regenerate the JEI world tabs (`/dumpworldjei`, `/cdevgen run jei_world`); rows for the new pairs | tools |
 
 Player changelog: add bullets under the dyeing family when each step is built (none yet: nothing built). Banner and glass
 behaviour changes (soap target, banner limit) count as player-visible fixes.

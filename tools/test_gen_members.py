@@ -38,7 +38,7 @@ def run():
                      + glob.glob(str(DATA / '*/mortar_catalog.js')))
     files = (['development/creativeCommon/src/main/resources/kubejs_startup/creativecommon/_lib/item_dict.js', gen_out.STARTUP_ROOT + '/creativedelight/cd_core.js']
              + [rel(p) for p in members]
-             + [gen_out.STARTUP_ROOT + '/creativeengineering/cans.js', CD + 'food_type_tags.js', CD + 'placeable_tags.js',
+             + [gen_out.STARTUP_ROOT + '/creativedelight/cans.js', CD + 'food_type_tags.js', CD + 'placeable_tags.js',
                 CD + 'can_tags.js', CD + 'mortar.js'])
     out = subprocess.run(['java', '-cp', f'{t}:{cp}', 'RhinoRun', str(ROOT)] + files, capture_output=True, text=True)
     if out.returncode != 0 or not out.stdout.strip():

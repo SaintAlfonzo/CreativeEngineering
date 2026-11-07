@@ -1,3 +1,4 @@
+// requires: creativebrewing
 // requires: alexsmobs
 // Moved from the pack's server_scripts/magic/lava_vision.js 2026-11-01 (creative_brewing.md 4.5), rows unchanged; recipe ids are
 // creativebrewing:<type>/<suffix> (were creativeengineering:).

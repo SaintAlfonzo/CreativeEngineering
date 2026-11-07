@@ -1,0 +1,110 @@
+{
+  "creativecompat:run_speed": {
+    "entrypoints": {
+      "client": "com.SaintAlfonzo.creativecompat.surface.WthitRunSpeed"
+    },
+    "side": "client",
+    "required": [
+      "blockrunner"
+    ]
+  },
+  "creativecompat:block_model_icon": {
+    "entrypoints": {
+      "client": "com.SaintAlfonzo.creativecompat.compat.WthitBlockModelIcon"
+    },
+    "side": "client"
+  },
+  "creativecompat:coaster": {
+    "entrypoints": {
+      "client": "com.SaintAlfonzo.creativecompat.compat.WthitCoaster"
+    },
+    "side": "client",
+    "required": [
+      "brewinandchewin"
+    ]
+  },
+  "creativecompat:holder_contents": {
+    "entrypoints": {
+      "client": "com.SaintAlfonzo.creativecompat.compat.WthitHolderContents"
+    },
+    "side": "client",
+    "required": [
+      "supplementaries"
+    ]
+  },
+  "creativecompat:hive": {
+    "entrypoints": {
+      "common": "com.SaintAlfonzo.creativecompat.compat.WthitHive",
+      "client": "com.SaintAlfonzo.creativecompat.compat.WthitHive"
+    },
+    "side": "*"
+  },
+  "creativecompat:state_lines": {
+    "entrypoints": {
+      "client": "com.SaintAlfonzo.creativecompat.compat.WthitStateLines"
+    },
+    "side": "client"
+  },
+  "creativecompat:campfire": {
+    "entrypoints": {
+      "common": "com.SaintAlfonzo.creativecompat.compat.WthitCampfire",
+      "client": "com.SaintAlfonzo.creativecompat.compat.WthitCampfire"
+    },
+    "side": "*"
+  },
+  "creativecompat:sheetmetal_tank": {
+    "entrypoints": {
+      "common": "com.SaintAlfonzo.creativecompat.compat.WthitSheetmetalTank"
+    },
+    "side": "*",
+    "required": [
+      "immersiveengineering"
+    ]
+  },
+  "creativecompat:kitchen_station": {
+    "entrypoints": {
+      "common": "com.SaintAlfonzo.creativecompat.compat.WthitKitchenStation",
+      "client": "com.SaintAlfonzo.creativecompat.compat.WthitKitchenStation"
+    },
+    "side": "*",
+    "required": [
+      "appliedcooking",
+      "ae2"
+    ]
+  },
+  "creativecompat:remainder_buffer": {
+    "entrypoints": {
+      "common": "com.SaintAlfonzo.creativecompat.compat.WthitRemainderBuffer",
+      "client": "com.SaintAlfonzo.creativecompat.compat.WthitRemainderBuffer"
+    },
+    "side": "*"
+  },
+  "creativecompat:sheared": {
+    "entrypoints": {
+      "client": "com.SaintAlfonzo.creativecompat.compat.WthitSheared"
+    },
+    "side": "client"
+  },
+  "creativecompat:silk_touch": {
+    "entrypoints": {
+      "client": "com.SaintAlfonzo.creativecompat.compat.WthitSilkTouch"
+    },
+    "side": "client"
+  },
+  "creativecompat:operator_blocks": {
+    "entrypoints": {
+      "client": "com.SaintAlfonzo.creativecompat.compat.WthitOperatorBlocks"
+    },
+    "side": "client"
+  },
+  "creativecompat:pot_contents": {
+    "entrypoints": {
+      "client": "com.SaintAlfonzo.creativecompat.compat.WthitPotContents"
+    },
+    "side": "client",
+    "required": [
+      "framedblocks",
+      "supplementaries"
+    ]
+  }
+}

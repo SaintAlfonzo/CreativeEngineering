@@ -23,12 +23,12 @@ Recorder (JFR), built into Java, no mod. When it lags, `perf/dump.sh` on the ser
 | Report intake | `tools/perf/ingest_report.py` | BUILT 2026-09-30; tested on the three scratch archives |
 | Dump on exit | `dumponexit=true,filename=perf/exit` in the `JVMARGS` line | BUILT 2026-09-30; watchdog crash wrote a 254 MB recording |
 | Pack events (exact tick, dimension, chunk-wait, KubeJS-script, entity-type times) | patcherMod `perf/` + 9 mixins, `ce-server.jfc` (3.6) | BUILT 2026-10-26 (patcherMod 1.1.03); JFR logic and report tested headless; scratch test queued (SQ-PF) |
-| `/ceperf status`, `/ceperf dump [tag]` | patcherMod `perf/PerfCommand` (3.6) | BUILT 2026-10-26; scratch test queued |
+| `/cdevperf status`, `/cdevperf dump [tag]` | patcherMod `perf/PerfCommand` (3.6) | BUILT 2026-10-26; scratch test queued |
 
 **After a crash or lag (preferred):** on the server, `perf/report.sh` (section 3.5). Copy the zip here and run
 `python3 tools/perf/ingest_report.py <zip>`, then open `perf/incoming/<name>/index.html`.
 
-**Recording only:** on the server, `perf/dump.sh 10m` (or in game, as an op: `/ceperf dump`, the whole kept window). Copy the file to `perf/recordings/` here. Then run
+**Recording only:** on the server, `perf/dump.sh 10m` (or in game, as an op: `/cdevperf dump`, the whole kept window). Copy the file to `perf/recordings/` here. Then run
 `python3 tools/perf/perf_report.py perf/recordings/<file>.jfr` and open `perf/reports/<file>.html`. Add
 `--baseline perf/reports/<older>.summary.json` to see what changed between two recordings.
 
@@ -227,9 +227,9 @@ Closes the blind spots of sampling (section 4) with measured times. patcherMod d
 - **Chunk waits** include the main-thread tasks the server runs while it waits (chunk promotions, queued packets),
   as `managedBlock` does; the report blames each recorded wait on the first mod frame past `getChunk`.
 - **Hooks are optional** (`require = 0`): a mod that changes one of these methods leaves that event empty
-  instead of crashing the server. `/ceperf status` lists hooks that never ran.
-- **`/ceperf status`** (op level 3): the running recording, which pack events it records, hooks that have not run
-  yet, and how many KubeJS handlers are wrapped. **`/ceperf dump [tag]`** saves the whole kept window (up to 30
+  instead of crashing the server. `/cdevperf status` lists hooks that never ran.
+- **`/cdevperf status`** (op level 3): the running recording, which pack events it records, hooks that have not run
+  yet, and how many KubeJS handlers are wrapped. **`/cdevperf dump [tag]`** saves the whole kept window (up to 30
   minutes) to `perf/recordings/server-<time>[-tag].jfr` on a background thread, like `dump.sh`, for admins without
   shell access. It cannot cut a shorter window (Java 17's API has no `maxage` for a dump); use
   `perf_report.py --last` instead.
@@ -269,7 +269,7 @@ Closes the blind spots of sampling (section 4) with measured times. patcherMod d
   file read and write.
 - **patcherMod JFR events (the user's option 3).** Deferred on 2026-09-28, built 2026-10-26 (3.6): per-tick
   and per-dimension timing, chunk-wait events with stacks, KubeJS handler timing by script, entity and block
-  entity totals by type, `/ceperf status` and `/ceperf dump`.
+  entity totals by type, `/cdevperf status` and `/cdevperf dump`.
 
 ## 5. File map
 
@@ -374,9 +374,9 @@ Notes:
 Pack events (3.6), scratch-queue rows SQ-PF-01 to -06:
 
 - [x] **PF-14 hooks load:** PASSED 2026-10-26 after a fix (the 9 mixins sat in the client list and never applied on a
-  dedicated server; moved to `mixins`): all hooks run, 320 KubeJS handlers wrapped, no mixin warning. boot with the recording -> no mixin warning for the 9 perf mixins; `/ceperf status`
+  dedicated server; moved to `mixins`): all hooks run, 320 KubeJS handlers wrapped, no mixin warning. boot with the recording -> no mixin warning for the 9 perf mixins; `/cdevperf status`
   shows recording `ce`, all 10 events recorded, every hook run but chunk wait, and some KubeJS handlers wrapped.
-- [x] **PF-15 dump and report:** PASSED 2026-10-26 (scratch nb2). `/ceperf dump smoke` -> `perf/recordings/server-...-smoke.jfr`; its report has the
+- [x] **PF-15 dump and report:** PASSED 2026-10-26 (scratch nb2). `/cdevperf dump smoke` -> `perf/recordings/server-...-smoke.jfr`; its report has the
   measured section: ticks, one row per dimension, KubeJS handlers named `server_scripts:...:line`, entity and
   block entity types.
 - [ ] **PF-16 chunk waits:** partial 2026-10-26: one sync load (`spreadplayers`, no player to `/tp`) listed with
@@ -384,8 +384,8 @@ Pack events (3.6), scratch-queue rows SQ-PF-01 to -06:
   waits lists them with the caller (the teleport / player move).
 - [ ] **PF-17 overhead:** partial 2026-10-27 (section 10): 5:26 with the events, 5:12 without, one run each; repeat the pair. Chunky pregen of 2601 chunks with the pack events on and with them off (copy of the jfc)
   -> the same time within noise (1:34 in the 2026-09-28 A/B).
-- [x] **PF-18 reload:** PASSED 2026-10-26 (320 before and after). `/reload` twice, `/ceperf status` -> the wrapped-handler count does not grow; no KubeJS errors.
-- [ ] **PF-19 client:** a client (no recording) boots and plays as before; `/ceperf status` in single player says
+- [x] **PF-18 reload:** PASSED 2026-10-26 (320 before and after). `/reload` twice, `/cdevperf status` -> the wrapped-handler count does not grow; no KubeJS errors.
+- [ ] **PF-19 client:** a client (no recording) boots and plays as before; `/cdevperf status` in single player says
   no recording.
 
 ## 9. History
@@ -396,11 +396,11 @@ Pack events (3.6), scratch-queue rows SQ-PF-01 to -06:
   2026-09-28. PF-17 partial.
 
 - 2026-10-26: Pack events built (3.6, TODO `server #9`): ten `creativecommon.*` JFR events from 9 patcherMod
-  mixins, `/ceperf status|dump`, the events in `ce-server.jfc`, `PerfParse` and `perf_report.py` read them (new
+  mixins, `/cdevperf status|dump`, the events in `ce-server.jfc`, `PerfParse` and `perf_report.py` read them (new
   "Measured by the pack's hooks" section). Headless JFR and report tests pass; patcherMod 1.1.03 rebuilt;
   live checks queued as SQ-PF-01 to -06.
 - 2026-10-26 (scratch run nb2): the 9 perf mixins were in the `client` list of `creativeengineering.mixins.json`, so a
-  dedicated server never applied them (`/ceperf status`: no hook run, 0 handlers wrapped); moved to the common list,
+  dedicated server never applied them (`/cdevperf status`: no hook run, 0 handlers wrapped); moved to the common list,
   patcherMod 1.1.03 rebuilt and installed 15:54. PF-14, PF-15, PF-18 PASSED, PF-16 partial; PF-17, PF-19 open.
 
 - 2026-10-03: Known issues (section 7) fixed: 5 throttles in patcherMod `[perf]` plus the horse armor pass, and a
@@ -699,7 +699,7 @@ off: the same-day "before"; `wgp_new` = as shipped.
 | Pregen, Chunky radius 400 at 4000 4000 (2601 chunks) | 5:26 | 4:53 | **3:50** | 3:48 |
 | Item entities at spawn, Done + 2 min | 672 | 593 (FTW off) | **72** | 72 |
 | MSPT right after the pregen | | 14.1 ms | 11.2 ms | 10.2 ms |
-| `/celocate census 96` (100,765 slot chunks) | | 886 s | **424 s** | not run |
+| `/cwglocate census 96` (100,765 slot chunks) | | 886 s | **424 s** | not run |
 | Pack share of worldgen CPU (Worker-Main, JFR) | 7.6% (EarthFill) | 11.2% | **5.3%** | |
 
 Pregen 21% faster than the same-day all-off world and 29% faster than the morning eval; `Done` 28% faster. The
@@ -854,7 +854,8 @@ named threads in the window. Nothing was changed; status: INVESTIGATED.
    (`-Dlog4j.configurationFile=.../client-1.19-debug.xml`): about 5 s per launch (10.2 #8), a 162 MB `debug.log`
    and 44 MB of dumped classes per launch in `/tmp/classDump*` (4 folders there now). Fix: remove that argument in
    ATLauncher's instance settings (user setting, not shipped).
-   Decision 2026-10-27: the debug log config stays active; no change.
+   Decision 2026-10-27: the debug log config stays active; no change. **Reversed 2026-11-07: argument removed from
+   `instance.json` (section 18).**
 9. **ModernFix is not in the pack.** It has a Forge 1.19.2 build (LGPL-3.0) aimed at exactly these costs: lazy
    model loading (ModelManager and client heap, 10.2 #3), fewer block-state cache rebuilds, skipping the duplicate
    datapack load at world open (the generated packs and tag events above run twice), faster registry and resource
@@ -1135,7 +1136,7 @@ the suite (G03a, G04, G12) against `g1`. TODO `server #29`.
   keeping IW 1.2.10's body for the off switch; a RETURN inject on `rebuild` refills the tables from IW's maps
   (`GROWTH_FOR_BLOCK`, `UNIVERSAL_GROWTHS`) after every tag update. `mixin/IwBlockGrowthHolderMixin` adds the field
   to `Block` (`perf/IwGrowthHolder`).
-- C: `perf/CEMixinPlugin` is now the mixin config plugin of `creativeengineering.mixins.json`. On the post-apply of
+- C: `perf/CommonMixinPlugin` is now the mixin config plugin of `creativeengineering.mixins.json`. On the post-apply of
   the empty marker `mixin/IwServerLevelTickMixin` (ServerLevel, priority 1500) it finds IW's merged handler (name
   ends `$callTick`, `@MixinMerged` from IW's `ServerLevelMixin` or the exact 1.2.10 descriptor) and replaces its
   body with a call to `IwGrowthFast.blockTick`, which uses the state vanilla already read unless the block
@@ -1191,7 +1192,7 @@ driven by the same level. Code: `perf.MobCapLevels`, `MobCapLevelTickMixin` (Ser
 `NaturalSpawner.createState`'s chunk count, unchanged), `MobCapMixin` (Redirect of `getMaxInstancesPerChunk` in
 `SpawnState.canSpawnForCategory` `m_186548_` and `LocalMobCapCalculator$MobCounts.canSpawn` `m_186522_`),
 `MobCapSpawnAreaMixin` (NaturalSpawner `m_47045_` spawnCategoryForChunk HEAD for the radius, `m_220421_`
-isValidSpawnPostitionForType HEAD for the band). Config `[perf]` in the common config, read live. `/ceperf mobcap`
+isValidSpawnPostitionForType HEAD for the band). Config `[perf]` in the common config, read live. `/cdevperf mobcap`
 prints each dimension's spawnable chunks and level. Botania's `NaturalSpawnerMixin` touches the same class (not the
 same methods).
 
@@ -1300,3 +1301,35 @@ Scratch r1031 (2026-10-31): SQ-MCL-01 (mixins), -02 (one player: level 0), -03 (
 -05 (forced level 2, normal world: monsters only inside the 32 band) PASSED. SQ-MCL-04 FAILED: forced level 2 on the
 superflat spawned 0 monsters in 8 min for one bot (level 0: 13 zombies); suspects `MobCapSpawnAreaMixin.outsideRadius`
 and the local-cap path in `MobCapMixin`. Note: `#forge:monsters` does not hold zombies in this pack. SQ-MCL-06 not run.
+
+## 18. Dev client froze the PC, 2026-11-07 (session 13:02 to 13:20)
+
+### 18.1 What the logs showed
+
+- Server ticks fell behind from 13:10 (3 s, then 19.6 s and 29 s), a ModernFix watchdog reported one 41 s tick at
+  13:19:37, ComputerCraft's own thread was stalled 11.7 s at 13:19:52, and the machine rebooted at 13:20:31. The
+  desktop log shows "your system is too slow" and dropped mouse input from 13:15: the whole system was thrashing,
+  no OOM kill, no GPU fault, no Java crash report.
+- Memory: 14 GB RAM, integrated AMD GPU (shares RAM), `-Xmx10240M`. The 12:55 crash report of the session before had
+  10176 of 10240 MiB committed (6.2 GB used). Java's off-heap memory comes on top. Recommended max 7 to 8 GB
+  (ATLauncher instance setting, not changed here).
+- Distant Horizons: `distantGeneratorMode = "FEATURES"` with `lodChunkRenderDistanceRadius = 192` (about 147,000
+  chunks of pack worldgen to generate around the player).
+- Debug log config still on (11.2 #8): 163 MB `debug.log` and 5,903 dumped classes for the session; disk 98% full.
+- Xaero's World Map, accurate colours (`block_colors = 0`): 666 texture PNGs read and decoded on the render thread
+  (`MapWriter.loadBlockColourFromTexture`), each leaving the resource stream open (the 1,292 "Leaked resource ...
+  Finalizer" warnings, 703 from Xaero, the rest from reload listeners).
+
+### 18.2 Changed (2026-11-07)
+
+- `config/DistantHorizons.toml` `lodChunkRenderDistanceRadius` 64 [192] (+ `configs_edited/root_config/`). A `player`
+  config in `build_deploy.py`: reaches new installs and `--config full` only. Generator mode left at FEATURES.
+- `instance.json` `javaArguments`: `-Dlog4j.configurationFile=.../client-1.19-debug.xml` removed (only `latest.log`
+  now, no `debug.log`, no class dumps); old `debug*.log*` deleted (175 MB).
+- Creative Compat `XaeroAtlasColourMixin` (client, gated on `xaeroworldmap`, @Pseudo): a redirect on the
+  `textureColours.get(name)` call (HashMap.get ordinal 1) fills a miss from the block atlas sprite already in memory
+  (`getPixelRGBA(0, x, y)`, same sampling as Xaero: side min(w, h), step max(1, min(4, side / 8)), alpha-0 and zero
+  pixels skipped, average of A, R, G, B). No file read, no stream. Sprite not on the block atlas, or an all-black
+  average: returns null and Xaero's own PNG path runs. Xaero still clears its in-memory caches on every resource
+  reload; the refill is now an in-memory sample. Built and installed 2026-11-07 13:35. Test: CQ-XAC-01.
+- Not done: DH generator mode, `-Xmx`, Xaero `map_writing_distance` (-1, unlimited).

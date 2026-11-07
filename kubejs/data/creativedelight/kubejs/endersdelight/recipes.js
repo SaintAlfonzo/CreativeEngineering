@@ -1,3 +1,4 @@
+// requires: creativedelight
 // requires: endersdelight
 // Ender's Delight recipe changes: chorus juice (the pack's chorus juice fluid is its liquid form), grid routes,
 // assemblies. Non-member file (2.1): recipe ids are creativedelight:<type>/<suffix> (global.CD.recipes). Moved from
@@ -13,7 +14,7 @@ ServerEvents.recipes(e => {
 
 		//######################### Fluids #########################
 		//Chorus juice
-		// The pack's chorus juice fluid (development/creativeDelight/src/main/resources/kubejs_startup/creativeengineering/fluids.js, TODO food/drinks #4). Grid: Ender's Delight's
+		// The pack's chorus juice fluid (development/creativeDelight/src/main/resources/kubejs_startup/creativedelight/fluids.js, TODO food/drinks #4). Grid: Ender's Delight's
 		// 1 fruit + sugar + bottle (kept). Pot and Kettle: the juice rule (creativeengineering/drinks.js, food/drinks #15).
 		// Create mixer, heated: 1 fruit + sugar + 250 mB water -> 250 mB; spout, drain and IE Bottling Machine at 250 mB.
 		if (Platform.isLoaded('create')) {

@@ -60,16 +60,34 @@ public class CreativeEquipment {
         // The sections came from patcherMod's file: the first boot copies the player's values over (then patcherMod
         // drops them from its file when Forge corrects it). Must run before Forge reads the COMMON configs.
         ConfigRename.carrySections(OLD_FILE, FILE, CEQConfig.SECTIONS);
+        // [copper_poisoning] came from Creative Brewing's file (plan_cb_polish.md 1, 2026-11-06), before that patcherMod's.
+        if (!ConfigRename.carrySections("creativebrewing-common.toml", FILE, CEQConfig.CB_SECTIONS))
+            ConfigRename.mergeSections("creativebrewing-common.toml", FILE, CEQConfig.CB_SECTIONS);
+        ConfigRename.mergeSections(OLD_FILE, FILE, CEQConfig.CB_SECTIONS);
+        // [armor_overflow] came from Creative Common's file with the Detail Armor Bar code (2026-11-07), before the
+        // 2026-11-04 swap from patcherMod's creativeengineering-common.toml.
+        if (!ConfigRename.carrySections("creativecommon-common.toml", FILE, CEQConfig.COMMON_SECTIONS))
+            ConfigRename.mergeSections("creativecommon-common.toml", FILE, CEQConfig.COMMON_SECTIONS);
+        ConfigRename.mergeSections(OLD_FILE, FILE, CEQConfig.COMMON_SECTIONS);
         ModLoadingContext.get().registerConfig(ModConfig.Type.COMMON, CEQConfig.SPEC, FILE);
+        // Oxidized Everything Copper gear rolls for Poison ([copper_poisoning]; the effect-tick half is
+        // mixin/CopperPoisoningEffectMixin). From Creative Brewing (plan_cb_polish.md 1).
+        if (net.minecraftforge.fml.ModList.get().isLoaded("everythingcopper"))
+            MinecraftForge.EVENT_BUS.register(com.SaintAlfonzo.creativeequipment.effect.CopperPoisoningHandler.class);
 
         IEventBus modEventBus = FMLJavaModLoadingContext.get().getModEventBus();
         modEventBus.addListener(CreativeEquipment::commonSetup);
+        // Data naming other mods (packs/<modid>/, e.g. the Felsic Gear ore worldgen): added only while that mod is loaded.
+        modEventBus.addListener(com.SaintAlfonzo.creativeequipment.compat.ModDataPacks::add);
 
         // Elytra duplication recipe serializer (gear/).
         ElytraDuplicationSerializers.register(modEventBus);
         // Tier shields (copper..dragon, iron = the vanilla shield): the items here, the block-check widening in
         // mixin/LivingEntityShieldMixin, everything tunable in CEQConfig.SHIELDS.
         ShieldItems.register(modEventBus);
+        // Wooden bucket (water only; bucket/, from Creative Engineering 2026-11-06): creativeengineering:wooden_bucket and
+        // creativeengineering:wooden_water_bucket. Recipe: KubeJS.
+        com.SaintAlfonzo.creativeequipment.bucket.WoodenBucketItems.register(modEventBus);
         // Backpack skins: smithing + clearing recipes, Curios equip block (backpackskin/; the looks are mixin/BackpackSkin*).
         BackpackSkinSerializers.register(modEventBus);
         boolean curios = ModList.get().isLoaded("curios");
@@ -95,9 +113,9 @@ public class CreativeEquipment {
         // listener gives that item the tier tooltip lines.
         MinecraftForge.EVENT_BUS.register(IronShieldTooltip.class);
 
-        // Copper tool tier, between stone and iron (CETiers; Everything Copper's pickaxe uses it, mixin/CopperPickaxeItemMixin).
+        // Copper tool tier, between stone and iron (CEQTiers; Everything Copper's pickaxe uses it, mixin/CopperPickaxeItemMixin).
         TierSortingRegistry.registerTier(
-                CETiers.COPPER,
+                CEQTiers.COPPER,
                 new ResourceLocation(NS, "copper"),
                 List.of(Tiers.STONE),   // this tier is after stone
                 List.of(Tiers.IRON)     // and before iron
@@ -116,6 +134,11 @@ public class CreativeEquipment {
         @SubscribeEvent
         public static void onClientSetup(FMLClientSetupEvent event) {
             TierShieldClient.setup(event);
+            // Gate here, not only inside register(): the class's static fields build detailab TextureOffsets, so
+            // merely loading it without Detail Armor Bar throws NoClassDefFoundError.
+            if (ModList.get().isLoaded("detailab")) {
+                com.SaintAlfonzo.creativeequipment.compat.DetailArmorBarCompat.register();
+            }
             if (ModList.get().isLoaded("curios")) {
                 MinecraftForge.EVENT_BUS.register(StepstoolClient.class);
                 // "Slot:" line on every Curios item, also where the item's mod hides it (ui/tooltips #8).

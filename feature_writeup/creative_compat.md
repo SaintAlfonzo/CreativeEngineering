@@ -12,7 +12,7 @@ Every other Creative jar requires it (Common <- Compat <- content jars). Same be
 - **Java** (`com.SaintAlfonzo.creativecompat`, same subpackages as in patcherMod): `compat/` (banner pattern atlas,
   botanist pot, Polymorph in Sophisticated / vanilla crafting, Supplementaries jar mixing, jar fluid pipes (JarFluidPipes, 2026-11-02), Handcrafted nightstands,
   plant box models, Quark safe sort, sack bundle and scroll, spout gun farmland, Supplementaries flower box, TrashSlot),
-  `itemphysic/` (split, burn transform, burn blast damage, Allurement curses),
+  `banners/` (Bedspreads and Customizable Elytra pattern textures built at load, 6.3), `itemphysic/` (split, burn transform, burn blast damage, Allurement curses),
   `block/` (MossTint, VineShearing), `mobs/MonsterBoxVault`, and the JEI world rows `compat/jei/BurnRows`. The campfire
   code (`campfire/`, `CampfireRainMixin`, `CampfireRows`, `[campfire]`) moved to Creative Delight on 2026-11-04
   (creative_split.md 7.9 step 1).
@@ -20,7 +20,7 @@ Every other Creative jar requires it (Common <- Compat <- content jars). Same be
   Stick and Cozy's Improved Cats, [cozy_cats.md](cozy_cats.md) 10) with 5 more gated common mixins (DiFeatherEntity,
   FishingHookFeatherPull, CatCozyCommand, CozyHomeGoalFeather, CozyMessageGender) and a new `[cats]` config table
   (not carried from the old file).
-- **Mixins:** `creativecompat.mixins.json`, 32 common + 13 client (2026-11-04; the two client additions are `JetpackItemTooltipMixin`, gated on
+- **Mixins:** `creativecompat.mixins.json`, 32 common + 14 client (2026-11-07: `XaeroAtlasColourMixin`, gated on `xaeroworldmap`, perf.md 18; 2026-11-04: the two client additions are `JetpackItemTooltipMixin`, gated on
   `create_dd`, and the ungated `FallingBlockWaterSplashMixin`, both from Common, member prefix `creativecompat$`), SRG names, `remap = false`, member prefixes still
   `creativeengineering$`. `compat/CompatMixinPlugin` (a `GatedMixinPlugin`) applies each only when its mod is loaded:
   an any-of table plus an all-of table (`NEEDS_ALL`) for the Polymorph pairs (with sophisticatedcore, IE, Pretty Pipes),
@@ -33,8 +33,9 @@ Every other Creative jar requires it (Common <- Compat <- content jars). Same be
   config correction then drops them from its file. If nothing could be carried, Compat warns about the leftover
   section headers (Calendar's pattern).
 - **Resources in the jar** (paths and ids keep the `creativeengineering` namespace): moss tinted models and texture,
-  flower box models, the 98 banner pattern textures for Bedspreads and Customizable Elytra, `tags/items/physics/`, 13
-  lang keys (MCA eyes, monster box), no painting art (since 2026-11-05 the Immersive Paintings set
+  flower box models, `tags/items/physics/`, 13
+  lang keys (MCA eyes, monster box), no banner pattern textures (since 2026-11-06 the Bedspreads and Customizable
+  Elytra set is built at load from the installed jars, `banners/BannerPatternPack`, 6.3), no painting art (since 2026-11-05 the Immersive Paintings set
   is built at load from the installed jars, `paintings/PaintingPack`, 6.2), the monster box reward loot table, the weathered cardboard box assets.
 - **Scripts:** startup `kubejs_startup/creativecompat/` (`item_physics.js`, `decor_blocks.js` weathered cardboard
   box); server `kubejs/data/creativecompat/kubejs/` (coin, dead recipe removal, feature ports, flowers, misc mods,
@@ -100,13 +101,13 @@ art upscaled (474 exact after downscaling, one stretched). None is own art; each
 | paintings `supplementaries` (1) | ARR | remove |
 | paintings `buzzier_bees`, `clayworks`, `neapolitan`, `upgrade_aquatic` (6) | Abnormals licence (URL only, not read) | remove unless it allows |
 | paintings `minecraft` (30) | Mojang | remove |
-| elytra banner and bedspread textures (100) | derived from Botania, IE (Blu's), Alex's Mobs (LGPL), Buzzier Bees banner patterns | fix (check Botania and IE terms, credit) |
-| MineColonies banner textures (25) | MineColonies not in the pack; leftover output | remove |
+| elytra banner and bedspread textures (73) | derived from Botania, IE (Blu's), Alex's Mobs (LGPL), Buzzier Bees banner patterns | built 2026-11-06: built at load from the installed jars, none ship (6.3) |
+| MineColonies banner textures (25) | MineColonies not in the pack; leftover output | removed 2026-11-06 (6.3) |
 | `weathered_cardboard_box.png` + models | Design and Decor (MIT) recolour | OK: MIT notice added 2026-11-05 |
 | `moss_block_tinted.png` | Mojang `moss_block` greyscaled | low ([creative_brewing.md](creative_brewing.md) 9.3) |
 | flower box models (3) | reference Beautify / Quark textures, none copied | OK |
 | Java, 79 classes (45 mixins), scripts, lang, tags, loot | own | OK |
-| `TrashSlotGuiHandlerMixin` `@Overwrite onScreenInit` (about 33 lines) | follows TrashSlot's ARR method | fix (targeted injects) |
+| `TrashSlotGuiHandlerMixin` `@Overwrite onScreenInit` (about 33 lines) | follows TrashSlot's ARR method | built 2026-11-06: four redirects and one inject, no overwrite (6.4) |
 | `SupplementariesBreezyCompatMixin` `@Overwrite` (4 lines) | own formula | OK |
 
 Fixes: TODO `licence/compat #1` (paintings), `#2` (banner textures, MineColonies leftovers), `#3` (cardboard notice,
@@ -161,3 +162,44 @@ Status: **built 2026-11-05, NOT installed** (details and tests in [immersive_pai
 - Done with it: the 950 files left the Compat jar; `NOTICE-thirdparty.txt` lost the painting credits and the MIT
   (Too Many Paintings), Apache, AFL and LGPL 2.1 texts (only paintings needed them); scratch rows SQ-PA-01 to -04,
   CQ-PA-01, -02. A config-listed source can override art but can't add variants (those need the mod's registry entry).
+
+### 6.3 Banner pattern textures built at load (2026-11-06; TODO `licence/compat #2`)
+
+Status: **built 2026-11-06 13:17, NOT installed** (`creativecompat-1.0.0.jar` in build/libs). Owner pick 2026-11-05
+(plan_cb_publish.md 13, N2).
+
+- **What:** Bedspreads and Customizable Elytra draw banner patterns from their own bundled, re-placed copies; for
+  patterns they lack, Compat used to ship 73 generated textures (Botania 15/13, IE 9/9, Alex's Mobs 0/1, Buzzier Bees
+  1/1, bed/elytra; the elytra ones twice, full and `_low`) plus 25 MineColonies leftovers. All 98 left the jar.
+- **Now:** `banners/BannerPatternArt` (pure Java) does what `gen_bedspreads_pattern_compat.py` and
+  `gen_elytra_pattern_compat.py` did: first glyph of each `assets/<ns>/textures/entity/banner/<id>.png`, placed on each
+  mod's canvas, Lanczos over premultiplied alpha with Pillow's fixed-point rounding. `banners/BannerPatternPack` serves
+  the result as the hidden client resource pack `creativecompat_banner_patterns` (bottom of the stack, built once on the
+  first resource load) from every installed mod jar (file name order, Minecraft last, first wins), only on the client
+  and only with Bedspreads or Customizable Elytra installed. Paths stay `creativeengineering:textures/entity/...`, so
+  `BannerPatternAtlasCompat` and the two mixins are unchanged. No config (nothing to choose; resource packs can still
+  override any path). Log: `[banner_patterns] <n> Bedspreads and <m> Customizable Elytra pattern textures built`.
+- **Offline check:** against `mods/` the builder reproduces all 73 old files pixel for pixel, and adds 4 for Neapolitan
+  (`chimpanzee`, `mca_chimpanzee`; installed after the generators last ran): 27 bed and 25 elytra patterns.
+- **Generators retired:** both scripts deleted from `tools/` and from `tools/generators.json`'s hand-run note.
+- **Notice:** `NOTICE-thirdparty.txt` says no banner art ships and credits the pattern sources (Botania, IE, Alex's Mobs,
+  Buzzier Bees and Neapolitan) and the layouts measured from Bedspreads and Customizable Elytra.
+- Tests: CQ-BPT-01 to -03, SQ-BPT-01 (scratch_queue.md).
+
+### 6.4 TrashSlot screen setup without an overwrite (2026-11-06; TODO `licence/compat #3`)
+
+Status: **built 2026-11-06 13:17, NOT installed.** `TrashSlotGuiHandlerMixin` no longer overwrites `onScreenInit`
+(which restated TrashSlot 12.1.0's all-rights-reserved method). TrashSlot's own body runs, with:
+
+| Change | How |
+|---|---|
+| Settings from `TrashSlotCompat.settingsFor` | `@Redirect` of `TrashSlotSaveState.getSettings` |
+| Creative inventory screen gets a slot | `@Redirect` of the second `event.getScreen()` (its only use is the `instanceof CreativeModeInventoryScreen` skip) to `null` |
+| Survival inventory of a creative player gets a slot | `@Redirect` of the `Abilities.instabuild` read to `false` |
+| Spectator: previous screen's slot cleared | `@Redirect` of `Player.isSpectator()`, clears when true |
+| Server without TrashSlot (first screen): previous slot cleared | `@Inject` at the `sentMissingMessage` write |
+
+Behaviour is the same as the overwrite. The one path that differs in principle: TrashSlot builds the slot component only
+when the settings are not `NONE`, the overwrite always did; `settingsFor` never returns `NONE`, so the outcome is equal.
+The `onMouseClick`, `runKeyBindings` and `onScreenDrawn` redirects are unchanged. Tests: CQ-TSL-01, -02 (with the
+[trashslot.md](trashslot.md) 7 list).

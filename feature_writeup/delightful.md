@@ -109,7 +109,7 @@ Hunger / saturation (built), then effects (for the review).
 | Chunkwich; Green Tea Leaf; Chopped Clover | 11 / 0.3; 1 / 0.2; 2 / 0.3 | 11 / 0.4; 1 / 0.1; 1 / 0.35 (read from the class constants of both jars) |
 
 The Cantaloupe Slice keeps the pack's pumpkin-slice values (`food_values.js`), not Delightful's. After a restart rerun
-the food catalog and the can generators (`/cegen`) so the new values reach the catalogs and the can parity.
+the food catalog and the can generators (`/cdevgen`) so the new values reach the catalogs and the can parity.
 
 ### 2.5 Loot, worldgen, other
 

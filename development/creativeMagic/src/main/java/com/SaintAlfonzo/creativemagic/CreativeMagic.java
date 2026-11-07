@@ -2,6 +2,7 @@ package com.SaintAlfonzo.creativemagic;
 
 import com.SaintAlfonzo.creativecommon.swap.ConfigRename;
 import com.SaintAlfonzo.creativemagic.block.DarkFireBlock;
+import com.SaintAlfonzo.creativemagic.fluid.FluidBridge;
 import com.SaintAlfonzo.creativemagic.item.FlintAndTerraSteelItem;
 import com.mojang.logging.LogUtils;
 import net.minecraft.world.item.CreativeModeTab;
@@ -14,6 +15,7 @@ import net.minecraftforge.eventbus.api.IEventBus;
 import net.minecraftforge.fml.ModLoadingContext;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.config.ModConfig;
+import net.minecraftforge.fml.event.lifecycle.FMLCommonSetupEvent;
 import net.minecraftforge.fml.javafmlmod.FMLJavaModLoadingContext;
 import net.minecraftforge.registries.DeferredRegister;
 import net.minecraftforge.registries.ForgeRegistries;
@@ -24,7 +26,9 @@ import org.slf4j.Logger;
  * Creative Magic (feature_writeup/creative_magic.md): enchanting, magic recipes and the Botania tweaks, carved out of
  * patcherMod on 2026-11-04 (creative_split.md 7.6, wave 6). Dark Fire and Flint and Terrasteel with the Nether portal
  * rule (dimension/PortalFailureHandler: ordinary fire no longer opens a portal), the Nock Enough Arrows enchantments
- * taken off tables and trades, the Botania Trinket Case holding any item ({@code [botania]}). Requires patcherMod
+ * taken off tables and trades, the Botania Trinket Case holding any item ({@code [botania]}), and the liquid XP bridge
+ * (PneumaticCraft and Sophisticated Core use Create Enchantment Industry's experience fluid; fluid/FluidBridge, from
+ * Creative Engineering 2026-11-06). Requires patcherMod
  * ({@code creativeengineering}, later Creative Common) and Creative Compat.
  *
  * Ids stay: Dark Fire and Flint and Terrasteel keep the {@code creativeengineering} namespace ({@link #NS}); this mod id
@@ -67,7 +71,13 @@ public class CreativeMagic {
         // Same order as patcherMod's constructor had them: items, then blocks.
         ITEMS.register(modEventBus);
         BLOCKS.register(modEventBus);
+        modEventBus.addListener(CreativeMagic::commonSetup);
 
         LOGGER.info("[creativemagic] loaded (config/{})", FILE);
+    }
+
+    private static void commonSetup(FMLCommonSetupEvent event) {
+        // Liquid XP bridge: log whether Create Enchantment Industry's experience fluid is there for the mixins.
+        event.enqueueWork(FluidBridge::logStartupDiagnostic);
     }
 }

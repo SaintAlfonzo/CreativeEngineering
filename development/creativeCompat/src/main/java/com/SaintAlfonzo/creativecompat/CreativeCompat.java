@@ -16,17 +16,27 @@ import com.SaintAlfonzo.creativecompat.compat.jei.BurnRows;
 import com.SaintAlfonzo.creativecompat.cats.CatFeather;
 import com.SaintAlfonzo.creativecompat.cats.CozyCats;
 import com.SaintAlfonzo.creativecompat.mobs.MonsterBoxVault;
-import com.SaintAlfonzo.creativecommon.compat.JarContents;
-import com.SaintAlfonzo.creativecommon.compat.jei.world.WorldRows;
-import com.SaintAlfonzo.creativecommon.compat.jei.world.WorldTab;
+import com.SaintAlfonzo.creativecompat.shrapnel.ShrapnelEntities;
+import com.SaintAlfonzo.creativecompat.shrapnel.ShrapnelSpawner;
+import com.SaintAlfonzo.creativecompat.shrapnel.TntShrapnelHandler;
+import com.SaintAlfonzo.creativecompat.surface.CamoSpeedTooltip;
+import com.SaintAlfonzo.creativecompat.surface.LeafPileSlow;
+import com.SaintAlfonzo.creativecompat.surface.SurfaceSpeeds;
+import com.SaintAlfonzo.creativecommon.util.BurnBursts;
+import com.SaintAlfonzo.creativecompat.compat.JarContents;
+import com.SaintAlfonzo.creativecompat.compat.jei.world.WorldRows;
+import com.SaintAlfonzo.creativecompat.compat.jei.world.WorldTab;
 import com.SaintAlfonzo.creativecommon.swap.ConfigRename;
 import com.mojang.logging.LogUtils;
+import net.minecraft.client.renderer.entity.ThrownItemRenderer;
 import net.minecraftforge.api.distmarker.Dist;
+import net.minecraftforge.client.event.EntityRenderersEvent;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.eventbus.api.EventPriority;
 import net.minecraftforge.eventbus.api.IEventBus;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.ModList;
+import com.SaintAlfonzo.creativecompat.portalgun.PortalGunRecipes;
 import net.minecraftforge.fml.ModLoadingContext;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.config.ModConfig;
@@ -71,14 +81,42 @@ public class CreativeCompat {
         // The sections came from patcherMod's file: the first boot copies the player's values over (then patcherMod
         // drops them from its file when Forge corrects it). Must run before Forge reads the COMMON configs.
         boolean carried = ConfigRename.carrySections(OLD_FILE, FILE, CompatConfig.SECTIONS);
+        // [shrapnel], [surface] and [vein_undo] came from Creative Engineering's file of the same name (2026-11-06),
+        // after this file's first release: carried into a new file, or merged into an existing one.
+        if (!ConfigRename.carrySections(OLD_FILE, FILE, CompatConfig.ENGINEERING_SECTIONS))
+            ConfigRename.mergeSections(OLD_FILE, FILE, CompatConfig.ENGINEERING_SECTIONS);
+        // [jei], [gui_title], [toasts], [tooltips], [coaster], [wthit] came from Creative Common's file with the interface
+        // code (2026-11-07); before the 2026-11-04 swap they were in patcherMod's creativeengineering-common.toml.
+        // Sections this file already has are kept; Common drops its copies when Forge corrects its file.
+        if (!ConfigRename.carrySections("creativecommon-common.toml", FILE, CompatConfig.COMMON_SECTIONS))
+            ConfigRename.mergeSections("creativecommon-common.toml", FILE, CompatConfig.COMMON_SECTIONS);
+        ConfigRename.mergeSections(OLD_FILE, FILE, CompatConfig.COMMON_SECTIONS);
         ModLoadingContext.get().registerConfig(ModConfig.Type.COMMON, CompatConfig.SPEC, FILE);
         if (!carried) warnOldKeys();
 
         IEventBus modEventBus = FMLJavaModLoadingContext.get().getModEventBus();
         modEventBus.addListener(CreativeCompat::commonSetup);
 
-        // [leaf_piles] slowFromLayers also feeds the WTHIT Run Speed line: Creative Engineering reads it through
-        // CompatConfig.LEAF_PILES into its surface/LeafPileSlow hook (2026-11-04; Compat links no content jar).
+        // The TNT shrapnel entity (shrapnel/, from Creative Engineering 2026-11-06, id creativeengineering:shrapnel):
+        // fired on primed-TNT-entity detonation, and for the itemphysic.ItemBurnTransform burn-explosion rule through
+        // Common's util.BurnBursts. Tuning: [shrapnel].
+        ShrapnelEntities.register(modEventBus);
+        MinecraftForge.EVENT_BUS.register(TntShrapnelHandler.class);
+        BurnBursts.register(ShrapnelSpawner::burst);
+
+        // Portal Gun dyeing (portalgun/, plan_portal_gun.md 4): the serializer names the gun only by id, so it registers
+        // always; its recipe JSON loads only with the mod.
+        PortalGunRecipes.register(modEventBus);
+
+        // Walking on blocks (surface/, from Creative Engineering 2026-11-06; [surface]). Framed / copycat blocks: say
+        // on BlockRunner's speed tooltip line whether they walk like their camo. BlockRunner tier speeds come from
+        // [surface.speed] (mixin/BlockRunnerSpeedConfigMixin): re-apply them when the toml is saved, and log an error
+        // if the mixin never ran. The WTHIT Run Speed line (waila_plugins.json) reads [leaf_piles] slowFromLayers.
+        MinecraftForge.EVENT_BUS.register(CamoSpeedTooltip.class);
+        modEventBus.addListener(SurfaceSpeeds::onConfigReload);
+        MinecraftForge.EVENT_BUS.register(SurfaceSpeeds.class);
+        LeafPileSlow.set(() -> CompatConfig.SPEC.isLoaded() ? CompatConfig.LEAF_PILES.slowFromLayers.get() : LeafPileSlow.DEFAULT);
+
         // What Creative Common's WTHIT and JEI code reads from here, through its own holders (no Common class loads this
         // jar's classes). Read live, so config reloads apply.
         if (ModList.get().isLoaded("supplementaries")) {
@@ -118,6 +156,12 @@ public class CreativeCompat {
         // the pack's datapack.
         if (ModList.get().isLoaded("immersive_paintings")) {
             modEventBus.addListener(com.SaintAlfonzo.creativecompat.paintings.PaintingPack::add);
+        }
+        // Banner patterns on Bedspreads beds and Customizable Elytra wings for patterns those mods bundle no art for:
+        // built from the installed jars as a hidden resource pack (banners/BannerPatternPack; creative_compat.md 6.3).
+        if (FMLEnvironment.dist == Dist.CLIENT
+                && (ModList.get().isLoaded("bedspreads") || ModList.get().isLoaded("customizableelytra"))) {
+            modEventBus.addListener(com.SaintAlfonzo.creativecompat.banners.BannerPatternPack::add);
         }
         // Vine shearing ([vine_shearing]): shears stop modded vines and growing-plant tips growing.
         MinecraftForge.EVENT_BUS.register(VineShearing.class);
@@ -205,6 +249,12 @@ public class CreativeCompat {
                     SophisticatedPolymorphClient.register();
                 }
             }
+        }
+
+        @SubscribeEvent
+        public static void onRegisterRenderers(EntityRenderersEvent.RegisterRenderers event) {
+            event.registerEntityRenderer(ShrapnelEntities.SHRAPNEL.get(),
+                    context -> new ThrownItemRenderer<>(context, 1.0F, false));
         }
     }
 }

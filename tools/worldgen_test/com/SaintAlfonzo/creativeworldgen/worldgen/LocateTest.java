@@ -125,7 +125,7 @@ public class LocateTest {
 		LocateStats.begin(set5, BlockPos.ZERO);
 		check(!LocateStats.expired(), "a fresh search is not expired");
 		LocateStats.stopAll();
-		check(LocateStats.expired() && "stopped".equals(slot5[0].ended), "/celocate stop: a running search expires, marked stopped");
+		check(LocateStats.expired() && "stopped".equals(slot5[0].ended), "/cwglocate stop: a running search expires, marked stopped");
 		LocateStats.end(null);
 		check((Long) LocateStats.totals().get(0).get("cutShort") == 1, "a search cut short is counted in the totals");
 		LocateStats.release(set5);

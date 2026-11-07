@@ -13,8 +13,9 @@
 //     jar ships, so the pack folder copy (dev) and the jar copy share one resource id and load once:
 //       data/more_mooblooms/moobloom_spawns/  the pack's moobloom spawn rules (More Mooblooms, a Worldgen member,
 //                                              combines every file of that folder; creativeengineering.json is ours)
-//     The structure datapacks, Eugene, watchtower_building and the creativeengineering worldgen data stay in the pack
-//     folder: the structure generators (tools/gen_structure_config.py and the scanners) tell jar sets from kubejs/data
+//     The pack's creativeengineering worldgen data is in src/main/resources (data/, and packs/<modid>/ for files naming a
+//     mod this jar does not require, compat/ModDataPacks; moved 2026-11-06). The structure datapacks, Eugene and
+//     watchtower_building stay in the pack folder: the structure generators (tools/gen_structure_config.py and the scanners) tell jar sets from kubejs/data
 //     ones by source, and campsite_structures, ipo and lightmanscurrency are overrides of loaded mods' jars.
 // Build: ./gradlew :creativeWorldgen:build --offline   Install: ./gradlew :creativeWorldgen:installToMods
 plugins {
@@ -32,9 +33,19 @@ dependencies {
 }
 
 def scriptTrees = ['data/creativeworldgen/kubejs']
+// Every worldgen table except Calendar's two and the scratch-only test overrides (reports are .md, not copied).
+def genData = ['worldgen/**/*.json', 'worldgen/**/*.json.gz']
+def genDataExclude = ['worldgen/season_types.json', 'worldgen/crop_seasons.json', 'worldgen/structure_test_overrides.json']
 def dataTrees = ['data/more_mooblooms/moobloom_spawns']
 
 tasks.named('processResources', ProcessResources).configure {
+    // Generated data the jar's scripts and Java read (instance kubejs/generation_scripts/ first, this copy second;
+    // Creative Common WorldgenFiles / global.genText).
+    from(rootProject.file('kubejs/generation_scripts')) {
+        into 'generation_scripts'
+        include genData
+        exclude genDataExclude
+    }
     (scriptTrees + dataTrees).each { tree ->
         from(rootProject.file("kubejs/${tree}")) {
             into tree
@@ -47,6 +58,9 @@ tasks.named('processResources', ProcessResources).configure {
 tasks.named('jar', Jar).configure {
     doLast {
         def entries = new java.util.zip.ZipFile(archiveFile.get().asFile).withCloseable { z -> z.entries().collect { it.name } }
+        genData.findAll { !it.contains('*') }.each { f ->
+            if (!entries.contains('generation_scripts/' + f)) throw new GradleException("creativeworldgen jar has no generation_scripts/${f}")
+        }
         ['kubejs_startup/creativeworldgen/', 'data/creativeworldgen/kubejs/'].each { dir ->
             if (!entries.any { it.startsWith(dir) && it.endsWith('.js') }) {
                 throw new GradleException("creativeworldgen jar has no scripts under ${dir}")

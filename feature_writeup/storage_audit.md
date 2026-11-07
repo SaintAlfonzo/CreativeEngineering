@@ -170,7 +170,7 @@ bundle; keep gui open in world interaction". BUILT 2026-10-22, patcherMod 1.1.01
 - **Scroll** over a sack holding 2+ stacks in any container screen: the stacks rotate one step (down = selected to
   the back, up = last to the front) and are compacted into the first slots. Client `compat/SackBundleScroll`
   cancels `ScreenEvent.MouseScrolled.Pre` (so Mouse Tweaks' wheel tweak, on Post, does not also move it) and sends
-  `SackBundle.Rotate` (channel `creativeengineering:sack_bundle`). Player-inventory slots go by inventory index (the
+  `SackBundle.Rotate` (channel `creativecompat:sack_bundle`). Player-inventory slots go by inventory index (the
   creative screen's slots are not the server menu's); other creative-tab slots are ignored.
 - **Take out:** right-click a filled sack in a slot with an empty cursor: the selected stack goes to the cursor
   (`mixin/SupplementariesSackItemMixin`, head of `overrideOtherStackedOnMe`). An empty sack is picked up as before.

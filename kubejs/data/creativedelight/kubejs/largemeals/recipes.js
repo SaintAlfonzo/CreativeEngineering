@@ -1,3 +1,4 @@
+// requires: creativedelight
 // requires: largemeals
 // Large Meals 1.3.0 port recipes (feature_writeup/large_meals.md 3.1, 3.2, 4 step 8). Creative Delight member script:
 // recipe ids are creativedelight:<type>/<suffix> (global.CD.recipes). The member loads none of the donor's recipe files,

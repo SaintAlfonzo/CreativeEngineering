@@ -1,3 +1,4 @@
+// requires: creativeequipment
 // Creative Equipment; moved from kubejs/server_scripts/equipment/stepstool.js on 2026-11-04 (creative_split.md 7.6, wave 7), rows unchanged.
 // Recipe ids are creativeequipment:<type>/<suffix> (global.CEQ.recipes).
 // Stepstools (items: startup_scripts/items/stepstools.js; feature_writeup/stepstool.md): a Create seat on top of an oak fence,

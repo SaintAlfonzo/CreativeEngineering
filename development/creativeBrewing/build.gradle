@@ -16,6 +16,8 @@ plugins {
 dependencies {
     // CEConfig, the remainder buffer API and the other pack Java CB's compartments call; Creative Common is a hard dependency.
     compileOnly project(':creativeCommon')
+    // interface APIs (JEI rows and pages, WTHIT lines, potion fluid tooltip) moved to Creative Compat 2026-11-07
+    compileOnly project(':creativeCompat')
     // The mods the potion, effect and machine code targets (Create, IE, JEI, JEED, Farmer's Respite, ...): the pack's
     // jars, shared with Creative Common (git-ignored libs/, SRG-named), as creativeCompat does.
     compileOnly fileTree(dir: rootProject.file('development/creativeCommon/libs'), include: '*.jar')

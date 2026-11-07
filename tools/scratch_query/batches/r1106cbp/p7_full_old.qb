@@ -1,0 +1,24 @@
+# r1106cbp: full pack, installed jars, old ids saved (setup for SQ-CBP-06, SQ-CDFL-03)
+## SETUP-OLD | old-id items, fluids and effects saved
+> forceload add 0 0
+sleep 2
+> fill -2 -61 -2 12 -58 12 minecraft:air
+> setblock 0 -61 0 create:fluid_tank{TankContent:{FluidName:"creativeengineering:carrot_juice",Amount:4000}}
+> setblock 0 -61 3 create:fluid_tank{TankContent:{FluidName:"creativeengineering:egg_solution",Amount:500}}
+> setblock 0 -61 6 create:fluid_tank{TankContent:{FluidName:"create:potion",Amount:1000,Tag:{Potion:"creativebrewing:resistance",Bottle:"REGULAR"}}}
+> setblock 4 -61 0 minecraft:chest{Items:[{Slot:0b,id:"minecraft:potion",Count:1b,tag:{Potion:"creativebrewing:resistance"}},{Slot:1b,id:"minecraft:potion",Count:1b,tag:{Potion:"creativebrewing:magic_resistance"}},{Slot:2b,id:"creativebrewing:potion_bucket",Count:1b,tag:{Potion:"creativebrewing:magic_resistance"}},{Slot:3b,id:"minecraft:potion",Count:1b,tag:{Potion:"kubejs:long_wither"}}]}
+> setblock 8 -61 0 minecraft:dispenser[facing=south]{Items:[{Slot:0b,id:"minecraft:splash_potion",Count:1b,tag:{Potion:"creativebrewing:resistance"}}]}
+> setblock 10 -61 0 minecraft:dispenser[facing=south]{Items:[{Slot:0b,id:"minecraft:splash_potion",Count:1b,tag:{Potion:"creativebrewing:magic_resistance"}}]}
+> summon minecraft:iron_golem 4 -61 8 {Tags:["mrold"],NoAI:1b,PersistenceRequired:1b}
+> effect give @e[tag=mrold] creativebrewing:magic_resistance 100000 0
+sleep 1
+> data get block 0 -61 0 TankContent
+> data get block 0 -61 3 TankContent
+> data get block 0 -61 6 TankContent
+> data get block 4 -61 0 Items
+> data get entity @e[tag=mrold,limit=1] ActiveEffects
+expect creativeengineering:carrot_juice
+expect creativeengineering:egg_solution
+expect creativebrewing:magic_resistance
+> save-all flush
+sleep 3

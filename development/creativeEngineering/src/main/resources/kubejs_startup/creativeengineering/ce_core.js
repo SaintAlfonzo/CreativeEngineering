@@ -23,8 +23,7 @@ global.CEN = {
 	},
 }
 
-// [shrapnel], [surface] and [vein_undo] are this jar's CEConfig (creativeengineering-common.toml); every other table
-// NCH.cfg reads is Creative Common's CommonConfig or another carved jar's class.
-global.NCH.registerConfig(global.CEN.modId, 'com.SaintAlfonzo.creativeengineering.CEConfig')
+// No config of its own since 2026-11-06: [shrapnel], [surface] and [vein_undo] moved to Creative Compat's CompatConfig
+// (creativecompat-common.toml); every table NCH.cfg reads is Common's CommonConfig or another carved jar's class.
 
 console.info('[creativeengineering] core finished')

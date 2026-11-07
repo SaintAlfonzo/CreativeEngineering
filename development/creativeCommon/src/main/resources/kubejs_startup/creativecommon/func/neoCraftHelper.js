@@ -677,12 +677,125 @@ global.NCH = {
   // Recipe removal / replacement
   // ========================================================================
 
+  // KubeJS reads a missing filter value as match-all ({output: undefined} removed about 3500 recipes, scratch
+  // r1106cba), so a filter that is, or holds at any depth, undefined or null is refused (logged, nothing removed).
   remove(id, e) {
+    var path = global.NCH._undefinedIn(id, 'filter')
+    if (path) throw new Error('remove refused: ' + path + ' is undefined or null (a dict key that does not exist?)')
+    global.NCH._absentInFilter(id, 'remove')
+    global.NCH._pruneEmptyIeOutputs(e)
     e.remove(id)
+  },
+
+  // "Empty array?" (plan_cb_polish.md 3, scratch r1106cbo: 77 failures on the cooking set). kubejs-immersive-engineering
+  // reads an IE output that has no "item" key through IngredientWithSize + IEApi.getPreferredStackbyMod, which throws on
+  // a tag with no items. Every output-filtered remove / replaceOutput tests every recipe's outputs, so one such recipe
+  // aborts the whole call. IE's own data guards on the input tag, not the output one: metalpress/plate_zinc needs
+  // forge:ingots/zinc (Create fills it) but makes forge:plates/zinc (nothing fills it without the full pack). These
+  // recipes cannot run anyway (IE would throw on use), so they are removed by id once per recipe event, before the first
+  // filter. Only the types kubejs-ie gives a schema are read through IEApi; the rest never throw.
+  _ieSchemaTypes: ['alloy', 'arc_furnace', 'blast_furnace', 'blueprint', 'bottling_machine', 'cloche', 'coke_oven',
+    'crusher', 'fermenter', 'metal_press', 'mixer', 'refinery', 'sawmill', 'squeezer'],
+  _iePrunedFor: null,
+  _pruneEmptyIeOutputs(e) {
+    if (!e || global.NCH._iePrunedFor === e) return
+    global.NCH._iePrunedFor = e
+    if (!global.has('immersiveengineering')) return
+    var emptyCache = {}
+    var tagEmpty = function (t) {
+      if (emptyCache[t] === undefined) {
+        try { emptyCache[t] = !(Ingredient.of('#' + t).itemIds.length > 0) } catch (err) { emptyCache[t] = true }
+      }
+      return emptyCache[t]
+    }
+    // the tag an IE output object resolves through IEApi, or null ({item} and {base_ingredient: {item}} never throw)
+    var outTag = function (el) {
+      if (!el || !el.isJsonObject()) return null
+      var o = el.getAsJsonObject()
+      if (o.has('item')) return null
+      if (o.has('base_ingredient') && o.get('base_ingredient').isJsonObject()) o = o.getAsJsonObject('base_ingredient')
+      return (o.has('tag') && o.get('tag').isJsonPrimitive()) ? String(o.get('tag').getAsString()) : null
+    }
+    var hasEmpty = function (json) {
+      var keys = ['result', 'results', 'output', 'secondaries']
+      for (var k = 0; k < keys.length; k++) {
+        if (!json.has(keys[k])) continue
+        var v = json.get(keys[k])
+        var list = v.isJsonArray() ? v.getAsJsonArray() : null
+        var n = list ? list.size() : 1
+        for (var x = 0; x < n; x++) {
+          var el = list ? list.get(x) : v
+          // crusher / arc furnace secondaries: {chance, output: {...}}
+          if (el.isJsonObject() && el.getAsJsonObject().has('output')) el = el.getAsJsonObject().get('output')
+          var t = outTag(el)
+          if (t !== null && tagEmpty(t)) return t
+        }
+      }
+      return null
+    }
+    var filter = global.NCH._ieSchemaTypes.map(function (t) { return { type: 'immersiveengineering:' + t } })
+    var removed = []
+    var found = e.findRecipes(filter)
+    var it = found.iterator()
+    while (it.hasNext()) {
+      var r = it.next()
+      var t = r.json ? hasEmpty(r.json) : null
+      if (t !== null) removed.push(String(r.getId()) + ' (#' + t + ')')
+    }
+    removed.forEach(s => e.remove({ id: s.substring(0, s.indexOf(' ')) }))
+    if (removed.length > 0) console.info('[NCH] removed ' + removed.length + ' Immersive Engineering recipes whose output tag is empty: ' + removed.join(', '))
+  },
+
+  // G5 for filters: an input/output id (or tag) of a mod that is not loaded matches nothing; count the call for that
+  // mod instead of letting KubeJS parse it. Walks plain objects and arrays (or / not / lists); Java objects pass through
+  // as before. (The "Empty array?" errors this was first written for were IE output tags, _pruneEmptyIeOutputs.)
+  _absentInFilter(v, context, key) {
+    if (v === undefined || v === null) return
+    if (typeof v === 'string' || v instanceof String) {
+      if (key === 'input' || key === 'output') global.NCH._absent(String(v).replace(/^#/, ''), context)
+      return
+    }
+    if (typeof v !== 'object') return
+    if (Array.isArray(v)) {
+      // a list under input/output is a choice of items: left to KubeJS (one absent entry must not drop the call)
+      if (key === 'input' || key === 'output') return
+      for (var n = 0; n < v.length; n++) global.NCH._absentInFilter(v[n], context, key)
+      return
+    }
+    if (Object.prototype.toString.call(v) !== '[object Object]') return
+    var keys = Object.keys(v)
+    for (var k = 0; k < keys.length; k++) {
+      var kk = keys[k]
+      global.NCH._absentInFilter(v[kk], context, (kk === 'input' || kk === 'output') ? kk : key)
+    }
+  },
+
+  _undefinedIn(v, path) {
+    if (v === undefined || v === null) return path
+    if (typeof v !== 'object') return null
+    if (Array.isArray(v)) {
+      for (var n = 0; n < v.length; n++) {
+        var a = global.NCH._undefinedIn(v[n], path + '[' + n + ']')
+        if (a) return a
+      }
+      return null
+    }
+    // plain JS objects only: Java objects (Ingredient, RegExp wrappers) are values, not filters to walk. Not a
+    // prototype check: each script pack has its own Object.prototype, so a filter from a server script never matched
+    // this file's (scratch r1106cbb; tools/rhino_scope_test)
+    if (Object.prototype.toString.call(v) !== '[object Object]') return null
+    var keys = Object.keys(v)
+    for (var k = 0; k < keys.length; k++) {
+      var b = global.NCH._undefinedIn(v[keys[k]], path + '.' + keys[k])
+      if (b) return b
+    }
+    return null
   },
 
   replaceInput(filter, oldInput, newInput, e, includeAdded) {
     if (!e) throw new Error('replaceInput called without event object!')
+    global.NCH._absentInFilter(filter, 'replaceInput')
+    global.NCH._pruneEmptyIeOutputs(e)
     global.NCH._validateAny(oldInput, 'replaceInput old input')
     global.NCH._validateAny(newInput, 'replaceInput new input')
     e.replaceInput(filter, oldInput, newInput)
@@ -691,6 +804,8 @@ global.NCH = {
 
   replaceOutput(filter, oldOutput, newOutput, e, includeAdded) {
     if (!e) throw new Error('replaceOutput called without event object!')
+    global.NCH._absentInFilter(filter, 'replaceOutput')
+    global.NCH._pruneEmptyIeOutputs(e)
     global.NCH._validateAny(oldOutput, 'replaceOutput old output')
     global.NCH._validateAny(newOutput, 'replaceOutput new output')
     e.replaceOutput(filter, oldOutput, newOutput)
@@ -701,6 +816,7 @@ global.NCH = {
   // pot recipes both read `cookingtime`). Returns the number of recipes changed.
   setCookTime(filter, time, e) {
     if (!e) throw new Error('setCookTime called without event object!')
+    global.NCH._pruneEmptyIeOutputs(e)
     var n = 0
     e.forEachRecipe(filter, r => { r.json.addProperty('cookingtime', time); n++ })
     return n
@@ -747,6 +863,7 @@ global.NCH = {
       })
       if (hit) changed++
     }
+    global.NCH._pruneEmptyIeOutputs(e)
     e.forEachRecipe([{ input: anyOld }, { output: anyOld }], swap)
     var it = e.addedRecipes.iterator()
     while (it.hasNext()) {
@@ -772,7 +889,7 @@ global.NCH = {
   // feeds:
   //
   //   const felsicSword = R.cfg({
-  //     potion: 'creativebrewing:magic_resistance',
+  //     potion: 'creativecommon:magic_resistance',
   //     mb: 250,
   //     loops: 1,
   //     blows: 3
@@ -1603,6 +1720,9 @@ global.NCH = {
 	// keeps the backpack's data and sets its skin; the clear recipe (backpack alone in the grid) removes it.
 	backpackSkin(skinTag, e, idOverride) {
 		if (!e) throw new Error('backpackSkin called without event object!')
+		// the serializer reads Sophisticated Backpacks classes: without the mod the recipe threw NoClassDefFoundError
+		// (scratch r1106cbp SQ-CBP-08, TODO `creativebrewing/publish #23`)
+		if (!global.has('sophisticatedbackpacks')) return global.NCH._skip('sophisticatedbackpacks')
 		var idSuffix = idOverride ?? 'backpack_skin'
 		e.custom({
 			type: `${global.NCH.modId}:backpack_skin`,
@@ -1612,6 +1732,7 @@ global.NCH = {
 
 	backpackSkinClear(e, idOverride) {
 		if (!e) throw new Error('backpackSkinClear called without event object!')
+		if (!global.has('sophisticatedbackpacks')) return global.NCH._skip('sophisticatedbackpacks')
 		var idSuffix = idOverride ?? 'backpack_skin_clear'
 		e.custom({ type: `${global.NCH.modId}:backpack_skin_clear` }).id(`${global.NCH.ns()}:backpackskin/${idSuffix}`)
 	},
@@ -1943,12 +2064,33 @@ global.NCH = {
 		}
 		transitionalItem = transitionalItem || global.NCH.INCOMPLETE[idOverride] || global.item.incomplete
 
-		global.NCH._validateAny(output, ctx + ' output')
-		global.NCH._validateAny(input, ctx + ' input')
-		global.NCH._validateAny(transitionalItem, ctx + ' transitionalItem')
+		// The steps were already added to the event by e.recipes.create.*; KubeJS drops a step only when the assembly
+		// consumes it (newRecipe = false). Every path that does not build the assembly must drop them too, or they stay
+		// as loose recipes (scratch r1106spf: the felsic ingot's filling step left as create:kjs_<hash> without Felsic Gear).
+		var steps = Array.isArray(sequence) ? sequence : [sequence]
+		var dropSteps = function () { steps.forEach(st => { try { st.newRecipe = false } catch (err) {} }) }
+
+		try {
+			global.NCH._validateAny(output, ctx + ' output')
+			global.NCH._validateAny(input, ctx + ' input')
+			global.NCH._validateAny(transitionalItem, ctx + ' transitionalItem')
+		} catch (err) {
+			dropSteps()
+			throw err
+		}
 
 		if (transitionalItem === global.item.incomplete)
 			console.warn(`WARN: ${idOverride} has no incomplete item - pass ['<key>'] and register it in transition_items.js`)
+
+		// G5 for steps: a step built by the caller with Fluid.of(<absent mod's fluid>) carries the empty fluid, and Create
+		// rejects the whole recipe (horror lasagna on the chain without Central Kitchen, scratch r1106cbo). Skip the recipe
+		// quietly, counted in the [absent mods] summary, and drop its steps. Until 2026-11-06 night the loop only counted
+		// and the assembly was still built (scratch r1106spf SQ-CBP-03b: horror lasagna kept its empty filling step).
+		for (var si = 0; si < steps.length; si++) {
+			if (!global.NCH._stepHasEmptyFluid(steps[si])) continue
+			dropSteps()
+			return global.NCH._absent('minecraft:empty', ctx + ' step[' + si + ']')
+		}
 
 		let r = e.recipes.create.sequenced_assembly(output, input, sequence)
 		  .transitionalItem(transitionalItem)
@@ -1956,6 +2098,61 @@ global.NCH = {
 		if (loops) r.loops(loops)
 
 		r.id(`${global.NCH.ns()}:createsequencedassembly/${idOverride}`)
+	},
+
+	// true when a KubeJS recipe object (a sequenced-assembly step) has an empty fluid among its inputs. Only fluids are
+	// checked: an empty item input can be a real optional slot. Any API surprise reads as "not empty".
+	// kubejs-create 1902 builds filling / emptying inputs with FluidComponents.INPUT_OR_ITEM_ARRAY, so each value is a
+	// com.mojang.datafixers.util.Either (left = InputFluid, right = InputItem): unwrap it before the Fluid test
+	// (scratch r1106cbp SQ-CBP-03: the horror lasagna filling step was never seen). CreateInputFluid exposes
+	// kjs$isEmpty, which Rhino may or may not remap to isEmpty: try both.
+	_stepHasEmptyFluid(step) {
+		try {
+			if (!step || typeof step.inputValues !== 'function') return global.NCH._stepJsonHasEmptyFluid(step)
+			var vals = step.inputValues()
+			var hit = false
+			var emptyOf = function (v) {
+				if (typeof v.isEmpty === 'function') return v.isEmpty()
+				if (typeof v['kjs$isEmpty'] === 'function') return v['kjs$isEmpty']()
+				return false
+			}
+			var visit = function (v) {
+				if (v === null || v === undefined || hit) return
+				if (Array.isArray(v)) { v.forEach(visit); return }
+				if (typeof v !== 'object' || typeof v.getClass !== 'function') return
+				if (v.getClass().isArray()) {
+					for (var n = 0; n < v.length; n++) visit(v[n])
+					return
+				}
+				var cls = String(v.getClass().getName())
+				if (cls.indexOf('datafixers.util.Either') >= 0) {
+					var l = v.left(), r = v.right()
+					if (l.isPresent()) visit(l.get())
+					if (r.isPresent()) visit(r.get())
+					return
+				}
+				if (cls.indexOf('Fluid') >= 0 && emptyOf(v)) hit = true
+			}
+			for (var k = 0; k < vals.length; k++) visit(vals[k] ? vals[k].value : null)
+			return hit || global.NCH._stepJsonHasEmptyFluid(step)
+		} catch (err) {
+			return global.NCH._stepJsonHasEmptyFluid(step)
+		}
+	},
+
+	// Second check, independent of how kubejs-create wraps the inputs: serialize the step and look for the empty fluid
+	// in its JSON (the form Create rejects: {"fluid":"minecraft:empty",...}). Scratch r1106spf SQ-CBP-03b: the value walk
+	// above still missed the horror lasagna's filling step on the 18:51 build.
+	_stepJsonHasEmptyFluid(step) {
+		try {
+			if (!step) return false
+			if (typeof step.serialize === 'function') step.serialize()
+			var j = step.json
+			if (j === undefined || j === null) return false
+			return /"fluid"\s*:\s*"minecraft:empty"/.test(String(j))
+		} catch (err) {
+			return false
+		}
 	},
 
 	createIncompleteItem(event, name, textureLocation, colorHex) {

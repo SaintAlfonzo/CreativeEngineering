@@ -35,7 +35,7 @@ public final class UpstreamJars {
 
     /** Stops the game with a clear message when a jar is missing or not the expected file. */
     public static void verifyOrFail() {
-        DonorJars.verifyOrFail(FOLDER, "Let's Do Vinery (Backport)", "the original Vinery jars", Vinery.LOGGER::error, VINERY_155, VINERY_1310);
+        DonorJars.verifyOrFail(FOLDER, "Vinery (Creative Brewing)", "the original Vinery jars", Vinery.LOGGER::error, VINERY_155, VINERY_1310);
     }
 
     public static synchronized Map<String, byte[]> vinery155() {

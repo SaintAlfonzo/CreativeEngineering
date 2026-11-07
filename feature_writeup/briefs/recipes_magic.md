@@ -283,7 +283,7 @@ Armor and potion uses for the Geode+ shards.
   `wrappist_block`) and use wrappist in `wrappist_pedestal` (2 shards, end stone bricks, 2 prismarine shards). The
   other geodes drop vanilla materials (diamond, redstone, quartz, lapis, emerald, glowstone, gold nuggets, ancient
   debris, echo, prismarine).
-- **Potions, built:** [potions.js](../../kubejs/startup_scripts/cooking/potions.js) 59-65 (`CE_POTION_MIXES`):
+- **Potions, built:** [potions.js](../../kubejs/startup_scripts/cooking/potions.js) 59-65 (`CB_POTION_MIXES`):
   thick + wrappist -> `creativeengineering:long_reach`, thick + celestite -> `creativeengineering:phantom_bane`, each
   with redstone / glowstone steps; [potions.md](../potions.md) 80-81, test PO-04. Magic Resistance still uses
   amethyst as a placeholder (potions.js 72, `potions/potions #4`).

@@ -1,3 +1,4 @@
+// requires: creativedelight
 // Cans: the generated food cans (tools/gen_can_types.py -> the CD jar's kubejs_startup/<mod>/can_types.js member
 // scripts, put into global.CD at startup; framework #7 2026-11-01), the empty can recipes and the Canned Goods removals. Moved from the pack's
 // server_scripts/cooking/canning.js 2026-10-25, rows unchanged; recipe ids are creativedelight:<type>/<suffix>
@@ -66,7 +67,7 @@ global.CD.recipes(() => {
 			})
 			if (can.pie) {
 				if (typeof i[can.pie] !== 'string') console.warn('[canning] ' + key + '_pie skipped: ' + can.pie + ' is not in item_dict')
-				else { R.shapeless(Item.of(i[can.pie], 1), [i[key], i.pie_crust], e, key + '_pie', null, null, { whole: i[key] }); made++ }
+				else { R.shapeless(i[can.pie], [i[key], i.pie_crust], e, key + '_pie', null, null, { whole: i[key] }); made++ }
 			}
 		})
 		console.log('[canning] ' + section + ': ' + made + ' recipes')

@@ -13,8 +13,8 @@ classes and Async Locator 1.3.0; decisions in 4)
 | 3.2 Non-blocking miss loads | BUILT 2026-10-12; still blocked in 1.0.6 (LO-05 failed), FIXED in patcherMod 1.0.7, DEPLOYED 2026-10-18; LO-05 rerun pending | `worldgen/LocateLoads` (redirect in `ChunkGeneratorMetaLocateMixin`, and `MetaSlots.locateAt`) |
 | 3.3 StructureCheck thread safety | BUILT 2026-10-12 | `mixin/StructureCheckThreadSafeMixin` |
 | 3.4 Miss logging (misses before a hit, per search and per structure) | BUILT 2026-10-12 | `worldgen/LocateStats` + `mixin/ChunkGeneratorMetaLocateMixin` |
-| 3.5 `/celocate batch` | BUILT 2026-10-12; `stop` label fixed in 1.0.7 (DEPLOYED 2026-10-18) | `worldgen/LocateCommand`, `compat/AsyncLocatorBridge` |
-| 3.6 `/celocate census` (with generation-time miss reasons) | BUILT 2026-10-12; "known" bug (LO-03, LO-14) FIXED in 1.0.7 (DEPLOYED 2026-10-18); biome-tie false negatives FIXED 2026-10-27 (DEPLOYED to the client with 1.1.04 2026-10-29, server on 1.1.03; SQ-TIE-01 not run). SQ-WG30-C02 (2026-10-30, 1.1.04 jar) still logged 5 biome false negatives (old refinery x4, a mineshaft): the fix does not cover them, TODO `structures/testing #4`, `structures/rates-and-groups #13`; 2026-11-01: cause not found from the code (structure_tuning.md ST-218), each biome false negative now carries a diagnosis in `falseNegativeAt` (point again, its biome and nearest entries, the built start piece) | `worldgen/LocateCensus`; reasons from the earth fill, biome rules, priority and frequency mixins |
+| 3.5 `/cwglocate batch` | BUILT 2026-10-12; `stop` label fixed in 1.0.7 (DEPLOYED 2026-10-18) | `worldgen/LocateCommand`, `compat/AsyncLocatorBridge` |
+| 3.6 `/cwglocate census` (with generation-time miss reasons) | BUILT 2026-10-12; "known" bug (LO-03, LO-14) FIXED in 1.0.7 (DEPLOYED 2026-10-18); biome-tie false negatives FIXED 2026-10-27 (DEPLOYED to the client with 1.1.04 2026-10-29, server on 1.1.03; SQ-TIE-01 not run). SQ-WG30-C02 (2026-10-30, 1.1.04 jar) still logged 5 biome false negatives (old refinery x4, a mineshaft): the fix does not cover them, TODO `structures/testing #4`, `structures/rates-and-groups #13`; 2026-11-01: cause not found from the code (structure_tuning.md ST-218), each biome false negative now carries a diagnosis in `falseNegativeAt` (point again, its biome and nearest entries, the built start piece) | `worldgen/LocateCensus`; reasons from the earth fill, biome rules, priority and frequency mixins |
 | 3.7 Distant Horizons generation clipped below y 48 with a fake seabed (deep oceans around y 8, other oceans just under 48); pregen on the final server world | BUILT 2026-10-12 (option A), DEPLOYED with 1.0.6 (2026-10-14; LO-12 passed on that jar); LO-11 [game] open; pregen is a deploy step | `worldgen/DistantClip`, `mixin/NoiseBasedChunkGeneratorDistantClipMixin`, `NoiseChunkDistantClipMixin`, `ConfiguredFeatureDistantClipMixin` |
 
 **Main findings:**
@@ -48,8 +48,8 @@ classes and Async Locator 1.3.0; decisions in 4)
 
 Every fold and the non-blocking loads apply to the next search without a restart; the thread-safe cache needs a rejoin.
 
-**How to measure:** `/celocate stats` (misses per structure since boot), `/celocate batch` (one locate per
-structure, written to `kubejs/exported/worldgen/locate_batch.json`), `/celocate census <radius>` (every slot in an
+**How to measure:** `/cwglocate stats` (misses per structure since boot), `/cwglocate batch` (one locate per
+structure, written to `kubejs/exported/worldgen/locate_batch.json`), `/cwglocate census <radius>` (every slot in an
 area, predicted against actual, written to `kubejs/exported/worldgen/locate_census.json`).
 
 ## 1. Overview
@@ -195,7 +195,7 @@ Cheap counters, one log line per expensive search:
   `[locate] minecraft:village_plains from (120, -340): hit at (1904, 2210) after 23 misses, 41 loads, 310 candidates, 2140 ms [asynclocator-1-thread-2]`.
   A search with no hit logs the same with `no hit`.
 - Totals per structure (`ConcurrentHashMap<ResourceLocation, LongAdder[]>`: searches, hits, misses, misses
-  before hit, loads, ms) since boot, printed and written by `/celocate stats`.
+  before hit, loads, ms) since boot, printed and written by `/cwglocate stats`.
 
 Cost: a ThreadLocal read and a few increments per candidate, nothing per tick. A miss costs a chunk generation,
 which is many orders of magnitude more. Off unless something searches.
@@ -204,7 +204,7 @@ which is many orders of magnitude more. Off unless something searches.
 re-checking them in the same world always gives the same answer. Comparing two configs on the same seed is
 what the census is for.
 
-### 3.5 `/celocate batch [<structure|#tag|namespace|all>] [radius] [skipKnown]`
+### 3.5 `/cwglocate batch [<structure|#tag|namespace|all>] [radius] [skipKnown]`
 
 - Op level 2. Builds the target list from the structure registry minus dead placements (R1). By default every live
   structure in the current dimension's generator (`possibleStructureSets`).
@@ -215,7 +215,7 @@ what the census is for.
 - 120 s timeout per task (2.3: a throwing search never completes). A timed-out task is reported, not retried.
   Since 2026-10-13 every search, not just a batch's, has its own deadline (`[worldgen.locate] searchTimeoutSeconds`,
   120): past it the search's candidates and loads return "nothing" at once, so it ends as not found and frees its
-  thread instead of being abandoned. `/celocate stop` and the server stopping end running searches the same way
+  thread instead of being abandoned. `/cwglocate stop` and the server stopping end running searches the same way
   (structure_tuning.md 7.3.2). Batch rows then say `timed_out` or `stopped`.
 - Progress line every 10 s in chat/console; at the end, `kubejs/exported/worldgen/locate_batch.json` (written
   through the same exporter as the other dumps) plus a one-line summary. Per structure: found, position, distance,
@@ -225,7 +225,7 @@ what the census is for.
 - A bias to keep in mind: the first hit ends a search, so a batch samples only the slots between the origin and
   the nearest hit. Rates come from the census.
 
-### 3.6 `/celocate census <radiusChunks> [centerX centerZ]`
+### 3.6 `/cwglocate census <radiusChunks> [centerX centerZ]`
 
 - Lists every slot of every live set in the square (grid math per placement, the same as the search; ring positions
   for concentric sets). For each slot and each member, it records the prediction stage by stage (3.1). Then it
@@ -375,7 +375,7 @@ never drawn, so a flat floor at 48 is invisible. But the DH toml is a player con
    biome rules, fits, replacement narrowing). Stages C (group pick), D (surface check) and E (earth fill, priority)
    stay out for now; the census's saved-by-stage and miss-reason columns decide whether to revisit them.
 2. Build 3.2 (non-blocking miss loads), 3.3 (StructureCheck thread safety), 3.4 (miss logging), 3.5
-   (`/celocate batch`) and 3.6 (`/celocate census`), all through Async Locator's multithreaded pool.
+   (`/cwglocate batch`) and 3.6 (`/cwglocate census`), all through Async Locator's multithreaded pool.
 3. Testing uses more than one locator thread (4 on the scratch server, after 3.3).
 4. Distant Horizons' own generation is clipped below **y 48** (option A): no noise and no features in the band;
    real chunks are untouched. The band gets a **fake seabed** (decided 2026-10-12): in a column whose block at y 48
@@ -424,11 +424,11 @@ fresh level-name.
 
 ## 7. Test suite
 
-- [ ] **LO-01 fold off, baseline [scratch]:** all `fold*` false, `/celocate batch all` -> report written, every
+- [ ] **LO-01 fold off, baseline [scratch]:** all `fold*` false, `/cwglocate batch all` -> report written, every
   live structure has a row, misses recorded, no task times out. *2026-10-14 scratch phase 5 (structure_tuning 8.0.5, seed 8675309, 1.0.6 jar of 12:44, density 1, worlds st_l1/st_l2/st_l3; log testing/structures/05_phase_5.md): PARTLY: report written with 258 rows and misses (10660 in total, 2018 s, 4 threads); 42 rows `timed_out` at the 120 s batch timeout, so "no task times out" does not hold at the default. The 21 of them that folds on found came back at the same position folds off with a 900 s timeout.*
 - [x] **LO-02 stages A+B [scratch]:** `foldPlacement` + `foldBiomes` on, same seed, same origin, batch again ->
   same found positions as LO-01 for every structure, total misses lower, `savedByStage` A/B non-zero. *2026-10-14 scratch phase 5 (structure_tuning 8.0.5, seed 8675309, 1.0.6 jar of 12:44, density 1, worlds st_l1/st_l2/st_l3; log testing/structures/05_phase_5.md): PASSED: 212 structures found in both batches: 210 at the same position, 2 (village_desert, village_savanna) in the same chunk but a few blocks apart = the meta layout difference between JVM runs, not the folds. The 21 found only folds on and the 4 found only folds off give the same position in the other mode at a 900 s timeout. Misses 2003 vs 10660; savedByStage placement 40670, biome 156421.*
-- [ ] **LO-03 census, no false negatives [scratch]:** `/celocate census 128` with stages A + B on -> false
+- [ ] **LO-03 census, no false negatives [scratch]:** `/cwglocate census 128` with stages A + B on -> false
   negatives 0 for every structure. *2026-10-14 scratch phase 6 (structure_tuning 8.0.6, seed 8675309, 1.0.6 jar of 12:44, density 1, world st_p: Chunky square radius 96 chunks at 2144 -2592, census at -1700 1500; log testing/structures/06_phase_6.md): FAILED (census bug): the report says 0 false negatives, but the census only predicts the first set that tries each chunk. That set loads the chunk, so every later set there counts as "known" (142971 of 179710 slots on fresh terrain; mineshaft 37249/37249 known). Fix: per chunk, predict all sets first, then load once.*
 - [ ] **LO-04 census rates [scratch]:** the same census -> per-group member shares written; compare with
   `gen_structure_groups.py` estimates. *2026-10-14 scratch phase 6 (structure_tuning 8.0.6, seed 8675309, 1.0.6 jar of 12:44, density 1, world st_p: Chunky square radius 96 chunks at 2144 -2592, census at -1700 1500; log testing/structures/06_phase_6.md): per-set shares written and valid (they come from the real starts, e.g. settlements 16 slots: village_savanna 0.19, village_towers 0.13); the comparison with the estimates is skipped (rates out of scope).*
@@ -438,7 +438,7 @@ fresh level-name.
   no hang, results identical to the single-thread run. *2026-10-14 scratch phase 5 (structure_tuning 8.0.5, seed 8675309, 1.0.6 jar of 12:44, density 1, worlds st_l1/st_l2/st_l3; log testing/structures/05_phase_5.md): PASSED (adapted): a second parallel batch is refused by design ("A batch is already running"), so one 4-thread `batch all` ran with 21 plain `/locate` on top: no exception, no hang, 21/21 plain and 23/23 batch rows at the known positions. 1-thread batches (philipsruins, minecraft) vs the 4-thread rows: 38/40 same position, the 2 = the meta layout difference above.*
 - [x] **LO-07 miss log line [scratch]:** a search with at least 8 misses -> one `[locate]` INFO line with
   misses, loads, candidates, ms and thread; a search with fewer -> no line. *2026-10-13 scratch phase 2 (structure_tuning 8.0.2, world st_a, seed 8675309, 1.0.6 build jar, 4 locator threads): PASSED: e.g. `[locate] takesapillage:pillager_camp from (-368, 396): hit at (4464, -5040) after 178 misses, 179 loads, 419 candidates, 269035 ms [asynclocator-1-thread-2]`; searches with fewer misses (witch village 5, jungle temple, monument) logged nothing.*
-- [x] **LO-08 stats [scratch]:** `/celocate stats` -> totals match the sum of the batch rows. *2026-10-13 scratch phase 2 (structure_tuning 8.0.2, world st_a, seed 8675309, 1.0.6 build jar, 4 locator threads): `/locate` part PASSED: `locate_stats.json` and `/celocate stats` count every search since boot (35 in boot 1, 7 in boot 4), each row's misses equal its `[locate]` line. The batch-row comparison waits for LO-02 (Phase 5).* *2026-10-14 scratch phase 5 (structure_tuning 8.0.5, seed 8675309, 1.0.6 jar of 12:44, density 1, worlds st_l1/st_l2/st_l3; log testing/structures/05_phase_5.md): batch part PASSED: after two batches on a fresh boot, `/celocate stats` has 43 rows = the 43 batch rows, and misses, loads, candidates and every savedByStage value are equal row by row.*
+- [x] **LO-08 stats [scratch]:** `/cwglocate stats` -> totals match the sum of the batch rows. *2026-10-13 scratch phase 2 (structure_tuning 8.0.2, world st_a, seed 8675309, 1.0.6 build jar, 4 locator threads): `/locate` part PASSED: `locate_stats.json` and `/cwglocate stats` count every search since boot (35 in boot 1, 7 in boot 4), each row's misses equal its `[locate]` line. The batch-row comparison waits for LO-02 (Phase 5).* *2026-10-14 scratch phase 5 (structure_tuning 8.0.5, seed 8675309, 1.0.6 jar of 12:44, density 1, worlds st_l1/st_l2/st_l3; log testing/structures/05_phase_5.md): batch part PASSED: after two batches on a fresh boot, `/cwglocate stats` has 43 rows = the 43 batch rows, and misses, loads, candidates and every savedByStage value are equal row by row.*
 - [ ] **LO-09 maps and trades [game]:** a cartographer explorer map and an LC map trade still point at real
   structures with folding on.
 - [x] **LO-10 deep-terrain measurement [scratch]:** JFR recording of a Chunky pregen (radius 64) -> per-status
@@ -455,9 +455,9 @@ fresh level-name.
 - [ ] **LO-14 census miss reasons [scratch]:** in the LO-03 census, misses carry reasons (`earth_fill`,
   `priority`, `surface_check`, `slot_taken` with `takenBy`, `no_start`...), and `sets[].shareOfSlots` lists each
   group member. *2026-10-14 scratch phase 6 (structure_tuning 8.0.6, seed 8675309, 1.0.6 jar of 12:44, density 1, world st_p: Chunky square radius 96 chunks at 2144 -2592, census at -1700 1500; log testing/structures/06_phase_6.md): FAILED (same census bug): 1 miss (no_start) in the report while the log shows 79 placement drops and 48 earth-fill cancels in the square during the census; `sets[].shareOfSlots` is written for every set.*
-- [x] **LO-15 batch timeout and stop [scratch]:** `batchTimeoutSeconds` 5, `/celocate batch all` -> slow searches
-  reported `timed_out`; a second run stopped with `/celocate stop` still writes its report. *2026-10-14 scratch phase 5 (structure_tuning 8.0.5, seed 8675309, 1.0.6 jar of 12:44, density 1, worlds st_l1/st_l2/st_l3; log testing/structures/05_phase_5.md): PASSED: at 5 s, 21 of 51 towns_and_towers rows `timed_out` (a load in flight still finishes: worst 31.5 s); `/celocate stop` during `batch all` wrote the 258-row report in the same second. Label bug: the 245 rows never started say `error: java.util.concurrent.CancellationException` instead of `stopped`.*
-- [ ] **LO-17 `/celocate stop` label [scratch]:** `/celocate batch all`, then `/celocate stop` while rows are
+- [x] **LO-15 batch timeout and stop [scratch]:** `batchTimeoutSeconds` 5, `/cwglocate batch all` -> slow searches
+  reported `timed_out`; a second run stopped with `/cwglocate stop` still writes its report. *2026-10-14 scratch phase 5 (structure_tuning 8.0.5, seed 8675309, 1.0.6 jar of 12:44, density 1, worlds st_l1/st_l2/st_l3; log testing/structures/05_phase_5.md): PASSED: at 5 s, 21 of 51 towns_and_towers rows `timed_out` (a load in flight still finishes: worst 31.5 s); `/cwglocate stop` during `batch all` wrote the 258-row report in the same second. Label bug: the 245 rows never started say `error: java.util.concurrent.CancellationException` instead of `stopped`.*
+- [ ] **LO-17 `/cwglocate stop` label [scratch]:** `/cwglocate batch all`, then `/cwglocate stop` while rows are
   still queued -> the queued rows say `stopped`, none says `error: java.util.concurrent.CancellationException`
   (05_phase_5.md 3.4; fixed 2026-10-18, DEPLOYED with 1.0.7). Rows that were running when stopped say `stopped` too.
 - [x] **LO-16 boot and mixins [scratch]:** server boots with the 1.0.6 jar, no mixin apply errors for
@@ -486,18 +486,18 @@ fresh level-name.
   predicted-surface lookup (decision 4).
 - 2026-10-12: Revised: floors hover (smooth seeded noise, +-4) around y 48 for oceans and y 8 for deep oceans.
 - 2026-10-12: BUILT (patcherMod 1.0.6 in build/libs, not in mods/): stages A + B, non-blocking loads, StructureCheck
-  thread safety, miss counters and log line, `/celocate batch | census | stats | status | stop` on Async Locator's
+  thread safety, miss counters and log line, `/cwglocate batch | census | stats | status | stop` on Async Locator's
   pool, census miss reasons from the generation reject points, the Distant Horizons clip with the fake seabed.
   CEConfig `[worldgen.locate]` and `[worldgen.distant]`. Private vanilla members are read by reflection
   (`LocateReflect`): SRG-named @Accessor/@Invoker fail the mixin annotation processor. Offline: LocateTest 20/20,
   steps 1-7 unchanged. Tests LO-13 to LO-16 added.
 - 2026-10-14: ships INCOMPLETE in pack 1.0.6 with the rest of the structure tuning (patcherMod 1.0.6, update from 1.0.4).
-  The 7.3.2 locate changes (dimension check, `meta_target`, `searchTimeoutSeconds` 120, `/celocate stop`) are in the same
+  The 7.3.2 locate changes (dimension check, `meta_target`, `searchTimeoutSeconds` 120, `/cwglocate stop`) are in the same
   jar. LO- tests still pending.
 - 2026-10-18: Three locate bugs from the scratch run fixed in source for patcherMod 1.0.7 (not built, not shipped):
   the non-blocking loads ran `getChunkFuture` on the server thread and still stalled every tick (3.2, LO-05);
   the census predicted only the first set at each chunk and counted the rest "known" (3.6, LO-03, LO-14); a
-  `/celocate stop` row still queued said `error: ...CancellationException` instead of `stopped` (LO-17 added).
+  `/cwglocate stop` row still queued said `error: ...CancellationException` instead of `stopped` (LO-17 added).
   Offline: the worldgen package compiles against the mapped 1.19.2 Forge jar, LocateTest 28/28; the loads and the
   census only run in game, so LO-03, LO-05, LO-14, LO-17 are the checks.
 - 2026-10-19: the three fixes above went out in pack 1.0.7 (DEPLOYED 2026-10-18 19:43, [plan_1.0.7.md](plan_1.0.7.md) SF).

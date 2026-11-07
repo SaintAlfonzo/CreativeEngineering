@@ -1,0 +1,14 @@
+{
+  "structures": [
+    {
+      "structure": "creativeengineering:sky_island",
+      "weight": 1
+    }
+  ],
+  "placement": {
+    "type": "minecraft:random_spread",
+    "spacing": 64,
+    "separation": 16,
+    "salt": 1931672406
+  }
+}

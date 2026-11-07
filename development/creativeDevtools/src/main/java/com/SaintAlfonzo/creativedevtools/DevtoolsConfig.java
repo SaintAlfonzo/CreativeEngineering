@@ -12,7 +12,7 @@ import java.util.function.Supplier;
  * <ul>
  * <li>{@code [debug]}: moved whole from creativeengineering-common.toml, keys and comments unchanged (generators,
  * block-state sync, names, WTHIT icons, recipe scan, Level random probe).</li>
- * <li>{@code [worldgen.mass_place]}: /ceplace's knobs, moved from creativeengineering-common.toml under the same path.</li>
+ * <li>{@code [worldgen.mass_place]}: /cdevplace's knobs, moved from creativeengineering-common.toml under the same path.</li>
  * <li>{@code [features]}: one switch per Devtools script feature ({@link #FEATURE_ROWS}), read by
  * {@code global.CDV.feature(id)}.</li>
  * </ul>
@@ -21,7 +21,7 @@ import java.util.function.Supplier;
  */
 public final class DevtoolsConfig {
 
-    /** Where /ceplace puts each structure vertically ({@code ceplace/MassPlacer}). */
+    /** Where /cdevplace puts each structure vertically ({@code cdevplace/MassPlacer}). */
     public enum VerticalAlign { AUTO, KEEP, GROUND }
 
     /** Script feature switches: {id, comment lines...}. */
@@ -76,7 +76,7 @@ public final class DevtoolsConfig {
         }
     }
 
-    // /ceplace readers (were WorldgenConfig.place*), with the code defaults before the file loads
+    // /cdevplace readers (were WorldgenConfig.place*), with the code defaults before the file loads
     public static int placeGap() { return get(() -> MASS_PLACE.gap.get(), 12); }
     public static int placeRowGap() { return get(() -> MASS_PLACE.rowGap.get(), 16); }
     public static boolean placeLabels() { return get(() -> MASS_PLACE.labels.get(), true); }
@@ -96,9 +96,9 @@ public final class DevtoolsConfig {
 
         private MassPlace(ForgeConfigSpec.Builder b) {
             b.comment(
-                    "/ceplace structures <filter> and /ceplace templates <glob>: place every match in rows (one row per",
+                    "/cdevplace structures <filter> and /cdevplace templates <glob>: place every match in rows (one row per",
                     "type tag, group, mod or template folder), starting at your position and going +X, rows stacked +Z.",
-                    "Meant for a flat world with Generate Structures off. /ceplace preview ... lists without placing."
+                    "Meant for a flat world with Generate Structures off. /cdevplace preview ... lists without placing."
             ).push("mass_place");
             gap = b.comment("Blocks between two structures in a row.").defineInRange("gap", 12, 0, 512);
             rowGap = b.comment("Blocks between rows (the aisle the labels stand in).").defineInRange("rowGap", 16, 4, 512);
@@ -121,7 +121,7 @@ public final class DevtoolsConfig {
         }
     }
 
-    /** Dev-instance knobs: the Python generator runner ({@code generators/GeneratorRunner}, /cegen) and the probes and dumps. */
+    /** Dev-instance knobs: the Python generator runner ({@code generators/GeneratorRunner}, /cdevgen) and the probes and dumps. */
     public static final class Debug {
         public final ForgeConfigSpec.BooleanValue runGeneratorsAtStartup;
         public final ForgeConfigSpec.ConfigValue<String> generatorTarget;
@@ -139,18 +139,18 @@ public final class DevtoolsConfig {
             b.comment("Developer tools. Only meaningful in the dev instance (the one with tools/ and mods/ source).").push("debug");
             b.comment(
                     "The pack's generator scripts (tools/*.py: structure/biome/loot configs, effect descriptions,",
-                    "pack manifest, reports) listed in tools/generators.json. /cegen run [target] runs them in game;",
+                    "pack manifest, reports) listed in tools/generators.json. /cdevgen run [target] runs them in game;",
                     "these knobs also let them run by themselves every time the game starts."
             ).push("generators");
 
             runGeneratorsAtStartup = b.comment(
                     "Debug mode. When true, the generators run in the background as the game starts (from common",
                     "setup), and loading waits for them before finishing, so the first world load already reads",
-                    "fresh files. Results go to latest.log, logs/cegen/<id>.log and /cegen status. Off by default."
+                    "fresh files. Results go to latest.log, logs/cdevgen/<id>.log and /cdevgen status. Off by default."
             ).define("runAtStartup", false);
 
             generatorTarget = b.comment(
-                    "What the startup run and a bare /cegen run execute: 'all', a group or one generator id",
+                    "What the startup run and a bare /cdevgen run execute: 'all', a group or one generator id",
                     "from tools/generators.json."
             ).define("target", "core");
 
@@ -178,7 +178,7 @@ public final class DevtoolsConfig {
             stateSyncEnabled = b.comment(
                     "Debug mode. Client: logs every block-update packet containing a state id the client cannot resolve",
                     "(the raw id, the block position, the client's state count) and writes",
-                    "logs/ce_block_state_ranges_client.txt. Dedicated server: writes logs/ce_block_state_ranges_server.txt",
+                    "logs/cdev_block_state_ranges_client.txt. Dedicated server: writes logs/cdev_block_state_ranges_server.txt",
                     "when it starts. tools/diff_block_state_ranges.py compares the two files and names the block."
             ).define("enabled", false);
 
@@ -192,7 +192,7 @@ public final class DevtoolsConfig {
             b.comment("The names audit (feature_writeup/names.md, tools/name_audit.py).").push("names");
             dumpNamesAtTitle = b.comment(
                     "Client: write kubejs/exported/display_names.json (every block, item, effect... name and the pack",
-                    "that set it) and names.json the first time the title screen opens, as /cedumpnames does in game.",
+                    "that set it) and names.json the first time the title screen opens, as /cdevdumpnames does in game.",
                     "For a scratch client that never joins a world. Off by default."
             ).define("dumpAtTitle", false);
             b.pop(); // names
@@ -200,7 +200,7 @@ public final class DevtoolsConfig {
             b.comment("The WTHIT icon audit (feature_writeup/wthit_lines.md, tools/wthit_icon_audit.py).").push("wthit");
             dumpIconsAtTitle = b.comment(
                     "Client: write kubejs/exported/wthit_icons.json (every block's WTHIT icon verdict and every item",
-                    "with a missing model) the first time the title screen opens, as /cedumpicons does in game.",
+                    "with a missing model) the first time the title screen opens, as /cdevdumpicons does in game.",
                     "For a scratch client that never joins a world. Off by default."
             ).define("dumpIconsAtTitle", false);
             b.pop(); // wthit

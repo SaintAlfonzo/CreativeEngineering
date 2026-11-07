@@ -1,3 +1,4 @@
+// requires: creativedelight
 // requires: pneumaticcraft
 // PneumaticCraft food: sourdough, tempura, chips and fish and chips, and its machine-only routes for the pack's
 // cornmeal. Non-member file: recipe ids are creativedelight:<type>/<suffix> (global.CD.recipes). Moved from the pack's

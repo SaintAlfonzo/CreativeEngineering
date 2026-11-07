@@ -1,0 +1,61 @@
+backportedTempad is licensed under the GNU General Public License v3 (see LICENSE).
+
+It is a port of Tempad 3.0.4 (NeoForge, Minecraft 1.21.1) by CodexAdrian and Terrarium
+(https://github.com/terrarium-earth/Tempad, branch 1.21.1), translated from Kotlin to Java for Forge 1.19.2.
+
+Which parts are ours: every Java file in this jar is either a translation of an upstream Kotlin/Java source file (each
+names its upstream file in its header; the translation is a derivative of MIT-licensed Code, see below) or written for
+the port (package earth.terrarium.tempad.forge, the capability/network/config glue, the shared ...tempad.shared
+helpers). Our own work and our changes are GPLv3; the upstream MIT notice below covers the upstream parts.
+
+This jar contains no upstream resources: no textures, models, blockstates, lang, sounds or shader .json files (All
+Rights Reserved under the licence below), and no upstream data files. Art and data are read at runtime, in memory,
+from the unmodified upstream jar, which must be present in <game dir>/tempad_upstream/:
+  tempad-1.21.1-3.0.4-all.jar  (https://modrinth.com/mod/tempad, version 3.0.4 for NeoForge 1.21.1,
+                                https://cdn.modrinth.com/data/gKNwt7xu/versions/T26aJH7E/tempad-1.21.1-3.0.4-all.jar)
+
+Upstream's licence (LICENSE in the repository, branch 1.21.1), verbatim:
+
+-------------------------------------------------------------------------------------------------------
+# Terrarium License v1
+
+### 0. Definitions
+
+“Code” refers to:
+1. Any file found in the `.../resources/data/...` directory
+2. Shader files, which refers to
+    1. Files ending in `.vsh`, `.fsh` and `.glsl`
+3. Build scripts, which refers to
+    1. Files ending in `.gradle`, `.gradle.kts`, `.properties`, `.bat`, and `.gitignore`
+4. Source files, which refers to
+    1. Files ending in `.java`, `.kt`, `.dart`, `.html`, `.xml` and `.cs`
+5. Script files, which refers to
+    1. Files ending in `.js`, `.ts`, `.py`, `.kts` and `.css`
+6. Documentation files, which refers to
+    1. Files ending in `.md`, `.txt`, `.pdf`, `.rtf`, `.doc`, `.docx` and `.csv`
+7. Configuration files, which refers to
+    1. Files ending in `.yml`, `.toml`, and `.mcmeta`
+    2. Files named `fabric.mod.json` or `mods.toml` or `quilt.mod.json`
+
+### 1. Code
+  Per the definitions above, Code is licensed under the “MIT” License, found below
+
+> Permission is hereby granted, free of charge, to any person obtaining a copy of this software and associated documentation files (the "Software"), to deal in the Software without restriction, including without limitation the rights to use, copy, modify, merge, publish, distribute, sublicense, and/or sell copies of the Software, and to permit persons to whom the Software is furnished to do so, subject to the following conditions:
+The above copyright notice and this permission notice shall be included in all copies or substantial portions of the Software.
+THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
+
+### 2. Non-Code
+
+ Per the definitions above, Everything that is not defined as Code is "All Rights Reserved"-------------------------------------------------------------------------------------------------------
+
+
+Olympus and Resourceful Lib (UI libraries upstream uses; both MIT, by Terrarium)
+-------------------------------------------------------------------------------------------------------
+The widget kit in earth.terrarium.tempad.client.ui translates the behaviour of Olympus 1.0.18 for NeoForge 1.21
+(https://github.com/terrarium-earth/Olympus; buttons, text and icon renderers, dropdowns and context menus, the
+scrolling layout widget, the delete-confirm modal, the colour picker with eyedropper and presets, the map widget) and
+of Resourceful Lib's SelectionList (https://github.com/terrarium-earth/Resourceful-Lib, the app bar). Each translated
+file names its source in its header. Those parts are a derivative of MIT-licensed code (the MIT terms above, copyright
+Terrarium); our changes are GPLv3. No Olympus file is shipped: the Olympus art and lang the screens show (button,
+modal, list and chevron sprites, eye dropper icon, "olympus.*" strings) are read in memory from the Olympus jar that
+upstream nests in its own jar (META-INF/jarjar/olympus-neoforge-1.21-1.0.18.jar) and served with the upstream assets.

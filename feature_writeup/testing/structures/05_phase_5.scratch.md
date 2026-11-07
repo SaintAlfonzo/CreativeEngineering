@@ -27,7 +27,7 @@
 - 13:09:40 st_l1 boot Done (97.7 s). Load line: 15 groups, 178 sets (143 emptied), 199 original; 112 freqs < 1;
   1 biome rule; 30 fits / 181 structures; 22 metas; 3 replacements; 242 ranked, 1 companion. Placement: 104 peaceful
   in 2 sets keep 70 hostile away (8 chunks).
-- 13:09:53 LO-02: `celocate batch all` from console (spawn -80 76): "258 structures from -80 76, radius 100 chunks,
+- 13:09:53 LO-02: `cwglocate batch all` from console (spawn -80 76): "258 structures from -80 76, radius 100 chunks,
   4 locator thread(s)". Overworld only (console level).
 - 13:35:20 L1 batch done: 233/258 found, 2003 misses total, 1526 s (saved as scratchpad batch_l1.json). 21 timed_out
   (120 s): old_illager_statue 92 misses, simply_houses taiga_forge 58 / plains_house 57 / plains_mansion 52, birch
@@ -40,7 +40,7 @@
 - 13:35:33 stop (clean, no AL search running). srv toml: [worldgen.locate] foldPlacement + foldBiomes true -> false
   (lines 1515/1518; base copy = scratchpad toml_m5_base.toml). level-name st_l2, boot.
 - 13:39:17 st_l2 Done (96.3 s). 13:39:30 LO-01 batch: 258 structures from -80 76, radius 100, 4 threads. A second
-  `celocate batch all` at 13:39:34 refused: "A batch is already running" (good).
+  `cwglocate batch all` at 13:39:34 refused: "A batch is already running" (good).
 - 14:13:08 L2 batch done: 216/258 found, 10660 misses, 2018 s (scratchpad batch_l2.json); 42 timed_out, 0 not_found
   (the 4 L1 not_found are timed_out here). savedByStage L2: placement 0, biome 0 (folds off, as expected), meta 18944,
   frequency 5119, meta_target 1438, point 659.
@@ -86,26 +86,26 @@
   -6469 -2923 (17, 145 s), glacial_hut -7941 -2149 (15, 338 s), snowy_tent 4736 3168 (46 misses, 519 s): all 4 SAME
   as L2 folds off. -> every position compared agrees (210 + 21 + 4 + plains), the 2 that differ are the meta layout issue.
 - 15:09 stop (clean), console/latest/stats of L2 kept as scratchpad console_l2.log, latest_l2.log, stats_l2.json.
-- 15:13:25 st_l1 (fresh, base toml, 4 threads) LO-06: `celocate batch all` (258, 4 threads); a 2nd batch 3 s later
+- 15:13:25 st_l1 (fresh, base toml, 4 threads) LO-06: `cwglocate batch all` (258, 4 threads); a 2nd batch 3 s later
   refused ("A batch is already running"); then the 21 plain /locate on top. 15:39:12 batch done: 234/258 found, 2031
   misses, 1547 s (first L1 batch: 233, 2003, 1526 s); 20 timed_out, 4 not_found (mineshaft_mesa 1 miss = no mesa within
   radius 100; the 3 cave-fit ones). The 21 plain searches: 21/21 "The nearest" = known positions (none timed out this
   time). Batch rows vs every known position (21 + village_plains + igloo): 23/23 same; the 4 L2-only ones timed out
   again at 120 s. No exception after boot except the known village-piece reload errors (2). Saved: batch_l1b.json,
   stats_l1b.json, console_l1b.log, latest_l1b.log.
-- 15:43:50 st_l3 (fresh, asyncLocatorThreads 1): `celocate batch philipsruins` 22/24 found, 207 misses, 331 s: 22/22
+- 15:43:50 st_l3 (fresh, asyncLocatorThreads 1): `cwglocate batch philipsruins` 22/24 found, 207 misses, 331 s: 22/22
   positions = the 4-thread batch_l1b (misses differ per row: concurrent searches reuse each other's checked chunks;
-  totals 207 vs 188). 15:49:37 `celocate batch minecraft` 18/19, 42 misses, 83 s: 16/18 same, village_desert -4536 -442
+  totals 207 vs 188). 15:49:37 `cwglocate batch minecraft` 18/19, 42 misses, 83 s: 16/18 same, village_desert -4536 -442
   (L1b -4538 -445, L2 -4533 -446) and village_savanna -1292 236 (L1b -1292 229, L2 -1280 236) = the meta layout issue
   again (3 different answers in 3 JVM runs; plains/snowy/taiga villages stable). mineshaft_mesa not_found in both.
-- 15:51:20 LO-08: `celocate stats` after only the 2 batches: 43 rows = 43 batch rows; misses/loads/candidates/every
+- 15:51:20 LO-08: `cwglocate stats` after only the 2 batches: 43 rows = 43 batch rows; misses/loads/candidates/every
   savedByStage value equal per row, 0 mismatches (totals 249 misses, 280 loads, 141560 candidates).
-- 15:51:36 LO-15: batchTimeoutSeconds 120 -> 5 (live, one write), `celocate batch towns_and_towers`: 30/51 found, 21
+- 15:51:36 LO-15: batchTimeoutSeconds 120 -> 5 (live, one write), `cwglocate batch towns_and_towers`: 30/51 found, 21
   timed_out, 192 s. Overshoot: deadline is checked between candidates/loads, a load in flight finishes (worst 31.5 s
-  for village_old_growth_taiga, 7 loads; next 10.6 s). 15:55:05 `celocate batch all` (1 thread), 15:55:35 `celocate
+  for village_old_growth_taiga, 7 loads; next 10.6 s). 15:55:05 `cwglocate batch all` (1 thread), 15:55:35 `cwglocate
   stop`: "stopping every running search ...", report written the same second, 258 rows: 9 found, 4 timed_out, 245
   "error: java.util.concurrent.CancellationException" (the queued ones never started) -> label bug, should read
-  "stopped". `celocate status` -> nothing running. batchTimeoutSeconds back to 120.
+  "stopped". `cwglocate status` -> nothing running. batchTimeoutSeconds back to 120.
 - 15:57 st_l3 reboot (7.5 s) with srv-only kubejs/server_scripts/zz_scratch_tick.js (gap between tick starts, per 5 s:
   ticks, max gap, gaps > 100 / > 250 ms). Idle: 100 ticks / 5 s, max gap 51-69 ms.
 - LO-05 (1 locator thread, takesapillage:pillager_camp from fresh far origins via `execute positioned`):
@@ -146,7 +146,7 @@
 - Cloud Storage + Domestication Innovation village houses use the builtin ProcessorLists.EMPTY holder -> their pieces
   are saved as {} and dropped when a structure_starts chunk reloads (see 14:51 log). Third-party; possible fix: PoolTuner
   (or a mixin) rebinds each pool element's processors holder to the world's registry. For the user.
-- /celocate stop: searches still queued in Async Locator's pool end with a CancellationException, and the batch row
+- /cwglocate stop: searches still queued in Async Locator's pool end with a CancellationException, and the batch row
   says "error: java.util.concurrent.CancellationException" instead of "stopped" (LocateCommand.batch whenComplete).
   Report is otherwise complete. Label only; 1.0.7 fix candidate (treat CancellationException as "stopped").
 - LO-05 FAILED: LocateLoads non-blocking path blocks the server thread (getChunkFuture inside a server task waits in

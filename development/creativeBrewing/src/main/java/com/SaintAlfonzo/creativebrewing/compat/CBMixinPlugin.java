@@ -2,6 +2,7 @@ package com.SaintAlfonzo.creativebrewing.compat;
 
 import com.SaintAlfonzo.creativebrewing.shared.GatedMixinPlugin;
 
+import java.util.List;
 import java.util.Map;
 
 /**
@@ -18,7 +19,16 @@ public class CBMixinPlugin extends GatedMixinPlugin {
 	/** Mod id -> the only version its compartment applies to (fix mixins written against one jar). */
 	private static final Map<String, String> FOR_VERSION = Map.of();
 
+	/**
+	 * Create mixins that reference Potion Bundles classes: they apply only when Potion Bundles is loaded (a table
+	 * entry replaces the compartment check for that mixin; Potion Bundles itself needs Create's potion classes).
+	 */
+	private static final Map<String, List<String>> NEEDS_MOD = Map.of(
+			"PotionFluidHandlerMixin", List.of("potionbundles"),
+			"ItemDrainCategoryMixin", List.of("potionbundles"),
+			"SpoutCategoryMixin", List.of("potionbundles"));
+
 	public CBMixinPlugin() {
-		super("[creativebrewing]", COMPARTMENT_PREFIX, FOR_VERSION, Map.of());
+		super("[creativebrewing]", COMPARTMENT_PREFIX, FOR_VERSION, NEEDS_MOD);
 	}
 }

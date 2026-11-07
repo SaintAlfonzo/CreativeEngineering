@@ -23,7 +23,7 @@ import umpaz.farmersrespite.common.block.entity.container.KettleMenu;
 public abstract class KettleScreenRemainderMixin extends AbstractContainerScreen<KettleMenu> {
 
     @Unique
-    private static final ResourceLocation CE_TEXTURE = new ResourceLocation("farmersrespite", "textures/gui/kettle.png");
+    private static final ResourceLocation CD_TEXTURE = new ResourceLocation("farmersrespite", "textures/gui/kettle.png");
 
     private KettleScreenRemainderMixin(KettleMenu menu, Inventory playerInventory, Component title) {
         super(menu, playerInventory, title);
@@ -31,6 +31,6 @@ public abstract class KettleScreenRemainderMixin extends AbstractContainerScreen
 
     @Inject(method = {"m_7286_", "renderBg"}, at = @At("TAIL"), require = 1)
     private void ce$drawRemainderSlots(PoseStack poseStack, float partialTick, int mouseX, int mouseY, CallbackInfo ci) {
-        RemainderSlotFrames.draw(poseStack, CE_TEXTURE, leftPos, topPos, 85, 54);
+        RemainderSlotFrames.draw(poseStack, CD_TEXTURE, leftPos, topPos, 85, 54);
     }
 }

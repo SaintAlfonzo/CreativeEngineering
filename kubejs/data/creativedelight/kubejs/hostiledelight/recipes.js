@@ -1,3 +1,4 @@
+// requires: creativedelight
 // requires: hostiledelight
 // Hostile Delight recipe changes (feature_writeup/hostile_delight.md). Non-member file: recipe ids are
 // creativedelight:<type>/<suffix> (global.CD.recipes).

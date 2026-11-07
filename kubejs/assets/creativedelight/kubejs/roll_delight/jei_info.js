@@ -1,3 +1,4 @@
+// requires: creativedelight
 // requires: jei
 // requires: roll_delight
 // Roll Delight JEI information pages: mechanics that are block interactions, not recipes (jei_coverage.md 4.11).

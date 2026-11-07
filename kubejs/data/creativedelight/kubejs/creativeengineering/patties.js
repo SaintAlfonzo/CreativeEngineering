@@ -1,3 +1,4 @@
+// requires: creativedelight
 // priority: -90
 // requires: farmersdelight
 // Patty rule (TODO dishes/meals #55, 2026-11-02): any cooked patty fills a beef patty slot. #creativeengineering:patty

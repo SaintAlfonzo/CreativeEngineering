@@ -400,7 +400,7 @@ def render(named, by_id, g):
         '// item and every kitchen ingredient gets one development name; the value is always i.<key>, so items stay defined',
         '// once in item_dict.js. Key: <category>[_<form>][_<state>]_<name>, parts from food_grammar.js; raw is implicit.',
         '//',
-        '// Kept by hand. Seeded 2026-10-25 by tools/food_dict.py --seed; run tools/food_dict.py (or /cegen run food_dict)',
+        '// Kept by hand. Seeded 2026-10-25 by tools/food_dict.py --seed; run tools/food_dict.py (or /cdevgen run food_dict)',
         '// after a /dumpfood to lint this file and list foods with no key, with a proposed key for each.',
         '//',
         '// Read it as global.food. Creative Delight scripts (their own scope) can alias it f; the pack\'s startup and server',

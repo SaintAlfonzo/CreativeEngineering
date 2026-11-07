@@ -1,4 +1,5 @@
 // requires: creativedevtools
+// requires: creativeworldgen
 // /dumpbeenests [reset]  ->  writes kubejs/exported/bee_nests.json
 // trees, bee nests and chunks counted per biome as chunks generate (since the server started, or since the last
 // /dumpbeenests reset), plus the bee_nests.json rules each biome got. Report: python3 tools/gen_bee_nests.py ->

@@ -1,0 +1,10 @@
+# r1106cba Boot 2: same OUT, [members] vinery = false (SQ-CBA-11).
+## SQ-CBA-11 | Vinery member off: scripts skip, member data stays
+bootexpect \[creativebrewing\] members: \[vinery, brewinandchewin\]
+# the startup "core finished, members:" line lists the nested members whatever their switch; the server line has the on-set
+kjsexpect server scripts ready, members on: brewinandchewin$
+kjsreject \[wandering trades\] winemaker
+shell ! grep -nE "ReferenceError|TypeError|is not defined" logs/kubejs/*.log
+> zq bytype vinery:wine_fermentation
+sleep 3
+expect bytype vinery:wine_fermentation: [1-9]

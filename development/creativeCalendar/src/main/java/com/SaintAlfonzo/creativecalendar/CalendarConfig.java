@@ -171,7 +171,7 @@ public final class CalendarConfig {
                     "time values in betterdays-common.toml, the world's sereneseasons-server.toml and seasonhud-server.toml",
                     "are overwritten from here at server start and on every edit. The Vinery port reads [time.wine] and the",
                     "lengths from here and ignores the matching vinery-common.toml [wine]/[aging] keys while enabled.",
-                    "/cetime shows every derived value."
+                    "/ccaltime shows every derived value."
             ).push("time");
 
             preset = b.comment(

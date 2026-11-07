@@ -1,0 +1,19 @@
+{
+  "replace": false,
+  "tips": [
+    "Glass breaks into glass shards unless mined with Silk Touch; shards craft back into glass",
+    "Composters turn plants, food, straw, bark and sawdust into bone meal",
+    "Kill a mob an Axolotl is fighting to gain Regeneration",
+    "Gilded apples give massive buffs",
+    "Some Pillager outposts hold caged Allays",
+    "Leather boots let you walk on powder snow",
+    "Compasses point to spawn in the Overworld, to the portal you came through in the Nether, and to the exit portal in the End",
+    "Lava flowing over soul soil next to blue ice turns into basalt",
+    "Water and lava make cobblestone, or other stones when the lava touches certain blocks",
+    "Every player can take an elytra from each End ship",
+    "Facing a Creeper blast with a shield cuts the damage; better shields block more",
+    "Sweet berry bushes slow you down and hurt you unless you wear leggings",
+    "A totem of undying saves you from your hand or your charm slot",
+    "Lava buckets are a great furnace fuel"
+  ]
+}

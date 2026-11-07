@@ -1,3 +1,4 @@
+// requires: creativedelight
 // requires: nethersdelight
 // Nether's Delight tags (Creative Delight member repackedNethers; nethers_delight.md 4.2, 4.9; TODO
 // largecontent/mod-additions #16): the Nether's Delight 4.0 tag changes on the 3.1 repack.

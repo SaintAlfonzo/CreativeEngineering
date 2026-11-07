@@ -1,3 +1,4 @@
+// requires: creativedelight
 // requires: quarkdelight
 // Quark Delight recipe changes: crab bars, grid routes for its pot meals, exotic fruits. Non-member file: recipe ids
 // are creativedelight:<type>/<suffix> (global.CD.recipes). Moved from the pack's

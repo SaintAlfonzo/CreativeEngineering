@@ -37,7 +37,7 @@ import java.util.List;
  * random tick. {@code mixin/AttachedStemExtraFruitMixin} gives the attached stem a random tick that calls
  * {@link #randomTick}, which grows a 2nd, 3rd and 4th fruit on free sides with vanilla's stem growth roll,
  * but only once a minimum time has passed since the stem's last fruit (longer for each one;
- * CEConfig [stem_fruit]). The last-fruit time per stem lives in the dimension's saved data; it starts on
+ * CDConfig [stem_fruit]). The last-fruit time per stem lives in the dimension's saved data; it starts on
  * the attached stem's first random tick, and is dropped when the stem is broken or turns back into a
  * plain stem. feature_writeup/crops.md 2.10.
  *

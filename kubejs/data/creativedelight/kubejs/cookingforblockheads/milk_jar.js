@@ -1,3 +1,4 @@
+// requires: creativedelight
 // requires: cookingforblockheads
 // Glass bottles on Cooking for Blockheads' milk jar and cow in a jar (TODO food/drinks #6). CfB's own use() only
 // takes buckets (1000 mB) and fails on anything else. Here an empty bottle takes 250 mB out as Farmer's Delight's

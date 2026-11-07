@@ -1,3 +1,4 @@
+// requires: creativedelight
 // requires: endersdelight
 // Ender's Delight tags (non-member; ends_delight.md 3.1). Ender's entries of the shared End food tags (End's entries:
 // ends_delight/tags.js) and the mining tags its blocks lack. The soils and spice of enders_additions (1.1.4 content,

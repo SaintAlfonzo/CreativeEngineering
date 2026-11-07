@@ -1,3 +1,4 @@
+// requires: creativedelight
 // requires: miners_delight
 // requires: lootjs
 // Squid drops for the squid chain (TODO dishes/ocean #3): a squid drops one Miner's Delight squid item and a glow squid

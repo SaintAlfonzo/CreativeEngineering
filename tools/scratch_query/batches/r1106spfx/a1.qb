@@ -1,0 +1,33 @@
+# r1106spfx boot a1: group A superflat, 22:07-22:09 builds, Immersive Portals + Portal Gun + Portal Gels KEPT,
+# tools/scratch_query/nch_empty_fluid_probe.js copied in as zz_nch_probe.js. Rows SQ-SPFX-01a, -02, -03a, -06.
+pace 1
+
+## SQ-SPFX-01a | IP + Serene Seasons boot: ChunkMap visibility mixin
+bootexpect Done \(
+bootexpect ChunkMap\.m_183760_ set back to private
+bootreject MixinChunkMap_C
+shell grep -hcE "ChunkMap.m_183760_ set back to private" logs/latest.log; true; grep -hE "ChunkMap.m_183760_ set back to private|MixinChunkMap_C" logs/latest.log logs/debug.log | head -5
+look exactly one 'set back to private' line in latest.log, no MixinChunkMap_C failure
+
+## SQ-SPFX-02 | horror lasagna sequenced assembly in the full pack
+> zq rdetail horror_lasagna_sequenced_assembly
+waitlog \[zq\] done 60
+expect creativedelight:createsequencedassembly/horror_lasagna_sequenced_assembly
+expect tomato_sauce
+shell grep -h "horror_lasagna" logs/kubejs/server.log logs/latest.log | grep -iE "error|fail" | head -5; echo "errlines=$(grep -h horror_lasagna logs/kubejs/server.log logs/latest.log | grep -ciE 'error|fail')"
+look 7 steps, filling create_central_kitchen:tomato_sauce 250 mB, result 2 brewinandchewin:horror_lasagna; errlines=0
+
+## SQ-SPFX-03a | NCH empty-fluid probe
+kjsexpect \[zqnch\] zz_probe_empty_fluid: skipped
+kjsexpect \[zqnch\] zz_probe_good: built
+bootreject Error parsing recipe.*zz_probe
+> zq rdetail zz_probe
+waitlog \[zq\] done 60
+shell grep -h "\[zqnch\]" logs/latest.log logs/kubejs/server.log | head -4; grep -hc "zz_probe_empty_fluid" logs/kubejs/server.log
+look only zz_probe_good listed by rdetail (no zz_probe_empty_fluid recipe, no loose create:kjs_ filling)
+
+## SQ-SPFX-06 | dict validators clean
+bootreject \[(item|block|fluid)_dict\] Missing
+bootreject is not validated
+shell grep -A30 "\[item_dict\] Missing\|\[block_dict\] Missing\|\[fluid_dict\] Missing" logs/latest.log | head -40; echo "notvalidated=$(grep -c 'is not validated' logs/latest.log)"; grep "tag entries not checked" logs/latest.log | head
+look one [block_dict] and one [fluid_dict] 'tag entries not checked' info line, nothing else

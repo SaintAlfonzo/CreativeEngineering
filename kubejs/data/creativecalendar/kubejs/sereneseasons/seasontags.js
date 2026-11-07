@@ -1,3 +1,4 @@
+// requires: creativecalendar
 // requires: sereneseasons
 // Creative Calendar (feature_writeup/creative_calendar.md 4.4); moved from kubejs/server_scripts/tags/ on 2026-11-01.
 // Season types: biome tags creativeengineering:seasons/{arid,frozen,dry,tropical,temperate,cold,adaptive} and
@@ -5,7 +6,8 @@
 // Snow seasons: biome tags creativeengineering:snow/no_<sub_season>, one per sub-season a biome may not snow in
 // (season_types.json snow_seasons lists the sub-seasons it may snow in; [] = never).
 //
-// The lists live in kubejs/generation_scripts/worldgen/season_types.json (its _readme says what each type
+// The lists live in kubejs/generation_scripts/worldgen/season_types.json (the jar ships a copy, read when the instance
+// has none; its _readme says what each type
 // does); Creative Calendar seasons/SeasonTypes reads the tags and steers Serene Seasons and SeasonHUD with them.
 // Edit the json, then /reload. Reference + tests: feature_writeup/weather.md; per-biome result:
 // feature_writeup/weather_by_biome.md (python3 tools/gen_weather_table.py checks the same file offline:
@@ -34,7 +36,8 @@
 	ServerEvents.tags('worldgen/biome', function (event) {
 		var cfg
 		try {
-			cfg = JSON.parse(String(JsonIO.readString(CONFIG_PATH)))
+			cfg = JSON.parse(String(global.genText(CONFIG_PATH)))
+			if (cfg == null) throw 'not found (no instance file, no jar copy)'
 		} catch (err) {
 			console.error('[season-types] could not read ' + CONFIG_PATH + ', no season tags: ' + err)
 			return

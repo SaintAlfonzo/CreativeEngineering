@@ -39,7 +39,7 @@ import java.util.concurrent.atomic.LongAdder;
  *
  * HOOK: mixin/ChunkGeneratorSeabedClearanceMixin, on the generated start of ChunkGenerator#tryGenerateStructure
  * (slot 15, the same store the surface check and earth fill use): INVALID_START fails the pick the way a wrong-biome
- * start does. Counted in /celocate stats under SURFACE_CHECK. The noise terrain is read only for tagged structures,
+ * start does. Counted in /cwglocate stats under SURFACE_CHECK. The noise terrain is read only for tagged structures,
  * and the floor first: a deep start costs one column read per point. Drops are counted per structure and logged at
  * server stop ({@code [seabed-clearance] dropped N starts: ...}); each drop is also a debug line.
  */

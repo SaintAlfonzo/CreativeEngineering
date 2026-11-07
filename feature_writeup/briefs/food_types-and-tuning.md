@@ -537,7 +537,7 @@ values); the members are brought in line.
 1. Owner pass over 4.2 D1 to D4 (the cost of each proposal is in 3.2's compliance counts).
 2. Per decided family, one pass in the CD tree of each member's mod, with the family helpers of 4.5 (`global.CD.food`
    callers, `global.NCH` recipes, `global.tags` for placement tags); then `/dumpall` and
-   `python3 tools/food_families.py` (or `/cegen run food_families`) until 3.2 reads full.
+   `python3 tools/food_families.py` (or `/cdevgen run food_families`) until 3.2 reads full.
 3. Suggested order (small to large): soup (F1, F2: the heatless crafts and pot recipes), sandwich and roll (D3, F5),
    skewer (with `dishes/meals #13`, #46 and row #19), drinks (F9, `food/drinks #8`), the rest.
 4. Values per family land through #1 (`types` keyed by family), not in this row.

@@ -225,6 +225,9 @@ CATEGORIES = {
     'oceanic_upstream': (('server', 'client'), 'oceanic_upstream'),
     'enders_upstream': (('server', 'client'), 'enders_upstream'),
     'goldenfood_upstream': (('server', 'client'), 'goldenfood_upstream'),
+    # the unmodified Tempad 3.0.4 jar the Tempad port (a bundle member, now in Creative Compat) reads its art and data from (immersive_portals.md
+    # 2.1.1). Never in mods/: it is a NeoForge jar with the port's mod id.
+    'tempad_upstream': (('server', 'client'), 'tempad_upstream'),
     'server': (('server',), ''),
 }
 TREES = ('kubejs', 'config', 'defaultconfigs', 'server')
@@ -334,7 +337,7 @@ KUBEJS_CLASSES = [
     ('generation_scripts/food/mortar_catalog.json', 'dev'),             # tools/gen_mortar_catalog.py record
     ('generation_scripts/food/placed_food_slices.json', 'runtime'),    # PlacedFoodSol (Spice of Life bites of placed cakes)
     ('generation_scripts/food/food_families.json', 'runtime'),         # CD seasoning_tags.js (food family item tags)
-    ('generation_scripts/food/comfort_nourishment.json', 'runtime'),   # CD creativeengineering/comfort_nourishment.js (tools/gen_comfort_nourishment.py)
+    ('generation_scripts/food/comfort_nourishment.json', 'runtime'),   # CD creativedelight/comfort_nourishment.js (tools/gen_comfort_nourishment.py)
     ('generation_scripts/food/food_tuning.json', 'runtime'),           # CD goldenfood/golden_values.js (golden and gilded multipliers)
     ('generation_scripts/food/food_dict_index.json', 'dev'),           # tools/food_dict.py lookup only
     ('generation_scripts/stacks/stack_sizes.json', 'runtime'),          # changes/stack_sizes.js
@@ -594,6 +597,8 @@ UPSTREAM_DONORS = {
                         ('creativeDelight/members/ends', 'com', 'SaintAlfonzo', 'creativedelight', 'enders', 'upstream')),
     'goldenfood_upstream': ('creativedelight', 'Golden Food (Creative Delight)',
                             ('creativeDelight/members/golden', 'com', 'SaintAlfonzo', 'creativedelight', 'golden', 'upstream')),
+    'tempad_upstream': ('creativecompat', 'Tempad (Creative Compat)',
+                        ('creativeCompat/members/tempad', 'earth', 'terrarium', 'tempad', 'forge')),
 }
 
 
@@ -640,7 +645,7 @@ def check_structures(pre):
             detail = ''.join(f'\n    new set {s}' for s in sorted(new - old)) + \
                 ''.join(f'\n    gone set {s}' for s in sorted(old - new))
             pre.error('structure_config.json is stale for the installed mods/kubejs data: run '
-                      '`/cegen run worldgen` (or tools/gen_structure_config.py, then the rest of the '
+                      '`/cdevgen run worldgen` (or tools/gen_structure_config.py, then the rest of the '
                       'worldgen group)' + (detail or '\n    (same sets, changed members or biomes)'))
             return
         r = subprocess.run([sys.executable, os.path.join(ROOT, 'tools', 'gen_structure_groups.py'),
@@ -1570,8 +1575,8 @@ def render_readme(cur, prev, d, dpay, base, payload):
         rm('server'),
         ("Copy `mods/` into the server's `mods/`" + only_changed + '. Do not copy `client_mods/`.') if has('mods') else
         'No server jars changed.',
-        f"Copy {folders(('kubejs', 'config', 'defaultconfigs', 'vinery_upstream', 'miners_upstream', 'rustic_upstream', 'roll_upstream', 'largemeals_upstream', 'farmers_upstream', 'oceanic_upstream', 'enders_upstream', 'goldenfood_upstream'))} over the server's folders{only_changed}."
-        if folders(('kubejs', 'config', 'defaultconfigs', 'vinery_upstream', 'miners_upstream', 'rustic_upstream', 'roll_upstream', 'largemeals_upstream', 'farmers_upstream', 'oceanic_upstream', 'enders_upstream', 'goldenfood_upstream')) else None,
+        f"Copy {folders(('kubejs', 'config', 'defaultconfigs', 'vinery_upstream', 'miners_upstream', 'rustic_upstream', 'roll_upstream', 'largemeals_upstream', 'farmers_upstream', 'oceanic_upstream', 'enders_upstream', 'goldenfood_upstream', 'tempad_upstream'))} over the server's folders{only_changed}."
+        if folders(('kubejs', 'config', 'defaultconfigs', 'vinery_upstream', 'miners_upstream', 'rustic_upstream', 'roll_upstream', 'largemeals_upstream', 'farmers_upstream', 'oceanic_upstream', 'enders_upstream', 'goldenfood_upstream', 'tempad_upstream')) else None,
         ('`vinery_upstream/` goes next to `mods/`, never inside it: the Vinery backport reads those two jars and '
          'stops the game with a message if they are missing.') if has('vinery_upstream') else None,
         ("`miners_upstream/` goes next to `mods/`, never inside it: the Miner's Delight backport reads that jar and "
@@ -1588,13 +1593,15 @@ def render_readme(cur, prev, d, dpay, base, payload):
            'and stops the game with a message if it is missing.') if has(d) else None
           for d, n in (('oceanic_upstream', 'Oceanic Delight'), ('enders_upstream', "End's Delight (Ender's additions)"),
                        ('goldenfood_upstream', 'Golden Food'))],
+        ("`tempad_upstream/` goes next to `mods/`, never inside it: the Tempad port reads that jar "
+         'and stops the game with a message if it is missing.') if has('tempad_upstream') else None,
         ('Copy the *contents* of `server/` into the server folder itself (`LaunchServer.sh`/`.bat`, `perf/`); if you '
          "changed MEMORY or JAVAPATH in the server's LaunchServer script, set them again.") if has('server') else None,
         world_step('the server world (`world/`, or the `level-name` folder)'),
     ])
     rp_order = [p[len('file/'):] for p in cur['resourcePackOrder'] if p.startswith('file/')]
     show_order = rp_order and (not update or (base or {}).get('resourcePackOrder') != cur['resourcePackOrder'])
-    client_trees = folders(('kubejs', 'config', 'defaultconfigs', 'resourcepacks', 'shaderpacks', 'vinery_upstream', 'miners_upstream', 'rustic_upstream', 'roll_upstream', 'largemeals_upstream', 'farmers_upstream', 'oceanic_upstream', 'enders_upstream', 'goldenfood_upstream'))
+    client_trees = folders(('kubejs', 'config', 'defaultconfigs', 'resourcepacks', 'shaderpacks', 'vinery_upstream', 'miners_upstream', 'rustic_upstream', 'roll_upstream', 'largemeals_upstream', 'farmers_upstream', 'oceanic_upstream', 'enders_upstream', 'goldenfood_upstream', 'tempad_upstream'))
     lines += ['', '## Client', ''] + numbered([
         'Close the game.',
         rm('client'),

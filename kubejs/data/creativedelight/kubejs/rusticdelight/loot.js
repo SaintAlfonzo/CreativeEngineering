@@ -1,3 +1,4 @@
+// requires: creativedelight
 // requires: rusticdelight
 // Rustic Delight 1.7.0 chest loot (feature_writeup/rustic_delight.md 5.4). The upstream jungle temple, village and
 // shipwreck seed swaps are not ported (RusticTranslator); the Pale and Dark seeds come only from these chests and the

@@ -143,7 +143,7 @@ so structures of one kind keep apart and their rates are set in one place; decid
 - ST-211 MES off the main island: in a new world `/locate structure mes:monolith` from 0 0 in the End answers more
   than 1000 blocks out; a Chunky pregen of radius 1000 blocks around 0 0 in the End has no MES start
   (`/dumpstructuregen` or a structure-start census).
-- ST-212 Fortress and bastion keep apart: `/celocate census` (locate.md) over a Nether square: no fortress start
+- ST-212 Fortress and bastion keep apart: `/cwglocate census` (locate.md) over a Nether square: no fortress start
   within 10 chunks of a bastion.
 - ST-213 Deep dungeons (retest of ST-115): skeleton dungeon, bone dungeon, lost soul city `/locate` answers in cave
   biomes.
@@ -246,7 +246,7 @@ structure's biomes, those numbers no longer stand for anything a person chose.
    rate per structure is visible before rejoining.
 3. Group grids stay (spacing/separation are hand-set, 2.2). `--fit-rates` must not re-fit stripped members later:
    either mark them `fit_keep: false` + no `fit_base`, or teach `fit_rates` to skip members without `fit_base`.
-4. Run the census (`/celocate census`, locate.md) on a scratch world afterwards; set `tuned` on whatever the user then
+4. Run the census (`/cwglocate census`, locate.md) on a scratch world afterwards; set `tuned` on whatever the user then
    adjusts by hand.
 
 ### Ids and data
@@ -333,7 +333,7 @@ at line 1878 is the pattern). No mod data.
 - Cost: a start predicts every set with a higher-ranked member; ranking a few members of many groups high makes more
   sets "higher" for everyone below and adds predictions (each predicted slot is generated twice;
   [testing/structures/10_phase_10.md](../testing/structures/10_phase_10.md) 5 lists the hot spots, row
-  `structures/earthfill #7`). Keep high ranks to a short list; check `/celocate` timing (LO- tests) after.
+  `structures/earthfill #7`). Keep high ranks to a short list; check `/cwglocate` timing (LO- tests) after.
 - Prediction depth is capped at 3 (`MAX_DEPTH`); chains stay short only while ranks rise per level.
 - Peaceful radius is separate from rank (a hostile landmark still drops near a village).
 

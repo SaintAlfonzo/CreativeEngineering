@@ -3,7 +3,6 @@ package com.SaintAlfonzo.creativeworldgen;
 import com.SaintAlfonzo.creativecommon.swap.ConfigRename;
 import com.SaintAlfonzo.creativeworldgen.block.FastLeafDecayPort;
 import com.SaintAlfonzo.creativeworldgen.forgivingvoid.ForgivingVoidBridge;
-import com.SaintAlfonzo.creativeworldgen.loot.BiomeTagCondition;
 import com.SaintAlfonzo.creativeworldgen.mobs.NamedMobs;
 import com.SaintAlfonzo.creativeworldgen.mooshroom.MooshroomFamily;
 import com.SaintAlfonzo.creativeworldgen.worldgen.BeeNests;
@@ -81,9 +80,10 @@ public class CreativeWorldgen {
         modEventBus.addListener(CreativeWorldgen::commonSetup);
         // Farmer's Structures 1.0.6 data, translated in memory from the donor jar in farmers_upstream/ (worldgen/donor).
         modEventBus.addListener(FarmersDonor::onAddPackFinders);
+        // packs/<modid>/: worldgen data naming a mod this jar does not require, added only while that mod is loaded.
+        modEventBus.addListener(com.SaintAlfonzo.creativeworldgen.compat.ModDataPacks::add);
 
-        // creativeengineering:biome_tag loot condition (loot/BiomeTagCondition; the fishing net tables use it).
-        BiomeTagCondition.register(modEventBus);
+        // The creativeengineering:biome_tag loot condition moved to Creative Delight (loot/BiomeTagCondition) 2026-11-06.
         // Meta structures: the creativeengineering:meta structure type and its piece types (worldgen/MetaStructure; the
         // structures themselves are kubejs meta_structures.json).
         MetaStructure.register(modEventBus);
@@ -133,7 +133,7 @@ public class CreativeWorldgen {
         // Terrain adaptation by structure tag and template trim ([worldgen.terrain_adaptation]): tag table and caches.
         MinecraftForge.EVENT_BUS.register(TerrainAdaptation.class);
         MinecraftForge.EVENT_BUS.register(TemplateTrim.class);
-        // /celocate batch | census | stats ([worldgen.locate]).
+        // /cwglocate batch | census | stats ([worldgen.locate]).
         MinecraftForge.EVENT_BUS.register(LocateCommand.class);
 
         LOGGER.info("[creativeworldgen] loaded (config/{}){}", FILE,

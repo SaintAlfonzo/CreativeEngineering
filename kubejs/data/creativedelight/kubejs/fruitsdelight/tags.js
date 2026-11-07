@@ -1,3 +1,4 @@
+// requires: creativedelight
 // requires: fruitsdelight
 // Fruits Delight 1.1.3 tag changes on the installed 0.5.11 (fruits_delight.md 2.5).
 

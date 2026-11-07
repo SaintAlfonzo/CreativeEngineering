@@ -1,0 +1,7 @@
+# r1106cba Boot 3: same OUT, vinery = true, brewinandchewin = false (SQ-CBA-12).
+## SQ-CBA-12 | Brewin' member off: scripts skip, member data stays
+kjsexpect server scripts ready, members on: vinery$
+shell ! grep -nE "ReferenceError|TypeError|is not defined" logs/kubejs/*.log
+> zq bytype brewinandchewin:fermenting
+sleep 3
+expect bytype brewinandchewin:fermenting: ([2-9]\d|\d{3,})$

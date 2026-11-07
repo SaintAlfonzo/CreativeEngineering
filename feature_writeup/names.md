@@ -212,7 +212,7 @@ Restart the game, or reload resources with F3+T (lang only).
 - 2026-10-02 (late): `/dumpnames` ran through `/dumpall` in single player (NM-07, NM-08 PASSED). Catalog
   regenerated from the dump (191 partial blocks, 65 items, 53 entities...) and the section 9 triage redone from it.
   The new 1.0.4 mods only add the Untitled Duck Mod rows.
-- 2026-10-20: display-name audit (section 11): client dump `/cedumpnames` (patcherMod 1.1.01), `tools/name_audit.py`,
+- 2026-10-20: display-name audit (section 11): client dump `/cdevdumpnames` (patcherMod 1.1.01), `tools/name_audit.py`,
   `name_rules.json`, `client_scripts/name_fixes.js`. 436 names fixed (raw keys and Title Case), all 59 namespaces
   through the KubeJS lang event; none needed a resource-pack zip edited. WTHIT plugin toggle names added (wthit_lines F2).
 - 2026-10-20 (later): Pretty Pipes keeps its mod name and creative tab (your call; the items stay "Item Pipe ...").
@@ -326,7 +326,7 @@ item and block name is checked for Title Case. Sections 9 and 10 above are the o
 
 **How it works**
 
-1. **Dump** (patcherMod `devtools/DisplayNameDump`, client side). `/cedumpnames` in game, or
+1. **Dump** (patcherMod `devtools/DisplayNameDump`, client side). `/cdevdumpnames` in game, or
    `[debug.names] dumpAtTitle = true` in creativeengineering-common.toml on a client that never joins a world,
    writes `kubejs/exported/display_names.json`: every block, item, effect, enchantment, entity, fluid,
    potion form and villager profession with its key, the text the game shows, and the pack + namespace whose
@@ -363,7 +363,7 @@ item and block name is checked for Title Case. Sections 9 and 10 above are the o
 
 **Tests:**
 - [x] **NM-09 Dump:** a scratch client with `dumpAtTitle` writes both files at the title screen (latest.log
-  `[cedumpnames] 59807 lang keys traced`). PASSED 2026-10-20 15:53.
+  `[cdevdumpnames] 59807 lang keys traced`). PASSED 2026-10-20 15:53.
 - [x] **NM-10 Audit offline:** `python3 tools/name_audit.py --check` prints "up to date". PASSED 2026-10-20.
 - [x] **NM-11 Fixes applied:** a second dump after the fixes: every fixed name shows, the audit finds nothing new,
   and a rerun on that dump writes the same `name_fixes.json` (fixes carried forward). PASSED 2026-10-20 16:05 (scratch

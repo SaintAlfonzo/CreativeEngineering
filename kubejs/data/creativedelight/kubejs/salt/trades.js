@@ -1,3 +1,4 @@
+// requires: creativedelight
 // requires: salt
 // requires: morejs
 // Salt's butcher trade, mirroring the Barbeque's Delight seasoning powders (barbequesdelight/trades.js): level 1,

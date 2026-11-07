@@ -1,3 +1,4 @@
+// requires: creativedelight
 // requires: alexsmobs
 // Alex's Mobs recipe changes. Non-member file: recipe ids are creativedelight:<type>/<suffix> (global.CD.recipes).
 ServerEvents.recipes(e => {

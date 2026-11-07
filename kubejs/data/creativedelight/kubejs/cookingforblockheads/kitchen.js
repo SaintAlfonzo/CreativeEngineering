@@ -1,3 +1,4 @@
+// requires: creativedelight
 // requires: cookingforblockheads
 // Wood spice racks, tool racks and fruit baskets (Creative Delight's Cooking for Blockheads compartment, kitchen.md 9;
 // creativedelight:<wood>_* since M8, the blockheads_additions member's cookingforblockheads:<wood>_* before), and the

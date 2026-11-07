@@ -29,35 +29,125 @@
     "vintagedelight:evaporator",
     "vintagedelight:golden_egg",
     "vintagedelight:cheese_mold",
-    "vintagedelight:ancient_fruit_cauldron",
-    "vintagedelight:ancient_fruit_jam_cauldron",
-    "vintagedelight:ancient_fruit_jello_cauldron",
-    "vintagedelight:banana_cauldron",
-    "vintagedelight:banana_jam_cauldron",
-    "vintagedelight:banana_jello_cauldron",
-    "vintagedelight:cherry_cauldron",
-    "vintagedelight:cherry_jam_cauldron",
-    "vintagedelight:cherry_jello_cauldron",
-    "vintagedelight:green_grape_cauldron",
-    "vintagedelight:green_grape_jam_cauldron",
-    "vintagedelight:green_grape_jello_cauldron",
-    "vintagedelight:mulberry_cauldron",
-    "vintagedelight:mulberry_jam_cauldron",
-    "vintagedelight:mulberry_jello_cauldron",
-    "vintagedelight:pepper_cauldron",
-    "vintagedelight:pepper_jam_cauldron",
-    "vintagedelight:pepper_jello_cauldron",
-    "vintagedelight:raspberry_cauldron",
-    "vintagedelight:raspberry_jam_cauldron",
-    "vintagedelight:raspberry_jello_cauldron",
-    "vintagedelight:red_grape_cauldron",
-    "vintagedelight:red_grape_jam_cauldron",
-    "vintagedelight:red_grape_jello_cauldron",
-    "vintagedelight:salmonberry_cauldron",
-    "vintagedelight:salmonberry_jam_cauldron",
-    "vintagedelight:salmonberry_jello_cauldron",
-    "vintagedelight:strawberry_cauldron",
-    "vintagedelight:strawberry_jam_cauldron",
-    "vintagedelight:strawberry_jello_cauldron"
+    {
+      "id": "vintagedelight:ancient_fruit_cauldron",
+      "required": false
+    },
+    {
+      "id": "vintagedelight:ancient_fruit_jam_cauldron",
+      "required": false
+    },
+    {
+      "id": "vintagedelight:ancient_fruit_jello_cauldron",
+      "required": false
+    },
+    {
+      "id": "vintagedelight:banana_cauldron",
+      "required": false
+    },
+    {
+      "id": "vintagedelight:banana_jam_cauldron",
+      "required": false
+    },
+    {
+      "id": "vintagedelight:banana_jello_cauldron",
+      "required": false
+    },
+    {
+      "id": "vintagedelight:cherry_cauldron",
+      "required": false
+    },
+    {
+      "id": "vintagedelight:cherry_jam_cauldron",
+      "required": false
+    },
+    {
+      "id": "vintagedelight:cherry_jello_cauldron",
+      "required": false
+    },
+    {
+      "id": "vintagedelight:green_grape_cauldron",
+      "required": false
+    },
+    {
+      "id": "vintagedelight:green_grape_jam_cauldron",
+      "required": false
+    },
+    {
+      "id": "vintagedelight:green_grape_jello_cauldron",
+      "required": false
+    },
+    {
+      "id": "vintagedelight:mulberry_cauldron",
+      "required": false
+    },
+    {
+      "id": "vintagedelight:mulberry_jam_cauldron",
+      "required": false
+    },
+    {
+      "id": "vintagedelight:mulberry_jello_cauldron",
+      "required": false
+    },
+    {
+      "id": "vintagedelight:pepper_cauldron",
+      "required": false
+    },
+    {
+      "id": "vintagedelight:pepper_jam_cauldron",
+      "required": false
+    },
+    {
+      "id": "vintagedelight:pepper_jello_cauldron",
+      "required": false
+    },
+    {
+      "id": "vintagedelight:raspberry_cauldron",
+      "required": false
+    },
+    {
+      "id": "vintagedelight:raspberry_jam_cauldron",
+      "required": false
+    },
+    {
+      "id": "vintagedelight:raspberry_jello_cauldron",
+      "required": false
+    },
+    {
+      "id": "vintagedelight:red_grape_cauldron",
+      "required": false
+    },
+    {
+      "id": "vintagedelight:red_grape_jam_cauldron",
+      "required": false
+    },
+    {
+      "id": "vintagedelight:red_grape_jello_cauldron",
+      "required": false
+    },
+    {
+      "id": "vintagedelight:salmonberry_cauldron",
+      "required": false
+    },
+    {
+      "id": "vintagedelight:salmonberry_jam_cauldron",
+      "required": false
+    },
+    {
+      "id": "vintagedelight:salmonberry_jello_cauldron",
+      "required": false
+    },
+    {
+      "id": "vintagedelight:strawberry_cauldron",
+      "required": false
+    },
+    {
+      "id": "vintagedelight:strawberry_jam_cauldron",
+      "required": false
+    },
+    {
+      "id": "vintagedelight:strawberry_jello_cauldron",
+      "required": false
+    }
   ]
 }

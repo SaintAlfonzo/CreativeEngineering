@@ -1,0 +1,24 @@
+# r1106spf b2s: literal coordinates (zq count takes no ~), entity census at the plains.
+pace 1
+
+## SQ-SPF-73 | wild crops around the plains (literal box)
+> forceload add 3696 3376 3776 3456
+sleep 10
+> zq count 3696 -64 3376 3776 200 3456 farmersdelight:wild_carrots
+> zq count 3696 -64 3376 3776 200 3456 farmersdelight:wild_cabbages
+> zq count 3696 -64 3376 3776 200 3456 farmersdelight:wild_onions
+> zq count 3696 -64 3376 3776 200 3456 farmersdelight:wild_potatoes
+> zq count 3696 -64 3376 3776 200 3456 farmersdelight:wild_beetroots
+> zq count 3696 -64 3376 3776 200 3456 minecraft:grass
+look wild crops above 0 (grass > 0 shows the box scanned)
+
+## SQ-NM-01 | animal census at the plains
+> execute at qa if entity @e[distance=..200,type=!minecraft:player]
+> execute at qa if entity @e[distance=..200,type=minecraft:cow]
+> execute at qa if entity @e[distance=..200,type=minecraft:sheep]
+> execute at qa if entity @e[distance=..200,type=minecraft:pig]
+> execute at qa if entity @e[distance=..200,type=minecraft:chicken]
+> execute at qa if entity @e[distance=..200,type=#zq:monsters]
+> data get entity qa Pos
+> forceload remove 3696 3376 3776 3456
+look counts per type (Test passed, count N / Test failed)

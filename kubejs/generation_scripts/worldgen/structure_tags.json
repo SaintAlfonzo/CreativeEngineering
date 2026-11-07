@@ -705,14 +705,15 @@
       ]
     },
     "type/sky": {
-      "note": "Floating structures: Cloud Storage, Sky Villages and the sky meta structures (2026-10-30).",
+      "note": "Floating structures: Cloud Storage, Sky Villages and the sky meta structures (2026-10-30); Sky Structures' floating island on its own (creativeengineering:sky_island, 2026-11-06).",
       "values": [
         "cloudstorage:*",
         "skyvillages:*",
         "creativeengineering:meta/cloud_cluster",
         "creativeengineering:meta/balloon_fleet",
         "creativeengineering:meta/cloud_balloons",
-        "creativeengineering:meta/sky_village_islands"
+        "creativeengineering:meta/sky_village_islands",
+        "creativeengineering:sky_island"
       ]
     },
     "type/nether_environmental": {

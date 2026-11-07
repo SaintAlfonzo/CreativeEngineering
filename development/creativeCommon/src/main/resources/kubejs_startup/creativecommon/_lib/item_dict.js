@@ -33,7 +33,7 @@ i.layered_obsidian = 'creativeengineering:layered_obsidian';
 i.weathered_cardboard_box = 'creativeengineering:weathered_cardboard_box';
 // Oven — FD cooking-pot style baking block. Java: patcherMod oven/ package (block, GUI, JEI, the
 // creativeengineering:baking recipe type) | recipes: kubejs/data/creativedelight/kubejs/creativeengineering/baking.js (NCH.ceBaking) |
-// bakeware items: Creative Delight kubejs_startup/creativeengineering/bakeware.js | feature_writeup/oven.md
+// bakeware items: Creative Delight kubejs_startup/creativedelight/bakeware.js | feature_writeup/oven.md
 i.oven = 'creativeengineering:oven';
 i.baking_sheet = 'creativeengineering:baking_sheet';
 i.cake_pan = 'creativeengineering:cake_pan';
@@ -81,7 +81,7 @@ i.ce_echo_shield = 'creativeengineering:echo_shield';
 i.ce_felsic_shield = 'creativeengineering:felsic_shield';
 i.ce_dragon_shield = 'creativeengineering:dragon_shield';
 // Potion buckets — area-of-effect lingering-potion items (i.potion_bucket is IE's).
-// Items and effect: Creative Brewing kubejs_startup/creativeengineering/potion_buckets.js, potion_area.js
+// Items: Creative Brewing kubejs_startup/creativebrewing/ (the effect: Creative Common effects/)potion_buckets.js, potion_area.js
 i.ce_potion_bucket = 'creativebrewing:potion_bucket';
 i.ce_splash_potion_bucket = 'creativebrewing:splash_potion_bucket';
 i.ce_lingering_potion_bucket = 'creativebrewing:lingering_potion_bucket';
@@ -207,7 +207,7 @@ i.netherite_camera_bag = 'exposure_extras:netherite_camera_bag';
 // like book/written_book/enchanted_book instead of one item + NBT (NBT-matched ingredients
 // via .weakNBT()/PartialNBTIngredient kept silently matching zero items here - not worth
 // re-litigating why; plain item ids side-step it entirely).
-// Items and behaviour: Creative Delight kubejs_startup/creativeengineering/sample_syringe_items.js, sample_syringe.js
+// Items and behaviour: Creative Delight kubejs_startup/creativedelight/sample_syringe_items.js, sample_syringe.js
 i.sample_syringe = 'creativeengineering:sample_syringe';
 i.cow_sample_syringe = 'creativeengineering:cow_sample_syringe';
 i.pig_sample_syringe = 'creativeengineering:pig_sample_syringe';
@@ -217,7 +217,7 @@ i.rabbit_sample_syringe = 'creativeengineering:rabbit_sample_syringe';
 i.cod_sample_syringe = 'creativeengineering:cod_sample_syringe';
 i.salmon_sample_syringe = 'creativeengineering:salmon_sample_syringe';
 // Meat cultures — raw lab-grown precursors for cultivated meat. Items and blocks: Creative Delight
-// kubejs_startup/creativeengineering/cultures.js; recipes: kubejs/data/creativedelight/kubejs/creativeengineering/cultivated_meat.js
+// kubejs_startup/creativedelight/cultures.js; recipes: kubejs/data/creativedelight/kubejs/creativeengineering/cultivated_meat.js
 i.culture_beef = 'creativeengineering:culture_beef';
 i.culture_pork = 'creativeengineering:culture_pork';
 i.culture_mutton = 'creativeengineering:culture_mutton';
@@ -225,7 +225,7 @@ i.culture_poultry = 'creativeengineering:culture_poultry';
 i.culture_rabbit = 'creativeengineering:culture_rabbit';
 i.culture_cod = 'creativeengineering:culture_cod';
 i.culture_salmon = 'creativeengineering:culture_salmon';
-// Culture storage blocks (9 cultures each). Blocks: Creative Delight kubejs_startup/creativeengineering/cultures.js
+// Culture storage blocks (9 cultures each). Blocks: Creative Delight kubejs_startup/creativedelight/cultures.js
 i.culture_block_beef = 'creativeengineering:beef_culture_block';
 i.culture_block_pork = 'creativeengineering:pork_culture_block';
 i.culture_block_mutton = 'creativeengineering:mutton_culture_block';
@@ -725,7 +725,7 @@ i.mulch_waste = '#forge:mulch/waste';
 i.mulch_green = '#forge:mulch/green';
 i.mulch_fungus = '#forge:mulch/fungus';
 i.mulch_fertilizer = '#forge:mulch/fertilizer';
-i.any_bark = '#immersive_weathering:bark';
+i.any_bark = '#creativeengineering:bark';   // Immersive Weathering's barks only (tag in Creative Common's data)
 i.compost = 'farmersdelight:organic_compost';
 i.any_scale = '#immersive_weathering:scales';
 i.magma_cream = 'minecraft:magma_cream';
@@ -1936,7 +1936,7 @@ i.golden_coffee_beans = 'rusticdelight:golden_coffee_beans';
 //Forge
 i.milk = '#forge:milk';
 i.flour = '#forge:flour/wheat';
-i.cornmeal = 'creativeengineering:cornmeal';          // CD creativeengineering/cornmeal.js
+i.cornmeal = 'creativeengineering:cornmeal';          // CD creativedelight/cornmeal.js
 // Corn Delight 1.2.11 items on 1.0.3 (feature_writeup/corn_delight.md 2). Items: CD corn_delight/corn_items.js
 i.corncob = 'creativeengineering:corncob';
 i.corn_popsicle = 'creativeengineering:corn_popsicle';
@@ -1959,11 +1959,11 @@ i.t_curios_face = '#curios:face';                     // pack slot: patcherMod c
 i.t_curios_hands = '#curios:hands';                   // pack slot: patcherMod compat/CuriosSlots (IMC)
 i.t_curios_feet = '#curios:feet';                     // pack slot: patcherMod compat/CuriosSlots (IMC)
 i.t_trimmable_armor = '#creativeengineering:trimmable_armor';  // Armor Trims allowlist, patcherMod compat/ArmorTrimsItemCache (gear/tuning #14)
-i.frosting = 'creativeengineering:frosting';          // CD creativeengineering/baking_ingredients.js
-i.cookie_dough = 'creativeengineering:cookie_dough';  // CD creativeengineering/baking_ingredients.js
-i.powdered_sugar = 'creativeengineering:powdered_sugar';  // CD creativeengineering/baking_ingredients.js
+i.frosting = 'creativeengineering:frosting';          // CD creativedelight/baking_ingredients.js
+i.cookie_dough = 'creativeengineering:cookie_dough';  // CD creativedelight/baking_ingredients.js
+i.powdered_sugar = 'creativeengineering:powdered_sugar';  // CD creativedelight/baking_ingredients.js
 i.powdered_sugar_bucket = 'creativeengineering:powdered_sugar_bucket';  // patcherMod food/PowderedSugarRegistry.java
-// Dough blocks (9 dough each; Create's is i.dough_block). Blocks: CD creativeengineering/baking_ingredients.js
+// Dough blocks (9 dough each; Create's is i.dough_block). Blocks: CD creativedelight/baking_ingredients.js
 i.gingerdough_block = 'creativeengineering:gingerdough_block';
 i.cookie_dough_block = 'creativeengineering:cookie_dough_block';
 i.sweet_potato_dough_block = 'creativeengineering:sweet_potato_dough_block';
@@ -2018,7 +2018,7 @@ i.t_sea_pickles = '#forge:sea_pickles';            // sea pickle and Oceanic's s
 i.tomato = '#forge:crops/tomato';
 i.rice = '#forge:crops/rice';
 i.mushrooms = '#forge:mushrooms';
-//Compost rule tags (development/creativeDelight/src/main/resources/kubejs_startup/creativeengineering/compost_rules.js)
+//Compost rule tags (development/creativeDelight/src/main/resources/kubejs_startup/creativedelight/compost_rules.js)
 i.t_seeds = '#forge:seeds';
 i.t_seeds_c = '#c:seeds';
 i.t_seeds_rice = '#forge:seeds/rice';
@@ -2036,7 +2036,7 @@ i.t_tea_leaves = '#forge:tea_leaves';
 i.t_respite_tea_leaves = '#farmersrespite:tea_leaves';   // Farmer's Respite's own tea leaf tag (Kettle recipes)
 i.t_lavender = '#forge:lavender';
 // Drink rules (feature_writeup/creative_delight_drinks.md 6, food/drinks #15): pack teas and juices (Creative Delight
-// kubejs_startup/creativeengineering/drinks.js) and the input tags the rules use (CD creativeengineering/drink_tags.js)
+// kubejs_startup/creativedelight/drinks.js) and the input tags the rules use (CD creativeengineering/drink_tags.js)
 i.kiwi_tea = 'creativeengineering:kiwi_tea';
 i.turnip_tea = 'creativeengineering:turnip_tea';
 i.bayberry_tea = 'creativeengineering:bayberry_tea';
@@ -4666,10 +4666,6 @@ i.redstone_torch_pearl = 'gates:redstone_torch_pearl';
 i.gates_transmitter = 'gates:transmitter';
 i.waxed_redstone_wire = 'gates:waxed_redstone_wire';
 i.wireless_redstone_lamp = 'gates:wireless_redstone_lamp';
-i.jei_bucket_bioethanol = 'immersiveengineering:jei_bucket_bioethanol';
-i.jei_bucket_ethanol = 'immersiveengineering:jei_bucket_ethanol';
-i.jei_bucket_memory_essence = 'immersiveengineering:jei_bucket_memory_essence';
-i.jei_bucket_yeast_culture = 'immersiveengineering:jei_bucket_yeast_culture';
 i.coin_chocolate_copper = 'lightmanscurrency:coin_chocolate_copper';
 i.coin_chocolate_diamond = 'lightmanscurrency:coin_chocolate_diamond';
 i.coin_chocolate_emerald = 'lightmanscurrency:coin_chocolate_emerald';
@@ -4690,8 +4686,6 @@ i.motor = 'projectred_core:motor';
 i.red_iron_comp = 'projectred_core:red_iron_comp';
 i.sail = 'projectred_core:sail';
 i.woven_cloth = 'projectred_core:woven_cloth';
-i.tmted_melon_juice = 'tmted:melon_juice';
-i.tmted_tomato_sauce = 'tmted:tomato_sauce';
 i.aluminum_rod = 'vintageimprovements:aluminum_rod';
 i.aluminum_sheet = 'vintageimprovements:aluminum_sheet';
 i.aluminum_wire = 'vintageimprovements:aluminum_wire';
@@ -5654,7 +5648,6 @@ i.empty_brass_chunk_loader    = 'create_power_loader:empty_brass_chunk_loader';
 i.tweaked_linked_controller = 'create_tweaked_controllers:tweaked_linked_controller';
 
 // ===== create_questing  -  1 new  (1 items, 0 already mapped) =====
-i.create_questing_blueprint = 'create_questing:blueprint';
 
 // ===== nocubescreateexp  -  1 new  (1 items, 0 already mapped) =====
 i.exp_block = 'nocubescreateexp:exp_block';
@@ -5794,9 +5787,6 @@ i.cc_coil      = 'more_immersive_wires:cc_coil';
 i.cc_connector = 'more_immersive_wires:cc_connector';
 i.cc_modem     = 'more_immersive_wires:cc_modem';
 i.cc_relay     = 'more_immersive_wires:cc_relay';
-i.rs_coil      = 'more_immersive_wires:rs_coil';
-i.rs_connector = 'more_immersive_wires:rs_connector';
-i.rs_relay     = 'more_immersive_wires:rs_relay';
 
 // ===== tmted  -  1 new  (2 items, 1 already mapped) =====
 i.bottle_of_wodka = 'tmted:bottle_of_wodka';
@@ -8381,7 +8371,6 @@ i.blossom_shutter                        = 'everycomp:af/quark/blossom_shutter';
 i.blossom_table                          = 'everycomp:af/quark/blossom_table';
 i.cherry_bench                           = 'everycomp:af/vinery/cherry_bench';
 i.cherry_chair                           = 'everycomp:af/vinery/cherry_chair';
-i.cherry_drawer                          = 'everycomp:af/vinery/cherry_drawer';
 i.cherry_planter_box                     = 'everycomp:af/vinery/cherry_planter_box';
 i.cherry_shelf                           = 'everycomp:af/vinery/cherry_shelf';
 i.cherry_shutter                         = 'everycomp:af/vinery/cherry_shutter';
@@ -8501,7 +8490,6 @@ i.ancient_cabinet                        = 'everycomp:fd/quark/ancient_cabinet';
 i.azalea_cabinet                         = 'everycomp:fd/quark/azalea_cabinet';
 i.bamboo_cabinet                         = 'everycomp:fd/quark/bamboo_cabinet';
 i.blossom_cabinet                        = 'everycomp:fd/quark/blossom_cabinet';
-i.cherry_cabinet                         = 'everycomp:fd/vinery/cherry_cabinet';
 i.everycomp_twisted_bench                = 'everycomp:hc/architects_palette/twisted_bench';
 i.twisted_board                          = 'everycomp:hc/architects_palette/twisted_board';
 i.everycomp_twisted_chair                = 'everycomp:hc/architects_palette/twisted_chair';
@@ -8623,7 +8611,6 @@ i.cherry_counter                         = 'everycomp:hc/vinery/cherry_counter';
 i.cherry_cupboard                        = 'everycomp:hc/vinery/cherry_cupboard';
 i.cherry_desk                            = 'everycomp:hc/vinery/cherry_desk';
 i.cherry_dining_bench                    = 'everycomp:hc/vinery/cherry_dining_bench';
-i.everycomp_cherry_drawer                = 'everycomp:hc/vinery/cherry_drawer';
 i.cherry_fancy_bed                       = 'everycomp:hc/vinery/cherry_fancy_bed';
 i.cherry_nightstand                      = 'everycomp:hc/vinery/cherry_nightstand';
 i.cherry_pillar_trim                     = 'everycomp:hc/vinery/cherry_pillar_trim';
@@ -11751,7 +11738,6 @@ i.short_silver_door                    = 'dramaticdoors:short_silver_door';
 i.short_spruce_door                    = 'dramaticdoors:short_spruce_door';
 i.short_stripped_bamboo_door           = 'dramaticdoors:short_stripped_bamboo_door';
 i.short_twisted_door                   = 'dramaticdoors:short_twisted_door';
-i.short_vinery_cherry_door             = 'dramaticdoors:short_vinery_cherry_door';
 i.short_warped_door                    = 'dramaticdoors:short_warped_door';
 i.short_waxed_exposed_iron_door        = 'dramaticdoors:short_waxed_exposed_iron_door';
 i.short_waxed_iron_door                = 'dramaticdoors:short_waxed_iron_door';
@@ -11812,7 +11798,6 @@ i.tall_silver_door                     = 'dramaticdoors:tall_silver_door';
 i.tall_spruce_door                     = 'dramaticdoors:tall_spruce_door';
 i.tall_stripped_bamboo_door            = 'dramaticdoors:tall_stripped_bamboo_door';
 i.tall_twisted_door                    = 'dramaticdoors:tall_twisted_door';
-i.tall_vinery_cherry_door              = 'dramaticdoors:tall_vinery_cherry_door';
 i.tall_warped_door                     = 'dramaticdoors:tall_warped_door';
 i.tall_waxed_exposed_iron_door         = 'dramaticdoors:tall_waxed_exposed_iron_door';
 i.tall_waxed_iron_door                 = 'dramaticdoors:tall_waxed_iron_door';
@@ -13094,11 +13079,15 @@ i.t_food_canned               = '#creativeengineering:food_type/canned';
 i.t_canned_source             = '#creativeengineering:canned_source';
 // ===== end food mods (generated) =====
 
+// ===== lunchbox tier names (hand-kept, outside the generated block so tools/food_catalog.py keeps them) =====
+i.copper_lunchbox = i.lunchbox;         // renamed Copper Lunchbox (feature_writeup/lunchboxes.md)
+i.iron_lunchbox   = i.golden_lunchbox;  // renamed Iron Lunchbox
+
 // ===== can tags (kubejs/data/creativedelight/kubejs/creativeengineering/can_tags.js, patcherMod food.CanServings) =====
 i.t_cans                        = '#creativeengineering:cans';
 i.t_can_servings                = '#creativeengineering:cans/servings'; // + '/<n>' = cans holding n servings
 
-// ===== canning (kubejs/data/creativedelight/kubejs/creativeengineering/canning.js, development/creativeDelight/src/main/resources/kubejs_startup/creativeengineering/cans.js) =====
+// ===== canning (kubejs/data/creativedelight/kubejs/creativeengineering/canning.js, development/creativeDelight/src/main/resources/kubejs_startup/creativedelight/cans.js) =====
 // every can key is in the generated block below (tools/gen_can_types.py); Canned Goods' own cans are under canned_goods
 // additives
 i.salt                          = '#forge:salt';
@@ -14060,8 +14049,6 @@ i.guardian_soup            = 'oceansdelight:guardian_soup';
 i.bell_pepper_medley       = 'rusticdelight:bell_pepper_medley';
 i.dark_bell_pepper_medley  = 'rusticdelight:dark_bell_pepper_medley';
 i.pale_bell_pepper_medley  = 'rusticdelight:pale_bell_pepper_medley';
-i.king_danis_wine          = 'vinery:king_danis_wine';
-i.mead                     = 'vinery:mead';
 
 i.t_placeable                = '#creativeengineering:placeable';
 i.t_placeable_sneak          = '#creativeengineering:placeable/sneak';
@@ -14701,6 +14688,9 @@ StartupEvents.postInit(() => {
 			// Object-shaped ingredient (e.g. NBT matchers) — skip tag/item validation
 			continue;
 		}
+		// Ids of a mod that is not loaded are guarded by global.has where they are used, and a glob such as
+		// 'displaydelight:*plated_*' is a matcher, not an item: neither is a dict error (scratch r1106spf).
+		if (id.indexOf('*') >= 0 || !global.has(id)) continue;
 		if (id.startsWith('#')) {
 			let tagItems = Ingredient.of(id).itemIds;
 			if (!tagItems || tagItems.length === 0) {

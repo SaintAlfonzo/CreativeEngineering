@@ -1,3 +1,4 @@
+// requires: creativedelight
 // Placeable food tooltip lines: Creative Delight QoL-2 (creative_delight.md 8; moved from client_scripts/ 2026-10-25),
 // switch [qol] placeableTooltips (off: no lines and the mods' own lines stay). From the tags in the pack's
 // kubejs/data/creativedelight/kubejs/creativeengineering/placeable_tags.js:

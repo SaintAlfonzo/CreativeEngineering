@@ -1,3 +1,4 @@
+// requires: creativedelight
 // requires: corn_delight
 // requires: lootjs
 // Corn Delight loot rows (feature_writeup/corn_delight.md 2.4). Non-member file.

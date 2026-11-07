@@ -110,7 +110,7 @@ Delight startup script `kubejs_startup/moredelight/toast.js` (list `global.fastT
 ### 5.2 Family rule
 
 `tools/food_families.py`: a `values` rule on `bread/slice` (toast only) and `sandwich/toast`: every toast eats fast
-(checked against the food dump's `fast` flag). The doc regenerates with `/cegen` after `/dumpall`.
+(checked against the food dump's `fast` flag). The doc regenerates with `/cdevgen` after `/dumpall`.
 
 ### 5.3 Tag singulars
 

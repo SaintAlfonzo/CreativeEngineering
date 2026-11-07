@@ -89,7 +89,7 @@ public final class SeasonClock {
         }
     }
 
-    /** After /cetime date moved the sun and the counter together: the jump is not a step to add. */
+    /** After /ccaltime date moved the sun and the counter together: the jump is not a step to add. */
     static void jumped(ServerLevel level) {
         LAST_DAY_TIME.put(level.dimension(), level.getDayTime());
     }

@@ -27,8 +27,8 @@
 | LO-02 | PASSED | Same positions with folds on and off for every structure compared (below); misses 2003 vs 10660; stages A/B saved 40670 / 156421 checks |
 | LO-01 | PARTLY | 258-row report with misses; 42 rows time out at the 120 s default, so "no task times out" does not hold |
 | LO-06 | PASSED (adapted) | A second parallel batch is refused by design. Instead: a 4-thread batch with 21 plain searches on top, no exception or hang, and the 1-thread rows match |
-| LO-08 | PASSED | `/celocate stats` = batch rows, 43 of 43, every count equal |
-| LO-15 | PASSED (label bug) | 5 s timeout: 21 of 51 rows `timed_out`. `/celocate stop` writes the full report at once; rows that never started say `error: CancellationException`, not `stopped` |
+| LO-08 | PASSED | `/cwglocate stats` = batch rows, 43 of 43, every count equal |
+| LO-15 | PASSED (label bug) | 5 s timeout: 21 of 51 rows `timed_out`. `/cwglocate stop` writes the full report at once; rows that never started say `error: CancellationException`, not `stopped` |
 | LO-05 | FAILED | Non-blocking loads still stall the server thread, by seconds per load, no better than vanilla |
 
 ### LO-01 / LO-02: folds on vs off
@@ -111,7 +111,7 @@ Idle baseline: 20 TPS, max gap 51 to 69 ms.
   a canonical pool order, `[worldgen.pools] canonicalOrder`. [structure_tuning.md](../../structure_tuning.md) 3.23
   item 1, ST-191.
 
-### 3.4 `/celocate stop` row label (cosmetic)
+### 3.4 `/cwglocate stop` row label (cosmetic)
 
 - Batch rows for searches that were still queued say `error: java.util.concurrent.CancellationException` instead
   of `stopped`. The report is complete otherwise.

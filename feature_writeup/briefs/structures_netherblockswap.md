@@ -48,7 +48,7 @@ crying obsidian and crimson trapdoors are exempt from every rule until then) and
   (`StructureTemplateManager#get`, `m_230407_`, RETURN). Switch `[worldgen.systems] templateBlockSwaps`
   (CEConfig.java:1784-1787; its comment still names only meat_block_swaps.json, worth a one-line fix in the next
   patcherMod build). Server restart; new chunks only; no client change.
-- **Not run by /cegen**: `gen_nether_swaps.py` (and `meat_block_scan.py`) are not in `tools/generators.json`. The
+- **Not run by /cdevgen**: `gen_nether_swaps.py` (and `meat_block_scan.py`) are not in `tools/generators.json`. The
   generator needs a full instance (`mods/*.jar` + the vanilla -extra jar, `gen_loot_config.MODS_DIR`); it can't run in
   a cloud checkout without the jars.
 - **Processor blind spot**: blocks a structure processor places are not in the templates, so swaps can't see them
@@ -91,7 +91,7 @@ crying obsidian and crimson trapdoors are exempt from every rule until then) and
    3 "Built" table, drop them from "Still open" in section 0, add the NW tests below.
 5. Optional, small: add a `nether_swaps` entry to `tools/generators.json` after `structure_groups` (it reads
    `pool_config.json` and the structure tags), outputs `kubejs/generation_scripts/worldgen/nether_block_swaps.json` and
-   `feature_writeup/nether_swaps.md`, apply "restart the server; new chunks only". Then `/cegen run nether_swaps` works.
+   `feature_writeup/nether_swaps.md`, apply "restart the server; new chunks only". Then `/cdevgen run nether_swaps` works.
 6. Ship: data only (`kubejs/generation_scripts/worldgen/`), server restart. Goes out with the next pack version; no
    patcherMod build unless the CEConfig comment fix rides along.
 
@@ -149,7 +149,7 @@ If the user keeps the stronghold's (portal rooms look right with it), add `"exce
 ### Tests
 
 - **NW-12 Crying obsidian:** `/locate structure betterstrongholds:stronghold`, find a portal treasure room (or
-  `/ceplace` the `treasure_portal_1` template) -> obsidian, no crying obsidian; same for a jungle pillager tower and an
+  `/cdevplace` the `treasure_portal_1` template) -> obsidian, no crying obsidian; same for a jungle pillager tower and an
   old villager statue.
 
 ---

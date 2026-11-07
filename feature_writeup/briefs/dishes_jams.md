@@ -73,7 +73,7 @@ mulberry jam's eat-return), tests RC-176 to RC-179. Left: steps 2 and 3 (panes, 
 - FD's `*_jelly_block` stays beside the placeable jar block (storage vs placed food). Recommend yes.
 
 ### Gotchas
-- Cans: `canned_*_jam` rows in `can_parity.md` name FD jams; rerun `/cegen` after any id change.
+- Cans: `canned_*_jam` rows in `can_parity.md` name FD jams; rerun `/cdevgen` after any id change.
 - RC-172 note: a JEI search "jam bottle" still finds Upgrade Aquatic's mulberry jam bottle (scratch r1031).
 
 ### Tests
@@ -128,7 +128,7 @@ item (compost row in CD startup `upgrade_aquatic/compost_values.js:37`).
 1. CD startup `upgrade_aquatic/item_merges.js` (new, `// requires: upgrade_aquatic`, `// requires: fruitsdelight`):
    `global.addItemMerges('creativedelight', [[i.mulberry_bread, i.jelly_bread]])`. The CD `_core/item_merges.js` run swaps
    recipes, loot and inventories.
-2. Drop the mulberry bread compost row (the purged id), and its can if any (`/cegen`).
+2. Drop the mulberry bread compost row (the purged id), and its can if any (`/cdevgen`).
 3. If the merged bread should still be makeable from mulberries: `#forge:jams` holds only the 22 Fruits Delight jams
    (tag dump 2026-10-30, before the new jars), so add `i.mulberry_jam_bottle` with `global.tags` and check that the Bread
    with Jam fillings read the tag rather than per-jam ids.
@@ -167,7 +167,7 @@ butter sandwich: Vintage's texture, Delightful's name; any bread + any jam + a n
 3. Sandwich: `pb_j` becomes any bread + any jam + nut mash jar (`R.shapeless(i.pb_j, [i.t_bread, i.nut_mash_jar, i.t_forge_jams], ...)`,
    jar returned as a remainder or consumed: D3); pad thai takes the jar. Rename `pb_j` to "Nut Butter and Jam Sandwich" in
    `namechanges.js`. `#forge:nut_butter` then holds the jar only.
-4. Food dict: drop the purged keys; rerun `/cegen` (cans) and the food catalog.
+4. Food dict: drop the purged keys; rerun `/cdevgen` (cans) and the food catalog.
 
 ### Decisions
 - **D1 Survivor:** settled by the owner (nut mash jar). Recommend the sandwich survivor be `vintagedelight:pb_j` (texture

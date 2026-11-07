@@ -1,0 +1,7 @@
+# r1106cbo boot 5 restart: members vinery and brewinandchewin off (SQ-CBO-18)
+## SQ-CBO-18 | optional, both members off
+kjsexpect server scripts ready, members on: $
+shell ! grep -nE "ReferenceError|TypeError|EvaluatorException|is not defined" logs/kubejs/startup.log logs/kubejs/server.log
+> cbo effects
+waitlog \[cbo\] done 30
+expect effects leaks 0

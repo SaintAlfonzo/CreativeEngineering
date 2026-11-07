@@ -413,10 +413,10 @@ public final class ItemMerges {
 		return fingerprint;
 	}
 
-	// ---------------------------------------------------------------- /ceswap items
+	// ---------------------------------------------------------------- /ccswap items
 
 	private static void register(CommandDispatcher<CommandSourceStack> d) {
-		d.register(Commands.literal("ceswap").requires(s -> s.hasPermission(2))
+		d.register(Commands.literal("ccswap").requires(s -> s.hasPermission(2))
 				.then(Commands.literal("items").executes(ctx -> {
 					CommandSourceStack src = ctx.getSource();
 					if (!SwapConfig.ON_COMMAND.get()) {
@@ -461,7 +461,7 @@ public final class ItemMerges {
 				}
 			}
 		}
-		LOGGER.info("[swaps] /ceswap items: {} stack(s) rewritten ({} players, {} chunks, {} entities)", stacks, players, chunks, entities);
+		LOGGER.info("[swaps] /ccswap items: {} stack(s) rewritten ({} players, {} chunks, {} entities)", stacks, players, chunks, entities);
 		return new int[] {stacks, players, chunks, entities};
 	}
 }

@@ -3,12 +3,5 @@
   "creativebrewing.jei.lingerification": "Lingerification",
   "creativebrewing.jei.tipped_arrows": "Tipped Arrows",
   "creativebrewing.jei.potion_buckets": "Potion Buckets",
-  "tooltip.creativebrewing.intoxicating_drink": "Intoxicating Drink",
-  "effect.creativebrewing.compound.parts": "Compound of: %s.",
-  "effect.creativebrewing.part.wither_immunity": "Wither Immunity",
-  "effect.creativebrewing.part.mid_air_jump": "One Mid-Air Jump",
-  "effect.creativebrewing.part.screen_flash": "Screen Flash",
-  "effect.creativebrewing.part.elytra_lift": "Elytra Lift",
-  "effect.creativebrewing.magic_resistance": "Magic Resistance",
-  "effect.creativebrewing.magic_resistance.description": "Reduces magic damage (potions, evoker fangs, thorns, sonic booms, curses and life drain) by 20% per level. Poison and Wither ticks deal no damage while their level is at most this effect's level."
+  "tooltip.creativebrewing.intoxicating_drink": "Intoxicating Drink"
 }

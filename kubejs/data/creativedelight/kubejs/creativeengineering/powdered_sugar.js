@@ -1,3 +1,4 @@
+// requires: creativedelight
 // Powdered sugar: grinding, block and bucket. Moved from the pack's kubejs/server_scripts/cooking/powdered_sugar.js
 // 2026-10-25, rows unchanged.
 ServerEvents.recipes(e => {
@@ -13,7 +14,7 @@ ServerEvents.recipes(e => {
 		// ============================================================
 		// Item: ground sugar (TODO dishes/ingredients #23, 2026-10-29). Create crushing and Millstone: 1 sugar -> 1 plus a
 		// 50% second (1.5 on average); mortar: 3 sugar -> 4. Counts as sugar (#forge:sugar, tags/cookingtags.js) and seasons
-		// like sugar (development/creativeDelight/src/main/resources/kubejs_startup/creativeengineering/seasonings.js).
+		// like sugar (development/creativeDelight/src/main/resources/kubejs_startup/creativedelight/seasonings.js).
 		R.foodGrinding([i.powdered_sugar, Item.of(i.powdered_sugar, 1).withChance(0.5)], i.sugar, e, 'sugar_powdered_sugar',
 			{ mortar: { count: 4, inputs: 3 } })
 

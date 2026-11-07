@@ -1,3 +1,4 @@
+// requires: creativedelight
 // requires: farmersdelight
 // Farmer's Delight 1.3.4 tag changes on the repacked 1.2.4 (feature_writeup/farmers_delight.md 3).
 

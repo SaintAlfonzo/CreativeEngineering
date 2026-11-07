@@ -18,7 +18,7 @@ public class EquipmentMixinPlugin extends GatedMixinPlugin {
     private static final List<String> EASY_ELYTRA = List.of("easyelytratakeoff");
 
     private static final Map<String, List<String>> NEEDS_MOD = Map.ofEntries(
-            // Copper tool tier on Everything Copper's pickaxe (CETiers)
+            // Copper tool tier on Everything Copper's pickaxe (CEQTiers)
             Map.entry("CopperPickaxeItemMixin", List.of("everythingcopper")),
             // Backpack skins (backpackskin/)
             Map.entry("BackpackSkinItemRendererMixin", BACKPACKS),
@@ -29,9 +29,20 @@ public class EquipmentMixinPlugin extends GatedMixinPlugin {
             Map.entry("BackpackSkinEquipMixin", BACKPACKS),
             // Elytra chestplates take off with Easy Elytra Takeoff (util/ElytraChestplates)
             Map.entry("EasyElytraTakeoffHelperMixin", EASY_ELYTRA),
-            Map.entry("EasyElytraTakeoffGroundCheckMixin", EASY_ELYTRA));
+            Map.entry("EasyElytraTakeoffGroundCheckMixin", EASY_ELYTRA),
+            // From Creative Brewing (plan_cb_polish.md 1): copper poisoning, the echo armor set bonus
+            Map.entry("CopperPoisoningEffectMixin", List.of("everythingcopper")),
+            Map.entry("EchoArmorEffectProcedureMixin", List.of("create_deep_dark")),
+            Map.entry("EchoArmorTooltipMixin", List.of("create_deep_dark")),
+            // Detail Armor Bar overflow row, from Creative Common (2026-11-07)
+            Map.entry("ArmorBarRendererAccessor", List.of("detailab")),
+            Map.entry("ArmorBarRendererOverflowTickMixin", List.of("detailab")));
+
+    /** Tested version ranges (Detail Armor Bar, moved from Creative Common's CommonMixinPlugin 2026-11-07). */
+    private static final Map<String, String> MOD_RANGE = Map.ofEntries(
+            Map.entry("detailab", "[2.6.4,2.7)"));
 
     public EquipmentMixinPlugin() {
-        super("[creativeequipment]", NEEDS_MOD);
+        super("[creativeequipment]", NEEDS_MOD, MOD_RANGE);
     }
 }

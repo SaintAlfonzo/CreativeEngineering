@@ -1,0 +1,43 @@
+# r1107tp boot a3: same save, tempad-common.toml edited before the boot (shell lines in run_a3 below the batch are done
+# by hand / chain): require_location_upgrade = true, [timedoor] cost_per_door = 10, time_in_world = 100,
+# [tempad] capacity = 2000. Rows SQ-TP-06, -30 (server half).
+pace 1
+
+## SQ-TP-06 | require_location_upgrade = true
+bootexpect Done \(
+shell grep -E "require_location_upgrade|cost_per_door|time_in_world" config/tempad-common.toml; grep -A2 "^\[tempad\]" config/tempad-common.toml
+> pbot spawn qa 0.5 -60 0.5 minecraft:overworld survival
+sleep 3
+> clear qa
+> item replace entity qa hotbar.0 with tempad:tempad
+> ztp apps qa
+waitlog \[ztp\] apps 20
+expect \[ztp\] apps tempad:settings tempad:teleport$
+> item replace entity qa hotbar.0 with tempad:tempad{installed_upgrades:{upgrades:["tempad:new_location"]}}
+> ztp apps qa
+waitlog \[ztp\] apps tempad:new 20
+expect \[ztp\] apps tempad:new_location tempad:settings tempad:teleport
+> zq rdetail tempad:upgrades/new_location
+waitlog \[zq\] done 30
+expect \[zq\] tempad:upgrades/new_location
+> zq makes tempad:new_location_upgrade
+waitlog \[zq\] done 30
+expect \[zq\] .*new_location_upgrade
+look upgrade installed by NBT (the crafting of the upgrade into the Tempad is the tempad:upgrade recipe listed here); creative tab is a client check
+
+## SQ-TP-30 | changed config numbers (server half; ConfigSyncPacket to a client is CQ)
+> ztp setchr qa 0 6000
+waitlog \[ztp\] setchr 20
+expect \[ztp\] setchr slot 0 tempad:tempad inserted 2000 now 2000
+> ztp locs qa
+> kill @e[type=tempad:timedoor]
+> ztp open qa tempad:default Far East
+waitlog \[ztp\] open 20
+expect chronons 2000 -> 1990
+> ztp doors
+waitlog \[ztp\] doors total 20
+expect \[ztp\] door minecraft:overworld 0\.50 -60\.00 3\.50 .* age \d+ closing \d+ .*original true
+sleep 6
+> ztp doors
+waitlog \[ztp\] doors total 20
+expect \[ztp\] doors total 0

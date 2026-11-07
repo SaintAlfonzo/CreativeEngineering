@@ -197,7 +197,7 @@ Rerun the generators after the port (I25), and stop the `#missing` texture faces
 - **I25 is `pack/release #5`'s work.** alcohol.md B3.4 I25 lists `crop_growth_coverage.py`, `placeable_catalog.py`,
   `stack_sizes.py`, `gen_spawn_table.py`, `food_catalog.py` and `/dumpall`. The dumps with the port exist (2026-10-26 scratch,
   2026-10-30 client), and the generated files already carry Vinery keys (37 in food_types.json, 28 in stack_sizes.json). The
-  last four tools are in `tools/generators.json` (`/cegen`); `crop_growth_coverage.py` is not.
+  last four tools are in `tools/generators.json` (`/cdevgen`); `crop_growth_coverage.py` is not.
 - **`#missing` is 14 WARN lines now, not 4.** `logs/latest.log` (boot 2026-10-31 17:16): `Unable to resolve texture
   reference: #missing in` the four upstream models `vinery:block/{aegis, glowing, stal, strad}_wine` and ten port-built
   models `vinery_backport:block/wine_box/{aegis_wine, apple_cider, chenet_wine, creepers_crush, eiswein, glowing_wine,

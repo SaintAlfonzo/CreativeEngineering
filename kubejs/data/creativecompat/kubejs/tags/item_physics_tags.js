@@ -1,3 +1,4 @@
+// requires: creativecompat
 // Creative Compat; moved from kubejs/server_scripts/tags/item_physics_tags.js on 2026-11-01.
 // Item-physics behaviour tags (Creative Compat ItemPhysicSplit). Runs on /reload — dropped
 // items pick up membership changes on the next tick, no restart.

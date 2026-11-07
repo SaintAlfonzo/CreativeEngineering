@@ -1,3 +1,4 @@
+// requires: creativecompat
 // Creative Compat; moved from kubejs/server_scripts/other/misc_mods.js on 2026-11-01.
 ServerEvents.recipes(e => {
 
@@ -70,7 +71,7 @@ R.createSplashing(i.weathered_cardboard_box, i.cardboard_box, e)
 
 // Nests, same U shape as Incubation's own hay nest (5 wheat).
 // Twig nest: stock Incubation only has it from worldgen
-R.shaped(Item.of(i.twig_nest, 1), ['T T', 'TTT'], { T: [i.twig, i.any_stick] }, e, 'twig_nest')
+R.shaped(i.twig_nest, ['T T', 'TTT'], { T: [i.twig, i.any_stick] }, e, 'twig_nest')
 // Emu, duck and goose nests and the duck/goose egg crates: recipes ship in Incubation Additions
 // (development/incubationAdditions, packs/<mod id>/data), loaded only with their bird's mod
 

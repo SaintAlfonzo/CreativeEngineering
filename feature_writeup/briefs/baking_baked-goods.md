@@ -289,7 +289,7 @@ the spout 129).
 
 ### Build
 1. (c) Add the five CCK cake slices to `global.removedItems` (restart): hidden in JEI, tags stripped. The `cake/slice`
-   family table then drops them on the next `/cegen`.
+   family table then drops them on the next `/cdevgen`.
 2. (b) Rename in `kubejs/assets/creativedelight/kubejs/fruitsdelight/client.js` (new, the CD client pattern of
    `veggiesdelight/client.js`): `e.renameItem(i.mangosteen_cake, '<name>')`. If it stops being a cake, move it from
    `CAKES` to its own oven line (bowl as the plating container) and out of `cake/whole`.
@@ -556,7 +556,7 @@ cherry jelly / jam share the cherry route (jam: `dishes/jams #4`).
    pot filling and `_from_filling` come with the row). Slices: `F.pieSlice(i.cherry_pie, i.cherry_pie_slice)` if CCK's
    cutting recipe stays gated (it is: Environmental) **(unverified: check JEI after the item exists)**.
 3. Can: a `canned_cherry_pie_filling` row in the can generator (`cans/canning`), section `pie`, 4 servings.
-4. Restart (startup item) and `/cegen` for the can.
+4. Restart (startup item) and `/cdevgen` for the can.
 
 ### Decisions
 - Resolved 2026-10-29: add item, slice and block.
@@ -596,7 +596,7 @@ Every pie slice in the pack can be obtained, or is hidden.
 2. The other five: add the slices to `global.removedItems`
    ([removed_items.js](../../kubejs/startup_scripts/_lib/removed_items.js)); optionally set their config switches to false
    (whether that unregisters the item is **(unverified)**). The dead crates and sacks can go with them.
-3. Restart; `/cegen` (can parity, families).
+3. Restart; `/cdevgen` (can parity, families).
 
 ### Decisions
 - **Add or hide, per slice** (TODO decision). Recommendation: add blueberry (a fruit the pack has, a block that exists);

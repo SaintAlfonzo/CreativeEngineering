@@ -86,7 +86,7 @@ Already in Common's jar: `global.NCH`, `global.tags`, `global.compost` (`kubejs_
 ### 1.2 Hard dependencies of the chain
 
 `creativecommon` needs `kubejs`; Compat needs Common; Calendar needs Common and Compat; CD needs those three and
-`farmersdelight` (met by CD's own nested Farmer's Delight member); CB needs all four. **Inside CD, members add hard deps:**
+`farmersdelight` (met by CD's own nested Farmer's Delight member); CB needs all four, plus `morejs` (MoreJS, the brewing mixes; hard since 2026-11-06). **Inside CD, members add hard deps:**
 `blockheads` needs Cooking for Blockheads and Balm, `incubation` needs Incubation. A nested member with a missing hard
 dependency stops the game, so today the minimal chain also needs CfB, Balm and Incubation. Decided (D3): both members
 become optional compartments of CD's own jar (M8); after it the chain needs none of the three.
@@ -470,3 +470,75 @@ Input to the plan that follows Step 2 (Compat and CD rows gate the publish order
 | N2 | Banners | `licence/compat #2` | Delete the 25 MineColonies banner textures. Build the elytra banner and bedspread patterns at runtime from the installed jars (as the paintings), so no derived PNG ships; the 100 shipped files go. Credit the source mods in `NOTICE-thirdparty.txt` |
 | N3 | TrashSlot compliance | `licence/compat #3` | Replace `TrashSlotGuiHandlerMixin`'s `@Overwrite onScreenInit` (follows TrashSlot's all-rights-reserved method) with targeted injects that do not copy its body. Needs a plan of its own: read what the overwrite changes first |
 | N4 | Rustic crate placeholders | `licence/cd #2` | Closed: Rustic Delight is MIT (CurseForge page, owner). Add the MIT notice for the 2 crate PNGs to the Rustic member's NOTICE; no repaint |
+
+## 14. Minimal-instance fixes (2026-11-06, from the CEPortTesting run)
+
+The first CEPortTesting boot (55 mods, no pack `kubejs/` folder) showed the jars still leaning on the pack folder.
+Built and installed in the pack 2026-11-06 01:30; tests SQ-MIN-01 to -07 (scratch_queue.md).
+
+- **Generated data ships in the jars.** Scripts and Java read `kubejs/generation_scripts/...` through Creative Common
+  (`util/WorldgenFiles` for Java, `global.genText` / `global.genJson` in `func/gen_data.js` for scripts): the instance
+  file first, else `generation_scripts/...` inside any loaded mod jar. Each jar's build.gradle `genData` list copies its
+  files and the jar task fails if one is missing: Calendar `season_types`, `crop_seasons`; Creative Delight the 8 `food/`
+  tables; Worldgen the rest of `worldgen/` (not the `.md` reports or `structure_test_overrides.json`). Without this,
+  season types (biome weather) and crop seasons (the WTHIT crop-season line) were empty, and food families, comfort,
+  golden values and placed slices stayed upstream. Edit the instance file as before; a rebuild only refreshes the
+  fallback copy.
+- **KubeJS addons are hard dependencies.** Creative Delight requires `kubejs_create`, `kubejsdelight` and `lootjs`;
+  Creative Worldgen requires `lootjs` (mods.toml). Creative Brewing requires `morejs` (owner 2026-11-06: without it the
+  CB potions had no brewing mix; `potions.js` no longer guards it). Without them ~1000 recipe-helper errors and the `LootJS` ReferenceError.
+- **Assets.** Culture and dough block blockstates/models, 16 item textures, `sample_syringe` and the Corn Delight cob
+  pipe models/textures, `treated_stick` textures moved from `kubejs/assets` into the Creative Delight jar (git mv).
+- **`creativeengineering:biome_tag` loot condition** moved from Worldgen to Creative Delight (the fishing net tables use
+  it; Delight does not need Worldgen).
+- **Fixes:** `DragonBreathBrewing` treated a missing Create Central Kitchen fluid as present (`getValue` returns
+  `minecraft:empty`), building 93 broken mixing recipes that crashed Create's JEI page. Log noise: DetailArmorBarCompat,
+  Display Delight dishes and Roll Delight chopstick foods no longer warn for mods that are not installed.
+- **Follow-up 2026-11-06 late (built, not installed):** the culture and dough blocks still showed the missing texture
+  in CEPortTesting: KubeJS writes its own block model for every block it registers (unless the builder has a model
+  JSON), and it wins over the jar's. `cultures.js` and `baking_ingredients.js` now set `.textureAll(...)` to the
+  `block/culture_block/` and `block/dough_block/` paths. MoreJS became a hard dependency of Creative Brewing (owner).
+  Tests: SQ-MIN-05, SQ-CBA-06, -14, CQ-CBA-01.
+- Left as is: vanilla "Unknown recipe category" for the oven and fermenting types (client recipe book, cosmetic); dict
+  validation lines; third-party texture/model warnings.
+
+## 15. Decision-free fixes after r1106cbb (2026-11-06 afternoon)
+
+Owner request: "build the fixes for all of the issues without decisions for the creative brewing publish process".
+Built 13:16-13:17 (Common 1.1.0, CD 1.1.0, Engineering 2.0.0, Brewing 1.0.0 in build/libs), NOT installed; Compat
+rebuilt by the licence work (`licence/compat #2`, `#3`). Tests SQ-CBC-01 to -05, CQ-CBC-01. TODO `creativebrewing/publish #9`. **Scratch r1106cbo 2026-11-06 ([scratch_run_2026-11-06.md](testing/scratch_run_2026-11-06.md) 4): SQ-CBC-01, -03 to
+-07 PASS (chain: 0 incomplete-item errors, failed recipes 204 -> 1; full pack: 296 sequenced assemblies, removed 1328);
+SQ-CBC-02 FAIL: 77 `Empty array?` left (TODO `creativebrewing/publish #15`); `[absent mods]` never prints because
+KubeJS 1902.6.2 never posts `afterRecipes` (`#11`). CQ-CBC-01 not run.**
+
+- **Incomplete items in CD** (open issue 2.2 #3, 72 of the 230 NCH failures): the 80 food rows of Engineering's
+  `changes/transition_items.js` moved to CD's `kubejs_startup/creativedelight/cd_transition_items.js`. Ids unchanged
+  (`kubejs:incomplete_<key>` whichever script registers them). Without Engineering, every CD sequenced assembly failed,
+  and each step (`create:deploying` with an undefined incomplete item) was still added as an empty-fluid recipe: most
+  likely the 204 KubeJS failed recipes on the chain (2.2 #2; SQ-CBC-03 confirms).
+- **G5 for remove and replace filters** (2.2 #3, 81 `Empty array?`): `NCH._absentInFilter` checks the ids under
+  `input` / `output` of `remove`, `replaceInput` and `replaceOutput` filters (through `or` / `not` / filter lists) and
+  counts an absent mod's id instead of letting KubeJS throw. A list under `input` / `output` is left to KubeJS (one
+  absent entry must not drop the call). Checked in the pack's Rhino with two scopes (scratchpad harness, as
+  `tools/rhino_scope_test`): counts per mod, present ids and lists still removed, the undefined refusal unchanged.
+- **`Item.of(<absent id>)` outputs** (2.2 #3, 16 lines): `Item.of` gives null for a missing id, so NCH cannot see the
+  mod. Bushier Flowers bushes, the hanging pot (Compat `flowers.js`), the twig nest (Compat `misc_mods.js`) and the
+  canned-filling pies (CD `canning.js`) now pass the id string (count 1 is the default; recipe ids unchanged). Other
+  `Item.of(x, 1)` outputs elsewhere behave the same way; not swept (each shows as an `output: is undefined/null` line).
+- **`[absent mods]` summary** (2.2 #4): the counting works across script scopes (same Rhino check), so the empty
+  summary meant nothing was counted (the two cases above bypassed the counter). The summary now prints
+  `[absent mods] none skipped` when empty, so a missing line means the listener did not run.
+- **Engineering spring tags** (TODO #7): the full-pack dump has the stiff / weak spring tags right (the consts sit in a
+  `forEach` callback, a function scope); switched to `let` so `rhino_const_loop_check.py` reports nothing.
+- **Names and notices:** Vinery's donor error and pack description say "Vinery (Creative Brewing)", Brewin's pack
+  description "Brewin' & Chewin' (Creative Brewing)" (9.4 "should fix"); Rustic member `NOTICE-upstream-MIT.txt` for the
+  2 glowing calamari crate textures (N4).
+- **Donor-jar list (9.5 R2):** `tools/donor_jars_md.py` prints folder, file, sha1 and source from every
+  `UpstreamJars.java`; the table is in the README's rebuild steps. Project page: `--mods creativebrewing,creativedelight`.
+
+Owner answers 2026-11-06 (built 13:23-13:24, not installed): **CB optional dependencies** listed, 24 `mandatory=false`,
+`ordering="AFTER"` entries in CB's `mods.toml` (every mod its scripts, mixin compartments or JEI pages check; Create left
+out, the chain requires it through KubeJS Create). **`metal_dusts`:** the chain does not fill it; it stays empty there and
+Steel Toe Stout keeps the iron ingot fallback (TODO #4). **Geophilic Reforged** (`geophilic_reforged`, the mod the #6
+note called "Geolithic"; in `mods/`) is a mandatory Worldgen dependency. CD's `moved_code_backup` Farmer's Delight
+jar deleted (owner 2026-11-06; nothing read it; still in pushed history). Still open: R6 commit, push and tag. Left for a boot: 2.2 #2 remainder, #7 meta structures, TODO #7 full-pack tag diff (`/dumptags`).

@@ -1,3 +1,4 @@
+// requires: creativedelight
 // requires: quark
 // Quark food storage block removals (chorus fruit block, crop crates). Non-member file: recipe ids are
 // creativedelight:<type>/<suffix> (global.CD.recipes). Moved from the pack's kubejs/server_scripts/cooking/cooking.js

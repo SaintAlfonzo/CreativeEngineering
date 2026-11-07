@@ -1,0 +1,284 @@
+# r1106spf boot 1, new SQ-SPF rows (gen.sh puts this after the boot-only reruns and the probes).
+pace 1
+
+## SQ-SPF-00 | boot on the 18:5x builds: jars, mixin and class errors, script errors
+> pbot spawn qa -20 -60 -24 minecraft:overworld survival
+sleep 2
+bootexpect Done \(
+bootreject (Mixin apply failed|InvalidMixinException|InvalidInjectionException|NoClassDefFoundError|ClassNotFoundException).*(com\.SaintAlfonzo|ce\.shared)
+kjsreject Error occurred while handling event
+kjsreject ReferenceError
+kjsreject global\.(CEN|CMG|CEQ|CWG|CDV) (missing|is undefined)
+shell ls mods | grep -iE "^creative|exposure" ; grep -ciE "Mixin apply failed|InvalidMixinException|NoClassDefFoundError|ClassNotFoundException" logs/latest.log; grep -hE "Error occurred while handling event|ReferenceError" logs/kubejs/*.log | head
+look 11 Creative jars (Common, Compat, Calendar, Devtools, Magic, Equipment, Engineering, Worldgen, Delight, Brewing, Labels) plus Exposure; tag/registry/recipe diff is done offline by compare.py
+
+## SQ-SPF-03 | Common: advancements dropped, farmer trades
+bootexpect Loaded 0 advancements
+> summon minecraft:villager -10 -60 -10 {VillagerData:{profession:"minecraft:farmer",level:5},NoAI:1b}
+sleep 1
+> execute positioned -10 -60 -10 as @e[type=#zq:villagers,limit=1,sort=nearest,distance=..4] run data get entity @s Offers
+expect Recipes
+look offers present; pack trade ids (CD or Engineering items) among them
+
+## SQ-SPF-02 | Common: item merge (farmersrespite:coffee_beans -> rusticdelight:roasted_coffee_beans), removed items
+> clear qa
+> give qa farmersrespite:coffee_beans 3
+sleep 1
+> data get entity qa Inventory
+shell grep -iE "item ?merge|swap_merges|\[swaps\]" logs/latest.log | head -8
+look inventory holds rusticdelight:roasted_coffee_beans (or the give failed as unknown item, which also means the id is gone); merge/swaps stamp lines present
+
+## SQ-SPF-05 | Common engine fixes: 200 block place/break over 4 chunk sections
+> fill 40 -60 -60 47 -45 -55 minecraft:stone
+> fill 40 -60 -60 47 -45 -55 minecraft:air
+> fill 48 -60 -60 55 -45 -55 minecraft:sand
+> fill 48 -60 -60 55 -45 -55 minecraft:air
+> fill 40 -44 -60 47 -30 -55 minecraft:oak_planks
+> fill 40 -44 -60 47 -30 -55 minecraft:air
+> fill 48 -44 -60 55 -30 -55 minecraft:glass
+> fill 48 -44 -60 55 -30 -55 minecraft:air
+sleep 2
+shell grep -ciE "null (block)?state|section update" logs/latest.log
+reject (?i)null (block)?state
+bootreject (?i)(FallingBlockHold|ProtoChunkTicksFalling|HolderReferenceUnbound).*(error|fail)
+
+## SQ-SPF-10 | Compat: moss patch kept, monster box / vine reruns follow
+> execute if block -39 -61 -39 minecraft:moss_block
+expect Test passed
+look moss tint is client-only (CQ-SPF-01); vine and monster box: SQ-VS / SQ-MB rows of this boot
+
+## SQ-SPF-11 | Compat item physics: stick in lava, log in fire
+> fill 60 -61 -20 62 -61 -18 minecraft:lava
+> fill 60 -61 -14 62 -61 -12 minecraft:stone
+> setblock 61 -60 -13 minecraft:fire
+> summon minecraft:item 61 -59 -19 {Item:{id:"minecraft:stick",Count:4b}}
+> summon minecraft:item 61 -59 -13 {Item:{id:"minecraft:oak_log",Count:4b}}
+sleep 15
+> execute positioned 61 -60 -19 run data get entity @e[type=minecraft:item,limit=1,sort=nearest,distance=..3] Item
+> execute positioned 61 -60 -13 run data get entity @e[type=minecraft:item,limit=1,sort=nearest,distance=..3] Item
+> zq itemtag creativecompat:physics/burns_to_charcoal
+shell grep -c "itemphysic\|ItemPhysic" logs/latest.log
+look burn transform outputs (charcoal / ash) as base; physics tags filled
+
+## SQ-SPF-12 | Compat leaf pile slow and surface walk speed
+> fill 0 -61 -70 25 -61 -70 immersivepetroleum:asphalt
+> fill 0 -61 -74 25 -61 -74 minecraft:grass_block
+> tp qa 0 -60 -70
+> pbot path qa 25 -60 -70 1.0
+sleep 2
+> data get entity qa Pos
+> pbot path-stop qa
+> tp qa 0 -60 -74
+> pbot path qa 25 -60 -74 1.0
+sleep 2
+> data get entity qa Pos
+> pbot path-stop qa
+> tp qa -20 -60 -24
+shell grep -A6 "^\[surface\]" config/creativecompat-common.toml | head -8
+look x after 2 s on asphalt is greater than on grass by about the [surface] factor (bot path speed uses the movement attribute)
+
+## SQ-SPF-13 | Compat TNT shrapnel count
+> tp qa 70 -60 40
+> fill 68 -61 38 92 -61 62 minecraft:obsidian
+pace 0.05
+> summon minecraft:tnt 80 -40 50 {Fuse:1}
+> kill @e[type=creativeengineering:shrapnel]
+> kill @e[type=creativeengineering:shrapnel]
+pace 1
+> tp qa -20 -60 -24
+shell grep -A6 "^\[shrapnel\]" config/creativecompat-common.toml | grep -E "count|enabled"
+look Killed N entities with N = [shrapnel] count (24 default); vein undo (SQ-CEN-07) needs the client's vein mine key: CQ row
+
+## SQ-SPF-14 | Compat cats and storage: feather on a stick
+> summon minecraft:cat -12 -60 -26 {Tame:0b}
+> pbot hold qa domesticationinnovation:feather_on_a_stick
+> zq useitem qa
+sleep 2
+> data get entity @e[type=minecraft:cat,limit=1,sort=nearest,x=-12,y=-60,z=-26] Brain
+shell grep -iE "FeatherAttack|feather" logs/latest.log | tail -3
+look cat reacts (log line or memory); Quark sort is in the Trinket Case probe (SQ-CMG-05 tcprobe sort)
+
+## SQ-SPF-20 | Calendar time: one day, pushed values
+> cetime date
+> time add 24000
+> cetime date
+shell grep -A12 "^\[time" config/creativecalendar-common.toml | head -14; grep -iE "dayLength|day_length|ticks" config/betterdays-common.toml | head -5; ls world/serverconfig/ | grep -i season; grep -iE "day|duration" world/serverconfig/sereneseasons-server.toml | head -5
+look date moved one day; Better Days and Serene Seasons values match [time.day] of creativecalendar-common.toml
+
+## SQ-SPF-22 | Calendar into Brewing: wine clock after 2 days
+> wine time
+> time add 48000
+> wine time
+look clock advanced by 2 days against the base value (SQ-SPF-22-base) plus the boot gap
+
+## SQ-SPF-21 | Calendar seasons: off-season cucumber vs wheat
+> execute if block -30 -60 -48 #creativeengineering:crop_seasons/warm_wet
+> execute if block -30 -60 -48 #creativeengineering:crop_seasons/warm_dry
+> execute if block -30 -60 -50 #creativeengineering:crop_seasons/temperate
+> fill -35 -60 -50 -26 -60 -50 minecraft:wheat[age=0]
+> fill -35 -60 -48 -26 -60 -48 vintagedelight:cucumber_crop[age=0]
+> tp qa -30 -60 -45
+> season set MID_WINTER
+> gamerule randomTickSpeed 100
+sleep 30
+> gamerule randomTickSpeed 3
+> zq ages -35 -60 -50 -26 -60 -50 minecraft:wheat
+> zq ages -35 -60 -48 -26 -60 -48 vintagedelight:cucumber_crop
+> fill -35 -60 -50 -26 -60 -50 minecraft:wheat[age=0]
+> fill -35 -60 -48 -26 -60 -48 vintagedelight:cucumber_crop[age=0]
+> season set MID_SUMMER
+> gamerule randomTickSpeed 100
+sleep 30
+> gamerule randomTickSpeed 3
+> zq ages -35 -60 -50 -26 -60 -50 minecraft:wheat
+> zq ages -35 -60 -48 -26 -60 -48 vintagedelight:cucumber_crop
+look winter means below summer means for the warm crop; both still grow in winter (off is slower, never stopped)
+
+## SQ-SPF-40 | Magic: portal frame with flint and steel vs Flint and Terrasteel (SQ-CMG-04)
+> fill 30 -61 70 33 -57 70 minecraft:obsidian
+> fill 31 -60 70 32 -58 70 minecraft:air
+> fill 35 -61 70 38 -57 70 minecraft:obsidian
+> fill 36 -60 70 37 -58 70 minecraft:air
+> tp qa 31 -60 72
+> pbot hold qa minecraft:flint_and_steel
+> pbot use qa 31 -61 70 up
+sleep 2
+> execute if block 30 -61 70 minecraft:crying_obsidian
+> execute if block 31 -60 70 minecraft:nether_portal
+> tp qa 36 -60 72
+> pbot hold qa creativeengineering:flint_and_terrasteel
+> pbot use qa 36 -61 70 up
+sleep 2
+> execute if block 36 -60 70 minecraft:nether_portal
+> zq recipes creativemagic:
+> tp qa -20 -60 -24
+look first frame: crying obsidian, no portal; second: portal open; creativemagic: recipes listed (Flint and Terrasteel, Ender Storage, CEI machine, sculk)
+
+## SQ-SPF-50 | Equipment: fixture chest after the swap, tier shields, tags (SQ-CEQ-01, -04, -05, -08)
+> data get block -20 -60 -20 Items
+expect creativeengineering:copper_shield
+expect clothColor
+> give qa creativeengineering:netherite_shield
+> zq itemtag creativeengineering:stepstools
+> zq itemtag curios:feet
+> zq itemtag creativeengineering:dragon_gear
+> zq itemtag creativeengineering:elytra_chestplates
+> zq itemtag creativeengineering:bonemeal_charms
+> zq recipes creativeequipment:
+> zq blocktag creativeengineering:needs_copper_tool
+> execute if block -20 -60 -20 minecraft:chest
+shell grep -c "\[tags\].*harvest" logs/kubejs/server.log
+look items keep NBT (backpack colours, sawblade Damage 5); tag counts as base (compare with SQ-SPF-50 lines vs b0 dumps); creativeequipment: recipes (felsic assembly, End gear, shield, stepstool, archery, bullets, camera bag, backpack skin)
+
+## SQ-SPF-50b | Equipment: dragon gear autorepair and tuned attributes (SQ-CEQ-07, -08)
+> item replace entity qa armor.head with dragonloot:dragon_helmet{Damage:50}
+sleep 12
+> data get entity qa Inventory[{Slot:103b}]
+> give qa create_deep_dark:echo_sword
+> give qa felsic_gear:felsic_pickaxe
+> zq item create_deep_dark:echo_sword
+> zq item felsic_gear:felsic_pickaxe
+> zq item dragonloot:dragon_helmet
+> zq item farmersdelight:flint_knife
+> zq makes echo_pickaxe
+look helmet Damage below 50 after 220 ticks by amountPerInterval; item stats as before the carve (compare with base dumps gear/)
+
+## SQ-SPF-51 | Equipment moved in: wooden water bucket place and pick up, fletching recipes
+> tp qa -10 -60 -40
+> pbot hold qa creativeengineering:wooden_water_bucket
+> pbot use qa -10 -61 -42 up
+sleep 1
+> execute if block -10 -60 -42 minecraft:water
+> data get entity qa SelectedItem
+> pbot hold qa creativeengineering:wooden_bucket
+> pbot use qa -10 -60 -42 up
+sleep 1
+> data get entity qa SelectedItem
+> zq makes creativeengineering:wooden_bucket
+> zq recipes fletching
+> tp qa -20 -60 -24
+look water placed, empty wooden bucket after; bucket refilled with water (wooden_water_bucket) on the second use; bucket and fletching recipes present
+
+## SQ-SPF-52 | Equipment stepstools (SQ-STL-01, -02 reruns are in this boot)
+> item replace entity qa armor.feet with creativeengineering:red_stepstool
+> data get entity qa Inventory[{Slot:100b}]
+look stepstool equipped; step-up packet needs the client (CQ-SPF-02)
+
+## SQ-SPF-60 | Engineering machines: dragon breathing fan, sawmill routing (SQ-CEN-06)
+> zq bytype creativeengineering:dragon_breathing
+> zq bytype immersiveengineering:sawmill
+> setblock 20 -60 90 create:creative_motor[facing=east]
+> setblock 21 -60 90 create:encased_fan[facing=east]
+> setblock 22 -60 90 minecraft:dragon_head[rotation=4]
+> summon minecraft:item 24 -60 90 {Item:{id:"minecraft:cobblestone",Count:4b},PickupDelay:32767}
+sleep 12
+> execute positioned 24 -60 90 run data get entity @e[type=minecraft:item,limit=1,sort=nearest,distance=..4] Item
+shell grep -iE "dragon_breathing|DragonBreathing" logs/latest.log | head -5
+look the fan processes the item with the dragon recipe (output differs from glass bottle if a bottle recipe exists; else judge from the bytype list); fan type registered once; sawmill needs a fed multiblock: count only here, operation in CQ-SPF-01 JEI
+
+## SQ-SPF-80b | Delight: cooking pot finishes a meal
+> setblock -30 -60 -60 minecraft:campfire[lit=true]
+> setblock -30 -59 -60 farmersdelight:cooking_pot
+> data merge block -30 -59 -60 {Inventory:{Items:[{Slot:0b,id:"minecraft:potato",Count:1b},{Slot:1b,id:"minecraft:potato",Count:1b},{Slot:2b,id:"farmersdelight:onion",Count:1b},{Slot:3b,id:"minecraft:milk_bucket",Count:1b},{Slot:7b,id:"minecraft:bowl",Count:1b}]}}
+sleep 25
+> data get block -30 -59 -60 Inventory
+expect largemeals:potato_soup
+
+## SQ-SPF-83 | Delight fluids and compost
+> forge tags minecraft:fluid get forge:fluid/chorus_juice
+> forge tags minecraft:fluid get forge:fluid/egg_solution
+> setblock -36 -60 -60 minecraft:composter
+> tp qa -36 -60 -58
+> pbot hold qa vintagedelight:cucumber 20
+repeat 20
+> pbot use qa -36 -60 -60 up
+end
+> data get block -36 -60 -60
+> execute if block -36 -60 -60 minecraft:composter
+> tp qa -20 -60 -24
+look fluid tags list creativedelight: fluids only; composter level against the compost.js value (20 tries: about chance x 20 / 7 levels)
+
+## SQ-SPF-90b | Brewing: Vinery fermentation barrel and Brewin' keg run
+> setblock -40 -60 -60 vinery:fermentation_barrel
+> setblock -42 -60 -60 brewinandchewin:keg
+> data get block -40 -60 -60
+> data get block -42 -60 -60
+look block entities present with their NBT layout; a full brew needs filled fluid tanks (client or hopper chain): judge counts in SQ-SPF-90 / -91
+
+## SQ-SPF-91b | Brewing: bot drinks a beer, alcohol effect
+> item replace entity qa weapon.mainhand with brewinandchewin:beer
+> zq useitem qa
+sleep 3
+> data get entity qa ActiveEffects
+look Tipsy (or the pack's alcohol effect) with the alcohol_drinks.js values
+
+## SQ-SPF-92b | Brewing: dragon's breath guard and lingerification (SQ-DEP-06)
+reject dragon's breath fluid brewing disabled
+shell grep -nE "dragon's breath fluid brewing disabled|Lingerification" logs/latest.log | head
+look no disabled warning
+
+## SQ-SPF-04b | Common: effect applies and ticks
+> effect give qa creativecommon:magic_resistance 30
+sleep 2
+> data get entity qa ActiveEffects
+expect creativecommon:magic_resistance|Id: \d+
+
+## SQ-SPF-100 | Labels: fixture note and label kept, new note places
+> data get block -20 -60 -19
+> data get block -17 -61 -22
+> execute as @e[type=creative_labels:label] run data get entity @s
+> pbot hold qa creative_labels:sticky_note
+> pbot use qa -17 -60 -20 north
+look old note and label keep text/colour (same data as boot 0); new note placed
+
+## SQ-SPF-110 | Config files per jar
+shell for f in config/creative*-common.toml; do echo "$f $(grep -c '^\[' $f)"; done; ls config/creativeengineering-common.toml 2>&1; grep -h '^\[' config/creative*-common.toml | sort | uniq -d
+look one file per jar with config (Common, Compat, Calendar, Devtools, Magic, Equipment, Worldgen, Delight, Brewing); creativeengineering-common.toml absent (or kept from boot 0 but unread); no duplicate table
+
+## SQ-SPF-80c | Delight: Display Delight ctd_ plated blocks (compare_b0: 44 left counter_toppers, 882 fewer blocks)
+> setblock -44 -60 -60 displaydelight:ctd_plated_avocado_toast
+> execute if block -44 -60 -60 displaydelight:ctd_plated_avocado_toast
+> zq blocktag creativeengineering:counter_toppers
+> zq tagsof displaydelight:ctd_plated_avocado_toast
+shell grep -iE "displaydelight|ctd_" logs/latest.log | grep -iE "skip|gate|off|not loaded|missing" | head -5; grep -ohE "(mod data packs|members?)[^\n]{0,200}" logs/kubejs/startup.log | grep -i display | head -3
+look block exists or not; if it is gone, which gate removed it (member off, its mod absent)

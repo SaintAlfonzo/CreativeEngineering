@@ -1,3 +1,4 @@
+// requires: creativeequipment
 // priority: 1000
 // Creative Equipment client scripts (feature_writeup/creative_equipment.md, creative_split.md 3.9, 7.6, wave 7). Authored
 // here in the pack folder (reloads on F3+T); the Equipment build copies this tree into the jar at

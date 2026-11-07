@@ -1,5 +1,8 @@
 package com.SaintAlfonzo.creativecommon.mixin;
 
+// Reserved for Creative Economy: wandering trader trades and spawning move to the future economy mod (trading and loot
+// chests; owner, 2026-11-07, creative_split.md 2.3). Stays in Common until that mod is planned.
+
 import com.SaintAlfonzo.creativecommon.trader.WanderingTraderTweaks;
 
 import net.minecraft.world.entity.npc.VillagerTrades;

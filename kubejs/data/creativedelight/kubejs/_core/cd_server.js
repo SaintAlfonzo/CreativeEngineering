@@ -1,3 +1,4 @@
+// requires: creativedelight
 // priority: 1000
 // Creative Delight server scripts (creative_delight.md 10.3, 10.4). Authored here in the pack folder (loads on
 // /reload); the CD build copies this tree into the jar at the same path (data/creativedelight/kubejs/). Ships

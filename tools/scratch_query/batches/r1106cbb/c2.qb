@@ -1,0 +1,27 @@
+# r1106cbb Boot 2: new OUT, chain + cooking set, group A superflat (SQ-CBB-06 to -09).
+## SQ-CBB-06 | cooking boot: SQ-CBA-01 to -03 checks
+bootexpect \[creativebrewing\] members: \[vinery, brewinandchewin\]$
+bootreject NOT loaded:|is loaded from .*not from the Creative Brewing jar|Missing or unsupported mandatory|Encountered an unexpected exception|Exception in thread
+bootreject Mixin apply failed|InvalidMixinException|creativebrewing.*(NoClassDefFoundError|ClassNotFoundException)
+shell grep -q "\[jar-startup\] startup script packs in order: .*creativedelight.*creativebrewing" logs/kubejs/startup.log
+shell grep -q "\[creativebrewing\] core finished, members: vinery, brewinandchewin" logs/kubejs/startup.log
+shell ! grep -nE "ReferenceError|TypeError|EvaluatorException|is not defined|global.trades missing" logs/kubejs/startup.log logs/kubejs/server.log
+shell grep -E "Skipped creativebrewing:kubejs/" logs/kubejs/server.log | sed 's/.*\] //'
+kjsreject Skipped creativebrewing:kubejs/
+kjsexpect Loaded script creativebrewing:kubejs/alexsmobs/lava_vision.js
+## SQ-CBB-07 | cooking: 44 of 44 alcohol drinks, winemaker trades
+shell grep -oE "\[alcohol\] food values set on [0-9]+ of 44[^\"]*" logs/kubejs/startup.log
+shell grep -qE "\[alcohol\] food values set on 44 of 44" logs/kubejs/startup.log
+shell grep -oE "\[wandering trades\] winemaker [0-9]+" logs/kubejs/server.log | head -1
+shell n=$(grep -oE "\[wandering trades\] winemaker [0-9]+" logs/kubejs/server.log | head -1 | grep -oE "[0-9]+$"); test "$n" -ge 34
+## SQ-CBB-08 | cooking: removed count, NCH failures, fermenting count
+shell grep -h "Added [0-9]* recipes" logs/kubejs/server.log
+shell n=$(grep -oE "removed [0-9]+ recipes" logs/kubejs/server.log | tail -1 | grep -oE "[0-9]+"); echo "removed=$n"; test "$n" -lt 600
+shell grep -c "\[NCH\].*failed and was skipped" logs/kubejs/server.log logs/kubejs/startup.log
+shell grep -h "remove refused" logs/kubejs/server.log logs/kubejs/startup.log | head
+> zq bytype brewinandchewin:fermenting
+sleep 3
+expect bytype brewinandchewin:fermenting: (2[1-9]|[3-9]\d)$
+## SQ-CBB-09 | cooking: dragon-breath fluid brews re-added
+shell grep -h "re-added [0-9]* dragon-breath fluid brews" logs/kubejs/startup.log
+shell grep -qE "re-added [1-9][0-9]* dragon-breath fluid brews" logs/kubejs/startup.log

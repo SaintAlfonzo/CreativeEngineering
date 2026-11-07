@@ -1,3 +1,4 @@
+// requires: creativedelight
 // requires: nethersdelight
 // Nether's Delight client rows (Creative Delight member repackedNethers; nethers_delight.md 4.1, 4.5): the 4.0 names.
 // Ids stay 3.1's; only the display names change.

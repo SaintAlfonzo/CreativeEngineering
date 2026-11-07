@@ -21,7 +21,7 @@ Re-checked 2026-10-31 (brief sweep): #5 (built 2026-10-23) and #6 (built 2026-10
 |---|---|---|---|
 | #4 | Clock icon frozen while sleeping | Bug (offline check 2026-10-23 found no cause; TI-31 next) | unknown cause: a 5-minute in-game diagnosis first, then likely a small client mixin or a config line |
 | #3 | Offline checks (`tools/time_table.py`, SUN-counter test) | Planned | small: one Python tool + one headless Java test |
-| #5, #6, #1 | Minimap line, `/cetime date`, time master | Testing | built, see "Built, needs play" |
+| #5, #6, #1 | Minimap line, `/ccaltime date`, time master | Testing | built, see "Built, needs play" |
 
 Build order:
 
@@ -134,7 +134,7 @@ that the SUN season counter moves exactly as far as the sun.
   (74-87: Serene Seasons `day_duration` / `sub_season_duration` / `progress_season_while_offline`, SeasonHUD
   `day_length` / `sub_season_length`). Vinery is no longer pushed: the port reads `WineTime` itself (TimePush.java
   23-24, time.md 3.7), so the wine rows come from `[time.wine]` directly.
-- New since the first brief: `TimeDate.java` (`/cetime date`, row #6) does calendar math (Early Spring day 1 6:00 am
+- New since the first brief: `TimeDate.java` (`/ccaltime date`, row #6) does calendar math (Early Spring day 1 6:00 am
   = 0, time.md 3.11) inside command code; `CalendarDate.java` has `worldDay` / `year` helpers that need a `Level`.
 - The `[time]` values: [config/creativeengineering-common.toml](../../config/creativeengineering-common.toml) from 2012.
 - The SUN counter: `SeasonClock.onLevelTick` ([SeasonClock.java](../../development/creativeCommon/src/main/java/com/SaintAlfonzo/creativecommon/time/SeasonClock.java)
@@ -196,7 +196,7 @@ that the SUN season counter moves exactly as far as the sun.
 |---|---|---|---|
 | #1 | Time master | Testing | Code matches time.md 3.8 / 3.9. Fixed stale test text and values in time.md (below): the pushed sub-season is 8, not 10, and the cellar boost is x2.0, not x2.5. The 3.9 deploy gotcha (server preset) is still open as `pack/release #2`. TI-01 to TI-29 open |
 | #5 | Season day and day counter misaligned on the GUI | Testing | Built 2026-10-23, shipped 1.1.03: `XaeroTimeInfoMixin` puts Xaero's minimap time line on the pack clock, day steps at sunrise; Better Days still wakes at vanilla morning (7:42 am). Open: TI-30 in game (client row CQ-NEW-01). Writeup [time.md](../time.md) 3.10 |
-| #6 | Admin time commands | Testing | Built 2026-10-30 as `/cetime date` (`TimeDate.java`; reset / set / next / previous / restart / add). Scratch r1031 PASSED SQ-TD-01 to -03, -05; open: SQ-TD-04 client half, TI-32 to TI-37 in game, and the plural-units decision (`add 40 days` refused, TI-32 and the docs write plurals). Writeup [time.md](../time.md) 3.11 |
+| #6 | Admin time commands | Testing | Built 2026-10-30 as `/ccaltime date` (`TimeDate.java`; reset / set / next / previous / restart / add). Scratch r1031 PASSED SQ-TD-01 to -03, -05; open: SQ-TD-04 client half, TI-32 to TI-37 in game, and the plural-units decision (`add 40 days` refused, TI-32 and the docs write plurals). Writeup [time.md](../time.md) 3.11 |
 
 ## Writeup corrections made
 

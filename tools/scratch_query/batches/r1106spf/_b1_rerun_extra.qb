@@ -1,0 +1,79 @@
+# r1106spf boot 1: reruns that had no earlier batch (written from the queue rows).
+pace 1
+
+## SQ-GFB-01 | generated falling blocks mixins
+bootreject (?i)(FallingBlockHold|ProtoChunkTicksFalling|HolderReferenceUnbound).*(error|fail)
+bootreject (?i)Mixin.*(error|fail).*(FallingBlock|ProtoChunk)
+
+## SQ-CFR-01 | campfire rain mixin applies once, from Delight
+shell grep -c "CampfireRainMixin" logs/debug.log; grep -n "CampfireRainMixin" logs/debug.log | head -3; grep -niE "campfire.*(error|exception)|InvalidInjection" logs/latest.log | head
+bootreject (?i)campfire.*(InvalidInjection|exception)
+look one apply, from creativedelight.mixins.json
+
+## SQ-CFR-08 | damage tags: creativedelight:stoves
+bootexpect \[damage-tags\] loaded.*creativedelight:stoves\(1\)
+bootreject neither a built-in flag tag nor defined by any pack.*creativedelight:stoves
+
+## SQ-STN-05 | station containers list
+bootreject (?i)exception.*StationContainers
+shell grep "\[stations\]" logs/latest.log | head
+
+## SQ-CMG-05 | Trinket Case probe, experience fluid tag
+> tcprobe
+waitlog \[tcprobe\] done 60
+expect \[tcprobe\] done: 0 fail
+> forge tags minecraft:fluid get forge:experience
+look one fluid (Create liquid experience); no Cycle, Stockpile, Recovery: checked in the enchanting dumps (compare.py)
+
+## SQ-LP-RERUN | leaf piles with the pack's decay (tools/leaf_pile_probe.js; SQ-LP-00 to -06 summary)
+> forceload add 288 288 351 351
+sleep 2
+> zlp tick
+sleep 3
+> zlp rt
+sleep 2
+> zlp tree
+sleep 18
+shell grep "\[zlp\]" logs/latest.log | tail -12
+look piles from decay on the scheduled-tick path; the tree run leaves piles; values as mob_block_tweaks.md 2.5
+
+## SQ-CFR-05 | rain douses an open-sky campfire on stone only
+> fill 90 -61 -40 100 -61 -30 minecraft:stone
+> setblock 90 -60 -40 minecraft:campfire[lit=true]
+> setblock 93 -61 -40 minecraft:coal_block
+> setblock 93 -60 -40 minecraft:campfire[lit=true]
+> setblock 96 -60 -40 minecraft:soul_campfire[lit=true]
+> setblock 99 -60 -40 minecraft:campfire[lit=true]
+> fill 98 -57 -41 100 -57 -39 minecraft:stone
+> weather rain
+sleep 11
+> execute if block 90 -60 -40 minecraft:campfire[lit=false]
+> execute if block 93 -60 -40 minecraft:campfire[lit=true]
+> execute if block 96 -60 -40 minecraft:soul_campfire[lit=true]
+> execute if block 99 -60 -40 minecraft:campfire[lit=true]
+count Test passed == 4
+> execute if block -25 -60 -35 minecraft:campfire[lit=false]
+> weather clear
+look the fixture campfire (open sky, grass) also out: SQ-SPF-81 thunder half
+
+## SQ-CFR-07 | comfort near a campfire (default config)
+> setblock 90 -60 -20 minecraft:campfire[lit=true]
+> effect clear qa
+> tp qa 92 -60 -20
+sleep 3
+> data get entity qa ActiveEffects
+expect farmersdelight:comfort|Id:
+> tp qa 96 -60 -20
+> effect clear qa
+sleep 7
+> data get entity qa ActiveEffects
+> tp qa -20 -60 -24
+look near: comfort 3 to 5 s left; far: none
+
+## SQ-STN-04 | kettle brew time 600 from the default config
+> setblock 80 -60 -60 minecraft:campfire[lit=true]
+> setblock 80 -59 -60 farmersrespite:kettle
+> data merge block 80 -59 -60 {Inventory:{Items:[{Slot:0b,id:"farmersrespite:black_tea_leaves",Count:1b},{Slot:1b,id:"farmersrespite:black_tea_leaves",Count:1b}]},FluidTank:{FluidName:"minecraft:water",Amount:1000}}
+sleep 1
+> data get block 80 -59 -60
+look BrewTimeTotal 600 (kettleBrewTicks default)

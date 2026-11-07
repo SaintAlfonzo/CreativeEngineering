@@ -1,0 +1,26 @@
+## SQ-NM-01 | naturally spawned cows, sheep, pigs get names (chance 1.0)
+> execute positioned 3000 70 3000 run locate biome minecraft:plains
+waitlog nearest minecraft:plains is at 300
+capture PL is at \[(-?\d+), (~|-?\d+), (-?\d+)\]
+> tp qa {PL1} 150 {PL3}
+sleep 40
+> execute at qa as @e[type=minecraft:cow,distance=..96] run data get entity @s CustomName
+> execute at qa as @e[type=minecraft:sheep,distance=..96] run data get entity @s CustomName
+> execute at qa as @e[type=minecraft:pig,distance=..96] run data get entity @s CustomName
+> execute at qa as @e[type=minecraft:cow,distance=..96,limit=1] run data get entity @s ForgeData
+> execute at qa as @e[type=minecraft:rabbit,distance=..96] run data get entity @s CustomName
+reject Accessing LegacyRandomSource from multiple threads
+expect creativeengineering:named_mob": 2b
+look every cow/sheep/pig answer is a name ("has the following entity data"); rabbits "Found no elements"; no animals at all = locate plains from another far origin
+
+## SQ-NM-02 | command spawns never roll
+# a failed `data get` inside `execute as` prints nothing: tag the cow and read it directly
+> execute at qa run summon minecraft:cow ~ ~ ~ {Tags:["qnm2"]}
+> data get entity @e[tag=qnm2,limit=1] CustomName
+expect Found no elements matching CustomName
+
+## SQ-NM-03 | a named cow dies cleanly
+> execute at qa run kill @e[type=minecraft:cow,limit=1,sort=furthest,distance=..96]
+reject (?i)NamedMobs.*(exception|error)
+expect (?i)named entity|died|was killed
+

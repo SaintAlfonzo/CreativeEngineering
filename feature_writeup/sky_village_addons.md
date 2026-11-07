@@ -85,7 +85,7 @@ New house entries use `skyvillages:house_processor` like the 13 base houses; dec
   and meat swaps (no glowstone or redstone blocks), Lootr pass (the new chests already name sky village tables; the
   16 Brewery barrels are empty). `lootr_fixed_containers.py --dry-run` still lists 6 old `eugene` containers, unrelated
   and left as they are.
-- Open: rerun the loot generators (`/dumpall`, then `/cegen` for `template_loot`, `loot_breakdown`) so loot counts
+- Open: rerun the loot generators (`/dumpall`, then `/cdevgen` for `template_loot`, `loot_breakdown`) so loot counts
   include the new houses.
 
 ### 3.2 Swap table (generated from the JSON 2026-10-30, hops and dried bundles revised the same day)
@@ -186,7 +186,7 @@ The block has no survival rule, so nothing breaks.
    - Village farm crops: add the 3 FD farms and the Vinery houses as `"auto"` in
      `development/creativeDelight/src/main/resources/creativedelight/village_farms.json` only if they hold vanilla
      crops (the swap rolls vanilla crop fields only); needs a CD rebuild.
-   - Loot: no new tables. Rerun the loot generators with `/cegen` after `/dumpall` (`template_loot` cache,
+   - Loot: no new tables. Rerun the loot generators with `/cdevgen` after `/dumpall` (`template_loot` cache,
      `loot_breakdown`, `audit_loot_containers`, `lootr_fixed_containers`) so the counts include the new houses.
    - Rerun the template scans that list sky village pieces (`meat_blocks`, `nether_swaps`, `wood_mismatch`,
      `terrain_adaptation_scan`) and check nothing new needs a swap (glowstone, redstone blocks).

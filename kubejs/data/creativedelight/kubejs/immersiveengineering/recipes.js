@@ -1,3 +1,4 @@
+// requires: creativedelight
 // requires: immersiveengineering
 // Immersive Engineering machine-only routes for the pack's food items (cornmeal in the crusher). Non-member file:
 // recipe ids are creativedelight:<type>/<suffix> (global.CD.recipes). Moved from the pack's

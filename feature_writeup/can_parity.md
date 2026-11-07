@@ -1778,10 +1778,10 @@ into the pack by hand:
 
 | Sprite | Goes to | File |
 |---|---|---|
-| apple1, banana1, beet1, bell_pepper1, cabbage1, cantalope1, carrot1, cherries1, glow_berries1, gongylidia1, melon1, mulberries1, onion1, potato1, pumpkin1, salmonberries1, strawberries1, sweet_berries1, tomato1 | the matching hand-written `creativeengineering:canned_*` can | `kubejs/assets/creativeengineering/textures/item/<id>.png`; cans.js leaves out `.texture()` for these |
+| apple1, banana1, beet1, bell_pepper1, cabbage1, cantalope1, carrot1, cherries1, glow_berries1, gongylidia1, melon1, mulberries1, onion1, potato1, pumpkin1, salmonberries1, strawberries1, sweet_berries1, tomato1 | the matching hand-written `creativeengineering:canned_*` can | `development/creativeDelight/src/main/resources/assets/creativeengineering/textures/item/<id>.png`; cans.js leaves out `.texture()` for these |
 | cooked_cod1, cooked_salmon1, mushroom1 | Canned Goods cans reused for Cooked Cod (`canned_fish`), Cooked Salmon, Mushroom Stew (`canned_mushrooms`) | `kubejs/assets/canned_goods/textures/items/<texture>.png` (overrides the mod's sprite) |
 | chorus_fruit1, tropical_fish1, pufferfish1, posionous_potato1, night_berries1, tough_leather1 | Canned Goods' own cans with no recipe here (Chorus Fruit, Tropical Fish, Pufferfishs, Poisonous Potatos, Night Berries = `canned_spider_eyes`, Tough Jerky = `canned_rotten_flesh`) | same, `kubejs/assets/canned_goods/textures/items/` |
-| cranberries1, raw_cod1, raw_salmon1, raw_beef, raw_mutton, raw_pork | `canned_cranberry`, `canned_raw_cod`, `canned_raw_salmon`, `canned_raw_beef`, `canned_raw_mutton`, `canned_raw_pork` | `kubejs/assets/creativeengineering/textures/item/<id>.png` |
+| cranberries1, raw_cod1, raw_salmon1, raw_beef, raw_mutton, raw_pork | `canned_cranberry`, `canned_raw_cod`, `canned_raw_salmon`, `canned_raw_beef`, `canned_raw_mutton`, `canned_raw_pork` | `development/creativeDelight/src/main/resources/assets/creativeengineering/textures/item/<id>.png` |
 
 Still to draw (scratchpad 2026-10-21, a priority): a sprite for every built can that borrows one ([TODO](todo/TODO.md) `textures/food #1`).
 

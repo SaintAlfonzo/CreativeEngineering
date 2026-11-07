@@ -71,8 +71,16 @@ public class CDMixinPlugin extends GatedMixinPlugin {
 			"FruitsDelightFoodDataAnchorMixin", CDMixinPlugin::patchFoodDataHandler,
 			"FruitsDelightLeafCheckMixin", CDMixinPlugin::patchLeafCheckHandler);
 
+	/**
+	 * Table rows with a tested version range (the compartment gate has none): Farmer's Respite's Caffeinated tick fix,
+	 * moved from Creative Common with its range (2026-11-07). Outside the range the mixin is skipped with one warning.
+	 */
+	private static final Map<String, java.util.List<String>> NEEDS_MOD = Map.of(
+			"CaffeinatedEffectMixin", java.util.List.of("farmersrespite"));
+	private static final Map<String, String> MOD_RANGE = Map.of("farmersrespite", "[1.19-2.0,1.19-2.1)");
+
 	public CDMixinPlugin() {
-		super("[creativedelight]", COMPARTMENT_PREFIX, FOR_VERSION, Map.of());
+		super("[creativedelight]", COMPARTMENT_PREFIX, FOR_VERSION, NEEDS_MOD, MOD_RANGE);
 	}
 
 	/**
@@ -87,10 +95,21 @@ public class CDMixinPlugin extends GatedMixinPlugin {
 			"DuckEntityEggLayerMixin", Compartments.INCUBATION,
 			"GooseEntityEggLayerMixin", Compartments.INCUBATION);
 
+	/**
+	 * Mixins that reference a second mod's classes besides their package's mod: both must be loaded. The seagull
+	 * lunchbox mixins test for Spice of Life's FoodContainerItem; with Alex's Mobs and no Spice of Life the apply failed
+	 * with ClassMetadataNotFound and crashed the boot (scratch r1106cbb, cooking set).
+	 */
+	private static final Map<String, String> NEEDS_ALSO_MOD = Map.of(
+			"AlexsMobsSeagullItemMixin", "solapplepie",
+			"AlexsMobsSeagullStealMixin", "solapplepie");
+
 	@Override
 	public boolean shouldApplyMixin(String targetClassName, String mixinClassName) {
 		if (!super.shouldApplyMixin(targetClassName, mixinClassName)) return false;
 		String simple = mixinClassName.substring(mixinClassName.lastIndexOf('.') + 1);
+		String alsoMod = NEEDS_ALSO_MOD.get(simple);
+		if (alsoMod != null && !Compartments.loaded(alsoMod)) return false;
 		String compartment = NEEDS_COMPARTMENT.get(simple);
 		if (mixinClassName.startsWith(COMPARTMENT_PREFIX + Compartments.CFB + ".")) compartment = Compartments.CFB;
 		if (mixinClassName.startsWith(COMPARTMENT_PREFIX + Compartments.INCUBATION + ".")) {

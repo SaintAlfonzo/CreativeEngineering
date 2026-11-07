@@ -5,7 +5,7 @@
 | Part | Status |
 |---|---|
 | Design (this file) | DESIGNED 2026-10-24, nothing built |
-| Driver mod `development/creativeDevtools/members/capture` (mod id `cecapture`, dev-only, nested in Creative Devtools since 2026-11-01) | not started |
+| Driver mod `development/creativeDevtools/members/capture` (mod id `cdevcapture`, dev-only, nested in Creative Devtools since 2026-11-01) | not started |
 | Runner `tools/client_capture/run_captures.py` | not started |
 | Cropper `tools/client_capture/crop.py` | not started |
 | Spec files `feature_writeup/testing/capture_specs/*.json` | not started |
@@ -23,7 +23,7 @@ PASS / FAIL into the writeups the usual way.
 ## 1. Overview
 
 ```
-spec JSON (per queue group) ──> run_captures.py ──> scratch game dir ──> client JVM + cecapture driver
+spec JSON (per queue group) ──> run_captures.py ──> scratch game dir ──> client JVM + cdevcapture driver
                                     │                                      │ loads template world
                                     │                                      │ per test: reset, steps, capture
                                     │                                      ▼
@@ -168,7 +168,7 @@ Built by the runner in `~/.cache/ce_capture/game/`, outside the scratchpad (it g
 root (no stray `logs/` beside the real ones). On each run:
 
 - `mods/`: hard links to the instance's jars (same filesystem; the client may add files, which must not land in the
-  real `mods/`) plus `cecapture-*.jar` from the driver's `build/libs`. Optional `--jar <path>` swaps in a fresh build
+  real `mods/`) plus `cdevcapture-*.jar` from the driver's `build/libs`. Optional `--jar <path>` swaps in a fresh build
   of one of our mods without touching `mods/`.
 - `kubejs/`, `vinery_upstream/` copied (the Vinery port refuses to load without the latter; memory
   `client-launch-for-defaults`).
@@ -178,12 +178,12 @@ root (no stray `logs/` beside the real ones). On each run:
   `renderDistance:6`, `fov:0.0`, `narrator:0`, `tutorialStep:none`, `joinedFirstServer:true`,
   `skipMultiplayerWarnings:true`, sound master 0, `fullscreen:false`, `gamma:0.5`, `entityShadows:true`, english.
 - Launch: `launch_client.py`'s argument rebuild (made importable), plus `--width 1280 --height 720` and
-  `-Dcecapture.plan=<game dir>/capture_plan.json`. No `--server`: the integrated server is the server, so the run is
+  `-Dcdevcapture.plan=<game dir>/capture_plan.json`. No `--server`: the integrated server is the server, so the run is
   one JVM.
 
 ### 2.7 Driver internals
 
-- Inert unless `cecapture.plan` is set; it's a separate dev-only jar anyway (4.1, D1).
+- Inert unless `cdevcapture.plan` is set; it's a separate dev-only jar anyway (4.1, D1).
 - Runs on the client tick as a state machine (one step at a time, never blocking the render thread). `cmd` is sent to
   the integrated server with `server.execute(...)` and the step waits for its result.
 - Capture: after the settle frames, at the end of a frame (`TickEvent.RenderTickEvent` phase END),
@@ -194,10 +194,10 @@ root (no stray `logs/` beside the real ones). On each run:
 - Mixins (the reason this is a mod and not a client script): `Screen.hasShiftDown/hasControlDown/hasAltDown` return
   the virtual key state; `MouseHandler.xpos()/ypos()` return the virtual mouse while a `hover` is active, so slot
   tooltips render without moving the real cursor; a `RenderHandEvent` cancel for `hide: hand`.
-- Log markers: `[cecapture] BEGIN <ID>`, `[cecapture] STEP <n> <kind> ok|fail <why>`, `[cecapture] END <ID> ok|fail`.
+- Log markers: `[cdevcapture] BEGIN <ID>`, `[cdevcapture] STEP <n> <kind> ok|fail <why>`, `[cdevcapture] END <ID> ok|fail`.
   The runner slices `logs/latest.log` between markers and keeps any `ERROR`, `Exception` or
   `Error occurred while handling event` lines per test in the manifest.
-- `progress.json` is rewritten after each test (done IDs, current ID). At the end: `[cecapture] DONE`, then the
+- `progress.json` is rewritten after each test (done IDs, current ID). At the end: `[cdevcapture] DONE`, then the
   driver calls `Minecraft.stop()` itself so the runner doesn't have to kill anything.
 
 ### 2.8 Runner
@@ -264,7 +264,7 @@ golden egg odds), sound, anything that needs a real player's survival play over 
 
 ### 4.1 Open decisions (user)
 
-- **D1. Where the driver lives.** Recommended: its own dev-only mod `development/clientCapture` (mod id `cecapture`),
+- **D1. Where the driver lives.** Recommended: its own dev-only mod `development/clientCapture` (mod id `cdevcapture`),
   built by the root Gradle build, never copied into `mods/`, never deployed; `mod_sides.md` row "client, dev-only, not
   in mods/". The other option, a `devtools/capture` package in patcherMod gated on the system property, ships capture
   code and the shift/mouse mixins to every player and ties driver fixes to patcherMod releases.
@@ -325,7 +325,7 @@ golden egg odds), sound, anything that needs a real player's survival play over 
 Run by the runner itself on a first group (CQ-NEW is small and covers a block colour, a tooltip, a HUD mod).
 
 - [ ] CC-01 Preflight refuses to start while any `java` process is up and names its cwd; never prints a command line.
-- [ ] CC-02 A run reaches the world, writes `[cecapture] BEGIN` / `END` for every test, and the client exits by itself.
+- [ ] CC-02 A run reaches the world, writes `[cdevcapture] BEGIN` / `END` for every test, and the client exits by itself.
 - [ ] CC-03 `FX-43.png` shows the moss and grass at the crosshair, no chat, no hand, no toast; `FX-43_hotbar.png`
       is the hotbar only.
 - [ ] CC-04 `tooltip` + `auto`: the whole Legendary Tooltips frame is inside the crop, with no background margin

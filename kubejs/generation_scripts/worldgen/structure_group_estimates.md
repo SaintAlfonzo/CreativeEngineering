@@ -61,7 +61,7 @@ Pillager outposts: vanilla, and every Towns & Towers tower, fort and camp outpos
 
 Grid: spacing 32, separation 8 (members never start closer than 9 chunks = 144 blocks apart). At most 1 structure per 32 x 32 chunks anywhere. Excluded within 4 chunks of `creativeengineering:group/settlements` grid slots.
 
-Capped (old combined density above the group grid): 70 biome(s), 31% of the group's area. Largest: `terralith:yellowstone` 1 per 27 -> 28, `minecraft:plains` 1 per 26 -> 27, `terralith:highlands` 1 per 26 -> 27, `terralith:brushland` 1 per 30 -> 27, `terralith:lush_desert` 1 per 30 -> 27, `terralith:rocky_mountains` 1 per 26 -> 27.
+Capped (old combined density above the group grid): 70 biome(s), 32% of the group's area. Largest: `terralith:yellowstone` 1 per 27 -> 28, `minecraft:plains` 1 per 26 -> 27, `terralith:highlands` 1 per 26 -> 27, `terralith:brushland` 1 per 30 -> 27, `terralith:lush_desert` 1 per 30 -> 27, `terralith:rocky_mountains` 1 per 26 -> 27.
 
 | Structure | Weight | Frequency | Mod default 1 per | New 1 per | Ratio | Note |
 |---|---|---|---|---|---|---|
@@ -372,23 +372,24 @@ Capped (old combined density above the group grid): 78 biome(s), 78% of the grou
 
 ### `sky` -> `creativeengineering:group/sky`
 
-Sky structures: Cloud Storage's hot air balloons and sky temples, AE2 meteorites (same rate as the clouds). Meta structures join later.
+Sky structures: Cloud Storage's hot air balloons and sky temples, AE2 meteorites (same rate as the clouds). Meta structures join later; floating islands (creativeengineering:sky_island) since 2026-11-06.
 
 Grid: spacing 64, separation 16 (members never start closer than 17 chunks = 272 blocks apart). At most 1 structure per 64 x 64 chunks anywhere.
 
-Capped (old combined density above the group grid): 145 biome(s), 100% of the group's area. Largest: `terralith:cave/deep_caves` 1 per 20 -> 57, `minecraft:lush_caves` 1 per 20 -> 57, `minecraft:deep_ocean` 1 per 19 -> 59, `minecraft:deep_cold_ocean` 1 per 19 -> 59, `minecraft:deep_lukewarm_ocean` 1 per 19 -> 59, `terralith:cave/andesite_caves` 1 per 20 -> 57.
+Capped (old combined density above the group grid): 145 biome(s), 100% of the group's area. Largest: `terralith:cave/deep_caves` 1 per 19 -> 59, `minecraft:lush_caves` 1 per 19 -> 59, `minecraft:deep_ocean` 1 per 18 -> 57, `minecraft:deep_cold_ocean` 1 per 18 -> 57, `minecraft:deep_lukewarm_ocean` 1 per 18 -> 57, `minecraft:ocean` 1 per 18 -> 57.
 
 | Structure | Weight | Frequency | Mod default 1 per | New 1 per | Ratio | Note |
 |---|---|---|---|---|---|---|
-| `ae2:meteorite` | 100 | 0.985 | 32 | 121 | 0.07 |  |
-| `cloudstorage:big_balloon` | 100 | 0.985 | 32 | 121 | 0.07 |  |
-| `cloudstorage:sky_temple` | 100 | 0.985 | 40 | 121 | 0.11 |  |
-| `skyvillages:skyvillage` | 100 | 1.0 | 70 | 128 | 0.30 |  |
-| `creativeengineering:meta/balloon_fleet` | 1 | 1.0 | - | 222 | new |  |
-| `creativeengineering:meta/cloud_balloons` | 1 | 1.0 | - | 272 | new |  |
-| `creativeengineering:meta/cloud_cluster` | 1 | 1.0 | - | 222 | new |  |
-| `creativeengineering:meta/sky_village_islands` | 1 | 1.0 | - | - | - | empty biome tag: never spawns unless a mod fills it at runtime |
+| `ae2:meteorite` | 100 | 0.985 | 32 | 138 | 0.05 |  |
+| `cloudstorage:big_balloon` | 100 | 0.985 | 32 | 138 | 0.05 |  |
+| `cloudstorage:sky_temple` | 100 | 0.985 | 40 | 138 | 0.08 |  |
+| `skyvillages:skyvillage` | 100 | 1.0 | 70 | 143 | 0.24 |  |
+| `creativeengineering:meta/balloon_fleet` | 1 | 1.0 | - | 251 | new |  |
+| `creativeengineering:meta/cloud_balloons` | 1 | 1.0 | - | 308 | new |  |
+| `creativeengineering:meta/cloud_cluster` | 1 | 1.0 | - | 251 | new |  |
+| `creativeengineering:meta/sky_village_islands` | 1 | 1.0 | - | 202 | new |  |
 | `creativeengineering:meta/meteor_shower` | 1 | 1.0 | - | - | - | empty biome tag: never spawns unless a mod fills it at runtime |
+| `creativeengineering:sky_island` | 100 | 0.985 | 64 | 138 | 0.22 |  |
 
 ### `nether_ruins` -> `creativeengineering:group/nether_ruins`
 
@@ -398,13 +399,13 @@ Grid: spacing 14, separation 7 (members never start closer than 8 chunks = 128 b
 
 | Structure | Weight | Frequency | Mod default 1 per | New 1 per | Ratio | Note |
 |---|---|---|---|---|---|---|
-| `philipsruins:nether_lava_ruins` | 100 | 0.5993 | 52 | 38 | 1.91 |  |
-| `philipsruins:sealedruinedghaststatue1` | 100 | 0.5993 | 52 | 38 | 1.91 |  |
-| `philipsruins:start_nether_dungeon` | 100 | 0.5993 | 52 | 38 | 1.91 |  |
+| `philipsruins:nether_lava_ruins` | 100 | 0.5993 | 52 | 38 | 1.90 |  |
+| `philipsruins:sealedruinedghaststatue1` | 100 | 0.5993 | 52 | 38 | 1.90 |  |
+| `philipsruins:start_nether_dungeon` | 100 | 0.5993 | 52 | 38 | 1.90 |  |
 | `twigs:bloodstone_obelisk` | 100 | 1.0 | 20 | 30 | 0.43 |  |
 | `philipsruins:lost_soul_dungeon` | 100 | 0.5993 | 60 | 36 | 2.75 |  |
-| `philipsruins:rare_ruin` | 6 | 0.3759 | 360 | 181 | 3.98 |  |
-| `philipsruins:start_nether_ruin` | 100 | 0.5993 | 310 | 39 | 61.64 |  |
+| `philipsruins:rare_ruin` | 6 | 0.3759 | 360 | 180 | 3.98 |  |
+| `philipsruins:start_nether_ruin` | 100 | 0.5993 | 310 | 39 | 61.67 |  |
 
 ### `way_signs` -> `creativeengineering:group/way_signs`
 
@@ -484,7 +485,7 @@ Capped (old combined density above the group grid): 9 biome(s), 100% of the grou
 | `philipsruins:underground_structures` | 1 | 0.9885 | 104 | 40 | 6.73 |  |
 | `philipsruins:sculk_dungeon` | 1 | 0.991 | 104 | 40 | 6.74 |  |
 | `terralith:underground/oak_cabin` | 11 | 1.0 | 16 | 4 | 13.44 |  |
-| `terralith:underground/giant_bee_hive` | 2 | 0.4261 | 34 | 14 | 5.73 |  |
+| `terralith:underground/giant_bee_hive` | 2 | 0.4261 | 35 | 15 | 5.73 |  |
 | `terralith:underground/mining_outpost` | 13 | 0.1097 | 13 | 11 | 1.47 |  |
 | `terralith:underground/old_refinery` | 5 | 0.1166 | 18 | 14 | 1.57 |  |
 | `terralith:underground/sunken_tower` | 5 | 0.4277 | 22 | 9 | 5.75 |  |

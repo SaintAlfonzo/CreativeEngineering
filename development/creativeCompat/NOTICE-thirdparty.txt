@@ -2,14 +2,17 @@ Creative Compat: third-party material
 
 Creative Compat's own code is licensed under the GNU General Public License v3 (creativecompat-LICENSE.txt). The art
 below comes from other projects; it is not covered by the GPL and stays under the terms of its authors. Credit and
-licence, as each project declares it. No painting art ships in this jar: Immersive Paintings entries for modded
-paintings are built at load from the installed mods' own jars.
+licence, as each project declares it.
 
-Elytra banner and bedspread pattern textures, derived from each mod's banner pattern art:
+No painting or banner pattern art ships in this jar. Immersive Paintings entries for modded paintings, and the banner
+pattern textures for Bedspreads beds and Customizable Elytra wings, are built at load from the installed mods' own
+jars. The banner pattern textures built that way come from the banner pattern art of, among others:
   Botania by Vazkii and contributors, Botania License
   Immersive Engineering by BluSunrize and Damien A.W. Hazard, Blu's License of Common Sense
   Alex's Mobs by Alexthe668, Carro1001, GNU LGPL
-  Buzzier Bees by Team Abnormals, Abnormals licence
+  Buzzier Bees and Neapolitan by Team Abnormals, Abnormals licence
+and are placed following the layout of the bundled pattern art of Bedspreads (Illusive Soulworks) and Customizable
+Elytra (Hidoni), measured, not copied.
 
 Weathered cardboard box (texture and models): recoloured from Create: Design n' Decor's cardboard box by DrMangoTea,
 Milky, Luna, Pepa, Spydnel, MIT License.

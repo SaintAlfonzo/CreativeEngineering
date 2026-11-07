@@ -10,31 +10,15 @@
     "ImmersivePostsRegistrationMixin",
     "ImmersivePostsValidItemMixin",
     "TagLoaderImmersivePostsMixin",
-    "MemoryStickItemMixin",
-    "PneumaticCraftUtilsMixin",
-    "XpHelperMixin",
-    "XpPumpUpgradeWrapperMixin",
-    "XPFluidManagerMixin",
     "SawmillRecipeMixin",
     "SawmillRecipeSerializerMixin",
     "SawmillProcessMixin",
     "ProcessingRecipeMixin",
     "ProcessingRecipeSerializerMixin",
     "ExcavationDrillItemMixin",
-    "DeforesterSawItemMixin",
-    "OreExcavationBlockHistoryMixin",
-    "OreExcavationCommandUndoMixin",
-    "OreExcavationHistoryMixin",
-    "OreExcavationMiningAgentMixin",
-    "OreExcavationSchedulerMixin",
-    "BlockRunnerBlockStateMixin",
-    "BlockRunnerSpeedConfigMixin",
-    "FramedDoubleCamoOrderMixin",
-    "CopycatMaterialOrderMixin"
+    "DeforesterSawItemMixin"
   ],
   "client": [
-    "SkullBlockEntityMixin",
-    "EntitySinkRenderMixin",
-    "CameraSinkMixin"
+    "SkullBlockEntityMixin"
   ]
 }

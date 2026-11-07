@@ -23,7 +23,7 @@ import sereneseasons.season.SeasonTime;
  * <p>
  * Each server sync is an anchor: the client shows the synced value plus how far its dayTime has moved past the dayTime
  * it had when the sync arrived, never less. Adding every forward client step instead (before 2026-11-02) counted a
- * jump twice when it came with its sync ({@code /cetime date}, /time add): the server's value already held it, and
+ * jump twice when it came with its sync ({@code /ccaltime date}, /time add): the server's value already held it, and
  * Better Days then glides the client's time of day up to the new one, adding it again. With {@code doDaylightCycle
  * false} no later sync corrected it (TODO {@code gameplay/time #7}, scratch r1101 CQ-TD-06: SeasonHUD read Summer
  * day 1 for Mid Autumn day 13). Listed under "client" in the mixin

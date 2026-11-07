@@ -1,3 +1,4 @@
+// requires: creativeengineering
 // Creative Engineering; moved from kubejs/server_scripts/tags/fluidtags.js on 2026-11-04 (creative_split.md 7.13, wave 8), rows unchanged.
 ServerEvents.tags('fluid', e => {
 	var t = global.tags

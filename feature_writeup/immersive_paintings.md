@@ -10,7 +10,7 @@ painting screen has not been checked in game**
 |---|---|
 | `/dumppaintings`: every registered painting variant with its size and whether it is placeable | DEPLOYED with 1.0.6, part of `/dumpall`; last run 2026-10-18 18:31 (475 variants) |
 | Modded paintings (445) built at load from the installed jars: Creative Compat `paintings/PaintingArt` + `PaintingPack`, served as the hidden data pack `creativecompat_paintings`; `[paintings]` config | 2026-11-05: built, NOT installed. Offline: all 445 equal the old generated files (pixels and json); scratch rows SQ-PA-01 to -04, CQ-PA-01, -02 queued |
-| `tools/gen_immersive_paintings.py`: since 2026-11-05 writes only the 30 vanilla paintings (`/cegen` id `immersive_paintings`, group `pack`) | in use; output in `kubejs/data/creativeengineering/paintings/minecraft/` (pack folder, never a jar) |
+| `tools/gen_immersive_paintings.py`: since 2026-11-05 writes only the 30 vanilla paintings (`/cdevgen` id `immersive_paintings`, group `pack`) | in use; output in `kubejs/data/creativeengineering/paintings/minecraft/` (pack folder, never a jar) |
 | Before 2026-11-05: all 475 as generated files (in `kubejs/data`, then in the Compat jar after the split) | DEPLOYED with 1.0.6; removed 2026-11-05 (licence audit, TODO `licence/compat #1`) |
 
 - **Files to open:** [PaintingArt.java](../development/creativeCompat/src/main/java/com/SaintAlfonzo/creativecompat/paintings/PaintingArt.java)
@@ -129,7 +129,7 @@ placement.
 - [tools/scratch_query/painting_test_zip.py](../tools/scratch_query/painting_test_zip.py): the `extraSources` test zip.
 - [kubejs/server_scripts/_lib/dump_paintings.js](../kubejs/server_scripts/_lib/dump_paintings.js): `/dumppaintings`
   -> `kubejs/exported/paintings.json`. In `/dumpall` ([dump_all.js](../kubejs/server_scripts/_lib/dump_all.js)).
-- [tools/generators.json](../tools/generators.json): the `immersive_paintings` entry for `/cegen`.
+- [tools/generators.json](../tools/generators.json): the `immersive_paintings` entry for `/cdevgen`.
 - `kubejs/data/creativeengineering/paintings/minecraft/<id>.png` + `.json`: generated vanilla output, do not edit.
 - `config/immersive_paintings.json`: the mod's config, defaults.
 

@@ -1,3 +1,4 @@
+// requires: creativedelight
 // requires: oceansdelight
 // Ocean's / Oceanic Delight tag rows (feature_writeup/ocean_delight.md). Oceanic Delight's squid tentacles are removed
 // (startup_scripts/_lib/removed_items.js, dishes/ocean #4), which empties the squid tentacle tag its sea pickle roll,

@@ -12,12 +12,12 @@ of 2026-10-24; rows 1 to 13 predate this brief). Layout per [README.md](README.m
   the `WorldTab` enum (id, icon candidates, catalysts); the title is lang key `creativeengineering.jei.world.<id>`
   in patcherMod `lang/en_us.json` lines 8-26. Rows are JSON in `kubejs/assets/creativeengineering/jei_world/<tab>/`:
   `generated.json` (written by `tools/gen_jei_world.py`, modules in `tools/jei_world/tab_*.py`, run in game with
-  `/cegen run jei_world`) and hand-written `manual.json`; Java providers `BurnRows` and `CampfireRows` add rows at JEI
+  `/cdevgen run jei_world`) and hand-written `manual.json`; Java providers `BurnRows` and `CampfireRows` add rows at JEI
   start. Row format is documented in `WorldRow.java`. Apply: generator or json edit -> F3+T and rejoin; Java -> restart.
 - **The tool dump has been run.** `kubejs/exported/world_jei/tool_pairs.json` (725 KB, 2026-10-22 21:34) has no
   `"_fixture"` key and `"errors": 0`, but the `generated.json` files (21:20) were not regenerated after it: stripping
   still has 3 rows, soaping 4, dyeing 5, waxing 20. The TODO's "fixture 3 rows" counts are therefore stale; run
-  `/cegen run jei_world` before judging rows 16 to 18.
+  `/cdevgen run jei_world` before judging rows 16 to 18.
 - **Stand-ins.** An itemless block becomes a Barrier stack renamed to the block (`WorldRow.blockStack`, line 203;
   fire gets flint and steel); `WorldInteractionJEI.icon` falls back to a Barrier too.
 - Rows in `jei_world` that cite another mod drop out when the mod's id does not resolve (`requires`).
@@ -56,7 +56,7 @@ Part 2: every recipe type with no JEI category, and every category that drops so
    The second part finds categories that drop recipes, which a uid diff cannot (JEI uids often differ from recipe
    type ids).
 2. **Tool**: `tools/jei_coverage.py --part2` reads both files and renders jei_coverage.md 3 (types with no category,
-   types with dropped recipes, counts). Add it to `tools/generators.json` only if it should run from `/cegen`.
+   types with dropped recipes, counts). Add it to `tools/generators.json` only if it should run from `/cdevgen`.
 3. Review the list with the user; per type pick a fix kind from jei_coverage.md 0 (stand-in, info, none). Java
    categories go in patcherMod `compat/jei/` (`RowPagesCategory` for simple input -> output pages).
 4. **Part 3 rows**: read each mechanic in its jar first, then add `manual.json` rows to an existing world tab with
@@ -162,7 +162,7 @@ The Stripping tab shows its rows the way the user wants (see Decisions) instead 
 - Before regenerating, open JEI uses of Oak Log and note what actually cycles.
 
 ### Build
-1. Run `/cegen run jei_world` with the real dump (no code change); check the tab again.
+1. Run `/cdevgen run jei_world` with the real dump (no code change); check the tab again.
 2. If a row still cycles several logs: in `_stripping`, key rows by `(to, bark)`, never merge inputs (each pair is
    already separate; a merge would come from `_group_by_target`, used only for soap).
 3. If the user wants the opposite (one cycling row): group `from` by `to` through `_group_by_target` and use `blocks(...)`.
@@ -193,7 +193,7 @@ Settle how the Soap Washing tab groups its rows and whether soap removes copper 
 - `soap_blacklist` in the dump config: `minecraft:glazed_terracotta`.
 
 ### Build
-1. Regenerate (`/cegen run jei_world`) and look at the tab.
+1. Regenerate (`/cdevgen run jei_world`) and look at the tab.
 2. Decide the grouping; if one row per colour is wanted, drop `_group_by_target` for `how == 'color'` only.
 3. No code for oxidation: it already works in the data; if the user wants a different behaviour it is a Supplementaries
    config / mixin question (`supplementaries-common.toml` `functional.soap`).
@@ -447,7 +447,7 @@ The Knife and Machete Drops tab reads "Cut with a knife", not "Broken"; the chee
 ### Build
 1. `notes()`: "Cut with a knife." (blocks) and the cheese wheel note "Cut with a knife; drops itself otherwise." or shorter
    ("Knife: wedges. Otherwise the wheel."). Keep Grass Drops shears as "Broken"? Recommend "Cut with shears".
-2. Regenerate with `/cegen run jei_world`.
+2. Regenerate with `/cdevgen run jei_world`.
 
 ### Tests (JW-)
 - JW-11 (existing, edit): the wording on a pig row is unchanged (kill); a wheel row and a grass row say "Cut".

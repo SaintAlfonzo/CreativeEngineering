@@ -44,7 +44,7 @@ public final class PerfEvents {
 
 	public static volatile boolean serverTick, levelTick, chunkWaits, entityTicks, blockEntityTicks, kubejs;
 
-	/** Hooks that have run at least once since start, for /ceperf status (a hook that never runs was not applied). */
+	/** Hooks that have run at least once since start, for /cdevperf status (a hook that never runs was not applied). */
 	public static final int HOOK_SERVER_TICK = 1, HOOK_LEVEL_TICK = 2, HOOK_CHUNK_WAIT = 4, HOOK_ENTITY = 8,
 			HOOK_BLOCK_ENTITY = 16, HOOK_KUBEJS = 32;
 	private static volatile int hooksSeen;
@@ -132,7 +132,7 @@ public final class PerfEvents {
 		return (hooksSeen & hook) != 0;
 	}
 
-	/** Event label -> enabled in a running recording, for /ceperf status. */
+	/** Event label -> enabled in a running recording, for /cdevperf status. */
 	public static Map<String, Boolean> enabledEvents() {
 		Map<String, Boolean> out = new LinkedHashMap<>();
 		int i = 0;

@@ -1,0 +1,90 @@
+# r1106spf boot 2: group B fresh normal world (seed 8675309), 18:5x builds. Worldgen rows SQ-SPF-70 to -73.
+pace 1
+
+## SQ-SPF-70 | Worldgen: packs enabled, structures locate, ground under them
+bootexpect Done \(
+bootreject (Mixin apply failed|InvalidInjectionException).*(creativeworldgen|WorldgenMixinPlugin)
+> datapack list
+> pbot spawn qa 0 120 0 minecraft:overworld creative
+> locate structure creativeengineering:meta/ruin_scatter
+waitlog (nearest|Could not find).* 240
+capture RS is at \[(-?\d+), (~|-?\d+), (-?\d+)\]
+> locate structure creativeengineering:meta/ruin_cluster
+waitlog (nearest|Could not find).*ruin_cluster 240
+> locate structure creativeengineering:meta/pillager_camp_ruins
+waitlog (nearest|Could not find).*pillager_camp_ruins 240
+> locate structure creativeengineering:sky_island
+waitlog (nearest|Could not find).*sky_island 240
+> tp qa {RS1} 150 {RS3}
+sleep 15
+> zq under {RS1} {RS3} 2
+waitlog \[zq\] done 120
+look every creative pack listed and enabled; each locate finds a structure within the SQ-WGE census radius; zq under: no air or water under the built bottom
+
+## SQ-SPF-72 | Worldgen: leaf decay, Forgiving Void, biome-tagged loot
+> tp qa 300 120 300
+sleep 8
+> place feature minecraft:oak 300 ~ 300
+> execute positioned 300 ~ 300 run fill ~-1 ~ ~-1 ~1 ~8 ~1 minecraft:air replace minecraft:oak_log
+sleep 20
+> zq count 294 -64 294 306 200 306 minecraft:oak_leaves
+> zq count 294 -64 294 306 200 306 immersive_weathering:oak_leaf_pile
+> gamemode survival qa
+> tp qa 0 -100 0
+sleep 6
+> data get entity qa Pos
+> gamemode creative qa
+shell grep -A4 "^\[leaf_decay\]" config/creativeworldgen-common.toml | head -5
+look leaves gone or decaying within the [leaf_decay] range, leaf piles left; bot returned to the surface (y above 60) by Forgiving Void; loot BiomeTagCondition is checked in the client chest look (CQ-SPF-01) unless zloot probe added
+
+## SQ-NM-01 | naturally spawned cows, sheep, pigs get names (chance 1.0)
+> execute positioned 3000 70 3000 run locate biome minecraft:plains
+waitlog nearest minecraft:plains is at 300
+capture PL is at \[(-?\d+), (~|-?\d+), (-?\d+)\]
+> tp qa {PL1} 150 {PL3}
+sleep 40
+> tp qa {PL1} 90 {PL3}
+sleep 20
+> execute at qa as @e[type=minecraft:cow,distance=..96] run data get entity @s CustomName
+> execute at qa as @e[type=minecraft:sheep,distance=..96] run data get entity @s CustomName
+> execute at qa as @e[type=minecraft:pig,distance=..96] run data get entity @s CustomName
+> execute at qa as @e[type=minecraft:cow,distance=..96,limit=1] run data get entity @s ForgeData
+> execute at qa as @e[type=minecraft:rabbit,distance=..96] run data get entity @s CustomName
+reject Accessing LegacyRandomSource from multiple threads
+expect creativeengineering:named_mob": 2b
+look every cow/sheep/pig answer is a name ("has the following entity data"); rabbits "Found no elements"; no animals at all = locate plains from another far origin
+
+## SQ-NM-02 | command spawns never roll
+# a failed `data get` inside `execute as` prints nothing: tag the cow and read it directly
+> execute at qa run summon minecraft:cow ~ ~ ~ {Tags:["qnm2"]}
+> data get entity @e[tag=qnm2,limit=1] CustomName
+expect Found no elements matching CustomName
+
+## SQ-NM-03 | a named cow dies cleanly
+> execute at qa run kill @e[type=minecraft:cow,limit=1,sort=furthest,distance=..96]
+reject (?i)NamedMobs.*(exception|error)
+expect (?i)named entity|died|was killed
+
+
+## SQ-SPF-71 | Worldgen fauna: mooblooms and baby mobs near the plains bot, mooshroom breeding
+sleep 20
+> execute at qa run kill @e[type=minecraft:item,distance=..200]
+> execute at qa if entity @e[type=#zq:villagers,distance=..1]
+> execute at qa as @e[distance=..128,type=!minecraft:player] run data get entity @s id
+> execute at qa run summon minecraft:mooshroom ~2 ~ ~ {Age:0}
+> execute at qa run summon minecraft:mooshroom ~3 ~ ~ {Age:0}
+> execute at qa as @e[type=minecraft:mooshroom,distance=..5] run data merge entity @s {InLove:600}
+sleep 8
+> execute at qa as @e[type=minecraft:mooshroom,distance=..6] run data get entity @s Age
+look entity ids include more_mooblooms: and baby mob types; a calf (Age negative) from the bred pair
+
+## SQ-SPF-73 | Worldgen wild crops at the plains SQ-NM-01 located (literal box via {PL}; zq count takes no ~)
+> forceload add {PL1-32} {PL3-32} {PL1+31} {PL3+31}
+sleep 30
+> zq count {PL1-32} -64 {PL3-32} {PL1+31} 200 {PL3+31} farmersdelight:wild_carrots
+> zq count {PL1-32} -64 {PL3-32} {PL1+31} 200 {PL3+31} farmersdelight:wild_cabbages
+> zq count {PL1-32} -64 {PL3-32} {PL1+31} 200 {PL3+31} farmersdelight:wild_onions
+> zq count {PL1-32} -64 {PL3-32} {PL1+31} 200 {PL3+31} farmersdelight:wild_potatoes
+> zq count {PL1-32} -64 {PL3-32} {PL1+31} 200 {PL3+31} minecraft:grass
+> forceload remove {PL1-32} {PL3-32} {PL1+31} {PL3+31}
+look grass > 0 shows the box was generated; wild crops above 0 (one 4 x 4 chunk box can miss a rare patch: try a second plains)

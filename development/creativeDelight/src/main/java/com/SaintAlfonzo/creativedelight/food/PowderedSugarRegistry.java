@@ -17,7 +17,7 @@ import net.minecraftforge.registries.RegistryObject;
 /**
  * Powdered sugar block {@code creativeengineering:powdered_sugar_block} and its bucket
  * {@code creativeengineering:powdered_sugar_bucket}, the powder snow pair. The plain item
- * {@code creativeengineering:powdered_sugar} and every recipe are KubeJS (development/creativeDelight/src/main/resources/kubejs_startup/creativeengineering/baking_ingredients.js,
+ * {@code creativeengineering:powdered_sugar} and every recipe are KubeJS (development/creativeDelight/src/main/resources/kubejs_startup/creativedelight/baking_ingredients.js,
  * kubejs/data/creativedelight/kubejs/creativeengineering/powdered_sugar.js). TODO dishes/ingredients #16.
  */
 public final class PowderedSugarRegistry {

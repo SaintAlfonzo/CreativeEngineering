@@ -6,7 +6,7 @@
     python3 tools/name_audit.py --print    counts and every proposed change, nothing written
     python3 tools/name_audit.py --check    exit 1 when name_fixes.json is out of date
 
-Input: kubejs/exported/display_names.json from the client dump (/cedumpnames in game, or
+Input: kubejs/exported/display_names.json from the client dump (/cdevdumpnames in game, or
 [debug.names] dumpAtTitle on a scratch client; Creative Devtools dump/DisplayNameDump). Every entry
 carries the name the game shows and the pack + namespace whose lang file set its key.
 
@@ -324,7 +324,7 @@ def main():
     ap.add_argument('--check', action='store_true')
     args = ap.parse_args()
     if not DUMP.exists():
-        raise SystemExit('no %s: run /cedumpnames in game first' % DUMP.relative_to(INSTANCE))
+        raise SystemExit('no %s: run /cdevdumpnames in game first' % DUMP.relative_to(INSTANCE))
     dump = json.loads(DUMP.read_text())
     rules = load_rules()
     previous = json.loads(FIXES.read_text()).get('audit', {}) if FIXES.exists() else {}

@@ -1,3 +1,4 @@
+// requires: creativecompat
 // priority: 1000
 // Creative Compat server scripts (feature_writeup/creative_split.md 3.9, 7.6). Authored here in the pack folder (loads
 // on /reload); the Compat build copies this tree into the jar at the same path (data/creativecompat/kubejs/). Folders

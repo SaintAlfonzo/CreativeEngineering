@@ -1,3 +1,4 @@
+// requires: creativedelight
 // requires: architects_palette
 // Architect's Palette bread blocks from the dough block. Non-member file: recipe ids are
 // creativedelight:<type>/<suffix> (global.CD.recipes). Moved from the pack's kubejs/server_scripts/cooking/cooking.js

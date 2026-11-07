@@ -32,7 +32,7 @@ Related rows: `cooking/kitchen #18` (lava bottles, folded into row 3), `dishes/i
   `tools/gen_soup_soft_fluids.py`, generator `soup_soft_fluids`, plus hand-written drinks) with `containers[].capacity`
   (a bowl of soup 2, a bottle 1) and `food.divider`; plus same-path overrides of mod fluids in `kubejs/data/moonlight/`
   (lava, milk), `kubejs/data/supplementaries/` (7 milkshakes) and `kubejs/data/vintagedelight/` (2).
-- The JEI jar tabs read the capacity (`tab_drops.py`): changing it changes their rows after `/cegen run jei_world`.
+- The JEI jar tabs read the capacity (`tab_drops.py`): changing it changes their rows after `/cdevgen run jei_world`.
 
 ---
 
@@ -160,7 +160,7 @@ A bowl of soup or stew fills 1 space of the jar (was 2); enchanted soups and ste
   unverified: the jar draws fluid as a tinted still texture; the glint needs a render hook in `SupplementariesJarRendererMixin`.
 
 ### Build
-1. Generator: capacity 1 (after row 1: 5 of 60) and divider to match; regenerate (`/cegen run soup_soft_fluids`).
+1. Generator: capacity 1 (after row 1: 5 of 60) and divider to match; regenerate (`/cdevgen run soup_soft_fluids`).
 2. Keep pour-in and pour-out symmetric (in/out use the same capacity; mixed_jars.md 9).
 3. Glint: tag enchanted soups (`#creativeengineering:enchanted_foods`?) and draw an animated glint layer over the liquid in
    both jar renderers; or drop it if too costly.
@@ -219,7 +219,7 @@ makes them look like one.
 ### Build
 1. In `cookie_rows`, emit one row per loose item (`row([item(m), item(JAR)], ...)`, note "Up to {cap}. Fills a jar on its
    own.") instead of one cycling `items(alone)` row.
-2. `/cegen run jei_world`; check the regenerated tab.
+2. `/cdevgen run jei_world`; check the regenerated tab.
 No tag change.
 
 ### Decisions

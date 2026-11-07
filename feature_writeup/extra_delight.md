@@ -410,7 +410,7 @@ No load errors: the jar was never loaded in the pack.
    `loot_table` -> `loot_tables`, `tags/item` -> `tags/items`; result `id` -> `item`; `neoforge:compound` ->
    array ingredients; `c:` -> `forge:`; NeoForge biome modifiers -> Forge; `Material` on blocks; drop advancements.
    Drop every Drop id of 2.1 with its assets, recipes, loot, tags, lang. `mod_sides.md` row (both sides).
-2. **Dumps and generators** (memory `dumpall-refresh-workflow`): install, `/dumpall`, `/cegen` (names, food catalog, JEI
+2. **Dumps and generators** (memory `dumpall-refresh-workflow`): install, `/dumpall`, `/cdevgen` (names, food catalog, JEI
    coverage, stack sizes, physics, WTHIT icons, crop table, paintings).
 3. **Ids and tags:** `item_dict.js` (and block / fluid dicts) keys for every kept id; tags through `global.tags` in a CD
    `extradelight/tags.js`: crops and seeds (`#forge:crops/chili|ginger|soybean|mallow_root`, `#forge:seeds/*`), fruit
@@ -460,7 +460,7 @@ No load errors: the jar was never loaded in the pack.
 21. **Cornfield dimension** per D4 (dropped by default: no dimension, no maze, no structures, no portal code).
 22. **Trades and chests:** villager / wanderer code dropped (D14); kept crops into the trader catalog if wanted
     ([wandering_trader.md](wandering_trader.md)).
-23. **Paintings and banner:** 4 paintings into the paintings catalog (`/cegen` paintings), citrus banner pattern
+23. **Paintings and banner:** 4 paintings into the paintings catalog (`/cdevgen` paintings), citrus banner pattern
     through the banner compat fix (memory `banner-pattern-compat-fix`).
 24. **Patchouli cookbook:** dropped (it documents ED's own stations and recipes, which the pack replaces).
 25. **Config:** `configs_edited/` copy of the port's config (mint spread off since mint is dropped; all-year spooky off).

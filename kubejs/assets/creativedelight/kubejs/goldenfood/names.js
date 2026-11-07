@@ -1,3 +1,4 @@
+// requires: creativedelight
 // Gilded food names (food.md 3.16, golden_food.md 3.7; TODO food/types-and-tuning #23, owner 2026-11-02). The
 // enchanted golden foods are called "Gilded" in language; their ids stay `enchanted_golden_*`. Covers every
 // item_dict id with an `enchanted_golden_` path (Golden Food's 24, vanilla's apple, Immersive Weathering's moss clump),

@@ -1,0 +1,32 @@
+# r1106cbp: Creative Delight alone (cooking set without Creative Brewing), group A (SQ-CDFL-01, -02)
+## SQ-CDFL-01 | CD alone: creativedelight: fluids, startup folder, swaps, effect swaps
+bootreject Missing or unsupported mandatory|Mixin apply failed|InvalidMixinException|Encountered an unexpected exception
+shell grep -h "jar-startup\]\|\[swaps\]" logs/latest.log logs/kubejs/startup.log | sed -E 's/^\[[^]]*\] \[[^]]*\]: //' | sort | uniq -c
+shell grep -h "jar-startup\] creativedelight" logs/latest.log logs/kubejs/startup.log | head -3
+> forge tags minecraft:fluid get forge:fluid/chorus_juice
+> forge tags minecraft:fluid get forge:fluid/egg_solution
+> forge tags minecraft:fluid get forge:fluid/frosting
+> forge tags minecraft:fluid get forge:fluid/turnip_water
+sleep 2
+expect creativedelight:chorus_juice
+expect creativedelight:egg_solution
+expect creativedelight:frosting
+expect creativedelight:turnip_water
+reject creativeengineering:(chorus_juice|egg_solution|frosting|turnip_water)
+shell grep -h "Unknown fluid\|Invalid fluid" logs/kubejs/*.log | head; ! grep -qh "Unknown fluid\|Invalid fluid" logs/kubejs/*.log
+shell ! grep -h "effect_swaps" logs/kubejs/*.log | grep -iE "error|fail"
+shell grep -h "\[food values\].*effect swaps" logs/kubejs/*.log logs/latest.log | head -3
+shell grep -h "\[food values\] [0-9]* effect swaps" logs/kubejs/*.log logs/latest.log | head -1 | grep -q .
+shell ! grep -nE "ReferenceError|TypeError|EvaluatorException|is not defined" logs/kubejs/startup.log logs/kubejs/server.log
+## SQ-CDFL-02 | CD alone: filling, emptying, kettle, mixing name creativedelight: fluids
+> zq bytype create:filling
+> zq bytype create:emptying
+sleep 3
+expect creativedelight:
+reject creativeengineering:(carrot_juice|egg_solution|frosting|[a-z_]*_coffee|[a-z_]*_tea)\b
+> zq bytype farmersrespite:brewing
+> zq bytype create:mixing
+sleep 3
+expect egg_solution
+expect frosting
+shell grep -h "failed and was skipped" logs/kubejs/startup.log logs/kubejs/server.log | wc -l

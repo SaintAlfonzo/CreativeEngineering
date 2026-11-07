@@ -13,7 +13,7 @@ description: Add (or remove/replace) a third-party mod jar in the pack - sides r
 4. **Pinned fixes.** If the mod is in [deploy.md](../../../feature_writeup/deploy.md) "Mod updates (version-pinned fixes)", recheck
    the fix and update `PINNED_MODS` in `tools/build_deploy.py`.
 5. **Configs.** Any config edited by hand: copy to `configs_edited/root_config/<path>` or `server_config/`.
-6. **Dumps and generators** (in game): `/dumpall`, then `/cegen run all dumps`; order and hand steps in memory
+6. **Dumps and generators** (in game): `/dumpall`, then `/cdevgen run all dumps`; order and hand steps in memory
    `dumpall-refresh-workflow` (food_catalog misfiles, BlockRunner tiers, jei_coverage UNCOVERED, item_dict
    mapping, crops.md, compost `gen_compost_values.py --merge`).
 7. **Early checks**: `logs/latest.log` for `Failed to parse`, mixin errors, the mod id.

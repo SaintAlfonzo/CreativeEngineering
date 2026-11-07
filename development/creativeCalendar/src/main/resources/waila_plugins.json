@@ -1,5 +1,5 @@
 {
-  "creativeengineering:crop_seasons": {
+  "creativecalendar:crop_seasons": {
     "entrypoints": {
       "client": "com.SaintAlfonzo.creativecalendar.compat.WthitCropSeasons"
     },

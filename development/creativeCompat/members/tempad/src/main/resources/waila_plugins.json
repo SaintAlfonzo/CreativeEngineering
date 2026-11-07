@@ -1,0 +1,9 @@
+{
+  "tempad:main": {
+    "entrypoints": {
+      "common": "earth.terrarium.tempad.common.compat.WthitPlugin",
+      "client": "earth.terrarium.tempad.client.compat.WthitClientPlugin"
+    },
+    "side": "*"
+  }
+}

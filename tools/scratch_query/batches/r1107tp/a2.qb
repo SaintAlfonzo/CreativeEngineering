@@ -1,0 +1,61 @@
+# r1107tp boot a2: same save as a1 (restart), tools/scratch_query/ztp_probe.js copied in as zz_ztp_probe.js.
+# Bot qa (perfBot) holds a Tempad in slot 0; locations "Home One" (0.5 -60 0.5), "Far East" (30.5 -60 0.5), "Hell Spot"
+# (Nether 0.5 120 0.5) and pin "Far East" were made on a1 by hand (SQ-TP-04 log in the run doc).
+# Rows SQ-TP-03 (restart half), -05, -07.
+pace 1
+
+## SQ-TP-03 | locations and Teleport app after a restart
+bootexpect Done \(
+> pbot spawn qa 0.5 -60 0.5 minecraft:overworld survival
+sleep 3
+> ztp locs qa
+waitlog \[ztp\] done 20
+expect \[ztp\] loc tempad:default .* "Home One" minecraft:overworld 0\.50 -60\.00 0\.50
+expect \[ztp\] loc tempad:default .* "Far East" minecraft:overworld 30\.50
+expect \[ztp\] loc tempad:default .* "Hell Spot" minecraft:the_nether 0\.50 120\.00
+> pbot hold qa tempad:tempad
+> zq useitem qa
+> ztp menu qa
+waitlog \[ztp\] menu 20
+expect \[ztp\] menu tempad:teleport
+
+## SQ-TP-05 | pinned location + default macro, after restart and after a death
+> ztp pdata qa
+waitlog \[ztp\] pdata 20
+expect pinned_location:\{locationId:\[I;-191329597,-100384576,-1821537137,2007787117\],providerId:"tempad:default"\}
+> ztp settings qa tempad:teleport tempad:default
+> ztp setchr qa 0 6000
+> kill @e[type=tempad:timedoor]
+sleep 3
+> ztp macro qa
+> ztp doors
+waitlog \[ztp\] doors total 20
+expect \[ztp\] door minecraft:overworld .* target minecraft:overworld \(30\.5, -60\.0, 0\.5\)
+> kill @e[type=tempad:timedoor]
+> gamerule keepInventory true
+> kill qa
+sleep 3
+> pbot spawn qa 0.5 -60 0.5 minecraft:overworld survival
+sleep 2
+> ztp pdata qa
+waitlog \[ztp\] pdata 20
+count pinned_location:\{locationId:\[I;-191329597 >= 2
+> ztp macro qa
+> ztp doors
+waitlog \[ztp\] doors total 20
+count \[ztp\] door minecraft:overworld .* target minecraft:overworld \(30\.5, -60\.0, 0\.5\) >= 2
+look perfBot relogs a dead bot (no PlayerEvent.Clone): the death half covers save/load only; Clone (copyFrom) needs a client death (CQ note)
+
+## SQ-TP-07 | chronon generator charges a carried Tempad
+> kill @e[type=tempad:timedoor]
+> clear qa
+> give qa tempad:tempad
+> give qa tempad:chronon_generator
+sleep 1
+> ztp chr qa
+waitlog \[ztp\] chr end 20
+sleep 120
+> ztp chr qa
+waitlog \[ztp\] chr end 20
+shell grep -hE "\[ztp\] chr slot" logs/latest.log | tail -6
+look tempad chronons rose between the two chr reads (generator 1 per 48 ticks: about 50 in 2 min)

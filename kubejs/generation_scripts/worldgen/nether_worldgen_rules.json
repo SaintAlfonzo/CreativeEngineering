@@ -3,7 +3,7 @@
   "what": "Nether blocks in Overworld biomes (feature_writeup/nether_worldgen.md). python3 tools/gen_nether_worldgen.py turns these rules into kubejs/data overrides (listed in nether_worldgen_manifest.json); rerun it after editing this file or after a Terralith update. Structures are not here: they use nether_swap_rules.json.",
   "surface": "Block results of the Overworld surface rule (Terralith's minecraft:overworld and minecraft:large_biomes noise settings). A rule changes a block result only where every biome condition on its path lies inside `biomes` (rules that apply to every biome are never touched). to: a block id, \"remove\" (the rule is dropped, so the next rule in the sequence decides), or a weighted list [{block, weight}] mixed per block at random (vertical_gradient bands of 16 blocks, about +-0.5 % off the weight).",
   "features": "Configured features rewritten in place: every placed block state `from` becomes `to` (properties such as axis carry over), or with to \"remove\" its entry is dropped from a weighted state provider.",
-  "literal": "Whole data files written as given (code-registered entries with no json to copy, e.g. Create layered ores).",
+  "literal": "Whole data files written as given (code-registered entries with no json to copy, e.g. Create layered ores). path: under kubejs/, or instance-relative when it starts with development/ (a jar's resources, e.g. Creative Worldgen's packs/<modid>/ gated folders).",
   "remove_features": "forge:remove_features modifiers: the placed features no longer generate in the listed biomes."
  },
  "surface": [
@@ -136,7 +136,7 @@
   },
   {
    "note": "Vintage Delight backport: wild ghost peppers in crimson and warped forests only (nylium). The port ships the feature and no biome modifier; Vintage's own placed them in every Nether biome (feature_writeup/vintage_delight.md 2.2)",
-   "path": "data/creativeengineering/forge/biome_modifier/vintage_wild_ghost_peppers.json",
+   "path": "development/creativeWorldgen/src/main/resources/packs/vintagedelight/data/creativeengineering/forge/biome_modifier/vintage_wild_ghost_peppers.json",
    "json": {
     "type": "forge:add_features",
     "biomes": [

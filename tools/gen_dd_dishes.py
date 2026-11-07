@@ -71,8 +71,10 @@ def item_sprite(item_id):
                         if tex:
                             return tex
     # A KubeJS item has no model in a jar: its generated model's layer0 is <ns>:item/<path>, the sprite in kubejs/assets
-    if (INSTANCE / 'kubejs/assets' / ns / 'textures/item' / f'{path}.png').exists():
-        return f'{ns}:item/{path}'
+    # (or in an in-tree jar's assets: Creative Delight holds the cooking sprites since 2026-11-06)
+    for root in [INSTANCE / 'kubejs/assets', *sorted(INSTANCE.glob('development/*/src/main/resources/assets'))]:
+        if (root / ns / 'textures/item' / f'{path}.png').exists():
+            return f'{ns}:item/{path}'
     sys.exit(f'no item model with layer0 for {item_id}')
 
 

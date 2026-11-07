@@ -30,7 +30,7 @@ campfire, sheetmetal tank, kitchen station and keg lines, and the coverage audit
 - **Findings:** F1 to F3 resolved; the coverage audit's F4 to F10 are all built (F9 on 2026-10-21).
 - **Files to open:** [waila_plugins.json](../development/creativeCommon/src/main/resources/waila_plugins.json),
   [compat/](../development/creativeCommon/src/main/java/com/SaintAlfonzo/creativecommon/compat/),
-  [state_lines.json](../development/creativeCommon/src/main/resources/assets/creativecommon/state_lines.json),
+  [state_lines.json](../development/creativeCompat/src/main/resources/assets/creativecompat/state_lines.json),
   [KegWthit.java](../development/backportedBrewin/src/main/java/umpaz/brewinandchewin/integration/wthit/KegWthit.java),
   [tools/wthit_icon_audit.py](../tools/wthit_icon_audit.py).
 - **Knobs:** WTHIT's plugin toggles (`config/waila/plugin_toggle.json5`) and options; the pack's `[wthit]`,
@@ -52,21 +52,21 @@ nothing under WTHIT; 2.6 to 2.8 port the ones that matter.
 
 | Plugin id | Class | Side | Needs | What it adds |
 |---|---|---|---|---|
-| `creativeengineering:run_speed` | `surface/WthitRunSpeed` | client | `blockrunner` | "Run Speed: 1.50× (Asphalt)" ([blockrunner.md](blockrunner.md) 3.8) |
+| `creativecompat:run_speed` | `surface/WthitRunSpeed` | client | `blockrunner` | "Run Speed: 1.50× (Asphalt)" ([blockrunner.md](blockrunner.md) 3.8) |
 | `creativedelight:crop_growth` | Creative Delight `compat/wthit/WthitCropGrowth` (QoL-6) | client | nothing | "Growth: 67%", "(Harvestable)" ([crops.md](crops.md) 2.9) |
-| `creativeengineering:block_model_icon` | `compat/WthitBlockModelIcon` | client | nothing | the icon fix, 2.2 |
-| `creativeengineering:coaster` | `compat/WthitCoaster` | client | `brewinandchewin` | coaster lines ([alcohol.md](alcohol.md) 12) |
-| `creativeengineering:holder_contents` | `compat/WthitHolderContents` | client | `supplementaries` | "Contents: ...", 2.3 |
-| `creativeengineering:hive` | `compat/WthitHive` | both | nothing | "Bees", "Honey Level", 2.4 |
-| `creativeengineering:state_lines` | `compat/WthitStateLines` | client | nothing | servings, slices, eggs..., 2.5 |
-| `creativeengineering:campfire` | `compat/WthitCampfire` | both | nothing (Unlit Campfire optional) | burn and rain lines, 2.6 |
-| `creativeengineering:sheetmetal_tank` | `compat/WthitSheetmetalTank` | both (server data only) | `immersiveengineering` | tank fluid bar, 2.7 |
-| `creativeengineering:kitchen_station` | `compat/WthitKitchenStation` | both | `appliedcooking`, `ae2` | online / offline, 2.7 |
-| `creativeengineering:remainder_buffer` | `compat/WthitRemainderBuffer` | both | nothing (pot / kettle parts only with `farmersdelight` / `farmersrespite`) | leftover slots, 2.9 |
-| `creativeengineering:sheared` | `compat/WthitSheared` | client | nothing | "Sheared, prevents spreading and converting to dirt", 2.10 |
-| `creativeengineering:silk_touch` | `compat/WthitSilkTouch` | client | nothing (the generated block tag) | Silk Touch book + "Needs Silk Touch", 2.11 |
-| `creativeengineering:crop_seasons` | `compat/WthitCropSeasons` | client | `sereneseasons` | "Fertile: ...", "Offseason: ...", "Fertile here" / "Offseason here", 2.12 |
-| `creativeengineering:operator_blocks` | `compat/WthitOperatorBlocks` | client | nothing | barriers for operators (a redirect, no line), 2.13 |
+| `creativecompat:block_model_icon` | `compat/WthitBlockModelIcon` | client | nothing | the icon fix, 2.2 |
+| `creativecompat:coaster` | `compat/WthitCoaster` | client | `brewinandchewin` | coaster lines ([alcohol.md](alcohol.md) 12) |
+| `creativecompat:holder_contents` | `compat/WthitHolderContents` | client | `supplementaries` | "Contents: ...", 2.3 |
+| `creativecompat:hive` | `compat/WthitHive` | both | nothing | "Bees", "Honey Level", 2.4 |
+| `creativecompat:state_lines` | `compat/WthitStateLines` | client | nothing | servings, slices, eggs..., 2.5 |
+| `creativecompat:campfire` | `compat/WthitCampfire` | both | nothing (Unlit Campfire optional) | burn and rain lines, 2.6 |
+| `creativecompat:sheetmetal_tank` | `compat/WthitSheetmetalTank` | both (server data only) | `immersiveengineering` | tank fluid bar, 2.7 |
+| `creativecompat:kitchen_station` | `compat/WthitKitchenStation` | both | `appliedcooking`, `ae2` | online / offline, 2.7 |
+| `creativecompat:remainder_buffer` | `compat/WthitRemainderBuffer` | both | nothing (pot / kettle parts only with `farmersdelight` / `farmersrespite`) | leftover slots, 2.9 |
+| `creativecompat:sheared` | `compat/WthitSheared` | client | nothing | "Sheared, prevents spreading and converting to dirt", 2.10 |
+| `creativecompat:silk_touch` | `compat/WthitSilkTouch` | client | nothing (the generated block tag) | Silk Touch book + "Needs Silk Touch", 2.11 |
+| `creativecalendar:crop_seasons` | `compat/WthitCropSeasons` | client | `sereneseasons` | "Fertile: ...", "Offseason: ...", "Fertile here" / "Offseason here", 2.12 |
+| `creativecompat:operator_blocks` | `compat/WthitOperatorBlocks` | client | nothing | barriers for operators (a redirect, no line), 2.13 |
 | `brewinandchewin:keg` (Brewin' port) | `integration/wthit/KegWthit` | both | nothing | keg lines, 2.8 |
 
 "Both" plugins have a server half that sends data the client doesn't otherwise get; WTHIT and the two mods are on
@@ -88,7 +88,7 @@ both sides in this pack (`mod_sides.md`). Client-only plugins need nothing on th
 Priority 1000, ahead of WTHIT's core icon (1100). Skull candles needed nothing: their vanilla pick item reads the
 block entity (the skull) in a real world; the empty-world audit only made them look blank.
 
-**The audit (2026-10-20, `/cedumpicons`):** 14,259 blocks: 13,829 item icons, 272 drawn as their model, 158 not
+**The audit (2026-10-20, `/cdevdumpicons`):** 14,259 blocks: 13,829 item icons, 272 drawn as their model, 158 not
 drawable, 0 errors, 0 items with a missing model. The name audit's `hasItem: false` (964) over-reports: most of
 those blocks override their pick item.
 
@@ -131,8 +131,8 @@ Every `BeehiveBlock` (beehive, bee nest, Upgrade Aquatic's driftwood and river b
 
 ### 2.5 State lines
 
-`compat/WthitStateLines` (client), rules in `assets/creativecommon/state_lines.json` (copy to
-`kubejs/assets/creativeengineering/` to override; pure logic in `compat/StateLines`). Each rule: `blocks` (ids, globs,
+`compat/WthitStateLines` (client), rules in `assets/creativecompat/state_lines.json` (copy to
+`kubejs/assets/creativecompat/` to override; pure logic in `compat/StateLines`). Each rule: `blocks` (ids, globs,
 `#tags`), `except`, an integer `property`, a `label` (lang `creativeengineering.wthit.state.<label>`) and a `mode`.
 Rules apply in order; a later rule whose label or property the block already shows is skipped.
 
@@ -227,7 +227,7 @@ and "Needs Silk Touch" on every block that only drops itself with Silk Touch. Hi
 Silk Touch.
 
 - **Source:** loot tables are server data and never reach the client, so the list is a block tag,
-  `creativecommon:wthit/needs_silk_touch`, synced like every tag. `tools/gen_silk_touch_blocks.py` (`/cegen run
+  `creativecommon:wthit/needs_silk_touch`, synced like every tag. `tools/gen_silk_touch_blocks.py` (`/cdevgen run
   silk_touch_blocks dumps`, after `/dumploot`) reads `kubejs/exported/loot_tables/` and writes
   `kubejs/generation_scripts/wthit/silk_touch_blocks.json`; `kubejs/server_scripts/tags/wthittags.js` adds the
   registered ones to the tag (`/reload`).
@@ -315,7 +315,7 @@ and single player with cheats on); everyone else falls through to the blacklist 
 
   WTHIT's own plugin toggles (`config/waila/plugin_toggle.json5`) turn a whole plugin off as well.
   `[debug.wthit] dumpIconsAtTitle` runs the icon dump at the title screen.
-- **Text:** `creativeengineering.wthit.*` and `config.waila.plugin_creativecommon.*` in patcherMod's lang;
+- **Text:** `creativeengineering.wthit.*` and `config.waila.plugin_creativecompat.*` in Creative Compat's lang (`plugin_creativecalendar.*` in Calendar's);
   `brewinandchewin.wthit.keg.*` and `config.waila.plugin_brewinandchewin*` in the port's. Unlit Campfire, Applied
   Cooking, the keg GUI and WTHIT's own keys are reused where they exist.
 - **Compile-only jars:** `development/creativeCommon/libs/` gained Moonlight, Unlit Campfire and Applied Cooking (WTHIT,
@@ -354,7 +354,7 @@ TreeChop ship WTHIT plugins.
 - **Cookie jars** show the cookie twice (WTHIT's item line and the Contents line).
 - **Hive order** is decided by a guess at whether WTHIT wrote its names line (its option on and bees in); a hive whose
   bees the server can't name could show the order the other way round.
-- **`/cedumpicons` probes an empty world** with no hit: it over-counts model icons and can't see Forge-pick or
+- **`/cdevdumpicons` probes an empty world** with no hit: it over-counts model icons and can't see Forge-pick or
   block-entity pick items.
 - **Keg progress** stops at 99% and reads 0% while waiting for room for leftovers.
 
@@ -378,7 +378,7 @@ TreeChop ship WTHIT plugins.
   `kubejs/generation_scripts/wthit/silk_touch_blocks.json` → [wthittags.js](../kubejs/server_scripts/tags/wthittags.js).
 - Sheared grass blocks in the ports: [LushGrassBlock.java](../development/backportedVintage/src/main/java/net/ribs/vintagedelight/block/custom/LushGrassBlock.java),
   [SpreadableGrassSlabBlock.java](../development/backportedVinery/src/main/java/net/satisfy/vinery/core/block/SpreadableGrassSlabBlock.java).
-- [state_lines.json](../development/creativeCommon/src/main/resources/assets/creativecommon/state_lines.json).
+- [state_lines.json](../development/creativeCompat/src/main/resources/assets/creativecompat/state_lines.json).
 - [KegWthit.java](../development/backportedBrewin/src/main/java/umpaz/brewinandchewin/integration/wthit/KegWthit.java).
 - [devtools/WthitIconDump.java](../development/creativeCommon/src/main/java/com/SaintAlfonzo/creativecommon/devtools/WthitIconDump.java) → `kubejs/exported/wthit_icons.json` → [tools/wthit_icon_audit.py](../tools/wthit_icon_audit.py).
 - [tools/gen_display_delight_models.py](../tools/gen_display_delight_models.py); `check_display_delight_models` in [tools/build_deploy.py](../tools/build_deploy.py).
@@ -386,7 +386,7 @@ TreeChop ship WTHIT plugins.
 
 ## 6. Offline and scratch checks
 
-- **Icon audit:** `/cedumpicons` (client command) or `[debug.wthit] dumpIconsAtTitle`, then
+- **Icon audit:** `/cdevdumpicons` (client command) or `[debug.wthit] dumpIconsAtTitle`, then
   `python3 tools/wthit_icon_audit.py` (`--md`, `--all`).
 - **State lines:** a headless test of `StateLines` against the shipped json (14 checks: all modes, cauldron except,
   rule matching) passed 2026-10-20; a dry run over `display_names.json` gives the counts in 2.5.
@@ -458,7 +458,7 @@ Line-specific tests elsewhere: BR-44 to BR-47 ([blockrunner.md](blockrunner.md))
 - [ ] **WL-23 Cauldrons:** a dyed water cauldron two-thirds full → "Level: 2 / 3"; a vanilla water cauldron → only
   WTHIT's fluid bar, no Level line; a Fruits Delight juice cauldron and a powder snow cauldron → Level lines.
 - [ ] **WL-24 Others and override:** a respawn anchor with 2 charges → "Charges: 2 / 4"; 3 sea pickles → "Pickles: 3 /
-  4". Copy `state_lines.json` to `kubejs/assets/creativeengineering/`, delete the pickle rule, F3+T → the Pickles line
+  4". Copy `state_lines.json` to `kubejs/assets/creativecompat/`, delete the pickle rule, F3+T → the Pickles line
   is gone. Remove the copy.
 
 **Campfires**
@@ -531,7 +531,7 @@ Line-specific tests elsewhere: BR-44 to BR-47 ([blockrunner.md](blockrunner.md))
 - 2026-10-04: Growth line and Display Delight icon fix (patcherMod 1.0.4).
 - 2026-10-18: this hub writeup; findings F1 to F3; tests WL-01 to WL-06.
 - 2026-10-20: plugin names in lang (F2); coaster plugin ([alcohol.md](alcohol.md) 12).
-- 2026-10-20: TODO `ui/wthit #2` to `#4`: icon for every namespace (F1) with `/cedumpicons` and the audit tool; jar
+- 2026-10-20: TODO `ui/wthit #2` to `#4`: icon for every namespace (F1) with `/cdevdumpicons` and the audit tool; jar
   contents line; hive lines; DD model check in the deploy preflight (F3); coverage audit F4 to F10.
 - 2026-10-20 (later): TODO `ui/wthit #5` to `#8` built: state lines (F4 to F6), campfire, sheetmetal tank and kitchen
   station (F7), keg in the Brewin' port (F8), Forge pick + `iconItems` (F10). Scratch server + client run (section 6).

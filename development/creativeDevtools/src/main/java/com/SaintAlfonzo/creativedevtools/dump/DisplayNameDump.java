@@ -55,7 +55,7 @@ import java.util.function.Supplier;
  *   <li>{@code kubejs/exported/names.json}: the missing-only file /dumpnames writes, same format, so
  *       tools/missing_names.py reads either.</li>
  * </ul>
- * Triggers: the client command {@code /cedumpnames}, or {@code [debug.names] dumpAtTitle} (once, when the title
+ * Triggers: the client command {@code /cdevdumpnames}, or {@code [debug.names] dumpAtTitle} (once, when the title
  * screen first opens: a scratch client can dump without joining a world). tools/name_audit.py reads the file.
  *
  * <p>Where a key comes from: the game merges lang per namespace ({@code ClientLanguage.loadFrom} walks
@@ -72,9 +72,9 @@ public final class DisplayNameDump {
 
     @SubscribeEvent
     public static void onClientCommands(RegisterClientCommandsEvent event) {
-        event.getDispatcher().register(Commands.literal("cedumpnames").executes(ctx -> {
+        event.getDispatcher().register(Commands.literal("cdevdumpnames").executes(ctx -> {
             String summary = dump();
-            ctx.getSource().sendSuccess(Component.literal("[cedumpnames] " + summary
+            ctx.getSource().sendSuccess(Component.literal("[cdevdumpnames] " + summary
                     + " -> kubejs/exported/display_names.json").withStyle(ChatFormatting.GREEN), false);
             return 1;
         }));
@@ -242,7 +242,7 @@ public final class DisplayNameDump {
         JsonObject legacy = new JsonObject();
         legacy.addProperty("dedicated", false);
         legacy.addProperty("generated", when);
-        legacy.addProperty("source", "client /cedumpnames");
+        legacy.addProperty("source", "client /cdevdumpnames");
         legacy.add("totals", totals);
         legacy.add("missing", missing);
 
@@ -253,13 +253,13 @@ public final class DisplayNameDump {
             Files.writeString(dir.resolve("display_names.json"), gson.toJson(out), StandardCharsets.UTF_8);
             Files.writeString(dir.resolve("names.json"), gson.toJson(legacy), StandardCharsets.UTF_8);
         } catch (IOException e) {
-            LOGGER.error("[cedumpnames] could not write {}", dir, e);
+            LOGGER.error("[cdevdumpnames] could not write {}", dir, e);
             return "write failed: " + e.getMessage();
         }
         StringBuilder summary = new StringBuilder("missing:");
         missingCounts.forEach((k, n) -> summary.append(' ').append(k).append(' ').append(n).append('/').append(totals.get(k).getAsInt()).append(','));
         summary.setLength(summary.length() - 1);
-        LOGGER.info("[cedumpnames] {} lang keys traced, {} ({} ms)", sources.size(), summary,
+        LOGGER.info("[cdevdumpnames] {} lang keys traced, {} ({} ms)", sources.size(), summary,
                 (System.nanoTime() - start) / 1_000_000);
         return summary.toString();
     }
@@ -283,7 +283,7 @@ public final class DisplayNameDump {
                     try (InputStream in = res.open()) {
                         Language.loadFromJson(in, (k, v) -> out.put(k, new Source(pack, ns, v)));
                     } catch (IOException | RuntimeException e) {
-                        LOGGER.warn("[cedumpnames] skipped {} from {}: {}", rl, pack, e.toString());
+                        LOGGER.warn("[cdevdumpnames] skipped {} from {}: {}", rl, pack, e.toString());
                     }
                 }
             }
@@ -300,7 +300,7 @@ public final class DisplayNameDump {
             try {
                 fn.accept(rl.toString(), value);
             } catch (RuntimeException e) {
-                LOGGER.warn("[cedumpnames] {} {}: {}", reg.getRegistryName(), rl, e.toString());
+                LOGGER.warn("[cdevdumpnames] {} {}: {}", reg.getRegistryName(), rl, e.toString());
             }
         }
     }

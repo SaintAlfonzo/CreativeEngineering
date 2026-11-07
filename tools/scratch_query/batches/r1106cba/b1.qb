@@ -1,0 +1,98 @@
+# r1106cba Boot 1: chain jars, group A superflat, fresh config (SQ-CBA-01 to -10).
+## SQ-CBA-01 | chain boot: Creative Brewing loads with both members
+bootexpect \[creativebrewing\] members: \[vinery, brewinandchewin\]$
+bootreject NOT loaded:|is loaded from .*not from the Creative Brewing jar|Missing or unsupported mandatory|Encountered an unexpected exception|Exception in thread
+## SQ-CBA-02 | no mixin failure, no client class on the dedicated server
+bootreject Mixin apply failed|InvalidMixinException|creativebrewing.*(NoClassDefFoundError|ClassNotFoundException)|Attempted to load class net/minecraft/client
+## SQ-CBA-03 | startup script order and script errors
+shell grep -q "\[jar-startup\] startup script packs in order: .*creativedelight.*creativebrewing" logs/kubejs/startup.log
+shell grep -q "\[creativebrewing\] core finished, members: vinery, brewinandchewin" logs/kubejs/startup.log
+shell ! grep -nE "ReferenceError|TypeError|EvaluatorException|is not defined|global.trades missing" logs/kubejs/startup.log logs/kubejs/server.log
+shell grep -E "Skipped creativebrewing:kubejs/|Loaded script creativebrewing:kubejs/" logs/kubejs/server.log | sed 's/.*\] //'
+kjsexpect Skipped creativebrewing:kubejs/alexsmobs/lava_vision.js: Mod alexsmobs is not loaded
+kjsexpect Loaded script creativebrewing:kubejs/vinery/wandering_trades.js
+## SQ-CBA-04 | creativebrewing-common.toml tables and members
+shell grep -nE "^\[(members|alcohol|effects|magic_resistance|copper_poisoning)\]|^\s*(vinery|brewinandchewin) = " config/creativebrewing-common.toml
+shell test "$(grep -cE '^\[(members|alcohol|effects|magic_resistance|copper_poisoning)\]' config/creativebrewing-common.toml)" = 5
+shell grep -qE "^\s*vinery = true" config/creativebrewing-common.toml && grep -qE "^\s*brewinandchewin = true" config/creativebrewing-common.toml
+bootreject still has sections that moved to
+## SQ-CBA-05 | potions registered
+> zq potion creativebrewing:magic_resistance
+> zq potion creativebrewing:long_magic_resistance
+> zq potion creativebrewing:strong_magic_resistance
+> zq potion creativebrewing:wither
+> zq potion creativebrewing:resistance
+> zq potion creativebrewing:darkness
+> zq potion creativebrewing:long_reach
+sleep 2
+count registered: true == 6
+expect long_reach registered: false
+bootexpect better_beacons not present - skipping the long_reach potions
+## SQ-CBA-06 | MoreJS potion mixes, Automatic Brewing, dragon-breath guard
+shell grep -oE "\[CE potions\] added [0-9]+ item-agnostic potion mixes" logs/kubejs/startup.log
+shell grep -qE "Automatic Brewing: rebuilt [0-9]+ recipes" logs/kubejs/startup.log
+shell grep -q "re-added 0 dragon-breath fluid brews" logs/kubejs/startup.log
+> zq potion minecraft:mundane minecraft:wither_rose
+> zq potion minecraft:thick minecraft:amethyst_shard
+> zq potion creativebrewing:magic_resistance minecraft:redstone,minecraft:glowstone_dust
+sleep 2
+expect -> minecraft:potion wither
+expect mundane \+ minecraft:wither_rose -> minecraft:potion
+expect thick \+ minecraft:amethyst_shard -> minecraft:potion magic_resistance
+expect -> minecraft:potion long_magic_resistance
+expect -> minecraft:potion strong_magic_resistance
+reject \[zq\] error|ERROR
+## SQ-CBA-07 | Magic Resistance reduces instant damage and negates Poison I
+# a level with no player and no forced chunk stops ticking entities after 300 ticks: forceload the golems' chunk
+> forceload add 0 0
+sleep 2
+> summon minecraft:iron_golem 0 -60 5 {Tags:["cbaA"],NoAI:1b}
+> summon minecraft:iron_golem 3 -60 5 {Tags:["cbaB"],NoAI:1b}
+> effect give @e[tag=cbaA] creativebrewing:magic_resistance 120 0
+> effect give @e[tag=cbaA] minecraft:instant_damage 1 0
+> effect give @e[tag=cbaB] minecraft:instant_damage 1 0
+sleep 2
+> data get entity @e[tag=cbaA,limit=1] Health
+> data get entity @e[tag=cbaB,limit=1] Health
+> effect give @e[tag=cbaA] minecraft:poison 10 0
+sleep 5
+> data get entity @e[tag=cbaA,limit=1] Health
+> kill @e[tag=cbaA]
+> kill @e[tag=cbaB]
+> forceload remove 0 0
+expect Applied effect Magic Resistance
+count entity data: 95\.2 == 2
+count entity data: 94\.0 == 1
+## SQ-CBA-08 | lingering potion bucket from a dispenser
+bootexpect potion bucket dispenser behaviors registered
+bootexpect potion bucket dispense handler installed from KubeJS
+> setblock 10 -60 10 minecraft:dispenser[facing=up]{Items:[{Slot:0b,id:"creativebrewing:lingering_potion_bucket",Count:1b,tag:{Potion:"minecraft:regeneration"}}]}
+> setblock 11 -60 10 minecraft:redstone_block
+sleep 2
+> execute if entity @e[type=minecraft:area_effect_cloud,x=10,y=-59,z=10,distance=..8]
+expect Test passed
+reject dispensed with no KubeJS handler installed
+## SQ-CBA-09 | Vinery and Brewin' recipes, CB recipe ids
+> zq bytype brewinandchewin:fermenting
+> zq bytype brewinandchewin:keg_pouring
+> zq bytype vinery:wine_fermentation
+> zq bytype vinery:apple_mashing
+> zq recipes creativebrewing:
+sleep 4
+expect bytype brewinandchewin:fermenting: ([2-9]\d|\d{3,})$
+expect bytype brewinandchewin:keg_pouring: ([2-9]\d|\d{3,})$
+expect bytype vinery:wine_fermentation: [1-9]
+expect bytype vinery:apple_mashing: [1-9]
+expect \[zq\] creativebrewing:
+reject errored recipe|Couldn't parse
+## SQ-CBA-10 | alcohol food values, winemaker trades, PackTime
+shell grep -oE "\[alcohol\] food values set on [0-9]+ of [0-9]+ drinks" logs/kubejs/startup.log
+# chain: Fruits Delight (bellini_cocktail) and tmted (bottle_of_wodka) are absent, so 42; the instance boot has more
+shell grep -qE "\[alcohol\] food values set on 42 of 44 drinks" logs/kubejs/startup.log
+> zq food brewinandchewin:beer
+> summon vinery:wandering_winemaker 0 -60 -5
+sleep 2
+expect food brewinandchewin:beer: .*brewinandchewin:tipsy
+expect Summoned new
+kjsexpect \[wandering trades\] winemaker [1-9]
+bootreject (PackTime|WineTime).*(Exception|Error)

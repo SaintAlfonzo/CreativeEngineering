@@ -1,3 +1,4 @@
+// requires: creativedelight
 // requires: vintagedelight
 // requires: lootjs
 // Vintage Delight chest loot (vintageport #5, vintage_delight.md S11). Rules for the pre-roll loot framework

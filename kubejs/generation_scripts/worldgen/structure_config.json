@@ -889,6 +889,28 @@
         ]
       }
     },
+    "creativeengineering:sky_island": {
+      "source": "creativeworldgen-1.0.0.jar",
+      "structures": [
+        {
+          "structure": "creativeengineering:sky_island",
+          "weight": 1,
+          "biomes": "#minecraft:is_overworld"
+        }
+      ],
+      "original": {
+        "type": "minecraft:random_spread",
+        "spacing": 64,
+        "separation": 16,
+        "salt": 1931672406,
+        "frequency": 1.0,
+        "locate_offset": [
+          0,
+          0,
+          0
+        ]
+      }
+    },
     "desert_village_temple:village_temple": {
       "source": "kubejs/data",
       "structures": [

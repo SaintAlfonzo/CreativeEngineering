@@ -171,3 +171,142 @@ mandatory=false
 versionRange="*"
 ordering="NONE"
 side="BOTH"
+[[dependencies.creativecompat]]
+modId="oreexcavation"
+mandatory=false
+versionRange="*"
+ordering="NONE"
+side="BOTH"
+[[dependencies.creativecompat]]
+modId="blockrunner"
+mandatory=false
+versionRange="*"
+ordering="NONE"
+side="BOTH"
+[[dependencies.creativecompat]]
+modId="copycats"
+mandatory=false
+versionRange="*"
+ordering="NONE"
+side="BOTH"
+
+# --- interface carve from Creative Common, 2026-11-07 ---
+# WTHIT plugins: state lines, holder and pot contents, hives, campfires, coasters, tanks, remainder buffer, silk touch, sheared, operator blocks, block model icons
+[[dependencies.creativecompat]]
+modId="wthit"
+mandatory=false
+versionRange="*"
+ordering="NONE"
+side="BOTH"
+
+# GUI tooltip fixes
+[[dependencies.creativecompat]]
+modId="lightmanscurrency"
+mandatory=false
+versionRange="*"
+ordering="NONE"
+side="BOTH"
+
+# Legendary Tooltips requires it; the title break mixin targets it
+[[dependencies.creativecompat]]
+modId="iceberg"
+mandatory=false
+versionRange="*"
+ordering="NONE"
+side="CLIENT"
+
+# tooltip title line break fix (mixin into Iceberg, gated on this mod)
+[[dependencies.creativecompat]]
+modId="legendarytooltips"
+mandatory=false
+versionRange="*"
+ordering="NONE"
+side="CLIENT"
+
+# GUI tooltip fixes
+[[dependencies.creativecompat]]
+modId="ftblibrary"
+mandatory=false
+versionRange="*"
+ordering="NONE"
+side="BOTH"
+
+# quest task and description tooltips
+[[dependencies.creativecompat]]
+modId="ftbquests"
+mandatory=false
+versionRange="*"
+ordering="NONE"
+side="BOTH"
+
+# agreement tooltip fix
+[[dependencies.creativecompat]]
+modId="wares"
+mandatory=false
+versionRange="*"
+ordering="NONE"
+side="BOTH"
+
+# book tooltip fix
+[[dependencies.creativecompat]]
+modId="patchouli"
+mandatory=false
+versionRange="*"
+ordering="NONE"
+side="BOTH"
+
+# GUI, pattern encoding and guide tooltips
+[[dependencies.creativecompat]]
+modId="ae2"
+mandatory=false
+versionRange="*"
+ordering="NONE"
+side="BOTH"
+
+# WTHIT campfire burn lines
+[[dependencies.creativecompat]]
+modId="unlitcampfire"
+mandatory=false
+versionRange="*"
+ordering="NONE"
+side="BOTH"
+
+# WTHIT remainder buffer lines
+[[dependencies.creativecompat]]
+modId="farmersdelight"
+mandatory=false
+versionRange="*"
+ordering="NONE"
+side="BOTH"
+
+# WTHIT remainder buffer lines
+[[dependencies.creativecompat]]
+modId="farmersrespite"
+mandatory=false
+versionRange="*"
+ordering="NONE"
+side="BOTH"
+
+# WTHIT kitchen station lines
+[[dependencies.creativecompat]]
+modId="appliedcooking"
+mandatory=false
+versionRange="*"
+ordering="NONE"
+side="BOTH"
+
+# Compound effect lines in Just Enough Effect Descriptions
+[[dependencies.creativecompat]]
+modId="jeed"
+mandatory=false
+versionRange="*"
+ordering="NONE"
+side="BOTH"
+
+# JEI smithing template rows
+[[dependencies.creativecompat]]
+modId="armor_trims"
+mandatory=false
+versionRange="*"
+ordering="NONE"
+side="BOTH"

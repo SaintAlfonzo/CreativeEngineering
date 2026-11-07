@@ -1,6 +1,6 @@
 {
   "_readme": [
-    "Generator manifest for the in-game /cegen command (Creative Devtools generators/GeneratorRunner) and the",
+    "Generator manifest for the in-game /cdevgen command (Creative Devtools generators/GeneratorRunner) and the",
     "optional run at game startup (config/creativedevtools-common.toml [debug.generators]).",
     "",
     "Entries run one at a time, in this order, so put a generator after anything it reads:",
@@ -9,23 +9,23 @@
     "A failed entry is reported and the rest still run.",
     "",
     "Fields per generator:",
-    "  id        name used by /cegen run <id>",
+    "  id        name used by /cdevgen run <id>",
     "  script    path from the instance root, run with the configured python from the instance root",
     "  args      extra command-line arguments (optional)",
-    "  groups    /cegen run <group> runs every entry in the group; 'all' runs everything",
-    "  dumps     in-game commands whose kubejs/exported/ output the script reads. /cegen run <target> dumps",
+    "  groups    /cdevgen run <group> runs every entry in the group; 'all' runs everything",
+    "  dumps     in-game commands whose kubejs/exported/ output the script reads. /cdevgen run <target> dumps",
     "            runs them first; plain runs (and the startup run) use whatever the last dump left",
     "  outputs   files or folders the script writes. Hashed before and after, so chat can say what changed",
     "  apply     what makes a changed output take effect, shown only when something changed",
     "  warnExit  exit codes that mean 'finished with findings' rather than 'failed' (optional)",
     "  highlight extra regexes, on top of the top-level list, whose matching output lines go to chat",
     "  outRoot   output folder for a generator that writes Creative Delight member rows (optional; read by the",
-    "            script through tools/gen_out.py, not by /cegen). Must be one of the CD trees the jar build copies,",
+    "            script through tools/gen_out.py, not by /cdevgen). Must be one of the CD trees the jar build copies,",
     "            e.g. kubejs/data/creativedelight/kubejs/<modid>; its outputs must lie under it. Missing = pack folder.",
     "            The CD jar has to be rebuilt after such a run (build_deploy refuses a stale jar). Since framework #7",
     "            (2026-11-01) cans, food types, placeable and mortar write one <mod>/<name>.js member script per item",
     "            namespace there (gen_out.write_member_scripts); their JSON in generation_scripts/food is the record only",
-    "  handRun   top-level list (not read by /cegen): hand-run scripts that need an outRoot, e.g. gen_can_types.py",
+    "  handRun   top-level list (not read by /cdevgen): hand-run scripts that need an outRoot, e.g. gen_can_types.py",
     "",
     "Every tools/*.py generator or report is either listed below or named here with the reason it is run by hand:",
     "  dump_server_mods.py: the only way to fill server_mods/ (no in-game command any more). Run it by hand before a",
@@ -35,11 +35,11 @@
     "    (snapshot / diff), decompile_mod.py, jar_diff.py, seabed_heights.py (a save), log_warnings_scan.py (a client",
     "    log), diff_block_state_ranges.py (both sides' logs), echo_texture.py, potion_bucket_texture.py and gen_lunchbox_looks.py (one-off art)",
     "  one-off rewrites of kubejs/data structures: port_structure_jars.py, lootr_fixed_containers.py",
-    "  write mod resources, so a jar rebuild (not a restart) applies them: gen_bedspreads/elytra_pattern_compat.py and",
+    "  write mod resources, so a jar rebuild (not a restart) applies them:",
     "    gen_dd_dishes.py (Creative Delight), gen_moobloom_variants.py (More Mooblooms), gen_compost_values.py (Creative",
     "    Delight's startup tree; also needs the --merge / --add-new choice)",
     "  hand workflows run with --check first: gen_can_types.py (rewrites item_dict.js and the can tables; its outRoot entry",
-    "    is in the top-level handRun list, which /cegen does not read),",
+    "    is in the top-level handRun list, which /cdevgen does not read),",
     "    gen_cfb_racks.py (Cooking for Blockheads wood racks and fridge fill, Creative Delight's Cooking for Blockheads compartment; jar rebuild)",
     "  checks that print and write nothing: effect_audit, shield_check, check_moobloom_data, check_worldgen_json,",
     "    crop_growth_coverage, wthit_icon_audit, structure_biome_coverage, leaf_path_scan, changelog_lint",
@@ -63,7 +63,7 @@
     {
       "id": "can_types",
       "script": "tools/gen_can_types.py",
-      "_note": "Not run by /cegen (hand workflow, --check first; see _readme). Listed for tools/gen_out.py: its outRoot is the CD jar's startup tree.",
+      "_note": "Not run by /cdevgen (hand workflow, --check first; see _readme). Listed for tools/gen_out.py: its outRoot is the CD jar's startup tree.",
       "outRoot": "development/creativeDelight/src/main/resources/kubejs_startup",
       "outputs": [
         "kubejs/generation_scripts/food/can_types.json",
@@ -337,7 +337,7 @@
       "groups": ["client", "names"],
       "dumps": [],
       "outputs": ["kubejs/generation_scripts/names/name_fixes.json", "feature_writeup/names.md"],
-      "apply": "reads the client dump: run /cedumpnames first (a client command, so /cegen can't run it); F3+T or restart the client"
+      "apply": "reads the client dump: run /cdevdumpnames first (a client command, so /cdevgen can't run it); F3+T or restart the client"
     },
     {
       "id": "food_catalog",
@@ -427,9 +427,9 @@
       "script": "tools/gen_soup_soft_fluids.py",
       "groups": ["food"],
       "dumps": ["dumpfood"],
-      "outputs": ["kubejs/data/creativeengineering/moonlight/soft_fluids"],
+      "outputs": ["development/creativeDelight/src/main/resources/data/creativeengineering/moonlight/soft_fluids"],
       "warnExit": [1],
-      "apply": "/reload (Moonlight re-reads soft fluids and syncs them to players)"
+      "apply": ":creativeDelight: rebuild + install, then restart (the soft fluids ship in the CD jar)"
     },
     {
       "id": "can_audit",

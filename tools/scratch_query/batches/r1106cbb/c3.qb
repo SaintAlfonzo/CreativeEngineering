@@ -1,0 +1,11 @@
+# r1106cbb Boot 3: new OUT, CEPortTesting instance jars WITH Creative Worldgen, group B (SQ-CBB-10, -11).
+## SQ-CBB-10 | instance with Creative Worldgen: structure gate, datapacks load
+bootexpect structure gate: [0-9]+ set\(s\) and [0-9]+ structure\(s\) left out.*betterjungletemples
+bootreject Failed to load datapacks|Unknown registry key
+bootexpect Done \(
+shell grep -h "structure gate" logs/latest.log logs/kubejs/server.log | head -5
+shell grep -h "meta_structures.*left out" logs/latest.log | head -10
+## SQ-CBB-11 | structure tuning applied without the absent members
+shell grep -h "\[structures\]\|structure tuning\|nothing applied" logs/latest.log logs/kubejs/server.log | head -20
+bootreject nothing applied
+shell grep -qh "structure tuning" logs/latest.log logs/kubejs/server.log

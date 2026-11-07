@@ -122,7 +122,7 @@ placement, no NBT editing, but can't do "at most one vindicator" and needs Java.
 
 **1c.** `structures/contents #3`: see its brief.
 
-Then: `python3 tools/check_worldgen_json.py`; rejoin; `/ceplace` the edited templates (structure_tuning.md 3.10) and
+Then: `python3 tools/check_worldgen_json.py`; rejoin; `/cdevplace` the edited templates (structure_tuning.md 3.10) and
 look; structure_tuning.md new subsection "3.20 Pillager garrisons" with the final table; mob_spawns.md 3 row for
 `lone_pillagers`.
 
@@ -166,7 +166,7 @@ look; structure_tuning.md new subsection "3.20 Pillager garrisons" with the fina
   `monster` lists pillager 3 (1-1).
 - **MS-33 lone pillagers in play:** a night in a dark forest / badlands -> single pillagers appear, never by day (with
   `dark_only`); none in plains.
-- **ST-9x siege weapon mix:** `/ceplace` each siege weapon template twice (both variants) -> variant A has no
+- **ST-9x siege weapon mix:** `/cdevplace` each siege weapon template twice (both variants) -> variant A has no
   vindicator, B exactly one; pillagers carry crossbows.
 - **ST-9x camp mix:** 5 new T&T beach camps -> vindicators 0-3, mostly 1-2.
 
@@ -257,7 +257,7 @@ evokers (vanilla).
    entity swapped to an evoker (towers 1, 3, 5, 7 by list order) or illusioner (the others); pool json (already in
    `kubejs/data/mysticrift_pillagers_towers_aris/worldgen/template_pool/`) gets the variant at weight 1 next to the
    original at weight 1. Keep the `block_ignore` processor on the new element.
-4. `/ceplace` the variants; structure_tuning.md table.
+4. `/cdevplace` the variants; structure_tuning.md table.
 
 ### Ids and data
 - Pools above verified in pool_config.json; Mysticrift pool format verified
@@ -277,7 +277,7 @@ evokers (vanilla).
   out of the small camps.
 
 ### Tests
-- **ST-9x casters:** `/ceplace` the captain pool and a Mysticrift caster variant -> one evoker / illusioner present;
+- **ST-9x casters:** `/cdevplace` the captain pool and a Mysticrift caster variant -> one evoker / illusioner present;
   5 new T&T outposts -> about 2 with a caster.
 
 ---

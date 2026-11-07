@@ -15,23 +15,23 @@ textures section renamed to its TODO id `textures/food #1`; new test ids are pla
 ## Scope and order
 
 Open rows: `textures/food #1` (Planned, was `canning #13`), #1 (In Progress), #8 (In Progress), #10 (Planned), #17
-(In Progress). Testing: #3, #4, #5, #6, #9, #11, #12, #14, #15, #16 and the `/cegen` rerun (list at the end).
+(In Progress). Testing: #3, #4, #5, #6, #9, #11, #12, #14, #15, #16 and the `/cdevgen` rerun (list at the end).
 Complete: #2, #7.
 
 **State on 2026-10-31** (checked against the files):
 
 - [can_types.json](../../kubejs/generation_scripts/food/can_types.json) holds **306 cans: 272 generated pack cans and 34
   Canned Goods cans** reused (`existing`). 25 pack cans have their own sprite
-  (`kubejs/assets/creativeengineering/textures/item/canned_*.png`, plus 9 overrides in
+  (`development/creativeDelight/src/main/resources/assets/creativeengineering/textures/item/canned_*.png`, plus 9 overrides in
   `kubejs/assets/canned_goods/textures/items/`); the other 247 borrow their family's sprite through `GROUP_SPRITE`
   ([gen_can_types.py](../../tools/gen_can_types.py) lines 103-126). None borrows the beetroot can any more.
 - can_types.json was last written 2026-10-27 22:22. The `/dumpfood` of 2026-10-30 has not been fed to the generators
-  yet: scratch queue `CQ-DUMP-04` (`/cegen` for the can generators) is the TODO "Blocked on Dumps" row for #3 / #14.
+  yet: scratch queue `CQ-DUMP-04` (`/cdevgen` for the can generators) is the TODO "Blocked on Dumps" row for #3 / #14.
 - The generator still has no `--sprites` mode (only `--check`, line 698).
 
 **Order:**
 
-1. **`CQ-DUMP-04`:** `/cegen` on the 2026-10-30 dump, restart; then #17's feast rows in the next generator pass.
+1. **`CQ-DUMP-04`:** `/cdevgen` on the 2026-10-30 dump, restart; then #17's feast rows in the next generator pass.
 2. **#1 golden effect length** (D-B, `dur` 0.25 -> 0.333) can go with step 1; the other #1 values wait on
    `food/types-and-tuning #1` (Planned) and use #3's audit findings.
 3. **#8:** the bowl remainders and the mixer check (KubeJS, no generator run).
@@ -50,7 +50,7 @@ Status **Planned** / Work resource pack / TODO `textures/food #1` (was `cans/can
 Every pack can has its own 16x16 sprite; none borrows its family's sprite or a Canned Goods sprite.
 
 ### Now
-- Own sprites: 25 files `kubejs/assets/creativeengineering/textures/item/canned_*.png` and 9 overrides of Canned
+- Own sprites: 25 files `development/creativeDelight/src/main/resources/assets/creativeengineering/textures/item/canned_*.png` and 9 overrides of Canned
   Goods' sprites in `kubejs/assets/canned_goods/textures/items/`. Canned Goods' 34 reused cans keep the mod's sprites
   or those overrides.
 - Borrowing pack cans by family (can_types.json `texture`, 2026-10-31; 247 of 272):
@@ -91,7 +91,7 @@ Every pack can has its own 16x16 sprite; none borrows its family's sprite or a C
 3. **Draw the rest** in the user's textureswapper flow, most-seen first (recommendation for the open "order"
    decision): raw fruit (18) and raw fish (9) (same can, new icon), cooked meat (9), soup (34), cooked veggie (24),
    cookies (12), bread (11), salad (14), meal (21), pie (13), feast (9), the small sections last. Copy to
-   `kubejs/assets/creativeengineering/textures/item/<key>.png`, run `--sprites`, restart.
+   `development/creativeDelight/src/main/resources/assets/creativeengineering/textures/item/<key>.png`, run `--sprites`, rebuild and install Creative Delight, restart.
 4. Sheet: Texture cells to `x`, summary column, can_parity 5.1 sprite table.
 
 ### Ids and data
@@ -248,7 +248,7 @@ Every feast (a placed block with servings) can be canned, as the nine existing f
 ### Build
 1. Confirm the list in game or from `food_blocks.json` (`blockClasses`); add item_dict keys for any block item missing.
 2. One `('feast', 'canned_<name>', '<Name>', ['<serving key>'], False, dict(input=['<block item key>']))` row per
-   missing feast, keys from `global.item`; run `/cegen` (with `CQ-DUMP-04`), restart; sprites per `textures/food #1`.
+   missing feast, keys from `global.item`; run `/cdevgen` (with `CQ-DUMP-04`), restart; sprites per `textures/food #1`.
 3. Later feasts (Hostile, Ocean delights, `meals #5` new assemblies, Large Meals if ported) add a row when integrated.
 
 ### Decisions
@@ -280,7 +280,7 @@ feast with several plate items.
 | `cans/canning #14` | Can crafts: 19 new cans, sections dairy / preserve / dessert, Canned Dough, Canned Goods values, removals | [can_parity.md](../can_parity.md) 0, CP-15 to CP-22, CP-25 | C P (S+): restart, `/dumpfood`, `food_catalog.py --check` |
 | `cans/canning #15` | Canned cake: 1 cake or 4 slices + sugar / honey -> 4 fast servings | [can_parity.md](../can_parity.md) 2.23 | P T (S+); decision "4 or 6 slices" open |
 | `cans/canning #16` | Sweet Berry Pie filling can (FD cheesecake renamed) | [oven.md](../oven.md) OV-32, [can_parity.md](../can_parity.md) CP-26 | C P (S+) |
-| `cans/canning #3, #14` (Blocked on Dumps) | `/cegen` on the 2026-10-30 `/dumpfood` (glow, pickle and mhadjeb cans) | scratch queue `CQ-DUMP-04` | can_types.json last written 2026-10-27; rerun not done |
+| `cans/canning #3, #14` (Blocked on Dumps) | `/cdevgen` on the 2026-10-30 `/dumpfood` (glow, pickle and mhadjeb cans) | scratch queue `CQ-DUMP-04` | can_types.json last written 2026-10-27; rerun not done |
 
 Closed: `#2` (`Want = ?` cells, done 2026-10-20, `c82dd31`: no `?` left) and `#7` (removed 1.0.4 cans, D-E: no
 remap; if reopened, a Forge `MissingMappingsEvent` remap) are Complete.

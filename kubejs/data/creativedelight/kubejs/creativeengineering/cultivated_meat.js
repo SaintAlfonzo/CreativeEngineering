@@ -1,3 +1,4 @@
+// requires: creativedelight
 // Reserved for Creative Cultivation: all cultivated-meat code (the sample syringe, the meat cultures, the culture blocks,
 // their recipes, tags, lang and textures) is marked for a future own mod, Creative Cultivation, the way potion brewing
 // and alcohol are marked for Creative Brewing (creative_delight.md 29.5). Until then it lives in Creative Delight's
@@ -5,7 +6,7 @@
 //
 // Cultivated meat: the sample syringe, cultures from samples, culture growth, cutting and culture blocks. Moved from
 // the pack's kubejs/server_scripts/cooking/cultivated_meat.js 2026-10-25, rows unchanged. Items and blocks:
-// kubejs_startup/creativeengineering/cultures.js (CD jar); tags: cultivated_meat_tags.js beside this file.
+// kubejs_startup/creativedelight/cultures.js (CD jar); tags: cultivated_meat_tags.js beside this file.
 ServerEvents.recipes(e => {
 	if (!global.CD) return
 

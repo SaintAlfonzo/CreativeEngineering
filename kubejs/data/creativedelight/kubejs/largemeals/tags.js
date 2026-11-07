@@ -1,3 +1,4 @@
+// requires: creativedelight
 // requires: largemeals
 // Large Meals port tags (feature_writeup/large_meals.md 4 steps 3, 4, 17). Food types come from food_types.json, not from here.
 ServerEvents.tags('item', e => {

@@ -1,0 +1,24 @@
+# r1107tp boot a5: same save; tempad-common.toml defaults + allow_interdimensional_travel = false; scratch tag
+# kubejs/data/tempad/tags/dimension_type/intradimensional_travel_not_supported.json (minecraft:overworld) written
+# before the boot. Reruns of SQ-TP-22b / -22c (a4 BATCH-FAULT: the toml is not reloaded while running).
+pace 1
+
+## SQ-TP-22b2 | allow_interdimensional_travel = false (restart)
+bootexpect Done \(
+shell grep -E "^allow_" config/tempad-common.toml; cat kubejs/data/tempad/tags/dimension_type/*.json
+> pbot spawn qa 0.5 -60 0.5 minecraft:overworld survival
+sleep 3
+> clear qa
+> item replace entity qa hotbar.0 with tempad:tempad
+> ztp setchr qa 0 6000
+> ztp open qa tempad:default Hell Spot
+waitlog \[ztp\] open 20
+expect \[ztp\] open .*"Hell Spot".* -> message ".*" key entity\.tempad\.timedoor\.fail\.interdimensional chronons 6000 -> 6000
+
+## SQ-TP-22c2 | intradimensional_travel_not_supported tag (overworld), allow_intradimensional_travel = true
+> ztp open qa tempad:default Far East
+waitlog \[ztp\] open .*Far 20
+expect \[ztp\] open .*"Far East".* -> message ".*" key entity\.tempad\.timedoor\.fail\.intradimensional chronons 6000 -> 6000
+> ztp doors
+waitlog \[ztp\] doors total 20
+expect \[ztp\] doors total 0

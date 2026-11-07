@@ -1,3 +1,4 @@
+// requires: creativedelight
 // Supplementaries jars: what goes in one, and what may share one (feature_writeup/mixed_jars.md).
 //   #supplementaries:cookies                    a jar takes the item at all (the mods only tag their own few)
 //   #creativeengineering:jar_family/<name>      items that may be mixed in one jar (patcherMod compat/JarMixing.java:

@@ -1,3 +1,4 @@
+// requires: creativedelight
 // The pack's own food items and food rules: the mortar and pestle, dough blocks, cornmeal grinding and the burger
 // rule (a table over Farmer's, Delightful, More Delight, Alex's Delight and Alex's Mobs burgers). Non-member file:
 // recipe ids are creativedelight:<type>/<suffix> (global.CD.recipes). Moved from the pack's
@@ -16,7 +17,7 @@ ServerEvents.recipes(e => {
 		R.shaped(i.mortar_and_pestle, [' L ', 'G G', ' G '], { L: i.lever, G: i.polished_granite }, e, 'mortar_and_pestle')
 
 		//######################### Dough blocks #########################
-		// Dough block for every other dough (development/creativeDelight/src/main/resources/kubejs_startup/creativeengineering/baking_ingredients.js, TODO baking/baked-goods #27):
+		// Dough block for every other dough (development/creativeDelight/src/main/resources/kubejs_startup/creativedelight/baking_ingredients.js, TODO baking/baked-goods #27):
 		// 9 dough <-> block, as Create Compressed's dough block (the wheat dough block is in create/recipes.js)
 		// G5 begin: rows naming an absent mod's id are filtered out below (Item.of of a missing id is air)
 		;[
@@ -30,7 +31,7 @@ ServerEvents.recipes(e => {
 		})
 
 		//######################### Cornmeal #########################
-		// creativeengineering:cornmeal (development/creativeDelight/src/main/resources/kubejs_startup/creativeengineering/cornmeal.js), TODO dishes/ingredients #1. Corn and kernels
+		// creativeengineering:cornmeal (development/creativeDelight/src/main/resources/kubejs_startup/creativedelight/cornmeal.js), TODO dishes/ingredients #1. Corn and kernels
 		// (corn_delight:corn_seeds) crush to it; a 9-block (corn crate, kernel bag) gives the same per-item ratio.
 		// The Millstone mirrors the crushing recipes below; Corn Delight's own corn and wild corn milling are removed (wild corn
 		// now grinds as corn). Corn gives no straw: the knife and IE crusher recipes that did keep their kernels only

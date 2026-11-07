@@ -1,3 +1,4 @@
+// requires: creativedelight
 // requires: create_confectionery
 // requires: create
 // Ruby chocolate from dragon's breath fluid in a heated mixer. Moved from the pack's

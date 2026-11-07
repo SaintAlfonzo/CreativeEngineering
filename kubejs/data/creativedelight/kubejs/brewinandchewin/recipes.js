@@ -1,3 +1,4 @@
+// requires: creativedelight
 // requires: brewinandchewin
 // Brewin' and Chewin' dishes (owner, 2026-10-31: the dishes stay in Creative Delight, added only while Brewin' is
 // loaded; Brewin' itself is a Creative Brewing member, feature_writeup/creative_brewing.md 4.4 Q1). Moved from the pack's
@@ -81,15 +82,18 @@ ServerEvents.recipes(e => {
 		// Assembly meals (TODO dishes/meals #3)
 		// Horror lasagna: the efficient route, 2 a run. Pasta goes in first: a sequenced assembly's first step wins over a
 		// plain recipe, so a bowl under a spout of tomato sauce would turn into lasagna instead of tomato sauce.
-		var incHorrorLasagna = R.incomplete('horror_lasagna')
-		R.createSequencedAssembly(Item.of(i.horror_lasagna, 2), i.bowl, [
-			e.recipes.create.deploying(incHorrorLasagna, [incHorrorLasagna, i.pasta]),
-			e.recipes.create.filling(incHorrorLasagna, [incHorrorLasagna, Fluid.of(f.tomato_sauce, 250)]),
-			e.recipes.create.deploying(incHorrorLasagna, [incHorrorLasagna, i.beetroot]),
-			e.recipes.create.deploying(incHorrorLasagna, [incHorrorLasagna, i.scarlet_cheese_wedge]),
-			e.recipes.create.deploying(incHorrorLasagna, [incHorrorLasagna, i.cooked_horror_lasagna_meat]),
-			e.recipes.create.deploying(incHorrorLasagna, [incHorrorLasagna, i.cooked_horror_lasagna_meat]),
-			e.recipes.create.deploying(incHorrorLasagna, [incHorrorLasagna, i.scarlet_cheese_wedge])
-		], ['horror_lasagna'], e, 'horror_lasagna_sequenced_assembly', 1)
+		// The filling step needs Central Kitchen's tomato sauce fluid (chain without it: scratch r1106cbo / r1106spf).
+		if (global.has(f.tomato_sauce)) {
+			var incHorrorLasagna = R.incomplete('horror_lasagna')
+			R.createSequencedAssembly(Item.of(i.horror_lasagna, 2), i.bowl, [
+				e.recipes.create.deploying(incHorrorLasagna, [incHorrorLasagna, i.pasta]),
+				e.recipes.create.filling(incHorrorLasagna, [incHorrorLasagna, Fluid.of(f.tomato_sauce, 250)]),
+				e.recipes.create.deploying(incHorrorLasagna, [incHorrorLasagna, i.beetroot]),
+				e.recipes.create.deploying(incHorrorLasagna, [incHorrorLasagna, i.scarlet_cheese_wedge]),
+				e.recipes.create.deploying(incHorrorLasagna, [incHorrorLasagna, i.cooked_horror_lasagna_meat]),
+				e.recipes.create.deploying(incHorrorLasagna, [incHorrorLasagna, i.cooked_horror_lasagna_meat]),
+				e.recipes.create.deploying(incHorrorLasagna, [incHorrorLasagna, i.scarlet_cheese_wedge])
+			], ['horror_lasagna'], e, 'horror_lasagna_sequenced_assembly', 1)
+		}
 	})
 })

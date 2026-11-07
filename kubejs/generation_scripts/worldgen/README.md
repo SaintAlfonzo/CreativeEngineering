@@ -17,7 +17,7 @@ Everything in this folder is config, read at every world load (including world c
 
 Above these files sits `config/creativeengineering-common.toml` `[worldgen]` (also in Create's config screen): an on/off
 switch for each system above plus ground matching, `[worldgen.debug] structureDensity` (every structure's rate times x,
-for testing), the solvers' constants, ground matching and `/ceplace`. Switching a system off never touches these files;
+for testing), the solvers' constants, ground matching and `/cdevplace`. Switching a system off never touches these files;
 the game just uses the mods' own values while it's off. See `feature_writeup/structure_tuning.md` 3.9 and 3.10.
 
 `highPriorityData` fires inside KubeJS's world-load resource wrap, before the game parses worldgen,

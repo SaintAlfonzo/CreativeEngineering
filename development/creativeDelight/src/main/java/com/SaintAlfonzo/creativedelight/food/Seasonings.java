@@ -44,7 +44,7 @@ import net.minecraftforge.registries.ForgeRegistries;
 /**
  * Pack seasonings: a food carries the seasonings put on it as NBT {@code Seasonings:["ns:id", ...]} (sorted, so the
  * order they went on doesn't split stacks), and eating it adds each one's bonus on top of the food. Definitions come
- * from KubeJS at startup ({@code development/creativeDelight/src/main/resources/kubejs_startup/creativeengineering/seasonings.js} -> {@link #define}), on both sides: the
+ * from KubeJS at startup ({@code development/creativeDelight/src/main/resources/kubejs_startup/creativedelight/seasonings.js} -> {@link #define}), on both sides: the
  * server needs them to match {@link SeasoningRecipe} and apply the bonus, the client for {@link SeasoningTooltip}.
  * Salt's {@code Salted} is its own mechanism and untouched.
  */

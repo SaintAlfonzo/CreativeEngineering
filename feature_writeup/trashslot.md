@@ -78,7 +78,7 @@ shared one spot even though each tier has a different panel size, and it never a
 ## 5. File map
 
 - [../development/creativeCommon/src/main/java/com/SaintAlfonzo/creativecommon/compat/TrashSlotCompat.java](../development/creativeCommon/src/main/java/com/SaintAlfonzo/creativecommon/compat/TrashSlotCompat.java): settings resolution, switch-on record, `StorageTierLayout`, creative provider.
-- [../development/creativeCommon/src/main/java/com/SaintAlfonzo/creativecommon/mixin/TrashSlotGuiHandlerMixin.java](../development/creativeCommon/src/main/java/com/SaintAlfonzo/creativecommon/mixin/TrashSlotGuiHandlerMixin.java): `onScreenInit` overwrite, creative redirects.
+- [../development/creativeCompat/src/main/java/com/SaintAlfonzo/creativecompat/mixin/TrashSlotGuiHandlerMixin.java](../development/creativeCompat/src/main/java/com/SaintAlfonzo/creativecompat/mixin/TrashSlotGuiHandlerMixin.java): `onScreenInit` redirects and one inject (no overwrite since 2026-11-06, [creative_compat.md](creative_compat.md) 6.4), creative redirects.
 - [../development/creativeCommon/src/main/java/com/SaintAlfonzo/creativecommon/mixin/TrashSlotComponentMixin.java](../development/creativeCommon/src/main/java/com/SaintAlfonzo/creativecommon/mixin/TrashSlotComponentMixin.java): Y clamp.
 - [../development/creativeCommon/src/main/java/com/SaintAlfonzo/creativecommon/mixin/TrashSlotSaveStateAccessor.java](../development/creativeCommon/src/main/java/com/SaintAlfonzo/creativecommon/mixin/TrashSlotSaveStateAccessor.java): settings map.
 - `../development/creativeCommon/src/main/java/com/SaintAlfonzo/creativecommon/CEConfig.java`: `TrashSlot` section.
@@ -112,3 +112,4 @@ shared one spot even though each tier has a different panel size, and it never a
 - 2026-09-30: investigated (plan_1.0.3 section 5.5), then built; compiled as patcherMod 1.0.3 (in `development/creativeCommon/build/libs/` and `jar_archive/`, not in `mods/`, not deployed).
 - 2026-10-02: in `mods/` (patcherMod 1.0.3 copied in, confirmed against the jar contents); not deployed.
 - 2026-10-19: status sweep: went out with pack 1.0.3 (DEPLOYED 2026-10-02); TS-01 to TS-13 pending.
+- 2026-11-06: `onScreenInit` overwrite replaced by four redirects and one inject (licence, TODO `licence/compat #3`; [creative_compat.md](creative_compat.md) 6.4); same behaviour. Compat jar built 13:17, not installed; CQ-TSL-01, -02 queued.

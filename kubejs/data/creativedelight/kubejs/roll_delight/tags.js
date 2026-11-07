@@ -1,3 +1,4 @@
+// requires: creativedelight
 // requires: roll_delight
 // Roll Delight 1.3.1 port tags (feature_writeup/roll_delight.md 3.1, 3.2, 3.3.1, 3.3.3, 4 steps 3, 14, 16). Food types
 // come from food_types.json (handheld, golden, cooked/veggie), not from here.
@@ -60,11 +61,12 @@ ServerEvents.tags('item', e => {
 		i.ender_noodle, i.ender_congee, i.ender_bamboo_rice, i.stir_fried_shulker_meat, i.raw_dragon_meat_cuts,
 		i.roasted_dragon_meat_cuts, i.stuffed_rice_cake,
 	]
-	// Only registered ids go in; a listed id that is not (a mod removed, a renamed item) is logged once per tag load
+	// Only registered ids go in; a listed id whose mod is loaded but the item is not (a renamed item) is logged once per
+	// tag load. An id from a mod that is not installed is skipped quietly.
 	var missing = []
 	var present = FOODS.filter(id => {
 		if (id && Item.exists(id)) return true
-		missing.push(String(id))
+		if (global.has(id)) missing.push(String(id))
 		return false
 	})
 	t.add(e, i.t_chopstick_foods, present.concat(OPTIONAL.filter(id => id && Item.exists(id))))

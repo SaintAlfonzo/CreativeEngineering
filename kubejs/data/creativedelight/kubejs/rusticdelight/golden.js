@@ -1,3 +1,4 @@
+// requires: creativedelight
 // requires: rusticdelight
 // Rustic Delight's golden food on the golden family rule (CD.food goldenGild, creative_delight.md 30; TODO
 // creativedelight/framework #12): Golden Coffee Beans, a coffee bean (raw or roasted, as upstream's grid recipe) in a

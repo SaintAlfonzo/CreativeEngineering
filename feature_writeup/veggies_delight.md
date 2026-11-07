@@ -353,7 +353,7 @@ Breaking a wild plant keeps VD's drops: the planting item plus a 20 % roll of th
 - `/dumpfood`, `python3 tools/food_catalog.py`: every VD food gets a food type and that type's values (not VD's).
 - Cans: `tools/gen_can_types.py` picks up the new raw and cooked veggies by type.
 - **Every soup and stew jarable:** broccoli soup, cauliflower soup, garlic chicken stew, turnip beef stew and
-  cacciatore get `food_type/soup`; `/cegen run soup_soft_fluids` (`tools/gen_soup_soft_fluids.py`) then gives each a
+  cacciatore get `food_type/soup`; `/cdevgen run soup_soft_fluids` (`tools/gen_soup_soft_fluids.py`) then gives each a
   Supplementaries soft fluid with its own colour ([mixed_jars.md](mixed_jars.md), `dishes/ingredients #13`).
 - Stack sizes by `gen_stack_sizes.py` rules (bowl meals 32, drinks 32, placed cakes and feasts 8); placeables through
   `/dumpplaceable` + `placeable_catalog.py`; feasts in the Feast Plating JEI tab.
@@ -521,7 +521,7 @@ Rows added to [TODO](todo/TODO.md) on 2026-10-24; nothing is built. Plans: [dish
   `f.veggie_slice_sweet_potato`; a source of the Canned Sweet Potato, same slots as the whole sweet potato
   (`tools/gen_can_types.py` spec, `can_types.json`, `food_types.json` canned map).
 - **Open:** `gen_can_types.py --check` reports the item as missing from the food catalog until a `/dumpfood` after the
-  restart (as the Pickled Sea Pickle); then rerun it and `/cegen food_families`, `item_physics_audit`. The More Delight
+  restart (as the Pickled Sea Pickle); then rerun it and `/cdevgen food_families`, `item_physics_audit`. The More Delight
   mashed potatoes take the sliced sweet potato through `#forge:sliced_potatoes`, against M2's split (5.1: More Delight's
   mashed potatoes from potatoes and potato slices only); a `R.replaceInput` on that recipe would restore the split.
 - Tests: VD-44, VD-45, VD-46.
@@ -568,7 +568,7 @@ Crops and worldgen
 - [ ] VD-02 Right-click on a ripe VD crop harvests and replants; a hoe does the same over its area.
 - [ ] VD-03 WTHIT shows a growth percentage on every VD crop.
 - [ ] VD-04 Wild broccoli, cauliflower and garlic appear (rarely) only in temperate grassy biomes; wild sweet potato and
-  zucchini only in warm dry grassy biomes; wild turnips only where sea beets grow (`/ceplace` or locate).
+  zucchini only in warm dry grassy biomes; wild turnips only where sea beets grow (`/cdevplace` or locate).
 - [ ] VD-05 Wild VD crops also generate on Immersive Weathering soils.
 - [ ] VD-06 Mature dandelions generate in every biome with dandelions and nowhere else, more often than the wild crops.
 - [ ] VD-07 Breaking a mature dandelion drops 1 dandelion and 0 to 3 leaves (any tool but shears); shears give the

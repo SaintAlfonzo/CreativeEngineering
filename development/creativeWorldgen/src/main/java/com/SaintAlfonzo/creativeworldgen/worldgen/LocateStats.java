@@ -22,11 +22,11 @@ import java.util.concurrent.atomic.LongAdder;
  * ChunkGenerator#findNearestMapStructure call on a thread (the meta-expanded inner search counts into it):
  * candidates looked at, chunks loaded to STRUCTURE_STARTS, misses (a load that found no start) and the
  * predictions that said "no" by stage. A search with at least {@code logMissesAtLeast} misses logs one line;
- * every search adds to per-structure totals (/celocate stats). /celocate batch captures each of its searches by
+ * every search adds to per-structure totals (/cwglocate stats). /cwglocate batch captures each of its searches by
  * the identity of the HolderSet it passed in.
  *
  * Also the search deadline (feature_writeup/structure_tuning.md 7.3.2): a search running past [worldgen.locate]
- * searchTimeoutSeconds, one /celocate stop ended, or any search while the server stops, is {@link #expired}: the
+ * searchTimeoutSeconds, one /cwglocate stop ended, or any search while the server stops, is {@link #expired}: the
  * candidate checks and chunk loads then return "nothing here" at once, so the search finishes as not found and
  * frees its thread (Async Locator can't cancel a search itself).
  *
@@ -81,7 +81,7 @@ public final class LocateStats {
 	private static final ThreadLocal<boolean[]> PREDICTED = ThreadLocal.withInitial(() -> new boolean[1]);
 	private static final Map<String, Totals> TOTALS = new ConcurrentHashMap<>();
 	private static final Map<HolderSet<Structure>, Search[]> CAPTURE = Collections.synchronizedMap(new IdentityHashMap<>());
-	/** Bumped by /celocate stop: every search that started before is stopped. */
+	/** Bumped by /cwglocate stop: every search that started before is stopped. */
 	private static final java.util.concurrent.atomic.AtomicLong STOPS = new java.util.concurrent.atomic.AtomicLong();
 	/** The server is stopping: every search and search load ends at once. */
 	private static volatile boolean shuttingDown;
@@ -137,7 +137,7 @@ public final class LocateStats {
 	// ── deadline and stop ────────────────────────────────────────────────────
 
 	/**
-	 * The search on this thread must end now: past searchTimeoutSeconds, stopped by /celocate stop, the server
+	 * The search on this thread must end now: past searchTimeoutSeconds, stopped by /cwglocate stop, the server
 	 * stopping, or its thread interrupted (Async Locator's cancel). Outside a search only the last two count (a
 	 * census load). Marks the search, so its log line and the batch report say why.
 	 */
@@ -156,7 +156,7 @@ public final class LocateStats {
 		return why != null;
 	}
 
-	/** /celocate stop: every search running now ends at its next candidate or load. */
+	/** /cwglocate stop: every search running now ends at its next candidate or load. */
 	public static void stopAll() { STOPS.incrementAndGet(); }
 
 	/** ServerStoppingEvent: every running search ends, and no new one gets anywhere, until the next server start. */
@@ -228,7 +228,7 @@ public final class LocateStats {
 		CAPTURE.remove(structures);
 	}
 
-	// ── totals (/celocate stats) ─────────────────────────────────────────────
+	// ── totals (/cwglocate stats) ─────────────────────────────────────────────
 
 	static List<Map<String, Object>> totals() {
 		List<Map<String, Object>> rows = new ArrayList<>();
