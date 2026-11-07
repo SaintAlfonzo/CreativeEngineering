@@ -24,7 +24,7 @@ ordering="NONE"
 side="BOTH"
 # patcherMod: supplies KubeJS (it requires it), the shared helpers (global.NCH, global.tags) and the startup script
 # loader. Becomes creativecommon at the final swap (creative_split.md 7.6 Q1). The range must exclude every patcherMod
-# that still carries time/ and seasons/ (it would register /cetime and the season mixins twice).
+# that still carries time/ and seasons/ (it would register /ccaltime and the season mixins twice).
 [[dependencies.creativecalendar]]
 modId="creativecommon"
 mandatory=true
@@ -38,11 +38,13 @@ mandatory=true
 versionRange="[1.0.0,)"
 ordering="AFTER"
 side="BOTH"
-# The mods the season and time code steers: optional, each mixin is gated on its mod (compat/CalendarMixinPlugin).
+# Serene Seasons is required: season types, crop seasons, the season clock and /ccaltime use its classes directly
+# (without it Forge fails loading the event subscribers with NoClassDefFoundError on Season.SubSeason).
+# Better Days and SeasonHUD stay optional, each mixin is gated on its mod (compat/CalendarMixinPlugin).
 # No ordering: patcherMod never declared them either, so the load order stays as it was before the carve.
 [[dependencies.creativecalendar]]
 modId="sereneseasons"
-mandatory=false
+mandatory=true
 versionRange="*"
 ordering="NONE"
 side="BOTH"

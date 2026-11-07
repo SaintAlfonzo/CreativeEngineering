@@ -6,8 +6,8 @@ plan 7.4 went out INCOMPLETE with pack 1.0.6 (2026-10-14); fixes from the 8.0 sc
 8.0.1 to 8.0.10 finished 2026-10-19 ([testing/structures/00_plan.md](testing/structures/00_plan.md)); the client list
 (8.0.11) is still to run. The 1.0.6 open bugs and switches are in [plan_1.0.6.md](plan_1.0.6.md) 2.1 and 2.2. Older parts: DEPLOYED, in-game test pending (structure groups
 replaced the per-set + multiplier model on 2026-09-27 evening; jar in `mods/`, needs a rejoin: ST-17 onward). Ground
-matching (3.8), the CEConfig `[worldgen]` section with its debug density (3.9) and `/ceplace` (3.10) are DEPLOYED
-2026-09-27 (jar md5 729953e6); the structure lines, live-set check and `/ceplace` ran on a scratch dedicated server, your client not yet: ST-27 to ST-42
+matching (3.8), the CEConfig `[worldgen]` section with its debug density (3.9) and `/cdevplace` (3.10) are DEPLOYED
+2026-09-27 (jar md5 729953e6); the structure lines, live-set check and `/cdevplace` ran on a scratch dedicated server, your client not yet: ST-27 to ST-42
 
 ## 0. At a glance
 
@@ -28,8 +28,8 @@ there (a grassy ruin on volcanic peaks sits on basalt instead).
 | Searches skip removed sets (explorer maps, `/locate`) | patcherMod `ChunkGeneratorLocateMixin` + KubeJS `loot/06_dead_maps.js` | DEPLOYED (in the 16:51 jar). Emptied sets now also have no members, so searches never see them (ST-15, ST-16) |
 | Ground matching (grass/dirt bases on foreign ground) | patcherMod `worldgen/GroundMatch` + 2 mixins, CEConfig `[worldgen.ground_match]`, tags in `blocktags.js` | DEPLOYED 2026-09-27 (jar md5 729953e6), 37 headless checks pass (`tools/test_worldgen_tools.sh`). ST-27 to ST-32 |
 | Worldgen config: a switch per system, debug structure density, solver constants | CEConfig `[worldgen]` via `worldgen/WorldgenConfig`; read by the KubeJS applier and every patcherMod worldgen class | DEPLOYED 2026-09-27. Density exact for every live set (244 node checks), node and Rhino identical at x4, x0.3 and groups off. ST-33 to ST-38 |
-| `/ceplace`: every structure or template of a filter in rows (flat-world testing) | patcherMod `worldgen/MassPlacer` | DEPLOYED 2026-09-27; filter/row/sign/alignment logic tested headless (30 checks); a real run on a scratch dedicated server placed 55 of 56 T&T structures after the watchdog fix. ST-39 to ST-42 |
-| Data-only structure mods converted to `kubejs/data` (33 jars, 56 structures) | `tools/port_structure_jars.py` | Done 2026-09-27; scratch server boots, 56 of 56 placed by `/ceplace`, live sets match. Client untested. ST-43 |
+| `/cdevplace`: every structure or template of a filter in rows (flat-world testing) | patcherMod `worldgen/MassPlacer` | DEPLOYED 2026-09-27; filter/row/sign/alignment logic tested headless (30 checks); a real run on a scratch dedicated server placed 55 of 56 T&T structures after the watchdog fix. ST-39 to ST-42 |
+| Data-only structure mods converted to `kubejs/data` (33 jars, 56 structures) | `tools/port_structure_jars.py` | Done 2026-09-27; scratch server boots, 56 of 56 placed by `/cdevplace`, live sets match. Client untested. ST-43 |
 | Biome rules: only water structures start in oceans and rivers | `biome_rules` in `structure_groups.json` + tag `water_ok`; patcherMod `worldgen/StructureBiomeRules` + `ChunkGeneratorStructureBiomeRulesMixin`, CEConfig `structureBiomeRules` | DEPLOYED with 1.0.4 (2026-10-04); 6 Java checks, node/Rhino parity; a scratch dedicated server applied it (25 kept out). ST-44 to ST-46 |
 | Improved Pillager Outpost as a 1-in-8 tower, not a replacement; IPO template names fixed; driftwood at 0.25x | `kubejs/data/{minecraft,ipo,upgrade_aquatic}` | DEPLOYED with 1.0.4 (2026-10-04); the scratch server loaded the pools at 7:1 and created the world with the driftwood overrides. ST-47, ST-48 |
 | Monobank banks 5x rarer in villages | `pool_tags.json` tags `monobank/vault_houses` x0.18 and `monobank/vault_streets` x0.16 | DEPLOYED with 1.0.4 (2026-10-04); chance per pool computed from the 2026-10-03 pool report, not yet read back from a game load. ST-49 |
@@ -72,7 +72,7 @@ and the offline estimate [structure_group_estimates.md](../kubejs/generation_scr
   - `[worldgen.debug] structureDensity`: every structure's rate times x (testing only).
   - `[worldgen.pools]`, `[worldgen.biome_solver]`: the solvers' constants.
   - `[worldgen.ground_match]` (+ `.sampling`), `[worldgen.earth_fill]` (limits, 3.13), `[worldgen.water_fill]` (3.14),
-    `[worldgen.terrain_adaptation]` (soft beard `skirtBump`, 3.15), `[worldgen.mass_place]` (`/ceplace` layout).
+    `[worldgen.terrain_adaptation]` (soft beard `skirtBump`, 3.15), `[worldgen.mass_place]` (`/cdevplace` layout).
 - Ground matching: `[worldgen.ground_match]` (mode, baseLayers, nativeShare, minSamples, families, log, sampling); which
   blocks are base / plants / not-ground: the `creativeengineering:ground_match/*` block tags in `blocktags.js`; opt a
   structure out: `creativeengineering:ground_match/exempt` in `worldgen/ground_match.js`.
@@ -82,14 +82,14 @@ and the offline estimate [structure_group_estimates.md](../kubejs/generation_scr
 - Meta structures (3.16): definitions in `meta_structures.json` (`share` = the share of its anchors' slots a meta takes),
   who may take part in the `meta/*` tags of `structure_tags.json`; `[worldgen.systems] metaStructures`,
   `[worldgen.meta_structures] log`.
-- Inspecting structures: `/ceplace preview structures <filter>`, `/ceplace structures [by type|group|mod|none] <filter>`,
-  `/ceplace templates <glob>` (3.10).
+- Inspecting structures: `/cdevplace preview structures <filter>`, `/cdevplace structures [by type|group|mod|none] <filter>`,
+  `/cdevplace templates <glob>` (3.10).
 
 **Applying:** rejoin the world (worldgen is read at world load; `/reload` only refreshes the report). Only chunks
 generated afterwards change.
 
 **Measuring:** `python3 tools/gen_structure_groups.py --check` (expected rate of every structure), `[worldgen.debug]
-structureDensity` to see many structures fast, `/ceplace` to see every structure of a mod side by side,
+structureDensity` to see many structures fast, `/cdevplace` to see every structure of a mod side by side,
 `/locate structure <id>`, the report, and `/dumpstructuregen` + `python3 tools/check_structure_live.py` for the live sets.
 
 ---
@@ -387,7 +387,7 @@ fossils, strongholds (ring count limit 4095), Philip's nether structures, Terral
 get `count` times x. `legacy_type_1` (outposts' old rounding) switches to `default` whenever the frequency changes. The
 report and summary line say `DEBUG density xN`, and every live set is written (126 files instead of 96).
 
-### 3.10 `/ceplace`: every structure or template of a mod, in rows (added 2026-09-27)
+### 3.10 `/cdevplace`: every structure or template of a mod, in rows (added 2026-09-27)
 
 For looking at structures side by side, typically in a **superflat world with Generate Structures OFF** and cheats on.
 Operator only.
@@ -397,18 +397,18 @@ A superflat world (single player) or `level-type=minecraft:flat` (server) stays 
 so the data packs' `dimension/overworld.json` (the biome layout's in the KubeJS virtual pack, Terralith's, Tectonic's)
 no longer replace it. Before that every flat world came out as normal terrain (testing/structures/09_phase_9.md 3.2).
 
-- `/ceplace structures <filter>`: rows by type. `/ceplace structures by <type|group|mod|none> <filter>` picks another
+- `/cdevplace structures <filter>`: rows by type. `/cdevplace structures by <type|group|mod|none> <filter>` picks another
   grouping. The filter takes terms like `structure_tags.json` values: an id, a glob (`towns_and_towers:*village*`),
   `@namespace`, `#type/tower` (a pack tag), `#minecraft:village` (a real structure tag), and `!term` to exclude.
   Tab-completion offers all of these.
 - **Rows by type:** each structure goes in its **smallest** `type/*` tag, so outposts land in camp/fort/tower, not the
   `enemy_building` union. Structures with no type tag get a last row. For Towns & Towers (56 structures) that gives camp
   5, fort 9, ship 2, shipwreck 1, tower 15, village 23, and 1 untagged (`mimic_desert`).
-- `/ceplace templates <glob>`: raw templates, one row per folder, jigsaw blocks turned into what they become. Towns &
-  Towers keeps its 742 templates under the `kaisyn` namespace, for example `/ceplace templates kaisyn:village/*/houses/*`.
+- `/cdevplace templates <glob>`: raw templates, one row per folder, jigsaw blocks turned into what they become. Towns &
+  Towers keeps its 742 templates under the `kaisyn` namespace, for example `/cdevplace templates kaisyn:village/*/houses/*`.
   Templates are listed per data pack (`structures/**.nbt`) plus the world's `generated/` folder, not through vanilla
   `listTemplates()`, which throws on a bare `structures.nbt` path in this pack's merged listing (fixed 2026-10-19).
-- `/ceplace preview structures|templates ...` lists the rows without placing. `/ceplace status` and `/ceplace stop`
+- `/cdevplace preview structures|templates ...` lists the rows without placing. `/cdevplace status` and `/cdevplace stop`
   report on or cancel a run.
 - **Layout:** rows start 3 blocks in front of you and run +X; each new row is placed further +Z, with a `rowGap` aisle
   between. A sign faces the aisle for each row and each structure (id, wrapped). Structures are generated exactly as
@@ -416,7 +416,7 @@ no longer replace it. Before that every flat world came out as normal terrain (t
   drops sky structures and lifts underground ones to the ground (KEEP / GROUND also available); surface ones keep their
   height. Work runs in steps (lay out, then generate and build one chunk at a time) until `tickBudgetMs` (40) is used
   each tick, so a 90-chunk village spreads over many ticks; `maxItems` refuses bigger runs (1000). Chat shows progress; every placement
-  and failure goes to `latest.log` (`[ceplace]`).
+  and failure goes to `latest.log` (`[cdevplace]`).
 - Ground matching applies here too (the placing structure start is known), so a sand or snow superflat shows it
   happening at scale.
 
@@ -722,7 +722,7 @@ spot is open water; kept starts with any footprint water were 5 of 926, all vill
 - It judges the generator's noise terrain: no carvers, surface rules, features, lakes, or other structures' terrain
   adaptation. The beard is estimated by its reach, not computed per block.
 - Only the template's own earth blocks are counted, not the terrain a structure's processors add.
-- `/place structure`, `/ceplace` and `/locate` don't go through `tryGenerateStructure`, so none of them is checked
+- `/place structure`, `/cdevplace` and `/locate` don't go through `tryGenerateStructure`, so none of them is checked
   (a `/locate` can point at a slot the check later cancels: it loads the chunk and finds no start, as for a wrong biome).
 - A cancelled slot stays empty, so structure rates drop a little on coasts and cliffs (the group grid is unchanged).
 - Terrain-matching pieces and non-template pieces (legacy temples, mineshafts) count as no earth.
@@ -787,7 +787,7 @@ structures. The reasoning: a water structure in its own biome lands in water or 
 should be near 0, and a few dozen blocks into dry ground or air is already a visible spill. Calibrate with `log = ALL`
 (ST-57).
 
-**Limits.** The same as earth fill (noise terrain only, no `/place`, `/ceplace` or `/locate`, an empty slot on a
+**Limits.** The same as earth fill (noise terrain only, no `/place`, `/cdevplace` or `/locate`, an empty slot on a
 cancel), plus:
 - The seabed test reads the column's top non-air block, so a lake or river bed counts as seabed too, and a column whose
   surface the noise puts in an aquifer lake is "under water" even if a surface rule later makes it dry.
@@ -908,7 +908,7 @@ and end gate fortress (-1), T&T's nilotic village (-1). The load log line counts
 - Only the ported MCreator structures are tagged. The scan below lists every other structure that could use the tags.
 
 **Which other structures it could help (scan, 2026-10-09).** `python3 tools/terrain_adaptation_scan.py` (also
-`/cegen run terrain_adaptation_scan`, about a minute fresh, seconds cached) follows every structure's start pool and
+`/cdevgen run terrain_adaptation_scan`, about a minute fresh, seconds cached) follows every structure's start pool and
 jigsaw links to the templates it can place and measures each rigid one the way `TemplateTrim` does (pad and plants
 from the live tag export). Report: [terrain_adaptation_scan.md](terrain_adaptation_scan.md); data:
 `kubejs/generation_scripts/worldgen/terrain_adaptation_scan.json`. Of 383 structures, before batches 1 to 3 were tagged:
@@ -1727,7 +1727,7 @@ box top and a fluid lies on it (`WORLD_SURFACE_WG` above `OCEAN_FLOOR_WG`). Deep
 kept, so rates only drop under water. Tag (`terrain_adaptation.js`, end): the 7 Terralith `underground/*` structures and
 the 6 Subterrestrial land cabins. Left out: the ocean cabin (y 24..44 in ocean biomes only, built for the seabed; tagged
 it would almost never start), the deepslate cabin (y -56..-6), Philip's y -40 ruins, buried treasure (its box sits at
-y 90 until placed). Counted in `/celocate` census as `SURFACE_CHECK`; world load logs
+y 90 until placed). Counted in `/cwglocate` census as `SURFACE_CHECK`; world load logs
 `[seabed-clearance] world load: 13 structures tagged`, server stop `[seabed-clearance] dropped N starts: {...}`.
 Lowering a start instead of dropping it (the row's first idea) needs moving an assembled jigsaw start and resetting its
 cached box after earth fill has read it; not built.
@@ -1801,7 +1801,7 @@ search sees about 33 loads (9 s each, phase 2b); at a settlements grid of 48 the
   `falseNegativeAt` for every biome false negative: the point found again after the load, its one-sample biome and
   every entry at the nearest distance (`+` passes, `-` fails), and the built start's first-piece centre. The next census
   (SQ-WG30-C02b) says which: a point away from the start piece, or a passing nearest biome.
-  SQ-WG30-C02 PARTIAL 2026-10-30: `/celocate census 96 2144 -2592`
+  SQ-WG30-C02 PARTIAL 2026-10-30: `/cwglocate census 96 2144 -2592`
   at density 1 after the Chunky square (100,616 slot chunks, 2,749 starts, 316 s, 5 biome false negatives: old refinery
   x4, a mineshaft). Starts per group member: settlements 6 in 17 slots (Mediterranean 2, plains, taiga, jungle, old
   growth taiga 1 each); pillager settlements 24 in 37 (fake trader camp 4, savanna outpost 3, 2 each for camp ruin,
@@ -1935,7 +1935,7 @@ after pruning (satellite dropped, anchor cancels the meta).
 - [ ] **ST-298 Meta pruned before dropped [scratch]:** *r1031: pending, needs a hand-made shore case (SQ-EF-10).* meta log on; a meta with a jigsaw anchor or satellite at a lake
   logs a `pruned` line for that part id and builds; `dropped K of N parts` only for parts still over their limits. SQ-EF-10.
 - [ ] **ST-299 Footprint floor and log tags [scratch]:** *PASS r1031 (2026-10-31, SQ-EF-11; the radius-96 census takes 1457 s on one locator thread).* `log = "ALL"`: no `too wet` line with fewer than 9 water;
-  `under 9 water` lines end `-> kept`; `(predicted)` lines appear with placement priority on, and `/celocate` census
+  `under 9 water` lines end `-> kept`; `(predicted)` lines appear with placement priority on, and `/cwglocate` census
   counts EARTH_FILL and PRIORITY rejects as before (no mixin error at boot). SQ-EF-11.
 
 - [ ] **ST-328 Earth fill on the placed blocks [scratch]:** under `log = "ALL"`, kept starts have no column more than
@@ -2076,8 +2076,11 @@ slots YUNG's temple keeps).
 place at a chosen spot (the feature rolls 150 in a million and picks its own spot in the chunk). So
 `kubejs/data/creativeengineering/worldgen/structure/sky_island.json` is a one-piece jigsaw over the mod's 9 templates
 (pool `creativeengineering:sky_island`: plain and the 6 tree islands weight 2, bees and blacksmith 1), 135 to 165 blocks
-above `WORLD_SURFACE_WG`, like the sky village's +150. It has no structure set, so it only spawns as a part
-(`/place structure creativeengineering:sky_island` works); it is in the earth-fill exempt list.
+above `WORLD_SURFACE_WG`, like the sky village's +150. It is in the earth-fill exempt list. Until 2026-11-06 it had no
+structure set and spawned only as a part; since then the Worldgen jar ships `structure_set/sky_island.json` (baseline
+64 / 16) and the island is a member of group `sky` (weight 100, frequency 0.985, like the balloons and temples; about
+0.22 of the group's slots, structure_group_estimates.md), so lone islands also generate (owner request after scratch
+r1106spf). It is still a part of `meta/sky_village_islands`.
 
 **Caravans (7.4.9, brief `briefs/structures_metas.md` #1).** Built as clusters (data only): parts land at random angles,
 not in a line; the line layout of the brief is not built. The witch hut is tried for every witch caravan (count 0 to 1),
@@ -2228,7 +2231,7 @@ category without a box keep vanilla's height. Caps (no budget of their own, owne
 rules, the 24-block player distance and the box lookup are unchanged: the attempt only starts where the box mobs can
 stand. Applies to every box, the vanilla outpost included (`towers`).
 
-**Probe: `/cespawnbox [pos] [category]`** (added 2026-11-02, op level 2; default: the executor's block, `monster`).
+**Probe: `/cwgspawnbox [pos] [category]`** (added 2026-11-02, op level 2; default: the executor's block, `monster`).
 Prints and logs one `[spawn-boxes]` line: the box that answers a natural spawn there (`box <id> of <structure>`, inside
 a meta `box <meta box> (part box <part's box>) of <meta>, part <part>`, or `spawn_overrides` of a meta part) with its
 pool as `type weight (min-max)`, or `no box (structures referenced here: ...) -> vanilla [...]` with the list vanilla
@@ -2244,7 +2247,7 @@ the anchor tower (`towers`), the camps (`camps`) and the weapons (`vehicles`) al
 tower at -375 91 44, a C.C.C. camp at -333 101 36 and a catapult at -375 72 20) are unlikely under `large_tower` (about
 2% for 3 dark-spawned picks with no evoker, illusioner or witch) but come from one 240 s window with qa within 24 blocks
 of the camp, and the SQ-SB-03 lone birch tower spawned no illager while zombies did. Not settled; the next run probes
-first (`/cespawnbox` inside each part) and counts mobs only after that, with patrols off and the area cleared. Spawn
+first (`/cwgspawnbox` inside each part) and counts mobs only after that, with patrols off and the area cleared. Spawn
 facts that thin box mobs: the spawner picks a height from the world bottom to the column top, so most attempts over a
 tower land below it in caves (biome mobs); every box monster but the pillager needs block light 0, so lit tower
 interiors only spawn pillagers; box mobs share the monster cap with cave mobs; nothing spawns within 24 blocks of a
@@ -2262,7 +2265,7 @@ attempts a floor level, and with the monster cap full of cave mobs only freed sl
 pillagers (8 in the NBT) despawn at random beyond 32 blocks (qa stood 31-45 off). Fix: box spawn height (above).
 
 **Tests** (scratch queue SQ-SB; r1031 2026-10-31 ran SB-01 to -03, SB-04 to -08 not run):
-- **ST-320 Spawners gone:** *r1031 (SQ-SB-02): the log shows the spawners removed from the catapult, the Mysticrift oak and End towers and the Blocky Siege ship; the row's check was wrong, fixed row not rerun.* new world; `/ceplace` a catapult, a Mysticrift oak tower, the Blocky Siege ship and the End
+- **ST-320 Spawners gone:** *r1031 (SQ-SB-02): the log shows the spawners removed from the catapult, the Mysticrift oak and End towers and the Blocky Siege ship; the row's check was wrong, fixed row not rerun.* new world; `/cdevplace` a catapult, a Mysticrift oak tower, the Blocky Siege ship and the End
   tower -> no spawner where the templates had them; `[spawner-filter]` lines for each; `removeSpawners = []` brings
   them back in new chunks.
 - **ST-321 Boxes load:** *PASS r1031 (2026-10-31, SQ-SB-01, -01b).* boot log `[spawn-boxes] 15 box(es)`, then `N structure(s) boxed` on the first spawn check, no
@@ -2374,7 +2377,7 @@ ground remain. No toggle. Test: ST-335.
 - **The density multiplier only changes structure sets.** Village house weights, biome shares and exclusion-zone radii stay
   as they are. Above x1 a set's separation shrinks too (so the grid can get denser), which means group gaps are smaller
   while it's on. It's meant for testing ("do these spawn at all, and where"), not for a play world.
-- **`/ceplace` is not natural generation.** No frequency roll, no biome check, no terrain adaptation. Some structures turn
+- **`/cdevplace` is not natural generation.** No frequency roll, no biome check, no terrain adaptation. Some structures turn
   a flat world down and are listed as failed: their own generator refuses the height or needs water or room (a
   mansion wants ground at y 60 or above, for example). Moving a generated structure sideways is exact only on flat
   ground; in a normal world it keeps the height of wherever the row cursor was.
@@ -2389,14 +2392,14 @@ ground remain. No toggle. Test: ST-335.
 - Scanner: [tools/gen_structure_config.py](../tools/gen_structure_config.py) (`VANILLA_STRUCTURE_SETS`, `CODE_REGISTERED_SETS`, `CODE_BLOCKS`, `scan_meta_structures`)
 - patcherMod: [worldgen/StructureFrequencies.java](../development/creativeCommon/src/main/java/com/SaintAlfonzo/creativecommon/worldgen/StructureFrequencies.java) + mixins [ChunkGeneratorStructureFrequencyMixin](../development/creativeCommon/src/main/java/com/SaintAlfonzo/creativecommon/mixin/ChunkGeneratorStructureFrequencyMixin.java), [StructureCheckFrequencyMixin](../development/creativeCommon/src/main/java/com/SaintAlfonzo/creativecommon/mixin/StructureCheckFrequencyMixin.java); [worldgen/PoolTuner.java](../development/creativeCommon/src/main/java/com/SaintAlfonzo/creativecommon/worldgen/PoolTuner.java), [LootContainerSwaps.java](../development/creativeCommon/src/main/java/com/SaintAlfonzo/creativecommon/worldgen/LootContainerSwaps.java), [WorldgenFiles.java](../development/creativeCommon/src/main/java/com/SaintAlfonzo/creativecommon/worldgen/WorldgenFiles.java) (report writer; KubeJS blocks java.io); mixins [StructureTemplateLootSwapMixin](../development/creativeCommon/src/main/java/com/SaintAlfonzo/creativecommon/mixin/StructureTemplateLootSwapMixin.java), [KubeJSVirtualDataPackListMixin](../development/creativeCommon/src/main/java/com/SaintAlfonzo/creativecommon/mixin/KubeJSVirtualDataPackListMixin.java), [ChunkGeneratorLocateMixin](../development/creativeCommon/src/main/java/com/SaintAlfonzo/creativecommon/mixin/ChunkGeneratorLocateMixin.java) + [DeadPlacementFilter.java](../development/creativeCommon/src/main/java/com/SaintAlfonzo/creativecommon/worldgen/DeadPlacementFilter.java)
 - Earth fill: [worldgen/EarthFill.java](../development/creativeCommon/src/main/java/com/SaintAlfonzo/creativecommon/worldgen/EarthFill.java) (`countEarth`, `beardOf`, `sizeOf`, `earthLimitsFor`, `count`, `pieceEarth`, `localEarth`, `pieceWater`, `localWater`, `predicted`, `topIsWater`, `waterLimitsFor`, `filter`) + mixin [ChunkGeneratorEarthFillMixin](../development/creativeCommon/src/main/java/com/SaintAlfonzo/creativecommon/mixin/ChunkGeneratorEarthFillMixin.java), knobs `CEConfig.EarthFill`, earth tag in [blocktags.js](../kubejs/server_scripts/tags/blocktags.js), exempt structures [worldgen/earth_fill.js](../kubejs/server_scripts/worldgen/earth_fill.js); water structures and ponds [worldgen/water_fill.js](../kubejs/server_scripts/worldgen/water_fill.js), knobs `CEConfig.WaterFill`; tests `EarthFillTest` and the calibration [tools/earth_fill_sim.sh](../tools/earth_fill_sim.sh) (`EarthFillSim`; `beard` mode measures the beard reach)
-- Terrain adaptation candidates: [tools/terrain_adaptation_scan.py](../tools/terrain_adaptation_scan.py) → [terrain_adaptation_scan.md](terrain_adaptation_scan.md) + `kubejs/generation_scripts/worldgen/terrain_adaptation_scan.json` (cache `tools/.cache/terrain_scan.json`; `/cegen run terrain_adaptation_scan`)
+- Terrain adaptation candidates: [tools/terrain_adaptation_scan.py](../tools/terrain_adaptation_scan.py) → [terrain_adaptation_scan.md](terrain_adaptation_scan.md) + `kubejs/generation_scripts/worldgen/terrain_adaptation_scan.json` (cache `tools/.cache/terrain_scan.json`; `/cdevgen run terrain_adaptation_scan`)
 - Terrain adaptation + template trim: [worldgen/TerrainAdaptation.java](../development/creativeCommon/src/main/java/com/SaintAlfonzo/creativecommon/worldgen/TerrainAdaptation.java) (`Mode`, `rebuild`, `override`, `rigid`, `softBox`, `SoftBox`, `beard`, `field`, `addSoft`), [worldgen/TemplateTrim.java](../development/creativeCommon/src/main/java/com/SaintAlfonzo/creativecommon/worldgen/TemplateTrim.java) (`kind`, `columns`, `trim`, `apply`), mixins [StructureTerrainAdaptationMixin](../development/creativeCommon/src/main/java/com/SaintAlfonzo/creativecommon/mixin/StructureTerrainAdaptationMixin.java), [BeardifierSoftMixin](../development/creativeCommon/src/main/java/com/SaintAlfonzo/creativecommon/mixin/BeardifierSoftMixin.java) and the trim call in [StructureTemplateGroundMatchMixin](../development/creativeCommon/src/main/java/com/SaintAlfonzo/creativecommon/mixin/StructureTemplateGroundMatchMixin.java); knobs `CEConfig.TerrainAdaptation`; structure tags [worldgen/terrain_adaptation.js](../kubejs/server_scripts/worldgen/terrain_adaptation.js), block tags `template_trim/*` in [blocktags.js](../kubejs/server_scripts/tags/blocktags.js); test `TerrainAdaptationTest`
 - Banks and driftwood: tags `monobank/vault_houses` / `monobank/vault_streets` in [pool_tags.json](../kubejs/generation_scripts/worldgen/pool_tags.json); [driftwood placed features](../kubejs/data/upgrade_aquatic/worldgen/placed_feature/) and [land driftwood](../kubejs/data/creativeengineering/worldgen/placed_feature/driftwood_land/) with their [biome modifiers](../kubejs/data/creativeengineering/forge/biome_modifier/)
 - Meta structures: [meta_structures.json](../kubejs/generation_scripts/worldgen/meta_structures.json); [worldgen/MetaStructure.java](../development/creativeCommon/src/main/java/com/SaintAlfonzo/creativecommon/worldgen/MetaStructure.java) (`Part`, `strict`, `findGenerationPoint`, `placeStructures`, `placeFeatures`, `generate`, `Layout`, `Index`, `structureAt`, `structureOf`, `afterPlace`), [worldgen/MetaFeaturePiece.java](../development/creativeCommon/src/main/java/com/SaintAlfonzo/creativecommon/worldgen/MetaFeaturePiece.java), the anchor roll in `StructureFrequencies#anchorChosen`, part lookups in `TemplateTrim#apply`, `GroundMatch#apply`, `TerrainAdaptation#rigid`; applier: `metaSupport`, `metaProblems`, the `## Meta structures` report section and the `ServerEvents.tags` handler in [structure_overrides.js](../kubejs/server_scripts/worldgen/structure_overrides.js); placed feature [meta/flotilla_driftwood](../kubejs/data/creativeengineering/worldgen/placed_feature/meta/flotilla_driftwood.json); test `MetaTest`
 - Biome fits: [biome_fits.json](../kubejs/generation_scripts/worldgen/biome_fits.json) + the `tower`/`tower/*` tags in `structure_tags.json`; [worldgen/StructureBiomeFits.java](../development/creativeCommon/src/main/java/com/SaintAlfonzo/creativecommon/worldgen/StructureBiomeFits.java) (`stage`, `activate`, `fitEntry`, `resolve`, `biomesFor`, `FitBiomes`) + mixin [StructureBiomesMixin](../development/creativeCommon/src/main/java/com/SaintAlfonzo/creativecommon/mixin/StructureBiomesMixin.java); applier: `planBiomeFits`, `fitChain`, `fitStage`, the `## Biome fits` report section and both `ServerEvents.tags` handlers in [structure_overrides.js](../kubejs/server_scripts/worldgen/structure_overrides.js); estimates: `Pack.apply_biome_fits` and `fit_rates` (`--fit-rates`) in [tools/gen_structure_groups.py](../tools/gen_structure_groups.py); test `FitTest`
 - Dead explorer maps: [loot/06_dead_maps.js](../kubejs/server_scripts/loot/06_dead_maps.js)
 - Worldgen config: `CEConfig.Worldgen` (+ `WorldgenSystems`, `WorldgenDebug`, `PoolTuning`, `BiomeSolver`, `GroundMatch`, `MassPlace`), read through [worldgen/WorldgenConfig.java](../development/creativeCommon/src/main/java/com/SaintAlfonzo/creativecommon/worldgen/WorldgenConfig.java); density in `scalePlacement` in [structure_overrides.js](../kubejs/server_scripts/worldgen/structure_overrides.js)
-- `/ceplace`: [worldgen/MassPlacer.java](../development/creativeCommon/src/main/java/com/SaintAlfonzo/creativecommon/worldgen/MassPlacer.java) (`select`, `rowsFor`, `templateRows`, `signLines`, `verticalShift`, `placeStructure`, `placeTemplate`)
+- `/cdevplace`: [worldgen/MassPlacer.java](../development/creativeCommon/src/main/java/com/SaintAlfonzo/creativecommon/worldgen/MassPlacer.java) (`select`, `rowsFor`, `templateRows`, `signLines`, `verticalShift`, `placeStructure`, `placeTemplate`)
 - Ground matching: [worldgen/GroundMatch.java](../development/creativeCommon/src/main/java/com/SaintAlfonzo/creativecommon/worldgen/GroundMatch.java) (`sample`, `palette`, `rewrite`, `apply`), mixins [StructureTemplateGroundMatchMixin](../development/creativeCommon/src/main/java/com/SaintAlfonzo/creativecommon/mixin/StructureTemplateGroundMatchMixin.java) + [StructureStartGroundMatchMixin](../development/creativeCommon/src/main/java/com/SaintAlfonzo/creativecommon/mixin/StructureStartGroundMatchMixin.java), knobs `CEConfig.GroundMatch`, block tags at the end of [blocktags.js](../kubejs/server_scripts/tags/blocktags.js), exempt structures [worldgen/ground_match.js](../kubejs/server_scripts/worldgen/ground_match.js)
 - Worldgen tool tests: [tools/test_worldgen_tools.sh](../tools/test_worldgen_tools.sh) ([tools/worldgen_test/](../tools/worldgen_test/): `GroundMatchTest`, `MassPlacerTest`; [tools/structure_density_check.js](../tools/structure_density_check.js)); the Java test classpath shared with `test_structure_groups.sh` is [tools/java_test_cp.sh](../tools/java_test_cp.sh)
 - Dump commands: `/dumpstructuregen` [dump_structuregen.js](../kubejs/server_scripts/_lib/dump_structuregen.js) → `kubejs/exported/worldgen/structuregen.json`; `/dumpstructures` [structure_dump.js](../kubejs/server_scripts/_lib/structure_dump.js) (names only)
@@ -2428,14 +2431,14 @@ ground remain. No toggle. Test: ST-335.
   should be empty and section 4 should say `0 mismatch(es)` over 96 sets (spacing, separation, count and members; the
   frequencies are confirmed by the `[structure-frequency]` log line instead). On the pre-groups dump it flags 76 sets,
   as it should.
-- In game, `/cegen run worldgen` runs `gen_structure_config.py`, `gen_biome_config.py` and `gen_structure_groups.py`; `/cegen run structure_live_check dumps` does `/dumpstructuregen` + `check_structure_live.py`.
+- In game, `/cdevgen run worldgen` runs `gen_structure_config.py`, `gen_biome_config.py` and `gen_structure_groups.py`; `/cdevgen run structure_live_check dumps` does `/dumpstructuregen` + `check_structure_live.py`.
 - **Loot containers after mod changes:** `python3 tools/audit_loot_containers.py` rewrites `loot_container_audit.md`.
 - **`tools/test_worldgen_tools.sh`** (about 30 s, after `./gradlew build`), all passed 2026-09-27 (earth fill added and passed 2026-10-03):
   1. 37 headless checks of `GroundMatch` against real block states and bound tags. They cover what counts as ground,
      the native/foreign decision (volcanic vs plains sample, the 35% threshold, too few columns), weighted picks, and a
      5x5 grass-pad ruin through all three modes: 50 base blocks swapped, poppy + tall grass dropped, exposed vs covered
      palettes, the roof garden and the next chunk left alone, plus `maxPlantHeight`.
-  2. 30 checks of `/ceplace` and `WorldgenConfig`: sign wrapping, every filter term, rows on the real
+  2. 30 checks of `/cdevplace` and `WorldgenConfig`: sign wrapping, every filter term, rows on the real
      `structure_tags.json` (each Towns & Towers structure in exactly one row, always its smallest type tag), template
      folders, vertical alignment, and every config default equal to the old hard-coded value.
   3. `EarthFillTest`: the counting core (limits -1 and 0, early stop, dedupe), the earth blocks of a real template
@@ -2601,7 +2604,7 @@ pass (earth fill 48, locate 28); not run in game; ST-158 to ST-166):
   Config `prune`, `pruneMaxHanging` 8, `pruneMaxMound` 4; tag `earth_fill/prune`. ST-167 to ST-169.
 - `/locate` through metas (7.3.2): targets that can't spawn in the dimension don't bring metas in; a meta slot is
   only loaded when an asked-for structure could be in it (new counter `meta_target`); every search ends after
-  `[worldgen.locate] searchTimeoutSeconds` (120); `/celocate stop` and the server stopping end running searches.
+  `[worldgen.locate] searchTimeoutSeconds` (120); `/cwglocate stop` and the server stopping end running searches.
 
 **2026-10-12: 7.1, standalone structures folded into groups** (patcherMod 1.0.6 in `build/libs`, not in `mods/`;
 nothing run in game; ST-102 to ST-131):
@@ -2838,7 +2841,7 @@ a size family from its built footprint (the earth base block count the template 
 | `huge` | over 2000 | 320 | 128 |
 
 The numbers are first guesses for the calibration run (ST-52, `log = ALL`, Phase 7). The families are tags
-`earth_fill/size/<family>`, generated by a tool from the scan (`tools/gen_earth_fill_sizes.py`, in `/cegen`), so a
+`earth_fill/size/<family>`, generated by a tool from the scan (`tools/gen_earth_fill_sizes.py`, in `/cdevgen`), so a
 new mod's structures get one automatically. Each family's limits go in CEConfig (`[worldgen.earth_fill.sizes]`).
 The existing `overrides` list still wins for single structures, and a type family (`#type/village=...`) can be
 overridden too.
@@ -2903,7 +2906,7 @@ won by other anchors. Async Locator can't cancel a search, and its non-daemon th
    - Count what this saves as a new `LocateStats` stage (`meta_target`).
 3. **A search deadline.** `[worldgen.locate] searchTimeoutSeconds` (default 120). `LocateLoads` and `locateAt` check
    it before each load and end the search with "not found (timed out after N s)", logged with the `[locate]`
-   counters. `/celocate stop` ends running `/locate` searches too, not just batches.
+   counters. `/cwglocate stop` ends running `/locate` searches too, not just batches.
 4. **Shutdown.** On `ServerStoppingEvent`, flag every running search to stop (the deadline check sees it), so
    `stop` no longer waits on Async Locator's threads. No change to Async Locator itself.
 
@@ -2921,12 +2924,12 @@ seconds.
   quarts at that height and 16 above and below; the first biome a target part accepts ends the check with yes. Every
   part in `meta_structures.json` is a surface or sea structure. The census doesn't go through this path, so LO-03's
   false negatives can't change; the check can only make `/locate` skip a meta slot.
-- Part 3: `LocateStats.expired()`: past `searchTimeoutSeconds` (0 = none), `/celocate stop` since the search began,
+- Part 3: `LocateStats.expired()`: past `searchTimeoutSeconds` (0 = none), `/cwglocate stop` since the search began,
   the server stopping, or the search thread interrupted (Async Locator's cancel interrupts). Then every further
   candidate returns "nothing" at `getStructureGeneratingAt` HEAD (vanilla's ring walk runs out in milliseconds), and a
   load returns an empty chunk at once, or within a quarter second while it waits (the load now waits in 250 ms slices,
   not one 300 s `get`). A search cut short always logs its `[locate]` line, `... not found (timed out after 120 s)
-  after N misses ...`; `/celocate stats` counts them (`cutShort`), and batch rows say `timed_out` or `stopped`.
+  after N misses ...`; `/cwglocate stats` counts them (`cutShort`), and batch rows say `timed_out` or `stopped`.
 - Part 4: `ServerStoppingEvent` flags every search (and resets on the next server start).
 
 #### 7.3.3 Deep dungeons: marked for the cave-structure pass
@@ -3254,7 +3257,7 @@ Briefs: [briefs/structures_earthfill.md](briefs/structures_earthfill.md), [brief
 
 Every pending structure-generation test, ST- (below) and LO- ([locate.md](locate.md) 7), in the order to run them:
 cheap log checks first, then single commands, config reboots, batch searches, pregenerated areas, calibration runs,
-two-world comparisons, the flat-world `/ceplace` run and the profiling run last. Each phase is one server setup; a
+two-world comparisons, the flat-world `/cdevplace` run and the profiling run last. Each phase is one server setup; a
 phase only starts when the one before it is clean. Tests that need eyes in a client follow at the end (8.0.11).
 Tests marked **[scratch]** below are run by me on the scratch server; the rest of each phase works there too
 through the log, reports, `/locate`, `/place` and scratch KubeJS probes (block and biome reads). ST-11 and ST-18
@@ -3377,7 +3380,7 @@ old jar). No bugs found. Counts that changed since the tests were written: 22 me
 boats 48/28.*
 
 **8.0.5 Phase 5: batch searches** (fresh worlds, same seed, 4 locator threads):
-1. World L1, folds on, first thing after boot: LO-02's batch (`/celocate batch all` from spawn).
+1. World L1, folds on, first thing after boot: LO-02's batch (`/cwglocate batch all` from spawn).
 2. World L2, `foldPlacement` and `foldBiomes` off: LO-01's batch; compare with L1 (same positions, more misses).
 3. World L1 again: LO-06 (two batches at once), LO-15 (timeout and stop), LO-05 (tick times during a high-miss
    `/locate`, `nonBlockingLoads` on vs off).
@@ -3391,7 +3394,7 @@ chunk reloads (static ProcessorLists holder), and vanilla desert/savanna village
 slightly different layout in each JVM run. Log: testing/structures/05_phase_5.md.*
 
 **8.0.6 Phase 6: a pregenerated area** (world P: Chunky radius 96 chunks around spawn, then the checks):
-1. LO-03 and LO-14 and LO-04: `/celocate census 96` (false negatives 0, miss reasons, member shares).
+1. LO-03 and LO-14 and LO-04: `/cwglocate census 96` (false negatives 0, miss reasons, member shares).
 2. From the pregeneration's log: ST-141, ST-154, ST-114.
 3. From the census and probes: ST-106, ST-107, ST-20, ST-72, ST-91, ST-98, ST-101, ST-74, ST-142 (blocks at 3
    logged drops), LO-12 (columns below y 48 in full chunks).
@@ -3419,7 +3422,7 @@ ST-145 (`placementPriority` on vs off, overlap count).
 **8.0.9 Phase 9: flat world** (superflat, structures off): ST-39, ST-41, ST-42, ST-40 (every Towns & Towers
 structure placed; the longest step).
 
-*Phase 9 run 2026-10-19: ST-42 passed, ST-40 passed its scratch part (55 of 56 placed on hills and on a flat world, signs, no overlaps, illagers; walking the rows is [game]), ST-39 partly and ST-41 FAILED: the `/ceplace templates` mode throws because vanilla `listTemplates()` dies on a `structures.nbt` path a resource-manager mixin adds. Also: no flat world can be created while `[worldgen.systems] biomeLayout` is on (its overworld dimension override outranks presets and world datapacks; Terralith/Tectonic override too); recipe in the log. Log: testing/structures/09_phase_9.md.*
+*Phase 9 run 2026-10-19: ST-42 passed, ST-40 passed its scratch part (55 of 56 placed on hills and on a flat world, signs, no overlaps, illagers; walking the rows is [game]), ST-39 partly and ST-41 FAILED: the `/cdevplace templates` mode throws because vanilla `listTemplates()` dies on a `structures.nbt` path a resource-manager mixin adds. Also: no flat world can be created while `[worldgen.systems] biomeLayout` is on (its overworld dimension override outranks presets and world datapacks; Terralith/Tectonic override too); recipe in the log. Log: testing/structures/09_phase_9.md.*
 
 **8.0.10 Phase 10: profiling** (JFR on the scratch server): LO-10 (per-status chunk generation times of a Chunky
 pregen radius 64, written into locate.md 3.7).
@@ -3563,8 +3566,8 @@ biome/start check); **[game]**: needs eyes in a client.
 - [x] **ST-168 Only villages are pruned [scratch]:** no `pruned` line names a structure outside `#creativeengineering:type/village` (or a meta); `/locate` of a pruned village still answers at its chunk. *2026-10-19 scratch phase 7 (structure_tuning 8.0.7, seed 8675309, patcherMod 1.0.7 jar (worldgen identical to 1.0.8), density 4, worlds st_c / st_c2 / st_c3; log testing/structures/07_phase_7.md): PASSED with the tag fix: 4 pruned lines, all villages; `/locate` of both pruned villages answers at their own chunk ([-81, -181], [-142, -130]).* *2026-10-19 fix rerun (same world): PASSED: both pruned lines are villages.*
 - [x] **ST-169 Prune switch [scratch]:** `prune = false` (one reboot, new land): no `pruned` lines; the same seed's village near water logs `CANCELLED` instead. *2026-10-19 scratch phase 7 (structure_tuning 8.0.7, seed 8675309, patcherMod 1.0.7 jar (worldgen identical to 1.0.8), density 4, worlds st_c / st_c2 / st_c3; log testing/structures/07_phase_7.md): PASSED: `prune = false` (tag fix on): 0 pruned lines; the taiga village at [-81, -181] and the savanna village at [-142, -130] log CANCELLED with the same numbers as without pruning.*
 - [x] **ST-163 End tower fails fast [scratch]:** from the Overworld, `/locate structure` the End tower of ST-80: "Could not find" within a few seconds (was 900+ s). *2026-10-13 scratch phase 2b (world st_b, seed 8675309, 1.0.6 jar of 21:59, 4 locator threads, earth fill `log = ALL`): PASSED: "Could not find" in 0 s (1 ms, 0 loads) from the Overworld (was 900+ s).*
-- [x] **ST-164 Rare anchors answer or time out [scratch]:** `/locate` the desert tower and the bastille: each answers or ends within 120 s with a `[locate] ... not found (timed out after 120 s)` line; `/celocate stats` shows `meta_target` savings for them and `cutShort` for any that timed out. ST-86 and ST-87 still find a part and an anchor. *2026-10-13 scratch phase 2b (world st_b, seed 8675309, 1.0.6 jar of 21:59, 4 locator threads, earth fill `log = ALL`): PASSED: desert tower and bastille from 2448 -624 each ended at 120 s with `not found (timed out after 120 s)` (13 and 8 loads); `/celocate stats` shows `cutShort` 1 for both and `meta_target` savings of 47 and 23. Loads were slow (about 9 s each with 4 searches at once). The desert tower was kept 4 times by earth fill elsewhere during the searches (2 dropped by peaceful radius).*
-- [x] **ST-165 Stop [scratch]:** start 4 slow searches (desert tower from 4 places), then `/celocate stop`: each logs `... (stopped)` within a second or two and the locator threads are free (a new `/locate` of a village answers at once). *2026-10-13 scratch phase 2b (world st_b, seed 8675309, 1.0.6 jar of 21:59, 4 locator threads, earth fill `log = ALL`): PASSED: 4 desert-tower searches, `/celocate stop` after 20 s: all 4 logged `not found (stopped)` in the same second; a `/locate` of `village_plains` sent 4 s later answered 4 s after that (2064 blocks).*
+- [x] **ST-164 Rare anchors answer or time out [scratch]:** `/locate` the desert tower and the bastille: each answers or ends within 120 s with a `[locate] ... not found (timed out after 120 s)` line; `/cwglocate stats` shows `meta_target` savings for them and `cutShort` for any that timed out. ST-86 and ST-87 still find a part and an anchor. *2026-10-13 scratch phase 2b (world st_b, seed 8675309, 1.0.6 jar of 21:59, 4 locator threads, earth fill `log = ALL`): PASSED: desert tower and bastille from 2448 -624 each ended at 120 s with `not found (timed out after 120 s)` (13 and 8 loads); `/cwglocate stats` shows `cutShort` 1 for both and `meta_target` savings of 47 and 23. Loads were slow (about 9 s each with 4 searches at once). The desert tower was kept 4 times by earth fill elsewhere during the searches (2 dropped by peaceful radius).*
+- [x] **ST-165 Stop [scratch]:** start 4 slow searches (desert tower from 4 places), then `/cwglocate stop`: each logs `... (stopped)` within a second or two and the locator threads are free (a new `/locate` of a village answers at once). *2026-10-13 scratch phase 2b (world st_b, seed 8675309, 1.0.6 jar of 21:59, 4 locator threads, earth fill `log = ALL`): PASSED: 4 desert-tower searches, `/cwglocate stop` after 20 s: all 4 logged `not found (stopped)` in the same second; a `/locate` of `village_plains` sent 4 s later answered 4 s after that (2064 blocks).*
 - [x] **ST-166 Server stop [scratch]:** with 4 slow searches running, `stop`: the server exits within a few seconds (no kill needed). *2026-10-13 scratch phase 2b (world st_b, seed 8675309, 1.0.6 jar of 21:59, 4 locator threads, earth fill `log = ALL`): PASSED: 4 bastille searches, `stop` after 20 s: the java process exited 40 s later with no kill. The searches logged `not found (server stopping)` within 2 s of "Stopping the server", and the save took 6 s; the other 31 s passed before the server thread got to the `stop` command at all (it was lagging behind under the 4 searches, see LO-05).*
 
 **New structure mods before Phase 3** (2026-10-14, plan 7.4, BUILT 2026-10-14, offline checks passed). New world. Rare structures: loosen soft
@@ -3629,7 +3632,7 @@ estimates, the harsh/ordinary ratio in ST-185 skipped). Every correctness part s
 
 **Fixes from the scratch run** (2026-10-18, 3.23). In 1.0.7 (DEPLOYED 2026-10-18); new chunks only.
 
-- [ ] **ST-191 Same villages after a restart [scratch]:** fresh world, `/celocate batch towns_and_towers` (and
+- [ ] **ST-191 Same villages after a restart [scratch]:** fresh world, `/cwglocate batch towns_and_towers` (and
   `/locate` of `meta/village_towers`), restart the server on the same world copy taken before the first batch, run it
   again -> every found position identical, including the desert and savanna village anchors. The log has `put in
   canonical order` with a count; `pool_tag_report.md` lists `minecraft:village/desert/houses` in key order on both
@@ -3731,12 +3734,12 @@ estimates, the harsh/ordinary ratio in ST-185 skipped). Every correctness part s
 - [x] **ST-37 Frequencies off:** `systems.structureFrequencies = false`, rejoin → `[structure-frequency] off in CEConfig [worldgen.systems]` instead of the `109 structure(s) ... roll a frequency below 1` line. *2026-10-14 scratch phase 4 (seed 8675309, 1.0.6 jar of 01:28, density 1, world st_d unless noted; log feature_writeup/testing/structures/04_phase_4.md): PASSED: `[structure-frequency] off in CEConfig [worldgen.systems]: every structure spawns whenever it wins its slot`, no below-1 roll line.*
 - [x] **ST-38 Pool tuning off:** `systems.poolTuning = false`, rejoin → `pool_tag_report.md` lists the warning "pool tuning is off"; a fresh plains village can have Create: Dynamic Village houses again. *2026-10-14 scratch phase 4 (seed 8675309, 1.0.6 jar of 01:28, density 1, world st_d unless noted; log feature_writeup/testing/structures/04_phase_4.md): PASSED: pool_tag_report.md warns "pool tuning is off"; 24 of 25 generated plains villages have Create: Dynamic Village houses (101 pieces) and some IE ones.*
 
-**`/ceplace`** (superflat world, Generate Structures OFF, cheats on)
-- [ ] **ST-39 Preview:** `/ceplace preview structures @towns_and_towers` → `56 structures in 7 row(s)`: type/camp 5, type/fort 9, type/ship 2, type/shipwreck 1, type/tower 15, type/village 23, (no type/* tag) 1. `/ceplace preview templates kaisyn:village/*/houses/*` → one row per village style. *2026-09-27: the structures preview gave exactly this from a scratch dedicated server's console; templates preview and your client still to do.* *2026-10-19 scratch phase 9 (structure_tuning 8.0.9, seed 8675309, patcherMod 1.0.7 jar (= 1.0.8 MassPlacer); worlds st_9 (hills: the flat setting did not take) and st_9d (flat: biomeLayout off + a flat-overworld world datapack); log testing/structures/09_phase_9.md): structures part PASSED again (56 in 7 rows, counts exactly as written); templates part FAILED: `/ceplace preview templates kaisyn:village/*/houses/*` throws "An unexpected error occurred" (vanilla listTemplates StringIndexOutOfBoundsException on a `structures.nbt` path at a namespace root; see ST-41).* *2026-10-19 fix rerun: templates part PASSED: `/ceplace preview templates kaisyn:village/*/houses/*` lists 326 templates in 21 rows, one per house folder.*
-- [ ] **ST-40 Whole mod in rows:** `/ceplace structures @towns_and_towers` → progress in chat, then `/ceplace done: N of 56 placed in x ..`; a sign in front of each row and each structure; no two structures overlap; failures (if any) listed with a reason. Walk the rows: villages complete, outposts with their pillagers. *2026-09-27, scratch dedicated server on normal terrain: the first version was killed by the 60 s watchdog at 38/56 (a 90-chunk village generated in one tick); after the step/tick-budget rewrite, `done: 55 of 56 placed`, `village_ocean` refused dry land. Flat world and walking the rows still to do.* *2026-10-19 scratch phase 9 (structure_tuning 8.0.9, seed 8675309, patcherMod 1.0.7 jar (= 1.0.8 MassPlacer); worlds st_9 (hills: the flat setting did not take) and st_9d (flat: biomeLayout off + a flat-overworld world datapack); log testing/structures/09_phase_9.md): scratch part PASSED: on hills and on a real flat world, `done: 55 of 56 placed`, `village_ocean` refused with its reason; a sign in front of each of the 7 rows and at each of the 55 structures; no two boxes overlap; all 29 outposts hold illagers, 22 of 24 villages villagers (the trader camp has traders; T&T `village_forest` is the forest_ruins set, abandoned by design). Walking the rows stays [game]. Note: no flat world is possible while `[worldgen.systems] biomeLayout` is on (its overworld dimension override outranks every preset and world datapack).*
-- [ ] **ST-41 Templates:** `/ceplace templates kaisyn:village/meadow_swiss/houses/*` (or any folder from ST-39's list) → houses in a row, no jigsaw blocks left, signs with each template id. *2026-10-19 scratch phase 9 (structure_tuning 8.0.9, seed 8675309, patcherMod 1.0.7 jar (= 1.0.8 MassPlacer); worlds st_9 (hills: the flat setting did not take) and st_9d (flat: biomeLayout off + a flat-overworld world datapack); log testing/structures/09_phase_9.md): FAILED: every `/ceplace templates` (preview or place) throws: MassPlacer.templateIds calls StructureTemplateManager.listTemplates, which throws StringIndexOutOfBoundsException (begin 11, end 10, length 14) on a merged-listing path `structures.nbt`; no single pack lists it (a resource-manager mixin adds it). Fix: list templates per pack, keeping only `structures/` paths.* *2026-10-19 fix rerun (patcherMod 1.0.8 d60b5a99, world st_flat made with `level-type=minecraft:flat` and biomeLayout on): scratch part PASSED: `/ceplace templates kaisyn:village/meadow_swiss/houses/*` placed 17 of 17 in 1 s on the flat surface (y -61), 0 failed; looking at the houses is [game].*
-- [x] **ST-42 Status and stop:** start `/ceplace structures by group @philipsruins @hopo`, run `/ceplace status` (progress line naming the structure in progress and its chunks loaded/placed), then `/ceplace stop` → `stopped at n/N`, nothing more is placed. *2026-10-19 scratch phase 9 (structure_tuning 8.0.9, seed 8675309, patcherMod 1.0.7 jar (= 1.0.8 MassPlacer); worlds st_9 (hills: the flat setting did not take) and st_9d (flat: biomeLayout off + a flat-overworld world datapack); log testing/structures/09_phase_9.md): PASSED: `/ceplace structures by group @philipsruins @hopo` (33 in 5 rows); `/ceplace status` -> "11/33 started, 10 placed, 0 failed, row 3/5, now philipsruins:ancient_towers (chunks loaded 2/2, placed 0/2)"; `/ceplace stop` -> "stopped at 18/33", nothing placed after.*
-- [ ] **ST-43 Converted structure mods in the client:** the game starts with no `NoSuchMethodException ... <init>()`. In a flat world, `/ceplace structures @mysticrift_pillagers_towers_aris @skyvillages @saloon @villager_forge @illagerwarship` → all placed. Look for supplementaries urns where the 1.20 decorated pots were, Vinery cherry wood on the cherry tower, and Sky Villages with no empty gaps. *2026-09-27: all 56 placed on a scratch dedicated server (0 failed); client not yet.*
+**`/cdevplace`** (superflat world, Generate Structures OFF, cheats on)
+- [ ] **ST-39 Preview:** `/cdevplace preview structures @towns_and_towers` → `56 structures in 7 row(s)`: type/camp 5, type/fort 9, type/ship 2, type/shipwreck 1, type/tower 15, type/village 23, (no type/* tag) 1. `/cdevplace preview templates kaisyn:village/*/houses/*` → one row per village style. *2026-09-27: the structures preview gave exactly this from a scratch dedicated server's console; templates preview and your client still to do.* *2026-10-19 scratch phase 9 (structure_tuning 8.0.9, seed 8675309, patcherMod 1.0.7 jar (= 1.0.8 MassPlacer); worlds st_9 (hills: the flat setting did not take) and st_9d (flat: biomeLayout off + a flat-overworld world datapack); log testing/structures/09_phase_9.md): structures part PASSED again (56 in 7 rows, counts exactly as written); templates part FAILED: `/cdevplace preview templates kaisyn:village/*/houses/*` throws "An unexpected error occurred" (vanilla listTemplates StringIndexOutOfBoundsException on a `structures.nbt` path at a namespace root; see ST-41).* *2026-10-19 fix rerun: templates part PASSED: `/cdevplace preview templates kaisyn:village/*/houses/*` lists 326 templates in 21 rows, one per house folder.*
+- [ ] **ST-40 Whole mod in rows:** `/cdevplace structures @towns_and_towers` → progress in chat, then `/cdevplace done: N of 56 placed in x ..`; a sign in front of each row and each structure; no two structures overlap; failures (if any) listed with a reason. Walk the rows: villages complete, outposts with their pillagers. *2026-09-27, scratch dedicated server on normal terrain: the first version was killed by the 60 s watchdog at 38/56 (a 90-chunk village generated in one tick); after the step/tick-budget rewrite, `done: 55 of 56 placed`, `village_ocean` refused dry land. Flat world and walking the rows still to do.* *2026-10-19 scratch phase 9 (structure_tuning 8.0.9, seed 8675309, patcherMod 1.0.7 jar (= 1.0.8 MassPlacer); worlds st_9 (hills: the flat setting did not take) and st_9d (flat: biomeLayout off + a flat-overworld world datapack); log testing/structures/09_phase_9.md): scratch part PASSED: on hills and on a real flat world, `done: 55 of 56 placed`, `village_ocean` refused with its reason; a sign in front of each of the 7 rows and at each of the 55 structures; no two boxes overlap; all 29 outposts hold illagers, 22 of 24 villages villagers (the trader camp has traders; T&T `village_forest` is the forest_ruins set, abandoned by design). Walking the rows stays [game]. Note: no flat world is possible while `[worldgen.systems] biomeLayout` is on (its overworld dimension override outranks every preset and world datapack).*
+- [ ] **ST-41 Templates:** `/cdevplace templates kaisyn:village/meadow_swiss/houses/*` (or any folder from ST-39's list) → houses in a row, no jigsaw blocks left, signs with each template id. *2026-10-19 scratch phase 9 (structure_tuning 8.0.9, seed 8675309, patcherMod 1.0.7 jar (= 1.0.8 MassPlacer); worlds st_9 (hills: the flat setting did not take) and st_9d (flat: biomeLayout off + a flat-overworld world datapack); log testing/structures/09_phase_9.md): FAILED: every `/cdevplace templates` (preview or place) throws: MassPlacer.templateIds calls StructureTemplateManager.listTemplates, which throws StringIndexOutOfBoundsException (begin 11, end 10, length 14) on a merged-listing path `structures.nbt`; no single pack lists it (a resource-manager mixin adds it). Fix: list templates per pack, keeping only `structures/` paths.* *2026-10-19 fix rerun (patcherMod 1.0.8 d60b5a99, world st_flat made with `level-type=minecraft:flat` and biomeLayout on): scratch part PASSED: `/cdevplace templates kaisyn:village/meadow_swiss/houses/*` placed 17 of 17 in 1 s on the flat surface (y -61), 0 failed; looking at the houses is [game].*
+- [x] **ST-42 Status and stop:** start `/cdevplace structures by group @philipsruins @hopo`, run `/cdevplace status` (progress line naming the structure in progress and its chunks loaded/placed), then `/cdevplace stop` → `stopped at n/N`, nothing more is placed. *2026-10-19 scratch phase 9 (structure_tuning 8.0.9, seed 8675309, patcherMod 1.0.7 jar (= 1.0.8 MassPlacer); worlds st_9 (hills: the flat setting did not take) and st_9d (flat: biomeLayout off + a flat-overworld world datapack); log testing/structures/09_phase_9.md): PASSED: `/cdevplace structures by group @philipsruins @hopo` (33 in 5 rows); `/cdevplace status` -> "11/33 started, 10 placed, 0 failed, row 3/5, now philipsruins:ancient_towers (chunks loaded 2/2, placed 0/2)"; `/cdevplace stop` -> "stopped at 18/33", nothing placed after.*
+- [ ] **ST-43 Converted structure mods in the client:** the game starts with no `NoSuchMethodException ... <init>()`. In a flat world, `/cdevplace structures @mysticrift_pillagers_towers_aris @skyvillages @saloon @villager_forge @illagerwarship` → all placed. Look for supplementaries urns where the 1.20 decorated pots were, Vinery cherry wood on the cherry tower, and Sky Villages with no empty gaps. *2026-09-27: all 56 placed on a scratch dedicated server (0 failed); client not yet.*
 
 **Water biomes, IPO, driftwood** (2026-10-03)
 - [x] **ST-44 Rule applies:** latest.log has `[structure-biome-rules] water: 12 biomes, ... kept out:` listing the 8 `mysticrift_pillagers_towers_aris:*` towers; `structure_tag_report.md` has a "Biome rules" section. *2026-10-03: both on a scratch dedicated server (25 kept out, 31 allowed that can start in water).* *2026-10-13 scratch phase 1 (seed 8675309, 1.0.6 build jar): PASSED (rule section + water line; the Mysticrift towers are no longer in the kept-out list because their biome fits already keep them on land: 151 -> 1..36 biomes).*
@@ -3792,7 +3795,7 @@ estimates, the harsh/ordinary ratio in ST-185 skipped). Every correctness part s
   the start's own size (no size tags or tool: the count at generation is exact), `maxOverAir` removed, water under the
   beard treated like air (the 10-03 "0 over water" was unbound fluid tags in the simulation), mansion exempt.
   `/locate` through metas: dimension check, per-slot target prediction (`meta_target`), `searchTimeoutSeconds` 120,
-  `/celocate stop` and server stop end searches. patcherMod 1.0.6 rebuilt in `build/libs`; worldgen tests pass;
+  `/cwglocate stop` and server stop end searches. patcherMod 1.0.6 rebuilt in `build/libs`; worldgen tests pass;
   ST-158 to ST-166.
 - **2026-10-13: earth-fill pruning.** User: "since villages are being canceled by houses over water, could just those
   houses of the offending jigsaw be canceled instead implement this change but dont scratch test it yet". Pieces of
@@ -3805,7 +3808,7 @@ estimates, the harsh/ordinary ratio in ST-185 skipped). Every correctness part s
   worldgen identical. Phase 7 (calibration): earth-fill pruning never ran live (`earth_fill/prune` empty because
   `type/village` is not a real structure tag; ST-167 failed as shipped, passed with a scratch-only fix); pruning can
   drop a start a size class; `/dumpstructuregen` broken. Phase 8 (two-world comparisons): all passed (ST-148 with the
-  town companion distance loosened). Phase 9 (`/ceplace`): templates mode broken (vanilla `listTemplates` on a
+  town companion distance loosened). Phase 9 (`/cdevplace`): templates mode broken (vanilla `listTemplates` on a
   merged `structures.nbt` path); no flat world while `biomeLayout` is on. Phase 10: per-status worldgen times in
   locate.md 3.7. Logs: testing/structures/07_phase_7.md to 10_phase_10.md. Nothing in kubejs/, config/ or the
   patcherMod source was changed.

@@ -123,6 +123,10 @@
 	var StructureBiomeFits = Java.loadClass('com.SaintAlfonzo.creativeworldgen.worldgen.StructureBiomeFits')
 	var MetaSlots = Java.loadClass('com.SaintAlfonzo.creativeworldgen.worldgen.MetaSlots')
 	var PlacementPriority = Java.loadClass('com.SaintAlfonzo.creativeworldgen.worldgen.PlacementPriority')
+	// structure gate: which structures and placement types this load really has (TODO creativebrewing/publish #5)
+	var StructurePresence = Java.loadClass('com.SaintAlfonzo.creativeworldgen.worldgen.StructurePresence')
+	// the gate's verdict from the last highPriorityData pass; the structure tag pass (later in the same load) reads it
+	var lastAbsent = {}
 
 	// creativeworldgen-common.toml [worldgen] switches
 	function worldgenSettings() {
@@ -169,7 +173,7 @@
 	function readJson(path) {
 		var text
 		try {
-			text = JsonIO.readString(path)
+			text = global.genText(path)
 		} catch (err) {
 			return null
 		}
@@ -212,7 +216,7 @@
 	}
 
 	// -> { members: {tag: {id: true}}, errors: [], warnings: [] }
-	function resolveTags(tagDefs, allIds) {
+	function resolveTags(tagDefs, allIds, absentIds) {
 		var idSet = {}
 		allIds.forEach(function (id) { idSet[id] = true })
 		var members = {}
@@ -246,6 +250,8 @@
 					if (!ids.length) warnings.push(name + ': "' + raw + '" matches no structure')
 				} else if (idSet[v]) {
 					ids = [v]
+				} else if (absentIds && absentIds[v]) {
+					ids = []   // left out by the structure gate: its mod or data pack is not loaded
 				} else {
 					errors.push(name + ': unknown structure "' + v + '"')
 					ids = []
@@ -813,13 +819,68 @@
 		return out
 	}
 
+	// STRUCTURE GATE. structure_config.json comes from the full pack; on an instance without a mod or data pack a set
+	// can name a placement type that is not registered (betterjungletemples:jungle_temple) or structures whose files are
+	// not loaded, and writing it fails world creation. Such sets and structures are left out here, and every config row
+	// and tag naming them is skipped quietly (one summary line), so the rest of the tuning still applies.
+	function gateSets(all) {
+		var sets = {}
+		var absentSets = {}
+		var absentIds = {}
+		var byNs = {}
+		function gone(id) {
+			if (absentIds[id]) return
+			absentIds[id] = true
+			var ns = id.split(':')[0]
+			byNs[ns] = (byNs[ns] || 0) + 1
+		}
+		Object.keys(all).forEach(function (id) {
+			var entry = all[id]
+			var type = entry.original && entry.original.type
+			if (type && !StructurePresence.placementType(String(type))) {
+				absentSets[id] = 'placement type ' + type + ' is not registered'
+				entry.structures.forEach(function (s) { gone(s.structure) })
+				return
+			}
+			var kept = entry.structures.filter(function (s) {
+				if (StructurePresence.structure(s.structure)) return true
+				gone(s.structure)
+				return false
+			})
+			// a set that is empty in the config (Revamped Shipwrecks empties minecraft:shipwrecks) is not absent
+			if (!kept.length && entry.structures.length) { absentSets[id] = 'none of its structures is loaded'; return }
+			sets[id] = kept.length === entry.structures.length ? entry : assign({}, entry, { structures: kept })
+		})
+		// A kept set's original exclusion zone can name a set that is left out (Terralith adds
+		// exclusion_zone terralith:rare_village to minecraft:villages). Writing it fails world loading ("Unbound values
+		// in registry worldgen/structure_set"), so the zone is dropped, as it is on an instance without that mod.
+		Object.keys(sets).forEach(function (id) {
+			var o = sets[id].original
+			var ez = o && o.exclusion_zone
+			if (!ez || typeof ez !== 'object' || sets[ez.other_set]) return
+			var orig = assign({}, o)
+			delete orig.exclusion_zone
+			sets[id] = assign({}, sets[id], { original: orig })
+		})
+		var summary = null
+		var nSets = Object.keys(absentSets).length
+		if (nSets || Object.keys(absentIds).length) {
+			summary = 'structure gate: ' + nSets + ' set(s) and ' + Object.keys(absentIds).length +
+				' structure(s) left out, their mod or data pack is not loaded (' +
+				Object.keys(byNs).sort().map(function (ns) { return ns + ' ' + byNs[ns] }).join(', ') + ')'
+		}
+		return { sets: sets, absentSets: absentSets, absentIds: absentIds, summary: summary }
+	}
+
 	function plan() {
 		var settings = worldgenSettings()
 		var density = settings.density
 		var capped = []
 		var config = readJson(CONFIG_PATH)
 		if (!config) return { errors: ['could not read ' + CONFIG_PATH + ' (run python3 tools/gen_structure_config.py)'] }
-		var sets = config.structure_sets
+		var gate = gateSets(config.structure_sets)
+		var sets = gate.sets
+		lastAbsent = gate.absentIds
 		var tagsDoc = readJson(TAGS_PATH)
 		var tagDefs = tagsDoc ? tagsDoc.tags : {}
 		var doc = readJson(GROUPS_PATH)
@@ -846,8 +907,9 @@
 			if (!setOf[id] && allIds.indexOf(id) < 0) allIds.push(id)
 		})
 
-		var resolved = resolveTags(tagDefs, allIds)
+		var resolved = resolveTags(tagDefs, allIds, gate.absentIds)
 		var warnings = resolved.warnings.slice()
+		if (gate.summary) warnings.push(gate.summary)
 		if (resolved.errors.length) {
 			// Groups off: the tags only feed the report, so their errors don't stop the mod defaults.
 			if (settings.groups) return { errors: resolved.errors, title: 'structure_tags.json has errors' }
@@ -923,6 +985,7 @@
 				if (!r || typeof r !== 'object' || !('replaces' in r) || owner[id] !== g) return
 				var where = 'groups.' + g + '.structures.' + id
 				if (r.replaces === id) errors.push(where + ': replaces itself')
+				else if (gate.absentIds[r.replaces]) return
 				else if (owner[r.replaces] !== g) errors.push(where + ': replaces ' + r.replaces + ', which is not in group/' + g + ' (a replacement takes slots in its own group)')
 				else if ((metaDefs[id] && 'anchor' in metaDefs[id]) || metaDefs[r.replaces]) errors.push(where + ': a meta structure with an anchor can\'t replace, and no meta can be replaced (use "anchor" + "share" in meta_structures.json)')
 				else if (listed[r.replaces] && typeof listed[r.replaces] === 'object' && 'replaces' in listed[r.replaces]) errors.push(where + ': replaces ' + r.replaces + ', which is a replacement itself')
@@ -968,6 +1031,7 @@
 			var listed = entry.structures || {}
 			var ids = Object.keys(tagMembers['group/' + g]).sort()
 			Object.keys(listed).forEach(function (id) {
+				if (gate.absentIds[id]) return
 				if (owner[id] !== g) errors.push('groups.' + g + '.structures lists ' + id + ', which is not in group/' + g + (owner[id] ? ' (it is in group/' + owner[id] + ')' : ''))
 			})
 			var listedWeights = ids.filter(function (id) { return listed[id] && isInt(listed[id].weight) }).map(function (id) { return listed[id].weight })
@@ -1005,7 +1069,7 @@
 
 		// every original set: members that moved to a group leave it; the rest follow "standalone"
 		Object.keys(standaloneDoc).forEach(function (id) {
-			if (!sets[id]) errors.push('standalone: "' + id + '" is not a structure set in structure_config.json')
+			if (!sets[id] && !gate.absentSets[id]) errors.push('standalone: "' + id + '" is not a structure set in structure_config.json')
 		})
 		Object.keys(sets).forEach(function (id) {
 			var entry = sets[id]
@@ -1017,6 +1081,7 @@
 			if (rest.length) errors.push.apply(errors, validatePlacement('standalone.' + id + '.placement', p, knownSets))
 			var listed = sa.structures || {}
 			Object.keys(listed).forEach(function (sid) {
+				if (gate.absentIds[sid]) return
 				if (!entry.structures.some(function (s) { return s.structure === sid })) errors.push('standalone.' + id + '.structures lists ' + sid + ', which is not in that set')
 				else if (owner[sid]) warnings.push('standalone.' + id + '.structures still lists ' + sid + ', which is in group/' + owner[sid] + ' now: ignored (python3 tools/gen_structure_groups.py removes it)')
 			})
@@ -1365,11 +1430,13 @@
 
 	ServerEvents.highPriorityData(function (event) {
 		var result
+		StructurePresence.capture(event)
 		try {
 			result = plan()
 		} catch (err) {
 			result = { errors: ['structure tuning failed: ' + err], title: 'Structure tuning failed' }
 		}
+		StructurePresence.release()
 		if (result.errors) {
 			result.errors.forEach(function (e) { console.error(TAG + e) })
 			console.error(TAG + 'nothing applied, every structure uses its mod/vanilla default')
@@ -1411,7 +1478,7 @@
 		var tagsDoc = readJson(TAGS_PATH)
 		if (!config || !tagsDoc) return console.error(TAG + 'meta tags: could not read ' + CONFIG_PATH + ' / ' + TAGS_PATH)
 		var metaDoc = readJson(META_PATH)
-		var resolved = resolveTags(tagsDoc.tags, structureIds(config, (metaDoc && metaDoc.structures) || {}))
+		var resolved = resolveTags(tagsDoc.tags, structureIds(config, (metaDoc && metaDoc.structures) || {}).filter(function (id) { return !lastAbsent[id] }), lastAbsent)
 		resolved.errors.forEach(function (err) { console.error(TAG + 'meta tags: structure_tags.json: ' + err) })
 		Object.keys(tagsDoc.tags).filter(function (t) { return t.indexOf(META_TAG_PREFIX) === 0 || t.indexOf(TYPE_TAG_PREFIX) === 0 }).forEach(function (t) {
 			var ids = Object.keys(resolved.members[t] || {}).sort()

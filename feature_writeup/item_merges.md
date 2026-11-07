@@ -647,7 +647,7 @@ read-only item handlers, containers in chunks that never load.
 | `onWorldLoad` | false | Every chunk load: its containers are rewritten on the next server tick (32 chunks a tick); every item and container entity as it enters a level |
 | `onPlayerDataLoad` | true | Every login: inventory and ender chest |
 | `onContainerOpen` | true | Every menu a player opens |
-| `onCommand` | true | `/ceswap items` (permission 2): online players, every loaded chunk, every item and container entity now; reports the counts |
+| `onCommand` | true | `/ccswap items` (permission 2): online players, every loaded chunk, every item and container entity now; reports the counts |
 | `onceWhenUpdated` | true | Each chunk and player once per list version: the list fingerprint is stamped in the chunk NBT and the player's persisted data (`creativeengineering:swap_merges`); a chunk or player with an older or no stamp is rewritten on its next load. Item and container entities are rewritten as they enter a level while this is on |
 
 The KubeJS inventory swap of 1.1 still runs for both groups (it drops NBT; the Java login and open triggers keep it).
@@ -664,9 +664,9 @@ SQ-SWP-01 to -08 in the scratch queue (section SQ-CDJ6). 2026-11-03: CD `swaps/m
 |---|---|---|
 | SWP-01 | Restart, `logs/latest.log` | `[swaps] ... 43 item merge(s)`, `[creativedelight] 43 item merge(s) from the swap lists` (fewer only when a `requires` mod is absent), `[swaps] n item merge(s) live in the world`; no `merged twice`, no `Error occurred while handling event` |
 | SWP-02 | JEI: search banana, coffee berries, diced potatoes, Caesar salad | The purged items are hidden, as before the move (recipes and loot follow the survivors) |
-| SWP-03 | Put 5 `alexsmobs:banana` with a custom name in a chest (`/data merge`), leave, `/ceswap items` | 5 Neapolitan bananas, name kept |
+| SWP-03 | Put 5 `alexsmobs:banana` with a custom name in a chest (`/data merge`), leave, `/ccswap items` | 5 Neapolitan bananas, name kept |
 | SWP-04 | 64 `vintagedelight:vinegar_bottle` in a chest, open it | Jars in 16-stacks (or the survivor's stack size) in the free slots, total 64; none lost |
 | SWP-05 | Shulker box holding Farmer's Respite coffee in a chest, open the chest | The box's contents read Rustic Delight coffee |
 | SWP-06 | Log out with a purged item in the inventory and ender chest, set `onPlayerDataLoad=false`, rejoin | Rewritten once (`onceWhenUpdated`); a second rejoin logs nothing |
 | SWP-07 | Drop a purged stack from an old save (or `/summon item ... {Item:{id:"alexsmobs:banana",Count:3b}}`) | The item entity holds 3 Neapolitan bananas |
-| SWP-08 | `onCommand=false`, `/ceswap items` | Refused with the config key named |
+| SWP-08 | `onCommand=false`, `/ccswap items` | Refused with the config key named |

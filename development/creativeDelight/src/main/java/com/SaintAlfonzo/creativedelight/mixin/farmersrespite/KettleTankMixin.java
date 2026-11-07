@@ -59,10 +59,10 @@ import vectorwing.farmersdelight.common.block.entity.SyncedBlockEntity;
 @Mixin(value = KettleBlockEntity.class, remap = false)
 public abstract class KettleTankMixin extends SyncedBlockEntity implements KettleTankHolder {
 
-	@Unique private static final String CE_FLUID = "CETankFluid";
-	@Unique private static final String CE_LEVEL = "CETankLevel";
-	@Unique private static final String CE_BOXES = "CETankBoxes";
-	@Unique private static final String CE_POURING = "CETankPouring";
+	@Unique private static final String CD_FLUID = "CETankFluid";
+	@Unique private static final String CD_LEVEL = "CETankLevel";
+	@Unique private static final String CD_BOXES = "CETankBoxes";
+	@Unique private static final String CD_POURING = "CETankPouring";
 
 	@Shadow @Final private ItemStackHandler inventory;
 	@Shadow private ResourceLocation lastRecipeID;
@@ -140,16 +140,16 @@ public abstract class KettleTankMixin extends SyncedBlockEntity implements Kettl
 
 	@Inject(method = "m_142466_", at = @At("TAIL"))
 	private void ce$loadTank(CompoundTag tag, CallbackInfo ci) {
-		ce$type = tag.contains(CE_FLUID) ? FluidStack.loadFluidStackFromNBT(tag.getCompound(CE_FLUID)) : FluidStack.EMPTY;
-		if (tag.contains(CE_BOXES)) ce$boxes().deserializeNBT(tag.getCompound(CE_BOXES));
-		if (tag.contains(CE_POURING)) ce$pouring = tag.getBoolean(CE_POURING);
+		ce$type = tag.contains(CD_FLUID) ? FluidStack.loadFluidStackFromNBT(tag.getCompound(CD_FLUID)) : FluidStack.EMPTY;
+		if (tag.contains(CD_BOXES)) ce$boxes().deserializeNBT(tag.getCompound(CD_BOXES));
+		if (tag.contains(CD_POURING)) ce$pouring = tag.getBoolean(CD_POURING);
 	}
 
 	@Inject(method = "m_183515_", at = @At("TAIL"))
 	private void ce$saveTank(CompoundTag tag, CallbackInfo ci) {
 		ce$writeType(tag);
-		tag.put(CE_BOXES, ce$boxes().serializeNBT());
-		tag.putBoolean(CE_POURING, ce$pouring);
+		tag.put(CD_BOXES, ce$boxes().serializeNBT());
+		tag.putBoolean(CD_POURING, ce$pouring);
 	}
 
 	/** The client copy (update tag): the type, so the GUI, WTHIT and the bar show it. */
@@ -165,13 +165,13 @@ public abstract class KettleTankMixin extends SyncedBlockEntity implements Kettl
 		if (units <= 0) return;
 		CompoundTag out = cir.getReturnValue();
 		FluidStack type = ce$type.isEmpty() ? new FluidStack(Fluids.WATER, 1) : ce$type;
-		out.put(CE_FLUID, type.writeToNBT(new CompoundTag()));
-		out.putInt(CE_LEVEL, units);
+		out.put(CD_FLUID, type.writeToNBT(new CompoundTag()));
+		out.putInt(CD_LEVEL, units);
 	}
 
 	@Unique
 	private void ce$writeType(CompoundTag tag) {
-		if (!ce$type.isEmpty()) tag.put(CE_FLUID, ce$type.writeToNBT(new CompoundTag()));
+		if (!ce$type.isEmpty()) tag.put(CD_FLUID, ce$type.writeToNBT(new CompoundTag()));
 	}
 
 	// ---------------------------------------------------------------------------------------------------------

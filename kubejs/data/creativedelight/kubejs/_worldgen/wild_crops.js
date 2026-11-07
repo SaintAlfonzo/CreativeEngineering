@@ -1,3 +1,4 @@
+// requires: creativedelight
 // Wild crops: which biomes each wild crop and fruit tree generates in (Creative Delight, creative_delight.md 24).
 //
 // Edit wild_crops.json next to this file, then rejoin the world (biome modifiers are read at world load, not on

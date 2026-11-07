@@ -1,0 +1,68 @@
+# r1106spf shared probes: run on boot 0 (installed jars, ids get "-base") and boot 1 (18:5x builds); the two
+# RES/rows/<ID>.log files are compared line by line in the judge step (tools/scratch_query/batches/r1106spf/compare.py).
+pace 1
+
+## SQ-SPF-01@S@ | Common: NCH recipes, andesite alloy, copper ingot tag
+> zq recipes creativecommon:
+> zq makes create:andesite_alloy
+> zq itemtag forge:ingots/copper
+look per-jar namespaces present; andesite alloy recipes same as base
+
+## SQ-SPF-04@S@ | Common: potions registered, brewing ingredients
+> zq potion creativecommon:long_reach
+> zq potion creativecommon:phantom_bane
+> zq potion creativecommon:magic_resistance
+> zq potion creativecommon:long_magic_resistance
+> zq potion creativebrewing:magic_resistance
+look every creativecommon: potion registered (new jars); brewing lines as base
+
+## SQ-SPF-61@S@ | Engineering items: recipes making each item family
+> zq makes component_copper
+> zq makes component_netherite
+> zq makes coil_electrum
+> zq makes plate_block_iron
+> zq makes dust_pile
+> zq makes wood_pellet
+> zq makes prepared_flesh
+> zq makes hemp_fabric
+> zq bytype create:sequenced_assembly
+look every family has recipes, counts as base
+
+## SQ-SPF-80@S@ | Delight: cooking and cutting counts, five dishes
+> zq bytype farmersdelight:cooking
+> zq bytype farmersdelight:cutting
+> zq food veggiesdelight:cauliflower_soup
+> zq food vintagedelight:pickle_soup
+> zq food farmersdelight:vegetable_soup
+> zq food miners_delight:cave_soup
+> zq food endersdelight:chorus_stew
+look counts and food values identical to base
+
+## SQ-SPF-82@S@ | Delight moved in: torch and seeds recipes, millable seeds tag
+> zq recipes torch_crafting_animal_fat
+> zq recipes seeds_bone_meal
+> zq itemtag creativeengineering:millable_seeds
+> zq itemtag forge:mulch
+look present under creativedelight: on the new jars; tags same as base
+
+## SQ-SPF-90@S@ | Brewing: Vinery fermentation count
+> zq bytype vinery:wine_fermentation
+> zq bytype vinery:apple_fermenting
+look count identical to base
+
+## SQ-SPF-91@S@ | Brewing: Brewin' fermenting count
+> zq bytype brewinandchewin:fermenting
+> zq bytype brewinandchewin:keg_pouring
+look count identical to base
+
+## SQ-SPF-62@S@ | Engineering: IE recipe count
+> zq bytype immersiveengineering:sawmill
+> zq bytype immersiveengineering:crusher
+> zq bytype immersiveengineering:metal_press
+> zq bytype immersiveengineering:blueprint
+look counts identical to base
+
+## SQ-SPF-41@S@ | Magic: experience fluid tag and bridge line
+shell grep -iE "FluidBridge|liquid ?xp|liquid experience" logs/latest.log | head -5
+> forge tags minecraft:fluid get forge:experience
+look new jars: bridge line logged by creativemagic, one fluid in the tag

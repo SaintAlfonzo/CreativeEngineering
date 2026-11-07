@@ -1,3 +1,4 @@
+// requires: creativedelight
 // requires: abnormals_delight
 // requires: neapolitan
 // Abnormals Delight x Neapolitan recipe changes (abnormals_delight.md 3.2, 3.4). Non-member file: recipe ids are

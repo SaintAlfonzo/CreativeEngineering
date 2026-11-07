@@ -1,3 +1,4 @@
+// requires: creativedelight
 // requires: delightful
 // Delightful 3.8.1 tags the backported items need (feature_writeup/delightful.md 3.2): 3.4.1 has none of them. Contents
 // as 3.8.1's, limited to items in the pack.

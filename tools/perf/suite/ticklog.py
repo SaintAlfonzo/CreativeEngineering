@@ -1,4 +1,4 @@
-"""Reads the ceperfbot tick log (perf/bot/ticks-<epoch ms>.csv in the scratch server, format in TickLog.java)
+"""Reads the cdevperfbot tick log (perf/bot/ticks-<epoch ms>.csv in the scratch server, format in TickLog.java)
 and turns a window between two markers into numbers. A window whose end marker is missing (the server died)
 ends at the last tick in the file."""
 import glob

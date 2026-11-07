@@ -1,3 +1,4 @@
+// requires: creativedelight
 // requires: jei
 // requires: ends_delight
 // End's Delight JEI information pages: mob drops that come from loot modifiers, not recipes (ends_delight.md 3.1).

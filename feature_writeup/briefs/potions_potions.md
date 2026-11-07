@@ -17,7 +17,7 @@ Rustic Delight 1.3.0 (`ModPotions`, `ModBrewingRecipe`), IE 9.2.4 (`EventHandler
 | Step | Rows | What | Work | Why this order |
 |---|---|---|---|---|
 | 1 | #5 | Delete the 3 duplicate Luck mixes | KubeJS, 3 lines | Bug, trivial, no decision |
-| 2 | #4, #6 | Reagent and strength retune in `CUSTOM_POTIONS` / `CE_POTION_MIXES` | KubeJS | Same file as step 1, needs only your picks |
+| 2 | #4, #6 | Reagent and strength retune in `CUSTOM_POTIONS` / `CB_POTION_MIXES` | KubeJS | Same file as step 1, needs only your picks |
 | 3 | #2, #3 | Batch sizes and the Refinery shortcut | patcherMod (one rebuild) | Both touch `Lingerification.java`; do in one build |
 | 4 | #8 | Overlap trims: Quark Resilience brew off (config), Caffeinated mixin | config + patcherMod | Can ride the step 3 build |
 | 5 | #7 | New potions for modded effects | patcherMod class + KubeJS mixes + lang | Largest; reuses the step 3 build if decided by then |
@@ -94,7 +94,7 @@ Replace the two placeholder reagents with something that fits: Magic Resistance 
 clover, `TODO` comment at `potions.js` line 86).
 
 ### Now
-- Magic Resistance: `CE_POTION_MIXES` line 72, `['minecraft:amethyst_shard', 'minecraft:thick', 'creativeengineering:magic_resistance']`,
+- Magic Resistance: `CB_POTION_MIXES` line 72, `['minecraft:amethyst_shard', 'minecraft:thick', 'creativeengineering:magic_resistance']`,
   then redstone / glowstone (73-74). Potions registered in patcherMod `CE/potion/MagicResistancePotions.java`
   (3:00 / 8:00 / 1:30 II), effect in `MagicResistanceEffect.java`, tuning in CEConfig `[magic_resistance]`
   ([armor_effects.md](../armor_effects.md) 2.5).
@@ -368,7 +368,7 @@ stay unbrewable (`alcohol/decisions #13`), Fruits Delight stays food-only for no
 - Mechanism: KubeJS's `StartupEvents.registry('potion')` runs before modded effects exist (header comment lines
   129-137), so modded-effect potions are Forge `DeferredRegister<Potion>` in patcherMod, as `CE/potion/BetterBeaconsPotions.java`
   (with a `ModList` guard) and `MagicResistancePotions.java`, registered at `CreativeEngineering.java` lines 85-86;
-  brewing mixes go in `CE_POTION_MIXES` in `potions.js`.
+  brewing mixes go in `CB_POTION_MIXES` in `potions.js`.
 - Potion names live in `kubejs/assets/kubejs/lang/en_us.json` (`item.minecraft.potion.effect.<path>`, `splash_potion`,
   `lingering_potion`, `tipped_arrow` keys, e.g. lines 35-40, 74-79, 113-118 for Long Reach / Magic Resistance).
 
@@ -377,7 +377,7 @@ stay unbrewable (`alcohol/decisions #13`), Fruits Delight stays food-only for no
    `{name, modid, effectPath, base, long, strongDur, strongAmp}`; in `register(IEventBus)`, for each row whose
    `ModList.get().isLoaded(modid)`, call `POTIONS.register(name, supplier)` (the supplier looks the effect up at
    `RegisterEvent<Potion>` time, after every mod's effects exist). Register the class next to lines 85-86.
-2. `potions.js`: add the base / lengthen (/ amplify) rows to `CE_POTION_MIXES` (or a new `MODDED_POTION_MIXES`), using
+2. `potions.js`: add the base / lengthen (/ amplify) rows to `CB_POTION_MIXES` (or a new `MODDED_POTION_MIXES`), using
    dict keys for reagents. Everything else (Create, IE Mixer, Lingerification, bottling, buckets, tipped arrows,
    JEI fluid list) follows automatically from the registry.
 3. Lang: 4 keys per potion id (potion, splash, lingering, tipped arrow) for base, long, strong in

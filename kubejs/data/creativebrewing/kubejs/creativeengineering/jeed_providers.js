@@ -1,3 +1,4 @@
+// requires: creativebrewing
 // Moved from the pack's server_scripts/other/jeed_providers.js 2026-11-01 (creative_brewing.md 4.5), rows unchanged; recipe ids are
 // creativebrewing:<type>/<suffix> (were creativeengineering:).
 // JEED effect providers: one jeed:effect_provider recipe per effect, listing every item that gives it, so each
@@ -12,7 +13,6 @@
 //   - mobs that inflict an effect, as their spawn egg (JEED's husk -> Hunger);
 //   - blocks and gear that give one (JEED's conduit, turtle helmet), incl. IE fluids and the chemthrower;
 //   - food and drink that applies its effect in code (no FoodProperties entry: chocolate, teas, coins);
-//   - pack gear, read from global.armorEffects / global.toolEffects, and the echo armor set (CDD mixin);
 //   - Vinery wines (the port's [wine] effects config) and the Vinery standard banner;
 //   - Botania brews (vial, flask, incense stick, blood pendant, by their brewKey NBT);
 //   - Xaero's map switches: the command block, since only /effect gives them;
@@ -122,22 +122,8 @@ global.CB.recipes(() => {
 	add('create_confectionery:stimulation', [i.bar_of_black_chocolate, i.full_black_chocolate_bar,
 		i.black_chocolate_candy, i.black_chocolate_candy_2, i.ruby_chocolate_candy_3])
 
-	//######################### Pack gear (armor and tool effect frameworks) #########################
-	var addEffects = (effects, items) => (effects || []).forEach(spec => add(String(spec.effect), items))
-	var A = global.armorEffects, T = global.toolEffects
-	if (A) {
-		Object.keys(A.PIECES).forEach(id => addEffects(A.PIECES[id], id))
-		A.SETS.forEach(set => addEffects(set.effects, set.ids))
-		Object.keys(A.MOUNTS).forEach(id => addEffects(A.MOUNTS[id], id))
-	}
-	if (T) {
-		Object.keys(T.ON_HIT).forEach(id => addEffects(T.ON_HIT[id], id))
-		Object.keys(T.HELD).forEach(id => addEffects(T.HELD[id], id))
-	}
-	// Echo armor: CDD's own set bonus, redirected by patcherMod's EchoArmorEffectMixin (memory echo-tier-gear)
-	var echoArmor = [i.echo_helmet, i.echo_chestplate, i.echo_leggings, i.echo_boots]
-	add('minecraft:night_vision', echoArmor)
-	add('better_beacons:phantom_bane', echoArmor)
+	// Pack gear (the armor and tool effect frameworks) and the echo armor set: Creative Equipment's
+	// equipment/gear_jeed.js, with the gear rows (plan_cb_polish.md 1, 2026-11-06).
 
 	//######################### Botania brews #########################
 	// BotaniaBrews.registerBrews (Botania 440.2): brew key -> effects, and whether it infuses incense / the pendant

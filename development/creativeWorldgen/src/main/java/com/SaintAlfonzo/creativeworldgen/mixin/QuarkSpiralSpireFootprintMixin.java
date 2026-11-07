@@ -25,12 +25,12 @@ import java.util.Random;
 @Mixin(value = SpiralSpireGenerator.class, remap = false)
 public abstract class QuarkSpiralSpireFootprintMixin {
 
-    private static final int CE_FOOTPRINT_RADIUS = 7;
+    private static final int CWG_FOOTPRINT_RADIUS = 7;
 
     @Inject(method = "makeSpike", at = @At("HEAD"), cancellable = true, remap = false)
     private void creativeengineering$cancelOverAir(WorldGenRegion world, ChunkGenerator generator, Random rand,
                                                    BlockPos pos, CallbackInfo ci) {
-        int r = CE_FOOTPRINT_RADIUS;
+        int r = CWG_FOOTPRINT_RADIUS;
         BlockPos.MutableBlockPos test = new BlockPos.MutableBlockPos();
         for (int i = -r + 1; i < r; i++) {
             for (int j = -r + 1; j < r; j++) {

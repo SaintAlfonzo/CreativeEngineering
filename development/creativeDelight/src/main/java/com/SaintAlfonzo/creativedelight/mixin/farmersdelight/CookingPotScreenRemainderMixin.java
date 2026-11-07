@@ -23,7 +23,7 @@ import vectorwing.farmersdelight.common.block.entity.container.CookingPotMenu;
 public abstract class CookingPotScreenRemainderMixin extends AbstractContainerScreen<CookingPotMenu> {
 
     @Unique
-    private static final ResourceLocation CE_TEXTURE = new ResourceLocation("farmersdelight", "textures/gui/cooking_pot.png");
+    private static final ResourceLocation CD_TEXTURE = new ResourceLocation("farmersdelight", "textures/gui/cooking_pot.png");
 
     private CookingPotScreenRemainderMixin(CookingPotMenu menu, Inventory playerInventory, Component title) {
         super(menu, playerInventory, title);
@@ -31,6 +31,6 @@ public abstract class CookingPotScreenRemainderMixin extends AbstractContainerSc
 
     @Inject(method = {"m_7286_", "renderBg"}, at = @At("TAIL"), require = 1)
     private void ce$drawRemainderSlots(PoseStack poseStack, float partialTick, int mouseX, int mouseY, CallbackInfo ci) {
-        RemainderSlotFrames.draw(poseStack, CE_TEXTURE, leftPos, topPos, 91, 54);
+        RemainderSlotFrames.draw(poseStack, CD_TEXTURE, leftPos, topPos, 91, 54);
     }
 }

@@ -1,4 +1,4 @@
-# M9: Phase 9, flat world `/ceplace` (8.0.9)
+# M9: Phase 9, flat world `/cdevplace` (8.0.9)
 
 2026-10-19. Live notes: [09_phase_9.scratch.md](09_phase_9.scratch.md). Result lines are inline in
 [structure_tuning.md](../../structure_tuning.md) section 8, with a summary under "8.0.9 Phase 9".
@@ -17,7 +17,7 @@
   | `st_9d` | The same datapack plus `biomeLayout = false` | Flat |
 
   ST-40 ran on both `st_9` (hills) and `st_9d` (flat).
-- **Checks:** the `[ceplace]` log lines (one box per structure) and the region files: signs, entities and blocks.
+- **Checks:** the `[cdevplace]` log lines (one box per structure) and the region files: signs, entities and blocks.
 
 ## 2. Results
 
@@ -25,7 +25,7 @@
 |---|---|---|
 | ST-39 | PARTLY | The structures preview is exact: `56 structures in 7 row(s)`, with camp 5, fort 9, ship 2, shipwreck 1, tower 15, village 23 and 1 with no `type/*` tag (`mimic_desert`). The templates preview throws (3.1) |
 | ST-40 | PASSED (scratch part) | 55 of 56 placed, on hills (3.5 min) and on the flat world (46 s). The one failure is listed with its reason. Signs, no overlaps, outposts with illagers |
-| ST-41 | FAILED | `/ceplace templates ...` throws "An unexpected error occurred" every time, in either world (3.1) |
+| ST-41 | FAILED | `/cdevplace templates ...` throws "An unexpected error occurred" every time, in either world (3.1) |
 | ST-42 | PASSED | `by group @philipsruins @hopo`: 33 in 5 rows. The status line names the structure in progress and its chunk counts. `stop` logs `stopped at 18/33`, and nothing is placed after it |
 
 ST-40 details:
@@ -41,7 +41,7 @@ ST-40 details:
 
 ## 3. Bugs and findings
 
-### 3.1 `/ceplace templates` can't list templates (ST-41; MassPlacer, older code)
+### 3.1 `/cdevplace templates` can't list templates (ST-41; MassPlacer, older code)
 
 - **Symptom:** vanilla `StructureTemplateManager.listTemplates()` throws `StringIndexOutOfBoundsException: begin 11,
   end 10, length 14`, in its listResources lambda (it cuts `structures/` off a path that has no slash). A
@@ -61,7 +61,7 @@ ST-40 details:
 ### 3.2 No flat world in this pack
 
 - **Symptom:** with `level-type=minecraft:flat`, with explicit flat settings, or with a world datapack defining a
-  flat overworld, the overworld is created as `minecraft:noise`. `/ceplace` says so ("Not a flat world: everything
+  flat overworld, the overworld is created as `minecraft:noise`. `/cdevplace` says so ("Not a flat world: everything
   is built at this spot's height"), so the rows climb over hills.
 - **Cause 1:** patcherMod's `BiomeLayoutTuner` (`biome_overrides.js`, `[worldgen.systems] biomeLayout`) puts a full
   `minecraft:dimension/overworld.json` into KubeJS's top-priority virtual datapack. That ranks above every world
@@ -88,7 +88,7 @@ the world datapack (inside the scratch worlds), and the probe script (removed).
 
 
 1. **3.1:** fix `MassPlacer.templateIds`, then rerun ST-41 and the second half of ST-39.
-2. **3.2:** decide whether `/ceplace` testing needs a flat world. If so, add the recipe to the `/ceplace` docs
+2. **3.2:** decide whether `/cdevplace` testing needs a flat world. If so, add the recipe to the `/cdevplace` docs
    (structure_tuning 3.x) or give `biomeLayout` a "skip flat presets" rule.
 3. **ST-40 in game:** walk the rows (villages complete, outposts manned).
 4. **Next phase (10):** JFR profiling (LO-10).

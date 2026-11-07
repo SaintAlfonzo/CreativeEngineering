@@ -2,31 +2,30 @@ package com.SaintAlfonzo.creativecompat.mixin;
 
 import com.SaintAlfonzo.creativecompat.compat.TrashSlotCompat;
 import net.blay09.mods.balm.api.event.client.screen.ScreenInitEvent;
-import net.blay09.mods.trashslot.TrashSlot;
 import net.blay09.mods.trashslot.api.IGuiContainerLayout;
 import net.blay09.mods.trashslot.client.ContainerSettings;
-import net.blay09.mods.trashslot.client.LayoutManager;
-import net.blay09.mods.trashslot.client.ModKeyMappings;
 import net.blay09.mods.trashslot.client.TrashSlotGuiHandler;
 import net.blay09.mods.trashslot.client.TrashSlotSlot;
 import net.blay09.mods.trashslot.client.deletion.DeletionProvider;
 import net.blay09.mods.trashslot.client.gui.TrashSlotComponent;
 import net.blay09.mods.trashslot.config.TrashSlotConfig;
 import com.mojang.blaze3d.vertex.PoseStack;
-import net.minecraft.ChatFormatting;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.screens.Screen;
 import net.minecraft.client.gui.screens.inventory.AbstractContainerScreen;
 import net.minecraft.client.gui.screens.inventory.CreativeModeInventoryScreen;
 import net.minecraft.network.chat.Component;
-import net.minecraft.network.chat.MutableComponent;
+import net.minecraft.world.entity.player.Abilities;
 import net.minecraft.world.entity.player.Player;
+import org.objectweb.asm.Opcodes;
 import org.spongepowered.asm.mixin.Final;
 import org.spongepowered.asm.mixin.Mixin;
-import org.spongepowered.asm.mixin.Overwrite;
 import org.spongepowered.asm.mixin.Shadow;
+import org.spongepowered.asm.mixin.Unique;
 import org.spongepowered.asm.mixin.injection.At;
+import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.Redirect;
+import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
 import java.util.List;
 
@@ -34,11 +33,11 @@ import java.util.List;
  * TrashSlot's per-screen setup and two creative-mode fixes; pack defaults themselves live in
  * {@link TrashSlotCompat}.
  *
- * <p>{@code onScreenInit} is overwritten (same logic as TrashSlot 12.1.0) with three changes:
- * settings come from {@link TrashSlotCompat#settingsFor} instead of {@code TrashSlotSaveState.getSettings};
- * the creative inventory screen and the survival inventory of a creative player get a slot
- * (TrashSlot skipped both); and the spectator / server-missing early returns also clear the previous
- * screen's state instead of leaving it active.
+ * <p>{@code onScreenInit} keeps TrashSlot's own body with four targeted changes (no overwrite):
+ * settings come from {@link TrashSlotCompat#settingsFor} instead of {@code TrashSlotSaveState.getSettings}
+ * (never {@code NONE}, so the slot component is always built); the creative inventory screen and the survival
+ * inventory of a creative player get a slot (TrashSlot skipped both); and the spectator and server-missing early
+ * returns also clear the previous screen's state instead of leaving it active.
  *
  * <p>In the creative screen the trash slot uses {@link TrashSlotCompat#CREATIVE} (clears the
  * client-side cursor), and the "delete hovered slot" key branch is kept off: it sends the picker
@@ -53,51 +52,51 @@ public abstract class TrashSlotGuiHandlerMixin {
     @Shadow @Final private static TrashSlotSlot trashSlot;
     @Shadow private static TrashSlotComponent trashSlotComponent;
     @Shadow private static ContainerSettings currentContainerSettings;
-    @Shadow private static boolean sentMissingMessage;
 
-    @Shadow
-    private static void showHint(String id, MutableComponent message, int timeToDisplay) {}
+    @Unique
+    private static void creativecompat$clearState() {
+        currentContainerSettings = ContainerSettings.NONE;
+        trashSlotComponent = null;
+    }
 
-    @Shadow
-    private static void showHint(String id, MutableComponent message, int timeToDisplay, boolean force) {}
+    /** Settings from the pack's defaults per screen and per backpack tier. */
+    @Redirect(method = "onScreenInit", at = @At(value = "INVOKE",
+            target = "Lnet/blay09/mods/trashslot/TrashSlotSaveState;getSettings(Lnet/minecraft/client/gui/screens/inventory/AbstractContainerScreen;Lnet/blay09/mods/trashslot/api/IGuiContainerLayout;)Lnet/blay09/mods/trashslot/client/ContainerSettings;"))
+    private static ContainerSettings creativecompat$settings(AbstractContainerScreen<?> screen, IGuiContainerLayout layout) {
+        return TrashSlotCompat.settingsFor(screen, layout);
+    }
 
     /**
-     * @author SaintAlfonzo
-     * @reason pack defaults per screen, per-tier backpacks, trash slot in creative
+     * The creative inventory screen check: its only use is {@code instanceof CreativeModeInventoryScreen}, so no screen
+     * here lets the creative screen go on like any container screen.
      */
-    @Overwrite
-    private static void onScreenInit(ScreenInitEvent.Post event) {
-        Screen eventScreen = event.getScreen();
-        if (eventScreen.getClass().getName().startsWith("com.replaymod")) {
-            return;
-        }
+    @Redirect(method = "onScreenInit", at = @At(value = "INVOKE", ordinal = 1,
+            target = "Lnet/blay09/mods/balm/api/event/client/screen/ScreenInitEvent$Post;getScreen()Lnet/minecraft/client/gui/screens/Screen;"))
+    private static Screen creativecompat$noCreativeSkip(ScreenInitEvent.Post event) {
+        return null;
+    }
 
-        Player player = Minecraft.getInstance().player;
-        if ((player != null && player.isSpectator()) || !(eventScreen instanceof AbstractContainerScreen<?> screen)) {
-            currentContainerSettings = ContainerSettings.NONE;
-            trashSlotComponent = null;
-            return;
-        }
+    /** The survival inventory of a creative player: read as not creative, so it gets a slot. */
+    @Redirect(method = "onScreenInit", at = @At(value = "FIELD", opcode = Opcodes.GETFIELD,
+            target = "Lnet/minecraft/world/entity/player/Abilities;f_35937_:Z"))
+    private static boolean creativecompat$noCreativeInventorySkip(Abilities abilities) {
+        return false;
+    }
 
-        if (!TrashSlot.isServerSideInstalled && !sentMissingMessage) {
-            TrashSlot.logger.info("TrashSlot is not installed on the server and thus will be unavailable.");
-            MutableComponent message = Component.translatable("trashslot.serverNotInstalled");
-            message.withStyle(ChatFormatting.RED);
-            showHint("serverNotInstalled", message, 5000, true);
-            sentMissingMessage = true;
-            currentContainerSettings = ContainerSettings.NONE;
-            trashSlotComponent = null;
-            return;
-        }
+    /** A spectator's screen: also drop the previous screen's slot. */
+    @Redirect(method = "onScreenInit", at = @At(value = "INVOKE",
+            target = "Lnet/minecraft/world/entity/player/Player;m_5833_()Z"))
+    private static boolean creativecompat$spectatorClears(Player player) {
+        boolean spectator = player.isSpectator();
+        if (spectator) creativecompat$clearState();
+        return spectator;
+    }
 
-        IGuiContainerLayout layout = LayoutManager.getLayout(screen);
-        currentContainerSettings = TrashSlotCompat.settingsFor(screen, layout);
-        trashSlotComponent = new TrashSlotComponent(screen, layout, currentContainerSettings, trashSlot);
-        if (!currentContainerSettings.isEnabled() && !layout.isEnabledByDefault()) {
-            MutableComponent hint = Component.translatable("trashslot.hint.toggleOn",
-                    ModKeyMappings.keyBindToggleSlot.getTranslatedKeyMessage());
-            showHint("toggleOn", hint, 5000);
-        }
+    /** TrashSlot missing on the server (first screen, the one with the message): also drop the previous slot. */
+    @Inject(method = "onScreenInit", at = @At(value = "FIELD", opcode = Opcodes.PUTSTATIC,
+            target = "Lnet/blay09/mods/trashslot/client/TrashSlotGuiHandler;sentMissingMessage:Z"))
+    private static void creativecompat$serverMissingClears(ScreenInitEvent.Post event, CallbackInfo ci) {
+        creativecompat$clearState();
     }
 
     @Redirect(

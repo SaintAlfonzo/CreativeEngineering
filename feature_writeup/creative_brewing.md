@@ -71,7 +71,8 @@ moves `backportedVinery-*`, `backportedBrewin-*` out of `mods/` (to `development
 
 `mods.toml`: `creativeengineering` (KubeJS, helpers, startup loader), `creativecalendar` (the `[time]` master the Vinery
 member's `PackTime` calls, since 2026-11-01, [creative_calendar.md](creative_calendar.md)) and `creativedelight` (nests
-Farmer's Delight, Brewin's base; defines `global.CD`), all mandatory, all `ordering="AFTER"`. patcherMod's startup
+Farmer's Delight, Brewin's base; defines `global.CD`), all mandatory, all `ordering="AFTER"`; and MoreJS (`morejs`, mandatory since 2026-11-06,
+ordering NONE: `potions.js` adds every brewing mix through `MoreJSEvents.registerPotionBrewing`). patcherMod's startup
 loader runs jar packs in mod-list order, so the startup order is: patcherMod's pack, `startup_scripts/`, Calendar, CD,
 CB. Check
 `[jar-startup] startup script packs in order:` in `logs/kubejs/startup.log` (SQ-CBJ-02). Server and client script packs
@@ -131,7 +132,7 @@ Mixins use SRG names with `remap = false` (no refmap), as patcherMod's do, so a 
 package. `compileOnly project(':patcherMod')` is there for CEConfig and pack APIs, plus patcherMod's `libs/` (the target
 mods' jars); add `:creativeDelight` the first time a compartment needs CD Java.
 
-Since phase 2 (2026-11-01): `potion/` (CEPotions, CompoundEffects, CompoundEffectTooltip, CopperPoisoningHandler,
+Since phase 2 (2026-11-01): `potion/` (CommonPotions, CompoundEffects, CompoundEffectTooltip, CopperPoisoningHandler,
 EffectCategories, EffectRules, MagicResistanceEffect, PhantomBaneRules, PotionBucketDispenser), `fluidbrewing/`
 (DragonBreathBrewing, Lingerification, PotionMixDedup), `compat/jei/` (AutomatedPotionMixingCategory,
 LingerificationCategory, PotionPagesJEI, and `PotionMachinesJEI`, the `@JeiPlugin` that registers the first two, split
@@ -139,7 +140,7 @@ out of patcherMod's DragonBreathingJEI), `alcohol/IntoxicatingDrinkTooltip`, `tr
 mod id since 2026-11-04, plan_cb_publish.md M4; they were `creativeengineering:`, and the 30 KubeJS potions `kubejs:`).
 The 41 old -> new entries (1 effect, 38 potions, 3 buckets; Magic Resistance's effect and potion share one) are in
 `data/creativebrewing/swaps/creative_split.json`. Potion ids saved as NBT strings (bottles, tipped arrows, bucket
-contents, Create and IE potion fluids) are not remapped (decision D5): those made before read as Uncraftable Potion. `CreativeBrewing` registers CEPotions, the three FORGE-bus
+contents, Create and IE potion fluids) are not remapped (decision D5): those made before read as Uncraftable Potion. `CreativeBrewing` registers CommonPotions, the three FORGE-bus
 handlers and the three setup tasks that `CreativeEngineering` used to. 25 mixins in compartments: `minecraft` (4),
 `create` (6), `immersiveengineering` (8), `jeed` (2), `create_deep_dark` (2), `everythingcopper`, `farmersrespite`,
 `fruitsdelight` (1 each); 14 common, 11 client. Resources (all `creativebrewing`): 12 lang keys in `assets/creativebrewing/lang/en_us.json` (JEI page titles, the
@@ -330,8 +331,22 @@ be installed (it is). The pack's dedicated server (CreEngServer) needs the same 
 ## 6. Tests
 
 - **r1102b 2026-11-02** (scratch server; verdicts in `perf/runs/r1102b/` HANDOVER.md and the slice judged.md): PASS SQ-CBJ-04.
+- **r1106cba 2026-11-06** (chain on its own, server rows; [scratch_run_2026-11-06.md](testing/scratch_run_2026-11-06.md) 1): PASS SQ-CBA-01, -03 to -08, -10 to -14, -16, -17, -18; FAIL SQ-CBA-09 (TODO `creativedelight/framework #15`, `creativebrewing/publish #4`); SQ-CBA-02 and -15 FAIL on the client-class regex only (lines from Quark and CD scripts, none from CB). CQ-CBA-01 to -04 not run (owner, through ATLauncher; -04 blocked by `creativebrewing/publish #5`).
+- **r1106cbb 2026-11-06 midday** (round 2, server rows; [scratch_run_2026-11-06.md](testing/scratch_run_2026-11-06.md) 3): PASS SQ-CBB-01 to -09, -12 (seven after fixes made in the run: NCH remove guard across script packs, `global.tags._ents` loop const, Vintage fruit cauldron tags optional, CD seagull mixins need Spice of Life, structure gate false positives); BLOCKED SQ-CBB-10, -11 (Creative Worldgen names Terralith biomes, TODO `creativebrewing/publish #6`). Left for the owner: CQ-CBA-01 to -03 (CEPortTesting, `port_chain.sh bare`); CQ-CBA-04 waits for #6.
 
-Scratch server: SQ-CBJ-01 to -05 in [scratch_queue.md](testing/scratch_queue.md). In game (after install):
+Scratch server: SQ-CBJ-01 to -05 in [scratch_queue.md](testing/scratch_queue.md). Chain on its own (only its hard dependencies, from the CEPortTesting instance, built by
+`tools/scratch_query/port_chain.sh`): SQ-CBA-01 to -18 and CQ-CBA-01 to -04, queued 2026-11-06 (boot, mixins on a
+dedicated server, script packs, config defaults, potions and brewing mixes, Magic Resistance, bucket dispenser, member
+recipes, alcohol and Winemaker, `[members]` switches, missing donor folder, missing dependencies, then the full
+CEPortTesting set and the client checks). With and without the optional dependencies: SQ-CBO-01 to -05 (bare chain:
+guards, probe `/cbo` for Armor / Tool Effects leaks, effect rules with absent ids, config dials), SQ-CBO-10 to -18 (all
+24 optional mods: every guarded potion, mix, remap, removal, swap, drink, trade, Lingerification, dragon-breath brews,
+bottling, JEED providers, member switches), SQ-CBO-20 to -43 (one optional mod each), SQ-CBO-50 to -53 (pairs whose rows
+name two mods), CQ-CBO-01 to -04 (client: tooltips, HUD icons, JEI pages, JEED, AppleSkin, Supplementaries models,
+Copper Poisoning), queued 2026-11-06 evening. **Scratch r1106cbo 2026-11-06 ([scratch_run_2026-11-06.md](testing/scratch_run_2026-11-06.md)
+4): SQ-CBO server rows PASS 34, FAIL 8; the guards hold for all 24 optional mods; FAILs: 4 unguarded echo tool rows in
+`tool_effects.js` (TODO `creativebrewing/publish #12`, fails -01, -04, -10, -17, -18), no `[absent mods]` line
+(`#11`, -03, -16), Common compost WARN with Immersive Weathering alone (`#16`, -34). CQ-CBO-01 to -04 not run.** In game (after install):
 
 - [ ] **CBR-01 Mod list:** "Creative Brewing" is listed once (the bundle); Vinery's `foundation` id shows "Foundation
   (Creative Brewing)", Vinery "Vinery (Creative Brewing)", Brewin' "Brewin' & Chewin' (Creative Brewing)"; JEI's mod line
@@ -356,7 +371,7 @@ Scratch server: SQ-CBJ-01 to -05 in [scratch_queue.md](testing/scratch_queue.md)
 Paths: `PM` = `development/creativeCommon/src/main/java/com/SaintAlfonzo/creativecommon/`, `PMR` = patcherMod resources,
 `KJ` = `kubejs/`. Line numbers as of 2026-10-31.
 
-- **PM potion/** (whole): CEPotions, CompoundEffects, CompoundEffectTooltip, CopperPoisoningHandler (CB, Q3), EffectCategories,
+- **PM potion/** (whole): CommonPotions, CompoundEffects, CompoundEffectTooltip, CopperPoisoningHandler (CB, Q3), EffectCategories,
   EffectRules, MagicResistanceEffect, PhantomBaneRules, PotionBucketDispenser.
 - **PM fluidbrewing/** (whole): DragonBreathBrewing, Lingerification, PotionMixDedup.
 - **PM compat/**: AutomatedPotionMixingCategory, LingerificationCategory, DragonBreathingJEI, PotionFluidTooltip,
@@ -395,6 +410,15 @@ Paths: `PM` = `development/creativeCommon/src/main/java/com/SaintAlfonzo/creativ
   `brewinandchewin-common.toml` / `-client.toml`, `jeed-client.toml`, `potionbundles-client.toml`.
 
 ## 8. History
+
+- 2026-11-06 (plan_cb_polish.md, all sections built, not installed): the potions, Magic Resistance, the effect rules,
+  categories, compound lines, Phantom Bane rules, their ten mixins, `[effects]` and `[magic_resistance]` and the armor
+  and tool effect frameworks moved to Creative Common (ids `creativecommon:`, remap list moved with them); the gear rows,
+  copper poisoning (`[copper_poisoning]`) and the echo armor mixins to Creative Equipment; `effect_swaps.js` to Creative
+  Delight. CB keeps alcohol, potion machines, buckets, bottling, tipped arrows, the brew mixes (`potions.js`), Winemaker
+  trades and the members. Startup folder renamed `kubejs_startup/creativebrewing/`. Optional dependencies
+  `create_deep_dark`, `everythingcopper`, `farmersrespite`, `dragonloot` dropped from `mods.toml`. Tests SQ-CBP. Scratch r1106cbp 2026-11-06 (testing/scratch_run_2026-11-06.md 5):
+  PASS except SQ-CBP-03 (horror lasagna, TODO `creativebrewing/publish #14`) and SQ-CBP-08 (Equipment alone, `#22`, `#23`); CQ-CBP-01 open.
 
 - 2026-11-04 (plan_cb_publish.md M2 to M5): guards on every pack-native script (guard check 172 -> 0), every id under
   `creativebrewing:` with 41 swap entries, bucket and effect art, coaster models and Magic Resistance's lang into the
@@ -514,7 +538,7 @@ verification, and what a public install looks like. Checked against the jar buil
 - Safety: the two serverbound packets (Brewin' JEI keg transfer, Foundation recipe book) run on the main thread and check
   the open menu; no network calls; the only file write is the dev texture dump; reflection limited to compat fields.
 - Repo: no credentials in tracked files. Outside CB: CD's `moved_code_backup/.../libs/` tracks a Farmer's Delight jar
-  (MIT, no notice beside it); delete the backup or add the notice.
+  (MIT, no notice beside it); delete the backup or add the notice. **Deleted 2026-11-06 (owner): the jar only; the rest of the backup stays.**
 
 ### 9.5 Owner decisions 2026-11-05 on the 9.4 review
 
@@ -527,6 +551,10 @@ verification, and what a public install looks like. Checked against the jar buil
 | R6 source | The whole project is one public repo, not split per submod: https://github.com/SaintAlfonzo/CreativeEngineering . Tag the release there and link the tag from the upload |
 | Textures | Vanilla textures and edits of them are wanted for visual consistency, and are not treated as a licence issue (supersedes 9.3's "optional cleanup"). `licence/cb #1` and `#2` are closed as accepted; no vanilla-art replacement work anywhere |
 | Manifest | Done 2026-11-05, built: CB requires CD `[1.1.0,)`; CB and CD descriptions rewritten; CB has `issueTrackerURL` and `displayURL` (the repo); stale header comments fixed |
+
+**2026-11-06 (plan_cb_publish.md 15):** Vinery's donor message and both members' pack descriptions use the Creative
+Brewing names. Donor jar list for the page: `python3 tools/donor_jars_md.py --mods creativebrewing,creativedelight`
+(also in the README's rebuild steps).
 
 Dependencies to list on the project page, beyond the four Creative jars (pack versions in `mods/`): KubeJS
 `kubejs-forge-1902.6.2-build.73` (Common requires `[1902.6.0,)`), Rhino `rhino-forge-1902.2.3-build.284` and Architectury

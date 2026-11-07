@@ -88,7 +88,7 @@ spire, the fish ponds and the swamp fisherman house, Philip's padded ruins, and 
    stone of its own template (stacked on another template's stone) would be dropped (trim is per template). If that
    leaves bare stone patches, drop the idea or add a `template_trim/keep` exception (needs a new block tag and a check
    in `TemplateTrim.kind`).
-4. **Philip's level-three ruins:** soft + trim, after placing two variants (`/ceplace structures philipsruins:level_three_ruins`
+4. **Philip's level-three ruins:** soft + trim, after placing two variants (`/cdevplace structures philipsruins:level_three_ruins`
    on a flat world shows all 11). Ground matching already reskins their grass pads (3.8); trim removes pad columns
    instead. It is a `meta/large_ruins` anchor: meta parts beard and trim as their own structure
    (`TerrainAdaptation.rigid` 397-401, `TemplateTrim.apply` 152), so the cluster follows.
@@ -96,7 +96,7 @@ spire, the fish ponds and the swamp fisherman house, Philip's padded ruins, and 
    terrain and beard look differ.
 6. **Villages:** not as a batch. If wanted, one T&T family at a time (start with the most unbuilt: `village_forest` 63%,
    `village_beach` 59%, `village_mushroom_fields` 36%), soft + trim on the whole structure (tags apply per structure,
-   so every house in it). Compare a village before/after with `/ceplace structures` on a flat world and once on hills.
+   so every house in it). Compare a village before/after with `/cdevplace structures` on a flat world and once on hills.
 7. Update the scan's "Choosing tags" note and structure_tuning.md 3.15 "Tagged now" (count and list) and the batches
    paragraph ("batch 4 is open").
 

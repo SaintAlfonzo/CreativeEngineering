@@ -11,7 +11,7 @@
 	onPlayerDataLoad = true
 	#Rewrite a container's slots when a player opens it.
 	onContainerOpen = true
-	#Allow /ceswap items (operators): rewrites online players and every loaded chunk and entity now.
+	#Allow /ccswap items (operators): rewrites online players and every loaded chunk and entity now.
 	onCommand = true
 	#Rewrite each chunk and each player once per merge list version: a chunk or player saved with an older (or no)
 	#list is rewritten when it next loads and then stamped. Dropped items and container entities are rewritten as

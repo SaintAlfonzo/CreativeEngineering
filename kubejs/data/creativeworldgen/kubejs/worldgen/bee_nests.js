@@ -50,7 +50,7 @@
 	}
 
 	function readJson(path) {
-		return JSON.parse(String(JsonIO.readString(path)))
+		return JSON.parse(String(global.genText(path)))
 	}
 
 	function readConfig() {

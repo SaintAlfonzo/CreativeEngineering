@@ -1,3 +1,4 @@
+// requires: creativedelight
 // Delight dish, crop and fluid names and the lunchbox tier names. Moved from the pack's client_scripts/namechanges.js
 // 2026-11-01 (creative_split.md 7.6, wave 4), rows unchanged; no pack or CD script names these keys, so running after
 // the pack's lang pass gives the same names.

@@ -16,7 +16,7 @@ import java.util.concurrent.Future;
 
 /**
  * The only class of ours that touches Async Locator's own classes (call {@link #available()} first; nothing here
- * loads when the mod is missing). Used by /celocate (worldgen/LocateCommand): batch searches go through AL's public
+ * loads when the mod is missing). Used by /cwglocate (worldgen/LocateCommand): batch searches go through AL's public
  * locate call, and census regions run on AL's thread pool, so both follow its asyncLocatorThreads setting.
  */
 public final class AsyncLocatorBridge {

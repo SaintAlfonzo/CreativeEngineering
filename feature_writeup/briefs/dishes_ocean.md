@@ -123,7 +123,7 @@ Add Ocean's Delight 1.0.4's Kelp Encrusted Cod as a pack item (decided 2026-10-2
    notice beside it (as `glowing_calamari_art_notice.txt`).
 4. Recipe: CD `oceansdelight/recipes.js`: `R.fdCooking([i.cod_slice, i.eggs, i.kelp], i.kelp_encrusted_cod, e,
    'kelp_encrusted_cod', 0.35, 200)` (no container).
-5. Follow-ups: `/dumpall`, then `/cegen` (food types, cans, Comfort / Nourishment rule, compost); tooltip per
+5. Follow-ups: `/dumpall`, then `/cdevgen` (food types, cans, Comfort / Nourishment rule, compost); tooltip per
    [tooltips.md](../tooltips.md); food tuning sets the final value.
 6. CD rebuild and install (`:creativeDelight:build`, `installToMods`) with the game closed; restart. Changelog bullet.
 

@@ -13,7 +13,7 @@ the feature-specific uses. Deploy tooling is in [deploy.md](deploy.md), the perf
 | Tag helper `global.tags` (add/remove, wildcard `addMatching`, families, mineable, storage blocks, overlaps, mirror) | in use |
 | `CEConfig` (patcherMod): one Forge common config, 23 sections, live-editable in Create's config screen; `NCH.cfg` reads recipe values from it | in use ([gear_tuning.md](gear_tuning.md) for `NCH.cfg`) |
 | 24 `/dump*` commands writing `kubejs/exported/`, and `/dumpall` | in use |
-| `/cegen`: runs `tools/generators.json` (50 Python generators and reports, 2026-10-31) in game, optionally at startup | in use; startup run off |
+| `/cdevgen`: runs `tools/generators.json` (50 Python generators and reports, 2026-10-31) in game, optionally at startup | in use; startup run off |
 | `tools/pack_paths.py`: shared instance paths, item_dict parser, lenient JSON loader, vanilla / Forge jar locator for the Python tools | in use since 2026-10-27 |
 | Headless tests: 9 `tools/test_*.sh` suites (Java on patcherMod classes, the pack's Rhino fork, node sims, Python), plus GameTest projects | in use; machine-specific paths (F7) |
 | Root Gradle build: one build for the 5 in-tree mods, `ce.forge-mod` convention plugin, `installToMods` | in use |
@@ -145,7 +145,7 @@ folders through patcherMod because KubeJS can't).
 [java_guard.js](../kubejs/server_scripts/_lib/java_guard.js) `guardThrowable(fn)` catches `java.lang.Error`s that
 Rhino's `try/catch` can't (a `NoClassDefFoundError` used to kill `/dumprecipes` silently).
 
-### 2.6 Generators and `/cegen`
+### 2.6 Generators and `/cdevgen`
 
 [tools/generators.json](../tools/generators.json) lists 50 Python generators and reports (45 on 2026-10-27; silk touch blocks, UA coral growths, item physics audit and crop season audit added since) in run order, each with `groups`
 (`core`, `worldgen`, `loot`, `client`, `pack`, `reports`, `names`, `food`, `blockrunner`, `jei`, `stacks`, `slow`), the `dumps` it
@@ -154,11 +154,11 @@ instance root, hashes the outputs before and after, and reports changes.
 
 | Command | |
 |---|---|
-| `/cegen` | list generators, groups, last run |
-| `/cegen run [target] [dumps]` | `all`, a group or an id (default `[debug.generators] target` = `core`); `dumps` first runs the `/dump*` commands those scripts read |
-| `/cegen status` / `cancel` | progress or last results; kill the running script and skip the rest |
+| `/cdevgen` | list generators, groups, last run |
+| `/cdevgen run [target] [dumps]` | `all`, a group or an id (default `[debug.generators] target` = `core`); `dumps` first runs the `/dump*` commands those scripts read |
+| `/cdevgen status` / `cancel` | progress or last results; kill the running script and skip the rest |
 
-Output goes to chat (status lines and highlighted lines), `latest.log` (`[cegen:id]`) and `logs/cegen/<id>.log`.
+Output goes to chat (status lines and highlighted lines), `latest.log` (`[cdevgen:id]`) and `logs/cdevgen/<id>.log`.
 `[debug.generators] runAtStartup = true` runs the target in the background from common setup and waits for it at
 load complete (up to `startupWaitSeconds`), so the first world load reads fresh files; results go to the first player
 to join. Python and timeout are configurable (`python`, `timeoutSeconds`).
@@ -331,7 +331,7 @@ Everything here is the pack's own; nothing replaces a mod. The conventions and t
 ### Rejected options
 
 - **Per-feature JSON configs (`global.config`):** replaced by CEConfig for the in-game editor (F3).
-- **Running generators only by hand:** `/cegen` keeps the dumps and generators in step and shows what changed.
+- **Running generators only by hand:** `/cdevgen` keeps the dumps and generators in step and shows what changed.
 
 ## 5. File map
 
@@ -367,12 +367,12 @@ Everything here is the pack's own; nothing replaces a mod. The conventions and t
 - [ ] **TL-07 `/dumpall`:** run it → chat ends with `[dumpall] all 22 dumps done`; `kubejs/exported/` timestamps
   updated; `server_mods/` refreshed.
 - [ ] **TL-08 A dump failing:** (if one fails) `/dumpall` reports it and carries on with the rest.
-- [ ] **TL-09 `/cegen` list:** `/cegen` → the 50 generators, the groups (`stacks` among them) and the last run.
-- [ ] **TL-10 `/cegen run core`:** runs the core group in the background, one chat line per script, changed outputs
-  named; `logs/cegen/structure_config.log` exists.
-- [ ] **TL-11 `/cegen run loot dumps`:** runs `/dumploot` and `/dumptags item` first, then the loot generators.
-- [ ] **TL-12 `/cegen cancel`:** start `/cegen run all`, cancel → the running script is killed, the rest skipped,
-  `/cegen status` says so.
+- [ ] **TL-09 `/cdevgen` list:** `/cdevgen` → the 50 generators, the groups (`stacks` among them) and the last run.
+- [ ] **TL-10 `/cdevgen run core`:** runs the core group in the background, one chat line per script, changed outputs
+  named; `logs/cdevgen/structure_config.log` exists.
+- [ ] **TL-11 `/cdevgen run loot dumps`:** runs `/dumploot` and `/dumptags item` first, then the loot generators.
+- [ ] **TL-12 `/cdevgen cancel`:** start `/cdevgen run all`, cancel → the running script is killed, the rest skipped,
+  `/cdevgen status` says so.
 - [ ] **TL-13 Startup run:** `[debug.generators] runAtStartup = true`, restart → the log shows the core generators
   running during load; the first player to join gets the results. Turn it off.
 - [ ] **TL-14 `tools/dump_server_mods.py`:** copies only `both` / `server` jars into `server_mods/`; with a jar missing
@@ -390,7 +390,7 @@ Everything here is the pack's own; nothing replaces a mod. The conventions and t
 - 2026-09-27 (initial git commit): root Gradle build and manifest tooling.
 - 2026-09-30: item-loss repro harness run ([plan_1.0.3.md](plan_1.0.3.md) 4.7).
 - 2026-09-27 to 10-02 (first commits): `/dumpall` and `generators.json` (09-27), `java_test_cp.sh` (09-28), the
-  `/cegen` command (10-02). The Rhino, node and GameTest harnesses and more dumps came with their features (each
+  `/cdevgen` command (10-02). The Rhino, node and GameTest harnesses and more dumps came with their features (each
   dated in its feature writeup).
 - 2026-10-18: this writeup; findings F1 to F10; tests TL-01 to TL-16. No code changed.
 - 2026-10-19: F6 fixed (test_crop_growth.sh, neoCraftHelper.js line 1, NCH.cfg example).
@@ -398,7 +398,7 @@ Everything here is the pack's own; nothing replaces a mod. The conventions and t
   (SQ-CO-01: Canned Coffee Berries still took Respite's berries).
 - 2026-10-27 (pack_hygiene 36-38, 40): shared Java sources (2.8) replace the per-jar copies of `MemoryPackResources`,
   `UpstreamPacks`, the `UpstreamJars` reading code, the three `NEEDS_MOD` mixin plugins, the two `ItemHiddenMixin`s
-  and the built-in `packs/` registration; patcherMod's two potion registrars became one table (`potion/CEPotions`,
+  and the built-in `packs/` registration; patcherMod's two potion registrars became one table (`potion/CommonPotions`,
   same ids); `/dumpservermods` (`devtools/ServerModsDump`) removed, `tools/dump_server_mods.py` is the only route
   (TL-14 now tests it). No id or behaviour change.
 - 2026-10-27 (pack_hygiene 44-49): `tools/pack_paths.py` (2.6) replaces the per-tool item_dict regexes

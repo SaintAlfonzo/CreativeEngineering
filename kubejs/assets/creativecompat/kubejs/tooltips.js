@@ -1,3 +1,4 @@
+// requires: creativecompat
 // Creative Compat: item tooltips for the mod tweaks (misc mods, Quark, Supplementaries, Framed and copycat blocks,
 // flower pots); moved from kubejs/client_scripts/tooltips.js on 2026-11-01, rows unchanged. The helpers and the colour
 // palette stay in the pack's tooltips.js and are read here through global.tooltips at event time (each script pack has

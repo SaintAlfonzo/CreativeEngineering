@@ -1,3 +1,4 @@
+// requires: creativedelight
 // requires: jei
 // requires: largemeals
 // Large Meals JEI information pages: the sheep knife drop is a loot modifier, not a recipe (large_meals.md 4 step 18).

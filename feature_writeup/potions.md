@@ -77,9 +77,9 @@ KubeJS's potion registry runs before any mod's mob effects exist, so potions for
 
 | Potion | Effect | Reagent | Class |
 |---|---|---|---|
-| Long Reach | `better_beacons:long_reach` | wrappist shard (Geode+) | `CEPotions` |
-| Phantom Bane | `better_beacons:phantom_bane` | celestite shard (Geode+) | `CEPotions` (must be Better Beacons' real effect object: its phantom-spawn check compares by identity) |
-| Magic Resistance | `creativeengineering:magic_resistance` | amethyst shard (**placeholder**) | `CEPotions` ([armor_effects.md](armor_effects.md) 2.5) |
+| Long Reach | `better_beacons:long_reach` | wrappist shard (Geode+) | `CommonPotions` |
+| Phantom Bane | `better_beacons:phantom_bane` | celestite shard (Geode+) | `CommonPotions` (must be Better Beacons' real effect object: its phantom-spawn check compares by identity) |
+| Magic Resistance | `creativeengineering:magic_resistance` | amethyst shard (**placeholder**) | `CommonPotions` ([armor_effects.md](armor_effects.md) 2.5) |
 
 ### 2.3 Other mods' potions made to work everywhere
 
@@ -163,6 +163,10 @@ line 66). Potion buckets and tipped arrows on these machines: [potion_buckets.md
 
 ## 4. Limits and decisions
 
+- **Without MoreJS** (a minimal instance): `potions.js` part 2 skips the brewing mixes with a warning instead of a
+  `MoreJSEvents is not defined` startup error (2026-11-06); the potions themselves still register. Without Create,
+  part 3 (the Automatic Brewing rebuild) is skipped the same way.
+
 ### Findings (2026-10-18)
 
 - **F1. Batch sizes differ between machines.** DECIDED 2026-10-29 (owner): keep the IE Mixer's 1500 mB batch (TODO `potions/potions #2`; the brief's matching build drops Lingerification to 1000). Create 1000 mB; IE Mixer 1500 mB, but 1000 mB for the step
@@ -214,7 +218,7 @@ line 66). Potion buckets and tipped arrows on these machines: [potion_buckets.md
 - [client_scripts/fluid_jei.js](../kubejs/client_scripts/fluid_jei.js): fluids in JEI's list.
 - [server_scripts/tags/fluidtags.js](../kubejs/data/creativeengineering/kubejs/tags/fluidtags.js): `#forge:fluid/potion`, `#forge:fluid/dragon_breath`.
 - patcherMod [fluidbrewing/](../development/creativeCommon/src/main/java/com/SaintAlfonzo/creativecommon/fluidbrewing/): `DragonBreathBrewing`, `Lingerification`, `PotionMixDedup`; run from common setup (`CreativeEngineering.java` lines 287-288).
-- patcherMod [potion/](../development/creativeCommon/src/main/java/com/SaintAlfonzo/creativecommon/potion/): `CEPotions` (one `DeferredRegister<Potion>` over a row table: effect, optional required mod, base / long / strong trio; Better Beacons rows skipped without the mod; registered in `CreativeEngineering.java`).
+- patcherMod [potion/](../development/creativeCommon/src/main/java/com/SaintAlfonzo/creativecommon/potion/): `CommonPotions` (one `DeferredRegister<Potion>` over a row table: effect, optional required mod, base / long / strong trio; Better Beacons rows skipped without the mod; registered in `CreativeEngineering.java`).
 - Mixins: [PotionRecipeGeneratorsMixin](../development/creativeCommon/src/main/java/com/SaintAlfonzo/creativecommon/mixin/PotionRecipeGeneratorsMixin.java), [PotionHelperMixin](../development/creativeCommon/src/main/java/com/SaintAlfonzo/creativecommon/mixin/PotionHelperMixin.java), [PotionMixingRecipesMixin](../development/creativeCommon/src/main/java/com/SaintAlfonzo/creativecommon/mixin/PotionMixingRecipesMixin.java), [MechanicalMixerBlockEntityMixin](../development/creativeCommon/src/main/java/com/SaintAlfonzo/creativecommon/mixin/MechanicalMixerBlockEntityMixin.java), [FluidTagInputMixin](../development/creativeCommon/src/main/java/com/SaintAlfonzo/creativecommon/mixin/FluidTagInputMixin.java), [PotionFluidHandlerMixin](../development/creativeCommon/src/main/java/com/SaintAlfonzo/creativecommon/mixin/PotionFluidHandlerMixin.java), [SpoutCategoryMixin](../development/creativeCommon/src/main/java/com/SaintAlfonzo/creativecommon/mixin/SpoutCategoryMixin.java), [ItemDrainCategoryMixin](../development/creativeCommon/src/main/java/com/SaintAlfonzo/creativecommon/mixin/ItemDrainCategoryMixin.java), [JEIHelperMixin](../development/creativeCommon/src/main/java/com/SaintAlfonzo/creativecommon/mixin/JEIHelperMixin.java), and the IE category tooltip mixins (Mixer, BottlingMachine, Refinery, Squeezer, Fermenter `...RecipeCategoryMixin`).
 - JEI: [compat/DragonBreathingJEI.java](../development/creativeEngineering/src/main/java/com/SaintAlfonzo/creativeengineering/compat/DragonBreathingJEI.java) (registers both pages), [AutomatedPotionMixingCategory](../development/creativeCommon/src/main/java/com/SaintAlfonzo/creativecommon/compat/AutomatedPotionMixingCategory.java), [LingerificationCategory](../development/creativeCommon/src/main/java/com/SaintAlfonzo/creativecommon/compat/LingerificationCategory.java), [PotionFluidTooltip](../development/creativeCommon/src/main/java/com/SaintAlfonzo/creativecommon/compat/PotionFluidTooltip.java); lang keys in patcherMod `assets/creativeengineering/lang/en_us.json`.
 - Not here: the dragon-breathing fan type (backlog row 6), potion buckets and machine-tipped arrows ([potion_buckets.md](potion_buckets.md)), effects on gear ([armor_effects.md](armor_effects.md)).

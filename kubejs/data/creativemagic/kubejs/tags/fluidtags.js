@@ -1,3 +1,4 @@
+// requires: creativemagic
 // Creative Magic; moved from kubejs/server_scripts/tags/fluidtags.js on 2026-11-04 (creative_split.md 7.6, wave 6), rows
 // unchanged: the experience fluid tags and the XP fluid merge.
 ServerEvents.tags('fluid', e => {

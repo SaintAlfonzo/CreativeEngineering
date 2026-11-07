@@ -1,3 +1,4 @@
+// requires: creativedelight
 // requires: corn_delight
 // Corn Delight recipe changes: kernels, raw tortilla and cornbread batter on the pack's cornmeal, the corn soup grid
 // route. Non-member file: recipe ids are creativedelight:<type>/<suffix> (global.CD.recipes). Moved from the pack's

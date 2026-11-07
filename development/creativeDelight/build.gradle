@@ -6,6 +6,7 @@
 //       kubejs/data/creativedelight/kubejs/    -> data/creativedelight/kubejs/    (server scripts)
 //       kubejs/assets/creativedelight/kubejs/  -> assets/creativedelight/kubejs/  (client scripts)
 //       kubejs/data/creativedelight/worldgen/  -> data/creativedelight/worldgen/  (wild crop features, 24)
+//         except the files of a wild_crops.json rule with "requires": packs/worldgen/<mod>/ (splitWorldgen, framework #13)
 //       kubejs/data/creativedelight/cup_conversion/ -> data/creativedelight/cup_conversion/ (Miner's cups, 27; empty since the cup foods went, dishes/meals #53)
 //       kubejs/data/creativedelight/loot_tables/ -> data/creativedelight/loot_tables/ (Oceanic fishing net tables, 5)
 //     Startup scripts live in this project (src/main/resources/kubejs_startup/creativedelight/), loaded from the
@@ -24,6 +25,8 @@ dependencies {
     // QoL compartments (creative_delight.md 8): CEConfig, ConfigRename, RemainderView and the JEI helpers are Creative Common's
     // (a hard dependency); the pot (QoL-1), kettle (QoL-1) and WTHIT (QoL-6) jars as in creativeCommon/libs.
     compileOnly project(':creativeCommon')
+    // interface APIs (JEI rows and pages, WTHIT lines, potion fluid tooltip) moved to Creative Compat 2026-11-07
+    compileOnly project(':creativeCompat')
     compileOnly 'local:FarmersDelight:1.19.2-1.2.4'
     compileOnly 'local:FarmersRespite:1.19-2.0'
     compileOnly 'local:wthit:1.19.2-forge-5.36.1'
@@ -81,7 +84,76 @@ tasks.named('check') { dependsOn arrPacks }
 tasks.named('jar') { dependsOn arrPacks }
 
 def scriptTrees = ['data/creativedelight/kubejs', 'assets/creativedelight/kubejs']
-def dataTrees = ['data/creativedelight/worldgen', 'data/creativedelight/cup_conversion', 'data/creativedelight/loot_tables']
+def genData = ['food/food_tuning.json', 'food/comfort_nourishment.json', 'food/food_families.json',
+               'food/placed_food_slices.json', 'food/placeable.json', 'food/food_types.json', 'food/can_types.json',
+               'food/can_servings.json']
+def genDataExclude = []
+def dataTrees = ['data/creativedelight/cup_conversion', 'data/creativedelight/loot_tables']
+
+// framework #13: the wild crop worldgen files, split by the mods they need. Forge 1.19.2 has no conditions for worldgen
+// registries, so one file naming an absent mod's block or placer fails the whole datapack. A wild_crops.json rule with
+// "requires" (other than creativedelight / minecraft) owns its creativedelight:wild/* placed features and the configured
+// features they name; those go to packs/worldgen/<requires>/ (a data pack CompartmentPacks loads only with that mod),
+// the rest to data/creativedelight/worldgen/. A file left in the plain tree that names another mod fails the build:
+// give its rule a "requires".
+def worldgenSrc = rootProject.file('kubejs/data/creativedelight/worldgen')
+def wildCropsJson = rootProject.file('kubejs/data/creativedelight/kubejs/_worldgen/wild_crops.json')
+def worldgenOut = layout.buildDirectory.dir('generated/cd_worldgen')
+def splitWorldgen = tasks.register('splitWorldgen') {
+    group = 'build'
+    description = 'Splits the wild crop worldgen files into the plain data tree and one pack per optional mod'
+    inputs.dir(worldgenSrc)
+    inputs.file(wildCropsJson)
+    outputs.dir(worldgenOut)
+    doLast {
+        def out = worldgenOut.get().asFile
+        project.delete(out)
+        def slurper = new groovy.json.JsonSlurper()
+        // namespaces that are always there; creativeengineering is only named as tags (an unknown tag is empty, not an error)
+        def always = ['minecraft', 'forge', 'creativedelight', 'creativeengineering'] as Set
+        def gate = [:]
+        def claim = { String rel, String mod, String rule ->
+            def had = gate[rel]
+            if (had != null && had != mod) throw new GradleException("worldgen/${rel} is needed by rules requiring ${had} and ${mod} (${rule})")
+            gate[rel] = mod
+        }
+        slurper.parse(wildCropsJson).crops.each { key, rule ->
+            def mod = rule.requires
+            if (!mod || mod in ['creativedelight', 'minecraft']) return
+            (rule.features ?: []).findAll { it.startsWith('creativedelight:wild/') }.each { id ->
+                def placed = "placed_feature/${id.substring('creativedelight:'.length())}.json"
+                def pf = new File(worldgenSrc, placed)
+                if (!pf.file) throw new GradleException("wild_crops.json ${key}: no worldgen/${placed}")
+                claim(placed, mod, key)
+                def feat = slurper.parse(pf).feature
+                if (feat instanceof String && feat.startsWith('creativedelight:')) {
+                    def conf = "configured_feature/${feat.substring('creativedelight:'.length())}.json"
+                    if (new File(worldgenSrc, conf).file) claim(conf, mod, key)
+                }
+            }
+        }
+        def unrouted = []
+        worldgenSrc.eachFileRecurse(groovy.io.FileType.FILES) { f ->
+            if (!f.name.endsWith('.json')) return
+            def rel = worldgenSrc.toPath().relativize(f.toPath()).toString().replace('\\', '/')
+            def mod = gate[rel]
+            if (mod == null) {
+                def ns = (f.text =~ /"#?([a-z0-9_.-]+):[a-z0-9_\/.-]+"/).collect { it[1] }.findAll { !(it in always) }.unique()
+                if (ns) unrouted << "${rel}: ${ns.join(', ')}"
+            }
+            def dest = new File(out, (mod == null ? '' : "packs/worldgen/${mod}/") + "data/creativedelight/worldgen/${rel}")
+            dest.parentFile.mkdirs()
+            dest.bytes = f.bytes
+        }
+        if (unrouted) throw new GradleException("worldgen files name another mod but no wild_crops.json rule with \"requires\" owns them:\n  " + unrouted.join('\n  '))
+        gate.values().toSet().each { mod ->
+            new File(out, "packs/worldgen/${mod}/pack.mcmeta").text = groovy.json.JsonOutput.prettyPrint(groovy.json.JsonOutput.toJson([pack: [
+                    description: "Creative Delight: wild crop worldgen that needs ${mod} (added only with it)".toString(),
+                    pack_format: 9, 'forge:resource_pack_format': 9, 'forge:data_pack_format': 10]])) + '\n'
+        }
+        logger.lifecycle("splitWorldgen: ${gate.size()} files gated, packs " + gate.values().toSet().sort().join(', '))
+    }
+}
 def testSuite = rootProject.file('tools/creative_delight_test/suite')
 def withTestSuite = project.hasProperty('cd_test_suite')
 
@@ -106,8 +178,17 @@ def writeMembers = tasks.register('writeMembersList') {
 }
 
 tasks.named('processResources', ProcessResources).configure {
+    // Generated data the jar's scripts and Java read (instance kubejs/generation_scripts/ first, this copy second;
+    // Creative Common WorldgenFiles / global.genText).
+    from(rootProject.file('kubejs/generation_scripts')) {
+        into 'generation_scripts'
+        include genData
+        exclude genDataExclude
+    }
     dependsOn writeMembers
     from(membersFile)
+    dependsOn splitWorldgen
+    from(worldgenOut)
     (scriptTrees + dataTrees).each { tree ->
         from(rootProject.file("kubejs/${tree}")) {
             into tree
@@ -126,6 +207,9 @@ tasks.named('processResources', ProcessResources).configure {
 tasks.named('jar', Jar).configure {
     doLast {
         def entries = new java.util.zip.ZipFile(archiveFile.get().asFile).withCloseable { z -> z.entries().collect { it.name } }
+        genData.findAll { !it.contains('*') }.each { f ->
+            if (!entries.contains('generation_scripts/' + f)) throw new GradleException("creativedelight jar has no generation_scripts/${f}")
+        }
         ['kubejs_startup/creativedelight/', 'data/creativedelight/kubejs/', 'assets/creativedelight/kubejs/'].each { dir ->
             if (!entries.any { it.startsWith(dir) && it.endsWith('.js') }) {
                 throw new GradleException("creativedelight jar has no scripts under ${dir}")

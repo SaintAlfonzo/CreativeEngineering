@@ -1,3 +1,4 @@
+// requires: creativedelight
 // Soil yield: extra produce from a ripe crop grown on better soil (feature_writeup/crop_yields.md, TODO farming/crops #23).
 // Each switched-on crop gets one pool per soil, appended to its harvest table: rolls = binomial sized to bonus x the
 // crop's average produce (Rich +33%, Fertile Soil +66% by default), each roll

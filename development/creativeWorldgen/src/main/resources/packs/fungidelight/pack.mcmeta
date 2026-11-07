@@ -1,0 +1,8 @@
+{
+  "pack": {
+    "description": "Creative Worldgen: morel and inky cap mushrooms (added only with Fungi Delight)",
+    "pack_format": 10,
+    "forge:resource_pack_format": 9,
+    "forge:data_pack_format": 10
+  }
+}

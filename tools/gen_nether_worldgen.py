@@ -38,7 +38,8 @@ RULES = WORLDGEN / 'nether_worldgen_rules.json'
 MANIFEST = WORLDGEN / 'nether_worldgen_manifest.json'
 DATA = INSTANCE / 'kubejs/data'
 NOISE_SETTINGS = ('overworld', 'large_biomes')
-MODIFIER_DIR = 'creativeengineering/forge/biome_modifier/nether_worldgen'
+# Creative Worldgen's jar (moved from kubejs/data on 2026-11-06; ids unchanged). Instance-relative.
+MODIFIER_DIR = 'development/creativeWorldgen/src/main/resources/data/creativeengineering/forge/biome_modifier/nether_worldgen'
 BAND = 16
 Y_MIN, Y_MAX = -64, 320
 GRADIENT_SPAN = 1900       # anchors must stay within +-2032 (VerticalAnchor's absolute range)
@@ -231,7 +232,8 @@ def main():
         out[key] = data
 
     for r in rules.get('literal', []):
-        out[f'kubejs/{r["path"]}'] = r['json']
+        # a path under development/ is instance-relative (a jar's resources); anything else is under kubejs/
+        out[r['path'] if r['path'].startswith('development/') else f'kubejs/{r["path"]}'] = r['json']
         print(f'literal {r["path"]}: {r["note"]}')
 
     if rules.get('remove_features'):
@@ -244,7 +246,7 @@ def main():
             mod = {'type': 'forge:remove_features', 'biomes': r['biomes'], 'features': r['features']}
             if steps:
                 mod['steps'] = steps
-            out[f'kubejs/data/{MODIFIER_DIR}/{r["name"]}.json'] = mod
+            out[f'{MODIFIER_DIR}/{r["name"]}.json'] = mod
             print(f'remove {r["name"]}: {len(r["features"])} feature(s) from {len(r["biomes"])} biome(s), steps {steps}')
 
     for key in out:

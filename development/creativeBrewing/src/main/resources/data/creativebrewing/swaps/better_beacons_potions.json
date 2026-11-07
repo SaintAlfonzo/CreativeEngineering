@@ -1,0 +1,25 @@
+{
+  "_comment": "Better Beacons potions, registered by Creative Brewing (potion/BetterBeaconsPotions) since 2026-11-07 (owner decision); creativecommon: from 2026-11-06, creativebrewing: before that, creativeengineering: earlier. Potion ids saved as NBT strings are mapped by Common's PotionByNameRemapMixin from this list. Never prune.",
+  "replaces": {
+    "creativebrewing:long_reach": [
+      "creativecommon:long_reach",
+      "creativeengineering:long_reach"
+    ],
+    "creativebrewing:long_long_reach": [
+      "creativecommon:long_long_reach",
+      "creativeengineering:long_long_reach"
+    ],
+    "creativebrewing:strong_long_reach": [
+      "creativecommon:strong_long_reach",
+      "creativeengineering:strong_long_reach"
+    ],
+    "creativebrewing:phantom_bane": [
+      "creativecommon:phantom_bane",
+      "creativeengineering:phantom_bane"
+    ],
+    "creativebrewing:long_phantom_bane": [
+      "creativecommon:long_phantom_bane",
+      "creativeengineering:long_phantom_bane"
+    ]
+  }
+}

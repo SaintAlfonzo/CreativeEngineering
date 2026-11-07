@@ -76,7 +76,7 @@ correctness part was run.
    could hang over a cliff unchecked. Same family as the piglin camp note from M1.
    **Fixed in source 2026-10-18** (patcherMod 1.0.7, DEPLOYED 2026-10-18): opt-in structure tag `earth_fill/stone_base` (the drum tower) counts stone and brick
    bases too. [structure_tuning.md](../../structure_tuning.md) 3.23 item 6, ST-197.
-3. **Census reports every slot "known":** `/celocate census` on fresh land showed no prediction path, so its
+3. **Census reports every slot "known":** `/cwglocate census` on fresh land showed no prediction path, so its
    false-negative column means nothing yet. Check before Phase 6.
 4. **Locate misses (Phase 6 lead):** a battering ram search loaded 16 "maybe" candidates and all missed (catapult 4),
    then timed out. These were not wrong answers.

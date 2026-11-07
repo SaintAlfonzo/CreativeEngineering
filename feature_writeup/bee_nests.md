@@ -19,7 +19,7 @@ Where wild bee nests generate, how often, and a tuning file that gives nests to 
   older-jar fallback was removed 2026-10-27 ([pack_hygiene.md](pack_hygiene.md) finding 4).
 - **Knobs:** `kubejs/generation_scripts/worldgen/bee_nests.json` (section 3); CEConfig `[worldgen.systems] beeNests`
   (off = nests as the mods ship them). Rejoin to apply; only chunks generated afterwards change.
-- **Preview without the game:** edit the rules, `python3 tools/gen_bee_nests.py` (or `/cegen run bee_nests`).
+- **Preview without the game:** edit the rules, `python3 tools/gen_bee_nests.py` (or `/cdevgen run bee_nests`).
 - **Measure in game:** `/dumpbeenests reset`, generate new terrain (fly, or `chunky` in an unexplored area),
   `/dumpbeenests`, then rerun the generator: section 2 of the report is the real count.
 - **Offline checks:** `bash tools/test_bee_nests.sh` (section 6).
@@ -161,7 +161,7 @@ Brief: [briefs/mobs_bees.md](briefs/mobs_bees.md). Nothing here is built.
 - [TreeFeatureBeeNestsMixin.java](../development/creativeCommon/src/main/java/com/SaintAlfonzo/creativecommon/mixin/TreeFeatureBeeNestsMixin.java),
   [BeehiveDecoratorBeeNestsMixin.java](../development/creativeCommon/src/main/java/com/SaintAlfonzo/creativecommon/mixin/BeehiveDecoratorBeeNestsMixin.java),
   [ChunkGeneratorBeeNestsMixin.java](../development/creativeCommon/src/main/java/com/SaintAlfonzo/creativecommon/mixin/ChunkGeneratorBeeNestsMixin.java)
-- [tools/gen_bee_nests.py](../tools/gen_bee_nests.py) -> [bee_nests_by_biome.md](bee_nests_by_biome.md); `/cegen run bee_nests`
+- [tools/gen_bee_nests.py](../tools/gen_bee_nests.py) -> [bee_nests_by_biome.md](bee_nests_by_biome.md); `/cdevgen run bee_nests`
 - [tools/test_bee_nests.sh](../tools/test_bee_nests.sh), [tools/bee_nests_test/](../tools/bee_nests_test/)
 - CEConfig `[worldgen.systems] beeNests` (`CEConfig.java`, `WorldgenConfig.beeNestsEnabled()`)
 

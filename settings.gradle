@@ -71,3 +71,9 @@ project(':creativeWorldgen').projectDir = file('development/creativeWorldgen')
     include name
     project(":${name}").projectDir = file("development/creativeWorldgen/members/${dir}")
 }
+
+// Creative Compat's members (development/creativeCompat/members/), nested in the Compat jar.
+['backportedTempad': 'tempad'].each { name, dir ->
+    include name
+    project(":${name}").projectDir = file("development/creativeCompat/members/${dir}")
+}

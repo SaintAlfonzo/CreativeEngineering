@@ -1,3 +1,4 @@
+// requires: creativedelight
 // requires: farmersdelight
 // Farmer's Delight 1.3.4 recipe changes on the repacked 1.2.4 (feature_writeup/farmers_delight.md 3, TODO
 // largecontent/mod-additions #18). Creative Delight member script: recipe ids are creativedelight:<type>/<suffix>

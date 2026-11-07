@@ -176,7 +176,7 @@ public final class BlockStateSyncDebug {
     }
 
     private static void writeRanges(String side) {
-        Path file = FMLPaths.GAMEDIR.get().resolve("logs").resolve("ce_block_state_ranges_" + side + ".txt");
+        Path file = FMLPaths.GAMEDIR.get().resolve("logs").resolve("cdev_block_state_ranges_" + side + ".txt");
         try {
             StringBuilder out = new StringBuilder();
             StringBuilder body = new StringBuilder();

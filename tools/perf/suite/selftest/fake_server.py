@@ -1,4 +1,4 @@
-"""Stand-in for a Minecraft server, for selftest.py: speaks RCON, writes logs/latest.log and a ceperfbot tick
+"""Stand-in for a Minecraft server, for selftest.py: speaks RCON, writes logs/latest.log and a cdevperfbot tick
 log, and ends the ways a real server does when told to (`fake die9|hang|oom|crashnext`). Run from the srv dir
 by a copy of python named `java`, so the runner's pid lookup (pgrep -x java + cwd) finds it."""
 import os
@@ -57,7 +57,7 @@ def ticker():
 
 def handle(cmd):
     if cmd == "pbot status":
-        return "ceperfbot ok tick %d bots 0 out perf/bot" % state["tick"]
+        return "cdevperfbot ok tick %d bots 0 out perf/bot" % state["tick"]
     if cmd.startswith("pbot spawn"):
         n = cmd.split()[2]
         return f"bot {n} at 10 64 -20 in minecraft:overworld"

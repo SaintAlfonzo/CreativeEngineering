@@ -1,3 +1,4 @@
+// requires: creativecompat
 // Creative Compat: item tags for the flower box, planter box, chalk and microblock tweaks; moved from
 // kubejs/server_scripts/tags/misctags.js on 2026-11-01.
 

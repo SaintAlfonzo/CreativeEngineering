@@ -25,7 +25,7 @@ Open rows: #10 (Bug), #1 to #8, #11, #12 (Planned). #9 is Complete (table at the
   tables that the 2026-10-14 catalog lists: Subterrestrial 13 (`subterrestrial:chests/cabin/*`), Eugene's 5
   (`eugene:chests/*`), Underground Bunkers 3. The pre-roll pass never plans them (no packing, chalk, golden food, ban
   check), and regex table filters can't match them (`resolveTables`, 05_tuning.js line 216, matches only indexed ids;
-  exact ids are taken with a warning). **Step 0 for every row: regenerate** (`/cegen run loot dumps` in game, or
+  exact ids are taken with a warning). **Step 0 for every row: regenerate** (`/cdevgen run loot dumps` in game, or
   `/dumploot` + `/dumptags item` then `python3 tools/gen_loot_config.py` on the machine with `mods/`), then
   `node tools/loot_tuning_sim.js` and commit the new index.
 - **The NEA "quiver" enchantments are quiver-only** (verified in `nock_enough_arrows-1.19.2-1.2.0.jar`,

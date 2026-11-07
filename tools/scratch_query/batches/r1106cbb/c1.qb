@@ -1,0 +1,34 @@
+# r1106cbb Boot 1: chain jars, group A superflat, fresh config, nch_guard_probe.js copied in before the boot
+# (SQ-CBB-01 to -03, -05; SQ-CBB-04 = r1106cba/b1.qb rows 01 to 08 and 10 on the same boot).
+## SQ-CBB-01 | chain: removed recipe count back to normal, no refused remove from pack scripts
+shell grep -h "Added [0-9]* recipes" logs/kubejs/server.log
+shell n=$(grep -oE "removed [0-9]+ recipes" logs/kubejs/server.log | tail -1 | grep -oE "[0-9]+"); echo "removed=$n"; test "$n" -lt 500
+bootreject remove refused: filter\.output.*dish_stuffed
+shell grep -h "remove refused" logs/kubejs/server.log logs/kubejs/startup.log | head -20
+## SQ-CBB-02 | NCH remove guard probe
+kjsexpect \[nchguard\] normal remove of minecraft:bread done
+shell grep -h "\[nchguard\] case done" logs/kubejs/server.log | sed 's/.*\] //'
+shell test "$(grep -h "\[nchguard\] case done" logs/kubejs/server.log | wc -l)" = 4
+shell grep -h "remove refused" logs/kubejs/server.log logs/kubejs/startup.log | sed 's/.*remove refused/remove refused/'
+shell test "$(grep -h "remove refused" logs/kubejs/server.log logs/kubejs/startup.log | wc -l)" = 4
+> zq recipes minecraft:bread
+sleep 2
+reject \[zq\] minecraft:bread ->
+## SQ-CBB-03 | fermenting count, Pale Jane and Steel Toe, bark and metal dust tags in Common
+> zq bytype brewinandchewin:fermenting
+> zq recipes creativebrewing:fermenting/pale_jane
+> zq recipes creativebrewing:fermenting/steel_toe
+> zq itemtag immersive_weathering:bark
+> zq itemtag creativeengineering:bark
+> zq itemtag creativeengineering:metal_dusts
+sleep 3
+expect bytype brewinandchewin:fermenting: (1[89]|[2-9]\d)$
+expect pale_jane_from_rice_wine
+expect farmersdelight:tree_bark
+bootreject Couldn't load tag|missing references
+## SQ-CBB-05 | kippers and forge:raw_fishes on the chain
+> zq rdetail brewinandchewin:fermenting/kippers
+> zq itemtag forge:raw_fishes
+> zq recipes brewinandchewin:fermenting/kippers
+sleep 3
+look record whether kippers is listed, whether #forge:raw_fishes holds miners_delight:tentacles, and the ingredient list

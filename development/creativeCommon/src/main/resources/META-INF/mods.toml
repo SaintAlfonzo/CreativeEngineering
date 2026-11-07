@@ -39,26 +39,10 @@ versionRange="[1902.6.2-build.73,1902.7)"
 ordering="AFTER"
 side="BOTH"
 
-# Optional integrations. versionRange stays "*": the tested ranges are in perf/CEMixinPlugin MOD_RANGE, which skips a
+# Optional integrations. versionRange stays "*": the tested ranges are in each jar's mixin plugin MOD_RANGE, which skips a
 # mod's mixins (one warning in the log) when its version is outside them, where a range here would stop the boot.
 
-# JEI plugin (craftable-first lists, pack ingredient order, seasoning, potion bucket, tipped arrow, can and world interaction categories, cycling crafting) and 12 mixins
-[[dependencies.creativecommon]]
-modId="jei"
-mandatory=false
-versionRange="*"
-ordering="NONE"
-side="BOTH"
-
-# WTHIT plugins: state lines, holder and pot contents, hives, campfires, coasters, tanks, remainder buffer, silk touch, sheared, operator blocks, block model icons
-[[dependencies.creativecommon]]
-modId="wthit"
-mandatory=false
-versionRange="*"
-ordering="NONE"
-side="BOTH"
-
-# sequenced assembly and config screen mixins
+# sequenced assembly mixin
 [[dependencies.creativecommon]]
 modId="create"
 mandatory=false
@@ -74,7 +58,7 @@ versionRange="*"
 ordering="NONE"
 side="BOTH"
 
-# fluid tag input mixin, WTHIT sheet metal tank lines
+# fluid tag input mixin (shared API; WTHIT sheet metal tank lines: Creative Compat)
 [[dependencies.creativecommon]]
 modId="immersiveengineering"
 mandatory=false
@@ -82,15 +66,7 @@ versionRange="*"
 ordering="NONE"
 side="BOTH"
 
-# armor bar overflow rows and modded armor icons (API plus 2 mixins)
-[[dependencies.creativecommon]]
-modId="detailab"
-mandatory=false
-versionRange="*"
-ordering="AFTER"
-side="CLIENT"
-
-# large item list fix and JEI smithing
+# large item list fix (JEI smithing: Creative Compat)
 [[dependencies.creativecommon]]
 modId="armor_trims"
 mandatory=false
@@ -130,139 +106,19 @@ versionRange="*"
 ordering="NONE"
 side="BOTH"
 
-# GUI tooltip fixes
+# Phantom Bane rules (rest reset, spawner skip); its potions are Creative Brewing's since 2026-11-07
 [[dependencies.creativecommon]]
-modId="lightmanscurrency"
+modId="better_beacons"
 mandatory=false
 versionRange="*"
 ordering="NONE"
 side="BOTH"
 
-# Legendary Tooltips requires it; the title break mixin targets it
+# Effect remap of Fruits Delight's jam and jelly effect lines
 [[dependencies.creativecommon]]
-modId="iceberg"
-mandatory=false
-versionRange="*"
-ordering="NONE"
-side="CLIENT"
-
-# tooltip title line break fix (mixin into Iceberg, gated on this mod)
-[[dependencies.creativecommon]]
-modId="legendarytooltips"
-mandatory=false
-versionRange="*"
-ordering="NONE"
-side="CLIENT"
-
-# terminal tooltip fix
-[[dependencies.creativecommon]]
-modId="prettypipes"
+modId="fruitsdelight"
 mandatory=false
 versionRange="*"
 ordering="NONE"
 side="BOTH"
 
-# GUI tooltip fixes
-[[dependencies.creativecommon]]
-modId="ftblibrary"
-mandatory=false
-versionRange="*"
-ordering="NONE"
-side="BOTH"
-
-# quest task and description tooltips
-[[dependencies.creativecommon]]
-modId="ftbquests"
-mandatory=false
-versionRange="*"
-ordering="NONE"
-side="BOTH"
-
-# agreement tooltip fix
-[[dependencies.creativecommon]]
-modId="wares"
-mandatory=false
-versionRange="*"
-ordering="NONE"
-side="BOTH"
-
-# book tooltip fix
-[[dependencies.creativecommon]]
-modId="patchouli"
-mandatory=false
-versionRange="*"
-ordering="NONE"
-side="BOTH"
-
-# GUI, pattern encoding and guide tooltips
-[[dependencies.creativecommon]]
-modId="ae2"
-mandatory=false
-versionRange="*"
-ordering="NONE"
-side="BOTH"
-
-# WTHIT holder contents
-[[dependencies.creativecommon]]
-modId="supplementaries"
-mandatory=false
-versionRange="*"
-ordering="NONE"
-side="BOTH"
-
-# WTHIT holder contents (Supplementaries' library)
-[[dependencies.creativecommon]]
-modId="moonlight"
-mandatory=false
-versionRange="*"
-ordering="NONE"
-side="BOTH"
-
-# WTHIT campfire burn lines
-[[dependencies.creativecommon]]
-modId="unlitcampfire"
-mandatory=false
-versionRange="*"
-ordering="NONE"
-side="BOTH"
-
-# WTHIT pot contents
-[[dependencies.creativecommon]]
-modId="framedblocks"
-mandatory=false
-versionRange="*"
-ordering="NONE"
-side="BOTH"
-
-# WTHIT remainder buffer lines
-[[dependencies.creativecommon]]
-modId="farmersdelight"
-mandatory=false
-versionRange="*"
-ordering="NONE"
-side="BOTH"
-
-# WTHIT remainder buffer lines
-[[dependencies.creativecommon]]
-modId="farmersrespite"
-mandatory=false
-versionRange="*"
-ordering="NONE"
-side="BOTH"
-
-# WTHIT kitchen station lines
-[[dependencies.creativecommon]]
-modId="appliedcooking"
-mandatory=false
-versionRange="*"
-ordering="NONE"
-side="BOTH"
-
-
-# armor bar icons for the echo armor set (ids only)
-[[dependencies.creativecommon]]
-modId="create_deep_dark"
-mandatory=false
-versionRange="*"
-ordering="NONE"
-side="BOTH"

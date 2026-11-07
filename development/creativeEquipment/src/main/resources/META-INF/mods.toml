@@ -61,6 +61,13 @@ mandatory=false
 versionRange="*"
 ordering="NONE"
 side="BOTH"
+# Echo armor set bonus (mixin/EchoArmorEffectProcedureMixin, EchoArmorTooltipMixin; from Creative Brewing, plan_cb_polish.md 1)
+[[dependencies.creativeequipment]]
+modId="create_deep_dark"
+mandatory=false
+versionRange="*"
+ordering="NONE"
+side="BOTH"
 [[dependencies.creativeequipment]]
 modId="curios"
 mandatory=false
@@ -73,3 +80,12 @@ mandatory=false
 versionRange="*"
 ordering="NONE"
 side="BOTH"
+
+# --- Detail Armor Bar from Creative Common, 2026-11-07 ---
+# armor bar overflow rows and modded armor icons (API plus 2 mixins)
+[[dependencies.creativeequipment]]
+modId="detailab"
+mandatory=false
+versionRange="*"
+ordering="AFTER"
+side="CLIENT"

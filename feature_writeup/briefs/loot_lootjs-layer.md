@@ -6,7 +6,7 @@ Written 2026-10-21 from [TODO.md](../todo/TODO.md) `# loot`, Sub `lootjs-layer`.
 [exposure.md](../exposure.md) 4. Code: [00_lib.js](../../kubejs/server_scripts/loot/00_lib.js),
 [05_tuning.js](../../kubejs/server_scripts/loot/05_tuning.js), [07_rules.js](../../kubejs/server_scripts/loot/07_rules.js),
 `10_removals.js` to `40_targeted.js`, `99_debug.js`; tools `gen_loot_config.py`, `loot_census.py`,
-`audit_loot_containers.py`, `loot_breakdown.py`, `loot_tuning_sim.js`; `tools/generators.json` (`/cegen`).
+`audit_loot_containers.py`, `loot_breakdown.py`, `loot_tuning_sim.js`; `tools/generators.json` (`/cdevgen`).
 
 ## Scope and order
 
@@ -61,15 +61,15 @@ table and the loot writeups' numbers are true.
   Fruits Delight, Improved Pillager Outpost, Just a Well; 1.0.6 Campsite Structures, Subterrestrial, Underground
   Bunkers, Volcanic Caverns (and the `eugene` datapack port); 1.0.7 Create: The Salt; exposureBackport `-02` -> `-04`.
 - `tools/generators.json` has `loot_config` (needs `/dumploot` + `/dumptags item`), `loot_container_audit` and
-  `loot_census` (group `loot`), so `/cegen run loot dumps` in game runs all three. `loot_breakdown.py` is **not**
+  `loot_census` (group `loot`), so `/cdevgen run loot dumps` in game runs all three. `loot_breakdown.py` is **not**
   registered there.
 - All these tools read `mods/*.jar` from the instance folder (`INSTANCE = tools/..`); the repo clone has no jars, so
   they can't run in a cloud session.
 
 ### Build
-1. In game (dev instance, a world with no players needed): `/cegen run loot dumps`. It runs `/dumploot`,
+1. In game (dev instance, a world with no players needed): `/cdevgen run loot dumps`. It runs `/dumploot`,
    `/dumptags item`, `gen_loot_config.py`, `audit_loot_containers.py` and `loot_census.py`, and reports changed files
-   (log `logs/cegen/<id>.log`).
+   (log `logs/cdevgen/<id>.log`).
 2. `python3 tools/loot_breakdown.py` (catalog). Optional: add it to `tools/generators.json` as
    `{"id": "loot_breakdown", "script": "tools/loot_breakdown.py", "groups": ["reports", "loot", "slow"], "dumps": ["dumploot"], "outputs": ["feature_writeup/loot_catalog/README.md"], "apply": "report only"}`
    so step 1 covers it next time.

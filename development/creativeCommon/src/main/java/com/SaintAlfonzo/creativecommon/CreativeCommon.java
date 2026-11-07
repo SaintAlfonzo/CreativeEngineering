@@ -70,7 +70,21 @@ public class CreativeCommon
         // spec drops them from that file when Forge corrects it). The swap list toml is only renamed.
         com.SaintAlfonzo.creativecommon.swap.ConfigRename.carrySections(OLD_FILE, FILE, CommonConfig.SECTIONS);
         com.SaintAlfonzo.creativecommon.swap.ConfigRename.carryOver("creativeengineering-swaps.toml", MODID + "-swaps.toml");
+        // [effects] and [magic_resistance] came from Creative Brewing's file (plan_cb_polish.md 2, 2026-11-06), and before
+        // that from patcherMod's: the first boot copies the player's values in (sections this file already has are kept).
+        // CB drops them from its own file when Forge corrects it.
+        if (!com.SaintAlfonzo.creativecommon.swap.ConfigRename.carrySections("creativebrewing-common.toml", FILE, CommonConfig.EFFECT_SECTIONS))
+            com.SaintAlfonzo.creativecommon.swap.ConfigRename.mergeSections("creativebrewing-common.toml", FILE, CommonConfig.EFFECT_SECTIONS);
+        com.SaintAlfonzo.creativecommon.swap.ConfigRename.mergeSections(OLD_FILE, FILE, CommonConfig.EFFECT_SECTIONS);
         ModLoadingContext.get().registerConfig(ModConfig.Type.COMMON, CommonConfig.COMMON_SPEC, FILE);
+
+        // Every potion and mob effect the Creative mods own (plan_cb_polish.md 2, from Creative Brewing 2026-11-06):
+        // the creativecommon: potions (Magic Resistance; Better Beacons potions are Creative Brewing's since 2026-11-07; the vanilla-effect ones are KubeJS,
+        // kubejs_startup/creativecommon/effects/potions.js), Magic Resistance's damage cut (the MobEffect itself is
+        // KubeJS, effects/magic_resistance.js) and Phantom Bane's rules.
+        com.SaintAlfonzo.creativecommon.effect.CommonPotions.register(modEventBus);
+        MinecraftForge.EVENT_BUS.register(com.SaintAlfonzo.creativecommon.effect.MagicResistanceEffect.class);
+        MinecraftForge.EVENT_BUS.register(com.SaintAlfonzo.creativecommon.effect.PhantomBaneRules.class);
 
         // Sawblade and sawdust items, the shrapnel entity, the dragon breathing recipe type, the wooden bucket:
         // Creative Engineering (creativeengineering, 2026-11-04, creative_split.md 7.13 wave 8).
@@ -119,7 +133,7 @@ public class CreativeCommon
 
         // Per-hoe Quark harvest area and its tooltip: Creative Delight (2026-11-01).
 
-        // [time], seasons and crop seasons (/cetime): Creative Calendar (development/creativeCalendar), carved 2026-11-01.
+        // [time], seasons and crop seasons (/ccaltime): Creative Calendar (development/creativeCalendar), carved 2026-11-01.
 
         modEventBus.addListener(com.SaintAlfonzo.creativecommon.util.ModDisplayNames::onConfigReload);
 
@@ -133,9 +147,9 @@ public class CreativeCommon
         // Farmer's Structures donor, Forgiving Void) moved to Creative Worldgen (2026-11-02, creative_split.md 7.6).
         // Quark monster boxes as vaults moved to Creative Compat (2026-11-01).
 
-        // /ceplace (MassPlacer) moved to Creative Devtools (feature_writeup/creative_devtools.md 2).
+        // /cdevplace (MassPlacer) moved to Creative Devtools (feature_writeup/creative_devtools.md 2).
 
-        // Python generators (/cegen) and the other dev tools moved to Creative Devtools
+        // Python generators (/cdevgen) and the other dev tools moved to Creative Devtools
         // (feature_writeup/creative_devtools.md).
 
     }
@@ -192,7 +206,7 @@ public class CreativeCommon
             LOGGER.info("HELLO FROM CLIENT SETUP");
             LOGGER.info("MINECRAFT NAME >> {}", Minecraft.getInstance().getUser().getName());
 
-            com.SaintAlfonzo.creativecommon.compat.DetailArmorBarCompat.register();
+            // Detail Armor Bar compat: Creative Equipment.
             // Lunchbox looks, cob pipe renderer and the oven screen: Creative Delight (2026-11-01).
             MinecraftForge.EVENT_BUS.register(com.SaintAlfonzo.creativecommon.trader.client.TradeSyncClient.class);
         }

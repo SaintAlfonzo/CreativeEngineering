@@ -118,7 +118,7 @@ This file has three parts:
   ([crops.md](crops.md) §2.8). Vintage's biome modifiers for oats, peanuts and cucumbers go into the `forge:none`
   replacement list. No gearo bush feature exists.
 - The wild plants' own survival check (`mayPlaceOn` / `canSurvive`) also uses the dirt-soil rule so the block can be
-  placed by hand and by `/ceplace` on any dirt soil. The wild ghost pepper is the exception: its block keeps nylium and
+  placed by hand and by `/cdevplace` on any dirt soil. The wild ghost pepper is the exception: its block keeps nylium and
   the three seed soils, so it grows where it is generated and where the seeds go.
 - **1.1.02 boot failure (fixed in port build -03, 2026-10-23):** the four placed features using FD's
   `farmersdelight:biome_tag` filter (oats, peanuts, cucumbers, salt) wrote the key as `tag`; FD 1.2.4 reads
@@ -675,7 +675,7 @@ Briefs: [dishes_jams](briefs/dishes_jams.md), [dishes_pickles-and-ferments](brie
   `kubejs/assets/creativeengineering/textures/item/pickled_sea_pickle.png`. Brewin's Pickled Pickles merge into it
   (`global.itemMerges`, pushed from the same startup file); the pack's honey jar recipe for them is gone (`alcohol.js`);
   compost 0.5 and the cooked soup veggie tag moved to it. `canned_pickled_pickles` keeps its id as Canned Pickles
-  (pickle + pickled sea pickle; `gen_can_types.py`, applied at the next `/cegen` after `/dumpfood`).
+  (pickle + pickled sea pickle; `gen_can_types.py`, applied at the next `/cdevgen` after `/dumpfood`).
 - **Pickle soup:** Vintage's pot recipe replaced: `#creativeengineering:pickled_veg` (pickle, pickled sea pickle, pickled
   beetroot, onion and pepper, both kimchis; CD `vintagedelight/tags.js`), 2 `#forge:vegetables` (was carrot + potato),
   beetroot, `#forge:salad_ingredients`; 200 ticks, 1.0 xp as before.

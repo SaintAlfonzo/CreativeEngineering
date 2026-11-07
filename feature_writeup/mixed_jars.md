@@ -204,7 +204,7 @@ Bottled drinks of the two ports are hand-written files in the same folder, kept 
 Vintage's Nut Milk, Veggies' Carrot Juice, Dandelion Juice and Turnip Water (their tank fluids count as the same
 liquid, `equivalent_fluids`) and Fermented Garlic Honey. Vintage's own jar contents ship in its jar.
 
-**Generator:** `python3 tools/gen_soup_soft_fluids.py` (`/cegen run soup_soft_fluids`, reads `/dumpfood`'s
+**Generator:** `python3 tools/gen_soup_soft_fluids.py` (`/cdevgen run soup_soft_fluids`, reads `/dumpfood`'s
 foods.json for each item's empty container) writes one json per uncovered soup and deletes stale ones; the folder is
 the tool's, except the `HAND_WRITTEN` drink files. A soup a mod already covers is skipped (its colour stays the mod's). New soups: put the key in the soup
 type in food_types.json and rerun. Applies on `/reload`.

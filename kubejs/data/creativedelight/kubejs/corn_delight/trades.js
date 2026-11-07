@@ -1,3 +1,4 @@
+// requires: creativedelight
 // requires: corn_delight
 // requires: morejs
 // Corn Delight trades (feature_writeup/corn_delight.md 2.6): 1.2.11's farmer and wandering trader trades, which 1.0.3

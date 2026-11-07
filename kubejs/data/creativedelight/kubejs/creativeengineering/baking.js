@@ -1,3 +1,4 @@
+// requires: creativedelight
 // Oven: creativeengineering:baking recipes (NCH.ceBaking) and the oven / bakeware recipes. Moved from the pack's
 // server_scripts/cooking/baking.js 2026-10-25, rows unchanged; recipe ids are creativedelight:<type>/<suffix>
 // (global.CD.recipes). The cake / pie / cookie tables stay whole here (they span many mods); each row is one

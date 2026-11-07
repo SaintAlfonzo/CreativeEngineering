@@ -20,7 +20,7 @@ import org.slf4j.Logger;
  * it; it requires patcherMod ({@code creativeengineering}, later Creative Common).
  *
  * Ids stay: tags, WTHIT option ids and lang keys keep the {@code creativeengineering} namespace ({@link #NAMESPACE}),
- * the command stays {@code /cetime}. This mod id is only the jar's own identity, its config file and its script packs.
+ * the command stays {@code /ccaltime}. This mod id is only the jar's own identity, its config file and its script packs.
  */
 @Mod(CreativeCalendar.MOD_ID)
 public class CreativeCalendar {
@@ -35,7 +35,7 @@ public class CreativeCalendar {
 
         IEventBus modEventBus = FMLJavaModLoadingContext.get().getModEventBus();
         // [time] master (feature_writeup/time.md): pushes into Serene Seasons / SeasonHUD at server start and on every
-        // toml save (the Vinery port reads time/WineTime itself), the sun-driven season counter, and /cetime.
+        // toml save (the Vinery port reads time/WineTime itself), the sun-driven season counter, and /ccaltime.
         // Calendar tooltip: time/TimeClient (client); season types, crop seasons and their tooltip subscribe themselves.
         modEventBus.addListener(CalendarConfigMigration::onConfigLoading); // before TimePresets reconciles the preset
         modEventBus.addListener(TimePush::onConfigReload);

@@ -1,3 +1,4 @@
+// requires: creativedelight
 // requires: delightful
 // Delightful client rows, moved from the pack's client_scripts/ 2026-10-27, rows unchanged.
 ClientEvents.lang('en_us', e => {

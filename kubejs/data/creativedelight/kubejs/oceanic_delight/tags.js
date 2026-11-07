@@ -1,3 +1,4 @@
+// requires: creativedelight
 // requires: oceanic_delight
 // Oceanic Delight block tags (ocean_delight.md 3.1, 7; TODO farming/crops #27): changes from the newer Oceanic jar
 // (1.0.4) rebuilt on the 1.0.1 port. The fishing net tags are in fishing_net_tags.js.

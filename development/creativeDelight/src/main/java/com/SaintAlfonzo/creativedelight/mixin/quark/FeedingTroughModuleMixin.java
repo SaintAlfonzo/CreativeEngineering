@@ -25,7 +25,7 @@ import vazkii.quark.content.automation.module.FeedingTroughModule;
  *   When the call comes back without a trough (the result is not Quark's FakePlayer food holder) and no
  *   real player is tempting the animal, stamp the goal with "do not search before now + the cooldown"
  *   and answer the next calls with {@code found} unchanged. Hits are never stamped, so a cached trough
- *   keeps working at full speed. Cooldown is CEConfig perf.troughMissCooldownTicks (600 = 30 s, 0 = off).
+ *   keeps working at full speed. Cooldown is CDConfig perf.troughMissCooldownTicks (600 = 30 s, 0 = off).
  *   An ineligible animal (baby, in love, module off) also comes back without a trough and is stamped
  *   too, which only delays its first search by the cooldown once it becomes eligible.
  */

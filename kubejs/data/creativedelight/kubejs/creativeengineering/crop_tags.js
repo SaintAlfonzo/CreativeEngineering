@@ -1,3 +1,4 @@
+// requires: creativedelight
 // Crop tags: crop parity soils and crops, hoe harvest area.
 // Moved from the pack's server_scripts/tags/blocktags.js and equipmenttags.js 2026-11-01 (wave 4), rows
 // unchanged. Only adds: running after the pack's tag scripts gives the same contents (nothing removes from these tags).

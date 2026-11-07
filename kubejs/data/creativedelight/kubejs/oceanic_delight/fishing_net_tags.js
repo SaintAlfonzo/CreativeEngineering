@@ -1,3 +1,4 @@
+// requires: creativedelight
 // requires: oceanic_delight
 // Oceanic Delight fishing net tags.
 // Moved from the pack's server_scripts/tags/loottags.js 2026-11-01 (creative_split.md 7.6, wave 4), rows

@@ -26,7 +26,7 @@ Written for: the owner and the split agents, as the working reference for Calend
 | Script global | `global.CAL` (`kubejs_startup/creativecalendar/cal_core.js`) |
 | Requires | `creativeengineering` (patcherMod; `creativecommon` after the Q1 swap), later `creativecompat` (creative_split.md 7.6) |
 | Required by | `creativedelight`, `creativebrewing` (mandatory, `ordering="AFTER"`) |
-| Ids | unchanged: tags, WTHIT option ids and lang keys keep `creativeengineering`; `/cetime` keeps its name |
+| Ids | unchanged: tags, WTHIT option ids and lang keys keep `creativeengineering`; `/ccaltime` keeps its name |
 
 ## 1. Shape
 
@@ -39,7 +39,7 @@ crop season) and **Creative Brewing** (Vinery's wine clock) both require it. pat
 
 | Area | Where it was |
 |---|---|
-| Calendar and the `[time]` master (day length, season length, pause when empty, `/cetime`) | `PM/time/`: CalendarDate, SeasonClock, TimeClient, TimeCommand, TimeDate, TimePause, TimePresets, TimePush, TimeSettings |
+| Calendar and the `[time]` master (day length, season length, pause when empty, `/ccaltime`) | `PM/time/`: CalendarDate, SeasonClock, TimeClient, TimeCommand, TimeDate, TimePause, TimePresets, TimePush, TimeSettings |
 | Wine clock | `PM/time/WineTime.java`, `[time.wine]`, `[time.wine.boosts]`; read by CB's Vinery (`net/satisfy/vinery/forge/PackTime.java`) |
 | Day and night cycle (Better Days) | mixins BetterDaysConfig, BetterDaysTimePause, ServerLevelTimePause |
 | Seasons (Serene Seasons clock, types, colours, melt, time skip; SeasonHUD; Xaero's time line) | `PM/seasons/SeasonTypes.java`; 11 Season* / SereneSeasons* / SeasonHud* / XaeroTimeInfo mixins; `[seasons]` |
@@ -49,10 +49,11 @@ crop season) and **Creative Brewing** (Vinery's wine clock) both require it. pat
 ## 3. Rules (the creative_split.md 3 rules as they apply here)
 
 1. **Ids stay** (3.1, no conversions). Calendar registers nothing in a registry. Its tags
-   (`creativeengineering:seasons/*`, `snow/no_*`, `crop_seasons/*`), the WTHIT option ids
-   (`creativeengineering:crop_seasons`, `crop_out_of_season`), the WTHIT plugin id and every lang key keep the
-   `creativeengineering` namespace: `CreativeCalendar.NAMESPACE`. `CreativeCalendar.MOD_ID` is only for the
-   `@Mod.EventBusSubscriber` annotations, the config file and the script packs.
+   (`creativeengineering:seasons/*`, `snow/no_*`, `crop_seasons/*`) and every lang key keep the
+   `creativeengineering` namespace: `CreativeCalendar.NAMESPACE`. `CreativeCalendar.MOD_ID` is for the
+   `@Mod.EventBusSubscriber` annotations, the config file, the script packs and, since 2026-11-07
+   ([plan_owner_ids.md](plan_owner_ids.md)), the WTHIT plugin id and line ids (`creativecalendar:crop_seasons`,
+   `crop_out_of_season`), which are not saved anywhere.
 2. **Dependencies point down.** Calendar calls no patcherMod Java (it keeps `compileOnly project(':patcherMod')` for the
    later Common APIs). CD and CB call down into Calendar; Calendar never names CD or CB.
 3. **Config keys moved with their feature**, names and comments unchanged (4.3).
@@ -82,14 +83,15 @@ copies the server script tree into the jar, and fails the jar task when `kubejs_
   `immersiveengineering`, `the_dirty_stuff`, `nethersdelight`. `ServerLevelTimePauseMixin` (vanilla) always applies.
 - `creativecalendar.mixins.json`: 10 common, 8 client, no `injectors.defaultRequire` (as patcherMod's, so every
   injector's `require` is what it was).
-- `waila_plugins.json`: the `creativeengineering:crop_seasons` entry (required `sereneseasons`), now pointing at
+- `waila_plugins.json`: the `creativecalendar:crop_seasons` entry (required `sereneseasons`), now pointing at
   `com.SaintAlfonzo.creativecalendar.compat.WthitCropSeasons`.
 - `assets/creativeengineering/lang/en_us.json`: the 31 Calendar lang keys (crop season lines, calendar tooltip,
   SeasonHUD "Arid" / "Frozen", the WTHIT plugin name). Minecraft merges every jar's file for the namespace.
 
 ### 4.2 Load order and dependencies
 
-`mods.toml`: `creativeengineering` mandatory `[1.1.04,)` AFTER; `sereneseasons`, `betterdays`, `seasonhud` optional, no
+`mods.toml`: `creativeengineering` mandatory `[1.1.04,)` AFTER; `sereneseasons` mandatory (2026-11-06: the season and time classes import it directly, so without it the jar
+failed at load with NoClassDefFoundError; it was wrongly optional after the carve); `betterdays`, `seasonhud` optional, no
 ordering (patcherMod never declared them, so the load order is the one it had). CD's and CB's `mods.toml` require
 `creativecalendar` `[1.0.0,)` AFTER, so the startup script packs run: patcherMod, `startup_scripts/`, Calendar, CD, CB.
 
@@ -165,7 +167,7 @@ The moved features keep their own suites: TI- ([time.md](time.md)), WE- ([weathe
 ([crops.md](crops.md)), SQ-TD and SQ-CS. In game (after install):
 
 - [ ] **CAL-01 Mod list:** "Creative Calendar" is listed; Creative Delight and Creative Brewing name it as a dependency.
-- [ ] **CAL-02 Old world:** the season, day and wine ages of an existing world are where they were; `/cetime date` agrees
+- [ ] **CAL-02 Old world:** the season, day and wine ages of an existing world are where they were; `/ccaltime date` agrees
   with SeasonHUD.
 - [ ] **CAL-03 Config:** `config/creativecalendar-common.toml` holds the sections of 4.3 with the values from before; no
   `[time]`, `[seasons]` or `[crop_seasons]` left in `creativeengineering-common.toml`, and on a copy of the server's old CE file an edited
@@ -176,7 +178,7 @@ The moved features keep their own suites: TI- ([time.md](time.md)), WE- ([weathe
 
 ## 7. Install (game closed)
 
-All four in one go (a new patcherMod without the Calendar jar loses `/cetime` and the seasons; the old patcherMod with it
+All four in one go (a new patcherMod without the Calendar jar loses `/ccaltime` and the seasons; the old patcherMod with it
 applies every season mixin twice): `./gradlew :creativeCommon:installToMods :creativeCalendar:installToMods
 :creativeDelight:installToMods :creativeBrewing:installToMods --offline`. The dedicated server (CreEngServer) needs
 the same four jars at the next deploy. Calendar's `creativeengineering` range `[1.1.04,)` cannot tell the old patcherMod

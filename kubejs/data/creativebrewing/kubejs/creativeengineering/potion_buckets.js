@@ -1,8 +1,9 @@
+// requires: creativebrewing
 // Moved from the pack's server_scripts/engineering/potion_buckets.js 2026-11-01 (creative_brewing.md 4.5), unchanged.
 // Potion buckets — right-click a block to burst a large, short-lived, EXPANDING
 // stack of lingering-potion rings (a dome, not a flat disc). See:
-//   CB startup creativeengineering/potion_buckets.js   (item registration)
-//   CB startup creativeengineering/potion_area.js       (global.potionArea — ring stack + per-bucket dials)
+//   CB startup creativebrewing/potion_buckets.js   (item registration)
+//   CB startup creativebrewing/potion_area.js       (global.potionArea — ring stack + per-bucket dials)
 //   CB client creativeengineering/potion_buckets.js          (effect tooltip)
 
 // NOTE: read the id list from global.potionArea.BUCKETS rather than declaring our own local

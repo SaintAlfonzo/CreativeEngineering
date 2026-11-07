@@ -1,3 +1,4 @@
+// requires: creativedelight
 // requires: ends_delight
 // End's Delight drop tooltips (ends_delight.md 3.1): the mob parts that only come from loot modifiers. Same facts as
 // the JEI pages in jei_info.js; grey like the pack's other drop lines (tooltips.md).

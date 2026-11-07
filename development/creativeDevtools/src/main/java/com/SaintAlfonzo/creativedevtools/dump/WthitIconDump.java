@@ -3,7 +3,7 @@ package com.SaintAlfonzo.creativedevtools.dump;
 import com.SaintAlfonzo.creativedevtools.CreativeDevtools;
 import com.SaintAlfonzo.creativedevtools.DevtoolsConfig;
 
-import com.SaintAlfonzo.creativecommon.compat.BlockModelIcons;
+import com.SaintAlfonzo.creativecompat.compat.BlockModelIcons;
 import com.google.gson.GsonBuilder;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
@@ -49,7 +49,7 @@ import java.util.Map;
  *
  * <p>The clone stack is asked of an empty world ({@code EmptyBlockGetter}, origin), so a block whose pick item
  * depends on its block entity or neighbours may differ in game; those that throw are listed with {@code error}.
- * Triggers: the client command {@code /cedumpicons}, or {@code [debug.wthit] dumpIconsAtTitle} (once, when the title
+ * Triggers: the client command {@code /cdevdumpicons}, or {@code [debug.wthit] dumpIconsAtTitle} (once, when the title
  * screen first opens).
  */
 @Mod.EventBusSubscriber(modid = CreativeDevtools.MOD_ID, value = Dist.CLIENT)
@@ -61,9 +61,9 @@ public final class WthitIconDump {
 
     @SubscribeEvent
     public static void onClientCommands(RegisterClientCommandsEvent event) {
-        event.getDispatcher().register(Commands.literal("cedumpicons").executes(ctx -> {
+        event.getDispatcher().register(Commands.literal("cdevdumpicons").executes(ctx -> {
             String summary = dump();
-            ctx.getSource().sendSuccess(Component.literal("[cedumpicons] " + summary
+            ctx.getSource().sendSuccess(Component.literal("[cdevdumpicons] " + summary
                     + " -> kubejs/exported/wthit_icons.json").withStyle(ChatFormatting.GREEN), false);
             return 1;
         }));
@@ -135,7 +135,7 @@ public final class WthitIconDump {
                     missingItems.add(id.toString());
                 }
             } catch (RuntimeException e) {
-                LOGGER.warn("[cedumpicons] item {}: {}", id, e.toString());
+                LOGGER.warn("[cdevdumpicons] item {}: {}", id, e.toString());
             }
         }
 
@@ -156,11 +156,11 @@ public final class WthitIconDump {
             Files.writeString(dir.resolve("wthit_icons.json"),
                     new GsonBuilder().setPrettyPrinting().disableHtmlEscaping().create().toJson(out), StandardCharsets.UTF_8);
         } catch (IOException e) {
-            LOGGER.error("[cedumpicons] could not write {}", dir, e);
+            LOGGER.error("[cdevdumpicons] could not write {}", dir, e);
             return "write failed: " + e.getMessage();
         }
         String summary = totals.toString();
-        LOGGER.info("[cedumpicons] {} ({} ms)", summary, (System.nanoTime() - start) / 1_000_000);
+        LOGGER.info("[cdevdumpicons] {} ({} ms)", summary, (System.nanoTime() - start) / 1_000_000);
         return summary;
     }
 }

@@ -183,7 +183,7 @@ hunger, genetics, homes, dimensionalCats, toggles, misc, ancientFish, classes, n
 
 ## 4. Fold-in, in build order
 
-0. **Dumps and generators** (memory `dumpall-refresh-workflow`): boot once, `/dumpall`, then the `/cegen` generators.
+0. **Dumps and generators** (memory `dumpall-refresh-workflow`): boot once, `/dumpall`, then the `/cdevgen` generators.
    Read the first boot log for B1 and the prefix warnings. Add the `mod_sides.md` row (both sides; skill `add-mod`).
 1. **Ids:** 11 keys in `item_dict.js` (new `// ===== cozys-improved-cats` block: `ancient_cod`, `ancient_salmon`,
    `ancient_cooked_cod`, `ancient_cooked_salmon`, `cat_treat`, `yarn_ball`, `training_string`, `cat_collar`,

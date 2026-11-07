@@ -1,3 +1,4 @@
+// requires: creativedelight
 // requires: abnormals_delight
 // requires: upgrade_aquatic
 // Abnormals Delight x Upgrade Aquatic recipe changes. Non-member file: recipe ids are creativedelight:<type>/<suffix>

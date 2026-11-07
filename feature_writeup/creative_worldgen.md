@@ -77,13 +77,24 @@ own Java plus two nested members. Same behaviour as before the carve; every regi
 - LootJS modifier order: Worldgen's post-roll modifier now registers after the pack's and CD's item-merge modifiers.
 - `95_tag_capture` sees tag additions from packs that load before Worldgen (more than before, not less).
 
+### 4.1 Fixes of 2026-11-06 night (after scratch r1106spf)
+
+- `compat/ModDataPacks`: a `packs/<modA>+<modB>/` folder is added only while every listed mod is loaded (same change in
+  Equipment).
+- `creativeengineering:sky_island` has a structure set (`structure_set/sky_island.json`, baseline 64 / 16) and is a member
+  of group `sky` (weight 100, frequency 0.985; structure_tuning.md "Floating islands"), so lone islands generate as well as
+  the sky village's. `structure_config.json` regenerated with the new jar (only that set added).
+- Every Worldgen script already had `// requires: creativeworldgen`; Devtools' `dump_bee_nests.js` and
+  `dump_structuregen.js` now also require Worldgen.
+- Tests SQ-SPFX-04, -05, -07: PASS r1106spfx (sky_island 1120 blocks out, floating; scratch_run_2026-11-06.md 7).
+
 ## 5. Tests
 
 - **r1103 2026-11-03** (scratch server; verdicts in `perf/runs/r1103/` FINAL.md and the slice judged.md): PASS SQ-CWG-01, -02, -02b, -03, -04, -05, -09, -10, -08b, -07; FAIL SQ-CWG-06: the punch meta `meteorite_desert_pyramid` is dropped: `META_PART_KEYS` lacks `punch` (`structure_overrides.js` line 110); SQ-CWG-08o BATCH-FAULT: the forceload does not cover a plains village; rerun sA_R.qb part 2 (old 1.1.06 world); SQ-CWG-08 OPEN: mobs, breeding, leaf decay, mobcap, dumpspawns pass; the village read-back waits for SQ-CWG-08o.
 - r1103 boot fix (runner, 2026-11-03): `kubejs/data/creativeworldgen/kubejs/loot/README.md` renamed `readme.md`; KubeJS refused the upper-case file name and stopped startup. Also found: the jar ships older `loot_config.json` / `loot_index.json` than `kubejs/data`, so rebuild creativeworldgen before a release.
 
 Scratch SQ-CWG-01 to -10 ([scratch_queue.md](testing/scratch_queue.md)). In game (client rows pinned until wave 8+,
-7.8): CWG-01 More Mooblooms and baby squid render with models; CWG-02 `/celocate` and a map trade from a cartographer.
+7.8): CWG-01 More Mooblooms and baby squid render with models; CWG-02 `/cwglocate` and a map trade from a cartographer.
 
 ## 6. History
 

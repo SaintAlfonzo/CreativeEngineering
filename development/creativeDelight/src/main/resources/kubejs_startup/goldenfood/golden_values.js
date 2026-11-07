@@ -13,10 +13,15 @@ ItemEvents.modification(e => {
 	var i = global.item
 	var path = 'kubejs/generation_scripts/food/food_tuning.json'
 	var cfg = null
-	try { cfg = JSON.parse(String(JsonIO.readString(path))).golden } catch (err) {
+	// The instance file, else the copy shipped in the Creative Delight jar (global.genText); skip with a warning if neither.
+	var raw = global.genText(path)
+	var json = null
+	try { json = raw == null ? null : JSON.parse(String(raw)) } catch (err) {
 		console.error('[golden values] could not read ' + path + ': ' + err)
 		return
 	}
+	if (json == null) { console.warn('[golden values] ' + path + ' not found - golden and gilded values left as upstream'); return }
+	cfg = json.golden
 	if (!cfg) { console.error('[golden values] ' + path + ' has no golden section'); return }
 	var $GoldenRegistries = Java.loadClass('net.minecraftforge.registries.ForgeRegistries')
 	var $GoldenRL = Java.loadClass('net.minecraft.resources.ResourceLocation')

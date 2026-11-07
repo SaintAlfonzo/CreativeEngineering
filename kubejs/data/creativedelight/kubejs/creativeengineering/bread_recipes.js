@@ -1,3 +1,4 @@
+// requires: creativedelight
 // Any bread in any bread recipe (TODO baking/baked-goods #28). Every loaded recipe slot that takes vanilla bread or a
 // bread slice (minecraft:bread, #forge:bread/wheat, #forge:bread_slices, the slice item) takes any bread
 // (#forge:bread: the loaves, the flavored breads, bread slice and toast; creativeengineering/bread_tags.js). No burger,

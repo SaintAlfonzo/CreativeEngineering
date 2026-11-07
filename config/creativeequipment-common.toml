@@ -91,7 +91,7 @@
 
 	[crafting.felsic_sword]
 		#Potion effect id filled in during assembly.
-		potion = "creativebrewing:magic_resistance"
+		potion = "creativecommon:magic_resistance"
 		#mB of potion fluid (the potion above) used in the last filling step.
 		#Range: 1 ~ 10000
 		potionMb = 250
@@ -107,7 +107,7 @@
 
 	[crafting.felsic_helmet]
 		#Potion effect id filled in during assembly.
-		potion = "creativebrewing:magic_resistance"
+		potion = "creativecommon:magic_resistance"
 		#mB of potion fluid (the potion above) used in the last filling step.
 		#Range: 1 ~ 10000
 		potionMb = 500
@@ -123,7 +123,7 @@
 
 	[crafting.felsic_chestplate]
 		#Potion effect id filled in during assembly.
-		potion = "creativebrewing:magic_resistance"
+		potion = "creativecommon:magic_resistance"
 		#mB of potion fluid (the potion above) used in the last filling step.
 		#Range: 1 ~ 10000
 		potionMb = 500
@@ -139,7 +139,7 @@
 
 	[crafting.felsic_leggings]
 		#Potion effect id filled in during assembly.
-		potion = "creativebrewing:magic_resistance"
+		potion = "creativecommon:magic_resistance"
 		#mB of potion fluid (the potion above) used in the last filling step.
 		#Range: 1 ~ 10000
 		potionMb = 500
@@ -155,7 +155,7 @@
 
 	[crafting.felsic_boots]
 		#Potion effect id filled in during assembly.
-		potion = "creativebrewing:magic_resistance"
+		potion = "creativecommon:magic_resistance"
 		#mB of potion fluid (the potion above) used in the last filling step.
 		#Range: 1 ~ 10000
 		potionMb = 500
@@ -171,7 +171,7 @@
 
 	[crafting.felsic_pickaxe]
 		#Potion effect id filled in during assembly.
-		potion = "creativebrewing:magic_resistance"
+		potion = "creativecommon:magic_resistance"
 		#mB of potion fluid (the potion above) used in the last filling step.
 		#Range: 1 ~ 10000
 		potionMb = 250
@@ -187,7 +187,7 @@
 
 	[crafting.felsic_axe]
 		#Potion effect id filled in during assembly.
-		potion = "creativebrewing:magic_resistance"
+		potion = "creativecommon:magic_resistance"
 		#mB of potion fluid (the potion above) used in the last filling step.
 		#Range: 1 ~ 10000
 		potionMb = 250
@@ -203,7 +203,7 @@
 
 	[crafting.felsic_shovel]
 		#Potion effect id filled in during assembly.
-		potion = "creativebrewing:magic_resistance"
+		potion = "creativecommon:magic_resistance"
 		#mB of potion fluid (the potion above) used in the last filling step.
 		#Range: 1 ~ 10000
 		potionMb = 250
@@ -219,7 +219,7 @@
 
 	[crafting.felsic_hoe]
 		#Potion effect id filled in during assembly.
-		potion = "creativebrewing:magic_resistance"
+		potion = "creativecommon:magic_resistance"
 		#mB of potion fluid (the potion above) used in the last filling step.
 		#Range: 1 ~ 10000
 		potionMb = 250
@@ -235,7 +235,7 @@
 
 	[crafting.felsic_shield]
 		#Potion effect id filled in during assembly.
-		potion = "creativebrewing:magic_resistance"
+		potion = "creativecommon:magic_resistance"
 		#mB of potion fluid (the potion above) used in the last filling step.
 		#Range: 1 ~ 10000
 		potionMb = 250
@@ -975,4 +975,48 @@
 	#Every item that fits a Curios slot shows Curios' "Slot:" line, also when the item's own mod
 	#hides or replaces it. Off: only the lines Curios and the item's mod add.
 	curiosSlotLine = true
+
+#Fully oxidized Everything Copper gear (armor worn, or any piece in the hotbar or
+#offhand) poisons its holder now and then, and the Copper Poisoning effect (copper
+#nuggets) gives Poison instead of dealing damage itself.
+[copper_poisoning]
+	#Roll for poison from oxidized gear.
+	enabled = true
+	#Average seconds between rolls, per player.
+	#Range: 10 ~ 86400
+	intervalSeconds = 300
+	#Random spread either side of intervalSeconds.
+	#Range: 0 ~ 86400
+	jitterSeconds = 120
+	#Chance per fully oxidized piece that a roll poisons; pieces roll independently, so
+	#n pieces give 1 - (1 - chancePerPiece)^n.
+	#Range: 0.0 ~ 1.0
+	chancePerPiece = 0.15
+	#Poison I duration with one oxidized piece.
+	#Range: 1 ~ 600
+	baseSeconds = 4
+	#Extra Poison seconds per oxidized piece after the first.
+	#Range: 0 ~ 600
+	secondsPerExtraPiece = 2
+	#Cap on the Poison duration from one roll.
+	#Range: 1 ~ 600
+	maxSeconds = 20
+	#Poison I seconds the Copper Poisoning effect gives per effect level (a copper nugget
+	#gives level II, so twice this).
+	#Range: 1 ~ 600
+	effectPoisonSeconds = 4
+
+#No detailab-compatible armor overflow mod exists, so this adds one: extra rows
+#of the same registered armor-bar icons/colors stacked above the normal 10-icon row,
+#once a player has more than 20 armor points. Requires detailab; no-ops without it.
+[armor_overflow]
+	#Master on/off switch. When false, overflow past 20 armor points isn't shown at all.
+	enabled = true
+	#false (default): overflow rows are spaced a full icon height apart, like separate rows.
+	#true: rows are packed tighter (compactRowSpacing px apart) and tucked mostly behind
+	#the row below - the row closer to the hotbar is drawn on top of the one above it.
+	compact = false
+	#Vertical pixels between overflow rows when compact is true (icons are 9px tall).
+	#Range: 1 ~ 9
+	compactRowSpacing = 4
 

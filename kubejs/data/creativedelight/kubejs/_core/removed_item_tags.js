@@ -1,3 +1,4 @@
+// requires: creativedelight
 // priority: -10000
 // Removed items lose every item tag (_lib/removed_item_tags.js in the pack). That strip runs at the end of the pack's tag
 // scripts, before any CD script, so CD rows that tag a removed item (food_type_tags.js from food_types.json, the

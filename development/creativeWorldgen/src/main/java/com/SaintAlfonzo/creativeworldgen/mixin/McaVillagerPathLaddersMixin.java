@@ -41,7 +41,7 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 public abstract class McaVillagerPathLaddersMixin extends NodeEvaluator {
 
     @Unique
-    private static final TagKey<Block> CE_VILLAGER_LADDERS =
+    private static final TagKey<Block> CWG_VILLAGER_LADDERS =
             TagKey.create(Registry.BLOCK_REGISTRY, new ResourceLocation("creativeengineering", "villager_ladders"));
 
     @Shadow(remap = false)
@@ -52,7 +52,7 @@ public abstract class McaVillagerPathLaddersMixin extends NodeEvaluator {
 
     @Unique
     private static boolean creativeengineering$isLadder(BlockState state) {
-        return state.is(BlockTags.CLIMBABLE) && state.is(CE_VILLAGER_LADDERS);
+        return state.is(BlockTags.CLIMBABLE) && state.is(CWG_VILLAGER_LADDERS);
     }
 
     @Inject(method = "getLandNodeType", at = @At("HEAD"), cancellable = true, remap = false)

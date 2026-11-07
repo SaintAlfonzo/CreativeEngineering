@@ -627,7 +627,7 @@ Cost: one game-time compare per player per second; the 14-stack scan only at a r
   (Corrected 2026-10-21 from the Abnormals Delight 4.1.2 jar: it has no food value either, so it does nothing at all; it is out
   of JEI because `NectarItem` only gets a creative tab when `atmospheric` is loaded; its one recipe needs `atmospheric`.
   Plan: [briefs/ui_effects.md](briefs/ui_effects.md).)
-- **F9.** FIXED 2026-10-19 (header now points at `MagicResistancePotions` and `CE_POTION_MIXES`). **Stale comment:** [magic_resistance.js](../kubejs/startup_scripts/magic/magic_resistance.js) lines 19-23 say
+- **F9.** FIXED 2026-10-19 (header now points at `MagicResistancePotions` and `CB_POTION_MIXES`). **Stale comment:** [magic_resistance.js](../kubejs/startup_scripts/magic/magic_resistance.js) lines 19-23 say
   Magic Resistance has no potion; patcherMod's `MagicResistancePotions` added base, long and strong.
 - **F10. Exports predate the ports.** `mob_effects.json`, `potions.json` and `foods.json` were from 2026-10-18 18:30; the
   Vinery and Brewin ports went into `mods/` at 2026-10-19 00:50. The table uses the port sources for those two mods
@@ -702,7 +702,7 @@ mod in the pack registers a second Haste effect, and every source already gives 
 So there is nothing to unify at the effect level, and no new effect was made. The real overlap is two **potion**
 lines with the same effect (Miner's D7, `MND-40`): one of them would have to stop registering, which leaves stacks in
 old worlds without a potion (no conversions) and, by Miner's D4, is decided only after an in-game test. Also, potion
-registration left patcherMod in wave 4: the pack's own potions are CB's `CEPotions` (creative_split.md 7.8), so a
+registration left patcherMod in wave 4: the pack's own potions are CB's `CommonPotions` (creative_split.md 7.8), so a
 pack-owned Haste potion line would be CB's, not patcherMod's. Owner choice needed: keep both lines, or drop one
 (which, and whether its brewing ingredient then brews the survivor).
 
@@ -828,6 +828,11 @@ ingredient type.
 
 ## 9. History
 
+- 2026-11-06 (plan_cb_polish.md 1, 2): the frameworks, rules, categories, compound lines, Magic Resistance and every
+  Creative potion moved from Creative Brewing to Creative Common (`creativecommon:` ids, config `[effects]` and
+  `[magic_resistance]` in `creativecommon-common.toml`); gear rows and copper poisoning to Creative Equipment;
+  `jeed_providers.js`' gear block to Equipment's `gear_jeed.js`. Paths in this writeup older than this line name the
+  old places.
 - 2026-10-19: this writeup: table of all 140 effects (vanilla, 25 mods, the pack), counts, overlap groups, findings
   F1 to F13, tests EF-01 to EF-14; `tools/effect_audit.py`. Behaviour read from decompiled jars and the Vinery and Brewin
   port sources. No game code changed.

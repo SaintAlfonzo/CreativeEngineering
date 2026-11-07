@@ -251,7 +251,7 @@ the group's spacing. Only the split between members changes.
 - **Removed:**
   - The JSON, the script, `build_biome_merges.py`, the proposal analyzer and its reports moved to
     `kubejs/archive/worldgen/biome_merges_2026-10-11/` (deleted 2026-10-22; git history has it).
-  - Both `/cegen` generator entries.
+  - Both `/cdevgen` generator entries.
   - Both `build_deploy.py` file rules. The next deploy removes `biome_merges.js` and `biome_merges.json` from
     clients and the server.
   - The `biomeMerges` switch in `CEConfig` / `WorldgenConfig`, and its line in `config/creativeengineering-common.toml`.

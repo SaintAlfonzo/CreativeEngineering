@@ -52,3 +52,15 @@ mandatory=false
 versionRange="*"
 ordering="NONE"
 side="BOTH"
+[[dependencies.creativemagic]]
+modId="pneumaticcraft"
+mandatory=false
+versionRange="*"
+ordering="NONE"
+side="BOTH"
+[[dependencies.creativemagic]]
+modId="sophisticatedcore"
+mandatory=false
+versionRange="*"
+ordering="NONE"
+side="BOTH"

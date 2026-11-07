@@ -1,3 +1,4 @@
+// requires: creativecompat
 // Creative Compat: display names; moved from kubejs/client_scripts/namechanges.js on 2026-11-01.
 ClientEvents.lang('en_us', e => {
 	// Flower pots (feature_writeup/flower_pots.md 3.4): Supplementaries' 3-plant box; Beautify's hanging pot has rich
@@ -23,4 +24,10 @@ ClientEvents.lang('en_us', e => {
 	e.add(g + 'cooked_fish.body', 'Cats eat their fish raw. Cooked cod and salmon are for you.')
 	e.add(g + 'cooked_fish_cont_2.title', 'Cooked Fish')
 	e.add(g + 'cooked_fish_cont_2.body', 'Cooked fish does not tame cats.')
+
+	// Immersive Portals and the Portal Gun ship no names for these entities (WTHIT, /kill, death messages showed raw
+	// keys; plan_portal_gun.md 1). Lang merges per namespace, so each key is filed under its own.
+	e.add('portalgun', 'entity.portalgun.custom_portal', 'Portal')
+	e.add('imm_ptl_core', 'entity.imm_ptl_core.mirror', 'Mirror')
+	e.add('imm_ptl_core', 'entity.imm_ptl_core.breakable_mirror', 'Mirror')
 })

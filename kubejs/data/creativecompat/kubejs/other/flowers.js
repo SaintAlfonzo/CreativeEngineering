@@ -1,3 +1,4 @@
+// requires: creativecompat
 // Creative Compat; moved from kubejs/server_scripts/other/flowers.js on 2026-11-01.
 ServerEvents.recipes(e => {
     console.log('flowers starting')
@@ -21,7 +22,7 @@ ServerEvents.recipes(e => {
         [i.grown_red_tulip,    i.red_tulip],
         [i.grown_white_tulip,  i.white_tulip],
         [i.grown_wither_rose,  i.wither_rose]
-    ].map(p => [Item.of(p[0], 1), [p[1], p[1], p[1], p[1]], e, p[0].split(':')[1]]))
+    ].map(p => [p[0], [p[1], p[1], p[1], p[1]], e, String(p[0]).split(':')[1]]))
 
     console.log('flowers done')
 
@@ -30,5 +31,5 @@ ServerEvents.recipes(e => {
     R.remove({ id: 'beautify:hanging_pot' }, e)
     // Floral Enchantment's large pot is hidden (global.removedItems; flower_pots.md 3.2.9)
     R.remove({ id: 'floralench:large_pot' }, e)
-    R.shaped(Item.of(i.rich_hanging_pot, 1), ['A', 'B', 'C'], { A: i.beautify_rope, B: i.flower_pot, C: i.rich_soil }, e)
+    R.shaped(i.rich_hanging_pot, ['A', 'B', 'C'], { A: i.beautify_rope, B: i.flower_pot, C: i.rich_soil }, e)
 })

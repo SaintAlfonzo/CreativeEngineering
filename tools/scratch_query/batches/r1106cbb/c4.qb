@@ -1,0 +1,6 @@
+# r1106cbb Boot 4: the full pack (prep_srv.sh, group B) (SQ-CBB-12).
+## SQ-CBB-12 | full pack: removed count, no gate line, no refused remove
+shell grep -h "Added [0-9]* recipes" logs/kubejs/server.log
+shell n=$(grep -oE "removed [0-9]+ recipes" logs/kubejs/server.log | tail -1 | grep -oE "[0-9]+"); echo "removed=$n"; test "$n" -gt 1100 -a "$n" -lt 1600
+bootreject structure gate:
+shell test "$(grep -h "remove refused" logs/kubejs/server.log logs/kubejs/startup.log | wc -l)" = 0

@@ -1,3 +1,4 @@
+// requires: creativedelight
 // requires: miners_delight
 // Miner's Delight recipe changes (feature_writeup/miners_delight.md). Not a nested member yet: recipe ids are
 // creativedelight:<type>/<suffix> (global.CD.recipes).

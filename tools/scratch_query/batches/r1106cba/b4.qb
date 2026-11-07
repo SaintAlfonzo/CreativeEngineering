@@ -1,0 +1,5 @@
+# r1106cba Boot 4: new OUT, NOUPSTREAM=vinery_upstream (SQ-CBA-13). The server stops; run after the JVM exits.
+## SQ-CBA-13 | Vinery donor folder missing: startup stops with the message
+bootexpect missing: .*vinery_upstream/letsdo-vinery
+bootexpect get it from
+bootreject Done \(

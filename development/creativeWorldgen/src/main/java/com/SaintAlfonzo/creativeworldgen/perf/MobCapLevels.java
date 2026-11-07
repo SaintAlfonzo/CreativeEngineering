@@ -23,7 +23,7 @@ public final class MobCapLevels {
 
 	private static final MobCategory[] CATEGORIES = MobCategory.values();
 
-	/** Last chunk count and level per dimension, for the hysteresis and /ceperf mobcap. */
+	/** Last chunk count and level per dimension, for the hysteresis and /cdevperf mobcap. */
 	public static final class State {
 		public int chunks;
 		public int level;
@@ -122,7 +122,7 @@ public final class MobCapLevels {
 		return player != null && Math.abs(pos.getY() - player.getY()) > band;
 	}
 
-	/** Snapshot for /ceperf mobcap. */
+	/** Snapshot for /cdevperf mobcap. */
 	public static Map<ServerLevel, State> states() {
 		return STATES;
 	}

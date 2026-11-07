@@ -61,7 +61,8 @@
     "alexsmobs.EntityEmuEggLayerMixin",
     "untitledduckmod.DuckEntityEggLayerMixin",
     "untitledduckmod.GooseEntityEggLayerMixin",
-    "incubation.LayEggInNestGoalMixin"
+    "incubation.LayEggInNestGoalMixin",
+    "farmersrespite.CaffeinatedEffectMixin"
   ],
   "client": [
     "farmersdelight.CookingPotScreenRemainderMixin",

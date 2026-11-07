@@ -90,7 +90,7 @@ expect itemtag forge:jams .*cherry_jam_jar
 > zq itemtag creativeengineering:stepstools
 > zq itemtag curios:feet
 > curios list
-count creativeengineering:shaped/[a-z0-9_]*_stepstool[a-z_]* -> 1 [a-z_]*_stepstool == 16
+count creative(engineering|equipment):shaped/[a-z0-9_]*_stepstool[a-z_]* -> 1 [a-z_]*_stepstool == 16
 expect itemtag creativeengineering:stepstools \(16\)
 expect itemtag curios:feet .*stepstool
 expect (?i)feet
@@ -180,7 +180,7 @@ look the bark tag holds every species (oak to azalea, crimson and warped scales,
 
 ## SQ-DD-08 | painted asphalt
 > zq recipes painted_asphalt
-count creativeengineering:shaped/[a-z_]*_painted_asphalt -> 8 [a-z_]*_asphalt_block == 16
+count creative(engineering|equipment):shaped/[a-z_]*_painted_asphalt -> 8 [a-z_]*_asphalt_block == 16
 expect asphalt_from_painted_asphalt_soap -> 8 asphalt$
 > zq recipes create_dd:crafting/decor
 reject create_dd:crafting/decor/[a-z_]*_asphalt_block

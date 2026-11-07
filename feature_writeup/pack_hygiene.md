@@ -119,7 +119,7 @@ literal shape tag ids in `engineeringtags.js` (TODO `tooling/conventions #1`).
 
 53. **Status docs.** Judgement. `todo/todo.txt` is "kept as history" (TODO.md:15) but ebb0648 still ticked a box in it;
     [client_capture.md](client_capture.md) and its README row say nothing is built while `development/clientCapture`
-    has 11 Java files and `jar_archive/cecapture-0.1.0.jar`; `development/creativeCommon/changelog.txt` is a Forge MDK
+    has 11 Java files and `jar_archive/cdevcapture-0.1.0.jar`; `development/creativeCommon/changelog.txt` is a Forge MDK
     leftover (635 lines) missing from TODO row 1's MDK list.
 
 ## 3. Suggested fix order
@@ -336,7 +336,7 @@ effects reserved for Creative Brewing). The Brewin' / alcohol rows in `cooking/c
     runs its own spawner while the port's `WanderingTraderSpawnerMixin` swap is kept at 0. Option: the port reads CEConfig.
 40. **Server mods dump in two languages.** **FIXED 2026-10-27** (section 9). Judgement, documented. patcherMod `devtools/ServerModsDump.java` mirrors
     `tools/dump_server_mods.py` line for line, including a second `mod_sides.md` parser (KubeJS could not copy files;
-    `/cegen` can now run Python).
+    `/cdevgen` can now run Python).
 
 ### I. Build scripts
 
@@ -353,7 +353,7 @@ effects reserved for Creative Brewing). The Brewin' / alcohol rows in `cooking/c
 
 ### J. Tools
 
-44. **Generators missing from the manifest.** **FIXED 2026-10-27** (section 9). Rule (memory `cegen-generator-runner`). `gen_stack_sizes.py` (writes
+44. **Generators missing from the manifest.** **FIXED 2026-10-27** (section 9). Rule (memory `cdevgen-generator-runner`). `gen_stack_sizes.py` (writes
     `generation_scripts/stacks/stack_sizes.json`, read by `startup_scripts/changes/stack_sizes.js`),
     `gen_nether_swaps.py` (writes `nether_block_swaps.json`, read by patcherMod `TemplateBlockSwaps`), `food_catalog.py`
     (writes `food_types.json` and `item_dict.js`), and the dump readers `jei_coverage.py` and `stack_sizes.py` (in the
@@ -476,7 +476,7 @@ new patcherMod, CD, Brewin', Vinery, Miner's, Creative Labels, More Mooblooms an
     `winemakerEnabled` / `winemakerIntervalTicks` removed from CEConfig. time.md 3.7, wandering_trader.md.
   - 40: `devtools/ServerModsDump` deleted; `/dumpall` no longer runs it; `tools/dump_server_mods.py` is the route.
   - 36 to 38: shared Java under `development/shared/` (`packs`, `upstream`, `mixinplugin`, `itemhidden`), copied into
-    each jar under its own package by the `shared_sources` convention in `ce.forge-mod`; `CEPotions` replaces the two
+    each jar under its own package by the `shared_sources` convention in `ce.forge-mod`; `CommonPotions` replaces the two
     potion registrars; one Fruits Delight bytecode engine (CD). pack_tooling.md 2.8.
   - 28: the meal tooltip mixins moved to CD; `MealSlotTooltip` stays in patcherMod (two Central Kitchen mixins use it).
   - 41 to 43: `ce.forge-mod-refmap` (`refmap_name`), the resource guard (`resource_guard_*`), `flatDir libs` by default and

@@ -1,3 +1,4 @@
+// requires: creativedelight
 // Bread tags. #forge:bread (i.t_bread) is "any bread" for every recipe that asks for a general bread: loaves, the
 // flavored breads, bread slices and plain toast all count. Filled breads (honey, mulberry, glow, jelly) are not bread:
 // they have a filling. Specific breads keep their own recipes (sourdough and the

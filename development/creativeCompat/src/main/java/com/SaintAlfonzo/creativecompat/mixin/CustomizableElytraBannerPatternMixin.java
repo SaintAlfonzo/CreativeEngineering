@@ -33,7 +33,7 @@ import org.spongepowered.asm.mixin.injection.Redirect;
  *
  * <p>So instead: probe the curated location first (unchanged), and if that's missing, probe our
  * own {@code creativeengineering:entity/elytra_banner[_low]/<originNamespace>/<path>} compat
- * texture -- generated offline by {@code tools/gen_elytra_pattern_compat.py}, which reproduces
+ * texture -- built at load by {@code banners/BannerPatternPack}, which reproduces
  * customizableelytra's own centered-crop convention for every other installed mod's patterns.
  * Only fall back to the original (missing) curated location -- i.e. render nothing, same as
  * customizableelytra's own un-patched behavior -- if neither exists. Every location here binds

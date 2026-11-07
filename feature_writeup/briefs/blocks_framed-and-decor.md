@@ -223,7 +223,7 @@ Fairy light fasteners attach to some non-full blocks (fence tops and similar).
    (uses the fence-fastener entity, which hangs from the block centre: good for posts and walls).
 3. Optional (D2): mixin on `FastenerBlock.canSurvive` to accept `#creativeengineering:fairy_light_faces` for face
    fasteners on non-sturdy faces (top of a slab, a log pile).
-4. Guard with `ModList.isLoaded("fairylights")` through the mixin plugin (`CEMixinPlugin`).
+4. Guard with `ModList.isLoaded("fairylights")` through the mixin plugin (`CommonMixinPlugin`).
 
 ### Decisions
 - **D1 Which blocks.** Recommend walls, posts, chains, bars, lattices, stacked logs.

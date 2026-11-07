@@ -107,7 +107,7 @@ the first rebuild), `now` (each item's chance, whether a value or a rule put it 
   check `/dumpcompost`'s `now` for surprises (CM-06).
 - **F2. A two-step reload.** Edits need `/kubejs reload startup_scripts` and then `/reload`; `/reload` alone keeps the
   old rules.
-- **F3. `gen_compost_values.py` isn't in `/cegen`.** It's a manual `--add-new` after adding mods (output is now deterministic, so it could join; was: the file is hand-edited,
+- **F3. `gen_compost_values.py` isn't in `/cdevgen`.** It's a manual `--add-new` after adding mods (output is now deterministic, so it could join; was: the file is hand-edited,
   so a blind regeneration would be wrong). Fine as is; noted for the tooling list ([pack_tooling.md](pack_tooling.md) F5).
 - **F4. The nulch recipe** sits in `sawdust.js` (line 83) with a note that it belongs with compost ([TODO](todo/TODO.md) `farming/composting #2`).
 

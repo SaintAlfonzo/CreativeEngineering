@@ -1,3 +1,4 @@
+// requires: creativedelight
 // requires: alexsdelight
 // requires: alexsmobs
 // Alex's Delight recipe changes: bone broth and pasta grid routes, catfish slicing. Non-member file: recipe ids are

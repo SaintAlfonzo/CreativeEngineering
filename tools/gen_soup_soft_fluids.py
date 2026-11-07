@@ -5,7 +5,9 @@ Soups are the food_types.json "soup" type plus the Golden Food soups and stews (
 "golden/enchanted" keys with soup or stew in the name), as item_dict keys. A soup is covered when a
 soft fluid in mods/*.jar (data/<ns>/moonlight/soft_fluids/*.json) already lists it as a filled item;
 those keep the mod's json and colour. Each remaining soup gets
-kubejs/data/creativeengineering/moonlight/soft_fluids/<name>.json, Supplementaries' pumpkin soup as the
+development/creativeDelight/src/main/resources/data/creativeengineering/moonlight/soft_fluids/<name>.json (in the
+Creative Delight jar since 2026-11-06, plan_cb_polish.md 4; the soft fluid ids keep the creativeengineering namespace,
+since Moonlight has no alias for a renamed soft fluid and jars in saved worlds would empty), Supplementaries' pumpkin soup as the
 template: its empty container is the item's remainder from kubejs/exported/food/foods.json (/dumpfood;
 bowl when it has none), capacity 2 for a bowl and 1 for a bottle, the same both ways (a bowl in and a bowl
 out move the same amount). Items in removed_items.js are left out (Ender's Delight's wooden-bowl stews), so
@@ -36,7 +38,9 @@ import pack_paths  # noqa: E402
 REMOVED_JS = pack_paths.STARTUP_LIB / 'removed_items.js'
 TYPES = INSTANCE / 'kubejs/generation_scripts/food/food_types.json'
 FOODS = INSTANCE / 'kubejs/exported/food/foods.json'
-OUT = INSTANCE / 'kubejs/data/creativeengineering/moonlight/soft_fluids'
+OUT = INSTANCE / 'development/creativeDelight/src/main/resources/data/creativeengineering/moonlight/soft_fluids'
+# this tool's own output inside an installed Creative Delight jar: not a mod's coverage
+OWN_PREFIX = 'data/creativeengineering/moonlight/soft_fluids/'
 VANILLA = pack_paths.vanilla_jar()
 SOFT_FLUID_RE = re.compile(r'^data/[^/]+/moonlight/soft_fluids/.+\.json$')
 CAPACITY = {'minecraft:glass_bottle': 1}   # everything else is a bowl: 2 per item, as Supplementaries' soups
@@ -91,7 +95,7 @@ def covered(jars):
     out = {}
     for z in jars:
         for n in z.namelist():
-            if not SOFT_FLUID_RE.match(n):
+            if not SOFT_FLUID_RE.match(n) or n.startswith(OWN_PREFIX):
                 continue
             try:
                 d = json.loads(z.read(n))

@@ -126,6 +126,14 @@
 	#Read when data loads: a change applies on the next /reload or world start.
 	enabled = false
 
+#Creative inventory (client side).
+[creative_menu]
+	#true: creative players open the survival inventory (2x2 crafting grid) instead of the creative tabs,
+	#which skips the creative search cache build (a multi-second freeze on the first E press with many
+	#mods); JEI's cheat mode covers item browsing. Default false (vanilla); the pack sets true.
+	#Takes effect the next time the inventory opens.
+	disabled = true
+
 #Pop-up toasts in the top-right corner (client side).
 [toasts]
 	#Show tutorial toasts: vanilla's (move, find a tree, punch, craft planks, open inventory,
@@ -155,7 +163,7 @@
 	#Block model icons: when the looked-at block has no item, or its item draws as the purple/black
 	#missing model, WTHIT's icon slot shows the block's own model instead. Blocks listed here keep
 	#WTHIT's normal icon. Entries: a namespace ('create') or a block id ('create:belt').
-	#/cedumpicons + tools/wthit_icon_audit.py list every block the icon applies to.
+	#/cdevdumpicons + tools/wthit_icon_audit.py list every block the icon applies to.
 	iconExclude = []
 	#Block model icons: an item to show for a block that has none and draws no model of its own
 	#(block-entity rendered). Entries 'block=item'. D&D's powered flywheel is Create's flywheel.

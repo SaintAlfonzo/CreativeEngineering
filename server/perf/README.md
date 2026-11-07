@@ -80,17 +80,17 @@ anything older than 30 minutes is gone. Copy it to the dev instance's `perf/reco
 `python3 tools/perf/perf_report.py perf/recordings/server-<date>-<time>.jfr`; the report is
 `perf/reports/<name>.html`.
 
-## From in game: `/ceperf`
+## From in game: `/cdevperf`
 
 For an op (level 3) without shell access to the server:
 
 ```
-/ceperf status            # is the recording running, which pack events it records, hooks not run yet
-/ceperf dump              # saves everything kept (up to 30 minutes) to perf/recordings/server-<date>-<time>.jfr
-/ceperf dump lagspike     # adds a word to the file name
+/cdevperf status            # is the recording running, which pack events it records, hooks not run yet
+/cdevperf dump              # saves everything kept (up to 30 minutes) to perf/recordings/server-<date>-<time>.jfr
+/cdevperf dump lagspike     # adds a word to the file name
 ```
 
-`/ceperf dump` cannot cut a shorter window; `perf_report.py --last 600` does that on the dev machine.
+`/cdevperf dump` cannot cut a shorter window; `perf_report.py --last 600` does that on the dev machine.
 
 ## If `dump` says there is no jcmd
 

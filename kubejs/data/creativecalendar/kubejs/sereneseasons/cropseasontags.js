@@ -1,3 +1,4 @@
+// requires: creativecalendar
 // requires: sereneseasons
 // Creative Calendar (feature_writeup/creative_calendar.md 4.4); moved from kubejs/server_scripts/tags/ on 2026-11-01.
 // Crop growing season types: block and item tags creativeengineering:crop_seasons/<type>.
@@ -20,7 +21,9 @@
 
 	function readConfig() {
 		try {
-			return JSON.parse(String(JsonIO.readString(CONFIG_PATH)))
+			var cfg = JSON.parse(String(global.genText(CONFIG_PATH)))
+			if (cfg == null) console.error('[crop-seasons] ' + CONFIG_PATH + ' not found (no instance file, no jar copy), no crop season tags')
+			return cfg
 		} catch (err) {
 			console.error('[crop-seasons] could not read ' + CONFIG_PATH + ', no crop season tags: ' + err)
 			return null

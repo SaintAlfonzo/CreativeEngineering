@@ -38,8 +38,8 @@ A change to a Terralith flower feature through `nether_worldgen_rules.json` can'
   `kubejs/data/terralith/worldgen/configured_feature/flower/blue/flowers.json`) is ignored in game until
   `gen_wild_flowers.py` reruns (nether_worldgen.md 4, "Flower snapshot order"). The snapshot holds 9
   `terralith:flower/blue` entries today.
-- `tools/generators.json` runs `nether_worldgen` before `wild_flowers` (both in groups `core`, `worldgen`), so `/cegen
-  run worldgen` or `all` is safe. `/cegen run nether_worldgen` alone, or `python3 tools/gen_nether_worldgen.py` by
+- `tools/generators.json` runs `nether_worldgen` before `wild_flowers` (both in groups `core`, `worldgen`), so `/cdevgen
+  run worldgen` or `all` is safe. `/cdevgen run nether_worldgen` alone, or `python3 tools/gen_nether_worldgen.py` by
   hand, is not. The manifest has no dependency field (`_readme`: "put a generator after anything it reads").
 - `gen_nether_worldgen.py` `main()` (:195-268) writes `out` and the manifest; nothing looks at flowers.
 
@@ -56,7 +56,7 @@ A change to a Terralith flower feature through `nether_worldgen_rules.json` can'
    ```
    Add `--no-flowers` to skip it (prints a WARNING line instead).
 2. Add `kubejs/generation_scripts/worldgen/flower_features.json` to the `nether_worldgen` entry's `outputs` in
-   `tools/generators.json`, so `/cegen` reports the snapshot change, and add a `highlight` regex for the
+   `tools/generators.json`, so `/cdevgen` reports the snapshot change, and add a `highlight` regex for the
    "rerunning gen_wild_flowers" line.
 3. Optional guard on the other side: a `--check` mode in `gen_wild_flowers.py` that recomputes the snapshot in memory
    and exits non-zero on a difference, called from `tools/test_wild_flowers.sh`.

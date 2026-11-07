@@ -1,0 +1,8 @@
+# r1106spfx boot a2: same save as a1, Immersive Portals, Portal Gun, Portal Gels moved out. Row SQ-SPFX-01b.
+pace 1
+## SQ-SPFX-01b | no IP: visibility mixin gated off
+bootexpect Done \(
+bootreject ChunkMap\.m_183760_ set back to private
+bootreject (Mixin apply failed|InvalidInjectionException).*com\.SaintAlfonzo
+shell grep -hcE "ChunkMap.m_183760_" logs/latest.log; true
+look 0 lines

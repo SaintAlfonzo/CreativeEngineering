@@ -1,3 +1,4 @@
+// requires: creativecompat
 // Creative Compat: Curios slot membership for the pack's own slots (data: kubejs/data/creativeengineering/curios/;
 // feature_writeup/curios_slots.md); moved from kubejs/server_scripts/tags/curiostags.js on 2026-11-01. Curios takes an
 // item into a slot when it is in the item tag curios:<slot>. Botania's masks, the Cob Pipe and the stepstools stay in

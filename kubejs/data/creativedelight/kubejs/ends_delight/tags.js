@@ -1,3 +1,4 @@
+// requires: creativedelight
 // requires: ends_delight
 // End's Delight tags (Creative Delight member, ends_delight.md 3.1; TODO largecontent/mod-additions #4, #15). The
 // shared End food tags get their End's entries here and their Ender's entries in endersdelight/tags.js.

@@ -1,3 +1,4 @@
+// requires: creativeengineering
 // Creative Engineering; moved from kubejs/server_scripts/engineering/dust.js on 2026-11-04 (creative_split.md 7.13, wave 8), rows unchanged.
 ServerEvents.recipes(e => {
     console.log('Hello! The dust event has started!')
@@ -82,11 +83,11 @@ ServerEvents.recipes(e => {
     R.createFilling(Item.of(i.ash, 36), [Fluid.of(f.create_potion, 225, '{Bottle:"REGULAR",Potion:"minecraft:healing"}'), i.cinder_flour_pile], e, 'cinder_pile_ash_filling')
 
     // Powdered obsidian <- Resistance
-    R.shapeless(Item.of(i.powdered_obsidian, 8), [Item.of(i.cinder_flour, 8), { type: 'forge:partial_nbt', item: i.potion, nbt: '{Potion:"creativebrewing:resistance"}' }], e, 'cinder_powdered_obsidian_shapeless', null, [i.potion, Item.of(i.glass_bottle)])
-    R.ieBottling(i.powdered_obsidian,{ tag: f.t_potion, amount: 20, nbt: '{Bottle:"REGULAR",Potion:"creativebrewing:resistance"}' },i.cinder_flour,e, 'powdered_obsidian_from_cinder_flour_potion')
-    R.createFilling(i.powdered_obsidian, [Fluid.of(f.create_potion, 25, '{Bottle:"REGULAR",Potion:"creativebrewing:resistance"}'), i.cinder_flour], e, 'cinder_powdered_obsidian_filling')
-    R.ieBottling(Item.of(i.powdered_obsidian, 9),{ tag: f.t_potion, amount: 180, nbt: '{Bottle:"REGULAR",Potion:"creativebrewing:resistance"}' },i.cinder_flour_pile,e, 'powdered_obsidian_from_cinder_flour_pile_potion')
-    R.createFilling(Item.of(i.powdered_obsidian, 9), [Fluid.of(f.create_potion, 225, '{Bottle:"REGULAR",Potion:"creativebrewing:resistance"}'), i.cinder_flour_pile], e, 'cinder_pile_powdered_obsidian_filling')
+    R.shapeless(Item.of(i.powdered_obsidian, 8), [Item.of(i.cinder_flour, 8), { type: 'forge:partial_nbt', item: i.potion, nbt: '{Potion:"creativecommon:resistance"}' }], e, 'cinder_powdered_obsidian_shapeless', null, [i.potion, Item.of(i.glass_bottle)])
+    R.ieBottling(i.powdered_obsidian,{ tag: f.t_potion, amount: 20, nbt: '{Bottle:"REGULAR",Potion:"creativecommon:resistance"}' },i.cinder_flour,e, 'powdered_obsidian_from_cinder_flour_potion')
+    R.createFilling(i.powdered_obsidian, [Fluid.of(f.create_potion, 25, '{Bottle:"REGULAR",Potion:"creativecommon:resistance"}'), i.cinder_flour], e, 'cinder_powdered_obsidian_filling')
+    R.ieBottling(Item.of(i.powdered_obsidian, 9),{ tag: f.t_potion, amount: 180, nbt: '{Bottle:"REGULAR",Potion:"creativecommon:resistance"}' },i.cinder_flour_pile,e, 'powdered_obsidian_from_cinder_flour_pile_potion')
+    R.createFilling(Item.of(i.powdered_obsidian, 9), [Fluid.of(f.create_potion, 225, '{Bottle:"REGULAR",Potion:"creativecommon:resistance"}'), i.cinder_flour_pile], e, 'cinder_pile_powdered_obsidian_filling')
 
     // ############################## Sulfur ##############################
 

@@ -1,3 +1,4 @@
+// requires: creativedelight
 // requires: abnormals_delight
 // requires: untitledduckmod
 // Abnormals Delight recipe changes. Non-member file: recipe ids are creativedelight:<type>/<suffix>

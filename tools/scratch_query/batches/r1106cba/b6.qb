@@ -1,0 +1,26 @@
+# r1106cba Boot 6: new OUT, CEPortTesting instance jars, group B normal world (SQ-CBA-15 to -18).
+## SQ-CBA-15 | instance boot: SQ-CBA-01 to -03 again
+bootexpect \[creativebrewing\] members: \[vinery, brewinandchewin\]$
+bootreject NOT loaded:|is loaded from .*not from the Creative Brewing jar|Missing or unsupported mandatory|Encountered an unexpected exception|Exception in thread
+bootreject Mixin apply failed|InvalidMixinException|creativebrewing.*(NoClassDefFoundError|ClassNotFoundException)|Attempted to load class net/minecraft/client
+shell grep -q "\[jar-startup\] startup script packs in order: .*creativedelight.*creativebrewing" logs/kubejs/startup.log
+shell grep -q "\[creativebrewing\] core finished, members: vinery, brewinandchewin" logs/kubejs/startup.log
+shell ! grep -nE "ReferenceError|TypeError|EvaluatorException|is not defined|global.trades missing" logs/kubejs/startup.log logs/kubejs/server.log
+shell grep -E "Skipped creativebrewing:kubejs/" logs/kubejs/server.log | sed 's/.*\] //'
+shell test "$(grep -c 'Skipped creativebrewing:kubejs/' logs/kubejs/server.log)" -le 1
+## SQ-CBA-16 | instance: same brews, mix count compared with the chain boot
+shell grep -oE "\[CE potions\] added [0-9]+ item-agnostic potion mixes" logs/kubejs/startup.log
+> zq potion minecraft:mundane minecraft:wither_rose
+> zq potion minecraft:thick minecraft:amethyst_shard
+sleep 2
+expect mundane \+ minecraft:wither_rose -> minecraft:potion
+expect thick \+ minecraft:amethyst_shard -> minecraft:potion magic_resistance
+look compare the mix count above with SQ-CBA-06's shell output (equal or higher)
+## SQ-CBA-17 | instance: winemaker trade count compared with the chain boot
+kjsexpect \[wandering trades\] winemaker [1-9]
+shell grep -oE "\[wandering trades\] winemaker [0-9]+[^\"]*" logs/kubejs/server.log | head -3
+look compare with SQ-CBA-10's winemaker count (higher)
+## SQ-CBA-18 | instance: absent-mods list and CB errors
+shell grep -h "absent mods" logs/kubejs/server.log | head -20
+bootreject ERROR.*creativebrewing
+look the absent list names only mods CEPortTesting lacks (no quark, fruitsdelight, supplementaries)

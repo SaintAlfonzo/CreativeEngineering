@@ -1,0 +1,23 @@
+{
+  "color": "#f08a24",
+  "containers": [
+    {
+      "filled": [
+        "veggiesdelight:carrot_juice"
+      ],
+      "empty": "minecraft:glass_bottle",
+      "capacity": 1
+    }
+  ],
+  "equivalent_fluids": [
+    "creativedelight:carrot_juice"
+  ],
+  "flowing_texture": "moonlight:soft_fluids/potion_flow",
+  "food": {
+    "divider": 1,
+    "item": "veggiesdelight:carrot_juice"
+  },
+  "from_mod": "veggiesdelight",
+  "still_texture": "moonlight:soft_fluids/potion_still",
+  "translation_key": "item.veggiesdelight.carrot_juice"
+}

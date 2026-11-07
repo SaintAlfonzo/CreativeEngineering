@@ -1,3 +1,4 @@
+// requires: creativedelight
 // requires: farmersrespite
 // requires: rusticdelight
 // Coffee merge (feature_writeup/item_merges.md 2.8). Non-member file: recipe ids are creativedelight:<type>/<suffix>

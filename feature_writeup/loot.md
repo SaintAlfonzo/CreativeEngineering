@@ -634,9 +634,9 @@ two mod configs from disk, so a switched-on config shows up as an alarm there to
 
 ## 6. Offline checks
 
-- In game, `/cegen run loot dumps` runs `/dumploot` + `/dumptags item`, then `gen_loot_config.py`, the audit and the
-  census, and says in chat which files changed (patcherMod `/cegen`, list in `tools/generators.json`). `/cegen run
-  loot_config` alone is about 2 s. Full output lands in `logs/cegen/<id>.log`.
+- In game, `/cdevgen run loot dumps` runs `/dumploot` + `/dumptags item`, then `gen_loot_config.py`, the audit and the
+  census, and says in chat which files changed (patcherMod `/cdevgen`, list in `tools/generators.json`). `/cdevgen run
+  loot_config` alone is about 2 s. Full output lands in `logs/cdevgen/<id>.log`.
 - `python3 tools/gen_loot_config.py` prints scope / GLM / item counts. On 2026-09-27 (evening): `scope: 376 tables
   (309 roots, 237 placed by templates, 2 code-rolled orphans, 19 with code-added pools, 10 with code-injected
   entries)`, 615 items (55 post-roll only), 12 dead template references.
@@ -786,7 +786,7 @@ Revert every temporary edit and `/reload` afterwards.
   `tools/loot_census.py` added, this writeup written. Found the 8 items in 4.2. Confirmed in bytecode that LootJS
   types rolls by caller, that Forge skips `LootTableLoadEvent` for overridden vanilla tables, and that KubeJS's
   pre-roll edit doesn't trigger that.
-- **2026-09-27:** `/cegen` (patcherMod `devtools/GeneratorRunner`) runs the loot generators from in game or at
+- **2026-09-27:** `/cdevgen` (patcherMod `devtools/GeneratorRunner`) runs the loot generators from in game or at
   startup (`[debug.generators] runAtStartup`). BUILT, not in mods/ yet. Its first scratch run showed `loot_config.json`
   and `loot_index.json` are behind SimplyHouses.
 - **2026-09-27:** `06_dead_maps.js` strips Monobank's ruined-portal explorer map from its 5 vault tables (ruined

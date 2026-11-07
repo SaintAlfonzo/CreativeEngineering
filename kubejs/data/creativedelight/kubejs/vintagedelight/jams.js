@@ -1,3 +1,4 @@
+// requires: creativedelight
 // requires: vintagedelight
 // Jams (TODO dishes/jams #1, #3, #4; owner 2026-10-29; feature_writeup/briefs/dishes_jams.md). Jams are mason jars
 // only: the jam and relish bottles and Vintage's sweet berry and glow berry jams are removed items (CD startup

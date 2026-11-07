@@ -21,7 +21,7 @@ import net.minecraft.world.item.ItemStack;
 @JeiPlugin
 public class OvenJeiPlugin implements IModPlugin {
 
-    private static final ResourceLocation UID = new ResourceLocation(CreativeDelight.NS, "oven");
+    private static final ResourceLocation UID = new ResourceLocation(CreativeDelight.MOD_ID, "oven");
 
     @Override
     public ResourceLocation getPluginUid() {

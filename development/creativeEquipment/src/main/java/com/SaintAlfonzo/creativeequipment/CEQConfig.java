@@ -19,7 +19,7 @@ import net.minecraftforge.common.ForgeConfigSpec;
  * {@code [crafting]} (the felsic assembly values), {@code [armor_enchantability]}, {@code [shields]},
  * {@code [bonemeal_charm]}, {@code [bottled_air]} and {@code [backpackSkins]}. The first boot with Equipment copies a
  * player's values over ({@code swap.ConfigRename.carrySections}, called from {@link CreativeEquipment}). The static
- * field names are CEConfig's, so {@code global.NCH.cfg(..., 'CRAFTING.FELSIC_SWORD')} finds them once the scripts
+ * field names are the pre-carve CEConfig's, so {@code global.NCH.cfg(..., 'CRAFTING.FELSIC_SWORD')} finds them once the scripts
  * register this class. {@code [damage_tags]} stays in Common with the damage tag framework (Creative Brewing reads it).
  */
 public final class CEQConfig {
@@ -37,6 +37,14 @@ public final class CEQConfig {
     public static final BottledAir BOTTLED_AIR;
     public static final BackpackSkins BACKPACK_SKINS;
     public static final Tooltips TOOLTIPS;
+    public static final CopperPoisoning COPPER_POISONING;
+    public static final ArmorOverflow ARMOR_OVERFLOW;
+
+    /** Sections taken over from Creative Common's creativecommon-common.toml (interface carve, 2026-11-07). */
+    public static final List<String> COMMON_SECTIONS = List.of("armor_overflow");
+
+    /** Taken over from Creative Brewing's creativebrewing-common.toml (plan_cb_polish.md 1, 2026-11-06). */
+    public static final List<String> CB_SECTIONS = List.of("copper_poisoning");
 
     /** The toml tables carried over from creativeengineering-common.toml. */
     public static final List<String> SECTIONS = List.of("dragon_gear", "air_brake", "stepstool", "crafting",
@@ -55,6 +63,9 @@ public final class CEQConfig {
         BOTTLED_AIR = new BottledAir(builder);
         BACKPACK_SKINS = new BackpackSkins(builder);
         TOOLTIPS = new Tooltips(builder);
+        COPPER_POISONING = new CopperPoisoning(builder);
+        // from creativecommon-common.toml (interface carve, 2026-11-07)
+        ARMOR_OVERFLOW = new ArmorOverflow(builder);
         SPEC = builder.build();
     }
 
@@ -232,10 +243,10 @@ public final class CEQConfig {
 
     /**
      * Framework for driving individual KubeJS recipe VALUES (not just on/off toggles) from
-     * CEConfig. Each recipe that opts in gets its own nested section here; the KubeJS side
+     * CEQConfig. Each recipe that opts in gets its own nested section here; the KubeJS side
      * reads it via {@code Java.loadClass} the same way as {@link DragonGear}/{@link AirBrake}.
      * Recipes are baked at datapack-reload time ({@code ServerEvents.recipes}), so editing a
-     * value here needs a {@code /reload} to reach an already-generated recipe - CEConfig's own
+     * value here needs a {@code /reload} to reach an already-generated recipe - the config's own
      * live-reload only refreshes the value on disk, not recipes already built from it.
      */
     public static final class Crafting {
@@ -252,7 +263,7 @@ public final class CEQConfig {
 
         private Crafting(ForgeConfigSpec.Builder b) {
             b.push("crafting");
-            String magicResistance = "creativebrewing:magic_resistance"; // Creative Brewing's effect (creativeengineering: up to 2026-11-04)
+            String magicResistance = "creativecommon:magic_resistance"; // Creative Common since 2026-11-06 (creativebrewing: before, creativeengineering: up to 2026-11-04)
             FELSIC_HELMET = new FelsicPiece(b, "felsic_helmet", magicResistance, 500, 1, 5);
             FELSIC_CHESTPLATE = new FelsicPiece(b, "felsic_chestplate", magicResistance, 500, 1, 5);
             FELSIC_LEGGINGS = new FelsicPiece(b, "felsic_leggings", magicResistance, 500, 1, 5);
@@ -590,6 +601,84 @@ public final class CEQConfig {
 
                 b.pop(); // tier id
             }
+        }
+    }
+
+    /** Copper poisoning from oxidized Everything Copper gear ({@code effect/CopperPoisoningHandler}; from Creative Brewing's file, plan_cb_polish.md 1). */
+    public static final class CopperPoisoning {
+        public final ForgeConfigSpec.BooleanValue enabled;
+        public final ForgeConfigSpec.IntValue intervalSeconds;
+        public final ForgeConfigSpec.IntValue jitterSeconds;
+        public final ForgeConfigSpec.DoubleValue chancePerPiece;
+        public final ForgeConfigSpec.IntValue baseSeconds;
+        public final ForgeConfigSpec.IntValue secondsPerExtraPiece;
+        public final ForgeConfigSpec.IntValue maxSeconds;
+        public final ForgeConfigSpec.IntValue effectPoisonSeconds;
+
+        private CopperPoisoning(ForgeConfigSpec.Builder b) {
+            b.comment(
+                    "Fully oxidized Everything Copper gear (armor worn, or any piece in the hotbar or",
+                    "offhand) poisons its holder now and then, and the Copper Poisoning effect (copper",
+                    "nuggets) gives Poison instead of dealing damage itself."
+            ).push("copper_poisoning");
+
+            enabled = b.comment("Roll for poison from oxidized gear.").define("enabled", true);
+            intervalSeconds = b.comment("Average seconds between rolls, per player.")
+                    .defineInRange("intervalSeconds", 300, 10, 86400);
+            jitterSeconds = b.comment("Random spread either side of intervalSeconds.")
+                    .defineInRange("jitterSeconds", 120, 0, 86400);
+            chancePerPiece = b.comment(
+                    "Chance per fully oxidized piece that a roll poisons; pieces roll independently, so",
+                    "n pieces give 1 - (1 - chancePerPiece)^n."
+            ).defineInRange("chancePerPiece", 0.15, 0.0, 1.0);
+            baseSeconds = b.comment("Poison I duration with one oxidized piece.")
+                    .defineInRange("baseSeconds", 4, 1, 600);
+            secondsPerExtraPiece = b.comment("Extra Poison seconds per oxidized piece after the first.")
+                    .defineInRange("secondsPerExtraPiece", 2, 0, 600);
+            maxSeconds = b.comment("Cap on the Poison duration from one roll.")
+                    .defineInRange("maxSeconds", 20, 1, 600);
+            effectPoisonSeconds = b.comment(
+                    "Poison I seconds the Copper Poisoning effect gives per effect level (a copper nugget",
+                    "gives level II, so twice this)."
+            ).defineInRange("effectPoisonSeconds", 4, 1, 600);
+
+            b.pop(); // copper_poisoning
+        }
+    }
+
+    /**
+     * Dials for {@code compat.ArmorOverflowRenderer} - Detail Armor Bar (detailab) only ever
+     * draws one row of 10 armor-point icons; this instead draws full extra rows of the same
+     * textured/recolored icons stacked above the first row. Detailab's own fallback for overflow
+     * - tiny 3px tick marks to the left of the bar - is permanently suppressed by
+     * {@code mixin.ArmorBarRendererOverflowTickMixin} regardless of this section's settings, since
+     * it visually conflicts with real rows and has no purpose once this feature exists.
+     */
+    public static final class ArmorOverflow {
+        public final ForgeConfigSpec.BooleanValue enabled;
+        public final ForgeConfigSpec.BooleanValue compact;
+        public final ForgeConfigSpec.IntValue compactRowSpacing;
+
+        private ArmorOverflow(ForgeConfigSpec.Builder b) {
+            b.comment(
+                    "No detailab-compatible armor overflow mod exists, so this adds one: extra rows",
+                    "of the same registered armor-bar icons/colors stacked above the normal 10-icon row,",
+                    "once a player has more than 20 armor points. Requires detailab; no-ops without it."
+            ).push("armor_overflow");
+
+            enabled = b.comment("Master on/off switch. When false, overflow past 20 armor points isn't shown at all.")
+                    .define("enabled", true);
+
+            compact = b.comment(
+                    "false (default): overflow rows are spaced a full icon height apart, like separate rows.",
+                    "true: rows are packed tighter (compactRowSpacing px apart) and tucked mostly behind",
+                    "the row below - the row closer to the hotbar is drawn on top of the one above it."
+            ).define("compact", false);
+
+            compactRowSpacing = b.comment("Vertical pixels between overflow rows when compact is true (icons are 9px tall).")
+                    .defineInRange("compactRowSpacing", 4, 1, 9);
+
+            b.pop(); // armor_overflow
         }
     }
 }

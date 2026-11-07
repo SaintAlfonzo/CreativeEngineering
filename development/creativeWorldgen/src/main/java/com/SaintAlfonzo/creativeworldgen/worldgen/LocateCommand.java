@@ -42,7 +42,7 @@ import java.util.concurrent.ExecutorService;
 import java.util.concurrent.ThreadPoolExecutor;
 
 /**
- * /celocate (feature_writeup/locate.md 3.4 to 3.6), op level 2. Everything runs on Async Locator's thread pool, so its
+ * /cwglocate (feature_writeup/locate.md 3.4 to 3.6), op level 2. Everything runs on Async Locator's thread pool, so its
  * asyncLocatorThreads setting is the parallelism; the server thread only starts work, prints progress and writes the
  * reports.
  *
@@ -104,7 +104,7 @@ public final class LocateCommand {
 
 	@SubscribeEvent
 	public static void onRegisterCommands(RegisterCommandsEvent event) {
-		LiteralArgumentBuilder<CommandSourceStack> root = Commands.literal("celocate").requires(s -> s.hasPermission(2))
+		LiteralArgumentBuilder<CommandSourceStack> root = Commands.literal("cwglocate").requires(s -> s.hasPermission(2))
 				.then(Commands.literal("batch")
 						.executes(ctx -> batch(ctx, "all", WorldgenConfig.locateBatchRadius()))
 						.then(Commands.argument("filter", StringArgumentType.string())
@@ -128,8 +128,8 @@ public final class LocateCommand {
 
 	private static int batch(CommandContext<CommandSourceStack> ctx, String filter, int radius) {
 		CommandSourceStack source = ctx.getSource();
-		if (!AsyncLocatorBridge.available()) return fail(source, "Async Locator is not installed; /celocate needs its thread pool.");
-		if (batch != null) return fail(source, "A batch is already running (/celocate status, /celocate stop).");
+		if (!AsyncLocatorBridge.available()) return fail(source, "Async Locator is not installed; /cwglocate needs its thread pool.");
+		if (batch != null) return fail(source, "A batch is already running (/cwglocate status, /cwglocate stop).");
 		ServerLevel level = source.getLevel();
 		List<Holder<Structure>> targets = targets(level, filter);
 		if (targets.isEmpty()) return fail(source, "No live structure matches '" + filter + "' in " + level.dimension().location() + ".");
@@ -146,7 +146,7 @@ public final class LocateCommand {
 					item.result = r;
 					LocateStats.Search s = item.search[0];
 					String ended = s == null ? null : s.ended;
-					// a queued search that /celocate stop cancels completes with a CancellationException (05_phase_5.md 3.4)
+					// a queued search that /cwglocate stop cancels completes with a CancellationException (05_phase_5.md 3.4)
 					Throwable cause = e instanceof CompletionException && e.getCause() != null ? e.getCause() : e;
 					item.status = cause instanceof CancellationException ? "stopped" : e != null ? "error: " + e : r != null ? "found"
 							: ended == null ? "not_found" : ended.startsWith("timed out") ? "timed_out" : "stopped";
@@ -157,15 +157,15 @@ public final class LocateCommand {
 				item.done = true;
 			}
 		}
-		source.sendSuccess(Component.literal("[celocate] batch: " + b.items.size() + " structures from " + b.origin.getX() + " " + b.origin.getZ()
+		source.sendSuccess(Component.literal("[cwglocate] batch: " + b.items.size() + " structures from " + b.origin.getX() + " " + b.origin.getZ()
 				+ ", radius " + radius + " chunks, " + threads() + " locator thread(s). Report: " + BATCH_OUT), true);
 		return b.items.size();
 	}
 
 	private static int census(CommandContext<CommandSourceStack> ctx, int radius, BlockPos centerBlock) {
 		CommandSourceStack source = ctx.getSource();
-		if (!AsyncLocatorBridge.available()) return fail(source, "Async Locator is not installed; /celocate needs its thread pool.");
-		if (censusJob != null) return fail(source, "A census is already running (/celocate status, /celocate stop).");
+		if (!AsyncLocatorBridge.available()) return fail(source, "Async Locator is not installed; /cwglocate needs its thread pool.");
+		if (censusJob != null) return fail(source, "A census is already running (/cwglocate status, /cwglocate stop).");
 		ServerLevel level = source.getLevel();
 		BlockPos at = centerBlock != null ? centerBlock : new BlockPos(source.getPosition());
 		LocateCensus c = new LocateCensus(level, new ChunkPos(at), radius);
@@ -182,7 +182,7 @@ public final class LocateCommand {
 			finishCensus();
 			return fail(source, "Could not use Async Locator's thread pool: " + e);
 		}
-		source.sendSuccess(Component.literal("[celocate] census: " + c.slotCount + " slot chunks in " + c.regions.size() + " regions around chunk "
+		source.sendSuccess(Component.literal("[cwglocate] census: " + c.slotCount + " slot chunks in " + c.regions.size() + " regions around chunk "
 				+ c.center.x + " " + c.center.z + " (radius " + radius + "), " + threads() + " locator thread(s). Report: " + CENSUS_OUT
 				+ (c.skippedPlacements.isEmpty() ? "" : "; skipped " + c.skippedPlacements.size() + " sets with custom placement types")), true);
 		return c.slotCount;
@@ -191,12 +191,12 @@ public final class LocateCommand {
 	private static int stats(CommandSourceStack source, boolean reset) {
 		if (reset) {
 			LocateStats.resetTotals();
-			source.sendSuccess(Component.literal("[celocate] search totals cleared."), true);
+			source.sendSuccess(Component.literal("[cwglocate] search totals cleared."), true);
 			return 1;
 		}
 		List<Map<String, Object>> rows = LocateStats.totals();
 		write(STATS_OUT, Map.of("searches", rows));
-		source.sendSuccess(Component.literal("[celocate] " + rows.size() + " structures searched since boot (" + STATS_OUT + "). Most misses:"), false);
+		source.sendSuccess(Component.literal("[cwglocate] " + rows.size() + " structures searched since boot (" + STATS_OUT + "). Most misses:"), false);
 		for (Map<String, Object> r : rows.subList(0, Math.min(10, rows.size()))) {
 			source.sendSuccess(Component.literal("  " + r.get("structure") + ": " + r.get("misses") + " misses, " + r.get("hits") + "/" + r.get("searches")
 					+ " found, " + r.get("ms") + " ms"), false);
@@ -206,7 +206,7 @@ public final class LocateCommand {
 
 	private static int status(CommandSourceStack source) {
 		if (batch == null && censusJob == null) {
-			source.sendSuccess(Component.literal("[celocate] nothing running."), false);
+			source.sendSuccess(Component.literal("[cwglocate] nothing running."), false);
 			return 0;
 		}
 		if (batch != null) source.sendSuccess(Component.literal(batchProgress(batch)), false);
@@ -221,7 +221,7 @@ public final class LocateCommand {
 		}
 		if (censusJob != null) censusJob.cancelled.set(true);
 		LocateStats.stopAll();
-		source.sendSuccess(Component.literal("[celocate] stopping every running search (batch, census, /locate, maps); the reports are written with what finished."), true);
+		source.sendSuccess(Component.literal("[cwglocate] stopping every running search (batch, census, /locate, maps); the reports are written with what finished."), true);
 		return 1;
 	}
 
@@ -322,7 +322,7 @@ public final class LocateCommand {
 		root.put("seconds", (System.currentTimeMillis() - b.started) / 1000);
 		root.put("structures", rows);
 		write(BATCH_OUT, root);
-		String msg = "[celocate] batch done: " + found + "/" + b.items.size() + " found, " + misses + " misses in total, "
+		String msg = "[cwglocate] batch done: " + found + "/" + b.items.size() + " found, " + misses + " misses in total, "
 				+ (System.currentTimeMillis() - b.started) / 1000 + " s. " + BATCH_OUT;
 		b.source.sendSuccess(Component.literal(msg), true);
 		LOG.info(msg);
@@ -335,7 +335,7 @@ public final class LocateCommand {
 		if (c == null) return;
 		write(CENSUS_OUT, c.report(threads()));
 		long[] t = c.totals();
-		String msg = "[celocate] census done" + (c.cancelled.get() ? " (stopped)" : "") + ": " + c.slotsDone.get() + "/" + c.slotCount + " slot chunks, "
+		String msg = "[cwglocate] census done" + (c.cancelled.get() ? " (stopped)" : "") + ": " + c.slotsDone.get() + "/" + c.slotCount + " slot chunks, "
 				+ t[0] + " starts, " + t[1] + " misses, " + t[2] + " false negatives" + (t[2] == 0 ? "" : " (prediction bug: see falseNegativeAt)")
 				+ ", " + (System.currentTimeMillis() - c.started) / 1000 + " s. " + CENSUS_OUT;
 		if (censusSource != null) censusSource.sendSuccess(Component.literal(msg), true);
@@ -344,11 +344,11 @@ public final class LocateCommand {
 
 	private static String batchProgress(Batch b) {
 		long done = b.items.stream().filter(i -> i.done).count();
-		return "[celocate] batch: " + done + "/" + b.items.size() + " searches done, " + (System.currentTimeMillis() - b.started) / 1000 + " s";
+		return "[cwglocate] batch: " + done + "/" + b.items.size() + " searches done, " + (System.currentTimeMillis() - b.started) / 1000 + " s";
 	}
 
 	private static String censusProgress(LocateCensus c) {
-		return "[celocate] census: " + c.slotsDone.get() + "/" + c.slotCount + " slot chunks, " + c.regionsDone.get() + "/" + c.regions.size()
+		return "[cwglocate] census: " + c.slotsDone.get() + "/" + c.slotCount + " slot chunks, " + c.regionsDone.get() + "/" + c.regions.size()
 				+ " regions, " + (System.currentTimeMillis() - c.started) / 1000 + " s";
 	}
 
@@ -393,12 +393,12 @@ public final class LocateCommand {
 		try {
 			WorldgenFiles.writeText(rel, new GsonBuilder().setPrettyPrinting().disableHtmlEscaping().create().toJson(json) + "\n");
 		} catch (Exception e) {
-			LOG.error("[celocate] could not write {}", rel, e);
+			LOG.error("[cwglocate] could not write {}", rel, e);
 		}
 	}
 
 	private static int fail(CommandSourceStack source, String message) {
-		source.sendFailure(Component.literal("[celocate] " + message));
+		source.sendFailure(Component.literal("[cwglocate] " + message));
 		return 0;
 	}
 }

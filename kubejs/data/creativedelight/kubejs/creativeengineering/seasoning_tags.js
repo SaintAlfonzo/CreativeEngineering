@@ -1,11 +1,12 @@
+// requires: creativedelight
 // Food family tags and the seasonable tags built from them.
 //
 // #creativeengineering:food_family/<path>: every edible member of each food family (feature_writeup/food_families.md),
-// from kubejs/generation_scripts/food/food_families.json (written by python3 tools/food_families.py, or /cegen run
+// from kubejs/generation_scripts/food/food_families.json (written by python3 tools/food_families.py, or /cdevgen run
 // food_families, after /dumpall). A subfamily also lands in its parents: snack, fruit/whole -> fruit -> food_family.
 //
 // #<ns>:seasonable/<path>, one per pack seasoning (global.seasoning, Creative Delight's
-// kubejs_startup/creativeengineering/seasonings.js): the foods that seasoning may go on, in this order:
+// kubejs_startup/creativedelight/seasonings.js): the foods that seasoning may go on, in this order:
 //   1. families: every member of each listed family and its subfamilies (expanded to item ids here)
 //   2. add:      single items or tags, after the families
 //   3. remove:   single items, last. An item that only comes in through a tag in `add` can't be removed (nested tag).
@@ -17,7 +18,7 @@ ServerEvents.tags('item', e => {
 	var t = global.tags
 	var path = 'kubejs/generation_scripts/food/food_families.json'
 	var families = {}
-	try { families = JSON.parse(String(JsonIO.readString(path))).families } catch (err) {
+	try { families = JSON.parse(String(global.genText(path))).families } catch (err) {
 		console.error('[food families] could not read ' + path + ': ' + err + '; family tags and family seasonings empty')
 	}
 

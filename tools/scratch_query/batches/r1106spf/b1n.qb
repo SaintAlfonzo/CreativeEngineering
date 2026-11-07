@@ -1,0 +1,12 @@
+# r1106spf boot 1n: same save without creativedevtools-*.jar (SQ-SPF-31).
+pace 1
+## SQ-SPF-31 | Devtools absent
+bootexpect Done \(
+bootreject (?i)ERROR.*creativedevtools
+bootreject (NoClassDefFoundError|ClassNotFoundException).*(creativedevtools|ceperfbot|BlockStateLookupHook)
+> dumpall
+> cegen list
+count Unknown or incomplete command == 2
+> zq tagsof minecraft:stick
+shell grep -c "creativedevtools" logs/latest.log; ls mods | grep -ci devtools
+look removed items still lose their tags (compare.py: removed item ids carry no tags in this boot is not dumped; check a known removed id with zq tagsof)

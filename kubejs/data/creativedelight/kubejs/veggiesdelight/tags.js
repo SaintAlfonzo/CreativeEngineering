@@ -1,3 +1,4 @@
+// requires: creativedelight
 // requires: veggiesdelight
 // Veggies Delight items in the pack's food and cooking item tags (Creative Delight member #2, moved from the pack's
 // server_scripts/tags/cookingtags.js 2026-10-25, rows unchanged; split by the mod owning each entry).

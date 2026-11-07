@@ -272,7 +272,7 @@ Autumnity leftover "remove or integrate pancakes").
 1. Dict keys for the 14 Rustic pancake ids in the Rustic block of `item_dict.js` (or CD startup `rusticdelight/`), then
    `/dumpall` and `python3 tools/food_catalog.py` so they get types.
 2. New type `sweet/pancake` in `food_types.json`: move `sweet_potato_pancakes` and the 7 Rustic servings into it (the
-   stacks are block items, in the type only if they are edible as items). Run `/cegen run food_catalog` to check.
+   stacks are block items, in the type only if they are edible as items). Run `/cdevgen run food_catalog` to check.
 3. Sweet potato pancakes placeable: add the key to the Food Plate list through `tools/placeable_catalog.py` rules (the
    generated `kubejs/generation_scripts/food/placeable.json`, read by `creativeengineering/placeable_tags.js`), not by hand.
    Alternative: make it a Rustic-style stack (Java), not recommended now.
@@ -314,7 +314,7 @@ A skewer food type covering the pack's skewers, with family recipes (shaped plus
 
 ### Build
 1. New type `handheld/skewer` in `food_types.json`: move the 11 keys above (hawberry stick and marshmallow sticks stay
-   `sweet`). `/cegen run food_catalog`.
+   `sweet`). `/cdevgen run food_catalog`.
 2. Recipes by the family rule, per skewer not yet on it (food_families.md 3.4 "Skewer" table lists which): shaped
    `R.shaped(..., e, '<key>_manual_only')` with the stick, one `R.createSequencedAssembly` on `i.stick` (first step must
    be unique per skewer: deploy the main meat), in the CD tree of the skewer's mod.
@@ -814,7 +814,7 @@ Status: Testing / Work: KubeJS / TODO `dishes/meals #32` ([recipes_cooking.md](.
 
 Built 2026-10-25 (shipped 1.1.03; CD `veggiesdelight/veggies_items.js`, `recipes.js`); fold into [veggies_delight.md](../veggies_delight.md) 5.2.
 Still open: `creativeengineering:canned_mhadjeb` is registered with `creativedelight:shapeless/canned_mhadjeb` (exports
-2026-10-30): run `/dumpfood`, then `/cegen` (can generator), SQ-CDB-12.
+2026-10-30): run `/dumpfood`, then `/cdevgen` (can generator), SQ-CDB-12.
 
 ### Goal
 Remove the mhadjeb.
@@ -828,7 +828,7 @@ bell pepper + tomato sauce (plus a Vintage ghost pepper / cheese variant), cooke
 ### Build
 Add both keys to `global.removedItems` ([removed_items.js](../../kubejs/startup_scripts/_lib/removed_items.js)) (hides
 in JEI, strips tags; `/recipescan` lists leftovers); drop the `canned_mhadjeb` row in
-`tools/gen_can_types.py` and run `/cegen`; `food_types.json` follows from the generator.
+`tools/gen_can_types.py` and run `/cdevgen`; `food_types.json` follows from the generator.
 
 ### Decisions
 None. Compost value and loot entries naming it need a grep.

@@ -140,7 +140,7 @@ pack; random wool colour per raft; more floating debris with a random wood type;
   pool `kaisyn:ships/wreckage_ocean/wreckage` with one `legacy_single_pool_element`, no processors. In
   `meta/floating_wreckage` and `meta/fleet_wreckage` (debris, pillager fleet).
 - Tooling: `tools/port_structure_jars.py` has a byte-exact NBT reader/writer (`nbt_read`, `nbt_write`, `Tag`) and
-  palette remaps (`BLOCK_REMAP`, `convert_template`); `/ceplace templates <glob>` shows templates in rows, including
+  palette remaps (`BLOCK_REMAP`, `convert_template`); `/cdevplace templates <glob>` shows templates in rows, including
   `<world>/generated/<ns>/structures/` (11_fixes_1_0_8.md).
 
 ### Build
@@ -181,7 +181,7 @@ _bed`, `minecraft:<wood>_log / _slab / _planks` (all exist in 1.19.2; mangrove i
   variants are generated. Recommend generating first.
 - **Offline variants vs a processor:** a patcherMod structure processor that picks one palette per piece (seeded by
   the piece origin) would cover any template without files, but needs a registered `StructureProcessorType` and
-  testing. Recommend offline variants (small files, deterministic, visible in `/ceplace templates`).
+  testing. Recommend offline variants (small files, deterministic, visible in `/cdevplace templates`).
 - **Colour weights:** all 16 equal, or mostly white/brown/grey. Recommend white 4, each other colour 1.
 
 ### Gotchas
@@ -194,7 +194,7 @@ _bed`, `minecraft:<wood>_log / _slab / _planks` (all exist in 1.19.2; mangrove i
 ### Tests
 - ST-244 Pools load: `pool_tag_report.md` lists `villager_rafts:raft_1` with its variants and
   `kaisyn:ships/wreckage_ocean/wreckage` with the wood variants; no "missing template" error in the log.
-- ST-245 `/ceplace templates villager_rafts:*` and `kaisyn:ships/wreckage_ocean/*` show every variant intact.
+- ST-245 `/cdevplace templates villager_rafts:*` and `kaisyn:ships/wreckage_ocean/*` show every variant intact.
 - ST-246 A raft convoy found by `/locate` shows rafts of different colours; a shipwreck debris meta shows wreckage of
   a non-spruce wood in some runs.
 

@@ -366,7 +366,7 @@ Slower blocks show red. Frames add "from camo"; a sticky piston that isn't facin
   with no server traffic, since frames already sync their camo.
 - **Plugin wiring:** [WthitRunSpeed](../development/creativeEngineering/src/main/java/com/SaintAlfonzo/creativeengineering/surface/WthitRunSpeed.java)
   is a client-only WTHIT plugin declared in `development/creativeCommon/src/main/resources/waila_plugins.json`, which
-  requires `blockrunner`. It fills the WTHIT line `creativeengineering:run_speed`.
+  requires `blockrunner`. It fills the WTHIT line `creativecompat:run_speed`.
 - **Config `[surface.wthit]`:**
   - `enabled` (true): master switch.
   - `hideUntyped` (true): no line on blocks nothing gives a speed to (no tier, no json entry, no speed
@@ -525,7 +525,7 @@ Slower blocks show red. Frames add "from camo"; a sticky piston that isn't facin
 - [ ] **BR-44 Line shows:** look at IP asphalt → "Run Speed: 1.50× (Asphalt)", number green. Sand → "0.85× (Dust)", red. Stone → "1.05× (Natural Smooth)". Glass and grass → no line (1.00, `hideNormal`).
 - [ ] **BR-45 Frames and sticky:** a framed cube camo'd with concrete → "1.40× (Concrete, from camo)". A sticky piston facing up → "0.65× (Sticky)". Facing sideways → no line; with `hideNormal = false` → "1.00× (Sticky, sticky face not up)".
 - [ ] **BR-46 Live and configurable:** set `[surface.speed] asphalt = 2.0` and save → the asphalt line reads 2.00× without relooking. `format = PERCENT` → "+100%". `showTier = false` → number only. `enabled = false` → no line. Put everything back.
-- [ ] **BR-47 Plugin loads:** WTHIT's plugin list (its config screen, Plugins) includes `creativeengineering:run_speed`; `latest.log` has no WTHIT plugin error for it (log half seen 2026-09-27 14:50 with the first version).
+- [ ] **BR-47 Plugin loads:** WTHIT's plugin list (its config screen, Plugins) includes `creativecompat:run_speed`; `latest.log` has no WTHIT plugin error for it (log half seen 2026-09-27 14:50 with the first version).
 - [ ] **BR-48 Passable blocks:** tall grass, a flower, a wheat seedling, a pressure plate → no line, even with `hideNormal = false` and `hideUntyped = false`. A cobweb on grass → "0.11× (walking through)". A grown sweet berry bush → "0.36× (walking through)". A 5-layer IW leaf pile → "0.45× (walking through)"; 2 layers → no line.
 - [ ] **BR-49 Layers and powder snow:** a 1-layer and a 2-layer snow on sand → "0.85× (Dust, block below)"; 3 layers → "0.75× (Snow)". A carpet on planks → "1.10× (Wood, block below)". Powder snow bare-footed → "0.41× (walking through)"; in leather boots → "0.75× (Snow)".
 - [ ] **BR-50 Own speed:** soul sand → "0.58× (own speed)".

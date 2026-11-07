@@ -1,0 +1,47 @@
+# r1106spf boot 0: group A superflat on the 18:5x builds (the installed jars do not boot with the current kubejs/
+# tree: unbound creativeengineering:wild/* placed features, run notes 19:50). Builds the SQ-SPF fixture (queue section
+# "SQ-SPF", fixture list) around x -60..-10, z -60..-10, takes the baseline probes, /dumpall, saves.
+# Then the same world is restarted on the same jars (b1.qb).
+pace 1
+
+## SQ-SPF-B0 | baseline boot, bot, fixture
+bootexpect Done \(
+> gamerule doDaylightCycle false
+> difficulty peaceful
+> pbot spawn qa -20 -60 -24 minecraft:overworld survival
+sleep 2
+# moss patch next to grass
+> fill -40 -61 -40 -38 -61 -38 minecraft:moss_block
+# vine wall, monster box, leaf pile 5 layers
+> fill -45 -60 -30 -45 -55 -26 minecraft:stone
+> setblock -44 -56 -28 minecraft:vine[west=true]
+> setblock -50 -60 -30 quark:monster_box
+# fixture chest with the carry items
+> setblock -20 -60 -20 minecraft:chest[facing=north]
+> data merge block -20 -60 -20 {Items:[{Slot:0b,id:"creativeengineering:copper_shield",Count:1b},{Slot:1b,id:"sophisticatedbackpacks:backpack",Count:1b,tag:{clothColor:13394234,borderColor:6434330}},{Slot:2b,id:"creativeengineering:red_stepstool",Count:1b},{Slot:3b,id:"creativeengineering:wooden_water_bucket",Count:1b},{Slot:4b,id:"creativeengineering:precision_sawblade",Count:1b,tag:{Damage:5}},{Slot:5b,id:"botania:bauble_box",Count:1b},{Slot:6b,id:"vinery:red_wine",Count:1b},{Slot:7b,id:"creativeengineering:dragon_shield",Count:1b},{Slot:8b,id:"creativeengineering:echo_shield",Count:1b}]}
+> data get block -20 -60 -20 Items
+expect creativeengineering:copper_shield
+# sticky note and label on the chest face (bot)
+> pbot hold qa creative_labels:sticky_note
+> pbot use qa -20 -60 -20 north
+> pbot hold qa creative_labels:label
+> pbot use qa -20 -60 -20 north
+> setblock -17 -60 -20 minecraft:chest[facing=north]
+> pbot hold qa creative_labels:sticky_note
+> pbot use qa -17 -61 -22 up
+# leaf pile
+> setblock -30 -60 -20 minecraft:oak_leaves[persistent=true]
+# lit campfire under open sky
+> setblock -25 -60 -35 minecraft:campfire[lit=true]
+# wheat row + out-of-season crop row (Vintage cucumber)
+> fill -35 -61 -50 -26 -61 -48 minecraft:farmland[moisture=7]
+> fill -35 -60 -50 -26 -60 -50 minecraft:wheat[age=0]
+> fill -35 -60 -48 -26 -60 -48 vintagedelight:cucumber_crop[age=0]
+> fill -35 -61 -49 -26 -61 -49 minecraft:water
+> data get block -20 -60 -19
+> data get block -17 -61 -22
+look note and label blocks/entities placed on the chest face and on the floor (data shows a sticky note or label); if the bot use did nothing, note it (labels then only checked in CQ-SPF-02)
+
+## SQ-SPF-22-base | wine clock before the restart
+> wine time
+look wine clock value (compared with boot 1 after /time add 48000)

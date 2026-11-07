@@ -156,7 +156,18 @@ global.compost = {
 		}
 
 		var missing = []
-		for (var vid in this.VALUES) if (!byId[vid]) missing.push(vid)
+		var absentSkipped = 0
+		for (var vid in this.VALUES) {
+			if (byId[vid]) continue
+			// G5 (plan_cb_publish.md M2): a value for an absent mod's item is skipped quietly. Compat items named
+			// <ns>:<othermod>/<name> (Immersive Weathering's leaf piles for Architect's Palette, Fruits Delight...) register
+			// only with <othermod>, so that folder counts as the item's mod too (scratch r1106cbo SQ-CBO-34).
+			var ns = global.has.namespace(vid)
+			var path = String(vid).substring(String(vid).indexOf(':') + 1)
+			var folder = path.indexOf('/') > 0 ? path.substring(0, path.indexOf('/')) : null
+			if ((ns !== null && !global.has.mod(ns)) || (folder !== null && !global.has.mod(folder))) { absentSkipped++; continue }
+			missing.push(vid)
+		}
 
 		table.clear()
 		var fromValues = 0
@@ -178,6 +189,7 @@ global.compost = {
 		console.info('[compost] ' + this.last.cause + ': ' + (fromValues + fromRules) + ' compostable ('
 			+ fromValues + ' from values, ' + fromRules + ' from rules), ' + Object.keys(excluded).length + ' excluded, '
 			+ Object.keys(global.compostOriginal).length + ' before rebuild, ' + this.last.ms + ' ms')
+		if (absentSkipped) console.info('[compost] skipped ' + absentSkipped + ' values for items of absent mods')
 		if (missing.length) console.warn('[compost] values for items that do not exist: ' + missing.join(', '))
 		if (bad.length) console.warn('[compost] values with no usable chance (unknown tier?): ' + bad.join(', '))
 		return this.last

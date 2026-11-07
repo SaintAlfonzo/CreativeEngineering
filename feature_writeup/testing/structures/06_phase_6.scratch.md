@@ -52,7 +52,7 @@
   2366; predictedNo placement 36051, biome 665. Every group set row "known" (village_plains 16/16, spider_dungeon
   36/36, mineshaft 37249/37249). During the census the log had 79 placement drops + 48 earth-fill CANCELLED, none in
   the report (only 1 miss, reason no_start). Saved: census_p.json.
-- 17:37 small check `celocate census 4 -9000 9000` (untouched terrain): 218 slots, 1 s; known 351 of 432 member-slots;
+- 17:37 small check `cwglocate census 4 -9000 9000` (untouched terrain): 218 slots, 1 s; known 351 of 432 member-slots;
   the only predictions: buried_treasure 81 slots (80 placement-no, 1 known) + 1 ancient_city. -> CENSUS BUG: enumerate
   fills each region's list set by set; the first every-chunk set (buried_treasures) predicts then LOADS every chunk,
   so every later set at that chunk finds it loaded (StructureCheck loadedChunks) = "known". Prediction, misses, miss

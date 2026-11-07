@@ -19,7 +19,7 @@ and "Placeable on a coaster". The lines come from five item tags generated from 
 
 **Counts (live dump of 2026-10-24, catalog of 2026-10-25):** 507 items. 161 placeable (103 only while sneaking), 34 on a Food Plate, 13 on a Small Food Plate, 392 on a coaster (every raw, cooked, egg and dairy food). 9 patcherMod Display Delight egg dishes join "placeable" after the next dump.
 **Open first:** the rules at the top of `tools/placeable_catalog.py` (`INCLUDE`, `EXCLUDE`, `SNEAK_ITEM_CLASSES`).
-**Refresh:** `/dumpplaceable` (or `/dumpall`) in game → `python3 tools/placeable_catalog.py` (or `/cegen run placeable_catalog`) →
+**Refresh:** `/dumpplaceable` (or `/dumpall`) in game → `python3 tools/placeable_catalog.py` (or `/cdevgen run placeable_catalog`) →
 `/reload` for the tags (restart if the tool added item_dict keys).
 
 ## 1. Overview

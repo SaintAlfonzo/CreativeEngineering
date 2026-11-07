@@ -69,7 +69,7 @@ reject (?i)WARN.*(VintageClock|wine)
 look wine time reads 8 days after the forward step and about 0 after the backward one; the chat line "wine clock moved back" goes to the console too
 
 ## SQ-TD-05 | every /cetime date change is logged
-count \[time\] /cetime date >= 8
+shell test "$(grep -c "\[time\] /cetime date" logs/latest.log)" -ge 8
 
 ## SQ-NM-01 | naturally spawned cows, sheep, pigs get names (chance 1.0)
 > execute positioned 3000 70 3000 run locate biome minecraft:plains

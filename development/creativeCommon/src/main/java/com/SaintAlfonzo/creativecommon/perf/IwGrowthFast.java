@@ -29,7 +29,7 @@ import java.util.function.Supplier;
  *       growth will run.</li>
  *   <li>B: each block carries its growth sets per tick source ({@link IwGrowthHolder}, filled from IW's own maps
  *       after every rebuild), so a block without growths returns after one field read.</li>
- *   <li>C: IW's {@code ServerLevelMixin.callTick} handler is rewritten (see {@link CEMixinPlugin}) to call
+ *   <li>C: IW's {@code ServerLevelMixin.callTick} handler is rewritten (see {@link CommonMixinPlugin}) to call
  *       {@link #blockTick}, which re-reads the block state from the section only when the block random-ticked
  *       (nothing else can change it between vanilla's read and the hook).</li>
  * </ul>

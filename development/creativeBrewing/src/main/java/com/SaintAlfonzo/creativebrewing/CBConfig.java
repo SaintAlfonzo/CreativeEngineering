@@ -36,7 +36,7 @@ public final class CBConfig {
 	public static final List<String> MEMBERS = readMembers();
 
 	/** Feature sections, in file order. */
-	public static final List<String> SECTIONS = List.of("brewing", "alcohol", "effects");
+	public static final List<String> SECTIONS = List.of("brewing", "alcohol");
 
 	/**
 	 * Feature switches: {section, id, comment lines...}. Add one row per feature as it moves in from patcherMod or the
@@ -45,16 +45,13 @@ public final class CBConfig {
 	private static final List<String[]> FEATURE_ROWS = List.of();
 
 	/** Feature sections that also hold moved dials (built by their dial class). */
-	private static final List<String> DIAL_SECTIONS = List.of("alcohol", "effects");
+	private static final List<String> DIAL_SECTIONS = List.of("alcohol");
 
 	/** Sections moved here from creativeengineering-common.toml (phase 3), for the carry-over and the leftover WARN. */
-	public static final List<String> MOVED_SECTIONS = List.of("alcohol", "effects", "magic_resistance", "copper_poisoning");
+	public static final List<String> MOVED_SECTIONS = List.of("alcohol");
 
 	public static final ForgeConfigSpec SPEC;
 	public static final Alcohol ALCOHOL;
-	public static final Effects EFFECTS;
-	public static final Magic MAGIC;
-	public static final CopperPoisoning COPPER_POISONING;
 	private static final Map<String, ForgeConfigSpec.BooleanValue> MEMBER_SWITCHES = new LinkedHashMap<>();
 	private static final Map<String, ForgeConfigSpec.BooleanValue> FEATURES = new LinkedHashMap<>();
 
@@ -78,9 +75,6 @@ public final class CBConfig {
 		// Moved from creativeengineering-common.toml on 2026-11-01 (creative_brewing.md 4.2 phase 3): same keys,
 		// comments and defaults; ConfigRename.mergeSections carries the player's values over on the first boot.
 		ALCOHOL = new Alcohol(b);
-		EFFECTS = new Effects(b);
-		MAGIC = new Magic(b);
-		COPPER_POISONING = new CopperPoisoning(b);
 		SPEC = b.build();
 	}
 
@@ -138,81 +132,6 @@ public final class CBConfig {
 		return Collections.unmodifiableList(ids);
 	}
 
-	/** Dials for {@code potion/MagicResistanceEffect}'s damage-reduction curve. */
-	public static final class Magic {
-		public final ForgeConfigSpec.DoubleValue reductionPerLevel;
-		public final ForgeConfigSpec.ConfigValue<String> negatedEffectTicks;
-
-		private Magic(ForgeConfigSpec.Builder b) {
-			b.comment(
-					"Tuning for creativebrewing:magic_resistance's damage reduction against",
-					"the creativecommon:magic damage tag (the same tag the shields' MAGIC column",
-					"reads: potions, poison, evoker fangs, thorns, sonic booms, curses, life drain) and",
-					"against the periodic damage of the effects listed in negatedEffectTicks."
-			).push("magic_resistance");
-
-			reductionPerLevel = b.comment(
-					"Damage reduction per effect amplifier level (amplifier 0 = level I), same",
-					"shape as vanilla Resistance. Total reduction is capped at 1.0 (full immunity)",
-					"regardless of amplifier."
-			).defineInRange("reductionPerLevel", 0.2, 0.0, 1.0);
-
-			negatedEffectTicks = b.comment(
-					"Effects whose periodic damage Magic Resistance stops outright, comma-separated",
-					"effect ids. A tick of one of these deals no damage while its level is at most the",
-					"Magic Resistance level (Poison I against Magic Resistance I); a higher level takes",
-					"the per-level cut instead. These are ticks no shield can block",
-					"([shields].unblockableEffectTicks)."
-			).define("negatedEffectTicks", "minecraft:poison, minecraft:wither");
-
-			b.pop(); // magic_resistance
-		}
-	}
-
-
-	/** Copper poisoning from oxidized Everything Copper gear ({@code potion/CopperPoisoningHandler}). */
-	public static final class CopperPoisoning {
-		public final ForgeConfigSpec.BooleanValue enabled;
-		public final ForgeConfigSpec.IntValue intervalSeconds;
-		public final ForgeConfigSpec.IntValue jitterSeconds;
-		public final ForgeConfigSpec.DoubleValue chancePerPiece;
-		public final ForgeConfigSpec.IntValue baseSeconds;
-		public final ForgeConfigSpec.IntValue secondsPerExtraPiece;
-		public final ForgeConfigSpec.IntValue maxSeconds;
-		public final ForgeConfigSpec.IntValue effectPoisonSeconds;
-
-		private CopperPoisoning(ForgeConfigSpec.Builder b) {
-			b.comment(
-					"Fully oxidized Everything Copper gear (armor worn, or any piece in the hotbar or",
-					"offhand) poisons its holder now and then, and the Copper Poisoning effect (copper",
-					"nuggets) gives Poison instead of dealing damage itself."
-			).push("copper_poisoning");
-
-			enabled = b.comment("Roll for poison from oxidized gear.").define("enabled", true);
-			intervalSeconds = b.comment("Average seconds between rolls, per player.")
-					.defineInRange("intervalSeconds", 300, 10, 86400);
-			jitterSeconds = b.comment("Random spread either side of intervalSeconds.")
-					.defineInRange("jitterSeconds", 120, 0, 86400);
-			chancePerPiece = b.comment(
-					"Chance per fully oxidized piece that a roll poisons; pieces roll independently, so",
-					"n pieces give 1 - (1 - chancePerPiece)^n."
-			).defineInRange("chancePerPiece", 0.15, 0.0, 1.0);
-			baseSeconds = b.comment("Poison I duration with one oxidized piece.")
-					.defineInRange("baseSeconds", 4, 1, 600);
-			secondsPerExtraPiece = b.comment("Extra Poison seconds per oxidized piece after the first.")
-					.defineInRange("secondsPerExtraPiece", 2, 0, 600);
-			maxSeconds = b.comment("Cap on the Poison duration from one roll.")
-					.defineInRange("maxSeconds", 20, 1, 600);
-			effectPoisonSeconds = b.comment(
-					"Poison I seconds the Copper Poisoning effect gives per effect level (a copper nugget",
-					"gives level II, so twice this)."
-			).defineInRange("effectPoisonSeconds", 4, 1, 600);
-
-			b.pop(); // copper_poisoning
-		}
-	}
-
-
 	/** Alcoholic drinks (alcohol.md 11): the pack side lives in KubeJS {@code global.alcohol}; this is the client tooltip. */
 	public static final class Alcohol {
 		public final ForgeConfigSpec.BooleanValue quarkLine;
@@ -231,69 +150,5 @@ public final class CBConfig {
 	}
 
 
-	/** Mob effect category overrides ({@code potion.EffectCategories}, {@code mixin/MobEffectCategoryMixin}). */
-	public static final class Effects {
-		public final ForgeConfigSpec.ConfigValue<List<? extends String>> categoryOverrides;
-		public final ForgeConfigSpec.ConfigValue<List<? extends String>> forceHudIcon;
-		public final ForgeConfigSpec.ConfigValue<List<? extends String>> forceHudIconItems;
-		public final ForgeConfigSpec.ConfigValue<List<? extends String>> remap;
-		public final ForgeConfigSpec.ConfigValue<List<? extends String>> removed;
 
-		private Effects(ForgeConfigSpec.Builder b) {
-			b.comment("Mob effects (client and server).").push("effects");
-			categoryOverrides = b.comment(
-					"Category overrides, \"namespace:effect=CATEGORY\" with CATEGORY one of BENEFICIAL, HARMFUL, NEUTRAL.",
-					"The category colours the effect's name in potion, food and gear tooltips (HARMFUL red, the other",
-					"two blue), and AppleSkin, Quark's saturation word and isBeneficial() go by it. The defaults are the",
-					"effects whose own category showed the wrong colour (feature_writeup/effects.md 2.4). Read live."
-			).defineList("categoryOverrides", List.of(
-					"create_confectionery:rest=BENEFICIAL",
-					"alexsmobs:debilitating_sting=HARMFUL",
-					"alexsmobs:fear=HARMFUL",
-					"alexsmobs:power_down=HARMFUL",
-					"neapolitan:slipping=HARMFUL",
-					"vinery:trippy=HARMFUL"
-			), o -> o instanceof String s && s.matches("[a-z0-9_.-]+:[a-z0-9_/.-]+=(BENEFICIAL|HARMFUL|NEUTRAL)"));
-			forceHudIcon = b.comment(
-					"Effects that always get their HUD icon (top right), even when the mod that gave them hid it",
-					"(showIcon false, mostly to drop particles). The inventory list shows them either way. Armor, held",
-					"tool and aura effects are left hidden on purpose (feature_writeup/effects.md 2.6). Client, read live."
-			).defineList("forceHudIcon", List.of(
-					"brewinandchewin:intoxication",
-					"via_romana:travellers_fatigue",
-					"monobank:thief"
-			), o -> o instanceof String s && s.matches("[a-z0-9_.-]+:[a-z0-9_/.-]+"));
-			forceHudIconItems = b.comment(
-					"Items whose effects always get their HUD icon: every effect added while an entity finishes using",
-					"one (eating, drinking, the item's own code). \"namespace\" for a whole mod or \"namespace:item\". Effect",
-					"ids in forceHudIcon show from any source; this list only for these items, so the same effect from",
-					"armor stays hidden. Server side, read live."
-			).defineList("forceHudIconItems", List.of(
-					"create:builders_tea",
-					"canned_goods:canned_pufferfishs",
-					"farmersrespite",
-					"immersive_weathering"
-			), o -> o instanceof String s && s.matches("[a-z0-9_.-]+(:[a-z0-9_/.-]+)?"));
-			remap = b.comment(
-					"Effects swapped for another wherever they are applied, \"from=to\". Same duration, level and",
-					"visibility. Covers foods, potions, blocks, commands and mob code (LivingEntity#addEffect), and",
-					"Fruits Delight's jam / jelly effect lines. Food tooltips are swapped by KubeJS",
-					"(global.foodEffectSwaps). Server side, read live."
-			).defineList("remap", List.of(
-					"neapolitan:agility=vinery:climbing_effect",
-					"fruitsdelight:chorus=vinery:teleport",
-					"quark:resilience=alexsmobs:knockback_resistance"
-			), o -> o instanceof String s && s.matches("[a-z0-9_.-]+:[a-z0-9_/.-]+=[a-z0-9_.-]+:[a-z0-9_/.-]+"));
-			removed = b.comment(
-					"Effects that are never applied (LivingEntity#addEffect refuses them). Their brews are removed",
-					"by KubeJS (startup_scripts/cooking/potions.js). Server side, read live."
-			).defineList("removed", List.of(
-					"upgrade_aquatic:restfulness",
-					"upgrade_aquatic:insomnia",
-					"alexsmobs:power_down"
-			), o -> o instanceof String s && s.matches("[a-z0-9_.-]+:[a-z0-9_/.-]+"));
-			featureRows(b, "effects");
-			b.pop(); // effects
-		}
-	}
 }

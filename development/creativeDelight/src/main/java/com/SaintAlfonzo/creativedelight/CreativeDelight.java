@@ -111,12 +111,14 @@ public class CreativeDelight {
 		ModList mods = ModList.get();
 		// Oven: FD cooking-pot style baking block + the creativeengineering:baking recipe type (oven/; oven.md).
 		com.SaintAlfonzo.creativedelight.oven.OvenRegistry.register(modBus);
+		// creativeengineering:biome_tag loot condition for the fishing net tables (from Creative Worldgen, 2026-11-06)
+		com.SaintAlfonzo.creativedelight.loot.BiomeTagCondition.register(modBus);
 		// Powdered sugar block + bucket (food/PowderedSugarRegistry). Item and recipes are KubeJS.
 		com.SaintAlfonzo.creativedelight.food.PowderedSugarRegistry.register(modBus);
 		// Display Delight placed blocks for foods it has none for (compat/DisplayDelightDishes).
 		com.SaintAlfonzo.creativedelight.compat.DisplayDelightDishes.register(modBus);
 		// The oven's leftover slots show on WTHIT through Common's RemainderView (compat/WthitRemainderBuffer).
-		com.SaintAlfonzo.creativecommon.compat.RemainderView.addStation(
+		com.SaintAlfonzo.creativecompat.compat.RemainderView.addStation(
 				com.SaintAlfonzo.creativedelight.oven.OvenBlockEntity.class);
 		// Campfires: rain puts them out, Comfort nearby (campfire/, mixin.minecraft.CampfireRainMixin; moved from Compat
 		// 2026-11-04). patcherMod's WTHIT line reads the switch and ticks through Common's CampfireRainInfo holder.
@@ -125,8 +127,8 @@ public class CreativeDelight {
 				() -> CDConfig.SPEC.isLoaded() ? CDConfig.CAMPFIRE.rainOutTicks.get() : 160);
 		if (mods.isLoaded("jei")) {
 			// JEI World Interactions: Campfire Rules rows (WorldRows is JEI-free; JEI loads its plugin later)
-			com.SaintAlfonzo.creativecommon.compat.jei.world.WorldRows.provider(
-					com.SaintAlfonzo.creativecommon.compat.jei.world.WorldTab.CAMPFIRE,
+			com.SaintAlfonzo.creativecompat.compat.jei.world.WorldRows.provider(
+					com.SaintAlfonzo.creativecompat.compat.jei.world.WorldTab.CAMPFIRE,
 					com.SaintAlfonzo.creativedelight.compat.jei.CampfireRows::rows);
 		}
 		// Spice of Life lunchboxes: Netherite tier, upgrade/skin/dye/soap recipes, "Slots" tooltip (lunchboxes.md).
@@ -134,6 +136,10 @@ public class CreativeDelight {
 			com.SaintAlfonzo.creativedelight.lunchbox.LunchboxItems.register(modBus);
 			com.SaintAlfonzo.creativedelight.lunchbox.LunchboxRecipes.register(modBus);
 			MinecraftForge.EVENT_BUS.register(com.SaintAlfonzo.creativedelight.lunchbox.LunchboxTooltip.class);
+		}
+		// Caffeinated adds a hidden Phantom Bane (from Creative Common's PhantomBaneRules, 2026-11-07).
+		if (mods.isLoaded("farmersrespite")) {
+			MinecraftForge.EVENT_BUS.register(com.SaintAlfonzo.creativedelight.compat.farmersrespite.CaffeinatedPhantomBane.class);
 		}
 		// Corn Delight 1.2.11 on 1.0.3: Cob Pipe right click to equip (corn_delight.md 2.3).
 		if (mods.isLoaded("corn_delight")) {
@@ -146,7 +152,7 @@ public class CreativeDelight {
 		// Multi-serving cans ([canning]): max-servings cache cleared on tag reload + the "Servings" tooltip line.
 		MinecraftForge.EVENT_BUS.register(com.SaintAlfonzo.creativedelight.food.CanServings.class);
 		MinecraftForge.EVENT_BUS.register(com.SaintAlfonzo.creativedelight.food.CanServingsTooltip.class);
-		// Pack seasonings (kubejs_startup/creativeengineering/seasonings.js): the craft, the bonus and the tooltip lines.
+		// Pack seasonings (kubejs_startup/creativedelight/seasonings.js): the craft, the bonus and the tooltip lines.
 		com.SaintAlfonzo.creativedelight.food.SeasoningRecipe.register(modBus);
 		MinecraftForge.EVENT_BUS.register(com.SaintAlfonzo.creativedelight.food.Seasonings.class);
 		MinecraftForge.EVENT_BUS.register(com.SaintAlfonzo.creativedelight.food.SeasoningTooltip.class);

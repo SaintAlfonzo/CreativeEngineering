@@ -1,6 +1,6 @@
 package com.SaintAlfonzo.creativedelight.compat.jei;
 
-import com.SaintAlfonzo.creativecommon.compat.jei.JeiArrow;
+import com.SaintAlfonzo.creativecompat.compat.jei.JeiArrow;
 import java.util.List;
 
 import javax.annotation.ParametersAreNonnullByDefault;
@@ -31,7 +31,7 @@ import net.minecraft.world.item.ItemStack;
 @ParametersAreNonnullByDefault
 public class SeasoningCategory implements IRecipeCategory<SeasoningCategory.Display> {
 
-    public static final RecipeType<Display> TYPE = RecipeType.create(CreativeDelight.NS, "seasoning", Display.class);
+    public static final RecipeType<Display> TYPE = RecipeType.create(CreativeDelight.MOD_ID, "seasoning", Display.class);
 
     /** Most input slots a page draws; longer crafts stay on the Crafting page. */
     public static final int MAX_INPUTS = 3;

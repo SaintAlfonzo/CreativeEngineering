@@ -3,7 +3,7 @@
 
     python3 tools/wthit_icon_audit.py [wthit_icons.json] [--md] [--all]
 
-Reads kubejs/exported/wthit_icons.json (client command /cedumpicons, or [debug.wthit] dumpIconsAtTitle on a
+Reads kubejs/exported/wthit_icons.json (client command /cdevdumpicons, or [debug.wthit] dumpIconsAtTitle on a
 scratch client; Creative Devtools dump/WthitIconDump). Each block's default state has a verdict from
 compat/BlockModelIcons:
 

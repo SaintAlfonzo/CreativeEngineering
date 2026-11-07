@@ -1,3 +1,4 @@
+// requires: creativebrewing
 // Moved from the pack's server_scripts/engineering/potion_bottling.js 2026-11-01 (creative_brewing.md 4.5), rows unchanged; recipe ids are
 // creativebrewing:<type>/<suffix> (were creativeengineering:).
 ServerEvents.recipes(e => {
@@ -65,7 +66,7 @@ function bucketRecipes(pid, idBase) {
 		)
 
 		// Reverse: filled potion bucket -> 4 potion bottles. The bucket leaves a plain
-		// minecraft:bucket behind via its own containerItem (CB startup creativeengineering/potion_buckets.js).
+		// minecraft:bucket behind via its own containerItem (CB startup creativebrewing/potion_buckets.js).
 		R.shapeless(
 			Item.of(bottleItem, 4, bucketNbt),
 			[{ type: 'forge:partial_nbt', item: bucketItem, nbt: bucketNbt }, Item.of(i.glass_bottle, 4)],

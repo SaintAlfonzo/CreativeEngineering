@@ -1,0 +1,14 @@
+# r1106cbp (rerun of r1106cbo) boot 3: cooking set, group A (SQ-CBC-02)
+## SQ-CBC-02 | cooking: NCH failures and absent-mods summary
+shell grep -h "failed and was skipped" logs/kubejs/startup.log logs/kubejs/server.log | sed -E 's/[0-9]+//g' | sort | uniq -c | sort -rn | head -40
+shell grep -h "failed and was skipped" logs/kubejs/startup.log logs/kubejs/server.log | wc -l
+shell ! grep -h "failed and was skipped" logs/kubejs/startup.log logs/kubejs/server.log | grep -E "Empty array\?|grown_|twig_nest|rope_to__air|canned_mulberry_pie_filling_pie"
+shell test "$(cat logs/kubejs/startup.log logs/kubejs/server.log | grep -c "failed and was skipped")" -lt 40
+shell grep -h "absent mods" logs/kubejs/server.log
+kjsexpect absent mods
+look record what is left; [absent mods] names quark, upgrade_aquatic, bushierflowers among others
+## SQ-CBP-02 | cooking: no Empty array?, IE empty-output prune line, failures under 40
+shell n=$(cat logs/kubejs/*.log logs/latest.log | grep -c "Empty array"); echo "empty_array=$n"; test "$n" = 0
+shell grep -qE '\[NCH\] removed [0-9]+ Immersive Engineering recipes whose output tag is empty' logs/kubejs/startup.log  # startup.log (r1106spf: kjsexpect reads server.log)
+shell grep -h "\[NCH\] removed" logs/kubejs/*.log | cut -c1-600
+shell n=$(cat logs/kubejs/startup.log logs/kubejs/server.log | grep -c "failed and was skipped"); echo "failures=$n"; test "$n" -lt 40

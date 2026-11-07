@@ -1,6 +1,6 @@
 package com.SaintAlfonzo.creativedelight.compat.jei;
 
-import com.SaintAlfonzo.creativecommon.compat.jei.JeiArrow;
+import com.SaintAlfonzo.creativecompat.compat.jei.JeiArrow;
 import java.io.Reader;
 import java.nio.file.Files;
 import java.nio.file.Path;
@@ -63,7 +63,7 @@ import vectorwing.farmersdelight.common.block.FeastBlock;
 public class FeastPlatingCategory implements IRecipeCategory<FeastPlatingCategory.Display> {
 
     public static final RecipeType<Display> TYPE =
-            new RecipeType<>(new ResourceLocation(CreativeDelight.NS, "feast_plating"), Display.class);
+            new RecipeType<>(new ResourceLocation(CreativeDelight.MOD_ID, "feast_plating"), Display.class);
 
     private static final Logger LOGGER = LogUtils.getLogger();
     private static final int TEXT_COLOR = 0xFF404040;

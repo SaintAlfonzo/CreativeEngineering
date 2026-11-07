@@ -1,3 +1,4 @@
+// requires: creativecalendar
 // priority: 1000
 // Creative Calendar server scripts (feature_writeup/creative_calendar.md 4.4). Authored here in the pack folder (loads
 // on /reload); the Calendar build copies this tree into the jar at the same path (data/creativecalendar/kubejs/). Ships

@@ -14,7 +14,7 @@ Generated 2026-11-05 by `python3 tools/terrain_adaptation_scan.py` (re-run after
 - `soft` + `template_trim`: a building on a pad. The pad and the air around it go, the ground is levelled only under the building and blends out in 4 blocks (+ `skirtBump`).
 - `soft` alone: keeps the template's pad and courtyards (they are levelled too) but rounds and shortens the skirt. For walled compounds and forts whose yards should stay flat.
 - `template_trim` alone: for `none` structures (and YUNG's, which ignore the mode tags): no more air notches or floating pad, nothing else changes.
-- The suggestion column is a starting point from the numbers only; look at a structure with `/ceplace` or `/locate` before tagging a whole family.
+- The suggestion column is a starting point from the numbers only; look at a structure with `/cdevplace` or `/locate` before tagging a whole family.
 
 | Verdict | Structures |
 |---|---|
@@ -50,7 +50,7 @@ Some pad or air around the building; trim and soft would help a little.
 
 ## 3. Settlements (review)
 
-Villages and other jigsaw settlements with terrain-matching streets. Their houses often carry small pads; tagging the structure changes every house in it, so look at one first (`/ceplace structures <id>`).
+Villages and other jigsaw settlements with terrain-matching streets. Their houses often carry small pads; tagging the structure changes every house in it, so look at one first (`/cdevplace structures <id>`).
 
 | Structure | Adaptation | Templates | Box cols | Built | Pad cols | Air-only cols | Air outside built | Unbuilt | Suggested tags |
 |---|---|---|---|---|---|---|---|---|---|

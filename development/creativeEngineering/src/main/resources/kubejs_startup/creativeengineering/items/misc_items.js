@@ -15,7 +15,6 @@
 // requiresCorrectToolForDrops() either, so it stays hand-breakable.
 
 StartupEvents.registry('item', e => {
-    e.create('creativeengineering:arrow_fletching')
     e.create('creativeengineering:zinc_grit')
     e.create('creativeengineering:brass_grit')
     e.create('creativeengineering:cast_iron_grit')
@@ -41,7 +40,8 @@ StartupEvents.registry('item', e => {
     e.create('creativeengineering:brass_wire')
     e.create('creativeengineering:constantan_wire')
 
-    // The mortar and pestle moved to Creative Delight 2026-10-27 (kubejs_startup/creativeengineering/bakeware.js).
+    // The mortar and pestle moved to Creative Delight 2026-10-27 (kubejs_startup/creativedelight/bakeware.js).
+    // arrow_fletching moved to Creative Equipment 2026-11-06 (kubejs_startup/creativeequipment/items/archery_items.js).
 })
 
 StartupEvents.registry('block', e => {

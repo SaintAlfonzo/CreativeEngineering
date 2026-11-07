@@ -3,7 +3,7 @@
 // item and every kitchen ingredient gets one development name; the value is always i.<key>, so items stay defined
 // once in item_dict.js. Key: <category>[_<form>][_<state>]_<name>, parts from food_grammar.js; raw is implicit.
 //
-// Kept by hand. Seeded 2026-10-25 by tools/food_dict.py --seed; run tools/food_dict.py (or /cegen run food_dict)
+// Kept by hand. Seeded 2026-10-25 by tools/food_dict.py --seed; run tools/food_dict.py (or /cdevgen run food_dict)
 // after a /dumpfood to lint this file and list foods with no key, with a proposed key for each.
 //
 // Read it as global.food. Creative Delight scripts (their own scope) can alias it f; the pack's startup and server
@@ -1060,6 +1060,7 @@ global.food = {}
 	f.dish_stuffed_bell_pepper_green               = i.stuffed_bell_pepper_green;
 	f.dish_stuffed_bell_pepper_red                 = i.stuffed_bell_pepper_red;
 	f.dish_stuffed_bell_pepper_yellow              = i.stuffed_bell_pepper_yellow;
+	f.dish_stuffed_bellpepper                      = i.stuffed_bellpepper;
 	f.dish_stuffed_burrito                         = i.stuffed_burrito;
 	f.dish_stuffed_cod                             = i.stuffed_cod;
 	f.dish_stuffed_morels                          = i.stuffed_morels;

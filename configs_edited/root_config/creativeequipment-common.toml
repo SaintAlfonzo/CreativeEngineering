@@ -74,7 +74,7 @@
 
 	[crafting.felsic_sword]
 		#Potion effect id filled in during assembly.
-		potion = "creativebrewing:magic_resistance"
+		potion = "creativecommon:magic_resistance"
 		#mB of potion fluid (the potion above) used in the last filling step.
 		#Range: 1 ~ 10000
 		potionMb = 250
@@ -90,7 +90,7 @@
 
 	[crafting.felsic_helmet]
 		#Potion effect id filled in during assembly.
-		potion = "creativebrewing:magic_resistance"
+		potion = "creativecommon:magic_resistance"
 		#mB of potion fluid (the potion above) used in the last filling step.
 		#Range: 1 ~ 10000
 		potionMb = 500
@@ -106,7 +106,7 @@
 
 	[crafting.felsic_chestplate]
 		#Potion effect id filled in during assembly.
-		potion = "creativebrewing:magic_resistance"
+		potion = "creativecommon:magic_resistance"
 		#mB of potion fluid (the potion above) used in the last filling step.
 		#Range: 1 ~ 10000
 		potionMb = 500
@@ -122,7 +122,7 @@
 
 	[crafting.felsic_leggings]
 		#Potion effect id filled in during assembly.
-		potion = "creativebrewing:magic_resistance"
+		potion = "creativecommon:magic_resistance"
 		#mB of potion fluid (the potion above) used in the last filling step.
 		#Range: 1 ~ 10000
 		potionMb = 500
@@ -138,7 +138,7 @@
 
 	[crafting.felsic_boots]
 		#Potion effect id filled in during assembly.
-		potion = "creativebrewing:magic_resistance"
+		potion = "creativecommon:magic_resistance"
 		#mB of potion fluid (the potion above) used in the last filling step.
 		#Range: 1 ~ 10000
 		potionMb = 500
@@ -154,7 +154,7 @@
 
 	[crafting.felsic_pickaxe]
 		#Potion effect id filled in during assembly.
-		potion = "creativebrewing:magic_resistance"
+		potion = "creativecommon:magic_resistance"
 		#mB of potion fluid (the potion above) used in the last filling step.
 		#Range: 1 ~ 10000
 		potionMb = 250
@@ -170,7 +170,7 @@
 
 	[crafting.felsic_axe]
 		#Potion effect id filled in during assembly.
-		potion = "creativebrewing:magic_resistance"
+		potion = "creativecommon:magic_resistance"
 		#mB of potion fluid (the potion above) used in the last filling step.
 		#Range: 1 ~ 10000
 		potionMb = 250
@@ -186,7 +186,7 @@
 
 	[crafting.felsic_shovel]
 		#Potion effect id filled in during assembly.
-		potion = "creativebrewing:magic_resistance"
+		potion = "creativecommon:magic_resistance"
 		#mB of potion fluid (the potion above) used in the last filling step.
 		#Range: 1 ~ 10000
 		potionMb = 250
@@ -202,7 +202,7 @@
 
 	[crafting.felsic_hoe]
 		#Potion effect id filled in during assembly.
-		potion = "creativebrewing:magic_resistance"
+		potion = "creativecommon:magic_resistance"
 		#mB of potion fluid (the potion above) used in the last filling step.
 		#Range: 1 ~ 10000
 		potionMb = 250
@@ -218,7 +218,7 @@
 
 	[crafting.felsic_shield]
 		#Potion effect id filled in during assembly.
-		potion = "creativebrewing:magic_resistance"
+		potion = "creativecommon:magic_resistance"
 		#mB of potion fluid (the potion above) used in the last filling step.
 		#Range: 1 ~ 10000
 		potionMb = 250

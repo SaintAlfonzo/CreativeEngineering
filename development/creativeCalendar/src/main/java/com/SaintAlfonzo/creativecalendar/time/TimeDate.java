@@ -32,7 +32,7 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 /**
- * {@code /cetime date ...} (op 2, feature_writeup/time.md 3.11): moves the calendar to a date and keeps every clock on
+ * {@code /ccaltime date ...} (op 2, feature_writeup/time.md 3.11): moves the calendar to a date and keeps every clock on
  * it. A date is one position, day time units since the first sunrise ({@link TimeSettings#firstSunrise()}): year 1,
  * Early Spring, day 1, 6:00 am is 0. Applying it sets
  * <ul>
@@ -203,7 +203,7 @@ public final class TimeDate {
         String date = describe(server);
         source.sendSuccess(Component.literal(String.format(Locale.ROOT, "[time] Moved to %s: %s (%s%.1f days; %s)",
                 what, date, delta >= 0 ? "+" : "", delta / (double) TimeSettings.DAY_UNITS, wine)), true);
-        LOGGER.info("[time] /cetime date: {} -> {} ({}), dayTime {}, seasonCycleTicks {}, sun moved {} units; {}",
+        LOGGER.info("[time] /ccaltime date: {} -> {} ({}), dayTime {}, seasonCycleTicks {}, sun moved {} units; {}",
                 before, position, date, dayTime, cycle, delta, wine);
         return 1;
     }

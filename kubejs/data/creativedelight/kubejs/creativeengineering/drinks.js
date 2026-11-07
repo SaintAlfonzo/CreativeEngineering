@@ -1,7 +1,8 @@
+// requires: creativedelight
 // requires: farmersrespite
 // Drink rules: juice, tea, latte and coffee (feature_writeup/creative_delight_drinks.md, owner 2026-11-01 and
 // 2026-11-02; TODO food/drinks #15, folding #8, #10, merges/drinks #1, flowers #5). Non-member file: recipe ids are
-// creativedelight:<type>/<suffix> (global.CD.recipes). Items and fluids: CD kubejs_startup/creativeengineering/drinks.js.
+// creativedelight:<type>/<suffix> (global.CD.recipes). Items and fluids: CD kubejs_startup/creativedelight/drinks.js.
 // The Kettle is Creative Delight's patched one (farmersrespite/kettle.js header): two ingredients, one 250 mB unit of
 // its base fluid, one result. Pot recipes that have a mixer route of their own are re-id'd _manual_only so Slice & Dice
 // does not copy them into a second (bottle) mixer recipe.

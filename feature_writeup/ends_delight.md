@@ -314,7 +314,7 @@ now scans jars nested in `META-INF/jarjar/`. The Mysticrift End tower is in `typ
 - Tower: keep on the pillager grid (now), standalone set, or a new `group/end_constructed` (the pending End pass).
 - Strict y 50 House check (patcherMod `min_surface` tag proposal, ~40 lines) or earth fill only.
 - After install: `/dumpall`, then the food tuning (`food_types.json`), can decision, names and JEI audits for the 10
-  new items and End's integration rows; `/cegen run worldgen` (or `gen_structure_config.py` + `gen_structure_groups.py`).
+  new items and End's integration rows; `/cdevgen run worldgen` (or `gen_structure_config.py` + `gen_structure_groups.py`).
 - `food/drinks #7` (pot teas cost more), machete review, End gear values (`gear #12`) unchanged.
 
 ### 5.7 Ender's Delight 1.2.2 inventory (`creativedelight/members #33` step 1, 2026-11-02)

@@ -714,7 +714,7 @@ are registered in Java; the script rebuilds them from the decompiled source). Sn
 left alone (they shape terrain). The pack's own `wild/hamimelon` takes the tag directly. A manifest
 (`kubejs/generation_scripts/worldgen/soil_compat_manifest.json`) lists the files it owns; rerunning removes stale ones and
 never overwrites a hand-written file. Rerun after updating Terralith, Vinery, Neapolitan, Fruits Delight or Geophilic
-(`/cegen run soil_compat`).
+(`/cdevgen run soil_compat`).
 
 Vinery grapes (2026-10-23): the Backported Vinery port has no worldgen JSON in its jar; it serves 1.5.5's at runtime
 from the donor jars in `vinery_upstream/` as a bottom-priority pack, so the KubeJS overrides win. The script reads the
@@ -945,7 +945,7 @@ list in `village_farms.json` or a sibling file and a biome-to-crop lookup from `
 ### 2.12 Growing seasons (audit)
 
 Every growing plant's Serene Seasons seasons, from the generated
-[crop_seasons_audit.md](crop_seasons_audit.md) (`python3 tools/crop_season_audit.py`, `/cegen run crop_season_audit`;
+[crop_seasons_audit.md](crop_seasons_audit.md) (`python3 tools/crop_season_audit.py`, `/cdevgen run crop_season_audit`;
 reads `/dumpcropgrowth`, `/dumptags`, `/dumpitemsbymod` and scans the class files in `mods/` for Forge's crop-grow
 event). Rerun it after adding a crop mod. Audited 2026-10-30 (dumps of 2026-10-30): 123 plants. Rules and the design
 work: [briefs/farming_crops.md](briefs/farming_crops.md) crops #5 (TODO `farming/crops #5`).
@@ -1654,7 +1654,7 @@ PASSED r1031 (2026-10-31; SQ-CS-03 to -05 on a plains superflat), including the 
   coverage tool. CR-59 to CR-66 added.
 - **2026-10-05:** §2.8.1 Immersive Weathering soils. Cause: IW soils are laid before vegetation and many features test
   `grass_block` by name. New tag `creativeengineering:worldgen/grass_like_soils`, generator `tools/gen_soil_compat.py` (65
-  `kubejs/data` overrides, `/cegen` id `soil_compat`), hamimelon takes the tag. Scratch-server before/after test passed. CR-67, CR-68 added.
+  `kubejs/data` overrides, `/cdevgen` id `soil_compat`), hamimelon takes the tag. Scratch-server before/after test passed. CR-67, CR-68 added.
 - **2026-10-11:** status refresh. Hoe areas, tobacco parity and wild-crop placement went out with 1.0.4 (DEPLOYED
   2026-10-04). The WTHIT growth line (in patcherMod 1.0.5), the Immersive Weathering soil overrides and the
   refreshed `wild_crops.json` are STAGED for 1.0.6 (not deployed); the staged jar booted in single player without

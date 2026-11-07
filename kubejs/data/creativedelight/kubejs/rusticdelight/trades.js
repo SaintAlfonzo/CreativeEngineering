@@ -1,3 +1,4 @@
+// requires: creativedelight
 // requires: rusticdelight
 // requires: morejs
 // Rustic Delight 1.7.0 Wandering Trader stock (feature_writeup/rustic_delight.md 5.4): Pale and Dark seeds as rare

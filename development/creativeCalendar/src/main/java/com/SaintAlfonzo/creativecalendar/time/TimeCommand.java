@@ -20,16 +20,16 @@ import java.util.List;
 import java.util.Locale;
 
 /**
- * {@code /cetime} (everyone): every derived length in ticks, world days and real time, and where each value went
- * (feature_writeup/time.md 3.6). {@code /cetime set day|season|wine ...} and {@code /cetime push} (op 2) edit the
- * {@code [time]} values and push them, for testing. {@code /cetime date ...} (op 2) moves the calendar: {@link TimeDate}.
+ * {@code /ccaltime} (everyone): every derived length in ticks, world days and real time, and where each value went
+ * (feature_writeup/time.md 3.6). {@code /ccaltime set day|season|wine ...} and {@code /ccaltime push} (op 2) edit the
+ * {@code [time]} values and push them, for testing. {@code /ccaltime date ...} (op 2) moves the calendar: {@link TimeDate}.
  */
 public final class TimeCommand {
     private TimeCommand() {}
 
     @SubscribeEvent
     public static void onRegisterCommands(RegisterCommandsEvent event) {
-        event.getDispatcher().register(Commands.literal("cetime")
+        event.getDispatcher().register(Commands.literal("ccaltime")
                 .executes(ctx -> show(ctx.getSource()))
                 .then(TimeDate.node())
                 .then(Commands.literal("push").requires(s -> s.hasPermission(2))

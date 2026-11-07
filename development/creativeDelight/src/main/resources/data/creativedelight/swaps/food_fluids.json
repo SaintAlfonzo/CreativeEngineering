@@ -1,0 +1,203 @@
+{
+  "_comment": "plan_cb_polish.md 4 (2026-11-06, owner decision): the 33 food fluids Creative Delight registers (kubejs_startup/creativedelight/fluids.js, drinks.js) moved from creativeengineering: to creativedelight:, each with its flowing variant (KubeJS registers no bucket or block for them). Forge aliases the old ids, so fluid in tanks, basins and pipes of older saves keeps its contents. The Moonlight soft fluids keep their creativeengineering: ids (no Moonlight alias). Never prune.",
+  "replaces": {
+    "creativedelight:chorus_juice": [
+      "creativeengineering:chorus_juice"
+    ],
+    "creativedelight:flowing_chorus_juice": [
+      "creativeengineering:flowing_chorus_juice"
+    ],
+    "creativedelight:carrot_juice": [
+      "creativeengineering:carrot_juice"
+    ],
+    "creativedelight:flowing_carrot_juice": [
+      "creativeengineering:flowing_carrot_juice"
+    ],
+    "creativedelight:dandelion_juice": [
+      "creativeengineering:dandelion_juice"
+    ],
+    "creativedelight:flowing_dandelion_juice": [
+      "creativeengineering:flowing_dandelion_juice"
+    ],
+    "creativedelight:turnip_water": [
+      "creativeengineering:turnip_water"
+    ],
+    "creativedelight:flowing_turnip_water": [
+      "creativeengineering:flowing_turnip_water"
+    ],
+    "creativedelight:egg_solution": [
+      "creativeengineering:egg_solution"
+    ],
+    "creativedelight:flowing_egg_solution": [
+      "creativeengineering:flowing_egg_solution"
+    ],
+    "creativedelight:frosting": [
+      "creativeengineering:frosting"
+    ],
+    "creativedelight:flowing_frosting": [
+      "creativeengineering:flowing_frosting"
+    ],
+    "creativedelight:milk_coffee": [
+      "creativeengineering:milk_coffee"
+    ],
+    "creativedelight:flowing_milk_coffee": [
+      "creativeengineering:flowing_milk_coffee"
+    ],
+    "creativedelight:honey_coffee": [
+      "creativeengineering:honey_coffee"
+    ],
+    "creativedelight:flowing_honey_coffee": [
+      "creativeengineering:flowing_honey_coffee"
+    ],
+    "creativedelight:chocolate_coffee": [
+      "creativeengineering:chocolate_coffee"
+    ],
+    "creativedelight:flowing_chocolate_coffee": [
+      "creativeengineering:flowing_chocolate_coffee"
+    ],
+    "creativedelight:dark_coffee": [
+      "creativeengineering:dark_coffee"
+    ],
+    "creativedelight:flowing_dark_coffee": [
+      "creativeengineering:flowing_dark_coffee"
+    ],
+    "creativedelight:syrup_coffee": [
+      "creativeengineering:syrup_coffee"
+    ],
+    "creativedelight:flowing_syrup_coffee": [
+      "creativeengineering:flowing_syrup_coffee"
+    ],
+    "creativedelight:pumpkin_coffee": [
+      "creativeengineering:pumpkin_coffee"
+    ],
+    "creativedelight:flowing_pumpkin_coffee": [
+      "creativeengineering:flowing_pumpkin_coffee"
+    ],
+    "creativedelight:cherry_blossom_coffee": [
+      "creativeengineering:cherry_blossom_coffee"
+    ],
+    "creativedelight:flowing_cherry_blossom_coffee": [
+      "creativeengineering:flowing_cherry_blossom_coffee"
+    ],
+    "creativedelight:lavender_tea": [
+      "creativeengineering:lavender_tea"
+    ],
+    "creativedelight:flowing_lavender_tea": [
+      "creativeengineering:flowing_lavender_tea"
+    ],
+    "creativedelight:matcha_latte": [
+      "creativeengineering:matcha_latte"
+    ],
+    "creativedelight:flowing_matcha_latte": [
+      "creativeengineering:flowing_matcha_latte"
+    ],
+    "creativedelight:berry_matcha_latte": [
+      "creativeengineering:berry_matcha_latte"
+    ],
+    "creativedelight:flowing_berry_matcha_latte": [
+      "creativeengineering:flowing_berry_matcha_latte"
+    ],
+    "creativedelight:kiwi_tea": [
+      "creativeengineering:kiwi_tea"
+    ],
+    "creativedelight:flowing_kiwi_tea": [
+      "creativeengineering:flowing_kiwi_tea"
+    ],
+    "creativedelight:turnip_tea": [
+      "creativeengineering:turnip_tea"
+    ],
+    "creativedelight:flowing_turnip_tea": [
+      "creativeengineering:flowing_turnip_tea"
+    ],
+    "creativedelight:bayberry_tea": [
+      "creativeengineering:bayberry_tea"
+    ],
+    "creativedelight:flowing_bayberry_tea": [
+      "creativeengineering:flowing_bayberry_tea"
+    ],
+    "creativedelight:hamimelon_tea": [
+      "creativeengineering:hamimelon_tea"
+    ],
+    "creativedelight:flowing_hamimelon_tea": [
+      "creativeengineering:flowing_hamimelon_tea"
+    ],
+    "creativedelight:carrot_tea": [
+      "creativeengineering:carrot_tea"
+    ],
+    "creativedelight:flowing_carrot_tea": [
+      "creativeengineering:flowing_carrot_tea"
+    ],
+    "creativedelight:lemon_tea": [
+      "creativeengineering:lemon_tea"
+    ],
+    "creativedelight:flowing_lemon_tea": [
+      "creativeengineering:flowing_lemon_tea"
+    ],
+    "creativedelight:melon_tea": [
+      "creativeengineering:melon_tea"
+    ],
+    "creativedelight:flowing_melon_tea": [
+      "creativeengineering:flowing_melon_tea"
+    ],
+    "creativedelight:orange_tea": [
+      "creativeengineering:orange_tea"
+    ],
+    "creativedelight:flowing_orange_tea": [
+      "creativeengineering:flowing_orange_tea"
+    ],
+    "creativedelight:pear_tea": [
+      "creativeengineering:pear_tea"
+    ],
+    "creativedelight:flowing_pear_tea": [
+      "creativeengineering:flowing_pear_tea"
+    ],
+    "creativedelight:chorus_tea": [
+      "creativeengineering:chorus_tea"
+    ],
+    "creativedelight:flowing_chorus_tea": [
+      "creativeengineering:flowing_chorus_tea"
+    ],
+    "creativedelight:lychee_juice": [
+      "creativeengineering:lychee_juice"
+    ],
+    "creativedelight:flowing_lychee_juice": [
+      "creativeengineering:flowing_lychee_juice"
+    ],
+    "creativedelight:hawberry_juice": [
+      "creativeengineering:hawberry_juice"
+    ],
+    "creativedelight:flowing_hawberry_juice": [
+      "creativeengineering:flowing_hawberry_juice"
+    ],
+    "creativedelight:mango_juice": [
+      "creativeengineering:mango_juice"
+    ],
+    "creativedelight:flowing_mango_juice": [
+      "creativeengineering:flowing_mango_juice"
+    ],
+    "creativedelight:mangosteen_juice": [
+      "creativeengineering:mangosteen_juice"
+    ],
+    "creativedelight:flowing_mangosteen_juice": [
+      "creativeengineering:flowing_mangosteen_juice"
+    ],
+    "creativedelight:peach_juice": [
+      "creativeengineering:peach_juice"
+    ],
+    "creativedelight:flowing_peach_juice": [
+      "creativeengineering:flowing_peach_juice"
+    ],
+    "creativedelight:sea_grape_juice": [
+      "creativeengineering:sea_grape_juice"
+    ],
+    "creativedelight:flowing_sea_grape_juice": [
+      "creativeengineering:flowing_sea_grape_juice"
+    ],
+    "creativedelight:pickerelweed_juice": [
+      "creativeengineering:pickerelweed_juice"
+    ],
+    "creativedelight:flowing_pickerelweed_juice": [
+      "creativeengineering:flowing_pickerelweed_juice"
+    ]
+  }
+}

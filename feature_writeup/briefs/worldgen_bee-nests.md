@@ -42,7 +42,7 @@ Know where wild bees come from and how often, and tune it where it is wrong.
 
 ### Build
 
-1. Refresh the report: `python3 tools/gen_bee_nests.py` (or `/cegen run bee_nests`). It needs the instance's `mods/`,
+1. Refresh the report: `python3 tools/gen_bee_nests.py` (or `/cdevgen run bee_nests`). It needs the instance's `mods/`,
    so run it on the dev machine. Check that section 0's totals move only by the new areas.
 2. Run BN-04 on a scratch server:
    - `/dumpbeenests reset`, then `chunky radius 400` in an unexplored area, then `/dumpbeenests`;

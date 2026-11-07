@@ -1,0 +1,52 @@
+# r1106cbp: full pack, NEW jars, same world as p7 (SQ-CBP-05, -06, -07, SQ-CDFL-03, -04, SQ-CBC-04 rerun)
+## SQ-CBP-05 | full pack: absent-mods once per load, no prune of full-pack recipes, removed 1328
+bootreject Missing or unsupported mandatory|Mixin apply failed|InvalidMixinException|Encountered an unexpected exception
+shell grep -h "absent mods\|\[NCH\] removed\|Empty array" logs/kubejs/*.log logs/latest.log | cut -c1-400 | sort | uniq -c | head
+shell n=$(grep -ch "\[absent mods\] \(skipped\|none\)" logs/kubejs/server.log); echo "absent lines=$n"
+shell n=$(cat logs/kubejs/*.log logs/latest.log | grep -c "Empty array"); echo "empty_array=$n"
+shell grep -h "Added [0-9]* recipes" logs/kubejs/server.log
+kjsexpect removed 1328 recipes
+## SQ-CBP-06 | old world: potions, buckets, Create potion fluid, active Magic Resistance
+shell ! grep -iE "missing.*creativebrewing:(resistance|magic_resistance)|creativebrewing:magic_resistance.*missing" logs/latest.log
+shell grep -h "\[swaps\]" logs/latest.log | sed -E 's/^\[[^]]*\] \[[^]]*\]: //' | head
+> forceload add 0 0
+sleep 3
+> data get entity @e[tag=mrold,limit=1] ActiveEffects
+> data get block 0 -61 6 TankContent
+> data get block 4 -61 0 Items
+sleep 1
+expect "forge:id": "creativecommon:magic_resistance"
+> summon minecraft:iron_golem 8 -61 2 {Tags:["mrA"],NoAI:1b}
+> summon minecraft:iron_golem 10 -61 2 {Tags:["mrB"],NoAI:1b}
+> setblock 8 -60 0 minecraft:redstone_block
+> setblock 10 -60 0 minecraft:redstone_block
+sleep 3
+> data get entity @e[tag=mrA,limit=1] ActiveEffects
+> data get entity @e[tag=mrB,limit=1] ActiveEffects
+sleep 1
+expect "forge:id": "minecraft:resistance"
+expect "forge:id": "creativecommon:magic_resistance"
+> effect give @e[tag=mrA] creativecommon:magic_resistance 30 0
+reject Unknown effect
+> zq potion creativecommon:resistance
+> zq potion kubejs:long_wither
+> zq potion creativecommon:long_wither
+sleep 3
+look Items: potions show creativebrewing:/kubejs: Potion strings or remapped ones; dispensed splash potions applied their effect (above); kubejs:long_wither resolves
+## SQ-CDFL-03 | old world: food fluids remapped to creativedelight:
+shell ! grep -E "Identifier .* is missing|[Mm]issing.*creativeengineering:(carrot_juice|egg_solution|flowing_)" logs/latest.log
+> data get block 0 -61 0 TankContent
+> data get block 0 -61 3 TankContent
+sleep 1
+expect FluidName: "creativedelight:carrot_juice"
+expect FluidName: "creativedelight:egg_solution"
+expect Amount: 4000
+## SQ-CDFL-04 | soft fluid equivalent of the renamed carrot juice (static + log; jar fill is a client step)
+shell for f in carrot_juice dandelion_juice turnip_water; do unzip -p mods/creativedelight-*.jar data/creativeengineering/moonlight/soft_fluids/$f.json 2>/dev/null | tr -d ' \n' | grep -o '"equivalent_fluids":\[[^]]*\]' || echo "$f: no json"; done
+shell ! grep -E "WARN.*equivalent_fluids" logs/latest.log
+## SQ-CBP-07 | config carry-over: effects and magic_resistance into Common, copper_poisoning into Equipment
+shell grep -h "\[swaps\] config sections" logs/latest.log | sed -E 's/^\[[^]]*\] \[[^]]*\]: //'
+shell for f in creativecommon creativeequipment creativebrewing; do echo "$f: $(grep -o '^\[[a-z_]*\]' config/$f-common.toml | tr '\n' ' ')"; done
+shell grep -q "^\[effects\]" config/creativecommon-common.toml && grep -q "^\[magic_resistance\]" config/creativecommon-common.toml && grep -q "^\[copper_poisoning\]" config/creativeequipment-common.toml
+shell ! grep -E "^\[(effects|magic_resistance|copper_poisoning)\]" config/creativebrewing-common.toml
+look diff of the moved sections against configs_edited/root_config/creativebrewing-common.toml (shell.txt of this row is the section list; the diff is in the run notes)

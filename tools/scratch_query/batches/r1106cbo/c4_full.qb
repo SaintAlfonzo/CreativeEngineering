@@ -1,0 +1,16 @@
+# r1106cbo boot 4: the full pack (prep_srv.sh, group B, dev jars swapped in) (SQ-CBC-04, SQ-CBC-07 full-pack half).
+# Reference: kubejs/exported/recipes/all.csv 2026-11-05 22:42 = 296 create:sequenced_assembly (CD 88, Engineering 69).
+## SQ-CBC-04 | full pack: transition items split, removed count, sequenced assembly count
+shell grep -h "transition items" logs/kubejs/startup.log
+shell grep -qE '\[creativedelight\] transition items \(89\)' logs/kubejs/startup.log  # startup.log (r1106spf: kjsexpect reads server.log)
+shell grep -h "Added [0-9]* recipes" logs/kubejs/server.log
+shell n=$(grep -oE "removed [0-9]+ recipes" logs/kubejs/server.log | tail -1 | grep -oE "[0-9]+"); echo "removed=$n"; test "$n" -gt 1100 -a "$n" -lt 1600
+shell grep -h "absent mods" logs/kubejs/server.log
+shell grep -c "not registered - add a row\|no incomplete item registered" logs/kubejs/startup.log logs/kubejs/server.log
+> zq bytype create:sequenced_assembly
+waitlog bytype create:sequenced_assembly: [0-9]+ 60
+expect bytype create:sequenced_assembly: 296$
+look sequenced assembly count against 296 (11-05 dump); [absent mods] never prints (afterRecipes not posted, run notes 14:06)
+## SQ-CBC-07 | full pack: no dependency or ordering error for creativebrewing
+bootreject Missing or unsupported mandatory
+bootreject \b[Cc]ycle\b|[Oo]rdering (cycle|error|constraint)

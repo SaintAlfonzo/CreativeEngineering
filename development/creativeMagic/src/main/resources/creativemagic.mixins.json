@@ -11,7 +11,12 @@
     "TrinketCaseInventoryMixin",
     "TrinketCaseSlotMixin",
     "TrinketCaseMenuMixin",
-    "ItemBackedInventoryAccessor"
+    "ItemBackedInventoryAccessor",
+    "MemoryStickItemMixin",
+    "PneumaticCraftUtilsMixin",
+    "XpHelperMixin",
+    "XpPumpUpgradeWrapperMixin",
+    "XPFluidManagerMixin"
   ],
   "client": [],
   "server": []

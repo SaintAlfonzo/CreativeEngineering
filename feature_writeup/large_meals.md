@@ -24,7 +24,7 @@ asks for it by name. Upstream bugs are fixed (3.5).
 | Already wired in the pack | 2.2 | 13 Display Delight `lm_` blocks (excluded prefix), 4 Spice of Life complexity entries (dead today) |
 | Fold-in | 4 | 21 steps planned |
 | Decisions | 5 | D1-D9 answered 2026-11-01 |
-| Build | 4.2 | BUILT 2026-11-01 (member + CD scripts + Display Delight `lm_`); in `mods/` since the CD jar of 11-02 14:01, not played; `/dumpall`, can generator, compost and `/cegen` wait on the game |
+| Build | 4.2 | BUILT 2026-11-01 (member + CD scripts + Display Delight `lm_`); in `mods/` since the CD jar of 11-02 14:01, not played; `/dumpall`, can generator, compost and `/cdevgen` wait on the game |
 | Tests | 8 | LGM-01..24 in game: none run. Scratch r1102b (2026-11-02): SQ-LGM-01 to -09 PASS; SQ-LGM-10 FAIL (Chicken Curry recipe ids clash with Ender's, 8); CQ-LGM-11 waits for the client round |
 
 - **Jar:** 156 files, no jarjar. `mods.toml` authors FoundWiz, jamb.
@@ -165,7 +165,7 @@ and `development/creativeDelight/src/main/resources/kubejs_startup/largemeals/` 
 0. **Port (Java):** items and the three feasts on FD's `FeastBlock` / `ConsumableItem` (MIT base classes), our own
    food-value table, feast shapes; GLMs as FD `add_item` data (ours) or per D3. Donor translation: drop recipe
    `category`, the 1.20 creative-tab list (`CREATIVE_TAB_ITEMS`) becomes an FD tab entry.
-1. **Dumps and generators:** `/dumpall`, then `/cegen` (memory `dumpall-refresh-workflow`).
+1. **Dumps and generators:** `/dumpall`, then `/cdevgen` (memory `dumpall-refresh-workflow`).
 2. **Ids:** all 18 items and 3 blocks in `item_dict.js` / block dict.
 3. **Tags** via `global.tags`: food types; bowls meals in the soup / stew / meal types, desserts in `dessert/pudding`.
 4a. **Egg tag:** no change; re-scan the item dump after `/dumpall` for any raw egg added since 2026-10-24 and add it if found.
@@ -257,7 +257,7 @@ build classpath only for ids (it resolves by name at runtime), so it can go in t
   upstream grid craft is unchanged as the heatless route.
 - **Not done here (waits on the game or owner):** `/dumpall`, then `python3 tools/gen_can_types.py` (soups and meals get generated
   cans; feasts wait for `cans/canning #17`), `python3 tools/gen_compost_values.py --add-new` after `/dumpcompost` (racks are not
-  compostable), then `/cegen` (stack sizes, placeables, food families: `python3 tools/food_families.py --check`). Item Physic and
+  compostable), then `/cdevgen` (stack sizes, placeables, food families: `python3 tools/food_families.py --check`). Item Physic and
   WTHIT need no rows (FD feasts are covered). Spice of Life: the four `largemeals:` entries in `solapplepie-server.toml` need no
   change; confirm in LGM-16. Chopstick foods: the Large Meals dishes are not on the Roll Delight list (not asked).
 - **Installing:** `:creativeDelight:installToMods` and the rebuilt `:backportedDisplay:installToMods`, only with the game closed

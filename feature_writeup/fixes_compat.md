@@ -68,8 +68,9 @@ a long javadoc with the investigation; this file summarises.
   pattern's real banner texture is wrong: both mods draw on their own model layouts, so their bundled textures are
   re-cropped copies; the real texture lands in the wrong place (an earlier version of both mixins did that and broke
   every bed).
-- **Fix:** `tools/gen_bedspreads_pattern_compat.py` and `tools/gen_elytra_pattern_compat.py` generate compat textures
-  for every other installed pattern, following each mod's own cropping convention, into patcherMod's assets.
+- **Fix:** compat textures for every other installed pattern, following each mod's own cropping convention: first
+  generated offline into the jar by two tools/ scripts; since 2026-11-06 built at load from the installed jars as a
+  hidden client resource pack (Compat `banners/BannerPatternPack`, [creative_compat.md](creative_compat.md) 6.3).
   `BannerPatternAtlasCompat` stitches them into the block atlas; the two mixins use the mod's own texture when it
   exists and the generated one otherwise.
 
@@ -111,6 +112,9 @@ exist).
 - **Overflow:** Detail Armor Bar draws one row of 10 icons and collapses anything past 20 points into 3 px tick marks.
   `ArmorOverflowRenderer` draws real extra rows above it with each piece's icon (`[armor_overflow] enabled`, `compact`
   tucks rows behind each other, `compactRowSpacing`), and `ArmorBarRendererOverflowTickMixin` hides the tick marks.
+- **Without Detail Armor Bar:** client setup checks `ModList` before touching `DetailArmorBarCompat` (its static fields
+  are detailab types, so loading the class alone threw NoClassDefFoundError; found 2026-11-06 in the minimal
+  CEPortTesting instance). The overflow renderer and both mixins were already gated.
 
 ### 2.8 Create config text fields
 
@@ -192,7 +196,7 @@ vanilla's label drawing are touched. `[gui_title] stretchPlaque`, `logOverflow` 
 | `CreativeMenuDisableMixin` | creative players get the survival inventory: the creative tab screen builds a cache of every item on first open (a multi-second freeze in this pack); JEI's cheat mode covers giving items |
 | XP fluid merge: `XpHelperMixin`, `XpPumpUpgradeWrapperMixin`, `XPFluidManagerMixin`, `MemoryStickItemMixin`, `PneumaticCraftUtilsMixin` | every liquid XP is Create: Enchantment Industry's experience (Sophisticated Backpacks' ratio 20 → 1 mB per point, its XP pump fills the CEI fluid, PneumaticCraft's memory stick and orb absorber use it without dividing by zero) |
 | `IETagUtilsMixin` | IE's recycling picked a material from an item's tags in hash order, so `forge:rods/all_metal` could win over `forge:rods/iron` and recycle to air; now the first candidate with a real ingot tag wins |
-| `CopperPickaxeItemMixin` | Everything Copper's copper pickaxe gets the pack's copper tier instead of stone (`CETiers.COPPER`) |
+| `CopperPickaxeItemMixin` | Everything Copper's copper pickaxe gets the pack's copper tier instead of stone (`CEQTiers.COPPER`) |
 
 ### 2.20 to 2.23
 
@@ -338,7 +342,7 @@ the vanilla texture). Off: nothing is swapped, moss is vanilla. Read at model lo
 
 Immersive Weathering grows fans, wall fans, coral and rarely wet sponge into the water around each vanilla coral
 block (`gameplay/misc #15`). It does this with one data file per kind, `block_growths/<kind>_coral.json`, and the five
-files differ only in the kind name. `tools/gen_ua_coral_growths.py` (`/cegen run ua_coral_growths`) copies IW's
+files differ only in the kind name. `tools/gen_ua_coral_growths.py` (`/cdevgen run ua_coral_growths`) copies IW's
 `brain_coral.json` once per living UA coral kind into `kubejs/data/immersive_weathering/block_growths/ua_<kind>_coral.json`.
 It finds the kinds from the UA jar: every kind with a block, coral, fan and wall fan, dead kinds excluded. That gives 11
 kinds: acan, branch, chrome, finger, moss, petal, pillow, prismarine, rock, silk, star.
@@ -352,7 +356,7 @@ kinds: acan, branch, chrome, finger, moss, petal, pillow, prismarine, rock, silk
 - Recipes: UA already turns 4 corals or fans of a kind into its block, so IW's coral block recipes are not copied.
 - Dead coral blocks do not grow, as in IW. Elder prismarine coral is prismarine coral's dead form (user 2026-10-28), so
   it gets no growth either (`DEAD` in the generator).
-- The Weathering and Growth JEI tab picks the files up after `/cegen run jei_world` (82 rows before this).
+- The Weathering and Growth JEI tab picks the files up after `/cdevgen run jei_world` (82 rows before this).
 
 ### 2.32 Falling block water splash
 
@@ -395,7 +399,7 @@ reobfuscated with no refmap).
   off-thread callers (max 20 distinct). Test SQ-LR-01 in [scratch_queue.md](testing/scratch_queue.md). Close F4 once a
   caller is named and fixed, or a long probe session logs none.
 - **F5. Banner compat textures need a jar rebuild** for a new pattern mod: both generators write patcherMod resources,
-  so they're deliberately not in `/cegen` (`generators.json` `_readme`).
+  so they're deliberately not in `/cdevgen` (`generators.json` `_readme`).
 - **F6.** FIXED 2026-10-19 (javadoc added). **`CopperPickaxeItemMixin` had no javadoc**, unlike every other mixin.
 
 ### Known limits
@@ -417,7 +421,7 @@ All in patcherMod `src/main/java/com/SaintAlfonzo/creativeengineering/` unless n
 - 2.10 `util/BlockStateIdOverflow`, `mixin/SectionUpdateEncodeFixMixin`, `mixin/SectionUpdateNullStateMixin`, `mixin/BlockUpdateNullStateMixin`, `devtools/BlockStateSyncDebug`, [tools/diff_block_state_ranges.py](../tools/diff_block_state_ranges.py); 2.11 `mixin/SupplementariesBreezyCompatMixin`; 2.12 `mixin/LevelThreadSafeRandomMixin`; 2.13 `compat/AsyncMapTrades`, `compat/AsyncLocatorBridge`, `mixin/LCItemsForMapTradeMixin`, `mixin/CSSellingMapMixin`.
 - 2.15 `compat/LightmansTooltipStacks`, `mixin/LCEasyScreenHelperMixin`, `mixin/LCEasyGuiGraphicsMixin`; 2.16 `mixin/JeiRecipeLayoutTooltipMixin`, `mixin/JeiRecipesGuiTooltipMixin`; 2.17 `mixin/IcebergTitleBreakMixin`; 2.18 `compat/guititle/`, `mixin/ContainerTitlePlaqueMixin`, `mixin/RenderSystemShaderTextureMixin`.
 - 2.25 `compat/TrinketCaseRules`, `mixin/TrinketCaseInventoryMixin`, `mixin/TrinketCaseSlotMixin`, `mixin/TrinketCaseMenuMixin`, `mixin/ItemBackedInventoryAccessor`, [kubejs/client_scripts/tooltips.js](../kubejs/client_scripts/tooltips.js) (Botania section), `config/quark-common.toml` `Allowed Screens`.
-- 2.19 `mixin/CreativeMenuDisableMixin`, `mixin/XpHelperMixin`, `mixin/XpPumpUpgradeWrapperMixin`, `mixin/XPFluidManagerMixin`, `mixin/MemoryStickItemMixin`, `mixin/PneumaticCraftUtilsMixin`, `mixin/IETagUtilsMixin`, `mixin/CopperPickaxeItemMixin`, `CETiers`.
+- 2.19 `mixin/CreativeMenuDisableMixin`, `mixin/XpHelperMixin`, `mixin/XpPumpUpgradeWrapperMixin`, `mixin/XPFluidManagerMixin`, `mixin/MemoryStickItemMixin`, `mixin/PneumaticCraftUtilsMixin`, `mixin/IETagUtilsMixin`, `mixin/CopperPickaxeItemMixin`, `CEQTiers`.
 - 2.28 `compat/SophisticatedPolymorphCompat`, `compat/SophisticatedPolymorphClient`, `mixin/SophisticatedCraftingPolymorphMixin`, `mixin/SophisticatedUpgradeOpenMixin`, `mixin/PolymorphRecipeSelectionPacketMixin`; compile dep `development/creativeCommon/libs/polymorph-forge-0.46.6+1.19.2.jar` (copied from `mods/`, git-ignored).
 - 2.29 `compat/CraftingMenuPolymorphCompat`, `compat/CraftingMenuPolymorphClient`, `mixin/IECraftingTablePolymorphMixin`, `mixin/PrettyPipesCraftingTerminalPolymorphMixin`; compile deps `libs/ImmersiveEngineering-1.19.2-9.2.4-170.jar`, `libs/PrettyPipes-1.13.6.jar`.
 - 2.30 `block/MossTint`, `CEConfig.Moss`; `assets/creativeengineering/models/block/moss_block_tinted.json`, `moss_carpet_tinted.json`, `textures/block/moss_block_tinted.png` (grayscale made with a one-off PIL script: luminance / brightest pixel).
@@ -533,7 +537,7 @@ All in patcherMod `src/main/java/com/SaintAlfonzo/creativeengineering/` unless n
   1000`, place an acan coral block under water with open water around it: within a few minutes acan wall fans appear
   on its sides and acan fans or acan coral on top, rarely a wet sponge; growth stops once 6 or more surround it. A
   prismarine coral block in a cold or plain ocean grows prismarine fans the same way; an acan block there does not.
-  A dead acan coral block and an elder prismarine coral block grow nothing. After `/cegen run jei_world`, the Weathering and Growth tab has a row per UA
+  A dead acan coral block and an elder prismarine coral block grow nothing. After `/cdevgen run jei_world`, the Weathering and Growth tab has a row per UA
   kind.
 - [ ] **FX-49 Falling block splash** (in game, client): over a pool, drop an anvil from height (`/summon falling_block ~ ~20 ~ {BlockState:{Name:"minecraft:anvil"},HurtEntities:1b}`) and sand from 2 blocks up. Each splashes once on entering the water (Effective splash model, droplets, splash sound) and the high drop splashes larger. No splash when it lands on dry ground; the block is not pushed sideways by the water.
 
@@ -574,7 +578,7 @@ All in patcherMod `src/main/java/com/SaintAlfonzo/creativeengineering/` unless n
 - 2026-10-26: F2 fixed (TODO `server #6`): `SectionUpdateEncodeFixMixin` writes the multi-block packet with a long
   shift instead of masking, no 2^20 ceiling. patcherMod 1.1.03 in `mods/`, not run; FX-47.
 - 2026-10-26: F3 closed: version-pinned fixes tracked in [deploy.md](deploy.md) "Mod updates" plus a staging warning; 2.8 corrected (the text-field mixin is silent on a renamed lambda, not loud).
-- 2026-10-28: 2.31 Upgrade Aquatic coral growth (`gameplay/misc #15`): 11 IW growth files from a `/cegen` generator; prismarine in every ocean, elder prismarine treated as dead. Data only, not run; FX-48.
+- 2026-10-28: 2.31 Upgrade Aquatic coral growth (`gameplay/misc #15`): 11 IW growth files from a `/cdevgen` generator; prismarine in every ocean, elder prismarine treated as dead. Data only, not run; FX-48.
 - 2026-10-28: 2.32 falling block water splash: client mixin calls `doWaterSplashEffect` once on entering water (Effective draws it); FallingBlockEntity only. Built, not run; FX-49.
 
 ## Owner ideas (scratchpad 2026-10-26)

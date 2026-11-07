@@ -18,10 +18,10 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 @Mixin(RangedAttribute.class)
 public abstract class ArmorCapMixin {
 
-    private static final double CE_DEFAULT_ARMOR_CAP = 50.0D;
+    private static final double CEQ_DEFAULT_ARMOR_CAP = 50.0D;
 
     private static double creativeengineering$armorCap() {
-        return CEQConfig.SPEC.isLoaded() ? CEQConfig.DRAGON_GEAR.armorCap.get() : CE_DEFAULT_ARMOR_CAP;
+        return CEQConfig.SPEC.isLoaded() ? CEQConfig.DRAGON_GEAR.armorCap.get() : CEQ_DEFAULT_ARMOR_CAP;
     }
 
     // sanitizeValue

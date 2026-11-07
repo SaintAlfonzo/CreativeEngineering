@@ -306,7 +306,7 @@ Tests: SQ-DNR-O-01 to -05 (scratch queue). Old-world check: a 1.1.03+ world with
   `#forge:squid_tentacles` (Oceanic's four dishes) and `#forge:foods/tentacles` (Miner's Takoyaki, two slots) in CD
   `oceansdelight/tags.js`. Rebuilt and installed 2026-10-31 12:32; recheck SQ-CM-32 and SQ-CM-35.
 - Seagrass Salad: 2 seagrass + bowl.
-- Not done: generated files still list the removed items (`food_types.json`, the can and compost outputs); the generators drop them on the next `/dumpall` and `/cegen` run.
+- Not done: generated files still list the removed items (`food_types.json`, the can and compost outputs); the generators drop them on the next `/dumpall` and `/cdevgen` run.
 
 ## 7. Built 2026-11-02 (food and cooking batch, [plan_food_cooking_batch.md](plan_food_cooking_batch.md))
 

@@ -76,11 +76,13 @@ global.tags = {
 		const arr = this._arr(v)
 		let out = null
 		for (let k = 0; k < arr.length; k++) {
-			const s = arr[k] == null ? '' : String(arr[k])
-			const c = s.charAt(0)
+			// let, not const: Rhino keeps a loop-body const's first value, so one absent first entry dropped the whole
+			// list (scratch r1106cbb: the removed-item tag strip did nothing on the chain)
+			let s = arr[k] == null ? '' : String(arr[k])
+			let c = s.charAt(0)
 			let keep = true
 			if (s !== '' && c !== '#' && c !== '/' && s.indexOf('*') < 0) {
-				const ns = global.has.namespace(s)
+				let ns = global.has.namespace(s)
 				if (ns !== null && !global.has.mod(ns) && !this._inRegistry(event, s)) {
 					keep = false
 					this._absentCounts[ns] = (this._absentCounts[ns] || 0) + 1

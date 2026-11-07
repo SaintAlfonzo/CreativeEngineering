@@ -559,7 +559,7 @@ filter value against the live cave biomes, and the starting rates above (FGD-28)
 | FGD-25 | Mill an inky cap and a colony in Create | black dye as §2.6 |
 | FGD-26 | Dedicated server with the port, client joins | no missing-class or registry mismatch |
 | FGD-27 | Lightning on a red mooshroom; on an Inky Cap Cow; `javap` for BROWN | red becomes brown; Fungi cow unchanged |
-| FGD-28 | Explore dark forest, swamp, mushroom fields, caves (`/ceplace`) | inky only in dark forest, mushroom fields, caves; morel also in swamps; Fungi forms rarer than brown/red; rare colonies of all four in caves |
+| FGD-28 | Explore dark forest, swamp, mushroom fields, caves (`/cdevplace`) | inky only in dark forest, mushroom fields, caves; morel also in swamps; Fungi forms rarer than brown/red; rare colonies of all four in caves |
 | FGD-29 | Dark forest and mushroom fields herds | brown mooshrooms at the set shares; Fungi cows rare; morel cow in swamps |
 | FGD-30 | Breed red x brown, inky x morel, red x inky 10 times each | calves are either parent's type, about 50 % each |
 | FGD-31 | Mushroom on rich soil; JEI info page | becomes the colony; page lists the four mushrooms |

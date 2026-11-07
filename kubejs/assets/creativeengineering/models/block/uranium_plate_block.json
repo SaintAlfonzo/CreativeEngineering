@@ -1,8 +1,0 @@
-{
-  "parent": "block/cube_all",
-  "textures": {
-    "all": "creativeengineering:block/plate_block/uranium_plate_block",
-    "particle": "creativeengineering:block/plate_block/uranium_plate_block"
-  },
-  "render_type": "solid"
-}

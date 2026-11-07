@@ -173,6 +173,8 @@ rabbit stew 20 / 20, honey bottle 12 / 20 (0.1). Before: every golden 4 hunger /
 The generated cans of these foods copy the catalog values: `tools/gen_can_types.py` needs a `/dumpfood` after the
 restart first (it reads `kubejs/exported/food/catalog.json`); not rerun yet (its `--check` on 2026-11-03 already
 showed 5 other members' scripts pending from parallel work).
+If `food_tuning.json` is missing (an instance without the pack's `kubejs/generation_scripts/`, such as CEPortTesting)
+the script logs a warning and leaves the upstream values instead of a startup error (2026-11-06).
 
 ### 3.7 Gilded names (owner 2026-11-02, built 2026-11-03)
 Client lang `kubejs/assets/creativedelight/kubejs/goldenfood/names.js`: every item_dict id with an

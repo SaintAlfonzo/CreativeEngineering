@@ -1440,7 +1440,7 @@
       }
     },
     "sky": {
-      "note": "Sky structures: Cloud Storage's hot air balloons and sky temples, AE2 meteorites (same rate as the clouds). Meta structures join later.",
+      "note": "Sky structures: Cloud Storage's hot air balloons and sky temples, AE2 meteorites (same rate as the clouds). Meta structures join later; floating islands (creativeengineering:sky_island) since 2026-11-06.",
       "placement": {
         "spacing": 64,
         "separation": 16,
@@ -1491,6 +1491,12 @@
           "weight": 1,
           "frequency": 1.0,
           "note": "Meta structure with an anchor: never picked by this weight; it takes \"share\" (meta_structures.json) of the slots its anchors win here, so no member's rate changes. Keep the weight at 1."
+        },
+        "creativeengineering:sky_island": {
+          "weight": 100,
+          "frequency": 0.985,
+          "fit_keep": false,
+          "note": "Sky Structures' floating island (one template, 135 to 165 blocks up), standalone since 2026-11-06; also a part of meta/sky_village_islands."
         }
       }
     },

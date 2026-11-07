@@ -1,3 +1,4 @@
+// requires: creativeengineering
 // Creative Engineering; moved from kubejs/server_scripts/tags/metaltags.js on 2026-11-04 (creative_split.md 7.13, wave 8), rows unchanged.
 ServerEvents.tags('item', e => {
 	var t = global.tags
@@ -26,12 +27,8 @@ ServerEvents.tags('item', e => {
 		t.add(e, `forge:${type}/all_metal`, id)
 	})
 
-	// any metal dust or grit (Steel Toe Stout, alcohol.md 8.6)
-	t.add(e, i.t_metal_dusts, [
-		i.dust_copper, i.dust_iron, i.dust_gold, i.dust_zinc, i.dust_aluminum, i.dust_lead, i.dust_nickel,
-		i.dust_silver, i.dust_uranium, i.dust_cast_iron, i.dust_rose_gold, i.dust_brass, i.dust_steel,
-		i.dust_constantan, i.dust_electrum,
-	])
+	// any metal dust or grit (Steel Toe Stout, alcohol.md 8.6): moved 2026-11-06 to Creative Common's data
+	// (data/creativeengineering/tags/items/metal_dusts.json, optional entries) so Creative Brewing finds the tag alone
 
 	// spool
 	t.addTag(e, 'forge:spool/iron', i.spool)
@@ -58,10 +55,10 @@ ServerEvents.tags('item', e => {
 		stiff: ['copper', 'iron', 'zinc', 'nickel', 'constantan', 'steel'],
 		weak: ['gold', 'aluminum', 'silver', 'brass', 'electrum'],
 	}
-	for (const stiff in SPRINGS) {
+	for (let stiff in SPRINGS) {
 		SPRINGS[stiff].forEach(metal => {
-			const s = i['spring_' + metal]
-			const ss = i['small_spring_' + metal]
+			let s = i['spring_' + metal]
+			let ss = i['small_spring_' + metal]
 			t.addTag(e, 'forge:springs/' + metal, s) // -> forge:springs/<metal>, forge:springs
 			t.addTag(e, 'forge:springs_' + stiff, s)
 			t.addTag(e, 'forge:small_springs_' + stiff, ss)

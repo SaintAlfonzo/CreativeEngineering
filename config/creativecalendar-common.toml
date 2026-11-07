@@ -53,7 +53,7 @@
 #time values in betterdays-common.toml, the world's sereneseasons-server.toml and seasonhud-server.toml
 #are overwritten from here at server start and on every edit. The Vinery port reads [time.wine] and the
 #lengths from here and ignores the matching vinery-common.toml [wine]/[aging] keys while enabled.
-#/cetime shows every derived value.
+#/ccaltime shows every derived value.
 [time]
 	#SINGLEPLAYER or SERVER sets every value below to that preset (they differ only in monthsPerLevel:
 	#1 in single player, 3 on a server). Editing any value by hand turns this into CUSTOM, unless the

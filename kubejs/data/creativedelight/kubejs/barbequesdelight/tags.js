@@ -1,3 +1,4 @@
+// requires: creativedelight
 // requires: barbequesdelight
 // Tags of the Barbeque's Delight port (Creative Delight member barbequesdelight, barbeques_delight.md 4 step 2). The port's
 // own data has raw_skewers / grilled_skewers and the mineable tags; the eight raw pack skewers join raw_skewers here. 1.3.0's CarryOn blacklist is dropped (no CarryOn in the pack).

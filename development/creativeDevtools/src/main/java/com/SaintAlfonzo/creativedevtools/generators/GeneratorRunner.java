@@ -33,17 +33,17 @@ import java.util.stream.Stream;
 
 /**
  * Runs the pack's Python generator scripts (tools/*.py) as child processes, one after another, in
- * the order tools/generators.json lists them. Backs /cegen and the optional startup run
+ * the order tools/generators.json lists them. Backs /cdevgen and the optional startup run
  * ({@link GeneratorCommand}); has no Minecraft dependencies so it can be tested headless.
  *
  * <p>Each script runs with the instance root as working directory. Its merged stdout/stderr goes to
- * latest.log line by line ("[cegen:id]") and, whole, to logs/cegen/&lt;id&gt;.log. The manifest's
+ * latest.log line by line ("[cdevgen:id]") and, whole, to logs/cdevgen/&lt;id&gt;.log. The manifest's
  * "outputs" are hashed before and after, so a result can say which files actually changed.
  */
 public final class GeneratorRunner {
 
     public static final String MANIFEST = "tools/generators.json";
-    public static final String LOG_DIR = "logs/cegen";
+    public static final String LOG_DIR = "logs/cdevgen";
     private static final Logger LOGGER = LogUtils.getLogger();
     private static final int TAIL_LINES = 8;
 
@@ -203,12 +203,12 @@ public final class GeneratorRunner {
                 String line;
                 while ((line = in.readLine()) != null) {
                     lines.add(line);
-                    LOGGER.info("[cegen:{}] {}", gen.id(), line);
+                    LOGGER.info("[cdevgen:{}] {}", gen.id(), line);
                 }
             } catch (IOException ignored) {
                 // stream closed by destroyForcibly on timeout/cancel
             }
-        }, "cegen-output-" + gen.id());
+        }, "cdevgen-output-" + gen.id());
         reader.setDaemon(true);
         reader.start();
 
@@ -243,13 +243,13 @@ public final class GeneratorRunner {
         List<String> tail = out.subList(Math.max(0, out.size() - TAIL_LINES), out.size());
         Result r = new Result(gen, status, exit, seconds, changed, highlight, List.copyOf(tail), null);
         writeLog(gen, cmd, out, r);
-        LOGGER.info("[cegen:{}] {} (exit {}) in {}s; changed: {}", gen.id(), status, exit,
+        LOGGER.info("[cdevgen:{}] {} (exit {}) in {}s; changed: {}", gen.id(), status, exit,
                 String.format("%.1f", seconds), changed.isEmpty() ? "nothing" : String.join(", ", changed));
         return r;
     }
 
     private Result failed(Generator gen, long start, String error) {
-        LOGGER.error("[cegen:{}] {}", gen.id(), error);
+        LOGGER.error("[cdevgen:{}] {}", gen.id(), error);
         return new Result(gen, Status.FAILED, -1, (System.nanoTime() - start) / 1e9, List.of(), List.of(), List.of(), error);
     }
 
@@ -264,7 +264,7 @@ public final class GeneratorRunner {
             text.addAll(out);
             Files.write(dir.resolve(gen.id() + ".log"), text, StandardCharsets.UTF_8);
         } catch (IOException e) {
-            LOGGER.warn("[cegen:{}] could not write {}/{}.log: {}", gen.id(), LOG_DIR, gen.id(), e.getMessage());
+            LOGGER.warn("[cdevgen:{}] could not write {}/{}.log: {}", gen.id(), LOG_DIR, gen.id(), e.getMessage());
         }
     }
 

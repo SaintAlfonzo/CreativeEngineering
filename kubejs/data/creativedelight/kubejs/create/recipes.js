@@ -1,3 +1,4 @@
+// requires: creativedelight
 // requires: create
 // Create's food items and machine-only food routes: the egg solution fluid and the wheat flour / dough merge onto
 // Create's flour and dough. Non-member file: recipe ids are creativedelight:<type>/<suffix> (global.CD.recipes).
@@ -17,7 +18,7 @@ ServerEvents.recipes(e => {
 			i.minecraft_bread, i.t_bread, e)
 
 		//######################### Egg solution #########################
-		// The pack's egg solution fluid (development/creativeDelight/src/main/resources/kubejs_startup/creativeengineering/fluids.js, TODO dishes/ingredients #2). Mixer: 1 egg + 250 mB
+		// The pack's egg solution fluid (development/creativeDelight/src/main/resources/kubejs_startup/creativedelight/fluids.js, TODO dishes/ingredients #2). Mixer: 1 egg + 250 mB
 		// milk -> 500 mB. Each 250 mB stands in for one egg and its milk, so an egg goes twice as far in the mixer and spout.
 		// Tank-only, so every use is a Create recipe; the grid and pot recipes keep their eggs. The uses are in the folder
 		// of the food they make (corn_delight, supplementaries, rusticdelight, incubation, farmersdelight, fruitsdelight,

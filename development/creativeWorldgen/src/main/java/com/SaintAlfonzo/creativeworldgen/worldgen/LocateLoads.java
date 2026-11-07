@@ -40,7 +40,7 @@ import java.util.concurrent.TimeoutException;
  * Every load is counted for the current search (LocateStats). CWGConfig [worldgen.locate] nonBlockingLoads off, or
  * the server thread itself searching: vanilla's call.
  *
- * A search that has expired (its deadline, /celocate stop, the server stopping; LocateStats#expired) gets an empty
+ * A search that has expired (its deadline, /cwglocate stop, the server stopping; LocateStats#expired) gets an empty
  * chunk with no structure starts instead, at once or while it waits, so it ends as "nothing here" and frees its
  * thread. The wait checks for that every quarter second.
  */

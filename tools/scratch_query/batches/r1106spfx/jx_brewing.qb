@@ -1,0 +1,10 @@
+# r1106spfx SQ-SPFX-05: Creative jar set brewing removed (jx_run.sh writes jx_brewing.qb from this), same save.
+pace 1
+## SQ-SPFX-05-brewing | boots without brewing
+bootexpect Done \(
+bootreject (NoClassDefFoundError|ClassNotFoundException).*(com\.SaintAlfonzo|ce\.shared)
+bootreject (Mixin apply failed|InvalidInjectionException).*com\.SaintAlfonzo
+kjsreject ReferenceError
+kjsreject Error occurred while handling event
+shell grep -E "Missing or unsupported mandatory dependencies" -A6 logs/latest.log | head; grep -hE "ReferenceError|Error occurred while handling event|dump_bee_nests|dump_structuregen" logs/kubejs/*.log logs/latest.log | grep -iv "skipped" | head -5; echo "skiplines=$(grep -hcE 'Skipped creative[a-z]+:kubejs/.*is not loaded' logs/kubejs/*.log logs/latest.log | paste -sd+)"; grep -hE "Skipped creative[a-z]+:kubejs/" logs/kubejs/*.log logs/latest.log | sed -E 's/.*Skipped //' | cut -d: -f1 | sort | uniq -c | head
+look Skipped lines name only the removed jars; no script errors

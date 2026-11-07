@@ -1,3 +1,4 @@
+// requires: creativedelight
 // requires: fruitsdelight
 // Fruits Delight recipe changes. Non-member file: recipe ids are creativedelight:<type>/<suffix> (global.CD.recipes).
 ServerEvents.recipes(e => {

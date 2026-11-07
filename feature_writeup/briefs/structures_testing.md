@@ -50,9 +50,9 @@ Run the two 1.0.8 fixes that only a client can exercise.
 1. Create a world: More World Options -> World Type **Superflat**, default preset. Expected: the world is flat; in
    `logs/latest.log` the "kept the world's own overworld generator (FlatLevelSource)" line; no KubeJS errors.
    Rejoin once: still flat.
-2. In that world run ST-43's placement: `/ceplace structures @mysticrift_pillagers_towers_aris @skyvillages @saloon
+2. In that world run ST-43's placement: `/cdevplace structures @mysticrift_pillagers_towers_aris @skyvillages @saloon
    @villager_forge @illagerwarship` (all placed; urns where 1.20 pots were, Vinery cherry wood on the cherry tower, no
-   gaps in Sky Villages), and `/ceplace templates kaisyn:village/meadow_swiss/houses/*` (17 of 17, no "Not a flat
+   gaps in Sky Villages), and `/cdevplace templates kaisyn:village/meadow_swiss/houses/*` (17 of 17, no "Not a flat
    world").
 3. Clock, in a normal world: `/season set late_spring` close to a sub-season end (`/time set 22000`, then let the day
    run, or `/time add` in small steps). Watch SeasonHUD's day number and the grass colour: the day goes up once at

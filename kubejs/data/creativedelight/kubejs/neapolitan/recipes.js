@@ -1,3 +1,4 @@
+// requires: creativedelight
 // requires: neapolitan
 // Neapolitan recipe changes: vanilla pudding from egg solution, ice cubes and the ice foods that take them.
 // Non-member file: recipe ids are creativedelight:<type>/<suffix> (global.CD.recipes). Moved from the pack's

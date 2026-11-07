@@ -1,0 +1,17 @@
+# r1106spf boot 1c: same save, CD toml [campfire] rainDouses = false, useComfort = false (set before the boot).
+pace 1
+## SQ-CFR-06 | rainDouses = false: open-sky campfire stays lit
+> setblock 90 -60 -44 minecraft:campfire[lit=true]
+> weather rain
+sleep 20
+> execute if block 90 -60 -44 minecraft:campfire[lit=true]
+expect Test passed
+> weather clear
+
+## SQ-CFR-07b | useComfort = false: regeneration near a campfire
+> pbot spawn qa 92 -60 -20 minecraft:overworld survival
+> setblock 90 -60 -20 minecraft:campfire[lit=true]
+> effect clear qa
+sleep 3
+> data get entity qa ActiveEffects
+expect minecraft:regeneration|Id: 10

@@ -1,3 +1,4 @@
+// requires: creativebrewing
 // Moved from the pack's client_scripts/fluid_jei.js 2026-11-01 (creative_brewing.md 4.5), unchanged. Runs after the
 // pack's own JEIEvents.addFluids pass (all registered fluids), as it did before.
 // create:potion is a special case: the fluid identity that actually matters is its NBT

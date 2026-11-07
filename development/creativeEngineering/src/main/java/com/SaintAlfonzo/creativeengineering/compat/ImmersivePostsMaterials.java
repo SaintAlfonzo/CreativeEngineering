@@ -15,7 +15,7 @@ import java.util.Set;
  * instead of looking up a block that does not exist.
  *
  * <p>Registration runs in the mod's own class init, before any config is read, so the list is fixed
- * here rather than in CEConfig.
+ * here rather than in a config file.
  */
 public final class ImmersivePostsMaterials {
 

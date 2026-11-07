@@ -1,3 +1,4 @@
+// requires: creativebrewing
 // requires: vinery
 // Vinery item tooltips (port lines and the flower box). Moved from the pack's client_scripts/tooltips.js 2026-11-01
 // (creative_brewing.md 4.5), rows unchanged; the helpers and palette are read through global.tooltips at event time.

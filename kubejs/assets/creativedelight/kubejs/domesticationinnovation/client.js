@@ -1,3 +1,4 @@
+// requires: creativedelight
 // requires: domesticationinnovation
 // Domestication Innovation food tooltips, moved from the pack's client_scripts/tooltips.js 2026-10-27, rows unchanged.
 ItemEvents.tooltip(e => {

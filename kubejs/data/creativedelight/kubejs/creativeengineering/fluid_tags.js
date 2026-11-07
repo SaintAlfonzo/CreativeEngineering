@@ -1,3 +1,4 @@
+// requires: creativedelight
 // Food and drink fluid subtags (forge:fluid + forge:fluid/<subtag>).
 // Moved from the pack's server_scripts/tags/fluidtags.js 2026-11-01 (creative_split.md 7.6, wave 4), rows
 // unchanged. Only adds: running after the pack's tag scripts gives the same contents (nothing removes from these tags).

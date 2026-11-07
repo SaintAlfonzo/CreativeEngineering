@@ -31,7 +31,7 @@ import umpaz.farmersrespite.common.block.entity.container.KettleMenu;
 @Mixin(value = KettleScreen.class, remap = false)
 public abstract class KettleScreenTankMixin extends AbstractContainerScreen<KettleMenu> {
 
-	@Unique private static final ResourceLocation CE_TEXTURE = new ResourceLocation("farmersrespite", "textures/gui/kettle.png");
+	@Unique private static final ResourceLocation CD_TEXTURE = new ResourceLocation("farmersrespite", "textures/gui/kettle.png");
 
 	private KettleScreenTankMixin(KettleMenu menu, Inventory playerInventory, Component title) {
 		super(menu, playerInventory, title);
@@ -48,7 +48,7 @@ public abstract class KettleScreenTankMixin extends AbstractContainerScreen<Kett
 	private void ce$drawTank(PoseStack pose, float partialTick, int mouseX, int mouseY, CallbackInfo ci) {
 		if (!(menu.tileEntity instanceof KettleTankHolder tank)) return;
 		KettleTankRender.drawBar(pose, leftPos, topPos, tank);
-		KettleTankRender.drawBoxes(pose, CE_TEXTURE, leftPos, topPos, tank);
+		KettleTankRender.drawBoxes(pose, CD_TEXTURE, leftPos, topPos, tank);
 	}
 
 	@Inject(method = "renderWaterBarIndicatorTooltip", at = @At("HEAD"), cancellable = true, require = 1)

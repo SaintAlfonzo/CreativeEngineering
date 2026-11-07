@@ -119,12 +119,12 @@ class Server:
         set_prop(sp, "max-tick-time", "60000" if watchdog else "-1")
         for k, v in (props or {}).items():
             set_prop(sp, k, v)
-        jars = sorted(glob.glob(os.path.join(BOT_JAR, "ceperfbot-*.jar")), key=os.path.getmtime)
+        jars = sorted(glob.glob(os.path.join(BOT_JAR, "cdevperfbot-*.jar")), key=os.path.getmtime)
         if not jars:
-            raise RuntimeError("no ceperfbot jar: ./gradlew :perfBot:build --offline")
+            raise RuntimeError("no cdevperfbot jar: ./gradlew :perfBot:build --offline")
         shutil.copy2(jars[-1], os.path.join(self.srv, "mods"))
         with open(os.path.join(self.srv, "user_jvm_args.txt"), "a") as fh:
-            fh.write("-Dceperfbot.out=perf/bot\n")
+            fh.write("-Dcdevperfbot.out=perf/bot\n")
         with open(os.path.join(self.srv, "perf_suite.owner"), "w") as fh:
             fh.write(f"perf_suite runner pid {os.getpid()}\n")
         with open(os.path.join(self.out, "rcon.secret"), "w") as fh:
@@ -133,7 +133,7 @@ class Server:
         # which build of our own jars this run measured (results are only comparable at the same builds)
         ours = {f: time.strftime("%m-%d %H:%M", time.localtime(os.path.getmtime(os.path.join(self.srv, "mods", f))))
                 for f in os.listdir(os.path.join(self.srv, "mods"))
-                if f.startswith(("creativeengineering", "creativedelight", "ceperfbot"))}
+                if f.startswith(("creativeengineering", "creativedelight", "cdevperfbot"))}
         return {"jars": len(os.listdir(os.path.join(self.srv, "mods"))), "bot_jar": os.path.basename(jars[-1]),
                 "our_jars": ours}
 
@@ -251,8 +251,8 @@ class Server:
         else:
             raise RuntimeError("server is up but RCON never answered")
         out = self.cmd("pbot status")
-        if "ceperfbot ok" not in out:
-            raise RuntimeError("ceperfbot not loaded: " + out[:200])
+        if "cdevperfbot ok" not in out:
+            raise RuntimeError("cdevperfbot not loaded: " + out[:200])
         return {"wall_s": round(wall, 1), "done": done_line.strip()}
 
     def _try_rcon(self):

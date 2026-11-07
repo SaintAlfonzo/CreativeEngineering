@@ -1,3 +1,4 @@
+// requires: creativecompat
 // Creative Compat; moved from kubejs/server_scripts/economy/coin.js on 2026-11-01.
 ServerEvents.recipes(e=>{
 console.log('Coin starting')

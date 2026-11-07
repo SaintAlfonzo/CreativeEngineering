@@ -17,6 +17,26 @@
     // Default value: [true]
     showcustomname: true
   },
+  tempad: {
+    // Timedoor
+    // Default value: [true]
+    timedoor: true,
+    // Marker
+    // Default value: [true]
+    anchor: true,
+    // Timedoor Projector
+    // Default value: [true]
+    rudimentary: true,
+    // Metronome
+    // Default value: [true]
+    metronome: true,
+    // Workstation
+    // Default value: [true]
+    workstation: true,
+    // Chronon
+    // Default value: [true]
+    chronon: true
+  },
   waila: {
     // Show Blocks
     // Default value: [true]

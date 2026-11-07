@@ -1,3 +1,4 @@
+// requires: creativedelight
 // requires: jei
 // requires: fungidelight
 // Fungi Delight JEI information pages: mechanics that are block or entity interactions, not recipes

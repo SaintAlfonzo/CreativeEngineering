@@ -64,7 +64,7 @@ Not a TODO row; listed so a session doesn't build on stale numbers.
 
 1. Join the world with the current pack (patcherMod 1.0.5+ has `SpawnTuning`), check latest.log:
    `[mob-spawns] 12 of 12 rules and 3 of 3 conditions` (MS-13).
-2. `/dumpspawns` (or `/cegen run spawns_by_biome dumps`), then `python3 tools/gen_spawn_table.py`; the WARNING lines at
+2. `/dumpspawns` (or `/cdevgen run spawns_by_biome dumps`), then `python3 tools/gen_spawn_table.py`; the WARNING lines at
    the top of spawns_by_biome.md (lines 11 and 30) must be gone (MS-14). Commit the regenerated report.
 3. Then `python3 tools/gen_spawn_table.py --mob <id>` gives any one mob's table for the rows below.
 

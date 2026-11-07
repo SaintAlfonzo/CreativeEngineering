@@ -230,7 +230,7 @@ Decide whether the four Terralith skylands stay at 0.15x, given how many feature
 2. If raising: set the four multipliers in `biome_config.json`. Remove `'skylands'` from the keep set in
    `tools/biome_rarity_floor.py:50` only if they should follow the floor instead (0.15 % each).
 3. `/reload`, new world, `/locate biome terralith:skylands_spring` (WG-06), and rerun the generators whose reports
-   weight by area: `/cegen run worldgen` (bee nests, flowers, spawns, structures by biome).
+   weight by area: `/cdevgen run worldgen` (bee nests, flowers, spawns, structures by biome).
 
 ### Decisions
 

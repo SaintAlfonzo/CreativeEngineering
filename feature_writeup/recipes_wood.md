@@ -137,7 +137,7 @@ Dramatic Doors' 2, Supplementaries' 2, Supp Squared's shelf, Abnormals Delight's
 The azalea rows were taken out of `wood_types.js`, `bark.js`, `engineeringtags.js`, `fabric.js` and the CD `kitchen.js` rack
 list; the jar sawmill jsons for azalea are removed at load by the output purge. Azalea bushes, leaves, flowers, leaf carpets,
 hedges, leaf piles and azalea tea stay. Restart (startup list and Quark config). Generated lists that still name azalea wood
-(`item_physics_families.json`, `wthit/silk_touch_blocks.json`) refresh on the next `/cegen`. Test RW-29.
+(`item_physics_families.json`, `wthit/silk_touch_blocks.json`) refresh on the next `/cdevgen`. Test RW-29.
 
 **D&D woods (2026-10-31).** Create: Dreams & Desires rose, rubber and spirit wood have no source: the jar has no tree, sapling,
 leaves or worldgen, no recipe or loot table outputs their logs, and nothing in the pack adds one (creative only). The three

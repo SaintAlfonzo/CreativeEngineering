@@ -25,7 +25,7 @@ The pack's own code is split into focused jars. Every one is GPLv3.
 | **Creative Calendar** | Calendar, day/night cycle, seasons and biome weather, which Delight crops and Brewing's wine clock rely on. |
 | **Creative Compat** | Tweaks to third-party mods that have no larger system of their own: banner patterns, Polymorph pairings, Supplementaries jars and pipes, Quark safe sort, TrashSlot, ItemPhysic burn rules, cat feathers and Cozy cats, and more. Every other Creative jar requires it. |
 | **Creative Labels** | Sticky notes and labels rebuilt for the pack. |
-| **Creative Devtools** | Dev-only tools: `/cegen` generators, `/dumpall` and `/dump*` data exports, performance bots and the in-game structure placer. Not needed to play. |
+| **Creative Devtools** | Dev-only tools: `/cdevgen` generators, `/dumpall` and `/dump*` data exports, performance bots and the in-game structure placer. Not needed to play. |
 | **Exposure Backport** | Exposure 1.9.19 with its Polaroid, Expanded and Catalog add-ons ported to 1.19.2. |
 
 ### Gameplay highlights
@@ -51,7 +51,7 @@ The pack's own code is split into focused jars. Every one is GPLv3.
 - `startup_scripts/` for items and rules, `server_scripts/` for recipes and tags, `client_scripts/` for UI.
 - Recipes and tags go through shared helpers (`global.NCH`, `global.tags`) rather than hand-written events, and every
   item id is defined once in a dictionary. Recipe values can be driven from config.
-- `generation_scripts/` holds generated data; the generators live in `tools/` and run in game with `/cegen`.
+- `generation_scripts/` holds generated data; the generators live in `tools/` and run in game with `/cdevgen`.
 
 ### Tooling
 
@@ -81,6 +81,26 @@ The pack's own code is split into focused jars. Every one is GPLv3.
 1. Create a Minecraft 1.19.2 + Forge 43.3.9 instance (Java 17).
 2. Download every mod in `pack/MODLIST.md` into `mods/`, checking each file against the sha1 in `pack/manifest.json`.
 3. Build the Creative mods (below) and put their jars in `mods/`.
+   Some Creative mods translate another mod's original jar at startup instead of shipping its files (ports of mods
+   whose licence does not allow a repack). Put each of these unmodified jars in the named folder of the game directory,
+   never in `mods/`; the mod checks the sha1 and stops with the missing file's name and source if one is absent
+   (list made by `python3 tools/donor_jars_md.py`):
+
+| Needed by | Folder (in the game directory) | File | sha1 | Where to get it |
+|---|---|---|---|---|
+| creativebrewing | `vinery_upstream/` | `letsdo-vinery-fabric-1.5.5.jar` | `9d4c7646b91219a75a432b6dea1d7a7c41faaaec` | https://cdn.modrinth.com/data/1DWmBJVA/versions/PDi0T5xs/letsdo-vinery-fabric-1.5.5.jar (Modrinth, Let's Do Vinery 1.5.5 for Fabric 1.21.1) |
+| creativebrewing | `vinery_upstream/` | `letsdo-vinery-forge-1.3.10.jar` | `fbbd4ae7c10a9d0aa13819e09b70167f3b4ff81c` | https://www.curseforge.com/minecraft/mc-mods/lets-do-vinery/files (Let's Do Vinery 1.3.10 for Forge 1.19.2) |
+| creativecompat | `tempad_upstream/` | `tempad-1.21.1-3.0.4-all.jar` | `7a4d6837c6f7a4c9a8f4e7054952df25c148033e` | https://cdn.modrinth.com/data/gKNwt7xu/versions/T26aJH7E/tempad-1.21.1-3.0.4-all.jar (Modrinth, Tempad 3.0.4 for NeoForge 1.21.1) |
+| creativedelight | `enders_upstream/` | `endersdelight-1.1.4.jar` | `d1541d70c7dbae71c2a7e1693f512f2166908802` | https://cdn.modrinth.com/data/2uEhdGKt/versions/Jaf9wxnO/endersdelight-1.1.4.jar (Modrinth, Ender's Delight 1.1.4 for Forge 1.20.1) |
+| creativedelight | `goldenfood_upstream/` | `goldenfood-1.19.2-2.0.0.jar` | `4109e4d6d484892b8efc201b1a32b9361df930cd` | the Golden Food 2.0.0 release for Forge 1.19.2 by GGWPJason (CurseForge, file goldenfood-1.19.2-2.0.0.jar), or the pack's server files |
+| creativedelight | `largemeals_upstream/` | `largemeals-1.20.1-1.3.0.jar` | `7662138788a75832a0c6bad6b13b006cac383496` | CurseForge, Large Meals 1.3.0 for Forge 1.20.1 (largemeals-1.20.1-1.3.0.jar) |
+| creativedelight | `miners_upstream/` | `miners_delight-1.20.1-1.4.5-backport.jar` | `638438679800711939e7a8029ae3d5340f8c17bd` | https://cdn.modrinth.com/data/qMxbM4BQ/versions/p0INUam7/miners_delight-1.20.1-1.4.5-backport.jar (Modrinth, Miner's Delight 1.20.1-1.4.5-backport for Forge 1.20.1) |
+| creativedelight | `miners_upstream/` | `miners_delight-1.19.2-1.1.2.jar` | `23701e0772676ff74c0290387c90fd9365987673` | https://mediafilez.forgecdn.net/files/4738/272/miners_delight-1.19.2-1.1.2.jar (CurseForge, Miner's Delight 1.19.2-1.1.2 for Forge 1.19.2, project 689630 file 4738272) |
+| creativedelight | `oceanic_upstream/` | `oceanic_delight-1.0.1-forge-1.19.2.jar` | `91fd8842a5bf9b55c2d9fb39f721129bc6cae1b5` | https://cdn.modrinth.com/data/O1qboAbB/versions/9JkMCuAa/oceanic_delight-1.0.1-forge-1.19.2.jar (Modrinth, Oceanic Delight 1.0.1 for Forge 1.19.2) |
+| creativedelight | `roll_upstream/` | `roll_delight-1.3.1-forge-1.20.1.jar` | `e23d48373f2a62c51533d15cd99eb24397f8d8d8` | CurseForge, Roll Delight 1.3.1 for Forge 1.20.1 (file "[1.20.1] Roll Delight-1.3.1-forge-.jar", renamed) |
+| creativedelight | `rustic_upstream/` | `rusticdelight-forge-1.20.1-1.7.0.jar` | `bca9adf60b59951ae5049149185da64a6f7b6f8a` | https://cdn.modrinth.com/data/foa4fGIH/versions/z29Gd3ec/rusticdelight-forge-1.20.1-1.7.0.jar (Modrinth, Rustic Delight 1.7.0 for Forge 1.20.1) |
+| creativeworldgen | `farmers_upstream/` | `FarmersStructures-1.0.6-1.21.1_neoforge.jar` | `94262398153d7ca5dc9ffb93e49acdbad85af223` | Farmer's Structures 1.0.6 for NeoForge 1.21.1 (CurseForge / Modrinth) |
+
 4. Copy `kubejs/`, `config/` and `defaultconfigs/` into the instance.
 5. Download the resource packs into `resourcepacks/` and enable them in the order listed in `pack/MODLIST.md`.
 6. For a dedicated server, run `python3 tools/dump_server_mods.py` to copy only the `both`/`server` mods into

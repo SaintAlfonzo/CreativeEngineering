@@ -30,11 +30,11 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 public abstract class McaCombEyeColourMixin extends Screen {
 
     @Unique
-    private static final String[] CE_EYE_COLOURS = {
+    private static final String[] COMPAT_EYE_COLOURS = {
             "brown", "pink", "amber", "purple", "green", "blue", "magenta", "cyan", "red", "grey", "yellow"
     };
     @Unique
-    private static final int CE_FACES = 2 * CE_EYE_COLOURS.length;
+    private static final int COMPAT_FACES = 2 * COMPAT_EYE_COLOURS.length;
 
     @Shadow
     @Final
@@ -58,11 +58,11 @@ public abstract class McaCombEyeColourMixin extends Screen {
         }));
         label.active = false;
         this.addRenderableWidget(new Button(x, y, 20, 20, Component.literal("<"), b -> {
-            ce$setFace(ce$shape(), (ce$colour() + CE_EYE_COLOURS.length - 1) % CE_EYE_COLOURS.length);
+            ce$setFace(ce$shape(), (ce$colour() + COMPAT_EYE_COLOURS.length - 1) % COMPAT_EYE_COLOURS.length);
             label.setMessage(ce$colourLabel());
         }));
         this.addRenderableWidget(new Button(x + 88, y, 20, 20, Component.literal(">"), b -> {
-            ce$setFace(ce$shape(), (ce$colour() + 1) % CE_EYE_COLOURS.length);
+            ce$setFace(ce$shape(), (ce$colour() + 1) % COMPAT_EYE_COLOURS.length);
             label.setMessage(ce$colourLabel());
         }));
         this.addRenderableWidget(new Button(this.width / 2 - 192, y, 100, 20, ce$shapeLabel(), b -> {
@@ -81,29 +81,29 @@ public abstract class McaCombEyeColourMixin extends Screen {
 
     @Unique
     private int ce$face() {
-        return (int) Math.min(CE_FACES - 1, Math.max(0, this.villager.getGenetics().getGene(Genetics.FACE) * CE_FACES));
+        return (int) Math.min(COMPAT_FACES - 1, Math.max(0, this.villager.getGenetics().getGene(Genetics.FACE) * COMPAT_FACES));
     }
 
     @Unique
     private int ce$shape() {
-        return ce$face() / CE_EYE_COLOURS.length;
+        return ce$face() / COMPAT_EYE_COLOURS.length;
     }
 
     @Unique
     private int ce$colour() {
-        return ce$face() % CE_EYE_COLOURS.length;
+        return ce$face() % COMPAT_EYE_COLOURS.length;
     }
 
     @Unique
     private void ce$setFace(int shape, int colour) {
-        int face = shape * CE_EYE_COLOURS.length + colour;
-        this.villager.getGenetics().setGene(Genetics.FACE, (face + 0.5F) / CE_FACES);
+        int face = shape * COMPAT_EYE_COLOURS.length + colour;
+        this.villager.getGenetics().setGene(Genetics.FACE, (face + 0.5F) / COMPAT_FACES);
         this.ce$eyesChanged = true;
     }
 
     @Unique
     private Component ce$colourLabel() {
-        return Component.translatable("creativeengineering.mca_eyes.colour." + CE_EYE_COLOURS[ce$colour()]);
+        return Component.translatable("creativeengineering.mca_eyes.colour." + COMPAT_EYE_COLOURS[ce$colour()]);
     }
 
     @Unique

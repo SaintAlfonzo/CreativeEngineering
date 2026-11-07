@@ -1,3 +1,4 @@
+// requires: creativebrewing
 // Moved from the pack's client_scripts/potion_buckets.js 2026-11-01 (creative_brewing.md 4.5), unchanged.
 // Vanilla-style potion tooltip for the potion buckets - same layout/wording/colour as
 // minecraft:potion/splash_potion/lingering_potion bottles (PotionUtils.addPotionTooltip):

@@ -1,3 +1,4 @@
+// requires: creativedelight
 // requires: enders_additions
 // Recipes and tags for Ender's Delight 1.1.4's content, rebuilt as enders_additions inside the End's Delight member (ids
 // stay endersdelight:*; ends_delight.md 3.1, 3.2, 5.9; TODO largecontent/mod-additions #28). It registers whether or not

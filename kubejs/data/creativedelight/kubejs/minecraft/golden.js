@@ -1,3 +1,4 @@
+// requires: creativedelight
 // Golden foods (food_families.md 4.5 `golden`, creative_delight.md 30): the golden family calls of global.CD.food for
 // vanilla's three. goldenGild = the food in a ring of 8 gold by hand (vanilla's shaped recipe replaced), a heated
 // Create mixer with 6 gold and an Immersive Engineering Arc Furnace with 5 (each only when that mod is loaded);

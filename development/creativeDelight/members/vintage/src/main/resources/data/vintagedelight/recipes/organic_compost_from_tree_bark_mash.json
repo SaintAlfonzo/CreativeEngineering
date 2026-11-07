@@ -23,10 +23,10 @@
       "item": "vintagedelight:organic_mash"
     },
     {
-      "item": "farmersdelight:tree_bark"
+      "tag": "immersive_weathering:bark"
     },
     {
-      "item": "farmersdelight:tree_bark"
+      "tag": "immersive_weathering:bark"
     }
   ],
   "result": {

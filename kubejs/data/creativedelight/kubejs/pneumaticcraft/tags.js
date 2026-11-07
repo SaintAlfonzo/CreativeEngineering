@@ -1,3 +1,4 @@
+// requires: creativedelight
 // requires: pneumaticcraft
 // PneumaticCraft items in the pack's food and cooking item tags (moved from the pack's
 // server_scripts/tags/cookingtags.js 2026-10-25, rows unchanged; split by the mod owning each entry).

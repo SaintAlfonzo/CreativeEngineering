@@ -1,3 +1,4 @@
+// requires: creativedelight
 // requires: farmersrespite
 // Farmer's Respite Kettle recipes in the tank format (feature_writeup/farmers_respite.md 2.1, K8 to K10). Non-member
 // file: recipe ids are creativedelight:<type>/<suffix> (global.CD.recipes). Needs Creative Delight's Kettle patch

@@ -1,0 +1,137 @@
+{
+  "_comment": "plan_cb_polish.md 2 (2026-11-06, owner decision): every potion and mob effect the Creative mods register lives in Creative Common under creativecommon: (were creativebrewing:, before that creativeengineering: and kubejs:). The Magic Resistance effect and potion share one entry (registries by id). Potion ids saved as NBT strings are mapped by PotionByNameRemapMixin from this same list. Never prune. The Better Beacons potions (long_reach, phantom_bane and variants) went back to Creative Brewing on 2026-11-07: their rows are in data/creativebrewing/swaps/better_beacons_potions.json.",
+  "replaces": {
+    "creativecommon:magic_resistance": [
+      "creativebrewing:magic_resistance",
+      "creativeengineering:magic_resistance"
+    ],
+    "creativecommon:long_magic_resistance": [
+      "creativebrewing:long_magic_resistance",
+      "creativeengineering:long_magic_resistance"
+    ],
+    "creativecommon:strong_magic_resistance": [
+      "creativebrewing:strong_magic_resistance",
+      "creativeengineering:strong_magic_resistance"
+    ],
+    "creativecommon:resistance": [
+      "creativebrewing:resistance",
+      "kubejs:resistance"
+    ],
+    "creativecommon:long_resistance": [
+      "creativebrewing:long_resistance",
+      "kubejs:long_resistance"
+    ],
+    "creativecommon:strong_resistance": [
+      "creativebrewing:strong_resistance",
+      "kubejs:strong_resistance"
+    ],
+    "creativecommon:health_boost": [
+      "creativebrewing:health_boost",
+      "kubejs:health_boost"
+    ],
+    "creativecommon:long_health_boost": [
+      "creativebrewing:long_health_boost",
+      "kubejs:long_health_boost"
+    ],
+    "creativecommon:strong_health_boost": [
+      "creativebrewing:strong_health_boost",
+      "kubejs:strong_health_boost"
+    ],
+    "creativecommon:absorption": [
+      "creativebrewing:absorption",
+      "kubejs:absorption"
+    ],
+    "creativecommon:long_absorption": [
+      "creativebrewing:long_absorption",
+      "kubejs:long_absorption"
+    ],
+    "creativecommon:strong_absorption": [
+      "creativebrewing:strong_absorption",
+      "kubejs:strong_absorption"
+    ],
+    "creativecommon:glowing": [
+      "creativebrewing:glowing",
+      "kubejs:glowing"
+    ],
+    "creativecommon:long_glowing": [
+      "creativebrewing:long_glowing",
+      "kubejs:long_glowing"
+    ],
+    "creativecommon:saturation": [
+      "creativebrewing:saturation",
+      "kubejs:saturation"
+    ],
+    "creativecommon:wither": [
+      "creativebrewing:wither",
+      "kubejs:wither"
+    ],
+    "creativecommon:long_wither": [
+      "creativebrewing:long_wither",
+      "kubejs:long_wither"
+    ],
+    "creativecommon:strong_wither": [
+      "creativebrewing:strong_wither",
+      "kubejs:strong_wither"
+    ],
+    "creativecommon:levitation": [
+      "creativebrewing:levitation",
+      "kubejs:levitation"
+    ],
+    "creativecommon:long_levitation": [
+      "creativebrewing:long_levitation",
+      "kubejs:long_levitation"
+    ],
+    "creativecommon:strong_levitation": [
+      "creativebrewing:strong_levitation",
+      "kubejs:strong_levitation"
+    ],
+    "creativecommon:mining_fatigue": [
+      "creativebrewing:mining_fatigue",
+      "kubejs:mining_fatigue"
+    ],
+    "creativecommon:long_mining_fatigue": [
+      "creativebrewing:long_mining_fatigue",
+      "kubejs:long_mining_fatigue"
+    ],
+    "creativecommon:strong_mining_fatigue": [
+      "creativebrewing:strong_mining_fatigue",
+      "kubejs:strong_mining_fatigue"
+    ],
+    "creativecommon:hunger": [
+      "creativebrewing:hunger",
+      "kubejs:hunger"
+    ],
+    "creativecommon:long_hunger": [
+      "creativebrewing:long_hunger",
+      "kubejs:long_hunger"
+    ],
+    "creativecommon:strong_hunger": [
+      "creativebrewing:strong_hunger",
+      "kubejs:strong_hunger"
+    ],
+    "creativecommon:nausea": [
+      "creativebrewing:nausea",
+      "kubejs:nausea"
+    ],
+    "creativecommon:long_nausea": [
+      "creativebrewing:long_nausea",
+      "kubejs:long_nausea"
+    ],
+    "creativecommon:blindness": [
+      "creativebrewing:blindness",
+      "kubejs:blindness"
+    ],
+    "creativecommon:long_blindness": [
+      "creativebrewing:long_blindness",
+      "kubejs:long_blindness"
+    ],
+    "creativecommon:darkness": [
+      "creativebrewing:darkness",
+      "kubejs:darkness"
+    ],
+    "creativecommon:long_darkness": [
+      "creativebrewing:long_darkness",
+      "kubejs:long_darkness"
+    ]
+  }
+}

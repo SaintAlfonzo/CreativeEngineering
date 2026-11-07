@@ -1,4 +1,5 @@
 // requires: creativedevtools
+// requires: creativeworldgen
 // /dumpstructuregen  ->  kubejs/exported/worldgen/structuregen.json
 //
 // Full generation values for every structure_set + structure the LIVE server knows about

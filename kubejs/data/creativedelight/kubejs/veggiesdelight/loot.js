@@ -1,3 +1,4 @@
+// requires: creativedelight
 // requires: veggiesdelight
 // requires: rusticdelight
 // Veggies Delight loot rows: its crop crates and 9 chest entries (Creative Delight members #2, moved from the pack's

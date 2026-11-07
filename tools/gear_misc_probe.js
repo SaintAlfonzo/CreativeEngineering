@@ -159,8 +159,8 @@
     }
 
     function vein(level) {
-        const $VU = Java.loadClass('com.SaintAlfonzo.creativeengineering.excavation.VeinUndo')
-        const $VUA = Java.loadClass('com.SaintAlfonzo.creativeengineering.excavation.VeinUndoAccess')
+        const $VU = Java.loadClass('com.SaintAlfonzo.creativecompat.excavation.VeinUndo')
+        const $VUA = Java.loadClass('com.SaintAlfonzo.creativecompat.excavation.VeinUndoAccess')
         const $CE = Java.loadClass('com.SaintAlfonzo.creativecommon.CommonConfig')
         const $History = Java.loadClass('oreexcavation.undo.ExcavateHistory')
         const $BlockHistory = Java.loadClass('oreexcavation.undo.BlockHistory')

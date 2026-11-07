@@ -69,3 +69,183 @@
 	#true: each Sophisticated Backpacks tier (leather, copper, iron, gold, diamond, netherite)
 	#remembers its own trash slot position and on/off state. false: all backpacks share one.
 	splitBackpacksByTier = true
+
+#TNT shrapnel: when a primed TNT entity or a burning TNT item explodes, it also
+#flings out a burst of fast, gravity-immune projectiles mostly along the horizontal
+#plane (with some vertical variation) that despawn once they've travelled far enough.
+[shrapnel]
+	#Master on/off switch for TNT shrapnel.
+	enabled = true
+	#Number of shrapnel projectiles spawned per TNT explosion, spread evenly around the full circle.
+	#Range: 0 ~ 512
+	count = 24
+	#Base shrapnel speed, in blocks/tick.
+	#Range: 0.0 ~ 10.0
+	speed = 1.4
+	#Random speed variation as a fraction of the base speed (e.g. 0.25 = each piece
+	#gets a random speed between 75% and 125% of speed).
+	#Range: 0.0 ~ 1.0
+	speedVariance = 0.25
+	#Max vertical launch angle in degrees, either side of dead-level (0 = perfectly
+	#horizontal, 90 = could fire straight up/down). Each piece rolls an independent
+	#random angle in [-verticalAngle, +verticalAngle].
+	#Range: 0.0 ~ 90.0
+	verticalAngle = 15.0
+	#Distance in blocks a shrapnel piece travels before it despawns.
+	#Range: 0.5 ~ 128.0
+	maxDistance = 12.0
+	#Damage dealt to whatever a shrapnel piece hits.
+	#Range: 0.0 ~ 100.0
+	damage = 3.0
+	#Item id rendered as the flying shrapnel piece.
+	item = "minecraft:iron_nugget"
+
+#Walking on blocks: speed per surface tier (BlockRunner), sticky pistons, framed / copycat
+#blocks and visual sinking. Tier contents are the blockrunner:surface/* block tags
+#(kubejs blocktags.js). Keep this section the same on server and client, apart from
+#[surface.sinking], which is client-side only.
+[surface]
+
+	#Walk-speed multiplier per surface tier. 1.0 = normal speed, 1.5 = 50% faster, 0.5 = half.
+	#These replace the tier entries in config/blockrunner.json, which now only holds one-off
+	#block overrides. The server's values are sent to players. Saving the file re-applies
+	#them straight away; you feel a change after stepping onto a new block.
+	[surface.speed]
+		#Asphalt: Immersive Petroleum asphalt, Create D&D coloured asphalt.
+		#Range: 0.05 ~ 4.0
+		asphalt = 1.5
+		#Concrete: vanilla concrete, IE concrete and hempcrete, Engineer's Decor rebar concrete, cinder blocks.
+		#Range: 0.05 ~ 4.0
+		concrete = 1.4
+		#See-through walkway floors: catwalks, floor grating, Quark grate, metal scaffolding.
+		#Range: 0.05 ~ 4.0
+		grating = 1.3
+		#Solid metal: storage blocks, copper, sheet metal and plating, metal fences, gates and trapdoors.
+		#Range: 0.05 ~ 4.0
+		metal = 1.25
+		#Ice and soap: ice, packed/blue ice, soap block, thin ice.
+		#Range: 0.05 ~ 4.0
+		slippery = 1.25
+		#Cut, polished and tiled stone: smooth stone, polished stones, quartz, glazed terracotta.
+		#Range: 0.05 ~ 4.0
+		constructed_smooth = 1.25
+		#Bricks and masonry: every brick and tile family, prismarine, purpur, shingles.
+		#Range: 0.05 ~ 4.0
+		constructed_brick = 1.25
+		#Trodden ground: dirt path, coarse dirt, gravel, cobblestone families.
+		#Range: 0.05 ~ 4.0
+		natural_path = 1.15
+		#Wood: planks, logs, wooden slabs/stairs, fences, gates and trapdoors, scaffolding.
+		#Range: 0.05 ~ 4.0
+		wood = 1.1
+		#Raw rock: stone, deepslate, tuff, calcite, terracotta, ores, obsidian.
+		#Range: 0.05 ~ 4.0
+		natural_smooth = 1.05
+		#Reserved for Create/IE machines. Not filled yet.
+		#Range: 0.05 ~ 4.0
+		machinery = 1.0
+		#Reserved for chests, furnaces and workstations. Not filled yet.
+		#Range: 0.05 ~ 4.0
+		functional = 1.0
+		#Reserved for furniture, lamps and signage. Not filled yet.
+		#Range: 0.05 ~ 4.0
+		decorative = 1.0
+		#Framed / copycat blocks. Only used by an empty frame, or by every frame when [surface.camouflage] copyCamo is false.
+		#Range: 0.05 ~ 4.0
+		camouflage = 1.0
+		#Glass blocks, framed glass, windows, sea lantern.
+		#Range: 0.05 ~ 4.0
+		glass = 1.0
+		#Leftover #minecraft:dirt: grass block, dirt, rooted dirt, rich soil.
+		#Range: 0.05 ~ 4.0
+		dirt = 1.0
+		#Rough, crumbly ground: podzol, mycelium, nylium, netherrack, basalt, raw ore blocks.
+		#Range: 0.05 ~ 4.0
+		natural_rough = 0.92
+		#Soft and fibrous: wool, hay, moss, beds, sponge, sculk. Full blocks also sink (see [surface.sinking]).
+		#Range: 0.05 ~ 4.0
+		soft = 0.88
+		#Loose powder: sand, concrete powder, dust piles, sawdust. Full blocks also sink.
+		#Range: 0.05 ~ 4.0
+		dust = 0.85
+		#Edible blocks: chocolate, cake, pies, melon, pumpkins.
+		#Range: 0.05 ~ 4.0
+		confectionery = 0.85
+		#Crop fields: farmland, rich soil farmland, tilled end stone.
+		#Range: 0.05 ~ 4.0
+		tilled = 0.8
+		#Leaves and hedges.
+		#Range: 0.05 ~ 4.0
+		leaves = 0.78
+		#Snow block, snow layers (3+), powder snow.
+		#Range: 0.05 ~ 4.0
+		snow = 0.75
+		#One sticky face: sticky pistons and their heads, sticky launchers (see [surface.sticky]).
+		#Range: 0.05 ~ 4.0
+		sticky = 0.65
+		#Squelching ground: mud, clay, wet sponge, dough, flesh blocks. Full blocks also sink.
+		#Range: 0.05 ~ 4.0
+		spongy = 0.6
+		#Whole slime and honey blocks. Full blocks also sink.
+		#Range: 0.05 ~ 4.0
+		very_sticky = 0.45
+
+	#The sticky tier (sticky pistons, piston heads, sticky launchers).
+	[surface.sticky]
+		#true: a sticky piston only slows you while its sticky face points up (a piston head
+		#only while it's a sticky head). false: every block in the tier slows you whichever way it faces.
+		faceUpOnly = true
+
+	#Walk speed on framed / copycat blocks (FramedBlocks, Copycats+, Create copycats).
+	[surface.camouflage]
+		#true: walk like the camo block (its own tier speed). Hybrid blocks holding several
+		#materials use the one inserted most recently. false: the camouflage tier's flat speed.
+		#Independent of [surface.sinking] copyCamo.
+		copyCamo = true
+
+	#Visual soul-sand-style sinking: entities standing on a full block in the soft, dust,
+	#spongy or very_sticky tier (#creativeengineering:sinking) are drawn lower, and so is the
+	#camera. Collision, hitboxes, movement, mob AI and shadows are untouched.
+	[surface.sinking]
+		#How far the camera and entities appear to sink, in 1/16-block pixels (soul sand's real sink is 2). 0 = off.
+		#Range: 0 ~ 8
+		depthPixels = 2
+		#true: full framed / copycat blocks (cubes, hybrid double slabs, anything with a full
+		#block shape) sink like their camo, the newest one in a hybrid. Frames that aren't a
+		#full block never sink, same as any other block. false: frames never sink.
+		#Independent of [surface.camouflage] copyCamo.
+		copyCamo = true
+
+	#A 'Run Speed' line in WTHIT's look-at overlay: the speed you'd walk at on that block, by
+	#the same rules as movement (camo and sticky facing included). Blocks you pass through
+	#(plants) get no line unless they slow you from inside (cobwebs, berry bushes, leaf piles);
+	#thin layers (carpet, 1-2 snow layers) show the block beneath, which is the one you walk on.
+	#Client-side only; it reads BlockRunner's own speed table, no server traffic.
+	[surface.wthit]
+		#Master on/off switch for the line.
+		enabled = true
+		#true: no line on any block at normal speed (1.0), tiered or not.
+		hideNormal = true
+		#true: name the surface tier after the value, e.g. 'Run Speed: 1.50× (Asphalt)', and add
+		#notes: 'from camo', 'sticky face not up', 'block below' (thin layers), 'own speed'
+		#(soul sand), 'walking through' (cobwebs and other blocks that slow you from inside).
+		showTier = true
+		#MULTIPLIER: 1.50× / 0.88×. PERCENT: +50% / -12%.
+		#Allowed Values: MULTIPLIER, PERCENT
+		format = "MULTIPLIER"
+		#true: no line on blocks nothing gives a speed to: no surface tier, no blockrunner.json
+		#entry, no speed of their own, and they don't slow you from inside. Those are always 1.0,
+		#so this only matters with hideNormal = false: tiered 1.0 blocks (Glass, Dirt) still show.
+		hideUntyped = true
+
+#Ore Excavation's /undo_excavation. An undo is refused when the vein mine broke a block in
+##creativeengineering:vein_undo_denied (ores, storage blocks, budding blocks, spawners, ancient
+#debris; filled by KubeJS). Server side.
+[vein_undo]
+	#Seconds a player waits after a successful undo before the next one. 0 = none.
+	#Range: 0 ~ 3600
+	cooldownSeconds = 5
+	#Also refuse when the vein mine broke a block with a block entity (chests, furnaces...).
+	#A restored chest keeps its unrolled loot table, so mine-and-undo would reroll structure loot.
+	denyBlockEntities = true
+

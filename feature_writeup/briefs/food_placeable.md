@@ -293,7 +293,7 @@ Every dough has a block; list the doughs that have none.
   `baking/baked-goods #27`).
 
 ### Build
-1. Texture `kubejs/assets/creativeengineering/textures/block/dough_block/nut_dough_block.png` (recolour in
+1. Texture `development/creativeDelight/src/main/resources/assets/creativeengineering/textures/block/dough_block/nut_dough_block.png` (recolour in
    `textureswapper/baking/dough/`, as the six were made), blockstate / block model / item model like
    `oat_dough_block`'s.
 2. Key `i.nut_dough_block = 'creativeengineering:nut_dough_block'` next to line 1858; add

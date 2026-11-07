@@ -1,3 +1,4 @@
+// requires: creativedelight
 // Can tags: #creativeengineering:cans/servings/<n> for every can in the <mod>/can_servings.js startup member
 // scripts of the CD jar (item_dict key -> servings; record kubejs/generation_scripts/food/can_servings.json, written
 // by tools/gen_can_types.py; framework #7 2026-11-01, read by instance path before), chained up to

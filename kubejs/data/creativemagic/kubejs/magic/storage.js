@@ -1,3 +1,4 @@
+// requires: creativemagic
 // Creative Magic; moved from kubejs/server_scripts/magic/storage.js on 2026-11-04 (creative_split.md 7.6, wave 6), rows unchanged.
 // Recipe ids are creativemagic:<type>/<suffix> (global.CMG.recipes).
 ServerEvents.recipes(e => {

@@ -1,3 +1,4 @@
+// requires: creativedelight
 // requires: moredelight
 // requires: rusticdelight
 // Diced potatoes merge (feature_writeup/item_merges.md 2.4). Moved from the pack's server_scripts/other/item_merges.js

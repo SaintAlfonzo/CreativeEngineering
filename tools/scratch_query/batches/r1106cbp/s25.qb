@@ -1,0 +1,14 @@
+# r1106cbp (rerun of r1106cbo) single boot: chain + ADD="create_central_kitchen-*.jar", group A (SQ-CBO-25)
+## SQ-CBO-25 | chain + create_central_kitchen-*.jar
+bootexpect \[creativebrewing\] members: \[vinery, brewinandchewin\]$
+bootreject Missing or unsupported mandatory|Mixin apply failed|InvalidMixinException|creativebrewing.*(NoClassDefFoundError|ClassNotFoundException)|Encountered an unexpected exception
+shell ! grep -nE "ReferenceError|TypeError|EvaluatorException|is not defined" logs/kubejs/startup.log logs/kubejs/server.log
+> cbo all
+waitlog \[cbo\] done 30
+expect effects leaks 0$
+reject \[cbo\] leak 
+reject \[cbo\] leak .*echo_
+expect mods loaded 1 of 24: create_central_kitchen$
+shell grep -h "dragon-breath" logs/latest.log logs/kubejs/startup.log
+bootexpect registered [1-9][0-9]* dragon-breath fluid-brewing recipes
+shell grep -h "re-added [1-9]" logs/latest.log logs/kubejs/startup.log logs/kubejs/server.log

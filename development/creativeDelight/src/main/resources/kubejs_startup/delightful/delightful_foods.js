@@ -47,7 +47,7 @@ ItemEvents.modification(e => {
 	})
 })
 
-// Food value copies (rows of global.foodValueCopies, applied by creativeengineering/food_value_copies.js). Moved from
+// Food value copies (rows of global.foodValueCopies, applied by creativedelight/food_value_copies.js). Moved from
 // the pack's startup_scripts/cooking/food_values.js 2026-10-25, rows unchanged.
 //   cantaloupe_slice <- pumpkin_slice              Delightful's 4 / 0.8 + Resistance was far above the other melon
 //                                                  slices (feature_writeup/can_parity.md 4.1)

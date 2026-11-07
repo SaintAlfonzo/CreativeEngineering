@@ -12,7 +12,7 @@ import java.util.Locale;
 /**
  * The six seasonings of 1.3.0: item, name prefix and colour. Since the seasoning fold (food/seasoning #11,
  * barbeques_delight.md 4.1) each is a pack seasoning {@code barbequesdelight:<name>} (Creative Delight's
- * {@code kubejs_startup/creativeengineering/seasonings.js} holds the effects, values as 1.3.0), put on by a shapeless
+ * {@code kubejs_startup/creativedelight/seasonings.js} holds the effects, values as 1.3.0), put on by a shapeless
  * craft that consumes one item; the click-and-durability use is retired. Powders go on raw and cooked skewers, sauces on
  * cooked ones only (O28), by their seasonable tags.
  */

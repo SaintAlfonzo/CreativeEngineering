@@ -1,3 +1,4 @@
+// requires: creativedelight
 // requires: endersdelight
 // Ender's Delight client rows (non-member; ends_delight.md 3.1): knife drop tooltips and JEI pages (1.1.4's info
 // lines), and 1.1.4's Shulker Bowl message for the Stuffed Shulker feast.

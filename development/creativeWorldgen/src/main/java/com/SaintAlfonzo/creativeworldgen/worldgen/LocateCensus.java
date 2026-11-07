@@ -35,7 +35,7 @@ import java.util.concurrent.atomic.AtomicInteger;
 import java.util.function.Predicate;
 
 /**
- * /celocate census (feature_writeup/locate.md 3.6): every slot of every live structure set in a square, the
+ * /cwglocate census (feature_writeup/locate.md 3.6): every slot of every live structure set in a square, the
  * prediction for each member (what a search would see, stage by stage), then the real structure starts of that chunk
  * (generated to STRUCTURE_STARTS only, through LocateLoads, so no noise or features). Every set that tries a chunk is
  * predicted before that chunk loads, and the chunk loads once for all of them. While it runs, the generation reject

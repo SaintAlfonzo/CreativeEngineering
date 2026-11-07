@@ -1,3 +1,4 @@
+// requires: creativedelight
 // requires: farmersdelight
 // Farmer's Delight client rows, moved from the pack's client_scripts/ 2026-10-27, rows unchanged.
 

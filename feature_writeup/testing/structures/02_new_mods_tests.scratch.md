@@ -80,7 +80,7 @@
 - ST-189: `loot spawn` of eugene:chests/carriage_chest (21 items) and trader_camp_chest (3): the map's village search ran
   on an AL thread in 86 ms, no stall (AL's "couldn't find block entity on chest" = no real chest with /loot spawn).
 - Carriage locate misses 19/20 loads: only 2 explained by drops (peaceful farmers_structures:cooks). Misses can be
-  normal "maybe" predictions; running `/celocate census 64 6000 -6000` (44750 slot chunks) for false negatives.
+  normal "maybe" predictions; running `/cwglocate census 64 6000 -6000` (44750 slot chunks) for false negatives.
 
 - Earth fill (st_c, unique starts): Campsite cartographer 1 / cleric 2 kept (medium, beard); fisher [-118,6] CANCELLED
   (26 over water); eugene:camp 6, pillager_camp 6, fake_trader_camp 1, carriage 2, witch_wagon 1 kept (small, beard);
@@ -88,7 +88,7 @@
   10 earth". Drum tower template (same as the original mod's) is a 49x45 base of polished andesite (19k of 27k
   blocks): earth fill sizes and judges starts by EARTH base blocks (dirt/sand/gravel/clay/path) only, so a big stone
   base is "small" and mostly invisible to it -> open issue (ST-176 partly).
-- 08:27 `/celocate census 64 6000 -6000`: 44750 slot chunks, 1712 starts, 0 misses, 0 false negatives, 387 s. BUT every
+- 08:27 `/cwglocate census 64 6000 -6000`: 44750 slot chunks, 1712 starts, 0 misses, 0 false negatives, 387 s. BUT every
   structure row is all "known" (predictedMaybe 0, predictedNo 0): no slot went through the prediction path, so false
   negatives could not be seen. Census tooling issue (Phase 6 / LO-), not 7.4 -> open issue.
 - ST-185 direct check: from 100 blocks off known starts, /locate eugene:pillager_loot_carriage -> -2832 4400 (the known
@@ -208,7 +208,7 @@
 - Earth fill can't see stone bases: size class and checks use earth base blocks only. The drum tower (49x45 polished
   andesite base, 10 earth) is "small" and could hang over water/cliffs unchecked. Same family as the piglin camp
   finding (M1). Options: count any solid template block in the base row, or an override for the drum tower. User.
-- /celocate census reports every slot "known" on fresh land (no prediction recorded), so its false-negative column
+- /cwglocate census reports every slot "known" on fresh land (no prediction recorded), so its false-negative column
   is meaningless as run here. Check LocateStats.wasPredicted / the census active flag before Phase 6.
 
 - Way-sign metas: 0 of 11 assembled on st_c (friendly camp part or way sign part placed 0 of 1). Phase 2 found both by

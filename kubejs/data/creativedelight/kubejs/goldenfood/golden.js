@@ -1,3 +1,4 @@
+// requires: creativedelight
 // requires: goldenfood
 // Golden foods (food.md 3.16, golden_food.md 3.4): every goldenfood golden food is its input food in a ring of 8 gold
 // nuggets (global.CD.food goldenGild, which also adds the heated mixer and Arc Furnace routes), replacing upstream's

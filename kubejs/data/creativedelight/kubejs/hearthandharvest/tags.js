@@ -1,3 +1,4 @@
+// requires: creativedelight
 // requires: hearthandharvest
 // Item tags of the Hearth and Harvest content ported into the Creative Delight member hearthandharvest
 // (hearth_and_harvest.md 4.1). 1.4.1's c: tags as forge: tags; the pack's plural #forge:fruits/raspberries is the fruit

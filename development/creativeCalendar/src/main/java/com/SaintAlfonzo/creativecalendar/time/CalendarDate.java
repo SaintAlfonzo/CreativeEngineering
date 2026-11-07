@@ -9,7 +9,7 @@ import sereneseasons.api.season.Season;
  * year, so the year number comes from the world's day count: the days since the first sunrise
  * ({@link TimeSettings#firstSunrise()}), less the day of the year, rounded up so a world that starts after Early Spring
  * reaches year 2 at its first Early Spring. A /season set moves the day but not the sun, so after one the year can read
- * one off until the next new year; /cetime date ({@link TimeDate}) moves both.
+ * one off until the next new year; /ccaltime date ({@link TimeDate}) moves both.
  */
 public final class CalendarDate {
     private CalendarDate() {}

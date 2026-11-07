@@ -28,8 +28,8 @@ import umpaz.farmersrespite.common.block.entity.container.KettleMenu;
 @Mixin(value = KettleMenu.class, remap = false)
 public abstract class KettleMenuTankMixin extends AbstractContainerMenu {
 
-	@Unique private static final int CE_INV_START = 5;
-	@Unique private static final int CE_INV_END = 41;
+	@Unique private static final int CD_INV_START = 5;
+	@Unique private static final int CD_INV_END = 41;
 
 	@Unique private int ce$firstBox = -1;
 
@@ -52,12 +52,12 @@ public abstract class KettleMenuTankMixin extends AbstractContainerMenu {
 		Slot slot = slots.get(index);
 		if (!slot.hasItem()) return;
 		boolean fromBox = index == ce$firstBox || index == ce$firstBox + 1;
-		boolean fromInv = index >= CE_INV_START && index < CE_INV_END;
+		boolean fromInv = index >= CD_INV_START && index < CD_INV_END;
 		if (!fromBox && !fromInv) return;
 		ItemStack stack = slot.getItem();
 		ItemStack copy = stack.copy();
 		if (fromBox) {
-			if (!moveItemStackTo(stack, CE_INV_START, CE_INV_END, true)) {
+			if (!moveItemStackTo(stack, CD_INV_START, CD_INV_END, true)) {
 				cir.setReturnValue(ItemStack.EMPTY);
 				return;
 			}

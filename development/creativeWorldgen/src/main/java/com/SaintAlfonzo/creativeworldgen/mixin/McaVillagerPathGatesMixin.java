@@ -36,13 +36,13 @@ import java.util.function.Predicate;
 public abstract class McaVillagerPathGatesMixin {
 
     @Unique
-    private static final TagKey<Block> CE_TALL_DOORS = creativeengineering$tag("tall_doors");
+    private static final TagKey<Block> CWG_TALL_DOORS = creativeengineering$tag("tall_doors");
     @Unique
-    private static final TagKey<Block> CE_SHORT_DOORS = creativeengineering$tag("short_doors");
+    private static final TagKey<Block> CWG_SHORT_DOORS = creativeengineering$tag("short_doors");
     @Unique
-    private static final TagKey<Block> CE_TALL_WOODEN_DOORS = creativeengineering$tag("tall_wooden_doors");
+    private static final TagKey<Block> CWG_TALL_WOODEN_DOORS = creativeengineering$tag("tall_wooden_doors");
     @Unique
-    private static final TagKey<Block> CE_SHORT_WOODEN_DOORS = creativeengineering$tag("short_wooden_doors");
+    private static final TagKey<Block> CWG_SHORT_WOODEN_DOORS = creativeengineering$tag("short_wooden_doors");
 
     @Unique
     private static TagKey<Block> creativeengineering$tag(String path) {
@@ -57,10 +57,10 @@ public abstract class McaVillagerPathGatesMixin {
             cir.setReturnValue(ExtendedPathNodeType.FENCE);
             return;
         }
-        if (!(state.is(CE_TALL_DOORS) || state.is(CE_SHORT_DOORS)) || !state.hasProperty(BlockStateProperties.OPEN)) return;
+        if (!(state.is(CWG_TALL_DOORS) || state.is(CWG_SHORT_DOORS)) || !state.hasProperty(BlockStateProperties.OPEN)) return;
         if (state.getValue(BlockStateProperties.OPEN)) {
             cir.setReturnValue(ExtendedPathNodeType.DOOR_OPEN);
-        } else if (state.is(CE_TALL_WOODEN_DOORS) || state.is(CE_SHORT_WOODEN_DOORS)) {
+        } else if (state.is(CWG_TALL_WOODEN_DOORS) || state.is(CWG_SHORT_WOODEN_DOORS)) {
             cir.setReturnValue(ExtendedPathNodeType.DOOR_WOOD_CLOSED);
         } else {
             cir.setReturnValue(ExtendedPathNodeType.DOOR_IRON_CLOSED);

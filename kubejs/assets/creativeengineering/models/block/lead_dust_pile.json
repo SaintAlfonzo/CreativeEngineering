@@ -1,8 +1,0 @@
-{
-  "parent": "block/cube_all",
-  "textures": {
-    "all": "creativeengineering:block/dust_pile/lead_dust_pile",
-    "particle": "creativeengineering:block/dust_pile/lead_dust_pile"
-  },
-  "render_type": "solid"
-}

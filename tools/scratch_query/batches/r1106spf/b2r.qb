@@ -1,0 +1,35 @@
+# r1106spf b2r: same boot as b2. NM-01 / SPF-71 / SPF-73 at the plains found in b2 (vars PL), bot on the ground.
+pace 1
+
+## SQ-NM-01 | named cows, sheep, pigs at the plains (bot on the ground, 60 s)
+> tp qa {PL1} 90 {PL3}
+sleep 60
+> execute at qa if entity @e[type=minecraft:cow,distance=..160]
+> execute at qa if entity @e[type=minecraft:sheep,distance=..160]
+> execute at qa if entity @e[type=minecraft:pig,distance=..160]
+> execute at qa if entity @e[type=#zq:monsters,distance=..160]
+> execute at qa as @e[type=minecraft:cow,distance=..160,limit=3] run data get entity @s CustomName
+> execute at qa as @e[type=minecraft:sheep,distance=..160,limit=3] run data get entity @s CustomName
+> execute at qa as @e[type=minecraft:cow,distance=..160,limit=1] run data get entity @s ForgeData
+expect creativeengineering:named_mob": 2b
+
+## SQ-SPF-71 | mooblooms, baby mobs, all entity types near the plains
+> execute at qa as @e[distance=..160,type=!minecraft:player,type=!minecraft:item] run data get entity @s id
+> execute at qa run summon minecraft:mooshroom ~2 ~ ~ {Age:0}
+> execute at qa run summon minecraft:mooshroom ~3 ~ ~ {Age:0}
+> execute at qa as @e[type=minecraft:mooshroom,distance=..5] run data merge entity @s {InLove:600}
+sleep 10
+> execute at qa as @e[type=minecraft:mooshroom,distance=..8] run data get entity @s Age
+look ids include more_mooblooms: or baby types; a negative Age (calf) from the bred pair
+
+## SQ-SPF-73 | wild crops around the plains
+> execute at qa run forceload add ~-40 ~-40 ~40 ~40
+sleep 10
+> execute at qa run zq count ~-40 -64 ~-40 ~40 200 ~40 farmersdelight:wild_carrots
+> execute at qa run zq count ~-40 -64 ~-40 ~40 200 ~40 farmersdelight:wild_cabbages
+> execute at qa run zq count ~-40 -64 ~-40 ~40 200 ~40 farmersdelight:wild_onions
+> execute at qa run zq count ~-40 -64 ~-40 ~40 200 ~40 farmersdelight:wild_potatoes
+> execute at qa run zq count ~-40 -64 ~-40 ~40 200 ~40 farmersdelight:wild_beetroots
+> execute at qa run zq count ~-40 -64 ~-40 ~40 200 ~40 minecraft:grass
+> execute at qa run forceload remove ~-40 ~-40 ~40 ~40
+look wild crop counts above 0 somewhere in the plains box

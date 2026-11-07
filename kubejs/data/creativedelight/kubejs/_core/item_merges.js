@@ -1,3 +1,4 @@
+// requires: creativedelight
 // priority: -100
 // Food item merges, Creative Delight's group (feature_writeup/item_merges.md 1.1, 6). The pairs come from CD's swap
 // lists (data/creativedelight/swaps/merges_*.json, fed in by the startup script creativedelight/swap_merges.js); per-merge recipe and tag work is in the purged

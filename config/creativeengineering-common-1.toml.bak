@@ -1156,14 +1156,14 @@
 [debug]
 
 	#The pack's generator scripts (tools/*.py: structure/biome/loot configs, effect descriptions,
-	#pack manifest, reports) listed in tools/generators.json. /cegen run [target] runs them in game;
+	#pack manifest, reports) listed in tools/generators.json. /cdevgen run [target] runs them in game;
 	#these knobs also let them run by themselves every time the game starts.
 	[debug.generators]
 		#Debug mode. When true, the generators run in the background as the game starts (from common
 		#setup), and loading waits for them before finishing, so the first world load already reads
-		#fresh files. Results go to latest.log, logs/cegen/<id>.log and /cegen status. Off by default.
+		#fresh files. Results go to latest.log, logs/cdevgen/<id>.log and /cdevgen status. Off by default.
 		runAtStartup = false
-		#What the startup run and a bare /cegen run execute: 'all', a group or one generator id
+		#What the startup run and a bare /cdevgen run execute: 'all', a group or one generator id
 		#from tools/generators.json.
 		target = "core"
 		#Python interpreter to run the scripts with (a name on PATH or a full path).
@@ -1344,9 +1344,9 @@
 			#Range: 1 ~ 16
 			maxPlantHeight = 4
 
-	#/ceplace structures <filter> and /ceplace templates <glob>: place every match in rows (one row per
+	#/cdevplace structures <filter> and /cdevplace templates <glob>: place every match in rows (one row per
 	#type tag, group, mod or template folder), starting at your position and going +X, rows stacked +Z.
-	#Meant for a flat world with Generate Structures off. /ceplace preview ... lists without placing.
+	#Meant for a flat world with Generate Structures off. /cdevplace preview ... lists without placing.
 	[worldgen.mass_place]
 		#Blocks between two structures in a row.
 		#Range: 0 ~ 512
@@ -1558,14 +1558,14 @@
 		#Log one [locate] line for every search with at least this many misses (0 = every search, -1 = never).
 		#Range: > -1
 		logMissesAtLeast = 8
-		#Default search radius of /celocate batch, in chunks (/locate uses 100).
+		#Default search radius of /cwglocate batch, in chunks (/locate uses 100).
 		#Range: 1 ~ 1000
 		batchRadius = 100
-		#A /celocate batch search still running after this long is reported as timed out and cancelled (Async
+		#A /cwglocate batch search still running after this long is reported as timed out and cancelled (Async
 		#Locator never completes a search that threw).
 		#Range: 5 ~ 3600
 		batchTimeoutSeconds = 120
-		#/celocate census splits its square into regions this many chunks wide; each region is one task on
+		#/cwglocate census splits its square into regions this many chunks wide; each region is one task on
 		#Async Locator's thread pool.
 		#Range: 4 ~ 256
 		censusRegionChunks = 32
@@ -1574,7 +1574,7 @@
 		#Range: 10 ~ 3600
 		loadTimeoutSeconds = 300
 		#Any structure search (/locate, maps, Async Locator) still running after this long ends as not found and
-		#logs a [locate] line with its counters; its thread is free again. /celocate stop ends running searches
+		#logs a [locate] line with its counters; its thread is free again. /cwglocate stop ends running searches
 		#too, and so does the server stopping. 0 = no deadline. Applies to new searches immediately.
 		#Range: 0 ~ 3600
 		searchTimeoutSeconds = 120
@@ -1786,7 +1786,7 @@
 #Day length, seasons and wine aging in one place (feature_writeup/time.md). While enabled, the
 #time values in betterdays-common.toml, the world's sereneseasons-server.toml and seasonhud-server.toml,
 #and vinery-common.toml [wine]/[aging] are overwritten from here at server start and on every edit.
-#/cetime shows every derived value.
+#/ccaltime shows every derived value.
 [time]
 	#SINGLEPLAYER or SERVER sets every value below to that preset (they differ only in monthsPerLevel:
 	#1 in single player, 3 on a server). Editing any value by hand turns this into CUSTOM, unless the

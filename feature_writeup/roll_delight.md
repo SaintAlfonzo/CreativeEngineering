@@ -56,7 +56,7 @@ asks for it by name. Upstream bugs are fixed (3.5).
 | Overlap | 2 | Salmon Maki Roll (upstream "Amazing Salmon Roll") vs FD Salmon Roll (committed, D12); medleys vs FD Rice Roll Medley; Tobiko vs Oceanic Delight Fish Egg Roll. Rice Roll and slice are **not** an overlap (owner, 2026-10-31) |
 | Fold-in | 4 | 19 steps planned |
 | Decisions | 5 | D1-D17, all settled, D6 values confirmed (2026-11-01) |
-| Build | 4.2 | BUILT 2026-11-01 (member + CD scripts); in `mods/` since the CD jar of 11-02 14:01, not played; `/dumpall`, can generator and `/cegen` wait on the game |
+| Build | 4.2 | BUILT 2026-11-01 (member + CD scripts); in `mods/` since the CD jar of 11-02 14:01, not played; `/dumpall`, can generator and `/cdevgen` wait on the game |
 | Tests | 8 | ROLL-01..27 in game: none run. Scratch r1102b (2026-11-02): SQ-ROLL-01, -02, -05 to -09 PASS; SQ-ROLL-03, -04 OPEN (probe eats from the main hand only); CQ-ROLL-10 waits for the client round |
 
 - **Jar:** 178 files; bundles `mixinextras-forge-0.5.0` (jarjar), unused by the code.
@@ -395,7 +395,7 @@ Code goes into a Creative Delight member (memory `creative-delight-routing`, Rus
 0. **Port (Java):** register the ids kept by D3 (the Ancient Roll ids are back); foods as plain items with the values D6 fixes; Cooked Nether Wart
    as a bowl food (stack per 4.1); chopsticks (3.3) and wrapped chopsticks; medleys as `FeastBlock` subclasses (3.2); B1-B9 fixed.
    Donor translation: 1.20 data to 1.19.2 (the recipe `category` fields are ignored on 1.19.2; drop the 1.21 tag).
-1. **Dumps and generators:** after install, `/dumpall`, then `/cegen` (memory `dumpall-refresh-workflow`).
+1. **Dumps and generators:** after install, `/dumpall`, then `/cdevgen` (memory `dumpall-refresh-workflow`).
 2. **Ids:** every kept id in `item_dict.js` (and the block dict for the three blocks) before any script uses them.
 3. **Tags** via `global.tags`: slices and rolls into the `roll` food type; `#forge:cooked_rice`-style inputs where the
    pack has one; Cooked Nether Wart into the vegetable / side food type.
@@ -466,7 +466,7 @@ Ordering: 0 before everything; 1 before 2-4 (ids must exist in the dump); 2 befo
   `gen_can_types.py` (Cooked Nether Wart can, waits on `/dumpall`), [names.md](names.md) 3.3, [can_parity.md](can_parity.md) 2.6.
 - **Not built (open):** Display Delight plates and the Cooked Nether Wart placed / coaster look (need art and `display_blocks.json`
   rows in `backportedDisplay`); Item Physic and BlockRunner rows for the wrapped chopsticks. Waits on the game: `/dumpall`, then
-  `python3 tools/gen_can_types.py` (empty its `AWAIT_DUMP`), then `/cegen` (stack sizes, placeables, food families).
+  `python3 tools/gen_can_types.py` (empty its `AWAIT_DUMP`), then `/cdevgen` (stack sizes, placeables, food families).
 
 ## 5. Decisions for the owner
 

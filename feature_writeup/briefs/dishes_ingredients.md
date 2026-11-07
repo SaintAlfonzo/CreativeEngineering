@@ -201,7 +201,7 @@ A cut sweet potato gives 3 sweet potato slices.
    baked form by `R.smelting` / smoking / campfire as for the potato slices.
 3. CD `veggiesdelight/tags.js`: `t.add(e, [i.t_sliced_potato, i.t_sliced_potatoes], i.sweet_potato_slices)` (row 26's key),
    so fries and More Delight's dishes take it.
-4. `food_types.json` (ingredient or raw/veggie cut), compost row, `/cegen` for cans, changelog bullet.
+4. `food_types.json` (ingredient or raw/veggie cut), compost row, `/cdevgen` for cans, changelog bullet.
 
 ### Decisions
 - Count 3 (the row's number) against 2 for the potato: recommend as asked.
@@ -329,7 +329,7 @@ item or churn block. Milk: `i.milk` = `#forge:milk` (1825), `i.t_milk_bottle` (1
    bucket back) if an early route is wanted.
 3. Uses (decision D2): pie crust and cookie dough as an alternative fat; toast with butter; mashed potatoes; fried egg in
    place of cooking oil (`food.md` 3.7). Each by an extra slot option, not a replacement.
-4. `food_types.json`, compost, cans (`/cegen`), changelog.
+4. `food_types.json`, compost, cans (`/cdevgen`), changelog.
 
 ### Decisions
 - **D1 New item and source:** recommend a new item from the Create mixer (milk), not from the Brewin' keg.
@@ -358,7 +358,7 @@ recoloured copy). Vegetarian protein today: Veggies' vegetarian patty in burgers
    plus Create compacting 3 mushrooms -> 2 tofu.
 3. Uses: a cooked tofu (smoking / campfire), and tofu as a meat alternative in a few dishes (stir fry, salads, the burger
    patty slot) by slot arrays.
-4. `food_types.json` (protein / ingredient), compost, `/cegen`, changelog.
+4. `food_types.json` (protein / ingredient), compost, `/cdevgen`, changelog.
 
 ### Decisions
 - **D1 Recipe:** recommend the pot and the compactor, no grid route.

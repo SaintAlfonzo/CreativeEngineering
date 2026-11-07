@@ -37,8 +37,9 @@ mandatory=true
 versionRange="[1.0.0,)"
 ordering="AFTER"
 side="BOTH"
-# Creative Worldgen: /ceplace (MassPlacer), the /dumpspawns tuning record and /ceperf mobcap read its classes; each is
-# skipped when it is not loaded (creative_split.md 7.6: Devtools has an optional dependency on Worldgen).
+# Creative Worldgen: /cdevplace (MassPlacer), the /dumpspawns tuning record and /cdevperf mobcap read its classes; each is
+# skipped when it is not loaded (creative_split.md 7.6: Devtools has an optional dependency on Worldgen). The dump
+# scripts that load its classes (dump_bee_nests.js, dump_structuregen.js) carry `// requires: creativeworldgen`.
 [[dependencies.creativedevtools]]
 modId="creativeworldgen"
 mandatory=false

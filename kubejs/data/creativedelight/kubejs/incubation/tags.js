@@ -1,3 +1,4 @@
+// requires: creativedelight
 // requires: incubation
 // Incubation item tags (moved from the pack's server_scripts/tags/cookingtags.js 2026-10-25, rows unchanged).
 ServerEvents.tags('item', e => {

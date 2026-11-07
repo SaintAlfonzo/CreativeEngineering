@@ -2,10 +2,6 @@ package com.SaintAlfonzo.creativebrewing;
 
 import com.SaintAlfonzo.creativebrewing.fluidbrewing.DragonBreathBrewing;
 import com.SaintAlfonzo.creativebrewing.fluidbrewing.Lingerification;
-import com.SaintAlfonzo.creativebrewing.potion.CEPotions;
-import com.SaintAlfonzo.creativebrewing.potion.CopperPoisoningHandler;
-import com.SaintAlfonzo.creativebrewing.potion.MagicResistanceEffect;
-import com.SaintAlfonzo.creativebrewing.potion.PhantomBaneRules;
 import com.SaintAlfonzo.creativebrewing.potion.PotionBucketDispenser;
 import com.SaintAlfonzo.creativecommon.swap.ConfigRename;
 import com.mojang.logging.LogUtils;
@@ -39,8 +35,8 @@ import java.util.regex.Pattern;
  * {@code assets/creativebrewing/kubejs/}) that call the pack's helpers, {@link CBConfig}, and the potion, effect,
  * potion machine and alcohol Java moved here from patcherMod on 2026-11-01 (creative_brewing.md 4.2 phases 2 and 3).
  *
- * Ids: everything CB registers or names (the potions, the Magic Resistance effect, the potion buckets, JEI recipe
- * types, lang keys, the lingerification list) is under {@code creativebrewing} ({@link #NS}, the mod id) since
+ * Ids: everything CB registers or names (the potion buckets, JEI recipe
+ * types,  lang keys, the lingerification list) is under {@code creativebrewing} ({@link #NS}, the mod id) since
  * 2026-11-04 (plan_cb_publish.md M4; they were {@code creativeengineering:} and {@code kubejs:}). The old ids are in
  * {@code data/creativebrewing/swaps/creative_split.json}, so saved effects, buckets and the registry table carry over.
  */
@@ -67,17 +63,10 @@ public class CreativeBrewing {
 		if (!carried) warnOldKeys();
 
 		IEventBus modEventBus = FMLJavaModLoadingContext.get().getModEventBus();
-		// Better Beacons fallback potions and the magic_resistance potion (creativebrewing:*).
-		CEPotions.register(modEventBus);
+		// The potions, Magic Resistance and Phantom Bane rules moved to Creative Common (plan_cb_polish.md 2, 2026-11-06).
 		modEventBus.addListener(CreativeBrewing::commonSetup);
-		// Damage-reduction half of creativebrewing:magic_resistance (the MobEffect itself is registered in KubeJS,
-		// startup magic/magic_resistance.js).
-		MinecraftForge.EVENT_BUS.register(MagicResistanceEffect.class);
-		// Oxidized Everything Copper gear rolls for Poison ([copper_poisoning]; the effect-tick half is
-		// mixin/everythingcopper/CopperPoisoningEffectMixin).
-		MinecraftForge.EVENT_BUS.register(CopperPoisoningHandler.class);
-		// Caffeinated carries Phantom Bane; Phantom Bane ending resets Time Since Rest (potions/effects #10).
-		MinecraftForge.EVENT_BUS.register(PhantomBaneRules.class);
+		// Better Beacons potions (creativebrewing:long_reach, phantom_bane and variants), from Creative Common 2026-11-07.
+		com.SaintAlfonzo.creativebrewing.potion.BetterBeaconsPotions.register(modEventBus);
 		// Dispensed potion buckets credit the dispenser's placer (PotionBucketDispenser, potions/potion-buckets #3)
 		MinecraftForge.EVENT_BUS.register(PotionBucketDispenser.class);
 
@@ -97,7 +86,7 @@ public class CreativeBrewing {
 
 	/** Lines of creativeengineering-common.toml that held the sections moved here. */
 	private static final Pattern OLD_KEY = Pattern.compile(
-			"^\\s*(\\[(?:alcohol|effects|magic_resistance|copper_poisoning)\\])", Pattern.MULTILINE);
+			"^\\s*(\\[(?:alcohol)\\])", Pattern.MULTILINE);
 
 	/**
 	 * When neither carry-over ran (this file already had the sections, or patcherMod's file had none), Forge drops the

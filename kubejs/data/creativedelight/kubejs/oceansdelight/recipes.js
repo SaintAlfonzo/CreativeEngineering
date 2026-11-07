@@ -1,3 +1,4 @@
+// requires: creativedelight
 // requires: oceansdelight
 // Ocean's Delight recipe changes (feature_writeup/ocean_delight.md). Creative Delight member script: recipe ids are
 // creativedelight:<type>/<suffix> (global.CD.recipes).

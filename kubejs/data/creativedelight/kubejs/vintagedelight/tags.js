@@ -1,3 +1,4 @@
+// requires: creativedelight
 // requires: vintagedelight
 // Vintage Delight item tags (Creative Delight members #3, moved from the pack's server_scripts/tags/cookingtags.js
 // 2026-10-25, rows unchanged). Nothing in the pack removes from these tags, so running after the pack's tag scripts

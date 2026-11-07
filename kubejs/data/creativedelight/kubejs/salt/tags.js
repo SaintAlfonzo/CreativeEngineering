@@ -1,3 +1,4 @@
+// requires: creativedelight
 // requires: salt
 // The Salt's saltable tag (#salt:can_be_salted, i.t_can_be_salted): the Salting craft takes any food in it
 // (salt.md 5, TODO food/seasoning #4 and #1, 2026-11-03).

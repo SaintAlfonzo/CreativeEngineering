@@ -61,7 +61,7 @@ fixes its water and fire behaviour through the existing four physics tags. Nothi
 - No `physics/family/*` tag exists (`kubejs/data/creativeengineering/tags/items/physics/` is absent).
 
 ### Build
-1. **Rerun the audit** on the existing dump (`/cegen run item_physics_audit`, or `python3 tools/item_physics_audit.py`)
+1. **Rerun the audit** on the existing dump (`/cdevgen run item_physics_audit`, or `python3 tools/item_physics_audit.py`)
    and check the IP-21 / SQ-IP-16 pass line: header "dump yes", unclassified below 650, `minecraft:netherite_scrap`
    under `fire_resistant_item`. If the dump is stale against `mods/` (new jars since 10-30), `/dumpphysics` again first.
 2. **Settle 9.6 with the user** (nether wood fireproof, ice floats, machines fireproof, skim, stone scope) and add the

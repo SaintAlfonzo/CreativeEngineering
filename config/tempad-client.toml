@@ -1,0 +1,3 @@
+#The sorting mode for the Tempad screen. Options: Dimension, Alphabetical, Type
+sorting_mode = "Dimension"
+

@@ -1,3 +1,4 @@
+// requires: creativebrewing
 // requires: vinery
 // Wandering Winemaker stock (Vinery): draws 8 from its own pool. Moved from the pack's
 // server_scripts/economy/wandering_trades.js 2026-11-01 (creative_brewing.md 4.5), rows unchanged. The pack's handler

@@ -30,9 +30,9 @@ import java.util.List;
 import java.util.Map;
 
 /**
- * /ceperf status: the running JFR recording, which of the pack's perf events it records, and which hooks
- * have run. /ceperf dump [tag]: saves the recording to perf/recordings/ like server/perf/dump.sh, without
- * shell access to the server (feature_writeup/perf.md 3.6). /ceperf mobcap: each dimension's mob cap level (perf.md 17).
+ * /cdevperf status: the running JFR recording, which of the pack's perf events it records, and which hooks
+ * have run. /cdevperf dump [tag]: saves the recording to perf/recordings/ like server/perf/dump.sh, without
+ * shell access to the server (feature_writeup/perf.md 3.6). /cdevperf mobcap: each dimension's mob cap level (perf.md 17).
  */
 @Mod.EventBusSubscriber(modid = CreativeDevtools.MOD_ID, bus = Mod.EventBusSubscriber.Bus.FORGE)
 public final class PerfCommand {
@@ -44,7 +44,7 @@ public final class PerfCommand {
 
 	@SubscribeEvent
 	public static void onRegisterCommands(RegisterCommandsEvent event) {
-		event.getDispatcher().register(Commands.literal("ceperf")
+		event.getDispatcher().register(Commands.literal("cdevperf")
 				.requires(src -> src.hasPermission(3))
 				.executes(ctx -> status(ctx.getSource()))
 				.then(Commands.literal("status").executes(ctx -> status(ctx.getSource())))
@@ -56,7 +56,7 @@ public final class PerfCommand {
 	}
 
 	private static MutableComponent prefix() {
-		return Component.literal("[ceperf] ").withStyle(ChatFormatting.GOLD);
+		return Component.literal("[cdevperf] ").withStyle(ChatFormatting.GOLD);
 	}
 
 	private static void say(CommandSourceStack source, String text, ChatFormatting color) {
@@ -142,18 +142,18 @@ public final class PerfCommand {
 				msg = "saved " + Files.size(out) / (1024 * 1024) + " MB to perf/recordings/" + out.getFileName()
 						+ ". On the dev machine: python3 tools/perf/perf_report.py perf/recordings/" + out.getFileName();
 				ok = true;
-				LOGGER.info("[ceperf] recording saved to {}", out);
+				LOGGER.info("[cdevperf] recording saved to {}", out);
 			} catch (Exception e) {
 				msg = "dump failed: " + e;
 				ok = false;
-				LOGGER.warn("[ceperf] dump to {} failed", out, e);
+				LOGGER.warn("[cdevperf] dump to {} failed", out, e);
 			} finally {
 				dumping = false;
 			}
 			String text = msg;
 			ChatFormatting color = ok ? ChatFormatting.GREEN : ChatFormatting.RED;
 			server.execute(() -> say(source, text, color));
-		}, "ceperf-dump");
+		}, "cdevperf-dump");
 		t.setDaemon(true);
 		t.start();
 		return 1;

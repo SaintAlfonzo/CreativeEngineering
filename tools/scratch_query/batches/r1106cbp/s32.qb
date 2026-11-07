@@ -1,0 +1,15 @@
+# r1106cbp (rerun of r1106cbo) single boot: chain + ADD="geodeforge-*.jar", group A (SQ-CBO-32)
+## SQ-CBO-32 | chain + geodeforge-*.jar
+bootexpect \[creativebrewing\] members: \[vinery, brewinandchewin\]$
+bootreject Missing or unsupported mandatory|Mixin apply failed|InvalidMixinException|creativebrewing.*(NoClassDefFoundError|ClassNotFoundException)|Encountered an unexpected exception
+shell ! grep -nE "ReferenceError|TypeError|EvaluatorException|is not defined" logs/kubejs/startup.log logs/kubejs/server.log
+> cbo all
+waitlog \[cbo\] done 30
+expect effects leaks 0$
+reject \[cbo\] leak 
+reject \[cbo\] leak .*echo_
+expect mods loaded 1 of 24: geode$
+> zq potion minecraft:thick geode:wrappist_shard
+sleep 3
+expect wrappist_shard -> nothing
+shell ! grep -hE "mix skipped" logs/kubejs/startup.log logs/kubejs/server.log logs/latest.log

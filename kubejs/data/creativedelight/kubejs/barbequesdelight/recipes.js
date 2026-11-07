@@ -1,3 +1,4 @@
+// requires: creativedelight
 // requires: barbequesdelight
 // Recipes for the Barbeque's Delight port (Creative Delight member barbequesdelight, barbeques_delight.md 4 steps 3, 7).
 // The port ships no recipe data: the stations and combos are here, the skewer lines in skewers.js. Combos are plain shaped /

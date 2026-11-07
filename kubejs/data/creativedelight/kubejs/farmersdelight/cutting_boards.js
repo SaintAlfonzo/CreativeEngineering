@@ -1,3 +1,4 @@
+// requires: creativedelight
 // requires: farmersdelight
 // Extra cutting boards, registered by the repackedFarmers member (FDBackportRegistry). They work like FD's board (same
 // block class and block entity). Recipe: FD's board shape (2 sticks, 4 of the material).

@@ -3,7 +3,7 @@
 // again on /kubejs reload client_scripts, which re-sorts a running JEI. Tags still need /reload.
 // No binding for the class: this Rhino throws "redeclaration of var" for a top-level const inside a try block.
 try {
-	Java.loadClass('com.SaintAlfonzo.creativecommon.compat.jei.PackIngredientOrder').define(global.jeiOrder.toJson())
+	Java.loadClass('com.SaintAlfonzo.creativecompat.compat.jei.PackIngredientOrder').define(global.jeiOrder.toJson())
 } catch (err) {
 	console.error('[jei_order] could not hand the JEI order to patcherMod: ' + err)
 }

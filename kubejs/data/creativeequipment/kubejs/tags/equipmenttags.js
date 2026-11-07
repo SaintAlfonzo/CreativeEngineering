@@ -1,3 +1,4 @@
+// requires: creativeequipment
 // Creative Equipment; moved from kubejs/server_scripts/tags/equipmenttags.js on 2026-11-04 (creative_split.md 7.6, wave 7), rows unchanged.
 ServerEvents.tags('item', e => {
 

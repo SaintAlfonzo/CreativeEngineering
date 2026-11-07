@@ -66,7 +66,7 @@ namespaces) and `kubejs/assets/`. Shared helpers live in patcherMod's jar (`kube
 | **Creative Worldgen** (`creativeworldgen`) | `worldgen/` (structures, locate, earth and water fill, terrain adaptation, sky islands, spawn tuning, bee nests), `dimension/`, `loot/` and `server_scripts/loot`, `forgivingvoid/`, the ChunkGenerator, Structure, Jigsaw, Beardifier, DistantClip and leaf decay mixins; `server_scripts/worldgen`; the structure datapacks in `kubejs/data/`. **Fauna features too** (owner, 2026-11-01): `mobs/`, mob caps and spawn areas, MCA villager pathing, bee idle, raid glowing, `removed_mobs.js`. |
 | **Creative Compat** (`creativecompat`) | Third-party tweaks with no wider system: Quark, Supplementaries, Handcrafted, FTB, Lightman's Currency, Polymorph, Sophisticated, Pretty Pipes, TrashSlot, MCA combs, Breezy, Botania, `itemphysic/`, storage tweaks (sack bundle, trinket case, nightstand). |
 | **Creative Calendar** (`creativecalendar`) | As reserved in [creative_calendar.md](creative_calendar.md) 2: `time/`, `seasons/`, Better Days, Serene Seasons, SeasonHUD, Xaero's time, crop seasons, weather by biome, the wine clock. CD and CB depend on it. |
-| **Creative Devtools** (`creativedevtools`) | `devtools/`, `/cegen`, `/dumpall` and the `server_scripts/_lib` dump scripts, `PerfCommand` and JFR events, the block-state and random probes. Kept in dev `mods/` only and left out of `build_deploy.py` player payloads (Q6). |
+| **Creative Devtools** (`creativedevtools`) | `devtools/`, `/cdevgen`, `/dumpall` and the `server_scripts/_lib` dump scripts, `PerfCommand` and JFR events, the block-state and random probes. Kept in dev `mods/` only and left out of `build_deploy.py` player payloads (Q6). |
 
 ### 2.2 Into the existing bundles
 
@@ -85,6 +85,7 @@ twice, and Common never holds them.
 |---|---|---|
 | **Creative Magic** (`creativemagic`) | Enchantment mixins (Cycle, Recovery, Stockpile), enchanting power ([enchant_power.md](enchant_power.md)), `server_scripts/magic` minus what CB takes, [recipes_magic.md](recipes_magic.md) rows, `startup_scripts/magic`, the Botania tweaks. Potions and effects stay CB's. | Equipment |
 | **Creative Computers** (`creativecomputers`) | The high-level circuits, ComputerCraft, AE2 (recipes and mixins that are not tooltips), and the control-engineering content: `server_scripts/engineering/computing.js` and the circuit rows in `components.js` and `mechanisms.js`; the audit finds the rest. | Engineering |
+| **Creative Economy** (`creativeeconomy`, name not final) | Trading and loot chests (owner, 2026-11-07): the wandering trader spawn and trade tweaks (`trader/WanderingTraderTweaks`, `WanderingTraderSpawnerMixin`, `WanderingTraderTradesMixin`, `[wandering_trader]`, marked); the loot-chest rows the plan for that mod lists. `trader/TradeListings` and `TradeSync` stay Common APIs. | Common |
 
 ### 2.4 Creative Common (what remains)
 
@@ -98,15 +99,14 @@ missed.
   `DrinkFluidEffects`.
 - Engine fixes and perf: ghost blocks, null-state packets, section updates, the GL debug sync, thread-safe random,
   `perf/` and the perf mixins.
-- **Interface** (owner, 2026-11-01):
-  - JEI tweaks: `compat/jei`, the Jei* mixins, world tabs, ordering, craftable-first.
-  - WTHIT plugins: the Wthit* classes, `state_lines.json`, `waila_plugins.json`.
-  - Tooltips, toasts, GUI title plaques, the armor bar, and the Legendary Tooltips and Iceberg fixes.
-  - The tooltip mixins for AE2, FTB, Lightman's Currency, Pretty Pipes and Patchouli.
-  - `client_scripts/` tooltips, names and JEI order.
+- **Interface: moved to Creative Compat** (owner, 2026-11-07; was Common's by the 2026-11-01 note; section 7.19). JEI,
+  WTHIT, tooltip, toast and GUI title code and their mixins are Compat's; the Detail Armor Bar row is Equipment's. Common keeps
+  the interface pieces that are effect rules or perf: `EffectRules` and the use-item icon marker, `MobEffectCategoryMixin`,
+  `CompoundEffects` (the JEED, tooltip and HUD-icon render halves are Compat's), the creative menu disable (perf), the
+  `changelog/` viewer, loading tips, `[mod_names]`, and the `client_scripts` helpers (`jei_order.js`).
+- Kept in Common although they target one mod: Create: Gravity's dimension skip (perf) and IE `FluidTagInputMixin`
+  (shared API: Creative Brewing's potion bottling recipes need it) (owner, 2026-11-07).
 
-  An Interface row that only shows a content jar's data (a WTHIT line for an oven, a JEI category for a sawmill) goes
-  with that content jar instead. The audit applies this test per row.
 
 ## 3. Rules the audit applies to every row
 
@@ -335,7 +335,7 @@ Rows the owner must settle before the execution docs are written (each sweep fil
 | `onServerStarted` IE recycling diagnostics in the main class | Engineering, Devtools or delete | Devtools |
 | `NockRecipeBookSync`, `SequencedAssemblyRecipeMixin` | Equipment or Compat / Common | Equipment (they only serve Equipment content) |
 | `[botania]` section and `TrinketCaseRules` | Compat or the Magic reservation | Compat |
-| `MassPlacer` (`/ceplace`) | Worldgen or Devtools | Worldgen (it is built on Worldgen internals) |
+| `MassPlacer` (`/cdevplace`) | Worldgen or Devtools | Worldgen (it is built on Worldgen internals) |
 | `other/harvest.js`, `other/creative_labels.js`, `items/decor_blocks.js`, `tags/entitytags.js` | see F section 13 | Equipment, creativeLabels jar, Compat, Worldgen |
 | The three ungated live test-recipe files and `_lib/flower_world.js` | Devtools or delete | Devtools |
 
@@ -407,7 +407,7 @@ Engineering for good.
 | `NockRecipeBookSync` | Equipment. The Equipment carve checks whether it is still needed now that the recipe book is removed; delete it if not. |
 | `SequencedAssemblyRecipeMixin` | **Common**. |
 | `[botania]` and `TrinketCaseRules` | **Creative Magic**. |
-| `MassPlacer` (`/ceplace`) | **Devtools** (optional dependency on Worldgen). |
+| `MassPlacer` (`/cdevplace`) | **Devtools** (optional dependency on Worldgen). |
 | `other/harvest.js` | **Equipment** (owner, wave 4 close; supersedes the earlier CD row). |
 | `other/creative_labels.js` | the creativeLabels jar, which stays its own mod. |
 | `items/decor_blocks.js`, `tags/entitytags.js` | Compat, Worldgen. |
@@ -769,7 +769,7 @@ Fixed (2026-11-04):
 Left for the owner (both done in 7.17): Common's ~40 ungated third-party mixins (JEI, AE2, FTB, Lightman's Currency, WorldEdit and others)
 would only warn if those mods left the pack, so they could take `NEEDS_MOD` rows if Common is ever published alone;
 Storage Delight could declare `farmersdelight`. The stale `_readme` in `kubejs/generation_scripts/wthit/silk_touch_blocks.json`
-updates on the next `/cegen run silk_touch_blocks`. Scratch SQ-DEP-04 to -06 (same boot as SQ-DEP-01).
+updates on the next `/cdevgen run silk_touch_blocks`. Scratch SQ-DEP-04 to -06 (same boot as SQ-DEP-01).
 
 ### 7.17 Dependency audit follow-up (2026-11-04; built, NOT installed, not booted, not tested)
 
@@ -791,7 +791,88 @@ Owner, 2026-11-04, on 7.16:
 Built: Common, CD (config comment), Storage Delight `-02`. No player-visible change (the namespace move ships
 with the swap jars), so no changelog bullet. Scratch SQ-DEP-05 (updated), -07, -08.
 
+### 7.18 Feature regression after the split (2026-11-06; scratch r1106spf: PASS 33, FAIL 2)
+
+The carve rows check that each jar boots and carries its config; scratch section "SQ-SPF" checks each jar's
+features on the builds of 2026-11-06 18:51-18:54 against a baseline boot on the jars in `mods/`: SQ-SPF-00 (id, tag
+and recipe diffs), Common -01 to -05, Compat -10 to -14, Calendar -20 to -22, Devtools -30, -31, Magic -40, -41,
+Equipment -50 to -52, Engineering -60 to -62, Worldgen -70 to -73 (fresh normal world), Delight -80 to -83, Brewing
+-90 to -92, Labels -100, cross-jar -110 (config files), -111 (one jar removed at a time); client CQ-SPF-01, -02. Rows
+marked RERUN repeat the earlier feature suites on the split jars. TODO `creativesplit/regression #14`.
+
+Run r1106spf (2026-11-06 night, [scratch_run_2026-11-06.md](testing/scratch_run_2026-11-06.md) 6): every jar's
+features as before the split (recipe counts per type, tags and items equal to the 11-05 dumps apart from the
+intended fluid rename and mead removal). FAIL: SQ-CBP-03b (horror lasagna empty filling step), SQ-CBP-08b (Equipment
+felsic assembly step; `felsic_gear` pack names Nullscape biomes). Findings for TODO `creativesplit/regression #15` to
+`#18`. Worldgen rows partial; CQ-SPF-01, -02 open.
+
+Scratch r1106spfx ([scratch_run_2026-11-06.md](testing/scratch_run_2026-11-06.md) 7): SQ-SPFX-02 to -07 PASS, SQ-SPFX-01 FAIL
+(Immersive Portals fix too late in Mixin). Fixes the same night (owner request; all ten Creative jars built 22:07-22:09, not installed; queue SQ-SPFX-01 to -07,
+CQ-SPFX-01): Common sets ChunkMap `m_183760_` back to private for Immersive Portals with Serene Seasons; NCH also checks a
+sequenced-assembly step's JSON for the empty fluid and drops the steps of a skipped assembly; horror lasagna and the felsic
+ingot assembly guarded with `global.has`; Equipment's Nullscape felsic rows in `packs/felsic_gear+nullscape/`; `// requires:
+<own jar>` on every script of Compat, Calendar, Magic, Equipment, Engineering, Delight and Brewing (346 files; Devtools and
+Worldgen had it), Devtools' two Worldgen dumps also `requires: creativeworldgen`; 17 dead dict ids removed (Vinery cherry
+set, mead, King Danis wine, IE JEI buckets, TMTED items, More Immersive Wires redstone parts, Create Questing blueprint)
+and the dict validators skip absent mods and globs; sky islands in group `sky`.
+
+### 7.19 Interface carve and owner moves (2026-11-07; built, NOT installed by this session, not booted, not tested)
+
+Owner notes of 2026-11-07, with the answers to the conflicts found:
+
+| Note | Done |
+|---|---|
+| Create: Gravity changes to Engineering | **Kept in Common** (owner): its only change, `CreateGravityDimensionMixin`, is a perf fix under `[perf]`, and perf stays in Common. |
+| Immersive Engineering changes to Engineering | **Kept in Common** (owner): `FluidTagInputMixin` is a shared API; Brewing's potion bottling recipes need it and Brewing does not depend on Engineering. The IE sheetmetal tank WTHIT line went to Compat with the rest of WTHIT. `multiblock_dict.js` stays (dicts are Common's). |
+| Detail Armor Bar and its tweaks to Equipment | `compat/DetailArmorBarCompat`, `ArmorOverflowRenderer`, `ArmorBarRendererAccessor`, `ArmorBarRendererOverflowTickMixin`, `[armor_overflow]`, the 12 `*_tint.png` sheets (`creativeequipment:textures/gui/`), the `detailab` dependency and its range. |
+| UI, WTHIT and JEI changes to Compat | 89 classes: all of `compat/jei/**`, `compat/guititle/`, the Wthit* classes, `StateLines`, `BlockModelIcons`, `RemainderView`, `JarContents`, `PottedPlantHolder`, `PotionFluidTooltip`, `StringEntry`, the AE2 / FTB / Lightman's tooltip stacks, `CompoundEffectTooltip`, and 35 client mixins (JEI, tooltip fixes, Iceberg, title plaques, toasts, Create config widget, JEED, HUD effect icon). `[jei] [gui_title] [toasts] [tooltips] [coaster] [wthit]`, 64 lang keys, all 13 WTHIT plugin entries, the optional dependencies and tested ranges. |
+| Effect UI mixins to Compat (owner answer) | `JeedEffectInfoMixin`, `JeedEffectRendererMixin`, `GuiEffectIconMixin`, `CompoundEffectTooltip`. The rules they read (`EffectRules`, `CompoundEffects`, `[effects]`) stay in Common. |
+| Performance changes stay in Common | Unchanged: `perf/`, the perf mixins, IW growth, WorldEdit, Quark spires, NEA whistles, Armor Trims cache, creative menu disable. |
+| Better Beacons potions to Brewing | `potion/BetterBeaconsPotions` registers `creativebrewing:long_reach`, `long_long_reach`, `strong_long_reach`, `phantom_bane`, `long_phantom_bane` (owner: rename, reverses plan_cb_polish.md 2 (a)/(b) for these five). Remap rows moved from Common's `effects_potions.json` to `data/creativebrewing/swaps/better_beacons_potions.json`; `potions.js` and the NCH Long Reach filling recipe use the new ids. Phantom Bane's rules (rest reset, spawner skip) stay Common effect rules. |
+| Farmer's Respite Caffeinated to Delight | `mixin/farmersrespite/CaffeinatedEffectMixin` (table row with the old range in `CDMixinPlugin`) and `compat/farmersrespite/CaffeinatedPhantomBane` (the Caffeinated -> hidden Phantom Bane half of `PhantomBaneRules`). The compound description row stays in `CompoundEffects`. |
+| Wandering trader to a future economy mod | Marked only (2.3 row, file headers). |
+
+Ids kept so nothing resets: lang keys `creativecommon.wthit.*` / `creativecommon.jei.*` (now in Compat's lang file).
+The WTHIT plugin ids, JEI uids and categories and `state_lines.json` first kept `creativecommon:` too; reversed the same
+day, see 7.20. Config: Compat and Equipment merge the sections from `creativecommon-common.toml` (then from the
+pre-swap `creativeengineering-common.toml`) at construction; Common drops them when Forge corrects its file.
+Build: Brewing, Delight and Devtools compile against Compat (they already required it in `mods.toml`). Every project
+compiles (`./gradlew compileJava --offline`), the seven jars `:build`. Tests: scratch section SQ-CIF (-01 to -04,
+CQ-CIF-01). `configs_edited/` copies are untouched: the merge moves the values on first boot; refresh the backups from
+`config/` after that boot.
+
+### 7.20 Ids that named the wrong owner jar, `ce` names outside Engineering (2026-11-07; built, NOT installed, not booted, not tested)
+
+Plan and full lists: [plan_owner_ids.md](plan_owner_ids.md) (D1 and D2 taken as recommended). Only ids not saved in
+worlds moved; registered ids, NBT keys, capability ids and the stepstool keybind keep their names (rule 1).
+
+- Fixed: `TitlePlaques` (Compat) and `ArmorOverflowRenderer` (Equipment) kept Common's mod id in
+  `@Mod.EventBusSubscriber` after 7.19, so Forge never registered them.
+- WTHIT plugin and line ids `creativecompat:*` (Compat, 15) and `creativecalendar:crop_seasons`; their
+  `config.waila.plugin_*` lang keys follow (remainder_buffer and pot_contents got names, they had none).
+  `config/waila/plugin_toggle.json5` renamed, 14 dead `creativeengineering:` rows dropped, backup added in
+  `configs_edited/root_config/waila/`.
+- JEI uids and categories: Compat `creativecompat:` (3 uids, 19 World tabs), Delight `creativedelight:` (4 uids, Canning,
+  Can Uses, Feast Plating, Seasoning); `creativeengineering:baking` kept (mirrors the recipe type).
+  `recipe-category-sort-order.ini` and its backup carry the new ids, World tabs back after Tipped Arrows.
+- Channels `creativeequipment:stepstool`, `creativecompat:sack_bundle`. `state_lines.json` moved to Compat's
+  `assets/creativecompat/`. Empty `assets/creativeengineering/` dropped from Calendar and Worldgen.
+- Commands `/ccswap /ccaltime /cwglocate /cwgspawnbox /cdevgen /cdevplace /cdevperf /cdevdumpnames /cdevdumpicons`;
+  Devtools members `cdevcapture` (`DevCapture`, `-Dcdevcapture.plan`) and `cdevperfbot` (`DevPerfBot`,
+  `-Dcdevperfbot.out`); package `creativedevtools.cdevplace`; log `logs/cdev_block_state_ranges_<side>.txt`, generator
+  logs `logs/cdevgen/`. Tools, skills, CLAUDE.md, memory and live docs use the new names; dated plans, scratch run
+  logs, run batches and deployed changelogs keep the old ones.
+- Classes `CommonMixinPlugin`, `CommonPotions`, `CEQTiers`; constants `CD_`, `CWG_`, `CEQ_`, `COMPAT_`; the JS list in
+  Brewing's `potions.js` is `CB_POTION_MIXES`.
+- Guard: `tools/id_owner_lint.py` (0 flagged).
+
+Build: the nine jars `:build` OK, MassPlacerTest 30/30. Tests: scratch section SQ-IDS (-01 to -03, CQ-IDS-01 to -06).
+
 ## 8. History
+
+- 2026-11-07, owner: interface (JEI, WTHIT, tooltips) moves to Compat, Detail Armor Bar to Equipment, Caffeinated to
+  Delight, Better Beacons potions to Brewing; Gravity and the IE fluid input stay in Common; wandering trader marked for a
+  future economy mod (7.19).
 
 - 2026-11-02, owner: Creative Split deploys as 1.2.00; the Creative Delight cutover goes in the next deployment before it.
 

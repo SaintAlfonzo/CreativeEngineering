@@ -5,7 +5,7 @@
 //
 // Order: quick registry dumps first, world/worldgen dumps after, then the two slow ones
 // (dumpclimate samples every multi_noise dimension, about 4.5 min; dumpclimatecaves the Overworld's caves).
-// The server jar copy is not a dump command: run tools/dump_server_mods.py (by hand, or through /cegen when
+// The server jar copy is not a dump command: run tools/dump_server_mods.py (by hand, or through /cdevgen when
 // tools/generators.json lists it).
 //
 // /dumploot runs without "all" because its trade half writes the same villager_trades.json as

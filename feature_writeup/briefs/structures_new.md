@@ -136,7 +136,7 @@ variants.
 
 ### Tests
 - ST-260 Load: every family's structure and processor list loads (no "unknown block" / codec errors);
-  `/ceplace structures creativeengineering:greenhouse/*` builds one of each in rows.
+  `/cdevplace structures creativeengineering:greenhouse/*` builds one of each in rows.
 - ST-261 Plants: the spruce greenhouse holds only spruce wood and cold-family plants; 5 placements of one family give
   different pot contents.
 - ST-262 Biomes: `/locate structure creativeengineering:greenhouse/jungle` answers in a jungle-family biome.
@@ -187,7 +187,7 @@ missing ones under the dict's `exposure_*` / mod-prefixed key style (repo, not r
   `loot_container_swaps.json` entry (`tools/audit_loot_containers.py` flags it).
 
 ### Tests
-- ST-263 `/ceplace structures creativeengineering:camera_shop` builds it intact; its chest rolls from the new table
+- ST-263 `/cdevplace structures creativeengineering:camera_shop` builds it intact; its chest rolls from the new table
   (`/loot spawn ~ ~ ~ loot creativeengineering:chests/camera_shop`).
 - ST-264 `/locate structure creativeengineering:camera_shop` answers in a fitted biome.
 
@@ -237,7 +237,7 @@ chosen.
   size class read once with `log = ALL`, 7.4.7 step 4).
 
 ### Tests
-- ST-265 Both kinds build intact with `/ceplace`, `/locate` answers each, chests roll the new tables.
+- ST-265 Both kinds build intact with `/cdevplace`, `/locate` answers each, chests roll the new tables.
 - ST-266 A `waysign_camps` meta can pick a pioneer camp as a part (log line names it).
 
 ---

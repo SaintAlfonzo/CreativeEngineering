@@ -1,3 +1,4 @@
+// requires: creativeequipment
 // Creative Equipment; moved from kubejs/server_scripts/equipment/dragon_autorepair.js on 2026-11-04 (creative_split.md 7.6, wave 7), rows unchanged.
 // Passive slow self-repair for dragon-tier gear (#creativeengineering:dragon_gear -
 // server_scripts/tags/equipmenttags.js) while worn/held - the same "repairs very slowly

@@ -1,3 +1,4 @@
+// requires: creativedelight
 // requires: pneumaticcraft
 // PneumaticCraft food client rows, moved from the pack's client_scripts/ 2026-10-27, rows unchanged.
 // The Fish Tempura renames went with the tempuras (removed items, TODO merges/dishes #11)

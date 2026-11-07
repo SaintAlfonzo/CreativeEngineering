@@ -1,3 +1,4 @@
+// requires: creativedelight
 // requires: vintagedelight
 // Vintage Delight recipe changes (feature_writeup/vintage_delight.md, TODO ports/vintageport). Creative Delight member
 // script: recipe ids are creativedelight:<type>/<suffix> (global.CD.recipes). The port's data stays as upstream ships
@@ -23,7 +24,7 @@ ServerEvents.recipes(e => {
 			[i.blaze_powder, i.salt, i.crimson_fungus, i.fermented_spider_eye, i.ghast_tear], e, 'berserks_brew',
 			{ time: 400, container: i.glass_bottle })
 		R.remove({ id: 'vintagedelight:fermenting/leather_from_fermenting' }, e)
-		R.vdPickling(Item.of(i.leather, 2), [Item.of(i.rotten_flesh, 2), Item.of(i.tree_bark, 2), i.salt, i.vinegar_jar], e,
+		R.vdPickling(Item.of(i.leather, 2), [Item.of(i.rotten_flesh, 2), Item.of(i.any_bark, 2), i.salt, i.vinegar_jar], e,
 			'leather_from_fermenting', { time: 4800 }) // the jar's leftover (empty mason jar) comes back through the leftover slots
 		// Fermented spider eye: the sugar slot takes the plain sweetener tag like the crafting recipe (minecraft/recipes.js;
 		// replaceInput does not reach this recipe type). Rest as upstream.

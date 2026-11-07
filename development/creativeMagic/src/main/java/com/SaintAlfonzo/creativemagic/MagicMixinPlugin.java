@@ -15,6 +15,8 @@ public class MagicMixinPlugin extends GatedMixinPlugin {
 
     private static final List<String> NEA = List.of("nock_enough_arrows");
     private static final List<String> BOTANIA = List.of("botania");
+    private static final List<String> PNC = List.of("pneumaticcraft");
+    private static final List<String> SOPHISTICATED = List.of("sophisticatedcore");
 
     private static final Map<String, List<String>> NEEDS_MOD = Map.ofEntries(
             // Nock Enough Arrows' Cycle, Stockpile and Recovery: not on tables, books or trades
@@ -25,7 +27,13 @@ public class MagicMixinPlugin extends GatedMixinPlugin {
             Map.entry("TrinketCaseInventoryMixin", BOTANIA),
             Map.entry("TrinketCaseSlotMixin", BOTANIA),
             Map.entry("TrinketCaseMenuMixin", BOTANIA),
-            Map.entry("ItemBackedInventoryAccessor", BOTANIA));
+            Map.entry("ItemBackedInventoryAccessor", BOTANIA),
+            // Liquid XP bridge (fluid/FluidBridge), from Creative Engineering 2026-11-06
+            Map.entry("MemoryStickItemMixin", PNC),
+            Map.entry("PneumaticCraftUtilsMixin", PNC),
+            Map.entry("XPFluidManagerMixin", PNC),
+            Map.entry("XpHelperMixin", SOPHISTICATED),
+            Map.entry("XpPumpUpgradeWrapperMixin", SOPHISTICATED));
 
     public MagicMixinPlugin() {
         super("[creativemagic]", NEEDS_MOD);

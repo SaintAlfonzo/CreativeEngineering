@@ -85,49 +85,49 @@ f.t_melon_juice = '#forge:fluid/melon_juice';
 f.tomato_sauce = 'create_central_kitchen:tomato_sauce';
 f.t_tomato_sauce = '#forge:fluid/tomato_sauce';
 
-//Pack fluids (Creative Delight kubejs_startup/creativeengineering/fluids.js)
-f.chorus_juice = 'creativeengineering:chorus_juice';
+//Pack fluids (Creative Delight kubejs_startup/creativedelight/fluids.js; creativeengineering: until 2026-11-06, remapped by CD swaps/food_fluids.json)
+f.chorus_juice = 'creativedelight:chorus_juice';
 f.t_chorus_juice = '#forge:fluid/chorus_juice';
-f.carrot_juice = 'creativeengineering:carrot_juice';
+f.carrot_juice = 'creativedelight:carrot_juice';
 f.t_carrot_juice = '#forge:fluid/carrot_juice';
-f.dandelion_juice = 'creativeengineering:dandelion_juice';
+f.dandelion_juice = 'creativedelight:dandelion_juice';
 f.t_dandelion_juice = '#forge:fluid/dandelion_juice';
-f.turnip_water = 'creativeengineering:turnip_water';
+f.turnip_water = 'creativedelight:turnip_water';
 f.t_turnip_water = '#forge:fluid/turnip_water';
-f.egg_solution = 'creativeengineering:egg_solution';
+f.egg_solution = 'creativedelight:egg_solution';
 f.t_egg_solution = '#forge:fluid/egg_solution';
-f.frosting = 'creativeengineering:frosting';
+f.frosting = 'creativedelight:frosting';
 f.t_frosting = '#forge:fluid/frosting';
 // Kettle tank drinks with no fluid of their own (farmers_respite.md K9)
-f.milk_coffee = 'creativeengineering:milk_coffee';
-f.honey_coffee = 'creativeengineering:honey_coffee';
-f.chocolate_coffee = 'creativeengineering:chocolate_coffee';
-f.dark_coffee = 'creativeengineering:dark_coffee';
-f.syrup_coffee = 'creativeengineering:syrup_coffee';
-f.pumpkin_coffee = 'creativeengineering:pumpkin_coffee';
-f.cherry_blossom_coffee = 'creativeengineering:cherry_blossom_coffee';
-f.lavender_tea = 'creativeengineering:lavender_tea';
-f.matcha_latte = 'creativeengineering:matcha_latte';
-f.berry_matcha_latte = 'creativeengineering:berry_matcha_latte';
+f.milk_coffee = 'creativedelight:milk_coffee';
+f.honey_coffee = 'creativedelight:honey_coffee';
+f.chocolate_coffee = 'creativedelight:chocolate_coffee';
+f.dark_coffee = 'creativedelight:dark_coffee';
+f.syrup_coffee = 'creativedelight:syrup_coffee';
+f.pumpkin_coffee = 'creativedelight:pumpkin_coffee';
+f.cherry_blossom_coffee = 'creativedelight:cherry_blossom_coffee';
+f.lavender_tea = 'creativedelight:lavender_tea';
+f.matcha_latte = 'creativedelight:matcha_latte';
+f.berry_matcha_latte = 'creativedelight:berry_matcha_latte';
 // Drink rules (feature_writeup/creative_delight_drinks.md 6, food/drinks #15): new teas and juices, chorus tea, the
-// sea juices the sea pickle tea brews on (Creative Delight kubejs_startup/creativeengineering/drinks.js)
-f.kiwi_tea = 'creativeengineering:kiwi_tea';
-f.turnip_tea = 'creativeengineering:turnip_tea';
-f.bayberry_tea = 'creativeengineering:bayberry_tea';
-f.hamimelon_tea = 'creativeengineering:hamimelon_tea';
-f.carrot_tea = 'creativeengineering:carrot_tea';
-f.lemon_tea = 'creativeengineering:lemon_tea';
-f.melon_tea = 'creativeengineering:melon_tea';
-f.orange_tea = 'creativeengineering:orange_tea';
-f.pear_tea = 'creativeengineering:pear_tea';
-f.chorus_tea = 'creativeengineering:chorus_tea';
-f.lychee_juice = 'creativeengineering:lychee_juice';
-f.hawberry_juice = 'creativeengineering:hawberry_juice';
-f.mango_juice = 'creativeengineering:mango_juice';
-f.mangosteen_juice = 'creativeengineering:mangosteen_juice';
-f.peach_juice = 'creativeengineering:peach_juice';
-f.sea_grape_juice = 'creativeengineering:sea_grape_juice';
-f.pickerelweed_juice = 'creativeengineering:pickerelweed_juice';
+// sea juices the sea pickle tea brews on (Creative Delight kubejs_startup/creativedelight/drinks.js)
+f.kiwi_tea = 'creativedelight:kiwi_tea';
+f.turnip_tea = 'creativedelight:turnip_tea';
+f.bayberry_tea = 'creativedelight:bayberry_tea';
+f.hamimelon_tea = 'creativedelight:hamimelon_tea';
+f.carrot_tea = 'creativedelight:carrot_tea';
+f.lemon_tea = 'creativedelight:lemon_tea';
+f.melon_tea = 'creativedelight:melon_tea';
+f.orange_tea = 'creativedelight:orange_tea';
+f.pear_tea = 'creativedelight:pear_tea';
+f.chorus_tea = 'creativedelight:chorus_tea';
+f.lychee_juice = 'creativedelight:lychee_juice';
+f.hawberry_juice = 'creativedelight:hawberry_juice';
+f.mango_juice = 'creativedelight:mango_juice';
+f.mangosteen_juice = 'creativedelight:mangosteen_juice';
+f.peach_juice = 'creativedelight:peach_juice';
+f.sea_grape_juice = 'creativedelight:sea_grape_juice';
+f.pickerelweed_juice = 'creativedelight:pickerelweed_juice';
 // Fruits Delight's own juice and tea fluids (bottle pairs ship with the mod); bayberry_soup is Bayberry Juice
 f.bayberry_juice = 'fruitsdelight:bayberry_soup';
 f.hamimelon_juice = 'fruitsdelight:hamimelon_juice';
@@ -270,23 +270,28 @@ StartupEvents.postInit(() => {
  }
 
  let missing = [];
+ let tagEntries = 0;
  for (let key in f) {
  let id = f[key];
  if (typeof id !== 'string') {
  // Object-shaped fluid matchers (NBT, etc.) — skip validation
  continue;
  }
+ // A glob ('displaydelight:*plated_*') is a matcher, and ids of a mod that is not loaded are guarded where they
+ // are used: neither is a dict error (scratch r1106spf).
+ if (id.indexOf('*') >= 0 || !global.has(id)) continue;
  if (id.startsWith('#')) {
  // Tag-based fluid entries aren't validated yet — verify these manually.
  // Forge fluid tag validation requires a TagKey<Fluid> lookup that hasn't
  // been implemented/tested here; flagging rather than guessing at it.
- console.warn('[fluid_dict] Tag entry "' + key + ' -> ' + id + '" is not validated (tag support not yet implemented)');
+ tagEntries++;
  continue;
  }
  if (!fluidExists(id)) {
  missing.push(key + ' -> ' + id);
  }
  }
+ if (tagEntries > 0) console.info('[fluid_dict] ' + tagEntries + ' tag entries not checked (tags load after startup)');
  if (missing.length > 0) {
  console.warn('[fluid_dict] Missing/invalid fluid IDs:\n' + missing.join('\n'));
  }

@@ -66,7 +66,7 @@ Status In Progress / Work KubeJS / tool / TODO `creativedelight/framework #4` (T
 ### Now
 - Food dict built 2026-10-25 and unchanged since: `kubejs/startup_scripts/_lib/food_grammar.js` (grammar,
   `global.subdict.parse / check`), `_lib/food_dict.js` (1542 `f.<key> = i.<key>` lines, checked 2026-10-31),
-  `tools/food_dict.py` (lint, coverage, reverse index, `/cegen run food_dict`), `tools/test_food_dict.sh`. As built:
+  `tools/food_dict.py` (lint, coverage, reverse index, `/cdevgen run food_dict`), `tools/test_food_dict.sh`. As built:
   creative_delight.md 13.5.
 - CDT-08, CDT-10 PASSED offline; SQ-FD-01 log half PASSED (2026-10-25 late run); the `/kubejs eval` value check not run.
 - **No script reads `global.food` yet** (grep of `kubejs/` and the CD tree, 2026-10-31). `tool_dict.js` and
@@ -232,3 +232,54 @@ When it starts: a download step per donor that checks the same sha1 and refuses 
 | framework #8 | Compartment pattern (`CDMixinPlugin`, `mixin.<modid>.`) | S | SQ-CDQ-03, CDT-new2 (proposed, numbered when queued: boot with each optional mod absent) | [creative_delight.md](../creative_delight.md) 12 |
 | framework #10 | Stale upstream member jar logs an ERROR | S | SQ-CDJ-02 (rewritten, not rerun) | [creative_delight.md](../creative_delight.md) 28.3 |
 | framework #11 | Members moved from `global.foodFamily` to `global.CD.food` | S | SQ-FFH-02, FF-10 | [food_families.md](../food_families.md) 4.5, [creative_delight.md](../creative_delight.md) 30 |
+
+## framework #13: Gate Creative Delight worldgen data on the mods it uses
+
+Status Built 2026-11-06 (not installed; as built: [creative_delight.md](../creative_delight.md) 24.4) / Work new jar + KubeJS / TODO id
+`creativedelight/framework #13`. Opened 2026-11-06 from a CEPortTesting failure. Step 4 needed no new lookup: the rules'
+existing `"requires"` key drives both the build split and the skip. Step 5 left as it was (already silent / logged).
+
+### Goal
+Creative Delight boots and creates a world with any optional Delight mod absent. Today the jar ships every wild-crop
+worldgen file unconditionally, so a missing mod makes the whole datapack fail ("Failed to validate datapack").
+
+### Now
+- Seen in CEPortTesting `logs/latest.log`: `Unknown registry key in minecraft:worldgen/trunk_placer_type:
+  myrtrees:rubber_trunk_placer` (from `data/creativedelight/worldgen/configured_feature/wild/rubber_tree.json`). The load
+  stops at the first bad file, so more may follow.
+- Source: `kubejs/data/creativedelight/worldgen/` (copied into the jar by `development/creativeDelight/build.gradle`,
+  `dataTrees`). External namespaces used there: `myrtrees` 4, `endersdelight` 6, `delightful` 1, `ends_delight` 1,
+  `oceanic_delight` 1, `hearthandharvest` 1, `fruitsdelight` 1, `fungidelight` 2, `farmersdelight` 8 (some of these may
+  be nested members, so always loaded; check per mod).
+- Forge 1.19.2-43.3.9 has no `forge:conditions` for worldgen registries (no ConditionalOps in the universal jar), so a
+  JSON condition is not an option.
+- Biome wiring is done by `kubejs/data/creativedelight/kubejs/_worldgen/wild_crops.js` from `wild_crops.json`; it adds
+  feature ids to biomes, so it must also skip features whose mod is absent.
+
+### Build
+1. Inventory: for each file under `worldgen/`, list the non-vanilla namespaces it references (script it; output to the
+   writeup) and mark each as nested member (always present) or optional external.
+2. Split the optional ones at build time: `dataTrees` copies them to `optional/<modid>/data/creativedelight/worldgen/...`
+   instead of `data/...`, so the plain data tree never contains a file that needs an absent mod.
+3. Java: on `AddPackFindersEvent` (SERVER_DATA), register one built-in pack per `optional/<modid>` folder, only when
+   `GatedMixinPlugin.isLoaded(modid)` (or `ModList`) is true. Pack ids `creativedelight_optional_<modid>`, always on,
+   not user-selectable.
+4. `wild_crops.js`: before adding a rule's features, drop any whose mod is not loaded (needs a feature-id to mod
+   lookup, from the step 1 inventory, written as JSON beside `wild_crops.json`); log one line per skipped rule.
+5. Same check for `remove_features` / `disable_modifiers` entries that name an absent mod (harmless, but log it).
+
+### Decisions
+- Runtime filter wrapper over the jar's pack instead of step 2/3: fewer build changes, but touches Forge pack classes
+  and is harder to test. Recommendation: the per-mod packs (steps 2/3).
+- Whether to cover other CD data trees (`loot_tables`, `cup_conversion`) in the same pass: they failed nowhere yet.
+  Recommendation: inventory them in step 1, gate only if they reference absent mods.
+
+### Gotchas
+- Placed features reference configured features by id; gate both files together or the placed one errors.
+- The datapack error hides later ones; re-boot after each fix until it is clean.
+- Pack must also reach the dedicated server and the world-creation screen (the failure was on world select).
+
+### Tests
+- SQ-CDW-01: boot with every optional mod removed one at a time (myrtrees first): no datapack error, world creates.
+- SQ-CDW-02: all mods present: rubber tree still generates in 1 jungle chunk in 4 (SQ-WCD style box), no rule skipped.
+- SQ-CDW-03: log has one skipped-rule line per absent mod and nothing else.

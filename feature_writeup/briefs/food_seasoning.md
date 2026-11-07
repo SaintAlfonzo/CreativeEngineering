@@ -127,7 +127,7 @@ efficiency. Later (scratchpad 2026-10-24): one JEI category per seasoning type i
 
 ### Gotchas
 - Salting copies the stack's other NBT; canned food is out (not in any listed family).
-- A family-driven tag moves when food_families.json is regenerated: rerun `/cegen run food_families` after `/dumpall`.
+- A family-driven tag moves when food_families.json is regenerated: rerun `/cdevgen run food_families` after `/dumpall`.
 
 ### Tests (SE- ids from 2026-10-21, proposed; numbered as FO- when queued)
 - **SE-01 Saltable:** Calamari Roll and Crab Rangoon salt in the grid; Bone Broth, Cooked Rice, Tomato Sauce don't.

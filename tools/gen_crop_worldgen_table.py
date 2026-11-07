@@ -56,6 +56,7 @@ BIOME_TRAITS = INSTANCE / 'kubejs/generation_scripts/worldgen/biome_traits.json'
 MUSHROOM_SPAWNS = INSTANCE / 'kubejs/generation_scripts/worldgen/mushroom_spawns.json'
 FUNGI_UPSTREAM = Path.home() / '.local/share/atlauncher/downloads/FungiDelight-1.20.1-1.3.jar'
 FUNGI_CONFIGURED = 'data/fungidelight/worldgen/configured_feature/'
+GATED_PACK = re.compile(r'^packs/([^/]+)/(data/.+\.json)$')
 
 BASE_JARS = [j for j in (pack_paths.vanilla_jar(), pack_paths.forge_jar('universal')) if j]
 
@@ -248,7 +249,7 @@ CROP_BLOCKS = {
     'vinery:jungle_grape_bush_red': 'Grapes: jungle red', 'vinery:jungle_grape_bush_white': 'Grapes: jungle white',
     'vinery:apple_leaves': 'Apple (Vinery tree)', 'vinery:cherry_leaves': 'Cherry (Vinery tree)',
     'vinery:dark_cherry_leaves': 'Cherry (Vinery tree)',  # 1.5.5 id; the port renames dark_cherry_* to cherry_*
-    # the pack's own json versions of Java features (kubejs/data/creativeengineering/worldgen/*/wild/)
+    # the pack's own json versions of Java features (creativeengineering:wild/*, Creative Worldgen packs/<modid>/)
     'farmersdelight:wild_cabbages': 'Cabbage', 'farmersdelight:wild_beetroots': 'Beetroot (Sea Beet)',
     'farmersdelight:brown_mushroom_colony': 'Brown Mushroom Colony', 'farmersdelight:red_mushroom_colony': 'Red Mushroom Colony',
     'fruitsdelight:hamimelon': 'Cantaloupe', 'delightful:cantaloupe': 'Mini Cantaloupe',  # item_merges.md 2.10
@@ -287,6 +288,12 @@ def iter_sources():
             names = [n for n in zz.namelist() if n.startswith('data/') and n.endswith('.json')]
             fungi = fungi or any(n.startswith(FUNGI_CONFIGURED) for n in names)
             yield label, [(n, (lambda z=zz, n=n: z.read(n))) for n in names]
+            # gated data packs inside a jar (packs/<modid>/data/..., Creative Worldgen and Equipment ModDataPacks:
+            # added only with that mod, which the pack always has), read under their data/ path
+            gated = [(m.group(1), m.group(2)) for m in map(GATED_PACK.match, zz.namelist()) if m]
+            for mod in sorted({g for g, _ in gated}):
+                yield f'{label}!packs/{mod}', [(rel, (lambda z=zz, n=f'packs/{mod}/{rel}': z.read(n)))
+                                               for g, rel in gated if g == mod]
     # the Fungi Delight port ships the upstream configured features (only those) under the same ids
     if not fungi and FUNGI_UPSTREAM.exists():
         z = zipfile.ZipFile(FUNGI_UPSTREAM)

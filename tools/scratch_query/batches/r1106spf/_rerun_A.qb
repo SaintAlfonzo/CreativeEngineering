@@ -1,0 +1,332 @@
+## SQ-STL-01 | stepstool mixins and scripts
+bootreject (Mixin apply failed|InvalidInjectionException).*(EntityStepstoolCollisionMixin|ServerGamePacketListenerStepstoolMixin)
+kjsreject (stepstools\.js|stepstool\.js|curiostags\.js).*(Error|error)
+
+## SQ-CS-01 | crop season hook
+bootreject (Mixin apply failed|InvalidInjectionException).*CropSeasonGrowHookMixin
+bootreject \[crop-seasons\].*(ERROR|error|Error)
+
+## SQ-MB-01 | monster box mixins and reward table
+bootreject (Mixin apply failed|InvalidInjectionException).*(MonsterBoxBlockEntityMixin|CreateBreakerMonsterBoxMixin)
+bootreject (?i)monster.?box.*(missing|not found)
+
+## SQ-VS-01 | vine shearing mixin, flower vine models
+bootreject (Mixin apply failed|InvalidInjectionException).*VineBlockShearMixin
+bootreject (?i)(missing|exception).*(floralench:[a-z_]*vine|botania:solid_vine)
+
+## SQ-CS-02 | crop season type tags (each block passes its own type only)
+> setblock 30 -61 30 minecraft:farmland
+> setblock 30 -60 30 minecraft:wheat
+> setblock 32 -61 30 minecraft:farmland
+> setblock 32 -60 30 the_dirty_stuff:tobacco_seeds
+> setblock 34 -60 30 minecraft:attached_melon_stem
+> setblock 36 -50 30 minecraft:stone
+> setblock 36 -51 30 minecraft:cave_vines
+> execute if block 30 -60 30 #creativeengineering:crop_seasons/temperate
+> execute if block 30 -60 30 #creativeengineering:crop_seasons/warm_dry
+> execute if block 30 -60 30 #creativeengineering:crop_seasons/warm_wet
+> execute if block 30 -60 30 #creativeengineering:crop_seasons/cave
+> execute if block 32 -60 30 #creativeengineering:crop_seasons/temperate
+> execute if block 32 -60 30 #creativeengineering:crop_seasons/warm_dry
+> execute if block 32 -60 30 #creativeengineering:crop_seasons/warm_wet
+> execute if block 32 -60 30 #creativeengineering:crop_seasons/cave
+> execute if block 34 -60 30 #creativeengineering:crop_seasons/temperate
+> execute if block 34 -60 30 #creativeengineering:crop_seasons/warm_dry
+> execute if block 34 -60 30 #creativeengineering:crop_seasons/warm_wet
+> execute if block 34 -60 30 #creativeengineering:crop_seasons/cave
+> execute if block 36 -51 30 #creativeengineering:crop_seasons/temperate
+> execute if block 36 -51 30 #creativeengineering:crop_seasons/warm_dry
+> execute if block 36 -51 30 #creativeengineering:crop_seasons/warm_wet
+> execute if block 36 -51 30 #creativeengineering:crop_seasons/cave
+count Test passed == 4
+look order of the 16 answers in RES/rows/SQ-CS-02.log: pass on 1 (wheat temperate), 6 (tobacco warm_dry), 11 (melon stem warm_wet), 16 (cave vines cave); "Unknown block" for tobacco = id changed
+
+## SQ-CS-08 | greenhouse glass tag
+> setblock 30 -55 34 minecraft:glass_pane
+> execute if block 30 -55 34 #sereneseasons:greenhouse_glass
+> setblock 30 -55 34 immersiveengineering:insulating_glass
+> execute if block 30 -55 34 #sereneseasons:greenhouse_glass
+> setblock 30 -55 34 securitycraft:reinforced_red_stained_glass_pane
+> execute if block 30 -55 34 #sereneseasons:greenhouse_glass
+> setblock 30 -55 34 create:framed_glass_door
+> execute if block 30 -55 34 #sereneseasons:greenhouse_glass
+> setblock 30 -55 34 storagedelight:oak_cabinet_with_glass_doors
+> execute if block 30 -55 34 #sereneseasons:greenhouse_glass
+> setblock 30 -55 34 minecraft:air
+count Test passed == 4
+count Test failed == 1
+
+## SQ-VS-04 | flower vine default state is fertile
+> fill 10 -60 10 18 -53 10 minecraft:stone
+> setblock 18 -58 9 floralench:poppy_vine
+> execute if block 18 -58 9 floralench:poppy_vine[fertile=true]
+expect Test passed
+
+## SQ-VS-05 | fake player shears a flower vine (VS-01 server half)
+> setblock 12 -53 9 floralench:poppy_vine[south=true]
+> setblock 12 -54 9 floralench:poppy_vine[south=true]
+> setblock 12 -55 9 floralench:poppy_vine[south=true]
+> tp qa 12 -60 7
+> pbot hold qa minecraft:shears
+> pbot use qa 12 -54 9 north
+> execute if block 12 -54 9 floralench:poppy_vine[fertile=false]
+> execute if block 12 -55 9 minecraft:air
+> data get entity qa SelectedItem
+expect use (SUCCESS|CONSUME)
+count Test passed == 2
+expect Damage: 1
+
+## SQ-VS-08 | second shear does nothing (VS-03 server half)
+> pbot use qa 12 -54 9 north
+> data get entity qa SelectedItem
+expect use PASS
+expect Damage: 1
+
+## SQ-VS-06 | fake player caps weeping, twisting and kelp tips (VS-05, VS-06 server half)
+> fill 20 -50 10 30 -50 10 minecraft:stone
+> setblock 22 -51 10 minecraft:weeping_vines[age=0]
+> setblock 28 -60 12 minecraft:twisting_vines[age=0]
+> fill 33 -60 14 37 -56 18 minecraft:glass hollow
+> fill 34 -59 15 36 -57 17 minecraft:water
+> setblock 35 -59 16 minecraft:kelp[age=0]
+> tp qa 24 -60 12
+> pbot use qa 22 -51 10 down
+> pbot use qa 28 -60 12 up
+> tp qa 35 -55 13
+> pbot use qa 35 -59 16 up
+> execute if block 22 -51 10 minecraft:weeping_vines[age=25]
+> execute if block 28 -60 12 minecraft:twisting_vines[age=25]
+> execute if block 35 -59 16 minecraft:kelp[age=25]
+count Test passed == 3
+
+## SQ-VS-07 | cave vine with berries is picked, then capped (VS-07 server half)
+> setblock 24 -51 10 minecraft:cave_vines[age=0,berries=true]
+> tp qa 24 -60 12
+> pbot use qa 24 -51 10 down
+> execute if block 24 -51 10 minecraft:cave_vines[berries=false]
+> execute if block 24 -51 10 minecraft:cave_vines[age=25]
+> pbot use qa 24 -51 10 down
+> execute if block 24 -51 10 minecraft:cave_vines[age=25]
+count Test passed == 2
+look order: pass, fail, pass (picked first, capped on the second use)
+
+## SQ-VS-02 | sheared flower vine stays put, unsheared spreads (60 s at randomTickSpeed 300; also runs SQ-VS-03)
+> setblock 10 -53 9 floralench:poppy_vine[south=true,fertile=false]
+> setblock 16 -53 9 floralench:poppy_vine[south=true]
+> setblock 20 -51 10 minecraft:weeping_vines[age=25]
+> setblock 26 -51 10 minecraft:weeping_vines[age=0]
+> tp qa 15 -60 5
+> gamerule randomTickSpeed 300
+sleep 60
+> gamerule randomTickSpeed 3
+> execute if block 10 -53 9 floralench:poppy_vine[fertile=false]
+> execute if block 10 -54 9 minecraft:air
+> execute if block 9 -53 9 minecraft:air
+> execute if block 11 -53 9 minecraft:air
+> execute if block 16 -54 9 floralench:poppy_vine
+count Test passed >= 4
+look the last answer (unsheared grew down) may fail if it spread sideways instead: zq count 13 -60 9 19 -53 9 floralench:poppy_vine in the next row decides
+
+## SQ-VS-03 | weeping vine age 25 does not grow, age 0 does
+> zq count 13 -60 9 19 -53 9 floralench:poppy_vine
+> execute if block 20 -52 10 minecraft:air
+> execute if block 26 -52 10 minecraft:weeping_vines_plant
+count Test passed == 2
+look zq count of the unsheared vine area above 1 (VS-02 unsheared spread)
+
+## SQ-MB-02 | monster box stays and records its wave (Normal difficulty, bot next to it)
+> difficulty normal
+> setblock 20 -60 -20 quark:monster_box
+> tp qa 18 -60 -20
+sleep 4
+> execute if block 20 -60 -20 quark:monster_box
+> data get block 20 -60 -20
+expect Test passed
+expect creativeengineering:phase": 1b
+expect creativeengineering:wave
+look the wave list holds 5 to 8 UUIDs
+
+## SQ-MB-03 | wave dead -> one reward stack, rest phase
+# scratch-only: no mob drops, so the item count is the reward alone; bot leaves at once so the 200-tick cooldown
+# does not re-arm the box with the bot beside it (SQ-MB-04 needs phase 0 first) and the bot cannot pick up the reward
+> kill @e[type=minecraft:item]
+> gamerule doMobLoot false
+> tp qa 0 -60 0
+> execute positioned 20 -60 -20 run kill @e[type=!minecraft:player,type=!minecraft:item,distance=..24]
+sleep 3
+> data get block 20 -60 -20
+> execute positioned 20 -60 -20 if entity @e[type=item,distance=..3]
+expect creativeengineering:phase": 2b
+expect creativeengineering:until
+expect Test passed, count: 1
+> gamerule doMobLoot true
+look until = game time + 72000 normally; this boot has cooldownTicks 200, so until = game time + 200
+
+## SQ-MB-04 | cooldown ends, a new wave starts (cooldownTicks 200)
+> tp qa 0 -60 0
+> kill @e[type=item]
+sleep 12
+> data get block 20 -60 -20
+> tp qa 18 -60 -20
+sleep 4
+> data get block 20 -60 -20
+expect creativeengineering:phase": 0b
+expect creativeengineering:phase": 1b
+> execute positioned 20 -60 -20 run kill @e[type=!minecraft:player,distance=..24]
+
+## SQ-MB-05 | monster box mining tags
+> execute if block 20 -60 -20 #minecraft:mineable/pickaxe
+> execute if block 20 -60 -20 #minecraft:needs_diamond_tool
+count Test passed == 2
+look hardness 25 per the changelog (queue row says 50): check with WTHIT in the client block (CQ-MB-08)
+
+## SQ-MB-06 | Create drill cannot break it
+> setblock 22 -60 -20 create:creative_motor[facing=west]
+> setblock 21 -60 -20 create:mechanical_drill[facing=west]
+sleep 30
+> execute if block 20 -60 -20 quark:monster_box
+expect Test passed
+look if the drill did not turn (motor facing wrong), set facing=east on the motor and rerun the row
+> fill 21 -60 -20 22 -60 -20 minecraft:air
+
+## SQ-CS-06 | crop_seasons.json edit + /reload moves wheat (run last: /reload truncates the KubeJS log)
+shell python3 -c "import json;p='kubejs/generation_scripts/worldgen/crop_seasons.json';d=json.load(open(p));b=d['blocks'];b['temperate'].remove('minecraft:wheat');b['cold'].append('minecraft:wheat');json.dump(d,open(p,'w'),indent=2)"
+> reload
+sleep 20
+> execute if block 30 -60 30 #creativeengineering:crop_seasons/cold
+> execute if block 30 -60 30 #creativeengineering:crop_seasons/temperate
+shell cp "$INST/kubejs/generation_scripts/worldgen/crop_seasons.json" kubejs/generation_scripts/worldgen/crop_seasons.json
+expect Test passed
+expect Test failed
+look the shell step restored the instance file in srv; /reload again before any later season row
+
+## SQ-STL-02 | stepstool recipes and curios tag
+> zq recipes _stepstool
+> zq itemtag creativeengineering:stepstools
+> zq itemtag curios:feet
+> curios list
+count creative(engineering|equipment):shaped/[a-z0-9_]*_stepstool[a-z_]* -> 1 [a-z_]*_stepstool == 16
+expect itemtag creativeengineering:stepstools \(16\)
+expect itemtag curios:feet .*stepstool
+expect (?i)feet
+
+## SQ-SPC-01 | seeds tag
+> zq itemtag forge:seeds
+expect itemtag forge:seeds .*the_dirty_stuff:tobacco_seeds|itemtag forge:seeds .*tobacco_seeds
+expect itemtag forge:seeds .*hamimelon_seeds
+expect itemtag forge:seeds .*lemon_seeds
+reject itemtag forge:seeds .*(botania:[a-z_]*mana[a-z_]*seed|mungal)
+
+## SQ-SPC-02 | seed pouch tag
+> zq itemtag quark:seed_pouch_holdable
+expect itemtag quark:seed_pouch_holdable .*tobacco_seeds
+expect itemtag quark:seed_pouch_holdable .*hamimelon_seeds
+expect itemtag quark:seed_pouch_holdable .*lemon_seeds
+
+## SQ-TD-01 | reset
+> cetime date
+# units are singular (day, month, season, year): `40 days` is refused (TI-32 and the queue wrote days)
+> cetime date add 40 day
+> cetime date reset
+> cetime date
+> time query daytime
+expect Year 1, Early Spring, day 1 of 8, 7:42 am \(world day 1\)
+expect The time is [0-9]{1,2}$
+expect (?i)early spring
+
+## SQ-TD-02 | next / previous / restart
+> cetime date next month
+> cetime date
+> cetime date next month
+> cetime date
+> cetime date next month
+> cetime date
+> cetime date previous season
+> cetime date
+> cetime date add 3 day
+> cetime date
+> cetime date restart month
+> cetime date
+expect Mid Spring
+expect Late Spring
+expect Early Summer, day 1 of 8, 6:00 am
+expect Early Spring, day 4
+look order of the /cetime date answers: Mid Spring, Late Spring, Early Summer day 1 6:00 am, Early Spring day 1, Early Spring day 4, Early Spring day 1
+
+## SQ-TD-03 | set an exact date, no double step
+> cetime date set 3 mid_autumn 5 7:30 pm
+> cetime date
+> season
+sleep 30
+> cetime date
+expect Year 3, Mid Autumn, day 5 of 8, 7:30 pm \(world day 253\)
+count Mid Autumn, day 5 >= 2
+expect (?i)mid autumn
+
+## SQ-TD-04 | wine clock follows
+> wine clock set 0 days
+> cetime date add 1 month
+> wine time
+> cetime date add -1 month
+> wine time
+reject (?i)WARN.*(VintageClock|wine)
+look wine time reads 8 days after the forward step and about 0 after the backward one; the chat line "wine clock moved back" goes to the console too
+
+## SQ-TD-05 | every /cetime date change is logged
+shell test "$(grep -c "\[time\] /cetime date" logs/latest.log)" -ge 8
+
+## SQ-CDV-01 | devtools loads
+bootexpect \[creativedevtools\] loaded, members: \[ceperfbot, cecapture\]
+bootreject \[creativedevtools\].*NOT loaded
+bootreject NoClassDefFoundError.*(BlockStateLookupHook|LevelRandomHook)
+kjsexpect \[creativedevtools\] server scripts ready
+shell grep -E "\[creativedevtools\]" logs/kubejs/startup.log; grep -E "ERROR.*creativedevtools" logs/latest.log | head -5; grep -nE "^\s*\[" config/creativedevtools-common.toml; echo CE:; grep -nE "^\s*\[(debug|worldgen\.mass_place)" config/creativeengineering-common.toml || echo "CE has no debug/mass_place"
+look startup core finished; toml has [debug.*], [worldgen.mass_place], [features]; CE toml lost [debug] and [worldgen.mass_place]
+
+## SQ-CDV-02 | devtools commands answer
+> cegen list
+> ceperf status
+> ceplace status
+> recipescan
+waitlog (?i)(recipescan|recipe scan).*(done|summary|checked|recipes|references) 300
+> dumpworldjei
+sleep 10
+> dumpspawns
+sleep 10
+reject Unknown command
+shell ls -la kubejs/exported/spawns.json; grep -rn "flowerworld" kubejs/server_scripts logs/kubejs/server.log | head -3
+look every command answered; /recipescan summary line; spawns.json written now; /flowerworld registered (not run)
+
+## SQ-CDV-04 | devtools test recipes under the creativedevtools namespace (probe half in cs1b)
+> dumprecipes create
+sleep 20
+shell grep -rho "creativedevtools:[^\"]*" kubejs/exported/recipes/ | sort -u | head -30
+look one *_mech_crafting per metal and wood, netherite, one sequenced assembly, all creativedevtools:
+
+## SQ-CDV-03 | /dumpall (about 5 min)
+> dumpall
+waitlog \[dumpall\] (all \d+ dumps done|\d+/\d+ (dumps )?ok) 900
+expect \[dumpall\] (all 25 dumps done|2[45]/25 (dumps )?ok)
+kjsreject ReferenceError
+kjsreject guardThrowable.*(not|undefined)|writeExportJson.*(not|undefined)
+
+## SQ-IP-15 | Allurement curses under ItemPhysic: Ascension item rises, Fleeting pushes a mob
+> forceload add 16 16 48 48
+sleep 3
+> summon minecraft:item 20 -55 20 {Tags:["ip15a"],PickupDelay:32767,Item:{id:"minecraft:iron_sword",Count:1b,tag:{Enchantments:[{id:"allurement:ascension_curse",lvl:1s}]}}}
+> summon minecraft:item 20 -55 24 {Tags:["ip15n"],PickupDelay:32767,Item:{id:"minecraft:iron_sword",Count:1b}}
+> summon minecraft:iron_golem 40.5 -60 40.5 {Tags:["ip15g"]}
+> summon minecraft:item 40.5 -59 41.5 {Tags:["ip15f"],PickupDelay:32767,Item:{id:"minecraft:iron_sword",Count:1b,tag:{Enchantments:[{id:"allurement:fleeting_curse",lvl:1s}]}}}
+sleep 6
+> execute as @e[tag=ip15a,y=-54,dy=300] run say IP15 ascension above start
+> execute as @e[tag=ip15n,y=-62,dy=4] run say IP15 plain on the ground
+> data get entity @e[tag=ip15a,limit=1] Pos
+> data get entity @e[tag=ip15g,limit=1] Pos
+> data get entity @e[tag=ip15g,limit=1] Motion
+expect IP15 ascension above start
+expect IP15 plain on the ground
+reject (?i)(ItemPhysicServerMixin|AllurementUtil|AllurementItemCurses).*(error|exception|fail)
+bootreject (?i)(ItemPhysicServerMixin|AllurementItemCurses).*(error|exception|fail)
+> forceload remove 16 16 48 48
+look golem position against 40.5 / 40.5 (pushed away from the Fleeting item); the drop by a player (Q) is a client check
+

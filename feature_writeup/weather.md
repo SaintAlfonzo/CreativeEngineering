@@ -474,7 +474,7 @@ climbs back over 0.15.
 
 ### 6.1 Generator
 
-`python3 tools/gen_weather_table.py` (also `/cegen run weather_by_biome`). Exit 1 when `season_types.json` names
+`python3 tools/gen_weather_table.py` (also `/cdevgen run weather_by_biome`). Exit 1 when `season_types.json` names
 an unknown biome or lists one biome twice. Its section 2.1 lists cold, dry, river/beach and >0.8 biomes the
 file leaves untagged; 2.2 must stay empty (no Mid Wet rain in a dry biome); 2.7 is the before/after table.
 

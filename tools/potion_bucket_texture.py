@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 """Generate the potion-bucket item textures as two layers each, so the item can be
-dynamically tinted per-potion at runtime (see development/creativeBrewing/src/main/resources/kubejs_startup/creativeengineering/potion_buckets.js
+dynamically tinted per-potion at runtime (see development/creativeBrewing/src/main/resources/kubejs_startup/creativebrewing/potion_buckets.js
 .color(...)) instead of baking one fixed colour into the PNG.
 
 Takes vanilla `water_bucket.png`, splits it into:

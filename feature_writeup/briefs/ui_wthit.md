@@ -32,7 +32,7 @@ other items, grass blocks, ...).
 ### Build
 1. Decide the source of truth: (a) server provider reads the block's loot table (`LootTables`, look for the entry that
    gives the block's own item behind a `match_tool` silk touch predicate and no non-silk entry for it) and sends a
-   boolean in `appendServerData`; or (b) a generator tool (`tools/*.py`, in `generators.json`, run with `/cegen`) reads
+   boolean in `appendServerData`; or (b) a generator tool (`tools/*.py`, in `generators.json`, run with `/cdevgen`) reads
    `kubejs/exported/loot_tables/` and writes a block tag `creativeengineering:needs_silk_touch` through `global.tags`,
    which the client plugin reads.
 2. Client component: an icon line "Silk Touch" with the enchanted-book or Silk Touch book item icon next to the name, in a
@@ -44,7 +44,7 @@ Tag name above is proposed. The loot dump (`kubejs/exported/loot_tables/<mod>.js
 
 ### Decisions
 Runtime loot-table scan (always right, server cost on look) or generated tag (cheap, stale after a mod change). Recommend
-the generated tag with a `/cegen` module, matching how the pack's other block lists are kept.
+the generated tag with a `/cdevgen` module, matching how the pack's other block lists are kept.
 
 ### Gotchas
 Blocks with several loot pools (leaves: shears or Silk Touch; ores: Fortune) need a rule: show only when no non-Silk-Touch

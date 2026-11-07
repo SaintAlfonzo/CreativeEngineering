@@ -58,7 +58,7 @@ only where generation would certainly say no (locate.md 1, 4).
 
 ### Gate (decide before building)
 
-1. Rerun the census on 1.0.9 (locate #1: LO-03 + LO-14). On a scratch server: `/celocate census 96` on a fresh world,
+1. Rerun the census on 1.0.9 (locate #1: LO-03 + LO-14). On a scratch server: `/cwglocate census 96` on a fresh world,
    seed 8675309, centre 2144 -2592 as in Phase 6. Read `kubejs/exported/worldgen/locate_census.json`:
    `missReasons` per structure.
 2. Build only if `slot_taken + surface_check + earth_fill + priority` is a large part of all misses, say over half,
@@ -163,10 +163,10 @@ against.
 
 ### Tests
 
-- **LO-18 replay census [scratch]:** `foldReplay` true, `/celocate census 96` on a fresh world -> `falseNegatives` 0
+- **LO-18 replay census [scratch]:** `foldReplay` true, `/cwglocate census 96` on a fresh world -> `falseNegatives` 0
   for every structure; `no.replay` non-zero; `missReasons` `slot_taken`, `earth_fill`, `priority`, `surface_check`
   lower than in the same census with it off.
-- **LO-19 replay batch [scratch]:** `/celocate batch all` with `foldReplay` off, then on, same seed and origin -> same
+- **LO-19 replay batch [scratch]:** `/cwglocate batch all` with `foldReplay` off, then on, same seed and origin -> same
   positions for every structure found in both, fewer misses, `savedByStage.replay` > 0, total wall time not higher.
 - **LO-20 rare metas [scratch]:** `foldReplay` on, `/locate structure takesapillage:bastille` and the fortified metas
   (`structures/rates-and-groups #6`) -> answered within `searchTimeoutSeconds` 120.

@@ -19,7 +19,7 @@ file that changes spawn weights per biome, adds mobs to biomes and removes them.
 
 - **Jar:** patcherMod's `worldgen/SpawnTuning` (since 1.0.5, first shipped in pack 1.0.6). The scripts load it directly;
   the older-jar fallback was removed 2026-10-27 ([pack_hygiene.md](pack_hygiene.md) finding 4).
-- **Measure:** `/dumpspawns` (or `/dumpall`), then `python3 tools/gen_spawn_table.py` (or `/cegen run spawns_by_biome`).
+- **Measure:** `/dumpspawns` (or `/dumpall`), then `python3 tools/gen_spawn_table.py` (or `/cdevgen run spawns_by_biome`).
 - **Knobs:** `kubejs/generation_scripts/worldgen/mob_spawns.json` (rules, section 3); CEConfig
   `[worldgen.systems] mobSpawns` (off = every mob as its mod ships it). Rejoin to apply.
 - **Preview without the game:** edit the rules, run the generator: it applies them to the last dump's untuned spawners.
@@ -318,7 +318,7 @@ has cow (More Mooblooms' set switches Buzzier Bees' removal off).
 - [ ] **MS-09 change record:** with the MS-08 rule, spawns.json `tuning.biomes["minecraft:plains"].changes` = `test_cow_plains: scaled x2.0: 8 -> 16` and `before` lists cow 8
 - [ ] **MS-10 switch off:** CEConfig `[worldgen.systems] mobSpawns = false` with the MS-08 rule, rejoin -> log says off, plains cow 8
 - [ ] **MS-11 conditions:** spawns_by_biome.md section 6 names `Animal.checkAnimalSpawnRules` for cow and a registering class for an Alex's Mobs animal
-- [ ] **MS-12 /cegen:** `/cegen run spawns_by_biome dumps` runs `/dumpspawns` then the generator, chat lists spawns_by_biome.md as changed
+- [ ] **MS-12 /cdevgen:** `/cdevgen run spawns_by_biome dumps` runs `/dumpspawns` then the generator, chat lists spawns_by_biome.md as changed
 - [ ] **MS-13 plan rules load:** install the jar, rejoin -> latest.log `[mob-spawns] 12 of 12 rules and 3 of 3 conditions`, and after load `12 rules, N biomes changed ...; conditions: flying_birds, chicken_shores, waterfowl_ponds`; no `[mob-spawns]` errors
 - [ ] **MS-14 dump shows them:** `/dumpspawns`, then `python3 tools/gen_spawn_table.py` -> no WARNING lines; spawns.json `tuning.conditions` lists the 3 ids; dark forest lists mooshroom 8; plains cow 16
 - [ ] **MS-15 dirt ground:** creative, a fresh world or new chunks in a podzol-heavy biome (old growth taiga) -> cows/pigs/sheep spawn on podzol and coarse dirt; `/execute if block ~ ~-1 ~ #minecraft:animals_spawnable_on` on podzol succeeds

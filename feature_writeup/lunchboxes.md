@@ -12,7 +12,7 @@ count), `mobs/tweaks #7` (seagulls), scratchpad 2026-10-29 (reskinning).
 |---|---|
 | Netherite Lunchbox (18 slots, 2 x 9, fire resistant) | BUILT 2026-10-29, scratch server PASSED r1031 (2026-10-31, SQ-LB-01), in game pending |
 | Renames and textures: Lunchbox = Copper, Golden Lunchbox = Iron | BUILT 2026-10-29, untested |
-| Tier recipes that keep the contents (shaped copper/iron, smithing netherite) | BUILT 2026-10-29, scratch server PASSED r1031 (2026-10-31, SQ-LB-02: recipes load clean), in game pending |
+| Tier recipes that keep the contents (shaped copper/iron, smithing netherite) | BUILT 2026-10-29, scratch server PASSED r1031 (2026-10-31, SQ-LB-02: recipes load clean), in game pending. Broken by the Creative split (copper_lunchbox / iron_lunchbox dict aliases dropped, all 3 tier recipes skipped); aliases restored outside the generated food block 2026-11-07, re-run SQ-LB-02 |
 | Skins (smithing a lower-tier empty box or a berry basket on) | BUILT 2026-10-29, untested |
 | Dye (grid, leather-style mixing, base only) | BUILT 2026-10-29, untested |
 | Soap (grid: dye off, then skin off) | BUILT 2026-10-29, untested |

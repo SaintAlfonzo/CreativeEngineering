@@ -7,7 +7,7 @@
 | `biome_config.json`: a multiplier or a replacement per biome, for every `multi_noise` dimension (Overworld from Terralith, End from Nullscape, vanilla Nether) | DEPLOYED (in the 2026-09-27 initial commit; the same 17 edits until 2026-10-19), applies to worlds created after it. Overworld rarity floor (53 more edits, `tools/biome_rarity_floor.py`) BUILT 2026-10-19, solved on a scratch server, DEPLOYED with 1.0.9 (2026-10-19 15:54) |
 | `BiomeLayoutTuner` (patcherMod) solves the edits against climate samples at every world load; `biome_overrides.js` adds the result to KubeJS's virtual datapack | DEPLOYED |
 | `/dumpclimate`: climate samples per dimension, shipped gzipped | DEPLOYED (resampled 2026-09-30 and 2026-10-14); Overworld resampled at 20,000 columns and caves sampled 2026-10-19, DEPLOYED with 1.0.9 |
-| `tools/gen_biome_config.py`: rebuilds the editable config and baselines after a mod update, keeping edits | in use (`/cegen` group `core`) |
+| `tools/gen_biome_config.py`: rebuilds the editable config and baselines after a mod update, keeping edits | in use (`/cdevgen` group `core`) |
 | Structure spawn biomes (biome merges) | **retired 2026-10-11** for biome fits ([structure_tuning.md](structure_tuning.md) 7.2, [biome_fits.md](biome_fits.md)) |
 
 - **Pending:** the rarity floor, `target_pct`, the 20,000-column and cave samples (2026-10-19) shipped with 1.0.9 and
@@ -185,7 +185,7 @@ before), only when an input changed: the result is cached on the input hashes in
 2. `/reload` or rejoin: the solve runs, `result_pct` and `note` update in the file, and the log has `[biome-tuning]`
    lines.
 3. Create a **new** world to use it.
-4. After a mod update that changes a dimension's biome list: `python3 tools/gen_biome_config.py` (or `/cegen run core`)
+4. After a mod update that changes a dimension's biome list: `python3 tools/gen_biome_config.py` (or `/cdevgen run core`)
    refreshes baselines and entry counts, keeps edits, adds new biomes at 1.0 and drops vanished ones with a warning.
 5. If the noise settings change, or a biome is "never hit": `/dumpclimate [columns] [radius]` (default 20,000
    columns since 2026-10-19, about 4.5 minutes) and `/dumpclimatecaves [columns] [radius] [step]` (default 5,000

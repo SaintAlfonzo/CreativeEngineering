@@ -47,7 +47,7 @@ adapters, 3.5 new families, 3.6 unclean soap, 3.7 tool interactions, 3.8a glow a
   soap hook yet.
 - Audit inputs: the `/dumpworldjei` dump (devtool `WorldJeiToolPairs.java`), JEI world tabs
   `kubejs/assets/creativeengineering/jei_world/{dyeing,soaping}/{generated,manual}.json`, generator
-  `tools/gen_jei_world.py` (`/cegen run jei_world`, generators.json:450).
+  `tools/gen_jei_world.py` (`/cdevgen run jei_world`, generators.json:450).
 
 ### Build (dyeing.md 3.8; steps in order)
 1. **Disables (3.1).** Tags (blocktags.js, next to line 78): `t.add(e, b.t_no_world_dye, [...])` with
@@ -76,7 +76,7 @@ adapters, 3.5 new families, 3.6 unclean soap, 3.7 tool interactions, 3.8a glow a
    (mossy / overgrown / rusty / dirty / sandy / ashen / muddy / floral → clean twin, shapes kept); patcherMod loads it as
    data and the soap hook applies it. Shears on overgrown and floral, hoe on muddy mangrove roots: a tool-action hook
    (`PlayerInteractEvent.RightClickBlock`), no drops.
-7. **JEI world tabs:** `/dumpworldjei`, then `/cegen run jei_world`; manual rows for anything the dump can't see.
+7. **JEI world tabs:** `/dumpworldjei`, then `/cdevgen run jei_world`; manual rows for anything the dump can't see.
 8. Changelog bullets per step (`## Dyeing`), dyeing.md 3 marked built per step, DY tests queued.
 
 ### Ids and data

@@ -1,3 +1,4 @@
+// requires: creativedelight
 // requires: rusticdelight
 // Rustic Delight block and item names, moved from the pack's client_scripts/namechanges.js 2026-10-27, rows unchanged.
 ClientEvents.lang('en_us', e => {

@@ -1,0 +1,8 @@
+{
+  "pack": {
+    "description": "Creative Worldgen: driftwood on land and the driftwood flotilla meta structure part (added only with Upgrade Aquatic)",
+    "pack_format": 10,
+    "forge:resource_pack_format": 9,
+    "forge:data_pack_format": 10
+  }
+}

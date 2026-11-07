@@ -221,7 +221,7 @@ public final class StructureSpawnBoxes {
 		return hit == null ? null : hit.spawns();
 	}
 
-	/** The box (or meta part override) answering at pos, or null when vanilla's lookup runs. Also used by /cespawnbox. */
+	/** The box (or meta part override) answering at pos, or null when vanilla's lookup runs. Also used by /cwgspawnbox. */
 	public static Hit lookup(StructureManager structures, MobCategory category, BlockPos pos) {
 		Config cfg = config;
 		boolean boxed = !cfg.boxes().isEmpty() && WorldgenConfig.spawnBoxesEnabled();
@@ -348,11 +348,11 @@ public final class StructureSpawnBoxes {
 		return lo > hi ? null : new int[] {lo, hi};
 	}
 
-	// ── /cespawnbox: what answers a natural spawn here (scratch tests; feature_writeup/structure_tuning.md) ──
+	// ── /cwgspawnbox: what answers a natural spawn here (scratch tests; feature_writeup/structure_tuning.md) ──
 
 	@SubscribeEvent
 	public static void onRegisterCommands(net.minecraftforge.event.RegisterCommandsEvent event) {
-		event.getDispatcher().register(net.minecraft.commands.Commands.literal("cespawnbox").requires(src -> src.hasPermission(2))
+		event.getDispatcher().register(net.minecraft.commands.Commands.literal("cwgspawnbox").requires(src -> src.hasPermission(2))
 				.executes(ctx -> probe(ctx.getSource(), new BlockPos(ctx.getSource().getPosition()), MobCategory.MONSTER))
 				.then(net.minecraft.commands.Commands.argument("pos", net.minecraft.commands.arguments.coordinates.BlockPosArgument.blockPos())
 						.executes(ctx -> probe(ctx.getSource(), net.minecraft.commands.arguments.coordinates.BlockPosArgument.getLoadedBlockPos(ctx, "pos"), MobCategory.MONSTER))

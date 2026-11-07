@@ -32,7 +32,7 @@ import org.spongepowered.asm.mixin.injection.Redirect;
  *
  * <p>So: if bedspreads already ships a curated texture for this pattern, leave its own location
  * alone. Otherwise fall back to {@code creativeengineering:entity/<originNamespace>/<path>} — a
- * texture generated offline by {@code tools/gen_bedspreads_pattern_compat.py}, which reproduces
+ * texture built at load by {@code banners/BannerPatternPack}, which reproduces
  * bedspreads' own recentering convention for every other installed mod's patterns. Both that and
  * bedspreads' own textures are bound against {@code InventoryMenu.BLOCK_ATLAS} (confirmed
  * identical to {@code TextureAtlas.LOCATION_BLOCKS}); {@link BannerPatternAtlasCompat} stitches

@@ -1,3 +1,4 @@
+// requires: creativedelight
 // Placeable food tags, drawn as tooltip lines by assets/creativedelight/kubejs/_qol/placeable_tooltip.js. Moved from
 // the pack's server_scripts/tags/placeabletags.js 2026-10-27, rows unchanged; the tags are not switched by [qol]
 // placeableTooltips (Brewin' and Chewin's coaster reads one of them):

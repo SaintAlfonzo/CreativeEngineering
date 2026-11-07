@@ -30,14 +30,14 @@ import java.util.List;
 import java.util.function.Consumer;
 
 /**
- * /cegen - runs the pack's Python generators (tools/generators.json, see {@link GeneratorRunner}) from
+ * /cdevgen - runs the pack's Python generators (tools/generators.json, see {@link GeneratorRunner}) from
  * in game, on a background thread, reporting each script to chat as it finishes:
  * <pre>
- *   /cegen                        list generators, groups and the last run
- *   /cegen run [target] [dumps]   target = all | group | id (default: [debug.generators] target);
+ *   /cdevgen                        list generators, groups and the last run
+ *   /cdevgen run [target] [dumps]   target = all | group | id (default: [debug.generators] target);
  *                                 "dumps" first runs the /dump* commands those scripts read
- *   /cegen status                 what's running, or the last run's results
- *   /cegen cancel                 kill the running script and skip the rest
+ *   /cdevgen status                 what's running, or the last run's results
+ *   /cdevgen cancel                 kill the running script and skip the rest
  * </pre>
  * With [debug.generators] runAtStartup, the same target also runs as the game starts: kicked off in
  * common setup, waited for at FMLLoadCompleteEvent, which is before any datapack loads on both the
@@ -75,7 +75,7 @@ public final class GeneratorCommand {
                 }
             }
         });
-        if (error != null) LOGGER.warn("[cegen] startup run skipped: {}", error);
+        if (error != null) LOGGER.warn("[cdevgen] startup run skipped: {}", error);
     }
 
     public static void onLoadComplete(FMLLoadCompleteEvent event) {
@@ -93,9 +93,9 @@ public final class GeneratorCommand {
             Thread.currentThread().interrupt();
         }
         if (t.isAlive()) {
-            LOGGER.warn("[cegen] startup run still going after {}s; loading continues, files may change after the first world loads", wait);
+            LOGGER.warn("[cdevgen] startup run still going after {}s; loading continues, files may change after the first world loads", wait);
         } else {
-            LOGGER.info("[cegen] waited {} ms for the startup run", System.currentTimeMillis() - started);
+            LOGGER.info("[cdevgen] waited {} ms for the startup run", System.currentTimeMillis() - started);
         }
     }
 
@@ -132,7 +132,7 @@ public final class GeneratorCommand {
 
     @SubscribeEvent
     public static void onRegisterCommands(RegisterCommandsEvent event) {
-        event.getDispatcher().register(Commands.literal("cegen")
+        event.getDispatcher().register(Commands.literal("cdevgen")
                 .requires(src -> src.hasPermission(2))
                 .executes(ctx -> list(ctx.getSource()))
                 .then(Commands.literal("list").executes(ctx -> list(ctx.getSource())))
@@ -161,7 +161,7 @@ public final class GeneratorCommand {
             source.sendSuccess(Component.literal("  " + g.id()).withStyle(ChatFormatting.WHITE)
                     .append(Component.literal("  [" + String.join(", ", g.groups()) + "]" + dumps).withStyle(ChatFormatting.DARK_GRAY)), false);
         }
-        source.sendSuccess(Component.literal("  /cegen run <all|group|id> [dumps]").withStyle(ChatFormatting.GRAY), false);
+        source.sendSuccess(Component.literal("  /cdevgen run <all|group|id> [dumps]").withStyle(ChatFormatting.GRAY), false);
         return all.size();
     }
 
@@ -187,7 +187,7 @@ public final class GeneratorCommand {
     private static int cancel(CommandSourceStack source) {
         synchronized (LOCK) {
             if (active == null) {
-                source.sendFailure(Component.literal("[cegen] nothing is running"));
+                source.sendFailure(Component.literal("[cdevgen] nothing is running"));
                 return 0;
             }
             active.cancel();
@@ -203,16 +203,16 @@ public final class GeneratorCommand {
             List<Generator> all = GeneratorRunner.load(FMLPaths.GAMEDIR.get());
             selection = GeneratorRunner.select(all, target);
             if (selection.isEmpty()) {
-                source.sendFailure(Component.literal("[cegen] unknown target '" + target + "'; one of: " + String.join(", ", GeneratorRunner.targets(all))));
+                source.sendFailure(Component.literal("[cdevgen] unknown target '" + target + "'; one of: " + String.join(", ", GeneratorRunner.targets(all))));
                 return 0;
             }
         } catch (IOException | IllegalStateException e) {
-            source.sendFailure(Component.literal("[cegen] " + e.getMessage()));
+            source.sendFailure(Component.literal("[cdevgen] " + e.getMessage()));
             return 0;
         }
         synchronized (LOCK) {
             if (active != null) {
-                source.sendFailure(Component.literal("[cegen] " + activeLabel + " is still running - /cegen status, /cegen cancel"));
+                source.sendFailure(Component.literal("[cdevgen] " + activeLabel + " is still running - /cdevgen status, /cdevgen cancel"));
                 return 0;
             }
         }
@@ -220,16 +220,16 @@ public final class GeneratorCommand {
         if (withDumps) {
             // On the server thread, before the scripts start: the dumps read live registries.
             for (String cmd : GeneratorRunner.dumps(selection)) {
-                source.sendSuccess(Component.literal("[cegen] /" + cmd).withStyle(ChatFormatting.GRAY), false);
+                source.sendSuccess(Component.literal("[cdevgen] /" + cmd).withStyle(ChatFormatting.GRAY), false);
                 int ok;
                 try {
                     ok = server.getCommands().performPrefixedCommand(source, cmd);
                 } catch (Throwable t) {
-                    LOGGER.error("[cegen] /{} threw", cmd, t);
+                    LOGGER.error("[cdevgen] /{} threw", cmd, t);
                     ok = 0;
                 }
                 if (ok <= 0) {
-                    source.sendFailure(Component.literal("[cegen] /" + cmd + " failed; its scripts will read the previous dump"));
+                    source.sendFailure(Component.literal("[cdevgen] /" + cmd + " failed; its scripts will read the previous dump"));
                 }
             }
         }
@@ -238,7 +238,7 @@ public final class GeneratorCommand {
         String error = start(target, target, new Reporter() {
             @Override
             public void started(Generator gen, int index, int total) {
-                chat.accept(Component.literal("[cegen] " + (index + 1) + "/" + total + " " + gen.id() + "...").withStyle(ChatFormatting.DARK_GRAY));
+                chat.accept(Component.literal("[cdevgen] " + (index + 1) + "/" + total + " " + gen.id() + "...").withStyle(ChatFormatting.DARK_GRAY));
             }
 
             @Override
@@ -252,7 +252,7 @@ public final class GeneratorCommand {
             }
         });
         if (error != null) {
-            source.sendFailure(Component.literal("[cegen] " + error));
+            source.sendFailure(Component.literal("[cdevgen] " + error));
             return 0;
         }
         source.sendSuccess(prefix().append(Component.literal("running " + selection.size() + " generator(s) for '" + target
@@ -284,7 +284,7 @@ public final class GeneratorCommand {
             try {
                 results = runner.run(selection, reporter);
             } catch (Throwable t) {
-                LOGGER.error("[cegen] {} crashed", label, t);
+                LOGGER.error("[cdevgen] {} crashed", label, t);
             } finally {
                 synchronized (LOCK) {
                     active = null;
@@ -293,10 +293,10 @@ public final class GeneratorCommand {
                     lastLabel = label;
                     lastResults = List.copyOf(results);
                 }
-                LOGGER.info("[cegen] {} done: {}", label, summary(results).getString());
+                LOGGER.info("[cdevgen] {} done: {}", label, summary(results).getString());
                 reporter.done(results);
             }
-        }, "cegen-runner");
+        }, "cdevgen-runner");
         thread.setDaemon(true);
         synchronized (LOCK) {
             if (active != null) return activeLabel + " is still running";
@@ -305,7 +305,7 @@ public final class GeneratorCommand {
             activeLabel = label;
             activeStart = System.currentTimeMillis();
         }
-        LOGGER.info("[cegen] {}: running {}", label, selection.stream().map(Generator::id).toList());
+        LOGGER.info("[cdevgen] {}: running {}", label, selection.stream().map(Generator::id).toList());
         thread.start();
         return null;
     }
@@ -317,7 +317,7 @@ public final class GeneratorCommand {
     private static final int MAX_HIGHLIGHT_LINES = 8;
 
     private static net.minecraft.network.chat.MutableComponent prefix() {
-        return Component.literal("[cegen] ").withStyle(ChatFormatting.GOLD);
+        return Component.literal("[cdevgen] ").withStyle(ChatFormatting.GOLD);
     }
 
     /** One result: a status line, then highlighted output, then (on failure) the output tail. */

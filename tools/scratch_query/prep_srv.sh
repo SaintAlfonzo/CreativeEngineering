@@ -5,7 +5,7 @@
 #   - every jar HARD-LINKED (cp -l) instead of symlinked, so a parallel session's installToMods or rebuild cannot
 #     break a booting server (installToMods moves the old file; the link keeps it)
 #   - dev jars newer than mods/ swapped in (SWAPS below: build/libs jar replaces the mods/ jar of the same mod)
-#   - the dev-only perfBot jar added (bots = fake players; never in the instance's mods/), -Dceperfbot.out=perf/bot
+#   - the dev-only perfBot jar added (bots = fake players; never in the instance's mods/), -Dcdevperfbot.out=perf/bot
 #   - /zq probe copied in as a scratch-only server script, plus tools/scratch_query/datapack/zq (tag #zq:villagers)
 #   - group B: normal world, structures on, seed 8675309 unless level-seed= is given
 #   - prop=value pairs written into server.properties (difficulty=normal, spawn-monsters=true, ...)
@@ -25,10 +25,16 @@ for l in mods/*.jar; do
   [ -L "$l" ] || continue
   t=$(readlink -f "$l"); rm "$l"; cp -l "$t" "$l" 2>/dev/null || cp "$t" "$l"
 done
+# newest build jar of a project (no -own / -sources / -overlay), or a non-existent path
+newest() { ls -t "$INST"/development/$1/build/libs/$2-*.jar 2>/dev/null | grep -vE -- '-(own|sources|overlay)\.jar$' | head -1 || echo "$INST/development/$1/build/libs/none"; }
 # dev jars: "glob in srv/mods to drop|build jar to use"; applied only when the build jar is newer than the mods/ one
 SWAPS=(
-  "creativeengineering-*.jar|$(ls -t "$INST"/development/creativeCommon/build/libs/creativecommon-*.jar | head -1)"
-  "creativedelight-*.jar|$INST/development/creativeDelight/build/libs/creativedelight-1.0.0.jar"
+  # Common was patcherMod (jar creativeengineering-*) until the 2026-11-04 swap; the Engineering jar now owns that name
+  "creativecommon-*.jar|$(newest creativeCommon creativecommon)"
+  "creativeengineering-*.jar|$(newest creativeEngineering creativeengineering)"
+  "creativeequipment-*.jar|$(newest creativeEquipment creativeequipment)"
+  "creativemagic-*.jar|$(newest creativeMagic creativemagic)"
+  "creativedelight-*.jar|$(newest creativeDelight creativedelight)"
   # Veggies, Vintage, Fungi, Miner's and Display are nested in the CD jar since 2026-11-02 (plan_creative_delight.md H):
   # no standalone swap rows for them (a rebuilt member reaches the scratch server through a rebuilt CD jar)
   "creativebrewing-*.jar|$INST/development/creativeBrewing/build/libs/creativebrewing-1.0.0.jar"
@@ -49,7 +55,9 @@ for s in "${SWAPS[@]+"${SWAPS[@]}"}"; do
   if [ -n "$old" ] && ! [ "$b" -nt "$INST/mods/$(basename "$old")" ]; then
     echo "swap: kept $(basename "$old") (build jar not newer)"; continue
   fi
-  rm -f mods/$g; cp -l "$b" mods/ 2>/dev/null || cp "$b" mods/
+  # unlink the target name too: srv/mods files are hard links to the instance's mods/, so a plain cp onto an existing
+  # name writes THROUGH the link into the pack's jar (r1106cbb: the pack's creativecommon jar was overwritten that way)
+  rm -f mods/$g "mods/$(basename "$b")"; cp -l "$b" mods/ 2>/dev/null || cp "$b" mods/
   echo "swap: $(basename "${old:-none}") -> $(basename "$b") ($(date -r "$b" +%m-%d_%H:%M))"
 done
 # Creative Brewing nests the Vinery and Brewin' ports: their standalone jars (and what they replace) would win over it
@@ -64,8 +72,8 @@ for cd in mods/creativedelight-*.jar; do
     if unzip -l "$cd" | grep -q "META-INF/jarjar/$m-"; then rm -f mods/$m-*.jar; echo "nested in CD: dropped standalone $m"; fi
   done
 done
-PB="$INST/development/creativeDevtools/members/perfbot/build/libs/ceperfbot-0.1.0.jar"
-[ -f "$PB" ] && { cp "$PB" mods/; echo "-Dceperfbot.out=perf/bot" >> user_jvm_args.txt; echo "perfBot added"; }
+PB="$INST/development/creativeDevtools/members/perfbot/build/libs/cdevperfbot-0.1.0.jar"
+[ -f "$PB" ] && { cp "$PB" mods/; echo "-Dcdevperfbot.out=perf/bot" >> user_jvm_args.txt; echo "perfBot added"; }
 cp "$INST/tools/scratch_query/zq_probe.js" kubejs/server_scripts/zz_zq_probe.js
 # scratch-only data (zq namespace): entity tag #zq:villagers (vanilla + MCA) for selectors
 mkdir -p kubejs/data && cp -r "$INST/tools/scratch_query/datapack/zq" kubejs/data/

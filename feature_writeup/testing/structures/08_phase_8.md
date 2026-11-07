@@ -91,5 +91,5 @@ All of these were in the scratch copy and have been put back:
 1. **Companion reach:** at the real distance (112-160) no companion reached its town in 8 towns, so shaping is
    rarely exercised. That is fine for correctness (it works when needed). It also means ST-147's "streets end at a
    town" is hard to see in game without the loosened distance.
-2. **Next phase (9):** the flat-world `/ceplace` run (ST-39, 40, 41, 42). The open items from Phase 7 are still
+2. **Next phase (9):** the flat-world `/cdevplace` run (ST-39, 40, 41, 42). The open items from Phase 7 are still
    yours: the 1.0.8 server crash, the prune tag fix, pruning shrinking the size class, and `/dumpstructuregen`.

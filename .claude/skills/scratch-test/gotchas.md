@@ -19,6 +19,10 @@ Sorted by topic. Add new ones under their topic with the date (skill step B5.4).
   mid-run, once a boot-crashing mixin (10-27).
 - Mods for the server: every `mods/*.jar` except `client` rows in mod_sides.md; never `server_mods/` (stale).
   `vinery_upstream/` must be reachable from srv/ (the Vinery port refuses to load without it).
+- Jars in `mods/` but not in `mod_sides.md` are another session's work in progress: a scratch srv takes them (prep_srv
+  copies every non-client jar), and they can crash the boot. 2026-11-06: Immersive Portals 2.3.7 + Serene Seasons' ChunkMap
+  wildcard AT crash at world creation (`MixinChunkMap_C ... cannot reduce visibility`). List the unlisted jars before
+  booting (`for j in srv/mods/*.jar; do grep -qF $(basename $j) mod_sides.md || echo $j; done`) and leave them out.
 - `/` can be nearly full: check `df -h /`; JFR is capped per boot (`JFR_MAX`).
 
 ## Boot
@@ -115,7 +119,7 @@ Sorted by topic. Add new ones under their topic with the date (skill step B5.4).
   biomes (use getNoiseBiome). Jigsaw biome check point = centre of the start piece.
 - `locate structure #tag` logging `NamedSet(...)[[]]` = the tag is empty at runtime.
 - Checks: `[structure-tuning]`, `[structure-frequency]`, `[pool-tuning]`, `[biome-merges]` lines; `dumpstructuregen`
-  then `tools/check_structure_live.py`; `/ceplace structures @ns ...` proves templates load.
+  then `tools/check_structure_live.py`; `/cdevplace structures @ns ...` proves templates load.
 - Perf numbers: per-stage ChunkGeneration means are wall time on contended threads; compare pregen wall time and
   time-to-N-chunks. A run with high idle MSPT = busy machine: discard it.
 
@@ -151,3 +155,98 @@ Sorted by topic. Add new ones under their topic with the date (skill step B5.4).
   file): copy the jars into srv (`drive.sh` decouple) for long runs.
 - Background `run_in_background` shells and Monitor here do not see the game's pids (`kill -0` / `pgrep` fail): wait
   on files (results `totals:` line, drive logs) with a foreground `timeout 590 tail -f | grep -m1`.
+
+## Found in r1106cbo (2026-11-06)
+
+- KubeJS's class filter refuses `net.minecraftforge.fml.ModList` in a probe ("Class is not allowed by class filter"):
+  the whole script fails to load and its command never registers. Use `Platform.isLoaded(modid)`.
+- A probe copied into OUT at setup stays the old copy on a restart of the same OUT (`cbo_run.sh` REUSE): copy it in again
+  with PRE after editing it.
+- `ServerEvents.loaded` lines print once per boot, not on /reload; check them with `bootexpect`, not after a reload.
+- KubeJS 1902.6.2-build.73 never posts `ServerEvents.afterRecipes`: a listener there never runs (no error either).
+- `shell grep -c ...` exits 1 when the count is 0, so a qrun shell step that only prints a count FAILs on 0: add `; true`
+  or test the number. qrun `kjsexpect` reads `server.log`; startup-script lines (`console.log` in startup scripts) are in
+  `startup.log`: use a `shell grep` on that file.
+- A server that refuses to boot (missing donor folder, missing dependency) writes its crash report and then hangs; 
+  `stop_wait.sh` kills its own pid after 180 s. `wait_boot.sh` returns CRASH at once, so no time is lost waiting for Done.
+- `/cbo effects` counts ITEM namespaces of the Armor / Tool Effects rows; a mod that only contributes effect ids never
+  appears there.
+- `[Cc]ycle` as a bootreject matched Forge's "recycleShowTicks" config line: anchor words with `\b`.
+
+## Found in r1106cbb (2026-11-06)
+
+- **Never `cp` onto a name that already exists in `srv/mods/`**: those files are hard links to the instance's `mods/`, so
+  the copy writes THROUGH into the pack's jar. prep_srv's swap did that (stale SWAPS row, `cp -l` failed on the existing
+  name, plain `cp` fallback) and overwrote the pack's `mods/creativecommon-1.1.0.jar`. prep_srv and port_chain now `rm -f`
+  the target name first. Same family: a Gradle build rewrites a build/libs jar in place, so a scratch server hard-linked
+  to it sees the new jar mid-run (stop the server before rebuilding, or accept that its rows are done).
+- prep_srv's SWAPS table has to follow jar renames: after the 2026-11-04 Common swap the `creativeengineering-*` glob is
+  the Engineering jar. Rows now pick the newest build jar per project (`newest()`); read the `swap:` lines before booting.
+- Rhino, two script packs: each has its own `Object.prototype`, so `Object.getPrototypeOf(v) === Object.prototype` in a
+  startup helper is false for every object a server script builds. Use `Object.prototype.toString.call(v)`. And a
+  loop-body `const` keeps its first value (memory `rhino-fieldandmethods-gotcha`): `tools/rhino_const_loop_check.py`
+  lists them. `tools/rhino_scope_test/run.sh` runs a snippet in the pack's Rhino with two scopes.
+- Chain/instance boots: an empty chain can hide behind a bug that "works" in the full pack (first entry present). Compare
+  counts with the full pack (`Found N tags, added X objects`, `removed N recipes`) rather than only checking for errors.
+- A data pack that only fails on worldgen registries ("Unbound values in registry worldgen/biome") stops the boot after
+  the KubeJS server scripts ran, so their log lines (structure gate, tuning) can still be judged from `latest.log`.
+
+## Found in r1106cba (2026-11-06)
+
+- A level with no player and no forced chunk stops ticking entities 300 ticks after start: effects on summoned mobs never
+  apply (golems stayed at 100.0). `forceload add` the chunk first.
+- KubeJS removed-recipe logging: `srv/local/kubejs/dev.properties` with `logRemovedRecipes=true` (not
+  `kubejs/config/`); read at startup only, `/reload` does not pick it up. To find which call removed what, add
+  `tools/scratch_query/nch_remove_diag.js` to `srv/kubejs/startup_scripts/` (logs every `global.NCH.remove` filter to
+  latest.log, skips filters with an undefined value). A filter like `{output: undefined}` is match-all in KubeJS.
+- After an FML missing-dependency or donor-jar stop the JVM stays up: kill your pid (cwd under the scratchpad).
+
+## qrun batches and probes (r1106cbp, 2026-11-06)
+
+- qrun refuses a batch with any directive (`bootreject`, `bootexpect`) before the first `## ID` row ("directive before
+  the first row"); put boot-wide checks inside the first row.
+- `kjsexpect` reads `logs/kubejs/server.log` only; startup prints (`[NCH] removed`, `transition items`, `[compost]`)
+  are in `startup.log`: check them with `shell grep ... logs/kubejs/startup.log`.
+- `port_chain.sh` boots without Creative Delight must also DROP `kubejsdelight-*.jar` (Farmer's Delight comes nested in
+  the CD jar). `/zq` loads the Calendar class lazily now; any new probe class import from an optional Creative jar must
+  be lazy too, or the probe fails to register in boots without that jar.
+
+## Probes and batches (r1106spfx)
+
+- `grep -c` exits 1 when the count is 0, so a `shell` step that ends on it FAILs on the pass case: end with `; true`
+  or test the number (`test "$(grep -c ...)" = 0`).
+- `zq count` takes an optional 8th argument, the dimension (`... <block> minecraft:the_end`); without it the overworld.
+- The full pack cannot boot without Creative Delight (Farmer's Delight is nested in it), so a jar-out row for CD,
+  Calendar or Compat belongs on the port chain, not the full pack.
+- A mixin config plugin's `preApply` runs after Mixin conforms visibility (`MixinPreProcessorStandard.attach`): it
+  cannot rescue another mod's `@Overwrite` from an access-transformer clash.
+
+## Found in r1107tp (Tempad, 2026-11-07)
+
+- perfBot relogs a bot that dies (`/kill`: remove + spawn, no `PlayerEvent.Clone`). Never call
+  `PlayerList.respawn` on a bot as well: perfBot keeps ticking the stale object and the server crashes
+  (`DistanceManager` NPE in `Bots.onServerTick`). Clone-path checks need a client death.
+- Bots never close a screen: after a block or item use opened a menu, `containerMenu` stays that menu, so inventory
+  clicks go nowhere. Click `p.inventoryMenu` directly (`/ztp click P SLOT BUTTON inv`); `closeContainer` is not
+  callable from Rhino on a BotPlayer.
+- Shift-use needs `p.setShiftKeyDown(true)` (`/ztp sneak P on`); `pbot use` is a plain use.
+- A `/give` to a bot fills slot 0 = the main hand, and `item replace ... weapon.mainhand` overwrites slot 0: keep
+  the item under test (a Tempad) in another hotbar slot.
+- Block drops here scatter more than 8 blocks from a survival break: collect with a radius of about 24.
+- Player-only command trees (FTB Teams `party create / invite / join`) do not parse for `execute as <bot>`
+  ("Incorrect argument"): call the mod's API from a probe (`/ztp ftbparty`).
+- Rhino: `ChrononHandler.of(blockEntity)` is ambiguous between overloads; pick one with
+  `$Cls['of(net.minecraft.world.level.block.entity.BlockEntity)'](be)`. `ItemStack#getTag` on a stack from
+  `getMainHandItem()` or `ItemEntity#getItem` throws "Cannot find function getTag": save the stack to a CompoundTag.
+- Moving Curios out of a full-pack srv takes its hard dependents (Botania and its addons, Charm of Undying, Corpse
+  Curios Compat, Elytra Slot, Shulker Box Slot, Simple Hats) plus Wardrobe and Portable Wardrobe, which use Curios
+  without declaring it (crash `NoClassDefFoundError ... ICurioItem`); FTB Teams takes FTB Chunks, FTB Quests, Quests
+  Additions, FTBQuestsOptimizer. Compute the closure from mods.toml (`mandatory = true`) before booting.
+- `wait_boot.sh` reports CRASH for any old file in `srv/crash-reports/`: move old reports out before the next boot.
+- Translated donor data can vanish silently: a port that converts upstream data at load may drop whole files (debug.log
+  only). `/loot spawn ~ ~ ~ loot <ns>:blocks/<block>` = "Dropped 0 items" is the quick check.
+- `pbot hold P ITEM` puts a FRESH stack into slot 0 (replacing what was there); it does not select an inventory stack.
+  Charge or tag the held item after the hold (`/ztp setchr P 0 N`), or set the hand with `item replace entity P
+  weapon.mainhand with ITEM{nbt}` to re-place a dropped block with its exact NBT (r1107tp2).
+- 1.19.2 has no `contents` slot for item entities (`item replace ... from entity @e[type=item] contents` = "Unknown
+  slot") and no `execute if loaded` (r1107tp2).

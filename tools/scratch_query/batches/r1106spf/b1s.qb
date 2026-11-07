@@ -1,0 +1,46 @@
+# r1106spf b1s: same boot, bot up (b1r); SPF-21 with upper-case season names (BATCH-FAULT in b1).
+pace 1
+
+## SQ-SPF-21 | Calendar seasons: off-season cucumber vs wheat
+> execute if block -30 -60 -48 #creativeengineering:crop_seasons/warm_wet
+> execute if block -30 -60 -48 #creativeengineering:crop_seasons/warm_dry
+> execute if block -30 -60 -50 #creativeengineering:crop_seasons/temperate
+> fill -35 -60 -50 -26 -60 -50 minecraft:wheat[age=0]
+> fill -35 -60 -48 -26 -60 -48 vintagedelight:cucumber_crop[age=0]
+> season set MID_WINTER
+> gamerule randomTickSpeed 100
+sleep 30
+> gamerule randomTickSpeed 3
+> zq ages -35 -60 -50 -26 -60 -50 minecraft:wheat
+> zq ages -35 -60 -48 -26 -60 -48 vintagedelight:cucumber_crop
+> fill -35 -60 -50 -26 -60 -50 minecraft:wheat[age=0]
+> fill -35 -60 -48 -26 -60 -48 vintagedelight:cucumber_crop[age=0]
+> season set MID_SUMMER
+> gamerule randomTickSpeed 100
+sleep 30
+> gamerule randomTickSpeed 3
+> zq ages -35 -60 -50 -26 -60 -50 minecraft:wheat
+> zq ages -35 -60 -48 -26 -60 -48 vintagedelight:cucumber_crop
+look winter means below summer means for the warm crop; both still grow in winter (off is slower, never stopped)
+
+
+## SQ-SPF-60b | dragon fan with cobblestone (b1 used a glass bottle: no recipe)
+> kill @e[type=minecraft:item,x=24,y=-60,z=90,distance=..5]
+> summon minecraft:item 24 -60 90 {Item:{id:"minecraft:cobblestone",Count:4b},PickupDelay:32767}
+sleep 15
+> execute positioned 24 -60 90 run data get entity @e[type=minecraft:item,limit=1,sort=nearest,distance=..5] Item
+> setblock 22 -60 90 minecraft:air
+> setblock 22 -61 90 minecraft:dragon_head
+> kill @e[type=minecraft:item,x=24,y=-60,z=90,distance=..5]
+> summon minecraft:item 24 -60 90 {Item:{id:"minecraft:cobblestone",Count:4b},PickupDelay:32767}
+sleep 15
+> execute positioned 24 -60 90 run data get entity @e[type=minecraft:item,limit=1,sort=nearest,distance=..5] Item
+look end_stone in either run (catalyst head in the air flow, or below it)
+
+## SQ-SPF-80d | cooking pot: potato soup (Large Meals recipe used by SQ-LGM-03)
+> setblock -30 -59 -60 minecraft:air
+> setblock -30 -59 -60 farmersdelight:cooking_pot
+> data merge block -30 -59 -60 {Inventory:{Items:[{Slot:0b,id:"minecraft:potato",Count:1b},{Slot:1b,id:"minecraft:potato",Count:1b},{Slot:2b,id:"farmersdelight:onion",Count:1b},{Slot:3b,id:"minecraft:milk_bucket",Count:1b},{Slot:7b,id:"minecraft:bowl",Count:1b}]}}
+sleep 25
+> data get block -30 -59 -60 Inventory
+expect largemeals:potato_soup

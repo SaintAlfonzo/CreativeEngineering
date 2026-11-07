@@ -1,0 +1,9 @@
+# r1106spf SQ-SPF-111: one Creative jar removed (set by the runner), same save.
+pace 1
+## SQ-SPF-111@J@ | boots without the jar
+bootexpect Done \(
+bootreject (NoClassDefFoundError|ClassNotFoundException).*(com\.SaintAlfonzo|ce\.shared)
+bootreject (Mixin apply failed|InvalidInjectionException).*com\.SaintAlfonzo
+kjsreject ReferenceError
+shell grep -E "Missing or unsupported mandatory dependencies" -A6 logs/latest.log | head; grep -hE "ReferenceError|Error occurred while handling event" logs/kubejs/*.log | head -5; grep -ciE "\bERROR\b" logs/latest.log
+look only missing-content warnings the writeups expect

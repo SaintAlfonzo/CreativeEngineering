@@ -1,3 +1,4 @@
+// requires: creativebrewing
 // requires: brewinandchewin
 // Brewin' and Chewin' (backport) recipe changes: feature_writeup/alcohol.md 8.6 and 8.7. Brewin' dishes are Creative
 // Delight's (kubejs/data/creativedelight/kubejs/brewinandchewin/recipes.js).
@@ -52,9 +53,11 @@ R.bncFermenting(Fluid.of(f.bloody_mary, 1000), [i.tomato, i.cabbage, i.salt], f.
 R.remove({ id: 'brewinandchewin:fermenting/rice_wine_from_water' }, e)
 R.bncFermenting(Fluid.of(f.rice_wine, 1000), [i.rice, i.rice, i.brown_mushroom], f.water, e, 'rice_wine_from_water')
 
-// Steel Toe Stout: any metal dust and blaze powder (its Resistance II, 90 s is in the port)
+// Steel Toe Stout: any metal dust (iron ingot when the tag is empty) and blaze powder (its Resistance II, 90 s is in the port)
 R.remove({ id: 'brewinandchewin:fermenting/steel_toe_stout_from_strongroot_ale' }, e)
-R.bncFermenting(Fluid.of(f.steel_toe_stout, 1000), [i.t_metal_dusts, i.crimson_fungus, i.nether_wart, i.blaze_powder], f.strongroot_ale, e,
+// An empty #creativeengineering:metal_dusts (the chain alone has no dust mod) falls back to an iron ingot
+var steelToeMetal = Ingredient.of(i.t_metal_dusts).getStacks().isEmpty() ? i.ingot_iron : i.t_metal_dusts
+R.bncFermenting(Fluid.of(f.steel_toe_stout, 1000), [steelToeMetal, i.crimson_fungus, i.nether_wart, i.blaze_powder], f.strongroot_ale, e,
 	'steel_toe_stout_from_strongroot_ale', { temperature: 1, time: 4800 })
 
 //######################### Spout and drain #########################

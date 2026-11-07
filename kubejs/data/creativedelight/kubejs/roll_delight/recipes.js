@@ -1,3 +1,4 @@
+// requires: creativedelight
 // requires: roll_delight
 // Roll Delight 1.3.1 port recipes (feature_writeup/roll_delight.md 3.1, 3.2, 4 step 8). Creative Delight member script:
 // recipe ids are creativedelight:<type>/<suffix> (global.CD.recipes). The member loads none of the donor's recipe

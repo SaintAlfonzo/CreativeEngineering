@@ -1,3 +1,4 @@
+// requires: creativedelight
 // requires: incubation
 // Wild duck, goose and emu nests (nests.md 2.4, TODO mobs/nests #3, 2026-11-03): the pack's habitats on top of the
 // defaults of Creative Delight's Incubation compartment (its has_feature tags: duck mod river tags, #minecraft:is_savanna

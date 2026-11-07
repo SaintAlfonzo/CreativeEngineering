@@ -15,7 +15,7 @@ is the build.
 | Tab tweaks ([plan_jei_tab_tweaks.md](plan_jei_tab_tweaks.md)): blocks and mobs drawn in slots, notes as one paragraph, one Jar Storage / Jar Fluids row per potion, jar + faucet icon, regenerated tool tabs, "Cut" wording, Lava Interactions, concrete 30 s | BUILT 2026-10-26, shipped in 1.1.04 (client 2026-10-29; server still 1.1.03), not seen in game. Tests JW-19 to JW-27 |
 | Grape Planting category (Backported Vinery 1.5.5-ce-19.2-04, rebuilt in place) | BUILT 2026-10-22, seen in game; slow/fast text rebuilt 2026-10-22, in `mods/` since (Vinery `-06` installed 2026-10-31 00:41). TODO `alcohol/vineryport #23` |
 
-**Before a release:** run `/dumpworldjei` then `/cegen run jei_world` (or `python3 tools/gen_jei_world.py`), so
+**Before a release:** run `/dumpworldjei` then `/cdevgen run jei_world` (or `python3 tools/gen_jei_world.py`), so
 the fixture rows are replaced. The generator exits 1 and prints a WARNING while the fixture or a dump is missing.
 
 ## 1. How it works
@@ -128,7 +128,7 @@ Briefs: [briefs/jei_jei-coverage.md](briefs/jei_jei-coverage.md). TODO rows `jei
 Install patcherMod 1.1.01, moreMooblooms-1.1.0 and backportedVinery-1.5.5-ce-19.2-04 (all rebuilt 2026-10-22) first.
 
 - [ ] **JW-01 Dump:** `/dumpworldjei` -> "2/2 parts"; `kubejs/exported/world_jei/tool_pairs.json` has no `_fixture` and
-  `"errors": 0`; no door or block appeared at the world bottom under spawn. Then `/cegen run jei_world`: no WARNING
+  `"errors": 0`; no door or block appeared at the world bottom under spawn. Then `/cdevgen run jei_world`: no WARNING
   lines; F3+T and rejoin.
 - [ ] **JW-02 Log:** `latest.log` has `[jei_world] N rows in 19 tabs` and no `[jei_world]` warnings, and no
   `sample_syringe: JEI world rows not added`.

@@ -228,7 +228,7 @@ code). Quark's Spawner Replacer module is off. Botania, PneumaticCraft, Create a
 
 ### Tests
 
-- **ST-290 Pillager spawners gone:** new world; `/ceplace` (or `/locate`) a catapult, a Mysticrift oak tower and the
+- **ST-290 Pillager spawners gone:** new world; `/cdevplace` (or `/locate`) a catapult, a Mysticrift oak tower and the
   Blocky Siege ship -> no spawner where the template had one; log line with the removed count (22 if every template
   loads). `removeSpawners = []` brings them back in new chunks.
 - **ST-291 Pillager spawn box:** stand near a boxed Mysticrift tower at night and by day for a few minutes on Normal

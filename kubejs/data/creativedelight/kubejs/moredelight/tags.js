@@ -1,3 +1,4 @@
+// requires: creativedelight
 // requires: moredelight
 // More Delight items in pack item tags. Non-member file (as recipes.js): the requires line gates it.
 ServerEvents.tags('item', e => {

@@ -1,4 +1,4 @@
-// Vanilla food value copies (rows of global.foodValueCopies, applied by creativeengineering/food_value_copies.js).
+// Vanilla food value copies (rows of global.foodValueCopies, applied by creativedelight/food_value_copies.js).
 // Moved from the pack's startup_scripts/cooking/food_values.js 2026-10-25, rows unchanged. Creative Delight startup
 // script. Restart to apply.
 //   glistering_melon_slice <- golden_melon_slice   edible at the golden tier of its base food (Golden Food's gilded

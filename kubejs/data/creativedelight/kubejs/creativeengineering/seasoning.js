@@ -1,3 +1,4 @@
+// requires: creativedelight
 // The pack's seasoning crafts on foods. Moved from the pack's kubejs/server_scripts/cooking/seasoning.js 2026-10-25,
 // rows unchanged.
 ServerEvents.recipes(e => {
@@ -8,7 +9,7 @@ ServerEvents.recipes(e => {
 	global.CD.recipes(() => {
 
 		// ============================================================
-		// Pack seasonings on foods (development/creativeDelight/src/main/resources/kubejs_startup/creativeengineering/seasonings.js holds the seasonings themselves)
+		// Pack seasonings on foods (development/creativeDelight/src/main/resources/kubejs_startup/creativedelight/seasonings.js holds the seasonings themselves)
 		// ============================================================
 		// One craft per seasoning: any food in its seasonable tag (seasoning_tags.js: families, then single adds and
 		// removals) + the seasoning item -> the same food carrying it. Plus one craft per pair that combines, both at

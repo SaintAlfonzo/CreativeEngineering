@@ -1,0 +1,8 @@
+{
+  "pack": {
+    "description": "Creative Equipment: Felsic Gear ore in the End and the felsic block loot table (added only with Felsic Gear)",
+    "pack_format": 10,
+    "forge:resource_pack_format": 9,
+    "forge:data_pack_format": 10
+  }
+}
