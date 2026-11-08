@@ -92,7 +92,7 @@ Eight wild plants. Seven `wild_*` blocks are `FlowerBlock`s; the mature dandelio
 **Mature dandelion maturing and reverting (2026-10-30).** Plain dandelion -> mature: patcherMod `crops/DandelionMaturing`,
 called from the random tick of Rich Soil, Rich Soil Farmland and Fertile Soil (`mixin/Dandelion*Mixin`); odds are
 `[dandelion_maturing] richSoilTicks / fertileSoilTicks` in creativeengineering-common.toml (average soil random ticks per
-conversion, default 20 / 10 since 2026-10-31 (was 10 / 20; Fertile Soil is the faster one), 0 = off). Mature -> plain: `DandelionBlock.use` with `#forge:shears` or `#forge:tools/knives`
+conversion, default 10 / 5 since 2026-11-07 (plan_farming_cooking_batch.md Q3; was 20 / 10 from 2026-10-31, 10 / 20 before; Fertile Soil is the faster one), 0 = off; the setting now lives in creativedelight-common.toml). Mature -> plain: `DandelionBlock.use` with `#forge:shears` or `#forge:tools/knives`
 turns it into a vanilla dandelion, drops 2-3 leaves and a dandelion at 50 %, and damages the tool.
 
 Breaking one (checked for turnip, garlic, sweet potato and dandelion) drops the planting item, plus a 20 % roll of the
@@ -576,7 +576,7 @@ Crops and worldgen
 - [ ] VD-08 No VD bell pepper, seeds, crate or wild patch exists; Rustic peppers work in every VD recipe.
 - [ ] VD-09 VD crops follow the copied seasons.
 - [ ] VD-42 *Scratch server PASSED r1031 (2026-10-31, SQ-DM-01, -02).* Plant a vanilla Dandelion on Rich Soil and one on Fertile Soil; `/tick` or wait: each turns into a Mature
-  Dandelion (about 10 and 20 minutes); `[dandelion_maturing] richSoilTicks = 0` stops it (TODO `ports/veggiesport #4`).
+  Dandelion (about 10 and 5 minutes since 2026-11-07); `[dandelion_maturing] richSoilTicks = 0` stops it (TODO `ports/veggiesport #4`).
 - [ ] VD-43 *Scratch server PASSED r1031 (2026-10-31, SQ-DM-03, -03b drop rate).* Right-click a Mature Dandelion with shears, then another with a knife: each becomes a plain Dandelion, drops
   2-3 Dandelion Leaves (a Dandelion about half the time) and takes 1 durability; other items do nothing. Scratch: SQ-DM-01 to -03.
 

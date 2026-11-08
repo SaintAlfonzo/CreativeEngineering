@@ -20,6 +20,8 @@ if (global.CD) global.CD.genPut('can_servings', 'vintagedelight', {
   "canned_cucumber_salad": 8,
   "canned_ghostly_chili": 8,
   "canned_oatmeal": 8,
-  "canned_pickle_soup": 8
+  "canned_pickle_soup": 8,
+  "canned_cheese_pizza": 6,
+  "canned_meat_pizza": 6
  }
 })

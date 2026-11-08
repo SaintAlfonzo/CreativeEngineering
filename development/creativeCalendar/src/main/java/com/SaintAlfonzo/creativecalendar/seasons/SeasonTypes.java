@@ -463,6 +463,7 @@ public final class SeasonTypes {
     @SubscribeEvent
     public static void onTagsUpdated(TagsUpdatedEvent event) {
         TYPE_CACHE = new ConcurrentHashMap<>();
+        SeasonAnswers.clear();
         synchronized (CACHES) {
             CACHES.clear();
         }

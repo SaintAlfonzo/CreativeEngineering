@@ -171,6 +171,13 @@ Golem: R4-07 ([plan_1.0.4.md](plan_1.0.4.md)). Repack: CN-07 to CN-09 (section 9
   no separate `CannedGoods-*.jar` in `mods/`; every `canned_goods:` item, the 202 generated cans and `canned_goods:` tags
   as before (JEI, `/kubejs hand`).
 - [ ] **CN-08 Old golem keeps its colour:** a golem dyed before the repack (NBT `Color`) loads with the same colour.
+- [ ] **CN-10 Every feast cans:** JEI on each feast block (the four pizzas, Stuffed Cantaloupe, End's Delight's three,
+  Rice Roll Medley, Miner's three, Guardian Soup, the two roll medleys, the three bell pepper medleys, Rice Roll Royale,
+  Lasagna Pan, Stuffed Bell Peppers) → one can recipe each: the block and an empty can make a 6-serving can.
+- [ ] **CN-11 Feast can values:** eat a Canned Cheese Pizza and a Canned Bell Pepper Medley serving → the serving
+  item's hunger and saturation (cheese pizza slice, red stuffed bell pepper).
+- [ ] **CN-12 Oatmeal can sugar:** JEI on Canned Oatmeal → 6 oatmeal, or 3 oatmeal and 1 sugar; no salt or bone broth
+  recipe.
 - [ ] **CN-09 Golem upstream behaviour:** a golem still breaks mushrooms, plays its hurt sound, drops on death and reacts
   to lightning as before (the decompiled class keeps the upstream code).
 
@@ -220,3 +227,10 @@ Golem: R4-07 ([plan_1.0.4.md](plan_1.0.4.md)). Repack: CN-07 to CN-09 (section 9
 - **Unchanged:** `CanPagesJEI`, the generated per-type cans, `ItemStackCanServingsMixin` and every `canned_goods:` id
   and tag stay in CD and name the mod only by id.
 - **Tests:** CN-04 to CN-09 (section 7); scratch rows SQ-CNG-01 to -04, CQ-CNG-01, -02 (queue section SQ-CDJ6).
+- 2026-11-07 (plan_farming_cooking_batch A5, A12): `cans/canning #17` every feast block cannable: 21 new rows in
+  `gen_can_types.py` section `feast` (6 servings; several-plate feasts take their first plate as the value source;
+  Gleaming Salad skipped, its salad can exists), 33 feast cans. `cans/canning #21` Canned Oatmeal's additive recipe takes
+  sugar (`_sugar`) instead of salt or bone broth, through the new per-can `CAN_OPTS` table. The same generator run picked
+  up 15 cans of foods added since its last run (Large Meals, Roll Delight, salads and soups). `tools/gen_out.py` now writes
+  `// requires: creativedelight` into member scripts under the pack data tree (the run had dropped the hand-added line).
+  Sprites: the new cans borrow their family sprite (`textures/food #1`). CN-10 to CN-12. Needs a CD + Common rebuild.

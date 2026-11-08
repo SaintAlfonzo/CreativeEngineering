@@ -1,0 +1,35 @@
+# r1108cge2 client block 2: the same throwaway client JOINED to the b1 scratch server (cge2_run.sh join OUT: boots the
+# b1 srv again with the default Create Gravity and Common configs and leaves it up). Hand steps before this batch:
+# Multiplayer > Direct Connection > localhost:25599 (offline-mode server), then op the player from the console
+# (cge2_run.sh op OUT reads the name from the server log). This is the only row that exercises the dedicated-client
+# lookup (the synced SERVER config): CQ-CGE-03b.
+pace 2
+
+## CQ-CGE-03a | joined a dedicated server, no error
+bootreject Mixin apply failed|InvalidMixinException|InjectionError|InvalidInjectionException
+> gamemode creative
+
+## CQ-CGE-03 | End on a dedicated server: objects fall slowly and smoothly, no snapping (no motion packets)
+# one function summons everything in one tick (datapack tools/scratch_query/datapack/cge2_drop in the b1 world); camera on glass
+> execute in minecraft:the_end run tp @s 14 125 9
+sleep 8
+> execute in minecraft:the_end run fill 12 111 7 16 111 11 minecraft:glass
+> execute in minecraft:the_end run fill -2 60 -2 8 125 20 minecraft:air
+> execute in minecraft:the_end run tp @s 14 112 9 facing 3 115 9
+sleep 3
+> function cge2:drop_end
+shot join_end_t0
+sleep 1
+shot join_end_t1
+sleep 2
+shot join_end_t3
+look as CQ-CGE-02, on the server: no jump back up about once a second (items, blocks; TNT every half second) that would mean the client predicts vanilla gravity
+
+## CQ-CGE-03b | the dedicated client parsed the synced Create Gravity list
+bootexpect \[low gravity\] client biome list: 1 of 1 entries \[#minecraft:is_end;;\]
+
+## CQ-CGE-03c | ridden boat glides down off an End edge (the client moves a steered boat)
+> execute in minecraft:the_end run fill 40 100 -3 46 100 3 minecraft:obsidian
+> execute in minecraft:the_end run summon minecraft:boat 43 101 0
+> execute in minecraft:the_end run tp @s 41 101 0 facing 43 101 0
+look hand: right-click the boat (xdotool click at the window centre), hold W until it leaves the platform, then shots every second: the boat sinks slowly (about 20 percent of vanilla), no snapping

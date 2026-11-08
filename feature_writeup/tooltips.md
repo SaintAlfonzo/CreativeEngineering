@@ -306,6 +306,8 @@ Hover items in JEI or the inventory. BlockRunner's Speed Multiplier line is off 
   lines; Glycerol → "Tastes sweet!" in gray. Holding Shift → PNC's own aqua text.
 - [ ] **TT-42 No Speed Multiplier line:** hover asphalt, stone and a framed cube. → No "Speed Multiplier" line; look at the
   placed blocks with WTHIT → the walk speed line is still there (`gameplay/blockrunner #6`).
+- [ ] **TT-43 Botany Pots:** hover a terracotta, a concrete and a hopper botany pot → "Useful for flowers, not great for
+  crops" on each ([botany_pots.md](botany_pots.md)).
 
 - [ ] **TT-09 No dead patterns:** search `logs/latest.log` for `[addTooltipPattern]`. → Every line reports more than 0 matches.
 
@@ -369,3 +371,5 @@ Not a line but the tooltip box: large item tooltips should run off the bottom of
   replaced by the description in plain gray (`pnc_tooltips.js`, was glycerol only, in aqua); stepstools' "Worn in the
   Feet slot" line dropped. patcherMod 1.1.07 built and installed. `#12` (tree fruit season lines) was already built
   with `farming/crops #5` on 2026-10-30. TT-39 to TT-41.
+- 2026-11-07: Botany Pots line on every botany pot (`addTooltipPattern 'botanypots:*botany_pot'` in
+  `client_scripts/tooltips.js`), owner's note with the slower pot growth ([botany_pots.md](botany_pots.md)). TT-43.

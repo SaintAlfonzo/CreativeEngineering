@@ -197,6 +197,117 @@ if (global.CD) global.CD.genPut('can_types', 'miners_delight', {
     }
    ],
    "texture": "canned_goods:items/canned_golden_apples"
+  },
+  "canned_fake_meatloaf": {
+   "section": "feast",
+   "existing": false,
+   "name": "Canned Fake Meatloaf",
+   "servings": 6,
+   "hunger": 8,
+   "modifier": 0.65,
+   "meat": false,
+   "fast": false,
+   "always": false,
+   "glow": false,
+   "effects": [
+    {
+     "effect": "farmersdelight:comfort",
+     "ticks": 2400,
+     "amp": 0,
+     "chance": 1
+    }
+   ],
+   "sources": [
+    "plate_of_fake_meatloaf"
+   ],
+   "recipes": [
+    {
+     "suffix": "",
+     "inputs": [
+      {
+       "any": [
+        "fake_meatloaf"
+       ],
+       "n": 1
+      }
+     ]
+    }
+   ],
+   "texture": "canned_goods:items/canned_food"
+  },
+  "canned_glazed_arachnid_limbs": {
+   "section": "feast",
+   "existing": false,
+   "name": "Canned Glazed Arachnid Limbs",
+   "servings": 6,
+   "hunger": 12,
+   "modifier": 0.8,
+   "meat": false,
+   "fast": false,
+   "always": false,
+   "glow": false,
+   "effects": [
+    {
+     "effect": "farmersdelight:nourishment",
+     "ticks": 4800,
+     "amp": 0,
+     "chance": 1
+    }
+   ],
+   "sources": [
+    "plate_of_glazed_arachnid_limbs"
+   ],
+   "recipes": [
+    {
+     "suffix": "",
+     "inputs": [
+      {
+       "any": [
+        "glazed_arachnid_limbs"
+       ],
+       "n": 1
+      }
+     ]
+    }
+   ],
+   "texture": "canned_goods:items/canned_food"
+  },
+  "canned_stuffed_squid": {
+   "section": "feast",
+   "existing": false,
+   "name": "Canned Stuffed Squid",
+   "servings": 6,
+   "hunger": 10,
+   "modifier": 0.8,
+   "meat": false,
+   "fast": false,
+   "always": false,
+   "glow": false,
+   "effects": [
+    {
+     "effect": "farmersdelight:nourishment",
+     "ticks": 4800,
+     "amp": 0,
+     "chance": 1
+    }
+   ],
+   "sources": [
+    "bowl_of_stuffed_squid"
+   ],
+   "recipes": [
+    {
+     "suffix": "",
+     "inputs": [
+      {
+       "any": [
+        "stuffed_squid"
+       ],
+       "n": 1
+      }
+     ]
+    }
+   ],
+   "texture": "canned_goods:items/canned_food"
   }
  }
 })

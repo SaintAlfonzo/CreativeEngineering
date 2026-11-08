@@ -33,7 +33,7 @@ ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 EXP = os.path.join(ROOT, 'kubejs', 'exported')
 OUT_MD = os.path.join(ROOT, 'feature_writeup', 'item_physics_audit.md')
 OUT_JSON = os.path.join(ROOT, 'kubejs', 'generation_scripts', 'physics', 'item_physics_families.json')
-P = 'creativeengineering:physics/'
+P = 'creativecompat:physics/'
 
 # --------------------------------------------------------------------------------------------------------
 # Families. water: skim (rests on the surface), float (dips, rises), sink. fire: burn (fire and lava destroy),

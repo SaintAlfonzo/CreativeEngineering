@@ -79,10 +79,10 @@
 [dandelion_maturing]
 	#Rich Soil and Rich Soil Farmland (Farmer's Delight).
 	#Range: 0 ~ 100000
-	richSoilTicks = 20
+	richSoilTicks = 10
 	#Fertile Soil (Immersive Weathering's mulch block).
 	#Range: 0 ~ 100000
-	fertileSoilTicks = 10
+	fertileSoilTicks = 5
 
 #Pack changes to crop harvest drops (server side, applied on /reload).
 [crop_drops]

@@ -175,6 +175,67 @@ if (global.CD) global.CD.genPut('can_types', 'endersdelight', {
    ],
    "texture": "canned_goods:items/canned_food"
   },
+  "canned_amberveil_stew": {
+   "section": "soup",
+   "existing": false,
+   "name": "Canned Amberveil Stew",
+   "servings": 8,
+   "hunger": 5,
+   "modifier": 0.5,
+   "meat": false,
+   "fast": false,
+   "always": false,
+   "glow": false,
+   "effects": [
+    {
+     "effect": "minecraft:regeneration",
+     "ticks": 450,
+     "amp": 0,
+     "chance": 1
+    },
+    {
+     "effect": "minecraft:speed",
+     "ticks": 1800,
+     "amp": 0,
+     "chance": 1
+    }
+   ],
+   "sources": [
+    "amberveil_stew"
+   ],
+   "recipes": [
+    {
+     "suffix": "",
+     "inputs": [
+      {
+       "any": [
+        "amberveil_stew"
+       ],
+       "n": 6
+      }
+     ]
+    },
+    {
+     "suffix": "_broth",
+     "inputs": [
+      {
+       "any": [
+        "amberveil_stew"
+       ],
+       "n": 3
+      },
+      {
+       "any": [
+        "salt",
+        "bone_broth"
+       ],
+       "n": 1
+      }
+     ]
+    }
+   ],
+   "texture": "canned_goods:items/canned_rabit_stew"
+  },
   "canned_chorus_stew": {
    "section": "soup",
    "existing": false,

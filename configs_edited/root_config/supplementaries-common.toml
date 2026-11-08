@@ -172,7 +172,7 @@
 		clean_blacklist = ["minecraft:glazed_terracotta"]
 
 	[functional.flax]
-		enabled = true
+		enabled = false
 
 		[functional.flax.wild_flax]
 			enabled = false

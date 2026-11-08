@@ -48,6 +48,8 @@ R.replaceInput({ id: 'beautify:warped_picture_frame' },
   i.white_wool, [i.white_wool, i.hemp_fabric, i.paper, i.canvas], e)
 R.replaceInput({ id: 'beautify:quartz_picture_frame' },
   i.white_wool, [i.white_wool, i.hemp_fabric, i.paper, i.canvas], e)
+R.replaceInput({ id: 'everycomp:bd/quark/azalea_picture_frame' },
+  i.white_wool, [i.white_wool, i.hemp_fabric, i.paper, i.canvas], e)
 R.replaceInput({ id: 'everycomp:bd/quark/ancient_picture_frame' },
   i.white_wool, [i.white_wool, i.hemp_fabric, i.paper, i.canvas], e)
 R.replaceInput({ id: 'everycomp:bd/quark/blossom_picture_frame' },

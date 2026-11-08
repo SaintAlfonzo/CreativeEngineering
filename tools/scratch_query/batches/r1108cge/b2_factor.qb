@@ -1,0 +1,30 @@
+# r1108cge boot 2: same srv and world as b1, stopped; world/serverconfig/create_gravity-server.toml biome_configs set to
+# ["#minecraft:is_end;;-1", "minecraft:plains;;"] while stopped (SQ-CGE-05). First rows run BEFORE any /reload
+# (SQ-CGE-02 "as booted": is Create Gravity's biome list built on a dedicated server start?).
+pace 2
+
+## SQ-CGE-02e | fresh boot, no /reload yet: Create Gravity lookup and drops in the End
+> execute in minecraft:the_end run forceload add 0 0
+> zgv cfg the_end 0 70 0
+waitlog \[zgv\] cfg dim=minecraft:the_end 10
+> zgv drop the_end 0 120 0
+waitlog \[zgv\] drop done dim=minecraft:the_end 20
+> execute in minecraft:the_end run summon minecraft:villager 0 70 4 {NoAI:1b,PersistenceRequired:1b,Tags:["cge02v"]}
+sleep 6
+> execute in minecraft:the_end run attribute @e[tag=cge02v,limit=1] forge:entity_gravity get
+> kill @e[tag=cge02v]
+look before any reload: cfg config=null and End drop = overworld drop (about 24.6 at t=40), villager 0.08 = Create Gravity inert on a dedicated server until /reload
+
+## SQ-CGE-05 | factor -1 in the End, plains listed with the default factor, desert unlisted
+> reload
+sleep 10
+> zgv cfg the_end 0 70 0
+> zgv cfg overworld 0 -60 0
+waitlog \[zgv\] cfg dim=minecraft:overworld 10
+> zgv drop the_end 0 120 0
+waitlog \[zgv\] drop done dim=minecraft:the_end 20
+> zgv drop overworld 0 120 0
+waitlog \[zgv\] drop done dim=minecraft:overworld 20
+expect \[zgv\] cfg dim=minecraft:the_end .*factor=-1(\.0)?\b
+expect \[zgv\] cfg dim=minecraft:overworld biome=minecraft:plains factor=-0\.8
+look End t=40 drop 0 (no fall) for all three; plains (superflat = plains) drop about 25 percent of vanilla 24.6; desert half in SQ-CGE-05b

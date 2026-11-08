@@ -34,5 +34,6 @@
   "creativecompat:silk_touch": true,
   "creativecompat:operator_blocks": true,
   "creativecompat:pot_contents": true,
-  "tempad:main": true
+  "tempad:main": true,
+  "creativeengineering:crop_seasons": true
 }

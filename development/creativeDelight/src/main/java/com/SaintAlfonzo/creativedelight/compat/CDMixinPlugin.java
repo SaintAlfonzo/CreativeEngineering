@@ -102,7 +102,9 @@ public class CDMixinPlugin extends GatedMixinPlugin {
 	 */
 	private static final Map<String, String> NEEDS_ALSO_MOD = Map.of(
 			"AlexsMobsSeagullItemMixin", "solapplepie",
-			"AlexsMobsSeagullStealMixin", "solapplepie");
+			"AlexsMobsSeagullStealMixin", "solapplepie",
+			// Farmer's Respite coffee bushes break only while the coffee merge into Rustic Delight applies (item_merges.md 2.8)
+			"CoffeeBushRemovedMixin", "rusticdelight");
 
 	@Override
 	public boolean shouldApplyMixin(String targetClassName, String mixinClassName) {

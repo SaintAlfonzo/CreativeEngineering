@@ -1,0 +1,17 @@
+# r1108cge2 boot 3: same srv and world, stopped first; the runner adds the Nether to Common's limit:
+#   [perf] gravityDimensions = ["minecraft:the_end", "minecraft:the_nether"]   (config/creativecommon-common.toml)
+# biome_configs as boot 2.
+pace 2
+
+## SQ-CGE-09b | with the Nether allowed, its listed biome lowers gravity for every type and for mobs
+# clear from x -3: the boat is 1.375 wide, at x 0 it overlaps column -1 and wedges in the netherrack (drop 0.000)
+> execute in minecraft:the_nether run forceload add -3 -3 9 21
+> execute in minecraft:the_nether run fill -3 80 -3 9 124 21 minecraft:air
+> forceload add 0 0 6 18
+> zgv dropall the_nether 0 120 0
+waitlog \[zgv\] drop done dim=minecraft:the_nether 20
+> zgv dropall overworld 0 120 0
+waitlog \[zgv\] drop done dim=minecraft:overworld 20
+shell python3 "$INST/tools/scratch_query/cge_judge.py" logs/latest.log the_nether overworld low
+> execute in minecraft:the_nether run attribute @e[tag=cge09,limit=1] forge:entity_gravity get
+expect Entity Gravity for entity .* is 0\.01599

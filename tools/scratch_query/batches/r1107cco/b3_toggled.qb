@@ -1,0 +1,53 @@
+# r1107cco boot 2: the same `full` srv and level cco1 rebooted with the toggled settings (scratch srv only):
+#   srv/user_jvm_args.txt  -Dcreativecommon.iwFastTick=false                     (SQ-CCO-05 second half)
+#   qrun.py toml srv/config/creativecommon-common.toml perf gravityLimitDimensions false   (SQ-CCO-08 second half)
+#   qrun.py toml srv/config/creativecommon-common.toml effects removed '["minecraft:slowness"]'   (SQ-CCO-16 second half)
+# SQ-CCO-08 samples the falling zombies every second: Gravity adds its modifier only while an entity falls.
+pace 2
+
+## SQ-CCO-05b | IW fast path off: the off line is logged and moss still spreads
+bootexpect (?i)random-tick fast path off
+bootreject (?i)unknown signature|handler not found
+> pbot remove-all
+sleep 2
+> pbot spawn s5pb1 0 70 0 minecraft:overworld creative
+> forceload add 0 0 31 31
+> fill 8 69 8 23 69 23 minecraft:cobblestone
+> fill 8 70 8 23 72 23 minecraft:air
+> setblock 15 69 15 minecraft:mossy_cobblestone
+> setblock 16 70 16 minecraft:water
+> zq count 8 69 8 23 69 23 minecraft:mossy_cobblestone
+> gamerule randomTickSpeed 300
+sleep 60
+> zq count 8 69 8 23 69 23 minecraft:mossy_cobblestone
+> gamerule randomTickSpeed 3
+look mossy_cobblestone count after 60 s is higher than the first count (growth without the fast path; compare with b2's 1 -> 83)
+
+## SQ-CCO-08b | Create Gravity with gravityLimitDimensions = false (the mod's own behaviour): control for SQ-CCO-08
+> kill @e[tag=cco08]
+> execute in minecraft:the_end run forceload add 0 0
+> time set 18000
+> execute in minecraft:the_end run summon minecraft:zombie 0 200 0 {Silent:1b,PersistenceRequired:1b,Tags:["cco08","cco08e"]}
+> execute in minecraft:overworld run summon minecraft:zombie 3 200 3 {Silent:1b,PersistenceRequired:1b,Tags:["cco08","cco08o"]}
+pace 0
+sleep 1
+> execute in minecraft:the_end run data get entity @e[tag=cco08e,limit=1] Pos[1]
+> data get entity @e[tag=cco08o,limit=1] Pos[1]
+> execute in minecraft:the_end run data get entity @e[tag=cco08e,limit=1] Attributes
+> data get entity @e[tag=cco08o,limit=1] Attributes
+sleep 1
+> execute in minecraft:the_end run data get entity @e[tag=cco08e,limit=1] Pos[1]
+> data get entity @e[tag=cco08o,limit=1] Pos[1]
+pace 2
+> kill @e[tag=cco08]
+> time set noon
+look with Common's limit off: does the End zombie fall slower / carry the Low Gravity Biome modifier? If not, Gravity itself does not apply it here and SQ-CCO-08's End half cannot show Common's effect
+
+## SQ-CCO-16b | [effects] removed = ["minecraft:slowness"]: Slowness refused, Speed applies
+> effect give s5pb1 minecraft:slowness 30 0
+> effect give s5pb1 minecraft:speed 30 0
+> data get entity s5pb1 ActiveEffects
+expect Applied effect Speed to s5pb1
+reject "minecraft:slowness"|Id: 2b
+> pbot remove-all
+look ActiveEffects holds Speed and no Slowness (the give line for Slowness may say it could not be applied)

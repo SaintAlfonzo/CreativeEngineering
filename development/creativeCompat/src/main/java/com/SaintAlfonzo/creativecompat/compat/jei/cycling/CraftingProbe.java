@@ -2,7 +2,9 @@ package com.SaintAlfonzo.creativecompat.compat.jei.cycling;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.LinkedHashMap;
 import java.util.List;
+import java.util.Map;
 
 import javax.annotation.Nullable;
 
@@ -107,11 +109,38 @@ final class CraftingProbe {
         return results.isEmpty();
     }
 
-    @Nullable
-    CyclingCraftingDisplay page(String path, boolean shapeless) {
+    /**
+     * The pages for the variants found, none when there are none. JEI focus-links the slots of a page, and a link needs
+     * every slot to hold the same number of stacks, so variants that leave different cells blank (a repair of two
+     * tools next to a repair of two other tools in other cells) go on separate pages, one per blank-cell pattern. A
+     * recipe whose variants all fill the same cells stays one page under {@code path}; with several patterns the
+     * pages are {@code path_1}, {@code path_2}, ... in the order the patterns first appear.
+     */
+    List<CyclingCraftingDisplay> page(String path, boolean shapeless) {
         if (results.isEmpty()) {
-            return null;
+            return List.of();
         }
-        return CyclingCraftingDisplay.of(CyclingCraftingPages.pageId(recipe, path), grids, results, shapeless);
+        Map<String, List<Integer>> byPattern = new LinkedHashMap<>();
+        for (int i = 0; i < grids.size(); i++) {
+            StringBuilder mask = new StringBuilder(9);
+            for (ItemStack s : grids.get(i)) {
+                mask.append(s.isEmpty() ? '.' : 'x');
+            }
+            byPattern.computeIfAbsent(mask.toString(), k -> new ArrayList<>()).add(i);
+        }
+        List<CyclingCraftingDisplay> out = new ArrayList<>(byPattern.size());
+        int n = 0;
+        for (List<Integer> indices : byPattern.values()) {
+            n++;
+            List<List<ItemStack>> g = new ArrayList<>(indices.size());
+            List<ItemStack> r = new ArrayList<>(indices.size());
+            for (int i : indices) {
+                g.add(grids.get(i));
+                r.add(results.get(i));
+            }
+            String id = byPattern.size() == 1 ? path : path + "_" + n;
+            out.add(CyclingCraftingDisplay.of(CyclingCraftingPages.pageId(recipe, id), g, r, shapeless));
+        }
+        return out;
     }
 }

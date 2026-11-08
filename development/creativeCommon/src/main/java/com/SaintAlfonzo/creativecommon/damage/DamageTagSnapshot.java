@@ -13,6 +13,7 @@ import java.util.function.Consumer;
 import java.util.regex.Pattern;
 
 import net.minecraft.resources.ResourceLocation;
+import net.minecraftforge.fml.ModList;
 
 /**
  * One immutable, fully-merged generation of the data-defined damage tags. {@link DamageTagLoader}
@@ -122,12 +123,26 @@ final class DamageTagSnapshot {
 
         for (Def def : defs.values()) {
             for (ResourceLocation inc : def.includes()) {
-                if (!defs.containsKey(inc) && !DamageFlag.isFlagTag(inc)) {
+                if (!defs.containsKey(inc) && !DamageFlag.isFlagTag(inc) && namespaceLoaded(inc.getNamespace())) {
                     warn.accept(def.id() + " includes '#" + inc + "', which is neither a built-in flag tag nor defined by any pack - it will never match");
                 }
             }
         }
         return new DamageTagSnapshot(Collections.unmodifiableMap(defs));
+    }
+
+    /**
+     * False for a namespace whose mod is not installed: an include of another mod's tag (Common's fire tag includes
+     * {@code #creativedelight:stoves}) is then expected to be undefined, not a typo. True when the mod list is not
+     * available (offline harness), so the warning stays.
+     */
+    private static boolean namespaceLoaded(String namespace) {
+        try {
+            ModList mods = ModList.get();
+            return mods == null || mods.isLoaded(namespace);
+        } catch (LinkageError e) {
+            return true;
+        }
     }
 
     /** {@code ieRevolver_*} -> a regex where only {@code *} is special (any run of characters, including none). */

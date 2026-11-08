@@ -820,3 +820,7 @@ List `#creativedelight:crow_shiny_items` (generated through `global.tags`, not h
 - 2026-11-06: owner notes N22 recorded in the rows (H&H first and complete, ED merges later; butter applied; juices and wines for evaluation on Vinery's stations; goat cheese like Brewin' cheeses; value and family alignment; horseshoe speed boost and sugar cube stacking; Scared Still removed from pitchfork, tiger and dragon shovel and hidden; trough investigated and renamed Water Trough, water-only tank; README row rewritten to the current state). Nothing built.
 - 2026-11-06: owner notes N21 added to the rows: corn husk implemented; mac and cheese added (overlap eval); hat effect on the four pack hats and the H&H hat; scarecrow takes any farmer's hat; trough as an eval build; animal feed not included (per-animal breeding-food audit first); H&H trellis not ported, hops on Vinery's trellis; spool kept for eval; both crows need an in-game eval; nests dropped totally; all included crops get Calendar season tags. Nothing built.
 - 2026-11-07: owner notes N23 recorded as section 5.7 with investigation results (Pinned source is the thrown pitchfork only, lemon wine has a texture, Carry On is not in the pack, Four-Leaf Clover is item-only in Buzzier Bees). Nothing built.
+
+## Owner notes (scratchpad 2026-11-07)
+
+- Manure buildup (owner 2026-11-07): layers build up in cramped or uncleared pens; manure mobs walk to open space to drop it; crammed mobs (no 3x3 clear space, touching other mobs) drop manure layers instead of items with a chance. Row `blocks/new #22`.

@@ -77,7 +77,7 @@ user asks for one, follow its skill.
   user says to. Writing rows and running them: skill `scratch-test`.
 - Script-only change: `/reload` is enough for server scripts; startup scripts, items and any
   Java change need a full restart.
-- The shared helpers (`neoCraftHelper.js`, `tag_helper.js`, `compost.js`, `trade_helper.js`, `jei_order.js`) and the dicts
+- The shared helpers (`neoCraftHelper.js`, `tag_helper.js`, `compost.js`, `trade_helper.js`) and the dicts
   (`_lib/item_dict.js` and siblings) live in Creative Common's jar (`src/main/resources/kubejs_startup/creativecommon/`,
   loaded before `startup_scripts/`); its server and client helpers are in `kubejs/data/creativecommon/kubejs/_lib/` and
   `kubejs/assets/creativecommon/kubejs/_lib/`, copied into the jar. An edit to any of them (including generator output

@@ -588,6 +588,66 @@ if (global.CD) global.CD.genPut('can_types', 'vintagedelight', {
    ],
    "texture": "canned_goods:items/canned_food"
   },
+  "canned_cheese_pizza": {
+   "section": "feast",
+   "existing": false,
+   "name": "Canned Cheese Pizza",
+   "servings": 6,
+   "hunger": 4,
+   "modifier": 0.75,
+   "meat": false,
+   "fast": true,
+   "always": false,
+   "glow": false,
+   "effects": [],
+   "sources": [
+    "cheese_pizza_slice"
+   ],
+   "recipes": [
+    {
+     "suffix": "",
+     "inputs": [
+      {
+       "any": [
+        "cheese_pizza"
+       ],
+       "n": 1
+      }
+     ]
+    }
+   ],
+   "texture": "canned_goods:items/canned_food"
+  },
+  "canned_meat_pizza": {
+   "section": "feast",
+   "existing": false,
+   "name": "Canned Meat Pizza",
+   "servings": 6,
+   "hunger": 5,
+   "modifier": 0.75,
+   "meat": false,
+   "fast": true,
+   "always": false,
+   "glow": false,
+   "effects": [],
+   "sources": [
+    "meat_pizza_slice"
+   ],
+   "recipes": [
+    {
+     "suffix": "",
+     "inputs": [
+      {
+       "any": [
+        "meat_pizza"
+       ],
+       "n": 1
+      }
+     ]
+    }
+   ],
+   "texture": "canned_goods:items/canned_food"
+  },
   "canned_cheese_slice": {
    "section": "dairy",
    "existing": false,
@@ -768,7 +828,7 @@ if (global.CD) global.CD.genPut('can_types', 'vintagedelight', {
      ]
     },
     {
-     "suffix": "_broth",
+     "suffix": "_sugar",
      "inputs": [
       {
        "any": [
@@ -778,8 +838,7 @@ if (global.CD) global.CD.genPut('can_types', 'vintagedelight', {
       },
       {
        "any": [
-        "salt",
-        "bone_broth"
+        "sugar"
        ],
        "n": 1
       }

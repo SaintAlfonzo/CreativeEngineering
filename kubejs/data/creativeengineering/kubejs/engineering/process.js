@@ -54,7 +54,7 @@ R.shaped(Item.of(i.vibrating_table, 1), ['ABA','ACA', 'DED'], {A: i.springs_stif
 //Mechanical crafter
 //Replace brass w/ gold, more complex recipe
 R.remove({id:'create:crafting/kinetics/mechanical_crafter'}, e)
-R.shaped(Item.of(i.mechanical_crafter, 2), ['GRG','CTC', 'GAG'], {G: i.ingot_gold, R: i.redstone_mechanism, C: i.cog, T: i.crafting_table, A: i.andesite_casing}, e)
+R.shaped(Item.of(i.mechanical_crafter, 2), ['GRG','CTC', 'GAG'], {G: i.any_ingot_gold, R: i.redstone_mechanism, C: i.cog, T: i.crafting_table, A: i.andesite_casing}, e)
 
 // ############################## Alloy Furnace ##############################
 

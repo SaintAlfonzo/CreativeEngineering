@@ -254,6 +254,8 @@ water".
   `getStateForPlacement`), and keep it after.
 - WTHIT: "Punch to toggle lid" / "Punch to toggle handle" in the body, hidden with the switch off.
 - Kettle handle: placement only (under a block), confirmed by owner 2026-11-03; a punch on the kettle toggles the lid.
+- Since 2026-11-07 with QoL-8 on (2.12) the pickup keeps the contents in the item instead of emptying them into the
+  inventory; only the leftover slots drop at the block.
 - History: 11-02 the handle toggle was sneak left-click; on 11-03 it was briefly placement-only, then the punch toggle
   replaced it (owner).
 
@@ -277,6 +279,59 @@ water".
   before).
 - Other board checks: the vanilla pumpkin pie placement (`FDBackportEvents`) refuses any `CuttingBoardBlock`, not
   only FD's board. The renderer offset mixin already applies to every cutting board block entity.
+
+### 2.12 Cookware keeps its contents (built 2026-11-07, not tested; scratch SQ-FCB-09, client CQ-FCB-05; TODO `cooking/kitchen #40`)
+
+- Switch `[qol] cookwareKeepContents` (QoL-8, on). Cooking pot, copper pot, kettle.
+- A survival player's break (one that drops the item) and the QoL-7 pickup (2.9) keep every slot in the item's
+  `BlockEntityTag`: pot slots 0-8 (ingredients, meal, container slot, output) plus cook progress; copper pot slots 0-6;
+  kettle slots 0-4 plus brew progress, and its tank (already kept, `farmers_respite.md` K11). The leftover slots drop at
+  the block: remainder buffer (pot, kettle), the kettle's two bottle boxes, the copper pot's leftover slot.
+- Placing the item restores them (vanilla `BlockItem` loads `BlockEntityTag`).
+- Only marked breaks keep: `CookwareContents` marks the block entity (Forge persistent data, key
+  `creativedelight:keep_contents`, valid for the current game tick) from a lowest-priority `BreakEvent` (not cancelled,
+  not creative, `canHarvestBlock`) or the pickup. Creative breaks, explosions, Create drills and `/setblock` drop the
+  contents as before, so nothing is lost when no item follows.
+- QoL-7 pickup with QoL-8 on: no longer empties the station into the inventory; the hand gets the stocked item.
+  QoL-8 off: the 2.9 behaviour.
+- Item: enchantment glint while it holds an item or kettle fluid (`ItemStack.hasFoil` mixin); tooltip "Holds:" with one
+  line per stored stack except the meal (the mods' own "Serves" line shows that). All three items already stack to 1,
+  so no stack-size change was needed.
+- Code: CD `cooking/CookwareContents`, mixins `farmersdelight.CookingPotKeepContentsMixin`,
+  `farmersrespite.KettleKeepContentsMixin`, `minecraft.ItemStackCookwareGlintMixin`; copper pot in the Miner's member
+  (`CopperPotBlockEntity.writeMeal` / `getDroppableInventory`); `cooking/CookwareHandling` (pickup).
+- Risk: creative pick-block (middle click) of a pot is unchanged (meal only). A pot broken in creative drops its
+  contents loose, as before.
+
+### 2.13 Hung skillet (built 2026-11-07, not tested; scratch SQ-FCB-10, client CQ-FCB-06; TODO `cooking/kitchen #39`)
+
+- Block `farmersdelight:hanging_skillet` (FD member, `block/HangingSkilletBlock`), no item of its own; name "Skillet".
+- Placing: the skillet's own placement (sneak right-click, upstream) on the side of a block hangs it on that wall when
+  the wall face is sturdy and the block above the hanging spot is air or replaceable (the handle reaches into it).
+  Anything else places the standing skillet as upstream. Mixin `SkilletHangMixin` (member config).
+- Keeps the skillet stack (name, enchantments, damage) in FD's skillet block entity (the hanging block is added to its
+  valid blocks at common setup); breaking it drops that skillet (loot `copy_skillet`), pick block gives it, right-click
+  with an empty main hand takes it down into the hand. Pops off (drops) when the wall goes.
+- Does not cook: no ticker, food right-click does nothing.
+- Model: FD's skillet model (MIT) turned upright against the wall, handle up into the block above
+  (`models/block/hanging_skillet.json`), one blockstate per facing. Hardness 0.5, no tool tag (a tag file collides with
+  FD's and Cooking for Blockheads' own `mineable/pickaxe.json` paths in the build guards); breaks fast by hand.
+- Not in `#creativedelight:cookware_pickup`.
+
+### 2.14 Faucet fits containers (built 2026-11-07, not tested; client CQ-FAU-01, -02; TODO `cooking/kitchen #26`)
+
+- Supplementaries 2.4.20 faucet. CD `compat/supplementaries/FaucetFit` (shape math), client `FaucetFitModel` (wrapper on
+  every faucet block-state model, from `ModelEvent.BakingCompleted` at lowest priority) and mixin
+  `supplementaries.FaucetStreamFitMixin` (the tile renderer's stream).
+- Horizontal: the faucet model and its stream move toward the block it drains by how far that block's shape stands back
+  from the shared face (a Supplementaries jar 3 px, a kettle or a pot by their shapes), at most 6 px; held so the 4 px
+  spout stays over the block below when there is one.
+- Vertical: the stream ends on the top of the block below (its shape top) instead of 5 px above that block's floor; it
+  reaches down into a low block (a carpet) and stops at a full block's top. Nothing below: upstream length.
+- When the faucet is connected below (a jar, a fluid tank: Supplementaries' `has_jar` model, spout at the block's
+  floor) no stream is drawn, as upstream; the jar's neck top is at y 16, so the spout already meets it.
+- Owner's "start with the jar, then other containers and the kettle": all go through the same shape rule; no per-block
+  table yet. If a container looks wrong in game, a table row (block -> inset, floor) is the next step.
 
 ## 3. What the pack changes
 
@@ -424,6 +479,19 @@ Not covered offline: anything drawn (board offset, fridge), the corner's GUI on 
   Goose (no coaster model) → not taken (the item is used or
   placed as normal); a port drink (Beer) is still taken.
 
+- [ ] **KT-26 Stocked pot (cooking/kitchen #40):** put ingredients, bowls and a finished meal in a Cooking Pot, break it
+  in survival → one glinted pot item, tooltip "Holds:" lists the ingredients and bowls; place it → all slots as before.
+  Same for a Copper Pot and a Kettle with tea leaves and water (the tank comes back too). Bottles in the leftover slots
+  drop on the ground. Sneak right-click pickup with an empty hand → the same stocked item in the hand. Break one in
+  creative → contents drop loose.
+- [ ] **KT-27 Hung skillet (cooking/kitchen #39):** sneak right-click the side of a stone wall with an enchanted, renamed
+  Skillet, air above → it hangs on the wall, handle up; with a block above → a standing skillet as before. Food in the
+  other hand does not cook on it. Break it → the same enchanted, renamed Skillet; empty-hand right-click → into the hand;
+  break the wall → it drops.
+- [ ] **KT-28 Faucet fit (cooking/kitchen #26):** a faucet on the side of a Supplementaries Jar sits against the jar's
+  glass (no 3 px gap); open it over a carpet and over a Cooking Pot and a Kettle → the stream ends on the carpet / the
+  rim; faucet on a full block over a full block → stream stops at the top of the lower block.
+
 ## 8. History
 
 - 2026-10-21: writeup started from the kitchen brief's built sections. Built the same day (patcherMod 1.1.01, not
@@ -504,3 +572,7 @@ Not covered offline: anything drawn (board offset, fridge), the corner's GUI on 
   were already in the Creative Delight trees.
 
 2026-11-05: the 19 fruit basket and 38 rack textures no longer ship; Creative Delight builds them on the client from the installed planks and Cooking for Blockheads' own rack art ([creative_delight.md](creative_delight.md) 40.1). `gen_cfb_racks.py` writes models, blockstates, loot and lang only. Tests CQ-LCA-01, -02.
+
+## Owner notes (scratchpad 2026-11-07)
+
+- FD pot, kettle and copper pot keep contents on pickup: kettle keeps fluid, ingredients and output; pots keep input and output; overflow slots drop on break; a stocked item is glinted and does not stack. Row `cooking/kitchen #40`.

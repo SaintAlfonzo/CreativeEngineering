@@ -833,3 +833,7 @@ Revert every temporary edit and `/reload` afterwards.
 ## Owner ideas (scratchpad 2026-10-26)
 
 - Seed, crate and raw food loot tables by biome: `loot/tables #14` (see also the Pale and Dark seed rows, `loot/tables #13`).
+
+## Owner notes (scratchpad 2026-11-07)
+
+- Missing Lootr in the wooden Nether structures (owner): scan the Nether structure chests for tables Lootr does not convert. Row `loot/tables #16`.

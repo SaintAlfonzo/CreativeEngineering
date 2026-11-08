@@ -337,6 +337,49 @@ if (global.CD) global.CD.genPut('can_types', 'delightful', {
    "pie": "salmonberry_pie",
    "texture": "canned_goods:items/canned_pumpkin_pie"
   },
+  "canned_stuffed_cantaloupe": {
+   "section": "feast",
+   "existing": false,
+   "name": "Canned Stuffed Cantaloupe",
+   "servings": 6,
+   "hunger": 14,
+   "modifier": 0.75,
+   "meat": false,
+   "fast": false,
+   "always": false,
+   "glow": false,
+   "effects": [
+    {
+     "effect": "minecraft:resistance",
+     "ticks": 600,
+     "amp": 1,
+     "chance": 1
+    },
+    {
+     "effect": "farmersdelight:nourishment",
+     "ticks": 4800,
+     "amp": 0,
+     "chance": 1
+    }
+   ],
+   "sources": [
+    "stuffed_cantaloupe"
+   ],
+   "recipes": [
+    {
+     "suffix": "",
+     "inputs": [
+      {
+       "any": [
+        "stuffed_cantaloupe_block"
+       ],
+       "n": 1
+      }
+     ]
+    }
+   ],
+   "texture": "canned_goods:items/canned_food"
+  },
   "canned_carrots": {
    "section": "pie",
    "existing": true,
@@ -360,13 +403,50 @@ if (global.CD) global.CD.genPut('can_types', 'delightful', {
    ],
    "recipes": []
   },
+  "canned_cantaloupe_bread": {
+   "section": "bread",
+   "existing": false,
+   "name": "Canned Cantaloupe Bread",
+   "servings": 4,
+   "hunger": 18,
+   "modifier": 0.35,
+   "meat": false,
+   "fast": false,
+   "always": false,
+   "glow": false,
+   "effects": [
+    {
+     "effect": "minecraft:resistance",
+     "ticks": 300,
+     "amp": 0,
+     "chance": 1
+    }
+   ],
+   "sources": [
+    "cantaloupe_bread"
+   ],
+   "recipes": [
+    {
+     "suffix": "",
+     "inputs": [
+      {
+       "any": [
+        "cantaloupe_bread"
+       ],
+       "n": 6
+      }
+     ]
+    }
+   ],
+   "texture": "canned_goods:items/canned_bread"
+  },
   "canned_field_salad": {
    "section": "salad",
    "existing": false,
    "name": "Canned Field Salad",
    "servings": 8,
    "hunger": 13,
-   "modifier": 0.529,
+   "modifier": 0.577,
    "meat": false,
    "fast": true,
    "always": false,
@@ -379,7 +459,7 @@ if (global.CD) global.CD.genPut('can_types', 'delightful', {
      "chance": 1
     },
     {
-     "effect": "farmersdelight:nourishment",
+     "effect": "farmersdelight:comfort",
      "ticks": 3600,
      "amp": 0,
      "chance": 1
@@ -420,13 +500,129 @@ if (global.CD) global.CD.genPut('can_types', 'delightful', {
    ],
    "texture": "creativeengineering:item/canned_cabbage"
   },
+  "canned_cactus_chili": {
+   "section": "soup",
+   "existing": false,
+   "name": "Canned Cactus Chili",
+   "servings": 8,
+   "hunger": 13,
+   "modifier": 0.673,
+   "meat": false,
+   "fast": false,
+   "always": false,
+   "glow": false,
+   "effects": [
+    {
+     "effect": "minecraft:strength",
+     "ticks": 300,
+     "amp": 0,
+     "chance": 1
+    },
+    {
+     "effect": "farmersdelight:nourishment",
+     "ticks": 3600,
+     "amp": 0,
+     "chance": 1
+    }
+   ],
+   "sources": [
+    "cactus_chili"
+   ],
+   "recipes": [
+    {
+     "suffix": "",
+     "inputs": [
+      {
+       "any": [
+        "cactus_chili"
+       ],
+       "n": 6
+      }
+     ]
+    },
+    {
+     "suffix": "_broth",
+     "inputs": [
+      {
+       "any": [
+        "cactus_chili"
+       ],
+       "n": 3
+      },
+      {
+       "any": [
+        "salt",
+        "bone_broth"
+       ],
+       "n": 1
+      }
+     ]
+    }
+   ],
+   "texture": "canned_goods:items/canned_rabit_stew"
+  },
+  "canned_cactus_soup": {
+   "section": "soup",
+   "existing": false,
+   "name": "Canned Cactus Soup",
+   "servings": 8,
+   "hunger": 15,
+   "modifier": 0.6,
+   "meat": false,
+   "fast": false,
+   "always": false,
+   "glow": false,
+   "effects": [
+    {
+     "effect": "farmersdelight:comfort",
+     "ticks": 3600,
+     "amp": 0,
+     "chance": 1
+    }
+   ],
+   "sources": [
+    "cactus_soup"
+   ],
+   "recipes": [
+    {
+     "suffix": "",
+     "inputs": [
+      {
+       "any": [
+        "cactus_soup"
+       ],
+       "n": 6
+      }
+     ]
+    },
+    {
+     "suffix": "_broth",
+     "inputs": [
+      {
+       "any": [
+        "cactus_soup"
+       ],
+       "n": 3
+      },
+      {
+       "any": [
+        "salt",
+        "bone_broth"
+       ],
+       "n": 1
+      }
+     ]
+    }
+   ],
+   "texture": "canned_goods:items/canned_rabit_stew"
+  },
   "canned_sinigang": {
    "section": "soup",
    "existing": false,
    "name": "Canned Sinigang",
    "servings": 8,
-   "hunger": 19,
-   "modifier": 0.888,
+   "hunger": 15,
+   "modifier": 0.7,
    "meat": false,
    "fast": false,
    "always": false,

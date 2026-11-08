@@ -1,0 +1,13 @@
+# r1108cge boot 7: tools/scratch_query/cpp_chain_srv.sh OUT cpp5 compat (Common + Compat + Calendar + Serene Seasons,
+# no Create, no Create Recycle). SQ-CPP-05.
+pace 2
+
+## SQ-CPP-05 | the physics tags load without Create Recycle; no error naming create:scrap_*
+bootreject Mixin apply failed|InvalidMixinException
+bootreject ^(?!.*Error loading class).*(ClassNotFoundException|NoClassDefFoundError)
+bootexpect Done \(
+shell grep -E "scrap_wood|scrap_copper|floats|to_ash" logs/latest.log logs/kubejs/server.log | grep -iE "error|missing" | head || true
+shell grep -cE "\[ERROR\]" logs/kubejs/server.log logs/kubejs/startup.log || true
+shell grep -E "\[ERROR\]" logs/kubejs/server.log logs/kubejs/startup.log | grep -v zz_cl_probe | cut -c1-220 | head || true
+> zq itemtag creativeengineering:physics/floats
+look no scrap error; 0 KubeJS errors apart from the scratch-only zz_cl_probe; startup order creativecommon, creativecompat, startup_scripts

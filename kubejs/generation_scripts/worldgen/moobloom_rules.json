@@ -1,0 +1,52 @@
+{
+  "_readme": [
+    "Input of tools/gen_moobloom_rules.py (mooblooms.md 4.9). The generator reads the wild flowers (wild_flowers.json",
+    "through tools/gen_wild_flowers.py's inventory), the moobloom variant pools and the cow spawners from",
+    "kubejs/exported/spawns.json, and writes kubejs/data/more_mooblooms/moobloom_spawns/creativeengineering.json",
+    "plus the generated tables in feature_writeup/mooblooms.md (2.8 and 4.9).",
+    "tiers: a biome with cows and at least 'min' pool-flower patches per chunk gets 'percent' of its cows as mooblooms,",
+    "  split by its variant mix (shares under drop_under_pct dropped, the rest rescaled and rounded to 'decimals' so",
+    "  the rule adds up to the tier). Biomes at or above flower_min need a manual entry (a WARNING names any that lack one).",
+    "manual: hand-set rules, written first and never recomputed. Either 'bloom' (% of cows) + 'split'",
+    "  ({variant: share}, scaled to bloom; or 'even' + 'variants') or 'replace' (the rule's entries verbatim).",
+    "exclude_variants: variants whose pools are not counted (azalea only underground, wither rose never generates)."
+  ],
+  "flower_min": 1.0,
+  "tiers": [
+    { "min": 0.5, "percent": 25, "decimals": 0 },
+    { "min": 0.25, "percent": 2, "decimals": 1 }
+  ],
+  "drop_under_pct": 5,
+  "exclude_variants": ["azaleabloom", "witherbloom"],
+  "even_variants": ["moobloom", "sunbloom", "rosebloom", "peonybloom", "onionbloom", "bluebloom", "orchidbloom", "lilybloom", "oxeyebloom"],
+  "manual": [
+    { "biomes": ["minecraft:old_growth_birch_forest"], "bloom": 35,
+      "split": { "peonybloom": 58, "lilybloom": 18, "bluebloom": 16, "onionbloom": 8 } },
+    { "biomes": ["terralith:skylands_summer"],
+      "replace": { "sunbloom": 33.34, "moobloom": 33.33, "oxeyebloom": 33.33 } },
+    { "biomes": ["terralith:orchid_swamp"], "bloom": 65,
+      "split": { "orchidbloom": 63, "bluebloom": 19, "moobloom": 18 } },
+    { "biomes": ["terralith:moonlight_valley"], "bloom": 75,
+      "split": { "sunbloom": 66, "bluebloom": 19, "lilybloom": 9, "orchidbloom": 6 } },
+    { "biomes": ["terralith:blooming_plateau", "terralith:blooming_valley"], "bloom": 100, "split": "even" },
+    { "biomes": ["terralith:lavender_forest", "terralith:lavender_valley"], "bloom": 75,
+      "split": { "onionbloom": 75, "peonybloom": 15, "oxeyebloom": 5, "rosebloom": 5, "lilybloom": 6 } },
+    { "biomes": ["terralith:sakura_grove", "terralith:sakura_valley"], "bloom": 65,
+      "split": { "onionbloom": 64, "peonybloom": 28, "lilybloom": 8 } },
+    { "biomes": ["terralith:cloud_forest"], "bloom": 65,
+      "split": { "lilybloom": 48, "oxeyebloom": 42, "bluebloom": 10 } },
+    { "biomes": ["terralith:alpha_islands"], "bloom": 35, "split": { "rosebloom": 50, "moobloom": 50 } },
+    { "biomes": ["terralith:alpha_islands_winter"], "bloom": 35, "split": { "rosebloom": 50, "moobloom": 50 } },
+    { "biomes": ["terralith:moonlight_grove"], "bloom": 65,
+      "split": { "bluebloom": 50, "lilybloom": 23, "orchidbloom": 15, "oxeyebloom": 12 } },
+    { "biomes": ["minecraft:meadow"], "bloom": 75, "split": "even" },
+    { "biomes": ["terralith:skylands_spring"],
+      "replace": { "moobloom": 14.28, "sunbloom": 14.28, "rosebloom": 14.28, "peonybloom": 14.29, "onionbloom": 14.29,
+                   "bluebloom": 14.29, "lilybloom": 14.29 } },
+    { "biomes": ["terralith:skylands_autumn"],
+      "replace": { "moobloom": 33.34, "sunbloom": 33.33, "rosebloom": 33.33 } },
+    { "biomes": ["minecraft:flower_forest"], "bloom": 100, "split": "even" },
+    { "biomes": ["minecraft:sunflower_plains"], "bloom": 100, "split": { "sunbloom": 75, "moobloom": 25 } },
+    { "biomes": ["minecraft:lush_caves"], "replace": { "azaleabloom": 100 }, "last": true }
+  ]
+}

@@ -14,7 +14,7 @@ Test prefix **CR-** · Last updated **2026-11-02** · Overall status **reference
 | Crop parity layer: how a non-standard crop is brought in line (tobacco done) | §2.6 | DEPLOYED with 1.0.4 (2026-10-04); CR-01, CR-02, CR-21 to CR-25 pending |
 | Pack changes to farming | §3 | DEPLOYED (tobacco parity with 1.0.4) |
 | Gaps: hemp, grape bushes, weeds, pack hoes | §4 | G1 to G3 (tobacco) fixed; the rest open |
-| 1.0.4 mods: Corn Delight, Farmer's Respite (tea, coffee), Fruits Delight (bushes, lemon, pineapple, hamimelon, 13 fruit trees) | §2.1 | reference from the decompiled jars 2026-10-02; G12 to G15 open; CR-31 to CR-37 |
+| 1.0.4 mods: Corn Delight, Farmer's Respite (tea, coffee), Fruits Delight (bushes, lemon, pineapple, hamimelon, 13 fruit trees) | §2.1 | reference from the decompiled jars 2026-10-02; G12, G13, G15 BUILT 2026-11-07 (not run in game); G14 resolved by the coffee merge; CR-31 to CR-37 |
 | Wild generation: where every crop, bush and fruit tree spawns (biomes, rate, height, ground, side blocks such as Coarse Dirt, Adzuki Soil, mint ponds) | §2.7 + generated [crops_by_biome.md](crops_by_biome.md) | reference 2026-10-03; findings V1 to V12 feed the planned vegetation worldgen system; CR-38 to CR-46 |
 | Pack wild-crop placement: every wild crop and fruit tree moved to the biomes you specified (`wild_crops.json`), leaf apples and AM leaf bananas off, FR Nether coffee off | §2.8 | DEPLOYED with 1.0.4 (2026-10-04); `wild_crops.json` changed again for 1.0.5, DEPLOYED with 1.0.6; not looked at in game; V13 to V20; CR-47 to CR-58 |
 | WTHIT growth line for every plant WTHIT skips (hemp, tobacco, strawberries, salmonberries, mint, grapes, blueberries, cranberries, lemons and the other plants, 62 blocks in all) | §2.9 | BUILT 2026-10-04, headless-tested (38 checks, 290-block audit); in patcherMod 1.0.5 (in `mods/`), DEPLOYED with 1.0.6 (2026-10-14); jar boots clean (single player 2026-10-11); CR-59 to CR-66 |
@@ -122,8 +122,9 @@ the plant is caught by the area break when you break a plant with a hoe (breaks 
   and you lose those plants.
 - **Corn** (Mysterious Mountain Lib `HighCropBlock`, a `CropBlock`): the top half is the same block with
   `upper=true`. It appears once the lower half reaches stage 4 and needs light 8+ or open sky, then ages on its own.
-  Both halves drop corn at stage 7, else a seed. Quark only matches the lower half (G13): replanting it to stage 0
-  makes the top fail its survival check, so the top breaks and drops its own corn. Clicking the top does nothing.
+  Both halves drop corn at stage 7, else a seed. Quark only matches the lower half: replanting it to stage 0
+  makes the top fail its survival check, so the top breaks and drops its own corn. Clicking the top harvests the
+  lower half the same way (G13, fixed 2026-11-07).
 - **Tomatoes:** both resets go to stage 0, so the result is the same. Since 2026-11-02 (`farming/crops #29`) all four
   tomato blocks are in `#creativeengineering:crops/own_pick` (CD `farmersdelight/tags.js`), so Quark leaves every vine
   to FD's own pick (1-2 tomatoes, 5 % rotten tomato, back to stage 0, the vine stays), and an area hoe clicks every
@@ -169,7 +170,7 @@ the plant is caught by the area break when you break a plant with a hoe (breaks 
   Farmland and Rich Farmland are not full blocks. Fertile Soil has a full-cube shape, but it isn't
   confirmed to count as opaque (CR-13).
 - **Fruits Delight bushes** grow 1 in 5 random ticks at light 9+ above them. They need no farmland.
-- **Tea:** the small bush becomes the two-high bush 1 in 20 random ticks when the space above is free, then ages
+- **Tea:** (G12 fixed 2026-11-07: Farmland, Rich Farmland and Fertile Soil accept both bushes.) The small bush becomes the two-high bush 1 in 20 random ticks when the space above is free, then ages
   0 to 3 (1 in 12 ticks). Shears give green leaves at age 0, yellow at 1, yellow + black at 2, black at 3, so you
   choose the tea by when you cut. Right-click with an axe stunts the bush: it stops aging, which holds a colour.
   Both bushes check `#minecraft:dirt` directly instead of Forge's soil hook, so Farmland and Rich Farmland refuse
@@ -325,6 +326,15 @@ height in the hoe's area breaks too:
 Rich Soil and Fertile Soil are both in `#minecraft:dirt`. That's why plain bushes accept them through
 the normal bush rule as well. Rich Farmland isn't in that tag.
 
+**Water bucket and water bottle on soil (BUILT 2026-11-07, `farming/crops #17`, plan_farming_cooking_batch A13).**
+CD `crops/WaterOnSoil` (a right-click-block listener at HIGH priority). A water bucket used on Farmland, Rich Farmland or
+Fertile Soil (any block with farmland moisture) soaks the 3x3 around it at the same height to full moisture (Fertile Soil:
+soaked), the same wetness as the Watering Can, and becomes an empty bucket. A water bottle soaks only that block and
+becomes a glass bottle. Counts: a click on the soil's top face, or on a plant without collision (a crop) standing on it.
+Left to vanilla: sneaking, a side-face click (water placed in a channel), and soil that is already wet in reach (then
+the bucket places water and the bottle is drunk as before). Creative mode keeps the bucket or bottle. It runs before
+Quark's right-click harvest, so a bucket on a ripe crop over dry soil waters instead of harvesting. Tests CR-105 to CR-107.
+
 ### 2.5 Tobacco in detail (`the_dirty_stuff:tobacco_seeds`)
 
 - **Class:** `net.mcreator.thedirtystuff.block.TobaccoSeedsBlock extends Block`, with a block entity.
@@ -463,6 +473,10 @@ jungles picks from the biome's flower features, so it can also grow wild cotton,
 | Lemon | ripe `lemon_tree` bush | 9: plains, sunflower plains, meadow, Terralith Blooming, Lavender and Moonlight biomes | 1/32 | grass block |
 | Pineapple | `fruitsdelight:wild_pineapple` | vanilla **Beach only** | 1/32, 24 tries | sand |
 | Hamimelon | hamimelon blocks (no stem) | desert + 5 Terralith deserts | 1/64, 24 tries | sand |
+
+Since 2026-11-07 the pack's Cantaloupe (`wild/hamimelon`) and Mini Cantaloupe (`wild/mini_cantaloupe`) each have a
+second, more common patch in the same biomes (`wild/hamimelon_common`, `wild/mini_cantaloupe_common`: same configured
+feature, rarity 1/24 instead of 1/64; `farming/wild-crops #5`). CR-111.
 
 | Fruit tree | Trees per chunk | Trunk | Biomes |
 |---|---|---|---|
@@ -1198,9 +1212,11 @@ G1 to G3 are fixed (§2.6). The rest are open, each with a suggested fix for you
 - **G6 Untilled Rich Soil never takes farmland crops.** That's Farmer's Delight's design: till it into Rich
   Farmland. Not a bug.
 - **G7 Grape bushes refuse Farmland and Rich Farmland.** That's Vinery's full-opaque-block rule ([vinery.md](vinery.md)).
-- **G8 Right-clicking ripe Weeds replants them.** Weeds are a `CropBlock`, so Quark's search picks them up. Fix if
-  wanted: add `immersive_weathering:weeds` to `#quark:simple_harvest_blacklisted` (the tag also blocks the
-  replant step), or just break weeds.
+- **G8 Right-clicking ripe Weeds replants them.** Weeds are a `CropBlock`, so Quark's search picks them up. **Fixed
+  2026-11-07:** `immersive_weathering:weeds` is in `#quark:simple_harvest_blacklisted` (CD `creativeengineering/crop_tags.js`);
+  right-click does nothing, break them. Same tag script: weeds can be hand-planted on Rich Farmland
+  (`#immersive_weathering:fertile_blocks`, read only by `WeedsBlock.mayPlaceOn`); natural growth stays on vanilla
+  Farmland (IW `block_growths/weeds*.json` owner block), so rich soils never grow weeds by themselves (Q1, `farming/crops #4`). CR-108, CR-109.
 - **G9 Flax top half doesn't respond to right-click.** Flax forwards the click to its lower half, but
   Quark rejects the forwarded click because the hit position is still the top block. Click the lower
   half or the farmland.
@@ -1210,14 +1226,21 @@ G1 to G3 are fixed (§2.6). The rest are open, each with a suggested fix for you
   dry, on any accepted soil. That is its own growth rule, not a soil rule, so it is left alone. It
   still gets Rich Farmland's 20% boost and Fertile Soil's bone-meal step.
 - **G12 Tea refuses Farmland and Rich Farmland.** Both tea bushes test `#minecraft:dirt` themselves, so the
-  pack's farmland soils never reach them. Rich Soil and Fertile Soil work (they're in `#minecraft:dirt`). Fix if
-  wanted: a placement mixin per §2.6, like tobacco.
-- **G13 Corn's top half doesn't respond to right-click.** Quark records only the `upper=false` ripe state, the
-  same limit as flax (G9). Click the lower half or the farmland.
+  pack's farmland soils never reached them. BUILT 2026-11-07 (plan_farming_cooking_batch C1): CD
+  `mixin/farmersrespite/TeaBushSoilMixin` adds `CropParity.isFarmlandSoil` to both bushes' `mayPlaceOn` (`m_6266_`),
+  so Farmland, Rich Farmland and Fertile Soil take them as well as dirt. Tea is not in `crops/farmland_crops`, so dry
+  vanilla Farmland under a bush still turns to dirt (the bush stays) and soaked Fertile Soil gives it no bone-meal step
+  (tea bone meal is off). CR-33.
+- **G13 Corn's top half doesn't respond to right-click.** Quark records only the `upper=false` ripe state.
+  BUILT 2026-11-07: CD `mixin/quark/QuarkTopHalfHarvestMixin` sends Quark's per-block `handle` to the lower half when
+  the clicked block is the top of a `#creativeengineering:crops/harvest_from_bottom` crop (the same block directly
+  below; tag holds `corn_delight:corn_crop`, CD `corn_delight/tags.js`). Covers the empty hand, 1x1 hoes and area hoes.
+  Flax (G9) is not fixed: flax is being removed (plan item F1). CR-31.
 - **G14 Coffee eats neighbouring crops.** Farmer's Respite design; keep coffee 3+ blocks from other crops, or grow
   it in the Nether. Turning bone meal on (`enableBoneMealCoffeeBush`) is the only config knob.
 - **G15 Pineapple only grows on sand, red sand and coarse dirt.** Fruits Delight design (the tag
-  `fruitsdelight:pineapple_grows_on`). Extend the tag if you want it on farmland.
+  `fruitsdelight:pineapple_grows_on`). **Fixed 2026-11-07:** the tag also holds `#creativeengineering:crops/farmland_soils`
+  (Farmland, Rich Farmland, Fertile Soil), CD `crop_tags.js`. CR-110.
 
 **Wild generation findings (2026-10-03).** Inputs for the vegetation worldgen system. Nothing is changed
 yet; each has a suggested direction for you to approve or reject.
@@ -1460,9 +1483,9 @@ Everything in §2 was read from decompiled classes (2026-10-02). To re-check aft
 - [ ] **CR-29 Area break:** break one wheat in a full field with a copper hoe → 4 gone (2x2). Netherite → 16. Dragon → 25. Wooden hoe → only the one broken.
 - [ ] **CR-30 Wooden hoe right-click:** wooden hoe right-click a ripe wheat in a field → only that one replants. On a ripe sweet berry bush → it's picked by vanilla's own click, the neighbours aren't.
 
-- [ ] **CR-31 Corn replant:** right-click the lower half of ripe corn → corn drops, the lower half is back at stage 0 and the top half breaks and drops its corn. Right-click the top half → nothing.
+- [ ] **CR-31 Corn replant:** right-click the lower half of ripe corn → corn drops, the lower half is back at stage 0 and the top half breaks and drops its corn. Right-click the top half (empty hand, then an iron hoe) → the same harvest of the lower half (G13 fixed 2026-11-07).
 - [ ] **CR-32 Corn soils:** corn seeds plant on Farmland, Rich Farmland and Fertile Soil; refused on dirt and Rich Soil.
-- [ ] **CR-33 Tea:** tea seeds plant on grass and Rich Soil, refused on Farmland (G12). Shears on a grown bush → leaves + sticks, back to a small bush; empty hand and iron hoe right-click → nothing.
+- [ ] **CR-33 Tea:** tea seeds plant on grass, Rich Soil, Farmland, Rich Farmland and Fertile Soil (G12 fixed 2026-11-07); a grown two-high bush on Farmland survives a neighbour update (place and break a block beside it). Shears on a grown bush → leaves + sticks, back to a small bush; empty hand and iron hoe right-click → nothing.
 - [ ] **CR-34 Coffee drain:** coffee beans on basalt next to a wheat patch in the Overworld → as the coffee grows, wheat within 2 blocks turns into Wither Roots / Wild Coffee Bush. A stem at stage 2 gives 1 berry on an empty-hand click.
 - [ ] **CR-35 Fruit bushes:** blueberry bush at stage 4 → right-click gives 1-2 berries and it drops to stage 2; iron hoe right-click on a ripe patch picks 3x3. Lemon: right-click the top half of a ripe lemon tree → lemons drop.
 - [ ] **CR-36 Pineapple:** pineapple sapling plants on sand and coarse dirt, refused on grass and farmland.
@@ -1604,6 +1627,23 @@ PASSED r1031 (2026-10-31; SQ-CS-03 to -05 on a plains superflat), including the 
   and Ender crop in the End green, in the overworld red.
 - [ ] **CR-94 Cave [game]:** glow berries under a ceiling at y -10 green, at y 60 nothing, at y 140 red; seasons do not
   change it.
+- [ ] **CR-105 Bucket soaks 3x3 [game]:** till a 5x5 of dry Farmland (no water near), water bucket on the middle (top
+  face) → the middle 3x3 turns dark (moist), the outer ring stays dry, the hand holds an empty bucket. Repeat on Rich
+  Farmland and on dry Fertile Soil (soaked texture). Creative mode: the bucket stays full.
+- [ ] **CR-106 Bottle soaks one [game]:** water bottle on one dry Farmland block → only that block turns moist, a glass
+  bottle in hand. A water bottle on already moist Farmland → you drink it (nothing taken). A bucket on a ripe wheat over
+  dry Farmland → the 3x3 under it soaks and the wheat is not harvested.
+- [ ] **CR-107 Left alone [game]:** sneak + water bucket on dry Farmland → a water source is placed as in vanilla; a
+  water bucket on the side face of Farmland next to a 1-deep hole → water goes into the hole.
+- [ ] **CR-108 Weeds no replant [game]:** right-click ripe Weeds with an empty hand and with a hoe → nothing; break
+  them → dandelions and weeds drop.
+- [ ] **CR-109 Weeds on rich soils [game]:** plant the weed item on Rich Farmland, Rich Soil and Fertile Soil → it
+  places on all three; leave a field of Rich Farmland and Fertile Soil next to tall grass for a few days → no weeds
+  appear by themselves (vanilla Farmland nearby can still get them).
+- [ ] **CR-110 Pineapple soils [game]:** plant pineapple on Farmland, Rich Farmland and Fertile Soil → it places and
+  grows; it still grows on sand.
+- [ ] **CR-111 Common cantaloupe [game]:** new chunks in a desert and a badlands → cantaloupe and mini cantaloupe
+  patches roughly three times as often as before (both kinds).
 - [ ] **CR-95 Mushroom colony [game]:** a Farmer's Delight red mushroom colony in Mushroom Fields green in every
   season; in plains it follows temperate (green spring, red winter).
 - [ ] **CR-96 Wet/dry calendar [game]:** pineapple in a jungle green in the wet (`/season set mid_winter`), nothing in
@@ -1710,3 +1750,12 @@ PASSED r1031 (2026-10-31; SQ-CS-03 to -05 on a plains superflat), including the 
 - 2026-10-31: scratchpad notes translated into TODO rows (`farming/trees #3`, `farming/crops #28`, `#29`). No code changed.
 - 2026-11-02: pre-scratch pass (plan_prescratch_fixes.md): tomatoes on ropes, sticks and treated sticks are own-pick crops and the hoe area climbs their columns (`farming/crops #29`); attached stems connect to every fruit they grew and re-point only at those (`#20`); stems get no Immersive Weathering extra ticks on Fertile Soil (`#21`, `[stem_fruit] fertileSoilBoost`). Creative Delight Java + `kubejs/assets` blockstates. CR-101 to CR-104.
 - 2026-11-02 (deep scan): status lines matched to the runs: crop seasons shipped 1.1.05 and CQ-CS-07 passed; village farm rows SQ-VF never run; CR-100 to CR-104 annotated with the r1102b pre-scratch results (s5 boot A judged; boot B and the s5_R reruns still running).
+- 2026-11-07 (plan_farming_cooking_batch): G12 tea on Farmland, Rich Farmland and Fertile Soil (CD `TeaBushSoilMixin`);
+  G13 the top half of corn harvests through Quark like the lower half (CD `QuarkTopHalfHarvestMixin`, tag
+  `crops/harvest_from_bottom`); water bucket (3x3) and water bottle (1 block) soak farmland soils (CD `crops/WaterOnSoil`,
+  `farming/crops #17`); grape seed tooltip "not on farmland" (Creative Brewing `vinery/tooltips.js`, Q13). Built and
+  compile-checked; not run in game. CR-31, CR-33, CR-105 to CR-107.
+- 2026-11-07 (plan_farming_cooking_batch, main session): G8 weeds blacklisted from Quark's replant; weeds hand-plantable
+  on Rich Farmland (Q1); G15 pineapple on the farmland soils; a common Cantaloupe and Mini Cantaloupe wild patch
+  (rarity 1/24) beside the 1/64 ones (`farming/wild-crops #5`); Mini melon (`farming/crops #25`) stays a note: its plant
+  growth and seed shape will mirror the Mini Cantaloupe. CD tag script and worldgen data. CR-108 to CR-111.

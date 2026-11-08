@@ -191,10 +191,10 @@
     "cantaloupe": {
       "label": "Mini Cantaloupe",
       "where": ["warm desert", "warm badlands"],
-      "features": ["creativedelight:wild/mini_cantaloupe"],
+      "features": ["creativedelight:wild/mini_cantaloupe", "creativedelight:wild/mini_cantaloupe_common"],
       "requires": "delightful",
       "disable_modifiers": ["delightful:cantaloupe"],
-      "notes": "Cantaloupe merge (item_merges.md 2.10): Delightful's cantaloupe is the Mini Cantaloupe and grows where the Cantaloupe (hamimelon) does, on the same soils (pack feature, copy of wild/hamimelon). Was warm dry grassy, Delightful's patch."
+      "notes": "Cantaloupe merge (item_merges.md 2.10): Delightful's cantaloupe is the Mini Cantaloupe and grows where the Cantaloupe (hamimelon) does, on the same soils (pack feature, copy of wild/hamimelon). Was warm dry grassy, Delightful's patch. Two patches: the rarity 64 one and the common one (rarity 24, plan_farming_cooking_batch A10)."
     },
     "corn": {
       "label": "Corn",
@@ -297,10 +297,10 @@
     "hamimelon": {
       "label": "Cantaloupe",
       "where": ["warm desert", "warm badlands"],
-      "features": ["creativedelight:wild/hamimelon"],
+      "features": ["creativedelight:wild/hamimelon", "creativedelight:wild/hamimelon_common"],
       "requires": "fruitsdelight",
       "disable_modifiers": ["fruitsdelight:hamimelon"],
-      "notes": "Pack feature: Fruits Delight's own needs plain sand; this one takes sand, red sand and terracotta."
+      "notes": "Pack feature: Fruits Delight's own needs plain sand; this one takes sand, red sand and terracotta. Two patches: the rarity 64 one and the common one (rarity 24, plan_farming_cooking_batch A10)."
     },
     "lychee": { "label": "Lychee (tree)", "where": ["jungle"], "features": ["fruitsdelight:tree/lychee_tree"], "disable_modifiers": ["fruitsdelight:lychee"] },
     "mango": { "label": "Mango (tree)", "where": ["jungle"], "features": ["fruitsdelight:tree/mango_tree"], "disable_modifiers": ["fruitsdelight:mango"] },

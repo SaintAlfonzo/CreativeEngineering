@@ -1333,3 +1333,94 @@ and the local-cap path in `MobCapMixin`. Note: `#forge:monsters` does not hold z
   average: returns null and Xaero's own PNG path runs. Xaero still clears its in-memory caches on every resource
   reload; the refill is now an in-memory sample. Built and installed 2026-11-07 13:35. Test: CQ-XAC-01.
 - Not done: DH generator mode, `-Xmx`, Xaero `map_writing_distance` (-1, unlimited).
+
+## 19. Live client recording, 2026-11-07 17:01 to 17:16 (singleplayer, Nether + overworld)
+
+`tools/perf/sp.sh start` attached to the running client (no JFR launch args, so stackdepth stayed 64), dumped after
+25 min; report `perf/reports/sp-20261107-171623.html` (15:23 window, 414 jars). Analysis only, nothing changed.
+
+- **Memory is the problem.** Live heap after each GC is flat at 4.2 to 4.7 GB (no leak), but the heap is committed to
+  the full 8 GB and the JVM was 7.9 GB resident plus 6.2 GB in swap (machine: 14.5 GB RAM, integrated GPU, 9.4 GB swap
+  in use, 308 MB free). One collection at 17:14:33 (7.1 to 4.3 GB) took 14.3 s because it touched swapped-out pages:
+  the whole game froze, server logged 14,315 ms behind and an 8.2 s Nether tick. All other pauses under 0.5 s except
+  one 1.06 s. Same cause as the 13:20 freeze (section 18). Candidate: `-Xmx6G` (headroom over the 4.7 GB live peak),
+  and less DH off-heap work (generator mode, radius).
+- **Server is fine** apart from that freeze: median tick 3.7 ms (pack hooks 2.8), p95 9.8, Nether 44% of tick time
+  (1,416 chunks loaded). Server thread: modernfix 13% (chunk system), Immersive Portals 13% (`BreakableMirror` 5.5%
+  of the thread, portal entities).
+- **Client threads**: DH Render Loader 23% and DH World Gen 19% of all CPU samples, Render thread 20%, Server 10%,
+  CullThread 9%. DH also allocates 40 MB/s of the 117 MB/s total.
+- **Render thread** (innermost mod frame): Xaero's World Map 22% (`BiomeColorCalculator.getBiomeColor` 8.8% alone,
+  `MapPixel`/`MapWriter.loadPixel` 6%), Immersive Portals 18.5% (rendering the world through portals 5.4%, remote-world
+  random ticks 4.9%, chunk manager 3.1%, player render 2.9%), Rubidium 12%.
+- **Log spam**: 440,000 warnings in 15 min, `latest.log` 130 MB: Better Fortresses and Better Dungeons each warn on every
+  out-of-region basalt columns placement made by DH's world-gen threads in the Nether. Candidate: a log filter for
+  those two messages (or YUNG's own option, if any).
+- **Recording bloat**: 13.4 M `jdk.Deoptimization` events (361 MB of the 504 MB dump), almost all DH
+  `BlockStateWrapper_forge.calculateEDhApiBlockMaterialId` with `unstable_if`/action none (an uncommon trap on every
+  call, not a recompile loop). Candidate: disable `jdk.Deoptimization` in `server/perf/ce-server.jfc` so the 512 MB cap
+  keeps the full 30 min.
+
+### 19.1 Built (2026-11-07 evening; Creative Compat and Creative Calendar built, NOT installed: game running)
+
+- **Log spam**: Compat `compat/LogSpamFilter`, a config-level filter on the running log4j context (installed in the
+  Compat constructor). Each listed message passes once per session after an info note, the rest are denied. Listed:
+  Better Fortresses' and Better Dungeons' `NoBasaltColumnsInStructuresMixin` warning ("Detected a mod with a broken
+  basalt columns configuredfeature"): their check asks the WorldGenRegion for the neighbour chunk, which DH's
+  generator regions do not have. YUNG's check itself still runs.
+- **No DH generation in the Nether**: Compat `mixin/DhNoGenerationMixin` (common list, gated on distanthorizons,
+  @Pseudo) cancels `AbstractDhServerLevel.shouldDoWorldGen()` with false for the dimensions in
+  `compat/DhDimensions.NO_GENERATION` (`minecraft:the_nether`); the answer is computed once per DH level. Covers
+  `DhClientServerLevel` (singleplayer) and `DhServerLevel` (calls super). Loaded chunks still become LODs.
+- **Nether LOD radius and fog**: Compat `compat/DhDimensionView` (client, Forge bus, HIGHEST): on a client
+  `LevelEvent.Load` in the Nether it sets DH API overrides `chunkRenderDistance` 32 (config 64), `enableDhFog` true,
+  `farFogEndDistance` 1.0, `farFogMaxThickness` 1.0; any other level and logout clear them. API overrides are not
+  written to `DistantHorizons.toml`. DH scales far-fog distances by the LOD radius (fog shader reads
+  `lodChunkRenderDistanceRadius`), so the fog edge follows the radius; start (0.4), falloff (EXPONENTIAL_SQUARED),
+  density (2.5) and colour stay configured, about 99.8% thick at the edge.
+- **Xaero biome colour time**: 85% of `BiomeColorCalculator.getBiomeColor` was Serene Seasons' grass/foliage
+  resolver, which Xaero calls up to 9 times per pixel (biome blending) and chunk meshing once per tinted block. Per
+  call it scanned the biome blacklist, tropical list, less-colour list and dimension whitelist and read two
+  ForgeConfigSpec values. Calendar `seasons/SeasonAnswers` keeps those answers per biome holder (references only) and
+  per dimension: `SeasonBiomeConfigMixin` (HEAD returns a known answer, RETURN stores; the tag overrides store too),
+  new `SeasonServerConfigMixin` (`isDimensionWhitelisted`), `SeasonColorUtilMixin` @Redirect of the two
+  `BooleanValue.get()` (require 2). Cleared on TagsUpdatedEvent (`SeasonTypes.onTagsUpdated`) and on
+  ModConfigEvent Loading/Reloading of Creative Calendar and of Serene Seasons (its own mod bus through
+  `FMLModContainer.getEventBus()`). Season and sub-season are still read live. Expected: about 350 of the 546
+  getBiomeColor samples gone; the rest is Xaero's registry lookup (`MappedRegistry.get`, 44) and the colour math.
+  Not changed: Xaero `biome_blending` (true); turning it off would cut the calls 9x more but gives hard biome edges.
+- **Recording**: `server/perf/ce-server.jfc` `jdk.Deoptimization` disabled.
+- Tests: CQ-PNE-01..07 (scratch_queue.md). Changelog: 4 bullets under Performance & Stability. TODO `pack/server #38`.
+
+### 19.2 Rubidium on the render thread (2026-11-07 recording, categorised)
+
+699 render-thread samples (11.4%) had Rubidium as the innermost mod frame (vanilla callees counted to it). By
+Rubidium entry point; "via portals" = inside Immersive Portals' world-through-portal render (29% of the total):
+
+| Category | Samples | % of render thread | via portals | What |
+|---|---|---|---|---|
+| Chunk visibility and render lists (`updateChunks`) | 234 | 3.8 | 48 | the section-graph walk (`DirectionUtil.getOpposite` 91), render-list building (`addAll` 63), `tickVisibleRenders` 20 |
+| Block entities (`renderTileEntities`) | 221 | 3.6 | 55 | vanilla BE renderers, mostly **signs** (`SignRenderer` 111, 1.8% alone, text drawn every frame), model quads 31, banners |
+| Fog colour sampling (`FastCubicSampler.sampleColor`) | 93 | 1.5 | 77 | Sodium's smooth fog colour (biome sample per frame); repeated for every portal view |
+| Terrain draw calls (`drawChunkLayer`) | 72 | 1.2 | 1 | uploading uniforms and issuing the chunk-layer draws |
+| Entity vertex output (`VertexDrain`) | 44 | 0.7 | 6 | entity and item vertex writes |
+| Other | 35 | 0.6 | | rebuild scheduling, entity visibility |
+
+Candidates (not built): sign text culling by distance (a mod such as a sign-render-distance option, or a mixin
+skipping text past N blocks); Immersive Portals' portal render limits (another session's `IPPortalRenderLimitsMixin`
+work) cut the "via portals" share, fog colour sampling most of all.
+
+### 19.3 Sign text distance and Nether fog colour (built 2026-11-07 evening, Compat, not installed)
+
+- **Sign text**: Compat `mixin/SignTextDistanceMixin` (client list, SRG names, remap off): `SignRenderer.m_6922_`
+  (render) cancels at the `SignBlockEntity.m_155717_` (getRenderMessages) call when the sign centre is more than 24
+  blocks from the camera, popping the one outer pose still open (the model's inner pose is already popped). The sign
+  model is still drawn; text stays while scoping (`isScoping`, as vanilla's glowing outline). Covers modded wood signs
+  that use the vanilla renderer. The cost was about 80% text (line widths through `StringSplitter`, glyphs) and 20%
+  model. Test CQ-PNE-08.
+- **Nether fog colour**: Compat `compat/NetherFogColour` (client, Forge bus, LOW): `ViewportEvent.ComputeFogColor` sets
+  #3F0905 when the drawn level (`Minecraft.level`, so also Immersive Portals' Nether views) is the Nether, the camera is
+  in no fluid and the camera entity has neither Blindness nor Darkness. Clear colour, terrain fog and DH's world-coloured
+  far fog follow. The biome fog sample (Rubidium's `FastCubicSampler`, 19.2) still runs; skipping it would need a second
+  redirect on a call Rubidium already redirects. Owner request 2026-11-07. Test CQ-PNE-09.
+

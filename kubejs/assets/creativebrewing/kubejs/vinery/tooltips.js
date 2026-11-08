@@ -23,6 +23,10 @@ ItemEvents.tooltip(e => {
 			['Shears give the seed back; breaking a planted stem loses it', col.norm]],
 		[i.grapevine_lattice, ['Plant jungle grape seeds on it', col.norm],
 			['Shears give the seed back; breaking a planted lattice loses it', col.norm]],
+		// Ground grape bushes need a full solid block below (vinery.md 2.6), so farmland refuses them (farming/crops #2, Q13)
+		[[i.grape_seeds_red, i.grape_seeds_white, i.grape_seeds_red_savanna, i.grape_seeds_white_savanna,
+			i.grape_seeds_red_taiga, i.grape_seeds_white_taiga],
+			['Grows on a full solid block such as grass or dirt, not on farmland', col.norm]],
 		[i.apple_leaves, ['Some leaves grow apples; pick ripe ones with an empty hand', col.norm]],
 		[i.cherry_leaves, ['Some leaves grow cherries; pick ripe ones with an empty hand', col.norm]],
 		[i.apple_tree_sapling, ['Grows an apple tree', col.norm]],

@@ -145,10 +145,13 @@ def split_lists(lists, key_val, all_names_in=None):
     return parts
 
 
-def member_text(gen_id, name, ns, data, what):
+def member_text(gen_id, name, ns, data, what, server=False):
     lines = [header(gen_id).rstrip('\n'), f'// priority: {MEMBER_PRIORITY}']
     if ns not in NO_REQUIRES:
         lines.append(f'// requires: {requires_mod(ns)}')
+    if server:
+        # pack data tree: KubeJS loads it even without the Creative Delight jar, so every script there needs CD
+        lines.append('// requires: creativedelight')
     lines.append(f'// {what}, {ns} part. Readers merge every part with global.CD.genMerge(\'{name}\') (creative_delight.md 28.2).')
     body = json.dumps(data, indent=1, ensure_ascii=False)
     lines.append(f"if (global.CD) global.CD.genPut('{name}', '{ns}', {body})")
@@ -160,9 +163,10 @@ def write_member_scripts(gen_id, name, parts, default_root, what, check=False):
     <name>.js in folders with no part. Returns (changed or new paths, stale paths); writes nothing when check."""
     root = out_root(gen_id, default_root)
     mark = header(gen_id).split(';')[0]
+    server = (INSTANCE / DATA_ROOT) in (root, *root.parents)
     # CD's own startup folder is creativedelight/ (plan_cb_polish.md 4), also for its creativeengineering: items
     folder = (lambda ns: STARTUP_FOLDER.get(ns, ns)) if root == INSTANCE / STARTUP_ROOT else (lambda ns: ns)
-    want = {root / folder(ns) / f'{name}.js': member_text(gen_id, name, ns, parts[ns], what) for ns in sorted(parts)}
+    want = {root / folder(ns) / f'{name}.js': member_text(gen_id, name, ns, parts[ns], what, server) for ns in sorted(parts)}
     changed = [p for p, t in want.items() if not p.exists() or p.read_text(encoding='utf-8') != t]
     stale = [p for p in sorted(root.glob(f'*/{name}.js'))
              if p not in want and p.read_text(encoding='utf-8').startswith(mark)]

@@ -1,5 +1,6 @@
 package com.SaintAlfonzo.creativecompat.portalgun;
 
+import com.SaintAlfonzo.creativecompat.compat.jei.JeiGate;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -39,6 +40,10 @@ public class PortalGunDyeJEI implements IModPlugin {
 
     @Override
     public void registerRecipes(IRecipeRegistration registration) {
+        JeiGate.run("registerRecipes", () -> registerRecipes0(registration));
+    }
+
+    private void registerRecipes0(IRecipeRegistration registration) {
         Item gun = PortalGunDyeRecipe.gun();
         if (gun == null) return;
         List<CraftingRecipe> pages = new ArrayList<>();

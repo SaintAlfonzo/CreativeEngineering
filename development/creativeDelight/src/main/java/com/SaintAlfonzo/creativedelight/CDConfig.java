@@ -60,6 +60,7 @@ public final class CDConfig {
 	public static final String WTHIT_CROP_LINE = "wthitCropLine";
 	public static final String JEI_INFO_PAGES = "jeiInfoPages";
 	public static final String COOKWARE_PICKUP = "cookwarePickup";
+	public static final String COOKWARE_KEEP_CONTENTS = "cookwareKeepContents";
 
 	/** Worldgen switch ids (creative_delight.md 24). */
 	public static final String WILD_CROPS = "wildCrops";
@@ -138,6 +139,9 @@ public final class CDConfig {
 		qolSwitch(b, COOKWARE_PICKUP, "QoL-7: sneak right-click with an empty hand picks up a cooking pot, copper pot, kettle or",
 				"skillet (#creativedelight:cookware_pickup) into the hand, as if broken; sneak left-click toggles the handle.",
 				"Off: sneak right-click toggles the handle as in the original mods.");
+		qolSwitch(b, COOKWARE_KEEP_CONTENTS, "QoL-8: a cooking pot, copper pot or kettle broken by a player (or picked up, QoL-7) keeps",
+				"its ingredients, meal and output in the item, restored when placed; the leftover slots drop. Off: everything but",
+				"the meal drops, as in the original mods (QoL-7 pickup then empties the station into the inventory).");
 		b.pop();
 
 		b.comment("One switch per Creative Delight worldgen system (feature_writeup/creative_delight.md 24). Rejoin the world",
@@ -535,9 +539,9 @@ public final class CDConfig {
             ).push("dandelion_maturing");
 
             richSoilTicks = b.comment("Rich Soil and Rich Soil Farmland (Farmer's Delight).")
-                    .defineInRange("richSoilTicks", 20, 0, 100000);
+                    .defineInRange("richSoilTicks", 10, 0, 100000);
             fertileSoilTicks = b.comment("Fertile Soil (Immersive Weathering's mulch block).")
-                    .defineInRange("fertileSoilTicks", 10, 0, 100000);
+                    .defineInRange("fertileSoilTicks", 5, 0, 100000);
 
             b.pop(); // dandelion_maturing
         }

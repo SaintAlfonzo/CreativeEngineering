@@ -11,7 +11,7 @@ var R = global.NCH
 // Unify bio oils to plant oil
 // Add seeds to squeezing
 R.bulk('ieSqueezing', [
-	[Fluid.of(f.plantoil, 60), i.flax_seeds, e, undefined, undefined, 6400],
+	// flax seeds dropped with flax (item_merges.md 2.22)
 	[Fluid.of(f.plantoil, 50), i.grape_seeds_red, e, undefined, undefined, 6400],
 	[Fluid.of(f.plantoil, 50), i.grape_seeds_red_savanna, e, undefined, undefined, 6400],
 	[Fluid.of(f.plantoil, 50), i.grape_seeds_red_taiga, e, undefined, undefined, 6400],

@@ -7,11 +7,11 @@
 //       kubejs/assets/creativecompat/kubejs/  -> assets/creativecompat/kubejs/  (client scripts)
 //     Startup scripts live in this project (src/main/resources/kubejs_startup/creativecompat/), loaded from the jar by
 //     Creative Common's startup loader.
-//   - members nested under META-INF/jarjar/ (ce.forge-bundle, as Creative Brewing): Tempad, ported from 3.0.4
-//     (members/tempad, feature_writeup/immersive_portals.md 2.1.1).
+//   - no nested members (Tempad was one until 2026-11-07; now its own jar, development/backportedTempad), so Compat
+//     needs no donor jar.
 // Build: ./gradlew :creativeCompat:build --offline   Install: ./gradlew :creativeCompat:installToMods
 plugins {
-    id 'ce.forge-bundle'
+    id 'ce.forge-mod'
 }
 
 dependencies {

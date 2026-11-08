@@ -60,6 +60,8 @@ script. The recipe swap tool runs twice per recipe event (once per group); no pa
 | 2.5 | `decorative_blocks:rocky_dirt` | `twigs:rocky_dirt` | Decorative Blocks' 4 dirt -> 1 and 1 -> 4 dirt recipes removed. Dave's `davebuildingmod:rocky_dirt` (and slab) is a separate block, renamed Pebble Dirt / Pebble Dirt Slab. Recipes swapped: Pebble Dirt is Twigs' pattern (dirt and pebbles crossed in a 2x2) -> 4, Rocky Dirt is Dave's shapeless 2 dirt + 2 cobblestone -> 4; coarse dirt in place of dirt gives 8 in both. Originals (`davebuildingmod:rec_rocky_dirt`, `twigs:rocky_dirt`) removed |
 | 2.8 | Farmer's Respite's coffee: berries, beans, sack, wild bush, three drinks | Rustic Delight's | See 2.8: 7 pairs, 15 recipes removed, Rustic's coffees give Caffeinated |
 | 2.9 | `salt:salt`, `vintagedelight:salt_block` (and the salt bucket, removed) | `vintagedelight:salt_dust`, `salt:salt_block` | See 2.9: one pink salt |
+| 2.21 | `twigs:azalea_flowers` | `immersive_weathering:azalea_flowers` | See 2.21: Twigs' block placed from Immersive Weathering's item |
+| 2.22 | Supplementaries flax, flax seeds, flax bale, wild flax | none (removed) | See 2.22: config switch, string recipes |
 | 2.10 | `fruitsdelight:hamimelon_slice`, `fruitsdelight:hamimelon_popsicle`, `creativeengineering:canned_hamimelon` | `delightful:cantaloupe_slice`, `delightful:cantaloupe_popsicle`, `creativeengineering:canned_cantaloupe` | See 2.10: hamimelon line renamed Cantaloupe, Delightful's cantaloupe renamed Mini Cantaloupe |
 
 Related rename (not a merge): Vinery's `vinery:apple_cider` is "Hard Cider" (`client_scripts/namechanges.js`), and
@@ -143,6 +145,15 @@ drinks go, Rustic's drinks give Caffeinated instead of Speed and Haste, every ot
   `replaceOutput` (the two can recipes, [pack_tooling.md](pack_tooling.md) 2.2). Respite's kettle has no KubeJS
   schema, so gambler's tea is removed and rebuilt with `R.frBrewing` on Rustic's beans. `mortar.js` skips catalogue
   entries naming a purged item (`[mortar] 6 of 7`).
+- Bush removed (C6, owner Q21b, 2026-11-07; built, not run): Farmer's Respite's coffee plant no longer exists in play.
+  The purged beans already meant no new bush could be planted; a bush already in a world grew on and ate any
+  `CropBlock` within 2 blocks (crops.md G14). Creative Delight mixin `mixin/farmersrespite/CoffeeBushRemovedMixin` on
+  the five plant blocks (`coffee_bush`, `coffee_bush_top`, `coffee_stem`, `coffee_stem_middle`, `coffee_stem_double`)
+  makes every piece random-tick and breaks it on its first random tick instead of growing (drops through the loot swap:
+  Rustic Delight's beans). Gated in `CDMixinPlugin` `NEEDS_ALSO_MOD` on `rusticdelight` (the merge list's condition).
+  Wither Roots already placed by a bush stay. Basalt Deltas spawn was already off (V18). Nothing of Farmer's Respite's
+  coffee is left to merge: its 9 coffee ids are the 7 pairs above plus the coffee cake and slice, which stay
+  (made from Rustic's roasted beans). G14 is closed by this. MG-49, SQ-MG-22.
 
 ### 2.9 Salt (VERIFIED COMPLETE 2026-11-02: code in CD `vintage_items.js` and `vintagedelight/recipes.js`, scratch r1031 pass; only play is open; built 2026-10-26, scratch server PASSED r1031 2026-10-31 after the 2026-10-28 fix; TODO `food/seasoning #6`)
 
@@ -259,6 +270,15 @@ their apple trees; Vinery's grow in plains, sunflower plains, meadow and 9 Terra
 stay and keep fruiting; their leaves are typed `autumn_fruit` like Vinery's. The apple itself (`minecraft:apple`) is
 unchanged and its tooltip shows the Vinery apple tree's seasons. Apple jelly, jello and crates stay (made from apples).
 The Botany Pots apple recipe goes through the recipe swap onto the Vinery sapling.
+
+Q21 (owner 2026-11-07, "merge Fruits Delight's apple into Vinery's"): checked 2026-11-07, nothing is left to build.
+Neither mod has its own apple item: both trees drop `minecraft:apple`, so the apple is already one item; the sapling and
+leaves are the two pairs above. Decision on what a Fruits Delight apple tree becomes: an existing one stays as it is
+(its trunk and Fruits Delight apple leaves, still fruiting vanilla apples, `autumn_fruit` season); it is not converted
+in the world, because both blocks stay registered and the swap lists only remap a block id that is gone. Breaking its
+leaves gives Vinery's leaves (Silk Touch) or Vinery's sapling. A Fruits Delight sapling already placed in a world still
+grows a Fruits Delight tree. No new ones generate. The apple crates (Fruits Delight's, Quark's) and Vinery's apple bag
+are the crate merge (`merges/materials #4`), not this one.
 
 ### 2.12 Ancient fish (built 2026-11-01, not run; SQ-CAT-02, SQ-CAT-04; [cozy_cats.md](cozy_cats.md) 10.2)
 
@@ -386,6 +406,52 @@ roasted zucchini. Removed: the grid recipes and the three sequenced assemblies (
 pack has no lettuce tag; the lettuce version uses `#forge:salad_ingredients` (cabbage, cabbage leaf, dandelion leaf,
 chopped clover); the zucchini quiche's "egg" is read as any egg.
 
+### 2.21 Azalea flowers (built 2026-11-07, not run; MG-50, SQ-MG-23; TODO `flowers #5`, owner Q23)
+
+Immersive Weathering's azalea flowers stay; Twigs' item is purged into it. Twigs' placement is kept.
+
+| Purged | Survivor | Why |
+|---|---|---|
+| `twigs:azalea_flowers` (item) | `immersive_weathering:azalea_flowers` | owner: Immersive Weathering's survives |
+
+- Pair: pack group, Creative Common `kubejs_startup/creativecommon/_lib/item_merges.js` (not food: the Twigs item is
+  only a placeable flower, so it is not a Creative Delight swap list).
+- Placement: Creative Compat mixin `IwAzaleaFlowersPlaceMixin` on Immersive Weathering's `AzaleaFlowersItem#useOn`:
+  where Immersive Weathering's own use passes (any block but an azalea to re-flower), the held stack places Twigs'
+  azalea flowers block through Twigs' block item (multiface, on floors, walls and ceilings, Twigs' sound, one flower
+  used). Gated in `CompatMixinPlugin` `NEEDS_ALL` on `immersive_weathering` and `twigs`.
+- Texture: the one item left is Immersive Weathering's, with its texture. The placed block is Twigs' block with Twigs'
+  block texture (Immersive Weathering has no placed form for the item).
+- Recipes: both sets kept. Twigs' two (flowering azalea or flowering azalea leaves -> 6) now make Immersive
+  Weathering's flowers through the recipe swap; Immersive Weathering's shearing of a flowering azalea, its flower pile
+  (3 -> 6) and the azalea tea (`#creativeengineering:azalea_flowers`, which now holds only the survivor) are unchanged.
+- Loot: the placed Twigs block (and its potted form) drops Immersive Weathering's flowers (loot swap). Twigs' worldgen
+  patches stay.
+- Not covered: Immersive Weathering's item is not a block item, so it cannot be put in a flower pot; a potted Twigs
+  azalea flower already placed stays.
+- Separate from the azalea wood restore (`farming/trees #7`, plan_farming_cooking_batch.md Part B).
+
+### 2.22 Flax removed (built 2026-11-07, not run; MG-51, SQ-MG-24; TODO `merges/materials #2` "Flax goes", plan item F1)
+
+Not a merge: Supplementaries' flax goes with no survivor, folded into the string route of the rope plan.
+
+| Piece | Where | What |
+|---|---|---|
+| Config | `config/supplementaries-common.toml` `[functional.flax] enabled = false` (copy in `configs_edited/root_config/`) | Supplementaries' own switch. Its items stay registered (the switch only drops the creative tab), so old worlds keep them. Its flag recipes change: rope from 3 string (`rope_2`, 3 rope), sack from wheat and string (`sack_2`); flax -> string (`strings`) and the flax doormat (`doormat_2`) are off. Its chest injects (dungeon, mineshaft, pillager outpost, shipwreck) and the flax seed trades (farmer buys 15, wandering trader sells) are off. Wild flax was already off (V6) |
+| Hidden | `removed_items.js` (Creative Common) | flax, flax seeds, flax bale (`flax_block`), wild flax: hidden in JEI, item tags stripped (`#forge:crops/flax`, `#forge:fiber`, `#minecraft:straw`, `#supplementaries:straw`, seeds and flower tags) |
+| Recipes | `kubejs/data/creativecompat/kubejs/other/misc_mods.js` | removed: `supplementaries:flax_block`, `flax_block_uncrafting`, `botany_flax`, `botanypots:supplementaries/crop/flax`, `create:milling/compat/supplementaries/flax`. `kubejs/data/creativeengineering/kubejs/engineering/oil.js`: the flax seeds -> 60 mB plant oil squeezer row dropped. Fodder already took a rice bale and a straw bale in place of the flax bale (unchanged) |
+| Loot | `kubejs/data/creativeworldgen/kubejs/loot/loot_config.json` | `supplementaries:flax_seeds` `remove: true` (the underground bunker treasure table also had them) |
+
+- Daub still has a recipe: `#supplementaries:straw` keeps wheat and Farmer's Delight straw.
+- Open, owner: the doormat now has no recipe (its only one took flax), as the rope plan expected. It stays registered
+  and visible. Give it a recipe (e.g. 2 straw) or hide it.
+- Rope: the Supplementaries rope is made from string until the rope plan (`merges/materials #2`, section 5.5: Rope
+  Netting from 3 Farmer's Delight ropes) is built.
+- Flax crops already planted stay and drop the hidden flax and seeds. Composting them still works (CD
+  `supplementaries/compost_values.js`). G9 (flax top half) is dropped.
+- Generated data still naming flax, harmless until their next run: `item_physics_families.json`, `crop_seasons.json`,
+  `jei_world/knife_drops/generated.json`, CD `soil_yield.js` (flax row).
+
 ## 3. Known limits
 
 - A Neapolitan milk bottle can't be poured back into a milk cauldron (only Neapolitan's own bottle fits, and it no
@@ -398,7 +464,7 @@ chopped clover); the zucchini quiche's "egg" is read as any egg.
   (CCK's berry milling), `can_types.json` (Canned Coffee Berries' source key) still name purged items.
 - Canned Coffee Berries keeps its name, values and effects (Wither, Caffeinated) but is filled from Rustic's raw beans,
   which are not a food themselves. Rename or drop the can if that reads wrong.
-- FR coffee bushes already in a world stay and still grow (CCK harvester compat included); they drop Rustic's items.
+- FR coffee bushes already in a world break on their next random tick (since 2026-11-07, 2.8) and drop Rustic's items.
 - Salt: Vintage Salt Blocks already placed stay in the world and drop The Salt's block. The Salt's own melting /
   dissolving of a dropped salt item does not apply to salt dust.
 - Salt merge gaps (audit 2026-10-26):
@@ -418,7 +484,7 @@ chopped clover); the zucchini quiche's "egg" is read as any egg.
 - **r1102b 2026-11-02** (scratch server; verdicts in `perf/runs/r1102b/` HANDOVER.md and the slice judged.md): rerun pending (batch fault) SQ-SALT-06, -08.
 - **r1103 2026-11-03** (scratch server; verdicts in `perf/runs/r1103/` FINAL.md and the slice judged.md): PASS SQ-SWP-06o, -01, -02, -03, -04, -05, -06, -07, -08, SQ-VTDA-12, SQ-SALT-06, -08.
 
-After a full restart, `logs/latest.log` first: `[itemMerges] 1 pack merges registered` and the two
+After a full restart, `logs/latest.log` first: `[itemMerges] 2 pack merges registered` (rocky dirt, azalea flowers) and the two
 recipe-event lines of 1.1 (SQ-IMS-01), `[food values] 5 effect swaps` with no
 `effect swap:` warning, no `Error occurred while handling event`
 from `item_merges.js` or `cooking.js`, no `ieMixer` warning, no mixin apply error for `JeiFluidHelperTooltipMixin` or
@@ -478,6 +544,15 @@ from `item_merges.js` or `cooking.js`, no `ieMixer` warning, no mixin apply erro
 - [ ] **MG-48 Fish and chips [game]:** JEI shows one Fish and Chips (Veggies Delight's art) with the Cooking Pot
   frying route, no Cod 'n' Chips, Fries or Canned Chips entry; a Cod 'n' Chips given by `/give`
   turns into Fish and Chips in the inventory; eating it returns a bowl (2.13).
+- [ ] **MG-49 Coffee bush removed [game]:** in an old world with a Farmer's Respite coffee bush next to wheat, wait
+  (or `/gamerule randomTickSpeed 300`): the bush breaks into Rustic Delight coffee items; the wheat is untouched, no
+  Wither Roots appear (2.8). Server half: SQ-MG-22.
+- [ ] **MG-50 Azalea flowers [game]:** JEI shows only Immersive Weathering's azalea flowers; right-click it on a floor,
+  a wall and a ceiling: Twigs' flowers are placed and one item is used; break one: Immersive Weathering's flowers drop;
+  crafting a flowering azalea gives 6 of them; right-click on a plain azalea (Immersive Weathering shearing on) still
+  re-flowers it (2.21). Server half: SQ-MG-23.
+- [ ] **MG-51 Flax [game]:** JEI has no flax, flax seeds, flax bale or wild flax; rope shows 3 string -> 3, sack shows
+  wheat and string; no flax in any chest or trade; a doormat has no recipe (2.22). Server half: SQ-MG-24.
 
 Server half of MG-35 to MG-37 without a player: `tools/salt_probe/salt_probe.js` (`/salttest`, scratch queue SQ-SALT-05
 to -07) calls each block's random tick itself and times a salt-brick tick against a stone one (added 2026-10-27).
@@ -670,3 +745,7 @@ SQ-SWP-01 to -08 in the scratch queue (section SQ-CDJ6). 2026-11-03: CD `swaps/m
 | SWP-06 | Log out with a purged item in the inventory and ender chest, set `onPlayerDataLoad=false`, rejoin | Rewritten once (`onceWhenUpdated`); a second rejoin logs nothing |
 | SWP-07 | Drop a purged stack from an old save (or `/summon item ... {Item:{id:"alexsmobs:banana",Count:3b}}`) | The item entity holds 3 Neapolitan bananas |
 | SWP-08 | `onCommand=false`, `/ccswap items` | Refused with the config key named |
+
+## Owner notes (scratchpad 2026-11-07)
+
+- Swap system: players on unmodified Delight and other mods can swap items to the new variants; a swap for every merge and some removes (owner, lower priority). Row `merges/dishes #16`.

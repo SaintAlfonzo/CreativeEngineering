@@ -1,211 +1,76 @@
 # Creative Common
 
-**The shared library behind the Creative mods.** Creative Common is the core that every Creative mod is built on. On
-its own it adds no blocks or items. It provides the shared code, scripting helpers and data the other Creative mods
-need, plus a set of interface improvements, bug fixes and performance fixes that help any large Forge 1.19.2 pack.
+**The shared library behind the Creative mods.** Creative Common is the core that every Creative mod is built on. On its own it adds no blocks or items. It provides the shared code, scripting helpers and data the other Creative mods need, plus bug fixes and performance fixes that help any large Forge 1.19.2 pack.
 
----
+Looking for the JEI, WTHIT and tooltip improvements? They are in **Creative Compat**. The armor bar overflow is in **Creative Equipment**; the Create and Immersive Engineering tweaks are in **Creative Engineering**.
+
+***
 
 ## Mods that require Creative Common
 
-- **Creative Engineering**: machines and engineering
-- **Creative Delight**: food, cooking and Farmer's Delight addons
-- **Creative Brewing**: brewing, alcohol and potions
-- **Creative Equipment**: armor, tools and gear
-- **Creative Magic**: magic mod integration
-- **Creative Worldgen**: world generation and wildlife
-- **Creative Calendar**: seasons and time
-- **Creative Compat**: compatibility between third-party mods
-- **Creative Devtools**: pack development tools
+*   **Creative Engineering**: machines and engineering
+*   **Creative Delight**: food, cooking and Farmer's Delight addons
+*   **Creative Brewing**: brewing, alcohol and potions
+*   **Creative Equipment**: armor, tools and gear
+*   **Creative Magic**: magic mod integration
+*   **Creative Worldgen**: world generation and wildlife
+*   **Creative Calendar**: seasons and time
+*   **Creative Compat**: compatibility between third-party mods, and the JEI, WTHIT and tooltip improvements
+*   **Creative Devtools**: pack development tools
 
----
+***
 
 ## What it does on its own
 
-Every feature below works without any other Creative mod. Features that touch another mod only switch on when that mod
-is installed.
+Every feature below works without any other Creative mod. Features that touch another mod only switch on when that mod is installed.
 
 ### For mod and pack authors (KubeJS)
 
-- **KubeJS scripts loaded from mod jars.** Creative mods ship their KubeJS scripts inside their own jars. Creative
-  Common loads them before the pack's own `startup_scripts`, so a mod can be dropped into any pack without copying files.
-- **Shared helpers** for recipes, tags, composting, villager and wandering trader trades, and JEI ordering.
-- **Item, block, fluid, food and effect dictionaries** that skip any mod that is not installed, so scripts can name
-  optional content safely.
-- **Swap lists**: when a mod renames or removes an item, block, effect or potion, existing worlds keep working. Old ids
-  are remapped on load, and items that were merged into another are converted in inventories, containers and on the
-  ground. Operators can run `/ccswap items` to convert everything loaded right away.
-- **Data-driven damage tags** that group damage sources (fire, magic, and so on) for other mods to use.
-- **Loot tables that name optional mods** load without errors when those mods are missing.
+<div class="spoiler"><ul><li><strong>KubeJS scripts loaded from mod jars.</strong> Creative mods ship their KubeJS scripts inside their own jars, so a mod can be dropped into any pack without copying files. Creative Common's own scripts and any jar script headed <code>// phase: helpers</code> load before the pack's <code>startup_scripts</code>, so the pack can use them; every other jar script loads after.</li><li><strong>Shared helpers</strong> for recipes, tags, composting, villager and wandering trader trades, and JEI ordering.</li><li><strong>Item, block, fluid, food and effect dictionaries</strong> that skip any mod that is not installed, so scripts can name optional content safely. Recipe removals that name a missing mod are skipped, and one summary line lists the absent mods instead of an error per recipe.</li><li><strong>Armor and tool effect frameworks</strong>: scripts can give armor sets and held tools passive effects and on-hit effects, with matching tooltip lines.</li><li><strong>Swap lists</strong>: when a mod renames or removes an item, block, effect or potion, existing worlds keep working. Old ids are remapped on load, potions made before a rename keep their effect, and items that were merged into another are converted in inventories, containers and on the ground. Operators can run <code>/ccswap items</code> to convert everything loaded right away.</li><li><strong>Data-driven damage tags</strong> that group damage sources (fire, magic, and so on) for other mods to use. Minecraft 1.19.2 has no damage types of its own.</li><li><strong>Loot tables that name optional mods</strong> load without errors when those mods are missing.</li><li><strong>Server profiling events</strong>: when a Java Flight Recorder recording is running, Creative Common writes events for every server tick, each dimension's tick, chunk waits (with the requesting stack), KubeJS event handlers (by script and line), and entity and block entity time by type. Nothing is recorded or paid for unless a recording enables them.</li><li><strong>Trade sync</strong>: on a dedicated server, clients receive the real villager and wandering trader trades, so recipe viewers that show trades list the server's offers instead of vanilla's.</li></ul></div>
 
 ### Interface
 
-- **JEI**: recipes you can craft right now are listed first; extra recipe categories and pages (cycling crafting pages,
-  smithing templates, Armor Trims recipes, world interactions); fluid amounts in tanks drawn on a readable scale; an
-  optional pack-defined ingredient order.
-- **WTHIT plugins**: contents of holders, pots, hives and tanks; campfire burn and rain state; silk touch and shears
-  hints; block model icons; and more, each with its own config switch.
-- **Tooltips**: a tooltip taller than the screen keeps its name and first lines visible. Item tooltips in AE2, FTB
-  Quests, Patchouli, Lightman's Currency, Pretty Pipes and Wares screens now show tooltip images such as AppleSkin's food
-  bars.
-- **Armor bar overflow** (with Detail Armor Bar): armor above 20 points is drawn as extra rows of icons.
-- **Container title plaques** from GUI resource packs stretch to fit long titles.
-- **Effect HUD icons and descriptions**: food and drink effects show the icon of the item that gave them; works with
-  Just Enough Effect Descriptions.
-- **Toast filter**: tutorial and advancement toasts can be turned off.
-- **In-game changelog viewer** on the title screen and pause menu, and a **loading screen tip bar** (tip packs use the
-  Loading Screen Tips format).
-- **Mod display names**: rename how any mod is shown in JEI, WTHIT and the Mods screen.
+<div class="spoiler"><ul><li><strong>In-game changelog viewer</strong> on the title screen and pause menu. It only appears when a pack ships a changelog.</li></ul><p><img src="https://media.forgecdn.net/attachments/2164/300/2026-11-07_17-21-27-png.png" alt="Changelog viewer"></p><ul><li><strong>Loading screen tip bar</strong>: tips roll across the bottom of the world loading screen. Tip packs use the Loading Screen Tips format; over 300 general Minecraft tips are built in.</li></ul><p><img src="https://media.forgecdn.net/attachments/2164/299/screenshot-from-2026-11-07-17-28-10-png.png" alt="Changelog viewer"> <img src="https://media.forgecdn.net/attachments/2164/298/screenshot-from-2026-11-07-17-28-55-png.png" alt="Changelog viewer"></p><ul><li><strong>Mod display names</strong>: rename how any mod is shown in JEI, WTHIT and the Mods screen. The list starts empty.</li></ul></div>
 
 ### Effects and potions
 
-- **Magic Resistance**: a new effect that reduces magic damage and shortens poison and wither.
-- Potions (normal, long and strong) for Magic Resistance, and for Reach and Phantom Bane when Better Beacons is installed.
-- Effect categories, HUD icons and effect id remaps can be set in the config.
+<div class="spoiler"><ul><li><strong>Magic Resistance</strong>: a new effect that reduces magic damage and shortens poison and wither, with potions (normal, long and strong).</li><li><strong>Effect rules in the config</strong>: change an effect's category (beneficial, harmful, neutral), swap one effect for another wherever it is applied, block effects from being applied at all, and choose which hidden effects keep their HUD icon. No effect is swapped or blocked by default. (Creative Compat draws the icons and effect descriptions.)</li></ul></div>
 
 ### Bug fixes
 
-- **Ghost blocks on dedicated servers**: vanilla 1.19.2 corrupts multi-block updates once a pack has more than about
-  524,000 block states. Fixed, along with the client-side crash from a missing block state in those packets.
-- **Creative pick block deleting the held item** on servers (MC-197793).
-- **Client never exiting after quit**: on some NVIDIA drivers the game window closes but the process keeps running.
-- **"Accessing LegacyRandomSource from multiple threads" crashes**: each world's shared random is made thread safe.
-- **Unbound holder crashes** from mods that check tags on unregistered entries.
+<div class="spoiler"><ul><li><strong>Ghost blocks on dedicated servers</strong>: vanilla 1.19.2 corrupts multi-block updates once a pack has more than about 524,000 block states. Fixed, along with the client-side crash from a missing block state in those packets.</li><li><strong>Creative pick block deleting the held item</strong> on servers (MC-197793).</li><li><strong>Client never exiting after quit</strong>: on some NVIDIA drivers the game window closes but the process keeps running.</li><li><strong>"Accessing LegacyRandomSource from multiple threads" crashes</strong>: each world's shared random is made thread safe.</li><li><strong>Poison and Wither damage told apart from other magic damage</strong>: shields and resistance effects can tell an effect's periodic tick from an ordinary hit that uses the same vanilla damage source.</li><li><strong>Unbound holder crashes</strong> from mods that check tags on unregistered entries.</li></ul></div>
 
----
+***
 
-## Optional pack settings (off by default)
+## Optional pack settings
 
-Out of the box, Creative Common leaves vanilla behaviour alone. The *Creative Engineering* pack turns these on in its
-own config, and any pack can do the same in `config/creativecommon-common.toml`:
+<div class="spoiler"><p>Out of the box, Creative Common leaves vanilla behaviour alone (the Create: Gravity limit below is the one performance setting that is on). The *Creative Engineering* pack turns these on in its own config, and any pack can do the same in <code>config/creativecommon-common.toml</code>:</p><table><thead><tr><th>Setting</th><th>What it does</th></tr></thead><tbody><tr><td><code>[advancements] enabled = false</code></td><td>Loads no advancements at all (vanilla, mods and datapacks)</td></tr><tr><td><code>[wandering_trader] enabled = true</code></td><td>Sets the Wandering Trader's spawn interval and number of offers</td></tr><tr><td><code>[perf] gravityLimitDimensions = true</code></td><td>Create: Gravity's per-entity work and Creative Common's low gravity for items, blocks and projectiles only run in the listed dimensions (default the End)</td></tr><tr><td><code>[creative_menu] disabled = true</code></td><td>Creative players open the survival inventory, which avoids the long freeze of building the creative search in large packs; JEI's cheat mode covers item browsing</td></tr></tbody></table><p>Most other features have a switch in the same file. With Create and Creative Compat installed, the file can also be edited in game through Create's config screen.</p></div>
 
-| Setting | What it does |
-|---|---|
-| `[advancements] enabled = false` | Loads no advancements at all (vanilla, mods and datapacks) |
-| `[toasts] tutorial / advancement = false` | Hides tutorial and advancement toasts |
-| `[jei] packOrder = true` | Orders JEI's ingredient list by the pack's definition |
-| `[wandering_trader] enabled = true` | Sets the Wandering Trader's spawn interval and number of offers |
-| `[creative_menu] disabled = true` | Creative players open the survival inventory, which avoids the long freeze of building the creative search in large packs; JEI's cheat mode covers item browsing |
-
-Most other features have a switch in the same file. With Create installed, the file can also be edited in game through
-Create's config screen.
-
----
+***
 
 ## Optional mods: what changes with each
 
-None of these are required. Each change only switches on when that mod is installed. Changes that alter another mod's
-code are tied to the versions given; with any other version they are turned off and one warning is logged, so an
-update to that mod never crashes the game. "Any version" means Creative Common only uses the mod's public features.
+<div class="spoiler"><p>None of these are required. Each change only switches on when that mod is installed. Changes that alter another mod's code are tied to the versions given; with any other version they are turned off and one warning is logged, so an update to that mod never crashes the game.</p><p> <b> Performance and stability </b> </p><ul><li><strong>Create: Gravity (1.2.x)</strong><ul><li>Its per-entity tick logic only runs in the dimensions that can have gravity (performance).</li><li>Low gravity also applies to dropped items, falling blocks, lit TNT, minecarts, experience orbs, fishing bobbers, arrows, tridents, thrown items, llama spit, Shulker bullets and boats out of water. Modded entities with their own gravity code are not affected.</li><li>Low gravity works from the moment a dedicated server starts; without this fix it only began after a <code>/reload</code>.</li><li>With ItemPhysic (1.6.7 or newer in 1.6.x), dropped items follow the same low gravity.</li></ul></li><li><strong>Immersive Weathering (1.2.x)</strong><ul><li>Faster random ticks.</li></ul></li><li><strong>WorldEdit (7.2.x)</strong><ul><li>Skips building its full block state table at server start (a long stall in large packs).</li></ul></li><li><strong>Quark (3.4)</strong><ul><li>Teleports into unexplored terrain no longer force chunk generation.</li></ul></li><li><strong>Nock Enough Arrows (1.2.x)</strong><ul><li>The whistle goal skips its search when no whistling arrow exists.</li></ul></li><li><strong>Armor Trims (1.3.x)</strong><ul><li>Item lists are cached.</li></ul></li><li><strong>Immersive Portals (2.3.x) with Serene Seasons</strong><ul><li>Crash at world creation and on joining a world fixed.</li></ul></li><li><strong>Immersive Portals (2.3.x) with Heartstone (1.1.x)</strong><ul><li>Client crash at launch fixed.</li></ul></li></ul><p><b>Effects</b></p><ul><li><strong>Better Beacons (1.0.x)</strong><ul><li>One player with Phantom Bane no longer stops phantom spawns for every player after them.</li></ul></li></ul></div>
 
-### Recipe viewers and tooltips
-
-- **JEI (11.8.x)**
-  - Recipes you can craft right now are listed first.
-  - Fluid amounts in tanks are drawn on a readable scale.
-  - Extra pages: cycling crafting grids, repairs, world interactions, potion rows.
-  - Optional pack-defined ingredient order.
-- **Just Enough Effect Descriptions (2.1.x)**
-  - Compound effects list their parts in the effect page and hover text.
-- **WTHIT (any version)**
-  - Look-at lines for holder, pot, hive and tank contents, campfires, silk touch and shears hints, and block model icons, plus the integrations listed below.
-- **Legendary Tooltips with Iceberg (1.4.x)**
-  - Fixes the name underline drawn through the title and 3D model on armor and tool tooltips.
-- **AE2 (12.9.x)**
-  - Item tooltips in terminals, pattern encoding and the guide show tooltip images (AppleSkin food bars and similar).
-- **FTB Library (1902.4.x) and FTB Quests (1902.5.x)**
-  - Same tooltip image fix in the quest book and FTB screens.
-- **Patchouli (1.19.2-77 and later)**
-  - Same tooltip image fix in books.
-- **Lightman's Currency (2.2.x)**
-  - Same tooltip image fix in its screens.
-- **Pretty Pipes (1.13.x)**
-  - Same tooltip image fix in the item terminal.
-- **Wares (1.2.x)**
-  - Same tooltip image fix on delivery agreements.
-
-### Create and Immersive Engineering
-
-- **Create (0.5.1)**
-  - Sequenced assembly keeps the item's NBT (enchantments, names) through each step.
-  - The Configs screen can edit text settings (Create leaves them as "Impl missing"), which also makes Creative Common's config editable in game.
-  - Spout and Item Drain recipes appear on JEI row pages.
-  - Haste from a pipe spilling Builder's Tea shows its HUD icon.
-- **Create: Gravity (1.2.x)**
-  - Its per-entity tick logic only runs in the dimensions that can have gravity (performance).
-- **Immersive Engineering (9.2.x)**
-  - Fluid inputs (Bottling Machine, Mixer, Refinery) accept a single fluid by id.
-  - Bottling Machine recipes appear on JEI row pages.
-  - WTHIT shows a sheetmetal tank's contents on every part.
-
-### Performance and stability
-
-- **Immersive Weathering (1.2.x)**
-  - Faster random ticks.
-- **WorldEdit (7.2.x)**
-  - Skips building its full block state table at server start (a long stall in large packs).
-- **Quark (3.4)**
-  - Teleports into unexplored terrain no longer force chunk generation.
-- **Nock Enough Arrows (1.2.x)**
-  - The whistle goal skips its search when no whistling arrow exists.
-- **Armor Trims (1.3.x)**
-  - Item lists are cached.
-  - JEI's smithing pages show which template each recipe needs.
-- **Immersive Portals (2.3.x) and Heartstone (1.1.x)**
-  - Crash at world creation with Serene Seasons fixed.
-  - Client crash at launch with Heartstone fixed.
-
-### Armor bar
-
-- **Detail Armor Bar (2.6.x)**
-  - Armor above 20 points draws as extra rows of icons.
-  - Armor sets without their own icons get them.
-- **Create: Deep Dark (any version)**
-  - Its armor gets Detail Armor Bar icons.
-
-### Food, effects and blocks
-
-- **Better Beacons (1.0.x)**
-  - Potions of Reach and Phantom Bane (normal, long, strong).
-  - One player with Phantom Bane no longer stops phantom spawns for every player after them.
-- **Farmer's Respite (2.0)**
-  - Caffeinated keeps phantoms away through a hidden Phantom Bane part instead of resetting the rest timer.
-  - WTHIT shows the kettle's leftover slots.
-- **Fruits Delight (0.5.x)**
-  - Effect remaps from the config also apply to jam, jelly and jello effects and their tooltips.
-- **Farmer's Delight (any version)**
-  - WTHIT shows the cooking pot's leftover slots.
-  - Its stoves count as fire in the damage tags.
-- **Supplementaries with Moonlight (any version)**
-  - WTHIT shows what is in a jar, goblet or cage, and plants in hanging pots and flower boxes.
-  - Potion jars appear in JEI's potion rows.
-- **Framed Blocks (any version)**
-  - WTHIT shows the plant in a framed flower pot.
-- **Unlit Campfire (any version)**
-  - WTHIT shows a campfire's remaining burn time.
-- **Applied Cooking (any version)**
-  - WTHIT shows whether the ME Kitchen Station is online and which security terminal it is connected to.
-
----
+***
 
 ## Requirements
 
-| | Version |
-|---|---|
-| Minecraft | 1.19.2 |
-| Forge | 43 or newer |
-| KubeJS | 1902.6.2-build.73 or newer (1902.6.x) |
-| Rhino and Architectury | required by KubeJS |
+|                        |Version                               |
+| ---------------------- |------------------------------------- |
+| Minecraft              |1.19.2                                |
+| Forge                  |43 or newer                           |
+| KubeJS                 |1902.6.2-build.73 or newer (1902.6.x) |
+| Rhino and Architectury |required by KubeJS                    |
 
 Everything else is optional; see "Optional mods: what changes with each" above.
 
 Both client and server need it.
 
----
+***
 
 ## Source, issues and licence
 
-- Source code and issue tracker: [github.com/SaintAlfonzo/CreativeEngineering](https://github.com/SaintAlfonzo/CreativeEngineering)
-- Licence: GNU GPL v3. Includes code adapted from Detail Armor Bar by RedLime (MIT) and Immersive Weathering by Ordana,
-  MehVahdJukaar and Keybounce (LGPL v3), and a shaded copy of commonmark-java (BSD 2-Clause). The full notices are in the jar.
-- Free to include in modpacks.
+*   Source code and issue tracker: [github.com/SaintAlfonzo/CreativeEngineering](https://github.com/SaintAlfonzo/CreativeEngineering)
+*   Licence: GNU GPL v3. Includes code adapted from Immersive Weathering by Ordana, MehVahdJukaar and Keybounce (LGPL v3), a shaded copy of commonmark-java (BSD 2-Clause), and loading screen tips from Loading Tips by Naw7k (MIT). The tip format follows Loading Screen Tips by UltrusBot (MIT). The full notices are in the jar.
+*   Free to include in modpacks.

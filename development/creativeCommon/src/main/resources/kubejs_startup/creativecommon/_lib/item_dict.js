@@ -725,7 +725,7 @@ i.mulch_waste = '#forge:mulch/waste';
 i.mulch_green = '#forge:mulch/green';
 i.mulch_fungus = '#forge:mulch/fungus';
 i.mulch_fertilizer = '#forge:mulch/fertilizer';
-i.any_bark = '#creativeengineering:bark';   // Immersive Weathering's barks only (tag in Creative Common's data)
+i.any_bark = '#creativecommon:bark';   // Immersive Weathering's barks only (tag in Creative Common's data)
 i.compost = 'farmersdelight:organic_compost';
 i.any_scale = '#immersive_weathering:scales';
 i.magma_cream = 'minecraft:magma_cream';
@@ -1309,7 +1309,7 @@ i.dust_electrum = 'immersiveengineering:dust_electrum';
 i.dust_block_electrum = 'creativeengineering:electrum_dust_pile';
 
 // any metal dust or grit (metaltags.js; Steel Toe Stout, alcohol.md 8.6). forge:dusts also holds redstone, salt...
-i.t_metal_dusts = '#creativeengineering:metal_dusts';
+i.t_metal_dusts = '#creativecommon:metal_dusts';
 i.nugget_electrum = 'immersiveengineering:nugget_electrum';
 i.ingot_electrum = 'immersiveengineering:ingot_electrum';
 i.block_electrum = 'immersiveengineering:storage_electrum';
@@ -2026,6 +2026,7 @@ i.t_millable_seeds = '#creativeengineering:millable_seeds';   // seeds the mills
 i.t_saplings = '#minecraft:saplings';
 i.t_leaves = '#minecraft:leaves';
 i.t_flowers = '#minecraft:flowers';
+i.t_wild_crops = '#farmersdelight:wild_crops';   // wild crop blocks (also in #minecraft:flowers); Botany Pots treats them as crops
 i.t_petals = '#botania:petals';
 i.t_crops = '#forge:crops';
 i.t_berries = '#forge:berries';
@@ -13099,7 +13100,7 @@ i.salt_lamp                     = 'salt:salt_lamp';     // named Large Salt Lamp
 i.any_potato                    = '#forge:vegetables/potato';       // potato, potato slices
 i.any_bell_pepper               = '#forge:crops/bell_pepper';       // green, red, yellow
 // ===== BEGIN GENERATED CANS (tools/gen_can_types.py, do not edit) =====
-// 277 cans: raw veggie/fruit/meat/fish, hazard, special, cookies, cooked, bread, salad, soup, meal, pie, feast, drink, golden, dairy, preserve, dessert (kubejs/generation_scripts/food/can_types.json)
+// 313 cans: raw veggie/fruit/meat/fish, hazard, special, cookies, cooked, bread, salad, soup, meal, pie, feast, drink, golden, dairy, preserve, dessert (kubejs/generation_scripts/food/can_types.json)
 i.canned_beetroot                           = 'creativeengineering:canned_beetroot';
 i.canned_cabbage                            = 'creativeengineering:canned_cabbage';
 i.canned_carrot                             = 'creativeengineering:canned_carrot';
@@ -13202,6 +13203,7 @@ i.canned_pickled_onion                      = 'creativeengineering:canned_pickle
 i.canned_pickled_pepper                     = 'creativeengineering:canned_pickled_pepper';
 i.canned_roasted_peanut                     = 'creativeengineering:canned_roasted_peanut';
 i.canned_cooked_inky_cap                    = 'creativeengineering:canned_cooked_inky_cap';
+i.canned_cooked_nether_wart                 = 'creativeengineering:canned_cooked_nether_wart';
 i.canned_glazed_porkchop                    = 'creativeengineering:canned_glazed_porkchop';
 i.canned_jerky                              = 'creativeengineering:canned_jerky';
 i.canned_maple_glazed_bacon                 = 'creativeengineering:canned_maple_glazed_bacon';
@@ -13263,6 +13265,30 @@ i.canned_roast_chicken                      = 'creativeengineering:canned_roast_
 i.canned_shepherds_pie                      = 'creativeengineering:canned_shepherds_pie';
 i.canned_stuffed_pumpkin                    = 'creativeengineering:canned_stuffed_pumpkin';
 i.canned_stuffed_shulker                    = 'creativeengineering:canned_stuffed_shulker';
+i.canned_omurice                            = 'creativeengineering:canned_omurice';
+i.canned_mushroom_pot_pie                   = 'creativeengineering:canned_mushroom_pot_pie';
+i.canned_roasted_mutton_rack                = 'creativeengineering:canned_roasted_mutton_rack';
+i.canned_pizza                              = 'creativeengineering:canned_pizza';
+i.canned_cheese_pizza                       = 'creativeengineering:canned_cheese_pizza';
+i.canned_meat_pizza                         = 'creativeengineering:canned_meat_pizza';
+i.canned_vegan_pizza                        = 'creativeengineering:canned_vegan_pizza';
+i.canned_stuffed_cantaloupe                 = 'creativeengineering:canned_stuffed_cantaloupe';
+i.canned_dragon_meat_stew                   = 'creativeengineering:canned_dragon_meat_stew';
+i.canned_grilled_shulker                    = 'creativeengineering:canned_grilled_shulker';
+i.canned_steamed_dragon_egg                 = 'creativeengineering:canned_steamed_dragon_egg';
+i.canned_rice_roll_medley                   = 'creativeengineering:canned_rice_roll_medley';
+i.canned_fake_meatloaf                      = 'creativeengineering:canned_fake_meatloaf';
+i.canned_glazed_arachnid_limbs              = 'creativeengineering:canned_glazed_arachnid_limbs';
+i.canned_stuffed_squid                      = 'creativeengineering:canned_stuffed_squid';
+i.canned_guardian_soup                      = 'creativeengineering:canned_guardian_soup';
+i.canned_legendary_roll_medley              = 'creativeengineering:canned_legendary_roll_medley';
+i.canned_mythical_roll_medley               = 'creativeengineering:canned_mythical_roll_medley';
+i.canned_bell_pepper_medley                 = 'creativeengineering:canned_bell_pepper_medley';
+i.canned_pale_bell_pepper_medley            = 'creativeengineering:canned_pale_bell_pepper_medley';
+i.canned_dark_bell_pepper_medley            = 'creativeengineering:canned_dark_bell_pepper_medley';
+i.canned_rice_roll_royale                   = 'creativeengineering:canned_rice_roll_royale';
+i.canned_lasagna                            = 'creativeengineering:canned_lasagna';
+i.canned_stuffed_bell_peppers               = 'creativeengineering:canned_stuffed_bell_peppers';
 i.canned_powdered_milk                      = 'creativeengineering:canned_powdered_milk';
 i.canned_flaxen_cheese                      = 'creativeengineering:canned_flaxen_cheese';
 i.canned_scarlet_cheese                     = 'creativeengineering:canned_scarlet_cheese';
@@ -13272,6 +13298,7 @@ i.canned_dough                              = 'creativeengineering:canned_dough'
 i.canned_pear_with_rock_sugar               = 'creativeengineering:canned_pear_with_rock_sugar';
 i.canned_adzuki_bun                         = 'creativeengineering:canned_adzuki_bun';
 i.canned_banana_bread                       = 'creativeengineering:canned_banana_bread';
+i.canned_cantaloupe_bread                   = 'creativeengineering:canned_cantaloupe_bread';
 i.canned_cauliflower_bread                  = 'creativeengineering:canned_cauliflower_bread';
 i.canned_cornbread                          = 'creativeengineering:canned_cornbread';
 i.canned_garlic_bread                       = 'creativeengineering:canned_garlic_bread';
@@ -13287,14 +13314,17 @@ i.canned_coleslaw                           = 'creativeengineering:canned_colesl
 i.canned_cucumber_salad                     = 'creativeengineering:canned_cucumber_salad';
 i.canned_field_salad                        = 'creativeengineering:canned_field_salad';
 i.canned_fruit_salad                        = 'creativeengineering:canned_fruit_salad';
+i.canned_gleaming_salad                     = 'creativeengineering:canned_gleaming_salad';
 i.canned_inky_caps_salad                    = 'creativeengineering:canned_inky_caps_salad';
 i.canned_lush_moss_salad                    = 'creativeengineering:canned_lush_moss_salad';
 i.canned_mango_salad                        = 'creativeengineering:canned_mango_salad';
 i.canned_mixed_salad                        = 'creativeengineering:canned_mixed_salad';
 i.canned_nether_salad                       = 'creativeengineering:canned_nether_salad';
+i.canned_sweet_salad                        = 'creativeengineering:canned_sweet_salad';
 i.canned_turnip_salad                       = 'creativeengineering:canned_turnip_salad';
 i.canned_acacia_blossom_soup                = 'creativeengineering:canned_acacia_blossom_soup';
 i.canned_adzuki_stew                        = 'creativeengineering:canned_adzuki_stew';
+i.canned_amberveil_stew                     = 'creativeengineering:canned_amberveil_stew';
 i.canned_baked_cod_stew                     = 'creativeengineering:canned_baked_cod_stew';
 i.canned_beef_stew                          = 'creativeengineering:canned_beef_stew';
 i.canned_ce_beetroot_soup                   = 'creativeengineering:canned_ce_beetroot_soup';
@@ -13303,6 +13333,9 @@ i.canned_blazing_chili                      = 'creativeengineering:canned_blazin
 i.canned_bone_broth                         = 'creativeengineering:canned_bone_broth';
 i.canned_broccoli_soup                      = 'creativeengineering:canned_broccoli_soup';
 i.canned_cacciatore                         = 'creativeengineering:canned_cacciatore';
+i.canned_cactus_chili                       = 'creativeengineering:canned_cactus_chili';
+i.canned_cactus_soup                        = 'creativeengineering:canned_cactus_soup';
+i.canned_calamari_soup                      = 'creativeengineering:canned_calamari_soup';
 i.canned_carrot_soup                        = 'creativeengineering:canned_carrot_soup';
 i.canned_cauliflower_soup                   = 'creativeengineering:canned_cauliflower_soup';
 i.canned_chicken_soup                       = 'creativeengineering:canned_chicken_soup';
@@ -13320,10 +13353,14 @@ i.canned_miso_with_bamboo_sprouts           = 'creativeengineering:canned_miso_w
 i.canned_noodle_soup                        = 'creativeengineering:canned_noodle_soup';
 i.canned_oatmeal                            = 'creativeengineering:canned_oatmeal';
 i.canned_pickle_soup                        = 'creativeengineering:canned_pickle_soup';
+i.canned_potato_soup                        = 'creativeengineering:canned_potato_soup';
+i.canned_pufferfish_broth                   = 'creativeengineering:canned_pufferfish_broth';
 i.canned_pumpkin_soup                       = 'creativeengineering:canned_pumpkin_soup';
+i.canned_red_soup                           = 'creativeengineering:canned_red_soup';
 i.canned_sinigang                           = 'creativeengineering:canned_sinigang';
 i.canned_sopa_de_macaco                     = 'creativeengineering:canned_sopa_de_macaco';
 i.canned_strider_moss_stew                  = 'creativeengineering:canned_strider_moss_stew';
+i.canned_tomato_egg_soup                    = 'creativeengineering:canned_tomato_egg_soup';
 i.canned_turnip_beef_stew                   = 'creativeengineering:canned_turnip_beef_stew';
 i.canned_vegetable_soup                     = 'creativeengineering:canned_vegetable_soup';
 i.canned_glistering_melon_slice             = 'creativeengineering:canned_glistering_melon_slice';
@@ -13393,7 +13430,7 @@ i.glow_berry_pips    = 'berry_good:glow_berry_pips';
 i.sweet_berry_basket = 'berry_good:sweet_berry_basket';
 i.sweet_berry_pips   = 'berry_good:sweet_berry_pips';
 
-// ===== cookingforblockheads (66) =====
+// ===== cookingforblockheads (69) =====
 // The <wood>_spice_rack / _tool_rack / _fruit_basket rows are Creative Delight's Cooking for Blockheads compartment
 // (creativedelight: since M8, plan_cb_publish.md 3b; were cookingforblockheads:)
 i.acacia_fruit_basket                = 'creativedelight:acacia_fruit_basket';
@@ -13402,6 +13439,9 @@ i.acacia_tool_rack                   = 'creativedelight:acacia_tool_rack';
 i.ancient_fruit_basket               = 'creativedelight:ancient_fruit_basket';
 i.ancient_spice_rack                 = 'creativedelight:ancient_spice_rack';
 i.ancient_tool_rack                  = 'creativedelight:ancient_tool_rack';
+i.azalea_fruit_basket                = 'creativedelight:azalea_fruit_basket';
+i.azalea_spice_rack                  = 'creativedelight:azalea_spice_rack';
+i.azalea_tool_rack                   = 'creativedelight:azalea_tool_rack';
 i.bamboo_fruit_basket                = 'creativedelight:bamboo_fruit_basket';
 i.bamboo_spice_rack                  = 'creativedelight:bamboo_spice_rack';
 i.bamboo_tool_rack                   = 'creativedelight:bamboo_tool_rack';
@@ -14677,6 +14717,18 @@ i.ender_pearl_grain        = 'ends_delight:ender_pearl_grain';
 i.non_hatchable_dragon_egg = 'ends_delight:non_hatchable_dragon_egg';
 i.raw_stuffed_hoglin       = 'nethersdelight:raw_stuffed_hoglin';
 i.splash_milk_bottle       = 'splash_milk:milk_bottle';
+
+// ############################## Mirror glass (feature_writeup/plan_portal_changes.md 4) ##############################
+// Create Framed's tinted glass (Design and Decor's same-named set is i.tinted_framed_glass and siblings)
+i.createframed_tinted_framed_glass                 = 'createframed:tinted_framed_glass';
+i.createframed_horizontal_tinted_framed_glass      = 'createframed:horizontal_tinted_framed_glass';
+i.createframed_vertical_tinted_framed_glass        = 'createframed:vertical_tinted_framed_glass';
+i.createframed_tinted_tiled_glass                  = 'createframed:tinted_tiled_glass';
+i.createframed_tinted_framed_glass_pane            = 'createframed:tinted_framed_glass_pane';
+i.createframed_horizontal_tinted_framed_glass_pane = 'createframed:horizontal_tinted_framed_glass_pane';
+i.createframed_vertical_tinted_framed_glass_pane   = 'createframed:vertical_tinted_framed_glass_pane';
+i.createframed_tinted_tiled_glass_pane             = 'createframed:tinted_tiled_glass_pane';
+i.reinforced_tinted_glass                          = 'securitycraft:reinforced_tinted_glass';
 
 // ############################## Validation ##############################
 

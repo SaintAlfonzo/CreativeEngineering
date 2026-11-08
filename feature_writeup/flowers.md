@@ -175,6 +175,19 @@ First pass (2026-10-07), numbers from [flowers_by_biome.md](flowers_by_biome.md)
 
 2026-10-07: all four pass (119 tags, 378 files, 18 configured + 1 inline Flower Patch rewrites).
 
+### 3.1 Glow lichen (2026-11-07, TODO `flowers #4`, plan_farming_cooking_batch.md A8 / Q6)
+
+Vanilla 1.19.2 builds glow lichen in code (`CaveFeatures` / `CavePlacements`, no JSON in the jar), so the pack overrides
+both ids in `kubejs/data/minecraft/worldgen/`:
+
+- `placed_feature/glow_lichen.json`: vanilla's count 104 to 157 per chunk followed by a second `count` 3 (counts multiply: x3, 312 to 471). A single uniform 312 to 471 is invalid (a count provider allows at most 256) and stopped every new world from loading (scratch r1108cge 2026-11-08, fixed); the rest as vanilla
+  (bottom to y 256, in square, at least 13 below the ocean floor heightmap, biome filter).
+- `configured_feature/glow_lichen.json`: vanilla's multiface growth (same stones, wall and ceiling, search range 20)
+  inside a `random_patch` of 3 tries, 2 across and 2 up or down, with `chance_of_spreading` 1.0 (was 0.5). 1.19.2's
+  multiface feature has no block count: one vanilla placement covers about 1.5 blocks, one pack placement about 3 to 6.
+- Every biome that lists `minecraft:glow_lichen` (vanilla, Terralith) gets it; no mod in `mods/` overrides the ids.
+- Tests FL-15 (SQ-FCK-07).
+
 ## 7. In-game test suite
 
 Use a new world (or new chunks). `/locate biome` then fly over.
@@ -193,6 +206,7 @@ Use a new world (or new chunks). `/locate biome` then fly over.
 - [ ] **FL-12 Switch off:** `wildFlowers = false` (needs the rebuilt patcherMod jar), rejoin, new chunks -> Botania random colors everywhere, no pack patches
 - [ ] **FL-13 Meadow:** meadow still looks like vanilla's mix, now with a few patch blocks
 - [ ] **FL-14 Bone meal:** bone meal on grass in plains -> flowers, sometimes a Flower Patch block
+- [ ] **FL-15 Glow lichen:** new chunks, any cave -> about three times as many glow lichen spots as before, most of them clusters of 3 or more blocks; no worldgen errors in the log
 
 ## 8. History
 

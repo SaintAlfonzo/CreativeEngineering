@@ -8,6 +8,7 @@ if (global.CD) global.CD.genPut('can_servings', 'brewinandchewin', {
   "canned_jerky": 3,
   "canned_cheesy_pasta": 4,
   "canned_flaxen_cheese": 4,
-  "canned_scarlet_cheese": 4
+  "canned_scarlet_cheese": 4,
+  "canned_pizza": 6
  }
 })

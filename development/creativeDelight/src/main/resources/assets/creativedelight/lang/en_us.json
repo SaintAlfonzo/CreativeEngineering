@@ -11,6 +11,8 @@
   "creativedelight.wthit.kettle_tank": "Tank",
   "creativedelight.wthit.punch_toggle.lid": "Punch to toggle lid",
   "creativedelight.wthit.punch_toggle.handle": "Punch to toggle handle",
+  "creativedelight.cookware.holds": "Holds:",
+  "creativedelight.cookware.holds_entry": " %s x %s",
   "creativedelight.wthit.kettle_tank.value": "%s %s / %s",
   "block.creativedelight.treated_stick": "Treated Stick",
   "block.creativedelight.treated_stick_tomatoes": "Tomatoes",

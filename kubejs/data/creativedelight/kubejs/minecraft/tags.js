@@ -13,6 +13,9 @@ ServerEvents.tags('item', e => {
 	// cooking oil: Rustic Delight only presses cotton seeds
 	t.add(e, i.t_cooking_oil_ingredients, i.pumpkin_seeds)
 
+	// rotten meat (the Hostile Delight hams are in hostiledelight/tags.js)
+	t.add(e, 'forge:rotten_meat', i.rotten_flesh)
+
 	// cooked meat
 	t.add(e, 'forge:cooked_meat', [
 		i.beef_cooked,

@@ -26,6 +26,9 @@ if (global.CD) global.CD.genPut('can_servings', 'veggiesdelight', {
   "canned_garlic_chicken_stew": 8,
   "canned_turnip_beef_stew": 8,
   "canned_sweet_potato_pie_filling": 4,
-  "canned_mashed_sweet_potatoes": 4
+  "canned_mashed_sweet_potatoes": 4,
+  "canned_vegan_pizza": 6,
+  "canned_lasagna": 6,
+  "canned_stuffed_bell_peppers": 6
  }
 })

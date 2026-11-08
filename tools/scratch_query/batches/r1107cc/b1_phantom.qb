@@ -1,0 +1,55 @@
+# r1107cc boot b1 (group A superflat, scratch srv cc/): SQ-CC-10's Better Beacons half, copied from r1102b s5_R_A.qb
+# SQ-PSU-04 with fixed coordinates. Needs tools/scratch_query/s5_probe.js in srv/kubejs/server_scripts (for /s5 rest)
+# and a /reload before the row. About 13 minutes. Needs spawn-monsters=true, and the bots at or above the world's sea level
+# (the group A superflat reports 63: phantoms never spawn for a player below it), hence the y 70 platforms. Faster
+# check without the spawner wait: tools/scratch_query/cc_phantom_probe.js (/zph N, r1107cc).
+pace 2
+
+## SQ-CC-10b | Better Beacons Phantom Bane on the first player skips only that player (SQ-PSU-04 rerun on the Common 18:02 build)
+# spawning on for this row only; hard raises the local-difficulty roll per pass (the row names no difficulty)
+> pbot remove-all
+sleep 2
+> gamerule doMobSpawning true
+> gamerule doInsomnia true
+> difficulty hard
+> time set 18000
+> fill -202 69 -2 -198 69 2 minecraft:stone
+> fill 198 69 -202 202 69 -198 minecraft:stone
+> pbot spawn s5pb1 -200 70 0 minecraft:overworld survival
+sleep 2
+> pbot spawn s5pb2 200 70 -200 minecraft:overworld survival
+sleep 5
+> s5 rest s5pb1 1200000
+> s5 rest s5pb2 1200000
+count \[s5\] rest s5pb[12] 1200000 >= 2
+# control: no Phantom Bane, phantoms must reach both bots
+repeat 6
+sleep 60
+> execute at s5pb1 if entity @e[type=minecraft:phantom,distance=..80] run say PSU04C phantom near bot 1
+> execute at s5pb2 if entity @e[type=minecraft:phantom,distance=..80] run say PSU04C phantom near bot 2
+end
+expect PSU04C phantom near bot 1
+expect PSU04C phantom near bot 2
+> kill @e[type=minecraft:phantom]
+> s5 rest s5pb1 1200000
+> s5 rest s5pb2 1200000
+> effect give s5pb1 better_beacons:phantom_bane 9999
+sleep 2
+> kill @e[type=minecraft:phantom]
+# bane pass
+repeat 6
+sleep 60
+> execute at s5pb2 if entity @e[type=minecraft:phantom,distance=..80] run say PSU04 phantom near bot 2
+> execute at s5pb1 if entity @e[type=minecraft:phantom,distance=..80] run say PSU04 phantom near bot 1
+end
+expect PSU04 phantom near bot 2
+reject PSU04 phantom near bot 1
+> kill @e[type=minecraft:phantom]
+> time set noon
+> pbot remove-all
+> gamerule doMobSpawning false
+> difficulty normal
+> kill @e[type=!minecraft:player,type=!minecraft:marker]
+reject (Unknown (item|block|block type|entity)|does not (have|accept)|Incorrect argument for command|Unknown or incomplete command|That position is not loaded|No player was found|no such bot|no such item|Invalid (block state|tag)|\[(zq|s5)\] (error|no player))
+look control pass: phantoms near both bots (spawning works there at all); bane pass: phantoms near bot 2 only. A control with no phantom near bot 1 leaves the row undecided, not FAILed
+

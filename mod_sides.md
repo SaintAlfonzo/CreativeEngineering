@@ -278,7 +278,7 @@ Mods are matched by **mod id**, so updating a mod to a new version needs no edit
 | both | Survivality | `survivality` | `survivality-1.19.2-1.2.4-forge.jar` |  |
 | both | SwingThroughGrass | `swingthroughgrass` | `swingthroughgrass-1.19.2-1.10.0.jar` |  |
 | both | Tactical Fishing | `tactical_fishing` | `TacticalFishing-1.19.x2-v1.2.jar` |  |
-| both | Tempad | `tempad` | `backportedTempad-3.0.4-ce-19.2-01.jar` (nested in `creativecompat-1.0.0.jar`) | Tempad 3.0.4 ported to Forge 1.19.2 (development/creativeCompat/members/tempad, immersive_portals.md 2.1.1): items, timedoor entity, packets and menus on both sides; reads its art and data from `tempad_upstream/` on both sides (not mods/). Replaced tempad-forge-1.19.2-1.4.5.jar 2026-11-06. Nested ids take the bundle's side; the row keeps its side if the member moves to its own jar |
+| both | Tempad | `tempad` | `backportedTempad-3.0.4-ce-19.2-01.jar` | Tempad 3.0.4 ported to Forge 1.19.2 (development/backportedTempad, its own jar since 2026-11-07, nested in Creative Compat before; planned to fold into Creative Computing; immersive_portals.md 2.1.1): items, timedoor entity, packets and menus on both sides; reads its art and data from `tempad_upstream/` on both sides (not mods/). Replaced tempad-forge-1.19.2-1.4.5.jar 2026-11-06. Nested ids take the bundle's side; the row keeps its side if the member moves to its own jar |
 | both | Tectonic | `tectonic` | `tectonic-forge-1.19-2.3.5a.jar` |  |
 | both | Terralith | `terralith` | `Terralith_1.19.3_v2.3.12.jar` |  |
 | both | Towns and Towers | `t_and_t` | `Towns-and-Towers-v.1.10-_FORGE-1.19.2_.jar` |  |

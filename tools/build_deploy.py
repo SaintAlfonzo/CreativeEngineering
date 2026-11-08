@@ -147,6 +147,9 @@ IN_TREE_MODS = [
     ('creativeCalendar', 'creativecalendar', True),
     # Creative Compat: tweaks to third-party mods (feature_writeup/creative_compat.md); every other Creative jar requires it.
     ('creativeCompat', 'creativecompat', True),
+    # Tempad 3.0.4 port (feature_writeup/immersive_portals.md 2.1.1): its own jar since 2026-11-07 (nested in Creative Compat
+    # before, so Compat ships without a donor jar); planned to fold into Creative Computing. Reads tempad_upstream/.
+    ('backportedTempad', 'backportedTempad', True),
     # Creative Worldgen: world generation and fauna (feature_writeup/creative_worldgen.md); nests More Mooblooms and Baby
     # Mobs (development/creativeWorldgen/members/; More Mooblooms shipped on its own before 2026-11-02).
     ('creativeWorldgen', 'creativeworldgen', True),
@@ -597,8 +600,9 @@ UPSTREAM_DONORS = {
                         ('creativeDelight/members/ends', 'com', 'SaintAlfonzo', 'creativedelight', 'enders', 'upstream')),
     'goldenfood_upstream': ('creativedelight', 'Golden Food (Creative Delight)',
                             ('creativeDelight/members/golden', 'com', 'SaintAlfonzo', 'creativedelight', 'golden', 'upstream')),
-    'tempad_upstream': ('creativecompat', 'Tempad (Creative Compat)',
-                        ('creativeCompat/members/tempad', 'earth', 'terrarium', 'tempad', 'forge')),
+    # its own jar since 2026-11-07 (nested in Creative Compat before)
+    'tempad_upstream': ('backportedTempad', 'Tempad',
+                        ('backportedTempad', 'earth', 'terrarium', 'tempad', 'forge')),
 }
 
 

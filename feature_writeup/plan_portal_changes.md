@@ -1,7 +1,9 @@
 # Plan: Immersive Portals changes (Nether portal, opaque gun portals, mirrors)
 
 Owner notes of 2026-11-07 (scratchpad "portal changes"). Investigation 2026-11-07 (bytecode of
-`immersive-portals-2.3.7-mc1.19.2-forge.jar` and `portalgun-1.19.2-5.0.0.jar`); nothing built. All decisions answered by the owner 2026-11-07 (section 5).
+`immersive-portals-2.3.7-mc1.19.2-forge.jar` and `portalgun-1.19.2-5.0.0.jar`). All decisions answered by the owner 2026-11-07 (section 5).
+**Status: BUILT and installed 2026-11-07 16:44** (Creative Magic, Creative Compat, Creative Common; IP config edited); not booted.
+Scratch rows SQ-IP-01..05, CQ-IP-01..04 queued. As built, and where it differs from the plan: section 8.
 Parent writeup: [immersive_portals.md](immersive_portals.md) 2.3, 2.4. TODO rows `gameplay/tnt-and-portal #17..#25`.
 
 The Portal Gun items of the same notes (names, hotbar desaturation, exit lift, dyeing) are already built:
@@ -187,3 +189,26 @@ one heartbeat; the owner messages are immediate.
    mirrors, sneak with frosty glass; mirrors render within 24 blocks, 4 bounces; portal fog set per portal type; the renamed glass.
 8. Writeup: fold the result into [immersive_portals.md](immersive_portals.md) 2.3, 2.4 and
    [nether_portal.md](nether_portal.md) (IP interplay in section 3).
+
+## 8. As built (2026-11-07)
+
+| # | Code | Differs from the plan |
+|---|---|---|
+| N1 | Magic `mixin/IPFireGateMixin` (HEAD on `onFireLitOnObsidian` and `onCrouchingPlayerIgnite`), `dimension/IPNetherPortalBridge`, `block/DarkFireBlock#onPlace` | Only callers of the two methods in IP 2.3.7: `MixinAbstractFireBlock`, `MixinFlintAndSteelItem` (checked). IP's frame search skips the starting cell, so Dark Fire (not air) there works like fire. The diagnostic log in `PortalFailureHandler` stays until NP-01..05 pass (TODO #4). **Fix 2026-11-07 17:05 (after the first in-game try):** in `normal` mode IP's redirect returns an empty shape whatever `onFireLitOnObsidian` returns, so gating it alone left no event; Smaller Nether Portals' delayed flint-and-steel task then filled the frame with vanilla portal blocks and posted the event itself (Collective ignores the cancel), and the handler's flood fill gave up on the portal blocks (51 `state=minecraft:nether_portal` events in latest.log, no crying obsidian). Now the gate posts the vanilla event itself (`IPNetherPortalBridge.postVanillaSpawnEvent`), and the handler counts `minecraft:nether_portal` as interior, so a Smaller Nether Portals frame also fails |
+| N2, N3 | `config/immersive_portals_forge.json` (+ configs_edited copy); Compat `portals/PortalFog`, `mixin/IPPortalFogMixin` (TAIL of `FogRenderer.setupFog`, `m_234172_`, terrain fog only), `mixin/IPPortalRenderingAccessor` | Fog is never pushed farther than vanilla's (water, blindness stay). Offset by the real camera's distance to the outermost portal. Config lives in `creativecompat-common.toml` `[immersive_portals.fog.*]` (the file already has client sections) |
+| G5 | `portals/PortalLimits` via `mixin/IPPortalRenderLimitsMixin` (HEAD of `PortalRenderer.shouldSkipRenderingPortal`), `mixin/PortalGunRendererOpaqueMixin` | Not `Portal#isVisible` (IP also reads it for block interaction, and the gun sets it for unlinked portals). The fill is the gun's own `overlay_filled.png` disc, tinted in the portal colour, not a new quad |
+| M2 | `kubejs/assets/creativecompat/kubejs/names.js` | none |
+| M3 | `PortalLimits.skip` (distance from the current camera, bounces when the whole layer chain is mirrors) and `renderDistance` (RETURN of `getPortalRenderDistance`) | The view inside a mirror is cut in whole chunks (64 blocks = 4 chunks) around the reflected camera |
+| M4 | `mixin/IPMirrorGlassMixin` (RETURN of `isGlass`, `isGlassPane`), tags in `kubejs/data/creativecompat/kubejs/tags/blocktags.js`, dict keys `b.t_mirror_glass`, `b.t_mirror_glass_panes`, nine new `item_dict` ids (Create Framed tinted, Reinforced Tinted Glass) | Frosty glass needs no ordering code: IW melts it in the block's `use`, which vanilla skips while sneaking with an item, so sneak + flint and steel reaches IP's mirror check. A pane tag member also counts for `isGlass` (IP's own `isGlass` takes panes too) |
+| G6 | `portalgun/PortalGunDissolve` (events registered when `portalgun` is loaded), `mixin/PortalGunHeartbeatMixin` (TAIL of the portal tick), `mixin/PortalGunPortalInvoker` (closing sound) | No new NBT: the portal already saves its owner in `descriptor`, and the beat is scheduled on `tickCount` + a uuid phase, so it needs no saved counter. The heartbeat also dissolves a portal whose owner is in another dimension (covers a respawn, which fires no dimension-change event). IP fires the Forge dimension event for its own teleports. Unloaded portals only lose their record entry; Portal Gun discards them when they next tick. `despawnDistance` 128 (D8 left the value open) |
+
+**Values changed by the owner 2026-11-07 17:10** (code defaults and `config/creativecompat-common.toml`, backup in
+configs_edited): `mirrorRenderDistance` 12 (was 24); `mirrorViewDistance` 32 (was 64); new `portalGunViewDistance` 32
+(gun portals had no cap; same `getPortalRenderDistance` hook); fog `portalGun` and `mirror` on, 16 to 32 (were off,
+60 to 64). Nether unchanged (4 chunks, fog 4 to 64). The 32-block cut is two chunks around the drawing camera, so the
+fog end (32 past the portal plane) can sit a little past the cut when the player stands back from the portal.
+
+**Nether changed by the owner 2026-11-07 17:18:** `indirectLoadingRadiusCap` 2 (was 4; IP config, needs a restart), new
+`netherViewDistance` 32 (cut in the same hook), fog `nether` 8 to 32 (was 4 to 64). All three portal types now show
+32 blocks.
+

@@ -1,6 +1,7 @@
 package com.SaintAlfonzo.creativecompat.compat.jei;
 
 import com.SaintAlfonzo.creativecommon.CommonConfig;
+import com.SaintAlfonzo.creativecompat.CreativeCompat;
 import com.SaintAlfonzo.creativecompat.mixin.JeiIngredientFilterAccessor;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonElement;
@@ -44,8 +45,8 @@ import java.util.function.Consumer;
  * <p>Inputs:
  * <ul>
  *   <li>the ordering definition, {@code global.jeiOrder} from kubejs/startup_scripts/jei/order.js, handed over as
- *       JSON by kubejs/assets/creativecommon/kubejs/_lib/jei_order.js through {@link #define};</li>
- *   <li>the {@code creativecommon:jei/<path>} item, fluid and mob_effect tags (made from the same definition
+ *       JSON by kubejs/assets/creativecompat/kubejs/jei_order.js through {@link #define};</li>
+ *   <li>the {@code creativecompat:jei/<path>} item, fluid and mob_effect tags (made from the same definition
  *       by kubejs/server_scripts/tags/jei_order_tags.js), read from the client's synced registries. An
  *       ingredient's deepest jei tag is its place; a node's {@code list} places ids that carry no jei tag (that is
  *       how multiblocks, which have no registry, get placed).</li>
@@ -63,7 +64,7 @@ import java.util.function.Consumer;
 public final class PackIngredientOrder {
 
     private static final Logger LOGGER = LogUtils.getLogger();
-    public static final String TAG_NAMESPACE = "creativecommon";
+    public static final String TAG_NAMESPACE = CreativeCompat.MOD_ID;
     public static final String TAG_PREFIX = "jei/";
     private static final List<String> DEFAULT_SORT = List.of("mod", "creative");
     private static final Object[] NO_LEAF = new Object[0];
@@ -87,7 +88,7 @@ public final class PackIngredientOrder {
     // ------------------------------------------------------------------------------------------------
 
     /**
-     * Called by kubejs/assets/creativecommon/kubejs/_lib/jei_order.js with {@code JSON.stringify(global.jeiOrder.definition())}.
+     * Called by kubejs/assets/creativecompat/kubejs/jei_order.js with {@code JSON.stringify(global.jeiOrder.definition())}.
      * Re-sorts right away when JEI is already running (client script reload).
      */
     public static synchronized void define(String json) {

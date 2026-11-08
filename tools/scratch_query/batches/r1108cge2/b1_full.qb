@@ -1,0 +1,106 @@
+# r1108cge2 boot 1 (tools/scratch_query/cge2_run.sh server): full pack, group A superflat, level r1108cge2, Create Gravity
+# config as generated (End -0.8), Common 11-08 13:51 + Compat 13:21 from build/libs (the runner checks them in srv/mods).
+# Probes zz_cge_probe.js (/zgv), zz_zq_probe.js (/zq); bots from perfBot. FRESH boot: no /reload anywhere in this batch.
+# Judging: tools/scratch_query/cge_judge.py (shell steps; exit 1 = row FAIL).
+pace 2
+
+## SQ-CGE-07 | boots; every LowGravity mixin applied; startup order with the helper phase
+bootreject Mixin apply failed|InvalidMixinException|InjectionError|InvalidInjectionException
+bootreject (?i)(LowGravity|CreateGravity)\w*Mixin.*(error|fail|warn)
+bootexpect Done \(
+shell grep -E "packs in order" logs/kubejs/startup.log | grep -q "creativecommon, creativecompat_helpers, startup_scripts, .*creativecompat" && echo "order ok"
+shell grep -q "creativecompat: 1 helper file(s) run before startup_scripts" logs/kubejs/startup.log && echo "helper line ok"
+shell grep -q "\[jeiOrder\] defined" logs/kubejs/startup.log && echo "jeiOrder ok"
+shell test "$(grep -c '\[ERROR\]' logs/kubejs/startup.log)" = 0 && echo "0 startup errors"
+look shell.txt holds the four ok lines (each shell step exits 1 when its check fails)
+
+## SQ-CGE-08 | every fixed-pull type falls at 20 percent of vanilla in the End, overworld vanilla, no /reload
+> execute in minecraft:the_end run forceload add 0 0 6 18
+> forceload add 0 0 6 18
+> zgv cfg the_end 0 70 0
+> zgv dropall the_end 0 120 0
+waitlog \[zgv\] drop done dim=minecraft:the_end 20
+> zgv dropall overworld 0 120 0
+waitlog \[zgv\] drop done dim=minecraft:overworld 20
+expect \[zgv\] start dim=minecraft:the_end entities=9
+expect \[zgv\] start dim=minecraft:overworld entities=9
+shell python3 "$INST/tools/scratch_query/cge_judge.py" logs/latest.log the_end overworld low
+look shell.txt: 9 types ok (falling_block, item, tnt, experience_orb, arrow, snowball, boat, minecart, llama_spit), ratio about 0.2
+
+## SQ-CGE-13 | boats in water float at vanilla height in the End (buoyancy untouched)
+# two glass tubs with water at the same height (y 61..65) in the End and the overworld
+> execute in minecraft:the_end run forceload add 16 16 28 28
+> forceload add 16 16 28 28
+> execute in minecraft:the_end run fill 19 60 19 25 66 25 minecraft:glass hollow
+> execute in minecraft:the_end run fill 20 61 20 24 65 24 minecraft:water
+> fill 19 60 19 25 66 25 minecraft:glass hollow
+> fill 20 61 20 24 65 24 minecraft:water
+> execute in minecraft:the_end run fill 20 66 20 24 66 24 minecraft:air
+> fill 20 66 20 24 66 24 minecraft:air
+> execute in minecraft:the_end run summon minecraft:boat 22 66 22 {Tags:["cge13e"]}
+> summon minecraft:boat 22 66 22 {Tags:["cge13o"]}
+sleep 8
+> execute in minecraft:the_end run data get entity @e[tag=cge13e,limit=1] Pos[1] 1000
+> data get entity @e[tag=cge13o,limit=1] Pos[1] 1000
+shell python3 -c "import re,sys;v=[int(m) for m in re.findall(r'Pos\[1\] on Boat after scale factor of 1000\.00 is (-?\d+)',open('logs/latest.log').read())][-2:];print(v);sys.exit(0 if len(v)==2 and abs(v[0]-v[1])<=50 else 1)"
+look shell.txt: the two boat heights (End, overworld) within 0.05 blocks, both at the water surface (about 65.9)
+
+## SQ-CGE-10 | End oxygen: air runs out without a backtank; a Create Goggles backtank supplies air; tag sizes
+# bots are invulnerable: the damage half is CQ-CGE-04 (client)
+> execute in minecraft:the_end run forceload add 40 0
+> pbot spawn cge10 40 80 0 minecraft:the_end survival
+# a rerun on the same world reloads the bot's saved backtank from SQ-CGE-10b
+> item replace entity cge10 armor.chest with minecraft:air
+sleep 2
+> data get entity cge10 Air
+sleep 10
+> data get entity cge10 Air
+# Create Gravity 1.2.0: oxygen_depletion_amount (4) every oxygen_factor ticks (default 100), not every tick
+expect cge10 has the following entity data: (288|292|296)s
+look Air 300 at first, then 4 lower per 5 s (296 or 292 after 12 s) without a backtank
+
+## SQ-CGE-10b | a Create Goggles backtank supplies air in the End; every backtank and goggle helmet is in Create Gravity's tags
+> item replace entity cge10 armor.chest with creategoggles:leather_backtank{Air:900}
+sleep 6
+> data get entity cge10 Air
+> data get entity cge10 Inventory[{Slot:102b}].tag.Air
+expect cge10 has the following entity data: (\d{2,3})s
+expect cge10 has the following entity data: 8[89]\d$
+> zq itemtag create_gravity:backtanks
+> zq itemtag create_gravity:diving_helmets
+expect itemtag create_gravity:backtanks \(7\)
+expect itemtag create_gravity:diving_helmets \(4\)
+> pbot remove cge10
+look with the leather backtank Air climbs back (2-3 digits, positive) and the backtank's Air NBT falls from 900 by about 1 a second
+
+## SQ-CGE-11 | no oxygen loss and vanilla gravity in the overworld
+> pbot spawn cge11 0 -60 0 minecraft:overworld survival
+sleep 6
+> data get entity cge11 Air
+> attribute cge11 forge:entity_gravity get
+> pbot remove cge11
+expect cge11 has the following entity data: 300s
+expect Entity Gravity for entity cge11 is 0\.08
+
+## SQ-CGE-12 | physics tags renamed to creativecompat:, item physics still floats and sinks
+> zq itemtag creativecompat:physics/floats
+> zq itemtag creativecompat:physics/sinks
+> zq itemtag creativecompat:physics/fireproof
+> zq itemtag creativecompat:physics/lavaproof
+> zq itemtag creativecompat:burn/to_ash
+> zq itemtag creativeengineering:physics/floats
+> zq itemtag creativeengineering:physics/sinks
+> zq itemtag creativeengineering:physics/fireproof
+> zq itemtag creativeengineering:physics/lavaproof
+expect itemtag creativecompat:physics/floats \(\d{3,}\)
+expect itemtag creativecompat:physics/sinks \([1-9]\d*\)
+reject itemtag creativeengineering:physics/(floats|sinks|fireproof|lavaproof) \([1-9]
+# float check in the overworld tub of SQ-CGE-13 (acacia log floats, redstone sinks; both tags as of the 11-07 dump)
+> summon minecraft:item 21 61.2 21 {Item:{id:"minecraft:acacia_log",Count:1b},PickupDelay:32767,Tags:["cge12f"]}
+> summon minecraft:item 23 61.2 23 {Item:{id:"minecraft:redstone",Count:1b},PickupDelay:32767,Tags:["cge12s"]}
+sleep 8
+> data get entity @e[tag=cge12f,limit=1] Pos[1] 1000
+> data get entity @e[tag=cge12s,limit=1] Pos[1] 1000
+shell grep -E "\[item_physics\] canonical tags" logs/kubejs/startup.log | grep -q "creativecompat:physics/floats" && echo "startup names creativecompat"
+shell python3 -c "import re,sys;v=[int(m) for m in re.findall(r'Pos\[1\] on (?:Acacia Log|Redstone Dust) after scale factor of 1000\.00 is (-?\d+)',open('logs/latest.log').read())][-2:];print(v);sys.exit(0 if len(v)==2 and v[0]>=64500 and v[1]<=61500 else 1)"
+look shell.txt: log near the surface (>= 64.5), redstone on the floor (<= 61.5)

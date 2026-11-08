@@ -1,0 +1,37 @@
+# r1107cco boot 1: SQ-CCO full set (Common + KubeJS stack + Immersive Weathering, Armor Trims, WorldEdit, Quark, Create
+# Gravity, Nock Enough Arrows, Better Beacons, Immersive Portals, Heartstone, Serene Seasons; NO other Creative jar).
+# Server: tools/scratch_query/cc_only_srv.sh OUT cco1 full spawn-monsters=true. Needs a fake player for the effect rows:
+# group B world with perfBot (prep_srv.sh adds it); bot name s5pb1.
+pace 2
+
+## SQ-CCO-01 | no mixin or class error, every optional mod's mixins applied, no other Creative jar loaded
+# 'Error loading class' WARNs are third-party mixin configs probing absent mods (Quark -> Lootr ConfigManager): not ours
+bootreject Mixin apply failed|InvalidMixinException|outside the tested range|^(?!.*Error loading class).*(ClassNotFoundException|NoClassDefFoundError)
+bootreject creativecompat|creativecalendar|creativeengineering|creativeequipment|creativemagic|creativedelight|creativebrewing
+bootexpect \[perf\] Immersive Weathering callTick handler .* now calls IwGrowthFast\.blockTick
+bootexpect \[compat\] Immersive Portals overwrites conform to target visibility
+# the Heartstone priority line is client-only (orderHeartstoneBeforePortals returns on a dedicated server): CQ-CCO-01
+kjsreject (?i)error
+look Done( \(|) line present, the Common startup files loaded line (`creativecommon: N files loaded`) in logs/kubejs/startup.log
+
+## SQ-CCO-02 | Better Beacons present: its potions registered; effects work with only Common
+> pbot spawn s5pb1 0 70 0 minecraft:overworld creative
+> effect give s5pb1 creativecommon:magic_resistance 30 0
+> data get entity s5pb1 ActiveEffects
+expect creativecommon:magic_resistance
+> effect give s5pb1 better_beacons:phantom_bane 30 0
+expect Applied effect Phantom Bane to s5pb1
+reject (Unknown (item|block|block type|entity|effect)|Incorrect argument for command|No player was found|no such bot)
+bootreject \[CE potions\] .* not present
+
+## SQ-CCO-03 | WorldEdit present: the state-id skip does not break world edit
+> execute at s5pb1 run fill ~ 69 ~ ~4 69 ~4 minecraft:stone
+> execute at s5pb1 run say CCO03 fill done
+expect CCO03 fill done
+bootreject WorldEditSkipStateId|BlockStateIdAccess
+look //pos1 and //set stone from the console is not possible (needs a player); run //set with the bot or a client when a window is up, else the fill above stands as the check
+
+## SQ-CCO-04 | Common's default config is written fresh, no pack lists
+shell grep -nE "^\s*(overrides|removed|gravityLimitDimensions|enabled|disabled) =" config/creativecommon-common.toml
+shell test -f config/creativecommon-common.toml && echo CCO04 config present
+look shell.txt: config present and overrides = [], removed = [], gravityLimitDimensions = true, [advancements] enabled = true, [creative_menu] disabled = false (the shell output is not in the server log)

@@ -72,8 +72,6 @@ project(':creativeWorldgen').projectDir = file('development/creativeWorldgen')
     project(":${name}").projectDir = file("development/creativeWorldgen/members/${dir}")
 }
 
-// Creative Compat's members (development/creativeCompat/members/), nested in the Compat jar.
-['backportedTempad': 'tempad'].each { name, dir ->
-    include name
-    project(":${name}").projectDir = file("development/creativeCompat/members/${dir}")
-}
+// Tempad 3.0.4 port: its own jar (nested in Creative Compat until 2026-11-07; planned to fold into Creative Computing).
+include 'backportedTempad'
+project(':backportedTempad').projectDir = file('development/backportedTempad')

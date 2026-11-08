@@ -1,0 +1,36 @@
+# r1107cco boot 10: SQ-CCO-08 again on the `full` srv (cco1, gravityLimitDimensions back to true), after b2/b3 found no
+# low-gravity modifier on a falling zombie or survival bot in the End even with the limit off. Create Gravity resolves
+# the biome config through a cache (cache_time 3 s): sample standing mobs after 6 s and 12 s, as r1107cc's SQ-CC-15
+# (End villager gravity 0.016) presumably did.
+pace 2
+
+## SQ-CCO-08c | Create Gravity in the End only, sampled after the biome cache settles
+> execute in minecraft:the_end run forceload add 0 0
+> execute in minecraft:overworld run forceload add 0 0
+> kill @e[tag=cco08]
+> execute in minecraft:the_end run summon minecraft:villager 0 70 0 {NoAI:1b,PersistenceRequired:1b,Tags:["cco08","cco08e"]}
+> execute in minecraft:overworld run summon minecraft:villager 3 200 3 {NoAI:1b,PersistenceRequired:1b,Tags:["cco08","cco08o"]}
+> execute in minecraft:the_end run summon minecraft:zombie 0 150 0 {Silent:1b,PersistenceRequired:1b,Tags:["cco08","cco08z"]}
+sleep 6
+> execute in minecraft:the_end run attribute @e[tag=cco08e,limit=1] forge:entity_gravity get
+> attribute @e[tag=cco08o,limit=1] forge:entity_gravity get
+> execute in minecraft:the_end run attribute @e[tag=cco08z,limit=1] forge:entity_gravity get
+sleep 6
+> execute in minecraft:the_end run attribute @e[tag=cco08e,limit=1] forge:entity_gravity get
+> attribute @e[tag=cco08o,limit=1] forge:entity_gravity get
+> kill @e[tag=cco08]
+look End villager value below 0.08 (0.016 with the default -0.8 factor), overworld villager 0.08
+
+## SQ-CCO-14 | old potion id with Brewing absent: left untouched, no crash (emulated: no save from before the carve)
+# The chest NBT is written the way an 11-06 save holds it (as r1107cc SQ-CC-09); this `full` set has no Brewing.
+> setblock 6 71 6 minecraft:chest{Items:[{Slot:0b,id:"minecraft:potion",Count:1b,tag:{Potion:"creativecommon:long_reach"}}]}
+sleep 2
+> data get block 6 71 6 Items
+expect creativecommon:long_reach
+> save-all
+sleep 3
+> data get block 6 71 6 Items
+expect creativecommon:long_reach
+reject (?i)exception|crash
+> setblock 6 71 6 minecraft:air
+look the stack keeps Potion "creativecommon:long_reach" after a save (no rewrite to creativebrewing:, no crash); with Brewing installed the read is SQ-CC-09

@@ -1,0 +1,19 @@
+{
+  "variants": {
+    "facing=south": {
+      "model": "farmersdelight:block/hanging_skillet"
+    },
+    "facing=west": {
+      "model": "farmersdelight:block/hanging_skillet",
+      "y": 90
+    },
+    "facing=north": {
+      "model": "farmersdelight:block/hanging_skillet",
+      "y": 180
+    },
+    "facing=east": {
+      "model": "farmersdelight:block/hanging_skillet",
+      "y": 270
+    }
+  }
+}

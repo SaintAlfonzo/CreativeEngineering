@@ -7,7 +7,7 @@ Owner notes of 2026-11-06, written down as the plan. Nothing is built or install
 | Part | Status |
 |---|---|
 | Tempad 1.4.5 loaded cleanly (2026-11-06 session); jar now in `disabledmods/` | superseded by the port |
-| Tempad 3.0.4 ported to Forge 1.19.2 as a Creative Compat member (2.1.1); all four phases (core; workstation, cards, wallet, broadcaster, screening device; projector, markers, metronome, time twister; Curios, FTB Teams, WTHIT instead of Jade, handbook as upstream's own screen) | BUILT 2026-11-07, not installed; scratch r1107tp 2026-11-07 ([run doc](testing/scratch_run_2026-11-07.md) 1): server rows PASS 26, FAIL 2 (SQ-TP-08 creative workstation break drops, SQ-TP-25 marker anchor id lost on load), plus all five block loot tables dropped by the translator (TODO `gameplay/tnt-and-portal #10..#12`, all three fixed and built 12:01; scratch r1107tp2 ([run doc](testing/scratch_run_2026-11-07.md) 2): SQ-TP-31..39 PASS, reruns of SQ-TP-24, -25 and the break steps of -08, -13, -14, -15 PASS; CQ-TP-16 not run); SQ-TP-17, -29, CQ-TP-01..15 not run (21..30 / 12..15 added 2026-11-07: bug-fix checks and whole-mod gaps); 5 upstream bugs fixed 2026-11-07 at the owner's request, before testing (TODO `gameplay/tnt-and-portal #9`, PORT_NOTES 6.12), plus 2 lang bugs found while fixing (missing `intradimensional_all` key; array lang lines stopped 1.19.2 loading the end of `tempad_static` lang); WTHIT bar colours approved 2026-11-07 |
+| Tempad 3.0.4 ported to Forge 1.19.2 (2.1.1), its own jar `backportedTempad` since 2026-11-07 (a Creative Compat member before; planned to fold into Creative Computing); all four phases (core; workstation, cards, wallet, broadcaster, screening device; projector, markers, metronome, time twister; Curios, FTB Teams, WTHIT instead of Jade, handbook as upstream's own screen) | BUILT 2026-11-07, not installed; scratch r1107tp 2026-11-07 ([run doc](testing/scratch_run_2026-11-07.md) 1): server rows PASS 26, FAIL 2 (SQ-TP-08 creative workstation break drops, SQ-TP-25 marker anchor id lost on load), plus all five block loot tables dropped by the translator (TODO `gameplay/tnt-and-portal #10..#12`, all three fixed and built 12:01; scratch r1107tp2 ([run doc](testing/scratch_run_2026-11-07.md) 2): SQ-TP-31..39 PASS, reruns of SQ-TP-24, -25 and the break steps of -08, -13, -14, -15 PASS; CQ-TP-16 not run); SQ-TP-17, -29, CQ-TP-01..15 not run (21..30 / 12..15 added 2026-11-07: bug-fix checks and whole-mod gaps); 5 upstream bugs fixed 2026-11-07 at the owner's request, before testing (TODO `gameplay/tnt-and-portal #9`, PORT_NOTES 6.12), plus 2 lang bugs found while fixing (missing `intradimensional_all` key; array lang lines stopped 1.19.2 loading the end of `tempad_static` lang); WTHIT bar colours approved 2026-11-07 |
 | Immersive Portal Gun added, with Immersive Portals as its dependency | PLANNED |
 | Immersive Portals limited to the features below | PLANNED |
 | Nether portal test of the visual effect and the missing load screen | PLANNED, a trial for stability and performance |
@@ -75,7 +75,7 @@ out whether they are stable and how they perform. Everything else Immersive Port
   memory for art (`tempad_upstream_assets`) and data (`tempad_upstream_data`, via `BuiltInPacks.addUpstream`). No
   upstream resource is shipped in our jar (resource guard on). Never port from the 1.4.x / 2.x branches (fully ARR).
 - **TP-D2 Home.** Creative Compat becomes a bundle (`ce.forge-bundle`, like Creative Brewing); member
-  `development/creativeCompat/members/tempad`, Gradle `:backportedTempad`, mod id `tempad`, jar `backportedTempad`.
+  `development/backportedTempad` (was `development/creativeCompat/members/tempad` until 2026-11-07, when it moved out so Compat ships without a donor jar; TP-D8; planned host: Creative Computing), Gradle `:backportedTempad`, mod id `tempad`, jar `backportedTempad`.
   Ported code keeps package `earth.terrarium.tempad`; backport glue (donor pack, translator) in `...tempad.forge`.
   `replaces_jars` retires `tempad-forge-*.jar`.
 - **TP-D3 Java, not Kotlin** (KFF 3.12 = Kotlin 1.8, upstream needs 2.0.20, no Kotlin toolchain offline).
@@ -120,18 +120,30 @@ out whether they are stable and how they perform. Everything else Immersive Port
 |---|---|
 | New portal shapes | Disabled |
 | Vanilla portal behaviour | In place |
-| The pack's failure mechanic (ordinary ignition fails and ruins the frame, only Dark Fire lights a portal) | In place; must keep working with the Immersive Portals Nether portal |
+| The pack's failure mechanic (ordinary ignition fails and ruins the frame, only Dark Fire lights a portal) | In place with Immersive Portals since 2026-11-07: IP's fire hook is gated (Creative Magic `IPFireGateMixin`), Dark Fire builds the IP portal ([nether_portal.md](nether_portal.md) 3) |
 | Nether portal | Trial of the visual effect and of the missing load screen |
 | Nether portal link mode | `Mode: normal`: a portal only links to an obsidian frame with the exact same shape and orientation |
 | End portals | Vanilla behaviour |
-| Mirrors | Implemented (enabled) |
+| Mirrors | Implemented (enabled). Since 2026-11-07: more glass and panes (tags `creativecompat:mirror_glass`, `_panes`; frosty glass needs sneaking), rendered within 12 blocks, 4 bounces, 32 blocks inside (Creative Compat `[immersive_portals]`); Design and Decor's tinted framed glass named Smooth Tinted Glass |
 | Global portals | Excluded |
 | Vertical dimension stacking | Disabled |
 
 ### 2.4 The Nether trial
 
-Plan of 2026-11-07 for the failure mechanic with IP (found broken: IP's fire hook skips `PortalSpawnEvent`), view
-distance, tint, fog, and the mirror changes: [plan_portal_changes.md](plan_portal_changes.md), TODO #17..#23.
+Plan of 2026-11-07 for the failure mechanic with IP (found broken: IP's fire hook skipped `PortalSpawnEvent`), view
+distance, tint, fog, and the mirror changes: [plan_portal_changes.md](plan_portal_changes.md), TODO #17..#24.
+BUILT and installed 2026-11-07 16:44 (Magic, Compat, Common), scratch rows SQ-IP-01..05, CQ-IP-01..04 queued:
+
+- Nether portal: `indirectLoadingRadiusCap` 2 (was 8; 4 until 17:18), view cut `netherViewDistance` 32, `netherPortalOverlay` on (portals made before keep no tint).
+- Fog through a portal per type, Creative Compat `[immersive_portals.fog]` (`portals/PortalFog`, client mixin on
+  `FogRenderer.setupFog`): Nether on, 8 to 32 blocks past the portal plane (was 4 to 64 until 17:18); gun portals and mirrors on, 16 to 32 (owner, 17:10). View cut: 32 blocks
+  inside mirrors (`mirrorViewDistance`) and through gun portals (`portalGunViewDistance`).
+- Portal Gun ([plan_portal_gun.md](plan_portal_gun.md) for the earlier fixes): `[portalgun] opaquePortals` (off) skips
+  rendering through gun portals and draws the gun's own filled disc; portals dissolve on the owner's logout or
+  dimension change, and on a heartbeat (`heartbeatSeconds` 10) when the owner is offline, elsewhere, or past
+  `despawnDistance` (128) (`portalgun/PortalGunDissolve`).
+- The render filter is IP's `PortalRenderer.shouldSkipRenderingPortal` (`portals/PortalLimits`); teleporting and
+  block interaction through portals are untouched.
 
 - Purpose: judge stability and performance, not a permanent commitment. If it is unstable or slow, fall back to the
   vanilla Nether portal and keep Immersive Portals for the Portal Gun and mirrors.

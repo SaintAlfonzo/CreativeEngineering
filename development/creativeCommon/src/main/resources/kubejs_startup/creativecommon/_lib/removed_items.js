@@ -384,6 +384,13 @@ global.removedItems = [
 	// Upgrade Aquatic's Flare is gone with Restfulness and Insomnia (potions/effects #9); it only ever came from an
 	// Insomnia potion on a Phantom. server_scripts/other/removed_mobs.js stops any other spawn.
 	i.flare_spawn_egg,
+	// Supplementaries flax is removed (F1, merges/materials #2; item_merges.md 2.22): flax is off in
+	// supplementaries-common.toml (its rope, sack and string fall back to string and wheat; no chest loot or trades),
+	// and the recipes still naming it are removed in creativecompat/kubejs/other/misc_mods.js.
+	i.flax,
+	i.flax_seeds,
+	i.flax_block,
+	i.wild_flax,
 ];
 
 // Floral Enchantment's 31 large pots (empty and filled) are hidden; a pack pot replaces them (flower_pots.md 3.2.9).

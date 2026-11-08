@@ -9,6 +9,12 @@ if (global.CD) global.CD.genPut('can_servings', 'rusticdelight', {
   "canned_cooked_calamari": 3,
   "canned_bell_pepper_soup": 8,
   "canned_raw_calamari": 4,
-  "canned_bell_pepper_pasta": 4
+  "canned_bell_pepper_pasta": 4,
+  "canned_sweet_salad": 8,
+  "canned_calamari_soup": 8,
+  "canned_bell_pepper_medley": 6,
+  "canned_pale_bell_pepper_medley": 6,
+  "canned_dark_bell_pepper_medley": 6,
+  "canned_rice_roll_royale": 6
  }
 })

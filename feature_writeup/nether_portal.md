@@ -71,6 +71,21 @@ the frame, lava lighting the frame interior.
   invisible (the client skips rendering air). It now relies on the fire tag.
 - **Item:** `FlintAndTerraSteelItem extends FlintAndSteelItem` and overrides `useOn` without calling the parent, so
   vanilla's fire placement and portal checks are skipped.
+- **With Immersive Portals (2026-11-07, [plan_portal_changes.md](plan_portal_changes.md) N1):** IP redirects
+  `PortalShape.findEmptyPortalShape` in `BaseFireBlock#onPlace` and, when its own `onFireLitOnObsidian` built a
+  portal, returned an empty shape, so `PortalSpawnEvent` never fired and ordinary fire lit seamless portals.
+  Creative Magic's `IPFireGateMixin` makes `onFireLitOnObsidian` (and the crouch-ignite path) return false, so the
+  vanilla shape reaches the event and the failure runs as without IP. Dark Fire, after the vanilla rectangle check,
+  calls IP's generation through `dimension/IPNetherPortalBridge` (a thread-local pass through the gate): the result is
+  an IP portal (`imm_ptl_core:nether_portal_new`) with a generated frame on the other side, not vanilla portal blocks.
+  If IP declines (mode `vanilla`/`disabled`, not Overworld or Nether, no frame) the old path places vanilla blocks.
+  `PortalFailureHandler` is still the only place that creates vanilla portal blocks. The gate also posts the
+  `PortalSpawnEvent` vanilla would have posted (IP's redirect returns an empty shape in `normal` mode), so the frame
+  fails when the fire lands.
+- **Smaller Nether Portals:** a flint-and-steel click near obsidian queues a task that fills a fire-holding frame
+  with vanilla portal blocks and then posts `PortalSpawnEvent` (through Collective, which ignores a cancel). The
+  failure handler counts `minecraft:nether_portal` as frame interior, so those frames turn to crying obsidian and the
+  portal blocks break with them (2026-11-07).
 - **Text:** names in [namechanges.js](../kubejs/client_scripts/namechanges.js) ("Flint and Terrasteel", "Dark Fire").
 
 ## 4. Limits and decisions
@@ -154,3 +169,5 @@ Survival, Overworld, a fresh obsidian frame (4 × 5, corners optional) each time
 - 2026-10-18: this writeup; findings F1 to F6; tests NP-01 to NP-12. No code changed.
 - 2026-10-19: F6 fixed (DarkFireBlock comment; source only, ships with the next patcherMod build).
 - 2026-11-04: Dark Fire, Flint and Terrasteel and `PortalFailureHandler` moved to Creative Magic ([creative_magic.md](creative_magic.md)); ids unchanged. Same behaviour.
+- 2026-11-07: Immersive Portals interplay fixed (section 3): ordinary fire fails again with IP loaded, Dark Fire builds the IP
+  portal. Built and installed 16:44; scratch SQ-IP-01, -02 queued.

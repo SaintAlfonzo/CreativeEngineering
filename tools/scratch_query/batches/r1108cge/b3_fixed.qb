@@ -1,0 +1,65 @@
+# r1108cge boot 3: same srv and world, Common 00:49 (gravity applied before the move; Create Gravity's biome list built
+# at server start). The live toml edit in SQ-CGE-05b was NOT picked up on the first run (Forge did not fire Reloading
+# within 6 s), so rows 05b, 04b, 02g were rerun on a boot with the default config (b4). Booted with biome_configs ["#minecraft:is_end;;-1", "minecraft:plains;;"]; NO /reload in this batch.
+pace 2
+
+## SQ-CGE-02f | fresh boot, no /reload: the list is built at server start (fix), factor -1 holds objects still
+> execute in minecraft:the_end run forceload add 0 0
+> zgv cfg the_end 0 70 0
+> zgv cfg overworld 0 -60 0
+waitlog \[zgv\] cfg dim=minecraft:overworld 10
+expect \[zgv\] cfg dim=minecraft:the_end .*factor=-1\b
+expect \[zgv\] cfg dim=minecraft:overworld biome=minecraft:plains factor=-0\.8
+> zgv drop the_end 0 120 0
+waitlog \[zgv\] drop done dim=minecraft:the_end 20
+> zgv drop overworld 0 120 0
+waitlog \[zgv\] drop done dim=minecraft:overworld 20
+expect t=40 dim=minecraft:the_end type=minecraft:falling_block .* drop=0\.000
+look End drop 0.000 for all three at t=20 and t=40; plains about 20 percent of vanilla 24.57
+
+## SQ-CGE-05b | live config edit back to the pack default (Create Gravity's Reloading path), default End factor
+# needs the default biome_configs set while the server is STOPPED (Forge writes its in-memory copy back on shutdown;
+# a live edit was not picked up within 6 s)
+> execute in minecraft:the_end run forceload add 0 0
+sleep 2
+> zgv cfg the_end 0 70 0
+> zgv cfg overworld 0 -60 0
+waitlog \[zgv\] cfg dim=minecraft:overworld 10
+expect \[zgv\] cfg dim=minecraft:the_end .*factor=-0\.8
+expect \[zgv\] cfg dim=minecraft:overworld .*config=null
+> zgv drop the_end 0 120 0
+waitlog \[zgv\] drop done dim=minecraft:the_end 20
+> zgv drop overworld 0 120 0
+waitlog \[zgv\] drop done dim=minecraft:overworld 20
+look End t=40 drop about 20 percent of the overworld's 24.57 (about 5); overworld vanilla
+
+## SQ-CGE-04b | resting entities with the HEAD fix: landed sand becomes a block, a tossed item rests on the floor
+> kill @e[tag=c4i]
+> execute in minecraft:the_end run fill -2 60 -2 10 60 2 minecraft:obsidian
+> execute in minecraft:the_end run fill -2 61 -2 10 70 2 minecraft:air
+> zgv watch the_end 0 63 0 120
+waitlog \[zgv\] watch done dim=minecraft:the_end 20
+> execute in minecraft:the_end if block 0 61 0 minecraft:sand run say CGE04b sand placed
+> execute in minecraft:the_end run kill @e[tag=zgv]
+> execute in minecraft:the_end run summon minecraft:item 0 61.2 1 {Item:{id:"minecraft:sand",Count:1b},PickupDelay:32767,Motion:[0.0d,0.2d,0.0d],Tags:["c4i"]}
+sleep 1
+> execute in minecraft:the_end as @e[tag=c4i] run data get entity @s Pos[1] 1000
+sleep 6
+> execute in minecraft:the_end as @e[tag=c4i] run data get entity @s Pos[1] 1000
+sleep 6
+> execute in minecraft:the_end as @e[tag=c4i] run data get entity @s Pos[1] 1000
+> kill @e[tag=c4i]
+expect CGE04b sand placed
+expect Pos\[1\] on Sand after scale factor of 1000\.00 is 61000
+look item and TNT rest at 61.000 in the watch lines; tossed item ends at 61000
+
+## SQ-CGE-02g | living entities with the list built at start (no /reload)
+> execute in minecraft:the_end run summon minecraft:villager 0 70 4 {NoAI:1b,PersistenceRequired:1b,Tags:["cge02v"]}
+> summon minecraft:villager 3 -59 3 {NoAI:1b,PersistenceRequired:1b,Tags:["cge02o"]}
+sleep 6
+> execute in minecraft:the_end run attribute @e[tag=cge02v,limit=1] forge:entity_gravity get
+> attribute @e[tag=cge02o,limit=1] forge:entity_gravity get
+> kill @e[tag=cge02v]
+> kill @e[tag=cge02o]
+expect Entity Gravity for entity .* is 0\.01599
+expect Entity Gravity for entity .* is 0\.08

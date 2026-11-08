@@ -61,16 +61,21 @@ public class CommonMixinPlugin extends GatedMixinPlugin {
 			Map.entry("KubeJSStartupJarScriptsMixin", List.of("kubejs")),
 			Map.entry("KubeJSVirtualDataPackListMixin", List.of("kubejs")),
 			Map.entry("ArmorTrimsLargeItemListsMixin", List.of("armor_trims")),
-			Map.entry("FluidTagInputMixin", List.of("immersiveengineering")),
 			Map.entry("WorldEditSkipStateIdInitMixin", List.of("worldedit")),
 			Map.entry("WorldEditBlockStateIdAccessMixin", List.of("worldedit")),
 			Map.entry("QuarkSpiralSpiresTeleportMixin", List.of("quark")),
 			Map.entry("CreateGravityDimensionMixin", List.of("create_gravity")),
+			Map.entry("CreateGravityConfigAccessor", List.of("create_gravity")),
+			Map.entry("LowGravityPullMixin", List.of("create_gravity")),
+			Map.entry("LowGravitySlowPullMixin", List.of("create_gravity")),
+			Map.entry("LowGravityArrowMixin", List.of("create_gravity")),
+			Map.entry("LowGravityLlamaSpitMixin", List.of("create_gravity")),
+			Map.entry("LowGravityBoatMixin", List.of("create_gravity")),
+			Map.entry("LowGravityThrowableMixin", List.of("create_gravity")),
+			Map.entry("LowGravityItemPhysicMixin", List.of("itemphysic")),
 			Map.entry("NeaWhistleGoalSkipMixin", List.of("nock_enough_arrows")),
-			Map.entry("SequencedAssemblyRecipeMixin", List.of("create")),
-			// effect mixins from Creative Brewing (plan_cb_polish.md 2, 2026-11-06)
-			Map.entry("CreateTeaPipeIconMixin", List.of("create")),
-			Map.entry("FruitsDelightEffectFuncMixin", List.of("fruitsdelight")),
+			// effect mixin from Creative Brewing (plan_cb_polish.md 2, 2026-11-06); the Create tea pipe icon went to
+			// Engineering and the Fruits Delight remap to Delight 2026-11-07 (creative_engineering.md 7.1)
 			Map.entry("PhantomSpawnerBaneSkipMixin", List.of("better_beacons")));
 
 	/**
@@ -85,19 +90,24 @@ public class CommonMixinPlugin extends GatedMixinPlugin {
 			Map.entry("kubejs", "[1902.6.2-build.73,1902.7)"),
 			Map.entry("immersive_weathering", "[1.19.2-1.2.10,1.19.2-1.3)"),
 			Map.entry("armor_trims", "[1.3.3,1.4)"),
-			Map.entry("immersiveengineering", "[1.19.2-9.2.4-170,1.19.2-9.3)"),
 			Map.entry("worldedit", "[7.2.12,7.3)"),
 			Map.entry("quark", "[3.4-418,3.5)"),
 			Map.entry("create_gravity", "[1.2.0,1.3)"),
+			Map.entry("itemphysic", "[1.6.7,1.7)"),
 			Map.entry("nock_enough_arrows", "[1.2.0,1.3)"),
-			Map.entry("create", "[0.5.1.i,0.5.2)"),
-			Map.entry("fruitsdelight", "[0.5.11,0.6)"),
 			Map.entry("better_beacons", "[1.0.2,1.1)"),
 			Map.entry("immersive_portals", "[2.3.7,2.4)"),
 			Map.entry("heartstone", "[1.19.2-1.1.2,1.19.2-1.2)"));
 
 	public CommonMixinPlugin() {
 		super("[creativecommon]", NEEDS_MOD, MOD_RANGE);
+	}
+
+	/** The ItemPhysic low gravity mixin calls LowGravity, which needs Create Gravity too; the table gate takes any one mod. */
+	@Override
+	public boolean shouldApplyMixin(String targetClassName, String mixinClassName) {
+		if (mixinClassName.endsWith(".LowGravityItemPhysicMixin") && !modOn("create_gravity")) return false;
+		return super.shouldApplyMixin(targetClassName, mixinClassName);
 	}
 
 	/** Immersive Portals' mixin config; its MixinChunkMap_C overwrites ChunkMap.playerLoadedChunk (m_183760_) as private. */

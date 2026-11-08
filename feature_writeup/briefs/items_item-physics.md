@@ -68,18 +68,18 @@ fixes its water and fire behaviour through the existing four physics tags. Nothi
    user's own adjustments from lines 91-92 as manual overrides (totem, crossbow, armor stand, shield sink; trident
    fireproof). Record each in item_physics.md 9.6.
 3. **Generator mode** in `item_physics_audit.py` (`--write-tags`, a second `generators.json` entry or a changed
-   `apply`): one JSON item tag per family, `creativeengineering:physics/family/<family>`, under
+   `apply`): one JSON item tag per family, `creativecompat:physics/family/<family>`, under
    `kubejs/data/creativeengineering/tags/items/physics/family/`; reads the manual-override list so every item is in
    exactly one family tag. Write ids, not nested tags, so a reload never depends on tag order.
 4. **Map families to behaviour** in `item_physics_tags.js` through `global.tags` only:
-   `t.add(e, PHYSICS_TAG.floats, ['#creativeengineering:physics/family/wood', ...])`, sinks / fireproof / lavaproof the
+   `t.add(e, PHYSICS_TAG.floats, ['#creativecompat:physics/family/wood', ...])`, sinks / fireproof / lavaproof the
    same way (table 9.2); skim families go to the new `physics/skims` tag of #6 (and to floats until #6 ships). Replace
    `physicsFromTag` (F6) and shrink the hand lists to the override list.
 5. Update item_physics.md 0, 2.2, 9.4 (new figures), 9.5 (built), F4.
 
 ### Ids and data
-- Tags: `creativeengineering:physics/{floats,sinks,fireproof,lavaproof}` (ItemPhysicSplit 49-52, verified), new
-  `creativeengineering:physics/family/<21 names>`.
+- Tags: `creativecompat:physics/{floats,sinks,fireproof,lavaproof}` (ItemPhysicSplit 49-52, verified), new
+  `creativecompat:physics/family/<21 names>`.
 - Dict keys for the overrides (item_dict, verified 2026-10-31): `i.armor_stand` 2109, `i.crossbow` 2249, `i.shield`
   2760, `i.totem_of_undying` 2821, `i.trident` 2824.
 
@@ -141,7 +141,7 @@ other floaters settle without bobbing forever; items that survive lava float on 
 5. Writeup: item_physics.md 10 (built), 2.1 (third water behaviour), 5 (file map).
 
 ### Ids and data
-- New tag `creativeengineering:physics/skims` (item). Existing `physics/lavaproof`.
+- New tag `creativecompat:physics/skims` (item). Existing `physics/lavaproof`.
 - ItemPhysic members (from item_physics.md 10.3, verified there 2026-10-28): `ItemPhysicServer.fluid`,
   `CommonPhysic.getFluid(ItemEntity, boolean)`.
 

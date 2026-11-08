@@ -85,6 +85,9 @@ var i = global.item
 global.addItemMerges('pack', [
 	// Decorative Blocks' rocky dirt goes, Twigs' stays (Dave's is a separate block, renamed Pebble Dirt)
 	[i.decorative_blocks_rocky_dirt, i.twigs_rocky_dirt],
+	// Twigs' azalea flowers -> Immersive Weathering's; the placed block stays Twigs' (Creative Compat
+	// IwAzaleaFlowersPlaceMixin places it from Immersive Weathering's item; item_merges.md 2.21)
+	[i.azalea_flowers, i.immersive_weathering_azalea_flowers],
 ])
 
 console.log(`[itemMerges] ${global.itemMergeGroups.pack.length} pack merges registered`)

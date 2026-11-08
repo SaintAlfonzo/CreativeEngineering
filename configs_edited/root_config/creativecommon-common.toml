@@ -1,16 +1,16 @@
-#No detailab-compatible armor overflow mod exists, so this adds one: extra rows
-#of the same registered armor-bar icons/colors stacked above the normal 10-icon row,
-#once a player has more than 20 armor points. Requires detailab; no-ops without it.
-[armor_overflow]
-	#Master on/off switch. When false, overflow past 20 armor points isn't shown at all.
+
+#Player changelog, "What's New" (client side). The notes are the pack's
+#assets/creativecommon/changelog/<version>.md files. Takes effect the next time a menu opens.
+[changelog]
+	#Master switch: off removes the book buttons and the update popup.
 	enabled = true
-	#false (default): overflow rows are spaced a full icon height apart, like separate rows.
-	#true: rows are packed tighter (compactRowSpacing px apart) and tucked mostly behind
-	#the row below - the row closer to the hotbar is drawn on top of the one above it.
-	compact = false
-	#Vertical pixels between overflow rows when compact is true (icons are 9px tall).
-	#Range: 1 ~ 9
-	compactRowSpacing = 4
+	#Book button on the title screen, right of Singleplayer.
+	titleButton = true
+	#Book button on the pause menu, right of Back to Game.
+	pauseButton = true
+	#Speech bubble beside the book button while the newest version's notes are unread. Opening the
+	#changelog once acknowledges it (config/creativecommon/changelog_seen.txt).
+	updatePopup = true
 
 #Damage tags classify every hit (fire, magic, electric, ...) so shields - and later armour -
 #can treat kinds of damage differently. Every tag is a data/creativecommon/damage_tags/
@@ -27,27 +27,6 @@
 	#'tags=NONE' means no damage_tags file claims that source yet. Off by default.
 	#Live: takes effect immediately.
 	logSeenSources = true
-
-#Wandering Trader spawning and offer counts (the Wandering Winemaker: vinery-common.toml [trader]).
-#The spawner rolls once per interval, counted in server ticks (20 = 1 second) while the
-#overworld runs with doMobSpawning on. Day length (Better Days), sleeping and /time do not
-#change it. A roll is vanilla's: 25/50/75% chance (rising until a spawn), then 1 in 10, then
-#a free spot near a random player; on average about 14 rolls per spawn.
-#/gamerule doTraderSpawning false stops it and the Winemaker.
-[wandering_trader]
-	#Off = vanilla Wandering Trader (24000-tick interval, 5 + 1 offers).
-	enabled = true
-	#Ticks between Wandering Trader spawn rolls. Vanilla: 24000 (20 minutes). 96000 = 80 minutes.
-	#A change takes effect after the wait already counting down.
-	#Range: 1200 ~ 100000000
-	traderIntervalTicks = 96000
-	#Offers drawn from the common pool. Vanilla: 5. Each offer is a different listing; a pool
-	#smaller than this gives every listing once.
-	#Range: 0 ~ 200
-	commonTrades = 25
-	#Offers drawn from the rare pool, all different items. Vanilla: 1.
-	#Range: 1 ~ 50
-	rareTrades = 5
 
 #Performance throttles for other mods' per-tick work. See feature_writeup/perf.md section 7.
 [perf]
@@ -66,63 +45,30 @@
 	#Range: 1 ~ 1200
 	mountEffectIntervalTicks = 100
 
-#JEI recipe screen tweaks (client side).
-[jei]
-	#When the recipe screen is opened over a screen that can take recipe transfers (crafting table,
-	#inventory, modded crafting GUIs), list the recipes whose + button is enabled first. The rest follow,
-	#most-complete first (the share of inputs you already have). Other screens keep JEI's own order.
-	#Takes effect the next time a recipe lookup opens.
-	craftableFirst = true
-	#Order JEI's ingredient list by the pack's definition (kubejs/startup_scripts/jei/order.js) and its
-	#creativecommon:jei/... tags: by type (items, multiblocks, fluids, effects), then category, then
-	#each category's own order. Ingredients with no place keep JEI's own order ([sorting] in
-	#config/jei/jei-client.ini) after the placed ones of their type. Off: JEI's own order only.
-	#Takes effect the next time JEI starts (rejoin or /reload).
-	packOrder = true
-	#Write kubejs/exported/jei_order.json at every JEI start: every item, fluid, effect and multiblock with
-	#its place in the pack order and whether JEI shows it (shown / hidden by the pack / hidden by a mod /
-	#hidden in JEI's edit mode / never in JEI), plus problems in the definition. Render it with
-	#python3 tools/jei_order_report.py. Off by default: it takes a moment and a few MB.
-	orderReport = false
-	#Show seasoning crafts (Salt's food + salt, Create: The Salt's salting mixes, and crafting recipes
-	#with ids creativeengineering:shapeless/season/...) on their own Seasoning page instead of the
-	#Crafting and Mixing pages. Off: they stay where their mods put them.
-	#Takes effect the next time JEI starts (rejoin or /reload).
-	seasoningCategory = true
-	#Show the potion bucket recipes on one Potion Buckets page per potion and bucket: filling and
-	#draining by hand, the Spout, the Item Drain and the Bottling Machine together. Off: they stay on the
-	#Crafting, Spout Filling, Item Draining and Bottling Machine pages.
-	#Takes effect the next time JEI starts (rejoin or /reload).
-	potionBucketCategory = true
-	#Show tipped arrow recipes on one Tipped Arrows page per potion: by hand (8 arrows + a lingering
-	#potion), the Spout and the Bottling Machine together. Off: they stay on the Crafting, Spout Filling
-	#and Bottling Machine pages.
-	#Takes effect the next time JEI starts (rejoin or /reload).
-	tippedArrowCategory = true
-	#Show can crafts on two pages of their own: Canning (food + an empty can -> a can) and Using Cans
-	#(crafts that take a can). Off: they stay on the Crafting page.
-	#Takes effect the next time JEI starts (rejoin or /reload).
-	canCategories = true
-	#How full a fluid looks in JEI tanks (every mod's recipe pages and the pack's own) for its amount.
-	#LOG: small amounts stay visible and 250, 1000 and 8000 mB look different. SQRT: a milder curve.
-	#LINEAR: JEI's own (fill = amount / tank size, so small amounts are a sliver).
-	#Takes effect at once.
-	#Allowed Values: LOG, SQRT, LINEAR
-	fluidAmountScale = "LOG"
-
-#Container title plaques from GUI resource packs (client side).
-[gui_title]
-	#When a container title is wider than the plaque the resource pack painted behind it, stretch the
-	#plaque to fit. Titles wider than the whole GUI are cut short with "...". Only screens that draw
-	#their title the vanilla way (chests, barrels, shulker boxes, hoppers, horses, dispensers, furnaces).
-	stretchPlaque = true
-	#Record every title that needed a stretch in kubejs/exported/gui_title_overflow.json
-	#(screen class, texture, title and widths; kept across sessions).
-	logOverflow = true
+#Wandering Trader spawning and offer counts (the Wandering Winemaker: vinery-common.toml [trader]).
+#The spawner rolls once per interval, counted in server ticks (20 = 1 second) while the
+#overworld runs with doMobSpawning on. Day length (Better Days), sleeping and /time do not
+#change it. A roll is vanilla's: 25/50/75% chance (rising until a spawn), then 1 in 10, then
+#a free spot near a random player; on average about 14 rolls per spawn.
+#/gamerule doTraderSpawning false stops it and the Winemaker.
+[wandering_trader]
+	#Off = vanilla Wandering Trader (24000-tick interval, 5 + 1 offers). Default off; the pack sets true.
+	enabled = true
+	#Ticks between Wandering Trader spawn rolls. Vanilla: 24000 (20 minutes). 96000 = 80 minutes
+	#(the pack's value). A change takes effect after the wait already counting down.
+	#Range: 1200 ~ 100000000
+	traderIntervalTicks = 96000
+	#Offers drawn from the common pool. Vanilla: 5 (the pack: 25). Each offer is a different listing; a pool
+	#smaller than this gives every listing once.
+	#Range: 0 ~ 200
+	commonTrades = 25
+	#Offers drawn from the rare pool, all different items. Vanilla: 1 (the pack: 5).
+	#Range: 1 ~ 50
+	rareTrades = 5
 
 #Advancements (vanilla, every mod, every datapack).
 [advancements]
-	#false (the pack's setting): none are loaded, so none show, toast or give rewards.
+	#false: none are loaded, so none show, toast or give rewards (the pack's setting). Default true (vanilla).
 	#Read when data loads: a change applies on the next /reload or world start.
 	enabled = false
 
@@ -134,115 +80,6 @@
 	#Takes effect the next time the inventory opens.
 	disabled = true
 
-#Pop-up toasts in the top-right corner (client side).
-[toasts]
-	#Show tutorial toasts: vanilla's (move, find a tree, punch, craft planks, open inventory,
-	#social interactions, bundles), Exposure's camera/lightroom hints and Fairy Lights' Clippy
-	#balloons. Takes effect for the next toast.
-	tutorial = false
-	#Show advancement toasts (vanilla's "Advancement Made!" and Patchouli's book-unlocked toast).
-	#The pack loads no advancements ([advancements] enabled), so this only matters if that is on.
-	advancement = false
-
-#Brewin' and Chewin' coasters (client side).
-[coaster]
-	#WTHIT lines on a coaster: 'Coaster: 3 / 4' ('(put away)' once the coaster itself was taken
-	#back) and one line per item on it, in the order they went on.
-	wthit = true
-
-#WTHIT look-at overlay lines (client side). See feature_writeup/wthit_lines.md.
-[wthit]
-	#Block model icons: a block with no item (or whose item draws as the purple/black missing model)
-	#shows its own block model in WTHIT's icon slot. Off = WTHIT's empty icon, Display Delight included.
-	iconBlockModel = true
-	#Block model icons: before drawing the model, ask Forge's hit-aware pick block (what middle-click
-	#gives), so a block holding several things shows the part looked at (Supplementaries' skull pile).
-	iconForgePick = true
-	#Block model icons: use the iconItems list below.
-	iconSubstitutes = true
-	#Block model icons: when the looked-at block has no item, or its item draws as the purple/black
-	#missing model, WTHIT's icon slot shows the block's own model instead. Blocks listed here keep
-	#WTHIT's normal icon. Entries: a namespace ('create') or a block id ('create:belt').
-	#/cdevdumpicons + tools/wthit_icon_audit.py list every block the icon applies to.
-	iconExclude = []
-	#Block model icons: an item to show for a block that has none and draws no model of its own
-	#(block-entity rendered). Entries 'block=item'. D&D's powered flywheel is Create's flywheel.
-	iconItems = ["create_dd:powered_flywheel=create:flywheel"]
-	#Supplementaries jars, goblets and cages: 'Contents: Honey (6 / 12)' (fluid in bottles, with the
-	#jar's capacity; a goblet just 'Water'), 'Contents: Cookie (5 / 12)', or the mob inside.
-	holderContents = true
-	#Under a potion in a jar or goblet, one line per effect with its strength and length, as the
-	#potion's own tooltip shows them ('Instant Health II', 'Regeneration (0:45)').
-	holderPotionEffects = true
-	#A one-bottle holder (goblet) shows just the fluid ('Contents: Water'). Off = 'Water (1 / 1)'.
-	holderSingleName = true
-	#Beehives and bee nests: 'Bees: 2 / 3'. The count comes from the server (WTHIT and the pack's
-	#mod on both sides); without it the line is left out.
-	hiveBees = true
-	#The Bees line takes the place of WTHIT's occupant-names line ('2 Bee') and sits above Honey Level.
-	#Off = WTHIT's names line stays and Bees goes at the end.
-	hiveBeesOnTop = true
-	#Beehives and bee nests: WTHIT's 'Honey Level: 3' becomes 'Honey Level: 3 / 5'. Still follows
-	#WTHIT's own 'Show Beehive Honey Level' option.
-	hiveHoneyMax = true
-	#Numbers kept in block state: 'Servings: 3 / 4' (feasts), 'Slices: 5 / 7' (cakes, pies), 'Eggs' and
-	#'Hatching' (nests, turtle eggs), 'Level' (cauldrons WTHIT has no fluid bar for), anchor charges,
-	#sea pickles. Rules in assets/creativecommon/state_lines.json (override from kubejs/assets).
-	stateLines = true
-	#Lit campfires: Unlit Campfire's burn line ('Burns forever' / 'Burn time: 42s'). Server data.
-	campfireBurn = true
-	#Lit plain campfires: the pack's rain rule ('Rain: Puts it out', 'Going out in 6s', 'Safe (fuel
-	#block below)'). Server data.
-	campfireRain = true
-	#IE sheetmetal tanks: the tank's fluid bar on every part, not only the two fluid ports. Server side.
-	sheetmetalTank = true
-	#Applied Cooking's ME Kitchen Station: online / offline and the security terminal it is tied to.
-	kitchenStation = true
-	#FD cooking pot, Farmer's Respite kettle and oven: 'Holding: 3 Glass Bottle, 1 Bucket' for the two
-	#leftover slots, and 'Waiting: leftover slots full' while a craft waits for room ([cooking] stallWhenFull).
-	remainderBuffer = true
-	#Grass-like blocks cut with shears (fertile=false: grass, mycelium, lush grass, grass slabs):
-	#'Sheared, prevents spreading and converting to dirt'. Sheared vines ([vine_shearing]) and Vinery's
-	#sterilized jungle grape vine: 'Sheared, stops growing'. Weeping, twisting and cave vine and kelp
-	#tips and Immersive Weathering ivy at their last age: 'Stopped growing'.
-	sheared = true
-	#'Silk Touch Required' line: True (green) when nothing drops without Silk Touch, Drops Differently
-	#(yellow) when something else drops (block tags creativecommon:wthit/needs_silk_touch and
-	#wthit/silk_touch_differs, from tools/gen_silk_touch_blocks.py). Hidden while the main-hand tool has Silk Touch.
-	silkTouch = true
-	#WTHIT's blacklist hides barriers, structure voids and light blocks from everyone. With this on, players
-	#with operatorBlockLevel see the blocks in operatorBlockList; everyone else still sees through them.
-	operatorBlocks = true
-	#Blocks shown to operators only (block ids).
-	operatorBlockList = ["minecraft:barrier", "minecraft:structure_void", "minecraft:light"]
-	#Permission level that sees them: 2 = operators who can use /give and command blocks (also single
-	#player with cheats on), 4 = server owners only, 0 = every player.
-	#Range: 0 ~ 4
-	operatorBlockLevel = 2
-	#Also show 'Silk Touch Required: False' (red) on every other block. Off by default.
-	silkTouchShowFalse = false
-	#Flower pots, flower boxes and planter boxes: 'Contains: Poppy' (every plant inside, a box's plants
-	#in slot order, '2 Poppy' for a double); a Twigs silt pot 'Rooted Dirt: Yes / No'. A Beautify hanging
-	#pot standing on the ground is named 'Rich Pot'.
-	potContents = true
-
-	#One switch per state line (a label added by an overriding state_lines.json is always on).
-	[wthit.state_lines]
-		#'Servings: 3 / 4' (feasts, Rustic Delight pancakes)
-		servings = true
-		#'Slices: 5 / 7' (cakes, pies, Brewin' cheese wheels and pizza)
-		slices = true
-		#'Eggs: 3 / 6' (nests, turtle eggs)
-		eggs = true
-		#'Hatching: 1 / 2' (turtle, crocodile, terrapin eggs)
-		hatch = true
-		#'Level: 2 / 3' (cauldrons)
-		level = true
-		#'Charges: 2 / 4' (respawn anchor)
-		charges = true
-		#'Pickles: 3 / 4' (sea pickles)
-		pickles = true
-
 #Mod display names (client side: JEI's mod line and @ search, WTHIT, the Mods screen).
 [mod_names]
 	#"modid=Name" entries replacing the name from the mod's mods.toml. Applied at startup and when this
@@ -252,15 +89,54 @@
 	#Title Case, Create addons as "Create: <name>", no author handles, the pack's own mods end in (Alfonzo).
 	overrides = ["abnormals_delight=Abnormals' Delight", "apexcore=Apex Core", "appleskin=Apple Skin", "astikorcarts=Astikor Carts", "autoreglib=Auto Reg Lib", "baby_mobs=Baby Mobs", "betterdays=Better Days", "betterf3=Better F3", "boatview360=Boat View 360", "bobberdetector=Create: Bobber Detector", "canned_goods=Canned Goods (Creative Delight)", "cb_microblock=CB Microblock", "cb_multipart=CB Multipart", "cb_multipart_minecraft=CB Multipart Minecraft", "cccbridge=Create: CC Bridge", "chefsdelight=Chef's Delight", "cherisheditems=Cherished Items", "codechickenlib=Code Chicken Lib", "compressedcreativity=Create: Compressed Creativity", "conditional_mixin=Conditional Mixin", "cookingforblockheads=Cooking for Blockheads", "corpsecurioscompat=Corpse Curios Compat", "cosmeticarmorreworked=Cosmetic Armor Reworked", "create__the_salt=Create: The Salt (Creative Delight)", "create_compressed=Create: Compressed", "create_confectionery=Create: Confectionery", "create_crush_everything=Create: Recycling", "create_enchantment_industry=Create: Enchantment Industry", "create_mechanical_extruder=Create: Mechanical Extruder", "create_questing=Create: Questing", "create_things_and_misc=Create: Things & Misc", "createaddition=Create: Crafts & Additions", "createappliedkinetics=Create: Applied Kinetics", "createdeco=Create: Deco", "creategbd=Create: Guardian Beam Defense", "creategoggles=Create: Goggles", "createliquidfuel=Create: Liquid Fuel", "creativecore=Creative Core", "creativeengineering=Creative Engineering", "ctm=Connected Textures Mod", "darkpaintings=Dark Paintings", "deathknell=Death Knell", "design_decor=Create: Design & Decor", "do_a_barrel_roll=Do a Barrel Roll", "dont_void_arrows=Don't Void Arrows", "dragonloot=Dragon Loot", "dummmmmmy=Target Dummy", "enchdesc=Enchantment Descriptions", "enderstorage=Ender Storage", "entityculling=Entity Culling", "everythingcopper=Everything Is Copper", "exposure=Exposure Backport & Extras", "exposure_catalog=Exposure Catalog Backport", "exposure_expanded=Exposure: Expanded Backport", "exposure_extras=Exposure Extras", "exposure_polaroid=Exposure Polaroid Backport", "extendedgears=Create: Extended Cogwheels", "farmers_structures=Farmer's Structures", "fastfurnace=Fast Furnace", "fireflybushport=Firefly Bush Port", "fishontheline=Fish on the Line", "fortuneonneterite_i_ig_z=Fortune on Netherite", "framedblocks=Framed Blocks", "geckolib3=Gecko Lib", "hobbit_house_=Hobbit House", "hopour=Hopo Better Underwater Ruins", "immediatelyfast=Immediately Fast", "incubation_additions=Incubation Additions", "ipo=Improved Pillager Outpost", "itemphysic=Item Physic", "just_enough_beacons=Just Enough Beacons", "kotlinforforge=Kotlin for Forge", "kubejsdelight=KubeJS Delight", "lightmansdiscord=Lightman's Discord Integration", "littlecontraptions=Create: Little Contraptions", "minecraft_style_paintings=Minecraft Style Paintings", "mixinsquared=Mixin Squared", "more_mooblooms=More Mooblooms", "netherportalfix=Nether Portal Fix", "nocubescreateexp=Create: Compact Exp", "notenoughanimations=Not Enough Animations", "old_swamp_fisherman_house=Old Swamp Fisherman House", "oreexcavation=Ore Excavation", "portablewardrobe=Portable Wardrobe", "projectred_core=Project Red Core", "projectred_fabrication=Project Red Fabrication", "projectred_illumination=Project Red Illumination", "projectred_integration=Project Red Integration", "projectred_transmission=Project Red Transmission", "railways=Create: Steam & Rails", "restapi=REST API", "sawmillhouse=Sawmill House", "seasonhud=Season HUD", "simplehats=Simple Hats", "sliceanddice=Create: Slice & Dice", "spectrelib=Spectre Lib", "supermartijn642configlib=Config Library", "supermartijn642corelib=Core Lib", "swingthroughgrass=Swing Through Grass", "t_and_t=Towns & Towers", "takesapillage=It Takes a Pillage", "tmted=Engineer's Delight", "transition=Transition", "trashslot=Trash Slot", "treechop=HT's Tree Chop", "villagersellanimals=Villagers Sell Animals", "w2w2=Waystones 2 Waypoints 2", "waila=Waila", "whitenoise=White Noise", "worldedit=World Edit", "wthit=WTHIT", "xaerolib=Xaero Lib", "xaerozoomout=Xaero Zoomout"]
 
-#Player changelog, "What's New" (client side). The notes are the pack's
-#assets/creativecommon/changelog/<version>.md files. Takes effect the next time a menu opens.
-[changelog]
-	#Master switch: off removes the book buttons and the update popup.
+#Mob effects (client and server).
+[effects]
+	#Category overrides, "namespace:effect=CATEGORY" with CATEGORY one of BENEFICIAL, HARMFUL, NEUTRAL.
+	#The category colours the effect's name in potion, food and gear tooltips (HARMFUL red, the other
+	#two blue), and AppleSkin, Quark's saturation word and isBeneficial() go by it. The defaults are the
+	#effects whose own category showed the wrong colour (feature_writeup/effects.md 2.4). Read live.
+	categoryOverrides = ["create_confectionery:rest=BENEFICIAL", "alexsmobs:debilitating_sting=HARMFUL", "alexsmobs:fear=HARMFUL", "alexsmobs:power_down=HARMFUL", "neapolitan:slipping=HARMFUL", "vinery:trippy=HARMFUL"]
+	#Effects that always get their HUD icon (top right), even when the mod that gave them hid it
+	#(showIcon false, mostly to drop particles). The inventory list shows them either way. Armor, held
+	#tool and aura effects are left hidden on purpose (feature_writeup/effects.md 2.6). Client, read live.
+	forceHudIcon = ["brewinandchewin:intoxication", "via_romana:travellers_fatigue", "monobank:thief"]
+	#Items whose effects always get their HUD icon: every effect added while an entity finishes using
+	#one (eating, drinking, the item's own code). "namespace" for a whole mod or "namespace:item". Effect
+	#ids in forceHudIcon show from any source; this list only for these items, so the same effect from
+	#armor stays hidden. Server side, read live.
+	forceHudIconItems = ["create:builders_tea", "canned_goods:canned_pufferfishs", "farmersrespite", "immersive_weathering"]
+	#Effects swapped for another wherever they are applied, "from=to". Same duration, level and
+	#visibility. Covers foods, potions, blocks, commands and mob code (LivingEntity#addEffect), and
+	#Fruits Delight's jam / jelly effect lines. Food tooltips are swapped by KubeJS
+	#(global.foodEffectSwaps). Server side, read live.
+	remap = ["neapolitan:agility=vinery:climbing_effect", "fruitsdelight:chorus=vinery:teleport", "quark:resilience=alexsmobs:knockback_resistance"]
+	#Effects that are never applied (LivingEntity#addEffect refuses them). Their brews are removed
+	#by KubeJS (Creative Brewing's potions.js). Server side, read live.
+	removed = ["upgrade_aquatic:restfulness", "upgrade_aquatic:insomnia", "alexsmobs:power_down"]
+
+#Tuning for creativecommon:magic_resistance's damage reduction against
+#the creativecommon:magic damage tag (the same tag the shields' MAGIC column
+#reads: potions, poison, evoker fangs, thorns, sonic booms, curses, life drain) and
+#against the periodic damage of the effects listed in negatedEffectTicks.
+[magic_resistance]
+	#Damage reduction per effect amplifier level (amplifier 0 = level I), same
+	#shape as vanilla Resistance. Total reduction is capped at 1.0 (full immunity)
+	#regardless of amplifier.
+	#Range: 0.0 ~ 1.0
+	reductionPerLevel = 0.2
+	#Effects whose periodic damage Magic Resistance stops outright, comma-separated
+	#effect ids. A tick of one of these deals no damage while its level is at most the
+	#Magic Resistance level (Poison I against Magic Resistance I); a higher level takes
+	#the per-level cut instead. These are ticks no shield can block
+	#([shields].unblockableEffectTicks).
+	negatedEffectTicks = "minecraft:poison, minecraft:wither"
+
+#Tip bar on the world loading screens (client side). The tips come from the built-in
+#resource packs Loading Tips and Creative Tips (assets/<namespace>/loading_tips/*.json).
+[loading_tips]
+	#Show the tip bar while a world or dimension loads.
 	enabled = true
-	#Book button on the title screen, right of Singleplayer.
-	titleButton = true
-	#Book button on the pause menu, right of Back to Game.
-	pauseButton = true
-	#Speech bubble beside the book button while the newest version's notes are unread. Opening the
-	#changelog once acknowledges it (config/creativecommon/changelog_seen.txt).
-	updatePopup = true
+	#Seconds each tip stays before the next one rolls in.
+	#Range: 2 ~ 120
+	cycleSeconds = 7
+

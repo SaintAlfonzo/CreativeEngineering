@@ -16,7 +16,8 @@
     "PneumaticCraftUtilsMixin",
     "XpHelperMixin",
     "XpPumpUpgradeWrapperMixin",
-    "XPFluidManagerMixin"
+    "XPFluidManagerMixin",
+    "IPFireGateMixin"
   ],
   "client": [],
   "server": []

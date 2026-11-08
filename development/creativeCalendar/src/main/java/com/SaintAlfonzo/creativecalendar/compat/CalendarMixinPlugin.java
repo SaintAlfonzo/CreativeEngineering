@@ -34,6 +34,7 @@ public class CalendarMixinPlugin extends GatedMixinPlugin {
             Map.entry("SereneSeasonsTimeSkipMixin", SERENE),
             Map.entry("SereneSeasonsClientClockMixin", SERENE),
             Map.entry("SeasonBiomeConfigMixin", SERENE),
+            Map.entry("SeasonServerConfigMixin", SERENE),
             Map.entry("SeasonHooksTypesMixin", SERENE),
             Map.entry("SeasonHooksClientMixin", SERENE),
             Map.entry("SeasonFertilityMixin", SERENE),
